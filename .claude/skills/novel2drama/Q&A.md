@@ -112,7 +112,7 @@ Step 4 合成（配音 + BGM + 字幕 + 剪辑）
 
 ## Q4：沈念（女主）常态定妆怎么做？<a id="q4"></a>
 
-### 4.1 正向提示词（来自 `characters/沈念.md` 第22行）
+### 4.1 正向提示词（来自 `common/characters/沈念.md` 第22行）
 
 ```
 角色定妆设定图：废妃林婉儿（沈念），20岁出头女子，全身正面站姿A-pose + 半身脸部特写，
@@ -416,24 +416,33 @@ prompt 加"嘴角似笑非笑、眼神阴冷算计"。
 
 ```
 artifacts/<剧名>/
-├── 分镜剧本/
-│   ├── characters/        ← 角色卡（定妆 prompt 源头）
-│   ├── locations/         ← 场景卡
-│   ├── global_style.md   ← 画风/负面词
-│   └── 第N集/
-│       ├── 分镜剧本.md
-│       ├── 素材清单.md
-│       ├── voiceover.txt
-│       ├── bgm.txt
-│       ├── 字幕_中文.srt
-│       ├── 字幕_英文.srt
-│       └── 出图/                    ← 定妆 + 分镜定稿图
-│           ├── 定妆_<角色>.png
-│           ├── 定妆_<角色>_<形态>.png
-│           ├── 定妆_<场景>.png
-│           └── 镜头N_<描述>.png
-├── temp/                  ← 筛选过程的 4 选 1 拼图临时存放
-└── tempt/                 ← 历史杂物（不要动）
+├── 小说/<剧名>.docx
+├── common/                           跨阶段共用
+│   ├── _进度.md
+│   ├── global_style.md
+│   ├── characters/                   角色卡（定妆 prompt 源头）
+│   ├── locations/                    场景卡
+│   └── 废料/                         4 选 1 筛选 / 废图 / 废视频
+│       ├── 出图/{common,第N集}/
+│       └── 出视频/第N集/
+├── 脚本/第N集/                       ← Stage 1：8 类素材
+│   ├── 分镜剧本.md / 故事板.md / 素材清单.md
+│   ├── voiceover.txt / bgm.txt / 封面.md
+│   └── 字幕_中文.srt / 字幕_英文.srt
+├── 出图/                             ← Stage 2
+│   ├── common/                       扁平：PNG + prompt 同目录
+│   │   ├── 00_索引.md
+│   │   ├── 角色定妆.md / 场景定妆.md / 道具定妆.md
+│   │   ├── 定妆_<角色>.png
+│   │   ├── 定妆_<角色>_<形态>.png
+│   │   ├── 定妆_<场景>.png
+│   │   └── 定妆_<道具>.png
+│   └── 第N集/                        扁平
+│       ├── 00_总览.md / 01_分镜出图.md
+│       └── 镜头N_<描述>.png
+└── 出视频/第N集/                     ← Stage 3
+    ├── 00_总览.md / 01_clips.md
+    └── ClipK_<描述>.mp4
 ```
 
 ### 13.2 命名规范
@@ -449,8 +458,9 @@ artifacts/<剧名>/
 
 1. 即梦下载到 `~/Downloads/`
 2. Claude 自动从 Downloads 挑选 + 归档：
-   - **定稿单图** → `第N集/出图/定妆_xxx.png`
-   - **4 选 1 拼图** → `temp/筛选_xxx_4选1.png`
+   - **共享定妆** → `出图/common/定妆_xxx.png`
+   - **本集分镜** → `出图/第N集/镜头N_xxx.png`
+   - **4 选 1 筛选拼图** → `common/废料/出图/{common,第N集}/筛选_xxx_4选1.png`
 3. 归档后 Downloads 自动清空（用 mv 不用 cp）
 
 ---
@@ -705,26 +715,29 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 
 沈念在 100 集里是同一张脸、同一套服装；冷宫寝殿在 5 集里是同一处场景。这些是**全篇共享资产**，绝不按集切分。
 
-### 19.2 目录架构（v2，2026-05 起）
+### 19.2 目录架构（v3，2026-05-31 起，4-skill 拆分后）
 
-共享层 vs 本集层 分离：
+共享层 vs 本集层 分离；每个 skill 自占一个顶层文件夹：
 
 ```
-分镜剧本/
-├── characters/              ← 角色卡（设定）shared
-├── locations/               ← 场景卡 shared
-├── 出图/                    ← 🆕 定妆 PNG 库 shared
-├── 出图prompt/              ← 🆕 定妆 prompt 实战库 shared
-│   ├── 00_索引.md
-│   ├── 角色定妆.md
-│   ├── 场景定妆.md
-│   └── 道具定妆.md
-└── 第N集/
-    ├── 出图/                ← 本集**分镜**出图 PNG（不含定妆）
-    └── 出图prompt/
-        ├── 00_总览.md       本集图清单（引用 shared）
-        └── 01_分镜出图.md   本集独有分镜 prompt
+作品根/
+├── common/                    ← 跨阶段共用
+│   ├── characters/            ← 角色卡（设定）shared，由 n2d-script 写
+│   └── locations/             ← 场景卡 shared，由 n2d-script 写
+└── 出图/                      ← Stage 2: n2d-image 产物
+    ├── common/                扁平：PNG + prompt 同目录
+    │   ├── 00_索引.md
+    │   ├── 角色定妆.md
+    │   ├── 场景定妆.md
+    │   ├── 道具定妆.md
+    │   └── 定妆_*.png         定妆 PNG 库
+    └── 第N集/                 扁平
+        ├── 00_总览.md         本集图清单（引用 shared）
+        ├── 01_分镜出图.md     本集独有分镜 prompt
+        └── 镜头N_*.png        本集分镜 PNG
 ```
+
+> 历史记录：v2（2026-05 起）共享层在 `分镜剧本/出图/` + `分镜剧本/出图prompt/`，本集在 `分镜剧本/第N集/出图prompt/` 等。v3 起每个 skill 占一个顶层文件夹，**全篇共享资产从 stage-1 子目录里迁出独立**，详见 Q21。
 
 ### 19.3 决策表：什么放共享？什么放每集？
 
@@ -743,11 +756,11 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 
 ```
 1. 第N集 出料发现新角色/场景/道具
-2. 共享 出图prompt/00_索引.md 追加 ⬜ 行
-3. 共享 角色|场景|道具定妆.md 追加完整 prompt 块
-4. 跑即梦（或 CLI 自动）→ 挑图 → PNG 落 共享 出图/
+2. 出图/common/00_索引.md 追加 ⬜ 行
+3. 出图/common/角色|场景|道具定妆.md 追加完整 prompt 块
+4. 跑即梦（或 CLI 自动）→ 挑图 → PNG 落 出图/common/
 5. 索引状态改 ✅
-6. 本集 出图prompt/00_总览.md 引用 shared
+6. 出图/第N集/00_总览.md 引用 shared
 7. 后续集自动复用，不再重做
 ```
 
@@ -769,14 +782,14 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 - **避免重复**：4 张定妆图存 100 次 = 400 张 PNG。共享后 = 4 张。
 - **保证一致**：跨集偶然修改某张定妆会立刻让其他集不一致。集中管理避免漂移。
 - **降低生成成本**：复用 = 无需重抽，省钱（即梦会员积分）省时间。
-- **方便回溯**：所有角色"曾经画过什么样"集中在 `出图prompt/角色定妆.md`，无需翻 N 个集子。
+- **方便回溯**：所有角色"曾经画过什么样"集中在 `出图/common/角色定妆.md`，无需翻 N 个集子。
 
 ### 19.7 跟 `characters/` / `locations/` 的关系
 
-- `characters/角色名.md` 是**人物设定文档**（小说级，剧情服务）
-- `出图prompt/角色定妆.md` 是**生产实战 prompt**（AI 服务，含即梦操作 SOP）
+- `common/characters/角色名.md` 是**人物设定文档**（小说级，剧情服务）
+- `出图/common/角色定妆.md` 是**生产实战 prompt**（AI 服务，含即梦操作 SOP）
 - 前者是设定，后者是执行。前者由编剧维护，后者由制作维护。
-- 两者锁定的"妆造拆解"完全一致——`出图prompt` 只是把 `characters/` 的 ① 定妆照 prompt 加上即梦操作、检查清单、参考图依赖等"实战包装"。
+- 两者锁定的"妆造拆解"完全一致——`出图/common/` 只是把 `characters/` 的 ① 定妆照 prompt 加上即梦操作、检查清单、参考图依赖等"实战包装"。
 
 ---
 
@@ -786,11 +799,11 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 
 ```
 ① 扫描共享库
-   读 分镜剧本/出图prompt/00_索引.md
+   读 出图/common/00_索引.md
    盘清楚：已有哪些角色（含形态变体）/场景/道具，及状态（✅/⏳/⬜）
    ↓
 ② 列出本集需求
-   读 第N集/分镜剧本.md + 素材清单.md
+   读 脚本/第N集/分镜剧本.md + 素材清单.md
    提取本集需要的所有 角色/场景/道具/特殊视觉
    ↓
 ③ 差集 = 新增
@@ -798,12 +811,12 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
    包括："首次出现的全新角色/场景/道具" + "已有角色的新形态变体"
    ↓
 ④ 追加共享库（仅新增项）
-   共享 00_索引.md 追加 ⬜ 行
-   共享 角色|场景|道具定妆.md 追加实战 prompt 块
+   出图/common/00_索引.md 追加 ⬜ 行
+   出图/common/角色|场景|道具定妆.md 追加实战 prompt 块
    ↓
 ⑤ 建本集 prompt 文件夹
-   第N集/出图prompt/00_总览.md（含引用共享）
-   第N集/出图prompt/01_分镜出图.md（本集独有分镜）
+   出图/第N集/00_总览.md（含引用共享）
+   出图/第N集/01_分镜出图.md（本集独有分镜）
 ```
 
 ### 20.2 实战例子：第2集 出图 prompt 生成
@@ -814,7 +827,7 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 | ② 列需求 | 本集需要：沈念常态、小禾、偏殿修炼室、系统光幕、12 个分镜场景 |
 | ③ 差集 | **新增**：偏殿修炼室 LOC_02、系统光幕（共享道具已占位但 prompt 未写满）|
 | ④ 追加 | 共享 `场景定妆.md ②` 占位 → 完整 prompt 块；`道具定妆.md ②` 占位 → 完整 prompt 块 |
-| ⑤ 建本集 | `第2集/出图prompt/00_总览.md` 引用共享 + `01_分镜出图.md` 12 镜 |
+| ⑤ 建本集 | `出图/第2集/00_总览.md` 引用共享 + `01_分镜出图.md` 12 镜 |
 
 **复用红利**：第2集开局 **2/16**（沈念常态 + 小禾 直接复用）
 
@@ -942,7 +955,7 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 ### 21.6 拆分的实施约定
 
 - **进度表（`_进度.md`）是 single source of truth**，4 个 skill 都读写它
-- **目录约定**（`作品根/小说/`、`分镜剧本/`、`出图/` 共享层、`第N集/`、`temp/`）由 `novel2drama/references/architecture.md` 统一管
+- **目录约定**（`作品根/{小说,common,脚本,出图,出视频}/` — common 装跨阶段共用资产 + 废料）由 `novel2drama/references/architecture.md` 统一管
 - **Q&A.md 保留在 `novel2drama/`**，全阶段共用；各阶段 skill 在 SKILL.md 末尾指向 Q&A.md 的相关问题号
 - **`platforms.md` 在 3 个阶段 skill 各放一份**（每份内容相同，~150 行）——self-contained 比共享路径黑魔法稳
 

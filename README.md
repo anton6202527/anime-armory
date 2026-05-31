@@ -33,17 +33,24 @@ anime-armory/
 │   └── n2d-video/                         ← Stage 3：出视频 prompt + 生视频
 │       ├── SKILL.md                       Clip prompt 派生 + image2video + 扫 CLI/手动指导
 │       └── references/{prompt_format,platforms,cli_registry}.md
-└── artifacts/冷宫有妖气/                  ← 示例产出
-    ├── 小说/冷宫有妖气.docx                小说原文（约定放 小说/ 子目录）
-    ├── 分镜剧本/                          素材根
-    │   ├── global_style.md                全局画风/世界观/目标平台
-    │   ├── characters/  locations/        角色卡（含定妆 prompt）/ 场景卡
-    │   ├── 出图/                          共享定妆 PNG 库
-    │   ├── 出图prompt/                    共享定妆 prompt 实战库（00_索引 + 角色/场景/道具定妆）
-    │   ├── _进度.md                       全作品进度表（4 个 skill 的 single source of truth）
-    │   └── 第N集/                         raw.txt + 分镜剧本/故事板/素材清单 + voiceover/bgm/封面
-    │                                       + 字幕_中文.srt/字幕_英文.srt + 出图prompt/ + 出图/ + 视频/
-    └── temp/第N集/                        废料归档（4 选 1 拼图 / 废图 / 废视频）
+└── artifacts/冷宫有妖气/                  ← 示例产出（1 skill = 1 顶层文件夹）
+    ├── 小说/冷宫有妖气.docx                小说原文
+    ├── common/                             跨阶段共用资产
+    │   ├── _进度.md                        全作品 dashboard
+    │   ├── global_style.md                 全局画风/世界观/目标 AI
+    │   ├── characters/                     角色卡（含定妆 prompt 源头）
+    │   ├── locations/                      场景卡
+    │   └── 废料/                           4 选 1 / 废图 / 废视频
+    │       ├── 出图/{common,第N集}/
+    │       └── 出视频/第N集/
+    ├── 脚本/第N集/                         ← Stage 1：n2d-script 产物
+    │                                        raw.txt + 分镜剧本.md/故事板/素材清单
+    │                                        + voiceover/bgm/封面 + 字幕_中文/英文.srt
+    ├── 出图/                               ← Stage 2：n2d-image 产物
+    │   ├── common/                         扁平：00_索引 + 角色/场景/道具定妆.md + 定妆_*.png
+    │   └── 第N集/                          扁平：00_总览.md + 01_分镜出图.md + 镜头N_*.png
+    └── 出视频/第N集/                       ← Stage 3：n2d-video 产物
+                                             00_总览.md + 01_clips.md + ClipK_*.mp4
 ```
 
 ## 快速开始（在 Claude Code 中）
@@ -60,7 +67,7 @@ anime-armory/
 
 ## 当前进度（《冷宫有妖气》）
 
-第 1–4 集已全套精修（含定妆照、双语字幕）；第 1 集附可灵 Kling 跨平台适配样例。其余集为待精修骨架。详见 `artifacts/冷宫有妖气/分镜剧本/_进度.md`。
+第 1–15 集已全套精修（含定妆照、双语字幕）；第 1–9 集附即梦/可灵/Veo 三平台适配样例。其余集为待精修骨架。详见 `artifacts/冷宫有妖气/common/_进度.md`。
 
 ## 说明
 

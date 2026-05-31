@@ -52,19 +52,19 @@ done
 ```bash
 # 图生视频（默认）
 dreamina image2video \
-  --image <第N集/出图/镜头N1_xxx.png> \
+  --image <出图/第N集/镜头N1_xxx.png> \
   --prompt "$(cat <prompt 块文件或 here-doc>)" \
   --duration 7 \
   --aspect 9:16 \
   --motion-strength 0.6 \
-  --out <第N集/视频/ClipK_<描述>.mp4>
+  --out <出视频/第N集/ClipK_<描述>.mp4>
 
 # 文生视频（空镜）
 dreamina text2video \
   --prompt "空镜：残烛在风中摇曳，烛芯吐黑烟" \
   --duration 5 \
   --aspect 9:16 \
-  --out <第N集/视频/ClipK_<描述>.mp4>
+  --out <出视频/第N集/ClipK_<描述>.mp4>
 ```
 
 > ⚠️ 参数名以官方 SKILL 为准；首次调用前必读 `~/.dreamina_cli/dreamina/SKILL.md` 核对 flag。
@@ -87,8 +87,8 @@ dreamina text2video \
 - **调用模板**：
   ```bash
   kling image2video \
-    --first <第N集/出图/镜头N1_xxx.png> \
-    --last <第N集/出图/镜头N2_xxx.png> \
+    --first <出图/第N集/镜头N1_xxx.png> \
+    --last <出图/第N集/镜头N2_xxx.png> \
     --prompt "..." \
     --duration 8 \
     --motion-brush <可选 motion mask> \
@@ -109,7 +109,7 @@ dreamina text2video \
 ```bash
 gcloud ai models invoke veo-XX \
   --project <PROJECT_ID> \
-  --image <第N集/出图/镜头N1_xxx.png> \
+  --image <出图/第N集/镜头N1_xxx.png> \
   --prompt "<English prompt>" \
   --duration 8 \
   --output <ClipK.mp4>
@@ -152,7 +152,7 @@ gcloud ai models invoke veo-XX \
 
 本集 Clip 数 ≥6 时可 spawn 2-3 个 sub-agent 并发跑 CLI。注意：
 - **视频 API 限速比图更严**，单账号 ≤2-3 并发更安全
-- 视频每条扣分多，**翻车成本高**——子 agent 跑完后主线程认真筛选，不通过的废视频归档 `temp/第N集/视频废料/`
+- 视频每条扣分多，**翻车成本高**——子 agent 跑完后主线程认真筛选，不通过的废视频归档 `common/废料/出视频/第N集/`
 - 子 agent 不要自行重抽 —— 由主线程统一决定是否改 prompt + 重跑
 
 ---

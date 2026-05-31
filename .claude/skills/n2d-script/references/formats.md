@@ -10,7 +10,7 @@
 
 ---
 
-## 1. 角色卡（characters/角色名.md，全篇唯一，首次出现即建卡）
+## 1. 角色卡（common/characters/角色名.md，全篇唯一，首次出现即建卡）
 
 ```markdown
 # 角色卡 — {姓名}（ID: CHAR_01）
@@ -50,7 +50,7 @@ character design / reference sheet: {name}, full-body front A-pose + bust close-
 
 ---
 
-## 2. 场景卡（locations/场景名.md，全篇唯一）
+## 2. 场景卡（common/locations/场景名.md，全篇唯一）
 
 ```markdown
 # 场景卡 — {场景名}（ID: LOC_01）
@@ -65,7 +65,7 @@ character design / reference sheet: {name}, full-body front A-pose + bust close-
 
 ---
 
-## 3. 分镜剧本（第N集/分镜剧本.md）— 逐镜头脚本
+## 3. 分镜剧本（脚本/第N集/分镜剧本.md）— 逐镜头脚本
 
 每集 8~15 个镜头。每镜头：
 
@@ -79,7 +79,7 @@ character design / reference sheet: {name}, full-body front A-pose + bust close-
 
 ---
 
-## 4. 故事板 Clip 表（第N集/故事板.md）— **AI 视频生成输入**
+## 4. 故事板 Clip 表（脚本/第N集/故事板.md）— **AI 视频生成输入**
 
 把相邻分镜合成 **片段（Clip）**，每片段 1~2 个分镜、时长约 5~8 秒（按目标视频 AI 档案），作为"一次视频生成"的单元。
 
@@ -111,7 +111,7 @@ character design / reference sheet: {name}, full-body front A-pose + bust close-
 
 ---
 
-## 5. 素材清单（第N集/素材清单.md）— **AI 图片生成输入（简版）**
+## 5. 素材清单（脚本/第N集/素材清单.md）— **AI 图片生成输入（简版）**
 
 本集需要出图的所有角色/场景/关键道具，逐条给 prompt：
 
@@ -136,7 +136,7 @@ character design / reference sheet: {name}, full-body front A-pose + bust close-
 
 ---
 
-## 6. 配音文案（第N集/voiceover.txt）
+## 6. 配音文案（脚本/第N集/voiceover.txt）
 
 按镜头顺序逐条，标注角色与情绪，便于 AI 配音：
 ```
@@ -146,7 +146,7 @@ character design / reference sheet: {name}, full-body front A-pose + bust close-
 
 ---
 
-## 7. BGM 与音效（第N集/bgm.txt）
+## 7. BGM 与音效（脚本/第N集/bgm.txt）
 
 ```
 整体情绪：阴森压抑 → 高潮爆发
@@ -156,13 +156,13 @@ BGM风格：国风暗黑 / 弦乐渐强 / 低频鼓点
 
 ---
 
-## 8. 封面 / 首图（第N集/封面.md）
+## 8. 封面 / 首图（脚本/第N集/封面.md）
 
 一张高点击率竖版封面，含本集最大爽点或钩子、主角清晰正脸、强情绪、可叠加标题留白。给中文+英文 prompt。
 
 ---
 
-## 9. 字幕（第N集/字幕_中文.srt + 字幕_英文.srt）— 中英双语
+## 9. 字幕（脚本/第N集/字幕_中文.srt + 字幕_英文.srt）— 中英双语
 
 标准 **SRT** 格式，可直接导入剪辑软件 / 上传平台。**两个文件同一套时间码**：`字幕_中文.srt` 国内投放，`字幕_英文.srt` 海外投放（TikTok / ReelShort / YouTube / 北美短剧）。
 

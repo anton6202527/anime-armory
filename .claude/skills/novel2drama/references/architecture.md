@@ -32,39 +32,49 @@
 ```
 artifacts/<剧名>/
 ├── 小说/                  原文
-├── 分镜剧本/              所有素材根
-└── temp/                  废料归档
+├── common/                全局资产 + 废料
+├── 脚本/                  n2d-script 产物
+├── 出图/                  n2d-image 产物
+└── 出视频/                n2d-video 产物
 ```
 
 `<剧名>` 用中文是 OK 的（macOS/Linux 路径支持）。
 
 ### 共享 vs 本集
 
-**铁律**：**全篇复用的资产放共享层，仅本集出现的放本集层**。
+**铁律**：**全篇复用的资产放共享层，仅本集出现的放本集层**。1 skill = 1 顶层文件夹，里面再按"common / 第N集"拆。
 
 ```
-分镜剧本/                              ← 共享层根
-├── global_style.md                   全局画风/世界观/目标AI（仅 1 份）
-├── characters/                       角色设定（一角色一文件）
-├── locations/                        场景设定
-├── 出图/                             【共享 PNG 库】定妆图
-├── 出图prompt/                       【共享 prompt 库】定妆 prompt 实战
-│   ├── 00_索引.md                    全篇定妆清单 + 状态
-│   ├── 角色定妆.md
-│   ├── 场景定妆.md
-│   └── 道具定妆.md
-├── _进度.md                          全作品进度表
-└── 第N集/                            ← 本集层根
-    ├── raw.txt                       拆集出来的原文片段
-    ├── 分镜剧本.md / 故事板.md / 素材清单.md
-    ├── voiceover.txt / bgm.txt / 封面.md
-    ├── 字幕_中文.srt / 字幕_英文.srt
-    ├── 出图prompt/                   本集分镜出图 prompt
-    │   ├── 00_总览_出图清单.md
-    │   └── 01_分镜出图.md
-    ├── 出图/                         本集分镜 PNG（不含定妆）
-    └── 视频/                         本集 MP4
+作品根/
+├── common/                               跨阶段共用
+│   ├── _进度.md                          全作品进度表
+│   ├── global_style.md                   全局画风/世界观/目标AI（仅 1 份）
+│   ├── characters/                       角色设定（一角色一文件）
+│   ├── locations/                        场景设定
+│   └── 废料/                             废料归档（4 选 1 / 废图 / 废视频）
+├── 脚本/                                 ← Stage 1：n2d-script
+│   └── 第N集/
+│       ├── raw.txt                       拆集出来的原文片段
+│       ├── 分镜剧本.md / 故事板.md / 素材清单.md
+│       ├── voiceover.txt / bgm.txt / 封面.md
+│       └── 字幕_中文.srt / 字幕_英文.srt
+├── 出图/                                 ← Stage 2：n2d-image
+│   ├── common/                           全篇定妆库（PNG + prompt 扁平同目录）
+│   │   ├── 00_索引.md                    全篇定妆清单 + 状态
+│   │   ├── 角色定妆.md / 场景定妆.md / 道具定妆.md
+│   │   └── 定妆_*.png                    角色/场景/道具 定妆 PNG
+│   └── 第N集/                            本集分镜（PNG + prompt 扁平同目录）
+│       ├── 00_总览.md                    本集图清单 + 引用共享
+│       ├── 01_分镜出图.md                本集分镜 prompt
+│       └── 镜头N_*.png                   本集分镜 PNG
+└── 出视频/                               ← Stage 3：n2d-video
+    └── 第N集/
+        ├── 00_总览.md                    本集 Clip 清单
+        ├── 01_clips.md                   每 Clip 视频 prompt
+        └── ClipK_*.mp4                   定稿视频片段
 ```
+
+> `common/` 在作品根有两个：作品根的 `common/` 装跨阶段共用（进度 / 画风 / 角色场景设定 / 废料）；`出图/common/` 是 n2d-image 阶段的全篇定妆库。语义不同——前者是"跨技能共用"，后者是"该技能内跨集复用"。路径互不重叠。
 
 **判定表**：
 
@@ -81,7 +91,16 @@ artifacts/<剧名>/
 
 ### 废料
 
-筛选/废图/废视频统一进 `temp/第N集/`。**不要**留在 Downloads，不要散落作品根。
+```
+common/废料/
+├── 出图/
+│   ├── common/                       共享层定妆筛选 4 选 1 / 废图
+│   └── 第N集/                        本集分镜筛选 4 选 1 / 废图
+└── 出视频/
+    └── 第N集/                        废视频片段
+```
+
+**不要**留在 Downloads，不要散落作品根。
 
 ---
 
@@ -150,9 +169,9 @@ prompt 写法/语言         图片该长啥样
 
 n2d-script →
   1. 把小说挪到 artifacts/我的小说/小说/
-  2. 跑 split_novel.py → 生成 artifacts/我的小说/分镜剧本/ + 第N集/raw.txt
-  3. 在 _进度.md 写入 N 集骨架（raw 列 ✅，其他全 ⬜）
-  4. 精修 global_style.md + characters/ + locations/
+  2. 跑 split_novel.py → 生成 artifacts/我的小说/{common/{_进度.md, global_style.md, characters/, locations/}, 脚本/第N集/raw.txt}
+  3. 在 common/_进度.md 写入 N 集骨架（raw 列 ✅，其他全 ⬜）
+  4. 精修 common/global_style.md + common/characters/ + common/locations/
   5. 精修第1集 8 类素材 → 物料列 ✅
   6. 报告：第1集物料齐，可调 /n2d-image 出图
 
@@ -179,7 +198,7 @@ n2d-image →
 
 ```
 def dispatch(work_root):
-    progress = read(f"{work_root}/分镜剧本/_进度.md")
+    progress = read(f"{work_root}/common/_进度.md")
     for episode in episodes_sorted_by_number(progress):
         stage1_cols = ["分镜剧本", "故事板", "素材清单", "配音", "BGM", "封面", "字幕中", "字幕英"]
         if any(episode[c] != "✅" for c in stage1_cols):

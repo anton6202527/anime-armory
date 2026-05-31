@@ -1,6 +1,6 @@
 # 视频 prompt 格式（Stage 3）
 
-把 `第N集/故事板.md` 的 Clip 表派生为**开箱即用**的视频 prompt 文件夹：`第N集/视频prompt/`。
+把 `脚本/第N集/故事板.md` 的 Clip 表派生为**开箱即用**的视频 prompt 文件夹：`出视频/第N集/`。
 
 ---
 
@@ -9,8 +9,8 @@
 ```markdown
 ## Clip K（时长 Ns · 镜头 N1[+N2]）
 
-**首帧**：`第N集/出图/镜头N1_<描述>.png`
-**尾帧**（可选，可灵/部分平台支持）：`第N集/出图/镜头N2_<描述>.png`
+**首帧**：`出图/第N集/镜头N1_<描述>.png`
+**尾帧**（可选，可灵/部分平台支持）：`出图/第N集/镜头N2_<描述>.png`
 **场景**：{场景名}（夜晚/内）
 
 ### 视频 prompt（中文，目标=即梦/可灵/Seedance）
@@ -74,7 +74,7 @@ dynamic detail: candle flame flickering, hair strands swaying;
 - 本集 Clip 总数 + 总时长（应与故事板一致）
 - 进度（已完成 / 总数）
 - 每 Clip 状态表（Clip K | 时长 | 首帧 | 尾帧 | 状态 ✅/⏳/⬜ | 落档路径）
-- 首帧 PNG 来源速查（对应 Stage 2 的 `第N集/出图/镜头N_*.png`）
+- 首帧 PNG 来源速查（对应 Stage 2 的 `出图/第N集/镜头N_*.png`）
 - 已知降级（如 Clip 3 image2video 跑不稳，改成 Clip3a/3b 两短段）
 
 ---

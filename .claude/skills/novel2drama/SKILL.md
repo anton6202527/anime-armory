@@ -19,15 +19,15 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 ```
 小说.txt/.docx
    ↓ /n2d-script   ← Stage 1：拆集 + 全局/角色/场景 + 8 类素材（剧本/故事板/素材清单/配音/BGM/封面/字幕中/字幕英）
-分镜剧本/ + 第N集/ 物料齐
+脚本/第N集/ 物料齐
    ↓ /n2d-image    ← Stage 2：出图 prompt（共享 + 本集两层）→ 扫本机生图 CLI → 调用 or 指导手动
-分镜剧本/出图/ + 第N集/出图/ PNG 齐
+出图/common/ + 出图/第N集/ PNG 齐
    ↓ /n2d-video    ← Stage 3：视频 prompt（从故事板派生）→ 扫本机生视频 CLI → 调用 or 指导手动
-第N集/视频/ MP4 齐
+出视频/第N集/ MP4 齐
    ↓ （Stage 4 配音/BGM/字幕合成不在本流水线 skill 范围）
 ```
 
-每个阶段都按 **集** 为单位推进；进度统一写进 `<作品>/分镜剧本/_进度.md`。
+每个阶段都按 **集** 为单位推进；进度统一写进 `<作品根>/common/_进度.md`。
 
 ## 调度工作流
 
@@ -44,7 +44,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 ### 读进度 → 路由
 
-1. 定位 `<作品根>/分镜剧本/_进度.md`，读进度表
+1. 定位 `<作品根>/common/_进度.md`，读进度表
 2. 进度表头形如：`| 集 | 字数 | raw | 分镜剧本 | 故事板 | 素材清单 | 配音 | BGM | 封面 | 字幕中 | 字幕英 | 出图prompt | 出图 |`
 3. 对每一集逐列判断：
    - **物料列**（分镜剧本 → 字幕英）任一为 ⬜ → 该集还在 Stage 1
@@ -70,34 +70,45 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 ```
 artifacts/<剧名>/
-├── 小说/                      ← 小说原文（.txt/.docx），子文件夹
-│   └── <剧名>.docx
-├── 分镜剧本/                  ← Stage 1 输出根（与小说同级）
-│   ├── global_style.md
-│   ├── characters/  locations/
-│   ├── 出图/                  ← Stage 2 共享层 PNG（定妆库）
-│   ├── 出图prompt/            ← Stage 2 共享层 prompt（00_索引 + 角色/场景/道具定妆）
-│   ├── _进度.md               ← 全作品进度（所有 stage 的 single source of truth）
+├── 小说/                          原文（.txt/.docx）
+├── common/                        全局资产 + 废料
+│   ├── _进度.md                   全作品 dashboard（4 skill 共用 single source of truth）
+│   ├── global_style.md            全局画风/世界观/目标AI
+│   ├── characters/                角色卡（设定 + 定妆 prompt 源头）
+│   ├── locations/                 场景卡
+│   └── 废料/                      4 选 1 / 废图 / 废视频
+│       ├── 出图/{common,第N集}/   筛选 / 废图
+│       └── 出视频/第N集/          废视频片段
+├── 脚本/                          ← n2d-script 产物
 │   └── 第N集/
 │       ├── raw.txt 分镜剧本.md 故事板.md 素材清单.md
 │       ├── voiceover.txt bgm.txt 封面.md
-│       ├── 字幕_中文.srt 字幕_英文.srt
-│       ├── 出图prompt/        ← Stage 2 本集层
-│       ├── 出图/              ← Stage 2 本集层 PNG（分镜出图）
-│       └── 视频/              ← Stage 3 本集层 MP4
-└── temp/                      ← Stage 2/3 废料归档（4 选 1 拼图 / 废图 / 废视频）
-    └── 第N集/                 ← 按集分子目录
+│       └── 字幕_中文.srt 字幕_英文.srt
+├── 出图/                          ← n2d-image 产物
+│   ├── common/                    全篇定妆库（PNG + prompt 扁平同目录）
+│   │   ├── 00_索引.md
+│   │   ├── 角色定妆.md / 场景定妆.md / 道具定妆.md
+│   │   └── 定妆_*.png
+│   └── 第N集/                     本集分镜（PNG + prompt 扁平同目录）
+│       ├── 00_总览.md
+│       ├── 01_分镜出图.md
+│       └── 镜头N_*.png
+└── 出视频/                        ← n2d-video 产物
+    └── 第N集/
+        ├── 00_总览.md
+        ├── 01_clips.md
+        └── ClipK_*.mp4
 ```
 
-> 旧仓库可能没有 `小说/` 子目录（原文直接在作品根）。仍能识别——找 `分镜剧本/` 相邻的 `.txt/.docx` 即为原文。
+> 旧仓库可能没有 `小说/` 子目录（原文直接在作品根）。仍能识别——作品根下 `.txt/.docx` 即为原文。
 
 ## 子 skill 速查
 
 | skill | 何时调 | 输入 | 关键输出 |
 |---|---|---|---|
-| `/n2d-script` | 首跑（拆集）/ 精修某集物料 | 小说路径 或 作品根 + 集号 | `第N集/` 8 类素材 + `_进度.md` 物料列勾 ✅ |
-| `/n2d-image` | 物料齐后出图 prompt + 生图 | 作品根 + 集号 | `出图prompt/` + `出图/` PNG + 进度勾 ✅ |
-| `/n2d-video` | 出图齐后出视频 prompt + 生视频 | 作品根 + 集号 | `第N集/视频/` MP4 + 进度勾 ✅ |
+| `/n2d-script` | 首跑（拆集）/ 精修某集物料 | 小说路径 或 作品根 + 集号 | `脚本/第N集/` 8 类素材 + `_进度.md` 物料列勾 ✅ |
+| `/n2d-image` | 物料齐后出图 prompt + 生图 | 作品根 + 集号 | `出图/{common,第N集}/` prompt + PNG + 进度勾 ✅ |
+| `/n2d-video` | 出图齐后出视频 prompt + 生视频 | 作品根 + 集号 | `出视频/第N集/` MP4 + 进度勾 ✅ |
 
 ## 实战参考
 

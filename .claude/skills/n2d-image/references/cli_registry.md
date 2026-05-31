@@ -55,7 +55,7 @@ done
 ```bash
 # 定妆首图（无参考图）
 dreamina text2image \
-  --prompt "$(cat <共享/出图prompt/角色定妆.md  内某 prompt 块>)" \
+  --prompt "$(cat <出图/common/角色定妆.md  内某 prompt 块>)" \
   --negative "$(cat <统一负面词文件>)" \
   --aspect 9:16 \
   --model 图片3.0 \
@@ -65,7 +65,7 @@ dreamina text2image \
 
 # 形态变体（图生图）
 dreamina image2image \
-  --ref <共享/出图/定妆_<角色>_<常态>.png> \
+  --ref <出图/common/定妆_<角色>_<常态>.png> \
   --ref-strength 0.8 \
   --prompt "..." \
   --negative "..." \
@@ -74,9 +74,9 @@ dreamina image2image \
 
 # 分镜出图（图生图 + 参考图）
 dreamina image2image \
-  --ref <共享/出图/定妆_<角色>.png> \
+  --ref <出图/common/定妆_<角色>.png> \
   --ref-strength 0.75 \
-  --prompt "$(cat <第N集/出图prompt/01_分镜出图.md 镜头N 块>)" \
+  --prompt "$(cat <出图/第N集/01_分镜出图.md 镜头N 块>)" \
   --negative "..." \
   --aspect 9:16 \
   --out <第N集/出图/镜头N_xxx.png>

@@ -13,7 +13,7 @@ description: Stage 2 of novel2drama pipeline — for a 作品 episode whose Stag
 - **强制 5 步 SOP**：每集出图 prompt 生成前必走"扫共享 → 列需求 → 差集 → 追加共享 → 建本集"，**跳过第 1 步必跨集脸漂移**。
 - **跨 AI 锚定句铁律**：若**图 AI ≠ 视频 AI**，每个 image prompt 末尾**必须**拼接目标视频 AI 的"图像风格锚定句"，否则视频 AI 的 image2video 运动估计会崩。
 - **生图调用优先级**：本机已装的官方 CLI → Bash 直调；没装的 → 一步步指导手动；批量并发可 spawn sub-agent。**不装第三方逆向 CLI**（违 ToS + 封号风险）。
-- **废料归档**：所有筛选拼图 / 废图 → `artifacts/<剧名>/temp/第N集/`，**绝不留在 Downloads 或散落作品根**。
+- **废料归档**：所有筛选拼图 / 废图 → `artifacts/<剧名>/common/废料/出图/{common,第N集}/`，**绝不留在 Downloads 或散落作品根**。
 
 ## 输入前置条件
 
@@ -25,11 +25,11 @@ description: Stage 2 of novel2drama pipeline — for a 作品 episode whose Stag
 ### 阶段 A — 出图 prompt 生成（5 步强制 SOP）
 
 **① 扫描共享库**
-- 读 `分镜剧本/出图prompt/00_索引.md`（若不存在则首次创建——格式见 `references/prompt_format.md §1`）
+- 读 `出图/common/00_索引.md`（若不存在则首次创建——格式见 `references/prompt_format.md §1`）
 - 盘清楚：已有哪些角色（含形态变体）/场景/道具，及状态（✅/⏳/⬜）
 
 **② 列出本集需求**
-- 读 `第N集/分镜剧本.md` + `素材清单.md`
+- 读 `脚本/第N集/分镜剧本.md` + `素材清单.md`
 - 提取本集需要的所有角色/场景/道具/特殊视觉
 
 **③ 差集 = 新增项**
@@ -41,8 +41,8 @@ description: Stage 2 of novel2drama pipeline — for a 作品 episode whose Stag
 - 对应 `角色|场景|道具定妆.md` 追加完整 prompt 块（格式见 `references/prompt_format.md §2`）
 
 **⑤ 建本集 prompt 文件夹**
-- `第N集/出图prompt/00_总览_出图清单.md`（本集图清单 + 引用共享 + 进度）
-- `第N集/出图prompt/01_分镜出图.md`（本集 N 张分镜，一镜一图，复杂镜拆 NA/NB）
+- `出图/第N集/00_总览.md`（本集图清单 + 引用共享 + 进度）
+- `出图/第N集/01_分镜出图.md`（本集 N 张分镜，一镜一图，复杂镜拆 NA/NB）
 
 **完成后**：
 - `_进度.md` 该集 **`出图prompt` 列填 ✅**（共享层新增 + 本集总览 + 本集分镜 三处都写完算 ✅）
@@ -66,19 +66,19 @@ done
 - 选定后告知用户："找到 X，将用它出图。如不同意请打断。"
 - 按 SOP 一镜一图调用（详见"调用规范"）
 - **批量加速可选**：>10 张时，可 spawn 多个 sub-agent 并发调用 CLI（每个负责一段镜头），主线程收集结果
-- 中间筛选废料 → `temp/第N集/`，定稿 PNG → 共享 `出图/` 或本集 `出图/`
+- 中间筛选废料 → `common/废料/出图/{common,第N集}/`，定稿 PNG → `出图/common/` 或 `出图/第N集/`
 
 **分支 2：本机无合适 CLI**
 - 告知用户："本机未检测到合适的图 AI CLI（已扫 dreamina/gemini-cli/...）。可以由我一步步指导你在 [默认即梦 web] 上生图，你跑完每批回传，我帮你筛选 + 落档。"
 - 进入"手动指导模式"：
   - 一次一张（或一批），把 prompt + 即梦参数列出来
-  - 让用户截图回传 → Claude 评判 → 通过则落档（用户从 Downloads 挪 PNG 进 共享 `出图/` 或本集 `出图/`），不通过则建议调整 prompt 或重抽
+  - 让用户截图回传 → Claude 评判 → 通过则落档（用户从 Downloads 挪 PNG 进 `出图/common/` 或 `出图/第N集/`），不通过则建议调整 prompt 或重抽
 - 用户也可主动切换：换用 可灵 web / DALL-E web 等，本 skill 按 `references/platforms.md` 给对应平台的 prompt 适配
 
 ### 阶段 D — 进度回写 + 推进
 
 每出一张定稿 PNG：
-1. PNG 落档到正确位置（共享定妆 → 共享 `出图/`；本集分镜 → 第N集 `出图/`）
+1. PNG 落档到正确位置（共享定妆 → `出图/common/`；本集分镜 → `出图/第N集/`）
 2. 共享 `00_索引.md` 该项状态改 ✅，填 PNG 路径
 3. `_进度.md` 该集 `出图` 列分子 +1
 
@@ -101,13 +101,13 @@ done
    ```bash
    <cli> <subcommand> --prompt "$(cat <prompt_file_or_inline>)" \
                      --negative "..." \
-                     --ref-image <共享/出图/定妆_xxx.png> \
+                     --ref-image <出图/common/定妆_xxx.png> \
                      --ref-strength 0.8 \
                      --aspect 9:16 \
                      --out <目标 PNG 路径>
    ```
    （各 CLI 具体子命令/参数见 `references/cli_registry.md` 单家档案）
-3. 检查产出 → 通过则原位 PNG 已落档；废图 → `mv` 到 `temp/第N集/`
+3. 检查产出 → 通过则原位 PNG 已落档；废图 → `mv` 到 `common/废料/出图/{common,第N集}/`
 4. **跨 AI 锚定句**：组装 prompt 时若 `global_style.md` 标的 图AI ≠ 视频AI，自动在 prompt 末尾追加视频AI 的锚定句（详见 `references/platforms.md`）
 
 **安装新 CLI 时**（用户同意才做）：
@@ -126,10 +126,10 @@ done
 | 错误 | 纠正 |
 |---|---|
 | 跳过 SOP 第 ① 步（不扫共享） | 必然重复劳动 + 跨集脸漂移 |
-| 把定妆图当本集分镜放到 `第N集/出图/` | 共享资产去 共享 `出图/` |
+| 把定妆图当本集分镜放到 `出图/第N集/` | 共享资产去 `出图/common/` |
 | 角色切换时不清空参考图 | 即梦参考图框是粘性的，新角色前必须清空（见 Q&A Q8） |
 | 场景图带角色参考图 | 场景定妆**必须**清空人物参考图（见 Q&A Q12） |
 | 图 AI ≠ 视频 AI 时漏拼锚定句 | image prompt 末尾必须拼视频 AI 锚定句 |
 | 装第三方逆向 CLI | 违 ToS、封号风险，仅装官方 |
-| 废图留在 Downloads | 全部归档 `temp/第N集/`，Downloads 清空 |
+| 废图留在 Downloads | 全部归档 `common/废料/出图/{common,第N集}/`，Downloads 清空 |
 | 全部串行生 100 张 | 大量分镜可 spawn 子 agent 并发调 CLI |
