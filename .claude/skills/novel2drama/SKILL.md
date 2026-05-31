@@ -85,20 +85,28 @@ artifacts/<剧名>/
 │       ├── voiceover.txt bgm.txt 封面.md
 │       └── 字幕_中文.srt 字幕_英文.srt
 ├── 出图/                          ← n2d-image 产物
-│   ├── common/                    全篇定妆库（PNG + prompt 扁平同目录）
-│   │   ├── 00_索引.md
-│   │   ├── 角色定妆.md / 场景定妆.md / 道具定妆.md
+│   ├── common/                    全篇定妆库
+│   │   ├── prompt/
+│   │   │   ├── 00_索引.md
+│   │   │   └── 角色定妆.md / 场景定妆.md / 道具定妆.md
 │   │   └── 定妆_*.png
-│   └── 第N集/                     本集分镜（PNG + prompt 扁平同目录）
-│       ├── 00_总览.md
-│       ├── 01_分镜出图.md
+│   └── 第N集/                     本集分镜
+│       ├── prompt/
+│       │   ├── 00_总览.md
+│       │   └── 01_分镜出图.md
 │       └── 镜头N_*.png
 └── 出视频/                        ← n2d-video 产物
+    ├── common/                    （如有跨集复用片段，如转场/空镜）
+    │   ├── prompt/
+    │   └── *.mp4
     └── 第N集/
-        ├── 00_总览.md
-        ├── 01_clips.md
+        ├── prompt/
+        │   ├── 00_总览.md
+        │   └── 01_clips.md
         └── ClipK_*.mp4
 ```
+
+> **prompt/PNG/MP4 分离铁律**：每个 `出图/` 或 `出视频/` 文件夹（无论是 `common/` 还是 `第N集/`）一律分两层——`prompt/` 子目录装所有 prompt md，**生成产物 PNG/MP4 在 `prompt/` 同级**（即 `common/` 或 `第N集/` 的根）。
 
 > 旧仓库可能没有 `小说/` 子目录（原文直接在作品根）。仍能识别——作品根下 `.txt/.docx` 即为原文。
 

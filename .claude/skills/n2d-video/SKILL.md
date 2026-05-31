@@ -10,6 +10,7 @@ description: Stage 3 of novel2drama pipeline — for a 作品 episode whose Stag
 ## 核心原则
 
 - **图生视频为主，文生视频为辅**：每个 Clip 以 Stage 2 出的 PNG 为首帧（可灵/部分平台支持首尾帧），视频 AI 只控制"动作 + 运镜"。纯空镜/转场/氛围镜头可文生视频。
+- **prompt / 产物分离铁律**：每个 `出视频/` 目录（`common/` 跨集复用片段 或 `第N集/`）都分两层——所有 prompt md 进 `prompt/` 子目录，生成 MP4 **平铺**在 prompt/ 的同级父目录。详见 `novel2drama/references/architecture.md` "prompt / 产物分离铁律"章节。
 - **运动 + 运镜 + 动态细节三件套必写**：只写画面不写运动 → AI 会随机推断，常翻车。
 - **平台差异在档案里**：单 Clip 时长 / 运镜词偏好 / 首尾帧机制 / 提示词语言 见 `references/platforms.md`。默认即梦 5~8s。
 - **生视频调用优先级**：本机已装的官方 CLI → Bash 直调；没装 → 一步步指导手动；大批量可 spawn sub-agent。
@@ -27,7 +28,7 @@ description: Stage 3 of novel2drama pipeline — for a 作品 episode whose Stag
 
 源数据：`脚本/第N集/故事板.md`（Stage 1 写的 Clip 表）+ `出图/第N集/镜头N_*.png`（Stage 2 出的定稿首帧）。
 
-输出：`出视频/第N集/00_总览.md` + `出视频/第N集/01_clips.md`（按 Clip 一段一块）。
+输出：`出视频/第N集/prompt/00_总览.md` + `出视频/第N集/prompt/01_clips.md`（按 Clip 一段一块）。
 
 **单 Clip prompt 块标准格式**（详见 `references/prompt_format.md §1`）：
 
@@ -97,7 +98,7 @@ done
 
 每出一条定稿 MP4：
 1. MP4 落档到 `出视频/第N集/Clip<K>_<描述>.mp4`
-2. `视频prompt/00_总览.md` 对应 Clip 行状态改 ✅
+2. `出视频/第N集/prompt/00_总览.md` 对应 Clip 行状态改 ✅
 3. `_进度.md` 该集 `视频` 列分子 +1
 
 本集 `视频` 列 = 分母时：
@@ -114,7 +115,7 @@ done
 
 **通用流程**（每个 Clip）：
 
-1. 从 `视频prompt/01_clips.md` 读出本段 prompt + 首帧路径 + 平台参数
+1. 从 `出视频/第N集/prompt/01_clips.md` 读出本段 prompt + 首帧路径 + 平台参数
 2. 走 CLI：
    ```bash
    <cli> image2video \

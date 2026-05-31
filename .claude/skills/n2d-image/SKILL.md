@@ -10,6 +10,7 @@ description: Stage 2 of novel2drama pipeline — for a 作品 episode whose Stag
 ## 核心原则
 
 - **两层架构**：定妆（角色/场景/反复入镜道具）放**共享层**全篇复用；分镜出图（一镜一图）放**本集层**。
+- **prompt / 产物分离铁律**：每个 `出图/` 目录（`common/` 或 `第N集/`）都分两层——所有 prompt md 进 `prompt/` 子目录，定妆 PNG 与分镜 PNG **平铺**在 prompt/ 的同级父目录。详见 `references/prompt_format.md §1 §2` 与 `novel2drama/references/architecture.md` "prompt / 产物分离铁律"章节。
 - **强制 5 步 SOP**：每集出图 prompt 生成前必走"扫共享 → 列需求 → 差集 → 追加共享 → 建本集"，**跳过第 1 步必跨集脸漂移**。
 - **跨 AI 锚定句铁律**：若**图 AI ≠ 视频 AI**，每个 image prompt 末尾**必须**拼接目标视频 AI 的"图像风格锚定句"，否则视频 AI 的 image2video 运动估计会崩。
 - **生图调用优先级**：本机已装的官方 CLI → Bash 直调；没装的 → 一步步指导手动；批量并发可 spawn sub-agent。**不装第三方逆向 CLI**（违 ToS + 封号风险）。
@@ -25,7 +26,7 @@ description: Stage 2 of novel2drama pipeline — for a 作品 episode whose Stag
 ### 阶段 A — 出图 prompt 生成（5 步强制 SOP）
 
 **① 扫描共享库**
-- 读 `出图/common/00_索引.md`（若不存在则首次创建——格式见 `references/prompt_format.md §1`）
+- 读 `出图/common/prompt/00_索引.md`（若不存在则首次创建——格式见 `references/prompt_format.md §1`）
 - 盘清楚：已有哪些角色（含形态变体）/场景/道具，及状态（✅/⏳/⬜）
 
 **② 列出本集需求**
@@ -41,8 +42,8 @@ description: Stage 2 of novel2drama pipeline — for a 作品 episode whose Stag
 - 对应 `角色|场景|道具定妆.md` 追加完整 prompt 块（格式见 `references/prompt_format.md §2`）
 
 **⑤ 建本集 prompt 文件夹**
-- `出图/第N集/00_总览.md`（本集图清单 + 引用共享 + 进度）
-- `出图/第N集/01_分镜出图.md`（本集 N 张分镜，一镜一图，复杂镜拆 NA/NB）
+- `出图/第N集/prompt/00_总览.md`（本集图清单 + 引用共享 + 进度）
+- `出图/第N集/prompt/01_分镜出图.md`（本集 N 张分镜，一镜一图，复杂镜拆 NA/NB）
 
 **完成后**：
 - `_进度.md` 该集 **`出图prompt` 列填 ✅**（共享层新增 + 本集总览 + 本集分镜 三处都写完算 ✅）

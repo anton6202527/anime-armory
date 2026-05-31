@@ -437,11 +437,15 @@ artifacts/<剧名>/
 │   │   ├── 定妆_<角色>_<形态>.png
 │   │   ├── 定妆_<场景>.png
 │   │   └── 定妆_<道具>.png
-│   └── 第N集/                        扁平
-│       ├── 00_总览.md / 01_分镜出图.md
+│   └── 第N集/
+│       ├── prompt/
+│       │   ├── 00_总览.md
+│       │   └── 01_分镜出图.md
 │       └── 镜头N_<描述>.png
 └── 出视频/第N集/                     ← Stage 3
-    ├── 00_总览.md / 01_clips.md
+    ├── prompt/
+    │   ├── 00_总览.md
+    │   └── 01_clips.md
     └── ClipK_<描述>.mp4
 ```
 
@@ -731,10 +735,11 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
     │   ├── 场景定妆.md
     │   ├── 道具定妆.md
     │   └── 定妆_*.png         定妆 PNG 库
-    └── 第N集/                 扁平
-        ├── 00_总览.md         本集图清单（引用 shared）
-        ├── 01_分镜出图.md     本集独有分镜 prompt
-        └── 镜头N_*.png        本集分镜 PNG
+    └── 第N集/
+        ├── prompt/             本集 prompt 文件
+        │   ├── 00_总览.md      本集图清单（引用 shared）
+        │   └── 01_分镜出图.md  本集独有分镜 prompt
+        └── 镜头N_*.png         本集分镜 PNG
 ```
 
 > 历史记录：v2（2026-05 起）共享层在 `分镜剧本/出图/` + `分镜剧本/出图prompt/`，本集在 `分镜剧本/第N集/出图prompt/` 等。v3 起每个 skill 占一个顶层文件夹，**全篇共享资产从 stage-1 子目录里迁出独立**，详见 Q21。
@@ -756,11 +761,11 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 
 ```
 1. 第N集 出料发现新角色/场景/道具
-2. 出图/common/00_索引.md 追加 ⬜ 行
-3. 出图/common/角色|场景|道具定妆.md 追加完整 prompt 块
+2. 出图/common/prompt/00_索引.md 追加 ⬜ 行
+3. 出图/common/prompt/角色|场景|道具定妆.md 追加完整 prompt 块
 4. 跑即梦（或 CLI 自动）→ 挑图 → PNG 落 出图/common/
 5. 索引状态改 ✅
-6. 出图/第N集/00_总览.md 引用 shared
+6. 出图/第N集/prompt/00_总览.md 引用 shared
 7. 后续集自动复用，不再重做
 ```
 
@@ -782,12 +787,12 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 - **避免重复**：4 张定妆图存 100 次 = 400 张 PNG。共享后 = 4 张。
 - **保证一致**：跨集偶然修改某张定妆会立刻让其他集不一致。集中管理避免漂移。
 - **降低生成成本**：复用 = 无需重抽，省钱（即梦会员积分）省时间。
-- **方便回溯**：所有角色"曾经画过什么样"集中在 `出图/common/角色定妆.md`，无需翻 N 个集子。
+- **方便回溯**：所有角色"曾经画过什么样"集中在 `出图/common/prompt/角色定妆.md`，无需翻 N 个集子。
 
 ### 19.7 跟 `characters/` / `locations/` 的关系
 
 - `common/characters/角色名.md` 是**人物设定文档**（小说级，剧情服务）
-- `出图/common/角色定妆.md` 是**生产实战 prompt**（AI 服务，含即梦操作 SOP）
+- `出图/common/prompt/角色定妆.md` 是**生产实战 prompt**（AI 服务，含即梦操作 SOP）
 - 前者是设定，后者是执行。前者由编剧维护，后者由制作维护。
 - 两者锁定的"妆造拆解"完全一致——`出图/common/` 只是把 `characters/` 的 ① 定妆照 prompt 加上即梦操作、检查清单、参考图依赖等"实战包装"。
 
@@ -799,7 +804,7 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 
 ```
 ① 扫描共享库
-   读 出图/common/00_索引.md
+   读 出图/common/prompt/00_索引.md
    盘清楚：已有哪些角色（含形态变体）/场景/道具，及状态（✅/⏳/⬜）
    ↓
 ② 列出本集需求
@@ -811,12 +816,12 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
    包括："首次出现的全新角色/场景/道具" + "已有角色的新形态变体"
    ↓
 ④ 追加共享库（仅新增项）
-   出图/common/00_索引.md 追加 ⬜ 行
-   出图/common/角色|场景|道具定妆.md 追加实战 prompt 块
+   出图/common/prompt/00_索引.md 追加 ⬜ 行
+   出图/common/prompt/角色|场景|道具定妆.md 追加实战 prompt 块
    ↓
 ⑤ 建本集 prompt 文件夹
-   出图/第N集/00_总览.md（含引用共享）
-   出图/第N集/01_分镜出图.md（本集独有分镜）
+   出图/第N集/prompt/00_总览.md（含引用共享）
+   出图/第N集/prompt/01_分镜出图.md（本集独有分镜）
 ```
 
 ### 20.2 实战例子：第2集 出图 prompt 生成

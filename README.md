@@ -48,9 +48,9 @@ anime-armory/
     │                                        + voiceover/bgm/封面 + 字幕_中文/英文.srt
     ├── 出图/                               ← Stage 2：n2d-image 产物
     │   ├── common/                         扁平：00_索引 + 角色/场景/道具定妆.md + 定妆_*.png
-    │   └── 第N集/                          扁平：00_总览.md + 01_分镜出图.md + 镜头N_*.png
+    │   └── 第N集/                          prompt/（00_总览.md + 01_分镜出图.md）+ 镜头N_*.png
     └── 出视频/第N集/                       ← Stage 3：n2d-video 产物
-                                             00_总览.md + 01_clips.md + ClipK_*.mp4
+                                             prompt/（00_总览.md + 01_clips.md）+ ClipK_*.mp4
 ```
 
 ## 快速开始（在 Claude Code 中）

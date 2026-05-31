@@ -4,19 +4,22 @@
 
 ---
 
-## 1. 共享层 — `出图/common/`（全篇一份，扁平：PNG + prompt 同目录）
+## 1. 共享层 — `出图/common/`（全篇一份：prompt/ 文件夹 + PNG 同级）
 
 ```
 出图/common/
-├── 00_索引.md               全篇定妆清单 + 状态 + 首现/复用范围 + PNG 路径
-├── 角色定妆.md              所有角色（含形态变体）实战 prompt
-├── 场景定妆.md              所有场景实战 prompt
-├── 道具定妆.md              关键道具实战 prompt
-├── 定妆_<角色>.png          定妆 PNG（与 prompt 同目录，扁平）
+├── prompt/                  共享 prompt 文件
+│   ├── 00_索引.md           全篇定妆清单 + 状态 + 首现/复用范围 + PNG 路径
+│   ├── 角色定妆.md          所有角色（含形态变体）实战 prompt
+│   ├── 场景定妆.md          所有场景实战 prompt
+│   └── 道具定妆.md          关键道具实战 prompt
+├── 定妆_<角色>.png          定妆 PNG（与 prompt/ 平级，扁平）
 ├── 定妆_<角色>_<形态>.png
 ├── 定妆_<场景>.png
 └── 定妆_<道具>.png
 ```
+
+> **prompt / 产物分离铁律**：本 skill 任一目录（`common/` 或 `第N集/`）下，所有 prompt md 进 `prompt/` 子目录；生成产物 PNG 平铺在父目录。详见 `novel2drama/references/architecture.md` 二节。
 
 ### 1.1 `00_索引.md` 必含字段
 
@@ -64,13 +67,14 @@
 
 ---
 
-## 2. 本集层 — `出图/第N集/`（每集一份，扁平：PNG + prompt 同目录）
+## 2. 本集层 — `出图/第N集/`（每集一份：prompt/ 文件夹 + PNG 同级）
 
 ```
 出图/第N集/
-├── 00_总览.md               本集图清单 + 引用共享库 + 本集分镜进度
-├── 01_分镜出图.md           本集 N 张分镜实战 prompt（一镜一图，复杂镜可拆 NA/NB）
-└── 镜头N_<描述>.png         本集分镜 PNG（与 prompt 同目录，扁平）
+├── prompt/
+│   ├── 00_总览.md           本集图清单 + 引用共享库 + 本集分镜进度
+│   └── 01_分镜出图.md       本集 N 张分镜实战 prompt（一镜一图，复杂镜可拆 NA/NB）
+└── 镜头N_<描述>.png         本集分镜 PNG（与 prompt/ 平级）
 ```
 
 ### 2.1 `00_总览.md` 必含字段
@@ -125,16 +129,16 @@
 ```
 第N集 出料阶段发现新角色"X"（n2d-script 阶段已建 characters/X.md 含 ① 定妆 prompt）
   ↓ n2d-image 阶段：
-① 出图/common/00_索引.md 追加 ⬜ 行（ID/名称/首现/复用）
+① 出图/common/prompt/00_索引.md 追加 ⬜ 行（ID/名称/首现/复用）
   ↓
-② 出图/common/角色定妆.md 追加完整 prompt 块（本文 §1.2 格式）
+② 出图/common/prompt/角色定妆.md 追加完整 prompt 块（本文 §1.2 格式）
    （来源 = characters/X.md 的 ① 定妆 prompt + Stage 2 的实战包装：即梦设置 + 检查清单）
   ↓
 ③ 跑即梦 CLI（或手动指导）→ 挑图 → PNG 落到 出图/common/
   ↓
 ④ 索引状态改 ✅，填 PNG 路径
   ↓
-⑤ 出图/第N集/00_总览.md 引用此 PNG
+⑤ 出图/第N集/prompt/00_总览.md 引用此 PNG
   ↓
 ⑥ 后续集自动复用，不再重做
 ```
@@ -148,9 +152,9 @@
 | `脚本/第N集/分镜剧本.md` | n2d-script | 提供"画面视觉描述"原文（艺术层）|
 | `脚本/第N集/素材清单.md` | n2d-script | 简版图清单（理论） |
 | `common/characters/<X>.md` 的 ① Prompt | n2d-script | 角色定妆 prompt 源头 |
-| `出图/common/角色\|场景\|道具定妆.md` | **n2d-image** | **实战定妆 prompt**（含 CLI 调用 + 检查清单 + 已知瑕疵） |
-| `出图/第N集/01_分镜出图.md` | **n2d-image** | **实战分镜 prompt**（含参考图 + 操作） |
-| `出图/第N集/00_总览.md` | **n2d-image** | 本集图清单 + 引用共享 + 进度 |
+| `出图/common/prompt/角色\|场景\|道具定妆.md` | **n2d-image** | **实战定妆 prompt**（含 CLI 调用 + 检查清单 + 已知瑕疵） |
+| `出图/第N集/prompt/01_分镜出图.md` | **n2d-image** | **实战分镜 prompt**（含参考图 + 操作） |
+| `出图/第N集/prompt/00_总览.md` | **n2d-image** | 本集图清单 + 引用共享 + 进度 |
 | `脚本/第N集/故事板.md` | n2d-script | Clip 表，**Stage 3 视频生成**用，不在 image prompt 文件夹中 |
 
 **一句话**：

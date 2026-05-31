@@ -1,6 +1,6 @@
 # 视频 prompt 格式（Stage 3）
 
-把 `脚本/第N集/故事板.md` 的 Clip 表派生为**开箱即用**的视频 prompt 文件夹：`出视频/第N集/`。
+把 `脚本/第N集/故事板.md` 的 Clip 表派生为**开箱即用**的视频 prompt 文件夹：`出视频/第N集/prompt/`。
 
 ---
 
@@ -89,7 +89,7 @@ dynamic detail: candle flame flickering, hair strands swaying;
 | 转场（白光闪过 / 黑屏过渡）| **文生视频** | 同上 |
 | 氛围镜头（远景城池 / 山雨欲来）| **文生视频** | 无人物或人物极远 |
 
-文生视频 Clip 在本集 `视频prompt/01_clips.md` 标注：`**模式**：文生视频（无首帧）`
+文生视频 Clip 在本集 `出视频/第N集/prompt/01_clips.md` 标注：`**模式**：文生视频（无首帧）`
 
 ---
 
@@ -102,5 +102,5 @@ Stage 3 第一次跑时，往 `_进度.md` 表头追加 `视频prompt` + `视频
 | 第K集 | ✅ | ✅ | 16/16 | ✅ | 4/8 |
 ```
 
-- `视频prompt` ✅ / ⬜：本集 `视频prompt/` 全套写完
+- `视频prompt` ✅ / ⬜：本集 `出视频/第N集/prompt/` 全套写完
 - `视频`：`已完成 MP4 / 本集 Clip 总数`
