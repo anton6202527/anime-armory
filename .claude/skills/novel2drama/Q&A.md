@@ -26,6 +26,7 @@
 - [Q18：图 AI 和视频 AI 是什么关系？image prompt 该按谁写？](#q18)
 - [Q19：定妆图能跨集复用吗？目录怎么组织？](#q19)
 - [Q20：下一集出料时怎么自动复用前几集的定妆？SOP 是什么？](#q20)
+- [Q21：skill 越攒越重，要不要拆？4 个 skill 还是单写 agent？](#q21)
 
 ---
 
@@ -870,3 +871,82 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 | Step 2 分镜出图（12镜） | 待开始 |
 | Step 3 图生视频（12镜） | 待开始 |
 | Step 4 配音+BGM+字幕合成 | 待开始 |
+
+---
+
+## Q21：skill 越攒越重，要不要拆？4 个 skill 还是单写 agent？<a id="q21"></a>
+
+**结论：拆成 4 个 skill，不要单写 agent。**
+
+### 21.1 起因（2026-05-31）
+
+原 `novel2drama` 单 skill 在 100+ 集制作期间膨胀：拆集 + 全局/角色/场景 + 8 类素材 + 出图 prompt + 出图 CLI 操作 + 视频 prompt + 视频 CLI 操作——全揉在一个 SKILL.md（117 行）+ `references/formats.md`（323 行，含两层架构 §10）+ `references/platforms.md`（147 行）。
+
+具体痛点：
+- 任一集只在某一阶段时，无关阶段细节也被加载进上下文（如精修剧本时不需要 CLI 调用细节）
+- 不同 AI 工具（图 AI / 视频 AI）的差异散布在多处
+- 经验沉淀（本 Q&A）越累越多，单文件 873 行难翻
+- 想加新功能（如本机 CLI 探测、并发生图）时不敢动——动哪儿都怕影响其他阶段
+
+### 21.2 决策：skill vs agent
+
+| 维度 | skill | agent |
+|---|---|---|
+| 用户能否直接触发 | ✅ `/n2d-image` | ❌ 只能被自动调起 |
+| 阶段间是否需要人工 review | ✅ 留在主上下文，方便在线打回精修 | ❌ agent 隔离上下文，每次返回都丢状态 |
+| 文件读写状态共享（`_进度.md`） | ✅ 都在主上下文里看 | ❌ agent 看不到 |
+| 节省上下文 | ✅ 只在被调起时加载 | ✅ 但代价是失忆 |
+
+**这个流水线是「分阶段 + 强交互（用户在线筛图、改本子）」**，正好是 skill 的主场。agent 适合"扔出去几个小时不管它自己干完"的并行工作。
+
+### 21.3 4-skill 结构
+
+```
+.claude/skills/
+├── novel2drama/                  ← Stage 0：调度（薄，~110 行）
+│   ├── SKILL.md                  扫作品根 → 读 _进度.md → 推荐下一步该调哪个 skill
+│   ├── Q&A.md                    全阶段沉淀（保留原位）
+│   └── references/architecture.md  四阶段流水线总览 + 目录铁律 + 首跑示范
+├── n2d-script/                   ← Stage 1：拆集 + 8 类素材
+│   ├── SKILL.md
+│   ├── scripts/split_novel.py
+│   └── references/{formats,platforms}.md
+├── n2d-image/                    ← Stage 2：出图 prompt + 生图
+│   ├── SKILL.md                  两层架构 + 5 步 SOP + 扫 CLI + 调用/指导
+│   └── references/{prompt_format,platforms,cli_registry}.md
+└── n2d-video/                    ← Stage 3：出视频 prompt + 生视频
+    ├── SKILL.md                  视频 prompt + 扫 CLI + 调用/指导
+    └── references/{prompt_format,platforms,cli_registry}.md
+```
+
+### 21.4 关于"扫本机生图/视频 CLI 并调用"
+
+- **扫描**：直接 Bash `command -v <name>`，配合 `references/cli_registry.md` 里一份"已知 CLI 清单"
+- **调用**：**直接 Bash 调用即可，不需要 agent**
+- **何时上 agent**：本集分镜 ≥10 张 / Clip ≥6 段，需要并发生图/生视频时，可 spawn 2-4 个 sub-agent 各跑一段 CLI；主线程统一收集 + 筛选 + 落档
+- **第三方逆向 CLI 严禁装**（违 ToS + 封号），仅装官方（dreamina / gemini-cli / ...）
+
+### 21.5 4-skill vs 单大 skill 的权衡
+
+| 方面 | 4-skill | 单大 skill |
+|---|---|---|
+| 上下文清洁度 | ✅ 高 | ❌ 各阶段细节互相污染 |
+| 用户命令记忆负担 | 4 个命令（调度兜底） | 1 个 |
+| 阶段并行 | ✅ 第 K 集出图 + 第 K+1 集精修可并行 | 可以但容易混 |
+| 公共逻辑重复 | platforms.md 在 3 个 skill 各一份 | 一份 |
+| 新增功能扩展 | 改对应阶段 skill，影响范围小 | 改大文件容易破坏其他阶段 |
+| 翻车修正定位 | 锁在某个 skill 内 | 全局都受影响 |
+
+**结论**：未来功能只会越加越多，4 个 skill 的隔离收益 > platforms.md 复制 3 份的成本。
+
+### 21.6 拆分的实施约定
+
+- **进度表（`_进度.md`）是 single source of truth**，4 个 skill 都读写它
+- **目录约定**（`作品根/小说/`、`分镜剧本/`、`出图/` 共享层、`第N集/`、`temp/`）由 `novel2drama/references/architecture.md` 统一管
+- **Q&A.md 保留在 `novel2drama/`**，全阶段共用；各阶段 skill 在 SKILL.md 末尾指向 Q&A.md 的相关问题号
+- **`platforms.md` 在 3 个阶段 skill 各放一份**（每份内容相同，~150 行）——self-contained 比共享路径黑魔法稳
+
+### 21.7 后续可能的扩展
+
+- Stage 4 合成（配音 + BGM + 字幕 + 剪辑）当前不在 skill 范围；未来若加入 `n2d-compose`，进度表追加 `成片` 列，调度规则向后扩展即可
+- 自动化进度查询脚本可后续抽到 `novel2drama/scripts/`，目前人肉读表 + Claude 解读已够用
