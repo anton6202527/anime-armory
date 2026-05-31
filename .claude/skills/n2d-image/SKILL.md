@@ -13,7 +13,8 @@ description: Stage 2 of novel2drama pipeline — for a 作品 episode whose Stag
 - **prompt / 产物分离铁律**：每个 `出图/` 目录（`common/` 或 `第N集/`）都分两层——所有 prompt md 进 `prompt/` 子目录，定妆 PNG 与分镜 PNG **平铺**在 prompt/ 的同级父目录。详见 `references/prompt_format.md §1 §2` 与 `novel2drama/references/architecture.md` "prompt / 产物分离铁律"章节。
 - **强制 5 步 SOP**：每集出图 prompt 生成前必走"扫共享 → 列需求 → 差集 → 追加共享 → 建本集"，**跳过第 1 步必跨集脸漂移**。
 - **跨 AI 锚定句铁律**：若**图 AI ≠ 视频 AI**，每个 image prompt 末尾**必须**拼接目标视频 AI 的"图像风格锚定句"，否则视频 AI 的 image2video 运动估计会崩。
-- **生图调用优先级**：本机已装的官方 CLI → Bash 直调；没装的 → 一步步指导手动；批量并发可 spawn sub-agent。**不装第三方逆向 CLI**（违 ToS + 封号风险）。
+- **筛选宽容铁律**：候选图**能用就用，尽量不重抽**。只有"特别不匹配"才提重抽——即触发以下硬伤之一：① 核心人/物/场景错位（如该镜要木榻拍成石凳、该出现的人没出现）② 定妆脸/服漂移到识别不出 ③ 违反 prompt 检查项里的硬性禁忌（如要求"无血浆"却出血浆、要求"特写"却出全景）。轻微偏差（构图小动、表情微差、目光朝向略偏、环境细节小出入）→ 直接通过落档，**不要拖节奏**。
+- **生图调用优先级**：本机已装的官方 CLI → Bash 直调；没装的 → **先问用户有没有其他自动生图 AI**，没有再默认走即梦 web 手动指导；批量并发可 spawn sub-agent。**不装第三方逆向 CLI**（违 ToS + 封号风险）。
 - **废料归档**：所有筛选拼图 / 废图 → `artifacts/<剧名>/common/废料/出图/{common,第N集}/`，**绝不留在 Downloads 或散落作品根**。
 
 ## 输入前置条件
@@ -70,10 +71,14 @@ done
 - 中间筛选废料 → `common/废料/出图/{common,第N集}/`，定稿 PNG → `出图/common/` 或 `出图/第N集/`
 
 **分支 2：本机无合适 CLI**
-- 告知用户："本机未检测到合适的图 AI CLI（已扫 dreamina/gemini-cli/...）。可以由我一步步指导你在 [默认即梦 web] 上生图，你跑完每批回传，我帮你筛选 + 落档。"
-- 进入"手动指导模式"：
+- **必须先问一句**（不要直接跳进即梦 web 手动模式）：
+  > "本机未检测到合适的图 AI CLI（已扫 dreamina/gemini-cli/...）。**默认我会一步步指导你在即梦 web 上生图**。但如果你本地或账号上有其他能自动接 prompt 跑图的 AI（如 SD WebUI / ComfyUI / Midjourney bot / 自建 API / 其它图生图服务），告诉我接入方式，我可以把 prompt 喂给它自动跑。否则就走即梦 web 手动模式。"
+- 用户回答后再分流：
+  - **有自动 AI** → 让用户提供调用方式（CLI 命令 / API endpoint / webhook），按 `references/cli_registry.md` 临时登记一项并走分支 1 流程
+  - **没有 / 用户直接说"走即梦"** → 进入"手动指导模式"
+- **手动指导模式**：
   - 一次一张（或一批），把 prompt + 即梦参数列出来
-  - 让用户截图回传 → Claude 评判 → 通过则落档（用户从 Downloads 挪 PNG 进 `出图/common/` 或 `出图/第N集/`），不通过则建议调整 prompt 或重抽
+  - 让用户截图回传 → Claude 按**筛选宽容铁律**评判 → 通过则落档（用户从 Downloads 挪 PNG 进 `出图/common/` 或 `出图/第N集/`），只有触发硬伤才建议调整 prompt 或重抽
 - 用户也可主动切换：换用 可灵 web / DALL-E web 等，本 skill 按 `references/platforms.md` 给对应平台的 prompt 适配
 
 ### 阶段 D — 进度回写 + 推进
@@ -134,3 +139,5 @@ done
 | 装第三方逆向 CLI | 违 ToS、封号风险，仅装官方 |
 | 废图留在 Downloads | 全部归档 `common/废料/出图/{common,第N集}/`，Downloads 清空 |
 | 全部串行生 100 张 | 大量分镜可 spawn 子 agent 并发调 CLI |
+| 候选图轻微偏差就喊重抽 | 违反**筛选宽容铁律**——只对核心错位/定妆漂移/硬性禁忌违反 才重抽，小动小偏直接放行 |
+| 无 CLI 就直接进即梦 web 手动模式 | 必须先问用户有无自建 / 第三方自动生图 AI 可接 prompt，没有再走默认 |
