@@ -1038,4 +1038,33 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 以下需真实来源校正后补入，**勿当已证实**：
 - 即梦 Dreamina / 可灵 Kling 2026「建角色/形象」功能的具体：几张参考图、工作流、价格、能否跨集复用、一致性上限；
 - LoRA 训练落地细节：Flux vs SDXL 选型、数据集/打标、云训练（Replicate/fal/RunPod/Civitai）实际价格与时长、本地（kohya_ss / Apple Silicon）可行性、ComfyUI 出图链。
-- 调研状态：`deep-research`（runId `wf_49aa61f4-e30`）**首次运行失败**（子 agent 未按 schema 输出），上述 24.5/24.6 仍是**专家判断、未经来源核实**；待重跑或人工查证后补 24.7。
+- 调研状态：`deep-research`（runId `wf_5f36c12b-21b`）**已完成**，结论见下 24.7（25 条 claim 经 3 票对抗验证，14 通过/11 否决）。
+
+### 24.7 经来源核实的结论（2026，deep-research 验证）
+
+**A. ROI 拐点（证实 3-0，来源 apatero 2026 LoRA 指南）**
+训练判据 = 角色长期反复出现 + 质量要求高 + 需跨多场景；"一次性/测试镜头跳过训练，用图生图"。→ 与 24.3 一致：沈念这类全篇核心角色**该训**，柳娘子/三小妖**不训**。连续叙事媒体（漫剧/动画系列需帧级一致）正是 LoRA 仍有价值的场景。
+
+**B. 闭源平台"建角色"真相**
+- **即梦 Dreamina（Seedance 2.0，约2026-02发布）= "全能参考"多模态引用，不是训练一个持久角色**（证实 2-1，来源 36kr）：单次生成可混引最多 **9 张图 + 3 段视频 + 3 段音频**，用 `@素材名` 维持面部/服装/体型；多镜头连贯靠"上段尾帧→下段输入"。即**强化版参考图**，无独立"角色库"。
+- **可灵 Kling 两套**：
+  - **Custom Model（随1.5起，证实 3-0，来源 aibase）**：上传 **10–30 段视频**（每段≥10s，注意是**视频不是静态图**）训练可复用角色，`@tag` 跨生成复用、一致性高。
+  - **Element Library / "Bind Subject"（3.0/O1，证实 2-1 medium，官方 blog）**：约 **4 张参考图**定义一次角色，跨多序列复用；Kling 2.6/3.0 还有原生多镜头一致性（Master Prompt 一次描述跨 2–6 镜头）。
+  - ⚠️ 引用源含低质 SEO 博客，官方术语以 Element Library + Bind Subject 为准。
+
+**C. 开源 LoRA how-to（多条 3-0 证实）**
+- **底模**：用 **Flux**（FLUX.1-dev），工具 **Ostris AI-Toolkit / FluxGym**（dev 为 HF 门控模型需接受许可）。
+- **数据集**：**15–20 张甜区**（15–50 可用，>~30 易过拟合）；按景别均衡（5近/5半身/5不同角度/5全身），**1024×1024**（512 下限）；**已有定妆照可直接当种子**；角度多样性比数量更重要。
+- **FluxGym 基线超参**：每图重复 10、最多 12 epochs、network_dim(rank) 4→16、学习率 8e-4→5e-4（小数据集更稳）。
+- **云训练成本（官方一手源证实 3-0）**：RunPod RTX 4090(24GB) **Community $0.34/hr、Secure $0.69/hr**（建议先充 $10）；**fal.ai FLUX LoRA fast ≈ $2/次**（默认1000步，按步线性）。显存：Flux LoRA 24GB 最低。
+- **出图链（证实 3-0）**：ComfyUI 里 **角色 LoRA 强度 0.7–1.0** + **IP-Adapter FaceID 控脸（3–5 张好参考）** + **ControlNet 控姿势**；**LoRA 底模必须与生成底模一致**（SD1.5/SDXL/Flux 互不通用）；多数 12GB 显存可跑，8GB 优化后勉强。
+
+**D. 场景图（证实 3-0 medium）**：通常**无需单独训练**，场景定妆图 + 风格参考 + 统一画风词即可。
+
+**E. 已被否决/未证实（勿当结论）**：
+- "2400步/RTX4090 约1.5h≈$0.50"、"Medium $0.44/hr 总价≈$1" → **端到端总价/耗时无硬数据**，未给数字。
+- "SDXL 可降 10GB / Flux 不能在 3060/4070 训" → 否决。
+- "Apple Silicon/Mac 本地训 LoRA（Qwen-on-Mac）" → 证据不足，**Mac 用户走云端（RunPod/fal.ai）更稳**。
+- **许可风险**：FLUX.1-dev 非商用许可是否传递到所训 LoRA——验证未决，**商用产线须自行向 Black Forest Labs 核实当前授权**（schnell=Apache2.0 可商用 的对比声明也未通过验证）。
+
+**F. 时效警告**：本领域 2026 迭代极快（即梦 Seedance 2.0、可灵 2.6/3.0 都在变），价格/配额/功能名以官方实时为准。
