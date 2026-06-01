@@ -177,3 +177,32 @@ def extract_chapter_links(html, base_url):
         seen.add(url)
         out.append((url, text))
     return out
+
+
+def http_get(url):
+    """单页 GET，返回解码后的 HTML 文本。仅此一处真实联网。"""
+    import requests
+    resp = requests.get(url, headers={"User-Agent": "n2d-fetch/1.0"}, timeout=30)
+    resp.raise_for_status()
+    if not resp.encoding or resp.encoding.lower() == "iso-8859-1":
+        resp.encoding = resp.apparent_encoding
+    return resp.text
+
+
+def fetch_generic(index_url, get=http_get):
+    """通用兜底：抓目录页 → 遍历章节页 → 逐章提正文。返回 [{title, body}]。
+    逐章打印抓取状态到 stderr。"""
+    index_html = get(index_url)
+    links = extract_chapter_links(index_html, base_url=index_url)
+    if not links:
+        raise SystemExit("目录页未发现章节链接；请确认这是章节目录页 URL。")
+    chapters = []
+    for i, (url, title) in enumerate(links, 1):
+        try:
+            body = extract_body(get(url), url=url)
+            status = "ok" if body else "empty"
+        except Exception as e:  # noqa: BLE001 — 单章失败不应中断全书
+            body, status = "", f"fail({type(e).__name__})"
+        chapters.append({"title": title, "body": body})
+        print(f"  [{i}/{len(links)}] {status}: {title}", file=sys.stderr)
+    return chapters

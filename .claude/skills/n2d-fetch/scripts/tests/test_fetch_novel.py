@@ -105,3 +105,17 @@ def test_extract_chapter_links_resolves_and_filters():
     assert titles == ["第一章 开端", "第二章 发展", "第三章 高潮"]
     assert urls[0] == "https://example.test/book/1/ch1.html"  # 相对链接已解析为绝对
     assert all("ch" in u for u in urls)  # 「首页」「关于」等非章节链接被过滤
+
+
+def test_fetch_generic_with_injected_getter():
+    here = os.path.dirname(__file__)
+    index = open(os.path.join(here, "fixtures", "index.html"), encoding="utf-8").read()
+    chapter = open(os.path.join(here, "fixtures", "chapter.html"), encoding="utf-8").read()
+
+    def fake_get(url):
+        return index if url.endswith("index.html") else chapter
+
+    chapters = fn.fetch_generic("https://example.test/book/1/index.html", get=fake_get)
+    assert len(chapters) == 3
+    assert chapters[0]["title"] == "第一章 开端"
+    assert "正文第一段" in chapters[0]["body"]
