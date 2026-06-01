@@ -208,7 +208,7 @@ def fetch_generic(index_url, get=http_get):
 
 
 _PLAINTEXT_CH_RE = re.compile(
-    r"^\s*(Chapter\s+[IVXLC0-9]+|CHAPTER\s+[IVXLC0-9]+|"
+    r"^\s*(Chapter\s+[IVXLCDM0-9]+|CHAPTER\s+[IVXLCDM0-9]+|"
     r"第\s*[0-9零一二三四五六七八九十百千两]+\s*[章回节卷])\b.*$", re.M)
 
 
@@ -277,7 +277,10 @@ def _today():
 
 
 def resolve_out_dir(out, name):
-    """输出目录 = <作品根>/小说/；缺省作品根 = artifacts/<书名>/。"""
+    """输出目录 = <作品根>/小说/；缺省作品根 = artifacts/<书名>/。
+    若 --out 本身已指向 小说/ 目录，直接用它，避免 小说/小说 双层嵌套。"""
+    if out and os.path.basename(out.rstrip("/\\")) == "小说":
+        return out
     root = out if out else os.path.join("artifacts", name)
     return os.path.join(root, "小说")
 

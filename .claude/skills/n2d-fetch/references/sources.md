@@ -25,3 +25,4 @@
 - 非公版 URL 需 `--i-have-rights` 声明授权。
 - 成功率因站结构而异；脚本逐章报告状态，失败章节 body 为空，可手动补。
 - 部分系统上 trafilatura 还需额外安装 `lxml_html_clean` 包——若 `pip install trafilatura` 后仍报 `lxml.html.clean` ImportError，执行 `pip install lxml_html_clean` 即可。
+- 已知限制：通用兜底逐章顺序抓取、章节间无延时；对章节很多的作品，密集请求可能触发目标站软封锁，必要时手动分批或自行加节流。

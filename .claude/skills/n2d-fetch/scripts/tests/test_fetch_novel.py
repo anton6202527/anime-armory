@@ -84,6 +84,8 @@ def test_write_docx_roundtrip(tmp_path):
     headings = [para.text for para in doc.paragraphs if para.style.name.startswith("Heading")]
     assert "第1章 楔子" in headings
     assert "第2章 初遇" in headings
+    # provenance 也要落进 docx（普通段落）
+    assert any("source_url" in para.text for para in doc.paragraphs)
 
 
 def test_extract_body_from_html():
@@ -140,6 +142,13 @@ def test_split_plaintext_into_chapters():
     assert not any("Intro line" in c["body"] for c in chapters)
 
 
+def test_split_plaintext_handles_large_roman_numerals():
+    # D (500) / M (1000) are valid Roman numerals — must still split, not blob
+    raw = "Chapter D\n\nFive hundred.\n\nChapter MCMXCIX\n\nAlmost two thousand."
+    titles = [c["title"] for c in fn.split_plaintext_chapters(raw)]
+    assert "Chapter D" in titles and "Chapter MCMXCIX" in titles
+
+
 def test_fetch_wikisource_with_injected_getter():
     html = ('<div class="mw-parser-output">'
             '<p>紅樓夢正文第一段，篇幅足够构成正文主体内容用于提取测试。</p>'
@@ -158,6 +167,8 @@ def test_fetch_wikisource_with_injected_getter():
 def test_resolve_out_dir_default_and_explicit():
     assert fn.resolve_out_dir(None, "紅樓夢").endswith(os.path.join("artifacts", "紅樓夢", "小说"))
     assert fn.resolve_out_dir("/tmp/work", "紅樓夢") == os.path.join("/tmp/work", "小说")
+    # --out already pointing at 小说/ must not double-nest into 小说/小说
+    assert fn.resolve_out_dir("/tmp/work/紅樓夢/小说", "紅樓夢") == "/tmp/work/紅樓夢/小说"
 
 
 def test_dispatch_routes_by_source():
