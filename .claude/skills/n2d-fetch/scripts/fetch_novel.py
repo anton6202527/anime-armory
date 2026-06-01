@@ -83,3 +83,49 @@ def assemble_text(chapters):
         body = (ch.get("body") or "").strip()
         blocks.append(f"第{i}章 {title}\n\n{body}")
     return "\n\n".join(blocks) + "\n"
+
+
+_CHAPTER_RE = re.compile(r"^第\s*[0-9零一二三四五六七八九十百千两]+\s*[章回节卷]")
+
+
+def _provenance_lines(prov):
+    return [
+        "# === 抓取来源信息 (provenance) — split_novel.py 会自动跳过本块 ===",
+        f"# source_url: {prov.get('source_url', '')}",
+        f"# fetched: {prov.get('fetched', '')}",
+        f"# chapters: {prov.get('chapters', '')}",
+        f"# chars: {prov.get('chars', '')}",
+        f"# copyright: {prov.get('copyright', '')}",
+        "# ================================================================",
+    ]
+
+
+def write_txt(path, text, prov):
+    os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+    header = "\n".join(_provenance_lines(prov))
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(header + "\n\n" + text)
+
+
+def write_docx(path, text, prov):
+    import docx
+    os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+    doc = docx.Document()
+    for line in _provenance_lines(prov):
+        doc.add_paragraph(line.lstrip("# ").rstrip())
+    for block in text.split("\n\n"):
+        block = block.strip()
+        if not block:
+            continue
+        first, _, rest = block.partition("\n")
+        if _CHAPTER_RE.match(first.strip()):
+            doc.add_heading(first.strip(), level=1)
+            if rest.strip():
+                for para in rest.split("\n"):
+                    if para.strip():
+                        doc.add_paragraph(para.strip())
+        else:
+            for para in block.split("\n"):
+                if para.strip():
+                    doc.add_paragraph(para.strip())
+    doc.save(path)
