@@ -129,3 +129,27 @@ def write_docx(path, text, prov):
                 if para.strip():
                     doc.add_paragraph(para.strip())
     doc.save(path)
+
+
+def extract_body(html, url=None):
+    """从单页 HTML 提取正文：优先 trafilatura，失败回退 readability，再回退 bs4 取最长 <div>。"""
+    try:
+        import trafilatura
+        extracted = trafilatura.extract(html, url=url, favor_recall=True,
+                                         include_comments=False, include_tables=False)
+        if extracted and extracted.strip():
+            return extracted.strip()
+    except ImportError:
+        pass
+    try:
+        from readability import Document as _RDoc
+        from bs4 import BeautifulSoup
+        summary_html = _RDoc(html).summary()
+        return BeautifulSoup(summary_html, "html.parser").get_text("\n").strip()
+    except ImportError:
+        pass
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(html, "html.parser")
+    blocks = soup.find_all(["div", "article"])
+    best = max(blocks, key=lambda b: len(b.get_text()), default=soup.body or soup)
+    return best.get_text("\n").strip()

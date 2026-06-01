@@ -84,3 +84,13 @@ def test_write_docx_roundtrip(tmp_path):
     headings = [para.text for para in doc.paragraphs if para.style.name.startswith("Heading")]
     assert "第1章 楔子" in headings
     assert "第2章 初遇" in headings
+
+
+def test_extract_body_from_html():
+    here = os.path.dirname(__file__)
+    html = open(os.path.join(here, "fixtures", "chapter.html"), encoding="utf-8").read()
+    body = fn.extract_body(html, url="https://example.test/ch1")
+    assert "正文第一段" in body
+    assert "正文第二段" in body
+    assert "上一章" not in body  # 导航噪声被剔除
+    assert "版权所有" not in body
