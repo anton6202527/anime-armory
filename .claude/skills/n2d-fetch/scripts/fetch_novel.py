@@ -45,3 +45,30 @@ def missing_deps(have=None):
     if have is None:
         have = _detect_have()
     return [install for mod, install in _DEP_INSTALL_NAME.items() if mod not in have]
+
+
+# 已知付费墙/反爬站：命中直接拒抓（不替用户规避）
+PAYWALL_DOMAINS = (
+    "qidian.com", "fanqienovel.com", "jjwxc.net", "jjwxc.com",
+    "zongheng.com", "17k.com", "hongxiu.com", "yuewen.com",
+    "ciweimao.com", "faloo.com", "readnovel.com",
+)
+
+
+def _host(url):
+    m = re.match(r"^[a-z]+://([^/]+)", url.strip(), re.I)
+    return (m.group(1) if m else url).lower()
+
+
+def is_paywalled(url):
+    host = _host(url)
+    return any(host == d or host.endswith("." + d) for d in PAYWALL_DOMAINS)
+
+
+def detect_source(url):
+    host = _host(url)
+    if "gutenberg.org" in host or "gutendex.com" in host:
+        return "gutenberg"
+    if "wikisource.org" in host:
+        return "wikisource"
+    return "generic"
