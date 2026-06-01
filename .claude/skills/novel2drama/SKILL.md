@@ -17,6 +17,8 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 ## 四阶段全景
 
 ```
+书名 / 章节目录页 URL
+   ↓ /n2d-fetch    ← Stage 0.5（可选）：联网抓公版小说全文 → txt+docx 落 小说/
 小说.txt/.docx
    ↓ /n2d-script   ← Stage 1：拆集 + 全局/角色/场景 + 8 类素材（剧本/故事板/素材清单/配音/BGM/封面/字幕中/字幕英）
 脚本/第N集/ 物料齐
@@ -35,6 +37,9 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 **情境 A — 用户给了一个小说路径，作品根尚不存在**：
 → 推荐 `/n2d-script <小说路径>`（Stage 1 首跑：拆集 + 精修第1集）
+
+**情境 A0 — 用户只给了书名 / 想从网上找原文，本地没有小说文件**：
+→ 推荐 `/n2d-fetch`（Stage 0.5：联网抓公版小说全文 → txt+docx 落 `artifacts/<书名>/小说/`），抓完再走情境 A。
 
 **情境 B — 用户给了一个已存在的作品根 或 `_进度.md` 路径**：
 → 走下面的"读进度 → 路由"流程
@@ -114,6 +119,7 @@ artifacts/<剧名>/
 
 | skill | 何时调 | 输入 | 关键输出 |
 |---|---|---|---|
+| `/n2d-fetch` | 只给书名 / 想联网找公版原文 | 书名 或 目录页 URL | `artifacts/<书名>/小说/<书名>.txt` + `.docx` |
 | `/n2d-script` | 首跑（拆集）/ 精修某集物料 | 小说路径 或 作品根 + 集号 | `脚本/第N集/` 8 类素材 + `_进度.md` 物料列勾 ✅ |
 | `/n2d-image` | 物料齐后出图 prompt + 生图 | 作品根 + 集号 | `出图/{common,第N集}/` prompt + PNG + 进度勾 ✅ |
 | `/n2d-video` | 出图齐后出视频 prompt + 生视频 | 作品根 + 集号 | `出视频/第N集/` MP4 + 进度勾 ✅ |
