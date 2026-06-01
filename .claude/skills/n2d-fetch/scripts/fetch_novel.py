@@ -206,3 +206,65 @@ def fetch_generic(index_url, get=http_get):
         chapters.append({"title": title, "body": body})
         print(f"  [{i}/{len(links)}] {status}: {title}", file=sys.stderr)
     return chapters
+
+
+from urllib.parse import quote, unquote
+
+_PLAINTEXT_CH_RE = re.compile(
+    r"^\s*(Chapter\s+[IVXLC0-9]+|CHAPTER\s+[IVXLC0-9]+|"
+    r"第\s*[0-9零一二三四五六七八九十百千两]+\s*[章回节卷])\b.*$", re.M)
+
+
+def split_plaintext_chapters(raw):
+    """把纯文本（Gutenberg）按 Chapter/第N章 标记切章；无标记则整本一章。"""
+    marks = list(_PLAINTEXT_CH_RE.finditer(raw))
+    if not marks:
+        return [{"title": "正文", "body": raw.strip()}]
+    chapters = []
+    for i, m in enumerate(marks):
+        start = m.end()
+        end = marks[i + 1].start() if i + 1 < len(marks) else len(raw)
+        chapters.append({"title": m.group(0).strip(), "body": raw[start:end].strip()})
+    return chapters
+
+
+def _gutenberg_book_id(url):
+    m = re.search(r"/(?:ebooks|books)/(\d+)", url)
+    if not m:
+        raise SystemExit(f"无法从 URL 解析 Gutenberg 书号: {url}")
+    return m.group(1)
+
+
+def fetch_gutenberg(url, get=http_get, get_json=None):
+    """Project Gutenberg：经 gutendex 拿 plain-text 链接 → 下载 → 切章。"""
+    import json as _json
+    if get_json is None:
+        def get_json(u):
+            return _json.loads(get(u))
+    book_id = _gutenberg_book_id(url)
+    meta = get_json(f"https://gutendex.com/books/{book_id}")
+    fmts = meta.get("formats", {})
+    txt_url = next((v for k, v in fmts.items()
+                    if k.startswith("text/plain") and not v.endswith(".zip")), None)
+    if not txt_url:
+        raise SystemExit("gutendex 未提供纯文本格式；换一本或用 --source generic。")
+    return split_plaintext_chapters(get(txt_url))
+
+
+def fetch_wikisource(page_url, get=http_get):
+    """中文维基文库：MediaWiki action=parse 取渲染 HTML → extract_body。
+    单页作品 → 一章；多卷请对每卷分页 URL 各跑一次（v1 先支持单页）。"""
+    m = re.match(r"^(https?://[^/]+)/wiki/(.+)$", page_url)
+    if not m:
+        raise SystemExit(f"不是有效的 Wikisource 页面 URL: {page_url}")
+    api = m.group(1) + "/w/api.php"
+    title = unquote(m.group(2))
+    url = (f"{api}?action=parse&prop=text&format=json"
+           f"&formatversion=2&page={quote(title)}")
+    import json as _json
+    data = _json.loads(get(url))
+    html = data.get("parse", {}).get("text", "")
+    if isinstance(html, dict):  # formatversion<2 兼容
+        html = html.get("*", "")
+    body = extract_body(html, url=page_url)
+    return [{"title": title.split("/")[-1], "body": body}]

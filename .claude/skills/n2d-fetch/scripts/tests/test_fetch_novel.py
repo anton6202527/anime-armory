@@ -119,3 +119,31 @@ def test_fetch_generic_with_injected_getter():
     assert len(chapters) == 3
     assert chapters[0]["title"] == "第一章 开端"
     assert "正文第一段" in chapters[0]["body"]
+
+
+def test_gutenberg_book_id_from_url():
+    assert fn._gutenberg_book_id("https://www.gutenberg.org/ebooks/1342") == "1342"
+    assert fn._gutenberg_book_id("https://gutendex.com/books/1342") == "1342"
+
+
+def test_split_plaintext_into_chapters():
+    raw = "Intro line.\n\nChapter 1\n\nAlpha body.\n\nChapter 2\n\nBeta body."
+    chapters = fn.split_plaintext_chapters(raw)
+    titles = [c["title"] for c in chapters]
+    assert "Chapter 1" in titles and "Chapter 2" in titles
+    assert any("Alpha body" in c["body"] for c in chapters)
+
+
+def test_fetch_wikisource_with_injected_getter():
+    html = ('<div class="mw-parser-output">'
+            '<p>紅樓夢正文第一段，篇幅足够构成正文主体内容用于提取测试。</p>'
+            '<p>正文第二段，同样具有足够长度以被识别为主体。</p></div>')
+
+    def fake_get(url):
+        import json
+        return json.dumps({"parse": {"text": html}})
+
+    chapters = fn.fetch_wikisource("https://zh.wikisource.org/wiki/紅樓夢/第一回",
+                                   get=fake_get)
+    assert len(chapters) == 1
+    assert "紅樓夢正文第一段" in chapters[0]["body"]
