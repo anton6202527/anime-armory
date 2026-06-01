@@ -1,14 +1,12 @@
 # 输出格式规范
 
-两个文件内容一致，仅格式不同，均落 `artifacts/<书名>/小说/`。
+两个文件内容一致，仅格式不同；默认落 `作品集/<书名>/小说/`，`--out` 可改。
 
-## `<书名>.txt`（喂给 split_novel.py）
+## `<书名>.txt`
 - UTF-8。
-- 文件头：provenance 注释块（`#` 开头多行：source_url / fetched / chapters / chars / copyright）。
-  `split_novel.py` 的 `strip_frontmatter` 会从首个 `第N章` 起算正文，自动跳过本块。
+- 文件头：provenance 注释块（`#` 开头多行：source_url / fetched / chapters / chars / copyright）。注释块在首个 `第N章` 之前，便于按章拆分时自动跳过。
 - 每章：一行 `第N章 标题`（N 为顺序号，**重新编号**，不沿用原站编号），空行，正文段落。
-- 章节标题正则与 `n2d-script/scripts/split_novel.py` 的 `CHAPTER_RE` 对齐：
-  `^\s*第\s*[0-9零一二三四五六七八九十百千两]+\s*[章回节卷]`。
+- 章节标题正则：`^\s*第\s*[0-9零一二三四五六七八九十百千两]+\s*[章回节卷]`（通用格式，便于任意按章拆分工具消费）。
 
 ## `<书名>.docx`（便于人读 / 导入飞书）
 - python-docx 生成。

@@ -45,7 +45,7 @@ def test_assemble_text_uses_chapter_headings():
     lines = text.splitlines()
     assert "第1章 楔子" in lines
     assert "第2章 初遇" in lines
-    # 章节标题必须能被 split_novel.py 的 CHAPTER_RE 命中  # keep in sync with split_novel.py CHAPTER_RE
+    # 章节标题须匹配通用「第N章」正则，便于任意按章拆分工具消费
     chapter_re = __import__("re").compile(
         r"^\s*第\s*[0-9零一二三四五六七八九十百千两]+\s*[章回节卷]")
     headings = [ln for ln in lines if chapter_re.match(ln)]
@@ -165,7 +165,7 @@ def test_fetch_wikisource_with_injected_getter():
 
 
 def test_resolve_out_dir_default_and_explicit():
-    assert fn.resolve_out_dir(None, "紅樓夢").endswith(os.path.join("artifacts", "紅樓夢", "小说"))
+    assert fn.resolve_out_dir(None, "紅樓夢").endswith(os.path.join("作品集", "紅樓夢", "小说"))
     assert fn.resolve_out_dir("/tmp/work", "紅樓夢") == os.path.join("/tmp/work", "小说")
     # --out already pointing at 小说/ must not double-nest into 小说/小说
     assert fn.resolve_out_dir("/tmp/work/紅樓夢/小说", "紅樓夢") == "/tmp/work/紅樓夢/小说"

@@ -9,7 +9,7 @@ fetch_novel.py — 给定章节目录页 URL，联网抓取公版小说全文，
 
 选项:
     --name 书名      输出文件名与标题（必填）
-    --out  作品根    输出到 <作品根>/小说/；缺省 = artifacts/<书名>/
+    --out  作品根    输出到 <作品根>/小说/；缺省 = 作品集/<书名>/
     --source auto|gutenberg|wikisource|generic   抓取引擎（默认 auto 探测）
     --i-have-rights  对非公版/通用兜底 URL 声明你有权使用（跳过合法性确认）
 
@@ -76,8 +76,8 @@ def detect_source(url):
 
 
 def assemble_text(chapters):
-    """把 [{title, body}] 合并成符合 split_novel.py 输入约定的纯文本：
-    每章一行 `第N章 标题`，空行，正文。"""
+    """把 [{title, body}] 合并成纯文本：每章一行 `第N章 标题`，空行，正文。
+    章节标题格式通用、利于后续按章拆分。"""
     blocks = []
     for i, ch in enumerate(chapters, 1):
         title = (ch.get("title") or "").strip()
@@ -91,7 +91,7 @@ _CHAPTER_RE = re.compile(r"^第\s*[0-9零一二三四五六七八九十百千两
 
 def _provenance_lines(prov):
     return [
-        "# === 抓取来源信息 (provenance) — split_novel.py 会自动跳过本块 ===",
+        "# === 抓取来源信息 (provenance) — 注释块，按章拆分时会自动跳过 ===",
         f"# source_url: {prov.get('source_url', '')}",
         f"# fetched: {prov.get('fetched', '')}",
         f"# chapters: {prov.get('chapters', '')}",
@@ -181,7 +181,7 @@ def extract_chapter_links(html, base_url):
 def http_get(url):
     """单页 GET，返回解码后的 HTML 文本。仅此一处真实联网。"""
     import requests
-    resp = requests.get(url, headers={"User-Agent": "n2d-fetch/1.0"}, timeout=30)
+    resp = requests.get(url, headers={"User-Agent": "novel-fetch/1.0"}, timeout=30)
     resp.raise_for_status()
     if not resp.encoding or resp.encoding.lower() == "iso-8859-1":
         resp.encoding = resp.apparent_encoding
@@ -277,11 +277,11 @@ def _today():
 
 
 def resolve_out_dir(out, name):
-    """输出目录 = <作品根>/小说/；缺省作品根 = artifacts/<书名>/。
+    """输出目录 = <作品根>/小说/；缺省作品根 = 作品集/<书名>/。
     若 --out 本身已指向 小说/ 目录，直接用它，避免 小说/小说 双层嵌套。"""
     if out and os.path.basename(out.rstrip("/\\")) == "小说":
         return out
-    root = out if out else os.path.join("artifacts", name)
+    root = out if out else os.path.join("作品集", name)
     return os.path.join(root, "小说")
 
 
@@ -301,7 +301,7 @@ def main():
     ap = argparse.ArgumentParser(description="联网抓取公版小说全文 → txt + docx")
     ap.add_argument("url", help="章节目录页 / 作品页 URL")
     ap.add_argument("--name", required=True, help="书名（输出文件名与标题）")
-    ap.add_argument("--out", default=None, help="作品根；缺省 = artifacts/<书名>/")
+    ap.add_argument("--out", default=None, help="作品根；缺省 = 作品集/<书名>/")
     ap.add_argument("--source", default="auto",
                     choices=["auto", "gutenberg", "wikisource", "generic"])
     ap.add_argument("--i-have-rights", action="store_true",
@@ -340,7 +340,6 @@ def main():
     print(f"完成：{len(chapters)} 章，{chars} 字")
     print(f"  txt : {txt_path}")
     print(f"  docx: {docx_path}")
-    print(f"下一步：/n2d-script {os.path.dirname(out_dir)}")
 
 
 if __name__ == "__main__":
