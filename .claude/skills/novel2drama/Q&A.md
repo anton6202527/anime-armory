@@ -968,3 +968,74 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 
 - Stage 4 合成（配音 + BGM + 字幕 + 剪辑）当前不在 skill 范围；未来若加入 `n2d-compose`，进度表追加 `成片` 列，调度规则向后扩展即可
 - 自动化进度查询脚本可后续抽到 `novel2drama/scripts/`，目前人肉读表 + Claude 解读已够用
+
+---
+
+## Q22：dreamina（即梦官方 CLI）能让 Claude 自动出图吗？为什么 headless 跑不通？<a id="q22"></a>
+
+### 22.1 现象
+`dreamina user_credit` / `list_task` / `-h` 都正常（读账号 OK，余额 180 积分），**但 `text2image` / `image2image` 退出码 1、零 stdout/stderr、日志文件 0 字节**；关掉沙箱（dangerouslyDisableSandbox）也一样。
+
+### 22.2 根因：登录密钥在 macOS 钥匙串，非交互 shell 取不到
+- dreamina 用 OAuth 设备流登录，密钥存进 **macOS keyring（钥匙串）**。
+- 读账号类命令走缓存/轻校验能过；**生成提交**要从钥匙串取密钥，而 Claude Code 的 Bash 是**非交互 shell、无钥匙串解锁权限** → 静默失败退出 1。
+- 旧日志佐证：`[authsdk:ensureActiveRecord] load auth record failed err=<secret not found in keyring>`。
+
+### 22.3 dreamina 真实用法（首次调用必读 `~/.dreamina_cli/dreamina/SKILL.md` 核对 flag）
+- **异步**：submit → 拿 `submit_id` + `gen_status(querying/success)` → `query_result --submit_id=<id> --download_dir=<目录>` 下载。
+- `text2image --prompt= --ratio=9:16 --resolution_type=1k|2k --model_version=3.0 --poll N`
+- `image2image --images a.png,b.png --prompt= --ratio=9:16 --resolution_type=2k --model_version=4.0`（**image2image 需 4.0+，1k 不支持，最多 10 张参考图**）
+- **没有 `--negative` / `--n` / `--out`**（cli_registry 里旧模板是惯例猜名，错的）→ 负面词**并进 prompt**："…。画面避免：低幼Q版、…"
+- `AigcComplianceConfirmationRequired` 报错 = 需先去**即梦网页点一次性合规确认**再重试。
+
+### 22.4 结论 / 分工
+即梦 CLI 的**生成步骤必须在用户自己的交互式终端跑**（能解锁钥匙串）；Claude 负责出 prompt + 读图挑选（Read 工具可直接看 PNG）+ 落档 + 写进度。或先 `dreamina relogin` 重新扫码登录、重存钥匙串后重试。
+
+---
+
+## Q23：用 gemini 出图行不行？为什么免费号和免费 API key 都出不了图？<a id="q23"></a>
+
+### 23.1 一句话结论
+**图像生成是付费能力**——无论 gemini CLI 免费个人号、还是免费档 API key，都给不了图。判断任何"图 AI 能不能用"，先验**权限 + 配额**，别只看模型"可见"。
+
+### 23.2 gemini CLI（免费 oauth-personal 个人号）
+- headless 本身通（`-p` 非交互 + `-y` YOLO 自动批准工具，连得上 API，鉴权走文件 `~/.gemini/oauth_creds.json` 无钥匙串问题）。
+- **但所有图像模型 404 `ModelNotFoundError`**（`gemini-2.5-flash-image` / `gemini-3.x-image` / `imagen-4.0`）；默认文本模型自答"我无法直接生成图像文件"；无图像扩展/skill。→ 免费 OAuth 没被授予图像模型。
+
+### 23.3 gemini API key（免费档）
+- `curl .../v1beta/models?key=` 能列出 54 个模型，含 `gemini-2.5-flash-image`、`gemini-3.1-flash-image`、`imagen-4.0-*`、`veo-*`——**"可见"≠"可用"**。
+- 真打：`generateContent` → **429 `generate_content_free_tier_requests, limit: 0`**（免费档图像配额为 0）；imagen `predict` → **400 "Imagen only available on paid plans, upgrade at ai.dev/projects"**。
+
+### 23.4 解法
+- **① 给 key 开 billing**（ai.dev/projects 升付费）后，REST 直调最稳：`POST .../models/gemini-2.5-flash-image:generateContent`，body `generationConfig.responseModalities=["IMAGE"]`（+可选 `imageConfig.aspectRatio`），从 `candidates[].content.parts[].inlineData.data` 取 base64 存 PNG。脚本见 `出图/_gen_gemini.py`（支持参考图走 inlineData、aspectRatio 回退、~$0.039/张 nano banana）。key 存 `~/.gemini/.apikey`、用 `$(cat …)` 读、**不进对话/不打印**。
+- **② 用闭源平台自家额度**：即梦 dreamina 已有 180 付费积分（见 Q22 解决钥匙串）。
+- nano banana 默认偏西方脸 → image prompt 末尾拼"中国古代东方面孔"等锚定句（见 Q18 + 共享 `00_索引.md`）。
+
+---
+
+## Q24：稳定产线里，定妆照 / 场景图 需不需要"角色训练"（LoRA）？怎么训？<a id="q24"></a>
+
+### 24.1 铁律：要不要训练 = 你最终在哪个平台出图
+**即梦 / 可灵 / Gemini 都是闭源，不接受你自训的 LoRA**；自训模型只能在**开源生态（SD / Flux / ComfyUI）**出图。所以这是个绑定平台的决策。
+
+### 24.2 三档一致性方法（由轻到重）
+1. **无训练 · 参考图法**（主流，你现在的路线）：定妆照 → 当"角色参考图 / 图生图"反复复用（即梦角色参考、可灵首帧、Gemini image2image）。零训练零成本、三家都支持；一致性"够用但非完美"，复杂角度/光照偶漂。
+2. **平台内置"建角色/形象"**：上传 N 张图建一个可复用角色 ID，平台内、无需 GPU，比纯参考图稳。**强烈建议用上**（具体见 24.5 待补）。
+3. **真 LoRA / DreamBooth**（仅开源生态）：开源底模 + 该角色 15–30 张多角度图训一个 LoRA，云/本地训练，ComfyUI + LoRA + ControlNet/IPAdapter 出图。一致性最强、可控性最高；代价是离开即梦/可灵、要 GPU/云训练。
+
+### 24.3 ROI 拐点
+角色**反复出现几十集以上 + 对脸要求已超出参考图能压住** → 才值得训 LoRA。
+例（《冷宫有妖气》）：女主**沈念**（贯穿全篇 + 常态/觉醒/银牌多形态）= 最该训；只出 1–2 集即死的**柳娘子 / 三小妖** = 纯参考图，绝不值得训。
+
+### 24.4 场景图
+**基本不用训练**——场景对一致性容错远高于人脸，靠"场景定妆图 + 风格参考（强度 0.4–0.5）+ 统一画风词"即可。
+
+### 24.5 推荐【混合产线】分工
+- 闭源（即梦/可灵）跑 ~90% 镜头快速出量 + 平台"建角色"兜一致性；
+- 仅 **1–3 个核心长线角色**在开源（Flux/SDXL）训 LoRA、用 ComfyUI 出他们的关键镜头，再回流统一画风。
+
+### 24.6 待核实 / 待补（deep-research 进行中）
+以下需真实来源校正后补入，**勿当已证实**：
+- 即梦 Dreamina / 可灵 Kling 2026「建角色/形象」功能的具体：几张参考图、工作流、价格、能否跨集复用、一致性上限；
+- LoRA 训练落地细节：Flux vs SDXL 选型、数据集/打标、云训练（Replicate/fal/RunPod/Civitai）实际价格与时长、本地（kohya_ss / Apple Silicon）可行性、ComfyUI 出图链。
+- 调研状态：`deep-research`（runId `wf_49aa61f4-e30`）**首次运行失败**（子 agent 未按 schema 输出），上述 24.5/24.6 仍是**专家判断、未经来源核实**；待重跑或人工查证后补 24.7。
