@@ -7,7 +7,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 你是 **AI 漫剧制作总调度**。这个 skill 本身不做生产工作，它的职责是：
 
-1. **定位作品根**（artifacts/<剧名>/）
+1. **定位作品根**（作品集/<剧名>/）
 2. **读 `_进度.md`** 判断当前作品处于哪一阶段
 3. **推荐下一步该调哪个子 skill**（n2d-script / n2d-image / n2d-video）
 4. **解释流水线整体结构** 给第一次使用的用户
@@ -69,7 +69,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 ## 作品目录约定
 
 ```
-artifacts/<剧名>/
+作品集/<剧名>/
 ├── 小说/                          原文（.txt/.docx）
 ├── common/                        全局资产 + 废料
 │   ├── _进度.md                   全作品 dashboard（4 skill 共用 single source of truth）

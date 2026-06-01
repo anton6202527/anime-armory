@@ -2,7 +2,7 @@
 
 小说 → **AI 漫剧 / 短剧** 工业化生产工具与素材库。
 
-包含一组可复用的 Claude Code skill — **`novel2drama` 调度 + `n2d-script` / `n2d-image` / `n2d-video` 三阶段**，以及用它生产的示例项目《冷宫有妖气》全套素材。
+包含一组可复用的 Claude Code skill — **`novel2drama` 调度 + `n2d-script` / `n2d-image` / `n2d-video` 三阶段**，以及用它生产的示例项目《冷宫有妖气》全套素材。另附一个**独立**的 `novel-fetch`（联网抓公版小说 → doc + txt），与流水线解耦，可单独使用。
 
 ---
 
@@ -19,6 +19,10 @@
 ```
 anime-armory/
 ├── .claude/skills/
+│   ├── novel-fetch/                       ← 独立工具：给书名/URL 联网抓公版小说 → doc+txt（与流水线解耦）
+│   │   ├── SKILL.md                       搜候选 → 确认 → 跑脚本 → 输出 + 合法性铁律
+│   │   ├── scripts/fetch_novel.py         站点适配器(Gutenberg/Wikisource)+通用兜底+txt/docx 双输出
+│   │   └── references/{sources,formats}.md
 │   ├── novel2drama/                       ← Stage 0 调度
 │   │   ├── SKILL.md                       薄路由：扫作品根 → 读 _进度.md → 推荐下一步该调哪个 skill
 │   │   ├── Q&A.md                         全阶段实战 Q&A 沉淀
@@ -33,7 +37,7 @@ anime-armory/
 │   └── n2d-video/                         ← Stage 3：出视频 prompt + 生视频
 │       ├── SKILL.md                       Clip prompt 派生 + image2video + 扫 CLI/手动指导
 │       └── references/{prompt_format,platforms,cli_registry}.md
-└── artifacts/冷宫有妖气/                  ← 示例产出（1 skill = 1 顶层文件夹）
+└── 作品集/冷宫有妖气/                  ← 示例产出（1 skill = 1 顶层文件夹）
     ├── 小说/冷宫有妖气.docx                小说原文
     ├── common/                             跨阶段共用资产
     │   ├── _进度.md                        全作品 dashboard
@@ -67,7 +71,7 @@ anime-armory/
 
 ## 当前进度（《冷宫有妖气》）
 
-第 1–15 集已全套精修（含定妆照、双语字幕）；第 1–9 集附即梦/可灵/Veo 三平台适配样例。其余集为待精修骨架。详见 `artifacts/冷宫有妖气/common/_进度.md`。
+第 1–15 集已全套精修（含定妆照、双语字幕）；第 1–9 集附即梦/可灵/Veo 三平台适配样例。其余集为待精修骨架。详见 `作品集/冷宫有妖气/common/_进度.md`。
 
 ## 说明
 
