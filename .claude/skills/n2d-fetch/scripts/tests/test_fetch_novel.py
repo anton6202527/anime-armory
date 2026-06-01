@@ -147,3 +147,21 @@ def test_fetch_wikisource_with_injected_getter():
                                    get=fake_get)
     assert len(chapters) == 1
     assert "紅樓夢正文第一段" in chapters[0]["body"]
+
+
+def test_resolve_out_dir_default_and_explicit():
+    assert fn.resolve_out_dir(None, "紅樓夢").endswith(os.path.join("artifacts", "紅樓夢", "小说"))
+    assert fn.resolve_out_dir("/tmp/work", "紅樓夢") == os.path.join("/tmp/work", "小说")
+
+
+def test_dispatch_routes_by_source():
+    calls = {}
+
+    def fake_gutenberg(url, **kw):
+        calls["g"] = url
+        return [{"title": "正文", "body": "x"}]
+
+    chapters = fn.dispatch("https://www.gutenberg.org/ebooks/1342", source="auto",
+                           engines={"gutenberg": fake_gutenberg})
+    assert calls["g"] == "https://www.gutenberg.org/ebooks/1342"
+    assert chapters[0]["body"] == "x"

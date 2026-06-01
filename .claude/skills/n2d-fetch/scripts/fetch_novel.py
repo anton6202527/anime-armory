@@ -268,3 +268,77 @@ def fetch_wikisource(page_url, get=http_get):
         html = html.get("*", "")
     body = extract_body(html, url=page_url)
     return [{"title": title.split("/")[-1], "body": body}]
+
+
+def resolve_out_dir(out, name):
+    """输出目录 = <作品根>/小说/；缺省作品根 = artifacts/<书名>/。"""
+    root = out if out else os.path.join("artifacts", name)
+    return os.path.join(root, "小说")
+
+
+def dispatch(url, source="auto", engines=None):
+    """按 source 路由到对应抓取引擎，返回 [{title, body}]。"""
+    if engines is None:
+        engines = {"gutenberg": fetch_gutenberg,
+                   "wikisource": fetch_wikisource,
+                   "generic": fetch_generic}
+    chosen = source if source != "auto" else detect_source(url)
+    if chosen not in engines:
+        raise SystemExit(f"未知 source: {chosen}")
+    return engines[chosen](url)
+
+
+def main():
+    ap = argparse.ArgumentParser(description="联网抓取公版小说全文 → txt + docx")
+    ap.add_argument("url", help="章节目录页 / 作品页 URL")
+    ap.add_argument("--name", required=True, help="书名（输出文件名与标题）")
+    ap.add_argument("--out", default=None, help="作品根；缺省 = artifacts/<书名>/")
+    ap.add_argument("--source", default="auto",
+                    choices=["auto", "gutenberg", "wikisource", "generic"])
+    ap.add_argument("--i-have-rights", action="store_true",
+                    help="对非公版/通用兜底 URL 声明有权使用")
+    args = ap.parse_args()
+
+    missing = missing_deps()
+    if missing:
+        sys.exit("缺少依赖，请先安装：pip install " + " ".join(missing))
+
+    if is_paywalled(args.url):
+        sys.exit("拒抓：该站为已知付费墙/反爬来源，本工具不替你规避。请改用公版来源。")
+
+    src = args.source if args.source != "auto" else detect_source(args.url)
+    if src == "generic" and not args.i_have_rights:
+        sys.exit("通用兜底抓取非公版来源需声明授权：确认你有权使用后加 --i-have-rights 重跑。")
+
+    chapters = dispatch(args.url, source=args.source)
+    chapters = [c for c in chapters if c.get("body")]
+    if not chapters:
+        sys.exit("未抓到任何正文。请检查 URL 是否为章节目录页。")
+
+    text = assemble_text(chapters)
+    chars = len(text.replace("\n", ""))
+    copyright_note = {"gutenberg": "公版（Project Gutenberg）",
+                      "wikisource": "公版（中文维基文库）"}.get(src, "用户声明有权使用")
+    prov = {"source_url": args.url, "fetched": _today(), "chapters": len(chapters),
+            "chars": chars, "copyright": copyright_note}
+
+    out_dir = resolve_out_dir(args.out, args.name)
+    txt_path = os.path.join(out_dir, args.name + ".txt")
+    docx_path = os.path.join(out_dir, args.name + ".docx")
+    write_txt(txt_path, text, prov)
+    write_docx(docx_path, text, prov)
+
+    print(f"完成：{len(chapters)} 章，{chars} 字")
+    print(f"  txt : {txt_path}")
+    print(f"  docx: {docx_path}")
+    print(f"下一步：/n2d-script {os.path.dirname(out_dir)}")
+
+
+def _today():
+    """抓取日期（脚本运行时刻）。"""
+    import datetime
+    return datetime.date.today().isoformat()
+
+
+if __name__ == "__main__":
+    main()
