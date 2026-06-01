@@ -72,3 +72,14 @@ def detect_source(url):
     if "wikisource.org" in host:
         return "wikisource"
     return "generic"
+
+
+def assemble_text(chapters):
+    """把 [{title, body}] 合并成符合 split_novel.py 输入约定的纯文本：
+    每章一行 `第N章 标题`，空行，正文。"""
+    blocks = []
+    for i, ch in enumerate(chapters, 1):
+        title = (ch.get("title") or "").strip()
+        body = (ch.get("body") or "").strip()
+        blocks.append(f"第{i}章 {title}\n\n{body}")
+    return "\n\n".join(blocks) + "\n"
