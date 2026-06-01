@@ -83,7 +83,7 @@ Claude 基于第 2 步给用户 **2–3 个续写方向**，每个方向附：
 
 ### 第 4 步 — 新章纲
 
-引用 `novel-craft/references/outline.md` + `continue.md`。每章一行 outline，含：本章主要伏笔回收 / 新冲突 / 新角色（如有，不可主导主角线）/ 钩子。
+**先按 `novel-craft/references/split.md` 反推总章数 / 字数分档**（按 target_platform；漫剧友好 ≠ 网文长篇）；然后引用 `novel-craft/references/outline.md` + `continue.md` 编织章纲。每章一行 outline，含：本章主要伏笔回收 / 新冲突 / 新角色（如有，不可主导主角线）/ 钩子。
 
 ### 第 5 步 — Demo（前 2–3 章）+ 用户审
 

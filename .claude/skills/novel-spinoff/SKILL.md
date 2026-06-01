@@ -138,8 +138,9 @@ python3 <skill>/scripts/init_project.py "<原作路径>" \
 要求：
 - 每个锚点至少有一章覆盖（节奏上可以放在锚点前的"赴约章"或锚点后的"复盘章"）。
 - 章节之间情节要有递进，不能流水账。
-- 长篇 30+ 章建议三幕结构（约 1:2:1 章数分配），中段必须有一次大反转。
-- 详见 `references/workflow.md` 的"章纲编织法"。
+- 三幕结构（约 1:2:1 章数分配），中段必须有一次大反转。
+- **总章数 / 字数分档先按 `<skills>/novel-craft/references/split.md` 反推**（按 `_meta.json.target_platform` 选档）——抖音漫剧友好通常 70-100 章，网文长篇 12-20 章，差一个量级。
+- 章纲编织（三幕 / 锚点织网 / 钩子）详见 `<skills>/novel-craft/references/outline.md` + 本 skill 的 `references/workflow.md`。
 
 写完让用户确认，可改。**章纲未敲定前不要进第 5 步 Demo**。
 

@@ -11,7 +11,8 @@ description: Shared writing-primitives library for the novel-* skill family — 
 
 | 主题 | 参考 | 何时引用 |
 |---|---|---|
-| 章纲编织 | `references/outline.md` | 进入逐章写作前 |
+| 拆分标准（章 / 集 边界 + 字数分档） | `references/split.md` | 章纲编织**之前**先定总章数与字数分档 |
+| 章纲编织 | `references/outline.md` | 拆分定下后；进入逐章写作前 |
 | 单章写作守则 | `references/chapter.md` | 每章下笔前；子代理 prompt 模板在此 |
 | 扩写法 | `references/expand.md` | 现有文本太短，想**加章节内细节**（时间不动） |
 | 续写法 | `references/continue.md` | 原作末章后，**加新章节**（时间向前推） |

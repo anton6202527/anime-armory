@@ -54,7 +54,7 @@ python3 <skill>/scripts/init_project.py "<原作>" \
 
 ### 第 4 步 — 章纲
 
-引用 `novel-craft/references/outline.md`。新章节的章纲（注意：漫剧友好版的章 = 戏剧节拍 ≠ 原作章节）。
+**先按 `novel-craft/references/split.md` 反推精简后总章数 / 字数分档**（短读版 1.5-3× 压缩 / 漫剧友好版 5-10× / 大纲级 20×+，对应章数差极大）；然后引用 `novel-craft/references/outline.md` + `condense.md` 编织章纲。注意：漫剧友好版的章 = 戏剧节拍 ≠ 原作章节。
 
 ### 第 5 步 — Demo（前 2-3 章）+ 用户审
 

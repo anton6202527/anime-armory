@@ -55,7 +55,7 @@ python3 <skill>/scripts/init_project.py "<原作>" \
 
 ### 第 4 步 — 章纲
 
-引用 `novel-craft/references/outline.md`。每章一行 outline，标注本章主要加什么类型的细节（环境 / 内心 / 对话 / 次要互动 / 支线）。
+**先按 `novel-craft/references/split.md` 反推扩写后总章数 / 字数分档**（按 target_platform；漫剧友好 vs 网文长篇 章数差一个量级）；然后引用 `novel-craft/references/outline.md` + `expand.md` 编织章纲。每章一行 outline，标注本章主要加什么类型的细节（环境 / 内心 / 对话 / 次要互动 / 支线）。
 
 ### 第 5 步 — Demo（前 2-3 章）+ 用户审
 
