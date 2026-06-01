@@ -153,3 +153,27 @@ def extract_body(html, url=None):
     blocks = soup.find_all(["div", "article"])
     best = max(blocks, key=lambda b: len(b.get_text()), default=soup.body or soup)
     return best.get_text("\n").strip()
+
+
+from urllib.parse import urljoin
+
+# 章节链接锚文本特征：含「第…章/回/节/卷」或「序/楔子/尾声/番外」
+_CH_LINK_RE = re.compile(
+    r"第\s*[0-9零一二三四五六七八九十百千两]+\s*[章回节卷]|楔子|序章|序言|尾声|番外")
+
+
+def extract_chapter_links(html, base_url):
+    """从目录页提取章节链接 [(绝对URL, 标题)]，按出现顺序，去重保序。"""
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(html, "html.parser")
+    out, seen = [], set()
+    for a in soup.find_all("a", href=True):
+        text = a.get_text(strip=True)
+        if not text or not _CH_LINK_RE.search(text):
+            continue
+        url = urljoin(base_url, a["href"])
+        if url in seen:
+            continue
+        seen.add(url)
+        out.append((url, text))
+    return out

@@ -94,3 +94,14 @@ def test_extract_body_from_html():
     assert "正文第二段" in body
     assert "上一章" not in body  # 导航噪声被剔除
     assert "版权所有" not in body
+
+
+def test_extract_chapter_links_resolves_and_filters():
+    here = os.path.dirname(__file__)
+    html = open(os.path.join(here, "fixtures", "index.html"), encoding="utf-8").read()
+    links = fn.extract_chapter_links(html, base_url="https://example.test/book/1/index.html")
+    titles = [t for _, t in links]
+    urls = [u for u, _ in links]
+    assert titles == ["第一章 开端", "第二章 发展", "第三章 高潮"]
+    assert urls[0] == "https://example.test/book/1/ch1.html"  # 相对链接已解析为绝对
+    assert all("ch" in u for u in urls)  # 「首页」「关于」等非章节链接被过滤
