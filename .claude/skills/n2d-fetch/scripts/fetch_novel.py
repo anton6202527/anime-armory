@@ -19,6 +19,7 @@ import argparse
 import os
 import re
 import sys
+from urllib.parse import quote, unquote, urljoin
 
 # 依赖：import 名 -> pip 安装名
 _DEP_INSTALL_NAME = {
@@ -155,8 +156,6 @@ def extract_body(html, url=None):
     return best.get_text("\n").strip()
 
 
-from urllib.parse import urljoin
-
 # 章节链接锚文本特征：含「第…章/回/节/卷」或「序/楔子/尾声/番外」
 _CH_LINK_RE = re.compile(
     r"第\s*[0-9零一二三四五六七八九十百千两]+\s*[章回节卷]|楔子|序章|序言|尾声|番外")
@@ -208,8 +207,6 @@ def fetch_generic(index_url, get=http_get):
     return chapters
 
 
-from urllib.parse import quote, unquote
-
 _PLAINTEXT_CH_RE = re.compile(
     r"^\s*(Chapter\s+[IVXLC0-9]+|CHAPTER\s+[IVXLC0-9]+|"
     r"第\s*[0-9零一二三四五六七八九十百千两]+\s*[章回节卷])\b.*$", re.M)
@@ -220,6 +217,7 @@ def split_plaintext_chapters(raw):
     marks = list(_PLAINTEXT_CH_RE.finditer(raw))
     if not marks:
         return [{"title": "正文", "body": raw.strip()}]
+    # 从第一个章节标记处开始迭代，intentionally 丢弃前置非章节内容（版权声明等前言）
     chapters = []
     for i, m in enumerate(marks):
         start = m.end()
@@ -263,11 +261,19 @@ def fetch_wikisource(page_url, get=http_get):
            f"&formatversion=2&page={quote(title)}")
     import json as _json
     data = _json.loads(get(url))
+    if "error" in data:
+        raise SystemExit(f"Wikisource API 错误: {data['error'].get('info', data['error'])}")
     html = data.get("parse", {}).get("text", "")
     if isinstance(html, dict):  # formatversion<2 兼容
         html = html.get("*", "")
     body = extract_body(html, url=page_url)
     return [{"title": title.split("/")[-1], "body": body}]
+
+
+def _today():
+    """抓取日期（脚本运行时刻）。"""
+    import datetime
+    return datetime.date.today().isoformat()
 
 
 def resolve_out_dir(out, name):
@@ -310,7 +316,7 @@ def main():
     if src == "generic" and not args.i_have_rights:
         sys.exit("通用兜底抓取非公版来源需声明授权：确认你有权使用后加 --i-have-rights 重跑。")
 
-    chapters = dispatch(args.url, source=args.source)
+    chapters = dispatch(args.url, source=src)
     chapters = [c for c in chapters if c.get("body")]
     if not chapters:
         sys.exit("未抓到任何正文。请检查 URL 是否为章节目录页。")
@@ -332,12 +338,6 @@ def main():
     print(f"  txt : {txt_path}")
     print(f"  docx: {docx_path}")
     print(f"下一步：/n2d-script {os.path.dirname(out_dir)}")
-
-
-def _today():
-    """抓取日期（脚本运行时刻）。"""
-    import datetime
-    return datetime.date.today().isoformat()
 
 
 if __name__ == "__main__":

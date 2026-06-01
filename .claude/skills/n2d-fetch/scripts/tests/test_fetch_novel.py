@@ -45,7 +45,7 @@ def test_assemble_text_uses_chapter_headings():
     lines = text.splitlines()
     assert "第1章 楔子" in lines
     assert "第2章 初遇" in lines
-    # 章节标题必须能被 split_novel.py 的 CHAPTER_RE 命中
+    # 章节标题必须能被 split_novel.py 的 CHAPTER_RE 命中  # keep in sync with split_novel.py CHAPTER_RE
     chapter_re = __import__("re").compile(
         r"^\s*第\s*[0-9零一二三四五六七八九十百千两]+\s*[章回节卷]")
     headings = [ln for ln in lines if chapter_re.match(ln)]
@@ -88,7 +88,8 @@ def test_write_docx_roundtrip(tmp_path):
 
 def test_extract_body_from_html():
     here = os.path.dirname(__file__)
-    html = open(os.path.join(here, "fixtures", "chapter.html"), encoding="utf-8").read()
+    with open(os.path.join(here, "fixtures", "chapter.html"), encoding="utf-8") as f:
+        html = f.read()
     body = fn.extract_body(html, url="https://example.test/ch1")
     assert "正文第一段" in body
     assert "正文第二段" in body
@@ -98,7 +99,8 @@ def test_extract_body_from_html():
 
 def test_extract_chapter_links_resolves_and_filters():
     here = os.path.dirname(__file__)
-    html = open(os.path.join(here, "fixtures", "index.html"), encoding="utf-8").read()
+    with open(os.path.join(here, "fixtures", "index.html"), encoding="utf-8") as f:
+        html = f.read()
     links = fn.extract_chapter_links(html, base_url="https://example.test/book/1/index.html")
     titles = [t for _, t in links]
     urls = [u for u, _ in links]
@@ -109,8 +111,10 @@ def test_extract_chapter_links_resolves_and_filters():
 
 def test_fetch_generic_with_injected_getter():
     here = os.path.dirname(__file__)
-    index = open(os.path.join(here, "fixtures", "index.html"), encoding="utf-8").read()
-    chapter = open(os.path.join(here, "fixtures", "chapter.html"), encoding="utf-8").read()
+    with open(os.path.join(here, "fixtures", "index.html"), encoding="utf-8") as f:
+        index = f.read()
+    with open(os.path.join(here, "fixtures", "chapter.html"), encoding="utf-8") as f:
+        chapter = f.read()
 
     def fake_get(url):
         return index if url.endswith("index.html") else chapter
@@ -132,6 +136,8 @@ def test_split_plaintext_into_chapters():
     titles = [c["title"] for c in chapters]
     assert "Chapter 1" in titles and "Chapter 2" in titles
     assert any("Alpha body" in c["body"] for c in chapters)
+    # Pre-chapter front matter (版权声明等) is intentionally discarded; no body should contain it
+    assert not any("Intro line" in c["body"] for c in chapters)
 
 
 def test_fetch_wikisource_with_injected_getter():
