@@ -1,11 +1,11 @@
 ---
 name: n2d-image
-description: Stage 2 of novel2drama pipeline — for a 作品 episode whose Stage 1 materials are done, generate the two-layer 出图 prompt pack (shared 定妆库 + 本集分镜), then either invoke a local image-gen CLI (即梦 dreamina / gemini-cli / DALL-E / Flux) or step-by-step guide the user to generate manually on their default platform (default 即梦). Writes progress to `_进度.md` (出图prompt + 出图 columns). Use when asked to 出图, 出图prompt, 生成定妆, 生成分镜图, 跑即梦, or anything image-generation-related for a novel2drama project. Triggers 出图, 出图prompt, 定妆, 分镜出图, 即梦, dreamina, gemini-cli, image2image, 生图.
+description: Stage 4 of novel2drama pipeline — for a 作品 episode whose 配音+分镜设计 are done (`分镜设计` 列 ✅), generate the two-layer 出图 prompt pack (shared 定妆库 + 本集分镜), then either invoke a local image-gen CLI (即梦 dreamina / gemini-cli / DALL-E / Flux) or step-by-step guide the user to generate manually on their default platform (default 即梦). Writes progress to `_进度.md` (出图prompt + 出图 columns). Use when asked to 出图, 出图prompt, 生成定妆, 生成分镜图, 跑即梦, or anything image-generation-related for a novel2drama project. Triggers 出图, 出图prompt, 定妆, 分镜出图, 即梦, dreamina, gemini-cli, image2image, 生图.
 ---
 
-# n2d-image — Stage 2：出图 prompt + 生图
+# n2d-image — Stage 4：出图 prompt + 生图
 
-你是 **AI 漫剧出图制作**。本 skill 关心一件事：把 Stage 1 物料齐的一集，先生成"开箱即用"的两层出图 prompt 文件夹，然后调本机生图 CLI（或一步步指导用户在即梦上手动跑），最后把 PNG 落档 + 更新进度。
+你是 **AI 漫剧出图制作**。本 skill 关心一件事：把 分镜设计齐的一集（配音→分镜设计之后），先生成"开箱即用"的两层出图 prompt 文件夹，然后调本机生图 CLI（或一步步指导用户在即梦上手动跑），最后把 PNG 落档 + 更新进度。
 
 ## 核心原则
 
@@ -20,7 +20,7 @@ description: Stage 2 of novel2drama pipeline — for a 作品 episode whose Stag
 
 ## 输入前置条件
 
-- 作品根存在，`_进度.md` 该集的 8 类素材列全 ✅
+- 作品根存在，`_进度.md` 该集 `分镜设计` 列 ✅（= 配音 + 阶段2分镜设计 已完成）
 - 否则报错并建议用户先调 `/n2d-script <作品根> 第N集`
 
 ## 工作流
@@ -87,7 +87,7 @@ done
 每出一张定稿 PNG：
 1. PNG 落档到正确位置（共享定妆 → `出图/common/`；本集分镜 → `出图/第N集/`）
 2. 共享 `00_索引.md` 该项状态改 ✅，填 PNG 路径
-3. `_进度.md` 该集 `出图` 列分子 +1
+3. 回写 `出图` 列：`python3 <novel2drama skill>/progress.py set <作品根> 第N集 出图 X/Y`（X=已出张数）
 
 本集 `出图` 列 = 分母时：
 ```

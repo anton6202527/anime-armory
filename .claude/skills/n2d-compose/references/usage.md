@@ -23,7 +23,7 @@
 90 秒一集漫剧工作室标配：1 条循环 BGM + 2~5 个转场音效 + AI 角色配音。
 
 ## 进度回写
-完成后把 <作品根>/common/_进度.md 该集「成片」列改 ✅（列若不存在，在表头末尾追加「成片」列）。
+完成后回写「成片」列：`python3 <novel2drama skill>/progress.py set <作品根> 第N集 成片 ✅`。
 
 ## 字幕字号微调
 render_subs.py 支持 env：ZH_SIZE(默认50) / EN_SIZE(默认34)。

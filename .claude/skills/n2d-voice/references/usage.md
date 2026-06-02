@@ -6,7 +6,7 @@
 产物：<作品根>/出视频/第N集/配音/{line_NN.wav, voice_zh.wav, voice_en.wav, 时长清单.json}
 
 ## 进度回写
-完成后把 <作品根>/common/_进度.md 该集「配音」列改 ✅（列若不存在，首次跑时在表头「草稿故事板」后插入「配音」列）。
+完成后回写「配音」列：`python3 <novel2drama skill>/progress.py set <作品根> 第N集 配音 ✅`（别手工编辑进度表，易改错列）。
 
 ## 完成消息（驱动下一阶段）
 配音完成后提示助手：「配音齐 → 下一步 /n2d-script <作品根> 第N集 用时长清单定稿故事板+SRT，再 /n2d-image」。

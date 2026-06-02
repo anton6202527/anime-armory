@@ -2,13 +2,13 @@
 # 逐句 TTS 配音 → gap 拼接 → voice.wav + 时长清单.json
 # 后端优先级: CosyVoice > MiniMax > 火山 > macOS say。带持久缓存(同参数同文本不重复调API)。
 # 用法: render_voice.py <作品根> <第N集> <zh|en>
-import sys, os, re, subprocess, json, base64, uuid, hashlib, urllib.request
+import sys, os, re, subprocess, json, base64, uuid, hashlib, urllib.request, shutil
 
 ROOT, EP, LANG = sys.argv[1], sys.argv[2], sys.argv[3]
 VO = os.path.join(ROOT, '脚本', EP, 'voiceover.txt')
 EN_SRT = os.path.join(ROOT, '脚本', EP, '字幕_英文.srt')
 W = os.path.join(ROOT, '出视频', EP, '配音'); os.makedirs(W, exist_ok=True)
-FF = "/opt/homebrew/bin/ffmpeg"; FP = "/opt/homebrew/bin/ffprobe"
+FF = shutil.which('ffmpeg') or '/opt/homebrew/bin/ffmpeg'; FP = shutil.which('ffprobe') or '/opt/homebrew/bin/ffprobe'
 CACHE = os.path.join(ROOT, '出视频', EP, '_voicecache', LANG); os.makedirs(CACHE, exist_ok=True)
 
 MM_KEY=os.environ.get('MINIMAX_API_KEY'); MM_GROUP=os.environ.get('MINIMAX_GROUP_ID')

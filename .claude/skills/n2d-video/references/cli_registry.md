@@ -57,14 +57,14 @@ dreamina image2video \
   --duration 7 \
   --aspect 9:16 \
   --motion-strength 0.6 \
-  --out <出视频/第N集/ClipK_<描述>.mp4>
+  --out <出视频/第N集/视频/ClipK_<描述>.mp4>
 
 # 文生视频（空镜）
 dreamina text2video \
   --prompt "空镜：残烛在风中摇曳，烛芯吐黑烟" \
   --duration 5 \
   --aspect 9:16 \
-  --out <出视频/第N集/ClipK_<描述>.mp4>
+  --out <出视频/第N集/视频/ClipK_<描述>.mp4>
 ```
 
 > ⚠️ 参数名以官方 SKILL 为准；首次调用前必读 `~/.dreamina_cli/dreamina/SKILL.md` 核对 flag。

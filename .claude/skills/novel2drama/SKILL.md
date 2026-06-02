@@ -51,6 +51,8 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 > python3 <skill>/progress.py <作品根> 第N集    # 查指定集所处阶段 + 推荐命令
 > ```
 > 把脚本输出**直接讲给用户**。下面的"逐列判断"是脚本内部逻辑（容错/手查时参考）。
+>
+> **回写进度统一用脚本**（别手工编辑表格）：`python3 <skill>/progress.py set <作品根> 第N集 <列名> <值>`（值 = ✅ / ⬜ / 12/19）。各阶段 skill 收尾都调它。
 
 1. 定位 `<作品根>/common/_进度.md`，读进度表
 2. 进度表头形如：`| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |`

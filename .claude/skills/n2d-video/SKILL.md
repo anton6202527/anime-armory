@@ -1,15 +1,15 @@
 ---
 name: n2d-video
-description: Stage 3 of novel2drama pipeline — for a 作品 episode whose Stage 2 (PNG) is done, generate the per-Clip video prompts from 故事板.md and either invoke a local video-gen CLI (即梦 dreamina image2video / kling / veo / seedance) or step-by-step guide the user to generate manually on their default platform (default 即梦). Writes progress to `_进度.md` (视频 column). Use when asked to 出视频, 视频 prompt, 生成视频, 跑视频, image2video, or anything video-generation-related for a novel2drama project. Triggers 出视频, 视频prompt, 图生视频, image2video, 即梦视频, 可灵视频, Veo, Seedance, 运镜.
+description: Stage 5 of novel2drama pipeline — for a 作品 episode whose 出图(PNG) is done, generate the per-Clip video prompts from 故事板.md and either invoke a local video-gen CLI (即梦 dreamina image2video / kling / veo / seedance) or step-by-step guide the user to generate manually on their default platform (default 即梦). Writes progress to `_进度.md` (视频 column). Use when asked to 出视频, 视频 prompt, 生成视频, 跑视频, image2video, or anything video-generation-related for a novel2drama project. Triggers 出视频, 视频prompt, 图生视频, image2video, 即梦视频, 可灵视频, Veo, Seedance, 运镜.
 ---
 
-# n2d-video — Stage 3：视频 prompt + 生视频
+# n2d-video — Stage 5：视频 prompt + 生视频
 
-你是 **AI 漫剧出视频制作**。本 skill 只关心一件事：把 Stage 2 PNG 齐的一集，先生成"开箱即用"的视频 prompt（按 Clip 维度），然后调本机生视频 CLI（或一步步指导用户在即梦/可灵/Veo 上手动跑），最后把 MP4 落档 + 更新进度。
+你是 **AI 漫剧出视频制作**。本 skill 只关心一件事：把 出图齐（分镜设计→出图后）的一集，先生成"开箱即用"的视频 prompt（按 Clip 维度），然后调本机生视频 CLI（或一步步指导用户在即梦/可灵/Veo 上手动跑），最后把 MP4 落档 + 更新进度。
 
 ## 核心原则
 
-- **图生视频为主，文生视频为辅**：每个 Clip 以 Stage 2 出的 PNG 为首帧（可灵/部分平台支持首尾帧），视频 AI 只控制"动作 + 运镜"。纯空镜/转场/氛围镜头可文生视频。
+- **图生视频为主，文生视频为辅**：每个 Clip 以出图阶段的 PNG 为首帧（可灵/部分平台支持首尾帧），视频 AI 只控制"动作 + 运镜"。纯空镜/转场/氛围镜头可文生视频。
 - **产物归集铁律**：所有 prompt md 进 `出视频/第N集/prompt/`；**生成的 clip MP4 全部落 `出视频/第N集/视频/`**（供 /n2d-compose 归集合成）。废片去 `common/废料/出视频/第N集/`。
 - **运动 + 运镜 + 动态细节三件套必写**：只写画面不写运动 → AI 会随机推断，常翻车。
 - **平台差异在档案里**：单 Clip 时长 / 运镜词偏好 / 首尾帧机制 / 提示词语言 见 `references/platforms.md`。默认即梦 5~8s。
@@ -19,14 +19,14 @@ description: Stage 3 of novel2drama pipeline — for a 作品 episode whose Stag
 
 ## 输入前置条件
 
-- `_进度.md` 该集 `配音` ✅ + `故事板定稿` ✅ + `出图` 列分子=分母。**Clip 时长读定稿 `故事板.md`（来自配音时长 `镜头时长.json`），不再用平台默认估**；平台档案只约束单 Clip 上限（如即梦 ≤8s，超限拆 Clip）。
+- `_进度.md` 该集 `配音` ✅ + `分镜设计` ✅ + `出图` 列分子=分母。**Clip 时长读定稿 `故事板.md`（来自配音时长 `镜头时长.json`），不再用平台默认估**；平台档案只约束单 Clip 上限（如即梦 ≤8s，超限拆 Clip）。
 - 否则报错并建议用户先调 `/n2d-script` 或 `/n2d-image`
 
 ## 工作流
 
 ### 阶段 A — 视频 prompt 生成
 
-源数据：`脚本/第N集/故事板.md`（Stage 1 写的 Clip 表）+ `出图/第N集/镜头N_*.png`（Stage 2 出的定稿首帧）。
+源数据：`脚本/第N集/故事板.md`（阶段2·分镜设计 写的 Clip 表，时长配音驱动）+ `出图/第N集/镜头N_*.png`（出图阶段的定稿首帧）。
 
 输出：`出视频/第N集/prompt/00_总览.md` + `出视频/第N集/prompt/01_clips.md`（按 Clip 一段一块）。
 
@@ -99,7 +99,7 @@ done
 每出一条定稿 MP4：
 1. MP4 落档到 `出视频/第N集/视频/Clip<K>_<描述>.mp4`
 2. `出视频/第N集/prompt/00_总览.md` 对应 Clip 行状态改 ✅
-3. `_进度.md` 该集 `视频` 列分子 +1
+3. 回写 `视频` 列：`python3 <novel2drama skill>/progress.py set <作品根> 第N集 视频 X/Y`
 
 本集 `视频` 列 = 分母时：
 ```
@@ -107,7 +107,7 @@ done
 - 总时长：~Y 秒
 - Clip 数：X
 下一步：
-- 合成（Stage 4 当前不在 skill 范围）：在剪映/CapCut/FFmpeg 把 视频/ + voiceover.txt + bgm.txt + 字幕_{中/英}.srt 合成成片
+- 合成：/n2d-compose <作品根> 第K集  → 视频/ + 配音轨 + BGM + 烧字幕 → 成片
 - 或继续 /n2d-video <作品根> 第K+1集
 ```
 
@@ -144,8 +144,8 @@ done
 |---|---|
 | 视频 prompt 只写画面不写运动 | 必含人物运动 + 镜头运动 + 动态细节 |
 | 设计超复杂打斗/人群 | 改为 AI 易生成的单人/双人动作、固定或简单运镜；过复杂的拆 Clip |
-| 跨集首帧画风跳变 | Stage 2 的定妆/分镜 PNG 都基于共享层定妆图复用，本 skill 直接用即可 |
-| 用文生视频做有角色的镜头 | 改用 image2video，首帧用 Stage 2 PNG |
+| 跨集首帧画风跳变 | 出图阶段的定妆/分镜 PNG 都基于共享层定妆图复用，本 skill 直接用即可 |
+| 用文生视频做有角色的镜头 | 改用 image2video，首帧用出图阶段 PNG |
 | 单 Clip 时长超平台上限（即梦 >8s / Veo >8s） | 拆成两个 Clip，尾帧 = 下一首帧 |
 | 废视频留在 Downloads | 全部归档 `common/废料/出视频/第N集/`，Downloads 清空 |
 | 装第三方逆向 CLI | 违 ToS、封号风险，仅装官方 |
