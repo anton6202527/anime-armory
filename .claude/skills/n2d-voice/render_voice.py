@@ -16,6 +16,8 @@ VOLC_APPID=os.environ.get('VOLC_APPID'); VOLC_TOKEN=os.environ.get('VOLC_TOKEN')
 VOLC_CLUSTER=os.environ.get('VOLC_CLUSTER','volcano_tts'); VOLC_ENDPOINT=os.environ.get('VOLC_ENDPOINT','https://openspeech.bytedance.com/api/v1/tts')
 USE_VOLC=bool(VOLC_APPID and VOLC_TOKEN) and not USE_MM
 USE_API=USE_MM or USE_VOLC
+COSY_URL=os.environ.get('COSYVOICE_URL')  # 本地 CosyVoice 服务，如 http://localhost:9880
+USE_COSY=bool(COSY_URL) and not USE_MM   # CosyVoice 优先于 MiniMax；若也设了 MiniMax，CosyVoice 赢
 
 def srt_times(p):
     out=[]
@@ -86,13 +88,23 @@ def volc(text,vt,emo,speed,out):
     if j.get('code')!=3000 or not j.get('data'): raise RuntimeError(f"火山 code={j.get('code')} {j.get('message')}")
     open(out,'wb').write(base64.b64decode(j['data']))
 
+def cosy_tts(text, ref_audio, ref_text, out_wav):
+    # CosyVoice2 常见 fork 的零样本端点；不同 fork 端点/参数可能不同，见 references/backends.md
+    import urllib.parse
+    q=urllib.parse.urlencode({"text":text,"prompt_text":ref_text or "","prompt_wav":ref_audio or ""})
+    req=urllib.request.Request(f"{COSY_URL}/inference_zero_shot?{q}")
+    with urllib.request.urlopen(req,timeout=120) as r: open(out_wav,'wb').write(r.read())
+
 def dur_of(p): return float(subprocess.run([FP,'-v','error','-show_entries','format=duration','-of','csv=p=0',p],capture_output=True,text=True).stdout.strip() or 0)
 
 wavs=[]; measured=[]
 for i in range(n):
     role,text=items[i]
     # 取原始音频(缓存)
-    if USE_MM:
+    if USE_COSY:
+        ref=os.environ.get('COSY_REF_AUDIO'); rtext=os.environ.get('COSY_REF_TEXT','')
+        raw=os.path.join(vd,f'r{i:02d}.wav'); cosy_tts(text, ref, rtext, raw); sysfx=('系统' in role)
+    elif USE_MM:
         if LANG=='en': vid,emo,sp,pit=MM['EN'],None,1.0,0
         else: vid,emo,sp,pit=mm_cfg(role)
         key=hashlib.md5(f"mm|{MM_MODEL}|{vid}|{emo}|{sp}|{pit}|{text}".encode()).hexdigest()
@@ -132,4 +144,4 @@ if LANG=='zh':
     manifest=[{"idx":i,"镜头":shots[i] if i<len(shots) else "","角色":items[i][0],"文本":items[i][1],"时长":round(measured[i],3),"line_wav":f"line_{i:02d}.wav"} for i in range(n)]
     out_dir=os.path.dirname(os.path.join(W,'voice_zh.wav'))
     _json.dump(manifest, open(os.path.join(out_dir,'时长清单.json'),'w',encoding='utf-8'), ensure_ascii=False, indent=2)
-print(f"配音 {LANG}: {n} 句（后端={'MiniMax' if USE_MM else '火山' if USE_VOLC else 'say'}，顺序拼接 gap={GAP}s，无压速）→ voice_{LANG}.wav")
+print(f"配音 {LANG}: {n} 句（后端={'CosyVoice' if USE_COSY else 'MiniMax' if USE_MM else '火山' if USE_VOLC else 'say'}，顺序拼接 gap={GAP}s，无压速）→ voice_{LANG}.wav")
