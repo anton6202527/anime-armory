@@ -77,7 +77,7 @@ python3 <skill>/scripts/condense.py "<作品根>" --formats txt,docx[,n2d,outlin
 
 ## 输出约定
 
-- 默认落 `作品集/<原作名>-精简/`。
+- 默认落 `写小说/<原作名>-精简/`。
 - 终态进 `导出/`，中间产物留作品根。
 
 ## 何时不用本 skill

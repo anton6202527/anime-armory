@@ -60,7 +60,7 @@ def main():
         print(f"[err] 找不到原作：{source_path}", file=sys.stderr); sys.exit(2)
 
     source_title = os.path.splitext(os.path.basename(source_path))[0]
-    out_root = os.path.abspath(args.out or os.path.join("作品集", f"{source_title}-续写"))
+    out_root = os.path.abspath(args.out or os.path.join("写小说", f"{source_title}-续写"))
     if os.path.exists(out_root):
         print(f"[err] 目标已存在：{out_root}", file=sys.stderr); sys.exit(2)
 

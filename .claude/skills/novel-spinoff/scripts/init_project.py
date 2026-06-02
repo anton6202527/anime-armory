@@ -193,7 +193,7 @@ def main():
     ap.add_argument("--scale", required=True, choices=["short", "medium", "long"])
     ap.add_argument("--branch-point", default=None, help="分叉模式必填，例：'第15章'")
     ap.add_argument("--person", default="third-limited", choices=["first", "third-limited"])
-    ap.add_argument("--out", default=None, help="输出根，缺省 作品集/<原作名>-<配角名>外传/")
+    ap.add_argument("--out", default=None, help="输出根，缺省 写小说/<原作名>-<配角名>外传/")
     ap.add_argument("--outputs", default="txt,docx,outline",
                     help="逗号分隔，可含 txt,docx,outline,n2d")
     ap.add_argument("--target-platform", default="跨平台",
@@ -213,7 +213,7 @@ def main():
 
     source_title = detect_source_title(source_path)
     project_name = f"{source_title}-{args.character}外传"
-    out_root = args.out or os.path.join("作品集", project_name)
+    out_root = args.out or os.path.join("写小说", project_name)
     out_root = os.path.abspath(out_root)
 
     if os.path.exists(out_root):

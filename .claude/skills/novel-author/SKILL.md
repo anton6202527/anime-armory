@@ -7,7 +7,9 @@ description: Top-level dispatcher for the novel-* skill family. Inspects user in
 
 不直接写小说，**读取用户输入 → 路由**到 novel-* 家族最合适的 sub-skill。
 
-和已存在的 `novel2drama` 平行：那条线管漫剧/视频生产，这条线管纯文本小说生产。两条线在 novel-fetch（取材）和 novel-spinoff/expand 的输出处自然衔接。
+和已存在的 `novel2drama` 平行：那条线管漫剧/视频生产、产物落 `制漫剧/`；这条线管纯文本小说生产、**产物统一落 `写小说/<项目>/`**（如 `写小说/仙界闭关小能手-王敦外传/`）。两条线在 novel-fetch（取材）和 novel-spinoff/expand 的输出处自然衔接——`写小说/` 里的成品可交给 `novel2drama` 改编，产物再流向 `制漫剧/`。
+
+**本系列成员**：`novel-fetch`（取公版）· `novel-title`（起名）· `novel-spinoff`（配角外传）· `novel-continue`（续写）· `novel-expand`/`novel-condense`（扩/缩）· `novel-craft`（写作工艺基元）· `novel-review`（已写章节质检/审稿）。
 
 ## 路由规则
 
@@ -20,6 +22,7 @@ description: Top-level dispatcher for the novel-* skill family. Inspects user in
 | 已有一段较短的文本，要**扩写章节内细节**（时间不动 / 加厚） | `novel-expand` |
 | 已有长篇，要**压缩为短版 / 漫剧脚本量级** | `novel-condense` |
 | 自己手写小说时要**工艺指南**（章纲 / 单章 / 扩 / 缩 / 续 的原则） | `novel-craft` |
+| 已写好若干章，要**质检 / 审稿 / 查问题**（人设崩 / 视角穿帮 / 设定矛盾 / 锚点漂移 / 节奏 / 原文照搬） | `novel-review` |
 | 把小说改成**漫剧 / 短剧** | `novel2drama`（另一条管线） |
 
 ⚠️ **续 vs 扩 vs 视角** 三者很容易混：
@@ -38,7 +41,7 @@ description: Top-level dispatcher for the novel-* skill family. Inspects user in
 
 ## 何时不路由
 
-- 用户在 `作品集/<剧名>/` 目录里有 `_进度.md`（漫剧管线状态）→ 让 `novel2drama` 接手，不要硬塞进 novel-* 家族。
+- 用户在 `制漫剧/<剧名>/` 目录里有 `_进度.md`（漫剧管线状态）→ 让 `novel2drama` 接手，不要硬塞进 novel-* 家族。
 - 用户在写**完全原创**小说（无源文本）→ 直接由当前 Claude 协助写，不必走任何 skill。
 
 ## 合法性继承（铁律）

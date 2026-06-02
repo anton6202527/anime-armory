@@ -9,7 +9,7 @@ fetch_novel.py — 给定章节目录页 URL，联网抓取公版小说全文，
 
 选项:
     --name 书名      输出文件名与标题（必填）
-    --out  作品根    输出到 <作品根>/小说/；缺省 = 作品集/<书名>/
+    --out  作品根    输出到 <作品根>/小说/；缺省 = 写小说/<书名>/
     --source auto|gutenberg|wikisource|generic   抓取引擎（默认 auto 探测）
     --i-have-rights  对非公版/通用兜底 URL 声明你有权使用（跳过合法性确认）
 
@@ -277,11 +277,11 @@ def _today():
 
 
 def resolve_out_dir(out, name):
-    """输出目录 = <作品根>/小说/；缺省作品根 = 作品集/<书名>/。
+    """输出目录 = <作品根>/小说/；缺省作品根 = 写小说/<书名>/。
     若 --out 本身已指向 小说/ 目录，直接用它，避免 小说/小说 双层嵌套。"""
     if out and os.path.basename(out.rstrip("/\\")) == "小说":
         return out
-    root = out if out else os.path.join("作品集", name)
+    root = out if out else os.path.join("写小说", name)
     return os.path.join(root, "小说")
 
 
@@ -301,7 +301,7 @@ def main():
     ap = argparse.ArgumentParser(description="联网抓取公版小说全文 → txt + docx")
     ap.add_argument("url", help="章节目录页 / 作品页 URL")
     ap.add_argument("--name", required=True, help="书名（输出文件名与标题）")
-    ap.add_argument("--out", default=None, help="作品根；缺省 = 作品集/<书名>/")
+    ap.add_argument("--out", default=None, help="作品根；缺省 = 写小说/<书名>/")
     ap.add_argument("--source", default="auto",
                     choices=["auto", "gutenberg", "wikisource", "generic"])
     ap.add_argument("--i-have-rights", action="store_true",

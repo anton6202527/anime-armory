@@ -165,7 +165,7 @@ def test_fetch_wikisource_with_injected_getter():
 
 
 def test_resolve_out_dir_default_and_explicit():
-    assert fn.resolve_out_dir(None, "紅樓夢").endswith(os.path.join("作品集", "紅樓夢", "小说"))
+    assert fn.resolve_out_dir(None, "紅樓夢").endswith(os.path.join("写小说", "紅樓夢", "小说"))
     assert fn.resolve_out_dir("/tmp/work", "紅樓夢") == os.path.join("/tmp/work", "小说")
     # --out already pointing at 小说/ must not double-nest into 小说/小说
     assert fn.resolve_out_dir("/tmp/work/紅樓夢/小说", "紅樓夢") == "/tmp/work/紅樓夢/小说"

@@ -3,7 +3,7 @@
 ## 作品根目录
 
 ```
-作品集/<原作名>-<配角名>外传/
+写小说/<原作名>-<配角名>外传/
 ├── _meta.json
 ├── _进度.md
 ├── 原作.txt                # 原作的纯文本副本（docx → txt 抽出，便于脚本/grep 扫描）
@@ -142,7 +142,7 @@ n2d-script/
 
 之后用户在该目录跑 n2d-script：
 ```bash
-python3 .claude/skills/n2d-script/scripts/split_novel.py "作品集/<原作名>-<配角名>外传/导出/n2d-script/小说/<书名>.docx"
+python3 .claude/skills/n2d-script/scripts/split_novel.py "写小说/<原作名>-<配角名>外传/导出/n2d-script/小说/<书名>.docx"
 ```
 
 本 skill **不**自动启动 n2d-script——是不是要进入漫剧流水线由用户决定。

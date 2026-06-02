@@ -43,7 +43,7 @@ python3 <skill>/scripts/init_project.py "<原作>" \
   [--i-have-rights]
 ```
 
-落点 `作品集/<原作名>-扩写/`。骨架同 novel-spinoff 模式（`设定/` / `章节/` / `导出/` / `_meta.json` / `_进度.md`）。
+落点 `写小说/<原作名>-扩写/`。骨架同 novel-spinoff 模式（`设定/` / `章节/` / `导出/` / `_meta.json` / `_进度.md`）。
 
 ### 第 2 步 — 提取骨架
 
@@ -77,7 +77,7 @@ python3 <skill>/scripts/expand.py "<作品根>" --formats txt,docx[,outline,n2d]
 
 ## 输出约定
 
-- 默认落 `作品集/<原作名>-扩写/`。
+- 默认落 `写小说/<原作名>-扩写/`。
 - 终态进 `导出/`，中间产物留作品根。
 
 ## 何时不用本 skill

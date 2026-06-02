@@ -30,7 +30,7 @@
 每个作品独占一个目录：
 
 ```
-作品集/<剧名>/
+制漫剧/<剧名>/
 ├── 小说/                  原文
 ├── common/                全局资产 + 废料
 ├── 脚本/                  n2d-script 产物
@@ -186,14 +186,14 @@ prompt 写法/语言         图片该长啥样
 用户：跑 /n2d-script
 
 n2d-script →
-  1. 把小说挪到 作品集/我的小说/小说/
-  2. 跑 split_novel.py → 生成 作品集/我的小说/{common/{_进度.md, global_style.md, characters/, locations/}, 脚本/第N集/raw.txt}
+  1. 把小说挪到 制漫剧/我的小说/小说/
+  2. 跑 split_novel.py → 生成 制漫剧/我的小说/{common/{_进度.md, global_style.md, characters/, locations/}, 脚本/第N集/raw.txt}
   3. 在 common/_进度.md 写入 N 集骨架（raw 列 ✅，其他全 ⬜）
   4. 精修 common/global_style.md + common/characters/ + common/locations/
   5. 精修第1集 8 类素材 → 物料列 ✅
   6. 报告：第1集物料齐，可调 /n2d-image 出图
 
-用户：跑 /n2d-image 作品集/我的小说 第1集
+用户：跑 /n2d-image 制漫剧/我的小说 第1集
 
 n2d-image →
   1. 走"强制 5 步 SOP"：扫共享 → 列需求 → 差集 → 追加共享 → 建本集 prompt

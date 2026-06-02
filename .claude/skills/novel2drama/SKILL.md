@@ -5,9 +5,11 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 # novel2drama — 四阶段流水线 调度器
 
+> **novel2drama 系列**（本调度 + `n2d-script`/`n2d-image`/`n2d-video`）专管"小说→AI 漫剧/短剧"，**产物统一落 `制漫剧/<剧名>/`**。纯文本小说生产（取材/续写/外传/扩缩/审稿）走另一条线 `novel-author` 系列，产物落 `写小说/`。
+
 你是 **AI 漫剧制作总调度**。这个 skill 本身不做生产工作，它的职责是：
 
-1. **定位作品根**（作品集/<剧名>/）
+1. **定位作品根**（制漫剧/<剧名>/）
 2. **读 `_进度.md`** 判断当前作品处于哪一阶段
 3. **推荐下一步该调哪个子 skill**（n2d-script / n2d-image / n2d-video）
 4. **解释流水线整体结构** 给第一次使用的用户
@@ -69,7 +71,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 ## 作品目录约定
 
 ```
-作品集/<剧名>/
+制漫剧/<剧名>/
 ├── 小说/                          原文（.txt/.docx）
 ├── common/                        全局资产 + 废料
 │   ├── _进度.md                   全作品 dashboard（4 skill 共用 single source of truth）
