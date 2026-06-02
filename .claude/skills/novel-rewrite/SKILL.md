@@ -1,0 +1,55 @@
+---
+name: novel-rewrite
+description: Use when rewriting / reimagining / 魔改 an existing novel into a NEW version that CHANGES the main storyline and/or ADDS original settings, materials, powers, factions, characters — a transformative rewrite (翻拍 / 重构 / 二创魔改 / 换设定重写). NOT a side-character POV retelling locked to source events (that's novel-spinoff), NOT appending new chapters forward (novel-continue), NOT in-place detail thickening (novel-expand). Defaults to public-domain / user-owned / user-declared rights. Triggers 改写, 重写, 重构, 魔改, 二创重写, 翻拍, 换设定重写, 加新设定, 移植设定, 原作重做.
+---
+
+# novel-rewrite — 改写 / 重构 / 魔改
+
+给定**原作** + **改动方向**，产出一部**改了主线 / 换了设定 / 加了原创材料**的新小说。和 `novel-spinoff` 是镜像关系：外传**锚点锁定**原作事件，改写**主动打破**它。
+
+## 与近邻 skill 的边界（防误路由）
+
+| 你想做的 | 用 |
+|---|---|
+| 换配角视角看同一批事件、**事件不改** | `novel-spinoff` |
+| 在末章后**加新章节**（时间前推） | `novel-continue` |
+| 章节内**加细节**、事件骨架不变 | `novel-expand` |
+| **改主线 / 换设定 / 加原创材料 / 魔改走向** | **novel-rewrite（本 skill）** |
+
+## 核心原则
+
+- **先定"保留什么内核"，再谈改**：改写不是推倒重来胡写——`设定/改动spec.md` 是这部改写的"宪法"，写明【保留的内核】【改的部分】【加的新料】三栏。丢了内核（人设魂/情感主线）的改写 = 烂二创。
+- **新设定圣经 = 第一生产资料**：你"增加的各种设定/材料/势力/金手指"统一进 `设定/新设定.md` 并做**一致性追踪**——改写最大的翻车点是新设定前后自相矛盾。
+- **改写更要重写文字，不照搬原作**：既是工艺也是法律边界（派生作品）。原作是**参考素材**，不是可粘贴的底稿。
+- **自由但自洽**：不受原作事件束缚，但新世界内部必须逻辑闭环。
+
+## 合法性铁律
+原作须 **公版 / 用户自有 / 用户声明授权（`--i-have-rights`）**。派生作品是原作版权人专有权利；当代受版权网文/出版物未声明授权 → 拒做。同 novel-spinoff，详见 `novel-author/SKILL.md` 合法性继承。
+
+## 工作流（七步，每步末用户审 gate）
+
+0. **确认输入 + 合法性**：原作路径、**改动方向**（一句话：要把它改成什么）、规模（short/medium/long 或抖音漫剧档）、目标平台、输出（txt/docx/outline/n2d）。判版权。
+1. **建骨架**：`python3 <skill>/scripts/init_project.py "<原作>" --rewrite-type "<方向>" --scale <档> [--i-have-rights]` → `写小说/<原作名>-改写/`（设定/{改动spec,新设定,角色卡,世界观,章纲} + 原作.txt 参考 + 章节/ + 导出/ + _meta + _进度）。
+2. **填改动spec**（最重要）：三栏【保留内核 / 改什么 / 加什么】写实写细。→ 用户审。
+3. **建新设定圣经 + 角色/世界观卡**：把"加的新设定/材料"系统化、列一致性约束。→ 用户审。
+4. **书名**：委托 `novel-title`（同人改写/魔改类型）。→ 用户审。
+5. **章纲**：自由编织（不受原作章节束缚，可大改顺序/结局），三幕 + 反转 + 钩子；用 `novel-craft/references/{outline,split}.md`。→ 用户审。
+6. **Demo（前几章）+ 用户审【最重要 gate】**：验文风 / 改动方向是否到位 / 新设定是否自洽 / 没丢内核 / 没照搬原文。每章独立审。
+7. **续写余下 + 回扫 + 导出**：逐章 subagent 写（喂 改动spec + 新设定圣经 + Demo 文风样本）；用 `novel-review` 回扫（重点：**新设定一致性**、没跑回原作旧设定、内核没丢、没照搬）；`<skill>/scripts/export.py`（或复用 spinoff 的 export）导出 txt/docx/outline。
+
+## 详细参考
+- 改动spec 模板 + 新设定圣经管理 + 一致性追踪 + 与 spinoff 的边界细则：`references/rewrite-spec.md`
+- 章纲/单章/扩缩工艺：`novel-craft/references/`
+- 质检：`novel-review`
+
+## 常见错误
+
+| 错误 | 纠正 |
+|---|---|
+| 把改写当外传，锚点锁死原作事件 | 改写本就要改；锁了就成了外传，路由错 |
+| 没定"保留内核"就开改 | 先填改动spec 的【保留】栏，否则改飞、丢魂 |
+| 新设定前后矛盾 / 越改越崩 | 新设定圣经 + 一致性回扫，新世界也要逻辑闭环 |
+| 大段照搬原作原文当底稿 | 原作只是参考素材；改写必须重写，触法律边界 |
+| 改到把原作的情感主线/人设魂也丢了 | 内核栏锁住魂；改的是事件/设定，不是魂 |
+| 跳过 Demo gate 直接写全本 | 改动方向对不对、新设定自不自洽，1 章就能看出 |
+| 误把"加新章节"当改写 | 那是 novel-continue |

@@ -9,7 +9,7 @@ description: Top-level dispatcher for the novel-* skill family. Inspects user in
 
 和已存在的 `novel2drama` 平行：那条线管漫剧/视频生产、产物落 `制漫剧/`；这条线管纯文本小说生产、**产物统一落 `写小说/<项目>/`**（如 `写小说/仙界闭关小能手-王敦外传/`）。两条线在 novel-fetch（取材）和 novel-spinoff/expand 的输出处自然衔接——`写小说/` 里的成品可交给 `novel2drama` 改编，产物再流向 `制漫剧/`。
 
-**本系列成员**：`novel-fetch`（取公版）· `novel-title`（起名）· `novel-spinoff`（配角外传）· `novel-continue`（续写）· `novel-expand`/`novel-condense`（扩/缩）· `novel-craft`（写作工艺基元）· `novel-review`（已写章节质检/审稿）。
+**本系列成员**：`novel-fetch`（取公版）· `novel-title`（起名）· `novel-spinoff`（配角外传·锁事件）· `novel-rewrite`（改写/魔改·改事件加设定）· `novel-continue`（续写）· `novel-expand`/`novel-condense`（扩/缩）· `novel-craft`（写作工艺基元）· `novel-review`（已写章节质检/审稿）。
 
 ## 路由规则
 
@@ -17,7 +17,8 @@ description: Top-level dispatcher for the novel-* skill family. Inspects user in
 |---|---|
 | 给了**书名 / 作者 / URL**，要把书"取回来" | `novel-fetch` |
 | 已有原作 + 想**起一个好书名** | `novel-title` |
-| 已有原作 + 指定一个**配角名**，要**视角续写**（POV 切换） | `novel-spinoff` |
+| 已有原作 + 指定一个**配角名**，要**视角续写**（POV 切换、事件锁定） | `novel-spinoff` |
+| 已有原作 + 要**改主线 / 换设定 / 加原创材料**（魔改 / 重构 / 翻拍 / 二创重写） | `novel-rewrite` |
 | 已有原作 + 要**接着末章往后写新章节**（时间向前推） | `novel-continue` |
 | 已有一段较短的文本，要**扩写章节内细节**（时间不动 / 加厚） | `novel-expand` |
 | 已有长篇，要**压缩为短版 / 漫剧脚本量级** | `novel-condense` |
@@ -25,10 +26,11 @@ description: Top-level dispatcher for the novel-* skill family. Inspects user in
 | 已写好若干章，要**质检 / 审稿 / 查问题**（人设崩 / 视角穿帮 / 设定矛盾 / 锚点漂移 / 节奏 / 原文照搬） | `novel-review` |
 | 把小说改成**漫剧 / 短剧** | `novel2drama`（另一条管线） |
 
-⚠️ **续 vs 扩 vs 视角** 三者很容易混：
+⚠️ **续 / 扩 / 视角 / 改 四者很容易混**：
 - **续写** = 加**新章节**（时间向前推） → novel-continue
 - **扩写** = 加**章节内细节**（时间不动 / 既有内容更厚） → novel-expand
-- **视角续写** = **换 POV** 写同一段时间 → novel-spinoff
+- **视角续写** = **换 POV** 写同一段时间、**事件锁定不改** → novel-spinoff
+- **改写** = **改主线 / 换设定 / 加原创材料**（事件可改、可新增设定，与视角续写正相反）→ novel-rewrite
 
 每条路由**简短确认输入后调起对应 skill**，让那个 skill 自走流程。不要在本 skill 里硬写小说。
 
@@ -48,7 +50,7 @@ description: Top-level dispatcher for the novel-* skill family. Inspects user in
 
 novel-* 家族的合法性规则一致：**公版 / 自有 / 用户声明授权（`--i-have-rights`）**。
 
-- 命中付费墙站或当代受版权网文，本 skill **拒绝路由** novel-spinoff / novel-expand / novel-condense（这些都会派生作品）。
+- 命中付费墙站或当代受版权网文，本 skill **拒绝路由** novel-spinoff / novel-rewrite / novel-expand / novel-condense（这些都会派生作品）。
 - 仅当 `novel-fetch` 用来取公版书、或 `novel-title` 用来起原创书名时，才可对原作版权状态宽松。
 - 路由前先做一次铁律筛查；命中即拒做并解释为什么。
 

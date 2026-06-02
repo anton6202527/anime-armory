@@ -5,7 +5,7 @@
 | 系列 | 调度入口 | 成员 skill | 干什么 | 产物落 |
 |---|---|---|---|---|
 | **novel2drama 系列** | `novel2drama` | `n2d-script` / `n2d-image` / `n2d-video` | 小说 → **AI 漫剧 / 短剧**（分镜/出图/出视频/字幕，对接即梦·可灵·Seedance·Veo）| **`制漫剧/`** |
-| **novel-author 系列** | `novel-author` | `novel-fetch` / `novel-title` / `novel-spinoff` / `novel-continue` / `novel-expand` / `novel-condense` / `novel-craft` / `novel-review` | **纯文本小说生产**（联网取公版 / 起书名 / 配角视角外传 / 续写 / 扩写 / 精简 / 写作工艺 / 质检审稿）| **`写小说/`** |
+| **novel-author 系列** | `novel-author` | `novel-fetch` / `novel-title` / `novel-spinoff` / `novel-rewrite` / `novel-continue` / `novel-expand` / `novel-condense` / `novel-craft` / `novel-review` | **纯文本小说生产**（联网取公版 / 起书名 / 配角视角外传 / 改写魔改 / 续写 / 扩写 / 精简 / 写作工艺 / 质检审稿）| **`写小说/`** |
 
 > 两系列在交界处衔接：`novel-author` 写好的小说可交给 `novel2drama` 改编成漫剧（产物从 `写小说/` 流向 `制漫剧/`）。
 > skill 目录在 `.claude/skills/` 下保持扁平（按 `novel2drama`/`n2d-*` 与 `novel-author`/`novel-*` 前缀分族），因为 Claude Code 只发现一层 `*/SKILL.md`。
@@ -26,7 +26,8 @@ anime-armory/
 │   ├── novel-author/                调度（路由到下面子 skill）+ 家族经验沉淀(Q&A)
 │   ├── novel-fetch/                 联网抓公版小说 → txt+docx
 │   ├── novel-title/                 起书名（5 维评分）
-│   ├── novel-spinoff/               配角视角并行外传（锚点对齐，init_project/export 脚本）
+│   ├── novel-spinoff/               配角视角并行外传（锚点锁定，init_project/export 脚本）
+│   ├── novel-rewrite/               改写/重构/魔改（改动spec + 新设定圣经，与外传镜像）
 │   ├── novel-continue/              续写后续章节
 │   ├── novel-expand/ novel-condense/ 扩写 / 精简
 │   ├── novel-craft/                 写作工艺基元（章纲/单章/扩缩，被其他 skill 引用）

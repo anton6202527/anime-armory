@@ -1,62 +1,59 @@
 1
-00:00:00,000 --> 00:00:07,000
-Madam Liu didn't bleed — she burst into black smoke.
-Everyone saw it. Everyone kept quiet. That's how a demon dies.
+00:00:00,000 --> 00:00:09,746
+Madam Liu didn't bleed — she burst into black smoke. Everyone saw it. Everyone kept quiet. That's how a demon dies.
 
 2
-00:00:07,000 --> 00:00:13,000
+00:00:10,146 --> 00:00:13,599
 I need time — time to figure out what's inside this body.
 
 3
-00:00:13,000 --> 00:00:19,000
-Myriad-Demon Bloodline System. Level 1.
-Warning: if your demon awakening tops 50%, you lose your mind — for good.
+00:00:13,999 --> 00:00:18,477
+Myriad-Demon Bloodline System. Level 1. Warning: if your demon awakening tops 50%, you lose your mind — for good.
 
 4
-00:00:19,000 --> 00:00:22,000
+00:00:18,877 --> 00:00:21,290
 Refining Madam Liu's leftover demon blood... Done. EXP +10.
 
 5
-00:00:22,000 --> 00:00:26,000
-Jade Demon Rank unlocked. Body +100%, Speed +80%, Senses +50%.
-New skill: Demonic Aura.
+00:00:21,690 --> 00:00:26,563
+Jade Demon Rank unlocked. Body +100%, Speed +80%, Senses +50%. New skill: Demonic Aura.
 
 6
-00:00:26,000 --> 00:00:31,000
+00:00:26,963 --> 00:00:28,251
 Okay, that's just ridiculous.
 
 7
-00:00:31,000 --> 00:00:39,000
+00:00:28,651 --> 00:00:29,654
 Demonic Aura — on.
 
 8
-00:00:39,000 --> 00:00:42,000
+00:00:30,054 --> 00:00:35,618
 That black cat out back? Lowest-tier spirit. The woman in the west wing — human.
 
 9
-00:00:42,000 --> 00:00:46,000
+00:00:36,018 --> 00:00:40,965
 Three of them under the locust tree... and something big at the bottom of that well.
 
 10
-00:00:46,000 --> 00:00:47,500
+00:00:41,365 --> 00:00:49,135
 The cold palace is a hunting ground. The fallen concubines? They're the prey.
 
 11
-00:00:47,500 --> 00:00:49,000
+00:00:49,535 --> 00:00:54,568
 No wonder they keep "dying of illness" and vanishing.
 
 12
-00:00:49,000 --> 00:00:50,500
+00:00:54,968 --> 00:00:57,333
 My lady... you look amazing today.
 
 13
-00:00:50,500 --> 00:00:52,000
+00:00:57,733 --> 00:01:03,031
 Get some sleep tonight. Whatever you hear — don't come out.
 
 14
-00:00:52,000 --> 00:00:53,000
+00:01:03,431 --> 00:01:05,146
 My lady, what are you going to do?
 
 15
-00:00:53,000 --> 00:00:54,000
+00:01:05,546 --> 00:01:06,140
 Hunt demons.

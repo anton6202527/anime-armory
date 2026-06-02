@@ -8,3 +8,11 @@ __pycache__/
 **/_submit.log
 
 
+
+# TTS 密钥（勿提交）
+**/.minimax_env
+**/.volc_env
+
+# TTS 缓存/合成临时（勿提交）
+**/_voicecache/
+**/出视频/**/_work/
