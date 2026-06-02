@@ -1,6 +1,6 @@
 ---
 name: novel2drama
-description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked anything about turning a novel into AI comic-drama / short-drama materials for 即梦AI / 可灵Kling / Seedance / Veo. Inspects the 作品 root, reads `_进度.md`, and routes the user to the right stage skill — `n2d-script` (拆集 + 8 类素材), `n2d-image` (出图 prompt + 生图), or `n2d-video` (出视频 prompt + 生视频). Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 分镜, 出图, 出视频, 即梦, 可灵, 双语字幕, 海外投放, novel2drama.
+description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked anything about turning a novel into AI comic-drama / short-drama materials for 即梦AI / 可灵Kling / Seedance / Veo. Inspects the 作品 root, reads `_进度.md`, and routes the user to the right stage skill — `n2d-script` (阶段1 分镜+物料 / 阶段2 定稿), `n2d-voice` (配音前移+时长清单), `n2d-image` (出图), `n2d-video` (出视频), or `n2d-compose` (合成成片). Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 分镜, 配音, 出图, 出视频, 合成, 成片, 即梦, 可灵, 双语字幕, 海外投放, novel2drama.
 ---
 
 # novel2drama — 四阶段流水线 调度器
@@ -16,17 +16,16 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 详细架构与目录约定见 `references/architecture.md`。实战 Q&A 见 `Q&A.md`（全阶段共用，沉淀的翻车修正都在那）。
 
-## 四阶段全景
+## 六阶段全景（配音前移·时长驱动镜头）
 
 ```
 小说.txt/.docx
-   ↓ /n2d-script   ← Stage 1：拆集 + 全局/角色/场景 + 8 类素材（剧本/故事板/素材清单/配音/BGM/封面/字幕中/字幕英）
-脚本/第N集/ 物料齐
-   ↓ /n2d-image    ← Stage 2：出图 prompt（共享 + 本集两层）→ 扫本机生图 CLI → 调用 or 指导手动
-出图/common/ + 出图/第N集/ PNG 齐
-   ↓ /n2d-video    ← Stage 3：视频 prompt（从故事板派生）→ 扫本机生视频 CLI → 调用 or 指导手动
-出视频/第N集/ MP4 齐
-   ↓ （Stage 4 配音/BGM/字幕合成不在本流水线 skill 范围）
+   ↓ /n2d-script  阶段1   分镜剧本 + voiceover文案 + 角色/场景/style + 草稿故事板(不锁时长) + 素材清单/封面/bgm/字幕英草稿
+   ↓ /n2d-voice           配音文案 → 真实配音 + 时长清单.json（每句实测时长）
+   ↓ /n2d-script  阶段2   读时长清单 → 故事板Clip时长定稿 + 字幕_中/英.srt(真实时间轴) + 镜头时长.json
+   ↓ /n2d-image           出图 prompt + PNG
+   ↓ /n2d-video           视频 prompt + clip MP4（落 出视频/第N集/视频/，Clip长=配音驱动）
+   ↓ /n2d-compose         视频/ + 配音轨 + BGM + 烧字幕 → 成片_第N集_{mode}.mp4
 ```
 
 每个阶段都按 **集** 为单位推进；进度统一写进 `<作品根>/common/_进度.md`。
@@ -42,17 +41,19 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 → 走下面的"读进度 → 路由"流程
 
 **情境 C — 用户问"怎么开始 / 流程是什么"**：
-→ 简述上面的四阶段全景 + 让用户给小说路径
+→ 简述上面的六阶段全景 + 让用户给小说路径
 
 ### 读进度 → 路由
 
 1. 定位 `<作品根>/common/_进度.md`，读进度表
-2. 进度表头形如：`| 集 | 字数 | raw | 分镜剧本 | 故事板 | 素材清单 | 配音 | BGM | 封面 | 字幕中 | 字幕英 | 出图prompt | 出图 |`
+2. 进度表头形如：`| 集 | 字数 | raw | 分镜剧本 | 草稿故事板 | 配音 | 故事板定稿 | 素材清单 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |`
 3. 对每一集逐列判断：
-   - **物料列**（分镜剧本 → 字幕英）任一为 ⬜ → 该集还在 Stage 1
-   - **物料列全 ✅，`出图prompt` ⬜** → 该集等 Stage 2 的 prompt 生成
-   - **`出图prompt` ✅，`出图` 分子 < 分母**（如 `4/19`）→ 该集等 Stage 2 的 PNG 生成
-   - **`出图` 分子 = 分母** → 该集可进 Stage 3 视频
+   - 阶段1 物料列（分镜剧本…素材清单/字幕英草稿）任一 ⬜ → 还在 /n2d-script 阶段1
+   - 阶段1 齐、`配音` ⬜ → 该集等 /n2d-voice 配音
+   - `配音` ✅、`故事板定稿` ⬜ → 回跑 /n2d-script 阶段2 定稿（故事板时长 + SRT）
+   - `故事板定稿` ✅、`出图prompt`/`出图` 未满 → /n2d-image
+   - `出图` 满、`视频` 未满 → /n2d-video
+   - `视频` 满、`成片` ⬜ → /n2d-compose（合成；问用户 BGM/配音选项）
 4. **推荐策略**：
    - 用户没指定集 → 找"最小未完成集编号" + 它所处的阶段，给出对应 skill 建议
    - 用户指定集 → 直接报该集所处阶段
