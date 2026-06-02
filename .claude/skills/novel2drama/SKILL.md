@@ -45,6 +45,13 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 ### 读进度 → 路由
 
+> **首选：跑确定性路由脚本**（别靠 LLM 推 16×N 大表，烧上下文且易错）：
+> ```bash
+> python3 <skill>/progress.py <作品根>          # 全局：最小未完成集 + 各阶段卡集数 + 推荐命令
+> python3 <skill>/progress.py <作品根> 第N集    # 查指定集所处阶段 + 推荐命令
+> ```
+> 把脚本输出**直接讲给用户**。下面的"逐列判断"是脚本内部逻辑（容错/手查时参考）。
+
 1. 定位 `<作品根>/common/_进度.md`，读进度表
 2. 进度表头形如：`| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |`
 3. 对每一集逐列判断：
