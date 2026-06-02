@@ -17,7 +17,7 @@
 | Stage | Skill | 关注点 | 不关注 |
 |---|---|---|---|
 | 0 调度 | `novel2drama` | 路由 + 全局架构 | 任何具体生产细节 |
-| 1 物料 | `n2d-script` | 拆集 + 8 类素材模板 + 角色/场景卡 | AI CLI 调用 / 锚定句细节 |
+| 1 物料 | `n2d-script` | 拆集 + 脚本素材(剧本/卡片)模板 + 角色/场景卡 | AI CLI 调用 / 锚定句细节 |
 | 2 出图 | `n2d-image` | 出图 prompt + 扫 CLI + 生图 / 指导 | 视频 prompt / 故事板 |
 | 3 视频 | `n2d-video` | 视频 prompt + 扫 CLI + 生视频 / 指导 | 物料模板 |
 
@@ -141,7 +141,7 @@ common/废料/
 | 列组 | 写入者 | 含义 |
 |---|---|---|
 | raw | n2d-script 拆集脚本 | 原文片段已落档 |
-| 分镜剧本 → 字幕英 | n2d-script | 8 类素材生成完毕 |
+| 阶段1物料(剧本/bgm/封面) | n2d-script阶段1 | 配音前的剧本改编完毕 |
 | 出图prompt | n2d-image | 本集出图 prompt **全套**写完（共享层 + 本集层） |
 | 出图 | n2d-image | `已完成 PNG / 本集需要的总数`（分子含共享复用 + 本集分镜） |
 | 视频 | n2d-video | `已完成 MP4 / 本集 Clip 总数` |
@@ -190,7 +190,7 @@ n2d-script →
   2. 跑 split_novel.py → 生成 制漫剧/我的小说/{common/{_进度.md, global_style.md, characters/, locations/}, 脚本/第N集/raw.txt}
   3. 在 common/_进度.md 写入 N 集骨架（raw 列 ✅，其他全 ⬜）
   4. 精修 common/global_style.md + common/characters/ + common/locations/
-  5. 精修第1集 8 类素材 → 物料列 ✅
+  5. 精修第1集 阶段1剧本(台词) → 剧本改编列 ✅
   6. 报告：第1集物料齐，可调 /n2d-image 出图
 
 用户：跑 /n2d-image 制漫剧/我的小说 第1集

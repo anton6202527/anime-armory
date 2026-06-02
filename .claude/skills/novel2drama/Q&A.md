@@ -1089,7 +1089,7 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 - **`时长清单.json`**（n2d-voice 产）= 配音驱动镜头的桥梁。`finalize_storyboard.py` 读它 → 重定时 SRT + `镜头时长.json` → 锁故事板 Clip 时长；单 Clip 超即梦 8s 自动标拆。
 - **n2d-voice**：多后端可插拔（CosyVoice/GPT-SoVITS 本地克隆 > MiniMax/火山 云 > macOS say 占位），含声音克隆（MiniMax 复刻 + demucs 人声分离去 BGM）。**不再按窗口压速**。
 - **n2d-compose**：本机 Homebrew ffmpeg **无 libass**（subtitles/drawtext 滤镜全无）→ 用 **Pillow 渲染字幕 PNG + overlay 烧录**；配音 + ducking BGM(sidechaincompress) + clip 自带音效底 三层混音。
-- **进度表 reschema** 成 6 阶段 16 物料列：`raw|分镜剧本|草稿故事板|素材清单|配音文案|BGM|封面|配音|故事板定稿|字幕中|字幕英|出图prompt|出图|视频prompt|视频|成片`。
+- **进度表 reschema** 成 6 阶段 16 物料列：`raw|分镜剧本|草稿故事板|素材清单|配音文案|BGM|封面|配音|分镜设计|字幕中|字幕英|出图prompt|出图|视频prompt|视频|成片`。
 
 **第2集实测验证**（铁证旧流程会犯的错）：
 | 镜头 | 配音驱动实测 | 旧平台估 | 旧流程后果 |
