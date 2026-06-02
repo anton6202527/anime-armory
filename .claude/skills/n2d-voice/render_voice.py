@@ -113,7 +113,7 @@ for i in range(n):
     fx = "asetrate=44100*0.9,aresample=44100,atempo=1.111,aecho=0.6:0.5:24:0.35," if sysfx else ""
     tmp=os.path.join(vd,f't{i:02d}.wav')
     subprocess.run([FF,'-y','-loglevel','error','-i',raw,'-af',f'{fx}loudnorm=I=-16:TP=-1.5:LRA=11,aresample=44100','-ar','44100','-ac','2',tmp],check=True)
-    out=os.path.join(vd,f'l{i:02d}.wav'); os.replace(tmp,out)
+    out=os.path.join(W,f'line_{i:02d}.wav'); os.replace(tmp,out)  # 最终逐句落 配音/line_NN.wav（与 manifest/spec 一致）
     measured.append(dur_of(out))
     wavs.append((out,starts[i]))
 
