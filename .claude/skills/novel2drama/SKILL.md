@@ -20,12 +20,12 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 ```
 小说.txt/.docx
-   ↓ /n2d-script  阶段1   分镜剧本 + voiceover文案 + 角色/场景/style + 草稿故事板(不锁时长) + 素材清单/封面/bgm/字幕英草稿
-   ↓ /n2d-voice           配音文案 → 真实配音 + 时长清单.json（每句实测时长）
-   ↓ /n2d-script  阶段2   读时长清单 → 故事板Clip时长定稿 + 字幕_中/英.srt(真实时间轴) + 镜头时长.json
-   ↓ /n2d-image           出图 prompt + PNG
-   ↓ /n2d-video           视频 prompt + clip MP4（落 出视频/第N集/视频/，Clip长=配音驱动）
-   ↓ /n2d-compose         视频/ + 配音轨 + BGM + 烧字幕 → 成片_第N集_{mode}.mp4
+   ↓ /n2d-script  阶段1·剧本改编   voiceover(台词) + 角色/场景/style + bgm + 封面（**不做分镜**）
+   ↓ /n2d-voice                  角色配音 → 真实配音 + 统计每句台词时长（时长清单.json）
+   ↓ /n2d-script  阶段2·分镜设计   时长驱动 → 分镜剧本 + 故事板(Clip时长) + 素材清单 + 字幕_中/英.srt + 镜头时长.json
+   ↓ /n2d-image                  出图 prompt + PNG
+   ↓ /n2d-video                  图生视频（落 出视频/第N集/视频/，Clip长=配音驱动）
+   ↓ /n2d-compose                剪辑合成 + 背景音乐 + 字幕 → 成片_第N集_{mode}.mp4
 ```
 
 每个阶段都按 **集** 为单位推进；进度统一写进 `<作品根>/common/_进度.md`。
@@ -46,14 +46,14 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 ### 读进度 → 路由
 
 1. 定位 `<作品根>/common/_进度.md`，读进度表
-2. 进度表头形如：`| 集 | 字数 | raw | 分镜剧本 | 草稿故事板 | 素材清单 | 配音文案 | BGM | 封面 | 配音 | 故事板定稿 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |`
+2. 进度表头形如：`| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |`
 3. 对每一集逐列判断：
-   - 阶段1 物料列（分镜剧本…素材清单/字幕英草稿）任一 ⬜ → 还在 /n2d-script 阶段1
-   - 阶段1 齐、`配音` ⬜ → 该集等 /n2d-voice 配音
-   - `配音` ✅、`故事板定稿` ⬜ → 回跑 /n2d-script 阶段2 定稿（故事板时长 + SRT）
-   - `故事板定稿` ✅、`出图prompt`/`出图` 未满 → /n2d-image
+   - `剧本改编`/`bgm`/`封面` 任一 ⬜ → 还在 /n2d-script 阶段1·剧本改编
+   - 阶段1 齐、`配音` ⬜ → 该集等 /n2d-voice 角色配音(统计台词时长)
+   - `配音` ✅、`分镜设计` ⬜ → 回跑 /n2d-script 阶段2·分镜设计（时长驱动：分镜剧本+故事板+素材清单+SRT）
+   - `分镜设计` ✅、`出图prompt`/`出图` 未满 → /n2d-image
    - `出图` 满、`视频` 未满 → /n2d-video
-   - `视频` 满、`成片` ⬜ → /n2d-compose（合成；问用户 BGM/配音选项）
+   - `视频` 满、`成片` ⬜ → /n2d-compose（剪辑合成+BGM+字幕；问用户 BGM 选项）
 4. **推荐策略**：
    - 用户没指定集 → 找"最小未完成集编号" + 它所处的阶段，给出对应 skill 建议
    - 用户指定集 → 直接报该集所处阶段
@@ -120,7 +120,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 | skill | 何时调 | 输入 | 关键输出 |
 |---|---|---|---|
-| `/n2d-script` | 首跑（拆集）/ 精修某集物料 | 小说路径 或 作品根 + 集号 | `脚本/第N集/` 8 类素材 + `_进度.md` 物料列勾 ✅ |
+| `/n2d-script` | 阶段1 剧本改编(台词) / 阶段2 分镜设计(配音后) | 小说路径 或 作品根 + 集号 | 阶段1: voiceover+bgm+封面；阶段2: 分镜剧本+故事板+素材清单+字幕 |
 | `/n2d-image` | 物料齐后出图 prompt + 生图 | 作品根 + 集号 | `出图/{common,第N集}/` prompt + PNG + 进度勾 ✅ |
 | `/n2d-voice` | 阶段1齐后配音(出图前) | 作品根 + 集号 | `出视频/第N集/配音/` 音频 + 时长清单.json + 配音列 ✅ |
 | `/n2d-video` | 出图齐后出视频 prompt + 生视频 | 作品根 + 集号 | `出视频/第N集/视频/` MP4 + 进度勾 ✅ |

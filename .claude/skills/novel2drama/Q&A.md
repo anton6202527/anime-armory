@@ -1077,11 +1077,11 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 
 **修正后的六阶段产线**（已合入 main）：
 ```
-小说 → n2d-script阶段1(分镜+配音文案+草稿故事板·不锁时长)
-     → n2d-voice(配音 + 时长清单.json·每句实测时长)
-     → n2d-script阶段2(读时长清单 → 故事板Clip时长定稿 + 字幕真实时间轴 + 镜头时长.json)
+小说 → n2d-script阶段1·剧本改编(voiceover台词 + bgm + 封面，**不做分镜**)
+     → n2d-voice(角色配音 + 统计每句台词时长·时长清单.json)
+     → n2d-script阶段2·分镜设计(时长驱动 → 分镜剧本 + 故事板Clip时长 + 素材清单 + 字幕SRT + 镜头时长.json)
      → n2d-image(出图) → n2d-video(图生视频·clip落 出视频/第N集/视频/)
-     → n2d-compose(视频/+配音轨+BGM+烧字幕 → 成片_第N集_{mode}.mp4)
+     → n2d-compose(剪辑合成 + 背景音乐 + 字幕 → 成片_第N集_{mode}.mp4)
 ```
 对齐主流栈：即梦(图+视频)/CosyVoice(配音)/Suno(BGM)/剪映(字幕+混音，由 n2d-compose 脚本化替代)。
 

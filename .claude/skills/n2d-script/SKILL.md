@@ -1,11 +1,11 @@
 ---
 name: n2d-script
-description: Stage 1 of novel2drama pipeline — split a novel (.txt/.docx) into per-episode dramatic beats and produce the 8 per-episode material types (分镜剧本 / 故事板 / 素材清单 / 配音 / BGM / 封面 / 字幕中 / 字幕英) plus the shared global_style.md, characters/ and locations/. Use when given a novel path (first run = split + refine episode 1) or asked to refine a specific episode's materials. Triggers 拆集, 分镜剧本, 故事板, 素材清单, 配音文案, BGM, 封面 prompt, 双语字幕, SRT, 角色卡, 场景卡, global_style.
+description: Stage 1+定稿 of novel2drama — 阶段1·剧本改编：split a novel into per-episode dramatic beats → voiceover台词 + bgm + 封面 + 角色/场景卡 + global_style（**不做分镜**）。阶段2·分镜设计（配音后回跑）：用配音时长设计 分镜剧本 + 故事板(Clip时长) + 素材清单 + 字幕SRT + 镜头时长。 Use when given a novel path (first run = split + refine episode 1) or asked to refine a specific episode's materials. Triggers 拆集, 分镜剧本, 故事板, 素材清单, 配音文案, BGM, 封面 prompt, 双语字幕, SRT, 角色卡, 场景卡, global_style.
 ---
 
-# n2d-script — Stage 1：拆集 + 8 类素材
+# n2d-script — 阶段1 剧本改编 + 阶段2 分镜设计（配音驱动）
 
-你是 **AI 漫剧编剧/导演**。本 skill 只关心 Stage 1：从小说到"可进入出图阶段"的全部文本素材。**不出图、不出视频**——那是 `n2d-image` 和 `n2d-video` 的事。
+你是 **AI 漫剧编剧/导演**。两阶段：**阶段1 剧本改编**（台词先行，不做分镜）→ /n2d-voice 配音 → **阶段2 分镜设计**（配音后回跑，时长驱动镜头）。**不出图、不出视频**——那是 `n2d-image` 和 `n2d-video` 的事。
 
 ## 核心原则
 
@@ -32,7 +32,7 @@ description: Stage 1 of novel2drama pipeline — split a novel (.txt/.docx) into
 - **目标视频 AI**（决定最终成片风格 + image2video 运动估计分布）—— 默认即梦；可选 可灵 / Seedance / Veo
 - **目标图 AI**（出图工具）—— 默认 = 同视频 AI；可独立选 Gemini / DALL-E / Flux 等
 
-详见 `references/platforms.md` 的"两轴架构"章节。**输出位置 = 作品根（与 `小说/` 同级）**：8 类素材进 `脚本/第N集/`；全局 `_进度.md` / `global_style.md` / `characters/` / `locations/` 进作品根的 `common/`。把两个 AI 都记到 `common/global_style.md` 顶部。
+详见 `references/platforms.md` 的"两轴架构"章节。**输出位置 = 作品根（与 `小说/` 同级）**：脚本素材进 `脚本/第N集/`；全局 `_进度.md` / `global_style.md` / `characters/` / `locations/` 进作品根的 `common/`。把两个 AI 都记到 `common/global_style.md` 顶部。
 
 > **关键铁律**：若**图 AI ≠ 视频 AI**，所有 image prompt 末尾**必须**拼接对应视频 AI 的"图像风格锚定句"（详细在 `n2d-image` skill 里）。Stage 1 这里只负责把决策写进 `global_style.md` 顶部。
 
@@ -77,19 +77,18 @@ python3 <skill>/scripts/split_novel.py "<小说路径>" --by-chapter
    - **本 skill 只生成 prompt 文本**——实际出定妆照在 Stage 2 (`/n2d-image`) 做
 3. 新角色/场景在其首次出现的那一集补建卡。
 
-### 第 3 步 — 逐集精修 8 类素材
+### 第 3 步 — 阶段1·剧本改编（台词先行，**不做分镜**）
 
-先按戏剧节拍确定本集边界（合并/拆分 `raw.txt`，一章 ≠ 一集），再按 `references/formats.md` 填写：
+> 流程铁律：`剧本改编 → 角色配音 → 统计每句台词时长 → 分镜设计 → 出图 …`。**分镜在配音之后**——镜头怎么切、每镜多长由真实配音时长决定（节奏可控、后期省成本）。本步只做"可配音的剧本"。
 
-1. `分镜剧本.md` — 逐镜头脚本（画面视觉描述 / 台词·音效·旁白）
-2. `故事板.md`（**草稿**）— Clip 表（相邻分镜合成片段；写清人物运动 + 镜头运动 + 动态细节；**Clip 时长留空/标 TBD —— 时长在配音后由 /n2d-voice 的时长清单定稿，本步不锁**；运镜按目标视频 AI 档案）
-3. `素材清单.md` — 角色/场景/道具的 AI 图片 prompt（复用角色卡锚定，中文 + 英文）
-4. `voiceover.txt` — 逐镜头配音文案（角色·情绪）
-5. `bgm.txt` — 整体情绪 + BGM 风格 + 关键音效点
-6. `封面.md` — 高点击率封面/首图 prompt
-（注：`字幕_中文.srt` / `字幕_英文.srt` **不在本步生成**。它们的时间轴必须由真实配音时长决定 → 在 /n2d-voice 跑完后，于本 skill 的**阶段2 定稿**生成，见下。本步只产出英文字幕**文本草稿**供阶段2 重定时用。）
+先按戏剧节拍确定本集边界（合并/拆分 `raw.txt`，一章 ≠ 一集），产出：
 
-完成后在 `_进度.md` 勾选阶段1 物料列：分镜剧本 / 草稿故事板 / 素材清单 / 配音文案(voiceover) / bgm / 封面 / 字幕英(草稿文本) ✅。**下一步是 /n2d-voice 配音**（不是出图）。
+1. `voiceover.txt` — 逐台词脚本 `[镜头N·角色·情绪] 台词/对白/旁白`。**这定义镜头划分骨架**（几镜、每镜说什么），是 /n2d-voice 的输入。
+2. `bgm.txt` — 整体情绪 + BGM 风格 + 关键音效点
+3. `封面.md` — 高点击率封面/首图 prompt
+（角色/场景卡见第 2 步。**本步不写 分镜剧本 / 故事板 / 素材清单 / 字幕** —— 它们的镜头切分与时长要由真实配音决定，属配音后的"阶段2 分镜设计"。）
+
+完成后在 `_进度.md` 勾选阶段1 列：`剧本改编`(voiceover) / `bgm` / `封面` ✅。**下一步 /n2d-voice 配音**（不是分镜、不是出图）。
 
 > **本 skill 不写出图 prompt**（即 `出图/common/` 与 `出图/第N集/` 下的所有 prompt + PNG）。物料齐后用户调 `/n2d-image`，那个 skill 才负责出图 prompt 两层架构。
 
@@ -100,27 +99,30 @@ python3 <skill>/scripts/split_novel.py "<小说路径>" --by-chapter
 每集物料齐后：
 
 ```
-第K集 阶段1 物料齐：
-- 分镜剧本 / 草稿故事板(时长未锁) / 素材清单 / voiceover / bgm / 封面 / 字幕英草稿 ✅
+第K集 阶段1(剧本改编) 齐：
+- voiceover(台词) / bgm / 封面 ✅；角色/场景卡复用
 - _进度.md 已勾选阶段1 列
 下一步建议：
-- 调 /n2d-voice <作品根> 第K集  生成配音 + 时长清单（**配音先于出图**）
-- 配音齐后回跑 /n2d-script 阶段2 定稿故事板时长 + SRT
+- /n2d-voice <作品根> 第K集  配音 + 统计每句台词时长（**配音先于分镜/出图**）
+- 配音齐后回跑 /n2d-script 阶段2 做分镜设计（时长驱动）
 ```
 
-## 阶段2 — 故事板/字幕定稿（配音后回跑本 skill）
+## 阶段2 — 分镜设计（配音后回跑本 skill，**时长驱动镜头**）
 
-**触发**：该集 `配音` 列 ✅（/n2d-voice 已产 `出视频/第N集/配音/时长清单.json`）后，回跑本 skill 做定稿。`配音` 列未 ✅ 时拒绝定稿并提示先 /n2d-voice。
+**触发**：该集 `配音` 列 ✅（/n2d-voice 已产 `出视频/第N集/配音/时长清单.json`）后回跑本 skill。`配音` 未 ✅ 时拒绝并提示先 /n2d-voice。
 
-**做两件事**：
-1. 生成真实时间轴的 SRT + 每镜时长：
+**用每句台词的实测时长设计分镜**：
+
+1. 先跑桥接脚本，得到真实时间轴字幕 + 每镜时长：
    ```bash
    python3 <skill>/finalize_storyboard.py <作品根> 第N集
    ```
    产出 `脚本/第N集/字幕_{中文,英文}.srt`（按配音逐句实测时长重定时）+ `脚本/第N集/镜头时长.json`（每镜聚合时长）。
-2. 用 `镜头时长.json` **锁定 `故事板.md` 的 Clip 时长**：每个 Clip 时长 = 其包含分镜的镜头时长之和；单 Clip 超目标视频 AI 上限（如即梦 ≤8s）则**拆 Clip**（尾帧=下一首帧）。
+2. `分镜剧本.md` — 逐镜头视觉脚本（画面描述）。**镜头切分参考配音时长**：单镜台词过长可拆成多镜。
+3. `故事板.md` — Clip 表（相邻分镜合片段；人物运动 + 镜头运动 + 动态细节）。**Clip 时长 = 所含镜头时长之和（来自 `镜头时长.json`，配音驱动）**；超即梦 8s 上限则拆 Clip（尾帧=下一首帧）。
+4. `素材清单.md` — 角色/场景/道具的 AI 图片 prompt（复用角色卡锚定，中英）。
 
-**完成后**：`_进度.md` 勾选 `故事板定稿` / `字幕中` / `字幕英` ✅。下一步 /n2d-image。
+**完成后**：`_进度.md` 勾选 `分镜设计` / `素材清单` / `字幕中` / `字幕英` ✅。下一步 /n2d-image。
 
 ## 平台提示词规范
 
