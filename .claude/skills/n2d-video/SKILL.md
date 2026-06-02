@@ -10,7 +10,7 @@ description: Stage 3 of novel2drama pipeline — for a 作品 episode whose Stag
 ## 核心原则
 
 - **图生视频为主，文生视频为辅**：每个 Clip 以 Stage 2 出的 PNG 为首帧（可灵/部分平台支持首尾帧），视频 AI 只控制"动作 + 运镜"。纯空镜/转场/氛围镜头可文生视频。
-- **prompt / 产物分离铁律**：每个 `出视频/` 目录（`common/` 跨集复用片段 或 `第N集/`）都分两层——所有 prompt md 进 `prompt/` 子目录，生成 MP4 **平铺**在 prompt/ 的同级父目录。详见 `novel2drama/references/architecture.md` "prompt / 产物分离铁律"章节。
+- **产物归集铁律**：所有 prompt md 进 `出视频/第N集/prompt/`；**生成的 clip MP4 全部落 `出视频/第N集/视频/`**（供 /n2d-compose 归集合成）。废片去 `common/废料/出视频/第N集/`。
 - **运动 + 运镜 + 动态细节三件套必写**：只写画面不写运动 → AI 会随机推断，常翻车。
 - **平台差异在档案里**：单 Clip 时长 / 运镜词偏好 / 首尾帧机制 / 提示词语言 见 `references/platforms.md`。默认即梦 5~8s。
 - **生视频调用优先级**：本机已装的官方 CLI → Bash 直调；没装 → 一步步指导手动；大批量可 spawn sub-agent。
@@ -19,7 +19,7 @@ description: Stage 3 of novel2drama pipeline — for a 作品 episode whose Stag
 
 ## 输入前置条件
 
-- 作品根存在，`_进度.md` 该集的 8 类素材 + `出图prompt` + `出图` 三组列均 ✅（出图列分子 = 分母）
+- `_进度.md` 该集 `配音` ✅ + `故事板定稿` ✅ + `出图` 列分子=分母。**Clip 时长读定稿 `故事板.md`（来自配音时长 `镜头时长.json`），不再用平台默认估**；平台档案只约束单 Clip 上限（如即梦 ≤8s，超限拆 Clip）。
 - 否则报错并建议用户先调 `/n2d-script` 或 `/n2d-image`
 
 ## 工作流
@@ -85,19 +85,19 @@ done
 - 选定后告知用户："找到 X，将用它出视频。如不同意请打断。"
 - 按 Clip 一段一条调用（详见"调用规范"）
 - **批量加速可选**：>6 个 Clip 时，可 spawn 2-3 个 sub-agent 并发调用 CLI
-- 中间筛选 → 废视频 `common/废料/出视频/第N集/`，定稿 MP4 → `出视频/第N集/Clip<K>_<描述>.mp4`
+- 中间筛选 → 废视频 `common/废料/出视频/第N集/`，定稿 MP4 → `出视频/第N集/视频/Clip<K>_<描述>.mp4`
 
 **分支 2：本机无合适 CLI**
 - 告知用户："本机未检测到合适的视频 AI CLI（已扫 dreamina/kling/veo/seedance）。可由我一步步指导你在 [默认即梦 web] 上跑 image2video，每跑一段回传，我帮你筛选 + 落档。"
 - 进入"手动指导模式"：
   - 一次一 Clip，列出 prompt + 首帧路径 + 平台参数
   - 用户上传首帧 + 粘贴 prompt → 平台跑 → MP4 下载
-  - 用户回传 MP4（或路径）→ Claude 评判 → 通过则用户 mv 到 `出视频/第N集/`，不通过则建议调整 prompt（多数情况是动作过复杂，需简化）
+  - 用户回传 MP4（或路径）→ Claude 评判 → 通过则用户 mv 到 `出视频/第N集/视频/`，不通过则建议调整 prompt（多数情况是动作过复杂，需简化）
 
 ### 阶段 D — 进度回写 + 推进
 
 每出一条定稿 MP4：
-1. MP4 落档到 `出视频/第N集/Clip<K>_<描述>.mp4`
+1. MP4 落档到 `出视频/第N集/视频/Clip<K>_<描述>.mp4`
 2. `出视频/第N集/prompt/00_总览.md` 对应 Clip 行状态改 ✅
 3. `_进度.md` 该集 `视频` 列分子 +1
 
@@ -123,7 +123,7 @@ done
        --prompt "$(cat <prompt 块>)" \
        --duration 7 \
        --aspect 9:16 \
-       --out <出视频/第N集/ClipK_<描述>.mp4>
+       --out <出视频/第N集/视频/ClipK_<描述>.mp4>
    ```
    （各 CLI 具体子命令/参数见 `references/cli_registry.md`）
 3. 检查产出：人脸不抖 / 动作合理 / 运镜与 prompt 一致 → 通过；否则进 `common/废料/出视频/第N集/`
