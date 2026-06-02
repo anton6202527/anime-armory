@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
-# 逐句 TTS 配音 → 按字幕窗口贴速对齐 → 拼 voice.wav
-# 后端优先级: MiniMax > 火山 > macOS say。带持久缓存(同参数同文本不重复调API)。
-# 用法: _render_voice.py <workdir> <zh|en> <dur_sec>
+# 逐句 TTS 配音 → gap 拼接 → voice.wav + 时长清单.json
+# 后端优先级: CosyVoice > MiniMax > 火山 > macOS say。带持久缓存(同参数同文本不重复调API)。
+# 用法: render_voice.py <作品根> <第N集> <zh|en>
 import sys, os, re, subprocess, json, base64, uuid, hashlib, urllib.request
 
-W, LANG, DUR = sys.argv[1], sys.argv[2], float(sys.argv[3])
+ROOT, EP, LANG = sys.argv[1], sys.argv[2], sys.argv[3]
+VO = os.path.join(ROOT, '脚本', EP, 'voiceover.txt')
+EN_SRT = os.path.join(ROOT, '脚本', EP, '字幕_英文.srt')
+W = os.path.join(ROOT, '出视频', EP, '配音'); os.makedirs(W, exist_ok=True)
 FF = "/opt/homebrew/bin/ffmpeg"; FP = "/opt/homebrew/bin/ffprobe"
-CACHE = os.path.join('出视频/第1集/_voicecache', LANG); os.makedirs(CACHE, exist_ok=True)
+CACHE = os.path.join(ROOT, '出视频', EP, '_voicecache', LANG); os.makedirs(CACHE, exist_ok=True)
 
 MM_KEY=os.environ.get('MINIMAX_API_KEY'); MM_GROUP=os.environ.get('MINIMAX_GROUP_ID')
 MM_MODEL=os.environ.get('MINIMAX_MODEL','speech-02-hd')
@@ -19,26 +22,16 @@ USE_API=USE_MM or USE_VOLC
 COSY_URL=os.environ.get('COSYVOICE_URL')  # 本地 CosyVoice 服务，如 http://localhost:9880
 USE_COSY=bool(COSY_URL) and not USE_MM   # CosyVoice 优先于 MiniMax；若也设了 MiniMax，CosyVoice 赢
 
-def srt_times(p):
-    out=[]
-    for b in re.split(r'\n\s*\n', open(p,encoding='utf-8').read().strip()):
-        ls=[l for l in b.splitlines() if l.strip()]
-        if len(ls)<2: continue
-        m=re.search(r'(\d+):(\d+):(\d+)[,.](\d+)',ls[1]); g=list(map(int,m.groups()))
-        out.append(g[0]*3600+g[1]*60+g[2]+g[3]/1000.0)
-    return out
-starts=srt_times(os.path.join(W,'zh.srt'))
-
 items=[]; shots=[]
 if LANG=='zh':
-    for ln in open('脚本/第1集/voiceover.txt',encoding='utf-8'):
+    for ln in open(VO,encoding='utf-8'):
         m=re.match(r'\[(镜头[^·]*)·([^·]+)·[^\]]*\]\s*(.+)',ln.strip())
         if m: items.append((m.group(2).strip(),m.group(3).strip())); shots.append(m.group(1).strip())
 else:
-    for b in re.split(r'\n\s*\n', open(os.path.join(W,'en.srt'),encoding='utf-8').read().strip()):
+    for b in re.split(r'\n\s*\n', open(EN_SRT,encoding='utf-8').read().strip()):
         ls=[l for l in b.splitlines() if l.strip()]
         if len(ls)>=3: items.append(('',' '.join(ls[2:])))
-n=min(len(items),len(starts))
+n=len(items)
 vd=os.path.join(W,'voice'); os.makedirs(vd,exist_ok=True)
 
 MM=dict(SHEN=os.environ.get('MM_SHEN','female-yujie'), NARR=os.environ.get('MM_NARR','audiobook_female_1'),
@@ -127,13 +120,13 @@ for i in range(n):
     subprocess.run([FF,'-y','-loglevel','error','-i',raw,'-af',f'{fx}loudnorm=I=-16:TP=-1.5:LRA=11,aresample=44100','-ar','44100','-ac','2',tmp],check=True)
     out=os.path.join(W,f'line_{i:02d}.wav'); os.replace(tmp,out)  # 最终逐句落 配音/line_NN.wav（与 manifest/spec 一致）
     measured.append(dur_of(out))
-    wavs.append((out,starts[i]))
+    wavs.append(out)
 
 GAP=float(os.environ.get('LINE_GAP','0.4'))
 sil=os.path.join(vd,'_gap.wav')
 subprocess.run([FF,'-y','-loglevel','error','-f','lavfi','-i',f'anullsrc=r=44100:cl=stereo','-t',str(GAP),sil],check=True)
 concat=[]
-for k,(wav,_) in enumerate(wavs):
+for k,wav in enumerate(wavs):
     concat.append(wav)
     if k<len(wavs)-1: concat.append(sil)
 listf=os.path.join(vd,'_concat.txt')
