@@ -3,15 +3,15 @@ name: novel2drama
 description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked anything about turning a novel into AI comic-drama / short-drama materials for 即梦AI / 可灵Kling / Seedance / Veo. Inspects the 作品 root, reads `_进度.md`, and routes the user to the right stage skill — `n2d-script` (阶段1 分镜+物料 / 阶段2 定稿), `n2d-voice` (配音前移+时长清单), `n2d-image` (出图), `n2d-video` (出视频), or `n2d-compose` (合成成片). Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 分镜, 配音, 出图, 出视频, 合成, 成片, 即梦, 可灵, 双语字幕, 海外投放, novel2drama.
 ---
 
-# novel2drama — 四阶段流水线 调度器
+# novel2drama — 六阶段流水线 调度器
 
-> **novel2drama 系列**（本调度 + `n2d-script`/`n2d-image`/`n2d-video`）专管"小说→AI 漫剧/短剧"，**产物统一落 `制漫剧/<剧名>/`**。纯文本小说生产（取材/续写/外传/扩缩/审稿）走另一条线 `novel-author` 系列，产物落 `写小说/`。
+> **novel2drama 系列**（本调度 + `n2d-script`/`n2d-voice`/`n2d-image`/`n2d-video`/`n2d-compose`）专管"小说→AI 漫剧/短剧"，**产物统一落 `制漫剧/<剧名>/`**。纯文本小说生产（取材/续写/外传/扩缩/审稿）走另一条线 `novel-author` 系列，产物落 `写小说/`。
 
 你是 **AI 漫剧制作总调度**。这个 skill 本身不做生产工作，它的职责是：
 
 1. **定位作品根**（制漫剧/<剧名>/）
 2. **读 `_进度.md`** 判断当前作品处于哪一阶段
-3. **推荐下一步该调哪个子 skill**（n2d-script / n2d-image / n2d-video）
+3. **推荐下一步该调哪个子 skill**（n2d-script 阶段1/2 · n2d-voice · n2d-image · n2d-video · n2d-compose）
 4. **解释流水线整体结构** 给第一次使用的用户
 
 详细架构与目录约定见 `references/architecture.md`。实战 Q&A 见 `Q&A.md`（全阶段共用，沉淀的翻车修正都在那）。
@@ -46,7 +46,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 ### 读进度 → 路由
 
 1. 定位 `<作品根>/common/_进度.md`，读进度表
-2. 进度表头形如：`| 集 | 字数 | raw | 分镜剧本 | 草稿故事板 | 配音 | 故事板定稿 | 素材清单 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |`
+2. 进度表头形如：`| 集 | 字数 | raw | 分镜剧本 | 草稿故事板 | 素材清单 | 配音文案 | BGM | 封面 | 配音 | 故事板定稿 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |`
 3. 对每一集逐列判断：
    - 阶段1 物料列（分镜剧本…素材清单/字幕英草稿）任一 ⬜ → 还在 /n2d-script 阶段1
    - 阶段1 齐、`配音` ⬜ → 该集等 /n2d-voice 配音
@@ -106,7 +106,10 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
         ├── prompt/
         │   ├── 00_总览.md
         │   └── 01_clips.md
-        └── ClipK_*.mp4
+        └── 视频/                  ← clip MP4 全归这（n2d-video）
+        │   └── ClipK_*.mp4
+        ├── 配音/                  ← n2d-voice：line_NN.wav + voice_*.wav + 时长清单.json
+        └── 成片_第N集_{mode}.mp4   ← n2d-compose 输出
 ```
 
 > **prompt/PNG/MP4 分离铁律**：每个 `出图/` 或 `出视频/` 文件夹（无论是 `common/` 还是 `第N集/`）一律分两层——`prompt/` 子目录装所有 prompt md，**生成产物 PNG/MP4 在 `prompt/` 同级**（即 `common/` 或 `第N集/` 的根）。
@@ -119,7 +122,9 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 |---|---|---|---|
 | `/n2d-script` | 首跑（拆集）/ 精修某集物料 | 小说路径 或 作品根 + 集号 | `脚本/第N集/` 8 类素材 + `_进度.md` 物料列勾 ✅ |
 | `/n2d-image` | 物料齐后出图 prompt + 生图 | 作品根 + 集号 | `出图/{common,第N集}/` prompt + PNG + 进度勾 ✅ |
-| `/n2d-video` | 出图齐后出视频 prompt + 生视频 | 作品根 + 集号 | `出视频/第N集/` MP4 + 进度勾 ✅ |
+| `/n2d-voice` | 阶段1齐后配音(出图前) | 作品根 + 集号 | `出视频/第N集/配音/` 音频 + 时长清单.json + 配音列 ✅ |
+| `/n2d-video` | 出图齐后出视频 prompt + 生视频 | 作品根 + 集号 | `出视频/第N集/视频/` MP4 + 进度勾 ✅ |
+| `/n2d-compose` | 视频齐后合成成片 | 作品根 + 集号 | `成片_第N集_{mode}.mp4` + 成片列 ✅ |
 
 ## 实战参考
 

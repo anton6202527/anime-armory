@@ -1068,3 +1068,34 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 - **许可风险**：FLUX.1-dev 非商用许可是否传递到所训 LoRA——验证未决，**商用产线须自行向 Black Forest Labs 核实当前授权**（schnell=Apache2.0 可商用 的对比声明也未通过验证）。
 
 **F. 时效警告**：本领域 2026 迭代极快（即梦 Seedance 2.0、可灵 2.6/3.0 都在变），价格/配额/功能名以官方实时为准。
+
+---
+
+## Q25：产线顺序大重排 —— 配音前移、时长驱动镜头（2026-06 落地）<a id="q25"></a>
+
+**起因**：第1集成片时发现「配音迁就预设字幕窗口被迫压速、不同步」。深挖根因——**当时产线把配音放在最后，镜头时长按平台默认估**（故事板写死 6-8s、字幕时间轴从估值推），与主流工作室「先配音、配音时长决定镜头时长」**正好相反**。
+
+**修正后的六阶段产线**（已合入 main）：
+```
+小说 → n2d-script阶段1(分镜+配音文案+草稿故事板·不锁时长)
+     → n2d-voice(配音 + 时长清单.json·每句实测时长)
+     → n2d-script阶段2(读时长清单 → 故事板Clip时长定稿 + 字幕真实时间轴 + 镜头时长.json)
+     → n2d-image(出图) → n2d-video(图生视频·clip落 出视频/第N集/视频/)
+     → n2d-compose(视频/+配音轨+BGM+烧字幕 → 成片_第N集_{mode}.mp4)
+```
+对齐主流栈：即梦(图+视频)/CosyVoice(配音)/Suno(BGM)/剪映(字幕+混音，由 n2d-compose 脚本化替代)。
+
+**关键新增**：
+- **`时长清单.json`**（n2d-voice 产）= 配音驱动镜头的桥梁。`finalize_storyboard.py` 读它 → 重定时 SRT + `镜头时长.json` → 锁故事板 Clip 时长；单 Clip 超即梦 8s 自动标拆。
+- **n2d-voice**：多后端可插拔（CosyVoice/GPT-SoVITS 本地克隆 > MiniMax/火山 云 > macOS say 占位），含声音克隆（MiniMax 复刻 + demucs 人声分离去 BGM）。**不再按窗口压速**。
+- **n2d-compose**：本机 Homebrew ffmpeg **无 libass**（subtitles/drawtext 滤镜全无）→ 用 **Pillow 渲染字幕 PNG + overlay 烧录**；配音 + ducking BGM(sidechaincompress) + clip 自带音效底 三层混音。
+- **进度表 reschema** 成 6 阶段 16 物料列：`raw|分镜剧本|草稿故事板|素材清单|配音文案|BGM|封面|配音|故事板定稿|字幕中|字幕英|出图prompt|出图|视频prompt|视频|成片`。
+
+**第2集实测验证**（铁证旧流程会犯的错）：
+| 镜头 | 配音驱动实测 | 旧平台估 | 旧流程后果 |
+|---|---|---|---|
+| 镜头1 | 10.1s | 7s | **截断 3 秒台词**（且超8s需拆Clip）|
+| 镜头7 | 1.4s | 8s | **6.6 秒死气留白** |
+| 镜头10 | 13.2s | 合并估8s | **严重低估**，节奏崩 |
+
+**结论**：配音先行 + 时长驱动镜头，既防截断又防留白，还把「需拆 Clip / 节奏问题」挡在出图/出视频（贵）之前——后期成本显著下降。详见 `docs/superpowers/specs/2026-06-02-n2d-pipeline-reorder-voice-compose-design.md` 与同名 plans。
