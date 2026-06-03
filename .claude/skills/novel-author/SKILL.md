@@ -11,6 +11,14 @@ description: Top-level dispatcher for the novel-* skill family. Inspects user in
 
 **本系列成员**：`novel-create`（原创从零·访谈引导）· `novel-fetch`（取公版）· `novel-title`（起名）· `novel-spinoff`（配角外传·锁事件）· `novel-rewrite`（改写/魔改·改事件加设定）· `novel-continue`（续写）· `novel-expand`/`novel-condense`（扩/缩）· `novel-craft`（写作工艺基元）· `novel-review`（已写章节质检/审稿）。
 
+## 偏好（私有 · 用户选择，不写死在本 skill）
+
+本 skill 的可选项**不写死在源码里**。按 `../_偏好约定.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
+
+本 skill 涉及的选择点：`目标平台`、`权利来源`、`输出格式`、`篇幅档`。
+
+> 作为入口：路由到子 skill 前，若已有项目则读其 `<作品根>/_设置.md`，新项目按全局默认初始化。
+
 ## 路由规则
 
 | 用户输入形态 | 路由到 |

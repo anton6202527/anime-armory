@@ -56,6 +56,7 @@ dreamina image2video \
   --prompt "$(cat <prompt 块文件或 here-doc>)" \
   --duration 7 \
   --aspect 9:16 \
+  --resolution 720p \
   --motion-strength 0.6 \
   --out <出视频/第N集/视频/ClipK_<描述>.mp4>
 
@@ -64,10 +65,13 @@ dreamina text2video \
   --prompt "空镜：残烛在风中摇曳，烛芯吐黑烟" \
   --duration 5 \
   --aspect 9:16 \
+  --resolution 720p \
   --out <出视频/第N集/视频/ClipK_<描述>.mp4>
 ```
 
-> ⚠️ 参数名以官方 SKILL 为准；首次调用前必读 `~/.dreamina_cli/dreamina/SKILL.md` 核对 flag。
+> ⚠️ 参数名以官方 SKILL 为准；首次调用前必读 `~/.dreamina_cli/dreamina/SKILL.md` 核对 flag（含分辨率 flag 的确切写法，可能是 `--resolution` / `--quality` / `-r`）。
+>
+> **分辨率默认 720p**：每次开跑前把选项给用户——`默认 720p（省积分/快），也可 1080p（更清晰/更贵）`。用户指定后按用户的来，不再每条重复问。
 
 ---
 
@@ -91,6 +95,7 @@ dreamina text2video \
     --last <出图/第N集/镜头N2_xxx.png> \
     --prompt "..." \
     --duration 8 \
+    --resolution 720p \
     --motion-brush <可选 motion mask> \
     --out <ClipK.mp4>
   ```
@@ -112,6 +117,7 @@ gcloud ai models invoke veo-XX \
   --image <出图/第N集/镜头N1_xxx.png> \
   --prompt "<English prompt>" \
   --duration 8 \
+  --resolution 720p \
   --output <ClipK.mp4>
 ```
 
