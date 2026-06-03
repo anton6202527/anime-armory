@@ -8,6 +8,7 @@ SKILL_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT="$1"; EP="$2"; MODE="${3:-bilingual}"
 case "$MODE" in zh|bilingual) VLANG=zh;; en) VLANG=en;; *) echo "bad mode"; exit 1;; esac
 BGMFILE="${BGMFILE:-}"
+BGM_OFFSET="${BGM_OFFSET:-0}"   # 卡点：从 BGM 第几秒起播，让 drop/炸点落在爽点画面那一帧（导演节奏.md §五）
 VID="$ROOT/出视频/$EP/视频"
 VOICE="$ROOT/出视频/$EP/配音/voice_${VLANG}.wav"
 ZH_SRT="$ROOT/脚本/$EP/字幕_中文.srt"; EN_SRT="$ROOT/脚本/$EP/字幕_英文.srt"
@@ -34,8 +35,8 @@ echo "成片时长 ${DUR}s"
 
 echo "=== [3/6] BGM ==="
 if [ -n "$BGMFILE" ] && [ -f "$BGMFILE" ]; then
-  echo "真实BGM: $BGMFILE"; fo=$(python3 -c "print(max(0,$DUR-3))")
-  ffmpeg -y -loglevel error -stream_loop -1 -i "$BGMFILE" -t "$DUR" \
+  echo "真实BGM: $BGMFILE (offset=${BGM_OFFSET}s)"; fo=$(python3 -c "print(max(0,$DUR-3))")
+  ffmpeg -y -loglevel error -ss "$BGM_OFFSET" -stream_loop -1 -i "$BGMFILE" -t "$DUR" \
     -af "afade=t=in:d=2,afade=t=out:st=${fo}:d=3,aresample=44100" -ac 2 "$W/bgm.wav"
 else
   echo "占位氛围乐"

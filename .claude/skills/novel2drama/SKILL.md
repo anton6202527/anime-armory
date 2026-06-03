@@ -139,4 +139,6 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 - 详细架构、目录铁律、首跑示范：`references/architecture.md`
 - 翻车 + 修正 + 决策案例（20+ Q&A）：`Q&A.md`
+- **导演节奏 / 留存工程（全阶段共用）**：`references/导演节奏.md` —— 留存曲线/黄金3秒/钩子密度/爽点憋放/集尾cliffhanger/镜头时长曲线/卡点/念白节奏。这是红果爆款"画质普通但留人"那一层，n2d-script/voice/video/compose 都引用。
+- 镜头空间语法：`n2d-script/references/分镜语法.md`
 - 平台档案 / prompt 格式：在各阶段 skill 的 `references/` 下

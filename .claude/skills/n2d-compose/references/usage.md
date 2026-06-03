@@ -6,6 +6,10 @@
     bash <skill>/compose.sh <作品根> 第N集 en    # 出海：英字+英配
 真实 BGM：
     BGMFILE=/path/to/music.mp3 bash <skill>/compose.sh <作品根> 第N集 zh
+卡点（让 BGM drop 落在爽点那一帧，导演节奏.md §五）：
+    BGMFILE=/path/to/music.mp3 BGM_OFFSET=12.5 bash <skill>/compose.sh <作品根> 第N集 zh
+    # BGM_OFFSET=从 BGM 第几秒起播。算法：成片里爽点累计时间戳（故事板 💥爽点 @ 0:48）
+    # 减去 BGM 文件里 drop 的时间戳 → 反推 offset，使 drop 与爽点画面对齐。
 产物：<作品根>/出视频/第N集/成片_第N集_{mode}.mp4
 
 ## 输入约定
