@@ -1179,12 +1179,15 @@ voiceover.txt 不标语速/停顿/钩子也能跑（情绪归不到关键词就 
 
 **已出图/视频才要删**，按粒度分两种：
 
-- **按镜头 / Clip 边界删（干净，推荐）**：
-  1. 删 `voiceover.txt` 对应行 + 删 `出视频/第N集/视频/ClipK.mp4`
-  2. 重跑 `/n2d-voice`（每句 `line_NN.wav` 独立/带缓存，**保留句不重合成**，只重拼轨 + 重量时长）
-  3. 重跑 `finalize_storyboard` → 新 SRT + `镜头时长.json`
-  4. 重跑 `/n2d-compose`（concat 少一个 clip，字幕/BGM 自动按新时间轴走）
+- **按镜头 / Clip 边界删（干净，推荐）**——可自动推导链一键完成：
+  ```bash
+  python3 <n2d-script skill>/delete_shot.py <作品根> 第N集 镜头6 [镜头7 ...]
+  ```
+  脚本自动做：删 `voiceover.txt` 对应行 → **删 `字幕_英文.srt` 对应块** → reflow `时长清单.json`（被删句 wav 移废料、保留句重命名连续、**时长不变**）→ 重拼 `voice_zh.wav`（有 ffmpeg 时）→ 重跑 `finalize_storyboard` 重定时 SRT + `镜头时长.json`。
+  - ⚠️ **EN 字幕必须同步删（试跑发现的坑）**：`finalize_storyboard` 是**按 index 从 `字幕_英文.srt` 取英文文本**的。只删中文 voiceover 不删对应英文块 → 删除点之后**每条英文字幕全错位一句**。脚本已自动处理；手动删时务必同删 EN 块。
+  - 脚本**只动可自动推导链**。还需**人工**：① 设计文档 `故事板.md / 分镜剧本.md / bgm.txt / 可灵*.md` 删该镜块（故事板·可灵的 Clip 视情况重编号）；② 已生成的 `出图/镜头X_*.png`、`出视频/视频/ClipK.mp4` 移废料；③ 重跑 `/n2d-compose`；④ 过 `导演节奏.md` 留存自查。
   - **保留镜头的图/视频一张都不重出**；只有被删那镜的已花成本作废（无新花费）。
+  - **无 ffmpeg 的机器**：脚本会把 `voice_zh.wav` 标 `.stale`，到装了 ffmpeg 的机器重跑 `/n2d-voice` 重拼轨即可（reflow / finalize 不依赖 ffmpeg，照常完成）。
 
 - **镜头内部分裁（trim 半句，代价高，能免则免）**：要同步裁 视频 clip + 配音 line + 字幕三者，易不同步 → **尽量改成"整镜删 / 整镜重配短台词"**，回到上面干净路径。
 

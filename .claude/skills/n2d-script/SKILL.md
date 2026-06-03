@@ -141,6 +141,16 @@ python3 <skill>/scripts/split_novel.py "<小说路径>" --by-chapter
 
 **完成后**：`_进度.md` 勾选 `分镜设计` / `素材清单` / `字幕中` / `字幕英` ✅。下一步 /n2d-image。
 
+## 后期删减（回流）
+
+要删某镜时**回源头改、重跑回流，别在成片上剪**。可自动推导链一键完成：
+
+```bash
+python3 <skill>/delete_shot.py <作品根> 第N集 镜头6 [镜头7 ...]
+```
+
+自动：删 voiceover 行 + **同步删 `字幕_英文.srt` 对应块**（finalize 按 index 取 EN 文本，不同步必错位）+ reflow `时长清单.json`（保留句时长不变）+ 重拼 voice_zh.wav（有 ffmpeg）+ 重跑 finalize 重定时。**不动**设计文档(故事板/分镜剧本/bgm/可灵)与已生成 PNG/clip——按脚本末尾清单人工清理 + 重跑 `/n2d-compose`。详见 `novel2drama/Q&A.md` Q27。
+
 ## 镜头语言规范（两份硬约束，缺一不可）
 
 - **`references/分镜语法.md`（空间）**——景别系统/节奏铁律/连贯三规则(轴线·30°·视线方向)/转场逻辑/运镜克制/构图/8条自查清单。**阶段2 必读**。
