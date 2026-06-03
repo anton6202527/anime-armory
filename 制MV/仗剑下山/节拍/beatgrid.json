@@ -1,0 +1,10 @@
+{
+  "song": "歌/song.wav",
+  "duration": 11.0,
+  "bpm": 0.0,
+  "meter": 4,
+  "beats": [],
+  "downbeats": [],
+  "sections": [],
+  "note": "副歌踩 downbeats 切；verse 缓。爽点对齐某个 downbeat。mv-video 出 clip 时长按相邻卡点定。"
+}
