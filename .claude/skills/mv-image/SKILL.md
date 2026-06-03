@@ -1,0 +1,44 @@
+---
+name: mv-image
+description: 制MV 出图 — 按 视觉蓝图 + 段落，为 MV 生成两层图（共享定妆库[主角/场景] + 分段分镜 PNG）。mv 系列自建，不调 n2d-image；用通用生图 CLI（即梦/Flux/Gemini）。Use when asked to MV出图 / 生成MV画面 / MV分镜图 / MV定妆. Triggers MV出图, MV画面, MV分镜图, MV定妆, mv-image.
+---
+
+# mv-image — 制MV 出图（mv 系列自建）
+
+按 `制MV/<曲名>/视觉蓝图.md` + 歌曲段落，生成 MV 的画面。**两层架构**：共享层（主角/场景定妆，全曲复用锁一致性）+ 分段层（每段/每镜分镜图）。**自包含**，不调 n2d-image；用通用生图 CLI。
+
+## 作品根
+```
+制MV/<曲名>/
+├── 视觉蓝图.md         主角/场景/画风 + 段落↔画面映射
+├── 设定/characters,locations  角色/场景卡（含锚点句）
+├── 节拍/beatgrid.json  段落+卡点（来自 mv-beat）
+└── 出图/
+    ├── common/         共享定妆 PNG（主角/场景，全曲复用）
+    └── 段落/           各段落分镜 PNG（intro/verse/chorus…）
+```
+
+## 核心原则
+- **两层 + 锚点一致性**：先出主角/场景**定妆**（共享层），每张分镜 prompt 末尾拼角色卡**锚点句**锁脸锁画风（跨段不漂）。
+- **段落驱动画面**：按 `视觉蓝图` 的段落映射出图——副歌高能/主歌叙事/bridge 反转；同段可多镜。
+- **卡点意识**：分镜数量/节奏参考 `beatgrid`（副歌密、verse 疏），为 mv-video 的卡点 clip 备料。
+- **画风统一**：依视觉蓝图 global_style；跨段不跳风。
+- **生图 CLI**：本机官方 CLI（即梦 dreamina / gemini / flux）直调；没有则一步步指导 web 出图。**不装第三方逆向 CLI**。
+
+## 工作流
+1. 读 `视觉蓝图.md` + `beatgrid.json` 段落。
+2. 出共享定妆（主角/场景）→ `出图/common/`，建/复用 `设定/characters|locations` 卡 + 锚点句。
+3. 按段落出分镜 → `出图/段落/<段落>_<描述>.png`，每张拼锚点句。
+4. 筛选（脸/画风一致优先），废图归 `common/废料/`。
+5. 回写 `_进度.md` 出图行。下一步 mv-video（图生视频）。
+
+## 详细参考
+- prompt 两层格式 + 锚点句 + 段落映射：`references/prompt_format.md`
+
+## 常见错误
+| 错误 | 纠正 |
+|---|---|
+| 不出定妆直接分镜 | 先共享定妆 + 锚点句，跨段才不漂 |
+| 跨段画风跳变 | 统一 global_style + 同一生图工具(同一集不换) |
+| 分镜不看段落/卡点 | 按视觉蓝图段落 + beatgrid 疏密出图 |
+| 想复用 n2d-image | mv 自建，各写各的 |

@@ -1,0 +1,42 @@
+---
+name: song-cover
+description: 写歌·翻唱/换声（可选）— 把一首歌的人声换成目标音色（歌声转换 SVC：RVC / so-vits-svc）。**仅限自有嗓 / 已授权音色 / 合成音色**，带合规闸门。song 写歌线可选步。Use when asked to 翻唱 / 换音色 / 换嗓 / AI翻唱 / 声音转换 / RVC. Triggers 翻唱, 换音色, 换嗓, AI翻唱, 歌声转换, RVC, so-vits-svc, song-cover.
+---
+
+# song-cover — 翻唱 / 换声（写歌线·可选）
+
+把一首歌（song-compose 产 或 用户给）的**人声换成目标音色**——歌声转换（SVC），不是重新作曲。**自包含**，用通用工具 RVC / so-vits-svc + demucs。
+
+> ⚠️ **换成真实歌手的嗓 = 需授权**（2026 opt-in）。本 skill 只服务合法场景。
+
+## 第 0 步 — 合规闸门（硬性，先过）
+| 必须满足 | 说明 |
+|---|---|
+| **目标音色合法** | 仅 ① 自有嗓 ② 已授权音色 ③ 纯合成音色（无真人对应） |
+| **被翻唱曲有权** | 原曲词曲版权另属原作者；商用翻唱需授权（自有原创歌随意） |
+**拒做**：未授权真人歌手嗓、用于冒充/误导、未成年。命中即拒并说明。
+
+## 依赖
+```bash
+# RVC（最流行，低延迟）：装 RVC WebUI；给目标音色几分钟干声训一个模型
+# so-vits-svc：同类 SVC，GPU 友好
+pip install demucs    # 先分离人声再转换，质量更高（Mac 可跑）
+```
+
+## 工作流
+1. 过合规闸门（音色来源 + 原曲权利）。
+2. **分离人声**：demucs 把目标歌分成 vocals / instrumental。
+3. **转换音色**：RVC（用目标音色模型）把 vocals 转成目标嗓。
+4. **回混**：转换后 vocals + 原 instrumental → 新 `歌/song.wav`（覆盖或另存 `歌/song_cover.wav`）。
+5. 落档 + 回写 `_进度.md`；记音色来源到 `_meta.vocal_source`。下一步交 `mv` 做视频。
+
+## 详细参考
+- RVC / so-vits-svc 安装·训练音色·转换·回混：`references/rvc.md`
+
+## 常见错误
+| 错误 | 纠正 |
+|---|---|
+| 跳过合规闸门 | 先确认音色合法 + 原曲权利 |
+| 换未授权真人歌手嗓 | 拒做 |
+| 不分离直接转整首 | 先 demucs 分 vocals，只转人声再回混 |
+| 想复用 video-faceswap/n2d | 那是换脸/说话；歌声转换各写各的 |

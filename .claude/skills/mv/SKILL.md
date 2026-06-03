@@ -31,10 +31,10 @@ description: 制MV 总调度 — 把一首【已做好的歌】（来自 写歌/
 | 阶段 | skill | 产物 | 状态 |
 |---|---|---|---|
 | 立项(视觉蓝图) | 本调度 + `mv-image` 起手 | `视觉蓝图.md` + 设定 | — |
-| 卡点 | **`mv-beat`** | `节拍/beatgrid.json`（BPM+beat+段落） | 🔜 规划（装 librosa） |
-| 出图 | **`mv-image`** | `出图/`（共享定妆 + 分段分镜 PNG） | 🔜 规划（mv 自建，生图 CLI） |
-| 出视频 | **`mv-video`** | `出视频/视频/`（图生视频，按段落+卡点） | 🔜 规划（mv 自建，生视频 CLI） |
-| 卡拉OK字幕 | **`mv-lyric-sync`** | `字幕/karaoke.ass`（词级高亮） | 🔜 规划（装 whisperx） |
+| 卡点 | **`mv-beat`** | `节拍/beatgrid.json`（BPM+beat+段落） | ✅ 已建（librosa） |
+| 出图 | **`mv-image`** | `出图/`（共享定妆 + 分段分镜 PNG） | ✅ 已建（生图 CLI） |
+| 出视频 | **`mv-video`** | `出视频/视频/`（图生视频，按段落+卡点） | ✅ 已建（生视频 CLI） |
+| 卡拉OK字幕 | **`mv-lyric-sync`** | `字幕/karaoke.ass`（词级高亮） | ✅ 已建（whisperx） |
 | 合成 | **`mv-compose`** | `成片_MV.mp4`（歌轨+卡点剪辑+卡拉OK烧录） | ✅ 已建（自包含 ffmpeg） |
 
 | 用户输入 | 路由到 |
