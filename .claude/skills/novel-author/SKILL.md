@@ -1,6 +1,6 @@
 ---
 name: novel-author
-description: Top-level dispatcher for the novel-* skill family. Inspects user input (book name / URL / file path / spin-off character / expand or condense request) and routes to the right sub-skill — novel-fetch / novel-title / novel-spinoff / novel-expand / novel-condense / novel-craft. Use when user gives an open-ended novel-related task without specifying which tool to use. Does not write novels itself — only routes. Triggers 小说工坊, novel-author, 小说相关任务, 帮我处理小说, 不知道用哪个小说 skill.
+description: Top-level dispatcher for the novel-* skill family. Inspects user input (a bare idea / few words / book name / URL / file path / spin-off character / expand or condense request) and routes to the right sub-skill — novel-create (原创从零) / novel-fetch / novel-title / novel-spinoff / novel-rewrite / novel-continue / novel-expand / novel-condense / novel-craft / novel-review. Use when user gives an open-ended novel-related task without specifying which tool to use. Does not write novels itself — only routes. Triggers 小说工坊, novel-author, 小说相关任务, 帮我处理小说, 不知道用哪个小说 skill.
 ---
 
 # novel-author — 小说工坊调度入口
@@ -9,12 +9,13 @@ description: Top-level dispatcher for the novel-* skill family. Inspects user in
 
 和已存在的 `novel2drama` 平行：那条线管漫剧/视频生产、产物落 `制漫剧/`；这条线管纯文本小说生产、**产物统一落 `写小说/<项目>/`**（如 `写小说/仙界闭关小能手-王敦外传/`）。两条线在 novel-fetch（取材）和 novel-spinoff/expand 的输出处自然衔接——`写小说/` 里的成品可交给 `novel2drama` 改编，产物再流向 `制漫剧/`。
 
-**本系列成员**：`novel-fetch`（取公版）· `novel-title`（起名）· `novel-spinoff`（配角外传·锁事件）· `novel-rewrite`（改写/魔改·改事件加设定）· `novel-continue`（续写）· `novel-expand`/`novel-condense`（扩/缩）· `novel-craft`（写作工艺基元）· `novel-review`（已写章节质检/审稿）。
+**本系列成员**：`novel-create`（原创从零·访谈引导）· `novel-fetch`（取公版）· `novel-title`（起名）· `novel-spinoff`（配角外传·锁事件）· `novel-rewrite`（改写/魔改·改事件加设定）· `novel-continue`（续写）· `novel-expand`/`novel-condense`（扩/缩）· `novel-craft`（写作工艺基元）· `novel-review`（已写章节质检/审稿）。
 
 ## 路由规则
 
 | 用户输入形态 | 路由到 |
 |---|---|
+| **只有几个字 / 一个想法 / 部分风格 / 零散笔记 / 半成品片段**，没有成型源文 → 要写一本**原创新书** | `novel-create`（访谈→蓝图→设定→章纲→Demo→成书） |
 | 给了**书名 / 作者 / URL**，要把书"取回来" | `novel-fetch` |
 | 已有原作 + 想**起一个好书名** | `novel-title` |
 | 已有原作 + 指定一个**配角名**，要**视角续写**（POV 切换、事件锁定） | `novel-spinoff` |
@@ -39,12 +40,13 @@ description: Top-level dispatcher for the novel-* skill family. Inspects user in
 1. 用户给了**书名 / 作者 / URL** 但没给本地文件 → 几乎肯定 `novel-fetch`。
 2. 用户给了**本地文件路径** + 明确动作（续写XX视角 / 起书名 / 扩 / 缩 / 漫剧改编）→ 直接按动作路由。
 3. 用户给了**本地文件路径** + 没说具体动作 → 问一个澄清问题：要做什么？
-4. 用户的输入是**只言片语**，没具体材料 → 问要什么材料 / 给什么文件。
+4. 用户的输入是**只言片语 / 一个想法 / 一点风格 / 零散碎片**，要写一本**原创新书**（没有成型源文）→ `novel-create`（它会用访谈把碎片补全成蓝图，**别在这里反问"给我个文件"**）。
+5. 用户给了**碎片 + 已有半成品/笔记文件**，要继续往成书走 → 也走 `novel-create`，用 `--ingest` 把碎片吃进 `素材/`。
 
 ## 何时不路由
 
 - 用户在 `制漫剧/<剧名>/` 目录里有 `_进度.md`（漫剧管线状态）→ 让 `novel2drama` 接手，不要硬塞进 novel-* 家族。
-- 用户在写**完全原创**小说（无源文本）→ 直接由当前 Claude 协助写，不必走任何 skill。
+- 用户在写**完全原创**小说（无源文本）→ 路由到 `novel-create`（它有访谈立项 + 蓝图/设定/章纲/Demo/进度跟踪的引导流程）。**只有**用户明确只想"随手聊两句、不要立项不要建项目"时，才不走 skill、直接帮写。
 
 ## 合法性继承（铁律）
 
