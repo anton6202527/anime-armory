@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # 逐句 TTS 配音 → gap 拼接 → voice.wav + 时长清单.json
-# 后端优先级: CosyVoice > MiniMax > 火山 > macOS say。带持久缓存(同参数同文本不重复调API)。
+# 后端优先级: CosyVoice > FishSpeech > MiniMax > 火山 > macOS say。带持久缓存(同参数同文本不重复调API)。
 # 用法: render_voice.py <作品根> <第N集> <zh|en>
 import sys, os, re, subprocess, json, base64, uuid, hashlib, urllib.request, shutil
 
@@ -21,6 +21,8 @@ USE_VOLC=bool(VOLC_APPID and VOLC_TOKEN) and not USE_MM
 USE_API=USE_MM or USE_VOLC
 COSY_URL=os.environ.get('COSYVOICE_URL')  # 本地 CosyVoice 服务，如 http://localhost:9880
 USE_COSY=bool(COSY_URL) and not USE_MM   # CosyVoice 优先于 MiniMax；若也设了 MiniMax，CosyVoice 赢
+FISH_URL=os.environ.get('FISHSPEECH_URL')  # 本地 Fish Speech 服务(n2d_fish_server.py)，如 http://localhost:8081
+USE_FISH=bool(FISH_URL) and not USE_COSY and not USE_MM   # 优先级 CosyVoice > FishSpeech > MiniMax
 
 # ── 表演标注解析（情绪/语速/停顿/钩子）→ 驱动念白，见 n2d-script formats §6 / 导演节奏.md §六 ──
 # 规范情绪：angry/fearful/sad/happy/serious/neutral（关键词归类，兼容旧的自由情绪词）
@@ -119,6 +121,13 @@ def cosy_tts(text, ref_audio, ref_text, out_wav):
     req=urllib.request.Request(f"{COSY_URL}/inference_zero_shot?{q}")
     with urllib.request.urlopen(req,timeout=120) as r: open(out_wav,'wb').write(r.read())
 
+def fish_tts(text, ref_audio, ref_text, out_wav):
+    # Fish Speech 本地服务(n2d_fish_server.py)；同 /inference_zero_shot 契约，见 references/backends.md
+    import urllib.parse
+    q=urllib.parse.urlencode({"text":text,"prompt_text":ref_text or "","prompt_wav":ref_audio or ""})
+    req=urllib.request.Request(f"{FISH_URL}/inference_zero_shot?{q}")
+    with urllib.request.urlopen(req,timeout=300) as r: open(out_wav,'wb').write(r.read())
+
 def dur_of(p): return float(subprocess.run([FP,'-v','error','-show_entries','format=duration','-of','csv=p=0',p],capture_output=True,text=True).stdout.strip() or 0)
 
 def clamp_sp(x): return round(min(1.5,max(0.7,x)),3)
@@ -129,6 +138,9 @@ for i in range(n):
     if USE_COSY:
         ref=os.environ.get('COSY_REF_AUDIO'); rtext=os.environ.get('COSY_REF_TEXT','')
         raw=os.path.join(vd,f'r{i:02d}.wav'); cosy_tts(text, ref, rtext, raw); sysfx=('系统' in role)
+    elif USE_FISH:
+        ref=os.environ.get('FISH_REF_AUDIO'); rtext=os.environ.get('FISH_REF_TEXT','')
+        raw=os.path.join(vd,f'r{i:02d}.wav'); fish_tts(text, ref, rtext, raw); sysfx=('系统' in role)
     elif USE_MM:
         if LANG=='en': vid,emo,sp,pit=MM['EN'],None,1.0,0
         else:
@@ -181,4 +193,4 @@ if LANG=='zh':
     manifest=[{"idx":i,"镜头":shots[i] if i<len(shots) else "","角色":items[i][0],"情绪":items[i][2],"钩子":items[i][4],"文本":items[i][1],"时长":round(measured[i],3),"line_wav":f"line_{i:02d}.wav"} for i in range(n)]
     out_dir=os.path.dirname(os.path.join(W,'voice_zh.wav'))
     _json.dump(manifest, open(os.path.join(out_dir,'时长清单.json'),'w',encoding='utf-8'), ensure_ascii=False, indent=2)
-print(f"配音 {LANG}: {n} 句（后端={'CosyVoice' if USE_COSY else 'MiniMax' if USE_MM else '火山' if USE_VOLC else 'say'}，顺序拼接 gap={GAP}s，无压速）→ voice_{LANG}.wav")
+print(f"配音 {LANG}: {n} 句（后端={'CosyVoice' if USE_COSY else 'FishSpeech' if USE_FISH else 'MiniMax' if USE_MM else '火山' if USE_VOLC else 'say'}，顺序拼接 gap={GAP}s，无压速）→ voice_{LANG}.wav")
