@@ -46,6 +46,35 @@
 
 ---
 
+## 重点创作线：novel-author（几个字 / 一本书 → 成稿小说）
+
+漫剧产线的上游。`novel-author` 是**总调度**（与 `novel2drama` 同构）：它不亲自写，而是看输入（几个字 / 想法 / 书名 / URL / 路径 / 配角名 / 动作），或读已有 `写小说/<项目>/` 的 `_进度.md`，把你路由到对应的 `novel-*` skill。和 novel2drama 做漫剧视频、产物落 `制漫剧/` 相对，这条线做**纯文本小说**、产物统一落 `写小说/<项目>/`——成稿后即可交给 novel2drama 改编漫剧。
+
+| 你给的 / 想做的 | skill | 干什么 | 产物 |
+|---|---|---|---|
+| 调度 | `novel-author` | 看输入 / 读 `_进度.md`，决定走哪个子 skill（**自身不写作**） | — |
+| 几个字 / 想法 / 碎片（无源文） | `novel-create` | 访谈 → 创作蓝图 → 设定圣经 → 章纲 → Demo → 逐章成书 | 成稿小说 |
+| 书名 / 章节目录 URL | `novel-fetch` | 联网抓公版全文 | txt + docx |
+| 已有书，想起名 | `novel-title` | 5–8 候选 × 5 维打分排序 | 书名候选 |
+| 源书 + 配角名 | `novel-spinoff` | 配角平行视角外传，锚点处锁原作事件 | 外传 + 章纲 |
+| 源书，改主线 / 换设定 | `novel-rewrite` | 魔改 / 翻拍转化型重写 | 新版小说 |
+| 源书，接末章往后写 | `novel-continue` | 续编（完本后）/ 接更（接未完本） | 新章节 |
+| 短文加厚 / 长文压缩 | `novel-expand` / `novel-condense` | 加细节 / 砍描写并章 | 长版 / 短版 |
+| 已写章节，查硬伤 | `novel-review` | 串视角 / 人设崩 / 设定矛盾 / 原文照搬定位报告 | 审稿报告 |
+| 已写章节，判能不能火 | `novel-score` | 联网对标热榜，多维打分 + 改写 ROI 判定 | 评分体检 |
+| 写作工艺问题 | `novel-craft` | 章纲 / 单章 / 扩缩工艺基元（被其他 novel-* 引用） | — |
+
+几个设计要点（与 novel2drama 同构）：
+- **只路由不写作**：novel-author 把意图分到对的工具——续 / 扩 / 视角 / 改四者最易混（其 SKILL.md 有专门警示框），review（查硬伤）与 score（判能不能火）也要分清。
+- **合法性铁律前置**：派生类（spinoff / rewrite / expand / condense）默认只做公版 / 自有 / 授权；命中付费墙或当代版权网文即拒，调度入口先筛一遍。
+- **节拍优先字数兜底**：章 = 一个戏剧节拍单元；每章字数按平台档（`novel-craft/references/split.md` 字数分档，`novel-create --scale` 与之 1:1）只是兜底区间，不是硬切。
+- **持续改进**：跑流水线中沉淀的可复用经验回写 `novel-craft` / `novel-author/Q&A.md`（meta-capability）。
+- **demo**：`写小说/仙界闭关小能手-王敦外传`（配角外传，对齐 1179 章原作锚点）等 —— 进度见各自 `_进度.md`。
+
+> 写歌的 `song` 线是同构的平行创作线（访谈作词 → 作曲演唱 → 成品歌），产物交给 `mv` 做视频，正如小说成稿交给 `novel2drama`。
+
+---
+
 ## 想做出好成品：你才是导演
 
 工具能把**流程**跑通，但**成片好不好，更多取决于你的品鉴力，而不是 skill**。请把自己当**导演**，而不是按按钮的人：
@@ -82,18 +111,6 @@
 
 ---
 
-## 本地 AI 后端（Apple Silicon）
-
-| 用途 | 后端 | 位置 |
-|---|---|---|
-| 配音（声音克隆） | CosyVoice / Fish-Speech | `~/CosyVoice` · `~/fish-speech`（conda env，本地 server） |
-| 作曲（出整首歌） | ACE-Step（本地，短样可跑）/ **Suno 云（整首推荐）** | `~/ACE-Step` |
-| 换脸 | FaceFusion（onnxruntime CoreML） | `~/facefusion`（conda env `facefusion`，py3.12） |
-
-> 云后端（Suno/即梦/可灵等）凭证缺失时各 skill 会优雅回退（如配音回退 macOS `say` 占位）。
-
----
-
 ## 目录结构
 
 ```
@@ -125,6 +142,36 @@ anime-armory/
 - **写歌**：`/song <主题/想法>` → `/song-lyrics` → `/song-compose`（→ `/song-cover` 可选）。
 - **做MV**：`/mv <成品歌或 制MV/曲名>` → `/mv-beat` → `/mv-image` → `/mv-video` → `/mv-lyric-sync` → `/mv-compose`。
 - **换脸**：`/image-faceswap`（图）/ `/video-faceswap`（视频）—— 先过合规闸门。
+
+## 完整示例：把一本小说迭代优化（评级 → 改写 → 起名 → 提纲 → Demo 审稿 → 续完）
+
+把小说**拖进 CLI**，用 `novel-author` 这条线走一个**优化闭环**——评分定方向、按建议改写、顺手测书名、出新提纲、先写前几章 Demo 自审、过关再续完。一轮跑下来出一版；**多跑几轮**，每轮拿上一版的评分/审稿结论再改，小说就被一层层打磨上去。下面用仓库里的 `写小说/冷宫有妖气` 走一遍：
+
+**① 先评级——判"值不值得改、该改哪几维"**　`/novel-score 写小说/冷宫有妖气`
+
+联网拉红果/抖音/番茄当下热榜做基准，多维打分 → 总分 + 平台档位 + 「过/小改/大改/弃稿重立」判定 + 改写 ROI，并**点名该改哪几维**。这就是下一步改写的施工图。
+
+![novel-score 评分体检报告](docs/images/novel-iterate-01-score.png)
+
+**② 一步步改写——按评分点名的弱项动刀**　`/novel-rewrite 写小说/冷宫有妖气`
+
+novel-rewrite 把改写拆成一组**选择点**逐个过：先定核心改动（如③克制 CP 暗线的男主选谁、是否加），每个选项都标了与漫剧 demo 伏笔的一致性、对红果女频受众的影响，**给推荐、让你拍板**——不替你定故事。
+
+![novel-rewrite 改写选择点：CP 男主](docs/images/novel-iterate-02-rewrite-cp.png)
+
+**③ 顺手测书名**　改写范围里有「书名」一项，动笔前的审 gate 会问要不要重起；选「委托 `novel-title`」就借改写依据生成候选并 5 维打分。
+
+![novel-rewrite Step 2 审 gate：书名要不要重起](docs/images/novel-iterate-03-rewrite-gate.png)
+
+![novel-title 书名候选 5 维打分](docs/images/novel-iterate-04-title.png)
+
+**④ 出提纲**　书名/改动定了，重织**章纲**（三幕 + 反转 + 钩子，节拍优先字数兜底，见 `novel-craft/references/{outline,split}.md`）。章纲未敲定不进 Demo。
+
+**⑤ 续写前几章 Demo + 自我审稿**　按新章纲先写**前 1–3 章 Demo**（每章一个戏剧节拍 + ≥1 钩子），随即 `/novel-review` 自审——查串视角/人设崩/设定矛盾/锚点漂移/原文照搬，出定位报告。**Demo 过关才批量往下写**（文风/爽点/设定自洽在这 1–3 章就能看出来）。
+
+**⑥ 续完剩余章节**　Demo 定调后逐章续写到完结，写完再 `/novel-review` 分批回扫一致性。
+
+> **如此可多来几回**：把这一版的评分 + 审稿结论当作下一轮 `/novel-score` 的输入，再改写 → 再起名 → 再 Demo → 再续完。每轮一个小版本，迭代收敛到"能火"的方向——这就是用 novel-* 线**优化**（而非一次性写完）一本小说的方式。
 
 ## 当前进度
 

@@ -1,6 +1,6 @@
 ---
 name: novel-author
-description: Top-level dispatcher for the novel-* skill family. Inspects user input (a bare idea / few words / book name / URL / file path / spin-off character / expand or condense request) and routes to the right sub-skill — novel-create (原创从零) / novel-fetch / novel-title / novel-spinoff / novel-rewrite / novel-continue / novel-expand / novel-condense / novel-craft / novel-review. Use when user gives an open-ended novel-related task without specifying which tool to use. Does not write novels itself — only routes. Triggers 小说工坊, novel-author, 小说相关任务, 帮我处理小说, 不知道用哪个小说 skill.
+description: Top-level dispatcher for the novel-* skill family — inspects an open-ended novel request (a bare idea / few words / book name / URL / file path / spin-off character / expand·condense·rewrite / 审稿查硬伤 / 评分·能不能火) and routes to the right sub-skill, or resumes an in-progress 写小说/<项目>/ from its _进度.md. Use when the user gives a novel-related task without specifying which tool. Does not write novels itself — only routes; the canonical sub-skill roster is the routing table in the body. Triggers 小说工坊, novel-author, 小说相关任务, 帮我处理小说, 不知道用哪个小说 skill, 小说打分, 小说评分, 能不能火, 值不值得改, 审稿.
 ---
 
 # novel-author — 小说工坊调度入口
@@ -9,7 +9,7 @@ description: Top-level dispatcher for the novel-* skill family. Inspects user in
 
 和已存在的 `novel2drama` 平行：那条线管漫剧/视频生产、产物落 `制漫剧/`；这条线管纯文本小说生产、**产物统一落 `写小说/<项目>/`**（如 `写小说/仙界闭关小能手-王敦外传/`）。两条线在 novel-fetch（取材）和 novel-spinoff/expand 的输出处自然衔接——`写小说/` 里的成品可交给 `novel2drama` 改编，产物再流向 `制漫剧/`。
 
-**本系列成员**：`novel-create`（原创从零·访谈引导）· `novel-fetch`（取公版）· `novel-title`（起名）· `novel-spinoff`（配角外传·锁事件）· `novel-rewrite`（改写/魔改·改事件加设定）· `novel-continue`（续写）· `novel-expand`/`novel-condense`（扩/缩）· `novel-craft`（写作工艺基元）· `novel-review`（已写章节质检/审稿）。
+**本系列成员**见下方"路由规则"表（家族唯一权威名册；新增/移除子 skill 只改那张表）。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
@@ -33,6 +33,7 @@ description: Top-level dispatcher for the novel-* skill family. Inspects user in
 | 已有长篇，要**压缩为短版 / 漫剧脚本量级** | `novel-condense` |
 | 自己手写小说时要**工艺指南**（章纲 / 单章 / 扩 / 缩 / 续 的原则） | `novel-craft` |
 | 已写好若干章，要**质检 / 审稿 / 查问题**（人设崩 / 视角穿帮 / 设定矛盾 / 锚点漂移 / 节奏 / 原文照搬） | `novel-review` |
+| 已写好若干章，要**打分 / 评分 / 市场体检**（题材够不够热、能不能火、值不值得继续写/改、要不要弃稿重立） | `novel-score` |
 | 把小说改成**漫剧 / 短剧** | `novel2drama`（另一条管线） |
 
 ⚠️ **续 / 扩 / 视角 / 改 四者很容易混**：
@@ -41,10 +42,16 @@ description: Top-level dispatcher for the novel-* skill family. Inspects user in
 - **视角续写** = **换 POV** 写同一段时间、**事件锁定不改** → novel-spinoff
 - **改写** = **改主线 / 换设定 / 加原创材料**（事件可改、可新增设定，与视角续写正相反）→ novel-rewrite
 
+⚠️ **审稿(review) vs 评分(score) 别混**：
+- **review** = 挑硬伤，判**写得对不对**（人设崩/视角穿帮/设定矛盾/原文照搬）→ novel-review
+- **score** = 市场+品质打分，判**值不值得做、能不能火、要不要继续改**（题材热度/爽点/留存/文学性 → 总分+判定+改写ROI）→ novel-score
+- 用户问"能不能火/这本行不行/要不要继续写"=score；问"有没有写崩/哪里错了"=review。两者可串用：先 score 定方向，改完再 review 抠细节。
+
 每条路由**简短确认输入后调起对应 skill**，让那个 skill 自走流程。不要在本 skill 里硬写小说。
 
 ## 决策树
 
+0. **先看有没有在建项目**：用户指向（或当前正处于）某个 `写小说/<项目>/`，且其下有 `_进度.md` → **先读它**，路由到进度里未完成的那个阶段 skill（与 `novel2drama` 读 `_进度.md` 续跑同理），不要从头追问"你要做什么"。仅当 `_进度.md` 显示已全部完成、或用户明确要开新动作时，才往下走 1-5。
 1. 用户给了**书名 / 作者 / URL** 但没给本地文件 → 几乎肯定 `novel-fetch`。
 2. 用户给了**本地文件路径** + 明确动作（续写XX视角 / 起书名 / 扩 / 缩 / 漫剧改编）→ 直接按动作路由。
 3. 用户给了**本地文件路径** + 没说具体动作 → 问一个澄清问题：要做什么？

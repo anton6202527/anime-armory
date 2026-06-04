@@ -75,10 +75,10 @@ def main():
     if not os.path.isdir(chdir):
         sys.exit(f"找不到章节目录：{chdir}")
 
-    files = sorted(glob.glob(os.path.join(chdir, "第*章.md")))
+    files = sorted(glob.glob(os.path.join(chdir, "第*章*.md")))  # 第N章.md 或 第N章_标题.md
     nums = []
     for f in files:
-        m = re.search(r"第0*(\d+)章\.md$", os.path.basename(f))
+        m = re.search(r"第0*(\d+)章", os.path.basename(f))
         if m:
             nums.append(int(m.group(1)))
     outline = load_outline_titles(args.root)
@@ -107,7 +107,7 @@ def main():
             add(0, "🔴", "章号", f"重号：{dup}")
 
     for f in files:
-        m = re.search(r"第0*(\d+)章\.md$", os.path.basename(f))
+        m = re.search(r"第0*(\d+)章", os.path.basename(f))
         ch = int(m.group(1)) if m else 0
         md = read(f)
         # 1 格式

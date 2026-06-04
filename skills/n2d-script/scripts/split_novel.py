@@ -235,7 +235,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("novel")
     ap.add_argument("--out", default=None,
-                    help="作品根（直接包含 脚本/ 出图/ 出视频/ + 全局文件）。缺省 = 小说同级目录；若小说位于 .../小说/<X>.docx 则取小说目录的父级")
+                    help="作品根（直接包含 脚本/ 出图/ 出视频/ + 全局文件）。缺省：小说在 .../小说/<X> 下→取其父；否则落到最近含『制漫剧/』的仓库根下的 制漫剧/<剧名>/（找不到才回退小说同级并告警）")
     ap.add_argument("--target", type=int, default=1000, help="每集目标字数")
     ap.add_argument("--min", type=int, default=800, help="末尾残料不足此字数则并入上一集")
     ap.add_argument("--max", type=int, default=1400, help="每集字数上限（超出在段/句边界断开）")
@@ -261,7 +261,23 @@ def main():
         if os.path.basename(novel_dir) == "小说":
             root = os.path.dirname(novel_dir)
         else:
-            root = novel_dir
+            # novel2drama 产物应落 制漫剧/<剧名>/：向上找含『制漫剧/』的仓库根，
+            # 避免把作品根误建在输入文件同级（如 写小说/<X>/导出/）。
+            d, repo = novel_dir, None
+            while True:
+                if os.path.isdir(os.path.join(d, "制漫剧")):
+                    repo = d
+                    break
+                parent = os.path.dirname(d)
+                if parent == d:
+                    break
+                d = parent
+            if repo:
+                root = os.path.join(repo, "制漫剧", title)
+            else:
+                root = novel_dir
+                print(f"[warn] 未找到含『制漫剧/』的仓库根，作品根回退到小说同级：{root}"
+                      f"（建议用 --out 指定 制漫剧/<剧名>/）", file=sys.stderr)
     text = read_text(args.novel)
     paras = normalize_paragraphs(text)
     if not paras:
@@ -307,9 +323,11 @@ def main():
             write_if_absent(os.path.join(ep_dir, fname), tmpl.format(title=title, n=i))
         lengths.append(len(ep.replace("\n", "")))
 
-    prog_lines = [f"# {title} — 生产进度\n", f"共拆分 **{len(episodes)}** 集。\n", "| 集 | 字数 | raw | 分镜剧本 | 故事板 | 素材清单 | 配音 | BGM | 封面 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频 |", "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+    prog_lines = [f"# {title} — 生产进度\n", f"共拆分 **{len(episodes)}** 集。\n",
+        "| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |",
+        "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for i, ln in enumerate(lengths, 1):
-        prog_lines.append(f"| 第{i}集 | {ln} | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |")
+        prog_lines.append(f"| 第{i}集 | {ln} | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |")
     write_if_absent(os.path.join(common, "_进度.md"), "\n".join(prog_lines) + "\n")
 
     print(f"作品根: {root}")

@@ -93,7 +93,7 @@
 
 **来源**：王敦外传 Demo 后用户明确补的标准——"契合原著时间线的同时，记得自己扩写剧情、丰富人物"。
 
-**适用范围**：`novel-craft/references/chapter.md` 写完自检 + 所有 skill 第 5 步 Demo gate。
+**适用范围**：`novel-craft/references/chapter.md` 写完自检「软评估三件套」（已并入）+ 所有 skill 第 5 步 Demo gate。
 
 ---
 
@@ -110,7 +110,7 @@
 
 **来源**：王敦外传 Demo 自检——Ch 2 系统出现 5 次过频，Ch 3 改回 2 次密度，可读性显著提升。
 
-**适用范围**：`novel-craft/references/chapter.md`（建议新增"原创机制使用克制"段）+ 所有派生 skill 的 Demo 自检。
+**适用范围**：`novel-craft/references/chapter.md`「原创机制使用克制」段（已并入）+ 所有派生 skill 的 Demo 自检。
 
 ---
 

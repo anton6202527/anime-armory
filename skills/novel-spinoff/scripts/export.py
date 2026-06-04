@@ -19,7 +19,7 @@ import shutil
 import sys
 from datetime import date
 
-CHAPTER_FILE_RE = re.compile(r"^第(\d+)章\.md$")
+CHAPTER_FILE_RE = re.compile(r"^第0*(\d+)章(?:[_ ].*)?\.md$")  # 第N章.md 或 第N章_标题.md
 META_LINE_RE = re.compile(r"^<!--\s*meta:.*-->\s*$")
 H1_RE = re.compile(r"^#\s+第\s*\d+\s*章\s*[《<]?([^》>]*)[》>]?\s*$")
 
@@ -75,16 +75,20 @@ def total_chars(chapters):
 
 def write_txt(out_path, meta, chapters, title):
     total = total_chars(chapters)
+    _kind = meta.get('kind', 'spinoff')
     provenance = [
-        f"# spinoff_of: {meta['source_title']}",
-        f"# spinoff_character: {meta['spinoff_character']}",
-        f"# mode: {meta['mode']}",
+        f"# source: {meta.get('source_title') or meta.get('source') or '—'}",
+        f"# kind: {_kind}",
         f"# chapters: {len(chapters)}",
         f"# chars: {total}",
-        f"# rights_status: {meta['rights_status']}",
+        f"# rights_status: {meta.get('rights_status', '—')}",
         f"# generated: {date.today().isoformat()}",
-        f"# tool: novel-spinoff",
+        f"# tool: novel-{_kind}",
     ]
+    if meta.get('spinoff_character'):
+        provenance.insert(2, f"# spinoff_character: {meta['spinoff_character']}")
+    if meta.get('rewrite_type'):
+        provenance.insert(2, f"# rewrite_type: {meta['rewrite_type']}")
     with open(out_path, "w", encoding="utf-8") as f:
         f.write("\n".join(provenance) + "\n\n")
         for idx, title_c, body in chapters:
@@ -104,12 +108,18 @@ def write_docx(out_path, meta, chapters, title):
     doc = Document()
     total = total_chars(chapters)
     # provenance 块（普通段落）
+    _kind = meta.get('kind', 'spinoff')
+    _src = meta.get('source_title') or meta.get('source') or '—'
+    _mode = meta.get('mode') or meta.get('rewrite_type') or meta.get('kind') or '—'
     provenance_lines = [
-        f"原作：{meta['source_title']}",
-        f"视角：{meta['spinoff_character']}",
-        f"模式：{meta['mode']}    规模：{meta['scale']}    章数：{len(chapters)}    字数：{total}",
-        f"版权状态：{meta['rights_status']}    生成日期：{date.today().isoformat()}",
-        f"工具：novel-spinoff",
+        f"原作：{_src}",
+    ]
+    if meta.get('spinoff_character'):
+        provenance_lines.append(f"视角：{meta['spinoff_character']}")
+    provenance_lines += [
+        f"模式：{_mode}    规模：{meta.get('scale','—')}    章数：{len(chapters)}    字数：{total}",
+        f"版权状态：{meta.get('rights_status','—')}    生成日期：{date.today().isoformat()}",
+        f"工具：novel-{_kind}",
     ]
     for ln in provenance_lines:
         doc.add_paragraph(ln)
@@ -144,12 +154,15 @@ def write_outline(out_path, project_root, meta, chapters):
             kept.append(ln)
         cleaned = "\n".join(kept).strip()
     else:
-        cleaned = f"# 章纲 — {meta['spinoff_character']}外传\n\n（章纲未填）"
+        _who = meta.get('spinoff_character') or meta.get('title') or '本作'
+        cleaned = f"# 章纲 — {_who}\n\n（章纲未填）"
 
+    _src = meta.get('source_title') or meta.get('source') or '—'
+    _mode = meta.get('mode') or meta.get('kind') or meta.get('rewrite_type') or '—'
     summary = (
         f"\n\n---\n\n"
         f"_共 {len(chapters)} 章，{total_chars(chapters)} 字。"
-        f"原作《{meta['source_title']}》，模式 {meta['mode']}。_\n"
+        f"原作《{_src}》，模式 {_mode}。_\n"
     )
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(cleaned + summary)
@@ -186,7 +199,7 @@ def main():
 
     chapters = collect_chapters(project_root)
     if not chapters:
-        print("[err] 章节/ 下没有 第NN章.md，先写章节再导出", file=sys.stderr)
+        print("[err] 章节/ 下没有 第NN章.md / 第NN章_标题.md，先写章节再导出", file=sys.stderr)
         sys.exit(2)
 
     out_dir = os.path.join(project_root, "导出")

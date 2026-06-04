@@ -32,7 +32,7 @@ description: Cold-start ORIGINAL novel creation from scratch — when the user h
 - **题材类型 + 目标平台**（决定篇幅档/爽点节奏）
 - **主角**：是谁 + **金手指/核心能力（必有代价）** + 动机/心结
 - **核心爽点**（这本"爽"在哪）+ **主线冲突/反派**
-- **规模档**（short/medium/long/漫剧）+ **人称视角** + 目标读者
+- **规模档**（short/medium/long/微短剧/漫剧 —— 见 `novel-craft/references/split.md` 字数分档）+ **人称视角** + 目标读者
 - **风格**：给了样本就吃（→ 风格卡）；没给则记"Demo 后回填"
 - **输出**：txt/docx/outline
 > 用户给了碎片（风格样本/笔记/半成品）→ 先复述你的理解、确认，再补缺口。**别让用户重答他已经给过的。**
@@ -41,7 +41,7 @@ description: Cold-start ORIGINAL novel creation from scratch — when the user h
 ```bash
 python3 <skill>/scripts/init_project.py \
     --title "<书名或'待定'>" --genre "<题材类型>" \
-    --premise "<一句话故事>" --scale short|medium|long|漫剧 \
+    --premise "<一句话故事>" --scale short|medium|long|微短剧|漫剧 \
     [--platform 抖音漫剧] [--person third-limited] [--target-chapters N] \
     [--ingest <碎片路径>]...
 ```
