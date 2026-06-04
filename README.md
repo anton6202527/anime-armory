@@ -2,7 +2,7 @@
 
 **AI 创作内容工厂** —— 一套可复用的 Claude Code skills，覆盖 **写小说→制漫剧**、**写歌→制MV** 两组「创作线 × 生产线」，外加公共换脸能力。仓库内的现有作品（`写小说/`·`制漫剧/`·`写歌/`·`制MV/`）是 **demo 演示**，展示这套 skill 的产出。
 
-> skill 详细索引见 [`skills/README.md`](skills/README.md)；本文件是项目总览。
+> skill 详细索引见 [`skills/README.md`](skills/README.md)；**其他 AI agent**（Cursor/Cline/Gemini-CLI…）进仓库先看 [`AGENTS.md`](AGENTS.md)；本文件是项目总览。
 
 ---
 
@@ -22,12 +22,56 @@
 
 ---
 
+## 重点生产线：novel2drama（小说 → AI 漫剧 / 短剧）
+
+整个仓库的核心产线。`novel2drama` 是**总调度**：它不亲自干活，而是检查作品根、读 `_进度.md`，按阶段把你路由到对应的 `n2d-*` skill。一本小说到成片，走这条流水线：
+
+| 阶段 | skill | 干什么 | 产物 |
+|---|---|---|---|
+| 0 调度 | `novel2drama` | 看作品根、读 `_进度.md`，决定下一步走哪个 skill | — |
+| 1 剧本改编 | `n2d-script` | 拆集 → 每集戏剧节拍 + 配音台词 / BGM / 封面 / 角色卡·场景卡 / global_style（**先不做分镜**） | 剧本 + 素材卡 |
+| 2 配音（前移） | `n2d-voice` | 台词 → 角色配音 + 拼接音轨 + **时长清单**（每句实测时长，驱动下游镜头时长） | 配音 + 时长 |
+| 2′ 分镜设计 | `n2d-script`（回跑） | 用配音实测时长设计 分镜剧本 / 故事板(Clip 时长) / 素材清单 / 双语字幕 SRT | 分镜 + 故事板 |
+| 3 出图 | `n2d-image` | 两层出图（**共享定妆库** + 本集分镜）→ 即梦 / Flux / Gemini 生图 | 分镜 PNG |
+| 4 出视频 | `n2d-video` | 图生视频（即梦 / 可灵 / Veo / Seedance），按故事板运镜 | clips |
+| 5 合成 | `n2d-compose` | clips + 配音 + BGM(自动 ducking) + 烧双语字幕 → 成片 | `成片.mp4` |
+
+几个设计要点（决定成片能不能用）：
+- **配音前移**：先配音拿到每句**实测时长**，再据此定镜头时长——避免"图都做完了才发现对不上节奏"。
+- **两层出图锁一致性**：先用共享定妆库锁主角脸 / 场景 / 画风，再做分镜，人物跨镜不漂。
+- **双语字幕**：面向海外投放，中英双语 SRT，`n2d-compose` 直接烧录。
+- **demo**：`制漫剧/冷宫有妖气` —— 101 集拆集，第 1 集走完全套（含双语版 `出视频/第1集/demo_第1集_bilingual.mp4`）。
+
+> 写歌→制MV 的 `mv` 线是同构的平行产线（卡点→出图→出视频→卡拉OK→合成，自包含不复用 n2d-*）。旗舰 demo 见下方 `仗剑下山`。
+
+---
+
+## 想做出好成品：你才是导演
+
+工具能把**流程**跑通，但**成片好不好，更多取决于你的品鉴力，而不是 skill**。请把自己当**导演**，而不是按按钮的人：
+
+- **会挑**：生图 / 生视频 / 出歌都有随机性——**一次多生几版，由你来挑**：角色对不对味、运镜有没有张力、爽点卡没卡在鼓点上。skill 默认就鼓励"多版择优"。
+- **会看节奏**：单集切多长不是按字数，而是按**爽点 / 钩子**落进验收区间；副歌、反转要踩节拍。你得有"这里该快切、这里该停一拍"的判断。
+- **会定调**：画风、音色、运镜语言这些"选择点"，skill 会问你一次，但**审美定成什么样是你的事**——同一段素材，导演眼光不同，成片天差地别。
+
+## 规模化制作（要批量稳定出片时）
+
+零散做几集，靠手挑就够了；**要成规模、稳定量产**，建议沉淀"资产"而不是每次重抽随机结果：
+
+- **角色 LoRA**：给主角 / 核心配角训练 LoRA，锁死人物长相，跨集跨镜一致，不再靠定妆图碰运气。
+- **资产库**：把定妆图、场景图、音色样本、BGM、运镜模板沉淀成可复用素材库（每剧 `common/` 已是雏形），新集直接调用。
+- **参数固化**：把验证过的 prompt / 运镜 / 卡点参数写进作品的 `_设置.md`，同剧沉默沿用，减少返工。
+
+> 这些**不用你全记住**——**相应 skill 会在合适的环节主动提示你**：什么时候该先建定妆库、该多生几版、该考虑接 LoRA、该把参数固化进 `_设置.md`。跟着提示走，会越做越省、越做越稳。
+
+---
+
 ## 设计原则：skill 通用，选择私有
 
 - **skill 保持通用**：不把平台/后端/分辨率/时长写死成唯一路径。凡「让用户选」的都是**选择点**。
 - **选择是私有的**，存在用户自己的空间、不进共享 skill 代码：
   - 每作品 `<作品根>/_设置.md`（权威，与 `_进度.md` 并列）
-  - 全局默认 [`.claude/创作偏好-默认.md`](.claude/创作偏好-默认.md)（跨项目个人默认，随私有库多机同步，开新项目预填）
+  - 全局默认 `创作偏好-默认.md`（跨项目个人默认，开新项目预填）——**个人私有文件，不进公开库**
 - **行为**：选择点首次问一次 → 写 `_设置.md` → 同项目沉默沿用；合规/不可逆/花钱多的点每次仍确认。
 - 机制与全部选择点目录见 [`skills/_偏好约定.md`](skills/_偏好约定.md)。
 
@@ -54,18 +98,17 @@
 
 ```
 anime-armory/
-├── README.md  TODO.md  .gitignore
-├── .claude/
-│   ├── 创作偏好-默认.md            ← 私有全局默认偏好（随库同步）
-│   └── skills/                     ← 全部自定义 skill（扁平，按前缀分族）
-│       ├── _偏好约定.md            通用偏好机制 + 选择点目录
-│       ├── README.md               skill 索引
-│       ├── novel-author/ novel-*   写小说（create/fetch/title/spinoff/rewrite/
-│       │                           continue/expand/condense/craft/review）
-│       ├── novel2drama/ n2d-*       制漫剧（script/voice/image/video/compose）
-│       ├── song/ song-*            写歌（lyrics/compose/cover）
-│       ├── mv/ mv-*                制MV（beat/image/video/lyric-sync/compose）
-│       └── video-faceswap/ image-faceswap/   公共换脸
+├── README.md  AGENTS.md  TODO.md  .gitignore
+├── skills/                          ← 全部自定义 skill（真身，扁平按前缀分族）
+│   ├── _偏好约定.md                通用偏好机制 + 选择点目录
+│   ├── README.md                    skill 索引（含「工具中立 / 跨 AI 使用」说明）
+│   ├── novel-author/ novel-*        写小说（create/fetch/title/spinoff/rewrite/
+│   │                                continue/expand/condense/craft/review）
+│   ├── novel2drama/ n2d-*           制漫剧（script/voice/image/video/compose）
+│   ├── song/ song-*                 写歌（lyrics/compose/cover）
+│   ├── mv/ mv-*                     制MV（beat/image/video/lyric-sync/compose）
+│   └── video-faceswap/ image-faceswap/   公共换脸
+├── .claude/skills → ../skills       ← 软链：供 Claude Code 自动发现（其他 AI 走 AGENTS.md）
 │
 ├── 写小说/<项目>/                  ← 写小说产物（设定/章节/审稿/导出 + _进度.md + _设置.md）
 ├── 制漫剧/<剧名>/                  ← 制漫剧产物（小说/脚本/出图/出视频/成片 + common/_进度.md）
@@ -73,7 +116,7 @@ anime-armory/
 └── 制MV/<曲名>/                    ← 制MV产物（节拍/出图/出视频/字幕/成片_MV.mp4）
 ```
 
-## 快速开始（在 Claude Code 中）
+## 快速开始
 
 - **写小说**：`/novel-author <书名/路径/想法/动作>` 路由；或直接 `/novel-create`（从零原创）、`/novel-fetch <书名>`、`/novel-spinoff <原作> <配角>`、`/novel-review <项目>`。
 - **做漫剧**：`/novel2drama <小说路径或 制漫剧/项目>` → `/n2d-script` → `/n2d-voice` → `/n2d-script`(分镜) → `/n2d-image` → `/n2d-video` → `/n2d-compose`。
@@ -85,7 +128,7 @@ anime-armory/
 
 - **制漫剧/冷宫有妖气**：拆 101 集；**第 1 集全套成片（demo）**，第 2–16 集已做剧本/分镜/双语字幕精修、出图进行中，余下为拆集骨架。详见 `制漫剧/冷宫有妖气/common/_进度.md`。
 - **写小说/**：`仙界闭关小能手-王敦外传`（外传）、`阿蒙乌沙`、`尼罗河黑墓`、`秦陵寻踪` —— 各项目进度见其 `_进度.md`。
-- **写歌+制MV/仗剑下山**：成品歌（`写歌/仗剑下山/歌/song.wav`）+ MV 成片（`制MV/仗剑下山/成片_MV.mp4`）。
+- **写歌+制MV/仗剑下山**（🎬 旗舰 demo，全流程本地跑通）：本地 ACE-Step 出真唱歌（`写歌/仗剑下山/歌/song.wav`）→ 卡点(BPM~144/踩 downbeat 切) → 出图/运镜 → whisper 转写校正烧歌词 → 合成 **`制MV/仗剑下山/成片_MV.mp4`**（20s · 9:16）。是「写歌→制MV」整条线的缩影。
 
 ## 说明
 
