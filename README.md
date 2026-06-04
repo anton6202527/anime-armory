@@ -118,6 +118,8 @@ anime-armory/
 
 ## 快速开始
 
+### **可以按照 demo 里的样子，在对应的创造区新建一个文件夹，然后在你的本地 AI agent 里就可以用自然语言的方式开始你的创造啦。**
+
 - **写小说**：`/novel-author <书名/路径/想法/动作>` 路由；或直接 `/novel-create`（从零原创）、`/novel-fetch <书名>`、`/novel-spinoff <原作> <配角>`、`/novel-review <项目>`。
 - **做漫剧**：`/novel2drama <小说路径或 制漫剧/项目>` → `/n2d-script` → `/n2d-voice` → `/n2d-script`(分镜) → `/n2d-image` → `/n2d-video` → `/n2d-compose`。
 - **写歌**：`/song <主题/想法>` → `/song-lyrics` → `/song-compose`（→ `/song-cover` 可选）。
