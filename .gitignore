@@ -16,3 +16,6 @@ __pycache__/
 # TTS 缓存/合成临时（勿提交）
 **/_voicecache/
 **/出视频/**/_work/
+
+# 配音逐句合成中间产物(loudnorm前 raw + concat/gap 临时，非最终轨)
+**/配音/voice/

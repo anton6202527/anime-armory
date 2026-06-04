@@ -9,16 +9,24 @@ def _ts(t):
     return f"{h:02d}:{m:02d}:{s:02d},{ms:03d}"
 
 def build(manifest, en_texts, gap=0.4):
-    zh=[]; en=[]; shots={}; t=0.0
+    zh=[]; en=[]; shots={}
+    # 优先消费 render_voice 写入的真实时间轴(start/end/gap_after)；旧 manifest 无则按同一套 HOOK_GAP 模型重建
+    if manifest and all('start' in r and 'end' in r for r in manifest):
+        spans=[(float(r['start']), float(r['end']), float(r.get('gap_after',0.0))) for r in manifest]
+    else:
+        HG={'end':1.0,'climax':0.7,'hook':0.6}   # 与 render_voice 默认 GAP_END/CLIMAX/HOOK 一致
+        spans=[]; t=0.0; last=len(manifest)-1
+        for i,r in enumerate(manifest):
+            d=float(r["时长"]); g=0.0 if i==last else HG.get(r.get("钩子","") or "", gap)  # 末句不留拍
+            spans.append((t, t+d, g)); t=t+d+g
     for i,row in enumerate(manifest):
-        d=float(row["时长"]); start=t; end=t+d
+        start,end,gap_after=spans[i]
         zh.append(f"{i+1}\n{_ts(start)} --> {_ts(end)}\n{row['文本']}\n")
         etxt=en_texts[i] if i<len(en_texts) else ""
         en.append(f"{i+1}\n{_ts(start)} --> {_ts(end)}\n{etxt}\n")
         sh=row.get("镜头","")
-        shots[sh]=shots.get(sh,0.0)+d
-        t=end+gap
-    for k in shots: shots[k]=round(shots[k]+gap,3)  # 每镜加一份留白
+        shots[sh]=shots.get(sh,0.0)+(end-start)+gap_after  # 镜头占屏=台词时长+其后留拍；∑镜头 == voice.wav 时长
+    shots={k:round(v,3) for k,v in shots.items()}
     return "\n".join(zh), "\n".join(en), shots
 
 def _parse_srt_texts(path):

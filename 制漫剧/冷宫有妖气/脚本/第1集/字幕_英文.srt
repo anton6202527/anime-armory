@@ -1,54 +1,61 @@
 1
-00:00:00,000 --> 00:00:03,000
-Wait... this isn't my dorm.
+00:00:00,000 --> 00:00:02,800
+Demon Bloodline... activated.
 
 2
-00:00:03,000 --> 00:00:08,000
-Rough cloth, mildew, cobwebs... where the hell am I?
+00:00:03,400 --> 00:00:06,200
+Wait... this isn't my dorm.
 
 3
-00:00:08,000 --> 00:00:14,000
-This... this isn't my face.
+00:00:06,600 --> 00:00:09,800
+Coarse cloth, mildew, cobwebs... where am I?
 
 4
-00:00:14,000 --> 00:00:20,000
-Lin Wan'er. A noble's daughter, made an imperial consort —
-then framed for witchcraft and locked in the cold palace. Three years.
+00:00:10,200 --> 00:00:13,400
+The face in the mirror... that isn't me.
 
 5
-00:00:20,000 --> 00:00:24,000
-My lady! Madam Liu's here — on the Empress's orders. They've come to kill you!
+00:00:14,000 --> 00:00:22,500
+Lin Wan'er — a minister's daughter, made imperial consort,
+framed for witchcraft, cast into the cold palace. Three whole years.
 
 6
-00:00:24,000 --> 00:00:28,000
-Presenting Madam Liu—
+00:00:23,000 --> 00:00:28,800
+My lady! Madam Liu is here —
+on the Empress's orders, to send you to your death!
 
 7
-00:00:28,000 --> 00:00:31,000
-Consort Lin, the Empress is merciful. She'll let you die in one piece. Do be grateful.
+00:00:29,200 --> 00:00:30,600
+Presenting Madam Liu—
 
 8
-00:00:31,000 --> 00:00:35,000
-I can't fight them. Begging's useless...
-Did I cross over just to die all over again?
+00:00:31,000 --> 00:00:38,000
+Consort Lin, the Empress is merciful — she grants you a whole corpse.
+You ought to be grateful.
 
 9
-00:00:35,000 --> 00:00:38,000
-Host near death. Demon Bloodline — force-activating.
+00:00:38,500 --> 00:00:44,500
+I can't fight them, begging is useless...
+Did I cross over just to die all over again?
 
 10
-00:00:38,000 --> 00:00:42,000
-What are you—
+00:00:44,900 --> 00:00:50,400
+Host near death — Demon Bloodline, force-activating.
 
 11
-00:00:42,000 --> 00:00:48,000
+00:00:51,000 --> 00:00:53,400
+Your... your eyes?!
+
+12
+00:00:53,700 --> 00:01:00,700
 Minor demon "Madam Liu" slain. EXP +10.
 Demon Bloodline is now Level 1.
 
-12
-00:00:48,000 --> 00:00:52,000
-From now on, nobody decides whether I live or die.
-
 13
-00:00:52,000 --> 00:00:55,000
-Madam Liu... was a demon?
+00:01:01,400 --> 00:01:05,800
+From this day on, no one decides whether I live or die.
+
+14
+00:01:06,200 --> 00:01:12,200
+Madam Liu... was a demon.
+So how many more are hiding in this cold palace?

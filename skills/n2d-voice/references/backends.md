@@ -12,7 +12,13 @@
 | say | （无） | macOS 占位，仅冒烟用 |
 
 ## 角色→音色映射
-默认见 render_voice.py 的音色表；均可 env 覆盖（MiniMax: MM_SHEN/MM_LIU/MM_XIAOHE/MM_TAIJIAN/MM_SYS/MM_NARR；CosyVoice/GPT-SoVITS 通过 COSY_REF_AUDIO/COSY_REF_TEXT 指定参考音）。
+默认见 render_voice.py 的音色表；均可 env 覆盖（MiniMax: MM_SHEN/MM_LIU/MM_XIAOHE/MM_TAIJIAN/MM_SYS/MM_NARR）。
+
+### 零样本克隆(CosyVoice/FishSpeech) 按角色分音色
+`role_key(role)` 把角色名归到音色键：`SYS`(系统) / `LIU`(柳娘子) / `XIAOHE`(小禾) / `TAIJIAN`(太监) / `YAO`(含「妖」) / `NARR`(纯「旁白」) / `SHEN`(沈念·沈念旁白·默认)。
+每个键各取参考音：优先 `<PREFIX>_REF_<KEY>` / `<PREFIX>_REF_<KEY>_TEXT`，缺则回退全局 `<PREFIX>_REF_AUDIO` / `<PREFIX>_REF_TEXT`，再缺则无参考(默认嗓)。`PREFIX` = `FISH` 或 `COSY`。
+例：`export FISH_REF_SHEN=.../SHEN.wav FISH_REF_SHEN_TEXT="<逐字文本>" FISH_REF_YAO=.../YAO.wav FISH_REF_YAO_TEXT="..."` → 沈念用 SHEN 嗓、妖用 YAO 嗓。⚠️ 参考音仅限本人嗓/已授权/纯合成。
+**音色库便捷生成**：`制漫剧/<剧名>/common/voicebank/build_voicebank.sh` 用本机中文 say(Tingting/Meijia/Sinji) + ffmpeg 变调派生 7 个区分音色，产出 `*.wav` + 可 `source` 的 `_refs.env`。
 
 ## CosyVoice/GPT-SoVITS 本地服务
 用户自行启动本地推理服务（端口/端点随 fork），把 URL 填进 COSYVOICE_URL/GPTSOVITS_URL，参考音频+参考文本填进对应 env。本 skill 通过 HTTP 调用，不负责启动服务。

@@ -89,6 +89,23 @@ def volc_cfg(role):
     if '系统' in role: return V['SYS'],None,1.0
     return V['SHEN'],'neutral',1.0
 
+# ── 零样本克隆(CosyVoice/FishSpeech) 按角色分音色：角色→音色键→参考音 env ──
+# 角色名(含子串)归到音色键；注意 '沈念旁白' 走 SHEN(沈念内心)，纯 '旁白' 才走 NARR(旁白)
+def role_key(role):
+    if '系统' in role:   return 'SYS'
+    if '柳娘子' in role: return 'LIU'
+    if '小禾' in role:   return 'XIAOHE'
+    if '太监' in role:   return 'TAIJIAN'
+    if '妖' in role:     return 'YAO'
+    if role=='旁白':     return 'NARR'
+    return 'SHEN'   # 沈念旁白 / 沈念 / 默认
+# 取该角色的 (参考音wav, 逐字文本)：优先 <PREFIX>_REF_<KEY>，回退全局 <PREFIX>_REF_AUDIO，再回退 None=默认嗓
+def role_ref(prefix, role):
+    k=role_key(role)
+    ref=os.environ.get(f'{prefix}_REF_{k}') or os.environ.get(f'{prefix}_REF_AUDIO')
+    txt=os.environ.get(f'{prefix}_REF_{k}_TEXT') or os.environ.get(f'{prefix}_REF_TEXT','')
+    return ref, txt
+
 def http(url,body,hdr):
     req=urllib.request.Request(url,data=json.dumps(body).encode('utf-8'),headers=hdr)
     with urllib.request.urlopen(req,timeout=90) as r: return json.loads(r.read().decode('utf-8'))
@@ -136,10 +153,10 @@ for i in range(n):
     role,text,emo_c,spd_m,hk=items[i]
     # 取原始音频(缓存)
     if USE_COSY:
-        ref=os.environ.get('COSY_REF_AUDIO'); rtext=os.environ.get('COSY_REF_TEXT','')
+        ref,rtext=role_ref('COSY',role)
         raw=os.path.join(vd,f'r{i:02d}.wav'); cosy_tts(text, ref, rtext, raw); sysfx=('系统' in role)
     elif USE_FISH:
-        ref=os.environ.get('FISH_REF_AUDIO'); rtext=os.environ.get('FISH_REF_TEXT','')
+        ref,rtext=role_ref('FISH',role)
         raw=os.path.join(vd,f'r{i:02d}.wav'); fish_tts(text, ref, rtext, raw); sysfx=('系统' in role)
     elif USE_MM:
         if LANG=='en': vid,emo,sp,pit=MM['EN'],None,1.0,0
@@ -170,8 +187,10 @@ for i in range(n):
     wavs.append(out)
 
 GAP=float(os.environ.get('LINE_GAP','0.4'))
-# 句间留拍：钩子/爽点/集尾 后多留一拍"悬念呼吸"（导演节奏.md §一/§四 留白）
+# 句间留拍：钩子/爽点/集尾 后多留一拍"悬念呼吸"（导演节奏.md §一/§四 留白）；末句不留拍（concat 尾部不补静音）
 HOOK_GAP={'end':float(os.environ.get('GAP_END','1.0')),'climax':float(os.environ.get('GAP_CLIMAX','0.7')),'hook':float(os.environ.get('GAP_HOOK','0.6'))}
+# gaps[k]=第 k 句之后的留拍；concat 与 manifest 时间轴共用同一份，保证字幕/镜头时长 == voice.wav 实际拼接
+gaps=[(HOOK_GAP.get(items[k][4] if k<len(items) else '', GAP) if k<n-1 else 0.0) for k in range(n)]
 _silcache={}
 def sil_for(d):
     if d not in _silcache:
@@ -183,14 +202,18 @@ concat=[]
 for k,wav in enumerate(wavs):
     concat.append(wav)
     if k<len(wavs)-1:
-        hk=items[k][4] if k<len(items) else ''
-        concat.append(sil_for(HOOK_GAP.get(hk,GAP)))
+        concat.append(sil_for(gaps[k]))
 listf=os.path.join(vd,'_concat.txt')
 open(listf,'w').write('\n'.join(f"file '{os.path.abspath(p)}'" for p in concat))
 subprocess.run([FF,'-y','-loglevel','error','-f','concat','-safe','0','-i',listf,'-c','copy',os.path.join(W,f'voice_{LANG}.wav')],check=True)
 if LANG=='zh':
     import json as _json
-    manifest=[{"idx":i,"镜头":shots[i] if i<len(shots) else "","角色":items[i][0],"情绪":items[i][2],"钩子":items[i][4],"文本":items[i][1],"时长":round(measured[i],3),"line_wav":f"line_{i:02d}.wav"} for i in range(n)]
+    # 真实时间轴：逐句在 voice_zh.wav 中的 start/end + 其后留拍（measured 已含系统音变速，逐拍对齐）
+    starts=[]; ends=[]; _t=0.0
+    for i in range(n):
+        starts.append(_t); _t+=measured[i]; ends.append(_t); _t+=gaps[i]
+    manifest=[{"idx":i,"镜头":shots[i] if i<len(shots) else "","角色":items[i][0],"情绪":items[i][2],"钩子":items[i][4],"文本":items[i][1],
+               "时长":round(measured[i],3),"start":round(starts[i],3),"end":round(ends[i],3),"gap_after":round(gaps[i],3),"line_wav":f"line_{i:02d}.wav"} for i in range(n)]
     out_dir=os.path.dirname(os.path.join(W,'voice_zh.wav'))
     _json.dump(manifest, open(os.path.join(out_dir,'时长清单.json'),'w',encoding='utf-8'), ensure_ascii=False, indent=2)
-print(f"配音 {LANG}: {n} 句（后端={'CosyVoice' if USE_COSY else 'FishSpeech' if USE_FISH else 'MiniMax' if USE_MM else '火山' if USE_VOLC else 'say'}，顺序拼接 gap={GAP}s，无压速）→ voice_{LANG}.wav")
+print(f"配音 {LANG}: {n} 句（后端={'CosyVoice' if USE_COSY else 'FishSpeech' if USE_FISH else 'MiniMax' if USE_MM else '火山' if USE_VOLC else 'say'}，顺序拼接 gap={GAP}s+钩子留拍，无压速）→ voice_{LANG}.wav")
