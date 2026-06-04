@@ -1,7 +1,7 @@
 # Suno Custom 模式 — 复制粘贴用（《仗剑下山》）
 # 用法：suno.com → Create → Custom。下面 [STYLE] 贴 Style 框，[LYRICS] 整段贴 Lyrics 框。
 # 多生 3-4 版挑最佳（旋律记忆点 / 演唱情绪 / 副歌爆发）。下载 mp3 后：
-#   python3 .claude/skills/song-compose/scripts/place_song.py 写歌/仗剑下山 <下载.mp3> --split
+#   python3 skills/song-compose/scripts/place_song.py 写歌/仗剑下山 <下载.mp3> --split
 
 [STYLE]
 Chinese guzheng + bamboo flute wuxia epic, youthful male vocal (clear, slightly raspy), war drums, soaring chorus with electric guitar, cinematic, key Am, ~86 BPM, 抖音 hook

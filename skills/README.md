@@ -1,8 +1,13 @@
 # Skills 索引
 
-本项目的自定义 skills 按 创作线×生产线 + 公共能力 组织（写小说→制漫剧、写歌→制MV，外加公共 video-faceswap / image-faceswap 换脸）。**目录保持扁平**（每个 skill 仍是 `.claude/skills/<name>/SKILL.md`）——
+本项目的自定义 skills 按 创作线×生产线 + 公共能力 组织（写小说→制漫剧、写歌→制MV，外加公共 video-faceswap / image-faceswap 换脸）。**目录保持扁平**（每个 skill 仍是 `skills/<name>/SKILL.md`）——
 skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目录，否则交叉引用与 skill 发现会失效。
 本文件仅作分类说明。
+
+> **工具中立 / 跨 AI 使用**：真身在仓库根 `skills/`，**不绑定任何特定 AI**。
+> - **Claude Code** 经软链 `.claude/skills → ../skills` 自动发现并用 `Skill` 工具按触发词路由（无需改动）。
+> - **其他 AI agent / 人**：直接读 `skills/<name>/SKILL.md`（= 这个 skill 干啥、何时用；frontmatter 的 `description` + 正文 `Triggers` 就是路由依据），照其说明做事，需要时跑 `skills/<name>/scripts/` 下的脚本。
+> - **脚本是通用的**：纯 Python/bash，只调通用工具（ffmpeg / librosa / whisper / yt-dlp / 生图生视频 CLI 等），**无任何 Claude 专有 API**，谁都能执行。引用一律走中立路径 `skills/...`（旧 `.claude/skills/...` 经软链仍兼容）。
 
 > **偏好约定（通用化原则）**：所有 skill 保持**通用**，不把平台/后端/分辨率写死成唯一路径。凡「让用户选」的点都是**选择点**，用户的实际选择是**私有的**，存在用户自己的空间——每作品 `<作品根>/_设置.md`（权威）+ 私有全局默认（memory 区 `创作偏好-默认.md`，开新项目预填），**不进共享 skill 代码 / 不进 git**。行为：选择点首次问一次→写 `_设置.md`→同项目沉默沿用；合规/不可逆/花钱多的点每次仍确认。机制与全部选择点目录见 [`_偏好约定.md`](_偏好约定.md)；每个 skill 有「## 偏好（私有）」段引用它。**新增选择点**→加进 `_偏好约定.md` 目录，别在正文写死。
 

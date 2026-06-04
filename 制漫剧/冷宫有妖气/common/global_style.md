@@ -1,7 +1,7 @@
 # 冷宫有妖气 — 全局画风与世界观
 
 ## 目标平台
-即梦AI（默认）；可选 可灵Kling / Seedance / Veo —— 平台档案见 .claude/skills/novel2drama/references/platforms.md
+即梦AI（默认）；可选 可灵Kling / Seedance / Veo —— 平台档案见 skills/novel2drama/references/platforms.md
 
 ## 画风（每条出图/视频 prompt 都带）
 高质量国风写实漫剧风格，电影级光影，暗黑宫廷氛围，9:16 竖版构图，高级感构图，高细节，统一冷色调 + 暗金点缀，强情绪氛围，动态漫画质感。

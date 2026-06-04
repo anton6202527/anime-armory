@@ -926,7 +926,7 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 ### 21.3 4-skill 结构
 
 ```
-.claude/skills/
+skills/
 ├── novel2drama/                  ← Stage 0：调度（薄，~110 行）
 │   ├── SKILL.md                  扫作品根 → 读 _进度.md → 推荐下一步该调哪个 skill
 │   ├── Q&A.md                    全阶段沉淀（保留原位）

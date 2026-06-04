@@ -6,12 +6,12 @@
 
 ## 1) 出歌（song-compose）—— Suno 或 ACE-Step
 - Suno：suno.com Custom 模式，把 `写歌/仗剑下山/歌/_suno_prompt.txt` 的 STYLE 贴 style 框、`词/lyrics.md` 歌词贴 lyrics 框 → 多生几版挑最佳 → 下载 mp3。
-- 归一：`python3 .claude/skills/song-compose/scripts/place_song.py 写歌/仗剑下山 <下载的.mp3> --split`
+- 归一：`python3 skills/song-compose/scripts/place_song.py 写歌/仗剑下山 <下载的.mp3> --split`
 - 拷进制MV：`cp 写歌/仗剑下山/歌/song.wav 制MV/仗剑下山/歌/song.wav`
 - （把好歌发我，我接着帮你跑下面的卡点/对齐/合成。）
 
 ## 2) 卡点（mv-beat）
-- `pip install librosa soundfile` 后：`python3 .claude/skills/mv-beat/scripts/beat_detect.py 制MV/仗剑下山`
+- `pip install librosa soundfile` 后：`python3 skills/mv-beat/scripts/beat_detect.py 制MV/仗剑下山`
 - 产 `节拍/beatgrid.json`；据 downbeats 回填 `出视频/视频/01_clips.md` 各 clip 时长。
 
 ## 3) 出图（mv-image）—— dreamina 需在你的【交互式终端】登录
@@ -25,10 +25,10 @@
 - 落 `出视频/视频/Clip<NN>_*.mp4`。
 
 ## 5) 卡拉OK字幕（mv-lyric-sync）
-- `pip install whisperx` 后：`python3 .claude/skills/mv-lyric-sync/scripts/align.py 制MV/仗剑下山 --lang zh`
+- `pip install whisperx` 后：`python3 skills/mv-lyric-sync/scripts/align.py 制MV/仗剑下山 --lang zh`
 - 产 `字幕/karaoke.ass` + `lyrics.lrc`。
 
 ## 6) 合成成片（mv-compose）—— 本机 ffmpeg 可跑！
-- 有了 歌 + 视频clips(+字幕)：`bash .claude/skills/mv-compose/mv_compose.sh 制MV/仗剑下山 9:16`
+- 有了 歌 + 视频clips(+字幕)：`bash skills/mv-compose/mv_compose.sh 制MV/仗剑下山 9:16`
 - 无 libass 烧 .ass 时会自动用 `render_lyrics.py`（需 `pip install Pillow`）。
 - 出 `成片_MV.mp4`。

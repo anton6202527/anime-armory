@@ -217,7 +217,7 @@ def main():
     for k, v in paths.items():
         print(f"     {k:<8} → {v}")
     if "n2d" in paths:
-        print(f"[next] 进 n2d-script：python3 .claude/skills/n2d-script/scripts/split_novel.py "
+        print(f"[next] 进 n2d-script：python3 skills/n2d-script/scripts/split_novel.py "
               f"\"{os.path.join(paths['n2d'], '小说', title + '.docx')}\"")
 
 
