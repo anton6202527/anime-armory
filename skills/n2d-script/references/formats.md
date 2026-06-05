@@ -33,12 +33,12 @@
 - **锚点句（把上面压成一句，每张分镜 prompt 末尾必拼，确保不漂移）**：（如「凤眼薄唇·乌黑半披发带·月白粗布·左腕淡疤」）
 - 形态变体：（如沈念 常态/觉醒态；记录差异点，避免漂移）
 
-**① 定妆照 / 角色参考图 Prompt（中文）：** ← 先出这张，作为后续所有镜头与视频首帧的"角色参考/图生图"锚点
-角色定妆设定图：{姓名}，{年龄性别}，全身正面站姿（A-pose）+ 半身脸部特写，{发型妆容服装配饰色卡}，干净浅灰纯色背景，柔和均匀打光、无强阴影，五官清晰、服装完整可辨，国风写实漫剧角色设定图，高细节，竖版9:16
-（备注：定妆照用"干净背景+均匀光"以便锁脸锁妆造，不用电影级强阴影；进入分镜后再套全局电影光影。）
+**① 定妆照 / 角色参考图 Prompt（中文）：** ← Stage 2 会据此生成定妆组，作为后续所有镜头与视频首帧的"角色参考/图生图"锚点
+角色定妆设定图：{姓名}，{年龄性别}，最低定妆组三张：正脸中性主参考 + 侧脸角度参考 + 半身或全身服装参考，{发型妆容服装配饰色卡}，干净浅灰纯色背景，柔和均匀打光、无强阴影，五官清晰、服装完整可辨，国风写实漫剧角色设定图，高细节，竖版9:16
+（备注：核心 / 长线角色至少按"正脸 + 侧脸 + 半身/全身"出定妆组；背面与表情条是增强项，等剧情需要背身/转身/大量情绪特写时再补。一次性配角可只出正脸主参考。定妆照用"干净背景+均匀光"以便锁脸锁妆造，不用电影级强阴影；进入分镜后再套全局电影光影。）
 
 **① 英文（备用）：**
-character design / reference sheet: {name}, full-body front A-pose + bust close-up, {hair makeup outfit accessories palette}, clean light-grey solid background, soft even lighting no harsh shadows, clear face and full outfit, Chinese ancient-fantasy webcomic character sheet, ultra detailed, vertical 9:16
+character design / reference sheet: {name}, minimum reference set with front-face neutral main reference + side-profile angle reference + half-body or full-body outfit reference, {hair makeup outfit accessories palette}, clean light-grey solid background, soft even lighting no harsh shadows, clear face and complete outfit, Chinese ancient-fantasy webcomic character sheet, ultra detailed, vertical 9:16
 
 **② 即梦图片 Prompt（中文·常态出镜）：**
 （角色锚定描述，含外貌+妆造+气质+画风词，用于实际分镜出图）
