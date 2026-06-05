@@ -15,6 +15,7 @@ description: Stage 2 of novel2drama (前移到出图之前) — turn a 作品 ep
 
 ## 核心原则
 - **配音先行**：本阶段在出图/出视频**之前**跑。配音时长决定镜头时长（节奏可控、后期省成本），**不**在这里按窗口压速。
+- **醒目提示：macOS `say` 中文可能输出空音频**：若 `say` 生成的中文音频无有效 duration，`render_voice.py` 会**自动降级为静音占位时长轨**（按文本长度/语速/钩子估算每句时长，写 `line_NN.wav` / `voice_zh.wav` / `时长清单.json`，并在 manifest 标 `占位:true`、写 `_占位说明.md`）。这不是有声朗读，只能用于 rough timing。
 - **占位分阶段（关键）**：macOS `say` 占位**只服务"出图之前"的环节**（跑通流程 / 字幕初定时 / 节奏 rough 预览）。**跨过出图这道线之前，必须换成接近成片的真实配音**（CosyVoice/克隆/MiniMax）定稿时长——因为**占位时长 ≠ 真实配音时长**，用占位时长去驱动出图/出视频（贵），等换真音色时长一变，镜头就要重切 → 白出。占位回退时**显式告警**："当前为占位音色，出图前请换真实配音重定时"。
 - **念白是表演，不是平读**：voiceover.txt 每句的 `情绪/语速/停顿/钩子` 标注**会驱动 TTS**（不是注释）——这是留存的一部分，见 `novel2drama/references/导演节奏.md §六`。
 - **后端可插拔**：检测 env 决定后端，优先级 CosyVoice/GPT-SoVITS(本地克隆·质量优先) > MiniMax/火山(云·省事) > macOS say(占位)。缺凭证回退 say 并告警。
@@ -40,7 +41,7 @@ description: Stage 2 of novel2drama (前移到出图之前) — turn a 作品 ep
 ## 工作流
 1. 解析 voiceover.txt → 逐句(镜头·角色·情绪·文本)。
 2. 选后端（见 references/backends.md）；按角色映射音色。
-3. 逐句生成 → loudnorm -16 → 量时长。
+3. 逐句生成 → loudnorm -16 → 量时长。若 macOS `say` 中文为空音频,自动生成静音占位轨并告警。
 4. 写 `配音/line_NN.wav` + 拼 `voice_{zh,en}.wav` + 写 `时长清单.json`。
 5. 回写 `_进度.md` 该集「配音」列 ✅。
 

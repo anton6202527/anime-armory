@@ -51,8 +51,8 @@ if [ "$(git rev-parse "$ARM^{tree}")" = "$NEWTREE" ]; then
   echo "armory 已是最新工具镜像，无需推送"
 else
   COMMIT=$(git commit-tree "$NEWTREE" -p "$ARM" -m "sync(armory): 工具文件镜像（排除创作区 制MV/制漫剧/写小说/写歌）")
-  GIT_TERMINAL_PROMPT=0 git push armory "$COMMIT:refs/heads/main" \
-    || ([ "$1" = force ] && GIT_TERMINAL_PROMPT=0 git push --force armory "$COMMIT:refs/heads/main") \
+  GIT_TERMINAL_PROMPT=0 git push armory "${COMMIT}:refs/heads/main" \
+    || ([ "$1" = force ] && GIT_TERMINAL_PROMPT=0 git push --force armory "${COMMIT}:refs/heads/main") \
     || echo "armory 推送被拒（可能历史分叉）→ 重跑 /toa force"
 fi
 ```

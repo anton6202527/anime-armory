@@ -73,7 +73,7 @@ Stage 5 固化（脚本/skill 化，下个核心角色可复用）
 - **清洗**：剔除脸崩/手崩/与设定漂移的；保证**这 15–20 张本身就高度一致**（脏数据=学歪）。
 - **规格**：统一 **1024×1024**（512 下限），裁好主体。
 - **打标**：给每张写 caption，用一个**唯一触发词**（如 `shennian_v1`，别撞常见词）+ 简述（角度/景别/服饰）。
-- 落档建议：`制漫剧/<剧名>/common/lora/<角色>/dataset/`（图 + caption）。
+- 落档建议：`制漫剧/<剧名>/设定库/lora/<角色>/dataset/`（图 + caption）。
 
 确认数据集齐 + 一致 → 进 Stage 2。
 
@@ -89,7 +89,7 @@ Stage 5 固化（脚本/skill 化，下个核心角色可复用）
 - **FluxGym 基线超参**：每图重复 10、最多 12 epochs、network_dim(rank) 4→16、学习率 8e-4→5e-4（小数据集取低值更稳）。
 
 > ⚠️ Q24.7-E：端到端总价/耗时**无硬数据**，以上是单价；实际多轮调参成本另算。
-> 产物 `.safetensors` 落 `common/lora/<角色>/<角色>_v1.safetensors`，记下训练参数与触发词。
+> 产物 `.safetensors` 落 `设定库/lora/<角色>/<角色>_v1.safetensors`，记下训练参数与触发词。
 
 ## Stage 3 — ComfyUI 出图验证（和即梦版对比）
 
@@ -108,7 +108,7 @@ Stage 5 固化（脚本/skill 化，下个核心角色可复用）
 ## Stage 5 — 固化（让下个核心角色能复用）
 
 - 把跑通的流程脚本化：`dataset-prep`（从定妆扩样 + 裁 1024 + 打标）/ `train-submit`（fal/RunPod 提交）/ `comfy-graph`（出图工作流 JSON）。
-- 落 `common/lora/` 统一管理；每个核心角色一个 `<角色>/` 子目录（dataset + safetensors + 触发词 + 参数）。
+- 落 `设定库/lora/` 统一管理；每个核心角色一个 `<角色>/` 子目录（dataset + safetensors + 触发词 + 参数）。
 - 视范围决定是否抽成独立 `n2d-lora` skill（本次范围若选"直接搭 skill"，在此固化）。
 
 ---

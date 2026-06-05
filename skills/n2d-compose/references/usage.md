@@ -12,6 +12,19 @@
     # 减去 BGM 文件里 drop 的时间戳 → 反推 offset，使 drop 与爽点画面对齐。
 产物：<作品根>/出视频/第N集/成片_第N集_{mode}.mp4
 
+## 可调参数（默认=原行为，全部可选）
+质量/速度（粗剪 vs 定稿）：
+    VIDEO_CRF=26 VIDEO_PRESET=ultrafast bash <skill>/compose.sh <作品根> 第N集   # 快速粗剪迭代
+    VIDEO_CRF=18 VIDEO_PRESET=slow bash <skill>/compose.sh <作品根> 第N集        # 发布定稿（默认 18/medium）
+BGM ducking（配音压 BGM 的力度）：
+    DUCK_RATIO=12 bash ... # 快节奏动作：配音前置、BGM 压狠（默认 8）
+    DUCK_RATIO=4  bash ... # 文艺/悬疑：BGM 重要、温和压低
+    # 其余：DUCK_THRESHOLD(0.05) DUCK_ATTACK(20) DUCK_RELEASE(400)
+clip 原生音频：
+    # 默认转码时剥掉 AI clip 原生音轨，避免原生台词与 n2d-voice 配音双人声
+    KEEP_CLIP_AUDIO=1 bash <skill>/compose.sh <作品根> 第N集 zh
+    # 仅当确认 clip 里是可用环境音、无原生人声时才开；脚本会低音量混入环境底。
+
 ## 输入约定
 - clips：<作品根>/出视频/第N集/视频/*.mp4（n2d-video 产物）
 - 配音轨：<作品根>/出视频/第N集/配音/voice_{zh,en}.wav（n2d-voice 产物，可选）
@@ -29,5 +42,11 @@
 ## 进度回写
 完成后回写「成片」列：`python3 <novel2drama skill>/progress.py set <作品根> 第N集 成片 ✅`。
 
-## 字幕字号微调
-render_subs.py 支持 env：ZH_SIZE(默认50) / EN_SIZE(默认34)。
+## 字幕字号微调 + 样式分级
+- 基础字号：`ZH_SIZE`(默认50) / `EN_SIZE`(默认34)。
+- **样式分级**（自动）：compose 把 `配音/时长清单.json` 复制为 `_work/manifest.json`，render_subs 据 `角色`/`钩子` 字段分级——旁白/系统句→灰色小一号、爽点(钩子=climax)句→暖金大一号、其余 normal。增量可调：`NARR_DZH`(-8)`NARR_DEN`(-4) / `EMPH_DZH`(+6)`EMPH_DEN`(+2)。无 manifest 时全部 normal（=原行为）。
+
+## 定稿前自检（建议）
+合成前跑一遍时长一致性守门：
+    python3 <n2d-script skill>/validate_timings.py <作品根> 第N集
+核对 配音轨≈字幕末行≈镜头时长累计 + 中英字幕句数一致 + line_*.wav 齐；有硬不一致退出码 1 并提示重跑哪步。

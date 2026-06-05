@@ -1,31 +1,76 @@
-# 图 AI CLI 注册表（Stage 2）
+# 图 AI / 本地生图能力注册表（Stage 2）
 
-本机生图 CLI 的已知清单 + 探测命令 + 调用规范 + 安装审查 SOP。每加一家新 CLI 时往本文件追加一节。
+本机生图能力的已知清单 + 探测命令 + 调用规范 + 安装审查 SOP。这里的"能力"包含 Codex 会话内置生图、Codex 插件、官方 CLI、以及可自动落 PNG 的本地服务。每加一家新入口时往本文件追加一节。
 
 ---
 
 ## 通用探测
 
 ```bash
-# 一次性探测所有已知图 AI CLI
-for cli in dreamina gemini-cli openai imagen flux replicate fal; do
+# 每次进入 n2d-image 生图阶段都重新探测
+for cli in codex openai gemini-cli imagen flux-cli replicate fal comfyui comfy comfy-cli a1111 sd-webui dreamina; do
   command -v "$cli" >/dev/null 2>&1 && \
-    echo "✅ $cli → $(command -v $cli)"
+    echo "$cli -> $(command -v $cli)"
 done
+codex features list 2>/dev/null | rg 'image_generation|artifact' || true
+codex plugin list 2>/dev/null | rg -i 'image|openai|fal|replicate|browser|computer-use' || true
 ```
 
-未找到任何 CLI → 进入"手动指导模式"（Stage 2 SKILL.md 阶段 C 分支 2）。
+未找到可自动落 PNG 的入口 → 先询问用户是否有其它自动生图服务；没有再进入 Dreamina/即梦兜底模式。
 
 ## 优先级（针对默认即梦视频流）
 
 | 排名 | 组合 | 说明 |
 |---|---|---|
-| ① | `dreamina` CLI → 即梦视频 | 同 AI 闭环，无锚定句，最稳 |
-| ② | `dreamina` CLI 不可用时切手动即梦 web | 同家闭环不打破 |
-| ③ | `gemini-cli` → 即梦视频 + 锚定句 | 省钱混合，图阶段免费 |
-| ❌ | DALL-E / Flux → 即梦视频 | 画风跨度大，不推荐 |
+| ① | Codex 会话内置 `image_gen` / Codex image_generation feature → 即梦视频 + 锚定句 | 当前 Codex 能力优先；生成后必须把图从 `$CODEX_HOME/generated_images/...` 移入作品目录 |
+| ② | 官方 OpenAI Images 入口（`openai` CLI 或 Codex/OpenAI 插件）→ 即梦视频 + 锚定句 | 可自动批量落 PNG 时优先于国内兜底；注意统一东方面孔锚点 |
+| ③ | `gemini-cli` / `imagen` → 即梦视频 + 锚定句 | 质感和光感较稳，需显式东方古装面孔 |
+| ④ | `flux-cli` / `replicate` / `fal` → 即梦视频 + 锚定句 | 写实能力强；亚洲脸和古装统一性需更重锚点或 LoRA |
+| ⑤ | ComfyUI / SD WebUI 本地服务 → 即梦视频 + 锚定句 | 可控性高，适合已有工作流/LoRA；没工作流时不要临时搭重产线 |
+| ⑥ | 用户指定自动生图 API / webhook / bot | 只要能接 prompt、可回传 PNG、合法合规即可临时登记 |
+| 兜底 | `dreamina` CLI / 即梦 web 手动 | 最后选择。只有更好的自动入口不可用，或用户明确指定即梦时使用 |
 
 切换到目标视频 = 可灵 / Veo 时，同理优先选自家或最接近自家的图 CLI。
+
+---
+
+## 档案：Codex 内置生图 / Codex CLI
+
+- **来源**：Codex 会话能力 + `codex` CLI。
+- **定位**：优先生图入口，但要分清"会话内置工具"和"命令行子命令"。
+- **本机探测**：
+  - `command -v codex`
+  - `codex features list | rg 'image_generation|artifact'`
+  - `codex plugin list | rg -i 'image|openai|fal|replicate|browser|computer-use'`
+  - `codex --help` / `codex exec --help`
+- **当前实测注意**：`codex` / `codex exec` 的 help 只有 agent、review、plugin、mcp 等子命令，`-i/--image` 是"附图输入"，不是"生成图片"。所以不能仅凭 `codex` 在 PATH 中就写 `codex images generate`。
+- **可用判定**：
+  1. 当前 agent 有内置 `image_gen` 工具，或
+  2. Codex 插件/配置明确暴露可生成并保存 PNG 的图像工具，或
+  3. 用户提供了可由 `codex exec` 稳定调用且会把 PNG 写入指定路径的本地命令/工作流。
+- **落档规则**：内置 `image_gen` 生成图默认在 `$CODEX_HOME/generated_images/...`；项目资产必须复制/移动到 `制漫剧/<剧名>/出图/common/` 或 `制漫剧/<剧名>/出图/第N集/`，不能只引用 `$CODEX_HOME` 路径。
+- **批量策略**：多个不同镜头用多次内置生图调用或已验证的批量入口；不要用一个泛 prompt 代替逐镜 prompt。
+
+---
+
+## 档案：OpenAI Images（官方）
+
+- **来源**：OpenAI 官方 Images API / 官方 CLI / Codex OpenAI 插件（如已安装）。
+- **探测**：`command -v openai`、`OPENAI_API_KEY`、`codex plugin list`。
+- **强项**：构图、审美、文字理解。
+- **弱项**：古装东方脸和跨镜一致性要显式锚点；跨即梦/可灵视频时必须拼目标视频 AI 的图像风格锚定句。
+- **调用模板**（仅在官方 CLI 可用且参数确认后使用）：
+
+```bash
+openai images create \
+  --model gpt-image-1 \
+  --prompt "..." \
+  --size 1024x1792 \
+  --n 1 \
+  --out /tmp/openai_<name>/
+```
+
+实际 CLI 参数随版本变化，首次使用前跑 `openai images --help` 或官方文档核对。
 
 ---
 
@@ -114,25 +159,6 @@ gemini-cli images generate \
 - **API**：官方 https://kling.kuaishou.com/dev
 - **CLI**：暂无官方独立 CLI，通过 API 包装。本仓库可未来加一个 `kling-wrap.sh` 薄封装。
 - **使用场景**：目标视频 = 可灵时 推荐自家闭环
-
----
-
-## 档案：DALL-E 3 / gpt-image-1（OpenAI）
-
-- **CLI**：`openai` 官方 CLI（`pip install openai-cli` 或 `npm install -g openai`）
-- **登录**：`OPENAI_API_KEY`
-- **强项**：构图艺术感
-- **弱项**：亚洲脸卡通化
-- **跨即梦/可灵视频时**：必拼锚定句
-
-```bash
-openai images create \
-  --model gpt-image-1 \
-  --prompt "..." \
-  --size 1024x1792 \
-  --n 4 \
-  --out /tmp/openai_<name>/
-```
 
 ---
 

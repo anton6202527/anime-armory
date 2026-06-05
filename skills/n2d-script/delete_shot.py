@@ -38,7 +38,7 @@ if os.path.exists(ENS):
     open(ENS, 'w', encoding='utf-8').write('\n\n'.join(blks) + '\n')
 
 # 3) 时长清单 reflow：被删句 wav 移废料；保留句重命名为连续 line_NN.wav；保留句"时长不变"
-waste = os.path.join(root, 'common', '废料', '出视频', ep, '配音'); os.makedirs(waste, exist_ok=True)
+waste = os.path.join(root, '废料', '出视频', ep, '配音'); os.makedirs(waste, exist_ok=True)
 for i in sorted(dset):
     w = os.path.join(CONF, man[i].get('line_wav', f'line_{i:02d}.wav'))
     if os.path.exists(w): shutil.move(w, os.path.join(waste, os.path.basename(w)))
@@ -91,6 +91,6 @@ subprocess.run([sys.executable, os.path.join(SCRIPT_DIR, 'finalize_storyboard.py
 print('\n=== 还需手动处理 ===')
 print(f'  □ 设计文档删 {sorted(shots)} 相关块：故事板.md / 分镜剧本.md / bgm.txt / 可灵*.md'
       '（故事板·可灵的 Clip 视情况重编号 + 同步拆Clip子标签）')
-print(f'  □ 若已出图/出视频：移走 出图/{ep}/镜头X_*.png 与 出视频/{ep}/视频/对应 Clip*.mp4 → common/废料/')
+print(f'  □ 若已出图/出视频：移走 出图/{ep}/镜头X_*.png 与 出视频/{ep}/视频/对应 Clip*.mp4 → 废料/')
 print(f'  □ 重跑 /n2d-compose <作品根> {ep} 出新成片')
 print('  □ 过一眼 novel2drama/references/导演节奏.md 留存自查（别把钩子/集尾删没）')

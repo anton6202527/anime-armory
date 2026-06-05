@@ -20,7 +20,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 本 skill 的可选项**不写死在源码里**。按 `../_偏好约定.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
-本 skill 涉及的选择点：`单集时长`、`生视频AI`、`生图AI`、`配音后端`、`视频分辨率`、`画幅`、`BGM来源`、`一致性增强`。
+本 skill 涉及的选择点：`单集时长`、`生视频AI`、`生图AI`、`配音后端`、`视频分辨率`、`画幅`、`对口型`、`BGM来源`、`一致性增强`。
 
 > 作为生产线入口：开新作品（`制漫剧/<剧名>/`）时按全局默认初始化 `<作品根>/_设置.md`。
 
@@ -36,7 +36,9 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
    ↓ /n2d-compose                剪辑合成 + 背景音乐 + 字幕 → 成片_第N集_{mode}.mp4
 ```
 
-每个阶段都按 **集** 为单位推进；进度统一写进 `<作品根>/common/_进度.md`。
+每个阶段都按 **集** 为单位推进；进度统一写进 `<作品根>/_进度.md`。
+
+> **配音后端是关键选择点（首跑前透露一次）**：`/n2d-voice` 多后端——① macOS `say`=**占位专用**（快，但时长不准，仅供出图前 rough timing）；② CosyVoice/GPT-SoVITS（本地克隆，真实时长）；③ MiniMax/火山（云，速度快）。**核心铁律：占位时长 ≠ 真实时长**，用占位定稿镜头/出视频会大返工。推荐 /n2d-voice 时带上后端建议（如 `--backend=cosyvoice`），别让用户默认落到占位。后端选择记入 `_设置.md` 的 `配音后端`（见 `_偏好约定.md`）。
 
 ## 调度工作流
 
@@ -60,14 +62,15 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 > ```
 > 把脚本输出**直接讲给用户**。下面的"逐列判断"是脚本内部逻辑（容错/手查时参考）。
 >
-> **回写进度统一用脚本**（别手工编辑表格）：`python3 <skill>/progress.py set <作品根> 第N集 <列名> <值>`（值 = ✅ / ⬜ / 12/19）。各阶段 skill 收尾都调它。
+> **回写进度统一用脚本**（别手工编辑表格）：`python3 <skill>/progress.py set <作品根> 第N集 <列名> <值>`（值 = ✅ / ⬜ / 12/19）。各阶段 skill 收尾都调它。旧项目表头缺新列时先跑：`python3 <skill>/progress.py ensure-col <作品根> <列名> ⬜`。
 
-1. 定位 `<作品根>/common/_进度.md`，读进度表
+1. 定位 `<作品根>/_进度.md`，读进度表（老项目若仍在 `<作品根>/common/_进度.md`，路由脚本会兼容读取）
 2. 进度表头形如：`| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |`
 3. 对每一集逐列判断：
    - `剧本改编`/`bgm`/`封面` 任一 ⬜ → 还在 /n2d-script 阶段1·剧本改编
    - 阶段1 齐、`配音` ⬜ → 该集等 /n2d-voice 角色配音(统计台词时长)
    - `配音` ✅、`分镜设计` ⬜ → 回跑 /n2d-script 阶段2·分镜设计（时长驱动：分镜剧本+故事板+素材清单+SRT）
+     - ⚠️ **占位检查**：`配音` ✅ 不代表是真实配音。读该集 `出视频/第N集/配音/时长清单.json`，若有 `占位:true`（macOS say 占位音色）→ 告知用户"当前是占位配音，时长不准；正式出视频前必须 /n2d-voice 换真实配音重跑 + 回跑阶段2 重定时"。finalize_storyboard/n2d-video 都会硬闸门拦截，但这里提前透露省返工。
    - `分镜设计` ✅、`出图prompt`/`出图` 未满 → /n2d-image
    - `出图` 满、`视频` 未满 → /n2d-video
    - `视频` 满、`成片` ⬜ → /n2d-compose（剪辑合成+BGM+字幕；问用户 BGM 选项）
@@ -91,14 +94,15 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 ```
 制漫剧/<剧名>/
 ├── 小说/                          原文（.txt/.docx）
-├── common/                        全局资产 + 废料
-│   ├── _进度.md                   全作品 dashboard（4 skill 共用 single source of truth）
+├── _进度.md                       全作品 dashboard（4 skill 共用 single source of truth）
+├── 设定库/                        跨阶段设定资产
 │   ├── global_style.md            全局画风/世界观/目标AI
 │   ├── characters/                角色卡（设定 + 定妆 prompt 源头）
 │   ├── locations/                 场景卡
-│   └── 废料/                      4 选 1 / 废图 / 废视频
-│       ├── 出图/{common,第N集}/   筛选 / 废图
-│       └── 出视频/第N集/          废视频片段
+│   └── voicebank/                 音色引用/音色库
+├── 废料/                          4 选 1 / 废图 / 废视频
+│   ├── 出图/{common,第N集}/       筛选 / 废图
+│   └── 出视频/第N集/              废视频片段
 ├── 脚本/                          ← n2d-script 产物
 │   └── 第N集/
 │       ├── raw.txt 分镜剧本.md 故事板.md 素材清单.md
@@ -142,6 +146,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 | `/n2d-voice` | 阶段1齐后配音(出图前) | 作品根 + 集号 | `出视频/第N集/配音/` 音频 + 时长清单.json + 配音列 ✅ |
 | `/n2d-video` | 出图齐后出视频 prompt + 生视频 | 作品根 + 集号 | `出视频/第N集/视频/` MP4 + 进度勾 ✅ |
 | `/n2d-compose` | 视频齐后合成成片 | 作品根 + 集号 | `成片_第N集_{mode}.mp4` + 成片列 ✅ |
+| `/n2d-review` | 任意阶段闸门 / 出成片后质检；或流程自审找优化 | 作品根 (+集号) | 质检报告 `_质检_第N集.md` / 流程自审建议（跨阶段 QA，非必经） |
 
 ## 实战参考
 

@@ -10,7 +10,7 @@
 
 ---
 
-## 1. 角色卡（common/characters/角色名.md，全篇唯一，首次出现即建卡）
+## 1. 角色卡（设定库/characters/角色名.md，全篇唯一，首次出现即建卡）
 
 ```markdown
 # 角色卡 — {姓名}（ID: CHAR_01）
@@ -52,7 +52,7 @@ character design / reference sheet: {name}, full-body front A-pose + bust close-
 
 ---
 
-## 2. 场景卡（common/locations/场景名.md，全篇唯一）
+## 2. 场景卡（设定库/locations/场景名.md，全篇唯一）
 
 ```markdown
 # 场景卡 — {场景名}（ID: LOC_01）

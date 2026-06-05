@@ -9,6 +9,10 @@ ROOT="$1"; EP="$2"; MODE="${3:-bilingual}"
 case "$MODE" in zh|bilingual) VLANG=zh;; en) VLANG=en;; *) echo "bad mode"; exit 1;; esac
 BGMFILE="${BGMFILE:-}"
 BGM_OFFSET="${BGM_OFFSET:-0}"   # 卡点：从 BGM 第几秒起播，让 drop/炸点落在爽点画面那一帧（导演节奏.md §五）
+# 可调参数（默认=原行为）：转码质量 + BGM ducking。快速粗剪 VIDEO_CRF=26 VIDEO_PRESET=ultrafast；快节奏压狠 DUCK_RATIO=12；文艺温和 DUCK_RATIO=4
+VIDEO_CRF="${VIDEO_CRF:-18}"; VIDEO_PRESET="${VIDEO_PRESET:-medium}"
+DUCK_THRESHOLD="${DUCK_THRESHOLD:-0.05}"; DUCK_RATIO="${DUCK_RATIO:-8}"; DUCK_ATTACK="${DUCK_ATTACK:-20}"; DUCK_RELEASE="${DUCK_RELEASE:-400}"
+KEEP_CLIP_AUDIO="${KEEP_CLIP_AUDIO:-0}"  # 默认丢弃 AI clip 原生音频；设 1 才低音量混入环境音底
 VID="$ROOT/出视频/$EP/视频"
 VOICE="$ROOT/出视频/$EP/配音/voice_${VLANG}.wav"
 ZH_SRT="$ROOT/脚本/$EP/字幕_中文.srt"; EN_SRT="$ROOT/脚本/$EP/字幕_英文.srt"
@@ -24,7 +28,7 @@ echo "=== [1/6] 统一规格 1080x1920/30fps ==="
 for c in "${CLIPS[@]}"; do
   ffmpeg -y -loglevel error -i "$c" \
     -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black,fps=30,format=yuv420p" \
-    -c:v libx264 -preset medium -crf 18 -c:a aac -ar 44100 -ac 2 "$W/n$i.mp4"
+    -c:v libx264 -preset "$VIDEO_PRESET" -crf "$VIDEO_CRF" -an "$W/n$i.mp4"
   echo "file 'n$i.mp4'" >> "$W/list.txt"; i=$((i+1))
 done
 
@@ -46,29 +50,50 @@ else
     -ar 44100 -ac 2 "$W/bgm.wav"
 fi
 
+if [ "$KEEP_CLIP_AUDIO" = "1" ]; then
+  echo "clip 原生音频：显式保留为低音量环境底"
+  : > "$W/alist.txt"; i=0
+  for c in "${CLIPS[@]}"; do
+    if ffprobe -v error -select_streams a:0 -show_entries stream=index -of csv=p=0 "$c" | grep -q .; then
+      ffmpeg -y -loglevel error -i "$c" -vn -t "$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$c")" \
+        -af "volume=0.35,aresample=44100" -ar 44100 -ac 2 "$W/a$i.wav"
+    else
+      d=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$c")
+      ffmpeg -y -loglevel error -f lavfi -i "anullsrc=r=44100:cl=stereo" -t "$d" "$W/a$i.wav"
+    fi
+    echo "file 'a$i.wav'" >> "$W/alist.txt"; i=$((i+1))
+  done
+  ffmpeg -y -loglevel error -f concat -safe 0 -i "$W/alist.txt" -c copy "$W/clip_audio.wav"
+else
+  echo "clip 原生音频：默认丢弃（避免原生台词与配音双人声）"
+  ffmpeg -y -loglevel error -f lavfi -i "anullsrc=r=44100:cl=stereo" -t "$DUR" "$W/clip_audio.wav"
+fi
+
 echo "=== [4/6] 字幕 PNG ==="
 cp "$ZH_SRT" "$W/zh.srt"; cp "$EN_SRT" "$W/en.srt"
-python3 "$SKILL_DIR/render_subs.py" "$W" "$MODE"
+# 复制时长清单供字幕样式分级（旁白/系统→灰小字，爽点→暖金大字）；缺则字幕全 normal
+MANIFEST="$ROOT/出视频/$EP/配音/时长清单.json"; [ -f "$MANIFEST" ] && cp "$MANIFEST" "$W/manifest.json" || true
+PNG_INPUT_BASE=3 python3 "$SKILL_DIR/render_subs.py" "$W" "$MODE"
 PNG_INPUTS=(); while IFS= read -r p; do PNG_INPUTS+=(-i "$p"); done < "$W/inputs.txt"
-NPNG=$(grep -c . "$W/inputs.txt"); VIDX=$((2+NPNG))
+NPNG=$(grep -c . "$W/inputs.txt"); VIDX=$((3+NPNG))
 VFILTER=$(cat "$W/vfilter.txt")
 
 echo "=== [5/6] 混音 + 烧字幕 ==="
 if [ -f "$VOICE" ]; then
-  ffmpeg -y -loglevel error -i "$W/concat.mp4" -i "$W/bgm.wav" "${PNG_INPUTS[@]}" -i "$VOICE" \
+  ffmpeg -y -loglevel error -i "$W/concat.mp4" -i "$W/bgm.wav" -i "$W/clip_audio.wav" "${PNG_INPUTS[@]}" -i "$VOICE" \
     -filter_complex "
-      [0:a]volume=0.45[sfx];
       [${VIDX}:a]asplit=2[voxA][voxB];
       [voxA]volume=1.0[vox];
       [1:a]volume=0.9[bgm0];
-      [bgm0][voxB]sidechaincompress=threshold=0.05:ratio=8:attack=20:release=400[bgmduck];
+      [bgm0][voxB]sidechaincompress=threshold=${DUCK_THRESHOLD}:ratio=${DUCK_RATIO}:attack=${DUCK_ATTACK}:release=${DUCK_RELEASE}[bgmduck];
+      [2:a]volume=1.0[sfx];
       [sfx][bgmduck][vox]amix=inputs=3:normalize=0:duration=first:dropout_transition=0,dynaudnorm[a];
       ${VFILTER}" \
     -map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p -c:a aac -b:a 192k -movflags +faststart "$OUT"
 else
   echo "（无配音轨，纯 BGM+音效底+字幕）"
-  ffmpeg -y -loglevel error -i "$W/concat.mp4" -i "$W/bgm.wav" "${PNG_INPUTS[@]}" \
-    -filter_complex "[0:a]volume=0.5[sfx];[1:a]volume=0.85[bgm];[sfx][bgm]amix=inputs=2:duration=first:dropout_transition=0,dynaudnorm[a];${VFILTER}" \
+  ffmpeg -y -loglevel error -i "$W/concat.mp4" -i "$W/bgm.wav" -i "$W/clip_audio.wav" "${PNG_INPUTS[@]}" \
+    -filter_complex "[2:a]volume=1.0[sfx];[1:a]volume=0.85[bgm];[sfx][bgm]amix=inputs=2:duration=first:dropout_transition=0,dynaudnorm[a];${VFILTER}" \
     -map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p -c:a aac -b:a 192k -movflags +faststart "$OUT"
 fi
 

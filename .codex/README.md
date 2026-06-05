@@ -3,6 +3,7 @@
 This directory mirrors the project-level helper layout used by other agents.
 
 - `skills -> ../skills`: shared project skills; do not duplicate them here.
+- `commands/`: project command prompts migrated for Codex use.
 - `创作偏好-默认.md`: default creative preferences for this project.
 
 Codex already reads the repository `AGENTS.md` as project instructions. The

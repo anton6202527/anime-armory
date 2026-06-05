@@ -18,6 +18,7 @@ description: Stage 6 of novel2drama (剪映合成的脚本化替代) — assembl
 - **卡点**：爽点的冲击 = 画面 + 声音同一帧砸下。用 `BGM_OFFSET` 平移 BGM，让 drop/炸点落在 `故事板.md` 标的爽点时间戳（如 `💥爽点 @ 0:48`）那一帧；反转/觉醒处铺 bgm.txt 标的"重音"音效。
 - **留白呼吸**：爆发后那个 `留白·定格` clip 不要被音效填满——让它喘一口（必要时 BGM 瞬时拉低再起）。
 - **配音先行**：BGM 垫在配音下面并被配音 ducking（先有配音再压 BGM）。配音轨由 n2d-voice 在前置阶段产出，本 skill **只消费不生成**。
+- **clip 原生音频处理（2026 新坑）**：Veo 3.1 / Seedance 2.0 出的 clip 可能**自带原生音轨**（环境音甚至台词）。混音默认策略：**转码时 `-an` 剥掉 clip 原生音轨**（否则与 n2d-voice 配音轨双人声打架），音频全部由 配音+BGM+SFX 这条受控链路提供。若确实要保留环境音底，显式设 `KEEP_CLIP_AUDIO=1`，脚本会低音量混入；不要默认保留。
 - **字幕烧录**：本机 Homebrew ffmpeg **无 libass**（无 subtitles/drawtext 滤镜）→ 用 Pillow 把 SRT 渲染成透明 PNG 再 overlay 烧录（render_subs.py）。
 - **占位 BGM 为主**：默认程序化占位；可选真实文件覆盖。
 

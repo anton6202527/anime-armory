@@ -5,6 +5,15 @@
     python3 <skill>/render_voice.py <作品根> 第N集 en   # 出海配音(英文)
 产物：<作品根>/出视频/第N集/配音/{line_NN.wav, voice_zh.wav, voice_en.wav, 时长清单.json}
 
+## ⚠️ macOS say 中文空音频自动降级
+
+如果本机 `say -v Tingting` 中文语音资源未完整下载，可能生成无有效 duration 的空 AIFF。`render_voice.py` 会自动检测这种情况，并生成**静音占位时长轨**：
+
+- `line_NN.wav` / `voice_zh.wav` 仍会生成，但内容是静音；
+- `时长清单.json` 每句会标 `占位:true`；
+- 配音目录会写 `_占位说明.md`；
+- 这只用于 rough timing。**出图前必须换真实配音重跑 n2d-voice，再回跑 n2d-script 阶段2。**
+
 ## 进度回写
 完成后回写「配音」列：`python3 <novel2drama skill>/progress.py set <作品根> 第N集 配音 ✅`（别手工编辑进度表，易改错列）。
 

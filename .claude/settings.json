@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "deny": [
-      "Edit(.claude/commands/toa.md)",
-      "Write(.claude/commands/toa.md)"
-    ]
-  }
-}

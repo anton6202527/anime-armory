@@ -32,7 +32,9 @@
 ```
 制漫剧/<剧名>/
 ├── 小说/                  原文
-├── common/                全局资产 + 废料
+├── _进度.md               全作品进度表
+├── 设定库/                跨阶段设定资产
+├── 废料/                  废料归档
 ├── 脚本/                  n2d-script 产物
 ├── 出图/                  n2d-image 产物
 └── 出视频/                n2d-video 产物
@@ -46,12 +48,13 @@
 
 ```
 作品根/
-├── common/                               跨阶段共用
-│   ├── _进度.md                          全作品进度表
+├── _进度.md                              全作品进度表
+├── 设定库/                               跨阶段设定资产
 │   ├── global_style.md                   全局画风/世界观/目标AI（仅 1 份）
 │   ├── characters/                       角色设定（一角色一文件）
 │   ├── locations/                        场景设定
-│   └── 废料/                             废料归档（4 选 1 / 废图 / 废视频）
+│   └── voicebank/                        音色引用/音色库
+├── 废料/                                 废料归档（4 选 1 / 废图 / 废视频）
 ├── 脚本/                                 ← Stage 1：n2d-script
 │   └── 第N集/
 │       ├── raw.txt                       拆集出来的原文片段
@@ -92,7 +95,7 @@
 - 打包分享方便——单独打 `prompt/` 给文案审稿，单独打父目录给视觉审稿
 - 4 个层级（出图/common, 出图/第N集, 出视频/common, 出视频/第N集）规则一致，跨 skill 心智零负担
 
-> `common/` 在作品根有两个：作品根的 `common/` 装跨阶段共用（进度 / 画风 / 角色场景设定 / 废料）；`出图/common/` 与 `出视频/common/` 是 stage 内的全篇定妆/转场库。语义不同——前者是"跨技能共用"，后者是"该技能内跨集复用"。路径互不重叠。
+> 作品根的跨阶段设定统一放 `设定库/`，全局进度放作品根 `_进度.md`，废料放作品根 `废料/`；`出图/common/` 与 `出视频/common/` 仍是 stage 内的全篇定妆/转场库。语义不同——前者是"跨技能共用设定"，后者是"该技能内跨集复用"。路径互不重叠。
 
 **判定表**：
 
@@ -110,7 +113,7 @@
 ### 废料
 
 ```
-common/废料/
+废料/
 ├── 出图/
 │   ├── common/                       共享层定妆筛选 4 选 1 / 废图
 │   └── 第N集/                        本集分镜筛选 4 选 1 / 废图
@@ -187,9 +190,9 @@ prompt 写法/语言         图片该长啥样
 
 n2d-script →
   1. 把小说挪到 制漫剧/我的小说/小说/
-  2. 跑 split_novel.py → 生成 制漫剧/我的小说/{common/{_进度.md, global_style.md, characters/, locations/}, 脚本/第N集/raw.txt}
-  3. 在 common/_进度.md 写入 N 集骨架（raw 列 ✅，其他全 ⬜）
-  4. 精修 common/global_style.md + common/characters/ + common/locations/
+  2. 跑 split_novel.py → 生成 制漫剧/我的小说/{_进度.md, 设定库/{global_style.md, characters/, locations/}, 脚本/第N集/raw.txt}
+  3. 在 _进度.md 写入 N 集骨架（raw 列 ✅，其他全 ⬜）
+  4. 精修 设定库/global_style.md + 设定库/characters/ + 设定库/locations/
   5. 精修第1集 阶段1剧本(台词) → 剧本改编列 ✅
   6. 报告：第1集物料齐，可调 /n2d-image 出图
 
@@ -216,7 +219,7 @@ n2d-image →
 
 ```
 def dispatch(work_root):
-    progress = read(f"{work_root}/common/_进度.md")
+    progress = read(f"{work_root}/_进度.md")
     for episode in episodes_sorted_by_number(progress):
         stage1_cols = ["分镜剧本", "故事板", "素材清单", "配音", "BGM", "封面", "字幕中", "字幕英"]
         if any(episode[c] != "✅" for c in stage1_cols):

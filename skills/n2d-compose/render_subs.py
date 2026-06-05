@@ -36,8 +36,32 @@ idxs = sorted(set(zh) | set(en))
 
 ZH_SIZE = int(os.environ.get('ZH_SIZE', 50))   # 原58→50 调小一号
 EN_SIZE = int(os.environ.get('EN_SIZE', 34))
-zh_font = ImageFont.truetype(ZH_FONT, ZH_SIZE)
-en_font = ImageFont.truetype(EN_FONT, EN_SIZE)
+
+# ── 字幕样式分级（cue 标签 → 字号/颜色）。默认=normal 即原行为，全部 env 可覆盖 ──
+# 标签来自 时长清单.json（compose.sh 复制为 W/manifest.json）：角色含"系统/旁白"→narrator；钩子=climax→emphasis。
+import json as _json
+TAGS = {}   # cue_idx(1-based) -> 'normal'|'narrator'|'emphasis'
+_mf = os.path.join(W, 'manifest.json')
+if os.path.exists(_mf):
+    try:
+        for k, r in enumerate(_json.load(open(_mf, encoding='utf-8'))):
+            cue = int(r.get('idx', k)) + 1   # manifest idx 0-based → SRT cue 1-based
+            role = str(r.get('角色', '')); hook = str(r.get('钩子', ''))
+            if ('系统' in role) or ('旁白' in role): TAGS[cue] = 'narrator'
+            elif hook == 'climax': TAGS[cue] = 'emphasis'
+    except Exception:
+        TAGS = {}
+# 每级 (中字号增量, 中色RGBA, 英字号增量, 英色RGBA)；env 覆盖键见注释
+STYLES = {
+    'normal':   (0,                                  (255,255,255,255), 0,                                  (235,235,235,255)),
+    'narrator': (int(os.environ.get('NARR_DZH',-8)), (205,205,205,235), int(os.environ.get('NARR_DEN',-4)), (200,200,200,225)),  # 旁白/系统：小一号、灰
+    'emphasis': (int(os.environ.get('EMPH_DZH', 6)), (255,225,120,255), int(os.environ.get('EMPH_DEN', 2)), (255,225,120,255)),  # 爽点：大一号、暖金
+}
+_fcache = {}
+def _font(path, size):
+    size = max(18, size)
+    if (path, size) not in _fcache: _fcache[(path, size)] = ImageFont.truetype(path, size)
+    return _fcache[(path, size)]
 
 def wrap(draw, text, font, maxw):
     # 按字符/单词折行，超过 maxw 像素换行
@@ -62,6 +86,10 @@ for i in idxs:
     d = ImageDraw.Draw(img)
     s = (zh.get(i) or en.get(i))[0]
     e = (zh.get(i) or en.get(i))[1]
+    # 本句样式分级
+    dzh, zh_fill, den, en_fill = STYLES[TAGS.get(i, 'normal')]
+    zh_sz = ZH_SIZE + dzh; en_sz = EN_SIZE + den
+    zh_font = _font(ZH_FONT, zh_sz); en_font = _font(EN_FONT, en_sz)
     zh_lines, en_lines = [], []
     if MODE in ('zh','bilingual') and i in zh:
         for ln in zh[i][2]: zh_lines += wrap(d, ln, zh_font, MAXW)
@@ -73,21 +101,22 @@ for i in idxs:
         d.text((WIDTH//2, y_baseline), text, font=font, fill=fill,
                anchor='ms', stroke_width=stroke, stroke_fill=(10,10,10,255))
     for ln in reversed(en_lines):
-        draw_line(ln, en_font, (235,235,235,255), 3, y); y -= EN_SIZE+12
+        draw_line(ln, en_font, en_fill, 3, y); y -= en_sz+12
     if en_lines and zh_lines: y -= 8
     for ln in reversed(zh_lines):
-        draw_line(ln, zh_font, (255,255,255,255), 4, y); y -= ZH_SIZE+14
+        draw_line(ln, zh_font, zh_fill, 4, y); y -= zh_sz+14
     p = os.path.join(W, 'subpng', f'sub_{i:02d}.png')
     img.save(p)
     manifest.append((p, s, e))
 
-# 写 inputs 与 overlay 链（ffmpeg 输入序: 0=concat 1=bgm，png 从 2 开始）
+# 写 inputs 与 overlay 链（ffmpeg 输入序默认: 0=concat 1=bgm，png 从 PNG_INPUT_BASE 开始）
+PNG_INPUT_BASE = int(os.environ.get('PNG_INPUT_BASE', '2'))
 with open(os.path.join(W,'inputs.txt'),'w') as f:
     for p,_,_ in manifest: f.write(p+'\n')
 chain, prev = [], '[0:v]'
 n = len(manifest)
 for k,(p,s,e) in enumerate(manifest):
-    inp = k+2
+    inp = k + PNG_INPUT_BASE
     out = '[vsub]' if k == n-1 else f'[v{k}]'
     chain.append(f"{prev}[{inp}:v]overlay=0:0:enable='between(t,{s:.3f},{e:.3f})'{out}")
     prev = out

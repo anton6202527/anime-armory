@@ -9,7 +9,13 @@
 | GPT-SoVITS | GPTSOVITS_URL, GSV_REF_AUDIO, GSV_REF_TEXT | 本地 inference api；零样本/微调（接入方式同 CosyVoice，端点随 fork） |
 | MiniMax | MINIMAX_API_KEY, MINIMAX_GROUP_ID, MINIMAX_MODEL | 云；t2a_v2；克隆见 cloning.md |
 | 火山 | VOLC_APPID, VOLC_TOKEN, VOLC_CLUSTER | 云 |
-| say | （无） | macOS 占位，仅冒烟用 |
+| say | （无） | macOS 占位，仅冒烟用；中文语音若输出空音频，脚本会自动生成静音占位时长轨并写 `_占位说明.md` |
+
+> ⚠️ **重要**：静音占位时长轨不是有声朗读，只能用于出图前 rough timing / 字幕初定时。跨过出图前必须换真实配音重跑，否则真实音色时长变化会导致镜头和字幕重切。
+
+## 其它可调 env
+- 句间留拍：`LINE_GAP`(0.4) / `GAP_HOOK`(0.6) / `GAP_CLIMAX`(0.7) / `GAP_END`(1.0)。
+- 系统音"机械感"FX：`SYS_AUDIO_FX`（默认 `asetrate=44100*0.9,aresample=44100,atempo=1.111,aecho=0.6:0.5:24:0.35,`）——设 `SYS_AUDIO_FX=''` 可禁用，或自定义滤镜链。仅作用于含「系统」的角色。
 
 ## 角色→音色映射
 默认见 render_voice.py 的音色表；均可 env 覆盖（MiniMax: MM_SHEN/MM_LIU/MM_XIAOHE/MM_TAIJIAN/MM_SYS/MM_NARR）。
@@ -18,7 +24,7 @@
 `role_key(role)` 把角色名归到音色键：`SYS`(系统) / `LIU`(柳娘子) / `XIAOHE`(小禾) / `TAIJIAN`(太监) / `YAO`(含「妖」) / `NARR`(纯「旁白」) / `SHEN`(沈念·沈念旁白·默认)。
 每个键各取参考音：优先 `<PREFIX>_REF_<KEY>` / `<PREFIX>_REF_<KEY>_TEXT`，缺则回退全局 `<PREFIX>_REF_AUDIO` / `<PREFIX>_REF_TEXT`，再缺则无参考(默认嗓)。`PREFIX` = `FISH` 或 `COSY`。
 例：`export FISH_REF_SHEN=.../SHEN.wav FISH_REF_SHEN_TEXT="<逐字文本>" FISH_REF_YAO=.../YAO.wav FISH_REF_YAO_TEXT="..."` → 沈念用 SHEN 嗓、妖用 YAO 嗓。⚠️ 参考音仅限本人嗓/已授权/纯合成。
-**音色库便捷生成**：`制漫剧/<剧名>/common/voicebank/build_voicebank.sh` 用本机中文 say(Tingting/Meijia/Sinji) + ffmpeg 变调派生 7 个区分音色，产出 `*.wav` + 可 `source` 的 `_refs.env`。
+**音色库便捷生成**：`制漫剧/<剧名>/设定库/voicebank/build_voicebank.sh` 用本机中文 say(Tingting/Meijia/Sinji) + ffmpeg 变调派生 7 个区分音色，产出 `*.wav` + 可 `source` 的 `_refs.env`。
 
 ## CosyVoice/GPT-SoVITS 本地服务
 用户自行启动本地推理服务（端口/端点随 fork），把 URL 填进 COSYVOICE_URL/GPTSOVITS_URL，参考音频+参考文本填进对应 env。本 skill 通过 HTTP 调用，不负责启动服务。

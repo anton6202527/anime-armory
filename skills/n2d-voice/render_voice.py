@@ -145,10 +145,29 @@ def fish_tts(text, ref_audio, ref_text, out_wav):
     req=urllib.request.Request(f"{FISH_URL}/inference_zero_shot?{q}")
     with urllib.request.urlopen(req,timeout=300) as r: open(out_wav,'wb').write(r.read())
 
-def dur_of(p): return float(subprocess.run([FP,'-v','error','-show_entries','format=duration','-of','csv=p=0',p],capture_output=True,text=True).stdout.strip() or 0)
+def dur_of(p):
+    s=subprocess.run([FP,'-v','error','-show_entries','format=duration','-of','csv=p=0',p],capture_output=True,text=True).stdout.strip()
+    try:
+        d=float(s)
+        return d if d>0 else 0.0
+    except (TypeError, ValueError):
+        return 0.0
+
+def estimate_placeholder_duration(text, spd_m, hk):
+    cjk=len(re.findall(r'[\u3400-\u9fff]', text))
+    punct=len(re.findall(r'[，。！？、；：,.!?;:]', text))
+    d=cjk/(5.0*spd_m)+punct*0.12
+    if spd_m<1.0: d+=0.25
+    if spd_m>1.0: d-=0.12
+    if hk=='climax': d+=0.25
+    if hk=='end': d+=0.35
+    return max(1.15, min(8.0, d))
+
+def make_silence(out, duration):
+    subprocess.run([FF,'-y','-loglevel','error','-f','lavfi','-i','anullsrc=r=44100:cl=stereo','-t',f'{duration:.3f}','-ar','44100','-ac','2',out],check=True)
 
 def clamp_sp(x): return round(min(1.5,max(0.7,x)),3)
-wavs=[]; measured=[]
+wavs=[]; measured=[]; placeholders=[]; placeholder_reason=''
 for i in range(n):
     role,text,emo_c,spd_m,hk=items[i]
     # 取原始音频(缓存)
@@ -178,12 +197,28 @@ for i in range(n):
         raw=os.path.join(vd,f'r{i:02d}.aiff'); r=158 if '柳娘子' in role else 208 if ('小禾' in role or '太监' in role) else 172 if '系统' in role else 182
         v='Samantha' if LANG=='en' else 'Tingting'; rr=int((185 if LANG=='en' else r)*spd_m)   # say 用 rate 体现快/慢
         subprocess.run(['say','-v',v,'-r',str(rr),'-o',raw,text],check=True); sysfx=('系统' in role and LANG!='en')
-    # FX + 统一电平
-    fx = "asetrate=44100*0.9,aresample=44100,atempo=1.111,aecho=0.6:0.5:24:0.35," if sysfx else ""
+        raw_dur=dur_of(raw)
+        if LANG=='zh' and raw_dur<=0:
+            out=os.path.join(W,f'line_{i:02d}.wav')
+            d=estimate_placeholder_duration(text, spd_m, hk)
+            make_silence(out, d)
+            measured.append(d)
+            wavs.append(out)
+            placeholders.append(i)
+            placeholder_reason='macOS say 中文语音输出为空;已自动生成静音占位时长轨'
+            continue
+    # FX + 统一电平（系统音"机械感"FX 可自定义/禁用：SYS_AUDIO_FX='' 关掉）
+    fx = (os.environ.get('SYS_AUDIO_FX', 'asetrate=44100*0.9,aresample=44100,atempo=1.111,aecho=0.6:0.5:24:0.35,') if sysfx else "")
     tmp=os.path.join(vd,f't{i:02d}.wav')
     subprocess.run([FF,'-y','-loglevel','error','-i',raw,'-af',f'{fx}loudnorm=I=-16:TP=-1.5:LRA=11,aresample=44100','-ar','44100','-ac','2',tmp],check=True)
     out=os.path.join(W,f'line_{i:02d}.wav'); os.replace(tmp,out)  # 最终逐句落 配音/line_NN.wav（与 manifest/spec 一致）
-    measured.append(dur_of(out))
+    d=dur_of(out)
+    if d<=0:
+        d=estimate_placeholder_duration(text, spd_m, hk)
+        make_silence(out, d)
+        placeholders.append(i)
+        placeholder_reason=placeholder_reason or '音频时长探测失败;已自动生成静音占位时长轨'
+    measured.append(d)
     wavs.append(out)
 
 GAP=float(os.environ.get('LINE_GAP','0.4'))
@@ -213,7 +248,14 @@ if LANG=='zh':
     for i in range(n):
         starts.append(_t); _t+=measured[i]; ends.append(_t); _t+=gaps[i]
     manifest=[{"idx":i,"镜头":shots[i] if i<len(shots) else "","角色":items[i][0],"情绪":items[i][2],"钩子":items[i][4],"文本":items[i][1],
-               "时长":round(measured[i],3),"start":round(starts[i],3),"end":round(ends[i],3),"gap_after":round(gaps[i],3),"line_wav":f"line_{i:02d}.wav"} for i in range(n)]
+               "时长":round(measured[i],3),"start":round(starts[i],3),"end":round(ends[i],3),"gap_after":round(gaps[i],3),"line_wav":f"line_{i:02d}.wav",
+               **({"占位":True} if i in placeholders else {})} for i in range(n)]
     out_dir=os.path.dirname(os.path.join(W,'voice_zh.wav'))
     _json.dump(manifest, open(os.path.join(out_dir,'时长清单.json'),'w',encoding='utf-8'), ensure_ascii=False, indent=2)
+if placeholders:
+    warn='⚠️ 占位提示: '+placeholder_reason+'。当前不是有声朗读,仅供出图前 rough timing;出图前请换真实配音重跑 n2d-voice。'
+    open(os.path.join(W,'_占位说明.md'),'w',encoding='utf-8').write(
+        f"# 本地占位配音\n\n{warn}\n\n用途: 跑通分镜/字幕时间轴 rough preview。\n要求: 跨过出图前,换 CosyVoice/克隆/MiniMax 等真实配音重跑,并用真实时长回跑 n2d-script 阶段2。\n"
+    )
+    print(warn)
 print(f"配音 {LANG}: {n} 句（后端={'CosyVoice' if USE_COSY else 'FishSpeech' if USE_FISH else 'MiniMax' if USE_MM else '火山' if USE_VOLC else 'say'}，顺序拼接 gap={GAP}s+钩子留拍，无压速）→ voice_{LANG}.wav")
