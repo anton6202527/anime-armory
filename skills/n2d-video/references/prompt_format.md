@@ -21,12 +21,14 @@
 （末尾追加平台风格词，参见 platforms.md）
 \`\`\`
 
-### 视频 prompt（英文，目标=Veo/海外）
+### 视频 prompt（英文，目标=安全兜底/Veo/海外）
 \`\`\`
 character motion: ...;
 camera motion: dolly in slowly;
 dynamic detail: candle flame flickering, hair strands swaying;
 \`\`\`
+
+> **中英双 prompt**：中文和英文视频 prompt 默认都写。英文不是只给海外平台；当中文 prompt 被平台安全策略误伤、被自动规避改写，或生成结果明显跑偏时，直接切英文版作为同义兜底。
 
 ### 平台参数
 - 模型 / 时长 / 帧率 / 画幅 / image2video 强度
