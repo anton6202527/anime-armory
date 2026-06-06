@@ -14,7 +14,9 @@ VIDEO_CRF="${VIDEO_CRF:-18}"; VIDEO_PRESET="${VIDEO_PRESET:-medium}"
 DUCK_THRESHOLD="${DUCK_THRESHOLD:-0.05}"; DUCK_RATIO="${DUCK_RATIO:-8}"; DUCK_ATTACK="${DUCK_ATTACK:-20}"; DUCK_RELEASE="${DUCK_RELEASE:-400}"
 KEEP_CLIP_AUDIO="${KEEP_CLIP_AUDIO:-0}"  # 默认丢弃 AI clip 原生音频；设 1 才低音量混入环境音底
 VID="$ROOT/出视频/$EP/视频"
-VOICE="$ROOT/出视频/$EP/配音/voice_${VLANG}.wav"
+# 默认用 n2d-voice 产的整轨；`制作模式=先出视频后配音` 时先跑 fit_voice_to_clips.py
+# 把后期补录的真音拟合到已成片镜头长，再用 VOICEFILE 指向 voice_<lang>_fitted.wav。
+VOICE="${VOICEFILE:-$ROOT/出视频/$EP/配音/voice_${VLANG}.wav}"
 ZH_SRT="$ROOT/脚本/$EP/字幕_中文.srt"; EN_SRT="$ROOT/脚本/$EP/字幕_英文.srt"
 W="$ROOT/出视频/$EP/_work"; rm -rf "$W"; mkdir -p "$W"
 OUT="$ROOT/出视频/$EP/成片_${EP}_${MODE}.mp4"
@@ -22,6 +24,19 @@ OUT="$ROOT/出视频/$EP/成片_${EP}_${MODE}.mp4"
 [ -d "$VID" ] || { echo "缺 $VID（先 /n2d-video）"; exit 1; }
 CLIPS=("$VID"/*.mp4)
 [ -e "${CLIPS[0]}" ] || { echo "$VID 无 clip"; exit 1; }
+
+# 占位配音守门：除非显式用 VOICEFILE 指了别的轨（如拟合轨），否则不许把占位音色烧进成片。
+# `制作模式=先出视频后配音` 时：先 /n2d-voice 补真音 → fit_voice_to_clips.py → VOICEFILE=拟合轨。
+MAN_J="$ROOT/出视频/$EP/配音/时长清单.json"
+if [ -z "${VOICEFILE:-}" ] && [ -f "$MAN_J" ] && [ "${ALLOW_PLACEHOLDER_COMPOSE:-0}" != "1" ]; then
+  if python3 -c "import json,sys;d=json.load(open(sys.argv[1]));sys.exit(0 if isinstance(d,list) and any(isinstance(x,dict) and x.get('占位') for x in d) else 1)" "$MAN_J"; then
+    echo "⛔ 本集配音仍是占位音色，拒绝合成（占位轨与镜头时长不是真实时长，成片音画会错）。"
+    echo "   · 配音先行：先 /n2d-voice 换真实配音（CosyVoice/克隆/MiniMax）重跑。"
+    echo "   · 先出视频后配音模式：/n2d-voice 补真音后，跑 fit_voice_to_clips.py 出拟合轨，再 VOICEFILE=…/voice_${VLANG}_fitted.wav 合成。"
+    echo "   · 仅要占位 rough preview：ALLOW_PLACEHOLDER_COMPOSE=1 重跑（产物不可用于交付）。"
+    exit 1
+  fi
+fi
 
 echo "=== [1/6] 统一规格 1080x1920/30fps ==="
 : > "$W/list.txt"; i=0
