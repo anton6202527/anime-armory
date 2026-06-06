@@ -63,6 +63,8 @@ description: 漫剧质检 + 流程自审（novel2drama 的 QA 环节，不生产
 ## 详细参考
 - 作品质检两层维度全清单（看什么 + 定级 + 怎么判）：`references/checklist.md`
 - 流程自审操作手册（拉基准 / 对照 / 起草）：`references/self_audit.md`
+- 各轴 SOTA vs n2d 默认 vs 升级触发（防过期快照，每次自审刷新）：`novel2drama/references/模型矩阵.md`
+- 定妆变更影响扫描（崩脸/换装重抽后，列出引用该资产的下游镜头一并重出）：`n2d-image/scripts/asset_impact.py`
 - 正向标准（镜头空间 / 时间留存）：`n2d-script/references/分镜语法.md` + `novel2drama/references/导演节奏.md`
 - 一致性全链：`n2d-image/references/角色一致性checklist.md`
 - 翻车修正沉淀：`novel2drama/Q&A.md`

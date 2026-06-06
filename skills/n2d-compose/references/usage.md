@@ -30,6 +30,17 @@ clip 原生音频：
 - 配音轨：<作品根>/出视频/第N集/配音/voice_{zh,en}.wav（n2d-voice 产物，可选）
 - 字幕：<作品根>/脚本/第N集/字幕_{中文,英文}.srt
 
+## 配音轨来源 / 占位守门 / 先出视频后配音拟合
+- **VOICEFILE 覆盖**：默认用 `配音/voice_{zh,en}.wav`；设 `VOICEFILE=/path/x.wav` 可指定别的轨（如拟合轨）。
+- **占位守门**：`时长清单.json` 含占位句且未设 VOICEFILE 时，compose 拒绝合成（占位≠真实时长）。rough preview 用 `ALLOW_PLACEHOLDER_COMPOSE=1` 放行。
+- **`制作模式=先出视频后配音`（快速 demo·不推荐）**：合成前必须拟合后期补录的真音到已成片镜头长：
+  ```
+  python3 <skill>/fit_voice_to_clips.py <作品根> 第N集 zh            # dry-run 对账
+  python3 <skill>/fit_voice_to_clips.py <作品根> 第N集 zh --apply    # 出 voice_zh_fitted.wav
+  VOICEFILE=<作品根>/出视频/第N集/配音/voice_zh_fitted.wav bash <skill>/compose.sh <作品根> 第N集 zh
+  ```
+  有 overflow（真音远超槽位）时脚本退出码 2、不产轨 → 回 /n2d-video 重出该镜头加长，或调 `FIT_MAX_STRETCH`。详见 SKILL「先出视频后配音」节。
+
 ## BGM 来源（提示用户给丰富选项 + 鉴定可行）
 ⓐ Suno 生成给文件 ⓑ 素材库 ⓒ 本地文件(BGMFILE) ⓓ 占位。用户自由描述需求 → 鉴定(存在/格式/时长够循环/版权)→ 可行照办，不可行说明并给替代。
 

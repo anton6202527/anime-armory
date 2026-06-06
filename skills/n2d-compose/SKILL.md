@@ -11,7 +11,7 @@ description: Stage 6 of novel2drama (剪映合成的脚本化替代) — assembl
 
 本 skill 的可选项**不写死在源码里**。按 `../_偏好约定.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
-本 skill 涉及的选择点：`BGM来源`、`画幅`。
+本 skill 涉及的选择点：`BGM来源`、`画幅`、`制作模式`（决定配音轨是否需先拟合到已成片镜头长·见「先出视频后配音」节）。
 
 ## 核心原则
 - **剪辑节奏 = 不许等长化**（`novel2drama/references/导演节奏.md §四/§五`）：clip 的时长曲线就是剪辑节奏，由上游（配音时长 + 故事板节奏注记）设计好——铺垫长镜、爽点碎切、爽点后留白。本 skill **按原时长拼接（concat -c copy），绝不把 clip 拉成等长**，否则节奏塌成 PPT。
@@ -21,6 +21,33 @@ description: Stage 6 of novel2drama (剪映合成的脚本化替代) — assembl
 - **clip 原生音频处理（2026 新坑）**：Veo 3.1 / Seedance 2.0 出的 clip 可能**自带原生音轨**（环境音甚至台词）。混音默认策略：**转码时 `-an` 剥掉 clip 原生音轨**（否则与 n2d-voice 配音轨双人声打架），音频全部由 配音+BGM+SFX 这条受控链路提供。若确实要保留环境音底，显式设 `KEEP_CLIP_AUDIO=1`，脚本会低音量混入；不要默认保留。
 - **字幕烧录**：本机 Homebrew ffmpeg **无 libass**（无 subtitles/drawtext 滤镜）→ 用 Pillow 把 SRT 渲染成透明 PNG 再 overlay 烧录（render_subs.py）。
 - **占位 BGM 为主**：默认程序化占位；可选真实文件覆盖。
+- **占位配音不许成片**：`compose.sh` 进门先查 `配音/时长清单.json`——若仍含占位句且未用 `VOICEFILE` 指定别的轨，**拒绝合成**（占位时长≠真实时长，烧进成片必音画错位）。仅 rough preview 可 `ALLOW_PLACEHOLDER_COMPOSE=1` 放行。
+
+## 先出视频后配音（`制作模式` 选择点 · 真音拟合到已成片镜头长）
+
+仅当 `制作模式=先出视频后配音`（快速 demo·不推荐，见 `novel2drama` SKILL「制作模式」节）。默认 `配音先行` **不走本节**——那条线配音先行、镜头时长本就由真音驱动，`voice_<lang>.wav` 与 clip 天然对齐，直接合成即可。
+
+这条线的视频是按**估算时长**锁死出的，真实配音补在最后，每句长短与锁定镜头不一致；若把真音整轨直接 amix 到拼好的 clip 上会**渐进失步**。所以合成前**必须先拟合**：
+
+```bash
+# ① 确认真音已补（n2d-voice 用 CosyVoice/克隆/MiniMax 重跑，时长清单 占位=false）
+# ② 拟合对账（dry-run，先看有没有 overflow）
+python3 <skill>/fit_voice_to_clips.py <作品根> 第N集 zh
+# ③ 生成拟合轨
+python3 <skill>/fit_voice_to_clips.py <作品根> 第N集 zh --apply
+# ④ 用拟合轨合成
+VOICEFILE=<作品根>/出视频/第N集/配音/voice_zh_fitted.wav bash <skill>/compose.sh <作品根> 第N集 zh
+```
+
+`fit_voice_to_clips.py` 按 `脚本/第N集/镜头时长.json`（锁定槽位）逐镜头核对真音（实测 `line_*.wav`），三档处理，**拟合轨总长精确 = 锁定槽位总长 = 视频总长**：
+
+| 情况 | 动作 | 代价 |
+|---|---|---|
+| 真音 ≤ 镜头槽位 | `pad`：放槽位起点 + 尾部补静音 | 无损 |
+| 槽位 < 真音 ≤ 槽位×`FIT_MAX_STRETCH`(默认1.25) | `stretch`：atempo 轻微提速塞入 | 语速略快（已告警） |
+| 真音 > 槽位×1.25 | `overflow`：**不静默处理**，列出镜头、退出码 2 | 须回 `/n2d-video` 重出/重切加长，或显式调高阈值 |
+
+> 有 overflow 时脚本拒绝产轨——这正是「先出视频后配音」最贵的返工点暴露处：要么回去重出那几个镜头加长，要么用户明知地接受重度变速。**别为了出片把它压过去。**
 
 ## 输入前置
 - `出视频/第N集/视频/` 有 clip MP4（n2d-video 产物）。否则报错建议先 /n2d-video。

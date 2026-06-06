@@ -92,7 +92,8 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 > **先读 `制作模式`**（`_设置.md`，见上「制作模式」节）。`progress.py` 是**模式无关**的线性路由器；下面逐列判断默认按 `配音先行`。若 `制作模式=先出视频后配音`，在脚本输出之上叠加以下调整，并**复述「制作模式」节的不推荐警告**：
 > - 配音 ⬜ 时，`/n2d-voice` 只为出**占位/估算 `时长清单.json`** 当时间脚手架（不追求音质，真实配音留到最后）。
 > - 阶段2、出图、出视频遇占位**不拦截**（用户已选此模式）：finalize 用 `FINALIZE_ALLOW_PLACEHOLDER=1`，n2d-video 复述警告后继续。
-> - **视频列满后、合成前，插一步真实配音**：`/n2d-voice` 换 CosyVoice/克隆/MiniMax 重出真音轨 → 再 `/n2d-compose`（配音拟合到已成片镜头长；若严重对不上，提示用户哪些镜头需重出）。progress.py 此时只看到占位 `配音 ✅` 不会再提示，由本调度器按模式补这一步。
+> - **视频列满后、合成前，插一步真实配音 + 拟合**：`/n2d-voice` 换 CosyVoice/克隆/MiniMax 重出真音轨 → 跑 `n2d-compose/fit_voice_to_clips.py`（先 dry-run 对账，再 `--apply` 出 `voice_<lang>_fitted.wav`，把真音逐镜头拟合到锁定时长；真音远超槽位的镜头列为 overflow、退出码 2，提示回 `/n2d-video` 重出加长）→ 再 `VOICEFILE=…_fitted.wav /n2d-compose`。详见 n2d-compose「先出视频后配音」节。
+> - progress.py 是模式无关线性路由，但 **n2d-progress 已识别本模式**：视频满、配音仍占位时它把前沿拦回 `/n2d-voice`（而非 `/n2d-compose`），与本调度器一致；`/n2d-compose` 本身也有占位守门，占位轨直接合成会被拒。
 
 1. 定位 `<作品根>/_进度.md`，读进度表（老项目若仍在 `<作品根>/common/_进度.md`，路由脚本会兼容读取）
 2. 进度表头形如：`| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |`

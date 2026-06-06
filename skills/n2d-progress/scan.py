@@ -16,6 +16,7 @@ raw=源文本，展示但不计入流程完成判定。
   python3 scan.py <剧根> [...]     # 只看指定剧（含 _进度.md 的目录）
   python3 scan.py --root <仓库根>  # 指定仓库根（默认=自动向上找）
 """
+import json
 import os
 import re
 import sys
@@ -83,6 +84,36 @@ def next_skill(col):
     return DISPATCHER
 
 
+def read_mode(root):
+    """读 _设置.md 的 `制作模式`（缺则默认 配音先行）。"""
+    p = os.path.join(root, "_设置.md")
+    if not os.path.isfile(p):
+        return "配音先行"
+    try:
+        with open(p, encoding="utf-8") as f:
+            txt = f.read()
+    except OSError:
+        return "配音先行"
+    m = re.search(r"制作模式\s*[:：]\s*([^\s#]+)", txt)
+    return m.group(1) if m else "配音先行"
+
+
+def voice_is_placeholder(root, ep):
+    """该集真实配音是否还没补（时长清单仍含占位句）。
+    返回 True=仍占位 / False=已是真音 / None=无清单可判。"""
+    p = os.path.join(root, "出视频", ep, "配音", "时长清单.json")
+    if not os.path.isfile(p):
+        return None
+    try:
+        with open(p, encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, ValueError):
+        return None
+    if isinstance(data, list):
+        return any(isinstance(x, dict) and x.get("占位") for x in data)
+    return None
+
+
 def report(root, out):
     with open(os.path.join(root, "_进度.md"), encoding="utf-8") as f:
         header, rows = parse_table(f.read())
@@ -95,20 +126,35 @@ def report(root, out):
                 if h not in META_COLS and i != label_i]
     flow_idx = [i for i in disp_idx if header[i] != "raw"]  # 流程列(排除源文本)
 
+    mode = read_mode(root)
+    alt = "先出视频" in mode  # 制作模式=先出视频后配音（快速 demo·不推荐）
+    if alt:
+        out.append("制作模式: 先出视频后配音 ⚠️(快速 demo·不推荐：占位时长锁镜头→后期补真音对不上)")
+
     full = sum(1 for r in rows if all(is_done(r[i]) for i in flow_idx))
     out.append(f"行数: {len(rows)} | 全流程完成: {full}/{len(rows)}")
     out.append("各阶段完成: " + " | ".join(
         f"{header[i]} {sum(1 for r in rows if is_done(r[i]))}/{len(rows)}"
         for i in disp_idx))
 
-    gaps = []  # (集, 列, 值, skill)
+    gaps = []  # (集, 列, 值, skill, note)
     for r in rows:
         started = any(is_started(r[i]) for i in flow_idx)
         if started and not all(is_done(r[i]) for i in flow_idx):
             for i in flow_idx:
                 if not is_done(r[i]):
-                    gaps.append((r[label_i], header[i], r[i].strip(),
-                                 next_skill(header[i])))
+                    col, val = header[i], r[i].strip()
+                    skill, note = next_skill(col), ""
+                    # 先出视频后配音模式：视频已出、只差成片时，progress.py 的线性
+                    # 路由会直接指向 n2d-compose——但此模式下「配音 ✅」很可能仍是占位，
+                    # 合成前必须先补真实配音。这里在前沿层把它拦回 n2d-voice。
+                    if alt and skill == "n2d-compose" \
+                            and voice_is_placeholder(root, r[label_i].strip()):
+                        skill = "n2d-voice"
+                        note = ("⚠️先出视频后配音模式：当前配音仍是占位，合成前"
+                                "必须先 /n2d-voice 补真实配音，再 /n2d-compose 把"
+                                "真音拟合到已成片镜头长（见 n2d-compose「先出视频后配音」节）")
+                    gaps.append((r[label_i], col, val, skill, note))
                     break
 
     if not gaps:
@@ -118,16 +164,19 @@ def report(root, out):
             out.append(f"尚无已开工的集（仅源文本就绪）→ 从第1集起跑：{DISPATCHER}")
         return
 
-    lbl, col, val, skill = gaps[0]
+    lbl, col, val, skill, note = gaps[0]
     vt = f"（当前 {val}）" if val and val != "⬜" else ""
     out.append(f"前沿: {lbl} → 下一步列「{col}」{vt} → skill: {skill}")
-    if col in COSTLY_HINT:
+    if note:
+        out.append(f"  {note}")
+    elif col in COSTLY_HINT:
         out.append(f"  ⚠️ {COSTLY_HINT[col]}")
     if len(gaps) > 1:
         out.append("次要缺口:")
-        for lbl, col, val, skill in gaps[1:6]:
+        for lbl, col, val, skill, note in gaps[1:6]:
             vt = f"（{val}）" if val and val != "⬜" else "⬜"
-            out.append(f"  - {lbl}「{col}」{vt} → {skill}")
+            tail = "（补真音后再合成）" if note else ""
+            out.append(f"  - {lbl}「{col}」{vt} → {skill}{tail}")
         if len(gaps) > 6:
             out.append(f"  - …另有 {len(gaps)-6} 集已开工待补")
 
