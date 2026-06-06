@@ -1,5 +1,8 @@
 .DS_Store
 **/.DS_Store
+
+# Claude Code 私有配置（工具相关，勿提交到工具中立镜像）
+.claude/
 __pycache__/
 *.pyc
 *.tmp
