@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
-# 配音时长 → 定稿：时长清单.json(+现有en字幕文本) → 重定时 字幕_中/英.srt + 镜头时长.json
+# 配音时长 → 定稿：时长清单.json(+现有en字幕文本) → 重定时 字幕_中文.srt[+字幕_英文.srt] + 镜头时长.json
 # 用法: finalize_storyboard.py <作品根> <第N集> [gap]
+#   字幕语言看 ../_偏好约定.md 的「字幕语言」选择点：默认仅中文；中英双语/仅英文用 SUB_LANG=zh,en（或 en）开启。
+#   未设 SUB_LANG 时：已存在 字幕_英文.srt 译文就一并重定时，否则只产中文。
 import sys, os, re, json, textwrap
 
 def _ts(t):
@@ -69,11 +71,18 @@ def main():
         print('   出图/出视频前务必：/n2d-voice '+root+' '+ep+' 换真实配音（CosyVoice/克隆/MiniMax）重跑，再回跑本步。')
         print('   仅想跑通时间轴 rough preview：FINALIZE_ALLOW_PLACEHOLDER=1 python3 finalize_storyboard.py ...（产物不可用于正式出视频）')
         sys.exit(2)
-    en_texts=_parse_srt_texts(os.path.join(root,'脚本',ep,'字幕_英文.srt'))
+    en_path=os.path.join(root,'脚本',ep,'字幕_英文.srt')
+    en_texts=_parse_srt_texts(en_path)
     zh_srt,en_srt,shots=build(manifest,en_texts,gap)
     open(os.path.join(root,'脚本',ep,'字幕_中文.srt'),'w',encoding='utf-8').write(zh_srt)
-    open(os.path.join(root,'脚本',ep,'字幕_英文.srt'),'w',encoding='utf-8').write(en_srt)
+    # 字幕语言是投放选择(见 ../_偏好约定.md)，不写死：默认仅中文(国内投放)。
+    # SUB_LANG 显式覆盖(zh|zh,en|en)；未设时按"已存在英文字幕源就重定时、没有就只产中文"——
+    # 中英双语/仅英文模式下 SKILL 会先写好 字幕_英文.srt 译文(任意时间码)，故 en_texts 非空即视为要英文。
+    lang=os.environ.get('SUB_LANG','').strip().lower()
+    want_en = ('en' in lang) if lang else bool(en_texts)
+    if want_en:
+        open(en_path,'w',encoding='utf-8').write(en_srt)
     json.dump(shots, open(os.path.join(root,'脚本',ep,'镜头时长.json'),'w',encoding='utf-8'), ensure_ascii=False, indent=2)
-    print(f"定稿: {len(manifest)} 句重定时 → 字幕_中/英.srt；{len(shots)} 镜 → 镜头时长.json")
+    print(f"定稿: {len(manifest)} 句重定时 → 字幕_中文.srt{'+字幕_英文.srt' if want_en else '(仅中文)'}；{len(shots)} 镜 → 镜头时长.json")
 
 if __name__=='__main__': main()
