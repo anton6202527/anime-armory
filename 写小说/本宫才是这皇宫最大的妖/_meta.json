@@ -1,0 +1,23 @@
+{
+  "source_novel": "/Users/wesley/work/anime-arsenal/写小说/冷宫有妖气/冷宫有妖气.docx",
+  "source_title": "冷宫有妖气",
+  "kind": "rewrite",
+  "rewrite_type": "去同质化精修:开篇万妖血脉吃妖夺神通差异化 + 中段主线收束(战争线服务宫斗爽点) + 加克制CP暗线(不恋爱脑)",
+  "scale": "long",
+  "target_chapters": 100,
+  "target_words_per_chapter": [
+    1500,
+    2500
+  ],
+  "person": "third-limited",
+  "rights_status": "user-declared",
+  "rights_declared_at": "2026-06-04",
+  "outputs": [
+    "txt",
+    "docx"
+  ],
+  "title": "本宫才是这皇宫最大的妖",
+  "target_platform": "红果/抖音漫剧",
+  "demo_chapters": 3,
+  "created_at": "2026-06-04"
+}
