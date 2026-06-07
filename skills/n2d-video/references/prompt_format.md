@@ -18,22 +18,41 @@
 - 转场：{match cut / eyeline cut / 动作切 / 空镜缓冲 / 声音先行(J-cut) / 硬切}
 - 连贯性：{轴线方向、人物左右站位、出入画方向、首尾帧约束}
 
+**continuity**（必填，自动读取相邻 Clip 派生；缺字段先补，不提交生成）：
+- start_state：{从上一 Clip 末尾/本 Clip 首帧承接的人物姿态、站位、视线、道具状态、场景状态}
+- action：{本 Clip 内唯一主动作链，幅度可控，不重设人物/场景}
+- end_state：{给下一 Clip 承接的结尾姿态、视线方向、画面重心或可切出的物件/空镜}
+- constraints：{服装发型、人物左右站位、轴线方向、光线、天气、道具、背景布局保持一致}
+- negative：{不要换脸、不要换衣、不要新增人物、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要生成原生人声}
+
 ### 视频 prompt（中文，目标=即梦/可灵/Seedance）
 \`\`\`
+continuity:
+  start_state: {start_state}
+  action: {action}
+  end_state: {end_state}
+  constraints: {constraints}
+  negative: {negative}
 人物运动：{角色 A 动作链}；{角色 A 表情变化}；
 镜头运动：{推/拉/跟/环绕/固定 + 速度词，如"缓慢推近 0.5x"}；   ← 由"节奏/张力"决定：铺垫=缓慢推/固定，爽点=轻甩/环绕/快推
 动态细节：{烛火摇曳 / 晨雾流动 / 衣袂飘动 / 妖气扩散 / 发丝飘动 ...};
-衔接约束：开头承接{入点}，结尾停在{出点}，保持{连贯性}，按{转场}服务下一镜；
+衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按{转场}服务下一镜；
 声音约束：无对白、无旁白、不要生成原生人声；若故事板标声音先行，仅作为后期 n2d-compose 的剪辑意图，不让视频模型自行生成台词；
 （末尾追加平台风格词，参见 platforms.md）
 \`\`\`
 
 ### 视频 prompt（英文，目标=安全兜底/Veo/海外）
 \`\`\`
+continuity:
+  start_state: ...
+  action: ...
+  end_state: ...
+  constraints: ...
+  negative: ...
 character motion: ...;
 camera motion: dolly in slowly;
 dynamic detail: candle flame flickering, hair strands swaying;
-continuity constraint: begin from ..., end on ..., preserve screen direction and eyeline, designed for ... transition;
+continuity constraint: begin from continuity.start_state, perform only continuity.action, end on continuity.end_state, preserve continuity.constraints, avoid continuity.negative, designed for ... transition;
 audio constraint: no dialogue, no narration, no generated native voice;
 \`\`\`
 
@@ -49,8 +68,9 @@ audio constraint: no dialogue, no narration, no generated native voice;
 4. ✅ 动态细节：烛火/雨丝/衣袂/雾气/灵光等 ≥1 条，且不改首帧设定
 5. ✅ ⑦张力：运镜与"节奏/张力"一致（铺垫缓慢、爽点短促、留白定格）
 6. ✅ 衔接设计：入点/出点/转场/轴线方向已从 `故事板.md` 读取，并写进 prompt 的衔接约束
-7. ✅ 原生音频：已写无对白、无旁白、不要生成原生人声；J-cut 只交给 compose，不交给视频模型生成声音
-8. ✅ 复杂度可控：无超复杂打斗/多人混战；复杂动作已有降级方案
+7. ✅ continuity：start_state/action/end_state/constraints/negative 五字段齐全，且已读取上一/下一 Clip 的衔接信息
+8. ✅ 原生音频：已写无对白、无旁白、不要生成原生人声；J-cut 只交给 compose，不交给视频模型生成声音
+9. ✅ 复杂度可控：无超复杂打斗/多人混战；复杂动作已有降级方案
 
 ### 自检（生成后逐条过 · 落档闸门）
 > 生成后过/重跑判定。筛选宽容：轻微偏差放行，只命中硬伤才重跑或改 prompt。
@@ -79,9 +99,11 @@ audio constraint: no dialogue, no narration, no generated native voice;
 | 场景名 | "场景"行 |
 | **节奏注记**（铺垫/加速/爽点/留白） | 标题"节奏"+ 决定运镜速度（铺垫=缓慢/固定，爽点=快推/轻甩，留白=固定定格） |
 | **衔接设计**（入点/出点/转场/连贯性） | "衔接设计"块 + prompt 里的"衔接约束"；决定是否要尾帧、空镜缓冲、按场景分批或后期 J-cut |
+| 上一 Clip 的出点/下一 Clip 的入点 | `continuity.start_state` / `continuity.end_state`；自动读取相邻 Clip，缺失时按首帧、尾帧、视线方向、动作完成前后一拍推断 |
 | 分镜 N 的镜头·景别/机位/运镜 | "镜头运动"行（多分镜则按顺序拼成镜头运动链）|
-| 分镜 N 的人物动作 | "人物运动"行 |
+| 分镜 N 的人物动作 | `continuity.action` + "人物运动"行；只保留一个主动作链，避免模型额外发挥 |
 | 分镜 N 的动态细节（烛火/雾气等） | "动态细节"行 |
+| 角色/场景/首帧约束 | `continuity.constraints` / `continuity.negative`；固定服装发型、轴线、站位、光线、道具、背景，禁止换脸换衣新增人物改场景 |
 
 **张力 → 运镜映射**（`导演节奏.md §四/§五`）：
 
@@ -109,6 +131,13 @@ audio constraint: no dialogue, no narration, no generated native voice;
 - `转场=空镜缓冲`：本 Clip 出点写成可切出的物件/环境动态；若故事板已有独立空镜 Clip，视频生成时按场景/段落分批，不跳过空镜。
 - `转场=声音先行(J-cut)`：视频 prompt 仍禁止原生人声，只在 `00_总览.md` 标注给 n2d-compose；正面说话特写不使用 J-cut，避免口型错位。
 - `转场=硬切`：仅用于爽点/反转/惊吓；必须有明确的情绪理由，不能作为默认省事转场。
+
+**continuity 自动派生规则**：
+- `start_state`：优先取上一 Clip 的 `end_state`；若无上一 Clip，取本 Clip 首帧描述 + 入点。
+- `action`：取本 Clip 人物动作主链，删掉"换场景/换衣/新增人物/大幅复杂动作"等会破坏连续性的内容。
+- `end_state`：优先服务下一 Clip 的入点/首帧；若下一 Clip 是反打/空镜，结尾停在视线方向、手部道具、门帘、烛火等可切出的画面重心。
+- `constraints`：从同场景连续 Clip 继承服装发型、人物左右站位、轴线、视线方向、光线、天气、道具、背景布局；场景切换时只继承角色定妆和道具状态。
+- `negative`：默认写入"不要换脸、不要换衣、不要新增人物、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要生成原生人声"；按镜头风险追加"不要手指变形/不要多人脸错乱/不要大幅旋转镜头"。
 
 ---
 
