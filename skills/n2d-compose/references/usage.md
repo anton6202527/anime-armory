@@ -20,6 +20,13 @@ BGM ducking（配音压 BGM 的力度）：
     DUCK_RATIO=12 bash ... # 快节奏动作：配音前置、BGM 压狠（默认 8）
     DUCK_RATIO=4  bash ... # 文艺/悬疑：BGM 重要、温和压低
     # 其余：DUCK_THRESHOLD(0.05) DUCK_ATTACK(20) DUCK_RELEASE(400)
+声音连续 / J-cut（默认开启 0.25s）：
+    bash <skill>/compose.sh <作品根> 第N集 zh
+    J_CUT_SEC=0 bash <skill>/compose.sh <作品根> 第N集 zh       # 关闭 J-cut
+    J_CUT_SEC=0.35 bash <skill>/compose.sh <作品根> 第N集 zh    # 更强的声音先行
+    # 基于 配音/时长清单.json + line_*.wav 重建轻量提前入声的 voice_jcut.wav。
+    # 只适合旁白、系统音、背身/侧脸说话、转场声；正面口型特写保持 J_CUT_SEC=0。
+    # 建议范围 0.15-0.35，脚本上限 0.4，避免破坏音画同步。
 clip 原生音频：
     # 默认转码时剥掉 AI clip 原生音轨，避免原生台词与 n2d-voice 配音双人声
     KEEP_CLIP_AUDIO=1 bash <skill>/compose.sh <作品根> 第N集 zh
@@ -46,6 +53,11 @@ clip 原生音频：
 
 ## 转场音效（可选）
 用户给 2~5 个 SFX 文件 → 在 clip 边界铺；不给跳过。
+
+## 衔接策略
+- `故事板.md` 每个 Clip 的「衔接设计」决定后期策略：match cut / eyeline / 动作切主要靠上游首尾帧；空镜缓冲作为独立 clip 保留；声音先行用 `J_CUT_SEC` 显式开启。
+- BGM 默认全程连续，不随 clip 边界断开；`BGM_OFFSET` 用来把 drop 对齐爽点。
+- 不在 compose 阶段临时硬塞未知空镜。需要空镜缓冲时，在 n2d-script 阶段写成正式 Clip，n2d-image/n2d-video 出图出视频后再合成。
 
 ## 行业参考（决定音频时展示）
 90 秒一集漫剧工作室标配：1 条循环 BGM + 2~5 个转场音效 + AI 角色配音。
