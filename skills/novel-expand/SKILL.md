@@ -78,7 +78,7 @@ python3 <skill>/scripts/init_project.py "<原作>" \
 ### 第 7 步 — 导出
 
 ```bash
-python3 <skill>/scripts/expand.py "<作品根>" --formats txt,docx[,outline,n2d]
+python3 novel-craft/scripts/export.py "<作品根>" --formats txt,docx[,outline,n2d]   # 家族通用导出器
 ```
 
 ## 输出约定

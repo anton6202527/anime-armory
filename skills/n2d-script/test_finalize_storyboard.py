@@ -1,4 +1,36 @@
+import json
+import os
+import subprocess
+import sys
+
 import finalize_storyboard as F
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+
+
+def _write_manifest(root, ep, manifest):
+    d = os.path.join(root, "出视频", ep, "配音")
+    os.makedirs(d, exist_ok=True)
+    os.makedirs(os.path.join(root, "脚本", ep), exist_ok=True)
+    json.dump(manifest, open(os.path.join(d, "时长清单.json"), "w", encoding="utf-8"),
+              ensure_ascii=False)
+
+
+def test_placeholder_gate_blocks_finalize(tmp_path):
+    # 占位音色定稿会污染镜头时长 → finalize 必须拒绝（退出码 2），除非 FINALIZE_ALLOW_PLACEHOLDER=1
+    root, ep = str(tmp_path), "第1集"
+    _write_manifest(root, ep, [
+        {"idx": 0, "镜头": "镜头1", "文本": "甲。", "时长": 2.0, "占位": True},
+        {"idx": 1, "镜头": "镜头1", "文本": "乙。", "时长": 1.0},
+    ])
+    cmd = [sys.executable, os.path.join(_HERE, "finalize_storyboard.py"), root, ep]
+    blocked = subprocess.run(cmd, capture_output=True, text=True)
+    assert blocked.returncode == 2 and "拒绝定稿" in blocked.stdout
+    # 放行开关：产出镜头时长.json
+    allowed = subprocess.run(cmd, capture_output=True, text=True,
+                             env={**os.environ, "FINALIZE_ALLOW_PLACEHOLDER": "1"})
+    assert allowed.returncode == 0
+    assert os.path.exists(os.path.join(root, "脚本", ep, "镜头时长.json"))
 
 def test_build_legacy_manifest_reconstructs_timeline():
     # 旧 manifest（无 start/end）：按 gap 模型重建，末句不留拍

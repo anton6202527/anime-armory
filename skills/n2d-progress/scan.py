@@ -6,7 +6,7 @@
 **绝不把上百行的大表灌进上下文，绝不修改任何文件。**
 
 进度表布局（n2d）：行=集，列含 raw + 多个流程列（剧本改编…成片），
-单元格 ✅=完成 / N|M=按比例(N=M 才算完成) / ⬜=未开工。
+单元格 ✅=完成 / N/M=按比例(N=M 才算完成) / ⬜=未开工。
 raw=源文本，展示但不计入流程完成判定。
 
 纯标准库，系统 Python 即可。
@@ -133,9 +133,9 @@ def report(root, out):
 
     full = sum(1 for r in rows if all(is_done(r[i]) for i in flow_idx))
     out.append(f"行数: {len(rows)} | 全流程完成: {full}/{len(rows)}")
-    out.append("各阶段完成: " + " | ".join(
+    out.append("各阶段完成: " + " | ".join(   # 只列流程列；raw 是源文本展示位，不计入完成度
         f"{header[i]} {sum(1 for r in rows if is_done(r[i]))}/{len(rows)}"
-        for i in disp_idx))
+        for i in flow_idx))
 
     gaps = []  # (集, 列, 值, skill, note)
     for r in rows:

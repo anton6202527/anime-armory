@@ -1,11 +1,18 @@
 ---
 name: novel-review
-description: Use when checking / auditing the quality of ALREADY-WRITTEN novel chapters (.md/.txt) — finding POV slips (串视角/视角穿帮), OOC / 人设崩, plot holes, anchor & timeline drift, setting contradictions (设定矛盾), pacing / missing-hook problems, voice drift (文风漂移), or copied source text (原文照搬) — and producing a severity-tagged, location-pinned review report. For 续写/外传 projects it cross-checks 设定/(角色卡·世界观·锚点表·章纲) and 原作. Does NOT write/continue the story. Triggers 审稿, 质检, 检查小说质量, 查人设崩, 视角穿帮, 串视角, 设定矛盾, 锚点对齐, 一致性回扫, 伏笔回收, 节奏, 文风漂移, 原文照搬, 质量报告, novel review, QA.
+description: 小说质检 + 流程自审（novel-* 家族的 QA 环节，不写作只审，与 n2d-review/mv-review/song-review 同构）。双模——模式①「作品质检」：审 ALREADY-WRITTEN 章节（.md/.txt）——POV slips(串视角/视角穿帮)、OOC/人设崩、plot holes、anchor & timeline drift、设定矛盾、节奏/缺钩子、文风漂移、原文照搬——机检+人判，出严重度分级·定位到章/段的报告；续写/外传交叉核对 设定/(角色卡·世界观·锚点表·章纲) 与 原作。模式②「流程自审」：联网拉当前小说/网文市场基准，对照 novel-* 各 skill + novel-craft + Q&A，产出"差距清单 + 该改哪个 skill 哪段"的优化建议。Does NOT write/continue the story. Triggers 审稿, 质检, 检查小说质量, 查人设崩, 视角穿帮, 串视角, 设定矛盾, 锚点对齐, 一致性回扫, 伏笔回收, 节奏, 文风漂移, 原文照搬, 质量报告, 流程自审, 流程优化, 自我优化, novel 还能优化啥, novel review, QA.
 ---
 
-# novel-review — 已写小说章节质检 / 审稿
+# novel-review — 小说质检 + 流程自审
 
-不写、不续小说，只**审已写的章节**：扫出问题 → 定位（章 + 行/段）→ 定级 → 给可执行修法 → 产出审稿报告。是 novel-* 家族的质检环节，把 `novel-spinoff` 第 7 步回扫 + Demo 自检清单**通用化、独立化**。
+不写、不续小说，只**审**。是 novel-* 家族的 QA 环节，与 `n2d-review`/`mv-review`/`song-review` 同构。两个模式：
+
+- **模式①「作品质检」**——审**已写的章节**：扫出问题 → 定位（章 + 行/段）→ 定级 → 给可执行修法 → 产出审稿报告。把 `novel-spinoff` 第 7 步回扫 + Demo 自检清单**通用化、独立化**。
+- **模式②「流程自审」**——审**写小说流水线本身**：联网拉市场基准，对照 novel-* 各 skill + novel-craft + 累积 Q&A，产出"差距清单 + 建议改哪个 skill 哪段"。让"整条创作线不断自我优化"成为可复跑命令。
+
+---
+
+# 模式①：作品质检
 
 ## 机检 / 人判分工
 
@@ -29,6 +36,24 @@ description: Use when checking / auditing the quality of ALREADY-WRITTEN novel c
 | 🟢 润色级 | 用词重复、个别过度直白、标点/错别字 | 可改可不改，`--fix` 可自动 |
 
 **容错铁律**：只报"真问题"。轻微主观偏好（"我会换个词"）**不入报告**——否则噪声淹没硬伤。这条等同 n2d 出图的"筛选宽容铁律"。
+
+> **修法回哪个 skill**（同 n2d/mv-review 的回流定位）：每条阻断/建议级修法都指明回源头重跑——OOC/设定矛盾→回 `novel-rewrite`/`novel-create` 改设定圣经再回扫；锚点漂移→对 `novel-spinoff` 锚点表；节奏塌/钩子弱→回写章纲（`novel-craft/references/outline.md`）；原文照搬→回对应派生 skill 重写该章。审已写章节、**未到的阶段不当问题报**（先读 `_进度.md`）。
+
+---
+
+# 模式②：流程自审（让写小说产线自我优化）
+
+把"人工复盘整条 novel 线"固化成可复跑流程。**节律**：用户主动要 / 写完一批书后 / 接了新写作工艺·新平台套路时跑一次。详细步骤见 `references/self_audit.md`，要点：
+
+1. **拉基准**：联网搜当前（带年月）网文/小说主流做法，分三轴取证——**题材/市场契合**（红果/番茄/晋江/抖音当下热题材与套路，复用 `novel-score` 的热榜拉取）、**写作工艺**（黄金三章钩子、爽点密度、章纲编织、单章守则 vs `novel-craft/references/*`）、**一致性/合规来源**（设定圣经/锚点一致性方法、公版/授权来源边界 vs fetch/spinoff/rewrite 的合规闸门）+ 各能力演进。
+2. **对照**：逐 skill 把基准 vs `novel-*/SKILL.md` + `novel-craft` + `novel-author/Q&A.md` 比，找**真差距**（已做的别重复立项，标"✅ 已覆盖"一行带过）。
+3. **差距清单**：每条 = 差距 + 证据（带来源链接·日期）+ 落到哪个 skill 哪段 + 优先级（must/optional）+ 是否可脚本化（是→能进 `mechanical_check.py`）。
+4. **起草**：高价值项起草建议 edit；**改任何 skill 必同步 `skills/README.md` 索引**（仓库硬约定）。
+5. **人确认后再写**：模式②**默认只产建议报告**，不自动改 skill。报告落 `skills/novel-review/_流程自审_<日期>.md` 或讲给用户。
+
+> **防过期铁律**：市场建议带"采集日期 + 来源链接"，旧建议可能已被采纳或过时——写进来前先核对当前 skill 是否已有。与 `novel-score` 的市场基准共用一套 `references/市场基准.md` 思路，避免两处各拉一份。
+
+---
 
 ## 详细参考
 - 两层质检维度全清单（看什么 + ✅/❌ + 定级）：`references/checklist.md`

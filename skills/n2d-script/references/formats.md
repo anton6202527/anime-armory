@@ -90,10 +90,11 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 
 **片段1（Clip 1）：时长：7秒**　**节奏**：铺垫·长镜　**累计**：0:00-0:07
 **场景**：{场景名}（夜晚/内）
-**衔接设计**：
-- 入点：承接上一个 Clip 的动作/视线/声音；首帧构图如何接住上一镜尾势。
-- 出点：本 Clip 结束时人物姿态/视线/道具/空镜停在哪里，下一 Clip 从哪里接。
+**衔接设计**（接力契约）：
+- 入点：**原样抄上一个 Clip 的「出点」**（同一句话——接力链单一真值，不允许相邻镜各写各的）；首帧构图如何接住上一镜尾势。
+- 出点：本 Clip 结束时人物姿态/视线/道具/空镜停在哪里，下一 Clip 从哪里接。**这句会成为下一 Clip 的入点。**
 - 转场：match cut / eyeline cut / 动作切 / 空镜缓冲 / 声音先行(J-cut) / 硬切。
+- 需要尾帧?：是/否。**同场景 + 人物姿态连续的硬切 = 是**（n2d-image 出尾帧 PNG=下一 Clip 首帧构图，n2d-video 用首尾双帧引导锁死接点）；换场/空镜缓冲/大跳切 = 否。
 - 连贯性：轴线方向、人物左右站位、出入画方向、首尾帧是否可用于双帧引导。
 **分镜1：0-4s**
 镜头：{景别}，{距离}，{机位角度}，{运镜}。
@@ -114,10 +115,17 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 > 视频 prompt 必须显式描述**人物运动 + 镜头运动 + 动态细节**。**含打斗按 `打斗分镜.md`：五帧拆招（起手/发力/命中/受击/收势）、命中帧必出独立图、攻防用正反打；仍避免一镜内多人混战、超复杂同框动作。** **含御剑飞行/追逐/渡劫/炼丹炼器/大阵/大场面 establish/斗法对轰/神魂 按 `仙侠场面分镜.md`：飞行追逐「锁姿态、动背景与镜头」、渡劫炼丹法阵对轰「爆发帧(命中·撞点)单独出图 + 奇观元素入库」、神魂「元神=肉身半透明派生治"二我"」、大场面「三镜由远及近 + 比例尺」。** 大量人群、高频切换等 AI 难生成动作仍从简。
 > 空镜缓冲不是补丁位，而是故事板阶段就要设计的正式 Clip：换场、跳时空、强情绪转折、AI 难接的姿态变化，都优先插 1-2s 空镜/物件镜（门帘、烛火、雨滴、符纸、手部）承接。下游 compose 只负责保留它的呼吸，不在成片上硬塞未知空镜。
 
-可选同步输出机器可读 `storyboard.json`：
+可选同步输出机器可读 `storyboard.json`（**接力契约的机器可读载体**——下游想结构化消费衔接时读它；缺它则回退读 `故事板.md` markdown）。每个 clip 带 `continuity` 块，`start_state` 应等于上一 clip 的 `end_state`：
 ```json
 { "episode": 1, "clips": [
   { "id": "EP01_CLIP01", "duration": 7, "scene": "冷宫寝殿/夜/内",
+    "continuity": {
+      "start_state": "首帧：沈念蜷坐木榻、视线投向门口",
+      "end_state": "沈念起身、右手扶榻、视线移向窗",   // ← 下一 clip 的 start_state 原样复制这句
+      "transition": "match_cut",                      // match_cut|eyeline|action_cut|empty_buffer|j_cut|hard_cut
+      "need_endframe": true,                          // 同场景姿态连续硬切=true → n2d-image 出尾帧 PNG
+      "endframe_png": "出图/第1集/镜头02_end.png"      // need_endframe 时由 n2d-image 落档后回填
+    },
     "shots": [ { "t": "0-4s", "lens": "全景·推镜", "desc": "...", "video_prompt": "..." } ] }
 ]}
 ```

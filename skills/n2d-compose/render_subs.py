@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # 把中/英 SRT 渲染成逐句透明 PNG（1080x1920），供 ffmpeg overlay 烧录。
-# 用法: _render_subs.py <workdir> <zh|en|bilingual>
+# 用法: render_subs.py <workdir> <zh|en|bilingual>
 # 产出: <workdir>/subpng/sub_NN.png + 写 inputs.txt(png路径) + vfilter.txt(overlay链)
 import sys, os, re
 
@@ -10,7 +10,7 @@ from PIL import Image, ImageDraw, ImageFont
 ZH_FONT = "/System/Library/Fonts/STHeiti Medium.ttc"
 EN_FONT = "/System/Library/Fonts/Supplemental/Arial.ttf"
 if not os.path.exists(EN_FONT):
-    EN_FONT = "/System/Library/Fonts/Helvetice.ttc" if os.path.exists("/System/Library/Fonts/Helvetice.ttc") else ZH_FONT
+    EN_FONT = "/System/Library/Fonts/Helvetica.ttc" if os.path.exists("/System/Library/Fonts/Helvetica.ttc") else ZH_FONT
 WIDTH, HEIGHT = 1080, 1920
 
 def parse_srt(path):
@@ -109,8 +109,9 @@ for i in idxs:
     img.save(p)
     manifest.append((p, s, e))
 
-# 写 inputs 与 overlay 链（ffmpeg 输入序默认: 0=concat 1=bgm，png 从 PNG_INPUT_BASE 开始）
-PNG_INPUT_BASE = int(os.environ.get('PNG_INPUT_BASE', '2'))
+# 写 inputs 与 overlay 链（ffmpeg 输入序: 0=concat 1=bgm 2=clip_audio，png 从 PNG_INPUT_BASE 开始）
+# compose.sh 始终传 PNG_INPUT_BASE=3（含 clip_audio 输入）；默认值与之对齐，便于独立跑。
+PNG_INPUT_BASE = int(os.environ.get('PNG_INPUT_BASE', '3'))
 with open(os.path.join(W,'inputs.txt'),'w') as f:
     for p,_,_ in manifest: f.write(p+'\n')
 chain, prev = [], '[0:v]'

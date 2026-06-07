@@ -19,6 +19,7 @@ description: MV 合成成片（mv 系列自包含，不依赖 n2d-compose）— 
 - **歌是主音轴**：MV 用整首 `歌/song.wav` 作主音轨，clip 自带音效一律静音/极低。不做配音 ducking。
 - **卡点驱动剪辑**：剪辑点对齐 `节拍/beatgrid.json`（副歌踩鼓点切、verse 缓）。**clip 时长由 beatgrid 在 mv-video 上游就对齐**（出 clip 时按段落/鼓点定时长）；compose 保留不等长化，并校验总时长≈歌长。
 - **卡拉OK字幕**：优先 `.ass` 逐字高亮（需 ffmpeg 带 **libass**）；无 libass → 用 **mv 自带 `render_lyrics.py`**（Pillow 渲染逐行 PNG → overlay），从 `.lrc`/`.ass` 取行级时间。
+- **按转场类型接 clip，别盲拼**（接力链末端兜底）：读 mv-video clip 表每个接缝的 `转场` 决定接法——`卡点硬切 / 动作切 / 有尾帧接力的硬切` 直接硬切（踩 downbeat 同帧砸下最稳）；`空镜缓冲` 契约要缓冲但 `视频/` 缺对应空镜 clip → **停下报警**（缺料），别默默硬切；`闪白 / 光效切` 按 clip 自带处理；**非有意硬切又视觉跳变明显**的接缝可加 **0.1–0.3s 微交叉溶解**兜底（ffmpeg `xfade`，不依赖 libass，仅该接缝局部重编码、其余仍直拼）。**副歌踩鼓点的有意硬切不要加溶解**（会泄掉卡点冲击）。
 - **优雅降级**：无 beatgrid → 按 clip 原时长顺接；无字幕 → 纯歌+画面。
 
 ## 输入前置（作品根=`制MV/<曲名>/`）
@@ -53,4 +54,5 @@ bash <skill>/mv_compose.sh <制MV作品根> [aspect=16:9|9:16]
 | clip 总时长和歌对不上 | 上游 mv-video 按 beatgrid 调 clip 时长；compose 只校验告警 |
 | 拿 .ass 在无 libass 的 ffmpeg 上烧 | 自动降级本 skill `render_lyrics.py`（Pillow overlay） |
 | 用配音 ducking 逻辑做 MV | MV 主音轴是整首歌，不 ducking |
+| 所有接缝一律裸切 | 按 clip 表 `转场` 接：有意硬切踩鼓点硬切、跳变接缝微溶解、缺空镜缓冲报警 |
 | 想复用 n2d-compose 的脚本 | 本系列完全独立，用自带 mv_compose.sh + render_lyrics.py |

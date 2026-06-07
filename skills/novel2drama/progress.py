@@ -92,6 +92,11 @@ def do_set(root, ep, col, val):
 def _split_row(ln):
     return [c.strip() for c in ln.split('|')[1:-1]]
 
+def _row_trailing(ln):
+    # 末尾 `|` 之后的行尾备注（如 `|（开局即高潮）`）；ensure-col 重建行时原样保回，避免吞注释
+    parts = ln.split('|')
+    return parts[-1] if len(parts) >= 2 else ''
+
 def do_ensure_col(root, col, default='⬜'):
     p = prog_path(root)
     lines = open(p, encoding='utf-8').read().split('\n')
@@ -112,16 +117,16 @@ def do_ensure_col(root, col, default='⬜'):
     out = []
     for ln in lines:
         if ln.startswith('| 集 |') or re.match(r'^\|\s*-+', ln):
-            cells = _split_row(ln)
+            cells = _split_row(ln); trailing = _row_trailing(ln)
             filler = '---' if re.match(r'^\|\s*-+', ln) else col
             cells.insert(insert_at, filler)
-            out.append('| ' + ' | '.join(cells) + ' |')
+            out.append('| ' + ' | '.join(cells) + ' |' + trailing)
         elif re.match(r'^\|\s*第\d+集\s*\|', ln):
-            cells = _split_row(ln)
+            cells = _split_row(ln); trailing = _row_trailing(ln)
             while len(cells) < len(header):
                 cells.append('')
             cells.insert(insert_at, default)
-            out.append('| ' + ' | '.join(cells) + ' |')
+            out.append('| ' + ' | '.join(cells) + ' |' + trailing)
         else:
             out.append(ln)
     open(p, 'w', encoding='utf-8').write('\n'.join(out))

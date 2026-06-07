@@ -1,4 +1,4 @@
-# 视频 prompt 格式（Stage 3）
+# 视频 prompt 格式（Stage 5）
 
 把 `脚本/第N集/故事板.md` 的 Clip 表派生为**开箱即用**的视频 prompt 文件夹：`出视频/第N集/prompt/`。
 
@@ -10,7 +10,7 @@
 ## Clip K（时长 Ns · 镜头 N1[+N2]）　**节奏**：铺垫·长镜 / 加速·碎切 / 爽点·CU硬切 / 留白·定格　**张力**：克制 / 紧张 / 爆发 / 释放
 
 **首帧**：`出图/第N集/镜头N1_<描述>.png`
-**尾帧**（可选，可灵/部分平台支持）：`出图/第N集/镜头N2_<描述>.png`
+**尾帧**（接力契约 `需要尾帧?=是` 时**必用**，平台支持双帧的走 frames2video）：`出图/第N集/镜头N_end.png`（n2d-image 出的尾帧=下一 Clip 首帧构图）
 **场景**：{场景名}（夜晚/内）
 **衔接设计**：
 - 入点：{承接上一个 Clip 的动作/视线/声音/空镜}
@@ -135,7 +135,7 @@ audio constraint: no dialogue, no narration, no generated native voice;
 **continuity 自动派生规则**：
 - `start_state`：优先取上一 Clip 的 `end_state`；若无上一 Clip，取本 Clip 首帧描述 + 入点。
 - `action`：取本 Clip 人物动作主链，删掉"换场景/换衣/新增人物/大幅复杂动作"等会破坏连续性的内容。
-- `end_state`：优先服务下一 Clip 的入点/首帧；若下一 Clip 是反打/空镜，结尾停在视线方向、手部道具、门帘、烛火等可切出的画面重心。
+- `end_state`：优先服务下一 Clip 的入点/首帧；若下一 Clip 是反打/空镜，结尾停在视线方向、手部道具、门帘、烛火等可切出的画面重心。**接力契约 `需要尾帧?=是` 时，end_state 必须与 n2d-image 出的 `镜头N_end.png` 尾帧一致，并把它设为本 Clip 尾帧做双帧引导。**
 - `constraints`：从同场景连续 Clip 继承服装发型、人物左右站位、轴线、视线方向、光线、天气、道具、背景布局；场景切换时只继承角色定妆和道具状态。
 - `negative`：默认写入"不要换脸、不要换衣、不要新增人物、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要生成原生人声"；按镜头风险追加"不要手指变形/不要多人脸错乱/不要大幅旋转镜头"。
 
@@ -146,7 +146,7 @@ audio constraint: no dialogue, no narration, no generated native voice;
 - 本集 Clip 总数 + 总时长（应与故事板一致）
 - 进度（已完成 / 总数）
 - 每 Clip 状态表（Clip K | 时长 | 首帧 | 尾帧 | 转场 | J-cut | 空镜缓冲 | 状态 ✅/⏳/⬜ | 落档路径）
-- 首帧 PNG 来源速查（对应 Stage 2 的 `出图/第N集/镜头N_*.png`）
+- 首帧 PNG 来源速查（对应 Stage 4 的 `出图/第N集/镜头N_*.png`）
 - 已知降级（如 Clip 3 image2video 跑不稳，改成 Clip3a/3b 两短段）
 
 ## 3.1 检查清单强制要求
@@ -165,7 +165,7 @@ audio constraint: no dialogue, no narration, no generated native voice;
 | 镜头类型 | 用哪种 | 理由 |
 |---|---|---|
 | 主角出场、对话、动作戏 | **图生视频** | 一致性必须靠首帧锁脸 |
-| 反派揭面、形态变化 | **图生视频** | 同上，首帧 = Stage 2 该形态定妆图 |
+| 反派揭面、形态变化 | **图生视频** | 同上，首帧 = Stage 4 该形态定妆图 |
 | 纯空镜（蛛网特写 / 残烛 / 风吹）| **文生视频** | 无人物，省一步 |
 | 转场（白光闪过 / 黑屏过渡）| **文生视频** | 同上 |
 | 氛围镜头（远景城池 / 山雨欲来）| **文生视频** | 无人物或人物极远 |
@@ -204,7 +204,7 @@ audio constraint: no dialogue, no narration, no generated native voice;
 
 ## 5. 进度表新增列
 
-Stage 3 第一次跑时，往 `_进度.md` 表头追加 `视频prompt` + `视频` 两列：
+Stage 5 第一次跑时，往 `_进度.md` 表头追加 `视频prompt` + `视频` 两列：
 
 ```
 | ... | 出图prompt | 出图 | 视频prompt | 视频 |

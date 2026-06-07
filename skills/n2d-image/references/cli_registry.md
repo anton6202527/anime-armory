@@ -1,4 +1,4 @@
-# 图 AI / 本地生图能力注册表（Stage 2）
+# 图 AI / 本地生图能力注册表（Stage 4：出图）
 
 本机生图能力的已知清单 + 探测命令 + 调用规范 + 安装审查 SOP。这里的"能力"包含 Codex 会话内置生图、Codex 插件、官方 CLI、以及可自动落 PNG 的本地服务。每加一家新入口时往本文件追加一节。
 
@@ -16,7 +16,7 @@ codex features list 2>/dev/null | rg 'image_generation|artifact' || true
 codex plugin list 2>/dev/null | rg -i 'image|openai|fal|replicate|browser|computer-use' || true
 ```
 
-未找到可自动落 PNG 的入口 → 先询问用户是否有其它自动生图服务；没有再进入 Dreamina/即梦兜底模式。
+未找到可自动落 PNG 的入口 → **默认 `Codex only`：停下报告，不自动落 Dreamina/即梦**（见 SKILL「生图调用优先级」）。仅当 `<作品根>/_设置.md` 显式 `生图AI: 即梦` 时才进入 Dreamina/即梦；其它后端（Gemini/Flux/fal/Replicate/ComfyUI/SD WebUI）按各自官方/本机能力执行。下表优先级仅在项目未锁定 `Codex only`（即显式选了"按本机最优自动入口"）时适用。
 
 ## 优先级（针对默认即梦视频流）
 
@@ -28,7 +28,7 @@ codex plugin list 2>/dev/null | rg -i 'image|openai|fal|replicate|browser|comput
 | ④ | `flux-cli` / `replicate` / `fal` → 即梦视频 + 锚定句 | 写实能力强；亚洲脸和古装统一性需更重锚点或 LoRA |
 | ⑤ | ComfyUI / SD WebUI 本地服务 → 即梦视频 + 锚定句 | 可控性高，适合已有工作流/LoRA；没工作流时不要临时搭重产线 |
 | ⑥ | 用户指定自动生图 API / webhook / bot | 只要能接 prompt、可回传 PNG、合法合规即可临时登记 |
-| 兜底 | `dreamina` CLI / 即梦 web 手动 | 最后选择。只有更好的自动入口不可用，或用户明确指定即梦时使用 |
+| 兜底 | `dreamina` CLI / 即梦 web 手动 | **仅当 `_设置.md` 显式 `生图AI: 即梦`**；默认 `Codex only` 下即便扫到 dreamina 也不用——停下报告 |
 
 切换到目标视频 = 可灵 / Veo 时，同理优先选自家或最接近自家的图 CLI。
 

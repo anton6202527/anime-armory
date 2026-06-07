@@ -4,7 +4,7 @@
 
 ---
 
-## 一、为什么拆四块
+## 一、为什么拆成多个 skill
 
 原 `novel2drama` skill 在 100+ 集制作期间膨胀到："拆集 + 物料 + 出图 prompt + 出图操作 + 视频" 全揉一起，导致：
 
@@ -12,14 +12,19 @@
 - 不同 AI 工具（图 AI / 视频 AI）的差异散布在多处
 - 经验沉淀（Q&A）越累越多，单文件难翻
 
-拆分后每阶段一个 skill，按需加载：
+拆分后每阶段一个 skill，调度器只路由、按需加载。**完整六阶段**（顺序见下文，注意配音前移、分镜在配音之后）：
 
-| Stage | Skill | 关注点 | 不关注 |
+| 阶段 | Skill | 关注点 | 不关注 |
 |---|---|---|---|
-| 0 调度 | `novel2drama` | 路由 + 全局架构 | 任何具体生产细节 |
-| 1 物料 | `n2d-script` | 拆集 + 脚本素材(剧本/卡片)模板 + 角色/场景卡 | AI CLI 调用 / 锚定句细节 |
-| 2 出图 | `n2d-image` | 出图 prompt + 扫 CLI + 生图 / 指导 | 视频 prompt / 故事板 |
-| 3 视频 | `n2d-video` | 视频 prompt + 扫 CLI + 生视频 / 指导 | 物料模板 |
+| 调度 | `novel2drama` | 路由 + 全局架构 | 任何具体生产细节 |
+| ①剧本改编 | `n2d-script`(阶段1) | 拆集 + 台词/bgm/封面 + 角色/场景卡 + global_style | 分镜 / AI CLI 调用 |
+| ②配音 | `n2d-voice` | 逐句 AI 配音 + 时长清单.json（实测时长驱动镜头） | 分镜 / 出图 |
+| ③分镜设计 | `n2d-script`(阶段2) | 用配音时长设计分镜剧本/故事板/素材清单/SRT | 出图细节 |
+| ④出图 | `n2d-image` | 两层出图 prompt（定妆库+本集分镜）+ 扫 CLI + 生图 | 视频 prompt |
+| ⑤视频 | `n2d-video` | 视频 prompt + 扫 CLI + 生视频 / 指导 | 物料模板 |
+| ⑥合成 | `n2d-compose` | FFmpeg 脚本化剪辑 + BGM + 烧字幕 → 成片 | prompt 设计 |
+
+> **两个非显然的顺序决定**：配音前移到分镜之前（`n2d-voice` 产的逐句实测时长驱动镜头时长，故 `n2d-script` 跑两遍）；出图分两层（先共享定妆库锁脸/场景/画风，再本集分镜，保跨镜一致）。
 
 ---
 
@@ -55,13 +60,15 @@
 │   ├── locations/                        场景设定
 │   └── voicebank/                        音色引用/音色库
 ├── 废料/                                 废料归档（4 选 1 / 废图 / 废视频）
-├── 脚本/                                 ← Stage 1：n2d-script
+├── 脚本/                                 ← n2d-script（①剧本改编 + ③分镜设计）
 │   └── 第N集/
 │       ├── raw.txt                       拆集出来的原文片段
-│       ├── 分镜剧本.md / 故事板.md / 素材清单.md
-│       ├── voiceover.txt / bgm.txt / 封面.md
-│       └── 字幕_中文.srt / 字幕_英文.srt
-├── 出图/                                 ← Stage 2：n2d-image
+│       ├── voiceover.txt / bgm.txt / 封面.md   ①剧本改编产物
+│       ├── 分镜剧本.md / 故事板.md / 素材清单.md  ③分镜设计产物（配音后回跑）
+│       ├── 字幕_中文.srt / 字幕_英文.srt
+│       └── 镜头时长.json                 ③定稿锁定的逐镜头时长（驱动 Clip 长）
+├── 出视频/第N集/配音/                     ← n2d-voice（②配音）：line_NN.wav + voice_zh.wav + 时长清单.json
+├── 出图/                                 ← n2d-image（④出图）
 │   ├── common/                           全篇定妆库
 │   │   ├── prompt/                       共享 prompt 文件
 │   │   │   ├── 00_索引.md                全篇定妆清单 + 状态
@@ -72,7 +79,7 @@
 │       │   ├── 00_总览.md                本集图清单 + 引用共享
 │       │   └── 01_分镜出图.md            本集分镜 prompt
 │       └── 镜头N_*.png                   本集分镜 PNG（与 prompt/ 同级）
-└── 出视频/                               ← Stage 3：n2d-video
+└── 出视频/                               ← n2d-video（⑤视频）+ n2d-voice 配音轨同住此层
     ├── common/                           （如有跨集复用片段，如转场/空镜）
     │   ├── prompt/
     │   └── *.mp4
@@ -80,7 +87,9 @@
         ├── prompt/                       本集 prompt 文件
         │   ├── 00_总览.md                本集 Clip 清单
         │   └── 01_clips.md               每 Clip 视频 prompt
-        └── ClipK_*.mp4                   定稿视频片段（与 prompt/ 同级）
+        ├── 配音/                         ← n2d-voice 产物（line_NN.wav / voice_zh.wav / 时长清单.json）
+        ├── 视频/                         ClipK_*.mp4 定稿片段（供 n2d-compose 归集）
+        └── 成片_第N集_<mode>.mp4         ← n2d-compose（⑥合成）最终成片落集根
 ```
 
 ### prompt / 产物分离铁律（n2d-image / n2d-video 通用）
@@ -129,29 +138,34 @@
 
 ## 三、进度表（_进度.md）协议
 
-进度表是 4 个 skill 的 **single source of truth**。格式：
+进度表是六阶段所有 skill 的 **single source of truth**。**表头由 `n2d-script/scripts/split_novel.py` 生成，它是权威**——本文与调度器 SKILL 只复述、不另立一套。当前 16 列格式：
 
 ```markdown
 # <剧名> — 生产进度
 
 共拆分 **N** 集。
 
-| 集 | 字数 | raw | 分镜剧本 | 故事板 | 素材清单 | 配音 | BGM | 封面 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 第1集 | 2388 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 4/19 | 0/12 |（开局即高潮）
+| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 第1集 | 2388 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 4/19 | ✅ | 0/12 | ⬜ |
 ```
+
+> **回写一律走脚本**：`python3 <skill>/progress.py set <作品根> 第N集 <列名> <值>`；旧项目缺新列先 `progress.py ensure-col`。别手工编辑表格（避免列错位）。
 
 **列含义**：
 
 | 列组 | 写入者 | 含义 |
 |---|---|---|
-| raw | n2d-script 拆集脚本 | 原文片段已落档 |
-| 阶段1物料(剧本/bgm/封面) | n2d-script阶段1 | 配音前的剧本改编完毕 |
-| 出图prompt | n2d-image | 本集出图 prompt **全套**写完（共享层 + 本集层） |
+| raw | n2d-script 拆集脚本 | 原文片段已落档（展示用，不计入流程完成判定） |
+| 剧本改编 / bgm / 封面 | n2d-script 阶段1 | 配音前的剧本改编（台词/BGM 设计/封面）完毕 |
+| 配音 | n2d-voice | 逐句配音 + 时长清单.json 完成（⚠️ ✅ 不代表真音：占位音色也会 ✅，看 `占位:true`） |
+| 分镜设计 / 素材清单 / 字幕中 / 字幕英 | n2d-script 阶段2 | 用配音时长定稿分镜剧本/故事板/素材清单/SRT |
+| 出图prompt | n2d-image | 本集出图 prompt **全套**写完（共享定妆库 + 本集分镜） |
 | 出图 | n2d-image | `已完成 PNG / 本集需要的总数`（分子含共享复用 + 本集分镜） |
-| 视频 | n2d-video | `已完成 MP4 / 本集 Clip 总数` |
+| 视频prompt / 视频 | n2d-video | prompt 写完 ✅；`视频` = `已完成 MP4 / 本集 Clip 总数` |
+| 成片 | n2d-compose | 剪辑合成 + BGM + 烧字幕 → 成片完成 |
 
-**调度规则**：任一列为 ⬜ 时，对应 skill 可以接手该集；列已 ✅ 时，下游 skill 才能继续。
+**调度规则**：任一列为 ⬜ 时，对应 skill 可以接手该集；列已 ✅ 时，下游 skill 才能继续。完整逐列路由判断见调度器 `SKILL.md`。
 
 ---
 
@@ -223,24 +237,25 @@ n2d-image →
 def dispatch(work_root):
     progress = read(f"{work_root}/_进度.md")
     for episode in episodes_sorted_by_number(progress):
-        stage1_cols = ["分镜剧本", "故事板", "素材清单", "配音", "BGM", "封面", "字幕中", "字幕英"]
-        if any(episode[c] != "✅" for c in stage1_cols):
-            return ("n2d-script", episode.id, "物料未齐")
-        if episode["出图prompt"] != "✅":
-            return ("n2d-image", episode.id, "出图prompt 未写")
-        if not all_done(episode["出图"]):  # "4/19" 形式
+        if any(episode[c] != "✅" for c in ["剧本改编", "bgm", "封面"]):
+            return ("n2d-script(阶段1)", episode.id, "剧本改编未齐")
+        if episode["配音"] != "✅":
+            return ("n2d-voice", episode.id, "未配音")
+        if any(episode[c] != "✅" for c in ["分镜设计", "素材清单", "字幕中", "字幕英"]):
+            return ("n2d-script(阶段2)", episode.id, "分镜设计未齐（配音后回跑）")
+        if episode["出图prompt"] != "✅" or not all_done(episode["出图"]):  # "4/19" 形式
             return ("n2d-image", episode.id, "出图未完")
-        if not all_done(episode["视频"]):
+        if episode["视频prompt"] != "✅" or not all_done(episode["视频"]):
             return ("n2d-video", episode.id, "视频未完")
+        if episode["成片"] != "✅":
+            return ("n2d-compose", episode.id, "未合成")
     return (None, None, "全集完工")
 ```
 
-实际操作上不需要写脚本——人肉读表即可。
+> 实际不需要写脚本——人肉读表即可；机读路由用 `novel2drama/progress.py`（模式无关线性路由器），它才是落地实现。`制作模式=先出视频后配音` 的占位放行/拟合调整见调度器 SKILL.md。
 
 ---
 
-## 七、合成阶段（已实现：n2d-voice + n2d-script阶段2 + n2d-compose）
+## 七、配音 / 分镜 / 合成阶段（均已实现）
 
-已实现：配音(n2d-voice·前移到出图前) → 分镜设计(n2d-script 阶段2·时长驱动) → 剪辑合成+BGM+字幕(n2d-compose·FFmpeg脚本化替代剪映)。完整六阶段见调度器 SKILL.md。
-
-若未来加入 `n2d-compose`，进度表追加 `视频` 列右边的 `成片` 列即可，调度规则向后扩展。
+六阶段已全部落地：配音(`n2d-voice`·前移到分镜与出图之前) → 分镜设计(`n2d-script` 阶段2·配音时长驱动) → 剪辑合成+BGM+烧字幕(`n2d-compose`·FFmpeg 脚本化替代剪映)。`成片` 列已在 split_novel.py 生成的表头里（最右一列），调度规则即 §六 伪代码。完整逐列路由见调度器 SKILL.md。

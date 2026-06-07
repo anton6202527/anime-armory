@@ -25,6 +25,10 @@ from datetime import date
 # 让本脚本能 import 同目录下 extract_anchors
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from extract_anchors import scan_candidates, write_anchor_table
+# 共享工具（docx→txt / 版权判定 / 落 _设置.md）上移至 novel-craft，避免各 init 各写一份
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "..", "..", "novel-craft", "scripts"))
+from derive_common import docx_to_txt, detect_rights_status, write_settings
 
 
 SCALE_PROFILE = {
@@ -34,41 +38,9 @@ SCALE_PROFILE = {
 }
 
 
-def docx_to_txt(docx_path, out_txt_path):
-    try:
-        from docx import Document
-    except ImportError:
-        print("[err] 缺依赖：pip install python-docx", file=sys.stderr)
-        sys.exit(2)
-    doc = Document(docx_path)
-    paras = [p.text for p in doc.paragraphs]
-    with open(out_txt_path, "w", encoding="utf-8") as f:
-        f.write("\n".join(paras))
-
-
 def detect_source_title(novel_path):
     base = os.path.splitext(os.path.basename(novel_path))[0]
     return base
-
-
-def detect_rights_status(novel_txt_path, i_have_rights):
-    """读 txt 头的 provenance 注释块判版权状态。
-    novel-fetch 抓的会有 `# copyright: ...` 行。"""
-    try:
-        with open(novel_txt_path, "r", encoding="utf-8") as f:
-            head = f.read(2000)
-    except FileNotFoundError:
-        return "unknown"
-    for line in head.splitlines():
-        if not line.startswith("#"):
-            break
-        if "copyright" in line.lower():
-            val = line.split(":", 1)[1].strip().lower() if ":" in line else ""
-            if "public" in val or "公版" in val or "gutenberg" in val or "wikisource" in val or "维基文库" in val:
-                return "public-domain"
-            if "用户声明" in val or "user-declared" in val:
-                return "user-declared"
-    return "user-declared" if i_have_rights else "unknown"
 
 
 def build_progress_md(meta):
@@ -275,6 +247,13 @@ def main():
     }
     with open(os.path.join(out_root, "_meta.json"), "w", encoding="utf-8") as f:
         json.dump(meta, f, ensure_ascii=False, indent=2)
+    write_settings(out_root, {
+        "目标平台": args.target_platform,
+        "权利来源": rights_status,
+        "篇幅档": f"{args.scale}（{profile['target_chapters']}章×{profile['words_per_chapter'][0]}-{profile['words_per_chapter'][1]}字）",
+        "外传模式": args.mode,
+        "输出格式": ",".join(outputs) + "（novel-craft/scripts/export.py）",
+    }, note="外传：配角平行视角，锚点处锁原作事件。")
 
     # 设定卡骨架
     with open(os.path.join(out_root, "设定", "角色卡.md"), "w", encoding="utf-8") as f:

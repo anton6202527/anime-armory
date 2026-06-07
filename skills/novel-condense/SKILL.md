@@ -78,7 +78,7 @@ python3 <skill>/scripts/init_project.py "<原作>" \
 ### 第 7 步 — 导出
 
 ```bash
-python3 <skill>/scripts/condense.py "<作品根>" --formats txt,docx[,n2d,outline]
+python3 novel-craft/scripts/export.py "<作品根>" --formats txt,docx[,n2d,outline]   # 家族通用导出器（漫剧友好版传 n2d 喂 n2d-script）
 ```
 
 ## 输出约定

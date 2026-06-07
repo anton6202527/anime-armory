@@ -25,6 +25,11 @@ import sys
 import re
 from datetime import date
 
+# 共享：落 _设置.md（_偏好约定 选择点存储）上移至 novel-craft，与派生类 init 同源
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "..", "..", "novel-craft", "scripts"))
+from derive_common import write_settings
+
 # 规模档：章数 + 每章字数 target 区间。**本表是 novel-craft/references/split.md「字数分档」表的代码镜像**——
 # 每个档 1:1 对应那张表的一行（band 与之严格相等）；改 band 必须两处同步。
 #   short  ↔ 短篇集(6000–10000) · medium ↔ 网文中篇(3000–5000) · long ↔ 网文长篇(5000–8000)
@@ -257,6 +262,13 @@ def main():
     W = lambda rel, txt: open(os.path.join(out_root, rel), "w", encoding="utf-8").write(txt)
     json.dump(meta, open(os.path.join(out_root, "_meta.json"), "w", encoding="utf-8"),
               ensure_ascii=False, indent=2)
+    write_settings(out_root, {
+        "目标平台": args.platform,
+        "题材": args.genre,
+        "篇幅档": f"{args.scale}（{n}章×{wpc[0]}-{wpc[1]}字）",
+        "权利来源": "original（原创自有）",
+        "输出格式": ",".join(outputs) + "（novel-craft/scripts/export.py；漫剧线加 n2d）",
+    }, note="原创从零：创作蓝图+设定圣经为宪法。")
     W("设定/创作蓝图.md", build_blueprint(title, args.genre, args.platform, args.premise, args.scale, n, wpc, args.person))
     W("设定/设定圣经.md", build_settings_bible(title))
     W("设定/角色卡.md", build_character_card(title))

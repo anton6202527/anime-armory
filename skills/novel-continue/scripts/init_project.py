@@ -16,32 +16,10 @@ init_project.py — 建续写项目骨架；docx → txt 抽取。
 import argparse, json, os, shutil, sys
 from datetime import date
 
-
-def docx_to_txt(docx_path, out_txt_path):
-    try:
-        from docx import Document
-    except ImportError:
-        print("[err] 缺依赖：pip install python-docx", file=sys.stderr); sys.exit(2)
-    doc = Document(docx_path)
-    paras = [p.text for p in doc.paragraphs]
-    open(out_txt_path, "w", encoding="utf-8").write("\n".join(paras))
-
-
-def detect_rights_status(novel_txt_path, i_have_rights):
-    try:
-        head = open(novel_txt_path, encoding="utf-8").read(2000)
-    except FileNotFoundError:
-        return "unknown"
-    for line in head.splitlines():
-        if not line.startswith("#"):
-            break
-        if "copyright" in line.lower():
-            val = line.split(":", 1)[1].strip().lower() if ":" in line else ""
-            if any(k in val for k in ["public", "公版", "gutenberg", "wikisource", "维基文库"]):
-                return "public-domain"
-            if any(k in val for k in ["用户声明", "user-declared"]):
-                return "user-declared"
-    return "user-declared" if i_have_rights else "unknown"
+# 共享工具（docx→txt / 版权判定 / 落 _设置.md）上移至 novel-craft，避免各 init 各写一份
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "..", "..", "novel-craft", "scripts"))
+from derive_common import docx_to_txt, detect_rights_status, write_settings
 
 
 def main():
@@ -115,6 +93,13 @@ def main():
     }
     json.dump(meta, open(os.path.join(out_root, "_meta.json"), "w", encoding="utf-8"),
               ensure_ascii=False, indent=2)
+    write_settings(out_root, {
+        "目标平台": args.target_platform,
+        "权利来源": rights,
+        "续写模式": args.mode,
+        "续写章数": args.new_chapters,
+        "输出格式": "txt,docx,outline（合本加 --combine；novel-craft/scripts/export.py）",
+    }, note="续写：从原作末章往后写新章节，沿用原作设定圣经/作者口吻。")
 
     mode_label = "续编（原作已完结）" if args.mode == "sequel" else "接更（原作未完结）"
     skeletons = [
