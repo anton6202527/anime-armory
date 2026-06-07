@@ -7,61 +7,21 @@
 #   python3 progress.py ensure-col <作品根> <列名> [默认值] # 旧项目迁移：缺列则追加到「成片」前
 import sys, os, re
 
-# 阶段顺序（列名组 → (阶段标签, 推荐命令)）；按顺序找第一个未完成列
-STAGES = [
-    (['剧本改编', 'bgm', '封面'], '阶段1·剧本改编', '/n2d-script {root} {ep}'),
-    (['配音'],                    '角色配音',        '/n2d-voice {root} {ep}'),
-    (['分镜设计'],                '阶段2·分镜设计',  '/n2d-script {root} {ep}  (配音后定稿)'),
-    (['出图prompt', '出图'],      '出图',            '/n2d-image {root} {ep}'),
-    (['视频prompt', '视频'],      '图生视频',        '/n2d-video {root} {ep}'),
-    (['成片'],                    '合成成片',        '/n2d-compose {root} {ep}'),
-]
-
-def cell_state(v):
-    v = (v or '').strip()
-    if v == '✅': return 'done'
-    if v in ('⬜', '', '—', '-'): return 'todo'
-    m = re.match(r'(\d+)\s*/\s*(\d+)', v)
-    if m:
-        a, b = int(m.group(1)), int(m.group(2))
-        if b > 0 and a >= b: return 'done'
-        return 'partial' if a > 0 else 'todo'
-    return 'todo'
+COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'common'))
+if COMMON not in sys.path:
+    sys.path.insert(0, COMMON)
+from n2d_route import STAGES, cell_state, format_route, parse_progress, progress_path, stage_of, summarize
 
 def prog_path(root):
-    root = root.rstrip('/')
-    primary = os.path.join(root, '_进度.md')
-    if os.path.exists(primary):
-        return primary
-    # Backward compatibility for older projects that still keep progress in common/.
-    return os.path.join(root, 'common', '_进度.md')
+    return progress_path(root)
 
 def parse(root):
-    p = prog_path(root)
-    if not os.path.exists(p): print(f"找不到 {p}"); sys.exit(1)
-    lines = open(p, encoding='utf-8').read().split('\n')
-    header = None; rows = []
-    for ln in lines:
-        if ln.startswith('| 集 |'):
-            header = [c.strip() for c in ln.split('|')[1:-1]]; continue
-        m = re.match(r'^\|\s*(第\d+集)\s*\|', ln)
-        if m and header:
-            cells = [c.strip() for c in ln.split('|')[1:len(header)+1]]
-            row = dict(zip(header, cells)); row['_ep'] = m.group(1)
-            row['_num'] = int(re.search(r'\d+', m.group(1)).group())
-            rows.append(row)
-    if header is None: print("未找到表头（| 集 | …）"); sys.exit(1)
-    return header, rows
-
-def stage_of(row, header):
-    for cols, label, cmd in STAGES:
-        for c in cols:
-            if c in header and cell_state(row.get(c)) != 'done':
-                return label, cmd
-    return '✅已成片', None
-
-def fmt(root, ep, label, cmd):
-    return f"{ep}: {label}" if cmd is None else f"{ep}: {label}  → {cmd.format(root=root, ep=ep)}"
+    try:
+        return parse_progress(root)
+    except FileNotFoundError as e:
+        print(f"找不到 {e.args[0]}"); sys.exit(1)
+    except ValueError as e:
+        print(str(e)); sys.exit(1)
 
 def do_set(root, ep, col, val):
     p = prog_path(root)
@@ -146,20 +106,22 @@ def main():
     if only:
         r = next((x for x in rows if x['_ep'] == only), None)
         if not r: print(f"{only} 不在进度表"); sys.exit(1)
-        label, cmd = stage_of(r, header); print(fmt(root, only, label, cmd)); return
-    done = 0; bottleneck = {}; first = None
-    for r in sorted(rows, key=lambda x: x['_num']):
-        label, cmd = stage_of(r, header)
-        if cmd is None: done += 1
-        else:
-            bottleneck[label] = bottleneck.get(label, 0) + 1
-            if first is None: first = (r['_ep'], label, cmd)
+        route = stage_of(root, r, header)
+        print(format_route(root, route))
+        if route.get('note'):
+            print(f"  ⚠️ {route['note']}")
+        return
+    summary = summarize(root)
+    done = summary["done"]; bottleneck = summary["bottleneck"]; first = summary["first"]
     print(f"作品: {os.path.basename(root)}（共 {len(rows)} 集）")
     print(f"成片完成: {done}/{len(rows)}")
-    if first: print(f"下一步（最小未完成集）: {fmt(root, *first)}")
+    if first:
+        print(f"下一步（最小未完成集）: {format_route(root, first)}")
+        if first.get('note'):
+            print(f"  ⚠️ {first['note']}")
     else: print("🎉 全部成片完成")
     if bottleneck:
-        order = [s[1] for s in STAGES] + ['✅已成片']
+        order = [s[1] for s in STAGES] + ['补真实配音', '✅已成片']
         items = sorted(bottleneck.items(), key=lambda kv: order.index(kv[0]) if kv[0] in order else 99)
         print("各阶段卡集数: " + " · ".join(f"{k}={v}" for k, v in items))
 

@@ -16,21 +16,18 @@ raw=源文本，展示但不计入流程完成判定。
   python3 scan.py <剧根> [...]     # 只看指定剧（含 _进度.md 的目录）
   python3 scan.py --root <仓库根>  # 指定仓库根（默认=自动向上找）
 """
-import json
 import os
 import re
 import sys
 
+COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'common'))
+if COMMON not in sys.path:
+    sys.path.insert(0, COMMON)
+from n2d_route import flow_columns, is_done, is_started, parse_progress, stage_of
+from n2d_settings import is_video_first
+
 LINE_DIR = "制漫剧"  # 只管 n2d 这一条线
 
-# 列名关键词 → n2d stage skill（命中第一个关键词即用）。
-STAGE_RULES = [
-    (("配音",), "n2d-voice"),
-    (("出图", "定妆"), "n2d-image"),
-    (("视频",), "n2d-video"),
-    (("成片", "合成"), "n2d-compose"),
-    (("改编", "bgm", "封面", "分镜", "素材", "字幕"), "n2d-script"),
-]
 DISPATCHER = "novel2drama"  # 认不出列名时兜底
 
 # 花钱/不可逆/合规的前沿列 → 提醒先确认。
@@ -41,124 +38,34 @@ COSTLY_HINT = {
     "配音": "声音克隆需肖像/音色授权（合规闸门）",
 }
 
-META_COLS = {"集", "字数", "序号", "#"}  # 索引/计量列，不算阶段
-
-
-def is_done(cell):
-    c = cell.strip()
-    if c == "✅":
-        return True
-    m = re.match(r"^(\d+)\s*/\s*(\d+)$", c)
-    return bool(m) and int(m.group(2)) > 0 and int(m.group(1)) == int(m.group(2))
-
-
-def is_started(cell):
-    c = cell.strip()
-    if c == "✅":
-        return True
-    m = re.match(r"^(\d+)\s*/\s*(\d+)$", c)
-    return bool(m) and int(m.group(1)) > 0
-
-
-def parse_table(text):
-    """提取第一张 markdown 管道表。返回 (header, rows) 或 (None, None)。"""
-    lines = [ln for ln in text.splitlines() if ln.strip().startswith("|")]
-    if len(lines) < 2:
-        return None, None
-    cells = lambda ln: [p.strip() for p in ln.strip().strip("|").split("|")]
-    header = cells(lines[0])
-    rows = []
-    for ln in lines[1:]:
-        if re.match(r"^\s*\|[\s:|-]+\|\s*$", ln):  # 分隔行 |---|
-            continue
-        c = cells(ln)
-        if len(c) == len(header):
-            rows.append(c)
-    return header, rows
-
-
-def next_skill(col):
-    for keys, skill in STAGE_RULES:
-        if any(k.lower() in col.lower() for k in keys):
-            return skill
-    return DISPATCHER
-
-
-def read_mode(root):
-    """读 _设置.md 的 `制作模式`（缺则默认 配音先行）。"""
-    p = os.path.join(root, "_设置.md")
-    if not os.path.isfile(p):
-        return "配音先行"
-    try:
-        with open(p, encoding="utf-8") as f:
-            txt = f.read()
-    except OSError:
-        return "配音先行"
-    m = re.search(r"制作模式\s*[:：]\s*([^\s#]+)", txt)
-    return m.group(1) if m else "配音先行"
-
-
-def voice_is_placeholder(root, ep):
-    """该集真实配音是否还没补（时长清单仍含占位句）。
-    返回 True=仍占位 / False=已是真音 / None=无清单可判。"""
-    p = os.path.join(root, "合成", ep, "配音", "时长清单.json")
-    if not os.path.isfile(p):
-        return None
-    try:
-        with open(p, encoding="utf-8") as f:
-            data = json.load(f)
-    except (OSError, ValueError):
-        return None
-    if isinstance(data, list):
-        return any(isinstance(x, dict) and x.get("占位") for x in data)
-    return None
-
-
 def report(root, out):
-    with open(os.path.join(root, "_进度.md"), encoding="utf-8") as f:
-        header, rows = parse_table(f.read())
-    if not header or not rows:
+    try:
+        header, dict_rows = parse_progress(root)
+    except (OSError, ValueError):
         out.append("（_进度.md 无可解析的进度表）")
         return
 
-    label_i = 0
-    disp_idx = [i for i, h in enumerate(header)
-                if h not in META_COLS and i != label_i]
-    flow_idx = [i for i in disp_idx if header[i] != "raw"]  # 流程列(排除源文本)
-
-    mode = read_mode(root)
-    alt = "先出视频" in mode  # 制作模式=先出视频后配音（快速 demo·不推荐）
-    if alt:
+    flow = flow_columns(header)
+    if is_video_first(root):
         out.append("制作模式: 先出视频后配音 ⚠️(快速 demo·不推荐：占位时长锁镜头→后期补真音对不上)")
 
-    full = sum(1 for r in rows if all(is_done(r[i]) for i in flow_idx))
-    out.append(f"行数: {len(rows)} | 全流程完成: {full}/{len(rows)}")
+    full = sum(1 for r in dict_rows if all(is_done(r.get(c, "")) for c in flow))
+    out.append(f"行数: {len(dict_rows)} | 全流程完成: {full}/{len(dict_rows)}")
     out.append("各阶段完成: " + " | ".join(   # 只列流程列；raw 是源文本展示位，不计入完成度
-        f"{header[i]} {sum(1 for r in rows if is_done(r[i]))}/{len(rows)}"
-        for i in flow_idx))
+        f"{c} {sum(1 for r in dict_rows if is_done(r.get(c, '')) )}/{len(dict_rows)}"
+        for c in flow))
 
     gaps = []  # (集, 列, 值, skill, note)
-    for r in rows:
-        started = any(is_started(r[i]) for i in flow_idx)
-        if started and not all(is_done(r[i]) for i in flow_idx):
-            for i in flow_idx:
-                if not is_done(r[i]):
-                    col, val = header[i], r[i].strip()
-                    skill, note = next_skill(col), ""
-                    # 先出视频后配音模式：视频已出、只差成片时，progress.py 的线性
-                    # 路由会直接指向 n2d-compose——但此模式下「配音 ✅」很可能仍是占位，
-                    # 合成前必须先补真实配音。这里在前沿层把它拦回 n2d-voice。
-                    if alt and skill == "n2d-compose" \
-                            and voice_is_placeholder(root, r[label_i].strip()):
-                        skill = "n2d-voice"
-                        note = ("⚠️先出视频后配音模式：当前配音仍是占位，合成前"
-                                "必须先 /n2d-voice 补真实配音，再 /n2d-compose 把"
-                                "真音拟合到已成片镜头长（见 n2d-compose「先出视频后配音」节）")
-                    gaps.append((r[label_i], col, val, skill, note))
-                    break
+    for r in dict_rows:
+        started = any(is_started(r.get(c, "")) for c in flow)
+        if started and not all(is_done(r.get(c, "")) for c in flow):
+            route = stage_of(root, r, header)
+            col = route.get("col") or ""
+            val = r.get(col, "").strip() if col else ""
+            gaps.append((r.get("_ep", ""), col, val, route.get("skill") or DISPATCHER, route.get("note") or ""))
 
     if not gaps:
-        if full == len(rows):
+        if full == len(dict_rows):
             out.append("✅ 全部完成。")
         else:
             out.append(f"尚无已开工的集（仅源文本就绪）→ 从第1集起跑：{DISPATCHER}")

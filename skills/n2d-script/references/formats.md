@@ -115,7 +115,7 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 > 视频 prompt 必须显式描述**人物运动 + 镜头运动 + 动态细节**。**含打斗按 `打斗分镜.md`：五帧拆招（起手/发力/命中/受击/收势）、命中帧必出独立图、攻防用正反打；仍避免一镜内多人混战、超复杂同框动作。** **含御剑飞行/追逐/渡劫/炼丹炼器/大阵/大场面 establish/斗法对轰/神魂 按 `仙侠场面分镜.md`：飞行追逐「锁姿态、动背景与镜头」、渡劫炼丹法阵对轰「爆发帧(命中·撞点)单独出图 + 奇观元素入库」、神魂「元神=肉身半透明派生治"二我"」、大场面「三镜由远及近 + 比例尺」。** 大量人群、高频切换等 AI 难生成动作仍从简。
 > 空镜缓冲不是补丁位，而是故事板阶段就要设计的正式 Clip：换场、跳时空、强情绪转折、AI 难接的姿态变化，都优先插 1-2s 空镜/物件镜（门帘、烛火、雨滴、符纸、手部）承接。下游 compose 只负责保留它的呼吸，不在成片上硬塞未知空镜。
 
-可选同步输出机器可读 `storyboard.json`（**接力契约的机器可读载体**——下游想结构化消费衔接时读它；缺它则回退读 `故事板.md` markdown）。每个 clip 带 `continuity` 块，`start_state` 应等于上一 clip 的 `end_state`：
+必须同步输出机器可读 `storyboard.json`（**接力契约的机器可读载体**——下游结构化消费衔接；缺它时 `n2d-review/scripts/gate.py --stage image|video|compose` 会阻断）。每个 clip 带 `continuity` 块，`start_state` 应等于上一 clip 的 `end_state`：
 ```json
 { "episode": 1, "clips": [
   { "id": "EP01_CLIP01", "duration": 7, "scene": "冷宫寝殿/夜/内",

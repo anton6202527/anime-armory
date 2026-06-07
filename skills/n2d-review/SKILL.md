@@ -23,6 +23,7 @@ description: 漫剧质检 + 流程自审（novel2drama 的 QA 环节，不生产
   python3 <skill>/scripts/mechanical_check.py <作品根> 第N集          # 人读
   python3 <skill>/scripts/mechanical_check.py <作品根> 第N集 --json   # 喂回 LLM 汇总
   ```
+- **阶段 gate（确定性，生产前跑）**：`scripts/gate.py <作品根> 第N集 --stage image|video|compose|review` —— 把高风险流程规则脚本化：`storyboard.json` continuity、尾帧、prompt 检查段、共享定妆、占位配音、clip 原生音轨/时长、水印等。`block` 退出码 1，先修再进入该阶段。
 - **人判（LLM 判断题）**：机检覆盖不了的语义维度——崩脸/场景漂移、**clip 接缝跳切/闪烁**、构图景别（对 `n2d-script/references/分镜语法.md`）、节奏体感（对 `novel2drama/references/导演节奏.md`）、口型、原生音频双人声、合规水印。逐维见 `references/checklist.md`。
   - **崩脸用图判**：把该集 `出图/第N集/镜头*.png` 与 `出图/common/定妆_<角色>.png` **并排读图比对**（脸型/发型/服色/配饰/锚点特征），漂了就标。装了 `face_recognition`/`insightface` 时机检可给余弦相似度分（阈值默认 0.45），缺库则此项由人判兜，机检会显式标"跳过"。
   - **接缝跳切用图判（逐接缝过）**：沿接力链逐个查相邻 Clip 的接缝——取 Clip K 末帧 vs Clip K+1 首帧**并排读图**，对照 `故事板.md` 该接缝契约：① 契约说"姿态连续硬切/有尾帧"但两帧人物姿态/站位/视线/光线明显对不上 → 跳切/闪烁，标问题；② 契约 `需要尾帧?=是` 却没出 `镜头N_end.png`（n2d-image 漏做）→ 标接力断链；③ 服装/发型/道具在接缝处突变 → 接缝崩。轻微姿态差走容错铁律放行。修法：回 n2d-image 补尾帧 / 回 n2d-video 用首尾双帧重出该 Clip。
