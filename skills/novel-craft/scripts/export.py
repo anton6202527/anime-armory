@@ -26,7 +26,8 @@ from datetime import date
 
 CHAPTER_FILE_RE = re.compile(r"^第0*(\d+)章(?:[_ ].*)?\.md$")  # 第N章.md 或 第N章_标题.md
 META_LINE_RE = re.compile(r"^<!--\s*meta:.*-->\s*$")
-H1_RE = re.compile(r"^#\s+第\s*\d+\s*章\s*[《<]?([^》>]*)[》>]?\s*$")
+# 章号接受阿拉伯/全角/中文数字；标题可带《》或裸标题
+H1_RE = re.compile(r"^#\s+第\s*[0-9０-９一二三四五六七八九十百千零〇两]+\s*章\s*[《<]?([^》>]*)[》>]?\s*$")
 ORIG_CHAP_RE = re.compile(r"^\s*第\s*[0-9零一二三四五六七八九十百千两]+\s*[章回节卷]")
 
 # kind → 书名后缀（spinoff/create 走特殊分支，不在此表）
