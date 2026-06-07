@@ -180,6 +180,7 @@
 ```
 anime-armory/
 ├── README.md  AGENTS.md  TODO.md  .gitignore
+│       └ AGENTS.md = 工具中立入口，Codex/Cursor 等按约定名自动读取；**手工维护，勿用 codex /init 覆盖**
 ├── skills/                          ← 全部自定义 skill（真身，扁平按前缀分族）
 │   ├── _偏好约定.md                通用偏好机制 + 选择点目录
 │   ├── README.md                    skill 索引（含「工具中立 / 跨 AI 使用」说明）
