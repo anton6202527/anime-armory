@@ -100,7 +100,10 @@ else
 fi
 
 echo "=== [4/6] 字幕 PNG ==="
-cp "$ZH_SRT" "$W/zh.srt"; cp "$EN_SRT" "$W/en.srt"
+# 字幕可选：默认仅中文（finalize_storyboard 仅在有英文译文时才产 字幕_英文.srt），EN 缺失不算错。
+# 注意 set -e：缺文件时 cp 会整体中断合成，故每个 cp 先判存在。render_subs.parse_srt 对缺轨已容错。
+[ -f "$ZH_SRT" ] && cp "$ZH_SRT" "$W/zh.srt" || echo "（无中文字幕 $ZH_SRT，跳过）"
+[ -f "$EN_SRT" ] && cp "$EN_SRT" "$W/en.srt" || true
 # 复制时长清单供字幕样式分级（旁白/系统→灰小字，爽点→暖金大字）；缺则字幕全 normal
 MANIFEST="$ROOT/合成/$EP/配音/时长清单.json"; [ -f "$MANIFEST" ] && cp "$MANIFEST" "$W/manifest.json" || true
 PNG_INPUT_BASE=3 python3 "$SKILL_DIR/render_subs.py" "$W" "$MODE"

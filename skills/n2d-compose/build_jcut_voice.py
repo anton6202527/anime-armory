@@ -2,9 +2,11 @@
 """Build an optional light J-cut voice track from per-line wav files.
 
 Default n2d-compose uses the original voice_<lang>.wav track. This helper is
-only for an explicit post pass: it advances each line by a small amount so the
-next line can enter before the visual cut. Keep the value small and avoid using
-it for front-facing lip-sync shots.
+only for an explicit post pass: it shifts the whole voice track earlier by a
+small fixed amount (a uniform "audio-leads" J-cut, not a per-cut early entry),
+so speech lands slightly before the visual cut. Subtitles keep the original SRT
+timing, so voice leads subtitles by up to this amount. Keep the value small and
+avoid it for front-facing lip-sync shots.
 """
 from __future__ import annotations
 

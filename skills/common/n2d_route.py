@@ -16,7 +16,9 @@ except ImportError:  # when imported as package-ish via sys.path parent
 STAGES = [
     (["剧本改编", "bgm", "封面"], "阶段1·剧本改编", "n2d-script", "/n2d-script {root} {ep}"),
     (["配音"], "角色配音", "n2d-voice", "/n2d-voice {root} {ep}"),
-    (["分镜设计"], "阶段2·分镜设计", "n2d-script", "/n2d-script {root} {ep}  (配音后定稿)"),
+    # 素材清单/字幕中/字幕英 也是阶段2·分镜设计(finalize_storyboard)的产物，归 n2d-script
+    # 路由（与 n2d-progress/SKILL.md 路由表一致），否则它们未完成时会落出空前沿「」。
+    (["分镜设计", "素材清单", "字幕中", "字幕英"], "阶段2·分镜设计", "n2d-script", "/n2d-script {root} {ep}  (配音后定稿)"),
     (["出图prompt", "出图"], "出图", "n2d-image", "/n2d-image {root} {ep}"),
     (["视频prompt", "视频"], "图生视频", "n2d-video", "/n2d-video {root} {ep}"),
     (["成片"], "合成成片", "n2d-compose", "/n2d-compose {root} {ep}"),
@@ -24,12 +26,42 @@ STAGES = [
 
 META_COLS = {"集", "字数", "序号", "#"}
 
+# 集号兼容 ASCII / 全角数字 / 中文数字（CLAUDE.md 记载 export.py 已为同类问题踩过坑）
+_FULLWIDTH = {ord("０") + i: ord("0") + i for i in range(10)}
+_CN_DIGIT = {"零": 0, "〇": 0, "一": 1, "二": 2, "两": 2, "三": 3, "四": 4,
+             "五": 5, "六": 6, "七": 7, "八": 8, "九": 9}
+_EP_TOKEN = r"[\d０-９一二三四五六七八九十百零〇两]+"
+
+
+def _cn_to_int(s: str) -> Optional[int]:
+    """把 '12'/'１２'/'十二'/'二十' 解析成 int；解析不出返回 None。"""
+    s = s.translate(_FULLWIDTH).strip()
+    if s.isdigit():
+        return int(s)
+    if not s:
+        return None
+    total = section = 0
+    for ch in s:
+        if ch in ("十", "百"):
+            unit = 10 if ch == "十" else 100
+            section = (section or 1) * unit
+            total += section
+            section = 0
+        elif ch in _CN_DIGIT:
+            section = _CN_DIGIT[ch]
+        else:
+            return None
+    return total + section
+
 
 def cell_state(v: str) -> str:
     v = (v or "").strip()
     if v == "✅":
         return "done"
-    if v in ("⬜", "", "—", "-"):
+    # 显式标记"本集不适用"（如 zh-only 项目的 字幕英）→ na：算已满足，不挡完成、不进缺口
+    if v in ("—", "-", "N/A", "n/a", "无", "✖", "✗", "×"):
+        return "na"
+    if v in ("⬜", ""):
         return "todo"
     m = re.match(r"(\d+)\s*/\s*(\d+)", v)
     if m:
@@ -41,7 +73,8 @@ def cell_state(v: str) -> str:
 
 
 def is_done(v: str) -> bool:
-    return cell_state(v) == "done"
+    # na（不适用）视为已满足：完成度统计与路由都不该卡在被标记跳过的列上
+    return cell_state(v) in ("done", "na")
 
 
 def is_started(v: str) -> bool:
@@ -64,15 +97,16 @@ def parse_progress(root: str) -> Tuple[List[str], List[Dict[str, str]]]:
     header: Optional[List[str]] = None
     rows: List[Dict[str, str]] = []
     for ln in lines:
-        if ln.startswith("| 集 |"):
+        if header is None and re.match(r"^\|\s*集\s*\|", ln):
             header = [c.strip() for c in ln.split("|")[1:-1]]
             continue
-        if header and re.match(r"^\|\s*第\d+集\s*\|", ln):
+        if header and re.match(r"^\|\s*第\s*" + _EP_TOKEN + r"\s*集\s*\|", ln):
             cells = [c.strip() for c in ln.split("|")[1:len(header) + 1]]
             row = dict(zip(header, cells))
             row["_ep"] = row.get("集") or cells[0]
-            n = re.search(r"\d+", row["_ep"])
-            row["_num"] = int(n.group()) if n else 10**9
+            m = re.search(r"第\s*(" + _EP_TOKEN + r")\s*集", row["_ep"])
+            num = _cn_to_int(m.group(1)) if m else None
+            row["_num"] = num if num is not None else 10**9
             rows.append(row)
     if header is None:
         raise ValueError("未找到表头（| 集 | …）")
@@ -83,9 +117,19 @@ def flow_columns(header: Iterable[str]) -> List[str]:
     return [h for h in header if h not in META_COLS and h != "raw"]
 
 
+def manifest_path(root: str, ep: str) -> Optional[str]:
+    """时长清单.json 可能落在 合成/<ep>/配音/（配音先行）或 出视频/<ep>/配音/
+    （先出视频后配音模式）——两处都探，返回第一个存在的。"""
+    for base in ("合成", "出视频"):
+        p = os.path.join(root, base, ep, "配音", "时长清单.json")
+        if os.path.isfile(p):
+            return p
+    return None
+
+
 def voice_is_placeholder(root: str, ep: str) -> Optional[bool]:
-    p = os.path.join(root, "合成", ep, "配音", "时长清单.json")
-    if not os.path.isfile(p):
+    p = manifest_path(root, ep)
+    if not p:
         return None
     try:
         data = json.load(open(p, encoding="utf-8"))

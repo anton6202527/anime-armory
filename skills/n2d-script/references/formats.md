@@ -69,7 +69,7 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 
 ## 3. 分镜剧本（脚本/第N集/分镜剧本.md）— 逐镜头脚本
 
-每集 8~15 个镜头。每镜头：
+每集 6~16 个镜头（随单集时长浮动，以 SKILL.md 为准）。每镜头：
 
 ```markdown
 ## 镜头 N
@@ -83,7 +83,7 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 
 ## 4. 故事板 Clip 表（脚本/第N集/故事板.md）— **AI 视频生成输入**
 
-把相邻分镜合成 **片段（Clip）**，每片段 1~2 个分镜、时长约 5~8 秒（按目标视频 AI 档案），作为"一次视频生成"的单元。
+把相邻分镜合成 **片段（Clip）**，每片段 1~2 个分镜，作为"一次视频生成"的单元。**Clip 时长按所选视频 AI 的单次生成上限定，别一刀切 8s**（即梦≤8s / Seedance≤15s / 可灵更长，见 `platforms.md`）——能一镜到底就别为凑时长切碎，节奏曲线优先（铺垫长镜 / 爽点碎切）。
 
 ```markdown
 ## Clip 表（分镜连贯性校验后）
@@ -94,8 +94,8 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 - 入点：**原样抄上一个 Clip 的「出点」**（同一句话——接力链单一真值，不允许相邻镜各写各的）；首帧构图如何接住上一镜尾势。
 - 出点：本 Clip 结束时人物姿态/视线/道具/空镜停在哪里，下一 Clip 从哪里接。**这句会成为下一 Clip 的入点。**
 - 转场：match cut / eyeline cut / 动作切 / 空镜缓冲 / 声音先行(J-cut) / 硬切。
-- 需要尾帧?：是/否。**同场景 + 人物姿态连续的硬切 = 是**（n2d-image 出尾帧 PNG=下一 Clip 首帧构图，n2d-video 用首尾双帧引导锁死接点）；换场/空镜缓冲/大跳切 = 否。
-- 连贯性：轴线方向、人物左右站位、出入画方向、首尾帧是否可用于双帧引导。
+- 需要尾帧?：是/否。**默认首尾双帧接力：除最终 Clip 外均为是**（n2d-image 出尾帧 PNG=下一 Clip 首帧构图，**尾帧命名=对应首帧名+`_end`**：`镜头N_xxx.png`→`镜头N_end.png`、`Clip_NN.png`→`Clip_NN_end.png`；n2d-video 用首尾双帧引导锁死接点）；只有换场空镜/时间大跳/明确不连续的接缝可设否，并必须写豁免原因。
+- 连贯性：轴线方向、人物左右站位、出入画方向、首尾帧是否可用于双帧引导；非最终 Clip 不能省略接力契约。
 **分镜1：0-4s**
 镜头：{景别}，{距离}，{机位角度}，{运镜}。
 {画面动态描述：人物运动 + 镜头运动 + 动态细节，如烛火摇曳/晨雾流动}
@@ -123,7 +123,7 @@ character design / reference sheet: {name}, minimum reference set with front-fac
       "start_state": "首帧：沈念蜷坐木榻、视线投向门口",
       "end_state": "沈念起身、右手扶榻、视线移向窗",   // ← 下一 clip 的 start_state 原样复制这句
       "transition": "match_cut",                      // match_cut|eyeline|action_cut|empty_buffer|j_cut|hard_cut
-      "need_endframe": true,                          // 同场景姿态连续硬切=true → n2d-image 出尾帧 PNG
+      "need_endframe": true,                          // 默认 true；非最终 Clip 若 false 必填 endframe_exempt_reason
       "endframe_png": "出图/第1集/镜头02_end.png"      // need_endframe 时由 n2d-image 落档后回填
     },
     "shots": [ { "t": "0-4s", "lens": "全景·推镜", "desc": "...", "video_prompt": "..." } ] }
@@ -202,7 +202,9 @@ BGM风格：国风暗黑 / 弦乐渐强 / 低频鼓点
 
 标准 **SRT** 格式，可直接导入剪辑软件 / 上传平台。下面英文一节仅在选了中英双语 / 仅英文时适用；项目只做中文时无需产英文（如需英文 prompt 兜底可另存译文草稿，不进 `字幕_英文.srt`、不勾 `字幕英`）。
 
-**时间码来源**：把 `voiceover.txt` 的每条台词/旁白，按 `故事板.md` 各 Clip/分镜的累计时长依次排进时间轴；一镜多句则在该镜窗口内平分。
+**时间码来源**：把 `voiceover.txt` 的每条台词/旁白，按 `故事板.md` 各 Clip/分镜的累计时长依次排进时间轴；一镜多句则在该镜窗口内平分。实操由 `finalize_storyboard.py` 用 `时长清单.json` 自动重定时产出，不必手算。
+
+**折行宽度**：`finalize_storyboard.py` 折行（中文 `_wrap_zh` 约 19 字/行、英文 `_wrap_en` 约 42 字符/行）只是 SRT 内的参考换行；**最终竖屏排版与是否再折行以渲染端 `n2d-compose/render_subs.py` 的字号/可用宽度为准**。两端宽度若调，需一并对账，避免 SRT 折好的行到 PNG 又被二次折行/溢出。
 
 **英文翻译要点**：口语化、贴短剧语境、长度适配字幕（每行 ≤ 约 42 字符、≤2 行）；保留人名音译统一（沈念 Shen Nian、林婉儿 Lin Wan'er、柳娘子 Madam Liu）；系统提示用游戏化英文（如 "Demon Bloodline activated."）。
 

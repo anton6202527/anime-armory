@@ -1,5 +1,12 @@
 # 声音克隆 + 人声分离
 
+## ⛔ 合规闸门（每次确认 · non-negotiable）
+声音克隆**只能**用于：① 本人嗓 / ② 已获**明确授权**的他人嗓 / ③ 纯合成音色。
+- 复刻真人歌手/演员/公众人物声音需本人书面授权（2026 opt-in）；未授权复刻属违规，禁止。
+- 这是 CLAUDE.md 列明的「合规/不可逆」点——即使 `_设置.md` 记过偏好，**每次仍重确认来源**，不沉默沿用。
+- 脚本侧已落地：`voice_clone.py` 必须显式 `VOICE_CLONE_AUTHORIZED=1` 才放行；`render_voice.py` 走零样本克隆后端时会打印参考音合规提示。
+- 配音成片用于投放时，叠加 AI 合规标识水印（见 watermark skill），不可去除。
+
 ## 参考音频要求
 ≥10s（30-60s 更佳）、目标角色单人声、BGM 越小越好、mp3/wav、≤20MB。
 
@@ -9,8 +16,8 @@ demucs（首次需 `pip install --user demucs soundfile`）：
 产物 <out>/htdemucs/<name>/vocals.wav。再 loudnorm/silenceremove 规整后作参考。
 
 ## MiniMax 复刻
-source 凭证后：
-    python3 voice_clone.py <参考音频> <自定义voiceID(字母开头≥8位)>
+source 凭证后（须先确认参考音来源合规，显式声明授权）：
+    VOICE_CLONE_AUTHORIZED=1 python3 voice_clone.py <参考音频> <自定义voiceID(字母开头≥8位)>
 得 voice_id → 填 MM_SHEN=<voiceID>（或对应角色 env）重生该角色。
 
 ## GPT-SoVITS / CosyVoice（本地·质量更高）

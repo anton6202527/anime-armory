@@ -28,6 +28,9 @@ ZS_SPECS=[('COSYVOICE_URL','COSY','CosyVoice',120),('FISHSPEECH_URL','FISH','Fis
 ZS=next(((os.environ[e],pfx,lbl,to) for e,pfx,lbl,to in ZS_SPECS if os.environ.get(e)), None)
 USE_ZS=bool(ZS) and not USE_MM   # 零样本克隆优先于 MiniMax；若也设了 MiniMax，本地零样本赢
 ZS_URL,ZS_PREFIX,ZS_LABEL,ZS_TIMEOUT = ZS if ZS else (None,None,None,120)
+if USE_ZS:
+    # 合规提示（CLAUDE.md：声音克隆 non-negotiable）：参考音须本人/已授权/合成音色，见 references/cloning.md。
+    print(f'⚠️ 零样本克隆后端 {ZS_LABEL}：参考音仅限本人嗓/已授权他人嗓/纯合成音色（合规闸门）。')
 
 # ── 表演标注解析（情绪/语速/停顿/钩子）→ 驱动念白，见 n2d-script formats §6 / 导演节奏.md §六 ──
 # 规范情绪：angry/fearful/sad/happy/serious/neutral（关键词归类，兼容旧的自由情绪词）
@@ -48,7 +51,8 @@ def hook_kind(s):
     if '⚡' in s or '钩子' in s: return 'hook'
     return ''
 def clean_text(t):
-    t=re.sub(r'[⚡💥🪝]\s*[钩子爽点集尾]*','',t)  # 剥钩子标记（不念出来）
+    t=re.sub(r'[⚡💥🪝]','',t)                       # 钩子 emoji 永不念出
+    t=re.sub(r'(?:钩子|爽点|集尾)\s*$','',t)          # 行尾裸词钩子标记（仅行尾，避免误伤台词正文里的同字）
     t=t.replace('||','，')                          # 停顿一拍 → 逗号（TTS 自然气口）
     t=re.sub(r'[，,]\s*[，,]+','，',t)               # 收拢叠出的逗号
     t=re.sub(r'([。！？…—；：、》」』）])\s*[，,]\s*',r'\1',t)  # ||紧跟句末标点/破折号：标点已含气口，去掉多余逗号+尾随空格（治 字幕「。，」「——，」）
@@ -59,6 +63,8 @@ def clean_text(t):
 # items[i] = (role, text, emo_canonical, speed_mult, hook_kind)
 items=[]; shots=[]
 if LANG=='zh':
+    if not os.path.isfile(VO):
+        sys.exit(f'⛔ 缺 {VO} —— 请先 /n2d-script 产出 voiceover.txt（阶段1·剧本改编）。')
     for ln in open(VO,encoding='utf-8'):
         ln=ln.strip()
         m=re.match(r'\[(镜头[^·]*)·([^·]+)·([^\]]*)\]\s*(.+)',ln)
@@ -67,10 +73,16 @@ if LANG=='zh':
             items.append((role,clean_text(raw),classify_emo(desc),speed_mult(desc),hook_kind(raw)))
             shots.append(shot)
 else:
+    # 英文字幕由 n2d-script 阶段2(分镜定稿, finalize_storyboard)产出，在配音之后；故 en 配音须在分镜定稿后才跑。
+    if not os.path.isfile(EN_SRT):
+        sys.exit(f'⛔ 缺 {EN_SRT} —— 英文配音需先跑 n2d-script 阶段2(分镜定稿)产出英文字幕，再跑 en。')
     for b in re.split(r'\n\s*\n', open(EN_SRT,encoding='utf-8').read().strip()):
         ls=[l for l in b.splitlines() if l.strip()]
         if len(ls)>=3: items.append(('',' '.join(ls[2:]),'neutral',1.0,''))
 n=len(items)
+if n==0:
+    sys.exit('⛔ voiceover.txt 无可解析台词行（格式：[镜头N·角色·情绪] 台词）。' if LANG=='zh'
+             else f'⛔ {EN_SRT} 无可解析字幕块。')
 MM_EMO={'angry':'angry','fearful':'fearful','sad':'sad','happy':'happy','serious':'neutral','neutral':'neutral'}
 vd=os.path.join(W,'voice'); os.makedirs(vd,exist_ok=True)
 
@@ -118,7 +130,7 @@ def http(url,body,hdr):
     with urllib.request.urlopen(req,timeout=90) as r: return json.loads(r.read().decode('utf-8'))
 
 def minimax(text,vid,emo,speed,pitch,out):
-    vs={"voice_id":vid,"speed":speed,"vol":1.6,"pitch":pitch}
+    vs={"voice_id":vid,"speed":speed,"vol":1.0,"pitch":pitch}  # vol=1.0：电平统一交给下游 loudnorm，避免源端先削波
     if emo and not os.environ.get('MINIMAX_NOEMO'): vs["emotion"]=emo
     j=http(f"{MM_ENDPOINT}?GroupId={MM_GROUP}",{"model":MM_MODEL,"text":text,"stream":False,"voice_setting":vs,
         "audio_setting":{"sample_rate":24000,"bitrate":128000,"format":"mp3","channel":1}},
@@ -214,6 +226,8 @@ for i in range(n):
     subprocess.run([FF,'-y','-loglevel','error','-i',raw,'-af',f'{fx}loudnorm=I=-16:TP=-1.5:LRA=11,aresample=44100','-ar','44100','-ac','2',tmp],check=True)
     out=os.path.join(W,f'line_{i:02d}.wav'); os.replace(tmp,out)  # 最终逐句落 配音/line_NN.wav（与 manifest/spec 一致）
     d=dur_of(out)
+    if d<=0:
+        d=dur_of(out)   # 重试一次：ffprobe 偶发管道/探测失败，不该把已合成的真实音频换成静音
     if d<=0:
         d=estimate_placeholder_duration(text, spd_m, hk)
         make_silence(out, d)
