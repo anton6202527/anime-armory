@@ -204,30 +204,46 @@ prompt 写法/语言         图片该长啥样
 用户：把这个小说改成漫剧素材：/Users/me/works/我的小说.docx
 
 调度（novel2drama）→ 识别"情境 A 首跑"：
+  先给「制作模式」菜单选一次（影响全程出片顺序，不静默默认）：
+    A 配音先行（推荐·配音已就绪）/ B 先出视频后配音（快速 demo 或配音还没就绪）
+    → 用户选后落 _设置.md（见 SKILL「制作模式 · 首跑选择」）。下面按默认 A 走。
   推荐：调 /n2d-script "/Users/me/works/我的小说.docx"
   说明：会先拆集，然后精修第1集
 
 用户：跑 /n2d-script
 
-n2d-script →
+n2d-script（阶段1·剧本改编）→
   1. 把小说挪到 制漫剧/我的小说/小说/
   2. 跑 split_novel.py → 生成 制漫剧/我的小说/{_进度.md, 设定库/{global_style.md, characters/, locations/}, 脚本/第N集/raw.txt}
   3. 在 _进度.md 写入 N 集骨架（raw 列 ✅，其他全 ⬜）
   4. 精修 设定库/global_style.md + 设定库/characters/ + 设定库/locations/
-  5. 精修第1集 阶段1剧本(台词) → 剧本改编列 ✅
-  6. 报告：第1集物料齐，可调 /n2d-image 出图
+  5. 精修第1集 阶段1剧本(台词+bgm+封面) → 剧本改编/bgm/封面列 ✅（**此阶段不做分镜**）
+  6. 报告：第1集剧本齐，下一步 /n2d-voice 配音（配音先行：真音时长驱动镜头）
+
+用户：跑 /n2d-voice 制漫剧/我的小说 第1集
+
+n2d-voice →
+  1. 把 voiceover.txt 逐句配音（CosyVoice/克隆/MiniMax；缺凭证回退 say 占位）
+  2. 落 合成/第1集/配音/{line_NN.wav, voice_zh.wav, 时长清单.json(每句实测时长)}
+  3. 配音列 ✅ → 报告：可回跑 /n2d-script 阶段2 用真音时长定稿分镜
+
+用户：跑 /n2d-script 第1集（阶段2·分镜设计，配音后回跑）
+
+n2d-script（阶段2）→
+  1. 跑 finalize_storyboard.py → 用实测时长定 分镜剧本 + 故事板(Clip时长) + 镜头时长.json
+  2. 产 素材清单 + 字幕_中文.srt（默认中文-only；海外才加 字幕_英文.srt）
+  3. 分镜设计/素材清单/字幕中 列 ✅ → 报告：可调 /n2d-image
 
 用户：跑 /n2d-image 制漫剧/我的小说 第1集
 
 n2d-image →
-  1. 走"强制 5 步 SOP"：扫共享 → 列需求 → 差集 → 追加共享 → 建本集 prompt
+  1. 走"强制 5 步 SOP"：扫共享 → 列需求 → 差集 → 追加共享定妆 → 建本集 prompt
   2. 写完 → 出图prompt 列 ✅
-  3. 扫本机生图 CLI（dreamina / gemini-cli / ...）
-  4. 有 CLI：调 → 出 PNG → 用户筛 → 落档 → 出图列填 K/N
-     无 CLI：分步指导用户在即梦 web 上一张张生 → 用户截图回传 → 落档
+  3. 按 _设置.md 的 生图AI（默认 Codex only）生图
+  4. 出 PNG → 用户筛 → 落档 出图/{common,第N集}/ → 出图列填 K/N
   5. 全部生成 → 出图列 K/K → 报告可调 /n2d-video
 
-用户：跑 /n2d-video ...
+用户：跑 /n2d-video ... → /n2d-compose（成片落 合成/第1集/）
 ```
 
 ---
@@ -246,7 +262,7 @@ def dispatch(work_root):
             return ("n2d-script(阶段1)", episode.id, "剧本改编未齐")
         if episode["配音"] != "✅":
             return ("n2d-voice", episode.id, "未配音")
-        if any(episode[c] != "✅" for c in ["分镜设计", "素材清单", "字幕中", "字幕英"]):
+        if episode["分镜设计"] != "✅":   # 实际路由只闸 分镜设计；素材清单/字幕中是阶段2 副产物、字幕英仅海外投放才出，均不阻塞路由（与 progress.py STAGES 一致）
             return ("n2d-script(阶段2)", episode.id, "分镜设计未齐（配音后回跑）")
         if episode["出图prompt"] != "✅" or not all_done(episode["出图"]):  # "4/19" 形式
             return ("n2d-image", episode.id, "出图未完")
