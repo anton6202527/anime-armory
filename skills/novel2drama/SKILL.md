@@ -162,19 +162,25 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 │       │   ├── 00_总览.md
 │       │   └── 01_分镜出图.md
 │       └── 镜头N_*.png
-└── 出视频/                        ← n2d-video 产物
-    ├── common/                    （如有跨集复用片段，如转场/空镜）
-    │   ├── prompt/
-    │   └── *.mp4
+├── 出视频/                        ← n2d-video 产物（只放 clips + 视频 prompt）
+│   ├── common/                    （如有跨集复用片段，如转场/空镜）
+│   │   ├── prompt/
+│   │   └── *.mp4
+│   └── 第N集/
+│       ├── prompt/
+│       │   ├── 00_总览.md
+│       │   └── 01_clips.md
+│       └── 视频/                  ← clip MP4 全归这（n2d-video 唯一产物）
+│           └── ClipK_*.mp4
+└── 合成/                          ← 音频 + 后期（n2d-voice 配音 + n2d-compose 成片）
     └── 第N集/
-        ├── prompt/
-        │   ├── 00_总览.md
-        │   └── 01_clips.md
-        └── 视频/                  ← clip MP4 全归这（n2d-video）
-        │   └── ClipK_*.mp4
         ├── 配音/                  ← n2d-voice：line_NN.wav + voice_*.wav + 时长清单.json
-        └── 成片_第N集_{mode}.mp4   ← n2d-compose 输出
+        ├── _voicecache/           （配音缓存）
+        ├── _work/                 （compose 中间产物）
+        ├── 成片_第N集_{mode}.mp4   ← n2d-compose 输出
+        └── 成片_第N集_{mode}_水印.mp4  （可选：compose 调 watermark 后）
 ```
+> **出视频/ vs 合成/ 分家（2026）**：`出视频/第N集/` 只放 per-shot clips（`视频/`）+ 视频 prompt（`prompt/`）；一切音频/后期——`配音/`（含 `时长清单.json`）、`_voicecache/`、compose `_work/`、最终 `成片_*.mp4` 及可选水印——落同级 `合成/第N集/`。compose 从 `出视频/` 读 clips、从 `合成/` 读配音、把成片写回 `合成/`。
 
 > **prompt/PNG/MP4 分离铁律**：每个 `出图/` 或 `出视频/` 文件夹（无论是 `common/` 还是 `第N集/`）一律分两层——`prompt/` 子目录装所有 prompt md，**生成产物 PNG/MP4 在 `prompt/` 同级**（即 `common/` 或 `第N集/` 的根）。
 
