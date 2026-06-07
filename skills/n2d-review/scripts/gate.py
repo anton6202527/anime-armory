@@ -179,8 +179,8 @@ def check_prompt_checklists(root: str, ep: str, kind: str) -> None:
             add(BLOCK, "prompt", p, "未识别到逐镜 prompt 块")
             return
         for idx, sec in enumerate(sections, 1):
-            if "**自检**" not in sec and "逐镜自检" not in sec and "自检（生成后逐张过" not in sec:
-                add(BLOCK, "prompt", p, f"镜头 {idx} 缺逐镜自检段")
+            check_image_shot_prompt_section(p, idx, sec)
+        check_common_image_prompts(root)
         return
     else:
         p = os.path.join(root, "出视频", ep, "prompt", "01_clips.md")
@@ -201,6 +201,112 @@ def check_prompt_checklists(root: str, ep: str, kind: str) -> None:
         return
 
 
+def _has_any(text: str, needles: Iterable[str]) -> bool:
+    return any(n in text for n in needles)
+
+
+def _headline(section: str, fallback: str) -> str:
+    first = next((ln.strip() for ln in section.splitlines() if ln.strip()), "")
+    return first or fallback
+
+
+def _reference_block(section: str) -> str:
+    m = re.search(r"(?ms)(?:\*\*)?参考图(?:\*\*)?.*?(?=^###\s+|^\*\*导演视角八维\*\*|^##\s+|\Z)", section)
+    return m.group(0) if m else ""
+
+
+def _section_has_character_refs(section: str) -> bool:
+    refs = _reference_block(section)
+    if "清空人物参考" in refs or "无需人物参考" in refs or "无人物" in section or "空镜" in section:
+        return False
+    # 场景/道具/VFX 纯空镜可没有角色锚点；含角色语义或人物定妆引用才按角色镜头卡。
+    if _has_any(section, ("角色", "人物", "脸", "脸型", "发型", "服装", "妆造", "锚点句", "同一少女", "同一少年")):
+        return True
+    asset_names = re.findall(r"定妆_([^`\s，。、,）)]+)", refs)
+    non_character_words = (
+        "场景", "道具", "寝殿", "宫", "殿", "庭", "院", "山", "洞", "门", "廊",
+        "床", "榻", "托盘", "光幕", "符纹", "剑气", "法宝", "特效", "阵", "丹炉",
+        "雷", "火", "云", "光效", "地标",
+    )
+    return any(not _has_any(name, non_character_words) for name in asset_names)
+
+
+def check_image_shot_prompt_section(path: str, idx: int, section: str) -> None:
+    name = _headline(section, f"镜头 {idx}")
+    loc = f"{path} {name}"
+
+    if "检查清单（八维自查" not in section:
+        add(BLOCK, "prompt", loc, "缺提交前检查清单（八维自查·最易漏②机位/⑥光影/⑦张力）")
+    if "**自检**" not in section and "逐镜自检" not in section and "自检（生成后逐张过" not in section:
+        add(BLOCK, "prompt", loc, "缺生成后逐张自检段")
+    if "重抽预算" not in section:
+        add(BLOCK, "prompt", loc, "缺重抽预算字段；无法按主要人物/关键镜策略收口")
+    if "正向 prompt（中文）" not in section:
+        add(BLOCK, "prompt", loc, "缺正向 prompt（中文）")
+    if "正向 prompt（英文）" not in section:
+        add(BLOCK, "prompt", loc, "缺正向 prompt（英文）兜底")
+    if "负向 prompt" not in section:
+        add(BLOCK, "prompt", loc, "缺负向 prompt；人物/场景堵漏不可控")
+    if "导演视角八维" not in section:
+        add(BLOCK, "prompt", loc, "缺导演视角八维表；分镜图不能只写画师式描述")
+
+    refs = _reference_block(section)
+    if not refs:
+        add(BLOCK, "prompt", loc, "缺参考图块；分镜图必须多图参考派生，禁止纯文生图")
+    else:
+        if "定妆_" not in refs:
+            add(BLOCK, "prompt", loc, "参考图块未引用共享定妆资产；会导致跨镜人物/场景漂移")
+        if "强度" not in refs and "strength" not in refs.lower():
+            add(WARN, "prompt", loc, "参考图块未标参考强度；多图参考派生稳定性不可复现")
+
+    for key in ("①", "②", "③", "④", "⑤", "⑥", "⑦", "⑧"):
+        if key not in section:
+            add(BLOCK, "prompt", loc, f"导演八维缺 {key} 维标记")
+
+    if _section_has_character_refs(section):
+        if not re.search(r"(锚点句|anchor phrase)\s*[:：]", section, re.IGNORECASE):
+            add(BLOCK, "角色一致性", loc, "含角色镜头缺锚点句；每镜必须拼角色卡锚点")
+        if not _has_any(section, ("脸型与定妆一致", "角色脸/妆造未漂移", "脸/妆造未漂移", "妆造未漂移")):
+            add(BLOCK, "角色一致性", loc, "含角色镜头自检未显式检查脸/妆造漂移")
+        if not _has_any(section, ("服装配色一致", "服装", "配色")):
+            add(BLOCK, "角色一致性", loc, "含角色镜头未显式锁服装/配色")
+        if "_侧" not in refs and "_半身" not in refs and "_全身" not in refs and "主体库" not in section and "角色ID" not in section:
+            add(WARN, "角色一致性", loc, "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂")
+
+
+def check_common_image_prompts(root: str) -> None:
+    prompt_dir = os.path.join(root, "出图", "common", "prompt")
+    if not os.path.isdir(prompt_dir):
+        add(BLOCK, "共享定妆", prompt_dir, "缺共享定妆 prompt 目录")
+        return
+    for filename in ("角色定妆.md", "场景定妆.md", "道具定妆.md", "法宝定妆.md", "特效定妆.md"):
+        p = os.path.join(prompt_dir, filename)
+        if not os.path.isfile(p):
+            continue
+        text = open(p, encoding="utf-8").read()
+        sections = re.findall(r"(?ms)^##\s+.*?(?=^##\s+|\Z)", text)
+        for i, sec in enumerate(sections, 1):
+            name = _headline(sec, f"{filename} block#{i}")
+            loc = f"{p} {name}"
+            if "目标存档" not in sec:
+                add(BLOCK, "共享定妆", loc, "缺目标存档；共享资产无法归档追踪")
+            if "正向 prompt（中文）" not in sec:
+                add(BLOCK, "共享定妆", loc, "缺正向 prompt（中文）")
+            if "正向 prompt（英文）" not in sec:
+                add(BLOCK, "共享定妆", loc, "缺正向 prompt（英文）")
+            if "负向 prompt" not in sec:
+                add(BLOCK, "共享定妆", loc, "缺负向 prompt")
+            if "检查清单（定妆自查" not in sec:
+                add(BLOCK, "共享定妆", loc, "缺定妆提交前检查清单")
+            if "自检（生成后逐张过" not in sec and "**自检**" not in sec:
+                add(BLOCK, "共享定妆", loc, "缺生成后落档自检段")
+            if filename == "角色定妆.md":
+                if "角色定妆组" not in sec:
+                    add(BLOCK, "角色一致性", loc, "角色定妆缺定妆组说明；核心角色不能只靠单张正脸")
+                if "锚点" not in sec:
+                    add(BLOCK, "角色一致性", loc, "角色定妆缺锚点字段；下游每镜无锚可拼")
+
+
 def check_shared_image_index(root: str, ep: str) -> None:
     overview = os.path.join(root, "出图", ep, "prompt", "00_总览.md")
     index = os.path.join(root, "出图", "common", "prompt", "00_索引.md")
@@ -210,6 +316,15 @@ def check_shared_image_index(root: str, ep: str) -> None:
     if not os.path.isfile(index):
         add(BLOCK, "出图", index, "缺共享定妆索引")
         return
+    index_text = open(index, encoding="utf-8").read()
+    for ln in index_text.splitlines():
+        if not ln.strip().startswith("|") or "✅" not in ln:
+            continue
+        paths = re.findall(r"`([^`]+\.png)`", ln)
+        for rel in paths:
+            full = rel if os.path.isabs(rel) else os.path.join(root, rel)
+            if not os.path.exists(full):
+                add(BLOCK, "共享定妆", index, f"索引标 ✅ 但 PNG 不存在：{rel}")
     overview_text = open(overview, encoding="utf-8").read()
     missing = []
     in_table = False
