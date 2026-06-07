@@ -29,7 +29,7 @@ COMMON = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "..", "common"))
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 
-from n2d_route import is_done, parse_progress, voice_is_placeholder  # noqa: E402
+from n2d_route import is_done, manifest_path, parse_progress, voice_is_placeholder  # noqa: E402
 from n2d_settings import is_video_first, watermark_setting  # noqa: E402
 
 BLOCK, WARN, INFO = "block", "warn", "info"
@@ -82,7 +82,8 @@ def progress_fraction_done(root: str, ep: str, col: str) -> bool:
 
 
 def voice_manifest(root: str, ep: str) -> Optional[List[dict]]:
-    p = os.path.join(root, "合成", ep, "配音", "时长清单.json")
+    # 时长清单可能在 合成/ 或 出视频/（先出视频后配音）下，两处都探
+    p = manifest_path(root, ep) or os.path.join(root, "合成", ep, "配音", "时长清单.json")
     data = load_json(p)
     if not isinstance(data, list):
         add(BLOCK, "配音", p, "缺少或无法解析时长清单.json")
@@ -122,14 +123,24 @@ def load_storyboard(root: str, ep: str) -> Optional[dict]:
     return data
 
 
-def check_storyboard_contract(root: str, ep: str) -> Optional[dict]:
+def check_storyboard_contract(root: str, ep: str, require_frame_assets: bool = True) -> Optional[dict]:
     data = load_storyboard(root, ep)
     if not data:
         return None
     clips = data["clips"]
+    policy = data.get("policy")
+    if not isinstance(policy, dict) or policy.get("tailframe_default") is not True:
+        add(BLOCK, "故事板", storyboard_path(root, ep), "storyboard.json 缺 policy.tailframe_default=true；首尾双帧接力必须作为默认契约")
     prev_end = None
     for i, clip in enumerate(clips, 1):
         loc = f"{storyboard_path(root, ep)} clip#{i}"
+        first_png = clip.get("firstframe_png")
+        if not first_png:
+            add(BLOCK, "首帧", loc, "缺 firstframe_png")
+        elif require_frame_assets:
+            first_full = first_png if os.path.isabs(first_png) else os.path.join(root, first_png)
+            if not os.path.exists(first_full):
+                add(BLOCK, "首帧", first_full, "firstframe_png 不存在")
         cont = clip.get("continuity")
         if not isinstance(cont, dict):
             add(BLOCK, "故事板", loc, "缺 continuity 块")
@@ -140,50 +151,54 @@ def check_storyboard_contract(root: str, ep: str) -> Optional[dict]:
         if prev_end and cont.get("start_state") != prev_end:
             add(BLOCK, "故事板", loc, "start_state 未原样继承上一 Clip 的 end_state")
         prev_end = cont.get("end_state")
+        if i < len(clips) and cont.get("need_endframe") is not True:
+            if not cont.get("endframe_exempt_reason"):
+                add(BLOCK, "尾帧", loc, "非最终 Clip 默认必须 need_endframe=true；若豁免需填写 endframe_exempt_reason")
         if cont.get("need_endframe") is True:
             end_png = cont.get("endframe_png")
             if not end_png:
                 add(BLOCK, "尾帧", loc, "need_endframe=true 但未填写 endframe_png")
-            else:
+            elif require_frame_assets:
                 full = end_png if os.path.isabs(end_png) else os.path.join(root, end_png)
                 if not os.path.exists(full):
                     add(BLOCK, "尾帧", full, "need_endframe=true 但尾帧 PNG 不存在")
     return data
 
 
-def prompt_blocks(paths: Iterable[str]) -> Iterable[Tuple[str, str]]:
-    for p in paths:
-        if not os.path.isfile(p):
-            continue
-        text = open(p, encoding="utf-8").read()
-        chunks = re.split(r"(?m)^##\s+", text)
-        for idx, chunk in enumerate(chunks):
-            if idx == 0 and not chunk.strip():
-                continue
-            yield p, chunk
-
-
 def check_prompt_checklists(root: str, ep: str, kind: str) -> None:
     if kind == "image":
-        paths = glob.glob(os.path.join(root, "出图", "common", "prompt", "*.md"))
-        paths += glob.glob(os.path.join(root, "出图", ep, "prompt", "*.md"))
-        required = ("检查清单（", "自检（生成后逐张过")
-    else:
-        paths = glob.glob(os.path.join(root, "出视频", ep, "prompt", "*.md"))
-        required = ("检查清单（视频三件套自查", "自检（生成后逐条过")
-    if not paths:
-        add(BLOCK, "prompt", root, f"缺 {kind} prompt 文件")
+        p = os.path.join(root, "出图", ep, "prompt", "01_分镜出图.md")
+        if not os.path.isfile(p):
+            add(BLOCK, "prompt", p, "缺本集分镜出图 prompt")
+            return
+        text = open(p, encoding="utf-8").read()
+        if "生成后自检流程" not in text and "自检（生成后逐张过" not in text:
+            add(WARN, "prompt", p, "缺全局生成后自检流程")
+        sections = re.findall(r"(?ms)^##\s+(?:镜头\s+\d+|Clip\s+\d+[A-Z]?).*?(?=^##\s+(?:镜头\s+\d+|Clip\s+\d+[A-Z]?)|\Z)", text)
+        if not sections:
+            add(BLOCK, "prompt", p, "未识别到逐镜 prompt 块")
+            return
+        for idx, sec in enumerate(sections, 1):
+            if "**自检**" not in sec and "逐镜自检" not in sec and "自检（生成后逐张过" not in sec:
+                add(BLOCK, "prompt", p, f"镜头 {idx} 缺逐镜自检段")
         return
-    checked = 0
-    for p, chunk in prompt_blocks(paths):
-        if "prompt" not in chunk.lower() and "Prompt" not in chunk and "视频 prompt" not in chunk:
-            continue
-        checked += 1
-        for marker in required:
-            if marker not in chunk:
-                add(BLOCK, "prompt", p, f"prompt 块缺必需检查段：{marker}")
-    if checked == 0:
-        add(WARN, "prompt", root, f"未识别到 {kind} prompt 块，检查清单闸门可能未覆盖")
+    else:
+        p = os.path.join(root, "出视频", ep, "prompt", "01_clips.md")
+        if not os.path.isfile(p):
+            add(BLOCK, "prompt", p, "缺本集视频 Clip prompt")
+            return
+        text = open(p, encoding="utf-8").read()
+        sections = re.findall(r"(?ms)^##\s+Clip\s+\d+[A-Z]?（.*?(?=^##\s+Clip\s+\d+[A-Z]?（|\Z)", text)
+        if not sections:
+            add(BLOCK, "prompt", p, "未识别到 Clip prompt 块")
+            return
+        for sec in sections:
+            name = sec.splitlines()[0].strip()
+            if "检查清单（视频三件套自查" not in sec:
+                add(BLOCK, "prompt", p, f"{name} 缺提交前检查清单")
+            if "自检（生成后逐条过" not in sec:
+                add(BLOCK, "prompt", p, f"{name} 缺生成后自检段")
+        return
 
 
 def check_shared_image_index(root: str, ep: str) -> None:
@@ -195,13 +210,19 @@ def check_shared_image_index(root: str, ep: str) -> None:
     if not os.path.isfile(index):
         add(BLOCK, "出图", index, "缺共享定妆索引")
         return
-    idx_text = open(index, encoding="utf-8").read()
-    bad = []
-    for ln in idx_text.splitlines():
-        if ln.strip().startswith("|") and "⬜" in ln:
-            bad.append(ln.strip())
-    if bad:
-        add(BLOCK, "共享定妆", index, f"共享索引仍有未完成项：{bad[0][:120]}")
+    overview_text = open(overview, encoding="utf-8").read()
+    missing = []
+    in_table = False
+    for ln in overview_text.splitlines():
+        if ln.startswith("## 共享定妆就绪状态"):
+            in_table = True
+            continue
+        if in_table and ln.startswith("## "):
+            break
+        if in_table and ln.strip().startswith("|") and "⬜" in ln:
+            missing.append(ln.strip())
+    if missing:
+        add(BLOCK, "共享定妆", overview, f"本集引用的共享定妆仍有未完成项：{missing[0][:120]}")
 
 
 def check_image_assets(root: str, ep: str) -> None:
@@ -290,21 +311,21 @@ def run(root: str, ep: str, stage: str) -> None:
     if stage == "image":
         require_progress(root, ep, ("配音", "分镜设计"))
         check_placeholder_policy(root, ep, "image")
-        check_storyboard_contract(root, ep)
+        check_storyboard_contract(root, ep, require_frame_assets=False)
         check_prompt_checklists(root, ep, "image")
         check_shared_image_index(root, ep)
     elif stage == "video":
         require_progress(root, ep, ("配音", "分镜设计", "出图prompt"))
         check_placeholder_policy(root, ep, "video")
-        check_storyboard_contract(root, ep)
+        check_storyboard_contract(root, ep, require_frame_assets=True)
         check_image_assets(root, ep)
         check_prompt_checklists(root, ep, "video")
     elif stage == "compose":
         require_progress(root, ep, ("视频",))
-        check_storyboard_contract(root, ep)
+        check_storyboard_contract(root, ep, require_frame_assets=True)
         check_compose_inputs(root, ep)
     elif stage == "review":
-        check_storyboard_contract(root, ep)
+        check_storyboard_contract(root, ep, require_frame_assets=True)
         check_video_assets(root, ep)
         check_final_watermark(root, ep)
     else:
@@ -336,4 +357,3 @@ def main(argv: List[str]) -> int:
 
 if __name__ == "__main__":
     sys.exit(main(sys.argv[1:]))
-

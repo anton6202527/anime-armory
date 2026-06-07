@@ -2,8 +2,9 @@
 源 env(可选): source <作品根>/合成/.minimax_env
 逐句生成 + 整轨 + 时长清单：
     python3 <skill>/render_voice.py <作品根> 第N集 zh
-    python3 <skill>/render_voice.py <作品根> 第N集 en   # 出海配音(英文)
-产物：<作品根>/合成/第N集/配音/{line_NN.wav, voice_zh.wav, voice_en.wav, 时长清单.json}
+    python3 <skill>/render_voice.py <作品根> 第N集 en   # 出海配音(英文)：须先有 字幕_英文.srt（n2d-script 阶段2 产物），故 en 配音在分镜定稿后才跑
+产物(zh)：<作品根>/合成/第N集/配音/{line_NN.wav, voice_zh.wav, 时长清单.json}
+产物(en)：voice_en.wav（en 不产 时长清单.json——它只由 zh 产出，驱动下游镜头时长）
 
 ## ⚠️ macOS say 中文空音频自动降级
 

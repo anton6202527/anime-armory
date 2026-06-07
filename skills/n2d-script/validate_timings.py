@@ -25,9 +25,21 @@ def srt_last_end(path):
     return last
 
 def main():
+    if len(sys.argv) < 3:
+        sys.exit('用法: validate_timings.py <作品根> <第N集> [--tol 0.5]')
     root, ep = sys.argv[1], sys.argv[2]
-    tol = float(sys.argv[sys.argv.index('--tol')+1]) if '--tol' in sys.argv else 0.5
-    vd  = os.path.join(root,'合成',ep,'配音')
+    tol = 0.5
+    if '--tol' in sys.argv:
+        i = sys.argv.index('--tol')
+        if i + 1 >= len(sys.argv):
+            sys.exit('⛔ --tol 后缺数值，例: --tol 0.5')
+        try:
+            tol = float(sys.argv[i + 1])
+        except ValueError:
+            sys.exit(f'⛔ --tol 数值无效: {sys.argv[i + 1]}')
+    # 配音可能在 合成/（配音先行）或 出视频/（先出视频后配音）下，两处都探
+    vbase = next((b for b in ('合成','出视频') if os.path.isfile(os.path.join(root,b,ep,'配音','时长清单.json'))), '合成')
+    vd  = os.path.join(root,vbase,ep,'配音')
     man_p = os.path.join(vd,'时长清单.json')
     voice = os.path.join(vd,'voice_zh.wav')
     zh_srt= os.path.join(root,'脚本',ep,'字幕_中文.srt')

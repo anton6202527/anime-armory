@@ -82,8 +82,9 @@ openai images create \
 - **配套 SKILL**：`~/.dreamina_cli/dreamina/SKILL.md`（可挂为另一个 skill 用）
 - **登录**：QR 码 + 抖音 App 扫码（OAuth）
 - **平台**：macOS / Linux / Windows（WSL）
-- **计费**：高级会员积分（试用期 2026-04-01 → 2026-05-01 已结束）
+- **计费**：高级会员积分（按官方实时档位为准；早期试用期已结束，不再列具体日期）
 - **后端模型**：Seedance 2.0
+> 注：默认 `生图AI=Codex only`，本 Dreamina/即梦档案**仅在项目 `_设置.md` 显式选「即梦」时**才生效，平时可略过。
 
 ### 子命令（实测）
 

@@ -1,0 +1,120 @@
+#!/usr/bin/env python3
+"""Tests for the n2d progress-table parser/router.
+
+Run from this directory:
+    cd skills/common && python -m pytest test_n2d_route.py
+"""
+import json
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(__file__))
+
+from n2d_route import (  # noqa: E402
+    cell_state, is_done, is_started, _cn_to_int,
+    parse_progress, stage_of, voice_is_placeholder, manifest_path,
+)
+
+
+# ── cell_state / is_done：na（不适用）算已满足 ──
+def test_cell_state_basic():
+    assert cell_state("✅") == "done"
+    assert cell_state("") == "todo"
+    assert cell_state("⬜") == "todo"
+    assert cell_state("3/5") == "partial"
+    assert cell_state("5/5") == "done"
+    assert cell_state("0/5") == "todo"
+
+
+def test_cell_state_na_counts_as_satisfied():
+    for v in ("—", "-", "N/A", "无", "×"):
+        assert cell_state(v) == "na"
+        assert is_done(v) is True       # na 不挡完成
+        assert is_started(v) is False   # 但不算"已开工"
+    assert is_done("") is False
+    assert is_done("⬜") is False
+
+
+# ── 集号解析：ASCII / 全角 / 中文数字 ──
+def test_cn_to_int():
+    assert _cn_to_int("12") == 12
+    assert _cn_to_int("１２") == 12       # 全角
+    assert _cn_to_int("十二") == 12
+    assert _cn_to_int("二十") == 20
+    assert _cn_to_int("二十三") == 23
+    assert _cn_to_int("三") == 3
+    assert _cn_to_int("abc") is None
+
+
+PROG_HEADER = "| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |"
+PROG_SEP = "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"
+
+
+def _write_progress(tmp_path, rows):
+    p = os.path.join(tmp_path, "_进度.md")
+    with open(p, "w", encoding="utf-8") as f:
+        f.write(PROG_HEADER + "\n" + PROG_SEP + "\n" + "\n".join(rows) + "\n")
+    return str(tmp_path)
+
+
+def test_parse_mixed_episode_numerals(tmp_path):
+    rows = [
+        "| 第1集 | 800 | … | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ | ✅ | ✅ |",
+        "| 第２集 | 800 | … | ✅ | ✅ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+        "| 第三集 | 800 | … | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+    ]
+    root = _write_progress(tmp_path, rows)
+    header, parsed = parse_progress(root)
+    assert len(parsed) == 3                       # 全角/中文集号都没被丢
+    assert [r["_num"] for r in parsed] == [1, 2, 3]
+
+
+def test_no_empty_frontier_on_secondary_column(tmp_path):
+    # 第1集：除 素材清单 外全 ✅（字幕英=— 不适用）→ 应路由到 n2d-script，而非空前沿
+    rows = [
+        "| 第1集 | 800 | … | ✅ | ✅ | ✅ | ✅ | ✅ | ⬜ | ✅ | — | ✅ | ✅ | ✅ | ✅ | ⬜ |",
+    ]
+    root = _write_progress(tmp_path, rows)
+    header, parsed = parse_progress(root)
+    route = stage_of(root, parsed[0], header)
+    assert route["col"] == "素材清单"
+    assert route["skill"] == "n2d-script"
+
+
+def test_zh_only_episode_can_complete(tmp_path):
+    # 字幕英=— 的纯中文集，全流程 ✅ → 不应卡在不适用列上
+    rows = [
+        "| 第1集 | 800 | … | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ | ✅ | ✅ |",
+    ]
+    root = _write_progress(tmp_path, rows)
+    header, parsed = parse_progress(root)
+    route = stage_of(root, parsed[0], header)
+    assert route["col"] is None        # 已成片
+    assert route["skill"] is None
+
+
+# ── manifest_path / voice_is_placeholder：合成/ 与 出视频/ 双探 ──
+def _put_manifest(base_dir, placeholder):
+    os.makedirs(base_dir, exist_ok=True)
+    data = [{"idx": 0, "文本": "x", "时长": 1.0, **({"占位": True} if placeholder else {})}]
+    json.dump(data, open(os.path.join(base_dir, "时长清单.json"), "w", encoding="utf-8"),
+              ensure_ascii=False)
+
+
+def test_manifest_path_probes_both_bases(tmp_path):
+    root = str(tmp_path)
+    assert manifest_path(root, "第1集") is None
+    # 只在 出视频/ 下（先出视频后配音）
+    _put_manifest(os.path.join(root, "出视频", "第1集", "配音"), placeholder=True)
+    p = manifest_path(root, "第1集")
+    assert p and "出视频" in p
+    assert voice_is_placeholder(root, "第1集") is True
+
+
+def test_manifest_path_prefers_compose_dir(tmp_path):
+    root = str(tmp_path)
+    _put_manifest(os.path.join(root, "出视频", "第2集", "配音"), placeholder=True)
+    _put_manifest(os.path.join(root, "合成", "第2集", "配音"), placeholder=False)
+    p = manifest_path(root, "第2集")
+    assert "合成" in p                              # 合成/ 优先
+    assert voice_is_placeholder(root, "第2集") is False

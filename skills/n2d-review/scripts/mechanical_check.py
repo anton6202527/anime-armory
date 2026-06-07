@@ -49,8 +49,18 @@ def parse_srt(path):
     return cues
 
 
+def voice_dir(root, ep):
+    """配音目录：合成/<ep>/配音/（配音先行）或 出视频/<ep>/配音/（先出视频后配音）
+    ——两处都探，返回第一个存在 时长清单.json 的；都没有则返回默认合成路径。"""
+    for base in ("合成", "出视频"):
+        d = os.path.join(root, base, ep, "配音")
+        if os.path.isfile(os.path.join(d, "时长清单.json")):
+            return d
+    return os.path.join(root, "合成", ep, "配音")
+
+
 def load_manifest(root, ep):
-    p = os.path.join(root, "合成", ep, "配音", "时长清单.json")
+    p = os.path.join(voice_dir(root, ep), "时长清单.json")
     if not os.path.exists(p):
         return None, p
     try:
@@ -126,8 +136,9 @@ def check_completeness(root, ep, manifest):
     if manifest is None:
         add(WARN, "完整性", ep, "缺 时长清单.json（未配音则正常）")
     else:
+        vdir = voice_dir(root, ep)
         for m in manifest:
-            w = n("合成", ep, "配音", m.get("line_wav", ""))
+            w = os.path.join(vdir, m.get("line_wav", ""))
             if m.get("line_wav") and not os.path.exists(w):
                 add(WARN, "完整性", f"{ep} {m['line_wav']}", "时长清单列了但 wav 不存在")
         if any(m.get("占位") for m in manifest):
@@ -222,7 +233,9 @@ def check_storyboard_and_video(root, ep):
     if audio:
         add(WARN, "原生音轨", audio[0], "clip 含原生音轨；compose 默认应丢弃，若混入需确认无原生人声")
     shots_p = os.path.join(root, "脚本", ep, "镜头时长.json")
-    if os.path.exists(shots_p) and mp4s:
+    # 仅当整集 clip 都齐了(len(mp4s)==len(clips))才比总长——增量生产中只出了几个 clip 时
+    # 拿部分对全集总时长会刷无意义的「差 N 秒」假警告。
+    if os.path.exists(shots_p) and mp4s and len(mp4s) == len(clips):
         try:
             target = sum(float(v) for v in json.load(open(shots_p, encoding="utf-8")).values())
             ds = [_duration(p) for p in mp4s]

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # 配音时长 → 定稿：时长清单.json(+现有en字幕文本) → 重定时 字幕_中文.srt[+字幕_英文.srt] + 镜头时长.json
 # 用法: finalize_storyboard.py <作品根> <第N集> [gap]
+#   [gap] 仅对无 start/end 的旧清单回退路径生效；render_voice 现恒写 start/end/gap_after，新清单忽略它。
 #   字幕语言看 ../_偏好约定.md 的「字幕语言」选择点：默认仅中文；中英双语/仅英文用 SUB_LANG=zh,en（或 en）开启。
 #   未设 SUB_LANG 时：已存在 字幕_英文.srt 译文就一并重定时，否则只产中文。
 import sys, os, re, json, textwrap
@@ -42,7 +43,7 @@ def build(manifest, en_texts, gap=0.4):
             spans.append((t, t+d, g)); t=t+d+g
     for i,row in enumerate(manifest):
         start,end,gap_after=spans[i]
-        zh.append(f"{i+1}\n{_ts(start)} --> {_ts(end)}\n{_wrap_zh(row['文本'])}\n")
+        zh.append(f"{i+1}\n{_ts(start)} --> {_ts(end)}\n{_wrap_zh(row.get('文本',''))}\n")
         etxt=en_texts[i] if i<len(en_texts) else ""
         en.append(f"{i+1}\n{_ts(start)} --> {_ts(end)}\n{_wrap_en(etxt)}\n")
         sh=row.get("镜头","")
@@ -61,7 +62,12 @@ def _parse_srt_texts(path):
 def main():
     root, ep = sys.argv[1], sys.argv[2]
     gap = float(sys.argv[3]) if len(sys.argv)>3 else 0.4
-    manifest=json.load(open(os.path.join(root,'合成',ep,'配音','时长清单.json'),encoding='utf-8'))
+    # 时长清单可能落在 合成/（配音先行）或 出视频/（先出视频后配音）下，两处都探
+    man_p = next((p for p in (os.path.join(root,'合成',ep,'配音','时长清单.json'),
+                              os.path.join(root,'出视频',ep,'配音','时长清单.json')) if os.path.isfile(p)), None)
+    if not man_p:
+        print('⛔ 缺 时长清单.json（合成/'+ep+'/配音/ 或 出视频/'+ep+'/配音/）——请先 /n2d-voice 配音。'); sys.exit(2)
+    manifest=json.load(open(man_p,encoding='utf-8'))
     # 占位闸门：占位音色时长是估算值（与真实配音差 20~40%），定稿到镜头时长后会污染故事板 Clip 时长 → 出视频按错时长生成 → 大返工。
     # render_voice 已把占位句标 "占位":true；这里默认拒绝定稿，仅 rough preview 可用 FINALIZE_ALLOW_PLACEHOLDER=1 放行。
     ph=[r.get('idx',i) for i,r in enumerate(manifest) if r.get('占位')]

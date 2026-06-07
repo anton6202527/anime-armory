@@ -26,6 +26,8 @@ BGM ducking（配音压 BGM 的力度）：
     J_CUT_SEC=0.35 bash <skill>/compose.sh <作品根> 第N集 zh    # 更强的声音先行
     # 基于 配音/时长清单.json + line_*.wav 重建轻量提前入声的 voice_jcut.wav。
     # 只适合旁白、系统音、背身/侧脸说话、转场声；正面口型特写保持 J_CUT_SEC=0。
+    # 注意：J-cut 把整条配音轨统一前移 J_CUT_SEC，字幕(render_subs)仍按原 SRT 时间码烧，
+    #       故声音会比字幕早 ≤J_CUT_SEC 秒——这是 J-cut(声音先行)的预期；要严格音字同步就设 0。
     # 建议范围 0.15-0.35，脚本上限 0.4，避免破坏音画同步。
 clip 原生音频：
     # 默认转码时剥掉 AI clip 原生音轨，避免原生台词与 n2d-voice 配音双人声

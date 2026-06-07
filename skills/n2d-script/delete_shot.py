@@ -5,7 +5,7 @@
 # 自动做：voiceover.txt 删行 → 字幕_英文.srt 删对应块(EN文本源·必须同步) →
 #         时长清单.json reflow(丢句+重编号+重命名 line wav，被删句移废料) →
 #         voice_zh.wav 重拼轨(有 ffmpeg 时，含 hook 可变间隔) → finalize_storyboard 重定时
-# 不动（末尾打印清单，需人工）：故事板/分镜剧本/bgm/可灵*.md 设计文档、已生成的 PNG/clip MP4、成片。
+# 不动（末尾打印清单，需人工）：故事板.md/分镜剧本.md/bgm.txt/storyboard.json 设计文档、已生成的 PNG/clip MP4、成片。
 import sys, os, re, json, subprocess, shutil
 
 if len(sys.argv) < 4: sys.exit('用法: delete_shot.py <作品根> <第N集> <镜头名> [镜头名...]')
@@ -15,8 +15,15 @@ shots = set(sys.argv[3:])
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 VO   = os.path.join(root, '脚本', ep, 'voiceover.txt')
 ENS  = os.path.join(root, '脚本', ep, '字幕_英文.srt')
-CONF = os.path.join(root, '合成', ep, '配音')
+# 时长清单/配音可能在 合成/（配音先行）或 出视频/（先出视频后配音）下，两处都探
+VBASE = next((b for b in ('合成', '出视频') if os.path.isfile(os.path.join(root, b, ep, '配音', '时长清单.json'))), '合成')
+CONF = os.path.join(root, VBASE, ep, '配音')
 MAN  = os.path.join(CONF, '时长清单.json')
+
+if not os.path.isfile(MAN):
+    sys.exit(f'⛔ 缺 {MAN} —— 该集还没配音(无时长清单)，无可回流的删镜。请确认集号，或先 /n2d-voice。')
+if not os.path.isfile(VO):
+    sys.exit(f'⛔ 缺 {VO} —— voiceover.txt 不存在，无法删行。请确认作品根/集号。')
 
 man = json.load(open(MAN, encoding='utf-8'))
 dset = {i for i, r in enumerate(man) if r.get('镜头') in shots}
@@ -34,11 +41,16 @@ open(VO, 'w', encoding='utf-8').write('\n'.join(l for l in lines if shot_of(l) n
 # 2) 字幕_英文.srt 删对应块 —— finalize 按 index 取 EN 文本，不同步则删除点之后全部错位
 if os.path.exists(ENS):
     blks = re.split(r'\n\s*\n', open(ENS, encoding='utf-8').read().strip())
-    blks = [b for i, b in enumerate(blks) if i not in dset]
-    open(ENS, 'w', encoding='utf-8').write('\n\n'.join(blks) + '\n')
+    if len(blks) != len(man):
+        # EN 块数与时长清单句数不一致：按 index 删会错块。跳过 EN 同步并警告，让用户先对齐。
+        print(f'⚠ 跳过英文字幕同步：EN 块数({len(blks)}) ≠ 时长清单句数({len(man)})，按 index 删会错位。'
+              f'\n  请先重跑 finalize_storyboard 对齐中英字幕，或手动删 {sorted(shots)} 对应 EN 块。')
+    else:
+        blks = [b for i, b in enumerate(blks) if i not in dset]
+        open(ENS, 'w', encoding='utf-8').write('\n\n'.join(blks) + '\n')
 
 # 3) 时长清单 reflow：被删句 wav 移废料；保留句重命名为连续 line_NN.wav；保留句"时长不变"
-waste = os.path.join(root, '废料', '合成', ep, '配音'); os.makedirs(waste, exist_ok=True)
+waste = os.path.join(root, '废料', VBASE, ep, '配音'); os.makedirs(waste, exist_ok=True)
 for i in sorted(dset):
     w = os.path.join(CONF, man[i].get('line_wav', f'line_{i:02d}.wav'))
     if os.path.exists(w): shutil.move(w, os.path.join(waste, os.path.basename(w)))
@@ -89,8 +101,8 @@ subprocess.run([sys.executable, os.path.join(SCRIPT_DIR, 'finalize_storyboard.py
 
 # 6) 还需人工（非自动推导链，脚本不动）
 print('\n=== 还需手动处理 ===')
-print(f'  □ 设计文档删 {sorted(shots)} 相关块：故事板.md / 分镜剧本.md / bgm.txt / 可灵*.md'
-      '（故事板·可灵的 Clip 视情况重编号 + 同步拆Clip子标签）')
+print(f'  □ 设计文档删 {sorted(shots)} 相关块：故事板.md / 分镜剧本.md / bgm.txt / storyboard.json'
+      '（故事板与 storyboard.json 的 Clip 视情况重编号 + 同步拆Clip子标签）')
 print(f'  □ 若已出图/出视频：移走 出图/{ep}/镜头X_*.png 与 出视频/{ep}/视频/对应 Clip*.mp4 → 废料/')
 print(f'  □ 重跑 /n2d-compose <作品根> {ep} 出新成片')
 print('  □ 过一眼 novel2drama/references/导演节奏.md 留存自查（别把钩子/集尾删没）')
