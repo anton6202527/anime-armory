@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # MiniMax 声音复刻：上传参考音频 → voice_clone → 输出自定义 voice_id
-# 用法: source .minimax_env && python3 _voice_clone.py <参考音频路径> <自定义voiceID>
+# 用法: source .minimax_env && python3 voice_clone.py <参考音频路径> <自定义voiceID>
 #   自定义voiceID 规则：字母开头、≥8位、字母数字（如 shennian_yujie01）
 import sys, os, json, subprocess, urllib.request
 

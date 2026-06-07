@@ -57,8 +57,12 @@ if [ -f "$VOICE" ] && [ -z "${VOICEFILE:-}" ] && [ -f "$MAN_J" ]; then
   if python3 -c "import sys; sys.exit(0 if float(sys.argv[1]) > 0 else 1)" "$J_CUT_SEC"; then
     echo "=== [2.5/6] 可选 J-cut 配音轨（提前 ${J_CUT_SEC}s 入声）==="
     echo "注意：J-cut 只适合旁白/系统音/背身或侧脸转场；正面口型特写请保持 J_CUT_SEC=0。"
-    python3 "$SKILL_DIR/build_jcut_voice.py" "$MAN_J" "$ROOT/出视频/$EP/配音" "$J_CUT_SEC" "$DUR" "$W/voice_jcut.wav"
-    VOICE="$W/voice_jcut.wav"
+    # 优雅降级：旧清单缺 start/line_wav 等导致 J-cut 构建失败时，退回原整轨继续合成（不因 set -e 整体中断）。
+    if python3 "$SKILL_DIR/build_jcut_voice.py" "$MAN_J" "$ROOT/出视频/$EP/配音" "$J_CUT_SEC" "$DUR" "$W/voice_jcut.wav"; then
+      VOICE="$W/voice_jcut.wav"
+    else
+      echo "⚠️ J-cut 构建失败（清单可能缺 start/line_wav 字段）→ 退回原配音轨继续合成：$VOICE"
+    fi
   fi
 fi
 

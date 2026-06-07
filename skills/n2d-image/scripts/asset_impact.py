@@ -74,15 +74,26 @@ def parse_shots(text):
     return shots
 
 
+# `定妆_<键>` 命中要求键后是真边界，避免前缀误伤：`定妆_沈` 不该命中 `定妆_沈念.png`、
+# `冷宫` 不该命中 `冷宫寝殿`。边界 = .png / 视图后缀(_侧…) / 标点空白 / 行尾。
+# 注：状态形态(如 沈念_觉醒)是独立 PNG，查 `沈念` 不连带命中——要重出该形态请显式查 `沈念_觉醒`。
+_PREFIX_BOUND = r"(?:\.png|_(?:%s)|[、,，/\s.。)）]|$)" % "|".join(VIEW_SUFFIXES)
+
+
+def _refs_prefixed(text, k):
+    return re.search(r"定妆_" + re.escape(k) + _PREFIX_BOUND, text) is not None
+
+
 def shot_references(shot, keys):
     """该镜头是否引用了任一目标资产。两 schema 都靠：参考图行裸名 token 命中，
-    或正文/参考图行出现 `定妆_<核心键>`（带前缀写法）。keys = 各资产核心键集合。"""
+    或正文/参考图行出现 `定妆_<核心键>`（带前缀写法，需过 _refs_prefixed 边界判定）。
+    keys = 各资产核心键集合。"""
     text = shot["refline"] + "\n" + shot["body"]
     ref_core = {core(t) for t in ref_tokens(shot["refline"])} if shot["refline"] else set()
     for k in keys:
         if not k:
             continue
-        if k in ref_core or ("定妆_" + k) in text:
+        if k in ref_core or _refs_prefixed(text, k):
             return True
     return False
 

@@ -18,7 +18,8 @@ description: 制MV 出视频 — 把 mv-image 的 PNG 图生视频成 MV clip，
 - **图生视频为主**：以 mv-image 的 PNG 为首帧，视频 AI 只控运动+运镜，锁画面一致性。纯氛围/转场可文生。
 - **运镜服务节奏/情绪**：副歌高能=快推/环绕/轻甩；verse 叙事=缓推/跟；bridge 反转=换机位。爽点对齐 downbeat。
 - **三件套必写**：人物运动 + 镜头运动 + 动态细节。
-- **continuity 必写**：每个 clip 必须有 `continuity.start_state/action/end_state/constraints/negative`，同时读取上一/下一 clip、`beatgrid.json` 起止点、段落张力和歌词画面钩子。MV 的连续性不是一镜到底，而是"视觉身份一致 + 动作/视线/道具可切 + 卡点落点准"。
+- **continuity 必写**：每个 clip 必须有 `continuity.start_state/action/end_state/constraints/negative`，同时读取上一/下一 clip、`beatgrid.json` 起止点、段落张力和歌词画面钩子。`continuity.start_state` 直接抄上一 clip 的 `end_state`（单一真值，别重写）。MV 的连续性不是一镜到底，而是"视觉身份一致 + 动作/视线/道具可切 + 卡点落点准"。
+  - **MV 默认卡点硬切**（踩 downbeat 切），接点靠"视觉身份一致 + 卡点准"，**不强求 n2d 那套首尾帧接力**。但**同段落·非卡点切·人物姿态连续**的接缝（如副歌内一段连续动作分两 clip），可选尾帧接力：mv-image 出 `镜头N_end.png`=下一 clip 首帧构图，mv-video 首尾双帧引导锁接点。换段/卡点切不需要。
 - **导演视角八维（视频版）**：①镜头/③人物/⑤场景/⑥光影/⑧画风**已由首帧 PNG 锁死**（出图阶段做完），视频阶段**只升级 ④动作→人物运动+表情(踩段落)、②机位→运镜(对齐 downbeat)、⑦张力**，其余严禁重定（改了=与首帧打架=闪烁）。详见 `mv/references/导演视角prompt.md §四`。
 - **生视频贵**：先在图阶段锁死视觉，视频只调动作/运镜；每 clip 跑几版挑稳由 `出视频规格` 档统一决定（见下节）。
 - **生视频 CLI**：本机官方 CLI（dreamina/kling/veo/seedance）直调；没有则一步步指导 web。**不装第三方逆向 CLI**。
@@ -43,7 +44,7 @@ description: 制MV 出视频 — 把 mv-image 的 PNG 图生视频成 MV clip，
 
 ## 工作流
 1. 读 `beatgrid.json`（downbeats/段落）+ `出图/` PNG + `视觉蓝图` 段落映射。
-2. 规划 clip：按段落 + 卡点定**每 clip 时长**（副歌密、verse 疏），列 clip 表（首帧 PNG / 时长 / 运镜 / 段落 / continuity）。`continuity.start_state` 优先取上一 clip 的 `end_state`；`end_state` 同时服务下一 clip 的首帧/歌词钩子/downbeat 落点。
+2. 规划 clip：按段落 + 卡点定**每 clip 时长**（副歌密、verse 疏），列 clip 表（首帧 PNG / 时长 / 运镜 / 段落 / 转场 / 需要尾帧? / continuity）。`continuity.start_state` **抄上一 clip 的 `end_state`**（同一句不重写）；`end_state` 同时服务下一 clip 的首帧/歌词钩子/downbeat 落点。给同段落连续硬切的接缝标 `需要尾帧?=是`，让 mv-image 备尾帧 PNG。
 3. 调 AI 前**先念「出视频规格」告知话术**（当前规格档 + 三档可改，见上节）→ 逐 clip 图生视频，按规格档的分辨率/帧率/跑几版执行 → `出视频/视频/Clip<NN>_<描述>.mp4`；废片归 `common/废料/`。
 4. 校验：clip 总时长 ≈ 歌长（差太多回头调 clip/补空镜）。
 5. 回写 `_进度.md` 视频行。下一步 mv-lyric-sync（字幕）/ mv-compose（合成，按 beatgrid 卡点拼）。

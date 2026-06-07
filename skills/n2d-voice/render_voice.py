@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # 逐句 TTS 配音 → gap 拼接 → voice.wav + 时长清单.json
-# 后端优先级: CosyVoice > FishSpeech > MiniMax > 火山 > macOS say。带持久缓存(同参数同文本不重复调API)。
+# 后端优先级: 零样本克隆组(CosyVoice > FishSpeech > GPT-SoVITS > IndexTTS-2 > VoxCPM2，取第一个设了 URL 的) > MiniMax > 火山 > macOS say。
+# 带持久缓存(同参数同文本不重复合成/调 API)——云端与本地零样本均缓存进 _voicecache/。
 # 用法: render_voice.py <作品根> <第N集> <zh|en>
 import sys, os, re, subprocess, json, base64, uuid, hashlib, urllib.request, shutil
 
@@ -19,10 +20,14 @@ VOLC_APPID=os.environ.get('VOLC_APPID'); VOLC_TOKEN=os.environ.get('VOLC_TOKEN')
 VOLC_CLUSTER=os.environ.get('VOLC_CLUSTER','volcano_tts'); VOLC_ENDPOINT=os.environ.get('VOLC_ENDPOINT','https://openspeech.bytedance.com/api/v1/tts')
 USE_VOLC=bool(VOLC_APPID and VOLC_TOKEN) and not USE_MM
 USE_API=USE_MM or USE_VOLC
-COSY_URL=os.environ.get('COSYVOICE_URL')  # 本地 CosyVoice 服务，如 http://localhost:9880
-USE_COSY=bool(COSY_URL) and not USE_MM   # CosyVoice 优先于 MiniMax；若也设了 MiniMax，CosyVoice 赢
-FISH_URL=os.environ.get('FISHSPEECH_URL')  # 本地 Fish Speech 服务(n2d_fish_server.py)，如 http://localhost:8081
-USE_FISH=bool(FISH_URL) and not USE_COSY and not USE_MM   # 优先级 CosyVoice > FishSpeech > MiniMax
+# 零样本克隆后端：本地服务统一 GET /inference_zero_shot?text=&prompt_text=&prompt_wav= 契约（端点随 fork，见 backends.md）。
+# (URL_env, 参考音 env 前缀, 显示名, HTTP 超时秒)，按优先级取第一个设了 URL 的；任一存在即优先于 MiniMax/火山。
+ZS_SPECS=[('COSYVOICE_URL','COSY','CosyVoice',120),('FISHSPEECH_URL','FISH','FishSpeech',300),
+          ('GPTSOVITS_URL','GSV','GPT-SoVITS',300),('INDEXTTS_URL','IDX','IndexTTS-2',300),
+          ('VOXCPM_URL','VOX','VoxCPM2',300)]
+ZS=next(((os.environ[e],pfx,lbl,to) for e,pfx,lbl,to in ZS_SPECS if os.environ.get(e)), None)
+USE_ZS=bool(ZS) and not USE_MM   # 零样本克隆优先于 MiniMax；若也设了 MiniMax，本地零样本赢
+ZS_URL,ZS_PREFIX,ZS_LABEL,ZS_TIMEOUT = ZS if ZS else (None,None,None,120)
 
 # ── 表演标注解析（情绪/语速/停顿/钩子）→ 驱动念白，见 n2d-script formats §6 / 导演节奏.md §六 ──
 # 规范情绪：angry/fearful/sad/happy/serious/neutral（关键词归类，兼容旧的自由情绪词）
@@ -133,19 +138,13 @@ def volc(text,vt,emo,speed,out):
     if j.get('code')!=3000 or not j.get('data'): raise RuntimeError(f"火山 code={j.get('code')} {j.get('message')}")
     open(out,'wb').write(base64.b64decode(j['data']))
 
-def cosy_tts(text, ref_audio, ref_text, out_wav):
-    # CosyVoice2 常见 fork 的零样本端点；不同 fork 端点/参数可能不同，见 references/backends.md
+def zeroshot_tts(url, text, ref_audio, ref_text, out_wav, timeout):
+    # 本地零样本克隆统一契约：GET /inference_zero_shot?text=&prompt_text=&prompt_wav=
+    # CosyVoice / FishSpeech(n2d_fish_server) / GPT-SoVITS / IndexTTS-2 / VoxCPM2 均包成此端点（端点随 fork，见 references/backends.md）
     import urllib.parse
     q=urllib.parse.urlencode({"text":text,"prompt_text":ref_text or "","prompt_wav":ref_audio or ""})
-    req=urllib.request.Request(f"{COSY_URL}/inference_zero_shot?{q}")
-    with urllib.request.urlopen(req,timeout=120) as r: open(out_wav,'wb').write(r.read())
-
-def fish_tts(text, ref_audio, ref_text, out_wav):
-    # Fish Speech 本地服务(n2d_fish_server.py)；同 /inference_zero_shot 契约，见 references/backends.md
-    import urllib.parse
-    q=urllib.parse.urlencode({"text":text,"prompt_text":ref_text or "","prompt_wav":ref_audio or ""})
-    req=urllib.request.Request(f"{FISH_URL}/inference_zero_shot?{q}")
-    with urllib.request.urlopen(req,timeout=300) as r: open(out_wav,'wb').write(r.read())
+    req=urllib.request.Request(f"{url}/inference_zero_shot?{q}")
+    with urllib.request.urlopen(req,timeout=timeout) as r: open(out_wav,'wb').write(r.read())
 
 def dur_of(p):
     s=subprocess.run([FP,'-v','error','-show_entries','format=duration','-of','csv=p=0',p],capture_output=True,text=True).stdout.strip()
@@ -173,12 +172,12 @@ wavs=[]; measured=[]; placeholders=[]; placeholder_reason=''
 for i in range(n):
     role,text,emo_c,spd_m,hk=items[i]
     # 取原始音频(缓存)
-    if USE_COSY:
-        ref,rtext=role_ref('COSY',role)
-        raw=os.path.join(vd,f'r{i:02d}.wav'); cosy_tts(text, ref, rtext, raw); sysfx=('系统' in role)
-    elif USE_FISH:
-        ref,rtext=role_ref('FISH',role)
-        raw=os.path.join(vd,f'r{i:02d}.wav'); fish_tts(text, ref, rtext, raw); sysfx=('系统' in role)
+    if USE_ZS:
+        ref,rtext=role_ref(ZS_PREFIX,role)
+        # 本地零样本同样缓存：同后端+同参考音+同文本 → 不重复合成（本地 MPS/CPU 合成慢，缓存收益最大）
+        key=hashlib.md5(f"zs|{ZS_LABEL}|{ref}|{rtext}|{text}".encode()).hexdigest(); raw=os.path.join(CACHE,key+'.wav')
+        if not os.path.exists(raw): zeroshot_tts(ZS_URL, text, ref, rtext, raw, ZS_TIMEOUT)
+        sysfx=('系统' in role)
     elif USE_MM:
         if LANG=='en': vid,emo,sp,pit=MM['EN'],None,1.0,0
         else:
@@ -260,4 +259,4 @@ if placeholders:
         f"# 本地占位配音\n\n{warn}\n\n用途: 跑通分镜/字幕时间轴 rough preview。\n要求: 跨过出图前,换 CosyVoice/克隆/MiniMax 等真实配音重跑,并用真实时长回跑 n2d-script 阶段2。\n"
     )
     print(warn)
-print(f"配音 {LANG}: {n} 句（后端={'CosyVoice' if USE_COSY else 'FishSpeech' if USE_FISH else 'MiniMax' if USE_MM else '火山' if USE_VOLC else 'say'}，顺序拼接 gap={GAP}s+钩子留拍，无压速）→ voice_{LANG}.wav")
+print(f"配音 {LANG}: {n} 句（后端={ZS_LABEL if USE_ZS else 'MiniMax' if USE_MM else '火山' if USE_VOLC else 'say'}，顺序拼接 gap={GAP}s+钩子留拍，无压速）→ voice_{LANG}.wav")

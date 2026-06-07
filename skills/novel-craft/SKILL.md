@@ -11,6 +11,7 @@ description: Shared writing-primitives library for the novel-* skill family — 
 
 | 主题 | 参考 | 何时引用 |
 |---|---|---|
+| **设定圣经 schema（统一·单一真值源）** | `references/setting-bible.md` | 建设定/角色卡/世界观时——create 从零建、spinoff/rewrite/continue 从原作抽改，**都用这一套字段**（含金手指必有代价 + 首现章/复用范围一致性三列） |
 | 拆分标准（章 / 集 边界 + 字数分档） | `references/split.md` | 章纲编织**之前**先定总章数与字数分档 |
 | 章纲编织 | `references/outline.md` | 拆分定下后；进入逐章写作前 |
 | 单章写作守则 | `references/chapter.md` | 每章下笔前；子代理 prompt 模板在此 |
@@ -18,9 +19,23 @@ description: Shared writing-primitives library for the novel-* skill family — 
 | 续写法 | `references/continue.md` | 原作末章后，**加新章节**（时间向前推） |
 | 精简法 | `references/condense.md` | 现有文本太长想压缩时 |
 
+## 共享脚本（家族通用工具，避免各 skill 各写一份）
+
+| 脚本 | 干什么 | 谁用 |
+|---|---|---|
+| `scripts/export.py` | 章节/第NN章.md 合并 → txt / docx / 大纲 / n2d-script 目录；`--combine` 走续写合本（原作+新章节·章号续编） | create / spinoff / rewrite / expand / condense / continue **共用同一份**（旧的 expand.py/condense.py/continue.py/spinoff·export.py 已删除合并到此） |
+
+```bash
+python3 novel-craft/scripts/export.py "<作品根>" --formats txt,docx,outline[,n2d] [--combine] [--title "<书名>"]
+```
+
+- `--formats` 缺省读 `_meta.json.outputs`；书名缺省按 `_meta.json` 的 `kind` 推导（spinoff=「原作-配角外传」、expand=「原作-扩写」、condense=「原作-精简」、continue=「原作-续写」、rewrite=「原作-改写」、create=`title`）。
+- 含 `n2d` 时在 `导出/n2d-script/小说/<书名>.docx` 铺好 n2d-script 入口，直接喂 `novel2drama`。
+- 依赖：`python-docx`（仅 docx/n2d 格式时）。
+
 ## 用法
 
-- **作为被引用方**：其他 skill 的 SKILL.md 通过文件路径引用本 references。例：novel-spinoff 第 4 步章纲 → 引 `outline.md`；novel-expand 第 5 步 Demo → 引 `chapter.md` + `expand.md`。
+- **作为被引用方**：其他 skill 的 SKILL.md 通过文件路径引用本 references / scripts。例：novel-spinoff 第 4 步章纲 → 引 `outline.md`；novel-expand 第 5 步 Demo → 引 `chapter.md` + `expand.md`；各派生 skill 第 7/8 步导出 → 调 `scripts/export.py`。
 - **作为被直接调用**：用户问"章纲怎么搭""子代理 prompt 怎么写"等通用问题时，把对应 references 摘要回给用户。
 
 ## 何时不用本 skill

@@ -1,4 +1,4 @@
-# 视频 AI CLI 注册表（Stage 3）
+# 视频 AI CLI 注册表（Stage 5）
 
 本机生视频 CLI 的已知清单 + 探测命令 + 调用规范 + 安装审查 SOP。
 
@@ -14,7 +14,7 @@ for cli in dreamina kling veo seedance runway pika; do
 done
 ```
 
-未找到任何 CLI → 进入"手动指导模式"（Stage 3 SKILL.md 阶段 C 分支 2）。
+未找到任何 CLI → 进入"手动指导模式"（Stage 5 SKILL.md 阶段 C 分支 2）。
 
 ## 优先级（按目标视频 AI 匹配自家 CLI）
 
@@ -25,7 +25,7 @@ done
 | Seedance | `dreamina text2video/image2video`（后端同 Seedance 2.0） | 手动 |
 | Veo | `gcloud ai vertex` / `veo-cli`（如有） | 手动 Veo web |
 
-跨家组合（图 AI ≠ 视频 AI）不在本表 — 那是 Stage 2 锚定句的事；Stage 3 只看视频 AI 这一轴。
+跨家组合（图 AI ≠ 视频 AI）不在本表 — 那是 Stage 4 锚定句的事；Stage 5 只看视频 AI 这一轴。
 
 ---
 
@@ -41,7 +41,7 @@ done
 
 ### 子命令（实测）
 
-| 子命令 | Stage 3 使用 |
+| 子命令 | Stage 5 使用 |
 |---|---|
 | `text2video` | 文生视频 — 用于空镜/氛围/转场 |
 | `image2video` | 图生视频 — **主力**，每条 Clip 用 |
@@ -140,7 +140,7 @@ gcloud ai models invoke veo-XX \
 
 ---
 
-## 安装审查（同 Stage 2 标准）
+## 安装审查（同 Stage 4 标准）
 
 详见 `n2d-image/references/cli_registry.md` 的"安装审查"章节。5 步：
 

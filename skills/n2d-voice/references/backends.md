@@ -1,6 +1,7 @@
 # 配音后端
 
-优先级：CosyVoice > FishSpeech > GPT-SoVITS(本地·设了 URL) > MiniMax(MINIMAX_API_KEY+GROUP_ID) > 火山(VOLC_APPID+TOKEN) > macOS say(占位)。缺凭证回退 say 并告警。
+优先级：**零样本克隆组**（CosyVoice > FishSpeech > GPT-SoVITS > IndexTTS-2 > VoxCPM2，按此序取**第一个设了 URL 的**）> MiniMax(MINIMAX_API_KEY+GROUP_ID) > 火山(VOLC_APPID+TOKEN) > macOS say(占位)。缺凭证回退 say 并告警。
+> 五个零样本后端走同一份代码路径（`render_voice.py` 的 `ZS_SPECS` 表 + `zeroshot_tts()`），只是 URL_env / 参考音前缀 / 超时不同；设了哪个 URL 就用哪个，合成结果按「后端+参考音+文本」持久缓存进 `_voicecache/`。
 
 | 后端 | env | 说明 |
 |---|---|---|
@@ -24,9 +25,9 @@
 ## 角色→音色映射
 默认见 render_voice.py 的音色表；均可 env 覆盖（MiniMax: MM_SHEN/MM_LIU/MM_XIAOHE/MM_TAIJIAN/MM_SYS/MM_NARR）。
 
-### 零样本克隆(CosyVoice/FishSpeech) 按角色分音色
+### 零样本克隆 按角色分音色（CosyVoice/FishSpeech/GPT-SoVITS/IndexTTS-2/VoxCPM2 通用）
 `role_key(role)` 把角色名归到音色键：`SYS`(系统) / `LIU`(柳娘子) / `XIAOHE`(小禾) / `TAIJIAN`(太监) / `YAO`(含「妖」) / `NARR`(纯「旁白」) / `SHEN`(沈念·沈念旁白·默认)。
-每个键各取参考音：优先 `<PREFIX>_REF_<KEY>` / `<PREFIX>_REF_<KEY>_TEXT`，缺则回退全局 `<PREFIX>_REF_AUDIO` / `<PREFIX>_REF_TEXT`，再缺则无参考(默认嗓)。`PREFIX` = `FISH` 或 `COSY`。
+每个键各取参考音：优先 `<PREFIX>_REF_<KEY>` / `<PREFIX>_REF_<KEY>_TEXT`，缺则回退全局 `<PREFIX>_REF_AUDIO` / `<PREFIX>_REF_TEXT`，再缺则无参考(默认嗓)。`PREFIX` = 选中后端对应前缀：`COSY` / `FISH` / `GSV` / `IDX` / `VOX`（即上表 env 列里 `*_REF_*` 的前缀）。
 例：`export FISH_REF_SHEN=.../SHEN.wav FISH_REF_SHEN_TEXT="<逐字文本>" FISH_REF_YAO=.../YAO.wav FISH_REF_YAO_TEXT="..."` → 沈念用 SHEN 嗓、妖用 YAO 嗓。⚠️ 参考音仅限本人嗓/已授权/纯合成。
 **音色库便捷生成**：`制漫剧/<剧名>/设定库/voicebank/build_voicebank.sh` 用本机中文 say(Tingting/Meijia/Sinji) + ffmpeg 变调派生 7 个区分音色，产出 `*.wav` + 可 `source` 的 `_refs.env`。
 

@@ -21,40 +21,19 @@ import shutil
 import sys
 from datetime import date
 
+# 共享工具（docx→txt / 版权判定 / 落 _设置.md）上移至 novel-craft，避免各 init 各写一份
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "..", "..", "novel-craft", "scripts"))
+from derive_common import docx_to_txt, detect_rights_status, write_settings
+
+# 每章字数 band 是 novel-craft/references/split.md「字数分档」表的代码镜像（band 1:1 严格相等）；
+# 改 band 必须两处同步。target_chapters 是 rewrite 篇幅选择，可按 skill 不同。
+#   short ↔ 短篇集(6000–10000) · medium ↔ 网文中篇(3000–5000) · long ↔ 网文长篇(5000–8000)
 SCALE_PROFILE = {
     "short":  {"target_chapters": 3,  "words_per_chapter": [6000, 10000]},
-    "medium": {"target_chapters": 12, "words_per_chapter": [4000, 6000]},
-    "long":   {"target_chapters": 40, "words_per_chapter": [3000, 5000]},
+    "medium": {"target_chapters": 12, "words_per_chapter": [3000, 5000]},
+    "long":   {"target_chapters": 40, "words_per_chapter": [5000, 8000]},
 }
-
-
-def docx_to_txt(docx_path, out_txt_path):
-    try:
-        from docx import Document
-    except ImportError:
-        print("[err] 缺依赖：pip install python-docx", file=sys.stderr)
-        sys.exit(2)
-    doc = Document(docx_path)
-    with open(out_txt_path, "w", encoding="utf-8") as f:
-        f.write("\n".join(p.text for p in doc.paragraphs))
-
-
-def detect_rights_status(novel_txt_path, i_have_rights):
-    try:
-        with open(novel_txt_path, "r", encoding="utf-8") as f:
-            head = f.read(2000)
-    except FileNotFoundError:
-        return "unknown"
-    for line in head.splitlines():
-        if not line.startswith("#"):
-            break
-        if "copyright" in line.lower():
-            val = line.split(":", 1)[1].strip().lower() if ":" in line else ""
-            if any(k in val for k in ("public", "公版", "gutenberg", "wikisource", "维基文库")):
-                return "public-domain"
-            if "用户声明" in val or "user-declared" in val:
-                return "user-declared"
-    return "user-declared" if i_have_rights else "unknown"
 
 
 def build_change_spec(source_title):
@@ -259,6 +238,13 @@ def main():
     W = lambda rel, txt: open(os.path.join(out_root, rel), "w", encoding="utf-8").write(txt)
     json.dump(meta, open(os.path.join(out_root, "_meta.json"), "w", encoding="utf-8"),
               ensure_ascii=False, indent=2)
+    write_settings(out_root, {
+        "目标平台": args.target_platform,
+        "权利来源": rights,
+        "篇幅档": f"{args.scale}（{n}章×{profile['words_per_chapter'][0]}-{profile['words_per_chapter'][1]}字）",
+        "改动方向": args.rewrite_type,
+        "输出格式": ",".join(outputs) + "（novel-craft/scripts/export.py）",
+    }, note="改写：改主线/换设定/加原创料，新设定圣经为准。")
     W("设定/改动spec.md", build_change_spec(source_title))
     W("设定/新设定.md", build_new_settings(source_title))
     W("设定/角色卡.md", build_character_card(source_title))

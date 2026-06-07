@@ -118,7 +118,7 @@ Claude 基于第 2 步给用户 **2–3 个续写方向**，每个方向附：
 ### 第 8 步 — 导出
 
 ```bash
-python3 <skill>/scripts/continue.py "<作品根>" [--combine]
+python3 novel-craft/scripts/export.py "<作品根>" --formats txt,docx[,outline] [--combine]   # 家族通用导出器；--combine 走续写合本
 ```
 
 - 默认：输出 `导出/<原作名>-续写.txt`（仅新章节）。

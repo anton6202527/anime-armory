@@ -76,3 +76,23 @@ def test_kanhua_schema_prefixed_refs_match():
     assert shot_references(shots[0], {"淡青系统符纹光幕"}) is True   # 带前缀写法命中
     assert shot_references(shots[1], {"王敦"}) is True
     assert shot_references(shots[0], {"王敦"}) is False             # 不串台
+
+
+# M8：`定妆_<键>` 前缀匹配必须有边界，短键不得误伤长名
+def test_prefixed_match_requires_boundary_no_false_positive():
+    shots = parse_shots(SAMPLE)   # 含 `定妆_沈念.png`
+    # `沈` 是 `沈念` 的前缀，但 `定妆_沈` 不该命中 `定妆_沈念.png`
+    assert shot_references(shots[0], {"沈"}) is False
+    # 完整核心键仍命中
+    assert shot_references(shots[0], {"沈念"}) is True
+
+
+def test_prefixed_match_scene_prefix_no_false_positive():
+    s = parse_shots("## Clip 2 · 镜2\n**参考图**：`定妆_冷宫寝殿.png`\n")
+    assert shot_references(s[0], {"冷宫"}) is False        # 不误伤 冷宫寝殿
+    assert shot_references(s[0], {"冷宫寝殿"}) is True
+
+
+def test_prefixed_match_view_suffix_still_matches():
+    s = parse_shots("## Clip 3 · 镜3\n正文出现 定妆_沈念_侧.png 引用\n")
+    assert shot_references(s[0], {"沈念"}) is True         # 视图后缀仍算同一资产

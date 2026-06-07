@@ -165,15 +165,33 @@ def check_face_consistency(root, ep):
     add(INFO, "一致性", ep, "检测到脸部识别库——可在此接入 定妆锚点 vs 镜头图 余弦相似度评分（阈值默认 0.45）")
 
 
+def _opt_int(argv, name, default):
+    """读 --name=N 或 --name N 两种写法的整数选项（任一无效则回默认）。"""
+    for i, a in enumerate(argv):
+        if a.startswith(name + "="):
+            try: return int(a.split("=", 1)[1])
+            except ValueError: return default
+        if a == name and i + 1 < len(argv):
+            try: return int(argv[i + 1])
+            except ValueError: return default
+    return default
+
+
 def main():
-    args = [a for a in sys.argv[1:] if not a.startswith("--")]
-    opts = [a for a in sys.argv[1:] if a.startswith("--")]
+    argv = sys.argv[1:]
+    opts = [a for a in argv if a.startswith("--")]
+    # 位置参数：剔除选项名(--x)及其紧随的值(--zh-max 8 里的 8)，避免把选项值当成 作品根/集号
+    skip = set()
+    for i, a in enumerate(argv):
+        if a in ("--zh-max", "--en-max") and i + 1 < len(argv):
+            skip.add(i + 1)
+    args = [a for i, a in enumerate(argv) if not a.startswith("--") and i not in skip]
     if len(args) < 2:
-        print("用法：python3 mechanical_check.py <作品根> 第N集 [--json]")
+        print("用法：python3 mechanical_check.py <作品根> 第N集 [--json] [--zh-max N] [--en-max N]")
         sys.exit(2)
     root, ep = args[0], args[1]
-    zh_max = next((int(o.split("=")[1]) for o in opts if o.startswith("--zh-max=")), ZH_LINE_MAX)
-    en_max = next((int(o.split("=")[1]) for o in opts if o.startswith("--en-max=")), EN_LINE_MAX)
+    zh_max = _opt_int(argv, "--zh-max", ZH_LINE_MAX)
+    en_max = _opt_int(argv, "--en-max", EN_LINE_MAX)
     if not os.path.isdir(root):
         print(f"作品根不存在：{root}"); sys.exit(2)
 

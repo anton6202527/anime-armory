@@ -38,7 +38,8 @@ def plan(slots, reals, max_stretch=1.25, tol_frac=0.10, tol_min=0.3):
     """纯函数：根据锁定槽位 + 真音时长算逐镜头拟合动作。
 
     slots: [(镜头名, 槽位秒)]，按时间轴顺序。
-    reals: {镜头名: (真音秒, wav路径或None)}；缺=该镜头无台词（空镜/旁白外），按静音填满槽位。
+    reals: {镜头名: (真音秒, 源)}；源 = 该镜头的拼接素材（aggregate_reals 产的 parts 列表），
+           或单 wav 路径（兼容旧调用），或 None=该镜头无台词→按静音填满槽位。
     返回逐行 dict：镜头/slot/real/wav/action(pad|stretch|overflow)/ratio/over(超出秒)/minor(是否微调)。
     """
     rows = []
@@ -70,6 +71,37 @@ def ffdur(p):
         return 0.0
 
 
+def aggregate_reals(man, vdir, dur_fn):
+    """把 manifest 逐句【按镜头聚合】成 {镜头: (总真音秒, [(wav或None, 句时长, 句后留拍)])}。
+
+    一个镜头常含多句台词；早先版本用 reals[shot]=(dur,wav) 逐句覆盖，只剩最后一句、
+    前面几句的语音被静默丢弃。这里按 manifest 顺序把同一镜头的所有句子收进 parts 列表，
+    总时长口径 = ∑(句时长 + 句后留拍)，与 finalize_storyboard 锁镜头槽位的口径一致
+    （finalize: shots[sh] += (end-start) + gap_after，对该镜头每一句都累加）。
+
+    dur_fn(wav路径)->秒：注入便于单测；生产传 ffdur（文件缺失/探测失败回 0）。
+    """
+    agg = {}
+    for r in man:
+        if not isinstance(r, dict):
+            continue
+        shot = r.get("镜头")
+        if not shot:
+            continue
+        lw = r.get("line_wav")
+        wav = os.path.join(vdir, lw) if lw else None
+        d = dur_fn(wav) if wav else 0.0
+        if d and d > 0:                       # 有可用真音 → 用实测时长
+            line_dur, use_wav = d, wav
+        else:                                  # 无 line_wav/探测失败 → 退回清单 时长 字段，按静音占位
+            line_dur, use_wav = float(r.get("时长", 0) or 0), None
+        gap = float(r.get("gap_after", 0) or 0)
+        a = agg.setdefault(shot, {"dur": 0.0, "parts": []})
+        a["dur"] += line_dur + gap
+        a["parts"].append((use_wav, line_dur, gap))
+    return {s: (round(a["dur"], 3), a["parts"]) for s, a in agg.items()}
+
+
 def load_inputs(root, ep):
     shots_p = os.path.join(root, "脚本", ep, "镜头时长.json")
     man_p = os.path.join(root, "出视频", ep, "配音", "时长清单.json")
@@ -86,17 +118,44 @@ def load_inputs(root, ep):
                    key=lambda kv: shot_num(kv[0]))
     vdir = os.path.dirname(man_p)
     ph = [r for r in man if isinstance(r, dict) and r.get("占位")]
-    reals = {}
-    for r in man:
-        if not isinstance(r, dict):
-            continue
-        shot = r.get("镜头")
-        wav = os.path.join(vdir, r["line_wav"]) if r.get("line_wav") else None
-        # 真音时长优先实测 line_wav，缺则退回清单 时长 字段
-        dur = ffdur(wav) if (wav and os.path.isfile(wav)) else float(r.get("时长", 0) or 0)
-        if shot:
-            reals[shot] = (dur, wav if (wav and os.path.isfile(wav)) else None)
+    reals = aggregate_reals(man, vdir, lambda p: ffdur(p) if (p and os.path.isfile(p)) else 0.0)
     return slots, reals, ph
+
+
+def _silence_wav(path, dur, sr):
+    subprocess.check_call(
+        ["ffmpeg", "-y", "-loglevel", "error", "-f", "lavfi",
+         "-i", f"anullsrc=r={sr}:cl=mono", "-t", f"{max(dur, 0.001):.3f}", path])
+
+
+def _shot_source(parts, work, idx, sr):
+    """把一个镜头的多句（wav 或静音）按 manifest 顺序（含句间留拍）拼成一条源音轨，返回路径。
+
+    parts: [(wav或None, 句时长, 句后留拍)]。None=该句无真音，用其估算时长的静音占位。
+    每句之后追加 gap_after 静音，使源轨长 ≈ aggregate_reals 算出的镜头真音总长。
+    """
+    sub = os.path.join(work, f"src{idx}.parts")
+    os.makedirs(sub, exist_ok=True)
+    lst = os.path.join(sub, "list.txt")
+    with open(lst, "w", encoding="utf-8") as lf:
+        for j, (wav, ldur, gap) in enumerate(parts):
+            p = os.path.join(sub, f"p{j}.wav")
+            if wav:
+                subprocess.check_call(
+                    ["ffmpeg", "-y", "-loglevel", "error", "-i", wav,
+                     "-ac", "1", "-ar", str(sr), p])
+            else:
+                _silence_wav(p, ldur, sr)
+            lf.write(f"file '{os.path.basename(p)}'\n")
+            if gap and gap > 0:               # 句后留拍（镜头内）
+                g = os.path.join(sub, f"g{j}.wav")
+                _silence_wav(g, gap, sr)
+                lf.write(f"file '{os.path.basename(g)}'\n")
+    out = os.path.join(sub, "src.wav")
+    subprocess.check_call(
+        ["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0",
+         "-i", lst, "-c", "copy", out])
+    return out
 
 
 def build_fitted(rows, out_wav):
@@ -109,10 +168,12 @@ def build_fitted(rows, out_wav):
         for i, r in enumerate(rows):
             seg = os.path.join(work, f"s{i}.wav")
             slot = r["slot"]
-            if not r["wav"]:  # 无台词镜头 → 整槽静音
-                subprocess.check_call(
-                    ["ffmpeg", "-y", "-loglevel", "error", "-f", "lavfi",
-                     "-i", f"anullsrc=r={SR}:cl=mono", "-t", f"{slot}", seg])
+            src = r["wav"]
+            if isinstance(src, list):
+                # 多句镜头：先把该镜头所有句子拼回一条源轨（不再只取最后一句）
+                src = _shot_source(src, work, i, SR) if src else None
+            if not src:  # 无台词镜头 → 整槽静音
+                _silence_wav(seg, slot, SR)
             else:
                 af = [f"aresample={SR}"]
                 if r["action"] == "stretch":
@@ -121,7 +182,7 @@ def build_fitted(rows, out_wav):
                 af.append(f"apad=whole_dur={slot}")
                 af.append(f"atrim=0:{slot}")
                 subprocess.check_call(
-                    ["ffmpeg", "-y", "-loglevel", "error", "-i", r["wav"],
+                    ["ffmpeg", "-y", "-loglevel", "error", "-i", src,
                      "-af", ",".join(af), "-ac", "1", "-ar", str(SR), seg])
             lf.write(f"file '{os.path.basename(seg)}'\n")
     subprocess.check_call(
