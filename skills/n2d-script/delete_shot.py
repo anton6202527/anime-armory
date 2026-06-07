@@ -15,7 +15,7 @@ shots = set(sys.argv[3:])
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 VO   = os.path.join(root, '脚本', ep, 'voiceover.txt')
 ENS  = os.path.join(root, '脚本', ep, '字幕_英文.srt')
-CONF = os.path.join(root, '出视频', ep, '配音')
+CONF = os.path.join(root, '合成', ep, '配音')
 MAN  = os.path.join(CONF, '时长清单.json')
 
 man = json.load(open(MAN, encoding='utf-8'))
@@ -38,7 +38,7 @@ if os.path.exists(ENS):
     open(ENS, 'w', encoding='utf-8').write('\n\n'.join(blks) + '\n')
 
 # 3) 时长清单 reflow：被删句 wav 移废料；保留句重命名为连续 line_NN.wav；保留句"时长不变"
-waste = os.path.join(root, '废料', '出视频', ep, '配音'); os.makedirs(waste, exist_ok=True)
+waste = os.path.join(root, '废料', '合成', ep, '配音'); os.makedirs(waste, exist_ok=True)
 for i in sorted(dset):
     w = os.path.join(CONF, man[i].get('line_wav', f'line_{i:02d}.wav'))
     if os.path.exists(w): shutil.move(w, os.path.join(waste, os.path.basename(w)))

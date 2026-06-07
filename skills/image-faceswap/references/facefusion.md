@@ -38,7 +38,7 @@ python facefusion.py headless-run \
 | 想保留透明通道 | 输出用 `.png`；JPEG 会丢 alpha |
 
 ## 强制 AI 标识（法律必做，见 SKILL 第 4 步）
-换完务必跑 `../label_watermark_image.py`（**图片专用**，纯 Pillow，不走 ffmpeg）烧可见提示 + 写元数据（PNG Comment / JPEG EXIF ImageDescription）。中国《标识办法》要求**可见 + 隐式**双标识；平台投放按平台隐式水印要求再补。**绝不**做去水印。
+换完务必调公共 `watermark` skill（`watermark.py --mode ai`，图/视频同一工具，按扩展名自动判定）烧可见提示 + 写元数据（PNG Comment / JPEG EXIF ImageDescription）。中国《标识办法》要求**可见 + 隐式**双标识；平台投放按平台隐式水印要求再补。**绝不**做去水印。
 
 ## 合法性（重申）
 仅 本人脸 / 已授权演员（留存授权声明）/ 纯合成脸。名人或他人未授权、诈骗、绕过人脸识别、NSFW、未成年 → 拒做。依据：中国《AI 生成合成内容标识办法》、US DEFIANCE/NO FAKES Act、EU AI Act、丹麦肖像权法。

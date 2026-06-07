@@ -101,7 +101,7 @@ def read_mode(root):
 def voice_is_placeholder(root, ep):
     """该集真实配音是否还没补（时长清单仍含占位句）。
     返回 True=仍占位 / False=已是真音 / None=无清单可判。"""
-    p = os.path.join(root, "出视频", ep, "配音", "时长清单.json")
+    p = os.path.join(root, "合成", ep, "配音", "时长清单.json")
     if not os.path.isfile(p):
         return None
     try:

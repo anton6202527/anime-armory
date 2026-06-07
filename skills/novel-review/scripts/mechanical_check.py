@@ -7,7 +7,7 @@
         [--terms "金丹,道障,王敦密码,烈阳花"] [--no-plagiarism]
 
 检查项：
-  1. 格式：每章有 H1 标题 `# 第 N 章 《…》` + meta 注释头
+  1. 格式：每章有 H1 标题 `# 第N章 标题`（N 可阿拉伯/中文数字，标题可带《》或裸标题）+ meta 注释头
   2. 字数：CJK 字数在 [min,max] 带宽内（漫剧档默认 1200-2800）
   3. 章末钩子：末段是否以悬念性收尾（启发式，低置信，仅提示）
   4. 视角"我"泄漏：引号外出现的"我"计数（第三人称限定下应≈0）
@@ -21,6 +21,8 @@ import argparse, json, os, re, sys, glob
 
 CJK = re.compile(r"[一-鿿]")
 QUOTE_PAIRS = [("「", "」"), ("“", "”"), ("‘", "’"), ("『", "』")]
+# 章号数字：阿拉伯 / 全角 / 中文数字都接受（# 第1章 / # 第一章 / # 第 12 章 均合规）
+CH_NUM = r"[0-9０-９一二三四五六七八九十百千零〇两]+"
 
 
 def cjk_count(s):
@@ -110,15 +112,16 @@ def main():
         m = re.search(r"第0*(\d+)章", os.path.basename(f))
         ch = int(m.group(1)) if m else 0
         md = read(f)
-        # 1 格式
-        if not re.search(r"^# 第\s*\d+\s*章\s*[《<]", md, re.M):
-            add(ch, "🔴", "格式", "缺规范 H1 标题 `# 第 N 章 《…》`")
+        # 1 格式：H1 需是 `# 第N章 …`，N 可为阿拉伯或中文数字，标题可带《》或裸标题
+        if not re.search(r"^#\s*第\s*" + CH_NUM + r"\s*章", md, re.M):
+            add(ch, "🔴", "格式", "缺规范 H1 标题 `# 第N章 标题`（N 可中文/阿拉伯数字）")
         if "<!--" not in md:
             add(ch, "🟢", "格式", "缺 meta 注释头")
-        # 标题与章纲一致
-        mt = re.search(r"^# 第\s*\d+\s*章\s*[《<]([^》>]+)[》>]", md, re.M)
-        if mt and ch in outline and mt.group(1).strip() != outline[ch].strip():
-            add(ch, "🟡", "标题", f"标题与章纲不符：正文「{mt.group(1)}」 vs 章纲「{outline[ch]}」")
+        # 标题与章纲一致（兼容《…》与裸标题两种写法）
+        mt = re.search(r"^#\s*第\s*" + CH_NUM + r"\s*章\s*(?:[《<]([^》>]+)[》>]|([^\n]*))$", md, re.M)
+        title = (mt.group(1) or mt.group(2) or "").strip() if mt else ""
+        if mt and ch in outline and title != outline[ch].strip():
+            add(ch, "🟡", "标题", f"标题与章纲不符：正文「{title}」 vs 章纲「{outline[ch]}」")
         is_demo = "demo=true" in md
         body = body_of(md)
         # 2 字数（demo 特长开篇豁免带宽）

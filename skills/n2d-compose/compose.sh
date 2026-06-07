@@ -14,13 +14,14 @@ VIDEO_CRF="${VIDEO_CRF:-18}"; VIDEO_PRESET="${VIDEO_PRESET:-medium}"
 DUCK_THRESHOLD="${DUCK_THRESHOLD:-0.05}"; DUCK_RATIO="${DUCK_RATIO:-8}"; DUCK_ATTACK="${DUCK_ATTACK:-20}"; DUCK_RELEASE="${DUCK_RELEASE:-400}"
 KEEP_CLIP_AUDIO="${KEEP_CLIP_AUDIO:-0}"  # 默认丢弃 AI clip 原生音频；设 1 才低音量混入环境音底
 J_CUT_SEC="${J_CUT_SEC:-0.25}"           # 默认轻量 J-cut：基于 line_*.wav 提前入声；设 0 关闭。正面口型特写慎用
+# clips 是「出视频」的唯一产物，仍读 出视频/；配音/成片/中间件都在「合成」文件夹下。
 VID="$ROOT/出视频/$EP/视频"
 # 默认用 n2d-voice 产的整轨；`制作模式=先出视频后配音` 时先跑 fit_voice_to_clips.py
 # 把后期补录的真音拟合到已成片镜头长，再用 VOICEFILE 指向 voice_<lang>_fitted.wav。
-VOICE="${VOICEFILE:-$ROOT/出视频/$EP/配音/voice_${VLANG}.wav}"
+VOICE="${VOICEFILE:-$ROOT/合成/$EP/配音/voice_${VLANG}.wav}"
 ZH_SRT="$ROOT/脚本/$EP/字幕_中文.srt"; EN_SRT="$ROOT/脚本/$EP/字幕_英文.srt"
-W="$ROOT/出视频/$EP/_work"; rm -rf "$W"; mkdir -p "$W"
-OUT="$ROOT/出视频/$EP/成片_${EP}_${MODE}.mp4"
+W="$ROOT/合成/$EP/_work"; rm -rf "$W"; mkdir -p "$W"
+OUT="$ROOT/合成/$EP/成片_${EP}_${MODE}.mp4"
 
 [ -d "$VID" ] || { echo "缺 $VID（先 /n2d-video）"; exit 1; }
 CLIPS=("$VID"/*.mp4)
@@ -28,7 +29,7 @@ CLIPS=("$VID"/*.mp4)
 
 # 占位配音守门：除非显式用 VOICEFILE 指了别的轨（如拟合轨），否则不许把占位音色烧进成片。
 # `制作模式=先出视频后配音` 时：先 /n2d-voice 补真音 → fit_voice_to_clips.py → VOICEFILE=拟合轨。
-MAN_J="$ROOT/出视频/$EP/配音/时长清单.json"
+MAN_J="$ROOT/合成/$EP/配音/时长清单.json"
 if [ -z "${VOICEFILE:-}" ] && [ -f "$MAN_J" ] && [ "${ALLOW_PLACEHOLDER_COMPOSE:-0}" != "1" ]; then
   if python3 -c "import json,sys;d=json.load(open(sys.argv[1]));sys.exit(0 if isinstance(d,list) and any(isinstance(x,dict) and x.get('占位') for x in d) else 1)" "$MAN_J"; then
     echo "⛔ 本集配音仍是占位音色，拒绝合成（占位轨与镜头时长不是真实时长，成片音画会错）。"
@@ -58,7 +59,7 @@ if [ -f "$VOICE" ] && [ -z "${VOICEFILE:-}" ] && [ -f "$MAN_J" ]; then
     echo "=== [2.5/6] 可选 J-cut 配音轨（提前 ${J_CUT_SEC}s 入声）==="
     echo "注意：J-cut 只适合旁白/系统音/背身或侧脸转场；正面口型特写请保持 J_CUT_SEC=0。"
     # 优雅降级：旧清单缺 start/line_wav 等导致 J-cut 构建失败时，退回原整轨继续合成（不因 set -e 整体中断）。
-    if python3 "$SKILL_DIR/build_jcut_voice.py" "$MAN_J" "$ROOT/出视频/$EP/配音" "$J_CUT_SEC" "$DUR" "$W/voice_jcut.wav"; then
+    if python3 "$SKILL_DIR/build_jcut_voice.py" "$MAN_J" "$ROOT/合成/$EP/配音" "$J_CUT_SEC" "$DUR" "$W/voice_jcut.wav"; then
       VOICE="$W/voice_jcut.wav"
     else
       echo "⚠️ J-cut 构建失败（清单可能缺 start/line_wav 字段）→ 退回原配音轨继续合成：$VOICE"
@@ -101,7 +102,7 @@ fi
 echo "=== [4/6] 字幕 PNG ==="
 cp "$ZH_SRT" "$W/zh.srt"; cp "$EN_SRT" "$W/en.srt"
 # 复制时长清单供字幕样式分级（旁白/系统→灰小字，爽点→暖金大字）；缺则字幕全 normal
-MANIFEST="$ROOT/出视频/$EP/配音/时长清单.json"; [ -f "$MANIFEST" ] && cp "$MANIFEST" "$W/manifest.json" || true
+MANIFEST="$ROOT/合成/$EP/配音/时长清单.json"; [ -f "$MANIFEST" ] && cp "$MANIFEST" "$W/manifest.json" || true
 PNG_INPUT_BASE=3 python3 "$SKILL_DIR/render_subs.py" "$W" "$MODE"
 PNG_INPUTS=(); while IFS= read -r p; do PNG_INPUTS+=(-i "$p"); done < "$W/inputs.txt"
 NPNG=$(grep -c . "$W/inputs.txt"); VIDX=$((3+NPNG))

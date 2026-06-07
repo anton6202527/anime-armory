@@ -8,9 +8,9 @@ import sys, os, re, subprocess, json, base64, uuid, hashlib, urllib.request, shu
 ROOT, EP, LANG = sys.argv[1], sys.argv[2], sys.argv[3]
 VO = os.path.join(ROOT, '脚本', EP, 'voiceover.txt')
 EN_SRT = os.path.join(ROOT, '脚本', EP, '字幕_英文.srt')
-W = os.path.join(ROOT, '出视频', EP, '配音'); os.makedirs(W, exist_ok=True)
+W = os.path.join(ROOT, '合成', EP, '配音'); os.makedirs(W, exist_ok=True)
 FF = shutil.which('ffmpeg') or '/opt/homebrew/bin/ffmpeg'; FP = shutil.which('ffprobe') or '/opt/homebrew/bin/ffprobe'
-CACHE = os.path.join(ROOT, '出视频', EP, '_voicecache', LANG); os.makedirs(CACHE, exist_ok=True)
+CACHE = os.path.join(ROOT, '合成', EP, '_voicecache', LANG); os.makedirs(CACHE, exist_ok=True)
 
 MM_KEY=os.environ.get('MINIMAX_API_KEY'); MM_GROUP=os.environ.get('MINIMAX_GROUP_ID')
 MM_MODEL=os.environ.get('MINIMAX_MODEL','speech-02-hd')

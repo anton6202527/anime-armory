@@ -67,7 +67,7 @@
 │       ├── 分镜剧本.md / 故事板.md / 素材清单.md  ③分镜设计产物（配音后回跑）
 │       ├── 字幕_中文.srt / 字幕_英文.srt
 │       └── 镜头时长.json                 ③定稿锁定的逐镜头时长（驱动 Clip 长）
-├── 出视频/第N集/配音/                     ← n2d-voice（②配音）：line_NN.wav + voice_zh.wav + 时长清单.json
+├── 合成/第N集/配音/                       ← n2d-voice（②配音）：line_NN.wav + voice_zh.wav + 时长清单.json（落「合成」层，不在出视频）
 ├── 出图/                                 ← n2d-image（④出图）
 │   ├── common/                           全篇定妆库
 │   │   ├── prompt/                       共享 prompt 文件
@@ -79,17 +79,22 @@
 │       │   ├── 00_总览.md                本集图清单 + 引用共享
 │       │   └── 01_分镜出图.md            本集分镜 prompt
 │       └── 镜头N_*.png                   本集分镜 PNG（与 prompt/ 同级）
-└── 出视频/                               ← n2d-video（⑤视频）+ n2d-voice 配音轨同住此层
-    ├── common/                           （如有跨集复用片段，如转场/空镜）
-    │   ├── prompt/
-    │   └── *.mp4
+├── 出视频/                               ← n2d-video（⑤视频）：唯一产物=各镜头 clips
+│   ├── common/                           （如有跨集复用片段，如转场/空镜）
+│   │   ├── prompt/
+│   │   └── *.mp4
+│   └── 第N集/
+│       ├── prompt/                       本集 prompt 文件
+│       │   ├── 00_总览.md                本集 Clip 清单
+│       │   └── 01_clips.md               每 Clip 视频 prompt
+│       └── 视频/                         ClipK_*.mp4 定稿片段（供 n2d-compose 归集）
+└── 合成/                                 ← n2d-voice 配音轨 + n2d-compose（⑥合成）+ 可选水印同住此层
     └── 第N集/
-        ├── prompt/                       本集 prompt 文件
-        │   ├── 00_总览.md                本集 Clip 清单
-        │   └── 01_clips.md               每 Clip 视频 prompt
         ├── 配音/                         ← n2d-voice 产物（line_NN.wav / voice_zh.wav / 时长清单.json）
-        ├── 视频/                         ClipK_*.mp4 定稿片段（供 n2d-compose 归集）
-        └── 成片_第N集_<mode>.mp4         ← n2d-compose（⑥合成）最终成片落集根
+        ├── _voicecache/                  配音缓存
+        ├── _work/                        compose 中间件（每次重建）
+        ├── 成片_第N集_<mode>.mp4         ← n2d-compose 最终成片
+        └── 成片_第N集_<mode>_水印.mp4    ← （可选）公共 watermark skill 打 AI合规/品牌水印后产物
 ```
 
 ### prompt / 产物分离铁律（n2d-image / n2d-video 通用）
@@ -97,7 +102,7 @@
 每个 `出图/` 或 `出视频/` 文件夹（`common/` 或 `第N集/`）一律分两层：
 
 - **`prompt/` 子目录** 装该文件夹所有 prompt md（共享层的 00_索引 + 角色/场景/道具定妆，或本集的 00_总览 + 01_分镜/clips）
-- **生成产物**：PNG 平铺在 `prompt/` 同级；**clip MP4 进 `视频/` 子目录**（供 n2d-compose 归集），成片落集根 `成片_第N集_{mode}.mp4`
+- **生成产物**：PNG 平铺在 `prompt/` 同级；**clip MP4 进 `出视频/第N集/视频/` 子目录**（出视频阶段唯一产物，供 n2d-compose 归集）；**配音 / 成片 / 水印产物落 `合成/第N集/`**（不在出视频层）
 
 好处：
 - 一目了然——浏览父目录只看到产物缩略图，找 prompt 进 `prompt/` 子目录
