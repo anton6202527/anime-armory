@@ -126,7 +126,7 @@ python3 <skill>/source_check.py <作品根> --record # 记/更新指纹基线（
 > - 配音 ⬜ 时，`/n2d-voice` 只为出**占位/估算 `时长清单.json`** 当时间脚手架（不追求音质，真实配音留到最后）。
 > - 阶段2、出图、出视频遇占位**不拦截**（用户已选此模式）：finalize 用 `FINALIZE_ALLOW_PLACEHOLDER=1`，n2d-video 复述警告后继续。
 > - **视频列满后、合成前，插一步真实配音 + 拟合**：`/n2d-voice` 换 CosyVoice/克隆/MiniMax 重出真音轨 → 跑 `n2d-compose/fit_voice_to_clips.py`（先 dry-run 对账，再 `--apply` 出 `voice_<lang>_fitted.wav`，把真音逐镜头拟合到锁定时长；真音远超槽位的镜头列为 overflow、退出码 2，提示回 `/n2d-video` 重出加长）→ 再 `VOICEFILE=…_fitted.wav /n2d-compose`。详见 n2d-compose「先出视频后配音」节。
-> - progress.py 是模式无关线性路由，但 **n2d-progress 已识别本模式**：视频满、配音仍占位时它把前沿拦回 `/n2d-voice`（而非 `/n2d-compose`），与本调度器一致；`/n2d-compose` 本身也有占位守门，占位轨直接合成会被拒。
+> - `progress.py` 与 `n2d-progress/scan.py` 共用同一套模式感知路由：视频满、配音仍占位时会把前沿拦回 `/n2d-voice`（而非 `/n2d-compose`）；`/n2d-compose` 本身也有占位守门，占位轨直接合成会被拒。
 
 1. 定位 `<作品根>/_进度.md`，读进度表（老项目若仍在 `<作品根>/common/_进度.md`，路由脚本会兼容读取）
 2. 进度表头形如：`| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |`

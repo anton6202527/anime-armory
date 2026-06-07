@@ -67,6 +67,7 @@ VOICEFILE=<作品根>/合成/第N集/配音/voice_zh_fitted.wav bash <skill>/com
 - `出视频/第N集/视频/` 有 clip MP4（n2d-video 产物）。否则报错建议先 /n2d-video。
 - `合成/第N集/配音/voice_{zh,en}.wav`（n2d-voice 产物，可选；无则纯 BGM+字幕）。
 - `脚本/第N集/字幕_{中文,英文}.srt`。
+- 正式合成前建议先跑确定性 gate：`python3 skills/n2d-review/scripts/gate.py <作品根> 第N集 --stage compose`（检查视频列、`storyboard.json`、clip 音轨/时长、占位配音、字幕）。
 
 ## 加 BGM —— 给用户更丰富选项 + 接受自定义
 到 BGM 环节，提示用户：

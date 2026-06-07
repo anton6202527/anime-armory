@@ -13,7 +13,7 @@ references/checklist.md 的「人判」清单，由 LLM 对照参考图与分镜
     python3 mechanical_check.py <作品根> 第N集 [--json] [--zh-max N] [--en-max N]
 退出码：有 🔴 阻断级 → 1，否则 0。
 """
-import sys, os, re, json, glob
+import sys, os, re, json, glob, subprocess
 
 BLOCK, WARN, INFO = "🔴", "🟡", "🟢"
 ZH_LINE_MAX = 20   # 中文单行字数上限（竖屏 9:16，超易溢出/换行难看）
@@ -150,6 +150,107 @@ def check_completeness(root, ep, manifest):
         f"产物快照：配音句 {len(manifest) if manifest else 0} · clip {len(clips)} · 成片 {len(finals)}")
 
 
+def _ffprobe(path):
+    try:
+        out = subprocess.check_output(
+            ["ffprobe", "-v", "error", "-print_format", "json", "-show_streams", "-show_format", path],
+            text=True)
+        return json.loads(out)
+    except Exception:
+        return None
+
+
+def _duration(path):
+    data = _ffprobe(path)
+    if not data:
+        return None
+    try:
+        return float((data.get("format") or {}).get("duration"))
+    except (TypeError, ValueError):
+        return None
+
+
+def _has_audio(path):
+    data = _ffprobe(path)
+    if not data:
+        return None
+    return any(s.get("codec_type") == "audio" for s in data.get("streams", []))
+
+
+def check_storyboard_and_video(root, ep):
+    """Machine-readable continuity contract + clip integrity checks."""
+    sb_p = os.path.join(root, "脚本", ep, "storyboard.json")
+    if not os.path.exists(sb_p):
+        add(BLOCK, "故事板", sb_p, "缺机器可读 storyboard.json——下游无法稳定校验 continuity / need_endframe")
+        return
+    try:
+        sb = json.load(open(sb_p, encoding="utf-8"))
+    except Exception as e:
+        add(BLOCK, "故事板", sb_p, f"storyboard.json 解析失败：{e}")
+        return
+    clips = sb.get("clips")
+    if not isinstance(clips, list) or not clips:
+        add(BLOCK, "故事板", sb_p, "storyboard.json 缺 clips[]")
+        return
+    prev_end = None
+    need_endframes = 0
+    for i, c in enumerate(clips, 1):
+        cont = c.get("continuity") or {}
+        loc = f"clip#{i}"
+        if not isinstance(cont, dict):
+            add(BLOCK, "故事板", loc, "continuity 不是对象")
+            continue
+        for k in ("start_state", "end_state", "transition", "need_endframe"):
+            if k not in cont:
+                add(BLOCK, "故事板", loc, f"continuity 缺字段：{k}")
+        if prev_end and cont.get("start_state") != prev_end:
+            add(BLOCK, "衔接", loc, "start_state 未原样继承上一 Clip 的 end_state")
+        prev_end = cont.get("end_state")
+        if cont.get("need_endframe") is True:
+            need_endframes += 1
+            endp = cont.get("endframe_png")
+            full = os.path.join(root, endp) if endp and not os.path.isabs(endp) else endp
+            if not endp or not os.path.exists(full):
+                add(BLOCK, "尾帧", loc, "need_endframe=true 但 endframe_png 缺失或文件不存在")
+    if need_endframes:
+        add(INFO, "尾帧", ep, f"本集需要尾帧接力 {need_endframes} 处")
+
+    mp4s = sorted(glob.glob(os.path.join(root, "出视频", ep, "视频", "*.mp4")))
+    if mp4s and len(mp4s) != len(clips):
+        add(WARN, "视频", ep, f"clip MP4 数 {len(mp4s)} 与 storyboard clips {len(clips)} 不一致")
+    audio = [p for p in mp4s if _has_audio(p)]
+    if audio:
+        add(WARN, "原生音轨", audio[0], "clip 含原生音轨；compose 默认应丢弃，若混入需确认无原生人声")
+    shots_p = os.path.join(root, "脚本", ep, "镜头时长.json")
+    if os.path.exists(shots_p) and mp4s:
+        try:
+            target = sum(float(v) for v in json.load(open(shots_p, encoding="utf-8")).values())
+            ds = [_duration(p) for p in mp4s]
+            if all(d is not None for d in ds):
+                total = sum(d for d in ds if d is not None)
+                if abs(total - target) > 1.0:
+                    add(WARN, "时长", ep, f"clip 总长 {total:.2f}s 与镜头时长累计 {target:.2f}s 差 {abs(total-target):.2f}s")
+        except Exception:
+            pass
+
+
+def check_watermark(root, ep):
+    settings = os.path.join(root, "_设置.md")
+    wm = "AI合规标识"
+    if os.path.exists(settings):
+        txt = open(settings, encoding="utf-8").read()
+        m = re.search(r"水印\s*[:：]\s*([^\s#]+)", txt)
+        if m:
+            wm = m.group(1)
+    if wm == "不打":
+        add(WARN, "水印", settings, "水印设置为不打；正式投放 AI 合成内容建议保留 AI 合规标识")
+        return
+    finals = glob.glob(os.path.join(root, "合成", ep, f"成片_{ep}_*_水印.mp4"))
+    plain = glob.glob(os.path.join(root, "合成", ep, f"成片_{ep}_*.mp4"))
+    if plain and not finals:
+        add(BLOCK, "水印", os.path.join(root, "合成", ep), f"水印设置为「{wm}」，但未找到 *_水印.mp4")
+
+
 def check_face_consistency(root, ep):
     """可选·脸部一致性度量。缺库时显式标跳过（绝不静默）。"""
     try:
@@ -199,6 +300,8 @@ def main():
     check_completeness(root, ep, manifest)
     check_subtitles(root, ep, manifest, zh_max, en_max)
     check_rhythm(ep, manifest)
+    check_storyboard_and_video(root, ep)
+    check_watermark(root, ep)
     check_face_consistency(root, ep)
 
     if "--json" in opts:

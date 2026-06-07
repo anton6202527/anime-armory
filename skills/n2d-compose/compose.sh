@@ -129,3 +129,7 @@ fi
 
 echo "=== [6/6] 完成: $OUT ==="
 ls -la "$OUT"
+
+if [ "${N2D_UPDATE_PROGRESS:-1}" != "0" ]; then
+  python3 "$SKILL_DIR/../novel2drama/progress.py" set "$ROOT" "$EP" 成片 ✅ || true
+fi

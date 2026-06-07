@@ -1,0 +1,36 @@
+# n2d-compose Quickstart
+
+Prerequisites:
+- `出视频/第N集/视频/*.mp4` exists
+- `脚本/第N集/字幕_中文.srt` exists
+- Real voice exists unless this is an explicit rough preview
+
+Gate:
+```bash
+python3 skills/n2d-review/scripts/gate.py <作品根> 第N集 --stage compose
+```
+
+Command:
+```bash
+bash skills/n2d-compose/compose.sh <作品根> 第N集 zh
+```
+
+With real BGM:
+```bash
+BGMFILE=/path/to/music.mp3 bash skills/n2d-compose/compose.sh <作品根> 第N集 zh
+```
+
+Outputs:
+- `合成/第N集/成片_第N集_zh.mp4`
+- optional watermarked final in `合成/第N集/成片_第N集_zh_水印.mp4`
+
+Progress:
+- `compose.sh` updates `成片 ✅` automatically after successful output.
+- Opt out with `N2D_UPDATE_PROGRESS=0`.
+
+Final QA:
+```bash
+python3 skills/n2d-review/scripts/mechanical_check.py <作品根> 第N集
+python3 skills/n2d-review/scripts/gate.py <作品根> 第N集 --stage review
+```
+

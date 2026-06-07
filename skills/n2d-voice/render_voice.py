@@ -258,5 +258,12 @@ if placeholders:
     open(os.path.join(W,'_占位说明.md'),'w',encoding='utf-8').write(
         f"# 本地占位配音\n\n{warn}\n\n用途: 跑通分镜/字幕时间轴 rough preview。\n要求: 跨过出图前,换 CosyVoice/克隆/MiniMax 等真实配音重跑,并用真实时长回跑 n2d-script 阶段2。\n"
     )
+
+if LANG == 'zh' and os.environ.get('N2D_UPDATE_PROGRESS', '1') != '0':
+    prog = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'novel2drama', 'progress.py'))
+    try:
+        subprocess.run(['python3', prog, 'set', ROOT, EP, '配音', '✅'], check=False)
+    except Exception:
+        pass
     print(warn)
 print(f"配音 {LANG}: {n} 句（后端={ZS_LABEL if USE_ZS else 'MiniMax' if USE_MM else '火山' if USE_VOLC else 'say'}，顺序拼接 gap={GAP}s+钩子留拍，无压速）→ voice_{LANG}.wav")
