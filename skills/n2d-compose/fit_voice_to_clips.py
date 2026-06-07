@@ -11,8 +11,8 @@
                                        重出/重切（加长）的镜头，退出码 2 让用户定夺。
 
 读：`脚本/第N集/镜头时长.json`（锁定槽位，驱动了 clip 长）
-    `出视频/第N集/配音/时长清单.json`（补录真音的逐句时长 + line_wav；须 占位=false）
-产（--apply）：`出视频/第N集/配音/voice_<lang>_fitted.wav`，交 compose.sh 用 VOICEFILE= 指向它。
+    `合成/第N集/配音/时长清单.json`（补录真音的逐句时长 + line_wav；须 占位=false）
+产（--apply）：`合成/第N集/配音/voice_<lang>_fitted.wav`，交 compose.sh 用 VOICEFILE= 指向它。
 
 纯标准库 + ffmpeg/ffprobe（仅 --apply 时调）。规划逻辑 plan() 不依赖 ffmpeg，可单测。
 
@@ -104,7 +104,7 @@ def aggregate_reals(man, vdir, dur_fn):
 
 def load_inputs(root, ep):
     shots_p = os.path.join(root, "脚本", ep, "镜头时长.json")
-    man_p = os.path.join(root, "出视频", ep, "配音", "时长清单.json")
+    man_p = os.path.join(root, "合成", ep, "配音", "时长清单.json")
     if not os.path.isfile(shots_p):
         sys.exit(f"⛔ 缺 {shots_p}（阶段2 未定稿，无锁定镜头时长可拟合）")
     if not os.path.isfile(man_p):
@@ -232,7 +232,7 @@ def main(argv):
         print("\n（dry-run）以上可自动拟合，无 overflow。加 --apply 生成 fitted 轨。")
         return 0
 
-    out_wav = os.path.join(root, "出视频", ep, "配音", f"voice_{lang}_fitted.wav")
+    out_wav = os.path.join(root, "合成", ep, "配音", f"voice_{lang}_fitted.wav")
     build_fitted(rows, out_wav)
     print(f"\n✅ 已生成拟合配音轨：{out_wav}（总长≈{slot_total:.2f}s，对齐已成片镜头）")
     print(f"   合成时指向它：VOICEFILE='{out_wav}' bash <skill>/compose.sh {root} {ep} {lang}")

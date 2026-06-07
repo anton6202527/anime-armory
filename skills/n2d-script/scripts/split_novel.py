@@ -246,6 +246,8 @@ def main():
                     help="每章独立成一集（最贴戏剧节拍，一章=一集；长章保持整章，精修时按上/下集再拆）；无章节标题时自动退回纯字数切")
     ap.add_argument("--keep-frontmatter", action="store_true",
                     help="保留开头的简介/标签/看点等元数据（默认自动剥离）")
+    ap.add_argument("--limit", type=int, default=None,
+                    help="部分先切：只粗切并落地前 N 集（仍按全本估总集数，便于先精修第1集验证后再续切）；缺省=全篇一次粗切。续切=重跑本脚本加大 --limit（已存在的集与进度勾选会保留）")
     args = ap.parse_args()
 
     if not os.path.exists(args.novel):
@@ -314,8 +316,12 @@ def main():
         f"# {title} — 场景卡总表\n\n> 全篇首次出现即建卡，后续镜头保持一致。格式见 references/formats.md。\n",
     )
 
+    total_est = len(episodes)
+    # 部分先切：只落地前 N 集（仍按全本估总集数）。续切=重跑加大 --limit。
+    n_make = total_est if args.limit is None else max(1, min(args.limit, total_est))
+
     lengths = []
-    for i, ep in enumerate(episodes, 1):
+    for i, ep in enumerate(episodes[:n_make], 1):
         ep_dir = os.path.join(root, "脚本", f"第{i}集")
         os.makedirs(ep_dir, exist_ok=True)
         write_if_absent(os.path.join(ep_dir, "raw.txt"), ep)
@@ -323,18 +329,41 @@ def main():
             write_if_absent(os.path.join(ep_dir, fname), tmpl.format(title=title, n=i))
         lengths.append(len(ep.replace("\n", "")))
 
-    prog_lines = [f"# {title} — 生产进度\n", f"共拆分 **{len(episodes)}** 集。\n",
-        "| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |",
-        "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
-    for i, ln in enumerate(lengths, 1):
-        prog_lines.append(f"| 第{i}集 | {ln} | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |")
-    write_if_absent(os.path.join(root, "_进度.md"), "\n".join(prog_lines) + "\n")
+    # 进度表：部分先切 / 已存在进度时合并续写——保留已勾选的旧行，只追加新粗切的集。
+    prog_path = os.path.join(root, "_进度.md")
+    partial = args.limit is not None and n_make < total_est
+    existing_rows = {}
+    if os.path.exists(prog_path):
+        for line in open(prog_path, encoding="utf-8"):
+            m = re.match(r"\|\s*第(\d+)集\s*\|", line)
+            if m:
+                existing_rows[int(m.group(1))] = line.rstrip("\n")
+    if args.limit is not None or not os.path.exists(prog_path):
+        fresh = {i: f"| 第{i}集 | {ln} | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |"
+                 for i, ln in enumerate(lengths, 1)}
+        rows = {**fresh, **existing_rows}  # 旧勾选优先，保留人工进度
+        made = max(rows) if rows else n_make
+        header = (f"# {title} — 生产进度\n",
+                  f"已粗切 **{made}** 集"
+                  + (f"（全本约估 {total_est} 集；部分先切，精修验证后重跑 split 加大 --limit 续切）。\n"
+                     if partial else f"。\n"))
+        prog_lines = [*header,
+            "| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |",
+            "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+        prog_lines += [rows[i] for i in sorted(rows)]
+        with open(prog_path, "w", encoding="utf-8") as f:
+            f.write("\n".join(prog_lines) + "\n")
 
     print(f"作品根: {root}")
     mode = "每章一集" if args.per_chapter else ("按章节+字数" if args.by_chapter else "按字数")
     print(f"切分方式：{mode}；剥离开头元数据 {dropped} 段。")
-    print(f"共 {len(episodes)} 集，字数范围 {min(lengths)}~{max(lengths)}（目标 {args.target}）")
-    print("目录骨架已生成。下一步：精修每集素材。")
+    if partial:
+        print(f"部分先切：已落地前 {n_make} 集（全本按当前 band 约估 {total_est} 集）。"
+              f"字数范围 {min(lengths)}~{max(lengths)}（目标 {args.target}）")
+        print(f"下一步：精修第1集验证节拍/画风/角色卡；满意后重跑 split 加大 --limit 续切（旧集与进度勾选保留）。")
+    else:
+        print(f"共 {n_make} 集，字数范围 {min(lengths)}~{max(lengths)}（目标 {args.target}）")
+        print("目录骨架已生成。下一步：精修每集素材。")
 
 
 if __name__ == "__main__":

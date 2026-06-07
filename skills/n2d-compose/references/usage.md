@@ -10,7 +10,7 @@
     BGMFILE=/path/to/music.mp3 BGM_OFFSET=12.5 bash <skill>/compose.sh <作品根> 第N集 zh
     # BGM_OFFSET=从 BGM 第几秒起播。算法：成片里爽点累计时间戳（故事板 💥爽点 @ 0:48）
     # 减去 BGM 文件里 drop 的时间戳 → 反推 offset，使 drop 与爽点画面对齐。
-产物：<作品根>/出视频/第N集/成片_第N集_{mode}.mp4
+产物：<作品根>/合成/第N集/成片_第N集_{mode}.mp4
 
 ## 可调参数（默认=原行为，全部可选）
 质量/速度（粗剪 vs 定稿）：
@@ -32,10 +32,11 @@ clip 原生音频：
     KEEP_CLIP_AUDIO=1 bash <skill>/compose.sh <作品根> 第N集 zh
     # 仅当确认 clip 里是可用环境音、无原生人声时才开；脚本会低音量混入环境底。
 
-## 输入约定
-- clips：<作品根>/出视频/第N集/视频/*.mp4（n2d-video 产物）
-- 配音轨：<作品根>/出视频/第N集/配音/voice_{zh,en}.wav（n2d-voice 产物，可选）
+## 输入约定（出视频/=只放 clips；配音/成片/=合成/ 下）
+- clips：<作品根>/出视频/第N集/视频/*.mp4（n2d-video 产物，出视频阶段唯一产物）
+- 配音轨：<作品根>/合成/第N集/配音/voice_{zh,en}.wav（n2d-voice 产物，可选）
 - 字幕：<作品根>/脚本/第N集/字幕_{中文,英文}.srt
+- 成片输出：<作品根>/合成/第N集/成片_第N集_{mode}.mp4（可选再加水印 → 成片_…_水印.mp4）
 
 ## 配音轨来源 / 占位守门 / 先出视频后配音拟合
 - **VOICEFILE 覆盖**：默认用 `配音/voice_{zh,en}.wav`；设 `VOICEFILE=/path/x.wav` 可指定别的轨（如拟合轨）。
@@ -44,7 +45,7 @@ clip 原生音频：
   ```
   python3 <skill>/fit_voice_to_clips.py <作品根> 第N集 zh            # dry-run 对账
   python3 <skill>/fit_voice_to_clips.py <作品根> 第N集 zh --apply    # 出 voice_zh_fitted.wav
-  VOICEFILE=<作品根>/出视频/第N集/配音/voice_zh_fitted.wav bash <skill>/compose.sh <作品根> 第N集 zh
+  VOICEFILE=<作品根>/合成/第N集/配音/voice_zh_fitted.wav bash <skill>/compose.sh <作品根> 第N集 zh
   ```
   有 overflow（真音远超槽位）时脚本退出码 2、不产轨 → 回 /n2d-video 重出该镜头加长，或调 `FIT_MAX_STRETCH`。详见 SKILL「先出视频后配音」节。
 
@@ -61,6 +62,16 @@ clip 原生音频：
 
 ## 行业参考（决定音频时展示）
 90 秒一集漫剧工作室标配：1 条循环 BGM + 2~5 个转场音效 + AI 角色配音。
+
+## 加水印（可选 · 公共 watermark skill）
+成片后可选打水印，调与 faceswap 同级的公共 `watermark` skill（图/视频同一工具）；产物落 `合成/第N集/`：
+```
+# AI 合规标识（含 AI 配音/生图/换脸的投放成片应打，只加不去）
+python3 <watermark-skill>/watermark.py <作品根>/合成/第N集/成片_第N集_zh.mp4 <作品根>/合成/第N集/成片_第N集_zh_水印.mp4 --mode ai
+# 品牌/账号水印（按 _设置.md 的 水印 选择点：文字/logo/位置/透明度）
+python3 <watermark-skill>/watermark.py <作品根>/合成/第N集/成片_第N集_zh.mp4 <作品根>/合成/第N集/成片_第N集_zh_水印.mp4 --mode brand --text "@账号" --pos br --opacity 0.8
+```
+注：`watermark.py` 依赖 Pillow + ffmpeg，须在带 Pillow 的环境跑（如 facefusion/cosyvoice conda env）。
 
 ## 进度回写
 完成后回写「成片」列：`python3 <novel2drama skill>/progress.py set <作品根> 第N集 成片 ✅`。

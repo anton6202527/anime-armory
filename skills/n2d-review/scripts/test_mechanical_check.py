@@ -36,12 +36,12 @@ def test_placeholder_regex():
 def _mk(root, ep, zh_cues, manifest):
     """在 tmp 作品根写出 字幕_中文.srt + 时长清单.json 供对账函数读取。"""
     os.makedirs(os.path.join(root, "脚本", ep), exist_ok=True)
-    os.makedirs(os.path.join(root, "出视频", ep, "配音"), exist_ok=True)
+    os.makedirs(os.path.join(root, "合成", ep, "配音"), exist_ok=True)
     if zh_cues is not None:
         srt = "\n\n".join(f"{i}\n{a} --> {z}\n{t}" for i, (a, z, t) in enumerate(zh_cues, 1))
         open(os.path.join(root, "脚本", ep, "字幕_中文.srt"), "w", encoding="utf-8").write(srt)
     if manifest is not None:
-        json.dump(manifest, open(os.path.join(root, "出视频", ep, "配音", "时长清单.json"),
+        json.dump(manifest, open(os.path.join(root, "合成", ep, "配音", "时长清单.json"),
                                  "w", encoding="utf-8"), ensure_ascii=False)
 
 

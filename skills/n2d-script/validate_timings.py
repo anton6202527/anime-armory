@@ -27,7 +27,7 @@ def srt_last_end(path):
 def main():
     root, ep = sys.argv[1], sys.argv[2]
     tol = float(sys.argv[sys.argv.index('--tol')+1]) if '--tol' in sys.argv else 0.5
-    vd  = os.path.join(root,'出视频',ep,'配音')
+    vd  = os.path.join(root,'合成',ep,'配音')
     man_p = os.path.join(vd,'时长清单.json')
     voice = os.path.join(vd,'voice_zh.wav')
     zh_srt= os.path.join(root,'脚本',ep,'字幕_中文.srt')

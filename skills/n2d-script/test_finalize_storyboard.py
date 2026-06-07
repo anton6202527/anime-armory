@@ -9,7 +9,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 
 
 def _write_manifest(root, ep, manifest):
-    d = os.path.join(root, "出视频", ep, "配音")
+    d = os.path.join(root, "合成", ep, "配音")
     os.makedirs(d, exist_ok=True)
     os.makedirs(os.path.join(root, "脚本", ep), exist_ok=True)
     json.dump(manifest, open(os.path.join(d, "时长清单.json"), "w", encoding="utf-8"),

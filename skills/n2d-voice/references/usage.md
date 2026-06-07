@@ -1,9 +1,9 @@
 # 调用规范
-源 env(可选): source <作品根>/出视频/.minimax_env
+源 env(可选): source <作品根>/合成/.minimax_env
 逐句生成 + 整轨 + 时长清单：
     python3 <skill>/render_voice.py <作品根> 第N集 zh
     python3 <skill>/render_voice.py <作品根> 第N集 en   # 出海配音(英文)
-产物：<作品根>/出视频/第N集/配音/{line_NN.wav, voice_zh.wav, voice_en.wav, 时长清单.json}
+产物：<作品根>/合成/第N集/配音/{line_NN.wav, voice_zh.wav, voice_en.wav, 时长清单.json}
 
 ## ⚠️ macOS say 中文空音频自动降级
 

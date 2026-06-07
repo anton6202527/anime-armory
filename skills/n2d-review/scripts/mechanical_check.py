@@ -50,7 +50,7 @@ def parse_srt(path):
 
 
 def load_manifest(root, ep):
-    p = os.path.join(root, "出视频", ep, "配音", "时长清单.json")
+    p = os.path.join(root, "合成", ep, "配音", "时长清单.json")
     if not os.path.exists(p):
         return None, p
     try:
@@ -127,7 +127,7 @@ def check_completeness(root, ep, manifest):
         add(WARN, "完整性", ep, "缺 时长清单.json（未配音则正常）")
     else:
         for m in manifest:
-            w = n("出视频", ep, "配音", m.get("line_wav", ""))
+            w = n("合成", ep, "配音", m.get("line_wav", ""))
             if m.get("line_wav") and not os.path.exists(w):
                 add(WARN, "完整性", f"{ep} {m['line_wav']}", "时长清单列了但 wav 不存在")
         if any(m.get("占位") for m in manifest):
@@ -145,7 +145,7 @@ def check_completeness(root, ep, manifest):
             pass
     # 视频 clip / 成片 存在性（仅提示，非阻断）
     clips = glob.glob(n("出视频", ep, "视频", "*.mp4"))
-    finals = glob.glob(n("*成片_" + ep + "*.mp4")) + glob.glob(n("出视频", ep, "成片*.mp4"))
+    finals = glob.glob(n("*成片_" + ep + "*.mp4")) + glob.glob(n("合成", ep, "成片*.mp4"))
     add(INFO, "完整性", ep,
         f"产物快照：配音句 {len(manifest) if manifest else 0} · clip {len(clips)} · 成片 {len(finals)}")
 

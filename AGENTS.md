@@ -43,8 +43,9 @@
 | 从主题/几个字写一首带人声的歌 | **`song`**（分诊到 song-lyrics/compose/cover） |
 | 把成品歌做成音乐 MV（卡点/出图出视频/卡拉OK/合成） | **`mv`**（分诊到 mv-beat/image/video/lyric-sync/compose） |
 | 给视频/图片换脸（公共，任何流程可调） | **`video-faceswap`** / **`image-faceswap`**（带合规闸门） |
+| 给图/视频加水印（合规 AI 标识 / 品牌 logo·账号，公共） | **`watermark`**（图视频同工具；AI 标识只加不去） |
 
-> 四条线**互不依赖、各自自包含**（mv-* 不复用 n2d-* 等）。换脸是公共能力。
+> 四条线**互不依赖、各自自包含**（mv-* 不复用 n2d-* 等）。换脸、水印是公共能力（faceswap 打标即调 `watermark`）。
 
 ## 必须遵守的项目约定
 

@@ -61,7 +61,7 @@ def _parse_srt_texts(path):
 def main():
     root, ep = sys.argv[1], sys.argv[2]
     gap = float(sys.argv[3]) if len(sys.argv)>3 else 0.4
-    manifest=json.load(open(os.path.join(root,'出视频',ep,'配音','时长清单.json'),encoding='utf-8'))
+    manifest=json.load(open(os.path.join(root,'合成',ep,'配音','时长清单.json'),encoding='utf-8'))
     # 占位闸门：占位音色时长是估算值（与真实配音差 20~40%），定稿到镜头时长后会污染故事板 Clip 时长 → 出视频按错时长生成 → 大返工。
     # render_voice 已把占位句标 "占位":true；这里默认拒绝定稿，仅 rough preview 可用 FINALIZE_ALLOW_PLACEHOLDER=1 放行。
     ph=[r.get('idx',i) for i,r in enumerate(manifest) if r.get('占位')]
