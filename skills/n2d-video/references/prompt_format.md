@@ -10,8 +10,18 @@
 ## Clip K（时长 Ns · 镜头 N1[+N2]）　**节奏**：铺垫·长镜 / 加速·碎切 / 爽点·CU硬切 / 留白·定格　**张力**：克制 / 紧张 / 爆发 / 释放
 
 **首帧**：`出图/第N集/镜头N1_<描述>.png`
-**尾帧**（接力契约 `需要尾帧?=是` 时**必用**，平台支持双帧的走 frames2video）：`出图/第N集/镜头N_end.png`（n2d-image 出的尾帧=下一 Clip 首帧构图）
+**尾帧**（接力契约 `需要尾帧?=是` 时**必用**，平台支持双帧的走 frames2video）：`出图/第N集/图片/镜头N_end.png`（n2d-image 出的尾帧=下一 Clip 首帧构图）
 **场景**：{场景名}（夜晚/内）
+**导演意图**：{这一镜在剧情里的功能，不写"画面好看"，写"为什么这样拍"；例如压迫/试探/藏锋/释放/钩子}
+**起幅**：{从首帧/上一 Clip 接什么姿态、站位、视线、道具、场景状态开始；首帧已锁死，不重设视觉变量}
+**落幅**：{结尾停到哪里，给下一镜接什么；必须服务下一 Clip 入点或可切出的空镜/物件}
+**场面调度**：{人物左右站位、前后景关系、轴线方向、视线方向、出入画方向；无人物镜写画面重心与环境运动层次}
+**表演节拍**：{按时间段写唯一主动作链，如 [0-2s] 抬眼 [2-5s] 压住呼吸 [5-7s] 定住；空镜则写光/雾/水/符纹节拍}
+**专项镜头模板**（复杂镜必填，普通镜写“无”）：{从 `storyboard.json.template_contract` 读取 template_id + beats + blocking + camera_rule + continuity_must + negative + 专属字段；`hug_or_pull` 必写接触点/力量方向/释放帧，`multi_character_same_frame` 必写角色槽位/脸优先级，`ensemble_blocking` 必写站位/焦点层级/人群简化；本 Clip 人物运动/镜头运动/衔接约束必须服从它}
+**模型路由**（每 Clip 必填，来自 `video_model_routes.json`）：{shot_type；primary_backend；fallback_backends；mode=image2video|frames2video|text2video|multi_shot；native_audio_policy；identity_requirement；risk_flags；motion_control摘要；rationale；degrade_plan；`生视频AI` 只作普通镜/兜底，不固定每 Clip}
+**Motion Control / 物理交互控制**（高危接触镜必填，普通镜写“无”）：{从 `video_model_routes.json.motion_control` 读取 level/manifest_path/required_inputs/failure_modes/gate_policy；若 level=required，manifest 必须 ready 或 degrade_only；ready=pose/depth/instance/contact 控制资产齐，degrade_only=不直接生成全身接触而拆手部/反打/释放帧；ready 控制资产若写远端 uri，必须同时写 scheme=https/s3/gs、verified_at=YYYY-MM-DD、sha256/checksum/etag 之一，裸 uri/file:// 不放行}
+**角色身份注册层**（含角色镜必填，普通镜写“无”）：{优先从 `生产数据/identity_adapter_matrix.json` 读取本角色/形态在目标后端的 binding；回溯 `出图/共享/identity_registry.json` 取 registry id、reference_group、高危角度、禁漂项；写明 Character ID / Face Lock / reference controls / LoRA / fallback reference_group 状态}
+**原生音画策略**（每 Clip 必填，默认丢弃）：{audio_intent=none|ambience|native_sfx；risk=low|medium|high；mouth_visible=yes|no；speech_policy=no_native_speech；compose_policy=丢弃|低音量混入环境声|保留原片音轨；review=生成后确认无原生人声}
 **衔接设计**：
 - 入点：{承接上一个 Clip 的动作/视线/声音/空镜}
 - 出点：{本 Clip 结束时停住的姿态/视线/道具/画面重心}
@@ -33,6 +43,16 @@ continuity:
   end_state: {end_state}
   constraints: {constraints}
   negative: {negative}
+导演意图：{导演意图，一句话，不给模型重画面，只给它理解运动目的};
+起幅：{起幅};
+落幅：{落幅};
+场面调度：{场面调度，尤其轴线/左右站位/画面重心};
+表演节拍：{表演节拍};
+专项模板约束：{若有 template_contract，写明本 Clip 必须遵守的模板动作/站位/运镜/负向；普通镜写“无”};
+模型路由约束：{读取 video_model_routes.json；本镜 primary_backend=...，fallback=...，mode=...，native_audio_policy=...，identity_requirement=...；prompt 只使用 primary 后端真实支持的能力，不能混用其它后端专属能力；失败按 degrade_plan 切 fallback 或拆镜};
+物理交互约束：{若 motion_control.level=required，先读取 motion_control_manifest.json；status=ready 时按 pose_sequence/depth_sequence/instance_masks/contact_map 控制资产生成；status=degrade_only 时不直接生成全身复杂接触，按 degrade_plan 拆手部特写/反打/释放帧；禁止只靠文本 prompt 让模型猜两人遮挡、手部归属、武器接触};
+身份锁定约束：{读取 identity_adapter_matrix.json + identity_registry.json；若目标后端 binding ready，则写入 Character ID / Face Lock / reference controls / LoRA trigger 等平台参数；否则回退首帧+尾帧+reference_group；保持 drift_forbidden，避开高危角度};
+原生音画约束：{默认禁止原生人声；若 audio_intent=ambience/native_sfx，则只允许环境声/动作音效，禁止台词/旁白/哼唱，生成后需确认无原生人声};
 人物运动：{角色 A 动作链}；{角色 A 表情变化}；
 镜头运动：{推/拉/跟/环绕/固定 + 速度词，如"缓慢推近 0.5x"}；   ← 由"节奏/张力"决定：铺垫=缓慢推/固定，爽点=轻甩/环绕/快推
 动态细节：{烛火摇曳 / 晨雾流动 / 衣袂飘动 / 妖气扩散 / 发丝飘动 ...};
@@ -49,28 +69,38 @@ continuity:
   end_state: ...
   constraints: ...
   negative: ...
+director intent: ...;
+opening frame state: ...;
+ending frame state: ...;
+blocking: ...;
+performance beats: ...;
 character motion: ...;
 camera motion: dolly in slowly;
 dynamic detail: candle flame flickering, hair strands swaying;
 continuity constraint: begin from continuity.start_state, perform only continuity.action, end on continuity.end_state, preserve continuity.constraints, avoid continuity.negative, designed for ... transition;
-audio constraint: no dialogue, no narration, no generated native voice;
+native audio policy: audio_intent=none by default; for low-risk ambience/native SFX only, allow environmental sound effects but no speech, no narration, no humming, no generated native voice;
 \`\`\`
 
 > **中英双 prompt**：中文和英文视频 prompt 默认都写。英文不是只给海外平台；当中文 prompt 被平台安全策略误伤、被自动规避改写，或生成结果明显跑偏时，直接切英文版作为同义兜底。
 
 ### 平台参数
-- 模型 / 时长 / 帧率 / 画幅 / image2video 强度
+- primary_backend / fallback_backends / mode / 模型质量档 / 时长 / 帧率 / 画幅 / image2video 强度 / identity adapter / native_audio_policy
 
 ### 检查清单（视频三件套自查·最易漏 ④人物运动 / ②镜头运动 / ⑦张力）
 1. ✅ 首帧 PNG 已落档并与 Clip 编号匹配
-2. ✅ ④人物运动：动作链明确、幅度可控、可由首帧自然推出
-3. ✅ ②镜头运动：推/拉/跟/环绕/固定等词明确，速度词明确，不只写"运镜"
-4. ✅ 动态细节：烛火/雨丝/衣袂/雾气/灵光等 ≥1 条，且不改首帧设定
-5. ✅ ⑦张力：运镜与"节奏/张力"一致（铺垫缓慢、爽点短促、留白定格）
-6. ✅ 衔接设计：入点/出点/转场/轴线方向已从 `故事板.md` 读取，并写进 prompt 的衔接约束
-7. ✅ continuity：start_state/action/end_state/constraints/negative 五字段齐全，且已读取上一/下一 Clip 的衔接信息
-8. ✅ 原生音频：已写无对白、无旁白、不要生成原生人声；J-cut 只交给 compose，不交给视频模型生成声音
-9. ✅ 复杂度可控：无超复杂打斗/多人混战；复杂动作已有降级方案
+2. ✅ 导演调度字段：导演意图 / 起幅 / 落幅 / 场面调度 / 表演节拍齐全，且都服务剧情，不重定首帧视觉
+3. ✅ ④人物运动：动作链明确、幅度可控、可由首帧自然推出
+4. ✅ ②镜头运动：推/拉/跟/环绕/固定等词明确，速度词明确，不只写"运镜"
+5. ✅ 动态细节：烛火/雨丝/衣袂/雾气/灵光等 ≥1 条，且不改首帧设定
+6. ✅ ⑦张力：运镜与"节奏/张力"一致（铺垫缓慢、爽点短促、留白定格）
+7. ✅ 衔接设计：入点/出点/转场/轴线方向已从 `故事板.md` 读取，并写进 prompt 的衔接约束
+8. ✅ continuity：start_state/action/end_state/constraints/negative 五字段齐全，且已读取上一/下一 Clip 的衔接信息
+9. ✅ 模型路由：已读取 `video_model_routes.json`，本镜有 primary/fallback/mode/rationale/degrade_plan，且平台参数只写目标后端支持的能力
+10. ✅ Motion Control：高危接触镜已读取 route.motion_control；manifest 为 ready 或 degrade_only；已写 failure_modes，生成后会查 FeatureMelting/特征融化
+11. ✅ 原生音画策略：已填 audio_intent/risk/mouth_visible/speech_policy/compose_policy；默认丢弃，只有低风险无口型无台词镜头才 opt-in 环境声/音效；J-cut 只交给 compose，不交给视频模型生成声音
+12. ✅ 复杂镜头：已继承 `专项镜头模板`，且人物运动/镜头运动/衔接约束未违反 template_contract
+13. ✅ 角色身份注册层：含角色 Clip 已读取 `identity_adapter_matrix.json` + `identity_registry.json`，明确 Character ID/Face Lock/reference controls/LoRA 或 fallback reference_group，且未违反高危角度/禁漂项
+14. ✅ 复杂度可控：无超复杂打斗/多人混战；复杂动作已有降级方案
 
 ### 自检（生成后逐条过 · 落档闸门）
 > 生成后过/重跑判定。筛选宽容：轻微偏差放行，只命中硬伤才重跑或改 prompt。
@@ -79,8 +109,11 @@ audio constraint: no dialogue, no narration, no generated native voice;
 - [ ] 人物运动：动作方向正确、幅度自然，无肢体扭曲、脸部抖动、多人脸错乱
 - [ ] 镜头运动：符合 prompt 的推/拉/跟/固定等设计，无突兀乱甩或无意义缩放
 - [ ] 动态细节：至少 1 个动态细节成立，且没有引入现代物件/文字/logo/水印
+- [ ] 导演调度：视频实际完成了本镜导演意图；起幅、落幅、场面调度和表演节拍没有偏离
+- [ ] 模型路由：结果符合本镜 primary 后端强项；若连续失败，按 fallback_backends/degrade_plan 重跑，不临场乱换后端
+- [ ] Motion Control / FeatureMelting：高危物理接触镜检查手部归属、肢体边界、遮挡顺序、武器/接触点是否漂移；有手脚融合、肢体融化、穿模或人物边界混淆则废料重跑或拆镜
 - [ ] 衔接落点：结尾画面能自然接下一 Clip 的首帧/空镜/视线方向；若不能，标记改 prompt、补尾帧或插空镜缓冲
-- [ ] 原生音频：无 AI 自带台词/旁白；若有原生音轨，在总览标记给 n2d-compose 丢弃
+- [ ] 原生音画：无 AI 自带台词/旁白/哼唱；若本镜 opt-in 环境声/音效，确认仅为环境底并在总览「原生音画 opt-in 清单」标记；交 n2d-compose 按选择点处理
 - [ ] 落档判定：⬜通过落 `出视频/第N集/视频/ClipK_<描述>.mp4` ｜ ⬜进废料重跑 ｜ ⬜改 prompt/拆 Clip 后重跑
 
 ### 降级方案
@@ -93,10 +126,51 @@ audio constraint: no dialogue, no narration, no generated native voice;
 
 `故事板.md` 每段 Clip 包含 1~2 个分镜，每分镜已写了"镜头：景别/距离/机位/运镜"+"画面动态描述"。派生时：
 
+**先做本集导演一致性契约 + 本集基础视觉风格契约，再写单 Clip。** 单条 prompt 只能解决本镜可生成，不能保证整段剪起来像同一场戏、同一风格。生成 `01_clips.md` 前，必须在 `00_总览.md` 写「本集导演一致性契约」和「本集基础视觉风格契约」。
+
+> **契约源在出图，不在这里重发明**：色调 / 光位 / 轴线·视线 / 人物状态 / 景别这些视觉变量，在 `n2d-image` 阶段已经被烤进首帧像素（见 `出图/第N集/prompt/00_总览.md`「本集视觉一致性契约」五字段）。本契约**继承**那一份——主色调=出图色调基线、轴线=出图场景轴线·视线、剧情状态锁=出图角色状态演进表；视频只负责把它们落实到运动/运镜/剪辑，不得与出图侧打架（改了=与首帧冲突=闪烁漂移）。出图侧缺契约时，应回 `n2d-image` 补齐再出视频。
+> **基础视觉风格也继承，不重发明**：风格名 / 视觉基调 / 镜头与构图 / 光色策略 / 运动边界 / 风格禁忌来自 `storyboard.json.style_contract` → `出图/第N集/prompt/00_总览.md`「本集基础视觉风格契约」。视频阶段只能把它落实到与首帧相容的运动，不能把首帧改成另一种风格。旧 `cinematic_contract` 仅兼容旧项目。
+> **专项镜头模板也继承，不重发明**：`storyboard.json clips[]` 的 `template/template_contract` 是复杂镜头的动作和空间真值源。视频阶段把它转成 `专项镜头模板` 字段、人物运动、镜头运动、衔接约束和降级方案；不得把打斗/追逐/反打/法术/飞行/亲密互动/拥抱拉扯/多人同框/群像站位重新自由发挥。
+> **模型路由也继承，不临场乱选**：`video_model_routes.json` 是视频后端选择真值源。默认 `视频模型路由=自动按镜头路由`，打斗/追逐/对话反打/飞行/空镜/法术爆发/亲密互动/拥抱拉扯/多人同框/群像站位按后端能力选 primary/fallback；`生视频AI` 只做普通镜/兜底。逐 Clip prompt 必须把路由表转成 `模型路由` 字段、中文 prompt 的 `模型路由约束` 和平台参数，不得把不同后端专属能力混写。
+> **Motion Control 也继承，不靠文本猜物理**：`video_model_routes.json.motion_control` 是复杂物理交互的控制真值源。打斗命中、拥抱、抓腕、拉扯、近距离接触必须有 `motion_control_manifest.json`；ready 才能直接走 pose/depth/instance/contact 控制生成，degrade_only 则必须拆成手部特写、反打、释放帧等可控短镜。OpenPose/DWPose 只锁姿态，遮挡顺序和身体归属还要靠 depth/instance masks/contact_map 或拆镜。
+> **资产身份注册层也继承，不重发明**：`出图/共享/identity_registry.json` 是角色/形态身份真值源，`生产数据/identity_adapter_matrix.json` 是可执行视图。视频阶段先读 matrix 确定目标后端是 Character ID / Face Lock / reference controls / LoRA / reference_group fallback，再回 registry 取 `reference_group`、`angle_policy` 和 `drift_forbidden`；不能在视频 prompt 现场凭记忆写临时 ID。
+> **原生音画策略也继承选择点，不临场乱开**：默认 `视频原生音轨=丢弃`。只有纯空镜/转场/远景氛围/背身侧脸等低风险镜头可写 `audio_intent=ambience|native_sfx`，并在总览「原生音画 opt-in 清单」列明为什么无口型、无台词、无原生人声风险。
+
+至少包含：
+
+- **主色调**：本集/本段默认色调，哪些色彩或特效只能在指定爽点后出现（如金瞳、妖气、系统光）。
+- **镜头语法**：铺垫/对峙/爽点/留白各用什么运镜；禁止无理由乱甩、乱推、随机环绕。
+- **轴线**：同场景主要人物左右站位、视线方向、出入画方向；换轴必须有反打/空镜/动作理由。
+- **剧情状态锁**：关键状态不能提前泄露，如觉醒前不发光、受伤前无伤、变身前不出现变体。
+- **场景状态**：同场景连续 Clip 的灯位、雨雾、门窗方向、道具位置、背景布局如何继承。
+
+`gate.py --stage video` 会阻断缺「本集导演一致性契约」或缺上述字段的出视频流程。
+
+「本集基础视觉风格契约」至少包含：
+
+- **风格名**：来自 `_设置.md` 的 `基础视觉风格`。
+- **视觉基调**：该风格的角色比例、材质/线条、画面密度和整体质感。
+- **镜头与构图**：该风格下可用的景别、透视、留白、剪影或线稿纪律。
+- **光色策略**：主色 + 强调色 + 强调色出现时机。
+- **运动边界**：与风格相容的推/拉/跟/固定/弹性运动；禁止无理由乱甩和随机变风格。
+- **风格禁忌**：随所选风格派生。写实电影感可禁插画化/游戏CG；二次元赛璐璐不应禁“插画感”，而应禁照片皮肤/3D塑料/风格跳变。
+
+`gate.py --stage video` 会阻断缺「本集基础视觉风格契约」或缺上述字段的出视频流程。
+
 | 故事板字段 | 视频 prompt 哪里用 |
 |---|---|
 | 时长 | "时长 Ns"（标题）+ 平台参数 |
 | 场景名 | "场景"行 |
+| 本段剧情功能 / 钩子 / 爽点位置 | "导演意图"；先说明这一镜为什么存在，再写动作 |
+| 上一 Clip 末帧 / 本 Clip 首帧 | "起幅"；必须承接首帧，不重新发明姿态/站位/状态 |
+| 下一 Clip 入点 / 接缝契约 | "落幅"；必须服务下一镜，不能只让本镜好看 |
+| 轴线 / 左右站位 / 前后景 | "场面调度"；锁人物空间关系和画面重心 |
+| 配音时长 / 情绪停顿 / 动作链 | "表演节拍"；用 [0-2s] 这类时间段写可执行的表演 |
+| `template/template_contract`（复杂镜头） | "专项镜头模板"字段 + 人物运动/镜头运动/衔接约束/降级方案；不从零写复杂动作 |
+| `video_model_routes.json`（模型适配层） | "模型路由"字段 + 中文 prompt 的"模型路由约束" + 平台参数里的 primary/fallback/mode/identity adapter/native_audio_policy；不固定一个视频模型 |
+| `video_model_routes.json.motion_control` + `control/Clip_XX/motion_control_manifest.json`（复杂物理交互） | "Motion Control / 物理交互控制"字段 + 中文 prompt 的"物理交互约束" + 生成后 FeatureMelting 自检；ready 走控制资产，degrade_only 走拆镜 |
+| `identity_adapter_matrix.json` + `identity_registry.json`（角色/形态） | "角色身份注册层"字段 + 中文 prompt 的"身份锁定约束" + 平台参数里的 Character ID/Face Lock/reference controls/LoRA；无注册则 fallback reference_group |
+| `视频原生音轨` 选择点 / 低风险声音意图 | "原生音画策略"字段 + 中文 prompt 的"原生音画约束" + `00_总览.md`「原生音画 opt-in 清单」；compose 阶段按 `丢弃/低音量混入环境声/保留原片音轨` 处理 |
 | **节奏注记**（铺垫/加速/爽点/留白） | 标题"节奏"+ 决定运镜速度（铺垫=缓慢/固定，爽点=快推/轻甩，留白=固定定格） |
 | **衔接设计**（入点/出点/转场/连贯性） | "衔接设计"块 + prompt 里的"衔接约束"；决定是否要尾帧、空镜缓冲、按场景分批或后期 J-cut |
 | 上一 Clip 的出点/下一 Clip 的入点 | `continuity.start_state` / `continuity.end_state`；自动读取相邻 Clip，缺失时按首帧、尾帧、视线方向、动作完成前后一拍推断 |
@@ -144,6 +218,12 @@ audio constraint: no dialogue, no narration, no generated native voice;
 ## 3. `00_总览.md` 必含字段
 
 - 本集 Clip 总数 + 总时长（应与故事板一致）
+- **本集导演一致性契约**：主色调 / 镜头语法 / 轴线 / 剧情状态锁 / 场景状态（缺任一项，`gate.py --stage video` 阻断）
+- **本集资产身份速查**：本集入镜角色/形态 registry id、目标视频后端角色身份状态、fallback reference_group、高危角度、禁漂项（缺 `identity_registry.json` 或字段不全，`gate.py --stage video` 阻断）
+- **本集身份 Adapter Matrix 摘要**：本集入镜角色在 primary/fallback 后端的 Character ID / Face Lock / reference controls / LoRA / reference_group binding；来自 `生产数据/identity_adapter_matrix.json`
+- **本集模型路由表**：逐 Clip 写 shot_type、primary_backend、fallback_backends、mode、native_audio_policy、identity_requirement、risk_flags、degrade_plan（缺则 `gate.py --stage video` 阻断）
+- **本集 Motion Control 清单**：仅高危物理交互镜必填；逐 Clip 写 level、manifest_path、status=ready|degrade_only、required_inputs、failure_modes、degrade_plan。缺 ready/degrade_only manifest 时 `gate.py --stage video` 阻断。
+- **原生音画 opt-in 清单**：仅当本集有 `audio_intent=ambience|native_sfx` 或 `_设置.md 视频原生音轨 != 丢弃` 时必填；逐 Clip 写 audio_intent、低风险理由、mouth_visible、speech_policy、compose_policy、生成后审查结论
 - 进度（已完成 / 总数）
 - 每 Clip 状态表（Clip K | 时长 | 首帧 | 尾帧 | 转场 | J-cut | 空镜缓冲 | 状态 ✅/⏳/⬜ | 落档路径）
 - 首帧 PNG 来源速查（对应 Stage 4 的 `出图/第N集/镜头N_*.png`）
@@ -153,10 +233,11 @@ audio constraint: no dialogue, no narration, no generated native voice;
 
 每个 Clip prompt 块必须同时包含两段检查，保持与 n2d-image 的"出图前八维自查 + 生成后落档闸门"同级严谨：
 
+- `导演意图 / 起幅 / 落幅 / 场面调度 / 表演节拍`：五个导演调度字段缺一不可。它们负责把 prompt 从"动作说明"升级成"可剪辑的镜头调度"。
 - `检查清单（视频三件套自查·最易漏 ④人物运动 / ②镜头运动 / ⑦张力）`：提交前检查 prompt 是否合格。
 - `自检（生成后逐条过 · 落档闸门）`：生成后检查视频是否通过、进废料重跑，或改 prompt/拆 Clip。
 
-只写一个泛化 checklist 不合格；缺任一段都要先补齐再提交视频生成。
+只写一个泛化 checklist 不合格；缺导演调度字段或任一检查段，都要先补齐再提交视频生成。
 
 ---
 
@@ -213,3 +294,4 @@ Stage 5 第一次跑时，往 `_进度.md` 表头追加 `视频prompt` + `视频
 
 - `视频prompt` ✅ / ⬜：本集 `出视频/第N集/prompt/` 全套写完
 - `视频`：`已完成 MP4 / 本集 Clip 总数`
+数`

@@ -4,6 +4,9 @@
 # 产出: <workdir>/subpng/sub_NN.png + 写 inputs.txt(png路径) + vfilter.txt(overlay链)
 import sys, os, re
 
+if len(sys.argv) < 3:
+    print("usage: render_subs.py <workdir> <zh|en|bilingual>", file=sys.stderr)
+    sys.exit(2)
 W, MODE = sys.argv[1], sys.argv[2]
 from PIL import Image, ImageDraw, ImageFont
 
@@ -11,7 +14,8 @@ ZH_FONT = "/System/Library/Fonts/STHeiti Medium.ttc"
 EN_FONT = "/System/Library/Fonts/Supplemental/Arial.ttf"
 if not os.path.exists(EN_FONT):
     EN_FONT = "/System/Library/Fonts/Helvetica.ttc" if os.path.exists("/System/Library/Fonts/Helvetica.ttc") else ZH_FONT
-WIDTH, HEIGHT = 1080, 1920
+WIDTH  = int(os.environ.get('SUB_W', 1080))   # 由 compose.sh 按画幅选择点透传（竖屏 1080 / 横屏 1920）
+HEIGHT = int(os.environ.get('SUB_H', 1920))
 
 def parse_srt(path):
     cues = {}
@@ -81,6 +85,20 @@ def wrap(draw, text, font, maxw):
 os.makedirs(os.path.join(W, 'subpng'), exist_ok=True)
 manifest = []
 MAXW = WIDTH - 120
+# 垂直安全区：字幕总高超过画面这一比例就缩字号（治长双语句顶出画面/叠死画面元素）
+MAXH = int(HEIGHT * float(os.environ.get('SUB_MAXH_FRAC', '0.45')))
+overflow_hits = 0
+
+def _layout(d, i, zh_sz, en_sz):
+    zh_font = _font(ZH_FONT, zh_sz); en_font = _font(EN_FONT, en_sz)
+    zh_lines, en_lines = [], []
+    if MODE in ('zh','bilingual') and i in zh:
+        for ln in zh[i][2]: zh_lines += wrap(d, ln, zh_font, MAXW)
+    if MODE in ('en','bilingual') and i in en:
+        for ln in en[i][2]: en_lines += wrap(d, ln, en_font, MAXW)
+    total_h = len(en_lines)*(en_sz+12) + (8 if (en_lines and zh_lines) else 0) + len(zh_lines)*(zh_sz+14)
+    return zh_font, en_font, zh_lines, en_lines, total_h
+
 for i in idxs:
     img = Image.new('RGBA', (WIDTH, HEIGHT), (0,0,0,0))
     d = ImageDraw.Draw(img)
@@ -89,12 +107,13 @@ for i in idxs:
     # 本句样式分级
     dzh, zh_fill, den, en_fill = STYLES[TAGS.get(i, 'normal')]
     zh_sz = ZH_SIZE + dzh; en_sz = EN_SIZE + den
-    zh_font = _font(ZH_FONT, zh_sz); en_font = _font(EN_FONT, en_sz)
-    zh_lines, en_lines = [], []
-    if MODE in ('zh','bilingual') and i in zh:
-        for ln in zh[i][2]: zh_lines += wrap(d, ln, zh_font, MAXW)
-    if MODE in ('en','bilingual') and i in en:
-        for ln in en[i][2]: en_lines += wrap(d, ln, en_font, MAXW)
+    zh_font, en_font, zh_lines, en_lines, total_h = _layout(d, i, zh_sz, en_sz)
+    # 溢出保护：逐步缩字号直到落进安全区或触到字号下限（18）
+    if total_h > MAXH:
+        overflow_hits += 1
+        while total_h > MAXH and zh_sz > 18 and en_sz > 16:
+            zh_sz -= 2; en_sz -= 2
+            zh_font, en_font, zh_lines, en_lines, total_h = _layout(d, i, zh_sz, en_sz)
     # 自底向上排版：英文在最底，中文在其上
     y = HEIGHT - 130
     def draw_line(text, font, fill, stroke, y_baseline):
@@ -126,4 +145,5 @@ if n:
 else:
     filt = '[0:v]format=yuv420p[v]'
 open(os.path.join(W,'vfilter.txt'),'w').write(filt)
-print(f"渲染 {len(manifest)} 句字幕 PNG，模式={MODE}")
+print(f"渲染 {len(manifest)} 句字幕 PNG，模式={MODE}，画幅 {WIDTH}x{HEIGHT}"
+      + (f"；⚠️ {overflow_hits} 句超垂直安全区已自动缩字号（如仍挤可拆句或 SUB_MAXH_FRAC 调大）" if overflow_hits else ""))

@@ -68,3 +68,41 @@ def test_build_uses_real_timeline_when_present():
     assert abs(shots["镜头1"]-4.6)<1e-6
     assert abs(shots["镜头2"]-3.0)<1e-6
     assert abs(shots["镜头1"]+shots["镜头2"]-7.6)<1e-6
+
+
+def test_clean_punct():
+    # 治 || 气口残留：。，→。、，，→，、行首逗号去掉（重跑 finalize 自动洗净字幕）
+    assert F._clean_punct("走向。，慎重选择。") == "走向。慎重选择。"
+    assert F._clean_punct("我，，你") == "我，你"
+    assert F._clean_punct("，开头的句子") == "开头的句子"
+    assert F._clean_punct("正常，一句话。") == "正常，一句话。"   # 合法标点不动
+
+
+def test_clean_en():
+    assert F._clean_en("Choose carefully .") == "Choose carefully."     # 标点前空格
+    assert F._clean_en("shape  the  path") == "shape the path"          # 多空格
+    assert F._clean_en("a,, b") == "a, b"                               # 叠逗号
+    assert F._clean_en(", leading") == "leading"                       # 行首逗号
+    assert F._clean_en("Mr. Smith, hello.") == "Mr. Smith, hello."      # 合法不动
+    assert F._clean_en("(opening one eye) ...This kid") == "(opening one eye) ...This kid"  # 省略号前空格不动
+
+
+def test_native_av_builds_shots_from_storyboard_without_manifest(tmp_path):
+    root = str(tmp_path)
+    os.makedirs(os.path.join(root, "脚本", "第1集"), exist_ok=True)
+    open(os.path.join(root, "_设置.md"), "w", encoding="utf-8").write("# _设置\n## 选择\n- 制作模式: 原生音画\n")
+    json.dump({"clips": [{"id": "EP01_CLIP01", "duration": 7}, {"id": "EP01_CLIP02", "duration": 5.5}]},
+              open(os.path.join(root, "脚本", "第1集", "storyboard.json"), "w", encoding="utf-8"), ensure_ascii=False)
+    r = subprocess.run([sys.executable, os.path.join(_HERE, "finalize_storyboard.py"), root, "第1集"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr            # 无配音清单也不崩
+    shots = json.load(open(os.path.join(root, "脚本", "第1集", "镜头时长.json"), encoding="utf-8"))
+    assert shots == {"EP01_CLIP01": 7.0, "EP01_CLIP02": 5.5}  # 时长来自 storyboard 脚本规划
+
+
+def test_non_native_still_requires_manifest(tmp_path):
+    root = str(tmp_path)
+    os.makedirs(os.path.join(root, "脚本", "第1集"), exist_ok=True)  # 无 _设置/制作模式 → 默认配音先行
+    r = subprocess.run([sys.executable, os.path.join(_HERE, "finalize_storyboard.py"), root, "第1集"],
+                       capture_output=True, text=True)
+    assert r.returncode == 2 and "缺 时长清单" in r.stdout      # 非原生音画仍要求配音清单

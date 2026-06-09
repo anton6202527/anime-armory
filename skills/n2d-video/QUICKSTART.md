@@ -24,5 +24,5 @@ python3 skills/novel2drama/progress.py set <作品根> 第N集 视频 X/Y
 
 Notes:
 - Keep platform-native clip audio in the original MP4; `n2d-compose` decides whether to discard or mix it.
+- Every Clip prompt must include `原生音画策略`; only low-risk ambience/SFX clips can opt in, and native speech remains forbidden by default.
 - Use backend-specific single-clip duration limits from `references/platforms.md`.
-

@@ -1,17 +1,17 @@
 ---
 name: mv-video
-description: 制MV 出视频 — 把 mv-image 的 PNG 图生视频成 MV clip，clip 时长对齐 beatgrid 卡点（副歌踩鼓点切），运镜服务节奏。mv 系列自建，不调 n2d-video；用通用生视频 CLI（即梦/可灵/Veo/Seedance）。Use when asked to MV出视频 / 生成MV视频 / MV图生视频 / 卡点剪辑素材. Triggers MV出视频, MV视频, MV图生视频, MV运镜, mv-video.
+description: 制MV 出视频 — 把 mv-image 的 PNG 图生视频成 MV clip，clip 时长对齐 mv-plan/beatgrid 卡点（副歌踩鼓点切），用 jobs_manifest 跟踪多版生成、评分和挑版，运镜服务节奏。mv 系列自建，不调 n2d-video；用通用生视频 CLI（即梦/可灵/Veo/Seedance/manual）。Use when asked to MV出视频 / 生成MV视频 / MV图生视频 / 卡点剪辑素材 / 登记视频take / 挑版. Triggers MV出视频, MV视频, MV图生视频, MV运镜, 视频take, 挑版, mv-video.
 ---
 
 # mv-video — 制MV 出视频（mv 系列自建）
 
-把 `出图/` 的 PNG 图生视频成 MV clip，落 `出视频/视频/`。**clip 时长对齐 `节拍/beatgrid.json` 卡点**（不等长），运镜服务节奏。**自包含**，不调 n2d-video；用通用生视频 CLI。
+把 `出图/` 的 PNG 图生视频成 MV clip，落 `出视频/takes/` 与 `出视频/视频/`。**clip 时长来自 `分镜/clip_plan.json`，而 clip_plan 由 `节拍/beatgrid.json` 卡点驱动**（不等长），运镜服务节奏。**自包含**，不调 n2d-video；用通用生视频 CLI 或人工/网页生成后登记。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
 本 skill 的可选项**不写死在源码里**。按 `../_偏好约定.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
-本 skill 涉及的选择点：`生视频AI`、`出视频规格`（三档预算·每次调 AI 前告知·见下「出视频规格」节）、`视频分辨率`。
+本 skill 涉及的选择点：`生视频AI`、`出视频规格`（三档预算·每次调 AI 前告知·见下「出视频规格」节）、`视频分辨率`、`MV规划粒度`、`卡点策略`。
 
 ## 核心原则
 - **卡点驱动 clip 时长**：每个 clip 时长 = 相邻卡点之差（`beatgrid.downbeats`）。**副歌每 1 拍/半小节一切（碎切）、verse 缓（2-4 拍）**。别等长堆叠——这是 MV 的命。
@@ -19,10 +19,11 @@ description: 制MV 出视频 — 把 mv-image 的 PNG 图生视频成 MV clip，
 - **运镜服务节奏/情绪**：副歌高能=快推/环绕/轻甩；verse 叙事=缓推/跟；bridge 反转=换机位。爽点对齐 downbeat。
 - **三件套必写**：人物运动 + 镜头运动 + 动态细节。
 - **continuity 必写**：每个 clip 必须有 `continuity.start_state/action/end_state/constraints/negative`，同时读取上一/下一 clip、`beatgrid.json` 起止点、段落张力和歌词画面钩子。`continuity.start_state` 直接抄上一 clip 的 `end_state`（单一真值，别重写）。MV 的连续性不是一镜到底，而是"视觉身份一致 + 动作/视线/道具可切 + 卡点落点准"。
-  - **MV 默认卡点硬切**（踩 downbeat 切），接点靠"视觉身份一致 + 卡点准"，**不强求 n2d 那套首尾帧接力**。但**同段落·非卡点切·人物姿态连续**的接缝（如副歌内一段连续动作分两 clip），可选尾帧接力：mv-image 出 `镜头N_end.png`=下一 clip 首帧构图，mv-video 首尾双帧引导锁接点。换段/卡点切不需要。
+  - **MV 默认卡点硬切**（踩 downbeat 切），接点靠"视觉身份一致 + 卡点准"，**不强求 n2d 那套首尾帧接力**。但**同段落·非卡点切·人物姿态连续**的接缝（如副歌内一段连续动作分两 clip），可选尾帧接力：`clip_plan.json` 标 `need_end_frame=true`，mv-image 出 `出图/段落/图片/Clip_XXX_end.png`=下一 clip 首帧构图，mv-video 首尾双帧引导锁接点。换段/卡点切不需要。
 - **导演视角八维（视频版）**：①镜头/③人物/⑤场景/⑥光影/⑧画风**已由首帧 PNG 锁死**（出图阶段做完），视频阶段**只升级 ④动作→人物运动+表情(踩段落)、②机位→运镜(对齐 downbeat)、⑦张力**，其余严禁重定（改了=与首帧打架=闪烁）。详见 `mv/references/导演视角prompt.md §四`。
 - **生视频贵**：先在图阶段锁死视觉，视频只调动作/运镜；每 clip 跑几版挑稳由 `出视频规格` 档统一决定（见下节）。
-- **生视频 CLI**：本机官方 CLI（dreamina/kling/veo/seedance）直调；没有则一步步指导 web。**不装第三方逆向 CLI**。
+- **视频任务 manifest**：先用 `scripts/video_jobs.py` 从 `分镜/clip_plan.json` 生成 `出视频/jobs_manifest.json` 和逐 take prompt；AI/网页/人工生成的视频先登记到 `takes/`，评分后挑版复制到 `出视频/视频/Clip_XXX.mp4` 并同步 `分镜/timeline_manifest.json`。不要只把 mp4 扔进目录让下游猜来源。
+- **生视频 CLI**：本机官方 CLI（dreamina/kling/veo/seedance）直调；没有则生成 job 包并指导 web/manual 登记。**不装第三方逆向 CLI**。
 - **出视频规格按三档预算 + 每次调 AI 前告知**：调即梦或任何生视频 AI 出 MV clip 前，**像出图预算提示一样先把本次生成规格告知用户**——规格打包成 `出视频规格` 三档预算（**预算充足 / 预算一般（默认）/ 预算不够**），每档预设*分辨率·帧率·每clip跑几版挑稳·平台质量档*。**首次问一次**→记入 `_设置.md`→之后**沉默沿用但每次开跑前一行告知当前档**（随时可改）。与 n2d-video 同义同源。三档表 + 告知话术见下「出视频规格」节。
 
 ## 出视频规格（选择点 `出视频规格` · 三档预算 · 每次调 AI 前告知）
@@ -40,24 +41,38 @@ description: 制MV 出视频 — 把 mv-image 的 PNG 图生视频成 MV clip，
   > 「即将出 MV 视频，当前规格档 = **预算一般**（720p · 24-30fps · 关键镜跑 2 版挑稳 / 普通镜 1 版 · 标准档）。可改 **预算充足**（1080p·30fps·多跑挑稳·高质量档，更清晰更贵）或 **预算不够**（720p·24fps·全 1 版·省积分档，最省）。要改说一声，否则按此档跑。」
 - **MV 的「关键镜」= 副歌高光/爽点 clip · 人脸特写 · 对齐 downbeat 的卡点镜**；verse 叙事镜/纯空镜/转场为普通镜。「跑几版挑稳」就是「每 clip 跑 2 版挑脸/运动稳」的预算开关——本档统一决定，不再每 clip 临时拍脑袋。
 - **单项可覆盖**：规格档只设默认，`视频分辨率` 等单项仍可在 `_设置.md` 单独覆盖。单 clip **时长不在本档内**——由 `beatgrid.json` 卡点驱动（见核心原则）；合成画幅另见 `合成画幅` 选择点（MV 默认 16:9 横屏）。
-- **落实到调用**：选定档后，把该档的分辨率/帧率喂给 CLI 的 `--resolution`/`--fps`（或平台对应 flag），并按「跑几版」决定每 clip 抽几版挑稳。
+- **落实到调用**：选定档后，把该档的分辨率/帧率喂给 CLI 的 `--resolution`/`--fps`（或平台对应 flag），并按「跑几版」决定每 clip抽几版挑稳。
 
 ## 工作流
-1. 读 `beatgrid.json`（downbeats/段落）+ `出图/` PNG + `视觉蓝图` 段落映射。
-2. 规划 clip：按段落 + 卡点定**每 clip 时长**（副歌密、verse 疏），列 clip 表（首帧 PNG / 时长 / 运镜 / 段落 / 转场 / 需要尾帧? / continuity）。`continuity.start_state` **抄上一 clip 的 `end_state`**（同一句不重写）；`end_state` 同时服务下一 clip 的首帧/歌词钩子/downbeat 落点。给同段落连续硬切的接缝标 `需要尾帧?=是`，让 mv-image 备尾帧 PNG。
-3. 调 AI 前**先念「出视频规格」告知话术**（当前规格档 + 三档可改，见上节）→ 逐 clip 图生视频，按规格档的分辨率/帧率/跑几版执行 → `出视频/视频/Clip<NN>_<描述>.mp4`；废片归 `common/废料/`。
-4. 校验：clip 总时长 ≈ 歌长（差太多回头调 clip/补空镜）。
-5. 回写 `_进度.md` 视频行。下一步 mv-lyric-sync（字幕）/ mv-compose（合成，按 beatgrid 卡点拼）。
+1. 先跑 `mv-plan`，确认 `分镜/clip_plan.json` 与 `timeline_manifest.json` 已存在。
+2. 生成视频任务包：
+   ```bash
+   python3 skills/mv-video/scripts/video_jobs.py "<制MV作品根>"
+   ```
+   产 `出视频/jobs_manifest.json` + `出视频/prompt/Clip_XXX_take_YY.md`。每个 job 带首帧、时长、转场、continuity、跑几版、关键镜标记。
+3. 调 AI 前**先念「出视频规格」告知话术**（当前规格档 + 三档可改，见上节）→ 按 job prompt 逐 take 图生视频。外部生成后登记：
+   ```bash
+   python3 skills/mv-video/scripts/video_jobs.py "<制MV作品根>" --register /path/to/take.mp4 --clip Clip_001 --take 1
+   ```
+4. 对 take 评分/挑版：
+   ```bash
+   python3 skills/mv-video/scripts/video_jobs.py "<制MV作品根>" --score Clip_001 --take 1 --motion-score 90 --identity-score 88 --beat-score 92 --clarity-score 86
+   python3 skills/mv-video/scripts/video_jobs.py "<制MV作品根>" --select Clip_001 --take 1
+   ```
+   `--select` 会复制到 `出视频/视频/Clip_001.mp4`，并同步 `分镜/timeline_manifest.json`。
+5. 校验：clip 总时长 ≈ 歌长（差太多回头调 clip/补空镜）。
+6. 回写 `_进度.md` 视频行. 下一步 mv-lyric-sync（字幕）/ mv-compose（合成，按 timeline 拼）。
 
 ## 详细参考
 - 导演视角八维（视频版·只调动作/运镜/张力，其余继承首帧）：`mv/references/导演视角prompt.md §四`
-- clip 表格式 + 卡点定时长 + 运镜映射：`references/prompt_format.md`
+- jobs manifest 格式 + 卡点定时长 + 运镜映射：`references/prompt_format.md`
 
 ## 常见错误
 | 错误 | 纠正 |
 |---|---|
-| clip 等长不卡点 | 时长按 beatgrid 相邻卡点定，副歌碎切 |
+| clip 等长不卡点 | 先跑 mv-plan，时长按 beatgrid 相邻卡点定，副歌碎切 |
 | 不告知规格就闷头调 AI 出视频 | 违反 `出视频规格` 选择点——调 AI 前先念三档话术告知当前规格档（分辨率/帧率/跑几版/质量档），用户可改 |
+| 外部生成后只丢 mp4 | 用 `video_jobs.py --register/--score/--select` 登记 take、挑版并同步 timeline |
 | 只写画面不写运动 | 人物运动+镜头运动+动态细节三件套 |
 | clip 单条好看但剪起来跳 | 每条补 `continuity` 五字段：承接上一条、给下一条留落点、锁服装发型/场景/轴线/道具，负面禁止换脸换衣新增人物 |
 | 运镜乱炫 | 服务节奏：副歌快/verse 缓/爽点对 downbeat |

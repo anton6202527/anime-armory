@@ -7,7 +7,8 @@ init_project.py — 建外传项目骨架；docx → txt 抽取；调 extract_an
     python3 init_project.py <原作路径> \\
         --character "<配角名>" \\
         --mode parallel|sequel|branch \\
-        --scale short|medium|long \\
+        --scale short|medium|long|微短剧|漫剧 \\
+        [--target-chapters N] \\
         [--branch-point "第N章"] \\
         [--person first|third-limited] \\
         [--out <输出根>] \\
@@ -28,14 +29,12 @@ from extract_anchors import scan_candidates, write_anchor_table
 # 共享工具（docx→txt / 版权判定 / 落 _设置.md）上移至 novel-craft，避免各 init 各写一份
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                 "..", "..", "novel-craft", "scripts"))
+from contract import (AI_TEXT_USAGE_MODES, CHAPTER_GRANULARITY, NOVEL_DRAFT_MODES,
+                      SCALE_PROFILES, base_meta, demo_chapters_for, derived_stage_markdown,
+                      parse_outputs, scale_profile)
 from derive_common import docx_to_txt, detect_rights_status, write_settings
 
-
-SCALE_PROFILE = {
-    "short":  {"target_chapters": 2,  "words_per_chapter": [6000, 10000]},
-    "medium": {"target_chapters": 10, "words_per_chapter": [4000, 6000]},
-    "long":   {"target_chapters": 32, "words_per_chapter": [5000, 8000]},
-}
+SCALE_PROFILE = SCALE_PROFILES  # backwards-compatible alias for tests/importers
 
 
 def detect_source_title(novel_path):
@@ -56,6 +55,8 @@ def build_progress_md(meta):
     outputs = meta["outputs"]
     out_lines = "\n".join(f"- [ ] {fmt}" for fmt in outputs)
     return f"""# 进度
+
+{derived_stage_markdown("spinoff")}
 
 ## 准备阶段
 - [x] 项目骨架
@@ -83,7 +84,7 @@ def build_progress_md(meta):
 def build_character_card_skeleton(character_name, source_title, mode):
     return f"""# 角色卡 — {character_name}
 
-> 第 2 步由 Claude 主对话填写。本骨架仅作占位。
+> 第 2 步由主对话填写。本骨架仅作占位。
 
 ## 来源
 - 原作：{source_title}
@@ -115,7 +116,7 @@ def build_character_card_skeleton(character_name, source_title, mode):
 def build_worldview_skeleton(source_title):
     return f"""# 世界观 — 摘自《{source_title}》
 
-> 第 2 步由 Claude 主对话填写。只摘原作已确立的规则，不发明能推翻原作的新规则。
+> 第 2 步由主对话填写。只摘原作已确立的规则，不发明能推翻原作的新规则。
 
 ## 修炼/魔法/能力体系
 
@@ -144,7 +145,7 @@ def build_outline_skeleton(meta):
     chapters_list = chr(10).join(f"- 第 {i:02d} 章 《》 — " for i in range(1, n + 1))
     return f"""# 章纲 — {meta['spinoff_character']}外传
 
-> 第 3 步由 Claude 主对话填写。**章纲未敲定不进第 4 步逐章写。**
+> 第 3 步由主对话填写。**章纲未敲定不进第 4 步逐章写。**
 
 ## 总体弧线
 
@@ -162,7 +163,9 @@ def main():
     ap.add_argument("source_novel", help="原作 .txt 或 .docx 路径")
     ap.add_argument("--character", required=True, help="配角名")
     ap.add_argument("--mode", required=True, choices=["parallel", "sequel", "branch"])
-    ap.add_argument("--scale", required=True, choices=["short", "medium", "long"])
+    ap.add_argument("--scale", required=True, choices=list(SCALE_PROFILE))
+    ap.add_argument("--target-chapters", type=int, default=None,
+                    help="覆盖规模档默认章数")
     ap.add_argument("--branch-point", default=None, help="分叉模式必填，例：'第15章'")
     ap.add_argument("--person", default="third-limited", choices=["first", "third-limited"])
     ap.add_argument("--out", default=None, help="输出根，缺省 写小说/<原作名>-<配角名>外传/")
@@ -170,6 +173,12 @@ def main():
                     help="逗号分隔，可含 txt,docx,outline,n2d")
     ap.add_argument("--target-platform", default="跨平台",
                     help="目标平台（第 3 步书名候选用）：起点/晋江/抖音漫剧/番茄/红果/历史向/跨平台")
+    ap.add_argument("--draft-mode", default="稳妥初稿", choices=NOVEL_DRAFT_MODES,
+                    help="小说生成模式：决定速度/质量 gate 密度")
+    ap.add_argument("--chapter-granularity", default="逐章", choices=CHAPTER_GRANULARITY,
+                    help="章节生成粒度：逐章/小批/全书草稿")
+    ap.add_argument("--ai-text-usage", default=None, choices=AI_TEXT_USAGE_MODES,
+                    help="发布披露用：AI-generated / AI-assisted / 未使用AI文本")
     ap.add_argument("--i-have-rights", action="store_true",
                     help="原作非公版时声明你有权使用")
     args = ap.parse_args()
@@ -193,7 +202,7 @@ def main():
         sys.exit(2)
 
     # 建目录
-    for sub in ("设定", "章节", "导出"):
+    for sub in ("设定", "章节", "导出", "写作任务", "合规"):
         os.makedirs(os.path.join(out_root, sub), exist_ok=True)
 
     # 原作 → txt 副本
@@ -221,11 +230,14 @@ def main():
         sys.exit(2)
 
     # _meta.json
-    profile = SCALE_PROFILE[args.scale]
-    outputs = [s.strip() for s in args.outputs.split(",") if s.strip()]
+    profile = scale_profile(args.scale)
+    if args.target_chapters is not None:
+        profile["target_chapters"] = args.target_chapters
+    outputs = parse_outputs(args.outputs)
     # Demo 章数按规模
-    demo_chapters = {"short": 0, "medium": 2, "long": 3}[args.scale]
-    meta = {
+    demo_chapters = demo_chapters_for(profile["target_chapters"])
+    meta = base_meta("spinoff", outputs=outputs, rights_status=rights_status)
+    meta.update({
         "source_novel": source_path,
         "source_title": source_title,
         "spinoff_character": args.character,
@@ -235,16 +247,16 @@ def main():
         "target_chapters": profile["target_chapters"],
         "target_words_per_chapter": profile["words_per_chapter"],
         "person": args.person,
-        "rights_status": rights_status,
         "rights_declared_at": date.today().isoformat() if args.i_have_rights else None,
-        "outputs": outputs,
         "title": None,
         "title_chosen_at": None,
         "target_platform": args.target_platform,
         "demo_chapters": demo_chapters,
         "demo_passed_at": None,
-        "created_at": date.today().isoformat(),
-    }
+        "draft_mode": args.draft_mode,
+        "chapter_granularity": args.chapter_granularity,
+        "ai_text_usage": args.ai_text_usage,
+    })
     with open(os.path.join(out_root, "_meta.json"), "w", encoding="utf-8") as f:
         json.dump(meta, f, ensure_ascii=False, indent=2)
     write_settings(out_root, {
@@ -253,6 +265,9 @@ def main():
         "篇幅档": f"{args.scale}（{profile['target_chapters']}章×{profile['words_per_chapter'][0]}-{profile['words_per_chapter'][1]}字）",
         "外传模式": args.mode,
         "输出格式": ",".join(outputs) + "（novel-craft/scripts/export.py）",
+        "小说生成模式": args.draft_mode,
+        "章节生成粒度": args.chapter_granularity,
+        "AI使用披露": args.ai_text_usage or "（发布前用 ai_usage.py 确认）",
     }, note="外传：配角平行视角，锚点处锁原作事件。")
 
     # 设定卡骨架

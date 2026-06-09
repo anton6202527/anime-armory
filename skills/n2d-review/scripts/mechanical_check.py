@@ -14,6 +14,11 @@ references/checklist.md 的「人判」清单，由 LLM 对照参考图与分镜
 退出码：有 🔴 阻断级 → 1，否则 0。
 """
 import sys, os, re, json, glob, subprocess
+_COMMON = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "common"))
+if _COMMON not in sys.path:
+    sys.path.insert(0, _COMMON)
+from n2d_settings import watermark_setting  # noqa: E402  水印设置读取单一真值源
+from n2d_text_utils import is_placeholder  # noqa: E402  占位检测单一真值源
 
 BLOCK, WARN, INFO = "🔴", "🟡", "🟢"
 ZH_LINE_MAX = 20   # 中文单行字数上限（竖屏 9:16，超易溢出/换行难看）
@@ -70,9 +75,6 @@ def load_manifest(root, ep):
         return None, p
 
 
-PLACEHOLDER = re.compile(r"待精修|占位|placeholder|TODO|（待")
-
-
 def check_subtitles(root, ep, manifest, zh_max, en_max):
     zh = parse_srt(os.path.join(root, "脚本", ep, "字幕_中文.srt"))
     en = parse_srt(os.path.join(root, "脚本", ep, "字幕_英文.srt"))
@@ -81,7 +83,7 @@ def check_subtitles(root, ep, manifest, zh_max, en_max):
         return
     # 占位未精修
     for i, c in enumerate(zh, 1):
-        if PLACEHOLDER.search(c["text"]):
+        if is_placeholder(c["text"]):
             add(BLOCK, "字幕", f"中文 cue#{i}", f"字幕仍是占位未精修：{c['text'][:30]}…")
     # 中英 cue 数一致（finalize 按 index 取 EN 文本，错位是已知坑）
     if en is not None and len(en) != len(zh):
@@ -101,6 +103,28 @@ def check_subtitles(root, ep, manifest, zh_max, en_max):
     for i in range(1, len(zh)):
         if zh[i]["start"] < zh[i - 1]["end"] - 0.05:
             add(WARN, "字幕", f"中文 cue#{i+1}", "时间码与上一条重叠")
+    # 脏标点 lint（气口 || 清洗残留：。，/，，/行首逗号——即便字幕与配音"同样脏"、对账能过也单独抓）
+    dirty = re.compile(r'[。！？…—；：、》」』）][，,]|[，,]{2,}')
+    for i, c in enumerate(zh, 1):
+        joined = c["text"].replace("\n", "")
+        if dirty.search(joined) or joined[:1] in "，,":
+            add(WARN, "字幕", f"中文 cue#{i}",
+                f"脏标点(||气口残留:。，/，，/行首逗号)：{joined[:24]}——重跑 finalize_storyboard 自动清，或回 n2d-voice 重出时长清单")
+    if manifest:
+        for i, m in enumerate(manifest, 1):
+            t = (m.get("文本") or "").strip()
+            if dirty.search(t) or t[:1] in "，,":
+                add(WARN, "配音", f"句#{i}",
+                    f"时长清单文本脏标点：{t[:24]}——回 n2d-voice 重出(clean_text 已修)或手清")
+    # 英文字幕脏标点（标点前空格 / 多空格 / 叠逗号 / 行首逗号——同套"审查即检出"，治英文文本卫生）
+    if en:
+        dirty_en = re.compile(r'\s[,;:!?]|\s\.(?!\.)|[ \t]{2,}|,\s*,')  # 省略号 ... 前空格合法，不抓
+        for i, c in enumerate(en, 1):
+            for ln in c["text"].splitlines():
+                if dirty_en.search(ln) or ln.lstrip()[:1] == ",":
+                    add(WARN, "字幕", f"英文 cue#{i}",
+                        f"英文脏标点(标点前空格/多空格/叠逗号/行首逗号)：{ln[:30]}——重跑 finalize_storyboard 自动清")
+                    break
     # 字幕 ↔ 配音时长清单 对账（文本 + 时间码）
     if manifest is not None:
         if len(zh) != len(manifest):
@@ -141,8 +165,8 @@ def check_completeness(root, ep, manifest):
             w = os.path.join(vdir, m.get("line_wav", ""))
             if m.get("line_wav") and not os.path.exists(w):
                 add(WARN, "完整性", f"{ep} {m['line_wav']}", "时长清单列了但 wav 不存在")
-        if any(m.get("占位") for m in manifest):
-            add(BLOCK, "完整性", ep, "配音仍为占位音色（占位:true）——出图/出视频前必须换真实配音重定时")
+        if any(is_placeholder(str(m.get("占位"))) or m.get("占位") is True for m in manifest):
+            add(BLOCK, "完整性", ep, "配音仍为占位音色（占位:true）——可用于出图 demo 的 rough timing；正式出视频/合成前必须换真实配音重定时")
     # 故事板镜头 ⊆ 时长清单镜头
     sb = n("脚本", ep, "镜头时长.json")
     if os.path.exists(sb) and manifest:
@@ -231,7 +255,7 @@ def check_storyboard_and_video(root, ep):
         add(WARN, "视频", ep, f"clip MP4 数 {len(mp4s)} 与 storyboard clips {len(clips)} 不一致")
     audio = [p for p in mp4s if _has_audio(p)]
     if audio:
-        add(WARN, "原生音轨", audio[0], "clip 含原生音轨；compose 默认应丢弃，若混入需确认无原生人声")
+        add(WARN, "原生音轨", audio[0], "clip 含原生音轨；compose 默认应丢弃。若按 opt-in 混入环境声，需确认低风险、无口型、无原生人声")
     shots_p = os.path.join(root, "脚本", ep, "镜头时长.json")
     # 仅当整集 clip 都齐了(len(mp4s)==len(clips))才比总长——增量生产中只出了几个 clip 时
     # 拿部分对全集总时长会刷无意义的「差 N 秒」假警告。
@@ -249,12 +273,7 @@ def check_storyboard_and_video(root, ep):
 
 def check_watermark(root, ep):
     settings = os.path.join(root, "_设置.md")
-    wm = "AI合规标识"
-    if os.path.exists(settings):
-        txt = open(settings, encoding="utf-8").read()
-        m = re.search(r"水印\s*[:：]\s*([^\s#]+)", txt)
-        if m:
-            wm = m.group(1)
+    wm = watermark_setting(root)  # 与 gate 同源（默认 AI合规标识；支持 - 水印: / 水印： 各式）
     if wm == "不打":
         add(WARN, "水印", settings, "水印设置为不打；正式投放 AI 合成内容建议保留 AI 合规标识")
         return
@@ -274,9 +293,49 @@ def check_face_consistency(root, ep):
         except Exception:
             add(INFO, "一致性", ep,
                 "脸部相似度度量已跳过（未装 face_recognition/insightface）——崩脸暂由人判清单覆盖；"
-                "装库后本项可自动给每镜 vs 定妆锚点打相似度分")
+                "装库后跑 scripts/face_consistency.py 自动给每镜 vs 定妆锚点打分")
             return
-    add(INFO, "一致性", ep, "检测到脸部识别库——可在此接入 定妆锚点 vs 镜头图 余弦相似度评分（阈值默认 0.45）")
+    add(INFO, "一致性", ep,
+        "检测到脸部识别库——跑 `python3 scripts/face_consistency.py <作品根> 第N集` 出崩脸分档报告"
+        "（**自标定 flag-band**：用本作定妆组内部互相余弦当'同一人下限'地板，再分 🔴/🟡/🟢，"
+        "不用写死的单一阈值；详见该脚本头注）")
+
+
+def check_voice_consistency(root, ep, manifest):
+    """跨集同角色音色一致性：同一「角色」在别集映射到不同 voice_id → 跨集音色漂。
+
+    起因：角色→音色绑定历史上靠每次手动 export env，未持久化（见 n2d-voice voicemap.json）。
+    manifest 现记 voice_id/音色键，于是可机检；老清单无该字段则自动跳过（向后兼容）。
+    """
+    def role_voice(man):
+        m = {}
+        for r in man or []:
+            role = (r.get("角色") or "").strip()
+            vid = r.get("voice_id") or r.get("音色键")
+            if role and vid:
+                m.setdefault(role, set()).add(vid)
+        return m
+    cur = role_voice(manifest)
+    if not cur:
+        return
+    others = {}
+    for vbase in ("合成", "出视频"):
+        for p in glob.glob(os.path.join(root, vbase, "第*集", "配音", "时长清单.json")):
+            oep = os.path.basename(os.path.dirname(os.path.dirname(p)))
+            if oep == ep:
+                continue
+            try:
+                oman = json.load(open(p, encoding="utf-8"))
+            except Exception:
+                continue
+            for role, vids in role_voice(oman).items():
+                others.setdefault(role, set()).update(vids)
+    for role, vids in cur.items():
+        ov = others.get(role)
+        if ov and not (vids & ov):
+            add(WARN, "配音一致性", f"{ep}·{role}",
+                f"角色「{role}」本集音色 {sorted(vids)} 与其它集 {sorted(ov)} 不一致——跨集音色会漂；"
+                f"在 设定库/voicemap.json 固定该角色音色，别靠每次手动 export env")
 
 
 def _opt_int(argv, name, default):
@@ -316,6 +375,7 @@ def main():
     check_storyboard_and_video(root, ep)
     check_watermark(root, ep)
     check_face_consistency(root, ep)
+    check_voice_consistency(root, ep, manifest)
 
     if "--json" in opts:
         print(json.dumps([{"sev": s, "dim": d, "loc": l, "msg": m}

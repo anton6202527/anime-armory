@@ -5,7 +5,7 @@ description: Given a book name (or chapter-index URL), find and fetch a public-d
 
 # novel-fetch — 联网抓小说 → doc + txt
 
-给定**书名**（或章节目录页 URL）→ 联网抓公版小说全文 → 输出 `<书名>.txt` + `<书名>.docx`。
+给定**书名**（或章节目录页 URL）→ 联网抓公版小说全文 → 输出 `<书名>.txt` + `<书名>.docx` + `source_manifest.json`。
 
 这是一个**独立工具**，不依赖任何其它 skill。抓下来的文件可以直接用，也可以喂给别的流水线（比如本仓的 `n2d-script` 做漫剧），但那是用户的选择，不是本 skill 的职责。
 
@@ -20,7 +20,7 @@ description: Given a book name (or chapter-index URL), find and fetch a public-d
 
 ### 第 1 步 — 锁定唯一一本（书名越确定越具体越好）
 
-- **用户给了书名**：用 WebSearch/WebFetch 在公版站检索，列出候选表，每个候选**强制带区分维度**：作者、来源站、字数/卷数、译本、全本 vs 节选。让用户确认唯一一本并拿到**章节目录页 / 作品页 URL**。优先推荐 中文维基文库（中文公版）/ Project Gutenberg（英文公版）。
+- **用户给了书名**：用当前环境可用的联网搜索 / 页面抓取工具在公版站检索，列出候选表，每个候选**强制带区分维度**：作者、来源站、字数/卷数、译本、全本 vs 节选。让用户确认唯一一本并拿到**章节目录页 / 作品页 URL**。优先推荐 中文维基文库（中文公版）/ Project Gutenberg（英文公版）。
 - **用户已给 URL**：跳过搜索，直接进第 2 步。
 - 命中付费墙站 → 解释铁律，引导改用公版来源。
 
@@ -30,19 +30,20 @@ description: Given a book name (or chapter-index URL), find and fetch a public-d
 python3 <skill>/scripts/fetch_novel.py "<目录页URL>" --name "<书名>" [--out <输出根>] [--source auto|gutenberg|wikisource|generic]
 ```
 
-- 缺依赖 → 脚本打印 `pip install ...`，照做后重跑。
+- 缺 `requests/python-docx` → 脚本打印 `pip install ...`，照做后重跑；缺 `beautifulsoup4/trafilatura` 只降级为标准库 HTMLParser 解析并打印 warning，能跑但正文抽取质量可能下降。
 - 通用兜底非公版来源 → 脚本要求 `--i-have-rights`（仅在用户已声明授权时加）。
 - 脚本逐章打印抓取状态（ok/empty/fail），完成后打印 txt/docx 路径。
 
 ### 第 3 步 — 报告
 
-报告：书名、来源、章节数、字数、两个输出路径（txt + docx）。完工。
+报告：书名、来源、章节数、字数、三个输出路径（txt + docx + source_manifest.json）。完工。
 
 ## 输出约定
 
 - 默认落点 `写小说/<书名>/小说/`；用 `--out <输出根>` 可改到任意目录（输出 = `<输出根>/小说/`）。
 - txt 章节用 `第N章 标题` 行（通用且利于后续按章拆分）；文件头是 provenance 注释块（来源/日期/章节数/字数/版权判定）。
 - docx 章节标题用 Heading 1，正文段落化，便于人读 / 导入飞书云文档。
+- `source_manifest.json` 是机器溯源文件，后续 `novel-spinoff/rewrite/expand/condense` 和 `novel2drama` 应优先读它判断 `source_type`、`rights_status`、`requires_user_rights`，不要解析正文头。
 - 详见 `references/formats.md`。
 
 ## 常见错误

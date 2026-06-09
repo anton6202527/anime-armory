@@ -24,7 +24,7 @@
 | 多形态（常态/觉醒/银牌）、对脸要求高 | 参考图 + 锚点句已经够稳 |
 | 参考图/平台建角色已压不住脸 | 还没试过"平台建角色 ID"这一档（先试它，更轻） |
 
-> 比 LoRA 更轻的一档先用尽：**平台"建角色 ID"**（即梦全能参考 / 可灵 Custom Model 或 Element Library）——无需 GPU、平台内复用。LoRA 是这一档也压不住时的重武器。
+> 比 LoRA 更轻的一档先用尽：**官方图后端的"建角色 ID / 主体库"**（可灵 Custom Model / Element Library、Seedream Universal Reference、Sora Cameo 等）——无需 GPU、平台内复用。Dreamina/即梦官方 CLI 可作为图片阶段后端，但没有持久主体 ID 时仍属于参考图派生档；LoRA 是这一档也压不住时的重武器。
 
 ---
 
@@ -96,20 +96,20 @@ Stage 5 固化（脚本/skill 化，下个核心角色可复用）
 - **底模必须与训练底模一致**（Flux 的 LoRA 不能用在 SDXL 底模，反之亦然）。
 - ComfyUI 出图链：**角色 LoRA 强度 0.7–1.0** + **IP-Adapter FaceID 控脸（3–5 张好参考）** + **ControlNet 控姿势**。多数 12GB 显存可跑（8GB 优化后勉强）——本地无显卡则继续用云 GPU 跑 ComfyUI。
 - prompt 里带**触发词** + 角色卡锚点句 + 画风词。
-- **验收**：拿 LoRA 出的脸和即梦参考图版**并排对比**，看复杂角度/光照下脸是否更稳。不如参考图版 → 多半是数据集不一致或步数不当，回 Stage 1/2 调，**别无止境刷**。
+- **验收**：拿 LoRA 出的脸和 Codex 参考图版**并排对比**，看复杂角度/光照下脸是否更稳。不如参考图版 → 多半是数据集不一致或步数不当，回 Stage 1/2 调，**别无止境刷**。
 
 ## Stage 4 — 接进产线（混合产线，别整集切开源）
 
-- LoRA **只用于该核心角色的 hero 镜 / 关键叙事镜**（爽点/反转/觉醒/封面候选）；其余 ~90% 镜头**仍走即梦/可灵闭源**快速出量。
-- **回流统一画风**：LoRA 出的图末尾仍拼视频 AI 的"图像风格锚定句"，与闭源版风格对齐（见 `platforms.md` + Q18）；必要时过一次即梦 image2image 轻重绘统一光感。
-- **归档/进度**：LoRA 版 PNG 仍落 `出图/common/`（共享层）或 `出图/第N集/`；在 `00_索引.md` 标注"LoRA 出"。出图列计数规则不变。
+- LoRA **只用于该核心角色的 hero 镜 / 关键叙事镜**（爽点/反转/觉醒/封面候选）；其余镜头仍走 Codex/OpenAI 参考图派生。
+- **回流统一画风**：LoRA 出的图末尾仍拼视频 AI 的"图像风格锚定句"，与当前项目图后端风格对齐（见 `platforms.md` + Q18）；需要轻重绘统一光感时可回到所选官方后端，包括 Dreamina/即梦官方 CLI。
+- **归档/进度**：LoRA 版 PNG 仍落 `出图/共享/图片/`（共享层）或 `出图/第N集/图片/`；在 `00_索引.md` 标注"LoRA 出"。出图列计数规则不变。
 - **绝不整集中途从闭源切开源**（画风跳变，违 `角色一致性checklist.md §五` 一致性税）。
 
 ## Stage 5 — 固化（让下个核心角色能复用）
 
-- 把跑通的流程脚本化：`dataset-prep`（从定妆扩样 + 裁 1024 + 打标）/ `train-submit`（fal/RunPod 提交）/ `comfy-graph`（出图工作流 JSON）。
-- 落 `设定库/lora/` 统一管理；每个核心角色一个 `<角色>/` 子目录（dataset + safetensors + 触发词 + 参数）。
-- 视范围决定是否抽成独立 `n2d-lora` skill（本次范围若选"直接搭 skill"，在此固化）。
+- 执行层已抽成 `n2d-lora`：用 `skills/n2d-lora/scripts/lora.py` 管理 `init / dataset / train-job / validate / register / status`。
+- 落 `设定库/lora/<CHAR_ID>/<形态>/` 统一管理；每个核心角色/形态都有 `lora_card.json`、`dataset_manifest.json`、`train_job.json`、`validation_report.json` 和最终 `.safetensors`。
+- `register` 只接受 `validation_report.verdict=pass`，然后把 `base_model/model_path/trigger/model_hash/validation_report/train_job` 写回 `identity_registry.json`；之后必须跑 `n2d-identity --write`。
 
 ---
 

@@ -3,6 +3,9 @@
 # 用法: validate_timings.py <作品根> <第N集> [--tol 0.5]
 # 退出码: 0=全过 / 1=有硬不一致或缺文件（可接 CI）。所有检查仅读取，不改文件。
 import sys, os, re, json, subprocess
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'common'))
+from n2d_settings import is_native_av  # 制作模式判定单一真值源
+from n2d_route import placeholder_indices  # 占位判定单一真值源
 
 def ffdur(p):
     try:
@@ -23,6 +26,39 @@ def srt_last_end(path):
         if m:
             g = list(map(int, m.groups())); last = g[0]*3600+g[1]*60+g[2]+g[3]/1000.0
     return last
+
+def _validate_native_av(root, ep, shots_p, tol):
+    """原生音画对账：无配音清单，改核 storyboard ∑clip.duration ≈ ∑镜头时长（finalize 从脚本推的）。
+    返回退出码（0=过 / 1=硬不一致或缺件）。字幕走成片后 whisperx 词级对齐，本步不校验。"""
+    fails=[]; warns=[]; oks=[]
+    print(f"=== 时长一致性 {ep}（原生音画·tol={tol}s）===")
+    if not os.path.exists(shots_p):
+        print("  ⛔ 缺 镜头时长.json（原生音画下应由 finalize_storyboard 从 storyboard 推出——先跑 /n2d-script 阶段2 分镜定稿）")
+        return 1
+    shots = json.load(open(shots_p,encoding='utf-8'))
+    st = sum(float(v) for v in shots.values())
+    sb_p = os.path.join(root,'脚本',ep,'storyboard.json')
+    if os.path.exists(sb_p):
+        try:
+            sb = json.load(open(sb_p,encoding='utf-8'))
+            cd = sum(float(c.get('duration',0)) for c in sb.get('clips',[]))
+        except Exception as e:
+            cd = None; warns.append(f"storyboard.json 不可解析（{e}）")
+        if cd is not None:
+            if abs(cd - st) > tol:
+                fails.append(f"storyboard.json ∑clip.duration {cd:.2f}s ≠ 镜头时长累计 {st:.2f}s → finalize 未按 storyboard 重出，重跑 finalize_storyboard")
+            else:
+                oks.append(f"∑clip.duration {cd:.2f}s ≈ 镜头时长累计 {st:.2f}s")
+    else:
+        warns.append("storyboard.json 不存在（阶段2 未定稿）——无法核对 clip 时长")
+    warns.append("原生音画：字幕未在本步校验，成片后用 whisperx 对原生台词做词级对齐（参考 mv-lyric-sync）")
+    for s in oks:   print(f"  ✅ {s}")
+    for s in warns: print(f"  ⚠️  {s}")
+    for s in fails: print(f"  ⛔ {s}")
+    if fails:
+        print(f"\n{len(fails)} 处硬不一致 → 修复后再进出图/出视频/合成。"); return 1
+    print("\n时长链一致（原生音画）。"); return 0
+
 
 def main():
     if len(sys.argv) < 3:
@@ -48,12 +84,15 @@ def main():
 
     fails=[]; warns=[]; oks=[]
     if not os.path.exists(man_p):
+        # 原生音画：说话镜由视频后端一次出同步音画，没有逐句配音清单——改走 storyboard 驱动对账，不误报"先 /n2d-voice"。
+        if is_native_av(root):
+            sys.exit(_validate_native_av(root, ep, shots_p, tol))
         print(f"⛔ 缺 {man_p}（先 /n2d-voice）"); sys.exit(1)
     man = json.load(open(man_p,encoding='utf-8'))
     n = len(man)
 
     # 占位提示（非硬错，但下游会被闸门拦）
-    ph = [r.get('idx',i) for i,r in enumerate(man) if r.get('占位')]
+    ph = placeholder_indices(man)
     if ph: warns.append(f"占位配音 {len(ph)}/{n} 句——正式出视频前须换真实配音重跑")
 
     # 1) ∑(时长+gap) ≈ voice_zh.wav 实测
@@ -77,6 +116,7 @@ def main():
         oks.append(f"中文字幕末行 {last:.2f}s ≈ 配音 {base:.2f}s")
 
     # 3) ∑镜头时长 ≈ voice 时长
+    st = None
     if os.path.exists(shots_p):
         shots = json.load(open(shots_p,encoding='utf-8'))
         st = sum(float(v) for v in shots.values())
@@ -86,6 +126,20 @@ def main():
             oks.append(f"镜头时长累计 {st:.2f}s ≈ 配音 {base:.2f}s")
     else:
         warns.append("镜头时长.json 不存在（阶段2 未定稿）")
+
+    # 3.5) ∑clip.duration(storyboard.json) ≈ ∑镜头时长 —— 治"手填 duration 与配音驱动时长漂"
+    sb_p = os.path.join(root,'脚本',ep,'storyboard.json')
+    if os.path.exists(sb_p) and st is not None:
+        try:
+            sb = json.load(open(sb_p,encoding='utf-8'))
+            cd = sum(float(c.get('duration',0)) for c in sb.get('clips',[]))
+        except Exception as e:
+            cd = None; warns.append(f"storyboard.json 不可解析（{e}）")
+        if cd is not None:
+            if abs(cd - st) > tol:
+                fails.append(f"storyboard.json ∑clip.duration {cd:.2f}s ≠ 镜头时长累计 {st:.2f}s → Clip 时长手填臆造/未随配音更新，按 ∑所含镜头时长 回填 duration")
+            else:
+                oks.append(f"∑clip.duration {cd:.2f}s ≈ 镜头时长累计 {st:.2f}s")
 
     # 4) manifest 句数 == 英文字幕块数（delete_shot 未同步删 EN 会错位）
     enb = srt_blocks(en_srt)

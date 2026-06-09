@@ -1,14 +1,19 @@
-# mv-video clip 表 + 卡点定时长 + 运镜映射
+# mv-video jobs manifest + 卡点定时长 + 运镜映射
 
-## clip 表（按段落 + beatgrid 规划）
+## 真值源
+- `分镜/clip_plan.json`：clip 时长、首帧路径、尾帧需求、转场、continuity 的源头，由 `mv-plan` 生成。
+- `出视频/jobs_manifest.json`：每个 clip 跑几版、prompt 文件、已登记 take、评分、selected_take 的源头，由 `scripts/video_jobs.py` 生成/维护。
+- `分镜/timeline_manifest.json`：最终合成顺序和 selected video 路径，由 `mv-plan` 创建、`video_jobs.py --select` 同步。
+
+## clip 任务格式（按 clip_plan + beatgrid 规划）
 ```markdown
-## Clip NN（段落 chorus · 时长 1.6s · @0:48-0:49.6）
-**首帧**：出图/段落/chorus_主角高光.png
-**尾帧**（`需要尾帧?=是` 时必用，平台支持双帧走 frames2video）：出图/段落/<段落>_<描述>_end.png（mv-image 出的尾帧=下一 clip 首帧构图）
+## Clip_001（段落 chorus · 时长 1.6s · @0:48-0:49.6）
+**首帧**：出图/段落/图片/Clip_001.png
+**尾帧**（`need_end_frame=true` 时必用，平台支持双帧走 frames2video）：出图/段落/图片/Clip_001_end.png（mv-image 出的尾帧=下一 clip 首帧构图）
 **卡点**：起 0:48(downbeat) → 止 0:49.6(下一downbeat)
 **歌词/情绪钩子**：{本 clip 对应歌词词组 / 情绪点 / 爽点}
 **转场**：{动作切 / 视线切 / 闪白 / 遮挡擦镜 / 光效切 / 硬切 / 空镜缓冲}
-**需要尾帧?**：是/否。**MV 默认卡点硬切 → 否**；仅**同段落·非卡点切·人物姿态连续**的接缝（副歌内一段连续动作分两 clip）= 是 → mv-image 出尾帧 PNG，本 clip 首尾双帧引导锁接点。
+**need_end_frame**：true/false。**MV 默认卡点硬切 → false**；仅**同段落·非卡点切·人物姿态连续**的接缝（副歌内一段连续动作分两 clip）= true → mv-image 出尾帧 PNG 进 图片/ 子目录，本 clip 首尾双帧引导锁接点。
 **continuity**（必填，**读取**相邻 clip + beatgrid **派生而非重写**）：
 - start_state：**直接抄上一 clip 的 `end_state`**（单一真值源，不要自己重新描述，否则相邻镜语义漂移=跳切根源）；首 clip 取首帧描述 + 段落视觉锚点
 - action：{本 clip 内唯一主动作链，动作峰值或镜头冲击点对齐指定 beat/downbeat}
@@ -35,7 +40,7 @@ continuity:
 > **分辨率/帧率/质量档/跑几版由 `出视频规格` 三档预算统一决定**（见 SKILL「出视频规格」节）：预算充足=1080p·30fps·高质量档·多跑挑稳，预算一般（默认）=720p·24-30fps·标准档·关键镜2版/普通镜1版，预算不够=720p·24fps·省积分档·全1版。**每次开跑前念一行告知当前规格档**（首次问一次记入 `_设置.md`，之后沉默沿用但仍告知，用户随时可改）。CLI 调用据此加 `--resolution`/`--fps`（flag 名以平台为准）。
 
 ## 卡点定 clip 时长（核心）
-- 读 `节拍/beatgrid.json` 的 `downbeats[]`（小节首秒）。
+- 由 `mv-plan` 读取 `节拍/beatgrid.json` 的 `downbeats[]`（小节首秒）并写入 `clip_plan.json`；mv-video 只消费，不重新拆时间线。
 - **副歌**：每个 downbeat（或半小节）切一刀 → clip 短（碎切，强节奏）。
 - **verse**：2-4 拍一切 → clip 长（缓）。
 - clip 时长 = 该段相邻卡点之差；**全曲 clip 时长之和 ≈ 歌长**（mv-compose 会校验）。
@@ -53,26 +58,29 @@ continuity:
 ## continuity 派生规则（MV 版）
 - `start_state`：**抄上一 clip 的 `end_state`**（同一句，不重写）；若是段落第一条，取本 clip 首帧描述 + 段落视觉锚点。
 - `action`：取本 clip 的主动作链，并把动作峰值、眼神落点、拔剑/转身/抬手/光效爆点对齐 `beatgrid` 的 beat/downbeat；副歌动作短促，verse 动作完整。
-- `end_state`：服务下一 clip 的首帧、歌词钩子和转场方式。接不住时停在手部道具、衣摆、背影、光效、门帘、山影等可切画面重心。**`需要尾帧?=是` 时，end_state 必须与 mv-image 出的尾帧 `_end.png` 一致，并把它设为本 clip 尾帧做双帧引导。**
+- `end_state`：服务下一 clip 的首帧、歌词钩子和转场方式。接不住时停在手部道具、衣摆、背影、光效、门帘、山影等可切画面重心。**`need_end_frame=true` 时，end_state 必须与 mv-image 出的尾帧 `_end.png` 一致，并把它设为本 clip 尾帧做双帧引导。**
 - `constraints`：同一段落继承角色定妆、服装发型、主色调、光线、天气、道具、背景布局、轴线/屏幕方向；跨段落可换场景，但角色定妆和核心道具保持。
 - `negative`：默认写入"不要换脸、不要换衣、不要新增人物、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要生成原生人声"；人脸/手部/多人镜按风险追加"不要脸部抖动/不要手指变形/不要多人脸错乱"。
 
 ## 常用衔接做法
 - **动作切**：上一 clip 结尾停在动作完成前后一拍，下一 clip 从同方向继续或切道具特写。
 - **视线切**：上一 clip 让人物看向画外，下一 clip 承接被看的物体/风景/敌人/远山。
-- **光效切/闪白**：副歌或强 downbeat 可用光效爆点遮掩场景切换，但不要每条都用。
+- **光效切/闪白**：副歌 or 强 downbeat 可用光效爆点遮掩场景切换，但不要每条都用。
 - **遮挡擦镜**：衣袖、剑光、前景树枝、烟雾横过画面，用于接不上时补缝。
 - **空镜缓冲**：verse/outro 用云、山、灯、雨、脚步、手部等 0.5-2s 镜头缓冲。
 
-## 生视频
+## 生视频 / 登记 / 挑版
 - 同一 MV 全程同一视频 AI（防风格跳）。首帧=mv-image PNG（图生视频锁一致性）。
 - 每 clip 跑几版挑脸/运动稳由 `出视频规格` 档统一定（充足=关键镜2-3版·普通镜2版；一般=关键镜2版·普通镜1版；不够=全1版）；废片归 `common/废料/出视频/`。
 - 爽点 clip 的关键帧对齐某个 downbeat，供 mv-compose 卡点。
+- 外部/网页生成视频后必须登记：`video_jobs.py --register <file> --clip Clip_001 --take 1`。
+- 多版评分后挑版：`video_jobs.py --score ...`，再 `--select Clip_001 --take 1`；挑版会复制到 `出视频/视频/Clip_001.mp4` 并同步 timeline。
 
 ## 自查
-- [ ] clip 时长来自 beatgrid（非等长）？
+- [ ] clip 时长来自 `clip_plan.json`（非等长）？
 - [ ] 副歌碎切、verse 缓？
 - [ ] 运镜服务段落/张力？
 - [ ] continuity 五字段齐，且读取了上一/下一 clip 与 beatgrid 落点？
-- [ ] 接力：start_state 抄了上一 clip 的 end_state（没自己重写）？标 `需要尾帧?=是` 的接缝已让 mv-image 出 `_end.png` 并用首尾双帧？
+- [ ] 接力：start_state 抄了上一 clip 的 end_state（没自己重写）？标 `need_end_frame=true` 的接缝已让 mv-image 出 `_end.png` 并用首尾双帧？
+- [ ] 每个外部 take 都已登记，最终 selected_take 已同步 timeline？
 - [ ] 三件套齐？总时长≈歌长？

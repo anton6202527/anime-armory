@@ -3,14 +3,41 @@
 # 后端优先级: 零样本克隆组(CosyVoice > FishSpeech > GPT-SoVITS > IndexTTS-2 > VoxCPM2，取第一个设了 URL 的) > MiniMax > 火山 > macOS say。
 # 带持久缓存(同参数同文本不重复合成/调 API)——云端与本地零样本均缓存进 _voicecache/。
 # 用法: render_voice.py <作品根> <第N集> <zh|en>
-import sys, os, re, subprocess, json, base64, uuid, hashlib, urllib.request, shutil
+import sys, os, re, subprocess, json, base64, uuid, hashlib, urllib.request, shutil, time
+_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'common'))
+if _COMMON not in sys.path: sys.path.insert(0, _COMMON)
+from n2d_settings import load_settings, get_setting  # noqa: E402
+from n2d_text_utils import clean_punctuation  # noqa: E402
+from n2d_telemetry import record_event, Timer  # noqa: E402
+from voice_text import clean_text  # 念白文本清洗（独立模块·带单测，治 ||→「。，」脏标点）
 
+if len(sys.argv) < 4:
+    print("usage: render_voice.py <作品根> <第N集> <zh|en>", file=sys.stderr)
+    sys.exit(2)
 ROOT, EP, LANG = sys.argv[1], sys.argv[2], sys.argv[3]
+TIMER = Timer(); TIMER.__enter__()
 VO = os.path.join(ROOT, '脚本', EP, 'voiceover.txt')
 EN_SRT = os.path.join(ROOT, '脚本', EP, '字幕_英文.srt')
 W = os.path.join(ROOT, '合成', EP, '配音'); os.makedirs(W, exist_ok=True)
 FF = shutil.which('ffmpeg') or '/opt/homebrew/bin/ffmpeg'; FP = shutil.which('ffprobe') or '/opt/homebrew/bin/ffprobe'
 CACHE = os.path.join(ROOT, '合成', EP, '_voicecache', LANG); os.makedirs(CACHE, exist_ok=True)
+
+SETTINGS = load_settings(ROOT)
+PROD_MODE = get_setting(ROOT, "制作模式", "配音先行")
+# 制作模式=原生音画：说话镜的台词由视频后端原生生成。
+NATIVE_AV = ("原生音画" in PROD_MODE or "native_av" in PROD_MODE.lower())
+
+# 角色→音色持久映射（治"跨集同角色音色漂"）：可选 <作品根>/设定库/voicemap.json
+#   {"角色子串": {"key":"LIU","mm":"female-chengshu","volc":"BV700_streaming","speed":0.96,"pitch":-2,"emo":"neutral"}}
+# 缺文件=回退下面内置(demo)映射；有则该角色跨集稳定按此绑定，不再靠每次手动 export env。
+def _load_voicemap():
+    try: return json.load(open(os.path.join(ROOT,'设定库','voicemap.json'),encoding='utf-8'))
+    except Exception: return {}
+VOICEMAP=_load_voicemap()
+def _vm_match(role):
+    for sub,cfg in VOICEMAP.items():
+        if sub and sub in role: return cfg
+    return None
 
 MM_KEY=os.environ.get('MINIMAX_API_KEY'); MM_GROUP=os.environ.get('MINIMAX_GROUP_ID')
 MM_MODEL=os.environ.get('MINIMAX_MODEL','speech-02-hd')
@@ -18,19 +45,26 @@ MM_ENDPOINT=os.environ.get('MINIMAX_ENDPOINT','https://api.minimaxi.com/v1/t2a_v
 USE_MM=bool(MM_KEY and MM_GROUP)
 VOLC_APPID=os.environ.get('VOLC_APPID'); VOLC_TOKEN=os.environ.get('VOLC_TOKEN')
 VOLC_CLUSTER=os.environ.get('VOLC_CLUSTER','volcano_tts'); VOLC_ENDPOINT=os.environ.get('VOLC_ENDPOINT','https://openspeech.bytedance.com/api/v1/tts')
-USE_VOLC=bool(VOLC_APPID and VOLC_TOKEN) and not USE_MM
-USE_API=USE_MM or USE_VOLC
 # 零样本克隆后端：本地服务统一 GET /inference_zero_shot?text=&prompt_text=&prompt_wav= 契约（端点随 fork，见 backends.md）。
 # (URL_env, 参考音 env 前缀, 显示名, HTTP 超时秒)，按优先级取第一个设了 URL 的；任一存在即优先于 MiniMax/火山。
 ZS_SPECS=[('COSYVOICE_URL','COSY','CosyVoice',120),('FISHSPEECH_URL','FISH','FishSpeech',300),
           ('GPTSOVITS_URL','GSV','GPT-SoVITS',300),('INDEXTTS_URL','IDX','IndexTTS-2',300),
           ('VOXCPM_URL','VOX','VoxCPM2',300)]
 ZS=next(((os.environ[e],pfx,lbl,to) for e,pfx,lbl,to in ZS_SPECS if os.environ.get(e)), None)
-USE_ZS=bool(ZS) and not USE_MM   # 零样本克隆优先于 MiniMax；若也设了 MiniMax，本地零样本赢
+USE_ZS=bool(ZS)   # 零样本克隆优先于 MiniMax；若也设了 MiniMax，本地零样本赢
+USE_VOLC=bool(VOLC_APPID and VOLC_TOKEN) and not USE_ZS and not USE_MM
+USE_API=USE_ZS or USE_MM or USE_VOLC
 ZS_URL,ZS_PREFIX,ZS_LABEL,ZS_TIMEOUT = ZS if ZS else (None,None,None,120)
 if USE_ZS:
-    # 合规提示（CLAUDE.md：声音克隆 non-negotiable）：参考音须本人/已授权/合成音色，见 references/cloning.md。
-    print(f'⚠️ 零样本克隆后端 {ZS_LABEL}：参考音仅限本人嗓/已授权他人嗓/纯合成音色（合规闸门）。')
+    # 合规闸门（项目约定：声音克隆 non-negotiable）：用参考音克隆他人嗓须先声明授权。
+    # 只打印提示不够——这里与 voice_clone.py 同级硬闸门：检测到任一 <PREFIX>_REF_* 参考音即要求 VOICE_CLONE_AUTHORIZED=1。
+    _refs=[k for k,v in os.environ.items() if v and (k==f'{ZS_PREFIX}_REF_AUDIO' or (k.startswith(f'{ZS_PREFIX}_REF_') and not k.endswith('_TEXT')))]
+    if _refs and os.environ.get('VOICE_CLONE_AUTHORIZED')!='1':
+        sys.exit(f'⛔ 合规闸门：{ZS_LABEL} 将用参考音克隆音色（{",".join(sorted(_refs))}），但未声明授权。\n'
+                 f'   声音克隆仅限本人嗓 / 已授权他人嗓 / 纯合成音色（项目约定 non-negotiable，见 references/cloning.md）。\n'
+                 f'   确认参考音合规后：VOICE_CLONE_AUTHORIZED=1 重跑；用默认嗓(不喂参考音)则无需授权。')
+    print(f'⚠️ 零样本克隆后端 {ZS_LABEL}：参考音仅限本人嗓/已授权他人嗓/纯合成音色'
+          + ('（已声明授权）' if _refs else '（未用参考音=默认嗓，无需授权）') + '。')
 
 # ── 表演标注解析（情绪/语速/停顿/钩子）→ 驱动念白，见 n2d-script formats §6 / 导演节奏.md §六 ──
 # 规范情绪：angry/fearful/sad/happy/serious/neutral（关键词归类，兼容旧的自由情绪词）
@@ -50,15 +84,7 @@ def hook_kind(s):
     if '💥' in s or '爽点' in s: return 'climax'
     if '⚡' in s or '钩子' in s: return 'hook'
     return ''
-def clean_text(t):
-    t=re.sub(r'[⚡💥🪝]','',t)                       # 钩子 emoji 永不念出
-    t=re.sub(r'(?:钩子|爽点|集尾)\s*$','',t)          # 行尾裸词钩子标记（仅行尾，避免误伤台词正文里的同字）
-    t=t.replace('||','，')                          # 停顿一拍 → 逗号（TTS 自然气口）
-    t=re.sub(r'[，,]\s*[，,]+','，',t)               # 收拢叠出的逗号
-    t=re.sub(r'([。！？…—；：、》」』）])\s*[，,]\s*',r'\1',t)  # ||紧跟句末标点/破折号：标点已含气口，去掉多余逗号+尾随空格（治 字幕「。，」「——，」）
-    t=re.sub(r'^\s*[，,]\s*','',t)                  # 行首多余逗号
-    t=re.sub(r'，\s+','，',t)                        # 中文逗号后不留空格
-    return re.sub(r'\s+',' ',t).strip()
+# clean_text 已抽到 voice_text.py（见顶部 import），便于单测、避免脚本不可导入
 
 # items[i] = (role, text, emo_canonical, speed_mult, hook_kind)
 items=[]; shots=[]
@@ -92,6 +118,8 @@ MM=dict(SHEN=os.environ.get('MM_SHEN','female-yujie'), NARR=os.environ.get('MM_N
         EN=os.environ.get('MM_EN','female-yujie'))
 # 角色 → (voice, emotion, speed, pitch)  pitch 加强区分度
 def mm_cfg(role):
+    vm=_vm_match(role)
+    if vm: return (vm.get('mm') or MM.get(vm.get('key','SHEN'), MM['SHEN']), vm.get('emo','neutral'), float(vm.get('speed',1.0)), int(vm.get('pitch',0)))
     if '柳娘子' in role: return MM['LIU'],'neutral',0.96,-2
     if '小禾'   in role: return MM['XIAOHE'],'sad',1.05,3
     if '太监'   in role: return MM['TAIJIAN'],'neutral',1.05,2
@@ -102,6 +130,8 @@ V=dict(SHEN=os.environ.get('VOICE_SHEN','BV700_streaming'),LIU=os.environ.get('V
        XIAOHE=os.environ.get('VOICE_XIAOHE','BV700_streaming'),TAIJIAN=os.environ.get('VOICE_TAIJIAN','BV001_streaming'),
        SYS=os.environ.get('VOICE_SYS','BV001_streaming'),EN=os.environ.get('VOICE_EN','BV503_streaming'))
 def volc_cfg(role):
+    vm=_vm_match(role)
+    if vm: return (vm.get('volc') or V.get(vm.get('key','SHEN'), V['SHEN']), vm.get('emo'), float(vm.get('speed',1.0)))
     if '柳娘子' in role: return V['LIU'],'serious',0.92
     if '小禾' in role: return V['XIAOHE'],'sad',1.12
     if '太监' in role: return V['TAIJIAN'],None,1.15
@@ -111,6 +141,8 @@ def volc_cfg(role):
 # ── 零样本克隆(CosyVoice/FishSpeech) 按角色分音色：角色→音色键→参考音 env ──
 # 角色名(含子串)归到音色键；注意 '沈念旁白' 走 SHEN(沈念内心)，纯 '旁白' 才走 NARR(旁白)
 def role_key(role):
+    vm=_vm_match(role)
+    if vm and vm.get('key'): return vm['key']
     if '系统' in role:   return 'SYS'
     if '柳娘子' in role: return 'LIU'
     if '小禾' in role:   return 'XIAOHE'
@@ -188,7 +220,13 @@ for i in range(n):
         ref,rtext=role_ref(ZS_PREFIX,role)
         # 本地零样本同样缓存：同后端+同参考音+同文本 → 不重复合成（本地 MPS/CPU 合成慢，缓存收益最大）
         key=hashlib.md5(f"zs|{ZS_LABEL}|{ref}|{rtext}|{text}".encode()).hexdigest(); raw=os.path.join(CACHE,key+'.wav')
-        if not os.path.exists(raw): zeroshot_tts(ZS_URL, text, ref, rtext, raw, ZS_TIMEOUT)
+        try:
+            if not os.path.exists(raw): zeroshot_tts(ZS_URL, text, ref, rtext, raw, ZS_TIMEOUT)
+        except Exception as ex:
+            o=os.path.join(W,f'line_{i:02d}.wav'); dd=estimate_placeholder_duration(text,spd_m,hk)
+            make_silence(o,dd); measured.append(dd); wavs.append(o); placeholders.append(i)
+            placeholder_reason=placeholder_reason or f'{ZS_LABEL} 单句合成失败({type(ex).__name__});静音占位（其余句正常）'
+            print(f'⚠️ 第{i}句({role}) {ZS_LABEL} 合成失败：{ex} → 静音占位，不中断整集'); continue
         sysfx=('系统' in role)
     elif USE_MM:
         if LANG=='en': vid,emo,sp,pit=MM['EN'],None,1.0,0
@@ -198,13 +236,25 @@ for i in range(n):
             sp=clamp_sp(sp*spd_m)                     # 每句语速（快/慢）叠加到角色基速
         key=hashlib.md5(f"mm|{MM_MODEL}|{vid}|{emo}|{sp}|{pit}|{text}".encode()).hexdigest()
         raw=os.path.join(CACHE,key+'.mp3')
-        if not os.path.exists(raw): minimax(text,vid,emo,sp,pit,raw)
+        try:
+            if not os.path.exists(raw): minimax(text,vid,emo,sp,pit,raw)
+        except Exception as ex:
+            o=os.path.join(W,f'line_{i:02d}.wav'); dd=estimate_placeholder_duration(text,spd_m,hk)
+            make_silence(o,dd); measured.append(dd); wavs.append(o); placeholders.append(i)
+            placeholder_reason=placeholder_reason or f'MiniMax 单句合成失败({type(ex).__name__});静音占位（其余句正常）'
+            print(f'⚠️ 第{i}句({role}) MiniMax 合成失败：{ex} → 静音占位，不中断整集'); continue
         sysfx=('系统' in role)
     elif USE_VOLC:
         if LANG=='en': vt,emo,sp=V['EN'],None,1.0
         else: vt,emo,sp=volc_cfg(role); sp=clamp_sp(sp*spd_m)   # 火山保角色情绪、仅叠每句语速（emotion 兼容性更保守）
         key=hashlib.md5(f"volc|{vt}|{emo}|{sp}|{text}".encode()).hexdigest(); raw=os.path.join(CACHE,key+'.mp3')
-        if not os.path.exists(raw): volc(text,vt,emo,sp,raw)
+        try:
+            if not os.path.exists(raw): volc(text,vt,emo,sp,raw)
+        except Exception as ex:
+            o=os.path.join(W,f'line_{i:02d}.wav'); dd=estimate_placeholder_duration(text,spd_m,hk)
+            make_silence(o,dd); measured.append(dd); wavs.append(o); placeholders.append(i)
+            placeholder_reason=placeholder_reason or f'火山 单句合成失败({type(ex).__name__});静音占位（其余句正常）'
+            print(f'⚠️ 第{i}句({role}) 火山 合成失败：{ex} → 静音占位，不中断整集'); continue
         sysfx=('系统' in role)
     else:
         raw=os.path.join(vd,f'r{i:02d}.aiff'); r=158 if '柳娘子' in role else 208 if ('小禾' in role or '太监' in role) else 172 if '系统' in role else 182
@@ -262,11 +312,28 @@ if LANG=='zh':
     starts=[]; ends=[]; _t=0.0
     for i in range(n):
         starts.append(_t); _t+=measured[i]; ends.append(_t); _t+=gaps[i]
+    # 音色绑定留痕（治"跨集同角色音色漂"——env 注入的绑定不落痕就无法机检）：
+    # 音色键=角色音色槽（跨集应稳定）；voice_id=实际下发后端的音色；情绪_已应用=后端真正吃到的情绪（暴露火山不逐句驱动情绪）。
+    def _voice_id_for(role):
+        if USE_ZS:
+            ref=role_ref(ZS_PREFIX, role)[0]
+            return f'{ZS_LABEL}:{role_key(role)}:' + (os.path.basename(ref) if ref else '默认嗓')
+        if USE_MM:   return f'MiniMax:{mm_cfg(role)[0]}'
+        if USE_VOLC: return f'火山:{volc_cfg(role)[0]}'
+        return 'say:Tingting'
+    def _emo_applied(role, emo_c):
+        if USE_MM:
+            if os.environ.get('MINIMAX_NOEMO'): return '后端禁用(NOEMO)'
+            return MM_EMO[emo_c] if emo_c!='neutral' else mm_cfg(role)[1]
+        if USE_VOLC: return (volc_cfg(role)[1] or 'none') + '(角色固定·不接逐句情绪)'
+        return '后端不接情绪'  # 零样本/say
     manifest=[{"idx":i,"镜头":shots[i] if i<len(shots) else "","角色":items[i][0],"情绪":items[i][2],"钩子":items[i][4],"文本":items[i][1],
                "时长":round(measured[i],3),"start":round(starts[i],3),"end":round(ends[i],3),"gap_after":round(gaps[i],3),"line_wav":f"line_{i:02d}.wav",
+               "音色键":role_key(items[i][0]),"voice_id":_voice_id_for(items[i][0]),"情绪_已应用":_emo_applied(items[i][0],items[i][2]),
                **({"占位":True} if i in placeholders else {})} for i in range(n)]
     out_dir=os.path.dirname(os.path.join(W,'voice_zh.wav'))
     _json.dump(manifest, open(os.path.join(out_dir,'时长清单.json'),'w',encoding='utf-8'), ensure_ascii=False, indent=2)
+
 if placeholders:
     warn='⚠️ 占位提示: '+placeholder_reason+'。当前不是有声朗读,仅供出图前 rough timing;出图前请换真实配音重跑 n2d-voice。'
     open(os.path.join(W,'_占位说明.md'),'w',encoding='utf-8').write(
@@ -279,5 +346,17 @@ if LANG == 'zh' and os.environ.get('N2D_UPDATE_PROGRESS', '1') != '0':
         subprocess.run(['python3', prog, 'set', ROOT, EP, '配音', '✅'], check=False)
     except Exception:
         pass
-    print(warn)
+    if placeholders: print(warn)
+
+# 记录生产数据 (P0)
+PROVIDER = ZS_LABEL if USE_ZS else 'MiniMax' if USE_MM else '火山' if USE_VOLC else 'say'
+record_event(
+    ROOT, EP, stage="voice", event="generation",
+    asset=os.path.join(W, f'voice_{LANG}.wav'),
+    status="pass",
+    duration_sec=TIMER.elapsed(),
+    provider=PROVIDER,
+    meta={"lines": n, "placeholder_lines": len(placeholders)}
+)
+
 print(f"配音 {LANG}: {n} 句（后端={ZS_LABEL if USE_ZS else 'MiniMax' if USE_MM else '火山' if USE_VOLC else 'say'}，顺序拼接 gap={GAP}s+钩子留拍，无压速）→ voice_{LANG}.wav")

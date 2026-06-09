@@ -20,6 +20,12 @@ With real BGM:
 BGMFILE=/path/to/music.mp3 bash skills/n2d-compose/compose.sh <作品根> 第N集 zh
 ```
 
+Native clip audio:
+```bash
+VIDEO_NATIVE_AUDIO_POLICY=低音量混入环境声 bash skills/n2d-compose/compose.sh <作品根> 第N集 zh
+```
+Only use this after n2d-video has marked the clips as low-risk ambience/SFX with no native speech. Default is `丢弃`.
+
 Outputs:
 - `合成/第N集/成片_第N集_zh.mp4`
 - optional watermarked final in `合成/第N集/成片_第N集_zh_水印.mp4`
@@ -33,4 +39,3 @@ Final QA:
 python3 skills/n2d-review/scripts/mechanical_check.py <作品根> 第N集
 python3 skills/n2d-review/scripts/gate.py <作品根> 第N集 --stage review
 ```
-

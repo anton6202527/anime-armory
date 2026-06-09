@@ -9,12 +9,13 @@ from __future__ import annotations
 
 import os
 import re
-from typing import Optional
+from typing import Dict, List, Optional
 
 
 DEFAULTS = {
     "制作模式": "配音先行",
-    "生图AI": "Codex only",
+    "基础视觉风格": "写实电影感",
+    "生图AI": "Codex",
     "生视频AI": "即梦",
     "出视频规格": "预算一般",
     "视频原生音轨": "丢弃",
@@ -49,11 +50,13 @@ def _extract_setting(text: str, key: str) -> Optional[str]:
     Supported forms:
       - `- 制作模式: 配音先行`
       - `制作模式: 配音先行`
-      - `制作模式：配音先行`
+      - `- **制作模式**：配音先行`
     Inline comments are stripped.  The first matching line wins inside a file;
     project settings are read before global defaults.
     """
-    pat = re.compile(rf"^\s*(?:[-*]\s*)?{re.escape(key)}\s*[:：]\s*(.+?)\s*$", re.M)
+    # Support optional ** bolding for keys often used in novel-craft
+    key_pattern = rf"(?:\*\*)?{re.escape(key)}(?:\*\*)?"
+    pat = re.compile(rf"^\s*(?:[-*]\s*)?{key_pattern}\s*[:：]\s*(.+?)\s*$", re.M)
     m = pat.search(text)
     if not m:
         return None
@@ -61,8 +64,67 @@ def _extract_setting(text: str, key: str) -> Optional[str]:
     return val or None
 
 
+def load_settings(work_root: str) -> Dict[str, str]:
+    """把 `<作品根>/_设置.md` 整体解析成 {key: value}（仅本作品文件，不并入全局默认）。
+    支持 `- key: v` / `key: v` / `key：v` / `- **key**：v`，剥行内 # 注释；
+    同 key 首行胜出（对齐 _extract_setting）。
+    供 n2d-feedback / n2d-model-router 等需要整表的场景；单值查询仍用 get_setting。"""
+    text = _read_text(os.path.join(work_root.rstrip("/"), "_设置.md"))
+    out: Dict[str, str] = {}
+    # Captures optional ** around key and strips them
+    pat = re.compile(r"^\s*(?:[-*]\s*)?(?:\*\*)?([^:：#]+?)(?:\*\*)?\s*[:：]\s*(.+?)\s*$", re.M)
+    for m in pat.finditer(text):
+        key = m.group(1).strip()
+        val = re.split(r"\s+#", m.group(2), maxsplit=1)[0].strip()
+        if key and key not in out:
+            out[key] = val
+    return out
+
+
+def write_settings(work_root: str, fields: Dict[str, str], *, note: Optional[str] = None, bold_keys: bool = False):
+    """落 `<作品根>/_设置.md` —— 本作私有选择点（_偏好约定 的 per-work 存储）。
+    
+    fields: 有序 dict {标签: 值}。
+    note: 可选的顶部注释。
+    bold_keys: 是否在 Key 两侧加 **（Novel 线路常用）。
+    """
+    lines = ["# 设置 — 本作私有选择点（_偏好约定）", ""]
+    if note:
+        lines += [f"> {note}", ""]
+    
+    for k, v in fields.items():
+        shown = v if v not in (None, "", []) else "（未定）"
+        key_str = f"**{k}**" if bold_keys else k
+        lines.append(f"- {key_str}：{shown}")
+    
+    lines += [
+        "",
+        "> 这些值由 init 按 CLI 参数/全局默认落定；同项目后续**沉默沿用**，"
+        "改了在此更新。合规/不可逆/花钱多的点每次仍向用户确认。",
+    ]
+    
+    path = os.path.join(work_root.rstrip("/"), "_设置.md")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+
+
+GLOBAL_SETTINGS_CANDIDATES = (
+    "创作偏好-默认.md",
+    os.path.join(".agents", "创作偏好-默认.md"),
+    os.path.join(".codex", "创作偏好-默认.md"),
+    os.path.join(".claude", "创作偏好-默认.md"),
+)
+
+
+def global_settings_paths(repo_root: str) -> List[str]:
+    return [os.path.join(repo_root, rel) for rel in GLOBAL_SETTINGS_CANDIDATES]
+
+
 def global_settings_path(repo_root: str) -> str:
-    return os.path.join(repo_root, ".claude", "创作偏好-默认.md")
+    for path in global_settings_paths(repo_root):
+        if os.path.exists(path):
+            return path
+    return global_settings_paths(repo_root)[0]
 
 
 def get_setting(work_root: str, key: str, default: Optional[str] = None) -> str:
@@ -72,9 +134,10 @@ def get_setting(work_root: str, key: str, default: Optional[str] = None) -> str:
     if project:
         return project
     repo = repo_root_from(work_root)
-    global_val = _extract_setting(_read_text(global_settings_path(repo)), key)
-    if global_val:
-        return global_val
+    for path in global_settings_paths(repo):
+        global_val = _extract_setting(_read_text(path), key)
+        if global_val:
+            return global_val
     if default is not None:
         return default
     return DEFAULTS.get(key, "")
@@ -89,6 +152,11 @@ def is_video_first(work_root: str) -> bool:
     return "先出视频" in production_mode(work_root)
 
 
+def is_native_av(work_root: str) -> bool:
+    """`制作模式=原生音画`：说话镜由视频后端一次出同步音画，逐句配音是可选旁白层、不卡路由。"""
+    mode = production_mode(work_root)
+    return "原生音画" in mode or "native_av" in mode.lower()
+
+
 def watermark_setting(work_root: str) -> str:
     return get_setting(work_root, "水印", DEFAULTS["水印"])
-

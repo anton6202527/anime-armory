@@ -16,6 +16,10 @@ def write_wav(path, *, seconds=35, rate=48000, ch=2, kind="tone"):
             v = 0
         elif kind == "clip":
             v = full if (i // 64) % 2 == 0 else -full   # 方波，贴满量程 → 削波
+        elif kind == "lead_silence" and i < 5 * rate:
+            v = 0
+        elif kind == "tail_silence" and i >= n - 5 * rate:
+            v = 0
         else:  # tone：约 -6dBFS 正弦
             v = int(0.5 * full * math.sin(2 * math.pi * 220 * i / rate))
         for _ in range(ch):
@@ -67,8 +71,10 @@ def run(root, **kw):
     prog = open(os.path.join(root, "_进度.md"), encoding="utf-8").read()
     sc.check_completeness(root)
     sc.check_lyrics(root, meta, kw.get("spread", sc.SPREAD_MAX))
-    sc.check_audio(root, prog)
+    sc.check_audio(root, prog, meta)
+    sc.check_take_manifest(root)
     sc.check_compliance(root, meta)
+    sc.check_ai_usage(root, meta)
     return list(sc.findings)
 
 
@@ -178,3 +184,43 @@ def test_low_samplerate_warns():
         assert any(d == "音频" and "采样率" in m for s, d, l, m in f), f
     finally:
         shutil.rmtree(tmp)
+
+
+def test_target_duration_warns():
+    tmp = tempfile.mkdtemp()
+    try:
+        f = run(make_project(tmp, meta={
+            "title": "曲",
+            "vocal_source": "synthetic",
+            "rights_status": "original",
+            "target_duration_seconds": 120,
+        }))
+        assert any(d == "音频" and "偏离目标" in m for s, d, l, m in f), f
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_edge_silence_warns():
+    tmp = tempfile.mkdtemp()
+    try:
+        f = run(make_project(tmp, wav="lead_silence"))
+        assert any(d == "音频" and "开头静音" in m for s, d, l, m in f), f
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_missing_take_manifest_warns_without_blocking():
+    tmp = tempfile.mkdtemp()
+    try:
+        f = run(make_project(tmp))
+        assert any(s == WARN and d == "挑版" for s, d, l, m in f), f
+        assert not [x for x in f if x[0] == BLOCK], f
+    finally:
+        shutil.rmtree(tmp)
+
+
+if __name__ == "__main__":
+    tests = [(name, fn) for name, fn in sorted(globals().items()) if name.startswith("test_") and callable(fn)]
+    for name, fn in tests:
+        fn()
+    print(f"OK ({len(tests)} tests)")

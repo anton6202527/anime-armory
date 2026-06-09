@@ -73,12 +73,15 @@
 │   │   ├── prompt/                       共享 prompt 文件
 │   │   │   ├── 00_索引.md                全篇定妆清单 + 状态
 │   │   │   └── 角色定妆.md / 场景定妆.md / 道具定妆.md（+ ⚙️法宝定妆.md / 特效定妆.md·仙侠玄幻可选）
-│   │   └── 定妆_*.png                    角色/场景/道具 定妆 PNG（与 prompt/ 同级）
+│   │   └── 图片/                         共享 PNG 产物（与 prompt/ 同级子目录）
+│   │       └── 定妆_*.png                角色/场景/道具 定妆 PNG（人物含正/侧/背标准三视图 + _三视图拼版 + _半身/_全身服装参考）
 │   └── 第N集/                            本集分镜
 │       ├── prompt/                       本集 prompt 文件
-│       │   ├── 00_总览.md                本集图清单 + 引用共享
+│       │   ├── 00_总览.md                本集图清单 + 引用共享 + 本集视觉一致性契约 + 本集基础视觉风格契约（继承 storyboard.json visual/style contract）
 │       │   └── 01_分镜出图.md            本集分镜 prompt
-│       └── 镜头N_*.png                   本集分镜 PNG（与 prompt/ 同级）
+│       └── 图片/                         本集 PNG 产物（与 prompt/ 同级子目录）
+│           ├── 镜头N_*.png               本集分镜首帧 PNG
+│           └── 镜头N_end.png             尾帧接力 PNG（=下一 Clip 首帧构图，供 n2d-video 首尾双帧锁接点）
 ├── 出视频/                               ← n2d-video（⑤视频）：唯一产物=各镜头 clips
 │   ├── common/                           （如有跨集复用片段，如转场/空镜）
 │   │   ├── prompt/
@@ -102,14 +105,14 @@
 每个 `出图/` 或 `出视频/` 文件夹（`common/` 或 `第N集/`）一律分两层：
 
 - **`prompt/` 子目录** 装该文件夹所有 prompt md（共享层的 00_索引 + 角色/场景/道具定妆，或本集的 00_总览 + 01_分镜/clips）
-- **生成产物**：PNG 平铺在 `prompt/` 同级；**clip MP4 进 `出视频/第N集/视频/` 子目录**（出视频阶段唯一产物，供 n2d-compose 归集）；**配音 / 成片 / 水印产物落 `合成/第N集/`**（不在出视频层）
+- **生成产物**：PNG 进 **`图片/` 子目录**（与 `prompt/` 同级；含分镜首帧 `镜头N_*.png` + 尾帧接力 `镜头N_end.png`，共享层为 `图片/定妆_*.png`）；**clip MP4 进 `出视频/第N集/视频/` 子目录**（出视频阶段唯一产物，供 n2d-compose 归集）；**配音 / 成片 / 水印产物落 `合成/第N集/`**（不在出视频层）
 
 好处：
 - 一目了然——浏览父目录只看到产物缩略图，找 prompt 进 `prompt/` 子目录
 - 打包分享方便——单独打 `prompt/` 给文案审稿，单独打父目录给视觉审稿
-- 4 个层级（出图/common, 出图/第N集, 出视频/common, 出视频/第N集）规则一致，跨 skill 心智零负担
+- 4 个层级（出图/共享, 出图/第N集, 出视频/共享, 出视频/第N集）规则一致，跨 skill 心智零负担
 
-> 作品根的跨阶段设定统一放 `设定库/`，全局进度放作品根 `_进度.md`，废料放作品根 `废料/`；`出图/common/` 与 `出视频/common/` 仍是 stage 内的全篇定妆/转场库。语义不同——前者是"跨技能共用设定"，后者是"该技能内跨集复用"。路径互不重叠。
+> 作品根的跨阶段设定统一放 `设定库/`，全局进度放作品根 `_进度.md`，废料放作品根 `废料/`；`出图/共享/图片/` 与 `出视频/共享/` 仍是 stage 内的全篇定妆/转场库。语义不同——前者是"跨技能共用设定"，后者是"该技能内跨集复用"。路径互不重叠。
 
 **判定表**：
 
@@ -122,7 +125,8 @@
 | ⚙️特效 / VFX（剑气/灵力/法术/护体光/阵法）| 共享 | 高频复现且会漂，锁颜色/形状/拖尾/强度 |
 | 死亡 / 仅本集形态 | **仍共享** | 规则统一 > 节省 3MB |
 | 一次性道具 | 本集 | 不复用 |
-| 分镜出图 | 本集 | 一镜一图 |
+| 分镜出图（首帧 `镜头N_*.png`）| 本集 | 一镜一图 |
+| 尾帧接力（`镜头N_end.png`）| 本集 | 接缝焊接=下一 Clip 首帧构图，供 n2d-video 首尾双帧锁接点 |
 | 封面 | 本集 | 一集一封 |
 | 视频片段 | 本集 | 一镜一段 |
 
@@ -141,9 +145,11 @@
 
 ---
 
-## 三、进度表（_进度.md）协议
+## 三、机器契约与进度表（_进度.md）协议
 
-进度表是六阶段所有 skill 的 **single source of truth**。**表头由 `n2d-script/scripts/split_novel.py` 生成，它是权威**——本文与调度器 SKILL 只复述、不另立一套。当前 16 列格式：
+机器契约真值源在 `skills/common/n2d_contract.py`，人读版见 `references/contract.md`。阶段图、列名、gate stage、manifest 路径、回退目标都从这里派生；`common/n2d_route.py`、`novel2drama/progress.py`、`n2d-progress/scan.py`、`n2d-review/scripts/gate.py` 不应各自维护一张阶段表。
+
+进度表是六阶段所有 skill 的 **single source of truth**。**表头由 `skills/common/n2d_contract.py` 定义，`n2d-script/scripts/split_novel.py` 生成时读取它**——本文与调度器 SKILL 只复述、不另立一套。当前 16 列格式：
 
 ```markdown
 # <剧名> — 生产进度
@@ -156,6 +162,7 @@
 ```
 
 > **回写一律走脚本**：`python3 <skill>/progress.py set <作品根> 第N集 <列名> <值>`；旧项目缺新列先 `progress.py ensure-col`。别手工编辑表格（避免列错位）。
+> **每集产物快照**：`progress.py set` 回写进度时会自动刷新 `脚本/第N集/manifest.json`，记录 schema 版本、制作模式、阶段产物路径、存在性和文件 hash，供 review 与最小返工范围使用。需要手动重建时可跑 `python3 skills/novel2drama/manifest.py <作品根> 第N集 [--stage stage_key]`。
 
 **列含义**：
 
@@ -176,7 +183,7 @@
 
 ## 四、双轴（图 AI / 视频 AI）
 
-skill 默认支持四个目标平台：**即梦AI**（默认） / **可灵Kling** / **Seedance** / **Veo**（海外）。
+视频阶段默认支持四个目标平台：**即梦AI**（默认） / **可灵Kling** / **Seedance** / **Veo**（海外）。图片阶段按 `生图AI` 选择点统一到一个官方/已登录后端（默认 Codex，可选 Dreamina/即梦官方 CLI、官方多参考后端），禁止第三方逆向、`同视频AI` 含糊口径和 web 自动化出图。
 
 ```
 图 AI（出图工具）→ 图片 → 视频 AI（出视频工具）
@@ -185,13 +192,13 @@ skill 默认支持四个目标平台：**即梦AI**（默认） / **可灵Kling*
 prompt 写法/语言         图片该长啥样
 ```
 
-- **同 AI 闭环**（默认）：图 AI = 视频 AI = 即梦。最稳，prompt 直接写。
-- **跨 AI 桥接**：图 AI ≠ 视频 AI（如 Gemini 出图 + 即梦视频）。**所有 image prompt 末尾必须拼接视频 AI 的"图像风格锚定句"**，否则视频 AI 的 image2video 运动估计会崩。
+- **当前默认**：图 AI = `生图AI` 所选官方/已登录后端（默认 Codex，可选 Dreamina/即梦官方 CLI）；视频 AI 可为即梦/可灵/Seedance/Veo。即使视频 AI=即梦，也必须在 `生图AI` 中显式写 Dreamina/即梦，不能写含糊的 `同视频AI`。
+- **跨 AI 桥接**：图 AI ≠ 视频 AI（如 Codex 出图 + 即梦视频，或 Seedream 出图 + 可灵视频）。**所有 image prompt 末尾必须拼接视频 AI 的"图像风格锚定句"**，否则视频 AI 的 image2video 运动估计会崩。
 
 **记录位置**：`global_style.md` 顶部记两行：
 ```
 目标视频AI：即梦
-目标图AI：即梦   ← 同视频AI 即同 AI 闭环
+目标图AI：Codex   ← 默认；可换官方/已登录图后端；Dreamina/即梦官方 CLI 可用于图片
 ```
 
 详细档案见 `n2d-image/references/platforms.md` 和 `n2d-video/references/platforms.md`。
@@ -239,8 +246,8 @@ n2d-script（阶段2）→
 n2d-image →
   1. 走"强制 5 步 SOP"：扫共享 → 列需求 → 差集 → 追加共享定妆 → 建本集 prompt
   2. 写完 → 出图prompt 列 ✅
-  3. 按 _设置.md 的 生图AI（默认 Codex only）生图
-  4. 出 PNG → 用户筛 → 落档 出图/{common,第N集}/ → 出图列填 K/N
+  3. 按 _设置.md 的 生图AI（默认 Codex，可选官方后端）生图
+  4. 出 PNG → 用户筛 → 落档 出图/{共享,第N集}/ → 出图列填 K/N
   5. 全部生成 → 出图列 K/K → 报告可调 /n2d-video
 
 用户：跑 /n2d-video ... → /n2d-compose（成片落 合成/第1集/）

@@ -12,7 +12,7 @@
 
 | 轴 | 搜什么 | 映射到 novel 的 |
 |---|---|---|
-| **题材 / 市场契合** | 红果/番茄/晋江/抖音漫剧当下热题材与套路、黄金三章、完读率留存机制、平台分档 | `novel-score`（复用其热榜拉取）/ `novel-create` 立项题材选择 |
+| **题材 / 市场契合** | 红果/番茄/晋江/抖音漫剧当下热题材与套路、黄金三章、完读率留存机制、平台分档 | `novel-score`（复用 `scripts/collect_market_baseline.py`）/ `novel-create` 立项题材选择 |
 | **写作工艺** | 章纲编织、单章节奏、爽点密度、钩子/反转布置、show-don't-tell、文风一致 | `novel-craft/references/{outline,chapter,expand,continue,condense}.md` |
 | **一致性 / 合规来源** | 设定圣经/锚点一致性方法、跨章人设防崩、公版/授权来源边界、原文照搬判定 | `novel-create`/`novel-spinoff` 设定与锚点 + fetch/spinoff/rewrite 合规闸门 + `mechanical_check.py` |
 | **能力演进**（横切） | 长文本一致性、子代理逐章写作、AI 审稿/查重工具 | 各 skill 的子代理 prompt / `mechanical_check.py` 检查项 |
@@ -36,13 +36,13 @@
 ## 起草 + 落地（人确认后）
 1. 高价值项**起草** skill edit（写成 diff 级描述：改哪段、加什么铁律/段落）。
 2. **改任何 skill → 必同步 `skills/README.md` 索引**（仓库硬约定，缺了视为未完成）。
-3. **默认不自动改产线**：模式②产报告，用户拍板后再由对应 skill / 人执行编辑。报告落 `skills/novel-review/_流程自审_<年-月-日>.md` 或直接讲给用户。
+3. **默认不自动改产线**：模式②产报告，用户拍板后再由对应 skill / 人执行编辑。**报告一次性·不留存**：只讲给用户，**不在 skill 目录存 `_流程自审_*.md`**（已 gitignore）；每次重审都重跑全流程，不依赖任何旧存档。
 
 ## 防过期 / 防噪声铁律
 - 每条建议**带来源链接 + 采集日期**；旧报告里的建议可能已被采纳或已过时，落地前重新核对当前 skill。
 - 容错铁律同模式①：只报"真差距"，不把"换种说法会更好"的主观偏好堆进来。
 - 题材热度会变（某题材退潮/某套路烂大街）——写"能力/方法"而非死绑某个当红题材名；具体热题材属 `novel-score` 的实时拉取，正文写通用原则。
-- **与 `novel-score` 分工**：score 判一部作品"值不值得做"，本模式判"整条产线哪里该升级"；两者共用 `references/市场基准.md` 的热榜拉取思路，别各拉一份。
+- **与 `novel-score` 分工**：score 判一部作品"值不值得做"，本模式判"整条产线哪里该升级"；两者共用 `novel-score/references/market-baseline.md` + `novel-score/scripts/collect_market_baseline.py` 的热榜拉取思路，别各拉一份。
 
 ## 一次自审的标准产物
 ```

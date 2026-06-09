@@ -32,6 +32,14 @@ import re
 import sys
 import zipfile
 
+COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
+if COMMON not in sys.path:
+    sys.path.insert(0, COMMON)
+
+from n2d_contract import PROGRESS_COLUMNS
+from n2d_settings import DEFAULTS, get_setting
+from n2d_visual_styles import format_style_contract_markdown, style_options_text
+
 
 def read_text(path):
     ext = os.path.splitext(path)[1].lower()
@@ -231,6 +239,21 @@ def write_if_absent(path, content):
             f.write(content)
 
 
+def global_style_scaffold(title, root):
+    base_style = get_setting(root, "基础视觉风格", DEFAULTS["基础视觉风格"])
+    style_note = f"{base_style}（来自 _设置.md 或全局默认；可选 {style_options_text()}）"
+    return (
+        f"# {title} — 全局画风与世界观\n\n"
+        "## 目标平台\n即梦AI（默认）；可选 可灵Kling / Seedance / Veo —— 平台档案见 references/platforms.md\n\n"
+        f"## 基础视觉风格\n{style_note}\n\n"
+        "## 画风\n高质量AI漫剧风格，统一色调，高细节；具体提示词随「基础视觉风格」派生。\n\n"
+        "## 基础视觉风格契约（style_contract 源头）\n"
+        f"{format_style_contract_markdown(base_style)}\n\n"
+        "## 世界观\n（待精修）\n\n"
+        "## 统一负面词\n（画风漂移、多余文字水印、多指错手、脸/妆造漂移；其余禁忌按「基础视觉风格」派生，例如未选Q版才禁低幼Q版，写实电影感才禁插画化）\n"
+    )
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("novel")
@@ -305,7 +328,7 @@ def main():
 
     write_if_absent(
         os.path.join(settings, "global_style.md"),
-        f"# {title} — 全局画风与世界观\n\n## 目标平台\n即梦AI（默认）；可选 可灵Kling / Seedance / Veo —— 平台档案见 references/platforms.md\n\n## 画风\n高质量国风AI漫剧风格，电影级光影，统一色调，高细节，动态漫画感。\n\n## 世界观\n（待精修）\n\n## 统一负面词\n（低幼Q版、画风漂移、多余文字水印 等）\n",
+        global_style_scaffold(title, root),
     )
     write_if_absent(
         os.path.join(settings, "characters", "_角色总表.md"),
@@ -339,8 +362,10 @@ def main():
             if m:
                 existing_rows[int(m.group(1))] = line.rstrip("\n")
     if args.limit is not None or not os.path.exists(prog_path):
-        fresh = {i: f"| 第{i}集 | {ln} | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |"
-                 for i, ln in enumerate(lengths, 1)}
+        fresh = {}
+        for i, ln in enumerate(lengths, 1):
+            cells = [f"第{i}集", str(ln), "✅"] + ["⬜"] * (len(PROGRESS_COLUMNS) - 3)
+            fresh[i] = "| " + " | ".join(cells) + " |"
         rows = {**fresh, **existing_rows}  # 旧勾选优先，保留人工进度
         made = max(rows) if rows else n_make
         header = (f"# {title} — 生产进度\n",
@@ -348,8 +373,8 @@ def main():
                   + (f"（全本约估 {total_est} 集；部分先切，精修验证后重跑 split 加大 --limit 续切）。\n"
                      if partial else f"。\n"))
         prog_lines = [*header,
-            "| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |",
-            "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+            "| " + " | ".join(PROGRESS_COLUMNS) + " |",
+            "|" + "|".join("---" for _ in PROGRESS_COLUMNS) + "|"]
         prog_lines += [rows[i] for i in sorted(rows)]
         with open(prog_path, "w", encoding="utf-8") as f:
             f.write("\n".join(prog_lines) + "\n")

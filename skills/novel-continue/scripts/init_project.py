@@ -8,7 +8,7 @@ init_project.py — 建续写项目骨架；docx → txt 抽取。
         --mode sequel|continuation \\
         --new-chapters 20 \\
         [--target-platform <name>] \\
-        [--out <输出根>] \\
+        [--out <输出根>] [--outputs txt,docx,outline] \\
         [--i-have-rights]
 
 依赖: python-docx (仅当原作是 .docx 时)
@@ -19,7 +19,18 @@ from datetime import date
 # 共享工具（docx→txt / 版权判定 / 落 _设置.md）上移至 novel-craft，避免各 init 各写一份
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                 "..", "..", "novel-craft", "scripts"))
+from contract import (AI_TEXT_USAGE_MODES, CHAPTER_GRANULARITY, NOVEL_DRAFT_MODES,
+                      base_meta, derived_stage_markdown, parse_outputs)
 from derive_common import docx_to_txt, detect_rights_status, write_settings
+
+
+def words_per_chapter_for(target_platform):
+    text = str(target_platform or "")
+    if any(key in text for key in ("漫剧", "红果", "抖音")):
+        return [1000, 1500]
+    if "短剧" in text:
+        return [1500, 2500]
+    return [3000, 5000]
 
 
 def main():
@@ -30,7 +41,15 @@ def main():
     ap.add_argument("--new-chapters", type=int, default=20, help="续写章数（5-30）")
     ap.add_argument("--target-platform", default="跨平台")
     ap.add_argument("--out", default=None)
+    ap.add_argument("--outputs", default="txt,docx,outline",
+                    help="逗号分隔，可含 txt,docx,outline,n2d")
     ap.add_argument("--i-have-rights", action="store_true")
+    ap.add_argument("--draft-mode", default=None, choices=NOVEL_DRAFT_MODES,
+                    help="小说生成模式；缺省按目标平台/输出格式推导")
+    ap.add_argument("--chapter-granularity", default="逐章", choices=CHAPTER_GRANULARITY,
+                    help="章节生成粒度：逐章/小批/全书草稿")
+    ap.add_argument("--ai-text-usage", default=None, choices=AI_TEXT_USAGE_MODES,
+                    help="发布披露用：AI-generated / AI-assisted / 未使用AI文本")
     args = ap.parse_args()
 
     source_path = os.path.abspath(args.source_novel)
@@ -42,7 +61,7 @@ def main():
     if os.path.exists(out_root):
         print(f"[err] 目标已存在：{out_root}", file=sys.stderr); sys.exit(2)
 
-    for sub in ("设定", "章节", "导出"):
+    for sub in ("设定", "章节", "导出", "写作任务", "合规"):
         os.makedirs(os.path.join(out_root, sub), exist_ok=True)
 
     novel_txt = os.path.join(out_root, "原作.txt")
@@ -72,15 +91,23 @@ def main():
 
     # Demo 章数按规模
     demo = 2 if args.new_chapters >= 5 else 1
+    outputs = parse_outputs(args.outputs)
+    target_wpc = words_per_chapter_for(args.target_platform)
+    draft_mode = args.draft_mode or (
+        "漫剧源书" if "n2d" in outputs or any(k in args.target_platform for k in ("漫剧", "红果", "抖音"))
+        else "稳妥初稿"
+    )
 
-    meta = {
+    meta = base_meta("continue", outputs=outputs, rights_status=rights)
+    meta.update({
         "source_novel": source_path,
         "source_title": source_title,
         "mode": args.mode,
         "new_chapters": args.new_chapters,
+        "target_chapters": args.new_chapters,
+        "target_words_per_chapter": target_wpc,
         "orig_chapter_count_estimate": orig_chapter_count,
         "target_platform": args.target_platform,
-        "rights_status": rights,
         "rights_declared_at": date.today().isoformat() if args.i_have_rights else None,
         "title": None,
         "title_chosen_at": None,
@@ -89,8 +116,10 @@ def main():
         "demo_chapters": demo,
         "demo_passed_at": None,
         "combine_with_original": False,
-        "created_at": date.today().isoformat(),
-    }
+        "draft_mode": draft_mode,
+        "chapter_granularity": args.chapter_granularity,
+        "ai_text_usage": args.ai_text_usage,
+    })
     json.dump(meta, open(os.path.join(out_root, "_meta.json"), "w", encoding="utf-8"),
               ensure_ascii=False, indent=2)
     write_settings(out_root, {
@@ -98,7 +127,10 @@ def main():
         "权利来源": rights,
         "续写模式": args.mode,
         "续写章数": args.new_chapters,
-        "输出格式": "txt,docx,outline（合本加 --combine；novel-craft/scripts/export.py）",
+        "输出格式": ",".join(outputs) + "（合本加 --combine；novel-craft/scripts/export.py）",
+        "小说生成模式": draft_mode,
+        "章节生成粒度": args.chapter_granularity,
+        "AI使用披露": args.ai_text_usage or "（发布前用 ai_usage.py 确认）",
     }, note="续写：从原作末章往后写新章节，沿用原作设定圣经/作者口吻。")
 
     mode_label = "续编（原作已完结）" if args.mode == "sequel" else "接更（原作未完结）"
@@ -121,6 +153,7 @@ def main():
         ("设定/章纲.md", f"# 章纲 — 续写 {args.new_chapters} 章\n\n> 第 4 步由主对话填写。**未敲定不进 Demo。**\n"),
         ("_进度.md",
          f"# 进度 — 续写（{mode_label}）\n\n"
+         f"{derived_stage_markdown('continue')}\n\n"
          f"- [x] 项目骨架（原作估计 {orig_chapter_count} 章，续写 {args.new_chapters} 章）\n"
          "- [ ] 吸收原作（人物 / 世界观 / 主线骨架 / 末章状态 / 作者口吻）\n"
          "- [ ] 续写方向（用户已选定）\n"

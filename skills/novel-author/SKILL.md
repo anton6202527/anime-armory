@@ -1,6 +1,6 @@
 ---
 name: novel-author
-description: Top-level dispatcher for the novel-* skill family — inspects an open-ended novel request (a bare idea / few words / book name / URL / file path / spin-off character / expand·condense·rewrite / 审稿查硬伤 / 评分·能不能火) and routes to the right sub-skill, or resumes an in-progress 写小说/<项目>/ from its _进度.md. Use when the user gives a novel-related task without specifying which tool. Does not write novels itself — only routes; the canonical sub-skill roster is the routing table in the body. Triggers 小说工坊, novel-author, 小说相关任务, 帮我处理小说, 不知道用哪个小说 skill, 小说打分, 小说评分, 能不能火, 值不值得改, 审稿.
+description: Top-level dispatcher for the novel-* skill family — inspects an open-ended novel request (a bare idea / few words / book name / URL / dragged file path / spin-off character / expand·condense·rewrite / 审稿查硬伤 / 评分·能不能火) and routes to the right sub-skill, imports a dragged novel file/link into 写小说/<项目>/ when no action is specified, or resumes an in-progress 写小说/<项目>/ from its _进度.md. Use when the user gives a novel-related task without specifying which tool. Does not write novels itself — only routes/imports source material; the canonical sub-skill roster is the routing table in the body. Triggers 小说工坊, novel-author, 小说相关任务, 拖进一本小说, 导入小说, 帮我处理小说, 不知道用哪个小说 skill, 小说打分, 小说评分, 能不能火, 值不值得改, 审稿.
 ---
 
 # novel-author — 小说工坊调度入口
@@ -15,7 +15,7 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 
 本 skill 的可选项**不写死在源码里**。按 `../_偏好约定.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
-本 skill 涉及的选择点：`目标平台`、`权利来源`、`输出格式`、`篇幅档`。
+本 skill 涉及的选择点：`目标平台`、`权利来源`、`输出格式`、`篇幅档`、`小说生成模式`、`章节生成粒度`、`AI使用披露`。
 
 > 作为入口：路由到子 skill 前，若已有项目则读其 `<作品根>/_设置.md`，新项目按全局默认初始化。
 
@@ -24,7 +24,8 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 | 用户输入形态 | 路由到 |
 |---|---|
 | **只有几个字 / 一个想法 / 部分风格 / 零散笔记 / 半成品片段**，没有成型源文 → 要写一本**原创新书** | `novel-create`（访谈→蓝图→设定→章纲→Demo→成书） |
-| 给了**书名 / 作者 / URL**，要把书"取回来" | `novel-fetch` |
+| 拖进来一本**本地小说文件/目录/file:///URL**，但没说下一步动作，只是要先建档 | `novel-author/scripts/import_novel.py` → `写小说/<书名>/` |
+| 给了**书名 / 作者 / URL**，明确要把公版书"取回来" | `novel-fetch` |
 | 已有原作 + 想**起一个好书名** | `novel-title` |
 | 已有原作 + 指定一个**配角名**，要**视角续写**（POV 切换、事件锁定） | `novel-spinoff` |
 | 已有原作 + 要**改主线 / 换设定 / 加原创材料**（魔改 / 重构 / 翻拍 / 二创重写） | `novel-rewrite` |
@@ -51,12 +52,32 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 
 ## 决策树
 
-0. **先看有没有在建项目**：用户指向（或当前正处于）某个 `写小说/<项目>/`，且其下有 `_进度.md` → **先读它**，路由到进度里未完成的那个阶段 skill（与 `novel2drama` 读 `_进度.md` 续跑同理），不要从头追问"你要做什么"。仅当 `_进度.md` 显示已全部完成、或用户明确要开新动作时，才往下走 1-5。
-1. 用户给了**书名 / 作者 / URL** 但没给本地文件 → 几乎肯定 `novel-fetch`。
+0. **先看有没有在建项目**：用户指向（或当前正处于）某个 `写小说/<项目>/`，且其下有 `_进度.md` → **先读它**，跑 `python3 novel-craft/scripts/progress.py "<作品根>"` 找第一条未完成项、stage owner/gate/on_fail，以及 review/score 阻断；再路由到对应阶段 skill。若 `progress.py` 显示 QA gate 阻断，先按 `return_to_stage` 回流，不能直接导出。仅当 `_进度.md` 显示已全部完成、且 `report_gate.py` 无阻断、或用户明确要开新动作时，才往下走 1-5。
+1. 用户给了**本地 .txt/.md/.docx、目录、file:// 或 URL**，且意图是"拖进来/导入/先建作品/纳管源书"，或没说具体动作 → 先跑 `python3 skills/novel-author/scripts/import_novel.py "<路径或URL>"` 建 `写小说/<书名>/`。
 2. 用户给了**本地文件路径** + 明确动作（续写XX视角 / 起书名 / 扩 / 缩 / 漫剧改编）→ 直接按动作路由。
-3. 用户给了**本地文件路径** + 没说具体动作 → 问一个澄清问题：要做什么？
+3. 用户给了**书名 / 作者 / 公版目录 URL**，明确说"抓回来/下载公版/联网取书" → `novel-fetch`。
 4. 用户的输入是**只言片语 / 一个想法 / 一点风格 / 零散碎片**，要写一本**原创新书**（没有成型源文）→ `novel-create`（它会用访谈把碎片补全成蓝图，**别在这里反问"给我个文件"**）。
 5. 用户给了**碎片 + 已有半成品/笔记文件**，要继续往成书走 → 也走 `novel-create`，用 `--ingest` 把碎片吃进 `素材/`。
+
+## 拖入小说 / 链接建档
+
+当用户说"从任何地方拖进来一本小说"、只给一个路径/URL、或只是要先把源书收进仓库时，不要问"要做什么"。先导入建档：
+
+```bash
+python3 skills/novel-author/scripts/import_novel.py "<路径或URL>"
+```
+
+脚本行为：
+- 自动从文件名、URL、HTML title 或正文首行推断书名，落到 `写小说/<书名>/`。
+- 写入 `原作.txt`、`小说/<书名>.txt`、可用时写 `小说/<书名>.docx`、`小说/source_manifest.json`、`_meta.json`、`_设置.md`、`_进度.md`。
+- 本地 `.txt/.md/.docx` 可直接纳管；通用 URL 必须加 `--i-have-rights`，Project Gutenberg / Wikisource 自动记为 `public-domain`；已知付费墙站拒抓。
+- 如果目标作品已存在，交互环境会提示 `新建版本 / 覆盖 / 使用现有 / 取消`。非交互环境不会自动覆盖，必须显式传：
+
+```bash
+python3 skills/novel-author/scripts/import_novel.py "<路径或URL>" --on-exists new-version
+python3 skills/novel-author/scripts/import_novel.py "<路径或URL>" --on-exists overwrite --force
+python3 skills/novel-author/scripts/import_novel.py "<路径或URL>" --on-exists use-existing
+```
 
 ## 何时不路由
 

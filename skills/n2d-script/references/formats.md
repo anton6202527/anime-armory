@@ -2,9 +2,9 @@
 
 所有每集脚本素材按本文档模板填写。**提示词一律中文为主 + 英文备用**。
 
-> 下文 prompt 示例以**默认 = 视频AI = 图AI = 即梦** 的写法为准；切换 可灵 / Seedance / Veo 等视频 AI 时，prompt 的语言/画幅/Clip 时长/角色一致性机制按 `platforms.md` 对应档案调整（核心分镜/卡片不变）。
+> 下文 prompt 示例以**图 AI = `生图AI` 所选官方/已登录后端（默认 Codex，可选 Dreamina/即梦官方 CLI 等），视频 AI 可为即梦/Seedance/可灵/Veo** 的写法为准。若图 AI 与视频 AI 不同，image prompt 末尾拼对应视频 AI 的图像风格锚定句（核心分镜/卡片不变）。
 
-> **跨 AI 强制规则**：若**图 AI ≠ 视频 AI**（例：Gemini 出图 + 即梦视频），所有 image prompt 末尾**必须**拼接目标视频 AI 的"图像风格锚定句"（见 `platforms.md` 各档案）。本文档示例中默认未拼锚定句（同 AI 场景），跨 AI 时自行追加。
+> **跨 AI 强制规则**：若**图 AI ≠ 视频 AI**（例：Codex 出图 + 即梦视频，或 Seedream 出图 + 可灵视频），所有 image prompt 末尾**必须**拼接目标视频 AI 的"图像风格锚定句"（见 `platforms.md` 各档案）。
 
 > **出图 prompt 两层架构（共享 + 本集）属于 Stage 2**，不在本文档；由 `n2d-image` skill 负责。本 skill 的角色卡只写"① 定妆照 prompt"作为 Stage 2 的来源。
 
@@ -34,20 +34,20 @@
 - 形态变体：（如沈念 常态/觉醒态；记录差异点，避免漂移）
 
 **① 定妆照 / 角色参考图 Prompt（中文）：** ← Stage 2 会据此生成定妆组，作为后续所有镜头与视频首帧的"角色参考/图生图"锚点
-角色定妆设定图：{姓名}，{年龄性别}，最低定妆组三张：正脸中性主参考 + 侧脸角度参考 + 半身或全身服装参考，{发型妆容服装配饰色卡}，干净浅灰纯色背景，柔和均匀打光、无强阴影，五官清晰、服装完整可辨，国风写实漫剧角色设定图，高细节，竖版9:16
-（备注：核心 / 长线角色至少按"正脸 + 侧脸 + 半身/全身"出定妆组；背面与表情条是增强项，等剧情需要背身/转身/大量情绪特写时再补。一次性配角可只出正脸主参考。定妆照用"干净背景+均匀光"以便锁脸锁妆造，不用电影级强阴影；进入分镜后再套全局电影光影。）
+角色定妆设定图：{姓名}，{年龄性别}，标准三视图定妆组：正面中性主参考 + 侧面参考 + 背面参考，另补半身或全身服装参考，{发型妆容服装配饰色卡}，干净浅灰纯色背景，柔和均匀打光、无强阴影，五官清晰、服装完整可辨，按 `基础视觉风格` 的角色设定图，高细节，竖版9:16
+（备注：所有人物定妆都按"正面 + 侧面 + 背面"标准三视图出生产拆图，并生成 `定妆_<角色>_三视图.png` 人审拼版；短线配角也不省背面。半身/全身服装参考用于锁衣领/袖型/腰带/配色/体态，表情条是增强项。定妆照用"干净背景+均匀光"以便锁脸锁妆造，不用强戏剧光；进入分镜后再套全局 `style_contract` 的光色与画风。）
 
 **① 英文（备用）：**
 character design / reference sheet: {name}, minimum reference set with front-face neutral main reference + side-profile angle reference + half-body or full-body outfit reference, {hair makeup outfit accessories palette}, clean light-grey solid background, soft even lighting no harsh shadows, clear face and complete outfit, Chinese ancient-fantasy webcomic character sheet, ultra detailed, vertical 9:16
 
-**② 即梦图片 Prompt（中文·常态出镜）：**
+**② Codex 图片 Prompt（中文·常态出镜）：**
 （角色锚定描述，含外貌+妆造+气质+画风词，用于实际分镜出图）
 
 **② 英文（备用）：**
 （同上英文）
 ```
 
-> 流程：先用 ① 定妆照锁定角色 → 在即梦里把这张设为「角色参考图 / 图生图」→ 之后每个分镜与视频首帧都基于它生成，保证脸和妆造不漂移。**实际生成定妆照在 Stage 2（`/n2d-image`）做**，本 skill 只准备 prompt。
+> 流程：先用 ① 定妆照锁定角色 → 在所选 `生图AI` 中用定妆组做参考派生 → 之后每个分镜与视频首帧都基于它生成，保证脸和妆造不漂移。**实际生成定妆照在 Stage 2（`/n2d-image`）做**，本 skill 只准备 prompt。
 > 后续所有镜头严格复用角色卡，禁止外貌/发型/服装/年龄漂移，除非剧情明确要求并在卡上记录"变体"。
 
 ---
@@ -61,7 +61,7 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 - 时间 / 天气 / 光线：
 - 主色调 / 氛围：
 
-**即梦图片 Prompt（中文）：** （含环境+光线+色调+画风）
+**Codex 图片 Prompt（中文）：** （含环境+光线+色调+画风）
 **英文 Prompt（备用）：**
 ```
 
@@ -115,20 +115,76 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 > 视频 prompt 必须显式描述**人物运动 + 镜头运动 + 动态细节**。**含打斗按 `打斗分镜.md`：五帧拆招（起手/发力/命中/受击/收势）、命中帧必出独立图、攻防用正反打；仍避免一镜内多人混战、超复杂同框动作。** **含御剑飞行/追逐/渡劫/炼丹炼器/大阵/大场面 establish/斗法对轰/神魂 按 `仙侠场面分镜.md`：飞行追逐「锁姿态、动背景与镜头」、渡劫炼丹法阵对轰「爆发帧(命中·撞点)单独出图 + 奇观元素入库」、神魂「元神=肉身半透明派生治"二我"」、大场面「三镜由远及近 + 比例尺」。** 大量人群、高频切换等 AI 难生成动作仍从简。
 > 空镜缓冲不是补丁位，而是故事板阶段就要设计的正式 Clip：换场、跳时空、强情绪转折、AI 难接的姿态变化，都优先插 1-2s 空镜/物件镜（门帘、烛火、雨滴、符纸、手部）承接。下游 compose 只负责保留它的呼吸，不在成片上硬塞未知空镜。
 
-必须同步输出机器可读 `storyboard.json`（**接力契约的机器可读载体**——下游结构化消费衔接；缺它时 `n2d-review/scripts/gate.py --stage image|video|compose` 会阻断）。每个 clip 带 `continuity` 块，`start_state` 应等于上一 clip 的 `end_state`：
+必须同步输出机器可读 `storyboard.json`（**接力契约 + 视觉契约 + 基础视觉风格契约的机器可读载体**——下游结构化消费衔接、视觉一致性与所选风格；缺它或缺必填字段时 `n2d-review/scripts/gate.py --stage image|video|compose` 会阻断）。
+
+**`visual_contract` 是视觉契约的上游真值源（keystone）**：轴线·视线、场景光位、人物状态演进、景别阶梯本质都是**分镜设计阶段（本 skill）的导演决策**——在写 `故事板.md` 时就该定死，**不是留给 n2d-image 对着分镜剧本凭空发明**。n2d-image 的「本集视觉一致性契约」**继承本块**（见 `n2d-image/references/prompt_format.md §2.1`），逐镜 `视线方向/光位锚` 字段从这里取真值。凡视频改不动、要烤进首帧像素的视觉变量，源头都在这。
+
+**`style_contract` 是基础视觉风格的上游真值源**：风格来自选择点 `基础视觉风格` 与 `global_style.md`。不要只在 prompt 末尾加 `cinematic/realistic/anime`；必须在分镜设计阶段定死风格名、视觉基调、镜头与构图、光色策略、运动边界和风格禁忌。n2d-image 的「本集基础视觉风格契约」继承本块，把所选风格烤进首帧；n2d-video 再继承同一契约，只做与风格相容的运动。缺字段时 gate 阻断。旧 `cinematic_contract` 仅作历史兼容。
+
+**`template` + `template_contract` 是复杂镜头的上游真值源**：凡 Clip 涉及打斗、追逐、对话反打、法术爆发、飞行、亲密互动、拥抱拉扯、多人同框、群像站位，必须按 `专项镜头模板库.md` 选模板并写契约。允许的模板 ID：`fight_exchange`、`chase`、`dialogue_shot_reverse`、`magic_burst`、`flight`、`intimate_interaction`、`hug_or_pull`、`multi_character_same_frame`、`ensemble_blocking`、`multi_person_blocking`（legacy）。普通空镜/单人静态反应可省略；复杂镜头缺模板或字段不全时 gate 阻断。
+
+每个 clip 带 `continuity` 块，`start_state` 应等于上一 clip 的 `end_state`：
+
 ```json
-{ "episode": 1, "clips": [
-  { "id": "EP01_CLIP01", "duration": 7, "scene": "冷宫寝殿/夜/内",
-    "continuity": {
-      "start_state": "首帧：沈念蜷坐木榻、视线投向门口",
-      "end_state": "沈念起身、右手扶榻、视线移向窗",   // ← 下一 clip 的 start_state 原样复制这句
-      "transition": "match_cut",                      // match_cut|eyeline|action_cut|empty_buffer|j_cut|hard_cut
-      "need_endframe": true,                          // 默认 true；非最终 Clip 若 false 必填 endframe_exempt_reason
-      "endframe_png": "出图/第1集/镜头02_end.png"      // need_endframe 时由 n2d-image 落档后回填
+{ "episode": 1, "title": "本宫才是这皇宫最大的妖·第1集", "source": "原著章节1-2",
+  "total_duration": 86.5,
+  "policy": { "tailframe_default": true },        // 首尾双帧接力为默认契约；gate 要求 =true
+
+  "visual_contract": {                            // ← 视觉契约种子（keystone）；n2d-image 继承，勿留空
+    "色调基线": "冷青压暗红；金瞳/妖气只在镜7爽点后出现，之前不得泄露",
+    "场景光位锚": {
+      "冷宫寝殿": { "主光方向": "画左前", "色温": "3000K 暖", "动机光源": "残烛" }
     },
-    "shots": [ { "t": "0-4s", "lens": "全景·推镜", "desc": "...", "video_prompt": "..." } ] }
-]}
+    "场景轴线视线": {
+      "冷宫寝殿": { "站位": "沈念居画左、柳娘子居画右后", "轴线": "床→门 横轴", "默认视线": "沈念看画右门口" }
+    },
+    "角色状态演进": {
+      "沈念": [ { "自": "镜3", "状态": "左颊新伤", "保持": "至集尾不复原" },
+                { "自": "镜7", "状态": "金瞳觉醒态", "保持": "镜7后" } ]
+    },
+    "景别阶梯": "镜1 ELS establish → 镜2-3 MS → 镜5 CU 爽点；相邻镜不撞同景别同机位"
+  },
+
+  "style_contract": {                             // ← 基础视觉风格契约；n2d-image/video 继承，勿留空
+    "风格名": "国漫写实",
+    "视觉基调": "东方幻想国漫，角色比例略理想化，场景和服装材质写实，高细节但不照片化",
+    "镜头与构图": "保留影视景别和轴线；可用更强剪影、广角压迫和法术特写，但不随机变透视",
+    "光色策略": "青灰为主，烛火金只在情绪转折处强调；强光来自月光、烛火、符阵或兵器反光",
+    "运动边界": "慢推、固定、跟摇为主；爽点可短促环绕或轻甩，禁止无理由飞行镜头",
+    "风格禁忌": ["欧美脸漂移", "页游塑料盔甲", "随机霓虹", "过度磨皮", "背景像贴图", "低幼Q版"]
+  },
+
+  "clips": [
+    { "id": "EP01_CLIP01", "label": "冷开场", "duration": 7, "scene": "冷宫寝殿/夜/内",
+      "rhythm": "铺垫·长镜",                         // 与 故事板.md 节奏注记一致（铺垫·长镜|加速·碎切|爽点·CU硬切|留白·定格）
+      "template": "dialogue_shot_reverse",            // 复杂镜头才填；普通空镜/单人反应可省略
+      "template_contract": {                          // 复杂镜头模板契约；字段见 专项镜头模板库.md
+        "template_id": "dialogue_shot_reverse",
+        "beats": ["沈念听见门外脚步", "反打柳娘子逼近", "沈念抬眼回望"],
+        "blocking": "沈念画左床榻，柳娘子画右门口，二人隔床幔对视",
+        "camera_rule": "正反打守床→门横轴；过肩只从沈念肩后向画右拍，不越轴",
+        "continuity_must": ["沈念画左、柳娘子画右", "烛火主光画左前", "沈念左颊伤不回退"],
+        "negative": ["不要跳轴", "不要交换左右站位", "不要新增第三人正脸"],
+        "axis": "床→门横轴",
+        "eyeline": "沈念看画右门口，柳娘子看画左床榻",
+        "shot_pairing": "Clip01A 沈念反应 CU / Clip01B 柳娘子过肩逼问"
+      },
+      "firstframe_png": "出图/第1集/图片/镜头01_冷开场.png",   // 由 n2d-image 落档后回填；gate image/video 必查
+      "video_out": "出视频/第1集/视频/Clip01_冷开场.mp4",      // 由 n2d-video 落档后回填
+      "continuity": {
+        "start_state": "首帧：沈念蜷坐木榻、视线投向门口",
+        "end_state": "沈念起身、右手扶榻、视线移向窗",   // ← 下一 clip 的 start_state 原样复制这句
+        "eyeline": "沈念视线画右门口（继承 visual_contract.场景轴线视线，正反打镜按此对位）",
+        "shot_size": "MS（继承 visual_contract.景别阶梯，不撞上一镜）",
+        "transition": "match_cut",                      // match_cut|eyeline|action_cut|empty_buffer|j_cut|hard_cut
+        "need_endframe": true,                          // 默认 true；非最终 Clip 若 false 必填 endframe_exempt_reason
+        "endframe_png": "出图/第1集/图片/镜头02_end.png"      // need_endframe 时由 n2d-image 落档后回填
+      },
+      "shots": [ { "t": "0-4s", "lens": "全景·推镜", "desc": "...", "video_prompt": "..." } ] }
+  ]}
 ```
+
+> **字段权责**：`duration` = 所含镜头时长之和（来自 `镜头时长.json`，配音驱动，勿手填臆造——`validate_timings.py` 会对账 ∑clip.duration ≈ ∑镜头时长）；`firstframe_png`/`endframe_png` 由 n2d-image 落档回填、`video_out` 由 n2d-video 回填（本 skill 先按命名约定占位）；`visual_contract` + `style_contract` + `continuity` + 复杂镜头 `template_contract` 由本 skill 在分镜设计时写死。
 
 ---
 
@@ -139,7 +195,7 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 ```markdown
 ## 角色出图
 ### CHAR_01 {姓名} @ 本集状态（如：惊醒/战斗）
-中文 Prompt：（复用角色卡锚定 + 本集动作表情 + 景别 + 画风词 + 电影级光影）
+中文 Prompt：（复用角色卡锚定 + 本集动作表情 + 景别 + 按 `基础视觉风格` 派生的画风词与光色）
 英文 Prompt：
 
 ## 场景出图

@@ -8,29 +8,28 @@ import re
 from typing import Dict, Iterable, List, Optional, Tuple
 
 try:
-    from n2d_settings import is_video_first
+    from n2d_contract import routing_stages, stage_specs
+    from n2d_settings import is_native_av, is_video_first
 except ImportError:  # when imported as package-ish via sys.path parent
-    from .n2d_settings import is_video_first
+    from .n2d_contract import routing_stages, stage_specs
+    from .n2d_settings import is_native_av, is_video_first
 
 
-STAGES = [
-    (["剧本改编", "bgm", "封面"], "阶段1·剧本改编", "n2d-script", "/n2d-script {root} {ep}"),
-    (["配音"], "角色配音", "n2d-voice", "/n2d-voice {root} {ep}"),
-    # 素材清单/字幕中/字幕英 也是阶段2·分镜设计(finalize_storyboard)的产物，归 n2d-script
-    # 路由（与 n2d-progress/SKILL.md 路由表一致），否则它们未完成时会落出空前沿「」。
-    (["分镜设计", "素材清单", "字幕中", "字幕英"], "阶段2·分镜设计", "n2d-script", "/n2d-script {root} {ep}  (配音后定稿)"),
-    (["出图prompt", "出图"], "出图", "n2d-image", "/n2d-image {root} {ep}"),
-    (["视频prompt", "视频"], "图生视频", "n2d-video", "/n2d-video {root} {ep}"),
-    (["成片"], "合成成片", "n2d-compose", "/n2d-compose {root} {ep}"),
-]
+# Single source of truth for routing stage order.  The tuple shape is kept for
+# backward compatibility with progress.py and n2d-progress/scan.py.
+STAGES = routing_stages()
+
+# 路由用的阶段规格（只取参与路由的），带 requires/owner/command/progress_columns。
+_ROUTING_SPECS = [s for s in stage_specs() if s.get("routes")]
 
 META_COLS = {"集", "字数", "序号", "#"}
 
-# 集号兼容 ASCII / 全角数字 / 中文数字（CLAUDE.md 记载 export.py 已为同类问题踩过坑）
+# 集号兼容 ASCII / 全角数字 / 中文数字（旧导出脚本曾踩过同类坑）
 _FULLWIDTH = {ord("０") + i: ord("0") + i for i in range(10)}
 _CN_DIGIT = {"零": 0, "〇": 0, "一": 1, "二": 2, "两": 2, "三": 3, "四": 4,
              "五": 5, "六": 6, "七": 7, "八": 8, "九": 9}
 _EP_TOKEN = r"[\d０-９一二三四五六七八九十百零〇两]+"
+EP_ROW_RE = re.compile(r"^\|\s*第\s*" + _EP_TOKEN + r"\s*集\s*\|")
 
 
 def _cn_to_int(s: str) -> Optional[int]:
@@ -52,6 +51,39 @@ def _cn_to_int(s: str) -> Optional[int]:
         else:
             return None
     return total + section
+
+
+def episode_number(value: str) -> Optional[int]:
+    """从 '第12集'/'第１２集'/'第十二集'/'十二' 中取集号；解析不出返回 None。"""
+    text = (value or "").strip()
+    m = re.search(r"第\s*(" + _EP_TOKEN + r")\s*集", text)
+    token = m.group(1) if m else re.sub(r"^\s*第|\s*集\s*$", "", text).strip()
+    if not token or not re.fullmatch(_EP_TOKEN, token):
+        return None
+    return _cn_to_int(token)
+
+
+def normalize_episode(value: str) -> str:
+    """把可解析集号统一成 '第N集'，不可解析时返回去空白原值。"""
+    n = episode_number(value)
+    return f"第{n}集" if n is not None else (value or "").strip()
+
+
+def episode_number(value: str) -> Optional[int]:
+    """从 '第12集'/'第１２集'/'第十二集'/'十二' 中取集号；解析不出返回 None。"""
+    text = (value or "").strip()
+    # 提取 "第" 与 "集" 之间的内容，或去除前缀后缀
+    m = re.search(r"第\s*(" + _EP_TOKEN + r")\s*集", text)
+    token = m.group(1) if m else re.sub(r"^\s*第|\s*集\s*$", "", text).strip()
+    if not token or not re.fullmatch(_EP_TOKEN, token):
+        return None
+    return _cn_to_int(token)
+
+
+def normalize_episode(value: str) -> str:
+    """把可解析集号统一成 '第N集'，不可解析时返回去空白原值。"""
+    n = episode_number(value)
+    return f"第{n}集" if n is not None else (value or "").strip()
 
 
 def cell_state(v: str) -> str:
@@ -81,6 +113,18 @@ def is_started(v: str) -> bool:
     return cell_state(v) in ("done", "partial")
 
 
+def is_progress_satisfied(root: str, row: Dict[str, str], col: str) -> bool:
+    """Mode-aware progress satisfaction for one column."""
+    if is_native_av(root) and col == "配音":
+        return True
+    return is_done(row.get(col, ""))
+
+
+def is_flow_complete(root: str, row: Dict[str, str], flow: Iterable[str]) -> bool:
+    """Mode-aware full-row completion used by progress scanners."""
+    return all(is_progress_satisfied(root, row, c) for c in flow)
+
+
 def progress_path(root: str) -> str:
     root = root.rstrip("/")
     primary = os.path.join(root, "_进度.md")
@@ -100,7 +144,7 @@ def parse_progress(root: str) -> Tuple[List[str], List[Dict[str, str]]]:
         if header is None and re.match(r"^\|\s*集\s*\|", ln):
             header = [c.strip() for c in ln.split("|")[1:-1]]
             continue
-        if header and re.match(r"^\|\s*第\s*" + _EP_TOKEN + r"\s*集\s*\|", ln):
+        if header and is_episode_row(ln):
             cells = [c.strip() for c in ln.split("|")[1:len(header) + 1]]
             row = dict(zip(header, cells))
             row["_ep"] = row.get("集") or cells[0]
@@ -111,6 +155,10 @@ def parse_progress(root: str) -> Tuple[List[str], List[Dict[str, str]]]:
     if header is None:
         raise ValueError("未找到表头（| 集 | …）")
     return header, rows
+
+
+def is_episode_row(line: str) -> bool:
+    return bool(EP_ROW_RE.match(line))
 
 
 def flow_columns(header: Iterable[str]) -> List[str]:
@@ -127,6 +175,26 @@ def manifest_path(root: str, ep: str) -> Optional[str]:
     return None
 
 
+def placeholder_indices(manifest) -> List[int]:
+    """从已加载的时长清单(list) 取占位句下标（优先 idx 字段，回退序号）。
+    占位判定的单一真值源——finalize/compose/fit_voice 都应走这里，别各写 `x.get('占位')`。"""
+    if not isinstance(manifest, list):
+        return []
+    return [r.get("idx", i) for i, r in enumerate(manifest) if isinstance(r, dict) and r.get("占位")]
+
+
+def placeholder_rows(manifest) -> List[dict]:
+    """已加载清单里的占位句（行对象列表）。"""
+    if not isinstance(manifest, list):
+        return []
+    return [r for r in manifest if isinstance(r, dict) and r.get("占位")]
+
+
+def manifest_is_placeholder(manifest) -> bool:
+    """已加载清单是否含占位句（布尔版）。"""
+    return bool(placeholder_rows(manifest))
+
+
 def voice_is_placeholder(root: str, ep: str) -> Optional[bool]:
     p = manifest_path(root, ep)
     if not p:
@@ -136,27 +204,49 @@ def voice_is_placeholder(root: str, ep: str) -> Optional[bool]:
     except (OSError, ValueError):
         return None
     if isinstance(data, list):
-        return any(isinstance(x, dict) and x.get("占位") for x in data)
+        return manifest_is_placeholder(data)
     return None
 
 
 def stage_of(root: str, row: Dict[str, str], header: List[str]) -> Dict[str, Optional[str]]:
-    """Return the next stage for a row, with production-mode adjustments."""
+    """Return the next stage for a row, with production-mode adjustments.
+
+    路由按 STAGE_GRAPH 顺序走，但消费每个阶段的 `requires`（跨列硬依赖）而非纯列序，
+    并按 `制作模式` 调整：
+      - 原生音画：配音是可选旁白层——`配音` 列视作已满足、不把 n2d-voice 当硬路由步骤，
+        免得分镜/出图被"先去配音"误推卡住（说话镜由视频后端一次出同步音画）。
+      - 先出视频后配音：合成前若配音仍是占位，前沿改指 n2d-voice 先补真音。
+    """
     ep = row.get("_ep") or row.get("集") or ""
-    for cols, label, skill, cmd in STAGES:
-        for col in cols:
-            if col in header and not is_done(row.get(col, "")):
-                note = ""
-                if is_video_first(root) and skill == "n2d-compose" and voice_is_placeholder(root, ep):
-                    return {
-                        "ep": ep,
-                        "col": col,
-                        "label": "补真实配音",
-                        "skill": "n2d-voice",
-                        "cmd": "/n2d-voice {root} {ep}  (补真音；之后 fit_voice_to_clips + n2d-compose)",
-                        "note": "先出视频后配音模式：当前配音仍是占位，合成前必须先补真实配音。",
-                    }
-                return {"ep": ep, "col": col, "label": label, "skill": skill, "cmd": cmd, "note": note}
+    def satisfied(col: str) -> bool:
+        return is_progress_satisfied(root, row, col)
+
+    native_av = is_native_av(root)
+
+    for spec in _ROUTING_SPECS:
+        skill = str(spec["owner"])
+        # 原生音画：不把 配音 当硬路由步骤（避免误推 n2d-voice 卡住分镜/出图）
+        if native_av and skill == "n2d-voice":
+            continue
+        cols = [c for c in spec.get("progress_columns", ()) if c in header]
+        if not cols or all(satisfied(c) for c in cols):
+            continue
+        # 命中未完成阶段：其 requires（跨列硬依赖）须先满足，否则真正的前沿在更早的缺口——
+        # 让外层循环按 STAGE_GRAPH 顺序先命中那个缺口阶段。
+        if any(r in header and not satisfied(r) for r in spec.get("requires", ())):
+            continue
+        col = next(c for c in cols if not satisfied(c))
+        label, cmd = str(spec["label"]), str(spec["command"])
+        if not native_av and is_video_first(root) and skill == "n2d-compose" and voice_is_placeholder(root, ep) is not False:
+            return {
+                "ep": ep,
+                "col": col,
+                "label": "补真实配音",
+                "skill": "n2d-voice",
+                "cmd": "/n2d-voice {root} {ep}  (补真音；之后 fit_voice_to_clips + n2d-compose)",
+                "note": "先出视频后配音模式：当前真实配音未确认（缺清单或仍是占位），合成前必须先补真实配音。",
+            }
+        return {"ep": ep, "col": col, "label": label, "skill": skill, "cmd": cmd, "note": ""}
     return {"ep": ep, "col": None, "label": "✅已成片", "skill": None, "cmd": None, "note": ""}
 
 
@@ -178,4 +268,3 @@ def summarize(root: str) -> Dict[str, object]:
             label = str(r["label"])
             bottleneck[label] = bottleneck.get(label, 0) + 1
     return {"header": header, "rows": rows, "routes": routes, "first": first, "done": done, "bottleneck": bottleneck}
-

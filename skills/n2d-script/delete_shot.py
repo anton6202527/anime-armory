@@ -99,10 +99,22 @@ else:
 # 5) finalize 重定时（纯 python）
 subprocess.run([sys.executable, os.path.join(SCRIPT_DIR, 'finalize_storyboard.py'), root, ep], check=True)
 
+# 5.5) 跑 image gate 强制对账 storyboard.json —— 删句后 storyboard.json 的 Clip/接力/duration 会失配，
+#      靠人记着改极易漏；这里主动让 gate 把"现在哪里对不上"列出来（非阻断，删镜本身已落地）。
+gate = os.path.join(SCRIPT_DIR, '..', 'n2d-review', 'scripts', 'gate.py')
+if os.path.isfile(gate):
+    print('\n=== 删镜后 storyboard 对账（gate --stage image，仅提示）===')
+    r = subprocess.run([sys.executable, gate, root, ep, '--stage', 'image'],
+                       capture_output=True, text=True)
+    out = (r.stdout or '').strip()
+    print('\n'.join(l for l in out.splitlines() if ('storyboard' in l or '故事板' in l or 'continuity'
+          in l or '尾帧' in l or '首帧' in l or 'block' in l)) or '  （gate 未报 storyboard 相关问题）')
+    print('  ↑ 若上面列出接力/首尾帧/duration 问题，按提示改 storyboard.json 再出图。')
+
 # 6) 还需人工（非自动推导链，脚本不动）
 print('\n=== 还需手动处理 ===')
 print(f'  □ 设计文档删 {sorted(shots)} 相关块：故事板.md / 分镜剧本.md / bgm.txt / storyboard.json'
-      '（故事板与 storyboard.json 的 Clip 视情况重编号 + 同步拆Clip子标签）')
+      '（故事板与 storyboard.json 的 Clip 视情况重编号 + 同步拆Clip子标签；改完按上面 gate 对账复跑）')
 print(f'  □ 若已出图/出视频：移走 出图/{ep}/镜头X_*.png 与 出视频/{ep}/视频/对应 Clip*.mp4 → 废料/')
 print(f'  □ 重跑 /n2d-compose <作品根> {ep} 出新成片')
 print('  □ 过一眼 novel2drama/references/导演节奏.md 留存自查（别把钩子/集尾删没）')

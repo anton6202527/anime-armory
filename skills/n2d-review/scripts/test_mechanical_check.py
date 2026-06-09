@@ -26,9 +26,9 @@ def test_parse_srt_missing():
 
 
 def test_placeholder_regex():
-    assert mc.PLACEHOLDER.search("（待精修：依据 voiceover）")
-    assert mc.PLACEHOLDER.search("placeholder text")
-    assert not mc.PLACEHOLDER.search("正常的字幕文本")
+    assert mc.is_placeholder("（待精修：依据 voiceover）")
+    assert mc.is_placeholder("placeholder text")
+    assert not mc.is_placeholder("正常的字幕文本")
 
 
 # ---- 对账引擎（跨 skill 格式契约）：check_subtitles / check_completeness ----
@@ -80,6 +80,32 @@ def test_check_subtitles_text_mismatch_blocks(tmp_path):
     assert _blocks("字幕文本≠配音文本")
 
 
+def _warns(substr):
+    return [f for f in mc.findings if f[0] == mc.WARN and substr in f[3]]
+
+
+def test_dirty_punct_warns_even_when_parity_passes(tmp_path):
+    # 字幕与配音"同样脏"(。，)→ 文本对账能过，但脏标点 lint 仍须抓（审查自动触发）
+    mc.findings.clear()
+    root, ep = str(tmp_path), "第1集"
+    zh = [("00:00:00,000", "00:00:02,000", "走向。，慎重选择。")]
+    man = [{"文本": "走向。，慎重选择。", "start": 0.0}]
+    _mk(root, ep, zh, man)
+    mc.check_subtitles(root, ep, man, 40, 42)
+    assert _warns("脏标点")                       # 抓到脏标点
+    assert not _blocks("字幕文本≠配音文本")         # 同样脏 → 对账反而过，故必须靠 lint
+
+
+def test_clean_punct_not_flagged(tmp_path):
+    mc.findings.clear()
+    root, ep = str(tmp_path), "第1集"
+    zh = [("00:00:00,000", "00:00:02,000", "走向。慎重选择。")]
+    man = [{"文本": "走向。慎重选择。", "start": 0.0}]
+    _mk(root, ep, zh, man)
+    mc.check_subtitles(root, ep, man, 40, 42)
+    assert not _warns("脏标点")
+
+
 def test_check_completeness_placeholder_blocks(tmp_path):
     mc.findings.clear()
     root, ep = str(tmp_path), "第1集"
@@ -87,3 +113,16 @@ def test_check_completeness_placeholder_blocks(tmp_path):
     _mk(root, ep, None, man)
     mc.check_completeness(root, ep, man)
     assert _blocks("占位音色")
+
+
+def test_en_dirty_punct_warns(tmp_path):
+    mc.findings.clear()
+    root, ep = str(tmp_path), "第1集"
+    zh = [("00:00:00,000", "00:00:02,000", "你好")]
+    man = [{"文本": "你好", "start": 0.0}]
+    _mk(root, ep, zh, man)
+    # 写一份脏英文字幕（标点前空格）
+    open(os.path.join(root, "脚本", ep, "字幕_英文.srt"), "w", encoding="utf-8").write(
+        "1\n00:00:00,000 --> 00:00:02,000\nHello , world\n")
+    mc.check_subtitles(root, ep, man, 40, 42)
+    assert _warns("英文脏标点")

@@ -2,7 +2,7 @@
 
 适用于所有 novel-* 写作 skill（spinoff / expand / continue / condense / 完全原创）的章节划分。**节拍优先，字数兜底**：一章是一个戏剧节拍单元，不是一个字数桶。
 
-本文件是 novel-* 家族的"拆分标准"概念源；n2d-script 的 `split_novel.py` 是同一标准在漫剧生产线上的脚本实现。
+本文件是 novel-* 家族的"拆分标准"说明；机器单一真值源在 `novel-craft/scripts/contract.py`。n2d-script 的 `split_novel.py` 是同一标准在漫剧生产线上的脚本实现。
 
 ## 核心原则
 
@@ -22,7 +22,7 @@
 | **网文长篇**（起点 V 后） | 5000–8000 | 4000 – 10000 | ~12-20 | `long` |
 | **短篇集** | 6000–10000 | 5000 – 15000 | ~10-17 | `short` |
 
-> **代码镜像**：`novel-create/scripts/init_project.py` 的 `SCALE_PROFILE` 与本表 1:1（每档 band 严格相等）。改任一处 band，两处必须同步。
+> **机器配置**：`novel-craft/scripts/contract.py` 的 `SCALE_PROFILES` 与本表 1:1（每档 band 严格相等）。改分档先改 `contract.py`，再同步本说明和测试。
 
 **判断口诀**：节拍 1-2 个 → 1000-2500 字；节拍 3-4 个 → 3000-8000 字。
 

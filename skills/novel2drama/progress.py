@@ -10,7 +10,8 @@ import sys, os, re
 COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'common'))
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
-from n2d_route import STAGES, cell_state, format_route, parse_progress, progress_path, stage_of, summarize
+from n2d_contract import write_episode_manifest
+from n2d_route import STAGES, cell_state, format_route, is_episode_row, parse_progress, progress_path, stage_of, summarize
 
 def prog_path(root):
     return progress_path(root)
@@ -47,6 +48,10 @@ def do_set(root, ep, col, val):
         out.append(ln)
     if not hit: print(f"{ep} 不在进度表"); sys.exit(1)
     open(p, 'w', encoding='utf-8').write('\n'.join(out))
+    try:
+        write_episode_manifest(root, ep, extra={"last_progress_column": col, "last_progress_value": val})
+    except Exception as e:
+        print(f"⚠️ manifest 快照写入失败：{e}")
     print(f"✅ 回写 {ep} 「{col}」= {val}")
 
 def _split_row(ln):
@@ -81,7 +86,7 @@ def do_ensure_col(root, col, default='⬜'):
             filler = '---' if re.match(r'^\|\s*-+', ln) else col
             cells.insert(insert_at, filler)
             out.append('| ' + ' | '.join(cells) + ' |' + trailing)
-        elif re.match(r'^\|\s*第\d+集\s*\|', ln):
+        elif is_episode_row(ln):
             cells = _split_row(ln); trailing = _row_trailing(ln)
             while len(cells) < len(header):
                 cells.append('')

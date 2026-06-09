@@ -1,6 +1,6 @@
 # 输出格式规范
 
-两个文件内容一致，仅格式不同；默认落 `写小说/<书名>/小说/`，`--out` 可改。
+正文文件内容一致，仅格式不同；另有机器溯源 manifest。默认落 `写小说/<书名>/小说/`，`--out` 可改。
 
 ## `<书名>.txt`
 - UTF-8。
@@ -12,6 +12,25 @@
 - python-docx 生成。
 - provenance 块在最前（普通段落）。
 - 每章标题 = Heading 1；正文逐段为普通段落。
+
+## `source_manifest.json`
+
+后续派生 skill 和视频改编线优先读本文件做合规/溯源判断，不解析 txt/docx 文件头。
+
+| 字段 | 含义 |
+|---|---|
+| schema_version | 当前为 `1` |
+| kind | 固定 `novel_source_manifest` |
+| title | 书名 |
+| source_url | 抓取目录页/作品页 URL |
+| source_type | `gutenberg/wikisource/generic` |
+| fetched_at | 抓取日期（YYYY-MM-DD） |
+| chapters | 章节数 |
+| chars | 总字数（去换行） |
+| rights_status | `public-domain/user-declared` |
+| rights_note | 人类可读版权判定 |
+| requires_user_rights | generic 来源是否要求用户授权声明 |
+| rights_declared | 本次抓取是否带 `--i-have-rights` |
 
 ## provenance 字段
 | 字段 | 含义 |

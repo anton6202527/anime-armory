@@ -6,7 +6,9 @@
             beatgrid.duration vs 歌/song.wav 时长一致。
   clip   —— (需 ffprobe) 每 clip 时长、clip 疑似等长(不卡点)、clip 总时长 ≈ 歌长。
   字幕   —— lyrics.lrc/karaoke.ass 占位未精修、时间单调/不重叠、时间越界(超歌长)、行数对账。
+  规划   —— clip_plan/timeline/jobs manifest 可解析、clip 对账、timeline 总时长、selected video 对账。
   合成   —— (需 ffprobe) 成片存在、时长 ≈ 歌长、分辨率符 _meta.aspect、有音轨(MV 没声音=废)。
+  合规   —— AI 视觉使用披露留痕。
   对账   —— 词/歌/beatgrid/出图/clip/成片 快照、_meta.has_song/has_lyrics vs 实际、段落数 vs structure。
 
 **不覆盖**需要语义判断的维度（崩脸/场景漂移/画风/运镜服务节奏/卡点体感/换脸合规水印）——
@@ -36,7 +38,7 @@ def have_ffprobe():
         _HAVE_FFPROBE = shutil.which("ffprobe") is not None
     return _HAVE_FFPROBE
 
-PLACEHOLDER = re.compile(r"待精修|待填|待定|占位|placeholder|TODO|（待|\(待")
+PLACEHOLDER = re.compile(r"待精修|待填|待定|占位|歌词…|歌词\.\.\.|placeholder|TODO|（待|\(待")
 
 
 def load_json(path):
@@ -231,6 +233,79 @@ def check_subtitles(root, songlen, lyric_lines):
     add(INFO, "字幕", src, f"快照：{len(lines)} 行")
 
 
+def check_alignment_report(root):
+    path = os.path.join(root, "字幕", "alignment_report.json")
+    if not os.path.exists(path):
+        if os.path.exists(os.path.join(root, "字幕", "lyrics.lrc")) or os.path.exists(os.path.join(root, "字幕", "karaoke.ass")):
+            add(WARN, "字幕", "字幕/alignment_report.json", "有字幕但缺对齐报告——建议重跑新版 mv-lyric-sync 便于 QA")
+        return
+    report = load_json(path)
+    if report is None:
+        add(BLOCK, "字幕", "字幕/alignment_report.json", "对齐报告损坏不可解析")
+        return
+    warnings = report.get("warnings") or []
+    for warning in warnings:
+        add(WARN, "字幕", "字幕/alignment_report.json", f"对齐报告提示：{warning}")
+    add(INFO, "字幕", "字幕/alignment_report.json",
+        f"对齐快照：{report.get('aligned_lines', 0)}/{report.get('lyric_lines', 0)} 行 · unused={report.get('unused_word_segments', 0)}")
+
+
+def check_plan_manifests(root, songlen):
+    plan_path = os.path.join(root, "分镜", "clip_plan.json")
+    timeline_path = os.path.join(root, "分镜", "timeline_manifest.json")
+    if not os.path.exists(plan_path):
+        add(WARN, "规划", "分镜/clip_plan.json", "缺 clip plan——建议先跑 mv-plan/scripts/plan_clips.py，避免出图/出视频/合成各自猜时间线")
+        return
+    plan = load_json(plan_path)
+    if plan is None:
+        add(BLOCK, "规划", "分镜/clip_plan.json", "clip_plan 损坏不可解析")
+        return
+    clips = plan.get("clips") or []
+    if not clips:
+        add(WARN, "规划", "分镜/clip_plan.json", "clip_plan 里没有 clips")
+        return
+    plan_ids = [c.get("clip_id") for c in clips]
+    if len(plan_ids) != len(set(plan_ids)):
+        add(BLOCK, "规划", "分镜/clip_plan.json", "clip_id 重复")
+    total = sum(float(c.get("duration") or 0) for c in clips)
+    if songlen and abs(total - songlen) > tol(songlen):
+        add(WARN, "规划", "分镜/clip_plan.json", f"clip_plan 总时长 {total:.1f}s 与 歌长 {songlen:.1f}s 差大")
+    add(INFO, "规划", "分镜/clip_plan.json", f"快照：{len(clips)} clips · 总时长 {total:.1f}s")
+    if not os.path.exists(timeline_path):
+        add(WARN, "规划", "分镜/timeline_manifest.json", "缺 timeline manifest——mv-compose 会退回文件顺序拼接")
+        return
+    timeline = load_json(timeline_path)
+    if timeline is None:
+        add(BLOCK, "规划", "分镜/timeline_manifest.json", "timeline_manifest 损坏不可解析")
+        return
+    tids = [c.get("clip_id") for c in (timeline.get("clips") or [])]
+    if set(tids) != set(plan_ids):
+        add(WARN, "规划", "分镜/timeline_manifest.json", "timeline clip_id 与 clip_plan 不一致")
+    missing_video = [c.get("video_path") for c in (timeline.get("clips") or []) if c.get("video_path") and not os.path.exists(os.path.join(root, c["video_path"]))]
+    if missing_video:
+        add(WARN, "规划", "分镜/timeline_manifest.json", f"timeline 有 {len(missing_video)} 个 video_path 尚不存在（未出视频/未挑版则正常）")
+
+
+def check_video_jobs(root):
+    path = os.path.join(root, "出视频", "jobs_manifest.json")
+    clips_exist = bool(glob.glob(os.path.join(root, "出视频", "视频", "*.mp4")))
+    if not os.path.exists(path):
+        if clips_exist:
+            add(WARN, "规划", "出视频/jobs_manifest.json", "已有视频 clip 但缺 video jobs manifest——建议用 video_jobs.py 登记来源/挑版")
+        return
+    manifest = load_json(path)
+    if manifest is None:
+        add(BLOCK, "规划", "出视频/jobs_manifest.json", "jobs_manifest 损坏不可解析")
+        return
+    jobs = manifest.get("jobs") or []
+    selected = [j for j in jobs if j.get("selected_take")]
+    add(INFO, "规划", "出视频/jobs_manifest.json", f"视频任务快照：{len(jobs)} jobs · 已选 {len(selected)}")
+    for job in selected:
+        p = job.get("selected_video_path")
+        if p and not os.path.exists(os.path.join(root, p)):
+            add(BLOCK, "规划", p, f"{job.get('clip_id')} selected_take 已选但成品 clip 不存在")
+
+
 def check_final(root, meta, songlen):
     finals = glob.glob(os.path.join(root, "成片_*.mp4")) + glob.glob(os.path.join(root, "成片*.mp4"))
     finals = sorted(set(finals))
@@ -266,6 +341,26 @@ def check_final(root, meta, songlen):
                     f"成片画幅 {w}x{h}(≈{act:.3f}) 与 _meta.aspect {aspect}(≈{exp:.3f}) 不符")
     add(INFO, "音画", os.path.basename(final),
         f"快照：{dur:.1f}s · {w}x{h} · {'有音轨' if has_audio else '无音轨'}")
+
+
+def check_ai_usage(root):
+    finals = glob.glob(os.path.join(root, "成片_*.mp4")) + glob.glob(os.path.join(root, "成片*.mp4"))
+    path = os.path.join(root, "合规", "ai_usage.json")
+    if not finals:
+        return
+    if not os.path.exists(path):
+        add(WARN, "合规", "合规/ai_usage.json",
+            "已有成片但缺 AI 视觉使用披露——发布/交平台前跑 mv-craft/scripts/ai_usage.py")
+        return
+    payload = load_json(path)
+    if payload is None:
+        add(BLOCK, "合规", "合规/ai_usage.json", "AI 使用披露 JSON 损坏不可解析")
+        return
+    mode = payload.get("visual_mode")
+    if mode not in ("AI-generated", "AI-assisted", "未使用AI视觉"):
+        add(WARN, "合规", "合规/ai_usage.json", f"visual_mode 不在约定枚举内：{mode}")
+    else:
+        add(INFO, "合规", "合规/ai_usage.json", f"AI 视觉使用披露：visual_mode={mode}")
 
 
 def check_lyrics_and_meta(root, meta):
@@ -315,9 +410,13 @@ def main():
     check_completeness(root)
     lyric_lines = check_lyrics_and_meta(root, meta)
     check_beatgrid(root, songlen)
+    check_plan_manifests(root, songlen)
+    check_video_jobs(root)
     check_clips(root, songlen)
     check_subtitles(root, songlen, lyric_lines)
+    check_alignment_report(root)
     check_final(root, meta, songlen)
+    check_ai_usage(root)
     if songlen:
         add(INFO, "音画", "歌/song.wav", f"歌长基准：{songlen:.2f}s（深度音质体检见 song-review）")
 

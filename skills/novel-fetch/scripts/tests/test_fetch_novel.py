@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 import os
 import sys
 
@@ -86,6 +87,26 @@ def test_write_docx_roundtrip(tmp_path):
     assert "第2章 初遇" in headings
     # provenance 也要落进 docx（普通段落）
     assert any("source_url" in para.text for para in doc.paragraphs)
+
+
+def test_source_manifest_public_domain_and_generic(tmp_path):
+    prov = {"source_url": "https://www.gutenberg.org/ebooks/1342", "fetched": "2026-06-01",
+            "chapters": 61, "chars": 700000, "copyright": "公版（Project Gutenberg）"}
+    public_manifest = fn.build_source_manifest("Pride", "gutenberg", prov)
+    assert public_manifest["kind"] == "novel_source_manifest"
+    assert public_manifest["rights_status"] == "public-domain"
+    assert public_manifest["requires_user_rights"] is False
+    assert public_manifest["rights_declared"] is False
+
+    generic_manifest = fn.build_source_manifest("X", "generic", prov, rights_declared=True)
+    assert generic_manifest["rights_status"] == "user-declared"
+    assert generic_manifest["requires_user_rights"] is True
+    assert generic_manifest["rights_declared"] is True
+
+    p = tmp_path / "source_manifest.json"
+    fn.write_source_manifest(str(p), public_manifest)
+    loaded = json.loads(p.read_text(encoding="utf-8"))
+    assert loaded == public_manifest
 
 
 def test_extract_body_from_html():

@@ -27,6 +27,9 @@ import re
 import subprocess
 import sys
 
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "common"))
+from n2d_route import placeholder_rows  # 占位判定单一真值源
+
 
 def shot_num(name):
     """'镜头12' → 12；无数字 → 大数（排末尾）。"""
@@ -117,7 +120,7 @@ def load_inputs(root, ep):
     slots = sorted(((k, float(v)) for k, v in shots.items()),
                    key=lambda kv: shot_num(kv[0]))
     vdir = os.path.dirname(man_p)
-    ph = [r for r in man if isinstance(r, dict) and r.get("占位")]
+    ph = placeholder_rows(man)
     reals = aggregate_reals(man, vdir, lambda p: ffdur(p) if (p and os.path.isfile(p)) else 0.0)
     return slots, reals, ph
 

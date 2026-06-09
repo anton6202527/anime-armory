@@ -26,6 +26,7 @@ description: 通用水印（公共能力，不属于任何生产线家族）— 
 
 - AI 合成内容（生图 / 生视频 / 换脸 / 配音）投放前**必须**带可见 AI 标识 + 元数据；faceswap 与 voice-clone 的产物**强制**走本步，不可跳过。
 - 本工具写可见提示 + 文件元数据（视频 `comment`、PNG `Comment`、JPEG EXIF `ImageDescription`）。中国法还要**隐式水印**——平台投放时按各平台要求另补隐式标识，隐式标识不在本地工具范围。
+- n2d 产线不得把水印当“成片后想起来再补”的事项：先在 `合规/compliance_manifest.json` 声明 `ai_disclosure` 和 `watermark` 策略；本工具执行后，把输出文件写回 `watermark.final_assets[]`。`n2d-review/scripts/gate.py --stage compose` 检查策略，`--stage review` 检查最终水印资产。
 - **绝不**提供去水印/抹标识/伪造标识能力。
 
 ## 用法
@@ -58,7 +59,8 @@ python3 <skill>/watermark.py 成片.mp4 成片_品牌.mp4 --mode brand \
 
 ## 被谁调用
 - `video-faceswap` / `image-faceswap`：换脸产物强制烧 `--mode ai`（合规）。
-- `n2d-compose` / `mv-compose`：成片可选烧 `--mode ai`（AI 合成投放）或 `--mode brand`（账号/片头水印）。
+- `n2d-compose`：按 `n2d-compliance` 合规包声明的策略烧 `--mode ai` / `--mode brand`，并回写最终资产路径。
+- `mv-compose`：成片可选烧 `--mode ai`（AI 合成投放）或 `--mode brand`（账号/片头水印）。
 - 任何其他线 / 用户单独使用。
 
 ## 常见错误 / 红线

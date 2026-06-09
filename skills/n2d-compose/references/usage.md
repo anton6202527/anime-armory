@@ -13,6 +13,17 @@
 产物：<作品根>/合成/第N集/成片_第N集_{mode}.mp4
 
 ## 可调参数（默认=原行为，全部可选）
+画幅（不写死·对齐 `_偏好约定.md`「画幅」选择点）：
+    # 默认按 <作品根>/_设置.md 的「画幅」决定；竖屏 9:16→1080x1920，横屏 16:9→1920x1080。
+    bash <skill>/compose.sh <作品根> 第N集                  # 读 _设置.md 画幅（缺则默认 9:16）
+    ASPECT=16:9 bash <skill>/compose.sh <作品根> 第N集       # 显式横屏（出海/横屏漫剧），字幕坐标随之
+    # 规格化 + pad + 字幕渲染(render_subs)全部按解析出的 W×H 走，不再写死竖屏。
+clip 级缓存（幂等·改字幕/BGM 不重转所有 clip）：
+    # 规格化后的 clip 缓存在 合成/第N集/_clipcache/（键=源名+mtime+几何+crf+preset），_work 清空不影响。
+    # 只改字幕/ducking/BGM 时直接复用缓存；换了 clip 源/画幅/crf/preset 才重转对应项。
+    # 想强制全重转：rm -rf 合成/第N集/_clipcache
+时长对账（成片末尾自动跑·非阻断）：
+    # 出片后报「成片≈配音≈字幕末行」；差 >1s 时警告（amix=duration=first 可能裁掉超长配音）。
 质量/速度（粗剪 vs 定稿）：
     VIDEO_CRF=26 VIDEO_PRESET=ultrafast bash <skill>/compose.sh <作品根> 第N集   # 快速粗剪迭代
     VIDEO_CRF=18 VIDEO_PRESET=slow bash <skill>/compose.sh <作品根> 第N集        # 发布定稿（默认 18/medium）
@@ -31,8 +42,13 @@ BGM ducking（配音压 BGM 的力度）：
     # 建议范围 0.15-0.35，脚本上限 0.4，避免破坏音画同步。
 clip 原生音频：
     # 默认转码时剥掉 AI clip 原生音轨，避免原生台词与 n2d-voice 配音双人声
-    KEEP_CLIP_AUDIO=1 bash <skill>/compose.sh <作品根> 第N集 zh
-    # 仅当确认 clip 里是可用环境音、无原生人声时才开；脚本会低音量混入环境底。
+    VIDEO_NATIVE_AUDIO_POLICY=丢弃 bash <skill>/compose.sh <作品根> 第N集 zh
+    VIDEO_NATIVE_AUDIO_POLICY=低音量混入环境声 bash <skill>/compose.sh <作品根> 第N集 zh
+    VIDEO_NATIVE_AUDIO_POLICY=保留原片音轨 bash <skill>/compose.sh <作品根> 第N集 zh
+    # 低音量混入：仅当 n2d-video 的「原生音画 opt-in 清单」确认低风险、无口型、无原生人声时才开。
+    # 保留原片音轨：仅无配音/测试预览/明确要原片声时用；有配音轨时会有双人声风险。
+    # 旧兼容：KEEP_CLIP_AUDIO=1 等价于 VIDEO_NATIVE_AUDIO_POLICY=低音量混入环境声。
+    # 混入音量：CLIP_AUDIO_GAIN=0.25 bash ...（默认低音量 0.35；保留原片音轨默认 1.0）
 
 ## 输入约定（出视频/=只放 clips；配音/成片/=合成/ 下）
 - clips：<作品根>/出视频/第N集/视频/*.mp4（n2d-video 产物，出视频阶段唯一产物）

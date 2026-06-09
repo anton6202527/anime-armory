@@ -3,38 +3,29 @@
 """novel-review 机检：对已写章节做确定性质检，输出问题清单（不做判断题，那是 LLM 的活）。
 
 用法:
-    python3 mechanical_check.py <作品根> [--pov 王敦] [--min 1200] [--max 2800] \
-        [--terms "金丹,道障,王敦密码,烈阳花"] [--no-plagiarism]
+    python3 mechanical_check.py <作品根> [--pov 王敦] [--min 800] [--max 1800] \
+        [--terms "金丹,道障,王敦密码,烈阳花"] [--no-auto-terms] [--no-plagiarism]
 
 检查项：
   1. 格式：每章有 H1 标题 `# 第N章 标题`（N 可阿拉伯/中文数字，标题可带《》或裸标题）+ meta 注释头
-  2. 字数：CJK 字数在 [min,max] 带宽内（漫剧档默认 1200-2800）
-  3. 章末钩子：末段是否以悬念性收尾（启发式，低置信，仅提示）
-  4. 视角"我"泄漏：引号外出现的"我"计数（第三人称限定下应≈0）
-  5. 章号连续性：与 章节/ 目录里其他章是否有缺号/重号；与 设定/章纲.md 标题是否一致
-  6. 术语出现统计：--terms 指定的规范术语在各章的出现次数（供人工看漂移）
-  7. 原文照搬：24 字滑窗与 原作.txt 比对，命中即报（续写/外传用；--no-plagiarism 关闭）
+  2. 字数：CJK 字数在 [min,max] 带宽内（漫剧档默认 800-1800）
+  3. 视角"我"密度：引号外出现的"我"计数（第三人称限定下交 LLM 抽查）
+  4. 章号连续性：与 章节/ 目录里其他章是否有缺号/重号；与 设定/章纲.md 标题是否一致
+  5. 术语出现统计：自动从 设定/ 抽术语，也可用 --terms 追加（供人工看漂移）
+  6. 原文照搬：24 字滑窗与 原作.txt 比对，命中即报（续写/外传用；--no-plagiarism 关闭）
 
 输出：人类可读清单 + 末尾机器可读 JSON（FINDINGS=[...]）。
 """
 import argparse, json, os, re, sys, glob
+from datetime import date
 
-CJK = re.compile(r"[一-鿿]")
-QUOTE_PAIRS = [("「", "」"), ("“", "”"), ("‘", "’"), ("『", "』")]
+_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
+if _COMMON not in sys.path:
+    sys.path.insert(0, _COMMON)
+from n2d_text_utils import cjk_count, strip_quotes  # noqa: E402
+
 # 章号数字：阿拉伯 / 全角 / 中文数字都接受（# 第1章 / # 第一章 / # 第 12 章 均合规）
 CH_NUM = r"[0-9０-９一二三四五六七八九十百千零〇两]+"
-
-
-def cjk_count(s):
-    return len(CJK.findall(s))
-
-
-def strip_quotes(text):
-    """移除成对引号内的内容，返回引号外文本（用于检测叙述里的'我'）。"""
-    out = text
-    for a, b in QUOTE_PAIRS:
-        out = re.sub(re.escape(a) + r"[^" + re.escape(b) + r"]*" + re.escape(b), "", out)
-    return out
 
 
 def read(p):
@@ -58,33 +49,110 @@ def load_outline_titles(root):
     return titles
 
 
+def extract_terms_from_settings(root):
+    """Best-effort canonical term extraction from setting-bible files."""
+    terms = set()
+    setting_dir = os.path.join(root, "设定")
+    md_files = ["设定圣经.md", "角色卡.md", "世界观.md", "作者口吻.md", "创作蓝图.md"]
+    for fname in md_files:
+        path = os.path.join(setting_dir, fname)
+        if not os.path.exists(path):
+            continue
+        text = read(path)
+        for m in re.finditer(r"[《「『`“]([^》」』`”]{2,24})[》」』`”]", text):
+            terms.add(m.group(1).strip())
+        for line in text.splitlines():
+            raw = line.strip()
+            if not raw or raw.startswith(("---", "|---")):
+                continue
+            if raw.startswith("|"):
+                cols = [c.strip() for c in raw.strip("|").split("|")]
+                if cols and cols[0] not in ("字段", "项目", "术语", "名称", "角色", "锚点 ID"):
+                    maybe = re.sub(r"\s+", "", cols[0])
+                    if _term_like(maybe):
+                        terms.add(maybe)
+            elif raw.startswith(("- ", "* ")):
+                head = re.split(r"[:：—-]", raw[2:].strip(), 1)[0].strip()
+                if _term_like(head):
+                    terms.add(head)
+    anchor_path = os.path.join(setting_dir, "锚点表.json")
+    if os.path.exists(anchor_path):
+        try:
+            data = json.loads(read(anchor_path))
+            _collect_json_terms(data, terms)
+        except json.JSONDecodeError:
+            pass
+    return sorted(terms, key=lambda x: (len(x), x))
+
+
+def _term_like(value):
+    if not (2 <= len(value) <= 18):
+        return False
+    if value in {"首现章", "复用范围", "代价或约束", "说明", "状态", "标题"}:
+        return False
+    return bool(re.search(r"[\u4e00-\u9fffA-Za-z0-9]", value))
+
+
+def _collect_json_terms(value, terms):
+    if isinstance(value, dict):
+        for key, val in value.items():
+            if key in {"event", "事件", "time", "时间", "present_with", "在场人", "known", "已知情报"}:
+                _collect_json_terms(val, terms)
+            elif isinstance(val, (dict, list)):
+                _collect_json_terms(val, terms)
+    elif isinstance(value, list):
+        for item in value:
+            _collect_json_terms(item, terms)
+    elif isinstance(value, str):
+        for part in re.split(r"[，,、/\s]+", value):
+            part = part.strip()
+            if _term_like(part):
+                terms.add(part)
+
+
 def build_shingles(text, n=24):
     text = re.sub(r"\s+", "", text)
     return {text[i:i + n] for i in range(0, max(0, len(text) - n + 1))}
+
+
+def chapter_number_from_path(path):
+    match = re.search(r"第0*(\d+)章", os.path.basename(path))
+    return int(match.group(1)) if match else None
+
+
+def chapter_sort_key(path):
+    number = chapter_number_from_path(path)
+    return (number is None, number or 0, os.path.basename(path))
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("root")
     ap.add_argument("--pov", default=None, help="第三人称限定的 POV 角色名（用于'我'泄漏提示）")
-    ap.add_argument("--min", type=int, default=1200)
-    ap.add_argument("--max", type=int, default=2800)
+    ap.add_argument("--min", type=int, default=800)
+    ap.add_argument("--max", type=int, default=1800)
     ap.add_argument("--terms", default="", help="逗号分隔的规范术语，统计各章出现次数")
+    ap.add_argument("--no-auto-terms", action="store_true",
+                    help="不从 设定/ 自动抽取术语，只使用 --terms")
     ap.add_argument("--no-plagiarism", action="store_true")
+    ap.add_argument("--json-out", default=None,
+                    help="可选：把机检结果写成 JSON，供 review_report.json 汇总")
     args = ap.parse_args()
 
     chdir = os.path.join(args.root, "章节")
     if not os.path.isdir(chdir):
         sys.exit(f"找不到章节目录：{chdir}")
 
-    files = sorted(glob.glob(os.path.join(chdir, "第*章*.md")))  # 第N章.md 或 第N章_标题.md
+    files = sorted(glob.glob(os.path.join(chdir, "第*章*.md")), key=chapter_sort_key)  # 第N章.md 或 第N章_标题.md
     nums = []
     for f in files:
         m = re.search(r"第0*(\d+)章", os.path.basename(f))
         if m:
             nums.append(int(m.group(1)))
     outline = load_outline_titles(args.root)
-    terms = [t.strip() for t in args.terms.split(",") if t.strip()]
+    manual_terms = [t.strip() for t in args.terms.split(",") if t.strip()]
+    auto_terms = [] if args.no_auto_terms else extract_terms_from_settings(args.root)
+    terms = sorted(set(manual_terms + auto_terms), key=lambda x: (len(x), x))
 
     # 原文照搬：预载原作滑窗集
     src_shingles = None
@@ -179,12 +247,31 @@ def main():
                   f"多为内心独白（合法），但**请 LLM 优先抽查这几章是否有真串视角**：")
             print("  " + "、".join(f"第{c}章({n})" for c, n in top))
     if term_matrix:
-        print("\n术语出现次数（看跨章漂移；0 与突变值得注意）：")
+        source = "手动+设定自动" if manual_terms and auto_terms else ("设定自动" if auto_terms else "手动")
+        print(f"\n术语出现次数（{source}；看跨章漂移，0 与突变值得注意）：")
         print("  章 | " + " | ".join(terms))
         for ch in sorted(term_matrix):
             print(f"  {ch:>2} | " + " | ".join(str(term_matrix[ch][t]) for t in terms))
     counts = {s: sum(1 for x in findings if x["severity"] == s) for s in ("🔴", "🟡", "🟢")}
     print(f"\n小结：🔴 {counts['🔴']}  🟡 {counts['🟡']}  🟢 {counts['🟢']}")
+    payload = {
+        "schema_version": 1,
+        "kind": "novel_mechanical_findings",
+        "project_root": args.root,
+        "generated_at": date.today().isoformat(),
+        "findings": findings,
+        "counts": counts,
+        "pov_density": pov_density,
+        "term_matrix": term_matrix,
+        "terms_source": {
+            "manual": manual_terms,
+            "auto": auto_terms,
+        },
+    }
+    if args.json_out:
+        os.makedirs(os.path.dirname(os.path.abspath(args.json_out)), exist_ok=True)
+        with open(args.json_out, "w", encoding="utf-8") as f:
+            json.dump(payload, f, ensure_ascii=False, indent=2)
     print("\n<!-- FINDINGS_JSON")
     print(json.dumps(findings, ensure_ascii=False))
     print("FINDINGS_JSON -->")

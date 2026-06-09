@@ -23,6 +23,24 @@
 - 系统音"机械感"FX：`SYS_AUDIO_FX`（默认 `asetrate=44100*0.9,aresample=44100,atempo=1.111,aecho=0.6:0.5:24:0.35,`）——设 `SYS_AUDIO_FX=''` 可禁用，或自定义滤镜链。仅作用于含「系统」的角色。
 
 ## 角色→音色映射
+**优先级：`<作品根>/设定库/voicemap.json`（持久·跨集稳定）> 内置 demo 音色表 > env 覆盖（MiniMax: MM_SHEN/…）。**
+
+### voicemap.json（新剧必建·治跨集音色漂）
+内置音色表的角色名是 demo 写死的（柳娘子/小禾/太监/沈念）——**新剧的新角色会全部掉进默认嗓互相撞**，且跨集一致只靠每次手动 export 同一串 env，不持久化就漂。建 `设定库/voicemap.json` 一次绑定：
+```json
+{
+  "沈念":   {"key":"SHEN",   "mm":"female-yujie",     "volc":"BV700_streaming", "speed":1.0,  "pitch":0,  "emo":"neutral"},
+  "柳娘子": {"key":"LIU",    "mm":"female-chengshu",  "volc":"BV700_streaming", "speed":0.96, "pitch":-2, "emo":"serious"},
+  "新角色": {"key":"HERO",   "mm":"male-qn-jingying", "speed":1.05, "pitch":2}
+}
+```
+- 匹配=角色名**子串包含**（`"沈念"` 命中 `沈念旁白`）；命中即返回该配置，缺字段回退合理默认。
+- `key` 同时决定零样本后端的参考音 env 名（`<PREFIX>_REF_<key>`），所以自定义角色也能各喂各的参考音。
+- 缺 voicemap.json = 回退下面的内置 demo 映射（老作品零改动）。
+- manifest 每句落 `音色键`/`voice_id`/`情绪_已应用`；`n2d-review` 机检跨集核对同角色音色一致性。
+- **火山后端不逐句驱动情绪**（只用角色固定情绪/voicemap 的 `emo`）；情绪吃重的集选 MiniMax/IndexTTS-2。
+
+### 内置 demo 音色表（缺 voicemap.json 时的回退）
 默认见 render_voice.py 的音色表；均可 env 覆盖（MiniMax: MM_SHEN/MM_LIU/MM_XIAOHE/MM_TAIJIAN/MM_SYS/MM_NARR）。
 
 ### 零样本克隆 按角色分音色（CosyVoice/FishSpeech/GPT-SoVITS/IndexTTS-2/VoxCPM2 通用）

@@ -13,7 +13,7 @@ description: Cold-start ORIGINAL novel creation from scratch — when the user h
 
 本 skill 的可选项**不写死在源码里**。按 `../_偏好约定.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
-本 skill 涉及的选择点：`目标平台`、`权利来源`、`输出格式`、`篇幅档`。
+本 skill 涉及的选择点：`目标平台`、`权利来源`、`输出格式`、`篇幅档`、`小说生成模式`、`章节生成粒度`、`AI使用披露`。
 
 ## 核心原则
 
@@ -23,6 +23,7 @@ description: Cold-start ORIGINAL novel creation from scratch — when the user h
 - **设定圣经做一致性追踪**：原创最大翻车点是设定前后矛盾、金手指无代价。`设定/设定圣经.md` 逐条登记 + 回扫核对。
 - **平台决定形态**：题材/爽点/篇幅/开篇钩按目标平台（起点/番茄/晋江/抖音漫剧/红果/历史向）走；起名委托 `novel-title`。
 - **Demo gate 最重要**：前 1-3 章定文风/爽点密度/钩子/设定自洽，用户审过才批量写。
+- **批量写章先出任务包**：Demo 过审后先跑 `novel-craft/scripts/draft_packets.py`，每章带蓝图/设定/章纲/Demo 风格锚点/状态账本，再写正文。写完填 `审稿/state_delta_第NN章.json`，避免长篇越写越漂。
 - **原创=用户自有，天然合法**：无版权筛查（区别于 spinoff/rewrite/expand/condense 的合法性铁律）。
 
 ## 工作流（八步，每步末用户审 gate）
@@ -62,11 +63,26 @@ python3 <skill>/scripts/init_project.py \
 ### 6. Demo（前 1-3 章）+ 用户审【最重要 gate】
 逐章写（每章一个戏剧节拍 + ≥1 钩子，用 `novel-craft/references/chapter.md` 的单章守则 + 子代理 prompt 模板）。验：文风对不对 / 爽点够不够 / 钩子留没留 / 设定自洽。**每章独立审**。文风定了回填 `创作蓝图.md` 风格卡。
 > **可选市场体检（批量前最便宜的 go/no-go）**：Demo 过审后，可对 Demo 章跑一次 `novel-score`（题材够不够热、黄金三章钩子、能不能火）——在投入逐章写满全书前用最低成本验证方向。题材冷/开篇弱时回第 1-2 步改 premise/题材，比写完再推翻划算。用户说"先确认能不能火"时必跑。
+> **机器留痕（必做）**：Demo 审完必须写 `审稿/demo_gate.json`（schema 见 `novel-craft/references/demo-gate.md`）。`status != passed` 不批量写；`style_anchor`、`reader_promises`、`setting_constraints` 必须喂给后续逐章子任务和 `novel-review`。
 
-### 7. 续写余下 + 回扫 + 导出
-- **逐章写**：subagent 逐章，喂【创作蓝图 + 设定圣经 + Demo 文风样本 + 章纲本章条目 + 风格卡】；写完更新 `_进度.md` 写作表。
-- **回扫**：用 `novel-review` 分批扫——重点**设定圣经一致性**（金手指代价没破、设定没前后矛盾）、人设不崩、钩子回收、文风不漂。
-- **导出**：`python3 novel-craft/scripts/export.py "<作品根>" --formats txt,docx,outline[,n2d]`（家族通用导出器）→ `导出/`。**要直接喂漫剧线就加 `n2d`**——在 `导出/n2d-script/小说/<书名>.docx` 铺好 n2d-script 入口，成稿即可交 `novel2drama` 改编漫剧（原创从零是 写小说→制漫剧 管线的源头，最该出 n2d 形态）。
+### 7. 续写余下 + 状态增量 + 回扫 + 导出
+- **定模式**：按 `_偏好约定.md` 读/问 `小说生成模式`（极速初稿/稳妥初稿/商业连载/漫剧源书）和 `章节生成粒度`（逐章/小批/全书草稿）。缺省推荐 `稳妥初稿 + 逐章`；用户明确要快时用 `极速初稿 + 小批`；要喂漫剧线时用 `漫剧源书`。
+- **出任务包**：先读 `novel-craft/references/draft-pipeline.md`，再跑：
+```bash
+python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --next
+python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --range 4-8
+```
+- **逐章写**：按 `写作任务/第NN章.md` 写到 `章节/第NN章.md`。不要跳过任务包直接凭记忆写长篇。
+- **状态增量**：每章写完填 `审稿/state_delta_第NN章.json`；涉及人物/能力/伏笔/关系变化时合并回 `审稿/state_ledger.json`，必要时同步 `设定/设定圣经.md` / `设定/角色卡.md`。
+- **回扫**：用 `novel-review` 分批扫——重点**设定圣经一致性**（金手指代价没破、设定没前后矛盾）、人设不崩、钩子回收、文风不漂。至少跑一次机检：
+```bash
+python3 skills/novel-review/scripts/mechanical_check.py "<作品根>" --json-out "<作品根>/审稿/mechanical_findings.json"
+```
+- **AI 使用披露**：发布/交平台前按 `_设置.md` 的 `AI使用披露` 跑：
+```bash
+python3 skills/novel-craft/scripts/ai_usage.py "<作品根>" --text-mode AI-generated --publish-target "<平台>"
+```
+- **导出**：`python3 skills/novel-craft/scripts/export.py "<作品根>" --formats txt,docx,outline[,n2d]`（家族通用导出器）→ `导出/`。**要直接喂漫剧线就加 `n2d`**——在 `导出/n2d-script/小说/<书名>.docx` 铺好 n2d-script 入口，成稿即可交 `novel2drama` 改编漫剧（原创从零是 写小说→制漫剧 管线的源头，最该出 n2d 形态）。
 
 ## 与家族其它 skill 的边界（防误路由）
 
@@ -96,5 +112,8 @@ python3 <skill>/scripts/init_project.py \
 | 蓝图没敲定就建设定/章纲 | 蓝图是宪法，未审不下推 |
 | 金手指无代价 / 设定前后矛盾 | 设定圣经登记代价边界 + 回扫逐条核 |
 | 跳过 Demo gate 直接批量写 | 文风/爽点/设定自洽 1-3 章就能看出 |
+| Demo 过审后不出任务包，直接靠主对话记忆写长篇 | 先跑 `draft_packets.py`，每章用任务包 + 状态账本 |
+| 写完章节不填状态增量 | 填 `state_delta_第NN章.json`，合并进 `state_ledger.json` |
+| 要发布却没留 AI 使用披露 | 跑 `ai_usage.py`，产出 `合规/AI使用说明.md` |
 | 一次性把 8 步全抛给用户 | 一步一 gate，逐步推进（这是引导式的灵魂） |
 | 误把"已有源书"的活塞进来 | 有源书 → spinoff/rewrite/continue/expand，别用 novel-create |

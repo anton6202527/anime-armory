@@ -4,7 +4,7 @@
 extract_anchors.py — 在原作 txt 里做配角锚点粗筛，输出候选 JSON。
 
 粗筛 only：用正则在每章里搜配角名，抽前后段落作为候选。是 anchor 还是 mention、
-事件骨架、已知/未知情报等，都由主对话的 Claude 在第 2 步精筛时填。
+事件骨架、已知/未知情报等，都由主对话的当前 agent 在第 2 步精筛时填。
 
 用法（单独跑）：
     python3 extract_anchors.py <作品根> --character "<配角名>"
@@ -132,7 +132,7 @@ def main():
     out = write_anchor_table(args.project_root, args.character, novel_txt, candidates)
 
     print(f"[ok] 候选 {len(candidates)} 条 → {out}")
-    print(f"[next] 用主对话的 Claude 跑第 2 步精筛：判 anchor/mention、填事件骨架。")
+    print(f"[next] 用主对话跑第 2 步精筛：判 anchor/mention、填事件骨架。")
 
 
 if __name__ == "__main__":

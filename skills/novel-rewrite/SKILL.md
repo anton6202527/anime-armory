@@ -11,7 +11,7 @@ description: Use when rewriting / reimagining / 魔改 an existing novel into a 
 
 本 skill 的可选项**不写死在源码里**。按 `../_偏好约定.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
-本 skill 涉及的选择点：`目标平台`、`权利来源`、`输出格式`、`篇幅档`。
+本 skill 涉及的选择点：`目标平台`、`权利来源`、`输出格式`、`篇幅档`、`小说生成模式`、`章节生成粒度`、`AI使用披露`。
 
 ## 与近邻 skill 的边界（防误路由）
 
@@ -34,14 +34,16 @@ description: Use when rewriting / reimagining / 魔改 an existing novel into a 
 
 ## 工作流（七步，每步末用户审 gate）
 
-0. **确认输入 + 合法性**：原作路径、**改动方向**（一句话：要把它改成什么）、规模（short/medium/long 或抖音漫剧档）、目标平台、输出（txt/docx/outline/n2d）。判版权。
-1. **建骨架**：`python3 <skill>/scripts/init_project.py "<原作>" --rewrite-type "<方向>" --scale <档> [--i-have-rights]` → `写小说/<原作名>-改写/`（设定/{改动spec,新设定,角色卡,世界观,章纲} + 原作.txt 参考 + 章节/ + 导出/ + _meta + _进度）。
+> **派生同构阶段表**：本 skill 的 `_meta.json` / `_进度.md` 必须遵守 `novel-craft/references/contract.md`。机器阶段 key 固定为 `setup → source_model → direction_spec → title → outline → demo → draft → review → export`；本 skill 中 `source_model` = 原作内核/旧设定吸收，`direction_spec` = 改动spec / 新设定确认。
+
+0. **确认输入 + 合法性**：原作路径、**改动方向**（一句话：要把它改成什么）、规模（short/medium/long/微短剧/漫剧）、目标平台、输出（txt/docx/outline/n2d）。判版权。
+1. **建骨架**：`python3 <skill>/scripts/init_project.py "<原作>" --rewrite-type "<方向>" --scale <档> [--draft-mode 稳妥初稿] [--chapter-granularity 逐章] [--ai-text-usage AI-assisted] [--i-have-rights]` → `写小说/<原作名>-改写/`（设定/{改动spec,新设定,角色卡,世界观,章纲} + 原作.txt 参考 + 章节/ + 导出/ + _meta + _进度）。
 2. **填改动spec**（最重要）：三栏【保留内核 / 改什么 / 加什么】写实写细。→ 用户审。
 3. **建新设定圣经 + 角色/世界观卡**：把"加的新设定/材料"系统化、列一致性约束，**按家族统一 schema `novel-craft/references/setting-bible.md`**（新金手指也必写代价、新设定标"改自原作哪条"+首现章）。→ 用户审。
 4. **书名**：委托 `novel-title`（同人改写/魔改类型）。→ 用户审。
 5. **章纲**：自由编织（不受原作章节束缚，可大改顺序/结局），三幕 + 反转 + 钩子；用 `novel-craft/references/{outline,split}.md`。→ 用户审。
-6. **Demo（前几章）+ 用户审【最重要 gate】**：验文风 / 改动方向是否到位 / 新设定是否自洽 / 没丢内核 / 没照搬原文。每章独立审。
-7. **续写余下 + 回扫 + 导出**：逐章 subagent 写（喂 改动spec + 新设定圣经 + Demo 文风样本）；用 `novel-review` 回扫（重点：**新设定一致性**、没跑回原作旧设定、内核没丢、没照搬）；`novel-craft/scripts/export.py`（家族通用导出器）导出 txt/docx/outline[/n2d]。
+6. **Demo（前几章）+ 用户审【最重要 gate】**：验文风 / 改动方向是否到位 / 新设定是否自洽 / 没丢内核 / 没照搬原文。每章独立审。Demo 审完必须写 `审稿/demo_gate.json`（见 `novel-craft/references/demo-gate.md`），`status != passed` 不批量写。
+7. **续写余下 + 回扫 + 导出**：先读 `novel-craft/references/draft-pipeline.md`，跑 `python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --next|--range A-B` 生成逐章任务包，再拆给子任务/子代理写（喂 改动spec + 新设定圣经 + `审稿/demo_gate.json` + Demo 文风样本 + 状态账本）；写完填 `审稿/state_delta_第NN章.json`。用 `novel-review` 回扫（重点：**新设定一致性**、没跑回原作旧设定、内核没丢、没照搬）；发布前用 `novel-craft/scripts/ai_usage.py` 留 AI 使用披露；`novel-craft/scripts/export.py`（家族通用导出器，默认执行 QA gate）导出 txt/docx/outline[/n2d]。
 
 ## 详细参考
 - 改动spec 模板 + 新设定圣经管理 + 一致性追踪 + 与 spinoff 的边界细则：`references/rewrite-spec.md`
@@ -58,4 +60,6 @@ description: Use when rewriting / reimagining / 魔改 an existing novel into a 
 | 大段照搬原作原文当底稿 | 原作只是参考素材；改写必须重写，触法律边界 |
 | 改到把原作的情感主线/人设魂也丢了 | 内核栏锁住魂；改的是事件/设定，不是魂 |
 | 跳过 Demo gate 直接写全本 | 改动方向对不对、新设定自不自洽，1 章就能看出 |
+| Demo 过审后不跑 `draft_packets.py` | 缺单章上下文包和状态账本，改写长篇容易跑回旧设定或越改越漂 |
+| Demo 过审但没写 `审稿/demo_gate.json` | 后续批量写章缺机器文风锚点，容易越改越漂 |
 | 误把"加新章节"当改写 | 那是 novel-continue |

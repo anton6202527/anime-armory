@@ -16,6 +16,7 @@ raw=源文本，展示但不计入流程完成判定。
   python3 scan.py <剧根> [...]     # 只看指定剧（含 _进度.md 的目录）
   python3 scan.py --root <仓库根>  # 指定仓库根（默认=自动向上找）
 """
+import glob
 import os
 import re
 import sys
@@ -23,8 +24,12 @@ import sys
 COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'common'))
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
-from n2d_route import flow_columns, is_done, is_started, parse_progress, stage_of
-from n2d_settings import is_video_first
+from n2d_route import flow_columns, is_done, is_flow_complete, is_progress_satisfied, is_started, parse_progress, stage_of
+from n2d_settings import is_native_av, is_video_first
+try:
+    from n2d_contract import cross_cutting
+except Exception:  # pragma: no cover - 横切检查可选，缺契约也不影响主流程扫描
+    cross_cutting = None
 
 LINE_DIR = "制漫剧"  # 只管 n2d 这一条线
 
@@ -32,7 +37,7 @@ DISPATCHER = "novel2drama"  # 认不出列名时兜底
 
 # 花钱/不可逆/合规的前沿列 → 提醒先确认。
 COSTLY_HINT = {
-    "出图": "会真出图·消耗额度 → 开跑前确认生图后端 + 重抽预算档位；分镜 PNG 前共享定妆库 出图/common/ 必须全 ✅",
+    "出图": "会真出图·消耗额度 → 开跑前确认生图后端 + 重抽预算档位；分镜 PNG 前共享定妆库 出图/共享/ 必须全 ✅",
     "视频": "会真出视频·消耗额度 → 开跑前确认生视频后端",
     "成片": "合成成片（混音+烧字幕），相对便宜但耗时",
     "配音": "声音克隆需肖像/音色授权（合规闸门）",
@@ -48,17 +53,21 @@ def report(root, out):
     flow = flow_columns(header)
     if is_video_first(root):
         out.append("制作模式: 先出视频后配音 ⚠️(快速 demo·不推荐：占位时长锁镜头→后期补真音对不上)")
+    elif is_native_av(root):
+        out.append("制作模式: 原生音画(native AV)·说话镜由视频后端一次出同步音画；配音=可选旁白层，不卡路由")
 
-    full = sum(1 for r in dict_rows if all(is_done(r.get(c, "")) for c in flow))
+    full = sum(1 for r in dict_rows if is_flow_complete(root, r, flow))
     out.append(f"行数: {len(dict_rows)} | 全流程完成: {full}/{len(dict_rows)}")
     out.append("各阶段完成: " + " | ".join(   # 只列流程列；raw 是源文本展示位，不计入完成度
-        f"{c} {sum(1 for r in dict_rows if is_done(r.get(c, '')) )}/{len(dict_rows)}"
+        f"{c} {sum(1 for r in dict_rows if is_progress_satisfied(root, r, c) )}/{len(dict_rows)}"
         for c in flow))
+
+    cross_cutting_check(root, out)  # 横切就绪（合规/身份/LoRA/仪表盘/评分/UI/回灌）——不在流程表里但要可见
 
     gaps = []  # (集, 列, 值, skill, note)
     for r in dict_rows:
         started = any(is_started(r.get(c, "")) for c in flow)
-        if started and not all(is_done(r.get(c, "")) for c in flow):
+        if started and not is_flow_complete(root, r, flow):
             route = stage_of(root, r, header)
             col = route.get("col") or ""
             val = r.get(col, "").strip() if col else ""
@@ -88,11 +97,40 @@ def report(root, out):
             out.append(f"  - …另有 {len(gaps)-6} 集已开工待补")
 
 
+def cross_cutting_check(root, out):
+    """横切就绪检查：按契约 CROSS_CUTTING 注册表，列各横切 skill 的就绪标志是否在位。
+    只读、只提示——合规缺失给 ⚠️（付费硬前置），其余给 ○（按需，未跑不算错）。"""
+    if cross_cutting is None:
+        return
+    rows = []
+    for item in cross_cutting():
+        art = item.get("artifact")
+        skill = item.get("skill")
+        label = item.get("label")
+        if not art:  # 仓库级/无 per-work 标志（如资产库）
+            continue
+        hit = bool(glob.glob(os.path.join(root, art)))
+        required = bool(item.get("required_before"))
+        if hit:
+            mark = "✅"
+        elif required:
+            mark = "⚠️缺"
+        else:
+            mark = "○未跑"
+        rows.append(f"{label}({skill}) {mark}")
+    if rows:
+        out.append("横切就绪: " + " | ".join(rows))
+        if any("⚠️缺" in r for r in rows):
+            out.append("  ⚠️ 合规包缺失：image 起的付费阶段 gate 会阻断，先跑 n2d-compliance --init")
+
+
 def find_repo_root(start):
     d = os.path.abspath(start)
     while d != os.path.dirname(d):
-        if os.path.isdir(os.path.join(d, "skills")) and \
-           os.path.isfile(os.path.join(d, "CLAUDE.md")):
+        if os.path.isdir(os.path.join(d, "skills")) and (
+            os.path.isfile(os.path.join(d, "AGENTS.md"))
+            or os.path.isfile(os.path.join(d, "CLAUDE.md"))
+        ):
             return d
         d = os.path.dirname(d)
     return os.path.abspath(start)

@@ -4,7 +4,7 @@ from asset_impact import (normalize, core, ref_tokens, parse_shots,
 
 
 def test_normalize_strips_dir_ext_prefix():
-    assert normalize("出图/common/定妆_沈念_侧.png") == "沈念_侧"
+    assert normalize("出图/共享/图片/定妆_沈念_侧.png") == "沈念_侧"
     assert normalize("定妆_沈念") == "沈念"
     assert normalize("沈念") == "沈念"
 
@@ -21,12 +21,12 @@ def test_ref_tokens_splits_fullwidth():
 
 
 SAMPLE = """## 镜头 1（冷开场）🔑关键镜
-目标：`出图/第1集/镜头1_赐死冷开场.png`
+目标：`出图/第1集/图片/镜头1_赐死冷开场.png`
 参考图：沈念、柳娘子、冷宫寝殿、赐死托盘
 - [ ] 脸未漂移（对照 定妆_沈念.png）
 
 ## 镜头 2（沈念惊醒）
-目标：`出图/第1集/镜头2_沈念惊醒.png`
+目标：`出图/第1集/图片/镜头2_沈念惊醒.png`
 参考图：沈念、冷宫寝殿
 """
 
@@ -34,7 +34,7 @@ SAMPLE = """## 镜头 1（冷开场）🔑关键镜
 def test_parse_shots_extracts_target_and_refline():
     shots = parse_shots(SAMPLE)
     assert len(shots) == 2
-    assert shots[0]["target"] == "出图/第1集/镜头1_赐死冷开场.png"
+    assert shots[0]["target"] == "出图/第1集/图片/镜头1_赐死冷开场.png"
     assert "柳娘子" in ref_tokens(shots[0]["refline"])
 
 
@@ -96,3 +96,50 @@ def test_prefixed_match_scene_prefix_no_false_positive():
 def test_prefixed_match_view_suffix_still_matches():
     s = parse_shots("## Clip 3 · 镜3\n正文出现 定妆_沈念_侧.png 引用\n")
     assert shot_references(s[0], {"沈念"}) is True         # 视图后缀仍算同一资产
+
+
+def _impact_project(tmp_path):
+    import os
+    root = tmp_path / "制漫剧" / "剧"
+    pd = root / "出图" / "第1集" / "prompt"
+    pd.mkdir(parents=True)
+    (root / "出图" / "第1集" / "图片").mkdir(parents=True)
+    (pd / "01_分镜出图.md").write_text(
+        "## 镜头 1（冷开场）\n目标：出图/第1集/图片/镜头1.png\n参考图：沈念、冷宫寝殿\n正文\n"
+        "## 镜头 2（反打）\n目标：出图/第1集/图片/镜头2.png\n参考图：沈念\n正文\n",
+        encoding="utf-8",
+    )
+    (root / "出图" / "第1集" / "图片" / "镜头1.png").write_bytes(b"\x89PNG\r\n\x1a\n")  # 镜头1 已出图
+    return root
+
+
+def test_build_rerun_plan_chains_and_minimal_scope(tmp_path):
+    from asset_impact import scan, build_rerun_plan
+    root = _impact_project(tmp_path)
+    keys, hits = scan(str(root), ["沈念"])
+    plan = build_rerun_plan(str(root), keys, hits)
+
+    assert plan["kind"] == "n2d_asset_rerun_plan"
+    assert plan["affected_episodes"] == ["第1集"]
+    assert plan["rerun_count"] == 1 and plan["pending_count"] == 1
+    skills = [s["skill"] for s in plan["steps"]]
+    assert skills == ["n2d-image", "n2d-identity", "n2d-video", "n2d-compose", "n2d-batch"]
+    batch_cmd = plan["steps"][-1]["commands"][0]
+    assert "--rerun-from image" in batch_cmd
+    assert "镜头1.png" in batch_cmd          # 只含已出图镜头（最小范围）
+    assert "镜头2" not in batch_cmd          # 未出图镜头不进重跑
+
+
+def test_rerun_plan_empty_when_nothing_generated(tmp_path):
+    import os
+    from asset_impact import scan, build_rerun_plan
+    root = tmp_path / "制漫剧" / "剧"
+    pd = root / "出图" / "第1集" / "prompt"
+    pd.mkdir(parents=True)
+    (pd / "01_分镜出图.md").write_text(
+        "## 镜头 1\n目标：出图/第1集/图片/镜头1.png\n参考图：沈念\n", encoding="utf-8")
+    keys, hits = scan(str(root), ["沈念"])  # 无 PNG → 全 pending
+    plan = build_rerun_plan(str(root), keys, hits)
+    assert plan["rerun_count"] == 0
+    assert plan["steps"] == []
+    assert plan["warnings"]

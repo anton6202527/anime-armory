@@ -1,6 +1,8 @@
 """mv_check 机检单测（覆盖 stdlib 确定性路径；clip/成片 的 ffprobe 路径在真机 demo 跑）。
 从脚本自身目录跑：
     cd skills/mv-review/scripts && python -m pytest test_mv_check.py
+或直接：
+    python3 test_mv_check.py
 """
 import os, json, wave, array, tempfile, shutil
 import mv_check as mc
@@ -40,7 +42,7 @@ STRUCTURE = ["verse1", "chorus"]
 def make_mv(tmp, *, lyrics=LYRICS, lrc=LRC, beatgrid=None, meta=None,
             song=True, structure=STRUCTURE, progress="# 进度\n"):
     root = os.path.join(tmp, "曲")
-    for d in ("词", "歌", "节拍", "字幕"):
+    for d in ("词", "歌", "节拍", "字幕", "分镜", "出视频", "合规"):
         os.makedirs(os.path.join(root, d), exist_ok=True)
     open(os.path.join(root, "视觉蓝图.md"), "w").write("# 蓝图\n")
     open(os.path.join(root, "_进度.md"), "w", encoding="utf-8").write(progress)
@@ -70,9 +72,13 @@ def run(root):
     mc.check_completeness(root)
     ll = mc.check_lyrics_and_meta(root, meta)
     mc.check_beatgrid(root, songlen)
+    mc.check_plan_manifests(root, songlen)
+    mc.check_video_jobs(root)
     mc.check_clips(root, songlen)
     mc.check_subtitles(root, songlen, ll)
+    mc.check_alignment_report(root)
     mc.check_final(root, meta, songlen)
+    mc.check_ai_usage(root)
     return list(mc.findings)
 
 
@@ -181,3 +187,71 @@ def test_missing_final_with_compose_progress_warns():
         assert has(f, WARN, "音画")
     finally:
         shutil.rmtree(tmp)
+
+
+def test_duplicate_plan_clip_id_blocks():
+    tmp = tempfile.mkdtemp()
+    try:
+        root = make_mv(tmp)
+        plan = {
+            "clips": [
+                {"clip_id": "Clip_001", "start": 0.0, "end": 3.0, "duration": 3.0},
+                {"clip_id": "Clip_001", "start": 3.0, "end": 6.0, "duration": 3.0},
+            ]
+        }
+        json.dump(plan, open(os.path.join(root, "分镜", "clip_plan.json"), "w", encoding="utf-8"), ensure_ascii=False)
+        assert has(run(root), BLOCK, "规划", "clip_id 重复")
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_timeline_missing_selected_video_warns():
+    tmp = tempfile.mkdtemp()
+    try:
+        root = make_mv(tmp)
+        plan = {"clips": [{"clip_id": "Clip_001", "start": 0.0, "end": 6.0, "duration": 6.0}]}
+        timeline = {"clips": [{"clip_id": "Clip_001", "video_path": "出视频/视频/Clip_001.mp4"}]}
+        json.dump(plan, open(os.path.join(root, "分镜", "clip_plan.json"), "w", encoding="utf-8"), ensure_ascii=False)
+        json.dump(timeline, open(os.path.join(root, "分镜", "timeline_manifest.json"), "w", encoding="utf-8"), ensure_ascii=False)
+        assert has(run(root), WARN, "规划", "video_path 尚不存在")
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_selected_video_job_missing_clip_blocks():
+    tmp = tempfile.mkdtemp()
+    try:
+        root = make_mv(tmp)
+        manifest = {
+            "jobs": [{
+                "clip_id": "Clip_001",
+                "selected_take": "take_01",
+                "selected_video_path": "出视频/视频/Clip_001.mp4",
+            }]
+        }
+        json.dump(manifest, open(os.path.join(root, "出视频", "jobs_manifest.json"), "w", encoding="utf-8"), ensure_ascii=False)
+        assert has(run(root), BLOCK, "规划", "selected_take 已选但成品 clip 不存在")
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_alignment_report_warnings_surface():
+    tmp = tempfile.mkdtemp()
+    try:
+        root = make_mv(tmp)
+        report = {"lyric_lines": 2, "aligned_lines": 1, "unused_word_segments": 3, "warnings": ["歌词与演唱疑似不一致"]}
+        json.dump(report, open(os.path.join(root, "字幕", "alignment_report.json"), "w", encoding="utf-8"), ensure_ascii=False)
+        assert has(run(root), WARN, "字幕", "歌词与演唱疑似不一致")
+    finally:
+        shutil.rmtree(tmp)
+
+
+def main():
+    tests = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
+    for test in tests:
+        test()
+    print(f"ok - {len(tests)} tests")
+
+
+if __name__ == "__main__":
+    main()

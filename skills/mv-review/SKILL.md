@@ -1,6 +1,6 @@
 ---
 name: mv-review
-description: 制MV 质检 + 流程自审（mv 写歌→制MV 生产线的 QA 环节，不生产内容只审）。双模——模式①「作品质检」：对一支 MV 的产物做体检（视觉一致性：主角崩脸/场景漂移/画风跳变；卡点节奏：clip 时长对齐 beatgrid downbeats·不等长·副歌密 verse 疏·爽点对鼓点·clip 总时长≈歌长；卡拉OK字幕：占位未精修/时间越界/重叠/行数对账；音画合成：成片时长≈歌长·画幅符 _meta.aspect·有音轨；运镜服务节奏；换脸合规 AI 标识+授权），机检+人判，出严重度分级·定位到 Clip/段落/时间码的报告。模式②「流程自审」：联网拉当前 AI MV/音乐视频市场基准，对照 mv 各 skill + references，产出"差距清单 + 该改哪个 skill 哪段"的优化建议。Use when asked to MV质检, 审MV, 查崩脸, 卡点对账, 卡拉OK字幕检查, MV成片体检, 验收MV, 流程自审, mv 还能优化啥, mv-review. Triggers MV质检, 审MV, MV审片, 崩脸, 卡点对账, 卡点检查, 卡拉OK检查, 字幕越界, MV成片体检, MV验收, 流程自审, 流程优化, 自我优化, mv-review, QA.
+description: 制MV 质检 + 流程自审（mv 写歌→制MV 生产线的 QA 环节，不生产内容只审）。双模——模式①「作品质检」：对一支 MV 的产物做体检（规划：clip_plan/timeline/jobs 对账；视觉一致性：主角崩脸/场景漂移/画风跳变；卡点节奏：clip 时长对齐 beatgrid downbeats·不等长·副歌密 verse 疏·爽点对鼓点·clip 总时长≈歌长；卡拉OK字幕：占位未精修/时间越界/重叠/行数对账/对齐报告；音画合成：成片时长≈歌长·画幅符 _meta.aspect·有音轨；AI 视觉使用披露；运镜服务节奏；换脸合规 AI 标识+授权），机检+人判，出严重度分级·定位到 Clip/段落/时间码的报告。模式②「流程自审」：联网拉当前 AI MV/音乐视频市场基准，对照 mv 各 skill + references，产出"差距清单 + 该改哪个 skill 哪段"的优化建议。Use when asked to MV质检, 审MV, 查崩脸, 卡点对账, 卡拉OK字幕检查, MV成片体检, 验收MV, 流程自审, mv 还能优化啥, mv-review. Triggers MV质检, 审MV, MV审片, 崩脸, 卡点对账, 卡点检查, 卡拉OK检查, 字幕越界, MV成片体检, MV验收, 流程自审, 流程优化, 自我优化, mv-review, QA.
 ---
 
 # mv-review — 制MV 质检 + 流程自审
@@ -20,9 +20,12 @@ description: 制MV 质检 + 流程自审（mv 写歌→制MV 生产线的 QA 环
 
 - **机检（确定性，先跑）**：`scripts/mv_check.py <制MV作品根>` —— 秒级出确定性问题：
   - **卡点**：`节拍/beatgrid.json` 存在/可解析、BPM 合理（半速/倍速嫌疑）、beats/downbeats 单调递增、`歌/song.wav` 时长 vs beatgrid.duration 一致。
+  - **规划**：`分镜/clip_plan.json` / `timeline_manifest.json` 存在可解析、clip_id 不重复、timeline 与 plan 对账、timeline selected video 是否存在。
+  - **视频任务**：`出视频/jobs_manifest.json` 存在可解析、已选 take 是否真的落到 `出视频/视频/Clip_XXX.mp4`。
   - **clip 节奏**（需 `ffprobe`，缺则显式跳过）：每个 `出视频/视频/*.mp4` 时长、**clip 是否疑似等长（不卡点）**、clip 总时长 ≈ 歌长。
-  - **卡拉OK字幕**：`字幕/lyrics.lrc` / `karaoke.ass` 解析、占位未精修、时间单调/不重叠、**时间戳越界（超歌长）**、字幕行数对账。
+  - **卡拉OK字幕**：`字幕/lyrics.lrc` / `karaoke.ass` 解析、占位未精修、时间单调/不重叠、**时间戳越界（超歌长）**、字幕行数对账、`alignment_report.json` warnings。
   - **音画合成**（需 `ffprobe`）：`成片_MV.mp4` 存在、时长 ≈ 歌长、分辨率符 `_meta.aspect`、**有音轨**（MV 没声音=废）。
+  - **AI 视觉使用披露**：已有成片时检查 `合规/ai_usage.json` 是否留痕、枚举是否有效。
   - **完整性/对账**：词/歌/beatgrid/出图/clip/成片 产物快照、`_meta.has_song/has_lyrics` vs 实际文件、段落数 vs `_meta.structure`。
   ```bash
   python3 <skill>/scripts/mv_check.py <制MV作品根>          # 人读
@@ -31,8 +34,8 @@ description: 制MV 质检 + 流程自审（mv 写歌→制MV 生产线的 QA 环
   > `ffprobe` 缺失时，clip/成片 的时长·分辨率·音轨检查**显式标「跳过」**，绝不静默略过（同 n2d 脸相似度库的处理）。WAV 时长走标准库 `wave`，不靠 ffprobe。
 
 - **人判（判断题）**：机检覆盖不了的语义维度。逐维见 `references/checklist.md`。
-  - **崩脸 / 场景漂移 / 画风跳变用图判**：把 `出图/段落/镜头*.png` 与 `出图/common/定妆_*.png` **并排读图比对**（脸型/发型/服色/画风锚点）；装了 `face_recognition`/`insightface` 可给相似度分，缺库则人判兜。
-  - **接缝跳切用图判（逐接缝过）**：取相邻 clip 的 Clip K 末帧 vs Clip K+1 首帧**并排读图**，对照 clip 表该接缝契约：① 标 `需要尾帧?=是`/连续硬切但两帧姿态/站位/视线/光线明显对不上 → 跳切/闪烁；② 标 `需要尾帧?=是` 却没出 `_end.png`（mv-image 漏做）→ 接力断链；③ 服装/发型/道具在接缝处突变 → 接缝崩。**注意 MV 容差更宽**：副歌卡点硬切处的视觉跳变若踩准鼓点、是有意冲击，**不算问题**（卡点切本就允许画面跳）；只标"非卡点切又接不住"的接缝。修法：回 mv-image 补尾帧 / 回 mv-video 用首尾双帧重出该 clip。
+  - **崩脸 / 场景漂移 / 画风跳变用图判**：把 `出图/段落/图片/镜头*.png` 与 `出图/共享/图片/定妆_*.png` **并排读图比对**（脸型/发型/服色/画风锚点）；装了 `face_recognition`/`insightface` 可给相似度分，缺库则人判兜。
+  - **接缝跳切用图判（逐接缝过）**：取相邻 clip 的 Clip K 末帧 vs Clip K+1 首帧**并排读图**，对照 `分镜/clip_plan.json` + `timeline_manifest.json` 的接缝契约：① 标 `need_end_frame=true`/连续硬切但两帧姿态/站位/视线/光线明显对不上 → 跳切/闪烁；② 标 `need_end_frame=true` 却没出 `_end.png`（mv-image 漏做）→ 接力断链；③ 服装/发型/道具在接缝处突变 → 接缝崩。**注意 MV 容差更宽**：副歌卡点硬切处的视觉跳变若踩准鼓点、是有意冲击，**不算问题**（卡点切本就允许画面跳）；只标"非卡点切又接不住"的接缝。修法：回 mv-image 补尾帧 / 回 mv-video 用首尾双帧重出该 clip。
   - **运镜服务节奏**：副歌快推/环绕、verse 缓推/跟、bridge 换机位、爽点对 downbeat 同帧砸下——对 `mv-video/references/prompt_format.md`。
   - **卡点体感**：机检给"clip 是否对齐 downbeat"的客观判断，**踩得爽不爽**由人判（看成片副歌切点是否砸在鼓点）。
   - **换脸合规**：若用了 `video-faceswap`——AI 标识水印在否、未被裁、源脸授权。
@@ -67,7 +70,7 @@ description: 制MV 质检 + 流程自审（mv 写歌→制MV 生产线的 QA 环
 2. **对照**：逐 stage 把基准 vs `mv-*/SKILL.md` + `references/*` 比，找**真差距**（已做的别重复立项）。
 3. **差距清单**：每条 = 差距 + 证据（带来源链接·日期）+ 落到哪个 skill 哪段 + 优先级（must/optional）+ 是否可脚本化（是→能进 `mv_check.py`）。
 4. **起草**：高价值项起草建议 edit；**改任何 skill 必同步 `skills/README.md` 索引**（仓库硬约定）。
-5. **人确认后再写**：模式②**默认只产建议报告**，不自动改 skill。报告落 `skills/mv-review/_流程自审_<日期>.md` 或讲给用户。
+5. **人确认后再写**：模式②**默认只产建议报告**，不自动改 skill。**报告是一次性的——只讲给用户、不在 skill 目录留存 `_流程自审_*.md` 这类存档**（已 gitignore）。**每次自审/重审都从头按本流程重跑**（拉基准→对照→差距），**绝不读旧报告当捷径**——市场会变，旧结论可能已过时或已落地。
 
 > **防过期铁律**：市场建议带"采集日期 + 来源链接"，旧建议可能已被采纳或过时——写进来前先核对当前 skill 是否已有。模型名/特性会变，写"能力"而非死绑某产品版本号（绑版本号的放 `prompt_format.md` 档案）。
 
@@ -85,6 +88,7 @@ description: 制MV 质检 + 流程自审（mv 写歌→制MV 生产线的 QA 环
 |---|---|
 | 只跑机检不做人判 | 机检只覆盖确定性问题；崩脸/运镜/卡点体感要 LLM 判（含并排读图） |
 | 只人判不跑机检 | clip 等长/字幕越界/成片无音轨/对账这类秒查，漏跑等于白审 |
+| 跳过 mv-plan 直接出视频 | 机检会提示缺 clip_plan/timeline；先补时间线，避免合成顺序和时长全靠猜 |
 | 没装 ffprobe 就当 clip/成片"没问题" | ffprobe 缺失时相关项是"跳过"不是"通过"——机检会显式标 |
 | 鸡蛋里挑骨头堆润色项 | 违容错铁律，硬伤被淹没 |
 | 报问题不定位不给修法 | 必须 Clip+时间码定位 + 指明回哪个 skill 重跑 |

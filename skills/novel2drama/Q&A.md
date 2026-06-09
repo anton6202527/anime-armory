@@ -20,7 +20,7 @@
 - [Q18：图 AI 和视频 AI 是什么关系？image prompt 该按谁写？](#q18)
 - [Q19：定妆图能跨集复用吗？目录怎么组织？](#q19)
 - [Q20：下一集出料时怎么自动复用前几集的定妆？SOP 是什么？](#q20)
-- [Q22：dreamina（即梦官方 CLI）能让 Claude 自动出图吗？为什么 headless 跑不通？](#q22)
+- [Q22：dreamina（即梦官方 CLI）能让自动化 agent 自动出图吗？为什么 headless 跑不通？](#q22)
 - [Q23：用 gemini 出图行不行？为什么免费号和免费 API key 都出不了图？](#q23)
 - [Q24：稳定产线里，定妆照 / 场景图 需不需要"角色训练"（LoRA）？怎么训？](#q24)
 - [Q25：产线顺序大重排 —— 配音前移、时长驱动镜头](#q25)
@@ -32,6 +32,10 @@
 - [Q31：仙侠武侠打斗场面怎么做才"顺且燃"？（武打/法术工程链）](#q31)
 - [Q32：世界观资产库该分哪几类？（角色/场景/道具/法宝/特效·题材自适应）](#q32)
 - [Q33：御剑飞行/追逐/渡劫/炼丹/法阵/大场面/斗法对轰/神魂这些仙侠奇观怎么做才不崩？（非打斗场面工程链）](#q33)
+- [Q34：能不能"先出视频、后期再配音"？（快速 demo 模式 vs 配音先行）](#q34)
+- [Q35：n2d 批量化生成漫剧能不能做到工业级？后续优化方向是什么？](#q35)
+- [Q36：以后能不能做个 PC 级客户端 + 无限画布（方便编排和观看）？](#q36)
+- [Q37：watermark 和 faceswap 等公共能力要不要拆分成管线专属的 skill？](#q37)
 
 ---
 
@@ -161,7 +165,7 @@ Step 4 合成（配音 + BGM + 字幕 + 剪辑）
 
 ### 8.2 操作
 
-每次切换角色前，**显式检查并清空参考图**。即梦的参考图框是"粘性"的，不主动清理会带到下一张。
+每次切换角色前，**显式检查并清空上一角色参考图**，只保留当前角色的正面/侧面/背面三视图、服装参考和本镜场景参考。多参考后端都可能把上一组参考“粘”到下一张，不主动清理会串脸。
 
 ### 8.3 但同一角色的"形态变体"必须用参考图
 
@@ -283,7 +287,7 @@ Step 4 合成（配音 + BGM + 字幕 + 剪辑）
 - 官方安装命令：`curl -s https://jimeng.jianying.com/cli | bash`
 - 二进制托管在字节官方 CDN：`lf3-static.bytednsdoc.com/obj/eden-cn/.../dreamina_cli_beta/`
 - 安装到：`~/.local/bin/dreamina`
-- 配套 SKILL.md：`~/.dreamina_cli/dreamina/SKILL.md`（可挂到 Claude Code 当 skill 用）
+- 配套 SKILL.md：`~/.dreamina_cli/dreamina/SKILL.md`（可按本仓库 skill 约定挂到任意兼容 agent）
 - 登录方式：QR 码 + 抖音 App 扫码（OAuth）
 - 支持平台：macOS / Linux / Windows（WSL）
 
@@ -384,11 +388,11 @@ Step 4 合成（配音 + BGM + 字幕 + 剪辑）
 ### 16.4 备选策略：双工具栈
 
 国风短剧推荐配置：
-- **主**：即梦 CLI（出图 + 视频）
-- **备**：可灵 Kling API（账号被封时的紧急后备）
-- 两者风格最接近，切换"一致性税"最小
+- **主**：`生图AI` 所选官方图后端（默认 Codex）+ 即梦/Seedance/可灵/Veo 图生视频
+- **备**：视频后端可切可灵 Kling / Veo / Seedance；图片后端也可切官方多参考后端，但必须整集/整项目统一切，不做单镜兜底
+- 切视频后端时只改锚定句和视频 prompt；若切出图后端，先统一设置并重做受影响定妆/分镜，否则一致性税最大
 
-不推荐同时用 即梦 + DALL-E / Flux——审美差异太大，切换等于重做。
+禁止用即梦/Dreamina 当图片后端；一致性吃紧时补定妆参考、角色 ID 资料或 LoRA，不切到即梦出图。
 
 ---
 
@@ -404,7 +408,7 @@ prompt 的"写法"        图片"该长啥样"
 （语言/格式/参考机制）  （面孔/风格/光感/构图）
 ```
 
-- **图 AI** = 工具选择（可以是 Gemini / DALL-E / Flux / 即梦 / 可灵任何一个）
+- **图 AI** = 工具选择；当前正式产线默认 Codex，可选 Dreamina/即梦官方 CLI 和官方多参考后端；禁止第三方逆向、`同视频AI` 含糊口径和 web 自动化
 - **视频 AI** = 风格基线（决定图片必须长成什么样子，因为它的 image2video 只熟悉自家训练分布）
 
 ### 18.2 为什么 image prompt 按视频 AI 来定风格？
@@ -421,10 +425,9 @@ prompt 的"写法"        图片"该长啥样"
 
 | 组合 | 锚定句 | 备注 |
 |---|---|---|
-| 即梦图 + 即梦视频 | ❌ 不需要 | 同家闭环，画风词已隐含 |
-| Gemini 图 + 即梦视频 | ✅ **必须拼** 即梦的图像风格锚定句 | 省钱混合方案 |
-| DALL-E 图 + Veo 视频 | ✅ 必须拼 Veo 的英文锚定句 | 海外短剧 |
-| 即梦图 + Veo 视频 | ⚠️ 不推荐 | 画风跨度大，锚定句也救不动 |
+| 所选官方图后端 + 即梦视频 | ✅ **必须拼** 即梦的图像风格锚定句 | 默认正式链路 |
+| 所选官方图后端 + Veo 视频 | ✅ 必须拼 Veo 的英文锚定句 | 海外短剧 |
+| Dreamina/即梦官方 CLI + 即梦视频 | ✅ 可用 | 需显式 `生图AI: Dreamina/即梦`，同集不混后端 |
 
 ### 18.4 锚定句拼接位置
 
@@ -520,9 +523,9 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 
 ```
 1. 第N集 出料发现新角色/场景/道具
-2. 出图/common/prompt/00_索引.md 追加 ⬜ 行
-3. 出图/common/prompt/角色|场景|道具定妆.md 追加完整 prompt 块
-4. 跑即梦（或 CLI 自动）→ 挑图 → PNG 落 出图/common/
+2. 出图/共享/prompt/00_索引.md 追加 ⬜ 行
+3. 出图/共享/prompt/角色|场景|道具定妆.md 追加完整 prompt 块
+4. 跑 `生图AI` 所选官方/已登录后端生图 → 挑图 → PNG 落 出图/共享/图片/；Dreamina/即梦官方 CLI 可用，第三方逆向/web 自动化禁用
 5. 索引状态改 ✅
 6. 出图/第N集/prompt/00_总览.md 引用 shared
 7. 后续集自动复用，不再重做
@@ -546,14 +549,14 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 - **避免重复**：4 张定妆图存 100 次 = 400 张 PNG。共享后 = 4 张。
 - **保证一致**：跨集偶然修改某张定妆会立刻让其他集不一致。集中管理避免漂移。
 - **降低生成成本**：复用 = 无需重抽，省钱（即梦会员积分）省时间。
-- **方便回溯**：所有角色"曾经画过什么样"集中在 `出图/common/prompt/角色定妆.md`，无需翻 N 个集子。
+- **方便回溯**：所有角色"曾经画过什么样"集中在 `出图/共享/prompt/角色定妆.md`，无需翻 N 个集子。
 
 ### 19.7 跟 `characters/` / `locations/` 的关系
 
 - `设定库/characters/角色名.md` 是**人物设定文档**（小说级，剧情服务）
-- `出图/common/prompt/角色定妆.md` 是**生产实战 prompt**（AI 服务，含即梦操作 SOP）
+- `出图/共享/prompt/角色定妆.md` 是**生产实战 prompt**（AI 服务，含即梦操作 SOP）
 - 前者是设定，后者是执行。前者由编剧维护，后者由制作维护。
-- 两者锁定的"妆造拆解"完全一致——`出图/common/` 只是把 `characters/` 的 ① 定妆照 prompt 加上即梦操作、检查清单、参考图依赖等"实战包装"。
+- 两者锁定的"妆造拆解"完全一致——`出图/共享/图片/` 只是把 `characters/` 的 ① 定妆照 prompt 加上即梦操作、检查清单、参考图依赖等"实战包装"。
 
 ---
 
@@ -563,7 +566,7 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 
 ```
 ① 扫描共享库
-   读 出图/common/prompt/00_索引.md
+   读 出图/共享/prompt/00_索引.md
    盘清楚：已有哪些角色（含形态变体）/场景/道具，及状态（✅/⏳/⬜）
    ↓
 ② 列出本集需求
@@ -575,8 +578,8 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
    包括："首次出现的全新角色/场景/道具" + "已有角色的新形态变体"
    ↓
 ④ 追加共享库（仅新增项）
-   出图/common/prompt/00_索引.md 追加 ⬜ 行
-   出图/common/prompt/角色|场景|道具定妆.md 追加实战 prompt 块
+   出图/共享/prompt/00_索引.md 追加 ⬜ 行
+   出图/共享/prompt/角色|场景|道具定妆.md 追加实战 prompt 块
    ↓
 ⑤ 建本集 prompt 文件夹
    出图/第N集/prompt/00_总览.md（含引用共享）
@@ -591,7 +594,7 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 | ② 列需求 | 本集需要：沈念常态、小禾、偏殿修炼室、系统光幕、12 个分镜场景 |
 | ③ 差集 | **新增**：偏殿修炼室 LOC_02、系统光幕（共享道具已占位但 prompt 未写满）|
 | ④ 追加 | 共享 `场景定妆.md ②` 占位 → 完整 prompt 块；`道具定妆.md ②` 占位 → 完整 prompt 块 |
-| ⑤ 建本集 | `出图/第2集/00_总览.md` 引用共享 + `01_分镜出图.md` 12 镜 |
+| ⑤ 建本集 | `出图/第2集/图片/00_总览.md` 引用共享 + `01_分镜出图.md` 12 镜 |
 
 **复用红利**：第2集开局 **2/16**（沈念常态 + 小禾 直接复用）
 
@@ -651,25 +654,26 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 
 ---
 
-## Q22：dreamina（即梦官方 CLI）能让 Claude 自动出图吗？为什么 headless 跑不通？<a id="q22"></a>
+## Q22：dreamina（即梦官方 CLI）能让自动化 agent 自动出图吗？为什么 headless 跑不通？<a id="q22"></a>
+
+> 2026-06-09 更新：阶段2 已放行 Dreamina/即梦官方 CLI 图片生成。当前 n2d 图片阶段按 `生图AI` 统一到一个官方/已登录后端（默认 Codex，可选 Dreamina/即梦官方 CLI、官方多参考后端），只禁第三方逆向、`同视频AI` 含糊口径和 web 自动化。
 
 ### 22.1 现象
 `dreamina user_credit` / `list_task` / `-h` 都正常（读账号 OK，余额 180 积分），**但 `text2image` / `image2image` 退出码 1、零 stdout/stderr、日志文件 0 字节**；关掉沙箱（dangerouslyDisableSandbox）也一样。
 
 ### 22.2 根因：登录密钥在 macOS 钥匙串，非交互 shell 取不到
 - dreamina 用 OAuth 设备流登录，密钥存进 **macOS keyring（钥匙串）**。
-- 读账号类命令走缓存/轻校验能过；**生成提交**要从钥匙串取密钥，而 Claude Code 的 Bash 是**非交互 shell、无钥匙串解锁权限** → 静默失败退出 1。
+- 读账号类命令走缓存/轻校验能过；**生成提交**要从钥匙串取密钥，而自动化 agent 的 Bash 通常是**非交互 shell、无钥匙串解锁权限** → 静默失败退出 1。
 - 旧日志佐证：`[authsdk:ensureActiveRecord] load auth record failed err=<secret not found in keyring>`。
 
-### 22.3 dreamina 真实用法（首次调用必读 `~/.dreamina_cli/dreamina/SKILL.md` 核对 flag）
+### 22.3 dreamina 真实用法（官方 CLI 可用于图片阶段）
 - **异步**：submit → 拿 `submit_id` + `gen_status(querying/success)` → `query_result --submit_id=<id> --download_dir=<目录>` 下载。
-- `text2image --prompt= --ratio=9:16 --resolution_type=1k|2k --model_version=3.0 --poll N`
-- `image2image --images a.png,b.png --prompt= --ratio=9:16 --resolution_type=2k --model_version=4.0`（**image2image 需 4.0+，1k 不支持，最多 10 张参考图**）
+- 图片阶段允许官方 CLI 的 `text2image` / `image2image`；角色镜头优先 `image2image` / 多参考，避免纯文生图脸漂。
 - **没有 `--negative` / `--n` / `--out`**（cli_registry 里旧模板是惯例猜名，错的）→ 负面词**并进 prompt**："…。画面避免：低幼Q版、…"
 - `AigcComplianceConfirmationRequired` 报错 = 需先去**即梦网页点一次性合规确认**再重试。
 
 ### 22.4 结论 / 分工
-即梦 CLI 的**生成步骤必须在用户自己的交互式终端跑**（能解锁钥匙串）；Claude 负责出 prompt + 读图挑选（Read 工具可直接看 PNG）+ 落档 + 写进度。或先 `dreamina relogin` 重新扫码登录、重存钥匙串后重试。
+即梦 CLI 的**图片/视频生成步骤**可在用户自己的交互式终端跑（能解锁钥匙串）；agent 负责 prompt + 读图/读片挑选 + 落档 + 写进度。图片生成不引导用户去即梦 web 自动化兜底，所选官方图后端不可用时直接停止并报告。
 
 ---
 
@@ -688,7 +692,7 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 
 ### 23.4 解法
 - **① 给 key 开 billing**（ai.dev/projects 升付费）后，REST 直调最稳：`POST .../models/gemini-2.5-flash-image:generateContent`，body `generationConfig.responseModalities=["IMAGE"]`（+可选 `imageConfig.aspectRatio`），从 `candidates[].content.parts[].inlineData.data` 取 base64 存 PNG。脚本见 `出图/_gen_gemini.py`（支持参考图走 inlineData、aspectRatio 回退、~$0.039/张 nano banana）。key 存 `~/.gemini/.apikey`、用 `$(cat …)` 读、**不进对话/不打印**。
-- **② 用闭源平台自家额度**：即梦 dreamina 已有 180 付费积分（见 Q22 解决钥匙串）。
+- **② 图片阶段不再用即梦额度兜底**：即梦 dreamina 额度仅保留给视频阶段；正式出图按 `生图AI` 选择的官方后端执行，项目内统一。
 - nano banana 默认偏西方脸 → image prompt 末尾拼"中国古代东方面孔"等锚定句（见 Q18 + 共享 `00_索引.md`）。
 
 ---
@@ -699,7 +703,7 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 **即梦 / 可灵 / Gemini 都是闭源，不接受你自训的 LoRA**；自训模型只能在**开源生态（SD / Flux / ComfyUI）**出图。所以这是个绑定平台的决策。
 
 ### 24.2 三档一致性方法（由轻到重）
-1. **无训练 · 参考图法**（主流，你现在的路线）：定妆照 → 当"角色参考图 / 图生图"反复复用（即梦角色参考、可灵首帧、Gemini image2image）。零训练零成本、三家都支持；一致性"够用但非完美"，复杂角度/光照偶漂。
+1. **无训练 · 参考图法**（主流，你现在的路线）：定妆照 → 在 `生图AI` 所选官方后端中作为多图参考反复复用（正面主参考 + 侧面 + 背面 + 半身/全身服装参考 + 场景参考）。零训练、最少迁移成本；一致性"够用但非完美"，复杂角度/光照偶漂。
 2. **平台内置"建角色/形象"**：上传 N 张图建一个可复用角色 ID，平台内、无需 GPU，比纯参考图稳。**强烈建议用上**（具体见 24.5 待补）。
 3. **真 LoRA / DreamBooth**（仅开源生态）：开源底模 + 该角色 15–30 张多角度图训一个 LoRA，云/本地训练，ComfyUI + LoRA + ControlNet/IPAdapter 出图。一致性最强、可控性最高；代价是离开即梦/可灵、要 GPU/云训练。
 
@@ -711,7 +715,7 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 **基本不用训练**——场景对一致性容错远高于人脸，靠"场景定妆图 + 风格参考（强度 0.4–0.5）+ 统一画风词"即可。
 
 ### 24.5 推荐【混合产线】分工
-- 闭源（即梦/可灵）跑 ~90% 镜头快速出量 + 平台"建角色"兜一致性；
+- Codex/OpenAI 负责正式出图；视频后端（即梦/可灵/Seedance/Veo）只负责图生视频运动；
 - 仅 **1–3 个核心长线角色**在开源（Flux/SDXL）训 LoRA、用 ComfyUI 出他们的关键镜头，再回流统一画风。
 
 ### 24.6 待核实 / 待补（deep-research 进行中）
@@ -770,6 +774,7 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 - **n2d-voice**：多后端可插拔（CosyVoice/GPT-SoVITS 本地克隆 > MiniMax/火山 云 > macOS say 占位），含声音克隆（MiniMax 复刻 + demucs 人声分离去 BGM）。**不再按窗口压速**。
 - **n2d-compose**：本机 Homebrew ffmpeg **无 libass**（subtitles/drawtext 滤镜全无）→ 用 **Pillow 渲染字幕 PNG + overlay 烧录**；配音 + ducking BGM(sidechaincompress) + clip 自带音效底 三层混音。
 - **进度表 reschema** 成 6 阶段 16 物料列：`raw|分镜剧本|草稿故事板|素材清单|配音文案|BGM|封面|配音|分镜设计|字幕中|字幕英|出图prompt|出图|视频prompt|视频|成片`。
+  > ⚠️ **此为 2026-06 初版 schema 快照，列名已变**：现行权威表头见 `references/architecture.md §三` / `common/n2d_route.py STAGES` / `n2d-script/split_novel.py`（如 `分镜剧本/草稿故事板/配音文案/BGM` 已并/改为 `剧本改编|bgm|…`）。读此处别当当前真值，以权威源为准。
 
 **第2集实测验证**（铁证旧流程会犯的错）：
 | 镜头 | 配音驱动实测 | 旧平台估 | 旧流程后果 |
@@ -901,7 +906,7 @@ voiceover.txt 不标语速/停顿/钩子也能跑（情绪归不到关键词就 
 
 | # | 增强 | 状态 | 落点 |
 |---|---|---|---|
-| ① | **多视图定妆**（正/侧/背/表情，厚锚点）核心角色必出，一次性配角仍单张 | 新增 | SKILL.md「多视图定妆铁律」、checklist §二、prompt_format §1.2 + 目录树 |
+| ① | **标准三视图定妆**（所有人物正/侧/背 + 三视图拼版，厚锚点；表情/设定表按需增强） | 新增 | SKILL.md「角色定妆组三视图铁律」、checklist §二、prompt_format §1.2 + 目录树 |
 | ② | **镜头图一律多图参考派生**（定妆张+场景图），禁纯文生图；与锚点句叠加不互斥 | 硬化（原为软约定）| SKILL.md「多图参考派生铁律」、checklist §四、prompt_format §2.2 |
 | ③ | **多镜一次性故事板**（Kling 3.0/Seedance 2.0/即梦故事模式 一批出连贯分镜），不支持自动降级 | 新增·opt-in | SKILL.md 可选增强节、platforms.md 平台字段 + 能力表 |
 | ④ | **场景图建库复用**（出一次跨集引用，别每集重画背景） | 强化（场景本就在共享库）| SKILL.md「场景图建库复用铁律」、checklist §三 |
@@ -930,7 +935,7 @@ voice-first 时长驱动镜头、两层定妆库（Q28 已强化多视图+多图
 | **C** | **原生音频视频模型**与"静音视频"架构冲突 | Veo 3.1 / Seedance 2.0 原生生成同步音频（环境音/台词） | n2d-video「原生音频静音铁律」+ n2d-compose「clip 原生音频处理」：默认丢弃 clip 原生人声，避免双人声 |
 | **D** | 无**对口型**，说话特写口型不对 | 可灵 3.0 方言级 lip-sync；情感共鸣仅及真人 63% | n2d-video 可选增强「对口型 lip-sync」（仅正面说话特写值得）；不做则分镜阶段用侧脸/旁白规避 |
 | **E** | **多镜连拍**没打通到出视频 | Seedance 2.0 self-storyboard 一条 prompt 出连贯多镜 | n2d-video「多镜连拍」可选模式，与 n2d-image 多镜故事板同源 |
-| **F** | `出视频/common/` 形同虚设，**共享空镜/转场库**没用起来 | 与场景库同理省积分 | n2d-video「共享视频库」铁律 |
+| **F** | `出视频/共享/` 形同虚设，**共享空镜/转场库**没用起来 | 与场景库同理省积分 | n2d-video「共享视频库」铁律 |
 | **G** | **字幕正确性不校验**（占位未精修/中英错位/文本≠配音/溢出） | "字幕错误"在审片 12 类内；本仓库实测有集 SRT 仍是 `（待精修）` | n2d-review `mechanical_check.py` 确定性查 |
 
 > ✅ 已覆盖（查过没重复）：两层定妆库、voice-first、导演节奏、删镜回流(Q27)、合规水印闸门、CLI 安全审查、重抽预算。
@@ -984,7 +989,7 @@ voice-first 时长驱动镜头、两层定妆库（Q28 已强化多视图+多图
 
 ```
 共享定妆库(建一次·跨集复用)              本集分镜(每集)
-  角色定妆: 正/侧/背/表情 多视图  ──参考──►  镜头图 = 定妆张 + 场景图 多图参考派生
+  角色定妆: 正/侧/背标准三视图 + 拼版  ──参考──►  镜头图 = 定妆张 + 场景图 多图参考派生
   场景定妆: 出一次跨集引用                   + 每张拼角色卡"锚点句"
 ```
 
@@ -1042,13 +1047,13 @@ voice-first 时长驱动镜头、两层定妆库（Q28 已强化多视图+多图
 | 层 | 位置 | 类目 |
 |---|---|---|
 | 文字设定层 | `设定库/` | `global_style.md`（画风/世界观；⚙️仙侠可补 境界体系/势力/术语表）、`characters/`、`locations/`、`voicebank/` |
-| 定妆图层 | `出图/common/` | 角色定妆 · 场景定妆 · 道具定妆 ·（⚙️**法宝定妆** · **特效定妆**）+ `00_索引.md` 对应表 |
+| 定妆图层 | `出图/共享/图片/` | 角色定妆 · 场景定妆 · 道具定妆 ·（⚙️**法宝定妆** · **特效定妆**）+ `00_索引.md` 对应表 |
 
 ### 32.2 五类各自要点
 
 | 类 | 题材 | 锁什么 | 多态 |
 |---|---|---|---|
-| 角色 | 全部 | 脸/发/服/配饰（多视图：正/侧/半身/全身/背/表情）| 形态变体（觉醒态…）|
+| 角色 | 全部 | 脸/发/服/配饰（标准三视图：正/侧/背 + 人审拼版；半身/全身/表情为增强）| 形态变体（觉醒态…）|
 | 场景 | 全部 | 背景/光线/构图 | — |
 | 道具 | 全部 | 反复入镜道具/HUD 光幕 | — |
 | **法宝** | ⚙️仙侠玄幻 | 法器/本命法宝 形状/材质/光泽 | **按形态/成长阶段多态**（初始→觉醒→…）|
@@ -1107,3 +1112,206 @@ voice-first 时长驱动镜头、两层定妆库（Q28 已强化多视图+多图
 **实现（怎么"真能跑通"而不只是文档喊话）**：选 `先出视频后配音` 后——① `/n2d-voice` 先出占位/估算 `时长清单.json` 当时间脚手架（不追音质）；② 阶段2 finalize 用 `FINALIZE_ALLOW_PLACEHOLDER=1` 放行占位闸门；③ `/n2d-video` 占位闸门放行（复述警告后继续）；④ 视频出齐后、合成前**插一步真实配音** `/n2d-voice`（CosyVoice/克隆）；⑤ `/n2d-compose` 把真音拟合到已成片镜头长。调度器 `novel2drama` 按 `制作模式` 在 progress.py 线性路由之上叠加这套顺序。
 
 > 一句话：**配音先行=时长驱动镜头(默认·推荐)；先出视频后配音=估时锁镜头(快速demo·不推荐)，放行≠安全，只是用户知情同意。**
+
+---
+
+## Q35：n2d 批量化生成漫剧能不能做到工业级？后续优化方向是什么？<a id="q35"></a>
+
+**采集/复核日期：2026-06-09。结论**：n2d 做“批量化 AI 漫剧/短剧”是可行的，而且架构方向已经接近轻工业化；但它还不能被描述成“完全无人值守的重工业级产线”。更准确的定位是：**小团队/工作室可用的工业化雏形**，能做到可排队、可审计、可控成本、可最小范围返工；要稳定跑 100 集级别，还要继续补多机调度、质检闭环、资产一致性和商业回收。
+
+“工业级”不要理解成一键全自动百集或稳定爆款，而应理解成：**可复制、可度量、可批量、可回滚、可数据迭代**。n2d 的优势不是押注某一个视频模型，而是把模型当产线工位：上游用剧本契约、资产库、专项模板和模型路由约束它，下游用 gate、机器评分、人审画布和投放数据驯它。
+
+### 35.1 外部生态判断
+
+2026 年的视频模型生态已经支持 n2d 的“拆镜头流水线”路线。官方资料显示：[Google Veo 3.1 Gemini API](https://ai.google.dev/gemini-api/docs/video) 支持 8 秒、720p/1080p/4K、原生音频视频生成；[Veo 3.1 定价](https://ai.google.dev/gemini-api/docs/pricing) 已按秒收费，Standard 1080p 为 $0.40/s、Fast 1080p 为 $0.12/s、Lite 1080p 为 $0.08/s，说明成本必须进入生产决策而非事后估算。[Kling 3.0 官方公告](https://ir.kuaishou.com/news-releases/news-release-details/kling-ai-launches-30-model-ushering-era-where-everyone-can-be) 强调 15 秒、原生多语言音频、多镜头故事板、参考视频/多图一致性；快手 2026 Q1 财报还提到 Kling AI 已用于商业影视/广告/游戏等专业场景，并支持“simultaneous audiovisual generation”和强主体一致性。[Runway API](https://docs.dev.runwayml.com/api/) 已把 image-to-video、text-to-video、video-to-video、音效、TTS、配音等拆成可程序化任务；[Luma Dream Machine API](https://docs.lumalabs.ai/docs/video-generation) 也支持 keyframes、start/end frame、extend generation。
+
+这意味着 n2d 的核心假设成立：**长剧不是一次生成，而是拆成可管理的镜头资产、按能力路由到不同后端、再用审查和返工闭环拼成稳定产物。**
+
+### 35.2 n2d 当前能做到什么
+
+**能做到**：批量生产 AI 漫剧短集，并做到角色/场景/字幕/音画有 gate，有生产数据账本，有返工队列，有机器评分，有投放回灌。这是工作室级工业化。
+
+**暂不能保证**：完全无人审片、稳定爆款、跨几十集零漂移、复杂多人动作长期稳定、每次一遍过。这些仍需要人做导演、审片、调优和最终放行。
+
+**最现实分工**：机器负责生成、检测、排队、记录、回流和复盘；人负责创意判断、镜头取舍、关键审片、合规放行和投放策略。
+
+### 35.3 工业级验收标准
+
+| 维度 | 工业级要求 | n2d 当前方向 |
+|---|---|---|
+| 一致性 | 角色、服装、场景、风格跨镜/跨集不漂 | 两层定妆库、三视图、锚点句、多图参考、identity registry、adapter matrix、style_contract |
+| 可控性 | 镜头空间、节奏、起落幅、运动边界可复现 | 分镜语法、导演节奏、导演视角八维、storyboard continuity、首尾双帧接力 |
+| 效率 | 贵步骤少返工，批量时能复用资产和设置 | 配音先行定时长、先图后视频、共享角色/场景/道具/特效库、设置私有化 |
+| 质检 | 出图/出视频前能阻断硬伤，成片后能定位修法 | n2d-review 机检 + gate + consistency audit + score + 人判 |
+| 可度量 | 不凭感觉说“像不像/稳不稳” | dashboard 记录成本、耗时、一次通过率、重抽率、QA 阻断、投放回收 |
+| 可恢复 | 失败能最小范围回流，不整集重来 | n2d-batch 的 rerun scope、affected_shots、affected_artifacts |
+| 合规 | 平台披露、水印、授权、审核运行前就有证据 | n2d-compliance + watermark + gate + dashboard 留痕 |
+
+### 35.4 已经形成的工业化支柱
+
+1. **资产优先**：角色、场景、道具、风格不临场散写，进入定妆库、reference group、identity registry 和 adapter matrix。
+2. **时长优先**：默认配音先行，用真实念白时长驱动分镜/字幕/Clip 长度，避免贵的视频阶段被估时污染。
+3. **模型路由**：`n2d-model-router` 按打斗、对话、空镜、飞行、法术、多人同框、原生音画/口型等能力选 primary/fallback，不固定单后端。
+4. **批量队列**：`n2d-batch` 已有 `_进度.md` 路由、原子 claim、租约、重试、预算裁剪、worker runner 和最小范围 rerun。
+5. **确定性 gate**：`n2d-review` 把合规、身份注册、定妆、prompt 契约、原生音轨、占位配音、复杂物理交互等风险挡在付费阶段前。
+6. **机器评分 + 人审画布**：`n2d-score` 负责低分回流，`n2d-review-ui` 让人集中看首尾帧、clip、接缝、定妆参考、QA flag 和机器分。
+7. **生产数据与 ROI**：`n2d-dashboard` 记录每分钟成本、每集耗时、一次通过率、重抽率、投放净回收/生产成本。
+
+### 35.5 仍需持续优化的深水区
+
+1. **成本与重抽率闭环**：视频模型已按秒收费，批量后必须按“后端 × 镜头类型 × 通过率 × 成本”优化 router。仅看生成质量不够，必须看单位合格秒成本。
+2. **跨集身份一致性**：Kling/Veo/Seedance 等都在强化参考与主体一致性，说明这仍是行业硬问题。n2d 要继续强化 identity registry、LoRA/Character ID/Face Lock、跨集漂移报表和资产影响扫描。
+3. **复杂物理交互**：打斗命中、拥抱、抓腕、多人接触不能只靠文本 prompt。需要把 motion control manifest、pose/depth/instance/contact 资产做成可执行输入；暂不能控制时就按模板拆镜。
+4. **口型与表演**：原生音画适合部分项目，但强控角色音色仍要配音先行。正面说话特写应逐步接入 voice-conditioned lipsync 或后期 MuseTalk/LatentSync/Wav2Lip 检测/修复链。
+5. **动作时序控制**：成片裁切能解决总时长，但不能保证“拔剑/转身/爆点”正好踩在重音上。后续需要更强的动作节拍检查、速度重映射或按关键动作帧重出。
+6. **视觉状态账本**：受伤、血迹、法宝、衣破、污渍、场景破坏等剧情状态要从文字账本升级成视觉状态账本，并能自动注入图像参考、mask 或 prompt modifier。
+7. **多机/算力池调度**：当前 `n2d-batch` 是单机多 worker 安全。真多机需要 DB/Redis/对象存储条件写/消息队列，否则 flock 不能当分布式锁。
+8. **合规与平台披露自动化**：[YouTube](https://support.google.com/youtube/answer/14328491) 对未披露合成内容可能人工加标、处罚或移除；[TikTok](https://support.tiktok.com/en/using-tiktok/creating-videos/ai-generated-content) 会识别 C2PA/AI 内容凭证并要求真实 AIGC 标注；中国《[人工智能生成合成内容标识办法](https://regulations.ai/regulations/RAI-CN-NA-MIASCXX-2025)》已于 2025-09-01 生效，要求显式标识和隐式元数据/水印。n2d 的 watermark/compliance 方向正确，但要继续补平台 profile。
+9. **投放反馈驱动创作**：工业级不是批量生成很多，而是批量试错、快速筛选、数据回灌。开场、封面、标题、集尾断点、镜头密度、钩子间隔都应进入 A/B 与 `n2d-feedback`。
+10. **审片 UI 产品化**：文本报告只适合摘要；真正批量审片要让人直接在画布里看 clip、接缝、定妆、分数、阻断和回流按钮。
+
+### 35.6 阶段性结论
+
+**现在可以把 n2d 用作工作室级量产线**：先用第 1 集打样锁定定妆、风格、声音和模型路由；再用 batch 跑 2-10 集小批量；用 dashboard/score/review-ui 看成本、通过率、漂移和观感；最后让 feedback 决定是否扩到 30/100 集。
+
+**还不该承诺完全无人值守工业级**：只要复杂动作、跨集身份、口型、节奏体感和平台合规仍需要人工放行，就必须保留“机器批量生成 + 人类关键审片”的混合模式。
+
+> 一句话：**n2d 的工业化路线不是押注某个更强模型，而是把模型当产线工位；上游用契约和模板喂它，下游用 gate、评分和投放数据驯它。**
+
+### 35.7 P1 已落地：批量任务队列
+
+**批量任务队列 `n2d-batch`**：按 `_进度.md` 自动找每集下一步，生成 `生产数据/batch_queue.json` / `batch_queue.md`，支持 `max_concurrency` 并发 claim、`max_retries` 失败重试、预算上限裁剪、以及 `--rerun-from + --affected-shot/--affected-artifact` 的最小范围重跑。
+
+它已经从单纯“生产编排账本”升级出 **worker runner**：`queue.py` 负责排什么、谁在跑、失败是否重试；`runner.py` 负责自动 claim、执行 `batch_runner.json` 配置的 stage 命令、写 dashboard telemetry、再 mark pass/fail。多个 runner 进程可以并行消费同一队列；失败自动回 `retry_queued` 或落 `failed`；预算不足的任务标 `blocked_budget`，不进入可 claim 批次。真实生成成本和通过率仍由对应 stage skill + `n2d-dashboard` 记录，runner 只补执行耗时和 exit_code。
+
+这件事的价值是把批量化从“人脑记第几集该干嘛”变成“机器可排、可暂停、可恢复、可追责”：第1集出图、第2集配音、第3集视频可以并行推进；某个定妆重抽后，只把引用该资产的 Clip 排成 rerun 任务；某个 gate 阻断，只回到 `return_to_stage` 对应范围，不把整集/整部重跑。后续自动审片评分低于阈值时，也会通过这套队列把对应 stage 的最小任务重新排入。
+
+### 35.8 P1 已立项：专项镜头模板库
+
+**专项镜头模板库 + gate**：打斗、追逐、对话反打、法术爆发、飞行、亲密互动、多人站位都要求在 `storyboard.json` 写 `template` 和 `template_contract`。复杂镜头如果只写“二人激烈打斗”“众人围住他”“飞剑追逐”这类自由 prompt，gate 应在出图前阻断，让它回 `/n2d-script` 按模板拆成可控动作、轴线、节拍、起落幅和负向约束。
+
+### 35.9 P0 已立项：资产身份注册层
+
+**角色 ID / Face Lock / LoRA 适配层**：`出图/共享/identity_registry.json` 成为角色/形态的机器真值。`00_索引.md` 只做人读；registry 记录 `reference_group`、图/视频后端角色 ID 或 Face Lock 状态、LoRA 状态、允许角度、高危角度和禁漂项。
+
+它已经升级为 **角色身份闭环 `n2d-identity`**：registry 仍是真值，但生产阶段读取的是 `生产数据/identity_adapter_matrix.json/md`。这张矩阵把 reference group、图后端角色 ID/主体库、视频 Character ID / Face Lock / reference controls、LoRA `base_model/model_path/trigger` 打在同一张表里；gate 会阻断未知 status、后端 mode 不匹配、`registered/ready` 空句柄、LoRA ready 假登记。这样 n2d-image 不再临场猜参考图，n2d-video 不再临场写 Face Lock/Character ID，n2d-review 能用同一份矩阵判定缺项、假登记和高危角度。
+
+同时新增 **跨集漂移报表**：`python3 skills/n2d-identity/scripts/identity.py <作品根> --episodes 1-10 --write` 会生成 `identity_drift_report.json/md`，按角色汇总每集 `ok/warn/block/noface`，并给出 `first_bad_episode`。后续批量队列、成本仪表盘、自动审片评分都会以它为基础追踪“某个角色形态在哪些镜头、用哪个后端身份、从哪一集开始脸漂、哪些镜头需要回流”。
+
+### 35.10 P1 已立项：原生音画 opt-in 策略
+
+**原生音画 opt-in**：默认仍是“配音先行 + clip 原生音轨丢弃”，但允许 Veo / Seedance / Kling 对低风险镜头贡献环境声或动作音效。低风险 = 空镜、转场、远景氛围、背身/侧脸/无口型、无角色台词；正面说话特写、旁白、系统音、克隆音色镜头不允许原生人声接管。
+
+落地方式：n2d-video 每个 Clip prompt 必填 `原生音画策略`；选择 `低音量混入环境声` 或 `保留原片音轨` 时，`00_总览.md` 必须有「原生音画 opt-in 清单」。n2d-compose 读取 `视频原生音轨` 选择点：默认丢弃，opt-in 后低音量混入环境声；若“保留原片音轨”同时存在 n2d-voice 配音轨，gate 阻断，防双人声。
+
+### 35.11 P1 已立项：模型适配层 / Model Routing
+
+**模型适配层 `n2d-model-router`**：出视频不再固定一个视频模型包打天下。默认 `视频模型路由=自动按镜头路由`，`生视频AI` 只作为普通镜和兜底后端；每个 Clip 按镜头类型、专项模板、身份注册层、原生音画策略、时长上限和失败风险选择 `primary_backend` / `fallback_backends`。
+
+落地方式：`/n2d-video` 前先跑 `python3 skills/n2d-model-router/scripts/router.py <作品根> 第N集 --write`，生成 `出视频/第N集/prompt/video_model_routes.json/md`。`00_总览.md` 必须包含「本集模型路由表」；每个 Clip prompt 必填 `模型路由` 和 `模型路由约束`，平台参数必须写 primary/fallback/mode/identity adapter/native_audio_policy。`n2d-review/scripts/gate.py --stage video` 会阻断缺路由表或逐 Clip 缺路由字段。
+
+这层的价值是把“哪个模型更适合哪个镜头”从临场经验升级成可维护的生产规则：打斗/亲密接触/多人站位优先强首尾帧、运动控制和身份 ID；追逐/飞行优先长连续运动；空镜/远景氛围可 opt-in 原生环境声；对话近景优先身份稳定和口型控制；法术爆发优先光效连续扩散。后端能力变化时，只更新 `n2d-video/references/platforms.md` 和 `n2d-model-router`，不用逐条 prompt 重写。
+
+### 35.12 P2 已立项：自动审片评分体系
+
+**自动审片评分 `n2d-score`**：每集输出一个机器分，不再只靠“审完感觉可以/不可以”。评分固定七维：角色一致性、服装一致性、场景一致性、字幕正确性、音画同步、节奏密度、风格一致性。它汇总 `n2d-review` 的机械检查、一致性机检、`n2d-dashboard` 的 QA 阻断，并新增 visual checks：图像相似度、字幕 OCR、成片/配音/SRT/storyboard 时长对账、口型风险/检测报告、成片节奏密度；缺数据维度按 70 分和 `insufficient_data` 处理，不能静默通过。
+
+落地方式：成片或阶段审查后跑 `python3 skills/n2d-score/scripts/score.py <作品根> 第N集 --run-checks --threshold 85`，产出 `生产数据/score_第N集.json/md`，并缓存 `score_inputs/第N集_visual.json`。低于阈值时，`auto_return_tasks` 会把问题映射回最低必要 stage：脸/服装/场景/风格多回 `image`，字幕/节奏回 `script_stage2`，音画同步回 `compose`。需要批量返工时加 `--enqueue-low`，由 `n2d-batch` 承接 rerun 队列。
+
+### 35.13 P2 已立项：投放数据回灌
+
+**投放数据回灌 `n2d-feedback`**：把平台侧留存、完播、追更、跳出数据反哺 `导演节奏.md`。它不看“这集做没做完”，而看“观众在哪走、为什么追下一集”。但平台数据不能单独归因，必须和导演标签一起 join：`opening_type`、`cliffhanger_type`、`shot_density_per_min`、`hook_interval_sec`。现在这些导演标签默认从 `storyboard.json` 自动抽取，手工 `creative_features` 只用于低置信/误判校正。
+
+落地方式：上线一批后导出 `platform_metrics.csv`，再跑 `python3 skills/n2d-feedback/scripts/feedback.py <作品根> --metrics <平台指标.csv> --write-features --update-guide`。脚本会按平台指标里的集号读取 `脚本/第N集/storyboard.json`，自动抽取开场类型、集尾类型、镜头密度、钩子间隔，并产出 `生产数据/platform_feedback.json/md`；`--write-features` 会额外落 `creative_features.auto.json` 方便复核。若人工判断自动标签不准，再用 `--features <导演标签.csv>` 覆盖。样本不足只观察，不把单集偶然数据写成铁律。
+
+> 一句话：**n2d 的工业化路线不是押注某个更强模型，而是把模型当产线里的一个工位；上游用契约和模板喂它，下游用 gate 和审片驯它。**
+
+---
+
+## Q36：以后能不能做个 PC 级客户端 + 无限画布（方便编排和观看）？<a id="q36"></a>
+
+**结论**：值得做，且 n2d 的现有结构天然适配——但它不应该是新引擎，而应该是**生产驾驶舱**。核心原则是：**PC 客户端/无限画布只做可视化、编排和触发；skills 仍是无头引擎**。n2d 已经具备做客户端最难的底座：干净的机器契约（`common/n2d_contract.py` 阶段图/进度 schema/manifest/gate stage/回退字段）+ 文件化产物树（`出图/出视频/合成` 的 PNG/MP4）+ `gate.py --json`（带 `return_to_stage/affected_artifacts`）+ 一致性检测器（都出 JSON）。**这套契约本身就是客户端要消费的 API**。
+
+推荐路线不是一上来做“大而全桌面软件”，而是按这个顺序推进：
+
+1. 先做 `n2d status --json`：把 `_进度.md`、阶段图、manifest、gate、audit、产物路径聚成一个作品级状态 JSON。
+2. 再做 `n2d-ui serve`：本地 Web 看板，能扫进度矩阵、Clip 首尾帧、成片、QA flag、定妆参考。
+3. 再做受约束无限画布：泳道 × Clip 卡 × 接力链边，优先解决编排/审片，不急着做完全自由白板。
+4. 最后套 PC 壳：当本地 Web 看板稳定后，再用 Electron 或 Tauri 封装成客户端。
+
+这是**未来方向、尚未立项**，先记此供以后参考。
+
+### 36.1 客户端形态铁律（最重要）
+- **薄壳不 fork 逻辑**：仓库立身之本是「工具中立、skill 不绑定某一家 AI 或某一个 agent」。客户端只能**读契约、调脚本/agent**，绝不把 gate/检测器逻辑重实现进 GUI——否则两个真值源，地狱。
+- 客户端读：`_进度.md` 状态机 + `manifest.json` 快照 + `gate --json` + `consistency_audit --json` + 产物树。
+- 「跑下一步」= shell 出对应 skill 脚本 / 起一个当前可用 agent 子进程驱动 stage；人在环「停审」= 画布交互（看图→放行/重抽/改 prompt），不是命令行。
+- 好处：客户端坏了/换了，引擎照样 CLI 跑；引擎升级，客户端零改也能用。
+
+### 36.2 为什么无限画布对漫剧特别契合（不是噱头）
+漫剧生产**本质是空间问题**，文本报告表达不了，正是画布的主场：
+- **编排**：① 接力链 = 天然有向图（`出点=下一入点 + 转场 + 需要尾帧?`）→ 每集一条泳道、每 Clip 一张卡（首/尾帧缩略图）、卡间画接缝边标转场，**storyboard 从 JSON 变可拖拽视觉板**；② 轴线/光位/景别阶梯这些 `visual_contract` 字段是空间概念，画布能把同场景镜头摆一起、箭头标轴线、色块标光位，一眼看出跳轴/光跳。
+- **观看/审片**：① `consistency_audit` 的崩脸/风格漂/接缝 flag 画成缩略图彩色描边（🔴🟡）——**审片从读文本报告变成扫一眼画布**，把检测器 JSON 真正可视化兑现；② 定妆库做钉住的参考面板，崩脸一目了然；③ 成片/clip 内联播放，按场景/角色聚类铺开。
+- 同类参照（ComfyUI 节点图、Flora / Visual Electric AI 媒体画布、tldraw 系 AI 板）是通用画布；n2d 的差异化是**画布节点直接绑产线契约**（卡片状态来自 manifest/gate，不是手摆）。
+
+### 36.3 推荐技术路线
+
+**先 Web，后桌面壳**。真正值钱的是状态契约和画布工作流，不是窗口框架。先把 `n2d-ui serve` 做成浏览器里可用的本地工作台，等交互稳定后再封成 PC 客户端。
+
+- **结构化编排画布**：优先用 React Flow 这类节点/边框架，适合“集/场/Clip/stage/接力链”的有向图和泳道看板，天然支持节点状态、边、拖拽、缩放。
+- **自由无限画布**：后续再考虑 tldraw 这类白板框架，用于批注、参考图墙、灵感板、导演手记。不要第一版就让自由画布承载生产契约，否则容易变成漂亮但不可控的白板。
+- **桌面壳选择**：早期 Electron 更省事，集成本地脚本、文件浏览、视频预览、日志窗口更快；Tauri 更轻、更安全，适合后期产品化。建议先 Web-first，若要快速本地客户端优先 Electron，稳定后再评估 Tauri。
+
+推荐架构：
+
+```
+本地 Web/PC 客户端
+  ① 状态机仪表盘：读 _进度.md + n2d_contract 阶段图
+  ② 无限画布：泳道(集)×节点(stage/Clip)，缩略图 + QA 描边 + 接力链边
+  ③ 产物查看器：PNG 网格 / clip 播放 / 定妆库面板
+  ④ 编排：一键「跑下一步 / 过 gate / 重抽这镜」
+        │ 只走 JSON 契约 + shell 调用
+  薄后端：`n2d status --json` + `n2d-ui serve`
+        │ 聚合 stage_specs + manifest + gate --json + audit + artifact index
+  驱动：起当前可用 agent 子进程 / 直调 skill 脚本
+        │
+  无头引擎（不动）= 现有 skills + n2d_contract
+```
+> `n2d status --json` 是整个客户端的**地基**，且**对纯 CLI 用户也立刻有用**——建议第一步就先写它。
+
+### 36.4 关键风险 / 边界
+1. 别让 GUI fork 逻辑（永远读契约、调脚本，不重实现 gate/检测器）。
+2. 无限画布是真工程：上百 PNG + 视频缩略图要虚拟化/分块渲染防卡——**先做受约束的「网格看板」，再升级自由画布**。
+3. 驱动 agent 的集成最棘手：先做**只读看板**（零驱动风险），再加「一键跑」。
+4. 本地重 AI 步骤要 conda env，客户端需做环境探测 + 优雅降级（沿用契约里「缺库优雅跳过」先例）。
+
+### 36.5 分期（每期独立交付价值）
+1. **MVP·状态 JSON**：`n2d status --json`，聚合进度、manifest、gate、audit、产物索引。先把客户端 API 固定下来。
+2. **只读仪表盘**：`n2d-ui serve` + 进度矩阵 + 产物缩略图网格 + QA 描边。零驱动纯看，立刻让"到哪了/哪镜崩了"可视化。
+3. **看板画布**：泳道×Clip 卡 + 接力链边 + 定妆库面板 + 内联播放。审片搬上画布。
+4. **编排**：一键跑下一步 / 过 gate / 重抽该镜（驱动层）。
+5. **PC 客户端封装**：本地 Web 工作台稳定后，用 Electron/Tauri 包一层，补文件关联、项目最近列表、日志窗口、环境探测。
+6. **批量 + 成本 + 反馈**：队列跑、$/集、一次通过率趋势——把「精品手作」推向「可量产」（与 Q35 工业化北极星合流）。
+
+> 一句话：**这不是给 n2d 换引擎，是给它装仪表盘和驾驶舱**；无限画布恰好把它最值钱的东西（接力链、契约、一致性 QA）从 JSON 变成看得见、可操作的板。起步从 `n2d status --json` + 只读看板，风险最低、对现有 CLI 用户即时有用。
+
+---
+
+## Q37：`watermark` 和 `faceswap` 等功能之前设计为公共能力，但我想保持 `mv` 和 `n2d` 相互独立。要不要把它们拆分成各自管线专属的 skill（比如 `mv-faceswap`）？<a id="q37"></a>
+
+**结论**：强烈建议**保持它们作为公共能力（Shared Skills）**，不需要拆分成专属版本。
+
+### 37.1 理由 1：基础设施层（Utility） vs 业务逻辑层（Domain）
+`mv` 和 `n2d` 之所以要严格独立，是因为它们的**业务逻辑**完全不同（漫剧的核心是长篇连贯性与分镜台词；MV 的核心是音乐卡点与氛围剪辑）。
+但 `watermark` 和 `faceswap` 就像是你机器上安装的 `ffmpeg` 或 `python` 一样，它们是**纯粹的物理工具**。
+- 换脸工具（FaceFusion）不关心你是漫剧还是 MV，它只关心“源图”和“目标视频”。
+- 水印工具（ffmpeg 烧字幕）只关心“给视频打个合规标记”。
+
+把这些纯粹的物理工具拆分开，不仅会产生大量的代码冗余（你要维护两份相同的换脸脚本），而且当合规法律发生变化（比如监管要求更新隐式水印格式）时，你需要去两个甚至更多地方改代码，极易造成漏改。
+
+### 37.2 理由 2：符合“微服务”架构（高内聚、低耦合）
+这其实是经典的**“微服务架构”**思想：`mv` 是一条生产流水线，当它需要换脸时，它“调用（RPC）”了名叫 `faceswap` 的公共微服务。这**并没有破坏 `mv` 的独立性**，因为 `mv` 内部没有耦合任何 `n2d` 的代码。
+
+### 37.3 理由 3：沉重的运行环境
+换脸（FaceFusion）需要庞大的 Conda 环境、CUDA/CoreML 驱动和特定的模型权重。如果你分设 `mv-faceswap` 和 `n2d-faceswap`，哪怕它们复用同一个底层环境，在项目认知和文档维护上也会造成混乱（新人会问：这两个换脸有啥区别？模型该放哪？）。
+
+> 一句话原则：**高内聚（每条产线管好自己的剧情或卡点）、低耦合（产线之间互不干扰，共同依赖底层物理工具库）**是最佳实践。保持 `watermark` 和 `faceswap` 的公共身份，是最高效的架构选择。

@@ -11,8 +11,8 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 
 from n2d_route import (  # noqa: E402
-    cell_state, is_done, is_started, _cn_to_int,
-    parse_progress, stage_of, voice_is_placeholder, manifest_path,
+    cell_state, is_done, is_started, _cn_to_int, episode_number, normalize_episode,
+    parse_progress, stage_of, voice_is_placeholder, manifest_path, is_flow_complete,
 )
 
 
@@ -44,6 +44,15 @@ def test_cn_to_int():
     assert _cn_to_int("二十三") == 23
     assert _cn_to_int("三") == 3
     assert _cn_to_int("abc") is None
+
+
+def test_episode_number_normalization():
+    assert episode_number("第１２集") == 12
+    assert episode_number("第十二集") == 12
+    assert episode_number("十二") == 12
+    assert episode_number("abc") is None
+    assert normalize_episode("第三集") == "第3集"
+    assert normalize_episode("第２集") == "第2集"
 
 
 PROG_HEADER = "| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |"
@@ -118,3 +127,62 @@ def test_manifest_path_prefers_compose_dir(tmp_path):
     p = manifest_path(root, "第2集")
     assert "合成" in p                              # 合成/ 优先
     assert voice_is_placeholder(root, "第2集") is False
+
+
+# ── ④ 制作模式：原生音画下 配音 不卡路由（治误推 n2d-voice）──────────────────
+def _set_mode(root, mode):
+    open(os.path.join(root, "_设置.md"), "w", encoding="utf-8").write(f"- 制作模式: {mode}\n")
+
+
+def test_voice_first_routes_to_voice_when_unvoiced(tmp_path):
+    # 配音先行：剧本改编 ✅ 但配音 ⬜ → 前沿就是 n2d-voice
+    rows = ["| 第1集 | 800 | … | ✅ | ✅ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |"]
+    root = _write_progress(tmp_path, rows)
+    _set_mode(root, "配音先行")
+    header, parsed = parse_progress(root)
+    route = stage_of(root, parsed[0], header)
+    assert route["skill"] == "n2d-voice"
+    assert route["col"] == "配音"
+
+
+def test_native_av_skips_voice_column(tmp_path):
+    # 原生音画：配音 ⬜ 不该误推 n2d-voice，应直接推进到 分镜设计（说话镜走 native 同步音画）
+    rows = ["| 第1集 | 800 | … | ✅ | ✅ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |"]
+    root = _write_progress(tmp_path, rows)
+    _set_mode(root, "原生音画")
+    header, parsed = parse_progress(root)
+    route = stage_of(root, parsed[0], header)
+    assert route["skill"] == "n2d-script"
+    assert route["col"] == "分镜设计"
+
+
+def test_native_av_requires_let_image_proceed_without_voice(tmp_path):
+    # 原生音画：配音 ⬜ 但分镜设计 ✅ → 出图prompt 的 requires 含「配音」，不能因此卡住
+    rows = ["| 第1集 | 800 | … | ✅ | ✅ | ✅ | ⬜ | ✅ | ✅ | ✅ | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |"]
+    root = _write_progress(tmp_path, rows)
+    _set_mode(root, "原生音画")
+    header, parsed = parse_progress(root)
+    route = stage_of(root, parsed[0], header)
+    assert route["col"] == "出图prompt"
+    assert route["skill"] == "n2d-image"
+
+
+def test_native_av_flow_completion_treats_voice_as_satisfied(tmp_path):
+    rows = ["| 第1集 | 800 | … | ✅ | ✅ | ✅ | ⬜ | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ | ✅ | ✅ |"]
+    root = _write_progress(tmp_path, rows)
+    _set_mode(root, "原生音画")
+    header, parsed = parse_progress(root)
+    flow = [h for h in header if h not in {"集", "字数", "raw"}]
+    assert is_flow_complete(root, parsed[0], flow) is True
+
+
+def test_video_first_compose_requires_confirmed_real_voice_manifest(tmp_path):
+    rows = ["| 第1集 | 800 | … | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ | ✅ | ⬜ |"]
+    root = _write_progress(tmp_path, rows)
+    _set_mode(root, "先出视频后配音")
+    header, parsed = parse_progress(root)
+
+    route = stage_of(root, parsed[0], header)
+
+    assert route["skill"] == "n2d-voice"
+    assert route["label"] == "补真实配音"

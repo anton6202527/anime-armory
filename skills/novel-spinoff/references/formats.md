@@ -26,13 +26,14 @@
 
 ```json
 {
+  "kind": "spinoff",
   "source_novel": "<原作绝对路径>",
   "source_title": "<原作名>",
   "spinoff_character": "<配角名>",
   "mode": "parallel|sequel|branch",
   "branch_point": "第N章 / null",
-  "scale": "short|medium|long",
-  "target_chapters": 30,
+  "scale": "short|medium|long|微短剧|漫剧",
+  "target_chapters": 40,
   "target_words_per_chapter": [5000, 8000],
   "person": "first|third-limited",
   "rights_status": "public-domain|user-owned|user-declared",
@@ -47,9 +48,9 @@
 }
 ```
 
-`title` 在第 1 步 init 时是 null；第 3 步用户选定后由 Claude 写回。`export.py --title` 缺省读这个字段。
+`title` 在第 1 步 init 时是 null；第 3 步用户选定后由主对话写回。`export.py --title` 缺省读这个字段。
 
-`demo_passed_at` 在第 5 步 Demo 通过后由 Claude 写回。用作 audit 痕迹和"是否允许进第 6 步"的硬开关。
+`demo_passed_at` 在第 5 步 Demo 通过后由主对话写回。用作 audit 痕迹和"是否允许进第 6 步"的硬开关。
 
 ## `_进度.md`
 
@@ -106,7 +107,8 @@
 UTF-8。文件头 provenance 注释块（`#` 开头多行），与 novel-fetch 同款风格：
 
 ```
-# spinoff_of: <原作名>
+# source: <原作名>
+# kind: spinoff
 # spinoff_character: <配角名>
 # mode: parallel|sequel|branch
 # chapters: 32

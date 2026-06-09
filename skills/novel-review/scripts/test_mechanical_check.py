@@ -77,6 +77,12 @@ def test_build_shingles_window_and_membership():
     assert mc.build_shingles("短", n=24) == set()
 
 
+def test_chapter_sort_uses_numeric_order():
+    paths = ["第10章.md", "第2章.md", "第01章.md"]
+    ordered = sorted(paths, key=mc.chapter_sort_key)
+    assert ordered == ["第01章.md", "第2章.md", "第10章.md"]
+
+
 def test_body_of_strips_h1_and_meta():
     body = mc.body_of(CLEAN)
     assert "第 1 章" not in body
@@ -153,3 +159,22 @@ def test_plagiarism_hit_and_toggle():
         # 关闭查重 → 不报
         f2 = run(root, "--min", "2", "--max", "500", "--no-plagiarism")
         assert ("🔴", "原文照搬") not in sev_dims(f2), f2
+
+
+def test_json_out_writes_machine_payload():
+    with tempfile.TemporaryDirectory() as t:
+        root = make_proj(t, {"第1章_开端.md": CLEAN})
+        out_path = os.path.join(t, "mechanical_findings.json")
+        f = run(root, "--min", "9000", "--max", "20000", "--json-out", out_path)
+        assert os.path.exists(out_path)
+        with open(out_path, encoding="utf-8") as fp:
+            payload = json.load(fp)
+        assert payload["schema_version"] == 1
+        assert payload["kind"] == "novel_mechanical_findings"
+        assert payload["findings"] == f
+        assert payload["counts"]["🟡"] >= 1
+
+
+if __name__ == "__main__":
+    import pytest
+    raise SystemExit(pytest.main([__file__]))

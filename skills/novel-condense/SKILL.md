@@ -11,7 +11,7 @@ description: Given a long novel (.txt/.docx), compress it into a shorter version
 
 本 skill 的可选项**不写死在源码里**。按 `../_偏好约定.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
-本 skill 涉及的选择点：`权利来源`、`输出格式`。
+本 skill 涉及的选择点：`权利来源`、`输出格式`、`小说生成模式`、`章节生成粒度`、`AI使用披露`。
 
 ## 合法性铁律
 
@@ -27,6 +27,8 @@ description: Given a long novel (.txt/.docx), compress it into a shorter version
 
 ## 工作流（七步）
 
+> **派生同构阶段表**：本 skill 的 `_meta.json` / `_进度.md` 必须遵守 `novel-craft/references/contract.md`。机器阶段 key 固定为 `setup → source_model → direction_spec → title → outline → demo → draft → review → export`；本 skill 中 `source_model` = 主线骨架/锚点/反转点，`direction_spec` = 压缩比/目标用途/合章策略。
+
 ### 第 0 步 — 输入
 
 - 原作路径
@@ -40,9 +42,13 @@ description: Given a long novel (.txt/.docx), compress it into a shorter version
 python3 <skill>/scripts/init_project.py "<原作>" \
   --ratio 5 \
   --target 漫剧 \
+  [--target-chapters 60] \
+  [--draft-mode 漫剧源书] [--chapter-granularity 逐章] [--ai-text-usage AI-assisted] \
   [--out <输出根>] \
   [--i-have-rights]
 ```
+
+`init_project.py` 会根据 `target_chars_estimate + target/outputs` 推导 `target_chapters / target_words_per_chapter / demo_chapters / draft_mode`，并把 `draft_mode / chapter_granularity / ai_text_usage` 同步写进 `_meta.json` 与 `_设置.md`；若漫剧版已有明确集/章规划，必须传 `--target-chapters`，保证后续 `draft_packets.py --next` 按机器字段推进。
 
 ### 第 2 步 — 标主线 / 锚点 / 反转点
 
@@ -56,7 +62,7 @@ python3 <skill>/scripts/init_project.py "<原作>" \
 
 ### 第 3 步 — 划章 / 合章
 
-按目标压缩比决定新章数。相邻同主题章合并；纯支线章砍掉或缩成一句话。映射写入 `设定/章节映射.md`。
+按 `_meta.json.target_chapters` 与目标压缩比决定新章数。相邻同主题章合并；纯支线章砍掉或缩成一句话。映射写入 `设定/章节映射.md`。
 
 ### 第 4 步 — 章纲
 
@@ -65,9 +71,13 @@ python3 <skill>/scripts/init_project.py "<原作>" \
 ### 第 5 步 — Demo（前 2-3 章）+ 用户审
 
 引用 `novel-craft/references/chapter.md` + `condense.md`。每章独立写、独立审。
+Demo 审完必须写 `审稿/demo_gate.json`（见 `novel-craft/references/demo-gate.md`）；`status != passed` 不进第 6 步。
 
 ### 第 6 步 — 续 + 回扫
 
+先读 `novel-craft/references/draft-pipeline.md`，跑 `python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --next|--range A-B` 生成逐章任务包。
+续压子任务必须喂 `审稿/demo_gate.json` 的 `style_anchor` / `reader_promises` / `setting_constraints`，并读取 `审稿/state_ledger.json`。
+每章写完填 `审稿/state_delta_第NN章.json`，记录主线骨架、钩子、反转点是否保留。
 重点扫：
 - 主线骨架是否完整
 - 钩子是否还在
@@ -76,6 +86,8 @@ python3 <skill>/scripts/init_project.py "<原作>" \
 - 没有大段原文照搬
 
 ### 第 7 步 — 导出
+
+发布/交平台前先用 `novel-craft/scripts/ai_usage.py` 写 AI 使用披露。
 
 ```bash
 python3 novel-craft/scripts/export.py "<作品根>" --formats txt,docx[,n2d,outline]   # 家族通用导出器（漫剧友好版传 n2d 喂 n2d-script）
@@ -102,3 +114,5 @@ python3 novel-craft/scripts/export.py "<作品根>" --formats txt,docx[,n2d,outl
 | 大段复刻原作高潮段 | 即便高潮段也要重写，不搬文本 |
 | 均匀压缩每段砍 50% | 高潮段失去击穿；要重点保高潮 |
 | Demo 没审就续 | 第 5 步 gate 必须等用户点头 |
+| Demo 过审后不跑 `draft_packets.py` | 缺单章上下文包和状态账本，容易砍丢主线或钩子 |
+| Demo 过审但没写 `审稿/demo_gate.json` | 后续压缩缺保留风格/承诺的机器锚点 |
