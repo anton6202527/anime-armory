@@ -1,6 +1,6 @@
 ---
 name: n2d-score
-description: P2 automatic review scoring for novel2drama/n2d. Produce a machine score per episode across character consistency, outfit consistency, scene consistency, subtitle correctness, audio-visual sync, rhythm density, and style consistency; integrates visual checks such as image similarity, subtitle OCR, audio/video duration reconciliation, lip-sync risk/report ingestion, and final rhythm density; write score JSON/Markdown, feed n2d-review-ui visual human review canvas, and optionally enqueue low-score reruns into n2d-batch. Use when asked for 自动审片评分, 机器分, 每集评分, 低于阈值自动回流, 角色一致性评分, 字幕正确性评分, 音画同步评分, 节奏密度评分, 图像相似度评分, 字幕OCR, 口型检测, 成片节奏密度, style score, review score.
+description: P2 automatic review scoring for novel2drama/n2d. Produce a machine score per episode across semantic continuity, state continuity, multimodal continuity, character consistency, outfit consistency, scene consistency, subtitle correctness, audio-visual sync, rhythm density, and style consistency; integrates visual checks such as image similarity, subtitle OCR, audio/video duration reconciliation, lip-sync risk/report ingestion, and final rhythm density; write score JSON/Markdown, feed n2d-review-ui visual human review canvas, and optionally enqueue low-score reruns into n2d-batch. Use when asked for 自动审片评分, 机器分, 每集评分, 低于阈值自动回流, 语义继承评分, 状态一致性评分, 多模态漂移评分, 角色一致性评分, 字幕正确性评分, 音画同步评分, 节奏密度评分, 图像相似度评分, 字幕OCR, 口型检测, 成片节奏密度, style score, review score.
 ---
 
 # n2d-score — P2 自动审片评分体系
@@ -11,7 +11,10 @@ description: P2 automatic review scoring for novel2drama/n2d. Produce a machine 
 
 | 维度 | 权重 | 主要来源 | 低分回流 |
 |---|---:|---|---|
-| 角色一致性 | 20 | `consistency_audit` 的 锚点门/脸/片内时序 + dashboard 角色类 block | `image` |
+| 语义继承 | 8 | `semantic_continuity.py` 的 P0 语义谱系 Diff：voiceover/storyboard/出图/出视频 prompt 是否逐层继承 | `script_stage2` |
+| 状态百科 | 8 | `state_continuity.py` 的 P1 动态百科：状态提前泄露、区间结束后泄露、开始后漏继承 | `image` |
+| 多模态漂移 | 8 | `multimodal_consistency.py` 的 P2 非角色资产组 embedding 离群，按 identity_registry 排除角色 | `image` |
+| 角色一致性 | 20 | `consistency_audit` 的 锚点门/脸/片内时序 + dashboard 角色类 block + **`n2d-identity` 跨集漂移**（早集稳·本集崩的回归，warn 级，不重复计片内崩脸） | `image` |
 | 服装一致性 | 12 | 服装配色机检 | `image` |
 | 场景一致性 | 12 | 场景机检 + 接缝接力 + 尾帧/下一首帧图像相似度 | `image` / 必要时 `video` |
 | 字幕正确性 | 16 | `mechanical_check` 字幕 findings + 成片字幕 OCR 抽检 | `script_stage2` |
@@ -20,6 +23,8 @@ description: P2 automatic review scoring for novel2drama/n2d. Produce a machine 
 | 风格一致性 | 12 | 风格机检 + 糊/低质 | `image` |
 
 默认阈值 `85`。任一维度 block 会让该维度 fail；总分低于阈值或存在 fail 时，整集状态为 `fail`，输出 `auto_return_tasks`。缺机器信号的维度是 `insufficient_data`：只输出 `data_collection_tasks`，先采集检查信号，不直接排返工。
+
+**无静默丢弃（P1）**：mechanical_check / dashboard 的 findings 若 `dim` 归不到评分维度（如 `完整性`=缺产物、`水印`=AI 标识、`视频`），不再被 `continue` 静默吞掉，而是落进 `unmapped_findings`。其中 **block 级会强制整集不给 `pass`（降 `warn`）并出 `triage_unmapped` 人判分诊任务**；warn/info 仅留痕。历史 bug：`BLOCK 完整性 / BLOCK 水印` 因关键词没命中被丢弃、不扣分、可放行。
 
 ## 标准命令
 
@@ -35,9 +40,12 @@ python3 skills/n2d-score/scripts/score.py <作品根> 第1集 --run-checks
 生产数据/score_inputs/第1集_consistency.json
 生产数据/score_inputs/第1集_mechanical.json
 生产数据/score_inputs/第1集_visual.json
+生产数据/score_inputs/第1集_identity.json   # 跨集漂移（registry/insightface 可用时才有）
 生产数据/score_第1集.json
 生产数据/score_第1集.md
 ```
+
+`第N集_identity.json` 由 `n2d-identity`（窗口=本集+前两集）产出的 `drift` 报告：单集评分本来对**跨集**角色漂移是盲的（片内每镜对定妆库都过，但相对前几集已经换了脸也看不出）。评分只采纳其中的**跨集回归**信号（某角色早集 ok、本集开始 block/临界），按 warn 级并进角色一致性——片内崩脸的 block 已由 `脸(G1)` 计，不在此重复扣分。`identity_registry.json` 缺失或 insightface/cv2 没装时该输入缺席，角色一致性按 `insufficient_data` 显式标注，不臆造通过。
 
 `第N集_visual.json` 由 `scripts/visual_checks.py` 生成，包含：
 
@@ -68,7 +76,7 @@ python3 skills/n2d-score/scripts/score.py <作品根> 第1集 \
   --max-retries 1
 ```
 
-低分时会调用 `n2d-batch` 安全合并写入 `生产数据/batch_queue.json`，把每个低分维度聚合到对应 `return_to_stage`。例如角色/服装/风格低分 → `image` rerun；字幕/节奏低分 → `script_stage2` rerun；音画同步低分 → `compose` rerun。证据里出现 `Clip 2`、`Clip_02`、`EP01_CLIP02`、`镜头2` 或 `出图/出视频/合成/脚本/...` 路径时，会落到 `affected_shots` / `affected_artifacts`，让 batch 优先按最小范围返工。若只有缺数据，`--enqueue-low` 不会写 batch 队列。
+低分时会调用 `n2d-batch` 安全合并写入 `生产数据/batch_queue.json`，把每个低分维度聚合到对应 `return_to_stage`。例如语义继承/字幕/节奏低分 → `script_stage2` rerun；状态百科/多模态/角色/服装/风格低分 → `image` rerun；音画同步低分 → `compose` rerun。证据里出现 `Clip 2`、`Clip_02`、`EP01_CLIP02`、`镜头2` 或 `出图/出视频/合成/脚本/...` 路径时，会落到 `affected_shots` / `affected_artifacts`，让 batch 优先按最小范围返工。若只有缺数据，`--enqueue-low` 不会写 batch 队列。
 
 ### 生成可视化人审画布
 
@@ -76,7 +84,7 @@ python3 skills/n2d-score/scripts/score.py <作品根> 第1集 \
 python3 skills/n2d-review-ui/scripts/review_ui.py <作品根> 第1集 --write --markdown
 ```
 
-`n2d-review-ui` 会读取本 skill 的 `score_第N集.json` 和 `score_inputs/`，把七维分、QA flag、visual checks 证据与首帧、尾帧、clip、接缝、定妆参考合并到静态 HTML/JSON。工业级人审以画布为入口，文本评分报告只做摘要和留档。
+`n2d-review-ui` 会读取本 skill 的 `score_第N集.json` 和 `score_inputs/`，把评分维度、QA flag、visual checks 证据与首帧、尾帧、clip、接缝、定妆参考合并到静态 HTML/JSON。工业级人审以画布为入口，文本评分报告只做摘要和留档。
 
 ## 与其他横切层的关系
 

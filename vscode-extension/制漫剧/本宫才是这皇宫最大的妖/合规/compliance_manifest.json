@@ -1,0 +1,123 @@
+{
+  "kind": "n2d_compliance_manifest",
+  "version": 1,
+  "updated_at": "2026-06-09",
+  "distribution_intent": "internal_only",
+  "scope": {
+    "episodes": "all"
+  },
+  "rights": {
+    "source_text": {
+      "status": "user_declared",
+      "evidence": "用户在本仓写小说项目创作并导出：写小说/本宫才是这皇宫最大的妖/章节 与 导出/本宫才是这皇宫最大的妖.txt"
+    },
+    "adaptation": {
+      "status": "user_declared",
+      "evidence": "用户明确要求对本作执行 /n2d-script，改编为 AI 漫剧脚本阶段产物"
+    },
+    "music_bgm": {
+      "status": "not_applicable",
+      "evidence": ""
+    },
+    "sfx": {
+      "status": "not_applicable",
+      "evidence": ""
+    },
+    "fonts": {
+      "status": "not_applicable",
+      "evidence": ""
+    }
+  },
+  "character_likeness": {
+    "characters": [
+      {
+        "character_id": "CHAR_01",
+        "status": "synthetic_character",
+        "evidence": "原创小说角色：沈念 / 林婉儿；用户补充本地参考图集用于内部 demo 定妆：出图/共享/参考/沈念_林婉儿_用户参考/reference_manifest.json。公开投放前需确认参考图权属或替换为自有/授权参考。"
+      },
+      {
+        "character_id": "CHAR_02",
+        "status": "synthetic_character",
+        "evidence": "原创小说角色：小禾"
+      },
+      {
+        "character_id": "CHAR_03",
+        "status": "synthetic_character",
+        "evidence": "原创小说角色：柳娘子"
+      },
+      {
+        "character_id": "CHAR_04",
+        "status": "synthetic_character",
+        "evidence": "原创小说角色：皇后王氏"
+      }
+    ]
+  },
+  "voice": {
+    "status": "synthetic_voice",
+    "uses_voice_clone": false,
+    "authorization_status": "not_applicable",
+    "evidence": "未使用真人参考音；若使用参考音，改为 authorized_clone + approved + evidence"
+  },
+  "ai_disclosure": {
+    "required": true,
+    "visible_label": {
+      "status": "planned",
+      "text": "AI 合成"
+    },
+    "metadata_label": {
+      "status": "planned"
+    },
+    "c2pa_or_content_credentials": {
+      "status": "not_supported",
+      "fallback": "平台上传披露 + 项目合规留痕"
+    },
+    "hidden_or_platform_watermark": {
+      "status": "planned",
+      "note": "按目标平台要求补隐式/自动标识"
+    }
+  },
+  "watermark": {
+    "ai_visible": {
+      "status": "planned",
+      "tool": "skills/watermark/watermark.py --mode ai"
+    },
+    "metadata": {
+      "status": "planned"
+    },
+    "final_assets": []
+  },
+  "platform_review": {
+    "targets": [
+      {
+        "platform": "internal_review",
+        "region": "CN",
+        "language": "zh",
+        "policy_profile": "internal_review_profile_2026-06-09",
+        "profile_checked_at": "2026-06-09",
+        "copyright_review": "ready",
+        "ai_disclosure_upload": "ready",
+        "content_rating_review": "ready",
+        "requires_localization": false
+      }
+    ]
+  },
+  "localization": {
+    "status": "not_applicable",
+    "subtitle_languages": [
+      "zh"
+    ],
+    "dub_languages": [],
+    "notes": ""
+  },
+  "reference_assets": {
+    "character_images": [
+      {
+        "character_id": "CHAR_01",
+        "path": "出图/共享/参考/沈念_林婉儿_用户参考/reference_manifest.json",
+        "status": "user_supplied_internal_reference",
+        "usage_limit": "internal_demo_only_until_user_confirms ownership_or_license; do not copy watermarks/source IDs into outputs",
+        "notes": "用于合成角色定妆脸型/发量参考；角色仍为原创小说合成角色，不按真人肖像复刻。"
+      }
+    ]
+  }
+}

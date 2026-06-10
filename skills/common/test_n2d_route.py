@@ -13,7 +13,26 @@ sys.path.insert(0, os.path.dirname(__file__))
 from n2d_route import (  # noqa: E402
     cell_state, is_done, is_started, _cn_to_int, episode_number, normalize_episode,
     parse_progress, stage_of, voice_is_placeholder, manifest_path, is_flow_complete,
+    voiceover_fingerprint,
 )
+
+
+# ── voiceover_fingerprint：抓"配音后又改 voiceover.txt"的失配 ──
+def test_voiceover_fingerprint_detects_content_change(tmp_path):
+    p = tmp_path / "voiceover.txt"
+    p.write_text("[镜头1·沈念·冷] 你来了。\n[镜头2·柳娘子·惊] 娘娘息怒。\n", encoding="utf-8")
+    fp1 = voiceover_fingerprint(str(p))
+    # 排版改动（空行 / 行尾空白）不该改指纹
+    p.write_text("[镜头1·沈念·冷] 你来了。  \n\n[镜头2·柳娘子·惊] 娘娘息怒。\n", encoding="utf-8")
+    assert voiceover_fingerprint(str(p)) == fp1
+    # 改台词 / 插句 → 指纹变
+    p.write_text("[镜头1·沈念·冷] 你终于来了。\n[镜头2·柳娘子·惊] 娘娘息怒。\n", encoding="utf-8")
+    assert voiceover_fingerprint(str(p)) != fp1
+
+
+def test_voiceover_fingerprint_missing_file_is_empty(tmp_path):
+    assert voiceover_fingerprint(str(tmp_path / "nope.txt")) == ""
+    assert voiceover_fingerprint("") == ""
 
 
 # ── cell_state / is_done：na（不适用）算已满足 ──

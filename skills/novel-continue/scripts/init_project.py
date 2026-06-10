@@ -20,7 +20,7 @@ from datetime import date
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                 "..", "..", "novel-craft", "scripts"))
 from contract import (AI_TEXT_USAGE_MODES, CHAPTER_GRANULARITY, NOVEL_DRAFT_MODES,
-                      base_meta, derived_stage_markdown, parse_outputs)
+                      base_meta, demo_chapters_for, derived_stage_markdown, parse_outputs)
 from derive_common import docx_to_txt, detect_rights_status, write_settings
 
 
@@ -89,8 +89,8 @@ def main():
     orig_chapter_count = sum(1 for ln in open(novel_txt, encoding="utf-8")
                               if chap_re.match(ln))
 
-    # Demo 章数按规模
-    demo = 2 if args.new_chapters >= 5 else 1
+    # Demo 章数走共享真值源（与 expand/condense/spinoff/rewrite 同口径），勿自定义阈值
+    demo = demo_chapters_for(args.new_chapters)
     outputs = parse_outputs(args.outputs)
     target_wpc = words_per_chapter_for(args.target_platform)
     draft_mode = args.draft_mode or (

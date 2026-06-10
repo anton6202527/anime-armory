@@ -23,6 +23,18 @@ DEFAULT_SOURCES = [
     ("晋江文学城", "https://m.jjwxc.net/rank/index", "web_novel_rank"),
 ]
 
+# 红果/抖音 短剧·漫剧榜单在 App/小程序内，无可直接抓取的公开网页。
+# 它们却是默认权重档（红果/抖音 商业爽文向）真正对标的平台——若静默缺席，
+# 基准会"看起来覆盖了"实则没覆盖。这里放可见的占位行（status=manual_required，
+# 不计入有效证据），逼采集者用 --note / --source <第三方报告URL> 显式补齐。
+MANUAL_REQUIRED_SOURCES = [
+    ("红果短剧", "App/小程序内榜（无公开网页），需第三方榜单报告", "short_drama_rank"),
+    ("抖音漫剧/短剧", "App 内热榜（无公开网页），需第三方榜单报告", "short_drama_rank"),
+]
+
+# target_platform 命中这些词时，要求 红果/抖音 有真实覆盖（--note 或 --source）。
+SHORT_DRAMA_KEYWORDS = ("红果", "抖音", "漫剧", "短剧")
+
 
 class TextExtractor(HTMLParser):
     def __init__(self):
@@ -105,6 +117,39 @@ def collect(args):
                 result["sources"].append(item)
                 raise
         result["sources"].append(item)
+
+    # 可见的人工占位行：红果/抖音 等无公开网页的短剧/漫剧榜
+    if args.defaults and not args.no_manual_required:
+        for platform, hint, use_for in MANUAL_REQUIRED_SOURCES:
+            result["sources"].append({
+                "platform": platform,
+                "url": hint,
+                "use_for": use_for,
+                "collected_at": now.isoformat(timespec="seconds"),
+                "status": "manual_required",
+                "title": "",
+                "signals": [],
+                "note": "用 --note 填第三方榜单结论，或 --source 平台|<第三方报告URL> 抓取；空占位不计入有效证据。",
+            })
+
+    # 覆盖告警：目标平台点名了短剧/漫剧，却没有任何来源/备注覆盖红果·抖音
+    result["coverage_warnings"] = []
+    tp = args.target_platform or ""
+    if any(k in tp for k in SHORT_DRAMA_KEYWORDS):
+        covered_by_source = any(
+            any(k in s.get("platform", "") for k in SHORT_DRAMA_KEYWORDS)
+            and s.get("status") == "ok" and s.get("signals")
+            for s in result["sources"]
+        )
+        covered_by_note = any(
+            any(k in note for k in SHORT_DRAMA_KEYWORDS) for note in (args.note or [])
+        )
+        if not covered_by_source and not covered_by_note:
+            result["coverage_warnings"].append(
+                "target_platform 命中 红果/抖音/漫剧/短剧，但无任何有效来源或 --note 覆盖这些平台；"
+                "当前基准只反映 番茄/起点/晋江 等网文公榜，对主投放平台是盲区。"
+                "请补 --note '<第三方短剧榜结论>' 或 --source '红果短剧|<第三方报告URL>'。"
+            )
     return result
 
 
@@ -138,6 +183,10 @@ def write_artifacts(result, out_dir):
             f.write("## 人工补充\n\n")
             for note in result["notes"]:
                 f.write(f"- {note}\n")
+        if result.get("coverage_warnings"):
+            f.write("\n## ⚠️ 覆盖告警\n\n")
+            for w in result["coverage_warnings"]:
+                f.write(f"- {w}\n")
     return json_path, md_path
 
 
@@ -149,6 +198,8 @@ def main():
     ap.add_argument("--expires-after-days", type=int, default=21)
     ap.add_argument("--source", action="append", default=[], help="平台|URL[|use_for]，可重复")
     ap.add_argument("--no-defaults", dest="defaults", action="store_false")
+    ap.add_argument("--no-manual-required", action="store_true",
+                    help="不追加 红果/抖音 等人工占位行（默认追加以暴露覆盖缺口）")
     ap.add_argument("--note", action="append", default=[], help="从浏览器/搜索人工核验到的趋势备注")
     ap.add_argument("--timeout", type=float, default=8.0)
     ap.add_argument("--max-signals", type=int, default=80)
@@ -163,6 +214,8 @@ def main():
     json_path, md_path = write_artifacts(result, os.path.abspath(args.out_dir))
     print(f"[ok] market baseline JSON → {json_path}")
     print(f"[ok] market baseline MD   → {md_path}")
+    for w in result.get("coverage_warnings", []):
+        print(f"[warn] {w}", file=sys.stderr)
 
 
 if __name__ == "__main__":

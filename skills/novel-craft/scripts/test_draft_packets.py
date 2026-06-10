@@ -55,6 +55,51 @@ def make_project(root, *, demo=True):
             }, f, ensure_ascii=False)
 
 
+def make_kind_project(root, kind):
+    os.makedirs(os.path.join(root, "设定"), exist_ok=True)
+    os.makedirs(os.path.join(root, "章节"), exist_ok=True)
+    os.makedirs(os.path.join(root, "审稿"), exist_ok=True)
+    with open(os.path.join(root, "_meta.json"), "w", encoding="utf-8") as f:
+        json.dump({
+            "schema_version": 1,
+            "kind": kind,
+            "title": "测试项目",
+            "rights_status": "user-declared",
+            "outputs": ["txt"],
+            "scale": "short",
+            "target_chapters": 3,
+            "target_words_per_chapter": [1000, 1500],
+            "demo_chapters": 1,
+            "target_platform": "红果",
+        }, f, ensure_ascii=False)
+    with open(os.path.join(root, "审稿", "demo_gate.json"), "w", encoding="utf-8") as f:
+        json.dump({"schema_version": 1, "kind": "novel_demo_gate", "status": "passed"}, f, ensure_ascii=False)
+    with open(os.path.join(root, "设定", "章纲.md"), "w", encoding="utf-8") as f:
+        f.write("# 章纲\n- 第 02 章 《推进》 — 推进主线\n")
+    with open(os.path.join(root, "原作.txt"), "w", encoding="utf-8") as f:
+        f.write("第1章 原作\n原作内容。\n")
+    for rel in (
+        "设定/创作蓝图.md",
+        "设定/设定圣经.md",
+        "设定/角色卡.md",
+        "设定/世界观.md",
+        "设定/改动spec.md",
+        "设定/新设定.md",
+        "设定/锚点表.json",
+        "设定/人物.md",
+        "设定/主线骨架.json",
+        "设定/末章状态.md",
+        "设定/作者口吻.md",
+        "设定/续写方向.md",
+        "设定/事件骨架.json",
+        "设定/章节映射.md",
+    ):
+        path = os.path.join(root, rel)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(f"# {rel}\n")
+
+
 class DraftPacketsTest(unittest.TestCase):
     def test_generates_packet_and_state_ledger(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -68,6 +113,8 @@ class DraftPacketsTest(unittest.TestCase):
             self.assertIn("[ok] 写作任务包", got.stdout)
             self.assertTrue(os.path.exists(packet))
             self.assertTrue(os.path.exists(ledger))
+            self.assertTrue(os.path.exists(os.path.join(tmp, "审稿", "state_ledger.lock")))
+            self.assertFalse([name for name in os.listdir(os.path.join(tmp, "审稿")) if ".tmp." in name])
             with open(packet, encoding="utf-8") as f:
                 text = f.read()
             self.assertIn("第 03 章写作任务包", text)
@@ -113,6 +160,27 @@ class DraftPacketsTest(unittest.TestCase):
                 capture_output=True, text=True, check=True,
             )
             self.assertTrue(os.path.exists(os.path.join(tmp, "写作任务", "第04章.md")))
+
+    def test_source_paths_follow_project_kind(self):
+        cases = {
+            "rewrite": (["设定/改动spec.md", "设定/新设定.md"], ["设定/创作蓝图.md", "设定/设定圣经.md"]),
+            "spinoff": (["设定/锚点表.json", "原作.txt"], ["设定/创作蓝图.md", "设定/新设定.md"]),
+            "continue": (["设定/末章状态.md", "设定/作者口吻.md", "设定/续写方向.md"], ["设定/创作蓝图.md"]),
+            "expand": (["设定/事件骨架.json", "设定/章节映射.md"], ["设定/创作蓝图.md", "设定/新设定.md"]),
+            "condense": (["设定/主线骨架.json", "设定/章节映射.md"], ["设定/创作蓝图.md", "设定/新设定.md"]),
+        }
+        for kind, (must_have, must_not_have) in cases.items():
+            with self.subTest(kind=kind), tempfile.TemporaryDirectory() as tmp:
+                make_kind_project(tmp, kind)
+                got = subprocess.run(
+                    [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "2", "--stdout"],
+                    capture_output=True, text=True, check=True,
+                )
+                for path in must_have:
+                    self.assertIn(f"`{path}`", got.stdout)
+                for path in must_not_have:
+                    self.assertNotIn(f"`{path}`", got.stdout)
+                self.assertIn("python3 skills/novel-review/scripts/mechanical_check.py", got.stdout)
 
 
 if __name__ == "__main__":

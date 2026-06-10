@@ -9,13 +9,14 @@ description: Given a long novel (.txt/.docx), compress it into a shorter version
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**。按 `../_偏好约定.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
+本 skill 的可选项**不写死在源码里**，按 `../_偏好约定.md`（家族统一的偏好读写机制 + 全部选择点目录与缺省）解析：`<作品根>/_设置.md` → 全局默认 `创作偏好-默认.md` 预填并告知一句 → 缺则**首次问一次**→写回 `_设置.md`→**沉默沿用**（合规/不可逆/花钱点每次仍确认）。
 
 本 skill 涉及的选择点：`权利来源`、`输出格式`、`小说生成模式`、`章节生成粒度`、`AI使用披露`。
 
 ## 合法性铁律
 
-同 novel-spinoff / novel-expand。当代受版权网文 → 拒做。
+家族统一铁律（公版 / 自有 / `--i-have-rights` + provenance 留痕；当代受版权网文未声明授权→拒做）见 `novel-author/SKILL.md` 合法性继承。
+- 本 skill 特有：精简时即便高潮段也要重写，不照搬原文。
 
 ## 用途分档
 
@@ -27,7 +28,7 @@ description: Given a long novel (.txt/.docx), compress it into a shorter version
 
 ## 工作流（七步）
 
-> **派生同构阶段表**：本 skill 的 `_meta.json` / `_进度.md` 必须遵守 `novel-craft/references/contract.md`。机器阶段 key 固定为 `setup → source_model → direction_spec → title → outline → demo → draft → review → export`；本 skill 中 `source_model` = 主线骨架/锚点/反转点，`direction_spec` = 压缩比/目标用途/合章策略。
+> **派生流水线**：阶段表 + demo_gate / draft_packets / 状态账本 / export / ai_usage 的通用机制见 `novel-craft/references/derive-pipeline.md`。本 skill 的 `source_model` = 主线骨架/锚点/反转点，`direction_spec` = 压缩比/目标用途/合章策略。
 
 ### 第 0 步 — 输入
 
@@ -90,7 +91,7 @@ Demo 审完必须写 `审稿/demo_gate.json`（见 `novel-craft/references/demo-
 发布/交平台前先用 `novel-craft/scripts/ai_usage.py` 写 AI 使用披露。
 
 ```bash
-python3 novel-craft/scripts/export.py "<作品根>" --formats txt,docx[,n2d,outline]   # 家族通用导出器（漫剧友好版传 n2d 喂 n2d-script）
+python3 skills/novel-craft/scripts/export.py "<作品根>" --formats txt,docx[,n2d,outline]   # 家族通用导出器（漫剧友好版传 n2d 喂 n2d-script）
 ```
 
 ## 输出约定
@@ -102,6 +103,8 @@ python3 novel-craft/scripts/export.py "<作品根>" --formats txt,docx[,n2d,outl
 
 - 用户想**扩写** → 用 novel-expand。
 - 用户想**配角视角续写** → 用 novel-spinoff。
+- 用户想**改设定 / 换主线魔改重写** → 用 novel-rewrite。
+- 用户想**接着原作末章往后写新章** → 用 novel-continue。
 - 用户想**做漫剧脚本但不要精简版小说** → 直接 novel2drama / n2d-script，更直接。
 
 ## 常见错误

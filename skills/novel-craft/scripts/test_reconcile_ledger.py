@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """reconcile_ledger safety tests. Can run without pytest."""
+import importlib.util
 import json
 import hashlib
 import os
@@ -12,6 +13,10 @@ import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SCRIPT = os.path.join(HERE, "reconcile_ledger.py")
+
+_spec = importlib.util.spec_from_file_location("reconcile_ledger", SCRIPT)
+reconcile_ledger = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(reconcile_ledger)
 
 
 def sha256_file(path):
@@ -44,6 +49,28 @@ def make_project(root):
             "open_threads_added": ["第一条线索"],
             "threads_resolved": [],
         }, f, ensure_ascii=False)
+
+
+class WriteJsonAtomicTest(unittest.TestCase):
+    def test_write_json_leaves_no_tmp_and_is_complete(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "审稿", "state_ledger.json")
+            reconcile_ledger.write_json(path, {"k": "值", "n": 1})
+            with open(path, encoding="utf-8") as f:
+                self.assertEqual(json.load(f), {"k": "值", "n": 1})
+            # 临时文件不残留
+            self.assertEqual([p for p in os.listdir(os.path.dirname(path)) if ".tmp." in p], [])
+
+    def test_failed_write_does_not_corrupt_existing_ledger(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "审稿", "state_ledger.json")
+            reconcile_ledger.write_json(path, {"good": True})
+            # 不可序列化的 payload 会在 json.dump 阶段抛错——旧账本必须原样保留、无残留 tmp
+            with self.assertRaises(TypeError):
+                reconcile_ledger.write_json(path, {"bad": object()})
+            with open(path, encoding="utf-8") as f:
+                self.assertEqual(json.load(f), {"good": True})
+            self.assertEqual([p for p in os.listdir(os.path.dirname(path)) if ".tmp." in p], [])
 
 
 class ReconcileLedgerSafetyTest(unittest.TestCase):

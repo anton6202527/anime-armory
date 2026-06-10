@@ -52,17 +52,19 @@ ENV_MAP = {
 }
 
 BENCHMARK_FILE = "industry_benchmark.json"
+BENCHMARK_REFERENCE_FILE = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "n2d-dashboard", "references", BENCHMARK_FILE)
+)
 
-# 行业基准参照（**只读·非闸门**）——给 ROI 五件套一个外部对照锚，不参与告警/阻断。
-# 都是厂商宣传口径、口径不一、会过期，仅作「你 X% vs 行业基准 Y%」的并排参照线。
-# 落地前以一次 `n2d-review` 流程自审复核为准（防过期铁律）。采集 2026-06。
-# 来源：搜狐《2026 AI 真人短剧工业化测评》、知乎《AI 漫剧角色一致性与自动化生产》。
-INDUSTRY_BENCHMARK: Dict[str, Any] = {
+# 行业基准参照（**只读·非闸门**）的 fallback。默认值从
+# `n2d-dashboard/references/industry_benchmark.json` 读取，方便流程自审刷新基准而不改代码。
+FALLBACK_INDUSTRY_BENCHMARK: Dict[str, Any] = {
     "one_pass_rate": 0.90,            # 分镜/镜头一次性通过率行业宣传基准（≈纳米漫剧 90%+）
     "redraw_rate": 0.10,             # 重抽率参照（≈1 − 一次通过率）
     "cost_per_min": {"CNY": 6.0},    # ~0.1 元/秒 × 60 = 6 元/成片分钟（有戏AI 0.1 元/秒口径）
     "cross_ep_consistency": 0.95,    # 跨集角色一致性（由 n2d-score 视觉相似度跟踪，非本仪表盘 ROI 字段）
     "collected": "2026-06",
+    "sources": [],
 }
 
 # _设置.md 标签 → benchmark 键（允许项目覆盖参照线，比如自有战绩库的真实基准）
@@ -72,9 +74,20 @@ BENCHMARK_SETTINGS_MAP = {
 }
 
 
+def load_reference_benchmark() -> Dict[str, Any]:
+    cfg: Dict[str, Any] = json.loads(json.dumps(FALLBACK_INDUSTRY_BENCHMARK))
+    try:
+        data = json.load(open(BENCHMARK_REFERENCE_FILE, encoding="utf-8"))
+        if isinstance(data, dict):
+            cfg.update(data)
+    except (ValueError, OSError):
+        pass
+    return cfg
+
+
 def load_benchmark(root: str) -> Dict[str, Any]:
     """行业基准参照：默认 ← _设置.md ← industry_benchmark.json。**只读，不参与告警/阻断。**"""
-    cfg: Dict[str, Any] = json.loads(json.dumps(INDUSTRY_BENCHMARK))  # deep copy
+    cfg: Dict[str, Any] = load_reference_benchmark()
     for label, key in BENCHMARK_SETTINGS_MAP.items():
         val = get_setting(root, label, "")
         ratio = parse_ratio(val)
@@ -85,7 +98,7 @@ def load_benchmark(root: str) -> Dict[str, Any]:
         try:
             data = json.load(open(path, encoding="utf-8"))
             if isinstance(data, dict):
-                cfg.update({k: v for k, v in data.items() if k in INDUSTRY_BENCHMARK})
+                cfg.update(data)
         except (ValueError, OSError):
             pass
     return cfg

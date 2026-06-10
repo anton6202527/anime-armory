@@ -82,7 +82,7 @@ python3 skills/n2d-feedback/scripts/feedback.py <作品根> \
   --metrics <平台指标.csv> --emit-ledger --genre 仙侠 --subgenres 复仇,马甲
 ```
 
-- 把本剧按播放量加权的 `retention_3s/retention_15s/completion_rate/follow_next_rate/roi/plays` 聚合成一条 `genre_performance_record`，按题材**追加**到战绩库（append-only JSONL）。
+- 把本剧按播放量加权的 `retention_3s/retention_15s/completion_rate/follow_next_rate/roi/plays` 聚合成一条 `genre_performance_record`，按 **(work, genre, platform) upsert** 写入战绩库（JSONL）——同剧同题材同平台**重 emit 替换旧快照、不堆重复行**（战绩库是作品级聚合，重复行会让 novel-score 按播放量重复加权、带偏题材先验）；不同剧/题材/平台各占一行。无 ROI（缺 roi/roas/回收比，也无 revenue+spend）时 stderr 提示，novel-score 该维度将缺席。
 - 默认路径 `$N2D_GENRE_LEDGER` 或 `<repo>/生产战绩/genre_ledger.jsonl`（`--ledger` 可改）。**跨项目共享**，不是 per-work。
 - `--genre` 缺省时读 `_meta.json` 的 `genre/题材` 或 `_设置.md 题材`；读不到记 `unknown` 并告警（无法按题材反哺）。
 - ROI 来自 metrics 的 `roi/roas/回收比`（按播放量加权）或 `revenue÷spend` 汇总。
@@ -107,7 +107,9 @@ python3 skills/n2d-feedback/scripts/differentiate.py \
 - **市场饱和**：公榜基线里某题材出现越多 = 越被全行业做烂 → 差异化应避开/慎投（惩罚因子）。
 - **白空间候选** = 我们没做过 × 复用 ≥1 已验证轴 × 避开最饱和题材，排序输出（如「都市 × 倒叙闪回 × 危机悬置」：把仙侠里验证有效的倒叙+危机节奏，搬到没做烂的都市题材）。
 
-`--genres` 可注入"有需求但我们没做过"的题材一起探索；只在被告知的题材集合内推荐，**不凭空捏造题材**。**诚实纪律**：战绩库样本 <3 时只作启发不作铁律；无公榜基线时仅按自有占用+已验证轴推荐，引擎会在 notes 里明说。产物 `生产战绩/差异化候选.json/md` 供选题端（`novel-create`/`novel-title`/`novel-score`）消费——同样只在数据产物层连接。
+`--genres` 可注入"有需求但我们没做过"的题材一起探索；只在被告知的题材集合内推荐，**不凭空捏造题材**。**诚实纪律**：战绩库样本 <3 时只作启发不作铁律；无公榜基线时仅按自有占用+已验证轴推荐，引擎会在 notes 里明说。
+
+**缺省双写 canonical 文件**：不带 `--out` 时，`differentiate.py` 把候选写到 `<repo>/生产战绩/差异化候选.{md,json}`（固定路径，不再只打印），`novel-create` 立项访谈、`novel-title` 起名时会**自动读这个 json** 作为差异化方向输入——把"反哺选题"从产物落到选题端能稳定发现的位置。仍只在数据产物层连接，**不互相 import**。
 
 ## 投放摄取适配器（实时投放 API → 标准文件）
 

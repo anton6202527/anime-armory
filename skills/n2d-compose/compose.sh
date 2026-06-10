@@ -21,6 +21,7 @@ if [ -z "$VIDEO_NATIVE_AUDIO_POLICY" ]; then
   VIDEO_NATIVE_AUDIO_POLICY=$(eval $_GET_SETTING "\"$ROOT\" \"视频原生音轨\" \"丢弃\"")
 fi
 if [ "$KEEP_CLIP_AUDIO" = "1" ] && [ "$VIDEO_NATIVE_AUDIO_POLICY" = "丢弃" ]; then
+  echo "⚠️ 旧环境变量 KEEP_CLIP_AUDIO=1 覆盖了权威设置「视频原生音轨=丢弃」→ 改用「低音量混入环境声」。若非本意请 unset KEEP_CLIP_AUDIO 或在 _设置.md 显式写「视频原生音轨」。"
   VIDEO_NATIVE_AUDIO_POLICY="低音量混入环境声"
 fi
 
@@ -257,7 +258,7 @@ WM_STATUS=$(eval $_GET_SETTING "\"$ROOT\" \"水印\" \"ai\"")
 python3 "$SKILL_DIR/../n2d-dashboard/scripts/dashboard.py" record "$ROOT" \
   --episode "$EP" --stage compose --event generation \
   --asset "$OUT" --status pass \
-  --duration-sec "0" --provider local-ffmpeg \
+  --duration-sec "$SECONDS" --provider local-ffmpeg \
   --meta native_audio_policy="$VIDEO_NATIVE_AUDIO_POLICY" \
   --meta watermark="$WM_STATUS" || true
 

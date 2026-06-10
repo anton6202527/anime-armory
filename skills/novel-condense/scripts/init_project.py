@@ -19,7 +19,7 @@ from datetime import date
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                 "..", "..", "novel-craft", "scripts"))
 from contract import (AI_TEXT_USAGE_MODES, CHAPTER_GRANULARITY, NOVEL_DRAFT_MODES,
-                      base_meta, derived_stage_markdown, parse_outputs)
+                      base_meta, demo_chapters_for, derived_stage_markdown, parse_outputs)
 from derive_common import docx_to_txt, detect_rights_status, write_settings
 
 
@@ -104,7 +104,7 @@ def main():
         "rights_declared_at": date.today().isoformat() if args.i_have_rights else None,
         "title": None,
         "title_chosen_at": None,
-        "demo_chapters": min(2, target_chapters),
+        "demo_chapters": demo_chapters_for(target_chapters),  # 共享真值源，勿硬编码 min(2,…)
         "demo_passed_at": None,
         "draft_mode": draft_mode,
         "chapter_granularity": args.chapter_granularity,

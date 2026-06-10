@@ -1,0 +1,936 @@
+{
+  "schema_version": 1,
+  "kind": "novel_score_report",
+  "project_root": "/Users/wesley/learn/anime-arsenal/写小说/本宫才是这皇宫最大的妖",
+  "generated_at": "2026-06-10",
+  "target_platform": "商业爽文向",
+  "score_task_id": "a874d0a73199dc3b",
+  "score_task_path": "评分/score_task.json",
+  "assessment_prompt_hash": "53f7c4af7415cc002656ef8c67ffdf5819b7923ecd3124a8f971be9a1f70bfd5",
+  "scope": {
+    "mode": "full",
+    "chapter_count": 100
+  },
+  "source_snapshot": {
+    "schema_version": 1,
+    "kind": "novel_text_snapshot",
+    "mode": "score:full",
+    "files": [
+      {
+        "path": "章节/第01章_这不是我的脸.md",
+        "chapter": 1,
+        "sha256": "fa29433937092af140753d540776f8d2be18bf19548598f012bf84252066f12e",
+        "bytes": 3147
+      },
+      {
+        "path": "章节/第02章_噬.md",
+        "chapter": 2,
+        "sha256": "5e5d4f890e5e8f83997a5535df6336138254c302657490456360945a1133b263",
+        "bytes": 2756
+      },
+      {
+        "path": "章节/第03章_吃一个强一分.md",
+        "chapter": 3,
+        "sha256": "05785d0dd6d49b56c8fc746a87e16bd9cb7bbf1c932189f922e9ed646bf5d6cf",
+        "bytes": 2779
+      },
+      {
+        "path": "章节/第04章_收租的该收网了.md",
+        "chapter": 4,
+        "sha256": "bc8d7f36a85a7b6461d524e8b573854fda0081a19f2964626299454bcb09b1a6",
+        "bytes": 6077
+      },
+      {
+        "path": "章节/第05章_冷宫的规矩本宫来定.md",
+        "chapter": 5,
+        "sha256": "1bd5cf4fe77ec07960ec9cda2b5613cd31142f421eaae5effdf3c2933c14666c",
+        "bytes": 6708
+      },
+      {
+        "path": "章节/第06章_皇后的人.md",
+        "chapter": 6,
+        "sha256": "0fdb3c3ecce370d4b91ede691c9e44c39b97d6f71141205cb513124c47a4fef9",
+        "bytes": 6693
+      },
+      {
+        "path": "章节/第07章_试探.md",
+        "chapter": 7,
+        "sha256": "b919c0b9838fc03e8d52b9118d3ad95b8c3d3f298c984cf0cb68b8d1fd1ada39",
+        "bytes": 8236
+      },
+      {
+        "path": "章节/第08章_第一次炼血.md",
+        "chapter": 8,
+        "sha256": "5fa37d5ce402b3f46259467c5669d93ec43af0084e0857dfea9e970b7a192a2c",
+        "bytes": 7774
+      },
+      {
+        "path": "章节/第09章_帝亲临.md",
+        "chapter": 9,
+        "sha256": "12a3eaf09189906d1ebac83d666dff612525b52246f0a9f480224f973df51ac7",
+        "bytes": 8372
+      },
+      {
+        "path": "章节/第10章_谁是猎物.md",
+        "chapter": 10,
+        "sha256": "d3e5c736b35da134f8985ab7d4c420d89699f0268b92904d1f8a8820db3bc385",
+        "bytes": 7606
+      },
+      {
+        "path": "章节/第11章_百年蛇妖.md",
+        "chapter": 11,
+        "sha256": "99fd7d14b1222827ee349528bc504bc57af701621d2fc75a0d1f1c070daf3344",
+        "bytes": 7107
+      },
+      {
+        "path": "章节/第12章_晋银牌.md",
+        "chapter": 12,
+        "sha256": "2de0c8415fc8b161e6a2b92fde237680403f6d941bd7f498a520d6c70ae31381",
+        "bytes": 8747
+      },
+      {
+        "path": "章节/第13章_将毒还席.md",
+        "chapter": 13,
+        "sha256": "c9d99078ecaad303c4f01c267efd4d9a420eefdcc6fb4260680f44fe2dcfeda5",
+        "bytes": 9380
+      },
+      {
+        "path": "章节/第14章_林渊试底线.md",
+        "chapter": 14,
+        "sha256": "ffb01d87da84654da87a72838e4e2358d859266cb82dc4c455c0e7eee2635b31",
+        "bytes": 7733
+      },
+      {
+        "path": "章节/第15章_摔杯.md",
+        "chapter": 15,
+        "sha256": "9b549090051f2b03931aa97d9dd25adeaae4d7a9070563bf51f5530170ccdb53",
+        "bytes": 9213
+      },
+      {
+        "path": "章节/第16章_坤宁宫对峙.md",
+        "chapter": 16,
+        "sha256": "1f56bd5b04f758232e8aa2c7d6b5ad738ea518a55869d95ccc53824047a9353e",
+        "bytes": 8818
+      },
+      {
+        "path": "章节/第17章_太后浮现.md",
+        "chapter": 17,
+        "sha256": "d7d9132d6483b54ed8b22553e5f5385ceabac89aaa18448b5da19fe395c0eb21",
+        "bytes": 7694
+      },
+      {
+        "path": "章节/第18章_妖患逼到眼前.md",
+        "chapter": 18,
+        "sha256": "43a39a114c1a1876e593d9b9802092bd5689a942db550787bd802602a5c3ace0",
+        "bytes": 9571
+      },
+      {
+        "path": "章节/第19章_请缨.md",
+        "chapter": 19,
+        "sha256": "e544efe519ed49606bc345f931e797275c3c7043b30e143b3a6b32f73865e360",
+        "bytes": 10800
+      },
+      {
+        "path": "章节/第20章_接旨.md",
+        "chapter": 20,
+        "sha256": "46592fdaab0b8afa388fa563f95367f585afd23340ab520fe26d56aa377c3d1a",
+        "bytes": 7397
+      },
+      {
+        "path": "章节/第21章_请缨之后.md",
+        "chapter": 21,
+        "sha256": "594a3ec747f4114a754a53fc0bd56f0be635bd412a073f517b38e92a2630a0d3",
+        "bytes": 6740
+      },
+      {
+        "path": "章节/第22章_妖宴.md",
+        "chapter": 22,
+        "sha256": "0c22043f4e30ff2b0b0360fdc27112f37a6a527276a5feda6454a6b92c0ce2bd",
+        "bytes": 8494
+      },
+      {
+        "path": "章节/第23章_赤睛.md",
+        "chapter": 23,
+        "sha256": "9f210cde2506d8e1862e2387cd4b7d1a120bb07e5656c70e8e3142d0346b6e71",
+        "bytes": 9398
+      },
+      {
+        "path": "章节/第24章_狐影.md",
+        "chapter": 24,
+        "sha256": "8c65fe40f91eb8b9e1529edaf042eefaeff8aff20f20cdc444a16f14051053e3",
+        "bytes": 8052
+      },
+      {
+        "path": "章节/第25章_结盟的价.md",
+        "chapter": 25,
+        "sha256": "55396205970639e7fa177f2b5830a09376fab5d07e5d86f08a2ea5a98ee87b73",
+        "bytes": 6768
+      },
+      {
+        "path": "章节/第26章_五品妖师.md",
+        "chapter": 26,
+        "sha256": "8967b8ea4fe70534293a983e7dbe868505482e1941c81034fc1731c33403fa35",
+        "bytes": 6151
+      },
+      {
+        "path": "章节/第27章_以问代探.md",
+        "chapter": 27,
+        "sha256": "427dac07d832e45a71bb1e8d9e3e62c5657723add4ca1ff7ccea3fab64dffe0b",
+        "bytes": 8669
+      },
+      {
+        "path": "章节/第28章_旧账.md",
+        "chapter": 28,
+        "sha256": "1ccae02730d5c5d605b61fa4c0393c785443512791e0f082f98bf673553d4bb6",
+        "bytes": 7708
+      },
+      {
+        "path": "章节/第29章_镜里红.md",
+        "chapter": 29,
+        "sha256": "3853db7e40b02b158531dc676e641e8a40f38f1d138b83b90b497f40045fff7a",
+        "bytes": 8665
+      },
+      {
+        "path": "章节/第30章_枯井.md",
+        "chapter": 30,
+        "sha256": "227af34eb47094942237a4ca2f451aa9e8cee91b5081f62f858979e719a84536",
+        "bytes": 6446
+      },
+      {
+        "path": "章节/第31章_黑衣人.md",
+        "chapter": 31,
+        "sha256": "fa9471990f69d750049a7cdf31073ead9d51c0860a604a19ef17d4d0691e3778",
+        "bytes": 7855
+      },
+      {
+        "path": "章节/第32章_养精.md",
+        "chapter": 32,
+        "sha256": "bc87e38c8e8ed06aa36aadece88463cc734b3ab6884bb52da15a8fd0450fbb99",
+        "bytes": 11158
+      },
+      {
+        "path": "章节/第33章_太后召见.md",
+        "chapter": 33,
+        "sha256": "c778d7f96da2dcfdc83c2cc399d59041199d2e39f0a631326c34374a6bb95abc",
+        "bytes": 9140
+      },
+      {
+        "path": "章节/第34章_娘胎里的.md",
+        "chapter": 34,
+        "sha256": "3062fe72bec3b9723108662c610d83c2718aa80bdbf0d4fa6e769c9449ee840c",
+        "bytes": 7985
+      },
+      {
+        "path": "章节/第35章_反客为主.md",
+        "chapter": 35,
+        "sha256": "b2e99b3b55c89a08f014edfb85b28966f55f60074f06cb32ac80c94a868ba31c",
+        "bytes": 8169
+      },
+      {
+        "path": "章节/第36章_妖师现身.md",
+        "chapter": 36,
+        "sha256": "6caf0dda29a3fcf3eacff2f5244a49349de89deac9ff510c9750edd89338e6e3",
+        "bytes": 7052
+      },
+      {
+        "path": "章节/第37章_他想让井开.md",
+        "chapter": 37,
+        "sha256": "8b0493ace5a28a8f66f80bd0d90518c4e7dee4c4f6076fc1adeac1085eaf55bd",
+        "bytes": 7293
+      },
+      {
+        "path": "章节/第38章_出京才好走.md",
+        "chapter": 38,
+        "sha256": "a4c7f06195372ff9993e207a255d343097d75742ac365b0335add717166e9c2f",
+        "bytes": 6889
+      },
+      {
+        "path": "章节/第39章_未寄出的信.md",
+        "chapter": 39,
+        "sha256": "d2a86259176153e2d060fe809476b41152fa575d2187718672271b7aed24bb58",
+        "bytes": 6742
+      },
+      {
+        "path": "章节/第40章_出征也是一场宫斗.md",
+        "chapter": 40,
+        "sha256": "0d4cbe2a7ecf9cfa4279e413c7a8f5764e7c7dfa6fc7097f42f045ef13737d37",
+        "bytes": 9137
+      },
+      {
+        "path": "章节/第41章_以战养势.md",
+        "chapter": 41,
+        "sha256": "316c86e2e0efe239ff6d22fcbb7ed7b241b17c5069fdd0e4957dd19aee4ec340",
+        "bytes": 8184
+      },
+      {
+        "path": "章节/第42章_军中的钉子.md",
+        "chapter": 42,
+        "sha256": "61179ff802239f9774d8dd5db6862874600d034df3c8c645d8dad7bea126c71a",
+        "bytes": 7054
+      },
+      {
+        "path": "章节/第43章_放长线.md",
+        "chapter": 43,
+        "sha256": "7f35251fd63237339561d1a2ea821ab2e0e6ff945ed12b34a230fb9ce90439df",
+        "bytes": 9025
+      },
+      {
+        "path": "章节/第44章_通敌的帽子,该谁戴.md",
+        "chapter": 44,
+        "sha256": "d01073e22eb4b5ef9488d0d0986f2aed58b861efb71fd9467b25c26d3e7d239e",
+        "bytes": 8397
+      },
+      {
+        "path": "章节/第45章_凯旋的算计.md",
+        "chapter": 45,
+        "sha256": "cd41577501ba8013051a10f489a59679fe8fca0002ffd78216afe66cbfdf8b1a",
+        "bytes": 6773
+      },
+      {
+        "path": "章节/第46章_凯旋即变天.md",
+        "chapter": 46,
+        "sha256": "5bec0955e7372340ff95474b29d0baa9abb5d85e98a210869919c3076758cdb6",
+        "bytes": 7309
+      },
+      {
+        "path": "章节/第47章_君臣对峙.md",
+        "chapter": 47,
+        "sha256": "b0a6e7f96960351df6d374b00bbb0b7d6a60a7bb76537c9f566b08a7019c178b",
+        "bytes": 9423
+      },
+      {
+        "path": "章节/第48章_她的软肋.md",
+        "chapter": 48,
+        "sha256": "2fe151da22dc0bf52346ef783627b9b377f75704295b2392eec9c5fe2f627b19",
+        "bytes": 5662
+      },
+      {
+        "path": "章节/第49章_触她逆鳞.md",
+        "chapter": 49,
+        "sha256": "4e7b2297084316b39d1abc9eb6cddeb8537e54dcef12a5a1c34dc909f0a9b94b",
+        "bytes": 6782
+      },
+      {
+        "path": "章节/第50章_雷霆反击.md",
+        "chapter": 50,
+        "sha256": "b40f0ea9508356fc3eb6ec44defc38ff635d126942b2959e6489d924a99d658e",
+        "bytes": 7655
+      },
+      {
+        "path": "章节/第51章_王家树倒.md",
+        "chapter": 51,
+        "sha256": "61f923178ffbaed23d558ce8e92d3abbe76b000170b248e02e67ce5ca02f4bfe",
+        "bytes": 7787
+      },
+      {
+        "path": "章节/第52章_逼到墙角.md",
+        "chapter": 52,
+        "sha256": "ab3641721074225b6a25e3503a2aedd5603d385e55745bf4d0e5629da7427b4c",
+        "bytes": 8276
+      },
+      {
+        "path": "章节/第53章_图穷.md",
+        "chapter": 53,
+        "sha256": "91d9d9085291bfe08de510a113f7ea06002807d469095341581adfc0e4400907",
+        "bytes": 7809
+      },
+      {
+        "path": "章节/第54章_妖师临宫.md",
+        "chapter": 54,
+        "sha256": "51c11a48779a88c80ce8e40609ba879775a5fa2017daabe3d95647b980c40daf",
+        "bytes": 6301
+      },
+      {
+        "path": "章节/第55章_血脉之争.md",
+        "chapter": 55,
+        "sha256": "e5c72ffcf22573434ec0f346aaaa38ba035f5335fa31168bfdc2cfac8f953d99",
+        "bytes": 9282
+      },
+      {
+        "path": "章节/第56章_收尾.md",
+        "chapter": 56,
+        "sha256": "e04d47a0d320124c74b6307769f8070bda2bae0ac73ede9d276f45beb8c6aadb",
+        "bytes": 6710
+      },
+      {
+        "path": "章节/第57章_逼宫.md",
+        "chapter": 57,
+        "sha256": "d31ce691c3096fc7c1037fe1c8842e7286d2ed6243a04067f75e1d9120f27640",
+        "bytes": 7589
+      },
+      {
+        "path": "章节/第58章_旧案.md",
+        "chapter": 58,
+        "sha256": "b27375358edbe4f3468c42e8354b1396146222bf8bb21e9d49c217cff0b5a35f",
+        "bytes": 8939
+      },
+      {
+        "path": "章节/第59章_互为底牌.md",
+        "chapter": 59,
+        "sha256": "615940414c9b15108916c2fe636f2731ee2d9758036ec83a789626e2e07ea192",
+        "bytes": 9620
+      },
+      {
+        "path": "章节/第60章_枯井之下.md",
+        "chapter": 60,
+        "sha256": "77e0723043be5d5dfd4eaa5c3f9eab12865d478fd97d7e44bced7740338ed387",
+        "bytes": 6539
+      },
+      {
+        "path": "章节/第61章_皇后倒了,棋盘空了.md",
+        "chapter": 61,
+        "sha256": "bbf30e387d28b6436f46d2c6783bb7d87460171c038718a2d96014bd4c534ebe",
+        "bytes": 9567
+      },
+      {
+        "path": "章节/第62章_新主子换了张脸.md",
+        "chapter": 62,
+        "sha256": "ed6d5d84c50ee694ba7162b22a2afc7970b1f2ec4d4acbd3e067c1f9b918c860",
+        "bytes": 8672
+      },
+      {
+        "path": "章节/第63章_压不住的那一口.md",
+        "chapter": 63,
+        "sha256": "69a9011133ff614e78283b298bd9dfa044b2ffd51dc2151ec18bdf785964f52f",
+        "bytes": 10112
+      },
+      {
+        "path": "章节/第64章_翻案不是为了昭雪.md",
+        "chapter": 64,
+        "sha256": "907ff1a790adca85cc3ca813ab7262334354ed6ab4b26eb5c759426263f933f5",
+        "bytes": 11346
+      },
+      {
+        "path": "章节/第65章_太后知道得太多.md",
+        "chapter": 65,
+        "sha256": "758343e31410659c6854ea3b751b17eeeec26997de303dd195fdadc3009780d0",
+        "bytes": 10519
+      },
+      {
+        "path": "章节/第66章_井里有人喊我.md",
+        "chapter": 66,
+        "sha256": "f34999c440799088ca78023f20e296447c66096fbb75c4d6bd60e60f5c4df711",
+        "bytes": 8037
+      },
+      {
+        "path": "章节/第67章_她不是头一个.md",
+        "chapter": 67,
+        "sha256": "be565cdc35845a33ab700dec8820522547303cbb8201112901394c9233b9e7d6",
+        "bytes": 10736
+      },
+      {
+        "path": "章节/第68章_一网两蚂蚱.md",
+        "chapter": 68,
+        "sha256": "e58df40722b5100b957c327f4080a45561a457371bf0b5ffe8cd11888d9446aa",
+        "bytes": 7314
+      },
+      {
+        "path": "章节/第69章_先救人,再说了算.md",
+        "chapter": 69,
+        "sha256": "3b3da55e500a92e6f621e96b45af31af62c14b5eb908011e76fb166f51eb7976",
+        "bytes": 6984
+      },
+      {
+        "path": "章节/第70章_这皇宫,谁说了算.md",
+        "chapter": 70,
+        "sha256": "4ed6f90676649da6726a01690ec8200b886affef985e1082d4e83d1977573ddf",
+        "bytes": 8973
+      },
+      {
+        "path": "章节/第71章_我的孩子.md",
+        "chapter": 71,
+        "sha256": "6773c73aedeb72a206eecd67238da78c287ce6fb960e707e0708a14f52c4f3fe",
+        "bytes": 7783
+      },
+      {
+        "path": "章节/第72章_三日之期.md",
+        "chapter": 72,
+        "sha256": "738ed1df56a15188d39b23aaf17365cce93cc19b40c34c03abbd03f97b9337e6",
+        "bytes": 7786
+      },
+      {
+        "path": "章节/第73章_养肥了再吃.md",
+        "chapter": 73,
+        "sha256": "6dd3e47bc8014b4fabf10af3133d9333b026cb301d634d8a9330da91bf10fbc5",
+        "bytes": 6742
+      },
+      {
+        "path": "章节/第74章_回到第一口.md",
+        "chapter": 74,
+        "sha256": "69f2d24f7cf53565572259086181af40246a8efde26ad552d7e9ac9dbd37e5bb",
+        "bytes": 6748
+      },
+      {
+        "path": "章节/第75章_最弱的时候最稳.md",
+        "chapter": 75,
+        "sha256": "d41677492f8afc7747498530a7f7fa1c428ac03216eec6daf46e3ee3d977f6c6",
+        "bytes": 7079
+      },
+      {
+        "path": "章节/第76章_骗过妖皇.md",
+        "chapter": 76,
+        "sha256": "a29ecf1a6947d52789a6e34e6887c8c263e4878142200c4ec67e3fca661ae9fc",
+        "bytes": 6505
+      },
+      {
+        "path": "章节/第77章_主子得是我.md",
+        "chapter": 77,
+        "sha256": "674bd928f1203c8e02adb796f889f113f24c2153c19428ba7e27d5f739fd9bf0",
+        "bytes": 6678
+      },
+      {
+        "path": "章节/第78章_赢了,然后呢.md",
+        "chapter": 78,
+        "sha256": "8e5e0f69e452b4ebde9e28053c06ccc98b8c795f35faaffdc6bef107f4401313",
+        "bytes": 7594
+      },
+      {
+        "path": "章节/第79章_涂去的名字.md",
+        "chapter": 79,
+        "sha256": "0daeaa64088a4a94827e611d5c4cffa62f677a83785d638f7f83d4cf4e571073",
+        "bytes": 9397
+      },
+      {
+        "path": "章节/第80章_风暴压境.md",
+        "chapter": 80,
+        "sha256": "a7700a4aa08843415d60c0c75c6ddb03429b7241bf355f6574bfe5dd29499a55",
+        "bytes": 7643
+      },
+      {
+        "path": "章节/第81章_枯井开了.md",
+        "chapter": 81,
+        "sha256": "c3e02a116a0a7a73f0143f888bc7a548138fe23b96626b57ee609c5c4e26e6d8",
+        "bytes": 11565
+      },
+      {
+        "path": "章节/第82章_我这张脸是谁的.md",
+        "chapter": 82,
+        "sha256": "420c261f72c40f2980add47723a4b0c75a013256f8a3bf88eb94b17a65be05e8",
+        "bytes": 7594
+      },
+      {
+        "path": "章节/第83章_半块玉符.md",
+        "chapter": 83,
+        "sha256": "3f74810772cb3253b2f0a7cf51f2a706062c5d23ba91a7465233b1fbfb36c962",
+        "bytes": 9634
+      },
+      {
+        "path": "章节/第84章_妖王叩关.md",
+        "chapter": 84,
+        "sha256": "06ff6a774dc74a5e8de26c98f62ea3ee8efe5d446fd6d6815c8b16e844031d64",
+        "bytes": 8205
+      },
+      {
+        "path": "章节/第85章_我说了算,不是你说了算.md",
+        "chapter": 85,
+        "sha256": "2ba1ab3cda6f9639eb346e26e7d1754dbd3f3ac02755f2070f137b1f3882ad57",
+        "bytes": 7702
+      },
+      {
+        "path": "章节/第86章_龙椅旁的空位.md",
+        "chapter": 86,
+        "sha256": "7c6ca7b45c6963dbff616c472ad24ce36de770d1ced0f79f12ad8054a039d57a",
+        "bytes": 7970
+      },
+      {
+        "path": "章节/第87章_太后才是钓鱼的人.md",
+        "chapter": 87,
+        "sha256": "48763730bebc14b8ac2f7198fa48fa7944535a18791637fc3e8f8c98614565b8",
+        "bytes": 9645
+      },
+      {
+        "path": "章节/第88章_清醒是我的命根.md",
+        "chapter": 88,
+        "sha256": "9d6e106b62be68f1200da76229386d829a81c259c607b37e6f570121c15c2ead",
+        "bytes": 8624
+      },
+      {
+        "path": "章节/第89章_底牌互换.md",
+        "chapter": 89,
+        "sha256": "39414d29e8630801a3d3d699ffce2bfae581e0e52128e9b46a06c5b4f4d2d4a1",
+        "bytes": 7258
+      },
+      {
+        "path": "章节/第90章_妖王收徒,还是收尸.md",
+        "chapter": 90,
+        "sha256": "ba356b32421e10028b3cdb2c32208164f8d2f015e221c86385067bb31f3270cb",
+        "bytes": 9889
+      },
+      {
+        "path": "章节/第91章_借你一次,皇后.md",
+        "chapter": 91,
+        "sha256": "99f9a98f99fefb736f4ce5a9cc809ccde529140256857b1002588adf04692c43",
+        "bytes": 8463
+      },
+      {
+        "path": "章节/第92章_我不当妖皇.md",
+        "chapter": 92,
+        "sha256": "0094409261d19ca17491069bd031dad141f0966cb3b69abd061f27c3674d4d51",
+        "bytes": 7271
+      },
+      {
+        "path": "章节/第93章_狡兔死,走狗烹.md",
+        "chapter": 93,
+        "sha256": "4499b8075ac75057fd2f9605d1cf8d5c416b058973e4c446dd3c8f064d2e865d",
+        "bytes": 8213
+      },
+      {
+        "path": "章节/第94章_他给的是选择,不是占有.md",
+        "chapter": 94,
+        "sha256": "321d222b2b16aa7312ab2adeb212d181f6533362ba3afff48e980bad526fd717",
+        "bytes": 5864
+      },
+      {
+        "path": "章节/第95章_一张椅子.md",
+        "chapter": 95,
+        "sha256": "efc98d69f531c9fee844571c48a5441147ed32fa254930702673d4985a7c4dad",
+        "bytes": 8371
+      },
+      {
+        "path": "章节/第96章_人间挺直腰板.md",
+        "chapter": 96,
+        "sha256": "d747be1d27415b85883646367922377506f48233875ee2bf0a659e56eadcbd32",
+        "bytes": 6570
+      },
+      {
+        "path": "章节/第97章_兴学.md",
+        "chapter": 97,
+        "sha256": "c38ce157a796676be4f30055af99e7e6296bf869305dc2e0ff499f70733876eb",
+        "bytes": 9004
+      },
+      {
+        "path": "章节/第98章_小禾的字.md",
+        "chapter": 98,
+        "sha256": "262cb7bc377a42ef4cd153b0e053868216ae03b33f6881ce6f62c599b3c92c9e",
+        "bytes": 7083
+      },
+      {
+        "path": "章节/第99章_凭我说了算.md",
+        "chapter": 99,
+        "sha256": "64463f0cd54982ffb37695337e63611471ea49215453fa1af35e438e8a2deaf0",
+        "bytes": 6261
+      },
+      {
+        "path": "章节/第100章_这皇宫,本宫说了算.md",
+        "chapter": 100,
+        "sha256": "803c6c2028d8a3142b335769306aec22b5617ce17dae3994b22b299a3c114bda",
+        "bytes": 10330
+      }
+    ],
+    "aggregate_hash": "0779019bd05ef85a644b04d946b720eae0f935655e2477a7663434571be61306"
+  },
+  "market_baseline": {
+    "baseline_date": "2026-06-10",
+    "baseline_path": "评分/题材热榜_2026-06-10.md",
+    "baseline_json_path": "评分/market_baseline_2026-06-10.json",
+    "sources": [
+      {
+        "platform": "番茄小说",
+        "url": "https://fanqienovel.com/rank",
+        "use_for": "web_novel_rank",
+        "collected_at": "2026-06-10T10:00:19+08:00",
+        "status": "ok",
+        "title": "小说排行榜_番茄小说官网",
+        "signals": [
+          "小说排行榜_番茄小说官网",
+          "@font-face{font-family:DNMrHsV173Pd4pgy;font-display:block;src:url(https://lf6-awef.bytetos.com/obj/awesome-font/c/dc027189e0ba4cd.woff2)format(\"woff2\"),url(https://lf3-awef.bytetos.com/obj/awesome-font/c/dc027189e0ba4cd.woff2)format(\"woff2\"),url(https://lf6-awef.bytetos.com/obj/awesome-font/c/dc027189e0ba4cd.woff)format(\"woff\"),url(https://lf3-awef.bytetos.com/obj/awesome-font/c/dc027189e0ba4cd.woff)format(\"woff\"),url(https://lf6-awef.bytetos.com/obj/awesome-font/c/dc027189e0ba4cd.otf)format(\"opentype\"),url(https://lf3-awef.bytetos.com/obj/awesome-font/c/dc027189e0ba4cd.otf)format(\"opentype\");font-weight:400;}@font-face{font-family:DNMrHsV173Pd4pgy;font-display:block;src:url(https://lf6-awef.bytetos.com/obj/awesome-font/c/dc027189e0ba4cd-500.woff2)format(\"woff2\"),url(https://lf3-awef.bytetos.com/obj/awesome-font/c/dc027189e0ba4cd-500.woff2)format(\"woff2\"),url(https://lf6-awef.bytetos.com/obj/awesome-font/c/dc027189e0ba4cd-500.woff)format(\"woff\"),url(https://lf3-awef.bytetos.com/obj/awesome-font/c/dc027189e0ba4cd-500.woff)format(\"woff\"),url(https://lf6-awef.bytetos.com/obj/awesome-font/c/dc027189e0ba4cd-500.otf)format(\"opentype\"),url(https://lf3-awef.bytetos.com/obj/awesome-font/c/dc027189e0ba4cd-500.otf)format(\"opentype\");font-weight:500;}@font-face{font-family:DNMrHsV173Pd4pgy;font-display:block;src:url(https://lf6-awef.bytetos.com/obj/awesome-font/c/dc027189e0ba4cd-700.woff2)format(\"woff2\"),url(https://lf3-awef.bytetos.com/obj/awesome-font/c/dc027189e0ba4cd-700.woff2)format(\"woff2\"),url(https://lf6-awef.bytetos.com/obj/awesome-font/c/dc027189e0ba4cd-700.woff)format(\"woff\"),url(https://lf3-awef.bytetos.com/obj/awesome-font/c/dc027189e0ba4cd-700.woff)format(\"woff\"),url(https://lf6-awef.bytetos.com/obj/awesome-font/c/dc027189e0ba4cd-700.otf)format(\"opentype\"),url(https://lf3-awef.bytetos.com/obj/awesome-font/c/dc027189e0ba4cd-700.otf)format(\"opentype\");font-weight:700;} .font-DNMrHsV173Pd4pgy { font-family: DNMrHsV173Pd4pgy, -apple-system, 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif; }",
+          "var windowWidth=window.innerWidth,href=window.location.href,mobileQuery=\"force_mobile=1\";windowWidth<600&&href.indexOf(mobileQuery)<0&&href.indexOf(\"/reader\")<0&&(window.location.href=href+(href.indexOf(\"?\")>=0?\"&\":\"?\")+mobileQuery)",
+          "var e=function(e,t,a){if(Math.ceil(100*Math.random())<=100*t){var o=\"2503\",d=\"24117\",n={ev_type:\"batch\",list:[{ev_type:\"custom\",payload:{name:\"sdk_glue_load\",type:\"event\",metrics:{},categories:{sdk_glue_load_status:e,sdk_glue_load_err_src:a,payload_bdms_aid:o,payload_bdms_page_id:d}},common:{context:{ctx_bdms_aid:o,ctx_bdms_page_id:d},bid:\"web_bdms_cn\",pid:window.location.pathname,view_id:\"/_1\",user_id:\"\",session_id:\"0-a-1-2-c\",release:\"\",env:\"production\",url:window.location.href,timestamp:+new Date,sdk_version:\"1.6.1\",sdk_name:\"SDK_SLARDAR_WEB\"}}]},i=new XMLHttpRequest;i.open(\"POST\",\"https://mon.zijieapi.com/monitor_browser/collect/batch/?biz_id=web_bdms_cn\",!0),i.setRequestHeader(\"Content-type\",\"application/json\"),i.send(JSON.stringify(n))}};e(\"before_load\",.1,\"\"),window.addEventListener(\"error\",(function(t){var a=t.target||t.srcElement;a instanceof HTMLElement&&\"SCRIPT\"==a.nodeName&&-1!=(a.src||\"\").indexOf(\"sdk-glue\")&&e(\"load_error\",1,a.src)}),!0)",
+          "window._SdkGlueInit({self:{aid:2503,pageId:24117},bdms:{aid:2503,pageId:24117,paths:[\"/api\",\"/reading/user/redeem_code/use\"]}})",
+          "window.TTGCaptcha&&window.TTGCaptcha.init({commonOptions:{aid:2503,iid:\"0\",did:\"0\"}})",
+          "secsdk.csrf.setProtectedHost([\"boe.muyewx.com\",\"fanqienovel.com\"])",
+          ".serial-filter-gray{filter:grayscale(100%);-webkit-filter:grayscale(100%);-moz-filter:grayscale(100%);-ms-filter:grayscale(100%);-o-filter:grayscale(100%);filter:url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='grayscale'><feColorMatrix type='matrix' values='0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0'/></filter></svg>#grayscale\");-webkit-filter:grayscale(1)}",
+          "You need to enable JavaScript to run this app.",
+          "番茄小说",
+          "帮助中心",
+          "作家助手",
+          "男频阅读榜",
+          "西方奇幻",
+          "东方仙侠",
+          "科幻末世",
+          "都市日常",
+          "都市修真",
+          "都市高武",
+          "历史古代",
+          "战神赘婿",
+          "都市种田",
+          "传统玄幻",
+          "历史脑洞",
+          "悬疑脑洞",
+          "都市脑洞",
+          "玄幻脑洞",
+          "悬疑灵异",
+          "抗战谍战",
+          "游戏体育",
+          "动漫衍生",
+          "男频衍生",
+          "男频新书榜",
+          "西方奇幻",
+          "东方仙侠",
+          "科幻末世",
+          "都市日常",
+          "都市修真",
+          "都市高武",
+          "历史古代",
+          "战神赘婿",
+          "都市种田",
+          "传统玄幻",
+          "历史脑洞",
+          "悬疑脑洞",
+          "都市脑洞",
+          "玄幻脑洞",
+          "悬疑灵异",
+          "抗战谍战",
+          "游戏体育",
+          "动漫衍生",
+          "男频衍生",
+          "女频阅读榜",
+          "古风世情",
+          "科幻末世",
+          "游戏体育",
+          "女频衍生",
+          "玄幻言情",
+          "种田",
+          "年代",
+          "现言脑洞",
+          "宫斗宅斗",
+          "悬疑脑洞",
+          "古言脑洞",
+          "快穿",
+          "青春甜宠",
+          "星光璀璨",
+          "女频悬疑",
+          "职场婚恋",
+          "豪门总裁",
+          "民国言情",
+          "女频新书榜",
+          "古风世情",
+          "科幻末世",
+          "游戏体育",
+          "女频衍生",
+          "玄幻言情",
+          "种田",
+          "年代",
+          "现言脑洞"
+        ]
+      },
+      {
+        "platform": "起点中文网",
+        "url": "https://www.qidian.com/rank/",
+        "use_for": "web_novel_rank",
+        "collected_at": "2026-06-10T10:00:19+08:00",
+        "status": "ok",
+        "title": "起点中文网",
+        "signals": [
+          "var buid = \"fffffffffffffffffff\""
+        ]
+      },
+      {
+        "platform": "晋江文学城",
+        "url": "https://m.jjwxc.net/rank/index",
+        "use_for": "web_novel_rank",
+        "collected_at": "2026-06-10T10:00:19+08:00",
+        "status": "ok",
+        "title": "���а� - ������ѧ�� - �ֻ���",
+        "signals": [
+          "body { -moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; -khtml-user-select:none; }",
+          "var protocolStr = document.location.protocol; if (protocolStr==\"http:\") { window.location.href = window.location.href.replace(\"http:\", \"https:\"); } document.onselectstart = function(e) { return false; } document.oncontextmenu = function(e) { return false; }",
+          "���а� - ������ѧ�� - �ֻ���",
+          ".dmlist a:link{color:#EF9E73} a.new{display:inline-block;} a.new::before{position:relative; left:90px; top:4px; width:21px; height:12px; background:url(//m-static.jjwxc.net/images/wap/hot.gif);content:\" \";display:block;} .channellink{color: black} .half{display:inline-block; width: 50%} .half:last-child :first-child{padding-left: 10px} .like{float:right;margin:0 3px} .clear{clear:both}",
+          "#mclear{border:none;background: url(//s9-static.jjwxc.net/images/clear.png) no-repeat;width:15px;height:15px;outline:none;background-size:13px;vertical-align:middle;margin-left:-15px;} .hide_menu{display:none} .show_menu{display: block} a {text-decoration:none;} #menu_list a {display: inline-block} @media (prefers-color-scheme: dark) { a:link{color: #5A7A9E;} .big.o a:link{color:#5A7A9E;} .big.o{color:#5A7A9E;} } /*����*/ .double_column_simple td>ul>li{max-height: 2em;line-height:1.8em; overflow: hidden;word-wrap: break-word;word-break: break-all;line-break: anywhere;} .double_column_div ul>li{max-height: 1.8em;line-height:1.8em;overflow: hidden;word-wrap: break-word;word-break: break-all;line-break: anywhere;} /*˳������һ�� ���Ǻ�*/ .double_column td>ul>li{height: 1.8em;line-height:1.8em;overflow: hidden;word-wrap: break-word;word-break: break-all;display: flex;flex-wrap: nowrap;line-break: anywhere;} /*��߿����ұ߿���*/ .double_column_flex ul>li{display: flex;flex-wrap: nowrap;} .double_column_flex ul>li>a:first-child{display: flex;flex-wrap: nowrap;height: 2em;line-height:1.8em;overflow: hidden;flex: 1;}",
+          "!window.jQuery&&document.write('<script src=\"//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.min.js\"><\\/script>');",
+          "function isonlinedoublered(type) { if (type==2) { return true; } if (type!=1) { return false; } //2015.02.18-2015.03.05 var localtime = Math.round(new Date().getTime()/1000); if (parseInt(localtime)>=1424188800&&parseInt(localtime)<=1425571199) { return true; } return false; } var search_novelname_arr = []; var search_timer; $(function() { if (isonlinedoublered(1)) { // �������������ʾ $.ajax({ type: \"get\", async: true, //ͬ���첽 trueΪ�첽(Ĭ��),falseΪͬ�� url: \"//s8-static.jjwxc.net/public_notice.php\", //ʵ���Ϸ���ʱ�����ĵ�ַΪ: test.php?callbackfun=jsonpCallback&id=10 cache: true, //Ĭ��ֵfalse falseʱ���������&_=����� dataType: \"jsonp\", jsonpCallback: \"red_envelope_150204\", ifModified: true, success: function(json) { var msg = ''; $.each(json.publicMsg, function(index, v) { msg += v+\"&nbsp;&nbsp;&nbsp;&nbsp;\"; }); if (msg!='') { $(\"#public_notice_new td#noticeImg\").html('<img src=\"//s9-static.jjwxc.net/images/laba.png\" />'); $(\"#public_notice_new\").css('display', 'block'); $(\"#public_info_show\").html(msg); } } }); } // �������� if ($('#searchnovelname').val().trim()) { search_novelname_arr = $('#searchnovelname').val().split(','); if (search_novelname_arr.length > 1) { setSearchNovelName(); var change_time = 2000; search_timer = setInterval(function() { setSearchNovelName(); }, change_time); $('#autoComplete').on('focus',function() { clearInterval(search_timer); }); $('#autoComplete').on('blur',function() { search_timer = setInterval(function() { setSearchNovelName(); }, change_time); }); } else { $('#autoComplete').attr('placeholder', search_novelname_arr[0]); } } let sid = getcookie(\"sid\"); // if (sid == '') {//���ص��ҵ��ղذ�ť // $(\"#myFav\").css(\"display\", \"none\"); // } else {//��ʾ���ҵ��ղذ�ť // $(\"#myFav\").css(\"display\", \"inline\"); // } }); //����������¼� function clearkey() { $(\"#autoComplete\").val(\"\"); } function setSearchNovelName() { if (search_novelname_arr.length === 0) { search_novelname_arr = $('#searchnovelname').val().split(','); } var searchText = search_novelname_arr.splice(0, 1); $('#autoComplete').attr('placeholder', searchText); }",
+          "��ҳ",
+          "����",
+          "����",
+          "����",
+          "����",
+          "��CP+",
+          "�ٺ�",
+          "���",
+          "����",
+          "����",
+          "ȫ��",
+          "����",
+          "���",
+          "�ж�ƪ",
+          "APP",
+          "����",
+          "����",
+          "����",
+          "�߼�����",
+          "��ҳ",
+          "����",
+          "�¶����а�>>",
+          "�������а�>>",
+          "�ڹŴ��ϰ������",
+          "��Ҫ������",
+          "ʢ�ĳ�ʪ",
+          "Ȩ�����޾������Լ�",
+          "�������",
+          "���������ű�������",
+          "һ�������滻һ������",
+          "������ǿ���ҿ���ʧ����ʮ�Ŵ�",
+          "��ԭ���ڹ�Ӱ�Ĵ�Խ����",
+          "�м�С��ү��������������",
+          "������������ʱ",
+          "������",
+          "����",
+          "ä��",
+          "��ߢ��",
+          "����С�",
+          "����",
+          "����",
+          "����ʽ����",
+          "ǰ�����һ����������",
+          "����õ�嵺",
+          "������һӪ����",
+          "���ҹɫ",
+          "����С������",
+          "����������",
+          "����һ����ȫ��",
+          "�Ͻ������[����]",
+          "�»鵹��ʱ",
+          "���н���",
+          "��������",
+          "ɥʬ�����Һ���",
+          "���ѣ��뱣�ֳ�Ĭ",
+          "Э��������������ʧ����",
+          "����",
+          "�����Ѱ������˵�������",
+          "��Ƹ������",
+          "���죬�������ʦϵͳ[����]",
+          "���µ�",
+          "�����Ҿ����޵�СС��",
+          "ͳ˧�����ҵĻ���������",
+          "�������а�>>",
+          "�½����߰�>>",
+          "�ڻң�������У̸����",
+          "��λ���Ҳ�����",
+          "��������",
+          "�������r��������",
+          "���Ϲ��������Ǳ����ʵۣ�",
+          "��������[�ƾ���Բ]",
+          "���������������������ڻ�",
+          "��͸"
+        ]
+      }
+    ],
+    "expires_after_days": 21,
+    "freshness": {
+      "status": "fresh",
+      "blocking": false,
+      "baseline_date": "2026-06-10",
+      "expires_after_days": 21,
+      "expires_on": "2026-07-01",
+      "reason": ""
+    },
+    "snapshot": {
+      "schema_version": 1,
+      "kind": "novel_market_baseline_snapshot",
+      "baseline_date": "2026-06-10",
+      "files": [
+        {
+          "path": "评分/market_baseline_2026-06-10.json",
+          "sha256": "fd7645e48a2ddea7e92464d77fa67d678d460ce979d0b7286a75f00c9edac34b",
+          "bytes": 14367
+        },
+        {
+          "path": "评分/题材热榜_2026-06-10.md",
+          "sha256": "472c964393aa635a8eb28f36735ee7e1e3cd92657ddbcca29edd0bb750cc9204",
+          "bytes": 9413
+        }
+      ],
+      "aggregate_hash": "d02be9dfab151f9d64c322e38c8d69031ec2ef800df7ad53678e7984faea332e"
+    }
+  },
+  "first_party_genre": null,
+  "genre_ledger_path": null,
+  "scores": [
+    {
+      "dimension": "topic_heat",
+      "dimension_label": "题材热度匹配",
+      "raw_score": 9,
+      "weight": 20,
+      "weighted_score": 18.0,
+      "evidence": "冷宫废妃穿越+噬妖夺能（第2章『噬妖夺能。已得：伪人皮·潜行』『吃一个，强一分，得一术』）+清醒型强女主。",
+      "comment": "踩中红果/番茄『古言宫斗×异能升级×强女主』红利区，『吃妖』中式恐怖钩子做差异化、记忆点强；公榜里现实/都市仍强故不打满，但本题材辨识度足。",
+      "improve_by": "投流主打『冷宫里最大的妖』『吃一个妖夺一术』『清醒不恋爱脑』，少打泛『废妃逆袭』。"
+    },
+    {
+      "dimension": "opening_hook",
+      "dimension_label": "开篇黄金三章钩子",
+      "raw_score": 9,
+      "weight": 18,
+      "weighted_score": 16.2,
+      "evidence": "第1章首句『铜镜里那张脸，不是沈念的』，同章完成赐死三件套→万妖血脉觉醒→竖瞳，第2章即反杀炼化夺能。",
+      "comment": "黄金三章把身份危机+生存压迫+金手指觉醒+第一次爽点压进前两章，短剧首集转化率高；唯『历史系大三/宫斗文』现代元叙事略削古风沉浸。",
+      "improve_by": "投放版开头压缩现代身份说明，把铜镜→毒酒→现形→金瞳→反杀做成连续强画面。"
+    },
+    {
+      "dimension": "payoff_density",
+      "dimension_label": "爽点密度与情绪节奏",
+      "raw_score": 9,
+      "weight": 18,
+      "weighted_score": 16.2,
+      "evidence": "金手指自带代价（第2章『力，不是白来的。一次，只够吃一个』、第3章『同源相斥，贪则反噬』、第70章吃五品『只取定身，余力压封』）。",
+      "comment": "『一次只吃一个』把吞噬做成了资源管理，憋—放节奏天然成立，爽点有重量不滥；反杀果断不圣母，情绪曲线稳定上抬。",
+      "improve_by": "中段出征/军中线（40-46章）略偏标准宫斗转朝堂，可压缩节拍、提速回到吞噬升级主轴。"
+    },
+    {
+      "dimension": "character_power",
+      "dimension_label": "人设与金手指",
+      "raw_score": 9,
+      "weight": 12,
+      "weighted_score": 10.8,
+      "evidence": "历史系冷静底色+万妖之躯吞噬本能，核心人格是『克制』（第70章『强在克制，不在贪多』、终章『争的是本宫的路本宫自己选』）。",
+      "comment": "金手指的代价/反噬阈值设计是本稿最大亮点——把『万能吞噬』收成『有规矩的吞噬』，主角辨识度高、不降智不恋爱脑，终章拒后位选兵符立得极稳。",
+      "improve_by": "已达高水准；可再给反派一两次利用『一次只吃一个』逼她取舍的设计，把金手指的限制变成更密的戏剧张力。"
+    },
+    {
+      "dimension": "plot_structure",
+      "dimension_label": "剧情结构与主线张力",
+      "raw_score": 9,
+      "weight": 12,
+      "weighted_score": 10.8,
+      "evidence": "主线清晰（冷宫→逼皇后→平太后→妖王叩关→十年之约），伏笔有收（枯井、半块玉符、巫蛊旧档、太后才是庄家），终章女学/小禾收束主题。",
+      "comment": "主线张力足、无注水烂尾；境界推进克制（封顶在妖王/仙使，十年之约留白不通胀），结尾以『拒凤位、守人间』收，主题落点比单纯成神更扎实。",
+      "improve_by": "第三卷部分朝堂博弈可再精简，给『以力破巧』正面爽段让位；改漫剧时这一段需重切分镜密度。"
+    },
+    {
+      "dimension": "prose",
+      "dimension_label": "文学性 / 文笔",
+      "raw_score": 8.5,
+      "weight": 8,
+      "weighted_score": 6.8,
+      "evidence": "冷峻短句+生理级比喻（『像隔着一层鞣过的皮』『那阴影像一层冷水漫过指骨』），对白以问代探、压迫感强，文风统一。",
+      "comment": "show-don't-tell 到位、节奏控制好，整体文笔在商业向里属上乘；偶有现代元叙事（『宫斗文里那些哭哭啼啼的废妃』）与个别长句略破古风沉浸，故不打满。",
+      "improve_by": "清理少量现代腔元叙事；动作描写可再视觉化以适配漫剧脚本。"
+    },
+    {
+      "dimension": "retention",
+      "dimension_label": "完读 / 留存潜力",
+      "raw_score": 9,
+      "weight": 12,
+      "weighted_score": 10.8,
+      "evidence": "章末硬断娴熟（第70章末枯井封印崩、妖王升起『我的孩子，该回家了』；第81章枯井开了），每章有信息增量。",
+      "comment": "cliffhanger 技术成熟，配合高密度升级反转与代价机制，追读欲强，完读率预计进平台前列。",
+      "improve_by": ">2000字长章可拆上下集，提升短剧单章卡点频率。"
+    }
+  ],
+  "deductions": [],
+  "total_deductions": 0,
+  "total_score": 89.6,
+  "tier": "爆款潜力",
+  "verdict": "过",
+  "rewrite_roi": "high",
+  "waivers": [],
+  "next_actions": [
+    {
+      "priority": "could",
+      "recommended_skill": "novel-review",
+      "return_to_stage": "review",
+      "action": "细节质检"
+    }
+  ]
+}

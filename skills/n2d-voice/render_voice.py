@@ -8,6 +8,7 @@ _COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'common'
 if _COMMON not in sys.path: sys.path.insert(0, _COMMON)
 from n2d_settings import load_settings, get_setting  # noqa: E402
 from n2d_text_utils import clean_punctuation  # noqa: E402
+from n2d_route import voiceover_fingerprint  # noqa: E402  配音源指纹（治"配音后改 voiceover 导致清单过期"）
 from n2d_telemetry import record_event, Timer  # noqa: E402
 from voice_text import clean_text  # 念白文本清洗（独立模块·带单测，治 ||→「。，」脏标点）
 
@@ -333,6 +334,15 @@ if LANG=='zh':
                **({"占位":True} if i in placeholders else {})} for i in range(n)]
     out_dir=os.path.dirname(os.path.join(W,'voice_zh.wav'))
     _json.dump(manifest, open(os.path.join(out_dir,'时长清单.json'),'w',encoding='utf-8'), ensure_ascii=False, indent=2)
+    # 时长清单 sidecar：记录配音时 voiceover.txt 的台词指纹 + 后端 + 时间。
+    # validate_timings 用它抓"配音之后又改 voiceover.txt（改词/插句/删句）→ 清单/字幕/镜头时长过期"，
+    # 这条失配链 delete_shot 的强制 gate 对账（只管删镜）覆盖不到。清单本体保持纯 list，不破坏下游消费。
+    _meta_prov = ZS_LABEL if USE_ZS else 'MiniMax' if USE_MM else '火山' if USE_VOLC else 'say'
+    _json.dump(
+        {"kind":"n2d.voice_manifest_meta","voiceover_fingerprint":voiceover_fingerprint(VO),
+         "lines":n,"placeholder_lines":len(placeholders),"provider":_meta_prov,"lang":LANG,
+         "generated_at":time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())},
+        open(os.path.join(out_dir,'时长清单.meta.json'),'w',encoding='utf-8'), ensure_ascii=False, indent=2)
 
 if placeholders:
     warn='⚠️ 占位提示: '+placeholder_reason+'。当前不是有声朗读,仅供出图前 rough timing;出图前请换真实配音重跑 n2d-voice。'

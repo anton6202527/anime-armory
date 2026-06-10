@@ -13,6 +13,7 @@ import os
 import sys
 from datetime import date
 
+from store import atomic_write_json, file_lock
 
 def load_json(path, default=None):
     if not os.path.exists(path):
@@ -22,9 +23,7 @@ def load_json(path, default=None):
 
 
 def write_json(path, payload):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(payload, f, ensure_ascii=False, indent=2)
+    atomic_write_json(path, payload)
 
 
 def get_delta_path(root, chapter):
@@ -37,6 +36,10 @@ def get_chapter_path(root, chapter):
 
 def get_ledger_path(root):
     return os.path.join(root, "审稿", "state_ledger.json")
+
+
+def get_ledger_lock_path(root):
+    return os.path.join(root, "审稿", "state_ledger.lock")
 
 
 def sha256_file(path):
@@ -142,73 +145,73 @@ def audit_delta_with_content(root, chapter, content):
 
 def merge_delta_to_ledger(root, chapter, verification=None):
     ledger_path = get_ledger_path(root)
-    ledger = load_json(ledger_path)
-    if not ledger:
-        # Initialize if missing
-        ledger = {
-            "schema_version": 1,
-            "kind": "novel_state_ledger",
-            "updated_at": date.today().isoformat(),
-            "characters": {},
-            "setting_facts": [],
-            "open_threads": [],
-            "resolved_threads": [],
-            "chapter_deltas": {},
-        }
-
     delta_path = get_delta_path(root, chapter)
     delta = load_json(delta_path)
     if not delta:
         return False, f"找不到增量文件：{delta_path}"
 
-    c_key = f"chapter_{chapter:02d}"
-    if c_key in ledger.get("chapter_deltas", {}):
-        print(f"[info] 第{chapter}章 已在账本中，正在覆盖更新...")
+    with file_lock(get_ledger_lock_path(root)):
+        ledger = load_json(ledger_path)
+        if not ledger:
+            # Initialize if missing.
+            ledger = {
+                "schema_version": 1,
+                "kind": "novel_state_ledger",
+                "updated_at": date.today().isoformat(),
+                "characters": {},
+                "setting_facts": [],
+                "open_threads": [],
+                "resolved_threads": [],
+                "chapter_deltas": {},
+            }
 
-    # Merge facts
-    for fact in delta.get("new_facts", []):
-        if fact not in ledger["setting_facts"]:
-            ledger["setting_facts"].append(fact)
+        c_key = f"chapter_{chapter:02d}"
+        if c_key in ledger.get("chapter_deltas", {}):
+            print(f"[info] 第{chapter}章 已在账本中，正在覆盖更新...")
 
-    # Merge characters
-    for char_change in delta.get("character_changes", []):
-        name = char_change.get("name")
-        if not name: continue
-        if name not in ledger["characters"]:
-            ledger["characters"][name] = {"history": [], "current_state": {}}
-        ledger["characters"][name]["history"].append({
-            "chapter": chapter,
-            "change": char_change.get("change"),
-            "state_update": char_change.get("state_update")
-        })
-        if char_change.get("state_update"):
-            ledger["characters"][name]["current_state"].update(char_change["state_update"])
+        # Merge facts.
+        for fact in delta.get("new_facts", []):
+            if fact not in ledger["setting_facts"]:
+                ledger["setting_facts"].append(fact)
 
-    # Merge threads
-    for thread in delta.get("open_threads_added", []):
-        ledger["open_threads"].append({"chapter": chapter, "thread": thread})
-    
-    for thread in delta.get("threads_resolved", []):
-        # Move from open to resolved
-        found = False
-        for i, ot in enumerate(ledger["open_threads"]):
-            if ot["thread"] == thread:
-                ledger["open_threads"].pop(i)
-                ledger["resolved_threads"].append({"chapter": chapter, "thread": thread})
-                found = True
-                break
-        if not found:
-            ledger["resolved_threads"].append({"chapter": chapter, "thread": thread, "note": "direct resolve"})
+        # Merge characters.
+        for char_change in delta.get("character_changes", []):
+            name = char_change.get("name")
+            if not name:
+                continue
+            if name not in ledger["characters"]:
+                ledger["characters"][name] = {"history": [], "current_state": {}}
+            ledger["characters"][name]["history"].append({
+                "chapter": chapter,
+                "change": char_change.get("change"),
+                "state_update": char_change.get("state_update")
+            })
+            if char_change.get("state_update"):
+                ledger["characters"][name]["current_state"].update(char_change["state_update"])
 
-    # Record the delta snapshot
-    ledger["chapter_deltas"][c_key] = {
-        "merged_at": date.today().isoformat(),
-        "summary": delta,
-        "verification": verification or {},
-    }
-    ledger["updated_at"] = date.today().isoformat()
-    
-    write_json(ledger_path, ledger)
+        # Merge threads.
+        for thread in delta.get("open_threads_added", []):
+            ledger["open_threads"].append({"chapter": chapter, "thread": thread})
+
+        for thread in delta.get("threads_resolved", []):
+            found = False
+            for i, ot in enumerate(ledger["open_threads"]):
+                if ot["thread"] == thread:
+                    ledger["open_threads"].pop(i)
+                    ledger["resolved_threads"].append({"chapter": chapter, "thread": thread})
+                    found = True
+                    break
+            if not found:
+                ledger["resolved_threads"].append({"chapter": chapter, "thread": thread, "note": "direct resolve"})
+
+        ledger["chapter_deltas"][c_key] = {
+            "merged_at": date.today().isoformat(),
+            "summary": delta,
+            "verification": verification or {},
+        }
+        ledger["updated_at"] = date.today().isoformat()
+
+        write_json(ledger_path, ledger)
     return True, "合并完成"
 
 

@@ -1,11 +1,13 @@
 ---
 name: song
-description: 写歌总调度 — 从主题/几个字/曲风想法，到一首带人声的成品歌（词 + 曲 + 演唱）。是与 novel-author(写小说) 平行的"写歌"创作线；产物落 写歌/<曲名>/(词/lyrics.md + 歌/song.wav)，之后交给 制MV(mv) 做视频。读 _进度.md 路由到 song-lyrics(作词) / song-compose(作曲+演唱与多版挑版) / song-cover(翻唱) / song-review(质检) / song-craft(合约与AI使用披露)。Use when asked to 写首歌 / 做首歌 / 从零写歌 / 我有个歌的点子 / 作词作曲. Triggers 写歌, 做歌, 写首歌, 作词作曲, 原创歌曲, 我想写首歌, song, write a song.
+description: 写歌总调度 — 直接创作或编辑一首带人声的歌（词 + 曲 + 演唱）。支持从主题/几个字/曲风想法从零创作，也支持在已有 `写歌/<曲名>/`、歌词、曲风、半成品音频基础上改词、改结构、改曲风、重生成、多版挑版、换声和质检。是与 novel-author(写小说) 平行的"写歌"创作线；产物落 写歌/<曲名>/(词/lyrics.md + 歌/song.wav)，之后交给 制MV(mv) 做视频。创作过程中可按需调用 song-lyrics(作词/改词) / song-score(歌词体检) / song-compose(作曲+演唱与多版挑版) / song-cover(翻唱/换声) / song-review(质检) / song-craft(合约与AI使用披露)。Use when asked to 写首歌 / 做首歌 / 从零写歌 / 创作歌曲 / 改这首歌 / 改词 / 改曲风 / 重生成 / 我有个歌的点子 / 作词作曲. Triggers 写歌, 做歌, 写首歌, 创作曲, 创作歌曲, 改歌, 改词, 改曲风, 重做这首歌, 作词作曲, 原创歌曲, 我想写首歌, song, write a song.
 ---
 
 # song — 写歌创作线 · 总调度
 
-把"主题 / 几个字 / 曲风想法"做成**一首成品歌**（词 + 曲 + 演唱）。与 `novel-author`（写小说）平行的创作线；**完全独立、自包含**，只用通用工具（Suno / ACE-Step / RVC 等不是 skill）。
+把"主题 / 几个字 / 曲风想法"直接创作成**一首成品歌**（词 + 曲 + 演唱），也可以对已有歌词、曲风、半成品音频或 `写歌/<曲名>/` 项目做编辑迭代。与 `novel-author`（写小说）平行的创作线；**完全独立、自包含**，只用通用工具（Suno / ACE-Step / RVC 等不是 skill）。
+
+总调度不是一次性黑盒：创作过程中可以按实际需要调用 `song-lyrics` 改词/补 hook，调用 `song-score` 做歌词体检，调用 `song-compose` 生成或重生成多版歌曲，调用 `song-cover` 换合法音色，调用 `song-review` 做成品质检，调用 `song-craft` 写合规留痕。
 
 产物落 **`写歌/<曲名>/`**（`词/lyrics.md` + `歌/song.wav`）。成品歌**交给 `mv`（制MV 线）做视频**——和 写小说→制漫剧 一个套路：**写歌 → 制MV**。
 
@@ -42,8 +44,11 @@ description: 写歌总调度 — 从主题/几个字/曲风想法，到一首带
 | 用户输入 | 路由到 |
 |---|---|
 | 没有词，只有想法 | `song-lyrics` |
+| 已有歌词，要改词/改结构/补 hook | `song-lyrics`，必要时再跑 `song-score` |
+| 已有曲风/参考方向，要直接创作歌曲 | 先 `song-lyrics` 固化蓝图和歌词，再 `song-compose` 多版生成 |
 | 已有词，要评估能不能出好歌 | `song-score`（分析结构与押韵） |
 | 已有词，要生成带人声的歌 | `song-compose` |
+| 已有歌但不满意，要改曲风/重生成/挑新版 | `song-compose`（保留 take manifest，多版登记评分后重选） |
 | 已有歌，要换音色/翻唱 | `song-cover` |
 | 成品歌要做成 MV 视频 | 交 `mv`（制MV 线，输入这首歌） |
 | 要发布/交平台/交 MV 前补 AI 使用留痕 | `song-craft/scripts/ai_usage.py` |

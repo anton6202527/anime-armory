@@ -1,0 +1,34 @@
+{
+  "name": "anime-arsenal-desktop",
+  "version": "0.0.2",
+  "private": true,
+  "author": "anime-arsenal",
+  "description": "VS Code-like desktop client for the anime-arsenal AI creation factory. MVP: open folder + file tree, Monaco editor with tabs, integrated resizable terminal. Standalone app that CONSUMES the skills — not part of the skills library.",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "rebuild": "electron-rebuild -f -w node-pty && chmod +x node_modules/node-pty/prebuilds/*/spawn-helper",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.anime-arsenal.desktop",
+    "productName": "anime-arsenal",
+    "afterPack": "build/afterPack.js",
+    "directories": { "output": "dist", "buildResources": "build" },
+    "asarUnpack": ["**/node_modules/node-pty/**"],
+    "mac": { "target": "dmg", "category": "public.app-category.developer-tools", "icon": "build/icon.icns" },
+    "dmg": { "title": "anime-arsenal ${version}" }
+  },
+  "dependencies": {
+    "@xterm/addon-fit": "^0.10.0",
+    "@xterm/xterm": "^5.5.0",
+    "monaco-editor": "^0.52.2",
+    "node-pty": "^1.0.0"
+  },
+  "devDependencies": {
+    "@electron/rebuild": "^3.7.0",
+    "electron": "^31.7.0",
+    "electron-builder": "^24.13.3"
+  }
+}

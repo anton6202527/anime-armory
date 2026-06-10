@@ -12,7 +12,7 @@ import sys
 _COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
-from n2d_settings import write_settings as _write_settings  # noqa: E402
+from settings import write_settings as _write_settings  # noqa: E402
 
 
 def docx_to_txt(docx_path, out_txt_path):
@@ -53,5 +53,5 @@ def write_settings(out_root, fields, *, note=None):
     fields: 有序 dict {中文标签: 值}（如 目标平台/权利来源/输出格式/篇幅档）。
     init 时按 CLI/默认值落定一次，同项目后续沉默沿用；改了在此更新。
     """
-    # 使用 common/n2d_settings.py 的单一真值源实现，保持 Novel 线路的 bold_keys=True
+    # 使用 common/settings.py 的单一真值源实现，保持 Novel 线路的 bold_keys=True
     _write_settings(out_root, fields, note=note, bold_keys=True)

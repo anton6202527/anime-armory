@@ -11,7 +11,7 @@ description: Cold-start ORIGINAL novel creation from scratch — when the user h
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**。按 `../_偏好约定.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
+本 skill 的可选项**不写死在源码里**，按 `../_偏好约定.md`（家族统一的偏好读写机制 + 全部选择点目录与缺省）解析：`<作品根>/_设置.md` → 全局默认 `创作偏好-默认.md` 预填并告知一句 → 缺则**首次问一次**→写回 `_设置.md`→**沉默沿用**（合规/不可逆/花钱点每次仍确认）。
 
 本 skill 涉及的选择点：`目标平台`、`权利来源`、`输出格式`、`篇幅档`、`小说生成模式`、`章节生成粒度`、`AI使用披露`。
 
@@ -29,6 +29,8 @@ description: Cold-start ORIGINAL novel creation from scratch — when the user h
 ## 工作流（八步，每步末用户审 gate）
 
 ### 0. 立项访谈（核心 · 把"几个字"补全成可写的蓝图）—— 必读 `references/interview.md`
+> **先看自有差异化候选（选题闭环读端）**：若 `<repo>/生产战绩/差异化候选.json` 存在（由 `n2d-feedback/differentiate.py` 从投放战绩反推），立项时**先读它**，把高分「题材×开场×结尾」白空间组合作为推荐方向之一报给用户（"我们做过的里这类还没做烂，且复用了已验证有效的节奏轴"）。这是 选题→生产→投放→**反哺选题** 闭环的上游落地；没有该文件就正常按用户想法走。
+
 从用户的只言片语 + 碎片，问清这几组（一次一组、带默认建议）：
 - **题材类型 + 目标平台**（决定篇幅档/爽点节奏）
 - **主角**：是谁 + **金手指/核心能力（必有代价）** + 动机/心结
@@ -67,13 +69,19 @@ python3 <skill>/scripts/init_project.py \
 
 ### 7. 续写余下 + 状态增量 + 回扫 + 导出
 - **定模式**：按 `_偏好约定.md` 读/问 `小说生成模式`（极速初稿/稳妥初稿/商业连载/漫剧源书）和 `章节生成粒度`（逐章/小批/全书草稿）。缺省推荐 `稳妥初稿 + 逐章`；用户明确要快时用 `极速初稿 + 小批`；要喂漫剧线时用 `漫剧源书`。
-- **出任务包**：先读 `novel-craft/references/draft-pipeline.md`，再跑：
+- **出任务包**：先读 `novel-craft/references/draft-pipeline.md`；进入小批/全书草稿时先建队列并认领章节，避免多代理重复写：
+```bash
+python3 skills/novel-craft/scripts/draft_queue.py "<作品根>" init
+python3 skills/novel-craft/scripts/draft_queue.py "<作品根>" claim --agent "<名字>"
+```
+再按认领章号出任务包：
 ```bash
 python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --next
 python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --range 4-8
 ```
 - **逐章写**：按 `写作任务/第NN章.md` 写到 `章节/第NN章.md`。不要跳过任务包直接凭记忆写长篇。
 - **状态增量**：每章写完填 `审稿/state_delta_第NN章.json`；涉及人物/能力/伏笔/关系变化时合并回 `审稿/state_ledger.json`，必要时同步 `设定/设定圣经.md` / `设定/角色卡.md`。
+- **队列回写**：该章 review/对账通过后跑 `python3 skills/novel-craft/scripts/draft_queue.py "<作品根>" done NN --agent "<名字>"`；返工则 `fail NN --reason "<原因>"` 或 `todo NN`。
 - **回扫**：用 `novel-review` 分批扫——重点**设定圣经一致性**（金手指代价没破、设定没前后矛盾）、人设不崩、钩子回收、文风不漂。至少跑一次机检：
 ```bash
 python3 skills/novel-review/scripts/mechanical_check.py "<作品根>" --json-out "<作品根>/审稿/mechanical_findings.json"

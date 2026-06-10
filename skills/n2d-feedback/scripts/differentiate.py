@@ -267,7 +267,7 @@ def main(argv: List[str]) -> int:
     ap.add_argument("--metric", default="follow_next_rate", help="评判已验证轴用的指标（默认 follow_next_rate）")
     ap.add_argument("--min-samples", type=int, default=2)
     ap.add_argument("--top", type=int, default=12)
-    ap.add_argument("--out", help="输出路径（.md 或 .json）；默认打印")
+    ap.add_argument("--out", help="输出路径（.md 或 .json）；缺省双写 <repo>/生产战绩/差异化候选.{md,json} 供选题 skill 发现")
     ap.add_argument("--json", action="store_true")
     ns = ap.parse_args(argv)
 
@@ -291,6 +291,21 @@ def main(argv: List[str]) -> int:
             fh.write(text + ("\n" if not text.endswith("\n") else ""))
         print(f"[differentiate] wrote {ns.out}", file=sys.stderr)
     else:
+        # 缺省双写 canonical 文件，让 novel-create/novel-title 立项/起名时能稳定发现；
+        # stdout 仍按 --json 输出，兼容管道用法。候选与战绩库同放在 生产战绩/ 下。
+        ledger_parent = os.path.dirname(os.path.abspath(ledger))
+        out_dir = ledger_parent if os.path.basename(ledger_parent) == "生产战绩" \
+            else os.path.join(ledger_parent, "生产战绩")
+        os.makedirs(out_dir, exist_ok=True)
+        md_path = os.path.join(out_dir, "差异化候选.md")
+        json_path = os.path.join(out_dir, "差异化候选.json")
+        with open(md_path, "w", encoding="utf-8") as fh:
+            fh.write(render_markdown(report))
+        with open(json_path, "w", encoding="utf-8") as fh:
+            json.dump(report, fh, ensure_ascii=False, indent=2)
+        print(f"[differentiate] 候选 → {md_path}", file=sys.stderr)
+        print(f"[differentiate] 机读 → {json_path}"
+              f"（novel-create/novel-title 立项/起名自动读此文件）", file=sys.stderr)
         print(text)
     return 0
 

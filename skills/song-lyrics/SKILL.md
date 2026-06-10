@@ -25,7 +25,7 @@ description: 访谈式 AI 作词 / 歌词创作 — 用户只有主题/几个字
 ## 工作流
 0. **立项访谈**（必读 `references/songcraft.md §访谈`）：主题/情绪 → 歌曲用途+目标时长 → 曲风+平台 → 语言+BPM/速度 → 叙事还是抒情 → 视角(我/他/对话) → 结构 → 关键意象/想押的韵脚。给默认让用户确认。
 1. **建/接骨架**：
-   - 新写歌项目 → `python3 <song skill>/scripts/init_project.py --title ... --genre ... --theme ...`（建 `写歌/<曲名>/` + `词/lyrics.md` 段落骨架）。
+   - 新写歌项目 → `python3 skills/song-craft/scripts/init_project.py --title ... --genre ... --theme ...`（建 `写歌/<曲名>/` + `词/lyrics.md` 段落骨架）。
    - 独立作词 → 直接产出 md，不建项目。
 2. **填创作蓝图**（若建了项目）：主题/曲风/情绪/平台/视角写实。→ 用户审。
 3. **写副歌 hook 先**：副歌是记忆点，先写它（含 1 句最抓耳的 hook），定全曲韵脚与情绪顶点。→ 用户审。

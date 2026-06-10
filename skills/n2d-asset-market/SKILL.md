@@ -101,14 +101,16 @@ python3 skills/n2d-asset-market/scripts/market.py export-routes <作品根> 第1
 
 ```text
 资产库/
-├── characters/<slug>/
+├── characters/<slug>/          # export-character / import-character 全链支持
 │   ├── asset_pack.json
 │   └── files/
-├── scenes/<slug>/
-├── props/<slug>/
+├── scenes/<slug>/              # ⚠️ 预留结构：list 会扫，但暂无 export/import-scene 命令（手建可被 list 识别）
+├── props/<slug>/               # ⚠️ 预留结构：同上，暂无 export/import-prop 命令
 └── templates/model_routes/<slug>/
-    └── asset_pack.json
+    └── asset_pack.json         # export-routes / import-routes
 ```
+
+> 当前只有 `characters/` 与 `templates/model_routes/` 有成对的导出/导入命令；`scenes/`/`props/` 是为后续扩展预留的目录约定，尚未实现专用命令，先按需手建（`pack_dir` 已能按 `asset_type` 落到对应子目录）。
 
 Schema 见 `references/schema.md`。
 

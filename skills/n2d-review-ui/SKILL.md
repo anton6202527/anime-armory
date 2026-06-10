@@ -1,17 +1,27 @@
 ---
 name: n2d-review-ui
-description: Build a local visual human-review UI for novel2drama/n2d episodes. Generate an infinite-canvas-style static HTML board and JSON manifest showing first frames, tail frames, video clips, seams, identity/reference images, QA flags, and machine scores from n2d-review/n2d-score outputs. Use when asked for 人审UI, 审片UI, 无限画布, 可视化审片, 首帧尾帧接缝可视化, QA flag 看板, 机器分看板, review canvas, visual review UI.
+description: Build a local visual UI for novel2drama/n2d. Two zero-build (self-contained HTML + JSON) views — (1) per-episode 人审画布 `review_ui.py`: first/tail frames, clips, seams, identity refs, QA flags, machine scores; (2) work-level 生产看板 `board.py`: reads `_进度.md` and renders 作品→集(swimlane)→阶段(stage chips, progress-colored)→Clip(接力链 edges, QA status) for the whole drama, optionally served on 127.0.0.1 (the MVP of the PC端+无限画布 vision, see novel2drama Q&A Q36). Use when asked for 人审UI, 审片UI, 无限画布, 可视化审片, 生产看板, 整部进度画布, 制作过程可视化, 首帧尾帧接缝可视化, QA flag 看板, 机器分看板, review canvas, production board, visual review UI.
 ---
 
-# n2d-review-ui — 人审无限画布
+# n2d-review-ui — 人审无限画布 + 生产看板
 
-`n2d-review-ui` 把文本质检报告升级成可视化人审入口。它不替代 `n2d-review` / `n2d-score`，而是把它们的输出和真实素材放到同一张本地画布里：
+`n2d-review-ui` 把文本质检报告升级成可视化入口。它不替代 `n2d-review` / `n2d-score`，只读它们和产线的产物（`_进度.md` / `storyboard.json` / `score_*.json` / 帧/clip），**单一真值源，绝不 fork 逻辑**。两个零构建（自带 HTML + vanilla JS，无 npm）视图，颗粒度不同：
 
-- 分镜首帧、尾帧、clip MP4；
-- clip 接缝：上一尾帧 vs 下一首帧；
-- 定妆 / reference group 参考图；
-- QA flag / 机器分 / 自动回流任务；
-- 缺素材、缺尾帧、缺视频的可视标记。
+**① 单集人审画布 `review_ui.py`**（细看一集，挑穿帮）：
+- 分镜首帧、尾帧、clip MP4；clip 接缝（上尾帧 vs 下首帧）；定妆 / reference group 参考图；
+- QA flag / 机器分 / 自动回流任务；缺素材、缺尾帧、缺视频的可视标记。
+
+**② 整部生产看板 `board.py`**（看全局，一眼到哪了）—— PC端+无限画布愿景的 MVP（见 `novel2drama` Q&A Q36）：
+- 读 `_进度.md` 状态机，渲染 **作品 → 集（泳道）→ 阶段（stage chips，按进度上色 done/进行中/未开始）→ Clip（接力链边 + QA 状态色）** 的可缩放/平移画布；
+- 每集显示完成度条 + 下一步该跑哪个 skill（前沿，与 `n2d-progress` 同源）；有 `storyboard.json` 的集进一步铺开 Clip 卡 + 接力链；
+- `--serve` 在 `127.0.0.1` 起本地服务（复用 `n2d-dashboard` 的本地服务先例），媒体相对路径直接解析。
+- **跨集深链**：board 上点某个 Clip → 新标签打开该集 `review_ui_第N集.html#clip=<id>`，深画布自动**居中并高亮**该 Clip（点集头则打开该集深画布）；该集深画布未生成时弹提示给出生成命令。两层（全局看板 ↔ 单集深审）由 Clip id 串起，看板看全局、深画布挑穿帮。
+
+```bash
+python3 skills/n2d-review-ui/scripts/board.py <作品根> --write --markdown   # 生成 生产数据/board.html + board.json
+python3 skills/n2d-review-ui/scripts/board.py <作品根> --serve [--port 8765] # 本地起服务看板
+```
+输出：`制漫剧/<剧名>/生产数据/board.html` + `board.json`。**只读不改任何状态**；要改进度/重跑仍走对应 skill。
 
 ## 触发
 

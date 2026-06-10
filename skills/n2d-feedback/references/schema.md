@@ -170,7 +170,7 @@ A/B 分析说明：
 
 ## 自有题材战绩库（genre_performance_record · 跨项目闭环）
 
-`--emit-ledger` 把本剧第一方战绩按题材追加进 append-only JSONL 战绩库，供 `novel-score` 读为题材热度的第一方先验，闭合 **选题→生产→投放→反哺选题**。
+`--emit-ledger` 把本剧第一方战绩聚合成一条记录，按 **(work, genre, platform) upsert** 写入 JSONL 战绩库（同键重 emit 替换旧快照、不堆重复行；不同剧/题材/平台各占一行），供 `novel-score` 读为题材热度的第一方先验，闭合 **选题→生产→投放→反哺选题**。
 
 - 路径：`$N2D_GENRE_LEDGER` 或 `<repo>/生产战绩/genre_ledger.jsonl`（`--ledger` 覆盖）。**跨项目共享**。
 - 一条记录 = 一次「某剧×某次回灌」的题材级聚合：

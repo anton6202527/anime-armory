@@ -1,0 +1,16 @@
+{
+  "mechanical": {
+    "ran": true,
+    "returncode": 0,
+    "json": "写小说/本宫才是这皇宫最大的妖/审稿/mechanical_findings.json",
+    "tail": " \"格式\", \"msg\": \"缺 meta 注释头\", \"evidence\": \"\"}, {\"chapter\": 97, \"severity\": \"🟢\", \"dim\": \"格式\", \"msg\": \"缺 meta 注释头\", \"evidence\": \"\"}, {\"chapter\": 98, \"severity\": \"🟢\", \"dim\": \"格式\", \"msg\": \"缺 meta 注释头\", \"evidence\": \"\"}, {\"chapter\": 99, \"severity\": \"🟢\", \"dim\": \"格式\", \"msg\": \"缺 meta 注释头\", \"evidence\": \"\"}, {\"chapter\": 100, \"severity\": \"🟢\", \"dim\": \"格式\", \"msg\": \"缺 meta 注释头\", \"evidence\": \"\"}]\nFINDINGS_JSON -->\n"
+  },
+  "logic_sentry": {
+    "ran": false,
+    "skipped": "无 设定/角色卡.md，无法播种动态百科——先补角色卡"
+  },
+  "style_drift": {
+    "ran": false,
+    "skipped": "无锚点指纹 写小说/本宫才是这皇宫最大的妖/设定/风格指纹.json——先跑 extract_style.py 提取锚点章指纹"
+  }
+}

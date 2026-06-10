@@ -22,6 +22,19 @@ WAV 时长走标准库 wave，不依赖 ffprobe。
 退出码：有 🔴 阻断级 → 1，否则 0。
 """
 import sys, os, re, json, glob, wave, subprocess, shutil
+import importlib.util
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
+MV_UTILS_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "mv_utils.py")
+
+def load_mv_utils():
+    spec = importlib.util.spec_from_file_location("mv_utils", MV_UTILS_PATH)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+mv_utils = load_mv_utils()
 
 BLOCK, WARN, INFO = "🔴", "🟡", "🟢"
 DUR_TOL = 2.0         # 时长一致允许差（秒，或按 10% 取大）
@@ -38,41 +51,8 @@ def have_ffprobe():
         _HAVE_FFPROBE = shutil.which("ffprobe") is not None
     return _HAVE_FFPROBE
 
-PLACEHOLDER = re.compile(r"待精修|待填|待定|占位|歌词…|歌词\.\.\.|placeholder|TODO|（待|\(待")
-
-
-def load_json(path):
-    if not os.path.exists(path):
-        return None
-    try:
-        return json.load(open(path, encoding="utf-8"))
-    except Exception as e:
-        add(BLOCK, "完整性", path, f"JSON 解析失败：{e}")
-        return None
-
-
-def wav_duration(path):
-    if not os.path.exists(path):
-        return None
-    try:
-        with wave.open(path, "rb") as w:
-            return w.getnframes() / w.getframerate() if w.getframerate() else None
-    except Exception:
-        return None
-
-
-def ffprobe_json(path, *args):
-    try:
-        out = subprocess.run(
-            ["ffprobe", "-v", "error", "-of", "json", *args, path],
-            capture_output=True, text=True, timeout=30)
-        return json.loads(out.stdout) if out.stdout.strip() else {}
-    except Exception:
-        return {}
-
-
 def probe_duration(path):
-    d = ffprobe_json(path, "-show_entries", "format=duration")
+    d = mv_utils.ffprobe_json(path, "-show_entries", "format=duration")
     try:
         return float(d.get("format", {}).get("duration"))
     except (TypeError, ValueError):
@@ -81,7 +61,7 @@ def probe_duration(path):
 
 def probe_video(path):
     """返回 (duration, w, h, has_audio) 或 None。"""
-    d = ffprobe_json(path, "-show_entries", "format=duration", "-show_streams")
+    d = mv_utils.ffprobe_json(path, "-show_entries", "format=duration", "-show_streams")
     streams = d.get("streams", [])
     if not streams:
         return None
@@ -110,12 +90,19 @@ def check_completeness(root):
             add(WARN, "完整性", f, "缺文件")
 
 
+def load_json_safe(path):
+    try:
+        return mv_utils.load_json(path)
+    except Exception as e:
+        add(BLOCK, "完整性", path, f"JSON 解析/加载失败：{e}")
+        return None
+
 def check_beatgrid(root, songlen):
     p = os.path.join(root, "节拍", "beatgrid.json")
     if not os.path.exists(p):
         add(WARN, "卡点", "节拍/beatgrid.json", "缺 beatgrid（未卡点则正常；无卡点 MV 节奏会平）")
         return None
-    bg = load_json(p)
+    bg = load_json_safe(p)
     if bg is None:
         add(BLOCK, "卡点", "节拍/beatgrid.json", "beatgrid 损坏不可解析")
         return None
@@ -171,17 +158,12 @@ def check_clips(root, songlen):
 def _parse_lrc(path, lines_out):
     rx = re.compile(r"\[(\d+):(\d+(?:\.\d+)?)\]")
     for raw in open(path, encoding="utf-8"):
-        if PLACEHOLDER.search(raw):
+        if mv_utils.PLACEHOLDER.search(raw):
             add(BLOCK, "字幕", os.path.basename(path), f"字幕占位未精修：{raw.strip()[:30]}…")
         ts = rx.findall(raw)
         text = rx.sub("", raw).strip()
         for m, s in ts:
             lines_out.append((int(m) * 60 + float(s), None, text))
-
-
-def _ass_time(t):
-    h, m, s = t.split(":")
-    return int(h) * 3600 + int(m) * 60 + float(s)
 
 
 def _parse_ass(path, lines_out):
@@ -192,11 +174,11 @@ def _parse_ass(path, lines_out):
         if len(parts) < 10:
             continue
         try:
-            st, en = _ass_time(parts[1].strip()), _ass_time(parts[2].strip())
+            st, en = mv_utils.parse_ass_time(parts[1].strip()), mv_utils.parse_ass_time(parts[2].strip())
         except Exception:
             continue
         text = re.sub(r"\{[^}]*\}", "", parts[9]).strip()
-        if PLACEHOLDER.search(text):
+        if mv_utils.PLACEHOLDER.search(text):
             add(BLOCK, "字幕", os.path.basename(path), f"字幕占位未精修：{text[:30]}…")
         lines_out.append((st, en, text))
 
@@ -239,7 +221,7 @@ def check_alignment_report(root):
         if os.path.exists(os.path.join(root, "字幕", "lyrics.lrc")) or os.path.exists(os.path.join(root, "字幕", "karaoke.ass")):
             add(WARN, "字幕", "字幕/alignment_report.json", "有字幕但缺对齐报告——建议重跑新版 mv-lyric-sync 便于 QA")
         return
-    report = load_json(path)
+    report = load_json_safe(path)
     if report is None:
         add(BLOCK, "字幕", "字幕/alignment_report.json", "对齐报告损坏不可解析")
         return
@@ -256,7 +238,7 @@ def check_plan_manifests(root, songlen):
     if not os.path.exists(plan_path):
         add(WARN, "规划", "分镜/clip_plan.json", "缺 clip plan——建议先跑 mv-plan/scripts/plan_clips.py，避免出图/出视频/合成各自猜时间线")
         return
-    plan = load_json(plan_path)
+    plan = load_json_safe(plan_path)
     if plan is None:
         add(BLOCK, "规划", "分镜/clip_plan.json", "clip_plan 损坏不可解析")
         return
@@ -274,7 +256,7 @@ def check_plan_manifests(root, songlen):
     if not os.path.exists(timeline_path):
         add(WARN, "规划", "分镜/timeline_manifest.json", "缺 timeline manifest——mv-compose 会退回文件顺序拼接")
         return
-    timeline = load_json(timeline_path)
+    timeline = load_json_safe(timeline_path)
     if timeline is None:
         add(BLOCK, "规划", "分镜/timeline_manifest.json", "timeline_manifest 损坏不可解析")
         return
@@ -293,7 +275,7 @@ def check_video_jobs(root):
         if clips_exist:
             add(WARN, "规划", "出视频/jobs_manifest.json", "已有视频 clip 但缺 video jobs manifest——建议用 video_jobs.py 登记来源/挑版")
         return
-    manifest = load_json(path)
+    manifest = load_json_safe(path)
     if manifest is None:
         add(BLOCK, "规划", "出视频/jobs_manifest.json", "jobs_manifest 损坏不可解析")
         return
@@ -352,7 +334,7 @@ def check_ai_usage(root):
         add(WARN, "合规", "合规/ai_usage.json",
             "已有成片但缺 AI 视觉使用披露——发布/交平台前跑 mv-craft/scripts/ai_usage.py")
         return
-    payload = load_json(path)
+    payload = load_json_safe(path)
     if payload is None:
         add(BLOCK, "合规", "合规/ai_usage.json", "AI 使用披露 JSON 损坏不可解析")
         return
@@ -370,7 +352,7 @@ def check_lyrics_and_meta(root, meta):
     if os.path.exists(ly):
         sec = 0
         for raw in open(ly, encoding="utf-8"):
-            if PLACEHOLDER.search(raw):
+            if mv_utils.PLACEHOLDER.search(raw):
                 add(BLOCK, "字幕", "词/lyrics.md", f"歌词占位未精修：{raw.strip()[:30]}…")
             s = raw.strip()
             if re.match(r"^\[[^\]]+\]$", s):
@@ -403,9 +385,9 @@ def main():
     if not os.path.isdir(root):
         print(f"作品根不存在：{root}"); sys.exit(2)
 
-    meta = load_json(os.path.join(root, "_meta.json"))
-    songlen = next((wav_duration(os.path.join(root, "歌", f"song{e}"))
-                    for e in (".wav",) if wav_duration(os.path.join(root, "歌", f"song{e}"))), None)
+    meta = load_json_safe(os.path.join(root, "_meta.json"))
+    songlen = next((mv_utils.wav_duration(os.path.join(root, "歌", f"song{e}"))
+                    for e in (".wav",) if mv_utils.wav_duration(os.path.join(root, "歌", f"song{e}"))), None)
 
     check_completeness(root)
     lyric_lines = check_lyrics_and_meta(root, meta)

@@ -1,0 +1,8 @@
+.vscode/**
+.gitignore
+**/*.vsix
+node_modules/**
+sync-assets.js
+settings.json.bak
+assets/**/__pycache__/**
+assets/**/*.pyc

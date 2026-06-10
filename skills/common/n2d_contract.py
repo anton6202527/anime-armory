@@ -106,6 +106,11 @@ COMPLIANCE_ALLOWED_RIGHTS = {
     "stock_licensed",
     "not_applicable",
 }
+
+# 权利状态为这些值时必须附 evidence/ref（不能只口头声明已授权）。
+# gate.py 与 compliance.py 必须共用本集合，避免 source_text 等单键漂移
+# （历史上 gate 漏了 stock_licensed → 与 compliance.py --check 给出相反结论）。
+COMPLIANCE_RIGHTS_EVIDENCE_REQUIRED = {"licensed", "stock_licensed", "user_declared"}
 COMPLIANCE_APPROVED_CHARACTER = {
     "synthetic_character",
     "original_character",
@@ -317,10 +322,10 @@ CINEMATIC_CONTRACT_FIELDS = (
 # 见 docs/n2d-原则变更提案-契约治理与一致性占位.md 提案一 P1.1/P1.3。
 # 治理原则：标 contested 的原则不应被新增 BLOCK gate / "必须/只能/不可选" 措辞进一步硬化；
 #       可以把现有 contested 的 BLOCK 降级为 WARN/choice（解除垄断）。
-# ⚠️ 进度：「生图后端垄断」已推进到阶段2（见下 APPROVED_IMAGE_BACKENDS / classify_image_backend，
-#       gate.check_image_ai_policy 消费）；其余两项仍为阶段0 纯元数据。
+# ⚠️ 进度：「生图后端垄断」已解除到官方/已登录后端白名单（见下 APPROVED_IMAGE_BACKENDS /
+#       classify_image_backend，gate.check_image_ai_policy 消费）；其余两项仍为纯元数据。
 CONTESTED = {
-    "生图后端垄断": "已推进到【阶段2·官方即梦放行】：生图AI 是选择点（默认 Codex），放行官方多参考一致性后端（Dreamina/即梦官方 CLI、Seedream 官方API / 可灵主体库 / Nano Banana / Sora Cameo）；gate 不再因『非 Codex』阻断，只拦后端混用 + 未授权/第三方逆向出图。见下 APPROVED_IMAGE_BACKENDS。",
+    "生图后端垄断": "已放行官方/已登录图片后端：生图AI 是选择点（默认 Codex），放行官方多参考一致性后端（Dreamina/即梦官方 CLI、Seedream 官方API / 可灵主体库 / Nano Banana / Sora Cameo）；gate 不再因『非 Codex』阻断，只拦后端混用 + 未授权/第三方逆向出图。见下 APPROVED_IMAGE_BACKENDS。",
     "占位驱动付费生成": "「先出视频后配音」/ 占位时长驱动出图·出视频，与配音先行不变量冲突（提案三，目标 rough→refine 两遍制）。",
     "基础视觉风格": "视觉风格必须来自选择点「基础视觉风格」与 global_style。新产物写 style_contract；旧 cinematic_contract 仅作兼容，不得把写实电影感当全线不变量。",
 }
@@ -330,8 +335,8 @@ INVARIANT_NOTE = (
     "（光色有逻辑·构图可信·运动克制·禁忌随所选风格派生）。"
 )
 
-# ── 生图后端治理：阶段1（解除 Codex 垄断）──────────────────────────────
-# 历史阶段0：gate 硬拦一切非 Codex 出图。阶段2：`生图AI` 是真选择点，默认仍 Codex；
+# ── 生图后端治理：官方/已登录后端白名单 ───────────────────────────────
+# 历史口径：gate 硬拦一切非 Codex 出图。当前：`生图AI` 是真选择点，默认仍 Codex；
 #   放行【官方/已登录多参考一致性后端】；gate 不再因"非 Codex"阻断，只阻断：
 #     ① 同项目/同集【后端混用】（混用才是跨镜一致性杀手）；
 #     ② 未授权/第三方逆向图片生成路径（安全 invariant，永不放行）。
@@ -468,11 +473,12 @@ STAGE_GRAPH: List[Dict[str, object]] = [
         "routes": True,
         "gate_stage": None,
         "requires": ("剧本改编",),
+        # 2026 出视频/合成 拆分后：配音 + 时长清单 一律落 合成/{ep}/配音/（render_voice.py 无条件写此处，
+        # 与 制作模式 无关）。历史上 先出视频后配音 曾设想落 出视频/{ep}/配音/，已废弃——勿再加该路径。
         "outputs": (
             "合成/{ep}/配音/voice_zh.wav",
             "合成/{ep}/配音/时长清单.json",
             "合成/{ep}/配音/_占位说明.md",
-            "出视频/{ep}/配音/时长清单.json",
         ),
         "output_contract": {
             "any_of": (
@@ -487,13 +493,7 @@ STAGE_GRAPH: List[Dict[str, object]] = [
                     "label": "视频先行占位时长",
                     "all_of": (
                         "合成/{ep}/配音/_占位说明.md",
-                        "出视频/{ep}/配音/时长清单.json",
-                    ),
-                },
-                {
-                    "label": "视频先行真实配音清单",
-                    "all_of": (
-                        "出视频/{ep}/配音/时长清单.json",
+                        "合成/{ep}/配音/时长清单.json",
                     ),
                 },
             ),

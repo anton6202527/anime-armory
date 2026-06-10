@@ -8,7 +8,7 @@
 
 ```bash
 # 每次进入 n2d-image 生图阶段都重新探测
-for cli in codex openai; do
+for cli in codex openai dreamina gemini-cli seedream kling sora; do
   command -v "$cli" >/dev/null 2>&1 && \
     echo "$cli -> $(command -v $cli)"
 done
@@ -16,7 +16,7 @@ codex features list 2>/dev/null | rg 'image_generation|artifact' || true
 codex plugin list 2>/dev/null | rg -i 'image|openai|fal|replicate|browser|computer-use' || true
 ```
 
-所选后端未找到可自动落 PNG 的入口 → **停下报告**（见 SKILL「生图后端规则」），不偷偷换后端兜底（换后端=混用）。`生图AI` 默认 Codex，阶段2 起也可选 Dreamina/即梦官方 CLI、Seedream/可灵主体库/Nano Banana/Sora Cameo 等官方/已登录后端（全集统一一个、不混用，下面 codex/openai 的探测只是默认后端的例子）。禁止第三方逆向 CLI、`同视频AI` 含糊口径和 web 自动化出图；`<作品根>/_设置.md` 写 `同视频AI` 时改成显式后端名。
+所选后端未找到可自动落 PNG 的入口 → **停下报告**（见 SKILL「生图后端规则」），不偷偷换后端兜底（换后端=混用）。`生图AI` 默认 Codex，当前也可选 Dreamina/即梦官方 CLI、Seedream/可灵主体库/Nano Banana/Sora Cameo 等官方/已登录后端（全集统一一个、不混用）。上面的通用探测覆盖白名单常见 CLI 名；具体是否可用仍以本文件各后端档案和官方帮助为准。禁止第三方逆向 CLI、`同视频AI` 含糊口径和 web 自动化出图；`<作品根>/_设置.md` 写 `同视频AI` 时改成显式后端名。
 
 ## 优先级（针对默认即梦视频流）
 
@@ -24,7 +24,7 @@ codex plugin list 2>/dev/null | rg -i 'image|openai|fal|replicate|browser|comput
 |---|---|---|
 | ① | Codex 会话内置 `image_gen` / Codex image_generation feature → 即梦视频 + 锚定句 | 当前 Codex 能力优先；生成后必须把图从 `$CODEX_HOME/generated_images/...` 移入作品目录 |
 | ② | 官方 OpenAI Images 入口（`openai` CLI 或 Codex/OpenAI 插件）→ 即梦视频 + 锚定句 | 可自动批量落 PNG 时优先于国内兜底；注意统一东方面孔锚点 |
-| 官方备选 | Dreamina/即梦官方 CLI / Seedream / 可灵主体库 / Nano Banana(Gemini) / Sora Cameo 官方 API | 阶段2 起可选；选定后整集统一、不与 Codex 混用；多角色同框/跨集锁人更稳 |
+| 官方备选 | Dreamina/即梦官方 CLI / Seedream / 可灵主体库 / Nano Banana(Gemini) / Sora Cameo 官方 API | 当前可选；选定后整集统一、不与 Codex 混用；多角色同框/跨集锁人更稳 |
 | 禁止 | 第三方逆向 CLI / `同视频AI` 含糊口径 / 即梦 web 自动化出图 | 安全 invariant：未授权路径禁用；官方 Dreamina CLI 和官方 Seedream API 不在此列 |
 
 切换目标视频 AI 时，图片阶段仍保持 Codex/OpenAI；需要风格兼容时拼目标视频 AI 的图像风格锚定句。
@@ -85,13 +85,13 @@ openai images create \
 
 ### 子命令（实测）
 
-| 子命令 | 用途 | Stage 2 使用 |
+| 子命令 | 用途 | Stage 4 使用 |
 |---|---|---|
 | `text2image` | 文生图 | ✅ 可用于共享定妆首图、场景、道具、空镜 |
 | `image2image` | 图生图 / 参考图派生 | ✅ 可用于角色定妆组派生、本集分镜首尾帧 |
 | `image_upscale` | 超分 | 可选，封面 4K 化 |
-| `text2video` | 文生视频 | Stage 3 用 |
-| `image2video` | 图生视频 | Stage 3 用 |
+| `text2video` | 文生视频 | Stage 5 用 |
+| `image2video` | 图生视频 | Stage 5 用 |
 
 ### 图片阶段调用原则
 

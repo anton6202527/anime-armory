@@ -9,7 +9,7 @@ description: Use when rewriting / reimagining / 魔改 an existing novel into a 
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**。按 `../_偏好约定.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
+本 skill 的可选项**不写死在源码里**，按 `../_偏好约定.md`（家族统一的偏好读写机制 + 全部选择点目录与缺省）解析：`<作品根>/_设置.md` → 全局默认 `创作偏好-默认.md` 预填并告知一句 → 缺则**首次问一次**→写回 `_设置.md`→**沉默沿用**（合规/不可逆/花钱点每次仍确认）。
 
 本 skill 涉及的选择点：`目标平台`、`权利来源`、`输出格式`、`篇幅档`、`小说生成模式`、`章节生成粒度`、`AI使用披露`。
 
@@ -34,7 +34,7 @@ description: Use when rewriting / reimagining / 魔改 an existing novel into a 
 
 ## 工作流（七步，每步末用户审 gate）
 
-> **派生同构阶段表**：本 skill 的 `_meta.json` / `_进度.md` 必须遵守 `novel-craft/references/contract.md`。机器阶段 key 固定为 `setup → source_model → direction_spec → title → outline → demo → draft → review → export`；本 skill 中 `source_model` = 原作内核/旧设定吸收，`direction_spec` = 改动spec / 新设定确认。
+> **派生流水线**：阶段表 + demo_gate / draft_packets / 状态账本 / export / ai_usage 的通用机制见 `novel-craft/references/derive-pipeline.md`。本 skill 的 `source_model` = 原作内核/旧设定吸收，`direction_spec` = 改动spec / 新设定确认。
 
 0. **确认输入 + 合法性**：原作路径、**改动方向**（一句话：要把它改成什么）、规模（short/medium/long/微短剧/漫剧）、目标平台、输出（txt/docx/outline/n2d）。判版权。
 1. **建骨架**：`python3 <skill>/scripts/init_project.py "<原作>" --rewrite-type "<方向>" --scale <档> [--draft-mode 稳妥初稿] [--chapter-granularity 逐章] [--ai-text-usage AI-assisted] [--i-have-rights]` → `写小说/<原作名>-改写/`（设定/{改动spec,新设定,角色卡,世界观,章纲} + 原作.txt 参考 + 章节/ + 导出/ + _meta + _进度）。

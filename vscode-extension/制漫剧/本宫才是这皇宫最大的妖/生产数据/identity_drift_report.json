@@ -1,0 +1,14 @@
+{
+  "kind": "n2d_identity_drift_report",
+  "version": 1,
+  "root": "制漫剧/本宫才是这皇宫最大的妖",
+  "generated_at": "2026-06-09T10:28:20+00:00",
+  "available": false,
+  "episodes": [
+    "第1集"
+  ],
+  "characters": {},
+  "notes": [
+    "脸部相似度度量已跳过（未装 insightface/cv2）——崩脸暂由人判清单(references/checklist.md)并排读图覆盖。"
+  ]
+}

@@ -206,11 +206,55 @@ def write_outline(out_path, project_root, meta, chapters):
         f.write(cleaned + summary)
 
 
-def write_n2d(n2d_root, docx_path, title):
-    """铺 n2d-script 友好的目录结构。"""
+def _find_drama_repo_root(start):
+    """向上找含『制漫剧/』的仓库根；找不到返回 None。与 split_novel 的作品根定位同源。"""
+    d = os.path.abspath(start)
+    while True:
+        if os.path.isdir(os.path.join(d, "制漫剧")):
+            return d
+        parent = os.path.dirname(d)
+        if parent == d:
+            return None
+        d = parent
+
+
+def resolve_n2d_dest(project_root, title, explicit):
+    """决定 n2d 交接落点（= 作品根，其下铺 小说/）。返回 (dest, mode)。
+
+    - explicit（--n2d-dest）优先。
+    - 否则自动定位 <repo>/制漫剧/<title>/：这样 split_novel 直接吃 小说/<title>.docx
+      就会把 n2d 生产树建在正确位置（split 取 小说/ 的父级为作品根），无需 --out。
+    - 都不行才回退项目内 导出/n2d-script/（此时 split 必须带 --out，否则会建错位置）。
+    """
+    if explicit:
+        return os.path.abspath(explicit), "explicit"
+    repo = _find_drama_repo_root(project_root)
+    if repo:
+        return os.path.join(repo, "制漫剧", title), "canonical"
+    return os.path.join(project_root, "导出", "n2d-script"), "legacy"
+
+
+def write_n2d(n2d_root, docx_path, title, meta, project_root):
+    """铺 n2d-script 友好的目录结构 + 交接清单（_n2d_handoff.json，留痕来源/版权/hash）。返回落地 docx 路径。"""
     novel_dir = os.path.join(n2d_root, "小说")
     os.makedirs(novel_dir, exist_ok=True)
-    shutil.copy(docx_path, os.path.join(novel_dir, f"{title}.docx"))
+    dest_docx = os.path.join(novel_dir, f"{title}.docx")
+    shutil.copy(docx_path, dest_docx)
+    handoff = {
+        "schema_version": 1,
+        "source_novel_project": os.path.basename(project_root.rstrip("/\\")),
+        "source_novel_path": project_root,
+        "source_title": meta.get("source_title") or meta.get("source") or "",
+        "title": title,
+        "kind": meta.get("kind", ""),
+        "rights_status": meta.get("rights_status", ""),
+        "docx": f"{title}.docx",
+        "docx_sha256": sha256_file(dest_docx),
+        "exported": date.today().isoformat(),
+    }
+    with open(os.path.join(novel_dir, "_n2d_handoff.json"), "w", encoding="utf-8") as f:
+        json.dump(handoff, f, ensure_ascii=False, indent=2)
+    return dest_docx
 
 
 def _rel(project_root, path):
@@ -248,6 +292,9 @@ def main():
                     help="novel-continue 合本：原作 + 新章节合一（章号续编）")
     ap.add_argument("--ignore-qa-gate", action="store_true",
                     help="强制导出：忽略 review/score 阻断报告（只用于人工明确要求）")
+    ap.add_argument("--n2d-dest", default=None,
+                    help="n2d 交接落点（制漫剧作品根，其下铺 小说/）。缺省自动取 <repo>/制漫剧/<书名>/，"
+                         "让 split_novel 无需 --out 即建在正确位置；仅 n2d 格式生效")
     args = ap.parse_args()
 
     project_root = os.path.abspath(args.project_root)
@@ -325,17 +372,24 @@ def main():
         p = os.path.join(out_dir, "大纲.md")
         write_outline(p, project_root, meta, chapters)
         paths["outline"] = p
+    n2d_mode = n2d_docx = None
     if "n2d" in formats:
-        n2d_root = os.path.join(out_dir, "n2d-script")
-        write_n2d(n2d_root, docx_path, title)
-        paths["n2d"] = n2d_root
+        dest, n2d_mode = resolve_n2d_dest(project_root, title, args.n2d_dest)
+        n2d_docx = write_n2d(dest, docx_path, title, meta, project_root)
+        paths["n2d"] = dest
 
     print(f"[ok] 导出完成：{len(chapters)} 章, {total_chars(chapters)} 字")
     for k, v in paths.items():
         print(f"     {k:<8} → {v}")
     if "n2d" in paths:
-        print(f"[next] 进 n2d-script：python3 skills/n2d-script/scripts/split_novel.py "
-              f"\"{os.path.join(paths['n2d'], '小说', title + '.docx')}\"")
+        if n2d_mode == "legacy":
+            print(f"[warn] 未找到含『制漫剧/』的仓库根，n2d 交接回退项目内：{paths['n2d']}")
+            print(f"[next] 进 n2d-script（须带 --out 指定剧名，否则会建错位置）：\n"
+                  f"       python3 skills/n2d-script/scripts/split_novel.py \"{n2d_docx}\" --out 制漫剧/{title}")
+        else:
+            print(f"[ok] n2d 交接已落入作品根：{paths['n2d']}（小说/ + _n2d_handoff.json）")
+            print(f"[next] 进 n2d-script（小说在 制漫剧/<剧名>/小说/ 下，split 自动取父级为作品根，无需 --out）：\n"
+                  f"       python3 skills/n2d-script/scripts/split_novel.py \"{n2d_docx}\"")
 
 
 if __name__ == "__main__":

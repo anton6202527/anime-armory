@@ -90,3 +90,18 @@ def test_cli_writes_output(tmp_path):
     rc = diff.main(["--ledger", str(lp), "--top", "5", "--out", str(out)])
     assert rc == 0 and out.is_file()
     assert "差异化选题候选" in out.read_text(encoding="utf-8")
+
+
+def test_default_out_writes_canonical_files_for_selection_skills(tmp_path):
+    """无 --out 时双写 生产战绩/差异化候选.{md,json}，供 novel-create/title 发现。"""
+    ledger_dir = tmp_path / "生产战绩"
+    ledger_dir.mkdir()
+    lp = ledger_dir / "genre_ledger.jsonl"
+    lp.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in _records()), encoding="utf-8")
+    rc = diff.main(["--ledger", str(lp), "--top", "5"])
+    assert rc == 0
+    md = ledger_dir / "差异化候选.md"
+    js = ledger_dir / "差异化候选.json"
+    assert md.is_file() and js.is_file()
+    report = json.loads(js.read_text(encoding="utf-8"))
+    assert "candidates" in report

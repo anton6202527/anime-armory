@@ -190,7 +190,7 @@
 ## 不在本提案范围（工厂成熟度路线图 · 后续单列）
 评审中识别但本提案不展开的三条，留作后续：
 - **回退按缺陷而非按 stage**（`GATE_RECOVERY` 升级为 `{(stage, dim): recovery}`，自愈更精）。
-- **共享工艺层 `av-craft`**（导演八维/节奏/接力抽成被 n2d/mv 共同引用的准真值源，治工艺散文双份漂移）。
+- **共享工艺层 `av-craft`**（导演八维/节奏/接力抽成 n2d 各阶段共同引用的准真值源，治工艺散文多份漂移）。
 - **manifest 记 outcome 而非仅 existence**（每产物记 rerolls/检测器分/review 判级 + `COSTLY_HINTS` 升成 cost_model，让工厂会算账、会从自己缺陷数据学习）。
 
 ---

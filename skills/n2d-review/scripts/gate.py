@@ -5,7 +5,10 @@ This script turns the high-risk SKILL.md rules into repeatable checks.  It does
 not create assets; it only reports whether a stage may proceed.
 
 Usage:
-  python3 skills/n2d-review/scripts/gate.py <作品根> 第N集 --stage image|video|compose|review
+  # Production entry: records QA findings and returns this gate's exit code.
+  python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage image|video|compose|review
+
+  # Engine/debug entry: deterministic findings only, no dashboard telemetry.
   python3 skills/n2d-review/scripts/gate.py <作品根> 第N集 --stage video --json
 
 Exit codes:
@@ -23,7 +26,7 @@ import os
 import re
 import subprocess
 import sys
-from typing import Dict, Iterable, List, Optional, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 SCRIPT_DIR = os.path.dirname(__file__)
 COMMON = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "..", "common"))
@@ -34,6 +37,7 @@ from n2d_contract import (  # noqa: E402
     APPROVED_IMAGE_BACKENDS,
     CINEMATIC_CONTRACT_FIELDS,
     COMPLIANCE_ALLOWED_RIGHTS,
+    COMPLIANCE_RIGHTS_EVIDENCE_REQUIRED,
     COMPLIANCE_APPROVED_CHARACTER,
     COMPLIANCE_BLOCKED_CHARACTER,
     COMPLIANCE_DONE_STATUSES,
@@ -53,6 +57,7 @@ from n2d_contract import (  # noqa: E402
     IDENTITY_REGISTRY_KIND,
     IDENTITY_VIDEO_ADAPTERS,
     identity_allowed_modes,
+    identity_registry_path,
     LORA_REGISTRY_READY_FIELDS,
     LORA_VALIDATION_REPORT_KIND,
     MOTION_CONTROL_MANIFEST_KIND,
@@ -71,6 +76,9 @@ from n2d_contract import (  # noqa: E402
 from n2d_platform_profiles import video_backend_max_seconds  # noqa: E402
 from n2d_route import is_done, manifest_path, parse_progress, voice_is_placeholder  # noqa: E402
 from n2d_settings import get_setting, is_video_first, watermark_setting  # noqa: E402
+import semantic_continuity as semc  # noqa: E402
+import state_continuity as statec  # noqa: E402
+import multimodal_consistency as mmc  # noqa: E402
 
 BLOCK, WARN, INFO = "block", "warn", "info"
 findings: List[Dict[str, object]] = []
@@ -302,8 +310,8 @@ def _check_compliance_rights(root: str, data: dict, loc: str) -> None:
         status = _status(source.get("status"))
         if status not in COMPLIANCE_ALLOWED_RIGHTS or status in ("unknown", ""):
             _compliance_block(f"{loc} rights.source_text", f"源文本权利状态不可用：{status or 'missing'}")
-        if status in ("licensed", "user_declared") and not _filled(source.get("evidence")):
-            _compliance_block(f"{loc} rights.source_text", "licensed/user_declared 必须填写 evidence/ref，不能只口头说已授权")
+        if status in COMPLIANCE_RIGHTS_EVIDENCE_REQUIRED and not _filled(source.get("evidence")):
+            _compliance_block(f"{loc} rights.source_text", "licensed/stock_licensed/user_declared 必须填写 evidence/ref，不能只口头说已授权")
 
     for key in ("adaptation", "music_bgm", "sfx", "fonts"):
         item = rights.get(key)
@@ -313,7 +321,7 @@ def _check_compliance_rights(root: str, data: dict, loc: str) -> None:
         status = _status(item.get("status"))
         if not status or status not in COMPLIANCE_ALLOWED_RIGHTS:
             _compliance_block(f"{loc} rights.{key}", f"{key} 权利状态未知：{status or 'missing'}")
-        if status in ("licensed", "stock_licensed", "user_declared") and not _filled(item.get("evidence")):
+        if status in COMPLIANCE_RIGHTS_EVIDENCE_REQUIRED and not _filled(item.get("evidence")):
             _compliance_block(f"{loc} rights.{key}", f"{key} 标为 {status} 但缺 evidence/ref")
 
 
@@ -792,10 +800,6 @@ def check_storyboard_special_templates(root: str, ep: str) -> None:
                 add(BLOCK, "专项镜头模板", loc, f"template={template_id} 的 template_contract 缺字段：{key}")
 
 
-def identity_registry_path(root: str) -> str:
-    return shared_asset_path(root, "identity_registry.json")
-
-
 def identity_adapter_matrix_path(root: str) -> str:
     return os.path.join(root, "生产数据", "identity_adapter_matrix.json")
 
@@ -923,6 +927,19 @@ def check_identity_registry(root: str, require_reference_assets: bool = False) -
                     rel = str(reference_group.get(key, "")).strip()
                     if require_reference_assets and not _identity_reference_exists(root, rel):
                         add(BLOCK, "资产身份注册层", os.path.join(root, rel) if not os.path.isabs(rel) else rel, f"reference_group.{key} 路径不存在")
+                expressions = reference_group.get("expressions", [])
+                if expressions is not None and not isinstance(expressions, list):
+                    add(BLOCK, "资产身份注册层", floc, "reference_group.expressions 必须是列表")
+                for expr in expressions or []:
+                    rel = str(expr or "").strip()
+                    if not rel:
+                        add(BLOCK, "资产身份注册层", floc, "reference_group.expressions 存在空路径")
+                        continue
+                    if require_reference_assets and not _identity_reference_exists(root, rel):
+                        add(BLOCK, "资产身份注册层", os.path.join(root, rel) if not os.path.isabs(rel) else rel, "reference_group.expressions 路径不存在")
+                    asset_key = str(form.get("asset_key") or "").strip()
+                    if asset_key and asset_key not in os.path.basename(rel):
+                        add(BLOCK, "资产身份注册层", floc, f"reference_group.expressions 跨角色/形态污染：{rel} 不属于 asset_key={asset_key}")
 
             adapters = form.get("identity_adapters")
             if not isinstance(adapters, dict):
@@ -1458,10 +1475,81 @@ def _character_names_in_refs(refs: str) -> set:
     for raw in re.findall(r"定妆_([^`\s，。、,）)]+)", refs):
         if raw.endswith(".png"):
             raw = raw[:-4]
-        base = re.sub(r"_(侧|半身|全身|背|三视图|设定表|表情)$", "", raw)
+        base = re.sub(
+            r"_(侧|半身|全身|背|三视图|设定表|表情|脸部特写|头部特写|面部特写|局部|近景|特写)$",
+            "",
+            raw,
+        )
         if base and not _has_any(base, non_char):
             names.add(base)
     return names
+
+
+def _needs_closeup_identity_lock(section: str, name: str) -> bool:
+    """Reaction/reverse-shot close-ups need finer identity locks than generic anchors.
+
+    Plain reference-group generation often preserves a character *type* but
+    redraws face shape, hair bun, or accessories in tight reaction shots.  Keep
+    this check scoped to dialogue/reaction close-ups so ordinary medium shots
+    are not over-gated.
+    """
+    focused_lines = "\n".join(
+        line for line in section.splitlines()
+        if _has_any(line, ("专项镜头模板", "镜头", "①", "template", "shot_type", "导演意图"))
+    )
+    blob = f"{name}\n{focused_lines}"
+    return _has_any(blob, (
+        "dialogue_shot_reverse",
+        "正反打",
+        "反打",
+        "过肩",
+        "反应镜",
+        "表情镜",
+        "逼问",
+        "假面",
+    ))
+
+
+def _has_closeup_identity_lock(section: str) -> bool:
+    has_lock_field = _has_any(section, (
+        "近景/反打身份锁定",
+        "近景身份锁定",
+        "反打身份锁定",
+        "细粒度身份锁定",
+        "脸部特写",
+        "_表情",
+    ))
+    has_face_detail = _has_any(section, ("脸型", "五官比例", "圆润脸", "窄长", "薄唇", "眼型"))
+    has_hair_detail = _has_any(section, ("发型", "发髻", "高圆髻", "发簪", "发饰", "配饰", "头饰"))
+    return has_lock_field and has_face_detail and has_hair_detail
+
+
+def _has_i2i_tail_continuity_lock(section: str) -> bool:
+    has_method = _has_any(section, (
+        "image2image",
+        "image-to-image",
+        "图生图",
+        "母图",
+        "同镜首帧",
+        "上一张成图",
+        "上一帧成图",
+        "前一张成图",
+        "尾帧接力生成方式",
+    ))
+    forbids_text_only = _has_any(section, (
+        "不得纯文生图",
+        "禁止纯文生图",
+        "不纯文生图",
+        "不要纯文重抽",
+        "不能纯文字重抽",
+        "不得纯文字重抽",
+    ))
+    return has_method and forbids_text_only
+
+
+def _has_character_id_binding(section: str) -> bool:
+    """Character shots must bind concrete registry IDs, not just prose names."""
+    return bool(re.search(r"`?CHAR_[A-Za-z0-9_]+/[^`\s；;，,]+`?", section))
 
 
 def _has_standard_character_turnaround(section: str) -> bool:
@@ -1471,6 +1559,112 @@ def _has_standard_character_turnaround(section: str) -> bool:
     has_back = _has_any(section, ("_背", "背面", "背身"))
     has_board = _has_any(section, ("_三视图", "标准三视图", "正/侧/背", "正面 / 侧面 / 背面"))
     return has_front and has_side and has_back and has_board
+
+
+def _uses_halfbody_outfit_ref(section: str) -> bool:
+    return _has_any(section, ("_半身", "半身服装", "半身参考", "半身.png", "半身图"))
+
+
+def _has_halfbody_crop_rule(section: str) -> bool:
+    """半身服装参考必须是正面主参考裁切放大，不能补底占位，且主体居中。
+
+    作用域铁律：本规则（含「主体居中」）只针对**定妆照 / 共享定妆库的半身服装参考图**
+    （仅 check_common_image_prompts 的 角色定妆.md 调用）。正式剧情**分镜图按导演构图与
+    运镜处理、不强制居中**——绝不要把本检查接进 check_image_shot_prompt_section。"""
+    has_source = _has_any(section, (
+        "从已通过自检的正面主参考",
+        "从已通过正面主参考",
+        "从已通过的正面主参考",
+        "从已通过正面图",
+        "从正面主参考",
+        "正面主参考裁切",
+        "正面图裁切",
+    ))
+    has_crop = _has_any(section, ("裁切", "裁剪", "crop"))
+    has_resize = _has_any(section, ("放大", "重采样", "回 9:16", "回9:16", "9:16"))
+    forbids_padding = _has_any(section, (
+        "不得用白底",
+        "不要用白底",
+        "禁止白底",
+        "白底/浅灰底/空白",
+        "空白补",
+        "补满下半截",
+        "补下半截",
+        "补底",
+        "纯色补底",
+    ))
+    has_centering = _has_any(section, (
+        "人物主体居中",
+        "人物居中",
+        "主体居中",
+        "居中裁切",
+        "居中重裁",
+        "头身中线",
+        "画面中线",
+        "左右留白",
+        "留白基本均衡",
+    ))
+    return has_source and has_crop and has_resize and forbids_padding and has_centering
+
+
+def _has_prop_structure_rule(section: str) -> bool:
+    """关键道具必须锁结构唯一性，避免模型把描述词误画成新增部件。"""
+    return _has_any(section, (
+        "结构唯一性",
+        "道具结构",
+        "结构不幻觉",
+        "件数锁定",
+        "数量锁定",
+        "三件套数量锁定",
+        "唯一圆口",
+        "唯一短颈",
+        "一个圆口",
+        "一个短颈圆口",
+        "只有一个短颈圆口",
+        "一个正常圆口",
+        "无侧嘴",
+        "无斜嘴",
+        "无双口",
+        "无多口",
+        "无额外壶嘴",
+        "无额外开口",
+        "无重复瓶口",
+        "无出酒嘴",
+        "无管状嘴",
+        "一柄一刃",
+        "只有一柄一刃",
+        "无多刃",
+        "无双刃",
+        "单镜面",
+        "无多镜面",
+        "不多镜面",
+        "无重复镜框",
+    ))
+
+
+def _needs_prop_structure_gate(section: str, name: str, refs: str) -> bool:
+    """只卡重道具镜头，避免普通场景里一句“托盘/铜镜”造成全剧误伤。"""
+    heavy_title_or_refs = _has_any(
+        f"{name}\n{refs}",
+        (
+            "赐死三件套",
+            "毒酒碎裂",
+            "定妆_赐死托盘",
+            "定妆_毒酒碎瓷",
+        ),
+    )
+    risky_wording = _has_any(section, (
+        "毒酒壶",
+        "白瓷毒酒壶",
+        "毒酒瓷壶",
+        "壶嘴",
+        "白绫",
+        "匕首",
+        "短匕首",
+        "赐死托盘",
+        "赐死三件套",
+    ))
+    return heavy_title_or_refs or risky_wording
 
 
 def check_image_shot_prompt_section(path: str, idx: int, section: str) -> None:
@@ -1508,6 +1702,9 @@ def check_image_shot_prompt_section(path: str, idx: int, section: str) -> None:
         if "强度" not in refs and "strength" not in refs.lower():
             add(WARN, "prompt", loc, "参考图块未标参考强度；多图参考派生稳定性不可复现")
 
+    if _needs_prop_structure_gate(section, name, refs) and not _has_prop_structure_rule(section):
+        add(BLOCK, "道具结构", loc, "关键道具镜头缺结构唯一性闸门；毒酒壶/瓷壶须锁唯一短颈圆口、无侧嘴/斜嘴/双口/额外开口，匕首须一柄一刃，三件套件数须锁定，避免道具幻觉")
+
     for key in ("①", "②", "③", "④", "⑤", "⑥", "⑦", "⑧"):
         if key not in section:
             add(BLOCK, "prompt", loc, f"导演八维缺 {key} 维标记")
@@ -1523,6 +1720,30 @@ def check_image_shot_prompt_section(path: str, idx: int, section: str) -> None:
             add(BLOCK, "角色一致性", loc, "含角色镜头未显式锁服装/配色")
         if not _has_any(section, ("资产身份注册层", "身份注册", "identity_registry", "reference_group", "drift_forbidden")):
             add(BLOCK, "资产身份注册层", loc, "含角色镜头缺资产身份注册层约束；必须从 identity_registry.json 继承 reference_group / angle_policy / drift_forbidden")
+        if not _has_character_id_binding(section):
+            add(
+                BLOCK,
+                "资产身份注册层",
+                loc,
+                "含角色镜头缺明确角色 ID 绑定；必须写 `CHAR_xx/形态`，让执行端从 identity_registry.json 自动反查 reference_group，禁止只靠中文角色名或纯文描述生图。",
+            )
+        if _needs_closeup_identity_lock(section, name) and not _has_closeup_identity_lock(section):
+            add(
+                BLOCK,
+                "角色一致性",
+                loc,
+                "正反打/反应/表情近景缺近景身份锁定；fallback reference_group 容易只保留角色大类但重画脸型/发髻/配饰。"
+                "请补 `近景/反打身份锁定` 字段，引用脸部特写或表情参考，并明确锁脸型/五官比例/发型发髻/标志配饰。",
+            )
+        if _needs_closeup_identity_lock(section, name) and not _has_i2i_tail_continuity_lock(section):
+            add(
+                BLOCK,
+                "角色一致性",
+                loc,
+                "正反打/反应/表情尾帧缺图生图接力约束；只写身份锚点仍可能纯文重抽成新演员。"
+                "请补 `尾帧接力生成方式` 字段：尾帧必须以上一张成图或同镜首帧 image2image/图生图为母图，"
+                "只改表情/眼神/嘴角，不得纯文生图。",
+            )
         if "_侧" not in refs and "_半身" not in refs and "_全身" not in refs and "主体库" not in section and "角色ID" not in section:
             add(WARN, "角色一致性", loc, "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂")
         chars = _character_names_in_refs(refs)
@@ -1558,6 +1779,8 @@ def check_common_image_prompts(root: str) -> None:
                 add(BLOCK, "共享定妆", loc, "缺定妆提交前检查清单")
             if "自检（生成后逐张过" not in sec and "**自检**" not in sec:
                 add(BLOCK, "共享定妆", loc, "缺生成后落档自检段")
+            if filename == "道具定妆.md" and not _has_prop_structure_rule(sec):
+                add(BLOCK, "道具结构", loc, "道具定妆缺关键道具结构唯一性闸门；需锁唯一圆口/短颈、无侧嘴/斜嘴/双口/额外开口、多刃/多镜面/件数错等，避免道具结构幻觉")
             if filename == "角色定妆.md":
                 if "身份注册" not in sec and "identity_registry" not in sec:
                     add(BLOCK, "资产身份注册层", loc, "角色定妆缺身份注册字段；必须指向 `出图/共享/identity_registry.json` 对应 characters[].forms[]")
@@ -1565,6 +1788,8 @@ def check_common_image_prompts(root: str) -> None:
                     add(BLOCK, "角色一致性", loc, "角色定妆缺定妆组说明；核心角色不能只靠单张正脸")
                 if not _has_standard_character_turnaround(sec):
                     add(BLOCK, "角色三视图", loc, "人物定妆必须是标准三视图：正面主参考 + 侧面参考 + 背面参考 + `定妆_<角色>_三视图.png` 人审拼版；不得只出正脸/半身或把背面按需省略")
+                if _uses_halfbody_outfit_ref(sec) and not _has_halfbody_crop_rule(sec):
+                    add(BLOCK, "服装参考", loc, "半身服装参考必须写明：`定妆_<角色>_半身.png` 从已通过自检的正面主参考裁切并放大/重采样回 9:16；人物主体居中、头身中线接近画面中线、左右留白基本均衡；不得新抽半身导致脸漂，也不得用白底/浅灰底/空白补下半截")
                 if "锚点" not in sec:
                     add(BLOCK, "角色一致性", loc, "角色定妆缺锚点字段；下游每镜无锚可拼")
 
@@ -1771,7 +1996,7 @@ def check_compose_inputs(root: str, ep: str) -> None:
         # 原生音画：说话镜台词由视频后端原生生成、不跑逐句配音，finalize 也不产 SRT
         # （字幕走成片后 whisperx 词级对齐，见 novel2drama SKILL）——此处只提醒、不硬闸。
         if is_native_av_production(root):
-            add(WARN, "字幕", zh, "原生音画：暂无中文字幕；成片后请用 whisperx 对原生台词做词级对齐再补字幕（参考 mv-lyric-sync）")
+            add(WARN, "字幕", zh, "原生音画：暂无中文字幕；成片后请用 whisperx 对原生台词做词级对齐再补字幕")
         else:
             add(BLOCK, "字幕", zh, "缺中文字幕")
     # 水印是成片后的独立步骤，compose 回写 成片✅ 不代表已合规——出片即提醒，别让"忘打水印就投放"
@@ -1811,6 +2036,101 @@ def check_voice_conditioned_lipsync_policy(root: str, ep: str, storyboard: Dict[
             f"检测到 {len(lp_clips)} 个配音条件口型镜，但未检测到主配音轨 (voice_zh.wav)；该模式依赖配音驱动口型，请先 /n2d-voice。")
 
 
+def _clip_label(value: Any) -> List[str]:
+    labels: List[str] = []
+    if isinstance(value, int):
+        labels.append(f"Clip_{value:02d}")
+    text = str(value or "")
+    for m in re.finditer(r"(?i)(?:Clip|镜头|镜)\s*[_ -]?0*([0-9]+)", text):
+        labels.append(f"Clip_{int(m.group(1)):02d}")
+    out: List[str] = []
+    for item in labels:
+        if item not in out:
+            out.append(item)
+    return out
+
+
+def _artifact_refs(text: str) -> List[str]:
+    pattern = r"(?:出图|出视频|合成|脚本|设定库|合规)/[^\s，。；;|)）]+"
+    out: List[str] = []
+    for m in re.finditer(pattern, text or ""):
+        item = m.group(0).rstrip("，。；;:：")
+        if item not in out:
+            out.append(item)
+    return out
+
+
+def _continuity_extra(row: Dict[str, Any], ep: str, default_stage: str,
+                      default_scope: str, default_artifacts: Sequence[str]) -> Dict[str, object]:
+    shots: List[str] = []
+    for key in ("shot", "heading", "target", "png", "message", "loc"):
+        shots.extend(_clip_label(row.get(key)))
+    artifacts = list(default_artifacts)
+    for key in ("source", "target", "png", "message", "loc"):
+        artifacts.extend(_artifact_refs(str(row.get(key) or "")))
+    png = str(row.get("png") or "")
+    if png and "/" not in png:
+        artifacts.append(f"出图/{ep}/图片/{png}")
+    return {
+        "return_to_stage": row.get("return_to_stage") or default_stage,
+        "rerun_scope": row.get("rerun_scope") or default_scope,
+        "affected_shots": sorted(set(shots)),
+        "affected_artifacts": sorted(set(a for a in artifacts if a)),
+    }
+
+
+def _add_continuity_rows(dim: str, rows: Sequence[Dict[str, Any]], ep: str, *,
+                         default_stage: str, default_scope: str,
+                         default_artifacts: Sequence[str]) -> None:
+    for row in rows:
+        verdict = str(row.get("verdict") or "ok")
+        if verdict not in {"block", "warn"}:
+            continue
+        sev = BLOCK if verdict == "block" else WARN
+        loc = str(row.get("target") or row.get("source") or row.get("png") or row.get("heading") or dim)
+        msg = str(row.get("message") or "一致性机检发现下游继承风险")
+        missing = row.get("missing_terms")
+        if missing:
+            msg += "；缺：" + "、".join(str(x) for x in list(missing)[:8])
+        add(sev, dim, loc, msg, **_continuity_extra(row, ep, default_stage, default_scope, default_artifacts))
+
+
+def check_semantic_lineage(root: str, ep: str) -> None:
+    res = semc.analyze(root, ep)
+    _add_continuity_rows(
+        "语义谱系(P0)",
+        [r for r in res.get("findings", []) if isinstance(r, dict)],
+        ep,
+        default_stage="script_stage2",
+        default_scope="修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
+        default_artifacts=(f"脚本/{ep}/storyboard.json", f"出图/{ep}/prompt", f"出视频/{ep}/prompt"),
+    )
+
+
+def check_state_continuity(root: str, ep: str) -> None:
+    res = statec.analyze(root, ep)
+    _add_continuity_rows(
+        "状态百科(P1)",
+        [r for r in res.get("alerts", []) if isinstance(r, dict)],
+        ep,
+        default_stage="image",
+        default_scope="修 visual_state_ledger / 出图分镜 prompt 的角色状态锁；必要时回 storyboard 修状态演进。",
+        default_artifacts=(f"脚本/{ep}/storyboard.json", f"出图/{ep}/prompt/01_分镜出图.md", "出图/共享/visual_state_ledger.json"),
+    )
+
+
+def check_multimodal_continuity(root: str, ep: str) -> None:
+    res = mmc.analyze(root, ep)
+    _add_continuity_rows(
+        "多模态(P2)",
+        [r for r in res.get("shots", []) if isinstance(r, dict)],
+        ep,
+        default_stage="image",
+        default_scope="按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产定妆 taxonomy。",
+        default_artifacts=(f"出图/{ep}/prompt/01_分镜出图.md", f"出图/{ep}/图片"),
+    )
+
+
 def run(root: str, ep: str, stage: str) -> None:
     if not os.path.isdir(root):
         add(BLOCK, "路径", root, "作品根不存在")
@@ -1828,7 +2148,10 @@ def run(root: str, ep: str, stage: str) -> None:
         check_storyboard_special_templates(root, ep)
         check_image_prompt_overview(root, ep)
         check_prompt_checklists(root, ep, "image")
+        check_semantic_lineage(root, ep)
+        check_state_continuity(root, ep)
         check_shared_image_index(root, ep)
+        check_common_image_prompts(root)
     elif stage == "video":
         check_compliance_manifest(root, ep, stage)
         require_progress(root, ep, ("分镜设计", "出图prompt") if av_native else ("配音", "分镜设计", "出图prompt"))
@@ -1840,6 +2163,8 @@ def run(root: str, ep: str, stage: str) -> None:
         check_storyboard_special_templates(root, ep)
         check_image_assets(root, ep)
         check_prompt_checklists(root, ep, "video")
+        check_semantic_lineage(root, ep)
+        check_state_continuity(root, ep)
     elif stage == "compose":
         check_compliance_manifest(root, ep, stage)
         require_progress(root, ep, ("视频",))
@@ -1847,11 +2172,11 @@ def run(root: str, ep: str, stage: str) -> None:
         check_identity_adapter_matrix(root)
         check_storyboard_contract(root, ep, require_frame_assets=True)
         check_storyboard_special_templates(root, ep)
-        
+        check_semantic_lineage(root, ep)
+        check_state_continuity(root, ep)
         sb = load_json(os.path.join(root, "脚本", ep, "storyboard.json"))
         if sb:
             check_voice_conditioned_lipsync_policy(root, ep, sb)
-            
         check_compose_inputs(root, ep)
     elif stage == "review":
         check_compliance_manifest(root, ep, stage)
@@ -1860,6 +2185,9 @@ def run(root: str, ep: str, stage: str) -> None:
         check_storyboard_contract(root, ep, require_frame_assets=True)
         check_storyboard_special_templates(root, ep)
         check_video_assets(root, ep)
+        check_semantic_lineage(root, ep)
+        check_state_continuity(root, ep)
+        check_multimodal_continuity(root, ep)
         check_final_watermark(root, ep)
     else:
         add(BLOCK, "参数", stage, "未知 stage")

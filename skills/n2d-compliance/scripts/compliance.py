@@ -24,6 +24,7 @@ from n2d_contract import (  # noqa: E402  合规清单 kind / 身份注册路径
     COMPLIANCE_PLACEHOLDER_MARKERS,
     COMPLIANCE_PLATFORM_REVIEW_STATUSES,
     COMPLIANCE_READY_STATUSES,
+    COMPLIANCE_RIGHTS_EVIDENCE_REQUIRED,
     COMPLIANCE_SAFE_VOICE,
     COMPLIANCE_STATUS_LIKE_VALUES,
     identity_registry_path,
@@ -32,6 +33,7 @@ from n2d_contract import (  # noqa: E402  合规清单 kind / 身份注册路径
 
 KIND = COMPLIANCE_MANIFEST_KIND
 ALLOWED_RIGHTS = COMPLIANCE_ALLOWED_RIGHTS
+RIGHTS_EVIDENCE_REQUIRED = COMPLIANCE_RIGHTS_EVIDENCE_REQUIRED
 PLATFORM_REVIEW_STATUSES = COMPLIANCE_PLATFORM_REVIEW_STATUSES
 APPROVED_CHARACTER = COMPLIANCE_APPROVED_CHARACTER
 BLOCKED_CHARACTER = COMPLIANCE_BLOCKED_CHARACTER
@@ -208,7 +210,7 @@ def check_manifest(root: Path, episode: str | None, stage: str = "compose") -> L
             issues.append(f"BLOCK {path}: rights.{key} requires status")
         elif status not in ALLOWED_RIGHTS:
             issues.append(f"BLOCK {path}: rights.{key} status must be one of {', '.join(sorted(ALLOWED_RIGHTS))}; got {status}")
-        if status in {"licensed", "stock_licensed", "user_declared"} and not has_real_value(item.get("evidence")):
+        if status in RIGHTS_EVIDENCE_REQUIRED and not has_real_value(item.get("evidence")):
             issues.append(f"BLOCK {path}: rights.{key} requires evidence/ref")
     registered = set(identity_character_ids(root))
     listed = {

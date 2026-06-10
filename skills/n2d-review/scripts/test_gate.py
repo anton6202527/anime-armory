@@ -16,7 +16,10 @@ GOOD_SHOT = """## 镜头 1（冷开场）🔑关键镜
 **视线方向**：画右（与反打镜 Clip 2 对位，守本场轴线）
 **光位锚**：继承本场光位锚（主光：画左前烛光顶侧光 / 3000K 暖 / 动机=残烛），本镜不改光
 **起幅·运动余量**：本镜为 Clip 1 首帧=起幅（顶点交尾帧），按缓慢推近预留构图余量、上下留 lead room
+**专项镜头模板**：dialogue_shot_reverse；blocking=沈念画左，柳娘子画右；camera_rule=守轴线；continuity_must=脸型发型不漂；negative=不要换脸。
 **资产身份注册层**：`CHAR_SHEN/常态`；reference_group=正/侧/半身/三视图；angle_policy=front/three_quarter allowed；drift_forbidden=face_shape/hairstyle/outfit_palette
+**近景/反打身份锁定**：本镜是 CU 近景，必须引用 `定妆_沈念_脸部特写.png` 或表情参考；锁脸型、五官比例、发型发髻、标志配饰和服装配色，不得换脸。
+**尾帧接力生成方式**：正反打/表情尾帧必须以同镜首帧或上一张成图 image2image 图生图为母图，不得纯文生图；只改表情/眼神/嘴角，不重画演员脸、发髻、配饰和服装。
 
 **导演视角八维**
 | 维度 | 本镜填什么 |
@@ -184,6 +187,30 @@ def test_character_shot_missing_identity_registry_constraint_is_blocked():
     )
     gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot)
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产身份注册层" and "reference_group" in f["msg"] for f in gate.findings)
+
+
+def test_character_shot_missing_character_id_binding_is_blocked():
+    shot = GOOD_SHOT.replace("`CHAR_SHEN/常态`；", "")
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产身份注册层" and "角色 ID" in f["msg"] for f in gate.findings)
+
+
+def test_closeup_character_shot_missing_fine_identity_lock_is_blocked():
+    shot = GOOD_SHOT.replace(
+        "**近景/反打身份锁定**：本镜是 CU 近景，必须引用 `定妆_沈念_脸部特写.png` 或表情参考；锁脸型、五官比例、发型发髻、标志配饰和服装配色，不得换脸。\n",
+        "",
+    )
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "角色一致性" and "近景身份锁定" in f["msg"] for f in gate.findings)
+
+
+def test_closeup_character_tail_missing_i2i_continuity_lock_is_blocked():
+    shot = GOOD_SHOT.replace(
+        "**尾帧接力生成方式**：正反打/表情尾帧必须以同镜首帧或上一张成图 image2image 图生图为母图，不得纯文生图；只改表情/眼神/嘴角，不重画演员脸、发髻、配饰和服装。\n",
+        "",
+    )
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "角色一致性" and "图生图接力" in f["msg"] for f in gate.findings)
 
 
 def test_shot_negative_missing_style_forbidden_is_blocked():
@@ -534,6 +561,16 @@ def test_identity_registry_missing_reference_field_is_blocked(tmp_path):
     root = _write_identity_registry(tmp_path, data)
     gate.check_identity_registry(root, require_reference_assets=False)
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产身份注册层" and "reference_group 缺核心路径：side" in f["msg"] for f in gate.findings)
+
+
+def test_identity_registry_rejects_cross_character_expression_reference(tmp_path):
+    data = _identity_registry()
+    data["characters"][0]["forms"][0]["reference_group"]["expressions"] = [
+        "出图/共享/图片/定妆_柳娘子_人皮态_脸部特写.png"
+    ]
+    root = _write_identity_registry(tmp_path, data)
+    gate.check_identity_registry(root, require_reference_assets=False)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产身份注册层" and "跨角色/形态污染" in f["msg"] for f in gate.findings)
 
 
 def test_identity_registry_ready_adapter_requires_handle(tmp_path):
@@ -1036,6 +1073,102 @@ Character reference sheet.
     gate.check_common_image_prompts(str(root))
 
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "角色三视图" and "标准三视图" in f["msg"] for f in gate.findings)
+
+
+def test_role_makeup_prompt_requires_halfbody_crop_rule(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    prompt_dir = root / "出图" / "common" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    (prompt_dir / "角色定妆.md").write_text(
+        """## ① CHAR_01 沈念·常态（⬜）
+
+**目标存档**：`出图/共享/图片/定妆_沈念.png`
+**身份注册**：`出图/共享/identity_registry.json` → `CHAR_01.常态`
+**参考图来源**：无需参考图
+**角色定妆组**：
+- 正面主参考：`出图/共享/图片/定妆_沈念.png`
+- 侧面参考：`出图/共享/图片/定妆_沈念_侧.png`
+- 背面参考：`出图/共享/图片/定妆_沈念_背.png`
+- 服装参考：`出图/共享/图片/定妆_沈念_半身.png`
+- 人审拼版：`出图/共享/图片/定妆_沈念_三视图.png`
+- 锚点句：凤眼薄唇
+
+### 正向 prompt（中文）
+```text
+角色设定图。
+```
+
+### 正向 prompt（英文）
+```text
+Character reference sheet.
+```
+
+### 负向 prompt
+```text
+文字/logo。
+```
+
+### 检查清单（定妆自查·最易漏③人物/⑥中性光影/一致性）
+1. ✅ 锚点：凤眼薄唇
+
+### 自检（生成后逐张过 · 落档闸门）
+**自检**：
+- [ ] 同一个人
+""",
+        encoding="utf-8",
+    )
+
+    gate.check_common_image_prompts(str(root))
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "服装参考" and "半身服装参考" in f["msg"] for f in gate.findings)
+
+
+def test_role_makeup_prompt_halfbody_crop_rule_passes(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    prompt_dir = root / "出图" / "common" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    (prompt_dir / "角色定妆.md").write_text(
+        """## ① CHAR_01 沈念·常态（⬜）
+
+**目标存档**：`出图/共享/图片/定妆_沈念.png`
+**身份注册**：`出图/共享/identity_registry.json` → `CHAR_01.常态`
+**参考图来源**：无需参考图
+**角色定妆组**：
+- 正面主参考：`出图/共享/图片/定妆_沈念.png`
+- 侧面参考：`出图/共享/图片/定妆_沈念_侧.png`
+- 背面参考：`出图/共享/图片/定妆_沈念_背.png`
+- 服装参考：`出图/共享/图片/定妆_沈念_半身.png`，从已通过自检的正面主参考裁切并放大/重采样回 9:16；人物主体居中、头身中线接近画面中线、左右留白基本均衡；不得用白底/浅灰底/空白补满下半截
+- 人审拼版：`出图/共享/图片/定妆_沈念_三视图.png`
+- 锚点句：凤眼薄唇
+
+### 正向 prompt（中文）
+```text
+角色设定图。
+```
+
+### 正向 prompt（英文）
+```text
+Character reference sheet.
+```
+
+### 负向 prompt
+```text
+文字/logo。
+```
+
+### 检查清单（定妆自查·最易漏③人物/⑥中性光影/一致性）
+1. ✅ 锚点：凤眼薄唇
+
+### 自检（生成后逐张过 · 落档闸门）
+**自检**：
+- [ ] 半身服装参考来自正面主参考裁切并重采样回 9:16，无白底/浅灰底/空白补下半截
+""",
+        encoding="utf-8",
+    )
+
+    gate.check_common_image_prompts(str(root))
+
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "服装参考" for f in gate.findings)
 
 
 def test_good_video_clip_prompt_passes_director_structure():

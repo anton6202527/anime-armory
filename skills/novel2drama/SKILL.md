@@ -141,7 +141,7 @@ python3 skills/n2d-batch/scripts/queue.py plan <作品根> --episodes 2 --rerun-
 ```bash
 python3 skills/n2d-compliance/scripts/compliance.py <作品根> 第1集 --init
 python3 skills/n2d-compliance/scripts/compliance.py <作品根> 第1集 --check
-python3 skills/n2d-review/scripts/gate.py <作品根> 第1集 --stage image
+python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第1集 --stage image
 ```
 
 **情境 F — 用户要自动审片评分 / 机器分 / 低于阈值回流**：
@@ -172,7 +172,7 @@ python3 skills/n2d-dashboard/scripts/dashboard.py build <作品根> --markdown
 两条创作线只在**成品文件**一处耦合：写小说导出 → 漫剧 `小说/<剧>.txt`。写小说改了之后，漫剧的源会过期，已拆的 raw 也跟着旧。**进作品根先跑一次自检**（确定性，秒级，不烧上下文）：
 
 ```bash
-python3 <skill>/source_check.py <作品根>          # 自检：对比 小说/<剧>.txt 与 小说/_源指纹.json
+python3 <skill>/source_check.py <作品根>          # 自检：优先比对同名 写小说/<剧>/章节，找不到再比对 小说/<剧>.txt 与 小说/_源指纹.json
 python3 <skill>/source_check.py <作品根> --record # 记/更新指纹基线（首切定稿后、或同步并确认后）
 ```
 
@@ -210,12 +210,12 @@ python3 <skill>/source_check.py <作品根> --record # 记/更新指纹基线（
 3. 对每一集逐列判断：
    - `剧本改编`/`bgm`/`封面` 任一 ⬜ → 还在 /n2d-script 阶段1·剧本改编
    - 阶段1 齐、`配音` ⬜ → 该集等 /n2d-voice 角色配音(统计台词时长)
-   - `配音` ✅、`分镜设计` ⬜ → 回跑 /n2d-script 阶段2·分镜设计（时长驱动：分镜剧本+故事板+素材清单+SRT）
+   - 非原生音画：`配音` ✅、`分镜设计` ⬜ → 回跑 /n2d-script 阶段2·分镜设计（时长驱动：分镜剧本+故事板+素材清单+SRT）。原生音画：`配音` 可选，`分镜设计` 直接按 `storyboard.json clips[].duration` 定稿。
      - ⚠️ **占位检查**：`配音` ✅ 不代表是真实配音。读该集 `合成/第N集/配音/时长清单.json`，若有 `占位:true`（macOS say 占位音色）→ 告知用户"当前是占位配音，时长不准；正式出视频前必须 /n2d-voice 换真实配音重跑 + 回跑阶段2 重定时"。finalize_storyboard/n2d-video 都会硬闸门拦截，但这里提前透露省返工。
    - `分镜设计` ✅、`出图prompt`/`出图` 未满 → /n2d-image
    - `出图` 满、`视频` 未满 → 先跑 `python3 skills/n2d-model-router/scripts/router.py <作品根> 第N集 --write` → /n2d-video
    - `视频` 满、`成片` ⬜ → /n2d-compose（剪辑合成+BGM+字幕；问用户 BGM 选项）
-   - **gate 前置（通用编排规则）**：路由到 image/video/compose 任一阶段时，推荐命令前先跑一步确定性 gate——`python3 skills/n2d-review/scripts/gate.py <作品根> 第N集 --stage image|video|compose`（退出码 1 即先补再做）。同时用 `python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage image|video|compose` 把 QA 阻断入账。`--json` 输出会带 `return_to_stage` / `affected_artifacts` / `rerun_scope`，用于按最小范围回退返工。image gate 还会拦「storyboard.json 缺 visual_contract 视觉契约种子 / style_contract 基础视觉风格种子 / 本集总览缺契约」，把跨镜一致性和所选基础风格挡在花钱出图之前。旧 `cinematic_contract` 兼容但新产物不再使用该标题。
+   - **gate 前置（通用编排规则）**：路由到 image/video/compose 任一阶段时，正式生产入口统一跑 `python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage image|video|compose`（它会调用 `n2d-review/scripts/gate.py --json`，退出码 1 即先补再做，并把 QA 阻断入账）。`gate.py --json` 只作底层/调试入口。结构化输出会带 `return_to_stage` / `affected_artifacts` / `rerun_scope`，用于按最小范围回退返工。image gate 还会拦「storyboard.json 缺 visual_contract 视觉契约种子 / style_contract 基础视觉风格种子 / 本集总览缺契约」，把跨镜一致性和所选基础风格挡在花钱出图之前。旧 `cinematic_contract` 兼容但新产物不再使用该标题。
 4. **推荐策略**：
    - 用户没指定集 → 找"最小未完成集编号" + 它所处的阶段，给出对应 skill 建议
    - 用户指定集 → 直接报该集所处阶段
@@ -251,7 +251,7 @@ python3 <skill>/source_check.py <作品根> --record # 记/更新指纹基线（
 │   └── 第N集/
 │       ├── raw.txt 分镜剧本.md 故事板.md 素材清单.md
 │       ├── voiceover.txt bgm.txt 封面.md manifest.json
-│       └── 字幕_中文.srt 字幕_英文.srt
+│       └── 字幕_中文.srt（字幕_英文.srt 仅海外/中英双语时生成）
 ├── 出图/                          ← n2d-image 产物
 │   ├── 共享/                      全篇定妆库
 │   │   ├── prompt/

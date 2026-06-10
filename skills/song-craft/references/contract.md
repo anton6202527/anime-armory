@@ -41,7 +41,7 @@
 
 | key | 阶段 | owner | gate |
 |---|---|---|---|
-| `setup` | 项目骨架 | `song/scripts/init_project.py` | deterministic |
+| `setup` | 项目骨架 | `song-craft/scripts/init_project.py` | deterministic |
 | `lyrics` | 立项 + 词 | `song-lyrics` | user-review + singability check |
 | `compose_plan` | 作曲任务包 | `song-compose/scripts/compose_song.py` | settings + lyrics |
 | `takes` | 多版生成 / 注册 | backend + `compose_song.py register` | take manifest |

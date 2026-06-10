@@ -5,7 +5,7 @@
 import sys, os, re, json, subprocess
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'common'))
 from n2d_settings import is_native_av  # 制作模式判定单一真值源
-from n2d_route import placeholder_indices  # 占位判定单一真值源
+from n2d_route import placeholder_indices, voiceover_fingerprint  # 占位判定 + 配音源指纹（单一真值源）
 
 def ffdur(p):
     try:
@@ -18,6 +18,24 @@ def ffdur(p):
 def srt_blocks(path):
     if not os.path.exists(path): return []
     return [b for b in re.split(r'\n\s*\n', open(path,encoding='utf-8').read().strip()) if b.strip()]
+
+def _srt_text(block):
+    ls = [l for l in block.splitlines() if l.strip()]
+    return " ".join(ls[2:]) if len(ls) >= 3 else ""
+
+def _is_placeholder_en_blocks(blocks):
+    if not blocks:
+        return False
+    joined = " ".join(_srt_text(b) for b in blocks).strip().lower()
+    markers = (
+        "todo",
+        "placeholder",
+        "待精修",
+        "待填写",
+        "english subtitles for overseas platforms",
+        "timed to the storyboard",
+    )
+    return bool(joined) and any(m in joined for m in markers)
 
 def srt_last_end(path):
     last = None
@@ -73,7 +91,7 @@ def main():
             tol = float(sys.argv[i + 1])
         except ValueError:
             sys.exit(f'⛔ --tol 数值无效: {sys.argv[i + 1]}')
-    # 配音可能在 合成/（配音先行）或 出视频/（先出视频后配音）下，两处都探
+    # 配音一律落 合成/（render_voice 与制作模式无关地写 合成/，见 2026 出视频↔合成分家）；出视频/ 为已废弃历史路径，仅防御性兜底探测
     vbase = next((b for b in ('合成','出视频') if os.path.isfile(os.path.join(root,b,ep,'配音','时长清单.json'))), '合成')
     vd  = os.path.join(root,vbase,ep,'配音')
     man_p = os.path.join(vd,'时长清单.json')
@@ -94,6 +112,24 @@ def main():
     # 占位提示（非硬错，但下游会被闸门拦）
     ph = placeholder_indices(man)
     if ph: warns.append(f"占位配音 {len(ph)}/{n} 句——正式出视频前须换真实配音重跑")
+
+    # 0) 配音源指纹：voiceover.txt 在配音之后是否被改（改词/插句/删句）→ 时长清单/字幕/镜头时长会全部过期。
+    #    delete_shot 的强制 gate 对账只覆盖删镜；改词/插句靠这条指纹兜底。
+    meta_p = os.path.join(vd, '时长清单.meta.json')
+    vo_p   = os.path.join(root, '脚本', ep, 'voiceover.txt')
+    if os.path.exists(vo_p):
+        if os.path.exists(meta_p):
+            try:
+                recorded = (json.load(open(meta_p, encoding='utf-8')) or {}).get('voiceover_fingerprint')
+            except Exception:
+                recorded = None
+            current = voiceover_fingerprint(vo_p)
+            if recorded and current and recorded != current:
+                fails.append("voiceover.txt 在配音后被改动（台词指纹失配）→ 时长清单/字幕/镜头时长已过期，重跑 /n2d-voice 再回跑 finalize_storyboard")
+            elif recorded and current:
+                oks.append("voiceover 指纹一致（配音后台词未改）")
+        else:
+            warns.append("无 时长清单.meta.json（旧配音产物或占位轨）——无法核对配音后 voiceover 改动，建议重跑 /n2d-voice 生成指纹")
 
     # 1) ∑(时长+gap) ≈ voice_zh.wav 实测
     man_total = sum(float(r.get('时长',0))+float(r.get('gap_after',0)) for r in man)
@@ -143,6 +179,8 @@ def main():
 
     # 4) manifest 句数 == 英文字幕块数（delete_shot 未同步删 EN 会错位）
     enb = srt_blocks(en_srt)
+    if _is_placeholder_en_blocks(enb):
+        enb = []
     if enb and len(enb) != n:
         fails.append(f"时长清单 {n} 句 ≠ 字幕_英文.srt {len(enb)} 块 → 删镜未同步删 EN，字幕将错位（用 delete_shot.py 或重跑 finalize）")
     elif enb:

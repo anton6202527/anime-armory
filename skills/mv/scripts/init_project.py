@@ -146,6 +146,15 @@ def main():
         target = "song.wav" if ext.lower() == ".wav" else f"song{ext}"
         shutil.copy(args.song, os.path.join(out_root, "歌", target))
         has_song = True
+        
+        # Check for demucs vocals
+        vocals_src = os.path.join(os.path.dirname(args.song), "_demucs", "vocals", "vocals.wav")
+        vocals_src_alt = os.path.join(os.path.dirname(args.song), "_demucs", "vocals.wav")
+        v_src = vocals_src if os.path.exists(vocals_src) else (vocals_src_alt if os.path.exists(vocals_src_alt) else None)
+        if v_src:
+            os.makedirs(os.path.join(out_root, "歌", "_demucs"), exist_ok=True)
+            shutil.copy(v_src, os.path.join(out_root, "歌", "_demucs", "vocals.wav"))
+            
     has_lyrics = False
     if args.lyrics and os.path.exists(args.lyrics):
         shutil.copy(args.lyrics, os.path.join(out_root, "词", "lyrics.md"))

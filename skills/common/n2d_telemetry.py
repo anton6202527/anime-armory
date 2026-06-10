@@ -7,6 +7,17 @@ import subprocess
 import time
 from typing import Any, Dict, Optional
 
+# 必须与 dashboard.py `record --event` 的 choices 白名单保持一致（单一真值）。
+VALID_EVENTS = (
+    "generation", "redraw", "qa", "cost", "duration", "manual", "release", "revenue",
+)
+
+
+def _dashboard_script() -> str:
+    """绝对路径定位 dashboard.py（本文件固定在 skills/common/）。"""
+    common_dir = os.path.dirname(os.path.abspath(__file__))
+    return os.path.abspath(os.path.join(common_dir, "..", "n2d-dashboard", "scripts", "dashboard.py"))
+
 
 def record_event(
     work_root: str,
@@ -22,28 +33,24 @@ def record_event(
     unit: str = "CNY",
     redraw_reason: Optional[str] = None,
     meta: Optional[Dict[str, Any]] = None,
+    build: bool = True,
 ):
-    """记录生产数据到 n2d-dashboard。
-    
+    """记录生产数据到 n2d-dashboard（异步、不阻断生产）。
+
     work_root: 作品根目录
     episode: 集号（如 "第1集"）
     stage: 阶段（voice, image, video, compose, script, review）
-    event: 事件类型（generation, redraw, manual, gate, qa）
+    event: 事件类型，必须 ∈ VALID_EVENTS（与 dashboard.py 的 --event 白名单一致）。
+           传非法值会 raise ValueError——属编程错误，不应静默吞掉（旧实现用
+           Popen+DEVNULL 会把 dashboard 的 rc=2 拒绝完全吞没，事件无声丢失）。
+    build: True 时 dashboard 录入后立即重建聚合；批量记账时传 False（追加 --no-build）
+           以避免每条都抢 production_events.lock 做全量重算（见 n2d-batch runner）。
     """
+    if event not in VALID_EVENTS:
+        raise ValueError(f"record_event: 非法 event={event!r}；合法值 {VALID_EVENTS}")
     try:
-        # 寻找 dashboard.py 路径
-        # 假设当前文件在 skills/common/n2d_telemetry.py
-        common_dir = os.path.dirname(os.path.abspath(__file__))
-        dashboard_script = os.path.abspath(os.path.join(common_dir, "..", "n2d-dashboard", "scripts", "dashboard.py"))
-        
-        if not os.path.exists(dashboard_script):
-            # 兜底：如果路径不对（比如被打包后），尝试直接调用命令行
-            dashboard_script = "python3 skills/n2d-dashboard/scripts/dashboard.py"
-        else:
-            dashboard_script = f"python3 {dashboard_script}"
-
         cmd = [
-            "python3", os.path.abspath(os.path.join(common_dir, "..", "n2d-dashboard", "scripts", "dashboard.py")),
+            "python3", _dashboard_script(),
             "record", work_root,
             "--episode", episode,
             "--stage", stage,
@@ -54,20 +61,20 @@ def record_event(
             "--cost", str(cost),
             "--unit", unit,
         ]
-        
+        if not build:
+            cmd.append("--no-build")
         if asset:
             cmd += ["--asset", asset]
         if redraw_reason:
             cmd += ["--redraw-reason", redraw_reason]
-        
         if meta:
             for k, v in meta.items():
                 cmd += ["--meta", f"{k}={v}"]
-                
+
         # 异步后台执行，避免阻塞主流程
         subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     except Exception as e:
-        # 电测失败不阻断生产
+        # 遥测失败不阻断生产（路径/spawn 异常）
         print(f"⚠️ Telemetry failed: {e}")
 
 

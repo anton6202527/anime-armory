@@ -21,6 +21,8 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 
 ## 路由规则
 
+> 机器校验源：`novel-craft/scripts/registry.py`；测试会校验它与本表、`skills/README.md`、磁盘目录一致。
+
 | 用户输入形态 | 路由到 |
 |---|---|
 | **只有几个字 / 一个想法 / 部分风格 / 零散笔记 / 半成品片段**，没有成型源文 → 要写一本**原创新书** | `novel-create`（访谈→蓝图→设定→章纲→Demo→成书） |
@@ -35,6 +37,11 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 | 自己手写小说时要**工艺指南**（章纲 / 单章 / 扩 / 缩 / 续 的原则） | `novel-craft` |
 | 已写好若干章，要**质检 / 审稿 / 查问题**（人设崩 / 视角穿帮 / 设定矛盾 / 锚点漂移 / 节奏 / 原文照搬） | `novel-review` |
 | 已写好若干章，要**打分 / 评分 / 市场体检**（题材够不够热、能不能火、值不值得继续写/改、要不要弃稿重立） | `novel-score` |
+| 已写好若干章，要**查逻辑硬伤 / 维护设定百科 / 角色生死状态** | `novel-wiki` |
+| 已写好若干章，要**模拟读者反馈 / 测留存 / 找弃书点** | `novel-simulate` |
+| 想要**克隆某人风格 / 提取文风指纹 / 保持笔力一致** | `novel-style` |
+| 想要**分析情节节奏 / 画热力图 / 查注水 / 查断章** | `novel-balance` |
+| 想要**宣发引流 / 写视频脚本 / 挖掘爆点章节** | `novel-promote` |
 | 把小说改成**漫剧 / 短剧** | `novel2drama`（另一条管线） |
 
 ⚠️ **续 / 扩 / 视角 / 改 四者很容易混**：
@@ -52,7 +59,7 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 
 ## 决策树
 
-0. **先看有没有在建项目**：用户指向（或当前正处于）某个 `写小说/<项目>/`，且其下有 `_进度.md` → **先读它**，跑 `python3 novel-craft/scripts/progress.py "<作品根>"` 找第一条未完成项、stage owner/gate/on_fail，以及 review/score 阻断；再路由到对应阶段 skill。若 `progress.py` 显示 QA gate 阻断，先按 `return_to_stage` 回流，不能直接导出。仅当 `_进度.md` 显示已全部完成、且 `report_gate.py` 无阻断、或用户明确要开新动作时，才往下走 1-5。
+0. **先看有没有在建项目**：用户指向（或当前正处于）某个 `写小说/<项目>/`，且其下有 `_进度.md` → **先读它**，跑 `python3 skills/novel-craft/scripts/progress.py "<作品根>"` 找第一条未完成项、stage owner/gate/on_fail，以及 review/score 阻断；再路由到对应阶段 skill。若 `progress.py` 显示 QA gate 阻断，先按 `return_to_stage` 回流，不能直接导出。仅当 `_进度.md` 显示已全部完成、且 `report_gate.py` 无阻断、或用户明确要开新动作时，才往下走 1-5。
 1. 用户给了**本地 .txt/.md/.docx、目录、file:// 或 URL**，且意图是"拖进来/导入/先建作品/纳管源书"，或没说具体动作 → 先跑 `python3 skills/novel-author/scripts/import_novel.py "<路径或URL>"` 建 `写小说/<书名>/`。
 2. 用户给了**本地文件路径** + 明确动作（续写XX视角 / 起书名 / 扩 / 缩 / 漫剧改编）→ 直接按动作路由。
 3. 用户给了**书名 / 作者 / 公版目录 URL**，明确说"抓回来/下载公版/联网取书" → `novel-fetch`。

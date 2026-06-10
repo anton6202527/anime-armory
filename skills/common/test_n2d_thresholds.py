@@ -51,3 +51,24 @@ def test_parse_ratio_forms():
     assert t.parse_ratio("") is None
     assert t.parse_ratio(None) is None
     assert t.parse_ratio("abc") is None
+
+
+def test_benchmark_defaults_are_loaded_from_reference_file(tmp_path):
+    root = _work(tmp_path)
+    cfg = t.load_benchmark(root)
+    assert cfg["one_pass_rate"] == 0.9
+    assert cfg["redraw_rate"] == 0.1
+    assert cfg["collected"] == "2026-06"
+    assert cfg.get("sources")
+
+
+def test_project_benchmark_json_overrides_reference(tmp_path):
+    root = _work(tmp_path)
+    json.dump(
+        {"one_pass_rate": 0.75, "redraw_rate": 0.2, "collected": "local"},
+        open(os.path.join(root, "生产数据", t.BENCHMARK_FILE), "w", encoding="utf-8"),
+    )
+    cfg = t.load_benchmark(root)
+    assert cfg["one_pass_rate"] == 0.75
+    assert cfg["redraw_rate"] == 0.2
+    assert cfg["collected"] == "local"

@@ -1,0 +1,51 @@
+{
+  "asset_key": "沈念_常态",
+  "backend": "Dreamina/即梦官方 CLI",
+  "generated_at": "2026-06-09",
+  "model_version": "5.0",
+  "resolution_type": "2k",
+  "ratio": "9:16",
+  "source_references": [
+    "出图/共享/参考/沈念_林婉儿_用户参考/ref_face_primary.jpg",
+    "出图/共享/参考/沈念_林婉儿_用户参考/ref_fullbody_hair.jpg",
+    "出图/共享/参考/沈念_林婉儿_用户参考/ref_body_front.jpg",
+    "出图/共享/参考/沈念_林婉儿_用户参考/ref_fantasy_face.jpg"
+  ],
+  "outputs": {
+    "front": {
+      "path": "出图/共享/图片/定妆_沈念_常态.png",
+      "submit_id": "104f1de8-3b99-4387-aaf9-480c06be35d0",
+      "credit_count": 3,
+      "size": "1440x2560"
+    },
+    "side": {
+      "path": "出图/共享/图片/定妆_沈念_常态_侧.png",
+      "submit_id": "93f752c1-b2ce-4c7a-acfd-8e3d7f034c62",
+      "credit_count": 3,
+      "size": "1440x2560"
+    },
+    "back": {
+      "path": "出图/共享/图片/定妆_沈念_常态_背.png",
+      "submit_id": "d81afecf-8f34-4781-9287-59c2a7728390",
+      "credit_count": 3,
+      "size": "1440x2560"
+    },
+    "halfbody": {
+      "path": "出图/共享/图片/定妆_沈念_常态_半身.png",
+      "derived_from": "front"
+    },
+    "turnaround": {
+      "path": "出图/共享/图片/定妆_沈念_常态_三视图.png",
+      "derived_from": [
+        "front",
+        "side",
+        "back"
+      ]
+    }
+  },
+  "total_credit_count": 9,
+  "acceptance": {
+    "status": "passed_for_demo_image_gate",
+    "notes": "正面/侧面/背面保持同一月白旧宫装、素布发带、长黑发和左腕淡疤；背面为轻微回头背面，按轻微偏差放行。"
+  }
+}

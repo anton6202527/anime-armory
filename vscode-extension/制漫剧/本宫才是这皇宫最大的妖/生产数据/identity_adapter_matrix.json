@@ -1,0 +1,1134 @@
+{
+  "kind": "n2d_identity_adapter_matrix",
+  "version": 1,
+  "root": "制漫剧/本宫才是这皇宫最大的妖",
+  "generated_at": "2026-06-09T10:28:20+00:00",
+  "summary": {
+    "forms": 5,
+    "forms_with_reference_group_ready": 0,
+    "forms_with_native_image_ready": 0,
+    "forms_with_native_video_ready": 0,
+    "forms_with_lora_ready": 0,
+    "forms_with_gaps": 5
+  },
+  "forms": [
+    {
+      "character_id": "CHAR_01",
+      "character_name": "沈念 / 林婉儿",
+      "scope": "全篇",
+      "form": "常态",
+      "asset_key": "沈念_常态",
+      "anchor_phrase": "凤眼薄唇·乌黑半披发带·月白粗布·左腕淡疤",
+      "reference_group": {
+        "front": {
+          "path": "出图/共享/图片/定妆_沈念_常态.png",
+          "exists": false
+        },
+        "side": {
+          "path": "出图/共享/图片/定妆_沈念_常态_侧.png",
+          "exists": false
+        },
+        "back": {
+          "path": "出图/共享/图片/定妆_沈念_常态_背.png",
+          "exists": false
+        },
+        "outfit": {
+          "path": "出图/共享/图片/定妆_沈念_常态_半身.png",
+          "exists": false
+        },
+        "turnaround": {
+          "path": "出图/共享/图片/定妆_沈念_常态_三视图.png",
+          "exists": false
+        },
+        "_extra": {
+          "value": {
+            "expressions": []
+          },
+          "exists": true
+        }
+      },
+      "reference_group_ready": false,
+      "image_bindings": {
+        "codex": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "openai": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_character_id",
+          "gaps": [],
+          "recommendations": [
+            "kling: register character_id for high-risk/core shots"
+          ]
+        },
+        "seedream": {
+          "mode": "universal_reference",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_universal_reference",
+          "gaps": [],
+          "recommendations": [
+            "seedream: register universal_reference for high-risk/core shots"
+          ]
+        },
+        "sora": {
+          "mode": "character_cameo",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_character_cameo",
+          "gaps": [],
+          "recommendations": [
+            "sora: register character_cameo for high-risk/core shots"
+          ]
+        },
+        "dreamina": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        }
+      },
+      "video_bindings": {
+        "dreamina": {
+          "mode": "first_last_frame",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_character_id",
+          "gaps": [],
+          "recommendations": [
+            "kling: register character_id for high-risk/core shots"
+          ]
+        },
+        "seedance": {
+          "mode": "face_lock",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_face_lock",
+          "gaps": [],
+          "recommendations": [
+            "seedance: register face_lock for high-risk/core shots"
+          ]
+        },
+        "veo": {
+          "mode": "reference_controls",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_reference_controls",
+          "gaps": [],
+          "recommendations": [
+            "veo: register reference_controls for high-risk/core shots"
+          ]
+        }
+      },
+      "lora_binding": {
+        "status": "not_needed",
+        "ready": false,
+        "base_model": "",
+        "model_path": "",
+        "trigger": "",
+        "dataset": "",
+        "model_hash": "",
+        "validation_report": "",
+        "train_job": "",
+        "card": "",
+        "gaps": []
+      },
+      "angle_policy": {
+        "allowed": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "over_shoulder"
+        ],
+        "risky": [
+          "extreme_top",
+          "extreme_low",
+          "face_too_small",
+          "deep_shadow",
+          "multi_person_contact"
+        ],
+        "requires_extra_reference": [
+          "side",
+          "back",
+          "full_body_action",
+          "multi_person_contact"
+        ]
+      },
+      "drift_forbidden": [
+        "face_shape",
+        "hairstyle",
+        "outfit_palette",
+        "signature_scar_or_scales",
+        "body_type"
+      ],
+      "gaps": [
+        "image.codex:reference_group_assets_missing",
+        "image.dreamina:reference_group_assets_missing",
+        "image.openai:reference_group_assets_missing",
+        "missing_reference:back",
+        "missing_reference:front",
+        "missing_reference:outfit",
+        "missing_reference:side",
+        "missing_reference:turnaround",
+        "video.dreamina:reference_group_assets_missing"
+      ],
+      "recommendations": [
+        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
+        "kling: register character_id for high-risk/core shots",
+        "lora: core long-running character; consider LoRA only if reference_group/native adapters still drift",
+        "seedance: register face_lock for high-risk/core shots",
+        "seedream: register universal_reference for high-risk/core shots",
+        "sora: register character_cameo for high-risk/core shots",
+        "veo: register reference_controls for high-risk/core shots",
+        "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
+      ]
+    },
+    {
+      "character_id": "CHAR_01",
+      "character_name": "沈念 / 林婉儿",
+      "scope": "全篇",
+      "form": "觉醒态",
+      "asset_key": "沈念_觉醒态",
+      "anchor_phrase": "凤眼薄唇·乌黑半披发带·月白粗布·左腕淡疤",
+      "reference_group": {
+        "front": {
+          "path": "出图/共享/图片/定妆_沈念_觉醒态.png",
+          "exists": false
+        },
+        "side": {
+          "path": "出图/共享/图片/定妆_沈念_觉醒态_侧.png",
+          "exists": false
+        },
+        "back": {
+          "path": "出图/共享/图片/定妆_沈念_觉醒态_背.png",
+          "exists": false
+        },
+        "outfit": {
+          "path": "出图/共享/图片/定妆_沈念_觉醒态_半身.png",
+          "exists": false
+        },
+        "turnaround": {
+          "path": "出图/共享/图片/定妆_沈念_觉醒态_三视图.png",
+          "exists": false
+        },
+        "_extra": {
+          "value": {
+            "expressions": []
+          },
+          "exists": true
+        }
+      },
+      "reference_group_ready": false,
+      "image_bindings": {
+        "codex": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "openai": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_character_id",
+          "gaps": [],
+          "recommendations": [
+            "kling: register character_id for high-risk/core shots"
+          ]
+        },
+        "seedream": {
+          "mode": "universal_reference",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_universal_reference",
+          "gaps": [],
+          "recommendations": [
+            "seedream: register universal_reference for high-risk/core shots"
+          ]
+        },
+        "sora": {
+          "mode": "character_cameo",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_character_cameo",
+          "gaps": [],
+          "recommendations": [
+            "sora: register character_cameo for high-risk/core shots"
+          ]
+        },
+        "dreamina": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        }
+      },
+      "video_bindings": {
+        "dreamina": {
+          "mode": "first_last_frame",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_character_id",
+          "gaps": [],
+          "recommendations": [
+            "kling: register character_id for high-risk/core shots"
+          ]
+        },
+        "seedance": {
+          "mode": "face_lock",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_face_lock",
+          "gaps": [],
+          "recommendations": [
+            "seedance: register face_lock for high-risk/core shots"
+          ]
+        },
+        "veo": {
+          "mode": "reference_controls",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_reference_controls",
+          "gaps": [],
+          "recommendations": [
+            "veo: register reference_controls for high-risk/core shots"
+          ]
+        }
+      },
+      "lora_binding": {
+        "status": "not_needed",
+        "ready": false,
+        "base_model": "",
+        "model_path": "",
+        "trigger": "",
+        "dataset": "",
+        "model_hash": "",
+        "validation_report": "",
+        "train_job": "",
+        "card": "",
+        "gaps": []
+      },
+      "angle_policy": {
+        "allowed": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "over_shoulder"
+        ],
+        "risky": [
+          "extreme_top",
+          "extreme_low",
+          "face_too_small",
+          "deep_shadow",
+          "multi_person_contact"
+        ],
+        "requires_extra_reference": [
+          "side",
+          "back",
+          "full_body_action",
+          "multi_person_contact"
+        ]
+      },
+      "drift_forbidden": [
+        "face_shape",
+        "hairstyle",
+        "outfit_palette",
+        "signature_scar_or_scales",
+        "body_type"
+      ],
+      "gaps": [
+        "image.codex:reference_group_assets_missing",
+        "image.dreamina:reference_group_assets_missing",
+        "image.openai:reference_group_assets_missing",
+        "missing_reference:back",
+        "missing_reference:front",
+        "missing_reference:outfit",
+        "missing_reference:side",
+        "missing_reference:turnaround",
+        "video.dreamina:reference_group_assets_missing"
+      ],
+      "recommendations": [
+        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
+        "kling: register character_id for high-risk/core shots",
+        "lora: core long-running character; consider LoRA only if reference_group/native adapters still drift",
+        "seedance: register face_lock for high-risk/core shots",
+        "seedream: register universal_reference for high-risk/core shots",
+        "sora: register character_cameo for high-risk/core shots",
+        "veo: register reference_controls for high-risk/core shots",
+        "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
+      ]
+    },
+    {
+      "character_id": "CHAR_02",
+      "character_name": "小禾",
+      "scope": "第1集起复用",
+      "form": "惊慌护主",
+      "asset_key": "小禾_惊慌护主",
+      "anchor_phrase": "双环髻·洗白青衣·圆眼含泪·护主",
+      "reference_group": {
+        "front": {
+          "path": "出图/共享/图片/定妆_小禾_惊慌护主.png",
+          "exists": false
+        },
+        "side": {
+          "path": "出图/共享/图片/定妆_小禾_惊慌护主_侧.png",
+          "exists": false
+        },
+        "back": {
+          "path": "出图/共享/图片/定妆_小禾_惊慌护主_背.png",
+          "exists": false
+        },
+        "outfit": {
+          "path": "出图/共享/图片/定妆_小禾_惊慌护主_半身.png",
+          "exists": false
+        },
+        "turnaround": {
+          "path": "出图/共享/图片/定妆_小禾_惊慌护主_三视图.png",
+          "exists": false
+        },
+        "_extra": {
+          "value": {
+            "expressions": []
+          },
+          "exists": true
+        }
+      },
+      "reference_group_ready": false,
+      "image_bindings": {
+        "codex": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "openai": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_character_id",
+          "gaps": [],
+          "recommendations": [
+            "kling: register character_id for high-risk/core shots"
+          ]
+        },
+        "seedream": {
+          "mode": "universal_reference",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_universal_reference",
+          "gaps": [],
+          "recommendations": [
+            "seedream: register universal_reference for high-risk/core shots"
+          ]
+        },
+        "sora": {
+          "mode": "character_cameo",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_character_cameo",
+          "gaps": [],
+          "recommendations": [
+            "sora: register character_cameo for high-risk/core shots"
+          ]
+        },
+        "dreamina": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        }
+      },
+      "video_bindings": {
+        "dreamina": {
+          "mode": "first_last_frame",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_character_id",
+          "gaps": [],
+          "recommendations": [
+            "kling: register character_id for high-risk/core shots"
+          ]
+        },
+        "seedance": {
+          "mode": "face_lock",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_face_lock",
+          "gaps": [],
+          "recommendations": [
+            "seedance: register face_lock for high-risk/core shots"
+          ]
+        },
+        "veo": {
+          "mode": "reference_controls",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_reference_controls",
+          "gaps": [],
+          "recommendations": [
+            "veo: register reference_controls for high-risk/core shots"
+          ]
+        }
+      },
+      "lora_binding": {
+        "status": "not_needed",
+        "ready": false,
+        "base_model": "",
+        "model_path": "",
+        "trigger": "",
+        "dataset": "",
+        "model_hash": "",
+        "validation_report": "",
+        "train_job": "",
+        "card": "",
+        "gaps": []
+      },
+      "angle_policy": {
+        "allowed": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "over_shoulder"
+        ],
+        "risky": [
+          "extreme_top",
+          "extreme_low",
+          "face_too_small",
+          "deep_shadow",
+          "multi_person_contact"
+        ],
+        "requires_extra_reference": [
+          "side",
+          "back",
+          "full_body_action",
+          "multi_person_contact"
+        ]
+      },
+      "drift_forbidden": [
+        "face_shape",
+        "hairstyle",
+        "outfit_palette",
+        "signature_scar_or_scales",
+        "body_type"
+      ],
+      "gaps": [
+        "image.codex:reference_group_assets_missing",
+        "image.dreamina:reference_group_assets_missing",
+        "image.openai:reference_group_assets_missing",
+        "missing_reference:back",
+        "missing_reference:front",
+        "missing_reference:outfit",
+        "missing_reference:side",
+        "missing_reference:turnaround",
+        "video.dreamina:reference_group_assets_missing"
+      ],
+      "recommendations": [
+        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
+        "kling: register character_id for high-risk/core shots",
+        "seedance: register face_lock for high-risk/core shots",
+        "seedream: register universal_reference for high-risk/core shots",
+        "sora: register character_cameo for high-risk/core shots",
+        "veo: register reference_controls for high-risk/core shots",
+        "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
+      ]
+    },
+    {
+      "character_id": "CHAR_03",
+      "character_name": "柳娘子",
+      "scope": "第1集起复用",
+      "form": "人皮态",
+      "asset_key": "柳娘子_人皮态",
+      "anchor_phrase": "深蓝宫装·善姑笑·整齐高髻·灰青裂鳞",
+      "reference_group": {
+        "front": {
+          "path": "出图/共享/图片/定妆_柳娘子_人皮态.png",
+          "exists": false
+        },
+        "side": {
+          "path": "出图/共享/图片/定妆_柳娘子_人皮态_侧.png",
+          "exists": false
+        },
+        "back": {
+          "path": "出图/共享/图片/定妆_柳娘子_人皮态_背.png",
+          "exists": false
+        },
+        "outfit": {
+          "path": "出图/共享/图片/定妆_柳娘子_人皮态_半身.png",
+          "exists": false
+        },
+        "turnaround": {
+          "path": "出图/共享/图片/定妆_柳娘子_人皮态_三视图.png",
+          "exists": false
+        },
+        "_extra": {
+          "value": {
+            "expressions": []
+          },
+          "exists": true
+        }
+      },
+      "reference_group_ready": false,
+      "image_bindings": {
+        "codex": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "openai": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_character_id",
+          "gaps": [],
+          "recommendations": [
+            "kling: register character_id for high-risk/core shots"
+          ]
+        },
+        "seedream": {
+          "mode": "universal_reference",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_universal_reference",
+          "gaps": [],
+          "recommendations": [
+            "seedream: register universal_reference for high-risk/core shots"
+          ]
+        },
+        "sora": {
+          "mode": "character_cameo",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_character_cameo",
+          "gaps": [],
+          "recommendations": [
+            "sora: register character_cameo for high-risk/core shots"
+          ]
+        },
+        "dreamina": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        }
+      },
+      "video_bindings": {
+        "dreamina": {
+          "mode": "first_last_frame",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_character_id",
+          "gaps": [],
+          "recommendations": [
+            "kling: register character_id for high-risk/core shots"
+          ]
+        },
+        "seedance": {
+          "mode": "face_lock",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_face_lock",
+          "gaps": [],
+          "recommendations": [
+            "seedance: register face_lock for high-risk/core shots"
+          ]
+        },
+        "veo": {
+          "mode": "reference_controls",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_reference_controls",
+          "gaps": [],
+          "recommendations": [
+            "veo: register reference_controls for high-risk/core shots"
+          ]
+        }
+      },
+      "lora_binding": {
+        "status": "not_needed",
+        "ready": false,
+        "base_model": "",
+        "model_path": "",
+        "trigger": "",
+        "dataset": "",
+        "model_hash": "",
+        "validation_report": "",
+        "train_job": "",
+        "card": "",
+        "gaps": []
+      },
+      "angle_policy": {
+        "allowed": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "over_shoulder"
+        ],
+        "risky": [
+          "extreme_top",
+          "extreme_low",
+          "face_too_small",
+          "deep_shadow",
+          "multi_person_contact"
+        ],
+        "requires_extra_reference": [
+          "side",
+          "back",
+          "full_body_action",
+          "multi_person_contact"
+        ]
+      },
+      "drift_forbidden": [
+        "face_shape",
+        "hairstyle",
+        "outfit_palette",
+        "signature_scar_or_scales",
+        "body_type"
+      ],
+      "gaps": [
+        "image.codex:reference_group_assets_missing",
+        "image.dreamina:reference_group_assets_missing",
+        "image.openai:reference_group_assets_missing",
+        "missing_reference:back",
+        "missing_reference:front",
+        "missing_reference:outfit",
+        "missing_reference:side",
+        "missing_reference:turnaround",
+        "video.dreamina:reference_group_assets_missing"
+      ],
+      "recommendations": [
+        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
+        "kling: register character_id for high-risk/core shots",
+        "seedance: register face_lock for high-risk/core shots",
+        "seedream: register universal_reference for high-risk/core shots",
+        "sora: register character_cameo for high-risk/core shots",
+        "veo: register reference_controls for high-risk/core shots",
+        "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
+      ]
+    },
+    {
+      "character_id": "CHAR_03",
+      "character_name": "柳娘子",
+      "scope": "第1集起复用",
+      "form": "破皮惊恐态",
+      "asset_key": "柳娘子_破皮惊恐态",
+      "anchor_phrase": "深蓝宫装·善姑笑·整齐高髻·灰青裂鳞",
+      "reference_group": {
+        "front": {
+          "path": "出图/共享/图片/定妆_柳娘子_破皮惊恐态.png",
+          "exists": false
+        },
+        "side": {
+          "path": "出图/共享/图片/定妆_柳娘子_破皮惊恐态_侧.png",
+          "exists": false
+        },
+        "back": {
+          "path": "出图/共享/图片/定妆_柳娘子_破皮惊恐态_背.png",
+          "exists": false
+        },
+        "outfit": {
+          "path": "出图/共享/图片/定妆_柳娘子_破皮惊恐态_半身.png",
+          "exists": false
+        },
+        "turnaround": {
+          "path": "出图/共享/图片/定妆_柳娘子_破皮惊恐态_三视图.png",
+          "exists": false
+        },
+        "_extra": {
+          "value": {
+            "expressions": []
+          },
+          "exists": true
+        }
+      },
+      "reference_group_ready": false,
+      "image_bindings": {
+        "codex": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "openai": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_character_id",
+          "gaps": [],
+          "recommendations": [
+            "kling: register character_id for high-risk/core shots"
+          ]
+        },
+        "seedream": {
+          "mode": "universal_reference",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_universal_reference",
+          "gaps": [],
+          "recommendations": [
+            "seedream: register universal_reference for high-risk/core shots"
+          ]
+        },
+        "sora": {
+          "mode": "character_cameo",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_character_cameo",
+          "gaps": [],
+          "recommendations": [
+            "sora: register character_cameo for high-risk/core shots"
+          ]
+        },
+        "dreamina": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        }
+      },
+      "video_bindings": {
+        "dreamina": {
+          "mode": "first_last_frame",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_character_id",
+          "gaps": [],
+          "recommendations": [
+            "kling: register character_id for high-risk/core shots"
+          ]
+        },
+        "seedance": {
+          "mode": "face_lock",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_face_lock",
+          "gaps": [],
+          "recommendations": [
+            "seedance: register face_lock for high-risk/core shots"
+          ]
+        },
+        "veo": {
+          "mode": "reference_controls",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "register_reference_controls",
+          "gaps": [],
+          "recommendations": [
+            "veo: register reference_controls for high-risk/core shots"
+          ]
+        }
+      },
+      "lora_binding": {
+        "status": "not_needed",
+        "ready": false,
+        "base_model": "",
+        "model_path": "",
+        "trigger": "",
+        "dataset": "",
+        "model_hash": "",
+        "validation_report": "",
+        "train_job": "",
+        "card": "",
+        "gaps": []
+      },
+      "angle_policy": {
+        "allowed": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "over_shoulder"
+        ],
+        "risky": [
+          "extreme_top",
+          "extreme_low",
+          "face_too_small",
+          "deep_shadow",
+          "multi_person_contact"
+        ],
+        "requires_extra_reference": [
+          "side",
+          "back",
+          "full_body_action",
+          "multi_person_contact"
+        ]
+      },
+      "drift_forbidden": [
+        "face_shape",
+        "hairstyle",
+        "outfit_palette",
+        "signature_scar_or_scales",
+        "body_type"
+      ],
+      "gaps": [
+        "image.codex:reference_group_assets_missing",
+        "image.dreamina:reference_group_assets_missing",
+        "image.openai:reference_group_assets_missing",
+        "missing_reference:back",
+        "missing_reference:front",
+        "missing_reference:outfit",
+        "missing_reference:side",
+        "missing_reference:turnaround",
+        "video.dreamina:reference_group_assets_missing"
+      ],
+      "recommendations": [
+        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
+        "kling: register character_id for high-risk/core shots",
+        "seedance: register face_lock for high-risk/core shots",
+        "seedream: register universal_reference for high-risk/core shots",
+        "sora: register character_cameo for high-risk/core shots",
+        "veo: register reference_controls for high-risk/core shots",
+        "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
+      ]
+    }
+  ],
+  "notes": []
+}

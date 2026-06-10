@@ -22,7 +22,7 @@ sys.path.append(os.path.join(SKILLS_ROOT, "novel-craft", "scripts"))
 _COMMON = os.path.join(SKILLS_ROOT, "common")
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
-from n2d_settings import load_settings as _load_settings  # noqa: E402
+from settings import load_settings as _load_settings  # noqa: E402
 
 try:
     import contract
@@ -80,7 +80,7 @@ def load_meta(root):
 
 
 def load_settings(root):
-    """读作品根下的 _设置.md；单一真值源在 common/n2d_settings.py。"""
+    """读作品根下的 _设置.md；单一真值源在 common/settings.py。"""
     return _load_settings(root)
 
 
@@ -338,6 +338,9 @@ def load_genre_ledger(path):
                 rec = json.loads(line)
             except ValueError:
                 continue
+            # "genre_performance_record" 是跨线 wire constant（= n2d_contract.GENRE_PERFORMANCE_RECORD_KIND /
+            # n2d-feedback LEDGER_KIND）。novel-* 刻意不 import n2d-*，两线只在此 JSONL 文件层连接，故此处
+            # 硬写字面值——若该 kind 在 n2d 侧改名，必须同步改这里，否则题材先验反哺会静默失效。
             if isinstance(rec, dict) and rec.get("kind") == "genre_performance_record":
                 records.append(rec)
     return records
@@ -395,6 +398,44 @@ def first_party_genre_text(summary):
         f"3秒留存 {pct('retention_3s')}、15秒留存 {pct('retention_15s')}、完播 {pct('completion_rate')}、"
         f"追更 {pct('follow_next_rate')}、ROI {roi}{sub}。"
         "（第一方实测，权重高于公榜热度：本题材自有 ROI/留存若明显低于平台基准，topic_heat 应下调并提示选题代差。）"
+    )
+
+
+READER_PANEL_REL_PATH = os.path.join("评分", "reader_panel_signals.json")
+
+
+def load_reader_panel_signals(root):
+    """读 novel-simulate 产的 评分/reader_panel_signals.json（模拟读者留存先验）。
+
+    缺文件正常退化为 None（纯公榜 + 战绩库）。字段名与 simulate_panel.py 输出对齐：
+    retention_prior / hook_strength / cliche_density_per_kchar。
+    """
+    path = os.path.join(root, READER_PANEL_REL_PATH)
+    if not os.path.isfile(path):
+        return None
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return None
+    if not isinstance(data, dict) or "retention_prior" not in data:
+        return None
+    return data
+
+
+def reader_panel_text(signals):
+    if not signals:
+        return ("无（尚无模拟读者信号；可先跑 novel-simulate 产 评分/reader_panel_signals.json，"
+                "作为发布前虚拟试读的留存先验）")
+    rp = signals.get("retention_prior")
+    hook = signals.get("hook_strength")
+    cliche = signals.get("cliche_density_per_kchar")
+    chs = signals.get("chapters_read") or signals.get("scope") or "?"
+    return (
+        f"模拟读者留存先验（novel-simulate 虚拟试读，范围 {chs}）："
+        f"retention_prior {rp}、钩子强度 {hook}、套路密度 {cliche}/千字。"
+        "（权重序：真实投放战绩 > 本模拟信号 > 公榜泛化；仅作 retention 维度先验，不单独定生死。"
+        "若 retention_prior 明显偏低且套路密度高，retention 维度下调并点明开篇疑似劝退/套路堆叠。）"
     )
 
 
@@ -524,7 +565,7 @@ def get_tier_verdict(total_score):
         return "不及格", "弃稿重立", "low"
 
 
-def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_party=None, task_id="__SCORE_TASK_ID__"):
+def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_party=None, reader_panel=None, task_id="__SCORE_TASK_ID__"):
     # This function generates a prompt for the LLM to perform the assessment
     # In a real automation, this would be sent to an LLM API.
 
@@ -550,6 +591,9 @@ def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_
 
 ## 第一方题材战绩（自有投放回灌 · n2d-feedback 闭环）
 {first_party_genre_text(first_party)}
+
+## 模拟读者留存信号（novel-simulate 虚拟试读 · retention 维度先验）
+{reader_panel_text(reader_panel)}
 
 ## 评估内容
 {chr(10).join(f"### 第{c['num']}章 {c['title']}\n{c['content'][:1000]}..." for c in chapters)}
@@ -684,6 +728,7 @@ def main():
         pending_waiver = make_freshness_waiver(freshness)
     ledger_path = args.genre_ledger or default_ledger_path(root)
     first_party = summarize_first_party_genre(load_genre_ledger(ledger_path), meta.get("genre"))
+    reader_panel = load_reader_panel_signals(root)
 
     platform_mode = args.platform or settings.get("目标平台") or "商业爽文向"
     if "品质" in platform_mode:
@@ -733,7 +778,7 @@ def main():
     )
     market_snapshot = baseline_file_snapshot(root, baseline)
     prompt = build_prompt(
-        root, meta, settings, baseline, samples, platform_mode, first_party,
+        root, meta, settings, baseline, samples, platform_mode, first_party, reader_panel,
         task_id="__SCORE_TASK_ID__",
     )
     expected_task = build_score_task(
@@ -846,6 +891,7 @@ def main():
         },
         "first_party_genre": first_party,
         "genre_ledger_path": ledger_path if os.path.isfile(ledger_path) else None,
+        "reader_panel_path": os.path.join(READER_PANEL_REL_PATH) if reader_panel else None,
         "scores": processed_scores,
         "deductions": deductions,
         "total_deductions": total_deductions,

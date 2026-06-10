@@ -19,6 +19,19 @@
 退出码：有 🔴 阻断级 → 1，否则 0。
 """
 import sys, os, re, json, glob, wave, array
+import importlib.util
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
+SONG_UTILS_PATH = os.path.join(REPO, "skills", "song-craft", "scripts", "song_utils.py")
+
+def load_song_utils():
+    spec = importlib.util.spec_from_file_location("song_utils", SONG_UTILS_PATH)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+song_utils = load_song_utils()
 
 BLOCK, WARN, INFO = "🔴", "🟡", "🟢"
 SPREAD_MAX = 6          # 同段各行字数极差上限（超 → 字数不齐，难唱）
@@ -33,13 +46,6 @@ TARGET_DURATION_TOL = 0.25
 findings = []  # (sev, dim, loc, msg)
 def add(sev, dim, loc, msg): findings.append((sev, dim, loc, msg))
 
-PLACEHOLDER = re.compile(r"待精修|待填|待定|占位|歌词…|歌词\.\.\.|placeholder|TODO|（待|\(待")
-SECTION_RE = re.compile(r"^\s*\[([^\]]+)\]\s*$")
-# 词行字数：只数可唱的字（中日韩 + 字母数字），剔标点/空白/舞台提示括注
-COUNT_RE = re.compile(r"[0-9A-Za-z一-鿿぀-ヿ]")
-STAGE_DIR = re.compile(r"^\s*[（(].*[）)]\s*$")   # 整行括注 = 舞台提示，不计字数
-
-
 def load_json(path):
     if not os.path.exists(path):
         return None
@@ -48,10 +54,6 @@ def load_json(path):
     except Exception as e:
         add(BLOCK, "完整性", path, f"JSON 解析失败：{e}")
         return None
-
-
-def line_chars(line):
-    return len(COUNT_RE.findall(line))
 
 
 def check_lyrics(root, meta, spread_max):
@@ -64,22 +66,22 @@ def check_lyrics(root, meta, spread_max):
 
     # 占位未精修
     for i, ln in enumerate(lines, 1):
-        if PLACEHOLDER.search(ln):
+        if song_utils.PLACEHOLDER.search(ln):
             add(BLOCK, "词", f"lyrics.md 第{i}行", f"歌词仍是占位未精修：{ln.strip()[:30]}…")
 
     # 分段（[tag] 行切段），统计每段词行字数
     sections = []   # (tag, [(lineno, text, chars)])
     cur_tag, cur = None, []
     for i, ln in enumerate(lines, 1):
-        m = SECTION_RE.match(ln)
+        m = song_utils.SECTION_RE.match(ln)
         if m:
             if cur_tag is not None:
                 sections.append((cur_tag, cur))
             cur_tag, cur = m.group(1).strip().lower(), []
         elif cur_tag is not None:
             s = ln.strip()
-            if s and not s.startswith("#") and not s.startswith(">") and not STAGE_DIR.match(s):
-                cur.append((i, s, line_chars(s)))
+            if s and not s.startswith("#") and not s.startswith(">") and not song_utils.STAGE_DIR.match(s):
+                cur.append((i, s, song_utils.line_chars(s)))
     if cur_tag is not None:
         sections.append((cur_tag, cur))
 
@@ -116,58 +118,6 @@ def check_lyrics(root, meta, spread_max):
     add(INFO, "词", "lyrics.md", f"产物快照：{len(sections)} 段 · 副歌×{nchorus} · 词约 {nwords} 字")
 
 
-def _wav_peak_clip(path):
-    """返回 wav 基础幅度指标；不可解析抛 wave.Error/EOFError。"""
-    with wave.open(path, "rb") as w:
-        ch, sw, rate, nframes = w.getnchannels(), w.getsampwidth(), w.getframerate(), w.getnframes()
-        dur = nframes / rate if rate else 0.0
-        if sw != 2:
-            # 仅对 16-bit PCM 做幅度分析；其余给基础信息
-            return dur, rate, ch, sw, None, None, None, None, None
-        frames = w.readframes(nframes)
-        a = array.array("h")
-        a.frombytes(frames)
-        peak = 0
-        clipped = 0
-        total = len(a)
-        full = 32768
-        thr = int(CLIP_THRESH * full)
-        sq = 0
-        for v in a:
-            av = -v if v < 0 else v
-            if av > peak:
-                peak = av
-            if av >= thr:
-                clipped += 1
-            sq += v * v
-        peak_ratio = peak / full if full else 0.0
-        clip_ratio = clipped / total if total else 0.0
-        import math
-        rms_ratio = math.sqrt(sq / total) / full if total else 0.0
-        silent_thr = int((10 ** (SILENCE_DBFS / 20.0)) * full)
-        head = 0
-        for v in a:
-            if abs(v) > silent_thr:
-                break
-            head += 1
-        tail = 0
-        for v in reversed(a):
-            if abs(v) > silent_thr:
-                break
-            tail += 1
-        samples_per_second = rate * ch if rate and ch else 1
-        return dur, rate, ch, sw, peak_ratio, clip_ratio, rms_ratio, head / samples_per_second, tail / samples_per_second
-
-
-def parse_seconds(value):
-    if value is None:
-        return None
-    if isinstance(value, (int, float)):
-        return int(value)
-    m = re.search(r"(\d+)", str(value))
-    return int(m.group(1)) if m else None
-
-
 def parse_settings(root):
     path = os.path.join(root, "_设置.md")
     settings = {}
@@ -188,9 +138,9 @@ def lyric_char_count(root):
     total = 0
     for line in open(path, encoding="utf-8"):
         s = line.strip()
-        if not s or s.startswith("#") or s.startswith(">") or SECTION_RE.match(s) or STAGE_DIR.match(s):
+        if not s or s.startswith("#") or s.startswith(">") or song_utils.SECTION_RE.match(s) or song_utils.STAGE_DIR.match(s):
             continue
-        total += line_chars(s)
+        total += song_utils.line_chars(s)
     return total
 
 
@@ -204,7 +154,7 @@ def check_audio(root, progress_text, meta=None):
             "缺成品歌 song.wav" + ("（进度提到作曲但产物不在）" if composed else "（未作曲则正常）"))
         return
     try:
-        dur, rate, ch, sw, peak, clip, rms, head_silence, tail_silence = _wav_peak_clip(path)
+        dur, rate, ch, sw, peak, clip, rms, head_silence, tail_silence = song_utils._wav_peak_clip(path)
     except (wave.Error, EOFError) as e:
         add(BLOCK, "音频", "歌/song.wav", f"音频损坏/不可解析（非标准 WAV？）：{e}")
         return
@@ -213,7 +163,7 @@ def check_audio(root, progress_text, meta=None):
         f"产物快照：{dur:.1f}s · {rate}Hz · {'立体声' if ch == 2 else f'{ch}声道'} · {sw*8}bit")
 
     settings = parse_settings(root)
-    target = parse_seconds((meta or {}).get("target_duration_seconds")) or parse_seconds(settings.get("目标时长"))
+    target = song_utils.parse_seconds((meta or {}).get("target_duration_seconds")) or song_utils.parse_seconds(settings.get("目标时长"))
     if target and dur:
         low = target * (1.0 - TARGET_DURATION_TOL)
         high = target * (1.0 + TARGET_DURATION_TOL)

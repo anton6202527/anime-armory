@@ -17,6 +17,8 @@ CONTINUE_INIT = os.path.join(REPO, "skills", "novel-continue", "scripts", "init_
 SPINOFF_INIT = os.path.join(REPO, "skills", "novel-spinoff", "scripts", "init_project.py")
 REWRITE_INIT = os.path.join(REPO, "skills", "novel-rewrite", "scripts", "init_project.py")
 DRAFT_PACKETS = os.path.join(HERE, "draft_packets.py")
+sys.path.insert(0, HERE)
+from contract import demo_chapters_for  # noqa: E402  共享 demo 章数真值源
 
 
 def write_source(tmp):
@@ -124,6 +126,27 @@ class InitMetadataTest(unittest.TestCase):
                 settings = f.read()
             self.assertIn("小说生成模式**：稳妥初稿", settings)
             assert_next_packet_runs(self, root)
+
+    def _meta_demo(self, init_script, src, root, chapter_flag, n, extra=()):
+        subprocess.run(
+            [sys.executable, init_script, src, "--out", root, chapter_flag, str(n), *extra],
+            cwd=REPO, check=True, capture_output=True, text=True,
+        )
+        with open(os.path.join(root, "_meta.json"), encoding="utf-8") as f:
+            return json.load(f)["demo_chapters"]
+
+    def test_demo_chapters_uses_shared_contract(self):
+        # 用 helper 与旧公式分叉的值锁住单一真值源：
+        #   demo_chapters_for(30)=3（旧 expand/condense min(2,30)=2），demo_chapters_for(3)=0（旧=2 / continue 旧=1）
+        self.assertEqual(demo_chapters_for(30), 3)
+        self.assertEqual(demo_chapters_for(3), 0)
+        with tempfile.TemporaryDirectory() as tmp:
+            src = write_source(tmp)
+            for name, init in (("expand", EXPAND_INIT), ("condense", CONDENSE_INIT)):
+                self.assertEqual(self._meta_demo(init, src, os.path.join(tmp, f"{name}30"), "--target-chapters", 30), 3, name)
+                self.assertEqual(self._meta_demo(init, src, os.path.join(tmp, f"{name}03"), "--target-chapters", 3), 0, name)
+            self.assertEqual(self._meta_demo(CONTINUE_INIT, src, os.path.join(tmp, "cont30"), "--new-chapters", 30, ("--mode", "sequel")), 3)
+            self.assertEqual(self._meta_demo(CONTINUE_INIT, src, os.path.join(tmp, "cont03"), "--new-chapters", 3, ("--mode", "sequel")), 0)
 
     def test_spinoff_writes_generation_metadata(self):
         with tempfile.TemporaryDirectory() as tmp:

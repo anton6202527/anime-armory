@@ -9,10 +9,10 @@ import re
 import sys
 from datetime import date
 
-
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 CONTRACT_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "contract.py")
+MV_UTILS_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "mv_utils.py")
 
 
 def load_contract():
@@ -21,57 +21,25 @@ def load_contract():
     spec.loader.exec_module(mod)
     return mod
 
+def load_mv_utils():
+    spec = importlib.util.spec_from_file_location("mv_utils", MV_UTILS_PATH)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
 
 contract = load_contract()
-SETTING_RE = re.compile(r"^\s*-\s*([^:：]+)\s*[:：]\s*(.*?)\s*(?:#.*)?$")
-SECTION_RE = re.compile(r"^\s*\[([^\]]+)\]\s*$")
-
-
-def read_text(path, default=""):
-    if not os.path.exists(path):
-        return default
-    with open(path, encoding="utf-8") as f:
-        return f.read()
-
-
-def write_text(path, text):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(text)
-
-
-def load_json(path, default):
-    if not os.path.exists(path):
-        return default
-    with open(path, encoding="utf-8") as f:
-        return json.load(f)
-
-
-def write_json(path, payload):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(payload, f, ensure_ascii=False, indent=2)
-
-
-def parse_settings(root):
-    settings = {}
-    for line in read_text(os.path.join(root, "_设置.md")).splitlines():
-        m = SETTING_RE.match(line)
-        if m:
-            settings[m.group(1).strip()] = m.group(2).strip()
-    return settings
-
+mv_utils = load_mv_utils()
 
 def parse_lyrics(root):
     path = os.path.join(root, "词", "lyrics.md")
     sections = []
     cur = None
     rows = []
-    for raw in read_text(path).splitlines():
+    for raw in mv_utils.read_text(path).splitlines():
         line = raw.strip()
         if not line or line.startswith("#") or line.startswith(">"):
             continue
-        m = SECTION_RE.match(line)
+        m = mv_utils.SECTION_RE.match(line)
         if m:
             if cur:
                 sections.append({"section": cur, "lines": rows})
@@ -213,6 +181,7 @@ def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visua
         key = is_chorus(section) or is_bridge(section)
         transition = "卡点硬切" if key else "动作切"
         beat_role = "key" if key else "normal"
+        speed_mode = "trim" if key else "warp"
         action = "副歌高光动作/光效爆点对齐 downbeat" if key else "叙事动作完整推进，镜头缓推"
         end_state = f"{section} 段 {clip_id} 结束姿态，画面重心留给下一刀"
         start_state = previous_end_state or f"{section} 段首帧，继承视觉蓝图和定妆锚点"
@@ -226,6 +195,7 @@ def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visua
             "end": clip["end"],
             "duration": clip["duration"],
             "beat_role": beat_role,
+            "speed_mode": speed_mode,
             "lyric_hint": clip.get("lyric_hint", ""),
             "image_prompt_path": image_prompt,
             "video_prompt_path": video_prompt,
@@ -265,7 +235,7 @@ def write_prompt_files(root, clips, blueprint):
             "## 负向",
             clip["continuity"]["negative"],
         ]
-        write_text(os.path.join(root, clip["image_prompt_path"]), "\n".join(image_lines) + "\n")
+        mv_utils.write_text(os.path.join(root, clip["image_prompt_path"]), "\n".join(image_lines) + "\n")
         video_lines = [
             f"# {clip['clip_id']} 视频任务",
             "",
@@ -284,7 +254,7 @@ def write_prompt_files(root, clips, blueprint):
             "## 视频 prompt",
             f"人物运动：{clip['continuity']['action']}；镜头运动：按段落张力执行；动态细节：发丝、衣摆、光斑或环境粒子随节拍变化；卡点约束：动作峰值对齐 {clip['end']:.2f}s；声音约束：无对白、无旁白、不要生成原生人声，音乐由 mv-compose 使用原歌轨统一处理。",
         ]
-        write_text(os.path.join(root, clip["video_prompt_path"]), "\n".join(video_lines) + "\n")
+        mv_utils.write_text(os.path.join(root, clip["video_prompt_path"]), "\n".join(video_lines) + "\n")
 
 
 def build_markdown(title, clips):
@@ -311,9 +281,9 @@ def main():
     if not os.path.exists(bg_path):
         print("[err] 缺 节拍/beatgrid.json，先跑 mv-beat", file=sys.stderr)
         sys.exit(2)
-    meta = load_json(os.path.join(root, "_meta.json"), {})
-    bg = load_json(bg_path, {})
-    settings = parse_settings(root)
+    meta = mv_utils.load_json(os.path.join(root, "_meta.json"), {})
+    bg = mv_utils.load_json(bg_path, {})
+    settings = mv_utils.parse_settings(root)
     title = meta.get("title") or os.path.basename(root)
     granularity = args.granularity or settings.get("MV规划粒度") or "标准"
     strategy = args.strategy or settings.get("卡点策略") or "副歌强卡点"
@@ -324,7 +294,7 @@ def main():
     if not clips:
         print("[err] 未生成任何 clip，请检查 beatgrid duration/sections", file=sys.stderr)
         sys.exit(1)
-    write_prompt_files(root, clips, read_text(os.path.join(root, "视觉蓝图.md")))
+    write_prompt_files(root, clips, mv_utils.read_text(os.path.join(root, "视觉蓝图.md")))
     plan = {
         "schema_version": 1,
         "kind": "mv_clip_plan",
@@ -354,15 +324,15 @@ def main():
                 "duration": c["duration"],
                 "video_path": c["selected_video_path"],
                 "transition": c["transition"],
-                "speed_mode": "warp",  # 默认开启 Time-warping，解决动作过慢被截断的问题
+                "speed_mode": c["speed_mode"],
             }
             for c in clips
         ],
     }
     plan_dir = os.path.join(root, "分镜")
-    write_json(os.path.join(plan_dir, "clip_plan.json"), plan)
-    write_json(os.path.join(plan_dir, "timeline_manifest.json"), timeline)
-    write_text(os.path.join(plan_dir, "clip_plan.md"), build_markdown(title, clips))
+    mv_utils.write_json(os.path.join(plan_dir, "clip_plan.json"), plan)
+    mv_utils.write_json(os.path.join(plan_dir, "timeline_manifest.json"), timeline)
+    mv_utils.write_text(os.path.join(plan_dir, "clip_plan.md"), build_markdown(title, clips))
     print(f"[ok] clip plan → {os.path.join(plan_dir, 'clip_plan.json')}（{len(clips)} clips）")
     print(f"[ok] timeline → {os.path.join(plan_dir, 'timeline_manifest.json')}")
     print("\n[推荐下一步] 你可以运行语义分镜引擎，根据歌词和蓝图自动补全画面提示词：")

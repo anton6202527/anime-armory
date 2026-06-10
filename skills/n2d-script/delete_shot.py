@@ -7,6 +7,8 @@
 #         voice_zh.wav 重拼轨(有 ffmpeg 时，含 hook 可变间隔) → finalize_storyboard 重定时
 # 不动（末尾打印清单，需人工）：故事板.md/分镜剧本.md/bgm.txt/storyboard.json 设计文档、已生成的 PNG/clip MP4、成片。
 import sys, os, re, json, subprocess, shutil
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'common'))
+from n2d_route import voiceover_fingerprint  # 删镜重写 voiceover.txt 后须同步刷新 meta 指纹，否则 validate_timings 误报失配
 
 if len(sys.argv) < 4: sys.exit('用法: delete_shot.py <作品根> <第N集> <镜头名> [镜头名...]')
 root, ep = sys.argv[1], sys.argv[2]
@@ -15,7 +17,7 @@ shots = set(sys.argv[3:])
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 VO   = os.path.join(root, '脚本', ep, 'voiceover.txt')
 ENS  = os.path.join(root, '脚本', ep, '字幕_英文.srt')
-# 时长清单/配音可能在 合成/（配音先行）或 出视频/（先出视频后配音）下，两处都探
+# 配音一律落 合成/（与制作模式无关）；出视频/ 为已废弃历史路径，仅防御性兜底探测
 VBASE = next((b for b in ('合成', '出视频') if os.path.isfile(os.path.join(root, b, ep, '配音', '时长清单.json'))), '合成')
 CONF = os.path.join(root, VBASE, ep, '配音')
 MAN  = os.path.join(CONF, '时长清单.json')
@@ -66,6 +68,20 @@ for n, (r, t) in enumerate(zip(keep, tmp)):
     if t: shutil.move(t, os.path.join(CONF, f'line_{n:02d}.wav'))
 json.dump(keep, open(MAN, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
 print(f'时长清单: {len(man)} → {len(keep)} 句；保留句时长不变')
+
+# 3.5) 刷新 时长清单.meta.json 指纹 —— 删镜是「授权的回流」（保留句真实音频+时长不变），
+#      但已改写了 voiceover.txt，若不同步指纹，validate_timings 会把这次删镜误报为「配音后改词失配」。
+META = os.path.join(CONF, '时长清单.meta.json')
+if os.path.isfile(META):
+    try:
+        _m = json.load(open(META, encoding='utf-8')) or {}
+    except Exception:
+        _m = {}
+    _m['voiceover_fingerprint'] = voiceover_fingerprint(VO)
+    _m['lines'] = len(keep)
+    _m['placeholder_lines'] = sum(1 for r in keep if r.get('占位'))
+    json.dump(_m, open(META, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+    print('时长清单.meta.json 指纹已同步（删镜后 validate_timings 不会误报失配）')
 
 # 4) voice_zh.wav 重拼轨（需 ffmpeg；hook 可变间隔与 render_voice 一致）
 FF = shutil.which('ffmpeg')

@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_industry_benchmark",
+  "collected": "2026-06",
+  "one_pass_rate": 0.9,
+  "redraw_rate": 0.1,
+  "cost_per_min": {
+    "CNY": 6.0
+  },
+  "cross_ep_consistency": 0.95,
+  "notes": "只读参照线，不参与告警/阻断。厂商宣传和媒体测评口径不一，落地前应由 n2d-review 流程自审重新复核。",
+  "sources": [
+    {
+      "title": "搜狐《2026 AI 真人短剧工业化测评》",
+      "checked": "2026-06"
+    },
+    {
+      "title": "知乎《AI 漫剧角色一致性与自动化生产》",
+      "checked": "2026-06"
+    }
+  ]
+}

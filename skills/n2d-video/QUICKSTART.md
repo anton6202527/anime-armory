@@ -7,7 +7,7 @@ Prerequisites:
 
 Gate:
 ```bash
-python3 skills/n2d-review/scripts/gate.py <作品根> 第N集 --stage video
+python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage video
 ```
 
 Required outputs:

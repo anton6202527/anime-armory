@@ -72,7 +72,7 @@
 
 允许的 `mode`（错 mode 由 `gate.py` 阻断）：
 
-- **image**：`codex/openai` → `reference_group`；`seedream` → `universal_reference`；`kling` → `character_id / subject_library / custom_model / element_library`；`sora` → `character_cameo`。
+- **image**：`codex/openai` → `reference_group`；`dreamina/即梦` → `reference_group`；`seedream` → `universal_reference`；`kling` → `character_id / subject_library / custom_model / element_library`；`sora` → `character_cameo`。
 - **video**：`dreamina` → `first_last_frame / reference_group`；`kling` → `character_id`；`seedance` → `face_lock`；`veo` → `reference_controls`。
 
 `binding != "reference_group"` 且 `ready=true` 即算「原生身份已生效」；否则一律回退 `reference_group` 兜底，绝不阻塞出图/出视频。

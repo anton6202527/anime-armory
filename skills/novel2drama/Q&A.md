@@ -490,18 +490,21 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 ├── 设定库/                    ← 跨阶段设定资产
 │   ├── characters/            ← 角色卡（设定）shared，由 n2d-script 写
 │   └── locations/             ← 场景卡 shared，由 n2d-script 写
-└── 出图/                      ← Stage 2: n2d-image 产物
-    ├── common/                扁平：PNG + prompt 同目录
-    │   ├── 00_索引.md
-    │   ├── 角色定妆.md
-    │   ├── 场景定妆.md
-    │   ├── 道具定妆.md
-    │   └── 定妆_*.png         定妆 PNG 库
+└── 出图/                      ← Stage 4: n2d-image 产物
+    ├── 共享/                  全篇共享定妆库（旧项目 common/ 仅读取兼容）
+    │   ├── prompt/
+    │   │   ├── 00_索引.md
+    │   │   ├── 角色定妆.md
+    │   │   ├── 场景定妆.md
+    │   │   └── 道具定妆.md
+    │   └── 图片/
+    │       └── 定妆_*.png     定妆 PNG 库
     └── 第N集/
         ├── prompt/             本集 prompt 文件
         │   ├── 00_总览.md      本集图清单（引用 shared）
         │   └── 01_分镜出图.md  本集独有分镜 prompt
-        └── 镜头N_*.png         本集分镜 PNG
+        └── 图片/
+            └── 镜头N_*.png     本集分镜 PNG
 ```
 
 > 历史记录：v2（2026-05 起）共享层在 `分镜剧本/出图/` + `分镜剧本/出图prompt/`，本集在 `分镜剧本/第N集/出图prompt/` 等。v3 起每个 skill 占一个顶层文件夹，**全篇共享资产从 stage-1 子目录里迁出独立**，详见 references/architecture.md 目录铁律。
@@ -510,14 +513,14 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 
 | 资产 | 放哪 | 理由 |
 |---|---|---|
-| 角色定妆 PNG/prompt | shared | 角色全集统一 |
-| 角色形态变体（觉醒态/银牌态）| shared | 多形态，跨集复用 |
-| 场景定妆 | shared | 场景通常多集复用 |
-| 反复入镜道具 / HUD 系统光幕 | shared | 全集统一视觉 |
+| 角色定妆 PNG/prompt | 共享 | 角色全集统一 |
+| 角色形态变体（觉醒态/银牌态）| 共享 | 多形态，跨集复用 |
+| 场景定妆 | 共享 | 场景通常多集复用 |
+| 反复入镜道具 / HUD 系统光幕 | 共享 | 全集统一视觉 |
 | 一次性道具（仅本集出现）| 本集分镜 | 不复用，无需独立块 |
 | 分镜出图 | 本集 | 一镜一图，不跨集 |
 | 封面 | 本集 | 一集一封 |
-| 死亡形态 / 仅本集形态（如柳娘子第1集就死）| **仍放 shared** | 一致性 > 节省空间，规则统一才好维护 |
+| 死亡形态 / 仅本集形态（如柳娘子第1集就死）| **仍放共享** | 一致性 > 节省空间，规则统一才好维护 |
 
 ### 19.4 工作流（新角色/场景/道具首现时）
 
@@ -527,19 +530,19 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 3. 出图/共享/prompt/角色|场景|道具定妆.md 追加完整 prompt 块
 4. 跑 `生图AI` 所选官方/已登录后端生图 → 挑图 → PNG 落 出图/共享/图片/；Dreamina/即梦官方 CLI 可用，第三方逆向/web 自动化禁用
 5. 索引状态改 ✅
-6. 出图/第N集/prompt/00_总览.md 引用 shared
+6. 出图/第N集/prompt/00_总览.md 引用共享层
 7. 后续集自动复用，不再重做
 ```
 
 ### 19.5 进度算法（`_进度.md` 的 `出图` 列）
 
 ```
-出图 列 = 已存在 PNG / 本集需要的所有 PNG（含 shared 复用 + 本集分镜）
+出图 列 = 已存在 PNG / 本集需要的所有 PNG（含共享复用 + 本集分镜）
 ```
 
 举例 — 第2集（假设需要：沈念常态 ✅ + 沈念觉醒态 ✅ + 小禾 ✅ + 冷宫寝殿 ✅（第1集做的）+ 偏殿修炼室 ⬜ + 8 张分镜）：
-- 总数 = 5 shared + 8 分镜 = 13
-- 已完成 = 4（4 shared 已 ✅）
+- 总数 = 5 共享资产 + 8 分镜 = 13
+- 已完成 = 4（4 个共享资产已 ✅）
 - 列填 `4/13`
 
 复用让"已完成"数自然跨集累积——第2集开始时就有 4 个起步分。
@@ -656,7 +659,7 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 
 ## Q22：dreamina（即梦官方 CLI）能让自动化 agent 自动出图吗？为什么 headless 跑不通？<a id="q22"></a>
 
-> 2026-06-09 更新：阶段2 已放行 Dreamina/即梦官方 CLI 图片生成。当前 n2d 图片阶段按 `生图AI` 统一到一个官方/已登录后端（默认 Codex，可选 Dreamina/即梦官方 CLI、官方多参考后端），只禁第三方逆向、`同视频AI` 含糊口径和 web 自动化。
+> 2026-06-09 更新：当前已放行 Dreamina/即梦官方 CLI 图片生成。n2d 图片阶段按 `生图AI` 统一到一个官方/已登录后端（默认 Codex，可选 Dreamina/即梦官方 CLI、官方多参考后端），只禁第三方逆向、`同视频AI` 含糊口径和 web 自动化。
 
 ### 22.1 现象
 `dreamina user_credit` / `list_task` / `-h` 都正常（读账号 OK，余额 180 积分），**但 `text2image` / `image2image` 退出码 1、零 stdout/stderr、日志文件 0 字节**；关掉沙箱（dangerouslyDisableSandbox）也一样。
@@ -1208,7 +1211,7 @@ voice-first 时长驱动镜头、两层定妆库（Q28 已强化多视图+多图
 
 **模型适配层 `n2d-model-router`**：出视频不再固定一个视频模型包打天下。默认 `视频模型路由=自动按镜头路由`，`生视频AI` 只作为普通镜和兜底后端；每个 Clip 按镜头类型、专项模板、身份注册层、原生音画策略、时长上限和失败风险选择 `primary_backend` / `fallback_backends`。
 
-落地方式：`/n2d-video` 前先跑 `python3 skills/n2d-model-router/scripts/router.py <作品根> 第N集 --write`，生成 `出视频/第N集/prompt/video_model_routes.json/md`。`00_总览.md` 必须包含「本集模型路由表」；每个 Clip prompt 必填 `模型路由` 和 `模型路由约束`，平台参数必须写 primary/fallback/mode/identity adapter/native_audio_policy。`n2d-review/scripts/gate.py --stage video` 会阻断缺路由表或逐 Clip 缺路由字段。
+落地方式：`/n2d-video` 前先跑 `python3 skills/n2d-model-router/scripts/router.py <作品根> 第N集 --write`，生成 `出视频/第N集/prompt/video_model_routes.json/md`。`00_总览.md` 必须包含「本集模型路由表」；每个 Clip prompt 必填 `模型路由` 和 `模型路由约束`，平台参数必须写 primary/fallback/mode/identity adapter/native_audio_policy。`dashboard.py gate --stage video`（生产入口，底层调 `n2d-review/scripts/gate.py --json`）会阻断缺路由表或逐 Clip 缺路由字段。
 
 这层的价值是把“哪个模型更适合哪个镜头”从临场经验升级成可维护的生产规则：打斗/亲密接触/多人站位优先强首尾帧、运动控制和身份 ID；追逐/飞行优先长连续运动；空镜/远景氛围可 opt-in 原生环境声；对话近景优先身份稳定和口型控制；法术爆发优先光效连续扩散。后端能力变化时，只更新 `n2d-video/references/platforms.md` 和 `n2d-model-router`，不用逐条 prompt 重写。
 
@@ -1232,6 +1235,8 @@ voice-first 时长驱动镜头、两层定妆库（Q28 已强化多视图+多图
 
 **结论**：值得做，且 n2d 的现有结构天然适配——但它不应该是新引擎，而应该是**生产驾驶舱**。核心原则是：**PC 客户端/无限画布只做可视化、编排和触发；skills 仍是无头引擎**。n2d 已经具备做客户端最难的底座：干净的机器契约（`common/n2d_contract.py` 阶段图/进度 schema/manifest/gate stage/回退字段）+ 文件化产物树（`出图/出视频/合成` 的 PNG/MP4）+ `gate.py --json`（带 `return_to_stage/affected_artifacts`）+ 一致性检测器（都出 JSON）。**这套契约本身就是客户端要消费的 API**。
 
+当前仓库已经有一个可验证雏形：`n2d-review-ui` 能把 `storyboard.json`、首帧/尾帧、clip MP4、接缝、定妆参考、机器分和 QA flag 聚合成 `生产数据/review_ui_第N集.html/json`。所以后续不是从零做“桌面软件”，而是把这个静态人审画布升级为一个本地工作台，再在稳定后套 PC 壳。
+
 推荐路线不是一上来做“大而全桌面软件”，而是按这个顺序推进：
 
 1. 先做 `n2d status --json`：把 `_进度.md`、阶段图、manifest、gate、audit、产物路径聚成一个作品级状态 JSON。
@@ -1239,7 +1244,7 @@ voice-first 时长驱动镜头、两层定妆库（Q28 已强化多视图+多图
 3. 再做受约束无限画布：泳道 × Clip 卡 × 接力链边，优先解决编排/审片，不急着做完全自由白板。
 4. 最后套 PC 壳：当本地 Web 看板稳定后，再用 Electron 或 Tauri 封装成客户端。
 
-这是**未来方向、尚未立项**，先记此供以后参考。
+这是**未来方向、尚未立项**，但可行性高；起点应是契约和只读工作台，不是窗口框架。
 
 ### 36.1 客户端形态铁律（最重要）
 - **薄壳不 fork 逻辑**：仓库立身之本是「工具中立、skill 不绑定某一家 AI 或某一个 agent」。客户端只能**读契约、调脚本/agent**，绝不把 gate/检测器逻辑重实现进 GUI——否则两个真值源，地狱。
@@ -1257,9 +1262,10 @@ voice-first 时长驱动镜头、两层定妆库（Q28 已强化多视图+多图
 
 **先 Web，后桌面壳**。真正值钱的是状态契约和画布工作流，不是窗口框架。先把 `n2d-ui serve` 做成浏览器里可用的本地工作台，等交互稳定后再封成 PC 客户端。
 
-- **结构化编排画布**：优先用 React Flow 这类节点/边框架，适合“集/场/Clip/stage/接力链”的有向图和泳道看板，天然支持节点状态、边、拖拽、缩放。
-- **自由无限画布**：后续再考虑 tldraw 这类白板框架，用于批注、参考图墙、灵感板、导演手记。不要第一版就让自由画布承载生产契约，否则容易变成漂亮但不可控的白板。
-- **桌面壳选择**：早期 Electron 更省事，集成本地脚本、文件浏览、视频预览、日志窗口更快；Tauri 更轻、更安全，适合后期产品化。建议先 Web-first，若要快速本地客户端优先 Electron，稳定后再评估 Tauri。
+- **薄后端**：优先 Python 本地服务（标准库 `http.server` / FastAPI 均可，按复杂度选择），因为现有产线脚本已经是 Python + shell。后端只做状态聚合、白名单命令触发、日志流和文件索引；不引入数据库作为第二真值源。
+- **结构化编排画布**：优先用 [React Flow](https://reactflow.dev/learn/concepts/terms-and-definitions) 这类节点/边框架。它的核心模型就是 nodes + edges 的 interactive flowgraph，适合“集/场/Clip/stage/接力链”的有向图和泳道看板，天然支持节点状态、边、拖拽、缩放。
+- **自由无限画布**：后续再考虑 [tldraw](https://github.com/tldraw/tldraw) 这类白板框架。它适合批注、参考图墙、灵感板、导演手记、自由标注；但不要第一版就让自由画布承载生产契约，否则容易变成漂亮但不可控的白板。
+- **桌面壳选择**：早期 [Electron](https://www.electronjs.org/docs/latest/) 更省事，集成本地脚本、文件浏览、视频预览、日志窗口更快；后期可评估 [Tauri](https://tauri.app/start/)，它用系统 WebView、体积更轻，安全模型也更适合产品化。建议先 Web-first，若要快速本地客户端优先 Electron，稳定后再评估 Tauri。
 
 推荐架构：
 
@@ -1269,7 +1275,7 @@ voice-first 时长驱动镜头、两层定妆库（Q28 已强化多视图+多图
   ② 无限画布：泳道(集)×节点(stage/Clip)，缩略图 + QA 描边 + 接力链边
   ③ 产物查看器：PNG 网格 / clip 播放 / 定妆库面板
   ④ 编排：一键「跑下一步 / 过 gate / 重抽这镜」
-        │ 只走 JSON 契约 + shell 调用
+        │ 只走 JSON 契约 + 白名单 shell 调用
   薄后端：`n2d status --json` + `n2d-ui serve`
         │ 聚合 stage_specs + manifest + gate --json + audit + artifact index
   驱动：起当前可用 agent 子进程 / 直调 skill 脚本
@@ -1283,16 +1289,35 @@ voice-first 时长驱动镜头、两层定妆库（Q28 已强化多视图+多图
 2. 无限画布是真工程：上百 PNG + 视频缩略图要虚拟化/分块渲染防卡——**先做受约束的「网格看板」，再升级自由画布**。
 3. 驱动 agent 的集成最棘手：先做**只读看板**（零驱动风险），再加「一键跑」。
 4. 本地重 AI 步骤要 conda env，客户端需做环境探测 + 优雅降级（沿用契约里「缺库优雅跳过」先例）。
+5. 本地服务只监听 `127.0.0.1`；可执行动作必须白名单化，禁止 UI 拼任意 shell 命令。
+6. 媒体层必须懒加载：缩略图缓存、视频 `preload=metadata`、分块渲染、搜索索引走 JSON；不要把全剧 PNG/MP4 一次性塞进 DOM。
+7. 写状态只通过现有脚本/API；UI 不直接乱改 `_进度.md`、`manifest.json`、`batch_queue.json`。
 
 ### 36.5 分期（每期独立交付价值）
-1. **MVP·状态 JSON**：`n2d status --json`，聚合进度、manifest、gate、audit、产物索引。先把客户端 API 固定下来。
-2. **只读仪表盘**：`n2d-ui serve` + 进度矩阵 + 产物缩略图网格 + QA 描边。零驱动纯看，立刻让"到哪了/哪镜崩了"可视化。
-3. **看板画布**：泳道×Clip 卡 + 接力链边 + 定妆库面板 + 内联播放。审片搬上画布。
-4. **编排**：一键跑下一步 / 过 gate / 重抽该镜（驱动层）。
+0. **现有雏形**：继续保留 `n2d-review-ui` 静态 HTML/JSON，它是人审画布的最小可用版本，也是后续 UI 数据模型的样板。
+1. **MVP·状态 JSON**：`n2d status --json`，聚合进度、manifest、gate、audit、score、产物索引、横切就绪。先把客户端 API 固定下来。
+2. **只读仪表盘**：`n2d-ui serve` + 进度矩阵 + 产物缩略图网格 + QA 描边。零驱动纯看，立刻让“到哪了/哪镜崩了”可视化。
+3. **看板画布**：泳道 × Clip 卡 + 接力链边 + 定妆库面板 + 内联播放。审片搬上画布。
+4. **受控编排**：一键跑下一步 / 过 gate / 重抽该镜 / 加入 batch（驱动层）。所有动作落日志，失败可回看。
 5. **PC 客户端封装**：本地 Web 工作台稳定后，用 Electron/Tauri 包一层，补文件关联、项目最近列表、日志窗口、环境探测。
-6. **批量 + 成本 + 反馈**：队列跑、$/集、一次通过率趋势——把「精品手作」推向「可量产」（与 Q35 工业化北极星合流）。
+6. **批量 + 成本 + 反馈**：队列跑、$/集、一次通过率趋势、平台回收趋势——把「精品手作」推向「可量产」（与 Q35 工业化北极星合流）。
 
-> 一句话：**这不是给 n2d 换引擎，是给它装仪表盘和驾驶舱**；无限画布恰好把它最值钱的东西（接力链、契约、一致性 QA）从 JSON 变成看得见、可操作的板。起步从 `n2d status --json` + 只读看板，风险最低、对现有 CLI 用户即时有用。
+### 36.6 代码级复核结论（2026-06-09）—— 比上面写的更近
+
+做了一轮 skills 代码层面的可行性复核，结论：**可行，且实际起点比 36.1–36.5 描述的更靠前——上面规划里"要建"的几件事，仓库里已经有可跑的先例，等于已走了约 60%**：
+
+- **无限画布雏形已在跑**：`n2d-review-ui/scripts/review_ui.py` 已经生成 infinite-canvas-style 静态 HTML（首/尾帧、clip、接缝、定妆 reference、QA flag、机器分聚到一张板）。差距只是**单集 → 多集/多阶段/可缩放、静态 → 实时**。
+- **本地服务也已经有**：36.3 把 `n2d-ui serve` 当"待建"，但 `n2d-dashboard` 里**已经有一个能跑的本地服务**——`dashboard.py` 的 `watch` 子命令用 `http.server.SimpleHTTPRequestHandler` + `socketserver.TCPServer(("127.0.0.1", port))` 起服务、配 `<meta http-equiv=refresh>` 自动刷新、轮询 `events.jsonl` + 阈值告警。"本地起服务看实时看板"这条路在仓库里已经走通，新看板可以直接复用这套外壳。
+- **数据层（最难的部分）已就绪且量大**：全线机器产物已成规模——`storyboard.json`（≈47 处引用）、`identity_registry.json`（≈24）、`compliance_manifest.json`（≈21）、`时长清单.json`（≈18）、`video_model_routes.json`、`score_*.json`、`batch_queue.json`、`production_events.jsonl`、`genre_ledger.jsonl`…… 任何可视化工具最难的"有没有干净的结构化数据可渲染"在这里**不是问题**，画布要的「节点+边+状态+遥测」几乎现成。
+
+复核同时补两条上面没点透、但会决定做法对错的要点：
+
+- **两种执行模型不能混为一谈**（这是 36.1「薄壳不 fork 逻辑」的落地细节）：① **确定性脚本**（`split_novel` / `render_voice` / `gate.py` / `score.py` / `compose.sh` / `dashboard` / `model-router`…）GUI 可白名单直调；② **LLM 驱动的创作阶段**（改编、分镜、prompt 生成）必须有 Claude 在环——靠 **Claude Agent SDK** 编程调用，或干脆**让 Claude Code 当后端引擎、画布只当查看器+遥控器去戳它**。GUI 永远不要假装自己替代了创作 agent。
+- **可成长为跨线画布**：`_进度.md` 状态机 + JSON 产物模型是 **novel / n2d / song / mv 四条线共用**的同一套口径，所以画布可以从"单部漫剧"长成"写小说→制漫剧→制MV"一条龙的跨线视图——但**第一版仍收窄到单部 n2d 作品 × 多集 × 多阶段**，验证手感再外扩。
+
+MVP 起点不变、且更明确：**把 `review_ui.py` 从单集扩成"读 `_进度.md` → 渲染 作品/集/阶段/Clip 节点图 + 接力链边 + 进度/QA 状态色"，挂到 dashboard 已有的 `127.0.0.1` 本地服务上**——基本是在两个现成件上扩，不引入新架构，就能交付"对整个制作过程有直观感受"的大头。
+
+> 一句话：**这不是给 n2d 换引擎，是给它装仪表盘和驾驶舱**；无限画布恰好把它最值钱的东西（接力链、契约、一致性 QA）从 JSON 变成看得见、可操作的板。起步从 `n2d status --json` + 只读看板，风险最低、对现有 CLI 用户即时有用；而且 review-ui 画布 + dashboard 本地服务两个雏形已在仓库里，起点比想象的靠前。
 
 ---
 

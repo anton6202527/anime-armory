@@ -22,10 +22,12 @@
   "score_inputs": {
     "consistency": "生产数据/score_inputs/第1集_consistency.json",
     "mechanical": "生产数据/score_inputs/第1集_mechanical.json",
-    "visual": "生产数据/score_inputs/第1集_visual.json"
+    "visual": "生产数据/score_inputs/第1集_visual.json",
+    "identity": "生产数据/score_inputs/第1集_identity.json"
   },
   "dimensions": [],
   "auto_return_tasks": [],
+  "unmapped_findings": [],
   "enqueued_batch_tasks": 3
 }
 ```
@@ -42,9 +44,10 @@
 | `threshold` | integer | 通过阈值，默认 `85` |
 | `total_score` | integer | 七维加权总分，0-100 |
 | `status` | string | `pass` / `warn` / `fail` |
-| `score_inputs` | object | 三类输入缓存路径：consistency / mechanical / visual |
+| `score_inputs` | object | 输入缓存路径：consistency / mechanical / visual / identity（跨集漂移，registry+insightface 可用时才有） |
 | `dimensions` | array | 七个维度分 |
 | `auto_return_tasks` | array | 低分维度聚合后的回流建议 |
+| `unmapped_findings` | array | 无法归到七维的 findings（如 完整性/水印/视频）；不再静默丢弃。含 block 级时整集不给 `pass`，并入 `data_collection_tasks` 出 `triage_unmapped` 分诊任务 |
 | `enqueued_batch_tasks` | integer | 可选；启用 `--enqueue-low` 后写入的 batch 任务数 |
 
 ## dimensions[]

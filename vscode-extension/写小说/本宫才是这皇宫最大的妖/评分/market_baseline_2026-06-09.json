@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "kind": "novel_market_baseline",
+  "baseline_date": "2026-06-09",
+  "target_platform": "红果/抖音漫剧 商业爽文向",
+  "collected_at": "2026-06-09T12:17:27+08:00",
+  "expires_after_days": 21,
+  "sources": [
+    {
+      "platform": "番茄小说",
+      "url": "https://fanqienovel.com/rank",
+      "use_for": "web_novel_rank",
+      "collected_at": "2026-06-09T12:17:27+08:00",
+      "status": "fetch_error",
+      "title": "",
+      "signals": [],
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    },
+    {
+      "platform": "起点中文网",
+      "url": "https://www.qidian.com/rank/",
+      "use_for": "web_novel_rank",
+      "collected_at": "2026-06-09T12:17:27+08:00",
+      "status": "fetch_error",
+      "title": "",
+      "signals": [],
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    },
+    {
+      "platform": "晋江文学城",
+      "url": "https://m.jjwxc.net/rank/index",
+      "use_for": "web_novel_rank",
+      "collected_at": "2026-06-09T12:17:27+08:00",
+      "status": "fetch_error",
+      "title": "",
+      "signals": [],
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    }
+  ],
+  "notes": [
+    "2026-06-09人工核验：虎嗅《2026短剧春节档》称红果春节档有多部续作热度破亿，同时指出爽点复刻边际效应递减；AI漫剧、仿真人漫剧仍在尝鲜成长期，宫斗宅斗仿真人漫剧进入DataEye漫剧热播榜，说明本书“宫斗/妖怪/AI漫剧化”方向有平台适配性但需要差异化。来源：https://www.huxiu.com/article/4837632.html",
+    "2026-06-09人工核验：新浪娱乐2026上半年短剧TOP10覆盖穿越爽剧/家族逆袭、古装权谋/草根逆袭、悬疑复仇、女性群像等；其中《一品布衣4》为古装权谋、红果/番茄平台，说明古装权谋仍可作为短剧强类目，但榜单更偏现实/都市与系列IP，古装奇幻需靠强设定破圈。来源：https://ent.sina.cn/2026-06-02/detail-inhzyxft1695707.d.html"
+  ]
+}

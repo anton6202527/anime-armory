@@ -37,6 +37,16 @@ class ProgressContractTest(unittest.TestCase):
             self.assertEqual(items[0]["stage"], "blueprint")
             self.assertIn("创作蓝图", items[0]["item"])
 
+    def test_machine_schema_ignores_legacy_detail_checklist(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            progress_md = contract.create_stage_markdown().replace("- [ ]", "- [x]")
+            with open(os.path.join(tmp, "_进度.md"), "w", encoding="utf-8") as f:
+                f.write("# 进度\n\n")
+                f.write(progress_md)
+                f.write("\n\n## 准备阶段\n- [ ] 创作蓝图（旧人读清单）\n")
+                f.write("\n## 写作阶段\n| 章 | 标题 | 状态 |\n|---|---|---|\n| 01 | 开局 | [ ] |\n")
+            self.assertEqual(progress.scan_progress(tmp), [])
+
     def test_progress_reports_stage_owner_and_qa_blockers(self):
         with tempfile.TemporaryDirectory() as tmp:
             with open(os.path.join(tmp, "_meta.json"), "w", encoding="utf-8") as f:
@@ -90,6 +100,21 @@ class ProgressContractTest(unittest.TestCase):
             ).stdout
             self.assertIn("QA gate 仍有阻断", out)
             self.assertIn("SCORE-VERDICT", out)
+
+    def test_set_stage_updates_progress_under_lock(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with open(os.path.join(tmp, "_进度.md"), "w", encoding="utf-8") as f:
+                f.write("# 进度\n\n")
+                f.write(contract.create_stage_markdown())
+            got = subprocess.run(
+                [sys.executable, progress.__file__, "set", tmp, "blueprint", "done"],
+                capture_output=True, text=True, check=True,
+            )
+            self.assertIn("blueprint -> done", got.stdout)
+            self.assertTrue(os.path.exists(os.path.join(tmp, "_进度.lock")))
+            items = progress.scan_progress(tmp)
+            self.assertEqual(items[0]["stage"], "setting_bible")
+            self.assertFalse([name for name in os.listdir(tmp) if ".tmp." in name])
 
 
 if __name__ == "__main__":

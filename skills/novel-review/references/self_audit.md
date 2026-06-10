@@ -7,6 +7,16 @@
 - 写完一批书/一个长项目后的阶段复盘。
 - **接了新工艺/平台变化时**（平台热题材换代、新爽点套路、新章纲/留存方法、AI 写作最佳实践更新）——最高价值触发点。
 
+## 先跑本地静态治理检查
+联网对标前先跑：
+
+```bash
+python3 skills/novel-review/scripts/self_audit.py
+python3 skills/novel-review/scripts/self_audit.py --project-root "<作品根>"
+```
+
+该脚本**只读不改、不联网**，检查 novel-* registry、`novel-author` 路由表、`skills/README.md` 索引、`_进度.md` 加锁写入口、`state_ledger.json` 原子写、批量写章队列、项目级市场基准新鲜度。若本地治理已有 block/warn，优先修这些，再进入下面的联网取证。
+
 ## 三轴取证（联网，必带年月）
 按写小说三大验收维分轴搜，每轴落到"当前 SOTA 做法 + 证据链接 + 日期"：
 

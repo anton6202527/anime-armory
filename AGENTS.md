@@ -4,27 +4,6 @@
 
 > 本文件是**工具中立**的项目说明，供任何 AI agent（Cursor / Cline / Gemini-CLI / Codex / Copilot / Claude Code…）或人进仓库时快速上手。不绑定任何特定 AI。
 
-## 这个仓库是什么
-
-`anime-armory` 是一套**创作 + 生产流水线**，把"一个点子 / 一本书 / 一首歌"做成可发布的小说、AI 漫剧短视频、AI 音乐 MV。四条线两两对应：
-
-- **写小说** → **制漫剧**（小说 → AI 漫剧/短剧）
-- **写歌** → **制MV**（成品歌 → AI 音乐 MV 视频）
-
-能力都封装在仓库根的 **`skills/`** 里（共 ~29 个 skill）。**产物**落在顶层中文目录：`写小说/`、`制漫剧/`、`写歌/`、`制MV/`，每个作品一个子目录。
-
-## 样例产物（demo，逛仓库先看这些）
-
-仓库里现成的作品就是这套流水线的**端到端产出**，可直接看效果：
-
-- 🎬 **制MV/仗剑下山** — `制MV/仗剑下山/成片_MV.mp4`（20s · 9:16 竖屏）
-  **全流程本地 demo**：`写歌`线本地 ACE-Step 出真唱歌（`写歌/仗剑下山/歌/song.wav`）→ `mv-beat` 测节拍卡点（踩 downbeat 切）→ 出图/占位运镜 → `whisper` 转写校正歌词烧字幕 → `mv-compose` 合成。是「写歌→制MV」整条线的缩影。
-- 📺 **制漫剧/冷宫有妖气** — `制漫剧/冷宫有妖气/出视频/第1集/成片_第1集_zh.mp4`（+ `demo_第1集_bilingual.mp4` 双语版）
-  101 集拆集中，**第 1 集全套成片**走通「写小说→制漫剧」：拆集 → 配音 → 出图 → 出视频 → 双语字幕 → 合成。
-- 🎵 **写歌/仗剑下山**（`词/lyrics.md` + `歌/song.wav`）、✍️ **写小说/**（`尼罗河黑墓`、`秦陵寻踪` 等成品 txt/docx）。
-
-> 这些都是**作者本人 / 公版 / 已授权**素材做的 demo 展示。复用本工具请自备合法素材。
-
 ## 怎么用这些 skill（任何 agent 通用）
 
 1. **发现**：读 [`skills/README.md`](skills/README.md)（分类总览）和每个 `skills/<name>/SKILL.md`。
@@ -40,7 +19,7 @@
 |---|---|
 | 写/改/续/扩/缩一本小说，或不知用哪个 | **`novel-author`**（分诊到 novel-create/fetch/spinoff/rewrite/continue/expand/condense/title/review/craft） |
 | 把小说做成 AI 漫剧/短剧（分镜/配音/出图/出视频/合成） | **`novel2drama`**（分诊到 n2d-script/voice/image/video/compose） |
-| 从主题/几个字写一首带人声的歌 | **`song`**（分诊到 song-lyrics/compose/cover） |
+| 直接创作/编辑一首带人声的歌 | **`song`**（可从主题直接创作，也可改词、改曲风、重生成、挑版；过程中分诊到 song-lyrics/song-score/song-compose/song-cover/song-review/song-craft） |
 | 把成品歌做成音乐 MV（卡点/出图出视频/卡拉OK/合成） | **`mv`**（分诊到 mv-beat/image/video/lyric-sync/compose） |
 | 给视频/图片换脸（公共，任何流程可调） | **`video-faceswap`** / **`image-faceswap`**（带合规闸门） |
 | 给图/视频加水印（合规 AI 标识 / 品牌 logo·账号，公共） | **`watermark`**（图视频同工具；AI 标识只加不去） |

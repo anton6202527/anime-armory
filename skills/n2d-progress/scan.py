@@ -27,21 +27,24 @@ if COMMON not in sys.path:
 from n2d_route import flow_columns, is_done, is_flow_complete, is_progress_satisfied, is_started, parse_progress, stage_of
 from n2d_settings import is_native_av, is_video_first
 try:
-    from n2d_contract import cross_cutting
+    from n2d_contract import cross_cutting, COSTLY_HINTS
 except Exception:  # pragma: no cover - 横切检查可选，缺契约也不影响主流程扫描
     cross_cutting = None
+    COSTLY_HINTS = None
 
 LINE_DIR = "制漫剧"  # 只管 n2d 这一条线
 
 DISPATCHER = "novel2drama"  # 认不出列名时兜底
 
-# 花钱/不可逆/合规的前沿列 → 提醒先确认。
-COSTLY_HINT = {
-    "出图": "会真出图·消耗额度 → 开跑前确认生图后端 + 重抽预算档位；分镜 PNG 前共享定妆库 出图/共享/ 必须全 ✅",
+# 花钱/不可逆/合规的前沿列 → 提醒先确认。基准取 n2d_contract.COSTLY_HINTS（单一真值源），
+# 仅补 progress 看板特有的「分镜 PNG 前共享定妆库须全 ✅」；缺契约时回退本地精简版。
+COSTLY_HINT = dict(COSTLY_HINTS) if COSTLY_HINTS else {
+    "配音": "声音克隆需肖像/音色授权（合规闸门）",
+    "出图": "会真出图·消耗额度 → 开跑前确认生图后端 + 重抽预算档位",
     "视频": "会真出视频·消耗额度 → 开跑前确认生视频后端",
     "成片": "合成成片（混音+烧字幕），相对便宜但耗时",
-    "配音": "声音克隆需肖像/音色授权（合规闸门）",
 }
+COSTLY_HINT["出图"] = COSTLY_HINT.get("出图", "") + " 分镜 PNG 前共享定妆库 出图/共享/ 必须全 ✅。"
 
 def report(root, out):
     try:
@@ -62,7 +65,8 @@ def report(root, out):
         f"{c} {sum(1 for r in dict_rows if is_progress_satisfied(root, r, c) )}/{len(dict_rows)}"
         for c in flow))
 
-    cross_cutting_check(root, out)  # 横切就绪（合规/身份/LoRA/仪表盘/评分/UI/回灌）——不在流程表里但要可见
+    episodes = [r.get("_ep", "") for r in dict_rows if r.get("_ep")]
+    cross_cutting_check(root, out, episodes)  # 横切就绪（合规/身份/LoRA/仪表盘/评分/UI/回灌）——不在流程表里但要可见
 
     gaps = []  # (集, 列, 值, skill, note)
     for r in dict_rows:
@@ -97,26 +101,59 @@ def report(root, out):
             out.append(f"  - …另有 {len(gaps)-6} 集已开工待补")
 
 
-def cross_cutting_check(root, out):
+def episode_coverage(root, artifact, episodes):
+    """Per-episode artifact coverage for glob patterns such as score_*.json."""
+    total = len(episodes)
+    if total <= 0:
+        return 0, 0
+    done = 0
+    for ep in episodes:
+        pattern = artifact.replace("*", ep)
+        if glob.glob(os.path.join(root, pattern)):
+            done += 1
+    return done, total
+
+
+def coverage_status(root, item, episodes):
+    """Return display mark for a CROSS_CUTTING entry.
+
+    Work-level artifacts stay boolean.  Per-episode glob artifacts report N/M,
+    preventing one generated score/review UI from looking like whole-work ready.
+    """
+    art = item.get("artifact")
+    required = bool(item.get("required_before"))
+    if not art:
+        return None
+    if "*" in art:
+        done, total = episode_coverage(root, art, episodes)
+        if total <= 0:
+            return "○0/0"
+        if done == total:
+            return f"✅{done}/{total}"
+        if done:
+            return f"◐{done}/{total}"
+        return f"⚠️0/{total}" if required else f"○0/{total}"
+    hit = bool(glob.glob(os.path.join(root, art)))
+    if hit:
+        return "✅"
+    if required:
+        return "⚠️缺"
+    return "○未跑"
+
+
+def cross_cutting_check(root, out, episodes=None):
     """横切就绪检查：按契约 CROSS_CUTTING 注册表，列各横切 skill 的就绪标志是否在位。
     只读、只提示——合规缺失给 ⚠️（付费硬前置），其余给 ○（按需，未跑不算错）。"""
     if cross_cutting is None:
         return
+    episodes = episodes or []
     rows = []
     for item in cross_cutting():
-        art = item.get("artifact")
         skill = item.get("skill")
         label = item.get("label")
-        if not art:  # 仓库级/无 per-work 标志（如资产库）
+        mark = coverage_status(root, item, episodes)
+        if mark is None:  # 仓库级/无 per-work 标志（如资产库）
             continue
-        hit = bool(glob.glob(os.path.join(root, art)))
-        required = bool(item.get("required_before"))
-        if hit:
-            mark = "✅"
-        elif required:
-            mark = "⚠️缺"
-        else:
-            mark = "○未跑"
         rows.append(f"{label}({skill}) {mark}")
     if rows:
         out.append("横切就绪: " + " | ".join(rows))

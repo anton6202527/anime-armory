@@ -64,6 +64,9 @@ def assess(candidates, sources, hits, timeout):
         fetched.append(item)
 
     manual_hits = [parse_hit(v) for v in hits]
+    # 是否真的查了：至少一个来源抓取成功，或给了人工命中。否则 collisions 为空 ≠ 不撞名，
+    # 而是「没查」——必须区分，免得零输入时把候选误报成 clear，给假的"书名不撞"信心。
+    checked = any(s["status"] == "ok" for s in fetched) or bool(manual_hits)
     for candidate in candidates:
         norm = normalize(candidate)
         collisions = []
@@ -91,9 +94,17 @@ def assess(candidates, sources, hits, timeout):
                     })
                     break
         hard = any(c["strength"] == "hard" for c in collisions)
+        if hard:
+            status = "hard_collision"
+        elif collisions:
+            status = "soft_collision"
+        elif checked:
+            status = "clear"
+        else:
+            status = "unchecked"  # 没做任何有效查重——不可视为不撞名
         reports.append({
             "candidate": candidate,
-            "status": "hard_collision" if hard else ("soft_collision" if collisions else "clear"),
+            "status": status,
             "collisions": collisions,
         })
     return reports, fetched
@@ -126,6 +137,9 @@ def main():
         f.write(f"# 书名撞名检查 — {args.date}\n\n")
         for item in reports:
             f.write(f"## {item['candidate']} — {item['status']}\n\n")
+            if item["status"] == "unchecked":
+                f.write("- ⚠️ 未做任何有效查重（无可用来源/命中）——**不可视为不撞名**，请补 --source 或 --hit 重查。\n\n")
+                continue
             if not item["collisions"]:
                 f.write("- 未发现明确撞名。\n\n")
                 continue

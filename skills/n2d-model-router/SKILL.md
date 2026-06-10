@@ -89,7 +89,7 @@ python3 skills/n2d-model-router/scripts/router.py <作品根> 第N集 --write
 - 中文 prompt 里的 `物理交互约束`：说明该镜使用 ready 控制资产，或按 `degrade_only` manifest 拆镜；不得只靠文本 prompt 生成全身复杂接触。
 - `平台参数`：primary_backend、fallback_backends、mode、duration、resolution、identity adapter、native_audio policy。
 
-`n2d-review/scripts/gate.py --stage video` 会阻断缺路由的 prompt。
+`dashboard.py gate --stage video`（生产入口，底层调 `n2d-review/scripts/gate.py --json`）会阻断缺路由的 prompt。
 
 ### 5. 失败回流
 

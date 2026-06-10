@@ -21,3 +21,37 @@ def test_summarize_counts_and_total_block():
 def test_summarize_empty():
     s = ca.summarize({})
     assert s["total_block"] == 0 and s["by_dim"] == {}
+
+
+def test_section_details_keep_return_scope():
+    sec = ca.section_from_result(
+        dim="状态百科(P1)",
+        result={"alerts": [{"verdict": "warn", "shot": 3, "message": "漏写左颊新伤"}], "notes": []},
+        detail_key="alerts",
+        skipped=False,
+        ep="第1集",
+        stage="image",
+        default_artifacts=("出图/第1集/prompt/01_分镜出图.md",),
+    )
+    assert sec["verdicts"] == ["warn"]
+    assert sec["details"][0]["affected_shots"] == ["Clip_03"]
+    assert "出图/第1集/prompt/01_分镜出图.md" in sec["details"][0]["affected_artifacts"]
+
+
+def test_auto_return_tasks_group_details():
+    sections = {
+        "状态百科(P1)": {
+            "return_to_stage": "image",
+            "rerun_scope": "修状态锁",
+            "details": [{
+                "verdict": "warn",
+                "message": "漏写状态",
+                "affected_shots": ["Clip_03"],
+                "affected_artifacts": ["出图/第1集/prompt/01_分镜出图.md"],
+            }],
+        }
+    }
+    tasks = ca.build_auto_return_tasks(sections)
+    assert tasks[0]["return_to_stage"] == "image"
+    assert tasks[0]["affected_shots"] == ["Clip_03"]
+    assert "定位镜头：Clip_03" in tasks[0]["scope"]

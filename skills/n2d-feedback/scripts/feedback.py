@@ -28,6 +28,8 @@ KIND = PLATFORM_FEEDBACK_KIND
 
 # ── 选题→投放→反哺选题闭环：跨项目「自有题材战绩库」（append-only JSONL）──
 # n2d-feedback 写、novel-score 读（两条线只在此数据文件层连接，不互相 import）。
+# ⚠️ LEDGER_KIND 的字面值是跨线 wire constant：novel-score 端硬写 "genre_performance_record" 匹配、不 import 本常量。
+#    改名前必须同步改 novel-score/scripts/score.py 的读取处，否则题材先验反哺会静默失效。
 LEDGER_KIND = GENRE_PERFORMANCE_RECORD_KIND
 LEDGER_VERSION = 1
 LEDGER_REL_PATH = os.path.join("生产战绩", "genre_ledger.jsonl")
@@ -1127,12 +1129,53 @@ def build_genre_record(
     }
 
 
-def append_genre_ledger(ledger_path: str, record: Dict[str, Any]) -> None:
+def _ledger_record_key(rec: Dict[str, Any]) -> Tuple[str, str, str]:
+    """战绩库行的天然主键。战绩库是作品级聚合（metrics 已按 episode 加权），
+    同 (work, genre, platform) 的多行 = 同一快照的新旧版本，不是 A/B 变体（A/B 在 episode 层）。"""
+    return (str(rec.get("work", "")), str(rec.get("genre", "")), str(rec.get("platform", "")))
+
+
+def upsert_genre_ledger(ledger_path: str, record: Dict[str, Any]) -> bool:
+    """按 (work, genre, platform) upsert：同键旧快照被新行替换，而非重复 append。
+
+    历史 bug：纯 append 让"投放数据成熟后重 emit / 手滑跑两次"在战绩库里堆重复行，
+    novel-score 读侧按播放量加权时会把同一部剧重复计数、带偏第一方题材热度先验。
+    无法解析的旧行原样保留（不静默丢）；tmp+os.replace 原子重写（读者看不到半截文件）。
+    注：低频手动步骤，不加 flock；并发 emit 极端情况下可能丢一次写，可接受。返回是否替换了旧行。"""
     directory = os.path.dirname(ledger_path)
     if directory:
         os.makedirs(directory, exist_ok=True)
-    with open(ledger_path, "a", encoding="utf-8") as fh:
-        fh.write(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n")
+    key = _ledger_record_key(record)
+    kept: List[str] = []
+    replaced = False
+    if os.path.isfile(ledger_path):
+        with open(ledger_path, encoding="utf-8") as fh:
+            for line in fh:
+                s = line.strip()
+                if not s:
+                    continue
+                try:
+                    rec = json.loads(s)
+                except ValueError:
+                    kept.append(s)  # 非法/外来行原样保留，绝不静默丢数据
+                    continue
+                if isinstance(rec, dict) and rec.get("kind") == LEDGER_KIND and _ledger_record_key(rec) == key:
+                    replaced = True
+                    continue  # 丢同键旧快照，下面追加最新行
+                kept.append(json.dumps(rec, ensure_ascii=False, sort_keys=True))
+    kept.append(json.dumps(record, ensure_ascii=False, sort_keys=True))
+    tmp = f"{ledger_path}.tmp.{os.getpid()}"
+    try:
+        with open(tmp, "w", encoding="utf-8") as fh:
+            fh.write("\n".join(kept) + "\n")
+        os.replace(tmp, ledger_path)
+    except Exception:
+        try:
+            os.remove(tmp)
+        except OSError:
+            pass
+        raise
+    return replaced
 
 
 def parser() -> argparse.ArgumentParser:
@@ -1211,9 +1254,13 @@ def cmd(ns: argparse.Namespace) -> int:
             features=dominant_features(root, metrics_rows, features_path),
         )
         ledger_path = ns.ledger or default_ledger_path(root)
+        if "roi" not in record.get("metrics", {}):
+            print("[ledger][warn] 本剧战绩缺 ROI（metrics 无 roi/roas/回收比，也无 revenue+spend 可推）；"
+                  "novel-score 题材先验将不计 ROI 维度。补 ROI 或 revenue/spend 字段后重 emit。", file=sys.stderr)
         if not ns.no_write:
-            append_genre_ledger(ledger_path, record)
-            print(f"[ledger] appended genre={record['genre']} → {ledger_path}", file=sys.stderr)
+            replaced = upsert_genre_ledger(ledger_path, record)
+            verb = "updated" if replaced else "appended"
+            print(f"[ledger] {verb} genre={record['genre']} platform={record['platform']} work={record['work']} → {ledger_path}", file=sys.stderr)
             if genre == UNKNOWN:
                 print("[ledger][warn] genre=unknown：建议用 --genre 或在 _meta.json 写 genre，否则反哺选题无法按题材聚合", file=sys.stderr)
     print(render_markdown(feedback) if ns.markdown else json.dumps(feedback, ensure_ascii=False, indent=2))

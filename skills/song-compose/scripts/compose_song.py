@@ -35,7 +35,18 @@ def load_contract():
     return mod
 
 
+def load_song_utils():
+    utils_path = os.path.join(REPO, "skills", "song-craft", "scripts", "song_utils.py")
+    spec = importlib.util.spec_from_file_location("song_utils", utils_path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
 contract = load_contract()
+try:
+    song_utils = load_song_utils()
+except Exception:
+    song_utils = None
 
 SETTING_RE = re.compile(r"^\s*-\s*([^:：]+)\s*[:：]\s*(.*?)\s*(?:#.*)?$")
 
@@ -321,6 +332,25 @@ def register_take(root, src, take_id):
     take["audio_path"] = rel(root, copied)
     take["registered_at"] = date.today().isoformat()
     write_json(manifest_path, manifest)
+    
+    # Proactive linting
+    if song_utils and copied.endswith(".wav"):
+        try:
+            dur, rate, ch, sw, peak, clip, rms, head, tail = song_utils._wav_peak_clip(copied)
+            if clip is not None and clip > 0.005:
+                print(f"[warn] {take_id} 检测到削波 (clipping: {clip*100:.1f}%)，建议在评分时注意音质或重新生成。")
+            if peak is not None and peak < 1e-6:
+                print(f"[warn] {take_id} 几乎全静音，可能生成失败！")
+            elif peak is not None:
+                import math
+                dbfs = 20 * math.log10(peak)
+                if dbfs < -40.0:
+                    print(f"[warn] {take_id} 近静音 (峰值 {dbfs:.1f}dBFS)，请检查是否生成成功。")
+            if dur and dur < 30:
+                print(f"[warn] {take_id} 时长仅 {dur:.1f}s，可能是截断的片段。")
+        except Exception as e:
+            pass # ignore parse errors during proactive linting
+            
     return copied
 
 
@@ -349,7 +379,7 @@ def score_take(root, take_id, args):
     write_json(manifest_path, manifest)
 
 
-def select_take(root, take_id):
+def select_take(root, take_id, args=None):
     manifest_path, manifest = load_manifest(root)
     take = get_take(manifest, take_id)
     audio_rel = take.get("audio_path")
@@ -368,6 +398,15 @@ def select_take(root, take_id):
     manifest["selected_take"] = take_id
     manifest["selected_at"] = date.today().isoformat()
     write_json(manifest_path, manifest)
+    
+    if args and getattr(args, "split", False):
+        try:
+            print("[info] 正在使用 demucs 分离人声和伴奏，请稍候...")
+            subprocess.run(["python3", "-m", "demucs", "--two-stems", "vocals", 
+                            "-o", os.path.join(root, "歌", "_demucs"), dst], check=True)
+            print("[ok] demucs 分离完成 → 歌/_demucs/ (vocals/no_vocals)")
+        except Exception as e:
+            print(f"[warn] demucs 运行失败，请确认是否已安装 (pip install demucs)：{e}")
 
 
 def main():
@@ -390,6 +429,7 @@ def main():
     ap.add_argument("--mv-score", type=int, choices=range(1, 6))
     ap.add_argument("--notes")
     ap.add_argument("--select", help="选择某个 take 作为 歌/song.wav")
+    ap.add_argument("--split", action="store_true", help="配合 --select 使用，调用 demucs 分离人声和伴奏")
     args = ap.parse_args()
 
     root = os.path.abspath(args.project_root)
@@ -417,7 +457,7 @@ def main():
 
     if args.select:
         take_id = normalize_take_id(args.select)
-        select_take(root, take_id)
+        select_take(root, take_id, args)
         print(f"[ok] {take_id} 已定稿 → {os.path.join(root, '歌', 'song.wav')}")
 
 

@@ -1,0 +1,58 @@
+{
+  "沈念": {
+    "key": "SHEN",
+    "mm": "female-yujie",
+    "volc": "BV700_streaming",
+    "speed": 0.98,
+    "pitch": -1,
+    "emo": "serious"
+  },
+  "林婉儿": {
+    "key": "SHEN",
+    "mm": "female-yujie",
+    "volc": "BV700_streaming",
+    "speed": 0.98,
+    "pitch": -1,
+    "emo": "serious"
+  },
+  "小禾": {
+    "key": "XIAOHE",
+    "mm": "female-shaonv",
+    "volc": "BV700_streaming",
+    "speed": 1.05,
+    "pitch": 3,
+    "emo": "sad"
+  },
+  "柳娘子": {
+    "key": "LIU",
+    "mm": "female-chengshu",
+    "volc": "BV700_streaming",
+    "speed": 0.94,
+    "pitch": -2,
+    "emo": "serious"
+  },
+  "皇后": {
+    "key": "QUEEN",
+    "mm": "female-chengshu",
+    "volc": "BV700_streaming",
+    "speed": 0.92,
+    "pitch": -2,
+    "emo": "serious"
+  },
+  "系统": {
+    "key": "SYS",
+    "mm": "presenter_female",
+    "volc": "BV001_streaming",
+    "speed": 0.9,
+    "pitch": -3,
+    "emo": "neutral"
+  },
+  "旁白": {
+    "key": "NARR",
+    "mm": "audiobook_female_1",
+    "volc": "BV700_streaming",
+    "speed": 0.98,
+    "pitch": 0,
+    "emo": "neutral"
+  }
+}

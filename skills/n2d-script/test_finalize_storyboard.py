@@ -70,6 +70,29 @@ def test_build_uses_real_timeline_when_present():
     assert abs(shots["镜头1"]+shots["镜头2"]-7.6)<1e-6
 
 
+def test_finalize_ignores_and_removes_placeholder_english_srt_for_zh_only(tmp_path):
+    root, ep = str(tmp_path), "第1集"
+    _write_manifest(root, ep, [
+        {"idx": 0, "镜头": "镜头1", "文本": "甲。", "时长": 2.0, "start": 0.0, "end": 2.0, "gap_after": 0.0},
+        {"idx": 1, "镜头": "镜头2", "文本": "乙。", "时长": 1.0, "start": 2.0, "end": 3.0, "gap_after": 0.0},
+    ])
+    en_path = os.path.join(root, "脚本", ep, "字幕_英文.srt")
+    open(en_path, "w", encoding="utf-8").write(
+        "1\n00:00:00,000 --> 00:00:03,000\n"
+        "(TODO: English subtitles for overseas platforms — timed to the storyboard)\n"
+    )
+
+    r = subprocess.run(
+        [sys.executable, os.path.join(_HERE, "finalize_storyboard.py"), root, ep],
+        capture_output=True,
+        text=True,
+    )
+
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "(仅中文)" in r.stdout
+    assert not os.path.exists(en_path)
+
+
 def test_clean_punct():
     # 治 || 气口残留：。，→。、，，→，、行首逗号去掉（重跑 finalize 自动洗净字幕）
     assert F._clean_punct("走向。，慎重选择。") == "走向。慎重选择。"

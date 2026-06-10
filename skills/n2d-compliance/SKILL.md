@@ -25,10 +25,10 @@ python3 skills/n2d-compliance/scripts/compliance.py <作品根> --init
 
 ```bash
 python3 skills/n2d-compliance/scripts/compliance.py <作品根> 第1集 --check
-python3 skills/n2d-review/scripts/gate.py <作品根> 第1集 --stage image
+python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第1集 --stage image
 ```
 
-`gate.py` 才是硬闸门；`compliance.py --check` 用于提前看缺口。
+`dashboard.py gate` 是生产硬闸门入口（内部调用 `gate.py --json` 并把 QA 入账）；`compliance.py --check` 用于提前看缺口。
 
 ## 必填面
 

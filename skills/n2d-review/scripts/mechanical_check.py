@@ -55,8 +55,8 @@ def parse_srt(path):
 
 
 def voice_dir(root, ep):
-    """配音目录：合成/<ep>/配音/（配音先行）或 出视频/<ep>/配音/（先出视频后配音）
-    ——两处都探，返回第一个存在 时长清单.json 的；都没有则返回默认合成路径。"""
+    """配音目录：2026 出视频/合成 拆分后配音一律落 合成/<ep>/配音/（render_voice 无条件写此处，与制作模式无关）。
+    出视频/<ep>/配音/ 是已废弃的历史路径，仅作防御性兜底探测；返回第一个存在 时长清单.json 的，都没有则返回默认合成路径。"""
     for base in ("合成", "出视频"):
         d = os.path.join(root, base, ep, "配音")
         if os.path.isfile(os.path.join(d, "时长清单.json")):

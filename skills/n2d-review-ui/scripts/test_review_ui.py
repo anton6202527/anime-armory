@@ -17,6 +17,49 @@ def write_text(path: Path, text: str = "x") -> None:
     path.write_text(text, encoding="utf-8")
 
 
+def _clip(number, **kw):
+    return {"id": kw.get("id", f"EP01_CLIP{number:02d}"), "label": kw.get("label", f"场景{number}"), "number": number, **kw}
+
+
+def test_flag_matches_clip_ignores_bare_numbers():
+    # 回归：裸编号不得子串命中集级数字（治"整列全红"假阳性）
+    c1 = _clip(1)
+    for msg in ("中英字幕条数不一致（中16/英0）", "第1集 节奏密度偏低",
+                'visual[final_rhythm_density]: metrics={"clip_count": 20}'):
+        assert review_ui.flag_matches_clip({"message": msg}, c1) is False, msg
+
+
+def test_flag_matches_clip_number_boundary():
+    # clip#1 不得命中 clip#10；clip#10 命中 clip 10；各自只认自己
+    c1, c10 = _clip(1), _clip(10)
+    msg10 = "clip#10: need_endframe=true 但 endframe_png 缺失"
+    assert review_ui.flag_matches_clip({"message": msg10}, c10) is True
+    assert review_ui.flag_matches_clip({"message": msg10}, c1) is False
+    # 多种写法 + 镜头 token + 补零都认
+    for msg in ("clip 1 接缝 dHash", "镜头1 崩脸", "Clip_01 服装漂移", "CLIP#1 风格跳变"):
+        assert review_ui.flag_matches_clip({"message": msg}, c1) is True, msg
+    assert review_ui.flag_matches_clip({"message": "镜头10 崩脸"}, c1) is False
+
+
+def test_flag_matches_clip_by_full_id_and_label():
+    c = _clip(5, id="EP01_CLIP05", label="冷宫铜镜错脸A")
+    assert review_ui.flag_matches_clip({"message": "EP01_CLIP05 角色崩脸"}, c) is True
+    assert review_ui.flag_matches_clip({"message": "冷宫铜镜错脸A 风格突变"}, c) is True
+    assert review_ui.flag_matches_clip({"message": "第5集无关 50 帧"}, c) is False
+
+
+def test_deeplink_anchor_and_focus_in_html(tmp_path: Path) -> None:
+    # 跨集深链落点：clip 卡有 data-clip-id 锚点 + #clip 聚焦逻辑
+    manifest = {"kind": "n2d_review_ui", "episode": "第1集", "root": str(tmp_path),
+                "generated_at": "t", "storyboard": {"title": "x"},
+                "clips": [{"index": 1, "id": "EP01_CLIP01", "label": "镜1", "qa_flags": []}],
+                "seams": [], "identity_refs": [], "global_flags": [], "score": {"available": False}}
+    out = review_ui.render_html(manifest)
+    assert "data-clip-id" in out            # 锚点
+    assert "focusFromHash" in out           # #clip=<id> → 居中高亮
+    assert "hashchange" in out
+
+
 def test_build_manifest_collects_visual_review_assets(tmp_path: Path) -> None:
     root = tmp_path / "制漫剧" / "测试剧"
     ep = "第1集"

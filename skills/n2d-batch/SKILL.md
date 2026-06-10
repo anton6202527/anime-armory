@@ -89,10 +89,10 @@ python3 skills/n2d-batch/scripts/queue.py claim <作品根> --limit 2
 ```json
 {
   "commands": {
-    "voice": "python3 skills/n2d-voice/render_voice.py \"{root}\" \"{episode}\" zh",
-    "image": "bash scripts/run_n2d_image.sh \"{root}\" \"{episode}\"",
-    "video": "bash scripts/run_n2d_video.sh \"{root}\" \"{episode}\"",
-    "compose": "bash scripts/run_n2d_compose.sh \"{root}\" \"{episode}\""
+    "voice": "python3 skills/n2d-voice/render_voice.py \"{root}\" \"{ep}\" zh",
+    "image": "bash scripts/run_n2d_image.sh \"{root}\" \"{ep}\"",
+    "video": "bash scripts/run_n2d_video.sh \"{root}\" \"{ep}\"",
+    "compose": "bash scripts/run_n2d_compose.sh \"{root}\" \"{ep}\""
   },
   "env": {
     "NO_PROXY": "127.0.0.1,localhost"
@@ -136,7 +136,7 @@ runner 行为：
 
 命令模板可用变量：`{root}`、`{episode}`/`{ep}`、`{task_id}`、`{stage_key}`、`{owner}`、`{reason}`、`{scope}`、`{affected_shots}`、`{affected_artifacts}`。runner 同时注入环境变量 `N2D_ROOT`、`N2D_EPISODE`、`N2D_TASK_ID`、`N2D_STAGE` 等。
 
-> **video stage 前置**：`video` 的包装脚本必须先执行 `python3 skills/n2d-model-router/scripts/router.py "{root}" "{episode}" --write`，再生成/修订 `00_总览.md` 和 `01_clips.md`，最后跑 `n2d-review/scripts/gate.py --stage video`。runner 不内置这些规则，避免把阶段逻辑复制进队列层。
+> **video stage 前置**：`video` 的包装脚本必须先执行 `python3 skills/n2d-model-router/scripts/router.py "{root}" "{episode}" --write`，再生成/修订 `00_总览.md` 和 `01_clips.md`，最后跑 `python3 skills/n2d-dashboard/scripts/dashboard.py gate "{root}" "{episode}" --stage video`（生产入口，会记 QA 遥测并调底层 gate）。runner 不内置这些规则，避免把阶段逻辑复制进队列层。
 
 ### 4.5 单机多 worker 安全（原子认领 + 租约回收 + 断点恢复）
 

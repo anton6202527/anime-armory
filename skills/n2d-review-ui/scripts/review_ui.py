@@ -219,19 +219,53 @@ def score_summary(root: Path, ep: str, score: Optional[Dict[str, Any]]) -> Dict[
     }
 
 
-def flag_matches_clip(flag: Dict[str, Any], clip: Dict[str, Any]) -> bool:
-    text = (flag.get("message") or "").lower()
-    needles = [
-        str(clip.get("id") or "").lower(),
-        str(clip.get("label") or "").lower(),
-        str(clip.get("number") or "").lower(),
-    ]
+def clip_match_needles(clip: Dict[str, Any]) -> List[str]:
+    """Specific substring identifiers for a clip — full id / 够长的 label / 媒体名。
+    **绝不含裸编号**（编号匹配走 `clip_number_re`，带 token + 数字边界）。"""
+    needles: List[str] = []
+    cid = str(clip.get("id") or "").strip().lower()
+    if len(cid) >= 3:
+        needles.append(cid)
+    label = str(clip.get("label") or "").strip().lower()
+    # 跳过「Clip N」这类自动标签：与编号匹配重复，且 "clip 1" 会子串命中 "clip 10"
+    if len(label) >= 4 and not re.fullmatch(r"clip\s*0*\d+", label):
+        needles.append(label)
     for key in ("first_frame", "end_frame", "video"):
         media = clip.get(key) if isinstance(clip.get(key), dict) else None
-        if media:
-            needles.append(str(media.get("name") or "").lower())
-            needles.append(str(media.get("path") or "").lower())
-    return any(needle and needle in text for needle in needles)
+        if isinstance(media, dict):
+            for field in ("name", "path"):
+                value = str(media.get(field) or "").strip().lower()
+                if len(value) >= 5:
+                    needles.append(value)
+    seen: set = set()
+    out: List[str] = []
+    for needle in needles:
+        if needle and needle not in seen:
+            seen.add(needle)
+            out.append(needle)
+    return out
+
+
+def clip_number_re(clip: Dict[str, Any]):
+    """带 clip/镜头 token + 数字边界的编号匹配。
+
+    历史 bug：裸 clip 号当子串会命中任意数字（集号/计数/metrics），整列全红=假阳性。
+    且 "clip#1" 是 "clip#10" 的子串——所以必须用负向前瞻 `(?!\\d)` 卡数字边界、`0*` 容忍补零，
+    让 Clip 1 只命中 clip#1/clip 1/镜头1，不再误吞 clip#10..19。"""
+    try:
+        n = int(clip.get("number"))
+    except (TypeError, ValueError):
+        return None
+    return re.compile(r"(?:clip[#_\-]?\s?|镜头\s?)0*%d(?!\d)" % n, re.IGNORECASE)
+
+
+def flag_matches_clip(flag: Dict[str, Any], clip: Dict[str, Any]) -> bool:
+    message = flag.get("message") or ""
+    text = message.lower()
+    if any(needle in text for needle in clip_match_needles(clip)):
+        return True
+    rx = clip_number_re(clip)
+    return bool(rx and rx.search(message))
 
 
 def collect_clip_flags(flags: List[Dict[str, Any]], clip: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -437,6 +471,7 @@ button, select, input {{ font:inherit; }}
 .lane-label {{ position:absolute; left:36px; padding:2px 8px; border:1px solid var(--line); border-radius:8px; background:#fff; color:var(--muted); font-size:12px; }}
 .card {{ position:absolute; width:320px; border:1px solid var(--line); border-radius:8px; background:var(--panel); box-shadow:0 10px 22px rgba(25,35,55,.08); overflow:hidden; }}
 .card.hidden {{ display:none; }}
+.clip-card.focused {{ outline:3px solid var(--blue); box-shadow:0 0 0 7px rgba(37,99,235,.20); transition:box-shadow .2s; }}
 .card-head {{ padding:10px 12px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; gap:8px; align-items:flex-start; }}
 .card-title {{ font-weight:700; font-size:14px; line-height:1.25; overflow-wrap:anywhere; }}
 .meta {{ font-size:12px; color:var(--muted); line-height:1.4; padding:8px 12px; }}
@@ -546,7 +581,7 @@ function renderClip(clip, idx) {{
   const x = 380 + idx * 360;
   const y = 150 + (idx % 2) * 34;
   const status = (clip.qa_flags || []).some(f => f.severity === 'block') ? 'block' : (clip.qa_flags || []).some(f => f.severity === 'warn') || hasMissing(clip) ? 'warn' : 'pass';
-  return `<section class="card clip-card" data-kind="clip" data-search="${{esc(JSON.stringify(clip))}}" style="${{cardStyle(x, y)}}"><div class="card-head"><div class="card-title">${{esc(clip.label)}} · ${{esc(clip.id)}}</div><span class="badge ${{status}}">${{status}}</span></div>
+  return `<section class="card clip-card" data-kind="clip" data-clip-id="${{esc(clip.id)}}" data-search="${{esc(JSON.stringify(clip))}}" style="${{cardStyle(x, y)}}"><div class="card-head"><div class="card-title">${{esc(clip.label)}} · ${{esc(clip.id)}}</div><span class="badge ${{status}}">${{status}}</span></div>
     <div class="meta">${{esc(clip.scene || '')}}<br>时长 ${{esc(clip.duration || '—')}}s · ${{esc(clip.rhythm || '')}} · ${{esc(clip.template || '')}}</div>
     <div class="media-grid">${{mediaBox(clip.first_frame, '首帧')}}${{mediaBox(clip.end_frame, '尾帧')}}${{mediaBox(clip.video, 'clip', true)}}</div>
     ${{flagHtml(clip.qa_flags)}}
@@ -596,7 +631,25 @@ window.addEventListener('mouseup', () => {{ dragging = false; viewport.style.cur
 window.addEventListener('mousemove', e => {{ if (!dragging) return; offsetX = ox + e.clientX - sx; offsetY = oy + e.clientY - sy; applyTransform(); }});
 viewport.addEventListener('wheel', e => {{ e.preventDefault(); const factor = e.deltaY > 0 ? .92 : 1.08; scale = Math.max(.25, Math.min(2.4, scale * factor)); applyTransform(); }}, {{passive:false}});
 window.addEventListener('keydown', e => {{ if (e.code === 'Space') {{ e.preventDefault(); document.getElementById('resetView').click(); }} }});
+// 深链：board 点 Clip 跳来时带 #clip=<id> —— 居中并高亮该 Clip 卡（跨集深链落点）
+function focusFromHash() {{
+  document.querySelectorAll('.clip-card.focused').forEach(el => el.classList.remove('focused'));
+  const m = (location.hash || '').match(/clip=([^&]+)/);
+  if (!m) return;
+  const id = decodeURIComponent(m[1]);
+  const el = [...document.querySelectorAll('.clip-card')].find(e => e.dataset.clipId === id);
+  if (!el) return;
+  el.classList.remove('hidden');
+  el.classList.add('focused');
+  scale = 1;
+  const left = parseFloat(el.style.left) || 0, top = parseFloat(el.style.top) || 0;
+  offsetX = viewport.clientWidth / 2 - (left + el.offsetWidth / 2) * scale;
+  offsetY = viewport.clientHeight / 2 - (top + el.offsetHeight / 2) * scale;
+  applyTransform();
+}}
+window.addEventListener('hashchange', focusFromHash);
 render();
+focusFromHash();
 </script>
 </body>
 </html>

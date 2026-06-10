@@ -22,7 +22,7 @@ from datetime import date
 _COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
-from n2d_text_utils import cjk_count, strip_quotes  # noqa: E402
+from text_utils import cjk_count, strip_quotes  # noqa: E402
 
 # 章号数字：阿拉伯 / 全角 / 中文数字都接受（# 第1章 / # 第一章 / # 第 12 章 均合规）
 CH_NUM = r"[0-9０-９一二三四五六七八九十百千零〇两]+"

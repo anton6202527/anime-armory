@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Generic read-only progress scanner for 写小说/<项目>/.
+"""Generic progress scanner/updater for 写小说/<项目>/.
 
 Usage:
     python3 skills/novel-craft/scripts/progress.py <作品根> [--limit 5]
+    python3 skills/novel-craft/scripts/progress.py set <作品根> <stage> done|todo
 
-It intentionally does not edit _进度.md. Novel skills can use this to resume
-from the first unfinished checklist/table item without depending on a bespoke
-progress format per workflow.
+Novel skills can use this to resume from the first unfinished stage, and to
+mark stable machine stages without hand-editing _进度.md.
 """
 import argparse
 import json
@@ -17,6 +17,7 @@ import sys
 
 from contract import stage_info
 from qa_gate import collect_gate_status, format_gate_status
+from store import atomic_write_text, file_lock
 
 
 CHECK_RE = re.compile(r"^\s*-\s*\[\s\]\s*(.+?)\s*$")
@@ -24,6 +25,14 @@ TABLE_RE = re.compile(r"^\|\s*([^|]+?)\s*\|.*\[\s\]\s*\|")
 DONE_TABLE_RE = re.compile(r"^\|\s*([^|]+?)\s*\|.*\[[xX]\]\s*\|")
 STAGE_RE = re.compile(r"<!--\s*stage:([a-z_]+)\s*-->")
 COMMENT_RE = re.compile(r"\s*<!--.*?-->\s*")
+
+
+def progress_path(root):
+    return os.path.join(root, "_进度.md")
+
+
+def progress_lock_path(root):
+    return os.path.join(root, "_进度.lock")
 
 
 def load_meta(root):
@@ -35,44 +44,80 @@ def load_meta(root):
 
 
 def scan_progress(root):
-    path = os.path.join(root, "_进度.md")
+    path = progress_path(root)
     if not os.path.exists(path):
         raise FileNotFoundError(path)
 
     items = []
     section = "未分组"
     with open(path, encoding="utf-8") as f:
-        for lineno, raw in enumerate(f, 1):
-            line = raw.rstrip("\n")
-            if line.startswith("## "):
-                section = line[3:].strip()
+        lines = f.readlines()
+    has_machine_schema = any("novel-progress-schema" in line for line in lines)
+    for lineno, raw in enumerate(lines, 1):
+        line = raw.rstrip("\n")
+        if line.startswith("## "):
+            section = line[3:].strip()
+            continue
+        m = CHECK_RE.match(line)
+        if m:
+            raw_item = m.group(1).strip()
+            sm = STAGE_RE.search(raw_item)
+            if has_machine_schema and not sm:
                 continue
-            m = CHECK_RE.match(line)
-            if m:
-                raw_item = m.group(1).strip()
-                sm = STAGE_RE.search(raw_item)
-                item = COMMENT_RE.sub("", raw_item).strip()
-                items.append({
-                    "line": lineno,
-                    "section": section,
-                    "item": item,
-                    "stage": sm.group(1) if sm else None,
-                })
-                continue
-            mt = TABLE_RE.match(line)
-            if mt and not DONE_TABLE_RE.match(line):
-                key = mt.group(1).strip()
-                if key and key not in ("---", "章"):
-                    items.append({"line": lineno, "section": section,
-                                  "item": f"章节/条目 {key}", "stage": None})
+            item = COMMENT_RE.sub("", raw_item).strip()
+            items.append({
+                "line": lineno,
+                "section": section,
+                "item": item,
+                "stage": sm.group(1) if sm else None,
+            })
+            continue
+        mt = TABLE_RE.match(line)
+        if has_machine_schema:
+            continue
+        if mt and not DONE_TABLE_RE.match(line):
+            key = mt.group(1).strip()
+            if key and key not in ("---", "章"):
+                items.append({"line": lineno, "section": section,
+                              "item": f"章节/条目 {key}", "stage": None})
     return items
 
 
-def main():
+def set_stage(root, stage_key, state):
+    """Mark one machine-readable stage done/todo under an exclusive lock."""
+    if state not in {"done", "todo"}:
+        raise ValueError("state must be done or todo")
+    path = progress_path(root)
+    if not os.path.exists(path):
+        raise FileNotFoundError(path)
+    mark = "x" if state == "done" else " "
+    with file_lock(progress_lock_path(root)):
+        with open(path, encoding="utf-8") as f:
+            lines = f.readlines()
+        changed = False
+        found = False
+        out = []
+        for raw in lines:
+            if f"stage:{stage_key}" in raw and re.match(r"^(\s*-\s*)\[[ xX]\]", raw):
+                found = True
+                new = re.sub(r"^(\s*-\s*)\[[ xX]\]", rf"\1[{mark}]", raw, count=1)
+                if new != raw:
+                    changed = True
+                out.append(new)
+            else:
+                out.append(raw)
+        if not found:
+            raise KeyError(f"stage not found in _进度.md: {stage_key}")
+        if changed:
+            atomic_write_text(path, "".join(out))
+    return {"stage": stage_key, "state": state, "changed": changed, "path": path}
+
+
+def scan_main(argv=None):
     ap = argparse.ArgumentParser(description="读取 novel 项目 _进度.md，报告下一步")
     ap.add_argument("project_root")
     ap.add_argument("--limit", type=int, default=5)
-    args = ap.parse_args()
+    args = ap.parse_args(argv)
 
     root = os.path.abspath(args.project_root)
     if not os.path.isdir(root):
@@ -114,6 +159,33 @@ def main():
         for item in rest:
             stage = f" [{item['stage']}]" if item.get("stage") else ""
             print(f"-{stage} {item['section']} / {item['item']}  (line {item['line']})")
+
+
+def set_main(argv):
+    ap = argparse.ArgumentParser(description="安全更新 novel 项目 _进度.md 的机器阶段")
+    ap.add_argument("project_root")
+    ap.add_argument("stage")
+    ap.add_argument("state", choices=("done", "todo"))
+    args = ap.parse_args(argv)
+
+    root = os.path.abspath(args.project_root)
+    try:
+        result = set_stage(root, args.stage, args.state)
+    except FileNotFoundError as e:
+        print(f"[err] 找不到进度文件：{e.filename}", file=sys.stderr)
+        sys.exit(2)
+    except KeyError as e:
+        print(f"[err] {e}", file=sys.stderr)
+        sys.exit(2)
+    changed = "updated" if result["changed"] else "already"
+    print(f"[ok] _进度.md {changed}: {args.stage} -> {args.state}")
+
+
+def main(argv=None):
+    argv = list(sys.argv[1:] if argv is None else argv)
+    if argv and argv[0] == "set":
+        return set_main(argv[1:])
+    return scan_main(argv)
 
 
 if __name__ == "__main__":

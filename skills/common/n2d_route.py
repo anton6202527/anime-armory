@@ -2,6 +2,7 @@
 """Shared progress-table routing for the novel2drama/n2d pipeline."""
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
@@ -56,23 +57,6 @@ def _cn_to_int(s: str) -> Optional[int]:
 def episode_number(value: str) -> Optional[int]:
     """从 '第12集'/'第１２集'/'第十二集'/'十二' 中取集号；解析不出返回 None。"""
     text = (value or "").strip()
-    m = re.search(r"第\s*(" + _EP_TOKEN + r")\s*集", text)
-    token = m.group(1) if m else re.sub(r"^\s*第|\s*集\s*$", "", text).strip()
-    if not token or not re.fullmatch(_EP_TOKEN, token):
-        return None
-    return _cn_to_int(token)
-
-
-def normalize_episode(value: str) -> str:
-    """把可解析集号统一成 '第N集'，不可解析时返回去空白原值。"""
-    n = episode_number(value)
-    return f"第{n}集" if n is not None else (value or "").strip()
-
-
-def episode_number(value: str) -> Optional[int]:
-    """从 '第12集'/'第１２集'/'第十二集'/'十二' 中取集号；解析不出返回 None。"""
-    text = (value or "").strip()
-    # 提取 "第" 与 "集" 之间的内容，或去除前缀后缀
     m = re.search(r"第\s*(" + _EP_TOKEN + r")\s*集", text)
     token = m.group(1) if m else re.sub(r"^\s*第|\s*集\s*$", "", text).strip()
     if not token or not re.fullmatch(_EP_TOKEN, token):
@@ -166,8 +150,9 @@ def flow_columns(header: Iterable[str]) -> List[str]:
 
 
 def manifest_path(root: str, ep: str) -> Optional[str]:
-    """时长清单.json 可能落在 合成/<ep>/配音/（配音先行）或 出视频/<ep>/配音/
-    （先出视频后配音模式）——两处都探，返回第一个存在的。"""
+    """时长清单.json 一律落在 合成/<ep>/配音/（render_voice 与制作模式无关地写 合成/，
+    见 2026 出视频↔合成分家）。出视频/<ep>/配音/ 为已废弃历史路径，保留防御性兜底探测
+    （test_manifest_path_probes_both_bases 守护向后兼容）——两处都探，返回第一个存在的。"""
     for base in ("合成", "出视频"):
         p = os.path.join(root, base, ep, "配音", "时长清单.json")
         if os.path.isfile(p):
@@ -193,6 +178,33 @@ def placeholder_rows(manifest) -> List[dict]:
 def manifest_is_placeholder(manifest) -> bool:
     """已加载清单是否含占位句（布尔版）。"""
     return bool(placeholder_rows(manifest))
+
+
+def voiceover_fingerprint(path: Optional[str]) -> str:
+    """配音源指纹：voiceover.txt 非空行序列的 sha256。
+
+    render_voice 出 时长清单 时把它记进 时长清单.meta.json，validate_timings 再比对当前
+    voiceover.txt——用来抓"配音之后又改了 voiceover.txt（改词/插句/删句）导致时长清单/字幕/
+    镜头时长全部过期"这条失配链。delete_shot 的强制 gate 对账只覆盖**删镜**，改词/插句覆盖不到。
+    只对台词内容敏感：忽略空行与行首尾空白，避免无意义的排版改动误报。"""
+    if not path or not os.path.isfile(path):
+        return ""
+    lines: List[str] = []
+    with open(path, encoding="utf-8") as fh:
+        for ln in fh:
+            s = ln.strip()
+            if s:
+                lines.append(s)
+    return hashlib.sha256("\n".join(lines).encode("utf-8")).hexdigest()
+
+
+def voice_meta_path(root: str, ep: str) -> Optional[str]:
+    """时长清单.meta.json 与 时长清单.json 同目录（合成/ 或 出视频/ 下），返回第一个存在的。"""
+    for base in ("合成", "出视频"):
+        p = os.path.join(root, base, ep, "配音", "时长清单.meta.json")
+        if os.path.isfile(p):
+            return p
+    return None
 
 
 def voice_is_placeholder(root: str, ep: str) -> Optional[bool]:

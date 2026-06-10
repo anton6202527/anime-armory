@@ -153,6 +153,7 @@ def append_runner_event(
     dry_run: bool,
     error: str = "",
     no_dashboard: bool = False,
+    build: bool = True,
 ) -> None:
     if no_dashboard:
         return
@@ -174,7 +175,10 @@ def append_runner_event(
         meta=meta,
     )
     dashboard_mod.append_events(root, [event])
-    dashboard_mod.build(root, write=True)
+    # 事件永远先落盘；整盘重建（持事件锁 + O(events) 聚合）开销大，多 worker 下会互相排队。
+    # build=False 时由调用方在一个 cycle 结束后只重建一次，避免每个任务都重建。
+    if build:
+        dashboard_mod.build(root, write=True)
 
 
 def _task_stage_spec(task: Dict[str, Any]) -> Dict[str, Any]:
@@ -302,6 +306,7 @@ def execute_task(
     dry_run: bool,
     no_dashboard: bool,
     verify_outputs: bool,
+    build_dashboard: bool = True,
 ) -> Dict[str, Any]:
     started = time.monotonic()
     command = ""
@@ -375,6 +380,7 @@ def execute_task(
             dry_run=dry_run,
             error=note if status == "fail" else "",
             no_dashboard=no_dashboard,
+            build=build_dashboard,
         )
     except Exception as exc:
         task["last_runner"]["telemetry_error"] = f"{type(exc).__name__}: {exc}"
@@ -407,6 +413,8 @@ def run_claimed(
     stop_on_fail: bool,
 ) -> List[Dict[str, Any]]:
     results: List[Dict[str, Any]] = []
+    # 同一 cycle 内每个任务只追加事件、不各自重建仪表盘；循环结束统一重建一次（见 append_runner_event）。
+    defer_build = len(claimed) > 1 and not no_dashboard
     for task in claimed:
         task_id = str(task["id"])
         stop_evt = threading.Event()
@@ -425,6 +433,7 @@ def run_claimed(
                 dry_run=dry_run,
                 no_dashboard=no_dashboard,
                 verify_outputs=verify_outputs,
+                build_dashboard=not defer_build,
             )
         finally:
             stop_evt.set()
@@ -467,6 +476,12 @@ def run_claimed(
         })
         if stop_on_fail and result["status"] != "pass":
             break
+    if defer_build:
+        # cycle 内已追加全部事件，这里统一重建一次（best-effort，失败不影响已 mark 的任务）。
+        try:
+            dashboard_mod.build(root, write=True)
+        except Exception:  # pragma: no cover - 仪表盘重建 best-effort
+            pass
     return results
 
 

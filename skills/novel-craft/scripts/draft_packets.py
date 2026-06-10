@@ -19,10 +19,60 @@ import sys
 from datetime import date
 
 from contract import scale_profile
+from store import atomic_write_json, atomic_write_text, file_lock
 from waivers import append_waiver, make_waiver
 
 
 CHAPTER_RE = re.compile(r"第\s*0*(\d+)\s*章\s*(?:[《<]([^》>]+)[》>])?\s*(?:[—-]\s*(.*))?")
+
+COMMON_SOURCE_PATHS = (
+    "设定/章纲.md",
+    "审稿/demo_gate.json",
+    "审稿/state_ledger.json",
+)
+
+SOURCE_PATHS_BY_KIND = {
+    "create": (
+        "设定/创作蓝图.md",
+        "设定/设定圣经.md",
+        "设定/角色卡.md",
+        "设定/世界观.md",
+    ),
+    "rewrite": (
+        "原作.txt",
+        "设定/改动spec.md",
+        "设定/新设定.md",
+        "设定/角色卡.md",
+        "设定/世界观.md",
+    ),
+    "spinoff": (
+        "原作.txt",
+        "设定/锚点表.json",
+        "设定/角色卡.md",
+        "设定/世界观.md",
+    ),
+    "continue": (
+        "原作.txt",
+        "设定/人物.md",
+        "设定/世界观.md",
+        "设定/主线骨架.json",
+        "设定/末章状态.md",
+        "设定/作者口吻.md",
+        "设定/续写方向.md",
+    ),
+    "expand": (
+        "原作.txt",
+        "设定/事件骨架.json",
+        "设定/人物.md",
+        "设定/世界观.md",
+        "设定/章节映射.md",
+    ),
+    "condense": (
+        "原作.txt",
+        "设定/主线骨架.json",
+        "设定/章节映射.md",
+    ),
+}
 
 
 def read_text(path, default=""):
@@ -89,12 +139,16 @@ def load_demo_gate(root, allow_missing=False):
     return data
 
 
-def ensure_state_ledger(root):
-    path = os.path.join(root, "审稿", "state_ledger.json")
-    if os.path.exists(path):
-        return load_json(path, {})
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    data = {
+def state_ledger_path(root):
+    return os.path.join(root, "审稿", "state_ledger.json")
+
+
+def state_ledger_lock_path(root):
+    return os.path.join(root, "审稿", "state_ledger.lock")
+
+
+def default_state_ledger():
+    return {
         "schema_version": 1,
         "kind": "novel_state_ledger",
         "updated_at": date.today().isoformat(),
@@ -104,20 +158,32 @@ def ensure_state_ledger(root):
         "resolved_threads": [],
         "chapter_deltas": {},
     }
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+
+
+def _ensure_state_ledger_unlocked(root):
+    path = os.path.join(root, "审稿", "state_ledger.json")
+    if os.path.exists(path):
+        return load_json(path, {})
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    data = default_state_ledger()
+    atomic_write_json(path, data)
     return data
 
 
+def ensure_state_ledger(root):
+    with file_lock(state_ledger_lock_path(root)):
+        return _ensure_state_ledger_unlocked(root)
+
+
 def record_ledger_waiver(root, waiver):
-    path = os.path.join(root, "审稿", "state_ledger.json")
-    ledger = ensure_state_ledger(root)
-    waivers = ledger.setdefault("waivers", [])
-    if not any(w.get("id") == waiver.get("id") for w in waivers):
-        waivers.append(waiver)
-        ledger["updated_at"] = date.today().isoformat()
-        with open(path, "w", encoding="utf-8") as f:
-            json.dump(ledger, f, ensure_ascii=False, indent=2)
+    path = state_ledger_path(root)
+    with file_lock(state_ledger_lock_path(root)):
+        ledger = _ensure_state_ledger_unlocked(root)
+        waivers = ledger.setdefault("waivers", [])
+        if not any(w.get("id") == waiver.get("id") for w in waivers):
+            waivers.append(waiver)
+            ledger["updated_at"] = date.today().isoformat()
+            atomic_write_json(path, ledger)
 
 
 def previous_chapter_excerpt(root, chapter):
@@ -150,6 +216,19 @@ def target_words(meta):
     return [1000, 1800]
 
 
+def source_paths_for_kind(kind):
+    """Return the context files a chapter packet must make the writer read."""
+    paths = list(SOURCE_PATHS_BY_KIND.get(kind or "", SOURCE_PATHS_BY_KIND["create"]))
+    paths.extend(COMMON_SOURCE_PATHS)
+    out = []
+    seen = set()
+    for path in paths:
+        if path not in seen:
+            out.append(path)
+            seen.add(path)
+    return out
+
+
 def build_packet(root, chapter, *, allow_missing_demo=False):
     meta = load_json(os.path.join(root, "_meta.json"), {})
     if not meta:
@@ -173,16 +252,7 @@ def build_packet(root, chapter, *, allow_missing_demo=False):
     title = outline_item.get("title") or ""
     draft_mode = draft_mode_from_settings(root, meta)
     out_file = f"章节/第{chapter:02d}章.md"
-    project_rel = lambda *p: os.path.join(*p)
-    source_paths = [
-        project_rel("设定", "创作蓝图.md"),
-        project_rel("设定", "设定圣经.md"),
-        project_rel("设定", "角色卡.md"),
-        project_rel("设定", "世界观.md"),
-        project_rel("设定", "章纲.md"),
-        project_rel("审稿", "demo_gate.json"),
-        project_rel("审稿", "state_ledger.json"),
-    ]
+    source_paths = source_paths_for_kind(meta.get("kind"))
     demo_anchor = gate.get("style_anchor", {}) if gate else {}
     promises = gate.get("reader_promises", []) if gate else []
     constraints = gate.get("setting_constraints", []) if gate else []
@@ -231,8 +301,8 @@ def build_packet(root, chapter, *, allow_missing_demo=False):
 - 只输出一章正文，第一行必须是 `# 第{chapter}章 {title or "<标题>"}`。
 - 第二行写 meta 注释：`<!-- meta: demo=false; packet=写作任务/第{chapter:02d}章.md -->`。
 - 本章必须兑现章纲里的戏剧节拍，至少保留一个钩子或承诺。
-- 不新增会推翻设定圣经的能力、关系、地点规则；新增设定必须写入章末状态增量。
-- 写完后填写 `{delta_path}`，再跑 `novel-review/scripts/mechanical_check.py`。
+- 不新增会推翻必读设定/骨架文件的能力、关系、地点规则；新增设定必须写入章末状态增量。
+- 写完后填写 `{delta_path}`，再跑 `python3 skills/novel-review/scripts/mechanical_check.py "{root}"`。
 
 ## 状态增量模板
 ```json
@@ -312,8 +382,7 @@ def main():
     os.makedirs(out_dir, exist_ok=True)
     for chapter, packet in packets:
         path = os.path.join(out_dir, f"第{chapter:02d}章.md")
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(packet)
+        atomic_write_text(path, packet)
         print(f"[ok] 写作任务包：{path}")
     print("[next] 按任务包写入 章节/第NN章.md，填写 审稿/state_delta_第NN章.json，再跑 novel-review 机检/人判。")
 

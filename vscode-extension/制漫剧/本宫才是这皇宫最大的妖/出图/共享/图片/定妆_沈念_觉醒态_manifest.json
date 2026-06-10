@@ -1,0 +1,43 @@
+{
+  "asset": "定妆_沈念_觉醒态",
+  "backend": "Codex built-in image generation",
+  "created_at": "2026-06-09",
+  "status": "approved",
+  "final_files": [
+    "出图/共享/图片/定妆_沈念_觉醒态.png",
+    "出图/共享/图片/定妆_沈念_觉醒态_侧.png",
+    "出图/共享/图片/定妆_沈念_觉醒态_背.png",
+    "出图/共享/图片/定妆_沈念_觉醒态_半身.png",
+    "出图/共享/图片/定妆_沈念_觉醒态_三视图.png"
+  ],
+  "tmp_files": [
+    "出图/_tmp/codex/沈念_觉醒态/front/codex_front_01.png",
+    "出图/_tmp/codex/沈念_觉醒态/side/codex_side_01.png",
+    "出图/_tmp/codex/沈念_觉醒态/back/codex_back_01.png"
+  ],
+  "codex_generated_sources": [
+    "/Users/lalala/.codex/generated_images/019eaa95-ccf2-70e1-a87e-bd5a68852e05/ig_02c08992337b0f53016a28014567208191a0574a799058d053.png",
+    "/Users/lalala/.codex/generated_images/019eaa95-ccf2-70e1-a87e-bd5a68852e05/ig_01be775195aeca2a016a2803f5a1808195971f09d1751978dd.png",
+    "/Users/lalala/.codex/generated_images/019eaa95-ccf2-70e1-a87e-bd5a68852e05/ig_01be775195aeca2a016a280567ff508195b6a32dda61555260.png"
+  ],
+  "derived_files": [
+    {
+      "file": "出图/共享/图片/定妆_沈念_觉醒态_半身.png",
+      "method": "PIL crop from approved front reference"
+    },
+    {
+      "file": "出图/共享/图片/定妆_沈念_觉醒态_三视图.png",
+      "method": "PIL contact sheet from approved front/side/back references"
+    }
+  ],
+  "review": {
+    "identity": "same as normal-form Shennian/Lin Waner",
+    "approved_points": [
+      "golden vertical pupils",
+      "left-wrist dark-gold cracked light",
+      "same moon-white rough palace robe and pale blue-gray inner layer",
+      "same plain white cloth hair ribbon and long black half-down hair",
+      "no watermark, modern clothing, armor, bracer or monsterization"
+    ]
+  }
+}

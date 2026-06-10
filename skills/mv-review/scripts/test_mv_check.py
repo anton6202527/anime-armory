@@ -67,8 +67,8 @@ def make_mv(tmp, *, lyrics=LYRICS, lrc=LRC, beatgrid=None, meta=None,
 
 def run(root):
     mc.findings.clear()
-    meta = mc.load_json(os.path.join(root, "_meta.json"))
-    songlen = mc.wav_duration(os.path.join(root, "歌", "song.wav"))
+    meta = mc.load_json_safe(os.path.join(root, "_meta.json"))
+    songlen = mc.mv_utils.wav_duration(os.path.join(root, "歌", "song.wav"))
     mc.check_completeness(root)
     ll = mc.check_lyrics_and_meta(root, meta)
     mc.check_beatgrid(root, songlen)

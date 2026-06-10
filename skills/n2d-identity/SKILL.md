@@ -47,7 +47,7 @@ python3 skills/n2d-identity/scripts/identity.py <作品根> --write
 
 ### 2. 出图阶段怎么用
 
-- 生成/补共享定妆时，同步更新 `出图/共享/identity_registry.json`。
+- 生成/补共享定妆时，由 **n2d-image（唯一写方）** 同步更新 `出图/共享/identity_registry.json`；n2d-identity 只读校验、写报表，不写 registry 本体（owner 见 `n2d_contract.PRODUCT_KINDS`：n2d-image 写 / n2d-identity·n2d-review 读校）。
 - 分镜 prompt 只从 registry 取 reference group 和 drift_forbidden，不临场猜参考图。
 - **图后端原生主体（阶段1 起一等公民）**：`生图AI` 解除 Codex 垄断后，图侧也能走第②档——`identity_adapters.image` 支持 `seedream→universal_reference`、`kling→subject_library/character_id`、`sora→character_cameo`。注册一次按 ID 引用，`identity_adapter_matrix` 的 `image native ready` 列与 `summary.forms_with_native_image_ready` 会统计它。Codex/OpenAI 无持久主体，自动回退 reference_group 兜底。
 - 若多角色同框或核心角色跨集漂，优先补图/视频后端原生角色 ID / 主体库；仍不稳才提 LoRA。注意：图后端整集统一一个，混用会被 image gate 拦。

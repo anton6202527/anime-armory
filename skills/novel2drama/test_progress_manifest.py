@@ -37,6 +37,8 @@ def test_progress_set_writes_episode_manifest(tmp_path):
     assert data["episode"] == "第1集"
     assert data["last_progress_column"] == "配音"
     assert data["last_progress_value"] == "✅"
+    assert (root / "_进度.lock").exists()
+    assert not list(root.glob("._进度.md.tmp.*"))
 
 
 def test_ensure_col_updates_fullwidth_and_chinese_episode_rows(tmp_path):
@@ -65,3 +67,5 @@ def test_ensure_col_updates_fullwidth_and_chinese_episode_rows(tmp_path):
     episode_rows = [ln for ln in lines if ln.startswith("| 第")]
     assert len(episode_rows) == 3
     assert all(len(row.split("|")[1:-1]) == 6 for row in episode_rows)
+    assert (root / "_进度.lock").exists()
+    assert not list(root.glob("._进度.md.tmp.*"))

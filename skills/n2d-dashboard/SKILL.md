@@ -18,7 +18,7 @@ description: P0 横切 skill for novel2drama production and ROI metrics. Record 
 - **投放回收从平台数据或 release 事件来**：dashboard 会自动读取 `生产数据/platform_metrics.csv|jsonl|json` 的 `revenue/distribution_spend/plays` 等字段；也可手动 `record --event release|revenue`。投放数据不再只进 `n2d-feedback`，必须进入 ROI 仪表盘。
 - **默认覆盖同一 gate 结果**：同一集同一 stage 重跑 `dashboard.py gate` 时，默认替换旧 gate 事件，避免 QA 阻断重复累计；要保留历史用 `--append`。
 - **工业级判断看 ROI 趋势**：单集 dashboard 是局部事实；批量后看 `每分钟成本`、`每集耗时`、`一次通过率`、`重抽率`、`投放净回收/生产成本`、`QA阻断Top`，再决定优先优化哪个 stage。
-- **行业基准只作参照线，不作闸门**：`dashboard.md` 的「行业基准对照」段把一次通过率/重抽率/每分钟成本/跨集一致性并排到行业宣传基准（采集 2026-06：一次通过率 90%、重抽率 10%、~0.1 元/秒≈6 元/分钟、跨集一致性 95%），给一条「你 X% vs 行业 Y%」的达标/差距参照。**这是只读参照、不参与告警/阻断**（厂商口径不一、会过期）。覆盖：`_设置.md` 写 `基准一次通过率 / 基准重抽率`，或 `生产数据/industry_benchmark.json`；基准本身以一次 `n2d-review` 流程自审复核为准。
+- **行业基准只作参照线，不作闸门**：`dashboard.md` 的「行业基准对照」段把一次通过率/重抽率/每分钟成本/跨集一致性并排到行业宣传基准（默认读 `references/industry_benchmark.json`，采集 2026-06），给一条「你 X% vs 行业 Y%」的达标/差距参照。**这是只读参照、不参与告警/阻断**（厂商口径不一、会过期）。覆盖：`_设置.md` 写 `基准一次通过率 / 基准重抽率`，或 `生产数据/industry_benchmark.json`；基准本身以一次 `n2d-review` 流程自审复核为准，刷新基准只改 JSON，不改 Python。
 - **外部 API 成本只作校准线**：按 2026-06 官方公开资料，Veo 3.1 已按生成秒计价（Lite/Fast/Standard/4K 档位不同），Kling/Runway/Luma 也都以 credits/秒/任务形式收费。dashboard 不硬编码外部价格；每个项目要记录真实 `provider/cost/currency/unit`，再由 `cost_per_finished_min` 和重抽率判断“这条路线是否值得放量”。
 - **工业级门槛不是单项指标**：只有同时满足“成本可控、通过率稳定、QA 阻断可收敛、投放回收能覆盖生产成本、跨集一致性没有持续恶化”，才算该项目进入可放量状态。任一项红灯，先回 router/identity/template/feedback 修产线，不盲目加集数。
 
@@ -52,6 +52,8 @@ python3 skills/n2d-dashboard/scripts/dashboard.py record <作品根> \
   --unit USD \
   --provider codex
 ```
+
+> **从 Python 记账走 `common/n2d_telemetry.record_event`**（封装本 CLI，是脚本侧的规范写入口）：它强校验 `event ∈ VALID_EVENTS`（与本命令 `--event` 白名单一致），批量记账传 `build=False` 走 `--no-build` 避免每条都重建抢锁。直接 shell 出本命令也可（image/video/compose SKILL 的「记账铁律」即如此）；`n2d-batch/runner` 则直接 import dashboard 模块批量追加。三条路径都写同一份 `production_events.jsonl`。
 
 重抽必须写原因：
 

@@ -29,7 +29,7 @@ description: Stage 2 of novel2drama (前移到出图之前) — turn a 作品 ep
 - **一角一色（跨集持久绑定）**：角色→音色映射优先读 `<作品根>/设定库/voicemap.json`（`{"角色子串":{"key","mm","volc","speed","pitch","emo"}}`），缺文件才回退内置(demo)映射，env 仍可覆盖。**新剧务必建 voicemap.json 把每个角色绑定音色**——否则新角色全部掉进默认嗓互相撞，且跨集靠每次手动 export env 极易漂。manifest 每句记 `音色键`/`voice_id`，`n2d-review` 机检会跨集核对同角色音色是否一致。
 - **生产数据记账铁律（P0）**：每次配音生成后必须调用 `n2d-dashboard` 记录 `stage=voice` 事件：后端、耗时、成本、输出音轨、句数、失败/占位句数。若某句降级占位或重跑，必须在 `meta` 或 `redraw_reason` 里写明，方便后续统计“配音导致的重定时/返工”。
 - **统一电平**：每句 loudnorm 到 -16 LUFS。
-- **时长清单是产线桥梁**：每句 ffprobe 量时长写入 `时长清单.json`，这是配音驱动镜头的关键产物。
+- **时长清单是产线桥梁**：每句 ffprobe 量时长写入 `时长清单.json`，这是配音驱动镜头的关键产物。同时写 `时长清单.meta.json`（记录配音那一刻 `voiceover.txt` 的台词指纹 + 后端 + 时间）——`validate_timings.py` 用它抓"配音之后又改了 `voiceover.txt`（改词/插句/删句）导致时长清单/字幕/镜头时长全部过期"这条失配链（`delete_shot` 的强制对账只覆盖删镜）。改台词后必须重跑 `/n2d-voice` 刷新指纹与时长，再回跑 n2d-script 阶段2。
 
 ## 表演指导（情绪/语速/停顿/钩子 → 念白）
 `render_voice.py` 解析 voiceover.txt 的 `[镜头N·角色·情绪·(语速)] 台词 (钩子)`，落实到念白：

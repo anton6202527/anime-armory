@@ -562,7 +562,11 @@ def aggregate_events(root: str, events: List[Dict[str, Any]]) -> Dict[str, Any]:
     if release_metrics_path:
         try:
             release_rows = read_records(release_metrics_path)
-        except Exception:
+        except Exception as exc:
+            # 文件存在但读取失败（编码坏/截断/非法 JSON）——别静默当无数据：
+            # 否则操作者看到 release_metrics_file 有值，却不知投放行已全部丢弃，成本回收/通过率指标静默不全。
+            print(f"[dashboard][warn] 投放数据文件存在但读取失败（{release_metrics_path}）：{exc}；"
+                  f"本次跳过全部投放行，回收比/通过率等指标可能不完整——修复该文件后重建。", file=sys.stderr)
             release_rows = []
         for row in release_rows:
             ep = normalize_episode(str(row.get("episode") or ""))

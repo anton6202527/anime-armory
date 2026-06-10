@@ -3,7 +3,7 @@
 # 用法: finalize_storyboard.py <作品根> <第N集> [gap]
 #   [gap] 仅对无 start/end 的旧清单回退路径生效；render_voice 现恒写 start/end/gap_after，新清单忽略它。
 #   字幕语言看 ../_偏好约定.md 的「字幕语言」选择点：默认仅中文；中英双语/仅英文用 SUB_LANG=zh,en（或 en）开启。
-#   未设 SUB_LANG 时：已存在 字幕_英文.srt 译文就一并重定时，否则只产中文。
+#   未设 SUB_LANG 时：已存在非占位 字幕_英文.srt 译文就一并重定时，否则只产中文。
 import sys, os, re, json, textwrap
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'common'))
 from n2d_route import placeholder_indices, manifest_path  # 占位判定/清单定位单一真值源
@@ -105,13 +105,29 @@ def _parse_srt_texts(path):
         if len(ls)>=3: out.append(' '.join(ls[2:]))
     return out
 
+def _is_placeholder_en_texts(texts):
+    if not texts:
+        return False
+    joined = " ".join(texts).strip().lower()
+    if not joined:
+        return True
+    markers = (
+        "todo",
+        "placeholder",
+        "待精修",
+        "待填写",
+        "english subtitles for overseas platforms",
+        "timed to the storyboard",
+    )
+    return any(m in joined for m in markers)
+
 def main():
     if len(sys.argv) < 3:
         print("usage: finalize_storyboard.py <作品根> <第N集> [gap]", file=sys.stderr)
         return 2
     root, ep = sys.argv[1], sys.argv[2]
     gap = float(sys.argv[3]) if len(sys.argv)>3 else 0.4
-    # 时长清单可能落在 合成/（配音先行）或 出视频/（先出视频后配音）下——两处都探，走 n2d_route 单一真值源
+    # 时长清单一律落 合成/（render_voice 与制作模式无关；出视频/ 为已废弃历史路径的兜底）——走 n2d_route 单一真值源
     man_p = manifest_path(root, ep)
     native_av = is_native_av(root)
     if not man_p:
@@ -142,15 +158,20 @@ def main():
         sys.exit(2)
     en_path=os.path.join(root,'脚本',ep,'字幕_英文.srt')
     en_texts=_parse_srt_texts(en_path)
+    placeholder_en = _is_placeholder_en_texts(en_texts)
+    if placeholder_en:
+        en_texts=[]
     zh_srt,en_srt,shots=build(manifest,en_texts,gap)
     open(os.path.join(root,'脚本',ep,'字幕_中文.srt'),'w',encoding='utf-8').write(zh_srt)
     # 字幕语言是投放选择(见 ../_偏好约定.md)，不写死：默认仅中文(国内投放)。
     # SUB_LANG 显式覆盖(zh|zh,en|en)；未设时按"已存在英文字幕源就重定时、没有就只产中文"——
-    # 中英双语/仅英文模式下 SKILL 会先写好 字幕_英文.srt 译文(任意时间码)，故 en_texts 非空即视为要英文。
+    # 中英双语/仅英文模式下 SKILL 会先写好 字幕_英文.srt 译文(任意时间码)，故非占位 en_texts 非空即视为要英文。
     lang=os.environ.get('SUB_LANG','').strip().lower()
     want_en = ('en' in lang) if lang else bool(en_texts)
     if want_en:
         open(en_path,'w',encoding='utf-8').write(en_srt)
+    elif placeholder_en and os.path.exists(en_path):
+        os.remove(en_path)
     json.dump(shots, open(os.path.join(root,'脚本',ep,'镜头时长.json'),'w',encoding='utf-8'), ensure_ascii=False, indent=2)
     print(f"定稿: {len(manifest)} 句重定时 → 字幕_中文.srt{'+字幕_英文.srt' if want_en else '(仅中文)'}；{len(shots)} 镜 → 镜头时长.json")
 

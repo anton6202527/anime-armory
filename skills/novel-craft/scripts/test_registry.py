@@ -9,6 +9,8 @@ import os
 import re
 import unittest
 
+import registry
+
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
@@ -35,10 +37,12 @@ def referenced_novel_skills(text):
 class NovelRegistryTest(unittest.TestCase):
     def test_author_and_readme_match_actual_novel_skills(self):
         actual = actual_novel_skills()
+        expected = set(registry.skill_names())
         author = referenced_novel_skills(read("skills/novel-author/SKILL.md"))
         readme = referenced_novel_skills(read("skills/README.md"))
-        self.assertEqual(author, actual)
-        self.assertEqual(readme, actual)
+        self.assertEqual(expected, actual)
+        self.assertEqual(author, expected)
+        self.assertEqual(readme, expected)
 
 
 if __name__ == "__main__":

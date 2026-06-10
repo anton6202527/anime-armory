@@ -5,17 +5,19 @@
 # 用法: align.py <制MV作品根> [--lang zh] [--device cpu] [--audio <vocals.wav>]
 # 依赖: pip install whisperx   （首次会下 wav2vec2 对齐模型；CPU 可跑，慢）
 import sys, os, re, json, argparse
+import importlib.util
 
+HERE = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
+MV_UTILS_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "mv_utils.py")
 
-def _ts_lrc(t):
-    m = int(t // 60); s = t - 60 * m
-    return f"[{m:02d}:{s:05.2f}]"
+def load_mv_utils():
+    spec = importlib.util.spec_from_file_location("mv_utils", MV_UTILS_PATH)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
 
-
-def _ts_ass(t):
-    h = int(t // 3600); m = int((t % 3600) // 60); s = t % 60
-    return f"{h:d}:{m:02d}:{s:05.2f}"
-
+mv_utils = load_mv_utils()
 
 def load_lyric_lines(path):
     lines = []
@@ -36,9 +38,16 @@ def main():
     ap.add_argument("--audio", default=None, help="可指定 demucs 分离后的人声文件，提升歌词对齐稳定性")
     args = ap.parse_args()
 
-    song = args.audio if args.audio else next((os.path.join(args.root, "歌", f"song{e}")
-                                               for e in (".wav", ".mp3", ".m4a", ".flac")
-                                               if os.path.exists(os.path.join(args.root, "歌", f"song{e}"))), None)
+    song = args.audio
+    if not song:
+        vocals_path = os.path.join(args.root, "歌", "_demucs", "vocals.wav")
+        if os.path.exists(vocals_path):
+            song = vocals_path
+            print(f"[info] 自动检测到 demucs 人声轨：{vocals_path}，将使用其进行对齐提升精度。")
+        else:
+            song = next((os.path.join(args.root, "歌", f"song{e}")
+                         for e in (".wav", ".mp3", ".m4a", ".flac")
+                         if os.path.exists(os.path.join(args.root, "歌", f"song{e}"))), None)
     lyr = os.path.join(args.root, "词", "lyrics.md")
     if not song or not os.path.exists(song): sys.exit(f"缺 {args.root}/歌/song.* 或 --audio 指定文件不存在")
     if not os.path.exists(lyr): sys.exit(f"缺 {args.root}/词/lyrics.md")
@@ -72,8 +81,8 @@ def main():
         start, end = wl[0]["start"], wl[-1]["end"]
         # .ass 逐字 \k（厘秒）
         ktext = "".join(f"{{\\k{max(1,int(round((w['end']-w['start'])*100)))}}}{w['word']}" for w in wl)
-        ass_events.append(f"Dialogue: 0,{_ts_ass(start)},{_ts_ass(end)},Default,,0,0,0,,{ktext}")
-        lrc_lines.append(f"{_ts_lrc(start)}{line}")
+        ass_events.append(f"Dialogue: 0,{mv_utils.ts_ass(start)},{mv_utils.ts_ass(end)},Default,,0,0,0,,{ktext}")
+        lrc_lines.append(f"{mv_utils.ts_lrc(start)}{line}")
         report_lines.append({
             "line": line,
             "start": round(float(start), 3),

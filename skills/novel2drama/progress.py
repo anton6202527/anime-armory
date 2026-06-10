@@ -5,7 +5,12 @@
 #   python3 progress.py <作品根> 第N集              # 查指定集所处阶段 + 推荐命令
 #   python3 progress.py set <作品根> 第N集 <列名> <值>   # 回写某列(✅ / ⬜ / 12/19)，各 skill 收尾调用
 #   python3 progress.py ensure-col <作品根> <列名> [默认值] # 旧项目迁移：缺列则追加到「成片」前
-import sys, os, re
+import contextlib, sys, os, re, time
+
+try:
+    import fcntl
+except ImportError:  # pragma: no cover - non-POSIX fallback
+    fcntl = None
 
 COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'common'))
 if COMMON not in sys.path:
@@ -15,6 +20,61 @@ from n2d_route import STAGES, cell_state, format_route, is_episode_row, parse_pr
 
 def prog_path(root):
     return progress_path(root)
+
+
+@contextlib.contextmanager
+def progress_lock(root, timeout=30.0, poll=0.1):
+    """Serialize read-modify-write of `_进度.md` for single-machine multi-worker runs."""
+    os.makedirs(root, exist_ok=True)
+    path = os.path.join(root, "_进度.lock")
+    start = time.time()
+    if fcntl is not None:
+        fd = os.open(path, os.O_CREAT | os.O_RDWR, 0o644)
+        try:
+            while True:
+                try:
+                    fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    break
+                except BlockingIOError:
+                    if time.time() - start > timeout:
+                        raise TimeoutError(f"progress lock timeout ({timeout}s): {path}")
+                    time.sleep(poll)
+            yield path
+        finally:
+            try:
+                fcntl.flock(fd, fcntl.LOCK_UN)
+            finally:
+                os.close(fd)
+    else:
+        lock_dir = path + ".d"
+        acquired = False
+        try:
+            while True:
+                try:
+                    os.mkdir(lock_dir)
+                    acquired = True
+                    break
+                except FileExistsError:
+                    if time.time() - start > timeout:
+                        raise TimeoutError(f"progress lock timeout ({timeout}s): {path}")
+                    time.sleep(poll)
+            open(path, "a", encoding="utf-8").close()
+            yield path
+        finally:
+            if acquired:
+                try:
+                    os.rmdir(lock_dir)
+                except OSError:
+                    pass
+
+
+def atomic_write_text(path, text):
+    """Same-directory temp + replace; readers never see half-written progress."""
+    directory = os.path.dirname(path) or "."
+    tmp = os.path.join(directory, f".{os.path.basename(path)}.tmp.{os.getpid()}")
+    with open(tmp, "w", encoding="utf-8") as f:
+        f.write(text)
+    os.replace(tmp, path)
 
 def parse(root):
     try:
@@ -26,28 +86,29 @@ def parse(root):
 
 def do_set(root, ep, col, val):
     p = prog_path(root)
-    lines = open(p, encoding='utf-8').read().split('\n')
-    header = None; hidx = {}
-    for i, ln in enumerate(lines):
-        if ln.startswith('| 集 |'):
-            header = [c.strip() for c in ln.split('|')[1:-1]]
-            hidx = {name: j for j, name in enumerate(header)}
-    if header is None or col not in hidx:
-        print(f"列名 '{col}' 不在表头：{header}"); sys.exit(1)
-    ci = hidx[col]  # 含 集/字数 在内的列下标
-    out = []; hit = False
-    for ln in lines:
-        m = re.match(r'^\|\s*' + re.escape(ep) + r'\s*\|', ln)
-        if m:
-            parts = ln.split('|')  # ['', 集, 字数, cells..., (note)]
-            # parts[1]=集, parts[2]=字数, 物料列从 parts[3] 起；header[0]=集 → ci 对应 parts[ci+1]
-            tgt = ci + 1
-            if tgt < len(parts):
-                parts[tgt] = f' {val} '
-                ln = '|'.join(parts); hit = True
-        out.append(ln)
-    if not hit: print(f"{ep} 不在进度表"); sys.exit(1)
-    open(p, 'w', encoding='utf-8').write('\n'.join(out))
+    with progress_lock(root):
+        lines = open(p, encoding='utf-8').read().split('\n')
+        header = None; hidx = {}
+        for i, ln in enumerate(lines):
+            if ln.startswith('| 集 |'):
+                header = [c.strip() for c in ln.split('|')[1:-1]]
+                hidx = {name: j for j, name in enumerate(header)}
+        if header is None or col not in hidx:
+            print(f"列名 '{col}' 不在表头：{header}"); sys.exit(1)
+        ci = hidx[col]  # 含 集/字数 在内的列下标
+        out = []; hit = False
+        for ln in lines:
+            m = re.match(r'^\|\s*' + re.escape(ep) + r'\s*\|', ln)
+            if m:
+                parts = ln.split('|')  # ['', 集, 字数, cells..., (note)]
+                # parts[1]=集, parts[2]=字数, 物料列从 parts[3] 起；header[0]=集 → ci 对应 parts[ci+1]
+                tgt = ci + 1
+                if tgt < len(parts):
+                    parts[tgt] = f' {val} '
+                    ln = '|'.join(parts); hit = True
+            out.append(ln)
+        if not hit: print(f"{ep} 不在进度表"); sys.exit(1)
+        atomic_write_text(p, '\n'.join(out))
     try:
         write_episode_manifest(root, ep, extra={"last_progress_column": col, "last_progress_value": val})
     except Exception as e:
@@ -64,37 +125,38 @@ def _row_trailing(ln):
 
 def do_ensure_col(root, col, default='⬜'):
     p = prog_path(root)
-    lines = open(p, encoding='utf-8').read().split('\n')
-    header = None
-    insert_at = None
-    for ln in lines:
-        if ln.startswith('| 集 |'):
-            header = _split_row(ln)
-            break
-    if header is None:
-        print("未找到表头（| 集 | …）"); sys.exit(1)
-    if col in header:
-        print(f"✅ 列已存在：{col}"); return
-    preferred_before = {'视频prompt': '视频'}
-    before = preferred_before.get(col, '成片')
-    insert_at = header.index(before) if before in header else (header.index('成片') if '成片' in header else len(header))
+    with progress_lock(root):
+        lines = open(p, encoding='utf-8').read().split('\n')
+        header = None
+        insert_at = None
+        for ln in lines:
+            if ln.startswith('| 集 |'):
+                header = _split_row(ln)
+                break
+        if header is None:
+            print("未找到表头（| 集 | …）"); sys.exit(1)
+        if col in header:
+            print(f"✅ 列已存在：{col}"); return
+        preferred_before = {'视频prompt': '视频'}
+        before = preferred_before.get(col, '成片')
+        insert_at = header.index(before) if before in header else (header.index('成片') if '成片' in header else len(header))
 
-    out = []
-    for ln in lines:
-        if ln.startswith('| 集 |') or re.match(r'^\|\s*-+', ln):
-            cells = _split_row(ln); trailing = _row_trailing(ln)
-            filler = '---' if re.match(r'^\|\s*-+', ln) else col
-            cells.insert(insert_at, filler)
-            out.append('| ' + ' | '.join(cells) + ' |' + trailing)
-        elif is_episode_row(ln):
-            cells = _split_row(ln); trailing = _row_trailing(ln)
-            while len(cells) < len(header):
-                cells.append('')
-            cells.insert(insert_at, default)
-            out.append('| ' + ' | '.join(cells) + ' |' + trailing)
-        else:
-            out.append(ln)
-    open(p, 'w', encoding='utf-8').write('\n'.join(out))
+        out = []
+        for ln in lines:
+            if ln.startswith('| 集 |') or re.match(r'^\|\s*-+', ln):
+                cells = _split_row(ln); trailing = _row_trailing(ln)
+                filler = '---' if re.match(r'^\|\s*-+', ln) else col
+                cells.insert(insert_at, filler)
+                out.append('| ' + ' | '.join(cells) + ' |' + trailing)
+            elif is_episode_row(ln):
+                cells = _split_row(ln); trailing = _row_trailing(ln)
+                while len(cells) < len(header):
+                    cells.append('')
+                cells.insert(insert_at, default)
+                out.append('| ' + ' | '.join(cells) + ' |' + trailing)
+            else:
+                out.append(ln)
+        atomic_write_text(p, '\n'.join(out))
     print(f"✅ 已追加列「{col}」（默认 {default}）")
 
 def main():

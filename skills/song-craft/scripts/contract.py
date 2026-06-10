@@ -52,7 +52,7 @@ SONG_STAGE_TABLE = [
     {
         "key": "setup",
         "label": "项目骨架",
-        "owner": "song/scripts/init_project.py",
+        "owner": "song-craft/scripts/init_project.py",
         "gate": "deterministic",
         "on_fail": "重跑 init 或换 --out",
     },
