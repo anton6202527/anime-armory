@@ -35,6 +35,7 @@ if COMMON not in sys.path:
 
 from n2d_contract import (  # noqa: E402
     APPROVED_IMAGE_BACKENDS,
+    ASSET_REFERENCE_REGISTRY_KIND,
     CINEMATIC_CONTRACT_FIELDS,
     COMPLIANCE_ALLOWED_RIGHTS,
     COMPLIANCE_RIGHTS_EVIDENCE_REQUIRED,
@@ -67,6 +68,7 @@ from n2d_contract import (  # noqa: E402
     VIDEO_MODEL_ROUTES_KIND,
     VISUAL_CONTRACT_FIELDS,
     annotate_finding,
+    asset_registry_path,
     classify_image_backend,
     lora_verdict_ok,
     motion_control_required,
@@ -185,6 +187,17 @@ IDENTITY_KNOWN_STATUSES = (
 # 后端→允许 mode 表从契约派生（与 n2d-identity 校验、n2d-asset-market 重置同源）
 IDENTITY_ALLOWED_IMAGE_MODES = identity_allowed_modes(IDENTITY_IMAGE_ADAPTERS)
 IDENTITY_ALLOWED_VIDEO_MODES = identity_allowed_modes(IDENTITY_VIDEO_ADAPTERS)
+
+ASSET_REFERENCE_TYPE_PREFIX = {
+    "scene": "LOC_",
+    "location": "LOC_",
+    "prop": "PROP_",
+    "outfit": "OUTFIT_",
+    "costume": "OUTFIT_",
+    "vfx": "VFX_",
+    "effect": "VFX_",
+}
+ASSET_REFERENCE_REQUIRED_FIELDS = ("id", "type", "name", "reference_group", "constraints", "drift_forbidden")
 
 NATIVE_AUDIO_DISCARD = "discard"
 NATIVE_AUDIO_AMBIENCE = "ambience"
@@ -962,6 +975,80 @@ def check_identity_registry(root: str, require_reference_assets: bool = False) -
                 add(BLOCK, "资产身份注册层", floc, "drift_forbidden 必须是非空列表")
 
 
+def check_asset_reference_registry(root: str, require_reference_assets: bool = False) -> None:
+    """Validate reusable non-character scene/prop/outfit/vfx asset registry."""
+    p = asset_registry_path(root)
+    data = load_json(p)
+    if not isinstance(data, dict):
+        add(BLOCK, "资产引用注册层", p, "缺少或无法解析 asset_registry.json；关键场景/道具/服装/VFX 必须升级为 LOC_/PROP_/OUTFIT_/VFX_ 资产引用注册层")
+        return
+    if data.get("kind") != ASSET_REFERENCE_REGISTRY_KIND:
+        add(BLOCK, "资产引用注册层", p, f"kind 必须是 {ASSET_REFERENCE_REGISTRY_KIND}")
+    assets = data.get("assets")
+    if not isinstance(assets, list) or not assets:
+        add(BLOCK, "资产引用注册层", p, "assets[] 缺失或为空；关键场景/道具/服装/VFX 必须登记")
+        return
+
+    seen_ids = set()
+    for idx, asset in enumerate(assets, 1):
+        loc = f"{p} asset#{idx}"
+        if not isinstance(asset, dict):
+            add(BLOCK, "资产引用注册层", loc, "asset 必须是对象")
+            continue
+        for key in ASSET_REFERENCE_REQUIRED_FIELDS:
+            if _field_is_missing(asset, key):
+                add(BLOCK, "资产引用注册层", loc, f"asset 缺字段：{key}")
+
+        asset_id = str(asset.get("id", "")).strip()
+        asset_type = str(asset.get("type", "")).strip().lower()
+        if asset_id:
+            if asset_id in seen_ids:
+                add(BLOCK, "资产引用注册层", loc, f"重复 asset id：{asset_id}")
+            seen_ids.add(asset_id)
+        expected_prefix = ASSET_REFERENCE_TYPE_PREFIX.get(asset_type)
+        if asset_type and not expected_prefix:
+            add(BLOCK, "资产引用注册层", loc, f"未知 type「{asset_type}」；允许：{', '.join(sorted(ASSET_REFERENCE_TYPE_PREFIX))}")
+        elif expected_prefix and asset_id and not asset_id.startswith(expected_prefix):
+            add(BLOCK, "资产引用注册层", loc, f"type={asset_type} 的 id 必须以 {expected_prefix} 开头")
+
+        reference_group = asset.get("reference_group")
+        if not isinstance(reference_group, dict):
+            add(BLOCK, "资产引用注册层", loc, "reference_group 必须是对象，至少含 primary")
+        else:
+            primary = str(reference_group.get("primary", "")).strip()
+            if not primary:
+                add(BLOCK, "资产引用注册层", loc, "reference_group.primary 缺失或为空")
+            elif require_reference_assets and not _identity_reference_exists(root, primary):
+                add(BLOCK, "资产引用注册层", os.path.join(root, primary) if not os.path.isabs(primary) else primary, "reference_group.primary 路径不存在")
+            alternates = reference_group.get("alternates", [])
+            if alternates is not None and not isinstance(alternates, list):
+                add(BLOCK, "资产引用注册层", loc, "reference_group.alternates 必须是列表")
+            for rel in alternates or []:
+                rel_s = str(rel or "").strip()
+                if not rel_s:
+                    add(BLOCK, "资产引用注册层", loc, "reference_group.alternates 存在空路径")
+                elif require_reference_assets and not _identity_reference_exists(root, rel_s):
+                    add(BLOCK, "资产引用注册层", os.path.join(root, rel_s) if not os.path.isabs(rel_s) else rel_s, "reference_group.alternates 路径不存在")
+
+        constraints = asset.get("constraints")
+        if not isinstance(constraints, dict) or not constraints:
+            add(BLOCK, "资产引用注册层", loc, "constraints 必须是非空对象；不能只登记名字和图片")
+        else:
+            if asset_type in {"scene", "location"} and not any(k in constraints for k in ("layout", "axis", "light_anchor", "structure")):
+                add(BLOCK, "资产引用注册层", loc, "场景资产 constraints 必须锁 layout/axis/light_anchor/structure 至少一项")
+            if asset_type == "prop" and "structure" not in constraints:
+                add(BLOCK, "资产引用注册层", loc, "道具资产 constraints 必须锁 structure，避免壶嘴/刀刃/镜面等部件幻觉")
+            name_blob = f"{asset.get('name', '')}\n{json.dumps(constraints, ensure_ascii=False)}"
+            if asset_type == "prop" and _has_any(name_blob, ("铜镜", "赐死", "托盘", "毒酒", "碎瓷", "匕首", "白绫")) and not _has_any(name_blob, (
+                "单镜面", "唯一", "数量", "件数", "短颈圆口", "无侧嘴", "无斜嘴", "无双口", "一柄一刃", "同一只",
+            )):
+                add(BLOCK, "资产引用注册层", loc, "关键道具 constraints 未写结构唯一性；铜镜/托盘/毒酒/碎瓷必须锁数量与部件")
+
+        drift_forbidden = asset.get("drift_forbidden")
+        if not isinstance(drift_forbidden, list) or not drift_forbidden:
+            add(BLOCK, "资产引用注册层", loc, "drift_forbidden 必须是非空列表")
+
+
 def check_identity_adapter_matrix(root: str) -> None:
     p = identity_adapter_matrix_path(root)
     data = load_json(p)
@@ -1552,6 +1639,28 @@ def _has_character_id_binding(section: str) -> bool:
     return bool(re.search(r"`?CHAR_[A-Za-z0-9_]+/[^`\s；;，,]+`?", section))
 
 
+def _has_asset_id_binding(section: str, prefix: str) -> bool:
+    return bool(re.search(rf"`?{re.escape(prefix)}[A-Za-z0-9_]+`?", section))
+
+
+def _needs_scene_asset_binding(refs: str) -> bool:
+    return _has_any(refs, (
+        "场景定妆",
+        "场景锚",
+        "定妆_冷宫寝殿",
+        "定妆_场景",
+    ))
+
+
+def _needs_prop_asset_binding(refs: str) -> bool:
+    return _has_any(refs, (
+        "道具定妆",
+        "定妆_斑驳铜镜",
+        "定妆_赐死托盘",
+        "定妆_毒酒碎瓷",
+    ))
+
+
 def _has_standard_character_turnaround(section: str) -> bool:
     """角色定妆必须具备标准正/侧/背三视图口径。"""
     has_front = _has_any(section, ("正面", "正脸", "主参考", "定妆_<角色>.png"))
@@ -1701,6 +1810,20 @@ def check_image_shot_prompt_section(path: str, idx: int, section: str) -> None:
             add(BLOCK, "prompt", loc, "参考图块未引用共享定妆资产；会导致跨镜人物/场景漂移")
         if "强度" not in refs and "strength" not in refs.lower():
             add(WARN, "prompt", loc, "参考图块未标参考强度；多图参考派生稳定性不可复现")
+        if _needs_scene_asset_binding(refs) and not _has_asset_id_binding(section, "LOC_"):
+            add(
+                BLOCK,
+                "资产引用注册层",
+                loc,
+                "参考图块含关键场景定妆但缺 LOC_xx 绑定；必须写 `资产引用注册层` 并引用 asset_registry.json，让执行端自动取场景 reference_group / constraints / drift_forbidden。",
+            )
+        if _needs_prop_asset_binding(refs) and not _has_asset_id_binding(section, "PROP_"):
+            add(
+                BLOCK,
+                "资产引用注册层",
+                loc,
+                "参考图块含关键道具定妆但缺 PROP_xx 绑定；必须写 `资产引用注册层` 并引用 asset_registry.json，锁道具结构、件数和禁漂项。",
+            )
 
     if _needs_prop_structure_gate(section, name, refs) and not _has_prop_structure_rule(section):
         add(BLOCK, "道具结构", loc, "关键道具镜头缺结构唯一性闸门；毒酒壶/瓷壶须锁唯一短颈圆口、无侧嘴/斜嘴/双口/额外开口，匕首须一柄一刃，三件套件数须锁定，避免道具幻觉")
@@ -2142,6 +2265,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_placeholder_policy(root, ep, "image")
         check_image_ai_policy(root, ep)
         check_identity_registry(root, require_reference_assets=False)
+        check_asset_reference_registry(root, require_reference_assets=False)
         check_storyboard_contract(root, ep, require_frame_assets=False)
         check_storyboard_visual_contract(root, ep)
         check_storyboard_style_contract(root, ep)
@@ -2157,6 +2281,7 @@ def run(root: str, ep: str, stage: str) -> None:
         require_progress(root, ep, ("分镜设计", "出图prompt") if av_native else ("配音", "分镜设计", "出图prompt"))
         check_placeholder_policy(root, ep, "video")
         check_identity_registry(root, require_reference_assets=True)
+        check_asset_reference_registry(root, require_reference_assets=True)
         check_identity_adapter_matrix(root)
         check_storyboard_contract(root, ep, require_frame_assets=True)
         check_storyboard_style_contract(root, ep)
@@ -2169,6 +2294,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_compliance_manifest(root, ep, stage)
         require_progress(root, ep, ("视频",))
         check_identity_registry(root, require_reference_assets=True)
+        check_asset_reference_registry(root, require_reference_assets=True)
         check_identity_adapter_matrix(root)
         check_storyboard_contract(root, ep, require_frame_assets=True)
         check_storyboard_special_templates(root, ep)
@@ -2181,6 +2307,7 @@ def run(root: str, ep: str, stage: str) -> None:
     elif stage == "review":
         check_compliance_manifest(root, ep, stage)
         check_identity_registry(root, require_reference_assets=True)
+        check_asset_reference_registry(root, require_reference_assets=True)
         check_identity_adapter_matrix(root)
         check_storyboard_contract(root, ep, require_frame_assets=True)
         check_storyboard_special_templates(root, ep)

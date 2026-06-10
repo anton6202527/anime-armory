@@ -9,6 +9,7 @@
 ```
 出图/共享/
 ├── identity_registry.json   机器真值：角色/形态的参考组 + 后端身份适配 + 角度策略 + 禁漂项
+├── asset_registry.json      机器真值：场景/道具/独立服装/VFX 的参考组 + 结构/光位约束 + 禁漂项
 ├── prompt/                  共享 prompt 文件
 │   ├── 00_索引.md           全篇定妆清单 + 状态 + 首现/复用范围 + PNG 路径
 │   ├── 角色定妆.md          所有角色（含形态变体）实战 prompt
@@ -39,6 +40,7 @@
 
 - 表（角色 / 场景 / 道具；**⚙️仙侠玄幻题材再加 法宝 / 特效 两张表**），每条含 **ID**、名称、形态、首现集、复用范围、状态（✅/⏳/⬜）、PNG 路径
 - `identity_registry.json` 同步登记提示：角色/形态行必须能对应到 `characters[].id` + `forms[].form`；后端角色 ID / Face Lock / LoRA 状态以 registry 为机器真值，`00_索引.md` 只做人读摘要
+- `asset_registry.json` 同步登记提示：场景/道具/独立服装/VFX 行必须能对应到 `assets[].id`；场景用 `LOC_xx`，道具用 `PROP_xx`，独立服装/套装用 `OUTFIT_xx`，法宝/光效/VFX 用 `VFX_xx`；参考组、结构/光位约束、禁漂项以 registry 为机器真值，`00_索引.md` 只做人读摘要
 - **角色一致性定档表（P0 · 出图前必产，付费出图前输出给用户并落此表）**：逐角色/形态一行——`角色/形态 ｜ 体量 ｜ 当前档 ｜ 目标档 ｜ 表情库 ｜ LoRA ｜ 升档触发条件`。档①=参考图派生+锚点句（默认全员）/ 档②=后端原生主体 ID·主体库（参考图压不住·无 GPU）/ 档③=LoRA（几十集核心角+前两档压不住）；附加=表情库（情绪戏多核心角 opt-in）。**ROI 驱动、默认最小化，绝不全员第1集前置高档/表情库/LoRA**；升档只在触发条件命中时发生。逐角色分档方法见 `lora_consistency.md「出图前一致性定档框架」`
 - **跨 AI 锚定句速查**（三大视频 AI 的中英锚定句）
 - **全集统一负面词**
@@ -53,6 +55,7 @@
 **首现**：第N集 / **复用**：第N-M集
 **目标存档**：`出图/共享/图片/定妆_xxx.png`
 **身份注册**：`出图/共享/identity_registry.json` → `characters[].forms[]`（角色/形态必填；场景/道具/法宝/特效写“无”）
+**资产引用注册**：`出图/共享/asset_registry.json` → `assets[]`（场景/道具/独立服装/VFX 必填；角色写“无”）
 **参考图来源**：（已完成共享图 / 无需参考图）
 **角色定妆组**（所有人物必出标准三视图 + 人审拼版；不按主配角或题材省背面）：
 - **标准三视图生产拆图**：
@@ -109,6 +112,7 @@
 **自检**（轻微偏差放行，只命中硬伤才重抽）：
 - [ ] 妆造拆解逐项对上角色卡（发型 / 妆容 / 服装 / 配饰 / 色卡，缺一项即漂）
 - [ ] `identity_registry.json` 已登记本角色/形态的 `reference_group` / `identity_adapters` / `angle_policy` / `drift_forbidden`
+- [ ] `asset_registry.json` 已登记本场景/道具/独立服装/VFX 的 `reference_group.primary` / `constraints` / `drift_forbidden`
 - [ ] 标准三视图是**同一个人**（侧面 / 背面的脸型轮廓、发型、后脑勺发型、背部服饰与正面主参考一致）
 - [ ] 标准三视图**对齐达标**（正 / 侧 / 背同身高、同比例、水平视平线对齐、同景别距离；纯灰底匀光无戏无表情）——"三张好看图"≠标准三视图，对齐不达标回**整张 turnaround 总图路线**或 **ControlNet turnaround 路线**重出（见 §1.2「标准三视图生产铁律」），不得当 ✅ 落档
 - [ ] 人审拼版已生成：`图片/定妆_<角色>_三视图.png`，且拼版中的正面 / 侧面 / 背面来自已通过自检的生产拆图
@@ -163,6 +167,7 @@
   - **风格禁忌**：随所选风格派生。写实电影感可禁插画化/游戏CG；二次元赛璐璐不应禁“插画感”，而应禁照片皮肤/3D塑料/风格跳变。
 - **本集专项镜头模板速查**（⚠️复杂镜头先继承模板，再出首帧/尾帧）。**真值源在上游**：`storyboard.json clips[]` 的 `template/template_contract`。凡打斗、追逐、对话反打、法术爆发、飞行、亲密互动、多人站位，逐 Clip 列出模板 ID、beats、blocking、camera_rule、continuity_must、negative 和模板专属字段；逐镜 prompt 必从这里誊抄，避免临场自由写动作。缺模板或字段不全时回 `/n2d-script` 补 `专项镜头模板库.md` 契约。
 - **本集资产身份速查**（⚠️角色身份先继承 registry）。**真值源在共享层**：`出图/共享/identity_registry.json`。凡本集入镜角色/形态，逐项列 `registry id`、`form`、`reference_group`、图/视频后端身份状态、允许角度、高危角度、禁漂项；逐镜 prompt 必写具体 `CHAR_xx/形态` 并从 registry 自动取角色参考组和禁漂约束，不能只看 `00_索引.md` 或中文角色名临场猜参考图。
+- **本集资产引用速查**（⚠️关键场景/道具/独立服装/VFX 先继承 registry）。**真值源在共享层**：`出图/共享/asset_registry.json`。凡本集入镜的关键非人物资产，逐项列 `asset id`、`type`、`reference_group.primary`、`constraints`、`drift_forbidden`；逐镜 prompt 必写具体 `LOC_xx` / `PROP_xx` / `OUTFIT_xx` / `VFX_xx` 并从 registry 自动取参考图和结构/光位/禁漂约束，不能只看 `00_索引.md` 或中文道具名临场猜参考图。
 - **本集图数统计**（共享复用 vs 本集分镜，分别列）
 - **进度**（已完成 / 总数）
 - **已完成图归档**（共享库链接 + 本集出图链接）
@@ -189,6 +194,7 @@
 **起幅·运动余量**（出图为视频铺路 · clip 首帧=起幅，非动作顶点）：本镜为 Clip K **首帧=起幅**（动作顶点交尾帧 `镜头N_end.png`，封面/定格图才抓顶点）；按 `故事板.md` 本镜节奏/张力反推的运镜（推近/环绕/跟摇）**预留构图余量**——推近→框略宽、环绕→主体周围留空、跟摇→运动方向留 lead room
 **专项镜头模板**（复杂镜必填 · 普通镜写“无”）：若所属 Clip 有 `template/template_contract`，这里誊抄模板 ID + 本镜要落实的 `beats/blocking/camera_rule/continuity_must/negative` + 模板专属字段（如 `impact_frame`、`screen_direction`、`axis`、`effect_asset`、`contact_points`、`screen_positions`）。本镜构图必须服务模板契约：例如反打锁轴线、飞行锁姿态动背景、亲密互动锁接触点、多人数锁主次站位。
 **资产身份注册层**（含角色镜必填）：`CHAR_xx/形态`；从 `出图/共享/identity_registry.json` 读取本镜角色/形态的 `reference_group`、可用后端角色 ID/主体库、`angle_policy` 和 `drift_forbidden`；执行时按该 ID 自动传入对应定妆组做 image2image / 多图参考派生，不得纯文生图。普通无人物镜写“无”。若命中高危角度（极端俯仰/深暗部/人物过小/多人接触），必须补对应参考或登记降级方案。
+**资产引用注册层**（含关键场景/道具/独立服装/VFX 必填）：`LOC_xx` / `PROP_xx` / `OUTFIT_xx` / `VFX_xx`；从 `出图/共享/asset_registry.json` 读取本镜非人物关键资产的 `reference_group`、`constraints` 和 `drift_forbidden`；执行时按该 ID 自动传入对应场景/道具/服装/VFX 参考图并继承结构、光位、件数、材质、时代风格等约束。普通无关键非人物资产镜写“无”。用了场景定妆/道具锚却没写资产 ID，gate 阻断。
 **近景/反打身份锁定**（CU/ECU、正反打、过肩反应、表情特写必填；普通镜可写“无”）：引用 `reference_group.expressions[]` 或 `定妆_<角色>_脸部特写.png` / `定妆_<角色>_表情.png`；逐项锁 `脸型 / 五官比例 / 发型发髻 / 标志配饰 / 服装配色`。接力帧相邻的反应镜要写“若发髻/脸型不一致即返工”。没有脸部/表情参考时，先从已通过定妆裁切脸部特写，不重新抽新脸。
 **尾帧接力生成方式**（正反打/反应/表情镜必填；普通镜可写“无”）：尾帧必须以上一张成图或同镜首帧 `image2image/图生图` 为母图，不得纯文生图；只改表情 / 眼神 / 嘴角 / 细微姿态，不重画演员脸、发髻、发簪、耳坠和服装。若执行后与母图发髻/脸型不一致，归档废料并重出，不得覆盖正式尾帧。
 
@@ -236,6 +242,7 @@
 7. ✅ 负向已继承本集风格禁忌（防 shot 级风格漂；S1 风格检测器会兜底机检）
 8. ✅ 复杂镜已继承 `专项镜头模板`：beats / blocking / camera_rule / continuity_must / negative 与 storyboard.json 一致
 9. ✅ 角色镜已继承 `identity_registry.json`：本镜写了具体 `CHAR_xx/形态`，reference_group / angle_policy / drift_forbidden 已写进本镜约束，执行时按 ID 自动取定妆组做图生图/多图参考
+10. ✅ 关键场景/道具镜已继承 `asset_registry.json`：本镜写了具体 `LOC_xx` / `PROP_xx` / `OUTFIT_xx` / `VFX_xx`，reference_group / constraints / drift_forbidden 已写进本镜约束，执行时按 ID 自动取参考图和结构/光位约束
 10. ✅ CU/ECU、正反打、过肩反应、表情特写已写 `近景/反打身份锁定`，并引用脸部特写/表情参考锁脸型、发髻和配饰
 11. ✅ 正反打/反应/表情尾帧已写 `尾帧接力生成方式`：必须以上一张成图或同镜首帧 image2image/图生图为母图，不得纯文生图重抽
 11. ✅ 首帧=起幅非动作顶点 + 已按计划运镜预留构图余量（④·出图为视频铺路）
@@ -271,7 +278,7 @@
   ↓ n2d-image 阶段：
 ① 出图/共享/prompt/00_索引.md 追加 ⬜ 行（ID/名称/首现/复用）
   ↓
-② 出图/共享/identity_registry.json 追加该角色/形态（reference_group / identity_adapters / angle_policy / drift_forbidden）
+② 出图/共享/identity_registry.json 追加该角色/形态（reference_group / identity_adapters / angle_policy / drift_forbidden）；若新增的是场景/道具/独立服装/VFX，则追加到 `出图/共享/asset_registry.json`（LOC_/PROP_/OUTFIT_/VFX_ + reference_group / constraints / drift_forbidden）
   ↓
 ③ 出图/共享/prompt/角色定妆.md 追加完整 prompt 块（本文 §1.2 格式）
    （来源 = characters/X.md 的 ① 定妆 prompt + Stage 4 的实战包装：图 AI 设置 + 检查清单）

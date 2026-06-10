@@ -18,6 +18,7 @@ GOOD_SHOT = """## 镜头 1（冷开场）🔑关键镜
 **起幅·运动余量**：本镜为 Clip 1 首帧=起幅（顶点交尾帧），按缓慢推近预留构图余量、上下留 lead room
 **专项镜头模板**：dialogue_shot_reverse；blocking=沈念画左，柳娘子画右；camera_rule=守轴线；continuity_must=脸型发型不漂；negative=不要换脸。
 **资产身份注册层**：`CHAR_SHEN/常态`；reference_group=正/侧/半身/三视图；angle_policy=front/three_quarter allowed；drift_forbidden=face_shape/hairstyle/outfit_palette
+**资产引用注册层**：`LOC_01` 冷宫寝殿；从 `出图/共享/asset_registry.json` 继承 reference_group / constraints / drift_forbidden；锁本场 layout/axis/light_anchor。
 **近景/反打身份锁定**：本镜是 CU 近景，必须引用 `定妆_沈念_脸部特写.png` 或表情参考；锁脸型、五官比例、发型发髻、标志配饰和服装配色，不得换脸。
 **尾帧接力生成方式**：正反打/表情尾帧必须以同镜首帧或上一张成图 image2image 图生图为母图，不得纯文生图；只改表情/眼神/嘴角，不重画演员脸、发髻、配饰和服装。
 
@@ -195,6 +196,33 @@ def test_character_shot_missing_character_id_binding_is_blocked():
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产身份注册层" and "角色 ID" in f["msg"] for f in gate.findings)
 
 
+def test_shot_missing_scene_asset_id_binding_is_blocked():
+    shot = GOOD_SHOT.replace(
+        "**资产引用注册层**：`LOC_01` 冷宫寝殿；从 `出图/共享/asset_registry.json` 继承 reference_group / constraints / drift_forbidden；锁本场 layout/axis/light_anchor。\n",
+        "",
+    )
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产引用注册层" and "LOC_xx" in f["msg"] for f in gate.findings)
+
+
+def test_shot_missing_prop_asset_id_binding_is_blocked():
+    shot = GOOD_SHOT.replace(
+        "- `出图/共享/图片/定妆_冷宫寝殿.png`（场景定妆，强度 0.45）\n",
+        "- `出图/共享/图片/定妆_冷宫寝殿.png`（场景定妆，强度 0.45）\n- `出图/共享/图片/定妆_斑驳铜镜.png`（道具锚，强度 0.45）\n",
+    )
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产引用注册层" and "PROP_xx" in f["msg"] for f in gate.findings)
+
+
+def test_generic_scene_prop_anchor_phrase_does_not_require_prop_id():
+    shot = GOOD_SHOT.replace(
+        "**资产引用注册层**：`LOC_01` 冷宫寝殿；从 `出图/共享/asset_registry.json` 继承 reference_group / constraints / drift_forbidden；锁本场 layout/axis/light_anchor。\n",
+        "**资产引用注册层**：`LOC_01` 冷宫寝殿；从 `出图/共享/asset_registry.json` 继承 reference_group / constraints / drift_forbidden；锁本场 layout/axis/light_anchor。\n锚点句：无人物或人物不露脸：以场景/道具锚为主\n",
+    )
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot)
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "资产引用注册层" and "PROP_xx" in f["msg"] for f in gate.findings)
+
+
 def test_closeup_character_shot_missing_fine_identity_lock_is_blocked():
     shot = GOOD_SHOT.replace(
         "**近景/反打身份锁定**：本镜是 CU 近景，必须引用 `定妆_沈念_脸部特写.png` 或表情参考；锁脸型、五官比例、发型发髻、标志配饰和服装配色，不得换脸。\n",
@@ -353,6 +381,56 @@ def _write_identity_registry(tmp_path, data=None, make_assets=False):
     (registry_dir / "identity_registry.json").write_text(json.dumps(registry, ensure_ascii=False), encoding="utf-8")
     if make_assets:
         for rel in registry["characters"][0]["forms"][0]["reference_group"].values():
+            if not isinstance(rel, str) or not rel.endswith(".png"):
+                continue
+            path = root / rel
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(b"\x89PNG\r\n\x1a\n")
+    return str(root)
+
+
+def _asset_registry():
+    return {
+        "kind": "n2d_asset_reference_registry",
+        "version": 1,
+        "assets": [
+            {
+                "id": "LOC_01",
+                "type": "scene",
+                "name": "冷宫寝殿",
+                "scope": "第1集起复用",
+                "reference_group": {"primary": "出图/共享/图片/定妆_冷宫寝殿.png"},
+                "constraints": {
+                    "layout": "床榻到门口横轴",
+                    "axis": "沈念画左，柳娘子画右",
+                    "light_anchor": "画左前 3000K 残烛暖主光；画右后冷月背光",
+                },
+                "drift_forbidden": ["layout", "axis", "light_direction", "era_style"],
+            },
+            {
+                "id": "PROP_01",
+                "type": "prop",
+                "name": "斑驳铜镜",
+                "scope": "第1集起复用",
+                "reference_group": {"primary": "出图/共享/图片/定妆_斑驳铜镜.png"},
+                "constraints": {"structure": "单镜面，斑驳铜绿镜框，无多镜面/重复镜框"},
+                "drift_forbidden": ["single_mirror_surface", "frame_shape", "era_style"],
+            },
+        ],
+    }
+
+
+def _write_asset_registry(tmp_path, data=None, make_assets=False):
+    import json
+    root = tmp_path / "制漫剧" / "测试剧"
+    registry_dir = root / "出图" / "common"
+    registry_dir.mkdir(parents=True, exist_ok=True)
+    registry = _asset_registry() if data is None else data
+    (registry_dir / "asset_registry.json").write_text(json.dumps(registry, ensure_ascii=False), encoding="utf-8")
+    if make_assets:
+        for asset in registry.get("assets", []):
+            ref = asset.get("reference_group", {}) if isinstance(asset, dict) else {}
+            rel = ref.get("primary", "") if isinstance(ref, dict) else ""
             if not isinstance(rel, str) or not rel.endswith(".png"):
                 continue
             path = root / rel
@@ -665,6 +743,50 @@ def test_identity_registry_full_contract_passes(tmp_path):
     root = _write_identity_registry(tmp_path, make_assets=True)
     gate.check_identity_registry(root, require_reference_assets=True)
     assert not any(f["dim"] == "资产身份注册层" for f in gate.findings)
+
+
+def test_asset_reference_registry_missing_is_blocked(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    gate.check_asset_reference_registry(str(root), require_reference_assets=False)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产引用注册层" and "asset_registry.json" in f["msg"] for f in gate.findings)
+
+
+def test_asset_reference_registry_rejects_prefix_type_mismatch(tmp_path):
+    data = _asset_registry()
+    data["assets"][0]["id"] = "PROP_99"
+    root = _write_asset_registry(tmp_path, data)
+    gate.check_asset_reference_registry(root, require_reference_assets=False)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产引用注册层" and "LOC_" in f["msg"] for f in gate.findings)
+
+
+def test_asset_reference_registry_requires_prop_structure(tmp_path):
+    data = _asset_registry()
+    del data["assets"][1]["constraints"]["structure"]
+    data["assets"][1]["constraints"]["color"] = "铜绿"
+    root = _write_asset_registry(tmp_path, data)
+    gate.check_asset_reference_registry(root, require_reference_assets=False)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产引用注册层" and "structure" in f["msg"] for f in gate.findings)
+
+
+def test_asset_reference_registry_allows_scene_layout_to_mention_props(tmp_path):
+    data = _asset_registry()
+    data["assets"][0]["constraints"]["layout"] = "床榻到门口横轴；沈念、床榻、铜镜在画左，门口在画右。"
+    root = _write_asset_registry(tmp_path, data)
+    gate.check_asset_reference_registry(root, require_reference_assets=False)
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "资产引用注册层" and "关键道具 constraints" in f["msg"] for f in gate.findings)
+
+
+def test_asset_reference_registry_reference_assets_required_for_video(tmp_path):
+    root = _write_asset_registry(tmp_path)
+    gate.check_asset_reference_registry(root, require_reference_assets=True)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产引用注册层" and "路径不存在" in f["msg"] for f in gate.findings)
+
+
+def test_asset_reference_registry_full_contract_passes(tmp_path):
+    root = _write_asset_registry(tmp_path, make_assets=True)
+    gate.check_asset_reference_registry(root, require_reference_assets=True)
+    assert not any(f["dim"] == "资产引用注册层" for f in gate.findings)
 
 
 def test_identity_adapter_matrix_missing_is_blocked(tmp_path):

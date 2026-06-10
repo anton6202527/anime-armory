@@ -23,6 +23,7 @@ MANIFEST_KIND = "n2d_episode_manifest"
 VISUAL_STATE_LEDGER_KIND = "n2d_visual_state_ledger"
 MOTION_CONTROL_MANIFEST_KIND = "n2d_motion_control_manifest"
 IDENTITY_REGISTRY_KIND = "n2d_asset_identity_registry"
+ASSET_REFERENCE_REGISTRY_KIND = "n2d_asset_reference_registry"
 SHARED_ASSET_DIR = "共享"
 LEGACY_SHARED_ASSET_DIR = "common"
 
@@ -54,6 +55,16 @@ PRODUCT_KINDS: Dict[str, Dict[str, str]] = {
         "boundary": (
             "角色【不变身份】注册层：定妆库人脸/形态/asset_key/reference_group/identity_adapters。"
             "跨集一致性的源头。会变的剧情状态属 visual_state_ledger，不在此。"
+        ),
+    },
+    ASSET_REFERENCE_REGISTRY_KIND: {
+        "owner": "n2d-image(写) / n2d-review·n2d-score(读校)",
+        "path": f"出图/{SHARED_ASSET_DIR}/asset_registry.json",
+        "layer": "非人物资产锁定（scene/prop/outfit/vfx）",
+        "boundary": (
+            "关键场景、反复入镜道具、独立服装/套装、法宝/VFX 的可执行参考资产注册层。"
+            "用 LOC_/PROP_/OUTFIT_/VFX_ ID 绑定 reference_group、constraints、drift_forbidden；"
+            "角色脸和角色形态仍归 identity_registry，剧情临时状态仍归 visual_state_ledger。"
         ),
     },
 }
@@ -762,6 +773,11 @@ def shared_asset_relpath(*parts: str) -> str:
 def identity_registry_path(root: str) -> str:
     """角色身份注册表路径，取自 PRODUCT_KINDS 注册的 path（move 时只改一处）。"""
     return shared_asset_path(root, "identity_registry.json")
+
+
+def asset_registry_path(root: str) -> str:
+    """非人物关键资产注册表路径，取自 PRODUCT_KINDS 注册的 path（move 时只改一处）。"""
+    return shared_asset_path(root, "asset_registry.json")
 
 
 def episode_manifest_path(root: str, ep: str) -> str:
