@@ -201,6 +201,7 @@ anime-armory/
 │   ├── novel2drama/ n2d-*    制漫剧能力
 │   ├── song/ song-*          写歌能力
 │   ├── mv/ mv-*              制MV能力
+│   ├── ad/ ad-*              拍广告能力（含 ad-craft 契约）
 │   └── shared-*              公共能力
 ├── .claude/skills -> ../skills
 ├── 写小说/<项目>/             小说产物

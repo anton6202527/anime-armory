@@ -22,6 +22,8 @@
 | 直接创作/编辑一首带人声的歌 | **`song`**（可从主题直接创作，也可改词、改曲风、重生成、挑版；过程中分诊到 song-lyrics/song-score/song-compose/song-cover/song-review/song-craft） |
 | 把成品歌做成音乐 MV（卡点/出图出视频/卡拉OK/合成） | **`mv`**（分诊到 mv-beat/image/video/lyric-sync/compose） |
 | 把客户需求/品牌产品做成 AI 广告片（创意/脚本/分镜/出图出视频/配音/剪辑包装/成片） | **`ad`**（分诊到 ad-craft/concept/script/voice/image/video/compose；不拆集，多时长 cutdown + 多比例交付） |
+| 查看任意项目进度/下一步，或在仓库根汇总所有项目 | **`progress`**（只读分发到各产线自己的进度脚本，不回写 `_进度.md`） |
+| 检查 skill 更新是否影响项目、生成重制计划 | **`update`**（当前 n2d 完整支持；其它线识别后友好提示待接入） |
 | 给视频/图片换脸（公共，任何流程可调） | **`shared-video-faceswap`** / **`shared-image-faceswap`**（带合规闸门） |
 | 给图/视频加水印（合规 AI 标识 / 品牌 logo·账号，公共） | **`shared-watermark`**（图视频同工具；AI 标识只加不去） |
 | 清理 / 瘦身 `skills/` 里的生成垃圾 | **`shared-cleanup`**（默认扫描，确认后只删低风险缓存/临时文件） |

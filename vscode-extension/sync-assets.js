@@ -18,9 +18,9 @@ const filter = (src) => {
   if (SKIP_NAMES.has(b)) return false;
   if (b.endsWith('.pyc') || b.endsWith('.vsix')) return false;
   if (fs.lstatSync(src).isSymbolicLink()) return false; // never bundle dangling links
-  // /tov: only bundle the novel + n2d lines (+ shared deps). Drop 写歌/制MV:
-  // skip the song-*/mv-* skill dirs at the skills/ root.
-  if (path.dirname(src) === path.join(repo, 'skills') && /^(song|mv)(-|$)/.test(b)) return false;
+  // /tov: only bundle the novel + n2d lines (+ shared deps). Drop 写歌/制MV/拍广告:
+  // skip the song-*/mv-*/ad-* skill dirs at the skills/ root.
+  if (path.dirname(src) === path.join(repo, 'skills') && /^(song|mv|ad)(-|$)/.test(b)) return false;
   return true;
 };
 
