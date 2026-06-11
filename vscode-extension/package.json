@@ -2,7 +2,7 @@
   "name": "anime-armory",
   "displayName": "anime-armory",
   "description": "VS Code panel for organizing anime-armory novel and comic-drama production workflows.",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "publisher": "armory",
   "private": true,
   "engines": {

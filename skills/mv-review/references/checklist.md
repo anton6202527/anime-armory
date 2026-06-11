@@ -1,7 +1,7 @@
 # 作品质检 —— 全维度清单（看什么 · 怎么判 · 定级）
 
 > 落到 mv 制MV 产线。**机** = `mv_check.py` 确定性查；**判** = LLM 语义判（含并排读图）。容错铁律：只记真问题。
-> 正向标尺：卡点 `mv-beat/SKILL.md` · 运镜 `mv-video/references/prompt_format.md` · 一致性 `mv-image/references/prompt_format.md` · 合成 `mv-compose/references/usage.md`。
+> 正向标尺：卡点 `mv-beat/SKILL.md` · 运镜/动作 `mv-video/references/prompt_format.md` + `action_knowledge.md` · 一致性 `mv-image/references/prompt_format.md` + `visual_consistency.md` · 合成 `mv-compose/references/usage.md`。
 
 ## A. 视觉一致性（同 n2d 头号死因）
 
@@ -14,6 +14,8 @@
 | 画风跳变 | 判 | 是否守视觉蓝图 global_style；有无中途换生图工具的"一致性税" | 🟡 |
 | 道具/配饰漂移 | 判 | 反复入镜道具一致 | 🟢/🟡 |
 | 画面糊/低质 | 判 | 出图/clip 分辨率清晰度够投放 | 🟡 |
+| 单曲视觉一致性包缺失 | 判 | `lead_identity_anchor / global_style / palette_anchor / section_look / motif_ledger` 是否在视觉蓝图/设定/分镜里被继承；MV 可换段落 look，但不能一支歌内换脸换主画风 | 🟡 |
+| 参考输入/LoRA 未登记 | 判 | 若 `_设置.md` 写 `MV一致性增强=指定参考图/后端主体库/+LoRA`，检查 prompt 是否含 `reference_inputs`、参考图路径/主体 ID/LoRA trigger+底模+授权说明 | 🟡 |
 
 ## B. 卡点 / 节奏（**MV 的命** —— 对 `mv-beat` 卡点原则）
 
@@ -25,6 +27,8 @@
 | clip 时长卡点 | 机（需 ffprobe）+判 | 每 clip 时长 = 相邻卡点之差；**clip 疑似等长 = 不卡点** | 等长 🟡 |
 | 副歌密 verse 疏 | 判 | 副歌每 downbeat 切（碎）、verse 缓（2–4 拍） | 🟡 |
 | 爽点对 downbeat | 判 | 高潮画面同帧砸在 downbeat 上 | 🟡 |
+| 动作家族空泛 | 判 | `clip_plan.json` / 视频 prompt 是否有 `action_family/action_peak/transition_motif`，且一 clip 一个主动作；只写“炫酷动作/酷炫运镜”不给可执行动作链 | 🟡 |
+| 动作强度不合段落 | 判 | verse 动作太满、副歌没高光动作、bridge 没反转动作；对 `action_knowledge.md` 段落强度表 | 🟡 |
 | clip 总时长 ≈ 歌长 | 机（需 ffprobe） | clip 总和 vs `歌/song.wav`/beatgrid.duration | 差大 🟡 |
 
 ## C. 卡拉OK字幕（确定性为主 → 机检）

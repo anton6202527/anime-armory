@@ -13,9 +13,20 @@ import contract
 class MvContractTest(unittest.TestCase):
     def test_choice_points_include_mv_controls(self):
         points = contract.choice_points()
-        for key in ("MV用途", "MV视觉风格", "MV规划粒度", "卡点策略", "生视频AI", "出视频规格", "AI视觉使用披露"):
+        for key in (
+            "MV用途",
+            "MV视觉风格",
+            "MV规划粒度",
+            "卡点策略",
+            "生图AI",
+            "MV一致性增强",
+            "生视频AI",
+            "出视频规格",
+            "AI视觉使用披露",
+        ):
             self.assertIn(key, points)
         self.assertIn("Kling", points["生视频AI"])
+        self.assertIn("+LoRA", points["MV一致性增强"])
 
     def test_profiles(self):
         self.assertEqual(contract.video_spec_profile("预算一般")["resolution"], "720p")
@@ -37,6 +48,7 @@ class MvContractTest(unittest.TestCase):
         self.assertEqual(contract.classify_image_backend("Dreamina")[1], "forbidden")
         self.assertEqual(contract.classify_image_backend("某小众生图器")[1], "unknown")
         self.assertEqual(contract.DEFAULT_SETTINGS["生图AI"], "Codex")
+        self.assertEqual(contract.DEFAULT_SETTINGS["MV一致性增强"], "共享定妆+锚点")
 
 
 if __name__ == "__main__":

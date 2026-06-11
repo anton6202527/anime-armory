@@ -4,6 +4,7 @@
 - `分镜/clip_plan.json`：clip 时长、首帧路径、尾帧需求、转场、continuity 的源头，由 `mv-plan` 生成。
 - `出视频/jobs_manifest.json`：每个 clip 跑几版、prompt 文件、已登记 take、评分、selected_take 的源头，由 `scripts/video_jobs.py` 生成/维护。
 - `分镜/timeline_manifest.json`：最终合成顺序和 selected video 路径，由 `mv-plan` 创建、`video_jobs.py --select` 同步。
+- `mv-video/references/action_knowledge.md`：动作家族、动作峰值、转场母题的知识库。`clip_plan.json` 中的 `action_family/action_peak/visual_motif/transition_motif` 应从这里选，不临场泛写“炫酷”。
 
 ## clip 任务格式（按 clip_plan + beatgrid 规划）
 ```markdown
@@ -13,6 +14,10 @@
 **卡点**：起 0:48(downbeat) → 止 0:49.6(下一downbeat)
 **歌词/情绪钩子**：{本 clip 对应歌词词组 / 情绪点 / 爽点}
 **转场**：{动作切 / 视线切 / 闪白 / 遮挡擦镜 / 光效切 / 硬切 / 空镜缓冲}
+**动作家族**：{performance_pose / expressive_walk / dance_hit / camera_whip / orbit_reveal / prop_sync / vfx_burst / environment_motion / mirror_split / silhouette_action}
+**动作峰值**：{对齐 beat/downbeat 的秒点，通常在 clip 结束前 0.1-0.3s 或强 downbeat}
+**视觉母题**：{主角身份锚点 / 主色 / 本段反复符号}
+**转场母题**：{闪白 / 遮挡擦镜 / whip pan / match action / match color / particle bridge / mirror fracture / shadow cut}
 **need_end_frame**：true/false。**MV 默认卡点硬切 → false**；仅**同段落·非卡点切·人物姿态连续**的接缝（副歌内一段连续动作分两 clip）= true → mv-image 出尾帧 PNG 进 图片/ 子目录，本 clip 首尾双帧引导锁接点。
 **continuity**（必填，**读取**相邻 clip + beatgrid **派生而非重写**）：
 - start_state：**直接抄上一 clip 的 `end_state`**（单一真值源，不要自己重新描述，否则相邻镜语义漂移=跳切根源）；首 clip 取首帧描述 + 段落视觉锚点
@@ -27,10 +32,11 @@ continuity:
   end_state: {end_state}
   constraints: {constraints}
   negative: {negative}
-人物运动：{动作链}；表情；
+人物运动：{动作链}；动作家族：{action_family}；表情；
 镜头运动：{快推/环绕/轻甩 + 速度}；   ← 由段落/张力决定
 动态细节：{发丝/光斑/衣摆/雾…}；
-卡点约束：动作峰值/眼神落点/光效爆点对齐 {beat/downbeat 秒点}，clip 结尾停在 continuity.end_state 方便下一刀进入；
+卡点约束：动作峰值/眼神落点/光效爆点对齐 {action_peak / beat/downbeat 秒点}，clip 结尾停在 continuity.end_state 方便下一刀进入；
+转场母题：{transition_motif}；
 衔接约束：开头承接 continuity.start_state，只执行 continuity.action，保持 continuity.constraints，避开 continuity.negative，按{转场}进入下一 clip；
 声音约束：无对白、无旁白、不要生成原生人声，音乐由 mv-compose 使用原歌轨统一处理；
 （末尾按平台拼风格词）

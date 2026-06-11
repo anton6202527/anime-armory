@@ -93,6 +93,7 @@ from n2d_settings import get_setting, is_video_first, watermark_setting  # noqa:
 import semantic_continuity as semc  # noqa: E402
 import state_continuity as statec  # noqa: E402
 import multimodal_consistency as mmc  # noqa: E402
+import subtitle_align as sa  # noqa: E402
 
 BLOCK, WARN, INFO = "block", "warn", "info"
 findings: List[Dict[str, object]] = []
@@ -2553,6 +2554,19 @@ def check_multimodal_continuity(root: str, ep: str) -> None:
     )
 
 
+def check_subtitle_alignment(root: str, ep: str) -> None:
+    """字幕对齐(L1)：双语短语边界/阅读速度/译文完整性（补 mechanical_check 条数对账盲区）。"""
+    res = sa.analyze(root, ep)
+    _add_continuity_rows(
+        "字幕对齐(L1)",
+        [r for r in res.get("rows", []) if isinstance(r, dict)],
+        ep,
+        default_stage="script_stage2",
+        default_scope="回 n2d-script 阶段2重跑 finalize_storyboard / 修翻译层，对齐中↔英断句与阅读速度。",
+        default_artifacts=(f"脚本/{ep}/字幕_中文.srt", f"脚本/{ep}/字幕_英文.srt"),
+    )
+
+
 def run(root: str, ep: str, stage: str) -> None:
     if not os.path.isdir(root):
         add(BLOCK, "路径", root, "作品根不存在")
@@ -2626,6 +2640,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_semantic_lineage(root, ep)
         check_state_continuity(root, ep)
         check_multimodal_continuity(root, ep)
+        check_subtitle_alignment(root, ep)
         check_final_watermark(root, ep)
     else:
         add(BLOCK, "参数", stage, "未知 stage")

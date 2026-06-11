@@ -163,9 +163,9 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "label": "字幕正确性",
         "weight": 16,
         "return_to_stage": "script_stage2",
-        "scope": "回 n2d-script 阶段2重跑 finalize_storyboard / 字幕重定时；必要时重出配音 manifest。",
-        "audit_labels": (),
-        "keywords": ("字幕", "srt", "cue"),
+        "scope": "回 n2d-script 阶段2重跑 finalize_storyboard / 字幕重定时 / 修翻译层；必要时重出配音 manifest。",
+        "audit_labels": ("字幕对齐(L1)",),
+        "keywords": ("字幕", "srt", "cue", "对齐", "断句", "漏译", "阅读速度", "双语", "subtitle"),
     },
     "audio_visual_sync": {
         "label": "音画同步",
@@ -1246,6 +1246,7 @@ PRODUCTION_DIR = "生产数据"  # 仪表盘/评分/投放/审片UI 的产出目
 
 def production_dir(root: str) -> str:
     """`<作品根>/生产数据/` 绝对路径——dashboard/score/feedback/review-ui/batch 共用。"""
+    root = os.fspath(root)
     return os.path.join(root.rstrip("/"), PRODUCTION_DIR)
 
 

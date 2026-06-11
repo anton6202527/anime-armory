@@ -75,6 +75,9 @@ def prompt_for_take(clip, backend, spec_profile, take_id):
         f"- 首帧：`{clip.get('image_path')}`",
         f"- 时长：{clip.get('duration')}s",
         f"- 转场：{clip.get('transition')}",
+        f"- 动作家族：{clip.get('action_family', '')}",
+        f"- 动作峰值：{clip.get('action_peak', clip.get('end'))}s",
+        f"- 转场母题：{clip.get('transition_motif', '')}",
         "",
         "## continuity",
         f"- start_state：{c.get('start_state', '')}",
@@ -84,7 +87,7 @@ def prompt_for_take(clip, backend, spec_profile, take_id):
         f"- negative：{c.get('negative', '')}",
         "",
         "## Prompt",
-        f"人物运动：{c.get('action', '')}；镜头运动：服务 {clip.get('section')} 段落张力；动态细节：发丝、衣摆、光斑或环境粒子随节拍变化；卡点约束：动作峰值对齐 {clip.get('end')}s；声音约束：无对白、无旁白、不要生成原生人声。",
+        f"人物运动：{c.get('action', '')}；动作家族：{clip.get('action_family', '')}；镜头运动：服务 {clip.get('section')} 段落张力；动态细节：发丝、衣摆、光斑或环境粒子随节拍变化；卡点约束：动作峰值对齐 {clip.get('action_peak', clip.get('end'))}s；转场母题：{clip.get('transition_motif', '')}；声音约束：无对白、无旁白、不要生成原生人声。",
     ]
     return "\n".join(lines) + "\n"
 

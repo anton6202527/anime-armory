@@ -46,6 +46,77 @@ COSTLY_HINT = dict(COSTLY_HINTS) if COSTLY_HINTS else {
 }
 COSTLY_HINT["出图"] = COSTLY_HINT.get("出图", "") + " 分镜 PNG 前共享定妆库 出图/共享/ 必须全 ✅。"
 
+LOW_COST_PARALLEL_SKILLS = {"n2d-script", "n2d-progress", "n2d-update"}
+
+
+def _num(row):
+    try:
+        return int(row.get("_num", 10**9))
+    except (TypeError, ValueError):
+        return 10**9
+
+
+def _parallel_tail(col, skill):
+    if col in COSTLY_HINT:
+        return "（也属于花钱/不可逆/合规点，开跑前仍需单独确认）"
+    if skill in LOW_COST_PARALLEL_SKILLS:
+        return "（低成本前期，可和当前阶段并行）"
+    return "（可并行，但需按对应 stage gate/依赖检查）"
+
+
+def format_parallel(lbl, col, val, skill, note):
+    vt = f"（当前 {val}）" if val and val != "⬜" else ""
+    tail = "（补真音后再合成）" if note else ""
+    return f"可并行: {lbl}「{col}」{vt} → {skill}{tail} {_parallel_tail(col, skill)}"
+
+
+def parallel_suggestion(root, rows, header, flow, gaps):
+    """Return one safe parallel work suggestion, if there is a useful candidate.
+
+    Prefer already-started secondary gaps; otherwise suggest starting the next
+    raw-ready episode from its current first stage.  This keeps the main
+    "frontier" single-minded while surfacing useful cross-episode overlap.
+    """
+    if not gaps:
+        return ""
+
+    primary_ep = gaps[0][0]
+    for lbl, col, val, skill, note in gaps[1:]:
+        if lbl != primary_ep and col:
+            return format_parallel(lbl, col, val, skill, note)
+
+    primary_num = next((_num(r) for r in rows if r.get("_ep") == primary_ep), 0)
+    for r in sorted(rows, key=_num):
+        ep = r.get("_ep", "")
+        if not ep or ep == primary_ep:
+            continue
+        # Do not invent work for episodes whose source/raw row is not ready.
+        if not is_started(r.get("raw", "")) and not is_progress_satisfied(root, r, "raw"):
+            continue
+        # Prefer later episodes; if none exist, the loop below still catches earlier unfinished ones.
+        if _num(r) <= primary_num:
+            continue
+        if any(is_started(r.get(c, "")) for c in flow):
+            continue
+        route = stage_of(root, r, header)
+        col = route.get("col") or ""
+        if col:
+            val = r.get(col, "").strip()
+            return format_parallel(ep, col, val, route.get("skill") or DISPATCHER, route.get("note") or "")
+
+    for r in sorted(rows, key=_num):
+        ep = r.get("_ep", "")
+        if not ep or ep == primary_ep:
+            continue
+        if any(is_started(r.get(c, "")) for c in flow):
+            continue
+        route = stage_of(root, r, header)
+        col = route.get("col") or ""
+        if col:
+            val = r.get(col, "").strip()
+            return format_parallel(ep, col, val, route.get("skill") or DISPATCHER, route.get("note") or "")
+    return ""
+
 def report(root, out):
     try:
         header, dict_rows = parse_progress(root)
@@ -96,6 +167,9 @@ def report(root, out):
         out.append(f"  {note}")
     elif col in COSTLY_HINT:
         out.append(f"  ⚠️ {COSTLY_HINT[col]}")
+    parallel = parallel_suggestion(root, dict_rows, header, flow, gaps)
+    if parallel:
+        out.append(parallel)
     if len(gaps) > 1 or findings_gaps:
         out.append("次要缺口/待办:")
         out.extend(findings_gaps[:3])

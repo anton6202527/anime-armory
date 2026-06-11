@@ -383,3 +383,66 @@ def test_consistency_findings_event_counts_and_folds_into_qa_blockers(tmp_path: 
     assert ep1["qa_blockers"] == 2   # 折入 qa_blockers，阈值告警/总账看得到审查检出
     totals = result["totals"]
     assert totals["consistency_blockers"] == 2 and totals["consistency_warnings"] == 3
+
+
+# ── 成本预检（forecast）单测 ──
+
+def test_forecast_episode_cost_pure():
+    assert dashboard.forecast_episode_cost({"CNY": 6.0}, 5.0) == {"CNY": 30.0}
+    assert dashboard.forecast_episode_cost({"CNY": 6.0, "USD": 1.0}, 2.0) == {"CNY": 12.0, "USD": 2.0}
+    assert dashboard.forecast_episode_cost({}, 5.0) == {}           # 无历史单价
+    assert dashboard.forecast_episode_cost({"CNY": 6.0}, 0) == {}    # 无计划时长
+    assert dashboard.forecast_episode_cost({"CNY": 0}, 5.0) == {}    # 单价为0忽略
+
+
+def test_affordable_episode_count_pure():
+    assert dashboard.affordable_episode_count(100.0, 30.0) == 3
+    assert dashboard.affordable_episode_count(20.0, 30.0) == 0
+    assert dashboard.affordable_episode_count(100.0, 0) is None      # 单集成本未知
+    assert dashboard.affordable_episode_count(100.0, -1) is None
+
+
+def test_top_redraw_leak_pure():
+    leak = dashboard.top_redraw_leak({"崩脸": 5, "构图": 2, "字幕": 0, "其它": 8}, top=2)
+    assert leak == [("其它", 8), ("崩脸", 5)]                         # 按次数降序，0 次剔除
+    assert dashboard.top_redraw_leak({}) == []
+
+
+def test_cmd_forecast_end_to_end(tmp_path, capsys):
+    root = str(tmp_path)
+    # 历史：第1集 已完成 1 分钟、花 12 CNY → ¥12/min；外加一次崩脸重抽
+    # （直接构造事件，绕开 CLI 与进度解析，只验 forecast 逻辑）
+    dashboard.append_events(root, [
+        dashboard.make_event("第1集", "image", "generation",
+                             cost={"amount": 12, "unit": "CNY", "currency": "CNY", "provider": "x"},
+                             generation={"status": "pass"},
+                             release={"runtime_sec": 60}),
+        dashboard.make_event("第1集", "video", "redraw",
+                             generation={"status": "fail", "redraw_reason": "崩脸重抽"}),
+    ])
+    # 第2集计划时长 120s = 2 分钟
+    sb = tmp_path / "脚本" / "第2集"
+    sb.mkdir(parents=True)
+    (sb / "storyboard.json").write_text(json.dumps({"total_duration": 120}), encoding="utf-8")
+
+    rc = dashboard.main(["forecast", root, "第2集", "--budget", "100", "--unit", "CNY", "--json"])
+    assert rc == 0
+    out = json.loads(capsys.readouterr().out)
+    assert out["planned_min"] == 2.0
+    assert out["cost_per_finished_min"] == {"CNY": 12.0}
+    assert out["forecast_cost"] == {"CNY": 24.0}            # 12 ¥/min × 2 min
+    assert out["budget"]["over_budget"] is False
+    assert out["budget"]["more_episodes_affordable"] == 4   # 100 // 24
+    assert any(x["category"] for x in out["redraw_leak_top"])  # 重抽漏点滚出来了
+
+
+def test_cmd_forecast_no_history_graceful(tmp_path, capsys):
+    # 无历史成本：不臆造，给 note + planned_min，仍 rc=0
+    sb = tmp_path / "脚本" / "第1集"
+    sb.mkdir(parents=True)
+    (sb / "storyboard.json").write_text(json.dumps({"total_duration": 90}), encoding="utf-8")
+    rc = dashboard.main(["forecast", str(tmp_path), "第1集", "--json"])
+    assert rc == 0
+    out = json.loads(capsys.readouterr().out)
+    assert out["forecast_cost"] == {}
+    assert any("无历史成本" in n for n in out["notes"])

@@ -36,7 +36,8 @@ description: 制MV 质检 + 流程自审（mv 写歌→制MV 生产线的 QA 环
 - **人判（判断题）**：机检覆盖不了的语义维度。逐维见 `references/checklist.md`。
   - **崩脸 / 场景漂移 / 画风跳变用图判**：把 `出图/段落/图片/镜头*.png` 与 `出图/共享/图片/定妆_*.png` **并排读图比对**（脸型/发型/服色/画风锚点）；装了 `face_recognition`/`insightface` 可给相似度分，缺库则人判兜。
   - **接缝跳切用图判（逐接缝过）**：取相邻 clip 的 Clip K 末帧 vs Clip K+1 首帧**并排读图**，对照 `分镜/clip_plan.json` + `timeline_manifest.json` 的接缝契约：① 标 `need_end_frame=true`/连续硬切但两帧姿态/站位/视线/光线明显对不上 → 跳切/闪烁；② 标 `need_end_frame=true` 却没出 `_end.png`（mv-image 漏做）→ 接力断链；③ 服装/发型/道具在接缝处突变 → 接缝崩。**注意 MV 容差更宽**：副歌卡点硬切处的视觉跳变若踩准鼓点、是有意冲击，**不算问题**（卡点切本就允许画面跳）；只标"非卡点切又接不住"的接缝。修法：回 mv-image 补尾帧 / 回 mv-video 用首尾双帧重出该 clip。
-  - **运镜服务节奏**：副歌快推/环绕、verse 缓推/跟、bridge 换机位、爽点对 downbeat 同帧砸下——对 `mv-video/references/prompt_format.md`。
+  - **运镜与动作服务节奏**：副歌快推/环绕、verse 缓推/跟、bridge 换机位、爽点对 downbeat 同帧砸下；动作家族、动作峰值、转场母题对 `mv-video/references/action_knowledge.md` + `prompt_format.md`。只写“炫酷动作”但没有可执行动作链，标为建议级。
+  - **单曲视觉一致性**：审 `mv-image/references/visual_consistency.md` 的身份锚点、主色、段落 look、母题、`reference_inputs` 是否贯穿；若 `_设置.md` 启用了指定参考图、后端主体库或 `+LoRA`，prompt 必须登记路径/主体 ID/LoRA trigger+底模+授权说明。MV 不要求跨集状态，但一支歌内不能换脸换主画风。
   - **卡点体感**：机检给"clip 是否对齐 downbeat"的客观判断，**踩得爽不爽**由人判（看成片副歌切点是否砸在鼓点）。
   - **换脸合规**：若用了 `shared-video-faceswap`——AI 标识水印在否、未被裁、源脸授权。
 
@@ -79,7 +80,7 @@ description: 制MV 质检 + 流程自审（mv 写歌→制MV 生产线的 QA 环
 ## 详细参考
 - 作品质检全维度清单（看什么 + 怎么判 + 定级 + 健康度概览）：`references/checklist.md`
 - 流程自审操作手册（拉基准 / 对照 / 起草）：`references/self_audit.md`
-- 正向标准：卡点 `mv-beat/SKILL.md` · 运镜 `mv-video/references/prompt_format.md` · 一致性 `mv-image/references/prompt_format.md` · 合成 `mv-compose/references/usage.md`
+- 正向标准：卡点 `mv-beat/SKILL.md` · 运镜/动作 `mv-video/references/prompt_format.md` + `mv-video/references/action_knowledge.md` · 一致性 `mv-image/references/prompt_format.md` + `mv-image/references/visual_consistency.md` · 合成 `mv-compose/references/usage.md`
 - 输入歌体检（不在本 skill 重复）：`song-review`
 
 ## 常见错误

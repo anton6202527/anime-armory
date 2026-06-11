@@ -15,9 +15,15 @@ import os
 import re
 import sys
 
+# Inject common directory for markdown_parser
+COMMON_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'common'))
+if COMMON_DIR not in sys.path:
+    sys.path.insert(0, COMMON_DIR)
+
+from markdown_parser import file_lock, atomic_write_text, update_checklist_stage
+
 from contract import stage_info
 from qa_gate import collect_gate_status, format_gate_status
-from store import atomic_write_text, file_lock
 
 
 CHECK_RE = re.compile(r"^\s*-\s*\[\s\]\s*(.+?)\s*$")
@@ -84,32 +90,20 @@ def scan_progress(root):
 
 
 def set_stage(root, stage_key, state):
-    """Mark one machine-readable stage done/todo under an exclusive lock."""
-    if state not in {"done", "todo"}:
-        raise ValueError("state must be done or todo")
+    """Mark one machine-readable stage done/todo under an exclusive lock, using common parser."""
     path = progress_path(root)
     if not os.path.exists(path):
         raise FileNotFoundError(path)
-    mark = "x" if state == "done" else " "
+    
     with file_lock(progress_lock_path(root)):
         with open(path, encoding="utf-8") as f:
-            lines = f.readlines()
-        changed = False
-        found = False
-        out = []
-        for raw in lines:
-            if f"stage:{stage_key}" in raw and re.match(r"^(\s*-\s*)\[[ xX]\]", raw):
-                found = True
-                new = re.sub(r"^(\s*-\s*)\[[ xX]\]", rf"\1[{mark}]", raw, count=1)
-                if new != raw:
-                    changed = True
-                out.append(new)
-            else:
-                out.append(raw)
-        if not found:
-            raise KeyError(f"stage not found in _进度.md: {stage_key}")
+            content = f.read()
+            
+        new_content, changed = update_checklist_stage(content, stage_key, state)
+        
         if changed:
-            atomic_write_text(path, "".join(out))
+            atomic_write_text(path, new_content)
+            
     return {"stage": stage_key, "state": state, "changed": changed, "path": path}
 
 

@@ -17,6 +17,7 @@ MV_BEAT_STRATEGIES = ("副歌强卡点", "全程强卡点", "叙事优先", "歌
 MV_VIDEO_BACKENDS = ("即梦", "可灵", "Veo", "Seedance", "Runway", "Kling", "manual")
 # 阶段1：生图AI 是选择点，默认 Codex；放行官方多参考一致性后端。供 _设置.md 菜单用。
 MV_IMAGE_BACKENDS = ("Codex", "Seedream", "可灵主体库", "Nano Banana", "Sora Cameo", "自定义")
+MV_CONSISTENCY_MODES = ("共享定妆+锚点", "指定参考图", "后端主体库", "+LoRA")
 MV_VIDEO_SPECS = ("预算充足", "预算一般", "预算不够")
 MV_ASPECTS = ("16:9", "9:16", "1:1")
 AI_VISUAL_USAGE_MODES = ("AI-generated", "AI-assisted", "未使用AI视觉")
@@ -66,6 +67,7 @@ DEFAULT_SETTINGS = {
     "MV规划粒度": "标准",
     "卡点策略": "副歌强卡点",
     "生图AI": "Codex",
+    "MV一致性增强": "共享定妆+锚点",
     "生视频AI": "即梦",
     "出视频规格": "预算一般",
     "合成画幅": "16:9",
@@ -79,6 +81,7 @@ CHOICE_POINTS = {
     "MV规划粒度": MV_PLAN_GRANULARITY,
     "卡点策略": MV_BEAT_STRATEGIES,
     "生图AI": MV_IMAGE_BACKENDS,
+    "MV一致性增强": MV_CONSISTENCY_MODES,
     "生视频AI": MV_VIDEO_BACKENDS,
     "出视频规格": MV_VIDEO_SPECS,
     "合成画幅": MV_ASPECTS,

@@ -64,3 +64,17 @@ def test_load_settings_parses_all_forms(tmp_path: Path) -> None:
     assert s["生图AI"] == "Codex"        # 裸形 + 全角冒号
     assert s["水印"] == "不打"
     assert n2d_settings.load_settings(str(tmp_path / "missing")) == {}
+
+
+def test_load_settings_does_not_span_markdown_quote_into_first_key(tmp_path: Path) -> None:
+    work = tmp_path / "w"
+    work.mkdir()
+    (work / "_设置.md").write_text(
+        "> 首跑说明：后续同项目沿用。\n\n- 制作模式：先出视频后配音\n- 生视频AI：即梦\n",
+        encoding="utf-8",
+    )
+
+    s = n2d_settings.load_settings(str(work))
+    assert s["制作模式"] == "先出视频后配音"
+    assert s["生视频AI"] == "即梦"
+    assert not any("首跑说明" in key for key in s)

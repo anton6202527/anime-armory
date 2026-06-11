@@ -145,23 +145,28 @@ def parse_progress(root: str) -> Tuple[List[str], List[Dict[str, str]]]:
     p = progress_path(root)
     if not os.path.exists(p):
         raise FileNotFoundError(p)
-    lines = open(p, encoding="utf-8").read().splitlines()
-    header: Optional[List[str]] = None
+    content = open(p, encoding="utf-8").read()
+    
+    # Import markdown_parser lazily to avoid circular dependencies if any
+    try:
+        from markdown_parser import parse_markdown_table
+    except ImportError:
+        from .markdown_parser import parse_markdown_table
+        
+    try:
+        header, raw_rows = parse_markdown_table(content, header_identifier="集")
+    except ValueError as e:
+        raise ValueError(str(e))
+        
     rows: List[Dict[str, str]] = []
-    for ln in lines:
-        if header is None and re.match(r"^\|\s*集\s*\|", ln):
-            header = [c.strip() for c in ln.split("|")[1:-1]]
-            continue
-        if header and is_episode_row(ln):
-            cells = [c.strip() for c in ln.split("|")[1:len(header) + 1]]
-            row = dict(zip(header, cells))
-            row["_ep"] = row.get("集") or cells[0]
-            m = re.search(r"第\s*(" + _EP_TOKEN + r")\s*集", row["_ep"])
-            num = _cn_to_int(m.group(1)) if m else None
-            row["_num"] = num if num is not None else 10**9
-            rows.append(row)
-    if header is None:
-        raise ValueError("未找到表头（| 集 | …）")
+    for r in raw_rows:
+        ep = r.get("集") or r.get("_pk", "")
+        num = episode_number(ep)
+        if num is not None:
+            r["_ep"] = ep
+            r["_num"] = num if num is not None else 10**9
+            rows.append(r)
+            
     return header, rows
 
 

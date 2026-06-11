@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
-import hashlib
 import json
 import os
 import subprocess
@@ -38,16 +37,18 @@ from n2d_route import (  # noqa: E402
     stage_of,
 )
 
+from skill_snapshot import ( # noqa: E402
+    now_iso, 
+    snapshot_for_skills, 
+    changed_files_since, 
+    git_changed_files
+)
+
 KIND_SNAPSHOT = SKILL_UPDATE_SNAPSHOT_KIND
 KIND_PLAN = SKILL_UPDATE_PLAN_KIND
 SNAPSHOT_FILE = "skill_update_snapshot.json"
 PLAN_PREFIX = "skill_update_plan"
 
-TEXT_EXTS = {
-    ".md", ".py", ".json", ".yaml", ".yml", ".txt", ".sh", ".js", ".ts",
-    ".toml", ".cfg", ".ini", ".csv",
-}
-SKIP_DIRS = {"__pycache__", "node_modules", ".git"}
 ALWAYS_RELEVANT_SKILLS = {
     "common",
     "novel2drama",
@@ -66,10 +67,6 @@ OBSERVE_ONLY_SKILLS = {
 }
 
 
-def now_iso() -> str:
-    return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
-
-
 def rel(path: str) -> str:
     return os.path.relpath(path, REPO_ROOT).replace(os.sep, "/")
 
@@ -80,48 +77,6 @@ def skill_name_for_path(path: str) -> Optional[str]:
     if len(parts) >= 2 and parts[0] == "skills":
         return parts[1]
     return None
-
-
-def iter_skill_files(skill: str) -> Iterable[str]:
-    base = os.path.join(REPO_SKILLS, skill)
-    if skill == "common":
-        base = os.path.join(REPO_SKILLS, "common")
-    if not os.path.isdir(base):
-        return []
-    files: List[str] = []
-    for root, dirs, names in os.walk(base):
-        dirs[:] = [d for d in dirs if d not in SKIP_DIRS and not d.startswith(".")]
-        for name in names:
-            if name.startswith(".") or name.endswith(".pyc") or name.endswith(".vsix"):
-                continue
-            ext = os.path.splitext(name)[1].lower()
-            if ext and ext not in TEXT_EXTS:
-                continue
-            path = os.path.join(root, name)
-            if os.path.isfile(path):
-                files.append(path)
-    return sorted(files)
-
-
-def file_sha256(path: str) -> str:
-    h = hashlib.sha256()
-    with open(path, "rb") as fh:
-        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
-            h.update(chunk)
-    return h.hexdigest()
-
-
-def snapshot_for_skills(skills: Iterable[str]) -> Dict[str, Any]:
-    files: Dict[str, str] = {}
-    for skill in sorted(set(skills)):
-        for path in iter_skill_files(skill):
-            files[rel(path)] = file_sha256(path)
-    return {
-        "kind": KIND_SNAPSHOT,
-        "created_at": now_iso(),
-        "skills": sorted(set(skills)),
-        "files": files,
-    }
 
 
 def snapshot_path(root: str) -> str:
@@ -146,40 +101,6 @@ def write_json(path: str, data: Dict[str, Any]) -> None:
         json.dump(data, fh, ensure_ascii=False, indent=2, sort_keys=True)
         fh.write("\n")
     os.replace(tmp, path)
-
-
-def changed_files_since(old: Optional[Dict[str, Any]], new: Dict[str, Any]) -> List[str]:
-    if not old:
-        return []
-    before = old.get("files") if isinstance(old.get("files"), dict) else {}
-    after = new.get("files") if isinstance(new.get("files"), dict) else {}
-    keys = set(before) | set(after)
-    return sorted(k for k in keys if before.get(k) != after.get(k))
-
-
-def git_changed_files() -> List[str]:
-    try:
-        proc = subprocess.run(
-            ["git", "-C", REPO_ROOT, "status", "--short", "--untracked-files=all"],
-            check=False,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
-            text=True,
-        )
-    except OSError:
-        return []
-    if proc.returncode != 0:
-        return []
-    out: List[str] = []
-    for line in proc.stdout.splitlines():
-        if not line.strip():
-            continue
-        path = line[3:].strip()
-        if " -> " in path:
-            path = path.split(" -> ", 1)[1].strip()
-        if path.startswith("skills/"):
-            out.append(path)
-    return sorted(set(out))
 
 
 def rows_by_episode(root: str) -> Tuple[List[str], Dict[str, Dict[str, str]]]:
@@ -327,12 +248,12 @@ def build_plan(root: str, ep: str, *, include_git: bool = True) -> Dict[str, Any
     until_key = current_stage_key(root, ep, header, row)
     relevant_skills = relevant_skills_for_stage(until_key)
     old = load_snapshot(root)
-    new = snapshot_for_skills(relevant_skills)
+    new = snapshot_for_skills(REPO_ROOT, REPO_SKILLS, relevant_skills)
     snapshot_changes = changed_files_since(old, new)
     changed = set(snapshot_changes)
     if include_git and old is None:
         relevant_prefixes = tuple(f"skills/{s}/" for s in relevant_skills)
-        changed.update(p for p in git_changed_files() if p.startswith(relevant_prefixes))
+        changed.update(p for p in git_changed_files(REPO_ROOT) if p.startswith(relevant_prefixes))
     changed_files = sorted(changed)
     changed_skills = sorted({skill_name_for_path(os.path.join(REPO_ROOT, p)) or "" for p in changed_files} - {""})
     rerun_from = earliest_rerun_stage(changed_skills, until_key)
@@ -374,7 +295,7 @@ def record(root: str, episodes: Sequence[str]) -> Dict[str, Any]:
         normalized.append(ep)
         until_key = current_stage_key(root, ep, header, rows[ep])
         skills.update(relevant_skills_for_stage(until_key))
-    snap = snapshot_for_skills(skills)
+    snap = snapshot_for_skills(REPO_ROOT, REPO_SKILLS, skills)
     snap["root"] = os.path.abspath(root)
     snap["episodes"] = normalized
     write_json(snapshot_path(root), snap)

@@ -1,17 +1,17 @@
 ---
 name: mv-image
-description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json，为 MV 生成两层图（共享定妆库[主角/场景] + Clip 首帧/尾帧 PNG）。mv 系列自建，不调 n2d-image。生图AI 是选择点（默认 Codex），阶段1 放行官方多参考后端（Seedream / 可灵主体库 / Nano Banana / Sora Cameo），只拦项目内后端混用 + 即梦/Dreamina 逆向出图. Use when asked to MV出图 / 生成MV画面 / MV分镜图 / MV定妆 / clip首帧. Triggers MV出图, MV画面, MV分镜图, MV定妆, clip首帧, mv-image.
+description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json，为 MV 生成两层图（共享定妆库[主角/场景] + Clip 首帧/尾帧 PNG）。mv 系列自建，不调 n2d-image。生图AI 是选择点（默认 Codex），MV一致性增强会在组图前提示用户可用指定参考图 / 后端主体库 / +LoRA；阶段1 放行官方多参考后端（Seedream / 可灵主体库 / Nano Banana / Sora Cameo），只拦项目内后端混用 + 即梦/Dreamina 逆向出图. Use when asked to MV出图 / 生成MV画面 / MV分镜图 / MV定妆 / clip首帧. Triggers MV出图, MV画面, MV分镜图, MV定妆, clip首帧, mv-image.
 ---
 
 # mv-image — 制MV 出图（mv 系列自建）
 
-按 `制MV/<曲名>/视觉蓝图.md` + `分镜/clip_plan.json`，生成 MV 的画面。**两层架构**：共享层（主角/场景定妆，全曲复用锁一致性）+ Clip 层（每个 clip 的首帧/按需尾帧 PNG）。**自包含**，不调 n2d-image。`生图AI` 是选择点（默认 Codex），**阶段1 起放行官方多参考一致性后端**（Seedream / 可灵主体库 / Nano Banana / Sora Cameo）；硬闸门只剩「不混用后端」+「禁即梦/Dreamina 逆向出图」（官方 Seedream API 可用）。后端清单见 `mv-craft/scripts/contract.py` `MV_APPROVED_IMAGE_BACKENDS`。
+按 `制MV/<曲名>/视觉蓝图.md` + `分镜/clip_plan.json`，生成 MV 的画面。**两层架构**：共享层（主角/场景定妆，全曲复用锁一致性）+ Clip 层（每个 clip 的首帧/按需尾帧 PNG）。**自包含**，不调 n2d-image。`生图AI` 是选择点（默认 Codex），`MV一致性增强` 在组图前提示用户可用指定参考图 / 后端主体库 / +LoRA；**阶段1 起放行官方多参考一致性后端**（Seedream / 可灵主体库 / Nano Banana / Sora Cameo）；硬闸门只剩「不混用后端」+「禁即梦/Dreamina 逆向出图」（官方 Seedream API 可用）。后端清单见 `mv-craft/scripts/contract.py` `MV_APPROVED_IMAGE_BACKENDS`。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
 本 skill 的可选项**不写死在源码里**。按 `../_偏好约定.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
-本 skill 涉及的选择点：`生图AI`、`MV视觉风格`、`重抽预算策略`。
+本 skill 涉及的选择点：`生图AI`、`MV一致性增强`、`MV视觉风格`、`重抽预算策略`。
 
 ## 作品根
 ```
@@ -32,7 +32,10 @@ description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json，为 MV 
 ## 核心原则
 - **导演视角八维（分镜图）**：每张分镜 prompt 按导演视角八维装配（**镜头·机位·人物·动作·场景·光影·情绪·画质**），不是画师视角的"好看主角图"——必读 `mv/references/导演视角prompt.md`。MV 最易漏也最关键三维：**②机位**（副歌用大胆机位/荷兰角，别全程正面平视）、**⑥光影**（演出光/色胶/逆光剪影——MV 就活在戏剧光里，别均匀打亮）、**⑦张力**（对齐 beatgrid 段落）。**定妆图是中性档案**（正面/均匀光/无戏），戏剧光只上分镜图。
 - **两层 + 锚点一致性**：先出主角/场景**定妆**（共享层），每张分镜 prompt 末尾拼角色卡**锚点句**锁脸锁画风（跨段不漂）。
+- **MV 单曲视觉一致性包（借鉴 n2d，但更宽松）**：不做跨集状态账本，只锁本曲内部的 `lead_identity_anchor / global_style / palette_anchor / section_look / motif_ledger / forbidden_drift`。主角/主唱最严；段落场景可随段落换，但同段落继承光色和场景定妆；特效/转场只锁颜色和形状方向。详细做法见 `references/visual_consistency.md`。
+- **出图前一致性增强提示**：进入共享定妆或分段组图前，必须提示用户可选 `MV一致性增强=共享定妆+锚点 / 指定参考图 / 后端主体库 / +LoRA`。默认轻量；若用户已有主角/服装/场景参考图或已授权 LoRA，应先登记再生成，不要先批量出图再返工。
 - **clip_plan 驱动画面**：按 `分镜/clip_plan.json` 的 `image_prompt_path` / `image_path` / `need_end_frame` 出图；`视觉蓝图` 只提供风格和段落映射，不再让出图阶段临时猜 clip。
+- **动作首帧服务 video**：读取 `action_family/action_peak/visual_motif/transition_motif`，首帧要抓动作起幅或关键姿态，不要只做静态美图；副歌高光镜可用更强机位/演出光，但身份锚点不变。
 - **卡点意识**：分镜数量/节奏参考 `beatgrid`（副歌密、verse 疏），为 mv-video 的卡点 clip 备料。
 - **尾帧接力（仅同段落连续硬切·按需）**：MV 默认卡点硬切，接点靠"视觉身份一致 + 卡点准"，**不强求 n2d 那套首尾帧接力**。但凡 `clip_plan.json` 标 `need_end_frame=true` 的接缝（同段落·非卡点切·人物姿态连续，如副歌内一段连续动作分两 clip），**除首帧外再出一张尾帧 PNG `出图/段落/图片/Clip_XXX_end.png`，其构图/姿态 = 下一 clip 首帧**——用上一镜 end_state 派生、喂同一套定妆组锁人，供 mv-video 首尾双帧引导焊接点。换段/卡点切不出尾帧（省 credit）。尾帧也按导演视角八维出，只是构图对齐下一首帧。
 - **画风统一**：依视觉蓝图 global_style；跨段不跳风。
@@ -48,9 +51,22 @@ description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json，为 MV 
   共同收尾：到该档上限仍不完美 → 从已抽版本挑**定妆/画风一致性最优**那张落档（一致性漂移优先级 > 构图/运镜小偏差）。任何档都先走筛选宽容铁律——别把"预算充足"理解成"对小瑕疵也反复抽"。「主角」=视觉蓝图标的主唱/核心人物，非一次性入镜路人。
 - **生图后端规则（阶段1 · 与 n2d 同构，mv 线自持于 `mv-craft/scripts/contract.py`）**：`生图AI` 是**选择点**，默认 Codex；**放行官方多参考一致性后端**（Seedream Universal Reference / 可灵 Kling 主体库 / Nano Banana / Sora Character Cameo，市场验证过的 95% 跨集一致性方案）。唯二硬闸门：① **同一支 MV 不混用多个生图后端**（混用=跨 clip 漂移）；② **禁逆向/未授权出图路径**（即梦/Dreamina 非官方 CLI 或 web 自动化——安全 invariant；ByteDance **官方 Seedream API** ≠ 即梦逆向出图，可用）。所选后端无法落 PNG 就停下报告，不偷偷换后端兜底。即梦/Seedance 仍可作后续 mv-video 图生视频后端.
 
+## 一致性增强菜单（出图前提示）
+
+进入共享定妆或分段组图前，必须给用户一句明确提示：**“本次 MV 默认用共享定妆+锚点；如果你有主角/服装/场景参考图、后端主体 ID，或已授权 LoRA，也可以先接入再出图。”** 若用户已有 `_设置.md`，按 `MV一致性增强` 沉默沿用；缺字段则补默认并提示一次。
+
+| 模式 | 何时用 | 必填资料 |
+|---|---|---|
+| `共享定妆+锚点`（默认） | 一支歌内轻量一致，MV 大多数场景足够 | 角色/场景定妆图、锚点句、global_style |
+| `指定参考图` | 用户已有主唱、服装、道具、场景参考图 | 参考图路径、用途标签、授权/来源说明；落 `设定/reference_images/` 或 `出图/共享/图片/` |
+| `后端主体库` | Seedream/可灵/Sora 等支持官方主体/角色 ID | 主体/角色 ID、绑定后端、注册素材路径；仍统一一个生图后端 |
+| `+LoRA` | 参考图和主体库仍不稳，且用户已有或明确授权 LoRA | `.safetensors` 路径、trigger、base model、许可说明、适用角色/形态 |
+
+`+LoRA` 不是默认项，也不在 mv-image 里自动训练。若用户只说“像 n2d 那样更稳”，优先建议 `指定参考图` 或 `后端主体库`；只有明确有 LoRA 资产或授权训练结果时才进入 `+LoRA`。
+
 ## 工作流
 1. 读 `视觉蓝图.md` + `分镜/clip_plan.json`。缺 `clip_plan.json` 时先跑 `mv-plan`，不要在出图阶段临时拆时间线。
-2. 出共享定妆（主角/场景）→ `出图/共享/图片/`，建/复用 `设定/characters|locations` 卡 + 锚点句.
+2. 出共享定妆（主角/场景）→ `出图/共享/图片/`，建/复用 `设定/characters|locations` 卡 + 锚点句。若 `MV一致性增强=指定参考图/后端主体库/+LoRA`，先登记参考图、主体 ID 或 LoRA 卡，再生成第一组图。
 3. 按 `clip_plan.json` 出首帧 → `出图/段落/图片/Clip_XXX.png`，每张拼锚点句与 `image_prompt_path`。**接力补尾帧**：`need_end_frame=true` 的 clip，额外出 `图片/Clip_XXX_end.png`（=下一 clip 首帧构图）。
 4. 筛选（脸/画风一致优先）：每张按 `references/prompt_format.md` 自检栏过——轻微偏差放行，命中硬伤才按 `重抽预算策略` 档位重抽，废图归 `common/废料/`。
 5. 回写 `_进度.md` 出图行. 下一步 mv-video（图生视频）.
@@ -58,6 +74,7 @@ description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json，为 MV 
 ## 详细参考
 - 导演视角八维 prompt 装配（画师→导演升级·MV版）：`mv/references/导演视角prompt.md`
 - prompt 两层格式 + 锚点句 + 段落映射：`references/prompt_format.md`
+- MV 单曲视觉一致性包（身份锚点/主色/母题/段落 look）：`references/visual_consistency.md`
 
 ## 常见错误
 | 错误 | 纠正 |
@@ -66,6 +83,8 @@ description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json，为 MV 
 | 全程正面平视 + 均匀打亮 | 机位即能量（副歌大胆机位）、光影是 MV 灵魂（演出光/色胶/逆光） |
 | 给定妆图也打浓光/色胶 | 定妆=中性档案，戏剧光只上分镜图，否则污染下游参考 |
 | 不出定妆直接分镜 | 先共享定妆 + 锚点句，跨段才不漂 |
+| 有参考图/LoRA 却没在组图前提示用户接入 | 进入共享定妆或分段组图前提示 `MV一致性增强` 四档；用户选择后先登记资产，再批量出图 |
+| 副歌为了炫直接换脸/换服装轮廓/换画风 | 违 MV 单曲一致性包；副歌只增强光效、机位、动作和特效，不换身份锚点 |
 | 跨段画风跳变 | 统一 global_style + 同一生图工具(同一集不换) |
 | 分镜不看段落/卡点 | 按视觉蓝图段落 + beatgrid 疏密出图 |
 | 跳过 mv-plan 直接按感觉出图 | 先跑 mv-plan，按 `clip_plan.json` 的 prompt/path 出首帧 |

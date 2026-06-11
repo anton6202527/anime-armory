@@ -37,6 +37,7 @@
 | `MV规划粒度` | 决定 clip 密度和任务量 |
 | `卡点策略` | 副歌碎切、verse 缓切、全程强卡点等 |
 | `生图AI` | MV 首帧/定妆图后端（选择点，默认 Codex；阶段1 放行官方多参考后端 Seedream/可灵主体库/Nano Banana/Sora Cameo；不混用、禁即梦逆向出图。见 `scripts/contract.py` `MV_APPROVED_IMAGE_BACKENDS`/`classify_image_backend`）|
+| `MV一致性增强` | 组图前提示是否用共享定妆+锚点（默认）、指定参考图、后端主体库或 +LoRA；LoRA 仅接入已有/授权资产 |
 | `生视频AI` | 图生视频后端 |
 | `出视频规格` | 预算、分辨率、帧率、每 clip 生成版数 |
 | `合成画幅` | 输出画幅 |

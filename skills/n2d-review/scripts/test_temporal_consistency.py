@@ -56,3 +56,32 @@ def test_shot_num_parses_both_namings():
     assert t._shot_num("镜头6A_end.png") == 6
     assert t._shot_num("Clip_12.png") == 12
     assert t._shot_num("封面.png") is None
+
+
+# ── 接缝色彩量化指标（#5 扩展）单测 ──
+
+def test_hist_cosine_distance_identical_is_zero():
+    h = [0.1, 0.2, 0.3, 0.4]
+    assert abs(tc.hist_cosine_distance(h, h)) < 1e-9
+
+
+def test_hist_cosine_distance_orthogonal_is_one():
+    assert abs(tc.hist_cosine_distance([1.0, 0.0], [0.0, 1.0]) - 1.0) < 1e-9
+
+
+def test_hist_cosine_distance_guards():
+    assert tc.hist_cosine_distance([], [1.0]) is None        # 维度不等
+    assert tc.hist_cosine_distance([0.0, 0.0], [1.0, 1.0]) is None  # 全零
+
+
+def test_color_verdict_bands():
+    assert tc.color_verdict(0.05) == "ok"
+    assert tc.color_verdict(0.20) == "warn"     # > SEAM_COLOR_WARN
+    assert tc.color_verdict(0.40) == "block"    # > SEAM_COLOR_BLOCK
+    assert tc.color_verdict(None) == "ok"        # 缺图不臆造
+
+
+def test_worse_takes_higher_severity():
+    assert tc._worse("ok", "warn") == "warn"
+    assert tc._worse("warn", "block") == "block"
+    assert tc._worse("block", "ok") == "block"

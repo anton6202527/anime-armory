@@ -1,13 +1,14 @@
 # anime-armory
 
-一套面向 AI 内容生产的本地流水线：把一个点子、一本书或一首歌，推进成可交付的小说、AI 漫剧短视频或 AI 音乐 MV。
+一套面向 AI 内容生产的本地流水线：把一个点子、一本书、一首歌或一份客户需求，推进成可交付的小说、AI 漫剧短视频、AI 音乐 MV 或 商业广告片。
 
-仓库的核心不是单个脚本，而是根目录 `skills/` 下的一组可复用 workflow skill。它们按两组创作线和生产线组织：
+仓库的核心不是单个脚本，而是根目录 `skills/` 下的一组可复用 workflow skill。它们按两组创作线和三组生产线组织：
 
 - **写小说** -> **制漫剧**：小说文本 -> AI 漫剧 / 短剧
 - **写歌** -> **制MV**：成品歌 -> AI 音乐 MV
+- **拍广告**：客户需求 (Brief) -> 商业广告片 (Ad)
 
-产物落在顶层中文目录：`写小说/`、`制漫剧/`、`写歌/`、`制MV/`。每个作品一个子目录，通常都有 `_进度.md` 和 `_设置.md` 来记录状态与选择。
+产物落在顶层中文目录：`写小说/`、`制漫剧/`、`写歌/`、`制MV/`、`拍广告/`。每个作品一个子目录，通常都有 `_进度.md` 和 `_设置.md` 来记录状态与选择。
 
 > 给 AI agent 或人快速进仓库：先读 [AGENTS.md](AGENTS.md)。  
 > skill 完整索引与职责边界：读 [skills/README.md](skills/README.md)。
@@ -36,7 +37,9 @@
 | 从零写一本原创小说 | `/novel-create <题材或想法>` |
 | 给小说做评分、判断值不值得改 | `/novel-score <写小说/项目>` |
 | 把小说做成 AI 漫剧 | `/novel2drama <小说路径或 制漫剧/项目>` |
-| 查看漫剧项目进度与下一步 | `/n2d-progress <制漫剧/项目>` 或直接问“当前进度” |
+| 根据客户需求制作商业广告片 | `/ad <需求/品牌产品 或 拍广告/项目>` |
+| 查看任意项目进度与下一步 | `/progress [作品目录]` 或直接问“当前进度” |
+| 检查流水线更新与生成重制计划 | `/update check [作品目录]` 或问“看看有没有更新” |
 | 直接创作或编辑一首歌 | `/song <主题/风格/想法 或 写歌/项目>` |
 | 把成品歌做成 MV | `/mv <歌曲路径或 制MV/项目>` |
 | 图片 / 视频换脸 | `/shared-image-faceswap`、`/shared-video-faceswap` |
@@ -50,6 +53,7 @@
 制漫剧：/novel2drama -> n2d-script -> n2d-voice -> n2d-script(分镜) -> n2d-image -> n2d-video -> n2d-compose
 写歌：/song -> song-lyrics/song-score -> song-compose -> song-review
 制MV：/mv -> mv-beat -> mv-plan -> mv-image -> mv-video -> mv-lyric-sync -> mv-compose -> mv-review
+拍广告：/ad -> ad-concept -> ad-script(含广告法机检) -> ad-voice -> ad-script(分镜) -> ad-image -> ad-video -> ad-compose(多比例/cutdown)
 ```
 
 ## 打包与下载版本
@@ -81,7 +85,7 @@ shasum -a 256 dist/anime-armory-full.zip > dist/anime-armory-full.zip.sha256
 
 `dist/` 已被 `.gitignore` 忽略，压缩包默认不进仓库；它是发布附件，不是源码的一部分。
 
-## 四条主线
+## 五条主线
 
 ### 写小说
 
@@ -137,10 +141,24 @@ shasum -a 256 dist/anime-armory-full.zip > dist/anime-armory-full.zip.sha256
 6. `mv-compose`：按 timeline 合成成片。
 7. `mv-review`、`mv-score`：卡点、字幕、音画、视觉一致性、平台披露与成片评分。
 
+### 拍广告
+
+入口是 `ad`。这条线专门用于商业广告的生产，核心特点是**不拆集**（主片是一个整体），并内置《广告法》机检。产物通过 cutdown 和 reframe 支持多交付件矩阵。
+
+1. `ad-concept`：分析客户 brief，策划 Big Idea、创意路线与 KV 方向。
+2. `ad-script`：撰写广告脚本与分镜，内置绝对化用语等**《广告法》合规机检**。
+3. `ad-voice`：旁白 / VO 配音，用真实配音时长驱动分镜时长。
+4. `ad-image`：构建**三层定妆库**（角色、场景、产品），核心产品（Hero Product）包装零漂移出图。
+5. `ad-video`：按分镜图生视频。
+6. `ad-compose`：剪辑包装成片，包含品牌 End Card（Logo + Slogan），并根据 `_进度.md` 交付清单输出多时长（Cutdown）和多比例（Reframe）矩阵。
+7. `ad-review`：产品一致性与品牌规范审阅（二期）。
+
 ## 公共能力
 
 | Skill | 用途 |
 |---|---|
+| `progress` | 智能进度分发：无论在写小说、做漫剧还是写歌，统一入口查询下一步 |
+| `update` | 智能更新分发：嗅探底层脚本与 prompt 更新，并安全生成重制计划 |
 | `shared-image-faceswap` | 图片换脸，本人 / 授权 / 合成脸限定，强制 AI 标识 |
 | `shared-video-faceswap` | 视频换脸，同样走合规闸门和水印 |
 | `shared-watermark` | 给图片 / 视频加 AI 标识或品牌水印，只加不去 |
@@ -189,6 +207,7 @@ anime-armory/
 ├── 制漫剧/<项目>/             漫剧工程与成片产物
 ├── 写歌/<曲名>/               歌词、歌曲、人声产物
 ├── 制MV/<曲名>/               MV 工程与成片
+├── 拍广告/<项目>/             广告工程、主片与多比例切片
 ├── 资产库/                    跨项目复用资产
 └── docs/images/              文档截图
 ```

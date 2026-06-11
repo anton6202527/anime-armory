@@ -17,10 +17,12 @@ description: 制MV 出视频 — 把 mv-image 的 PNG 图生视频成 MV clip，
 - **卡点驱动 clip 时长**：每个 clip 时长 = 相邻卡点之差（`beatgrid.downbeats`）。**副歌每 1 拍/半小节一切（碎切）、verse 缓（2-4 拍）**。别等长堆叠——这是 MV 的命。
 - **图生视频为主**：以 mv-image 的 PNG 为首帧，视频 AI 只控运动+运镜，锁画面一致性。纯氛围/转场可文生。
 - **运镜服务节奏/情绪**：副歌高能=快推/环绕/轻甩；verse 叙事=缓推/跟；bridge 反转=换机位。爽点对齐 downbeat。
+- **动作知识库优先**：先从 `references/action_knowledge.md` 选 `action_family`，再写一个主动作链、动作峰值和转场母题。短 clip 不堆多个动作；复杂接触/多人互动优先拆成手部、道具、剪影、光效切。
 - **三件套必写**：人物运动 + 镜头运动 + 动态细节。
 - **continuity 必写**：每个 clip 必须有 `continuity.start_state/action/end_state/constraints/negative`，同时读取上一/下一 clip、`beatgrid.json` 起止点、段落张力和歌词画面钩子。`continuity.start_state` 直接抄上一 clip 的 `end_state`（单一真值，别重写）。MV 的连续性不是一镜到底，而是"视觉身份一致 + 动作/视线/道具可切 + 卡点落点准"。
   - **MV 默认卡点硬切**（踩 downbeat 切），接点靠"视觉身份一致 + 卡点准"，**不强求 n2d 那套首尾帧接力**。但**同段落·非卡点切·人物姿态连续**的接缝（如副歌内一段连续动作分两 clip），可选尾帧接力：`clip_plan.json` 标 `need_end_frame=true`，mv-image 出 `出图/段落/图片/Clip_XXX_end.png`=下一 clip 首帧构图，mv-video 首尾双帧引导锁接点。换段/卡点切不需要。
 - **导演视角八维（视频版）**：①镜头/③人物/⑤场景/⑥光影/⑧画风**已由首帧 PNG 锁死**（出图阶段做完），视频阶段**只升级 ④动作→人物运动+表情(踩段落)、②机位→运镜(对齐 downbeat)、⑦张力**，其余严禁重定（改了=与首帧打架=闪烁）。详见 `mv/references/导演视角prompt.md §四`。
+- **MV 单曲一致性继承**：`mv-image` 已锁主角身份、主色、母题和段落 look；视频 prompt 只让它动起来，不改脸、不换衣型、不换场景风格。副歌可以让光效和相机更猛，但不能换成另一套视觉语言。
 - **生视频贵**：先在图阶段锁死视觉，视频只调动作/运镜；每 clip 跑几版挑稳由 `出视频规格` 档统一决定（见下节）。
 - **视频任务 manifest**：先用 `scripts/video_jobs.py` 从 `分镜/clip_plan.json` 生成 `出视频/jobs_manifest.json` 和逐 take prompt；AI/网页/人工生成的视频先登记到 `takes/`，评分后挑版复制到 `出视频/视频/Clip_XXX.mp4` 并同步 `分镜/timeline_manifest.json`。不要只把 mp4 扔进目录让下游猜来源。
 - **生视频 CLI**：本机官方 CLI（dreamina/kling/veo/seedance）直调；没有则生成 job 包并指导 web/manual 登记。**不装第三方逆向 CLI**。
@@ -66,6 +68,7 @@ description: 制MV 出视频 — 把 mv-image 的 PNG 图生视频成 MV clip，
 ## 详细参考
 - 导演视角八维（视频版·只调动作/运镜/张力，其余继承首帧）：`mv/references/导演视角prompt.md §四`
 - jobs manifest 格式 + 卡点定时长 + 运镜映射：`references/prompt_format.md`
+- MV 动作知识库（动作家族/动作峰值/炫酷转场母题）：`references/action_knowledge.md`
 
 ## 常见错误
 | 错误 | 纠正 |
@@ -74,6 +77,8 @@ description: 制MV 出视频 — 把 mv-image 的 PNG 图生视频成 MV clip，
 | 不告知规格就闷头调 AI 出视频 | 违反 `出视频规格` 选择点——调 AI 前先念三档话术告知当前规格档（分辨率/帧率/跑几版/质量档），用户可改 |
 | 外部生成后只丢 mp4 | 用 `video_jobs.py --register/--score/--select` 登记 take、挑版并同步 timeline |
 | 只写画面不写运动 | 人物运动+镜头运动+动态细节三件套 |
+| 每条都写“炫酷动作/酷炫运镜” | 从动作知识库选 `action_family`，写一个主动作链和动作峰值 |
+| 一个短 clip 塞太多动作 | 一 clip 一个主动作；副歌短 clip 尤其要克制 |
 | clip 单条好看但剪起来跳 | 每条补 `continuity` 五字段：承接上一条、给下一条留落点、锁服装发型/场景/轴线/道具，负面禁止换脸换衣新增人物 |
 | 运镜乱炫 | 服务节奏：副歌快/verse 缓/爽点对 downbeat |
 | 有角色用文生视频 | 用图生视频，首帧=mv-image PNG |

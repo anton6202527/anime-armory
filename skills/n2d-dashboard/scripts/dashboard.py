@@ -1430,6 +1430,87 @@ def cmd_watch(ns: argparse.Namespace) -> int:
     return 0
 
 
+# ── 成本预检（pre-flight forecast）——开跑前估这集要花多少、预算够撑几集 ──
+# dashboard 此前只**事后**记账（stage 完成才 record）；这里用历史 ¥/finished-min × 本集计划时长
+# 给一个开跑前的预测，并把已有的 redraw_categories 滚动出来当"过去钱漏在哪"的上下文。纯函数·可测。
+
+def forecast_episode_cost(cost_per_min: Dict[str, float], planned_min: float) -> Dict[str, float]:
+    """逐货币单位：预测成本 = 历史 ¥/finished-min × 本集计划输出分钟。纯函数。"""
+    if not isinstance(cost_per_min, dict) or not planned_min or planned_min <= 0:
+        return {}
+    out: Dict[str, float] = {}
+    for unit, per_min in cost_per_min.items():
+        amount = as_float(per_min)
+        if amount and amount > 0:
+            out[unit] = round(amount * planned_min, 2)
+    return out
+
+
+def affordable_episode_count(remaining_budget: float, per_episode_cost: float) -> Optional[int]:
+    """剩余预算还能撑几集（向下取整）。单集成本未知/<=0 → None（无法判断，不臆造）。纯函数。"""
+    if not per_episode_cost or per_episode_cost <= 0 or remaining_budget is None:
+        return None
+    return max(0, int(remaining_budget // per_episode_cost))
+
+
+def top_redraw_leak(redraw_categories: Dict[str, Any], top: int = 3) -> List[Tuple[str, int]]:
+    """show 级重抽归因 Top-N（'过去钱漏在哪'）。读已有 totals.redraw_categories，不重算。纯函数。"""
+    counts = {str(k): int(as_float(v) or 0) for k, v in (redraw_categories or {}).items()}
+    return sorted(((k, c) for k, c in counts.items() if c > 0), key=lambda kv: kv[1], reverse=True)[:top]
+
+
+def cmd_forecast(ns: argparse.Namespace) -> int:
+    root, ep = ns.root, normalize_episode(ns.episode)
+    agg = aggregate_events(root, load_events(root))
+    totals = agg.get("totals", {})
+    cpm = totals.get("cost_per_finished_min") or {}
+    finished_min = round(float(totals.get("runtime_sec") or 0.0) / 60.0, 2)
+    planned_sec, src = storyboard_duration(root, ep)
+    planned_min = round((planned_sec or 0.0) / 60.0, 2)
+
+    out: Dict[str, Any] = {
+        "kind": "n2d_cost_forecast", "episode": ep,
+        "history_finished_min": finished_min, "cost_per_finished_min": cpm,
+        "planned_min": planned_min, "planned_source": src,
+        "forecast_cost": {}, "notes": [],
+        "redraw_leak_top": [{"category": c, "count": n} for c, n in top_redraw_leak(totals.get("redraw_categories", {}))],
+        "show_redraw_rate": totals.get("redraw_rate"),
+    }
+    if not cpm:
+        out["notes"].append("无历史成本（cost_per_finished_min 为空）——先用 `record` 记几集真实成本再预检；本次只能给 redraw 漏点。")
+    if not planned_min:
+        out["notes"].append(f"缺本集计划时长（脚本/{ep}/storyboard.json 无 total_duration/clips）——无法估时长×单价，先跑分镜设计。")
+    if cpm and planned_min:
+        out["forecast_cost"] = forecast_episode_cost(cpm, planned_min)
+        if ns.budget is not None:
+            unit = ns.unit
+            per_ep = float(out["forecast_cost"].get(unit, 0.0))
+            out["budget"] = {"unit": unit, "remaining": ns.budget,
+                             "this_episode": per_ep,
+                             "over_budget": bool(per_ep and per_ep > ns.budget),
+                             "more_episodes_affordable": affordable_episode_count(ns.budget, per_ep)}
+
+    if ns.json:
+        print(json.dumps(out, ensure_ascii=False, indent=2)); return 0
+    print(f"=== 成本预检：{root} {ep} ===")
+    print(f"历史已完成 {finished_min} 分钟 · ¥/min(by unit): {format_cost(cpm) if cpm else '—'}")
+    print(f"本集计划 {planned_min} 分钟（{src or '缺 storyboard'}）")
+    if out["forecast_cost"]:
+        print(f"→ 预测成本：{format_cost(out['forecast_cost'])}")
+    b = out.get("budget")
+    if b:
+        warn = "⚠️ 超预算" if b["over_budget"] else "✅ 在预算内"
+        more = b["more_episodes_affordable"]
+        print(f"→ 预算 {b['remaining']} {b['unit']}：本集 {b['this_episode']} → {warn}"
+              + (f"；剩余还能撑约 {more} 集" if more is not None else ""))
+    if out["redraw_leak_top"]:
+        leaks = "、".join(f"{x['category']}×{x['count']}" for x in out["redraw_leak_top"])
+        print(f"过去重抽漏点 Top（先治这些省钱）：{leaks}（重抽率 {out['show_redraw_rate']}）")
+    for n in out["notes"]:
+        print(f"  · {n}")
+    return 0
+
+
 def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description="n2d production data dashboard")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -1491,6 +1572,14 @@ def parser() -> argparse.ArgumentParser:
     watch_cmd.add_argument("--once", action="store_true", help="只跑一遍就退出（适合 cron）")
     _add_alert_args(watch_cmd)
     watch_cmd.set_defaults(func=cmd_watch)
+
+    forecast_cmd = sub.add_parser("forecast", help="开跑前成本预检：历史 ¥/min × 本集计划时长 + 预算够撑几集 + 重抽漏点")
+    forecast_cmd.add_argument("root")
+    forecast_cmd.add_argument("episode")
+    forecast_cmd.add_argument("--budget", type=float, default=None, help="剩余预算（配合 --unit 判超支/还能撑几集）")
+    forecast_cmd.add_argument("--unit", default="CNY", help="预算货币单位（默认 CNY，须与 record 的 cost.unit 一致）")
+    forecast_cmd.add_argument("--json", action="store_true")
+    forecast_cmd.set_defaults(func=cmd_forecast)
 
     return ap
 

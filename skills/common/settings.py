@@ -59,7 +59,7 @@ def load_settings(work_root: str) -> Dict[str, str]:
     """Parse `<作品根>/_设置.md` into `{key: value}` without global defaults."""
     text = _read_text(os.path.join(work_root.rstrip("/"), "_设置.md"))
     out: Dict[str, str] = {}
-    pat = re.compile(r"^\s*(?:[-*]\s*)?(?:\*\*)?([^:：#]+?)(?:\*\*)?\s*[:：]\s*(.+?)\s*$", re.M)
+    pat = re.compile(r"^\s*(?!>)(?:[-*]\s*)?(?:\*\*)?([^\n:：#]+?)(?:\*\*)?\s*[:：]\s*(.+?)\s*$", re.M)
     for m in pat.finditer(text):
         key = m.group(1).strip()
         val = re.split(r"\s+#", m.group(2), maxsplit=1)[0].strip()

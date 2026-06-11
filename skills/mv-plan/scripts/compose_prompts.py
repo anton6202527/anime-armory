@@ -44,7 +44,7 @@ def build_composer_prompt(clips, blueprint, lyrics):
     for c in clips:
         lyric = c.get('lyric_hint') or '无'
         clip_summaries.append(
-            f"Clip ID: {c['clip_id']} | 时长: {c['duration']}s | 段落: {c['section']} | 歌词: {lyric}"
+            f"Clip ID: {c['clip_id']} | 时长: {c['duration']}s | 段落: {c['section']} | 动作家族建议: {c.get('action_family', '')} | 动作峰值: {c.get('action_peak', c.get('end'))}s | 歌词: {lyric}"
         )
         
     return f"""# MV 分镜语义补全任务
@@ -65,6 +65,8 @@ def build_composer_prompt(clips, blueprint, lyrics):
 - 主歌（Verse）：通常节奏较慢，适合推拉镜头，注重氛围和情绪铺垫。
 - 副歌（Chorus）：通常节奏快，适合环绕、快速切入，动作幅度大，展现高光时刻。
 - 空镜/转场：如果没有具体歌词，可以设计符合情绪的空镜。
+- 动作设计参考 mv-video/references/action_knowledge.md：一 clip 一个主动作，动作峰值对齐 beat/downbeat；复杂多人接触优先拆成特写/剪影/道具/光效切。
+- 视觉一致性参考 mv-image/references/visual_consistency.md：主角身份锚点、global_style、palette_anchor、motif_ledger 必须继承；副歌可以增强光效但不能换脸换风格。
 
 输出 JSON 格式，严格包含所有传入的 Clip ID，结构如下：
 {{
@@ -72,10 +74,14 @@ def build_composer_prompt(clips, blueprint, lyrics):
     {{
       "clip_id": "Clip_001",
       "start_state": "画面开始时的场景和人物状态",
+      "action_family": "动作家族，如 dance_hit/vfx_burst/expressive_walk",
       "action": "人物在此期间的具体动作（如：抬头看天、转身走开）",
+      "action_peak": "动作峰值应对齐的秒点，如 48.80",
       "end_state": "动作结束时的状态",
       "camera": "运镜方式（如：缓慢推进、跟随镜头、固定特写）",
-      "lighting": "光影氛围（如：逆光剪影、冷色调霓虹光）"
+      "lighting": "光影氛围（如：逆光剪影、冷色调霓虹光）",
+      "visual_motif": "本 clip 继承或强化的视觉母题",
+      "transition_motif": "转场母题，如 光效切/遮挡擦镜/动作切"
     }}
   ]
 }}
@@ -99,6 +105,17 @@ def apply_prompts(root, plan, semantic_data):
         clip["continuity"]["start_state"] = sem.get("start_state", "")
         clip["continuity"]["action"] = sem.get("action", "")
         clip["continuity"]["end_state"] = sem.get("end_state", "")
+        if sem.get("action_family"):
+            clip["action_family"] = sem.get("action_family")
+        if sem.get("action_peak") not in (None, ""):
+            try:
+                clip["action_peak"] = round(float(sem.get("action_peak")), 3)
+            except (TypeError, ValueError):
+                clip["action_peak"] = sem.get("action_peak")
+        if sem.get("visual_motif"):
+            clip["visual_motif"] = sem.get("visual_motif")
+        if sem.get("transition_motif"):
+            clip["transition_motif"] = sem.get("transition_motif")
         
         # Apply to Markdown files
         img_prompt_path = os.path.join(root, clip.get("image_prompt_path", f"出图/段落/prompt/{cid}.md"))
@@ -122,9 +139,18 @@ def apply_prompts(root, plan, semantic_data):
             vid_content = re.sub(r"- start_state：.*", f"- start_state：{sem.get('start_state', '')}", vid_content)
             vid_content = re.sub(r"- action：.*", f"- action：{sem.get('action', '')}", vid_content)
             vid_content = re.sub(r"- end_state：.*", f"- end_state：{sem.get('end_state', '')}", vid_content)
+            if sem.get("action_family"):
+                vid_content = re.sub(r"- 动作家族：.*", f"- 动作家族：{sem.get('action_family', '')}", vid_content)
+            if sem.get("transition_motif"):
+                vid_content = re.sub(r"- 转场母题：.*", f"- 转场母题：{sem.get('transition_motif', '')}", vid_content)
             
             # Update video prompt section
-            prompt_replacement = f"人物运动：{sem.get('action', '')}；镜头运动：{sem.get('camera', '按段落张力')}；光影：{sem.get('lighting', '按视觉蓝图')}；动态细节：发丝、衣摆、光斑或环境粒子随节拍变化；卡点约束：动作峰值对齐 {clip['end']:.2f}s；"
+            peak = clip.get("action_peak", clip["end"])
+            try:
+                peak_text = f"{float(peak):.2f}s"
+            except (TypeError, ValueError):
+                peak_text = str(peak)
+            prompt_replacement = f"人物运动：{sem.get('action', '')}；动作家族：{clip.get('action_family', '')}；镜头运动：{sem.get('camera', '按段落张力')}；光影：{sem.get('lighting', '按视觉蓝图')}；动态细节：发丝、衣摆、光斑或环境粒子随节拍变化；卡点约束：动作峰值对齐 {peak_text}；转场母题：{clip.get('transition_motif', '')}；"
             vid_content = re.sub(r"人物运动：.*?(?:卡点约束：.*?s；|声音约束：)", prompt_replacement + "声音约束：", vid_content, flags=re.DOTALL)
             
             write_text(vid_prompt_path, vid_content)

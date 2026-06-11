@@ -5,7 +5,7 @@
 本脚本把散落的检测器统一调起来，n2d-review 模式①工作流第 1 步「跑机检套件」即调它：
 
   语义谱系 P0 · 状态百科 P1 · 多模态 P2 · 视觉契约继承 · 锚点门 N3 · 脸 G1 ·
-  服装/配色 N1 · 片内时序 N2 · 场景 O2 · 糊/低质 N4 · 风格 S1
+  服装/配色 N1 · 片内时序 N2 · 场景 O2 · 糊/低质 N4 · 风格 S1 · 字幕对齐 L1
 
 每个子检测器各自缺库优雅跳过（见各脚本）；本编排只汇总、不重复实现。
 纯函数 `summarize` 无依赖、带 pytest。
@@ -43,6 +43,7 @@ import style_consistency as stc
 import semantic_continuity as semc
 import state_continuity as statec
 import multimodal_consistency as mmc
+import subtitle_align as sa
 
 
 def _verdicts(rows: List[dict]) -> List[str]:
@@ -343,6 +344,13 @@ def run(root: str, ep: str) -> dict:
     sections["接缝接力"] = {"skipped": bool(sm.get("notes")) and not sm.get("seams"),
                          "verdicts": _verdicts(sm.get("seams", [])), "notes": sm.get("notes", [])}
     collect_simple("接缝接力", sm.get("seams", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
+
+    # 字幕对齐(L1)——双语短语边界/阅读速度/译文完整性（补 mechanical_check 的"条数对账"盲区）
+    sub = sa.analyze(root, ep)
+    sections["字幕对齐(L1)"] = {"skipped": not sub.get("available", False),
+                             "verdicts": _verdicts(sub.get("rows", [])), "notes": sub.get("notes", [])}
+    collect_simple("字幕对齐(L1)", sub.get("rows", []), stage="script_stage2",
+                   default_artifacts=(f"脚本/{ep}/字幕_中文.srt", f"脚本/{ep}/字幕_英文.srt"))
 
     # N4 糊/低质
     q = qc.analyze(root, ep)

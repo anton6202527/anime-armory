@@ -45,7 +45,7 @@ def parse_lyrics(root):
                 sections.append({"section": cur, "lines": rows})
             cur, rows = m.group(1).strip(), []
             continue
-        line = re.sub(r"（歌词…）|\(歌词…\)|TODO|待填", "", line).strip()
+        line = mv_utils.PLACEHOLDER.sub("", line).strip()
         if line:
             rows.append(line)
     if cur:
@@ -182,7 +182,11 @@ def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visua
         transition = "卡点硬切" if key else "动作切"
         beat_role = "key" if key else "normal"
         speed_mode = "trim" if key else "warp"
+        action_family = "dance_hit/vfx_burst" if key else "performance_pose/expressive_walk"
         action = "副歌高光动作/光效爆点对齐 downbeat" if key else "叙事动作完整推进，镜头缓推"
+        action_peak = round(end - min(0.2, max(0.05, (end - start) * 0.2)), 3)
+        transition_motif = "光效切/whip pan" if key else "动作切/视线切"
+        visual_motif = "继承视觉蓝图的主角身份锚点、段落主色和本段反复母题"
         end_state = f"{section} 段 {clip_id} 结束姿态，画面重心留给下一刀"
         start_state = previous_end_state or f"{section} 段首帧，继承视觉蓝图和定妆锚点"
         previous_end_state = end_state
@@ -196,6 +200,10 @@ def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visua
             "duration": clip["duration"],
             "beat_role": beat_role,
             "speed_mode": speed_mode,
+            "action_family": action_family,
+            "action_peak": action_peak,
+            "transition_motif": transition_motif,
+            "visual_motif": visual_motif,
             "lyric_hint": clip.get("lyric_hint", ""),
             "image_prompt_path": image_prompt,
             "video_prompt_path": video_prompt,
@@ -228,6 +236,8 @@ def write_prompt_files(root, clips, blueprint):
             "",
             "## 首帧要求",
             f"用导演视角八维生成本 clip 首帧。画面必须服务：{clip['continuity']['action']}。",
+            f"动作家族：{clip.get('action_family', '')}；动作峰值：{clip.get('action_peak', clip['end']):.2f}s。",
+            f"视觉母题：{clip.get('visual_motif', '')}。",
             "",
             "## 继承",
             clip["continuity"]["constraints"],
@@ -243,6 +253,9 @@ def write_prompt_files(root, clips, blueprint):
             f"- 时长：{clip['duration']:.2f}s",
             f"- 卡点：{clip['start']:.2f}s → {clip['end']:.2f}s",
             f"- 转场：{clip['transition']}",
+            f"- 动作家族：{clip.get('action_family', '')}",
+            f"- 动作峰值：{clip.get('action_peak', clip['end']):.2f}s",
+            f"- 转场母题：{clip.get('transition_motif', '')}",
             "",
             "## continuity",
             f"- start_state：{clip['continuity']['start_state']}",
@@ -252,7 +265,7 @@ def write_prompt_files(root, clips, blueprint):
             f"- negative：{clip['continuity']['negative']}",
             "",
             "## 视频 prompt",
-            f"人物运动：{clip['continuity']['action']}；镜头运动：按段落张力执行；动态细节：发丝、衣摆、光斑或环境粒子随节拍变化；卡点约束：动作峰值对齐 {clip['end']:.2f}s；声音约束：无对白、无旁白、不要生成原生人声，音乐由 mv-compose 使用原歌轨统一处理。",
+            f"人物运动：{clip['continuity']['action']}；动作家族：{clip.get('action_family', '')}；镜头运动：按段落张力执行；动态细节：发丝、衣摆、光斑或环境粒子随节拍变化；卡点约束：动作峰值对齐 {clip.get('action_peak', clip['end']):.2f}s；转场母题：{clip.get('transition_motif', '')}；声音约束：无对白、无旁白、不要生成原生人声，音乐由 mv-compose 使用原歌轨统一处理。",
         ]
         mv_utils.write_text(os.path.join(root, clip["video_prompt_path"]), "\n".join(video_lines) + "\n")
 

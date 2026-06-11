@@ -292,7 +292,7 @@ def findings_payload(root: str, ep: str, report: Mapping[str, Any]) -> Dict[str,
     return {
         "kind": CONSISTENCY_FINDINGS_KIND,
         "version": 1,
-        "root": root,
+        "root": os.fspath(root),
         "episode": ep,
         "generated_at": _now_iso(),
         "summary": {"total": len(findings), "severity": counts, "by_dim": {spec.get("label", "音色一致性"): counts}},

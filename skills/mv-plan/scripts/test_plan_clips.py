@@ -57,6 +57,9 @@ class PlanClipsTest(unittest.TestCase):
             self.assertGreaterEqual(len(plan["clips"]), 4)
             self.assertEqual(plan["visual_style"], "国风写意")
             first = plan["clips"][0]
+            self.assertIn("action_family", first)
+            self.assertIn("action_peak", first)
+            self.assertIn("visual_motif", first)
             self.assertTrue(os.path.exists(os.path.join(tmp, first["image_prompt_path"])))
             self.assertTrue(os.path.exists(os.path.join(tmp, first["video_prompt_path"])))
 

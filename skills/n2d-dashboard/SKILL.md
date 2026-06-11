@@ -1,6 +1,6 @@
 ---
 name: n2d-dashboard
-description: P0 横切 skill for novel2drama production and ROI metrics. Record and rebuild per-episode production data: cost, elapsed time, generation attempts, redraw reasons, QA blockers, warnings, final pass rate, cost per finished minute, one-pass rate, redraw rate, platform revenue/spend, and recoup ratio. Also local-only real-time monitoring + threshold alerting: every record/gate re-evaluates thresholds (budget cap, pass-rate floor, redraw ceiling, QA blockers, recoup floor) and writes alerts.json/md; a built-in `watch` polls events.jsonl and serves an auto-refresh dashboard.html; optional best-effort desktop notification and webhook. Pure stdlib, no harness/cloud — works for any AI agent. Use after every n2d generation or review/gate run, and when asked for 生产数据仪表盘, 实时监控, 成本预警, 质检异常告警, 阈值告警, watch, ROI, 每分钟成本, 每集耗时, 一次通过率, 重抽率, 投放回收, 成本统计, 耗时统计, 生成次数, 重抽原因, QA 阻断, 通过率, 工业级指标, dashboard, metrics, monitoring, alerts.
+description: "P0 横切 skill for novel2drama production and ROI metrics. Record and rebuild per-episode production data: cost, elapsed time, generation attempts, redraw reasons, QA blockers, warnings, final pass rate, cost per finished minute, one-pass rate, redraw rate, platform revenue/spend, and recoup ratio. Also local-only real-time monitoring + threshold alerting: every record/gate re-evaluates thresholds (budget cap, pass-rate floor, redraw ceiling, QA blockers, recoup floor) and writes alerts.json/md; a built-in `watch` polls events.jsonl and serves an auto-refresh dashboard.html; optional best-effort desktop notification and webhook. Pure stdlib, no harness/cloud — works for any AI agent. Use after every n2d generation or review/gate run, and when asked for 生产数据仪表盘, 实时监控, 成本预警, 质检异常告警, 阈值告警, watch, ROI, 每分钟成本, 每集耗时, 一次通过率, 重抽率, 投放回收, 成本统计, 耗时统计, 生成次数, 重抽原因, QA 阻断, 通过率, 工业级指标, dashboard, metrics, monitoring, alerts."
 ---
 
 # n2d-dashboard — P0 生产数据仪表盘
@@ -103,6 +103,17 @@ python3 skills/n2d-batch/scripts/queue.py plan <作品根> \
 python3 skills/n2d-dashboard/scripts/dashboard.py build <作品根>
 python3 skills/n2d-dashboard/scripts/dashboard.py build <作品根> --markdown
 ```
+
+### 3.5 成本预检（开跑前估这集要花多少）
+
+dashboard 默认**事后**记账；`forecast` 用历史 `cost_per_finished_min`（已有 ROI 指标）× 本集 `storyboard.json` 计划时长，给一个**开跑前**的成本预测，并把已有的 `redraw_categories` 滚成「过去钱漏在哪」的 Top 漏点（先治这些最省钱）。可选 `--budget` 判超支 + 还能撑几集：
+
+```bash
+python3 skills/n2d-dashboard/scripts/dashboard.py forecast <作品根> 第2集 --budget 100 --unit CNY
+python3 skills/n2d-dashboard/scripts/dashboard.py forecast <作品根> 第2集 --json
+```
+
+无历史成本 / 缺本集计划时长时**不臆造**，只给 note + 已有的重抽漏点（先 `record` 几集真实成本，或先跑分镜设计出 `storyboard.json`）。`--unit` 须与 `record` 的 `cost.unit` 一致。
 
 ### 4. 投放回收入账
 
