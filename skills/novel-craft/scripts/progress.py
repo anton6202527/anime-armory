@@ -153,6 +153,17 @@ def scan_main(argv=None):
     if gate_status["blocking"]:
         print("")
         print(format_gate_status(gate_status))
+    
+    findings_files = []
+    try:
+        from glob import glob
+        findings_files = glob(os.path.join(root, "审稿", "*findings*.json")) + glob(os.path.join(root, "审稿", "consistency_audit.json"))
+    except Exception:
+        pass
+    if findings_files:
+        print("\n次要缺口/待办:")
+        print("  - 存在未解决的一致性 findings (建议调 novel-review 修复或确认)")
+
     rest = items[1:args.limit]
     if rest:
         print("\n后续未完成项：")

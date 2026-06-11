@@ -181,6 +181,38 @@ def append_runner_event(
         dashboard_mod.build(root, write=True)
 
 
+def refresh_gate(root: str, episode: str, stage: str) -> Dict[str, Any]:
+    """返工 pass 后重跑该 stage 门禁，刷新 gate_findings_<stage>_<ep>.json（闭环复检的最后一环）。
+
+    这让 --recheck 拿到的是返工 *之后* 的现状指纹，而不是返工前的陈旧 findings——否则复检永远
+    在对着旧报告判 resolved/reopen，等于没复检。镜头级 gate 重跑由这里自动接上，无需人工再敲一遍
+    dashboard.py gate。仅刷 gate 事件与 findings，不在此重建仪表盘（由调用方在 cycle 末统一重建）。
+    返回 {stage, exit_code, blocks, warns, findings_path}（相对 root）。
+    """
+    ep = dashboard_mod.normalize_episode(episode)
+    events, code, findings = dashboard_mod.gate_events(root, ep, stage)
+    dashboard_mod.replace_events(
+        root,
+        lambda event: (
+            event.get("episode") == ep
+            and event.get("stage") == stage
+            and event.get("source") == "n2d-review/scripts/gate.py"
+            and event.get("event") in {"qa_gate", "qa_gate_run"}
+        ),
+        events,
+    )
+    path = dashboard_mod.write_gate_findings(root, ep, stage, findings)
+    blocks = sum(1 for f in findings if isinstance(f, dict) and str(f.get("sev")).lower() == "block")
+    warns = sum(1 for f in findings if isinstance(f, dict) and str(f.get("sev")).lower() == "warn")
+    return {
+        "stage": stage,
+        "exit_code": code,
+        "blocks": blocks,
+        "warns": warns,
+        "findings_path": os.path.relpath(path, root),
+    }
+
+
 def _task_stage_spec(task: Dict[str, Any]) -> Dict[str, Any]:
     stage = str(task.get("stage_key") or "")
     try:
@@ -411,10 +443,12 @@ def run_claimed(
     no_dashboard: bool,
     verify_outputs: bool,
     stop_on_fail: bool,
+    auto_gate: bool = True,
 ) -> List[Dict[str, Any]]:
     results: List[Dict[str, Any]] = []
     # 同一 cycle 内每个任务只追加事件、不各自重建仪表盘；循环结束统一重建一次（见 append_runner_event）。
     defer_build = len(claimed) > 1 and not no_dashboard
+    gate_refreshed_any = False
     for task in claimed:
         task_id = str(task["id"])
         stop_evt = threading.Event()
@@ -464,7 +498,7 @@ def run_claimed(
             if stop_on_fail:
                 break
             continue
-        results.append({
+        record = {
             "id": marked.get("id"),
             "episode": marked.get("episode"),
             "stage_key": marked.get("stage_key"),
@@ -473,11 +507,20 @@ def run_claimed(
             "attempts": marked.get("attempts"),
             "exit_code": result["exit_code"],
             "note": result["note"],
-        })
+        }
+        # 返工成功且有门禁阶段 → 自动重跑该 stage 门禁刷新 findings，让随后 --recheck 对的是返工后的现状。
+        gate_stage = str(task.get("gate_stage") or "").strip()
+        if auto_gate and not dry_run and not no_dashboard and result["status"] == "pass" and gate_stage:
+            try:
+                record["gate_refreshed"] = refresh_gate(root, marked.get("episode"), gate_stage)
+                gate_refreshed_any = True
+            except Exception as exc:  # pragma: no cover - 门禁重跑 best-effort，失败不回滚已 mark 的任务
+                record["gate_refreshed"] = {"stage": gate_stage, "error": str(exc)}
+        results.append(record)
         if stop_on_fail and result["status"] != "pass":
             break
-    if defer_build:
-        # cycle 内已追加全部事件，这里统一重建一次（best-effort，失败不影响已 mark 的任务）。
+    if defer_build or gate_refreshed_any:
+        # cycle 内已追加全部事件（含自动门禁重跑），这里统一重建一次（best-effort，失败不影响已 mark 的任务）。
         try:
             dashboard_mod.build(root, write=True)
         except Exception:  # pragma: no cover - 仪表盘重建 best-effort
@@ -499,9 +542,12 @@ def run_once(
     stop_on_fail: bool = False,
     worker: Optional[str] = None,
     lease_seconds: int = queue_mod.DEFAULT_LEASE_SECONDS,
+    auto_gate: bool = True,
 ) -> Dict[str, Any]:
     config = load_config(root, config_path)
     worker = worker or queue_mod.default_worker()
+    # 配置可关：batch_runner.json 里 "auto_gate": false → 关掉返工后自动重跑门禁（CLI --no-gate 同效）。
+    effective_auto_gate = auto_gate and bool(config.get("auto_gate", True))
     # claim() 锁内：先回收过期租约（自动断点恢复）再认领，并打 worker+lease。
     claimed = queue_mod.claim(root, limit=limit, worker=worker, lease_seconds=lease_seconds)
     results = run_claimed(
@@ -517,6 +563,7 @@ def run_once(
         no_dashboard=no_dashboard,
         verify_outputs=verify_outputs,
         stop_on_fail=stop_on_fail,
+        auto_gate=effective_auto_gate,
     )
     return {
         "claimed": len(claimed),
@@ -543,6 +590,7 @@ def run_until_empty(
     stop_on_fail: bool,
     worker: Optional[str] = None,
     lease_seconds: int = queue_mod.DEFAULT_LEASE_SECONDS,
+    auto_gate: bool = True,
 ) -> Dict[str, Any]:
     all_results: List[Dict[str, Any]] = []
     while max_tasks is None or len(all_results) < max_tasks:
@@ -563,6 +611,7 @@ def run_until_empty(
             stop_on_fail=stop_on_fail,
             worker=worker,
             lease_seconds=lease_seconds,
+            auto_gate=auto_gate,
         )
         all_results.extend(result["results"])
         if result["claimed"] == 0:
@@ -594,6 +643,14 @@ def parser() -> argparse.ArgumentParser:
                     help=f"任务租约秒数（执行期自动心跳续租）；默认 {queue_mod.DEFAULT_LEASE_SECONDS}")
     ap.add_argument("--resume", action="store_true",
                     help="开跑前先回收本 --worker 上次崩溃残留的 running 任务（断点恢复），再继续认领")
+    ap.add_argument("--no-gate", action="store_true",
+                    help="关掉返工 pass 后自动重跑该 stage 门禁（默认开）；自动重跑让 --recheck 对的是返工后的现状")
+    ap.add_argument("--recheck", action="store_true",
+                    help="跑完后用 生产数据/ 最新审查产物的指纹复检：问题消失的返工任务标 resolved、复发的 reopen"
+                         "（闭环复检；返工后门禁已自动刷新，--recheck 即对现状判定）")
+    ap.add_argument("--coarse-recheck", action="store_true",
+                    help="--recheck 时启用粗粒度回退：精确指纹对不上但该(集×阶段×维度)桶仍有问题则不判 resolved 而 reopen，"
+                         "堵定位串大改导致的漏放")
     return ap
 
 
@@ -621,6 +678,7 @@ def main(argv: Sequence[str]) -> int:
             stop_on_fail=ns.stop_on_fail,
             worker=worker,
             lease_seconds=ns.lease_seconds,
+            auto_gate=not ns.no_gate,
         )
     else:
         result = run_once(
@@ -636,7 +694,21 @@ def main(argv: Sequence[str]) -> int:
             stop_on_fail=ns.stop_on_fail,
             worker=worker,
             lease_seconds=ns.lease_seconds,
+            auto_gate=not ns.no_gate,
         )
+    if ns.recheck:
+        try:
+            queue = queue_mod.load_queue(root)
+            active = queue_mod.collect_active_fingerprints(root)
+            coarse_active = queue_mod.collect_active_fingerprints(root, coarse=True) if ns.coarse_recheck else None
+            queue_mod.reconcile_resolved(queue, active, coarse_active=coarse_active)
+            queue_mod.save_queue(root, queue)
+            info = queue.get("recheck", {})
+            tail = f" reopened_coarse={info.get('reopened_coarse', 0)}" if coarse_active is not None else ""
+            print(f"[recheck] resolved={info.get('resolved', 0)} reopened={info.get('reopened', 0)}{tail}"
+                  f"（现存一致性问题指纹 {len(active)} 个）", file=sys.stderr)
+        except (FileNotFoundError, ValueError) as exc:
+            print(f"[recheck] 跳过：{exc}", file=sys.stderr)
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0 if not any(item.get("runner_status") == "fail" for item in result.get("results", [])) else 1
 

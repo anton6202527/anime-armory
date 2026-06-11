@@ -115,10 +115,10 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 ### 入口判定
 
 **情境 A — 用户给了一个小说路径，作品根尚不存在**：
-→ 推荐 `/n2d-script <小说路径>`（Stage 1 首跑：拆集 + 精修第1集）。**首跑时把上面「制作模式 · 首跑选择」的菜单念给用户选一次**（配音先行 / 先出视频后配音 + 一句原因），选后落 `_设置.md`。
+→ 推荐 `/n2d-script <小说路径>`（Stage 1 首跑：拆集 + 精修第1集）。**首跑时把上面「制作模式 · 首跑选择」的 A/B/C 菜单完整念给用户选一次**（配音先行 / 先出视频后配音 / 原生音画 + 一句原因），选后落 `_设置.md`。
 
 **情境 B — 用户给了一个已存在的作品根 或 `_进度.md` 路径**：
-→ **先跑源新鲜度自检**（见下「源新鲜度自检」节）→ 再走"读进度 → 路由"流程
+→ **先跑源新鲜度自检**（见下「源新鲜度自检」节）→ **再跑 skill 更新影响检查**（见下「skill 更新影响检查」节）→ 再走"读进度 → 路由"流程
 
 **情境 C — 用户问"怎么开始 / 流程是什么"**：
 → 简述上面的六阶段全景 + 让用户给小说路径
@@ -186,7 +186,27 @@ python3 <skill>/source_check.py <作品根> --record # 记/更新指纹基线（
 
 > 这不是单独的协调 agent——novel↔n2d 的耦合只有一个文件，盯它的新鲜度做进调度器入口即可；常驻 watcher 逆本仓库无状态 skill 架构。
 >
-> **已配自动守望（Stop hook）**：`.claude/settings.json` 的 Stop hook 每次回话后跑 `source_watch.py`，扫所有有 `小说/_源指纹.json` 的漫剧，**仅在写小说成品变动时打一行提醒**（含变动章是否触及已生产集），clean 时全静默。即不进调度器、改完写小说也会自动弹。挂源 = 同名 `写小说/<剧名>/章节`（章一改即发现，不必等重导出）。新漫剧首切后跑一次 `source_check.py <作品根> --record` 才纳入守望。
+> **可选自动守望（agent hook）**：支持会话结束 hook 的 agent 可在自己的私有配置里让 Stop/after-response hook 跑 `source_watch.py`（例如 Claude Code 可放在 `.claude/settings.json`，其它工具按各自 hook 机制配置），扫所有有 `小说/_源指纹.json` 的漫剧，**仅在写小说成品变动时打一行提醒**（含变动章是否触及已生产集），clean 时全静默。即不进调度器、改完写小说也会自动弹。挂源 = 同名 `写小说/<剧名>/章节`（章一改即发现，不必等重导出）。新漫剧首切后跑一次 `source_check.py <作品根> --record` 才纳入守望。
+
+### skill 更新影响检查（skills 更新 → 是否需要重制到当前阶段）
+
+已有作品进入调度时，源新鲜度自检之后再跑一次轻量检查：
+
+```bash
+python3 skills/n2d-update/scripts/update_plan.py check <作品根> 第N集 --write-plan
+```
+
+- 无变化 → 静默继续读进度路由。
+- 无基线 → 提醒先 `record` 建立 skill 快照；如果当前 git 工作区已有相关 skill 改动，脚本仍会列出变动文件。
+- 有变化 → 把 `生产数据/skill_update_plan_第N集.md` 讲给用户：从哪个阶段回放、最多重制到哪个当前阶段、哪些 skill 变了。
+- **只提示，不自动开跑**：出图/出视频/配音/合成都可能花钱或覆盖产物，必须等用户确认后再交 `n2d-batch` 或对应 stage skill 执行。
+- 重制上限 = 该集已到达的阶段。例如第1集当前 `出图=57/68`，计划最多到 `image`，不主动出视频/合成。
+
+阶段完成、用户接受现状或重制结束后，记录新基线：
+
+```bash
+python3 skills/n2d-update/scripts/update_plan.py record <作品根> 第N集
+```
 
 ### 读进度 → 路由
 
@@ -197,13 +217,14 @@ python3 <skill>/source_check.py <作品根> --record # 记/更新指纹基线（
 > ```
 > 把脚本输出**直接讲给用户**。下面的"逐列判断"是脚本内部逻辑（容错/手查时参考）。
 >
-> **回写进度统一用脚本**（别手工编辑表格）：`python3 <skill>/progress.py set <作品根> 第N集 <列名> <值>`（值 = ✅ / ⬜ / 12/19）。各阶段 skill 收尾都调它；`set` 会自动刷新 `脚本/第N集/manifest.json` 产物快照。旧项目表头缺新列时先跑：`python3 <skill>/progress.py ensure-col <作品根> <列名> ⬜`。需要手动重建快照时可跑：`python3 skills/novel2drama/manifest.py <作品根> 第N集 --stage <stage_key>`。
+> **回写进度统一用脚本**（别手工编辑表格）：`python3 <skill>/progress.py set <作品根> 第N集 <列名> <值>`（值 = ✅ / ⬜ / ⏳rough / 12/19）。各阶段 skill 收尾都调它；`set` 会自动刷新 `脚本/第N集/manifest.json` 产物快照，并记录 `last_progress_state`。旧项目表头缺新列时先跑：`python3 <skill>/progress.py ensure-col <作品根> <列名> ⬜`。需要手动重建快照时可跑：`python3 skills/novel2drama/manifest.py <作品根> 第N集 --stage <stage_key>`。
 
-> **先读 `制作模式` 与 `基础视觉风格`**（`_设置.md`，见上「制作模式」节和 `references/visual_styles.md`）。`progress.py` 是**模式无关**的线性路由器；下面逐列判断默认按 `配音先行`。若 `制作模式=先出视频后配音`，在脚本输出之上叠加以下调整，并**复述「制作模式」节的不推荐警告**：
-> - 配音 ⬜ 时，`/n2d-voice` 只为出**占位/估算 `时长清单.json`** 当时间脚手架（不追求音质，真实配音留到最后）。
+> **先读 `制作模式` 与 `基础视觉风格`**（`_设置.md`，见上「制作模式」节和 `references/visual_styles.md`）。`progress.py` / `n2d-progress/scan.py` 共用同一套模式感知路由；下面逐列判断默认按 `配音先行`。若 `制作模式=先出视频后配音`，在脚本输出之上叠加以下调整，并**复述「制作模式」节的不推荐警告**：
+> - 配音 ⬜ 时，`/n2d-voice` 只为出**占位/估算 `时长清单.json`** 当时间脚手架；占位回写 `配音=⏳rough`，不是 `✅`，真实配音留到最后。
 > - 阶段2、出图、出视频遇占位**不拦截**（用户已选此模式）：finalize 用 `FINALIZE_ALLOW_PLACEHOLDER=1`，n2d-video 复述警告后继续。
 > - **视频列满后、合成前，插一步真实配音 + 拟合**：`/n2d-voice` 换 CosyVoice/克隆/MiniMax 重出真音轨 → 跑 `n2d-compose/fit_voice_to_clips.py`（先 dry-run 对账，再 `--apply` 出 `voice_<lang>_fitted.wav`，把真音逐镜头拟合到锁定时长；真音远超槽位的镜头列为 overflow、退出码 2，提示回 `/n2d-video` 重出加长）→ 再 `VOICEFILE=…_fitted.wav /n2d-compose`。详见 n2d-compose「先出视频后配音」节。
-> - `progress.py` 与 `n2d-progress/scan.py` 共用同一套模式感知路由：视频满、配音仍占位时会把前沿拦回 `/n2d-voice`（而非 `/n2d-compose`）；`/n2d-compose` 本身也有占位守门，占位轨直接合成会被拒。
+> - `progress.py` 与 `n2d-progress/scan.py` 共用同一套模式感知路由：`⏳rough` 在该模式下可推进分镜/出图/出视频，但视频满、配音仍占位时会把前沿拦回 `/n2d-voice`（而非 `/n2d-compose`）；`/n2d-compose` 本身也有占位守门，占位轨直接合成会被拒。
+> - 旧项目若曾把占位配音写成 `✅`，先跑 `python3 <skill>/progress.py audit-placeholders <作品根>` 检查；确认要修则加 `--fix`，把伪完成降级为 `⏳rough`。
 
 1. 定位 `<作品根>/_进度.md`，读进度表（老项目若仍在 `<作品根>/common/_进度.md`，路由脚本会兼容读取）
 2. 进度表头形如：`| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |`
@@ -211,7 +232,7 @@ python3 <skill>/source_check.py <作品根> --record # 记/更新指纹基线（
    - `剧本改编`/`bgm`/`封面` 任一 ⬜ → 还在 /n2d-script 阶段1·剧本改编
    - 阶段1 齐、`配音` ⬜ → 该集等 /n2d-voice 角色配音(统计台词时长)
    - 非原生音画：`配音` ✅、`分镜设计` ⬜ → 回跑 /n2d-script 阶段2·分镜设计（时长驱动：分镜剧本+故事板+素材清单+SRT）。原生音画：`配音` 可选，`分镜设计` 直接按 `storyboard.json clips[].duration` 定稿。
-     - ⚠️ **占位检查**：`配音` ✅ 不代表是真实配音。读该集 `合成/第N集/配音/时长清单.json`，若有 `占位:true`（macOS say 占位音色）→ 告知用户"当前是占位配音，时长不准；正式出视频前必须 /n2d-voice 换真实配音重跑 + 回跑阶段2 重定时"。finalize_storyboard/n2d-video 都会硬闸门拦截，但这里提前透露省返工。
+     - ⚠️ **占位检查**：新进度约定下，占位配音应写 `配音=⏳rough`，真实配音才写 `✅`。旧项目若仍显示 `配音=✅`，也要读该集 `合成/第N集/配音/时长清单.json`，若有 `占位:true`（macOS say 占位音色）→ 告知用户"当前是占位配音，时长不准；正式出视频前必须 /n2d-voice 换真实配音重跑 + 回跑阶段2 重定时"。finalize_storyboard/n2d-video 都会硬闸门拦截，但这里提前透露省返工。
    - `分镜设计` ✅、`出图prompt`/`出图` 未满 → /n2d-image
    - `出图` 满、`视频` 未满 → 先跑 `python3 skills/n2d-model-router/scripts/router.py <作品根> 第N集 --write` → /n2d-video
    - `视频` 满、`成片` ⬜ → /n2d-compose（剪辑合成+BGM+字幕；问用户 BGM 选项）
@@ -281,7 +302,7 @@ python3 <skill>/source_check.py <作品根> --record # 记/更新指纹基线（
         ├── _voicecache/           （配音缓存）
         ├── _work/                 （compose 中间产物）
         ├── 成片_第N集_{mode}.mp4   ← n2d-compose 输出
-        └── 成片_第N集_{mode}_水印.mp4  （可选：compose 调 watermark 后）
+        └── 成片_第N集_{mode}_水印.mp4  （可选：compose 调 shared-watermark 后）
 ```
 > **出视频/ vs 合成/ 分家（2026）**：`出视频/第N集/` 只放 per-shot clips（`视频/`）+ 视频 prompt（`prompt/`）；一切音频/后期——`配音/`（含 `时长清单.json`）、`_voicecache/`、compose `_work/`、最终 `成片_*.mp4` 及可选水印——落同级 `合成/第N集/`。compose 从 `出视频/` 读 clips、从 `合成/` 读配音、把成片写回 `合成/`。
 
@@ -306,6 +327,15 @@ python3 <skill>/source_check.py <作品根> --record # 记/更新指纹基线（
 | `/n2d-score` | 成片或阶段审查后给每集打机器分；含 visual checks；低分自动回流 | 作品根 + 集号 | `生产数据/score_第N集.json/md` + `score_inputs/第N集_visual.json` + `auto_return_tasks` / 可选 batch 队列 |
 | `/n2d-review-ui` | 机检/评分后生成人审无限画布，看首帧、尾帧、clip、接缝、定妆参考、QA flag、机器分 | 作品根 + 集号 | `生产数据/review_ui_第N集.html/json` |
 | `/n2d-feedback` | 上线一批后把平台留存/追更/跳出数据反哺导演节奏；同集 A/B 比较开场/封面/集尾断点/标题文案 | 作品根 + 平台指标 + 自动/手工导演标签 + 可选 A/B 变体字段 | `生产数据/platform_feedback.json/md` + 可选更新 `导演节奏.md` |
+
+## 常见错误
+
+| 错误 | 纠正 |
+|---|---|
+| 不查进度直接猜测用户的当前阶段 | 每开始一个会话，务必调用脚本或人工确认 `_进度.md` 的前沿在哪 |
+| 跳过合规前置包 (n2d-compliance) | 后续的任何 image/video 生成都会因为 gate 被拦截，造成多次碰壁 |
+| 未让用户确认就设定了“先出视频后配音”模式 | 除非用户主动点名要求出 demo，否则应永远以默认的`配音先行`推流程以减少大返工 |
+| 源文件更新后（写小说）不检查漫剧侧的过期漂移 | 应依赖于源新鲜度自检及 `update_plan` 判断，重切必要的窗口，以免两边脱节 |
 
 ## 实战参考
 

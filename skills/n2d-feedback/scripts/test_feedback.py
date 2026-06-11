@@ -274,19 +274,27 @@ def test_consistency_findings_ingestion(tmp_path):
         "summary": {"by_dim": {"场景(O2)": {"block": 0, "warn": 1}}},
         "findings": [],
     }, ensure_ascii=False), encoding="utf-8")
+    # review-ui 导出的 findings 也应被读取；即便没有 summary.by_dim，也从 findings[] 反算。
+    (prod / "review_ui_findings_第3集.json").write_text(json.dumps({
+        "kind": "n2d_consistency_findings", "version": 1, "episode": "第3集",
+        "summary": {"severity": {"block": 0, "warn": 1}},
+        "findings": [{"dim": "角色一致性", "sev": "warn", "msg": "服装漂移"}],
+    }, ensure_ascii=False), encoding="utf-8")
     # kind 不对的文件被忽略
     (prod / "consistency_findings_bad.json").write_text('{"kind": "other"}', encoding="utf-8")
 
     reports = feedback.load_consistency_reports(str(root))
-    assert len(reports) == 2
+    assert len(reports) == 3
 
     rows = [
         {"episode": "第1集", "retention_15s": "0.4", "bounce_3s": "0.5", "plays": "100"},
         {"episode": "第2集", "retention_15s": "0.6", "bounce_3s": "0.2", "plays": "100"},
+        {"episode": "第3集", "retention_15s": "0.7", "bounce_3s": "0.1", "plays": "100"},
     ]
     result = feedback.analyze_consistency(reports, rows)
     assert result["worst_episode"] == "第1集"
     assert result["dim_totals"]["脸(G1)"] == {"block": 1, "warn": 2}
+    assert result["dim_totals"]["角色一致性"] == {"block": 0, "warn": 1}
     ep1 = next(e for e in result["episodes"] if e["episode"] == "第1集")
     assert ep1["top_dim"] == "脸(G1)" and ep1["retention_15s"] == 0.4
 
@@ -306,3 +314,24 @@ def test_consistency_findings_ingestion(tmp_path):
     empty_root = tmp_path / "empty"
     (empty_root / "生产数据").mkdir(parents=True)
     assert feedback.analyze_consistency(feedback.load_consistency_reports(str(empty_root)), []) is None
+
+
+# ── T11: feedback 一致性写回信号 ─────────────────────────────────────────────
+def test_consistency_priority_signal_on_block_and_low_retention():
+    import feedback as fb
+    reports = [{"kind": fb.CONSISTENCY_FINDINGS_KIND, "episode": "第1集",
+                "findings": [{"sev": "block", "dim": "角色一致性", "msg": "崩脸"}]}]
+    rows = [{"episode": "第1集", "retention_15s": 0.30}]   # 留存低
+    res = fb.analyze_consistency(reports, rows)
+    sigs = res["priority_signals"]
+    assert sigs and sigs[0]["episode"] == "第1集" and sigs[0]["signal"] == "prioritize_rework"
+    assert sigs[0]["top_dim"] == "角色一致性"
+
+
+def test_consistency_no_signal_when_retention_ok():
+    import feedback as fb
+    reports = [{"kind": fb.CONSISTENCY_FINDINGS_KIND, "episode": "第1集",
+                "findings": [{"sev": "block", "dim": "角色一致性", "msg": "崩脸"}]}]
+    rows = [{"episode": "第1集", "retention_15s": 0.80}]   # 留存好 → 不触发
+    res = fb.analyze_consistency(reports, rows)
+    assert res["priority_signals"] == []

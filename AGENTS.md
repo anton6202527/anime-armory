@@ -21,10 +21,11 @@
 | 把小说做成 AI 漫剧/短剧（分镜/配音/出图/出视频/合成） | **`novel2drama`**（分诊到 n2d-script/voice/image/video/compose） |
 | 直接创作/编辑一首带人声的歌 | **`song`**（可从主题直接创作，也可改词、改曲风、重生成、挑版；过程中分诊到 song-lyrics/song-score/song-compose/song-cover/song-review/song-craft） |
 | 把成品歌做成音乐 MV（卡点/出图出视频/卡拉OK/合成） | **`mv`**（分诊到 mv-beat/image/video/lyric-sync/compose） |
-| 给视频/图片换脸（公共，任何流程可调） | **`video-faceswap`** / **`image-faceswap`**（带合规闸门） |
-| 给图/视频加水印（合规 AI 标识 / 品牌 logo·账号，公共） | **`watermark`**（图视频同工具；AI 标识只加不去） |
+| 给视频/图片换脸（公共，任何流程可调） | **`shared-video-faceswap`** / **`shared-image-faceswap`**（带合规闸门） |
+| 给图/视频加水印（合规 AI 标识 / 品牌 logo·账号，公共） | **`shared-watermark`**（图视频同工具；AI 标识只加不去） |
+| 清理 / 瘦身 `skills/` 里的生成垃圾 | **`shared-cleanup`**（默认扫描，确认后只删低风险缓存/临时文件） |
 
-> 四条线**互不依赖、各自自包含**（mv-* 不复用 n2d-* 等）。换脸、水印是公共能力（faceswap 打标即调 `watermark`）。
+> 四条线**互不依赖、各自自包含**（mv-* 不复用 n2d-* 等）。`shared-*` 是公共能力；换脸打标调 `shared-watermark`。
 
 ## 必须遵守的项目约定
 

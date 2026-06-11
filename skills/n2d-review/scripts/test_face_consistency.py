@@ -73,7 +73,9 @@ def test_pillow_fallback_when_no_insightface(tmp_path):
         import pytest
         pytest.skip("本机装有 insightface，降级档不生效")
     image_mod = fc._load_pillow()
-    assert image_mod is not None, "本仓约定 Pillow 可用"
+    if image_mod is None:
+        import pytest
+        pytest.skip("本机未装 Pillow，无法验证降级档（环境缺依赖，非逻辑问题）")
 
     root = tmp_path
     ep = "第1集"
@@ -113,3 +115,39 @@ def test_pillow_fallback_when_no_insightface(tmp_path):
     assert ok_shot["verdict"] in {"ok", "warn"}
     # 绝不臆造相似度
     assert "similarity" not in json.dumps(result)
+
+
+# ── T11: flag-band 单张样本降权（floor_calibrated）────────────────────────────
+def test_floor_calibrated_predicate():
+    import face_consistency as fc
+    assert fc.floor_calibrated([]) is False          # 无内部对（单张定妆）→ 地板未自标定
+    assert fc.floor_calibrated([None]) is False
+    assert fc.floor_calibrated([0.7]) is True         # ≥1 对 → 已自标定
+    assert fc.floor_calibrated([0.6, 0.8]) is True
+    # 单张样本地板退回保守经验值；调用方据 floor_calibrated=False 降权而非硬判
+    assert fc.calibrate_floor([]) == 0.50
+
+
+# ── T11: 同框多角色串脸分配匹配（detect_face_swaps）──────────────────────────
+def test_detect_face_swaps_clean_two_shot():
+    import face_consistency as fc
+    A, B = [1.0, 0.0], [0.0, 1.0]
+    faces = [[0.98, 0.02], [0.03, 0.97]]  # 一张像A一张像B
+    res = fc.detect_face_swaps(faces, {"沈念": A, "柳娘子": B})
+    assert res["duplicate_chars"] == [] and res["missing_chars"] == []
+    assert res["swap_suspected"] is False
+
+
+def test_detect_face_swaps_both_faces_look_like_one_char():
+    import face_consistency as fc
+    A, B = [1.0, 0.0], [0.0, 1.0]
+    faces = [[0.99, 0.01], [0.97, 0.03]]  # 两张脸都最像 A → 柳娘子被画成了沈念
+    res = fc.detect_face_swaps(faces, {"沈念": A, "柳娘子": B})
+    assert res["duplicate_chars"] == ["沈念"] and res["missing_chars"] == ["柳娘子"]
+    assert res["swap_suspected"] is True
+
+
+def test_detect_face_swaps_empty_or_no_chars():
+    import face_consistency as fc
+    assert fc.detect_face_swaps([], {"沈念": [1.0, 0.0]})["assignments"] == []
+    assert fc.detect_face_swaps([[1.0, 0.0]], {})["assignments"] == []

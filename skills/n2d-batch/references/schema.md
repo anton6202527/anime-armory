@@ -68,9 +68,14 @@ Shape:
   "rerun_scope": "",
   "affected_artifacts": [],
   "affected_shots": [],
+  "finding_fingerprints": [],
+  "coarse_fingerprints": [],
   "history": []
 }
 ```
+
+- `finding_fingerprints`：`(集×阶段×维度×最小定位)` 精确指纹（定位串过 `canonical_scope_key` 归一，同镜头不同写法/帧位/产物路径同指纹）；复检判 resolved/reopen + 防复审堆叠。
+- `coarse_fingerprints`：`(集×阶段×维度)` 粗指纹；`recheck --coarse` 回退匹配用——精确指纹对不上但该桶仍有问题时不误判 resolved。
 
 ## Status values
 

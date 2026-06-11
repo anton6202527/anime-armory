@@ -7,6 +7,13 @@ description: P2 automatic review scoring for novel2drama/n2d. Produce a machine 
 
 `n2d-score` 把 n2d-review 的确定性机检、n2d-dashboard 的生产数据、gate/review findings，以及更贴近实际观感的 visual checks 汇总成**每集机器分**。它不取代人判；它负责判断“这集是否低于阈值，应自动回流哪个 stage”。
 
+## 输入 / 输出 / 读写边界
+
+- **输入**：mechanical/consistency/visual checks、dashboard gate/review findings、identity drift、字幕/成片/配音/SRT/storyboard 时长信号。
+- **输出**：`生产数据/score_inputs/*`、`score_第N集.json/md`，可选低分回流任务写入 `batch_queue.json`。
+- **读写边界**：只评分和排队；不修改图/视频/字幕/配音，不直接判定最终美学质量。
+- **契约关系**：finding kind、回流 stage、合规/水印等未映射 block 的处理与 `n2d_contract.py` 对齐；通过率阈值优先读 dashboard 阈值配置。
+
 ## 评分维度
 
 | 维度 | 权重 | 主要来源 | 低分回流 |

@@ -172,7 +172,7 @@ def default_manifest(root: Path, episode: str | None = None) -> Dict[str, Any]:
             "hidden_or_platform_watermark": {"status": "planned", "note": "按目标平台要求补隐式/自动标识"},
         },
         "watermark": {
-            "ai_visible": {"status": "planned", "tool": "skills/watermark/watermark.py --mode ai"},
+            "ai_visible": {"status": "planned", "tool": "skills/shared-watermark/watermark.py --mode ai"},
             "metadata": {"status": "planned"},
             "final_assets": [],
         },

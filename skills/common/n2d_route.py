@@ -9,10 +9,24 @@ import re
 from typing import Dict, Iterable, List, Optional, Tuple
 
 try:
-    from n2d_contract import routing_stages, stage_specs
+    from n2d_contract import (
+        PROGRESS_DONE,
+        PROGRESS_ROUGH_PREFIX,
+        PROGRESS_TODO,
+        routing_stages,
+        stage_requires_for_mode,
+        stage_specs,
+    )
     from n2d_settings import is_native_av, is_video_first
 except ImportError:  # when imported as package-ish via sys.path parent
-    from .n2d_contract import routing_stages, stage_specs
+    from .n2d_contract import (
+        PROGRESS_DONE,
+        PROGRESS_ROUGH_PREFIX,
+        PROGRESS_TODO,
+        routing_stages,
+        stage_requires_for_mode,
+        stage_specs,
+    )
     from .n2d_settings import is_native_av, is_video_first
 
 
@@ -70,14 +84,21 @@ def normalize_episode(value: str) -> str:
     return f"第{n}集" if n is not None else (value or "").strip()
 
 
+def is_rough(v: str) -> bool:
+    v = (v or "").strip()
+    return v.startswith(PROGRESS_ROUGH_PREFIX) or v.lower() in {"rough", "rough-timing", "rough_timing"}
+
+
 def cell_state(v: str) -> str:
     v = (v or "").strip()
-    if v == "✅":
+    if v == PROGRESS_DONE:
         return "done"
+    if is_rough(v):
+        return "rough"
     # 显式标记"本集不适用"（如 zh-only 项目的 字幕英）→ na：算已满足，不挡完成、不进缺口
     if v in ("—", "-", "N/A", "n/a", "无", "✖", "✗", "×"):
         return "na"
-    if v in ("⬜", ""):
+    if v in (PROGRESS_TODO, ""):
         return "todo"
     m = re.match(r"(\d+)\s*/\s*(\d+)", v)
     if m:
@@ -94,14 +115,17 @@ def is_done(v: str) -> bool:
 
 
 def is_started(v: str) -> bool:
-    return cell_state(v) in ("done", "partial")
+    return cell_state(v) in ("done", "partial", "rough")
 
 
 def is_progress_satisfied(root: str, row: Dict[str, str], col: str) -> bool:
     """Mode-aware progress satisfaction for one column."""
     if is_native_av(root) and col == "配音":
         return True
-    return is_done(row.get(col, ""))
+    state = cell_state(row.get(col, ""))
+    if col == "配音" and is_video_first(root) and state == "rough":
+        return True
+    return state in ("done", "na")
 
 
 def is_flow_complete(root: str, row: Dict[str, str], flow: Iterable[str]) -> bool:
@@ -234,6 +258,7 @@ def stage_of(root: str, row: Dict[str, str], header: List[str]) -> Dict[str, Opt
         return is_progress_satisfied(root, row, col)
 
     native_av = is_native_av(root)
+    production_mode = "原生音画" if native_av else ""
 
     for spec in _ROUTING_SPECS:
         skill = str(spec["owner"])
@@ -245,7 +270,7 @@ def stage_of(root: str, row: Dict[str, str], header: List[str]) -> Dict[str, Opt
             continue
         # 命中未完成阶段：其 requires（跨列硬依赖）须先满足，否则真正的前沿在更早的缺口——
         # 让外层循环按 STAGE_GRAPH 顺序先命中那个缺口阶段。
-        if any(r in header and not satisfied(r) for r in spec.get("requires", ())):
+        if any(r in header and not satisfied(r) for r in stage_requires_for_mode(spec, production_mode)):
             continue
         col = next(c for c in cols if not satisfied(c))
         label, cmd = str(spec["label"]), str(spec["command"])

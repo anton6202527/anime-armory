@@ -68,6 +68,11 @@ def report(root, out):
     episodes = [r.get("_ep", "") for r in dict_rows if r.get("_ep")]
     cross_cutting_check(root, out, episodes)  # 横切就绪（合规/身份/LoRA/仪表盘/评分/UI/回灌）——不在流程表里但要可见
 
+    findings_gaps = []
+    for ep in episodes:
+        if glob.glob(os.path.join(root, "生产数据", f"*findings*{ep}.json")):
+            findings_gaps.append(f"  - {ep} 存在未解决的一致性 findings (建议调 n2d-batch 修复)")
+
     gaps = []  # (集, 列, 值, skill, note)
     for r in dict_rows:
         started = any(is_started(r.get(c, "")) for c in flow)
@@ -91,8 +96,11 @@ def report(root, out):
         out.append(f"  {note}")
     elif col in COSTLY_HINT:
         out.append(f"  ⚠️ {COSTLY_HINT[col]}")
-    if len(gaps) > 1:
-        out.append("次要缺口:")
+    if len(gaps) > 1 or findings_gaps:
+        out.append("次要缺口/待办:")
+        out.extend(findings_gaps[:3])
+        if len(findings_gaps) > 3:
+            out.append(f"  - …另有 {len(findings_gaps)-3} 集存在 findings")
         for lbl, col, val, skill, note in gaps[1:6]:
             vt = f"（{val}）" if val and val != "⬜" else "⬜"
             tail = "（补真音后再合成）" if note else ""
@@ -115,7 +123,7 @@ def episode_coverage(root, artifact, episodes):
 
 
 def coverage_status(root, item, episodes):
-    """Return display mark for a CROSS_CUTTING entry.
+    """Return display mark for a CROSS_CUTTING_READINESS entry.
 
     Work-level artifacts stay boolean.  Per-episode glob artifacts report N/M,
     preventing one generated score/review UI from looking like whole-work ready.
@@ -142,7 +150,7 @@ def coverage_status(root, item, episodes):
 
 
 def cross_cutting_check(root, out, episodes=None):
-    """横切就绪检查：按契约 CROSS_CUTTING 注册表，列各横切 skill 的就绪标志是否在位。
+    """横切就绪检查：按契约 CROSS_CUTTING_READINESS 注册表，列各横切 readiness 标志是否在位。
     只读、只提示——合规缺失给 ⚠️（付费硬前置），其余给 ○（按需，未跑不算错）。"""
     if cross_cutting is None:
         return

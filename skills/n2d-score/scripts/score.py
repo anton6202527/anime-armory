@@ -24,88 +24,24 @@ REPO_SKILLS = os.path.abspath(os.path.join(SKILL_DIR, ".."))
 COMMON = os.path.join(REPO_SKILLS, "common")
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
-from n2d_contract import EPISODE_REVIEW_SCORE_KIND, PRODUCTION_DIR, production_dir  # noqa: E402  生产数据目录 / kind 单一真值源
+from n2d_contract import (  # noqa: E402  生产数据目录 / kind / 一致性维度单一真值源
+    EPISODE_REVIEW_SCORE_KIND,
+    PRODUCTION_DIR,
+    consistency_dimensions,
+    production_dir,
+)
 from n2d_thresholds import load_thresholds  # noqa: E402  告警阈值单一真值源（与 n2d-dashboard 共用）
 
 INPUT_DIR = "score_inputs"
 SCORE_KIND = EPISODE_REVIEW_SCORE_KIND
 VERSION = 1
 
-DIMENSIONS: Dict[str, Dict[str, Any]] = {
-    "character_consistency": {
-        "label": "角色一致性",
-        "weight": 20,
-        "return_to_stage": "image",
-        "scope": "回 n2d-image 重出崩脸/身份漂移镜头；必要时补 identity_registry / reference_group。",
-    },
-    "outfit_consistency": {
-        "label": "服装一致性",
-        "weight": 12,
-        "return_to_stage": "image",
-        "scope": "回 n2d-image 重出服装/配色漂移镜头；先检查定妆组和服装参考图。",
-    },
-    "scene_consistency": {
-        "label": "场景一致性",
-        "weight": 12,
-        "return_to_stage": "image",
-        "scope": "回 n2d-image 修场景定妆、光位锚或尾帧；必要时回 n2d-video 重出接缝 clip。",
-    },
-    "subtitle_correctness": {
-        "label": "字幕正确性",
-        "weight": 16,
-        "return_to_stage": "script_stage2",
-        "scope": "回 n2d-script 阶段2重跑 finalize_storyboard / 字幕重定时；必要时重出配音 manifest。",
-    },
-    "audio_visual_sync": {
-        "label": "音画同步",
-        "weight": 16,
-        "return_to_stage": "compose",
-        "scope": "回 n2d-compose 对齐配音轨、clip 时长、原生音轨策略；若时长源头错，回 n2d-script 阶段2。",
-    },
-    "rhythm_density": {
-        "label": "节奏密度",
-        "weight": 12,
-        "return_to_stage": "script_stage2",
-        "scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。",
-    },
-    "style_consistency": {
-        "label": "风格一致性",
-        "weight": 12,
-        "return_to_stage": "image",
-        "scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。",
-    },
-    "semantic_continuity": {
-        "label": "语义继承",
-        "weight": 8,
-        "return_to_stage": "script_stage2",
-        "scope": "回 n2d-script 阶段2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点。",
-    },
-    "state_continuity": {
-        "label": "状态百科",
-        "weight": 8,
-        "return_to_stage": "image",
-        "scope": "回 n2d-image 修 visual_state_ledger / 出图分镜状态锁；必要时回 storyboard 修角色状态演进。",
-    },
-    "multimodal_continuity": {
-        "label": "多模态漂移",
-        "weight": 8,
-        "return_to_stage": "image",
-        "scope": "回 n2d-image 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy。",
-    },
-}
+DIMENSIONS: Dict[str, Dict[str, Any]] = consistency_dimensions()
 
 CONSISTENCY_MAP = {
-    "语义谱系(P0)": "semantic_continuity",
-    "状态百科(P1)": "state_continuity",
-    "多模态(P2)": "multimodal_continuity",
-    "锚点门(N3)": "character_consistency",
-    "脸(G1)": "character_consistency",
-    "片内时序(N2)": "character_consistency",
-    "服装配色(N1)": "outfit_consistency",
-    "场景(O2)": "scene_consistency",
-    "接缝接力": "scene_consistency",
-    "风格(S1)": "style_consistency",
-    "糊/低质(N4)": "style_consistency",
+    str(label): key
+    for key, spec in DIMENSIONS.items()
+    for label in tuple(spec.get("audit_labels", ()))
 }
 
 MECHANICAL_DIM_MAP = {
@@ -116,18 +52,7 @@ MECHANICAL_DIM_MAP = {
     "衔接": "scene_consistency",
 }
 
-QA_KEYWORDS = (
-    ("semantic_continuity", ("语义", "谱系", "继承", "semantic", "voiceover", "storyboard")),
-    ("state_continuity", ("状态", "动态百科", "visual_state_ledger", "state")),
-    ("multimodal_continuity", ("多模态", "道具", "法宝", "视觉语义", "embedding")),
-    ("character_consistency", ("角色", "脸", "资产身份", "identity", "Face", "锚点")),
-    ("outfit_consistency", ("服装", "配色", "妆造")),
-    ("scene_consistency", ("场景", "接缝", "光位", "轴线", "尾帧")),
-    ("subtitle_correctness", ("字幕", "SRT", "cue")),
-    ("audio_visual_sync", ("音画", "配音", "原生音", "双人声", "时长")),
-    ("rhythm_density", ("节奏", "钩子", "爽点", "留存", "集尾")),
-    ("style_consistency", ("风格", "style", "画风", "基础视觉")),
-)
+QA_KEYWORDS = tuple((key, tuple(spec.get("keywords", ()))) for key, spec in DIMENSIONS.items())
 
 
 from n2d_route import episode_number, normalize_episode  # noqa: E402  集号单一真值源
@@ -198,16 +123,20 @@ def run_identity_drift(root: str, ep: str) -> Optional[Dict[str, Any]]:
 
 def run_checks(root: str, ep: str) -> Dict[str, Any]:
     review_scripts = os.path.join(REPO_SKILLS, "n2d-review", "scripts")
+    identity_scripts = os.path.join(REPO_SKILLS, "n2d-identity", "scripts")
     consistency = run_json([sys.executable, os.path.join(review_scripts, "consistency_audit.py"), root, ep, "--json"])
     mechanical = run_json([sys.executable, os.path.join(review_scripts, "mechanical_check.py"), root, ep, "--json"])
     visual = run_json([sys.executable, os.path.join(SCRIPT_DIR, "visual_checks.py"), root, ep, "--json"])
     identity = run_identity_drift(root, ep)
+    voice_print = run_json_safe([sys.executable, os.path.join(identity_scripts, "voice_print_consistency.py"), root, ep, "--json"])
     write_json(cached_path(root, ep, "consistency"), consistency)
     write_json(cached_path(root, ep, "mechanical"), mechanical)
     write_json(cached_path(root, ep, "visual"), visual)
     if identity is not None:
         write_json(cached_path(root, ep, "identity"), identity)
-    return {"consistency": consistency, "mechanical": mechanical, "visual": visual, "identity": identity}
+    if voice_print is not None:
+        write_json(cached_path(root, ep, "voice_print"), voice_print)
+    return {"consistency": consistency, "mechanical": mechanical, "visual": visual, "identity": identity, "voice_print": voice_print}
 
 
 def load_dashboard_episode(root: str, ep: str) -> Optional[Dict[str, Any]]:
@@ -273,9 +202,9 @@ def normalize_mechanical_severity(sev: str) -> str:
 
 
 def map_qa_dim(text: str) -> Optional[str]:
-    hay = text or ""
+    hay = (text or "").lower()
     for key, words in QA_KEYWORDS:
-        if any(word in hay for word in words):
+        if any(str(word).lower() in hay for word in words):
             return key
     return None
 
@@ -387,6 +316,41 @@ def apply_identity_drift(dims: Dict[str, Dict[str, Any]], drift: Optional[Dict[s
             add_signal(
                 dims, "character_consistency", warnings=1, skipped=False,
                 evidence=f"跨集漂移预警：{name} 在 {ep} 有 {warn} 个临界镜头、早集稳→ 关注该角色是否开始漂",
+            )
+
+
+def apply_voice_print(dims: Dict[str, Dict[str, Any]], report: Optional[Dict[str, Any]]) -> None:
+    """把声纹机检并进 voice_consistency。缺后端只标缺数据，不把未知当通过。"""
+    if not isinstance(report, dict):
+        return
+    if not report.get("available"):
+        add_signal(
+            dims,
+            "voice_consistency",
+            skipped=True,
+            evidence=f"声纹机检不可用：mode={report.get('mode')} precision={report.get('precision')}；{report.get('note', '')}",
+        )
+        return
+    add_signal(
+        dims,
+        "voice_consistency",
+        skipped=False,
+        evidence=f"声纹机检已采集：mode={report.get('mode')} total_drift={report.get('total_drift', 0)}",
+    )
+    for label, group in sorted((report.get("groups") or {}).items()):
+        if not isinstance(group, dict):
+            continue
+        lines = group.get("lines") if isinstance(group.get("lines"), list) else []
+        bad = sum(1 for line in lines if isinstance(line, dict) and line.get("band") == "bad")
+        warn = sum(1 for line in lines if isinstance(line, dict) and line.get("band") == "warn")
+        if bad or warn:
+            add_signal(
+                dims,
+                "voice_consistency",
+                blocks=bad,
+                warnings=warn,
+                skipped=False,
+                evidence=f"声纹漂移[{label}]: bad={bad} warn={warn} floor={group.get('floor')} mode={report.get('mode')}",
             )
 
 
@@ -689,6 +653,7 @@ def score_episode(
     mechanical: Optional[List[Dict[str, Any]]] = None,
     visual: Optional[Dict[str, Any]] = None,
     identity: Optional[Dict[str, Any]] = None,
+    voice_print: Optional[Dict[str, Any]] = None,
     dashboard_ep: Optional[Dict[str, Any]] = None,
     threshold: int = 85,
     pass_rate_floor: Optional[float] = None,
@@ -698,6 +663,7 @@ def score_episode(
     apply_consistency(dims, consistency)
     apply_face_precision(dims, consistency)
     apply_identity_drift(dims, identity, ep)
+    apply_voice_print(dims, voice_print)
     unmapped = apply_mechanical(dims, mechanical)
     apply_visual(dims, visual)
     unmapped += apply_dashboard(dims, dashboard_ep, pass_rate_floor)
@@ -726,6 +692,7 @@ def score_episode(
             "mechanical": cached_path(root, ep, "mechanical"),
             "visual": cached_path(root, ep, "visual"),
             "identity": cached_path(root, ep, "identity"),
+            "voice_print": cached_path(root, ep, "voice_print"),
         },
         "dimensions": list(dims.values()),
         "auto_return_tasks": build_auto_return_tasks(dims, threshold, ep),
@@ -835,6 +802,7 @@ def cmd_score(ns: argparse.Namespace) -> int:
         inputs["mechanical"] = load_json(cached_path(root, ep, "mechanical"))
         inputs["visual"] = load_json(cached_path(root, ep, "visual"))
         inputs["identity"] = load_json(cached_path(root, ep, "identity"))
+        inputs["voice_print"] = load_json(cached_path(root, ep, "voice_print"))
     inputs["dashboard_ep"] = load_dashboard_episode(root, ep)
     score = score_episode(
         root,
@@ -843,6 +811,7 @@ def cmd_score(ns: argparse.Namespace) -> int:
         mechanical=inputs.get("mechanical"),
         visual=inputs.get("visual"),
         identity=inputs.get("identity"),
+        voice_print=inputs.get("voice_print"),
         dashboard_ep=inputs.get("dashboard_ep"),
         threshold=ns.threshold,
         pass_rate_floor=resolve_pass_rate_floor(root, ns.pass_rate_floor),

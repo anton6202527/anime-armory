@@ -7,6 +7,13 @@ description: P0 横切 skill for novel2drama production and ROI metrics. Record 
 
 这是 n2d 工业化的 P0 横切层：**每集记录成本、耗时、生成次数、重抽原因、QA 阻断项、最终通过率和 ROI**。`_进度.md` 只回答“做没做”；本 skill 回答“每分钟成本多少、每集耗时多少、一次通过率/重抽率能否量产、投放回收能否覆盖生产成本”。
 
+## 输入 / 输出 / 读写边界
+
+- **输入**：各 stage 的 generation/redraw/manual/release 事件、gate findings、平台投放指标、告警阈值。
+- **输出**：`生产数据/production_events.jsonl`、`dashboard.json/md/html`、`alerts.json/md`、`gate_findings_*_第N集.json`。
+- **读写边界**：只记账、汇总、告警和 gate 入账；不修改 `_进度.md`、不执行实际生成、不解释评分维度。
+- **契约关系**：事件枚举、重抽分类、gate stage 和 finding schema 与 `skills/common/n2d_contract.py` 对齐；生产 gate 推荐从本 skill 入口调用。
+
 ## 核心原则
 
 - **事件日志是机器真值**：所有生产数据先追加到 `制漫剧/<剧名>/生产数据/production_events.jsonl`，再由脚本汇总成 `dashboard.json` + `dashboard.md`。不要把成本/重抽原因塞进 `_进度.md`。
@@ -81,7 +88,14 @@ python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第1集 --sta
 python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第1集 --stage review
 ```
 
-该命令会调用 `n2d-review/scripts/gate.py --json`，把 `sev/dim/loc/msg/return_to_stage/rerun_scope/affected_artifacts` 写进生产数据，并刷新 dashboard。
+该命令会调用 `n2d-review/scripts/gate.py --json`，把 `sev/dim/loc/msg/return_to_stage/rerun_scope/affected_artifacts` 写进生产数据，并刷新 dashboard；同时外发 `生产数据/gate_findings_<stage>_第N集.json`（kind=`n2d_consistency_findings`），可直接：
+
+```bash
+python3 skills/n2d-batch/scripts/queue.py plan <作品根> \
+  --from-consistency-findings <作品根>/生产数据/gate_findings_video_第1集.json \
+  --max-concurrency 1 \
+  --max-retries 2
+```
 
 ### 3. 手动重建
 

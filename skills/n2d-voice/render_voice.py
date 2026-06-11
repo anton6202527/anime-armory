@@ -343,7 +343,8 @@ if placeholders:
 if LANG == 'zh' and os.environ.get('N2D_UPDATE_PROGRESS', '1') != '0':
     prog = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'novel2drama', 'progress.py'))
     try:
-        subprocess.run(['python3', prog, 'set', ROOT, EP, '配音', '✅'], check=False)
+        progress_value = '⏳rough' if placeholders else '✅'
+        subprocess.run(['python3', prog, 'set', ROOT, EP, '配音', progress_value], check=False)
     except Exception:
         pass
     if placeholders: print(warn)

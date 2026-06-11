@@ -39,6 +39,18 @@ def _minimal_repo(root: Path) -> None:
     )
 
 
+def _write_minimal_contract(root: Path) -> None:
+    (root / "skills" / "common").mkdir(parents=True, exist_ok=True)
+    (root / "skills" / "common" / "n2d_contract.py").write_text(
+        "APPROVED_IMAGE_BACKENDS = {\n"
+        "  'codex': {'label': 'Codex'},\n"
+        "  'openai': {'label': '官方 OpenAI gpt-image / DALL·E'},\n"
+        "  'dreamina': {'label': 'Dreamina/即梦官方 CLI'},\n"
+        "}\n",
+        encoding="utf-8",
+    )
+
+
 def test_self_audit_passes_minimal_aligned_repo(tmp_path: Path) -> None:
     _minimal_repo(tmp_path)
     report = self_audit.audit(tmp_path)
@@ -55,3 +67,28 @@ def test_self_audit_flags_bare_production_gate(tmp_path: Path) -> None:
     report = self_audit.audit(tmp_path)
     matches = [f for f in report["findings"] if f["dim"] == "gate 单入口"]
     assert matches and matches[0]["sev"] == "warn"
+
+
+def test_self_audit_flags_image_backend_doc_drift(tmp_path: Path) -> None:
+    _minimal_repo(tmp_path)
+    _write_minimal_contract(tmp_path)
+    (tmp_path / "skills" / "n2d-image" / "SKILL.md").write_text(
+        "生图AI 可选 Codex 和 Dreamina/即梦官方 CLI。\n",
+        encoding="utf-8",
+    )
+    report = self_audit.audit(tmp_path)
+    matches = [f for f in report["findings"] if f["dim"] == "生图后端白名单"]
+    assert matches and matches[0]["sev"] == "warn"
+    assert "OpenAI" in matches[0]["loc"]
+
+
+def test_self_audit_accepts_image_backend_docs_aligned(tmp_path: Path) -> None:
+    _minimal_repo(tmp_path)
+    _write_minimal_contract(tmp_path)
+    (tmp_path / "skills" / "n2d-image" / "SKILL.md").write_text(
+        "生图AI 可选 Codex、OpenAI/gpt-image、Dreamina/即梦官方 CLI；同视频AI 是禁用旧值。\n",
+        encoding="utf-8",
+    )
+    report = self_audit.audit(tmp_path)
+    matches = [f for f in report["findings"] if f["dim"] == "生图后端白名单"]
+    assert matches and matches[0]["sev"] == "info"

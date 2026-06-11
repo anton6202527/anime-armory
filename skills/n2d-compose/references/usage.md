@@ -81,13 +81,13 @@ clip 原生音频：
 ## 行业参考（决定音频时展示）
 90 秒一集漫剧工作室标配：1 条循环 BGM + 2~5 个转场音效 + AI 角色配音。
 
-## 加水印（可选 · 公共 watermark skill）
-成片后可选打水印，调与 faceswap 同级的公共 `watermark` skill（图/视频同一工具）；产物落 `合成/第N集/`：
+## 加水印（可选 · 公共 shared-watermark skill）
+成片后可选打水印，调与 faceswap 同级的公共 `shared-watermark` skill（图/视频同一工具）；产物落 `合成/第N集/`：
 ```
 # AI 合规标识（含 AI 配音/生图/换脸的投放成片应打，只加不去）
-python3 <watermark-skill>/watermark.py <作品根>/合成/第N集/成片_第N集_zh.mp4 <作品根>/合成/第N集/成片_第N集_zh_水印.mp4 --mode ai
+python3 <shared-watermark-skill>/watermark.py <作品根>/合成/第N集/成片_第N集_zh.mp4 <作品根>/合成/第N集/成片_第N集_zh_水印.mp4 --mode ai
 # 品牌/账号水印（按 _设置.md 的 水印 选择点：文字/logo/位置/透明度）
-python3 <watermark-skill>/watermark.py <作品根>/合成/第N集/成片_第N集_zh.mp4 <作品根>/合成/第N集/成片_第N集_zh_水印.mp4 --mode brand --text "@账号" --pos br --opacity 0.8
+python3 <shared-watermark-skill>/watermark.py <作品根>/合成/第N集/成片_第N集_zh.mp4 <作品根>/合成/第N集/成片_第N集_zh_水印.mp4 --mode brand --text "@账号" --pos br --opacity 0.8
 ```
 注：`watermark.py` 依赖 Pillow + ffmpeg，须在带 Pillow 的环境跑（如 facefusion/cosyvoice conda env）。
 

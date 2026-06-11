@@ -35,7 +35,7 @@
 - [Q34：能不能"先出视频、后期再配音"？（快速 demo 模式 vs 配音先行）](#q34)
 - [Q35：n2d 批量化生成漫剧能不能做到工业级？后续优化方向是什么？](#q35)
 - [Q36：以后能不能做个 PC 级客户端 + 无限画布（方便编排和观看）？](#q36)
-- [Q37：watermark 和 faceswap 等公共能力要不要拆分成管线专属的 skill？](#q37)
+- [Q37：shared-watermark 和 shared-video-faceswap / shared-image-faceswap 等公共能力要不要拆分成管线专属的 skill？](#q37)
 
 ---
 
@@ -1148,7 +1148,7 @@ voice-first 时长驱动镜头、两层定妆库（Q28 已强化多视图+多图
 | 质检 | 出图/出视频前能阻断硬伤，成片后能定位修法 | n2d-review 机检 + gate + consistency audit + score + 人判 |
 | 可度量 | 不凭感觉说“像不像/稳不稳” | dashboard 记录成本、耗时、一次通过率、重抽率、QA 阻断、投放回收 |
 | 可恢复 | 失败能最小范围回流，不整集重来 | n2d-batch 的 rerun scope、affected_shots、affected_artifacts |
-| 合规 | 平台披露、水印、授权、审核运行前就有证据 | n2d-compliance + watermark + gate + dashboard 留痕 |
+| 合规 | 平台披露、水印、授权、审核运行前就有证据 | n2d-compliance + shared-watermark + gate + dashboard 留痕 |
 
 ### 35.4 已经形成的工业化支柱
 
@@ -1169,7 +1169,7 @@ voice-first 时长驱动镜头、两层定妆库（Q28 已强化多视图+多图
 5. **动作时序控制**：成片裁切能解决总时长，但不能保证“拔剑/转身/爆点”正好踩在重音上。后续需要更强的动作节拍检查、速度重映射或按关键动作帧重出。
 6. **视觉状态账本**：受伤、血迹、法宝、衣破、污渍、场景破坏等剧情状态要从文字账本升级成视觉状态账本，并能自动注入图像参考、mask 或 prompt modifier。
 7. **多机/算力池调度**：当前 `n2d-batch` 是单机多 worker 安全。真多机需要 DB/Redis/对象存储条件写/消息队列，否则 flock 不能当分布式锁。
-8. **合规与平台披露自动化**：[YouTube](https://support.google.com/youtube/answer/14328491) 对未披露合成内容可能人工加标、处罚或移除；[TikTok](https://support.tiktok.com/en/using-tiktok/creating-videos/ai-generated-content) 会识别 C2PA/AI 内容凭证并要求真实 AIGC 标注；中国《[人工智能生成合成内容标识办法](https://regulations.ai/regulations/RAI-CN-NA-MIASCXX-2025)》已于 2025-09-01 生效，要求显式标识和隐式元数据/水印。n2d 的 watermark/compliance 方向正确，但要继续补平台 profile。
+8. **合规与平台披露自动化**：[YouTube](https://support.google.com/youtube/answer/14328491) 对未披露合成内容可能人工加标、处罚或移除；[TikTok](https://support.tiktok.com/en/using-tiktok/creating-videos/ai-generated-content) 会识别 C2PA/AI 内容凭证并要求真实 AIGC 标注；中国《[人工智能生成合成内容标识办法](https://regulations.ai/regulations/RAI-CN-NA-MIASCXX-2025)》已于 2025-09-01 生效，要求显式标识和隐式元数据/水印。n2d 的 shared-watermark + compliance 方向正确，但要继续补平台 profile。
 9. **投放反馈驱动创作**：工业级不是批量生成很多，而是批量试错、快速筛选、数据回灌。开场、封面、标题、集尾断点、镜头密度、钩子间隔都应进入 A/B 与 `n2d-feedback`。
 10. **审片 UI 产品化**：文本报告只适合摘要；真正批量审片要让人直接在画布里看 clip、接缝、定妆、分数、阻断和回流按钮。
 
@@ -1321,13 +1321,13 @@ MVP 起点不变、且更明确：**把 `review_ui.py` 从单集扩成"读 `_进
 
 ---
 
-## Q37：`watermark` 和 `faceswap` 等功能之前设计为公共能力，但我想保持 `mv` 和 `n2d` 相互独立。要不要把它们拆分成各自管线专属的 skill（比如 `mv-faceswap`）？<a id="q37"></a>
+## Q37：`shared-watermark` 和 `shared-video-faceswap` / `shared-image-faceswap` 等功能之前设计为公共能力，但我想保持 `mv` 和 `n2d` 相互独立。要不要把它们拆分成各自管线专属的 skill（比如 `mv-faceswap`）？<a id="q37"></a>
 
 **结论**：强烈建议**保持它们作为公共能力（Shared Skills）**，不需要拆分成专属版本。
 
 ### 37.1 理由 1：基础设施层（Utility） vs 业务逻辑层（Domain）
 `mv` 和 `n2d` 之所以要严格独立，是因为它们的**业务逻辑**完全不同（漫剧的核心是长篇连贯性与分镜台词；MV 的核心是音乐卡点与氛围剪辑）。
-但 `watermark` 和 `faceswap` 就像是你机器上安装的 `ffmpeg` 或 `python` 一样，它们是**纯粹的物理工具**。
+但 `shared-watermark` 和 `shared-video-faceswap` / `shared-image-faceswap` 就像是你机器上安装的 `ffmpeg` 或 `python` 一样，它们是**纯粹的物理工具**。
 - 换脸工具（FaceFusion）不关心你是漫剧还是 MV，它只关心“源图”和“目标视频”。
 - 水印工具（ffmpeg 烧字幕）只关心“给视频打个合规标记”。
 
@@ -1339,4 +1339,4 @@ MVP 起点不变、且更明确：**把 `review_ui.py` 从单集扩成"读 `_进
 ### 37.3 理由 3：沉重的运行环境
 换脸（FaceFusion）需要庞大的 Conda 环境、CUDA/CoreML 驱动和特定的模型权重。如果你分设 `mv-faceswap` 和 `n2d-faceswap`，哪怕它们复用同一个底层环境，在项目认知和文档维护上也会造成混乱（新人会问：这两个换脸有啥区别？模型该放哪？）。
 
-> 一句话原则：**高内聚（每条产线管好自己的剧情或卡点）、低耦合（产线之间互不干扰，共同依赖底层物理工具库）**是最佳实践。保持 `watermark` 和 `faceswap` 的公共身份，是最高效的架构选择。
+> 一句话原则：**高内聚（每条产线管好自己的剧情或卡点）、低耦合（产线之间互不干扰，共同依赖底层物理工具库）**是最佳实践。保持 `shared-watermark` 和 `shared-video-faceswap` / `shared-image-faceswap` 的公共身份，是最高效的架构选择。

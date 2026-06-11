@@ -14,7 +14,7 @@
 | 形态变体串味 | 判 | 觉醒态/银牌态是否以常态定妆为参考、特征延续 | 🟡 |
 | 场景漂移 | 机+判 | 同一场景跨镜是否引用同一 `定妆_<场景>.png`；装 Pillow 跑 `scripts/scene_consistency.py`（同场景多镜 dHash 结构离群·自标定）抓背景画歪的离群镜 | 🟡 |
 | 道具/配饰漂移 | 判 | 反复入镜道具是否一致 | 🟢/🟡 |
-| 生图 AI 口径不一致 | 机+判 | 生产前：`_设置.md`、出图总览、逐镜 prompt 是否都统一到同一个官方/已登录生图后端（默认 Codex，可选 Dreamina/即梦官方 CLI、Seedream/可灵主体库/Nano Banana/Sora Cameo 等）；不得一部分 Codex、一部分其它官方后端，更不得写 `同视频AI` 含糊口径、第三方逆向/web 自动化出图。成片后：若画风/脸型跨镜跳变，追溯是否混用生图后端 | 生产前缺 🔴 / 成片后按结果 🔴/🟡 |
+| 生图 AI 口径不一致 | 机+判 | 生产前：`_设置.md`、出图总览、逐镜 prompt 是否都统一到同一个官方/已登录生图后端（默认 Codex，可选 OpenAI/gpt-image、Dreamina/即梦官方 CLI、Seedream/可灵主体库/Nano Banana/Sora Cameo 等）；不得一部分 Codex、一部分其它官方后端，更不得写 `同视频AI` 含糊口径、第三方逆向/web 自动化出图。成片后：若画风/脸型跨镜跳变，追溯是否混用生图后端 | 生产前缺 🔴 / 成片后按结果 🔴/🟡 |
 | 画风跳变 | 判 | 是否守 `global_style.md`；有无中途换图 AI 的"一致性税"。同一作品/同一集原则上不换生图后端；必须换时需重做该集全部定妆与分镜，不允许混产 | 🟡 |
 | 标准三视图定妆缺失（Q28） | 机+判 | 人物定妆是否具备正面 / 侧面 / 背面生产拆图 + `定妆_<角色>_三视图.png` 拼版；只出正面/侧面/半身，或把背面按需省略，都会导致转身/过肩/背身镜漂移 | 缺 🔴 |
 | 资产身份注册层缺失/假登记 | 机+判 | `gate.py --stage image|video|compose|review` 查 `出图/共享/identity_registry.json`：每个角色/形态须有 `reference_group`、图/视频 `identity_adapters`、LoRA 状态、`angle_policy`、`drift_forbidden`；`registered/ready` 必须有真实 ID/handle/reference/model_path。判读 prompt 是否真正从 registry 继承，而非临时手写 | 缺 🔴 / 假登记 🔴 |
@@ -108,7 +108,7 @@
 | 维度 | 机/判 | 定级 |
 |---|---|---|
 | AI 标识水印 | 判 | 换脸/合成画面是否带强制 AI 标识，未被裁掉 | 缺 🔴 |
-| 换脸授权 | 判 | 仅本人/授权演员/合成脸（video-/image-faceswap 闸门） | 未授权 🔴 |
+| 换脸授权 | 判 | 仅本人/授权演员/合成脸（shared-video-faceswap / shared-image-faceswap 闸门） | 未授权 🔴 |
 | 声音克隆授权 | 判 | 克隆真人嗓有授权（2026 opt-in） | 未授权 🔴 |
 | 题材/版权 | 判 | 原作公版/自有/授权 | 🔴 |
 

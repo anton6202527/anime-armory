@@ -37,6 +37,7 @@ from n2d_contract import (  # noqa: E402
     APPROVED_IMAGE_BACKENDS,
     ASSET_REFERENCE_REGISTRY_KIND,
     CINEMATIC_CONTRACT_FIELDS,
+    CONSISTENCY_DIMENSIONS,
     COMPLIANCE_ALLOWED_RIGHTS,
     COMPLIANCE_INTERNAL_DISTRIBUTION_INTENTS,
     COMPLIANCE_INTERNAL_SKIPPABLE_SECTIONS,
@@ -75,9 +76,19 @@ from n2d_contract import (  # noqa: E402
     motion_control_required,
     shared_asset_dir,
     shared_asset_path,
+    special_template_keywords,
+    stage_for_progress_column,
 )
+from n2d_contract_diff import diff_contracts  # noqa: E402  视觉契约继承 Diff 核心（common 层单一真值源）
 from n2d_platform_profiles import video_backend_max_seconds  # noqa: E402
-from n2d_route import is_done, manifest_path, parse_progress, voice_is_placeholder  # noqa: E402
+from n2d_route import (  # noqa: E402
+    is_done,
+    manifest_path,
+    parse_progress,
+    voice_is_placeholder,
+    voice_meta_path,
+    voiceover_fingerprint,
+)
 from n2d_settings import get_setting, is_video_first, watermark_setting  # noqa: E402
 import semantic_continuity as semc  # noqa: E402
 import state_continuity as statec  # noqa: E402
@@ -130,18 +141,8 @@ SPECIAL_SHOT_TEMPLATE_FIELDS: Dict[str, Tuple[str, ...]] = {
     ),
 }
 
-SPECIAL_SHOT_KEYWORDS: Tuple[Tuple[str, Tuple[str, ...]], ...] = (
-    ("fight_exchange", ("打斗", "搏斗", "交手", "格挡", "命中", "受击", "出拳", "挥剑", "掌风", "刀光")),
-    ("chase", ("追逐", "追赶", "追杀", "奔逃", "逃跑", "追上", "紧追")),
-    ("dialogue_shot_reverse", ("对话反打", "正反打", "反打", "过肩", "视线对位", "eyeline")),
-    ("magic_burst", ("法术", "符阵", "符纹", "灵力", "爆发", "光束", "雷落", "剑气", "护盾", "阵法")),
-    ("flight", ("御剑", "飞行", "腾空", "掠空", "坠落", "飞檐", "云海穿行")),
-    ("hug_or_pull", ("拥抱", "抱住", "拉扯", "拉住", "抓腕", "拽住", "推开", "扯住", "拉袖", "tug", "pull", "hug", "grab")),
-    ("intimate_interaction", ("搀扶", "扶住", "牵手", "抚脸", "扶肩", "贴近", "疗伤", "靠近")),
-    ("multi_character_same_frame", ("多人同框", "双人同框", "两人同框", "三人同框", "同框", "同画面", "two-shot", "group shot")),
-    ("ensemble_blocking", ("群像", "群戏", "群臣", "门徒", "人群", "围观", "队列", "站位", "多人站位", "围住", "围堵", "众人")),
-    ("multi_person_blocking", ("多人", "三人", "四人")),
-)
+# 专项镜头模板关键词从 common 派生（与 router.infer_shot_type 同一份 SHOT_TYPE_KEYWORDS，判型口径不再两边漂移）
+SPECIAL_SHOT_KEYWORDS: Tuple[Tuple[str, Tuple[str, ...]], ...] = special_template_keywords()
 
 MOTION_CONTROL_KIND = MOTION_CONTROL_MANIFEST_KIND  # 从 n2d_contract 产物 kind 注册表取
 # MOTION_CONTROL_REQUIRED_SHOT_TYPES / MOTION_CONTROL_RISK_FLAGS 从 n2d_contract 导入（与 router 同源）
@@ -529,6 +530,42 @@ def require_progress(root: str, ep: str, cols: Iterable[str]) -> None:
             add(BLOCK, "进度", os.path.join(root, "_进度.md"), f"{ep}「{col}」未完成（当前 {row.get(col, '⬜')}）")
 
 
+def _artifact_exists(root: str, ep: str, rel: str) -> bool:
+    return os.path.exists(os.path.join(root, str(rel).format(ep=ep)))
+
+
+def check_progress_artifact_signoff(root: str, ep: str, cols: Iterable[str]) -> None:
+    """文本×产物双签：被判 ✅ 的列，用 STAGE_GRAPH 的 output_contract/outputs 验关键产物真在磁盘。
+
+    `require_progress` 只信 `_进度.md` 单元格 ✅，手改进度把"配音 ✅"写上但实际没产 时长清单 也放行。
+    本检查把"单一真相"从纯文本升级为"文本+产物双签"：✅ 但关键产物缺 → BLOCK，回退对应阶段。
+    """
+    header, row = row_for(root, ep)
+    if row is None:
+        return
+    for col in cols:
+        if col not in header or not is_done(row.get(col, "")):
+            continue  # 未完成的列由 require_progress 负责，这里只验已判 ✅ 的
+        spec = stage_for_progress_column(col)
+        if not spec:
+            continue
+        loc = os.path.join(root, "_进度.md")
+        oc = spec.get("output_contract")
+        if isinstance(oc, dict) and oc.get("any_of"):
+            variants = [v for v in oc["any_of"] if isinstance(v, dict)]
+            if not any(all(_artifact_exists(root, ep, a) for a in v.get("all_of", ())) for v in variants):
+                labels = " 或 ".join(str(v.get("label", "")) for v in variants)
+                add(BLOCK, "产物签收", loc,
+                    f"{ep}「{col}」标 ✅ 但关键产物缺失（需满足其一：{labels}）——文本与产物背离，补产物或修进度",
+                    return_to_stage=spec.get("return_to_stage"))
+        else:
+            outs = spec.get("outputs") or ()
+            if outs and not any(_artifact_exists(root, ep, a) for a in outs):
+                add(BLOCK, "产物签收", loc,
+                    f"{ep}「{col}」标 ✅ 但「{spec.get('label')}」产物一个都不在磁盘（如 {str(outs[0]).format(ep=ep)}）"
+                    f"——幻影完成，补产物或修进度", return_to_stage=spec.get("return_to_stage"))
+
+
 def progress_fraction_done(root: str, ep: str, col: str) -> bool:
     _, row = row_for(root, ep)
     if not row:
@@ -552,6 +589,71 @@ def check_placeholder_policy(root: str, ep: str, stage: str) -> None:
         add(WARN, "配音", ep, "先出视频后配音模式已放行占位时长；后期补真音可能需要重出视频")
     else:
         add(BLOCK, "配音", ep, "配音仍为占位音色；该阶段不应继续")
+
+
+def check_voiceover_fingerprint(root: str, ep: str) -> None:
+    """配音定稿后 voiceover.txt 又被改词/插句/删句 → 时长清单/字幕/镜头时长全部过期。
+
+    `validate_timings` 在 n2d-script 阶段2收尾抓这条失配链，但 image/video gate 此前不复查指纹——
+    定稿后裸改台词，下游照常据过期时长出图出视频导致音画错位。这里把同一指纹比对前移到付费阶段闸门。
+    原生音画模式镜头时长不依赖配音时长清单，跳过。
+    """
+    if is_native_av_production(root):
+        return
+    vo_p = os.path.join(root, "脚本", ep, "voiceover.txt")
+    if not os.path.isfile(vo_p):
+        return  # 无 voiceover：上游问题，require_progress/其它检查覆盖
+    meta_p = voice_meta_path(root, ep)
+    if not meta_p:
+        # 占位轨/旧产物无指纹 sidecar：仅当配音非占位时温和提示（占位由 check_placeholder_policy 管）
+        if voice_is_placeholder(root, ep) is False:
+            add(WARN, "配音", vo_p, "无 时长清单.meta.json（旧配音产物）——无法核对配音后 voiceover 是否被改，建议重跑 /n2d-voice 生成指纹")
+        return
+    recorded = (load_json(meta_p) or {}).get("voiceover_fingerprint")
+    current = voiceover_fingerprint(vo_p)
+    if recorded and current and recorded != current:
+        add(
+            BLOCK,
+            "配音",
+            vo_p,
+            "voiceover.txt 在配音后被改动（台词指纹失配）→ 时长清单/字幕/镜头时长已过期；重跑 /n2d-voice 再回跑 n2d-script 阶段2，过 gate 再出图/出视频",
+            return_to_stage="voice",
+            rerun_scope="重跑 /n2d-voice 生成新时长清单 → 回跑 finalize_storyboard 重定镜头时长/字幕 → 再出图出视频。",
+            affected_artifacts=[
+                f"合成/{ep}/配音/时长清单.json",
+                f"脚本/{ep}/storyboard.json",
+                f"脚本/{ep}/字幕中.srt",
+            ],
+        )
+
+
+def check_contract_inheritance(root: str, ep: str) -> None:
+    """像素层视觉契约 出图→出视频 继承 Diff，逐字段机检（光位锚/轴线视线漂移=BLOCK）。
+
+    这是唯一能抓「人工誊抄改写轴线/光位」的机检；此前只存在于 inherit_contract.py 的裸命令、
+    游离在 gate 退出码之外，导致 `dashboard.py gate --stage video` 通过 ≠ 契约继承成立。
+    接进 video gate 后，视频侧改写/丢失像素层五字段会被硬拦，并消费 contract_inheritance 维度的回退坐标。
+    """
+    img_p = os.path.join(root, "出图", ep, "prompt", "00_总览.md")
+    vid_p = os.path.join(root, "出视频", ep, "prompt", "00_总览.md")
+    if not os.path.isfile(img_p):
+        return  # 出图总览缺：上游问题，image gate 负责，不在此重复 BLOCK
+    if not os.path.isfile(vid_p):
+        return  # 视频总览缺：check_video_prompt_overview 已 BLOCK，避免重复报
+    dim = CONSISTENCY_DIMENSIONS["contract_inheritance"]
+    for r in diff_contracts(open(img_p, encoding="utf-8").read(), open(vid_p, encoding="utf-8").read()):
+        if r["severity"] == "block":
+            add(
+                BLOCK,
+                "契约继承",
+                vid_p,
+                f"视觉契约继承漂移[{r['field']}]：{r['note']}（出图侧原文：{r['image_text'] or '缺'}）",
+                return_to_stage=dim["return_to_stage"],
+                rerun_scope=dim["scope"],
+                affected_artifacts=[f"出视频/{ep}/prompt/00_总览.md"],
+            )
+        elif r["status"] == "warn_drift":
+            add(WARN, "契约继承", vid_p, f"视觉契约继承提示[{r['field']}]：{r['note']}（出图侧：{r['image_text'] or '缺'}）")
 
 
 def check_image_ai_policy(root: str, ep: str) -> None:
@@ -753,6 +855,56 @@ def check_storyboard_style_contract(root: str, ep: str) -> None:
 def check_storyboard_cinematic_contract(root: str, ep: str) -> None:
     """Backward-compatible wrapper for old tests/scripts."""
     check_storyboard_style_contract(root, ep)
+
+
+_TONE_SPLIT_RE = re.compile(r"[；;。.，,\n]")
+
+
+def _tone_base(value) -> str:
+    """色调基线的基调首句（；。，前），去空白——逐集细化在首句后，基调首句应跨集恒定。"""
+    s = str(value or "").strip()
+    if not s:
+        return ""
+    return re.sub(r"\s+", "", _TONE_SPLIT_RE.split(s)[0])
+
+
+def _earliest_storyboard_ep(root: str) -> Optional[str]:
+    """打样集 = 最早一个有 storyboard.json 的集（按集号）。"""
+    eps = []
+    for p in glob.glob(os.path.join(root, "脚本", "*", "storyboard.json")):
+        name = os.path.basename(os.path.dirname(p))
+        digits = "".join(c for c in name if c.isdigit())
+        if digits:
+            eps.append((int(digits), name))
+    return min(eps)[1] if eps else None
+
+
+def check_cross_episode_style(root: str, ep: str) -> None:
+    """跨集色调/风格基线：以打样集为基准比对本集 色调基线基调 + 风格名。
+
+    集级 visual_contract/style_contract 各自自洽、inherit 各自 pass，整部却可能画风跳（第5集冷青灰、第6集暖橙）。
+    色调基线允许逐集细化，但其【基调首句】应跨集恒定；风格名应完全一致。漂移→WARN（以打样集为准或确认有意改）。
+    """
+    base_ep = _earliest_storyboard_ep(root)
+    if not base_ep or base_ep == ep:
+        return
+    # 直接读 JSON（只需契约块，不触发 load_storyboard 的 clips[] 硬校验与副作用 BLOCK）
+    base, cur = load_json(storyboard_path(root, base_ep)), load_json(storyboard_path(root, ep))
+    if not isinstance(base, dict) or not isinstance(cur, dict):
+        return
+    p = storyboard_path(root, ep)
+    base_tone = _tone_base((base.get("visual_contract") or {}).get("色调基线"))
+    cur_tone = _tone_base((cur.get("visual_contract") or {}).get("色调基线"))
+    if base_tone and cur_tone and base_tone != cur_tone:
+        add(WARN, "跨集色调", p,
+            f"本集色调基线基调「{cur_tone}」与打样集 {base_ep}「{base_tone}」不一致——色调可逐集细化但基调应跨集恒定；"
+            f"以打样集为准或确认有意改（防整部画风跳）", return_to_stage="script_stage2")
+    base_name = str((base.get("style_contract") or {}).get("风格名", "")).strip()
+    cur_name = str((cur.get("style_contract") or {}).get("风格名", "")).strip()
+    if base_name and cur_name and base_name != cur_name:
+        add(WARN, "跨集风格", p,
+            f"本集风格名「{cur_name}」与打样集 {base_ep}「{base_name}」不一致——基础视觉风格应跨集统一；核对是否选错风格",
+            return_to_stage="script_stage2")
 
 
 def _clip_blob(clip: dict) -> str:
@@ -994,6 +1146,62 @@ def check_identity_registry(root: str, require_reference_assets: bool = False) -
             drift_forbidden = form.get("drift_forbidden")
             if not isinstance(drift_forbidden, list) or not drift_forbidden:
                 add(BLOCK, "资产身份注册层", floc, "drift_forbidden 必须是非空列表")
+
+
+_COSTUME_VARIANT_RE = re.compile(r"_(侧|半身|全身|背|三视图|设定表|表情)$")
+_COSTUME_NON_FACE = ("三视图", "设定表", "表情")  # 人审拼版，非脸度量基准
+
+
+def _costume_stem(basename: str) -> str:
+    s = basename[:-4] if basename.endswith(".png") else basename
+    return _COSTUME_VARIANT_RE.sub("", s)
+
+
+def check_costume_registry_reconcile(root: str) -> None:
+    """定妆库 ↔ identity_registry 双向对账。
+
+    face 机检按文件名 glob 发现定妆图、identity_registry 按登记的 reference_group 路径锁脸——两套各写各的，
+    若 registry 登记 `定妆_X_人皮态.png` 但磁盘只有 `定妆_X.png`，崩脸机检可能测的根本不是 registry 锁的那张。
+    本检查对账：① registry 登记但磁盘缺的参考；② 属于已登记角色、磁盘有却没进任何 reference_group 的定妆变体（orphan）。
+    场景定妆（不属任何角色）天然不匹配角色 stem，不误报。
+    """
+    reg = load_json(identity_registry_path(root))
+    if not isinstance(reg, dict):
+        return  # 缺 registry：check_identity_registry 已把关
+    registered_rel: set = set()
+    for char in reg.get("characters") or []:
+        for form in (char.get("forms") or []):
+            rg = form.get("reference_group")
+            if not isinstance(rg, dict):
+                continue
+            for val in rg.values():
+                for v in (val if isinstance(val, list) else [val]):
+                    if isinstance(v, str) and v.strip():
+                        registered_rel.add(v.strip())
+    if not registered_rel:
+        return
+    registered_base = {os.path.basename(p) for p in registered_rel}
+    char_stems = {_costume_stem(b) for b in registered_base}
+    # ① registry 登记但磁盘缺（三视图/设定表/表情 不强求落盘）
+    for rel in sorted(registered_rel):
+        bn = os.path.basename(rel)
+        if any(t in bn for t in _COSTUME_NON_FACE):
+            continue
+        if not os.path.isfile(os.path.join(root, rel)):
+            add(WARN, "定妆对账", rel,
+                f"identity_registry 登记的定妆参考 {rel} 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空")
+    # ② 已登记角色的 orphan 变体：磁盘有、属同一角色 stem、却没进 reference_group
+    for p in sorted(glob.glob(os.path.join(shared_asset_path(root, "图片"), "定妆_*.png"))):
+        bn = os.path.basename(p)
+        if any(t in bn for t in _COSTUME_NON_FACE):
+            continue
+        if bn in registered_base:
+            continue
+        # 属已登记角色 = 文件名等于某角色 stem，或是其变体（stem_ 前缀）——任意变体后缀都能抓到
+        if any(bn == stem + ".png" or bn.startswith(stem + "_") for stem in char_stems):
+            add(WARN, "定妆对账", p,
+                f"定妆图 {bn} 属已登记角色但未进 identity_registry 任何 reference_group；"
+                f"face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除")
 
 
 def check_asset_reference_registry(root: str, require_reference_assets: bool = False) -> None:
@@ -1277,6 +1485,12 @@ def check_video_model_routes(root: str, ep: str, overview_text: str, overview_pa
         return
     if data.get("kind") != VIDEO_MODEL_ROUTES_KIND:
         add(BLOCK, "模型路由", p, f"video_model_routes.json kind 必须是 {VIDEO_MODEL_ROUTES_KIND}")
+    drift = data.get("baseline_drift")
+    if isinstance(drift, list) and drift:
+        sample = "、".join(f"{d.get('clip_id')}({d.get('shot_type')}):{d.get('was')}→{d.get('now')}" for d in drift[:5])
+        add(WARN, "后端跨集锁", p,
+            f"{len(drift)} 个 clip 的 shot_type 自然路由与 设定库/model_routes_baseline 不符，已按基线锚定（原后端降 fallback）；"
+            f"确认基线后端仍合适，否则 --write-baseline 刷新基线。{sample}")
     routes = data.get("routes")
     if not isinstance(routes, list) or not routes:
         add(BLOCK, "模型路由", p, "video_model_routes.json routes 为空；逐 Clip 必须有 primary/fallback/mode")
@@ -1308,6 +1522,62 @@ def check_video_model_routes(root: str, ep: str, overview_text: str, overview_pa
                 ],
             )
         check_motion_control_route(root, ep, route, p, idx)
+
+
+# 非原生锁绑定 = 仅靠参考组兜底/不支持（换后端会丢真正的锁脸力）。
+_NON_NATIVE_BINDINGS = {"reference_group", "fallback_reference_group", "not_needed", "unsupported", ""}
+_CORE_SCOPES = {"全篇", "长线", "核心", "主角"}
+
+
+def check_route_identity_readiness(root: str, ep: str) -> None:
+    """换后端丢锁机检：出视频路由用到的 primary 后端 × identity_adapter_matrix 的角色锁脸能力对账。
+
+    n2d-model-router 选后端时不读 matrix——一个在后端 A 原生注册了 character_id 的角色，若某 clip 被路由到
+    后端 B（B 上只有 reference_group 兜底甚至无绑定），锁脸力骤降却无任何机检。本检查在出视频闸门前置对账：
+    - 角色在 matrix 有「原生锁」(ready 且 binding 非 reference_group 族)，但路由用到的某 primary 后端在该角色上
+      只有 reference_group 兜底 → 换后端丢原生锁（核心角色 BLOCK / 其余 WARN）；该后端连兜底都没有 → 必丢锁 BLOCK；
+    - 全 reference_group 兜底（无任何原生锁，如当前 demo）= 后端间一致，不报（没有原生锁可丢，避免噪声）。
+    """
+    routes_data = load_json(os.path.join(root, "出视频", ep, "prompt", "video_model_routes.json"))
+    matrix_p = identity_adapter_matrix_path(root)
+    matrix = load_json(matrix_p)
+    if not isinstance(routes_data, dict) or not isinstance(matrix, dict):
+        return  # 缺路由/矩阵：check_video_model_routes / check_identity_adapter_matrix 各自把关
+    routes = routes_data.get("routes")
+    forms = matrix.get("forms")
+    if not isinstance(routes, list) or not isinstance(forms, list):
+        return
+    used = sorted({str(r.get("primary_backend") or "").strip()
+                   for r in routes if isinstance(r, dict)} - {""})  # primary 后端集合（fallback 仅失败时触发，主查 primary）
+    if not used:
+        return
+    for form in forms:
+        if not isinstance(form, dict):
+            continue
+        vb = form.get("video_bindings") if isinstance(form.get("video_bindings"), dict) else {}
+        native = sorted(b for b, v in vb.items()
+                        if isinstance(v, dict) and v.get("ready")
+                        and str(v.get("binding") or "") not in _NON_NATIVE_BINDINGS)
+        if not native:
+            continue  # 无原生锁 → 全兜底，后端间一致，无锁可丢
+        name = form.get("character_name") or form.get("character_id") or "?"
+        sev = BLOCK if str(form.get("scope") or "").strip() in _CORE_SCOPES else WARN
+        for b in used:
+            if b in native:
+                continue
+            v = vb.get(b)
+            if not (isinstance(v, dict) and v.get("ready")):
+                add(BLOCK, "换后端丢锁", matrix_p,
+                    f"角色「{name}」已在 {native} 原生锁脸，但本集出视频路由用到后端 {b}，该后端无可用身份绑定（连 reference_group 兜底都没有）→ 必丢锁；改路由到 {native} 或先在 {b} 注册该角色身份",
+                    return_to_stage="video_prompt",
+                    rerun_scope=f"重跑 n2d-model-router 把涉及「{name}」的 clip 路由到 {native}，或在 {b} 注册 character_id/face_lock 后再出视频。",
+                    affected_artifacts=[f"出视频/{ep}/prompt/video_model_routes.json", "生产数据/identity_adapter_matrix.json"])
+            elif str(v.get("binding") or "") in _NON_NATIVE_BINDINGS:
+                add(sev, "换后端丢锁", matrix_p,
+                    f"角色「{name}」已在 {native} 原生锁脸，但本集有 clip 路由到后端 {b}（{b} 上仅 reference_group 兜底）= 换后端丢原生锁、锁脸力下降；核心角色应改路由或在 {b} 注册原生身份",
+                    return_to_stage="video_prompt",
+                    rerun_scope=f"重跑 n2d-model-router 让「{name}」的 clip 优先用 {native}，或在 {b} 注册原生身份。",
+                    affected_artifacts=[f"出视频/{ep}/prompt/video_model_routes.json"])
 
 
 def _motion_control_required_for_route(route: Dict[str, object]) -> bool:
@@ -1853,6 +2123,14 @@ def check_image_shot_prompt_section(path: str, idx: int, section: str) -> None:
         if key not in section:
             add(BLOCK, "prompt", loc, f"导演八维缺 {key} 维标记")
 
+    # 机位即态度，是最易漏的导演决策——②机位 标记在场不等于真填了机位。空/默认正面平视无理由 → WARN。
+    cam = re.search(r"\|\s*②[^|]*\|\s*([^|\n]*?)\s*\|", section)
+    if cam:
+        value = cam.group(1).strip().strip("*` ")
+        if (not value) or value in ("正面平视", "平视", "默认", "正面", "默认正面平视", "—", "-", "/"):
+            add(WARN, "构图景别", loc,
+                "②机位 为空或默认正面平视——机位即态度（八维最易漏）；给本镜一个有叙事理由的机位（俯/仰/过肩/侧/主观），默认平视须注明理由")
+
     if _section_has_character_refs(section):
         if not re.search(r"(锚点句|anchor phrase)\s*[:：]", section, re.IGNORECASE):
             add(BLOCK, "角色一致性", loc, "含角色镜头缺锚点句；每镜必须拼角色卡锚点")
@@ -2282,14 +2560,19 @@ def run(root: str, ep: str, stage: str) -> None:
     av_native = is_native_av_production(root)  # 原生音画：说话镜不跑配音，不要求「配音」列就绪
     if stage == "image":
         check_compliance_manifest(root, ep, stage)
-        require_progress(root, ep, ("分镜设计",) if av_native else ("配音", "分镜设计"))
+        image_prereq = ("分镜设计",) if av_native else ("配音", "分镜设计")
+        require_progress(root, ep, image_prereq)
+        check_progress_artifact_signoff(root, ep, image_prereq)
         check_placeholder_policy(root, ep, "image")
+        check_voiceover_fingerprint(root, ep)
         check_image_ai_policy(root, ep)
         check_identity_registry(root, require_reference_assets=False)
+        check_costume_registry_reconcile(root)
         check_asset_reference_registry(root, require_reference_assets=False)
         check_storyboard_contract(root, ep, require_frame_assets=False)
         check_storyboard_visual_contract(root, ep)
         check_storyboard_style_contract(root, ep)
+        check_cross_episode_style(root, ep)
         check_storyboard_special_templates(root, ep)
         check_image_prompt_overview(root, ep)
         check_prompt_checklists(root, ep, "image")
@@ -2299,21 +2582,28 @@ def run(root: str, ep: str, stage: str) -> None:
         check_common_image_prompts(root)
     elif stage == "video":
         check_compliance_manifest(root, ep, stage)
-        require_progress(root, ep, ("分镜设计", "出图prompt") if av_native else ("配音", "分镜设计", "出图prompt"))
+        video_prereq = ("分镜设计", "出图prompt") if av_native else ("配音", "分镜设计", "出图prompt")
+        require_progress(root, ep, video_prereq)
+        check_progress_artifact_signoff(root, ep, video_prereq)
         check_placeholder_policy(root, ep, "video")
+        check_voiceover_fingerprint(root, ep)
         check_identity_registry(root, require_reference_assets=True)
         check_asset_reference_registry(root, require_reference_assets=True)
         check_identity_adapter_matrix(root)
+        check_route_identity_readiness(root, ep)
         check_storyboard_contract(root, ep, require_frame_assets=True)
         check_storyboard_style_contract(root, ep)
         check_storyboard_special_templates(root, ep)
         check_image_assets(root, ep)
+        check_multimodal_continuity(root, ep)
         check_prompt_checklists(root, ep, "video")
+        check_contract_inheritance(root, ep)
         check_semantic_lineage(root, ep)
         check_state_continuity(root, ep)
     elif stage == "compose":
         check_compliance_manifest(root, ep, stage)
         require_progress(root, ep, ("视频",))
+        check_progress_artifact_signoff(root, ep, ("视频",))
         check_identity_registry(root, require_reference_assets=True)
         check_asset_reference_registry(root, require_reference_assets=True)
         check_identity_adapter_matrix(root)

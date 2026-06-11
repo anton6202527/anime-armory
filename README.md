@@ -39,8 +39,9 @@
 | 查看漫剧项目进度与下一步 | `/n2d-progress <制漫剧/项目>` 或直接问“当前进度” |
 | 直接创作或编辑一首歌 | `/song <主题/风格/想法 或 写歌/项目>` |
 | 把成品歌做成 MV | `/mv <歌曲路径或 制MV/项目>` |
-| 图片 / 视频换脸 | `/image-faceswap`、`/video-faceswap` |
-| 给图片 / 视频加 AI 标识或品牌水印 | `/watermark` |
+| 图片 / 视频换脸 | `/shared-image-faceswap`、`/shared-video-faceswap` |
+| 给图片 / 视频加 AI 标识或品牌水印 | `/shared-watermark` |
+| 清理 `skills/` 里的缓存和临时文件 | `/shared-cleanup` |
 
 常见完整链路：
 
@@ -140,9 +141,10 @@ shasum -a 256 dist/anime-armory-full.zip > dist/anime-armory-full.zip.sha256
 
 | Skill | 用途 |
 |---|---|
-| `image-faceswap` | 图片换脸，本人 / 授权 / 合成脸限定，强制 AI 标识 |
-| `video-faceswap` | 视频换脸，同样走合规闸门和水印 |
-| `watermark` | 给图片 / 视频加 AI 标识或品牌水印，只加不去 |
+| `shared-image-faceswap` | 图片换脸，本人 / 授权 / 合成脸限定，强制 AI 标识 |
+| `shared-video-faceswap` | 视频换脸，同样走合规闸门和水印 |
+| `shared-watermark` | 给图片 / 视频加 AI 标识或品牌水印，只加不去 |
+| `shared-cleanup` | 清理 `skills/` 下低风险生成垃圾，默认先扫描 |
 
 换脸、声音克隆、真人仿声都属于高风险能力：必须有授权，且必须保留 AI 标识。未授权真人歌手嗓音克隆直接拒做。
 
@@ -181,7 +183,7 @@ anime-armory/
 │   ├── novel2drama/ n2d-*    制漫剧能力
 │   ├── song/ song-*          写歌能力
 │   ├── mv/ mv-*              制MV能力
-│   └── *-faceswap watermark  公共能力
+│   └── shared-*              公共能力
 ├── .claude/skills -> ../skills
 ├── 写小说/<项目>/             小说产物
 ├── 制漫剧/<项目>/             漫剧工程与成片产物

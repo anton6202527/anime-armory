@@ -177,7 +177,7 @@ def audit_progress_and_ledgers():
             "PROGRESS-WRITER-MISSING",
             "_进度.md 缺少统一写入口",
             f"progress.py missing tokens: {missing}",
-            "实现 progress.py set <root> <stage> done|todo，并加锁原子写。",
+            "实现 progress.py set <root> <stage> done|todo，并加锁原子写（需补齐 file_lock 等缺失依赖）。",
         ))
     else:
         out.append(finding("info", "PROGRESS-WRITER-OK", "_进度.md 有加锁写入口", "progress.py set"))

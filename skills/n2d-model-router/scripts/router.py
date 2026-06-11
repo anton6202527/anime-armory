@@ -22,6 +22,7 @@ if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import (  # noqa: E402  与 gate 共用的单一真值源
     MOTION_CONTROL_REQUIRED_SHOT_TYPES,  # 高危接触镜头集
+    SHOT_TYPE_KEYWORDS,                  # 镜头类型判定关键词（与 gate 专项模板检测同源）
     VIDEO_MODEL_ROUTES_KIND,             # 路由产物 kind
     is_native_av_mode,                   # 原生音画判定（与 n2d_settings/gate 同源）
 )
@@ -184,30 +185,10 @@ def infer_shot_type(clip: Mapping[str, Any]) -> str:
         return template
 
     text = _clip_text(clip)
-    if _has_any(text, ("打斗", "交手", "出拳", "挥剑", "命中", "撞击", "fight", "combat", "hit")):
-        return "fight_exchange"
-    if _has_any(text, ("追逐", "追赶", "奔逃", "逃跑", "chase", "running away")):
-        return "chase"
-    if _has_any(text, ("御剑", "飞行", "凌空", "掠过云", "飞掠", "flight", "flying")):
-        return "flight"
-    if _has_any(text, ("对话反打", "反打", "过肩", "对视", "台词", "dialogue", "shot reverse", "ots")):
-        return "dialogue_shot_reverse"
-    if _has_any(text, ("说话特写", "口型", "嘴部", "近景说话", "lip-sync", "mouth", "close-up dialogue")):
-        return "dialogue_closeup"
-    if _has_any(text, ("法术", "符阵", "灵光", "爆发", "雷劫", "光束", "magic", "burst", "spell")):
-        return "magic_burst"
-    if _has_any(text, ("拥抱", "抱住", "拉扯", "拉住", "抓腕", "拽住", "推开", "扯住", "拉袖", "tug", "pull", "grab wrist", "hug")):
-        return "hug_or_pull"
-    if _has_any(text, ("牵手", "靠近", "亲密", "搀扶", "扶住", "抚脸", "扶肩", "疗伤", "intimate", "touch")):
-        return "intimate_interaction"
-    if _has_any(text, ("多人同框", "双人同框", "两人同框", "三人同框", "同框", "同画面", "two-shot", "group shot")):
-        return "multi_character_same_frame"
-    if _has_any(text, ("群像", "群戏", "群臣", "门徒", "人群", "围观", "队列", "站位", "多人站位", "ensemble", "crowd")):
-        return "ensemble_blocking"
-    if _has_any(text, ("多人", "围住", "multi-person", "blocking")):
-        return "multi_person_blocking"
-    if _has_any(text, ("空镜", "转场", "远景", "氛围", "环境", "establishing", "ambience", "empty")):
-        return "empty_establishing"
+    # 关键词表单一真值源在 common（与 gate 专项镜头模板检测同源，避免判型口径漂移）；保留本地小写匹配器。
+    for shot_type, keywords in SHOT_TYPE_KEYWORDS:
+        if _has_any(text, keywords):
+            return shot_type
     return "general_motion"
 
 
@@ -706,6 +687,8 @@ def route_episode(
     *,
     storyboard_path: Optional[Path] = None,
     generated_at: Optional[str] = None,
+    baseline: Optional[Dict[str, str]] = None,
+    anchor_baseline: bool = True,
 ) -> Dict[str, Any]:
     settings = load_settings(root)
     default_backend = normalize_backend(settings.get("生视频AI", "即梦"))
@@ -717,7 +700,7 @@ def route_episode(
     clips = storyboard.get("clips") or []
     if not isinstance(clips, list):
         raise ValueError("storyboard.json clips must be a list")
-    return {
+    plan = {
         "kind": VIDEO_MODEL_ROUTES_KIND,
         "version": 1,
         "root": str(root),
@@ -741,6 +724,14 @@ def route_episode(
             for i, clip in enumerate(clips, 1)
         ],
     }
+    # 跨集后端锁：第1集打样落 设定库/model_routes_baseline.json，后续集按 shot_type 锚定同一后端，
+    # 防"换集漂到别的后端→同角色跨集风格/质感漂移"。baseline=None 时不锚定（首集或显式跳过）。
+    if baseline is None and anchor_baseline:
+        baseline = load_baseline(root)
+    if baseline:
+        plan["baseline_drift"] = apply_baseline(plan, baseline)
+        plan["baseline_anchored"] = True
+    return plan
 
 
 def render_markdown(plan: Mapping[str, Any]) -> str:
@@ -800,6 +791,70 @@ def render_markdown(plan: Mapping[str, Any]) -> str:
     return "\n".join(lines)
 
 
+MODEL_ROUTES_BASELINE_KIND = "n2d_model_routes_baseline"
+
+
+def baseline_path(root: Path) -> Path:
+    """跨集后端基线落 设定库/（与 voicemap/global_style 同级的跨集真值源）。"""
+    return Path(root) / "设定库" / "model_routes_baseline.json"
+
+
+def load_baseline(root: Path) -> Optional[Dict[str, str]]:
+    """读 shot_type → primary_backend 基线；无则 None（首集尚未打样）。"""
+    p = baseline_path(root)
+    if not p.is_file():
+        return None
+    try:
+        data = json.loads(p.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    table = data.get("shot_type_backends") if isinstance(data, Mapping) else None
+    return {str(k): str(v) for k, v in table.items()} if isinstance(table, Mapping) else None
+
+
+def build_baseline(plan: Mapping[str, Any]) -> Dict[str, str]:
+    """从一集 routes 抽 shot_type → 最常用 primary_backend（第1集打样写基线）。"""
+    counts: Dict[str, Dict[str, int]] = {}
+    for route in plan.get("routes", []) or []:
+        st, pb = str(route.get("shot_type") or ""), str(route.get("primary_backend") or "")
+        if not (st and pb):
+            continue
+        counts.setdefault(st, {})[pb] = counts.setdefault(st, {}).get(pb, 0) + 1
+    return {st: max(by.items(), key=lambda kv: kv[1])[0] for st, by in counts.items()}
+
+
+def apply_baseline(plan: Dict[str, Any], baseline: Mapping[str, str]) -> List[Dict[str, Any]]:
+    """按基线锚定每条 route 的 primary（baseline 胜，原 primary 降为 fallback 首项保留）；返回漂移清单。"""
+    drift: List[Dict[str, Any]] = []
+    for route in plan.get("routes", []) or []:
+        st = str(route.get("shot_type") or "")
+        want = baseline.get(st)
+        cur = str(route.get("primary_backend") or "")
+        if not want or want == cur:
+            continue
+        fb = [b for b in (route.get("fallback_backends") or []) if b != want]
+        if cur:
+            fb = [cur] + [b for b in fb if b != cur]
+        route["fallback_backends"] = fb[:3]
+        route["primary_backend"] = want
+        route["baseline_anchored"] = True
+        drift.append({"clip_id": route.get("clip_id"), "shot_type": st, "was": cur, "now": want})
+    return drift
+
+
+def write_baseline(plan: Mapping[str, Any], root: Path) -> Path:
+    table = build_baseline(plan)
+    p = baseline_path(root)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps({
+        "kind": MODEL_ROUTES_BASELINE_KIND,
+        "source_episode": plan.get("episode"),
+        "shot_type_backends": table,
+        "generated_at": plan.get("generated_at"),
+    }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return p
+
+
 def write_plan(plan: Mapping[str, Any], root: Path, episode: str) -> Dict[str, Path]:
     out_dir = root / "出视频" / episode / "prompt"
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -817,11 +872,25 @@ def main() -> int:
     parser.add_argument("--storyboard", help="override storyboard.json path")
     parser.add_argument("--write", action="store_true", help="write video_model_routes.json/md under 出视频/第N集/prompt")
     parser.add_argument("--markdown", action="store_true", help="print markdown instead of JSON")
+    parser.add_argument("--write-baseline", action="store_true",
+                        help="把本集 shot_type→后端 写成 设定库/model_routes_baseline.json（第1集打样锁后端，跨集锚定）")
+    parser.add_argument("--no-anchor", action="store_true",
+                        help="不按 model_routes_baseline 锚定本集 primary（默认有基线就锚定，保跨集后端一致）")
     ns = parser.parse_args()
 
     root = Path(ns.root)
     storyboard = Path(ns.storyboard) if ns.storyboard else None
-    plan = route_episode(root, ns.episode, storyboard_path=storyboard)
+    # --write-baseline 用本集"自然路由"(不锚定)抽基线；否则有基线就锚定
+    plan = route_episode(root, ns.episode, storyboard_path=storyboard,
+                         anchor_baseline=not (ns.no_anchor or ns.write_baseline))
+    if ns.write_baseline:
+        bp = write_baseline(plan, root)
+        print(f"wrote baseline {bp}")
+    drift = plan.get("baseline_drift") or []
+    if drift:
+        print(f"⚠️ 后端跨集漂移：{len(drift)} 个 clip 的 shot_type 自然路由与基线不符，已按基线锚定（原后端降为 fallback）", file=sys.stderr)
+        for d in drift[:8]:
+            print(f"  - {d['clip_id']}({d['shot_type']}): {d['was']} → {d['now']}", file=sys.stderr)
     if ns.write:
         paths = write_plan(plan, root, ns.episode)
         print(f"wrote {paths['json']}")

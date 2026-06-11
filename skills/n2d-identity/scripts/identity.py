@@ -49,6 +49,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 if _HERE not in sys.path:
     sys.path.insert(0, _HERE)
 import voice_consistency  # noqa: E402  同目录：音色跨集漂移对账（--write 时顺带跑）
+import voice_print_consistency  # noqa: E402  同目录：声纹机检（speaker embedding，量真实音色相似度）
 
 
 REGISTRY_KIND = IDENTITY_REGISTRY_KIND
@@ -676,6 +677,15 @@ def main() -> int:
                 f" / {vs.get('placeholder_revoice', 0)} 占位待重配 / {vs.get('episodes_insufficient', 0)} 集数据不足"
                 f" -> {voice_paths['json']}"
             )
+            # 声纹机检（speaker embedding）：逐集量真实音色相似度，补"只比 voice_key 字符串"的盲区。
+            # 缺声纹后端则优雅降级（available=False / insufficient_precision），交还人判，不假报。
+            for ep in voice_consistency.discover_episodes(root):
+                vp_report = voice_print_consistency.analyze(root, ep)
+                voice_print_consistency.run(root, ep)  # 落 identity_voice_print_第N集.json
+                if vp_report.get("available"):
+                    print(f"voice print {ep}: mode={vp_report.get('mode')} 音色漂移句数={vp_report.get('total_drift', 0)}")
+                else:
+                    print(f"voice print {ep}: {vp_report.get('mode')}（{vp_report.get('precision')}）→ 交还人判")
     elif ns.json:
         print(json.dumps({"matrix": matrix, "drift": drift}, ensure_ascii=False, indent=2))
     else:

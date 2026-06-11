@@ -143,6 +143,43 @@ def test_build_manifest_collects_visual_review_assets(tmp_path: Path) -> None:
     assert manifest["score"]["data_collection_tasks"][0]["action"] == "run_checks"
     assert manifest["clips"][0]["qa_flags"][0]["dimension"] == "场景一致性"
 
+    payload = review_ui.findings_payload(manifest)
+    assert payload["kind"] == "n2d_consistency_findings"
+    assert payload["episode"] == ep
+    assert payload["summary"]["severity"]["block"] >= 1
+    assert payload["findings"][0]["episode"] == ep
+    assert payload["findings"][0]["return_to_stage"] == "image"
+    assert payload["findings"][0]["affected_shots"]
+    assert payload["summary"]["by_dim"]["场景一致性"]["block"] >= 1
+    assert payload["auto_return_tasks"][0]["return_to_stage"] == "image"
+
+
+def test_write_findings_writes_batch_compatible_json(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    ep = "第1集"
+    manifest = {
+        "kind": "n2d_review_ui",
+        "root": str(root),
+        "episode": ep,
+        "source": {"score": "生产数据/score_第1集.json"},
+        "clips": [{
+            "id": "EP01_CLIP01",
+            "label": "Clip 1",
+            "qa_flags": [{"severity": "warn", "dimension": "角色一致性", "message": "Clip 1 服装漂移"}],
+            "first_frame": {"path": "出图/第1集/图片/Clip01.png"},
+        }],
+        "seams": [],
+        "global_flags": [],
+    }
+
+    out = Path(review_ui.write_findings(root, ep, manifest))
+    data = json.loads(out.read_text(encoding="utf-8"))
+    assert out.name == "review_ui_findings_第1集.json"
+    assert data["kind"] == "n2d_consistency_findings"
+    assert data["findings"][0]["return_to_stage"] == "image"
+    assert data["findings"][0]["dim_key"] == "character_consistency"
+    assert data["findings"][0]["affected_artifacts"] == ["出图/第1集/图片/Clip01.png"]
+
 
 def test_write_outputs_writes_html_and_json(tmp_path: Path) -> None:
     root = tmp_path / "制漫剧" / "测试剧"

@@ -14,6 +14,13 @@ description: P2 platform performance feedback loop for novel2drama/n2d. Ingest r
 
 它不替代 `n2d-dashboard`。dashboard 管生产成本、每分钟成本、每集耗时、一次通过率、重抽率、投放回收；feedback 管上线后的留存、追更、跳出和 A/B lift，并把结论写回导演节奏规则。`platform_metrics.*` 可被两者共用：feedback 看用户行为，dashboard 看 ROI。
 
+## 输入 / 输出 / 读写边界
+
+- **输入**：`platform_metrics.*`、`creative_features.*`、`storyboard.json` 自动导演标签、consistency/review-ui findings、可选公榜基线和自有题材战绩库。
+- **输出**：`生产数据/platform_feedback.json/md`、可选 `导演节奏.md` 快照块、`生产战绩/genre_ledger.jsonl`、`差异化候选.json/md`。
+- **读写边界**：只做投放归因和选题反哺；不审片、不重剪已上线集、不直接改生产产物。
+- **契约关系**：一致性 findings 使用统一 kind；ROI 指标与 `n2d-dashboard` 共享数据边界但不重复记账。
+
 ## 输入数据
 
 需要两类数据 join：
@@ -155,4 +162,4 @@ python3 skills/n2d-feedback/scripts/feedback.py <作品根> --metrics <平台指
 
 ## 一致性问题回灌（QA 线接进投放闭环）
 
-`analyze` 时自动读 `生产数据/consistency_findings_*.json`（`n2d-review` 的 `consistency_audit.py` 外发，kind=`n2d_consistency_findings`），在 `platform_feedback` 报告新增「一致性问题 Top」节：按维度（脸/服装/场景/风格/语义/状态）计数、标出一致性问题最严重的集，并与同集留存/跳出指标**并排呈现**——回答"脸漂严重的集是不是跳出率也高"。无 findings 文件时优雅跳过，不影响原有分析。
+`analyze` 时自动读 `生产数据/consistency_findings_*.json`（`n2d-review` 的 `consistency_audit.py` 外发）和 `review_ui_findings_*.json`（人审 UI 导出），两者 kind 都是 `n2d_consistency_findings`。报告新增「一致性问题 Top」节：按维度（脸/服装/场景/风格/语义/状态/契约继承等）计数、标出一致性问题最严重的集，并与同集留存/跳出指标**并排呈现**——回答"脸漂严重的集是不是跳出率也高"。无 findings 文件时优雅跳过，不影响原有分析。

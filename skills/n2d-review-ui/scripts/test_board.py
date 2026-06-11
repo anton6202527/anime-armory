@@ -73,6 +73,22 @@ def test_clip_status_degrades_without_score(tmp_path):
     assert statuses <= {"warn", "pass"}  # 没有 score 证据，不会冒出 block
 
 
+def test_board_preserves_rough_progress_state(tmp_path):
+    root = tmp_path / "制漫剧" / "rough剧"
+    make_work(root)
+    (root / "_进度.md").write_text(
+        "\n".join([
+            "| 集 | 字数 | raw | 剧本改编 | 配音 | 分镜设计 | 出图 | 成片 |",
+            "|---|---|---|---|---|---|---|---|",
+            "| 第1集 | 800 | ✅ | ✅ | ⏳rough | ⬜ | ⬜ | ⬜ |",
+        ]),
+        encoding="utf-8",
+    )
+    m = board.build_manifest(root)
+    assert m["episodes"][0]["stages"]["配音"] == "rough"
+    assert ".chip.rough" in board.render_html(m)
+
+
 def test_render_html_is_self_contained(tmp_path):
     root = tmp_path / "制漫剧" / "测试剧3"
     make_work(root)

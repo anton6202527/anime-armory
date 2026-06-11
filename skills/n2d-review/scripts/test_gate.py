@@ -142,6 +142,42 @@ def setup_function():
     gate.findings.clear()
 
 
+def test_video_gate_runs_multimodal_p2_before_video_prompt(monkeypatch, tmp_path):
+    root = tmp_path / "work"
+    root.mkdir()
+    calls = []
+
+    def mark(name):
+        def _inner(*args, **kwargs):
+            calls.append(name)
+
+        return _inner
+
+    for name in [
+        "check_compliance_manifest",
+        "require_progress",
+        "check_placeholder_policy",
+        "check_identity_registry",
+        "check_asset_reference_registry",
+        "check_identity_adapter_matrix",
+        "check_storyboard_contract",
+        "check_storyboard_style_contract",
+        "check_storyboard_special_templates",
+        "check_image_assets",
+        "check_multimodal_continuity",
+        "check_prompt_checklists",
+        "check_semantic_lineage",
+        "check_state_continuity",
+    ]:
+        monkeypatch.setattr(gate, name, mark(name))
+
+    gate.run(str(root), "第1集", "video")
+
+    assert "check_multimodal_continuity" in calls
+    assert calls.index("check_image_assets") < calls.index("check_multimodal_continuity")
+    assert calls.index("check_multimodal_continuity") < calls.index("check_prompt_checklists")
+
+
 def test_good_character_shot_prompt_passes_strict_structure():
     gate.check_image_shot_prompt_section("01_分镜出图.md", 1, GOOD_SHOT)
     assert gate.findings == []
@@ -1825,3 +1861,334 @@ def test_native_av_placeholder_not_blocked(tmp_path):
     (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 制作模式: 原生音画\n", encoding="utf-8")
     gate.check_placeholder_policy(str(root), "第1集", "video")
     assert not any(f["sev"] == gate.BLOCK and f["dim"] == "配音" for f in gate.findings)
+
+
+# ── T1: 契约继承 + 配音指纹 接进 gate ─────────────────────────────────────────
+_IMG_OVERVIEW = """# 第1集 — 出图总览
+
+## 本集视觉一致性契约
+- 色调基线：冷青灰压暗；残烛暖金只照脸。
+- 光位锚：冷宫寝殿=画左前 3000K 残烛暖主光；画右后冷月背光。
+- 轴线：守床榻到门口横轴；沈念画左看画右，柳娘子画右看画左。
+- 状态演进：沈念 Clip01-13 黑瞳常态；Clip14 起左腕疤裂暗金。
+- 景别阶梯：LS建制 -> CU铜镜 -> MCU对峙 -> ECU金瞳。
+"""
+
+_VID_OVERVIEW = """# 第1集 — 出视频总览
+
+## 本集导演一致性契约
+- 主色调：冷青灰压暗。
+- 镜头语法：铺垫慢推。
+- 轴线：守床榻到门口横轴。
+- 剧情状态锁：金瞳不得提前。
+- 场景状态：残烛常亮。
+
+## 本集视觉一致性契约
+- 色调基线：冷青灰压暗；残烛暖金只照脸。
+- 场景光位锚：冷宫寝殿=画左前 3000K 残烛暖主光；画右后冷月背光。
+- 场景轴线视线：守床榻到门口横轴；沈念画左看画右，柳娘子画右看画左。
+- 角色状态演进：沈念 Clip01-13 黑瞳常态；Clip14 起左腕疤裂暗金。
+- 景别阶梯：LS建制 → CU铜镜 → MCU对峙 → ECU金瞳。
+"""
+
+
+def _write_overviews(tmp_path, img, vid):
+    for sub, text in (("出图", img), ("出视频", vid)):
+        d = tmp_path / sub / "第1集" / "prompt"
+        d.mkdir(parents=True, exist_ok=True)
+        (d / "00_总览.md").write_text(text, encoding="utf-8")
+    return str(tmp_path)
+
+
+def test_contract_inheritance_identical_passes(tmp_path):
+    root = _write_overviews(tmp_path, _IMG_OVERVIEW, _VID_OVERVIEW)
+    gate.findings.clear()
+    gate.check_contract_inheritance(root, "第1集")
+    assert gate.findings == []
+
+
+def test_contract_inheritance_axis_rewrite_blocks(tmp_path):
+    vid = _VID_OVERVIEW.replace(
+        "- 场景轴线视线：守床榻到门口横轴；沈念画左看画右，柳娘子画右看画左。",
+        "- 场景轴线视线：守床榻到门口横轴；沈念画右看画左，柳娘子画左看画右。")
+    root = _write_overviews(tmp_path, _IMG_OVERVIEW, vid)
+    gate.findings.clear()
+    gate.check_contract_inheritance(root, "第1集")
+    blocks = [f for f in gate.findings if f["sev"] == gate.BLOCK and f["dim"] == "契约继承"]
+    assert blocks and "场景轴线视线" in blocks[0]["msg"]
+    assert blocks[0]["return_to_stage"] == "video_prompt"
+
+
+def test_contract_inheritance_video_missing_section_blocks(tmp_path):
+    vid = _VID_OVERVIEW.split("## 本集视觉一致性契约")[0]  # 只剩导演契约(运动层)，缺像素层整节
+    root = _write_overviews(tmp_path, _IMG_OVERVIEW, vid)
+    gate.findings.clear()
+    gate.check_contract_inheritance(root, "第1集")
+    assert all(f["sev"] == gate.BLOCK for f in gate.findings)
+    assert len(gate.findings) == len(gate.VISUAL_CONTRACT_FIELDS)
+
+
+def test_contract_inheritance_missing_overview_skips_no_double_block(tmp_path):
+    # 视频总览缺：check_video_prompt_overview 已 BLOCK，这里不重复报
+    d = tmp_path / "出图" / "第1集" / "prompt"
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "00_总览.md").write_text(_IMG_OVERVIEW, encoding="utf-8")
+    gate.findings.clear()
+    gate.check_contract_inheritance(str(tmp_path), "第1集")
+    assert gate.findings == []
+
+
+def _write_voice(tmp_path, vo_text, recorded_fp):
+    (tmp_path / "脚本" / "第1集").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "脚本" / "第1集" / "voiceover.txt").write_text(vo_text, encoding="utf-8")
+    meta_dir = tmp_path / "合成" / "第1集" / "配音"
+    meta_dir.mkdir(parents=True, exist_ok=True)
+    (meta_dir / "时长清单.meta.json").write_text(
+        json.dumps({"kind": "n2d.voice_manifest_meta", "voiceover_fingerprint": recorded_fp}),
+        encoding="utf-8")
+    return str(tmp_path)
+
+
+def test_voiceover_fingerprint_match_passes(tmp_path):
+    vo = "[镜头1·沈念·克制] 你来了。\n[镜头2·柳娘子·冷] 我一直在。\n"
+    root = _write_voice(tmp_path, vo, gate.voiceover_fingerprint(str(tmp_path / "脚本" / "第1集" / "voiceover.txt")))
+    gate.findings.clear()
+    gate.check_voiceover_fingerprint(root, "第1集")
+    assert not any(f["sev"] == gate.BLOCK for f in gate.findings)
+
+
+def test_voiceover_fingerprint_mismatch_blocks(tmp_path):
+    vo = "[镜头1·沈念·克制] 你来了。\n[镜头2·柳娘子·冷] 我一直在。\n"
+    root = _write_voice(tmp_path, vo, "deadbeef" * 8)  # 配音时记录的旧指纹，与当前不符
+    gate.findings.clear()
+    gate.check_voiceover_fingerprint(root, "第1集")
+    blocks = [f for f in gate.findings if f["sev"] == gate.BLOCK and f["dim"] == "配音"]
+    assert blocks and blocks[0]["return_to_stage"] == "voice"
+    assert "指纹失配" in blocks[0]["msg"]
+
+
+# ── T2: 换后端丢锁机检 ────────────────────────────────────────────────────────
+def _write_routes_and_matrix(tmp_path, routes, forms):
+    rp = tmp_path / "出视频" / "第1集" / "prompt"
+    rp.mkdir(parents=True, exist_ok=True)
+    (rp / "video_model_routes.json").write_text(
+        json.dumps({"kind": gate.VIDEO_MODEL_ROUTES_KIND, "routes": routes}), encoding="utf-8")
+    mp = tmp_path / "生产数据"
+    mp.mkdir(parents=True, exist_ok=True)
+    (mp / "identity_adapter_matrix.json").write_text(
+        json.dumps({"kind": "n2d_identity_adapter_matrix", "forms": forms}), encoding="utf-8")
+    return str(tmp_path)
+
+
+def _form(name, scope, bindings):
+    # bindings: {backend: (binding, ready)}
+    return {"character_name": name, "character_id": "CHAR_X", "scope": scope,
+            "video_bindings": {b: {"binding": bd, "ready": rd} for b, (bd, rd) in bindings.items()}}
+
+
+def test_route_identity_all_fallback_no_finding(tmp_path):
+    # 无原生锁（全 reference_group 兜底，如 demo）→ 不报
+    forms = [_form("沈念", "核心", {"kling": ("fallback_reference_group", True), "seedance": ("reference_group", True)})]
+    routes = [{"primary_backend": "seedance"}, {"primary_backend": "kling"}]
+    root = _write_routes_and_matrix(tmp_path, routes, forms)
+    gate.findings.clear()
+    gate.check_route_identity_readiness(root, "第1集")
+    assert not any(f["dim"] == "换后端丢锁" for f in gate.findings)
+
+
+def test_route_identity_native_lock_lost_core_blocks(tmp_path):
+    # 核心角色在 kling 原生 character_id 锁脸，但 clip 路由到 seedance（仅兜底）→ BLOCK
+    forms = [_form("沈念", "核心", {"kling": ("character_id", True), "seedance": ("fallback_reference_group", True)})]
+    routes = [{"primary_backend": "seedance"}]
+    root = _write_routes_and_matrix(tmp_path, routes, forms)
+    gate.findings.clear()
+    gate.check_route_identity_readiness(root, "第1集")
+    blocks = [f for f in gate.findings if f["dim"] == "换后端丢锁" and f["sev"] == gate.BLOCK]
+    assert blocks and "seedance" in blocks[0]["msg"] and blocks[0]["return_to_stage"] == "video_prompt"
+
+
+def test_route_identity_native_lock_downgrade_minor_warns(tmp_path):
+    # 次要角色同样情形 → WARN（不拦）
+    forms = [_form("小禾", "配角", {"kling": ("character_id", True), "seedance": ("fallback_reference_group", True)})]
+    routes = [{"primary_backend": "seedance"}]
+    root = _write_routes_and_matrix(tmp_path, routes, forms)
+    gate.findings.clear()
+    gate.check_route_identity_readiness(root, "第1集")
+    fs = [f for f in gate.findings if f["dim"] == "换后端丢锁"]
+    assert fs and all(f["sev"] == gate.WARN for f in fs)
+
+
+def test_route_identity_backend_missing_binding_blocks(tmp_path):
+    # 角色原生锁在 kling，但路由用 veo，且 veo 上无任何绑定 entry → 必丢锁 BLOCK
+    forms = [_form("沈念", "配角", {"kling": ("character_id", True)})]
+    routes = [{"primary_backend": "veo"}]
+    root = _write_routes_and_matrix(tmp_path, routes, forms)
+    gate.findings.clear()
+    gate.check_route_identity_readiness(root, "第1集")
+    blocks = [f for f in gate.findings if f["dim"] == "换后端丢锁" and f["sev"] == gate.BLOCK]
+    assert blocks and "veo" in blocks[0]["msg"]
+
+
+def test_route_identity_routed_to_native_backend_passes(tmp_path):
+    # 路由到角色原生锁所在后端 → 无 finding
+    forms = [_form("沈念", "核心", {"kling": ("character_id", True), "seedance": ("fallback_reference_group", True)})]
+    routes = [{"primary_backend": "kling"}]
+    root = _write_routes_and_matrix(tmp_path, routes, forms)
+    gate.findings.clear()
+    gate.check_route_identity_readiness(root, "第1集")
+    assert not any(f["dim"] == "换后端丢锁" for f in gate.findings)
+
+
+# ── T5: 定妆库 ↔ identity_registry 双向对账 ──────────────────────────────────
+def _setup_costume(tmp_path, reference_group, disk_basenames):
+    img = Path(gate.shared_asset_path(str(tmp_path), "图片"))
+    img.mkdir(parents=True, exist_ok=True)
+    for bn in disk_basenames:
+        (img / bn).write_bytes(b"PNG")
+    reg = {"characters": [{"name": "沈念", "forms": [{"form": "常态", "reference_group": reference_group}]}]}
+    Path(gate.identity_registry_path(str(tmp_path))).write_text(json.dumps(reg), encoding="utf-8")
+    return str(tmp_path)
+
+
+def _rel(tmp_path, bn):
+    return __import__("os").path.relpath(str(Path(gate.shared_asset_path(str(tmp_path), "图片")) / bn), str(tmp_path))
+
+
+def test_costume_reconcile_all_registered_no_finding(tmp_path):
+    bns = ["定妆_沈念_常态.png", "定妆_沈念_常态_侧.png"]
+    rg = {"front": _rel(tmp_path, bns[0]), "side": _rel(tmp_path, bns[1])}
+    root = _setup_costume(tmp_path, rg, bns)
+    gate.findings.clear()
+    gate.check_costume_registry_reconcile(root)
+    assert not any(f["dim"] == "定妆对账" for f in gate.findings)
+
+
+def test_costume_reconcile_registry_path_missing_on_disk(tmp_path):
+    rg = {"front": _rel(tmp_path, "定妆_沈念_常态.png"), "outfit": _rel(tmp_path, "定妆_沈念_常态_半身.png")}
+    root = _setup_costume(tmp_path, rg, ["定妆_沈念_常态.png"])  # 半身缺
+    gate.findings.clear()
+    gate.check_costume_registry_reconcile(root)
+    miss = [f for f in gate.findings if f["dim"] == "定妆对账" and "磁盘缺失" in f["msg"]]
+    assert miss and "半身" in miss[0]["msg"]
+
+
+def test_costume_reconcile_orphan_variant_of_known_char(tmp_path):
+    rg = {"front": _rel(tmp_path, "定妆_沈念_常态.png")}
+    # 磁盘多了一张同角色 stem 的脏污变体，没进 registry → orphan
+    root = _setup_costume(tmp_path, rg, ["定妆_沈念_常态.png", "定妆_沈念_常态_脏污.png"])
+    gate.findings.clear()
+    gate.check_costume_registry_reconcile(root)
+    orphans = [f for f in gate.findings if f["dim"] == "定妆对账" and "未进 identity_registry" in f["msg"]]
+    assert orphans and "脏污" in orphans[0]["msg"]
+
+
+def test_costume_reconcile_scene_costume_not_flagged(tmp_path):
+    rg = {"front": _rel(tmp_path, "定妆_沈念_常态.png")}
+    # 场景定妆不属任何角色 stem → 不误报为 orphan
+    root = _setup_costume(tmp_path, rg, ["定妆_沈念_常态.png", "定妆_冷宫寝殿.png"])
+    gate.findings.clear()
+    gate.check_costume_registry_reconcile(root)
+    assert not any(f["dim"] == "定妆对账" and "冷宫" in f["msg"] for f in gate.findings)
+
+
+# ── T8: 跨集色调/风格基线 ────────────────────────────────────────────────────
+def _write_sb(tmp_path, ep, tone, style_name):
+    d = tmp_path / "脚本" / ep
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "storyboard.json").write_text(json.dumps({
+        "visual_contract": {"色调基线": tone},
+        "style_contract": {"风格名": style_name},
+    }, ensure_ascii=False), encoding="utf-8")
+
+
+def test_cross_episode_style_consistent_no_finding(tmp_path):
+    _write_sb(tmp_path, "第1集", "冷青灰压暗；残烛暖金只照脸。", "写实电影感")
+    _write_sb(tmp_path, "第2集", "冷青灰压暗；本集多一道月光。", "写实电影感")  # 基调首句同，细化不同
+    gate.findings.clear()
+    gate.check_cross_episode_style(str(tmp_path), "第2集")
+    assert not any(f["dim"] in ("跨集色调", "跨集风格") for f in gate.findings)
+
+
+def test_cross_episode_tone_drift_warns(tmp_path):
+    _write_sb(tmp_path, "第1集", "冷青灰压暗；残烛暖金。", "写实电影感")
+    _write_sb(tmp_path, "第2集", "暖橙明亮高调；全程顺光。", "写实电影感")  # 基调首句变了
+    gate.findings.clear()
+    gate.check_cross_episode_style(str(tmp_path), "第2集")
+    tone = [f for f in gate.findings if f["dim"] == "跨集色调"]
+    assert tone and "第1集" in tone[0]["msg"] and tone[0]["return_to_stage"] == "script_stage2"
+
+
+def test_cross_episode_style_name_drift_warns(tmp_path):
+    _write_sb(tmp_path, "第1集", "冷青灰压暗。", "写实电影感")
+    _write_sb(tmp_path, "第2集", "冷青灰压暗。", "二次元厚涂")  # 风格名变了
+    gate.findings.clear()
+    gate.check_cross_episode_style(str(tmp_path), "第2集")
+    assert any(f["dim"] == "跨集风格" and "二次元厚涂" in f["msg"] for f in gate.findings)
+
+
+def test_cross_episode_style_baseline_episode_itself_skips(tmp_path):
+    _write_sb(tmp_path, "第1集", "冷青灰压暗。", "写实电影感")
+    gate.findings.clear()
+    gate.check_cross_episode_style(str(tmp_path), "第1集")  # 自己就是打样集
+    assert gate.findings == []
+
+
+# ── T9: _进度.md 文本 × 产物双签 ─────────────────────────────────────────────
+def _progress(tmp_path, **cols):
+    header = "| 集 | " + " | ".join(cols) + " |"
+    sep = "|" + "---|" * (len(cols) + 1)
+    row = "| 第1集 | " + " | ".join(cols.values()) + " |"
+    (tmp_path / "_进度.md").write_text("\n".join([header, sep, row]) + "\n", encoding="utf-8")
+
+
+def test_signoff_voice_done_but_no_manifest_blocks(tmp_path):
+    _progress(tmp_path, 配音="✅")
+    gate.findings.clear()
+    gate.check_progress_artifact_signoff(str(tmp_path), "第1集", ("配音",))
+    blocks = [f for f in gate.findings if f["dim"] == "产物签收"]
+    assert blocks and blocks[0]["return_to_stage"] == "voice" and "配音" in blocks[0]["msg"]
+
+
+def test_signoff_voice_done_with_manifest_passes(tmp_path):
+    _progress(tmp_path, 配音="✅")
+    d = tmp_path / "合成" / "第1集" / "配音"
+    d.mkdir(parents=True)
+    (d / "时长清单.json").write_text("[]", encoding="utf-8")
+    (d / "voice_zh.wav").write_bytes(b"RIFF")  # 满足"真实配音"变体
+    gate.findings.clear()
+    gate.check_progress_artifact_signoff(str(tmp_path), "第1集", ("配音",))
+    assert not any(f["dim"] == "产物签收" for f in gate.findings)
+
+
+def test_signoff_skips_not_done_columns(tmp_path):
+    _progress(tmp_path, 配音="⬜")  # 未完成 → 由 require_progress 管，签收不报
+    gate.findings.clear()
+    gate.check_progress_artifact_signoff(str(tmp_path), "第1集", ("配音",))
+    assert not any(f["dim"] == "产物签收" for f in gate.findings)
+
+
+def test_signoff_stage_without_contract_needs_some_output(tmp_path):
+    _progress(tmp_path, 分镜设计="✅")  # script_stage2 无 output_contract，要求 outputs 至少一个在
+    gate.findings.clear()
+    gate.check_progress_artifact_signoff(str(tmp_path), "第1集", ("分镜设计",))
+    assert any(f["dim"] == "产物签收" and f["return_to_stage"] == "script_stage2" for f in gate.findings)
+    # 补一个产物后放行
+    sd = tmp_path / "脚本" / "第1集"; sd.mkdir(parents=True)
+    (sd / "storyboard.json").write_text("{}", encoding="utf-8")
+    gate.findings.clear()
+    gate.check_progress_artifact_signoff(str(tmp_path), "第1集", ("分镜设计",))
+    assert not any(f["dim"] == "产物签收" for f in gate.findings)
+
+
+# ── T11: 机位逐镜契约化（②机位 substantive WARN）─────────────────────────────
+def test_shot_camera_default_flatview_warns():
+    sec = GOOD_SHOT.replace("| ② 机位 | 微俯视 |", "| ② 机位 | 正面平视 |")
+    gate.findings.clear()
+    gate.check_image_shot_prompt_section("p.md", 1, sec)
+    assert any(f["sev"] == gate.WARN and f["dim"] == "构图景别" and "机位即态度" in f["msg"] for f in gate.findings)
+
+
+def test_shot_camera_substantive_no_warn():
+    gate.findings.clear()
+    gate.check_image_shot_prompt_section("p.md", 1, GOOD_SHOT)  # ②机位=微俯视
+    assert not any(f["dim"] == "构图景别" and "机位即态度" in f["msg"] for f in gate.findings)

@@ -103,3 +103,12 @@ python3 skills/novel-craft/scripts/ai_usage.py "<作品根>" --text-mode AI-gene
 - **不抢写作权**：`draft_packets.py` 只生成任务包和状态模板，不直接生成正文；正文仍由当前 novel skill / agent 按项目目标写。
 - **可独立摘录**：每个 references 文件都是自包含的，引用方可以只摘其中一节。
 - **不重复 novel-* 主流程**：流程性内容在调用方的 SKILL.md / workflow.md 里，本库只放"工艺细节"。
+
+## 常见错误
+
+| 错误 | 纠正 |
+|---|---|
+| 导出前未检查 QA gate | `export.py` 默认会执行报告验证，直接跳过并强制导出可能会将隐患代入下一生产环节 |
+| 跨章设定不记录账本 | 跳过 `state_ledger.json` 会导致后续章节丧失一致性依据，务必通过 `reconcile_ledger.py` 原子化合并新设定 |
+| 让 draft_packets.py 直接写正文 | 该脚本仅用于组装上下文和包，不要期望它执行 LLM 写入操作 |
+| 手动修改进度文件且不加锁 | 强行在外部编辑 `_进度.md` 可能引发冲突，应始终用 `progress.py set` |

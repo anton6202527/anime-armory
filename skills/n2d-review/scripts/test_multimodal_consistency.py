@@ -1,6 +1,8 @@
 """multimodal_consistency 单测。
 cd skills/n2d-review/scripts && python -m pytest test_multimodal_consistency.py
 """
+import json
+
 import pytest
 
 import multimodal_consistency as mm
@@ -58,3 +60,39 @@ def test_identity_registry_drives_non_character_asset_classification(tmp_path):
     )
     refs = ["沈念", "血玉"]
     assert mm.non_character_refs(str(root), refs, mm.identity_character_assets(str(root))) == ["血玉"]
+
+
+def test_asset_registry_ids_drive_p2_grouping(tmp_path):
+    Image = pytest.importorskip("PIL.Image")
+    root = tmp_path / "制漫剧" / "测试剧"
+    ep = "第1集"
+    img_dir = root / "出图" / ep / "图片"
+    prompt_dir = root / "出图" / ep / "prompt"
+    shared_dir = root / "出图" / "共享"
+    img_dir.mkdir(parents=True)
+    prompt_dir.mkdir(parents=True)
+    shared_dir.mkdir(parents=True)
+    (shared_dir / "asset_registry.json").write_text(json.dumps({
+        "kind": "n2d_asset_reference_registry",
+        "assets": [{
+            "id": "PROP_01",
+            "type": "prop",
+            "name": "赐死托盘",
+            "reference_group": {"primary": "出图/共享/图片/定妆_赐死托盘.png"},
+            "constraints": {"structure": "三件套数量锁定"},
+            "drift_forbidden": ["item_count"],
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+    colors = [(255, 0, 0), (250, 10, 0), (0, 0, 255)]
+    for i, color in enumerate(colors, start=1):
+        Image.new("RGB", (32, 32), color).save(img_dir / f"Clip_{i:02d}.png")
+    (prompt_dir / "01_分镜出图.md").write_text(
+        "## Clip 1\n目标：出图/第1集/图片/Clip_01.png\n**资产引用注册层**：`PROP_01` 赐死托盘\n"
+        "## Clip 2\n目标：出图/第1集/图片/Clip_02.png\n**资产引用注册层**：`PROP_01` 赐死托盘\n"
+        "## Clip 3\n目标：出图/第1集/图片/Clip_03.png\n**资产引用注册层**：`PROP_01` 赐死托盘\n",
+        encoding="utf-8",
+    )
+    res = mm.analyze(str(root), ep, factor=1.05, floor=0.01)
+    assert res["asset_ref_source"] == "asset_registry"
+    assert "PROP_01" in res["groups"]
+    assert any(s["asset"] == "PROP_01" and s["asset_label"] == "PROP_01 赐死托盘" for s in res["shots"])

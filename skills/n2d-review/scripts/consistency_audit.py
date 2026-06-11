@@ -4,8 +4,8 @@
 2026 产线核心已从"单点能力"转到**编排层**：检测器再多，没被自动跑就等于没有。
 本脚本把散落的检测器统一调起来，n2d-review 模式①工作流第 1 步「跑机检套件」即调它：
 
-  语义谱系 P0 · 状态百科 P1 · 多模态 P2 · 锚点门 N3 · 脸 G1 · 服装/配色 N1 ·
-  片内时序 N2 · 场景 O2 · 糊/低质 N4 · 风格 S1
+  语义谱系 P0 · 状态百科 P1 · 多模态 P2 · 视觉契约继承 · 锚点门 N3 · 脸 G1 ·
+  服装/配色 N1 · 片内时序 N2 · 场景 O2 · 糊/低质 N4 · 风格 S1
 
 每个子检测器各自缺库优雅跳过（见各脚本）；本编排只汇总、不重复实现。
 纯函数 `summarize` 无依赖、带 pytest。
@@ -27,7 +27,12 @@ from typing import Any, Dict, Iterable, List, Sequence, Tuple
 COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
-from n2d_contract import CONSISTENCY_FINDINGS_KIND, production_dir  # noqa: E402  findings kind / 生产数据目录单一真值源
+from n2d_contract import (  # noqa: E402  findings kind / 生产数据目录 / 一致性维度单一真值源
+    CONSISTENCY_FINDINGS_KIND,
+    consistency_dim_spec,
+    production_dir,
+)
+from n2d_contract_diff import diff_contracts  # noqa: E402  视觉契约继承 Diff 核心（common 层单一真值源）
 
 import face_consistency as fc
 import outfit_consistency as oc
@@ -85,6 +90,37 @@ def artifacts_from_text(text: str) -> List[str]:
     return unique(m.group(0).rstrip("，。；;:：") for m in re.finditer(pattern, text or ""))
 
 
+def contract_inheritance_result(root: str, ep: str) -> dict:
+    """Read image/video overview contracts and expose inherit_contract diff as audit rows."""
+    img_rel = os.path.join("出图", ep, "prompt", "00_总览.md")
+    vid_rel = os.path.join("出视频", ep, "prompt", "00_总览.md")
+    img_path = os.path.join(root, img_rel)
+    vid_path = os.path.join(root, vid_rel)
+    if not os.path.isfile(img_path) or not os.path.isfile(vid_path):
+        missing = [rel for rel, path in ((img_rel, img_path), (vid_rel, vid_path)) if not os.path.isfile(path)]
+        return {"available": False, "fields": [], "notes": [f"契约继承检查跳过：缺 {', '.join(missing)}"]}
+    try:
+        rows = diff_contracts(
+            open(img_path, encoding="utf-8").read(),
+            open(vid_path, encoding="utf-8").read(),
+        )
+    except Exception as exc:
+        return {"available": False, "fields": [], "notes": [f"契约继承检查跳过：{exc}"]}
+    fields: List[dict] = []
+    for row in rows:
+        severity = str(row.get("severity") or "")
+        verdict = "ok" if severity == "pass" else severity if severity in {"block", "warn"} else "warn"
+        fields.append({
+            "verdict": verdict,
+            "field": row.get("field"),
+            "message": row.get("note") or row.get("status") or "",
+            "status": row.get("status"),
+            "loc": f"视觉契约/{row.get('field')}",
+            "affected_artifacts": [img_rel, vid_rel],
+        })
+    return {"available": True, "fields": fields, "notes": []}
+
+
 def normalize_details(rows: Sequence[dict], *, dim: str, ep: str, stage: str,
                       default_artifacts: Sequence[str], limit: int = 40) -> List[dict]:
     details: List[dict] = []
@@ -109,6 +145,9 @@ def normalize_details(rows: Sequence[dict], *, dim: str, ep: str, stage: str,
 
 
 def default_scope(dim: str, stage: str) -> str:
+    spec = consistency_dim_spec(dim)
+    if spec:
+        return str(spec.get("scope") or f"回 {stage} 修复该一致性维度。")
     if dim == "语义谱系(P0)":
         return "回 n2d-script 阶段2或 prompt 生成层，修 storyboard→出图/出视频的语义继承缺口。"
     if dim == "状态百科(P1)":
@@ -245,6 +284,20 @@ def run(root: str, ep: str) -> dict:
         default_artifacts=(f"出图/{ep}/prompt/01_分镜出图.md", f"出图/{ep}/图片"),
     )
 
+    # 出图 → 出视频 视觉契约继承 Diff（光位锚/轴线漂移是视频前硬风险）
+    contract_dim = "契约继承"
+    contract_spec = consistency_dim_spec("contract_inheritance") or {}
+    contract = contract_inheritance_result(root, ep)
+    sections[contract_dim] = section_from_result(
+        dim=contract_dim,
+        result=contract,
+        detail_key="fields",
+        skipped=not contract.get("available", False),
+        ep=ep,
+        stage=str(contract_spec.get("return_to_stage") or "video_prompt"),
+        default_artifacts=(f"出图/{ep}/prompt/00_总览.md", f"出视频/{ep}/prompt/00_总览.md"),
+    )
+
     # N3 锚点门（全篇定妆，不分集）
     a = fc.audit_anchors(root)
     sections["锚点门(N3)"] = {"skipped": not a.get("available", False),
@@ -322,6 +375,7 @@ def findings_payload(res: dict) -> dict:
         "generated_at": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
         "summary": res.get("summary", {}),
         "findings": res.get("findings", []),
+        "auto_return_tasks": res.get("auto_return_tasks", []),
     }
 
 

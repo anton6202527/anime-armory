@@ -17,6 +17,13 @@ description: Build a local visual UI for novel2drama/n2d. Two zero-build (self-c
 - `--serve` 在 `127.0.0.1` 起本地服务（复用 `n2d-dashboard` 的本地服务先例），媒体相对路径直接解析。
 - **跨集深链**：board 上点某个 Clip → 新标签打开该集 `review_ui_第N集.html#clip=<id>`，深画布自动**居中并高亮**该 Clip（点集头则打开该集深画布）；该集深画布未生成时弹提示给出生成命令。两层（全局看板 ↔ 单集深审）由 Clip id 串起，看板看全局、深画布挑穿帮。
 
+## 输入 / 输出 / 读写边界
+
+- **输入**：`_进度.md`、`storyboard.json`、首尾帧、clip MP4、identity registry、score/gate/mechanical/visual check JSON。
+- **输出**：`生产数据/review_ui_第N集.html/json`、可选 `review_ui_findings_第N集.json`，以及整部 `board.html/json`。
+- **读写边界**：只生成可视化和可消费 findings；不改进度、不改原始媒体、不执行返工队列。
+- **契约关系**：阶段前沿与 `n2d-progress` 同源于 `n2d_contract.py`；导出的 findings 使用统一 `n2d_consistency_findings` kind，供 `n2d-batch` 消费。
+
 ```bash
 python3 skills/n2d-review-ui/scripts/board.py <作品根> --write --markdown   # 生成 生产数据/board.html + board.json
 python3 skills/n2d-review-ui/scripts/board.py <作品根> --serve [--port 8765] # 本地起服务看板
@@ -41,6 +48,7 @@ python3 skills/n2d-score/scripts/score.py <作品根> 第N集 --run-checks --thr
 
 ```bash
 python3 skills/n2d-review-ui/scripts/review_ui.py <作品根> 第N集 --write --markdown
+python3 skills/n2d-review-ui/scripts/review_ui.py <作品根> 第N集 --write --export-findings --markdown
 ```
 
 输出：
@@ -48,6 +56,7 @@ python3 skills/n2d-review-ui/scripts/review_ui.py <作品根> 第N集 --write --
 ```text
 制漫剧/<剧名>/生产数据/review_ui_第N集.html
 制漫剧/<剧名>/生产数据/review_ui_第N集.json
+制漫剧/<剧名>/生产数据/review_ui_findings_第N集.json   # --export-findings 时生成，kind=n2d_consistency_findings
 ```
 
 HTML 是静态文件，可直接用浏览器打开；不需要开发服务器。若媒体文件已落档，浏览器会直接显示图片和视频。
@@ -63,7 +72,7 @@ HTML 是静态文件，可直接用浏览器打开；不需要开发服务器。
 
 ## 使用原则
 
-- **先机检，再人审**：UI 只负责聚合和呈现；低分来源仍由 `n2d-review` / `n2d-score` 产出。
+- **先机检，再人审**：UI 负责聚合、呈现，并可用 `--export-findings` 把红黄 QA flag 导出成 batch 可消费的 `n2d_consistency_findings`；低分来源仍由 `n2d-review` / `n2d-score` 产出。
 - **先看红黄，再看全片**：画布支持按 block / warn / 缺素材筛选，先处理阻断项。
 - **接缝并排看**：每个接缝都展示“上一尾帧 → 下一首帧”，用于判断跳切、尾帧没接上、构图突变。
 - **定妆同屏比对**：角色参考图在左侧固定区域，审片时和每个 Clip 的首帧/视频并排比。
@@ -77,3 +86,13 @@ UI 本身不改进度、不重跑、不提交任务。发现问题后按：
 - 视频运动 / 片内漂移 / 接缝问题：回 `n2d-video`，必要时先补尾帧。
 - 字幕 / 时长 / 音画同步：回 `n2d-compose` 或 `n2d-script` 阶段2。
 - 机器分低于阈值：用 `n2d-score --enqueue-low` 写入 `n2d-batch`。
+- 要把画布里的红黄 flag 直接排入返工队列：先生成 findings，再执行
+  `python3 skills/n2d-batch/scripts/queue.py plan <作品根> --from-consistency-findings <作品根>/生产数据/review_ui_findings_第N集.json`。
+
+## 常见错误
+
+| 错误 | 纠正 |
+|---|---|
+| 忘了跑机检/评分直接生成画布 | 这会导致画布里完全没有机器分数、QA 阻断和一致性标注 |
+| 把画布当成剪辑工具 | 画布只读、不修改任何生产状态。重修画面应由对应的 skill 和 batch 完成 |
+| 将本地 HTML 里的文件跨设备发人审阅 | HTML 里使用的是相对路径（本地或本地服务）。若要共享审查，需走在线服务部署 |

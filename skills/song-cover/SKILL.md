@@ -45,4 +45,4 @@ pip install demucs    # 先分离人声再转换，质量更高（Mac 可跑）
 | 跳过合规闸门 | 先确认音色合法 + 原曲权利 |
 | 换未授权真人歌手嗓 | 拒做 |
 | 不分离直接转整首 | 先 demucs 分 vocals，只转人声再回混 |
-| 想复用 video-faceswap/n2d | 那是换脸/说话；歌声转换各写各的 |
+| 想复用 shared-video-faceswap/n2d | 那是换脸/说话；歌声转换各写各的 |

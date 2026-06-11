@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 from pathlib import Path
 
 
@@ -382,3 +383,185 @@ def test_replace_refuses_running_without_force(tmp_path: Path) -> None:
 
     replaced = queue.write_planned_queue(str(tmp_path), planned, replace=True, force=True)
     assert replaced["tasks"] == []
+
+
+# ── T4: 回流闭环后半环（指纹 + resolved 回写 + 复检）──────────────────────────
+import queue as q
+from n2d_contract import finding_fingerprint
+
+
+def _findings_report(ep="第1集"):
+    return {
+        "kind": q.CONSISTENCY_FINDINGS_KIND, "episode": ep,
+        "findings": [
+            {"severity": "block", "dimension": "character_consistency",
+             "return_to_stage": "image", "affected_shots": ["Clip_03"], "msg": "崩脸"},
+        ],
+    }
+
+
+def test_consistency_tasks_carry_matching_fingerprint(tmp_path):
+    rep = _findings_report()
+    tasks = q.tasks_from_consistency_findings(str(tmp_path), rep, cost_estimates={}, max_retries=1)
+    assert len(tasks) == 1
+    fp = finding_fingerprint("第1集", "image", "character_consistency", "Clip_03")
+    assert tasks[0]["finding_fingerprints"] == [fp]
+    # task 端指纹 == audit 端重算的现存指纹（可对账）
+    assert fp in q.report_active_fingerprints(rep)
+
+
+def test_merge_reopens_recurring_done_task_no_stack(tmp_path):
+    fp = finding_fingerprint("第1集", "image", "character_consistency")
+    existing = {"tasks": [{"id": "001-image-rerun", "status": "done", "attempts": 1,
+                           "finding_fingerprints": [fp], "history": []}]}
+    planned = {"tasks": [{"id": "001-image-rerun", "status": "queued", "attempts": 0,
+                          "finding_fingerprints": [fp], "rerun_scope": "重出崩脸", "history": []}]}
+    merged = q.merge_queues(existing, planned)
+    assert len(merged["tasks"]) == 1                      # 不堆叠
+    t = merged["tasks"][0]
+    assert t["status"] == "queued" and t["resolved"] is False
+    assert any(h["action"] == "plan:reopen_recurring" for h in t["history"])
+
+
+def test_merge_skips_in_flight_duplicate(tmp_path):
+    fp = finding_fingerprint("第1集", "image", "character_consistency")
+    existing = {"tasks": [{"id": "001-image-rerun", "status": "running", "attempts": 1,
+                           "finding_fingerprints": [fp], "history": []}]}
+    planned = {"tasks": [{"id": "001-image-rerun-x", "status": "queued", "attempts": 0,
+                          "finding_fingerprints": [fp], "history": []}]}
+    merged = q.merge_queues(existing, planned)
+    assert len(merged["tasks"]) == 1                      # 在途同问题不重复入队
+    assert merged["tasks"][0]["status"] == "running"
+
+
+def test_reconcile_resolved_marks_and_reopens():
+    fp_gone = finding_fingerprint("第1集", "image", "character_consistency")
+    fp_still = finding_fingerprint("第2集", "image", "scene_consistency")
+    queue = {"tasks": [
+        {"id": "a", "status": "done", "finding_fingerprints": [fp_gone], "history": []},
+        {"id": "b", "status": "done", "finding_fingerprints": [fp_still], "history": []},
+        {"id": "c", "status": "queued", "finding_fingerprints": [fp_still], "history": []},  # 非 done 不碰
+    ]}
+    q.reconcile_resolved(queue, active_fingerprints={fp_still})
+    a, b, c = queue["tasks"]
+    assert a["resolved"] is True and a["status"] == "done"          # 问题消失 → resolved
+    assert b["status"] == "queued" and b["resolved"] is False        # 仍在 → reopen
+    assert c["status"] == "queued"                                   # queued 不动
+    assert queue["recheck"] == {"resolved": 1, "reopened": 1, "reopened_coarse": 0, "at": queue["recheck"]["at"]}
+
+
+def test_fingerprint_stable_across_shot_locator_granularity():
+    """#2 根因修复：同一镜头换写法/帧位/产物路径 → 同一精确指纹，复检不再误判 resolved。"""
+    base = finding_fingerprint("第1集", "image", "character_consistency", "Clip_03")
+    for variant in ("Clip 3", "clip_03", "Clip_03_首帧", "Clip_03_尾帧", "镜头3",
+                    "出图/第1集/图片/Clip_03.png"):
+        assert finding_fingerprint("第1集", "image", "character_consistency", variant) == base
+    # 不同镜头仍区分
+    assert finding_fingerprint("第1集", "image", "character_consistency", "Clip_04") != base
+
+
+def test_recheck_granularity_drift_no_false_resolved():
+    """返工前 finding 定位 Clip_03、返工后审查写成 Clip_03_首帧：精确指纹归一后仍判 reopen。"""
+    task_fp = finding_fingerprint("第2集", "image", "character_consistency", "Clip_03")
+    active = {finding_fingerprint("第2集", "image", "character_consistency", "Clip_03_首帧")}
+    queue = {"tasks": [{"id": "a", "status": "done", "finding_fingerprints": [task_fp], "history": []}]}
+    q.reconcile_resolved(queue, active)
+    assert queue["tasks"][0]["status"] == "queued"  # 没被误判 resolved
+
+
+def test_recheck_coarse_fallback_reopens_when_bucket_still_dirty():
+    """#2 安全网：精确指纹对不上，但 (集×阶段×维度) 桶仍有问题 → --coarse 下 reopen，不漏放。"""
+    task_fp = finding_fingerprint("第3集", "image", "outfit_consistency", "无镜头号自由文本A")
+    coarse_fp = finding_fingerprint("第3集", "image", "outfit_consistency")
+    # 桶里现在是另一条无法归一到同精确指纹的描述，但同 (集,阶段,维度)
+    active_fine = {finding_fingerprint("第3集", "image", "outfit_consistency", "另一段自由文本B")}
+    active_coarse = {coarse_fp}
+    queue = {"tasks": [{"id": "a", "status": "done",
+                        "finding_fingerprints": [task_fp],
+                        "coarse_fingerprints": [coarse_fp], "history": []}]}
+    # 不开 coarse：精确对不上 → 误判 resolved（说明回退的必要性）
+    q.reconcile_resolved({"tasks": [dict(queue["tasks"][0])]}, active_fine)
+    # 开 coarse：桶仍脏 → reopen
+    q.reconcile_resolved(queue, active_fine, coarse_active=active_coarse)
+    assert queue["tasks"][0]["status"] == "queued"
+    assert queue["recheck"]["reopened_coarse"] == 1
+    assert queue["recheck"]["reopened"] == 0
+
+
+def test_recheck_coarse_fallback_resolves_when_bucket_clean():
+    """精确指纹消失且桶也干净 → 即便开 coarse 也判 resolved，能收敛。"""
+    task_fp = finding_fingerprint("第3集", "image", "outfit_consistency", "Clip_07")
+    coarse_fp = finding_fingerprint("第3集", "image", "outfit_consistency")
+    queue = {"tasks": [{"id": "a", "status": "done",
+                        "finding_fingerprints": [task_fp],
+                        "coarse_fingerprints": [coarse_fp], "history": []}]}
+    q.reconcile_resolved(queue, set(), coarse_active=set())
+    assert queue["tasks"][0]["resolved"] is True
+    assert queue["recheck"]["reopened_coarse"] == 0
+
+
+def test_consistency_task_carries_coarse_fingerprints(tmp_path):
+    rep = {"kind": q.CONSISTENCY_FINDINGS_KIND, "episode": "第1集",
+           "auto_return_tasks": [{
+               "return_to_stage": "image",
+               "dimensions": ["character_consistency"],
+               "affected_shots": ["Clip_03"],
+           }]}
+    tasks = q.tasks_from_consistency_findings(str(tmp_path), rep, cost_estimates={}, max_retries=1)
+    assert tasks[0]["coarse_fingerprints"] == [
+        finding_fingerprint("第1集", "image", "character_consistency")
+    ]
+
+
+def test_collect_active_fingerprints_from_disk(tmp_path):
+    pdir = tmp_path / "生产数据"
+    pdir.mkdir()
+    (pdir / "consistency_findings_第1集.json").write_text(
+        json.dumps(_findings_report()), encoding="utf-8")
+    fps = q.collect_active_fingerprints(str(tmp_path))
+    assert finding_fingerprint("第1集", "image", "character_consistency", "Clip_03") in fps
+
+
+def test_consistency_fingerprints_are_scoped_per_affected_shot(tmp_path):
+    rep = {"kind": q.CONSISTENCY_FINDINGS_KIND, "episode": "第1集",
+           "auto_return_tasks": [{
+               "return_to_stage": "image",
+               "dimensions": ["character_consistency"],
+               "affected_shots": ["Clip_03", "Clip_05"],
+               "scope": "两镜崩脸",
+           }]}
+    tasks = q.tasks_from_consistency_findings(str(tmp_path), rep, cost_estimates={}, max_retries=1)
+    assert sorted(tasks[0]["finding_fingerprints"]) == sorted([
+        finding_fingerprint("第1集", "image", "character_consistency", "Clip_03"),
+        finding_fingerprint("第1集", "image", "character_consistency", "Clip_05"),
+    ])
+
+    active = q.report_active_fingerprints({
+        "kind": q.CONSISTENCY_FINDINGS_KIND, "episode": "第1集",
+        "auto_return_tasks": [{
+            "return_to_stage": "image",
+            "dimensions": ["character_consistency"],
+            "affected_shots": ["Clip_05"],
+        }],
+    })
+    queue_obj = {"tasks": [{"id": "a", "status": "done",
+                            "finding_fingerprints": tasks[0]["finding_fingerprints"], "history": []}]}
+    q.reconcile_resolved(queue_obj, active)
+    assert queue_obj["tasks"][0]["status"] == "queued"
+
+
+# ── T11: 最小范围返工命令注入 --shots ────────────────────────────────────────
+def test_task_command_injects_affected_shots():
+    rep = {"kind": q.CONSISTENCY_FINDINGS_KIND, "episode": "第1集",
+           "findings": [{"severity": "block", "dimension": "character_consistency",
+                         "return_to_stage": "image", "affected_shots": ["Clip_03", "Clip_05"], "msg": "崩脸"}]}
+    tasks = q.tasks_from_consistency_findings(str("/x"), rep, cost_estimates={}, max_retries=1)
+    assert tasks and "--shots Clip_03,Clip_05" in tasks[0]["command"]
+
+
+def test_task_command_no_shots_suffix_when_none():
+    rep = {"kind": q.CONSISTENCY_FINDINGS_KIND, "episode": "第1集",
+           "findings": [{"severity": "block", "dimension": "style_consistency",
+                         "return_to_stage": "image", "msg": "风格漂"}]}
+    tasks = q.tasks_from_consistency_findings(str("/x"), rep, cost_estimates={}, max_retries=1)
+    assert tasks and "--shots" not in tasks[0]["command"]

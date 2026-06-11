@@ -12,6 +12,13 @@ description: P1 batch task queue and worker runner for novel2drama/n2d. Build/ma
 
 真正的生产逻辑仍归 `n2d-script` / `n2d-voice` / `n2d-image` / `n2d-video` / `n2d-compose`。runner 只调用这些阶段的 shell 命令或本地脚本，不重写阶段逻辑。
 
+## 输入 / 输出 / 读写边界
+
+- **输入**：`_进度.md`、stage contract、gate/review/score/identity findings、可选 `batch_runner.json` 命令配置。
+- **输出**：`生产数据/batch_queue.json/md`、worker claim/lease/mark 状态、runner telemetry。
+- **读写边界**：队列层只排任务和调用已配置命令；不内置 stage 业务逻辑、不擅自整集重跑、不绕过对应 skill 的 gate。
+- **契约关系**：stage key、owner、输出验收、finding 回流字段来自 `skills/common/n2d_contract.py`；无稳定 readiness，所以登记为 `CROSS_CUTTING_TOOLS` 而不是进度横切就绪项。
+
 ## 核心原则
 
 - **路由真值源仍是 `_进度.md` + `common/n2d_contract.py`**：队列只消费现有状态机，不自创阶段顺序。
@@ -182,7 +189,36 @@ python3 skills/n2d-batch/scripts/queue.py plan <作品根> \
 
 这类任务 `reason=rerun`，不会因为该集 `_进度.md` 已显示完成而被跳过。
 
-### 7. 承接 n2d-score 低分回流
+### 7. 承接一致性 / 人审 findings 回流
+
+`n2d-review/scripts/consistency_audit.py` 会生成 `生产数据/consistency_findings_第N集.json`；`n2d-review-ui/scripts/review_ui.py --export-findings` 会生成 `生产数据/review_ui_findings_第N集.json`；`n2d-dashboard/scripts/dashboard.py gate ...` 会生成 `生产数据/gate_findings_<stage>_第N集.json`；`n2d-identity/scripts/voice_print_consistency.py` 会生成 `生产数据/consistency_findings_voice_print_第N集.json`。这些都是 `kind=n2d_consistency_findings`，可直接转成最小范围返工队列：
+
+```bash
+python3 skills/n2d-batch/scripts/queue.py plan <作品根> \
+  --from-consistency-findings <作品根>/生产数据/review_ui_findings_第N集.json \
+  --max-concurrency 1 \
+  --max-retries 2
+```
+
+报告里带 `auto_return_tasks` 时优先按它排队；否则按 `(episode, return_to_stage, dim)` 聚合红黄 findings，并携带 `affected_shots` / `affected_artifacts`，避免整集重来。
+
+**闭环复检（修复→标 resolved / 复发→reopen）**：每个返工任务带 `finding_fingerprints`（`(集×阶段×维度×最小定位)` 指纹，单一真值源 `n2d_contract.finding_fingerprint`；无镜头/产物定位时退回旧粒度）外加 `coarse_fingerprints`（`(集×阶段×维度)` 粗指纹，供回退匹配）。定位串先过 `canonical_scope_key` 归一：`Clip_03`、`Clip_03_首帧`、`镜头3`、`出图/.../Clip_03.png` 都归到同一 `clip_3`——同一镜头换写法/帧位/产物路径不再产生不同指纹，堵掉"定位粒度漂移导致已修问题被误判 resolved"。同一未解决问题**不随复审堆叠**——重排时同指纹的已结束任务 reopen、在途的跳过，而不是生成 `-2/-3` 重复任务。
+
+**返工 pass 后门禁自动重跑**：runner mark pass 且任务有 `gate_stage` 时，自动重跑该 stage 的 `dashboard.py gate` 刷新 `gate_findings_*.json`，让随后的 `--recheck` 对的是返工 **之后** 的现状指纹，而不是返工前的陈旧 findings——这是闭环的最后一环，无需人工再敲一遍 gate。`--no-gate`（或 `batch_runner.json` 里 `"auto_gate": false`）可关闭。
+
+```bash
+# 复检：用最新 consistency_findings/review_ui_findings 的指纹回写队列
+python3 skills/n2d-batch/scripts/queue.py recheck <作品根> [--episodes 1-5]
+# 或让 runner 跑完自动复检（pass 后已自动刷新门禁 findings，--recheck 即对现状判定）
+python3 skills/n2d-batch/scripts/runner.py <作品根> --until-empty --recheck
+# 粗粒度回退：精确指纹对不上但该(集×阶段×维度)桶仍有问题则不判 resolved 而 reopen，堵漏放
+python3 skills/n2d-batch/scripts/queue.py recheck <作品根> --coarse
+python3 skills/n2d-batch/scripts/runner.py <作品根> --until-empty --recheck --coarse-recheck
+```
+
+复检把指纹已从最新审查消失的 done 任务标 `resolved=true`（留痕，不静默覆盖），仍在的 reopen 回 `queued`——这样"发现→返工→修复→复检确认不复现"才真正闭环，而不是只入队不回收。`--coarse` 是安全网：精确指纹归一后仍对不上（定位串大改/换成无镜头号的自由文本）但同 `(集×阶段×维度)` 桶仍有 findings 时，宁可 reopen 复核也不漏放（代价：同桶若有别的镜头未修，已修镜头会被一起召回，计入 `reopened_coarse`）。
+
+### 8. 承接 n2d-score 低分回流
 
 ```bash
 python3 skills/n2d-score/scripts/score.py <作品根> 第1集 \

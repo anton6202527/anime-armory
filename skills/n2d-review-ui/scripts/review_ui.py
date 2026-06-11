@@ -17,7 +17,15 @@ from urllib.parse import quote
 _COMMON = str(Path(__file__).resolve().parent.parent.parent / "common")
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
-from n2d_contract import PRODUCTION_DIR, REVIEW_UI_KIND, identity_registry_path, shared_asset_path  # noqa: E402  生产数据/身份注册路径/kind 单一真值源
+from n2d_contract import (  # noqa: E402  生产数据/身份注册路径/kind 单一真值源
+    CONSISTENCY_FINDINGS_KIND,
+    PRODUCTION_DIR,
+    REVIEW_UI_KIND,
+    consistency_dim_key,
+    consistency_dim_spec,
+    identity_registry_path,
+    shared_asset_path,
+)
 
 
 KIND = REVIEW_UI_KIND
@@ -439,6 +447,140 @@ def build_manifest(root: Path, ep: str) -> Dict[str, Any]:
     }
 
 
+def _severity(flag: Dict[str, Any]) -> str:
+    severity = str(flag.get("severity") or "").lower()
+    if severity in {"block", "warn", "info"}:
+        return severity
+    status = str(flag.get("status") or "").lower()
+    if status == "fail":
+        return "block"
+    if status in {"warn", "insufficient_data"}:
+        return "warn"
+    return "info"
+
+
+def _return_stage(flag: Dict[str, Any]) -> str:
+    explicit = str(flag.get("return_to_stage") or flag.get("rerun_from") or "").strip()
+    if explicit:
+        return explicit
+    spec = consistency_dim_spec(flag.get("dimension"))
+    if spec:
+        return str(spec.get("return_to_stage") or "image")
+    text = f"{flag.get('dimension', '')} {flag.get('message', '')}".lower()
+    if any(token in text for token in ("字幕", "分镜", "storyboard", "节奏", "rhythm", "语义")):
+        return "script_stage2"
+    if any(token in text for token in ("配音", "音频", "voice", "audio", "口型", "mouth")):
+        return "voice"
+    if any(token in text for token in ("视频", "运动", "运镜", "接缝", "seam", "motion")):
+        return "video"
+    if any(token in text for token in ("角色", "身份", "服装", "场景", "画面", "出图", "image", "visual", "face")):
+        return "image"
+    return "image"
+
+
+def _media_paths(item: Dict[str, Any], keys: Sequence[str]) -> List[str]:
+    out: List[str] = []
+    for key in keys:
+        media = item.get(key)
+        if isinstance(media, dict) and media.get("path"):
+            out.append(str(media["path"]))
+    return out
+
+
+def _finding_from_flag(
+    ep: str,
+    flag: Dict[str, Any],
+    *,
+    loc: str,
+    affected_shots: Optional[List[str]] = None,
+    affected_artifacts: Optional[List[str]] = None,
+) -> Dict[str, Any]:
+    msg = str(flag.get("message") or "")
+    dim = str(flag.get("dimension") or "QA")
+    spec = consistency_dim_spec(dim)
+    return {
+        "sev": _severity(flag),
+        "dim": dim,
+        "dim_key": consistency_dim_key(dim) or "",
+        "loc": loc,
+        "msg": msg,
+        "episode": ep,
+        "return_to_stage": _return_stage(flag),
+        "rerun_scope": str(spec.get("scope") or "") if spec else str(flag.get("rerun_scope") or flag.get("scope") or ""),
+        "affected_shots": affected_shots or [],
+        "affected_artifacts": affected_artifacts or [],
+        "source": "review_ui",
+    }
+
+
+def findings_payload(manifest: Dict[str, Any]) -> Dict[str, Any]:
+    """Convert review-ui flags into n2d-batch compatible consistency findings."""
+    ep = str(manifest.get("episode") or "")
+    findings: List[Dict[str, Any]] = []
+    seen: set = set()
+
+    def add(item: Dict[str, Any]) -> None:
+        key = (item.get("episode"), item.get("return_to_stage"), item.get("dim"), item.get("loc"), item.get("msg"))
+        if key in seen:
+            return
+        seen.add(key)
+        findings.append(item)
+
+    for flag in manifest.get("global_flags") or []:
+        if isinstance(flag, dict):
+            add(_finding_from_flag(ep, flag, loc="episode"))
+
+    for clip in manifest.get("clips") or []:
+        if not isinstance(clip, dict):
+            continue
+        shot = str(clip.get("id") or clip.get("label") or f"Clip_{clip.get('number', '')}").strip()
+        artifacts = _media_paths(clip, ("first_frame", "end_frame", "video"))
+        for flag in clip.get("qa_flags") or []:
+            if isinstance(flag, dict):
+                add(_finding_from_flag(ep, flag, loc=shot, affected_shots=[shot], affected_artifacts=artifacts))
+
+    for seam in manifest.get("seams") or []:
+        if not isinstance(seam, dict):
+            continue
+        loc = f"seam:{seam.get('index')} {seam.get('from')}->{seam.get('to')}"
+        shots = [str(v) for v in (seam.get("from"), seam.get("to")) if v]
+        artifacts = _media_paths(seam, ("tail", "next_first"))
+        for flag in seam.get("qa_flags") or []:
+            if isinstance(flag, dict):
+                add(_finding_from_flag(ep, flag, loc=loc, affected_shots=shots, affected_artifacts=artifacts))
+
+    counts: Dict[str, int] = {"block": 0, "warn": 0, "info": 0}
+    by_dim: Dict[str, Dict[str, int]] = {}
+    for item in findings:
+        sev = str(item.get("sev") or "info")
+        counts[sev] = counts.get(sev, 0) + 1
+        dim = str(item.get("dim") or "QA")
+        dim_counts = by_dim.setdefault(dim, {"block": 0, "warn": 0, "info": 0})
+        dim_counts[sev] = dim_counts.get(sev, 0) + 1
+    score = manifest.get("score") if isinstance(manifest.get("score"), dict) else {}
+    auto_tasks = [dict(item) for item in score.get("auto_return_tasks") or [] if isinstance(item, dict)]
+    return {
+        "kind": CONSISTENCY_FINDINGS_KIND,
+        "version": 1,
+        "root": manifest.get("root", ""),
+        "episode": ep,
+        "generated_at": now_iso(),
+        "summary": {"total": len(findings), "severity": counts, "by_dim": by_dim},
+        "findings": findings,
+        "auto_return_tasks": auto_tasks,
+        "source": {"kind": KIND, "path": manifest.get("source", {})},
+    }
+
+
+def write_findings(root: Path, ep: str, manifest: Dict[str, Any], out_path: Optional[Path] = None) -> str:
+    paths = output_paths(root, ep)
+    paths["dir"].mkdir(parents=True, exist_ok=True)
+    target = out_path or (paths["dir"] / f"review_ui_findings_{safe_ep(ep)}.json")
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(json.dumps(findings_payload(manifest), ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return str(target)
+
+
 HTML_TEMPLATE = r"""<!doctype html>
 <html lang="zh-CN">
 <head>
@@ -683,6 +825,8 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("root", help="作品根, e.g. 制漫剧/剧名")
     ap.add_argument("episode", help="第N集")
     ap.add_argument("--write", action="store_true", help="write 生产数据/review_ui_第N集.html/json")
+    ap.add_argument("--export-findings", action="store_true", help="write batch-compatible review_ui_findings_第N集.json")
+    ap.add_argument("--findings-out", help="custom path for --export-findings")
     ap.add_argument("--markdown", action="store_true", help="print a short Markdown summary when --write is used")
     return ap
 
@@ -706,8 +850,12 @@ def markdown_summary(manifest: Dict[str, Any], paths: Optional[Dict[str, str]] =
         f"- missing_media: {missing}",
     ]
     if paths:
-        lines.append(f"- html: {paths.get('html')}")
-        lines.append(f"- json: {paths.get('json')}")
+        if paths.get("html"):
+            lines.append(f"- html: {paths.get('html')}")
+        if paths.get("json"):
+            lines.append(f"- json: {paths.get('json')}")
+        if paths.get("findings"):
+            lines.append(f"- findings: {paths.get('findings')}")
     return "\n".join(lines) + "\n"
 
 
@@ -716,13 +864,24 @@ def main(argv: Sequence[str]) -> int:
     root = Path(ns.root)
     ep = normalize_episode(ns.episode)
     manifest = build_manifest(root, ep)
+    paths: Optional[Dict[str, str]] = None
     if ns.write:
         paths = write_outputs(root, ep, manifest)
+    findings_path = None
+    if ns.export_findings:
+        findings_path = write_findings(root, ep, manifest, Path(ns.findings_out) if ns.findings_out else None)
+    if ns.write or ns.export_findings:
         if ns.markdown:
-            print(markdown_summary(manifest, paths))
+            summary_paths = dict(paths or {})
+            if findings_path:
+                summary_paths["findings"] = findings_path
+            print(markdown_summary(manifest, summary_paths))
         else:
-            print(f"wrote {paths['html']}")
-            print(f"wrote {paths['json']}")
+            if paths:
+                print(f"wrote {paths['html']}")
+                print(f"wrote {paths['json']}")
+            if findings_path:
+                print(f"wrote {findings_path}")
     else:
         print(json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True))
     return 0

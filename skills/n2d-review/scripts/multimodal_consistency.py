@@ -20,7 +20,7 @@ from typing import Dict, List, Optional, Sequence, Tuple
 COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
-from n2d_contract import identity_registry_path  # noqa: E402
+from n2d_contract import asset_registry_path, identity_registry_path  # noqa: E402
 
 import face_consistency as fc  # 复用 fallback is_character_asset / cosine
 
@@ -165,6 +165,83 @@ def refs_from_block(block: Dict[str, str]) -> List[str]:
     return refs
 
 
+def _reference_values(reference_group: object) -> List[str]:
+    out: List[str] = []
+    if not isinstance(reference_group, dict):
+        return out
+    for value in reference_group.values():
+        items = value if isinstance(value, list) else [value]
+        for item in items:
+            if isinstance(item, str) and item.strip():
+                out.append(item.strip())
+    return out
+
+
+def asset_registry_entries(root: str) -> Dict[str, dict]:
+    """Return non-character asset registry entries keyed by LOC_/PROP_/OUTFIT_/VFX_ id."""
+    path = asset_registry_path(root)
+    if not os.path.isfile(path):
+        return {}
+    try:
+        data = json.load(open(path, encoding="utf-8"))
+    except Exception:
+        return {}
+    assets = data.get("assets") if isinstance(data, dict) else None
+    if not isinstance(assets, list):
+        return {}
+    entries: Dict[str, dict] = {}
+    for asset in assets:
+        if not isinstance(asset, dict):
+            continue
+        asset_id = str(asset.get("id") or "").strip()
+        if not asset_id:
+            continue
+        keys = {normalize_asset(asset.get("name", ""))}
+        keys.update(normalize_asset(p) for p in _reference_values(asset.get("reference_group")))
+        entries[asset_id] = {
+            "id": asset_id,
+            "name": str(asset.get("name") or "").strip(),
+            "type": str(asset.get("type") or "").strip(),
+            "keys": sorted(k for k in keys if k),
+            "drift_forbidden": asset.get("drift_forbidden") if isinstance(asset.get("drift_forbidden"), list) else [],
+        }
+    return entries
+
+
+def asset_registry_refs_from_block(block: Dict[str, str], entries: Dict[str, dict]) -> List[str]:
+    """Resolve prompt asset bindings to registry IDs.
+
+    New prompts should contain explicit LOC_/PROP_/OUTFIT_/VFX_ IDs in the
+    资产引用注册层.  For migration safety, a block that still only names the
+    registered asset or references its registered PNG is also mapped to the ID.
+    """
+    if not entries:
+        return []
+    text = block["body"]
+    refs = set(refs_from_block(block))
+    out: List[str] = []
+
+    def add(asset_id: str) -> None:
+        if asset_id in entries and asset_id not in out:
+            out.append(asset_id)
+
+    for match in re.finditer(r"(?<![0-9A-Za-z])((?:LOC|PROP|OUTFIT|VFX)_[0-9A-Za-z_-]+)(?![0-9A-Za-z])", text):
+        add(match.group(1))
+
+    for asset_id, entry in entries.items():
+        name = entry.get("name") or ""
+        keys = set(entry.get("keys") or [])
+        if (name and name in text) or (keys & refs):
+            add(asset_id)
+    return out
+
+
+def asset_label(asset: str, entries: Dict[str, dict]) -> str:
+    entry = entries.get(asset) or {}
+    name = str(entry.get("name") or "").strip()
+    return f"{asset} {name}".strip() if name and name != asset else asset
+
+
 def identity_character_assets(root: str) -> List[str]:
     """Return character asset keys from identity_registry.
 
@@ -241,6 +318,15 @@ def analyze(root: str, ep: str, factor: float = DEFAULT_FACTOR, floor: float = D
         return res
     text = open(p, encoding="utf-8").read()
     rows = []
+    registry_assets = asset_registry_entries(root.rstrip("/"))
+    if registry_assets:
+        res["asset_ref_source"] = "asset_registry"
+        res["asset_registry_assets"] = [
+            {"id": k, "name": v.get("name", ""), "type": v.get("type", "")}
+            for k, v in sorted(registry_assets.items())
+        ]
+    else:
+        res["asset_ref_source"] = "prompt_reference_fallback"
     character_assets = identity_character_assets(root.rstrip("/"))
     if character_assets:
         res["character_asset_source"] = "identity_registry"
@@ -249,8 +335,9 @@ def analyze(root: str, ep: str, factor: float = DEFAULT_FACTOR, floor: float = D
         res["character_asset_source"] = "fallback_keyword_heuristic"
     for block in split_blocks(text):
         target = target_from_block(root.rstrip("/"), ep, block)
+        registry_refs = asset_registry_refs_from_block(block, registry_assets)
         refs = refs_from_block(block)
-        non_chars = non_character_refs(root.rstrip("/"), refs, character_assets)
+        non_chars = registry_refs or non_character_refs(root.rstrip("/"), refs, character_assets)
         if target and os.path.isfile(target):
             rows.append({"heading": block["heading"], "target": target, "assets": non_chars})
 
@@ -287,10 +374,11 @@ def analyze(root: str, ep: str, factor: float = DEFAULT_FACTOR, floor: float = D
                     "png": name,
                     "heading": labels.get(name, ""),
                     "asset": asset,
+                    "asset_label": asset_label(asset, registry_assets),
                     "avg_dist": round(avg_dist[name], 3),
                     "group_median": round(gmed, 3),
                     "verdict": "warn",
-                    "message": f"`{asset}` 参考组内视觉 embedding 离群，疑似道具/场景/法宝语义漂移。",
+                    "message": f"`{asset_label(asset, registry_assets)}` 参考组内视觉 embedding 离群，疑似道具/场景/法宝语义漂移。",
                 })
     res["verdicts"] = [s["verdict"] for s in res["shots"]]
     return res

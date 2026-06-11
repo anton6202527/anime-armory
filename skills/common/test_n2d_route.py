@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from n2d_route import (  # noqa: E402
     cell_state, is_done, is_started, _cn_to_int, episode_number, normalize_episode,
     parse_progress, stage_of, voice_is_placeholder, manifest_path, is_flow_complete,
-    voiceover_fingerprint,
+    is_progress_satisfied, voiceover_fingerprint,
 )
 
 
@@ -40,6 +40,9 @@ def test_cell_state_basic():
     assert cell_state("✅") == "done"
     assert cell_state("") == "todo"
     assert cell_state("⬜") == "todo"
+    assert cell_state("⏳rough") == "rough"
+    assert is_started("⏳rough") is True
+    assert is_done("⏳rough") is False
     assert cell_state("3/5") == "partial"
     assert cell_state("5/5") == "done"
     assert cell_state("0/5") == "todo"
@@ -164,6 +167,30 @@ def test_voice_first_routes_to_voice_when_unvoiced(tmp_path):
     assert route["col"] == "配音"
 
 
+def test_voice_first_rough_voice_still_routes_to_voice(tmp_path):
+    # 配音先行：⏳rough 只代表占位时长，不能算真实配音完成
+    rows = ["| 第1集 | 800 | … | ✅ | ✅ | ✅ | ⏳rough | ⬜ | ⬜ | ⬜ | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |"]
+    root = _write_progress(tmp_path, rows)
+    _set_mode(root, "配音先行")
+    header, parsed = parse_progress(root)
+    route = stage_of(root, parsed[0], header)
+    assert route["skill"] == "n2d-voice"
+    assert route["col"] == "配音"
+    assert is_progress_satisfied(root, parsed[0], "配音") is False
+
+
+def test_video_first_rough_voice_can_drive_storyboard(tmp_path):
+    # 先出视频后配音：⏳rough 可作时间脚手架推进到分镜/出图，但不是最终成片音轨
+    rows = ["| 第1集 | 800 | … | ✅ | ✅ | ✅ | ⏳rough | ⬜ | ⬜ | ⬜ | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |"]
+    root = _write_progress(tmp_path, rows)
+    _set_mode(root, "先出视频后配音")
+    header, parsed = parse_progress(root)
+    route = stage_of(root, parsed[0], header)
+    assert route["skill"] == "n2d-script"
+    assert route["col"] == "分镜设计"
+    assert is_progress_satisfied(root, parsed[0], "配音") is True
+
+
 def test_native_av_skips_voice_column(tmp_path):
     # 原生音画：配音 ⬜ 不该误推 n2d-voice，应直接推进到 分镜设计（说话镜走 native 同步音画）
     rows = ["| 第1集 | 800 | … | ✅ | ✅ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |"]
@@ -196,7 +223,7 @@ def test_native_av_flow_completion_treats_voice_as_satisfied(tmp_path):
 
 
 def test_video_first_compose_requires_confirmed_real_voice_manifest(tmp_path):
-    rows = ["| 第1集 | 800 | … | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ | ✅ | ⬜ |"]
+    rows = ["| 第1集 | 800 | … | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ | ✅ | ⬜ |"]
     root = _write_progress(tmp_path, rows)
     _set_mode(root, "先出视频后配音")
     header, parsed = parse_progress(root)

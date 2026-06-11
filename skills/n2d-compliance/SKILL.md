@@ -13,6 +13,13 @@ description: P0 compliance and rights preflight for novel2drama/n2d. Create and 
 制漫剧/<剧名>/合规/compliance_manifest.json
 ```
 
+## 输入 / 输出 / 读写边界
+
+- **输入**：源文本/改编权信息、identity registry 角色、声音克隆/素材授权、AI 标识/水印/平台审核策略、目标地区。
+- **输出**：`合规/compliance_manifest.json` 和 `--check` 结果；dashboard gate 会把阻断写入生产数据。
+- **读写边界**：只建立/校验合规包；不替代法律意见、不生成媒体、不改生产阶段。
+- **契约关系**：internal_only 免检范围、必填域和 gate 阶段阻断口径与 `skills/common/n2d_contract.py` 保持同源。
+
 ## 标准命令
 
 初始化模板：
@@ -53,3 +60,13 @@ python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第1集 --sta
 - TikTok 要求真实感 AIGC 标注，并会利用 C2PA Content Credentials 自动标记。
 - 中国《人工智能生成合成内容标识办法》把 AI 标识分为显式和隐式。
 - C2PA/Content Credentials 是跨平台 provenance 元数据方向；本地无法签发时，也要在 manifest 里写 `not_supported` 和平台侧替代方案。
+
+## 常见错误
+
+| 错误 | 纠正 |
+|---|---|
+| 在成片后才想起来做合规检查 | 必须在付费出图/出视频前跑 `--init` 并补齐策略，gate 会在生产入口前置阻断 |
+| 把 internal_only 当作完全免检 | `internal_only` 只免检平台审核和出海本地化；角色/声音授权、AI 标识、水印检查照常 BLOCK |
+| 声音克隆只声明未提供证据 | 必须提供 `evidence` 字段说明授权来源，否则 gate 阻断 |
+| 随意更改 policy_profile 为不带日期的泛称 | `policy_profile` 必须带检查日期（如 `youtube_ai_disclosure_2026-06-08`），防平台规则过期 |
+| 跨项目直接复制 compliance_manifest.json | 每个项目的源文本、素材和授权情况不同，必须针对本项目单独 `--init` 并确认 |

@@ -97,7 +97,7 @@
         ├── _voicecache/                  配音缓存
         ├── _work/                        compose 中间件（每次重建）
         ├── 成片_第N集_<mode>.mp4         ← n2d-compose 最终成片
-        └── 成片_第N集_<mode>_水印.mp4    ← （可选）公共 watermark skill 打 AI合规/品牌水印后产物
+        └── 成片_第N集_<mode>_水印.mp4    ← （可选）公共 shared-watermark skill 打 AI合规/品牌水印后产物
 ```
 
 ### prompt / 产物分离铁律（n2d-image / n2d-video 通用）

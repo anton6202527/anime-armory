@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 // Copy the REAL skills/ + entry docs from the repo into ./assets so they ship
 // INSIDE the .vsix — making the extension self-contained (install on any VS Code,
-// no anime-arsenal repo needed). Run automatically on `vsce package` via
+// no anime-armory source checkout needed). Run automatically on `vsce package` via
 // the `vscode:prepublish` hook; run manually with `npm run sync-assets`.
 //
-// Works/创作区 are NOT bundled — they're read live from the open workspace at
-// runtime so users create their own works by default.
+// Works/创作区 live next to the extension source, not under assets/. The packaged
+// default keeps an independent work root: 写小说 empty, 制漫剧 source-novel only.
 const fs = require('fs');
 const path = require('path');
 
@@ -18,12 +18,15 @@ const filter = (src) => {
   if (SKIP_NAMES.has(b)) return false;
   if (b.endsWith('.pyc') || b.endsWith('.vsix')) return false;
   if (fs.lstatSync(src).isSymbolicLink()) return false; // never bundle dangling links
+  // /tov: only bundle the novel + n2d lines (+ shared deps). Drop 写歌/制MV:
+  // skip the song-*/mv-* skill dirs at the skills/ root.
+  if (path.dirname(src) === path.join(repo, 'skills') && /^(song|mv)(-|$)/.test(b)) return false;
   return true;
 };
 
 function main() {
   if (!fs.existsSync(path.join(repo, 'skills'))) {
-    console.error('[sync-assets] 找不到 ../skills —— 必须在 anime-arsenal 仓库内运行');
+    console.error('[sync-assets] 找不到 ../skills —— 必须在 anime-armory 仓库内运行');
     process.exit(1);
   }
   fs.rmSync(assets, { recursive: true, force: true });

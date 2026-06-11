@@ -69,3 +69,25 @@ def test_ensure_col_updates_fullwidth_and_chinese_episode_rows(tmp_path):
     assert all(len(row.split("|")[1:-1]) == 6 for row in episode_rows)
     assert (root / "_进度.lock").exists()
     assert not list(root.glob("._进度.md.tmp.*"))
+
+
+def test_audit_placeholders_can_downgrade_old_fake_done(tmp_path):
+    root = tmp_path / "demo"
+    root.mkdir()
+    progress = PROG.replace("| 第1集 | 100 | ✅ | ✅ | ✅ | ✅ | ⬜ |", "| 第1集 | 100 | ✅ | ✅ | ✅ | ✅ | ✅ |")
+    (root / "_进度.md").write_text(progress, encoding="utf-8")
+    voice_dir = root / "合成" / "第1集" / "配音"
+    voice_dir.mkdir(parents=True)
+    (voice_dir / "时长清单.json").write_text(json.dumps([{"idx": 0, "占位": True}], ensure_ascii=False), encoding="utf-8")
+    script = os.path.join(os.path.dirname(__file__), "progress.py")
+
+    result = subprocess.run(
+        [sys.executable, script, "audit-placeholders", str(root), "--fix"],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=True,
+    )
+
+    assert "旧占位配音伪完成" in result.stdout
+    assert "⏳rough" in (root / "_进度.md").read_text(encoding="utf-8")

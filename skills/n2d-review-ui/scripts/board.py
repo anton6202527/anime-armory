@@ -234,6 +234,7 @@ svg.edges{{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}}
 .chip .dot{{width:8px;height:8px;border-radius:50%;background:var(--grey)}}
 .chip.done{{border-color:#9bd8b9;background:#ecfdf3}}.chip.done .dot{{background:var(--green)}}
 .chip.partial{{border-color:#f4d39a;background:#fff8e8}}.chip.partial .dot{{background:var(--amber)}}
+.chip.rough{{border-color:#f4d39a;background:#fff8e8}}.chip.rough .dot{{background:var(--amber)}}
 .chip.na{{opacity:.5}}.chip.na .dot{{background:#cbd2dc}}
 .chip.todo{{}}
 .chip b{{font-weight:600;text-align:center;line-height:1.1;max-width:88px;overflow:hidden}}

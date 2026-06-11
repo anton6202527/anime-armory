@@ -3,8 +3,9 @@
 # 用法:
 #   python3 progress.py <作品根>                    # 全局：最小未完成集 + 各阶段卡集数
 #   python3 progress.py <作品根> 第N集              # 查指定集所处阶段 + 推荐命令
-#   python3 progress.py set <作品根> 第N集 <列名> <值>   # 回写某列(✅ / ⬜ / 12/19)，各 skill 收尾调用
+#   python3 progress.py set <作品根> 第N集 <列名> <值>   # 回写某列(✅ / ⬜ / ⏳rough / 12/19)，各 skill 收尾调用
 #   python3 progress.py ensure-col <作品根> <列名> [默认值] # 旧项目迁移：缺列则追加到「成片」前
+#   python3 progress.py audit-placeholders <作品根> [--fix] # 扫/修旧项目「配音=✅ 但清单仍占位」
 import contextlib, sys, os, re, time
 
 try:
@@ -16,7 +17,7 @@ COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'common')
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 from n2d_contract import write_episode_manifest
-from n2d_route import STAGES, cell_state, format_route, is_episode_row, parse_progress, progress_path, stage_of, summarize
+from n2d_route import STAGES, cell_state, format_route, is_episode_row, parse_progress, progress_path, stage_of, summarize, voice_is_placeholder
 
 def prog_path(root):
     return progress_path(root)
@@ -110,7 +111,11 @@ def do_set(root, ep, col, val):
         if not hit: print(f"{ep} 不在进度表"); sys.exit(1)
         atomic_write_text(p, '\n'.join(out))
     try:
-        write_episode_manifest(root, ep, extra={"last_progress_column": col, "last_progress_value": val})
+        write_episode_manifest(
+            root,
+            ep,
+            extra={"last_progress_column": col, "last_progress_value": val, "last_progress_state": cell_state(val)},
+        )
     except Exception as e:
         print(f"⚠️ manifest 快照写入失败：{e}")
     print(f"✅ 回写 {ep} 「{col}」= {val}")
@@ -159,6 +164,24 @@ def do_ensure_col(root, col, default='⬜'):
         atomic_write_text(p, '\n'.join(out))
     print(f"✅ 已追加列「{col}」（默认 {default}）")
 
+def do_audit_placeholders(root, fix=False):
+    header, rows = parse(root)
+    if "配音" not in header:
+        print("未找到「配音」列"); return
+    issues = []
+    for row in rows:
+        ep = row.get("_ep") or row.get("集") or ""
+        if row.get("配音") == "✅" and voice_is_placeholder(root, ep) is True:
+            issues.append(ep)
+    if not issues:
+        print("✅ 未发现旧占位配音伪完成（配音=✅ 且 manifest 占位）"); return
+    print("⚠️ 发现旧占位配音伪完成：" + "、".join(issues))
+    if not fix:
+        print("提示：加 --fix 可把这些集的「配音」降级为 ⏳rough。")
+        return
+    for ep in issues:
+        do_set(root, ep, "配音", "⏳rough")
+
 def main():
     if len(sys.argv) >= 2 and sys.argv[1] == 'set':
         if len(sys.argv) != 6:
@@ -168,6 +191,10 @@ def main():
         if len(sys.argv) not in (4, 5):
             print("用法: progress.py ensure-col <作品根> <列名> [默认值]"); sys.exit(1)
         do_ensure_col(sys.argv[2], sys.argv[3], sys.argv[4] if len(sys.argv) == 5 else '⬜'); return
+    if len(sys.argv) >= 2 and sys.argv[1] == 'audit-placeholders':
+        if len(sys.argv) not in (3, 4) or (len(sys.argv) == 4 and sys.argv[3] != '--fix'):
+            print("用法: progress.py audit-placeholders <作品根> [--fix]"); sys.exit(1)
+        do_audit_placeholders(sys.argv[2], fix=len(sys.argv) == 4); return
     root = sys.argv[1].rstrip('/'); only = sys.argv[2] if len(sys.argv) > 2 else None
     header, rows = parse(root)
     if only:

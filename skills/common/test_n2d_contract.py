@@ -14,7 +14,12 @@ from n2d_contract import (  # noqa: E402
     annotate_finding,
     episode_manifest_path,
     routing_stages,
+    consistency_dim_key,
+    consistency_dim_spec,
+    consistency_dimensions,
+    stage_for_key,
     stage_for_progress_column,
+    stage_requires_for_mode,
     write_episode_manifest,
 )
 
@@ -55,6 +60,23 @@ def test_progress_column_maps_to_owner_and_stage():
     assert spec["owner"] == "n2d-video"
 
 
+def test_stage_requires_for_mode_drops_voice_in_native_av():
+    spec = stage_for_key("image_prompt")
+    assert spec is not None
+    assert "配音" in spec["requires"]
+    assert "配音" not in stage_requires_for_mode(spec, "原生音画")
+    assert "配音" in stage_requires_for_mode(spec, "配音先行")
+
+
+def test_consistency_dimensions_are_single_source():
+    dims = consistency_dimensions()
+    assert dims["character_consistency"]["return_to_stage"] == "image"
+    assert dims["contract_inheritance"]["return_to_stage"] == "video_prompt"
+    assert consistency_dim_key("脸(G1)") == "character_consistency"
+    assert consistency_dim_key("视觉契约继承") == "contract_inheritance"
+    assert consistency_dim_spec("状态百科(P1)")["scope"]
+
+
 def test_gate_finding_annotation_adds_recovery_scope():
     finding = {"sev": "block", "dim": "prompt", "loc": "x", "msg": "bad"}
     out = annotate_finding(finding, "video", ep="第3集")
@@ -86,10 +108,19 @@ def test_cross_cutting_registry():
     skills = {x["skill"] for x in cc}
     assert {"n2d-compliance", "n2d-identity", "n2d-lora", "n2d-asset-market",
             "n2d-dashboard", "n2d-score", "n2d-review-ui", "n2d-feedback"} <= skills
+    assert "n2d-batch" not in skills                    # 无就绪标志的横切工具不进 readiness 行
     comp = next(x for x in cc if x["skill"] == "n2d-compliance")
     assert comp["required_before"]                      # 合规是付费阶段硬前置
     am = next(x for x in cc if x["skill"] == "n2d-asset-market")
     assert am["artifact"] is None                       # 仓库级，无 per-work 标志
+
+
+def test_cross_cutting_tools_are_separate_from_readiness():
+    import n2d_contract as c
+    tools = c.cross_cutting_tools()
+    skills = {x["skill"] for x in tools}
+    assert {"n2d-model-router", "n2d-batch", "n2d-progress", "n2d-review"} <= skills
+    assert c.CROSS_CUTTING is c.CROSS_CUTTING_READINESS  # legacy alias means readiness-tracked only
 
 
 # ── ③ Motion Control / LoRA ready 判定单一真值源 ──────────────────────────
@@ -125,6 +156,7 @@ def test_product_kinds_registered_with_boundary():
     assert "visual_state_ledger" in idr["boundary"]     # 反向也点明
     assert c.product_kind(c.MOTION_CONTROL_MANIFEST_KIND)["owner"].startswith("n2d-model-router")
     assert c.product_kind("nope") is None
+    assert c.PRODUCT_KINDS is c.BOUNDARY_PRODUCT_KINDS   # legacy alias; new name says this is boundary metadata
 
 
 def test_json_kind_constants_cover_cross_cutting_outputs():
@@ -136,6 +168,8 @@ def test_json_kind_constants_cover_cross_cutting_outputs():
     assert c.REVIEW_UI_KIND == "n2d_review_ui"
     assert c.EPISODE_REVIEW_SCORE_KIND == "n2d_episode_review_score"
     assert c.SCORE_VISUAL_CHECKS_KIND == "n2d_score_visual_checks"
+    assert c.SKILL_UPDATE_SNAPSHOT_KIND == "n2d_skill_update_snapshot"
+    assert c.SKILL_UPDATE_PLAN_KIND == "n2d_skill_update_plan"
 
 
 # ── 共享路径 / 目录单一真值源 ──────────────────────────────────────────────
@@ -143,8 +177,8 @@ def test_production_dir_and_registry_path():
     import n2d_contract as c
     assert c.production_dir("/w/") == "/w/生产数据"
     assert c.identity_registry_path("/w") == "/w/出图/共享/identity_registry.json"
-    # registry 路径取自 PRODUCT_KINDS 注册的 path —— move 时只改一处
-    assert c.PRODUCT_KINDS[c.IDENTITY_REGISTRY_KIND]["path"] in c.identity_registry_path("/w")
+    # registry 路径取自 BOUNDARY_PRODUCT_KINDS 注册的 path —— move 时只改一处
+    assert c.BOUNDARY_PRODUCT_KINDS[c.IDENTITY_REGISTRY_KIND]["path"] in c.identity_registry_path("/w")
 
 
 # ── identity 共享字段 / 后端能力表 ─────────────────────────────────────────
@@ -291,3 +325,74 @@ def test_voicemap_contract():
 
     assert voicemap_path("/tmp/剧").endswith("设定库/voicemap.json")
     assert VOICE_KEY_FIELD == "voice_key"
+
+
+# ── T6: finding schema 三端归一 ──────────────────────────────────────────────
+import n2d_contract as _c6
+
+
+def test_resolve_dim_key_from_key_label_keyword():
+    assert _c6.resolve_dim_key("character_consistency") == "character_consistency"   # 已是 key
+    assert _c6.resolve_dim_key("角色一致性") == "character_consistency"               # 中文 label
+    assert _c6.resolve_dim_key("这镜脸崩了") == "character_consistency"               # 关键词「脸」
+    assert _c6.resolve_dim_key("声纹漂移") == "voice_consistency"                     # 音色/声纹也是一致性维度
+    assert _c6.resolve_dim_key("毫不相关的东西") == ""                                # 解析不出
+
+
+def test_normalize_finding_absorbs_three_emit_styles():
+    # review 侧
+    a = _c6.normalize_finding({"severity": "block", "dimension": "角色一致性", "message": "崩脸",
+                               "affected_shots": ["Clip_03"]})
+    # review-ui 侧（sev/dim/msg）
+    b = _c6.normalize_finding({"sev": "block", "dim": "角色一致性", "msg": "崩脸", "affected_shots": ["Clip_03"]})
+    # score 侧（dimensions 复数 + verdict）
+    c = _c6.normalize_finding({"verdict": "block", "dimensions": ["character_consistency"], "msg": "崩脸"})
+    for r in (a, b, c):
+        assert r["severity"] == "block"
+        assert r["dim_key"] == "character_consistency"
+        assert r["return_to_stage"] == "image"        # 未给则按 dim_key 从契约回退
+    assert a["message"] == b["message"] == "崩脸"
+    assert a["affected_shots"] == ["Clip_03"]
+
+
+def test_normalize_finding_keeps_explicit_return_stage():
+    r = _c6.normalize_finding({"sev": "warn", "dim": "字幕正确性", "return_to_stage": "compose"})
+    assert r["return_to_stage"] == "compose"           # 显式给的不被覆盖
+    assert r["dim_key"] == "subtitle_correctness"
+
+
+def test_make_consistency_finding_factory():
+    f = _c6.make_consistency_finding("block", "场景一致性", "场景漂移", affected_shots=["Clip_05"])
+    assert f["severity"] == "block" and f["dim_key"] == "scene_consistency"
+    assert f["return_to_stage"] == "image" and f["affected_shots"] == ["Clip_05"]
+
+
+def test_finding_dim_key_falls_back():
+    assert _c6.finding_dim_key({"dimension": "character_consistency"}) == "character_consistency"
+    assert _c6.finding_dim_key({"dimension": "自定义维度"}) == "自定义维度"   # 解析不出→原文
+    assert _c6.finding_dim_key({}) == "一致性"                              # 全空→兜底
+
+
+def test_finding_fingerprint_can_scope_to_shot():
+    coarse = _c6.finding_fingerprint("第1集", "image", "character_consistency")
+    scoped = _c6.finding_fingerprint("第1集", "image", "character_consistency", "Clip_03")
+    assert coarse != scoped
+    assert _c6.finding_fingerprints(
+        "第1集", "image", "character_consistency", {"affected_shots": ["Clip_03", "Clip_05"]}
+    ) == [
+        _c6.finding_fingerprint("第1集", "image", "character_consistency", "Clip_03"),
+        _c6.finding_fingerprint("第1集", "image", "character_consistency", "Clip_05"),
+    ]
+
+
+# ── T11: 镜头类型判定关键词单一真值源 ────────────────────────────────────────
+def test_shot_type_keywords_single_source():
+    keys = [st for st, _ in _c6.SHOT_TYPE_KEYWORDS]
+    assert "fight_exchange" in keys and "general_motion" not in keys  # general 是兜底，不在表里
+    # 专项模板子集 ⊆ 全表，且排除纯近景说话/空镜（它们不需要专项模板）
+    special = dict(_c6.special_template_keywords())
+    assert set(special).issubset(set(keys))
+    assert "dialogue_closeup" not in special and "empty_establishing" not in special
+    assert "fight_exchange" in special and "multi_character_same_frame" in special
+    # 派生保序且关键词与全表一致
+    assert special["fight_exchange"] == dict(_c6.SHOT_TYPE_KEYWORDS)["fight_exchange"]

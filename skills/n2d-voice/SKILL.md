@@ -28,7 +28,7 @@ description: Stage 2 of novel2drama (前移到出图之前) — turn a 作品 ep
 - **后端可插拔**：检测 env 决定后端，优先级 CosyVoice/GPT-SoVITS(本地克隆·质量优先) > MiniMax/火山(云·省事) > macOS say(占位)。缺凭证回退 say 并告警。
 - **一角一色（跨集持久绑定）**：角色→音色映射优先读 `<作品根>/设定库/voicemap.json`（`{"角色子串":{"key","mm","volc","speed","pitch","emo"}}`），缺文件才回退内置(demo)映射，env 仍可覆盖。**新剧务必建 voicemap.json 把每个角色绑定音色**——否则新角色全部掉进默认嗓互相撞，且跨集靠每次手动 export env 极易漂。manifest 每句记 **`voice_key`**（契约标准字段 `n2d_contract.VOICE_KEY_FIELD`，=该句实际应用的 voicemap 音色键；macOS say 占位后端没有走 voicemap 选音，记 `say:<声音名>#placeholder` 留痕并显式声明非注册音色）+ `音色键`(legacy 中文字段，保留兼容)/`voice_id`/`情绪_已应用`。**`voice_key` 是一角一色跨集对账的数据源**：`n2d-identity` 的 `voice_consistency.py` 逐集读它对账 voicemap、产出音色跨集漂移报表（老清单缺该字段按 `insufficient_data` 跳过，不报假漂移）；`n2d-review` 机检同源。条目构造在 `voice_manifest.py`（独立模块·带单测）。
 - **生产数据记账铁律（P0）**：每次配音生成后必须调用 `n2d-dashboard` 记录 `stage=voice` 事件：后端、耗时、成本、输出音轨、句数、失败/占位句数。若某句降级占位或重跑，必须在 `meta` 或 `redraw_reason` 里写明，方便后续统计“配音导致的重定时/返工”。
-- **统一电平**：每句 loudnorm 到 -16 LUFS。
+- **统一电平**：每句 loudnorm -16 LUFS。
 - **时长清单是产线桥梁**：每句 ffprobe 量时长写入 `时长清单.json`，这是配音驱动镜头的关键产物。同时写 `时长清单.meta.json`（记录配音那一刻 `voiceover.txt` 的台词指纹 + 后端 + 时间）——`validate_timings.py` 用它抓"配音之后又改了 `voiceover.txt`（改词/插句/删句）导致时长清单/字幕/镜头时长全部过期"这条失配链（`delete_shot` 的强制对账只覆盖删镜）。改台词后必须重跑 `/n2d-voice` 刷新指纹与时长，再回跑 n2d-script 阶段2。
 
 ## 表演指导（情绪/语速/停顿/钩子 → 念白）
@@ -63,6 +63,20 @@ description: Stage 2 of novel2drama (前移到出图之前) — turn a 作品 ep
      --cost <成本数值> --unit <USD|CNY|credits> \
      --meta lines=<句数> --meta placeholder_lines=<占位句数>
    ```
+
+## 常见错误
+
+| 错误 | 纠正 |
+|---|---|
+| 跳过合规检查，直接克隆音色 | 声音克隆合规是硬闸门，必须先在 `合规/compliance_manifest.json` 登记授权状态与证据 |
+| 出图前仍使用 macOS `say` 占位且不告警 | 占位时长不准，出图前必须换真实配音重定时，否则视频返工成本极高 |
+| 改了 `voiceover.txt` 却没重跑配音 | 时长清单/字幕/镜头时长已过期，必须重跑 `n2d-voice` 刷新指纹，再回跑 `n2d-script` 阶段2 |
+| 未建立 `voicemap.json`，导致音色随机或漂移 | 跨集一致性依赖 `voicemap.json` 角色-音色绑定，新剧务必先建表 |
+| 忽略 `render_voice.py` 的情绪/语速标注 | 念白是表演，必须按标注驱动 TTS 情绪和节奏 |
+| 忽略单句合成失败，导致整集中断 | 单句失败应降级为占位，保证整集产出，事后补全 |
+| 混合使用 `配音先行` 和 `先出视频后配音` 模式 | 严禁混用。模式在 `_设置.md` 定死，逻辑按模式分支，不可凭空跳跃 |
+| `原生音画` 模式下仍给所有镜头配音 | 浪费额度。说话镜由视频后端出声，配音阶段只需处理旁白或非说话镜 |
+| 漏记 `voice_key` 实际应用音色键 | 导致 `n2d-identity` 无法进行跨集音色一致性对账 |
 
 ## 声音克隆
 见 references/cloning.md（MiniMax 复刻 / GPT-SoVITS / CosyVoice 本地克隆 + demucs 人声分离清洗）。

@@ -1,7 +1,7 @@
-// Anime Arsenal — VS Code factory browser.
+// anime-armory — VS Code factory browser.
 // SELF-CONTAINED: public usage docs and optional skills are BUNDLED inside the
 // extension (./assets, synced from the repo by sync-assets.js). 作品区 defaults to
-// the extension's own bundled sample works, independent from the parent repo.
+// the extension's own bundled work root, independent from the parent repo.
 const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
@@ -73,8 +73,6 @@ function shortDesc(d) {
 const FAMILIES = [
   { id: 'novel', label: '✍️ 写小说 novel-*', test: (n) => n.startsWith('novel-') },
   { id: 'n2d', label: '🎬 制漫剧 n2d-*', test: (n) => n.startsWith('n2d-') || n === 'novel2drama' },
-  { id: 'song', label: '🎵 写歌 song-*', test: (n) => n.startsWith('song') },
-  { id: 'mv', label: '🎞️ 制MV mv-*', test: (n) => n.startsWith('mv') },
   { id: 'shared', label: '🔧 共享能力', test: () => true },
 ];
 function scanSkills(skillsDir) {
@@ -92,14 +90,13 @@ function scanSkills(skillsDir) {
 const WORK_LINES = [
   { label: '✍️ 写小说', dir: '写小说' },
   { label: '🎬 制漫剧', dir: '制漫剧' },
-  { label: '🎵 写歌', dir: '写歌' },
-  { label: '🎞️ 制MV', dir: '制MV' },
 ];
 const DOCS = [
   { rel: 'README.md', desc: '使用说明 · 工作流与批量生产' },
 ];
+const FIRST_OPEN_TERMINAL_MESSAGE = '进入ai，输入‘/制漫剧/本宫才是这皇宫最大的妖/小说/本宫才是这皇宫最大的妖.txt 拆脚本’，开始你的漫剧制作吧！';
 
-// 作品区 source: prefer the extension's own sample works, then an explicitly
+// 作品区 source: prefer the extension's own bundled work root, then an explicitly
 // configured external root, then the open workspace.
 function hasProjectMarkers(root) {
   return root && (exists(path.join(root, 'skills', 'README.md')) ||
@@ -220,7 +217,7 @@ class FactoryProvider {
   }
 
   _lines() {
-    // 作品区 = the user's live workspace. WRITABLE: 新建/重命名/删除可用。
+    // 作品区 = bundled work root by default, or the selected external root. WRITABLE: 新建/重命名/删除可用。
     const root = resolveWorkRoot(this.extensionRoot);
     if (!root) {
       const t = new vscode.TreeItem('打开一个工作区后在这里创作自己的作品', vscode.TreeItemCollapsibleState.None);
@@ -276,9 +273,23 @@ function nodeUri(node) {
 function terminalCwd(extensionRoot) {
   return resolveWorkRoot(extensionRoot) || extensionRoot || undefined;
 }
-function openArsenalTerminal(extensionRoot) {
-  const term = vscode.window.createTerminal({ name: 'Anime Arsenal', cwd: terminalCwd(extensionRoot) });
+function openArsenalTerminal(extensionRoot, initialMessage = '', reuseExisting = false) {
+  const sendInitialMessage = (term) => {
+    if (initialMessage) term.sendText(`# ${initialMessage}`, true);
+  };
+  if (reuseExisting) {
+    const existing = vscode.window.terminals.find((t) => t.name === 'anime-armory');
+    if (existing) {
+      existing.show();
+      sendInitialMessage(existing);
+      return existing;
+    }
+  }
+  const term = vscode.window.createTerminal({ name: 'anime-armory', cwd: terminalCwd(extensionRoot) });
   term.show();
+  // Show the onboarding line once without executing anything; using a shell
+  // comment avoids the command-echo + printed-output double line from echo/printf.
+  sendInitialMessage(term);
   return term;
 }
 
@@ -292,9 +303,8 @@ function activate(context) {
   const maybeOpenTerminal = () => {
     if (termOpened || !treeView.visible) return;
     termOpened = true; // once per window session
-    if (vscode.workspace.getConfiguration('animeArsenal').get('openTerminalOnReveal', true)) {
-      openArsenalTerminal(context.extensionPath);
-    }
+    if (!vscode.workspace.getConfiguration('animeArsenal').get('openTerminalOnReveal', true)) return;
+    openArsenalTerminal(context.extensionPath, FIRST_OPEN_TERMINAL_MESSAGE, true);
   };
   treeView.onDidChangeVisibility(() => maybeOpenTerminal());
   maybeOpenTerminal(); // in case the view is already visible at activation
@@ -306,7 +316,7 @@ function activate(context) {
     vscode.commands.registerCommand('animeArsenal.selectRepo', async () => {
       const pick = await vscode.window.showOpenDialog({
         canSelectFolders: true, canSelectFiles: false, canSelectMany: false,
-        openLabel: '选含 写小说/制漫剧/写歌/制MV 的项目根（用于作品区）',
+        openLabel: '选含 写小说/制漫剧 的项目根（用于作品区）',
       });
       if (!pick || !pick[0]) return;
       const dir = findProjectRoot(pick[0].fsPath) || pick[0].fsPath;
@@ -335,7 +345,7 @@ function activate(context) {
       if (!uri) return;
       // open at the folder (for a file, use its parent)
       const p = node.dirPath || (node.fsPath && path.dirname(node.fsPath)) || uri.fsPath;
-      vscode.window.createTerminal({ name: 'Anime Arsenal', cwd: p }).show();
+      vscode.window.createTerminal({ name: 'anime-armory', cwd: p }).show();
     }),
     vscode.commands.registerCommand('animeArsenal.copyPath', (node) => {
       const uri = nodeUri(node);
@@ -377,6 +387,58 @@ function activate(context) {
           e.affectsConfiguration('animeArsenal.useExternalWorks') ||
           e.affectsConfiguration('animeArsenal.showSkills')) {
         provider.refresh();
+      }
+    })
+  );
+
+  // Auto-refresh the tree when files appear/disappear/change on disk. Scripts,
+  // AI agents, and terminal commands write output OUTSIDE the extension's own
+  // CRUD path, so without this the generated files never show up until a manual
+  // refresh.
+  let refreshTimer;
+  const debouncedRefresh = () => {
+    clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(() => provider.refresh(), 300);
+  };
+
+  // (1) Watch the open workspace — covers a work root that IS the opened folder.
+  // The window-focus refresh is a cheap fallback for everything else.
+  const wsWatcher = vscode.workspace.createFileSystemWatcher('**/*');
+  context.subscriptions.push(
+    wsWatcher,
+    wsWatcher.onDidCreate(debouncedRefresh),
+    wsWatcher.onDidDelete(debouncedRefresh),
+    wsWatcher.onDidChange(debouncedRefresh),
+    vscode.window.onDidChangeWindowState((s) => { if (s.focused) debouncedRefresh(); })
+  );
+
+  // (2) Also watch the RESOLVED work root directly. The default bundled root and
+  // any external 作品区 chosen via 选择仓库目录 live OUTSIDE the workspace, so the
+  // workspace watcher above never sees scripts/agents writing there — produced
+  // files would only surface on manual refresh / window re-focus. A RelativePattern
+  // watcher recursively covers any folder, in- or out-of-workspace. Recreated
+  // whenever the resolved root changes (config / workspace folders).
+  let rootWatcher, watchedRoot;
+  const syncRootWatcher = () => {
+    const root = resolveWorkRoot(context.extensionPath);
+    if (root === watchedRoot) return;          // unchanged → keep existing watcher
+    watchedRoot = root;
+    if (rootWatcher) { rootWatcher.dispose(); rootWatcher = undefined; }
+    if (!root) return;
+    rootWatcher = vscode.workspace.createFileSystemWatcher(
+      new vscode.RelativePattern(vscode.Uri.file(root), '**/*'));
+    rootWatcher.onDidCreate(debouncedRefresh);
+    rootWatcher.onDidDelete(debouncedRefresh);
+    rootWatcher.onDidChange(debouncedRefresh);
+    context.subscriptions.push(rootWatcher);
+  };
+  syncRootWatcher();
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeWorkspaceFolders(() => syncRootWatcher()),
+    vscode.workspace.onDidChangeConfiguration((e) => {
+      if (e.affectsConfiguration('animeArsenal.repoRoot') ||
+          e.affectsConfiguration('animeArsenal.useExternalWorks')) {
+        syncRootWatcher();
       }
     })
   );

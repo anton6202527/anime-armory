@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import contextlib
 import datetime as dt
+import glob
 import json
 import os
 import socket
@@ -34,7 +35,12 @@ if COMMON not in sys.path:
 from n2d_contract import (  # noqa: E402  生产数据目录 / kind 单一真值源
     ASSET_RERUN_PLAN_KIND,
     BATCH_QUEUE_KIND,
+    CONSISTENCY_FINDINGS_KIND,
     PRODUCTION_DIR,
+    finding_dim_key,
+    finding_fingerprint,
+    finding_fingerprints,
+    normalize_finding,
     production_dir,
     stage_for_key,
     stage_for_progress_column,
@@ -234,16 +240,23 @@ def task_from_spec(
     rerun_scope: Optional[str] = None,
     affected_artifacts: Optional[List[str]] = None,
     affected_shots: Optional[List[str]] = None,
+    fingerprints: Optional[List[str]] = None,
+    coarse_fingerprints: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
     stage_key = str(spec["key"])
     estimate = dict(cost_estimates.get(stage_key, {"amount": 0.0, "unit": "work_units"}))
+    command = str(spec.get("command", "")).format(root=root, ep=ep)
+    # 最小范围返工：受影响镜头注入命令，让执行端只重跑这些镜头而非整集（不再只是元数据）。
+    shots = [s for s in (affected_shots or []) if str(s).strip()]
+    if shots and "--shots" not in command:
+        command = f"{command} --shots {','.join(shots)}"
     return {
         "id": task_id(ep, stage_key, reason),
         "episode": ep,
         "stage_key": stage_key,
         "stage_label": spec.get("label", ""),
         "owner": spec.get("owner", ""),
-        "command": str(spec.get("command", "")).format(root=root, ep=ep),
+        "command": command,
         "gate_stage": spec.get("gate_stage"),
         "status": "queued",
         "attempts": 0,
@@ -254,6 +267,10 @@ def task_from_spec(
         "rerun_scope": rerun_scope or "",
         "affected_artifacts": affected_artifacts or [],
         "affected_shots": affected_shots or [],
+        "finding_fingerprints": sorted(set(fingerprints or [])),  # 同一问题指纹：防复审堆叠 + 修复后复检判 resolved
+        # 粗粒度指纹 (集×阶段×维度，丢镜头定位)：复检 --coarse 回退用——精确指纹因定位串大改对不上时，
+        # 只要本镜头所属 (集,阶段,维度) 桶仍有 findings 就不误判 resolved（宁可多复核，不漏放）。
+        "coarse_fingerprints": sorted(set(coarse_fingerprints or [])),
         "created_at": now_iso(),
         "updated_at": now_iso(),
         "history": [],
@@ -375,6 +392,297 @@ def tasks_from_asset_impact(
             )
         )
     return dedupe_task_ids(tasks)
+
+
+def _string_list(value: Any) -> List[str]:
+    if not isinstance(value, list):
+        return []
+    return [str(item) for item in value if item not in (None, "")]
+
+
+def _unique(values: Iterable[str]) -> List[str]:
+    out: List[str] = []
+    seen: Set[str] = set()
+    for value in values:
+        item = str(value).strip()
+        if not item or item in seen:
+            continue
+        seen.add(item)
+        out.append(item)
+    return out
+
+
+def _episode_from_item(item: Dict[str, Any], default_episode: str) -> Optional[Tuple[str, str]]:
+    ep_raw = str(item.get("episode") or default_episode or "").strip()
+    if not ep_raw:
+        return None
+    return ep_raw, normalize_episode(ep_raw)
+
+
+def _episode_selected(ep_raw: str, ep: str, episodes: Optional[Set[str]]) -> bool:
+    return not episodes or ep_raw in episodes or ep in episodes
+
+
+def _fallback_shots_from_finding(finding: Dict[str, Any]) -> List[str]:
+    shots = _string_list(finding.get("affected_shots"))
+    if shots:
+        return shots
+    shot = str(finding.get("shot") or "").strip()
+    if shot:
+        if shot.isdigit():
+            return [f"Clip_{int(shot):02d}"]
+        return [shot]
+    loc = str(finding.get("loc") or "").strip()
+    if loc.startswith(("Clip_", "Clip ", "镜头")):
+        return [loc]
+    return []
+
+
+def tasks_from_consistency_findings(
+    root: str,
+    report: Dict[str, Any],
+    *,
+    cost_estimates: Dict[str, Dict[str, Any]],
+    max_retries: int,
+    episodes: Optional[Set[str]] = None,
+) -> List[Dict[str, Any]]:
+    """读 n2d-review consistency_findings JSON → 最小范围返工队列任务。
+
+    新报告优先消费 `auto_return_tasks`，这是 review 侧已经聚合好的回退建议；
+    老报告没有该字段时，按 (episode, return_to_stage, dim) 从 block/warn findings
+    做保守聚合，保证审查结果仍能进入 batch 闭环。
+    """
+    if not isinstance(report, dict) or report.get("kind") != CONSISTENCY_FINDINGS_KIND:
+        raise ValueError(f"not a consistency findings report (expect kind={CONSISTENCY_FINDINGS_KIND})")
+    default_episode = str(report.get("episode") or "").strip()
+    tasks: List[Dict[str, Any]] = []
+
+    auto_tasks = [item for item in report.get("auto_return_tasks") or [] if isinstance(item, dict)]
+    if auto_tasks:
+        for item in auto_tasks:
+            ep_pair = _episode_from_item(item, default_episode)
+            if ep_pair is None:
+                continue
+            ep_raw, ep = ep_pair
+            if not _episode_selected(ep_raw, ep, episodes):
+                continue
+            stage = str(item.get("return_to_stage") or item.get("rerun_from") or "image")
+            spec = find_stage(stage)
+            dims = [
+                finding_dim_key({"dimension": d})
+                for d in (_string_list(item.get("dimensions")) or [str(item.get("dim") or item.get("dimension") or "一致性")])
+            ]
+            raw_scope = {
+                "affected_shots": _string_list(item.get("affected_shots")),
+                "affected_artifacts": _string_list(item.get("affected_artifacts")),
+                "loc": item.get("loc") or "",
+            }
+            fps = [fp for d in dims for fp in finding_fingerprints(ep, stage, d, raw_scope)]
+            coarse = [finding_fingerprint(ep, stage, d) for d in dims]
+            tasks.append(
+                task_from_spec(
+                    root,
+                    ep,
+                    spec,
+                    reason="rerun",
+                    priority=len(tasks) + 1,
+                    cost_estimates=cost_estimates,
+                    max_retries=max_retries,
+                    rerun_scope=str(item.get("scope") or item.get("rerun_scope") or ""),
+                    affected_artifacts=_string_list(item.get("affected_artifacts")),
+                    affected_shots=_string_list(item.get("affected_shots")),
+                    fingerprints=fps,
+                    coarse_fingerprints=coarse,
+                )
+            )
+        return dedupe_task_ids(tasks)
+
+    grouped: Dict[Tuple[str, str, str], Dict[str, Any]] = {}
+    for finding in report.get("findings") or []:
+        if not isinstance(finding, dict):
+            continue
+        norm = normalize_finding(finding)  # 归一三端别名：sev/dim/msg → 规范字段，不再散落 or 链
+        if norm["severity"] not in {"block", "warn"}:
+            continue
+        ep_pair = _episode_from_item(finding, default_episode)
+        if ep_pair is None:
+            continue
+        ep_raw, ep = ep_pair
+        if not _episode_selected(ep_raw, ep, episodes):
+            continue
+        stage = norm["return_to_stage"] or "image"
+        dim = finding_dim_key(finding)  # 规范维度键，task 端与 audit 端指纹可对账
+        key = (ep, stage, dim)
+        item = grouped.setdefault(
+            key,
+            {
+                "ep": ep,
+                "stage": stage,
+                "dim": dim,
+                "scope": [],
+                "affected_artifacts": [],
+                "affected_shots": [],
+                "fingerprints": [],
+            },
+        )
+        msg = norm["rerun_scope"] or norm["message"]
+        item["scope"].append(f"{dim} 返修" + (f"：{msg}" if msg else ""))
+        item["affected_artifacts"].extend(norm["affected_artifacts"])
+        shots = norm["affected_shots"] or _fallback_shots_from_finding(finding)
+        item["affected_shots"].extend(shots)
+        scoped = dict(norm)
+        scoped["affected_shots"] = shots
+        item["fingerprints"].extend(finding_fingerprints(ep, stage, dim, scoped))
+
+    for item in grouped.values():
+        artifacts = _unique(item["affected_artifacts"])
+        shots = _unique(item["affected_shots"])
+        scope = "；".join(_unique(item["scope"]))
+        if shots and "定位镜头" not in scope:
+            scope += "；定位镜头：" + "、".join(shots)
+        tasks.append(
+            task_from_spec(
+                root,
+                str(item["ep"]),
+                find_stage(str(item["stage"])),
+                reason="rerun",
+                priority=len(tasks) + 1,
+                cost_estimates=cost_estimates,
+                max_retries=max_retries,
+                rerun_scope=scope,
+                affected_artifacts=artifacts,
+                affected_shots=shots,
+                fingerprints=_unique(item["fingerprints"]) or [finding_fingerprint(item["ep"], item["stage"], item["dim"])],
+                coarse_fingerprints=[finding_fingerprint(item["ep"], item["stage"], item["dim"])],
+            )
+        )
+    return dedupe_task_ids(tasks)
+
+
+def report_active_fingerprints(report: Dict[str, Any], *, coarse: bool = False) -> Set[str]:
+    """一份 consistency_findings 报告 → 当前仍存在的指纹集合。
+
+    复检用：返工跑完后重算这份集合，done 任务的指纹若已不在其中 = 问题消失 → resolved；
+    仍在 = 复发 → reopen。粒度与 tasks_from_consistency_findings 建的指纹一致。
+    coarse=True 时丢镜头定位，只产 (集×阶段×维度) 粗指纹，供 --coarse 回退匹配。
+    """
+    if not isinstance(report, dict):
+        return set()
+    ep_default = str(report.get("episode") or "").strip()
+    out: Set[str] = set()
+    for item in report.get("auto_return_tasks") or []:
+        if not isinstance(item, dict):
+            continue
+        ep_pair = _episode_from_item(item, ep_default)
+        if ep_pair is None:
+            continue
+        stage = str(item.get("return_to_stage") or item.get("rerun_from") or "image")
+        dims = [
+            finding_dim_key({"dimension": d})
+            for d in (_string_list(item.get("dimensions")) or [str(item.get("dim") or item.get("dimension") or "一致性")])
+        ]
+        raw_scope = {
+            "affected_shots": _string_list(item.get("affected_shots")),
+            "affected_artifacts": _string_list(item.get("affected_artifacts")),
+            "loc": item.get("loc") or "",
+        }
+        for d in dims:
+            if coarse:
+                out.add(finding_fingerprint(ep_pair[1], stage, d))
+            else:
+                out.update(finding_fingerprints(ep_pair[1], stage, d, raw_scope))
+    for finding in report.get("findings") or []:
+        if not isinstance(finding, dict):
+            continue
+        norm = normalize_finding(finding)
+        if norm["severity"] not in {"block", "warn"}:
+            continue
+        ep_pair = _episode_from_item(finding, ep_default)
+        if ep_pair is None:
+            continue
+        stage = norm["return_to_stage"] or "image"
+        dim = finding_dim_key(finding)
+        if coarse:
+            out.add(finding_fingerprint(ep_pair[1], stage, dim))
+        else:
+            out.update(finding_fingerprints(ep_pair[1], stage, dim, finding))
+    return out
+
+
+def reconcile_resolved(
+    queue: Dict[str, Any],
+    active_fingerprints: Set[str],
+    *,
+    coarse_active: Optional[Set[str]] = None,
+) -> Dict[str, Any]:
+    """复检回写：用最新审查仍存在的指纹集合，把已 done 的返工任务判 resolved / reopen。
+
+    - done 任务的指纹全部不在 active 集合 → 该问题已修复，标 resolved=true（保留历史，不静默覆盖）；
+    - done 任务仍有指纹在 active 集合 → 修了没真消失，reopen（status→queued、resolved=false、留痕 reopened）。
+    只动 done 任务；queued/running/failed 不碰（避免误改在途/未启动）。返回受影响计数。
+
+    coarse_active 给定时启用粗粒度回退：精确指纹已全部消失、但该任务所属 (集×阶段×维度) 桶在最新
+    findings 里仍有问题时，不判 resolved 而是 reopen（reopened_coarse）。这堵住「定位串大改→精确
+    指纹对不上→已修问题被误判 resolved」的漏放；代价是同桶若有别的镜头未修，已修镜头也会被一起
+    召回复核（宁可多复核、不漏放）。默认 None=关闭，行为与历史完全一致。
+    """
+    resolved = reopened = reopened_coarse = 0
+    for task in queue.get("tasks", []):
+        if str(task.get("status")) != "done":
+            continue
+        fps = set(task.get("finding_fingerprints") or [])
+        if not fps:
+            continue  # 无指纹（老任务/非一致性返工）：不参与复检
+        still = fps & active_fingerprints
+        history = task.setdefault("history", [])
+        coarse_still: Set[str] = set()
+        if not still and coarse_active is not None:
+            coarse_still = set(task.get("coarse_fingerprints") or []) & coarse_active
+        if still:
+            task["status"] = "queued"
+            task["attempts"] = 0
+            task["resolved"] = False
+            history.append({"ts": now_iso(), "action": "recheck:reopened", "fingerprints": sorted(still)})
+            reopened += 1
+        elif coarse_still:
+            task["status"] = "queued"
+            task["attempts"] = 0
+            task["resolved"] = False
+            history.append({"ts": now_iso(), "action": "recheck:reopened_coarse", "fingerprints": sorted(coarse_still)})
+            reopened_coarse += 1
+        else:
+            task["resolved"] = True
+            task["resolved_at"] = now_iso()
+            history.append({"ts": now_iso(), "action": "recheck:resolved"})
+            resolved += 1
+    queue["recheck"] = {
+        "resolved": resolved,
+        "reopened": reopened,
+        "reopened_coarse": reopened_coarse,
+        "at": now_iso(),
+    }
+    return queue
+
+
+def collect_active_fingerprints(
+    root: str, episodes: Optional[Set[str]] = None, *, coarse: bool = False
+) -> Set[str]:
+    """扫 生产数据/ 下最新审查产物（consistency_findings_*.json + review_ui_findings_*.json）→
+    当前仍存在的一致性问题指纹集合。复检的"现状"输入。coarse=True 产 (集×阶段×维度) 粗指纹。"""
+    out: Set[str] = set()
+    pdir = production_dir(root)
+    for pattern in ("consistency_findings_*.json", "review_ui_findings_*.json", "gate_findings_*.json"):
+        for path in glob.glob(os.path.join(pdir, pattern)):
+            try:
+                data = json.load(open(path, encoding="utf-8"))
+            except (OSError, ValueError):
+                continue
+            if not isinstance(data, dict):
+                continue
+            if episodes and str(data.get("episode") or "").strip() not in episodes:
+                continue
+            out |= report_active_fingerprints(data, coarse=coarse)
+    return out
 
 
 def dedupe_task_ids(tasks: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -545,9 +853,36 @@ def merge_queues(existing: Dict[str, Any], planned: Dict[str, Any]) -> Dict[str,
     tasks = list(merged.get("tasks", []))
     index = {str(task.get("id")): i for i, task in enumerate(tasks)}
     existing_ids = set(index)
+    # 指纹索引：同一一致性问题（同指纹）已被某任务跟踪 → 不再堆叠新任务。
+    fp_index: Dict[str, int] = {}
+    for i, t in enumerate(tasks):
+        for fp in t.get("finding_fingerprints") or []:
+            fp_index.setdefault(str(fp), i)
     for incoming in planned.get("tasks", []):
         task = deepcopy(incoming)
         tid = str(task.get("id") or "")
+        inc_fps = [str(fp) for fp in (task.get("finding_fingerprints") or [])]
+        match_i = next((fp_index[fp] for fp in inc_fps if fp in fp_index), None)
+        if match_i is not None:
+            # 同指纹问题已在队列：复发则 reopen 旧任务，未启动则刷新，在途则跳过——绝不堆叠重复任务。
+            old = tasks[match_i]
+            old_status = str(old.get("status") or "")
+            old.setdefault("history", [])
+            old["finding_fingerprints"] = sorted(set(old.get("finding_fingerprints") or []) | set(inc_fps))
+            if old_status in {"done", "failed"}:
+                old["status"] = "queued"
+                old["attempts"] = 0
+                old["resolved"] = False
+                old["rerun_scope"] = task.get("rerun_scope") or old.get("rerun_scope", "")
+                old["affected_shots"] = _unique(list(old.get("affected_shots") or []) + list(task.get("affected_shots") or []))
+                old["history"].append({"ts": now_iso(), "action": "plan:reopen_recurring", "prev_status": old_status})
+            elif old_status in REPLACEABLE_MERGE_STATUSES:
+                old["history"].append({"ts": now_iso(), "action": "plan:refresh_same_fingerprint"})
+            else:  # running/retry：同问题在途，跳过新计划
+                old["history"].append({"ts": now_iso(), "action": "plan:skip_in_flight_duplicate"})
+            for fp in inc_fps:
+                fp_index.setdefault(fp, match_i)
+            continue
         if tid in index:
             old = tasks[index[tid]]
             old_status = str(old.get("status") or "")
@@ -565,9 +900,13 @@ def merge_queues(existing: Dict[str, Any], planned: Dict[str, Any]) -> Dict[str,
                 )
                 existing_ids.add(str(task["id"]))
                 tasks.append(task)
+                for fp in inc_fps:
+                    fp_index.setdefault(fp, len(tasks) - 1)
             continue
         existing_ids.add(tid)
         tasks.append(task)
+        for fp in inc_fps:
+            fp_index.setdefault(fp, len(tasks) - 1)
     merged["tasks"] = tasks
     return merged
 
@@ -856,6 +1195,16 @@ def cmd_plan(ns: argparse.Namespace) -> int:
             max_retries=ns.max_retries,
             episodes=selected,
         )
+    elif ns.from_consistency_findings:
+        with open(ns.from_consistency_findings, encoding="utf-8") as fh:
+            findings_report = json.load(fh)
+        tasks = tasks_from_consistency_findings(
+            root,
+            findings_report,
+            cost_estimates=estimates,
+            max_retries=ns.max_retries,
+            episodes=selected,
+        )
     elif ns.rerun_from:
         if not selected:
             raise SystemExit("--rerun-from requires --episodes")
@@ -932,6 +1281,21 @@ def cmd_status(ns: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_recheck(ns: argparse.Namespace) -> int:
+    root = ns.root.rstrip("/")
+    queue = load_queue(root)
+    episodes = parse_episode_selector(ns.episodes) if ns.episodes else None
+    active = collect_active_fingerprints(root, episodes)
+    coarse_active = collect_active_fingerprints(root, episodes, coarse=True) if getattr(ns, "coarse", False) else None
+    reconcile_resolved(queue, active, coarse_active=coarse_active)
+    info = queue.get("recheck", {})
+    save_queue(root, queue)
+    tail = f" reopened_coarse={info.get('reopened_coarse', 0)}" if coarse_active is not None else ""
+    print(f"recheck: resolved={info.get('resolved', 0)} reopened={info.get('reopened', 0)}{tail}"
+          f"（现存一致性问题指纹 {len(active)} 个）")
+    return 0
+
+
 def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description="n2d batch queue planner")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -947,6 +1311,8 @@ def parser() -> argparse.ArgumentParser:
     plan.add_argument("--rerun-from", help="stage key/alias for targeted rerun")
     plan.add_argument("--from-asset-impact",
                       help="读 n2d-image asset_impact.py --output-batch-tasks 的 JSON（kind=n2d_asset_rerun_plan），直接建受影响重跑任务")
+    plan.add_argument("--from-consistency-findings",
+                      help="读 n2d-review consistency_findings_*.json（kind=n2d_consistency_findings），直接建审查返工任务")
     plan.add_argument("--scope", help="human-readable rerun scope")
     plan.add_argument("--affected-artifact", action="append", default=[])
     plan.add_argument("--affected-shot", action="append", default=[])
@@ -983,6 +1349,14 @@ def parser() -> argparse.ArgumentParser:
     status.add_argument("root")
     status.add_argument("--markdown", action="store_true")
     status.set_defaults(func=cmd_status)
+
+    recheck = sub.add_parser("recheck", help="复检：用最新审查产物的指纹，把已修复的返工任务标 resolved / 复发的 reopen")
+    recheck.add_argument("root")
+    recheck.add_argument("--episodes", help="只复检指定集，如 1-5,8 或 第1集,第2集")
+    recheck.add_argument("--coarse", action="store_true",
+                         help="粗粒度回退：精确指纹对不上但该(集×阶段×维度)桶仍有问题时不判 resolved 而 reopen，"
+                              "堵定位串大改导致的漏放（代价：同桶未修镜头会把已修镜头一起召回复核）")
+    recheck.set_defaults(func=cmd_recheck)
     return ap
 
 

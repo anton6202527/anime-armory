@@ -84,6 +84,45 @@ def calibrate_floor(intra_scores: Sequence[float], fallback: float = 0.50) -> fl
     return min(vals)
 
 
+def floor_calibrated(intra_scores: Sequence[float]) -> bool:
+    """定妆组是否有内部对可自标定地板（≥1 对）。单张/无对 → False：地板退回保守经验值 0.50，
+    风格化漫剧脸跨图余弦常 <0.5 会系统性误报——此时标低精度，让 n2d-score 像 pillow_fallback 那样降权而非硬判。"""
+    return any(s is not None for s in intra_scores)
+
+
+def detect_face_swaps(face_embs: Sequence[Sequence[float]],
+                      expected_char_embs: Dict[str, Sequence[float]]) -> dict:
+    """同框多角色串脸检测：把每张检出的脸归到余弦最高的应在场角色，揪出"张冠李戴"。
+
+    单脸 worst-of 只把【最大那张脸】vs 各角色各比一次取最差，测不出"A 长了 B 的五官"。这里对【所有】脸
+    做分配匹配：每张脸 argmax 余弦归到一个 expected 角色，于是能抓两类同框穿帮——
+      - duplicate_chars：同一角色被 ≥2 张脸认领 = 两个人都被画成同一人（串脸）；
+      - missing_chars：某应在场角色没有任何脸像他 = 该角色画丢/画成了别人。
+    纯数学（余弦），不依赖 insightface，可单测；embedding 抽取在 analyze 里用 insightface 喂进来。
+    """
+    chars = [c for c, e in expected_char_embs.items() if e]
+    assignments = []
+    claimed: Dict[str, int] = {}
+    for i, fe in enumerate(face_embs):
+        if not fe or not chars:
+            continue
+        best_c, best_s = None, -2.0
+        for c in chars:
+            s = cosine(fe, expected_char_embs[c])
+            if s > best_s:
+                best_c, best_s = c, s
+        assignments.append({"face_idx": i, "char": best_c, "score": round(best_s, 4)})
+        claimed[best_c] = claimed.get(best_c, 0) + 1
+    duplicate_chars = sorted(c for c, n in claimed.items() if n >= 2)
+    missing_chars = sorted(c for c in chars if claimed.get(c, 0) == 0)
+    return {
+        "assignments": assignments,
+        "duplicate_chars": duplicate_chars,   # 串脸：多张脸都最像同一角色
+        "missing_chars": missing_chars,       # 该在场角色没有脸像他
+        "swap_suspected": bool(duplicate_chars and missing_chars),  # 一多一少 = 典型 A 画成 B
+    }
+
+
 def band(score: float, floor: float, margin: float = DEFAULT_MARGIN) -> str:
     """落档：'ok'(🟢) / 'warn'(🟡) / 'block'(🔴)。"""
     if score >= floor:
@@ -188,6 +227,20 @@ def _embed(app, png: str) -> Optional[List[float]]:
         return list(map(float, faces[0].normed_embedding))
     except Exception:
         return None
+
+
+def _embed_all(app, png: str) -> List[List[float]]:
+    """检出图中【所有】人脸的 embedding（按脸面积降序）——多人同框串脸检测用。"""
+    try:
+        import cv2  # type: ignore
+        img = cv2.imread(png)
+        if img is None:
+            return []
+        faces = app.get(img) or []
+        faces.sort(key=lambda f: (f.bbox[2] - f.bbox[0]) * (f.bbox[3] - f.bbox[1]), reverse=True)
+        return [list(map(float, f.normed_embedding)) for f in faces]
+    except Exception:
+        return []
 
 
 # ---------- 资产发现 ----------
@@ -303,6 +356,7 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN) -> dict:
 
     # 1) 每角色定妆组自标定 floor
     char_floor: Dict[str, float] = {}
+    char_calibrated: Dict[str, bool] = {}
     char_main_emb: Dict[str, List[float]] = {}
     for char, variants in sets.items():
         embs = {v: _embed(app, p) for v, p in variants.items()}
@@ -315,8 +369,10 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN) -> dict:
                     intra.append(cosine(main, e))
         floor = calibrate_floor(intra)
         char_floor[char] = floor
+        char_calibrated[char] = floor_calibrated(intra)
         result["characters"][char] = {"floor": round(floor, 4), "intra_pairs": len(intra),
-                                      "has_main": main is not None}
+                                      "has_main": main is not None,
+                                      "floor_calibrated": char_calibrated[char]}
 
     # 2) 每镜 vs 其角色主参考
     smap = shot_character_map(root, ep)
@@ -334,11 +390,26 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN) -> dict:
                 sc = cosine(emb, char_main_emb[c])
                 fl = char_floor.get(c, 0.50)
                 v = band(sc, fl, margin)
-                row = {"char": c, "score": round(sc, 4), "floor": round(fl, 4), "verdict": v}
+                row = {"char": c, "score": round(sc, 4), "floor": round(fl, 4), "verdict": v,
+                       "floor_calibrated": char_calibrated.get(c, False)}
+                # 地板未自标定（单张定妆）时，block/warn 标低精度——score 降权，不当硬判
+                if not char_calibrated.get(c, False) and v in ("block", "warn"):
+                    row["precision"] = "low_floor_uncalibrated"
                 if worst is None or _sev(v) > _sev(worst["verdict"]):
                     worst = row
         if worst:
-            result["shots"].append({"png": png, **worst})
+            row = {"png": png, **worst}
+            # 多人同框：对所有脸做分配匹配，抓"张冠李戴"串脸（单脸 worst-of 测不出）
+            present = {c: char_main_emb[c] for c in chars if c in char_main_emb}
+            if len(present) >= 2:
+                all_faces = _embed_all(app, full)
+                if len(all_faces) >= 2:
+                    swap = detect_face_swaps(all_faces, present)
+                    if swap["duplicate_chars"] or swap["missing_chars"]:
+                        row["face_swap"] = swap
+                        if swap["swap_suspected"] and _sev(row["verdict"]) < _sev("warn"):
+                            row["verdict"] = "warn"  # 串脸至少 🟡，交人判
+            result["shots"].append(row)
     return result
 
 

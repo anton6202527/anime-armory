@@ -170,3 +170,55 @@ def test_write_plan_outputs_json_and_markdown(tmp_path):
     assert paths["json"].is_file()
     assert paths["markdown"].is_file()
     assert "本集模型路由表" in paths["markdown"].read_text(encoding="utf-8")
+
+
+# ── T7: 视频后端跨集锁（model_routes_baseline）────────────────────────────────
+def test_build_baseline_picks_most_common_primary_per_shot_type():
+    plan = {"routes": [
+        {"shot_type": "dialogue_shot", "primary_backend": "kling"},
+        {"shot_type": "dialogue_shot", "primary_backend": "kling"},
+        {"shot_type": "dialogue_shot", "primary_backend": "seedance"},
+        {"shot_type": "action_fight", "primary_backend": "seedance"},
+    ]}
+    assert router.build_baseline(plan) == {"dialogue_shot": "kling", "action_fight": "seedance"}
+
+
+def test_apply_baseline_anchors_primary_and_records_drift():
+    plan = {"routes": [{"clip_id": "C1", "shot_type": "dialogue_shot",
+                        "primary_backend": "seedance", "fallback_backends": ["veo"]}]}
+    drift = router.apply_baseline(plan, {"dialogue_shot": "kling"})
+    r = plan["routes"][0]
+    assert r["primary_backend"] == "kling"               # 基线胜
+    assert r["fallback_backends"][0] == "seedance"        # 原 primary 降为 fallback 首项（不丢）
+    assert r["baseline_anchored"] is True
+    assert drift == [{"clip_id": "C1", "shot_type": "dialogue_shot", "was": "seedance", "now": "kling"}]
+
+
+def test_write_then_load_baseline_roundtrip(tmp_path):
+    root = _root(tmp_path)
+    plan = {"episode": "第1集", "generated_at": "t",
+            "routes": [{"shot_type": "dialogue_shot", "primary_backend": "kling"}]}
+    bp = router.write_baseline(plan, root)
+    assert bp.is_file()
+    assert router.load_baseline(root) == {"dialogue_shot": "kling"}
+
+
+def test_route_episode_anchors_to_existing_baseline(tmp_path):
+    # 第1集自然路由 fight→kling；写基线时人为把 fight 锁成 seedance；再路由应锚定 seedance
+    root = _root(tmp_path)
+    _write_storyboard(root, [{"id": "Clip 1", "template": "fight_exchange", "scene": "挥剑命中"}])
+    natural = router.route_episode(root, "第1集", anchor_baseline=False)
+    st = natural["routes"][0]["shot_type"]
+    router.write_baseline({"episode": "第1集", "generated_at": "t",
+                           "routes": [{"shot_type": st, "primary_backend": "seedance"}]}, root)
+    anchored = router.route_episode(root, "第1集")  # 默认锚定
+    assert anchored["routes"][0]["primary_backend"] == "seedance"
+    assert anchored["baseline_anchored"] is True
+    assert anchored["baseline_drift"] and anchored["baseline_drift"][0]["now"] == "seedance"
+
+
+def test_route_episode_no_baseline_no_anchor(tmp_path):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{"id": "Clip 1", "template": "fight_exchange", "scene": "挥剑命中"}])
+    plan = router.route_episode(root, "第1集")  # 无基线
+    assert "baseline_anchored" not in plan

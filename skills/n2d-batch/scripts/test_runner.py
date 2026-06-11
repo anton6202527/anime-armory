@@ -156,3 +156,59 @@ def test_verify_outputs_accepts_single_compose_variant(tmp_path: Path) -> None:
     spec = queue.find_stage("compose")
 
     assert runner.verify_output_contract(str(tmp_path), task, spec) == []
+
+
+# ── #1 返工 pass 后自动重跑门禁刷新 findings（闭环复检最后一环）────────────────
+def test_runner_auto_reruns_gate_after_pass(tmp_path: Path, monkeypatch) -> None:
+    write_image_queue(tmp_path)
+    config = write_config(tmp_path, "python3 -c \"pass\"")
+    calls = []
+    monkeypatch.setattr(
+        runner, "refresh_gate",
+        lambda root, ep, stage: calls.append((ep, stage)) or {"stage": stage, "exit_code": 0, "blocks": 0, "warns": 0, "findings_path": "x"},
+    )
+
+    result = runner.run_once(str(tmp_path), limit=1, config_path=str(config))
+
+    assert calls == [("第1集", "image")]  # 该任务 gate_stage=image，pass 后自动重跑一次
+    assert result["results"][0]["gate_refreshed"]["stage"] == "image"
+
+
+def test_runner_no_gate_flag_skips_auto_gate(tmp_path: Path, monkeypatch) -> None:
+    write_image_queue(tmp_path)
+    config = write_config(tmp_path, "python3 -c \"pass\"")
+    calls = []
+    monkeypatch.setattr(runner, "refresh_gate", lambda *a, **k: calls.append(a) or {})
+
+    result = runner.run_once(str(tmp_path), limit=1, config_path=str(config), auto_gate=False)
+
+    assert calls == []
+    assert "gate_refreshed" not in result["results"][0]
+
+
+def test_runner_auto_gate_disabled_via_config(tmp_path: Path, monkeypatch) -> None:
+    write_image_queue(tmp_path)
+    path = tmp_path / "生产数据" / "batch_runner.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps({"commands": {"image": "python3 -c \"pass\""}, "auto_gate": False}), encoding="utf-8")
+    calls = []
+    monkeypatch.setattr(runner, "refresh_gate", lambda *a, **k: calls.append(a) or {})
+
+    runner.run_once(str(tmp_path), limit=1, config_path=str(path))
+
+    assert calls == []
+
+
+def test_runner_gate_failure_does_not_break_mark(tmp_path: Path, monkeypatch) -> None:
+    write_image_queue(tmp_path)
+    config = write_config(tmp_path, "python3 -c \"pass\"")
+
+    def boom(*a, **k):
+        raise RuntimeError("gate.py exploded")
+
+    monkeypatch.setattr(runner, "refresh_gate", boom)
+    result = runner.run_once(str(tmp_path), limit=1, config_path=str(config))
+
+    loaded = queue.load_queue(str(tmp_path))
+    assert loaded["tasks"][0]["status"] == "done"  # 门禁重跑失败不回滚已 mark 的任务
+    assert "gate.py exploded" in result["results"][0]["gate_refreshed"]["error"]

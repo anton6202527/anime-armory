@@ -10,16 +10,17 @@ from __future__ import annotations
 import hashlib
 import json
 import os
-from typing import Dict, Iterable, List, Optional
+import re
+from typing import Any, Dict, Iterable, List, Optional
 
 
 CONTRACT_VERSION = 2
 MANIFEST_KIND = "n2d_episode_manifest"
 
-# ── n2d 机器产物 kind 注册表（单一真值源）────────────────────────────────
-# 每个 JSON 产物在顶层写 "kind": <这里的值>，校验/消费方据此识别。把散落各脚本的 kind
-# 字面值收拢一处，并标明 owner / 路径 / 所属"层"与边界——尤其澄清相邻产物的职责分工，
-# 避免把会变的状态塞进锁身份的 registry、或反之。
+# ── n2d 边界型机器产物注册表（单一真值源）──────────────────────────────
+# 每个 JSON 产物在顶层写 "kind"。下面这张表只登记需要明确 owner/path/layer/boundary 的
+# “边界型产物”：相邻产物职责容易混淆，必须把分工写成机器可读说明。
+# 其它散落脚本的 JSON kind 常量集中在本文件后段，但不一定都需要边界元数据。
 VISUAL_STATE_LEDGER_KIND = "n2d_visual_state_ledger"
 MOTION_CONTROL_MANIFEST_KIND = "n2d_motion_control_manifest"
 IDENTITY_REGISTRY_KIND = "n2d_asset_identity_registry"
@@ -27,7 +28,7 @@ ASSET_REFERENCE_REGISTRY_KIND = "n2d_asset_reference_registry"
 SHARED_ASSET_DIR = "共享"
 LEGACY_SHARED_ASSET_DIR = "common"
 
-PRODUCT_KINDS: Dict[str, Dict[str, str]] = {
+BOUNDARY_PRODUCT_KINDS: Dict[str, Dict[str, str]] = {
     VISUAL_STATE_LEDGER_KIND: {
         "owner": "n2d-image",
         "path": f"出图/{SHARED_ASSET_DIR}/visual_state_ledger.json",
@@ -69,10 +70,14 @@ PRODUCT_KINDS: Dict[str, Dict[str, str]] = {
     },
 }
 
+# Backward-compatible alias. Existing scripts/tests use PRODUCT_KINDS; new code
+# should prefer BOUNDARY_PRODUCT_KINDS when it needs owner/path/layer/boundary.
+PRODUCT_KINDS = BOUNDARY_PRODUCT_KINDS
+
 
 def product_kind(kind: str) -> Optional[Dict[str, str]]:
-    """查机器产物 kind 的 owner/路径/层/边界（单一真值源）。未注册返回 None。"""
-    spec = PRODUCT_KINDS.get(kind)
+    """查边界型机器产物 kind 的 owner/路径/层/边界。未注册返回 None。"""
+    spec = BOUNDARY_PRODUCT_KINDS.get(kind)
     return dict(spec) if spec else None
 
 
@@ -101,7 +106,7 @@ IDENTITY_ADAPTER_KNOWN_STATUSES = (
 IDENTITY_FORK_HISTORY_FIELD = "fork_history"
 IDENTITY_FORK_HISTORY_ENTRY_FIELDS = ("from_pack", "from_slug", "from_character_id", "forked_at", "reason")
 
-# 其它机器产物 kind（除 PRODUCT_KINDS 已登记三项外，散落各脚本的字面值收拢于此）：
+# 其它机器产物 kind（除 BOUNDARY_PRODUCT_KINDS 已登记项外，散落各脚本的字面值收拢于此）：
 LORA_VALIDATION_REPORT_KIND = "n2d_lora_validation_report"
 LORA_DATASET_MANIFEST_KIND = "n2d_lora_dataset_manifest"
 LORA_TRAIN_JOB_KIND = "n2d_lora_train_job"
@@ -109,6 +114,7 @@ LORA_CARD_KIND = "n2d_lora_card"
 IDENTITY_ADAPTER_MATRIX_KIND = "n2d_identity_adapter_matrix"
 IDENTITY_DRIFT_REPORT_KIND = "n2d_identity_drift_report"
 IDENTITY_VOICE_DRIFT_REPORT_KIND = "n2d_identity_voice_drift_report"
+IDENTITY_VOICE_PRINT_REPORT_KIND = "n2d_identity_voice_print_report"
 CONSISTENCY_FINDINGS_KIND = "n2d_consistency_findings"
 CONTRACT_INHERITANCE_KIND = "n2d_contract_inheritance_diff"
 VIDEO_MODEL_ROUTES_KIND = "n2d_video_model_routes"
@@ -125,6 +131,134 @@ DIFFERENTIATION_CANDIDATES_KIND = "n2d_differentiation_candidates"
 REVIEW_UI_KIND = "n2d_review_ui"
 EPISODE_REVIEW_SCORE_KIND = "n2d_episode_review_score"
 SCORE_VISUAL_CHECKS_KIND = "n2d_score_visual_checks"
+SKILL_UPDATE_SNAPSHOT_KIND = "n2d_skill_update_snapshot"
+SKILL_UPDATE_PLAN_KIND = "n2d_skill_update_plan"
+
+CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
+    "character_consistency": {
+        "label": "角色一致性",
+        "weight": 20,
+        "return_to_stage": "image",
+        "scope": "回 n2d-image 重出崩脸/身份漂移镜头；必要时补 identity_registry / reference_group。",
+        "audit_labels": ("锚点门(N3)", "脸(G1)", "片内时序(N2)"),
+        "keywords": ("角色", "脸", "资产身份", "identity", "face", "锚点"),
+    },
+    "outfit_consistency": {
+        "label": "服装一致性",
+        "weight": 12,
+        "return_to_stage": "image",
+        "scope": "回 n2d-image 重出服装/配色漂移镜头；先检查定妆组和服装参考图。",
+        "audit_labels": ("服装配色(N1)",),
+        "keywords": ("服装", "配色", "妆造"),
+    },
+    "scene_consistency": {
+        "label": "场景一致性",
+        "weight": 12,
+        "return_to_stage": "image",
+        "scope": "回 n2d-image 修场景定妆、光位锚或尾帧；必要时回 n2d-video 重出接缝 clip。",
+        "audit_labels": ("场景(O2)", "接缝接力"),
+        "keywords": ("场景", "接缝", "尾帧", "场景资产"),
+    },
+    "subtitle_correctness": {
+        "label": "字幕正确性",
+        "weight": 16,
+        "return_to_stage": "script_stage2",
+        "scope": "回 n2d-script 阶段2重跑 finalize_storyboard / 字幕重定时；必要时重出配音 manifest。",
+        "audit_labels": (),
+        "keywords": ("字幕", "srt", "cue"),
+    },
+    "audio_visual_sync": {
+        "label": "音画同步",
+        "weight": 16,
+        "return_to_stage": "compose",
+        "scope": "回 n2d-compose 对齐配音轨、clip 时长、原生音轨策略；若时长源头错，回 n2d-script 阶段2。",
+        "audit_labels": (),
+        "keywords": ("音画", "配音", "原生音", "双人声", "时长", "voice", "audio", "口型", "mouth"),
+    },
+    "voice_consistency": {
+        "label": "音色一致性",
+        "weight": 10,
+        "return_to_stage": "voice",
+        "scope": "回 n2d-voice 按 voicemap 注册音色重配受影响角色台词；重配后复核时长清单与分镜时长。",
+        "audit_labels": ("音色声纹", "声纹一致性", "音色漂移"),
+        "keywords": ("音色", "声纹", "speaker", "voice print", "voice_key", "voicemap", "克隆音色"),
+    },
+    "rhythm_density": {
+        "label": "节奏密度",
+        "weight": 12,
+        "return_to_stage": "script_stage2",
+        "scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。",
+        "audit_labels": (),
+        "keywords": ("节奏", "钩子", "爽点", "留存", "集尾", "rhythm"),
+    },
+    "style_consistency": {
+        "label": "风格一致性",
+        "weight": 12,
+        "return_to_stage": "image",
+        "scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。",
+        "audit_labels": ("风格(S1)", "糊/低质(N4)"),
+        "keywords": ("风格", "style", "画风", "基础视觉", "糊", "低质", "清晰度"),
+    },
+    "semantic_continuity": {
+        "label": "语义继承",
+        "weight": 8,
+        "return_to_stage": "script_stage2",
+        "scope": "回 n2d-script 阶段2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点。",
+        "audit_labels": ("语义谱系(P0)",),
+        "keywords": ("语义", "谱系", "继承", "semantic", "voiceover", "storyboard"),
+    },
+    "state_continuity": {
+        "label": "状态百科",
+        "weight": 8,
+        "return_to_stage": "image",
+        "scope": "回 n2d-image 修 visual_state_ledger / 出图分镜状态锁；必要时回 storyboard 修角色状态演进。",
+        "audit_labels": ("状态百科(P1)",),
+        "keywords": ("状态", "动态百科", "visual_state_ledger", "state"),
+    },
+    "multimodal_continuity": {
+        "label": "多模态漂移",
+        "weight": 8,
+        "return_to_stage": "image",
+        "scope": "回 n2d-image 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy。",
+        "audit_labels": ("多模态(P2)",),
+        "keywords": ("多模态", "道具", "法宝", "视觉语义", "embedding"),
+    },
+    "contract_inheritance": {
+        "label": "视觉契约继承",
+        "weight": 8,
+        "return_to_stage": "video_prompt",
+        "scope": "回 n2d-video 修 出视频/prompt/00_总览.md 的本集视觉一致性契约；以出图总览原文为准，光位锚/轴线视线不得改写。",
+        "audit_labels": ("契约继承", "视觉契约继承"),
+        "keywords": ("契约继承", "contract_inheritance", "光位锚", "轴线视线", "导演一致性"),
+    },
+}
+
+
+def consistency_dimensions() -> Dict[str, Dict[str, Any]]:
+    """Consistency dimension registry copy for score/review/batch consumers."""
+    return {key: dict(spec) for key, spec in CONSISTENCY_DIMENSIONS.items()}
+
+
+def consistency_dim_key(value: Any) -> Optional[str]:
+    """Resolve a consistency key/label/audit label to the canonical dimension key."""
+    text = str(value or "").strip()
+    if not text:
+        return None
+    if text in CONSISTENCY_DIMENSIONS:
+        return text
+    folded = text.lower()
+    for key, spec in CONSISTENCY_DIMENSIONS.items():
+        labels = (spec.get("label"), *tuple(spec.get("audit_labels", ())))
+        if any(str(label or "").strip() == text for label in labels):
+            return key
+        if folded == key.lower():
+            return key
+    return None
+
+
+def consistency_dim_spec(value: Any) -> Optional[Dict[str, Any]]:
+    key = consistency_dim_key(value)
+    return dict(CONSISTENCY_DIMENSIONS[key]) if key else None
 
 
 # ── compliance / gate 共享状态集合（单一真值源）────────────────────────────
@@ -318,6 +452,11 @@ PROGRESS_COLUMNS = (
     "成片",
 )
 
+PROGRESS_DONE = "✅"
+PROGRESS_TODO = "⬜"
+PROGRESS_ROUGH = "⏳rough"
+PROGRESS_ROUGH_PREFIX = "⏳"
+
 PRODUCTION_MODES = {
     "配音先行": {
         "label": "配音先行",
@@ -346,12 +485,12 @@ def is_native_av_mode(mode) -> bool:
     return "原生音画" in (mode or "") or "native_av" in (mode or "").lower()
 
 
-# ── 横切 skill 注册表 ───────────────────────────────────────────────────
-# 这些 skill 不在主流程列(PROGRESS_COLUMNS)/STAGE_GRAPH 路由里——它们是按需横切的能力层。
-# 把它们登记在契约这一处单一真值源，让 n2d-progress 能感知"横切就绪度"、让索引/调度有据可查，
-# 而不必污染 _进度.md 的逐集流程表。`artifact` 是相对作品根的就绪标志(glob)，None=仓库级/无per-work标志。
+# ── 横切 readiness 注册表 ───────────────────────────────────────────────
+# 这些 skill 不在主流程列(PROGRESS_COLUMNS)/STAGE_GRAPH 路由里，但有作品级“就绪标志”。
+# n2d-progress 只消费这张表输出“横切就绪”，避免把按需工具污染进 _进度.md 流程表。
+# `artifact` 是相对作品根的就绪标志(glob)，None=仓库级/无 per-work 标志。
 # `required_before` 指出它是哪些付费阶段的硬前置(目前只有合规)。
-CROSS_CUTTING = (
+CROSS_CUTTING_READINESS = (
     {"key": "compliance", "skill": "n2d-compliance", "label": "合规与版权前置",
      "artifact": "合规/compliance_manifest.json", "required_before": ("image", "video", "compose", "review"),
      "when": "新剧/投放前；image 起每个付费阶段 gate 都读它"},
@@ -376,12 +515,37 @@ CROSS_CUTTING = (
     {"key": "feedback", "skill": "n2d-feedback", "label": "投放数据回灌 + 反同质化",
      "artifact": "生产数据/platform_feedback.json", "required_before": (),
      "when": "上线后回灌留存/追更；写题材战绩库 + 差异化候选反哺选题"},
+    {"key": "update", "skill": "n2d-update", "label": "skill 更新重制计划",
+     "artifact": "生产数据/skill_update_snapshot.json", "required_before": (),
+     "when": "n2d skills 更新后，检测受影响集并生成只到当前阶段的最小重制计划"},
+)
+
+# Backward-compatible alias for older consumers. It means “readiness-tracked
+# cross-cutting items”, not every cross-cutting tool in the family.
+CROSS_CUTTING = CROSS_CUTTING_READINESS
+
+# 横切工具注册表：这些也横切全链，但没有稳定“就绪标志”，或本身是调度/检查工具。
+# 它们应出现在索引和调度说明里，但不应出现在 n2d-progress 的“横切就绪”行。
+CROSS_CUTTING_TOOLS = (
+    {"key": "model_router", "skill": "n2d-model-router", "label": "模型适配层",
+     "when": "出视频 prompt 前按 Clip 路由 primary/fallback 后端；不写进 _进度.md"},
+    {"key": "batch", "skill": "n2d-batch", "label": "批量任务队列",
+     "when": "按 _进度.md / findings 生成队列、claim/mark/reclaim；就绪看 batch_queue.json，不代表作品质量"},
+    {"key": "progress", "skill": "n2d-progress", "label": "进度·下一步",
+     "when": "只读扫描 _进度.md 并提示下一步；它是观察工具，本身没有就绪状态"},
+    {"key": "review", "skill": "n2d-review", "label": "质检·自审",
+     "when": "作品质检和流程自审；具体 findings/score/ui 由 readiness 表里的产物承接"},
 )
 
 
 def cross_cutting() -> List[Dict[str, object]]:
-    """横切 skill 注册表（拷贝）。供 n2d-progress 横切就绪检查、索引/调度感知。"""
-    return [dict(item) for item in CROSS_CUTTING]
+    """横切 readiness 注册表（拷贝）。供 n2d-progress 横切就绪检查。"""
+    return [dict(item) for item in CROSS_CUTTING_READINESS]
+
+
+def cross_cutting_tools() -> List[Dict[str, object]]:
+    """横切工具注册表（拷贝）。供索引/调度说明感知，不用于就绪度展示。"""
+    return [dict(item) for item in CROSS_CUTTING_TOOLS]
 
 
 VISUAL_CONTRACT_FIELDS = (
@@ -420,7 +584,7 @@ CINEMATIC_CONTRACT_FIELDS = (
 #       classify_image_backend，gate.check_image_ai_policy 消费）；其余两项仍为纯元数据。
 CONTESTED = {
     "生图后端垄断": "已放行官方/已登录图片后端：生图AI 是选择点（默认 Codex），放行官方多参考一致性后端（Dreamina/即梦官方 CLI、Seedream 官方API / 可灵主体库 / Nano Banana / Sora Cameo）；gate 不再因『非 Codex』阻断，只拦后端混用 + 未授权/第三方逆向出图。见下 APPROVED_IMAGE_BACKENDS。",
-    "占位驱动付费生成": "「先出视频后配音」/ 占位时长驱动出图·出视频，与配音先行不变量冲突（提案三，目标 rough→refine 两遍制）。",
+    "占位驱动付费生成": "「先出视频后配音」/ 占位时长可写入 ⏳rough 并仅在该模式下驱动出图·出视频；配音先行仍需 ✅ 真实配音，成片前必须补真音。",
     "基础视觉风格": "视觉风格必须来自选择点「基础视觉风格」与 global_style。新产物写 style_contract；旧 cinematic_contract 仅作兼容，不得把写实电影感当全线不变量。",
 }
 INVARIANT_NOTE = (
@@ -872,6 +1036,14 @@ def stage_for_key(key: str) -> Optional[Dict[str, object]]:
     return next((dict(spec) for spec in STAGE_GRAPH if spec["key"] == key), None)
 
 
+def stage_requires_for_mode(spec: Dict[str, object], mode: str = "") -> tuple:
+    """Return hard requirements after production-mode adjustment."""
+    requires = tuple(spec.get("requires", ()))
+    if is_native_av_mode(mode):
+        return tuple(r for r in requires if r != "配音")
+    return requires
+
+
 def stage_for_progress_column(column: str) -> Optional[Dict[str, object]]:
     for spec in STAGE_GRAPH:
         if column in spec.get("progress_columns", ()):
@@ -898,6 +1070,175 @@ def annotate_finding(finding: Dict[str, str], gate_stage: str, ep: Optional[str]
     out.setdefault("rerun_scope", recovery.get("rerun_scope"))
     out.setdefault("affected_artifacts", recovery.get("affected_artifacts", ()))
     return out
+
+
+def _fingerprint_episode(episode: Any) -> str:
+    """归一集号：能取到数字就用数字（'第1集' / '1' / 'EP01' → '1'），否则用原串小写。"""
+    s = str(episode or "").strip()
+    digits = "".join(ch for ch in s if ch.isdigit())
+    return str(int(digits)) if digits else s.lower()
+
+
+# 定位串里的镜头号识别：Clip_03 / Clip 3 / Clip-03 / Clip#3 / shot03 / 镜头3 / 镜头_03 / 出图/.../Clip_03.png
+_SHOT_TOKEN_RE = re.compile(r"(?:clip|shot|镜头)[\s_\-#]*0*(\d+)", re.IGNORECASE)
+
+
+def canonical_scope_key(scope: Any) -> str:
+    """把定位串归一到稳定 token，让指纹不随定位粒度漂移而变（指纹复检的根因修复）。
+
+    `Clip_03`、`Clip 3`、`Clip_03_首帧`、`Clip_03_尾帧`、`镜头3`、`出图/第2集/图片/Clip_03.png`
+    都归到同一个 `clip_3`——同一镜头换个写法/换个帧位/换成产物路径，复检时仍判为同一问题，
+    不再因 `Clip_03`→`Clip_03_首帧` 这种粒度变化把已修问题误判 resolved。
+    认不出镜头号的串（定妆名、自由文本、无镜头号的产物路径）原样小写返回，行为与历史一致。
+    """
+    s = str(scope or "").strip()
+    if not s:
+        return ""
+    m = _SHOT_TOKEN_RE.search(s)
+    if m:
+        return f"clip_{int(m.group(1))}"
+    return s.lower()
+
+
+def finding_fingerprint(episode: Any, stage: Any, dim: Any, scope: Any = "") -> str:
+    """一致性问题的稳定指纹 = (集, return_to_stage, 维度[, scope]) 的 sha1 短哈希（单一真值源）。
+
+    返工任务带它、复检从当前 findings 重算它。scope 为空时保持历史粒度 (集×阶段×维度)；
+    有 affected_shots / affected_artifacts 时把最小定位也纳入指纹，让同集同维度多个镜头能分别
+    resolved / reopen，同时仍可被同一返工任务聚合执行。scope 先过 canonical_scope_key 归一，
+    使同一镜头的不同写法/帧位/产物路径产生同一指纹（见 canonical_scope_key）。
+    """
+    key_parts = [
+        _fingerprint_episode(episode),
+        str(stage or "").strip().lower(),
+        str(dim or "").strip().lower(),
+    ]
+    scope_s = canonical_scope_key(scope)
+    if scope_s:
+        key_parts.append(scope_s)
+    key = "|".join(key_parts)
+    return hashlib.sha1(key.encode("utf-8")).hexdigest()[:16]
+
+
+# ── 一致性 finding 归一化（单一真值源，消灭三端散落的 or 链）────────────────────
+# review 侧 emit `severity/dimension/message`，review-ui 侧 `sev/dim/msg`，score 侧 `dimensions`(复数)。
+# 任何消费端（batch 入队 / feedback / dashboard）都先过 normalize_finding，漏抄别名→静默丢 finding 的坑消失。
+_DIM_KEY_BY_LABEL = {spec["label"]: key for key, spec in CONSISTENCY_DIMENSIONS.items()}
+
+
+def resolve_dim_key(dim: Any) -> str:
+    """把维度（可能是 key / 中文 label / 自由文本）解析成 CONSISTENCY_DIMENSIONS 的规范 key；解析不出返回 ''。"""
+    d = str(dim or "").strip()
+    if not d:
+        return ""
+    if d in CONSISTENCY_DIMENSIONS:
+        return d
+    if d in _DIM_KEY_BY_LABEL:
+        return _DIM_KEY_BY_LABEL[d]
+    for key, spec in CONSISTENCY_DIMENSIONS.items():
+        if any(kw and kw in d for kw in spec.get("keywords", ())):
+            return key
+    return ""
+
+
+def normalize_finding(raw: Dict[str, Any]) -> Dict[str, Any]:
+    """把任意一端 emit 的一致性 finding 归一成规范结构（吸收 sev/dim/msg 别名、补 dim_key、回退 return_to_stage）。"""
+    if not isinstance(raw, dict):
+        return {}
+    severity = str(raw.get("severity") or raw.get("sev") or raw.get("verdict") or "").strip().lower()
+    dim = raw.get("dimension") or raw.get("dim") or ""
+    if not dim:
+        dims = raw.get("dimensions")
+        if isinstance(dims, list) and dims:
+            dim = dims[0]
+    dim_key = str(raw.get("dim_key") or "").strip() or resolve_dim_key(dim)
+    stage = str(raw.get("return_to_stage") or raw.get("rerun_from") or "").strip()
+    if not stage and dim_key in CONSISTENCY_DIMENSIONS:
+        stage = str(CONSISTENCY_DIMENSIONS[dim_key].get("return_to_stage") or "")
+    return {
+        "severity": severity,
+        "dimension": str(dim or "").strip(),
+        "dim_key": dim_key,
+        "message": str(raw.get("message") or raw.get("msg") or "").strip(),
+        "return_to_stage": stage,
+        "rerun_scope": str(raw.get("rerun_scope") or raw.get("scope") or "").strip(),
+        "loc": str(raw.get("loc") or "").strip(),
+        "shot": str(raw.get("shot") or "").strip(),
+        "affected_shots": [str(s) for s in (raw.get("affected_shots") or []) if str(s).strip()],
+        "affected_artifacts": [str(a) for a in (raw.get("affected_artifacts") or []) if str(a).strip()],
+    }
+
+
+def finding_dim_key(raw: Dict[str, Any]) -> str:
+    """finding → 用于分组/指纹的稳定维度键：优先规范 dim_key，回退原 dimension 文本，再回退 '一致性'。"""
+    norm = normalize_finding(raw)
+    return norm.get("dim_key") or norm.get("dimension") or "一致性"
+
+
+def finding_scope_keys(raw: Dict[str, Any]) -> List[str]:
+    """finding → 最小定位键列表。优先镜头，其次产物，再次 loc；全空则返回 [''] 保持历史粗粒度。"""
+    norm = normalize_finding(raw)
+    scopes = norm.get("affected_shots") or norm.get("affected_artifacts") or []
+    if not scopes and norm.get("loc"):
+        scopes = [str(norm["loc"])]
+    cleaned: List[str] = []
+    seen = set()
+    for scope in scopes:
+        text = str(scope or "").strip()
+        if text and text not in seen:
+            seen.add(text)
+            cleaned.append(text)
+    return cleaned or [""]
+
+
+def finding_fingerprints(episode: Any, stage: Any, dim: Any, raw: Optional[Dict[str, Any]] = None) -> List[str]:
+    """按 finding 的最小定位生成一个或多个指纹；无定位时退回单个粗粒度指纹。"""
+    scopes = finding_scope_keys(raw or {})
+    return [finding_fingerprint(episode, stage, dim, scope) for scope in scopes]
+
+
+# ── 镜头类型判定关键词（单一真值源）──────────────────────────────────────────
+# router.infer_shot_type 与 gate 专项镜头模板检测此前各维护一张关键词表，已经漂移
+# （router fight 有「撞击/combat/hit」、gate 有「搏斗/格挡/受击/掌风/刀光」）。统一到这里，
+# 两边消费同一份数据、各自保留自己的匹配器（router 小写匹配、gate 子串匹配）。顺序=匹配优先级。
+SHOT_TYPE_KEYWORDS: Tuple[Tuple[str, Tuple[str, ...]], ...] = (
+    ("fight_exchange", ("打斗", "搏斗", "交手", "格挡", "出拳", "挥剑", "命中", "受击", "撞击", "掌风", "刀光", "fight", "combat", "hit")),
+    ("chase", ("追逐", "追赶", "追杀", "奔逃", "逃跑", "追上", "紧追", "chase", "running away")),
+    ("flight", ("御剑", "飞行", "凌空", "腾空", "掠空", "掠过云", "飞掠", "坠落", "飞檐", "云海穿行", "flight", "flying")),
+    ("dialogue_shot_reverse", ("对话反打", "正反打", "反打", "过肩", "对视", "视线对位", "台词", "dialogue", "shot reverse", "ots", "eyeline")),
+    ("dialogue_closeup", ("说话特写", "口型", "嘴部", "近景说话", "lip-sync", "mouth", "close-up dialogue")),
+    ("magic_burst", ("法术", "符阵", "符纹", "灵光", "灵力", "爆发", "雷劫", "雷落", "光束", "剑气", "护盾", "阵法", "magic", "burst", "spell")),
+    ("hug_or_pull", ("拥抱", "抱住", "拉扯", "拉住", "抓腕", "拽住", "推开", "扯住", "拉袖", "tug", "pull", "grab", "hug")),
+    ("intimate_interaction", ("牵手", "靠近", "亲密", "搀扶", "扶住", "抚脸", "扶肩", "贴近", "疗伤", "intimate", "touch")),
+    ("multi_character_same_frame", ("多人同框", "双人同框", "两人同框", "三人同框", "同框", "同画面", "two-shot", "group shot")),
+    ("ensemble_blocking", ("群像", "群戏", "群臣", "门徒", "人群", "围观", "队列", "站位", "多人站位", "围住", "围堵", "众人", "ensemble", "crowd")),
+    ("multi_person_blocking", ("多人", "三人", "四人", "multi-person", "blocking")),
+    ("empty_establishing", ("空镜", "转场", "远景", "氛围", "环境", "establishing", "ambience", "empty")),
+)
+# 需要专项镜头模板的复杂类型（gate 专项模板检测用；不含纯近景说话/空镜/普通运动）
+SPECIAL_TEMPLATE_SHOT_TYPES: Tuple[str, ...] = (
+    "fight_exchange", "chase", "flight", "dialogue_shot_reverse", "magic_burst",
+    "hug_or_pull", "intimate_interaction", "multi_character_same_frame",
+    "ensemble_blocking", "multi_person_blocking",
+)
+
+
+def special_template_keywords() -> Tuple[Tuple[str, Tuple[str, ...]], ...]:
+    """gate 专项镜头模板检测用的 (shot_type, keywords) 子集，从 SHOT_TYPE_KEYWORDS 派生（保序）。"""
+    sset = set(SPECIAL_TEMPLATE_SHOT_TYPES)
+    return tuple((st, kw) for st, kw in SHOT_TYPE_KEYWORDS if st in sset)
+
+
+def make_consistency_finding(severity: str, dimension: str, message: str, *,
+                             return_to_stage: Optional[str] = None, loc: str = "",
+                             rerun_scope: str = "", affected_shots: Optional[List[str]] = None,
+                             affected_artifacts: Optional[List[str]] = None) -> Dict[str, Any]:
+    """规范一致性 finding 工厂——emit 端统一用它，字段名不再各写各的。"""
+    return normalize_finding({
+        "severity": severity, "dimension": dimension, "message": message,
+        "return_to_stage": return_to_stage, "loc": loc, "rerun_scope": rerun_scope,
+        "affected_shots": affected_shots or [], "affected_artifacts": affected_artifacts or [],
+    })
 
 
 PRODUCTION_DIR = "生产数据"  # 仪表盘/评分/投放/审片UI 的产出目录（单一真值源）
@@ -1000,12 +1341,12 @@ def shared_asset_relpath(*parts: str) -> str:
 
 
 def identity_registry_path(root: str) -> str:
-    """角色身份注册表路径，取自 PRODUCT_KINDS 注册的 path（move 时只改一处）。"""
+    """角色身份注册表路径，取自 BOUNDARY_PRODUCT_KINDS 注册的 path（move 时只改一处）。"""
     return shared_asset_path(root, "identity_registry.json")
 
 
 def asset_registry_path(root: str) -> str:
-    """非人物关键资产注册表路径，取自 PRODUCT_KINDS 注册的 path（move 时只改一处）。"""
+    """非人物关键资产注册表路径，取自 BOUNDARY_PRODUCT_KINDS 注册的 path（move 时只改一处）。"""
     return shared_asset_path(root, "asset_registry.json")
 
 
@@ -1016,6 +1357,67 @@ def episode_manifest_path(root: str, ep: str) -> str:
 def _render(path_template: str, ep: str) -> str:
     return path_template.format(ep=ep)
 
+
+# ── Episode-Specific Path Helpers (SSOT) ─────────────────────────────────
+# Avoid hardcoding "脚本/{ep}", "出图/{ep}", etc. in individual scripts.
+# {ep} is the episode name/number string.
+
+def episode_script_dir(root: str, ep: str) -> str:
+    """Path to the script directory for an episode: `<作品根>/脚本/<ep>/`."""
+    return os.path.join(root.rstrip("/"), "脚本", ep)
+
+def episode_image_dir(root: str, ep: str) -> str:
+    """Path to the image production directory: `<作品根>/出图/<ep>/`."""
+    return os.path.join(root.rstrip("/"), "出图", ep)
+
+def episode_video_dir(root: str, ep: str) -> str:
+    """Path to the video production directory: `<作品根>/出视频/<ep>/`."""
+    return os.path.join(root.rstrip("/"), "出视频", ep)
+
+def episode_compose_dir(root: str, ep: str) -> str:
+    """Path to the composition/final audio directory: `<作品根>/合成/<ep>/`."""
+    return os.path.join(root.rstrip("/"), "合成", ep)
+
+def episode_voice_dir(root: str, ep: str) -> str:
+    """Path to the voice audio subdirectory: `<作品根>/合成/<ep>/配音/`."""
+    return os.path.join(episode_compose_dir(root, ep), "配音")
+
+def episode_storyboard_path(root: str, ep: str) -> str:
+    """Path to storyboard.json: `<作品根>/脚本/<ep>/storyboard.json`."""
+    return os.path.join(episode_script_dir(root, ep), "storyboard.json")
+
+def episode_timing_path(root: str, ep: str) -> str:
+    """Path to episode-wide timings: `<作品根>/脚本/<ep>/镜头时长.json`."""
+    return os.path.join(episode_script_dir(root, ep), "镜头时长.json")
+
+def episode_voice_manifest_path(root: str, ep: str) -> str:
+    """Path to voice timing manifest: `<作品根>/合成/<ep>/配音/时长清单.json`."""
+    return os.path.join(episode_voice_dir(root, ep), "时长清单.json")
+
+def episode_output_video_path(root: str, ep: str, mode: str = "zh") -> str:
+    """Path to final MP4: `<作品根>/合成/<ep>/成片_<ep>_<mode>.mp4`."""
+    return os.path.join(episode_compose_dir(root, ep), f"成片_{ep}_{mode}.mp4")
+
+# ── Registry Loading (SSOT with Split-Brain Protection) ─────────────────
+
+def load_json_registry(path: str) -> Dict[str, Any]:
+    """Load a JSON registry with basic error handling."""
+    if not os.path.exists(path):
+        return {}
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            return data if isinstance(data, dict) else {}
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+def load_identity_registry(root: str) -> Dict[str, Any]:
+    """Load identity_registry.json from shared_asset_dir (SSOT)."""
+    return load_json_registry(identity_registry_path(root))
+
+def load_asset_registry(root: str) -> Dict[str, Any]:
+    """Load asset_registry.json from shared_asset_dir (SSOT)."""
+    return load_json_registry(asset_registry_path(root))
 
 def _sha256(path: str) -> Optional[str]:
     if not os.path.isfile(path):

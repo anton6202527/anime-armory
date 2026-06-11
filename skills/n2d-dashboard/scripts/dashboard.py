@@ -41,12 +41,15 @@ except Exception:  # pragma: no cover - dashboard still works without progress
     stage_of = None  # type: ignore[assignment]
 
 from n2d_contract import (  # 生产数据目录 / kind / 重抽原因枚举 单一真值源
+    CONSISTENCY_FINDINGS_KIND,
     PRODUCTION_ALERTS_KIND,
     PRODUCTION_DASHBOARD_KIND,
     PRODUCTION_DIR,
     PRODUCTION_EVENT_KIND,
     REDRAW_REASON_CATEGORIES,
     classify_redraw_reason,
+    finding_dim_key,
+    normalize_finding,
     production_dir,
 )
 from n2d_thresholds import DEFAULT_THRESHOLDS, THRESHOLDS_FILE, load_thresholds, load_benchmark  # 告警阈值单一真值源（与 n2d-score 共用）
@@ -62,6 +65,7 @@ DASHBOARD_HTML = "dashboard.html"
 ALERTS_JSON = "alerts.json"
 ALERTS_MD = "alerts.md"
 PLATFORM_METRICS_STEM = "platform_metrics"
+GATE_FINDINGS_PREFIX = "gate_findings"
 
 REVENUE_PRIMARY_FIELDS = ("revenue", "gross_revenue", "total_revenue", "income", "回收", "收入")
 REVENUE_COMPONENT_FIELDS = ("ad_revenue", "paid_revenue", "platform_revenue", "creator_revenue", "iap_revenue")
@@ -130,6 +134,10 @@ def atomic_write_text(path: str, text: str) -> None:
     with open(tmp, "w", encoding="utf-8") as fh:
         fh.write(text)
     os.replace(tmp, path)
+
+
+def gate_findings_path(root: str, episode: str, stage: str) -> str:
+    return os.path.join(production_dir(root), f"{GATE_FINDINGS_PREFIX}_{stage}_{normalize_episode(episode)}.json")
 
 
 def as_float(value: Any) -> Optional[float]:
@@ -383,6 +391,8 @@ def blank_episode(ep: str, progress: Optional[Dict[str, Any]] = None) -> Dict[st
         "qa_blockers": 0,
         "qa_warnings": 0,
         "qa_infos": 0,
+        "consistency_blockers": 0,
+        "consistency_warnings": 0,
         "final_pass_rate": None,
         "release_rows": 0,
         "release_plays": 0,
@@ -565,6 +575,20 @@ def aggregate_events(root: str, events: List[Dict[str, Any]]) -> Dict[str, Any]:
                 summary["qa_infos"] += 1
                 sb["qa_infos"] += 1
 
+        # 一致性审查事件：consistency_audit 写 meta.{total_block,total_warn} 但此前无人读 → 统计失真。
+        # 接入：单列 consistency_blockers/warnings，并把 block 计入 qa_blockers，让阈值告警看得到审查检出。
+        if event_name == "consistency_findings":
+            meta = event.get("meta") if isinstance(event.get("meta"), dict) else {}
+            c_block = int(as_float(meta.get("total_block")) or 0)
+            c_warn = int(as_float(meta.get("total_warn")) or 0)
+            summary["consistency_blockers"] += c_block
+            summary["consistency_warnings"] += c_warn
+            sb["consistency_blockers"] = sb.get("consistency_blockers", 0) + c_block
+            sb["consistency_warnings"] = sb.get("consistency_warnings", 0) + c_warn
+            if c_block:
+                summary["qa_blockers"] += c_block
+                sb["qa_blockers"] += c_block
+
         release = event.get("release") if isinstance(event.get("release"), dict) else {}
         if release or event_name in {"release", "revenue"}:
             apply_release_row(summary, release, "production_events.jsonl")
@@ -630,6 +654,8 @@ def aggregate_events(root: str, events: List[Dict[str, Any]]) -> Dict[str, Any]:
         "qa_blockers": sum(item["qa_blockers"] for item in ordered),
         "qa_warnings": sum(item["qa_warnings"] for item in ordered),
         "qa_infos": sum(item["qa_infos"] for item in ordered),
+        "consistency_blockers": sum(item.get("consistency_blockers") or 0 for item in ordered),
+        "consistency_warnings": sum(item.get("consistency_warnings") or 0 for item in ordered),
         "cost_totals": {},
         "cost_per_finished_min": {},
         "elapsed_per_finished_min_sec": None,
@@ -1136,7 +1162,108 @@ def event_from_record_args(ns: argparse.Namespace) -> Dict[str, Any]:
     )
 
 
-def gate_events(root: str, episode: str, stage: str) -> Tuple[List[Dict[str, Any]], int]:
+def _unique(items: Iterable[Any]) -> List[str]:
+    out: List[str] = []
+    seen = set()
+    for item in items:
+        text = str(item or "").strip()
+        if text and text not in seen:
+            seen.add(text)
+            out.append(text)
+    return out
+
+
+def gate_findings_payload(root: str, episode: str, stage: str, findings: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Convert gate.py findings into batch-compatible n2d_consistency_findings."""
+    rows: List[Dict[str, Any]] = []
+    severity_counts: Dict[str, int] = {"block": 0, "warn": 0, "info": 0}
+    by_dim: Dict[str, Dict[str, int]] = {}
+    grouped: Dict[Tuple[str, str], Dict[str, Any]] = {}
+
+    for item in findings:
+        if not isinstance(item, dict):
+            continue
+        norm = normalize_finding(item)
+        sev = norm["severity"] or "info"
+        if sev not in severity_counts:
+            sev = "info"
+        dim_key = finding_dim_key(item)
+        dim = norm["dimension"] or str(item.get("dim") or item.get("dimension") or dim_key or "QA")
+        row = {
+            "severity": sev,
+            "dimension": dim,
+            "dim_key": dim_key if dim_key != "一致性" else norm.get("dim_key", ""),
+            "message": norm["message"],
+            "loc": norm["loc"],
+            "episode": episode,
+            "gate_stage": stage,
+            "return_to_stage": norm["return_to_stage"],
+            "rerun_scope": norm["rerun_scope"],
+            "affected_shots": norm["affected_shots"],
+            "affected_artifacts": norm["affected_artifacts"],
+            "source": "n2d-dashboard/gate",
+        }
+        rows.append(row)
+        severity_counts[sev] = severity_counts.get(sev, 0) + 1
+        dim_counts = by_dim.setdefault(dim, {"block": 0, "warn": 0, "info": 0})
+        dim_counts[sev] = dim_counts.get(sev, 0) + 1
+
+        if sev not in {"block", "warn"}:
+            continue
+        return_stage = row["return_to_stage"] or stage
+        group_key = (str(return_stage), str(row["dim_key"] or dim))
+        group = grouped.setdefault(group_key, {
+            "return_to_stage": return_stage,
+            "dimensions": [row["dim_key"] or dim],
+            "scope": [],
+            "affected_shots": [],
+            "affected_artifacts": [],
+            "findings": [],
+        })
+        group["scope"].append(row["rerun_scope"] or row["message"])
+        group["affected_shots"].extend(row["affected_shots"])
+        group["affected_artifacts"].extend(row["affected_artifacts"])
+        group["findings"].append(row)
+
+    auto_tasks: List[Dict[str, Any]] = []
+    for group in grouped.values():
+        shots = _unique(group["affected_shots"])
+        artifacts = _unique(group["affected_artifacts"])
+        scope_parts = _unique(group["scope"])
+        if shots:
+            scope_parts.append("定位镜头：" + "、".join(shots))
+        if artifacts:
+            scope_parts.append("定位产物：" + "、".join(artifacts[:8]))
+        auto_tasks.append({
+            "return_to_stage": group["return_to_stage"],
+            "dimensions": group["dimensions"],
+            "scope": "；".join(scope_parts),
+            "affected_shots": shots,
+            "affected_artifacts": artifacts,
+            "findings": group["findings"][:12],
+        })
+
+    return {
+        "kind": CONSISTENCY_FINDINGS_KIND,
+        "version": 1,
+        "root": root,
+        "episode": episode,
+        "gate_stage": stage,
+        "generated_at": now_iso(),
+        "summary": {"total": len(rows), "severity": severity_counts, "by_dim": by_dim},
+        "findings": rows,
+        "auto_return_tasks": auto_tasks,
+        "source": {"kind": "n2d_gate", "path": "n2d-review/scripts/gate.py"},
+    }
+
+
+def write_gate_findings(root: str, episode: str, stage: str, findings: List[Dict[str, Any]]) -> str:
+    path = gate_findings_path(root, episode, stage)
+    atomic_write_text(path, json.dumps(gate_findings_payload(root, episode, stage, findings), ensure_ascii=False, indent=2, sort_keys=True) + "\n")
+    return path
+
+
+def gate_events(root: str, episode: str, stage: str) -> Tuple[List[Dict[str, Any]], int, List[Dict[str, Any]]]:
     gate_py = os.path.join(REPO_SKILLS, "n2d-review", "scripts", "gate.py")
     proc = subprocess.run(
         [sys.executable, gate_py, root, episode, "--stage", stage, "--json"],
@@ -1194,7 +1321,7 @@ def gate_events(root: str, episode: str, stage: str) -> Tuple[List[Dict[str, Any
                 meta=meta,
             )
         )
-    return events, proc.returncode
+    return events, proc.returncode, findings
 
 
 def _resolve_webhook(ns: argparse.Namespace) -> Optional[str]:
@@ -1224,7 +1351,7 @@ def cmd_record(ns: argparse.Namespace) -> int:
 
 def cmd_gate(ns: argparse.Namespace) -> int:
     ep = normalize_episode(ns.episode)
-    events, code = gate_events(ns.root, ep, ns.stage)
+    events, code, findings = gate_events(ns.root, ep, ns.stage)
     if ns.append:
         append_events(ns.root, events)
     else:
@@ -1238,10 +1365,11 @@ def cmd_gate(ns: argparse.Namespace) -> int:
             ),
             events,
         )
+    findings_path = write_gate_findings(ns.root, ep, ns.stage, findings)
     if not ns.no_build:
         dashboard = build(ns.root, **_build_kwargs(ns, write=True))
         print_alerts(dashboard.get("alerts", []))
-    print(json.dumps({"gate_exit_code": code, "recorded_events": len(events)}, ensure_ascii=False, indent=2))
+    print(json.dumps({"gate_exit_code": code, "recorded_events": len(events), "findings_path": findings_path}, ensure_ascii=False, indent=2))
     return code
 
 

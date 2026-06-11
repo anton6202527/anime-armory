@@ -201,3 +201,44 @@ LoRA ready 由 `n2d-lora` 生命周期写回。`model_path/base_model/trigger/mo
   `voicemap_unregistered:<角色>`，不算 mismatch。
 - 每条 drift/mismatch 的 `return_to_stage/affected_shots/scope` 是给 n2d-batch 的回流建议：回 `voice`
   阶段只重配受影响角色/集，重配后需复核分镜时长（时长清单驱动镜头时长）。
+
+## identity_voice_print_第N集.json
+
+路径：
+
+```text
+制漫剧/<剧名>/生产数据/identity_voice_print_第N集.json
+制漫剧/<剧名>/生产数据/consistency_findings_voice_print_第N集.json
+```
+
+由 `voice_print_consistency.py` 产出（`identity.py --write` 在存在配音时长清单时逐集顺带跑）。
+前者是声纹原始报告，后者是统一回流报告，`kind=n2d_consistency_findings`，维度键 `voice_consistency`。
+
+原始报告顶层：
+
+```json
+{
+  "kind": "n2d_identity_voice_print_report",
+  "episode": "第1集",
+  "manifest": "合成/第1集/配音/时长清单.json",
+  "available": true,
+  "mode": "resemblyzer",
+  "precision": "ok",
+  "groups": {
+    "沈念|SHEN": {
+      "floor": 0.72,
+      "floor_calibrated": true,
+      "lines": [{"idx": 0, "score": 0.91, "band": "ok"}],
+      "drift_count": 0
+    }
+  },
+  "total_drift": 0
+}
+```
+
+约定：
+
+- 缺 resemblyzer/speechbrain 或无可用逐句 wav 时写 `available=false`、`precision=insufficient_precision`，
+  交还人判，不输出假相似度。
+- `consistency_findings_voice_print_第N集.json` 只把 `band=bad/warn` 的组外发为 finding，
+  `return_to_stage=voice`，供 `n2d-score`、`n2d-feedback`、`n2d-batch --from-consistency-findings` 统一消费。

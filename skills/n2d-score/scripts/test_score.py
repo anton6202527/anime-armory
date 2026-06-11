@@ -195,7 +195,7 @@ def test_enqueue_low_does_not_queue_missing_data(tmp_path: Path) -> None:
 
 
 def _all_ok_consistency() -> dict:
-    keys = ["语义谱系(P0)", "状态百科(P1)", "多模态(P2)", "锚点门(N3)", "脸(G1)", "片内时序(N2)", "服装配色(N1)", "场景(O2)", "接缝接力", "风格(S1)", "糊/低质(N4)"]
+    keys = ["语义谱系(P0)", "状态百科(P1)", "多模态(P2)", "契约继承", "锚点门(N3)", "脸(G1)", "片内时序(N2)", "服装配色(N1)", "场景(O2)", "接缝接力", "风格(S1)", "糊/低质(N4)"]
     return {"summary": {"by_dim": {k: {"block": 0, "warn": 0, "ok": 5, "skipped": False} for k in keys}}}
 
 
@@ -227,19 +227,50 @@ def test_p0_p1_p2_have_dedicated_score_dimensions() -> None:
     assert any("Clip_03" in task["affected_shots"] for task in res["auto_return_tasks"])
 
 
+def test_contract_inheritance_has_dedicated_score_dimension() -> None:
+    consistency = {
+        "summary": {
+            "by_dim": {
+                "契约继承": {"block": 1, "warn": 0, "ok": 0, "skipped": False},
+            }
+        },
+        "sections": {
+            "契约继承": {
+                "details": [{
+                    "verdict": "block",
+                    "message": "场景轴线视线漂移",
+                    "affected_artifacts": ["出视频/第1集/prompt/00_总览.md"],
+                }]
+            }
+        },
+    }
+    res = score.score_episode("/tmp/w", "第1集", consistency=consistency, threshold=85)
+    dim = next(item for item in res["dimensions"] if item["key"] == "contract_inheritance")
+    assert dim["status"] == "fail"
+    assert dim["return_to_stage"] == "video_prompt"
+    assert any(task["return_to_stage"] == "video_prompt" for task in res["auto_return_tasks"])
+
+
 def _all_ok_visual() -> dict:
     # 覆盖 consistency 没碰的 subtitle/audio_visual/rhythm 三维，使健康集真为 pass=100
     return {"sections": {k: {"blocks": 0, "warnings": 0, "infos": 0, "skipped": False}
                          for k in ("image_similarity", "subtitle_ocr", "av_duration", "lip_sync", "final_rhythm_density")}}
 
 
+def _all_ok_voice_print() -> dict:
+    return {"available": True, "mode": "fake", "groups": {"沈念|SHEN": {"lines": [{"band": "ok"}], "floor": 0.72}}}
+
+
 def test_unmapped_block_does_not_silently_pass() -> None:
     # 健康集（七维全过=100）+ 一个无法归维的 block（水印/完整性）→ 不能 pass，必须 warn + 分诊
-    base = score.score_episode("/tmp/w", "第1集", consistency=_all_ok_consistency(), visual=_all_ok_visual(), mechanical=[], threshold=85)
+    base = score.score_episode(
+        "/tmp/w", "第1集", consistency=_all_ok_consistency(), visual=_all_ok_visual(),
+        voice_print=_all_ok_voice_print(), mechanical=[], threshold=85)
     assert base["status"] == "pass" and base["total_score"] == 100
 
     res = score.score_episode(
         "/tmp/w", "第1集", consistency=_all_ok_consistency(), visual=_all_ok_visual(),
+        voice_print=_all_ok_voice_print(),
         mechanical=[{"sev": "🔴", "dim": "水印", "loc": "成片", "msg": "缺 AI 可见标识"}],
         threshold=85,
     )
@@ -252,6 +283,7 @@ def test_unmapped_low_severity_only_records_not_escalates() -> None:
     # 未归维的 warn/info 只留痕，不把健康集拉下 pass
     res = score.score_episode(
         "/tmp/w", "第1集", consistency=_all_ok_consistency(), visual=_all_ok_visual(),
+        voice_print=_all_ok_voice_print(),
         mechanical=[{"sev": "🟡", "dim": "视频", "loc": "Clip_02", "msg": "生成耗时偏高"}],
         threshold=85,
     )
@@ -263,6 +295,7 @@ def test_unmapped_low_severity_only_records_not_escalates() -> None:
 def test_dashboard_unmapped_blocker_is_surfaced() -> None:
     res = score.score_episode(
         "/tmp/w", "第1集", consistency=_all_ok_consistency(), visual=_all_ok_visual(),
+        voice_print=_all_ok_voice_print(),
         dashboard_ep={"episode": "第1集", "final_pass_rate": 0.95,
                       "recent_blockers": [{"stage": "compose", "dim": "水印", "loc": "成片", "msg": "AI标识缺失"}]},
         threshold=85,
@@ -275,6 +308,7 @@ def test_mapped_findings_still_route_normally() -> None:
     # 回归：能归维的 finding 仍按维度计分，不进 unmapped
     res = score.score_episode(
         "/tmp/w", "第1集", consistency=_all_ok_consistency(), visual=_all_ok_visual(),
+        voice_print=_all_ok_voice_print(),
         mechanical=[{"sev": "🔴", "dim": "字幕", "loc": "cue#1", "msg": "时间码越界"}],
         threshold=85,
     )

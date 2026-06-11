@@ -44,7 +44,6 @@ node_modules/
 
 # AI agent local configs / generated state.
 # Keep AGENTS.md tracked: it is this repo's shared, tool-neutral entry.
-.claude/
 CLAUDE.md
 .codex/
 .cursor/

@@ -1,6 +1,6 @@
 ---
 name: mv
-description: 制MV 总调度 — 把一首【已做好的歌】（来自 写歌/song 线，或用户给的音频）做成 AI 音乐 MV 视频。是与 novel2drama(制漫剧) 平行的"制MV"生产线，输入=成品歌，产物落 制MV/<曲名>/(成片_MV.mp4)。**自包含，不复用 n2d-* 或任何家族 skill**。读 _进度.md 路由到 mv-craft(共享契约/AI披露) / mv-beat(卡点) / mv-plan(clip/timeline规划) / mv-image(出图) / mv-video(出视频+挑版) / mv-lyric-sync(卡拉OK字幕) / mv-compose(合成)。换脸用公共 video-faceswap。Use when given a finished song/audio or an existing 制MV/<曲名>/ folder, or asked 做MV / 给这首歌做视频 / 卡点 / 卡拉OK / MV出图出视频 / 合成成片. Triggers MV, 音乐视频, 做MV, 给歌做视频, 卡点, 卡拉OK, 歌词字幕, MV出图, MV出视频, MV合成, mv.
+description: 制MV 总调度 — 把一首【已做好的歌】（来自 写歌/song 线，或用户给的音频）做成 AI 音乐 MV 视频。是与 novel2drama(制漫剧) 平行的"制MV"生产线，输入=成品歌，产物落 制MV/<曲名>/(成片_MV.mp4)。**自包含，不复用 n2d-* 或任何家族 skill**。读 _进度.md 路由到 mv-craft(共享契约/AI披露) / mv-beat(卡点) / mv-plan(clip/timeline规划) / mv-image(出图) / mv-video(出视频+挑版) / mv-lyric-sync(卡拉OK字幕) / mv-compose(合成)。换脸用公共 shared-video-faceswap。Use when given a finished song/audio or an existing 制MV/<曲名>/ folder, or asked 做MV / 给这首歌做视频 / 卡点 / 卡拉OK / MV出图出视频 / 合成成片. Triggers MV, 音乐视频, 做MV, 给歌做视频, 卡点, 卡拉OK, 歌词字幕, MV出图, MV出视频, MV合成, mv.
 ---
 
 # mv — 制MV 生产线 · 总调度
@@ -9,7 +9,7 @@ description: 制MV 总调度 — 把一首【已做好的歌】（来自 写歌/
 
 与 `novel2drama`（小说→漫剧）平行：**写歌 → 制MV**，正如 **写小说 → 制漫剧**。歌怎么来不归本线管（那是 `song` 写歌线）。
 
-**完全独立铁律**：mv-* **自包含，不复用 n2d-*/novel-*/song-* 任何家族 skill**。视觉/合成/字幕全在 mv-* 内自实现；只用通用外部工具（ffmpeg / librosa / whisperx / 生图生视频 CLI）。换脸调**公共能力 `video-faceswap`**（它不属于任何家族）。
+**完全独立铁律**：mv-* **自包含，不复用 n2d-*/novel-*/song-* 任何家族 skill**。视觉/合成/字幕全在 mv-* 内自实现；只用通用外部工具（ffmpeg / librosa / whisperx / 生图生视频 CLI）。换脸调**公共能力 `shared-video-faceswap`**（它不属于任何家族）。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
@@ -61,7 +61,7 @@ description: 制MV 总调度 — 把一首【已做好的歌】（来自 写歌/
 | 要给 MV 出画 | `mv-image`（出图）→ `mv-video`（出视频）；整首当一个"作品"，段落≈分镜组 |
 | 要卡拉OK字幕 | `mv-lyric-sync` |
 | 素材齐了要合成成片 | `mv-compose` |
-| 要给某段视频换脸 | 公共 `video-faceswap`（先过其合规闸门） |
+| 要给某段视频换脸 | 公共 `shared-video-faceswap`（先过其合规闸门） |
 | 审 MV / 卡点对账 / 字幕检查 / 成片体检 / 流程自审 | `mv-review`（成品后审，出定位报告） |
 | 给了 `制MV/<曲名>/` 没说动作 | 读 `_进度.md` 报进度 + 建议下一步 |
 
@@ -71,11 +71,11 @@ description: 制MV 总调度 — 把一首【已做好的歌】（来自 写歌/
 
 ## 合法性
 - 输入歌的版权随歌而定（自有/授权/原创）；本线只做视觉，不改词曲版权属性。
-- 用 `video-faceswap` 换脸时，遵守它的合规闸门（仅本人/授权/合成脸 + 强制 AI 标识）。
+- 用 `shared-video-faceswap` 换脸时，遵守它的合规闸门（仅本人/授权/合成脸 + 强制 AI 标识）。
 
 ## 与别的线
 - **创作线**：`novel-author`(写小说) / `song`(写歌)。**生产线**：`novel2drama`(制漫剧) / **`mv`(制MV)**。写小说→制漫剧、**写歌→制MV**。
-- 各线**互不依赖**（自包含）；换脸是**公共** `video-faceswap`。
+- 各线**互不依赖**（自包含）；换脸是**公共** `shared-video-faceswap`。
 
 ## 持续改进
 工艺/翻车 → 写进对应 mv-* skill 的 `references/`。**新增/改 mv-* skill 后同步更新 `skills/README.md`。**

@@ -52,6 +52,23 @@ def write_platform_metrics(root: Path, rows: list[dict[str, object]]) -> None:
         writer.writerows(rows)
 
 
+def test_gate_findings_payload_is_batch_compatible(tmp_path: Path) -> None:
+    payload = dashboard.gate_findings_payload(str(tmp_path), "第1集", "image", [
+        {
+            "sev": "block",
+            "dim": "角色一致性",
+            "loc": "Clip_03",
+            "msg": "崩脸",
+            "return_to_stage": "image",
+            "affected_shots": ["Clip_03"],
+        }
+    ])
+    assert payload["kind"] == "n2d_consistency_findings"
+    assert payload["findings"][0]["dim_key"] == "character_consistency"
+    assert payload["auto_return_tasks"][0]["return_to_stage"] == "image"
+    assert payload["auto_return_tasks"][0]["affected_shots"] == ["Clip_03"]
+
+
 def test_aggregate_generation_cost_redraw_and_qa(tmp_path: Path) -> None:
     write_progress(tmp_path)
     events = [
@@ -348,3 +365,21 @@ def test_redraw_category_classification_and_totals(tmp_path: Path) -> None:
     md = dashboard.render_markdown(result)
     assert "重抽原因分维度" in md
     assert "一致性小计" in md
+
+
+# ── T10: 一致性审查事件接通（写而不读修复）─────────────────────────────────────
+def test_consistency_findings_event_counts_and_folds_into_qa_blockers(tmp_path: Path) -> None:
+    write_progress(tmp_path)
+    events = [
+        dashboard.make_event(
+            "第1集", "review", "consistency_findings",
+            source="n2d-review/scripts/consistency_audit.py",
+            meta={"total_block": 2, "total_warn": 3, "finding_count": 5},
+        ),
+    ]
+    result = dashboard.aggregate_events(str(tmp_path), events)
+    ep1 = next(item for item in result["episodes"] if item["episode"] == "第1集")
+    assert ep1["consistency_blockers"] == 2 and ep1["consistency_warnings"] == 3
+    assert ep1["qa_blockers"] == 2   # 折入 qa_blockers，阈值告警/总账看得到审查检出
+    totals = result["totals"]
+    assert totals["consistency_blockers"] == 2 and totals["consistency_warnings"] == 3

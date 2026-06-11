@@ -9,7 +9,7 @@
 ```markdown
 ## Clip K（时长 Ns · 镜头 N1[+N2]）　**节奏**：铺垫·长镜 / 加速·碎切 / 爽点·CU硬切 / 留白·定格　**张力**：克制 / 紧张 / 爆发 / 释放
 
-**首帧**：`出图/第N集/镜头N1_<描述>.png`
+**首帧**：`出图/第N集/图片/镜头N1_<描述>.png`
 **尾帧**（接力契约 `需要尾帧?=是` 时**必用**，平台支持双帧的走 frames2video）：`出图/第N集/图片/镜头N_end.png`（n2d-image 出的尾帧=下一 Clip 首帧构图）
 **场景**：{场景名}（夜晚/内）
 **导演意图**：{这一镜在剧情里的功能，不写"画面好看"，写"为什么这样拍"；例如压迫/试探/藏锋/释放/钩子}
@@ -105,7 +105,7 @@ native audio policy: audio_intent=none by default; for low-risk ambience/native 
 ### 自检（生成后逐条过 · 落档闸门）
 > 生成后过/重跑判定。筛选宽容：轻微偏差放行，只命中硬伤才重跑或改 prompt。
 
-- [ ] 首帧一致性：开头画面与 `出图/第N集/镜头N1_<描述>.png` 人物脸/服装/场景一致，无明显漂移
+- [ ] 首帧一致性：开头画面与 `出图/第N集/图片/镜头N1_<描述>.png` 人物脸/服装/场景一致，无明显漂移
 - [ ] 人物运动：动作方向正确、幅度自然，无肢体扭曲、脸部抖动、多人脸错乱
 - [ ] 镜头运动：符合 prompt 的推/拉/跟/固定等设计，无突兀乱甩或无意义缩放
 - [ ] 动态细节：至少 1 个动态细节成立，且没有引入现代物件/文字/logo/水印
@@ -226,7 +226,7 @@ native audio policy: audio_intent=none by default; for low-risk ambience/native 
 - **原生音画 opt-in 清单**：仅当本集有 `audio_intent=ambience|native_sfx` 或 `_设置.md 视频原生音轨 != 丢弃` 时必填；逐 Clip 写 audio_intent、低风险理由、mouth_visible、speech_policy、compose_policy、生成后审查结论
 - 进度（已完成 / 总数）
 - 每 Clip 状态表（Clip K | 时长 | 首帧 | 尾帧 | 转场 | J-cut | 空镜缓冲 | 状态 ✅/⏳/⬜ | 落档路径）
-- 首帧 PNG 来源速查（对应 Stage 4 的 `出图/第N集/镜头N_*.png`）
+- 首帧 PNG 来源速查（对应 Stage 4 的 `出图/第N集/图片/镜头N_*.png`）
 - 已知降级（如 Clip 3 image2video 跑不稳，改成 Clip3a/3b 两短段）
 
 ## 3.1 检查清单强制要求

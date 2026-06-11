@@ -21,12 +21,15 @@ from n2d_contract import (  # noqa: E402  生产数据目录 / kind 单一真值
     GENRE_PERFORMANCE_RECORD_KIND,
     PLATFORM_FEEDBACK_KIND,
     PRODUCTION_DIR,
+    normalize_finding,
     production_dir,
 )
 from n2d_settings import load_settings  # noqa: E402  _设置.md 解析单一真值源
 
 VERSION = 1
 KIND = PLATFORM_FEEDBACK_KIND
+# 15s 留存低于此线 + 有一致性 block → 触发优先返工写回信号（投放反哺闭环回火端）
+LOW_RETENTION_15S = 0.5
 
 # ── 选题→投放→反哺选题闭环：跨项目「自有题材战绩库」（append-only JSONL）──
 # n2d-feedback 写、novel-score 读（两条线只在此数据文件层连接，不互相 import）。
@@ -751,9 +754,13 @@ def build_recommendations(analyses: Dict[str, Dict[str, Any]], min_lift: float) 
 
 
 def load_consistency_reports(root: str) -> List[Dict[str, Any]]:
-    """读 n2d-review consistency_audit 外发的 生产数据/consistency_findings_*.json（无文件优雅返回空）。"""
+    """读 n2d-review/review-ui 外发的 n2d_consistency_findings（无文件优雅返回空）。"""
     reports: List[Dict[str, Any]] = []
-    for path in sorted(glob.glob(os.path.join(production_dir(root), "consistency_findings_*.json"))):
+    patterns = ("consistency_findings_*.json", "review_ui_findings_*.json")
+    paths: List[str] = []
+    for pattern in patterns:
+        paths.extend(glob.glob(os.path.join(production_dir(root), pattern)))
+    for path in sorted(set(paths)):
         try:
             with open(path, encoding="utf-8") as fh:
                 data = json.load(fh)
@@ -762,6 +769,24 @@ def load_consistency_reports(root: str) -> List[Dict[str, Any]]:
         if isinstance(data, dict) and data.get("kind") == CONSISTENCY_FINDINGS_KIND:
             reports.append(data)
     return reports
+
+
+def consistency_by_dim(report: Dict[str, Any]) -> Dict[str, Dict[str, int]]:
+    by_dim = ((report.get("summary") or {}).get("by_dim") or {})
+    if isinstance(by_dim, dict) and by_dim:
+        return by_dim
+    out: Dict[str, Dict[str, int]] = {}
+    for finding in report.get("findings") or []:
+        if not isinstance(finding, dict):
+            continue
+        norm = normalize_finding(finding)  # 归一三端别名（sev/dim/msg → 规范字段，与 batch 消费端同一真值源）
+        dim = norm["dimension"] or "QA"    # 展示维度保留原文（dim_totals 的 Top 维度键，不强转 canonical key）
+        sev = norm["severity"] or "info"
+        if sev not in {"block", "warn", "info"}:
+            continue
+        counts = out.setdefault(dim, {"block": 0, "warn": 0, "info": 0})
+        counts[sev] = counts.get(sev, 0) + 1
+    return out
 
 
 def analyze_consistency(reports: List[Dict[str, Any]], rows: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
@@ -781,7 +806,7 @@ def analyze_consistency(reports: List[Dict[str, Any]], rows: List[Dict[str, Any]
     episodes: List[Dict[str, Any]] = []
     for report in reports:
         ep = normalize_episode(report.get("episode"))
-        by_dim = ((report.get("summary") or {}).get("by_dim") or {})
+        by_dim = consistency_by_dim(report)
         ep_block = ep_warn = 0
         top_dim, top_weight = "", -1
         for dim, counts in by_dim.items():
@@ -808,11 +833,26 @@ def analyze_consistency(reports: List[Dict[str, Any]], rows: List[Dict[str, Any]
         })
     episodes.sort(key=lambda item: (-(item["block"] * 10 + item["warn"]), episode_sort_key(item["episode"])))
     worst = episodes[0] if episodes and (episodes[0]["block"] or episodes[0]["warn"]) else None
+    # 写回信号（闭环回火端，不止展示）：一致性 block + 留存偏低的集 → 优先返工并提该维度权重，
+    # 供 n2d-batch / n2d-score 消费。把"脸漂严重的集跳出也高"从洞察变成可执行动作。
+    priority_signals: List[Dict[str, Any]] = []
+    for e in episodes:
+        ret = e.get("retention_15s")
+        if e["block"] and ret is not None and ret < LOW_RETENTION_15S:
+            priority_signals.append({
+                "episode": e["episode"],
+                "top_dim": e["top_dim"],
+                "block": e["block"],
+                "retention_15s": ret,
+                "signal": "prioritize_rework",
+                "note": f"一致性 block {e['block']} 且 15s 留存 {ret:.0%} 偏低 → 优先返工该集、提「{e['top_dim']}」维度权重",
+            })
     return {
         "report_count": len(reports),
         "dim_totals": dim_totals,
         "episodes": episodes,
         "worst_episode": worst["episode"] if worst else None,
+        "priority_signals": priority_signals,
     }
 
 

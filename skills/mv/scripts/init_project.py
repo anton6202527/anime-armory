@@ -95,7 +95,7 @@ def build_progress(title, meta):
 | 合成成片 | mv-compose | [ ] |
 | 质检 | mv-review | [ ] |
 | AI 使用披露 | mv-craft/scripts/ai_usage.py | [ ] |
-| （可选）换脸 | video-faceswap（公共） | [ ] |
+| （可选）换脸 | shared-video-faceswap（公共） | [ ] |
 
 ## 导出
 - [ ] 成片_MV.mp4
