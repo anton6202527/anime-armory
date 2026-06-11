@@ -162,6 +162,62 @@ def test_parse_episodes_accepts_chinese_and_fullwidth_numbers():
     assert identity.parse_episodes("第２集,第三集", available) == ["第二集", "第３集"]
 
 
+def _drift_with_blocks(root, char="王敦"):
+    face_results = {
+        "第1集": {"available": True, "shots": [{"char": char, "verdict": "warn", "score": 0.62, "floor": 0.7}]},
+        "第2集": {"available": True, "shots": [{"char": char, "verdict": "block", "score": 0.5, "floor": 0.7}]},
+    }
+    return identity.summarize_face_results(root, ["第1集", "第2集"], face_results, generated_at="x")
+
+
+def test_lora_upgrade_candidates_recommends_when_drift_and_lora_not_ready(tmp_path):
+    root = _root(tmp_path)
+    data = _registry()
+    data["characters"][0]["forms"][0]["identity_adapters"]["lora"] = {"status": "candidate"}
+    drift = _drift_with_blocks(root)
+
+    recs = identity.lora_upgrade_candidates(data, drift)
+
+    assert len(recs) == 1
+    rec = recs[0]
+    assert rec["character_id"] == "CHAR_WANG"
+    assert rec["lora_status"] == "candidate"
+    assert rec["first_bad_episode"] == "第2集"
+    assert rec["bad_episodes"] == ["第1集", "第2集"]
+    assert "skills/n2d-lora/scripts/lora.py init" in rec["next_command"]
+    assert "--character-id CHAR_WANG" in rec["next_command"]
+
+
+def test_lora_upgrade_candidates_skips_ready_training_and_insufficient_data(tmp_path):
+    root = _root(tmp_path)
+    drift = _drift_with_blocks(root)
+
+    # lora 已 ready → 不再建议升档
+    assert identity.lora_upgrade_candidates(_registry(), drift) == []
+    # 已 training → 同样豁免
+    data = _registry()
+    data["characters"][0]["forms"][0]["identity_adapters"]["lora"] = {"status": "training"}
+    assert identity.lora_upgrade_candidates(data, drift) == []
+    # 机检不可用（available=false）→ 数据不足，空列表
+    skipped = identity.build_drift_report(root, ["第1集"], skip_face=True, registry=data)
+    assert skipped["recommendations"] == []
+    assert identity.lora_upgrade_candidates(data, skipped) == []
+
+
+def test_matrix_summary_lists_characters_needing_lora_upgrade(tmp_path):
+    root = _root(tmp_path)
+    data = _registry()
+    data["characters"][0]["forms"][0]["identity_adapters"]["lora"] = {"status": "candidate"}
+    drift = _drift_with_blocks(root)
+
+    matrix = identity.build_adapter_matrix(root, data, drift_report=drift)
+    assert matrix["summary"]["characters_needing_lora_upgrade"] == ["CHAR_WANG"]
+
+    # 无 drift 数据时为空列表（与判定同源，不瞎编）
+    matrix_no_drift = identity.build_adapter_matrix(root, data)
+    assert matrix_no_drift["summary"]["characters_needing_lora_upgrade"] == []
+
+
 def test_write_outputs(tmp_path):
     root = _root(tmp_path)
     matrix = identity.build_adapter_matrix(root, _registry())

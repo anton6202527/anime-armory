@@ -307,3 +307,44 @@ def test_build_fail_on_critical_exit_code(tmp_path: Path) -> None:
     _seed_events(tmp_path)
     rc = dashboard.main(["build", str(tmp_path), "--fail-on-critical"])
     assert rc == 3  # 默认 QA 阻断 = critical
+
+
+def test_redraw_category_classification_and_totals(tmp_path: Path) -> None:
+    """重抽原因分维度：自由文本读时归类 + 显式合法 category 尊重 + 显式非法回退归类 + totals 汇总。"""
+    write_progress(tmp_path)
+    events = [
+        # 自由文本 → 关键词归类 face_consistency
+        dashboard.make_event(
+            "第1集", "image", "redraw",
+            generation={"asset": "a.png", "status": "fail", "redraw_reason": "第3镜沈念崩脸"},
+        ),
+        # 显式合法 category：尊重，不按文本归类
+        dashboard.make_event(
+            "第1集", "image", "redraw",
+            generation={"asset": "b.png", "status": "fail",
+                        "redraw_reason": "看着不舒服", "redraw_category": "scene_drift"},
+        ),
+        # 显式非法 category：回退到文本归类（道具 → prop_structure）
+        dashboard.make_event(
+            "第2集", "image", "redraw",
+            generation={"asset": "c.png", "status": "fail",
+                        "redraw_reason": "法宝道具结构错了", "redraw_category": "not_a_category"},
+        ),
+        # 归不进任何类 → other
+        dashboard.make_event(
+            "第2集", "image", "redraw",
+            generation={"asset": "d.png", "status": "fail", "redraw_reason": "随便重抽一下"},
+        ),
+    ]
+    result = dashboard.aggregate_events(str(tmp_path), events)
+    ep1 = next(item for item in result["episodes"] if item["episode"] == "第1集")
+    ep2 = next(item for item in result["episodes"] if item["episode"] == "第2集")
+    assert ep1["redraw_categories"] == {"face_consistency": 1, "scene_drift": 1}
+    assert ep2["redraw_categories"] == {"prop_structure": 1, "other": 1}
+    assert result["totals"]["redraw_categories"] == {
+        "face_consistency": 1, "scene_drift": 1, "prop_structure": 1, "other": 1,
+    }
+    # markdown 渲染含分维度小节与一致性小计
+    md = dashboard.render_markdown(result)
+    assert "重抽原因分维度" in md
+    assert "一致性小计" in md

@@ -11,6 +11,7 @@ from n2d_text_utils import clean_punctuation  # noqa: E402
 from n2d_route import voiceover_fingerprint  # noqa: E402  配音源指纹（治"配音后改 voiceover 导致清单过期"）
 from n2d_telemetry import record_event, Timer  # noqa: E402
 from voice_text import clean_text  # 念白文本清洗（独立模块·带单测，治 ||→「。，」脏标点）
+import voice_manifest as vmf  # 时长清单条目 + voice_key 音色留痕（独立模块·带单测；契约字段 VOICE_KEY_FIELD）
 
 if len(sys.argv) < 4:
     print("usage: render_voice.py <作品根> <第N集> <zh|en>", file=sys.stderr)
@@ -35,10 +36,7 @@ def _load_voicemap():
     try: return json.load(open(os.path.join(ROOT,'设定库','voicemap.json'),encoding='utf-8'))
     except Exception: return {}
 VOICEMAP=_load_voicemap()
-def _vm_match(role):
-    for sub,cfg in VOICEMAP.items():
-        if sub and sub in role: return cfg
-    return None
+def _vm_match(role): return vmf.vm_match(role, VOICEMAP)  # 实现已抽到 voice_manifest.py（带单测）
 
 MM_KEY=os.environ.get('MINIMAX_API_KEY'); MM_GROUP=os.environ.get('MINIMAX_GROUP_ID')
 MM_MODEL=os.environ.get('MINIMAX_MODEL','speech-02-hd')
@@ -140,17 +138,8 @@ def volc_cfg(role):
     return V['SHEN'],'neutral',1.0
 
 # ── 零样本克隆(CosyVoice/FishSpeech) 按角色分音色：角色→音色键→参考音 env ──
-# 角色名(含子串)归到音色键；注意 '沈念旁白' 走 SHEN(沈念内心)，纯 '旁白' 才走 NARR(旁白)
-def role_key(role):
-    vm=_vm_match(role)
-    if vm and vm.get('key'): return vm['key']
-    if '系统' in role:   return 'SYS'
-    if '柳娘子' in role: return 'LIU'
-    if '小禾' in role:   return 'XIAOHE'
-    if '太监' in role:   return 'TAIJIAN'
-    if '妖' in role:     return 'YAO'
-    if role=='旁白':     return 'NARR'
-    return 'SHEN'   # 沈念旁白 / 沈念 / 默认
+# 角色名(含子串)归到音色键；实现已抽到 voice_manifest.role_key（带单测，'沈念旁白'走SHEN等规则见彼处）
+def role_key(role): return vmf.role_key(role, VOICEMAP)
 # 取该角色的 (参考音wav, 逐字文本)：优先 <PREFIX>_REF_<KEY>，回退全局 <PREFIX>_REF_AUDIO，再回退 None=默认嗓
 def role_ref(prefix, role):
     k=role_key(role)
@@ -328,10 +317,11 @@ if LANG=='zh':
             return MM_EMO[emo_c] if emo_c!='neutral' else mm_cfg(role)[1]
         if USE_VOLC: return (volc_cfg(role)[1] or 'none') + '(角色固定·不接逐句情绪)'
         return '后端不接情绪'  # 零样本/say
-    manifest=[{"idx":i,"镜头":shots[i] if i<len(shots) else "","角色":items[i][0],"情绪":items[i][2],"钩子":items[i][4],"文本":items[i][1],
-               "时长":round(measured[i],3),"start":round(starts[i],3),"end":round(ends[i],3),"gap_after":round(gaps[i],3),"line_wav":f"line_{i:02d}.wav",
-               "音色键":role_key(items[i][0]),"voice_id":_voice_id_for(items[i][0]),"情绪_已应用":_emo_applied(items[i][0],items[i][2]),
-               **({"占位":True} if i in placeholders else {})} for i in range(n)]
+    # 逐句条目形状（含契约字段 voice_key=实际应用音色键；say 占位记 say:<声音名>#placeholder）见 voice_manifest.manifest_entry
+    manifest=[vmf.manifest_entry(i, shots[i] if i<len(shots) else "", items[i][0], items[i][2], items[i][4], items[i][1],
+                                 measured[i], starts[i], ends[i], gaps[i], f"line_{i:02d}.wav",
+                                 VOICEMAP, USE_API, _voice_id_for(items[i][0]), _emo_applied(items[i][0],items[i][2]),
+                                 i in placeholders) for i in range(n)]
     out_dir=os.path.dirname(os.path.join(W,'voice_zh.wav'))
     _json.dump(manifest, open(os.path.join(out_dir,'时长清单.json'),'w',encoding='utf-8'), ensure_ascii=False, indent=2)
     # 时长清单 sidecar：记录配音时 voiceover.txt 的台词指纹 + 后端 + 时间。

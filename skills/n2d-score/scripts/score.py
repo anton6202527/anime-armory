@@ -280,6 +280,34 @@ def map_qa_dim(text: str) -> Optional[str]:
     return None
 
 
+FACE_DIM = "脸(G1)"
+PILLOW_FALLBACK_MODE = "pillow_fallback"  # 与 n2d-review face_consistency.PILLOW_FALLBACK_MODE 同字面值
+
+
+def apply_face_precision(dims: Dict[str, Dict[str, Any]], consistency: Optional[Dict[str, Any]]) -> None:
+    """G1 Pillow 降级档消费：有真实（但低精度）信号 → 不再整维度 insufficient_data，给降权分。
+
+    face_consistency 无 insightface 时降级为 Pillow 基础机检（图存在/可解码/分辨率/清晰度），
+    section 标 mode=pillow_fallback。此时 character_consistency：
+      - skipped=False（有信号，避免假性缺数据）；
+      - 标 precision=pillow_fallback → finalize 时维度权重减半（降权分），状态封顶 warn(需复核)；
+      - 留证据提示「建议装 insightface 提升精度」。
+    """
+    if not isinstance(consistency, dict):
+        return
+    sections = consistency.get("sections") if isinstance(consistency.get("sections"), dict) else {}
+    face = sections.get(FACE_DIM) if isinstance(sections.get(FACE_DIM), dict) else {}
+    if face.get("mode") != PILLOW_FALLBACK_MODE:
+        return
+    item = dims["character_consistency"]
+    item["precision"] = PILLOW_FALLBACK_MODE
+    item["skipped"] = False
+    item["evidence"].append(
+        "脸(G1) 为 Pillow 降级机检（仅查图存在/可解码/分辨率/清晰度，无人脸相似度）——"
+        "该维度按降权分计入；建议安装 insightface 提升精度，崩脸仍需人判兜底"
+    )
+
+
 def apply_consistency(dims: Dict[str, Dict[str, Any]], consistency: Optional[Dict[str, Any]]) -> None:
     if not isinstance(consistency, dict):
         return
@@ -486,6 +514,11 @@ def finalize_dimensions(dims: Dict[str, Dict[str, Any]], threshold: int) -> None
         item["score"] = score
         if score < threshold and status == "pass":
             status = "warn"
+        if item.get("precision") == PILLOW_FALLBACK_MODE:
+            # 降级档（低精度信号）：维度权重减半（降权分），干净结果也只给 warn(需复核)、不臆造满信心 pass
+            item["weight"] = max(1, int(round(int(item["weight"]) / 2)))
+            if status == "pass":
+                status = "warn"
         item["status"] = status
 
 
@@ -663,6 +696,7 @@ def score_episode(
     ep = normalize_episode(ep)
     dims = {key: empty_dimension(key) for key in DIMENSIONS}
     apply_consistency(dims, consistency)
+    apply_face_precision(dims, consistency)
     apply_identity_drift(dims, identity, ep)
     unmapped = apply_mechanical(dims, mechanical)
     apply_visual(dims, visual)

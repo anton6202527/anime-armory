@@ -152,3 +152,7 @@ python3 skills/n2d-feedback/scripts/feedback.py <作品根> --metrics <平台指
 | 同一集多个投放版本但没写 `variant_id` | 补 `ab_test_id + variant_id`；否则脚本只能当普通多条平台数据，不能算 paired lift |
 | 开场/封面/标题/断点全一起改 | 可以测试组合，但不能单因素归因；下一轮拆成单变量或正交实验 |
 | 把投放回灌当审片 | 审片走 `n2d-review` / `n2d-score`；feedback 看上线后的用户行为 |
+
+## 一致性问题回灌（QA 线接进投放闭环）
+
+`analyze` 时自动读 `生产数据/consistency_findings_*.json`（`n2d-review` 的 `consistency_audit.py` 外发，kind=`n2d_consistency_findings`），在 `platform_feedback` 报告新增「一致性问题 Top」节：按维度（脸/服装/场景/风格/语义/状态）计数、标出一致性问题最严重的集，并与同集留存/跳出指标**并排呈现**——回答"脸漂严重的集是不是跳出率也高"。无 findings 文件时优雅跳过，不影响原有分析。

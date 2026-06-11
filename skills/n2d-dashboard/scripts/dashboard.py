@@ -40,11 +40,13 @@ except Exception:  # pragma: no cover - dashboard still works without progress
     parse_progress = None  # type: ignore[assignment]
     stage_of = None  # type: ignore[assignment]
 
-from n2d_contract import (  # 生产数据目录 / kind 单一真值源
+from n2d_contract import (  # 生产数据目录 / kind / 重抽原因枚举 单一真值源
     PRODUCTION_ALERTS_KIND,
     PRODUCTION_DASHBOARD_KIND,
     PRODUCTION_DIR,
     PRODUCTION_EVENT_KIND,
+    REDRAW_REASON_CATEGORIES,
+    classify_redraw_reason,
     production_dir,
 )
 from n2d_thresholds import DEFAULT_THRESHOLDS, THRESHOLDS_FILE, load_thresholds, load_benchmark  # 告警阈值单一真值源（与 n2d-score 共用）
@@ -375,6 +377,7 @@ def blank_episode(ep: str, progress: Optional[Dict[str, Any]] = None) -> Dict[st
         "redraw_count": 0,
         "redraw_rate": None,
         "redraw_reasons": {},
+        "redraw_categories": {},
         "qa_gate_runs": 0,
         "qa_gate_passes": 0,
         "qa_blockers": 0,
@@ -528,6 +531,13 @@ def aggregate_events(root: str, events: List[Dict[str, Any]]) -> Dict[str, Any]:
                 reasons = Counter(summary["redraw_reasons"])
                 reasons[reason_text] += 1
                 summary["redraw_reasons"] = dict(reasons)
+                # 维度归类：显式 redraw_category 合法则尊重，否则按自由文本关键词归类
+                # （存量事件读时归类即可，不改写历史 jsonl）
+                explicit = str(generation.get("redraw_category") or event.get("redraw_category") or "").strip()
+                category = explicit if explicit in REDRAW_REASON_CATEGORIES else classify_redraw_reason(reason_text)
+                categories = Counter(summary["redraw_categories"])
+                categories[category] += 1
+                summary["redraw_categories"] = dict(categories)
 
         if event_name == "qa_gate_run":
             qa_gate = event.get("qa_gate") if isinstance(event.get("qa_gate"), dict) else {}
@@ -616,6 +626,7 @@ def aggregate_events(root: str, events: List[Dict[str, Any]]) -> Dict[str, Any]:
         "generation_fails": sum(item["generation_fails"] for item in ordered),
         "one_pass_count": sum(item["one_pass_count"] for item in ordered),
         "redraw_count": sum(item["redraw_count"] for item in ordered),
+        "redraw_categories": dict(sum((Counter(item.get("redraw_categories") or {}) for item in ordered), Counter())),
         "qa_blockers": sum(item["qa_blockers"] for item in ordered),
         "qa_warnings": sum(item["qa_warnings"] for item in ordered),
         "qa_infos": sum(item["qa_infos"] for item in ordered),
@@ -791,6 +802,26 @@ def render_markdown(dashboard: Dict[str, Any]) -> str:
             f"{item['duration_hms']} | {format_rate(item.get('one_pass_rate'))} | "
             f"{format_rate(item.get('redraw_rate'))} | {reason_text} | "
             f"{item['qa_blockers']} | {format_cost(item.get('release_net_totals', {}))} | {format_ratio(item.get('recoup_ratio', {}))} |"
+        )
+
+    # 重抽原因分维度统计：一致性相关类小计单列，"一致性是不是最大成本杀手"一眼可见
+    categories = dict((dashboard.get("totals") or {}).get("redraw_categories") or {})
+    if categories:
+        total_redraws = sum(categories.values()) or 1
+        consistency_keys = ("face_consistency", "outfit_consistency", "scene_drift", "style_drift")
+        consistency_subtotal = sum(categories.get(k, 0) for k in consistency_keys)
+        lines += [
+            "",
+            "## 重抽原因分维度",
+            "",
+            "| 维度 | 次数 | 占比 |",
+            "|---|---:|---:|",
+        ]
+        for key, count in sorted(categories.items(), key=lambda kv: -kv[1]):
+            label = REDRAW_REASON_CATEGORIES.get(key, key)
+            lines.append(f"| {label} ({key}) | {count} | {count / total_redraws:.0%} |")
+        lines.append(
+            f"| **一致性小计**（脸漂/服装/场景/画风） | **{consistency_subtotal}** | **{consistency_subtotal / total_redraws:.0%}** |"
         )
 
     blockers = [
@@ -1069,6 +1100,11 @@ def event_from_record_args(ns: argparse.Namespace) -> Dict[str, Any]:
             "status": ns.status,
             "redraw_reason": ns.redraw_reason,
         }
+        if ns.redraw_reason or getattr(ns, "redraw_category", None):
+            explicit = str(getattr(ns, "redraw_category", "") or "").strip()
+            generation["redraw_category"] = (
+                explicit if explicit in REDRAW_REASON_CATEGORIES else classify_redraw_reason(ns.redraw_reason)
+            )
     qa = None
     if ns.qa_sev or ns.qa_dim or ns.qa_loc or ns.qa_msg:
         qa = {
@@ -1285,6 +1321,8 @@ def parser() -> argparse.ArgumentParser:
     record.add_argument("--attempts", type=int)
     record.add_argument("--status", choices=["pass", "fail", "accepted", "rejected"])
     record.add_argument("--redraw-reason")
+    record.add_argument("--redraw-category", choices=sorted(REDRAW_REASON_CATEGORIES),
+                        help="重抽原因维度（契约 REDRAW_REASON_CATEGORIES）；缺省按 --redraw-reason 关键词自动归类")
     record.add_argument("--qa-sev", choices=["block", "warn", "info"])
     record.add_argument("--qa-dim")
     record.add_argument("--qa-loc")

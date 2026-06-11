@@ -16,10 +16,18 @@
 from __future__ import annotations
 
 import argparse
+import datetime as dt
+import importlib.util
 import json
+import os
 import re
 import sys
 from typing import Any, Dict, Iterable, List, Sequence, Tuple
+
+COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
+if COMMON not in sys.path:
+    sys.path.insert(0, COMMON)
+from n2d_contract import CONSISTENCY_FINDINGS_KIND, production_dir  # noqa: E402  findings kind / 生产数据目录单一真值源
 
 import face_consistency as fc
 import outfit_consistency as oc
@@ -177,8 +185,29 @@ def build_auto_return_tasks(sections: Dict[str, dict]) -> List[dict]:
     return tasks
 
 
+def active_findings(details: Sequence[dict]) -> List[dict]:
+    """details → 检出条目（block/warn），逐条带 severity（外发 findings 结构）。"""
+    out: List[dict] = []
+    for detail in details:
+        if not isinstance(detail, dict) or detail.get("verdict") not in ("block", "warn"):
+            continue
+        row = dict(detail)
+        row["severity"] = row.get("verdict")
+        out.append(row)
+    return out
+
+
 def run(root: str, ep: str) -> dict:
     sections: Dict[str, dict] = {}
+    export_rows: List[dict] = []  # 结构化外发：逐条带 维度/严重度/镜头定位/return_to_stage
+
+    def collect_simple(dim: str, rows: Sequence[dict], *, stage: str, default_artifacts: Sequence[str]) -> None:
+        """简单段（只存 verdicts 的维度）的检出行 → 与 details 同构的外发条目。"""
+        details = normalize_details(
+            [r for r in rows if isinstance(r, dict)],
+            dim=dim, ep=ep, stage=stage, default_artifacts=default_artifacts,
+        )
+        export_rows.extend(active_findings(details))
 
     # P0 语义谱系 Diff（raw/voiceover → storyboard → image/video prompt）
     sem = semc.analyze(root, ep)
@@ -220,42 +249,57 @@ def run(root: str, ep: str) -> dict:
     a = fc.audit_anchors(root)
     sections["锚点门(N3)"] = {"skipped": not a.get("available", False),
                              "verdicts": _verdicts(a.get("anchors", [])), "notes": a.get("notes", [])}
+    collect_simple("锚点门(N3)", a.get("anchors", []), stage="image", default_artifacts=("出图/共享/图片",))
 
-    # G1 脸
+    # G1 脸（insightface 缺席时自动降级 Pillow 基础机检：mode=pillow_fallback，供 n2d-score 降权消费）
     f = fc.analyze(root, ep)
     sections["脸(G1)"] = {"skipped": not f.get("available", False),
                          "verdicts": [s.get("verdict") for s in f.get("shots", []) if s.get("verdict") != "noface"],
+                         "mode": f.get("mode"),
+                         "precision": f.get("precision"),
                          "notes": f.get("notes", [])}
+    collect_simple("脸(G1)", [s for s in f.get("shots", []) if s.get("verdict") != "noface"],
+                   stage="image", default_artifacts=(f"出图/{ep}/图片",))
 
     # N1 服装/配色
     o = oc.analyze(root, ep)
     sections["服装配色(N1)"] = {"skipped": not o.get("available", False),
                               "verdicts": _verdicts(o.get("shots", [])), "notes": o.get("notes", [])}
+    collect_simple("服装配色(N1)", o.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
 
     # N2 片内时序
     t = tcheck.analyze(root, ep)
     sections["片内时序(N2)"] = {"skipped": not t.get("clips", []) and bool(t.get("notes")),
                               "verdicts": [c.get("verdict") for c in t.get("clips", [])], "notes": t.get("notes", [])}
+    collect_simple("片内时序(N2)", t.get("clips", []), stage="video", default_artifacts=(f"出视频/{ep}/视频",))
 
     # O2 场景
     s = sc.analyze(root, ep)
     sections["场景(O2)"] = {"skipped": not s.get("available", False),
                           "verdicts": _verdicts(s.get("shots", [])), "notes": s.get("notes", [])}
+    collect_simple("场景(O2)", s.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
 
     # S1 风格漂移
     st = stc.analyze(root, ep)
     sections["风格(S1)"] = {"skipped": not st.get("available", False) or st.get("floor") is None,
                           "verdicts": _verdicts(st.get("shots", [])), "notes": st.get("notes", [])}
+    collect_simple("风格(S1)", st.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
 
     # 接缝 接力(尾帧 vs 下一首帧)——PNG 层，把"逐接缝人判"降成机检初筛
     sm = tcheck.seam_analyze(root, ep)
     sections["接缝接力"] = {"skipped": bool(sm.get("notes")) and not sm.get("seams"),
                          "verdicts": _verdicts(sm.get("seams", [])), "notes": sm.get("notes", [])}
+    collect_simple("接缝接力", sm.get("seams", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
 
     # N4 糊/低质
     q = qc.analyze(root, ep)
     sections["糊/低质(N4)"] = {"skipped": not q.get("available", False),
                              "verdicts": _verdicts(q.get("shots", [])), "notes": q.get("notes", [])}
+    collect_simple("糊/低质(N4)", q.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
+
+    # 结构化段（P0/P1/P2）已有 details：直接取检出条目，避免双重归一
+    for sec in sections.values():
+        export_rows.extend(active_findings(sec.get("details", [])))
 
     summary = summarize(sections)
     return {
@@ -263,8 +307,76 @@ def run(root: str, ep: str) -> dict:
         "episode": ep,
         "summary": summary,
         "sections": sections,
+        "findings": export_rows,
         "auto_return_tasks": build_auto_return_tasks(sections),
     }
+
+
+def findings_payload(res: dict) -> dict:
+    """run() 结果 → 结构化外发 payload（kind=CONSISTENCY_FINDINGS_KIND，单一真值源）。"""
+    return {
+        "kind": CONSISTENCY_FINDINGS_KIND,
+        "version": 1,
+        "root": res.get("root", ""),
+        "episode": res.get("episode", ""),
+        "generated_at": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
+        "summary": res.get("summary", {}),
+        "findings": res.get("findings", []),
+    }
+
+
+def _append_dashboard_event(root: str, ep: str, res: dict, findings_path: str) -> bool:
+    """复用 n2d-dashboard 的事件写入约定，登记一条 consistency_findings 事件（best-effort）。
+
+    同集旧事件按 (episode, event, source) 替换而非堆积（沿用 cmd_gate 的 replace 约定）。
+    dashboard 模块加载失败/写失败不阻塞审计——findings JSON 文件才是主产物。
+    """
+    try:
+        dash_py = os.path.abspath(os.path.join(
+            os.path.dirname(__file__), "..", "..", "n2d-dashboard", "scripts", "dashboard.py"))
+        spec = importlib.util.spec_from_file_location("n2d_dashboard_for_audit", dash_py)
+        if spec is None or spec.loader is None:
+            return False
+        dash = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(dash)
+        summary = res.get("summary", {}) or {}
+        by_dim = summary.get("by_dim", {}) or {}
+        event = dash.make_event(
+            ep,
+            "review",
+            "consistency_findings",
+            source="n2d-review/scripts/consistency_audit.py",
+            meta={
+                "findings_path": os.path.relpath(findings_path, root),
+                "total_block": summary.get("total_block", 0),
+                "total_warn": sum(int((c or {}).get("warn") or 0) for c in by_dim.values()),
+                "finding_count": len(res.get("findings", [])),
+            },
+        )
+        dash.replace_events(
+            root,
+            lambda e: (
+                e.get("episode") == event["episode"]
+                and e.get("event") == "consistency_findings"
+                and e.get("source") == "n2d-review/scripts/consistency_audit.py"
+            ),
+            [event],
+        )
+        return True
+    except Exception as exc:  # 事件流是旁路：失败留痕到 stderr，不影响审计与文件外发
+        print(f"[consistency_audit][warn] dashboard 事件写入失败（忽略）：{exc}", file=sys.stderr)
+        return False
+
+
+def export_findings(root: str, ep: str, res: dict) -> str:
+    """聚合一致性检出 → 生产数据/consistency_findings_<集>.json + dashboard 事件（不改既有报告产物）。"""
+    path = os.path.join(production_dir(root), f"consistency_findings_{ep}.json")
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(findings_payload(res), fh, ensure_ascii=False, indent=2)
+        fh.write("\n")
+    _append_dashboard_event(root, ep, res, path)
+    return path
 
 
 def main(argv: List[str]) -> int:
@@ -272,8 +384,12 @@ def main(argv: List[str]) -> int:
     ap.add_argument("root")
     ap.add_argument("episode")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--no-export", action="store_true",
+                    help="只审计不外发（默认会写 生产数据/consistency_findings_<集>.json 并登记 dashboard 事件）")
     ns = ap.parse_args(argv)
     res = run(ns.root.rstrip("/"), ns.episode)
+    if not ns.no_export and os.path.isdir(ns.root):
+        export_findings(ns.root.rstrip("/"), ns.episode, res)
     if ns.json:
         print(json.dumps(res, ensure_ascii=False, indent=2)); return 0
     print(f"=== 一致性编排审计（O1·一键全跑）：{ns.root} {ns.episode} ===\n")

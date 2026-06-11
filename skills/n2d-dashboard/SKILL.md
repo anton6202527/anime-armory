@@ -12,6 +12,7 @@ description: P0 横切 skill for novel2drama production and ROI metrics. Record 
 - **事件日志是机器真值**：所有生产数据先追加到 `制漫剧/<剧名>/生产数据/production_events.jsonl`，再由脚本汇总成 `dashboard.json` + `dashboard.md`。不要把成本/重抽原因塞进 `_进度.md`。
 - **事件读写带本地锁**：`record` / `gate` / `build` / `watch` 对 `production_events.jsonl` 和 dashboard 输出统一走 `production_events.lock`；JSON/MD/HTML 用临时文件原子替换，避免多 worker 同时记账时读半截或互相覆盖。
 - **每次生成都记账**：n2d-image / n2d-video / n2d-voice / n2d-compose 的每次 AI 调用或实质性处理，都记录 `stage`、`asset`、`duration_sec`、`cost`、`status`。重抽必须写 `redraw_reason`。
+- **重抽原因分维度（契约枚举）**：`redraw_reason` 仍写自由文本，但记账时同步归入契约 `REDRAW_REASON_CATEGORIES` 九类维度（脸漂/服装/场景/画风/道具/参考图裁切/prompt 冲突/时序/其他）——显式传 `--redraw-category` 则尊重，否则按关键词自动归类；存量自由文本事件在 rebuild 时读时归类，不改写历史 jsonl。`dashboard.md` 出「重抽原因分维度」表并单列**一致性小计**（face/outfit/scene/style），让"一致性是不是最大成本杀手"一眼可见、可驱动投入决策。
 - **每次审查都入账**：生产前 gate、成片后 review 的 QA finding 都写入仪表盘。`block` 是 QA 阻断，`warn` 是风险提示；两者分开统计。
 - **最终通过率定义固定**：`final_pass_rate = generation_passes / (generation_passes + generation_fails)`。没有记录 pass/fail 时显示 `—`，不得凭感觉补。
 - **ROI 五件套固定**：`cost_per_finished_min`（生产成本 ÷ 成片分钟）、`duration_sec`（每集生产耗时）、`one_pass_rate`（一次通过数 ÷ 生成尝试数）、`redraw_rate`（重抽数 ÷ 生成尝试数）、`recoup_ratio`（投放净回收 ÷ 同币种生产成本）。没有同币种成本/收入时显示 `—`，不跨币种硬算。

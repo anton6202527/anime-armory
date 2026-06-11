@@ -38,6 +38,8 @@ from n2d_contract import (  # noqa: E402
     ASSET_REFERENCE_REGISTRY_KIND,
     CINEMATIC_CONTRACT_FIELDS,
     COMPLIANCE_ALLOWED_RIGHTS,
+    COMPLIANCE_INTERNAL_DISTRIBUTION_INTENTS,
+    COMPLIANCE_INTERNAL_SKIPPABLE_SECTIONS,
     COMPLIANCE_RIGHTS_EVIDENCE_REQUIRED,
     COMPLIANCE_APPROVED_CHARACTER,
     COMPLIANCE_BLOCKED_CHARACTER,
@@ -59,8 +61,6 @@ from n2d_contract import (  # noqa: E402
     IDENTITY_VIDEO_ADAPTERS,
     identity_allowed_modes,
     identity_registry_path,
-    LORA_REGISTRY_READY_FIELDS,
-    LORA_VALIDATION_REPORT_KIND,
     MOTION_CONTROL_MANIFEST_KIND,
     MOTION_CONTROL_REQUIRED_SHOT_TYPES,
     MOTION_CONTROL_RISK_FLAGS,
@@ -70,7 +70,8 @@ from n2d_contract import (  # noqa: E402
     annotate_finding,
     asset_registry_path,
     classify_image_backend,
-    lora_verdict_ok,
+    lora_gap_message,
+    lora_registry_ready_blocks,
     motion_control_required,
     shared_asset_dir,
     shared_asset_path,
@@ -277,11 +278,19 @@ def _has_embedded_iso_date(value) -> bool:
         return False
 
 
+def _is_internal_distribution(data: dict) -> bool:
+    """内部 demo（不投放）判定——与 n2d-compliance/scripts/compliance.py 同源：
+    只认契约常量 COMPLIANCE_INTERNAL_DISTRIBUTION_INTENTS，不再各自维护口语别名。"""
+    return _status(data.get("distribution_intent")).lower() in COMPLIANCE_INTERNAL_DISTRIBUTION_INTENTS
+
+
 def _is_publish_intent(data: dict) -> bool:
-    intent = _status(data.get("distribution_intent")).lower()
-    if intent in ("internal_only", "demo_internal", "内部测试", "内部预览"):
-        return False
-    return True
+    return not _is_internal_distribution(data)
+
+
+# internal_only 免检范围 = 契约 COMPLIANCE_INTERNAL_SKIPPABLE_SECTIONS（platform_review / overseas_localization）：
+# 这些字段域的 BLOCK 降为 INFO 并加注，角色/声音授权与 AI 标识照常 BLOCK。
+INTERNAL_SKIP_NOTE = "（内部 demo 免检，转投放前需补）"
 
 
 def _compliance_block(loc: str, msg: str) -> None:
@@ -401,42 +410,55 @@ def _check_ai_disclosure(data: dict, loc: str, stage: str) -> None:
 def _check_platform_targets(data: dict, loc: str, stage: str) -> None:
     if stage not in ("compose", "review"):
         return
-    if not _is_publish_intent(data):
-        _compliance_warn(loc, "distribution_intent=internal_only；跳过平台发布审核，但产物不得直接投放")
-        return
+    internal = _is_internal_distribution(data)
+
+    def flag(floc: str, msg: str) -> None:
+        # platform_review / overseas_localization ∈ COMPLIANCE_INTERNAL_SKIPPABLE_SECTIONS：
+        # internal_only 时降 BLOCK → INFO；其余（角色/声音授权、AI 标识、水印）不走本函数、照常 BLOCK。
+        if internal:
+            add(INFO, "合规前置", floc, f"{msg}{INTERNAL_SKIP_NOTE}")
+        else:
+            _compliance_block(floc, msg)
+
+    if internal:
+        _compliance_warn(
+            loc,
+            "distribution_intent=internal_only；"
+            f"{' / '.join(COMPLIANCE_INTERNAL_SKIPPABLE_SECTIONS)} 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+        )
     targets = _listify((data.get("platform_review") or {}).get("targets"))
     if not targets:
-        _compliance_block(f"{loc} platform_review", "发布候选缺 platform_review.targets；目标平台审核必须在合成前确定")
+        flag(f"{loc} platform_review", "发布候选缺 platform_review.targets；目标平台审核必须在合成前确定")
         return
     localization = data.get("localization") if isinstance(data.get("localization"), dict) else {}
     for idx, target in enumerate(targets, 1):
         if not isinstance(target, dict):
-            _compliance_block(f"{loc} platform_review.targets[{idx}]", "平台审核项必须是对象")
+            flag(f"{loc} platform_review.targets[{idx}]", "平台审核项必须是对象")
             continue
         platform = _status(target.get("platform"))
         tloc = f"{loc} platform_review.{platform or idx}"
         for key in ("platform", "region", "policy_profile", "profile_checked_at", "copyright_review", "ai_disclosure_upload", "content_rating_review"):
             if not _filled(target.get(key)):
-                _compliance_block(tloc, f"平台审核缺字段：{key}")
+                flag(tloc, f"平台审核缺字段：{key}")
         for key in ("platform", "region"):
             if _filled(target.get(key)) and _looks_like_status_value(target.get(key)):
-                _compliance_block(tloc, f"{key} 必须是具体平台/地区，不能写状态占位：{_status(target.get(key))}")
+                flag(tloc, f"{key} 必须是具体平台/地区，不能写状态占位：{_status(target.get(key))}")
         if _filled(target.get("policy_profile")) and not _has_embedded_iso_date(target.get("policy_profile")):
-            _compliance_block(tloc, "policy_profile 必须带 YYYY-MM-DD 检查日期，例如 douyin_ai_disclosure_2026-06-08")
+            flag(tloc, "policy_profile 必须带 YYYY-MM-DD 检查日期，例如 douyin_ai_disclosure_2026-06-08")
         if _filled(target.get("profile_checked_at")) and not _valid_iso_date(target.get("profile_checked_at")):
-            _compliance_block(tloc, "profile_checked_at 必须是 YYYY-MM-DD")
+            flag(tloc, "profile_checked_at 必须是 YYYY-MM-DD")
         for key in ("copyright_review", "ai_disclosure_upload", "content_rating_review"):
             if _status(target.get(key)) not in PLATFORM_REVIEW_STATUSES:
-                _compliance_block(tloc, f"{key} 必须 ready/done/not_applicable")
+                flag(tloc, f"{key} 必须 ready/done/not_applicable")
         region = _status(target.get("region")).lower()
         overseas = target.get("requires_localization") is True or platform.lower() in OVERSEAS_PLATFORMS or (region and region not in DOMESTIC_REGIONS)
         if overseas:
             if _status(localization.get("status")) not in ("ready", "done"):
-                _compliance_block(f"{loc} localization", f"{platform or '海外平台'} 目标需要出海本地化；localization.status 必须 ready/done")
+                flag(f"{loc} localization", f"{platform or '海外平台'} 目标需要出海本地化；localization.status 必须 ready/done")
             languages = set(str(x).lower() for x in _listify(localization.get("subtitle_languages")))
             required = _status(target.get("language")).lower()
             if required and required not in languages:
-                _compliance_block(f"{loc} localization", f"目标语言 {required} 不在 subtitle_languages 中")
+                flag(f"{loc} localization", f"目标语言 {required} 不在 subtitle_languages 中")
 
 
 def _check_watermark_manifest(data: dict, loc: str, ep: str, stage: str) -> None:
@@ -844,7 +866,23 @@ def _validate_identity_adapter_map(section: object, loc: str, label: str) -> Non
             add(BLOCK, "资产身份注册层", bloc, "registered/ready 状态必须填写真实 id/handle/reference/model_path，不能空登记")
 
 
+def _lora_gap_loc_suffix(code: str) -> str:
+    """LoRA 缺口码 → finding loc 尾缀（保持与历史逐条检查相同的定位粒度）。"""
+    if code == "ready_model_hash_mismatch":
+        return ".model_hash"
+    if code == "ready_model_path_missing":
+        return ".model_path"
+    if code.startswith("ready_validation_report") or code.startswith("ready_dataset_warnings"):
+        return ".validation_report"
+    return ""
+
+
 def _validate_identity_lora(section: object, loc: str, root: str) -> None:
+    """LoRA ready 校验收口到契约单一真值源 lora_registry_ready_blocks / lora_gap_message。
+
+    与 n2d-lora cmd_register、n2d-identity 同源演进；磁盘层检查（model_path 是否存在）按契约约定
+    留在调用方（契约层不碰文件系统），缺口码命名 ready_model_path_missing。
+    """
     if not isinstance(section, dict):
         add(BLOCK, "资产身份注册层", f"{loc} identity_adapters.lora", "缺 LoRA 状态对象")
         return
@@ -852,34 +890,17 @@ def _validate_identity_lora(section: object, loc: str, root: str) -> None:
     if not status:
         add(BLOCK, "资产身份注册层", f"{loc} identity_adapters.lora", "LoRA 缺 status")
     if status == "ready":
-        for key in LORA_REGISTRY_READY_FIELDS:  # 与 n2d-lora cmd_register 同源
-            if _field_is_missing(section, key):
-                add(BLOCK, "资产身份注册层", f"{loc} identity_adapters.lora", f"LoRA ready 但缺字段：{key}")
-        model_rel = str(section.get("model_path", "")).strip()
-        if model_rel and not _identity_reference_exists(root, model_rel):
-            add(BLOCK, "资产身份注册层", f"{loc} identity_adapters.lora.model_path", "LoRA ready 的 model_path 不存在")
+        report = None
         report_rel = str(section.get("validation_report", "")).strip()
         if report_rel:
             report_path = report_rel if os.path.isabs(report_rel) else os.path.join(root, report_rel)
-            report = load_json(report_path)
-            if not isinstance(report, dict):
-                add(BLOCK, "资产身份注册层", f"{loc} identity_adapters.lora.validation_report", "LoRA validation_report 缺失或无法解析")
-            else:
-                if report.get("kind") != LORA_VALIDATION_REPORT_KIND:
-                    add(BLOCK, "资产身份注册层", f"{loc} identity_adapters.lora.validation_report", "LoRA validation_report kind 不正确")
-                if not lora_verdict_ok(report.get("verdict")):
-                    add(BLOCK, "资产身份注册层", f"{loc} identity_adapters.lora.validation_report", "LoRA ready 必须对应 verdict=pass 的验证报告")
-                report_hash = str(report.get("model_sha256", "")).strip()
-                registry_hash = str(section.get("model_hash", "")).strip()
-                if report_hash and registry_hash and report_hash != registry_hash:
-                    add(BLOCK, "资产身份注册层", f"{loc} identity_adapters.lora.model_hash", "registry model_hash 与 validation_report.model_sha256 不一致")
-                manual_review = report.get("manual_review") if isinstance(report.get("manual_review"), dict) else {}
-                warnings = report.get("warnings") if isinstance(report.get("warnings"), list) else []
-                if "dataset_has_warnings" in warnings:
-                    if not manual_review.get("allow_dataset_warnings"):
-                        add(BLOCK, "资产身份注册层", f"{loc} identity_adapters.lora.validation_report", "LoRA 数据集有 warning，但验证报告缺 allow_dataset_warnings 显式放行")
-                    elif not str(manual_review.get("notes") or "").strip():
-                        add(BLOCK, "资产身份注册层", f"{loc} identity_adapters.lora.validation_report", "LoRA 数据集 warning 被人工放行时，manual_review.notes 必须写明原因")
+            report = load_json(report_path)  # 读不出 → None，契约层报 ready_validation_report_missing
+        codes = lora_registry_ready_blocks(section, report)
+        model_rel = str(section.get("model_path", "")).strip()
+        if model_rel and not _identity_reference_exists(root, model_rel):
+            codes.append("ready_model_path_missing")  # 磁盘检查由调用方补充（契约约定）
+        for code in codes:
+            add(BLOCK, "资产身份注册层", f"{loc} identity_adapters.lora{_lora_gap_loc_suffix(code)}", lora_gap_message(code))
 
 
 def _identity_reference_exists(root: str, rel: str) -> bool:

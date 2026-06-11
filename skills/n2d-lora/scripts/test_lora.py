@@ -147,6 +147,57 @@ def test_lora_force_register_writes_candidate_override_not_ready(tmp_path):
     assert "model_path_missing" in binding["manual_override"]["reasons"]
 
 
+def test_suggest_without_drift_report_hints_identity_write(tmp_path, capsys):
+    root = _root(tmp_path)
+
+    assert lora.main(["suggest", str(root)]) == 1
+
+    out = capsys.readouterr().out
+    assert "identity_drift_report.json" in out
+    assert "skills/n2d-identity/scripts/identity.py" in out
+
+
+def test_suggest_prints_recommendations_from_drift_report(tmp_path, capsys):
+    root = _root(tmp_path)
+    report = {
+        "kind": "n2d_identity_drift_report",
+        "available": True,
+        "characters": {},
+        "recommendations": [
+            {
+                "type": "lora_upgrade",
+                "character": "沈念",
+                "character_id": "CHAR_SHEN",
+                "character_name": "沈念",
+                "form": "常态",
+                "lora_status": "candidate",
+                "bad_episodes": ["第1集", "第2集"],
+                "first_bad_episode": "第2集",
+                "reason": "2 集脸部相似度低于阈值",
+                "next_command": "python3 skills/n2d-lora/scripts/lora.py init 'x' --character-id CHAR_SHEN --form '常态'",
+            }
+        ],
+    }
+    lora.write_json(root / "生产数据" / "identity_drift_report.json", report)
+
+    assert lora.main(["suggest", str(root)]) == 0
+
+    out = capsys.readouterr().out
+    assert "CHAR_SHEN" in out
+    assert "lora.py init" in out
+
+
+def test_suggest_with_empty_recommendations_is_ok(tmp_path, capsys):
+    root = _root(tmp_path)
+    lora.write_json(
+        root / "生产数据" / "identity_drift_report.json",
+        {"kind": "n2d_identity_drift_report", "available": True, "characters": {}, "recommendations": []},
+    )
+
+    assert lora.main(["suggest", str(root)]) == 0
+    assert "无 LoRA 升档建议" in capsys.readouterr().out
+
+
 def test_lora_register_rejects_dataset_warning_override_without_notes(tmp_path):
     root = _root(tmp_path)
     out_dir = root / "设定库" / "lora" / "CHAR_SHEN" / "常态"

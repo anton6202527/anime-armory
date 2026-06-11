@@ -27,20 +27,28 @@ _COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "c
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import (  # noqa: E402  身份/LoRA 判定的单一真值源（与 gate / n2d-lora 共用）
+    IDENTITY_ADAPTER_FALLBACK_STATUSES,
+    IDENTITY_ADAPTER_IN_PROGRESS_STATUSES,
+    IDENTITY_ADAPTER_KNOWN_STATUSES,
     IDENTITY_ADAPTER_MATRIX_KIND,
+    IDENTITY_ADAPTER_PASSIVE_STATUSES,
+    IDENTITY_ADAPTER_READY_STATUSES,
     IDENTITY_DRIFT_REPORT_KIND,
     IDENTITY_HANDLE_FIELDS,
     IDENTITY_IMAGE_ADAPTERS,
     IDENTITY_REFERENCE_KEYS,
     IDENTITY_REGISTRY_KIND,
     IDENTITY_VIDEO_ADAPTERS,
-    LORA_REGISTRY_READY_FIELDS,
-    LORA_VALIDATION_REPORT_KIND,
     identity_allowed_modes,
     identity_registry_path,
-    lora_verdict_ok,
+    lora_registry_ready_blocks,
 )
 from n2d_route import episode_number as route_episode_number, normalize_episode as route_normalize_episode  # noqa: E402
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+if _HERE not in sys.path:
+    sys.path.insert(0, _HERE)
+import voice_consistency  # noqa: E402  同目录：音色跨集漂移对账（--write 时顺带跑）
 
 
 REGISTRY_KIND = IDENTITY_REGISTRY_KIND
@@ -48,11 +56,14 @@ MATRIX_KIND = IDENTITY_ADAPTER_MATRIX_KIND
 DRIFT_KIND = IDENTITY_DRIFT_REPORT_KIND
 VERSION = 1
 
-READY_STATUSES = {"registered", "ready"}
-FALLBACK_STATUSES = {"fallback_reference_group"}
-PASSIVE_STATUSES = {"unsupported", "not_needed"}
-IN_PROGRESS_STATUSES = {"unregistered", "candidate", "training"}
-KNOWN_STATUSES = READY_STATUSES | FALLBACK_STATUSES | PASSIVE_STATUSES | IN_PROGRESS_STATUSES
+# adapter status 集合：契约单一真值源的本地别名（行为与历史一致，勿在此扩状态——去契约改）
+READY_STATUSES = IDENTITY_ADAPTER_READY_STATUSES
+FALLBACK_STATUSES = IDENTITY_ADAPTER_FALLBACK_STATUSES
+PASSIVE_STATUSES = IDENTITY_ADAPTER_PASSIVE_STATUSES
+IN_PROGRESS_STATUSES = IDENTITY_ADAPTER_IN_PROGRESS_STATUSES
+KNOWN_STATUSES = IDENTITY_ADAPTER_KNOWN_STATUSES
+# LoRA 升档判定：status 已在这些值时不再建议升档（ready=已上 LoRA；training=已在路上）
+LORA_UPGRADE_EXEMPT_STATUSES = frozenset({"ready", "training"})
 HANDLE_FIELDS = IDENTITY_HANDLE_FIELDS
 REFERENCE_FIELDS = IDENTITY_REFERENCE_KEYS
 
@@ -199,33 +210,17 @@ def lora_binding(root: Path, cfg: Mapping[str, Any]) -> Dict[str, Any]:
     elif status not in KNOWN_STATUSES:
         gaps.append(f"unknown_status:{status}")
     if status == "ready":
-        for key in LORA_REGISTRY_READY_FIELDS:  # 与 gate / n2d-lora 同源
-            if not str(cfg.get(key, "")).strip():
-                gaps.append(f"ready_missing_{key}")
+        # ready 缺口判定收口到契约（与 n2d-lora register / review gate 三方同源）；
+        # 本地只补磁盘层检查：model_path 文件是否真实存在（契约层不碰文件系统）。
+        validation_report = str(cfg.get("validation_report", "")).strip()
+        report: Optional[Mapping[str, Any]] = None
+        if validation_report:
+            loaded = load_json(resolve_path(root, validation_report))
+            report = loaded if isinstance(loaded, Mapping) else None
+        gaps.extend(lora_registry_ready_blocks(cfg, report))
         model_path = str(cfg.get("model_path", "")).strip()
         if model_path and not path_exists(root, model_path):
             gaps.append("ready_model_path_missing")
-        validation_report = str(cfg.get("validation_report", "")).strip()
-        if validation_report:
-            report = load_json(resolve_path(root, validation_report))
-            if not isinstance(report, Mapping):
-                gaps.append("ready_validation_report_missing")
-            else:
-                if report.get("kind") != LORA_VALIDATION_REPORT_KIND:
-                    gaps.append("ready_validation_report_kind_invalid")
-                if not lora_verdict_ok(report.get("verdict")):
-                    gaps.append("ready_validation_report_not_pass")
-                report_hash = str(report.get("model_sha256", "")).strip()
-                registry_hash = str(cfg.get("model_hash", "")).strip()
-                if report_hash and registry_hash and report_hash != registry_hash:
-                    gaps.append("ready_model_hash_mismatch")
-                manual_review = report.get("manual_review") if isinstance(report.get("manual_review"), Mapping) else {}
-                warnings = report.get("warnings") if isinstance(report.get("warnings"), list) else []
-                if "dataset_has_warnings" in warnings:
-                    if not manual_review.get("allow_dataset_warnings"):
-                        gaps.append("ready_dataset_warnings_without_override")
-                    elif not str(manual_review.get("notes") or "").strip():
-                        gaps.append("ready_dataset_warnings_override_notes_missing")
         ready = not gaps
     return {
         "status": status,
@@ -242,7 +237,99 @@ def lora_binding(root: Path, cfg: Mapping[str, Any]) -> Dict[str, Any]:
     }
 
 
-def build_adapter_matrix(root: Path, registry: Mapping[str, Any], generated_at: Optional[str] = None) -> Dict[str, Any]:
+def _drift_char_significant(info: Mapping[str, Any]) -> Tuple[bool, List[str], str]:
+    """单角色跨集漂移是否显著：warn/block 出现的集数 ≥2，或存在 first_bad_episode（出过 block）。
+
+    返回 (significant, bad_episodes, first_bad_episode)。
+    """
+    episodes = info.get("episodes") if isinstance(info.get("episodes"), Mapping) else {}
+    bad_episodes = sorted(
+        (ep for ep, counts in episodes.items()
+         if isinstance(counts, Mapping) and (counts.get("warn", 0) or 0) + (counts.get("block", 0) or 0) > 0),
+        key=episode_sort_key,
+    )
+    first_bad = str(info.get("first_bad_episode") or "").strip()
+    return (len(bad_episodes) >= 2 or bool(first_bad), bad_episodes, first_bad)
+
+
+def _match_registry_character(registry: Mapping[str, Any], drift_char: str) -> Optional[Tuple[Mapping[str, Any], Mapping[str, Any]]]:
+    """把 drift report 的角色键（face 检测里的 char 名）对回 registry 的 (character, form)。
+
+    匹配顺序：form.asset_key 精确命中 > character.name 精确命中（取首个 form）。匹配不到返回 None。
+    """
+    fallback: Optional[Tuple[Mapping[str, Any], Mapping[str, Any]]] = None
+    for char in registry.get("characters", []) or []:
+        if not isinstance(char, Mapping):
+            continue
+        forms = [f for f in char.get("forms", []) or [] if isinstance(f, Mapping)]
+        for form in forms:
+            if str(form.get("asset_key", "")).strip() == drift_char:
+                return char, form
+        if fallback is None and str(char.get("name", "")).strip() == drift_char and forms:
+            fallback = (char, forms[0])
+    return fallback
+
+
+def lora_upgrade_candidates(registry: Optional[Mapping[str, Any]], drift: Optional[Mapping[str, Any]]) -> List[Dict[str, Any]]:
+    """LoRA 升档自动建议（drift report recommendations / matrix summary 同判定）。
+
+    条件：① drift report 可用且该角色跨集漂移显著（_drift_char_significant）；
+         ② 该角色在 registry 能对上号；③ 其 lora status 不在 ready/training。
+    数据不足（无 registry / drift 不可用 / 无角色数据）一律返回空列表，不瞎编。
+    """
+    if not isinstance(registry, Mapping) or not isinstance(drift, Mapping):
+        return []
+    if not drift.get("available"):
+        return []
+    out: List[Dict[str, Any]] = []
+    root_str = str(drift.get("root") or registry.get("root") or "<作品根>")
+    for drift_char, info in sorted((drift.get("characters") or {}).items()):
+        if not isinstance(info, Mapping):
+            continue
+        significant, bad_episodes, first_bad = _drift_char_significant(info)
+        if not significant:
+            continue
+        matched = _match_registry_character(registry, drift_char)
+        if matched is None:
+            continue  # registry 对不上号 → 无法判 lora status，也给不出可执行命令，不输出半截建议
+        char, form = matched
+        adapters = form.get("identity_adapters") if isinstance(form.get("identity_adapters"), Mapping) else {}
+        lora_cfg = adapters.get("lora") if isinstance(adapters.get("lora"), Mapping) else {}
+        lora_status = str(lora_cfg.get("status", "")).strip()
+        if lora_status in LORA_UPGRADE_EXEMPT_STATUSES:
+            continue
+        character_id = str(char.get("id", "")).strip()
+        form_name = str(form.get("form", "")).strip() or "常态"
+        reason_bits = []
+        if len(bad_episodes) >= 2:
+            reason_bits.append(f"{len(bad_episodes)} 集脸部相似度低于阈值（{','.join(bad_episodes)}）")
+        if first_bad:
+            reason_bits.append(f"first_bad_episode={first_bad}（出现过 block 级漂移）")
+        reason_bits.append(f"LoRA status={lora_status or 'absent'}，reference_group/原生主体未压住跨集漂移")
+        out.append({
+            "type": "lora_upgrade",
+            "character": drift_char,
+            "character_id": character_id,
+            "character_name": str(char.get("name", "")).strip(),
+            "form": form_name,
+            "lora_status": lora_status,
+            "bad_episodes": bad_episodes,
+            "first_bad_episode": first_bad,
+            "reason": "；".join(reason_bits),
+            "next_command": (
+                f"python3 skills/n2d-lora/scripts/lora.py init '{root_str}' "
+                f"--character-id {character_id} --form '{form_name}'"
+            ),
+        })
+    return out
+
+
+def build_adapter_matrix(
+    root: Path,
+    registry: Mapping[str, Any],
+    generated_at: Optional[str] = None,
+    drift_report: Optional[Mapping[str, Any]] = None,
+) -> Dict[str, Any]:
     forms_out: List[Dict[str, Any]] = []
     notes: List[str] = []
     if registry.get("kind") != REGISTRY_KIND:
@@ -315,6 +402,10 @@ def build_adapter_matrix(root: Path, registry: Mapping[str, Any], generated_at: 
         "forms_with_native_video_ready": sum(1 for f in forms_out if any(b.get("ready") and b.get("binding") != "reference_group" for b in f.get("video_bindings", {}).values())),
         "forms_with_lora_ready": sum(1 for f in forms_out if f.get("lora_binding", {}).get("ready")),
         "forms_with_gaps": sum(1 for f in forms_out if f.get("gaps")),
+        # 与 drift report recommendations 同判定（lora_upgrade_candidates）；无 drift 数据时为空列表
+        "characters_needing_lora_upgrade": sorted({
+            c["character_id"] for c in lora_upgrade_candidates(registry, drift_report) if c.get("character_id")
+        }),
     }
     return {
         "kind": MATRIX_KIND,
@@ -423,7 +514,14 @@ def summarize_face_results(root: Path, episodes: List[str], face_results: Mappin
     }
 
 
-def build_drift_report(root: Path, episodes: List[str], *, skip_face: bool = False, generated_at: Optional[str] = None) -> Dict[str, Any]:
+def build_drift_report(
+    root: Path,
+    episodes: List[str],
+    *,
+    skip_face: bool = False,
+    generated_at: Optional[str] = None,
+    registry: Optional[Mapping[str, Any]] = None,
+) -> Dict[str, Any]:
     if skip_face:
         return {
             "kind": DRIFT_KIND,
@@ -433,6 +531,7 @@ def build_drift_report(root: Path, episodes: List[str], *, skip_face: bool = Fal
             "available": False,
             "episodes": episodes,
             "characters": {},
+            "recommendations": [],
             "notes": ["face consistency run skipped by --skip-face"],
         }
     fc = load_face_consistency()
@@ -445,10 +544,14 @@ def build_drift_report(root: Path, episodes: List[str], *, skip_face: bool = Fal
             "available": False,
             "episodes": episodes,
             "characters": {},
+            "recommendations": [],
             "notes": ["face_consistency.py not loadable"],
         }
     results = {ep: fc.analyze(str(root), ep) for ep in episodes}
-    return summarize_face_results(root, episodes, results, generated_at=generated_at)
+    report = summarize_face_results(root, episodes, results, generated_at=generated_at)
+    # LoRA 升档自动建议：漂移显著 + registry 对得上号 + lora 未 ready/training 才输出；数据不足为空
+    report["recommendations"] = lora_upgrade_candidates(registry, report)
+    return report
 
 
 def render_matrix_md(matrix: Mapping[str, Any]) -> str:
@@ -517,6 +620,12 @@ def render_drift_md(report: Mapping[str, Any]) -> str:
         )
     if not report.get("characters"):
         lines.append("| - | - | 0 | 0 | 无可机检角色或机检跳过 |")
+    recs = report.get("recommendations") or []
+    if recs:
+        lines.extend(["", "## LoRA 升档建议", ""])
+        for rec in recs:
+            lines.append(f"- **{rec.get('character_name') or rec.get('character_id')}**（{rec.get('character_id')} / {rec.get('form')}）：{rec.get('reason')}")
+            lines.append(f"  - next: `{rec.get('next_command')}`")
     return "\n".join(lines)
 
 
@@ -550,12 +659,23 @@ def main() -> int:
     available = discover_episodes(root)
     episodes = parse_episodes(ns.episodes, available) if ns.episodes else available
     generated_at = now_iso()
-    matrix = build_adapter_matrix(root, registry, generated_at=generated_at)
-    drift = build_drift_report(root, episodes, skip_face=ns.skip_face, generated_at=generated_at)
+    # drift 先于 matrix：matrix summary 的 characters_needing_lora_upgrade 需要 drift 信号
+    drift = build_drift_report(root, episodes, skip_face=ns.skip_face, generated_at=generated_at, registry=registry)
+    matrix = build_adapter_matrix(root, registry, generated_at=generated_at, drift_report=drift)
     if ns.write:
         paths = write_outputs(root, matrix, drift)
         for p in paths.values():
             print(f"wrote {p}")
+        # 配音 manifest 存在时顺带做音色跨集对账（import 调用，不 subprocess）
+        if voice_consistency.discover_episodes(root):
+            voice_report = voice_consistency.build_report(root, generated_at=generated_at)
+            voice_paths = voice_consistency.write_outputs(root, voice_report)
+            vs = voice_report.get("summary", {})
+            print(
+                f"voice consistency: {vs.get('drifts', 0)} drift / {vs.get('voicemap_mismatches', 0)} voicemap mismatch"
+                f" / {vs.get('placeholder_revoice', 0)} 占位待重配 / {vs.get('episodes_insufficient', 0)} 集数据不足"
+                f" -> {voice_paths['json']}"
+            )
     elif ns.json:
         print(json.dumps({"matrix": matrix, "drift": drift}, ensure_ascii=False, indent=2))
     else:

@@ -1,6 +1,6 @@
 # n2d identity closure schema
 
-`n2d-identity` 生成两类生产数据。
+`n2d-identity` 生成三类生产数据：adapter matrix、跨集脸漂报表（含 LoRA 升档建议）、音色跨集漂移报表。
 
 ## identity_adapter_matrix.json
 
@@ -67,7 +67,8 @@
 }
 ```
 
-`summary` 关键字段：`forms`、`forms_with_reference_group_ready`、`forms_with_native_image_ready`、`forms_with_native_video_ready`、`forms_with_lora_ready`、`forms_with_gaps`。
+`summary` 关键字段：`forms`、`forms_with_reference_group_ready`、`forms_with_native_image_ready`、`forms_with_native_video_ready`、`forms_with_lora_ready`、`forms_with_gaps`、`characters_needing_lora_upgrade`。
+`characters_needing_lora_upgrade` 是该升档 LoRA 的 character_id 列表，与 drift report 的 `recommendations` **同一判定**（漂移显著 + lora status 不是 ready/training）；构建 matrix 时没有 drift 数据（如 `--skip-face` 或机检不可用）则为空列表。
 `forms_with_native_image_ready` 统计有「图后端原生角色ID/主体（非 reference_group 兜底）已 ready」的形态——阶段1 解除 Codex 垄断后，图也能走第②档原生主体（见下）。
 
 允许的 `mode`（错 mode 由 `gate.py` 阻断）：
@@ -108,8 +109,95 @@ LoRA ready 由 `n2d-lora` 生命周期写回。`model_path/base_model/trigger/mo
       "total_block": 1
     }
   },
+  "recommendations": [
+    {
+      "type": "lora_upgrade",
+      "character": "王敦",
+      "character_id": "CHAR_WANG",
+      "character_name": "王敦",
+      "form": "常态",
+      "lora_status": "candidate",
+      "bad_episodes": ["第1集", "第2集"],
+      "first_bad_episode": "第2集",
+      "reason": "2 集脸部相似度低于阈值（第1集,第2集）；first_bad_episode=第2集（出现过 block 级漂移）；LoRA status=candidate，reference_group/原生主体未压住跨集漂移",
+      "next_command": "python3 skills/n2d-lora/scripts/lora.py init '制漫剧/剧名' --character-id CHAR_WANG --form '常态'"
+    }
+  ],
   "notes": []
 }
 ```
 
 `available=false` 表示缺 insightface/cv2，机器脸相似度跳过；报表仍会输出 registry adapter matrix，跨集漂移暂交人判。
+
+`recommendations[]`（LoRA 升档自动建议）的产出条件——三条全满足才输出，否则空列表：
+
+1. `available=true` 且该角色跨集漂移显著：warn/block 出现的集数 ≥2，或存在 `first_bad_episode`；
+2. 角色能对回 registry（form.asset_key 精确命中 > character.name 精确命中）；
+3. 该角色（命中 form）的 `identity_adapters.lora.status` 不是 `ready` / `training`。
+
+消费方：`n2d-lora suggest` 直接打印；adapter matrix `summary.characters_needing_lora_upgrade` 取其 character_id 集合。
+
+## identity_voice_drift_report.json
+
+路径：
+
+```text
+制漫剧/<剧名>/生产数据/identity_voice_drift_report.json
+```
+
+由 `voice_consistency.py` 产出（`identity.py --write` 在存在配音时长清单时顺带跑）。输入：各集
+`合成/第N集/配音/时长清单.json`（n2d-voice 逐句条目，音色键字段认契约 `voice_key`，兼容现行中文字段
+`音色键`）与 `设定库/voicemap.json`（角色→音色注册表，路径取 `n2d_contract.voicemap_path`）。
+
+顶层：
+
+```json
+{
+  "kind": "n2d_identity_voice_drift_report",
+  "version": 1,
+  "root": "制漫剧/剧名",
+  "generated_at": "2026-06-10T00:00:00Z",
+  "episodes": [
+    {"episode": "第1集", "manifest": "合成/第1集/配音/时长清单.json", "status": "ok", "lines": 16,
+     "characters": {"沈念": ["SHEN"], "旁白": ["NARR"]}}
+  ],
+  "drifts": [
+    {
+      "character": "沈念",
+      "episode_from": "第1集",
+      "episode_to": "第2集",
+      "voice_from": "SHEN",
+      "voice_to": "SHEN_NEW",
+      "first_affected_line_idx": 1,
+      "return_to_stage": "voice",
+      "affected_shots": ["镜头2", "镜头3"],
+      "scope": "第2集 角色「沈念」音色由 SHEN 漂为 SHEN_NEW：该集此角色共 2 句需按注册音色重配（n2d-voice），重配后时长清单变化需复核分镜时长（n2d-script 阶段2）"
+    }
+  ],
+  "voicemap_mismatches": [
+    {
+      "character": "沈念",
+      "episode": "第1集",
+      "voice_key_used": "SHEN_X",
+      "voice_key_registered": "SHEN",
+      "first_affected_line_idx": 0,
+      "return_to_stage": "voice",
+      "affected_shots": ["镜头1"],
+      "scope": "第1集 角色「沈念」实际使用音色 SHEN_X 与 voicemap 注册的 SHEN 不符：共 1 句需按注册音色重配（n2d-voice）"
+    }
+  ],
+  "summary": {"episodes_total": 2, "episodes_checked": 2, "episodes_insufficient": 0, "drifts": 1, "voicemap_mismatches": 1},
+  "notes": []
+}
+```
+
+约定：
+
+- 集状态 `ok / insufficient_data / invalid`：任何带角色的逐句条目缺音色键字段 → 整集 `insufficient_data`，
+  跳过比对（**不报假漂移**）；`invalid` 表示清单不是 JSON 数组。
+- `drifts` 覆盖两种情况：跨集换键（`episode_from != episode_to`，与上一可检集比）和同集内换键
+  （`episode_from == episode_to`）。
+- `voicemap.json` 缺失/不可解析 → 写入 `notes` 并跳过对账；角色未登记 → `notes` 里
+  `voicemap_unregistered:<角色>`，不算 mismatch。
+- 每条 drift/mismatch 的 `return_to_stage/affected_shots/scope` 是给 n2d-batch 的回流建议：回 `voice`
+  阶段只重配受影响角色/集，重配后需复核分镜时长（时长清单驱动镜头时长）。

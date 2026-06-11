@@ -19,6 +19,8 @@ from n2d_contract import (  # noqa: E402  合规清单 kind / 身份注册路径
     COMPLIANCE_BLOCKED_CHARACTER,
     COMPLIANCE_DONE_STATUSES,
     COMPLIANCE_DOMESTIC_REGIONS,
+    COMPLIANCE_INTERNAL_DISTRIBUTION_INTENTS,
+    COMPLIANCE_INTERNAL_SKIPPABLE_SECTIONS,
     COMPLIANCE_MANIFEST_KIND,
     COMPLIANCE_OVERSEAS_PLATFORMS,
     COMPLIANCE_PLACEHOLDER_MARKERS,
@@ -44,6 +46,23 @@ STATUS_LIKE_VALUES = COMPLIANCE_STATUS_LIKE_VALUES
 OVERSEAS_PLATFORMS = COMPLIANCE_OVERSEAS_PLATFORMS
 DOMESTIC_REGIONS = COMPLIANCE_DOMESTIC_REGIONS
 PLACEHOLDER_MARKERS = COMPLIANCE_PLACEHOLDER_MARKERS
+
+# internal_only 免检范围（与 n2d-review gate 同源，取契约常量）：
+# distribution_intent ∈ COMPLIANCE_INTERNAL_DISTRIBUTION_INTENTS 时，
+# COMPLIANCE_INTERNAL_SKIPPABLE_SECTIONS（platform_review / overseas_localization）字段域的
+# BLOCK 降为 INFO 并加注「内部 demo 免检，转投放前需补」；角色/声音授权、AI 标识、水印照常 BLOCK。
+INTERNAL_SKIP_NOTE = "（内部 demo 免检，转投放前需补）"
+
+
+def is_internal_distribution(data: Dict[str, Any]) -> bool:
+    return str(data.get("distribution_intent") or "").strip().lower() in COMPLIANCE_INTERNAL_DISTRIBUTION_INTENTS
+
+
+# 契约域名 → manifest 字段名（overseas_localization 在 manifest 里叫 localization）
+INTERNAL_SKIPPABLE_MANIFEST_KEYS = tuple(
+    "localization" if section == "overseas_localization" else section
+    for section in COMPLIANCE_INTERNAL_SKIPPABLE_SECTIONS
+)
 
 
 def has_real_value(value: Any) -> bool:
@@ -194,11 +213,23 @@ def check_manifest(root: Path, episode: str | None, stage: str = "compose") -> L
     issues: List[str] = []
     if not isinstance(data, dict):
         return [f"BLOCK {path}: missing or invalid JSON"]
+    internal = is_internal_distribution(data)
+
+    def flag_skippable(msg: str) -> None:
+        # 免检域（platform_review / overseas_localization→localization）：internal_only 时降 INFO 并加注。
+        if internal:
+            issues.append(f"INFO {path}: {msg}{INTERNAL_SKIP_NOTE}")
+        else:
+            issues.append(f"BLOCK {path}: {msg}")
+
     if data.get("kind") != KIND:
         issues.append(f"BLOCK {path}: kind must be {KIND}")
     for key in ("rights", "character_likeness", "voice", "ai_disclosure", "watermark", "platform_review", "localization"):
         if not isinstance(data.get(key), dict):
-            issues.append(f"BLOCK {path}: missing {key}")
+            if key in INTERNAL_SKIPPABLE_MANIFEST_KEYS:
+                flag_skippable(f"missing {key}")
+            else:
+                issues.append(f"BLOCK {path}: missing {key}")
     rights = data.get("rights") if isinstance(data.get("rights"), dict) else {}
     for key in ("source_text", "adaptation", "music_bgm", "sfx", "fonts"):
         item = rights.get(key)
@@ -271,40 +302,41 @@ def check_manifest(root: Path, episode: str | None, stage: str = "compose") -> L
         status = str(metadata.get("status") or "").strip()
         if status and status not in COMPLIANCE_READY:
             issues.append(f"BLOCK {path}: watermark.metadata status not releasable: {status}")
-    if data.get("distribution_intent") != "internal_only":
-        targets = ((data.get("platform_review") or {}).get("targets")) or []
-        if not targets:
-            issues.append(f"BLOCK {path}: publish candidate requires platform_review.targets")
-        for idx, target in enumerate(targets, 1):
-            if not isinstance(target, dict):
-                issues.append(f"BLOCK {path}: platform_review.targets[{idx}] must be object")
-                continue
-            for key in ("platform", "region", "policy_profile", "profile_checked_at", "copyright_review", "ai_disclosure_upload", "content_rating_review"):
-                if not has_real_value(target.get(key)):
-                    issues.append(f"BLOCK {path}: platform_review.targets[{idx}] requires real {key}")
-            for key in ("platform", "region"):
-                if has_real_value(target.get(key)) and looks_like_status_value(target.get(key)):
-                    issues.append(f"BLOCK {path}: platform_review.targets[{idx}] {key} must be a concrete value, not status placeholder")
-            if has_real_value(target.get("policy_profile")) and not has_embedded_iso_date(target.get("policy_profile")):
-                issues.append(f"BLOCK {path}: platform_review.targets[{idx}] policy_profile must include YYYY-MM-DD checked date")
-            if has_real_value(target.get("profile_checked_at")) and not valid_iso_date(target.get("profile_checked_at")):
-                issues.append(f"BLOCK {path}: platform_review.targets[{idx}] profile_checked_at must be YYYY-MM-DD")
-            for key in ("copyright_review", "ai_disclosure_upload", "content_rating_review"):
-                value = str(target.get(key) or "").strip()
-                if value and value not in PLATFORM_REVIEW_STATUSES:
-                    issues.append(f"BLOCK {path}: platform_review.targets[{idx}] {key} must be ready/done/not_applicable")
-            platform = str(target.get("platform") or "").strip()
-            region = str(target.get("region") or "").strip().lower()
-            overseas = target.get("requires_localization") is True or platform.lower() in OVERSEAS_PLATFORMS or (region and region not in DOMESTIC_REGIONS)
-            if overseas:
-                localization = data.get("localization") if isinstance(data.get("localization"), dict) else {}
-                loc_status = str(localization.get("status") or "").strip()
-                if loc_status not in {"ready", "done"}:
-                    issues.append(f"BLOCK {path}: localization.status must be ready/done for overseas target {platform or region}")
-                languages = {str(item).lower() for item in (localization.get("subtitle_languages") or [])}
-                required = str(target.get("language") or "").strip().lower()
-                if required and required not in languages:
-                    issues.append(f"BLOCK {path}: localization.subtitle_languages must include target language {required}")
+    # platform_review / overseas_localization：internal_only 不再整体跳过，而是同样检查、
+    # 把 BLOCK 降为 INFO（内部 demo 免检，转投放前需补）——与 n2d-review gate 同源行为。
+    targets = ((data.get("platform_review") or {}).get("targets")) or []
+    if not targets:
+        flag_skippable("publish candidate requires platform_review.targets")
+    for idx, target in enumerate(targets, 1):
+        if not isinstance(target, dict):
+            flag_skippable(f"platform_review.targets[{idx}] must be object")
+            continue
+        for key in ("platform", "region", "policy_profile", "profile_checked_at", "copyright_review", "ai_disclosure_upload", "content_rating_review"):
+            if not has_real_value(target.get(key)):
+                flag_skippable(f"platform_review.targets[{idx}] requires real {key}")
+        for key in ("platform", "region"):
+            if has_real_value(target.get(key)) and looks_like_status_value(target.get(key)):
+                flag_skippable(f"platform_review.targets[{idx}] {key} must be a concrete value, not status placeholder")
+        if has_real_value(target.get("policy_profile")) and not has_embedded_iso_date(target.get("policy_profile")):
+            flag_skippable(f"platform_review.targets[{idx}] policy_profile must include YYYY-MM-DD checked date")
+        if has_real_value(target.get("profile_checked_at")) and not valid_iso_date(target.get("profile_checked_at")):
+            flag_skippable(f"platform_review.targets[{idx}] profile_checked_at must be YYYY-MM-DD")
+        for key in ("copyright_review", "ai_disclosure_upload", "content_rating_review"):
+            value = str(target.get(key) or "").strip()
+            if value and value not in PLATFORM_REVIEW_STATUSES:
+                flag_skippable(f"platform_review.targets[{idx}] {key} must be ready/done/not_applicable")
+        platform = str(target.get("platform") or "").strip()
+        region = str(target.get("region") or "").strip().lower()
+        overseas = target.get("requires_localization") is True or platform.lower() in OVERSEAS_PLATFORMS or (region and region not in DOMESTIC_REGIONS)
+        if overseas:
+            localization = data.get("localization") if isinstance(data.get("localization"), dict) else {}
+            loc_status = str(localization.get("status") or "").strip()
+            if loc_status not in {"ready", "done"}:
+                flag_skippable(f"localization.status must be ready/done for overseas target {platform or region}")
+            languages = {str(item).lower() for item in (localization.get("subtitle_languages") or [])}
+            required = str(target.get("language") or "").strip().lower()
+            if required and required not in languages:
+                flag_skippable(f"localization.subtitle_languages must include target language {required}")
     if episode:
         final_assets = (data.get("watermark") or {}).get("final_assets") or []
         if (data.get("watermark") or {}).get("ai_visible", {}).get("status") == "done":

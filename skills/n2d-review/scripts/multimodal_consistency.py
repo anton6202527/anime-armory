@@ -157,7 +157,8 @@ def resolve_image_path(root: str, ep: str, value: str) -> Optional[str]:
 
 def refs_from_block(block: Dict[str, str]) -> List[str]:
     refs = []
-    for raw in re.findall(r"定妆_([^`\s，。、,）)]+?)(?:\.png)?", block["body"]):
+    # 贪婪匹配到分隔符为止再交 normalize_asset 剥 .png；惰性 `+?` 会只捕获首字（定妆_法宝血玉 → 法）
+    for raw in re.findall(r"定妆_([^`\s，。、,）)]+)", block["body"]):
         asset = normalize_asset(raw)
         if asset and asset not in refs:
             refs.append(asset)

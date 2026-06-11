@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import csv
 import datetime as dt
+import glob
 import json
 import os
 import re
@@ -16,6 +17,7 @@ _COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "c
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import (  # noqa: E402  生产数据目录 / kind 单一真值源
+    CONSISTENCY_FINDINGS_KIND,
     GENRE_PERFORMANCE_RECORD_KIND,
     PLATFORM_FEEDBACK_KIND,
     PRODUCTION_DIR,
@@ -748,6 +750,72 @@ def build_recommendations(analyses: Dict[str, Dict[str, Any]], min_lift: float) 
     return recs
 
 
+def load_consistency_reports(root: str) -> List[Dict[str, Any]]:
+    """读 n2d-review consistency_audit 外发的 生产数据/consistency_findings_*.json（无文件优雅返回空）。"""
+    reports: List[Dict[str, Any]] = []
+    for path in sorted(glob.glob(os.path.join(production_dir(root), "consistency_findings_*.json"))):
+        try:
+            with open(path, encoding="utf-8") as fh:
+                data = json.load(fh)
+        except (OSError, json.JSONDecodeError):
+            continue
+        if isinstance(data, dict) and data.get("kind") == CONSISTENCY_FINDINGS_KIND:
+            reports.append(data)
+    return reports
+
+
+def analyze_consistency(reports: List[Dict[str, Any]], rows: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    """一致性问题 Top：按维度计数 + 最严重的集，并排同集留存/跳出指标（有投放数据时）。
+
+    一致性检出（脸漂/服装/场景/风格/语义/状态）单独看是生产质量数据；和投放留存并排，
+    才能回答"脸漂严重的集是不是跳出率也高"——这是把 QA 线接进投放反哺闭环的读端。
+    """
+    if not reports:
+        return None
+    metrics_by_ep: Dict[str, Dict[str, Any]] = {}
+    for row in rows:
+        ep = normalize_episode(row.get("episode"))
+        if ep and ep not in metrics_by_ep:
+            metrics_by_ep[ep] = row
+    dim_totals: Dict[str, Dict[str, int]] = {}
+    episodes: List[Dict[str, Any]] = []
+    for report in reports:
+        ep = normalize_episode(report.get("episode"))
+        by_dim = ((report.get("summary") or {}).get("by_dim") or {})
+        ep_block = ep_warn = 0
+        top_dim, top_weight = "", -1
+        for dim, counts in by_dim.items():
+            if not isinstance(counts, dict):
+                continue
+            block = int(counts.get("block") or 0)
+            warn = int(counts.get("warn") or 0)
+            ep_block += block
+            ep_warn += warn
+            agg = dim_totals.setdefault(dim, {"block": 0, "warn": 0})
+            agg["block"] += block
+            agg["warn"] += warn
+            weight = block * 10 + warn
+            if weight > top_weight and weight > 0:
+                top_dim, top_weight = dim, weight
+        metrics_row = metrics_by_ep.get(ep, {})
+        episodes.append({
+            "episode": ep,
+            "block": ep_block,
+            "warn": ep_warn,
+            "top_dim": top_dim,
+            "retention_15s": metric(metrics_row, "retention_15s") if metrics_row else None,
+            "bounce_3s": metric(metrics_row, "bounce_3s") if metrics_row else None,
+        })
+    episodes.sort(key=lambda item: (-(item["block"] * 10 + item["warn"]), episode_sort_key(item["episode"])))
+    worst = episodes[0] if episodes and (episodes[0]["block"] or episodes[0]["warn"]) else None
+    return {
+        "report_count": len(reports),
+        "dim_totals": dim_totals,
+        "episodes": episodes,
+        "worst_episode": worst["episode"] if worst else None,
+    }
+
+
 def analyze_feedback(root: str, metrics_path: str, features_path: Optional[str] = None, *, min_samples: int = 2, min_lift: float = 0.05, auto_features: bool = True) -> Dict[str, Any]:
     metrics_rows = read_records(metrics_path)
     feature_rows, feature_source, feature_meta = resolve_feature_rows(root, metrics_rows, features_path, auto_features=auto_features)
@@ -838,6 +906,7 @@ def analyze_feedback(root: str, metrics_path: str, features_path: Optional[str] 
         "min_samples": min_samples,
         "min_lift": min_lift,
         "analyses": analyses,
+        "consistency": analyze_consistency(load_consistency_reports(root), rows),
         "recommendations": build_recommendations(analyses, min_lift),
     }
 
@@ -879,6 +948,24 @@ def render_markdown(feedback: Dict[str, Any]) -> str:
         analysis = feedback["analyses"][key]
         lines.extend(["", f"## {analysis['name']}", ""])
         lines.extend(render_groups(analysis["groups"], metrics))
+    consistency = feedback.get("consistency")
+    if consistency:
+        lines.extend(["", "## 一致性问题 Top（QA 回灌）", ""])
+        dim_totals = consistency.get("dim_totals") or {}
+        if dim_totals:
+            lines += ["| 维度 | block | warn |", "|---|---:|---:|"]
+            for dim, counts in sorted(dim_totals.items(), key=lambda kv: (-(kv[1]["block"] * 10 + kv[1]["warn"]), kv[0])):
+                lines.append(f"| {dim} | {counts['block']} | {counts['warn']} |")
+        if consistency.get("worst_episode"):
+            lines.append(f"\n- 一致性问题最严重的集：**{consistency['worst_episode']}**")
+        eps = [e for e in consistency.get("episodes") or [] if e["block"] or e["warn"]]
+        if eps:
+            lines += ["", "| 集 | block | warn | Top维度 | retention_15s | bounce_3s |", "|---|---:|---:|---|---:|---:|"]
+            for e in eps:
+                lines.append(
+                    f"| {e['episode']} | {e['block']} | {e['warn']} | {e['top_dim'] or '—'} | "
+                    f"{fmt_pct(e.get('retention_15s'))} | {fmt_pct(e.get('bounce_3s'))} |"
+                )
     lines.append("")
     return "\n".join(lines)
 

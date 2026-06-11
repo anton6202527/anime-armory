@@ -1,6 +1,6 @@
 ---
 name: n2d-voice
-description: Stage 2 of novel2drama (前移到出图之前) — turn a 作品 episode's voiceover.txt into AI 角色配音：per-line audio + stitched voice track + 时长清单.json (每句实测时长，驱动下游镜头时长). Multi-backend pluggable (CosyVoice / GPT-SoVITS 本地克隆 / MiniMax / 火山 / macOS say 占位), with voice-cloning + demucs 人声分离. Writes _进度.md 配音 column. Use when asked to 配音, 生成配音, 角色配音, 声音克隆, CosyVoice, GPT-SoVITS, 时长清单. Triggers 配音, 角色配音, 声音克隆, 克隆音色, CosyVoice, GPT-SoVITS, MiniMax配音, 时长清单, voiceover.
+description: Stage 2 of novel2drama (前移到出图之前) — turn a 作品 episode's voiceover.txt into AI 角色配音：per-line audio + stitched voice track + 时长清单.json (每句实测时长，驱动下游镜头时长；逐句记 voice_key 实际应用音色键，一角一色跨集对账数据源，n2d-identity 消费). Multi-backend pluggable (CosyVoice / GPT-SoVITS 本地克隆 / MiniMax / 火山 / macOS say 占位), with voice-cloning + demucs 人声分离. Writes _进度.md 配音 column. Use when asked to 配音, 生成配音, 角色配音, 声音克隆, CosyVoice, GPT-SoVITS, 时长清单. Triggers 配音, 角色配音, 声音克隆, 克隆音色, CosyVoice, GPT-SoVITS, MiniMax配音, 时长清单, voice_key, voiceover.
 ---
 
 # n2d-voice — 配音（前移到出图前）
@@ -26,7 +26,7 @@ description: Stage 2 of novel2drama (前移到出图之前) — turn a 作品 ep
 - **`制作模式`=`原生音画`（native AV）时，说话镜不在本步配音**：`制作模式=原生音画` 时，对话/说话镜由视频后端一次原生生成台词+口型+环境声（见 `n2d-model-router` `native_speech` 路由），**这些镜头不出逐句 `时长清单`、不在本步跑配音**。本步只处理仍需配音先行的部分（如旁白/纯画外音镜头、或用户对个别镜头要求精细念白时的回退配音）；整剧若全程原生音画，本步可整体跳过。注意：原生人声仍受声音克隆合规闸门约束（仿真人音色需授权 + AI 标识）。
 - **念白是表演，不是平读**：voiceover.txt 每句的 `情绪/语速/停顿/钩子` 标注**会驱动 TTS**（不是注释）——这是留存的一部分，见 `novel2drama/references/导演节奏.md §六`。
 - **后端可插拔**：检测 env 决定后端，优先级 CosyVoice/GPT-SoVITS(本地克隆·质量优先) > MiniMax/火山(云·省事) > macOS say(占位)。缺凭证回退 say 并告警。
-- **一角一色（跨集持久绑定）**：角色→音色映射优先读 `<作品根>/设定库/voicemap.json`（`{"角色子串":{"key","mm","volc","speed","pitch","emo"}}`），缺文件才回退内置(demo)映射，env 仍可覆盖。**新剧务必建 voicemap.json 把每个角色绑定音色**——否则新角色全部掉进默认嗓互相撞，且跨集靠每次手动 export env 极易漂。manifest 每句记 `音色键`/`voice_id`，`n2d-review` 机检会跨集核对同角色音色是否一致。
+- **一角一色（跨集持久绑定）**：角色→音色映射优先读 `<作品根>/设定库/voicemap.json`（`{"角色子串":{"key","mm","volc","speed","pitch","emo"}}`），缺文件才回退内置(demo)映射，env 仍可覆盖。**新剧务必建 voicemap.json 把每个角色绑定音色**——否则新角色全部掉进默认嗓互相撞，且跨集靠每次手动 export env 极易漂。manifest 每句记 **`voice_key`**（契约标准字段 `n2d_contract.VOICE_KEY_FIELD`，=该句实际应用的 voicemap 音色键；macOS say 占位后端没有走 voicemap 选音，记 `say:<声音名>#placeholder` 留痕并显式声明非注册音色）+ `音色键`(legacy 中文字段，保留兼容)/`voice_id`/`情绪_已应用`。**`voice_key` 是一角一色跨集对账的数据源**：`n2d-identity` 的 `voice_consistency.py` 逐集读它对账 voicemap、产出音色跨集漂移报表（老清单缺该字段按 `insufficient_data` 跳过，不报假漂移）；`n2d-review` 机检同源。条目构造在 `voice_manifest.py`（独立模块·带单测）。
 - **生产数据记账铁律（P0）**：每次配音生成后必须调用 `n2d-dashboard` 记录 `stage=voice` 事件：后端、耗时、成本、输出音轨、句数、失败/占位句数。若某句降级占位或重跑，必须在 `meta` 或 `redraw_reason` 里写明，方便后续统计“配音导致的重定时/返工”。
 - **统一电平**：每句 loudnorm 到 -16 LUFS。
 - **时长清单是产线桥梁**：每句 ffprobe 量时长写入 `时长清单.json`，这是配音驱动镜头的关键产物。同时写 `时长清单.meta.json`（记录配音那一刻 `voiceover.txt` 的台词指纹 + 后端 + 时间）——`validate_timings.py` 用它抓"配音之后又改了 `voiceover.txt`（改词/插句/删句）导致时长清单/字幕/镜头时长全部过期"这条失配链（`delete_shot` 的强制对账只覆盖删镜）。改台词后必须重跑 `/n2d-voice` 刷新指纹与时长，再回跑 n2d-script 阶段2。
@@ -41,7 +41,7 @@ description: Stage 2 of novel2drama (前移到出图之前) — turn a 作品 ep
 | **停顿 `||`** | 替换成逗号 | TTS 自然气口（反转词前留一拍） |
 | **钩子 ⚡/💥/🪝**（或行尾裸词 钩子/爽点/集尾） | 从念白文本剥掉（不念出来），记进 `时长清单.json` 的 `钩子` 字段 | 句后留"悬念呼吸"拍：hook 0.6s / 爽点 0.7s / 集尾 1.0s（env `GAP_HOOK/GAP_CLIMAX/GAP_END` 可调，常规句 `LINE_GAP` 0.4s） |
 
-> 情绪只标自由词（旧格式）也能跑——按关键词归类，归不到就 neutral。要"导演级念白"，按 formats §6 标全情绪+语速+停顿+钩子。`时长清单.json` 新增 `情绪`/`钩子` 字段，供下游分镜/卡点参考。
+> 情绪只标自由词（旧格式）也能跑——按关键词归类，归不到就 neutral。要"导演级念白"，按 formats §6 标全情绪+语速+停顿+钩子。`时长清单.json` 逐句含 `情绪`/`钩子`（供下游分镜/卡点参考）和 `voice_key`（实际应用音色键·跨集音色对账数据源，见上「一角一色」）。
 
 ## 输入前置
 - `脚本/第N集/voiceover.txt` 存在（n2d-script 阶段1 产物）。否则报错建议先 /n2d-script。

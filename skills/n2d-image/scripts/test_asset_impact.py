@@ -143,3 +143,138 @@ def test_rerun_plan_empty_when_nothing_generated(tmp_path):
     assert plan["rerun_count"] == 0
     assert plan["steps"] == []
     assert plan["warnings"]
+
+
+# ── B 部分新增：registry 结构化绑定 / 已出视频 / 后端身份提醒 / batch 任务 JSON ──
+
+def _registry_project(tmp_path):
+    """带 identity_registry + asset_registry 的项目：镜头 prompt 只写 ID 绑定，不写参考图行。"""
+    import json
+    root = tmp_path / "制漫剧" / "剧"
+    pd = root / "出图" / "第1集" / "prompt"
+    pd.mkdir(parents=True)
+    (root / "出图" / "第1集" / "图片").mkdir(parents=True)
+    shared = root / "出图" / "共享"
+    shared.mkdir(parents=True)
+    (shared / "identity_registry.json").write_text(json.dumps({
+        "kind": "n2d_asset_identity_registry", "version": 1,
+        "characters": [{
+            "id": "CHAR_01", "name": "沈念 / 林婉儿", "scope": "全篇",
+            "forms": [{
+                "form": "常态", "asset_key": "沈念_常态",
+                "reference_group": {"front": "出图/共享/图片/定妆_沈念_常态.png", "expressions": []},
+                "identity_adapters": {
+                    "image": {"kling": {"mode": "subject_library", "status": "registered", "id": "subj_123"},
+                              "codex": {"mode": "reference_group", "status": "fallback_reference_group"}},
+                    "video": {"seedance": {"mode": "face_lock", "status": "unregistered", "reference": ""}},
+                    "lora": {"status": "ready", "base_model": "flux", "model_path": "x.safetensors", "trigger": "t"},
+                },
+            }],
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+    (shared / "asset_registry.json").write_text(json.dumps({
+        "kind": "n2d_asset_reference_registry", "version": 1,
+        "assets": [{"id": "LOC_01", "type": "scene", "name": "冷宫寝殿",
+                    "reference_group": {"primary": "出图/共享/图片/定妆_冷宫寝殿.png"}}],
+    }, ensure_ascii=False), encoding="utf-8")
+    # Clip 1：只有 ID 绑定行（无参考图文本）→ 旧逻辑漏报、新逻辑必须命中
+    (pd / "01_分镜出图.md").write_text(
+        "## Clip 1 · 镜1（MS）\n目标：出图/第1集/图片/Clip_01.png\n"
+        "**资产身份注册层**：`CHAR_01/常态`；从 registry 自动取 reference_group\n"
+        "**资产引用注册层**：`LOC_01`\n"
+        "## Clip 2 · 镜2（LS 空镜）\n目标：出图/第1集/图片/Clip_02.png\n"
+        "纯空镜，无任何资产引用\n",
+        encoding="utf-8")
+    (root / "出图" / "第1集" / "图片" / "Clip_01.png").write_bytes(b"\x89PNG\r\n\x1a\n")
+    return root
+
+
+def test_registry_binding_matches_id_only_shot(tmp_path):
+    """盲区①：镜头没写「参考图：」、只写 CHAR_xx/LOC_xx 绑定，靠 registry 也要命中。"""
+    from asset_impact import scan
+    root = _registry_project(tmp_path)
+    keys, hits = scan(str(root), ["沈念_常态"])
+    assert len(hits) == 1 and hits[0]["镜头"].startswith("Clip 1")
+    # 按角色名（registry name 按 / 拆分）也能定位
+    keys, hits = scan(str(root), ["林婉儿"])
+    assert len(hits) == 1
+    # 场景资产按名字 → LOC_01 命中（prompt 里只有 ID，没有名字）
+    keys, hits = scan(str(root), ["冷宫寝殿"])
+    assert len(hits) == 1 and hits[0]["镜头"].startswith("Clip 1")
+    # 不相干资产不串台
+    keys, hits = scan(str(root), ["王敦"])
+    assert hits == []
+
+
+def test_registry_binding_id_boundary_no_false_positive():
+    from asset_impact import parse_shots, shot_references_bindings
+    shots = parse_shots("## Clip 1\n**资产身份注册层**：`CHAR_011/常态`\n")
+    b = [{"id": "CHAR_01", "kind": "character", "names": set(), "keys": set(), "forms": []}]
+    assert shot_references_bindings(shots[0], b) is False   # CHAR_01 不命中 CHAR_011
+    b2 = [{"id": "CHAR_011", "kind": "character", "names": set(), "keys": set(), "forms": []}]
+    assert shot_references_bindings(shots[0], b2) is True
+
+
+def test_include_video_lists_existing_clips_and_prompt_refs(tmp_path):
+    """盲区②：受影响镜头已出 clip / 出视频 prompt 引用了受影响 PNG → 需重生清单。"""
+    import os
+    from asset_impact import scan, scan_video_impact
+    root = _registry_project(tmp_path)
+    vdir = root / "出视频" / "第1集" / "视频"
+    vdir.mkdir(parents=True)
+    (vdir / "Clip_01.mp4").write_bytes(b"\x00")
+    (vdir / "Clip_011.mp4").write_bytes(b"\x00")   # 键后接数字，不得误伤
+    pdir = root / "出视频" / "第1集" / "prompt"
+    pdir.mkdir(parents=True)
+    (pdir / "01_clips.md").write_text("首帧：出图/第1集/图片/Clip_01.png", encoding="utf-8")
+    keys, hits = scan(str(root), ["沈念_常态"])
+    impacts = scan_video_impact(str(root), hits)
+    assert len(impacts) == 1
+    assert impacts[0]["clips"] == [os.path.join("出视频", "第1集", "视频", "Clip_01.mp4")]
+    assert impacts[0]["prompt引用"] == [os.path.join("出视频", "第1集", "prompt", "01_clips.md")]
+
+
+def test_video_key_boundary_shot_1_vs_10():
+    from asset_impact import _key_in_name
+    assert _key_in_name("镜头1_开场.mp4", "镜头1") is True
+    assert _key_in_name("镜头10_反打.mp4", "镜头1") is False
+
+
+def test_check_native_adapters_reports_registered_with_handle(tmp_path):
+    """盲区③：registered/ready + 句柄 → 「身份注册基于旧定妆」提醒；unregistered 不报。"""
+    from asset_impact import load_registry_bindings, match_bindings, native_adapter_notices
+    root = _registry_project(tmp_path)
+    bindings = match_bindings(load_registry_bindings(str(root)), ["沈念_常态"])
+    notices = native_adapter_notices(bindings)
+    by_backend = {(n["区域"], n["后端"]) for n in notices}
+    assert ("image", "kling") in by_backend          # registered + id
+    assert ("lora", "lora") in by_backend            # ready + model_path
+    assert ("video", "seedance") not in by_backend   # unregistered 不报
+    assert ("image", "codex") not in by_backend      # fallback 无句柄不报
+    assert all("重新注册" in n["提醒"] for n in notices)
+
+
+def test_output_batch_tasks_json_aligns_queue_fields(tmp_path):
+    """盲区④：--output-batch-tasks 产物 = queue.py plan --from-asset-impact 可直接消费。"""
+    import json
+    import os
+    from asset_impact import scan, scan_video_impact, build_batch_tasks, main
+    root = _registry_project(tmp_path)
+    vdir = root / "出视频" / "第1集" / "视频"
+    vdir.mkdir(parents=True)
+    (vdir / "Clip_01.mp4").write_bytes(b"\x00")
+    keys, hits = scan(str(root), ["沈念_常态"])
+    plan = build_batch_tasks(str(root), keys, hits, video_impacts=scan_video_impact(str(root), hits))
+    assert plan["kind"] == "n2d_asset_rerun_plan"
+    by_stage = {t["rerun_from"]: t for t in plan["rerun_tasks"]}
+    assert by_stage["image"]["episode"] == "第1集"
+    assert by_stage["image"]["affected_shots"] == ["Clip_01"]
+    assert by_stage["image"]["affected_artifacts"] == ["出图/第1集/图片/Clip_01.png"]
+    assert by_stage["video"]["affected_artifacts"] == [os.path.join("出视频", "第1集", "视频", "Clip_01.mp4")]
+    # CLI 端到端：写出文件
+    out = tmp_path / "计划.json"
+    rc = main([str(root), "沈念_常态", "--include-video", "--output-batch-tasks", str(out)])
+    assert rc == 0
+    data = json.loads(out.read_text(encoding="utf-8"))
+    assert data["kind"] == "n2d_asset_rerun_plan"
+    assert {t["rerun_from"] for t in data["rerun_tasks"]} == {"image", "video"}

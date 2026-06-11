@@ -84,6 +84,23 @@ IDENTITY_REFERENCE_KEYS = ("front", "side", "back", "outfit", "turnaround")
 # identity_adapter 是否携带"已注册句柄"的字段（任一非空即视为已登记）：
 IDENTITY_HANDLE_FIELDS = ("id", "handle", "reference", "model_path")
 
+# identity_adapters.<backend>.status 的标准状态集合（identity matrix / review gate 同源）。
+IDENTITY_ADAPTER_READY_STATUSES = frozenset({"registered", "ready"})
+IDENTITY_ADAPTER_FALLBACK_STATUSES = frozenset({"fallback_reference_group"})
+IDENTITY_ADAPTER_PASSIVE_STATUSES = frozenset({"unsupported", "not_needed"})
+IDENTITY_ADAPTER_IN_PROGRESS_STATUSES = frozenset({"unregistered", "candidate", "training"})
+IDENTITY_ADAPTER_KNOWN_STATUSES = (
+    IDENTITY_ADAPTER_READY_STATUSES
+    | IDENTITY_ADAPTER_FALLBACK_STATUSES
+    | IDENTITY_ADAPTER_PASSIVE_STATUSES
+    | IDENTITY_ADAPTER_IN_PROGRESS_STATUSES
+)
+
+# 跨项目 fork 溯源：n2d-asset-market 导入角色时写入 registry 的字段。
+# fork_history 按时间追加，支持 A→B→C 多级溯源；单层旧字段 source_asset_pack/slug 继续兼容。
+IDENTITY_FORK_HISTORY_FIELD = "fork_history"
+IDENTITY_FORK_HISTORY_ENTRY_FIELDS = ("from_pack", "from_slug", "from_character_id", "forked_at", "reason")
+
 # 其它机器产物 kind（除 PRODUCT_KINDS 已登记三项外，散落各脚本的字面值收拢于此）：
 LORA_VALIDATION_REPORT_KIND = "n2d_lora_validation_report"
 LORA_DATASET_MANIFEST_KIND = "n2d_lora_dataset_manifest"
@@ -91,6 +108,9 @@ LORA_TRAIN_JOB_KIND = "n2d_lora_train_job"
 LORA_CARD_KIND = "n2d_lora_card"
 IDENTITY_ADAPTER_MATRIX_KIND = "n2d_identity_adapter_matrix"
 IDENTITY_DRIFT_REPORT_KIND = "n2d_identity_drift_report"
+IDENTITY_VOICE_DRIFT_REPORT_KIND = "n2d_identity_voice_drift_report"
+CONSISTENCY_FINDINGS_KIND = "n2d_consistency_findings"
+CONTRACT_INHERITANCE_KIND = "n2d_contract_inheritance_diff"
 VIDEO_MODEL_ROUTES_KIND = "n2d_video_model_routes"
 COMPLIANCE_MANIFEST_KIND = "n2d_compliance_manifest"
 ASSET_PACK_KIND = "n2d_cross_project_asset_pack"
@@ -178,6 +198,69 @@ COMPLIANCE_PLACEHOLDER_MARKERS = (
 )
 COMPLIANCE_OVERSEAS_PLATFORMS = {"youtube", "tiktok", "instagram", "reels", "shorts", "x", "twitter"}
 COMPLIANCE_DOMESTIC_REGIONS = {"cn", "china", "中国", "mainland_china", "zh-cn"}
+
+# distribution_intent 为内部 demo（不投放）时，gate 可免检【平台投放相关】字段域；
+# 角色/声音授权与 AI 标识仍必检（为日后转投放留底，且授权问题不因内部使用而豁免）。
+COMPLIANCE_INTERNAL_DISTRIBUTION_INTENTS = {"internal_only"}
+COMPLIANCE_INTERNAL_SKIPPABLE_SECTIONS = ("platform_review", "overseas_localization")
+
+
+# ── 重抽原因分类（单一真值源）────────────────────────────────────────────
+# dashboard 记账时 redraw_reason 仍写自由文本，但同时归入这里的枚举维度，
+# 让"一致性是不是最大的成本杀手"可统计。归不进的落 other。
+REDRAW_REASON_CATEGORIES: Dict[str, str] = {
+    "face_consistency": "角色脸漂/崩脸",
+    "outfit_consistency": "服装/配色漂移",
+    "scene_drift": "场景/光位/背景漂移",
+    "style_drift": "画风跳变",
+    "prop_structure": "道具结构错误/自检失败",
+    "reference_cropping": "参考图裁切/构图问题",
+    "prompt_conflict": "prompt 冲突/语义矛盾",
+    "timing_mismatch": "时长/时序不符",
+    "other": "其他",
+}
+
+# 自由文本 → 枚举的关键词表（先匹配先得；存量自由文本回填归类也用它）。
+_REDRAW_REASON_KEYWORDS = (
+    ("face_consistency", ("崩脸", "脸漂", "换脸", "五官", "脸型", "面部", "face")),
+    ("outfit_consistency", ("服装", "衣服", "衣着", "配色", "套装", "outfit")),
+    ("scene_drift", ("场景", "光位", "背景", "布景", "光线", "scene")),
+    ("style_drift", ("画风", "风格跳", "风格漂", "style")),
+    ("prop_structure", ("道具", "法宝", "武器", "结构错", "prop")),
+    ("reference_cropping", ("裁切", "裁剪", "构图", "参考图", "crop")),
+    ("prompt_conflict", ("prompt", "提示词", "语义", "矛盾", "冲突")),
+    ("timing_mismatch", ("时长", "时序", "对不上", "不同步", "timing")),
+)
+
+
+def classify_redraw_reason(text) -> str:
+    """自由文本重抽原因 → REDRAW_REASON_CATEGORIES 枚举键（关键词归类，归不进给 other）。"""
+    raw = str(text or "").strip().lower()
+    if not raw:
+        return "other"
+    if raw in REDRAW_REASON_CATEGORIES:
+        return raw
+    for category, keywords in _REDRAW_REASON_KEYWORDS:
+        if any(k in raw for k in keywords):
+            return category
+    return "other"
+
+
+# ── 音色一致性契约（单一真值源）──────────────────────────────────────────
+# 一角一色、跨集持久绑定：voicemap.json 是角色→音色注册表（写方 n2d-voice），
+# 配音 manifest 逐句记 voice_key（实际应用的音色键），n2d-identity 跨集对账出 voice_drift_report。
+VOICE_MAP_RELPATH = os.path.join("设定库", "voicemap.json")
+VOICE_KEY_FIELD = "voice_key"
+# render_voice 历史清单写的中文字段名；消费方两者都认、voice_key 优先（写方继续双写保兼容）。
+VOICE_KEY_LEGACY_FIELD = "音色键"
+# 占位后端（macOS say 应急轨）voice_key 后缀：显式声明「不是 voicemap 注册音色，需重配」。
+# 写方 n2d-voice 打标、读方 n2d-identity 跳过漂移比对并单列待重配清单——同一字面值。
+VOICE_KEY_PLACEHOLDER_SUFFIX = "#placeholder"
+
+
+def voicemap_path(root: str) -> str:
+    """`<作品根>/设定库/voicemap.json` —— n2d-voice 写、n2d-identity 读校。"""
+    return os.path.join(root.rstrip("/"), VOICE_MAP_RELPATH)
 
 
 # ── identity_adapters 后端能力表（单一真值源）─────────────────────────────
@@ -442,6 +525,85 @@ LORA_REGISTRY_READY_FIELDS = ("base_model", "model_path", "trigger", "validation
 def lora_verdict_ok(verdict) -> bool:
     """validation_report.verdict 是否达到可注册 ready 的判定（单一真值源）。"""
     return str(verdict or "").strip() in LORA_READY_VERDICTS
+
+
+def lora_dataset_warning_blocks(report) -> List[str]:
+    """dataset_has_warnings 的人工覆核判定（lora register / identity binding / review gate 三方同源）。
+
+    有 dataset 警告时必须 manual_review.allow_dataset_warnings 显式放行 + 非空 notes 说明原因。
+    返回缺口码：dataset_warnings_without_override / dataset_warnings_override_notes_missing；无警告返回空。
+    """
+    warnings = report.get("warnings") if isinstance(report.get("warnings"), list) else []
+    if "dataset_has_warnings" not in warnings:
+        return []
+    manual_review = report.get("manual_review")
+    manual_review = manual_review if isinstance(manual_review, dict) else {}
+    if not manual_review.get("allow_dataset_warnings"):
+        return ["dataset_warnings_without_override"]
+    if not str(manual_review.get("notes") or "").strip():
+        return ["dataset_warnings_override_notes_missing"]
+    return []
+
+
+def lora_report_ready_blocks(report) -> List[str]:
+    """validation_report 自身能否支撑 ready 注册的缺口列表（verdict + 必填字段 + 数据集警告覆核）。
+
+    n2d-lora cmd_register 用；磁盘层检查（model 文件存在/实测 hash 比对）由调用方补充——契约层不碰文件系统。
+    """
+    blocks: List[str] = []
+    if not lora_verdict_ok(report.get("verdict")):
+        blocks.append(f"validation_verdict_not_pass:{str(report.get('verdict') or '').strip() or 'missing'}")
+    for key in LORA_REPORT_REQUIRED_FIELDS:
+        if not str(report.get(key, "") or "").strip():
+            blocks.append(f"missing_report_field:{key}")
+    blocks.extend(lora_dataset_warning_blocks(report))
+    return blocks
+
+
+def lora_registry_ready_blocks(cfg, report) -> List[str]:
+    """registry identity_adapters.lora 标 status=ready 时的缺口列表（identity matrix / review gate 同源）。
+
+    cfg=registry 里的 lora 对象；report=按 cfg.validation_report 加载的报告对象（路径非空但读不出传 None）。
+    磁盘层检查（model_path 是否存在）仍由调用方补充并命名 ready_model_path_missing。
+    """
+    blocks: List[str] = []
+    for key in LORA_REGISTRY_READY_FIELDS:
+        if not str(cfg.get(key, "") or "").strip():
+            blocks.append(f"ready_missing_{key}")
+    if not str(cfg.get("validation_report", "") or "").strip():
+        return blocks  # 缺报告路径已由 ready_missing_validation_report 覆盖
+    if not isinstance(report, dict):
+        blocks.append("ready_validation_report_missing")
+        return blocks
+    if report.get("kind") != LORA_VALIDATION_REPORT_KIND:
+        blocks.append("ready_validation_report_kind_invalid")
+    if not lora_verdict_ok(report.get("verdict")):
+        blocks.append("ready_validation_report_not_pass")
+    report_hash = str(report.get("model_sha256", "") or "").strip()
+    registry_hash = str(cfg.get("model_hash", "") or "").strip()
+    if report_hash and registry_hash and report_hash != registry_hash:
+        blocks.append("ready_model_hash_mismatch")
+    blocks.extend(f"ready_{b}" for b in lora_dataset_warning_blocks(report))
+    return blocks
+
+
+# gap 码 → gate 报告用人读中文（review gate 消费；新增缺口码时同步补一条）。
+_LORA_GAP_MESSAGES = {
+    "ready_validation_report_missing": "LoRA validation_report 缺失或无法解析",
+    "ready_validation_report_kind_invalid": "LoRA validation_report kind 不正确",
+    "ready_validation_report_not_pass": "LoRA ready 必须对应 verdict=pass 的验证报告",
+    "ready_model_hash_mismatch": "registry model_hash 与 validation_report.model_sha256 不一致",
+    "ready_model_path_missing": "LoRA ready 的 model_path 不存在",
+    "ready_dataset_warnings_without_override": "LoRA 数据集有 warning，但验证报告缺 allow_dataset_warnings 显式放行",
+    "ready_dataset_warnings_override_notes_missing": "LoRA 数据集 warning 被人工放行时，manual_review.notes 必须写明原因",
+}
+
+
+def lora_gap_message(code: str) -> str:
+    """LoRA 缺口码 → 人读中文说明（gate 报告用，与缺口码同源演进）。"""
+    if code.startswith("ready_missing_"):
+        return f"LoRA ready 但缺字段：{code[len('ready_missing_'):]}"
+    return _LORA_GAP_MESSAGES.get(code, f"LoRA ready 缺口：{code}")
 
 STAGE_GRAPH: List[Dict[str, object]] = [
     {
@@ -746,9 +908,30 @@ def production_dir(root: str) -> str:
     return os.path.join(root.rstrip("/"), PRODUCTION_DIR)
 
 
+# 同一进程内每个作品根只告警一次，避免批量脚本刷屏。
+_SPLIT_BRAIN_WARNED: set = set()
+
+
+def _warn_shared_asset_split_brain(base: str) -> None:
+    """新旧共享定妆目录并存 = 裂脑高危态：不同 skill 可能各读各的 registry。检测到就大声提示迁移。"""
+    current = os.path.join(base, "出图", SHARED_ASSET_DIR)
+    legacy = os.path.join(base, "出图", LEGACY_SHARED_ASSET_DIR)
+    if base in _SPLIT_BRAIN_WARNED or not (os.path.isdir(current) and os.path.isdir(legacy)):
+        return
+    _SPLIT_BRAIN_WARNED.add(base)
+    import sys as _sys
+
+    print(
+        f"[warn] 共享定妆库新旧目录并存（裂脑风险）：{current} 与 {legacy} 同时存在。\n"
+        f"       请先迁移收口：python3 skills/common/n2d_contract.py migrate-shared '{base}'",
+        file=_sys.stderr,
+    )
+
+
 def shared_asset_dir(root: str, *, prefer_existing: bool = True) -> str:
-    """共享定妆库目录。新项目写中文目录；旧英文目录仍可作为读取兜底。"""
+    """共享定妆库目录。新项目写中文目录；旧英文目录仅作读取兜底（并存时告警，应尽快 migrate-shared 收口）。"""
     base = root.rstrip("/")
+    _warn_shared_asset_split_brain(base)
     current = os.path.join(base, "出图", SHARED_ASSET_DIR)
     legacy = os.path.join(base, "出图", LEGACY_SHARED_ASSET_DIR)
     if prefer_existing and not os.path.exists(current) and os.path.exists(legacy):
@@ -759,11 +942,57 @@ def shared_asset_dir(root: str, *, prefer_existing: bool = True) -> str:
 def shared_asset_path(root: str, *parts: str, prefer_existing: bool = True) -> str:
     """共享定妆库内路径；写新产物时传 `prefer_existing=False`。"""
     base = root.rstrip("/")
+    _warn_shared_asset_split_brain(base)
     current = os.path.join(base, "出图", SHARED_ASSET_DIR, *parts)
     legacy = os.path.join(base, "出图", LEGACY_SHARED_ASSET_DIR, *parts)
     if prefer_existing and not os.path.exists(current) and os.path.exists(legacy):
         return legacy
     return current
+
+
+def migrate_legacy_shared_assets(root: str, *, apply: bool = True) -> Dict[str, object]:
+    """把旧 `出图/common/` 迁到 `出图/共享/`，消除双路径裂脑。
+
+    - 只有 legacy：整体改名为 current；
+    - 两边并存：逐文件把 legacy 独有的搬到 current；两边同名的列入 conflicts 留在原地，
+      人工裁决（不自动覆盖任何一边）；legacy 清空后删除空目录。
+    返回 {"moved": [...], "conflicts": [...], "removed_legacy": bool}；apply=False 只演练不动文件。
+    """
+    base = root.rstrip("/")
+    current = os.path.join(base, "出图", SHARED_ASSET_DIR)
+    legacy = os.path.join(base, "出图", LEGACY_SHARED_ASSET_DIR)
+    result: Dict[str, object] = {"moved": [], "conflicts": [], "removed_legacy": False}
+    if not os.path.isdir(legacy):
+        return result
+    if not os.path.exists(current):
+        if apply:
+            os.rename(legacy, current)
+        result["moved"] = [LEGACY_SHARED_ASSET_DIR]
+        result["removed_legacy"] = True
+        return result
+    moved: List[str] = []
+    conflicts: List[str] = []
+    for dirpath, _, files in os.walk(legacy):
+        rel_dir = os.path.relpath(dirpath, legacy)
+        for name in files:
+            rel = name if rel_dir == "." else os.path.join(rel_dir, name)
+            src = os.path.join(legacy, rel)
+            dst = os.path.join(current, rel)
+            if os.path.exists(dst):
+                conflicts.append(rel)
+                continue
+            if apply:
+                os.makedirs(os.path.dirname(dst), exist_ok=True)
+                os.rename(src, dst)
+            moved.append(rel)
+    result["moved"] = moved
+    result["conflicts"] = conflicts
+    if apply and not conflicts:
+        for dirpath, _, _ in os.walk(legacy, topdown=False):
+            if not os.listdir(dirpath):
+                os.rmdir(dirpath)
+        result["removed_legacy"] = not os.path.exists(legacy)
+    return result
 
 
 def shared_asset_relpath(*parts: str) -> str:
@@ -874,3 +1103,21 @@ def write_episode_manifest(
         json.dump(data, f, ensure_ascii=False, indent=2)
         f.write("\n")
     return path
+
+
+if __name__ == "__main__":
+    # 维护入口：python3 skills/common/n2d_contract.py migrate-shared <作品根> [--dry-run]
+    import argparse
+
+    _parser = argparse.ArgumentParser(description="n2d contract maintenance")
+    _sub = _parser.add_subparsers(dest="command", required=True)
+    _mig = _sub.add_parser("migrate-shared", help="把旧 出图/common/ 迁到 出图/共享/，消除双路径裂脑")
+    _mig.add_argument("root")
+    _mig.add_argument("--dry-run", action="store_true")
+    _args = _parser.parse_args()
+    if _args.command == "migrate-shared":
+        _result = migrate_legacy_shared_assets(_args.root, apply=not _args.dry_run)
+        print(json.dumps(_result, ensure_ascii=False, indent=2))
+        if _result["conflicts"]:
+            print("[warn] 存在同名冲突文件，已留在旧目录，请人工裁决后重跑。")
+            raise SystemExit(1)

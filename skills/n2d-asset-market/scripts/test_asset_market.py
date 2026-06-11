@@ -169,5 +169,7 @@ def test_downgrade_clears_stale_lora_path_keeps_base(tmp_path):
     out = market.downgrade_preserved_adapters(ad, reason="import", pack_path=Path("p"))
     l = out["lora"]
     assert l["status"] == "candidate"
-    assert l["model_path"] == "" and l["model_hash"] == "" and l["validation_report"] == ""
+    # 失效字段必须 pop 彻底移除（残留空串会被 schema 对账当成已登记）
+    for stale in ("model_path", "model_hash", "validation_report", "train_job", "card"):
+        assert stale not in l
     assert l["base_model"] == "flux" and l["trigger"] == "t"   # 重训参考保留

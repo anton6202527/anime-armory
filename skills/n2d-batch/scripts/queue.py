@@ -32,6 +32,7 @@ if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 
 from n2d_contract import (  # noqa: E402  生产数据目录 / kind 单一真值源
+    ASSET_RERUN_PLAN_KIND,
     BATCH_QUEUE_KIND,
     PRODUCTION_DIR,
     production_dir,
@@ -328,6 +329,49 @@ def rerun_tasks(
                 rerun_scope=rerun_scope,
                 affected_artifacts=affected_artifacts,
                 affected_shots=affected_shots,
+            )
+        )
+    return dedupe_task_ids(tasks)
+
+
+def tasks_from_asset_impact(
+    root: str,
+    plan: Dict[str, Any],
+    *,
+    cost_estimates: Dict[str, Dict[str, Any]],
+    max_retries: int,
+    episodes: Optional[Set[str]] = None,
+) -> List[Dict[str, Any]]:
+    """读 asset_impact.py `--output-batch-tasks` 的 n2d_asset_rerun_plan JSON → 队列任务。
+
+    `rerun_tasks[]` 字段与本模块 rerun 入参一一对应：episode / rerun_from / scope /
+    affected_artifacts / affected_shots（定妆变更连锁的最小范围重跑，不整集重来）。
+    """
+    if not isinstance(plan, dict) or plan.get("kind") != ASSET_RERUN_PLAN_KIND:
+        raise ValueError(f"not an asset rerun plan (expect kind={ASSET_RERUN_PLAN_KIND})")
+    tasks: List[Dict[str, Any]] = []
+    for item in plan.get("rerun_tasks") or []:
+        if not isinstance(item, dict):
+            continue
+        ep_raw = str(item.get("episode") or "").strip()
+        if not ep_raw:
+            continue
+        ep = normalize_episode(ep_raw)
+        if episodes and ep_raw not in episodes and ep not in episodes:
+            continue
+        spec = find_stage(str(item.get("rerun_from") or "image"))
+        tasks.append(
+            task_from_spec(
+                root,
+                ep,
+                spec,
+                reason="rerun",
+                priority=len(tasks) + 1,
+                cost_estimates=cost_estimates,
+                max_retries=max_retries,
+                rerun_scope=str(item.get("scope") or ""),
+                affected_artifacts=[str(a) for a in item.get("affected_artifacts") or []],
+                affected_shots=[str(s) for s in item.get("affected_shots") or []],
             )
         )
     return dedupe_task_ids(tasks)
@@ -802,7 +846,17 @@ def cmd_plan(ns: argparse.Namespace) -> int:
     root = ns.root.rstrip("/")
     selected = parse_episode_selector(ns.episodes)
     estimates = load_cost_estimates(root)
-    if ns.rerun_from:
+    if ns.from_asset_impact:
+        with open(ns.from_asset_impact, encoding="utf-8") as fh:
+            impact_plan = json.load(fh)
+        tasks = tasks_from_asset_impact(
+            root,
+            impact_plan,
+            cost_estimates=estimates,
+            max_retries=ns.max_retries,
+            episodes=selected,
+        )
+    elif ns.rerun_from:
         if not selected:
             raise SystemExit("--rerun-from requires --episodes")
         tasks = rerun_tasks(
@@ -891,6 +945,8 @@ def parser() -> argparse.ArgumentParser:
     plan.add_argument("--budget", type=float)
     plan.add_argument("--budget-unit")
     plan.add_argument("--rerun-from", help="stage key/alias for targeted rerun")
+    plan.add_argument("--from-asset-impact",
+                      help="读 n2d-image asset_impact.py --output-batch-tasks 的 JSON（kind=n2d_asset_rerun_plan），直接建受影响重跑任务")
     plan.add_argument("--scope", help="human-readable rerun scope")
     plan.add_argument("--affected-artifact", action="append", default=[])
     plan.add_argument("--affected-shot", action="append", default=[])

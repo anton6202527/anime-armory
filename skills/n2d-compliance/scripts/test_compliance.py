@@ -188,3 +188,39 @@ def test_check_manifest_blocks_invalid_platform_review_fields(tmp_path: Path) ->
     assert any("policy_profile" in item and "YYYY-MM-DD" in item for item in issues)
     assert any("profile_checked_at" in item and "YYYY-MM-DD" in item for item in issues)
     assert any("copyright_review" in item and "ready/done/not_applicable" in item for item in issues)
+
+
+def test_internal_only_downgrades_platform_fields_but_keeps_authorization_blocks(tmp_path: Path) -> None:
+    """internal_only：platform_review/localization 域降 INFO（带免检注），授权/AI 标识照常 BLOCK。"""
+    root = tmp_path / "制漫剧" / "测试剧"
+    comp = root / "合规"
+    comp.mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    data["distribution_intent"] = "internal_only"
+    data["rights"]["source_text"] = {"status": "original", "evidence": "作者自有项目"}
+    data["rights"]["adaptation"] = {"status": "original", "evidence": "同源改编"}
+    # 海外目标缺本地化（投放流程会 BLOCK 的场景）
+    data["platform_review"]["targets"][0].update({
+        "platform": "YouTube",
+        "region": "US",
+        "language": "en",
+        "policy_profile": "youtube_ai_disclosure_2026-06-08",
+        "profile_checked_at": "2026-06-08",
+        "copyright_review": "ready",
+        "ai_disclosure_upload": "ready",
+        "content_rating_review": "ready",
+        "requires_localization": True,
+    })
+    data["localization"]["status"] = "not_applicable"
+    data["localization"]["subtitle_languages"] = ["zh"]
+    # 声音克隆未授权（授权域，internal_only 不豁免）
+    data["voice"]["status"] = "unknown"
+    (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    issues = compliance.check_manifest(root, "第1集")
+
+    platform_issues = [i for i in issues if "localization" in i or "platform_review" in i]
+    assert platform_issues, "平台域问题应仍被报出（只是降级）"
+    assert all(i.startswith("INFO ") and "内部 demo 免检" in i for i in platform_issues)
+    voice_issues = [i for i in issues if "voice" in i]
+    assert voice_issues and all(i.startswith("BLOCK ") for i in voice_issues), "声音授权 internal_only 不豁免"

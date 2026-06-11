@@ -25,6 +25,10 @@ if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import (  # noqa: E402  身份注册单一真值源
     ASSET_PACK_KIND,
+    IDENTITY_ADAPTER_READY_STATUSES,
+    IDENTITY_FORK_HISTORY_ENTRY_FIELDS,
+    IDENTITY_FORK_HISTORY_FIELD,
+    IDENTITY_HANDLE_FIELDS,
     IDENTITY_IMAGE_ADAPTERS,
     IDENTITY_REFERENCE_KEYS,
     IDENTITY_REGISTRY_KIND,
@@ -243,12 +247,58 @@ def downgrade_preserved_adapters(adapters: Any, *, reason: str, pack_path: Path)
             lora["status"] = "candidate"
             lora["preserve_review"] = review(previous)
             # 清掉指向旧项目的资产/验证字段：safetensors 不随包迁移，candidate 不得带失效 model_path，
-            # 否则 gate 会读到旧路径误判文件存在。保留 base_model/trigger/dataset 作重训参考。
+            # 否则 gate 会读到旧路径误判文件存在。用 pop 彻底移除键（置空字符串仍是"残留字段"，
+            # 下游 `if lora.get("model_path")` 类判断虽不命中，但 schema 对账/diff 会把空串当已登记）。
+            # 保留 base_model/trigger/dataset 作重训参考。
             for stale in ("model_path", "model_hash", "validation_report", "train_job", "card"):
-                if lora.get(stale):
-                    lora[stale] = ""
+                lora.pop(stale, None)
             lora["notes"] = "保留为 candidate 参考：旧 .safetensors 未迁移，本项目需重新验证/注册才可回 ready"
     return adapters
+
+
+def reset_preserve_review(old_adapters: Any, new_adapters: Mapping[str, Any], *, pack_path: Path) -> List[Dict[str, Any]]:
+    """默认重置 identity_adapters 时的审计痕迹（挂 form.preserve_review，导入者可见）。
+
+    记录两类被重置的后端：① 旧 registry 存在、但新模板（identity_reset_template 派生）里
+    没有的后端——整条配置随导入被移除；② 旧 status ∈ registered/ready 被降级回模板默认——
+    句柄（Character ID / Face Lock / model_path）随之失效。逐条带 原 status/mode/句柄/重置原因，
+    让导入者知道"源项目曾在哪些后端注册过身份"，而不是悄悄抹掉。
+    """
+    entries: List[Dict[str, Any]] = []
+    if not isinstance(old_adapters, Mapping):
+        return entries
+    imported_at = now_iso()
+
+    def entry(area: str, backend: str, cfg: Mapping[str, Any], reset_reason: str) -> Dict[str, Any]:
+        return {
+            "area": area,
+            "backend": str(backend),
+            "previous_status": str(cfg.get("status", "")).strip(),
+            "previous_mode": str(cfg.get("mode", "")).strip(),
+            "previous_handles": {f: cfg.get(f) for f in IDENTITY_HANDLE_FIELDS if str(cfg.get(f) or "").strip()},
+            "reset_reason": reset_reason,
+            "imported_at": imported_at,
+            "source_asset_pack": str(pack_path),
+        }
+
+    for area in ("image", "video"):
+        old = old_adapters.get(area)
+        if not isinstance(old, Mapping):
+            continue
+        new = new_adapters.get(area)
+        new = new if isinstance(new, Mapping) else {}
+        for backend, cfg in old.items():
+            if not isinstance(cfg, Mapping):
+                continue
+            status = str(cfg.get("status", "")).strip()
+            if backend not in new:
+                entries.append(entry(area, backend, cfg, "后端不在当前重置模板，旧配置随导入移除"))
+            elif status in IDENTITY_ADAPTER_READY_STATUSES:
+                entries.append(entry(area, backend, cfg, "registered/ready 身份随导入重置为模板默认，需在本项目重新注册"))
+    lora = old_adapters.get("lora")
+    if isinstance(lora, Mapping) and str(lora.get("status", "")).strip() in IDENTITY_ADAPTER_READY_STATUSES:
+        entries.append(entry("lora", "lora", lora, "LoRA 完全重置：旧 .safetensors 不随资产包迁移，需在本项目重新训练/验证/注册"))
+    return entries
 
 
 def target_reference_path(name: str, role: str, suffix: str, form_name: str = "") -> str:
@@ -391,11 +441,30 @@ def cmd_import_character(args: argparse.Namespace) -> int:
     if not fragment_chars:
         raise ValueError(f"asset pack has no character fragment: {pack_path}")
     source_char = copy.deepcopy(fragment_chars[0])
+    source_character_id = str(source_char.get("id", "")).strip()  # 覆盖前捕获，写入 fork 溯源
     as_name = args.as_name or str(source_char.get("name") or pack.get("title") or "角色")
     as_id = args.as_id or f"CHAR_{slugify(as_name).upper()}"
 
+    # fork 溯源链：先继承源角色自带的 fork_history（源若本身是 fork 来的，链 A→B→C 不断），
+    # 再追加本次条目；entry 键严格按契约 IDENTITY_FORK_HISTORY_ENTRY_FIELDS 构造。
+    inherited_history = [dict(e) for e in source_char.get(IDENTITY_FORK_HISTORY_FIELD) or [] if isinstance(e, dict)]
+    fork_reason = f"import-character fork 为 {as_id}/{as_name}"
+    if preserve_reason:
+        fork_reason += f"；{preserve_reason}"
+    fork_values = {
+        "from_pack": str(pack_path),
+        "from_slug": str(pack.get("slug", "")),
+        "from_character_id": source_character_id,
+        "forked_at": now_iso(),
+        "reason": fork_reason,
+    }
+    source_char[IDENTITY_FORK_HISTORY_FIELD] = inherited_history + [
+        {key: fork_values.get(key, "") for key in IDENTITY_FORK_HISTORY_ENTRY_FIELDS}
+    ]
+
     source_char["id"] = as_id
     source_char["name"] = as_name
+    # 单层旧字段继续兼容（指向最近一次来源；多级链看 fork_history）
     source_char["source_asset_pack"] = str(pack_path)
     source_char["source_asset_slug"] = pack.get("slug", "")
     source_char["scope"] = args.scope or source_char.get("scope") or "全篇"
@@ -425,7 +494,11 @@ def cmd_import_character(args: argparse.Namespace) -> int:
                 new_ref[str(role)] = ""
         form["reference_group"] = new_ref
         if not args.preserve_adapters:
-            form["identity_adapters"] = reset_identity_adapters()
+            reset = reset_identity_adapters()
+            review = reset_preserve_review(form.get("identity_adapters"), reset, pack_path=pack_path)
+            if review:
+                form["preserve_review"] = review  # 审计痕迹：被重置/移除的后端身份，导入者可见
+            form["identity_adapters"] = reset
         else:
             form["identity_adapters"] = downgrade_preserved_adapters(
                 form.get("identity_adapters"),

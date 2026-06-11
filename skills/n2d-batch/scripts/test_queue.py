@@ -302,6 +302,67 @@ def test_plan_merge_reapplies_budget_to_full_ledger(tmp_path: Path) -> None:
     assert merged["budget"]["blocked_tasks"] == 1
 
 
+def _impact_plan(root: Path) -> dict:
+    return {
+        "kind": "n2d_asset_rerun_plan",
+        "version": 1,
+        "root": str(root),
+        "assets": ["沈念"],
+        "rerun_tasks": [
+            {"episode": "第1集", "rerun_from": "image", "scope": "定妆沈念变更连锁·重出受影响镜头",
+             "affected_artifacts": ["出图/第1集/图片/Clip_01.png"], "affected_shots": ["Clip_01"]},
+            {"episode": "第1集", "rerun_from": "video", "scope": "定妆沈念变更连锁·重生已出视频 clip",
+             "affected_artifacts": ["出视频/第1集/视频/Clip_01.mp4"], "affected_shots": ["Clip_01"]},
+            {"episode": "第2集", "rerun_from": "image", "scope": "定妆沈念变更连锁·重出受影响镜头",
+             "affected_artifacts": ["出图/第2集/图片/Clip_05.png"], "affected_shots": ["Clip_05"]},
+        ],
+    }
+
+
+def test_tasks_from_asset_impact_builds_rerun_tasks(tmp_path: Path) -> None:
+    """asset_impact --output-batch-tasks 的 JSON → 队列任务（字段透传、kind 校验、集过滤）。"""
+    plan = _impact_plan(tmp_path)
+    tasks = queue.tasks_from_asset_impact(
+        str(tmp_path), plan,
+        cost_estimates=queue.load_cost_estimates(str(tmp_path)), max_retries=1,
+    )
+    assert [(t["episode"], t["stage_key"]) for t in tasks] == [
+        ("第1集", "image"), ("第1集", "video"), ("第2集", "image")]
+    assert all(t["reason"] == "rerun" for t in tasks)
+    assert tasks[0]["affected_shots"] == ["Clip_01"]
+    assert tasks[0]["rerun_scope"].startswith("定妆沈念变更连锁")
+    # 集过滤
+    only2 = queue.tasks_from_asset_impact(
+        str(tmp_path), plan,
+        cost_estimates=queue.load_cost_estimates(str(tmp_path)), max_retries=1,
+        episodes=queue.parse_episode_selector("2"),
+    )
+    assert [(t["episode"], t["stage_key"]) for t in only2] == [("第2集", "image")]
+    # kind 校验
+    try:
+        queue.tasks_from_asset_impact(
+            str(tmp_path), {"kind": "x"},
+            cost_estimates=queue.load_cost_estimates(str(tmp_path)), max_retries=1)
+        assert False, "kind mismatch should raise"
+    except ValueError:
+        pass
+
+
+def test_plan_from_asset_impact_cli_writes_queue(tmp_path: Path) -> None:
+    import json
+    write_progress(tmp_path)
+    plan_path = tmp_path / "impact_plan.json"
+    plan_path.write_text(json.dumps(_impact_plan(tmp_path), ensure_ascii=False), encoding="utf-8")
+    rc = queue.main(["plan", str(tmp_path), "--from-asset-impact", str(plan_path)])
+    assert rc == 0
+    loaded = queue.load_queue(str(tmp_path))
+    by_id = {(t["episode"], t["stage_key"]): t for t in loaded["tasks"]}
+    assert ("第1集", "image") in by_id and ("第1集", "video") in by_id and ("第2集", "image") in by_id
+    task = by_id[("第1集", "video")]
+    assert task["reason"] == "rerun"
+    assert task["affected_artifacts"] == ["出视频/第1集/视频/Clip_01.mp4"]
+
+
 def test_replace_refuses_running_without_force(tmp_path: Path) -> None:
     _saved_queue(tmp_path, max_concurrency=1)
     queue.claim(str(tmp_path), limit=1, worker="w1", lease_seconds=600)

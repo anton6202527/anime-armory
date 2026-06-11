@@ -173,3 +173,121 @@ def test_image_backend_classification_allows_official_dreamina_cli():
     assert c.classify_image_backend("Dreamina") == ("dreamina", "approved")
     assert c.classify_image_backend("即梦") == ("dreamina", "approved")
     assert c.classify_image_backend("同视频AI") == ("", "forbidden")
+
+
+def test_lora_ready_blocks_single_source():
+    from n2d_contract import (
+        lora_dataset_warning_blocks,
+        lora_gap_message,
+        lora_registry_ready_blocks,
+        lora_report_ready_blocks,
+    )
+
+    # 数据集警告覆核：无警告→空；有警告无放行→缺口；放行但无 notes→缺口；放行+notes→空。
+    assert lora_dataset_warning_blocks({}) == []
+    assert lora_dataset_warning_blocks({"warnings": ["dataset_has_warnings"]}) == [
+        "dataset_warnings_without_override"
+    ]
+    assert lora_dataset_warning_blocks(
+        {"warnings": ["dataset_has_warnings"], "manual_review": {"allow_dataset_warnings": True}}
+    ) == ["dataset_warnings_override_notes_missing"]
+    assert (
+        lora_dataset_warning_blocks(
+            {
+                "warnings": ["dataset_has_warnings"],
+                "manual_review": {"allow_dataset_warnings": True, "notes": "已人工抽查 20 张"},
+            }
+        )
+        == []
+    )
+
+    good_report = {
+        "kind": "n2d_lora_validation_report",
+        "verdict": "pass",
+        "base_model": "sdxl",
+        "model_path": "设定库/lora/x.safetensors",
+        "trigger": "shenian",
+        "model_sha256": "abc",
+    }
+    assert lora_report_ready_blocks(good_report) == []
+    bad = dict(good_report, verdict="fail", trigger="")
+    blocks = lora_report_ready_blocks(bad)
+    assert "validation_verdict_not_pass:fail" in blocks
+    assert "missing_report_field:trigger" in blocks
+
+    good_cfg = {
+        "base_model": "sdxl",
+        "model_path": "设定库/lora/x.safetensors",
+        "trigger": "shenian",
+        "validation_report": "设定库/lora/validation_report.json",
+        "model_hash": "abc",
+    }
+    assert lora_registry_ready_blocks(good_cfg, good_report) == []
+    assert "ready_model_hash_mismatch" in lora_registry_ready_blocks(
+        dict(good_cfg, model_hash="def"), good_report
+    )
+    # 报告路径非空但读不出 → ready_validation_report_missing
+    assert "ready_validation_report_missing" in lora_registry_ready_blocks(good_cfg, None)
+    # 报告路径为空 → 只报 ready_missing_validation_report，不重复报 report_missing
+    no_report_cfg = dict(good_cfg, validation_report="")
+    blocks = lora_registry_ready_blocks(no_report_cfg, None)
+    assert blocks == ["ready_missing_validation_report"]
+
+    assert lora_gap_message("ready_missing_trigger") == "LoRA ready 但缺字段：trigger"
+    assert "verdict=pass" in lora_gap_message("ready_validation_report_not_pass")
+
+
+def test_identity_adapter_status_sets():
+    from n2d_contract import (
+        IDENTITY_ADAPTER_KNOWN_STATUSES,
+        IDENTITY_ADAPTER_READY_STATUSES,
+    )
+
+    assert "ready" in IDENTITY_ADAPTER_READY_STATUSES
+    assert "fallback_reference_group" in IDENTITY_ADAPTER_KNOWN_STATUSES
+    assert "candidate" in IDENTITY_ADAPTER_KNOWN_STATUSES
+
+
+def test_classify_redraw_reason():
+    from n2d_contract import REDRAW_REASON_CATEGORIES, classify_redraw_reason
+
+    assert classify_redraw_reason("第3镜沈念崩脸，五官漂了") == "face_consistency"
+    assert classify_redraw_reason("参考图被裁切导致构图不对") == "reference_cropping"
+    assert classify_redraw_reason("背景光位和上一镜对不上") == "scene_drift"
+    assert classify_redraw_reason("随便写的原因") == "other"
+    assert classify_redraw_reason("") == "other"
+    # 直接传枚举键原样返回
+    assert classify_redraw_reason("face_consistency") == "face_consistency"
+    assert set(c for c, _ in []) <= set(REDRAW_REASON_CATEGORIES)
+
+
+def test_migrate_legacy_shared_assets(tmp_path):
+    from n2d_contract import migrate_legacy_shared_assets
+
+    root = tmp_path / "剧"
+    legacy = root / "出图" / "common"
+    legacy.mkdir(parents=True)
+    (legacy / "identity_registry.json").write_text("{}", encoding="utf-8")
+
+    # 只有 legacy → 整体改名
+    result = migrate_legacy_shared_assets(str(root))
+    assert result["removed_legacy"] is True
+    assert (root / "出图" / "共享" / "identity_registry.json").is_file()
+    assert not legacy.exists()
+
+    # 并存 + 冲突 → 冲突文件留在旧目录，不覆盖
+    legacy.mkdir(parents=True)
+    (legacy / "identity_registry.json").write_text('{"old": true}', encoding="utf-8")
+    (legacy / "extra.json").write_text("{}", encoding="utf-8")
+    result = migrate_legacy_shared_assets(str(root))
+    assert result["conflicts"] == ["identity_registry.json"]
+    assert "extra.json" in result["moved"]
+    assert (legacy / "identity_registry.json").read_text(encoding="utf-8") == '{"old": true}'
+    assert (root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8") == "{}"
+
+
+def test_voicemap_contract():
+    from n2d_contract import VOICE_KEY_FIELD, voicemap_path
+
+    assert voicemap_path("/tmp/剧").endswith("设定库/voicemap.json")
+    assert VOICE_KEY_FIELD == "voice_key"

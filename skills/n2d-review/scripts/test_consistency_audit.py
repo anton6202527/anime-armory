@@ -55,3 +55,26 @@ def test_auto_return_tasks_group_details():
     assert tasks[0]["return_to_stage"] == "image"
     assert tasks[0]["affected_shots"] == ["Clip_03"]
     assert "定位镜头：Clip_03" in tasks[0]["scope"]
+
+
+def test_findings_payload_and_export(tmp_path):
+    """结构化外发：payload 带契约 kind；export 落 生产数据/consistency_findings_<集>.json。"""
+    import json
+
+    res = {
+        "root": str(tmp_path),
+        "episode": "第1集",
+        "summary": {"by_dim": {"脸(G1)": {"block": 1, "warn": 0, "ok": 0, "skipped": False}}, "total_block": 1},
+        "sections": {},
+        "findings": [{"dim": "脸(G1)", "sev": "block", "loc": "Clip_02", "msg": "崩脸", "return_to_stage": "image"}],
+        "auto_return_tasks": [],
+    }
+    payload = ca.findings_payload(res)
+    assert payload["kind"] == "n2d_consistency_findings"
+    assert payload["episode"] == "第1集"
+    assert payload["findings"][0]["return_to_stage"] == "image"
+
+    path = ca.export_findings(str(tmp_path), "第1集", res)
+    data = json.loads(open(path, encoding="utf-8").read())
+    assert data["kind"] == "n2d_consistency_findings"
+    assert path.endswith("consistency_findings_第1集.json")

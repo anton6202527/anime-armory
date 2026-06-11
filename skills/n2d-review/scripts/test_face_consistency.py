@@ -59,3 +59,57 @@ def test_anchor_verdict():
     assert fc.anchor_verdict(1, 0.02, min_ratio=0.06) == "warn"  # 脸太小
     assert fc.anchor_verdict(1, 0.20, min_ratio=0.06) == "ok"    # 单张够大正脸
     assert fc.anchor_verdict(1, 0.06, min_ratio=0.06) == "ok"    # 等于下限放行
+
+
+def test_pillow_fallback_when_no_insightface(tmp_path):
+    """无 insightface（本机真实环境）→ Pillow 降级档：有信号但 mode/precision 标降级，绝不输出相似度。"""
+    import json
+    import os
+
+    import face_consistency as fc
+
+    # 本机没有 insightface，analyze 应走 pillow_fallback（若装了 insightface 则跳过本用例）
+    if fc._load_embedder() is not None:
+        import pytest
+        pytest.skip("本机装有 insightface，降级档不生效")
+    image_mod = fc._load_pillow()
+    assert image_mod is not None, "本仓约定 Pillow 可用"
+
+    root = tmp_path
+    ep = "第1集"
+    prompt_dir = root / "出图" / ep / "prompt"
+    prompt_dir.mkdir(parents=True)
+    img_dir = root / "出图" / ep / "图片"
+    img_dir.mkdir(parents=True)
+    # 一镜引用沈念定妆：目标 PNG 存在（清晰大图）；另一镜 PNG 缺失
+    from PIL import Image
+    import random
+    img = Image.new("RGB", (1024, 1024))
+    img.putdata([(random.randint(0, 255),) * 3 for _ in range(1024 * 1024)])
+    img.save(img_dir / "Clip_01.png")
+    (prompt_dir / "01_分镜出图.md").write_text(
+        "\n".join([
+            "## Clip 01",
+            "目标：出图/第1集/图片/Clip_01.png",
+            "参考图：定妆_沈念.png",
+            "## Clip 02",
+            "目标：出图/第1集/图片/Clip_02.png",
+            "参考图：定妆_沈念.png",
+        ]),
+        encoding="utf-8",
+    )
+
+    result = fc.analyze(str(root), ep)
+    assert result["available"] is True
+    assert result["mode"] == fc.PILLOW_FALLBACK_MODE
+    assert result["precision"] == "insufficient_precision"
+    shots = {s["png"]: s for s in result["shots"]}
+    assert "图片/Clip_02.png" in json.dumps(shots, ensure_ascii=False) or any(
+        "Clip_02" in p for p in shots
+    )
+    missing = next(s for p, s in shots.items() if "Clip_02" in p)
+    assert missing["verdict"] == "block"
+    ok_shot = next(s for p, s in shots.items() if "Clip_01" in p)
+    assert ok_shot["verdict"] in {"ok", "warn"}
+    # 绝不臆造相似度
+    assert "similarity" not in json.dumps(result)

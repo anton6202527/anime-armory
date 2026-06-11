@@ -31,9 +31,9 @@ AI 内部再跑脚本。
 
 ## 核心规则
 
-- **导入即 fork**：跨项目默认不复用原角色 ID/name。必须生成新项目本地 `CHAR_...` 和新角色名，避免多剧撞脸撞身份。
-- **后端原生 ID 默认重置**：Character ID / Face Lock / reference controls / LoRA ready 多数绑定账号、项目或训练数据。导入新剧默认改回 `unregistered` 或 `fallback_reference_group`，再由 `n2d-identity` 重新生成 adapter matrix。若确需 `--preserve-adapters`，必须写 `--preserve-reason`；旧 registered/ready 只保留为 `candidate` 参考，不得直接当本项目可执行资产。
-- **LoRA 重置/降级清失效路径（防指向旧项目）**：`.safetensors` 不随资产包迁移。重置把 lora 的 `model_path/model_hash/validation_report/train_job/card` 全清空（不只 status）并标 notes；`--preserve-adapters` 把 ready 降级为 `candidate` 时也**清掉 `model_path/model_hash/validation_report/train_job`**（只留 `base_model/trigger/dataset` 作重训参考），否则 gate 会读到指向旧项目的失效 model_path 误判文件存在。
+- **导入即 fork，溯源不断链**：跨项目默认不复用原角色 ID/name。必须生成新项目本地 `CHAR_...` 和新角色名，避免多剧撞脸撞身份。同时写入溯源：`source_asset_pack`/`source_asset_slug`（单层，兼容旧导入）+ 追加一条 `fork_history[]`（先继承源角色自带的链再追加，A→B→C 多级 fork 可回溯；字段键名以契约 `IDENTITY_FORK_HISTORY_ENTRY_FIELDS` 为准）。
+- **后端原生 ID 默认重置 + 审计留痕**：Character ID / Face Lock / reference controls / LoRA ready 多数绑定账号、项目或训练数据。导入新剧默认改回 `unregistered` 或 `fallback_reference_group`，再由 `n2d-identity` 重新生成 adapter matrix；**被重置/被新模板移除的后端逐条记入 form 的 `preserve_review`**（原 status/mode/句柄/重置原因），导入者能看到"源项目曾在哪些后端注册过身份"，而不是被悄悄抹掉。若确需 `--preserve-adapters`，必须写 `--preserve-reason`；旧 registered/ready 只保留为 `candidate` 参考，不得直接当本项目可执行资产。
+- **LoRA 重置/降级清失效路径（防指向旧项目）**：`.safetensors` 不随资产包迁移。重置/降级用 `pop` **彻底移除** lora 的 `model_path/model_hash/validation_report/train_job/card` 键（置空字符串仍是"残留字段"，schema 对账/diff 会把空串当已登记）并标 notes；`--preserve-adapters` 把 ready 降级为 `candidate` 时同样移除（只留 `base_model/trigger/dataset` 作重训参考），否则 gate 会读到指向旧项目的失效 model_path 误判文件存在。
 - **资产包带授权字段**：默认 `template_only`。没有明确授权时，只复用模板结构，不复用“同一个可识别角色”。
 - **多形态文件名必须去重**：角色有多个 form 时，引用图文件名写入 form 后缀，避免 `front/side/back` 等同名文件在导出或导入时互相覆盖。
 - **路由模板只做参考**：新项目仍要按自己的 `storyboard.json` 跑 `n2d-model-router`，不能把旧剧逐 Clip 路由表直接覆盖过来。

@@ -256,3 +256,53 @@ def test_metric_alias_resolution_ingests_chinese_export_columns(tmp_path):
     assert abs(feedback.metric(row, "retention_3s") - 0.62) < 1e-6
     assert abs(feedback.metric(row, "follow_next_rate") - 0.33) < 1e-6
     assert feedback.row_weight(row) == 500000.0
+
+
+def test_consistency_findings_ingestion(tmp_path):
+    """一致性回灌：读 consistency_findings_*.json 出维度计数/最严重集，并排留存指标；无文件优雅跳过。"""
+    root = tmp_path
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    # 两集 findings：第1集 1 block + 2 warn（脸），第2集 1 warn（场景）
+    (prod / "consistency_findings_第1集.json").write_text(json.dumps({
+        "kind": "n2d_consistency_findings", "version": 1, "episode": "第1集",
+        "summary": {"by_dim": {"脸(G1)": {"block": 1, "warn": 2}, "场景(O2)": {"block": 0, "warn": 0}}},
+        "findings": [],
+    }, ensure_ascii=False), encoding="utf-8")
+    (prod / "consistency_findings_第2集.json").write_text(json.dumps({
+        "kind": "n2d_consistency_findings", "version": 1, "episode": "第2集",
+        "summary": {"by_dim": {"场景(O2)": {"block": 0, "warn": 1}}},
+        "findings": [],
+    }, ensure_ascii=False), encoding="utf-8")
+    # kind 不对的文件被忽略
+    (prod / "consistency_findings_bad.json").write_text('{"kind": "other"}', encoding="utf-8")
+
+    reports = feedback.load_consistency_reports(str(root))
+    assert len(reports) == 2
+
+    rows = [
+        {"episode": "第1集", "retention_15s": "0.4", "bounce_3s": "0.5", "plays": "100"},
+        {"episode": "第2集", "retention_15s": "0.6", "bounce_3s": "0.2", "plays": "100"},
+    ]
+    result = feedback.analyze_consistency(reports, rows)
+    assert result["worst_episode"] == "第1集"
+    assert result["dim_totals"]["脸(G1)"] == {"block": 1, "warn": 2}
+    ep1 = next(e for e in result["episodes"] if e["episode"] == "第1集")
+    assert ep1["top_dim"] == "脸(G1)" and ep1["retention_15s"] == 0.4
+
+    # 渲染含「一致性问题 Top」节
+    fb = {
+        "sample_count": 0, "min_samples": 2, "generated_at": "t", "recommendations": [],
+        "feature_extraction": {}, "source": {"features": "x"},
+        "analyses": {k: {"name": k, "groups": []} for k in (
+            "opening_retention", "cliffhanger_follow", "shot_density_bounce", "hook_interval_retention",
+            "ab_opening_retention", "ab_cover_retention", "ab_cliffhanger_follow", "ab_title_retention")},
+        "consistency": result,
+    }
+    md = feedback.render_markdown(fb)
+    assert "一致性问题 Top" in md and "第1集" in md
+
+    # 无 findings 文件 → None，渲染不出该节
+    empty_root = tmp_path / "empty"
+    (empty_root / "生产数据").mkdir(parents=True)
+    assert feedback.analyze_consistency(feedback.load_consistency_reports(str(empty_root)), []) is None

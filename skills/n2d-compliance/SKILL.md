@@ -43,7 +43,7 @@ python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第1集 --sta
 ## 前置原则
 
 - 任何 `unknown/pending/unlicensed` 都不得进入付费 image/video/compose。
-- 内部测试可设置 `distribution_intent=internal_only`，gate 会跳过平台投放审核但提醒不得直接发布。
+- **internal_only 免检范围（已工程化）**：`distribution_intent=internal_only` 时，`compliance.py --check` 与 review gate 把 `platform_review` / `localization`（出海本地化）域的 BLOCK 降为 INFO 并加注「内部 demo 免检，转投放前需补」；**角色/声音授权、AI 标识、水印检查照常 BLOCK**——授权问题不因内部使用而豁免，且为日后转投放留底。判定同源于契约 `COMPLIANCE_INTERNAL_DISTRIBUTION_INTENTS` / `COMPLIANCE_INTERNAL_SKIPPABLE_SECTIONS`。
 - 平台规则会变：`policy_profile` 必须带检查日期，例如 `youtube_ai_disclosure_2026-06-08`，不要把平台条款写死在脚本里。
 - 中国投放默认需要显式 AI 标识 + 元数据/隐式标识策略；海外平台按目标平台上传流程做 AI disclosure。
 

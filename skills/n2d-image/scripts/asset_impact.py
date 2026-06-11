@@ -3,17 +3,26 @@
 
 市场卖点"改一次人物资产，全剧镜头自动同步"。n2d 定妆库是共享的，但改了某个
 `出图/共享/图片/定妆_<X>.png` 后，没机制告诉你"哪些已出镜头引用了它、要重出"——靠人记易漏。
-本脚本扫各集 `出图/<集>/prompt/*.md` 的「参考图：」行 + 定妆引用，列出引用该资产的镜头，
-并按目标 PNG 是否已存在分两类：**已出图→需重出** / 未出图→待出时自然用新版。
+本脚本扫各集 `出图/<集>/prompt/*.md` 的「参考图：」行 + 定妆引用，并读
+`出图/共享/identity_registry.json` / `asset_registry.json` 的结构化绑定（镜头 prompt 写了
+`CHAR_xx` / `LOC_xx` / `PROP_xx` / `OUTFIT_xx` / `VFX_xx` 或角色/资产名、靠 registry 自动取参考的
+镜头同样命中），列出引用该资产的镜头，并按目标 PNG 是否已存在分两类：
+**已出图→需重出** / 未出图→待出时自然用新版。
 
-只读，不改任何文件、不删图。纯标准库。解析逻辑(normalize/parse_shots)可单测。
+只读（除 --output-batch-tasks / --out 显式落盘外），不改任何产物、不删图。纯标准库。
+解析逻辑(normalize/parse_shots/registry 绑定)可单测。
 
 用法：
   python3 asset_impact.py <作品根> <资产名...>               # 人读：受影响镜头清单
   python3 asset_impact.py <作品根> <资产名...> --json         # 喂回 LLM
   python3 asset_impact.py <作品根> <资产名...> --rerun-plan   # 连锁重跑计划（重出图→刷新身份→重出视频→重合成→n2d-batch 命令）
   python3 asset_impact.py <作品根> <资产名...> --rerun-plan --json [--out 计划.md/json]
-资产名可写 `定妆_沈念.png` / `定妆_沈念_侧` / `沈念` / `冷宫寝殿`，会归一到核心名匹配。
+  python3 asset_impact.py <作品根> <资产名...> --include-video           # 加「已出视频需重生」清单
+  python3 asset_impact.py <作品根> <资产名...> --check-native-adapters   # 加「后端身份注册基于旧定妆」提醒
+  python3 asset_impact.py <作品根> <资产名...> --output-batch-tasks 计划.json
+      # 输出 n2d-batch 可直接消费的任务 JSON（kind=n2d_asset_rerun_plan）：
+      # python3 skills/n2d-batch/scripts/queue.py plan <作品根> --from-asset-impact 计划.json
+资产名可写 `定妆_沈念.png` / `定妆_沈念_侧` / `沈念` / `冷宫寝殿` / `CHAR_01`，会归一到核心名匹配。
 """
 import glob
 import json
@@ -24,7 +33,13 @@ import sys
 COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
-from n2d_contract import ASSET_RERUN_PLAN_KIND  # noqa: E402  产物 kind 单一真值源
+from n2d_contract import (  # noqa: E402  产物 kind / registry 路径 / adapter 状态单一真值源
+    ASSET_RERUN_PLAN_KIND,
+    IDENTITY_ADAPTER_READY_STATUSES,
+    IDENTITY_HANDLE_FIELDS,
+    asset_registry_path,
+    identity_registry_path,
+)
 
 VIEW_SUFFIXES = ("正脸", "正面", "侧", "侧脸", "背", "背面", "半身", "全身", "三视图")
 
@@ -105,6 +120,90 @@ def shot_references(shot, keys):
     return False
 
 
+# ── registry 结构化绑定（盲区①：镜头没写参考图行、靠 registry 自动取参考也算受影响）──
+
+def _read_json(path):
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return None
+
+
+def _ref_paths(reference_group):
+    """reference_group 的所有参考路径（值可为字符串/列表，如 expressions[]）。"""
+    out = []
+    if not isinstance(reference_group, dict):
+        return out
+    for value in reference_group.values():
+        for item in value if isinstance(value, list) else [value]:
+            if isinstance(item, str) and item.strip():
+                out.append(item.strip())
+    return out
+
+
+def load_registry_bindings(root):
+    """读 identity_registry.json + asset_registry.json，建结构化绑定条目。
+
+    每条 = {"id"(CHAR_/LOC_/PROP_/OUTFIT_/VFX_), "kind"(character|asset),
+            "names"(角色名/资产名集合，角色名按 `/`、顿号拆分),
+            "keys"(asset_key 与定妆参考路径的核心键集合), "forms"(角色形态原文，供 adapter 检查)}。
+    registry 缺失/损坏返回 []——纯文本「参考图：」匹配照旧，不因 registry 缺席而报错。"""
+    entries = []
+    ident = _read_json(identity_registry_path(root))
+    if isinstance(ident, dict):
+        for char in ident.get("characters") or []:
+            if not isinstance(char, dict):
+                continue
+            cid = str(char.get("id", "")).strip()
+            if not cid:
+                continue
+            names = {p.strip() for p in re.split(r"[/、,，\s]+", str(char.get("name", ""))) if p.strip()}
+            keys, forms = set(), [f for f in char.get("forms") or [] if isinstance(f, dict)]
+            for form in forms:
+                asset_key = str(form.get("asset_key", "")).strip()
+                if asset_key:
+                    keys.add(core(asset_key))
+                for path in _ref_paths(form.get("reference_group")):
+                    keys.add(core(path))
+            entries.append({"id": cid, "kind": "character", "names": names, "keys": keys, "forms": forms})
+    areg = _read_json(asset_registry_path(root))
+    if isinstance(areg, dict):
+        for asset in areg.get("assets") or []:
+            if not isinstance(asset, dict):
+                continue
+            aid = str(asset.get("id", "")).strip()
+            if not aid:
+                continue
+            names = {s for s in (str(asset.get("name", "")).strip(),) if s}
+            keys = {core(p) for p in _ref_paths(asset.get("reference_group"))}
+            entries.append({"id": aid, "kind": "asset", "names": names, "keys": keys, "forms": []})
+    return entries
+
+
+def match_bindings(entries, keys):
+    """目标资产核心键 → 命中的 registry 条目（按 ID / 角色·资产名 / 定妆核心键三路匹配）。"""
+    keys = set(keys)
+    return [e for e in entries if e["id"] in keys or (keys & e["names"]) or (keys & e["keys"])]
+
+
+# ID 命中要求边界：`CHAR_01` 不得命中 `CHAR_011` / `CHAR_01B`。
+_ID_BOUND = r"(?![0-9A-Za-z])"
+
+
+def shot_references_bindings(shot, bindings):
+    """registry 结构化命中：镜头 prompt 文本（标题/参考图行/正文）里出现绑定条目的
+    CHAR_/LOC_/PROP_/OUTFIT_/VFX_ ID（带边界）或角色/资产名——覆盖『没写参考图行、
+    靠 registry 自动取定妆组』的镜头。"""
+    text = shot["title"] + "\n" + shot["refline"] + "\n" + shot["body"]
+    for b in bindings:
+        if re.search(re.escape(b["id"]) + _ID_BOUND, text):
+            return True
+        if any(name and name in text for name in b["names"]):
+            return True
+    return False
+
+
 def shot_key(title):
     """从标题推镜头键，用于无 目标 行时定位 PNG：`Clip 1`→`Clip_01`；`镜头 3`→`镜头3`。"""
     m = re.search(r"Clip\s*(\d+)", title)
@@ -130,8 +229,12 @@ def resolve_target(root, ep, shot):
     return f"出图/{ep}/{key}*.png", False
 
 
-def scan(root, assets):
+def scan(root, assets, *, bindings=None):
+    """扫各集分镜 prompt：文本「参考图」匹配 + registry 结构化绑定匹配（盲区①）。
+    bindings=None 时自动从 registry 加载并按目标资产过滤；传 [] 可强制只走纯文本匹配。"""
     keys = sorted({core(a) for a in assets if core(a)})
+    if bindings is None:
+        bindings = match_bindings(load_registry_bindings(root), keys)
     hits = []
     for pf in sorted(glob.glob(os.path.join(root, "出图", "*", "prompt", "*.md"))):
         ep = os.path.basename(os.path.dirname(os.path.dirname(pf)))  # 出图/<集>/prompt/x.md
@@ -141,13 +244,141 @@ def scan(root, assets):
         except OSError:
             continue
         for s in shots:
-            if not shot_references(s, keys):
+            if not (shot_references(s, keys) or shot_references_bindings(s, bindings)):
                 continue
             tgt = resolve_target(root, ep, s)
             if tgt is None:  # 00_总览.md 的章节头等：非出图镜头，过滤
                 continue
             hits.append({"集": ep, "镜头": s["title"], "目标": tgt[0], "已出图": tgt[1]})
     return keys, hits
+
+
+# ── 盲区②：已出视频需重生（--include-video）────────────────────────────────
+
+VIDEO_EXTS = (".mp4", ".mov", ".webm", ".m4v")
+
+
+def _key_in_name(text, key):
+    """镜头键命中文件名/文本，要求键后不接数字：`镜头1` 不得命中 `镜头10`。"""
+    if not key:
+        return False
+    return re.search(re.escape(key) + r"(?!\d)", text) is not None
+
+
+def scan_video_impact(root, hits):
+    """受影响镜头 → 「已出视频需重生」清单。
+
+    命中条件（任一即收）：① `出视频/<集>/视频/` 已有该镜头对应 clip（文件名含镜头键或首帧
+    PNG 主名）；② `出视频/<集>/prompt/*.md` 引用了受影响 PNG（相对路径或文件名）。
+    只看已出图镜头——首帧没落 PNG 不可能有由它派生的 clip。"""
+    out = []
+    for h in hits:
+        if not h["已出图"]:
+            continue
+        ep = h["集"]
+        skey = shot_key(h["镜头"])
+        png_rel = h["目标"]
+        png_base = os.path.basename(png_rel)
+        stem = os.path.splitext(png_base)[0]
+        clips = []
+        for p in sorted(glob.glob(os.path.join(root, "出视频", ep, "视频", "*"))):
+            name = os.path.basename(p)
+            if not name.lower().endswith(VIDEO_EXTS):
+                continue
+            if _key_in_name(name, skey) or _key_in_name(name, stem):
+                clips.append(os.path.relpath(p, root))
+        prompt_refs = []
+        for pf in sorted(glob.glob(os.path.join(root, "出视频", ep, "prompt", "*.md"))):
+            try:
+                with open(pf, encoding="utf-8") as f:
+                    text = f.read()
+            except OSError:
+                continue
+            if png_rel in text or png_base in text:
+                prompt_refs.append(os.path.relpath(pf, root))
+        if clips or prompt_refs:
+            out.append({"集": ep, "镜头": h["镜头"], "首帧": png_rel,
+                        "clips": clips, "prompt引用": prompt_refs})
+    return out
+
+
+# ── 盲区③：后端身份注册基于旧定妆（--check-native-adapters）───────────────────
+
+def native_adapter_notices(bindings):
+    """被改角色在 registry identity_adapters 里已有 registered/ready 且带句柄的后端 →
+    「该后端身份注册基于旧定妆，需重新注册」提醒（image/video 各后端 + LoRA）。"""
+    notices = []
+    for b in bindings:
+        if b["kind"] != "character":
+            continue
+        for form in b["forms"]:
+            adapters = form.get("identity_adapters")
+            if not isinstance(adapters, dict):
+                continue
+            form_name = str(form.get("form", "") or "")
+            sections = [(area, adapters.get(area)) for area in ("image", "video")]
+            lora = adapters.get("lora")
+            if isinstance(lora, dict):
+                sections.append(("lora", {"lora": lora}))
+            for area, section in sections:
+                if not isinstance(section, dict):
+                    continue
+                for backend, cfg in section.items():
+                    if not isinstance(cfg, dict):
+                        continue
+                    status = str(cfg.get("status", "")).strip()
+                    handles = {f: cfg.get(f) for f in IDENTITY_HANDLE_FIELDS
+                               if str(cfg.get(f) or "").strip()}
+                    if status in IDENTITY_ADAPTER_READY_STATUSES and handles:
+                        notices.append({
+                            "角色": b["id"], "形态": form_name, "区域": area, "后端": backend,
+                            "status": status, "句柄": handles,
+                            "提醒": "该后端身份注册基于旧定妆，定妆变更后需重新注册",
+                        })
+    return notices
+
+
+# ── 盲区④：n2d-batch 直读任务 JSON（--output-batch-tasks）─────────────────────
+
+def build_batch_tasks(root, keys, hits, video_impacts=None):
+    """输出 n2d-batch `queue.py plan --from-asset-impact` 可直接消费的任务 JSON。
+
+    字段对齐 queue.py 的 rerun 任务入参：每条 = episode / rerun_from / scope /
+    affected_artifacts / affected_shots；顶层 kind=ASSET_RERUN_PLAN_KIND。
+    已出图镜头按集聚合成 image 重跑任务；--include-video 命中的 clip 另出 video 重跑任务。"""
+    label = "、".join(keys) or "(空)"
+    rerun = [h for h in hits if h["已出图"]]
+    by_ep = {}
+    for h in rerun:
+        by_ep.setdefault(h["集"], []).append(h)
+    tasks = []
+    for ep in sorted(by_ep):
+        tasks.append({
+            "episode": ep,
+            "rerun_from": "image",
+            "scope": f"定妆{label}变更连锁·重出受影响镜头",
+            "affected_artifacts": sorted({h["目标"] for h in by_ep[ep] if h["目标"]}),
+            "affected_shots": sorted({shot_key(h["镜头"]) or h["镜头"] for h in by_ep[ep]}),
+        })
+    video_by_ep = {}
+    for v in video_impacts or []:
+        video_by_ep.setdefault(v["集"], []).append(v)
+    for ep in sorted(video_by_ep):
+        rows = video_by_ep[ep]
+        tasks.append({
+            "episode": ep,
+            "rerun_from": "video",
+            "scope": f"定妆{label}变更连锁·重生已出视频 clip",
+            "affected_artifacts": sorted({c for v in rows for c in v["clips"]}),
+            "affected_shots": sorted({shot_key(v["镜头"]) or v["镜头"] for v in rows}),
+        })
+    return {
+        "kind": ASSET_RERUN_PLAN_KIND,
+        "version": 1,
+        "root": root,
+        "assets": keys,
+        "rerun_tasks": tasks,
+    }
 
 
 def build_rerun_plan(root, keys, hits):
@@ -230,26 +461,46 @@ def render_rerun_plan(plan):
     return "\n".join(lines)
 
 
+def _pop_value_flag(argv, flag):
+    """从 argv 摘走 `<flag> <值>`，返回 (值或None, 余下argv)。"""
+    if flag not in argv:
+        return None, argv
+    i = argv.index(flag)
+    value = argv[i + 1] if i + 1 < len(argv) else None
+    return value, argv[:i] + argv[i + 2:]
+
+
 def main(argv):
     if len(argv) < 2:
         sys.exit(__doc__)
     as_json = "--json" in argv
     rerun_plan = "--rerun-plan" in argv
-    out_path = None
-    if "--out" in argv:
-        i = argv.index("--out")
-        out_path = argv[i + 1] if i + 1 < len(argv) else None
-        argv = argv[:i] + argv[i + 2:]
-    argv = [a for a in argv if a not in ("--json", "--rerun-plan")]
+    include_video = "--include-video" in argv
+    check_adapters = "--check-native-adapters" in argv
+    out_path, argv = _pop_value_flag(argv, "--out")
+    batch_out, argv = _pop_value_flag(argv, "--output-batch-tasks")
+    argv = [a for a in argv if a not in ("--json", "--rerun-plan", "--include-video", "--check-native-adapters")]
     root, assets = argv[0], argv[1:]
     if not assets:
         sys.exit("⛔ 至少给一个资产名，如：定妆_沈念 / 沈念 / 冷宫寝殿")
     if not os.path.isdir(os.path.join(root, "出图")):
         sys.exit(f"⛔ {root}/出图 不存在")
 
-    keys, hits = scan(root, assets)
+    raw_keys = sorted({core(a) for a in assets if core(a)})
+    bindings = match_bindings(load_registry_bindings(root), raw_keys)
+    keys, hits = scan(root, assets, bindings=bindings)
     rerun = [h for h in hits if h["已出图"]]
     pending = [h for h in hits if not h["已出图"]]
+    video_impacts = scan_video_impact(root, hits) if include_video else None
+    adapter_notices = native_adapter_notices(bindings) if check_adapters else None
+
+    if batch_out:
+        plan_tasks = build_batch_tasks(root, keys, hits, video_impacts=video_impacts)
+        with open(batch_out, "w", encoding="utf-8") as f:
+            json.dump(plan_tasks, f, ensure_ascii=False, indent=2)
+            f.write("\n")
+        print(f"[batch-tasks] wrote {batch_out}（共 {len(plan_tasks['rerun_tasks'])} 条任务）")
+        print(f"[batch-tasks] 对接：python3 skills/n2d-batch/scripts/queue.py plan {root} --from-asset-impact {batch_out}")
 
     if rerun_plan:
         plan = build_rerun_plan(root, keys, hits)
@@ -263,9 +514,13 @@ def main(argv):
         return 0
 
     if as_json:
-        print(json.dumps({"资产": keys, "引用镜头数": len(hits),
-                          "需重出": rerun, "待出图": pending},
-                         ensure_ascii=False, indent=2))
+        payload = {"资产": keys, "引用镜头数": len(hits),
+                   "需重出": rerun, "待出图": pending}
+        if video_impacts is not None:
+            payload["已出视频需重生"] = video_impacts
+        if adapter_notices is not None:
+            payload["后端身份提醒"] = adapter_notices
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
         return 0
 
     print(f"=== 定妆变更影响：{('、'.join(keys)) or '(空)'} ===")
@@ -278,6 +533,22 @@ def main(argv):
         print("\n⬜ 待出图（还没出，下次出图自然用新版，无需额外动作）：")
         for h in pending:
             print(f"  - {h['集']} · {h['镜头']}")
+    if video_impacts is not None:
+        if video_impacts:
+            print("\n🎬 已出视频需重生（首帧 PNG 变了，由它派生的 clip 必须回 n2d-video 重出）：")
+            for v in video_impacts:
+                refs = "、".join(v["clips"] + v["prompt引用"])
+                print(f"  - {v['集']} · {v['镜头']} → {refs}")
+        else:
+            print("\n🎬 已出视频需重生：无（受影响镜头还没有对应 clip / 视频 prompt 引用）")
+    if adapter_notices is not None:
+        if adapter_notices:
+            print("\n🪪 后端身份提醒（registered/ready 且带句柄——身份注册基于旧定妆，需重新注册）：")
+            for n in adapter_notices:
+                handles = "、".join(f"{k}={v}" for k, v in n["句柄"].items())
+                print(f"  - {n['角色']}/{n['形态']} · {n['区域']}.{n['后端']} status={n['status']} ({handles})")
+        else:
+            print("\n🪪 后端身份提醒：无（被改角色没有 registered/ready 的后端身份）")
     if not hits:
         print("\n（没有镜头引用该资产——确认资产名拼写，或它只是共享层未被分镜引用）")
     return 0
