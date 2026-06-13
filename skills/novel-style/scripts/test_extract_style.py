@@ -19,6 +19,21 @@ def test_fingerprint_basic_fields():
     assert fp["sentence_count"] >= 6
     assert "syntax_profile" in fp and "dialogue_ratio" in fp
     assert "lexicon_anchor" in fp and "rhythm" in fp
+    assert fp["style_source_rights"]["status"] == "project-demo"
+
+
+def test_fingerprint_records_style_source_rights():
+    fp = es.fingerprint(
+        SHORT,
+        source_rights="licensed",
+        style_source_name="样本集",
+        style_source_author="授权作者",
+        authorization_note="合同授权",
+    )
+    rights = fp["style_source_rights"]
+    assert rights["status"] == "licensed"
+    assert rights["source_author"] == "授权作者"
+    assert "未授权姓名式复刻" in rights["policy"]
 
 
 def test_short_text_is_fast_pulse():

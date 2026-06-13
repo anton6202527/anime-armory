@@ -19,7 +19,7 @@ import sys
 import tempfile
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
-COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
+COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 from n2d_contract import SCORE_VISUAL_CHECKS_KIND  # noqa: E402  产物 kind 单一真值源

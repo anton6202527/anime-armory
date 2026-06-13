@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Batch worker runner for novel2drama/n2d.
+"""Batch worker runner for n2d.
 
 The queue ledger stays in queue.py.  This worker claims tasks, executes the
 configured command for each task, records runner telemetry into n2d-dashboard,

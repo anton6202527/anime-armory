@@ -9,13 +9,13 @@ description: Given a long novel (.txt/.docx), compress it into a shorter version
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**，按 `../_偏好约定.md`（家族统一的偏好读写机制 + 全部选择点目录与缺省）解析：`<作品根>/_设置.md` → 全局默认 `创作偏好-默认.md` 预填并告知一句 → 缺则**首次问一次**→写回 `_设置.md`→**沉默沿用**（合规/不可逆/花钱点每次仍确认）。
+本 skill 的可选项**不写死在源码里**，按 `../skills/novel-craft/references/选择点与偏好.md`（家族统一的偏好读写机制 + 全部选择点目录与缺省）解析：`<作品根>/_设置.md` → 全局默认 `创作偏好-默认.md` 预填并告知一句 → 缺则**首次问一次**→写回 `_设置.md`→**沉默沿用**（合规/不可逆/花钱点每次仍确认）。
 
 本 skill 涉及的选择点：`权利来源`、`输出格式`、`小说生成模式`、`章节生成粒度`、`AI使用披露`。
 
 ## 合法性铁律
 
-家族统一铁律（公版 / 自有 / `--i-have-rights` + provenance 留痕；当代受版权网文未声明授权→拒做）见 `novel-author/SKILL.md` 合法性继承。
+家族统一铁律（公版 / 自有 / `--i-have-rights` + provenance 留痕；当代受版权网文未声明授权→拒做）见 `novel/SKILL.md` 合法性继承。
 - 本 skill 特有：精简时即便高潮段也要重写，不照搬原文。
 
 ## 用途分档
@@ -64,6 +64,7 @@ python3 <skill>/scripts/init_project.py "<原作>" \
 ### 第 3 步 — 划章 / 合章
 
 按 `_meta.json.target_chapters` 与目标压缩比决定新章数。相邻同主题章合并；纯支线章砍掉或缩成一句话。映射写入 `设定/章节映射.md`。
+随后按 `novel-craft/references/reader-contract.md` 补 `设定/读者契约.md`：精简版必须保留的核心题旨、读者承诺、反转 / 高潮 / 余味、文学质感和禁偏清单。精简不是把每章均匀砍短，而是保住读者为什么继续看的理由。
 
 ### 第 4 步 — 章纲
 
@@ -78,6 +79,7 @@ Demo 审完必须写 `审稿/demo_gate.json`（见 `novel-craft/references/demo-
 
 先读 `novel-craft/references/draft-pipeline.md`，跑 `python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --next|--range A-B` 生成逐章任务包。
 续压子任务必须喂 `审稿/demo_gate.json` 的 `style_anchor` / `reader_promises` / `setting_constraints`，并读取 `审稿/state_ledger.json`。
+同时必须喂 `设定/读者契约.md`，确保被保留的章不偏离核心题旨，且高光段的文学质感不被压成梗概。
 每章写完填 `审稿/state_delta_第NN章.json`，记录主线骨架、钩子、反转点是否保留。
 重点扫：
 - 主线骨架是否完整
@@ -105,7 +107,7 @@ python3 skills/novel-craft/scripts/export.py "<作品根>" --formats txt,docx[,n
 - 用户想**配角视角续写** → 用 novel-spinoff。
 - 用户想**改设定 / 换主线魔改重写** → 用 novel-rewrite。
 - 用户想**接着原作末章往后写新章** → 用 novel-continue。
-- 用户想**做漫剧脚本但不要精简版小说** → 直接 novel2drama / n2d-script，更直接。
+- 用户想**做漫剧脚本但不要精简版小说** → 直接 n2d / n2d-script，更直接。
 
 ## 常见错误
 

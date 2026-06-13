@@ -116,6 +116,11 @@ def analyze(project, scope, chapter, personas):
         0.45 * min(shuang / 6, 1) + 0.35 * hook + 0.20 * min(diversity / 0.9, 1) - 0.10 * min(cliche / 5, 1), 3)))
 
     return {
+        "analysis_mode": "signal_only",
+        "signal_only": True,
+        "qualitative_completed": False,
+        "personas_completed": [],
+        "agent_filled_at": None,
         "scope": scope,
         "chapters_read": [idx for idx, _ in target],
         "sampled_chars": _cjk_len(text),
@@ -144,6 +149,7 @@ def write_report(project, sig, personas):
         f"# 读者试读反馈报告 — {date}",
         "",
         f"- 范围：{sig['scope']}（第 {sig['chapters_read']} 章）",
+        f"- 完成状态：{sig.get('analysis_mode', 'signal_only')}；定性补全：{sig.get('qualitative_completed', False)}",
         f"- 留存先验（确定性近似）：**{sig['retention_prior']}** ｜ 钩子强度 {sig['hook_strength']} ｜ "
         f"词汇多样性 {sig['lexical_diversity']} ｜ 套路密度 {sig['cliche_density_per_kchar']}/千字",
         "",

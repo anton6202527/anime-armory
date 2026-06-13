@@ -5,9 +5,21 @@
 Can run without pytest:
     python3 skills/song-craft/scripts/test_contract.py
 """
+import importlib.util
+from pathlib import Path
 import unittest
 
-import contract
+
+def load_local_contract():
+    path = Path(__file__).with_name("contract.py")
+    spec = importlib.util.spec_from_file_location("song_craft_contract_under_test", path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec and spec.loader
+    spec.loader.exec_module(module)
+    return module
+
+
+contract = load_local_contract()
 
 
 class SongContractTest(unittest.TestCase):

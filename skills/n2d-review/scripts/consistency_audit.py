@@ -24,7 +24,7 @@ import re
 import sys
 from typing import Any, Dict, Iterable, List, Sequence, Tuple
 
-COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
+COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 from n2d_contract import (  # noqa: E402  findings kind / 生产数据目录 / 一致性维度单一真值源
@@ -63,6 +63,27 @@ def summarize(sections: Dict[str, dict]) -> dict:
         out[dim] = {"block": b, "warn": w, "ok": ok, "n": len(vs), "skipped": skipped}
         total_block += b
     return {"by_dim": out, "total_block": total_block}
+
+
+def audit_precision_level(capabilities: Dict[str, Any]) -> str:
+    """本次审计的总精度三档（契约 PRECISION_*）。把"本机机检能力"映射成诚实根信号，
+    根治"缺库全 skip → 0 block → 退出 0 全绿"的假绿灯：
+    无 Pillow=像素级一致性一概没检(none)；无 insightface=脸跑降级(degraded)；齐全=full。"""
+    if not capabilities.get("pillow"):
+        return "none"
+    if not capabilities.get("insightface"):
+        return "degraded"
+    return "full"
+
+
+def exit_code_for(summary: dict) -> int:
+    """退出码：有 🔴=1；否则总精度=none（啥像素都没检过）=2 inconclusive；其余=0。
+    让 CI/批处理调用方据退出码区分"检查了很干净"(0) 与"根本没法检查"(2)。"""
+    if summary.get("total_block"):
+        return 1
+    if summary.get("precision_level") == "none":
+        return 2
+    return 0
 
 
 def unique(values: Iterable[str]) -> List[str]:
@@ -235,6 +256,25 @@ def active_findings(details: Sequence[dict]) -> List[dict]:
         row["severity"] = row.get("verdict")
         out.append(row)
     return out
+
+
+def probe_capabilities() -> Dict[str, Any]:
+    """本机机检能力探针——把"哪些检查运行在降级精度"亮在台面上，避免"机检全绿"错觉。"""
+    import importlib.util as _ilu
+
+    caps: Dict[str, Any] = {
+        "insightface": _ilu.find_spec("insightface") is not None,
+        "pillow": _ilu.find_spec("PIL") is not None,
+    }
+    notes: List[str] = []
+    if not caps["pillow"]:
+        notes.append("本机无 Pillow——全部像素级一致性机检（脸/服装/接缝/风格/时序）不可用，交人判。")
+    elif not caps["insightface"]:
+        notes.append("本机无 insightface——脸部/片内身份机检运行在 Pillow 降级精度，"
+                     "机检通过≠脸部一致已验证；正式定稿前在装好 insightface 的环境复跑。")
+    caps["degraded"] = bool(notes)
+    caps["notes"] = notes
+    return caps
 
 
 def run(root: str, ep: str) -> dict:
@@ -450,11 +490,22 @@ def main(argv: List[str]) -> int:
                     help="只审计不外发（默认会写 生产数据/consistency_findings_<集>.json 并登记 dashboard 事件）")
     ns = ap.parse_args(argv)
     res = run(ns.root.rstrip("/"), ns.episode)
+    res["capabilities"] = probe_capabilities()
+    # 总精度写进 summary（外发/score/gate/人 据此判"没检查"≠"通过"）——必须在 export 之前算
+    res["summary"]["precision_level"] = audit_precision_level(res["capabilities"])
     if not ns.no_export and os.path.isdir(ns.root):
         export_findings(ns.root.rstrip("/"), ns.episode, res)
+    exit_code = exit_code_for(res["summary"])
     if ns.json:
-        print(json.dumps(res, ensure_ascii=False, indent=2)); return 0
+        print(json.dumps(res, ensure_ascii=False, indent=2)); return exit_code
     print(f"=== 一致性编排审计（O1·一键全跑）：{ns.root} {ns.episode} ===\n")
+    plv = res["summary"].get("precision_level", "full")
+    if plv != "full":
+        reason = ("无 Pillow，像素级一致性一概未跑，结果不可作通过依据" if plv == "none"
+                  else "脸部运行在降级精度，机检通过≠脸一致已验证")
+        print(f"⚠️ 本次机检总精度：{plv}——{reason}\n")
+    for note in res["capabilities"].get("notes", []):
+        print(f"⚠️ {note}\n")
     by = res["summary"]["by_dim"]
     print(f"{'维度':<16} 🔴  🟡  ✅  状态")
     for dim, c in by.items():
@@ -471,7 +522,7 @@ def main(argv: List[str]) -> int:
         print("\n自动回流建议：")
         for task in res["auto_return_tasks"]:
             print(f"  · {task['return_to_stage']}: {'、'.join(task['dimensions'])}；{task['scope']}")
-    return 1 if res["summary"]["total_block"] else 0
+    return exit_code
 
 
 if __name__ == "__main__":

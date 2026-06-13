@@ -12,11 +12,11 @@ spec.loader.exec_module(self_audit)
 
 
 def _minimal_repo(root: Path) -> None:
-    (root / "skills" / "novel2drama").mkdir(parents=True)
+    (root / "skills" / "n2d").mkdir(parents=True)
     (root / "skills" / "n2d-progress").mkdir(parents=True)
     (root / "skills" / "n2d-dashboard" / "references").mkdir(parents=True)
     (root / "skills" / "n2d-image").mkdir(parents=True)
-    (root / "skills" / "novel2drama" / "progress.py").write_text(
+    (root / "skills" / "n2d" / "progress.py").write_text(
         "def progress_lock(): pass\n"
         "def atomic_write_text():\n"
         "    os.replace('a', 'b')\n",
@@ -40,8 +40,8 @@ def _minimal_repo(root: Path) -> None:
 
 
 def _write_minimal_contract(root: Path) -> None:
-    (root / "skills" / "common").mkdir(parents=True, exist_ok=True)
-    (root / "skills" / "common" / "n2d_contract.py").write_text(
+    (root / "skills" / "n2d" / "_lib").mkdir(parents=True, exist_ok=True)
+    (root / "skills" / "n2d" / "_lib" / "n2d_contract.py").write_text(
         "APPROVED_IMAGE_BACKENDS = {\n"
         "  'codex': {'label': 'Codex'},\n"
         "  'openai': {'label': '官方 OpenAI gpt-image / DALL·E'},\n"

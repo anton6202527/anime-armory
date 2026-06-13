@@ -11,13 +11,14 @@ description: Given a book name (or chapter-index URL), find and fetch a public-d
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**。按 `../_偏好约定.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
+本 skill 的可选项**不写死在源码里**。按 `../skills/novel-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
 本 skill 涉及的选择点：`网络代理策略`、`首选公版源站`、`优先抓取格式` 等（如有扩展时适用）。
 
 ## 合法性铁律（不可逾越）
 
 - **只抓公版 / 开放授权来源**：已过版权期的经典、CC 授权、作者自授权、或用户明确声明有权使用的文本。
+- **公版要记辖区**：Gutenberg 默认按美国公版依据落 `rights_covered_regions=["US"]`；Wikisource 按页面/站点授权留 `source_license_url`。跨地区发行、商用、n2d 改编前必须补 `--distribution-regions` 并过 QA gate。
 - 脚本对已知付费墙/反爬站（起点、番茄、晋江 等，见 `references/sources.md`）**直接拒抓**，不替用户规避。
 - 通用兜底抓**非公版** URL 时，抓取前必须让用户**声明有权使用**（CLI `--i-have-rights`）。
 - 不实现绕过反爬 / 付费墙 / 登录墙的逻辑。
@@ -33,7 +34,7 @@ description: Given a book name (or chapter-index URL), find and fetch a public-d
 ### 第 2 步 — 跑脚本抓取 + 转格式
 
 ```bash
-python3 <skill>/scripts/fetch_novel.py "<目录页URL>" --name "<书名>" [--out <输出根>] [--source auto|gutenberg|wikisource|generic]
+python3 <skill>/scripts/fetch_novel.py "<目录页URL>" --name "<书名>" [--out <输出根>] [--source auto|gutenberg|wikisource|generic] [--distribution-regions CN,US]
 ```
 
 - 缺 `requests/python-docx` → 脚本打印 `pip install ...`，照做后重跑；缺 `beautifulsoup4/trafilatura` 只降级为标准库 HTMLParser 解析并打印 warning，能跑但正文抽取质量可能下降。
@@ -49,7 +50,7 @@ python3 <skill>/scripts/fetch_novel.py "<目录页URL>" --name "<书名>" [--out
 - 默认落点 `写小说/<书名>/小说/`；用 `--out <输出根>` 可改到任意目录（输出 = `<输出根>/小说/`）。
 - txt 章节用 `第N章 标题` 行（通用且利于后续按章拆分）；文件头是 provenance 注释块（来源/日期/章节数/字数/版权判定）。
 - docx 章节标题用 Heading 1，正文段落化，便于人读 / 导入飞书云文档。
-- `source_manifest.json` 是机器溯源文件，后续 `novel-spinoff/rewrite/expand/condense` 和 `novel2drama` 应优先读它判断 `source_type`、`rights_status`、`requires_user_rights`，不要解析正文头。
+- `source_manifest.json` 是机器溯源文件，后续 `novel-spinoff/rewrite/expand/condense` 和 `n2d` 应优先读它判断 `source_type`、`rights_status`、`rights_jurisdiction`、`rights_covered_regions`、`distribution_regions`、`requires_user_rights`，不要解析正文头。
 - 详见 `references/formats.md`。
 
 ## 常见错误
@@ -59,4 +60,5 @@ python3 <skill>/scripts/fetch_novel.py "<目录页URL>" --name "<书名>" [--out
 | 直接抓付费墙站 | 拒绝；引导公版来源 |
 | 把搜索得到的第一个结果就抓 | 必先列候选 + 用户确认唯一一本 |
 | 通用兜底硬抓非公版还不声明授权 | 必须 `--i-have-rights`（用户已确认有权时） |
+| 把 Gutenberg/Wikisource 当全球自动公版 | 只能按 manifest 里的辖区依据使用；跨区发行先补地区复核 |
 | 输出散落 | 一律落 `<输出根>/小说/`（默认 `写小说/<书名>/小说/`） |

@@ -16,9 +16,9 @@
 
 **剧透红线**：只放抓手，**严禁**揭核心解密点（谁是幕后、金手指真相、结局反转）。
 
-## 与 novel2drama 的成品级交接（架构铁律：不互相 import）
+## 与 n2d 的成品级交接（架构铁律：不互相 import）
 
-`novel-promote` 产 `导出/宣发/第NN章_n2d_ready.md`，作为 **finished-artifact 交接**喂给 `novel2drama`：
+`novel-promote` 产 `导出/宣发/第NN章_n2d_ready.md`，作为 **finished-artifact 交接**喂给 `n2d`：
 
 ```markdown
 # 预告片底稿 · 第NN章
@@ -29,4 +29,4 @@
 - 禁剧透项: <不可出现的解密点列表>
 ```
 
-字段对齐 `n2d-script` 的 beat 结构，novel2drama 接手后走正常出图/出视频/合成。promote 只产底稿、**不调任何 n2d-\* skill**——两条线只在 `导出/宣发/` 这层产物连接。
+字段对齐 `n2d-script` 的 beat 结构，n2d 接手后走正常出图/出视频/合成。promote 只产底稿、**不调任何 n2d-\* skill**——两条线只在 `导出/宣发/` 这层产物连接。

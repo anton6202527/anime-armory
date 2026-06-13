@@ -1,6 +1,6 @@
 ---
 name: n2d-review-ui
-description: "Build a local visual UI for novel2drama/n2d. Two zero-build (self-contained HTML + JSON) views — (1) per-episode 人审画布 `review_ui.py`: first/tail frames, clips, seams, identity refs, QA flags, machine scores; (2) work-level 生产看板 `board.py`: reads `_进度.md` and renders 作品→集(swimlane)→阶段(stage chips, progress-colored)→Clip(接力链 edges, QA status) for the whole drama, optionally served on 127.0.0.1 (the MVP of the PC端+无限画布 vision, see novel2drama Q&A Q36). Use when asked for 人审UI, 审片UI, 无限画布, 可视化审片, 生产看板, 整部进度画布, 制作过程可视化, 首帧尾帧接缝可视化, QA flag 看板, 机器分看板, review canvas, production board, visual review UI."
+description: "Build a local visual UI for n2d. Two zero-build (self-contained HTML + JSON) views — (1) per-episode 人审画布 `review_ui.py`: first/tail frames, clips, seams, identity refs, QA flags, machine scores; (2) work-level 生产看板 `board.py`: reads `_进度.md` and renders 作品→集(swimlane)→阶段(stage chips, progress-colored)→Clip(接力链 edges, QA status) for the whole drama, optionally served on 127.0.0.1 (the MVP of the PC端+无限画布 vision, see n2d Q&A Q36). Use when asked for 人审UI, 审片UI, 无限画布, 可视化审片, 生产看板, 整部进度画布, 制作过程可视化, 首帧尾帧接缝可视化, QA flag 看板, 机器分看板, review canvas, production board, visual review UI."
 ---
 
 # n2d-review-ui — 人审无限画布 + 生产看板
@@ -11,7 +11,7 @@ description: "Build a local visual UI for novel2drama/n2d. Two zero-build (self-
 - 分镜首帧、尾帧、clip MP4；clip 接缝（上尾帧 vs 下首帧）；定妆 / reference group 参考图；
 - QA flag / 机器分 / 自动回流任务；缺素材、缺尾帧、缺视频的可视标记。
 
-**② 整部生产看板 `board.py`**（看全局，一眼到哪了）—— PC端+无限画布愿景的 MVP（见 `novel2drama` Q&A Q36）：
+**② 整部生产看板 `board.py`**（看全局，一眼到哪了）—— PC端+无限画布愿景的 MVP（见 `n2d` Q&A Q36）：
 - 读 `_进度.md` 状态机，渲染 **作品 → 集（泳道）→ 阶段（stage chips，按进度上色 done/进行中/未开始）→ Clip（接力链边 + QA 状态色）** 的可缩放/平移画布；
 - 每集显示完成度条 + 下一步该跑哪个 skill（前沿，与 `n2d-progress` 同源）；有 `storyboard.json` 的集进一步铺开 Clip 卡 + 接力链；
 - `--serve` 在 `127.0.0.1` 起本地服务（复用 `n2d-dashboard` 的本地服务先例），媒体相对路径直接解析。

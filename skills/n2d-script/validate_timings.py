@@ -3,7 +3,7 @@
 # 用法: validate_timings.py <作品根> <第N集> [--tol 0.5]
 # 退出码: 0=全过 / 1=有硬不一致或缺文件（可接 CI）。所有检查仅读取，不改文件。
 import sys, os, re, json, subprocess
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'common'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'n2d', '_lib'))
 from n2d_settings import is_native_av  # 制作模式判定单一真值源
 from n2d_route import placeholder_indices, voiceover_fingerprint  # 占位判定 + 配音源指纹（单一真值源）
 
@@ -51,7 +51,7 @@ def _validate_native_av(root, ep, shots_p, tol):
     fails=[]; warns=[]; oks=[]
     print(f"=== 时长一致性 {ep}（原生音画·tol={tol}s）===")
     if not os.path.exists(shots_p):
-        print("  ⛔ 缺 镜头时长.json（原生音画下应由 finalize_storyboard 从 storyboard 推出——先跑 /n2d-script 阶段2 分镜定稿）")
+        print("  ⛔ 缺 镜头时长.json（原生音画下应由 finalize_storyboard 从 storyboard 推出——先跑 n2d-script 阶段2 分镜定稿）")
         return 1
     shots = json.load(open(shots_p,encoding='utf-8'))
     st = sum(float(v) for v in shots.values())
@@ -102,10 +102,10 @@ def main():
 
     fails=[]; warns=[]; oks=[]
     if not os.path.exists(man_p):
-        # 原生音画：说话镜由视频后端一次出同步音画，没有逐句配音清单——改走 storyboard 驱动对账，不误报"先 /n2d-voice"。
+        # 原生音画：说话镜由视频后端一次出同步音画，没有逐句配音清单——改走 storyboard 驱动对账，不误报"先 n2d-voice"。
         if is_native_av(root):
             sys.exit(_validate_native_av(root, ep, shots_p, tol))
-        print(f"⛔ 缺 {man_p}（先 /n2d-voice）"); sys.exit(1)
+        print(f"⛔ 缺 {man_p}（先 n2d-voice）"); sys.exit(1)
     man = json.load(open(man_p,encoding='utf-8'))
     n = len(man)
 
@@ -125,11 +125,11 @@ def main():
                 recorded = None
             current = voiceover_fingerprint(vo_p)
             if recorded and current and recorded != current:
-                fails.append("voiceover.txt 在配音后被改动（台词指纹失配）→ 时长清单/字幕/镜头时长已过期，重跑 /n2d-voice 再回跑 finalize_storyboard")
+                fails.append("voiceover.txt 在配音后被改动（台词指纹失配）→ 时长清单/字幕/镜头时长已过期，重跑 n2d-voice 再回跑 finalize_storyboard")
             elif recorded and current:
                 oks.append("voiceover 指纹一致（配音后台词未改）")
         else:
-            warns.append("无 时长清单.meta.json（旧配音产物或占位轨）——无法核对配音后 voiceover 改动，建议重跑 /n2d-voice 生成指纹")
+            warns.append("无 时长清单.meta.json（旧配音产物或占位轨）——无法核对配音后 voiceover 改动，建议重跑 n2d-voice 生成指纹")
 
     # 1) ∑(时长+gap) ≈ voice_zh.wav 实测
     man_total = sum(float(r.get('时长',0))+float(r.get('gap_after',0)) for r in man)
@@ -137,7 +137,7 @@ def main():
     if vdur is None:
         warns.append(f"voice_zh.wav 不存在或无法探测时长（{voice}）")
     elif abs(man_total - vdur) > tol:
-        fails.append(f"时长清单累计 {man_total:.2f}s ≠ voice_zh.wav 实测 {vdur:.2f}s（差 {abs(man_total-vdur):.2f}s）→ 配音轨与清单不同步，重跑 /n2d-voice")
+        fails.append(f"时长清单累计 {man_total:.2f}s ≠ voice_zh.wav 实测 {vdur:.2f}s（差 {abs(man_total-vdur):.2f}s）→ 配音轨与清单不同步，重跑 n2d-voice")
     else:
         oks.append(f"清单累计 {man_total:.2f}s ≈ 配音轨 {vdur:.2f}s")
 

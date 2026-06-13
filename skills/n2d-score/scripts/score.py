@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Automatic episode scoring for novel2drama/n2d.
+"""Automatic episode scoring for n2d.
 
 The score is a deterministic roll-up over existing n2d-review checks,
 n2d-dashboard events, and optional cached inputs.  It does not replace human
@@ -21,7 +21,7 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 SCRIPT_DIR = os.path.dirname(__file__)
 SKILL_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
 REPO_SKILLS = os.path.abspath(os.path.join(SKILL_DIR, ".."))
-COMMON = os.path.join(REPO_SKILLS, "common")
+COMMON = os.path.join(REPO_SKILLS, "n2d", "_lib")
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 from n2d_contract import (  # noqa: E402  生产数据目录 / kind / 一致性维度单一真值源
@@ -230,6 +230,7 @@ def apply_face_precision(dims: Dict[str, Dict[str, Any]], consistency: Optional[
         return
     item = dims["character_consistency"]
     item["precision"] = PILLOW_FALLBACK_MODE
+    item["precision_level"] = "degraded"  # 契约三档（n2d_contract.PRECISION_*）
     item["skipped"] = False
     item["evidence"].append(
         "脸(G1) 为 Pillow 降级机检（仅查图存在/可解码/分辨率/清晰度，无人脸相似度）——"

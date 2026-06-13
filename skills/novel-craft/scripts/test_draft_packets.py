@@ -38,6 +38,8 @@ def make_project(root, *, demo=True):
     for name in ("创作蓝图.md", "设定圣经.md", "角色卡.md", "世界观.md"):
         with open(os.path.join(root, "设定", name), "w", encoding="utf-8") as f:
             f.write(f"# {name}\n测试内容。\n")
+    with open(os.path.join(root, "设定", "读者契约.md"), "w", encoding="utf-8") as f:
+        f.write("# 读者契约\n核心题旨：代价换来的力量是否值得。\n")
     with open(os.path.join(root, "设定", "章纲.md"), "w", encoding="utf-8") as f:
         f.write("# 章纲\n- 第 01 章 《开局》 — 主角登场\n- 第 03 章 《转折》 — 发现代价\n")
     with open(os.path.join(root, "章节", "第01章.md"), "w", encoding="utf-8") as f:
@@ -52,6 +54,15 @@ def make_project(root, *, demo=True):
                 "reader_promises": ["主角会付出代价"],
                 "setting_constraints": ["能力不能无限用"],
                 "banned_drift": ["不要流水账"],
+                "reader_contract": {
+                    "theme": "力量必须付出代价",
+                    "dramatic_question": "主角是否愿意为守护他人承受反噬",
+                    "must_answer": ["代价能否被承担"],
+                    "reader_promises": ["代价会逐步升级"],
+                    "aesthetic_register": "短句、有压迫感、动作细节强",
+                    "delight_engine": ["每章让能力代价更尖锐"],
+                    "banned_drift": ["不要写成无脑升级"],
+                },
             }, f, ensure_ascii=False)
 
 
@@ -119,7 +130,11 @@ class DraftPacketsTest(unittest.TestCase):
                 text = f.read()
             self.assertIn("第 03 章写作任务包", text)
             self.assertIn("发现代价", text)
+            self.assertIn("题旨与读者契约", text)
+            self.assertIn("力量必须付出代价", text)
+            self.assertIn("代价换来的力量是否值得", text)
             self.assertIn("状态增量模板", text)
+            self.assertIn("reader_contract_progress", text)
 
     def test_blocks_without_demo_gate_by_default(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -178,6 +193,7 @@ class DraftPacketsTest(unittest.TestCase):
                 )
                 for path in must_have:
                     self.assertIn(f"`{path}`", got.stdout)
+                self.assertIn("`设定/读者契约.md`", got.stdout)
                 for path in must_not_have:
                     self.assertNotIn(f"`{path}`", got.stdout)
                 self.assertIn("python3 skills/novel-review/scripts/mechanical_check.py", got.stdout)

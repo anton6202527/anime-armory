@@ -50,6 +50,12 @@ def main():
     ap.add_argument("--master-duration", default=None, help="覆盖默认主片时长")
     ap.add_argument("--aspect", default=None, help="覆盖默认交付比例")
     ap.add_argument("--cutdown-plan", default=None, help="覆盖默认 cutdown 方案")
+    ap.add_argument("--video-model", default=None, choices=contract.VIDEO_MODELS,
+                    help="首跑选择的生视频模型；应由 agent 先问用户，再传入本脚本")
+    ap.add_argument("--video-channel", default=None, choices=contract.VIDEO_CHANNELS,
+                    help="首跑选择的生视频渠道/产品；应由 agent 先问用户，再传入本脚本")
+    ap.add_argument("--video-backend", default=None, choices=contract.VIDEO_BACKENDS,
+                    help="兼容旧参数：等同于 --video-channel")
     args = ap.parse_args()
 
     root = os.path.abspath(args.project_root)
@@ -61,6 +67,8 @@ def main():
     md = args.master_duration or contract.DEFAULT_SETTINGS["主片时长"]
     aspect = args.aspect or contract.DEFAULT_SETTINGS["交付比例"]
     plan = args.cutdown_plan or contract.DEFAULT_SETTINGS["cutdown版本"]
+    video_model = args.video_model or contract.DEFAULT_SETTINGS["生视频模型"]
+    video_channel = args.video_channel or args.video_backend or contract.DEFAULT_SETTINGS["生视频渠道"]
     deliverables = contract.default_deliverables(md, aspect, plan)
 
     def write_if_absent(rel, content):
@@ -73,14 +81,22 @@ def main():
             f.write(content)
         print(f"[ok] {rel}")
 
-    setting_overrides = {"主片时长": md, "交付比例": aspect, "cutdown版本": plan}
+    setting_overrides = {
+        "主片时长": md,
+        "交付比例": aspect,
+        "cutdown版本": plan,
+        "生视频模型": video_model,
+        "生视频渠道": video_channel,
+    }
     write_if_absent("_设置.md", contract.settings_markdown(title, setting_overrides))
     write_if_absent("_进度.md", contract.progress_markdown(title, deliverables))
 
     meta = {
         "schema_version": 1, "kind": "ad_project", "title": title, "brand": args.brand,
         "image_backend": contract.DEFAULT_SETTINGS["生图AI"],
-        "video_backend": contract.DEFAULT_SETTINGS["生视频AI"],
+        "video_model": video_model,
+        "video_channel": video_channel,
+        "video_backend": video_channel,
         "adlaw_region": contract.DEFAULT_SETTINGS["广告法地区"],
         "deliverables": deliverables,
     }
@@ -98,7 +114,10 @@ def main():
             json.dump(brief, f, ensure_ascii=False, indent=2)
         print("[ok] 需求/brief.json（模板，待 AI 据客户需求填充）")
 
-    print(f"\n[done] 立项完成：{root}\n下一步：ad-concept 创意策划（先把客户需求 brief 填全）")
+    print(f"\n[done] 立项完成：{root}")
+    print("下一步：ad-concept 创意策划。brief 缺的信息由 AI 在其第0步**访谈式补齐**——"
+          "必问只有最小集（品牌/产品/卖点/人群），其余推断后请用户确认、合规项可延后；"
+          "**不要让用户自己填 brief.json**。")
 
 
 if __name__ == "__main__":

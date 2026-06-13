@@ -5,11 +5,11 @@ description: 制MV 卡点分析 — 用 librosa 检测成品歌的 BPM / tempo_c
 
 # mv-beat — 卡点分析（制MV 线）
 
-检测 `制MV/<曲名>/歌/song.wav` 的节拍，产 `节拍/beatgrid.json`。下游 `mv-plan` 用它拆 clip/timeline，`mv-video` 用它定 clip 时长，`mv-compose` 用 timeline 顺序合成并提示卡点状态（**副歌踩 downbeats 切、verse 缓**）。**自包含**，只用通用工具 librosa。
+检测 `制MV/<曲名>/歌/song.*` 的节拍，支持 wav/mp3/m4a/flac，产 `节拍/beatgrid.json`。下游 `mv-plan` 用它拆 clip/timeline，`mv-video` 用它定 clip 时长，`mv-compose` 用 timeline 顺序合成并提示卡点状态（**副歌踩 downbeats 切、verse 缓**）。**自包含**，只用通用工具 librosa。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**。按 `../_偏好约定.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
+本 skill 的可选项**不写死在源码里**。按 `../skills/mv-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
 本 skill 涉及的选择点：`卡点策略`、`节拍提取后处理`（是否手动干预覆盖 librosa）。
 
@@ -31,6 +31,7 @@ python3 <skill>/scripts/beat_detect.py 制MV/<曲名> [--meter 4]
 
 ## 工作流
 1. 确认 `歌/song.*` 已就位（来自 写歌/ 或用户）。
+   - 若 `_设置.md` 为 `歌曲输入时序=后配歌曲` 且 `歌/` 还没有最终音频，先停下：去 `song` 线产歌或让用户上传，不能用估算节奏替代 beatgrid。
 2. 跑 beat_detect.py → beatgrid.json。
 3. 校对 BPM 是否合理（偶尔会半速/倍速，肉眼听一下；不对手动改 bpm 并按 60/bpm 重排 beats，或用 `--meter` 调拍号）。
 4. （可选）把 `sections` 改成真实段落起止（intro/verse/chorus…），供 `mv-plan` 更准地拆 clip。
@@ -46,6 +47,7 @@ python3 <skill>/scripts/beat_detect.py 制MV/<曲名> [--meter 4]
 |---|---|
 | BPM 被测成半速/倍速 | 听一下校正；改 bpm 重排或调 meter |
 | 无歌就跑 | 先放入 `歌/song.*`（写歌线产或用户给） |
+| 后配歌曲路线用 rough 蓝图直接卡点 | 先补最终歌，再跑 beatgrid；rough 蓝图只服务视觉方向 |
 | clip 等长不卡点 | mv-video 按 beatgrid 相邻卡点定 clip 时长 |
 | `sections` 只是等分 | 人工把真实段落起止写回 `sections`，再跑 mv-plan |
 | 想复用 n2d 脚本 | mv 系列独立，用自带 beat_detect.py |

@@ -33,6 +33,12 @@ def load_song_utils():
 
 song_utils = load_song_utils()
 
+# 设置解析统一走本线 song/_lib/settings.py（vendored，本线自包含）；别在本线另写一份 parser。
+_COMMON_DIR = os.path.join(REPO, "skills", "song", "_lib")
+if _COMMON_DIR not in sys.path:
+    sys.path.insert(0, _COMMON_DIR)
+from settings import load_settings as _load_settings  # noqa: E402
+
 BLOCK, WARN, INFO = "🔴", "🟡", "🟢"
 SPREAD_MAX = 6          # 同段各行字数极差上限（超 → 字数不齐，难唱）
 MIN_RATE = 44100        # 投放建议最低采样率
@@ -119,16 +125,9 @@ def check_lyrics(root, meta, spread_max):
 
 
 def parse_settings(root):
-    path = os.path.join(root, "_设置.md")
-    settings = {}
-    if not os.path.exists(path):
-        return settings
-    pat = re.compile(r"^\s*-\s*([^:：]+)\s*[:：]\s*(.*?)\s*(?:#.*)?$")
-    for line in open(path, encoding="utf-8"):
-        m = pat.match(line)
-        if m:
-            settings[m.group(1).strip()] = m.group(2).strip()
-    return settings
+    # 委托给本线 _lib/settings.load_settings：正确处理 **加粗** key、跳过 `## 记录` 区，
+    # 与本线 _lib/settings.py 写回格式同源（vendored，本线自包含）。
+    return _load_settings(root)
 
 
 def lyric_char_count(root):

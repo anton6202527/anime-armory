@@ -7,43 +7,44 @@
 
 ---
 
-## 两轴架构：内容轴(剧情) × 平台皮（2026-05 起）
+## 三项架构：内容轴(剧情) × 平台皮 × 调用渠道（2026-06 起）
 
-skill 改为**双轴**：
-- **视频 AI**：决定最终成片风格基线 + image2video 运动估计分布 → "主"
-- **图 AI**：出图工具，可以是视频 AI 本身、也可以独立（Gemini / DALL-E / Flux 等）
+skill 改为**图 AI + 生视频模型 + 生视频渠道**：
+- **生视频模型**：决定最终成片风格基线 + image2video 运动估计分布 → "主"
+- **生视频渠道**：决定实际通过哪个产品/API/CLI 调用模型（如即梦/Dreamina、豆包、海螺AI、Google Gemini API、Runway API）
+- **图 AI**：出图工具，可以与生视频模型同厂，也可以独立（Gemini / DALL-E / Flux 等）
 
 ```
-image prompt = [图AI 的 prompt 写法] + [视频AI 的图像风格锚定句]
+image prompt = [图AI 的 prompt 写法] + [生视频模型的图像风格锚定句]
 ```
 
-**默认 = 图 AI(`生图AI` 所选官方/已登录后端，默认 Codex，可选 Dreamina/即梦官方 CLI) + 视频 AI(即梦/Seedance/可灵/Veo)**。第三方逆向 CLI、`同视频AI` 含糊口径和 web 自动化出图仍禁。
+**默认结构 = 图 AI(`生图AI` 所选官方/已登录后端，默认 Codex，可选 Dreamina/即梦官方 CLI) + 生视频模型(`_设置.md 生视频模型`，新作品首跑菜单选择，默认 Seedance 2.0) + 生视频渠道(`_设置.md 生视频渠道`，默认 即梦/Dreamina)**。第三方逆向 CLI、`同视频AI` / `同视频模型` 含糊口径和 web 自动化出图仍禁。
 
-### 图 AI ≠ 视频 AI 时的强制规则
+### 图 AI ≠ 生视频模型时的强制规则
 
-1. image prompt **必须**在末尾追加目标视频 AI 的"图像风格锚定句"（见各档案）
-2. 锚定句作用：强制图 AI 输出**视频 AI 训练分布里的视觉特征**（面孔/风格/光感）→ 让视频 AI 的 image2video 运动估计稳定
-3. 图 AI 按 `生图AI` 选择点统一到一个官方后端；视频 AI 可为即梦/Seedance/可灵/Veo
-4. 锚定句语言：按目标视频 AI 的消化风格选；即梦/可灵视频通常用中文版，Veo 等海外视频用英文版
+1. image prompt **必须**在末尾追加目标生视频模型的"图像风格锚定句"（见各档案）
+2. 锚定句作用：强制图 AI 输出**生视频模型训练分布里的视觉特征**（面孔/风格/光感）→ 让视频模型的 image2video 运动估计稳定
+3. 图 AI 按 `生图AI` 选择点统一到一个官方后端；视频模型读 `_设置.md` 的 `生视频模型`，调用渠道读 `生视频渠道`，新作品首跑选择一次
+4. 锚定句语言：按目标生视频模型/渠道的消化风格选；即梦/可灵渠道通常用中文版，Veo 等海外渠道用英文版
 
 ### 推荐组合速查
 
-> 与 `n2d-image/references/platforms.md` 同一张表，保持一致：**图阶段按 `生图AI` 统一官方/已登录后端；Dreamina/即梦官方 CLI 可用于出图；视频阶段可默认即梦**。
+> 与 `n2d-image/references/platforms.md` 同一张表，保持一致：**图阶段按 `生图AI` 统一官方/已登录后端；Dreamina/即梦官方 CLI 可用于出图；视频阶段按 `_设置.md 生视频模型` + `生视频渠道` 执行，首跑菜单选择一次**。
 
 | 场景 | 组合 | 备注 |
 |---|---|---|
-| 国风短剧（默认） | `生图AI` 所选官方/已登录图后端 + 即梦锚定句 → 即梦视频 | 默认 Codex；视频默认即梦；全项目统一图后端 |
-| 国风短剧（即梦闭环） | Dreamina/即梦官方 CLI 出图 → 即梦视频 | 已登录会员可直调；全项目统一图后端 |
-| 国风短剧（备选视频） | `生图AI` 所选官方图后端 + 可灵锚定句 → 可灵视频 | 只换视频后端时不重写图后端；换图后端需整集统一 |
-| 海外英文短剧 | `生图AI` 所选官方图后端 + Veo 锚定句 → Veo | 全英文 prompt 优先 |
-| 禁止 | 第三方逆向 CLI / `同视频AI` 含糊口径 / web 自动化出图 | 未授权路径禁用 |
+| 国风短剧（Seedance via 即梦） | `生图AI` 所选官方/已登录图后端 + Seedance 锚定句 → `生视频模型=Seedance 2.0` + `生视频渠道=即梦/Dreamina` | 图默认 Codex；视频模型与渠道分开记录；全项目统一图后端 |
+| 国风短剧（即梦闭环） | Dreamina/即梦官方 CLI 出图 → `Seedance 2.0` via 即梦/Dreamina | 已登录会员可直调；全项目统一图后端 |
+| 国风短剧（Kling） | `生图AI` 所选官方图后端 + Kling 锚定句 → `生视频模型=Kling 3.0` + `生视频渠道=可灵/Kling` | 只换视频模型/渠道时不重写图后端；换图后端需整集统一 |
+| 海外英文短剧 | `生图AI` 所选官方图后端 + Veo 锚定句 → `生视频模型=Veo 3.1` + `生视频渠道=Google Gemini API` | 全英文 prompt 优先 |
+| 禁止 | 第三方逆向 CLI / `同视频AI` 或 `同视频模型` 含糊口径 / web 自动化出图 | 未授权路径禁用 |
 
 ---
 
 ## 通用 prompt 结构（所有平台共用）
 
 ```
-主体 + 外貌/妆造锚定 + 动作表情 + 环境/光线 + 景别构图 + 画风词 [+ 视频AI 风格锚定句]
+主体 + 外貌/妆造锚定 + 动作表情 + 环境/光线 + 景别构图 + 画风词 [+ 生视频模型风格锚定句]
                                                                   ↑
                                                               跨AI 时必拼
 ```
@@ -67,13 +68,13 @@ image prompt = [图AI 的 prompt 写法] + [视频AI 的图像风格锚定句]
 
 > **分辨率铁律**：所有平台**默认 720p**（省积分/出片快），1080p 仅在用户明确要时用。开跑前把选项给用户确认一次，用户指定后按用户的来。
 
-> **单 Clip 上限铁律（2026-06）**：单 Clip 时长上限**按所选后端档案，不是一刀切 8s**。**能一镜到底就别切碎**——更长单镜 = 更少拼接缝 = **跨镜一致性更稳 + 更省**。只在 Clip 时长（=所含镜头时长之和，配音驱动）**超该后端上限**时才拆 Clip，拆点尾帧=下一首帧。各后端当前上限见下方档案；n2d-script 阶段2 拆 Clip 时**读该后端上限值**，不要写死 8s。后端能力会变，以 `novel2drama/references/模型矩阵.md` 最新快照为准。
+> **单 Clip 上限铁律（2026-06）**：单 Clip 时长上限**按所选后端档案，不是一刀切 8s**。**能一镜到底就别切碎**——更长单镜 = 更少拼接缝 = **跨镜一致性更稳 + 更省**。只在 Clip 时长（=所含镜头时长之和，配音驱动）**超该后端上限**时才拆 Clip，拆点尾帧=下一首帧。各后端当前上限见下方档案；n2d-script 阶段2 拆 Clip 时**读该后端上限值**，不要写死 8s。后端能力会变，以 `n2d/references/模型矩阵.md` 最新快照为准。
 
 ---
 
 ## 模型路由能力速查（n2d-model-router）
 
-`生视频AI` 是项目默认/兜底，不是每个 Clip 的固定模型。`视频模型路由=自动按镜头路由` 时，`n2d-model-router` 按下表生成 `video_model_routes.json`，`n2d-video` 再按逐 Clip primary/fallback 写 prompt 和平台参数。
+`生视频模型` 是项目默认/兜底，不是每个 Clip 的固定模型；`生视频渠道` 是执行调用入口。`视频模型路由=自动按镜头路由` 时，`n2d-model-router` 按下表生成 `video_model_routes.json`，`n2d-video` 再按逐 Clip primary/fallback 写 prompt 和平台参数。
 
 | 镜头类型 | primary | fallback | 关键能力 | prompt / gate 要求 |
 |---|---|---|---|---|
@@ -85,11 +86,11 @@ image prompt = [图AI 的 prompt 写法] + [视频AI 的图像风格锚定句]
 | 法术爆发 / 符阵 / 雷劫 | Seedance | 可灵 / 即梦 | 光效连续扩散、蓄力→释放→余波、较长单镜 | 锁特效颜色/形状/方向；可 opt-in 动作音效但禁止人声；失败拆蓄力/爆发/余波 |
 | 亲密互动 / 搀扶 / 牵手 | 可灵 Kling | Seedance | 接触点、遮挡、近距离身份保持；必要时 pose/depth/instance 控制 | `motion_control=required`；必须写 contact point、occlusion_order、body_part_ownership；不稳就拆手部/反应/过肩 |
 | 拥抱 / 拉扯 / 抓腕 | 可灵 Kling | Seedance + 拆镜 | 首尾帧、接触点、力量方向、近距离身份保持；高危时需要 pose/depth/instance/contact_map | `motion_control=required`；必须写 force_direction 和 release_frame；无 ready manifest 就 degrade_only 拆手部/反打/释放帧 |
-| 多人同框 | 可灵 Kling | Seedance + 拆镜 | 多参考/主体控制、角色槽位、脸优先级 | 写 character_slots / face_priority / overlap_rules；2-3 个具名角色上限，错脸就拆 OTS/反打 |
-| 群像站位 / 队列 / 围堵 | 可灵 Kling | Seedance + 拆镜 | 主次层级、轴线与左右站位、背景人简化 | 写 screen_positions / focus_hierarchy / crowd_simplification；不要求每个背景人清脸 |
-| 普通单人运动 | `_设置.md 生视频AI` | Seedance / 可灵 | 成本、速度、普通 image2video | 若同类失败两次，改最近的专项镜头类型重新路由 |
+| 多人同框（2-3 具名） | 可灵 Kling | Seedance + 拆镜 | 多参考/主体控制、角色槽位、脸优先级 | 写 character_slots / face_priority / overlap_rules；**2-3 具名走 Kling，≥5 具名走 Sora**，错脸就拆 OTS/反打 |
+| 多人同框（5+ 具名）/ 群像站位 / 队列 / 围堵 | **Sora** | 可灵 Kling / Seedance + 拆镜 | 5+ 角色一致性、主次层级、背景人简化 | 2026：Sora 2 对 5+/群像同框最稳，超 Kling 2-3 张脸上限；写 character_slots/screen_positions/focus_hierarchy，仍不稳按 degrade_plan 拆组 |
+| 普通单人运动 | `_设置.md 生视频模型` | Seedance / 可灵 | 成本、速度、普通 image2video | 若同类失败两次，改最近的专项镜头类型重新路由 |
 
-路由表只写能力层判断；具体版本名、SOTA 快照和升级触发在 `novel2drama/references/模型矩阵.md`。若新后端在某类镜头上明显更稳，先更新本表和 `n2d-model-router`，再同步 README/Q&A。
+路由表只写能力层判断；具体版本名、SOTA 快照和升级触发在 `n2d/references/模型矩阵.md`。若新后端在某类镜头上明显更稳，先更新本表和 `n2d-model-router`，再同步 README/Q&A。
 
 ## 档案：即梦 AI（默认）
 
@@ -156,19 +157,19 @@ image prompt = [图AI 的 prompt 写法] + [视频AI 的图像风格锚定句]
 
 ---
 
-## 图 AI 档案（出图工具，不是视频 AI）
+## 图 AI 档案（出图工具，不是生视频模型）
 
-> 这里只列**作为图 AI 时**的写法特征。视频 AI 看上面档案。
+> 这里只列**作为图 AI 时**的写法特征。生视频模型看上面档案。
 
 ### 禁止：第三方逆向 / web 自动化出图
-图片阶段按 `生图AI` 统一到一个官方/已登录后端；Dreamina/即梦官方 CLI 可出图。视频 AI 仍可选即梦/Seedance，图阶段用所选后端生成首帧并按需拼视频 AI 锚定句。
+图片阶段按 `生图AI` 统一到一个官方/已登录后端；Dreamina/即梦官方 CLI 可出图。生视频模型/渠道另由 `生视频模型` + `生视频渠道` 选择，图阶段用所选后端生成首帧并按需拼生视频模型锚定句。
 
 ### Gemini-Imagen（Google）
 - **提示词语言**：英文最稳，中文次之
 - **prompt 长度**：偏好"描述性英文段落"，不要短关键词列表
 - **参考图**：支持（图生图 / Multi-image input）
 - **强项**：质感真实、光感细腻
-- **弱项**：东方面孔需要显式描述（默认会偏西方），**所以视频 AI = 国风系（即梦/可灵）时锚定句必加**
+- **弱项**：东方面孔需要显式描述（默认会偏西方），**所以生视频模型/渠道偏国风系（Seedance via 即梦、Kling/可灵）时锚定句必加**
 - **CLI**：`gemini-cli`（订阅制）
 
 ### DALL-E 3 / gpt-image-1（OpenAI）
@@ -194,4 +195,4 @@ image prompt = [图AI 的 prompt 写法] + [视频AI 的图像风格锚定句]
 
 1. 在本文件复制一段「档案：XXX」，填上面 8 个字段（**必含**"图像风格锚定句"中英双版）
 2. 若该平台 prompt 与即梦差异较大，可在该集 `素材清单.md` 里对该平台**另起一组 prompt 并标注平台名**（如 `【Kling·首帧】…` / `【Kling·尾帧】…`）
-3. 在项目 `global_style.md` 的"目标视频AI / 目标图AI"两行记上即可。**核心分镜/角色卡/字幕无需改动**——只换 prompt 的平台适配层。
+3. 在项目 `global_style.md` 的"目标视频模型 / 生视频渠道 / 目标图AI"三行记上即可。**核心分镜/角色卡/字幕无需改动**——只换 prompt 的平台适配层。

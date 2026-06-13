@@ -37,13 +37,13 @@ def rel(path):
 def actual_novel_skills():
     return {
         name for name in os.listdir(SKILLS)
-        if name.startswith("novel-")
+        if (name == "novel" or name.startswith("novel-"))
         and os.path.isfile(os.path.join(SKILLS, name, "SKILL.md"))
     }
 
 
 def referenced_novel_skills(text):
-    return set(re.findall(r"`(novel-[a-z-]+)(?:/[^`]*)?`", text))
+    return set(re.findall(r"`(novel(?:-[a-z-]+)?)(?:/[^`]*)?`", text))
 
 
 def finding(severity, fid, title, detail, fix=None):
@@ -57,11 +57,13 @@ def finding(severity, fid, title, detail, fix=None):
 
 
 def baseline_has_effective_evidence(baseline):
-    notes = baseline.get("notes") or []
-    if isinstance(notes, str):
-        notes = [notes]
-    if any(str(note).strip() for note in notes):
-        return True
+    for item in baseline.get("manual_evidence") or []:
+        if not isinstance(item, dict):
+            continue
+        required = ("platform", "date", "source", "summary")
+        if all(str(item.get(field) or "").strip() for field in required):
+            if re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(item.get("date") or "")):
+                return True
     for source in baseline.get("sources") or []:
         if not isinstance(source, dict):
             continue
@@ -121,8 +123,8 @@ def audit_market_baseline(project_root):
             "warn",
             "MARKET-NO-EVIDENCE",
             "市场基准缺少有效证据",
-            f"{rel(path)} 没有 status=ok 且 signals 非空的来源，也没有人工 notes。",
-            "补充有效榜单来源或人工核验 notes。",
+            f"{rel(path)} 没有 status=ok 且 signals 非空的来源，也没有结构化 manual_evidence。",
+            "补充有效榜单来源或 manual_evidence（platform/date/source/summary）。",
         ))
     if not out:
         out.append(finding("info", "MARKET-FRESH", "市场基准可用", f"{rel(path)} fresh until {expires_on.isoformat()}"))
@@ -141,15 +143,15 @@ def audit_registry():
             f"registry-only={sorted(expected - actual)}; disk-only={sorted(actual - expected)}",
             "更新 novel-craft/scripts/registry.py，或同步新增/删除的 skill 目录。",
         ))
-    author_refs = referenced_novel_skills(read("skills/novel-author/SKILL.md"))
+    author_refs = referenced_novel_skills(read("skills/novel/SKILL.md"))
     readme_refs = referenced_novel_skills(read("skills/README.md"))
     if author_refs != expected:
         out.append(finding(
             "block",
             "AUTHOR-ROUTE-DRIFT",
-            "novel-author 路由表与 registry 不一致",
+            "novel 路由表与 registry 不一致",
             f"missing={sorted(expected - author_refs)}; extra={sorted(author_refs - expected)}",
-            "同步 novel-author/SKILL.md 路由表。",
+            "同步 novel/SKILL.md 路由表。",
         ))
     if readme_refs != expected:
         out.append(finding(
@@ -303,4 +305,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

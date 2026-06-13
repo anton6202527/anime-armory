@@ -132,6 +132,10 @@ def test_write_report_emits_signals_json():
         data = json.load(f)
     assert "cliche_density_per_kchar" in data
     assert "retention_prior" in data
+    assert data["analysis_mode"] == "signal_only"
+    assert data["signal_only"] is True
+    assert data["qualitative_completed"] is False
+    assert data["personas_completed"] == []
     assert 0.0 <= data["retention_prior"] <= 1.0
     assert "date" in data
     # personas signals carried through

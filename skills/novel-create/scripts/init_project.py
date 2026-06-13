@@ -27,12 +27,12 @@ import sys
 import re
 from datetime import date
 
-# 共享：落 _设置.md（_偏好约定 选择点存储）上移至 novel-craft，与派生类 init 同源
+# 共享：落 _设置.md（skills/novel-craft/references/选择点与偏好.md 选择点存储）上移至 novel-craft，与派生类 init 同源
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                 "..", "..", "novel-craft", "scripts"))
 from contract import (AI_TEXT_USAGE_MODES, CHAPTER_GRANULARITY, NOVEL_DRAFT_MODES,
-                      SCALE_PROFILES, base_meta, create_stage_markdown,
-                      parse_outputs, scale_profile)
+                      SCALE_CHOICES, SCALE_PROFILES, base_meta, create_stage_markdown,
+                      normalize_scale, parse_outputs, scale_profile)
 from derive_common import write_settings
 
 SCALE_PROFILE = SCALE_PROFILES  # backwards-compatible alias for tests/importers
@@ -215,7 +215,7 @@ def main():
     ap.add_argument("--title", default="待定", help="书名；未定填'待定'，后续 novel-title 选定")
     ap.add_argument("--genre", required=True, help="题材类型，如 都市异能 / 古言宅斗 / 玄幻修真")
     ap.add_argument("--premise", required=True, help="一句话故事（logline）")
-    ap.add_argument("--scale", required=True, choices=list(SCALE_PROFILE))
+    ap.add_argument("--scale", required=True, choices=list(SCALE_CHOICES))
     ap.add_argument("--platform", default="跨平台")
     ap.add_argument("--person", default="third-limited", choices=["first", "third-limited"])
     ap.add_argument("--target-chapters", type=int, default=None)
@@ -251,7 +251,8 @@ def main():
         (shutil.copytree if os.path.isdir(ap_) else shutil.copy)(ap_, dst)
         ingested.append(os.path.basename(ap_))
 
-    profile = scale_profile(args.scale)
+    scale = normalize_scale(args.scale)
+    profile = scale_profile(scale)
     n = args.target_chapters or profile["target_chapters"]
     wpc = profile["words_per_chapter"]
     outputs = parse_outputs(args.outputs)
@@ -262,7 +263,7 @@ def main():
         "title": None if title == "待定" else title,
         "genre": args.genre,
         "premise": args.premise,
-        "scale": args.scale,
+        "scale": scale,
         "target_chapters": n,
         "target_words_per_chapter": wpc,
         "person": args.person,
@@ -282,14 +283,16 @@ def main():
     write_settings(out_root, {
         "目标平台": args.platform,
         "题材": args.genre,
-        "篇幅档": f"{args.scale}（{n}章×{wpc[0]}-{wpc[1]}字）",
+        "权利辖区": meta.get("rights_jurisdiction", ""),
+        "发行地区": ",".join(meta.get("distribution_regions") or []) or "GLOBAL",
+        "篇幅档": f"{scale}（{n}章×{wpc[0]}-{wpc[1]}字）",
         "权利来源": "original（原创自有）",
         "输出格式": ",".join(outputs) + "（novel-craft/scripts/export.py；漫剧线加 n2d）",
         "小说生成模式": args.draft_mode,
         "章节生成粒度": args.chapter_granularity,
         "AI使用披露": args.ai_text_usage or "（发布前用 ai_usage.py 确认）",
     }, note="原创从零：创作蓝图+设定圣经为宪法。")
-    W("设定/创作蓝图.md", build_blueprint(title, args.genre, args.platform, args.premise, args.scale, n, wpc, args.person))
+    W("设定/创作蓝图.md", build_blueprint(title, args.genre, args.platform, args.premise, scale, n, wpc, args.person))
     W("设定/设定圣经.md", build_settings_bible(title))
     W("设定/角色卡.md", build_character_card(title))
     W("设定/世界观.md", build_worldview(title))
@@ -303,7 +306,7 @@ def main():
     print(f"     写作任务/ ← draft_packets.py 生成逐章任务包；合规/ ← ai_usage.py 生成披露文件")
     if ingested:
         print(f"     素材/ ← 已收碎片：{', '.join(ingested)}")
-    print(f"     _meta: kind=create 题材=\"{args.genre}\" 档={args.scale}({n}章×{wpc[0]}-{wpc[1]}字) 平台={args.platform}")
+    print(f"     _meta: kind=create 题材=\"{args.genre}\" 档={scale}({n}章×{wpc[0]}-{wpc[1]}字) 平台={args.platform}")
     print(f"[next] 第 2 步填创作蓝图（用户审）→ 第 3 步设定圣经+卡 → 书名(novel-title) → 章纲 → Demo gate → draft_packets 写章+回扫 → AI披露+导出。")
 
 

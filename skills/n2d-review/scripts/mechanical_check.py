@@ -14,7 +14,7 @@ references/checklist.md 的「人判」清单，由 LLM 对照参考图与分镜
 退出码：有 🔴 阻断级 → 1，否则 0。
 """
 import sys, os, re, json, glob, subprocess
-_COMMON = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "common"))
+_COMMON = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "n2d", "_lib"))
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_settings import watermark_setting  # noqa: E402  水印设置读取单一真值源

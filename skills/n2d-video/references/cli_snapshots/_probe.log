@@ -1,0 +1,7 @@
+[ok] probed dreamina @ /Users/lalala/.local/bin/dreamina (2026-06-12T16:09:45Z)
+  [ok ] multiframe2video   9 flags
+  [ok ] frames2video       10 flags
+  [ok ] image2video        9 flags
+  [ok ] multimodal2video   12 flags
+  [ok ] text2video         9 flags
+  no drift vs previous snapshot

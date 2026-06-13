@@ -144,3 +144,98 @@ def test_missing_files_precondition(tmp_path):
     assert ic.run(root, EP) == 2  # 两侧都缺（出图文件没写）
     open(os.path.join(root, "出图", EP, "prompt", "00_总览.md"), "w", encoding="utf-8").write(IMG_CONTRACT)
     assert ic.run(root, EP) == 2  # 只缺视频侧
+
+
+# ── ② 身份交接契约（出图首帧脸 → 出视频脸） ────────────────────────────────────
+
+_ROUTES = json.dumps({"kind": "n2d_video_model_routes", "routes": [
+    {"clip_id": "Clip_01", "identity_requirement": "reference_group"},
+    {"clip_id": "Clip_02", "identity_requirement": "character_id_or_reference_group"},
+    {"clip_id": "Clip_03", "identity_requirement": "none"},   # 空镜：不要求锁脸
+]}, ensure_ascii=False)
+
+_CLIP_LOCKED = """## Clip 01（时长 5.6s · 镜头 EP01_CLIP01）
+**模型路由**：identity_requirement=reference_group。
+**角色身份注册层**：CHAR_01/常态；参考组=出图/共享/图片/定妆_沈念_常态.png；reference_group=ready。
+
+## Clip 02（时长 6.5s · 镜头 EP01_CLIP02）
+**身份锁定约束**：CHAR_02/常态，character_id=KLG_001；脸部特写=定妆_柳娘子_脸部特写.png。
+
+## Clip 03（时长 3.2s · 镜头 EP01_CLIP03）
+空镜，无人物。
+"""
+
+
+def test_parse_named_character_routes_filters_none():
+    named = ic.parse_named_character_routes(_ROUTES)
+    assert [r["clip_id"] for r in named] == ["Clip_01", "Clip_02"]   # Clip_03 (none) 被过滤
+    assert named[0]["clip_num"] == 1 and named[1]["clip_num"] == 2
+    assert ic.parse_named_character_routes("{bad json") is None
+
+
+def test_split_video_clip_blocks():
+    blocks = ic.split_video_clip_blocks(_CLIP_LOCKED)
+    assert set(blocks) == {1, 2, 3}
+    assert "CHAR_01" in blocks[1]
+    assert "空镜" in blocks[3]
+
+
+def test_clip_block_locks_identity():
+    assert ic.clip_block_locks_identity("**角色身份注册层**：CHAR_01/常态；定妆_沈念.png") is True
+    assert ic.clip_block_locks_identity("identity lock: face_lock + reference_group") is True
+    # 只喊锁身份没给锚 → False
+    assert ic.clip_block_locks_identity("**身份锁定**：保持人物一致") is False
+    # 有锚但没声明字段 → False
+    assert ic.clip_block_locks_identity("镜头平移，背景定妆_冷宫.png") is False
+
+
+def _write_with_video_prompts(tmp_path, routes=_ROUTES, clips=_CLIP_LOCKED):
+    root = _write_project(tmp_path, IMG_CONTRACT, VID_VERBATIM)
+    vp = os.path.join(root, "出视频", EP, "prompt")
+    if routes is not None:
+        open(os.path.join(vp, "video_model_routes.json"), "w", encoding="utf-8").write(routes)
+    if clips is not None:
+        open(os.path.join(vp, "01_clips.md"), "w", encoding="utf-8").write(clips)
+    return root
+
+
+def test_identity_handoff_passes_when_all_clips_lock(tmp_path):
+    root = _write_with_video_prompts(tmp_path)
+    assert ic.run(root, EP) == 0
+    rep = _report(root)
+    assert rep["verdict"] == "pass"
+    assert rep["identity_handoff"]["available"] is True
+    assert rep["identity_handoff"]["checked"] == 2          # 只核验命名角色镜
+    assert rep["identity_handoff"]["findings"] == []
+
+
+def test_identity_handoff_blocks_unlocked_named_clip(tmp_path):
+    # Clip 02 改成只喊锁身份没给锚 → block，整体 verdict=block, exit 1
+    clips = _CLIP_LOCKED.replace(
+        "**身份锁定约束**：CHAR_02/常态，character_id=KLG_001；脸部特写=定妆_柳娘子_脸部特写.png。",
+        "**演出**：柳娘子入画反应，保持人物一致。")
+    root = _write_with_video_prompts(tmp_path, clips=clips)
+    assert ic.run(root, EP) == 1
+    rep = _report(root)
+    assert rep["verdict"] == "block"
+    codes = {f["code"] for f in rep["identity_handoff"]["findings"]}
+    assert "identity_lock_missing" in codes
+
+
+def test_identity_handoff_blocks_missing_clip_prompt(tmp_path):
+    # routes 里有 Clip_02 命名角色镜，但 01_clips.md 没写 Clip 02 块 → block
+    clips = "## Clip 01（…）\n**角色身份注册层**：CHAR_01；定妆_沈念.png\n"
+    root = _write_with_video_prompts(tmp_path, clips=clips)
+    assert ic.run(root, EP) == 1
+    rep = _report(root)
+    codes = {f["code"] for f in rep["identity_handoff"]["findings"]}
+    assert "identity_clip_prompt_missing" in codes
+
+
+def test_identity_handoff_skipped_when_routes_absent(tmp_path):
+    # 没有 video_model_routes.json（旧项目/未跑 router）→ 不拦，verdict 仍由视觉契约决定
+    root = _write_project(tmp_path, IMG_CONTRACT, VID_VERBATIM)
+    assert ic.run(root, EP) == 0
+    rep = _report(root)
+    assert rep["identity_handoff"]["available"] is False
+    assert rep["identity_handoff"]["findings"] == []

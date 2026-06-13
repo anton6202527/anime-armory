@@ -11,10 +11,28 @@ from copy import deepcopy
 CONTRACT_VERSION = 1
 
 MV_USE_CASES = ("短视频Hook", "歌曲Demo", "正式MV草稿", "投放版", "自定义")
+MV_SONG_TIMINGS = ("先传音乐", "后配歌曲")
 MV_VISUAL_STYLES = ("电影叙事", "舞台演出", "国风写意", "赛博霓虹", "二次元", "抽象视觉器", "写实旅拍", "自定义")
 MV_PLAN_GRANULARITY = ("粗略", "标准", "精细", "自定义")
 MV_BEAT_STRATEGIES = ("副歌强卡点", "全程强卡点", "叙事优先", "歌词叙事优先", "人工指定", "自定义")
-MV_VIDEO_BACKENDS = ("即梦", "可灵", "Veo", "Seedance", "Runway", "Kling", "manual")
+MV_VIDEO_MODELS = (
+    "Seedance 2.0", "Veo 3.1", "Kling 3.0", "Hailuo 02", "Hailuo 2.3",
+    "Runway Gen-4", "Luma Ray3.2", "Pika 2.5",
+    "HunyuanVideo 1.5", "Wan 2.2", "LTX-2.3", "Sora", "manual",
+)
+MV_VIDEO_CHANNELS = (
+    "即梦/Dreamina", "即梦", "Dreamina",
+    "豆包",
+    "海螺AI", "Hailuo",
+    "可灵/Kling", "可灵", "Kling",
+    "Google Gemini API",
+    "Runway API", "Runway",
+    "Luma Dream Machine", "Luma",
+    "Pika",
+    "本地/开源", "manual",
+)
+# Legacy combined backend list. New projects write `生视频模型` + `生视频渠道`.
+MV_VIDEO_BACKENDS = MV_VIDEO_CHANNELS
 # 阶段1：生图AI 是选择点，默认 Codex；放行官方多参考一致性后端。供 _设置.md 菜单用。
 MV_IMAGE_BACKENDS = ("Codex", "Seedream", "可灵主体库", "Nano Banana", "Sora Cameo", "自定义")
 MV_CONSISTENCY_MODES = ("共享定妆+锚点", "指定参考图", "后端主体库", "+LoRA")
@@ -63,12 +81,14 @@ def classify_image_backend(raw):
 
 DEFAULT_SETTINGS = {
     "MV用途": "歌曲Demo",
+    "歌曲输入时序": "先传音乐",
     "MV视觉风格": "电影叙事",
     "MV规划粒度": "标准",
     "卡点策略": "副歌强卡点",
     "生图AI": "Codex",
     "MV一致性增强": "共享定妆+锚点",
-    "生视频AI": "即梦",
+    "生视频模型": "Seedance 2.0",
+    "生视频渠道": "即梦/Dreamina",
     "出视频规格": "预算一般",
     "合成画幅": "16:9",
     "AI视觉使用披露": "AI-generated",
@@ -77,12 +97,14 @@ DEFAULT_SETTINGS = {
 
 CHOICE_POINTS = {
     "MV用途": MV_USE_CASES,
+    "歌曲输入时序": MV_SONG_TIMINGS,
     "MV视觉风格": MV_VISUAL_STYLES,
     "MV规划粒度": MV_PLAN_GRANULARITY,
     "卡点策略": MV_BEAT_STRATEGIES,
     "生图AI": MV_IMAGE_BACKENDS,
     "MV一致性增强": MV_CONSISTENCY_MODES,
-    "生视频AI": MV_VIDEO_BACKENDS,
+    "生视频模型": MV_VIDEO_MODELS,
+    "生视频渠道": MV_VIDEO_CHANNELS,
     "出视频规格": MV_VIDEO_SPECS,
     "合成画幅": MV_ASPECTS,
     "AI视觉使用披露": AI_VISUAL_USAGE_MODES,
@@ -104,7 +126,10 @@ PLAN_GRANULARITY_PROFILE = {
 
 MV_STAGE_TABLE = [
     {"key": "setup", "label": "项目骨架", "owner": "mv/scripts/init_project.py", "gate": "deterministic"},
+    {"key": "song_ingest", "label": "歌曲入库/定稿", "owner": "song/user-upload", "gate": "歌/song.* + 词/lyrics.md"},
     {"key": "beat", "label": "节拍/能量", "owner": "mv-beat/scripts/beat_detect.py", "gate": "beatgrid"},
+    {"key": "script", "label": "视觉蓝图/设定", "owner": "mv-script", "gate": "visual blueprint"},
+    {"key": "script_review", "label": "视觉蓝图复核", "owner": "mv-script", "gate": "beatgrid-reviewed blueprint"},
     {"key": "plan", "label": "clip/timeline 规划", "owner": "mv-plan/scripts/plan_clips.py", "gate": "clip_plan"},
     {"key": "image", "label": "定妆/首帧/尾帧", "owner": "mv-image", "gate": "visual identity"},
     {"key": "video_jobs", "label": "视频任务包", "owner": "mv-video/scripts/video_jobs.py", "gate": "jobs_manifest"},
@@ -118,6 +143,23 @@ MV_STAGE_TABLE = [
 
 def stage_table():
     return deepcopy(MV_STAGE_TABLE)
+
+
+def workflow_stage_table(song_timing=None):
+    """Return stage order for the selected song timing mode."""
+    timing = song_timing or DEFAULT_SETTINGS["歌曲输入时序"]
+    by_key = {s["key"]: s for s in MV_STAGE_TABLE}
+    if timing == "后配歌曲":
+        keys = [
+            "setup", "script", "song_ingest", "beat", "script_review", "plan", "image",
+            "video_jobs", "video", "lyric_sync", "compose", "review", "handoff",
+        ]
+    else:
+        keys = [
+            "setup", "song_ingest", "beat", "script", "plan", "image",
+            "video_jobs", "video", "lyric_sync", "compose", "review", "handoff",
+        ]
+    return deepcopy([by_key[k] for k in keys])
 
 
 def choice_points():

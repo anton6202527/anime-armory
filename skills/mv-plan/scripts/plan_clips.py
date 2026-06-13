@@ -13,6 +13,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 CONTRACT_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "contract.py")
 MV_UTILS_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "mv_utils.py")
+GATE_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "gate.py")
 
 
 def load_contract():
@@ -27,8 +28,15 @@ def load_mv_utils():
     spec.loader.exec_module(mod)
     return mod
 
+def load_gate():
+    spec = importlib.util.spec_from_file_location("mv_gate", GATE_PATH)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
 contract = load_contract()
 mv_utils = load_mv_utils()
+mv_gate = load_gate()
 
 def parse_lyrics(root):
     path = os.path.join(root, "词", "lyrics.md")
@@ -97,28 +105,59 @@ def is_bridge(name):
     return any(k in low for k in ("bridge", "pre", "间奏", "桥", "drop"))
 
 
-def cut_points_for_section(sec, downbeats, profile, strategy):
+def get_energy_at(t, energy_map):
+    if not energy_map:
+        return 0.5
+    idx = int(t)
+    if idx < 0: return energy_map[0]
+    if idx >= len(energy_map): return energy_map[-1]
+    return energy_map[idx]
+
+
+def cut_points_for_section(sec, downbeats, energy_map, profile, strategy):
     start, end = sec["start"], sec["end"]
+    
+    # Calculate average energy for this section to drive ASL curve
+    avg_energy = 0.5
+    if energy_map:
+        relevant = energy_map[int(start):int(end)+1]
+        if relevant:
+            avg_energy = sum(relevant) / len(relevant)
+
+    # Base bars from profile
+    base_bars = profile["chorus_bars"] if is_chorus(sec["section"]) or strategy == "全程强卡点" else profile["verse_bars"]
+    
+    # Dynamic ASL: Higher energy -> lower bars (more frequent cuts)
+    if avg_energy > 0.8:
+        bars = 1
+    elif avg_energy > 0.5:
+        bars = max(1, base_bars // 2)
+    elif avg_energy < 0.2:
+        bars = base_bars * 2
+    else:
+        bars = base_bars
+
     in_range = [t for t in downbeats if start < t < end]
     if not in_range:
-        span = 3.0 if is_chorus(sec["section"]) or strategy == "全程强卡点" else 6.0
+        # Fallback to fixed interval if no downbeats
+        interval = 2.0 if avg_energy > 0.6 else 4.0
         pts = [start]
-        cur = start + span
+        cur = start + interval
         while cur < end:
             pts.append(round(cur, 3))
-            cur += span
+            cur += interval
         pts.append(end)
         return pts
-    bars = profile["chorus_bars"] if is_chorus(sec["section"]) or strategy == "全程强卡点" else profile["verse_bars"]
+
     pts = [start]
     for idx, t in enumerate(in_range):
-        if idx % max(1, bars) == 0:
+        if idx % max(1, int(bars)) == 0:
             pts.append(float(t))
     pts.append(end)
     # 去重并丢掉太短切点
     clean = []
     for p in sorted(set(round(x, 3) for x in pts)):
-        if not clean or p - clean[-1] >= 0.6:
+        if not clean or p - clean[-1] >= 0.5:
             clean.append(p)
     if clean[-1] != round(end, 3):
         clean.append(round(end, 3))
@@ -137,6 +176,8 @@ def merge_to_limit(clips, max_clips):
             cur["end"] = nxt["end"]
             cur["duration"] = round(cur["end"] - cur["start"], 3)
             cur["lyric_hint"] = " / ".join(x for x in (cur.get("lyric_hint"), nxt.get("lyric_hint")) if x)
+            # Recalculate energy level for merged clip
+            cur["energy_level"] = max(cur.get("energy_level", 5), nxt.get("energy_level", 5))
             i += 2
         else:
             i += 1
@@ -155,21 +196,28 @@ def lyric_hint_for(section_name, lyric_sections, index):
 def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visual_style):
     profile = contract.plan_granularity_profile(granularity)
     downbeats = [float(x) for x in (bg.get("downbeats") or bg.get("beats") or [])]
+    energy_map = bg.get("energy_map")
     raw_clips = []
     lyric_index_by_section = {}
     for sec in sections:
-        pts = cut_points_for_section(sec, downbeats, profile, strategy)
+        pts = cut_points_for_section(sec, downbeats, energy_map, profile, strategy)
         for i in range(len(pts) - 1):
             start, end = pts[i], pts[i + 1]
             if end <= start:
                 continue
             idx = lyric_index_by_section.get(sec["section"], 0)
             lyric_index_by_section[sec["section"]] = idx + 1
+            
+            energy = get_energy_at(start, energy_map)
+            energy_level = int(energy * 10) + 1
+            energy_level = max(1, min(10, energy_level))
+            
             raw_clips.append({
                 "section": sec["section"],
                 "start": round(start, 3),
                 "end": round(end, 3),
                 "duration": round(end - start, 3),
+                "energy_level": energy_level,
                 "lyric_hint": lyric_hint_for(sec["section"], lyric_sections, idx),
             })
     raw_clips = merge_to_limit(raw_clips, profile["max_clips"])
@@ -178,13 +226,20 @@ def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visua
     for idx, clip in enumerate(raw_clips, 1):
         clip_id = f"Clip_{idx:03d}"
         section = clip["section"]
-        key = is_chorus(section) or is_bridge(section)
+        start, end = clip["start"], clip["end"]
+        energy_level = clip["energy_level"]
+        key = is_chorus(section) or is_bridge(section) or energy_level >= 8
         transition = "卡点硬切" if key else "动作切"
         beat_role = "key" if key else "normal"
         speed_mode = "trim" if key else "warp"
+        
+        # Action Peak logic: Try to find a beat within the second half of the clip
+        # Fallback to 80% through the clip
+        action_peak_abs = round(end - min(0.2, max(0.05, (end - start) * 0.2)), 3)
+        action_peak_relative = round(action_peak_abs - start, 3)
+        
         action_family = "dance_hit/vfx_burst" if key else "performance_pose/expressive_walk"
-        action = "副歌高光动作/光效爆点对齐 downbeat" if key else "叙事动作完整推进，镜头缓推"
-        action_peak = round(end - min(0.2, max(0.05, (end - start) * 0.2)), 3)
+        action = f"力量等级 Level {energy_level}；副歌高光动作/光效爆点对齐击中点" if key else f"力量等级 Level {energy_level}；叙事动作完整推进，镜头缓推"
         transition_motif = "光效切/whip pan" if key else "动作切/视线切"
         visual_motif = "继承视觉蓝图的主角身份锚点、段落主色和本段反复母题"
         end_state = f"{section} 段 {clip_id} 结束姿态，画面重心留给下一刀"
@@ -195,13 +250,15 @@ def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visua
         clips.append({
             "clip_id": clip_id,
             "section": section,
-            "start": clip["start"],
-            "end": clip["end"],
+            "start": start,
+            "end": end,
             "duration": clip["duration"],
+            "energy_level": f"Level {energy_level}",
             "beat_role": beat_role,
             "speed_mode": speed_mode,
             "action_family": action_family,
-            "action_peak": action_peak,
+            "action_peak": action_peak_abs,
+            "action_peak_relative": action_peak_relative,
             "transition_motif": transition_motif,
             "visual_motif": visual_motif,
             "lyric_hint": clip.get("lyric_hint", ""),
@@ -236,7 +293,7 @@ def write_prompt_files(root, clips, blueprint):
             "",
             "## 首帧要求",
             f"用导演视角八维生成本 clip 首帧。画面必须服务：{clip['continuity']['action']}。",
-            f"动作家族：{clip.get('action_family', '')}；动作峰值：{clip.get('action_peak', clip['end']):.2f}s。",
+            f"动作家族：{clip.get('action_family', '')}；力量等级：{clip.get('energy_level', 'Level 5')}；动作峰值：{clip.get('action_peak_relative', 0.8):.2f}s (relative)。",
             f"视觉母题：{clip.get('visual_motif', '')}。",
             "",
             "## 继承",
@@ -254,7 +311,8 @@ def write_prompt_files(root, clips, blueprint):
             f"- 卡点：{clip['start']:.2f}s → {clip['end']:.2f}s",
             f"- 转场：{clip['transition']}",
             f"- 动作家族：{clip.get('action_family', '')}",
-            f"- 动作峰值：{clip.get('action_peak', clip['end']):.2f}s",
+            f"- 力量等级：{clip.get('energy_level', 'Level 5')}",
+            f"- 动作峰值：{clip.get('action_peak_relative', 0.8):.2f}s (relative)",
             f"- 转场母题：{clip.get('transition_motif', '')}",
             "",
             "## continuity",
@@ -265,7 +323,7 @@ def write_prompt_files(root, clips, blueprint):
             f"- negative：{clip['continuity']['negative']}",
             "",
             "## 视频 prompt",
-            f"人物运动：{clip['continuity']['action']}；动作家族：{clip.get('action_family', '')}；镜头运动：按段落张力执行；动态细节：发丝、衣摆、光斑或环境粒子随节拍变化；卡点约束：动作峰值对齐 {clip.get('action_peak', clip['end']):.2f}s；转场母题：{clip.get('transition_motif', '')}；声音约束：无对白、无旁白、不要生成原生人声，音乐由 mv-compose 使用原歌轨统一处理。",
+            f"人物运动：{clip['continuity']['action']}；动作家族：{clip.get('action_family', '')}；力量等级：{clip.get('energy_level', 'Level 5')}；镜头运动：按段落张力执行；动态细节：发丝、衣摆、光斑或环境粒子随节拍产生物理惯性偏移；卡点约束：动作峰值/击中点对齐本 clip 内部的 {clip.get('action_peak_relative', 0.8):.2f}s；转场母题：{clip.get('transition_motif', '')}；声音约束：无对白、无旁白、不要生成原生人声，音乐由 mv-compose 使用原歌轨统一处理。",
         ]
         mv_utils.write_text(os.path.join(root, clip["video_prompt_path"]), "\n".join(video_lines) + "\n")
 
@@ -289,6 +347,13 @@ def main():
     root = os.path.abspath(args.project_root)
     if not os.path.isdir(root):
         print(f"[err] 找不到作品根：{root}", file=sys.stderr)
+        sys.exit(2)
+    errors, warnings = mv_gate.check(root, "plan")
+    for msg in warnings:
+        print(f"[warn] {msg}")
+    if errors:
+        for msg in errors:
+            print(f"[err] {msg}", file=sys.stderr)
         sys.exit(2)
     bg_path = os.path.join(root, "节拍", "beatgrid.json")
     if not os.path.exists(bg_path):
@@ -320,13 +385,14 @@ def main():
         "beatgrid_path": "节拍/beatgrid.json",
         "clips": clips,
     }
+    song_path = mv_utils.find_song(root)
     timeline = {
         "schema_version": 1,
         "kind": "mv_timeline_manifest",
         "generated_at": date.today().isoformat(),
         "project_root": root,
         "title": title,
-        "song_path": "歌/song.wav",
+        "song_path": mv_utils.relpath(root, song_path) if song_path else "",
         "beatgrid_path": "节拍/beatgrid.json",
         "clips": [
             {
@@ -346,6 +412,7 @@ def main():
     mv_utils.write_json(os.path.join(plan_dir, "clip_plan.json"), plan)
     mv_utils.write_json(os.path.join(plan_dir, "timeline_manifest.json"), timeline)
     mv_utils.write_text(os.path.join(plan_dir, "clip_plan.md"), build_markdown(title, clips))
+    mv_utils.update_progress_stage(root, "plan")
     print(f"[ok] clip plan → {os.path.join(plan_dir, 'clip_plan.json')}（{len(clips)} clips）")
     print(f"[ok] timeline → {os.path.join(plan_dir, 'timeline_manifest.json')}")
     print("\n[推荐下一步] 你可以运行语义分镜引擎，根据歌词和蓝图自动补全画面提示词：")

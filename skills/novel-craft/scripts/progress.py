@@ -15,8 +15,8 @@ import os
 import re
 import sys
 
-# Inject common directory for markdown_parser
-COMMON_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'common'))
+# Inject novel/_lib for markdown_parser（本线自包含：vendored）
+COMMON_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'novel', '_lib'))
 if COMMON_DIR not in sys.path:
     sys.path.insert(0, COMMON_DIR)
 

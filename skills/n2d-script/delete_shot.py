@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# 删镜助手 — 后期删减「回流」的可自动推导部分一键完成（见 novel2drama/Q&A.md Q27）
+# 删镜助手 — 后期删减「回流」的可自动推导部分一键完成（见 n2d/Q&A.md Q27）
 # 用法: delete_shot.py <作品根> <第N集> <镜头名> [镜头名...]
 #   例: delete_shot.py 制漫剧/冷宫有妖气 第2集 镜头6
 # 自动做：voiceover.txt 删行 → 字幕_英文.srt 删对应块(EN文本源·必须同步) →
@@ -7,7 +7,7 @@
 #         voice_zh.wav 重拼轨(有 ffmpeg 时，含 hook 可变间隔) → finalize_storyboard 重定时
 # 不动（末尾打印清单，需人工）：故事板.md/分镜剧本.md/bgm.txt/storyboard.json 设计文档、已生成的 PNG/clip MP4、成片。
 import sys, os, re, json, subprocess, shutil
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'common'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'n2d', '_lib'))
 from n2d_route import voiceover_fingerprint  # 删镜重写 voiceover.txt 后须同步刷新 meta 指纹，否则 validate_timings 误报失配
 
 if len(sys.argv) < 4: sys.exit('用法: delete_shot.py <作品根> <第N集> <镜头名> [镜头名...]')
@@ -23,7 +23,7 @@ CONF = os.path.join(root, VBASE, ep, '配音')
 MAN  = os.path.join(CONF, '时长清单.json')
 
 if not os.path.isfile(MAN):
-    sys.exit(f'⛔ 缺 {MAN} —— 该集还没配音(无时长清单)，无可回流的删镜。请确认集号，或先 /n2d-voice。')
+    sys.exit(f'⛔ 缺 {MAN} —— 该集还没配音(无时长清单)，无可回流的删镜。请确认集号，或先 n2d-voice。')
 if not os.path.isfile(VO):
     sys.exit(f'⛔ 缺 {VO} —— voiceover.txt 不存在，无法删行。请确认作品根/集号。')
 
@@ -110,7 +110,7 @@ if FF:
     print('voice_zh.wav 已重拼轨')
 else:
     if os.path.exists(vw): shutil.move(vw, vw + '.stale')
-    print('⚠ 无 ffmpeg：voice_zh.wav → .stale，请在装 ffmpeg 的机器重跑 /n2d-voice 重拼轨')
+    print('⚠ 无 ffmpeg：voice_zh.wav → .stale，请在装 ffmpeg 的机器重跑 n2d-voice 重拼轨')
 
 # 5) finalize 重定时（纯 python）
 subprocess.run([sys.executable, os.path.join(SCRIPT_DIR, 'finalize_storyboard.py'), root, ep], check=True)
@@ -132,5 +132,5 @@ print('\n=== 还需手动处理 ===')
 print(f'  □ 设计文档删 {sorted(shots)} 相关块：故事板.md / 分镜剧本.md / bgm.txt / storyboard.json'
       '（故事板与 storyboard.json 的 Clip 视情况重编号 + 同步拆Clip子标签；改完按上面 gate 对账复跑）')
 print(f'  □ 若已出图/出视频：移走 出图/{ep}/镜头X_*.png 与 出视频/{ep}/视频/对应 Clip*.mp4 → 废料/')
-print(f'  □ 重跑 /n2d-compose <作品根> {ep} 出新成片')
-print('  □ 过一眼 novel2drama/references/导演节奏.md 留存自查（别把钩子/集尾删没）')
+print(f'  □ 重跑 n2d-compose <作品根> {ep} 出新成片')
+print('  □ 过一眼 n2d/references/导演节奏.md 留存自查（别把钩子/集尾删没）')

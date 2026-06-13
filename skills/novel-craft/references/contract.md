@@ -17,6 +17,13 @@
 | `title` | string/null | 是 | 用户选定书名；未定为 null |
 | `source_title` | string | 派生类必填 | 原作名；`create` 可无 |
 | `rights_status` | string | 是 | `original/public-domain/user-declared/...` |
+| `rights_jurisdiction` | string | 推荐 | 权利/公版依据适用辖区，如 `US/CN/GLOBAL/user-declared` |
+| `rights_basis` | string | 推荐 | 原创/授权/公版判断依据 |
+| `source_license_url` | string | 推荐 | 来源许可或公版说明 URL |
+| `rights_covered_regions` | list[string] | 公版推荐 | 来源权利依据覆盖地区，如 Gutenberg 默认 `["US"]` |
+| `distribution_regions` | list[string] | 发布推荐 | 计划发行/交付地区；未定留空 |
+| `requires_region_rights_review` | bool | 公版推荐 | 公版但非全球覆盖时为 true |
+| `requires_user_rights` | bool | 来源要求时填 | 通用/授权来源是否要求用户自持权利 |
 | `rights_declared_at` | string/null | 派生授权时填 | `YYYY-MM-DD` |
 | `outputs` | list[string] | 是 | 只能含 `txt/docx/outline/n2d` |
 | `created_at` | string | 是 | `YYYY-MM-DD` |
@@ -126,8 +133,10 @@
 
 ## QA gate
 
-`scripts/report_gate.py <作品根>` 是 review/score 到调度器的硬闸：
+`scripts/report_gate.py <作品根>` 是 rights/review/score 到调度器的硬闸：
 
+- 读取 `_meta.json` 和 `小说/source_manifest.json`：显式 `rights_status=unknown` 或来源要求用户权利但缺 `rights_declared/rights_declared_at` → `RIGHTS-*` 阻断。
+- 公版来源必须区分 `rights_covered_regions` 与 `distribution_regions`。普通文本导出缺发行区先 warning；导出 `n2d`/`combine`、商业连载/漫剧源书、目标平台含红果/番茄/抖音/漫剧时，缺发行区或发行区不被来源覆盖 → `RIGHTS-PD-REGION-*` 阻断。
 - Export 硬闸默认要求 `审稿/review_report.json` 存在；缺失即 `REVIEW-MISSING` 阻断。`progress.py` 只做续跑提示，缺报告先显示 warning。
 - 读取 `source_snapshot`：review/score 报告必须绑定正文 hash。正文文件 hash、aggregate hash 不匹配，或 review 报告生成后 `章节/` 新增/删除文件，进入 `REVIEW-SNAPSHOT` / `SCORE-SNAPSHOT`；export 阶段阻断，progress 阶段提示。
 - 读取 `审稿/review_report.json`：任一 `blocking=true` 或 `severity=blocking` → 阻断。

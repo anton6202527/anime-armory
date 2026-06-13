@@ -18,9 +18,20 @@ JOBS = os.path.join(HERE, "video_jobs.py")
 
 
 def make_project(root):
-    os.makedirs(os.path.join(root, "分镜"), exist_ok=True)
+    for sub in ("分镜", "歌", "词", "节拍", "出图/段落/图片"):
+        os.makedirs(os.path.join(root, sub), exist_ok=True)
     with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
         f.write("# _设置\n\n## 选择\n- 生视频AI: manual\n- 出视频规格: 预算一般\n")
+    with open(os.path.join(root, "_meta.json"), "w", encoding="utf-8") as f:
+        json.dump({"title": "测试MV", "song_timing": "先传音乐", "has_song": True, "has_lyrics": True}, f, ensure_ascii=False)
+    with open(os.path.join(root, "视觉蓝图.md"), "w", encoding="utf-8") as f:
+        f.write("# 视觉蓝图\n")
+    with open(os.path.join(root, "歌", "song.wav"), "wb") as f:
+        f.write(b"fake wav")
+    with open(os.path.join(root, "词", "lyrics.md"), "w", encoding="utf-8") as f:
+        f.write("[verse1]\n一句歌词\n")
+    with open(os.path.join(root, "节拍", "beatgrid.json"), "w", encoding="utf-8") as f:
+        json.dump({"duration": 6, "beats": [1, 2, 3], "downbeats": [1, 3]}, f, ensure_ascii=False)
     clips = [
         {
             "clip_id": "Clip_001",
@@ -51,6 +62,9 @@ def make_project(root):
         json.dump({"title": "测试MV", "clips": clips}, f, ensure_ascii=False)
     with open(os.path.join(root, "分镜", "timeline_manifest.json"), "w", encoding="utf-8") as f:
         json.dump({"title": "测试MV", "clips": [{"clip_id": c["clip_id"], "video_path": c["selected_video_path"]} for c in clips]}, f, ensure_ascii=False)
+    for clip in clips:
+        with open(os.path.join(root, clip["image_path"]), "wb") as f:
+            f.write(b"fake png")
 
 
 class VideoJobsTest(unittest.TestCase):

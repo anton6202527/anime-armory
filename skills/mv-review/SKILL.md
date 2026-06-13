@@ -19,7 +19,7 @@ description: 制MV 质检 + 流程自审（mv 写歌→制MV 生产线的 QA 环
 ## 机检 / 人判分工（照搬 n2d-review 的成熟做法）
 
 - **机检（确定性，先跑）**：`scripts/mv_check.py <制MV作品根>` —— 秒级出确定性问题：
-  - **卡点**：`节拍/beatgrid.json` 存在/可解析、BPM 合理（半速/倍速嫌疑）、beats/downbeats 单调递增、`歌/song.wav` 时长 vs beatgrid.duration 一致。
+  - **卡点**：`节拍/beatgrid.json` 存在/可解析、BPM 合理（半速/倍速嫌疑）、beats/downbeats 单调递增、`歌/song.*` 时长 vs beatgrid.duration 一致。
   - **规划**：`分镜/clip_plan.json` / `timeline_manifest.json` 存在可解析、clip_id 不重复、timeline 与 plan 对账、timeline selected video 是否存在。
   - **视频任务**：`出视频/jobs_manifest.json` 存在可解析、已选 take 是否真的落到 `出视频/视频/Clip_XXX.mp4`。
   - **clip 节奏**（需 `ffprobe`，缺则显式跳过）：每个 `出视频/视频/*.mp4` 时长、**clip 是否疑似等长（不卡点）**、clip 总时长 ≈ 歌长。
@@ -31,7 +31,7 @@ description: 制MV 质检 + 流程自审（mv 写歌→制MV 生产线的 QA 环
   python3 <skill>/scripts/mv_check.py <制MV作品根>          # 人读
   python3 <skill>/scripts/mv_check.py <制MV作品根> --json   # 喂回 LLM 汇总
   ```
-  > `ffprobe` 缺失时，clip/成片 的时长·分辨率·音轨检查**显式标「跳过」**，绝不静默略过（同 n2d 脸相似度库的处理）。WAV 时长走标准库 `wave`，不靠 ffprobe。
+  > `ffprobe` 缺失时，clip/成片 的时长·分辨率·音轨检查**显式标「跳过」**，绝不静默略过（同 n2d 脸相似度库的处理）。`song.wav` 时长优先走标准库 `wave`，mp3/m4a/flac 走 ffprobe。
 
 - **人判（判断题）**：机检覆盖不了的语义维度。逐维见 `references/checklist.md`。
   - **崩脸 / 场景漂移 / 画风跳变用图判**：把 `出图/段落/图片/镜头*.png` 与 `出图/共享/图片/定妆_*.png` **并排读图比对**（脸型/发型/服色/画风锚点）；装了 `face_recognition`/`insightface` 可给相似度分，缺库则人判兜。
@@ -39,7 +39,7 @@ description: 制MV 质检 + 流程自审（mv 写歌→制MV 生产线的 QA 环
   - **运镜与动作服务节奏**：副歌快推/环绕、verse 缓推/跟、bridge 换机位、爽点对 downbeat 同帧砸下；动作家族、动作峰值、转场母题对 `mv-video/references/action_knowledge.md` + `prompt_format.md`。只写“炫酷动作”但没有可执行动作链，标为建议级。
   - **单曲视觉一致性**：审 `mv-image/references/visual_consistency.md` 的身份锚点、主色、段落 look、母题、`reference_inputs` 是否贯穿；若 `_设置.md` 启用了指定参考图、后端主体库或 `+LoRA`，prompt 必须登记路径/主体 ID/LoRA trigger+底模+授权说明。MV 不要求跨集状态，但一支歌内不能换脸换主画风。
   - **卡点体感**：机检给"clip 是否对齐 downbeat"的客观判断，**踩得爽不爽**由人判（看成片副歌切点是否砸在鼓点）。
-  - **换脸合规**：若用了 `shared-video-faceswap`——AI 标识水印在否、未被裁、源脸授权。
+  - **换脸合规**：若用了 `mv-video-faceswap`——AI 标识水印在否、未被裁、源脸授权。
 
 ## 工作流（模式①）
 

@@ -158,7 +158,7 @@ A/B 分析说明：
 
 ## 导演节奏写回
 
-`--update-guide` 会替换 `skills/novel2drama/references/导演节奏.md` 中：
+`--update-guide` 会替换 `skills/n2d/references/导演节奏.md` 中：
 
 ```text
 <!-- n2d-feedback:start -->

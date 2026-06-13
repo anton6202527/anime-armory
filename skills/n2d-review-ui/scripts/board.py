@@ -28,7 +28,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
-_COMMON = str(_SCRIPT_DIR.parent.parent / "common")
+_COMMON = str(_SCRIPT_DIR.parent.parent / "n2d" / "_lib")
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 if str(_SCRIPT_DIR) not in sys.path:
@@ -73,7 +73,7 @@ def episode_block(root: Path, html_dir: Path, header: List[str], stages: List[st
     done_stages = sum(1 for col in stages if n2d_route.is_progress_satisfied(str(root), row, col))
 
     # 前沿：下一步该跑哪个 skill（mode-aware；与 n2d-progress 同源）。
-    # cmd = 契约里的下一步命令模板（多为 Claude Code 斜杠命令 /n2d-* {root} {ep}），格式化好供桌面端命令面板预填。
+    # cmd = 契约里的下一步命令模板（跨工具裸 skill 名，如 n2d-image {root} {ep}），格式化好供桌面端命令面板预填。
     route = n2d_route.stage_of(str(root), row, header)
     frontier = None
     if route.get("cmd"):

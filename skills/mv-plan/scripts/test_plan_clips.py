@@ -18,7 +18,7 @@ PLAN = os.path.join(HERE, "plan_clips.py")
 
 
 def make_project(root):
-    for sub in ("词", "节拍"):
+    for sub in ("词", "节拍", "歌"):
         os.makedirs(os.path.join(root, sub), exist_ok=True)
     with open(os.path.join(root, "_meta.json"), "w", encoding="utf-8") as f:
         json.dump({"title": "测试MV", "structure": ["verse1", "chorus"]}, f, ensure_ascii=False)
@@ -28,6 +28,8 @@ def make_project(root):
         f.write("# 视觉蓝图\n少年下山。\n")
     with open(os.path.join(root, "词", "lyrics.md"), "w", encoding="utf-8") as f:
         f.write("[verse1]\n山门外风起\n\n[chorus]\n仗剑下山闯人间\n")
+    with open(os.path.join(root, "歌", "song.mp3"), "wb") as f:
+        f.write(b"fake mp3")
     bg = {
         "duration": 16.0,
         "bpm": 120,
@@ -56,6 +58,9 @@ class PlanClipsTest(unittest.TestCase):
                 plan = json.load(f)
             self.assertGreaterEqual(len(plan["clips"]), 4)
             self.assertEqual(plan["visual_style"], "国风写意")
+            with open(timeline_path, encoding="utf-8") as f:
+                timeline = json.load(f)
+            self.assertEqual(timeline["song_path"], "歌/song.mp3")
             first = plan["clips"][0]
             self.assertIn("action_family", first)
             self.assertIn("action_peak", first)

@@ -87,4 +87,56 @@ def test_json_mode_outputs_candidates(tmp_path, capsys):
     assert code == 0
     payload = json.loads(capsys.readouterr().out)
     assert payload["command"] == "scan"
+    assert payload["summary"]["auto_clean"] >= 1
     assert any(c["path"] == "common/__pycache__" for c in payload["candidates"])
+
+
+def test_repo_scan_finds_root_caches_and_prunes_review_dirs(tmp_path):
+    root = tmp_path / "repo"
+    (root / ".pytest_cache").mkdir(parents=True)
+    (root / ".pytest_cache" / "README.md").write_text("cache", encoding="utf-8")
+    (root / "desktop" / "node_modules" / "pkg" / "__pycache__").mkdir(parents=True)
+    (root / "desktop" / "node_modules" / "pkg" / "__pycache__" / "x.pyc").write_bytes(b"cache")
+
+    candidates = cleanup.scan(root)
+    by_path = {c.path: c for c in candidates}
+
+    assert ".pytest_cache" in by_path
+    assert by_path[".pytest_cache"].auto_clean is True
+    assert "desktop/node_modules" in by_path
+    assert by_path["desktop/node_modules"].auto_clean is False
+    assert "desktop/node_modules/pkg/__pycache__" not in by_path
+
+
+def test_repo_mode_reports_logs_but_does_not_auto_clean(tmp_path):
+    root = tmp_path / "repo"
+    root.mkdir()
+    log = root / "生产运行.log"
+    log.write_text("keep for audit", encoding="utf-8")
+
+    default_candidates = cleanup.scan(root)
+    default_by_path = {c.path: c for c in default_candidates}
+    assert default_by_path["生产运行.log"].auto_clean is True
+
+    repo_candidates = cleanup.scan(root, repo_mode=True)
+    repo_by_path = {c.path: c for c in repo_candidates}
+    assert repo_by_path["生产运行.log"].kind == "review-log-file"
+    assert repo_by_path["生产运行.log"].auto_clean is False
+
+    for candidate in repo_candidates:
+        if candidate.auto_clean:
+            cleanup.remove_candidate(root, candidate)
+    assert log.exists()
+
+
+def test_clean_json_reports_saved_bytes(tmp_path, capsys):
+    root = make_skills(tmp_path)
+
+    code = cleanup.main(["clean", str(root), "--json"])
+
+    assert code == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["cleaned"] == payload["summary"]["cleaned"]
+    assert payload["saved_bytes"] == payload["summary"]["saved_bytes"]
+    assert payload["saved_bytes"] > 0
+    assert not (root / "common" / "__pycache__").exists()

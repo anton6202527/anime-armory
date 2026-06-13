@@ -1,6 +1,6 @@
 ---
 name: n2d-score
-description: P2 automatic review scoring for novel2drama/n2d. Produce a machine score per episode across semantic continuity, state continuity, multimodal continuity, character consistency, outfit consistency, scene consistency, subtitle correctness, audio-visual sync, rhythm density, and style consistency; integrates visual checks such as image similarity, subtitle OCR, audio/video duration reconciliation, lip-sync risk/report ingestion, and final rhythm density; write score JSON/Markdown, feed n2d-review-ui visual human review canvas, and optionally enqueue low-score reruns into n2d-batch. Use when asked for 自动审片评分, 机器分, 每集评分, 低于阈值自动回流, 语义继承评分, 状态一致性评分, 多模态漂移评分, 角色一致性评分, 字幕正确性评分, 音画同步评分, 节奏密度评分, 图像相似度评分, 字幕OCR, 口型检测, 成片节奏密度, style score, review score.
+description: P2 automatic review scoring for n2d. Produce a machine score per episode across semantic continuity, state continuity, multimodal continuity, character consistency, outfit consistency, scene consistency, subtitle correctness, audio-visual sync, rhythm density, and style consistency; integrates visual checks such as image similarity, subtitle OCR, audio/video duration reconciliation, lip-sync risk/report ingestion, and final rhythm density; write score JSON/Markdown, feed n2d-review-ui visual human review canvas, and optionally enqueue low-score reruns into n2d-batch. Use when asked for 自动审片评分, 机器分, 每集评分, 低于阈值自动回流, 语义继承评分, 状态一致性评分, 多模态漂移评分, 角色一致性评分, 字幕正确性评分, 音画同步评分, 节奏密度评分, 图像相似度评分, 字幕OCR, 口型检测, 成片节奏密度, style score, review score.
 ---
 
 # n2d-score — P2 自动审片评分体系

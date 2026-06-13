@@ -16,18 +16,18 @@ codex features list 2>/dev/null | rg 'image_generation|artifact' || true
 codex plugin list 2>/dev/null | rg -i 'image|openai|fal|replicate|browser|computer-use' || true
 ```
 
-所选后端未找到可自动落 PNG 的入口 → **停下报告**（见 SKILL「生图后端规则」），不偷偷换后端兜底（换后端=混用）。`生图AI` 默认 Codex，当前也可选 Dreamina/即梦官方 CLI、Seedream/可灵主体库/Nano Banana/Sora Cameo 等官方/已登录后端（全集统一一个、不混用）。上面的通用探测覆盖白名单常见 CLI 名；具体是否可用仍以本文件各后端档案和官方帮助为准。禁止第三方逆向 CLI、`同视频AI` 含糊口径和 web 自动化出图；`<作品根>/_设置.md` 写 `同视频AI` 时改成显式后端名。
+所选后端未找到可自动落 PNG 的入口 → **停下报告**（见 SKILL「生图后端规则」），不偷偷换后端兜底（换后端=混用）。`生图AI` 默认 Codex，当前也可选 Dreamina/即梦官方 CLI、Seedream/可灵主体库/Nano Banana/Sora Cameo 等官方/已登录后端（全集统一一个、不混用）。上面的通用探测覆盖白名单常见 CLI 名；具体是否可用仍以本文件各后端档案和官方帮助为准。禁止第三方逆向 CLI、`同视频AI` / `同视频模型` 含糊口径和 web 自动化出图；`<作品根>/_设置.md` 写 `同视频AI` 或 `同视频模型` 时改成显式后端名。
 
-## 优先级（针对默认即梦视频流）
+## 优先级（以 `生视频模型=Seedance 2.0` + `生视频渠道=即梦/Dreamina` 为例）
 
 | 排名 | 组合 | 说明 |
 |---|---|---|
-| ① | Codex 会话内置 `image_gen` / Codex image_generation feature → 即梦视频 + 锚定句 | 当前 Codex 能力优先；生成后必须把图从 `$CODEX_HOME/generated_images/...` 移入作品目录 |
-| ② | 官方 OpenAI Images 入口（`openai` CLI 或 Codex/OpenAI 插件）→ 即梦视频 + 锚定句 | 可自动批量落 PNG 时优先于国内兜底；注意统一东方面孔锚点 |
+| ① | Codex 会话内置 `image_gen` / Codex image_generation feature → 所选生视频模型 + 对应锚定句 | 当前 Codex 能力优先；生成后必须把图从 `$CODEX_HOME/generated_images/...` 移入作品目录 |
+| ② | 官方 OpenAI Images 入口（`openai` CLI 或 Codex/OpenAI 插件）→ 所选生视频模型 + 对应锚定句 | 可自动批量落 PNG 时优先于国内兜底；注意统一目标生视频模型的视觉锚点 |
 | 官方备选 | Dreamina/即梦官方 CLI / Seedream / 可灵主体库 / Nano Banana(Gemini) / Sora Cameo 官方 API | 当前可选；选定后整集统一、不与 Codex 混用；多角色同框/跨集锁人更稳 |
-| 禁止 | 第三方逆向 CLI / `同视频AI` 含糊口径 / 即梦 web 自动化出图 | 安全 invariant：未授权路径禁用；官方 Dreamina CLI 和官方 Seedream API 不在此列 |
+| 禁止 | 第三方逆向 CLI / `同视频AI` 或 `同视频模型` 含糊口径 / 即梦 web 自动化出图 | 安全 invariant：未授权路径禁用；官方 Dreamina CLI 和官方 Seedream API 不在此列 |
 
-切换目标视频 AI 时，图片阶段仍保持 Codex/OpenAI；需要风格兼容时拼目标视频 AI 的图像风格锚定句。
+切换目标生视频模型/渠道时，图片阶段仍保持 Codex/OpenAI；需要风格兼容时拼目标生视频模型的图像风格锚定句。
 
 ---
 
@@ -55,7 +55,7 @@ codex plugin list 2>/dev/null | rg -i 'image|openai|fal|replicate|browser|comput
 - **来源**：OpenAI 官方 Images API / 官方 CLI / Codex OpenAI 插件（如已安装）。
 - **探测**：`command -v openai`、`OPENAI_API_KEY`、`codex plugin list`。
 - **强项**：构图、审美、文字理解。
-- **弱项**：古装东方脸和跨镜一致性要显式锚点；跨即梦/可灵视频时必须拼目标视频 AI 的图像风格锚定句。
+- **弱项**：古装东方脸和跨镜一致性要显式锚点；跨 Seedance/Kling/Veo 等生视频模型时必须拼目标生视频模型的图像风格锚定句。
 - **调用模板**（仅在官方 CLI 可用且参数确认后使用）：
 
 ```bash
@@ -81,7 +81,7 @@ openai images create \
 - **平台**：macOS / Linux / Windows（WSL）
 - **计费**：高级会员积分（按官方实时档位为准；早期试用期已结束，不再列具体日期）
 - **后端模型**：Seedance 2.0
-> 注：Dreamina/即梦官方 CLI 图片生成已放行；仅禁第三方逆向版、`同视频AI` 含糊口径和 web 自动化。
+> 注：Dreamina/即梦官方 CLI 图片生成已放行；仅禁第三方逆向版、`同视频AI` / `同视频模型` 含糊口径和 web 自动化。
 
 ### 子命令（实测）
 
@@ -157,7 +157,7 @@ gemini-cli images generate \
 4. **是否往敏感位置写** — 安全：`~/.local/bin`、`~/.dreamina_cli`、`~/.zshrc` 追加 PATH。危险：`/usr/local/bin`、`/etc/`、`/var/`、sudoers。
 5. **是否有可疑行为** — 上传本地文件 / `eval $(curl ...)` / base64 解码执行 / 创建 systemd cron / 改其他工具配置 → 警惕。
 
-**Dreamina 审查结论**（参考案例，详见 `novel2drama/Q&A.md Q14/Q17`）：
+**Dreamina 审查结论**（参考案例，详见 `n2d/Q&A.md Q14/Q17`）：
 - ✅ 域名干净（jimeng.jianying.com + bytednsdoc.com 均字节系）
 - ✅ 用户级安装、无 sudo
 - ✅ 只动 `~/.local/bin` + `~/.dreamina_cli` + `~/.zshrc` 追加 PATH

@@ -97,6 +97,8 @@ def _provenance_lines(meta, chapters):
         f"# chapters: {len(chapters)}",
         f"# chars: {total_chars(chapters)}",
         f"# rights_status: {meta.get('rights_status', '—')}",
+        f"# rights_jurisdiction: {meta.get('rights_jurisdiction', '—')}",
+        f"# distribution_regions: {','.join(meta.get('distribution_regions') or []) or '—'}",
         f"# generated: {date.today().isoformat()}",
         f"# tool: novel-{kind}",
     ]
@@ -163,7 +165,7 @@ def write_docx(out_path, meta, chapters, title):
         provenance_lines.append(f"视角：{meta['spinoff_character']}")
     provenance_lines += [
         f"模式：{mode}    规模：{meta.get('scale', '—')}    章数：{len(chapters)}    字数：{total}",
-        f"版权状态：{meta.get('rights_status', '—')}    生成日期：{date.today().isoformat()}",
+        f"版权状态：{meta.get('rights_status', '—')}    权利辖区：{meta.get('rights_jurisdiction', '—')}    生成日期：{date.today().isoformat()}",
         f"工具：novel-{kind}",
     ]
     for ln in provenance_lines:
@@ -248,12 +250,43 @@ def write_n2d(n2d_root, docx_path, title, meta, project_root):
         "title": title,
         "kind": meta.get("kind", ""),
         "rights_status": meta.get("rights_status", ""),
+        "rights_jurisdiction": meta.get("rights_jurisdiction", ""),
+        "rights_basis": meta.get("rights_basis", ""),
+        "source_license_url": meta.get("source_license_url", ""),
+        "rights_covered_regions": meta.get("rights_covered_regions", []),
+        "distribution_regions": meta.get("distribution_regions", []),
+        "requires_region_rights_review": meta.get("requires_region_rights_review", False),
         "docx": f"{title}.docx",
         "docx_sha256": sha256_file(dest_docx),
         "exported": date.today().isoformat(),
     }
     with open(os.path.join(novel_dir, "_n2d_handoff.json"), "w", encoding="utf-8") as f:
         json.dump(handoff, f, ensure_ascii=False, indent=2)
+
+    # Asset-Aware Extraction
+    asset_registry = {"characters": {}, "props": {}, "vfx": {}, "locations": {}}
+    tag_pattern = re.compile(r"\[(CHAR|PROP|VFX|LOC)_([^\]]+)\]")
+    ch_dir = os.path.join(project_root, "章节")
+    if os.path.exists(ch_dir):
+        for fname in sorted(os.listdir(ch_dir)):
+            if fname.endswith(".md"):
+                with open(os.path.join(ch_dir, fname), "r", encoding="utf-8") as f:
+                    for match in tag_pattern.finditer(f.read()):
+                        kind, name = match.group(1), match.group(2)
+                        key = f"{kind}_{name}"
+                        if kind == "CHAR" and key not in asset_registry["characters"]:
+                            asset_registry["characters"][key] = {"id": key, "name": name, "source_chapter": fname}
+                        elif kind == "PROP" and key not in asset_registry["props"]:
+                            asset_registry["props"][key] = {"id": key, "name": name, "source_chapter": fname}
+                        elif kind == "VFX" and key not in asset_registry["vfx"]:
+                            asset_registry["vfx"][key] = {"id": key, "name": name, "source_chapter": fname}
+                        elif kind == "LOC" and key not in asset_registry["locations"]:
+                            asset_registry["locations"][key] = {"id": key, "name": name, "source_chapter": fname}
+    
+    if any(asset_registry.values()):
+        with open(os.path.join(novel_dir, "asset_registry_preflight.json"), "w", encoding="utf-8") as f:
+            json.dump(asset_registry, f, ensure_ascii=False, indent=2)
+
     return dest_docx
 
 
@@ -324,7 +357,7 @@ def main():
                   f"{','.join(ALLOWED_OUTPUT_FORMATS)}", file=sys.stderr)
             sys.exit(2)
 
-    gate_status = collect_gate_status(project_root, require_review_report=True)
+    gate_status = collect_gate_status(project_root, require_review_report=True, export_formats=formats)
     if gate_status["blocking"] and not args.ignore_qa_gate:
         print(format_gate_status(gate_status), file=sys.stderr)
         print("[err] QA gate 阻断导出；按报告回流修改，或人工确认后加 --ignore-qa-gate。", file=sys.stderr)

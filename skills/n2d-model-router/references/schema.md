@@ -24,10 +24,10 @@
 
 字段：
 
-- `routing_mode`: `auto` 或 `fixed_default`。默认 `auto`；若 `_设置.md` 写 `视频模型路由: 固定生视频AI` 才是 `fixed_default`。
+- `routing_mode`: `auto` 或 `fixed_default`。默认 `auto`；若 `_设置.md` 写 `视频模型路由: 固定生视频模型` 才是 `fixed_default`（旧值 `固定生视频AI` 兼容）。
 - `production_mode`: 从 `_设置.md 制作模式` 读取（`配音先行`|`先出视频后配音`|`原生音画`）。
 - `av_mode`: 音画路线，`voice_first`（默认，配音链路控制台词）或 `native_av`（`制作模式=原生音画`：说话镜一次出同步音画）。
-- `default_backend`: 从 `_设置.md 生视频AI` 归一化而来。`即梦` 归一为 `dreamina`；原生音画后端 `seedance|veo|sora`。
+- `default_backend`: 从 `_设置.md 生视频模型` 归一化而来；旧项目 fallback 读取 `生视频AI`，再 fallback 到 `生视频渠道`。`Seedance 2.0` 归一为 `seedance`；`即梦/Dreamina` 归一为 `dreamina`；原生音画后端 `seedance|veo|sora`。
 - `routes`: 每条 Clip 一个对象。
 
 ## route 对象
@@ -99,7 +99,7 @@
   - `character_id_or_reference_group`
   - `face_lock_or_reference_group`
   - `reference_controls_or_reference_group`
-- `max_clip_seconds`: 该 primary 后端建议单 Clip 上限。超出后回 `/n2d-script` 拆 Clip 或换长单镜后端。
+- `max_clip_seconds`: 该 primary 后端建议单 Clip 上限。超出后回 `n2d-script` 拆 Clip 或换长单镜后端。
 - `risk_flags`: `multi_person`、`mouth_visible`、`native_audio_risk`、`native_speech`（原生音画说话镜，须查唇音同步+AI标识）、`long_duration`、`contact_motion`、`identity_drift_risk` 等。
 - `motion_control`: 复杂物理交互控制契约，所有 route 都必须有；普通镜写 `level=none`。`fight_exchange`、`intimate_interaction`、`hug_or_pull` 或带 `physical_interaction/contact_motion/feature_melting_risk` 的镜头必须 `level=required`、`manifest_required=true`，并指向 `出视频/第N集/control/Clip_XX/motion_control_manifest.json`。
   - `level`: `none|recommended|required`。`recommended` 用于多人站位/追逐/飞行等可选增强；`required` 用于打斗命中、拥抱、抓腕、拉扯、近距离接触。

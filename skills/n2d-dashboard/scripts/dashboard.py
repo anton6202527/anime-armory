@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Production data dashboard for novel2drama/n2d.
+"""Production data dashboard for n2d.
 
 The dashboard is intentionally event based: every expensive generation or QA
 gate appends one JSONL record, then this script rebuilds stable JSON/Markdown
@@ -29,7 +29,7 @@ except ImportError:  # pragma: no cover - non-POSIX fallback
 SCRIPT_DIR = os.path.dirname(__file__)
 SKILL_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
 REPO_SKILLS = os.path.abspath(os.path.join(SKILL_DIR, ".."))
-COMMON = os.path.join(REPO_SKILLS, "common")
+COMMON = os.path.join(REPO_SKILLS, "n2d", "_lib")
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 
@@ -42,6 +42,7 @@ except Exception:  # pragma: no cover - dashboard still works without progress
 
 from n2d_contract import (  # 生产数据目录 / kind / 重抽原因枚举 单一真值源
     CONSISTENCY_FINDINGS_KIND,
+    GATE_STAGES,
     PRODUCTION_ALERTS_KIND,
     PRODUCTION_DASHBOARD_KIND,
     PRODUCTION_DIR,
@@ -769,6 +770,8 @@ def _benchmark_rows(dashboard: Dict[str, Any]) -> List[str]:
     cpm = totals.get("cost_per_finished_min", {})
     bench_cpm = bench.get("cost_per_min", {})
     for cur, target in sorted(bench_cpm.items()):
+        if not isinstance(target, (int, float)):
+            continue  # 防御：基准里若混入非数值（如说明字段），不参与每分钟成本格式化
         actual = cpm.get(cur)
         actual_txt = f"{cur} {actual:.2f}/min" if actual is not None else "—"
         rows.append(
@@ -1191,9 +1194,12 @@ def gate_findings_payload(root: str, episode: str, stage: str, findings: List[Di
         dim = norm["dimension"] or str(item.get("dim") or item.get("dimension") or dim_key or "QA")
         row = {
             "severity": sev,
+            "sev": sev,
             "dimension": dim,
+            "dim": dim,
             "dim_key": dim_key if dim_key != "一致性" else norm.get("dim_key", ""),
             "message": norm["message"],
+            "msg": norm["message"],
             "loc": norm["loc"],
             "episode": episode,
             "gate_stage": stage,
@@ -1263,6 +1269,25 @@ def write_gate_findings(root: str, episode: str, stage: str, findings: List[Dict
     return path
 
 
+def image_qc_findings(root: str, episode: str) -> List[Dict[str, Any]]:
+    """出图阶段额外跑 image_qc.py（生图后像素一致性 + 逐镜 prompt lint），转成与 gate.py
+    同形的 findings 合并入账。dashboard 在 n2d-image / n2d-review 之上，用 subprocess 调
+    避免 n2d-review→n2d-image 循环依赖。脚本缺失/出错/输出非 JSON → 返回 []（绝不阻断 gate）。
+    生图前跑（无 PNG）时像素项自然空，lint 仍能提前抓非法 CHAR_id；生图后跑则验像素。"""
+    script = os.path.join(REPO_SKILLS, "n2d-image", "scripts", "image_qc.py")
+    if not os.path.isfile(script):
+        return []
+    try:
+        proc = subprocess.run(
+            [sys.executable, script, root, episode, "--findings"],
+            text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False, timeout=600,
+        )
+        data = json.loads(proc.stdout or "[]")
+    except Exception:
+        return []
+    return [f for f in data if isinstance(f, dict)] if isinstance(data, list) else []
+
+
 def gate_events(root: str, episode: str, stage: str) -> Tuple[List[Dict[str, Any]], int, List[Dict[str, Any]]]:
     gate_py = os.path.join(REPO_SKILLS, "n2d-review", "scripts", "gate.py")
     proc = subprocess.run(
@@ -1279,6 +1304,15 @@ def gate_events(root: str, episode: str, stage: str) -> Tuple[List[Dict[str, Any
     if not isinstance(findings, list):
         raise RuntimeError("gate.py --json returned a non-list payload")
 
+    # C：出图 gate 合并 image_qc 的生图后像素/lint 机检（崩脸/纯文生图/非法 CHAR_id = block）。
+    # image_preflight 也合并它：无 PNG 时像素项自然为空，但 prompt lint 可在付费生图前拦非法 CHAR_id/纯文生图风险。
+    return_code = proc.returncode
+    if stage in {"image_preflight", "image"}:
+        qc = image_qc_findings(root, episode)
+        findings.extend(qc)
+        if return_code == 0 and any(str(f.get("sev")).lower() == "block" for f in qc):
+            return_code = 1   # image_qc 硬阻断也让出图 gate 失败
+
     counts = Counter(str(item.get("sev") or "").lower() for item in findings if isinstance(item, dict))
     ts = now_iso()
     events = [
@@ -1288,7 +1322,7 @@ def gate_events(root: str, episode: str, stage: str) -> Tuple[List[Dict[str, Any
             "qa_gate_run",
             ts=ts,
             source="n2d-review/scripts/gate.py",
-            meta={"exit_code": proc.returncode},
+            meta={"exit_code": return_code},
         )
     ]
     events[0]["qa_gate"] = {
@@ -1321,7 +1355,7 @@ def gate_events(root: str, episode: str, stage: str) -> Tuple[List[Dict[str, Any
                 meta=meta,
             )
         )
-    return events, proc.returncode, findings
+    return events, return_code, findings
 
 
 def _resolve_webhook(ns: argparse.Namespace) -> Optional[str]:
@@ -1413,12 +1447,17 @@ def cmd_watch(ns: argparse.Namespace) -> int:
             mtime = os.path.getmtime(epath) if os.path.isfile(epath) else 0.0
             if mtime != last_mtime:
                 last_mtime = mtime
-                dashboard = build(root, write=True, alerts=not ns.no_alert, notify=ns.notify,
-                                  webhook=webhook, html=True, refresh=ns.interval if ns.serve is not None else 0)
-                alist = dashboard.get("alerts", [])
-                stamp = now_iso()
-                print(f"[watch {stamp}] rebuilt · {_count_level(alist,'critical')} critical / {_count_level(alist,'warn')} warn", file=sys.stderr)
-                print_alerts(alist)
+                # 单轮 build 失败（如某行 events.jsonl 半写坏触发 ValueError）不能拖垮监控守护进程——
+                # 否则告警/预算闸门静默停摆而生产继续。捕获、留痕、继续轮询。
+                try:
+                    dashboard = build(root, write=True, alerts=not ns.no_alert, notify=ns.notify,
+                                      webhook=webhook, html=True, refresh=ns.interval if ns.serve is not None else 0)
+                    alist = dashboard.get("alerts", [])
+                    stamp = now_iso()
+                    print(f"[watch {stamp}] rebuilt · {_count_level(alist,'critical')} critical / {_count_level(alist,'warn')} warn", file=sys.stderr)
+                    print_alerts(alist)
+                except Exception as exc:
+                    print(f"[watch {now_iso()}] rebuild 失败（跳过本轮，监控继续）：{exc}", file=sys.stderr)
             if ns.once:
                 break
             time.sleep(ns.interval)
@@ -1549,7 +1588,7 @@ def parser() -> argparse.ArgumentParser:
     gate = sub.add_parser("gate", help="run n2d-review gate and record QA findings")
     gate.add_argument("root")
     gate.add_argument("episode")
-    gate.add_argument("--stage", required=True, choices=["image", "video", "compose", "review"])
+    gate.add_argument("--stage", required=True, choices=list(GATE_STAGES))  # 与裸 gate.py 同源，避免新增 gate 阶段时 wrapper 拒收
     gate.add_argument("--append", action="store_true", help="append instead of replacing previous gate events for this episode/stage")
     gate.add_argument("--no-build", action="store_true")
     _add_alert_args(gate)

@@ -61,7 +61,7 @@ Close-up, slight high angle, same face and costume, anchor phrase preserved.
 - [ ] 核心人/物/场景无错位
 - [ ] 角色脸/妆造未漂移（对照 定妆_沈念.png 主参考；主要人物零漂移容忍）
 - [ ] 无硬性禁忌
-- 重抽预算：主要人物/关键镜，软上限 4 次 ｜ 实抽__次 → ⬜过 ⬜重抽 ⬜到顶取定妆最一致版
+- 重抽预算：预算充足档，主要人物/关键镜严格自检，出到满意为止 ｜ 实抽__次 → ⬜过 ⬜重抽 ⬜满意落档
 """
 
 GOOD_VIDEO_CLIP = """## Clip 1（时长 5.0s · 镜头1） **节奏**：铺垫·长镜 **张力**：克制
@@ -74,8 +74,11 @@ GOOD_VIDEO_CLIP = """## Clip 1（时长 5.0s · 镜头1） **节奏**：铺垫·
 **落幅**：结尾停在沈念压住呼吸后的眼神，画面重心落到左腕疤，可接下一镜铜镜或手部特写。
 **场面调度**：沈念保持画面左前，柳娘子保持右后虚焦，镜头不越轴，烛火在画面左前，床幔在右侧形成压迫。
 **表演节拍**：[0-2s] 沈念急促呼吸；[2-4s] 缓慢抬眼；[4-5s] 呼吸压住，眼神定住。
+**运动精修**：幅度=极小；能量=克制蓄压；身体守卫=肩颈和下巴不大幅扭动，脸部轮廓不拉伸，手部不穿过衣襟。
+**环境交互**：残烛光在眼下轻轻跳动，床幔阴影随呼吸微动，前景托盘保持不位移。
 **模型路由**：shot_type=dialogue_closeup；primary_backend=dreamina；fallback_backends=seedance,kling；mode=image2video；native_audio_policy=none；identity_requirement=reference_group；risk_flags=mouth_visible；rationale=普通近景先用项目默认后端，失败切身份/运动更强后端；degrade_plan=改侧脸或反应镜，必要时切 seedance/kling 重跑
 **角色身份注册层**：`CHAR_SHEN/常态`；目标后端 dreamina=fallback_reference_group；fallback reference_group=出图/共享/图片/定妆_沈念.png + 侧面/半身参考；高危角度=deep_shadow；禁漂项=face_shape/hairstyle/outfit_palette
+**近景/反打身份锁定**：本镜是说话近景；优先引用 expressions/脸部特写，缺脸部特写时用正脸 front + 侧面 + 半身 reference_group；锁脸型、五官比例、发型发髻、标志配饰、服装配色；只允许眼神和嘴角小幅变化，脸漂则降级 MCU/侧脸/反应镜。
 **原生音画策略**：audio_intent=none；risk=low；mouth_visible=no；speech_policy=no_native_speech；compose_policy=丢弃；review=生成后确认无原生人声
 **衔接设计**：
 - 入点：承接上一 Clip 的动作和视线方向
@@ -98,8 +101,11 @@ continuity:
   end_state: 沈念压住呼吸，眼神定住，画面重心落在左腕疤
   constraints: 服装发型、人物左右站位、轴线方向、烛火光线、冷宫背景布局保持一致
   negative: 不要换脸、不要换衣、不要新增人物、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要生成原生人声
+运动精修约束：幅度极小，能量克制，脸部轮廓和发髻不拉伸，手部不穿模；
+环境交互约束：残烛光在眼下轻跳，床幔阴影随呼吸微动；
 模型路由约束：读取 video_model_routes.json；本镜 primary_backend=dreamina，fallback=seedance,kling，mode=image2video，native_audio_policy=none，identity_requirement=reference_group；prompt 只使用 dreamina 支持的 image2video 能力；失败按 degrade_plan 改侧脸或切 fallback 重跑；
 身份锁定约束：读取 identity_registry.json；dreamina 回退首帧+尾帧+reference_group；保持 drift_forbidden=face_shape/hairstyle/outfit_palette；
+近景身份锁定约束：近景优先脸部特写/表情参考；缺 reference_controls 时只做低幅度眼神和嘴角变化，不大幅转头，不重绘五官，配角近景不稳则降级 MCU/OTS/侧脸；
 原生音画约束：默认禁止原生人声，不生成对白/旁白/哼唱；本镜 compose_policy=丢弃；
 人物运动：沈念急促呼吸后缓慢抬眼，表情从惊惧压成克制；
 镜头运动：略俯 MCU 缓慢推近 0.5x，结尾稳定停住；
@@ -142,6 +148,110 @@ def setup_function():
     gate.findings.clear()
 
 
+def test_preflight_gate_stages_are_registered():
+    assert "image_preflight" in gate.GATE_STAGES
+    assert "video_preflight" in gate.GATE_STAGES
+
+
+def test_image_preflight_reuses_image_checks(monkeypatch, tmp_path):
+    root = tmp_path / "work"
+    root.mkdir()
+    calls = []
+
+    def mark(name):
+        def _inner(*args, **kwargs):
+            calls.append((name, args))
+
+        return _inner
+
+    monkeypatch.setattr(gate, "is_native_av_production", lambda _root: False)
+    for name in [
+        "check_compliance_manifest",
+        "require_progress",
+        "check_progress_artifact_signoff",
+        "check_placeholder_policy",
+        "check_voiceover_fingerprint",
+        "check_image_ai_policy",
+        "check_identity_registry",
+        "check_costume_registry_reconcile",
+        "check_asset_reference_registry",
+        "check_storyboard_contract",
+        "check_storyboard_visual_contract",
+        "check_storyboard_style_contract",
+        "check_cross_episode_style",
+        "check_storyboard_special_templates",
+        "check_image_prompt_overview",
+        "check_prompt_checklists",
+        "check_semantic_lineage",
+        "check_state_continuity",
+        "check_shared_image_index",
+        "check_common_image_prompts",
+        "check_cinematic_optical_continuity",
+        "check_shot_scale_progression",
+        "check_physical_scale_audit",
+    ]:
+        monkeypatch.setattr(gate, name, mark(name))
+
+    gate.run(str(root), "第1集", "image_preflight")
+
+    assert [name for name, _ in calls[:3]] == [
+        "check_compliance_manifest",
+        "require_progress",
+        "check_progress_artifact_signoff",
+    ]
+    assert ("check_placeholder_policy", (str(root), "第1集", "image")) in calls
+    assert ("check_prompt_checklists", (str(root), "第1集", "image")) in calls
+
+
+def test_video_preflight_reuses_video_checks(monkeypatch, tmp_path):
+    root = tmp_path / "work"
+    root.mkdir()
+    calls = []
+
+    def mark(name):
+        def _inner(*args, **kwargs):
+            calls.append((name, args))
+
+        return _inner
+
+    monkeypatch.setattr(gate, "is_native_av_production", lambda _root: False)
+    for name in [
+        "check_compliance_manifest",
+        "require_progress",
+        "check_progress_artifact_signoff",
+        "check_placeholder_policy",
+        "check_voiceover_fingerprint",
+        "check_identity_registry",
+        "check_asset_reference_registry",
+        "check_identity_adapter_matrix",
+        "check_route_identity_readiness",
+        "check_storyboard_contract",
+        "check_storyboard_style_contract",
+        "check_storyboard_special_templates",
+        "check_image_assets",
+        "check_input_frame_qc",
+        "check_video_prompt_frames",
+        "check_multimodal_continuity",
+        "check_prompt_checklists",
+        "check_video_stage_raw_output_policy",
+        "check_contract_inheritance",
+        "check_semantic_lineage",
+        "check_state_continuity",
+    ]:
+        monkeypatch.setattr(gate, name, mark(name))
+
+    gate.run(str(root), "第1集", "video_preflight")
+
+    assert [name for name, _ in calls[:3]] == [
+        "check_compliance_manifest",
+        "require_progress",
+        "check_progress_artifact_signoff",
+    ]
+    assert ("check_placeholder_policy", (str(root), "第1集", "video")) in calls
+    assert "check_image_assets" in [name for name, _ in calls]
+    assert "check_video_stage_raw_output_policy" in [name for name, _ in calls]
+
+
 def test_video_gate_runs_multimodal_p2_before_video_prompt(monkeypatch, tmp_path):
     root = tmp_path / "work"
     root.mkdir()
@@ -164,8 +274,11 @@ def test_video_gate_runs_multimodal_p2_before_video_prompt(monkeypatch, tmp_path
         "check_storyboard_style_contract",
         "check_storyboard_special_templates",
         "check_image_assets",
+        "check_input_frame_qc",
+        "check_video_prompt_frames",
         "check_multimodal_continuity",
         "check_prompt_checklists",
+        "check_video_stage_raw_output_policy",
         "check_semantic_lineage",
         "check_state_continuity",
     ]:
@@ -176,6 +289,7 @@ def test_video_gate_runs_multimodal_p2_before_video_prompt(monkeypatch, tmp_path
     assert "check_multimodal_continuity" in calls
     assert calls.index("check_image_assets") < calls.index("check_multimodal_continuity")
     assert calls.index("check_multimodal_continuity") < calls.index("check_prompt_checklists")
+    assert calls.index("check_prompt_checklists") < calls.index("check_video_stage_raw_output_policy")
 
 
 def test_good_character_shot_prompt_passes_strict_structure():
@@ -435,11 +549,13 @@ def _asset_registry():
                 "type": "scene",
                 "name": "冷宫寝殿",
                 "scope": "第1集起复用",
+                "spatial_layout": "床榻在画左深处，门口在画右，铜镜位于画左前景，人物走位沿床榻到门口横轴",
                 "reference_group": {"primary": "出图/共享/图片/定妆_冷宫寝殿.png"},
                 "constraints": {
                     "layout": "床榻到门口横轴",
                     "axis": "沈念画左，柳娘子画右",
                     "light_anchor": "画左前 3000K 残烛暖主光；画右后冷月背光",
+                    "lighting_signature": "3000K 残烛暖主光 + 冷月背光，低饱和冷暖对撞",
                 },
                 "drift_forbidden": ["layout", "axis", "light_direction", "era_style"],
             },
@@ -448,6 +564,9 @@ def _asset_registry():
                 "type": "prop",
                 "name": "斑驳铜镜",
                 "scope": "第1集起复用",
+                "owner": "沈念",
+                "current_state": "床榻旁，镜面斑驳不可照出清晰倒影",
+                "lifecycle": "第1集起作为沈念身份线索反复出现，不损毁不换型",
                 "reference_group": {"primary": "出图/共享/图片/定妆_斑驳铜镜.png"},
                 "constraints": {"structure": "单镜面，斑驳铜绿镜框，无多镜面/重复镜框"},
                 "drift_forbidden": ["single_mirror_surface", "frame_shape", "era_style"],
@@ -459,7 +578,7 @@ def _asset_registry():
 def _write_asset_registry(tmp_path, data=None, make_assets=False):
     import json
     root = tmp_path / "制漫剧" / "测试剧"
-    registry_dir = root / "出图" / "common"
+    registry_dir = root / "出图" / "共享"
     registry_dir.mkdir(parents=True, exist_ok=True)
     registry = _asset_registry() if data is None else data
     (registry_dir / "asset_registry.json").write_text(json.dumps(registry, ensure_ascii=False), encoding="utf-8")
@@ -526,6 +645,16 @@ def _good_compliance(root, *, status_overrides=None):
         "localization": {
             "status": "not_applicable",
             "subtitle_languages": ["zh"],
+        },
+        "regulatory_filing": {
+            "regime": "NRTA_网络微短剧",
+            "applicable": True,
+            "tier": "其他",
+            "planning_filing_no": "网微剧备字(2026)第001号",
+            "release_filing_no": "网微剧上字(2026)第001号",
+            "pre_broadcast_review": "ready",
+            "filed_at": "2026-06-01",
+            "notes": "",
         },
     }
     if status_overrides:
@@ -1361,6 +1490,30 @@ def test_video_clip_missing_identity_lock_is_blocked():
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产身份注册层" and "身份锁定约束" in f["msg"] for f in gate.findings)
 
 
+def test_video_clip_missing_motion_refinement_is_blocked():
+    clip = GOOD_VIDEO_CLIP.replace(
+        "**运动精修**：幅度=极小；能量=克制蓄压；身体守卫=肩颈和下巴不大幅扭动，脸部轮廓不拉伸，手部不穿过衣襟。\n",
+        "",
+    ).replace(
+        "运动精修约束：幅度极小，能量克制，脸部轮廓和发髻不拉伸，手部不穿模；\n",
+        "",
+    )
+    gate.check_video_clip_prompt_section("01_clips.md", clip)
+    assert any(f["sev"] == gate.BLOCK and "运动精修" in f["msg"] for f in gate.findings)
+
+
+def test_video_clip_closeup_missing_fine_identity_lock_is_blocked():
+    clip = GOOD_VIDEO_CLIP.replace(
+        "**近景/反打身份锁定**：本镜是说话近景；优先引用 expressions/脸部特写，缺脸部特写时用正脸 front + 侧面 + 半身 reference_group；锁脸型、五官比例、发型发髻、标志配饰、服装配色；只允许眼神和嘴角小幅变化，脸漂则降级 MCU/侧脸/反应镜。\n",
+        "",
+    ).replace(
+        "近景身份锁定约束：近景优先脸部特写/表情参考；缺 reference_controls 时只做低幅度眼神和嘴角变化，不大幅转头，不重绘五官，配角近景不稳则降级 MCU/OTS/侧脸；\n",
+        "",
+    )
+    gate.check_video_clip_prompt_section("01_clips.md", clip)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产身份注册层" and "近景" in f["msg"] for f in gate.findings)
+
+
 def test_video_clip_missing_native_audio_policy_is_blocked():
     clip = GOOD_VIDEO_CLIP.replace(
         "**原生音画策略**：audio_intent=none；risk=low；mouth_visible=no；speech_policy=no_native_speech；compose_policy=丢弃；review=生成后确认无原生人声\n",
@@ -1392,6 +1545,19 @@ def test_video_clip_model_route_constraint_alone_does_not_count_as_route_field()
     )
     gate.check_video_clip_prompt_section("01_clips.md", clip)
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "模型路由" and "缺模型路由字段" in f["msg"] for f in gate.findings)
+
+
+def test_video_clip_character_layer_cannot_use_identity_requirement_none():
+    clip = GOOD_VIDEO_CLIP.replace("identity_requirement=reference_group", "identity_requirement=none")
+
+    gate.check_video_clip_prompt_section("01_clips.md", clip)
+
+    assert any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "模型路由"
+        and "identity_requirement=none" in f["msg"]
+        for f in gate.findings
+    )
 
 
 def test_video_clip_physical_interaction_requires_motion_control_field():
@@ -1505,6 +1671,30 @@ def test_video_overview_requires_model_routes_json(tmp_path):
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "模型路由" and "video_model_routes.json" in f["msg"] for f in gate.findings)
 
 
+def test_video_overview_missing_closeup_identity_risk_table_is_blocked():
+    overview = "## 本集资产身份速查\n- CHAR_02 小禾 reference_group ready\n"
+
+    gate.check_video_closeup_identity_overview(overview, "00_总览.md")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产身份注册层" and "本集近景身份风险表" in f["msg"] for f in gate.findings)
+
+
+def test_video_overview_closeup_identity_risk_table_passes():
+    overview = """
+## 本集资产身份速查
+- CHAR_02 小禾 reference_group ready
+
+## 本集近景身份风险表
+| 角色/形态 | 近景风险 Clip | 可用脸部/表情参考 | 风险 | 执行策略 |
+|---|---|---|---|---|
+| CHAR_02/惊慌护主 小禾 | Clip06 | 无脸部特写，只有 reference_group | 高风险 | 降级 MCU/OTS/侧脸/手部/物件反应镜 |
+"""
+
+    gate.check_video_closeup_identity_overview(overview, "00_总览.md")
+
+    assert gate.findings == []
+
+
 def _motion_control_route(manifest_path="出视频/第1集/control/Clip_01/motion_control_manifest.json"):
     return {
         "clip_id": "Clip_01",
@@ -1579,6 +1769,45 @@ def test_long_duration_route_blocks_before_paid_video(tmp_path):
     assert finding["sev"] == gate.BLOCK
     assert finding["return_to_stage"] == "script_stage2"
     assert "storyboard.json" in " ".join(finding["affected_artifacts"])
+
+
+def test_fixed_default_allows_empty_fallback_when_backup_disabled(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    prompt_dir = root / "出视频" / "第1集" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    (root / "_设置.md").write_text("- 视频备用后端: 无\n", encoding="utf-8")
+    data = {
+        "kind": "n2d_video_model_routes",
+        "routing_mode": "fixed_default",
+        "routes": [_basic_route(fallback_backends=[])],
+    }
+    (prompt_dir / "video_model_routes.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_video_model_routes(str(root), "第1集", "## 本集模型路由表\n", "00_总览.md")
+
+    assert not any(
+        f["sev"] == gate.BLOCK and f["dim"] == "模型路由" and "fallback_backends" in f["msg"]
+        for f in gate.findings
+    )
+
+
+def test_fixed_default_empty_fallback_blocks_without_explicit_backup_setting(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    prompt_dir = root / "出视频" / "第1集" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    data = {
+        "kind": "n2d_video_model_routes",
+        "routing_mode": "fixed_default",
+        "routes": [_basic_route(fallback_backends=[])],
+    }
+    (prompt_dir / "video_model_routes.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_video_model_routes(str(root), "第1集", "## 本集模型路由表\n", "00_总览.md")
+
+    assert any(
+        f["sev"] == gate.BLOCK and f["dim"] == "模型路由" and "fallback_backends" in f["msg"]
+        for f in gate.findings
+    )
 
 
 def test_motion_control_required_route_blocks_without_manifest(tmp_path):
@@ -1805,6 +2034,27 @@ def test_native_audio_keep_with_voice_track_is_blocked(tmp_path):
     gate.check_native_audio_compose_policy(str(root), "第1集", ["Clip01.mp4"])
 
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "原生音画" and "双人声" in f["msg"] for f in gate.findings)
+
+
+def test_video_stage_blocks_noaudio_derivative_outputs(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    vid = root / "出视频" / "第1集" / "视频"
+    vid.mkdir(parents=True)
+    (vid / "Clip_01_冷宫.noaudio.mp4").write_bytes(b"derived")
+
+    gate.check_video_stage_raw_output_policy(str(root), "第1集")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "原生音轨" and "AI 平台原片" in f["msg"] for f in gate.findings)
+
+
+def test_video_stage_blocks_raw_with_audio_split_dir(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    vid = root / "出视频" / "第1集" / "视频"
+    (vid / "_raw_with_audio").mkdir(parents=True)
+
+    gate.check_video_stage_raw_output_policy(str(root), "第1集")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "原生音轨" and "_raw_with_audio" in f["msg"] for f in gate.findings)
 
 
 def test_native_av_allows_voiceover_only_track(tmp_path):
@@ -2167,6 +2417,58 @@ def test_signoff_skips_not_done_columns(tmp_path):
     assert not any(f["dim"] == "产物签收" for f in gate.findings)
 
 
+def _settings(tmp_path: Path, mode: str) -> None:
+    (tmp_path / "_设置.md").write_text(f"- 制作模式: {mode}\n", encoding="utf-8")
+
+
+def _voice_manifest(tmp_path: Path, *, placeholder: bool) -> None:
+    d = tmp_path / "合成" / "第1集" / "配音"
+    d.mkdir(parents=True)
+    row = {"idx": 0, "文本": "测试", "时长": 1.0}
+    if placeholder:
+        row["占位"] = True
+        (d / "_占位说明.md").write_text("rough timing", encoding="utf-8")
+    else:
+        (d / "voice_zh.wav").write_bytes(b"RIFF")
+    (d / "时长清单.json").write_text(json.dumps([row], ensure_ascii=False), encoding="utf-8")
+
+
+def test_voice_first_rough_progress_blocks_paid_gate_prereq(tmp_path):
+    _settings(tmp_path, "配音先行")
+    _progress(tmp_path, 配音="⏳rough")
+
+    gate.findings.clear()
+    gate.require_progress(str(tmp_path), "第1集", ("配音",))
+    gate.check_placeholder_policy(str(tmp_path), "第1集", "image")
+
+    blocks = [f for f in gate.findings if f["sev"] == gate.BLOCK and f["dim"] in {"进度", "配音"}]
+    assert blocks
+
+
+def test_video_first_rough_progress_satisfies_gate_with_manifest_warning(tmp_path):
+    _settings(tmp_path, "先出视频后配音")
+    _progress(tmp_path, 配音="⏳rough")
+    _voice_manifest(tmp_path, placeholder=True)
+
+    gate.findings.clear()
+    gate.require_progress(str(tmp_path), "第1集", ("配音",))
+    gate.check_placeholder_policy(str(tmp_path), "第1集", "video")
+
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] in {"进度", "配音"} for f in gate.findings)
+    assert any(f["sev"] == gate.WARN and f["dim"] == "配音" and "先出视频后配音" in f["msg"] for f in gate.findings)
+
+
+def test_video_first_rough_without_manifest_blocks_as_unverifiable(tmp_path):
+    _settings(tmp_path, "先出视频后配音")
+    _progress(tmp_path, 配音="⏳rough")
+
+    gate.findings.clear()
+    gate.require_progress(str(tmp_path), "第1集", ("配音",))
+    gate.check_placeholder_policy(str(tmp_path), "第1集", "video")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "配音" and "时长清单" in f["msg"] for f in gate.findings)
+
+
 def test_signoff_stage_without_contract_needs_some_output(tmp_path):
     _progress(tmp_path, 分镜设计="✅")  # script_stage2 无 output_contract，要求 outputs 至少一个在
     gate.findings.clear()
@@ -2192,3 +2494,534 @@ def test_shot_camera_substantive_no_warn():
     gate.findings.clear()
     gate.check_image_shot_prompt_section("p.md", 1, GOOD_SHOT)  # ②机位=微俯视
     assert not any(f["dim"] == "构图景别" and "机位即态度" in f["msg"] for f in gate.findings)
+
+
+# ── 多角色同框绑定歧义（资产身份注册层.md 第7节）单测 ──
+
+def test_multi_char_binding_ambiguity_pure():
+    assert gate._multi_char_binding_ambiguity("目标：`CHAR_SHEN/受难` 独角镜") is None       # 单角色不管
+    got = gate._multi_char_binding_ambiguity("`CHAR_SHEN/受难` 与 `CHAR_LIU/常服` 对峙")
+    assert got == ["CHAR_LIU", "CHAR_SHEN"]                                                  # 同框无星标 → 歧义
+    assert gate._multi_char_binding_ambiguity("`CHAR_SHEN/受难*` 与 `CHAR_LIU/常服` 对峙") is None  # 星标后放行
+    assert gate._multi_char_binding_ambiguity("`CHAR_SHEN*` 与 `CHAR_LIU` 同框") is None     # 裸 ID 星标也认
+
+
+def test_shot_section_warns_on_unstarred_multi_char():
+    gate.findings.clear()
+    section = GOOD_SHOT.replace("CHAR_SHEN/常态", "CHAR_SHEN/常态` 与 `CHAR_LIU/常服", 1)
+    assert "CHAR_LIU" in section
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, section)
+    assert any(f["sev"] == gate.WARN and "未星标 primary" in str(f["msg"]) for f in gate.findings)
+    gate.findings.clear()
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, section.replace("CHAR_SHEN/常态`", "CHAR_SHEN/常态*`", 1))
+    assert not any("未星标 primary" in str(f["msg"]) for f in gate.findings)
+
+
+def test_shot_scale_class_extracts_and_disambiguates():
+    assert gate.shot_scale_class("CU 85mm 缓推") == "CU"
+    assert gate.shot_scale_class("MCU 50mm") == "MCU"      # MCU 不被 CU 误命中
+    assert gate.shot_scale_class("ECU 大特写") == "ECU"     # ECU 不被 CU 误命中
+    assert gate.shot_scale_class("大远景 24mm") == "ELS"    # 大远景 不被 远景(LS) 误命中
+    assert gate.shot_scale_class("中近景") == "MCU"          # 中近景 不被 中景(MS) 误命中
+    assert gate.shot_scale_class("全景航拍") == "LS"
+    assert gate.shot_scale_class("无景别词") is None
+
+
+def test_monotonous_scale_runs_finds_runs_min3():
+    assert gate.monotonous_scale_runs(["CU", "CU", "CU"]) == [(0, 2, "CU", 3)]
+    assert gate.monotonous_scale_runs(["CU", "MS", "CU"]) == []          # 有变化 → 无单调
+    assert gate.monotonous_scale_runs(["CU", "CU", None, "CU", "CU"]) == []  # None 打断、各段 <3
+    assert gate.monotonous_scale_runs(["MS", "MS", "MS", "MS"]) == [(0, 3, "MS", 4)]
+
+
+def _write_scale_sb(root, ep, clips):
+    sb_dir = root / "脚本" / ep
+    sb_dir.mkdir(parents=True, exist_ok=True)
+    (sb_dir / "storyboard.json").write_text(json.dumps({"clips": clips}, ensure_ascii=False),
+                                            encoding="utf-8")
+
+
+def test_check_shot_scale_progression_flags_monotonous(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"
+    ep = "第1集"
+    _write_scale_sb(root, ep, [
+        {"id": "Clip_01", "shots": [{"lens": "CU 85mm"}]},
+        {"id": "Clip_02", "shots": [{"lens": "CU 85mm"}]},
+        {"id": "Clip_03", "shots": [{"lens": "CU 缓推"}]},
+        {"id": "Clip_04", "shots": [{"lens": "LS 35mm"}]},
+    ])
+    gate.check_shot_scale_progression(str(root), ep)
+    monotone = [f for f in gate.findings if f["dim"] == "景别阶梯"]
+    assert len(monotone) == 1
+    assert monotone[0]["sev"] == gate.WARN and "Clip_01→Clip_03" in monotone[0]["loc"]
+
+
+def test_check_shot_scale_progression_exempts_reverse_shots(tmp_path):
+    # 对白正反打：连续 CU 但带反打标记 → 合法交替变化，不告警
+    gate.findings.clear()
+    root = tmp_path / "work"
+    ep = "第1集"
+    _write_scale_sb(root, ep, [
+        {"id": "Clip_01", "shots": [{"lens": "CU 正面说话"}]},
+        {"id": "Clip_02", "shots": [{"lens": "CU 反打"}]},
+        {"id": "Clip_03", "shots": [{"lens": "CU 过肩反打"}]},
+    ])
+    gate.check_shot_scale_progression(str(root), ep)
+    assert [f for f in gate.findings if f["dim"] == "景别阶梯"] == []
+
+
+def _seed_pngs_and_qc(root, ep, hard_blocks, qc_present=True):
+    import os, time
+    png_dir = root / "出图" / ep / "图片"
+    png_dir.mkdir(parents=True, exist_ok=True)
+    png = png_dir / "镜头01.png"
+    png.write_bytes(b"x")
+    qc_path = root / "生产数据" / "image_qc" / ep / f"image_qc_{ep}.json"
+    if qc_present:
+        qc_path.parent.mkdir(parents=True, exist_ok=True)
+        qc_path.write_text(json.dumps({"summary": {"hard_blocks": hard_blocks, "verdict":
+                            "block" if hard_blocks else "ok"}}, ensure_ascii=False), encoding="utf-8")
+        # make QC newer than the PNG so the freshness branch passes
+        future = time.time() + 100
+        os.utime(qc_path, (future, future))
+    return png, qc_path
+
+
+def test_input_frame_qc_blocks_when_image_qc_has_hard(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"; ep = "第1集"
+    _seed_pngs_and_qc(root, ep, hard_blocks=2)
+    gate.check_input_frame_qc(str(root), ep)
+    blocks = [f for f in gate.findings if f["dim"] == "出图落档QC" and f["sev"] == gate.BLOCK]
+    assert len(blocks) == 1 and "图生视频会忠实" in blocks[0]["msg"]
+    assert blocks[0].get("return_to_stage") == "image"
+
+
+def test_input_frame_qc_warns_when_no_qc_result(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"; ep = "第1集"
+    _seed_pngs_and_qc(root, ep, hard_blocks=0, qc_present=False)
+    gate.check_input_frame_qc(str(root), ep)
+    warns = [f for f in gate.findings if f["dim"] == "出图落档QC" and f["sev"] == gate.WARN]
+    assert len(warns) == 1 and "未见 image_qc" in warns[0]["msg"]
+
+
+def test_input_frame_qc_passes_when_clean_and_fresh(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"; ep = "第1集"
+    _seed_pngs_and_qc(root, ep, hard_blocks=0)
+    gate.check_input_frame_qc(str(root), ep)
+    assert [f for f in gate.findings if f["dim"] == "出图落档QC"] == []
+
+
+def test_input_frame_qc_warns_when_qc_stale(tmp_path):
+    import os, time
+    gate.findings.clear()
+    root = tmp_path / "work"; ep = "第1集"
+    png, qc_path = _seed_pngs_and_qc(root, ep, hard_blocks=0)
+    # make the PNG newer than the QC result (出图后改过帧未重验)
+    future = time.time() + 500
+    os.utime(png, (future, future))
+    gate.check_input_frame_qc(str(root), ep)
+    warns = [f for f in gate.findings if f["dim"] == "出图落档QC" and f["sev"] == gate.WARN]
+    assert len(warns) == 1 and "晚于上次 image_qc" in warns[0]["msg"]
+
+
+def _seed_video_prompt(root, ep, clips_md, storyboard=None):
+    pdir = root / "出视频" / ep / "prompt"
+    pdir.mkdir(parents=True, exist_ok=True)
+    (pdir / "01_clips.md").write_text(clips_md, encoding="utf-8")
+    if storyboard is not None:
+        sb_dir = root / "脚本" / ep
+        sb_dir.mkdir(parents=True, exist_ok=True)
+        (sb_dir / "storyboard.json").write_text(json.dumps(storyboard, ensure_ascii=False), encoding="utf-8")
+
+
+def _mk_png(root, ep, name):
+    d = root / "出图" / ep / "图片"
+    d.mkdir(parents=True, exist_ok=True)
+    (d / name).write_bytes(b"x")
+
+
+def _record_image_event(root, ep, asset, *, status="pass", self_check="pass", event="generation"):
+    prod = root / "生产数据"
+    prod.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "kind": "n2d_production_event",
+        "version": 1,
+        "ts": "2026-01-01T00:00:00+00:00",
+        "episode": ep,
+        "stage": "image",
+        "event": event,
+        "source": "test",
+        "generation": {"asset": asset, "status": status},
+    }
+    if self_check is not None:
+        payload["meta"] = {"self_check": self_check}
+    with open(prod / "production_events.jsonl", "a", encoding="utf-8") as fh:
+        fh.write(json.dumps(payload, ensure_ascii=False) + "\n")
+
+
+def test_video_prompt_frames_blocks_missing_firstframe(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"; ep = "第1集"
+    # 首帧 PNG NOT created on disk → BLOCK (would fail the paid backend call)
+    _seed_video_prompt(root, ep, "## Clip 01\n**首帧**：`出图/第1集/图片/Clip_01.png`\n")
+    gate.check_video_prompt_frames(str(root), ep)
+    blocks = [f for f in gate.findings if f["dim"] == "首帧" and f["sev"] == gate.BLOCK]
+    assert len(blocks) == 1 and "白扣一次" in blocks[0]["msg"]
+
+
+def test_video_prompt_frames_warns_missing_endframe(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"; ep = "第1集"
+    _mk_png(root, ep, "Clip_01.png")  # 首帧 exists
+    _seed_video_prompt(root, ep,
+                       "## Clip 01\n**首帧**：`出图/第1集/图片/Clip_01.png`\n**尾帧**：`出图/第1集/图片/Clip_01_end.png`\n")
+    gate.check_video_prompt_frames(str(root), ep)
+    warns = [f for f in gate.findings if f["dim"] == "尾帧" and f["sev"] == gate.WARN]
+    assert len(warns) == 1 and "降级为单首帧" in warns[0]["msg"]
+
+
+def test_video_prompt_frames_warns_dropped_doubleframe_intent(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"; ep = "第1集"
+    _mk_png(root, ep, "Clip_01.png")
+    # video prompt omits 尾帧, but storyboard marks need_endframe=true → 双帧 intent dropped (WARN)
+    _seed_video_prompt(root, ep, "## Clip 01\n**首帧**：`出图/第1集/图片/Clip_01.png`\n",
+                       storyboard={"clips": [{"continuity": {"need_endframe": True}}]})
+    gate.check_video_prompt_frames(str(root), ep)
+    warns = [f for f in gate.findings if f["dim"] == "尾帧" and f["sev"] == gate.WARN]
+    assert len(warns) == 1 and "誊抄时丢失" in warns[0]["msg"]
+
+
+def test_video_prompt_frames_passes_when_all_present(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"; ep = "第1集"
+    _mk_png(root, ep, "Clip_01.png"); _mk_png(root, ep, "Clip_01_end.png")
+    _seed_video_prompt(root, ep,
+                       "## Clip 01\n**首帧**：`出图/第1集/图片/Clip_01.png`\n**尾帧**：`出图/第1集/图片/Clip_01_end.png`\n",
+                       storyboard={"clips": [{"continuity": {"need_endframe": True}}]})
+    gate.check_video_prompt_frames(str(root), ep)
+    assert [f for f in gate.findings if f["dim"] in ("首帧", "尾帧")] == []
+
+
+# ── 中段锚帧（opt-in midframe split）契约 ──
+
+def _write_midframe_storyboard(tmp_path, midframe, *, duration=10, make_png=False):
+    import json
+    root = tmp_path / "work"; ep = "第1集"
+    sb_dir = root / "脚本" / ep
+    sb_dir.mkdir(parents=True, exist_ok=True)
+    _mk_png(root, ep, "Clip_01.png")
+    cont = {"start_state": "s", "end_state": "e", "transition": "硬切", "need_endframe": False,
+            "endframe_exempt_reason": "最终 Clip"}
+    if midframe is not None:
+        cont["midframe"] = midframe
+    if make_png:
+        _mk_png(root, ep, "Clip_01_mid.png")
+    data = {"episode": 1, "policy": {"tailframe_default": True},
+            "clips": [{"id": "EP01_CLIP01", "duration": duration,
+                       "firstframe_png": "出图/第1集/图片/Clip_01.png", "continuity": cont}]}
+    (sb_dir / "storyboard.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    return str(root)
+
+
+def _midframe_findings():
+    return [f for f in gate.findings if f["dim"] == "中段锚帧"]
+
+
+def test_midframe_absent_is_fine(tmp_path):
+    root = _write_midframe_storyboard(tmp_path, None)
+    gate.check_storyboard_contract(root, "第1集")
+    assert _midframe_findings() == []
+
+
+def test_midframe_must_be_object(tmp_path):
+    root = _write_midframe_storyboard(tmp_path, "出图/第1集/图片/Clip_01_mid.png")
+    gate.check_storyboard_contract(root, "第1集")
+    assert any(f["sev"] == gate.BLOCK and "必须是 object" in f["msg"] for f in _midframe_findings())
+
+
+def test_midframe_missing_fields_blocked(tmp_path):
+    root = _write_midframe_storyboard(tmp_path, {"midframe_png": "出图/第1集/图片/Clip_01_mid.png"},
+                                      make_png=True)
+    gate.check_storyboard_contract(root, "第1集")
+    msgs = [f["msg"] for f in _midframe_findings() if f["sev"] == gate.BLOCK]
+    assert any("split_at_sec" in m for m in msgs)
+    assert any("reason" in m for m in msgs)
+
+
+def test_midframe_split_outside_duration_blocked(tmp_path):
+    root = _write_midframe_storyboard(
+        tmp_path,
+        {"midframe_png": "出图/第1集/图片/Clip_01_mid.png", "split_at_sec": 12,
+         "reason": "三拍动作中段漂移"},
+        duration=10, make_png=True)
+    gate.check_storyboard_contract(root, "第1集")
+    assert any(f["sev"] == gate.BLOCK and "split_at_sec=12" in f["msg"] for f in _midframe_findings())
+
+
+def test_midframe_missing_png_blocked(tmp_path):
+    root = _write_midframe_storyboard(
+        tmp_path,
+        {"midframe_png": "出图/第1集/图片/Clip_01_mid.png", "split_at_sec": 5,
+         "reason": "三拍动作中段漂移"},
+        make_png=False)
+    gate.check_storyboard_contract(root, "第1集")
+    assert any(f["sev"] == gate.BLOCK and "锚帧 PNG 不存在" in f["msg"] for f in _midframe_findings())
+
+
+def test_midframe_full_contract_passes(tmp_path):
+    root = _write_midframe_storyboard(
+        tmp_path,
+        {"midframe_png": "出图/第1集/图片/Clip_01_mid.png", "split_at_sec": 5,
+         "reason": "9s 三拍动作，redraw×2 中段漂移"},
+        make_png=True)
+    _record_image_event(Path(root), "第1集", "出图/第1集/图片/Clip_01_mid.png")
+    gate.check_storyboard_contract(root, "第1集")
+    assert _midframe_findings() == []
+
+
+def test_midframe_png_requires_generation_self_check(tmp_path):
+    root = _write_midframe_storyboard(
+        tmp_path,
+        {"midframe_png": "出图/第1集/图片/Clip_01_mid.png", "split_at_sec": 5,
+         "reason": "9s 三拍动作，redraw×2 中段漂移"},
+        make_png=True)
+    gate.check_storyboard_contract(root, "第1集")
+    assert any(f["sev"] == gate.BLOCK and "缺中段动作自检 pass 记账" in f["msg"] for f in _midframe_findings())
+
+
+def test_midframe_latest_failed_self_check_blocks(tmp_path):
+    root = _write_midframe_storyboard(
+        tmp_path,
+        {"midframe_png": "出图/第1集/图片/Clip_01_mid.png", "split_at_sec": 5,
+         "reason": "9s 三拍动作，redraw×2 中段漂移"},
+        make_png=True)
+    _record_image_event(Path(root), "第1集", "出图/第1集/图片/Clip_01_mid.png")
+    _record_image_event(Path(root), "第1集", "出图/第1集/图片/Clip_01_mid.png",
+                        status="fail", self_check="fail", event="redraw")
+    gate.check_storyboard_contract(root, "第1集")
+    assert any(f["sev"] == gate.BLOCK and "最近一次生成记录不是 pass" in f["msg"] for f in _midframe_findings())
+
+
+def test_midframe_pass_without_self_check_blocks(tmp_path):
+    root = _write_midframe_storyboard(
+        tmp_path,
+        {"midframe_png": "出图/第1集/图片/Clip_01_mid.png", "split_at_sec": 5,
+         "reason": "9s 三拍动作，redraw×2 中段漂移"},
+        make_png=True)
+    _record_image_event(Path(root), "第1集", "出图/第1集/图片/Clip_01_mid.png", self_check=None)
+    gate.check_storyboard_contract(root, "第1集")
+    assert any(f["sev"] == gate.BLOCK and "缺少通过值 self_check=pass" in f["msg"] for f in _midframe_findings())
+
+
+def test_video_prompt_frames_warns_missing_midframe_png(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"; ep = "第1集"
+    _mk_png(root, ep, "Clip_01.png")
+    _seed_video_prompt(root, ep,
+                       "## Clip 01\n**首帧**：`出图/第1集/图片/Clip_01.png`\n"
+                       "**中段锚帧**：`出图/第1集/图片/Clip_01_mid.png`\n")
+    gate.check_video_prompt_frames(str(root), ep)
+    warns = [f for f in gate.findings if f["dim"] == "中段锚帧" and f["sev"] == gate.WARN]
+    assert len(warns) == 1 and "PNG 不存在" in warns[0]["msg"]
+
+
+def test_video_prompt_frames_warns_dropped_midframe_intent(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"; ep = "第1集"
+    _mk_png(root, ep, "Clip_01.png")
+    # storyboard declares continuity.midframe, but prompt block lacks **中段锚帧** → split intent dropped
+    _seed_video_prompt(root, ep, "## Clip 01\n**首帧**：`出图/第1集/图片/Clip_01.png`\n",
+                       storyboard={"clips": [{"continuity": {
+                           "need_endframe": False,
+                           "midframe": {"midframe_png": "出图/第1集/图片/Clip_01_mid.png",
+                                        "split_at_sec": 5, "reason": "中段漂移"}}}]})
+    gate.check_video_prompt_frames(str(root), ep)
+    warns = [f for f in gate.findings if f["dim"] == "中段锚帧" and f["sev"] == gate.WARN]
+    assert len(warns) == 1 and "誊抄时丢失" in warns[0]["msg"]
+
+
+def test_video_prompt_frames_midframe_present_passes(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"; ep = "第1集"
+    _mk_png(root, ep, "Clip_01.png"); _mk_png(root, ep, "Clip_01_mid.png")
+    _seed_video_prompt(root, ep,
+                       "## Clip 01\n**首帧**：`出图/第1集/图片/Clip_01.png`\n"
+                       "**中段锚帧**：`出图/第1集/图片/Clip_01_mid.png`\n",
+                       storyboard={"clips": [{"continuity": {
+                           "need_endframe": False,
+                           "midframe": {"midframe_png": "出图/第1集/图片/Clip_01_mid.png",
+                                        "split_at_sec": 5, "reason": "中段漂移"}}}]})
+    gate.check_video_prompt_frames(str(root), ep)
+    assert [f for f in gate.findings if f["dim"] == "中段锚帧"] == []
+
+
+# ── anchors（N 锚帧链·anchor_planner 写）契约 ──
+
+def _anchors(*at_secs, png_prefix="出图/第1集/图片/Clip_01_a"):
+    return [{"anchor_png": f"{png_prefix}{k}.png", "at_sec": at, "reason": "auto: R2 普通长镜"}
+            for k, at in enumerate(at_secs, 1)]
+
+
+def test_anchors_full_chain_passes(tmp_path):
+    root = _write_midframe_storyboard(tmp_path, None, duration=15)
+    import json
+    sb_path = tmp_path / "work" / "脚本" / "第1集" / "storyboard.json"
+    sb = json.loads(sb_path.read_text(encoding="utf-8"))
+    sb["clips"][0]["continuity"]["anchors"] = _anchors(5, 10)
+    sb_path.write_text(json.dumps(sb, ensure_ascii=False), encoding="utf-8")
+    _mk_png(tmp_path / "work", "第1集", "Clip_01_a1.png")
+    _mk_png(tmp_path / "work", "第1集", "Clip_01_a2.png")
+    _record_image_event(tmp_path / "work", "第1集", "出图/第1集/图片/Clip_01_a1.png")
+    _record_image_event(tmp_path / "work", "第1集", "出图/第1集/图片/Clip_01_a2.png")
+    gate.check_storyboard_contract(str(tmp_path / "work"), "第1集")
+    assert _midframe_findings() == []
+
+
+def test_anchors_and_midframe_together_blocked(tmp_path):
+    root = _write_midframe_storyboard(
+        tmp_path,
+        {"midframe_png": "出图/第1集/图片/Clip_01_mid.png", "split_at_sec": 5, "reason": "x"},
+        make_png=True)
+    import json
+    sb_path = tmp_path / "work" / "脚本" / "第1集" / "storyboard.json"
+    sb = json.loads(sb_path.read_text(encoding="utf-8"))
+    sb["clips"][0]["continuity"]["anchors"] = _anchors(5)
+    sb_path.write_text(json.dumps(sb, ensure_ascii=False), encoding="utf-8")
+    gate.check_storyboard_contract(str(tmp_path / "work"), "第1集")
+    assert any(f["sev"] == gate.BLOCK and "不能同时声明" in f["msg"] for f in _midframe_findings())
+
+
+def test_anchors_not_increasing_blocked(tmp_path):
+    root = _write_midframe_storyboard(tmp_path, None, duration=15)
+    import json
+    sb_path = tmp_path / "work" / "脚本" / "第1集" / "storyboard.json"
+    sb = json.loads(sb_path.read_text(encoding="utf-8"))
+    sb["clips"][0]["continuity"]["anchors"] = _anchors(10, 5)
+    sb_path.write_text(json.dumps(sb, ensure_ascii=False), encoding="utf-8")
+    _mk_png(tmp_path / "work", "第1集", "Clip_01_a1.png")
+    _mk_png(tmp_path / "work", "第1集", "Clip_01_a2.png")
+    gate.check_storyboard_contract(str(tmp_path / "work"), "第1集")
+    assert any(f["sev"] == gate.BLOCK and "严格递增" in f["msg"] for f in _midframe_findings())
+
+
+def test_anchors_missing_png_blocked(tmp_path):
+    root = _write_midframe_storyboard(tmp_path, None, duration=15)
+    import json
+    sb_path = tmp_path / "work" / "脚本" / "第1集" / "storyboard.json"
+    sb = json.loads(sb_path.read_text(encoding="utf-8"))
+    sb["clips"][0]["continuity"]["anchors"] = _anchors(5, 10)
+    sb_path.write_text(json.dumps(sb, ensure_ascii=False), encoding="utf-8")
+    _mk_png(tmp_path / "work", "第1集", "Clip_01_a1.png")  # a2 缺
+    gate.check_storyboard_contract(str(tmp_path / "work"), "第1集")
+    assert any(f["sev"] == gate.BLOCK and "锚帧 2 但锚帧 PNG 不存在" in f["msg"] for f in _midframe_findings())
+
+
+def test_video_prompt_frames_warns_partial_anchor_transcription(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"; ep = "第1集"
+    _mk_png(root, ep, "Clip_01.png"); _mk_png(root, ep, "Clip_01_a1.png"); _mk_png(root, ep, "Clip_01_a2.png")
+    # storyboard 声明 2 锚帧，prompt 只誊抄了 1 个 → WARN
+    _seed_video_prompt(root, ep,
+                       "## Clip 01\n**首帧**：`出图/第1集/图片/Clip_01.png`\n"
+                       "**锚帧1**：`出图/第1集/图片/Clip_01_a1.png`\n",
+                       storyboard={"clips": [{"continuity": {
+                           "need_endframe": False, "anchors": _anchors(5, 10)}}]})
+    gate.check_video_prompt_frames(str(root), ep)
+    warns = [f for f in gate.findings if f["dim"] == "中段锚帧" and f["sev"] == gate.WARN]
+    assert len(warns) == 1 and "只引用了 1 个" in warns[0]["msg"]
+
+
+def test_video_prompt_frames_full_anchor_chain_passes(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"; ep = "第1集"
+    _mk_png(root, ep, "Clip_01.png"); _mk_png(root, ep, "Clip_01_a1.png"); _mk_png(root, ep, "Clip_01_a2.png")
+    _seed_video_prompt(root, ep,
+                       "## Clip 01\n**首帧**：`出图/第1集/图片/Clip_01.png`\n"
+                       "**锚帧1**：`出图/第1集/图片/Clip_01_a1.png`\n"
+                       "**锚帧2**：`出图/第1集/图片/Clip_01_a2.png`\n",
+                       storyboard={"clips": [{"continuity": {
+                           "need_endframe": False, "anchors": _anchors(5, 10)}}]})
+    gate.check_video_prompt_frames(str(root), ep)
+    assert [f for f in gate.findings if f["dim"] == "中段锚帧"] == []
+
+
+def _write_midframe_policy_storyboard(tmp_path, cont_extra):
+    import json
+    root = tmp_path / "work"; ep = "第1集"
+    sb_dir = root / "脚本" / ep
+    sb_dir.mkdir(parents=True, exist_ok=True)
+    _mk_png(root, ep, "Clip_01.png")
+    cont = {"start_state": "s", "end_state": "e", "transition": "硬切", "need_endframe": False,
+            "endframe_exempt_reason": "最终 Clip"}
+    cont.update(cont_extra)
+    data = {"episode": 1, "policy": {"tailframe_default": True, "midframe_default": True},
+            "clips": [{"id": "EP01_CLIP01", "duration": 6,
+                       "firstframe_png": "出图/第1集/图片/Clip_01.png", "continuity": cont}]}
+    (sb_dir / "storyboard.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    return str(root)
+
+
+def test_midframe_default_policy_blocks_undeclared_clip(tmp_path):
+    root = _write_midframe_policy_storyboard(tmp_path, {})
+    gate.check_storyboard_contract(root, "第1集")
+    assert any(f["sev"] == gate.BLOCK and "三帧契约" in f["msg"] for f in _midframe_findings())
+
+
+def test_midframe_default_policy_accepts_exempt_reason(tmp_path):
+    root = _write_midframe_policy_storyboard(
+        tmp_path, {"midframe_exempt_reason": "极短镜 <3s，中帧与首尾几乎重合"})
+    gate.check_storyboard_contract(root, "第1集")
+    assert _midframe_findings() == []
+
+
+def test_midframe_default_policy_accepts_declared_anchor(tmp_path):
+    root = _write_midframe_policy_storyboard(
+        tmp_path, {"anchors": [{"anchor_png": "出图/第1集/图片/Clip_01_mid.png",
+                                "at_sec": 3.0, "use": "qc",
+                                "reason": "default: 三帧契约（use=qc）"}]})
+    _mk_png(tmp_path / "work", "第1集", "Clip_01_mid.png")
+    _record_image_event(tmp_path / "work", "第1集", "出图/第1集/图片/Clip_01_mid.png")
+    gate.check_storyboard_contract(root, "第1集")
+    assert _midframe_findings() == []
+
+
+def test_compliance_regulatory_filing_pending_blocks_at_compose(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_identity_registry(tmp_path)
+    _good_compliance(root, status_overrides={
+        "distribution_intent": "paid_distribution",
+        "regulatory_filing.pre_broadcast_review": "pending",
+        "regulatory_filing.release_filing_no": "TODO: 上线备案号",
+    })
+    gate.check_compliance_manifest(str(root), "第1集", "compose")
+    assert any(f["sev"] == gate.BLOCK and "regulatory_filing" in f["loc"] and "pre_broadcast_review" in f["msg"] for f in gate.findings)
+    assert any(f["sev"] == gate.BLOCK and "regulatory_filing" in f["loc"] and "release_filing_no" in f["msg"] for f in gate.findings)
+
+
+def test_compliance_regulatory_filing_internal_only_is_info(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_identity_registry(tmp_path)
+    _good_compliance(root, status_overrides={
+        "distribution_intent": "internal_only",
+        "regulatory_filing.pre_broadcast_review": "pending",
+        "regulatory_filing.release_filing_no": "TODO",
+    })
+    gate.check_compliance_manifest(str(root), "第1集", "compose")
+    reg = [f for f in gate.findings if "regulatory_filing" in f["loc"]]
+    assert reg and all(f["sev"] == gate.INFO for f in reg)
+
+
+def test_compliance_regulatory_filing_good_passes_at_compose(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_identity_registry(tmp_path)
+    _good_compliance(root)  # filled regulatory_filing, publish_candidate
+    gate.check_compliance_manifest(str(root), "第1集", "compose")
+    assert not any("regulatory_filing" in f["loc"] for f in gate.findings)

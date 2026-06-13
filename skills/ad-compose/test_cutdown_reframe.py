@@ -6,6 +6,7 @@
 import unittest
 
 import cutdown
+import deliver
 import reframe
 
 
@@ -62,6 +63,33 @@ class CutdownTest(unittest.TestCase):
     def test_parse_seconds(self):
         self.assertEqual(cutdown.parse_seconds("6s"), 6.0)
         self.assertEqual(cutdown.parse_seconds("1:00"), 60.0)
+
+
+class DeliverTest(unittest.TestCase):
+    def test_parse_deliverables(self):
+        md = """# test
+
+## 交付版本矩阵
+
+| 交付件 | 时长 | 比例 | 类型 | 交付规格 | 状态 | 成片路径 |
+|---|---|---|---|---|---|---|
+| 主片 | 30s | 16:9 | master | 平台默认 | ⬜ | |
+| cutdown 15s | 15s | 16:9 | cutdown | 平台默认 | ⬜ | |
+"""
+        rows = deliver.parse_deliverables(md)
+        self.assertEqual(len(rows), 2)
+        self.assertEqual(deliver.expected_relpath(rows[0]), "合成/成片_主片.mp4")
+        self.assertEqual(deliver.expected_relpath(rows[1]), "合成/cutdown/成片_15s.mp4")
+
+    def test_build_plan_has_commands(self):
+        md = """## 交付版本矩阵
+| 交付件 | 时长 | 比例 | 类型 | 交付规格 | 状态 | 成片路径 |
+|---|---|---|---|---|---|---|
+| 主片 | 30s | 16:9 | master | 平台默认 | ⬜ | |
+"""
+        plan = deliver.build_plan("/tmp/ad-test", md)
+        self.assertEqual(plan["deliverables"][0]["deliverable_id"], "master")
+        self.assertIn("compose.sh", plan["deliverables"][0]["command"])
 
 
 if __name__ == "__main__":

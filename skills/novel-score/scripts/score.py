@@ -19,10 +19,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SKILLS_ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.append(os.path.join(SKILLS_ROOT, "novel-craft", "scripts"))
 
-_COMMON = os.path.join(SKILLS_ROOT, "common")
+_COMMON = os.path.join(SKILLS_ROOT, "novel", "_lib")
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
-from settings import load_settings as _load_settings  # noqa: E402
+from settings import load_settings as _load_settings  # noqa: E402  vendored 进 novel/_lib
 
 try:
     import contract
@@ -49,6 +49,18 @@ DIMENSIONS = [
     ("retention", "完读 / 留存潜力"),
 ]
 
+# 书名体检（附加体检项 · 不计入百分制总分）：维度沿用 novel-title 的 5 维（各 1-5 分，满分 25）。
+# 这里只「体检现有书名」并在不过关时路由 novel-title；候选生成与联网撞名查重仍归 novel-title。
+TITLE_CHECK_DIMENSIONS = [
+    ("hook", "钩子"),
+    ("platform_fit", "平台契合"),
+    ("character_identity", "角色识别"),
+    ("anti_collision", "抗撞名(初判)"),
+    ("memorability", "可记忆性"),
+]
+# 总分低于此线（满分 25）或硬撞名 → needs_rename，next_actions 路由 novel-title
+TITLE_RENAME_THRESHOLD = 15
+
 WEIGHTS = {
     "商业爽文向": {
         "topic_heat": 20,
@@ -69,6 +81,8 @@ WEIGHTS = {
         "retention": 12,
     }
 }
+
+SHORT_DRAMA_KEYWORDS = ("红果", "抖音", "漫剧", "短剧")
 
 
 def load_meta(root):
@@ -119,10 +133,7 @@ def baseline_has_effective_evidence(baseline):
     """A baseline is usable only if it contains real market evidence."""
     if not isinstance(baseline, dict):
         return False
-    notes = baseline.get("notes") or []
-    if isinstance(notes, str):
-        notes = [notes]
-    if any(str(note).strip() for note in notes):
+    if any(manual_evidence_valid(item) for item in baseline.get("manual_evidence") or []):
         return True
     for source in baseline.get("sources") or []:
         if not isinstance(source, dict):
@@ -130,6 +141,33 @@ def baseline_has_effective_evidence(baseline):
         status = str(source.get("status") or "").strip().lower()
         signals = source.get("signals") or []
         if status == "ok" and any(str(signal).strip() for signal in signals):
+            return True
+    return False
+
+
+def manual_evidence_valid(item):
+    if not isinstance(item, dict):
+        return False
+    required = ("platform", "date", "source", "summary")
+    if any(not str(item.get(field) or "").strip() for field in required):
+        return False
+    return bool(re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(item.get("date") or "")))
+
+
+def baseline_has_short_drama_coverage(baseline):
+    target = str((baseline or {}).get("target_platform") or "")
+    if not any(key in target for key in SHORT_DRAMA_KEYWORDS):
+        return True
+    for source in (baseline or {}).get("sources") or []:
+        if not isinstance(source, dict):
+            continue
+        platform = str(source.get("platform") or "")
+        if any(key in platform for key in SHORT_DRAMA_KEYWORDS):
+            if str(source.get("status") or "").lower() == "ok" and any(str(s).strip() for s in source.get("signals") or []):
+                return True
+    for item in (baseline or {}).get("manual_evidence") or []:
+        haystack = " ".join(str(item.get(field, "")) for field in ("platform", "source", "summary"))
+        if manual_evidence_valid(item) and any(key in haystack for key in SHORT_DRAMA_KEYWORDS):
             return True
     return False
 
@@ -171,7 +209,16 @@ def baseline_freshness(baseline):
             "baseline_date": raw_date,
             "expires_after_days": expires_after,
             "expires_on": expires_on.isoformat(),
-            "reason": "market baseline 没有有效证据：至少需要一个 status=ok 且 signals 非空的来源，或 notes 人工补充。",
+            "reason": "market baseline 没有有效证据：至少需要一个 status=ok 且 signals 非空的来源，或结构化 manual_evidence。",
+        }
+    if not baseline_has_short_drama_coverage(baseline):
+        return {
+            "status": "coverage_gap",
+            "blocking": True,
+            "baseline_date": raw_date,
+            "expires_after_days": expires_after,
+            "expires_on": expires_on.isoformat(),
+            "reason": "target_platform 命中 红果/抖音/漫剧/短剧，但缺这些平台的 ok 来源或结构化 manual_evidence。",
         }
     return {
         "status": "expired" if expired else "fresh",
@@ -431,12 +478,76 @@ def reader_panel_text(signals):
     hook = signals.get("hook_strength")
     cliche = signals.get("cliche_density_per_kchar")
     chs = signals.get("chapters_read") or signals.get("scope") or "?"
+    mode = "signal-only" if signals.get("signal_only", True) else "qualitative-completed"
+    qualitative = "已补全定性反馈" if signals.get("qualitative_completed") else "未补全定性反馈"
     return (
-        f"模拟读者留存先验（novel-simulate 虚拟试读，范围 {chs}）："
+        f"模拟读者留存先验（novel-simulate 虚拟试读，范围 {chs}，{mode}，{qualitative}）："
         f"retention_prior {rp}、钩子强度 {hook}、套路密度 {cliche}/千字。"
         "（权重序：真实投放战绩 > 本模拟信号 > 公榜泛化；仅作 retention 维度先验，不单独定生死。"
+        "signal-only 状态只能低权重参考，不能等同完整读者面板。"
         "若 retention_prior 明显偏低且套路密度高，retention 维度下调并点明开篇疑似劝退/套路堆叠。）"
     )
+
+
+def project_title(meta):
+    title = str(meta.get("title") or "").strip()
+    return title if title and title != "未定" else None
+
+
+def load_title_collision(root, title):
+    """读 novel-title 落的 设定/书名撞名检查_*.json，取最新一份里当前书名的查重结论。
+
+    缺文件/书名未命中候选 → None（抗撞名只能凭 LLM 初判，unchecked ≠ 不撞名）。
+    """
+    if not title:
+        return None
+    files = sorted(glob(os.path.join(root, "设定", "书名撞名检查_*.json")))
+    if not files:
+        return None
+    path = files[-1]
+    try:
+        with open(path, encoding="utf-8") as f:
+            payload = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return None
+    if not isinstance(payload, dict) or payload.get("kind") != "novel_title_collision_check":
+        return None
+    for cand in payload.get("candidates") or []:
+        if isinstance(cand, dict) and str(cand.get("candidate") or "").strip() == title:
+            return {
+                "status": cand.get("status"),
+                "path": rel_path(root, path),
+                "generated_at": payload.get("generated_at"),
+            }
+    return None
+
+
+def title_collision_text(collision):
+    if not collision:
+        return ("尚无联网撞名检查记录（设定/书名撞名检查_*.json 未命中当前书名）；"
+                "anti_collision 只能凭常见度初判，真正查重由 novel-title 联网做。")
+    return (f"已有撞名检查（{collision.get('generated_at')}，{collision.get('path')}）："
+            f"status={collision.get('status')}。hard_collision 必须换名；unchecked ≠ 不撞名。")
+
+
+def build_title_check(assessment_title_check, title, collision):
+    """汇总报告里的书名体检块；总分低于阈值或硬撞名 → needs_rename。"""
+    if not assessment_title_check or not title:
+        return None
+    scores = assessment_title_check.get("scores") or {}
+    total = sum(float(scores.get(key) or 0) for key, _ in TITLE_CHECK_DIMENSIONS)
+    needs_rename = bool(assessment_title_check.get("needs_rename")) or total < TITLE_RENAME_THRESHOLD
+    if collision and collision.get("status") == "hard_collision":
+        needs_rename = True
+    return {
+        "title": title,
+        "scores": scores,
+        "total": total,
+        "max_total": 5 * len(TITLE_CHECK_DIMENSIONS),
+        "comment": str(assessment_title_check.get("comment") or ""),
+        "collision": collision or {"status": "unchecked", "path": None, "generated_at": None},
+        "needs_rename": needs_rename,
+    }
 
 
 ACTION_BY_DIMENSION = {
@@ -460,7 +571,7 @@ def chapter_sort_key(path):
     return (number is None, number or 0, os.path.basename(path))
 
 
-def validate_assessment(assessment):
+def validate_assessment(assessment, expect_title_check=False):
     errors = []
     if not isinstance(assessment, dict):
         return ["assessment 必须是 JSON object"]
@@ -505,6 +616,30 @@ def validate_assessment(assessment):
                 errors.append(f"deductions[{idx}].points 必须是数字：{points!r}")
             elif points > 0:
                 errors.append(f"deductions[{idx}].points 必须小于等于 0：{points!r}")
+    title_check = assessment.get("title_check")
+    if expect_title_check and title_check is None:
+        errors.append("缺少 title_check（项目已有书名，必须做书名体检；书名未定时才可省略）")
+    if title_check is not None:
+        if not isinstance(title_check, dict):
+            errors.append("title_check 必须是 object")
+        else:
+            tc_scores = title_check.get("scores")
+            if not isinstance(tc_scores, dict):
+                errors.append("title_check.scores 必须是 object")
+                tc_scores = {}
+            expected_tc = {key for key, _ in TITLE_CHECK_DIMENSIONS}
+            for key in sorted(expected_tc - set(tc_scores)):
+                errors.append(f"title_check.scores 缺少维度：{key}")
+            for key in sorted(set(tc_scores) - expected_tc):
+                errors.append(f"title_check.scores 未知维度：{key}")
+            for key in expected_tc & set(tc_scores):
+                value = tc_scores[key]
+                if not isinstance(value, (int, float)) or not (1 <= float(value) <= 5):
+                    errors.append(f"title_check.scores.{key} 必须是 1-5 数字：{value!r}")
+            if not str(title_check.get("comment") or "").strip():
+                errors.append("title_check.comment 不能为空")
+            if not isinstance(title_check.get("needs_rename"), bool):
+                errors.append("title_check.needs_rename 必须是 bool")
     return errors
 
 
@@ -565,16 +700,40 @@ def get_tier_verdict(total_score):
         return "不及格", "弃稿重立", "low"
 
 
-def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_party=None, reader_panel=None, task_id="__SCORE_TASK_ID__"):
+def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_party=None, reader_panel=None, title_collision=None, task_id="__SCORE_TASK_ID__"):
     # This function generates a prompt for the LLM to perform the assessment
     # In a real automation, this would be sent to an LLM API.
 
     baseline_summary = "无（请先运行 collect_market_baseline.py）"
     if baseline:
         sources = [f"- {s['platform']}: {', '.join(s.get('signals', [])[:10])}" for s in baseline.get("sources", [])]
-        baseline_summary = "\n".join(sources)
+        manual = [
+            f"- {ev['platform']}｜{ev['date']}｜{ev['source']}：{ev['summary']}"
+            for ev in baseline.get("manual_evidence") or []
+            if manual_evidence_valid(ev)
+        ]
+        warnings = [f"- 覆盖告警：{w}" for w in baseline.get("coverage_warnings") or []]
+        baseline_summary = "\n".join(sources + manual + warnings)
 
     rubric_text = "（详见 novel-score/references/rubric.md）"
+
+    title = project_title(meta)
+    if title:
+        dim_list = " / ".join(f"{key}({label})" for key, label in TITLE_CHECK_DIMENSIONS)
+        title_check_section = f"""## 书名体检（附加体检项 · 不计入百分制总分）
+当前书名：《{title}》。请按 novel-title 的 5 维标准各打 1-5 分：{dim_list}。
+- anti_collision 只做常见度初判；联网查重归 novel-title。{title_collision_text(title_collision)}
+- 总分（满分 25）明显偏低、与目标平台命名习惯错位、或疑似撞名时，置 needs_rename=true。"""
+        title_check_json = """,
+  "title_check": {
+    "scores": {"hook": 4, "platform_fit": 3, "character_identity": 3, "anti_collision": 4, "memorability": 4},
+    "comment": "...",
+    "needs_rename": false
+  }"""
+    else:
+        title_check_section = """## 书名体检（附加体检项）
+书名未定——不输出 title_check 字段；评分后建议用 novel-title 起名。"""
+        title_check_json = ""
 
     prompt = f"""# 小说评分体检任务
 
@@ -594,6 +753,8 @@ def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_
 
 ## 模拟读者留存信号（novel-simulate 虚拟试读 · retention 维度先验）
 {reader_panel_text(reader_panel)}
+
+{title_check_section}
 
 ## 评估内容
 {chr(10).join(f"### 第{c['num']}章 {c['title']}\n{c['content'][:1000]}..." for c in chapters)}
@@ -621,7 +782,7 @@ def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_
       "points": -5,
       "reason": "..."
     }}
-  ]
+  ]{title_check_json}
 }}
 """
     return prompt
@@ -669,6 +830,21 @@ def generate_markdown_report(root, meta, result, total_score, tier, verdict, roi
         lines.append("## 3. 雷点扣分")
         for d in result["deductions"]:
             lines.append(f"- **{d['item']}** ({d['points']}分): {d['reason']}")
+        lines.append("")
+
+    tc = result.get("title_check")
+    if tc:
+        dim_labels = dict(TITLE_CHECK_DIMENSIONS)
+        dims = "、".join(
+            f"{dim_labels[key]} {tc['scores'].get(key)}/5" for key, _ in TITLE_CHECK_DIMENSIONS
+        )
+        lines.append("## 书名体检（附加项 · 不计入总分）")
+        lines.append(f"- 当前书名：《{tc['title']}》 — **{tc['total']:.0f}/{tc['max_total']}**（{dims}）")
+        lines.append(f"- 撞名状态：{tc['collision'].get('status')}"
+                     + (f"（{tc['collision'].get('path')}）" if tc['collision'].get('path') else "（未联网查重，unchecked ≠ 不撞名）"))
+        lines.append(f"- 短评：{tc['comment']}")
+        lines.append("- 结论：" + ("**建议换名** → 交 `novel-title` 重出候选并跑撞名检查"
+                                  if tc["needs_rename"] else "书名可用"))
         lines.append("")
 
     lines.append("## 4. 判定 & 下一步建议")
@@ -729,6 +905,8 @@ def main():
     ledger_path = args.genre_ledger or default_ledger_path(root)
     first_party = summarize_first_party_genre(load_genre_ledger(ledger_path), meta.get("genre"))
     reader_panel = load_reader_panel_signals(root)
+    book_title = project_title(meta)
+    title_collision = load_title_collision(root, book_title)
 
     platform_mode = args.platform or settings.get("目标平台") or "商业爽文向"
     if "品质" in platform_mode:
@@ -779,6 +957,7 @@ def main():
     market_snapshot = baseline_file_snapshot(root, baseline)
     prompt = build_prompt(
         root, meta, settings, baseline, samples, platform_mode, first_party, reader_panel,
+        title_collision=title_collision,
         task_id="__SCORE_TASK_ID__",
     )
     expected_task = build_score_task(
@@ -829,7 +1008,7 @@ def main():
             file=sys.stderr,
         )
         sys.exit(2)
-    errors = validate_assessment(assessment)
+    errors = validate_assessment(assessment, expect_title_check=bool(book_title))
     if errors:
         print("[err] mock assessment 不符合 novel-score schema：", file=sys.stderr)
         for error in errors:
@@ -862,6 +1041,18 @@ def main():
     tier, verdict, roi = get_tier_verdict(final_score)
 
     next_actions = build_next_actions(verdict, processed_scores)
+    title_check = build_title_check(assessment.get("title_check"), book_title, title_collision)
+    # 弃稿重立时换名无意义（novel-create 重开自带新名）；其余判定下书名不过关都值得顺手换。
+    if title_check and title_check["needs_rename"] and verdict != "弃稿重立":
+        next_actions.append({
+            "priority": "should",
+            "recommended_skill": "novel-title",
+            "return_to_stage": "setup",
+            "action": (f"书名体检不过关（{title_check['total']:.0f}/{title_check['max_total']}，"
+                       f"撞名状态 {title_check['collision'].get('status')}）："
+                       "用 novel-title 重出候选并跑联网撞名检查"),
+            "dimension": "title_check",
+        })
     waivers = []
     if pending_waiver:
         waivers.append(pending_waiver)
@@ -885,6 +1076,8 @@ def main():
             "baseline_path": f"评分/题材热榜_{baseline.get('baseline_date')}.md" if baseline else None,
             "baseline_json_path": f"评分/market_baseline_{baseline.get('baseline_date')}.json" if baseline else None,
             "sources": baseline.get("sources", []) if baseline else [],
+            "manual_evidence": baseline.get("manual_evidence", []) if baseline else [],
+            "coverage_warnings": baseline.get("coverage_warnings", []) if baseline else [],
             "expires_after_days": baseline.get("expires_after_days") if baseline else None,
             "freshness": freshness,
             "snapshot": task.get("market_baseline_snapshot"),
@@ -893,6 +1086,7 @@ def main():
         "genre_ledger_path": ledger_path if os.path.isfile(ledger_path) else None,
         "reader_panel_path": os.path.join(READER_PANEL_REL_PATH) if reader_panel else None,
         "scores": processed_scores,
+        "title_check": title_check,
         "deductions": deductions,
         "total_deductions": total_deductions,
         "total_score": final_score,

@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Sequence
 
-_COMMON = str(Path(__file__).resolve().parent.parent.parent / "common")
+_COMMON = str(Path(__file__).resolve().parent.parent.parent / "n2d" / "_lib")
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import (  # noqa: E402  合规清单 kind / 身份注册路径单一真值源
@@ -25,6 +25,7 @@ from n2d_contract import (  # noqa: E402  合规清单 kind / 身份注册路径
     COMPLIANCE_OVERSEAS_PLATFORMS,
     COMPLIANCE_PLACEHOLDER_MARKERS,
     COMPLIANCE_PLATFORM_REVIEW_STATUSES,
+    COMPLIANCE_PRE_BROADCAST_STATUSES,
     COMPLIANCE_READY_STATUSES,
     COMPLIANCE_RIGHTS_EVIDENCE_REQUIRED,
     COMPLIANCE_SAFE_VOICE,
@@ -37,6 +38,7 @@ KIND = COMPLIANCE_MANIFEST_KIND
 ALLOWED_RIGHTS = COMPLIANCE_ALLOWED_RIGHTS
 RIGHTS_EVIDENCE_REQUIRED = COMPLIANCE_RIGHTS_EVIDENCE_REQUIRED
 PLATFORM_REVIEW_STATUSES = COMPLIANCE_PLATFORM_REVIEW_STATUSES
+PRE_BROADCAST_STATUSES = COMPLIANCE_PRE_BROADCAST_STATUSES
 APPROVED_CHARACTER = COMPLIANCE_APPROVED_CHARACTER
 BLOCKED_CHARACTER = COMPLIANCE_BLOCKED_CHARACTER
 SAFE_VOICE = COMPLIANCE_SAFE_VOICE
@@ -172,7 +174,7 @@ def default_manifest(root: Path, episode: str | None = None) -> Dict[str, Any]:
             "hidden_or_platform_watermark": {"status": "planned", "note": "按目标平台要求补隐式/自动标识"},
         },
         "watermark": {
-            "ai_visible": {"status": "planned", "tool": "skills/shared-watermark/watermark.py --mode ai"},
+            "ai_visible": {"status": "planned", "tool": "skills/n2d-watermark/watermark.py --mode ai"},
             "metadata": {"status": "planned"},
             "final_assets": [],
         },
@@ -194,6 +196,18 @@ def default_manifest(root: Path, episode: str | None = None) -> Dict[str, Any]:
             "subtitle_languages": ["zh"],
             "dub_languages": [],
             "notes": "",
+        },
+        # 广电总局 网络微短剧 备案/分级/播前审核（2026 新规：AIGC 全面纳入分级 + 播前审核，
+        # 已下架 25000+ 集）。境内投放候选必填；internal_only/纯海外可置 applicable=false 并写明理由。
+        "regulatory_filing": {
+            "regime": "NRTA_网络微短剧",
+            "applicable": True,
+            "tier": "TODO: 重点/普通/其他（按投资额·题材分级）",
+            "planning_filing_no": "TODO: 规划备案号",
+            "release_filing_no": "TODO: 上线备案号",
+            "pre_broadcast_review": "pending",
+            "filed_at": "",
+            "notes": "境内付费投放须先备案后上线；纯海外/内部预览可 applicable=false 并写理由",
         },
     }
 
@@ -224,7 +238,7 @@ def check_manifest(root: Path, episode: str | None, stage: str = "compose") -> L
 
     if data.get("kind") != KIND:
         issues.append(f"BLOCK {path}: kind must be {KIND}")
-    for key in ("rights", "character_likeness", "voice", "ai_disclosure", "watermark", "platform_review", "localization"):
+    for key in ("rights", "character_likeness", "voice", "ai_disclosure", "watermark", "platform_review", "localization", "regulatory_filing"):
         if not isinstance(data.get(key), dict):
             if key in INTERNAL_SKIPPABLE_MANIFEST_KEYS:
                 flag_skippable(f"missing {key}")
@@ -337,6 +351,31 @@ def check_manifest(root: Path, episode: str | None, stage: str = "compose") -> L
             required = str(target.get("language") or "").strip().lower()
             if required and required not in languages:
                 flag_skippable(f"localization.subtitle_languages must include target language {required}")
+    # 广电备案/分级/播前审核（2026 新规）：境内投放候选必检；internal_only 降 INFO（flag_skippable）。
+    reg = data.get("regulatory_filing") if isinstance(data.get("regulatory_filing"), dict) else {}
+    if reg:
+        applicable = reg.get("applicable")
+        if applicable is False:
+            # 主动声明不适用（纯海外/内部）必须写理由，不能静默免备案
+            if not has_real_value(reg.get("notes")):
+                flag_skippable("regulatory_filing.applicable=false 须在 notes 写明理由（纯海外/内部预览等）")
+        else:
+            pbr = str(reg.get("pre_broadcast_review") or "").strip()
+            if pbr and pbr not in PRE_BROADCAST_STATUSES:
+                flag_skippable(f"regulatory_filing.pre_broadcast_review 须为 {'/'.join(sorted(PRE_BROADCAST_STATUSES))}；got {pbr}")
+            # 播前审核：发布候选不能停在 pending；review 阶段必须 done
+            if pbr in ("", "pending"):
+                flag_skippable("regulatory_filing.pre_broadcast_review 不能停在 pending（境内投放须先过播前审核）")
+            elif stage == "review" and pbr not in COMPLIANCE_DONE:
+                flag_skippable("regulatory_filing.pre_broadcast_review 须 done 才能过 review")
+            # 上线备案号：付费投放 / review 前必须落实，不能留 TODO 占位
+            release_no = reg.get("release_filing_no")
+            paid = str(data.get("distribution_intent") or "").strip().lower() == "paid_distribution"
+            if (paid or stage == "review") and not has_real_value(release_no):
+                flag_skippable("regulatory_filing.release_filing_no（上线备案号）付费投放/review 前必填，不能留 TODO 占位")
+            if has_real_value(reg.get("filed_at")) and not valid_iso_date(reg.get("filed_at")):
+                flag_skippable("regulatory_filing.filed_at 须为 YYYY-MM-DD")
+
     if episode:
         final_assets = (data.get("watermark") or {}).get("final_assets") or []
         if (data.get("watermark") or {}).get("ai_visible", {}).get("status") == "done":

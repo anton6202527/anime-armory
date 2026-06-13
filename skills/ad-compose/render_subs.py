@@ -3,7 +3,8 @@
 """字幕 PNG 渲染（本机 ffmpeg 无 libass/drawtext，走 Pillow 渲 PNG + overlay）。
 
 读 SRT → 每条字幕渲一张透明 PNG（带描边，安全框内居中底部），输出 PNG + overlay 时间表，
-供 compose.sh 用 ffmpeg overlay 烧进成片。自包含；依赖 Pillow。
+供 compose.sh 用 ffmpeg overlay 烧进成片。SRT 解析/字体回退复用 common/subtitle_render
+共享原语；描边/版式/overlay_table 本地保留。依赖 Pillow。
 
 用法：
     python3 render_subs.py 脚本/字幕_zh.srt --out-dir 合成/_work/subs --size 1920x1080
@@ -15,56 +16,22 @@ import re
 import sys
 
 try:
-    from PIL import Image, ImageDraw, ImageFont
+    from PIL import Image, ImageDraw
 except ImportError:
     print("[err] 需要 Pillow", file=sys.stderr)
     sys.exit(2)
 
-TS = re.compile(r"(\d+):(\d+):(\d+)[,.](\d+)")
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "ad", "_lib"))
+import subtitle_render as sr  # 本线自包含原语（vendored ad/_lib）：SRT 解析 / 字体回退
 
-
-def parse_srt(text):
-    blocks, cur = [], {}
-    for line in text.splitlines():
-        line = line.strip()
-        if "-->" in line:
-            a, b = line.split("-->")
-            cur = {"start": ts(a), "end": ts(b), "text": []}
-        elif line and not line.isdigit():
-            cur.setdefault("text", []).append(line)
-        elif not line and cur.get("text"):
-            cur["text"] = "\n".join(cur["text"])
-            blocks.append(cur)
-            cur = {}
-    if cur.get("text"):
-        cur["text"] = "\n".join(cur["text"]) if isinstance(cur["text"], list) else cur["text"]
-        blocks.append(cur)
-    return blocks
-
-
-def ts(s):
-    m = TS.search(s)
-    if not m:
-        return 0.0
-    hh, mm, ss, ms = (int(x) for x in m.groups())
-    return hh * 3600 + mm * 60 + ss + ms / 1000.0
-
-
-def load_font(size):
-    for p in ("/System/Library/Fonts/PingFang.ttc",
-              "/System/Library/Fonts/STHeiti Medium.ttc",
-              "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"):
-        if os.path.exists(p):
-            try:
-                return ImageFont.truetype(p, size)
-            except Exception:
-                continue
-    return ImageFont.load_default()
+AD_FONTS = ("/System/Library/Fonts/PingFang.ttc",
+            "/System/Library/Fonts/STHeiti Medium.ttc",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf")
 
 
 def render(blocks, out_dir, w, h, safe=0.90):
     os.makedirs(out_dir, exist_ok=True)
-    font = load_font(int(h * 0.05))
+    font = sr.load_font(int(h * 0.05), paths=AD_FONTS)
     table = []
     for i, blk in enumerate(blocks):
         img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
@@ -99,7 +66,8 @@ def main():
         sys.exit(2)
     w, h = (int(x) for x in args.size.lower().split("x"))
     with open(args.srt, encoding="utf-8") as f:
-        blocks = parse_srt(f.read())
+        blocks = [{"start": c["start"], "end": c["end"], "text": "\n".join(c["lines"])}
+                  for c in sr.parse_srt(f.read())]
     table = render(blocks, args.out_dir, w, h)
     with open(os.path.join(args.out_dir, "overlay_table.json"), "w", encoding="utf-8") as f:
         json.dump(table, f, ensure_ascii=False, indent=2)

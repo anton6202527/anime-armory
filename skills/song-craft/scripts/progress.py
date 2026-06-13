@@ -15,6 +15,12 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 if SCRIPT_DIR not in sys.path:
     sys.path.insert(0, SCRIPT_DIR)
 
+# 阶段表解析统一走本线 song/_lib/progress_md.py（vendored，本线自包含）。
+_COMMON_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "..", "song", "_lib"))
+if _COMMON_DIR not in sys.path:
+    sys.path.insert(0, _COMMON_DIR)
+import progress_md  # noqa: E402
+
 try:
     import contract
 except Exception:  # pragma: no cover - 进度查询不能因契约导入失败直接不可用
@@ -42,22 +48,10 @@ def read_progress(root):
 
 
 def parse_stage_rows(text):
-    rows = []
-    in_section = False
-    for line in text.splitlines():
-        s = line.strip()
-        if s.startswith("## "):
-            in_section = "写歌阶段" in s or "阶段" in s
-            continue
-        if not in_section or not s.startswith("|"):
-            continue
-        cells = [c.strip() for c in s.strip("|").split("|")]
-        if len(cells) < 3:
-            continue
-        if cells[0] in ("阶段", "") or set(cells[0]) <= set("-: "):
-            continue
-        rows.append({"label": cells[0], "owner": cells[1], "status": cells[2]})
-    return rows
+    # 写歌线历史用 `| 阶段 | skill | 状态 |`，段名含「阶段」即命中（含「写歌阶段」）。
+    return progress_md.parse_stage_rows(
+        text, section_keywords=("阶段",), min_cols=3, owner_col=1, status_col=2,
+    )
 
 
 def state_of(status):

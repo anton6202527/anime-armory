@@ -43,3 +43,23 @@ def test_style_band_median_centered():
     assert sc.style_band(0.83, med, margin) == "warn"    # [median-2m, median-m)
     assert sc.style_band(0.70, med, margin) == "block"   # 真离群
     assert sc.style_band(0.95, med, margin) == "ok"      # 高于中位
+
+
+# ── 跨集画风基线（集级指纹 vs 基线集）单测 ──
+
+def test_mean_fingerprint():
+    assert sc.mean_fingerprint([[1.0, 0.0], [0.0, 1.0]]) == [0.5, 0.5]
+    assert sc.mean_fingerprint([]) is None
+    assert sc.mean_fingerprint([[1.0], [1.0, 2.0]]) is None  # 维度不齐不硬凑
+
+
+def test_cross_band_thresholds():
+    assert sc.cross_band(0.01) == "ok"
+    assert sc.cross_band(sc.CROSS_EP_WARN + 0.01) == "warn"
+    assert sc.cross_band(sc.CROSS_EP_BLOCK + 0.01) == "block"
+    assert sc.cross_band(None) == "skipped"
+
+
+def test_ep_num_sort_key():
+    assert sc._ep_num("第3集") == 3
+    assert sc._ep_num("封面") == 10**9

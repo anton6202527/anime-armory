@@ -21,9 +21,9 @@ Outputs:
 
 Progress:
 ```bash
-python3 skills/novel2drama/progress.py set <作品根> 第N集 剧本改编 ✅
-python3 skills/novel2drama/progress.py set <作品根> 第N集 bgm ✅
-python3 skills/novel2drama/progress.py set <作品根> 第N集 封面 ✅
+python3 skills/n2d/progress.py set <作品根> 第N集 剧本改编 ✅
+python3 skills/n2d/progress.py set <作品根> 第N集 bgm ✅
+python3 skills/n2d/progress.py set <作品根> 第N集 封面 ✅
 ```
 
 ## Stage 2: 分镜设计
@@ -52,8 +52,8 @@ Required outputs:
 
 Progress:
 ```bash
-python3 skills/novel2drama/progress.py set <作品根> 第N集 分镜设计 ✅
-python3 skills/novel2drama/progress.py set <作品根> 第N集 素材清单 ✅
-python3 skills/novel2drama/progress.py set <作品根> 第N集 字幕中 ✅
+python3 skills/n2d/progress.py set <作品根> 第N集 分镜设计 ✅
+python3 skills/n2d/progress.py set <作品根> 第N集 素材清单 ✅
+python3 skills/n2d/progress.py set <作品根> 第N集 字幕中 ✅
 ```
 

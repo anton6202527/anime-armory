@@ -41,6 +41,8 @@
 - 环境声 opt-in：`audio_intent=ambience; risk=low; mouth_visible=no; speech_policy=no_native_speech; compose_policy=低音量混入环境声; review=确认仅雨声/风声/火声`
 - 原片音轨保留：仅用于无配音预览或纯环境片段，`compose_policy=保留原片音轨`；有 n2d-voice 配音轨时 gate 会阻断或要求改回低音量混入。
 
+> **`mouth_visible` 的真值在哪：就是上面这个 prompt 字段。** `mouth_detect.py` 是**只读顾问、不写任何文件**——它读 storyboard 文本启发式（`router.clip_has_mouth_visible`）、首帧 PNG（装 insightface 时）、以及 prompt 里已填的值，三方复核后**打印/JSON 给出建议并在冲突时 warn（退出码 1）**。"以图为准"= 由你照建议**改 prompt 里的 `mouth_visible`**，脚本不会替你回写。下游消费这个 prompt 字段的是：`router.py`（原生音画 opt-in / 口型路由）、`gate.py --stage video_preflight`（缺 `原生音画策略` 即 BLOCK）、`n2d-score`（风险标记统计）。
+
 ## 5. compose 处理
 
 `n2d-compose/compose.sh` 按 `视频原生音轨` 选择点处理：

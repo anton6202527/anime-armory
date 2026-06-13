@@ -9,7 +9,7 @@ description: Given a short story or compact novel (.txt/.docx), expand it into a
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**，按 `../_偏好约定.md`（家族统一的偏好读写机制 + 全部选择点目录与缺省）解析：`<作品根>/_设置.md` → 全局默认 `创作偏好-默认.md` 预填并告知一句 → 缺则**首次问一次**→写回 `_设置.md`→**沉默沿用**（合规/不可逆/花钱点每次仍确认）。
+本 skill 的可选项**不写死在源码里**，按 `../skills/novel-craft/references/选择点与偏好.md`（家族统一的偏好读写机制 + 全部选择点目录与缺省）解析：`<作品根>/_设置.md` → 全局默认 `创作偏好-默认.md` 预填并告知一句 → 缺则**首次问一次**→写回 `_设置.md`→**沉默沿用**（合规/不可逆/花钱点每次仍确认）。
 
 本 skill 涉及的选择点：`目标平台`、`权利来源`、`输出格式`、`小说生成模式`、`章节生成粒度`、`AI使用披露`。
 
@@ -25,7 +25,7 @@ description: Given a short story or compact novel (.txt/.docx), expand it into a
 
 ## 合法性铁律
 
-家族统一铁律（公版 / 自有 / `--i-have-rights` + provenance 留痕；当代受版权网文未声明授权→拒做）见 `novel-author/SKILL.md` 合法性继承。
+家族统一铁律（公版 / 自有 / `--i-have-rights` + provenance 留痕；当代受版权网文未声明授权→拒做）见 `novel/SKILL.md` 合法性继承。
 - 本 skill 特有：**扩写中不大段复刻原作原文** —— 保骨架时用事件骨架描述，不搬文本。
 
 ## 工作流（七步）
@@ -61,6 +61,7 @@ python3 <skill>/scripts/init_project.py "<原作>" \
 ### 第 3 步 — 划章
 
 确定扩写后章节数（按 `_meta.json.target_chapters` / 目标字数 / 平台节奏）。每章映射到原作的若干骨架点，写入 `设定/章节映射.md`。
+随后按 `novel-craft/references/reader-contract.md` 补 `设定/读者契约.md`：扩写要保留的核心题旨、读者承诺、好看机制、文学质感和禁偏清单。扩写不是“加字”，每章新增细节都要服务人物、氛围、关系或伏笔。
 
 ### 第 4 步 — 章纲
 
@@ -75,6 +76,7 @@ Demo 审完必须写 `审稿/demo_gate.json`（见 `novel-craft/references/demo-
 
 先读 `novel-craft/references/draft-pipeline.md`，跑 `python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --next|--range A-B` 生成逐章任务包。
 续扩子任务必须喂 `审稿/demo_gate.json` 的 `style_anchor` / `reader_promises` / `setting_constraints`，并读取 `审稿/state_ledger.json`。
+同时必须喂 `设定/读者契约.md`，每章至少推进一个读者承诺或强化一种文学质感，避免扩写成注水。
 每章写完填 `审稿/state_delta_第NN章.json`，只记录细节加厚带来的关系/伏笔状态，不新增会改主线的新规则。
 每写一组 5 章跑轻量回扫；全本写完跑全量。重点扫：
 - 事件骨架是否对齐

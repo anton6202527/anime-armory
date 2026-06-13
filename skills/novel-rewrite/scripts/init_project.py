@@ -25,9 +25,9 @@ from datetime import date
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                 "..", "..", "novel-craft", "scripts"))
 from contract import (AI_TEXT_USAGE_MODES, CHAPTER_GRANULARITY, NOVEL_DRAFT_MODES,
-                      SCALE_PROFILES, base_meta, demo_chapters_for, derived_stage_markdown,
-                      parse_outputs, scale_profile)
-from derive_common import docx_to_txt, detect_rights_status, write_settings
+                      SCALE_CHOICES, SCALE_PROFILES, base_meta, demo_chapters_for,
+                      derived_stage_markdown, normalize_scale, parse_outputs, scale_profile)
+from derive_common import build_rights_metadata, docx_to_txt, detect_rights_status, write_settings
 
 SCALE_PROFILE = SCALE_PROFILES  # backwards-compatible alias for tests/importers
 
@@ -174,7 +174,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("source_novel", help="原作 .txt 或 .docx")
     ap.add_argument("--rewrite-type", required=True, help="一句话改动方向（如：换主角+加任务系统魔改）")
-    ap.add_argument("--scale", required=True, choices=list(SCALE_PROFILE))
+    ap.add_argument("--scale", required=True, choices=list(SCALE_CHOICES))
     ap.add_argument("--target-chapters", type=int, default=None, help="覆盖规模档的章数")
     ap.add_argument("--person", default="third-limited", choices=["first", "third-limited"])
     ap.add_argument("--out", default=None, help="输出根，缺省 写小说/<原作名>-改写/")
@@ -187,6 +187,10 @@ def main():
     ap.add_argument("--ai-text-usage", default=None, choices=AI_TEXT_USAGE_MODES,
                     help="发布披露用：AI-generated / AI-assisted / 未使用AI文本")
     ap.add_argument("--i-have-rights", action="store_true")
+    ap.add_argument("--rights-jurisdiction", default=None,
+                    help="公版/授权依据适用辖区，如 US/CN/GLOBAL；缺省按来源推断")
+    ap.add_argument("--distribution-regions", default=None,
+                    help="计划发行/交付地区，逗号分隔，如 CN,US；公版跨区时必须复核")
     args = ap.parse_args()
 
     source_path = os.path.abspath(args.source_novel)
@@ -219,15 +223,22 @@ def main():
               "自有/已授权重跑加 --i-have-rights。", file=sys.stderr)
         shutil.rmtree(out_root); sys.exit(2)
 
-    profile = scale_profile(args.scale)
+    scale = normalize_scale(args.scale)
+    profile = scale_profile(scale)
     n = args.target_chapters or profile["target_chapters"]
     outputs = parse_outputs(args.outputs)
     meta = base_meta("rewrite", outputs=outputs, rights_status=rights)
+    meta.update(build_rights_metadata(
+        rights,
+        i_have_rights=args.i_have_rights,
+        rights_jurisdiction=args.rights_jurisdiction,
+        distribution_regions=args.distribution_regions,
+    ))
     meta.update({
         "source_novel": source_path,
         "source_title": source_title,
         "rewrite_type": args.rewrite_type,
-        "scale": args.scale,
+        "scale": scale,
         "target_chapters": n,
         "target_words_per_chapter": profile["words_per_chapter"],
         "person": args.person,
@@ -245,7 +256,9 @@ def main():
     write_settings(out_root, {
         "目标平台": args.target_platform,
         "权利来源": rights,
-        "篇幅档": f"{args.scale}（{n}章×{profile['words_per_chapter'][0]}-{profile['words_per_chapter'][1]}字）",
+        "权利辖区": meta.get("rights_jurisdiction", ""),
+        "发行地区": ",".join(meta.get("distribution_regions") or []) or "未定",
+        "篇幅档": f"{scale}（{n}章×{profile['words_per_chapter'][0]}-{profile['words_per_chapter'][1]}字）",
         "改动方向": args.rewrite_type,
         "输出格式": ",".join(outputs) + "（novel-craft/scripts/export.py）",
         "小说生成模式": args.draft_mode,

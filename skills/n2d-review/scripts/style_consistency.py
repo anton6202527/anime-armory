@@ -23,6 +23,7 @@ import argparse
 import glob
 import json
 import os
+import re
 import sys
 from typing import Dict, List, Optional, Sequence
 
@@ -86,6 +87,63 @@ def style_band(cohesion: float, med: float, margin: float = DEFAULT_MARGIN) -> s
     if cohesion >= med - 2 * margin:
         return "warn"
     return "block"
+
+
+# ── 跨集画风基线（集级指纹 vs 基线集）────────────────────────────────────────
+# 集内自标定抓"某镜突然漂"，抓不到"整集一起漂"（跨后端混跑/模型升级最常见）。
+# 跨集对账：每集出图的平均风格指纹 vs 基线集（默认最早一集）的 cosine 距。
+CROSS_EP_WARN = 0.06
+CROSS_EP_BLOCK = 0.15
+
+
+def mean_fingerprint(fps: Sequence[Sequence[float]]) -> Optional[List[float]]:
+    """多镜指纹的逐维均值 = 集级风格指纹。空/维度不齐 → None。纯函数。"""
+    fps = [f for f in fps if f]
+    if not fps:
+        return None
+    dim = len(fps[0])
+    if any(len(f) != dim for f in fps):
+        return None
+    return [sum(f[i] for f in fps) / len(fps) for i in range(dim)]
+
+
+def cross_band(dist: Optional[float], warn: float = CROSS_EP_WARN, block: float = CROSS_EP_BLOCK) -> str:
+    """集间指纹距 → ok/warn/block；算不出 → skipped（不臆造）。纯函数。"""
+    if dist is None:
+        return "skipped"
+    return "block" if dist > block else "warn" if dist > warn else "ok"
+
+
+def _ep_num(ep: str) -> int:
+    m = re.search(r"第(\d+)集", ep)
+    return int(m.group(1)) if m else 10**9
+
+
+def cross_analyze(root: str, bins: int = DEFAULT_BINS, baseline_ep: Optional[str] = None) -> dict:
+    """跨集画风对账：各集出图均值指纹 vs 基线集。"""
+    res: dict = {"available": None, "baseline": None, "episodes": [], "notes": []}
+    if not _probe_pillow():
+        res["available"] = False
+        res["notes"].append("未装 Pillow——跨集画风对账跳过，交人判抽帧并排看。")
+        return res
+    res["available"] = True
+    per_ep: List[tuple] = []
+    for d in sorted(glob.glob(os.path.join(root, "出图", "第*集")), key=lambda p: _ep_num(os.path.basename(p))):
+        ep = os.path.basename(d)
+        fps = [fp for fp in (_fingerprint(p, bins) for p in _shot_pngs(root, ep)) if fp is not None]
+        mfp = mean_fingerprint(fps)
+        if mfp is not None:
+            per_ep.append((ep, mfp, len(fps)))
+    if len(per_ep) < 2:
+        res["notes"].append(f"可对账集 {len(per_ep)} <2——跨集画风对账需至少两集出图。")
+        return res
+    base = next((x for x in per_ep if x[0] == baseline_ep), per_ep[0])
+    res["baseline"] = base[0]
+    for ep, mfp, n in per_ep:
+        dist = max(0.0, 1.0 - fc.cosine(base[1], mfp))
+        res["episodes"].append({"episode": ep, "shots": n, "dist": round(dist, 4),
+                                "verdict": "baseline" if ep == base[0] else cross_band(dist)})
+    return res
 
 
 # ---------- 图像（需 Pillow · 缺则 None） ----------
@@ -156,11 +214,31 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN, bins: int = DEFA
 def main(argv: List[str]) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("root")
-    ap.add_argument("episode")
+    ap.add_argument("episode", nargs="?", help="--cross 模式下可省略")
     ap.add_argument("--margin", type=float, default=DEFAULT_MARGIN)
     ap.add_argument("--bins", type=int, default=DEFAULT_BINS)
+    ap.add_argument("--cross", action="store_true", help="跨集画风对账（各集均值指纹 vs 基线集）")
+    ap.add_argument("--baseline", help="--cross 时指定基线集（默认最早一集），如 第1集")
     ap.add_argument("--json", action="store_true")
     ns = ap.parse_args(argv)
+    if ns.cross:
+        res = cross_analyze(ns.root.rstrip("/"), ns.bins, ns.baseline)
+        if ns.json:
+            print(json.dumps(res, ensure_ascii=False, indent=2)); return 0
+        print(f"=== 跨集画风对账（集级指纹 vs 基线 {res.get('baseline')}）：{ns.root} ===")
+        for n in res["notes"]:
+            print("ℹ️ " + n)
+        nblk = 0
+        for e in res["episodes"]:
+            v = e["verdict"]
+            if v == "block":
+                nblk += 1
+            mark = {"baseline": "📌基线", "ok": "✅", "warn": "⚠️整集轻漂", "block": "⛔整集画风漂"}.get(v, v)
+            print(f"{mark} {e['episode']}（{e['shots']} 镜）距基线 {e['dist']}")
+        print(f"\n整集画风漂 🔴 {nblk} · 共对账 {len(res['episodes'])} 集")
+        return 1 if nblk else 0
+    if not ns.episode:
+        ap.error("非 --cross 模式需要 episode 参数")
     res = analyze(ns.root.rstrip("/"), ns.episode, ns.margin, ns.bins)
     if ns.json:
         print(json.dumps(res, ensure_ascii=False, indent=2)); return 0

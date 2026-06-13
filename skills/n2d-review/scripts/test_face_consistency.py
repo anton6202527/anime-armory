@@ -2,6 +2,8 @@
 cd skills/n2d-review/scripts && python -m pytest test_face_consistency.py
 """
 import math
+import os
+
 import face_consistency as fc
 
 
@@ -43,10 +45,58 @@ def test_band_three_zones():
 def test_is_character_asset():
     assert fc.is_character_asset("王敦")
     assert fc.is_character_asset("少年王敦")
+    assert fc.is_character_asset("小妖A_覆鳞宫女")
     assert not fc.is_character_asset("灵药谷山洞")   # 场景
     assert not fc.is_character_asset("淡青系统符纹光幕")  # 特效
     assert not fc.is_character_asset("豆油灯")        # 道具(灯)
     assert not fc.is_character_asset("未来神界主桌剪影")  # 剪影
+    assert not fc.is_character_asset("斑驳铜镜")
+    assert not fc.is_character_asset("毒酒碎瓷")
+
+
+def test_resolve_project_path_does_not_duplicate_prefixed_root():
+    root = os.path.join("projects", "demo")
+    already_prefixed = os.path.join(root, "出图", "共享", "图片", "定妆_main.png")
+    project_relative = os.path.join("出图", "共享", "图片", "定妆_main.png")
+    absolute = os.path.abspath(already_prefixed)
+
+    assert fc._resolve_project_path(root, already_prefixed) == already_prefixed
+    assert fc._resolve_project_path(root, project_relative) == already_prefixed
+    assert fc._resolve_project_path(root, absolute) == absolute
+
+
+def test_discover_costume_sets_uses_identity_registry_filter(tmp_path):
+    import json
+
+    root = tmp_path
+    shared = root / "出图" / "共享"
+    img_dir = shared / "图片"
+    img_dir.mkdir(parents=True)
+    for name in [
+        "定妆_沈念_常态.png",
+        "定妆_沈念_常态_侧.png",
+        "定妆_沈念_常态_脸部特写.png",
+        "定妆_小妖A_覆鳞宫女.png",
+        "定妆_斑驳铜镜.png",
+        "定妆_毒酒碎瓷.png",
+    ]:
+        (img_dir / name).write_bytes(b"")
+    (shared / "identity_registry.json").write_text(
+        json.dumps(
+            {
+                "characters": [
+                    {"id": "CHAR_01", "forms": [{"form": "常态", "asset_key": "沈念_常态"}]},
+                    {"id": "CHAR_06", "forms": [{"form": "常态", "asset_key": "小妖A_覆鳞宫女"}]},
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    sets = fc.discover_costume_sets(str(root))
+    assert sorted(sets) == ["小妖A_覆鳞宫女", "沈念_常态"]
+    assert sorted(sets["沈念_常态"]) == ["主", "侧"]
 
 
 def test_severity_order():
@@ -115,6 +165,66 @@ def test_pillow_fallback_when_no_insightface(tmp_path):
     assert ok_shot["verdict"] in {"ok", "warn"}
     # 绝不臆造相似度
     assert "similarity" not in json.dumps(result)
+
+
+def test_shot_character_map_prefers_identity_layer_over_background_refs(tmp_path):
+    import json
+    import face_consistency as fc
+
+    root = tmp_path
+    ep = "第1集"
+    prompt_dir = root / "出图" / ep / "prompt"
+    prompt_dir.mkdir(parents=True)
+    reg_dir = root / "出图" / "共享"
+    reg_dir.mkdir(parents=True)
+    (reg_dir / "identity_registry.json").write_text(
+        json.dumps(
+            {
+                "characters": [
+                    {"id": "CHAR_01", "forms": [{"form": "觉醒态", "asset_key": "沈念_觉醒态"}]},
+                    {"id": "CHAR_03", "forms": [{"form": "破皮惊恐态", "asset_key": "柳娘子_破皮惊恐态"}]},
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    (prompt_dir / "01_分镜出图.md").write_text(
+        "\n".join(
+            [
+                "## Clip 18",
+                "目标：出图/第1集/图片/Clip_18_铜镜金瞳.png",
+                "参考图：",
+                "- `出图/共享/图片/定妆_沈念_觉醒态.png`",
+                "- `出图/共享/图片/定妆_柳娘子_破皮惊恐态.png`（右后景反应锚）",
+                "**资产身份注册层**：`CHAR_01/觉醒态`；沈念为铜镜最大脸。",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    assert fc.shot_character_map(str(root), ep)["图片/Clip_18_铜镜金瞳.png"] == ["沈念_觉醒态"]
+
+
+def test_shot_character_map_falls_back_to_reference_block_without_identity(tmp_path):
+    import face_consistency as fc
+
+    root = tmp_path
+    ep = "第1集"
+    prompt_dir = root / "出图" / ep / "prompt"
+    prompt_dir.mkdir(parents=True)
+    (prompt_dir / "01_分镜出图.md").write_text(
+        "\n".join(
+            [
+                "## Clip 01",
+                "目标：出图/第1集/图片/Clip_01.png",
+                "参考图：定妆_沈念_常态.png 定妆_柳娘子_人皮态.png",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    assert fc.shot_character_map(str(root), ep)["图片/Clip_01.png"] == ["沈念_常态", "柳娘子_人皮态"]
 
 
 # ── T11: flag-band 单张样本降权（floor_calibrated）────────────────────────────

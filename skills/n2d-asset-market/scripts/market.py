@@ -20,10 +20,11 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple
 
-_COMMON = str(Path(__file__).resolve().parent.parent.parent / "common")
+_COMMON = str(Path(__file__).resolve().parent.parent.parent / "n2d" / "_lib")
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import (  # noqa: E402  身份注册单一真值源
+    ASSET_REFERENCE_REGISTRY_KIND,
     ASSET_PACK_KIND,
     IDENTITY_ADAPTER_READY_STATUSES,
     IDENTITY_FORK_HISTORY_ENTRY_FIELDS,
@@ -34,7 +35,10 @@ from n2d_contract import (  # noqa: E402  身份注册单一真值源
     IDENTITY_REGISTRY_KIND,
     IDENTITY_VIDEO_ADAPTERS,
     identity_registry_path,
+    asset_registry_path,
     identity_reset_template,
+    file_lock,
+    registry_lock_path,
     shared_asset_path,
     shared_asset_relpath,
 )
@@ -43,8 +47,14 @@ from n2d_contract import (  # noqa: E402  身份注册单一真值源
 PACK_KIND = ASSET_PACK_KIND
 PACK_VERSION = 1
 REGISTRY_KIND = IDENTITY_REGISTRY_KIND
+ASSET_REGISTRY_KIND = ASSET_REFERENCE_REGISTRY_KIND
 DEFAULT_LIBRARY = Path("资产库")
 REFERENCE_KEYS = IDENTITY_REFERENCE_KEYS
+ASSET_ID_PREFIX = {
+    "scene": "LOC_",
+    "location": "LOC_",
+    "prop": "PROP_",
+}
 ROLE_SUFFIX = {
     "front": "",
     "side": "_侧",
@@ -64,7 +74,26 @@ def read_json(path: Path) -> Any:
 
 def write_json(path: Path, data: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    text = json.dumps(data, ensure_ascii=False, indent=2) + "\n"
+    tmp = path.with_name(f".{path.name}.tmp")
+    tmp.write_text(text, encoding="utf-8")
+    tmp.replace(path)  # same-dir temp+replace: readers never see a half-written registry
+
+
+def with_registry_lock(fn):
+    """Hold the per-project registry lock for the whole command so concurrent
+    import-character / import-asset (and lora.py status writes) serialize their
+    read-merge-write of identity_registry.json / asset_registry.json instead of
+    clobbering each other (n2d-batch multi-worker / 后台 factory)."""
+    def _wrapped(args: argparse.Namespace) -> int:
+        root = getattr(args, "project_root", None)
+        if not root:
+            return fn(args)
+        with file_lock(registry_lock_path(str(root))):
+            return fn(args)
+    _wrapped.__name__ = getattr(fn, "__name__", "wrapped")
+    _wrapped.__doc__ = fn.__doc__
+    return _wrapped
 
 
 def sha256(path: Path) -> str:
@@ -90,6 +119,10 @@ def registry_path(root: Path) -> Path:
     return Path(identity_registry_path(str(root)))
 
 
+def asset_ref_registry_path(root: Path) -> Path:
+    return Path(asset_registry_path(str(root)))
+
+
 def load_registry(root: Path) -> Dict[str, Any]:
     path = registry_path(root)
     if not path.is_file():
@@ -104,6 +137,10 @@ def empty_registry() -> Dict[str, Any]:
     return {"kind": REGISTRY_KIND, "version": 1, "characters": []}
 
 
+def empty_asset_registry() -> Dict[str, Any]:
+    return {"kind": ASSET_REGISTRY_KIND, "version": 1, "assets": []}
+
+
 def ensure_registry(root: Path) -> Dict[str, Any]:
     path = registry_path(root)
     if path.is_file():
@@ -114,6 +151,28 @@ def ensure_registry(root: Path) -> Dict[str, Any]:
             data.setdefault("characters", [])
             return data
     return empty_registry()
+
+
+def load_asset_registry(root: Path) -> Dict[str, Any]:
+    path = asset_ref_registry_path(root)
+    if not path.is_file():
+        raise FileNotFoundError(f"asset_registry.json not found: {path}")
+    data = read_json(path)
+    if not isinstance(data, dict):
+        raise ValueError(f"invalid asset_registry.json: {path}")
+    return data
+
+
+def ensure_asset_registry(root: Path) -> Dict[str, Any]:
+    path = asset_ref_registry_path(root)
+    if path.is_file():
+        data = read_json(path)
+        if isinstance(data, dict):
+            data.setdefault("kind", ASSET_REGISTRY_KIND)
+            data.setdefault("version", 1)
+            data.setdefault("assets", [])
+            return data
+    return empty_asset_registry()
 
 
 def ref_value_to_path(value: Any) -> str:
@@ -141,6 +200,20 @@ def find_character(registry: Mapping[str, Any], *, char_id: str = "", name: str 
     raise KeyError(f"character not found in registry: {needle}")
 
 
+def find_asset(registry: Mapping[str, Any], *, asset_id: str = "", name: str = "", asset_type: str = "") -> Dict[str, Any]:
+    for asset in registry.get("assets", []) or []:
+        if not isinstance(asset, Mapping):
+            continue
+        if asset_type and str(asset.get("type", "")).strip() not in _asset_type_aliases(asset_type):
+            continue
+        if asset_id and str(asset.get("id", "")).strip() == asset_id:
+            return copy.deepcopy(dict(asset))
+        if name and str(asset.get("name", "")).strip() == name:
+            return copy.deepcopy(dict(asset))
+    needle = asset_id or name
+    raise KeyError(f"{asset_type or 'asset'} not found in asset_registry: {needle}")
+
+
 def filter_forms(char: Dict[str, Any], form_name: str = "") -> Dict[str, Any]:
     if not form_name:
         return char
@@ -154,9 +227,27 @@ def filter_forms(char: Dict[str, Any], form_name: str = "") -> Dict[str, Any]:
 def pack_dir(library: Path, asset_type: str, slug: str) -> Path:
     if asset_type == "character":
         return library / "characters" / slug
+    if asset_type in {"scene", "location"}:
+        return library / "scenes" / slug
+    if asset_type == "prop":
+        return library / "props" / slug
     if asset_type == "route_template":
         return library / "templates" / "model_routes" / slug
     return library / asset_type / slug
+
+
+def _asset_type_aliases(asset_type: str) -> set[str]:
+    if asset_type == "scene":
+        return {"scene", "location"}
+    if asset_type == "prop":
+        return {"prop"}
+    return {asset_type}
+
+
+def validate_asset_id_prefix(asset_type: str, asset_id: str) -> None:
+    prefix = ASSET_ID_PREFIX.get(asset_type)
+    if prefix and not str(asset_id or "").strip().startswith(prefix):
+        raise ValueError(f"{asset_type} asset id must start with {prefix}: {asset_id}")
 
 
 def copy_reference_files(root: Path, out_dir: Path, char: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -197,6 +288,42 @@ def copy_reference_files(root: Path, out_dir: Path, char: Dict[str, Any]) -> Lis
                 }
             )
         form["reference_group"] = new_ref
+    return files
+
+
+def copy_asset_reference_files(root: Path, out_dir: Path, asset: Dict[str, Any]) -> List[Dict[str, Any]]:
+    files: List[Dict[str, Any]] = []
+    files_dir = out_dir / "files"
+    ref = asset.get("reference_group") if isinstance(asset.get("reference_group"), Mapping) else {}
+    new_ref: Dict[str, str] = {}
+    base = slugify(str(asset.get("name") or asset.get("id") or "asset"))
+    for role, value in ref.items():
+        rel = ref_value_to_path(value)
+        if not rel:
+            new_ref[str(role)] = ""
+            continue
+        source = relative_or_absolute(root, rel)
+        if not source.is_file():
+            new_ref[str(role)] = ""
+            files.append({"role": str(role), "source": rel, "path": "", "exists": False})
+            continue
+        suffix = "" if str(role) == "primary" else f"_{slugify(str(role))}"
+        target = files_dir / f"{base}{suffix}{source.suffix or '.png'}"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, target)
+        pack_rel = target.relative_to(out_dir).as_posix()
+        new_ref[str(role)] = pack_rel
+        files.append(
+            {
+                "role": str(role),
+                "source": rel,
+                "path": pack_rel,
+                "exists": True,
+                "sha256": sha256(target),
+                "bytes": target.stat().st_size,
+            }
+        )
+    asset["reference_group"] = new_ref
     return files
 
 
@@ -304,6 +431,11 @@ def reset_preserve_review(old_adapters: Any, new_adapters: Mapping[str, Any], *,
 def target_reference_path(name: str, role: str, suffix: str, form_name: str = "") -> str:
     form_suffix = f"_{slugify(form_name)}" if form_name else ""
     return shared_asset_relpath("图片", f"定妆_{name}{form_suffix}{ROLE_SUFFIX.get(role, '_' + role)}{suffix or '.png'}")
+
+
+def target_asset_reference_path(name: str, role: str, suffix: str) -> str:
+    role_suffix = "" if role == "primary" else f"_{slugify(role)}"
+    return shared_asset_relpath("图片", f"定妆_{name}{role_suffix}{suffix or '.png'}")
 
 
 def append_import_log(root: Path, text: str) -> None:
@@ -426,6 +558,24 @@ def merge_character(
     registry["characters"] = chars
 
 
+def merge_asset(
+    registry: Dict[str, Any],
+    asset: Dict[str, Any],
+    *,
+    replace: bool = False,
+) -> None:
+    assets = [a for a in registry.get("assets", []) if isinstance(a, dict)]
+    asset_id = str(asset.get("id", "")).strip()
+    existing = [a for a in assets if str(a.get("id", "")).strip() == asset_id]
+    if existing and not replace:
+        raise ValueError(f"asset id already exists: {asset_id} (use --replace)")
+    if existing:
+        assets = [a for a in assets if str(a.get("id", "")).strip() != asset_id]
+    assets.append(asset)
+    registry["assets"] = assets
+
+
+@with_registry_lock
 def cmd_import_character(args: argparse.Namespace) -> int:
     root = Path(args.project_root)
     preserve_reason = str(args.preserve_reason or "").strip()
@@ -526,6 +676,121 @@ def cmd_import_character(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_export_asset(args: argparse.Namespace) -> int:
+    asset_type = str(args.asset_type)
+    root = Path(args.project_root)
+    registry = load_asset_registry(root)
+    asset = find_asset(
+        registry,
+        asset_id=args.asset_id or "",
+        name=args.asset_name or "",
+        asset_type=asset_type,
+    )
+    validate_asset_id_prefix(asset_type, str(asset.get("id", "")).strip())
+    title = args.title or str(asset.get("name") or asset.get("id") or asset_type)
+    slug = slugify(args.slug or title)
+    out_dir = pack_dir(Path(args.library), asset_type, slug)
+    if out_dir.exists() and not args.force:
+        raise FileExistsError(f"asset pack already exists, use --force: {out_dir}")
+    if out_dir.exists():
+        shutil.rmtree(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    files = copy_asset_reference_files(root, out_dir, asset)
+
+    pack = {
+        "kind": PACK_KIND,
+        "version": PACK_VERSION,
+        "asset_type": asset_type,
+        "slug": slug,
+        "title": title,
+        "source_project": str(root),
+        "source_project_name": project_name(root),
+        "exported_at": now_iso(),
+        "license": {
+            "status": args.license_status,
+            "reuse": args.reuse,
+            "notes": args.license_notes or "",
+        },
+        "style_tags": args.style_tag or [],
+        "tags": args.tag or [],
+        "asset_registry_fragment": {"kind": ASSET_REGISTRY_KIND, "version": 1, "assets": [asset]},
+        "files": files,
+        "reminders": [
+            "导入到新剧时必须按新项目命名/ID 合并，避免 LOC_/PROP_ 冲突。",
+            "场景/道具模板只复用结构、参考图和约束；新剧仍要按剧情校准 constraints/lifecycle。",
+            "导入后重跑 image/video gate，确认逐镜 prompt 已绑定对应 LOC_/PROP_。",
+        ],
+    }
+    write_json(out_dir / "asset_pack.json", pack)
+    print(f"[ok] exported {asset_type} asset pack: {out_dir}")
+    return 0
+
+
+@with_registry_lock
+def cmd_import_asset(args: argparse.Namespace) -> int:
+    root = Path(args.project_root)
+    pack_dir_path = Path(args.pack)
+    pack_path = pack_dir_path / "asset_pack.json" if pack_dir_path.is_dir() else pack_dir_path
+    pack_root = pack_path.parent
+    pack = read_json(pack_path)
+    expected = str(args.asset_type)
+    if pack.get("kind") != PACK_KIND or pack.get("asset_type") not in _asset_type_aliases(expected):
+        raise ValueError(f"not a {expected} asset pack: {pack_path}")
+    fragment_assets = pack.get("asset_registry_fragment", {}).get("assets", [])
+    if not fragment_assets:
+        raise ValueError(f"asset pack has no asset registry fragment: {pack_path}")
+    source_asset = copy.deepcopy(fragment_assets[0])
+    as_name = args.as_name or str(source_asset.get("name") or pack.get("title") or expected)
+    as_id = args.as_id or str(source_asset.get("id") or "").strip()
+    if not as_id:
+        raise ValueError("--as-id is required when pack has no source id")
+    validate_asset_id_prefix(expected, as_id)
+
+    source_asset["id"] = as_id
+    source_asset["name"] = as_name
+    source_asset["source_asset_pack"] = str(pack_path)
+    source_asset["source_asset_slug"] = pack.get("slug", "")
+    if args.scope:
+        source_asset["scope"] = args.scope
+    if args.owner and source_asset.get("type") == "prop":
+        source_asset["owner"] = args.owner
+
+    ref = source_asset.get("reference_group") if isinstance(source_asset.get("reference_group"), Mapping) else {}
+    new_ref: Dict[str, str] = {}
+    for role, value in ref.items():
+        pack_rel = ref_value_to_path(value)
+        if not pack_rel:
+            new_ref[str(role)] = ""
+            continue
+        source = pack_root / pack_rel
+        suffix = source.suffix or ".png"
+        target_rel = target_asset_reference_path(as_name, str(role), suffix)
+        target = root / target_rel
+        if source.is_file():
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, target)
+            new_ref[str(role)] = target_rel
+        else:
+            new_ref[str(role)] = ""
+    source_asset["reference_group"] = new_ref
+
+    registry = ensure_asset_registry(root)
+    merge_asset(registry, source_asset, replace=args.replace)
+    write_json(asset_ref_registry_path(root), registry)
+
+    append_import_log(
+        root,
+        f"""## {now_iso()} 导入{expected}资产
+
+- 来源：`{pack_path}`
+- 新资产：`{as_id}` / {as_name}
+- 下一步：在出图 prompt 的「资产引用注册层」绑定 `{as_id}`，并重跑 image/video gate。
+""",
+    )
+    print(f"[ok] imported {expected} {as_id} / {as_name} into {asset_ref_registry_path(root)}")
+    return 0
+
+
 def cmd_export_routes(args: argparse.Namespace) -> int:
     root = Path(args.project_root)
     route_path = root / "出视频" / args.episode / "prompt" / "video_model_routes.json"
@@ -616,6 +881,38 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--preserve-adapters", action="store_true")
     p.add_argument("--preserve-reason", default="")
     p.set_defaults(func=cmd_import_character)
+
+    def add_export_asset_parser(name: str, asset_type: str, help_text: str) -> None:
+        p = sub.add_parser(name, help=help_text)
+        p.add_argument("project_root")
+        p.add_argument("--asset-id", default="")
+        p.add_argument("--asset-name", default="")
+        p.add_argument("--title", default="")
+        p.add_argument("--slug", default="")
+        p.add_argument("--library", default=str(DEFAULT_LIBRARY))
+        p.add_argument("--force", action="store_true")
+        p.add_argument("--license-status", default="user_owned_or_synthetic")
+        p.add_argument("--reuse", default="template_only", choices=["template_only", "same_ip", "licensed_reuse"])
+        p.add_argument("--license-notes", default="")
+        p.add_argument("--style-tag", action="append")
+        p.add_argument("--tag", action="append")
+        p.set_defaults(func=cmd_export_asset, asset_type=asset_type)
+
+    def add_import_asset_parser(name: str, asset_type: str, help_text: str) -> None:
+        p = sub.add_parser(name, help=help_text)
+        p.add_argument("project_root")
+        p.add_argument("pack")
+        p.add_argument("--as-id", required=True)
+        p.add_argument("--as-name", required=True)
+        p.add_argument("--scope", default="")
+        p.add_argument("--owner", default="", help="prop owner override, e.g. CHAR_SHEN")
+        p.add_argument("--replace", action="store_true")
+        p.set_defaults(func=cmd_import_asset, asset_type=asset_type)
+
+    add_export_asset_parser("export-scene", "scene", "export one LOC_/scene asset as an asset pack")
+    add_import_asset_parser("import-scene", "scene", "import a scene asset pack into target asset_registry")
+    add_export_asset_parser("export-prop", "prop", "export one PROP_/prop asset as an asset pack")
+    add_import_asset_parser("import-prop", "prop", "import a prop asset pack into target asset_registry")
 
     p = sub.add_parser("export-routes", help="export a video_model_routes.json as a route template pack")
     p.add_argument("project_root")

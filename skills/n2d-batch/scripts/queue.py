@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Batch queue ledger for novel2drama/n2d.
+"""Batch queue ledger for n2d.
 
 This script plans and tracks work; it does not execute model calls.  Actual
 generation still goes through the corresponding n2d skill.  Keeping the queue
@@ -28,7 +28,7 @@ except ImportError:  # pragma: no cover - non-POSIX fallback
 SCRIPT_DIR = os.path.dirname(__file__)
 SKILL_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
 REPO_SKILLS = os.path.abspath(os.path.join(SKILL_DIR, ".."))
-COMMON = os.path.join(REPO_SKILLS, "common")
+COMMON = os.path.join(REPO_SKILLS, "n2d", "_lib")
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 

@@ -14,6 +14,7 @@ description: Shared writing-primitives and deterministic production helpers for 
 | **机器契约（_meta/_进度/schema/分档/原创/派生阶段表/skill roster）** | `references/contract.md` + `scripts/contract.py` + `scripts/registry.py` | 任何脚本、init、导出、进度续跑、路由表同步要读写共享字段时；这是 novel 系列的机器单一真值源 |
 | **QA 报告 schema** | `references/qa-report-schema.md` | `novel-review` / `novel-score` 产出 JSON 报告、上层要按报告回流阶段时 |
 | **Demo gate 留痕 schema** | `references/demo-gate.md` | Demo 章过审后；批量写章、review 查文风漂移、score 复盘前都要读 |
+| **读者契约 / 题旨契约** | `references/reader-contract.md` | 蓝图/spec/章纲通过后固化 `设定/读者契约.md`；Demo gate 同步 `reader_contract`；每章任务包用它防止偏题、承诺遗忘和文学质感变薄 |
 | **设定圣经 schema（统一·单一真值源）** | `references/setting-bible.md` | 建设定/角色卡/世界观时——create 从零建、spinoff/rewrite/continue 从原作抽改，**都用这一套字段**（含金手指必有代价 + 首现章/复用范围一致性三列） |
 | **批量写章闭环** | `references/draft-pipeline.md` | Demo 过审后进入 draft；需要任务包、状态增量、章节生成粒度、写章回扫时 |
 | **派生流水线后半段（rewrite/continue/expand/condense/spinoff 共用）** | `references/derive-pipeline.md` | 任一派生 skill 的阶段表 / demo_gate / draft / export / ai_usage 通用机制——各 skill 只写自己的 source_model/direction_spec 映射，通用部分引此 |
@@ -29,11 +30,11 @@ description: Shared writing-primitives and deterministic production helpers for 
 | 脚本 | 干什么 | 谁用 |
 |---|---|---|
 | `scripts/contract.py` | 机器单一真值源：scale 分档、输出格式、kind/title 规则、原创/派生阶段表、进度 schema marker | 全部 novel-* 脚本和测试 |
-| `scripts/registry.py` | novel-* 家族机器 roster；测试会校验它与磁盘目录、`novel-author` 路由表、`skills/README.md` 一致 | novel-author / README / self_audit |
+| `scripts/registry.py` | novel-* 家族机器 roster；测试会校验它与磁盘目录、`novel` 路由表、`skills/README.md` 一致 | novel / README / self_audit |
 | `scripts/store.py` | 跨脚本加锁与原子写：`file_lock`、`atomic_write_text/json` | progress / draft_queue / draft_packets / reconcile_ledger |
 | `scripts/waivers.py` | 统一生成 / 读取 `审稿/waiver_log.jsonl`，所有 gate 绕过都要留同构痕迹 | export / draft_packets / score / report_gate |
 | `scripts/report_snapshot.py` | 给 review/score 报告记录正文文件 hash 与 aggregate hash；QA gate 用它判断报告是否仍绑定当前正文 | novel-review / novel-score / qa_gate |
-| `scripts/qa_gate.py` / `scripts/report_gate.py` | 读取 `审稿/review_report.json` + `评分/score_report.json` + `审稿/waiver_log.jsonl`；缺 review、报告 schema 不合规、报告 hash 过期、阻断 finding、阻断 score verdict、baseline freshness 阻断都会进入 gate；`--waive-missing-score` 只豁免带作用域的缺评分 | progress / export / novel-author 续跑 |
+| `scripts/qa_gate.py` / `scripts/report_gate.py` | 读取 `审稿/review_report.json` + `评分/score_report.json` + `审稿/waiver_log.jsonl`；缺 review、报告 schema 不合规、报告 hash 过期、阻断 finding、阻断 score verdict、baseline freshness 阻断都会进入 gate；`--waive-missing-score` 只豁免带作用域的缺评分 | progress / export / novel 续跑 |
 | `scripts/export.py` | 章节/第NN章.md 合并 → txt / docx / 大纲 / n2d-script 目录；默认执行 export QA gate，缺 review 或阻断未清不能导出；`--ignore-qa-gate` 会写带章节 hash / blocker ids / formats 的 waiver log；`--combine` 走续写合本 | create / spinoff / rewrite / expand / condense / continue **共用同一份** |
 | `scripts/progress.py` | 扫描 `<作品根>/_进度.md`，输出第一条未完成项 + stage owner/gate/on_fail + QA 阻断；`set <stage> done|todo` 通过 `_进度.lock` 加锁原子更新机器阶段 | 所有会写 `_进度.md` 的 novel-* 项目 |
 | `scripts/draft_queue.py` | 批量写章队列：初始化待写章节、claim 租约认领、done/fail/todo 标记，避免小批/多代理重复写同一章 | `draft` 阶段，尤其小批/全书草稿 |

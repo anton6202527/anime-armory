@@ -23,6 +23,8 @@ import argparse
 from collections import Counter
 
 SCHEMA_VERSION = 1
+STYLE_SOURCE_RIGHTS = ("project-demo", "user-owned", "licensed", "public-domain", "unknown")
+AUTHORIZED_STYLE_RIGHTS = {"project-demo", "user-owned", "licensed", "public-domain"}
 
 # 句子终结符（中英）
 _SENT_END = "。！？!?…\n"
@@ -130,7 +132,33 @@ def _lexicon(text, top=20):
     return [{"term": w, "count": c} for w, c in result]
 
 
-def fingerprint(text, source="<inline>"):
+def _extract_character_text(text, name):
+    """提取特定角色的对白与心声。"""
+    segments = []
+    # 对白匹配: "姓名道：“...”" 或 “...”，姓名...
+    # 简单实现：找包含姓名的段落，且提取引号内内容
+    for lq, rq in _QUOTE_PAIRS:
+        pattern = re.compile(re.escape(lq) + r"(.*?)" + re.escape(rq), re.DOTALL)
+        # 找引号前后的姓名提示
+        for m in pattern.finditer(text):
+            content = m.group(1)
+            start, end = m.start(), m.end()
+            # 引号前后 15 字内出现姓名
+            context_before = text[max(0, start-15):start]
+            context_after = text[end:end+15]
+            if name in context_before or name in context_after:
+                segments.append(content)
+    return "\n".join(segments)
+
+
+def fingerprint(text, source="<inline>", character=None, *, source_rights="project-demo",
+                style_source_name="", style_source_author="", authorization_note=""):
+    if character:
+        text = _extract_character_text(text, character)
+        if not text.strip():
+            # Fallback if no dialogue found
+            return {"error": f"未在样本中找到角色 {character} 的对白"}
+
     raw = _strip_markup(text)
     total_cjk = _cjk_len(raw) or 1
     sents = _split_sentences(raw)
@@ -157,6 +185,13 @@ def fingerprint(text, source="<inline>"):
     return {
         "schema_version": SCHEMA_VERSION,
         "source": source,
+        "style_source_rights": {
+            "status": source_rights,
+            "source_name": style_source_name,
+            "source_author": style_source_author,
+            "authorization_note": authorization_note,
+            "policy": "指纹仅用于授权/自有/公版/项目Demo样本的抽象风格约束；不得做未授权姓名式复刻。",
+        },
         "sampled_chars": total_cjk,
         "sentence_count": len(lengths),
         "syntax_profile": {
@@ -254,6 +289,12 @@ def main():
     p = argparse.ArgumentParser(description="文风指纹提取 + 漂移比对（确定性）")
     p.add_argument("--source", help="样本文本/目录（提取模式）")
     p.add_argument("--output", help="指纹 JSON 落盘路径（提取模式）")
+    p.add_argument("--character", help="提取特定角色的对白与心声指纹")
+    p.add_argument("--source-rights", default="project-demo", choices=STYLE_SOURCE_RIGHTS,
+                   help="样本权利来源：project-demo/user-owned/licensed/public-domain/unknown")
+    p.add_argument("--style-source-name", default="", help="样本作品名；若填写，必须明确 source-rights")
+    p.add_argument("--style-source-author", default="", help="样本作者名；若填写，必须明确 source-rights")
+    p.add_argument("--authorization-note", default="", help="授权/公版依据简述")
     p.add_argument("--compare", nargs=2, metavar=("ANCHOR", "CANDIDATE"),
                    help="比对两份（指纹.json 或 文本）算漂移分")
     p.add_argument("--json-out", help="比对结果落盘路径")
@@ -274,7 +315,22 @@ def main():
 
     if not args.source or not args.output:
         p.error("提取模式需同时给 --source 和 --output")
-    fp = fingerprint(_read_text(args.source), source=args.source)
+    if (args.style_source_name or args.style_source_author) and args.source_rights not in AUTHORIZED_STYLE_RIGHTS:
+        print("[err] 命名作品/作者样本必须声明 project-demo/user-owned/licensed/public-domain；"
+              "未授权姓名式复刻不允许。")
+        sys.exit(2)
+    fp = fingerprint(
+        _read_text(args.source),
+        source=args.source,
+        character=args.character,
+        source_rights=args.source_rights,
+        style_source_name=args.style_source_name,
+        style_source_author=args.style_source_author,
+        authorization_note=args.authorization_note,
+    )
+    if "error" in fp:
+        print(f"[err] {fp['error']}")
+        sys.exit(1)
     os.makedirs(os.path.dirname(args.output) or ".", exist_ok=True)
     with open(args.output, "w", encoding="utf-8") as f:
         json.dump(fp, f, ensure_ascii=False, indent=2)

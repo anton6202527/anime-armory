@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Machine-readable contract for the ad-* (拍广告) skill family.
 
-自包含，不引用 n2d-*/mv-*/novel-*。拍广告线与 mv 线一样遵守"不复用其它家族 skill"
+自包含，不引用 n2d-* / mv-* / novel-*。拍广告线与 mv 线一样遵守"不复用其它家族 skill"
 的硬约定——生图后端治理、阶段表、选择点都在本文件内独立维护一份。
 
 拍广告线的结构差异（相对 n2d 逐集矩阵）：
@@ -23,8 +23,25 @@ MASTER_DURATIONS = ("6s", "15s", "30s", "60s", "自定义")
 DELIVERY_ASPECTS = ("16:9", "9:16", "1:1", "多比例")
 CUTDOWN_PLANS = ("主片+15s+6s", "主片+15s", "仅主片", "自定义")
 CONSISTENCY_MODES = ("共享定妆+锚点", "指定参考图", "后端主体库", "+LoRA")
-VIDEO_BACKENDS = ("即梦", "可灵", "Veo", "Seedance", "Runway", "Kling", "manual")
-VIDEO_ROUTING = ("自动按镜头路由", "固定生视频AI")
+VIDEO_MODELS = (
+    "Seedance 2.0", "Veo 3.1", "Kling 3.0", "Hailuo 02", "Hailuo 2.3",
+    "Runway Gen-4", "Luma Ray3.2", "Pika 2.5",
+    "HunyuanVideo 1.5", "Wan 2.2", "LTX-2.3", "Sora", "manual",
+)
+VIDEO_CHANNELS = (
+    "即梦/Dreamina", "即梦", "Dreamina",
+    "豆包",
+    "海螺AI", "Hailuo",
+    "可灵/Kling", "可灵", "Kling",
+    "Google Gemini API",
+    "Runway API", "Runway",
+    "Luma Dream Machine", "Luma",
+    "Pika",
+    "本地/开源", "manual",
+)
+# Legacy combined backend list. New projects write `生视频模型` + `生视频渠道`.
+VIDEO_BACKENDS = VIDEO_CHANNELS
+VIDEO_ROUTING = ("自动按镜头路由", "固定生视频模型", "固定生视频AI")
 VIDEO_SPECS = ("预算充足", "预算一般", "预算不够")
 VIDEO_RESOLUTIONS = ("720p", "1080p", "4K")
 IMAGE_BACKENDS = ("Codex", "OpenAI", "Seedream", "可灵主体库", "Nano Banana", "Sora Cameo", "自定义")
@@ -37,7 +54,7 @@ ADLAW_REGIONS = ("中国大陆", "海外", "关闭")
 DELIVERY_SPECS = ("平台默认", "广电TVC", "自定义")
 GRANULARITY = ("逐个", "小批", "按场景分批", "整片", "自定义")
 GEN_PRIORITY = ("关键镜优先", "分镜顺序", "先易后难")
-REDRAW_BUDGET = ("预算充足", "预算一般", "预算不足")
+REDRAW_BUDGET = ("预算充足", "预算一般")
 WATERMARK_AI = ("投放前必打", "始终打")          # 合规·不可逆点：即便记录过每次仍确认
 WATERMARK_BRAND = ("打", "不打")
 TARGET_PLATFORMS = (
@@ -49,6 +66,11 @@ RELEASE_REGIONS = ("中国大陆", "港澳台", "北美", "东南亚", "全球",
 # ── 生图后端治理（解除 Codex 垄断，与 n2d/mv 同构，本线自持）────────────────
 # `生图AI` 是真选择点，默认 Codex；放行官方多参考一致性后端；只拦 ① 项目内后端混用
 # ② 逆向/未授权出图路径（安全 invariant）。合规闸门（AI 标识水印）与本治理无关。
+# 候选快照新鲜度戳记（本线 _lib/freshness.py 据此判过期）。
+# 注意：ad 线策略与 n2d 故意不同——ad 把 dreamina/即梦放进 FORBIDDEN（投放广告侧合规口径），
+# n2d 则放行即梦官方 CLI。两份白名单是「不同策略」不是「重复」，不得合并。
+# 采集日期：2026-06-13  来源：各后端官方文档 + 广告投放合规口径（待复核）
+AD_IMAGE_BACKENDS_VERIFIED = {"date": "2026-06-13", "source": "各后端官方文档 + 广告投放合规口径(待复核)"}
 AD_APPROVED_IMAGE_BACKENDS = {
     "codex":    {"label": "Codex / 官方 OpenAI gpt-image", "multi_reference": False, "native_subject": False, "default": True},
     "openai":   {"label": "官方 OpenAI gpt-image / DALL·E", "multi_reference": False, "native_subject": False},
@@ -94,7 +116,9 @@ DEFAULT_SETTINGS = {
     "cutdown版本": "主片+15s+6s",
     "生图AI": "Codex",
     "一致性增强": "共享定妆+锚点",
-    "生视频AI": "即梦",
+    "重抽预算策略": "预算充足",
+    "生视频模型": "Seedance 2.0",
+    "生视频渠道": "即梦/Dreamina",
     "视频模型路由": "自动按镜头路由",
     "出视频规格": "预算一般",
     "视频分辨率": "720p",
@@ -121,7 +145,8 @@ CHOICE_POINTS = {
     "cutdown版本": CUTDOWN_PLANS,
     "生图AI": IMAGE_BACKENDS,
     "一致性增强": CONSISTENCY_MODES,
-    "生视频AI": VIDEO_BACKENDS,
+    "生视频模型": VIDEO_MODELS,
+    "生视频渠道": VIDEO_CHANNELS,
     "视频模型路由": VIDEO_ROUTING,
     "出视频规格": VIDEO_SPECS,
     "视频分辨率": VIDEO_RESOLUTIONS,
@@ -139,8 +164,53 @@ CHOICE_POINTS = {
     "发行地区": RELEASE_REGIONS,
 }
 
-# 合规/不可逆/花钱多的点：即便已记录，每次仍确认（见 _偏好约定.md 例外条）。
+# 合规/不可逆/花钱多的点：即便已记录，每次仍确认（见 skills/ad-craft/references/选择点与偏好.md 例外条）。
 RECONFIRM_CHOICE_POINTS = ("水印-AI合规标识", "广告法地区", "音乐来源")
+
+# ── brief 必填分层（一句话入口的机器判据）────────────────────────────────────
+# 必问最小集：缺任一项 ad-concept 不应开工创意（由其第0步访谈式补齐，别让用户填 JSON）。
+BRIEF_REQUIRED = ("brand", "product", "usp", "audience")
+# 可延后合规项：允许标「待补」先做创意/脚本，但进入 GATE_STAGES（花钱/不可逆）前必须补齐。
+BRIEF_DEFER_TO_GATE = ("claims", "rights", "mandatories.legal_lines")
+
+_BRIEF_PENDING_TOKENS = ("", "待补", "tbd")
+
+
+def _brief_value(brief, dotted):
+    node = brief
+    for part in dotted.split("."):
+        if not isinstance(node, dict) or part not in node:
+            return None
+        node = node[part]
+    return node
+
+
+def _brief_filled(value):
+    if isinstance(value, str):
+        return value.strip().lower() not in _BRIEF_PENDING_TOKENS
+    if isinstance(value, dict):
+        return bool(value) and all(_brief_filled(v) for v in value.values())
+    if isinstance(value, (list, tuple)):
+        return bool(value) and all(_brief_filled(v) for v in value)
+    return value is not None
+
+
+def brief_check(brief):
+    """brief.json 完整性三层判据。
+
+    返回 {missing_required, missing_deferred, ready, gate_ready}：
+    - ready：必问最小集齐了，可开工创意/脚本；
+    - gate_ready：连可延后合规项也齐了，可进花钱 gate（出图/出视频/合成）。
+    """
+    brief = brief or {}
+    missing_required = [k for k in BRIEF_REQUIRED if not _brief_filled(_brief_value(brief, k))]
+    missing_deferred = [k for k in BRIEF_DEFER_TO_GATE if not _brief_filled(_brief_value(brief, k))]
+    return {
+        "missing_required": missing_required,
+        "missing_deferred": missing_deferred,
+        "ready": not missing_required,
+        "gate_ready": not (missing_required or missing_deferred),
+    }
 
 VIDEO_SPEC_PROFILE = {
     "预算充足": {"resolution": "1080p", "fps": 30, "key_takes": 3, "normal_takes": 2, "quality": "高质量档"},
@@ -165,7 +235,7 @@ AD_STAGE_TABLE = [
     {"key": "image",      "label": "定妆库+出图",  "owner": "ad-image",    "gate": "visual identity + 首尾帧"},
     {"key": "video",      "label": "图生视频",     "owner": "ad-video",    "gate": "契约继承 + clip videos"},
     {"key": "compose",    "label": "剪辑包装+交付", "owner": "ad-compose",  "gate": "成片 + cutdown + 交付规格"},
-    {"key": "review",     "label": "质检自审(二期)", "owner": "ad-review",  "gate": "machine + human review"},
+    {"key": "review",     "label": "质检自审", "owner": "ad-review",  "gate": "M0 delivery review + human review"},
     {"key": "handoff",    "label": "AI披露/交付",  "owner": "ad-craft/scripts/ai_usage.py", "gate": "AI usage disclosure"},
 ]
 
@@ -244,7 +314,7 @@ def progress_markdown(title, deliverables=None):
         "|---|---|---|---|",
     ]
     for st in AD_STAGE_TABLE:
-        gate = "（二期）" if st["key"] == "review" else ""
+        gate = "M0必跑；深度流程自审后续增强" if st["key"] == "review" else ""
         lines.append(f"| {st['label']} | ⬜ |  | {gate} |")
     lines.extend(["", "## 交付版本矩阵", "",
                   "| 交付件 | 时长 | 比例 | 类型 | 交付规格 | 状态 | 成片路径 |",

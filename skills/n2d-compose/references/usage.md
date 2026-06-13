@@ -13,7 +13,7 @@
 产物：<作品根>/合成/第N集/成片_第N集_{mode}.mp4
 
 ## 可调参数（默认=原行为，全部可选）
-画幅（不写死·对齐 `_偏好约定.md`「画幅」选择点）：
+画幅（不写死·对齐 `skills/n2d/references/选择点与偏好.md`「画幅」选择点）：
     # 默认按 <作品根>/_设置.md 的「画幅」决定；竖屏 9:16→1080x1920，横屏 16:9→1920x1080。
     bash <skill>/compose.sh <作品根> 第N集                  # 读 _设置.md 画幅（缺则默认 9:16）
     ASPECT=16:9 bash <skill>/compose.sh <作品根> 第N集       # 显式横屏（出海/横屏漫剧），字幕坐标随之
@@ -41,7 +41,8 @@ BGM ducking（配音压 BGM 的力度）：
     #       故声音会比字幕早 ≤J_CUT_SEC 秒——这是 J-cut(声音先行)的预期；要严格音字同步就设 0。
     # 建议范围 0.15-0.35，脚本上限 0.4，避免破坏音画同步。
 clip 原生音频：
-    # 默认转码时剥掉 AI clip 原生音轨，避免原生台词与 n2d-voice 配音双人声
+    # 默认只在 compose 工作缓存/合成链路剥掉 AI clip 原生音轨，避免原生台词与 n2d-voice 配音双人声；
+    # 不改写 <作品根>/出视频/第N集/视频/ 下的 AI 原片。
     VIDEO_NATIVE_AUDIO_POLICY=丢弃 bash <skill>/compose.sh <作品根> 第N集 zh
     VIDEO_NATIVE_AUDIO_POLICY=低音量混入环境声 bash <skill>/compose.sh <作品根> 第N集 zh
     VIDEO_NATIVE_AUDIO_POLICY=保留原片音轨 bash <skill>/compose.sh <作品根> 第N集 zh
@@ -51,7 +52,7 @@ clip 原生音频：
     # 混入音量：CLIP_AUDIO_GAIN=0.25 bash ...（默认低音量 0.35；保留原片音轨默认 1.0）
 
 ## 输入约定（出视频/=只放 clips；配音/成片/=合成/ 下）
-- clips：<作品根>/出视频/第N集/视频/*.mp4（n2d-video 产物，出视频阶段唯一产物）
+- clips：<作品根>/出视频/第N集/视频/*.mp4（n2d-video 产物，出视频阶段唯一产物；保留 AI 原片，不放 `.noaudio.mp4` 或 `_raw_with_audio/`）
 - 配音轨：<作品根>/合成/第N集/配音/voice_{zh,en}.wav（n2d-voice 产物，可选）
 - 字幕：<作品根>/脚本/第N集/字幕_{中文,英文}.srt
 - 成片输出：<作品根>/合成/第N集/成片_第N集_{mode}.mp4（可选再加水印 → 成片_…_水印.mp4）
@@ -65,7 +66,7 @@ clip 原生音频：
   python3 <skill>/fit_voice_to_clips.py <作品根> 第N集 zh --apply    # 出 voice_zh_fitted.wav
   VOICEFILE=<作品根>/合成/第N集/配音/voice_zh_fitted.wav bash <skill>/compose.sh <作品根> 第N集 zh
   ```
-  有 overflow（真音远超槽位）时脚本退出码 2、不产轨 → 回 /n2d-video 重出该镜头加长，或调 `FIT_MAX_STRETCH`。详见 SKILL「先出视频后配音」节。
+  有 overflow（真音远超槽位）时脚本退出码 2、不产轨 → 回 n2d-video 重出该镜头加长，或调 `FIT_MAX_STRETCH`。详见 SKILL「先出视频后配音」节。
 
 ## BGM 来源（提示用户给丰富选项 + 鉴定可行）
 ⓐ Suno 生成给文件 ⓑ 素材库 ⓒ 本地文件(BGMFILE) ⓓ 占位。用户自由描述需求 → 鉴定(存在/格式/时长够循环/版权)→ 可行照办，不可行说明并给替代。
@@ -81,18 +82,18 @@ clip 原生音频：
 ## 行业参考（决定音频时展示）
 90 秒一集漫剧工作室标配：1 条循环 BGM + 2~5 个转场音效 + AI 角色配音。
 
-## 加水印（可选 · 公共 shared-watermark skill）
-成片后可选打水印，调与 faceswap 同级的公共 `shared-watermark` skill（图/视频同一工具）；产物落 `合成/第N集/`：
+## 加水印（可选 · 本线 n2d-watermark skill）
+成片后可选打水印，调与 faceswap 同级的本线 `n2d-watermark` skill（图/视频同一工具）；产物落 `合成/第N集/`：
 ```
 # AI 合规标识（含 AI 配音/生图/换脸的投放成片应打，只加不去）
-python3 <shared-watermark-skill>/watermark.py <作品根>/合成/第N集/成片_第N集_zh.mp4 <作品根>/合成/第N集/成片_第N集_zh_水印.mp4 --mode ai
+python3 <n2d-watermark-skill>/watermark.py <作品根>/合成/第N集/成片_第N集_zh.mp4 <作品根>/合成/第N集/成片_第N集_zh_水印.mp4 --mode ai
 # 品牌/账号水印（按 _设置.md 的 水印 选择点：文字/logo/位置/透明度）
-python3 <shared-watermark-skill>/watermark.py <作品根>/合成/第N集/成片_第N集_zh.mp4 <作品根>/合成/第N集/成片_第N集_zh_水印.mp4 --mode brand --text "@账号" --pos br --opacity 0.8
+python3 <n2d-watermark-skill>/watermark.py <作品根>/合成/第N集/成片_第N集_zh.mp4 <作品根>/合成/第N集/成片_第N集_zh_水印.mp4 --mode brand --text "@账号" --pos br --opacity 0.8
 ```
 注：`watermark.py` 依赖 Pillow + ffmpeg，须在带 Pillow 的环境跑（如 facefusion/cosyvoice conda env）。
 
 ## 进度回写
-完成后回写「成片」列：`python3 <novel2drama skill>/progress.py set <作品根> 第N集 成片 ✅`。
+完成后回写「成片」列：`python3 <n2d skill>/progress.py set <作品根> 第N集 成片 ✅`。
 
 ## 字幕字号微调 + 样式分级
 - 基础字号：`ZH_SIZE`(默认50) / `EN_SIZE`(默认34)。

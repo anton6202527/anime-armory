@@ -2,11 +2,15 @@
 
 Stage gates:
 ```bash
+python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage image_preflight
 python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage image
+python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage video_preflight
 python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage video
 python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage compose
 python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage review
 ```
+
+Use `image_preflight` / `video_preflight` before paid backend calls; use `image` / `video` after generated assets are landed.
 
 Mechanical QA:
 ```bash
@@ -30,4 +34,3 @@ What still needs human/LLM judgment:
 - pacing feel
 - lip sync
 - whether native audio contains usable ambience or unwanted speech
-

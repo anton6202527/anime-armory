@@ -89,6 +89,27 @@ class BuildReviewReportTest(unittest.TestCase):
             self.assertIn("显式豁免", md)
             self.assertIn("missing_mechanical", md)
 
+    def test_quality_contract_dimensions_get_stable_routing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            os.makedirs(os.path.join(tmp, "审稿"), exist_ok=True)
+            mechanical = os.path.join(tmp, "审稿", "mechanical_findings.json")
+            with open(mechanical, "w", encoding="utf-8") as f:
+                json.dump({
+                    "kind": "novel_mechanical_findings",
+                    "findings": [
+                        {"chapter": 2, "severity": "🟡", "dim": "题旨偏移", "msg": "连续支线未推进核心题旨"},
+                        {"chapter": 3, "severity": "🟡", "dim": "读者承诺", "msg": "开篇承诺的代价没有递进"},
+                        {"chapter": 4, "severity": "🟢", "dim": "文学性", "msg": "对白偏功能化"},
+                    ],
+                }, f, ensure_ascii=False)
+
+            report = brr.build_report(tmp, mechanical)
+            by_dim = {finding["dimension"]: finding for finding in report["findings"]}
+            self.assertEqual(by_dim["theme"]["return_to_stage"], "outline")
+            self.assertEqual(by_dim["reader_promise"]["return_to_stage"], "demo")
+            self.assertEqual(by_dim["prose"]["return_to_stage"], "draft")
+            self.assertIn("读者契约", by_dim["theme"]["fix_hint"])
+
 
 if __name__ == "__main__":
     unittest.main()

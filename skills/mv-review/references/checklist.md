@@ -29,7 +29,7 @@
 | 爽点对 downbeat | 判 | 高潮画面同帧砸在 downbeat 上 | 🟡 |
 | 动作家族空泛 | 判 | `clip_plan.json` / 视频 prompt 是否有 `action_family/action_peak/transition_motif`，且一 clip 一个主动作；只写“炫酷动作/酷炫运镜”不给可执行动作链 | 🟡 |
 | 动作强度不合段落 | 判 | verse 动作太满、副歌没高光动作、bridge 没反转动作；对 `action_knowledge.md` 段落强度表 | 🟡 |
-| clip 总时长 ≈ 歌长 | 机（需 ffprobe） | clip 总和 vs `歌/song.wav`/beatgrid.duration | 差大 🟡 |
+| clip 总时长 ≈ 歌长 | 机（需 ffprobe） | clip 总和 vs `歌/song.*`/beatgrid.duration | 差大 🟡 |
 
 ## C. 卡拉OK字幕（确定性为主 → 机检）
 
@@ -57,8 +57,8 @@
 
 | 维度 | 机/判 | 定级 |
 |---|---|---|
-| 换脸 AI 标识水印 | 判 | 用了 `shared-video-faceswap` 的画面带强制 AI 标识、未被裁 | 缺 🔴 |
-| 换脸授权 | 判 | 仅本人/授权演员/合成脸（shared-video-faceswap 闸门） | 未授权 🔴 |
+| 换脸 AI 标识水印 | 判 | 用了 `mv-video-faceswap` 的画面带强制 AI 标识、未被裁 | 缺 🔴 |
+| 换脸授权 | 判 | 仅本人/授权演员/合成脸（mv-video-faceswap 闸门） | 未授权 🔴 |
 | 输入歌权利 | 判 | 歌的词曲版权随歌（自有/授权/原创）；mv 只做视觉不改属性 | 🔴 |
 
 ## F. 完整性 / 对账（机检）
@@ -66,7 +66,7 @@
 | 维度 | 定级 |
 |---|---|
 | `视觉蓝图.md` / `_进度.md` / `_meta.json` 齐全 | 缺 🟡 |
-| `歌/song.wav` 存在 vs `_meta.has_song` | 不符 🟡 |
+| `歌/song.*` 存在 vs `_meta.has_song` | 不符 🟡 |
 | `词/lyrics.md` 存在 vs `_meta.has_lyrics` | 不符 🟡 |
 | 段落数 vs `_meta.structure` | 不符 🟡 |
 | 进度表勾选 vs 实际产物（beatgrid/出图/clip/字幕/成片） | 不符 🟡 |
@@ -83,7 +83,7 @@
 卡拉OK字幕   ✅    0/0
 音画合成     ✅    0/0          成片 20.0s ≈ 歌 19.97s · 9:16 · 含音轨
 合规         ✅    0/0          未用换脸
-完整性       —    0/1          _meta.has_song=false 但 song.wav 已就位（meta 未更新）
+完整性       —    0/1          _meta.has_song=false 但 song.* 已就位（meta 未更新）
 产物快照     5 clip · 5 出图 · 字幕6行 · BPM 143.55 · 成片✅
 （ffprobe 缺失时 clip/成片 时长·画幅·音轨 = 跳过，非通过）
 ```

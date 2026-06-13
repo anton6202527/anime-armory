@@ -6,16 +6,17 @@
   "cost_per_min": {
     "CNY": 6.0
   },
+  "cost_per_min_note": "上面是生成算力口径（API/积分摊到成片分钟），与 dashboard cost_per_finished_min 同口径对比；非全链制作成本",
+  "all_in_cny_per_finished_min_band": [400, 1000],
+  "roi_floor_reference": 1.2,
+  "roi_market_median_reference": 1.1,
+  "hit_freshness_weeks": 3,
   "cross_ep_consistency": 0.95,
-  "notes": "只读参照线，不参与告警/阻断。厂商宣传和媒体测评口径不一，落地前应由 n2d-review 流程自审重新复核。",
+  "notes": "只读参照线，不参与告警/阻断。厂商宣传和媒体测评口径不一，落地前应由 n2d-review 流程自审重新复核。2026 现实：常规 AI 漫剧全链成本已降到每分钟 400-1000 元（旧 1500-2500）；纯付费漫剧市场 ROI 中位约 1.1，仅前 5% 头部稳住 1.2+；爆款新鲜期缩至约 3 周——成本纪律与上新速度同为生死线。Seedance 2.0 可用率从 20% 跃升至 ~90%，盲目抽卡应随之收敛（见 n2d-video 出视频规格『QC 门控重抽』）。",
   "sources": [
-    {
-      "title": "搜狐《2026 AI 真人短剧工业化测评》",
-      "checked": "2026-06"
-    },
-    {
-      "title": "知乎《AI 漫剧角色一致性与自动化生产》",
-      "checked": "2026-06"
-    }
+    {"title": "搜狐《2026 AI 真人短剧工业化测评》", "checked": "2026-06"},
+    {"title": "知乎《AI 漫剧角色一致性与自动化生产》", "checked": "2026-06"},
+    {"title": "TVOAO《短漫剧的冰与火：成本暴跌10倍，爆款新鲜期缩至3周》", "checked": "2026-06"},
+    {"title": "36氪《AI漫剧：百亿风口下90%在亏损》", "checked": "2026-06"}
   ]
 }

@@ -30,7 +30,7 @@ import os
 import re
 import sys
 
-COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
+COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 from n2d_contract import (  # noqa: E402  产物 kind / registry 路径 / adapter 状态单一真值源

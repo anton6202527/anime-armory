@@ -2,9 +2,9 @@
 
 所有每集脚本素材按本文档模板填写。**提示词一律中文为主 + 英文备用**。
 
-> 下文 prompt 示例以**图 AI = `生图AI` 所选官方/已登录后端（默认 Codex，可选 Dreamina/即梦官方 CLI 等），视频 AI 可为即梦/Seedance/可灵/Veo** 的写法为准。若图 AI 与视频 AI 不同，image prompt 末尾拼对应视频 AI 的图像风格锚定句（核心分镜/卡片不变）。
+> 下文 prompt 示例以**图 AI = `生图AI` 所选官方/已登录后端（默认 Codex，可选 Dreamina/即梦官方 CLI 等），生视频模型可为 Seedance/Veo/Kling 等，生视频渠道可为即梦/Dreamina/可灵/Gemini API 等** 的写法为准。若图 AI 与生视频模型不同，image prompt 末尾拼对应生视频模型的图像风格锚定句（核心分镜/卡片不变）。
 
-> **跨 AI 强制规则**：若**图 AI ≠ 视频 AI**（例：Codex 出图 + 即梦视频，或 Seedream 出图 + 可灵视频），所有 image prompt 末尾**必须**拼接目标视频 AI 的"图像风格锚定句"（见 `platforms.md` 各档案）。
+> **跨 AI 强制规则**：若**图 AI ≠ 生视频模型**（例：Codex 出图 + Seedance 2.0，或 Seedream 出图 + Kling 3.0），所有 image prompt 末尾**必须**拼接目标生视频模型的"图像风格锚定句"（见 `platforms.md` 各档案）。
 
 > **出图 prompt 两层架构（共享 + 本集）属于 Stage 2**，不在本文档；由 `n2d-image` skill 负责。本 skill 的角色卡只写"① 定妆照 prompt"作为 Stage 2 的来源。
 
@@ -47,7 +47,7 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 （同上英文）
 ```
 
-> 流程：先用 ① 定妆照锁定角色 → 在所选 `生图AI` 中用定妆组做参考派生 → 之后每个分镜与视频首帧都基于它生成，保证脸和妆造不漂移。**实际生成定妆照在 Stage 2（`/n2d-image`）做**，本 skill 只准备 prompt。
+> 流程：先用 ① 定妆照锁定角色 → 在所选 `生图AI` 中用定妆组做参考派生 → 之后每个分镜与视频首帧都基于它生成，保证脸和妆造不漂移。**实际生成定妆照在 Stage 2（`n2d-image`）做**，本 skill 只准备 prompt。
 > 后续所有镜头严格复用角色卡，禁止外貌/发型/服装/年龄漂移，除非剧情明确要求并在卡上记录"变体"。
 
 ---
@@ -77,13 +77,13 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 **台词 / 音效 / 旁白：** 台词（角色·情绪）：「…」 | 旁白：「…」 | 音效：[…]
 ```
 
-节奏硬约束（详见 `novel2drama/references/导演节奏.md`）：0-3s 冷开场/倒叙钩，前15秒立核心悬念+第一个矛盾，中段每15-20秒一个钩子/信息增量、≥1次反转，集尾 cliffhanger 硬断。镜头时长走曲线（铺垫长镜 / 爽点碎切 / 爽点后留白），不要等长堆叠。
+节奏硬约束（详见 `n2d/references/导演节奏.md`）：0-3s 冷开场/倒叙钩，前15秒立核心悬念+第一个矛盾，中段每15-20秒一个钩子/信息增量、≥1次反转，集尾 cliffhanger 硬断。镜头时长走曲线（铺垫长镜 / 爽点碎切 / 爽点后留白），不要等长堆叠。
 
 ---
 
 ## 4. 故事板 Clip 表（脚本/第N集/故事板.md）— **AI 视频生成输入**
 
-把相邻分镜合成 **片段（Clip）**，每片段 1~2 个分镜，作为"一次视频生成"的单元。**Clip 时长按所选视频 AI 的单次生成上限定，别一刀切 8s**（即梦≤8s / Seedance≤15s / 可灵更长，见 `platforms.md`）——能一镜到底就别为凑时长切碎，节奏曲线优先（铺垫长镜 / 爽点碎切）。
+把相邻分镜合成 **片段（Clip）**，每片段 1~2 个分镜，作为"一次视频生成"的单元。**Clip 时长按所选生视频模型/渠道的单次生成上限定，别一刀切 8s**（即梦≤8s / Seedance≤15s / 可灵更长，见 `platforms.md`）——能一镜到底就别为凑时长切碎，节奏曲线优先（铺垫长镜 / 爽点碎切）。
 
 ```markdown
 ## Clip 表（分镜连贯性校验后）
@@ -95,6 +95,7 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 - 出点：本 Clip 结束时人物姿态/视线/道具/空镜停在哪里，下一 Clip 从哪里接。**这句会成为下一 Clip 的入点。**
 - 转场：match cut / eyeline cut / 动作切 / 空镜缓冲 / 声音先行(J-cut) / 硬切。
 - 需要尾帧?：是/否。**默认首尾双帧接力：除最终 Clip 外均为是**（n2d-image 出尾帧 PNG=下一 Clip 首帧构图，**尾帧命名=对应首帧名+`_end`**：`镜头N_xxx.png`→`镜头N_end.png`、`Clip_NN.png`→`Clip_NN_end.png`；n2d-video 用首尾双帧引导锁死接点）；只有换场空镜/时间大跳/明确不连续的接缝可设否，并必须写豁免原因。
+- 中段锚帧?（opt-in·默认否）：长 Clip（≥8s 且 表演节拍 ≥3 拍）或已有中段漂移重抽记录的镜头，可声明**额外锚帧**——单锚帧写 `continuity.midframe`（命名=首帧名+`_mid`），多锚帧写 `continuity.anchors` 链（命名=首帧名+`_a1.._aN`，二选一），n2d-video 按锚点把 Clip 拆成 K+1 段双帧接力再焊回一条。**K+1× 视频成本 + K 道内部接缝**，只救已证明漂移的镜头，不作默认（默认仍"能一镜到底就别切碎"）。声明即必须填全字段，gate 阻断缺项/不递增/越界。**自动识别**：分镜定稿后跑 `python3 skills/n2d-script/scripts/anchor_planner.py <作品根> 第N集`——按三条确定性规则（R1 高运动模板镜：打斗/追逐/法术爆发/飞行/拥抱拉扯/亲密互动；R2 ≥8s 多拍长镜；R3 dashboard 漂移重抽实证）出 `生产数据/anchor_plan_第N集.json/md` 规划（锚点吸附分镜边界=自然换拍点）。**打斗/长镜会出多个中锚（>3 帧）**：R1 段目标 3.5s（一拍一段），10s 打斗→2 锚=4帧、15s→3 锚=5帧；R2 段目标 5s（长镜密度适中）；密度按 **multiframe 段地板 1.5s** 排（对齐 multiframe2video 的 0.5s 下限），不再被旧 relay 4s 地板卡死。**报告含成本增量、人确认后 `--write` 才注回** storyboard.json；已手动声明的 Clip 一律跳过。**三帧契约铁律（选择点 `中段锚帧默认`=开启）**：planner 加 `--default-midframe`，普通镜也默认得一张 `_mid` 锚帧（`use=split` 可拆段 / `use=qc` 短镜不拆段、作视频验收中段基准），<3s 极短镜写 `midframe_exempt_reason` 豁免；`policy.midframe_default=true` 后 gate 强制每镜有声明或豁免。
 - 连贯性：轴线方向、人物左右站位、出入画方向、首尾帧是否可用于双帧引导；非最终 Clip 不能省略接力契约。
 **分镜1：0-4s**
 镜头：{景别}，{距离}，{机位角度}，{运镜}。
@@ -115,7 +116,7 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 > 视频 prompt 必须显式描述**人物运动 + 镜头运动 + 动态细节**。**含打斗按 `打斗分镜.md`：五帧拆招（起手/发力/命中/受击/收势）、命中帧必出独立图、攻防用正反打；仍避免一镜内多人混战、超复杂同框动作。** **含御剑飞行/追逐/渡劫/炼丹炼器/大阵/大场面 establish/斗法对轰/神魂 按 `仙侠场面分镜.md`：飞行追逐「锁姿态、动背景与镜头」、渡劫炼丹法阵对轰「爆发帧(命中·撞点)单独出图 + 奇观元素入库」、神魂「元神=肉身半透明派生治"二我"」、大场面「三镜由远及近 + 比例尺」。** 大量人群、高频切换等 AI 难生成动作仍从简。
 > 空镜缓冲不是补丁位，而是故事板阶段就要设计的正式 Clip：换场、跳时空、强情绪转折、AI 难接的姿态变化，都优先插 1-2s 空镜/物件镜（门帘、烛火、雨滴、符纸、手部）承接。下游 compose 只负责保留它的呼吸，不在成片上硬塞未知空镜。
 
-必须同步输出机器可读 `storyboard.json`（**接力契约 + 视觉契约 + 基础视觉风格契约的机器可读载体**——下游结构化消费衔接、视觉一致性与所选风格；缺它或缺必填字段时 `dashboard.py gate --stage image|video|compose`（生产入口，底层调 `n2d-review/scripts/gate.py --json`）会阻断）。
+必须同步输出机器可读 `storyboard.json`（**接力契约 + 视觉契约 + 基础视觉风格契约的机器可读载体**——下游结构化消费衔接、视觉一致性与所选风格；缺它或缺必填字段时 `dashboard.py gate --stage image_preflight|video_preflight|image|video|compose`（生产入口，底层调 `n2d-review/scripts/gate.py --json`）会阻断）。
 
 **`visual_contract` 是视觉契约的上游真值源（keystone）**：轴线·视线、场景光位、人物状态演进、景别阶梯本质都是**分镜设计阶段（本 skill）的导演决策**——在写 `故事板.md` 时就该定死，**不是留给 n2d-image 对着分镜剧本凭空发明**。n2d-image 的「本集视觉一致性契约」**继承本块**（见 `n2d-image/references/prompt_format.md §2.1`），逐镜 `视线方向/光位锚` 字段从这里取真值。凡视频改不动、要烤进首帧像素的视觉变量，源头都在这。
 
@@ -128,7 +129,7 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 ```json
 { "episode": 1, "title": "本宫才是这皇宫最大的妖·第1集", "source": "原著章节1-2",
   "total_duration": 86.5,
-  "policy": { "tailframe_default": true },        // 首尾双帧接力为默认契约；gate 要求 =true
+  "policy": { "tailframe_default": true, "midframe_default": false },  // tailframe gate 要求 =true；midframe_default=true 时三帧契约铁律生效（anchor_planner --default-midframe --write 写入）
 
   "visual_contract": {                            // ← 视觉契约种子（keystone）；n2d-image 继承，勿留空
     "色调基线": "冷青压暗红；金瞳/妖气只在镜7爽点后出现，之前不得泄露",
@@ -178,13 +179,26 @@ character design / reference sheet: {name}, minimum reference set with front-fac
         "shot_size": "MS（继承 visual_contract.景别阶梯，不撞上一镜）",
         "transition": "match_cut",                      // match_cut|eyeline|action_cut|empty_buffer|j_cut|hard_cut
         "need_endframe": true,                          // 默认 true；非最终 Clip 若 false 必填 endframe_exempt_reason
-        "endframe_png": "出图/第1集/图片/镜头02_end.png"      // need_endframe 时由 n2d-image 落档后回填
+        "endframe_png": "出图/第1集/图片/镜头02_end.png",     // need_endframe 时由 n2d-image 落档后回填
+        "midframe": {                                   // ← 可选·中段锚帧·单锚帧手写糖（opt-in 拆段，2× 视频成本，绝大多数 Clip 不填）
+          "midframe_png": "出图/第1集/图片/镜头01_mid.png",   // 命名=首帧名+`_mid`；由 n2d-image 落档后回填
+          "split_at_sec": 4.0,                          // 焊点秒数（A 段时长）；两段各自须 ≥ 目标后端最短时长
+          "reason": "9s 三拍动作，redraw×2 中段动作漂移"      // 必填：为什么值得付 2× 成本（漂移证据/重抽记录）
+        },
+        "anchors": [                                    // ← 可选·N 锚帧链通用形（与 midframe 二选一，同时声明 gate 阻断）
+          // 由 scripts/anchor_planner.py 自动识别+规划写入（打斗等高运动模板/≥8s 长镜/漂移重抽实证），也可手写
+          { "anchor_png": "出图/第1集/图片/镜头01_x_a1.png",  // 命名=首帧名+`_aK`（三帧契约默认中锚=首帧名+`_mid`）；n2d-image 落档后回填
+            "at_sec": 4.0,                              // 焊点秒数，严格递增；use=split 时各段 ≥ 目标后端最短时长
+            "use": "split",                             // split=拆段接力 | qc=不拆段·视频验收中段基准/多参考 | reference=多参考输入
+            "reason": "auto: R1 高运动模板 fight_exchange（10s/3拍）" }
+        ],
+        "midframe_exempt_reason": "极短镜 <3s，中帧与首尾几乎重合（三帧契约豁免）"  // 仅 policy.midframe_default=true 且本镜无锚帧时必填
       },
       "shots": [ { "t": "0-4s", "lens": "全景·推镜", "desc": "...", "video_prompt": "..." } ] }
   ]}
 ```
 
-> **字段权责**：`duration` = 所含镜头时长之和（来自 `镜头时长.json`，配音驱动，勿手填臆造——`validate_timings.py` 会对账 ∑clip.duration ≈ ∑镜头时长）；`firstframe_png`/`endframe_png` 由 n2d-image 落档回填、`video_out` 由 n2d-video 回填（本 skill 先按命名约定占位）；`visual_contract` + `style_contract` + `continuity` + 复杂镜头 `template_contract` 由本 skill 在分镜设计时写死。
+> **字段权责**：`duration` = 所含镜头时长之和（来自 `镜头时长.json`，配音驱动，勿手填臆造——`validate_timings.py` 会对账 ∑clip.duration ≈ ∑镜头时长）；`firstframe_png`/`endframe_png`/`midframe.midframe_png`/`anchors[].anchor_png` 由 n2d-image 落档回填、`video_out` 由 n2d-video 回填（本 skill 先按命名约定占位）；`anchors` 可由 `scripts/anchor_planner.py` 自动规划（dry-run 报告→人确认→`--write` 注回）；`visual_contract` + `style_contract` + `continuity` + 复杂镜头 `template_contract` 由本 skill 在分镜设计时写死。
 
 ---
 
@@ -209,7 +223,7 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 英文 Prompt：
 ```
 
-> 这是 Stage 1 出的**简版清单**——给 Stage 2 作为来源。Stage 2 的 `/n2d-image` 会基于此 + 共享库扫描，生成"开箱即用"的两层 prompt 文件夹。
+> 这是 Stage 1 出的**简版清单**——给 Stage 2 作为来源。Stage 2 的 `n2d-image` 会基于此 + 共享库扫描，生成"开箱即用"的两层 prompt 文件夹。
 
 ---
 
@@ -254,7 +268,7 @@ BGM风格：国风暗黑 / 弦乐渐强 / 低频鼓点
 
 ## 9. 字幕（脚本/第N集/字幕_中文.srt [+ 字幕_英文.srt]）— 语言看 `字幕语言` 选择点
 
-**翻译语言是投放选择，不写死**：按 `../_偏好约定.md` 的 `字幕语言` 选择点决定。**默认 中文-only**（对齐 `_偏好约定.md` 与 finalize 默认；国内投放只产 `字幕_中文.srt`）；项目显式选 **中英双语 / 仅英文**（海外投放：TikTok / ReelShort / YouTube / 北美短剧）时才产 `字幕_英文.srt`，**与中文同一套时间码**。`字幕_英文.srt` 同时可作海外/复用/英文 prompt 兜底资产。
+**翻译语言是投放选择，不写死**：按 `../skills/n2d/references/选择点与偏好.md` 的 `字幕语言` 选择点决定。**默认 中文-only**（对齐 `skills/n2d/references/选择点与偏好.md` 与 finalize 默认；国内投放只产 `字幕_中文.srt`）；项目显式选 **中英双语 / 仅英文**（海外投放：TikTok / ReelShort / YouTube / 北美短剧）时才产 `字幕_英文.srt`，**与中文同一套时间码**。`字幕_英文.srt` 同时可作海外/复用/英文 prompt 兜底资产。
 
 标准 **SRT** 格式，可直接导入剪辑软件 / 上传平台。下面英文一节仅在选了中英双语 / 仅英文时适用；项目只做中文时无需产英文（如需英文 prompt 兜底可另存译文草稿，不进 `字幕_英文.srt`、不勾 `字幕英`）。
 

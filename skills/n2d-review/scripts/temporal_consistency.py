@@ -21,7 +21,7 @@ import re
 import subprocess
 import sys
 import tempfile
-from typing import Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence
 
 import face_consistency as fc  # 复用 cosine
 
@@ -34,6 +34,12 @@ SEAM_BLOCK = 29  # 距更大 → 接力基本断（出视频会跳切）
 # 接缝两帧本应近乎同色，故用绝对阈值（非自标定）；cosine 距 = 1 - 余弦相似度。
 SEAM_COLOR_WARN = 0.12
 SEAM_COLOR_BLOCK = 0.30
+# 人脸身份（dHash 抓结构、色距抓灯光，二者都抓不到"同构图同色但脸被重画/微调五官"=尾帧脸漂）。
+# 接缝两帧本应同人、表情/头位只在小范围内变，故用**保守**绝对阈值：正常表情/转头不会把
+# arcface 余弦压到这么低，只有真·重画脸/换人才会 → 误报风险低。需 insightface（缺则静默跳过
+# 交人判），另叠本集相对离群（只收紧不放松）。
+SEAM_FACE_WARN_COS = 0.50   # 尾帧 vs 首帧 人脸余弦 < 此 → warn（脸偏，疑似漂）
+SEAM_FACE_BLOCK_COS = 0.35  # < 此 → block（基本是另一张脸/严重漂）
 HIST_BINS = 16   # 每通道直方图 bin 数（16×3=48 维，够分辨色温/明暗跳，又不过拟合噪点）
 
 
@@ -64,9 +70,53 @@ def color_verdict(color_dist: Optional[float],
     return "block" if color_dist > block else "warn" if color_dist > warn else "ok"
 
 
+def face_seam_verdict(cos: Optional[float],
+                      warn_cos: float = SEAM_FACE_WARN_COS,
+                      block_cos: float = SEAM_FACE_BLOCK_COS) -> Optional[str]:
+    """尾帧↔首帧人脸余弦 → ok/warn/block。None（缺 insightface / 任一帧无脸）→ None（交人判，
+    不臆造，也不影响结构/色彩定级）。余弦越高越同人。纯函数。"""
+    if cos is None:
+        return None
+    if cos < block_cos:
+        return "block"
+    if cos < warn_cos:
+        return "warn"
+    return "ok"
+
+
 def _worse(a: str, b: str) -> str:
     order = {"ok": 0, "warn": 1, "block": 2}
     return a if order.get(a, 0) >= order.get(b, 0) else b
+
+
+def _median(vals: Sequence[float]) -> float:
+    s = sorted(vals)
+    n = len(s)
+    mid = n // 2
+    return s[mid] if n % 2 else (s[mid - 1] + s[mid]) / 2.0
+
+
+def seam_relative_floor(dists: Sequence[Optional[float]], k: float = 3.0,
+                        min_count: int = 4, min_margin: float = 4.0) -> Optional[float]:
+    """本集接缝 dHash 距分布的离群上界 = 中位数 + max(k×MAD, min_margin)。
+
+    绝对阈值（SEAM_WARN/BLOCK）抓"客观上断了"的接缝；本上界抓"绝对阈值放过、
+    但相对本集自身分布异常差"的接缝——只用于把 ok 收紧到 warn，**从不放松**绝对阈值。
+    样本 < min_count 时分布没意义 → None（不标定）；全相同分布（MAD=0）由 min_margin 保底防零容忍。
+    """
+    vals = [d for d in dists if d is not None]
+    if len(vals) < min_count:
+        return None
+    med = _median(vals)
+    mad = _median([abs(v - med) for v in vals])
+    return med + max(k * mad, min_margin)
+
+
+def apply_relative_outlier(verdict: str, dist: Optional[float], floor: Optional[float]) -> str:
+    """绝对阈值放过(ok)、但相对本集分布离群的接缝升到 warn；只升不降。纯函数。"""
+    if verdict == "ok" and floor is not None and dist is not None and dist > floor:
+        return "warn"
+    return verdict
 
 
 def flicker_index(frame_luma: Sequence[float]) -> float:
@@ -183,10 +233,41 @@ def _face_emb(app, path: str) -> Optional[List[float]]:
     return fc._embed(app, path) if app else None
 
 
+def _load_json(path: str) -> Optional[Any]:
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return None
+
+
+def analyze_lighting_signature(path: str, signature: Dict[str, Any]) -> str:
+    """光位签名是自由文本约束（如「画左前暖烛主光，画右后冷月背光」）——像素层无法与
+    文本可靠对账，永远返回 "skipped" 交人判/出图侧契约把关。绝不返回 ok：
+    早先的占位实现静默放行过，假通过比缺检查更危险。"""
+    return "skipped"
+
+
+def count_lighting_signatures(registry: Optional[Dict[str, Any]]) -> int:
+    """asset_registry 里带 lighting_signature 约束的资产数。纯函数·可测。"""
+    if not isinstance(registry, dict):
+        return 0
+    return sum(
+        1 for a in registry.get("assets", [])
+        if isinstance(a, dict) and (a.get("constraints") or {}).get("lighting_signature")
+    )
+
+
 def analyze(root: str, ep: str, frames: int = DEFAULT_FRAMES,
             id_floor: float = DEFAULT_ID_FLOOR, flicker_max: float = DEFAULT_FLICKER_MAX) -> dict:
     vids = sorted(glob.glob(os.path.join(root, "出视频", ep, "视频", "*.mp4")))
     res: dict = {"clips": [], "notes": [], "frames": frames}
+
+    n_sig = count_lighting_signatures(_load_json(os.path.join(root, "出图", "共享", "asset_registry.json")))
+    if n_sig:
+        res["notes"].append(
+            f"{n_sig} 个资产带 lighting_signature（自由文本光位约束）——文本签名无法像素机检，光位匹配交人判。")
+
     if not vids:
         res["notes"].append(f"无 clip MP4（{os.path.join(root,'出视频',ep,'视频')}）——出视频后再跑本检。")
         return res
@@ -218,6 +299,75 @@ def _shot_num(name: str) -> Optional[int]:
     return int(m.group(1)) if m else None
 
 
+# ── 接缝意图（storyboard 是唯一真值源）──────────────────────────────────────
+# 与 n2d-video/scripts/video_qc.py 的 seam_strictness/RELAY_TRANSITIONS 同义，两处保持同步。
+RELAY_TRANSITIONS = ("接力", "relay", "seamless", "continuous")
+
+
+def seam_strictness(intent: Optional[Dict[str, Any]]) -> str:
+    """relay 声明 → strict；声明了其他切镜 → info（构图必变，只记录）；无意图 → strict。纯函数。"""
+    if intent is None:
+        return "strict"
+    if intent.get("relay") or str(intent.get("transition") or "").strip().lower() in RELAY_TRANSITIONS:
+        return "strict"
+    if str(intent.get("transition") or "").strip():
+        return "info"
+    return "strict"
+
+
+def load_seam_intents(root: str, ep: str) -> Dict[int, Dict[str, Any]]:
+    """clip 序号 → storyboard 声明的接缝意图（continuity.transition + need_end_frame）。"""
+    data = _load_json(os.path.join(root, "脚本", ep, "storyboard.json"))
+    if not isinstance(data, dict):
+        return {}
+    out: Dict[int, Dict[str, Any]] = {}
+    for clip in (data.get("clips") or data.get("shots") or []):
+        if not isinstance(clip, dict):
+            continue
+        n = _shot_num(str(clip.get("id") or clip.get("clip") or clip.get("shot") or ""))
+        if n is None:
+            m = re.search(r"(\d+)\s*$", str(clip.get("id") or ""))
+            n = int(m.group(1)) if m else None
+        if n is None:
+            continue
+        cont = clip.get("continuity") or {}
+        out[n] = {"transition": cont.get("transition"),
+                  "relay": bool(clip.get("need_end_frame") or cont.get("need_end_frame"))}
+    return out
+
+
+def _face_cos(app, p1: Optional[str], p2: Optional[str]) -> Optional[float]:
+    """两图最大人脸的 arcface 余弦；缺 embedder / 任一帧无脸 → None（交人判）。"""
+    if app is None or not p1 or not p2:
+        return None
+    e1, e2 = fc._embed(app, p1), fc._embed(app, p2)
+    if e1 is None or e2 is None:
+        return None
+    return fc.cosine(e1, e2)
+
+
+def seam_pair_check(tail_path: str, first_path: str,
+                    warn: int = SEAM_WARN, block: int = SEAM_BLOCK) -> Optional[Dict[str, Any]]:
+    """单对接缝机检（前镜尾帧图 vs 后镜首帧图）：dHash 结构距 + RGB 直方图色距 → verdict。
+    供 PNG 层（seam_analyze）与出视频层（n2d-video/video_qc 抽帧）共用同一套阈值与数学。
+    缺 Pillow / 读图失败 → None（交人判，不臆造）。"""
+    import scene_consistency as scn  # 复用 _dhash_image / hamming / _probe_pillow
+    if not scn._probe_pillow():
+        return None
+    h1, h2 = scn._dhash_image(tail_path), scn._dhash_image(first_path)
+    if h1 is None or h2 is None:
+        return None
+    dist = scn.hamming(h1, h2)
+    struct_v = "block" if dist > block else "warn" if dist > warn else "ok"
+    cdist = hist_cosine_distance(_rgb_hist(tail_path) or [], _rgb_hist(first_path) or [])
+    cv = color_verdict(cdist)
+    return {
+        "dist": dist, "struct_verdict": struct_v,
+        "color_dist": round(cdist, 4) if cdist is not None else None,
+        "color_verdict": cv, "verdict": _worse(struct_v, cv),
+    }
+
+
 def seam_analyze(root: str, ep: str, warn: int = SEAM_WARN, block: int = SEAM_BLOCK) -> dict:
     """⑤ 接缝姿态/构图连续机检（PNG 层，出图后即可跑）——把"逐接缝人判并排读图"降成机检初筛。
     尾帧接力铁律：`镜头N_end.png` 构图 = 下一 Clip 首帧。两者 dHash 距应很小；
@@ -243,24 +393,69 @@ def seam_analyze(root: str, ep: str, warn: int = SEAM_WARN, block: int = SEAM_BL
         else:
             firsts.setdefault(n, p)
     fnums = sorted(firsts)
+    app = fc._load_embedder()  # 人脸身份比对用；None=缺 insightface（静默退化为纯构图/色彩，交人判）
+    if app is None:
+        res["notes"].append("未装 insightface——接缝仅测构图/色彩，尾帧脸身份漂移交人判。")
+    # 两遍制：先收集全部接缝距离 → 用本集分布算离群上界（只收紧不放松）→ 再定级。
+    pairs = []
     for n, tail in sorted(tails.items()):
         nxt = next((m for m in fnums if m > n), None)
         if nxt is None:
             continue
-        h1, h2 = scn._dhash_image(tail), scn._dhash_image(firsts[nxt])
-        if h1 is None or h2 is None:
+        chk = seam_pair_check(tail, firsts[nxt], warn=warn, block=block)
+        if chk is None:
             continue
-        dist = scn.hamming(h1, h2)
-        struct_v = "block" if dist > block else "warn" if dist > warn else "ok"
-        # 色彩直方图距：补 dHash（灰度结构）抓不到的"同构图但灯光/色温跳"的剪辑点闪光。
-        cdist = hist_cosine_distance(_rgb_hist(tail) or [], _rgb_hist(firsts[nxt]) or [])
-        cv = color_verdict(cdist)
-        v = _worse(struct_v, cv)
+        intra_cos = _face_cos(app, tail, firsts.get(n))   # 尾帧 vs 本镜首帧（最直接的"尾帧脸漂"）
+        cross_cos = _face_cos(app, tail, firsts[nxt])      # 尾帧 vs 接力的下一镜首帧
+        pairs.append((n, tail, firsts[nxt], chk, intra_cos, cross_cos))
+    rel_floor = seam_relative_floor([p[3]["dist"] for p in pairs])
+    if rel_floor is not None:
+        res["relative_floor"] = round(rel_floor, 1)
+    # 人脸距(=1-cos)的本集相对离群上界（face 距数值小，min_margin 调小）；只把 ok 收紧到 warn。
+    rel_face_floor = seam_relative_floor([1.0 - p[5] for p in pairs if p[5] is not None],
+                                         min_margin=0.08)
+    intents = load_seam_intents(root, ep)
+    if not intents and pairs:
+        res["notes"].append("storyboard 接缝意图不可用——_end.png 接力对全部按接力铁律严格判（可能误报设计切镜）。")
+    res["contradictions"] = []
+    for n, tail, first, chk, intra_cos, cross_cos in pairs:
+        v = apply_relative_outlier(chk["verdict"], chk["dist"], rel_floor)
+        intent = intents.get(n)
+        strictness = seam_strictness(intent) if intents else "strict"
+        # 人脸身份漂移：intra（尾帧 vs 本镜首帧）任何转场都该同人，始终比；
+        # cross（尾帧 vs 下一镜首帧）只在接力(strict)时比，硬切/溶解下镜本就可能换人/换景，不比免误报。
+        fv_intra = face_seam_verdict(intra_cos)
+        fv_cross = face_seam_verdict(cross_cos) if strictness == "strict" else None
+        face_v = None
+        for fv in (fv_intra, fv_cross):
+            if fv is not None:
+                face_v = fv if face_v is None else _worse(face_v, fv)
+        if face_v == "ok" and strictness == "strict" and cross_cos is not None:
+            face_v = apply_relative_outlier("ok", 1.0 - cross_cos, rel_face_floor)
+        if face_v is not None:
+            v = _worse(v, face_v)
+        if intents and strictness == "info":
+            # 真值源矛盾：出图层有 镜头N_end.png（接力素材），storyboard 却声明非接力切镜。
+            # 以 storyboard 为准——dHash 降为 info，但矛盾本身要报（两套声明必须收敛）。
+            res["contradictions"].append({
+                "shot": n, "tail": os.path.basename(tail),
+                "transition": (intent or {}).get("transition"),
+                "msg": f"镜头{n} 存在接力尾帧 _end.png，但 storyboard 声明 "
+                       f"{(intent or {}).get('transition')}（非接力）——真值源矛盾，"
+                       "以 storyboard 为准；请补 need_end_frame 或移除 _end 尾帧",
+            })
+            if v != "ok":
+                v = "info"
         if v != "ok":
-            res["seams"].append({"tail": os.path.basename(tail), "next_first": os.path.basename(firsts[nxt]),
-                                 "dist": dist, "verdict": v,
-                                 "struct_verdict": struct_v, "color_verdict": cv,
-                                 "color_dist": round(cdist, 4) if cdist is not None else None})
+            res["seams"].append({"tail": os.path.basename(tail), "next_first": os.path.basename(first),
+                                 "dist": chk["dist"], "verdict": v,
+                                 "struct_verdict": chk["struct_verdict"], "color_verdict": chk["color_verdict"],
+                                 "color_dist": chk["color_dist"],
+                                 "face_verdict": face_v,
+                                 "intra_face_cos": round(intra_cos, 3) if intra_cos is not None else None,
+                                 "cross_face_cos": round(cross_cos, 3) if cross_cos is not None else None,
+                                 "transition": (intent or {}).get("transition"),
+                                 "relative_outlier": v == "warn" and chk["verdict"] == "ok"})
     return res
 
 
@@ -289,6 +484,8 @@ def main(argv: List[str]) -> int:
         print(f"=== 接缝姿态/构图连续机检（尾帧 vs 下一首帧·N2接力）：{ns.root} {ns.episode} ===")
         for n in res["notes"]:
             print("ℹ️ " + n)
+        for c in res.get("contradictions", []):
+            print(f"⚠️真值源矛盾 {c['msg']}")
         nb = 0
         for s in res["seams"]:
             if s["verdict"] == "block":
@@ -299,6 +496,8 @@ def main(argv: List[str]) -> int:
                 why.append(f"构图 dHash 距 {s['dist']}")
             if s.get("color_verdict", "ok") != "ok":
                 why.append(f"色彩/灯光距 {cd}（同构图但色温/明暗跳）")
+            if s.get("relative_outlier"):
+                why.append(f"本集分布离群（距 {s['dist']} 超自标定上界 {res.get('relative_floor')}）")
             print(f"{'⛔接力断' if s['verdict']=='block' else '⚠️接缝偏'} {s['tail']} → {s['next_first']}："
                   f"{'；'.join(why) or f'dHash 距 {s['dist']}'}（尾帧没对上下一首帧，出视频会跳切/闪）")
         print(f"\n接缝跳切疑似 🔴 {nb} · 共查 {len(res['seams'])} 处异常接缝")

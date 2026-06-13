@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Platform performance feedback for novel2drama/n2d."""
+"""Platform performance feedback for n2d."""
 from __future__ import annotations
 
 import argparse
@@ -13,7 +13,7 @@ import sys
 from collections import defaultdict
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
-_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
+_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import (  # noqa: E402  生产数据目录 / kind 单一真值源
@@ -1321,7 +1321,7 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--update-guide", action="store_true")
     ap.add_argument(
         "--guide",
-        default=os.path.join("skills", "novel2drama", "references", "导演节奏.md"),
+        default=os.path.join("skills", "n2d", "references", "导演节奏.md"),
         help="director rhythm guide to update when --update-guide is set",
     )
     # 选题→投放→反哺选题闭环：把本剧第一方战绩按题材写入跨项目战绩库，供 novel-score 读为题材热度先验。

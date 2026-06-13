@@ -17,7 +17,9 @@ MV 不需要像 n2d 那样承担多集连续剧的严格跨集一致性，但一
 | `lead_identity_anchor` | 主角/主唱不可漂特征：脸型、发型、服装轮廓、标志配饰 |
 | `global_style` | 整支 MV 的画风、镜头质感、颗粒、色彩语法 |
 | `palette_anchor` | 2-4 个主色，允许段落内加亮/变暗，不允许整支 MV 跳风格 |
-| `section_look` | 每个段落的场景、光位、服装变体和情绪强度 |
+| `color_script` | 色彩剧本：为 Intro/Verse/Chorus/Bridge 定义主光色、对比色与氛围转场 |
+| `section_look` | 每个段落的场景、色调偏移、光位、服装变体和情绪强度 |
+| `vocal_traits` | 演唱特征：主角唱歌时的神态锚点（闭眼深情、嘶吼、呢喃、对口型风格） |
 | `motif_ledger` | 反复出现的视觉母题：镜子、雨、红线、剑光、霓虹、花瓣、火焰等 |
 | `reference_inputs` | 用户指定参考图、后端主体/角色 ID、LoRA 卡等一致性增强资产 |
 | `forbidden_drift` | 明确禁止漂移项：换脸、换发色、换衣型、主道具变形、场景风格突变 |

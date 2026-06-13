@@ -1,0 +1,39 @@
+# captured_at: 2026-06-12T16:09:45Z
+# cli: /Users/lalala/.local/bin/dreamina
+# command: frames2video
+
+Usage:
+  dreamina frames2video [flags]
+
+Upload two local images as first and last frames, then submit a Dreamina video generation task. The task is asynchronous, but --poll can wait briefly before falling back to query_result.
+
+Supported combinations:
+- model_version: 3.0, 3.5pro, seedance2.0, seedance2.0fast, seedance2.0_vip, seedance2.0fast_vip
+- seedance2.0_vip -> video_resolution 720p or 1080p; duration 4-15s
+- 3.0 -> video_resolution 720p; duration 3-10s
+- 3.5pro -> video_resolution 720p; duration 4-12s
+- all other seedance2.0 models -> video_resolution 720p; duration 4-15s
+
+Notes:
+- ratio is inferred from the first frame image size
+- default model_version: seedance2.0fast
+- omit --video_resolution to use the model default
+- 部分高内容安全风险模型在首次使用前，可能需要先在 Dreamina Web 端完成授权确认。若返回 AigcComplianceConfirmationRequired，请先完成授权后重试。
+
+
+Flags:
+      --first string              local first-frame image path
+      --last string               local last-frame image path
+      --prompt string             generation prompt
+      --session int               session id (default 0 "默认对话") 
+      --duration int              video duration in seconds; supported ranges: 3.0 -> 3-10, 3.5pro -> 4-12, seedance2.0 family -> 4-15 (default 5)
+      --video_resolution string   supported values by model: seedance2.0_vip -> 720p or 1080p; all other models -> 720p
+      --model_version string      supported values: 3.0, 3.5pro, seedance2.0, seedance2.0fast, seedance2.0_vip, seedance2.0fast_vip; default: seedance2.0fast
+      --poll int                  submit then poll query_result for up to N seconds at 1s intervals (0 disables polling)
+  -h, --help                      help for frames2video
+
+Global Flags:
+      --version   print build version information
+
+Examples:
+  dreamina frames2video --first=./start.png --last=./end.png --prompt="season changes"

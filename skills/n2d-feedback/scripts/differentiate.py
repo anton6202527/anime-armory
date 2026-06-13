@@ -27,7 +27,7 @@ import sys
 from collections import Counter, defaultdict
 from typing import Any, Dict, List, Optional, Tuple
 
-_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
+_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import DIFFERENTIATION_CANDIDATES_KIND, GENRE_PERFORMANCE_RECORD_KIND  # noqa: E402

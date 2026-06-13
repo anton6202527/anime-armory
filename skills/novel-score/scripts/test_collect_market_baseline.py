@@ -23,6 +23,7 @@ def _args(**overrides):
         no_manual_required=True,
         allow_fetch_errors=True,
         note=[],
+        manual_evidence=[],
         target_platform="红果/抖音 商业爽文向",
         date="2026-01-01",
         expires_after_days=21,
@@ -70,8 +71,15 @@ def test_coverage_warning_when_short_drama_platform_uncovered():
     assert "红果" in result["coverage_warnings"][0]
 
 
-def test_note_covering_short_drama_suppresses_warning():
+def test_note_does_not_suppress_short_drama_warning():
     result = cmb.collect(_args(note=["红果短剧榜本周热门：复仇逆袭题材占多数"]))
+    assert result["coverage_warnings"]
+
+
+def test_manual_evidence_covering_short_drama_suppresses_warning():
+    result = cmb.collect(_args(
+        manual_evidence=["红果短剧|2026-01-01|第三方榜单|复仇逆袭题材占多数|https://example.com/rank"]
+    ))
     assert result["coverage_warnings"] == []
 
 

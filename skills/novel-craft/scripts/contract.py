@@ -19,6 +19,46 @@ CHAPTER_GRANULARITY = ("逐章", "小批", "全书草稿")
 
 AI_TEXT_USAGE_MODES = ("AI-generated", "AI-assisted", "未使用AI文本")
 
+RIGHTS_STATUS_CANONICAL = {
+    "original": "original",
+    "原创": "original",
+    "self-owned": "user-owned",
+    "user-owned": "user-owned",
+    "owned": "user-owned",
+    "自有": "user-owned",
+    "授权": "user-declared",
+    "licensed": "user-declared",
+    "user-licensed": "user-declared",
+    "user-declared": "user-declared",
+    "public-domain": "public-domain",
+    "公版": "public-domain",
+    "unknown": "unknown",
+    "未判定": "unknown",
+}
+
+PUBLIC_DOMAIN_LICENSE_URLS = {
+    "gutenberg": "https://www.gutenberg.org/policy/license.html",
+    "wikisource": "https://wikisource.org/wiki/Wikisource:Copyright_policy",
+}
+
+REGION_ALIASES = {
+    "us": "US",
+    "usa": "US",
+    "united states": "US",
+    "美国": "US",
+    "cn": "CN",
+    "china": "CN",
+    "中国": "CN",
+    "中国大陆": "CN",
+    "大陆": "CN",
+    "全球": "GLOBAL",
+    "global": "GLOBAL",
+    "worldwide": "GLOBAL",
+    "跨平台": "UNSPECIFIED",
+    "未定": "UNSPECIFIED",
+    "": "",
+}
+
 KIND_SUFFIX = {
     "rewrite": "改写",
     "expand": "扩写",
@@ -63,6 +103,16 @@ SCALE_PROFILES = {
         "demo": 3,
     },
 }
+
+SCALE_ALIASES = {
+    "抖音漫剧": "漫剧",
+    "红果短剧": "漫剧",
+    "漫剧档": "漫剧",
+    "短剧": "微短剧",
+    "微短剧档": "微短剧",
+}
+
+SCALE_CHOICES = tuple(SCALE_PROFILES) + tuple(SCALE_ALIASES)
 
 DERIVED_STAGE_TABLE = [
     {
@@ -205,10 +255,117 @@ KIND_SPEC_LABEL = {
 }
 
 
+def normalize_scale(scale):
+    key = str(scale or "").strip()
+    return SCALE_ALIASES.get(key, key)
+
+
 def scale_profile(scale):
-    if scale not in SCALE_PROFILES:
+    key = normalize_scale(scale)
+    if key not in SCALE_PROFILES:
         raise KeyError(f"unknown scale: {scale}")
-    return deepcopy(SCALE_PROFILES[scale])
+    return deepcopy(SCALE_PROFILES[key])
+
+
+def normalize_rights_status(status):
+    key = str(status or "").strip()
+    return RIGHTS_STATUS_CANONICAL.get(key, key or "unknown")
+
+
+def normalize_region(region):
+    key = str(region or "").strip()
+    return REGION_ALIASES.get(key.lower(), REGION_ALIASES.get(key, key))
+
+
+def parse_regions(value):
+    if value is None:
+        return []
+    if isinstance(value, (list, tuple, set)):
+        raw = list(value)
+    else:
+        raw = str(value).replace("，", ",").replace("、", ",").split(",")
+    out = []
+    for item in raw:
+        region = normalize_region(item)
+        if region and region not in out:
+            out.append(region)
+    return out
+
+
+def rights_metadata(
+    rights_status,
+    *,
+    source_type="",
+    rights_declared=False,
+    source_url="",
+    rights_jurisdiction=None,
+    rights_basis=None,
+    source_license_url=None,
+    distribution_regions=None,
+):
+    """Return normalized rights fields for _meta.json/source_manifest.json.
+
+    Public-domain is jurisdiction-sensitive. We record the source-side basis and
+    distribution regions separately so QA/export gates can reason about gaps.
+    """
+    status = normalize_rights_status(rights_status)
+    source_type = str(source_type or "").strip()
+    regions = parse_regions(distribution_regions)
+    covered_regions = []
+    declared = bool(rights_declared)
+    jurisdiction = str(rights_jurisdiction or "").strip()
+    basis = str(rights_basis or "").strip()
+    license_url = str(source_license_url or "").strip()
+
+    if status == "original":
+        jurisdiction = jurisdiction or "GLOBAL"
+        basis = basis or "original_creation"
+        regions = regions or ["GLOBAL"]
+        covered_regions = ["GLOBAL"]
+        declared = True
+    elif status == "user-owned":
+        jurisdiction = jurisdiction or "user-declared"
+        basis = basis or "user_attested_ownership"
+        regions = regions or ["GLOBAL"]
+        covered_regions = ["GLOBAL"]
+        declared = True
+    elif status == "user-declared":
+        jurisdiction = jurisdiction or "user-declared"
+        basis = basis or "user_attested_authorization"
+        regions = regions or ["GLOBAL"]
+        covered_regions = ["GLOBAL"]
+        declared = True
+    elif status == "public-domain":
+        if source_type == "gutenberg":
+            jurisdiction = jurisdiction or "US"
+            basis = basis or "Project Gutenberg public-domain claim; verify outside US"
+            license_url = license_url or PUBLIC_DOMAIN_LICENSE_URLS["gutenberg"]
+            covered_regions = ["US"]
+        elif source_type == "wikisource":
+            jurisdiction = jurisdiction or "source-site"
+            basis = basis or "Wikisource page-level public-domain/free-license claim; verify target region"
+            license_url = license_url or PUBLIC_DOMAIN_LICENSE_URLS["wikisource"]
+        else:
+            jurisdiction = jurisdiction or "declared-by-source-header"
+            basis = basis or "source provenance header says public-domain; target region still needs review"
+    else:
+        status = "unknown"
+        jurisdiction = jurisdiction or "unknown"
+        basis = basis or "rights_not_established"
+
+    requires_user_rights = status not in {"original", "user-owned", "user-declared", "public-domain"}
+    requires_region_review = status == "public-domain" and "GLOBAL" not in covered_regions
+    return {
+        "rights_status": status,
+        "rights_jurisdiction": jurisdiction,
+        "rights_basis": basis,
+        "source_license_url": license_url or source_url or "",
+        "rights_covered_regions": covered_regions,
+        "distribution_regions": regions,
+        "requires_user_rights": requires_user_rights,
+        "requires_region_rights_review": requires_region_review,
+        "rights_declared": declared,
+    }
 
 
 def demo_chapters_for(target_chapters):
@@ -241,11 +398,12 @@ def derive_title(meta):
 
 
 def base_meta(kind, *, outputs, rights_status, title=None):
+    rights = rights_metadata(rights_status)
     return {
         "schema_version": CONTRACT_VERSION,
         "kind": kind,
         "title": title,
-        "rights_status": rights_status,
+        **rights,
         "outputs": list(outputs),
         "created_at": date.today().isoformat(),
     }

@@ -4,7 +4,7 @@
 # 带持久缓存(同参数同文本不重复合成/调 API)——云端与本地零样本均缓存进 _voicecache/。
 # 用法: render_voice.py <作品根> <第N集> <zh|en>
 import sys, os, re, subprocess, json, base64, uuid, hashlib, urllib.request, shutil, time
-_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'common'))
+_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'n2d', '_lib'))
 if _COMMON not in sys.path: sys.path.insert(0, _COMMON)
 from n2d_settings import load_settings, get_setting  # noqa: E402
 from n2d_text_utils import clean_punctuation  # noqa: E402
@@ -46,9 +46,14 @@ VOLC_APPID=os.environ.get('VOLC_APPID'); VOLC_TOKEN=os.environ.get('VOLC_TOKEN')
 VOLC_CLUSTER=os.environ.get('VOLC_CLUSTER','volcano_tts'); VOLC_ENDPOINT=os.environ.get('VOLC_ENDPOINT','https://openspeech.bytedance.com/api/v1/tts')
 # 零样本克隆后端：本地服务统一 GET /inference_zero_shot?text=&prompt_text=&prompt_wav= 契约（端点随 fork，见 backends.md）。
 # (URL_env, 参考音 env 前缀, 显示名, HTTP 超时秒)，按优先级取第一个设了 URL 的；任一存在即优先于 MiniMax/火山。
-ZS_SPECS=[('COSYVOICE_URL','COSY','CosyVoice',120),('FISHSPEECH_URL','FISH','FishSpeech',300),
-          ('GPTSOVITS_URL','GSV','GPT-SoVITS',300),('INDEXTTS_URL','IDX','IndexTTS-2',300),
-          ('VOXCPM_URL','VOX','VoxCPM2',300)]
+# 后端清单单一真值源在 common/voice_backends.py（候选快照+适配层）；此处只取用，不再各抄一份。
+try:
+    from voice_backends import zs_specs_legacy as _zs_legacy  # noqa: E402
+    ZS_SPECS=[tuple(t) for t in _zs_legacy()]
+except Exception:  # 退化兜底：catalog 不可用时仍按内置优先级跑
+    ZS_SPECS=[('COSYVOICE_URL','COSY','CosyVoice',120),('FISHSPEECH_URL','FISH','FishSpeech',300),
+              ('GPTSOVITS_URL','GSV','GPT-SoVITS',300),('INDEXTTS_URL','IDX','IndexTTS-2',300),
+              ('VOXCPM_URL','VOX','VoxCPM2',300)]
 ZS=next(((os.environ[e],pfx,lbl,to) for e,pfx,lbl,to in ZS_SPECS if os.environ.get(e)), None)
 USE_ZS=bool(ZS)   # 零样本克隆优先于 MiniMax；若也设了 MiniMax，本地零样本赢
 USE_VOLC=bool(VOLC_APPID and VOLC_TOKEN) and not USE_ZS and not USE_MM
@@ -89,7 +94,7 @@ def hook_kind(s):
 items=[]; shots=[]
 if LANG=='zh':
     if not os.path.isfile(VO):
-        sys.exit(f'⛔ 缺 {VO} —— 请先 /n2d-script 产出 voiceover.txt（阶段1·剧本改编）。')
+        sys.exit(f'⛔ 缺 {VO} —— 请先 n2d-script 产出 voiceover.txt（阶段1·剧本改编）。')
     for ln in open(VO,encoding='utf-8'):
         ln=ln.strip()
         m=re.match(r'\[(镜头[^·]*)·([^·]+)·([^\]]*)\]\s*(.+)',ln)
@@ -341,7 +346,7 @@ if placeholders:
     )
 
 if LANG == 'zh' and os.environ.get('N2D_UPDATE_PROGRESS', '1') != '0':
-    prog = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'novel2drama', 'progress.py'))
+    prog = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'n2d', 'progress.py'))
     try:
         progress_value = '⏳rough' if placeholders else '✅'
         subprocess.run(['python3', prog, 'set', ROOT, EP, '配音', progress_value], check=False)

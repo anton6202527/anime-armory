@@ -3,13 +3,13 @@
 ## 三条铁律
 
 1. **不拆集**。广告不切「第N集」。一条主片是一个整体（可以很长）。多时长（30/15/6s）、多比例（16:9/9:16/1:1）、A·B 是**交付件 deliverable**，不是集——登记在 `_进度.md` 的「交付版本矩阵」，由 `ad-compose` 从主片重剪/reframe。
-2. **自包含**。`ad-*` 不复用 n2d-*/mv-*/novel-*/song-*。借鉴思路可以，import 代码不行。换脸/水印走公共 `shared-video-faceswap`/`shared-watermark`。
+2. **自包含**。`ad-*` 不复用 n2d-* / mv-* / novel-* / song-*。借鉴思路可以，import 代码不行。换脸/水印走本线 `ad-video-faceswap`/`ad-watermark`。
 3. **音频先行**。VO 实测时长驱动镜头时长，`ad-script` 跑两遍（脚本 pass → 配音后分镜 pass），与 n2d「配音先行」同构。广告常是「音乐床 + VO」混合驱动，音乐床作节奏锚一并记录在时间轴。
 
 ## 状态机：两个 sibling 文件
 
 - `_进度.md` —— 状态机。先读它判断走到哪。结构=阶段进度表 + 交付版本矩阵 + 维护记录（不是逐集矩阵）。
-- `_设置.md` —— 私有选择点（权威）。按 `skills/_偏好约定.md` 解析。
+- `_设置.md` —— 私有选择点（权威）。按 `skills/ad-craft/references/选择点与偏好.md` 解析。
 
 ## 阶段图
 
@@ -17,10 +17,10 @@
 brief(立项) → concept(创意) → script(脚本+VO+时间轴+广告法机检)
    → voice(VO配音·时长清单) → storyboard(分镜·实测时长驱动)
    → image(三层定妆库+出图) → video(图生视频+契约继承)
-   → compose(剪辑包装+cutdown+多比例+交付规格+水印) → [review 二期] → handoff(AI披露)
+   → compose(剪辑包装+cutdown+多比例+交付规格+水印) → handoff(AI披露) → review(M0投放前硬项)
 ```
 
-高风险（花钱/不可逆/合规）阶段 = image / video / compose：正式生产入口须先确认（见 `_偏好约定.md` 例外条）。
+高风险（花钱/不可逆/合规）阶段 = image / video / compose：正式生产入口须先确认，并跑 `ad-craft/scripts/gate.py <作品根> --stage image|video|compose`。
 
 ## 广告专有强化（相对 n2d/mv）
 

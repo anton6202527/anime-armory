@@ -25,7 +25,13 @@ def valid_assessment(score_task_id=None):
         ],
         "deductions": [
             {"item": "Boring", "points": -5, "reason": "Too slow"}
-        ]
+        ],
+        "title_check": {
+            "scores": {"hook": 4, "platform_fit": 4, "character_identity": 3,
+                       "anti_collision": 4, "memorability": 4},
+            "comment": "书名贴平台、有钩子",
+            "needs_rename": False,
+        },
     }
     if score_task_id:
         payload["score_task_id"] = score_task_id
@@ -49,7 +55,7 @@ class TestNovelScore(unittest.TestCase):
                 "baseline_date": date.today().isoformat(),
                 "target_platform": "红果/抖音 商业爽文向",
                 "expires_after_days": 21,
-                "sources": [{"platform": "test", "url": "https://example.com", "status": "ok", "signals": ["仙侠"]}],
+                "sources": [{"platform": "红果短剧", "url": "https://example.com", "status": "ok", "signals": ["仙侠"]}],
             }, f)
         with open(os.path.join(self.score_dir, f"题材热榜_{date.today().isoformat()}.md"), "w", encoding="utf-8") as f:
             f.write("# test baseline\n")
@@ -101,7 +107,13 @@ class TestNovelScore(unittest.TestCase):
         self.assertEqual(report["source_snapshot"]["kind"], "novel_text_snapshot")
         self.assertEqual(len(report["source_snapshot"]["files"]), 1)
         self.assertEqual(report["market_baseline"]["baseline_path"], f"评分/题材热榜_{date.today().isoformat()}.md")
-        self.assertEqual(report["market_baseline"]["sources"][0]["platform"], "test")
+        self.assertEqual(report["market_baseline"]["sources"][0]["platform"], "红果短剧")
+        # 书名体检：19/25 且未撞名 → 不换名，也不路由 novel-title
+        self.assertEqual(report["title_check"]["title"], "Test Book")
+        self.assertEqual(report["title_check"]["total"], 19)
+        self.assertFalse(report["title_check"]["needs_rename"])
+        self.assertEqual(report["title_check"]["collision"]["status"], "unchecked")
+        self.assertNotIn("novel-title", [a["recommended_skill"] for a in report["next_actions"]])
 
     def test_assessment_must_match_score_task(self):
         self.generate_score_task()
@@ -195,10 +207,24 @@ class TestNovelScore(unittest.TestCase):
         finally:
             sys.argv = old_argv
 
-    def test_manual_baseline_notes_count_as_effective_evidence(self):
+    def test_unstructured_baseline_notes_do_not_count_as_effective_evidence(self):
         baseline = score.find_latest_baseline(self.tmp)
         baseline["sources"] = [{"platform": "test", "status": "fetch_error", "signals": []}]
         baseline["notes"] = ["2026-06-08 人工核验红果榜：仙侠复仇仍在上升。"]
+        freshness = score.baseline_freshness(baseline)
+        self.assertTrue(freshness["blocking"])
+        self.assertEqual(freshness["status"], "no_evidence")
+
+    def test_manual_baseline_evidence_counts_as_effective_evidence(self):
+        baseline = score.find_latest_baseline(self.tmp)
+        baseline["sources"] = [{"platform": "test", "status": "fetch_error", "signals": []}]
+        baseline["manual_evidence"] = [{
+            "platform": "红果短剧",
+            "date": "2026-06-08",
+            "source": "第三方榜单",
+            "summary": "仙侠复仇仍在上升。",
+            "url": "https://example.com/rank",
+        }]
         freshness = score.baseline_freshness(baseline)
         self.assertFalse(freshness["blocking"])
         self.assertEqual(freshness["status"], "fresh")
@@ -259,6 +285,89 @@ class TestNovelScore(unittest.TestCase):
         self.assertTrue(any("evidence" in e for e in errors))
         self.assertTrue(any("comment" in e for e in errors))
         self.assertTrue(any("improve_by" in e for e in errors))
+
+    def test_validate_assessment_requires_title_check_when_title_set(self):
+        payload = valid_assessment()
+        del payload["title_check"]
+        errors = score.validate_assessment(payload, expect_title_check=True)
+        self.assertTrue(any("title_check" in e for e in errors))
+        # 书名未定时可省略
+        self.assertEqual(score.validate_assessment(payload, expect_title_check=False), [])
+
+    def test_validate_assessment_checks_title_check_shape(self):
+        payload = valid_assessment()
+        payload["title_check"] = {
+            "scores": {"hook": 6, "platform_fit": 3, "unknown_dim": 2},
+            "comment": "",
+            "needs_rename": "yes",
+        }
+        errors = score.validate_assessment(payload, expect_title_check=True)
+        self.assertTrue(any("hook 必须是 1-5" in e for e in errors))
+        self.assertTrue(any("未知维度：unknown_dim" in e for e in errors))
+        self.assertTrue(any("缺少维度：anti_collision" in e for e in errors))
+        self.assertTrue(any("comment 不能为空" in e for e in errors))
+        self.assertTrue(any("needs_rename 必须是 bool" in e for e in errors))
+
+    def test_weak_title_routes_to_novel_title(self):
+        task = self.generate_score_task()
+        mock = valid_assessment(task["score_task_id"])
+        # 总分 10/25 < 阈值 15 → needs_rename，路由 novel-title
+        mock["title_check"]["scores"] = {"hook": 2, "platform_fit": 2, "character_identity": 2,
+                                         "anti_collision": 2, "memorability": 2}
+        mock_path = os.path.join(self.tmp, "mock.json")
+        with open(mock_path, "w", encoding="utf-8") as f:
+            json.dump(mock, f, ensure_ascii=False)
+        old_argv = sys.argv
+        sys.argv = ["score.py", self.tmp, "--mock-assessment", mock_path]
+        try:
+            score.main()
+        finally:
+            sys.argv = old_argv
+        with open(os.path.join(self.score_dir, "score_report.json"), encoding="utf-8") as f:
+            report = json.load(f)
+        self.assertTrue(report["title_check"]["needs_rename"])
+        title_actions = [a for a in report["next_actions"] if a["recommended_skill"] == "novel-title"]
+        self.assertEqual(len(title_actions), 1)
+        self.assertEqual(title_actions[0]["dimension"], "title_check")
+
+    def test_hard_collision_forces_rename(self):
+        settings_dir = os.path.join(self.tmp, "设定")
+        os.makedirs(settings_dir)
+        with open(os.path.join(settings_dir, "书名撞名检查_2026-06-01.json"), "w", encoding="utf-8") as f:
+            json.dump({
+                "schema_version": 1,
+                "kind": "novel_title_collision_check",
+                "generated_at": "2026-06-01",
+                "candidates": [{"candidate": "Test Book", "status": "hard_collision",
+                                "collisions": [{"strength": "hard", "match": "Test Book"}]}],
+            }, f, ensure_ascii=False)
+        task = self.generate_score_task()
+        mock = valid_assessment(task["score_task_id"])  # 5维高分也压不住硬撞名
+        mock_path = os.path.join(self.tmp, "mock.json")
+        with open(mock_path, "w", encoding="utf-8") as f:
+            json.dump(mock, f, ensure_ascii=False)
+        old_argv = sys.argv
+        sys.argv = ["score.py", self.tmp, "--mock-assessment", mock_path]
+        try:
+            score.main()
+        finally:
+            sys.argv = old_argv
+        with open(os.path.join(self.score_dir, "score_report.json"), encoding="utf-8") as f:
+            report = json.load(f)
+        self.assertEqual(report["title_check"]["collision"]["status"], "hard_collision")
+        self.assertTrue(report["title_check"]["needs_rename"])
+        self.assertIn("novel-title", [a["recommended_skill"] for a in report["next_actions"]])
+
+    def test_build_title_check_threshold(self):
+        tc = {"scores": {"hook": 3, "platform_fit": 3, "character_identity": 3,
+                         "anti_collision": 3, "memorability": 3},
+              "comment": "平", "needs_rename": False}
+        # 15/25 恰好达线 → 不换名
+        self.assertFalse(score.build_title_check(tc, "书名", None)["needs_rename"])
+        tc["scores"]["hook"] = 2
+        self.assertTrue(score.build_title_check(tc, "书名", None)["needs_rename"])
+        # 无书名 → 无体检块
+        self.assertIsNone(score.build_title_check(tc, None, None))
 
 
 class TestFirstPartyGenrePrior(unittest.TestCase):

@@ -56,3 +56,37 @@ def test_palette_hist_image_path(tmp_path):
     pg = tmp_path / "gray.png"; gray.save(pg)
     hg = oc._palette_hist(str(pg), bins=12)
     assert hg is not None and sum(hg) == 0.0
+
+
+# ---------- 相对离群二次校准（减噪） ----------
+
+def test_relative_calibrate_suppresses_group_wide_low():
+    # 整组一起低（场景灯光把所有镜拉低）→ 不是相对离群 → 放行 ok
+    group = [0.245, 0.284, 0.461, 0.567]   # 沈念_常态 实测分布，median≈0.373
+    assert oc.relative_calibrate("block", 0.245, group, rel_margin=0.15) == "ok"
+    assert oc.relative_calibrate("block", 0.284, group, rel_margin=0.15) == "ok"
+
+
+def test_relative_calibrate_keeps_strong_outlier():
+    # 个别镜明显低于本角色镜组中位（真信号）→ 保留 block
+    group = [0.307, 0.664, 0.718, 0.906]   # 沈念_觉醒态，median≈0.691
+    assert oc.relative_calibrate("block", 0.307, group, rel_margin=0.15) == "block"  # 距中位0.384>0.15
+    assert oc.relative_calibrate("block", 0.664, group, rel_margin=0.15) == "ok"     # 距中位0.027
+
+
+def test_relative_calibrate_small_group_downgrades_block():
+    # 镜组 <3 → 无统计基础 → block 降 warn，warn 保持
+    assert oc.relative_calibrate("block", 0.1, [0.1, 0.17], min_group=3) == "warn"
+    assert oc.relative_calibrate("block", 0.1, [0.1], min_group=3) == "warn"
+    assert oc.relative_calibrate("warn", 0.1, [0.1], min_group=3) == "warn"
+
+
+def test_relative_calibrate_never_escalates_ok():
+    assert oc.relative_calibrate("ok", 0.0, [0.9, 0.9, 0.9]) == "ok"
+
+
+def test_median_helper():
+    assert oc._median([]) == 0.0
+    assert oc._median([0.5]) == 0.5
+    assert oc._median([0.1, 0.3, 0.5]) == 0.3
+    assert oc._median([0.1, 0.3, 0.5, 0.7]) == 0.4

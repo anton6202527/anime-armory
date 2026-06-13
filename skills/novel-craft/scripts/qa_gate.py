@@ -11,6 +11,7 @@ import os
 import re
 from datetime import date
 
+from contract import normalize_rights_status, parse_regions
 from report_snapshot import snapshot_chapters, validate_snapshot
 from waivers import baseline_freshness_scope, has_waiver, load_waivers
 
@@ -18,6 +19,7 @@ from waivers import baseline_freshness_scope, has_waiver, load_waivers
 BLOCKING_SCORE_VERDICTS = {"大改", "弃稿重立"}
 COMMERCIAL_SCORE_MODES = {"商业连载", "漫剧源书"}
 COMMERCIAL_SCORE_TARGETS = ("红果", "番茄", "抖音", "漫剧")
+RIGHTS_REGION_EXPORT_FORMATS = {"n2d", "combine"}
 
 REVIEW_REQUIRED_FIELDS = (
     "schema_version",
@@ -83,6 +85,19 @@ def _load_settings(project_root):
     return settings
 
 
+def _load_source_manifest(project_root, meta):
+    candidates = []
+    if meta.get("source_manifest"):
+        candidates.append(os.path.join(project_root, str(meta["source_manifest"])))
+    candidates.append(os.path.join(project_root, "小说", "source_manifest.json"))
+    for path in candidates:
+        payload = _load_json(path)
+        if isinstance(payload, dict):
+            payload["_manifest_path"] = path
+            return payload
+    return {}
+
+
 def _score_required(project_root):
     meta = _load_meta(project_root)
     settings = _load_settings(project_root)
@@ -97,6 +112,138 @@ def _score_required(project_root):
     ]
     target = " ".join(str(part or "") for part in target_parts)
     return mode in COMMERCIAL_SCORE_MODES or any(key in target for key in COMMERCIAL_SCORE_TARGETS)
+
+
+def _target_distribution_regions(meta, settings):
+    for key in ("target_distribution_regions", "发行地区"):
+        value = meta.get(key) if key in meta else settings.get(key)
+        regions = parse_regions(value)
+        regions = [r for r in regions if r != "UNSPECIFIED"]
+        if regions:
+            return regions
+    return []
+
+
+def _source_distribution_regions(rights):
+    covered = [r for r in parse_regions(rights.get("rights_covered_regions")) if r != "UNSPECIFIED"]
+    if covered:
+        return covered
+    return [r for r in parse_regions(rights.get("distribution_regions")) if r != "UNSPECIFIED"]
+
+
+def _region_covered(target_regions, source_regions):
+    if not target_regions:
+        return False
+    if "GLOBAL" in source_regions:
+        return True
+    return all(region in source_regions for region in target_regions)
+
+
+def _rights_blocking_context(project_root, export_formats):
+    formats = set(export_formats or [])
+    return bool(formats & RIGHTS_REGION_EXPORT_FORMATS) or _score_required(project_root)
+
+
+def _rights_gate(project_root, *, export_formats=None):
+    meta = _load_meta(project_root)
+    settings = _load_settings(project_root)
+    manifest = _load_source_manifest(project_root, meta)
+    rights = dict(manifest)
+    rights.update({k: v for k, v in meta.items() if k.startswith("rights_") or k in {
+        "rights_status",
+        "rights_jurisdiction",
+        "rights_basis",
+        "source_license_url",
+        "rights_covered_regions",
+        "distribution_regions",
+        "requires_user_rights",
+        "requires_region_rights_review",
+        "rights_declared",
+    }})
+    raw_status = rights.get("rights_status")
+    status = normalize_rights_status(raw_status)
+    report = {
+        "kind": "rights",
+        "path": manifest.get("_manifest_path") or os.path.join(project_root, "_meta.json"),
+        "exists": bool(meta or manifest),
+        "blocking": False,
+        "blockers": [],
+        "warnings": [],
+        "next_actions": [],
+    }
+    if not (meta or manifest):
+        report["warnings"].append(_warning(
+            "RIGHTS-MISSING-META",
+            "rights",
+            "novel",
+            "缺少 _meta.json/source_manifest.json；无法做完整权利辖区审计。",
+        ))
+        return report
+
+    if raw_status in (None, ""):
+        report["warnings"].append(_warning(
+            "RIGHTS-STATUS-MISSING",
+            "rights",
+            "novel",
+            "缺少 rights_status；旧项目可继续，但导出/发布前应补 _meta.json/source_manifest.json 权利字段。",
+        ))
+    elif status == "unknown":
+        report["blockers"].append(_warning(
+            "RIGHTS-UNKNOWN",
+            "rights",
+            "novel",
+            "权利来源为 unknown；先确认 public-domain/user-owned/user-declared/original，不能导出或改编。",
+        ))
+    elif rights.get("requires_user_rights") and not (rights.get("rights_declared") or meta.get("rights_declared_at")):
+        report["blockers"].append(_warning(
+            "RIGHTS-USER-REQUIRED",
+            "rights",
+            "novel",
+            "来源需要用户权利声明；请补授权证明或改用公版/自有文本。",
+        ))
+    elif status in {"user-owned", "user-declared"} and not (rights.get("rights_declared") or meta.get("rights_declared_at")):
+        report["warnings"].append(_warning(
+            "RIGHTS-DECLARATION-MISSING",
+            "rights",
+            "novel",
+            "权利状态为自有/授权，但缺 rights_declared 或 rights_declared_at 留痕；发布前补授权记录。",
+        ))
+
+    if status == "public-domain":
+        target_regions = _target_distribution_regions(meta, settings)
+        source_regions = _source_distribution_regions(rights)
+        high_risk = _rights_blocking_context(project_root, export_formats)
+        if not target_regions:
+            item = _warning(
+                "RIGHTS-PD-REGION-UNSET",
+                "rights",
+                "novel",
+                "公版来源缺少计划发行地区；Project Gutenberg/Wikisource 等来源的公版判断不自动覆盖所有地区。",
+            )
+            if high_risk:
+                report["blockers"].append(item)
+            else:
+                report["warnings"].append(item)
+        elif not _region_covered(target_regions, source_regions):
+            item = _warning(
+                "RIGHTS-PD-REGION-GAP",
+                "rights",
+                "novel",
+                "公版来源辖区/发行地区不匹配："
+                f"source_regions={source_regions or ['未写']} target_regions={target_regions}；"
+                "补 rights_jurisdiction/rights_covered_regions/target_distribution_regions 或完成地区版权复核。",
+            )
+            report["blockers"].append(item)
+        elif rights.get("requires_region_rights_review"):
+            report["warnings"].append(_warning(
+                "RIGHTS-PD-REGION-REVIEW",
+                "rights",
+                "novel",
+                f"公版来源已覆盖目标地区 {target_regions}，但仍需保留来源许可/公版依据以备发布审查。",
+            ))
+
+    report["blocking"] = bool(report["blockers"])
+    return report
 
 
 def _warning(wid, stage, skill, reason):
@@ -364,10 +511,12 @@ def _first_recommended_skill(payload):
     return None
 
 
-def collect_gate_status(project_root, *, require_review_report=False, require_score_report=None):
+def collect_gate_status(project_root, *, require_review_report=False, require_score_report=None,
+                        export_formats=None):
     root = os.path.abspath(project_root)
     global_waivers = load_waivers(root)
     reports = [
+        _rights_gate(root, export_formats=export_formats),
         _review_gate(root, require_report=require_review_report),
         _score_gate(root, require_report=require_score_report, global_waivers=global_waivers),
     ]

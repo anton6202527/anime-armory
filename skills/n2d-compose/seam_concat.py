@@ -9,12 +9,12 @@
   - 缺空镜（需要空镜但没补）        → 报警（不静默裸切，也不自造素材）
 
 实现策略（重编码最小化）：把被硬切/报警接缝相连的连续 clip 归为一个 run，run 内
-`concat -c copy`（clip 已统一规格、无音轨，零重编码）；只在**溶解接缝**之间做 xfade。
+`concat -c copy`（compose 工作缓存里的 clip 已统一规格、无音轨，零重编码；`出视频/` 原片不改写）；只在**溶解接缝**之间做 xfade。
 任何 ffmpeg 失败 → 回退整体 `concat -c copy`，绝不让合成中断。
 
 纯逻辑（分类/分段/xfade offset/滤镜串）可单测；ffmpeg 调用是薄执行层。
-clip 在 compose.sh 的 list.txt 阶段已统一到同分辨率/fps/yuv420p 且 `-an`，故只做视频
-xfade，无需 acrossfade（音轨在下游单独混）。
+clip 在 compose.sh 的 list.txt 阶段已统一到同分辨率/fps/yuv420p 且缓存内 `-an`，故只做视频
+xfade，无需 acrossfade（音轨在下游单独按 `视频原生音轨` 策略处理）。
 
 用法：
   python3 seam_concat.py --list <list.txt> --out <concat.mp4> \

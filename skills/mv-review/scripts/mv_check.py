@@ -3,7 +3,7 @@
 
 覆盖确定性问题：
   卡点   —— beatgrid.json 可解析、BPM 合理(半/倍速嫌疑)、beats/downbeats 单调且在歌长内、
-            beatgrid.duration vs 歌/song.wav 时长一致。
+            beatgrid.duration vs 歌/song.* 时长一致。
   clip   —— (需 ffprobe) 每 clip 时长、clip 疑似等长(不卡点)、clip 总时长 ≈ 歌长。
   字幕   —— lyrics.lrc/karaoke.ass 占位未精修、时间单调/不重叠、时间越界(超歌长)、行数对账。
   规划   —— clip_plan/timeline/jobs manifest 可解析、clip 对账、timeline 总时长、selected video 对账。
@@ -254,7 +254,7 @@ def check_plan_manifests(root, songlen):
         add(WARN, "规划", "分镜/clip_plan.json", f"clip_plan 总时长 {total:.1f}s 与 歌长 {songlen:.1f}s 差大")
     add(INFO, "规划", "分镜/clip_plan.json", f"快照：{len(clips)} clips · 总时长 {total:.1f}s")
     if not os.path.exists(timeline_path):
-        add(WARN, "规划", "分镜/timeline_manifest.json", "缺 timeline manifest——mv-compose 会退回文件顺序拼接")
+        add(WARN, "规划", "分镜/timeline_manifest.json", "缺 timeline manifest——mv-compose 默认会阻断；需回 mv-plan/mv-video 补 timeline")
         return
     timeline = load_json_safe(timeline_path)
     if timeline is None:
@@ -308,7 +308,7 @@ def check_final(root, meta, songlen):
         return
     dur, w, h, has_audio = info
     if not has_audio:
-        add(BLOCK, "音画", os.path.basename(final), "成片无音轨——MV 没声音=废，回 mv-compose 重铺 歌/song.wav 主音轨")
+        add(BLOCK, "音画", os.path.basename(final), "成片无音轨——MV 没声音=废，回 mv-compose 重铺 歌/song.* 主音轨")
     if dur and songlen and abs(dur - songlen) > tol(songlen):
         add(WARN, "音画", os.path.basename(final), f"成片时长 {dur:.1f}s 与 歌长 {songlen:.1f}s 差大")
     # 画幅
@@ -386,8 +386,8 @@ def main():
         print(f"作品根不存在：{root}"); sys.exit(2)
 
     meta = load_json_safe(os.path.join(root, "_meta.json"))
-    songlen = next((mv_utils.wav_duration(os.path.join(root, "歌", f"song{e}"))
-                    for e in (".wav",) if mv_utils.wav_duration(os.path.join(root, "歌", f"song{e}"))), None)
+    song_path = mv_utils.find_song(root)
+    songlen = mv_utils.audio_duration(song_path) if song_path else None
 
     check_completeness(root)
     lyric_lines = check_lyrics_and_meta(root, meta)
@@ -400,7 +400,7 @@ def main():
     check_final(root, meta, songlen)
     check_ai_usage(root)
     if songlen:
-        add(INFO, "音画", "歌/song.wav", f"歌长基准：{songlen:.2f}s（深度音质体检见 song-review）")
+        add(INFO, "音画", mv_utils.relpath(root, song_path), f"歌长基准：{songlen:.2f}s（深度音质体检见 song-review）")
 
     if "--json" in opts:
         print(json.dumps([{"sev": s, "dim": d, "loc": l, "msg": m}

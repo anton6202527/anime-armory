@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                 "..", "..", "novel-craft", "scripts"))
 from contract import (AI_TEXT_USAGE_MODES, CHAPTER_GRANULARITY, NOVEL_DRAFT_MODES,
                       base_meta, demo_chapters_for, derived_stage_markdown, parse_outputs)
-from derive_common import docx_to_txt, detect_rights_status, write_settings
+from derive_common import build_rights_metadata, docx_to_txt, detect_rights_status, write_settings
 
 
 def chapter_plan(target_chars, target_platform, target_chapters=None):
@@ -48,6 +48,10 @@ def main():
     ap.add_argument("--outputs", default="txt,docx,outline",
                     help="逗号分隔，可含 txt,docx,outline,n2d")
     ap.add_argument("--i-have-rights", action="store_true")
+    ap.add_argument("--rights-jurisdiction", default=None,
+                    help="公版/授权依据适用辖区，如 US/CN/GLOBAL；缺省按来源推断")
+    ap.add_argument("--distribution-regions", default=None,
+                    help="计划发行/交付地区，逗号分隔，如 CN,US；公版跨区时必须复核")
     ap.add_argument("--draft-mode", default="稳妥初稿", choices=NOVEL_DRAFT_MODES,
                     help="小说生成模式：决定速度/质量 gate 密度")
     ap.add_argument("--chapter-granularity", default="逐章", choices=CHAPTER_GRANULARITY,
@@ -89,6 +93,12 @@ def main():
     outputs = parse_outputs(args.outputs)
 
     meta = base_meta("expand", outputs=outputs, rights_status=rights)
+    meta.update(build_rights_metadata(
+        rights,
+        i_have_rights=args.i_have_rights,
+        rights_jurisdiction=args.rights_jurisdiction,
+        distribution_regions=args.distribution_regions,
+    ))
     meta.update({
         "source_novel": source_path,
         "source_title": source_title,
@@ -112,6 +122,8 @@ def main():
     write_settings(out_root, {
         "目标平台": args.target_platform,
         "权利来源": rights,
+        "权利辖区": meta.get("rights_jurisdiction", ""),
+        "发行地区": ",".join(meta.get("distribution_regions") or []) or "未定",
         "扩写倍数": f"{args.ratio}×",
         "输出格式": ",".join(outputs) + "（novel-craft/scripts/export.py）",
         "小说生成模式": args.draft_mode,

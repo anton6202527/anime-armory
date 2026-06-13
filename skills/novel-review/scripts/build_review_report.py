@@ -39,6 +39,10 @@ DIMENSION_MAP = {
     "标题": "outline",
     "字数": "wordcount",
     "原文照搬": "plagiarism",
+    "题旨偏移": "theme",
+    "读者承诺": "reader_promise",
+    "文学性": "prose",
+    "文笔": "prose",
 }
 
 RETURN_STAGE_BY_DIM = {
@@ -46,6 +50,9 @@ RETURN_STAGE_BY_DIM = {
     "outline": "outline",
     "wordcount": "draft",
     "plagiarism": "draft",
+    "theme": "outline",
+    "reader_promise": "demo",
+    "prose": "draft",
 }
 
 
@@ -145,6 +152,12 @@ def _fix_hint(dimension, raw):
         return "按目标平台字数带宽增删内容，保留本章戏剧节拍和钩子。"
     if dimension == "plagiarism":
         return "重写雷同段，保留事件骨架但不要复刻原文表达。"
+    if dimension == "theme":
+        return "回看 `设定/读者契约.md` 与章纲，删改偏离核心题旨的支线或重写本章目标。"
+    if dimension == "reader_promise":
+        return "回到 Demo gate/读者契约，补兑现、递进或明确延迟兑现的读者承诺。"
+    if dimension == "prose":
+        return "按 `novel-craft/references/chapter.md` 做文学性精修：具体意象、动作化情绪、对白有戏，删空泛辞藻。"
     return raw.get("fix_hint") or "按问题定位回源头阶段修订。"
 
 

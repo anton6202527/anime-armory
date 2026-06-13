@@ -27,6 +27,7 @@ CHAPTER_RE = re.compile(r"第\s*0*(\d+)\s*章\s*(?:[《<]([^》>]+)[》>])?\s*(?
 
 COMMON_SOURCE_PATHS = (
     "设定/章纲.md",
+    "设定/读者契约.md",
     "审稿/demo_gate.json",
     "审稿/state_ledger.json",
 )
@@ -94,6 +95,15 @@ def clip(text, limit=2200):
     if len(text) <= limit:
         return text
     return text[:limit].rstrip() + "\n...（已截断；写章时按路径读取原文件）"
+
+
+def fmt_list(value):
+    if not value:
+        return "未填写"
+    if isinstance(value, (list, tuple)):
+        items = [str(item).strip() for item in value if str(item).strip()]
+        return "、".join(items) if items else "未填写"
+    return str(value).strip() or "未填写"
 
 
 def chapter_path(root, chapter):
@@ -229,7 +239,7 @@ def source_paths_for_kind(kind):
     return out
 
 
-def build_packet(root, chapter, *, allow_missing_demo=False):
+def build_packet(root, chapter, *, allow_missing_demo=False, step="full"):
     meta = load_json(os.path.join(root, "_meta.json"), {})
     if not meta:
         raise RuntimeError("缺少 _meta.json")
@@ -247,16 +257,102 @@ def build_packet(root, chapter, *, allow_missing_demo=False):
         append_waiver(root, demo_waiver)
         record_ledger_waiver(root, demo_waiver)
     ledger = ensure_state_ledger(root)
+    plot_loops = load_json(os.path.join(root, "设定", "剧情环.json"), {}).get("loops", [])
+    pending_loops = [L for L in plot_loops if L.get("status") in ("buried", "teasing")]
+    
+    char_voices = load_json(os.path.join(root, "设定", "角色语感.json"), {})
+    
     words = target_words(meta)
     outline_item = outline.get(chapter, {"title": "", "beat": "（章纲未写本章条目）", "raw": ""})
     title = outline_item.get("title") or ""
+    beat_text = outline_item.get("beat") or ""
+    
+    active_voices = []
+    for char_name, vfp in char_voices.items():
+        if char_name in title or char_name in beat_text:
+            active_voices.append((char_name, vfp))
+            
+    voice_section = ""
+    if active_voices:
+        voice_section = "\n## 角色语感约束\n"
+        for name, fp in active_voices:
+            sp = fp.get("syntax_profile", {})
+            voice_section += f"- **{name}**: 句均长 {sp.get('avg_sentence_length')} 字，短句比 {sp.get('short_sentence_ratio')}，长句比 {sp.get('long_sentence_ratio')}。词频特征: {', '.join(x['term'] for x in fp.get('lexicon_anchor', [])[:5])}\n"
+    
     draft_mode = draft_mode_from_settings(root, meta)
+    
+    # Workflow step adjustments
+    step_note = ""
     out_file = f"章节/第{chapter:02d}章.md"
+    
+    # Tension & Tone logic injection
+    tension_ledger_path = os.path.join(root, "设定", "tension_ledger.json")
+    tension_note = ""
+    if os.path.exists(tension_ledger_path):
+        try:
+            with open(tension_ledger_path, "r", encoding="utf-8") as f:
+                tension_data = json.load(f)
+                tension_note = f"\n## Tension Ledger (情绪 ROI)\n- 未解决悬念钩子 (Unresolved Hooks): {len(tension_data.get('unresolved_hooks', []))}个\n"
+                for hook in tension_data.get("unresolved_hooks", [])[:3]:
+                    tension_note += f"  - [{hook.get('urgency', 'normal')}] {hook.get('question')}\n"
+        except Exception: pass
+        
+    tone_curve_path = os.path.join(root, "设定", "tone_curve.json")
+    vibe_note = ""
+    if os.path.exists(tone_curve_path):
+        try:
+            with open(tone_curve_path, "r", encoding="utf-8") as f:
+                tone_data = json.load(f)
+                for arc in tone_data.get("arcs", []):
+                    rng = arc.get("range", "").split("-")
+                    if len(rng) == 2 and int(rng[0]) <= chapter <= int(rng[1]):
+                        vibe_note = f"\n## Semantic Vibe (当前 Arc: {arc.get('arc_name', '未知')})\n- Target Vibe: {arc.get('target_vibe')}\n- 请严格遵循该语境的情感基调，不要偏离。\n"
+                        break
+        except Exception: pass
+
     source_paths = source_paths_for_kind(meta.get("kind"))
+
+    if step == "architect":
+        step_note = "\n## 当前子任务：Architect Pass (剧情架构师)\n- **目标**：将骨干章纲转化为「节拍与潜台词(Beats & Subtext)」脚本。\n- **禁止**：禁止写优美的文学散文，纯干货输出。\n- **字数**：约 300-500 字。"
+        words = [300, 600]
+        out_file = f"写作任务/第{chapter:02d}章_beats.md"
+    elif step == "ghostwriter":
+        step_note = "\n## 当前子任务：Ghostwriter Pass (代笔枪手)\n- **前提**：已完成 Architect 节拍脚本。\n- **目标**：基于节拍脚本，填充环境描写、心理活动，输出流畅的初稿正文。\n- **注意**：请严格复刻文风指纹，并使用 `[CHAR_xx]`、`[PROP_xx]` 等标签标记N2D视觉资产。"
+        out_file = f"写作任务/第{chapter:02d}章_draft.md"
+        source_paths.append(f"写作任务/第{chapter:02d}章_beats.md")
+    elif step == "editor":
+        step_note = "\n## 当前子任务：Senior Editor Pass (主编润色)\n- **前提**：已完成 Ghostwriter 初稿。\n- **目标**：专门进行「五感丰富」与「去AI味」的滤网打磨（杀掉抽象词、动词升级、环境映衬）。\n- **输出**：最终交付正文。"
+        out_file = f"章节/第{chapter:02d}章.md"
+        source_paths.append(f"写作任务/第{chapter:02d}章_draft.md")
+
+    if step != "full" and step != "editor":
+        pass # Out file already set above
+    
+    # Optional dynamic injections
+    step_note += tension_note + vibe_note
+
     demo_anchor = gate.get("style_anchor", {}) if gate else {}
     promises = gate.get("reader_promises", []) if gate else []
     constraints = gate.get("setting_constraints", []) if gate else []
     banned = gate.get("banned_drift", []) if gate else []
+    reader_contract = gate.get("reader_contract", {}) if gate else {}
+    contract_path = os.path.join(root, "设定", "读者契约.md")
+    contract_text = read_text(contract_path)
+    contract_promises = reader_contract.get("reader_promises") or promises
+    contract_banned = reader_contract.get("banned_drift") or banned
+    contract_section = f"""
+## 题旨与读者契约
+- 核心题旨：{reader_contract.get("theme") or "未填写；写前先补 `设定/读者契约.md`"}
+- 核心戏剧问题：{reader_contract.get("dramatic_question") or "未填写"}
+- 终局必须回答：{fmt_list(reader_contract.get("must_answer"))}
+- 读者承诺：{fmt_list(contract_promises)}
+- 好看机制：{fmt_list(reader_contract.get("delight_engine"))}
+- 文学质感：{reader_contract.get("aesthetic_register") or "未填写"}
+- 禁偏清单：{fmt_list(contract_banned)}
+
+### `设定/读者契约.md` 摘录
+{clip(contract_text, 1600) if contract_text else "（缺 `设定/读者契约.md`；至少按 reader-contract.md 模板补齐题旨、读者承诺、文学质感和禁偏清单。）"}
+"""
     delta_path = f"审稿/state_delta_第{chapter:02d}章.json"
     waiver_section = ""
     if demo_waiver:
@@ -265,7 +361,13 @@ def build_packet(root, chapter, *, allow_missing_demo=False):
 - {demo_waiver['id']} [{demo_waiver['type']}] {demo_waiver['reason']}
 - 风险：缺少已通过 Demo gate 的文风锚点、读者承诺和禁止漂移项；本任务包只能作为准备包，不能替代正式批量写章 gate。
 """
-    return f"""# 第 {chapter:02d} 章写作任务包
+    loop_section = ""
+    if pending_loops:
+        loop_section = "\n## 剧情环提醒（伏笔/钩子）\n"
+        for L in pending_loops:
+            loop_section += f"- **{L['title']}** ({L['id']}): {L['description']} [状态: {L['status']}, 埋于: {L.get('buried_in', '未知')}, 预计回收: {L.get('expected_recovery', '未知')}]\n"
+
+    return f"""# 第 {chapter:02d} 章写作任务包 ({step if step != "full" else "完整稿"})
 
 ## 任务
 - 输出文件：`{out_file}`
@@ -273,7 +375,7 @@ def build_packet(root, chapter, *, allow_missing_demo=False):
 - 目标字数：{words[0]}-{words[1]} 字
 - 人称视角：{meta.get("person", "未指定")}
 - 目标平台：{meta.get("target_platform", "未指定")}
-- 小说生成模式：{draft_mode}
+- 小说生成模式：{draft_mode}{step_note}
 
 ## 必读源文件
 {chr(10).join(f"- `{p}`" for p in source_paths)}
@@ -283,7 +385,7 @@ def build_packet(root, chapter, *, allow_missing_demo=False):
 
 ## 上一章承接
 {previous_chapter_excerpt(root, chapter)}
-
+{loop_section}{voice_section}
 ## Demo 风格锚点
 - 来源章节：{demo_anchor.get("source_chapter", "未指定")}
 - 风格要点：{demo_anchor.get("summary", "未填写；写前先从 Demo 章抽取")}
@@ -291,6 +393,7 @@ def build_packet(root, chapter, *, allow_missing_demo=False):
 - 设定硬约束：{", ".join(constraints) if constraints else "未填写"}
 - 禁止漂移：{", ".join(banned) if banned else "未填写"}
 {waiver_section}
+{contract_section}
 
 ## 当前状态账本摘录
 ```json
@@ -299,8 +402,9 @@ def build_packet(root, chapter, *, allow_missing_demo=False):
 
 ## 写作要求
 - 只输出一章正文，第一行必须是 `# 第{chapter}章 {title or "<标题>"}`。
-- 第二行写 meta 注释：`<!-- meta: demo=false; packet=写作任务/第{chapter:02d}章.md -->`。
+- 第二行写 meta 注释：`<!-- meta: demo=false; packet=写作任务/第{chapter:02d}章.md; step={step} -->`。
 - 本章必须兑现章纲里的戏剧节拍，至少保留一个钩子或承诺。
+- 本章必须推进 `读者契约` 中的至少一项：核心题旨、读者承诺、关系弧光、秘密揭示、能力代价或文学质感；不能只刷事件。
 - 不新增会推翻必读设定/骨架文件的能力、关系、地点规则；新增设定必须写入章末状态增量。
 - 写完后填写 `{delta_path}`，再跑 `python3 skills/novel-review/scripts/mechanical_check.py "{root}"`。
 
@@ -316,6 +420,8 @@ def build_packet(root, chapter, *, allow_missing_demo=False):
   "relationship_changes": [],
   "open_threads_added": [],
   "threads_resolved": [],
+  "reader_contract_progress": [],
+  "theme_alignment": "",
   "setting_constraints_added": [],
   "next_chapter_carry": []
 }}
@@ -357,6 +463,7 @@ def main():
     ap.add_argument("--out-dir", default=None, help="缺省 <作品根>/写作任务")
     ap.add_argument("--stdout", action="store_true", help="只打印，不写文件")
     ap.add_argument("--allow-missing-demo", action="store_true", help="Demo gate 未通过时也允许生成准备包")
+    ap.add_argument("--step", default="full", choices=["full", "architect", "ghostwriter", "editor"], help="工作流步骤 (Trio Pipeline)")
     args = ap.parse_args()
 
     root = os.path.abspath(args.project_root)
@@ -365,7 +472,7 @@ def main():
         sys.exit(2)
     try:
         chapters = resolve_chapters(args, root)
-        packets = [(chapter, build_packet(root, chapter, allow_missing_demo=args.allow_missing_demo))
+        packets = [(chapter, build_packet(root, chapter, allow_missing_demo=args.allow_missing_demo, step=args.step))
                    for chapter in chapters]
     except Exception as e:
         print(f"[err] {e}", file=sys.stderr)
@@ -381,7 +488,8 @@ def main():
     out_dir = os.path.abspath(args.out_dir or os.path.join(root, "写作任务"))
     os.makedirs(out_dir, exist_ok=True)
     for chapter, packet in packets:
-        path = os.path.join(out_dir, f"第{chapter:02d}章.md")
+        suffix = f"_{args.step}" if args.step != "full" else ""
+        path = os.path.join(out_dir, f"第{chapter:02d}章{suffix}.md")
         atomic_write_text(path, packet)
         print(f"[ok] 写作任务包：{path}")
     print("[next] 按任务包写入 章节/第NN章.md，填写 审稿/state_delta_第NN章.json，再跑 novel-review 机检/人判。")

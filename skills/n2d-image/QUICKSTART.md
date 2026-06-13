@@ -7,7 +7,7 @@ Prerequisites:
 
 Gate:
 ```bash
-python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage image
+python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage image_preflight
 ```
 
 Required outputs:
@@ -20,10 +20,11 @@ Required outputs:
 
 Progress:
 ```bash
-python3 skills/novel2drama/progress.py set <作品根> 第N集 出图prompt ✅
-python3 skills/novel2drama/progress.py set <作品根> 第N集 出图 X/Y
+python3 skills/n2d/progress.py set <作品根> 第N集 出图prompt ✅
+python3 skills/n2d/progress.py set <作品根> 第N集 出图 X/Y
 ```
 
 Notes:
 - `生图AI` is a choice point (default `Codex`). Current policy allows official multi-reference backends (Dreamina/即梦官方 CLI / Seedream / Kling 主体库 / Nano Banana / Sora Cameo). The gate blocks only ① backend MIXING within a project and ② reverse-engineered/unauthorized image paths (第三方逆向 CLI/web 自动化). Pick ONE official backend per project; official Seedream API ≠ 即梦逆向出图.
 - Shared reference assets must be complete before episode shot PNGs.
+- After PNGs are landed, run `dashboard.py gate <作品根> 第N集 --stage image` for the post-generation image gate.

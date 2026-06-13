@@ -21,7 +21,7 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple
 
-_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
+_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import (  # noqa: E402  身份/LoRA 判定的单一真值源（与 n2d-review gate 共用）
@@ -33,6 +33,8 @@ from n2d_contract import (  # noqa: E402  身份/LoRA 判定的单一真值源�
     LORA_VALIDATION_REPORT_KIND,
     identity_registry_path,
     lora_report_ready_blocks,
+    file_lock,
+    registry_lock_path,
 )
 
 
@@ -56,7 +58,25 @@ def read_json(path: Path) -> Any:
 
 def write_json(path: Path, data: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    text = json.dumps(data, ensure_ascii=False, indent=2) + "\n"
+    tmp = path.with_name(f".{path.name}.tmp")
+    tmp.write_text(text, encoding="utf-8")
+    tmp.replace(path)  # same-dir temp+replace: readers never see a half-written registry
+
+
+def with_registry_lock(fn):
+    """Hold the per-project registry lock for the whole command so lora status
+    writes (init / train-job / register) serialize their read-merge-write of
+    identity_registry.json against concurrent n2d-asset-market imports."""
+    def _wrapped(args: argparse.Namespace) -> int:
+        root = getattr(args, "project_root", None)
+        if not root:
+            return fn(args)
+        with file_lock(registry_lock_path(str(root))):
+            return fn(args)
+    _wrapped.__name__ = getattr(fn, "__name__", "wrapped")
+    _wrapped.__doc__ = fn.__doc__
+    return _wrapped
 
 
 def write_text(path: Path, text: str) -> None:
@@ -222,6 +242,7 @@ agent 内部会按阶段运行：
     return 0
 
 
+@with_registry_lock
 def cmd_init(args: argparse.Namespace) -> int:
     root = Path(args.project_root)
     registry = load_registry(root)
@@ -394,6 +415,7 @@ def cmd_dataset(args: argparse.Namespace) -> int:
     return 1 if args.fail_on_warnings and manifest["summary"]["warnings"] else 0
 
 
+@with_registry_lock
 def cmd_train_job(args: argparse.Namespace) -> int:
     root = Path(args.project_root)
     registry = load_registry(root)
@@ -535,6 +557,7 @@ def cmd_validate(args: argparse.Namespace) -> int:
     return 0 if verdict == "pass" else 1
 
 
+@with_registry_lock
 def cmd_register(args: argparse.Namespace) -> int:
     root = Path(args.project_root)
     registry = load_registry(root)

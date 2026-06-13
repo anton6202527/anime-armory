@@ -9,7 +9,7 @@ description: Use when rewriting / reimagining / 魔改 an existing novel into a 
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**，按 `../_偏好约定.md`（家族统一的偏好读写机制 + 全部选择点目录与缺省）解析：`<作品根>/_设置.md` → 全局默认 `创作偏好-默认.md` 预填并告知一句 → 缺则**首次问一次**→写回 `_设置.md`→**沉默沿用**（合规/不可逆/花钱点每次仍确认）。
+本 skill 的可选项**不写死在源码里**，按 `../skills/novel-craft/references/选择点与偏好.md`（家族统一的偏好读写机制 + 全部选择点目录与缺省）解析：`<作品根>/_设置.md` → 全局默认 `创作偏好-默认.md` 预填并告知一句 → 缺则**首次问一次**→写回 `_设置.md`→**沉默沿用**（合规/不可逆/花钱点每次仍确认）。
 
 本 skill 涉及的选择点：`目标平台`、`权利来源`、`输出格式`、`篇幅档`、`小说生成模式`、`章节生成粒度`、`AI使用披露`。
 
@@ -25,12 +25,13 @@ description: Use when rewriting / reimagining / 魔改 an existing novel into a 
 ## 核心原则
 
 - **先定"保留什么内核"，再谈改**：改写不是推倒重来胡写——`设定/改动spec.md` 是这部改写的"宪法"，写明【保留的内核】【改的部分】【加的新料】三栏。丢了内核（人设魂/情感主线）的改写 = 烂二创。
+- **读者契约锁住新版本的题旨**：改动 spec 通过后补 `设定/读者契约.md`（见 `novel-craft/references/reader-contract.md`），写清新版本的核心戏剧问题、读者承诺、文学质感和禁偏清单，防止改到中段丢掉原作内核或偏成另一种题材。
 - **新设定圣经 = 第一生产资料**：你"增加的各种设定/材料/势力/金手指"统一进 `设定/新设定.md` 并做**一致性追踪**——改写最大的翻车点是新设定前后自相矛盾。
 - **改写更要重写文字，不照搬原作**：既是工艺也是法律边界（派生作品）。原作是**参考素材**，不是可粘贴的底稿。
 - **自由但自洽**：不受原作事件束缚，但新世界内部必须逻辑闭环。
 
 ## 合法性铁律
-原作须 **公版 / 用户自有 / 用户声明授权（`--i-have-rights`）**。派生作品是原作版权人专有权利；当代受版权网文/出版物未声明授权 → 拒做。同 novel-spinoff，详见 `novel-author/SKILL.md` 合法性继承。
+原作须 **公版 / 用户自有 / 用户声明授权（`--i-have-rights`）**。派生作品是原作版权人专有权利；当代受版权网文/出版物未声明授权 → 拒做。同 novel-spinoff，详见 `novel/SKILL.md` 合法性继承。
 
 ## 工作流（七步，每步末用户审 gate）
 
@@ -38,12 +39,12 @@ description: Use when rewriting / reimagining / 魔改 an existing novel into a 
 
 0. **确认输入 + 合法性**：原作路径、**改动方向**（一句话：要把它改成什么）、规模（short/medium/long/微短剧/漫剧）、目标平台、输出（txt/docx/outline/n2d）。判版权。
 1. **建骨架**：`python3 <skill>/scripts/init_project.py "<原作>" --rewrite-type "<方向>" --scale <档> [--draft-mode 稳妥初稿] [--chapter-granularity 逐章] [--ai-text-usage AI-assisted] [--i-have-rights]` → `写小说/<原作名>-改写/`（设定/{改动spec,新设定,角色卡,世界观,章纲} + 原作.txt 参考 + 章节/ + 导出/ + _meta + _进度）。
-2. **填改动spec**（最重要）：三栏【保留内核 / 改什么 / 加什么】写实写细。→ 用户审。
+2. **填改动spec + 读者契约**（最重要）：三栏【保留内核 / 改什么 / 加什么】写实写细。→ 用户审。审过后按 `novel-craft/references/reader-contract.md` 补 `设定/读者契约.md`，把“保留内核如何在新版本里兑现”写成后续每章可检查的题旨、读者承诺、好看机制、文学质感和禁偏清单。
 3. **建新设定圣经 + 角色/世界观卡**：把"加的新设定/材料"系统化、列一致性约束，**按家族统一 schema `novel-craft/references/setting-bible.md`**（新金手指也必写代价、新设定标"改自原作哪条"+首现章）。→ 用户审。
 4. **书名**：委托 `novel-title`（同人改写/魔改类型）。→ 用户审。
 5. **章纲**：自由编织（不受原作章节束缚，可大改顺序/结局），三幕 + 反转 + 钩子；用 `novel-craft/references/{outline,split}.md`。→ 用户审。
 6. **Demo（前几章）+ 用户审【最重要 gate】**：验文风 / 改动方向是否到位 / 新设定是否自洽 / 没丢内核 / 没照搬原文。每章独立审。Demo 审完必须写 `审稿/demo_gate.json`（见 `novel-craft/references/demo-gate.md`），`status != passed` 不批量写。
-7. **续写余下 + 回扫 + 导出**：先读 `novel-craft/references/draft-pipeline.md`，跑 `python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --next|--range A-B` 生成逐章任务包，再拆给子任务/子代理写（喂 改动spec + 新设定圣经 + `审稿/demo_gate.json` + Demo 文风样本 + 状态账本）；写完填 `审稿/state_delta_第NN章.json`。用 `novel-review` 回扫（重点：**新设定一致性**、没跑回原作旧设定、内核没丢、没照搬）；发布前用 `novel-craft/scripts/ai_usage.py` 留 AI 使用披露；`novel-craft/scripts/export.py`（家族通用导出器，默认执行 QA gate）导出 txt/docx/outline[/n2d]。
+7. **续写余下 + 回扫 + 导出**：先读 `novel-craft/references/draft-pipeline.md`，跑 `python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --next|--range A-B` 生成逐章任务包，再拆给子任务/子代理写（喂 改动spec + 新设定圣经 + `设定/读者契约.md` + `审稿/demo_gate.json` + Demo 文风样本 + 状态账本）；写完填 `审稿/state_delta_第NN章.json`。用 `novel-review` 回扫（重点：**新设定一致性**、没跑回原作旧设定、内核没丢、读者契约没偏、没照搬）；发布前用 `novel-craft/scripts/ai_usage.py` 留 AI 使用披露；`novel-craft/scripts/export.py`（家族通用导出器，默认执行 QA gate）导出 txt/docx/outline[n2d]。
 
 ## 详细参考
 - 改动spec 模板 + 新设定圣经管理 + 一致性追踪 + 与 spinoff 的边界细则：`references/rewrite-spec.md`

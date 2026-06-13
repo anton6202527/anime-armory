@@ -5,7 +5,7 @@
 
 NOVEL_SKILLS = [
     {
-        "name": "novel-author",
+        "name": "novel",
         "role": "dispatcher",
         "summary": "route/import/resume novel projects",
     },

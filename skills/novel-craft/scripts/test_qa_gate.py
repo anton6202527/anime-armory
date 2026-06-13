@@ -223,6 +223,41 @@ class QAGateTest(unittest.TestCase):
             self.assertTrue(status["blocking"])
             self.assertTrue(any(b["id"] == "SCORE-MISSING" for b in status["blockers"]))
 
+    def test_explicit_unknown_rights_blocks(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with open(os.path.join(tmp, "_meta.json"), "w", encoding="utf-8") as f:
+                json.dump({"rights_status": "unknown"}, f, ensure_ascii=False)
+            status = qa_gate.collect_gate_status(tmp)
+            self.assertTrue(status["blocking"])
+            self.assertTrue(any(b["id"] == "RIGHTS-UNKNOWN" for b in status["blockers"]))
+
+    def test_public_domain_without_target_region_blocks_n2d_export(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with open(os.path.join(tmp, "_meta.json"), "w", encoding="utf-8") as f:
+                json.dump({
+                    "rights_status": "public-domain",
+                    "rights_jurisdiction": "US",
+                    "rights_covered_regions": ["US"],
+                    "requires_region_rights_review": True,
+                }, f, ensure_ascii=False)
+            status = qa_gate.collect_gate_status(tmp, export_formats=["n2d"])
+            self.assertTrue(status["blocking"])
+            self.assertTrue(any(b["id"] == "RIGHTS-PD-REGION-UNSET" for b in status["blockers"]))
+
+    def test_public_domain_target_region_gap_blocks(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with open(os.path.join(tmp, "_meta.json"), "w", encoding="utf-8") as f:
+                json.dump({
+                    "rights_status": "public-domain",
+                    "rights_jurisdiction": "US",
+                    "rights_covered_regions": ["US"],
+                    "target_distribution_regions": ["CN"],
+                    "requires_region_rights_review": True,
+                }, f, ensure_ascii=False)
+            status = qa_gate.collect_gate_status(tmp)
+            self.assertTrue(status["blocking"])
+            self.assertTrue(any(b["id"] == "RIGHTS-PD-REGION-GAP" for b in status["blockers"]))
+
 
 if __name__ == "__main__":
     unittest.main()

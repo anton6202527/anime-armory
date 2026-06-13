@@ -102,7 +102,7 @@ Keep `n2d-feedback` for retention/A-B analysis; dashboard consumes the same plat
 
 ## Gate ingestion
 
-`dashboard.py gate <作品根> 第N集 --stage image|video|compose|review` converts every `n2d-review/scripts/gate.py --json` finding into a `qa_gate` event and adds one `qa_gate_run` summary event:
+`dashboard.py gate <作品根> 第N集 --stage image_preflight|video_preflight|image|video|compose|review` converts every `n2d-review/scripts/gate.py --json` finding into a `qa_gate` event and adds one `qa_gate_run` summary event. Use preflight stages before paid backend calls; use `image` / `video` after assets are landed:
 
 ```json
 {

@@ -26,13 +26,14 @@ import os
 import sys
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
-_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
+_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import (  # noqa: E402
     CONSISTENCY_FINDINGS_KIND,
     IDENTITY_VOICE_PRINT_REPORT_KIND,
     consistency_dim_spec,
+    normalize_precision,
     production_dir,
 )
 
@@ -212,12 +213,14 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN) -> Dict[str, Any
     if not wav_groups:
         report.update(available=False, mode="no_audio", precision=INSUFFICIENT_PRECISION,
                       note=f"无可用逐句 wav（{meta.get('status')}）——交还人判，不报假漂移", groups={}, total_drift=0)
+        report["precision_level"] = normalize_precision(report)
         return report
     backend, encoder = load_speaker_encoder()
     if backend is None:
         report.update(available=False, mode="no_speaker_backend", precision=INSUFFICIENT_PRECISION,
                       note="未装 resemblyzer/speechbrain 声纹后端——本机无法量音色相似度，交还人判（脸侧缺 insightface 同样降级）",
                       groups={}, total_drift=0, character_groups=sorted(wav_groups))
+        report["precision_level"] = normalize_precision(report)
         return report
     emb_groups: Dict[str, List[List[float]]] = {}
     for label, paths in wav_groups.items():
@@ -226,6 +229,7 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN) -> Dict[str, Any
             emb_groups[label] = embs
     analysis = analyze_groups(emb_groups, margin)
     report.update(available=True, mode=backend, precision="ok", **analysis)
+    report["precision_level"] = normalize_precision(report)
     return report
 
 

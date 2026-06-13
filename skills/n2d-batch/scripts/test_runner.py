@@ -17,6 +17,8 @@ runner = importlib.util.module_from_spec(runner_spec)
 assert runner_spec.loader is not None
 runner_spec.loader.exec_module(runner)
 
+SKILL_ROOT = Path(__file__).resolve().parents[1]
+
 
 def write_progress(root: Path) -> None:
     (root / "_进度.md").write_text(
@@ -55,6 +57,18 @@ def write_config(root: Path, command: str) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps({"commands": {"image": command}}, ensure_ascii=False), encoding="utf-8")
     return path
+
+
+def test_standard_batch_wrappers_and_example_config_exist() -> None:
+    for name in ("run_n2d_image.sh", "run_n2d_video.sh", "run_n2d_compose.sh"):
+        assert (SKILL_ROOT / "scripts" / name).is_file()
+    example = SKILL_ROOT / "references" / "batch_runner.example.json"
+    data = json.loads(example.read_text(encoding="utf-8"))
+    assert {"voice", "image", "video", "compose"} <= set(data["commands"])
+    assert "run_n2d_image.sh" in data["commands"]["image"]
+    assert "run_n2d_video.sh" in data["commands"]["video"]
+    assert "N2D_VIDEO_RANGE=" in data["commands"]["video"]
+    assert "run_n2d_compose.sh" in data["commands"]["compose"]
 
 
 def test_runner_claims_executes_marks_done_and_records_dashboard(tmp_path: Path) -> None:

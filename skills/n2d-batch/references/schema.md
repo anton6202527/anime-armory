@@ -54,7 +54,7 @@ Shape:
   "stage_key": "image",
   "stage_label": "出图",
   "owner": "n2d-image",
-  "command": "/n2d-image 制漫剧/剧名 第2集",
+  "command": "n2d-image 制漫剧/剧名 第2集",
   "gate_stage": "image",
   "status": "queued",
   "attempts": 0,
@@ -112,12 +112,14 @@ Shape:
 {
   "commands": {
     "voice": "python3 skills/n2d-voice/render_voice.py \"{root}\" \"{episode}\" zh",
-    "image": "bash scripts/run_n2d_image.sh \"{root}\" \"{episode}\"",
-    "n2d-video": "bash scripts/run_n2d_video.sh \"{root}\" \"{episode}\"",
+    "image": "bash skills/n2d-batch/scripts/run_n2d_image.sh \"{root}\" \"{episode}\"",
+    "video": "N2D_VIDEO_RANGE=06-10 bash skills/n2d-batch/scripts/run_n2d_video.sh \"{root}\" \"{episode}\"",
+    "compose": "bash skills/n2d-batch/scripts/run_n2d_compose.sh \"{root}\" \"{episode}\" zh",
     "*": "bash scripts/run_stage.sh \"{stage_key}\" \"{root}\" \"{episode}\""
   },
   "env": {
-    "NO_PROXY": "127.0.0.1,localhost"
+    "NO_PROXY": "127.0.0.1,localhost",
+    "N2D_IMAGE_COMMAND": "python3 my_image_runner.py \"$N2D_ROOT\" \"$N2D_EPISODE\""
   }
 }
 ```
@@ -133,14 +135,13 @@ Command lookup order:
 
 If the resolved command starts with `/`, runner treats it as an agent slash command and marks the task failed/retryable. Configure a real shell command instead.
 
-For `video` / `n2d-video`, the configured shell wrapper must run model routing before any paid video call:
+The repository-provided wrappers live under `skills/n2d-batch/scripts/`:
 
-```bash
-python3 skills/n2d-model-router/scripts/router.py "$root" "$episode" --write
-# then generate/update video prompts and run n2d-review gate --stage video
-```
+- `run_n2d_image.sh`: runs image_preflight gate, then executes explicit `N2D_IMAGE_COMMAND`.
+- `run_n2d_video.sh`: runs identity/router/video_preflight gate, prepares video jobs, and only submits when `N2D_VIDEO_SUBMIT_ONE` or `N2D_VIDEO_AUTO_SUBMIT=1` is set. `video_runner.py submit` also runs video_preflight by default.
+- `run_n2d_compose.sh`: runs compose gate, then calls `n2d-compose/compose.sh`.
 
-Do not hard-code this preflight inside `runner.py`; stage rules belong to `n2d-video` / `n2d-model-router`, and runner only executes configured commands.
+Do not hard-code this preflight inside `runner.py`; stage rules belong to the wrapper/stage skill, and runner only executes configured commands.
 
 Template variables:
 

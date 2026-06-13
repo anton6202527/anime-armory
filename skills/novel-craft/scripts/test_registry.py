@@ -25,20 +25,20 @@ def read(relpath):
 def actual_novel_skills():
     return {
         name for name in os.listdir(SKILLS)
-        if name.startswith("novel-")
+        if (name == "novel" or name.startswith("novel-"))
         and os.path.isfile(os.path.join(SKILLS, name, "SKILL.md"))
     }
 
 
 def referenced_novel_skills(text):
-    return set(re.findall(r"`(novel-[a-z-]+)(?:/[^`]*)?`", text))
+    return set(re.findall(r"`(novel(?:-[a-z-]+)?)(?:/[^`]*)?`", text))
 
 
 class NovelRegistryTest(unittest.TestCase):
     def test_author_and_readme_match_actual_novel_skills(self):
         actual = actual_novel_skills()
         expected = set(registry.skill_names())
-        author = referenced_novel_skills(read("skills/novel-author/SKILL.md"))
+        author = referenced_novel_skills(read("skills/novel/SKILL.md"))
         readme = referenced_novel_skills(read("skills/README.md"))
         self.assertEqual(expected, actual)
         self.assertEqual(author, expected)

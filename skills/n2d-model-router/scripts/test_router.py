@@ -73,15 +73,35 @@ def test_multi_character_same_frame_routes_to_kling(tmp_path):
     assert "character_id_or_reference_group" == route["identity_requirement"]
 
 
-def test_ensemble_blocking_routes_to_kling(tmp_path):
+def test_ensemble_blocking_routes_to_sora(tmp_path):
+    # 群像(ensemble) → Sora primary（2026：Sora 2 对 5+/群像最稳，超 Kling 2-3 张脸上限）
     root = _root(tmp_path)
     _write_storyboard(root, [{"id": "Clip 5", "template": "ensemble_blocking", "scene": "宗门大殿群像站位，门徒队列围住主角"}])
 
     route = router.route_episode(root, "第1集")["routes"][0]
 
     assert route["shot_type"] == "ensemble_blocking"
-    assert route["primary_backend"] == "kling"
+    assert route["primary_backend"] == "sora"
+    assert "kling" in route["fallback_backends"]
     assert "multi_person" in route["risk_flags"]
+
+
+def test_five_plus_same_frame_routes_to_sora(tmp_path):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{"id": "Clip 6", "template": "multi_character_same_frame",
+                              "scene": "六人对峙同框",
+                              "template_contract": {"character_slots": {"A": "", "B": "", "C": "", "D": "", "E": "", "F": ""}}}])
+    route = router.route_episode(root, "第1集")["routes"][0]
+    assert route["primary_backend"] == "sora"
+
+
+def test_two_three_same_frame_still_kling(tmp_path):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{"id": "Clip 7", "template": "multi_character_same_frame",
+                              "scene": "三人对峙同框",
+                              "template_contract": {"character_slots": {"A": "", "B": "", "C": ""}}}])
+    route = router.route_episode(root, "第1集")["routes"][0]
+    assert route["primary_backend"] == "kling"
 
 
 def test_empty_establishing_with_native_audio_opt_in_routes_to_veo(tmp_path):
@@ -143,6 +163,75 @@ def test_fixed_mode_uses_default_backend(tmp_path):
     assert plan["default_backend"] == "kling"
     assert route["primary_backend"] == "kling"
     assert route["shot_type"] == "fight_exchange"
+
+
+def test_split_video_model_setting_drives_fixed_default(tmp_path):
+    root = _root(tmp_path, "- 生视频模型: Seedance 2.0\n- 生视频渠道: 即梦/Dreamina\n- 视频模型路由: 固定生视频模型\n")
+    _write_storyboard(root, [{"id": "Clip 1", "scene": "普通单人抬眼"}])
+
+    plan = router.route_episode(root, "第1集")
+
+    assert plan["routing_mode"] == "fixed_default"
+    assert plan["default_backend"] == "seedance"
+    assert plan["routes"][0]["primary_backend"] == "seedance"
+
+
+def test_fixed_mode_can_disable_fallback_backends(tmp_path):
+    root = _root(tmp_path, "- 生视频AI: dreamina\n- 视频模型路由: 固定生视频AI\n- 视频备用后端: 无\n")
+    _write_storyboard(root, [{"id": "Clip 1", "template": "dialogue_shot_reverse", "scene": "对话反打台词"}])
+
+    plan = router.route_episode(root, "第1集")
+    route = plan["routes"][0]
+
+    assert plan["routing_mode"] == "fixed_default"
+    assert plan["default_backend"] == "dreamina"
+    assert route["primary_backend"] == "dreamina"
+    assert route["fallback_backends"] == []
+
+
+def test_fixed_mode_uses_structured_characters_for_identity_requirement(tmp_path):
+    root = _root(tmp_path, "- 生视频AI: dreamina\n- 视频模型路由: 固定生视频AI\n- 视频备用后端: 无\n")
+    _write_storyboard(root, [{
+        "id": "Clip 12",
+        "template": "dialogue_shot_reverse",
+        "scene": "沈念轻笑",
+        "characters": ["CHAR_01/常态", "CHAR_03/人皮态"],
+    }])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["identity_requirement"] == "reference_group"
+
+
+def test_fixed_mode_uses_character_template_for_identity_requirement(tmp_path):
+    root = _root(tmp_path, "- 生视频AI: dreamina\n- 视频模型路由: 固定生视频AI\n- 视频备用后端: 无\n")
+    _write_storyboard(root, [{
+        "id": "EP01_CLIP12",
+        "label": "沈念轻笑",
+        "scene": "冷宫寝殿/夜/内",
+        "template": "dialogue_shot_reverse",
+        "template_contract": {
+            "blocking": "沈念画左近景，柳娘子在画右压力源方向。",
+            "eyeline": "沈念抬眼看画右柳娘子，柳娘子看画左沈念",
+        },
+    }])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["identity_requirement"] == "reference_group"
+
+
+def test_fixed_mode_keeps_explicit_empty_shot_identity_none(tmp_path):
+    root = _root(tmp_path, "- 生视频AI: dreamina\n- 视频模型路由: 固定生视频AI\n- 视频备用后端: 无\n")
+    _write_storyboard(root, [{
+        "id": "Clip 3",
+        "scene": "山门空镜，雨声和风声，远景氛围转场",
+        "characters": [],
+    }])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["identity_requirement"] == "none"
 
 
 def test_fixed_mode_overrides_native_av_speech_reroute(tmp_path):

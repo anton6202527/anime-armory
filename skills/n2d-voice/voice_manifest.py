@@ -6,7 +6,7 @@
 import os
 import sys
 
-_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'common'))
+_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'n2d', '_lib'))
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import VOICE_KEY_FIELD, VOICE_KEY_LEGACY_FIELD, VOICE_KEY_PLACEHOLDER_SUFFIX  # noqa: E402

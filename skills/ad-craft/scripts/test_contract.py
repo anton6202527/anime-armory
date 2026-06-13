@@ -7,9 +7,21 @@
 或不装 pytest：
     cd skills/ad-craft/scripts && python3 test_contract.py
 """
+import importlib.util
+from pathlib import Path
 import unittest
 
-import contract
+
+def load_local_contract():
+    path = Path(__file__).with_name("contract.py")
+    spec = importlib.util.spec_from_file_location("ad_craft_contract_under_test", path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec and spec.loader
+    spec.loader.exec_module(module)
+    return module
+
+
+contract = load_local_contract()
 
 
 class AdContractTest(unittest.TestCase):
@@ -17,12 +29,14 @@ class AdContractTest(unittest.TestCase):
         points = contract.choice_points()
         for key in (
             "广告类型", "创意路线", "基础视觉风格", "主片时长", "交付比例",
-            "cutdown版本", "生图AI", "一致性增强", "生视频AI", "出视频规格",
+            "cutdown版本", "生图AI", "一致性增强", "生视频模型", "生视频渠道", "出视频规格",
             "配音后端", "音乐来源", "品牌包装模板", "字幕语言", "广告法地区",
             "交付规格", "AI视觉使用披露",
         ):
             self.assertIn(key, points)
         self.assertIn("+LoRA", points["一致性增强"])
+        self.assertIn("Seedance 2.0", points["生视频模型"])
+        self.assertIn("即梦/Dreamina", points["生视频渠道"])
         self.assertIn("9:16", points["交付比例"])
 
     def test_stage_table_order(self):
@@ -55,6 +69,29 @@ class AdContractTest(unittest.TestCase):
         self.assertEqual(contract.classify_image_backend("即梦")[1], "forbidden")
         self.assertEqual(contract.classify_image_backend("某小众生图器")[1], "unknown")
         self.assertEqual(contract.DEFAULT_SETTINGS["生图AI"], "Codex")
+
+    def test_brief_check_layers(self):
+        empty = contract.brief_check({})
+        self.assertFalse(empty["ready"])
+        self.assertEqual(set(empty["missing_required"]), set(contract.BRIEF_REQUIRED))
+
+        minimal = {"brand": "山岚", "product": "手冲咖啡", "usp": ["现烘现磨"], "audience": "都市白领"}
+        chk = contract.brief_check(minimal)
+        self.assertTrue(chk["ready"])
+        self.assertFalse(chk["gate_ready"])
+        self.assertIn("claims", chk["missing_deferred"])
+        self.assertIn("mandatories.legal_lines", chk["missing_deferred"])
+
+        full = dict(
+            minimal,
+            claims=["48小时内烘焙（有据）"],
+            rights={"talent": "未使用真人", "music": "授权曲库", "fonts": "思源黑体", "assets": "自有素材"},
+            mandatories={"legal_lines": ["广告"]},
+        )
+        self.assertTrue(contract.brief_check(full)["gate_ready"])
+        # 「待补」占位算缺项；空列表/空字符串同理
+        self.assertIn("claims", contract.brief_check(dict(full, claims=["待补"]))["missing_deferred"])
+        self.assertIn("usp", contract.brief_check(dict(full, usp=[]))["missing_required"])
 
     def test_settings_markdown(self):
         md = contract.settings_markdown("测试广告", {"交付比例": "9:16"})

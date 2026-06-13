@@ -147,3 +147,56 @@ def test_visual_state_ledger_is_consumed(tmp_path):
     res = st.analyze(str(root), ep)
     assert any(s["source"] == "visual_state_ledger" for s in res["states"])
     assert any(a["kind"] == "state_missing_after_start" for a in res["alerts"])
+
+
+def _write_prop_ledger(root, props):
+    shared = root / "出图" / "共享"
+    shared.mkdir(parents=True, exist_ok=True)
+    (shared / "visual_state_ledger.json").write_text(
+        json.dumps({"kind": "n2d_visual_state_ledger", "characters": {}, "props": props},
+                   ensure_ascii=False), encoding="utf-8")
+
+
+def _minimal_storyboard(root, ep):
+    sb_dir = root / "脚本" / ep
+    sb_dir.mkdir(parents=True, exist_ok=True)
+    (sb_dir / "storyboard.json").write_text(json.dumps({"visual_contract": {}, "clips": []},
+                                                       ensure_ascii=False), encoding="utf-8")
+
+
+def test_prop_lifecycle_issue_surfaced_as_alert(tmp_path):
+    # 道具 registry 数据质量问题（之前只建账不机检）现在进 alert → gate 会消费
+    root = tmp_path / "制漫剧" / "测试剧"
+    ep = "第1集"
+    _minimal_storyboard(root, ep)
+    _write_prop_ledger(root, {
+        "PROP_07": {"name": "信物玉佩", "states": ["clean"], "timeline": [],
+                    "expected_state": "clean", "stateful_freetext": True,
+                    "issues": ["lifecycle 为自由文本但含状态演进语义（默认应结构化）——升级为 {states,transitions} 才能机检"]},
+    })
+    res = st.analyze(str(root), ep)
+    kinds = {a["kind"] for a in res["alerts"]}
+    assert "prop_lifecycle_issue" in kinds
+    assert "warn" in res["verdicts"]
+
+
+def test_prop_state_premature_leak_flagged(tmp_path):
+    # 结构化 timeline：染血发生在 Clip14；镜10 已画染血 → 提前泄露（warn）
+    root = tmp_path / "制漫剧" / "测试剧"
+    ep = "第1集"
+    _minimal_storyboard(root, ep)
+    prompt_dir = root / "出图" / ep / "prompt"
+    prompt_dir.mkdir(parents=True, exist_ok=True)
+    (prompt_dir / "01_分镜出图.md").write_text(
+        "## Clip 10\n信物玉佩 摆在案上，玉佩染血斑斑。\n"
+        "## Clip 16\n信物玉佩 染血，握在手心。\n",
+        encoding="utf-8")
+    _write_prop_ledger(root, {
+        "PROP_07": {"name": "信物玉佩", "states": ["clean", "染血"],
+                    "timeline": [{"from": "clean", "to": "染血", "trigger": "Clip14", "clip": 14}],
+                    "expected_state": "染血", "issues": []},
+    })
+    res = st.analyze(str(root), ep)
+    leaks = [a for a in res["alerts"] if a["kind"] == "prop_state_premature_leak"]
+    assert any(a["shot"] == 10 for a in leaks)        # 镜10 提前泄露
+    assert not any(a["shot"] == 16 for a in leaks)    # 镜16 在转换镜后，正常

@@ -4,15 +4,20 @@
 derive_common.py — novel-* 派生类 init 脚本的共享工具（单一真值源）。
 
 被 create / spinoff / rewrite / expand / condense / continue 的 init_project.py 共用，
-消除各脚本里逐份复制的 docx→txt / 版权判定，并统一落 `_设置.md`（_偏好约定 选择点存储）。
+消除各脚本里逐份复制的 docx→txt / 版权判定，并统一落 `_设置.md`（skills/novel-craft/references/选择点与偏好.md 选择点存储）。
 """
 import os
 import sys
 
-_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
+_HERE = os.path.dirname(os.path.abspath(__file__))
+if _HERE not in sys.path:
+    sys.path.insert(0, _HERE)
+_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "novel", "_lib"))
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
-from settings import write_settings as _write_settings  # noqa: E402
+from settings import write_settings as _write_settings  # noqa: E402  vendored 进 novel/_lib
+
+from contract import rights_metadata  # noqa: E402
 
 
 def docx_to_txt(docx_path, out_txt_path):
@@ -47,8 +52,27 @@ def detect_rights_status(novel_txt_path, i_have_rights):
     return "user-declared" if i_have_rights else "unknown"
 
 
+def build_rights_metadata(
+    rights_status,
+    *,
+    i_have_rights=False,
+    source_type="",
+    source_url="",
+    rights_jurisdiction=None,
+    distribution_regions=None,
+):
+    return rights_metadata(
+        rights_status,
+        source_type=source_type,
+        source_url=source_url,
+        rights_declared=i_have_rights or rights_status in {"original", "user-owned", "user-declared"},
+        rights_jurisdiction=rights_jurisdiction,
+        distribution_regions=distribution_regions,
+    )
+
+
 def write_settings(out_root, fields, *, note=None):
-    """落 `<作品根>/_设置.md` —— 本作私有选择点（_偏好约定 的 per-work 存储）。
+    """落 `<作品根>/_设置.md` —— 本作私有选择点（skills/novel-craft/references/选择点与偏好.md 的 per-work 存储）。
 
     fields: 有序 dict {中文标签: 值}（如 目标平台/权利来源/输出格式/篇幅档）。
     init 时按 CLI/默认值落定一次，同项目后续沉默沿用；改了在此更新。

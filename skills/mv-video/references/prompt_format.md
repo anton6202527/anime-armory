@@ -14,17 +14,19 @@
 **卡点**：起 0:48(downbeat) → 止 0:49.6(下一downbeat)
 **歌词/情绪钩子**：{本 clip 对应歌词词组 / 情绪点 / 爽点}
 **转场**：{动作切 / 视线切 / 闪白 / 遮挡擦镜 / 光效切 / 硬切 / 空镜缓冲}
-**动作家族**：{performance_pose / expressive_walk / dance_hit / camera_whip / orbit_reveal / prop_sync / vfx_burst / environment_motion / mirror_split / silhouette_action}
-**动作峰值**：{对齐 beat/downbeat 的秒点，通常在 clip 结束前 0.1-0.3s 或强 downbeat}
+**动作家族**：{performance_pose / expressive_walk / dance_hit / dance_sharp / dance_fluid / dance_street / performance_vocal / camera_whip / orbit_reveal / prop_sync / vfx_burst / environment_motion / mirror_split / silhouette_action}
+**力量等级**：{Level 1-10}
+**动作峰值**：{对齐 beat/downbeat 的秒点，或相对于 clip 开始的秒点，如 0.8s (relative)}
+**空间/轴线锁**：{视线看向镜头 / 运动方向画左至画右 / 保持双脚接触地面}
 **视觉母题**：{主角身份锚点 / 主色 / 本段反复符号}
 **转场母题**：{闪白 / 遮挡擦镜 / whip pan / match action / match color / particle bridge / mirror fracture / shadow cut}
-**need_end_frame**：true/false。**MV 默认卡点硬切 → false**；仅**同段落·非卡点切·人物姿态连续**的接缝（副歌内一段连续动作分两 clip）= true → mv-image 出尾帧 PNG 进 图片/ 子目录，本 clip 首尾双帧引导锁接点。
-**continuity**（必填，**读取**相邻 clip + beatgrid **派生而非重写**）：
-- start_state：**直接抄上一 clip 的 `end_state`**（单一真值源，不要自己重新描述，否则相邻镜语义漂移=跳切根源）；首 clip 取首帧描述 + 段落视觉锚点
-- action：{本 clip 内唯一主动作链，动作峰值或镜头冲击点对齐指定 beat/downbeat}
-- end_state：{给下一 clip 承接的结尾姿态、视线方向、画面重心、道具特写、光效或空镜落点}
-- constraints：{角色定妆、服装发型、主色调、光线、天气、道具、背景布局、轴线/屏幕方向在同段落内保持一致}
-- negative：{不要换脸、不要换衣、不要新增人物、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要生成原生人声}
+**need_end_frame**：true/false。
+**continuity**：
+- start_state：直接抄上一 clip 的 `end_state`
+- action：{人物动作 + 力量等级}
+- end_state：{给下一 clip 承接的结尾姿态}
+- constraints：{角色定妆、服装发型、主色调、空间轴线锁}
+- negative：{不要换脸、不要换衣、不要瞬移、不要生成文字/logo、不要生成原生人声}
 ### 视频 prompt（中文，目标=即梦/可灵/Seedance）
 continuity:
   start_state: {start_state}
@@ -32,14 +34,16 @@ continuity:
   end_state: {end_state}
   constraints: {constraints}
   negative: {negative}
-人物运动：{动作链}；动作家族：{action_family}；表情；
-镜头运动：{快推/环绕/轻甩 + 速度}；   ← 由段落/张力决定
-动态细节：{发丝/光斑/衣摆/雾…}；
-卡点约束：动作峰值/眼神落点/光效爆点对齐 {action_peak / beat/downbeat 秒点}，clip 结尾停在 continuity.end_state 方便下一刀进入；
+人物运动：{动作链}；动作家族：{action_family}；力量等级：{energy_level}；表情；
+镜头运动：{快推/环绕/轻甩 + 速度}；
+空间/轴线锁：{eyeline_lock / movement_vector}；
+动态细节：发丝、衣摆、光斑或环境粒子随动作幅度产生物理惯性偏移；
+卡点约束：动作峰值/击中点对齐 {action_peak_relative}；
 转场母题：{transition_motif}；
-衔接约束：开头承接 continuity.start_state，只执行 continuity.action，保持 continuity.constraints，避开 continuity.negative，按{转场}进入下一 clip；
-声音约束：无对白、无旁白、不要生成原生人声，音乐由 mv-compose 使用原歌轨统一处理；
+衔接约束：开头承接 continuity.start_state，只执行 continuity.action，保持 continuity.constraints，避开 continuity.negative；
+声音约束：无对白、无旁白、不要生成原生人声；
 （末尾按平台拼风格词）
+
 ### 平台参数：模型/时长/帧率/画幅/**分辨率·帧率·质量档(由 出视频规格 档定)**/image2video 强度
 ```
 
@@ -76,7 +80,7 @@ continuity:
 - **空镜缓冲**：verse/outro 用云、山、灯、雨、脚步、手部等 0.5-2s 镜头缓冲。
 
 ## 生视频 / 登记 / 挑版
-- 同一 MV 全程同一视频 AI（防风格跳）。首帧=mv-image PNG（图生视频锁一致性）。
+- 同一 MV 全程同一生视频模型/渠道策略（防风格跳）。首帧=mv-image PNG（图生视频锁一致性）。
 - 每 clip 跑几版挑脸/运动稳由 `出视频规格` 档统一定（充足=关键镜2-3版·普通镜2版；一般=关键镜2版·普通镜1版；不够=全1版）；废片归 `common/废料/出视频/`。
 - 爽点 clip 的关键帧对齐某个 downbeat，供 mv-compose 卡点。
 - 外部/网页生成视频后必须登记：`video_jobs.py --register <file> --clip Clip_001 --take 1`。

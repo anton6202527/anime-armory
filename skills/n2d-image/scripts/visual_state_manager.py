@@ -13,7 +13,7 @@ import re
 import sys
 from datetime import date
 
-_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
+_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import VISUAL_STATE_LEDGER_KIND, shared_asset_path  # noqa: E402  产物 kind 单一真值源
@@ -145,24 +145,66 @@ def apply_updates(root, updates):
     return ledger
 
 
+def get_weathering_modifier(character_data, episode_num):
+    """Calculate weathering tags based on character's weathering_profile and current episode."""
+    profile = character_data.get("weathering_profile")
+    if not profile:
+        return None
+
+    current_tags = []
+    # Base tags if any
+
+    # Evolution steps
+    for stage in profile.get("evolution", []):
+        stage_ep_str = stage.get("episode", "第1集")
+        m = re.search(r"\d+", stage_ep_str)
+        if m and episode_num >= int(m.group(0)):
+            current_tags.append(stage.get("tags", ""))
+
+    if not current_tags:
+        return None
+
+    return {
+        "id": "narrative_weathering",
+        "description": f"叙事折旧: {', '.join(current_tags)}",
+        "control_type": "prompt_tag",
+        "mask_prompt": ", ".join(current_tags),
+        "added_in": f"第{episode_num}集",
+        "active": True
+    }
+
+
 def inject_into_prompts(root, episode):
     ledger = load_json(get_ledger_path(root), {})
-    if not ledger.get("characters"):
-        return 0
-        
+    registry_path = shared_asset_path(root, "identity_registry.json")
+    registry = load_json(registry_path, {})
+    char_registry_map = {c["name"]: c for c in registry.get("characters", [])}
+
+    m = re.search(r"\d+", str(episode))
+    ep_num = int(m.group(0)) if m else 1
+
     prompt_file = os.path.join(root, "出图", f"第{episode}集", "prompt", "01_分镜出图.md")
     if not os.path.exists(prompt_file):
         print(f"[err] 找不到出图 prompt 文件：{prompt_file}", file=sys.stderr)
         return 0
-        
+
     content = open(prompt_file, encoding="utf-8").read()
     updated = False
-    
-    for char_name, data in ledger["characters"].items():
+
+    for char_name, data in ledger.get("characters", {}).items():
         active_mods = [m for m in data.get("modifiers", []) if m.get("active")]
-        if not active_mods:
+        
+        # Add weathering modifier if applicable
+        reg_char = char_registry_map.get(char_name)
+        if reg_char and reg_char.get("forms"):
+            # Assume first form for now or match by asset_key if we had more context
+            weathering = get_weathering_modifier(reg_char["forms"][0], ep_num)
+            if weathering:
+                active_mods.append(weathering)
+
+        if not active_mods and not (reg_char and reg_char.get("forms") and reg_char["forms"][0].get("expression_dna")):
             continue
-            
+
         # Compile the visual injection text
         injection_lines = [f"\n> 👁️ **视觉状态锁 ({char_name})**:"]
         for mod in active_mods:
@@ -172,23 +214,50 @@ def inject_into_prompts(root, episode):
                 injection_lines.append(f"> - 提示词追加: {mod['description']} [Tag: `{mod.get('mask_prompt', '')}`]")
             elif mod["control_type"] == "lora":
                 injection_lines.append(f"> - LoRA 挂载: {mod['description']} [Trigger: `{mod.get('mask_prompt', '')}`]")
+        
+        # Inject Expression DNA reference
+        if reg_char and reg_char.get("forms") and reg_char["forms"][0].get("expression_dna"):
+            dna = reg_char["forms"][0]["expression_dna"]
+            injection_lines.append(f"> - 表情 DNA 参考: 按性格表现肌肉状态 {json.dumps(dna, ensure_ascii=False)}")
                 
         injection_text = "\n".join(injection_lines) + "\n"
-        
+
         # Simple injection: find where the character is mentioned in the prompt and append the state lock if not already there.
         # This is a naive regex matching the character name in a heading or objective line.
         pattern = re.compile(rf"(目标：.*{re.escape(char_name)}.*?\n)", re.IGNORECASE)
-        
+
         def replacer(match):
             nonlocal updated
             # If already injected, skip
-            if "👁️ **视觉状态锁" in content[match.end():match.end()+200]:
+            if "👁️ **视觉状态锁" in content[match.end():match.end() + 300]:
                 return match.group(0)
             updated = True
             return match.group(0) + injection_text
 
         content = pattern.sub(replacer, content)
-        
+
+    # 道具状态锁：state_ledger_build 解析 asset_registry 的 PROP lifecycle 时间线后，
+    # 把"当前应处状态"注入引用了该道具的镜头 prompt（与角色状态锁同构）。
+    for prop_id, prop in (ledger.get("props") or {}).items():
+        state = prop.get("expected_state") or prop.get("current_state")
+        if not state:
+            continue
+        lock_lines = [f"\n> 🧰 **道具状态锁 ({prop.get('name') or prop_id})**: 本镜道具应为 `{state}` 状态"]
+        for issue in prop.get("issues", []):
+            lock_lines.append(f"> - ⚠️ {issue}")
+        injection_text = "\n".join(lock_lines) + "\n"
+        for key in {prop_id, str(prop.get("name") or "")} - {""}:
+            pattern = re.compile(rf"(目标：.*{re.escape(key)}.*?\n)")
+
+            def prop_replacer(match):
+                nonlocal updated
+                if "🧰 **道具状态锁" in content[match.end():match.end() + 200]:
+                    return match.group(0)
+                updated = True
+                return match.group(0) + injection_text
+
+            content = pattern.sub(prop_replacer, content)
+
     if updated:
         with open(prompt_file, "w", encoding="utf-8") as f:
             f.write(content)

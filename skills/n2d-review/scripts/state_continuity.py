@@ -4,8 +4,9 @@
 检查会随剧情变化的视觉状态是否按镜头单调继承：
 
 - `storyboard.json.visual_contract.角色状态演进`：伤、泪、乱发、觉醒态等从某镜开始保持。
-- `出图/共享/visual_state_ledger.json`：跨集持续的可变状态锁（n2d-image 写方）。
-- `出图/第N集/prompt/01_分镜出图.md`：逐镜 prompt 是否漏写 / 提前泄露状态。
+- `出图/共享/visual_state_ledger.json`：跨集持续的可变状态锁（n2d-image 写方）——**角色与道具状态同源**：
+  道具 lifecycle 数据质量（自由文本未结构化 / current_state 落后）+ 结构化 timeline 的状态演进泄露都在此机检。
+- `出图/第N集/prompt/01_分镜出图.md`：逐镜 prompt 是否漏写 / 提前泄露角色或道具状态。
 
 这是 review 侧只读机检，不修改 ledger，也不注入 prompt。
 """
@@ -19,7 +20,7 @@ import re
 import sys
 from typing import Any, Dict, List, Optional, Sequence
 
-COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
+COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 from n2d_contract import VISUAL_STATE_LEDGER_KIND, production_dir, shared_asset_path  # noqa: E402
@@ -183,6 +184,70 @@ def states_from_visual_ledger(root: str, ep: str) -> List[Dict[str, Any]]:
     return states
 
 
+def _prop_label(pid: str, p: Dict[str, Any]) -> str:
+    name = p.get("name")
+    return f"{name}（{pid}）" if name and str(name) != str(pid) else str(pid)
+
+
+def _block_mentions_prop(block: Dict[str, Any], pid: str, name: Any) -> bool:
+    body = block.get("body", "")
+    return bool((pid and pid in body) or (name and str(name) in body))
+
+
+def prop_alerts_from_ledger(root: str, ep: str, blocks: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """道具状态机检（消费与角色状态同一本 visual_state_ledger）。
+
+    角色状态此前已机检；道具状态此前只建账不机检（声明但不验证）——这里补上：
+    (a) registry 数据质量问题（自由文本未结构化 / current_state 落后于 transition / 引用未声明状态）；
+    (b) 结构化 timeline 的状态演进泄露（转换镜前出现转换后状态 / 转换镜后仍写旧状态）。
+    道具在 prompt 里靠名字/ID 提及（不像角色有 定妆_ 主参考锚），文本匹配较模糊，故一律 warn 不 block。
+    """
+    data = load_json(ledger_path(root))
+    if not data or data.get("kind") not in (None, VISUAL_STATE_LEDGER_KIND):
+        return []
+    props = data.get("props") if isinstance(data.get("props"), dict) else {}
+    alerts: List[Dict[str, Any]] = []
+    for pid, p in props.items():
+        if not isinstance(p, dict):
+            continue
+        label = _prop_label(str(pid), p)
+        name = p.get("name")
+        for issue in p.get("issues", []) or []:
+            alerts.append({
+                "verdict": "warn", "kind": "prop_lifecycle_issue",
+                "source": "出图/共享/visual_state_ledger.json",
+                "message": f"道具 {label} lifecycle：{issue}",
+            })
+        for tr in p.get("timeline") or []:
+            if not isinstance(tr, dict):
+                continue
+            clip = tr.get("clip")
+            if clip is None or not blocks:
+                continue
+            to_terms = state_terms(tr.get("to"))
+            from_terms = state_terms(tr.get("from"))
+            for blk in blocks:
+                no = blk.get("shot")
+                if no is None or not _block_mentions_prop(blk, str(pid), name):
+                    continue
+                body = blk.get("body", "")
+                has_to = bool(to_terms) and has_any_term(body, to_terms)
+                has_from = bool(from_terms) and has_any_term(body, from_terms)
+                if no < clip and has_to:
+                    alerts.append({
+                        "verdict": "warn", "kind": "prop_state_premature_leak",
+                        "source": f"出图/{ep}/prompt/01_分镜出图.md", "shot": no,
+                        "message": f"道具 {label} 的 `{tr.get('to')}` 状态在转换镜（Clip{clip}）前的镜{no}提前出现。",
+                    })
+                elif no >= clip and has_from and not has_to:
+                    alerts.append({
+                        "verdict": "warn", "kind": "prop_state_regressed",
+                        "source": f"出图/{ep}/prompt/01_分镜出图.md", "shot": no,
+                        "message": f"道具 {label} 在 Clip{clip} 后应为 `{tr.get('to')}`，但镜{no} 仍写旧状态 `{tr.get('from')}`。",
+                    })
+    return alerts
+
+
 def image_blocks(root: str, ep: str) -> List[Dict[str, Any]]:
     text = sem.read_text(image_prompt_path(root, ep))
     blocks: List[Dict[str, Any]] = []
@@ -275,6 +340,8 @@ def analyze(root: str, ep: str) -> Dict[str, Any]:
                     "message": f"{char} 在镜{start}后应保持 `{st['description']}`，但镜{no} prompt 未见状态锁。",
                 })
 
+    alerts.extend(prop_alerts_from_ledger(root, ep, blocks))
+
     verdicts = [a["verdict"] for a in alerts]
     return {
         "kind": KIND,
@@ -323,9 +390,11 @@ def main(argv: List[str]) -> int:
             print("ℹ️ " + note)
         for a in res.get("alerts", []):
             icon = "⛔" if a["verdict"] == "block" else "⚠️"
-            print(f"{icon} 镜{a.get('shot')} · {a.get('character')}：{a.get('message')}")
+            loc = f"镜{a['shot']} · " if a.get("shot") is not None else ""
+            who = f"{a['character']}：" if a.get("character") else ""
+            print(f"{icon} {loc}{who}{a.get('message')}")
         if not res.get("alerts"):
-            print("✅ 状态演进未发现提前泄露/漏继承。")
+            print("✅ 角色/道具状态演进未发现提前泄露/漏继承/未结构化。")
     return 1 if any(v == "block" for v in res.get("verdicts", [])) else 0
 
 

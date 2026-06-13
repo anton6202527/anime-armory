@@ -17,13 +17,13 @@
 | 生图 AI 口径不一致 | 机+判 | 生产前：`_设置.md`、出图总览、逐镜 prompt 是否都统一到同一个官方/已登录生图后端（默认 Codex，可选 OpenAI/gpt-image、Dreamina/即梦官方 CLI、Seedream/可灵主体库/Nano Banana/Sora Cameo 等）；不得一部分 Codex、一部分其它官方后端，更不得写 `同视频AI` 含糊口径、第三方逆向/web 自动化出图。成片后：若画风/脸型跨镜跳变，追溯是否混用生图后端 | 生产前缺 🔴 / 成片后按结果 🔴/🟡 |
 | 画风跳变 | 判 | 是否守 `global_style.md`；有无中途换图 AI 的"一致性税"。同一作品/同一集原则上不换生图后端；必须换时需重做该集全部定妆与分镜，不允许混产 | 🟡 |
 | 标准三视图定妆缺失（Q28） | 机+判 | 人物定妆是否具备正面 / 侧面 / 背面生产拆图 + `定妆_<角色>_三视图.png` 拼版；只出正面/侧面/半身，或把背面按需省略，都会导致转身/过肩/背身镜漂移 | 缺 🔴 |
-| 资产身份注册层缺失/假登记 | 机+判 | `gate.py --stage image|video|compose|review` 查 `出图/共享/identity_registry.json`：每个角色/形态须有 `reference_group`、图/视频 `identity_adapters`、LoRA 状态、`angle_policy`、`drift_forbidden`；`registered/ready` 必须有真实 ID/handle/reference/model_path。判读 prompt 是否真正从 registry 继承，而非临时手写 | 缺 🔴 / 假登记 🔴 |
+| 资产身份注册层缺失/假登记 | 机+判 | `gate.py --stage image_preflight|video_preflight|image|video|compose|review` 查 `出图/共享/identity_registry.json`：每个角色/形态须有 `reference_group`、图/视频 `identity_adapters`、LoRA 状态、`angle_policy`、`drift_forbidden`；`registered/ready` 必须有真实 ID/handle/reference/model_path。判读 prompt 是否真正从 registry 继承，而非临时手写 | 缺 🔴 / 假登记 🔴 |
 | 分镜图纯文生图（Q28） | 判 | 含角色镜头是否「定妆张+场景图」多图参考派生，而非纯 text2image（纯文生图跨镜相似度差） | 🟡 |
-| 分镜 prompt 结构漏项 | 机 | `gate.py --stage image` 查逐镜是否有参考图、双语 prompt、负向词、导演八维、检查清单、生成后自检、重抽预算 | 缺 🔴 |
-| 基础视觉风格契约漏项 | 机+判 | `gate.py --stage image|video` 查 `storyboard.json.style_contract` 与出图/出视频总览「本集基础视觉风格契约」是否齐全（旧 `cinematic_contract` 兼容）；人判角色比例/材质或线条、光色策略、运动边界、风格禁忌是否符合用户选择的 `基础视觉风格` | 缺 🔴 / 结果假 🟡 |
-| 视频 prompt 导演调度漏项 | 机 | `gate.py --stage video` 查 `00_总览.md` 是否有本集导演一致性契约与本集基础视觉风格契约；逐 Clip 是否有导演意图/起幅/落幅/场面调度/表演节拍、衔接设计、continuity、中英 prompt、检查清单、生成后自检 | 缺 🔴 |
+| 分镜 prompt 结构漏项 | 机 | `gate.py --stage image_preflight` / 生成后 `--stage image` 查逐镜是否有参考图、双语 prompt、负向词、导演八维、检查清单、生成后自检、重抽预算 | 缺 🔴 |
+| 基础视觉风格契约漏项 | 机+判 | `gate.py --stage image_preflight|video_preflight|image|video` 查 `storyboard.json.style_contract` 与出图/出视频总览「本集基础视觉风格契约」是否齐全（旧 `cinematic_contract` 兼容）；人判角色比例/材质或线条、光色策略、运动边界、风格禁忌是否符合用户选择的 `基础视觉风格` | 缺 🔴 / 结果假 🟡 |
+| 视频 prompt 导演调度漏项 | 机 | `gate.py --stage video_preflight` / 生成后 `--stage video` 查 `00_总览.md` 是否有本集导演一致性契约与本集基础视觉风格契约；逐 Clip 是否有导演意图/起幅/落幅/场面调度/表演节拍、衔接设计、continuity、中英 prompt、检查清单、生成后自检 | 缺 🔴 |
 | 含角色镜头缺锚点/一致性自检 | 机+判 | 机查 prompt 是否写锚点句、脸/妆造漂移自检、服装/配色约束、参考强度；判读图确认是否真的像同一人 | 缺 🔴 / 漂 🟡 |
-| 共享定妆 prompt 漏项 | 机 | `gate.py --stage image` 查角色/场景/道具定妆块是否有目标存档、双语 prompt、负向词、定妆检查、生成后落档自检；角色定妆还查定妆组与锚点 | 缺 🔴 |
+| 共享定妆 prompt 漏项 | 机 | `gate.py --stage image_preflight` / 生成后 `--stage image` 查角色/场景/道具定妆块是否有目标存档、双语 prompt、负向词、定妆检查、生成后落档自检；角色定妆还查定妆组与锚点 | 缺 🔴 |
 | 定妆图不纯净（Q4-7/Q12） | 判 | 定妆图是否干净纯色背景 + A-pose 中性（非最有戏姿态/戏剧光）；场景定妆是否误画进人物剪影 | 🟡 |
 | 反派/配角脸混淆（Q10） | 判 | 反派/配角是否被画成主角脸（负向词未驱赶） | 🟡 |
 
@@ -40,7 +40,7 @@
 | 构图 | 主体安置、留白、竖屏 9:16 适配 | 🟢/🟡 |
 | 画面糊/低质 | 出图分辨率/清晰度够投放 | 🟡 |
 
-## C. 节奏留存（对 `novel2drama/references/导演节奏.md`）
+## C. 节奏留存（对 `n2d/references/导演节奏.md`）
 
 | 维度 | 机/判 | 怎么查 | 定级 |
 |---|---|---|---|
@@ -68,7 +68,7 @@
 | 维度 | 机/判 | 怎么查 | 定级 |
 |---|---|---|---|
 | 配音仍占位音色 | 机 | `时长清单.json` 有 `占位:true` | 🔴 |
-| 双人声打架 | 判 | 视频 AI（Veo 3.1/Seedance 2.0）原生台词未静音，与配音轨重叠 | 🔴 |
+| 双人声打架 | 判 | 生视频模型（Veo 3.1/Seedance 2.0）原生台词未静音，与配音轨重叠 | 🔴 |
 | 原生音画 opt-in 违规 | 机+判 | `视频原生音轨` 非默认丢弃时，查 `00_总览.md`「原生音画 opt-in 清单」和每 Clip `原生音画策略`：必须低风险、无口型、无原生人声；保留原片音轨不能和 n2d-voice 配音轨同时用于正式成片 | 违规 🔴 |
 | 音画同步 | 判 | 配音/口型/动作与画面对齐 | 🟡 |
 | 口型（opt-in） | 判 | 说话特写口型对得上配音（用 lip-sync 则查质量） | 🟡 |
@@ -108,7 +108,7 @@
 | 维度 | 机/判 | 定级 |
 |---|---|---|
 | AI 标识水印 | 判 | 换脸/合成画面是否带强制 AI 标识，未被裁掉 | 缺 🔴 |
-| 换脸授权 | 判 | 仅本人/授权演员/合成脸（shared-video-faceswap / shared-image-faceswap 闸门） | 未授权 🔴 |
+| 换脸授权 | 判 | 仅本人/授权演员/合成脸（n2d-video-faceswap / n2d-image-faceswap 闸门） | 未授权 🔴 |
 | 声音克隆授权 | 判 | 克隆真人嗓有授权（2026 opt-in） | 未授权 🔴 |
 | 题材/版权 | 判 | 原作公版/自有/授权 | 🔴 |
 
@@ -119,7 +119,7 @@
 | `时长清单.json` 列的 wav 实际存在 | 🟡 |
 | 故事板镜头 ⊆ 已配音镜头 | 🟡 |
 | 进度表勾选 vs 实际产物一致 | 🟡 |
-| 跨 AI 锚定句对账（Q18）：图 AI ≠ 视频 AI 时，含角色的 image prompt 末尾是否都拼了目标视频 AI 的风格锚定句（缺则 image2video 运动估计崩） | 缺 🔴 |
+| 跨 AI 锚定句对账（Q18）：图 AI ≠ 生视频模型时，含角色的 image prompt 末尾是否都拼了目标生视频模型的风格锚定句（缺则 image2video 运动估计崩） | 缺 🔴 |
 | 产物快照（配音句/clip/成片 计数） | 🟢 信息 |
 | 生图 AI 一致性对账 | 🔴/🟡 | `_设置.md` 的 `生图AI` 必须是同一个官方/已登录后端；出图 prompt 不得标 `同视频AI`、第三方逆向/web 自动化生图，也不得混用多个后端。Dreamina/即梦官方 CLI 可用。发现不一致时报告必须用用户可读话术提示：后端混用会造成角色脸、服装、画风漂移，本次停止出图，先统一后端再继续 |
 

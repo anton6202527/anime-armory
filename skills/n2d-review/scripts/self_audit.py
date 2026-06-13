@@ -22,7 +22,7 @@ Finding = Dict[str, Any]
 
 
 IMAGE_BACKEND_DOCS = (
-    "skills/_偏好约定.md",
+    "skills/n2d/references/选择点与偏好.md",
     "skills/README.md",
     "skills/n2d-image/SKILL.md",
     "skills/n2d-review/references/checklist.md",
@@ -59,7 +59,7 @@ def text(path: Path) -> str:
 
 
 def load_contract(root: Path):
-    path = root / "skills" / "common" / "n2d_contract.py"
+    path = root / "skills" / "n2d" / "_lib" / "n2d_contract.py"
     if not path.is_file():
         return None, None
     try:
@@ -90,7 +90,7 @@ def iter_docs(root: Path) -> Iterable[Path]:
     skill_root = root / "skills"
     patterns = [
         "README.md",
-        "novel2drama/**/*.md",
+        "n2d/**/*.md",
         "n2d-*/**/*.md",
     ]
     seen = set()
@@ -124,7 +124,7 @@ def check_gate_entry(root: Path, findings: List[Finding]) -> None:
 
 
 def check_progress_lock(root: Path, findings: List[Finding]) -> None:
-    path = root / "skills" / "novel2drama" / "progress.py"
+    path = root / "skills" / "n2d" / "progress.py"
     raw = text(path)
     missing = [name for name in ("progress_lock", "atomic_write_text", "os.replace") if name not in raw]
     if missing:
@@ -184,9 +184,11 @@ def check_benchmark_external(root: Path, findings: List[Finding]) -> None:
 
 def check_image_backend_docs(root: Path, findings: List[Finding]) -> None:
     contract, error = load_contract(root)
-    path = root / "skills" / "common" / "n2d_contract.py"
+    path = root / "skills" / "n2d" / "_lib" / "n2d_contract.py"
     if error:
-        add(findings, "block", "生图后端白名单", rel(root, path), f"无法导入 n2d_contract.py：{error}")
+        # 工具自身 import 失败 ≠ 内容合规问题：用独立维度，避免把自审引擎故障伪装成生图后端 block
+        add(findings, "block", "自审引擎错误", rel(root, path),
+            f"无法导入 n2d_contract.py（自审工具故障，非作品问题，请修脚本环境）：{error}")
         return
     if contract is None:
         add(findings, "info", "生图后端白名单", rel(root, path), "未找到 n2d_contract.py，跳过白名单文档一致性检查。")
@@ -226,16 +228,16 @@ def check_image_backend_docs(root: Path, findings: List[Finding]) -> None:
             "生图后端白名单",
             "; ".join(locs),
             "生图后端文档与 APPROVED_IMAGE_BACKENDS 不完全一致，可能重新制造后端口径分叉。",
-            "从 `skills/common/n2d_contract.py` 的 APPROVED_IMAGE_BACKENDS 刷新选择点、n2d-image 说明和 review checklist；`同视频AI` 只能作为禁用/旧值迁移语境出现。",
+            "从 `skills/n2d/_lib/n2d_contract.py` 的 APPROVED_IMAGE_BACKENDS 刷新选择点、n2d-image 说明和 review checklist；`同视频AI` 只能作为禁用/旧值迁移语境出现。",
         )
     else:
-        add(findings, "info", "生图后端白名单", "skills/common/n2d_contract.py", "关键文档已覆盖 APPROVED_IMAGE_BACKENDS，且未把 `同视频AI` 当作可选后端。")
+        add(findings, "info", "生图后端白名单", "skills/n2d/_lib/n2d_contract.py", "关键文档已覆盖 APPROVED_IMAGE_BACKENDS，且未把 `同视频AI` 当作可选后端。")
 
 
 def check_large_docs(root: Path, findings: List[Finding]) -> None:
     docs = (
-        (root / "skills" / "novel2drama" / "SKILL.md", 400, "长规则优先沉到 references/，SKILL.md 保持路由和关键命令。"),
-        (root / "skills" / "novel2drama" / "Q&A.md", 1500, "Q&A 是沉淀库；超过阈值时再分卷或按主题拆 references。"),
+        (root / "skills" / "n2d" / "SKILL.md", 400, "长规则优先沉到 references/，SKILL.md 保持路由和关键命令。"),
+        (root / "skills" / "n2d" / "Q&A.md", 1500, "Q&A 是沉淀库；超过阈值时再分卷或按主题拆 references。"),
     )
     for path, warn_after, suggestion_text in docs:
         if not path.is_file():

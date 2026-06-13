@@ -44,7 +44,7 @@ def build_composer_prompt(clips, blueprint, lyrics):
     for c in clips:
         lyric = c.get('lyric_hint') or '无'
         clip_summaries.append(
-            f"Clip ID: {c['clip_id']} | 时长: {c['duration']}s | 段落: {c['section']} | 动作家族建议: {c.get('action_family', '')} | 动作峰值: {c.get('action_peak', c.get('end'))}s | 歌词: {lyric}"
+            f"Clip ID: {c['clip_id']} | 时间: {c['start']}-{c['end']}s | 时长: {c['duration']}s | 段落: {c['section']} | 动作家族建议: {c.get('action_family', '')} | 能量等级: {c.get('energy_level', '')} | 歌词参考: {lyric}"
         )
         
     return f"""# MV 分镜语义补全任务
@@ -62,11 +62,11 @@ def build_composer_prompt(clips, blueprint, lyrics):
 
 ## 任务要求
 请根据每个 Clip 的时长、所属段落（Verse/Chorus）和对应的歌词，设计具体的画面表现。
-- 主歌（Verse）：通常节奏较慢，适合推拉镜头，注重氛围和情绪铺垫。
-- 副歌（Chorus）：通常节奏快，适合环绕、快速切入，动作幅度大，展现高光时刻。
-- 空镜/转场：如果没有具体歌词，可以设计符合情绪的空镜。
-- 动作设计参考 mv-video/references/action_knowledge.md：一 clip 一个主动作，动作峰值对齐 beat/downbeat；复杂多人接触优先拆成特写/剪影/道具/光效切。
-- 视觉一致性参考 mv-image/references/visual_consistency.md：主角身份锚点、global_style、palette_anchor、motif_ledger 必须继承；副歌可以增强光效但不能换脸换风格。
+- **动态对口型 (Dynamic Lip-Sync)**：如果 Clip 的动作家族是 `performance_vocal`，必须在 `action` 中明确指出人物正在演唱的具体歌词（参考“歌词参考”列），并在 `vocal_lyrics` 字段填入该片段。
+- **色彩剧本 (Color Script)**：参考“视觉蓝图”中的色彩剧本定义，为每个 Clip 设定符合段落氛围的 `lighting`。副歌应有更强烈的灯光律动。
+- **剪辑张力**：副歌（Chorus）通常节奏快，适合环绕、快速切入，动作幅度大；主歌（Verse）注重氛围和情绪铺垫。
+- **动作设计**：参考 mv-video/references/action_knowledge.md 和 mv-video/references/dance_choreography.md。一 clip 一个主动作，动作峰值对齐音乐重拍。
+- **力量等级**：根据段落张力分配 Level 1-10 的能量。
 
 输出 JSON 格式，严格包含所有传入的 Clip ID，结构如下：
 {{
@@ -74,12 +74,14 @@ def build_composer_prompt(clips, blueprint, lyrics):
     {{
       "clip_id": "Clip_001",
       "start_state": "画面开始时的场景和人物状态",
-      "action_family": "动作家族，如 dance_hit/vfx_burst/expressive_walk",
-      "action": "人物在此期间的具体动作（如：抬头看天、转身走开）",
-      "action_peak": "动作峰值应对齐的秒点，如 48.80",
+      "action_family": "动作家族，如 dance_hit/performance_vocal/expressive_walk",
+      "energy_level": "力量等级 Level 1-10",
+      "action": "人物在此期间的具体动作。若是演唱，格式为：[演唱神态]并演唱歌词“[具体歌词片段]”",
+      "vocal_lyrics": "具体演唱的歌词片段 (仅当 action_family 为 performance_vocal 时填写)",
+      "action_peak_relative": "动作峰值相对于本 clip 开始的秒点（如 0.8s），应严格对齐音乐重拍",
       "end_state": "动作结束时的状态",
       "camera": "运镜方式（如：缓慢推进、跟随镜头、固定特写）",
-      "lighting": "光影氛围（如：逆光剪影、冷色调霓虹光）",
+      "lighting": "光影氛围（如：逆光剪影、红蓝霓虹律动），需符合色彩剧本",
       "visual_motif": "本 clip 继承或强化的视觉母题",
       "transition_motif": "转场母题，如 光效切/遮挡擦镜/动作切"
     }}
@@ -107,11 +109,15 @@ def apply_prompts(root, plan, semantic_data):
         clip["continuity"]["end_state"] = sem.get("end_state", "")
         if sem.get("action_family"):
             clip["action_family"] = sem.get("action_family")
-        if sem.get("action_peak") not in (None, ""):
+        if sem.get("energy_level"):
+            clip["energy_level"] = sem.get("energy_level")
+        if sem.get("vocal_lyrics"):
+            clip["vocal_lyrics"] = sem.get("vocal_lyrics")
+        if sem.get("action_peak_relative") not in (None, ""):
             try:
-                clip["action_peak"] = round(float(sem.get("action_peak")), 3)
+                clip["action_peak_relative"] = round(float(sem.get("action_peak_relative")), 3)
             except (TypeError, ValueError):
-                clip["action_peak"] = sem.get("action_peak")
+                clip["action_peak_relative"] = sem.get("action_peak_relative")
         if sem.get("visual_motif"):
             clip["visual_motif"] = sem.get("visual_motif")
         if sem.get("transition_motif"):
@@ -141,16 +147,24 @@ def apply_prompts(root, plan, semantic_data):
             vid_content = re.sub(r"- end_state：.*", f"- end_state：{sem.get('end_state', '')}", vid_content)
             if sem.get("action_family"):
                 vid_content = re.sub(r"- 动作家族：.*", f"- 动作家族：{sem.get('action_family', '')}", vid_content)
+            if sem.get("energy_level"):
+                vid_content = re.sub(r"- 力量等级：.*", f"- 力量等级：{sem.get('energy_level', '')}", vid_content)
             if sem.get("transition_motif"):
                 vid_content = re.sub(r"- 转场母题：.*", f"- 转场母题：{sem.get('transition_motif', '')}", vid_content)
             
             # Update video prompt section
-            peak = clip.get("action_peak", clip["end"])
+            peak_rel = clip.get("action_peak_relative", "0.8s")
             try:
-                peak_text = f"{float(peak):.2f}s"
+                peak_text = f"{float(peak_rel):.2f}s (relative)"
             except (TypeError, ValueError):
-                peak_text = str(peak)
-            prompt_replacement = f"人物运动：{sem.get('action', '')}；动作家族：{clip.get('action_family', '')}；镜头运动：{sem.get('camera', '按段落张力')}；光影：{sem.get('lighting', '按视觉蓝图')}；动态细节：发丝、衣摆、光斑或环境粒子随节拍变化；卡点约束：动作峰值对齐 {peak_text}；转场母题：{clip.get('transition_motif', '')}；"
+                peak_text = str(peak_rel)
+                
+            vocal_lyrics = sem.get("vocal_lyrics", "")
+            action_desc = sem.get("action", "")
+            if vocal_lyrics and sem.get("action_family") == "performance_vocal":
+                action_desc = f"{action_desc}；对口型约束：人物正在演唱歌词“{vocal_lyrics}”，口型必须完全对齐"
+
+            prompt_replacement = f"人物运动：{action_desc}；动作家族：{clip.get('action_family', '')}；力量等级：{clip.get('energy_level', 'Level 5')}；镜头运动：{sem.get('camera', '按段落张力')}；光影：{sem.get('lighting', '按视觉蓝图')}；动态细节：发丝、衣摆、光斑或环境粒子随节拍产生物理惯性偏移；卡点约束：动作峰值/击中点对齐本 clip 内部的 {peak_text}；转场母题：{clip.get('transition_motif', '')}；"
             vid_content = re.sub(r"人物运动：.*?(?:卡点约束：.*?s；|声音约束：)", prompt_replacement + "声音约束：", vid_content, flags=re.DOTALL)
             
             write_text(vid_prompt_path, vid_content)
@@ -160,6 +174,14 @@ def apply_prompts(root, plan, semantic_data):
     # Save the updated clip_plan.json
     plan_path = os.path.join(root, "分镜", "clip_plan.json")
     write_json(plan_path, plan)
+    payload = {
+        "schema_version": 1,
+        "kind": "mv_semantic_prompts",
+        "generated_at": date.today().isoformat(),
+        "updated_clips": updated_count,
+        "clips": semantic_data.get("clips", []),
+    }
+    write_json(os.path.join(root, "分镜", "semantic_prompts.json"), payload)
     
     return updated_count
 

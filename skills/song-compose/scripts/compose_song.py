@@ -48,46 +48,39 @@ try:
 except Exception:
     song_utils = None
 
-SETTING_RE = re.compile(r"^\s*-\s*([^:：]+)\s*[:：]\s*(.*?)\s*(?:#.*)?$")
+# 设置解析统一走本线 song/_lib/settings.py（vendored，本线自包含）；别在本线另写一份 parser。
+_COMMON_DIR = os.path.join(REPO, "skills", "song", "_lib")
+if _COMMON_DIR not in sys.path:
+    sys.path.insert(0, _COMMON_DIR)
+from settings import load_settings as _load_settings  # noqa: E402
+import io_utils  # noqa: E402
 
 
 def rel(root, path):
     return os.path.relpath(path, root).replace(os.sep, "/")
 
 
+# IO 小工具走本线 _lib/io_utils.py（vendored，本线自包含）；本线 load_json 历史是 strict。
 def load_json(path, default):
-    if not os.path.exists(path):
-        return default
-    with open(path, encoding="utf-8") as f:
-        return json.load(f)
+    return io_utils.load_json(path, default)
 
 
 def write_json(path, payload):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(payload, f, ensure_ascii=False, indent=2)
+    io_utils.write_json(path, payload)
 
 
 def read_text(path, default=""):
-    if not os.path.exists(path):
-        return default
-    with open(path, encoding="utf-8") as f:
-        return f.read()
+    return io_utils.read_text(path, default)
 
 
 def write_text(path, text):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(text)
+    io_utils.write_text(path, text)
 
 
 def parse_settings(root):
-    settings = {}
-    for line in read_text(os.path.join(root, "_设置.md")).splitlines():
-        m = SETTING_RE.match(line)
-        if m:
-            settings[m.group(1).strip()] = m.group(2).strip()
-    return settings
+    # 委托给本线 _lib/settings.load_settings：正确处理 **加粗** key、跳过 `## 记录` 区，
+    # 与本线 _lib/settings.py 写回格式同源（vendored，本线自包含）。
+    return _load_settings(root)
 
 
 def parse_seconds(value):

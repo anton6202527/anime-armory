@@ -21,6 +21,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 CONTRACT_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "contract.py")
 MV_UTILS_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "mv_utils.py")
+GATE_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "gate.py")
 
 def load_contract():
     spec = importlib.util.spec_from_file_location("mv_contract", CONTRACT_PATH)
@@ -34,8 +35,15 @@ def load_mv_utils():
     spec.loader.exec_module(mod)
     return mod
 
+def load_gate():
+    spec = importlib.util.spec_from_file_location("mv_gate", GATE_PATH)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
 contract = load_contract()
 mv_utils = load_mv_utils()
+mv_gate = load_gate()
 
 def rel(root, path):
     return os.path.relpath(path, root).replace(os.sep, "/")
@@ -63,12 +71,13 @@ def normalize_take_id(value):
     raise SystemExit(f"[err] take id 无效：{value}（用 1 / take_01）")
 
 
-def prompt_for_take(clip, backend, spec_profile, take_id):
+def prompt_for_take(clip, backend, spec_profile, take_id, video_model=""):
     c = clip.get("continuity", {})
     lines = [
         f"# {clip['clip_id']} {take_id} 视频生成任务",
         "",
-        f"- 后端：{backend}",
+        f"- 生视频模型：{video_model or '未记录'}",
+        f"- 生视频渠道：{backend}",
         f"- 分辨率：{spec_profile['resolution']}",
         f"- 帧率：{spec_profile['fps']}fps",
         f"- 质量档：{spec_profile['quality']}",
@@ -93,15 +102,21 @@ def prompt_for_take(clip, backend, spec_profile, take_id):
 
 
 def create_jobs(root, args):
+    errors, warnings = mv_gate.check(root, "video_jobs")
+    for msg in warnings:
+        print(f"[warn] {msg}")
+    if errors:
+        raise SystemExit("\n".join(f"[err] {msg}" for msg in errors))
     plan_path = os.path.join(root, "分镜", "clip_plan.json")
     plan = mv_utils.load_json(plan_path, None)
     if not plan:
         raise SystemExit("[err] 缺 分镜/clip_plan.json，先跑 mv-plan/scripts/plan_clips.py")
     settings = mv_utils.parse_settings(root)
-    backend = args.backend or settings.get("生视频AI") or "即梦"
+    video_model = settings.get("生视频模型") or settings.get("生视频AI") or contract.DEFAULT_SETTINGS["生视频模型"]
+    backend = args.backend or settings.get("生视频渠道") or settings.get("生视频AI") or contract.DEFAULT_SETTINGS["生视频渠道"]
     spec = args.video_spec or settings.get("出视频规格") or "预算一般"
-    if backend not in contract.MV_VIDEO_BACKENDS:
-        raise SystemExit(f"[err] 不支持的生视频AI：{backend}")
+    if backend not in contract.MV_VIDEO_CHANNELS:
+        raise SystemExit(f"[err] 不支持的生视频渠道：{backend}")
     profile = contract.video_spec_profile(spec)
     jobs = []
     for clip in plan.get("clips", []):
@@ -116,7 +131,7 @@ def create_jobs(root, args):
         for i in range(1, requested + 1):
             take_id = f"take_{i:02d}"
             prompt_path = os.path.join("出视频", "prompt", f"{clip['clip_id']}_{take_id}.md")
-            mv_utils.write_text(os.path.join(root, prompt_path), prompt_for_take(clip, backend, profile, take_id))
+            mv_utils.write_text(os.path.join(root, prompt_path), prompt_for_take(clip, backend, profile, take_id, video_model))
             takes.append({
                 "take_id": take_id,
                 "status": "planned",
@@ -144,6 +159,8 @@ def create_jobs(root, args):
         "generated_at": date.today().isoformat(),
         "project_root": root,
         "title": plan.get("title") or os.path.basename(root),
+        "video_model": video_model,
+        "video_channel": backend,
         "backend": backend,
         "video_spec": spec,
         "spec_profile": profile,
@@ -152,6 +169,7 @@ def create_jobs(root, args):
     }
     out = os.path.join(root, "出视频", "jobs_manifest.json")
     mv_utils.write_json(out, manifest)
+    mv_utils.update_progress_stage(root, "video_jobs")
     return out, manifest
 
 
@@ -235,6 +253,8 @@ def select_take(root, clip_id, take_id):
     job["selected_at"] = date.today().isoformat()
     mv_utils.write_json(manifest_path, manifest)
     update_timeline(root, clip_id, rel(root, dst))
+    if all(j.get("selected_take") for j in manifest.get("jobs", [])):
+        mv_utils.update_progress_stage(root, "video")
     return dst
 
 

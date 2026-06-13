@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# mv-lyric-sync：whisperx 把【已知歌词】强制对齐到 歌/song.wav → 词级时间戳
+# mv-lyric-sync：whisperx 把【已知歌词】强制对齐到 歌/song.* → 词级时间戳
 #   → 字幕/karaoke.ass(逐字\k高亮) + 字幕/lyrics.lrc(逐行)。mv 系列自包含。
 # 用法: align.py <制MV作品根> [--lang zh] [--device cpu] [--audio <vocals.wav>]
 # 依赖: pip install whisperx   （首次会下 wav2vec2 对齐模型；CPU 可跑，慢）
@@ -10,6 +10,7 @@ import importlib.util
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 MV_UTILS_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "mv_utils.py")
+GATE_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "gate.py")
 
 def load_mv_utils():
     spec = importlib.util.spec_from_file_location("mv_utils", MV_UTILS_PATH)
@@ -17,7 +18,14 @@ def load_mv_utils():
     spec.loader.exec_module(mod)
     return mod
 
+def load_gate():
+    spec = importlib.util.spec_from_file_location("mv_gate", GATE_PATH)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
 mv_utils = load_mv_utils()
+mv_gate = load_gate()
 
 def load_lyric_lines(path):
     lines = []
@@ -45,10 +53,15 @@ def main():
             song = vocals_path
             print(f"[info] 自动检测到 demucs 人声轨：{vocals_path}，将使用其进行对齐提升精度。")
         else:
-            song = next((os.path.join(args.root, "歌", f"song{e}")
-                         for e in (".wav", ".mp3", ".m4a", ".flac")
-                         if os.path.exists(os.path.join(args.root, "歌", f"song{e}"))), None)
+            song = mv_utils.find_song(args.root)
     lyr = os.path.join(args.root, "词", "lyrics.md")
+    errors, warnings = mv_gate.check(args.root, "lyric_sync")
+    for msg in warnings:
+        print(f"[warn] {msg}")
+    if errors:
+        for msg in errors:
+            print(f"[err] {msg}", file=sys.stderr)
+        sys.exit(2)
     if not song or not os.path.exists(song): sys.exit(f"缺 {args.root}/歌/song.* 或 --audio 指定文件不存在")
     if not os.path.exists(lyr): sys.exit(f"缺 {args.root}/词/lyrics.md")
     lines = load_lyric_lines(lyr)
@@ -124,6 +137,7 @@ def main():
     open(os.path.join(out_dir, "alignment_report.json"), "w", encoding="utf-8").write(
         json.dumps(report, ensure_ascii=False, indent=2) + "\n"
     )
+    mv_utils.update_progress_stage(args.root, "lyric_sync")
     print(f"[ok] 对齐 {len(lines)} 行 / {wi} 词 → 字幕/karaoke.ass + lyrics.lrc")
     if report["warnings"]:
         print("[warn] " + "；".join(report["warnings"]))

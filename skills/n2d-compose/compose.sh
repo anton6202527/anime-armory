@@ -21,7 +21,7 @@ if [ -n "$BGM_GAIN_EXPR" ]; then
 else
   BGM_VOL_VOICE="volume=0.9"; BGM_VOL_NOVOICE="volume=0.85"
 fi
-KEEP_CLIP_AUDIO="${KEEP_CLIP_AUDIO:-0}"  # 默认丢弃 AI clip 原生音频；设 1 才低音量混入环境音底
+KEEP_CLIP_AUDIO="${KEEP_CLIP_AUDIO:-0}"  # 默认在 compose 工作缓存丢弃 AI clip 原生音频；设 1 才低音量混入环境音底。源 clip 不改写。
 J_CUT_SEC="${J_CUT_SEC:-0.25}"           # 默认轻量 J-cut：基于 line_*.wav 提前入声；设 0 关闭。正面口型特写慎用
 VIDEO_NATIVE_AUDIO_POLICY="${VIDEO_NATIVE_AUDIO_POLICY:-}"
 # 使用 common/n2d_settings.py 的单一真值源
@@ -47,7 +47,7 @@ case "$VIDEO_NATIVE_AUDIO_POLICY" in
   保留原片音轨|保留|keep|preserve) NATIVE_AUDIO_MODE="keep"; CLIP_AUDIO_GAIN="${CLIP_AUDIO_GAIN:-1.0}" ;;
   *) echo "bad 视频原生音轨: $VIDEO_NATIVE_AUDIO_POLICY（可选：丢弃 / 低音量混入环境声 / 保留原片音轨）"; exit 1 ;;
 esac
-# 画幅选择点（不写死，对齐 _偏好约定.md「画幅」）：env ASPECT(9:16|16:9) > _设置.md「画幅」> 默认 9:16(竖屏)
+# 画幅选择点（不写死，对齐 skills/n2d/references/选择点与偏好.md「画幅」）：env ASPECT(9:16|16:9) > _设置.md「画幅」> 默认 9:16(竖屏)
 if [ "${ASPECT:-}" = "16:9" ]; then GEO="1920 1080"
 elif [ "${ASPECT:-}" = "9:16" ]; then GEO="1080 1920"
 else
@@ -153,6 +153,7 @@ while IFS=$'\t' read -r c dur speed_mode; do
       fi
     fi
 
+    # 只在 compose 的规格化缓存中 -an；出视频目录里的 AI 原片保持不变。
     ffmpeg -y -loglevel error -i "$c" \
       -vf "${SETPTS_OPT}scale=${PXW}:${PXH}:force_original_aspect_ratio=decrease,pad=${PXW}:${PXH}:(ow-iw)/2:(oh-ih)/2:black,fps=30,format=yuv420p" \
       $TRIM_OPT -c:v libx264 -preset "$VIDEO_PRESET" -crf "$VIDEO_CRF" -an "$nf.tmp.mp4" && mv "$nf.tmp.mp4" "$nf"
@@ -259,7 +260,7 @@ ls -la "$OUT"
 
 # 回写进度
 if [ "${N2D_UPDATE_PROGRESS:-1}" != "0" ]; then
-  PYTHONPATH="$SKILL_DIR/../common" python3 "$SKILL_DIR/../novel2drama/progress.py" set "$ROOT" "$EP" "成片" "✅" || true
+  PYTHONPATH="$SKILL_DIR/../common" python3 "$SKILL_DIR/../n2d/progress.py" set "$ROOT" "$EP" "成片" "✅" || true
 fi
 
 # 记录生产数据 (P0)
@@ -299,5 +300,5 @@ else:
 PY
 
 if [ "${N2D_UPDATE_PROGRESS:-1}" != "0" ]; then
-  python3 "$SKILL_DIR/../novel2drama/progress.py" set "$ROOT" "$EP" 成片 ✅ || true
+  python3 "$SKILL_DIR/../n2d/progress.py" set "$ROOT" "$EP" 成片 ✅ || true
 fi

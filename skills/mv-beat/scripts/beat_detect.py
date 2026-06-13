@@ -3,7 +3,21 @@
 # mv-beat：librosa 检测 BPM/beats/downbeats/energy/sections → 节拍/beatgrid.json（卡点网格）。
 # 用法: beat_detect.py <制MV作品根> [--meter 4]
 # 依赖: pip install librosa soundfile  （Mac 友好，纯 CPU 可跑）
-import sys, os, json, argparse
+import sys, os, json, argparse, importlib.util
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
+MV_UTILS_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "mv_utils.py")
+
+
+def load_mv_utils():
+    spec = importlib.util.spec_from_file_location("mv_utils", MV_UTILS_PATH)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+mv_utils = load_mv_utils()
 
 
 def load_meta(root):
@@ -47,11 +61,11 @@ def main():
     ap.add_argument("--meter", type=int, default=4, help="每小节拍数（4/4 默认 4）")
     args = ap.parse_args()
 
-    song = None
-    for ext in (".wav", ".mp3", ".m4a", ".flac"):
-        p = os.path.join(args.root, "歌", f"song{ext}")
-        if os.path.exists(p): song = p; break
+    song = mv_utils.find_song(args.root)
     if not song:
+        meta = load_meta(args.root)
+        if meta.get("song_timing") == "后配歌曲":
+            sys.exit(f"找不到 {args.root}/歌/song.*（后配歌曲路线需先由 song 线产出或用户上传最终成品歌）")
         sys.exit(f"找不到 {args.root}/歌/song.*（先放入成品歌）")
 
     try:
@@ -97,8 +111,12 @@ def main():
     }
     out = os.path.join(out_dir, "beatgrid.json")
     json.dump(grid, open(out, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+    mv_utils.update_meta_flags(args.root)
+    mv_utils.update_progress_stage(args.root, "song_ingest")
+    mv_utils.update_progress_stage(args.root, "beat")
     print(f"[ok] BPM={grid['bpm']} 拍数={len(beats)} 小节首={len(downbeats)} 时长={grid['duration']}s → {out}")
-    print("[next] mv-image 按段落出图；mv-video 出 clip 时长对齐 downbeats；mv-compose 卡点合成")
+    next_script = "mv-script 复核 rough 蓝图" if meta.get("song_timing") == "后配歌曲" else "mv-script 创作视觉蓝图"
+    print(f"[next] {next_script} → mv-plan 正式时间线 → mv-image → mv-video → mv-lyric-sync → mv-compose")
 
 
 if __name__ == "__main__":

@@ -16,7 +16,7 @@
 - 这只用于 rough timing。**出图前必须换真实配音重跑 n2d-voice，再回跑 n2d-script 阶段2。**
 
 ## 进度回写
-完成后回写「配音」列：`python3 <novel2drama skill>/progress.py set <作品根> 第N集 配音 ✅`（别手工编辑进度表，易改错列）。
+完成后回写「配音」列：`python3 <n2d skill>/progress.py set <作品根> 第N集 配音 ✅`（别手工编辑进度表，易改错列）。
 
 ## 完成消息（驱动下一阶段）
-配音完成后提示助手：「配音齐 → 下一步 /n2d-script <作品根> 第N集 用时长清单定稿故事板+SRT，再 /n2d-image」。
+配音完成后提示助手：「配音齐 → 下一步 n2d-script <作品根> 第N集 用时长清单定稿故事板+SRT，再 n2d-image」。

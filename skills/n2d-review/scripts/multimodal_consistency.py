@@ -17,7 +17,7 @@ import re
 import sys
 from typing import Dict, List, Optional, Sequence, Tuple
 
-COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
+COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 from n2d_contract import asset_registry_path, identity_registry_path  # noqa: E402

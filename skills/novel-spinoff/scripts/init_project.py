@@ -30,9 +30,9 @@ from extract_anchors import scan_candidates, write_anchor_table
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                 "..", "..", "novel-craft", "scripts"))
 from contract import (AI_TEXT_USAGE_MODES, CHAPTER_GRANULARITY, NOVEL_DRAFT_MODES,
-                      SCALE_PROFILES, base_meta, demo_chapters_for, derived_stage_markdown,
-                      parse_outputs, scale_profile)
-from derive_common import docx_to_txt, detect_rights_status, write_settings
+                      SCALE_CHOICES, SCALE_PROFILES, base_meta, demo_chapters_for,
+                      derived_stage_markdown, normalize_scale, parse_outputs, scale_profile)
+from derive_common import build_rights_metadata, docx_to_txt, detect_rights_status, write_settings
 
 SCALE_PROFILE = SCALE_PROFILES  # backwards-compatible alias for tests/importers
 
@@ -163,7 +163,7 @@ def main():
     ap.add_argument("source_novel", help="原作 .txt 或 .docx 路径")
     ap.add_argument("--character", required=True, help="配角名")
     ap.add_argument("--mode", required=True, choices=["parallel", "sequel", "branch"])
-    ap.add_argument("--scale", required=True, choices=list(SCALE_PROFILE))
+    ap.add_argument("--scale", required=True, choices=list(SCALE_CHOICES))
     ap.add_argument("--target-chapters", type=int, default=None,
                     help="覆盖规模档默认章数")
     ap.add_argument("--branch-point", default=None, help="分叉模式必填，例：'第15章'")
@@ -181,6 +181,10 @@ def main():
                     help="发布披露用：AI-generated / AI-assisted / 未使用AI文本")
     ap.add_argument("--i-have-rights", action="store_true",
                     help="原作非公版时声明你有权使用")
+    ap.add_argument("--rights-jurisdiction", default=None,
+                    help="公版/授权依据适用辖区，如 US/CN/GLOBAL；缺省按来源推断")
+    ap.add_argument("--distribution-regions", default=None,
+                    help="计划发行/交付地区，逗号分隔，如 CN,US；公版跨区时必须复核")
     args = ap.parse_args()
 
     if args.mode == "branch" and not args.branch_point:
@@ -230,20 +234,27 @@ def main():
         sys.exit(2)
 
     # _meta.json
-    profile = scale_profile(args.scale)
+    scale = normalize_scale(args.scale)
+    profile = scale_profile(scale)
     if args.target_chapters is not None:
         profile["target_chapters"] = args.target_chapters
     outputs = parse_outputs(args.outputs)
     # Demo 章数按规模
     demo_chapters = demo_chapters_for(profile["target_chapters"])
     meta = base_meta("spinoff", outputs=outputs, rights_status=rights_status)
+    meta.update(build_rights_metadata(
+        rights_status,
+        i_have_rights=args.i_have_rights,
+        rights_jurisdiction=args.rights_jurisdiction,
+        distribution_regions=args.distribution_regions,
+    ))
     meta.update({
         "source_novel": source_path,
         "source_title": source_title,
         "spinoff_character": args.character,
         "mode": args.mode,
         "branch_point": args.branch_point,
-        "scale": args.scale,
+        "scale": scale,
         "target_chapters": profile["target_chapters"],
         "target_words_per_chapter": profile["words_per_chapter"],
         "person": args.person,
@@ -262,7 +273,9 @@ def main():
     write_settings(out_root, {
         "目标平台": args.target_platform,
         "权利来源": rights_status,
-        "篇幅档": f"{args.scale}（{profile['target_chapters']}章×{profile['words_per_chapter'][0]}-{profile['words_per_chapter'][1]}字）",
+        "权利辖区": meta.get("rights_jurisdiction", ""),
+        "发行地区": ",".join(meta.get("distribution_regions") or []) or "未定",
+        "篇幅档": f"{scale}（{profile['target_chapters']}章×{profile['words_per_chapter'][0]}-{profile['words_per_chapter'][1]}字）",
         "外传模式": args.mode,
         "输出格式": ",".join(outputs) + "（novel-craft/scripts/export.py）",
         "小说生成模式": args.draft_mode,

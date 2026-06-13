@@ -15,7 +15,7 @@ python3 skills/novel-review/scripts/self_audit.py
 python3 skills/novel-review/scripts/self_audit.py --project-root "<作品根>"
 ```
 
-该脚本**只读不改、不联网**，检查 novel-* registry、`novel-author` 路由表、`skills/README.md` 索引、`_进度.md` 加锁写入口、`state_ledger.json` 原子写、批量写章队列、项目级市场基准新鲜度。若本地治理已有 block/warn，优先修这些，再进入下面的联网取证。
+该脚本**只读不改、不联网**，检查 novel-* registry、`novel` 路由表、`skills/README.md` 索引、`_进度.md` 加锁写入口、`state_ledger.json` 原子写、批量写章队列、项目级市场基准新鲜度。若本地治理已有 block/warn，优先修这些，再进入下面的联网取证。
 
 ## 三轴取证（联网，必带年月）
 按写小说三大验收维分轴搜，每轴落到"当前 SOTA 做法 + 证据链接 + 日期"：
@@ -30,7 +30,7 @@ python3 skills/novel-review/scripts/self_audit.py --project-root "<作品根>"
 > 搜索词带"2026""最新""最佳实践""扑街/翻车"更易命中实战贴；中文为主（国内网文生态），英文补 AI-writing 圈一轮。
 
 ## 对照 → 差距清单
-逐 skill 把"基准做法"对到 `novel-*/SKILL.md` + `novel-craft/references/*` + `novel-author/Q&A.md`：
+逐 skill 把"基准做法"对到 `novel-*/SKILL.md` + `novel-craft/references/*` + `novel/Q&A.md`：
 
 - **先查已实现**：很多"新做法"产线早做了（如黄金三章钩子、爽点憋放、设定圣经单一真值、锚点表、原文照搬机检、容错铁律）。**已实现的不重复立项**——只在报告里标"✅ 已覆盖"一行带过。
 - **找真差距**：只记"基准有、novel 没有或更弱"的。每条写成：

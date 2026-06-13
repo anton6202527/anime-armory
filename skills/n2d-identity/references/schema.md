@@ -39,6 +39,23 @@
     "outfit": {"path": "出图/共享/图片/定妆_王敦_半身.png", "exists": true},
     "turnaround": {"path": "出图/共享/图片/定妆_王敦_三视图.png", "exists": true}
   },
+  "physical_scale": {
+    "height_cm": 178,
+    "body_type": "微胖",
+    "relative_scale": "比沈念高半个头"
+  },
+  "expression_dna": {
+    "joy": "眼角微弯，唇角上扬，眼神柔和",
+    "anger": "眉心微蹙，下颌收紧，眼神藏锋冷峻",
+    "sorrow": "低头垂眸，眼眶微红，神情落寞",
+    "fear": "瞳孔微缩，呼吸略促，面部肌肉僵硬"
+  },
+  "weathering_profile": {
+    "base_state": "new",
+    "evolution": [
+      {"episode": "第10集", "state": "worn", "tags": "clothes slightly faded, fine dust on boots"}
+    ]
+  },
   "image_bindings": {
     "codex": {"mode": "reference_group", "status": "fallback_reference_group", "ready": true, "binding": "reference_group"},
     "seedream": {"mode": "universal_reference", "status": "registered", "ready": true, "binding": "universal_reference", "handle": "sd_ref_wang"},

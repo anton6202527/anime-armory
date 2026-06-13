@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""n2d-progress/scan.py — 制漫剧(novel2drama)进度扫描器（只读）。
+"""n2d-progress/scan.py — 制漫剧(n2d)进度扫描器（只读）。
 
 只扫描 `制漫剧/<剧名>/_进度.md`，解析其中的逐集流程矩阵表，压缩输出：
 每阶段完成数 + 生产前沿(下一步该跑哪个 n2d skill) + 次要缺口。
@@ -17,24 +17,26 @@ raw=源文本，展示但不计入流程完成判定。
   python3 scan.py --root <仓库根>  # 指定仓库根（默认=自动向上找）
 """
 import glob
+import json
 import os
 import re
 import sys
 
-COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'common'))
+COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'n2d', '_lib'))
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 from n2d_route import flow_columns, is_done, is_flow_complete, is_progress_satisfied, is_started, parse_progress, stage_of
 from n2d_settings import is_native_av, is_video_first
 try:
-    from n2d_contract import cross_cutting, COSTLY_HINTS
+    from n2d_contract import cross_cutting, cross_cutting_tools, COSTLY_HINTS
 except Exception:  # pragma: no cover - 横切检查可选，缺契约也不影响主流程扫描
     cross_cutting = None
+    cross_cutting_tools = None
     COSTLY_HINTS = None
 
 LINE_DIR = "制漫剧"  # 只管 n2d 这一条线
 
-DISPATCHER = "novel2drama"  # 认不出列名时兜底
+DISPATCHER = "n2d"  # 认不出列名时兜底
 
 # 花钱/不可逆/合规的前沿列 → 提醒先确认。基准取 n2d_contract.COSTLY_HINTS（单一真值源），
 # 仅补 progress 看板特有的「分镜 PNG 前共享定妆库须全 ✅」；缺契约时回退本地精简版。
@@ -117,6 +119,65 @@ def parallel_suggestion(root, rows, header, flow, gaps):
             return format_parallel(ep, col, val, route.get("skill") or DISPATCHER, route.get("note") or "")
     return ""
 
+
+def _finding_counts(data):
+    """Return (block, warn) for consistency/gate findings payloads.
+
+    Supports both current `severity/dimension/message` rows and older
+    `sev/dim/msg` rows. Files with only info rows are not actionable gaps.
+    """
+    summary = data.get("summary") if isinstance(data, dict) else None
+    if isinstance(summary, dict):
+        sev = summary.get("severity")
+        if isinstance(sev, dict):
+            return int(sev.get("block") or 0), int(sev.get("warn") or 0)
+    rows = data.get("findings") if isinstance(data, dict) else None
+    if not isinstance(rows, list):
+        return 0, 0
+    block = warn = 0
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        sev = str(row.get("severity") or row.get("sev") or "").lower()
+        if row.get("resolved") is True:
+            continue
+        if sev == "block":
+            block += 1
+        elif sev == "warn":
+            warn += 1
+    return block, warn
+
+
+def findings_status(root, ep):
+    """Summarize active/stale findings for one episode.
+
+    A findings file older than `_进度.md` may describe a previous production
+    state. Report it as stale instead of "unresolved" so progress does not keep
+    sending the user into already-superseded return tasks.
+    """
+    # 用「本集」的 manifest mtime 当陈旧基准，而非整份 _进度.md：给别的集设一列也会 touch
+    # _进度.md，会把本集仍未解决的 block 误降级成「已过期」。本集 manifest 只在本集 set 时刷新。
+    ep_manifest = os.path.join(root, "脚本", ep, "manifest.json")
+    progress_file = os.path.join(root, "_进度.md")
+    ref_path = ep_manifest if os.path.exists(ep_manifest) else progress_file
+    progress_mtime = os.path.getmtime(ref_path) if os.path.exists(ref_path) else 0
+    active = {"block": 0, "warn": 0, "files": 0}
+    stale = {"block": 0, "warn": 0, "files": 0}
+    for path in glob.glob(os.path.join(root, "生产数据", f"*findings*{ep}.json")):
+        try:
+            data = json.load(open(path, encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        block, warn = _finding_counts(data)
+        if block <= 0 and warn <= 0:
+            continue
+        bucket = stale if os.path.getmtime(path) < progress_mtime else active
+        bucket["block"] += block
+        bucket["warn"] += warn
+        bucket["files"] += 1
+    return active, stale
+
+
 def report(root, out):
     try:
         header, dict_rows = parse_progress(root)
@@ -137,12 +198,21 @@ def report(root, out):
         for c in flow))
 
     episodes = [r.get("_ep", "") for r in dict_rows if r.get("_ep")]
-    cross_cutting_check(root, out, episodes)  # 横切就绪（合规/身份/LoRA/仪表盘/评分/UI/回灌）——不在流程表里但要可见
+    cross_cutting_check(root, out, episodes)  # 横切就绪（合规/身份/LoRA/仪表盘/回灌）+ 观察工具（评分/UI/更新）——不在流程表里但要可见
 
     findings_gaps = []
     for ep in episodes:
-        if glob.glob(os.path.join(root, "生产数据", f"*findings*{ep}.json")):
-            findings_gaps.append(f"  - {ep} 存在未解决的一致性 findings (建议调 n2d-batch 修复)")
+        active, stale = findings_status(root, ep)
+        if active["block"] or active["warn"]:
+            findings_gaps.append(
+                f"  - {ep} 当前 findings: block {active['block']} / warn {active['warn']} "
+                f"（{active['files']} 个文件，建议调 n2d-batch 修复或重跑对应 gate）"
+            )
+        elif stale["block"] or stale["warn"]:
+            findings_gaps.append(
+                f"  - {ep} 有过期 findings: block {stale['block']} / warn {stale['warn']} "
+                "（进度已更新，建议重跑 score/review/gate 刷新，不按旧结果直接返工）"
+            )
 
     gaps = []  # (集, 列, 值, skill, note)
     for r in dict_rows:
@@ -241,6 +311,19 @@ def cross_cutting_check(root, out, episodes=None):
         out.append("横切就绪: " + " | ".join(rows))
         if any("⚠️缺" in r for r in rows):
             out.append("  ⚠️ 合规包缺失：image 起的付费阶段 gate 会阻断，先跑 n2d-compliance --init")
+    # 观察/计划类工具（score/review_ui/update）：有 per-work 产物但只是可选观察输出，
+    # 单列「非前置」与「就绪」分开，避免把可选 QA/计划产物误当生产必经步骤。
+    tool_rows = []
+    if cross_cutting_tools is not None:
+        for item in cross_cutting_tools():
+            if not item.get("artifact"):
+                continue
+            mark = coverage_status(root, item, episodes)
+            if mark is None:
+                continue
+            tool_rows.append(f"{item.get('label')}({item.get('skill')}) {mark}")
+    if tool_rows:
+        out.append("横切观察(可选·非前置): " + " | ".join(tool_rows))
 
 
 def find_repo_root(start):

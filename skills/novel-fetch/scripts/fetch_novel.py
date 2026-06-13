@@ -23,6 +23,10 @@ import sys
 from html.parser import HTMLParser
 from urllib.parse import quote, unquote, urljoin
 
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "..", "..", "novel-craft", "scripts"))
+from contract import rights_metadata  # noqa: E402
+
 # 依赖：import 名 -> pip 安装名。bs4/trafilatura 是高质量解析增强项，缺失时可降级。
 _REQUIRED_DEP_INSTALL_NAME = {
     "requests": "requests",
@@ -148,9 +152,18 @@ def write_docx(path, text, prov):
     doc.save(path)
 
 
-def build_source_manifest(name, source_type, prov, *, rights_declared=False):
+def build_source_manifest(name, source_type, prov, *, rights_declared=False,
+                          rights_jurisdiction=None, distribution_regions=None):
     """Build machine-readable provenance for downstream derived skills."""
     rights_status = "public-domain" if source_type in ("gutenberg", "wikisource") else "user-declared"
+    rights = rights_metadata(
+        rights_status,
+        source_type=source_type,
+        source_url=prov.get("source_url", ""),
+        rights_declared=rights_declared,
+        rights_jurisdiction=rights_jurisdiction,
+        distribution_regions=distribution_regions,
+    )
     return {
         "schema_version": 1,
         "kind": "novel_source_manifest",
@@ -160,10 +173,9 @@ def build_source_manifest(name, source_type, prov, *, rights_declared=False):
         "fetched_at": prov.get("fetched", ""),
         "chapters": prov.get("chapters", 0),
         "chars": prov.get("chars", 0),
-        "rights_status": rights_status,
+        **rights,
         "rights_note": prov.get("copyright", ""),
         "requires_user_rights": source_type == "generic",
-        "rights_declared": bool(rights_declared),
     }
 
 
@@ -448,6 +460,10 @@ def main():
                     choices=["auto", "gutenberg", "wikisource", "generic"])
     ap.add_argument("--i-have-rights", action="store_true",
                     help="对非公版/通用兜底 URL 声明有权使用")
+    ap.add_argument("--rights-jurisdiction", default=None,
+                    help="公版/授权依据适用辖区，如 US/CN/GLOBAL；缺省按来源推断")
+    ap.add_argument("--distribution-regions", default=None,
+                    help="计划发行/交付地区，逗号分隔，如 CN,US；公版跨区时必须复核")
     args = ap.parse_args()
 
     missing = missing_deps(include_optional=False)
@@ -488,7 +504,14 @@ def main():
     write_docx(docx_path, text, prov)
     write_source_manifest(
         manifest_path,
-        build_source_manifest(args.name, src, prov, rights_declared=args.i_have_rights),
+        build_source_manifest(
+            args.name,
+            src,
+            prov,
+            rights_declared=args.i_have_rights,
+            rights_jurisdiction=args.rights_jurisdiction,
+            distribution_regions=args.distribution_regions,
+        ),
     )
 
     print(f"完成：{len(chapters)} 章，{chars} 字")

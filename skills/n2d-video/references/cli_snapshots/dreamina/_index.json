@@ -1,0 +1,94 @@
+{
+  "kind": "n2d_cli_snapshot_index",
+  "cli": "dreamina",
+  "binary": "/Users/lalala/.local/bin/dreamina",
+  "captured_at": "2026-06-12T16:09:45Z",
+  "available": true,
+  "commands": [
+    {
+      "command": "multiframe2video",
+      "ok": true,
+      "flags": [
+        "images",
+        "prompt",
+        "duration",
+        "transition-prompt",
+        "transition-duration",
+        "session",
+        "poll",
+        "help",
+        "version"
+      ],
+      "captured_at": "2026-06-12T16:09:45Z"
+    },
+    {
+      "command": "frames2video",
+      "ok": true,
+      "flags": [
+        "first",
+        "last",
+        "prompt",
+        "session",
+        "duration",
+        "video_resolution",
+        "model_version",
+        "poll",
+        "help",
+        "version"
+      ],
+      "captured_at": "2026-06-12T16:09:45Z"
+    },
+    {
+      "command": "image2video",
+      "ok": true,
+      "flags": [
+        "image",
+        "prompt",
+        "duration",
+        "video_resolution",
+        "model_version",
+        "session",
+        "poll",
+        "help",
+        "version"
+      ],
+      "captured_at": "2026-06-12T16:09:45Z"
+    },
+    {
+      "command": "multimodal2video",
+      "ok": true,
+      "flags": [
+        "image",
+        "video",
+        "audio",
+        "prompt",
+        "duration",
+        "ratio",
+        "video_resolution",
+        "model_version",
+        "session",
+        "poll",
+        "help",
+        "version"
+      ],
+      "captured_at": "2026-06-12T16:09:45Z"
+    },
+    {
+      "command": "text2video",
+      "ok": true,
+      "flags": [
+        "prompt",
+        "session",
+        "duration",
+        "ratio",
+        "video_resolution",
+        "model_version",
+        "poll",
+        "help",
+        "version"
+      ],
+      "captured_at": "2026-06-12T16:09:45Z"
+    }
+  ],
+  "drift": []
+}

@@ -9,6 +9,7 @@
 | `render_subs.py` | SRT → 字幕 PNG + overlay 时间表（无 libass）|
 | `cutdown.py <作品根> --target 15s` | 多时长重剪规划（按镜头优先级保骨架），带 pytest |
 | `reframe.py --src WxH --target 9:16` | 多比例 crop/pad 滤镜计算，带 pytest |
+| `deliver.py <作品根> --mark-existing` | 读 `_进度.md` 交付矩阵，生成 delivery_plan，并把已存在交付件回写 ✅ |
 
 ## 交付规格（响度归一）
 
@@ -40,7 +41,13 @@ ffmpeg -i 成片_主片.mp4 -af loudnorm=I=-16:TP=-1:LRA=11 -c:v copy 合成/交
 - cutdown 15s → `合成/cutdown/成片_15s.mp4`
 - 竖版 9:16 → `合成/多比例/成片_9x16.mp4`
 
+推荐用：
+
+```bash
+python3 skills/ad-compose/deliver.py "<作品根>" --mark-existing
+```
+
 ## AI 标识 + 披露（投放前必做）
 
-1. `shared-watermark` 打 AI 标识（可见 + 元数据，只加不去）。
+1. `ad-watermark` 打 AI 标识（可见 + 元数据，只加不去）。
 2. `ad-craft/scripts/ai_usage.py` 记 AI 使用 + 授权（音乐/代言人/字体/素材）。

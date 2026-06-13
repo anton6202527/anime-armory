@@ -1,6 +1,6 @@
 ---
 name: novel-title
-description: Brainstorm 5–8 book title candidates for a novel project, ranked by 5-dim scoring (hook / platform-fit / character identity / anti-collision / memorability). Supports major Chinese web/comic-drama platforms (起点 / 番茄 / 晋江 / 抖音漫剧 / 红果 / 历史向 / 跨平台). Use when asked to 起书名, 测书名, 取书名, 想几个书名, 给个好名字, brainstorm book titles. Can be invoked standalone or by other novel-* skills (novel-spinoff Step 3, novel-expand, novel-condense). Triggers 起书名, 测书名, 取书名, 改书名, 书名候选, 取个名字.
+description: Brainstorm 5–8 book title candidates for a novel project, ranked by 5-dim scoring (hook / platform-fit / character identity / anti-collision / memorability). Supports major Chinese web/comic-drama platforms (起点 / 番茄 / 晋江 / 抖音漫剧 / 红果 / 历史向 / 跨平台). Use when asked to 起书名, 测书名, 取书名, 想几个书名, 给个好名字, brainstorm book titles. Can be invoked standalone or by other novel-* skills (novel-spinoff Step 3, novel-expand, novel-condense; novel-score 的「书名体检」判 needs_rename 时也会经 next_actions 路由到这里重出候选). Triggers 起书名, 测书名, 取书名, 改书名, 书名候选, 取个名字.
 ---
 
 # novel-title — 书名候选 + 平台对位评分
@@ -11,7 +11,7 @@ description: Brainstorm 5–8 book title candidates for a novel project, ranked 
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**。按 `../_偏好约定.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
+本 skill 的可选项**不写死在源码里**。按 `../skills/novel-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
 本 skill 涉及的选择点：`目标平台`。
 
@@ -47,6 +47,7 @@ description: Brainstorm 5–8 book title candidates for a novel project, ranked 
 
 ## 何时不用本 skill
 
+- 只想"顺带看看现有书名行不行"（不要新候选）→ `novel-score` 评分时的「书名体检」附加项已覆盖；它判 needs_rename 后才路由回本 skill
 - 用户已经定死了书名 → 不需要候选
 - 项目还在第 0 / 1 步（连人物设定都没建）→ 太早；先把人物 / 设定卡建出来再回来取名
 

@@ -212,3 +212,12 @@ def test_build_manifest_falls_back_to_media_scan(tmp_path: Path) -> None:
     assert manifest["clips"][0]["first_frame"]["exists"] is True
     assert manifest["clips"][0]["end_frame"]["exists"] is True
     assert manifest["clips"][0]["video"]["exists"] is True
+
+
+def test_seam_review_priority_levels():
+    import review_ui as r
+    assert r.seam_review_priority("match_cut", None)["priority"] == "must"   # 设计切镜必看
+    assert r.seam_review_priority("relay", None)["priority"] == "spot"       # 接力+机检通过抽查
+    assert r.seam_review_priority(None, None)["priority"] == "spot"
+    assert r.seam_review_priority("relay", "block")["priority"] == "must"    # 机检实据必看
+    assert r.seam_review_priority("match_cut", "warn")["priority"] == "must"

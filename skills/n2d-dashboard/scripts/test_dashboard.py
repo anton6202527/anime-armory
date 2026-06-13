@@ -64,9 +64,36 @@ def test_gate_findings_payload_is_batch_compatible(tmp_path: Path) -> None:
         }
     ])
     assert payload["kind"] == "n2d_consistency_findings"
+    assert payload["findings"][0]["severity"] == "block"
+    assert payload["findings"][0]["sev"] == "block"
+    assert payload["findings"][0]["dimension"] == "角色一致性"
+    assert payload["findings"][0]["dim"] == "角色一致性"
+    assert payload["findings"][0]["message"] == "崩脸"
+    assert payload["findings"][0]["msg"] == "崩脸"
     assert payload["findings"][0]["dim_key"] == "character_consistency"
     assert payload["auto_return_tasks"][0]["return_to_stage"] == "image"
     assert payload["auto_return_tasks"][0]["affected_shots"] == ["Clip_03"]
+
+
+def test_image_preflight_gate_events_merge_image_qc(monkeypatch, tmp_path: Path) -> None:
+    class Proc:
+        returncode = 0
+        stdout = "[]"
+        stderr = ""
+
+    monkeypatch.setattr(dashboard.subprocess, "run", lambda *args, **kwargs: Proc())
+    monkeypatch.setattr(
+        dashboard,
+        "image_qc_findings",
+        lambda root, episode: [{"sev": "block", "dim": "prompt lint", "loc": "Clip_01", "msg": "bad CHAR_id"}],
+    )
+
+    events, code, findings = dashboard.gate_events(str(tmp_path), "第1集", "image_preflight")
+
+    assert code == 1
+    assert findings == [{"sev": "block", "dim": "prompt lint", "loc": "Clip_01", "msg": "bad CHAR_id"}]
+    assert events[0]["stage"] == "image_preflight"
+    assert events[0]["qa_gate"]["blocks"] == 1
 
 
 def test_aggregate_generation_cost_redraw_and_qa(tmp_path: Path) -> None:
@@ -446,3 +473,10 @@ def test_cmd_forecast_no_history_graceful(tmp_path, capsys):
     out = json.loads(capsys.readouterr().out)
     assert out["forecast_cost"] == {}
     assert any("无历史成本" in n for n in out["notes"])
+
+
+def test_image_qc_findings_graceful_on_bad_root(tmp_path: Path) -> None:
+    # 空目录无出图产物/prompt → image_qc 正常返回空 findings；helper 必返回 list、绝不抛、不阻断 gate
+    out = dashboard.image_qc_findings(str(tmp_path), "第1集")
+    assert isinstance(out, out.__class__) and isinstance(out, list)
+    assert all(isinstance(f, dict) for f in out)

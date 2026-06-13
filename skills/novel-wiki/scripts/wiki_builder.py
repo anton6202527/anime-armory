@@ -149,7 +149,42 @@ def build_wiki(project, chap_range=None, single=None, existing=None):
                         entry["auto"] = True
                         entry["evidence"] = ev
                     break
+    
+    # Initialize Matrix and Ledger if not exist
+    init_ancillary_files(project, names)
+    
     return wiki
+
+
+def init_ancillary_files(project, character_names):
+    """Initialize Relationship Matrix, Foreshadowing Ledger, and Plot Loops if missing."""
+    matrix_path = os.path.join(project, "设定", "relationship_matrix.json")
+    if not os.path.exists(matrix_path):
+        matrix = {"kind": "novel_relationship_matrix", "version": 1, "matrix": {}}
+        with open(matrix_path, "w", encoding="utf-8") as f:
+            json.dump(matrix, f, ensure_ascii=False, indent=2)
+            
+    ledger_path = os.path.join(project, "设定", "foreshadowing_ledger.json")
+    if not os.path.exists(ledger_path):
+        ledger = {"kind": "novel_foreshadowing_ledger", "seeds": []}
+        with open(ledger_path, "w", encoding="utf-8") as f:
+            json.dump(ledger, f, ensure_ascii=False, indent=2)
+
+    loop_path = os.path.join(project, "设定", "剧情环.json")
+    if not os.path.exists(loop_path):
+        loops = {
+            "kind": "novel_plot_loops",
+            "version": 1,
+            "loops": []
+        }
+        with open(loop_path, "w", encoding="utf-8") as f:
+            json.dump(loops, f, ensure_ascii=False, indent=2)
+            
+    world_path = os.path.join(project, "设定", "world_state_ledger.json")
+    if not os.path.exists(world_path):
+        world = {"kind": "novel_world_state_evolution", "major_changes": []}
+        with open(world_path, "w", encoding="utf-8") as f:
+            json.dump(world, f, ensure_ascii=False, indent=2)
 
 
 def main():

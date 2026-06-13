@@ -224,3 +224,75 @@ def test_internal_only_downgrades_platform_fields_but_keeps_authorization_blocks
     assert all(i.startswith("INFO ") and "内部 demo 免检" in i for i in platform_issues)
     voice_issues = [i for i in issues if "voice" in i]
     assert voice_issues and all(i.startswith("BLOCK ") for i in voice_issues), "声音授权 internal_only 不豁免"
+
+
+def _msgs(issues):
+    """只取 '<sev> <path>.json: <message>' 的消息体，避开 pytest 临时目录名里的 regulatory_filing 干扰。"""
+    return [(i.split(".json: ", 1)[-1], i.split(" ", 1)[0]) for i in issues]
+
+
+def _full_manifest(compliance, root):
+    """A default manifest with the regulatory_filing fields properly filled (releasable)."""
+    data = compliance.default_manifest(root, "第1集")
+    data["distribution_intent"] = "paid_distribution"
+    reg = data["regulatory_filing"]
+    reg["tier"] = "其他"
+    reg["planning_filing_no"] = "网微剧备字(2026)第001号"
+    reg["release_filing_no"] = "网微剧上字(2026)第001号"
+    reg["pre_broadcast_review"] = "done"
+    reg["filed_at"] = "2026-06-01"
+    return data
+
+
+def test_regulatory_filing_missing_section_blocks(tmp_path):
+    root = tmp_path / "制漫剧" / "剧"
+    (root / "合规").mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    data["distribution_intent"] = "paid_distribution"
+    del data["regulatory_filing"]
+    (root / "合规" / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    issues = compliance.check_manifest(root, "第1集")
+    assert any("missing regulatory_filing" in m for m, _ in _msgs(issues))
+
+
+def test_regulatory_filing_pending_blocks_paid(tmp_path):
+    root = tmp_path / "制漫剧" / "剧"
+    (root / "合规").mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    data["distribution_intent"] = "paid_distribution"  # default reg: pending + TODO 备案号
+    (root / "合规" / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    issues = compliance.check_manifest(root, "第1集")
+    assert any(sev == "BLOCK" and "pre_broadcast_review" in m for m, sev in _msgs(issues))
+    assert any(sev == "BLOCK" and "release_filing_no" in m for m, sev in _msgs(issues))
+
+
+def test_regulatory_filing_filled_passes(tmp_path):
+    root = tmp_path / "制漫剧" / "剧"
+    (root / "合规").mkdir(parents=True)
+    data = _full_manifest(compliance, root)
+    (root / "合规" / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    issues = compliance.check_manifest(root, "第1集")
+    assert not any("regulatory_filing" in m for m, _ in _msgs(issues)), [m for m, _ in _msgs(issues) if "regulatory_filing" in m]
+
+
+def test_regulatory_filing_internal_only_downgrades_to_info(tmp_path):
+    root = tmp_path / "制漫剧" / "剧"
+    (root / "合规").mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    data["distribution_intent"] = "internal_only"  # default reg pending/TODO
+    (root / "合规" / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    issues = compliance.check_manifest(root, "第1集")
+    reg_issues = [(m, sev) for m, sev in _msgs(issues) if "regulatory_filing" in m]
+    assert reg_issues and all(sev == "INFO" for _, sev in reg_issues), reg_issues
+
+
+def test_regulatory_filing_not_applicable_needs_reason(tmp_path):
+    root = tmp_path / "制漫剧" / "剧"
+    (root / "合规").mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    data["distribution_intent"] = "paid_distribution"
+    data["regulatory_filing"]["applicable"] = False
+    data["regulatory_filing"]["notes"] = ""  # no reason
+    (root / "合规" / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    issues = compliance.check_manifest(root, "第1集")
+    assert any("applicable=false" in m for m, _ in _msgs(issues))

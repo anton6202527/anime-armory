@@ -1,11 +1,11 @@
 ---
 name: n2d-review
-description: 漫剧质检 + 流程自审（novel2drama 的 QA 环节，不生产内容只审）。双模——模式①「作品质检」：对已产出的某集/整部漫剧做穿帮体检（角色崩脸/场景漂移/构图景别/字幕错位/音画不同步/双人声/节奏留存/口型/合规水印），机检+人判，出严重度分级·定位到镜头的报告。模式②「流程自审」：联网拉当前市场基准，对照 n2d 各 skill + Q&A，产出"差距清单 + 该改哪个 skill 哪段"的优化建议，让整条流水线可重复自我体检。Use when asked to 漫剧质检, 审片, 查崩脸, 查穿帮, 字幕对账, 成片体检, 流程自审, 自我优化, n2d 还能优化啥, n2d-review. Triggers 漫剧质检, 审片, 崩脸, 穿帮, 字幕错位, 音画同步, 成片体检, 验收, 流程自审, 流程优化, 自我优化, n2d-review, QA.
+description: 漫剧质检 + 流程自审（n2d 的 QA 环节，不生产内容只审）。双模——模式①「作品质检」：对已产出的某集/整部漫剧做穿帮体检（角色崩脸/场景漂移/构图景别/字幕错位/音画不同步/双人声/节奏留存/口型/合规水印），机检+人判，出严重度分级·定位到镜头的报告。模式②「流程自审」：联网拉当前市场基准，对照 n2d 各 skill + Q&A，产出"差距清单 + 该改哪个 skill 哪段"的优化建议，让整条流水线可重复自我体检。Use when asked to 漫剧质检, 审片, 查崩脸, 查穿帮, 字幕对账, 成片体检, 流程自审, 自我优化, n2d 还能优化啥, n2d-review. Triggers 漫剧质检, 审片, 崩脸, 穿帮, 字幕错位, 音画同步, 成片体检, 验收, 流程自审, 流程优化, 自我优化, n2d-review, QA.
 ---
 
 # n2d-review — 漫剧质检 + 流程自审
 
-不生产内容，只**审**。是 novel2drama 家族的 QA 环节，与 `novel-review`（审小说）同构。两个模式：
+不生产内容，只**审**。是 n2d 家族的 QA 环节，与 `novel-review`（审小说）同构。两个模式：
 
 - **模式①「作品质检」**——审**某集/整部漫剧的产物**：扫穿帮 → 定位（镜头 + 时间码）→ 定级 → 给修法 → 出报告。出成片前 / 各阶段闸门跑。
 - **模式②「流程自审」**——审**流水线本身**：联网拉市场基准，对照 n2d 各 skill + 累积 Q&A，产出"差距清单 + 建议改哪个 skill 哪段"。让"整套流程不断自我优化"成为一条可复跑的命令，而非靠人想起来。
@@ -34,10 +34,10 @@ description: 漫剧质检 + 流程自审（novel2drama 的 QA 环节，不生产
   - **P0 语义谱系 Diff**：`semantic_continuity.py` 把 `voiceover.txt → storyboard.json → 出图 prompt → 出视频 prompt` 抽成关键词谱系，检查角色、场景、状态、风格、专项模板、continuity 是否逐层继承；匹配层是精确词 + 常见同义别名 + 中文 bigram 重叠，仍保持无依赖可进 gate。
   - **P1 n2d 动态百科 / 状态哨兵**：`state_continuity.py` 读取 `storyboard.json.visual_contract.角色状态演进` + `出图/共享/visual_state_ledger.json`，抓状态提前泄露、区间结束后泄露、开始后漏继承；`until/至 ClipN/本镜` 会被当作状态区间，不再默认延到集尾。跨集账本可用 `state_ledger_build.py <作品根> --episodes 1-10 --write` 从 storyboard 确定性生成。
   - **P2 多模态视觉语义 / 道具漂移**：`multimodal_consistency.py` 按出图 prompt 的非角色参考资产（场景/道具/法宝/特效）分组，用本地视觉 embedding（RGB 直方图 + dHash；后续可接 CLIP/DINO/SAM）找组内离群；角色/非角色优先由 `identity_registry.json` 决定，避免普通道具因没写“道具/法宝”被漏检。
-- **阶段 gate（确定性，生产前跑）**：正式生产入口统一用 `python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage image|video|compose|review`。它会调用底层 `scripts/gate.py --json`，把高风险流程规则脚本化检查并把 `block/warn/info`、回流 stage、重跑范围写进 `生产数据/`，同时外发 `gate_findings_<stage>_第N集.json`（kind=`n2d_consistency_findings`，可直接交给 `n2d-batch --from-consistency-findings`）；`block` 退出码 1，先修再进入该阶段。底层 `scripts/gate.py --json` 只作调试/机器消费入口，不作为生产推荐入口。检查范围包括：合规包、`storyboard.json` continuity、尾帧、prompt 检查段、共享定妆、资产身份注册层、占位配音、clip 原生音轨/原生音画 opt-in/时长、水印、基础视觉风格契约、复杂镜头模板、Motion Control、生图 AI 一致性、**P0 语义谱系 / P1 状态百科前置**；`review` gate 另跑 **P2 多模态漂移**。
+- **阶段 gate（确定性，生产前跑）**：正式生产入口统一用 `python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage image_preflight|video_preflight|image|video|compose|review`。默认在正式调用后端前跑 `image_preflight` / `video_preflight`，生成落档后跑 `image` / `video` 回验。它会调用底层 `scripts/gate.py --json`，把高风险流程规则脚本化检查并把 `block/warn/info`、回流 stage、重跑范围写进 `生产数据/`，同时外发 `gate_findings_<stage>_第N集.json`（kind=`n2d_consistency_findings`，可直接交给 `n2d-batch --from-consistency-findings`）；`block` 退出码 1，先修再进入该阶段。底层 `scripts/gate.py --json` 只作调试/机器消费入口，不作为生产推荐入口。检查范围包括：合规包、`storyboard.json` continuity、尾帧、prompt 检查段、共享定妆、资产身份注册层、占位配音、clip 原生音轨/原生音画 opt-in/时长、水印、基础视觉风格契约、复杂镜头模板、Motion Control、生图 AI 一致性、**P0 语义谱系 / P1 状态百科前置**；`review` gate 另跑 **P2 多模态漂移**。
 - **QA 入账铁律（P0）**：每次跑 gate 或作品质检，都要把 QA 结果写入 `n2d-dashboard`。生产前 gate 不再先跑裸 `gate.py` 再补记账；直接用上面的 `dashboard.py gate` 单入口。人判报告里的新增阻断用 `record --stage review --event qa --qa-sev block|warn|info` 补录；否则仪表盘无法统计 QA 阻断率。
 - **自动审片评分（P2）**：作品质检完成后跑 `python3 skills/n2d-score/scripts/score.py <作品根> 第N集 --run-checks --threshold 85`，把语义继承、状态百科、多模态漂移、角色一致性、服装一致性、场景一致性、字幕正确性、音画同步、音色一致性、节奏密度、风格一致性汇总成机器分。`--run-checks` 还会缓存 `score_inputs/第N集_visual.json` 与 `score_inputs/第N集_voice_print.json`，接入图像相似度、字幕 OCR、成片/配音/SRT/storyboard 时长对账、口型风险/检测报告、成片节奏密度和声纹机检，让机器分更贴近观感。若用户要求自动返工或批量回流，加 `--enqueue-low`，低分维度会转成 `n2d-batch` 的 rerun 队列。评分后需要人审时，跑 `python3 skills/n2d-review-ui/scripts/review_ui.py <作品根> 第N集 --write --markdown`，把机器分、QA flag、首尾帧、clip、接缝和定妆参考放进可视化画布。
-- **人判（LLM 判断题）**：机检覆盖不了的语义维度——崩脸/场景漂移、**clip 接缝跳切/闪烁**、构图景别（对 `n2d-script/references/分镜语法.md`）、节奏体感（对 `novel2drama/references/导演节奏.md`）、口型、原生音频双人声、合规水印。逐维见 `references/checklist.md`。
+- **人判（LLM 判断题）**：机检覆盖不了的语义维度——崩脸/场景漂移、**clip 接缝跳切/闪烁**、构图景别（对 `n2d-script/references/分镜语法.md`）、节奏体感（对 `n2d/references/导演节奏.md`）、口型、原生音频双人声、合规水印。逐维见 `references/checklist.md`。
   - **崩脸用图判**：把该集 `出图/第N集/图片/镜头*.png` 与 `出图/共享/图片/定妆_<角色>.png` **并排读图比对**（脸型/发型/服色/配饰/锚点特征），漂了就标。装了 `insightface` 时跑 `scripts/face_consistency.py <作品根> 第N集` 给余弦相似度分——**不写死阈值**，而是**自标定 flag-band**：用本作定妆组内部互相余弦（同角色 正脸↔侧脸/半身 本就该高度相似）当"同一人下限"地板，每镜低于 地板−margin 标 🔴、地板带标 🟡（写死 0.45 对风格化脸要么误杀要么放过；业界 ArcFace 同人≈0.5–0.68 且因画风而异）。缺库则此项由人判兜，机检会显式标"跳过"。
   - **服装/配色漂移用机检（脸之外的漂）**：脸锁住不等于服装锁住——2026 公认"夹克色第 4 镜就漂"。装 Pillow 时跑 `scripts/outfit_consistency.py <作品根> 第N集`：对人物镜取**加权色相直方图**（饱和度×明度加权，压低灰暗背景），与该角色定妆组（优先半身）比，同样**自标定 flag-band**（定妆组内部直方图余弦设地板）。缺库由人判并排比服色/发型。
   - **片内时序用机检（单 clip 内身份漂移 + flicker）**：n2d-review 只查首帧 + 接缝，漏查 clip 内部"几秒后脸渐变/发际线闪"。装 ffmpeg(+insightface) 时跑 `scripts/temporal_consistency.py <作品根> 第N集`：每条 clip 抽 K 帧，量 ① 相邻帧人脸余弦最小值（片内身份漂移）② 相邻帧亮度绝对差均值=flicker/TCI，超阈标 🔴/🟡。对标行业 scene-stability 记分卡；缺库由人判抽帧看。
@@ -81,7 +81,7 @@ description: 漫剧质检 + 流程自审（novel2drama 的 QA 环节，不生产
 0. **本地静态自审**：先跑 `python3 skills/n2d-review/scripts/self_audit.py [--json]`。它不联网、不改文件，检查 `_进度.md` 并发安全、gate 单入口、横切覆盖率、行业基准外置、生图后端白名单文档一致性和文档体量；0 block / 0 warn 才进入市场对标。
    > 注：`self_audit.py` 是 **n2d 线特有的产线治理脚本**（检查的是 n2d 流水线专属约束）。同构的 `novel-review`/`mv-review`/`song-review` 模式② 目前只有联网对标，无对应本地静态自审脚本——四线共享的是 `references/self_audit.md` 工艺，不是这个脚本。
 1. **拉基准**：联网搜当前（带年月）AI 漫剧/短剧主流做法，分三轴取证——**一致性**（定妆/参考/相似度 KPI、多参考/多视图/LoRA、同一生图后端贯穿）、**效率**（成本/周期/批量）、**可控性**（口型/音画/节奏工具）+ 各 stage 模型演进（图/视频/配音 SOTA）。
-2. **对照**：逐 stage 把基准 vs `n2d-*/SKILL.md` + `novel2drama/Q&A.md` 比，找**真差距**（已做的别重复立项）。
+2. **对照**：逐 stage 把基准 vs `n2d-*/SKILL.md` + `n2d/Q&A.md` 比，找**真差距**（已做的别重复立项）。
 3. **差距清单**：每条 = 差距 + 证据（带来源链接·日期）+ 落到哪个 skill 哪段 + 优先级（must/optional）+ 是否可脚本化。
 4. **起草**：高价值项直接起草 `Q&A` 新条目 + 建议 edit；**改任何 skill 必同步 `skills/README.md` 索引**（仓库硬约定）。
 5. **人确认后再写**：模式②**默认 report-only**，只产建议报告 + 可选 diff 草案，不自动改 skill / Q&A / 模型矩阵（改产线是高影响动作）。用户明确要求“落地/刷新矩阵/改 skill”后，才进入 `refresh-matrix` 或编辑模式。**报告是一次性的——只讲给用户、不在 skill 目录留存 `_流程自审_*.md` 这类存档**（已 gitignore）。**每次自审/重审都从头按本流程重跑**（拉基准→对照→差距），**绝不读旧报告当捷径**——市场会变，旧结论可能已过时或已落地。
@@ -94,12 +94,12 @@ description: 漫剧质检 + 流程自审（novel2drama 的 QA 环节，不生产
 - 作品质检两层维度全清单（看什么 + 定级 + 怎么判）：`references/checklist.md`
 - 流程自审操作手册（拉基准 / 对照 / 起草）：`references/self_audit.md`
 - P0/P1/P2 算法一致性：`scripts/semantic_continuity.py`（语义谱系 Diff） / `scripts/state_continuity.py`（动态百科·状态哨兵） / `scripts/state_ledger_build.py`（从 storyboard 构建跨集视觉状态账本） / `scripts/multimodal_consistency.py`（视觉语义/道具 embedding 离群）
-- 各轴 SOTA vs n2d 默认 vs 升级触发（防过期快照；report-only 只给刷新建议，用户确认后再改）：`novel2drama/references/模型矩阵.md`
+- 各轴 SOTA vs n2d 默认 vs 升级触发（防过期快照；report-only 只给刷新建议，用户确认后再改）：`n2d/references/模型矩阵.md`
 - 定妆变更影响扫描（崩脸/换装重抽后，列出引用该资产的下游镜头一并重出）：`n2d-image/scripts/asset_impact.py`
-- 正向标准（镜头空间 / 时间留存）：`n2d-script/references/分镜语法.md` + `novel2drama/references/导演节奏.md`
+- 正向标准（镜头空间 / 时间留存）：`n2d-script/references/分镜语法.md` + `n2d/references/导演节奏.md`
 - 一致性全链：`n2d-image/references/角色一致性checklist.md`
 - 角色身份闭环 + 跨集漂移报表：`n2d-identity/SKILL.md`
-- 翻车修正沉淀：`novel2drama/Q&A.md`
+- 翻车修正沉淀：`n2d/Q&A.md`
 
 ## 常见错误
 

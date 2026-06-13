@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 from urllib.parse import quote
 
-_COMMON = str(Path(__file__).resolve().parent.parent.parent / "common")
+_COMMON = str(Path(__file__).resolve().parent.parent.parent / "n2d" / "_lib")
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import (  # noqa: E402  生产数据/身份注册路径/kind 单一真值源
@@ -353,19 +353,62 @@ def fallback_clip_rows(root: Path, ep: str) -> List[Dict[str, Any]]:
     return rows
 
 
-def collect_seams(clips: List[Dict[str, Any]], flags: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+def seam_review_priority(transition: Any, machine_verdict: Optional[str]) -> Dict[str, str]:
+    """接缝人判分级（纯函数·可测）。
+
+    - 机检 block/warn → 必看（机器已有实据）。
+    - 声明了非接力切镜（match/hard/action cut）→ 必看：匹配元素存在性/轴线是机检
+      验不了的（dHash 对设计切镜只 info），这类接缝的质量只能人判。
+    - 接力/未声明 + 机检 ok → 抽查即可。
+    """
+    if machine_verdict in ("block", "warn"):
+        return {"priority": "must", "reason": f"机检 {machine_verdict}"}
+    t = str(transition or "").strip().lower()
+    if t and t not in ("接力", "relay", "seamless", "continuous"):
+        return {"priority": "must", "reason": f"{t} 设计切镜——匹配元素/轴线机检不可判，须人看"}
+    return {"priority": "spot", "reason": "接力接缝且机检通过，抽查即可"}
+
+
+def load_video_qc_seams(root: Path, ep: str) -> Dict[Any, Dict[str, Any]]:
+    """聚合该集所有 video_qc 批次的接缝机检结果：(from_n, to_n) → seam（后跑的批次覆盖先跑的）。"""
+    out: Dict[Any, Dict[str, Any]] = {}
+    base = production_dir(root) / "video_qc" / ep
+    if not base.is_dir():
+        return out
+    for path in sorted(base.glob("*/video_qc_*.json")):
+        data = load_json(path)
+        for seam in (data or {}).get("seams") or []:
+            if not isinstance(seam, dict):
+                continue
+            a = clip_number(seam.get("from_clip"), -1)
+            b = clip_number(seam.get("to_clip"), -1)
+            if a > 0 and b > 0:
+                out[(a, b)] = seam
+    return out
+
+
+def collect_seams(clips: List[Dict[str, Any]], flags: List[Dict[str, Any]],
+                  machine: Optional[Dict[Any, Dict[str, Any]]] = None) -> List[Dict[str, Any]]:
     seams: List[Dict[str, Any]] = []
+    machine = machine or {}
     seam_flags = [flag for flag in flags if "接缝" in flag.get("message", "") or "seam" in flag.get("message", "").lower()]
     for idx, (prev, nxt) in enumerate(zip(clips, clips[1:]), 1):
         text = f"{prev.get('label')} {nxt.get('label')} {prev.get('transition')}"
         matched = [flag for flag in seam_flags if any(str(token).lower() in flag.get("message", "").lower() for token in (prev.get("label"), nxt.get("label"), prev.get("id"), nxt.get("id")) if token)]
+        a = clip_number(prev.get("id") or prev.get("label"), idx)
+        b = clip_number(nxt.get("id") or nxt.get("label"), idx + 1)
+        mc = machine.get((a, b)) or {}
+        review = seam_review_priority(prev.get("transition") or mc.get("transition"), mc.get("verdict"))
         seams.append({
             "index": idx,
             "from": prev.get("label"),
             "to": nxt.get("label"),
-            "transition": prev.get("transition"),
+            "transition": prev.get("transition") or mc.get("transition"),
             "tail": prev.get("end_frame"),
             "next_first": nxt.get("first_frame"),
+            "machine": {k: mc.get(k) for k in ("dist", "color_dist", "verdict", "verdict_if_relay")} if mc else None,
+            "review_priority": review["priority"],
+            "review_reason": review["reason"],
             "qa_flags": matched or ([] if seam_flags else []),
             "note": "" if matched else ("无接缝异常证据" if not seam_flags else "有接缝 flag，但未匹配到本接缝"),
             "context": text,
@@ -441,7 +484,7 @@ def build_manifest(root: Path, ep: str) -> Dict[str, Any]:
         "score": score_summary(root, ep, score),
         "score_inputs": score_inputs,
         "clips": clips,
-        "seams": collect_seams(clips, flags),
+        "seams": collect_seams(clips, flags, load_video_qc_seams(root, ep)),
         "identity_refs": collect_identity_refs(root, html_dir),
         "global_flags": collect_global_flags(flags, clips),
     }
@@ -733,7 +776,9 @@ function renderSeam(seam, idx) {{
   const x = 560 + idx * 360;
   const y = 690 + (idx % 2) * 22;
   const status = (seam.qa_flags || []).some(f => f.severity === 'block') ? 'block' : (seam.qa_flags || []).some(f => f.severity === 'warn') ? 'warn' : 'pass';
-  return `<section class="card seam-card" data-kind="seam" data-search="${{esc(JSON.stringify(seam))}}" style="${{cardStyle(x, y)}}"><div class="card-head"><div class="card-title">接缝 ${{idx + 1}}</div><span class="badge ${{status}}">${{status}}</span></div><div class="meta">${{esc(seam.from)}} → ${{esc(seam.to)}}<br>${{esc(seam.transition || '')}}</div><div class="seam-media">${{miniBox(seam.tail)}}${{miniBox(seam.next_first)}}</div>${{flagHtml(seam.qa_flags)}}</section>`;
+  const must = seam.review_priority === 'must' ? `<span class="badge warn" title="${{esc(seam.review_reason || '')}}">必看人判</span>` : '';
+  const mc = seam.machine ? `<br>机检 dHash ${{esc(seam.machine.dist)}}${{seam.machine.verdict_if_relay ? `（若接力则 ${{esc(seam.machine.verdict_if_relay)}}）` : ''}}` : '';
+  return `<section class="card seam-card" data-kind="seam" data-search="${{esc(JSON.stringify(seam))}}" style="${{cardStyle(x, y)}}"><div class="card-head"><div class="card-title">接缝 ${{idx + 1}}</div>${{must}}<span class="badge ${{status}}">${{status}}</span></div><div class="meta">${{esc(seam.from)}} → ${{esc(seam.to)}}<br>${{esc(seam.transition || '')}}${{mc}}</div><div class="seam-media">${{miniBox(seam.tail)}}${{miniBox(seam.next_first)}}</div>${{flagHtml(seam.qa_flags)}}</section>`;
 }}
 function renderGlobalFlags() {{
   const flags = data.global_flags || [];

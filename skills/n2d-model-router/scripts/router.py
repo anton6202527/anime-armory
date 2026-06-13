@@ -17,7 +17,7 @@ from collections.abc import Iterable, Mapping
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
+_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import (  # noqa: E402  与 gate 共用的单一真值源
@@ -79,6 +79,7 @@ LIPSYNC_AUDIO_REF_BACKENDS = {"seedance", "kling"}
 
 # 关闭对口型的 _设置.md 值；其余值（开启/配音对齐/原生口型/on…）视为 opt-in。
 LIPSYNC_OFF_VALUES = {"", "关闭", "否", "off", "no", "none", "disable", "disabled"}
+FALLBACK_OFF_VALUES = {"", "无", "不使用", "关闭", "否", "off", "no", "none", "disable", "disabled"}
 
 COMPLEX_TEMPLATES = {
     "fight_exchange",
@@ -111,6 +112,25 @@ def normalize_backend(value: str, default: str = "dreamina") -> str:
     return normalize_video_backend(value, default=default)
 
 
+def project_default_backend(settings: Mapping[str, str]) -> str:
+    """Return the route-level default backend from split model/channel settings.
+
+    `生视频模型` is preferred because routing is capability/model driven. Old
+    projects with only `生视频AI` continue to work, and `生视频渠道` is a final
+    fallback when the model name is absent or unsupported by this router.
+    """
+    for value in (
+        settings.get("生视频模型", ""),
+        settings.get("生视频AI", ""),
+        settings.get("生视频渠道", ""),
+        "Seedance 2.0",
+    ):
+        backend = normalize_backend(value, default="")
+        if backend:
+            return backend
+    return normalize_backend("即梦")
+
+
 def read_text(path: Path) -> str:
     if not path.is_file():
         return ""
@@ -127,6 +147,27 @@ def routing_mode_from_settings(settings: Mapping[str, str]) -> str:
     if "固定" in value:
         return "fixed_default"
     return "auto"
+
+
+def fixed_fallback_backends_from_settings(settings: Mapping[str, str], default_backend: str) -> Optional[List[str]]:
+    """Project-level fixed-mode fallback override.
+
+    Empty/missing keeps the historical router fallback list.  Explicit off
+    values allow a machine that only has the default backend CLI installed to
+    avoid advertising unavailable local backends in generated route tables.
+    """
+    raw = settings.get("视频备用后端", "").strip()
+    if not raw:
+        return None
+    if raw.lower() in FALLBACK_OFF_VALUES or raw in FALLBACK_OFF_VALUES:
+        return []
+    parts = [p.strip() for p in re.split(r"[,，、/\s]+", raw) if p.strip()]
+    out: List[str] = []
+    for part in parts:
+        backend = normalize_backend(part, default="")
+        if backend and backend != default_backend and backend not in out:
+            out.append(backend)
+    return out
 
 
 def av_mode_from_settings(settings: Mapping[str, str]) -> str:
@@ -158,6 +199,8 @@ def _clip_text(clip: Mapping[str, Any]) -> str:
     keys = (
         "id",
         "label",
+        "title",
+        "name",
         "scene",
         "description",
         "summary",
@@ -168,6 +211,14 @@ def _clip_text(clip: Mapping[str, Any]) -> str:
         "template",
         "template_contract",
         "continuity",
+        "visual_contract",
+        "characters",
+        "角色",
+        "character_ids",
+        "cast",
+        "roles",
+        "subjects",
+        "人物",
         "audio",
         "notes",
     )
@@ -177,6 +228,49 @@ def _clip_text(clip: Mapping[str, Any]) -> str:
 def _has_any(text: str, words: Iterable[str]) -> bool:
     lower = text.lower()
     return any(w.lower() in lower for w in words)
+
+
+CHARACTER_FIELD_KEYS = (
+    "characters",
+    "角色",
+    "character_ids",
+    "角色ID",
+    "角色id",
+    "cast",
+    "roles",
+    "subjects",
+    "人物",
+    "人物列表",
+    "character_refs",
+)
+NO_CHARACTER_VALUES = {"", "无", "none", "null", "[]", "无人物", "空镜", "no character", "empty shot"}
+
+
+def _value_has_named_character(value: Any) -> bool:
+    """Return true when a structured storyboard field explicitly names characters.
+
+    Fixed routing must not infer identity requirements only from prose keywords:
+    generated storyboards often store the actual cast in `characters[]`, while
+    the scene/continuity text may only describe the action.  This keeps empty
+    shots explicitly empty without dropping identity refs for dialogue/reaction
+    shots that have structured cast data.
+    """
+    if value is None:
+        return False
+    if isinstance(value, str):
+        text = value.strip()
+        if not text or text.lower() in NO_CHARACTER_VALUES or text in NO_CHARACTER_VALUES:
+            return False
+        if _has_any(text, ("无人物", "空镜", "no character", "empty shot")):
+            return False
+        return True
+    if isinstance(value, Mapping):
+        if not value:
+            return False
+        return any(_value_has_named_character(v) for v in value.values())
+    if isinstance(value, Iterable) and not isinstance(value, (bytes, bytearray)):
+        return any(_value_has_named_character(v) for v in value)
+    return False
 
 
 def infer_shot_type(clip: Mapping[str, Any]) -> str:
@@ -207,12 +301,33 @@ def clip_has_named_characters(clip: Mapping[str, Any]) -> bool:
     text = _clip_text(clip)
     if _has_any(text, ("无人物", "空镜", "empty shot", "no character")):
         return False
+    if any(_value_has_named_character(clip.get(k)) for k in CHARACTER_FIELD_KEYS):
+        return True
+    template = str(clip.get("template") or "").strip()
+    if template in COMPLEX_TEMPLATES:
+        return True
+    if re.search(r"\bCHAR_[A-Za-z0-9_]+(?:/[^\s，；、`]+)?\b", text):
+        return True
     return _has_any(text, ("角色", "人物", "主角", "脸", "发型", "服装", "character", "face"))
 
 
 def clip_has_mouth_visible(clip: Mapping[str, Any]) -> bool:
     text = _clip_text(clip)
     return _has_any(text, ("口型", "嘴", "说话", "台词", "正脸", "mouth", "lip-sync", "speaking", "dialogue"))
+
+
+def clip_named_character_count(clip: Mapping[str, Any]) -> int:
+    """同框具名角色数（从 template_contract.character_slots / face_priority 取）。
+    ≥5 时路由偏好 Sora（2026 行业：Sora 2 对 5+ 角色同框最稳，超 Kling 2-3 张脸上限）。"""
+    tc = clip.get("template_contract") if isinstance(clip.get("template_contract"), Mapping) else {}
+    slots = tc.get("character_slots")
+    if isinstance(slots, Mapping):
+        return len(slots)
+    for key in ("face_priority", "character_slots"):
+        val = tc.get(key)
+        if isinstance(val, (list, tuple)):
+            return len(val)
+    return 0
 
 
 def clip_multi_person(clip: Mapping[str, Any]) -> bool:
@@ -228,17 +343,30 @@ def clip_multi_person(clip: Mapping[str, Any]) -> bool:
     return False
 
 
-def _route_fixed(clip: Mapping[str, Any], shot_type: str, default_backend: str) -> Dict[str, Any]:
-    fallback = [b for b in ("seedance", "kling", "dreamina") if b != default_backend]
+def _route_fixed(
+    clip: Mapping[str, Any],
+    shot_type: str,
+    default_backend: str,
+    fallback_backends: Optional[List[str]] = None,
+) -> Dict[str, Any]:
+    if fallback_backends is None:
+        fallback = [b for b in ("seedance", "kling", "dreamina") if b != default_backend]
+    else:
+        fallback = [b for b in fallback_backends if b != default_backend]
+    degrade_plan = (
+        "If the fixed backend fails twice, switch 视频模型路由 to auto and reroute the affected clip."
+        if fallback
+        else "If the fixed backend fails twice, pause and ask before enabling another video backend or manually rerouting this clip."
+    )
     return {
         "primary_backend": default_backend,
         "fallback_backends": fallback[:2],
         "mode": "image2video" if shot_type != "empty_establishing" else "text2video",
         "native_audio_policy": "none",
         "identity_requirement": "reference_group" if clip_has_named_characters(clip) else "none",
-        "rationale": [f"routing_mode=fixed_default, use project 生视频AI={default_backend} for this clip"],
+        "rationale": [f"routing_mode=fixed_default, use project 生视频模型={default_backend} for this clip"],
         "prompt_requirements": ["write model routing field even in fixed mode", "keep fallback/degrade plan explicit"],
-        "degrade_plan": "If the fixed backend fails twice, switch 视频模型路由 to auto and reroute the affected clip.",
+        "degrade_plan": degrade_plan,
     }
 
 
@@ -318,11 +446,12 @@ def choose_route(
     native_audio_setting: str = "丢弃",
     lip_sync_setting: str = "关闭",
     av_mode: str = "voice_first",
+    fixed_fallback_backends: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
     if routing_mode == "fixed_default":
-        route = _route_fixed(clip, shot_type, default_backend)
+        route = _route_fixed(clip, shot_type, default_backend, fixed_fallback_backends)
         if av_mode == "native_av" and _is_speech_shot(clip, shot_type):
-            route["rationale"].append("制作模式=原生音画，但视频模型路由=固定生视频AI；固定选择优先，不自动切 native_speech 后端")
+            route["rationale"].append("制作模式=原生音画，但视频模型路由=固定生视频模型；固定选择优先，不自动切 native_speech 后端")
             route["prompt_requirements"].append("speech_policy=no_native_speech unless the fixed backend is explicitly configured downstream for native AV")
         return route
 
@@ -467,16 +596,25 @@ def choose_route(
                 "if more than three named characters share frame, split into groups or reaction shots",
             ]
             degrade_plan = "Split crowd blocking into two-character OTS pairs plus establishing shot."
+        # 5+ 同框 或 群像(ensemble) → Sora primary（行业：Sora 2 对 5+ 角色同框最稳）；
+        # 2-3 具名脸的常见同框仍走 Kling（Character ID/主体库 + 运动笔刷锁站位）。
+        big_ensemble = shot_type == "ensemble_blocking" or clip_named_character_count(clip) >= 5
+        mp_primary = "sora" if big_ensemble else "kling"
+        mp_fallback = [b for b in (["kling", "seedance", default_backend] if big_ensemble
+                                   else ["seedance", default_backend]) if b != mp_primary]
+        mp_rationale = [
+            "multi-person staging needs reference controls and stable screen direction",
+            "single-backend generic generation often swaps faces or screen positions",
+        ]
+        if big_ensemble:
+            mp_rationale.append("5+ 同框/群像：Sora 2 多角色一致性最强，超 Kling 2-3 张脸上限；仍不稳则按 degrade_plan 拆组")
         route = {
-            "primary_backend": "kling",
-            "fallback_backends": ["seedance", default_backend],
+            "primary_backend": mp_primary,
+            "fallback_backends": mp_fallback,
             "mode": "frames2video",
             "native_audio_policy": "none",
             "identity_requirement": "character_id_or_reference_group",
-            "rationale": [
-                "multi-person staging needs reference controls and stable screen direction",
-                "single-backend generic generation often swaps faces or screen positions",
-            ],
+            "rationale": mp_rationale,
             "prompt_requirements": prompt_requirements,
             "degrade_plan": degrade_plan,
         }
@@ -647,6 +785,7 @@ def route_clip(
     native_audio_setting: str,
     lip_sync_setting: str,
     av_mode: str = "voice_first",
+    fixed_fallback_backends: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
     shot_type = infer_shot_type(clip)
     route = choose_route(
@@ -657,6 +796,7 @@ def route_clip(
         native_audio_setting=native_audio_setting,
         lip_sync_setting=lip_sync_setting,
         av_mode=av_mode,
+        fixed_fallback_backends=fixed_fallback_backends,
     )
     primary = normalize_backend(route["primary_backend"], default_backend)
     clip_id = make_clip_id(clip, index)
@@ -691,11 +831,12 @@ def route_episode(
     anchor_baseline: bool = True,
 ) -> Dict[str, Any]:
     settings = load_settings(root)
-    default_backend = normalize_backend(settings.get("生视频AI", "即梦"))
+    default_backend = project_default_backend(settings)
     routing_mode = routing_mode_from_settings(settings)
     av_mode = av_mode_from_settings(settings)
     native_audio_setting = settings.get("视频原生音轨", "丢弃")
     lip_sync_setting = settings.get("对口型", "关闭")
+    fixed_fallback_backends = fixed_fallback_backends_from_settings(settings, default_backend)
     storyboard = load_storyboard(root, episode, storyboard_path)
     clips = storyboard.get("clips") or []
     if not isinstance(clips, list):
@@ -720,6 +861,7 @@ def route_episode(
                 native_audio_setting=native_audio_setting,
                 lip_sync_setting=lip_sync_setting,
                 av_mode=av_mode,
+                fixed_fallback_backends=fixed_fallback_backends,
             )
             for i, clip in enumerate(clips, 1)
         ],

@@ -1,0 +1,13 @@
+{
+  "commands": {
+    "voice": "python3 skills/n2d-voice/render_voice.py \"{root}\" \"{episode}\" zh",
+    "image": "bash skills/n2d-batch/scripts/run_n2d_image.sh \"{root}\" \"{episode}\"",
+    "video": "N2D_VIDEO_RANGE=06-10 bash skills/n2d-batch/scripts/run_n2d_video.sh \"{root}\" \"{episode}\"",
+    "compose": "bash skills/n2d-batch/scripts/run_n2d_compose.sh \"{root}\" \"{episode}\" zh"
+  },
+  "env": {
+    "NO_PROXY": "127.0.0.1,localhost",
+    "no_proxy": "127.0.0.1,localhost"
+  },
+  "auto_gate": true
+}

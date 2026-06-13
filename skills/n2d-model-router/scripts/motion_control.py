@@ -2,7 +2,7 @@
 """Motion Control 资产脚手架 —— 把"只 gate 不生成"的运镜控制资产补上生成端。
 
 背景：`n2d-model-router` 只**声明** `motion_control.level=required` + `manifest_path`，
-`gate.py --stage video` 只**校验** `出视频/<集>/control/Clip_XX/motion_control_manifest.json`
+`gate.py --stage video_preflight` / `--stage video` 只**校验** `出视频/<集>/control/Clip_XX/motion_control_manifest.json`
 是 `ready`/`degrade_only`。中间**没有任何工具生成这些控制资产或骨架** —— 操作者撞上
 gate 后得照 schema.md 手搓 JSON + 手补 pose/depth 文件，all-or-nothing 摩擦。本脚本补这段：
 
@@ -36,7 +36,7 @@ import os
 import sys
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
-_COMMON = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "common"))
+_COMMON = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "n2d", "_lib"))
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import MOTION_CONTROL_MANIFEST_KIND  # noqa: E402  manifest kind 单一真值源

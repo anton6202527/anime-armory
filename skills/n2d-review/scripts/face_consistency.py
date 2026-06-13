@@ -32,14 +32,15 @@ import math
 import os
 import re
 import sys
-from typing import Dict, List, Optional, Sequence, Tuple
+from typing import Dict, List, Optional, Sequence, Set, Tuple
 
-COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
+COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 from n2d_contract import shared_asset_path  # noqa: E402  共享定妆目录单一真值源
 
 DEFAULT_MARGIN = 0.08
+IDENTITY_REF_RE = re.compile(r"`?(CHAR_[A-Za-z0-9_]+(?:/[^`\s，；、*]+)?\*?)`?")
 
 # ── Pillow 降级档（无 insightface 时的基础机检）────────────────────────────
 # 只做四件事：图存在 / 可解码 / 分辨率达标 / 清晰度（PIL+stdlib 近似 Laplacian 方差）。
@@ -52,9 +53,10 @@ PILLOW_PROBE_MAX_SIDE = 256          # 清晰度探测降采样上限（控制�
 
 # 非角色类定妆名关键词（场景/道具/特效不参与脸相似度）——与 gate.py _section_has_character_refs 同源。
 _NON_CHARACTER = (
-    "场景", "道具", "寝殿", "宫", "殿", "庭", "院", "山", "洞", "门", "廊", "道",
+    "场景", "道具", "寝殿", "冷宫", "皇宫", "寝宫", "殿", "庭", "院", "山", "洞", "门", "廊", "道",
     "床", "榻", "托盘", "光幕", "符纹", "剑气", "法宝", "特效", "阵", "丹炉", "炉",
     "雷", "火", "云", "光效", "地标", "花田", "花单株", "米饼", "灯", "剪影",
+    "铜镜", "镜框", "毒酒", "碎瓷", "瓷", "脉冲", "妖力",
 )
 
 
@@ -249,26 +251,125 @@ def is_character_asset(name: str) -> bool:
     return not any(k in name for k in _NON_CHARACTER)
 
 
+def registered_character_assets(root: str) -> Set[str]:
+    """identity_registry.json → registered character asset_key set."""
+    path = os.path.join(root, "出图", "共享", "identity_registry.json")
+    try:
+        data = json.load(open(path, encoding="utf-8"))
+    except Exception:
+        return set()
+    out: Set[str] = set()
+    for ch in data.get("characters") or []:
+        for form in ch.get("forms") or []:
+            if not isinstance(form, dict):
+                continue
+            asset = str(form.get("asset_key") or "").strip()
+            if asset:
+                out.add(asset)
+    return out
+
+
+def _resolve_project_path(root: str, path: str) -> str:
+    """Resolve a project asset path without duplicating an already-prefixed root.
+
+    Some callers pass paths returned by shared_asset_path(root, ...). When root
+    itself is relative, glob returns values like "root/出图/共享/...", not bare
+    project-relative paths. Joining those with root again produces
+    "root/root/出图/共享/...", which makes existing anchors look missing.
+    """
+    text = str(path or "").strip()
+    if not text:
+        return text
+    norm = os.path.normpath(text)
+    if os.path.isabs(norm):
+        return norm
+    root_norm = os.path.normpath(str(root).rstrip(os.sep) or ".")
+    if norm == root_norm or norm.startswith(root_norm + os.sep):
+        return norm
+    root_abs = os.path.abspath(root_norm)
+    norm_abs = os.path.abspath(norm)
+    if norm_abs == root_abs or norm_abs.startswith(root_abs + os.sep):
+        return norm
+    return os.path.join(root_norm, norm)
+
+
 def discover_costume_sets(root: str) -> Dict[str, Dict[str, str]]:
     """出图/共享/图片/定妆_<角色>[ _侧/_半身/_全身 ].png → {角色: {variant: path}}。仅角色类。"""
     sets: Dict[str, Dict[str, str]] = {}
+    registered = registered_character_assets(root)
     for p in glob.glob(os.path.join(shared_asset_path(root, "图片"), "定妆_*.png")):
         base = os.path.basename(p)[len("定妆_"):-len(".png")]
         # 三视图/设定表/表情是人审拼版，不作脸度量基准
-        if any(t in base for t in ("三视图", "设定表", "表情")):
+        if any(t in base for t in ("三视图", "设定表", "表情", "脸部特写")):
             continue
         m = re.match(r"^(.+?)(?:_(侧|半身|全身|背))?$", base)
         if not m:
             continue
         char, variant = m.group(1), (m.group(2) or "主")
-        if not is_character_asset(char):
+        if registered:
+            if char not in registered:
+                continue
+        elif not is_character_asset(char):
             continue
         sets.setdefault(char, {})[variant] = p
     return sets
 
 
+def identity_asset_map(root: str) -> Dict[str, str]:
+    """identity_registry.json → {CHAR_ID/形态: asset_key}.
+
+    Face QC should judge the primary on-screen identity from the prompt's
+    资产身份注册层 when available. Reference blocks can include background
+    reaction anchors; treating every reference as the largest-face owner creates
+    false hard blocks for ECU/object shots.
+    """
+    path = os.path.join(root, "出图", "共享", "identity_registry.json")
+    try:
+        data = json.load(open(path, encoding="utf-8"))
+    except Exception:
+        return {}
+    out: Dict[str, str] = {}
+    for ch in data.get("characters") or []:
+        cid = str(ch.get("id") or "").strip()
+        forms = [f for f in (ch.get("forms") or []) if isinstance(f, dict)]
+        for form in forms:
+            name = str(form.get("form") or "").strip()
+            asset = str(form.get("asset_key") or "").strip()
+            if cid and name and asset:
+                out[f"{cid}/{name}"] = asset
+        if cid and len(forms) == 1:
+            asset = str(forms[0].get("asset_key") or "").strip()
+            if asset:
+                out[cid] = asset
+    return out
+
+
+def primary_identity_chars(root: str, section: str) -> List[str]:
+    """Prompt section 资产身份注册层 → primary asset keys.
+
+    Falls back to reference parsing when the identity layer is absent or cannot
+    be resolved, keeping older prompt formats compatible.
+    """
+    asset_by_ref = identity_asset_map(root)
+    registered = registered_character_assets(root)
+    if not asset_by_ref or "资产身份注册层" not in section:
+        return []
+    refs: List[str] = []
+    for raw in IDENTITY_REF_RE.findall(section):
+        ref = raw.rstrip("*")
+        asset = asset_by_ref.get(ref)
+        is_char = asset in registered if registered else is_character_asset(asset)
+        if asset and is_char and asset not in refs:
+            refs.append(asset)
+    return refs
+
+
 def shot_character_map(root: str, ep: str) -> Dict[str, List[str]]:
-    """每镜 PNG → 引用的角色列表（取自 01_分镜出图.md「参考图」行的 定妆_<角色>）。"""
+    """每镜 PNG → 主检角色列表。
+
+    新 prompt 优先取「资产身份注册层」的主身份；旧 prompt 回退取「参考图」
+    行的 定妆_<角色>。这样辅助参考图/后景反应锚不会被误当成最大脸身份。
+    """
     prompt = os.path.join(root, "出图", ep, "prompt", "01_分镜出图.md")
     out: Dict[str, List[str]] = {}
     if not os.path.isfile(prompt):
@@ -281,13 +382,14 @@ def shot_character_map(root: str, ep: str) -> Dict[str, List[str]]:
         if not mt:
             continue
         png = mt.group(1)
-        chars = []
-        for ref in re.findall(r"定妆_([^`\s，。、,）)]+)", _ref_block(blk)):
-            if ref.endswith(".png"):
-                ref = ref[:-4]
-            ref = re.sub(r"_(侧|半身|全身|背|三视图|设定表|表情)$", "", ref)
-            if is_character_asset(ref) and ref not in chars:
-                chars.append(ref)
+        chars = primary_identity_chars(root, blk)
+        if not chars:
+            for ref in re.findall(r"定妆_([^`\s，。、,）)]+)", _ref_block(blk)):
+                if ref.endswith(".png"):
+                    ref = ref[:-4]
+                ref = re.sub(r"_(侧|半身|全身|背|三视图|设定表|表情)$", "", ref)
+                if is_character_asset(ref) and ref not in chars:
+                    chars.append(ref)
         if chars:
             out[png] = chars
     return out
@@ -310,6 +412,7 @@ def pillow_fallback_analyze(root: str, ep: str, image_mod, margin: float = DEFAU
         "available": True,
         "mode": PILLOW_FALLBACK_MODE,
         "precision": "insufficient_precision",
+        "precision_level": "degraded",  # 契约三档（n2d_contract.PRECISION_*）：有真实但低精度信号
         "margin": margin,
         "characters": {},
         "shots": [],
@@ -395,6 +498,10 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN) -> dict:
                 # 地板未自标定（单张定妆）时，block/warn 标低精度——score 降权，不当硬判
                 if not char_calibrated.get(c, False) and v in ("block", "warn"):
                     row["precision"] = "low_floor_uncalibrated"
+                    if v == "block":
+                        # 风格化漫剧脸跨图常 <0.5，地板没自标定时 0.50 回退会系统性误杀单参考角色；
+                        # 降 warn 交人判（仍醒目），不当硬判 auto-return。
+                        v = row["verdict"] = "warn"
                 if worst is None or _sev(v) > _sev(worst["verdict"]):
                     worst = row
         if worst:
@@ -452,7 +559,7 @@ def audit_anchors(root: str, min_ratio: float = 0.06) -> dict:
         main = variants.get("主")
         if not main:
             continue
-        full = main if os.path.isabs(main) else os.path.join(root, main)
+        full = _resolve_project_path(root, main)
         try:
             img = cv2.imread(full)
             if img is None:
@@ -460,13 +567,13 @@ def audit_anchors(root: str, min_ratio: float = 0.06) -> dict:
                 continue
             h, w = img.shape[:2]
             faces = app.get(img)
-            n = len(faces)
+            n = int(len(faces))
             ratio = 0.0
             if n:
                 f = max(faces, key=lambda f: (f.bbox[2]-f.bbox[0])*(f.bbox[3]-f.bbox[1]))
-                ratio = ((f.bbox[2]-f.bbox[0])*(f.bbox[3]-f.bbox[1])) / float(w*h)
+                ratio = float(((f.bbox[2]-f.bbox[0])*(f.bbox[3]-f.bbox[1])) / float(w*h))
             v = anchor_verdict(n, ratio, min_ratio)
-            out["anchors"].append({"char": char, "faces": n, "box_ratio": round(ratio, 4), "verdict": v})
+            out["anchors"].append({"char": char, "faces": n, "box_ratio": round(float(ratio), 4), "verdict": v})
         except Exception as e:
             out["anchors"].append({"char": char, "verdict": "warn", "reason": f"检测异常 {e}"})
     return out

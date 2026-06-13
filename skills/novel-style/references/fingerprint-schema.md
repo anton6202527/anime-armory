@@ -8,6 +8,10 @@
 |---|---|---|
 | `schema_version` | 版本，当前 `1` | 常量 |
 | `source` | 样本路径/标识 | 入参 |
+| `style_source_rights.status` | 样本权利来源 | `project-demo/user-owned/licensed/public-domain/unknown` |
+| `style_source_rights.source_name` | 样本作品名 | CLI `--style-source-name` |
+| `style_source_rights.source_author` | 样本作者 | CLI `--style-source-author` |
+| `style_source_rights.authorization_note` | 授权/公版依据简述 | CLI `--authorization-note` |
 | `sampled_chars` | 参与统计的 CJK 字数 | `[一-鿿]` 计数 |
 | `sentence_count` | 有效句数 | 按 `。！？!?…\n` 切分后非空句 |
 | `syntax_profile.avg_sentence_length` | 句均长（CJK 字） | 句长均值 |
@@ -40,3 +44,4 @@
 - `drift_flag` 为真 = **机检线索**，不是定论。伏笔章、刻意变奏（战斗→抒情切换）、引文密集章都可能合理偏移 → 人判后可豁免。
 - 锚点取**已过审的 Demo 章 / 风格标杆章**，别拿全本平均当锚点（会把漂移摊平）。
 - 题材切换不可跨用指纹：仙侠指纹比对职场文必然高 `drift_score`，无意义。
+- 指纹只约束抽象统计特征；不得用未授权作者姓名或作品名做复刻目标。命名样本必须写 `style_source_rights`。

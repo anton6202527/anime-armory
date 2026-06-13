@@ -5,7 +5,7 @@
 仓库的核心不是单个脚本，而是根目录 `skills/` 下的一组可复用 workflow skill。它们按两组创作线和三组生产线组织：
 
 - **写小说** -> **制漫剧**：小说文本 -> AI 漫剧 / 短剧
-- **写歌** -> **制MV**：成品歌 -> AI 音乐 MV
+- **写歌** -> **制MV**：成品歌/歌曲企划 -> AI 音乐 MV
 - **拍广告**：客户需求 (Brief) -> 商业广告片 (Ad)
 
 产物落在顶层中文目录：`写小说/`、`制漫剧/`、`写歌/`、`制MV/`、`拍广告/`。每个作品一个子目录，通常都有 `_进度.md` 和 `_设置.md` 来记录状态与选择。
@@ -31,29 +31,31 @@
 
 在本地 AI agent 里打开仓库，然后按目标选择入口 skill。入口 skill 会读取作品 `_进度.md`，判断下一步要走哪个子阶段。
 
+skill 名称按跨工具兼容写法展示：直接写 `n2d-image`、`progress` 这类裸名，不加 `/`。部分 AI agent 会把 `/n2d-image` 当成自身不支持的斜杠命令。
+
 | 你想做什么 | 入口 |
 |---|---|
-| 写、改、续、扩、缩一本小说 | `/novel-author <想法/书名/路径/动作>` |
-| 从零写一本原创小说 | `/novel-create <题材或想法>` |
-| 给小说做评分、判断值不值得改 | `/novel-score <写小说/项目>` |
-| 把小说做成 AI 漫剧 | `/novel2drama <小说路径或 制漫剧/项目>` |
-| 根据客户需求制作商业广告片 | `/ad <需求/品牌产品 或 拍广告/项目>` |
-| 查看任意项目进度与下一步 | `/progress [作品目录]` 或直接问“当前进度” |
-| 检查流水线更新与生成重制计划 | `/update check [作品目录]` 或问“看看有没有更新” |
-| 直接创作或编辑一首歌 | `/song <主题/风格/想法 或 写歌/项目>` |
-| 把成品歌做成 MV | `/mv <歌曲路径或 制MV/项目>` |
-| 图片 / 视频换脸 | `/shared-image-faceswap`、`/shared-video-faceswap` |
-| 给图片 / 视频加 AI 标识或品牌水印 | `/shared-watermark` |
-| 清理 `skills/` 里的缓存和临时文件 | `/shared-cleanup` |
+| 写、改、续、扩、缩一本小说 | `novel <想法/书名/路径/动作>` |
+| 从零写一本原创小说 | `novel-create <题材或想法>` |
+| 给小说做评分、判断值不值得改 | `novel-score <写小说/项目>` |
+| 把小说做成 AI 漫剧 | `n2d <小说路径或 制漫剧/项目>` |
+| 根据客户需求制作商业广告片 | `ad <需求/品牌产品 或 拍广告/项目>` |
+| 查看任意项目进度与下一步 | `progress [作品目录]` 或直接问“当前进度” |
+| 检查流水线更新与生成重制计划 | `update check [作品目录]` 或问“看看有没有更新” |
+| 直接创作或编辑一首歌 | `song <主题/风格/想法 或 写歌/项目>` |
+| 把成品歌/歌曲企划做成 MV | `mv <歌曲路径或 制MV/项目>` |
+| 图片 / 视频换脸 | `shared-image-faceswap`、`shared-video-faceswap` |
+| 给图片 / 视频加 AI 标识或品牌水印 | `shared-watermark` |
+| 清理缓存和临时文件 | `shared-cleanup`（默认 `skills/`，可 `--repo` 全仓） |
 
 常见完整链路：
 
 ```text
-写小说：/novel-author -> novel-create/fetch/rewrite/continue/... -> novel-review/novel-score
-制漫剧：/novel2drama -> n2d-script -> n2d-voice -> n2d-script(分镜) -> n2d-image -> n2d-video -> n2d-compose
-写歌：/song -> song-lyrics/song-score -> song-compose -> song-review
-制MV：/mv -> mv-beat -> mv-plan -> mv-image -> mv-video -> mv-lyric-sync -> mv-compose -> mv-review
-拍广告：/ad -> ad-concept -> ad-script(含广告法机检) -> ad-voice -> ad-script(分镜) -> ad-image -> ad-video -> ad-compose(多比例/cutdown)
+写小说：novel -> novel-create/fetch/rewrite/continue/... -> novel-review/novel-score
+制漫剧：n2d -> n2d-script -> n2d-voice -> n2d-script(分镜) -> n2d-image -> n2d-video -> n2d-compose
+写歌：song -> song-lyrics/song-score -> song-compose -> song-review
+制MV：mv 先选歌曲输入时序；先传音乐 -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-sync -> mv-compose -> mv-review；后配歌曲 -> mv-script(rough) -> song/上传成品歌 -> mv-beat -> mv-script复核 -> mv-plan -> ...
+拍广告：ad -> ad-concept -> ad-script(含广告法机检) -> ad-voice -> ad-script(分镜) -> ad-image -> ad-video -> ad-compose(多比例/cutdown)
 ```
 
 ## 打包与下载版本
@@ -89,7 +91,7 @@ shasum -a 256 dist/anime-armory-full.zip > dist/anime-armory-full.zip.sha256
 
 ### 写小说
 
-入口是 `novel-author`。它负责分诊，不直接写作：根据输入或 `写小说/<项目>/_进度.md` 路由到子 skill。
+入口是 `novel`。它负责分诊，不直接写作：根据输入或 `写小说/<项目>/_进度.md` 路由到子 skill。
 
 主要能力包括：
 
@@ -102,7 +104,7 @@ shasum -a 256 dist/anime-armory-full.zip > dist/anime-armory-full.zip.sha256
 
 ### 制漫剧
 
-入口是 `novel2drama`。默认推荐“配音先行”：先用真实配音时长驱动分镜，再出图、出视频和合成，减少音画错位返工。
+入口是 `n2d`。默认推荐“配音先行”：先用真实配音时长驱动分镜，再出图、出视频和合成，减少音画错位返工。
 
 主流程：
 
@@ -131,15 +133,16 @@ shasum -a 256 dist/anime-armory-full.zip > dist/anime-armory-full.zip.sha256
 
 ### 制MV
 
-入口是 `mv`。这条线自包含，不复用 n2d 的分镜、出图、出视频逻辑。
+入口是 `mv`。这条线自包含，不复用 n2d 的分镜、出图、出视频逻辑。立项先选 `歌曲输入时序`：`先传音乐` 走成品歌→卡点→视觉；`后配歌曲` 先做 rough 视觉蓝图，成品歌补入后再卡点和正式 timeline。
 
-1. `mv-beat`：BPM、鼓点、能量、段落和 beatgrid。
-2. `mv-plan`：clip plan、timeline manifest、出图 / 出视频 prompt 包。
-3. `mv-image`：MV 共享定妆和分段分镜图。
-4. `mv-video`：多版图生视频、登记、评分、挑版。
-5. `mv-lyric-sync`：Whisper / WhisperX 对齐歌词，生成卡拉 OK 字幕。
-6. `mv-compose`：按 timeline 合成成片。
-7. `mv-review`、`mv-score`：卡点、字幕、音画、视觉一致性、平台披露与成片评分。
+1. `mv-script`：视觉蓝图和角色/场景设定；后配歌曲模式可先产 rough 蓝图。
+2. `mv-beat`：成品歌 BPM、鼓点、能量、段落和 beatgrid。
+3. `mv-plan`：clip plan、timeline manifest、出图 / 出视频 prompt 包。
+4. `mv-image`：MV 共享定妆和分段分镜图。
+5. `mv-video`：多版图生视频、登记、评分、挑版。
+6. `mv-lyric-sync`：Whisper / WhisperX 对齐歌词，生成卡拉 OK 字幕。
+7. `mv-compose`：按 timeline 合成成片。
+8. `mv-review`、`mv-score`：卡点、字幕、音画、视觉一致性、平台披露与成片评分。
 
 ### 拍广告
 
@@ -151,18 +154,18 @@ shasum -a 256 dist/anime-armory-full.zip > dist/anime-armory-full.zip.sha256
 4. `ad-image`：构建**三层定妆库**（角色、场景、产品），核心产品（Hero Product）包装零漂移出图。
 5. `ad-video`：按分镜图生视频。
 6. `ad-compose`：剪辑包装成片，包含品牌 End Card（Logo + Slogan），并根据 `_进度.md` 交付清单输出多时长（Cutdown）和多比例（Reframe）矩阵。
-7. `ad-review`：产品一致性与品牌规范审阅（二期）。
+7. `ad-review`：投放前 M0 质检，检查成片、广告法、占位 VO、AI 披露/水印、交付矩阵，并列人工复核清单。
 
 ## 公共能力
 
 | Skill | 用途 |
 |---|---|
-| `progress` | 智能进度分发：无论在写小说、做漫剧还是写歌，统一入口查询下一步 |
-| `update` | 智能更新分发：嗅探底层脚本与 prompt 更新，并安全生成重制计划 |
+| `progress` | 只读进度分发：写小说、制漫剧、写歌、制MV、拍广告统一入口查询当前前沿与下一步；仓库根可汇总所有项目 |
+| `update` | 更新/重制计划分发：当前 n2d 完整支持快照比对与最小重制计划；其它线识别后给待接入提示 |
 | `shared-image-faceswap` | 图片换脸，本人 / 授权 / 合成脸限定，强制 AI 标识 |
 | `shared-video-faceswap` | 视频换脸，同样走合规闸门和水印 |
 | `shared-watermark` | 给图片 / 视频加 AI 标识或品牌水印，只加不去 |
-| `shared-cleanup` | 清理 `skills/` 下低风险生成垃圾，默认先扫描 |
+| `shared-cleanup` | 清理低风险生成垃圾，默认扫 `skills/`，可 `--repo` 扫全仓，输出节省空间统计 |
 
 换脸、声音克隆、真人仿声都属于高风险能力：必须有授权，且必须保留 AI 标识。未授权真人歌手嗓音克隆直接拒做。
 
@@ -198,7 +201,7 @@ anime-armory/
 │   ├── _偏好约定.md          选择点和私有偏好规则
 │   ├── common/               共享契约与通用脚本
 │   ├── novel-*               写小说能力
-│   ├── novel2drama/ n2d-*    制漫剧能力
+│   ├── n2d/ n2d-*            制漫剧能力
 │   ├── song/ song-*          写歌能力
 │   ├── mv/ mv-*              制MV能力
 │   ├── ad/ ad-*              拍广告能力（含 ad-craft 契约）

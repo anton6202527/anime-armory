@@ -2,12 +2,14 @@
 # -*- coding: utf-8 -*-
 """Smart Update Dispatcher.
 
-Currently only the n2d line has a full skill snapshot + bounded rebuild planner.
-Other lines are detected explicitly and receive a friendly no-op message.
+n2d has a full skill snapshot + bounded rebuild planner. For selective
+image/video refresh, update delegates to the media planner for n2d/mv/ad and
+emits explicit no-op plans for text/audio-only lines.
 """
 
 import argparse
 import os
+import re
 import subprocess
 import sys
 
@@ -15,21 +17,13 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 
-LINE_ROOTS = {
-    "novel": "写小说",
-    "n2d": "制漫剧",
-    "song": "写歌",
-    "mv": "制MV",
-    "ad": "拍广告",
-}
-LINE_LABELS = {
-    "novel": "写小说",
-    "n2d": "制漫剧",
-    "song": "写歌",
-    "mv": "制MV",
-    "ad": "拍广告",
-}
+COMMON = os.path.join(REPO, "skills", "update", "_lib")
+if COMMON not in sys.path:
+    sys.path.insert(0, COMMON)
+from line_detect import LINE_LABELS, LINE_ROOTS, detect_line  # noqa: E402
+
 N2D_UPDATE = os.path.join(REPO, "skills", "n2d-update", "scripts", "update_plan.py")
+MEDIA_REFRESH = os.path.join(REPO, "skills", "update", "scripts", "media_refresh.py")
 
 
 def relpath(path):
@@ -37,40 +31,6 @@ def relpath(path):
         return os.path.relpath(path, REPO)
     except ValueError:
         return path
-
-
-def path_parts(path):
-    rel = relpath(os.path.abspath(path))
-    if rel == "." or rel.startswith(".."):
-        return []
-    return rel.split(os.sep)
-
-
-def detect_line(root):
-    root = os.path.abspath(root)
-    if root == REPO:
-        return "repo"
-
-    parts = path_parts(root)
-    if parts:
-        first = parts[0]
-        for line, line_root in LINE_ROOTS.items():
-            if first == line_root:
-                return line if len(parts) > 1 else f"{line}:root"
-
-    markers = (
-        ("ad", os.path.join(root, "需求", "brief.json")),
-        ("song", os.path.join(root, "词", "lyrics.md")),
-        ("mv", os.path.join(root, "视觉蓝图.md")),
-        ("mv", os.path.join(root, "节拍", "beatgrid.json")),
-        ("novel", os.path.join(root, "章节")),
-    )
-    for line, marker in markers:
-        if os.path.exists(marker):
-            return line
-    if os.path.isfile(os.path.join(root, "_进度.md")) and os.path.isdir(os.path.join(root, "小说")):
-        return "n2d"
-    return "unknown"
 
 
 def n2d_projects():
@@ -86,7 +46,18 @@ def n2d_projects():
 
 
 def has_episode_selector(extra_args):
-    return bool(extra_args)
+    # 集号是位置参数（如 第2集），--all 是显式全量；其余 --flag 不算选集。
+    return any(a == "--all" or not a.startswith("-") for a in extra_args)
+
+
+EPISODE_RE = re.compile(r"^(第\d+集|\d+)$")
+
+
+def split_target(project_root, extra_args):
+    """允许 `dispatch.py check 第1集`：首参是集号且不是已存在目录时，root 退回当前目录。"""
+    if EPISODE_RE.match(project_root) and not os.path.isdir(project_root):
+        return ".", [project_root] + list(extra_args)
+    return project_root, list(extra_args)
 
 
 def run_n2d(cmd_name, root, extra_args):
@@ -97,6 +68,18 @@ def run_n2d(cmd_name, root, extra_args):
     if not has_episode_selector(forwarded):
         forwarded.append("--all")
     cmd = [sys.executable, N2D_UPDATE, cmd_name, os.path.abspath(root)] + forwarded
+    # 子进程直写同一 fd；先 flush 父进程缓冲，否则管道下标题/分隔线全部乱序。
+    sys.stdout.flush()
+    result = subprocess.run(cmd, check=False)
+    return result.returncode
+
+
+def run_media(root, line, extra_args):
+    if not os.path.isfile(MEDIA_REFRESH):
+        print(f"[err] 找不到 update media 脚本：{relpath(MEDIA_REFRESH)}", file=sys.stderr)
+        return 2
+    cmd = [sys.executable, MEDIA_REFRESH, os.path.abspath(root), "--line", line] + list(extra_args)
+    sys.stdout.flush()
     result = subprocess.run(cmd, check=False)
     return result.returncode
 
@@ -127,30 +110,42 @@ def unsupported(line):
     elif line == "mv":
         print("制MV线目前没有自动化更新嗅探；涉及出图/出视频模板变化时建议从 mv-plan/mv-review 人工定位重跑范围。")
     elif line == "ad":
-        print("拍广告线目前没有自动化更新嗅探；广告法、品牌定妆与交付规格变化时建议从 ad-script/ad-review 人工复核。")
+        print("拍广告线目前没有自动化更新嗅探；广告法、品牌定妆与交付规格变化时建议从 ad-script 人工复核，或跑 ad-review 做投放前质检。")
     else:
         print("该上下文目前暂未接入自动化更新嗅探脚本。")
     return 0
 
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(description="智能更新分发：n2d 完整支持，其它产线友好提示")
-    ap.add_argument("cmd", choices=["check", "record"], help="执行的操作")
+    ap = argparse.ArgumentParser(description="智能更新分发：n2d 快照重制 + n2d/mv/ad 媒体选择性刷新")
+    ap.add_argument("cmd", choices=["check", "record", "media"], help="执行的操作")
     ap.add_argument("project_root", nargs="?", default=".", help="作品根、产线根或仓库根；默认当前目录")
     ap.add_argument("cmd_args", nargs=argparse.REMAINDER, help="传递给底层 update 脚本的附加参数")
     args = ap.parse_args(argv)
 
-    root = os.path.abspath(args.project_root)
-    detected = detect_line(root)
+    target, cmd_args = split_target(args.project_root, args.cmd_args)
+    root = os.path.abspath(target)
+    detected = detect_line(root, REPO)
+
+    if args.cmd == "media":
+        if detected in ("repo", "n2d:root") or detected.endswith(":root"):
+            print("[提示] media 选择性刷新计划需要具体作品根，并用 --image/--video/--target 指定少量目标。")
+            return 1
+        if detected in LINE_ROOTS:
+            print(f"[dispatch] 检测到 {LINE_LABELS.get(detected, detected)} 产线上下文 → {relpath(MEDIA_REFRESH)}")
+            print("")
+            return run_media(root, detected, cmd_args)
+        print("[提示] 无法识别产线上下文，media 计划未生成。")
+        return 1
 
     if detected == "repo":
-        return aggregate_n2d(args.cmd, args.cmd_args)
+        return aggregate_n2d(args.cmd, cmd_args)
     if detected == "n2d:root":
-        return aggregate_n2d(args.cmd, args.cmd_args)
+        return aggregate_n2d(args.cmd, cmd_args)
     if detected == "n2d":
         print(f"[dispatch] 检测到 {LINE_LABELS['n2d']} 产线上下文 → {relpath(N2D_UPDATE)}")
         print("")
-        return run_n2d(args.cmd, root, args.cmd_args)
+        return run_n2d(args.cmd, root, cmd_args)
     if detected.endswith(":root"):
         return unsupported(detected.split(":", 1)[0])
     if detected in LINE_ROOTS:

@@ -32,7 +32,7 @@ import re
 import sys
 import zipfile
 
-COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "common"))
+COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 
@@ -223,7 +223,7 @@ def split_per_chapter(paras, min_chars=100):
 
 PLACEHOLDERS = {
     "分镜剧本.md": "# {title}_第{n}集_分镜剧本\n\n> 待精修：参考 references/formats.md「分镜剧本」格式逐镜头填写。\n",
-    "故事板.md": "# {title}_第{n}集_故事板\n\n> 待精修：参考 references/formats.md「故事板 Clip 表」格式，供 AI 视频生成（平台档案见 references/platforms.md，默认即梦）。\n",
+    "故事板.md": "# {title}_第{n}集_故事板\n\n> 待精修：参考 references/formats.md「故事板 Clip 表」格式，供 AI 视频生成（目标视频模型/渠道见 _设置.md；平台档案见 references/platforms.md）。\n",
     "素材清单.md": "# {title}_第{n}集_素材清单\n\n> 待精修：参考 references/formats.md「素材清单」格式，供 AI 图片生成（中文为主+英文备用；平台档案见 references/platforms.md）。\n",
     "voiceover.txt": "# {title}_第{n}集_配音文案\n# 待精修：按镜头顺序填写旁白/台词，标注角色与情绪。\n",
     "bgm.txt": "# {title}_第{n}集_BGM与音效\n# 待精修：填写整体情绪、BGM风格、关键音效点。\n",
@@ -251,10 +251,16 @@ def write_source_snapshot(root, title, source_text):
 
 def global_style_scaffold(title, root):
     base_style = get_setting(root, "基础视觉风格", DEFAULTS["基础视觉风格"])
+    legacy_video_ai = get_setting(root, "生视频AI", DEFAULTS.get("生视频AI", "即梦"))
+    video_model = get_setting(root, "生视频模型", legacy_video_ai or DEFAULTS["生视频模型"])
+    video_channel = get_setting(root, "生视频渠道", DEFAULTS["生视频渠道"])
     style_note = f"{base_style}（来自 _设置.md 或全局默认；可选 {style_options_text()}）"
+    model_note = f"{video_model}（来自 _设置.md；新作品首跑应先让用户选一次，默认只作预选/兜底）"
+    channel_note = f"{video_channel}（调用渠道/产品，可与模型不同；旧项目 `生视频AI` 只作兼容 fallback）"
     return (
         f"# {title} — 全局画风与世界观\n\n"
-        "## 目标平台\n即梦AI（默认）；可选 可灵Kling / Seedance / Veo —— 平台档案见 references/platforms.md\n\n"
+        f"## 目标视频模型\n{model_note}；可选 Seedance 2.0 / Veo 3.1 / Kling 3.0 / Hailuo / Runway / Luma / Pika / 开源模型 / manual —— 平台档案见 references/platforms.md\n\n"
+        f"## 生视频渠道\n{channel_note}；可选 即梦/Dreamina / 豆包 / 海螺AI / 可灵Kling / Google Gemini API / Runway API / 本地开源 / manual\n\n"
         f"## 基础视觉风格\n{style_note}\n\n"
         "## 画风\n高质量AI漫剧风格，统一色调，高细节；具体提示词随「基础视觉风格」派生。\n\n"
         "## 基础视觉风格契约（style_contract 源头）\n"
@@ -296,7 +302,7 @@ def main():
         if os.path.basename(novel_dir) == "小说":
             root = os.path.dirname(novel_dir)
         else:
-            # novel2drama 产物应落 制漫剧/<剧名>/：向上找含『制漫剧/』的仓库根，
+            # n2d 产物应落 制漫剧/<剧名>/：向上找含『制漫剧/』的仓库根，
             # 避免把作品根误建在输入文件同级（如 写小说/<X>/导出/）。
             d, repo = novel_dir, None
             while True:

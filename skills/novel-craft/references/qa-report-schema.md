@@ -40,7 +40,7 @@
 |---|---|---|
 | `id` | string | 稳定问题 ID，如 `REV-001` |
 | `severity` | string | `blocking` / `suggestion` / `polish` |
-| `dimension` | string | `pov/ooc/setting/anchor/plot/pacing/style/plagiarism/format/wordcount/...` |
+| `dimension` | string | `pov/ooc/setting/anchor/plot/pacing/style/theme/reader_promise/prose/plagiarism/format/wordcount/...` |
 | `chapter` | int/null | 章节号；全局问题为 null |
 | `location` | string | 章+段/行定位 |
 | `evidence` | string | 短证据引文或机检证据 |
@@ -80,6 +80,7 @@
 | `source_snapshot` | object | 是 | 本次评分取样绑定的正文快照；含样本文件 path/hash 与 aggregate hash |
 | `market_baseline` | object | 是 | 热榜基准日期、来源文件、来源链接 |
 | `scores` | list[object] | 是 | 七维分数 |
+| `title_check` | object/null | 否 | 书名体检（附加项，不计入总分）；新版 `score.py` 总会写入，书名未定时为 null；更早的旧报告可缺省 |
 | `deductions` | list[object] | 是 | 雷点扣分 |
 | `total_score` | number | 是 | 百分制总分 |
 | `tier` | string | 是 | `爆款潜力/合格偏上/及格线下/不及格` |
@@ -100,6 +101,18 @@
 | `comment` | string | 一句短评 |
 | `improve_by` | string | 应交给哪个 skill 或哪类修改 |
 
+`title_check` 字段（书名体检，维度沿用 `novel-title` 5 维；规则见 `novel-score/references/rubric.md`）：
+
+| 字段 | 类型 | 说明 |
+|---|---|---|
+| `title` | string | 体检的现有书名（`_meta.json.title`） |
+| `scores` | object | `hook/platform_fit/character_identity/anti_collision/memorability`，各 1-5 |
+| `total` | number | 5 维合计（满分 25） |
+| `max_total` | number | 固定 25 |
+| `comment` | string | 一句短评 |
+| `collision` | object | `status/path/generated_at`；读 `设定/书名撞名检查_*.json`，缺则 `unchecked`（≠ 不撞名） |
+| `needs_rename` | bool | 总分 <15 或 `hard_collision` 或 LLM 显式判换名；true 且非弃稿重立 → `next_actions[]` 路由 `novel-title` |
+
 `market_baseline` 字段：
 
 | 字段 | 类型 | 说明 |
@@ -108,10 +121,12 @@
 | `baseline_path` | string | `评分/题材热榜_<YYYY-MM-DD>.md` |
 | `baseline_json_path` | string | `评分/market_baseline_<YYYY-MM-DD>.json` |
 | `sources` | list[object] | 每个来源含 `platform/url/title/collected_at/use_for/status/signals` |
+| `manual_evidence` | list[object] | 结构化人工证据，含 `platform/date/source/summary[/url]` |
+| `coverage_warnings` | list[string] | 红果/抖音/漫剧等目标平台覆盖缺口 |
 | `expires_after_days` | int | 建议 14-28；过期重拉 |
 | `freshness` | object | `status/blocking/reason/expires_on`；`no_evidence` 必须阻断，除非人工显式豁免 |
 
-有效市场基准必须至少满足其一：存在 `status=ok` 且 `signals` 非空的来源；或存在非空 `notes` 人工补充。全是 `fetch_error` 或空 signals 的 baseline 不能作为评分证据。
+有效市场基准必须至少满足其一：存在 `status=ok` 且 `signals` 非空的来源；或存在结构化 `manual_evidence` 人工补充。全是 `fetch_error`、空 signals 或自由文本 `notes` 的 baseline 不能作为评分证据；红果/抖音/漫剧目标缺覆盖时 `freshness.status=coverage_gap` 并阻断。
 
 `source_snapshot` 由 `novel-craft/scripts/report_snapshot.py` 生成。`review_report` 应对当前 `章节/` 全量快照负责；`score_report` 应对本次评分样本负责。`score:full` 与 review 一样会校验当前章节全集，新增/删除章节后旧 full score 失效；`score:opening` 只绑定前 3 章样本。正文变更后旧 report/task 失效，必须重审/重评。`qa_gate.py` 会先校验 `review_report` / `score_report` 必填字段和基础类型；schema 缺字段、`kind/schema_version` 不匹配、缺 `score_task_id/assessment_prompt_hash` 等旧报告在 export gate 下阻断。
 
@@ -134,18 +149,19 @@
 - `novel-craft/scripts/draft_packets.py --allow-missing-demo`
 - `novel-score/scripts/score.py --allow-stale-baseline` 且 freshness 阻断
 
-`missing_score_report` 豁免只能由 `report_gate.py --waive-missing-score` 生成，scope 必须绑定当前 `draft_mode/target_platform/outputs/chapter_count/source_aggregate_hash`；章节正文或目标变了，旧豁免不再匹配。`ignore_qa_gate` 豁免必须绑定本次章节 hash、blocker ids、导出 formats，以及已有 review/score 报告文件 hash。
+`missing_score_report` 豁免只能由 `report_gate.py --waive-missing-score` 生成，scope 必须绑定当前 `draft_mode/target_platform/outputs/chapter_count/source_aggregate_hash`；章节正文或目标变了，旧豁免不再匹配。`ignore_qa_gate` 豁免必须绑定本次章节 hash、blocker ids、导出 formats，以及已有 rights/review/score 报告文件 hash；若 blocker ids 含 `RIGHTS-*`，只能说明用户强制导出留痕，不代表版权风险已解除。
 
 ## 回流约定
 
 - `blocking=true` 或 `verdict=大改/弃稿重立` 时，上层调度器不能直接进入 `export`。
+- `dimension=theme/reader_promise/prose` 的阻断或建议项应对照 `设定/读者契约.md` 与 `审稿/demo_gate.json.reader_contract`，分别回流 `outline/demo/draft`，不要只做表层润色。
 - `return_to_stage` 必须使用 `contract.py` 里的稳定 stage key。
-- `recommended_skill` 必须是 `novel-author` 路由表中存在的 skill，或明确写 `manual`。
+- `recommended_skill` 必须是 `novel` 路由表中存在的 skill，或明确写 `manual`。
 - JSON 中的证据只放短引文；长段落留在 Markdown 报告。
 
 ## 执行入口
 
 - `python3 skills/novel-review/scripts/build_review_report.py "<作品根>" [--human-assessment 审稿/human_findings.json]`：把机检/人判汇总成 `审稿/review_report.json`，供 gate 消费。
-- `python3 skills/novel-craft/scripts/report_gate.py "<作品根>"`：按 export 硬闸检查 review/score 阻断，默认阻断时返回非 0；`--progress-mode` 用于续跑提示，缺 review 只显示 warning。商业/漫剧项目确需跳过评分时，用 `--waive-missing-score --reason "<原因>"` 写入带 scope 的 `missing_score_report` 豁免。
+- `python3 skills/novel-craft/scripts/report_gate.py "<作品根>"`：按 export 硬闸检查 rights/review/score 阻断，默认阻断时返回非 0；`--progress-mode` 用于续跑提示，缺 review 只显示 warning。商业/漫剧项目确需跳过评分时，用 `--waive-missing-score --reason "<原因>"` 写入带 scope 的 `missing_score_report` 豁免。
 - `python3 skills/novel-craft/scripts/progress.py "<作品根>"`：展示下一阶段 owner/gate/on_fail，同时展示 QA gate 阻断。
 - `python3 skills/novel-craft/scripts/export.py "<作品根>" ...`：默认执行 QA gate；除非用户明确要求并传 `--ignore-qa-gate`，否则阻断未清不能导出。

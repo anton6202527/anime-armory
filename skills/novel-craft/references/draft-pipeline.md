@@ -6,8 +6,9 @@
 
 - `_meta.json` 存在，含 `kind/target_chapters/target_words_per_chapter/demo_chapters`。`target_chapters` 必须由 init 脚本写入或用户显式改入元数据；不能只写在 `_设置.md` / `_进度.md` 的人类文案里。
 - `设定/章纲.md` 已经用户确认。
+- `设定/读者契约.md` 已经写明核心题旨、读者承诺、好看机制、文学质感和禁偏清单。旧项目缺失时可先按 `references/reader-contract.md` 补一版，再继续批量写章。
 - `审稿/demo_gate.json.status == passed`。未通过时只能写 Demo 或准备包，不能批量写余章。
-- `_设置.md` 已落 `小说生成模式` 与 `章节生成粒度`；缺则按 `_偏好约定.md` 问一次或用全局默认预填。
+- `_设置.md` 已落 `小说生成模式` 与 `章节生成粒度`；缺则按 `skills/novel-craft/references/选择点与偏好.md` 问一次或用全局默认预填。
 
 ## 三档小说生成模式
 
@@ -16,7 +17,7 @@
 | `极速初稿` | 用户要尽快得到可读草稿/大纲化正文 | Demo 过后按小批写，轻量机检，最后全量 review |
 | `稳妥初稿` | 默认；兼顾速度和一致性 | 每章任务包 + 每 3-5 章轻量 review + 全量 review |
 | `商业连载` | 要投平台或长期连载 | 每章任务包 + 每章状态增量 + 小批 score/review，开篇三章重点打磨 |
-| `漫剧源书` | 主要服务 novel2drama | 章纲和正文优先镜头化、事件密度、角色动作可视化；输出建议含 `n2d` |
+| `漫剧源书` | 主要服务 n2d | 章纲和正文优先镜头化、事件密度、角色动作可视化；输出建议含 `n2d` |
 
 ## 执行闭环
 
@@ -64,6 +65,7 @@ python3 skills/novel-review/scripts/mechanical_check.py "<作品根>" --json-out
 
 - 本章输出文件、目标字数、人称、目标平台、小说生成模式。
 - 必读源文件路径：蓝图、设定圣经、角色卡、世界观、章纲、Demo gate、状态账本。
+- 必读 `设定/读者契约.md`，并在任务包内展开 `reader_contract`：核心题旨、核心戏剧问题、读者承诺、文学质感、好看机制、禁偏清单。
 - 本章章纲原文。
 - 上一章结尾摘录。
 - Demo 风格锚点、读者承诺、设定硬约束、禁止漂移项。
@@ -75,5 +77,6 @@ python3 skills/novel-review/scripts/mechanical_check.py "<作品根>" --json-out
 |---|---|
 | 一次性把全书都塞给模型 | 先出任务包，按 `章节生成粒度` 分批 |
 | 只看章纲不看状态账本 | 每章写完更新 state delta / ledger |
+| 只推进事件不推进读者契约 | 每章至少推进题旨、承诺、关系弧光、秘密揭示、能力代价或文学质感中的一项 |
 | Demo 没通过就批量写 | 回 Demo gate；必要时只用 `--allow-missing-demo` 做准备包，并保留 `missing_demo_gate` waiver |
 | 写完不回扫 | 至少机检 + 小批 review，导出前必须过 QA gate |

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """fit_voice_to_clips.py — 把【后期补录的真实配音】拟合到【已成片的镜头时长】。
 
-仅用于 `制作模式 = 先出视频后配音`（快速 demo·不推荐，见 novel2drama SKILL「制作模式」节）。
+仅用于 `制作模式 = 先出视频后配音`（快速 demo·不推荐，见 n2d SKILL「制作模式」节）。
 在该模式下，视频是按**估算时长**锁死出的；真实配音补在最后，每句长短与锁定镜头不一致。
 本脚本把真音逐镜头放回锁定时间轴，使配音轨总长 = 视频总长、不再渐进失步：
 
@@ -27,7 +27,7 @@ import re
 import subprocess
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "common"))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "n2d", "_lib"))
 from n2d_route import placeholder_rows  # 占位判定单一真值源
 
 
@@ -111,7 +111,7 @@ def load_inputs(root, ep):
     if not os.path.isfile(shots_p):
         sys.exit(f"⛔ 缺 {shots_p}（阶段2 未定稿，无锁定镜头时长可拟合）")
     if not os.path.isfile(man_p):
-        sys.exit(f"⛔ 缺 {man_p}（先 /n2d-voice 补录真实配音）")
+        sys.exit(f"⛔ 缺 {man_p}（先 n2d-voice 补录真实配音）")
     with open(shots_p, encoding="utf-8") as f:
         shots = json.load(f)
     with open(man_p, encoding="utf-8") as f:
@@ -205,7 +205,7 @@ def main(argv):
     slots, reals, ph = load_inputs(root, ep)
     if ph:
         sys.exit(f"⛔ 时长清单仍有 {len(ph)} 句占位音色——本脚本要拟合的是**真实配音**。"
-                 "先 /n2d-voice 用 CosyVoice/克隆/MiniMax 补真音重跑，再来拟合。")
+                 "先 n2d-voice 用 CosyVoice/克隆/MiniMax 补真音重跑，再来拟合。")
 
     rows = plan(slots, reals, max_stretch, tol_frac, tol_min)
     pad = sum(1 for r in rows if r["action"] == "pad")
@@ -223,7 +223,7 @@ def main(argv):
               f"→ atempo×{r['ratio']:.2f} 提速塞入" + ("（微调，几乎无感）" if r["minor"] else "（语速会变快）"))
     for r in overflow:
         print(f"  🔴 {r['镜头']}: 真音 {r['real']:.2f}s 远超槽位 {r['slot']:.2f}s（超 {r['over']:.2f}s）"
-              f" → 回 /n2d-video 重出/重切此镜头加长，或显式接受重度提速")
+              f" → 回 n2d-video 重出/重切此镜头加长，或显式接受重度提速")
 
     if overflow:
         print(f"\n🔴 {len(overflow)} 个镜头真音严重超长，**不静默处理**。"
