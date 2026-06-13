@@ -640,6 +640,68 @@ def _degraded_closeup_face_shots(payload: Dict[str, Any]) -> List[Dict[str, Any]
             if s.get("degraded_face") and s.get("closeup") and s.get("verdict") != "block"]
 
 
+# ── ① 降级近景人审队列：拼『定妆主参考 ↔ 本镜脸』并排图，让人眼在 degraded 精度下秒判同人 ──
+
+def face_review_targets(payload: Dict[str, Any], root: Path, ep: str) -> List[Dict[str, Any]]:
+    """降级近景脸 → 人审拼图目标（纯路径计算，不写盘·可测）。
+
+    每项 {shot, png, png_abs, char, ref, stitch}：ref=该角色定妆主参考，stitch=并排图落点。
+    """
+    out: List[Dict[str, Any]] = []
+    for s in _degraded_closeup_face_shots(payload):
+        png = s.get("png")
+        chars = s.get("chars") or []
+        char = chars[0] if chars else None
+        key = _shot_key(png) or "shot"
+        ref = str(Path("出图") / "共享" / "图片" / f"定妆_{char}.png") if char else None
+        png_abs = str(Path(root) / "出图" / ep / png) if png else None
+        stitch = str(production_dir(Path(root)) / "image_qc" / ep / "face_review" / f"{key}_compare.png")
+        out.append({"shot": key, "png": png, "png_abs": png_abs, "char": char, "ref": ref, "stitch": stitch})
+    return out
+
+
+def build_face_review_queue(payload: Dict[str, Any], root: Path, ep: str) -> List[Dict[str, Any]]:
+    """为降级近景脸生成并排对比图 + Haar 几何粗筛，写 payload['face_human_review']。best-effort，never crash。"""
+    targets = face_review_targets(payload, root, ep)
+    if not targets:
+        payload["face_human_review"] = []
+        return []
+    stitch_mod = _load_review_module("face_compare_stitch")
+    face_mod = _load_review_module("face_consistency")
+    for t in targets:
+        # 几何粗筛：Haar 人脸数（仅作人审优先级，不下 verdict；漫剧脸漏检率高，None=没检测能力）。
+        t["haar_faces"] = None
+        if face_mod is not None and hasattr(face_mod, "cv2_face_boxes") and t.get("png_abs"):
+            try:
+                boxes = face_mod.cv2_face_boxes(t["png_abs"])
+                t["haar_faces"] = None if boxes is None else len(boxes)
+            except Exception:
+                t["haar_faces"] = None
+        if t["haar_faces"] == 0:
+            t["priority_note"] = "Haar 未检出人脸——疑崩脸/遮挡，优先人审"
+        elif isinstance(t["haar_faces"], int) and t["haar_faces"] >= 2:
+            t["priority_note"] = f"Haar 检出 {t['haar_faces']} 张脸——疑串入他人，优先人审"
+        # 并排对比图（degraded 精度下人眼判同人的唯一可靠兜底）。
+        t["stitched"] = False
+        if stitch_mod is not None and t.get("ref") and t.get("png_abs"):
+            ref_abs = os.path.join(str(root), t["ref"])
+            try:
+                t["stitched"] = bool(stitch_mod.build_comparison(
+                    [(f"参考·定妆_{t['char']}", ref_abs), (f"本镜·{t['shot']}", t["png_abs"])],
+                    t["stitch"]))
+            except Exception:
+                t["stitched"] = False
+    payload["face_human_review"] = targets
+    return targets
+
+
+def _stitch_for_png(payload: Dict[str, Any], png: Optional[str]) -> Optional[str]:
+    for t in payload.get("face_human_review") or []:
+        if t.get("png") == png and t.get("stitched"):
+            return t.get("stitch")
+    return None
+
+
 def summarize(payload: Dict[str, Any]) -> Dict[str, Any]:
     """汇总各项机检 + lint，区分 hard（必须修）与 advisory（非阻断初筛）。"""
     hard = advisory = 0
@@ -772,11 +834,14 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         if v in ("block", "warn"):
             out.append(_qc_finding(v, "character_consistency", s.get("png"),
                                    f"崩脸 G1 {v}：{s.get('png')}（脸/身份漂移机检）"))
-    # 降级精度近景（hard）：Pillow 模式无法验同人，近景/特写镜硬拦——装 insightface 重跑或人工逐帧确认前不放行
+    # 降级精度近景（hard）：Pillow 模式无法验同人，近景/特写镜硬拦——装 insightface 重跑或人工逐帧确认前不放行。
+    # 附并排对比图路径（①），让人审一屏秒判同人，而非硬拦后无从复核。
     for s in _degraded_closeup_face_shots(payload):
+        stitch = _stitch_for_png(payload, s.get("png"))
+        aid = f"；人审并排图：{stitch}" if stitch else ""
         out.append(_qc_finding("block", "character_consistency", s.get("png"),
                                f"降级精度近景：{s.get('png')} 在 Pillow 降级模式下无法验脸（无 insightface）；"
-                               "近景/特写脸是否同人未经核验，不放行"))
+                               f"近景/特写脸是否同人未经核验，不放行{aid}"))
     # 服装 N1 / 场景 O2 / 锚点门 N3（advisory）：即便 block 也降 warn 作为非阻断初筛入账
     for s in (checks.get("outfit") or {}).get("shots", []):
         if s.get("verdict") in ("block", "warn"):
@@ -936,7 +1001,9 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True) -> Dict[str, Any]:
     if with_pixel:
         with contextlib.redirect_stdout(sys.stderr):
             payload["checks"] = run_pixel_checks(root, ep)
-        annotate_degraded_closeups(payload, root, ep)
+            annotate_degraded_closeups(payload, root, ep)
+            # ① 降级近景脸：拼并排对比图 + Haar 粗筛，落人审队列（stdout 噪声重定向到 stderr）。
+            build_face_review_queue(payload, root, ep)
     payload["lint"] = lint_prompts(root, ep)
     payload["summary"] = summarize(payload)
     payload["qc_environment"] = qc_environment(payload, with_pixel=with_pixel)
@@ -1007,6 +1074,14 @@ def render_markdown(payload: Dict[str, Any]) -> str:
             lines.append(f"  - {mark} {f.get('msg')}")
     for note in lint.get("notes", []):
         lines.append(f"- note: {note}")
+    review = payload.get("face_human_review") or []
+    if review:
+        lines.extend(["", "## 降级近景人审队列（无 insightface 时人眼判同人 ①）",
+                      f"- {len(review)} 个近景脸需人审：开并排对比图『定妆主参考 ↔ 本镜脸』秒判同不同人"])
+        for t in review:
+            stitch = t.get("stitch") if t.get("stitched") else "(拼图未生成·缺 Pillow/参考图)"
+            pn = f"；{t['priority_note']}" if t.get("priority_note") else ""
+            lines.append(f"  - {t.get('shot')}（{t.get('char') or '?'}）：{stitch}{pn}")
     lines.append("")
     lines.append("落档判定：**verdict=block** → 有硬阻断（崩脸/纯文生图/非法 CHAR_id），必须修复后重跑；"
                  "**verdict=review** → 只有非阻断初筛时不挡 video；若是视觉机检降级/依赖缺失，按阶段跳转先补依赖或复核；"

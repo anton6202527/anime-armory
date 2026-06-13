@@ -202,6 +202,31 @@ def _load_pillow():
         return None
 
 
+def cv2_face_boxes(png: str) -> Optional[List[Tuple[int, int, int, int]]]:
+    """OpenCV Haar 正脸检测 → 人脸框 [(x,y,w,h)]；无 cv2/级联/读图失败 → None（区别于 []=检测到 0 脸）。
+
+    几何粗筛专用：**只判『有没有脸/几张脸』，绝不输出同人相似度**。风格化漫剧脸 Haar 漏检率高，
+    故检测结果仅作降级档人审优先级提示（0 脸=疑崩脸/遮挡，多脸=疑串入他人），不下 verdict、不当
+    block——这是 insightface 缺席、Pillow 又只能验图损坏时，介于两者之间的一层 precision=geometric 信号。
+    """
+    try:
+        import cv2  # type: ignore
+    except Exception:
+        return None
+    try:
+        clf = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+        if clf.empty():
+            return None
+        img = cv2.imread(png)
+        if img is None:
+            return None
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        faces = clf.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(48, 48))
+        return [tuple(int(v) for v in f) for f in faces]
+    except Exception:
+        return None
+
+
 def _pillow_probe(image_mod, png: str) -> Optional[Tuple[int, int, float]]:
     """读图 → (宽, 高, 清晰度)；不可解码返回 None。降采样后做纯 Python Laplacian。"""
     try:

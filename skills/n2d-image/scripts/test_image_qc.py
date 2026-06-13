@@ -423,6 +423,58 @@ def test_degraded_closeup_face_is_hard_block_but_non_closeup_is_review() -> None
     assert len(deg) == 1 and deg[0]["sev"] == "block" and "镜头03" in deg[0]["loc"]
 
 
+def test_face_review_targets_for_degraded_closeup() -> None:
+    # 降级近景脸 → 人审拼图目标：ref=定妆主参考，stitch 落 生产数据/image_qc/<ep>/face_review。
+    payload = {
+        "checks": {"face": {"available": True, "mode": "pillow_fallback", "shots": [
+            {"png": "图片/Clip_12_脸.png", "chars": ["沈念_常态"], "verdict": "ok",
+             "degraded_face": True, "closeup": True},
+            {"png": "图片/Clip_08.png", "chars": ["沈念_常态"], "verdict": "ok",
+             "degraded_face": True, "closeup": False},   # 远景 → 不进队列
+        ]}},
+    }
+    targets = image_qc.face_review_targets(payload, Path("/r/剧"), "第1集")
+    assert len(targets) == 1
+    t = targets[0]
+    assert t["shot"] == "Clip_12"
+    assert t["char"] == "沈念_常态"
+    assert t["ref"] == "出图/共享/图片/定妆_沈念_常态.png"
+    assert t["png_abs"] == "/r/剧/出图/第1集/图片/Clip_12_脸.png"
+    assert t["stitch"].endswith("生产数据/image_qc/第1集/face_review/Clip_12_compare.png")
+
+
+def test_face_review_targets_empty_when_full_precision() -> None:
+    # full（insightface）模式无 degraded_face → 队列为空
+    payload = {"checks": {"face": {"mode": "insightface", "shots": [
+        {"png": "图片/Clip_03.png", "chars": ["沈念"], "verdict": "ok"}]}}}
+    assert image_qc.face_review_targets(payload, Path("/r"), "第1集") == []
+
+
+def test_stitch_for_png_lookup() -> None:
+    payload = {"face_human_review": [
+        {"png": "图片/Clip_12_脸.png", "stitch": "/r/生产数据/.../Clip_12_compare.png", "stitched": True},
+        {"png": "图片/Clip_13.png", "stitch": "/r/.../Clip_13_compare.png", "stitched": False},
+    ]}
+    assert image_qc._stitch_for_png(payload, "图片/Clip_12_脸.png").endswith("Clip_12_compare.png")
+    assert image_qc._stitch_for_png(payload, "图片/Clip_13.png") is None   # 未成功生成 → None
+    assert image_qc._stitch_for_png(payload, "图片/none.png") is None
+
+
+def test_to_findings_degraded_closeup_appends_stitch_path() -> None:
+    payload = {
+        "checks": {"face": {"available": True, "mode": "pillow_fallback", "shots": [
+            {"png": "图片/Clip_12_脸.png", "verdict": "ok", "degraded_face": True, "closeup": True}]}},
+        "lint": {"findings": []},
+        "face_human_review": [
+            {"png": "图片/Clip_12_脸.png", "stitch": "生产数据/image_qc/第1集/face_review/Clip_12_compare.png",
+             "stitched": True}],
+    }
+    findings = image_qc.to_findings(payload)
+    deg = [f for f in findings if "降级精度近景" in f["msg"]]
+    assert len(deg) == 1
+    assert "人审并排图" in deg[0]["msg"] and "Clip_12_compare.png" in deg[0]["msg"]
+
+
 def test_to_findings_maps_severity_and_dims() -> None:
     payload = {
         "checks": {
