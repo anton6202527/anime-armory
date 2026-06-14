@@ -83,6 +83,7 @@ from n2d_contract import (  # noqa: E402
     stage_for_progress_column,
 )
 from n2d_contract_diff import diff_contracts  # noqa: E402  视觉契约继承 Diff 核心（common 层单一真值源）
+from n2d_handoff import check_asset_handoff  # noqa: E402  逐镜资产交接 Diff（common 层单一真值源，与 inherit_contract 共用）
 import image_backends  # noqa: E402  出图后端连通性探活 adapter（选择点→探针）
 from n2d_platform_profiles import (  # noqa: E402
     backend_supports_three_plus_frames,
@@ -888,6 +889,35 @@ def check_contract_inheritance(root: str, ep: str) -> None:
             )
         elif r["status"] == "warn_drift":
             add(WARN, "契约继承", vid_p, f"视觉契约继承提示[{r['field']}]：{r['note']}（出图侧：{r['image_text'] or '缺'}）")
+
+
+def check_asset_handoff_inheritance(root: str, ep: str) -> None:
+    """逐镜物料约束 出图→出视频 继承（LOC/PROP/OUTFIT/VFX）：出图绑定的资产在出视频对应镜
+    丢失=block/warn。视觉契约五字段管 episode 级光位/轴线，本检查补**逐镜**资产锚。
+
+    此前只在 inherit_contract.py 裸命令里跑，游离在 gate 退出码之外——`dashboard.py gate --stage video`
+    通过 ≠ 资产逐镜交接成立。接进 video gate 后，出图逐镜 prompt 绑的道具/特效在视频侧被丢会被收口。
+    （身份交接逐镜锁则由 check_route_identity_readiness / 近景身份锁负责，不在此重复报。）
+    """
+    res = check_asset_handoff(root, ep)
+    if not res.get("available"):
+        return  # 上游逐镜 prompt 未到位：image/video 各自 stage gate 负责，不在此重复 BLOCK
+    dim = CONSISTENCY_DIMENSIONS["contract_inheritance"]
+    vid_rel = res.get("video_clips_file", os.path.join("出视频", ep, "prompt", "01_clips.md"))
+    vid_p = os.path.join(root, vid_rel)
+    for f in res.get("findings", []):
+        if f.get("severity") == "block":
+            add(
+                BLOCK,
+                "契约继承",
+                vid_p,
+                f"资产逐镜交接[{f.get('code')}]：{f.get('note')}",
+                return_to_stage=dim["return_to_stage"],
+                rerun_scope=dim["scope"],
+                affected_artifacts=[vid_rel],
+            )
+        else:
+            add(WARN, "契约继承", vid_p, f"资产逐镜交接[{f.get('code')}]：{f.get('note')}")
 
 
 def check_image_ai_policy(root: str, ep: str) -> None:
@@ -3419,6 +3449,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_prompt_checklists(root, ep, "video")
         check_video_stage_raw_output_policy(root, ep)
         check_contract_inheritance(root, ep)
+        check_asset_handoff_inheritance(root, ep)
         check_semantic_lineage(root, ep)
         check_state_continuity(root, ep)
     elif check_stage == "compose":

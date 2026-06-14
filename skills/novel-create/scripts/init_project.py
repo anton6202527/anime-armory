@@ -34,16 +34,9 @@ if LIB not in sys.path:
 
 from novel_contract import (base_meta, build_progress_markdown, routing_stages,
                             SCALE_CHOICES, scale_profile, NOVEL_DEFAULTS,
-                            NOVEL_STAGES, normalize_scale)
+                            NOVEL_STAGES, normalize_scale, parse_outputs,
+                            NOVEL_DRAFT_MODES, CHAPTER_GRANULARITY, AI_TEXT_USAGE_MODES)
 from settings import write_settings
-
-# Simple fallback for missing constants in novel_contract
-NOVEL_DRAFT_MODES = ("极速初稿", "稳妥初稿", "商业连载", "漫剧源书")
-CHAPTER_GRANULARITY = ("逐章", "小批", "全书草稿")
-AI_TEXT_USAGE_MODES = ("AI-generated", "AI-assisted", "未使用AI文本")
-
-def parse_outputs(value):
-    return [s.strip() for s in value.split(",") if s.strip()]
 
 
 def demo_chapters_for(target_chapters):

@@ -62,25 +62,34 @@ def load_contract(root: Path):
     path = root / "skills" / "n2d" / "_lib" / "n2d_contract.py"
     if not path.is_file():
         return None, None
+    # n2d_contract.py 是 facade，内部 `from n2d_const import *` 需要 _lib 在 sys.path 上
+    # （否则回退到相对导入又因无包父级失败）。与 gate.py 同源做法。
+    lib_dir = str(path.parent)
+    # 关键隔离：facade 的 `from n2d_const import *` 等会按模块名查 sys.modules，
+    # 若同名模块已被「自审工具自身所在仓」缓存，就会顶替掉**本 root** 的 _lib，
+    # 读到错的 APPROVED_IMAGE_BACKENDS（单进程跑多 root / 测试套时复现）。
+    # 故先驱逐本 root _lib 同名模块、加载完再还原，保证 facade 从本 root 取符号。
+    lib_modules = {p.stem for p in path.parent.glob("*.py")}
+    saved = {name: sys.modules.pop(name) for name in list(sys.modules) if name in lib_modules}
+    added = lib_dir not in sys.path
+    if added:
+        sys.path.insert(0, lib_dir)
     try:
         spec = importlib.util.spec_from_file_location("_n2d_self_audit_contract", path)
         if spec is None or spec.loader is None:
             return None, "无法加载 n2d_contract.py"
         module = importlib.util.module_from_spec(spec)
-        # n2d_contract.py 是 facade，内部 `from n2d_const import *` 需要 _lib 在 sys.path 上
-        # （否则回退到相对导入又因无包父级失败）。与 gate.py 同源做法。
-        lib_dir = str(path.parent)
-        added = lib_dir not in sys.path
-        if added:
-            sys.path.insert(0, lib_dir)
-        try:
-            spec.loader.exec_module(module)
-        finally:
-            if added and sys.path and sys.path[0] == lib_dir:
-                sys.path.pop(0)
+        spec.loader.exec_module(module)
         return module, None
     except Exception as exc:  # pragma: no cover - defensive report path
         return None, str(exc)
+    finally:
+        if added and sys.path and sys.path[0] == lib_dir:
+            sys.path.pop(0)
+        # 移除本次加载引入的本 root 同名模块，再还原外层缓存——不污染调用方。
+        for name in lib_modules:
+            sys.modules.pop(name, None)
+        sys.modules.update(saved)
 
 
 def backend_aliases(key: str, spec: Dict[str, Any]) -> Sequence[str]:

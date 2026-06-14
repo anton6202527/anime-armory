@@ -549,6 +549,16 @@ APPROVED_IMAGE_BACKENDS: Dict[str, Dict[str, Any]] = {
         "native_subject": False,
         "tier": "tier-1",
     },
+    "openai": {
+        # 官方 OpenAI Images（gpt-image / DALL·E）入口，与 codex 同属 OpenAI 官方路线、
+        # 同走 reference_group（见 IDENTITY_IMAGE_ADAPTERS["openai"] 与 n2d-image references）。
+        "name": "OpenAI gpt-image / DALL·E",
+        "label": "官方 OpenAI gpt-image / DALL·E",
+        "canonical": "openai",
+        "multi_reference": True,
+        "native_subject": False,
+        "tier": "tier-1",
+    },
     "dreamina_official": {
         "name": "Dreamina/即梦官方 CLI",
         "label": "Dreamina/即梦官方 CLI",
@@ -595,6 +605,10 @@ IMAGE_BACKEND_ALIASES = {
     "即梦": "dreamina_official",
     "dreamina": "dreamina_official",
     "codex": "codex",
+    "openai": "openai",
+    "gpt-image": "openai",
+    "dall-e": "openai",
+    "dalle": "openai",
     "seedream": "seedream",
     "可灵": "kling_subject",
     "kling": "kling_subject",

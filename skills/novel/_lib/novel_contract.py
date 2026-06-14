@@ -236,6 +236,22 @@ def derive_title(meta):
 
 ALLOWED_OUTPUT_FORMATS = ("txt", "docx", "outline", "n2d")
 
+# ── 生产模式枚举（单一真值源；create/rewrite/spinoff 等 init 统一 import，勿各写一份）──
+NOVEL_DRAFT_MODES = ("极速初稿", "稳妥初稿", "商业连载", "漫剧源书")
+CHAPTER_GRANULARITY = ("逐章", "小批", "全书草稿")
+AI_TEXT_USAGE_MODES = ("AI-generated", "AI-assisted", "未使用AI文本")
+
+
+def parse_outputs(value):
+    """逗号分隔的输出格式 → 列表，并对账白名单（非法格式直接报错，不静默放行）。"""
+    outputs = [s.strip() for s in str(value or "").replace("，", ",").split(",") if s.strip()]
+    unknown = sorted(set(outputs) - set(ALLOWED_OUTPUT_FORMATS))
+    if unknown:
+        raise ValueError(
+            f"未知输出格式 {unknown}；允许值：{', '.join(ALLOWED_OUTPUT_FORMATS)}"
+        )
+    return outputs
+
 RIGHTS_STATUS_CANONICAL = {
     "original": "original",
     "原创": "original",

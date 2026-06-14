@@ -136,6 +136,17 @@ def reference_group_ready(ref_status: Mapping[str, Mapping[str, Any]]) -> bool:
     return all(bool(ref_status.get(k, {}).get("exists")) for k in REFERENCE_FIELDS)
 
 
+# reference_group 兜底（含 unregistered/in-progress 时的 "fallback_reference_group"）不是原生主体锁。
+# 统计/建议「原生就绪」时这两个串都要排掉——只判 != "reference_group" 会漏掉 "fallback_reference_group"，
+# 把仅靠参考图兜底的形态谎报成已有 Character ID/Face Lock，给跨集一致性虚假信心。
+NON_NATIVE_BINDINGS = frozenset({"reference_group", "fallback_reference_group"})
+
+
+def binding_is_native_ready(binding: Mapping[str, Any]) -> bool:
+    """该 adapter binding 是否「原生主体已就绪」：ready 且 binding 不是 reference_group 兜底。纯函数·可测。"""
+    return bool(binding.get("ready")) and str(binding.get("binding", "")) not in NON_NATIVE_BINDINGS
+
+
 def allowed_modes(stage: str, backend: str) -> Optional[set[str]]:
     table = ALLOWED_IMAGE_MODES if stage == "image" else ALLOWED_VIDEO_MODES
     return table.get(backend)
@@ -371,9 +382,9 @@ def build_adapter_matrix(
                     gaps.extend(f"{stage_name}.{backend}:{g}" for g in binding.get("gaps", []))
                     recommendations.extend(binding.get("recommendations", []))
             gaps.extend(f"lora:{g}" for g in lora.get("gaps", []))
-            if image_bindings and not any(b.get("ready") and b.get("binding") != "reference_group" for b in image_bindings.values()):
+            if image_bindings and not any(binding_is_native_ready(b) for b in image_bindings.values()):
                 recommendations.append("image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect")
-            if not any(b.get("ready") and b.get("binding") != "reference_group" for b in video_bindings.values()):
+            if not any(binding_is_native_ready(b) for b in video_bindings.values()):
                 recommendations.append("video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls")
             if not lora.get("ready") and str(char.get("scope", "")).strip() in ("全篇", "长线", "核心"):
                 recommendations.append("lora: core long-running character; consider LoRA only if reference_group/native adapters still drift")
@@ -399,8 +410,8 @@ def build_adapter_matrix(
     summary = {
         "forms": len(forms_out),
         "forms_with_reference_group_ready": sum(1 for f in forms_out if f.get("reference_group_ready")),
-        "forms_with_native_image_ready": sum(1 for f in forms_out if any(b.get("ready") and b.get("binding") != "reference_group" for b in f.get("image_bindings", {}).values())),
-        "forms_with_native_video_ready": sum(1 for f in forms_out if any(b.get("ready") and b.get("binding") != "reference_group" for b in f.get("video_bindings", {}).values())),
+        "forms_with_native_image_ready": sum(1 for f in forms_out if any(binding_is_native_ready(b) for b in f.get("image_bindings", {}).values())),
+        "forms_with_native_video_ready": sum(1 for f in forms_out if any(binding_is_native_ready(b) for b in f.get("video_bindings", {}).values())),
         "forms_with_lora_ready": sum(1 for f in forms_out if f.get("lora_binding", {}).get("ready")),
         "forms_with_gaps": sum(1 for f in forms_out if f.get("gaps")),
         # 与 drift report recommendations 同判定（lora_upgrade_candidates）；无 drift 数据时为空列表

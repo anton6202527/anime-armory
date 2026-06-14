@@ -29,9 +29,8 @@ if LIB not in sys.path:
 from novel_contract import (base_meta, build_progress_markdown, routing_stages,
                             SCALE_CHOICES, scale_profile, detect_rights_status,
                             docx_to_txt, write_project_settings, demo_chapters_for,
-                            normalize_scale)
-
-SCALE_PROFILE = SCALE_PROFILES  # backwards-compatible alias for tests/importers
+                            normalize_scale, parse_outputs, parse_regions,
+                            NOVEL_DRAFT_MODES, CHAPTER_GRANULARITY, AI_TEXT_USAGE_MODES)
 
 
 def build_change_spec(source_title):
@@ -140,38 +139,6 @@ def build_outline(n, rewrite_type):
 """
 
 
-def build_progress(meta):
-    n = meta["target_chapters"]
-    rows = "\n".join(f"| {i:02d} |  | - | [ ] |" for i in range(1, n + 1))
-    scans = "\n".join(f"- [ ] 轻量扫描（第 {a}-{min(a+4, n)} 章）" for a in range(1, n + 1, 5))
-    outs = "\n".join(f"- [ ] {fmt}" for fmt in meta["outputs"])
-    return f"""# 进度 — 《<新书名待定>》改写
-
-{derived_stage_markdown("rewrite")}
-
-## 准备阶段
-- [x] 项目骨架
-- [ ] 改动spec（用户已确认）
-- [ ] 新设定圣经
-- [ ] 角色卡 / 世界观卡
-- [ ] 书名（用户已选）
-- [ ] 章纲（用户已确认）
-
-## 写作阶段
-| 章 | 标题 | 字数 | 状态 |
-|---|---|---|---|
-{rows}
-
-## 回扫阶段
-{scans}
-- [ ] 全量一致性扫描
-- [ ] 新设定一致性 + 没跑回旧设定 + 内核没丢 + 没照搬原文
-
-## 导出
-{outs}
-"""
-
-
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("source_novel", help="原作 .txt 或 .docx")
@@ -230,13 +197,9 @@ def main():
     n = args.target_chapters or profile["target_chapters"]
     outputs = parse_outputs(args.outputs)
     meta = base_meta("rewrite", outputs=outputs, rights_status=rights)
-    meta.update(build_rights_metadata(
-        rights,
-        i_have_rights=args.i_have_rights,
-        rights_jurisdiction=args.rights_jurisdiction,
-        distribution_regions=args.distribution_regions,
-    ))
     meta.update({
+        "rights_jurisdiction": args.rights_jurisdiction or "",
+        "distribution_regions": parse_regions(args.distribution_regions),
         "source_novel": source_path,
         "source_title": source_title,
         "rewrite_type": args.rewrite_type,
