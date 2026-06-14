@@ -55,11 +55,13 @@ try:
 except Exception:  # 退化：能力档不可用时按"支持"（向前看·强制三帧）走
     def backend_supports_three_plus_frames(backend, channel=None):  # type: ignore
         return True
-
-HIGH_MOTION_TEMPLATES = {
-    "fight_exchange", "chase", "magic_burst", "flight",
-    "hug_or_pull", "intimate_interaction",
-}
+try:
+    from n2d_const import HIGH_MOTION_TEMPLATES  # 单一真值源（gate 帧能力闸门共用同一份）
+except Exception:  # 退化：常量不可用时本地兜底，保持与 n2d_const 同步
+    HIGH_MOTION_TEMPLATES = frozenset({
+        "fight_exchange", "chase", "magic_burst", "flight",
+        "hug_or_pull", "intimate_interaction",
+    })
 DRIFT_REASON_RE = re.compile(r"漂|drift|中段|动作崩|路径", re.I)
 ASSET_CLIP_RE = re.compile(r"(?i)clip[_\s]*0*(\d+)")
 SHOT_T_RE = re.compile(r"(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)\s*s")

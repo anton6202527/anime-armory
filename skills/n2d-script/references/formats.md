@@ -177,6 +177,9 @@ character design / reference sheet: {name}, minimum reference set with front-fac
         "end_state": "沈念起身、右手扶榻、视线移向窗",   // ← 下一 clip 的 start_state 原样复制这句
         "eyeline": "沈念视线画右门口（继承 visual_contract.场景轴线视线，正反打镜按此对位）",
         "shot_size": "MS（继承 visual_contract.景别阶梯，不撞上一镜）",
+        "expression_span": "大",                         // ← opt-in·近景表情跨度 微|中|大；本镜脸的情绪从起到止跨几档（平静→爆哭=大）。缺=不追踪。
+                                                        //    `大`+近景/特写/反打 → gate 强制 need_endframe=true 走首尾双帧只插值（首=起表情/尾=止表情同源定妆），
+                                                        //    否则单首帧硬扛跨情绪表情=脸型/五官随表情漂移（脸被表情带着重画的头号根因）。同情绪小变化用 微/中。
         "transition": "match_cut",                      // match_cut|eyeline|action_cut|empty_buffer|j_cut|hard_cut
         "need_endframe": true,                          // 默认 true；非最终 Clip 若 false 必填 endframe_exempt_reason
         "endframe_png": "出图/第1集/图片/镜头02_end.png",     // need_endframe 时由 n2d-image 落档后回填

@@ -94,12 +94,12 @@ python3 skills/n2d/run.py next <作品根> [第N集] [--json] [--auto]
 
 ## 4. 执行循环（伪码）
 
+> **边界**：`源新鲜度自检`（source_check）与 `skill 更新影响检查`（update_plan）是 **dispatcher 进作品时的
+> 一次性入口步骤**（SKILL.md 情境B），**不**进 `run.py next` ——否则每步推进都会重跑、浪费。`run.py next`
+> 只管"逐步推进 + 每步的确定性前置（doctor/router/gate/compliance/首跑选择探测）"。
+
 ```
 def next(root, ep=None, auto=False):
-    # 入口前置（已存在作品时，等价 SKILL.md 情境B 的两步自检）
-    run(source_check); run(update_plan check)          # drift/skill 更新 → 命中即 stop 报告
-    doctor_brief(root)                                  # 能力档；缺 → env_missing
-
     while True:
         route = stage_of(root, row(ep or 最小未完成集), header)  # 现有真值
         if route.col is None: return DONE

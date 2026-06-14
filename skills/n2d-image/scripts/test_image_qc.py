@@ -164,6 +164,7 @@ def test_lint_accepts_semantic_char_ids_and_primary_marker() -> None:
     valid = {"CHAR_SHEN", "CHAR_SHEN/受难", "CHAR_LIU"}
     assert image_qc.lint_shot_block(_char_block("Clip 02", char_id="CHAR_SHEN/受难"), valid) == []
     assert image_qc.lint_shot_block(_char_block("Clip 03", char_id="CHAR_SHEN/受难*"), valid) == []
+    assert image_qc.lint_shot_block(_char_block("Clip 03b", char_id="CHAR_SHEN*/受难"), valid) == []
     assert image_qc.lint_shot_block(_char_block("Clip 04", char_id="CHAR_LIU*"), valid) == []
 
 
@@ -226,6 +227,47 @@ def test_lint_passes_tail_identity_handoff_with_target_reference() -> None:
     )
     findings = image_qc.lint_shot_block(blk, valid, _registry_forms_for_tail_handoff())
     assert not any(f["code"].startswith("tail_identity_handoff_") for f in findings)
+
+
+def test_lint_blocks_outfit_form_mismatch_for_single_character_shot() -> None:
+    valid = {"CHAR_01", "CHAR_01/觉醒态", "CHAR_01/红衣觉醒态"}
+    forms = [
+        {
+            "id": "CHAR_01",
+            "form": "觉醒态",
+            "key": "CHAR_01/觉醒态",
+            "asset_key": "沈念_觉醒态",
+            "display": "沈念_觉醒态",
+            "reference_stems": {"定妆_沈念_觉醒态"},
+            "strong_aliases": {"CHAR_01", "CHAR_01/觉醒态", "沈念_觉醒态", "定妆_沈念_觉醒态"},
+            "weak_aliases": {"沈念"},
+        }
+    ]
+    blk = _char_block("Clip 08 红衣近景", char_id="CHAR_01/觉醒态")
+    blk["body"] += "\n**正向 prompt（中文）**：沈念穿红色破旧宫装，金瞳痛感觉醒，CU 近景。"
+    findings = image_qc.lint_shot_block(blk, valid, forms)
+    assert any(f["code"] == "outfit_form_mismatch" and f["level"] == "block" for f in findings)
+    assert "outfit_form_mismatch" in image_qc.HARD_LINT_CODES
+
+
+def test_lint_allows_matching_outfit_form() -> None:
+    valid = {"CHAR_01", "CHAR_01/红衣觉醒态"}
+    forms = [
+        {
+            "id": "CHAR_01",
+            "form": "红衣觉醒态",
+            "key": "CHAR_01/红衣觉醒态",
+            "asset_key": "沈念_红衣觉醒态",
+            "display": "沈念_红衣觉醒态",
+            "reference_stems": {"定妆_沈念_红衣觉醒态"},
+            "strong_aliases": {"CHAR_01", "CHAR_01/红衣觉醒态", "沈念_红衣觉醒态", "定妆_沈念_红衣觉醒态"},
+            "weak_aliases": {"沈念"},
+        }
+    ]
+    blk = _char_block("Clip 08 红衣近景", char_id="CHAR_01/红衣觉醒态")
+    blk["body"] += "\n**正向 prompt（中文）**：沈念穿红色破旧宫装，金瞳痛感觉醒，CU 近景。"
+    findings = image_qc.lint_shot_block(blk, valid, forms)
+    assert not any(f["code"] == "outfit_form_mismatch" for f in findings)
 
 
 def test_lint_blocks_tail_without_image2image_relay() -> None:
@@ -717,6 +759,16 @@ def test_face_reference_coverage_does_not_block_prompt_before_png(tmp_path: Path
     assert len(coverage["pending"]) == 1
 
 
+def test_face_reference_coverage_does_not_treat_endframe_as_firstframe(tmp_path: Path) -> None:
+    png = tmp_path / "出图" / "第1集" / "图片" / "Clip_02_end.png"
+    png.parent.mkdir(parents=True)
+    png.write_bytes(b"x")
+    coverage = image_qc.face_reference_coverage(_coverage_payload("ok"), tmp_path, "第1集")
+    assert coverage["verdict"] == "ok"
+    assert coverage["required"] == 0
+    assert len(coverage["pending"]) == 1
+
+
 def test_to_regen_list_includes_face_reference_coverage_missing() -> None:
     payload = {
         "checks": {},
@@ -730,6 +782,66 @@ def test_to_regen_list_includes_face_reference_coverage_missing() -> None:
     assert len(regen) == 1
     assert regen[0]["shot"] == "Clip_02"
     assert "脸部定妆比对覆盖:no_face_comparison" in regen[0]["reasons"]
+
+
+def _write_image_event(root: Path, ep: str, asset: str, *, provider: str = "Codex",
+                       method: str = "image2image", event: str = "generation") -> None:
+    prod = root / "生产数据"
+    prod.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "kind": "n2d_production_event",
+        "version": 1,
+        "episode": ep,
+        "stage": "image",
+        "event": event,
+        "source": provider,
+        "generation": {"asset": asset, "status": "pass", "method": method},
+        "cost": {"provider": provider},
+        "meta": {"method": method},
+    }
+    with open(prod / "production_events.jsonl", "a", encoding="utf-8") as fh:
+        fh.write(json.dumps(payload, ensure_ascii=False) + "\n")
+
+
+def test_prohibited_face_patch_outputs_block_summary_and_regen(tmp_path: Path) -> None:
+    _write_image_event(
+        tmp_path,
+        "第1集",
+        "出图/第1集/图片/Clip_02_冷开场.png",
+        provider="local_face_patch",
+        method="crop_resize_color_match_alpha_blend",
+        event="redraw",
+    )
+    report = image_qc.prohibited_face_patch_outputs(tmp_path, "第1集")
+    assert report["verdict"] == "block"
+    assert report["outputs"][0]["shot"] == "Clip_02"
+
+    payload = {"checks": {}, "lint": {"findings": []}, "prohibited_face_patch": report}
+    summary = image_qc.summarize(payload)
+    assert summary["hard_blocks"] == 1
+    assert summary["verdict"] == "block"
+    assert summary["by_check"]["prohibited_face_patch"]["block"] == 1
+
+    findings = image_qc.to_findings(payload)
+    assert len(findings) == 1
+    assert findings[0]["sev"] == "block"
+    assert "embedding 分数不是合格目标" in findings[0]["msg"]
+
+    regen = image_qc.to_regen_list(payload)
+    assert regen[0]["shot"] == "Clip_02"
+    assert "本地贴脸修复产物禁用" in regen[0]["reasons"]
+
+
+def test_prohibited_face_patch_outputs_cleared_by_later_real_generation(tmp_path: Path) -> None:
+    asset = "出图/第1集/图片/Clip_02_冷开场.png"
+    _write_image_event(tmp_path, "第1集", asset, provider="local_face_patch",
+                       method="crop_resize_color_match_alpha_blend", event="redraw")
+    _write_image_event(tmp_path, "第1集", asset, provider="Codex",
+                       method="image2image", event="generation")
+
+    report = image_qc.prohibited_face_patch_outputs(tmp_path, "第1集")
+    assert report["verdict"] == "ok"
+    assert report["outputs"] == []
 
 
 def test_to_findings_maps_severity_and_dims() -> None:
@@ -914,3 +1026,81 @@ def test_native_multiref_ok_when_enough_or_no_group():
 def test_registry_ref_counts_takes_max_per_char():
     forms = [{"id": "CHAR_01", "ref_count": 2}, {"id": "CHAR_01", "ref_count": 4}, {"id": "CHAR_02", "ref_count": 1}]
     assert image_qc.registry_ref_counts(forms) == {"CHAR_01": 4, "CHAR_02": 1}
+
+
+def _state_ledger_work(tmp_path: Path, sb_state: str, prompt_text: str = "", with_ledger: bool = False) -> Path:
+    (tmp_path / "脚本" / "第1集").mkdir(parents=True)
+    (tmp_path / "脚本" / "第1集" / "storyboard.json").write_text(
+        json.dumps({"visual_contract": {"角色状态演进": sb_state}}), encoding="utf-8")
+    (tmp_path / "出图" / "第1集" / "prompt").mkdir(parents=True)
+    (tmp_path / "出图" / "第1集" / "prompt" / "01_分镜出图.md").write_text(prompt_text, encoding="utf-8")
+    if with_ledger:
+        (tmp_path / "出图" / "共享").mkdir(parents=True, exist_ok=True)
+        (tmp_path / "出图" / "共享" / "visual_state_ledger.json").write_text("{}", encoding="utf-8")
+    return tmp_path
+
+
+def test_state_ledger_advises_when_cumulative_state_and_no_ledger(tmp_path: Path) -> None:
+    r = image_qc.audit_state_ledger(_state_ledger_work(tmp_path, "镜6 被刺流血→镜7 包扎"), "第1集")
+    assert r["advise"] is True
+    assert "流血" in r["markers"] and "包扎" in r["markers"]
+
+
+def test_state_ledger_silent_when_ledger_present(tmp_path: Path) -> None:
+    r = image_qc.audit_state_ledger(_state_ledger_work(tmp_path, "镜6 被刺流血", with_ledger=True), "第1集")
+    assert r["advise"] is False and r["ledger_present"] is True
+
+
+def test_state_ledger_no_false_positive_on_emotion_words(tmp_path: Path) -> None:
+    # 悲伤/热血 是情绪词，不是累积视觉状态——裸「伤/血」已从关键词表剔除，不应误报
+    r = image_qc.audit_state_ledger(_state_ledger_work(tmp_path, "女主悲伤落座，男主热血宣言"), "第1集")
+    assert r["advise"] is False and r["markers"] == []
+
+
+def test_state_ledger_unavailable_when_no_source(tmp_path: Path) -> None:
+    r = image_qc.audit_state_ledger(tmp_path / "nope", "第99集")
+    assert r["available"] is False and r["advise"] is False
+
+
+def test_state_ledger_finding_is_info_never_blocks(tmp_path: Path) -> None:
+    payload = {"state_ledger": {"advise": True, "markers": ["流血"]}}
+    findings = image_qc.to_findings(payload)
+    sl = [f for f in findings if f["dim"] == "state_continuity"]
+    assert len(sl) == 1 and sl[0]["sev"] == "info"
+
+
+def _registry_with_form(tmp_path: Path, forms: list) -> Path:
+    (tmp_path / "出图" / "共享").mkdir(parents=True)
+    (tmp_path / "出图" / "共享" / "identity_registry.json").write_text(
+        json.dumps({"characters": [{"id": "CHAR_01", "name": "沈念", "forms": forms}]}), encoding="utf-8")
+    return tmp_path
+
+
+def test_mark_finalized_sets_single_form(tmp_path: Path) -> None:
+    root = _registry_with_form(tmp_path, [{"form": "常态", "asset_key": "x"}])
+    r = image_qc.mark_finalized(root, "CHAR_01")
+    assert r["ok"] is True
+    reg = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))
+    assert reg["characters"][0]["forms"][0]["self_check_passed"] is True
+
+
+def test_mark_finalized_requires_form_when_ambiguous(tmp_path: Path) -> None:
+    root = _registry_with_form(tmp_path, [{"form": "常态"}, {"form": "觉醒态"}])
+    assert image_qc.mark_finalized(root, "CHAR_01")["ok"] is False
+    assert image_qc.mark_finalized(root, "CHAR_01/觉醒态")["ok"] is True
+
+
+def test_mark_finalized_unfinalize_sets_false(tmp_path: Path) -> None:
+    root = _registry_with_form(tmp_path, [{"form": "常态"}])
+    image_qc.mark_finalized(root, "CHAR_01/常态", value=False)
+    reg = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))
+    assert reg["characters"][0]["forms"][0]["self_check_passed"] is False
+
+
+def test_mark_finalized_asset(tmp_path: Path) -> None:
+    (tmp_path / "出图" / "共享").mkdir(parents=True)
+    (tmp_path / "出图" / "共享" / "asset_registry.json").write_text(
+        json.dumps({"assets": [{"id": "PROP_01", "name": "毒酒壶"}]}), encoding="utf-8")
+    assert image_qc.mark_finalized(tmp_path, "PROP_01")["ok"] is True
+    reg = json.loads((tmp_path / "出图" / "共享" / "asset_registry.json").read_text(encoding="utf-8"))
+    assert reg["assets"][0]["self_check_passed"] is True

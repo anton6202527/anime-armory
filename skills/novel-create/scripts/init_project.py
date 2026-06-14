@@ -34,9 +34,11 @@ if LIB not in sys.path:
 
 from novel_contract import (base_meta, build_progress_markdown, routing_stages,
                             SCALE_CHOICES, scale_profile, NOVEL_DEFAULTS,
-                            NOVEL_STAGES, normalize_scale, parse_outputs,
+                            NOVEL_STAGES, normalize_scale, parse_outputs, SCALE_PROFILES,
                             NOVEL_DRAFT_MODES, CHAPTER_GRANULARITY, AI_TEXT_USAGE_MODES)
 from settings import write_settings
+
+SCALE_PROFILE = SCALE_PROFILES  # scale-band 契约：test_scale_contract 校验其与规模档一致
 
 
 def demo_chapters_for(target_chapters):

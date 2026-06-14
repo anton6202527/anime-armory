@@ -127,6 +127,19 @@ def test_tone_drift_warns_not_blocks(tmp_path):
     assert tone["status"] == "warn_drift" and rep["verdict"] == "warn"
 
 
+def test_state_progression_drift_blocks(tmp_path):
+    # 角色状态演进被改写（提前泄露金瞳/伤）→ block, exit 1（2026-06 由 warn 升 block，剧情状态锁）
+    vid = VID_VERBATIM.replace(
+        "- 角色状态演进：沈念 Clip01-13 黑瞳常态；Clip14 起左腕疤裂暗金。",
+        "- 角色状态演进：沈念 Clip01 起即金瞳暗金，全程左腕疤外露。")
+    root = _write_project(tmp_path, IMG_CONTRACT, vid)
+    assert ic.run(root, EP) == 1
+    rep = _report(root)
+    assert rep["verdict"] == "block"
+    state = next(r for r in rep["fields"] if r["field"] == "角色状态演进")
+    assert state["status"] == "block_drift" and state["severity"] == "block"
+
+
 def test_upstream_missing_field_warns_not_blocks(tmp_path):
     # 出图侧本来就缺状态演进 → 提示但不拦（上游问题）；视频侧多写不构成 block
     img = "\n".join(ln for ln in IMG_CONTRACT.splitlines() if not ln.startswith("- 状态演进"))

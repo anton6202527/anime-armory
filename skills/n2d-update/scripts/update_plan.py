@@ -167,6 +167,40 @@ def current_todo_context(root: str, ep: str, header: List[str], row: Dict[str, s
     }
 
 
+def image_qc_requires_repair(qc: Optional[Dict[str, Any]]) -> bool:
+    """Whether existing image_qc findings should pull the operational todo back to image."""
+    if not qc:
+        return False
+    if qc.get("status") in {"error", "unavailable"}:
+        return True
+    try:
+        if int(qc.get("hard_blocks") or 0) > 0:
+            return True
+    except (TypeError, ValueError):
+        pass
+    return str(qc.get("verdict") or "").lower() == "block"
+
+
+def image_qc_repair_todo(root: str, ep: str, row: Dict[str, str], qc: Dict[str, Any]) -> Dict[str, Any]:
+    hard = qc.get("hard_blocks")
+    verdict = qc.get("verdict") or qc.get("status") or "unknown"
+    report = qc.get("report_md") or qc.get("report_json") or ""
+    note = f"image_qc={verdict}"
+    if hard not in (None, ""):
+        note += f"，hard_blocks={hard}"
+    if report:
+        note += f"；先修复报告阻断并重跑 image_qc：{report}"
+    return {
+        "stage_key": "image",
+        "label": "出图返修",
+        "column": "出图",
+        "status": row.get("出图", ""),
+        "skill": "n2d-image",
+        "command": f"n2d-image {root} {ep}",
+        "note": note,
+    }
+
+
 def stage_index(key: str) -> int:
     for idx, spec in enumerate(stage_specs()):
         if spec.get("key") == key:
@@ -833,8 +867,9 @@ def render_markdown(plan: Dict[str, Any]) -> str:
     sd = plan.get("source_drift")
     tf = plan.get("three_frame_compliance")
     ic = plan.get("image_consistency")
-    if sd or tf or ic:
-        lines.extend(["", "## 健康检测（源/三帧/图片）"])
+    ci = plan.get("contract_inheritance")
+    if sd or tf or ic or ci:
+        lines.extend(["", "## 健康检测（源/三帧/图片/契约继承）"])
         if sd:
             st = sd.get("status")
             mark = {"clean": "✅ 源未变动", "drift": "⚠️ 源已漂移",
@@ -861,6 +896,20 @@ def render_markdown(plan: Dict[str, Any]) -> str:
             else:
                 flag = "✅ 无硬阻断" if ic.get("consistent") else f"⚠️ hard_blocks={ic.get('hard_blocks')}"
             lines.append(f"- **图片一致性**：{flag}（verdict=`{ic.get('verdict')}`，精度 `{ic.get('precision_level')}`）")
+        if ci:
+            st = ci.get("status")
+            if st == "missing":
+                lines.append("- **契约继承**：— 未校验（缺 inherit_contract 报告，先跑 n2d-video `inherit_contract.py`）")
+            elif st == "error":
+                lines.append(f"- **契约继承**：⚠️ 报告不可读（{ci.get('error')}）")
+            elif ci.get("inherited"):
+                lines.append(f"- **契约继承**：✅ 已继承（verdict=`{ci.get('verdict')}`）")
+            else:
+                lines.append(
+                    f"- **契约继承**：⛔ block（verdict=`{ci.get('verdict')}`，字段漂移 "
+                    f"{ci.get('field_blocks')}·身份未锁 {ci.get('identity_blocks')}·资产丢失 {ci.get('asset_blocks')}）"
+                    + (f"：{'; '.join(ci.get('samples') or [])}" if ci.get("samples") else "")
+                )
 
     steps = plan.get("execution_steps") or []
     if steps:
@@ -1020,6 +1069,71 @@ def summarize_image_consistency(qc: Optional[Dict[str, Any]]) -> Optional[Dict[s
     }
 
 
+def contract_inheritance_report_path(root: str, ep: str) -> str:
+    ep = normalize_episode(ep)
+    return os.path.join(production_dir(root), f"contract_inheritance_{ep}.json")
+
+
+def check_contract_inheritance(root: str, ep: str) -> Optional[Dict[str, Any]]:
+    """读 出图→出视频「视觉契约继承」报告（n2d-video/inherit_contract.py 产物）。
+
+    校验参考帧契约（色调/光位锚/轴线视线/角色状态演进/景别）与文字 prompt 是否从出图侧
+    正确传递到出视频侧，外加身份交接（命名角色镜逐镜 prompt 锁脸）与物料交接
+    （场景/道具/服装/特效资产不丢）。只读已有报告，不自己跑 inherit_contract——付费/出视频
+    前的机检由 n2d-video 负责。报告缺失但已到 video_prompt 阶段时返回 missing，提示先跑
+    inherit_contract 取证；报告不可读返回 error。
+    """
+    path = contract_inheritance_report_path(root, ep)
+    md_path = os.path.splitext(path)[0] + ".md"
+    if not os.path.isfile(path):
+        return {
+            "status": "missing",
+            "report_json": path,
+            "report_md": md_path,
+            "inherited": False,
+        }
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except Exception as exc:
+        return {
+            "status": "error",
+            "report_json": path,
+            "report_md": md_path,
+            "error": f"{type(exc).__name__}: {exc}",
+            "inherited": False,
+        }
+    summary = data.get("summary") if isinstance(data.get("summary"), dict) else {}
+    identity = (data.get("identity_handoff") or {}).get("findings") or []
+    asset = (data.get("asset_handoff") or {}).get("findings") or []
+    identity_blocks = [f for f in identity if f.get("severity") == "block"]
+    asset_blocks = [f for f in asset if f.get("severity") == "block"]
+    field_drift = [
+        f"{r.get('field')}: {r.get('status')}"
+        for r in (data.get("fields") or [])
+        if r.get("severity") == "block"
+    ]
+    verdict = data.get("verdict")
+    return {
+        "status": "ok",
+        "verdict": verdict,
+        "field_blocks": summary.get("block"),
+        "field_warns": summary.get("warn"),
+        "identity_blocks": len(identity_blocks),
+        "asset_blocks": len(asset_blocks),
+        "report_json": path,
+        "report_md": md_path,
+        "generated_at": data.get("generated_at"),
+        "samples": (
+            field_drift
+            + [f"身份未锁 {f.get('clip_id')}: {f.get('code')}" for f in identity_blocks]
+            + [f"资产丢失 {f.get('clip_id')}: {f.get('code')}" for f in asset_blocks]
+        )[:6],
+        # 契约可有意收紧/细化，只有 verdict=block（光位锚/轴线漂移、身份未锁、资产丢失）才算未继承。
+        "inherited": verdict != "block",
+    }
+
+
 def build_plan(root: str, ep: str, *, regen_mode: Optional[str] = None) -> Dict[str, Any]:
     root = os.path.abspath(root)
     ep = normalize_episode(ep)
@@ -1027,8 +1141,17 @@ def build_plan(root: str, ep: str, *, regen_mode: Optional[str] = None) -> Dict[
     if ep not in rows:
         raise SystemExit(f"未在 _进度.md 找到 {ep}")
     row = rows[ep]
-    until_key = current_stage_key(root, ep, header, row)
+    progress_until_key = current_stage_key(root, ep, header, row)
+    image_qc_context = (
+        load_image_qc_context(root, ep)
+        if stage_index(progress_until_key) >= stage_index("image")
+        else None
+    )
+    qc_forces_image_repair = image_qc_requires_repair(image_qc_context)
+    until_key = "image" if qc_forces_image_repair and stage_index(progress_until_key) > stage_index("image") else progress_until_key
     current_todo = current_todo_context(root, ep, header, row)
+    if qc_forces_image_repair:
+        current_todo = image_qc_repair_todo(root, ep, row, image_qc_context or {})
     relevant_skills = relevant_skills_for_stage(until_key)
     old = load_snapshot(root)
     old_skills = snapshot_skills(old) if old else set()
@@ -1056,6 +1179,11 @@ def build_plan(root: str, ep: str, *, regen_mode: Optional[str] = None) -> Dict[
     shared_lock_changed = shared_lock_production_touched(changed_files)
     shared_lock_reuse = image_in_scope and not shared_lock_changed
     notes: List[str] = []
+    if qc_forces_image_repair and progress_until_key != until_key:
+        notes.append(
+            f"image_qc 硬阻断已将当前生产阶段从 `{progress_until_key}` 拉回 `{until_key}`；"
+            "先做 n2d-image 返修并重跑 image_qc，不进入下游。"
+        )
     if not old:
         notes.append("当前作品没有 skill_update_snapshot 基线；首次无法检测变更，请先 record 建立内容快照基线。")
     if baseline_stale:
@@ -1106,15 +1234,16 @@ def build_plan(root: str, ep: str, *, regen_mode: Optional[str] = None) -> Dict[
     else:
         execution_steps = []
     commands = commands_from_steps(execution_steps)
-    image_qc_context = (
-        load_image_qc_context(root, ep)
-        if stage_index(until_key) >= stage_index("image")
-        else None
-    )
-    # 三大健康检测（除 skill 变更外）：源小说漂移 / 三帧契约遵循 / 图片一致性。
+    # 四项健康检测（除 skill 变更外）：源小说漂移 / 三帧契约遵循 / 图片一致性 / 出图→出视频契约继承。
     source_drift = detect_source_drift(root)
     three_frame = check_three_frame_compliance(root, ep)
     image_consistency = summarize_image_consistency(image_qc_context)
+    # 契约继承（参考帧契约+文字 prompt 是否正确传到出视频侧）：到 video_prompt 阶段才有可检对象。
+    contract_inheritance = (
+        check_contract_inheritance(root, ep)
+        if stage_index(progress_until_key) >= stage_index("video_prompt")
+        else None
+    )
     if source_drift and source_drift.get("status") == "drift":
         chs = source_drift.get("changed_chapters") or source_drift.get("changed") or []
         notes.append(
@@ -1150,6 +1279,28 @@ def build_plan(root: str, ep: str, *, regen_mode: Optional[str] = None) -> Dict[
                 f"hard_blocks={image_consistency.get('hard_blocks')}）：见 `{image_consistency.get('report_md')}`，"
                 "崩脸/服装/场景/接缝需重出受影响镜。"
             )
+    if contract_inheritance and not contract_inheritance.get("inherited"):
+        st = contract_inheritance.get("status")
+        if st == "missing":
+            notes.append(
+                "出图→出视频视觉契约继承尚未校验：缺 "
+                f"`{contract_inheritance.get('report_json')}`。先跑 "
+                f"`python3 skills/n2d-video/scripts/inherit_contract.py <作品根> {ep}`，"
+                "校验参考帧契约（色调/光位锚/轴线视线/角色状态演进/景别）+ 文字 prompt 是否从出图侧正确传到出视频侧、"
+                "命名角色镜是否锁脸、出图绑定的场景/道具/特效资产是否丢失，再出视频。"
+            )
+        elif st == "error":
+            notes.append(
+                f"契约继承报告不可读（{contract_inheritance.get('error')}）；"
+                "重跑 `inherit_contract.py` 再判，不能当作已继承。"
+            )
+        else:
+            notes.append(
+                f"出图→出视频契约继承存在 block（verdict={contract_inheritance.get('verdict')}，"
+                f"字段漂移 {contract_inheritance.get('field_blocks')}·身份未锁 {contract_inheritance.get('identity_blocks')}·"
+                f"资产丢失 {contract_inheritance.get('asset_blocks')}）：见 `{contract_inheritance.get('report_md')}`，"
+                "先按出图侧原文修 `出视频/prompt/00_总览.md` 的视觉契约/补 01_clips.md 的身份锚点与物料绑定，再出视频。"
+            )
     return {
         "kind": KIND_PLAN,
         "created_at": now_iso(),
@@ -1176,6 +1327,7 @@ def build_plan(root: str, ep: str, *, regen_mode: Optional[str] = None) -> Dict[
         "source_drift": source_drift,
         "three_frame_compliance": three_frame,
         "image_consistency": image_consistency,
+        "contract_inheritance": contract_inheritance,
         "execution_steps": execution_steps,
         "commands": commands,
         "notes": notes,
@@ -1353,6 +1505,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     f"→ {todo.get('skill')}"
                 )
             sd, tf, ic = plan.get("source_drift"), plan.get("three_frame_compliance"), plan.get("image_consistency")
+            ci = plan.get("contract_inheritance")
             health = []
             if sd:
                 health.append(f"源={sd.get('status')}")
@@ -1365,6 +1518,11 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     health.append(f"图片={ic.get('status')}")
                 else:
                     health.append("图片=" + ("一致" if ic.get("consistent") else f"硬阻断{ic.get('hard_blocks')}"))
+            if ci:
+                if ci.get("status") in {"missing", "error"}:
+                    health.append(f"契约={ci.get('status')}")
+                else:
+                    health.append("契约=" + ("已继承" if ci.get("inherited") else "block"))
             if health:
                 print("  health: " + " | ".join(health))
             for note in plan.get("notes", []):

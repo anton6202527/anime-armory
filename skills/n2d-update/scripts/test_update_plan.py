@@ -80,6 +80,52 @@ def test_plan_reports_current_todo_even_when_video_started(tmp_path, monkeypatch
     assert "最远已开始产物 `video`" in md
 
 
+def test_plan_current_todo_returns_to_image_when_image_qc_blocks(tmp_path):
+    root = make_project(tmp_path)
+    progress = root / "_进度.md"
+    text = progress.read_text(encoding="utf-8")
+    progress.write_text(
+        text.replace(
+            "| 第1集 | 1000 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ | 57/68 | ⬜ | ⬜ | ⬜ |",
+            "| 第1集 | 1000 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 35/35 | ⬜ | ⬜ | ⬜ |",
+        ),
+        encoding="utf-8",
+    )
+    up.record(str(root), ["第1集"])
+    qc_dir = root / "生产数据" / "image_qc" / "第1集"
+    qc_dir.mkdir(parents=True)
+    (qc_dir / "image_qc_第1集.json").write_text(json.dumps({
+        "qc_environment": {
+            "precision_level": "full",
+            "python": "/env/bin/python",
+            "jump_to_stage": "image",
+            "jump_reason": "image_qc 有硬阻断",
+        },
+        "summary": {
+            "verdict": "block",
+            "hard_blocks": 18,
+            "advisory": 13,
+            "degraded": False,
+        },
+    }, ensure_ascii=False), encoding="utf-8")
+
+    plan = up.build_plan(str(root), "第1集")
+
+    assert plan["current_stage"] == "image"
+    assert plan["rerun_until"] == "image"
+    assert plan["current_todo"]["stage_key"] == "image"
+    assert plan["current_todo"]["label"] == "出图返修"
+    assert plan["current_todo"]["skill"] == "n2d-image"
+    assert plan["current_todo"]["status"] == "35/35"
+    assert "hard_blocks=18" in plan["current_todo"]["note"]
+
+    md = up.render_markdown(plan)
+    assert "当前待办：`出图返修`" in md
+    assert "出图 = `35/35`" in md
+    assert "当前阶段：`image`" in md
+    assert "从 `video_prompt` 拉回 `image`" in md
+
+
 def test_plan_detects_snapshot_change_and_bounds_to_current_stage(tmp_path, monkeypatch):
     root = make_project(tmp_path)
     old = up.snapshot_for_skills(up.REPO_ROOT, up.REPO_SKILLS, up.relevant_skills_for_stage("image"))
@@ -684,3 +730,95 @@ def test_json_output_not_polluted_by_smart_suggestions(tmp_path, capsys):
     out = capsys.readouterr().out
     data = json.loads(out)
     assert data["smart_suggestions"][0]["type"] == "upgrade_identity"
+
+
+def _write_contract_report(root: Path, ep: str, report: dict):
+    d = root / "生产数据"
+    d.mkdir(parents=True, exist_ok=True)
+    (d / f"contract_inheritance_{ep}.json").write_text(
+        json.dumps(report, ensure_ascii=False), encoding="utf-8")
+
+
+def _project_at_video_prompt(tmp_path: Path) -> Path:
+    """像 make_project，但第1集已推进到 视频prompt 阶段（出图完成）。"""
+    root = tmp_path / "制漫剧" / "测试剧V"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("- 制作模式：配音先行\n", encoding="utf-8")
+    (root / "_进度.md").write_text(
+        "\n".join([
+            "# 测试剧V — 生产进度",
+            "",
+            "| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |",
+            "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|",
+            "| 第1集 | 1000 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 3/8 | ⬜ | ⬜ |",
+        ]) + "\n",
+        encoding="utf-8",
+    )
+    return root
+
+
+def test_check_contract_inheritance_states(tmp_path):
+    root = make_project(tmp_path)
+    # 无报告 → missing（已到 video_prompt 时才会被 build_plan 取用）
+    miss = up.check_contract_inheritance(str(root), "第1集")
+    assert miss["status"] == "missing" and miss["inherited"] is False
+    # block 报告 → inherited False，带漂移/身份样本
+    _write_contract_report(root, "第1集", {
+        "summary": {"pass": 3, "warn": 1, "block": 1},
+        "fields": [{"field": "场景光位锚", "severity": "block", "status": "changed"}],
+        "identity_handoff": {"findings": [{"severity": "block", "clip_id": "Clip_002", "code": "FACE_UNLOCKED"}]},
+        "asset_handoff": {"findings": [{"severity": "warn", "clip_id": "Clip_003", "code": "ASSET_ID_MISSING"}]},
+        "verdict": "block",
+    })
+    blk = up.check_contract_inheritance(str(root), "第1集")
+    assert blk["status"] == "ok" and blk["inherited"] is False
+    assert blk["field_blocks"] == 1 and blk["identity_blocks"] == 1
+    assert any("光位锚" in s for s in blk["samples"])
+    # pass 报告 → inherited True
+    _write_contract_report(root, "第1集", {
+        "summary": {"pass": 5, "warn": 0, "block": 0},
+        "fields": [], "identity_handoff": {"findings": []}, "asset_handoff": {"findings": []},
+        "verdict": "pass",
+    })
+    ok = up.check_contract_inheritance(str(root), "第1集")
+    assert ok["inherited"] is True
+
+
+def test_check_contract_inheritance_unreadable(tmp_path):
+    root = make_project(tmp_path)
+    d = root / "生产数据"; d.mkdir(parents=True, exist_ok=True)
+    (d / "contract_inheritance_第1集.json").write_text("{bad json", encoding="utf-8")
+    r = up.check_contract_inheritance(str(root), "第1集")
+    assert r["status"] == "error" and r["inherited"] is False
+
+
+def test_contract_inheritance_none_before_video_prompt(tmp_path):
+    # 默认工程第1集还在 出图 57/68（未到 video_prompt）→ 不取契约继承
+    root = make_project(tmp_path)
+    _write_contract_report(root, "第1集", {"summary": {}, "verdict": "pass"})
+    plan = up.build_plan(str(root), "第1集")
+    assert plan["contract_inheritance"] is None
+
+
+def test_build_plan_surfaces_contract_missing(tmp_path):
+    root = _project_at_video_prompt(tmp_path)
+    plan = up.build_plan(str(root), "第1集")
+    ci = plan["contract_inheritance"]
+    assert ci and ci["status"] == "missing"
+    assert any("契约继承尚未校验" in n for n in plan["notes"])
+
+
+def test_build_plan_surfaces_contract_block(tmp_path):
+    root = _project_at_video_prompt(tmp_path)
+    _write_contract_report(root, "第1集", {
+        "summary": {"pass": 2, "warn": 0, "block": 1},
+        "fields": [{"field": "场景轴线视线", "severity": "block", "status": "changed"}],
+        "identity_handoff": {"findings": []}, "asset_handoff": {"findings": []},
+        "verdict": "block",
+    })
+    plan = up.build_plan(str(root), "第1集")
+    ci = plan["contract_inheritance"]
+    assert ci["inherited"] is False and ci["field_blocks"] == 1
+    assert any("契约继承存在 block" in n for n in plan["notes"])
+    md = up.render_markdown(plan)
+    assert "契约继承" in md

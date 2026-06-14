@@ -1,6 +1,6 @@
 ---
 name: n2d-video
-description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) is done, run/consume n2d-model-router, generate per-Clip video prompts from 故事板.md + video_model_routes.json, machine-check 出图→出视频 视觉契约继承 (scripts/inherit_contract.py 逐字段 Diff，光位锚/轴线漂移=block), then invoke a local video-gen CLI/API channel (Dreamina/即梦, Kling, Veo/Gemini, Seedance, manual) or guide manual generation. Writes progress to `_进度.md` (视频 column). Use when asked to 出视频, 视频 prompt, 生成视频, 跑视频, image2video, model routing, 契约继承校验, or anything video-generation-related for a n2d project. Triggers 出视频, 视频prompt, 图生视频, image2video, 即梦视频, 可灵视频, Veo, Seedance, 运镜, 模型路由, 后端路由, 契约继承.
+description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) is done, run/consume n2d-model-router, generate per-Clip video prompts from 故事板.md + video_model_routes.json, machine-check 出图→出视频 视觉契约继承 (scripts/inherit_contract.py 逐字段 Diff，光位锚/轴线/角色状态演进漂移=block) and 跨情绪近景首尾双帧契约 (expression_span=大 近景须 need_endframe), then invoke a local video-gen CLI/API channel (Dreamina/即梦, Kling, Veo/Gemini, Seedance, manual) or guide manual generation. Writes progress to `_进度.md` (视频 column). Use when asked to 出视频, 视频 prompt, 生成视频, 跑视频, image2video, model routing, 契约继承校验, or anything video-generation-related for a n2d project. Triggers 出视频, 视频prompt, 图生视频, image2video, 即梦视频, 可灵视频, Veo, Seedance, 运镜, 模型路由, 后端路由, 契约继承.
 ---
 
 # n2d-video — Stage 5：视频 prompt + 生视频
@@ -135,13 +135,13 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 python3 skills/n2d-video/scripts/inherit_contract.py <作品根> 第N集
 ```
 
-逐字段归一化比对两侧契约，报告落 `生产数据/contract_inheritance_第N集.json/.md`：**光位锚/轴线漂移或视频侧缺字段 = block（exit 1），必须按出图侧原文修复后再出视频**；色调/状态/景别漂移 = warn（确认是否有意改写）；出图侧本来就缺 = 提示不拦（上游问题，回 `n2d-image` 补）。
+逐字段归一化比对两侧契约，报告落 `生产数据/contract_inheritance_第N集.json/.md`：**光位锚/轴线/角色状态演进漂移或视频侧缺字段 = block（exit 1），必须按出图侧原文修复后再出视频**（角色状态演进=剧情状态锁，视频侧改写=提前泄露 觉醒/伤/变身=连续性+剧透双杀，2026-06 由 warn 升 block）；色调/景别漂移 = warn（确认是否有意改写）；出图侧本来就缺 = 提示不拦（上游问题，回 `n2d-image` 补）。
 
 > **同一条 Diff 还把「出图首帧脸 → 出视频脸」纳入身份交接契约校验（②·脸的契约级 Diff）**：视觉契约五字段管色调/光位/轴线/状态/景别，**不含脸**；inherit_contract 再读 `出视频/第N集/prompt/video_model_routes.json` 的每个命名角色镜（`identity_requirement != none`），核验其 `01_clips.md` 逐镜 prompt 是否**真锁了身份**（既有「身份锁定/身份注册层」声明、又落到具体锚点 `CHAR_xx/定妆_/reference_group/character_id/face_lock/脸部特写`）。命名角色镜缺逐镜 prompt 或未锁身份 = **block**（首帧脸→视频脸无契约锚，出视频必脸漂）。这补上了 router 只「要求」锁脸、却没人核验逐镜 prompt 是否「兑现」的缺口。
 
 > **同一条 Diff 还做「物料约束继承」（C·场景/道具/服装/特效逐镜资产交接）**：出图逐镜 `资产引用注册层` 绑定的 `LOC_xx/PROP_xx/OUTFIT_xx/VFX_xx`，出视频对应 Clip 的逐镜 prompt 不得丢失——丢了执行端取不到该资产的 `reference_group/constraints/drift_forbidden`，场景/道具/特效跨镜必漂。inherit_contract 逐 Clip 对账两侧资产 id 集合：出视频该 Clip 整块缺失 = block（`asset_clip_prompt_missing`）；资产 id 在出视频该镜丢了 = warn（`asset_handoff_dropped`，可能是记忆遮罩/转场的有意松引用，交人确认、补回 id 让结构/颜色/光位锚自动继承）。报告写进同一份 `contract_inheritance_第N集.json/md` 的 `asset_handoff` 段。
 
-> **这套契约继承机检已接进 video_preflight/video gate 退出码**（`dashboard.py gate --stage video_preflight` 和生成后 `--stage video` 都会内部调 `inherit_contract.diff_contracts`，光位锚/轴线漂移→BLOCK），不再只靠这条裸命令的"自觉跑"——裸命令用于单独复核。**原生音画(native_av)不绕过这条链**：native_av 说话镜仍以出图首帧 PNG 作图生视频引导，像素层五字段契约链与配音先行模式完全一致，gate 同样强制；只有"纯文生视频同步音画、无首帧 PNG"的特殊后端才不适用（此类镜须在总览标注并降级为运动层约束）。
+> **这套契约继承机检已接进 video_preflight/video gate 退出码**（`dashboard.py gate --stage video_preflight` 和生成后 `--stage video` 都会内部调 `inherit_contract.diff_contracts`，光位锚/轴线/角色状态演进漂移→BLOCK），不再只靠这条裸命令的"自觉跑"——裸命令用于单独复核。**原生音画(native_av)不绕过这条链**：native_av 说话镜仍以出图首帧 PNG 作图生视频引导，像素层五字段契约链与配音先行模式完全一致，gate 同样强制；只有"纯文生视频同步音画、无首帧 PNG"的特殊后端才不适用（此类镜须在总览标注并降级为运动层约束）。
 
 同时必须包含 **本集基础视觉风格契约**（继承出图总览，不重发明）：
 - 风格名：来自 `_设置.md` 的 `基础视觉风格`。

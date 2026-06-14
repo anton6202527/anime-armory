@@ -116,6 +116,11 @@ NOVEL_PRODUCT_KINDS = {
 # ── 章节文件命名约定 ──────────────────────────────────────────────────────────
 CHAPTER_FILE_PATTERN = r"第(\d+)章" # used by project_io
 
+# 正文里识别章节标题的单一真值源（第N章/回/节/卷，支持中文数字）。
+# extract_anchors / novel-continue 等切分原文均 import 此处，勿各写一份。
+import re as _re
+CHAPTER_RE = _re.compile(r"^\s*第\s*[0-9零一二三四五六七八九十百千两]+\s*[章回节卷]", _re.MULTILINE)
+
 def get_product_path(root: str, kind: str) -> str:
     if kind not in NOVEL_PRODUCT_KINDS:
         raise ValueError(f"Unknown product kind: {kind}")

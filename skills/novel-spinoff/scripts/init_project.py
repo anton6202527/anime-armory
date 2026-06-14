@@ -31,7 +31,9 @@ if LIB not in sys.path:
 from novel_contract import (base_meta, build_progress_markdown, routing_stages,
                             SCALE_CHOICES, scale_profile, detect_rights_status,
                             docx_to_txt, write_project_settings, demo_chapters_for,
-                            normalize_scale)
+                            normalize_scale, SCALE_PROFILES, parse_outputs)
+
+SCALE_PROFILE = SCALE_PROFILES  # scale-band 契约：test_scale_contract 校验其与规模档一致
 
 # 让本脚本能 import 同目录下 extract_anchors
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -194,7 +196,7 @@ def main():
     profile = scale_profile(scale)
     if args.target_chapters is not None:
         profile["target_chapters"] = args.target_chapters
-    outputs = [s.strip() for s in args.outputs.split(",")]
+    outputs = parse_outputs(args.outputs)
     demo_chapters = demo_chapters_for(profile["target_chapters"])
     
     meta = base_meta("spinoff", outputs=outputs, rights_status=rights_status)

@@ -40,7 +40,7 @@ if COMMON not in sys.path:
 from n2d_contract import shared_asset_path  # noqa: E402  共享定妆目录单一真值源
 
 DEFAULT_MARGIN = 0.08
-IDENTITY_REF_RE = re.compile(r"`?(CHAR_[A-Za-z0-9_]+(?:/[^`\s，；、*]+)?\*?)`?")
+IDENTITY_REF_RE = re.compile(r"`?(CHAR_[A-Za-z0-9_]+\*?(?:/[^`\s，；、*]+)?\*?)`?")
 
 # ── Pillow 降级档（无 insightface 时的基础机检）────────────────────────────
 # 只做四件事：图存在 / 可解码 / 分辨率达标 / 清晰度（PIL+stdlib 近似 Laplacian 方差）。
@@ -379,14 +379,21 @@ def primary_identity_chars(root: str, section: str) -> List[str]:
     registered = registered_character_assets(root)
     if not asset_by_ref or "资产身份注册层" not in section:
         return []
+    raw_refs = IDENTITY_REF_RE.findall(section)
+    starred = [raw for raw in raw_refs if "*" in raw]
     refs: List[str] = []
-    for raw in IDENTITY_REF_RE.findall(section):
-        ref = raw.rstrip("*")
+    for raw in (starred or raw_refs):
+        ref = normalize_identity_ref(raw)
         asset = asset_by_ref.get(ref)
         is_char = asset in registered if registered else is_character_asset(asset)
         if asset and is_char and asset not in refs:
             refs.append(asset)
     return refs
+
+
+def normalize_identity_ref(ref: str) -> str:
+    """Prompt identity ref → registry key, accepting `CHAR_01/常态*` and legacy `CHAR_01*/常态`."""
+    return str(ref or "").strip().replace("*/", "/").rstrip("*")
 
 
 def shot_character_map(root: str, ep: str) -> Dict[str, List[str]]:

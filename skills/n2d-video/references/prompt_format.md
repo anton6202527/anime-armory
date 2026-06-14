@@ -313,7 +313,7 @@ native audio policy: audio_intent=none by default; for low-risk ambience/native 
 
 > 近景人物在跨情绪表情变化时（平静→爆哭、隐忍→暴怒、惊愕→狂喜）最容易**脸被表情带着重画**——五官比例、脸型、眼距随表情拉伸漂移，剪起来像换了个人。与打斗"命中类必用首尾帧"同构，这类镜走**首尾双帧只插值**工艺。要点：
 
-- **判定**：本镜 `表情幅度=大`（表情锚跨情绪）且为 CU/ECU/MCU/反打/说话镜 → 命中本工艺。`表情幅度=微/中` 的同情绪变化（中性→微笑、皱眉→蹙紧）不必拆，单首帧 + `锁脸不锁情` 约束即可。
+- **判定**：本镜 `表情幅度=大`（表情锚跨情绪）且为 CU/ECU/MCU/反打/说话镜 → 命中本工艺。`表情幅度=微/中` 的同情绪变化（中性→微笑、皱眉→蹙紧）不必拆，单首帧 + `锁脸不锁情` 约束即可。**机检闸门（2026-06）**：把跨度结构化进 `storyboard.json continuity.expression_span ∈ {微,中,大}`（opt-in，缺=不追踪）后，`gate.py --stage video_preflight/video` 强制——`expression_span=大` 的近景/特写/反打镜必须 `need_endframe=true`（有止表情尾帧可插值），否则 BLOCK；其能否被路由后端原生消费（frames2video/multiframe）由 `check_route_frame_capability` 对高风险镜升 BLOCK 兜底。靠人读风险表自检的旧口径已升级为机检。
 - **首尾双帧只插值（最值钱一条）**：首帧=**起表情定妆**（如中性脸）、尾帧=**止表情定妆**（如含泪脸），二者**同一张脸、只差表情肌肉**——由 `n2d-image` 在该镜出一对同源表情帧（`镜头N_expr_start.png` / `镜头N_expr_end.png`，或复用 `identity_registry.reference_group.expressions` 里对应情绪图作尾帧）。走 `mode=frames2video`，让 AI 只做**起表情→止表情的帧间插值**，不自由生成中间表情，从根上锁住脸不变形。平台不支持双帧时降级：单首帧 + 强 `end_state` 文字写死止表情 + 表情幅度压到「中」。
 - **锁脸不锁情写进 negative**：双帧之间唯一允许变化的是面部肌肉；脸型/五官比例/眼距/鼻梁/下颌/发际线/痣疤 must hold，越大表情越要重申。
 - **运镜让位**：大表情镜尽量**固定或极缓推**，不要叠大幅运镜——运镜+大表情同时变会放大脸漂。情绪靠表情和景别给，不靠甩镜。

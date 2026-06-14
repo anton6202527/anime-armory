@@ -42,29 +42,29 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 >
 > **开局能力自检（doctor·E2）**：接手一个作品后、跑重活前，先 `python3 skills/n2d/doctor.py [作品根]` 一次性摊开本机精度档——脸部机检 `full|degraded|none`（缺 insightface→近景自动转人审）、ffmpeg、配音后端（缺克隆环境→只能 `say` 占位·正式出图前必重配）、所选生图后端连通、生视频关键帧能力档。这些机检本会**静默降级**，doctor 把它前移到开局，让代理提前规划验收方式（近景要不要预留人审、先占位后重配），少在花钱工位才发现降级。只探不改、不花钱。
 
-> **生产数据仪表盘 + ROI（P0 横切）**：阶段完成后不只回写 `_进度.md`，还要调用 `n2d-dashboard` 写 `生产数据/production_events.jsonl` 并刷新 `dashboard.json` / `dashboard.md`。`_进度.md` 回答“哪步完成了”，仪表盘回答“每分钟成本、每集耗时、一次通过率、重抽率、QA 阻断、投放回收是否支撑工业级”。每次出图/出视频/配音/合成/审查都要入账；上线后把 `platform_metrics.*` 或 `record --event release` 补进去，不能只停在“能生成”。
-
 > **工业化北极星（2026-06-09 口径）**：n2d 的目标不是承诺“一键无人值守百集”，而是做到**工作室级轻工业化**：可复制、可度量、可批量、可回滚、可数据迭代。放量前必须先用第 1 集打样锁定风格/定妆/声音/模型路由，再用 `n2d-batch + n2d-dashboard + n2d-score + n2d-review-ui` 小批量验证成本、通过率、漂移、QA 阻断和投放回收；任何红灯都先回产线修，不盲目追加集数。
 
 > **2026 市场现实 → 两条运营铁律（联网基准·见 `n2d-dashboard/references/industry_benchmark.json`）**：
 > 1. **速度即生死（R3·爆款新鲜期缩至 ~3 周·ROI 中位 ~1.1）**：抢新鲜趋势窗口比打磨更值钱。**立项即先跑 `n2d-feedback/scripts/differentiate.py`** 从战绩库反推未做烂的差异化方向（题材×开场×结尾），再让 `novel-create/novel-title/novel-score` 据此立项；打样与抢先**并行**（第 1 集打样的同时，用 `n2d-batch` 把后续集的文字/出图 prompt 先备好），不串行等。成本侧守 dashboard 的 `cost_per_finished_min`（全链行业带 400-1000 元/分）与 `recoup_ratio`，红线先治。
 > 2. **Agent 自动串接，人只做决策（I2·行业 Agent 取代工具链）**：确定性步骤（机检/规划/记账/gate）应由代理**自动链式跑完**，只在**决策点 + 花钱点 + 合规点**停下问人（见 `skills/n2d/references/选择点与偏好.md`「AI 代理交互节点」）。不要把割裂的 CLI 命令甩给用户手敲；`anchor_planner → 确认 → n2d-image`、`gate → score → review-ui` 这类"机器算完接语义判断"的组合，代理应在后台一气呵成，用户感受到的是连贯创作助理。
 
-> **角色身份闭环（P0/P1 横切）**：用户要“identity_registry / Face Lock / Character ID / LoRA / reference group / 跨集漂移报表”时，调 `n2d-identity`。它读取 `出图/共享/identity_registry.json`，生成 `生产数据/identity_adapter_matrix.json/md` 和 `identity_drift_report.json/md`。出图/出视频/审片只从这套矩阵取身份 binding，不在 prompt 现场手写临时 ID。
+### 横切 skill 速查（非必经 · 全文见 [`references/横切skill地图.md`](references/横切skill地图.md)）
 
-> **LoRA 生命周期（P2/P1 横切）**：用户要“LoRA 自动化 / LoRA 训练 / LoRA 部署 / 第三代一致性 / safetensors 注册”时，调 `n2d-lora`。它只服务核心长线角色，管理 `设定库/lora/<CHAR_ID>/<形态>/` 下的数据集、训练任务、验证报告和 registry ready 回写；验证未通过不能写 `lora.status=ready`。
+主干六阶段之外的横切能力，按用户意图点名触发即调。**其中的确定性前置（gate / model-router / 身份矩阵刷新 / 合规检查）已由编排器 `run.py next` 自动跑进每个 stage 的 prework**（见下「读进度 → 路由」），这里只在用户**显式**要某能力、或要理解其完整职责时用：
 
-> **合规与版权前置（P0 横切）**：用户要“合规前置 / 版权前置 / 角色授权 / 声音克隆授权 / 平台审核 / 出海本地化”时，调 `n2d-compliance`。它生成/检查 `合规/compliance_manifest.json`，作为 `n2d-review gate` 的硬输入；image 前阻断源文本/改编权/角色肖像授权缺口，video 前阻断声音克隆缺口，compose/review 前阻断平台审核和出海本地化缺口。合规不可沉默沿用，规则 profile 必须带检查日期。**AI 标识/AI 披露/水印不再由本流水线强制——该合规义务移到工具之外处理。**
+| 触发意图 | 调 | 一句话 |
+|---|---|---|
+| 生产数据 / ROI / 成本 / 通过率 / 重抽率 / 监控告警 | `n2d-dashboard` | 阶段完成必入账（不只回写 `_进度.md`）；回答工业级成本/回收 |
+| 身份闭环 / identity_registry / Face Lock / Character ID / 跨集漂移报表 | `n2d-identity` | 出图/出视频/审片的身份 binding 真值源 |
+| LoRA 训练 / 部署 / 第三代一致性 / safetensors 注册 | `n2d-lora` | 仅核心长线角色；验证未过不写 `ready` |
+| 合规 / 版权 / 角色授权 / 声音克隆 / 平台审核 / 出海 | `n2d-compliance` | 付费 gate 硬输入；缺口阻断 image/video/compose |
+| 多集批跑 / 排队 / 并发 / 重试 / 只重跑受影响镜头 | `n2d-batch` | 按 `_进度.md` 生成队列；`--rerun-from` 最小返工 |
+| 模型路由 / 按镜头选视频后端 / primary·fallback | `n2d-model-router` | 出视频前置；默认按镜头路由 |
+| 机器分 / 自动审片评分 / 低分回流 | `n2d-score` | 七维分，默认阈值 85，低分入 batch |
+| 人审 UI / 无限画布 / 可视化审片 | `n2d-review-ui` | 静态画布：首尾帧/clip/接缝/QA flag/机器分 |
+| 投放回灌 / 留存追更 / 同集 A/B / 更新导演节奏 | `n2d-feedback` | 平台指标反哺，自动抽创意标签 |
 
-> **批量任务队列（P1 横切）**：用户要“多集一起跑 / 自动排队 / 并发 / 失败重试 / 只重跑受影响镜头 / worker 自动执行队列”时，调 `n2d-batch`。它按 `_进度.md` 生成 `生产数据/batch_queue.json`，执行者用 `claim` 占并发槽、用 `mark` 回写 pass/fail；配置 `生产数据/batch_runner.json` 后，`runner.py` 可自动 claim、执行配置命令、写 dashboard telemetry、回写状态。定妆变更或审查回流用 `--rerun-from image|video|compose --affected-shot/--affected-artifact` 做最小范围重跑。
-
-> **模型适配层（P1 横切）**：路由到 `n2d-video` 前，先调 `n2d-model-router` 生成 `出视频/第N集/prompt/video_model_routes.json/md`。`视频模型路由=自动按镜头路由` 为默认：打斗、追逐、对话反打、飞行、空镜、法术爆发、亲密互动、拥抱拉扯、多人同框、群像站位按模型能力选 primary/fallback；`生视频模型` 只做普通镜/兜底，不再固定全片。`生视频渠道` 只决定实际通过哪个产品/API/CLI 调用。若用户明确账号/预算限制只能用单模型，才写 `视频模型路由=固定生视频模型`，但每 Clip 仍要写模型路由字段和 fallback/degrade plan。旧值 `固定生视频AI` 兼容。
-
-> **自动审片评分（P2 横切）**：用户要“机器分 / 自动审片评分 / 低于阈值自动回流 / 图像相似度 / 字幕 OCR / 口型检测 / 成片节奏密度”，或完成一次成片/阶段审查后，调 `n2d-score`。它把 `n2d-review` 机检、一致性审查、`n2d-dashboard` 阻断和 `visual_checks.py` 汇总成七维分：角色一致性、服装一致性、场景一致性、字幕正确性、音画同步、节奏密度、风格一致性。默认阈值 `85`；低分输出 `auto_return_tasks`，加 `--enqueue-low` 可直接写入 `n2d-batch` 返工队列。
-
-> **人审可视化 UI（P2 横切）**：用户要“人审 UI / 审片 UI / 无限画布 / 可视化审片 / 看首帧尾帧 clip 接缝定妆 QA flag 机器分”时，调 `n2d-review-ui`。它消费 `storyboard.json`、出图首尾帧、出视频 clip、`identity_registry`、`n2d-score` 输出和 score inputs，生成 `生产数据/review_ui_第N集.html/json`；先用机器分和 QA flag 筛 block/warn，再在画布里逐接缝、逐 clip 人判。
-
-> **投放数据回灌（P2 横切）**：用户要“平台数据反哺 / 投放数据回灌 / 哪种开场留存高 / 哪类 cliffhanger 追更高 / 镜头密度导致跳出 / 自动提取导演标签 / 同集开场封面标题集尾 A/B”，调 `n2d-feedback`。它读取 `platform_metrics`，默认从 `storyboard.json` 自动抽取 `creative_features`（opening/cliffhanger/镜头密度/钩子间隔），也支持同一集多版本 `ab_test_id + variant_id`，比较 `opening_variant / cover_variant / cliffhanger_cut_variant / title_variant` 的同集 paired lift；生成 `生产数据/platform_feedback.json/md`，并可用 `--update-guide` 更新 `n2d/references/导演节奏.md` 的数据化快照。手工 `creative_features` 可覆盖自动标签；样本不足只观察。
+> 完整职责、输入/产物、命令示例见 [`references/横切skill地图.md`](references/横切skill地图.md)；底部「子 skill 速查」表含各自产物路径。
 
 > **配音后端是关键选择点（首跑前透露一次）**：`n2d-voice` 多后端——① macOS `say`=**占位专用**（快，但时长不准，仅供出图前 rough timing）；② CosyVoice/GPT-SoVITS（本地克隆，真实时长）；③ MiniMax/火山（云，速度快）。**核心铁律：占位时长 ≠ 真实时长**，用占位定稿镜头/出视频会大返工。推荐 n2d-voice 时带上后端建议（如 `--backend=cosyvoice`），别让用户默认落到占位。后端选择记入 `_设置.md` 的 `配音后端`（见 `skills/n2d/references/选择点与偏好.md`）。
 
@@ -242,7 +242,15 @@ python3 skills/n2d-update/scripts/update_plan.py record <作品根> 第N集
 
 ### 读进度 → 路由
 
-> **首选：跑确定性路由脚本**（别靠 LLM 推 16×N 大表，烧上下文且易错）：
+> **首选：跑编排器 `run.py next`**（I2 铁律的落地——一条命令把"找前沿 → 跑确定性前置（doctor / model-router / gate / compliance / 首跑选择探测）→ 停在第一个决策/花钱/合规点"收敛掉，别再手敲那串散装 CLI）：
+> ```bash
+> python3 skills/n2d/run.py next <作品根>          # 最小未完成集：自动跑前置，停在下一个 stop-point，给「下一步动作卡」
+> python3 skills/n2d/run.py next <作品根> 第N集    # 指定集
+> python3 skills/n2d/run.py next <作品根> --json   # 机器可读 NextAction（代理消费 frontier/prework/stop_reason/action_card/gate）
+> ```
+> 它返回的 `stop_reason` ∈ `{needs_agent_gen, needs_payment_confirm, needs_choice, needs_compliance, blocked_by_gate, env_missing, done}`——**代理据此只在"需要脑子/钱包/签字"处停下问人，其余前置已自动跑完**。`blocked_by_gate` 会透传 `return_to_stage`/`findings_path` 指向最小返工。设计契约见 `../../docs/n2d-编排器设计.md`。
+>
+> **底层/手查：确定性路由脚本 `progress.py`**（编排器内部即调它解析前沿；容错或只想看前沿表时直接用，别靠 LLM 推 16×N 大表）：
 > ```bash
 > python3 <skill>/progress.py <作品根>          # 全局：最小未完成集 + 各阶段卡集数 + 推荐命令
 > python3 <skill>/progress.py <作品根> 第N集    # 查指定集所处阶段 + 推荐命令

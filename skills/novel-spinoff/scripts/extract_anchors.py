@@ -20,10 +20,11 @@ import re
 import sys
 from datetime import date
 
-CHAPTER_RE = re.compile(
-    r"^\s*第\s*[0-9零一二三四五六七八九十百千两]+\s*[章回节卷]",
-    re.MULTILINE,
-)
+# 章节标题正则用共享单一真值源（novel/_lib/novel_contract.CHAPTER_RE）
+_LIB = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "novel", "_lib"))
+if _LIB not in sys.path:
+    sys.path.insert(0, _LIB)
+from novel_contract import CHAPTER_RE
 
 # 候选段落上下文窗口（字符）
 CONTEXT_BEFORE = 200
@@ -53,8 +54,13 @@ def split_into_chapters(text):
     for i, m in enumerate(matches):
         start = m.start()
         end = matches[i + 1].start() if i + 1 < len(matches) else len(body)
-        title_line = body[start:body.find("\n", start) if body.find("\n", start) != -1 else end].strip()
-        body_text = body[body.find("\n", start) + 1:end] if body.find("\n", start) != -1 else ""
+        nl = body.find("\n", start)
+        if nl == -1 or nl >= end:
+            title_line = body[start:end].strip()
+            body_text = ""
+        else:
+            title_line = body[start:nl].strip()
+            body_text = body[nl + 1:end]
         chapters.append((i + 1, title_line, body_text))
     return chapters
 

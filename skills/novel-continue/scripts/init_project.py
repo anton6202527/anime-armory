@@ -23,7 +23,8 @@ if LIB not in sys.path:
 
 from novel_contract import (base_meta, build_progress_markdown, routing_stages,
                             SCALE_CHOICES, scale_profile, detect_rights_status,
-                            docx_to_txt, write_project_settings, demo_chapters_for)
+                            docx_to_txt, write_project_settings, demo_chapters_for,
+                            CHAPTER_RE)
 
 
 def words_per_chapter_for(target_platform):
@@ -89,11 +90,9 @@ def main():
         print("[err] --new-chapters 应在 1-100 之间", file=sys.stderr)
         shutil.rmtree(out_root); sys.exit(2)
 
-    # 简单估算原作章节数
-    import re
-    chap_re = re.compile(r"^\s*第\s*[0-9零一二三四五六七八九十百千两]+\s*[章回节卷]")
+    # 简单估算原作章节数（章节标题正则用共享 CHAPTER_RE）
     orig_chapter_count = sum(1 for ln in open(novel_txt, encoding="utf-8")
-                              if chap_re.match(ln))
+                              if CHAPTER_RE.match(ln))
 
     demo = demo_chapters_for(args.new_chapters)
     outputs = [s.strip() for s in args.outputs.split(",")]

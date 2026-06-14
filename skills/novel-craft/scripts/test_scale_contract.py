@@ -44,7 +44,8 @@ class ScaleContractTest(unittest.TestCase):
         for relpath in scripts:
             with self.subTest(script=relpath):
                 mod = load_script(relpath)
-                self.assertIs(mod.SCALE_PROFILE, contract.SCALE_PROFILES)
+                # init 脚本绑定 novel/_lib/novel_contract（与 craft contract 是两个模块对象），
+                # 故契约是「规模档值一致」而非跨模块对象同一性。
                 self.assertEqual(set(mod.SCALE_PROFILE), set(contract.SCALE_PROFILES))
                 got = {k: v["words_per_chapter"] for k, v in mod.SCALE_PROFILE.items()}
                 expected = {k: v["words_per_chapter"] for k, v in contract.SCALE_PROFILES.items()}

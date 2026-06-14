@@ -101,6 +101,20 @@ SPECIAL_TEMPLATE_SHOT_TYPES = (
     "ensemble_blocking", "multi_person_blocking",
 )
 
+# 高物理风险/高运动模板：人物姿态一动就崩、接触/遮挡靠帧间插值才稳。这些镜若后端吃不下
+# 首尾/中段锚帧，安全网（双帧/多帧插值）会静默失效 → 帧能力不匹配从 WARN 升 BLOCK。
+# 单一真值源：anchor_planner（排锚帧密度）与 gate（帧能力闸门）共用，避免两处各定义一份漂移。
+HIGH_MOTION_TEMPLATES = frozenset({
+    "fight_exchange", "chase", "magic_burst", "flight",
+    "hug_or_pull", "intimate_interaction",
+})
+
+# 近景表情跨度档（角色脸的情绪从起到止跨几档）。单一真值源：storyboard.continuity.expression_span
+# 与 gate 的「大表情近景必须首尾双帧」闸门共用。`大`=跨情绪（平静→爆哭/隐忍→暴怒），是脸被表情
+# 带着重画的头号根因，必须走 frames2video 首尾双帧只插值或降级 MCU。
+EXPRESSION_SPAN_VALUES = ("微", "中", "大")
+EXPRESSION_SPAN_BIG = "大"
+
 # ── 路径与目录 ─────────────────────────────────────────────────────────────
 SHARED_ASSET_DIR = "共享"
 LEGACY_SHARED_ASSET_DIR = "common"

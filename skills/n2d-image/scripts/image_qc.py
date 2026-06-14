@@ -47,7 +47,7 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple
 
 # 同家族复用：一致性机检的阈值与数学只在 n2d-review/scripts 维护一份。
 REVIEW_SCRIPTS_DIR = Path(__file__).resolve().parents[2] / "n2d-review" / "scripts"
@@ -257,12 +257,15 @@ def load_registry_forms(root: Path) -> Optional[List[Dict[str, Any]]]:
             key = f"{cid}/{fm}"
             strong_aliases: Set[str] = {cid, key}
             weak_aliases: Set[str] = set(name_aliases)
+            reference_stems: Set[str] = set()
             if asset_key:
                 _add_alias(strong_aliases, asset_key)
                 _add_alias(strong_aliases, f"定妆_{asset_key}")
                 _add_alias(weak_aliases, asset_key.split("_", 1)[0])
             for ref_path in _flatten_reference_paths(form.get("reference_group") or {}):
                 stem = Path(ref_path).stem
+                if ".png" in str(ref_path).lower():
+                    reference_stems.add(stem)
                 _add_alias(strong_aliases, stem)
                 if stem.startswith("定妆_"):
                     _add_alias(strong_aliases, stem.removeprefix("定妆_"))
@@ -278,6 +281,7 @@ def load_registry_forms(root: Path) -> Optional[List[Dict[str, Any]]]:
                 "asset_key": asset_key,
                 "display": display,
                 "ref_count": ref_count,  # 该形态 reference_group 的多角度参考张数（C4：喂全角度组给多参考后端）
+                "reference_stems": reference_stems,
                 "strong_aliases": strong_aliases,
                 "weak_aliases": weak_aliases,
             })
@@ -297,7 +301,7 @@ def registry_ref_counts(forms: Optional[List[Dict[str, Any]]]) -> Dict[str, int]
 # 逐镜块里 `资产身份注册层` 行引用的身份键，形如 `CHAR_01/常态`、`CHAR_SHEN/常态`
 # （反引号包裹）或裸 CHAR_SHEN。多人同框的主角星标（CHAR_SHEN* / CHAR_SHEN/常态*）
 # 是调度标记，不属于 registry id，比较前需剥掉。
-IDENTITY_REF_RE = re.compile(r"`?(CHAR_[A-Za-z0-9_]+(?:/[^`\s，；、*]+)?\*?)`?")
+IDENTITY_REF_RE = re.compile(r"`?(CHAR_[A-Za-z0-9_]+\*?(?:/[^`\s，；、*]+)?\*?)`?")
 TAIL_HANDOFF_FIELDS = ("近景/反打身份锁定", "近景身份锁定", "反打身份锁定", "细粒度身份锁定",
                        "尾帧接力生成方式", "尾帧专用", "尾帧身份", "尾帧重抽提示",
                        "接力身份", "尾帧锁脸")
@@ -305,8 +309,11 @@ TAIL_LOCK_MARKERS = ("尾帧专用", "尾帧身份", "尾帧重抽提示", "接�
 
 
 def normalize_identity_ref(ref: str) -> str:
-    """Prompt identity ref → registry lookup key.  Strips the primary-marker `*`."""
-    return str(ref or "").strip().rstrip("*")
+    """Prompt identity ref → registry lookup key.
+
+    Accepts canonical `CHAR_01/常态*` and legacy hand-written `CHAR_01*/常态`.
+    """
+    return str(ref or "").strip().replace("*/", "/").rstrip("*")
 
 
 def split_shot_blocks(md_text: str) -> List[Dict[str, str]]:
@@ -604,6 +611,84 @@ def _distinct_char_bases(id_refs: Sequence[str]) -> Set[str]:
     return {normalize_identity_ref(r).split("/")[0] for r in (id_refs or []) if r}
 
 
+OUTFIT_TOKEN_GROUPS: Dict[str, Tuple[str, ...]] = {
+    "红衣": ("红衣", "红袍", "赤衣", "绯衣", "朱红宫装", "深红宫装", "红色宫装", "红色破旧宫装"),
+    "白衣": ("白衣", "素衣", "月白", "素白", "白色宫装", "月白旧宫装", "灰白宫装"),
+    "黑衣": ("黑衣", "玄衣", "黑袍", "玄色长袍"),
+    "战甲": ("战甲", "甲胄", "盔甲", "铠甲", "护甲"),
+}
+
+
+def _positive_prompt_text(body: str) -> str:
+    """Strip negative prompt sections before semantic outfit matching."""
+    text = str(body or "")
+    return re.split(r"\*\*?负向\s*prompt|\bnegative\s*prompt", text, maxsplit=1, flags=re.I)[0]
+
+
+def _outfit_groups_in_text(text: str) -> Set[str]:
+    found: Set[str] = set()
+    src = str(text or "")
+    for group, tokens in OUTFIT_TOKEN_GROUPS.items():
+        if any(token and token in src for token in tokens):
+            found.add(group)
+    return found
+
+
+def _form_advertises_outfit_group(form: Dict[str, Any], group: str) -> bool:
+    tokens = OUTFIT_TOKEN_GROUPS.get(group) or ()
+    aliases = sorted((form.get("strong_aliases") or set()) | (form.get("weak_aliases") or set()))
+    haystack = " ".join([
+        str(form.get("form") or ""),
+        str(form.get("asset_key") or ""),
+        str(form.get("display") or ""),
+        " ".join(str(s) for s in form.get("reference_stems") or []),
+        " ".join(str(a) for a in aliases),
+    ])
+    return any(token and token in haystack for token in tokens)
+
+
+def _lint_outfit_form_binding(label: str, body: str, id_refs: Sequence[str],
+                              registry_forms: Optional[List[Dict[str, Any]]]) -> List[Dict[str, str]]:
+    """Single-character costume/form guard.
+
+    If a shot explicitly asks for a durable outfit form (红衣/白衣/战甲...) it must bind
+    the matching CHAR_xx/形态, not a nearby identity state with another costume.
+    Multi-character shots are left to human review to avoid assigning a costume token to
+    the wrong person.
+    """
+    if not registry_forms:
+        return []
+    normalized = [normalize_identity_ref(ref) for ref in (id_refs or [])]
+    if len(_distinct_char_bases(normalized)) != 1:
+        return []
+    exact_refs = sorted({ref for ref in normalized if "/" in ref})
+    if not exact_refs:
+        return []
+    groups = _outfit_groups_in_text(_positive_prompt_text(body))
+    if not groups:
+        return []
+
+    by_key = {str(form.get("key") or ""): form for form in registry_forms}
+    findings: List[Dict[str, str]] = []
+    for rid in exact_refs:
+        form = by_key.get(rid)
+        if not form:
+            continue
+        for group in sorted(groups):
+            if _form_advertises_outfit_group(form, group):
+                continue
+            findings.append({
+                "level": "block",
+                "code": "outfit_form_mismatch",
+                "msg": (
+                    f"{label}：正向 prompt 写了「{group}」类服饰/形态，但资产身份注册层绑定 `{rid}` "
+                    f"（asset_key={form.get('asset_key') or '-'}）没有对应服饰定妆。"
+                    "换装/形态变体必须新建独立 `CHAR_xx/形态` 和 reference_group，禁止复用其它服饰状态参考。"
+                ),
+            })
+    return findings
+
+
 def _lint_multi_subject_spatial_binding(label: str, body: str,
                                         id_refs: Sequence[str]) -> List[Dict[str, str]]:
     """多人同框防串脸（C3·生成端预防）：≥2 具名角色同框却没声明逐角色空间站位时 warn。
@@ -682,6 +767,7 @@ def lint_shot_block(
                 hint = "（形态名对不上 registry）" if base in valid_ids else "（registry 无此角色 ID）"
                 findings.append({"level": "block", "code": "unknown_char_id",
                                  "msg": f"{label}：身份引用 `{rid}` 在 identity_registry 不存在{hint}"})
+    findings.extend(_lint_outfit_form_binding(label, body, id_refs, registry_forms))
     if "视线方向" not in body:
         findings.append({"level": "warn", "code": "no_eyeline",
                          "msg": f"{label}：角色镜缺『视线方向』字段（轴线靠它焊进首帧，出视频救不回）"})
@@ -810,6 +896,7 @@ HARD_CHECKS = ("face", "seam")                # 崩脸：insightface 模式高�
 HARD_LINT_CODES = (
     "unknown_char_id",
     "no_reference_block",
+    "outfit_form_mismatch",
     "tail_identity_handoff_missing_prompt",
     "tail_identity_handoff_unlocked",
     "tail_relay_not_image2image",
@@ -839,6 +926,29 @@ QC_INSTALL_RECOMMENDATION = (
     "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python -m pip install "
     "pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') "
     "预热/下载模型。若无该 env，用 Python 3.10-3.12 conda env；系统 Python 3.14 不作为重视觉依赖首选。"
+)
+PROHIBITED_FACE_PATCH_LABEL = "本地贴脸修复产物禁用"
+PROHIBITED_FACE_PATCH_STRONG_TOKENS = (
+    "local_face_patch",
+    "face_patch",
+    "face-patch",
+    "facepaste",
+    "face_paste",
+    "face paste",
+    "faceswap",
+    "face_swap",
+    "face-swap",
+    "facefix",
+    "face_fix",
+    "inswapper",
+    "facefusion",
+    "roop",
+)
+PROHIBITED_FACE_PATCH_OPERATION_TOKENS = (
+    "crop_resize_color_match",
+    "alpha_blend",
+    "poisson_clone",
+    "seamless_clone",
 )
 
 
@@ -911,6 +1021,53 @@ def _degraded_closeup_face_shots(payload: Dict[str, Any]) -> List[Dict[str, Any]
     face = (payload.get("checks") or {}).get("face") or {}
     return [s for s in face.get("shots", [])
             if s.get("degraded_face") and s.get("closeup") and s.get("verdict") != "block"]
+
+
+# ── 状态账本启发式（advisory）：把「这剧状态简不简单、要不要强制 visual_state_ledger」从人脑
+#    豁免决策挪成机检提醒。累积状态(伤口/流血/泪痕/脏污/破损/升级…)出现却无账本 → info 级提示，
+#    永不进 summarize 的 hard/advisory、永不翻 verdict。去掉裸「伤/血」避免悲伤/热血等情绪词误报。──
+CUMULATIVE_STATE_MARKERS = (
+    "伤口", "受伤", "流血", "血迹", "血污", "染血", "淤青", "泪痕", "脏污", "污渍",
+    "破损", "撕裂", "裂痕", "烧痕", "灼伤", "绷带", "包扎", "升级", "进化", "觉醒", "消耗",
+)
+
+
+def _ledger_present(root: Path) -> bool:
+    """visual_state_ledger.json 是否已建（复用 visual_state_manager 的路径约定，缺则直接拼路径）。"""
+    vsm = _load_sibling("visual_state_manager")
+    if vsm is not None and hasattr(vsm, "get_ledger_path"):
+        try:
+            return os.path.exists(vsm.get_ledger_path(root))
+        except Exception:
+            pass
+    return (Path(root) / "出图" / "共享" / "visual_state_ledger.json").exists()
+
+
+def audit_state_ledger(root: Path, ep: str) -> Dict[str, Any]:
+    """状态账本启发式（advisory）：扫 storyboard 角色状态演进 + 本集出图 prompt 找累积状态关键词；
+    命中且无 visual_state_ledger.json → advise=True（建议跑 visual_state_manager --audit）。
+    永不 block——只把「简单/复杂」的人脑豁免决策挪到机检提醒。读不到源 → available=False。纯函数·可测。"""
+    res: Dict[str, Any] = {"available": False, "markers": [], "ledger_present": False, "advise": False}
+    texts: List[str] = []
+    try:
+        sb = json.loads((Path(root) / "脚本" / ep / "storyboard.json").read_text(encoding="utf-8"))
+        vc = sb.get("visual_contract") if isinstance(sb.get("visual_contract"), dict) else {}
+        texts.append(str(vc.get("角色状态演进", "")))
+        res["available"] = True
+    except Exception:
+        pass
+    try:
+        texts.append((Path(root) / "出图" / ep / "prompt" / "01_分镜出图.md").read_text(encoding="utf-8"))
+        res["available"] = True
+    except Exception:
+        pass
+    if not res["available"]:
+        return res
+    blob = "\n".join(texts)
+    res["markers"] = sorted({m for m in CUMULATIVE_STATE_MARKERS if m in blob})
+    res["ledger_present"] = _ledger_present(root)
+    res["advise"] = bool(res["markers"]) and not res["ledger_present"]
+    return res
 
 
 # ── ① 降级近景人审队列：拼『定妆主参考 ↔ 本镜脸』并排图，让人眼在 degraded 精度下秒判同人 ──
@@ -1106,6 +1263,8 @@ def _resolve_existing_character_png(root: Path, ep: str, rec: Mapping[str, Any])
     if not img_dir.exists():
         return None
     for cand in sorted(img_dir.glob("*.png")):
+        if re.search(r"_(?:end|mid|a\d+)\.png$", cand.name):
+            continue
         if _shot_key(cand.name) == shot:
             return _episode_rel_path(root, ep, cand)
     return None
@@ -1231,6 +1390,136 @@ def face_reference_coverage(payload: Dict[str, Any], root: Path, ep: str) -> Dic
     }
 
 
+def _production_events_path(root: Path) -> Path:
+    return Path(root) / "生产数据" / "production_events.jsonl"
+
+
+def _load_production_events(root: Path) -> List[Dict[str, Any]]:
+    path = _production_events_path(root)
+    if not path.exists():
+        return []
+    events: List[Dict[str, Any]] = []
+    try:
+        for line in path.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            item = json.loads(line)
+            if isinstance(item, dict):
+                events.append(item)
+    except Exception:
+        return []
+    return events
+
+
+def _event_generation(event: Mapping[str, Any]) -> Mapping[str, Any]:
+    return event.get("generation") if isinstance(event.get("generation"), Mapping) else {}
+
+
+def _event_meta(event: Mapping[str, Any]) -> Mapping[str, Any]:
+    return event.get("meta") if isinstance(event.get("meta"), Mapping) else {}
+
+
+def _event_cost(event: Mapping[str, Any]) -> Mapping[str, Any]:
+    return event.get("cost") if isinstance(event.get("cost"), Mapping) else {}
+
+
+def _event_asset_rel(root: Path, event: Mapping[str, Any]) -> Optional[str]:
+    generation = _event_generation(event)
+    asset = generation.get("asset") or event.get("asset")
+    if not asset:
+        return None
+    raw = str(asset).strip()
+    if not raw:
+        return None
+    p = Path(raw)
+    if p.is_absolute():
+        try:
+            return p.resolve().relative_to(Path(root).resolve()).as_posix()
+        except Exception:
+            return p.as_posix()
+    return p.as_posix()
+
+
+def _is_prohibited_face_patch_event(event: Mapping[str, Any]) -> bool:
+    generation = _event_generation(event)
+    meta = _event_meta(event)
+    cost = _event_cost(event)
+    fields = [
+        event.get("provider"),
+        event.get("source"),
+        event.get("method"),
+        cost.get("provider"),
+        cost.get("method"),
+        generation.get("provider"),
+        generation.get("method"),
+        generation.get("redraw_category"),
+        generation.get("redraw_reason"),
+        meta.get("provider"),
+        meta.get("method"),
+    ]
+    text = " ".join(str(v) for v in fields if v is not None).lower()
+    if any(token in text for token in PROHIBITED_FACE_PATCH_STRONG_TOKENS):
+        return True
+    return ("face" in text or "脸" in text) and any(
+        token in text for token in PROHIBITED_FACE_PATCH_OPERATION_TOKENS
+    )
+
+
+def prohibited_face_patch_outputs(root: Path, ep: str) -> Dict[str, Any]:
+    """查生产事件账本：最新落档事件若来自本地贴脸/换脸/alpha blend，则该 PNG 永久不得进 video。
+
+    这是比 embedding 分数更高优先级的事实闸门：embedding 只能说明相似，不能把本地裁脸贴回画面的
+    产物洗成合格出图。后续只有真实重抽 / 官方 image2image 落一条新的 pass 事件，才能覆盖旧事件。
+    """
+    latest: Dict[str, tuple[int, Dict[str, Any]]] = {}
+    for idx, event in enumerate(_load_production_events(root), start=1):
+        if str(event.get("episode") or "").strip() != ep:
+            continue
+        if str(event.get("stage") or "").strip() != "image":
+            continue
+        if str(event.get("event") or "").strip() not in {"generation", "redraw"}:
+            continue
+        rel = _event_asset_rel(root, event)
+        if not rel or not rel.endswith(".png"):
+            continue
+        latest[rel] = (idx, event)
+
+    outputs: List[Dict[str, Any]] = []
+    for rel, (line_no, event) in latest.items():
+        if not _is_prohibited_face_patch_event(event):
+            continue
+        generation = _event_generation(event)
+        meta = _event_meta(event)
+        cost = _event_cost(event)
+        provider = (
+            cost.get("provider")
+            or generation.get("provider")
+            or event.get("provider")
+            or event.get("source")
+            or ""
+        )
+        method = meta.get("method") or generation.get("method") or cost.get("method") or event.get("method") or ""
+        outputs.append({
+            "png": rel,
+            "shot": _shot_key(rel),
+            "line": line_no,
+            "provider": str(provider),
+            "method": str(method),
+            "status": str(generation.get("status") or event.get("status") or ""),
+            "reason": str(generation.get("redraw_reason") or ""),
+            "verdict": "block",
+        })
+
+    outputs.sort(key=lambda r: (str(r.get("shot") or ""), str(r.get("png") or "")))
+    return {
+        "available": True,
+        "outputs": outputs,
+        "verdict": "block" if outputs else "ok",
+        "notes": [] if outputs else ["未发现最新落档事件来自本地贴脸修复。"],
+    }
+
+
 def summarize(payload: Dict[str, Any]) -> Dict[str, Any]:
     """汇总各项机检 + lint，区分 hard（必须修）与 advisory（非阻断初筛）。"""
     hard = advisory = 0
@@ -1271,6 +1560,11 @@ def summarize(payload: Dict[str, Any]) -> Dict[str, Any]:
             "block": 0, "warn": len(coverage_unclassified), "noface": 0, "ok": 0
         }
         advisory += len(coverage_unclassified)
+    prohibited = (payload.get("prohibited_face_patch") or {}).get("outputs") or []
+    rows_by_check["prohibited_face_patch"] = {
+        "block": len(prohibited), "warn": 0, "noface": 0, "ok": 0
+    }
+    hard += len(prohibited)
     lint = payload.get("lint") or {}
     l_hard = sum(1 for f in lint.get("findings", [])
                  if f.get("level") == "block" and f.get("code") in HARD_LINT_CODES)
@@ -1385,6 +1679,15 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         out.append(_qc_finding("block", "character_consistency", s.get("png"),
                                f"降级精度近景：{s.get('png')} 在 Pillow 降级模式下无法验脸（无 insightface）；"
                                f"近景/特写脸是否同人未经核验，不放行{aid}"))
+    for s in (payload.get("prohibited_face_patch") or {}).get("outputs", []):
+        out.append(_qc_finding(
+            "block",
+            "character_consistency",
+            s.get("png"),
+            f"{PROHIBITED_FACE_PATCH_LABEL}：{s.get('png')} 最新落档事件来自 `{s.get('provider') or 'unknown'}`"
+            f" / `{s.get('method') or 'unknown'}`。embedding 分数不是合格目标，不能用裁脸/贴脸/换脸"
+            "把定妆照盖到镜头上骗过 QC；必须回 n2d-image 用真实重抽或官方 image2image 派生替换。",
+        ))
     reason_text = {
         "face_precision_not_full": "缺 full 精度脸部 embedding 比对",
         "no_face_comparison": "缺逐镜脸部参考比对记录",
@@ -1442,6 +1745,14 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         hard = f.get("level") == "block" and f.get("code") in HARD_LINT_CODES
         sev = "block" if hard else ("info" if f.get("level") == "info" else "warn")
         out.append(_qc_finding(sev, "image_prompt_lint", None, f.get("msg")))
+    # 状态账本启发式（advisory·info，永不翻 verdict）：累积状态出现却无 ledger → 提醒建账本
+    sl = payload.get("state_ledger") or {}
+    if sl.get("advise"):
+        out.append(_qc_finding(
+            "info", "state_continuity", None,
+            f"本集出现累积状态关键词（{'/'.join(sl.get('markers', []))[:60]}）但无 visual_state_ledger.json——"
+            "状态可能跨镜/跨集演进，建议跑 `python3 skills/n2d-image/scripts/visual_state_manager.py <作品根> --audit` "
+            "建账本锁状态（简单剧确认后可忽略；本提示不阻断）。"))
     return out
 
 
@@ -1472,8 +1783,15 @@ def to_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         if key is None:
             return
         d = by_shot.setdefault(key, {"shot": key, "png": None, "reasons": []})
-        if name and ".png" in str(name) and not d["png"]:
-            d["png"] = name
+        if name and ".png" in str(name):
+            current = str(d["png"] or "")
+            preferred_prohibited = (
+                PROHIBITED_FACE_PATCH_LABEL in reason
+                and current.endswith("_end.png")
+                and not str(name).endswith("_end.png")
+            )
+            if not d["png"] or preferred_prohibited:
+                d["png"] = name
         if reason not in d["reasons"]:
             d["reasons"].append(reason)
 
@@ -1495,6 +1813,8 @@ def to_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
             add(f.get("msg"), f"prompt:{f.get('code')}")
     for s in (payload.get("face_reference_coverage") or {}).get("missing", []):
         add(s.get("png") or s.get("label") or s.get("shot"), f"脸部定妆比对覆盖:{s.get('reason')}")
+    for s in (payload.get("prohibited_face_patch") or {}).get("outputs", []):
+        add(s.get("png") or s.get("shot"), PROHIBITED_FACE_PATCH_LABEL)
     return sorted(by_shot.values(), key=lambda d: d["shot"])
 
 
@@ -1513,8 +1833,15 @@ def to_strict_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         if key is None:
             return
         d = by_shot.setdefault(key, {"shot": key, "png": None, "reasons": []})
-        if name and ".png" in str(name) and not d["png"]:
-            d["png"] = name
+        if name and ".png" in str(name):
+            current = str(d["png"] or "")
+            preferred_prohibited = (
+                PROHIBITED_FACE_PATCH_LABEL in reason
+                and current.endswith("_end.png")
+                and not str(name).endswith("_end.png")
+            )
+            if not d["png"] or preferred_prohibited:
+                d["png"] = name
         if reason not in d["reasons"]:
             d["reasons"].append(reason)
 
@@ -1545,6 +1872,8 @@ def to_strict_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
                 f"strict:{VISUAL_CHECK_LABELS.get(key, key)} 降级未完整校验")
     for s in (payload.get("face_reference_coverage") or {}).get("missing", []):
         add(s.get("png") or s.get("label") or s.get("shot"), f"strict:脸部定妆比对覆盖 {s.get('reason')}")
+    for s in (payload.get("prohibited_face_patch") or {}).get("outputs", []):
+        add(s.get("png") or s.get("shot"), f"strict:{PROHIBITED_FACE_PATCH_LABEL}")
     return sorted(by_shot.values(), key=lambda d: d["shot"])
 
 
@@ -1601,6 +1930,8 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True) -> Dict[str, Any]:
         except Exception as exc:
             payload["asset_lifecycle"] = {"available": False, "notes": [f"asset_lifecycle 校验失败：{exc}"]}
     payload["face_reference_coverage"] = face_reference_coverage(payload, root, ep)
+    payload["prohibited_face_patch"] = prohibited_face_patch_outputs(root, ep)
+    payload["state_ledger"] = audit_state_ledger(root, ep)
     payload["summary"] = summarize(payload)
     payload["qc_environment"] = qc_environment(payload, with_pixel=with_pixel)
     payload = json_safe(payload)
@@ -1679,6 +2010,22 @@ def render_markdown(payload: Dict[str, Any]) -> str:
         lines.append("- ⏭ 未生成覆盖结果（旧版 image_qc 或未执行 lint）")
     lines.extend([
         "",
+        "## 本地贴脸修复禁用（硬闸）",
+    ])
+    prohibited = payload.get("prohibited_face_patch") or {}
+    prohibited_outputs = prohibited.get("outputs") or []
+    if prohibited_outputs:
+        lines.append(f"- 🔴 {len(prohibited_outputs)} 张最新落档事件来自本地贴脸/换脸/裁脸贴回画面，不能作为最终图进 video。")
+        lines.append("- 原则：embedding 分数只是证据，不是目标；不能为了过脸部 embedding QC 把定妆脸贴到镜头上。")
+        for s in prohibited_outputs:
+            lines.append(
+                f"  - 🔴 {s.get('png')}：provider `{s.get('provider') or 'unknown'}`；"
+                f"method `{s.get('method') or 'unknown'}`；event line {s.get('line')}"
+            )
+    else:
+        lines.append("- 🟢 未发现最新落档事件来自本地贴脸修复。")
+    lines.extend([
+        "",
         "## 执行层 lint（逐镜 prompt）",
     ])
     lint = payload.get("lint", {})
@@ -1711,14 +2058,64 @@ def render_markdown(payload: Dict[str, Any]) -> str:
     lines.append("")
     lines.append("落档判定：**verdict=block** → 有硬阻断（崩脸/纯文生图/非法 CHAR_id），必须修复后重跑；"
                  "**verdict=review** → 只有非阻断初筛时不挡 video；若是视觉机检降级/依赖缺失，按阶段跳转先补依赖或复核；"
-                 "**verdict=ok** → 放行。初筛项是像素直方图/dHash 机检初筛，非硬失败（同 video_qc 哲学）。")
+                 "**verdict=ok** → 放行。本地贴脸/换脸/裁脸贴回画面是独立硬禁项，不能靠 embedding 分数洗白。"
+                 "初筛项是像素直方图/dHash 机检初筛，非硬失败（同 video_qc 哲学）。")
     return "\n".join(lines) + "\n"
+
+
+def mark_finalized(root: Path, target: str, value: bool = True) -> Dict[str, Any]:
+    """把共享定妆/资产的机器可读 finalize 真值 `self_check_passed` 置位（补 `00_索引.md` 人读 ✅）。
+
+    target：角色 `CHAR_xx/形态` 或单形态时裸 `CHAR_xx`；资产 `LOC/PROP/OUTFIT/VFX_xx`。
+    人工/AI 过落档自检后调用，让 `gate` 的 `check_referenced_assets_finalized` 能机检"引用必须 finalized"。"""
+    root = Path(root)
+    t = str(target or "").strip()
+    if t.split("/")[0].startswith(("LOC_", "PROP_", "OUTFIT_", "VFX_")):
+        p = root / "出图" / "共享" / "asset_registry.json"
+        try:
+            reg = json.loads(p.read_text(encoding="utf-8"))
+        except Exception as exc:
+            return {"ok": False, "msg": f"读 asset_registry 失败：{exc}"}
+        for a in (reg.get("assets") or []):
+            if isinstance(a, dict) and str(a.get("id") or "").strip() == t:
+                a["self_check_passed"] = bool(value)
+                p.write_text(json.dumps(reg, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+                return {"ok": True, "target": t, "value": bool(value), "msg": f"{t}.self_check_passed={value}"}
+        return {"ok": False, "msg": f"asset_registry 无资产 `{t}`"}
+    # 角色 form
+    p = root / "出图" / "共享" / "identity_registry.json"
+    try:
+        reg = json.loads(p.read_text(encoding="utf-8"))
+    except Exception as exc:
+        return {"ok": False, "msg": f"读 identity_registry 失败：{exc}"}
+    cid, _, form_name = t.partition("/")
+    for c in (reg.get("characters") or []):
+        if str(c.get("id") or "").strip() != cid:
+            continue
+        forms = c.get("forms") or []
+        if form_name:
+            matches = [fm for fm in forms if str(fm.get("form") or "").strip() == form_name]
+        elif len(forms) == 1:
+            matches = forms
+        else:
+            return {"ok": False, "msg": f"`{cid}` 有多个形态，请指明 `CHAR_xx/形态`"}
+        if not matches:
+            return {"ok": False, "msg": f"`{cid}` 无形态 `{form_name}`"}
+        for fm in matches:
+            fm["self_check_passed"] = bool(value)
+        p.write_text(json.dumps(reg, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        return {"ok": True, "target": t, "value": bool(value), "msg": f"{t}.self_check_passed={value}"}
+    return {"ok": False, "msg": f"identity_registry 无角色 `{cid}`"}
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("root")
-    ap.add_argument("episode")
+    ap.add_argument("episode", nargs="?")
+    ap.add_argument("--mark-finalized", metavar="TARGET",
+                    help="把共享定妆/资产 `self_check_passed` 置 true（过落档自检后调用）：CHAR_xx/形态 或 LOC/PROP/OUTFIT/VFX_xx")
+    ap.add_argument("--unfinalize", action="store_true",
+                    help="与 --mark-finalized 连用：改置 false（标记脏定妆，gate 引用即 block）")
     ap.add_argument("--no-pixel", action="store_true", help="只跑 prompt lint，不跑像素机检")
     ap.add_argument("--json", action="store_true", help="打印机器可读 payload")
     ap.add_argument("--findings", action="store_true",
@@ -1731,6 +2128,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     help="严审刷新：block/warn/降级命中都进入候选重出清单，供 n2d-update 使用")
     ns = ap.parse_args(argv)
     root = Path(ns.root).expanduser().resolve()
+    if ns.mark_finalized:
+        r = mark_finalized(root, ns.mark_finalized, value=not ns.unfinalize)
+        print(("✅ " if r.get("ok") else "⛔ ") + r.get("msg", ""))
+        return 0 if r.get("ok") else 1
+    if not ns.episode:
+        ap.error("episode 必填（除非用 --mark-finalized 写 registry）")
     payload = run_qc(root, ns.episode, with_pixel=not ns.no_pixel)
     regen = to_strict_regen_list(payload) if ns.strict else to_regen_list(payload)
     if ns.affected_shots:

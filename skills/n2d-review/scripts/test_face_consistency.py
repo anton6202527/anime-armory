@@ -206,6 +206,47 @@ def test_shot_character_map_prefers_identity_layer_over_background_refs(tmp_path
     assert fc.shot_character_map(str(root), ep)["图片/Clip_18_铜镜金瞳.png"] == ["沈念_觉醒态"]
 
 
+def test_shot_character_map_uses_starred_primary_identity(tmp_path):
+    import json
+    import face_consistency as fc
+
+    root = tmp_path
+    ep = "第1集"
+    prompt_dir = root / "出图" / ep / "prompt"
+    prompt_dir.mkdir(parents=True)
+    reg_dir = root / "出图" / "共享"
+    reg_dir.mkdir(parents=True)
+    (reg_dir / "identity_registry.json").write_text(
+        json.dumps(
+            {
+                "characters": [
+                    {"id": "CHAR_01", "forms": [{"form": "觉醒态", "asset_key": "沈念_觉醒态"}]},
+                    {"id": "CHAR_03", "forms": [{"form": "破皮惊恐态", "asset_key": "柳娘子_破皮惊恐态"}]},
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    (prompt_dir / "01_分镜出图.md").write_text(
+        "\n".join(
+            [
+                "## Clip 07",
+                "目标：出图/第1集/图片/Clip_07_人皮裂鳞.png",
+                "**资产身份注册层**：`CHAR_01/觉醒态`；`CHAR_03*/破皮惊恐态`；柳娘子为主检脸。",
+                "## Clip 16",
+                "目标：出图/第1集/图片/Clip_16_一次只够吃一个.png",
+                "**资产身份注册层**：`CHAR_01*/觉醒态`；`CHAR_03/破皮惊恐态`；兼容旧星标写法。",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    shot_map = fc.shot_character_map(str(root), ep)
+    assert shot_map["图片/Clip_07_人皮裂鳞.png"] == ["柳娘子_破皮惊恐态"]
+    assert shot_map["图片/Clip_16_一次只够吃一个.png"] == ["沈念_觉醒态"]
+
+
 def test_shot_character_map_falls_back_to_reference_block_without_identity(tmp_path):
     import face_consistency as fc
 

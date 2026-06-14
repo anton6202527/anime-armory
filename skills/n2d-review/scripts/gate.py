@@ -54,7 +54,10 @@ from n2d_contract import (  # noqa: E402
     COMPLIANCE_READY_STATUSES,
     COMPLIANCE_SAFE_VOICE,
     COMPLIANCE_STATUS_LIKE_VALUES,
+    EXPRESSION_SPAN_BIG,
+    EXPRESSION_SPAN_VALUES,
     GATE_STAGES,
+    HIGH_MOTION_TEMPLATES,
     IDENTITY_ADAPTER_MATRIX_KIND,
     IDENTITY_HANDLE_FIELDS,
     IDENTITY_IMAGE_ADAPTERS,
@@ -248,8 +251,65 @@ def load_json(path: str):
         return None
 
 
+CHARACTER_ID_RE = re.compile(r"\bCHAR_\d{2,}\b")
+ASSET_ID_RE = re.compile(r"\b(?:LOC|PROP|OUTFIT|VFX)_\d{2,}\b")
+
+
+def _episode_reference_texts(root: str, ep: str) -> Iterable[str]:
+    """Text surfaces that define the current episode's registry references."""
+    roots = [
+        os.path.join(root, "脚本", ep),
+        os.path.join(root, "出图", ep, "prompt"),
+        os.path.join(root, "出视频", ep, "prompt"),
+    ]
+    for base in roots:
+        if not os.path.isdir(base):
+            continue
+        for pattern in ("*.md", "*.json", "*.txt"):
+            for path in sorted(glob.glob(os.path.join(base, pattern))):
+                try:
+                    with open(path, encoding="utf-8") as fh:
+                        yield fh.read()
+                except Exception:
+                    continue
+
+
+def episode_registry_reference_ids(root: str, ep: str) -> Tuple[set, set]:
+    """Return character and non-character registry ids used by one episode.
+
+    The registries can contain planned future characters/assets. A stage gate for
+    第N集 should validate registry schemas globally, but strict reference image
+    existence only for ids this episode actually consumes.
+    """
+    text = "\n".join(_episode_reference_texts(root, ep))
+    return set(CHARACTER_ID_RE.findall(text)), set(ASSET_ID_RE.findall(text))
+
+
 MIDFRAME_SELF_CHECK_KEYS = ("self_check", "midframe_self_check", "prompt_self_check")
 MIDFRAME_SELF_CHECK_PASS = {"pass", "passed", "ok", "true", "yes", "1", "✅", "通过"}
+PROHIBITED_FACE_PATCH_LABEL = "本地贴脸修复产物禁用"
+PROHIBITED_FACE_PATCH_STRONG_TOKENS = (
+    "local_face_patch",
+    "face_patch",
+    "face-patch",
+    "facepaste",
+    "face_paste",
+    "face paste",
+    "faceswap",
+    "face_swap",
+    "face-swap",
+    "facefix",
+    "face_fix",
+    "inswapper",
+    "facefusion",
+    "roop",
+)
+PROHIBITED_FACE_PATCH_OPERATION_TOKENS = (
+    "crop_resize_color_match",
+    "alpha_blend",
+    "poisson_clone",
+    "seamless_clone",
+)
 
 
 def _production_events_path(root: str) -> str:
@@ -303,6 +363,88 @@ def _latest_asset_generation_event(root: str, ep: str, asset_rel: str) -> Option
         if _asset_matches(root, generation.get("asset") or event.get("asset"), asset_rel):
             latest = event
     return latest
+
+
+def _event_generation(event: Dict[str, Any]) -> Dict[str, Any]:
+    return event.get("generation") if isinstance(event.get("generation"), dict) else {}
+
+
+def _event_meta(event: Dict[str, Any]) -> Dict[str, Any]:
+    return event.get("meta") if isinstance(event.get("meta"), dict) else {}
+
+
+def _event_cost(event: Dict[str, Any]) -> Dict[str, Any]:
+    return event.get("cost") if isinstance(event.get("cost"), dict) else {}
+
+
+def _event_asset_rel(root: str, event: Dict[str, Any]) -> Optional[str]:
+    generation = _event_generation(event)
+    asset = generation.get("asset") or event.get("asset")
+    if not asset:
+        return None
+    raw = str(asset).strip()
+    if not raw:
+        return None
+    if os.path.isabs(raw):
+        try:
+            return os.path.relpath(os.path.abspath(raw), os.path.abspath(root)).replace(os.sep, "/")
+        except Exception:
+            return raw.replace(os.sep, "/")
+    return _norm_rel_path(raw)
+
+
+def _is_prohibited_face_patch_event(event: Dict[str, Any]) -> bool:
+    generation = _event_generation(event)
+    meta = _event_meta(event)
+    cost = _event_cost(event)
+    fields = [
+        event.get("provider"),
+        event.get("source"),
+        event.get("method"),
+        cost.get("provider"),
+        cost.get("method"),
+        generation.get("provider"),
+        generation.get("method"),
+        generation.get("redraw_category"),
+        generation.get("redraw_reason"),
+        meta.get("provider"),
+        meta.get("method"),
+    ]
+    text = " ".join(str(v) for v in fields if v is not None).lower()
+    if any(token in text for token in PROHIBITED_FACE_PATCH_STRONG_TOKENS):
+        return True
+    return ("face" in text or "脸" in text) and any(
+        token in text for token in PROHIBITED_FACE_PATCH_OPERATION_TOKENS
+    )
+
+
+def _prohibited_face_patch_outputs(root: str, ep: str) -> List[Dict[str, Any]]:
+    latest: Dict[str, tuple[int, Dict[str, Any]]] = {}
+    for idx, event in enumerate(_load_production_events(root), start=1):
+        if str(event.get("episode") or "").strip() != ep:
+            continue
+        if str(event.get("stage") or "").strip() != "image":
+            continue
+        if str(event.get("event") or "").strip() not in {"generation", "redraw"}:
+            continue
+        rel = _event_asset_rel(root, event)
+        if rel and rel.endswith(".png"):
+            latest[rel] = (idx, event)
+
+    out: List[Dict[str, Any]] = []
+    for rel, (line_no, event) in latest.items():
+        if not _is_prohibited_face_patch_event(event):
+            continue
+        generation = _event_generation(event)
+        meta = _event_meta(event)
+        cost = _event_cost(event)
+        out.append({
+            "png": rel,
+            "line": line_no,
+            "provider": str(cost.get("provider") or generation.get("provider") or event.get("provider") or event.get("source") or ""),
+            "method": str(meta.get("method") or generation.get("method") or cost.get("method") or event.get("method") or ""),
+        })
+    return sorted(out, key=lambda r: str(r.get("png") or ""))
 
 
 def _midframe_self_check_value(event: Dict[str, Any]) -> str:
@@ -1383,7 +1525,20 @@ def _identity_reference_exists(root: str, rel: str) -> bool:
     return os.path.exists(full)
 
 
-def check_identity_registry(root: str, require_reference_assets: bool = False) -> None:
+def _identity_reference_matches_asset_key(asset_key: str, rel: str) -> bool:
+    """Registry references must advertise the exact character form they lock."""
+    key = str(asset_key or "").strip()
+    if not key:
+        return True
+    stem = os.path.splitext(os.path.basename(str(rel or "").strip()))[0]
+    return key in stem
+
+
+def check_identity_registry(
+    root: str,
+    require_reference_assets: bool = False,
+    required_character_ids: Optional[set] = None,
+) -> None:
     """Validate the role identity registry shared by image/video/review stages."""
     p = identity_registry_path(root)
     data = load_json(p)
@@ -1412,10 +1567,13 @@ def check_identity_registry(root: str, require_reference_assets: bool = False) -
                 add(BLOCK, "资产身份注册层", loc, f"重复 character id：{char_id}")
             seen_ids.add(char_id)
 
+        strict_references = required_character_ids is None or char_id in required_character_ids
+
         forms = char.get("forms")
         if not isinstance(forms, list) or not forms:
             add(BLOCK, "资产身份注册层", loc, "forms[] 缺失或为空；常态/变体必须分别登记")
             continue
+        form_count = len(forms)
         for fi, form in enumerate(forms, 1):
             floc = f"{loc} form#{fi}"
             if not isinstance(form, dict):
@@ -1429,12 +1587,22 @@ def check_identity_registry(root: str, require_reference_assets: bool = False) -
             if not isinstance(reference_group, dict):
                 add(BLOCK, "资产身份注册层", floc, "reference_group 必须是对象")
             else:
+                asset_key = str(form.get("asset_key") or "").strip()
+                form_name = str(form.get("form") or "").strip()
+                # Legacy single-form baseline characters may use `定妆_<角色>.png`.
+                # Multi-form or named variant forms must advertise the exact asset_key.
+                enforce_asset_key_filename = form_count > 1 or form_name not in {"常态", "局部参考", "局部参考（暂不正脸）"}
                 for key in IDENTITY_REFERENCE_FIELDS:
                     if _field_is_missing(reference_group, key):
-                        add(BLOCK, "资产身份注册层", floc, f"reference_group 缺核心路径：{key}")
+                        if strict_references:
+                            add(BLOCK, "资产身份注册层", floc, f"reference_group 缺核心路径：{key}")
                         continue
                     rel = str(reference_group.get(key, "")).strip()
-                    if require_reference_assets and not _identity_reference_exists(root, rel):
+                    if asset_key and enforce_asset_key_filename and not _identity_reference_matches_asset_key(asset_key, rel):
+                        add(BLOCK, "资产身份注册层", floc,
+                            f"reference_group.{key} 路径 `{rel}` 未包含 asset_key={asset_key}；"
+                            "服饰/形态变体必须独立定妆，禁止复用其它服饰形态参考")
+                    if require_reference_assets and strict_references and not _identity_reference_exists(root, rel):
                         add(BLOCK, "资产身份注册层", os.path.join(root, rel) if not os.path.isabs(rel) else rel, f"reference_group.{key} 路径不存在")
                 expressions = reference_group.get("expressions", [])
                 if expressions is not None and not isinstance(expressions, list):
@@ -1444,9 +1612,8 @@ def check_identity_registry(root: str, require_reference_assets: bool = False) -
                     if not rel:
                         add(BLOCK, "资产身份注册层", floc, "reference_group.expressions 存在空路径")
                         continue
-                    if require_reference_assets and not _identity_reference_exists(root, rel):
+                    if require_reference_assets and strict_references and not _identity_reference_exists(root, rel):
                         add(BLOCK, "资产身份注册层", os.path.join(root, rel) if not os.path.isabs(rel) else rel, "reference_group.expressions 路径不存在")
-                    asset_key = str(form.get("asset_key") or "").strip()
                     if asset_key and asset_key not in os.path.basename(rel):
                         add(BLOCK, "资产身份注册层", floc, f"reference_group.expressions 跨角色/形态污染：{rel} 不属于 asset_key={asset_key}")
 
@@ -1527,7 +1694,11 @@ def check_costume_registry_reconcile(root: str) -> None:
                 f"face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除")
 
 
-def check_asset_reference_registry(root: str, require_reference_assets: bool = False) -> None:
+def check_asset_reference_registry(
+    root: str,
+    require_reference_assets: bool = False,
+    required_asset_ids: Optional[set] = None,
+) -> None:
     """Validate reusable non-character scene/prop/outfit/vfx asset registry."""
     p = asset_registry_path(root)
     data = load_json(p)
@@ -1553,6 +1724,7 @@ def check_asset_reference_registry(root: str, require_reference_assets: bool = F
 
         asset_id = str(asset.get("id", "")).strip()
         asset_type = str(asset.get("type", "")).strip().lower()
+        strict_references = required_asset_ids is None or asset_id in required_asset_ids
         if asset_id:
             if asset_id in seen_ids:
                 add(BLOCK, "资产引用注册层", loc, f"重复 asset id：{asset_id}")
@@ -1582,7 +1754,7 @@ def check_asset_reference_registry(root: str, require_reference_assets: bool = F
             primary = str(reference_group.get("primary", "")).strip()
             if not primary:
                 add(BLOCK, "资产引用注册层", loc, "reference_group.primary 缺失或为空")
-            elif require_reference_assets and not _identity_reference_exists(root, primary):
+            elif require_reference_assets and strict_references and not _identity_reference_exists(root, primary):
                 add(BLOCK, "资产引用注册层", os.path.join(root, primary) if not os.path.isabs(primary) else primary, "reference_group.primary 路径不存在")
             alternates = reference_group.get("alternates", [])
             if alternates is not None and not isinstance(alternates, list):
@@ -1591,7 +1763,7 @@ def check_asset_reference_registry(root: str, require_reference_assets: bool = F
                 rel_s = str(rel or "").strip()
                 if not rel_s:
                     add(BLOCK, "资产引用注册层", loc, "reference_group.alternates 存在空路径")
-                elif require_reference_assets and not _identity_reference_exists(root, rel_s):
+                elif require_reference_assets and strict_references and not _identity_reference_exists(root, rel_s):
                     add(BLOCK, "资产引用注册层", os.path.join(root, rel_s) if not os.path.isabs(rel_s) else rel_s, "reference_group.alternates 路径不存在")
 
         constraints = asset.get("constraints")
@@ -2010,6 +2182,10 @@ def _storyboard_frame_requirements(root: str, ep: str) -> Dict[int, Dict[str, in
             "need_end": need_end,
             "anchor_count": anchor_count,
             "total_timeline_frames": 1 + anchor_count + (1 if need_end else 0),
+            # 高风险=高运动模板 或 跨情绪大表情近景：帧能力不匹配时安全网（双帧/多帧插值）静默失效，
+            # check_route_frame_capability 据此把 WARN 升 BLOCK（其余镜保持 WARN，有合法降级路径）。
+            "high_risk": (str(clip.get("template") or "") in HIGH_MOTION_TEMPLATES
+                          or (cont.get("expression_span") == EXPRESSION_SPAN_BIG and _clip_is_closeup(clip))),
         }
     return out
 
@@ -2025,10 +2201,15 @@ def check_route_frame_capability(
 ) -> None:
     """Warn when the storyboard asks for more timeline frames than the route can consume.
 
-    The warning is intentional rather than blocking: n2d has valid fallback
-    paths (split relay, first+last only, or first frame + end_state text). What
-    must not happen is silent degradation where `_mid` frames are generated but
-    ignored by the selected backend.
+    For ordinary clips the warning is intentional rather than blocking: n2d has
+    valid fallback paths (split relay, first+last only, or first frame +
+    end_state text). What must not happen is silent degradation where `_mid`
+    frames are generated but ignored by the selected backend.
+
+    **高风险镜例外（req.high_risk）**：高运动模板（打斗/追逐/法术/飞行/拥抱拉扯/亲密接触）
+    与跨情绪大表情近景，靠帧间插值（双帧/多帧）才稳——后端吃不下首尾/中段帧 = 双帧安全网
+    静默失效 = 必崩接触/必脸漂。这类镜帧能力不匹配从 WARN 升 **BLOCK**，强制换后端或显式降级，
+    不许靠纯文本约束硬出。
     """
     clip_num = _route_clip_number(route, idx)
     req = frame_requirements.get(clip_num)
@@ -2040,6 +2221,12 @@ def check_route_frame_capability(
     total_frames = int(req.get("total_timeline_frames") or 1)
     anchors = int(req.get("anchor_count") or 0)
     need_end = bool(req.get("need_end"))
+    high_risk = bool(req.get("high_risk"))
+    sev = BLOCK if high_risk else WARN
+    risk_note = (
+        "本镜为高运动模板/跨情绪大表情近景，帧间插值是唯一安全网，不许靠纯文本约束硬出（已升级为 BLOCK）。"
+        if high_risk else ""
+    )
     clip_id = str(route.get("clip_id") or f"Clip_{clip_num:02d}")
     mode = str(control.get("mode") or "unknown")
     verified = str(control.get("verified") or "unknown")
@@ -2047,12 +2234,12 @@ def check_route_frame_capability(
     channel_note = f"（执行渠道：{video_channel}）" if video_channel else ""
     if need_end and not bool(control.get("supports_last_frame")):
         add(
-            WARN,
+            sev,
             "首尾帧能力",
             route_path,
             f"{clip_id} storyboard 需要尾帧接力，但 primary 后端 {primary or 'unknown'}{channel_note} "
             f"的帧能力档案为 {mode}，未确认可原生消费尾帧。fallback：改走支持首尾帧的后端，"
-            f"或退回单首帧 + 强 end_state 文字（接缝/大表情近景风险升高）。能力来源：{verified}",
+            f"或退回单首帧 + 强 end_state 文字（接缝/大表情近景风险升高）。能力来源：{verified}{risk_note}",
             return_to_stage="video",
         )
     if anchors and not bool(control.get("supports_native_mid_anchors")):
@@ -2061,12 +2248,12 @@ def check_route_frame_capability(
         else:
             consequence = "该后端通常只按首帧/参考图生成，中段锚帧和尾帧都可能只剩文字约束"
         add(
-            WARN,
+            sev,
             "多帧能力",
             route_path,
             f"{clip_id} storyboard 声明了 {anchors} 个中段锚帧（共 {total_frames} 张时间轴帧），"
             f"但 primary 后端 {primary or 'unknown'}{channel_note} 的帧能力档案为 {mode}，"
-            f"最多 {max_frames} 张时间轴帧；{consequence}。fallback：{fallback}",
+            f"最多 {max_frames} 张时间轴帧；{consequence}。fallback：{fallback}{risk_note}",
             return_to_stage="video",
         )
 
@@ -2929,6 +3116,76 @@ def check_shared_image_index(root: str, ep: str) -> None:
         add(BLOCK, "共享定妆", overview, f"本集引用的共享定妆仍有未完成项：{missing[0][:120]}")
 
 
+_FINALIZE_CHAR_RE = re.compile(r"CHAR_[A-Za-z0-9_]+(?:/[^\s`，；、*]+)?")
+_FINALIZE_ASSET_RE = re.compile(r"(?:LOC|PROP|OUTFIT|VFX)_[A-Za-z0-9_]+")
+
+
+def _finalize_tracked_map(root: str) -> Dict[str, bool]:
+    """registry 里**显式登记了** `self_check_passed` 的 form/asset → {引用键: passed}。
+
+    机器可读的 finalize 真值（补 `00_索引.md` 的人读 ✅）：键缺失 = 未启用追踪（向后兼容/先出视频 demo
+    天然豁免，不入表）。角色 form 同时登记 `CHAR_xx/形态` 与（单形态时）裸 `CHAR_xx` 两个键。"""
+    tracked: Dict[str, bool] = {}
+    try:
+        reg = json.loads(open(os.path.join(root, "出图", "共享", "identity_registry.json"), encoding="utf-8").read())
+        for c in (reg.get("characters") or []):
+            cid = str(c.get("id") or "").strip()
+            forms = c.get("forms") or []
+            for fm in forms:
+                if not isinstance(fm, dict) or "self_check_passed" not in fm:
+                    continue
+                passed = bool(fm.get("self_check_passed"))
+                form_name = str(fm.get("form") or "").strip()
+                if cid and form_name:
+                    tracked[f"{cid}/{form_name}"] = passed
+                if cid and len(forms) == 1:
+                    tracked[cid] = passed
+    except Exception:
+        pass
+    try:
+        areg = json.loads(open(os.path.join(root, "出图", "共享", "asset_registry.json"), encoding="utf-8").read())
+        for a in (areg.get("assets") or []):
+            if not isinstance(a, dict) or "self_check_passed" not in a:
+                continue
+            aid = str(a.get("id") or "").strip()
+            if aid:
+                tracked[aid] = bool(a.get("self_check_passed"))
+    except Exception:
+        pass
+    return tracked
+
+
+def check_referenced_assets_finalized(root: str, ep: str) -> None:
+    """付费出图前置·机器可读 finalize 闸门：本集逐镜引用的共享定妆/资产，若 registry 显式标
+    `self_check_passed=false`（自检未过的"脏定妆"）→ BLOCK。补 `check_shared_image_index` 只拦 ⬜
+    的缺口（⏳ 漏网）+ 总览表没列就静默放行的软肋——改查机器真值，不依赖手维护的人读表。
+
+    **纯 opt-in**：registry 没登记 `self_check_passed` 字段 = 未启用追踪 → 跳过（向后兼容，现有作品/
+    先出视频 demo 不会被突然阻断）。键=true 放行、=false 且被引用=block。"""
+    tracked = _finalize_tracked_map(root)
+    if not tracked:
+        return  # 未启用机器 finalize 追踪：保持 00_索引 人读 ✅ 的既有流程，不强加
+    shots_md = os.path.join(root, "出图", ep, "prompt", "01_分镜出图.md")
+    try:
+        text = open(shots_md, encoding="utf-8").read()
+    except Exception:
+        return  # 逐镜 prompt 未写：check_image_prompt_overview 等各自负责
+    referenced = set(_FINALIZE_CHAR_RE.findall(text)) | set(_FINALIZE_ASSET_RE.findall(text))
+    unfinalized = sorted(rid for rid in referenced
+                         if rid in tracked and tracked[rid] is False)
+    # 裸 CHAR_xx 引用对应多形态时，逐形态查（任一形态显式 false 且被引用基名）
+    for rid in sorted(referenced):
+        base = rid.split("/")[0]
+        if rid == base and base not in tracked:
+            bad = [k for k, v in tracked.items() if k.startswith(base + "/") and v is False]
+            if bad and base not in unfinalized:
+                unfinalized.extend(bad)
+    for rid in sorted(set(unfinalized)):
+        add(BLOCK, "共享定妆", shots_md,
+            f"本集逐镜引用了未过落档自检的共享定妆/资产 `{rid}`（registry `self_check_passed=false`）——"
+            "脏定妆是锚点，脸/结构漂了下游每镜继承；先过自检并把该项置 true（或人工复核后 `image_qc --mark-finalized`），再付费出图。")
+
+
 def check_image_assets(root: str, ep: str) -> None:
     if not progress_fraction_done(root, ep, "出图"):
         add(BLOCK, "出图", os.path.join(root, "_进度.md"), "出图列未满，不能进入出视频")
@@ -2936,6 +3193,75 @@ def check_image_assets(root: str, ep: str) -> None:
     pngs = glob.glob(os.path.join(png_dir, "*.png"))
     if not pngs:
         add(BLOCK, "出图", png_dir, "本集没有分镜 PNG")
+
+
+# 近景/特写景别标记（脸占画面主体、表情漂移=脸重画最致命的镜）。
+_CLOSEUP_MARKERS = (
+    "CU", "ECU", "MCU", "BCU", "特写", "近景", "脸部", "面部",
+    "反打", "正反打", "过肩", "OTS", "dialogue_shot_reverse", "dialogue_closeup",
+)
+
+
+def _clip_is_closeup(clip: Dict[str, Any]) -> bool:
+    """clip 是否为近景/特写/反打（脸占主体）：扫 template + label + shots[].lens/desc 的景别标记。
+
+    用于「大表情近景必须首尾双帧」闸门——把 expression_span=大 收口到真正的脸戏，避免误伤
+    远景/空镜被误标 大 的镜。纯函数·可测。"""
+    blob = " ".join(str(clip.get(k) or "") for k in ("template", "label"))
+    for shot in clip.get("shots") or []:
+        if isinstance(shot, dict):
+            blob += " " + " ".join(str(shot.get(k) or "") for k in ("lens", "desc"))
+    return _has_any(blob, _CLOSEUP_MARKERS)
+
+
+def check_expression_span_frame_contract(root: str, ep: str) -> None:
+    """出视频前置（脸被表情带着重画的头号根因·机检闸门）：跨情绪近景必须走首尾双帧只插值工艺。
+
+    `prompt_format.md`「近景大表情变化类 Clip」铁律：表情跨度=大（平静→爆哭/隐忍→暴怒）的 CU/MCU/反打镜
+    若靠单首帧让模型自由生成中间表情，脸型/五官比例会随表情拉伸漂移、剪起来像换了个人。此前
+    `表情跨度` 只活在总览风险表里、是人读自检——gate 看不见、拦不住。本检查把它结构化（storyboard
+    `continuity.expression_span` ∈ {微,中,大}）后机检：
+
+      · expression_span 值非法（非 微/中/大）→ BLOCK（typo 防呆）；
+      · expression_span=大 且镜为近景/特写/反打 → 必须 need_endframe=true（有止表情尾帧可插值），
+        否则 BLOCK——单首帧扛不住跨情绪表情；
+      · expression_span=大 但镜非近景 → WARN（远景大表情风险低，或景别标错，提示复核）。
+
+    纯 opt-in：`continuity.expression_span` 缺失=未启用追踪→跳过（现有 demo/未标镜不误伤），与
+    `self_check_passed`、`midframe_default` 同款门控。路由后端能否真消费这条尾帧（frames2video/
+    multiframe）由 `check_route_frame_capability` 对高风险镜升 BLOCK 兜，本检查不重复报。"""
+    data = load_json(storyboard_path(root, ep))
+    if not isinstance(data, dict) or not isinstance(data.get("clips"), list):
+        return  # storyboard 缺失/损坏由 check_storyboard_contract 负责
+    for i, clip in enumerate(data["clips"], 1):
+        if not isinstance(clip, dict):
+            continue
+        cont = clip.get("continuity")
+        if not isinstance(cont, dict):
+            continue
+        span = cont.get("expression_span")
+        if span in (None, ""):
+            continue  # opt-in：未声明=不追踪
+        loc = f"{storyboard_path(root, ep)} clip#{i}"
+        if span not in EXPRESSION_SPAN_VALUES:
+            add(BLOCK, "表情一致性", loc,
+                f"continuity.expression_span={span!r} 非法；必须是 {'/'.join(EXPRESSION_SPAN_VALUES)} 之一"
+                "（大=跨情绪如 平静→爆哭/隐忍→暴怒）。")
+            continue
+        if span != EXPRESSION_SPAN_BIG:
+            continue
+        if not _clip_is_closeup(clip):
+            add(WARN, "表情一致性", loc,
+                "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；"
+                "若确为远景/空镜风险较低，否则复核景别或下调跨度档。", return_to_stage="script_stage2")
+            continue
+        if cont.get("need_endframe") is not True:
+            add(BLOCK, "表情一致性", loc,
+                "expression_span=大 的近景/特写/反打镜必须 need_endframe=true 走「首尾双帧只插值」"
+                "（首=起表情、尾=止表情同源定妆，mode=frames2video，让模型只插值表情肌肉、不自由重画脸）；"
+                "缺尾帧=单首帧硬扛跨情绪表情=脸型/五官比例随表情漂移。补 endframe_png（止表情定妆，"
+                "如 `镜头N_expr_end.png` 或 reference_group.expressions 对应情绪图）或降级 MCU/OTS/侧脸后下调跨度档。",
+                return_to_stage="image")
 
 
 _VID_CLIP_HEAD_RE = re.compile(r"^##\s*Clip[_\s]*(\d+)", re.M)
@@ -2953,14 +3279,18 @@ def check_video_prompt_frames(root: str, ep: str) -> None:
       · 声明了尾帧但 PNG 缺失 → WARN（双帧接力降级为单首帧，大表情近景有脸重画风险）；
       · storyboard 标 `need_endframe=true` 但视频 prompt 该 Clip 漏写 `**尾帧**` → WARN（双帧意图誊抄时丢了）；
       · storyboard 声明 `continuity.midframe` 但视频 prompt 该 Clip 漏写 `**中段锚帧**`、或引用的
-        锚帧 PNG 缺失 → WARN（拆段意图誊抄时丢失/锚帧漂，runner 会按单段出，中段漂移风险回归）。"""
+        锚帧 PNG 缺失 → WARN（拆段意图誊抄时丢失/锚帧漂，runner 会按单段出，中段漂移风险回归）；
+      · 视频 prompt 引用的首帧路径 ≠ storyboard.firstframe_png（两侧都存在但不是同一张）→ BLOCK
+        （誊抄成另一张存在的 PNG，两侧各查存在全绿、却动了错的首帧）；尾帧不一致 → WARN。"""
     p = os.path.join(root, "出视频", ep, "prompt", "01_clips.md")
     if not os.path.exists(p):
         return  # 视频 prompt 缺失由 check_video_prompt_overview 负责
     text = open(p, encoding="utf-8").read()
     need_end: Dict[int, bool] = {}
     need_mid: Dict[int, int] = {}  # Clip → 声明的锚帧数（midframe=1；anchors=len）
-    sb = load_json(storyboard_path(root, ep))  # 只读取 need_endframe/midframe/anchors，不重复报 storyboard 缺失
+    sb_first: Dict[int, str] = {}  # Clip → storyboard.firstframe_png（路径相等校验基准）
+    sb_end: Dict[int, str] = {}    # Clip → storyboard.continuity.endframe_png
+    sb = load_json(storyboard_path(root, ep))  # 只读取 need_endframe/midframe/anchors/首尾帧，不重复报 storyboard 缺失
     if isinstance(sb, dict) and isinstance(sb.get("clips"), list):
         for i, clip in enumerate(sb["clips"], 1):
             if isinstance(clip, dict) and isinstance(clip.get("continuity"), dict):
@@ -2970,10 +3300,21 @@ def check_video_prompt_frames(root: str, ep: str) -> None:
                     need_mid[i] = 1
                 elif isinstance(cont.get("anchors"), list):
                     need_mid[i] = len(cont["anchors"])
+                if clip.get("firstframe_png"):
+                    sb_first[i] = str(clip["firstframe_png"]).strip()
+                if cont.get("endframe_png"):
+                    sb_end[i] = str(cont["endframe_png"]).strip()
 
     def _missing(rel: str) -> bool:
         full = rel if os.path.isabs(rel) else os.path.join(root, rel)
         return not os.path.exists(full)
+
+    def _same_path(a: str, b: str) -> bool:
+        """两条 PNG 引用是否指向同一文件：归一化（去 ./、统一分隔符、相对根解析）后比对。"""
+        def _norm(rel: str) -> str:
+            full = rel if os.path.isabs(rel) else os.path.join(root, rel)
+            return os.path.normpath(full)
+        return _norm(a) == _norm(b)
 
     heads = list(_VID_CLIP_HEAD_RE.finditer(text))
     for idx, m in enumerate(heads):
@@ -2985,11 +3326,23 @@ def check_video_prompt_frames(root: str, ep: str) -> None:
             add(BLOCK, "首帧", loc,
                 f"视频 prompt 引用的首帧 PNG 不存在：{fm.group(1).strip()}——image2video 调用会失败、"
                 "白扣一次最贵工位的钱，先补帧/改路径再出视频。", return_to_stage="image")
+        elif fm and num in sb_first and not _missing(fm.group(1).strip()) \
+                and not _same_path(fm.group(1).strip(), sb_first[num]):
+            add(BLOCK, "首帧", loc,
+                f"视频 prompt 首帧引用 `{fm.group(1).strip()}` ≠ storyboard.firstframe_png `{sb_first[num]}`——"
+                "两侧各查存在都绿，但誊抄漂成另一张图=image2video 会动错的首帧（最贵工位上动错人/错构图）。"
+                "改回与 storyboard 一致的那张，或回 n2d-script 同步 firstframe_png。", return_to_stage="video")
         em = _VID_END_FRAME_RE.search(block)
         if em and _missing(em.group(1).strip()):
             add(WARN, "尾帧", loc,
                 f"视频 prompt 声明了尾帧但 PNG 不存在：{em.group(1).strip()}——双帧接力会降级为单首帧"
                 "（大表情近景有脸重画风险），先补尾帧或确认降级。", return_to_stage="image")
+        elif em and num in sb_end and not _missing(em.group(1).strip()) \
+                and not _same_path(em.group(1).strip(), sb_end[num]):
+            add(WARN, "尾帧", loc,
+                f"视频 prompt 尾帧引用 `{em.group(1).strip()}` ≠ storyboard.endframe_png `{sb_end[num]}`——"
+                "誊抄漂成另一张尾帧=双帧插值的落点错，接缝/大表情近景插到错的止帧。确认是有意改写否则改回。",
+                return_to_stage="video")
         elif em is None and need_end.get(num):
             add(WARN, "尾帧", loc,
                 "storyboard 标 need_endframe=true 但视频 prompt 此 Clip 漏写 `**尾帧**` 引用——"
@@ -3023,6 +3376,16 @@ def check_input_frame_qc(root: str, ep: str) -> None:
     if not pngs:
         return  # check_image_assets 已 BLOCK「本集没有分镜 PNG」
     qc_path = os.path.join(root, "生产数据", "image_qc", ep, f"image_qc_{ep}.json")
+    prohibited = _prohibited_face_patch_outputs(root, ep)
+    if prohibited:
+        sample = "、".join(p["png"] for p in prohibited[:5])
+        more = f" 等 {len(prohibited)} 张" if len(prohibited) > 5 else ""
+        add(BLOCK, "出图落档QC", _production_events_path(root),
+            f"{PROHIBITED_FACE_PATCH_LABEL}：发现 {len(prohibited)} 张最新 image 落档事件来自本地贴脸/换脸/裁脸贴回画面"
+            f"（{sample}{more}）。embedding 分数只是证据，不是目标；不能为了过脸部 embedding QC 把定妆脸盖到镜头上。"
+            "这些图不能进 video，必须回 n2d-image 用真实重抽或官方 image2image 派生替换，并重跑 image_qc。",
+            return_to_stage="image")
+        return
     qc = load_json(qc_path)
     if not isinstance(qc, dict):
         add(BLOCK, "出图落档QC", qc_path,
@@ -3424,6 +3787,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_semantic_lineage(root, ep)
         check_state_continuity(root, ep)
         check_shared_image_index(root, ep)
+        check_referenced_assets_finalized(root, ep)
         check_common_image_prompts(root)
         check_cinematic_optical_continuity(root, ep)
         check_shot_scale_progression(root, ep)
@@ -3435,13 +3799,15 @@ def run(root: str, ep: str, stage: str) -> None:
         check_progress_artifact_signoff(root, ep, video_prereq)
         check_placeholder_policy(root, ep, check_stage)
         check_voiceover_fingerprint(root, ep)
-        check_identity_registry(root, require_reference_assets=True)
-        check_asset_reference_registry(root, require_reference_assets=True)
+        referenced_characters, referenced_assets = episode_registry_reference_ids(root, ep)
+        check_identity_registry(root, require_reference_assets=True, required_character_ids=referenced_characters)
+        check_asset_reference_registry(root, require_reference_assets=True, required_asset_ids=referenced_assets)
         check_identity_adapter_matrix(root)
         check_route_identity_readiness(root, ep)
         check_storyboard_contract(root, ep, require_frame_assets=True)
         check_storyboard_style_contract(root, ep)
         check_storyboard_special_templates(root, ep)
+        check_expression_span_frame_contract(root, ep)
         check_image_assets(root, ep)
         check_input_frame_qc(root, ep)
         check_video_prompt_frames(root, ep)
@@ -3456,8 +3822,9 @@ def run(root: str, ep: str, stage: str) -> None:
         check_compliance_manifest(root, ep, check_stage)
         require_progress(root, ep, ("视频",))
         check_progress_artifact_signoff(root, ep, ("视频",))
-        check_identity_registry(root, require_reference_assets=True)
-        check_asset_reference_registry(root, require_reference_assets=True)
+        referenced_characters, referenced_assets = episode_registry_reference_ids(root, ep)
+        check_identity_registry(root, require_reference_assets=True, required_character_ids=referenced_characters)
+        check_asset_reference_registry(root, require_reference_assets=True, required_asset_ids=referenced_assets)
         check_identity_adapter_matrix(root)
         check_storyboard_contract(root, ep, require_frame_assets=True)
         check_storyboard_special_templates(root, ep)
@@ -3469,8 +3836,9 @@ def run(root: str, ep: str, stage: str) -> None:
         check_compose_inputs(root, ep)
     elif check_stage == "review":
         check_compliance_manifest(root, ep, check_stage)
-        check_identity_registry(root, require_reference_assets=True)
-        check_asset_reference_registry(root, require_reference_assets=True)
+        referenced_characters, referenced_assets = episode_registry_reference_ids(root, ep)
+        check_identity_registry(root, require_reference_assets=True, required_character_ids=referenced_characters)
+        check_asset_reference_registry(root, require_reference_assets=True, required_asset_ids=referenced_assets)
         check_identity_adapter_matrix(root)
         check_storyboard_contract(root, ep, require_frame_assets=True)
         check_storyboard_special_templates(root, ep)

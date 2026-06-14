@@ -30,7 +30,10 @@ from novel_contract import (base_meta, build_progress_markdown, routing_stages,
                             SCALE_CHOICES, scale_profile, detect_rights_status,
                             docx_to_txt, write_project_settings, demo_chapters_for,
                             normalize_scale, parse_outputs, parse_regions,
-                            NOVEL_DRAFT_MODES, CHAPTER_GRANULARITY, AI_TEXT_USAGE_MODES)
+                            SCALE_PROFILES, NOVEL_DRAFT_MODES, CHAPTER_GRANULARITY,
+                            AI_TEXT_USAGE_MODES)
+
+SCALE_PROFILE = SCALE_PROFILES  # scale-band 契约：test_scale_contract 校验其与规模档一致
 
 
 def build_change_spec(source_title):
@@ -218,7 +221,7 @@ def main():
     W = lambda rel, txt: open(os.path.join(out_root, rel), "w", encoding="utf-8").write(txt)
     json.dump(meta, open(os.path.join(out_root, "_meta.json"), "w", encoding="utf-8"),
               ensure_ascii=False, indent=2)
-    write_settings(out_root, {
+    write_project_settings(out_root, {
         "目标平台": args.target_platform,
         "权利来源": rights,
         "权利辖区": meta.get("rights_jurisdiction", ""),
@@ -235,14 +238,9 @@ def main():
     W("设定/角色卡.md", build_character_card(source_title))
     W("设定/世界观.md", build_worldview(source_title))
     W("设定/章纲.md", build_outline(n, args.rewrite_type))
-    # ... (inside main)
-    # W("_进度.md", ...) around line 240
     W("_进度.md", build_progress_markdown("<新书名待定>", "rewrite", n))
 
     print(f"[ok] 改写项目骨架 → {out_root}")
-
-def parse_outputs(value):
-    return [s.strip() for s in value.split(",") if s.strip()]
     print(f"     原作.txt        ← {ext} 抽取（参考素材，非底稿）")
     print(f"     设定/改动spec.md ← 骨架（第 2 步填：保留/改/加 三栏）★最重要")
     print(f"     设定/新设定.md   ← 骨架（第 3 步填：新增/覆盖设定 + 一致性约束）")

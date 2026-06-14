@@ -2,6 +2,8 @@
 
 适用于 novel-spinoff / novel-expand / novel-condense 等需要章纲的场景。
 
+> 配套读：长篇在三幕之上还有**卷级中层节奏**（单卷 5-20 章的蓄力—爆发弧）见 `arc-pacing.md`；第一章的字句级开篇工艺见 `opening.md`；章末钩与爽点配比见 `hooks.md`；跨章伏笔登记见 `foreshadowing.md`。
+
 ## 三幕结构
 
 适用于 ≥ 12 章长度。< 12 章不强套三幕。

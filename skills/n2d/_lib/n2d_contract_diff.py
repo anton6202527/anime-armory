@@ -21,8 +21,11 @@ from n2d_contract import VISUAL_CONTRACT_FIELDS  # noqa: E402
 
 SECTION_TITLE = "本集视觉一致性契约"
 
-# 漂移即 block 的字段（焊在像素里、视频改不动、写错必穿帮）；其余字段漂移只 warn。
-BLOCK_ON_DRIFT = ("场景光位锚", "场景轴线视线")
+# 漂移即 block 的字段；其余字段漂移只 warn。
+#   光位锚/轴线视线：焊在首帧像素里、视频改不动、写错必穿帮（越轴/光跳）。
+#   角色状态演进：剧情状态锁（觉醒前不发光/受伤前无伤/变身前无变体）——视频侧改写=提前泄露
+#     金瞳/伤/变身=连续性事故 + 剧透双杀，与像素层同级不可松（2026-06 由 warn 升 block）。
+BLOCK_ON_DRIFT = ("场景光位锚", "场景轴线视线", "角色状态演进")
 
 # 字段标签别名 → 契约 canonical 名。demo 出图总览用短标签（光位锚/轴线/状态演进），
 # gate.py --stage image_preflight/image 也按短标签检——两种写法都认，比对仍按 VISUAL_CONTRACT_FIELDS 归一。
@@ -113,8 +116,11 @@ def compare_field(field: str, img_val, vid_val) -> dict:
         item.update(status="pass_superset", severity="pass", note="视频侧为出图侧的细化/收紧超集（包含原文），放行")
     else:
         if field in BLOCK_ON_DRIFT:
+            why = ("剧情状态锁：视频侧改写=提前泄露 觉醒/伤/变身 等状态（连续性事故+剧透）"
+                   if field == "角色状态演进"
+                   else "该字段焊在首帧像素里，视频侧改写=与首帧打架（越轴/光跳穿帮）")
             item.update(status="block_drift", severity="block",
-                        note="漂移：该字段焊在首帧像素里，视频侧改写=与首帧打架（越轴/光跳穿帮）；以出图侧为准改回")
+                        note=f"漂移：{why}；以出图侧为准改回")
         else:
             item.update(status="warn_drift", severity="warn",
                         note="漂移：与出图侧不一致（非光位/轴线，先警告）；确认是否有意改写，无理由则以出图侧为准")

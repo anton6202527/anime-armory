@@ -21,6 +21,10 @@ description: Shared writing-primitives and deterministic production helpers for 
 | **派生流水线后半段（rewrite/continue/expand/condense/spinoff 共用）** | `references/derive-pipeline.md` | 任一派生 skill 的阶段表 / demo_gate / draft / export / ai_usage 通用机制——各 skill 只写自己的 source_model/direction_spec 映射，通用部分引此 |
 | 拆分标准（章 / 集 边界 + 字数分档） | `references/split.md` | 章纲编织**之前**先定总章数与字数分档 |
 | 章纲编织 | `references/outline.md` | 拆分定下后；进入逐章写作前 |
+| 黄金开篇（前三章 / 前 300 字） | `references/opening.md` | 写**第一章**前；留存生死线，字句级落地 |
+| 钩子库 + 爽点配比 | `references/hooks.md` | 写章末钩、设计爽点节奏、`novel-review` 查"钩子失效/平铺爽点"时 |
+| 卷级大节奏（arc） | `references/arc-pacing.md` | 规划/回扫一个 story arc（5-20 章）；`novel-balance` 判卷级起伏 |
+| 伏笔工艺（埋—养—收） | `references/foreshadowing.md` | 埋/回收伏笔、落 `foreshadowing_ledger.json`、`novel-wiki`/`novel-review` 查逾期烂尾 |
 | 单章写作守则 | `references/chapter.md` | 每章下笔前；子代理 prompt 模板在此 |
 | 扩写法 | `references/expand.md` | 现有文本太短，想**加章节内细节**（时间不动） |
 | 续写法 | `references/continue.md` | 原作末章后，**加新章节**（时间向前推） |
