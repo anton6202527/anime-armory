@@ -32,7 +32,9 @@ def test_product_kind_registered_with_boundary():
     assert spec and spec["owner"] == "n2d-image"
     # 边界必须点明与 identity_registry 的分工（定性的核心）
     assert "identity_registry" in spec["boundary"]
-    assert "状态" in spec["layer"]
+    # layer 是结构化分层 taxonomy（全英文：production_data/shared_asset/...），本账本落共享资产层；
+    # 「状态演进」的语义由 boundary 承载（上一条断言），不放进结构 layer 字段。
+    assert spec["layer"] == "shared_asset"
 
 
 def test_apply_add_then_dedup_update(tmp_path):

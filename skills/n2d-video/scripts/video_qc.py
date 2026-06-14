@@ -49,6 +49,25 @@ def seam_pairs(indices: Iterable[int]) -> List[Tuple[int, int]]:
 RELAY_TRANSITIONS = ("接力", "relay", "seamless", "continuous")
 
 
+def _is_relay_transition(transition: Any) -> bool:
+    return str(transition or "").strip().lower() in RELAY_TRANSITIONS
+
+
+def _declared_relay(transition: Any, need_endframe: bool) -> bool:
+    """Whether this seam is a strict cross-clip relay.
+
+    `need_endframe=true` may simply mean the clip has an end frame for
+    first/last-frame guidance.  Explicit hard/match/action cuts keep seam
+    distance informational; missing transition intent remains strict.
+    """
+    text = str(transition or "").strip()
+    if _is_relay_transition(text):
+        return True
+    if text:
+        return False
+    return bool(need_endframe)
+
+
 def seam_strictness(intent: Optional[Dict[str, Any]]) -> str:
     """接缝执行档位（纯函数）：relay 声明 → strict（block 拦验收）；
     声明了其他切镜方式 → info（只记录距离供人参考）；
@@ -80,8 +99,12 @@ def load_seam_intents(root: Path, episode: str) -> Dict[int, Dict[str, Any]]:
         if idx is None:
             continue
         cont = clip.get("continuity") or {}
+        transition = cont.get("transition")
+        need_end = bool(clip.get("need_endframe") or cont.get("need_endframe")
+                        or clip.get("need_end_frame") or cont.get("need_end_frame"))
         out[idx] = {"transition": cont.get("transition"),
-                    "relay": bool(clip.get("need_end_frame") or cont.get("need_end_frame"))}
+                    # 规范字段 need_endframe（无下划线）；need_end_frame 仅旧别名兜底。
+                    "relay": _declared_relay(transition, need_end)}
     return out
 
 
@@ -181,7 +204,8 @@ def load_shot_types(root: Path, episode: str) -> Dict[int, Dict[str, Any]]:
         cont = clip.get("continuity") if isinstance(clip.get("continuity"), dict) else {}
         out[idx] = {"closeup": is_closeup_shot(clip), "lens": lenses,
                     # 双帧接力镜：首尾两端帧已锚同人，大表情弧线天然大 dHash → 片内 block 豁免，不误杀。
-                    "double_frame": bool(clip.get("need_end_frame") or cont.get("need_end_frame"))}
+                    "double_frame": bool(clip.get("need_endframe") or cont.get("need_endframe")
+                                         or clip.get("need_end_frame") or cont.get("need_end_frame"))}
     return out
 
 
@@ -207,8 +231,8 @@ def intra_clip_check(payload: Dict[str, Any], shot_types: Optional[Dict[int, Dic
     """片内身份漂移采样（近景 CU/MCU/反打镜）：抽同一 clip 的 start/mid/end 帧两两比
     dHash 结构距 + 色距（复用 temporal_consistency 同一套数学），抓"表情变化时脸被重画"。
 
-    设计取舍：表情运动本就带结构变化，且近景里运镜/转头也会动 dHash——所以这里是**粗筛**，
-    只在"远超接缝 block 阈值"的 gross 变化报 **warn 交人判**，**永不 block**（不误杀正常表演）。
+    设计取舍：表情运动本就带结构变化，且近景里运镜/转头也会动 dHash——所以这里是**粗筛**：
+    未到重画阈值、双帧接力镜或景别未知时 warn 交人判；已知近景非双帧且远超重画阈值时 block。
     精确同人判定（face embedding 余弦 < 身份下限）在 n2d-review/temporal_consistency.analyze
     （需 insightface，重）；video_qc 只靠 Pillow 做轻量初筛，缺料静默降级、不臆造分数。
     无 storyboard 景别时**对全部 clip 抽样**（宁可多看几镜，不静默漏近景）。"""

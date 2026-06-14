@@ -20,7 +20,7 @@ class ReviewTest(unittest.TestCase):
         open(os.path.join(root, "合成", "成片_主片.mp4"), "wb").close()
         self._write_json(root, "脚本/广告法机检报告.json", {"summary": {"block": 0, "warn": 0}})
         self._write_json(root, "配音/时长清单.json", {"has_placeholder": False})
-        self._write_json(root, "合规/ai_usage.json", {"watermark_status": "已打可见AI标识"})
+        self._write_json(root, "合规/ai_usage.json", {"visual_mode": "AI-generated"})
         with open(os.path.join(root, "_进度.md"), "w", encoding="utf-8") as f:
             f.write("""## 交付版本矩阵
 | 交付件 | 时长 | 比例 | 类型 | 交付规格 | 状态 | 成片路径 |
@@ -41,12 +41,12 @@ class ReviewTest(unittest.TestCase):
             payload = review.review(root)
             self.assertTrue(any(f["code"] == "voice_placeholder" for f in payload["findings"]))
 
-    def test_review_blocks_unrecorded_watermark(self):
+    def test_review_blocks_missing_ai_usage(self):
         with tempfile.TemporaryDirectory() as root:
             self._base(root)
-            self._write_json(root, "合规/ai_usage.json", {"watermark_status": "未记录"})
+            os.remove(os.path.join(root, "合规", "ai_usage.json"))
             payload = review.review(root)
-            self.assertTrue(any(f["code"] == "watermark_unrecorded" for f in payload["findings"]))
+            self.assertTrue(any(f["code"] == "ai_usage_missing" for f in payload["findings"]))
 
 
 if __name__ == "__main__":

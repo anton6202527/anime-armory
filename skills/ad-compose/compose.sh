@@ -50,4 +50,4 @@ else
 fi
 
 echo "[ok] 成片：$OUT"
-echo "下一步：字幕 overlay（render_subs.py）→ 多比例 reframe.py → cutdown.py → AI标识水印（ad-watermark）→ 交付规格响度归一"
+echo "下一步：字幕 overlay（render_subs.py）→ 多比例 reframe.py → cutdown.py → 交付规格响度归一"

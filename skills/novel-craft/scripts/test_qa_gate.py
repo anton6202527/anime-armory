@@ -62,6 +62,13 @@ def valid_score_report(root, chapter, freshness=None, **extra):
         "total_score": 90,
         "tier": "爆款潜力",
         "verdict": "过",
+        "production_decision": {
+            "decision": "go",
+            "route": "novel-review",
+            "reason": "评分达标",
+            "score": 90,
+            "verdict": "过",
+        },
         "rewrite_roi": "high",
         "waivers": [],
         "next_actions": [],

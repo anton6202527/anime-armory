@@ -18,9 +18,10 @@ import json
 import os
 import re
 import sys
-from typing import Dict, List, Optional, Sequence
+from typing import Dict, List, Optional, Sequence, Any
 
 import face_consistency as fc  # 复用 cosine（光色指纹相似度）
+from n2d_contract import asset_registry_path # 导入契约路径
 
 DEFAULT_FACTOR = 1.8   # 镜头平均结构距离 > 组中位 * factor → 离群
 DEFAULT_FLOOR = 12     # 且绝对汉明距 > floor（64 位里差这么多才算真漂，避免小组误杀）
@@ -61,6 +62,40 @@ def is_outlier(value: float, group_median: float, factor: float = DEFAULT_FACTOR
                floor: float = DEFAULT_FLOOR) -> bool:
     """离群 = 同时 超组中位*factor 且 超绝对 floor。"""
     return value > group_median * factor and value > floor
+
+
+# ---------- 资产注册层集成 (Q28·结构唯一性) ----------
+
+def _load_asset_registry(root: str) -> Dict[str, Dict[str, Any]]:
+    """加载资产注册层，返回 {asset_id: {constraints, drift_forbidden, name}}。"""
+    path = asset_registry_path(root)
+    if not os.path.isfile(path):
+        return {}
+    try:
+        data = json.load(open(path, encoding="utf-8"))
+        if not isinstance(data, dict) or not isinstance(data.get("assets"), list):
+            return {}
+        return {a["id"]: a for a in data["assets"] if isinstance(a, dict) and "id" in a}
+    except Exception:
+        return {}
+
+
+def _match_asset_id(scene_name: str, registry: Dict[str, Dict[str, Any]]) -> Optional[str]:
+    """根据场景定妆名（如 "定妆_沈府大殿"）匹配资产 ID（如 "LOC_沈府大殿"）。"""
+    base_name = scene_name.replace(".png", "")
+    # 1) 精确匹配
+    if base_name in registry:
+        return base_name
+    # 2) 补齐前缀匹配
+    for prefix in ("LOC_", "PROP_", "OUTFIT_", "VFX_"):
+        candidate = prefix + base_name
+        if candidate in registry:
+            return candidate
+    # 3) 模糊匹配
+    for aid, asset in registry.items():
+        if base_name in aid or base_name in str(asset.get("name", "")):
+            return aid
+    return None
 
 
 # ---------- 图像（需 Pillow） ----------
@@ -134,6 +169,7 @@ def analyze(root: str, ep: str, factor: float = DEFAULT_FACTOR, floor: float = D
         res["notes"].append("场景一致性机检已跳过（未装 Pillow）——背景漂移暂由人判并排读图。")
         return res
     smap = _scene_of_shot(root, ep)
+    registry = _load_asset_registry(root)
     # 按场景分组
     groups: Dict[str, List[str]] = {}
     for png, scene in smap.items():
@@ -143,9 +179,24 @@ def analyze(root: str, ep: str, factor: float = DEFAULT_FACTOR, floor: float = D
     for scene, pngs in sorted(groups.items()):
         hashes = {p: _dhash_image(os.path.join(root, "出图", ep, p)) for p in pngs}
         hashes = {p: h for p, h in hashes.items() if h is not None}
+        
+        # 查找资产注册层约束
+        asset_id = _match_asset_id(scene, registry)
+        asset = registry.get(asset_id) if asset_id else None
+        constraints = asset.get("constraints") if asset else None
+        
+        group_summary: Dict[str, Any] = {"shots": len(hashes)}
+        if constraints:
+            group_summary["registered_id"] = asset_id
+            group_summary["constraints"] = constraints
+            for ck, cv in constraints.items():
+                res["notes"].append(f"场景[{scene}] 已注册{ck}：{cv}。验收时请重点核对。")
+
         if len(hashes) < 3:   # 组太小，统计不稳，跳过（少于3镜无法定离群）
-            res["groups"][scene] = {"shots": len(hashes), "skipped": "组<3镜"}
+            group_summary["skipped"] = "组<3镜"
+            res["groups"][scene] = group_summary
             continue
+        
         # 每镜对组内其他镜的平均汉明距
         names = list(hashes)
         avg = {}
@@ -153,7 +204,8 @@ def analyze(root: str, ep: str, factor: float = DEFAULT_FACTOR, floor: float = D
             ds = [hamming(hashes[p], hashes[q]) for q in names if q != p]
             avg[p] = sum(ds) / len(ds)
         gmed = median(list(avg.values()))
-        res["groups"][scene] = {"shots": len(names), "median_dist": round(gmed, 1)}
+        group_summary["median_dist"] = round(gmed, 1)
+        res["groups"][scene] = group_summary
         for p in names:
             if is_outlier(avg[p], gmed, factor, floor):
                 res["shots"].append({"png": p, "scene": scene, "kind": "结构", "avg_dist": round(avg[p], 1),

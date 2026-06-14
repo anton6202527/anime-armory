@@ -57,10 +57,7 @@ def review(root):
     usage = load_json(ai_usage)
     if usage is None:
         findings.append(finding("block", "ai_usage_missing", "缺 AI 使用/授权披露", ai_usage))
-    else:
-        wm = str(usage.get("watermark_status") or "").strip()
-        if not wm or wm in ("未记录", "待补", "tbd", "TBD"):
-            findings.append(finding("block", "watermark_unrecorded", "水印 / AI 标识状态未记录", ai_usage))
+    # AI 标识/水印不再由本流水线把关——AI 披露义务移到工具之外，由使用方按平台/地区法规自行处理。
 
     progress = os.path.join(root, "_进度.md")
     if not os.path.isfile(progress):

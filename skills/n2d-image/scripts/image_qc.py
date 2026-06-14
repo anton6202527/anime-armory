@@ -18,6 +18,8 @@
   不验 ID 真的在 registry 里，写错 CHAR_99 出图阶段无人拦）
 - 尾帧/下一镜入点若切到非主镜身份，必须有 `尾帧专用重抽提示`，并写目标 `CHAR_xx/形态`
   或 `定妆_<角色>_<形态>` 脸部参考，防止局部修复把接力角色美化成通用脸
+- 角色镜落档后必须逐张有 full 精度脸部参考比对证据：缺 insightface、缺比对行、比对 warn/noface
+  都不允许进入 video。
 
 落档判定：block=必须重抽/修复，warn=人判二次，ok=放行。退出码恒 0（建议性闸门，
 由出图落档工作流/人决定是否放行误报，同 video_qc 的 --allow-qc-block 哲学）。
@@ -65,6 +67,17 @@ def _load_review_module(name: str):
         return None
 
 
+def _load_sibling(name: str):
+    """惰性加载本 skill scripts 目录下的同级模块（如 asset_lifecycle）；不可用返回 None。"""
+    d = str(Path(__file__).resolve().parent)
+    if d not in sys.path:
+        sys.path.insert(0, d)
+    try:
+        return __import__(name)
+    except Exception:
+        return None
+
+
 def worst_verdict(verdicts: Iterable[str]) -> str:
     """一组 verdict 取最重者；空集 → ok。纯函数·可测。"""
     worst = "ok"
@@ -106,6 +119,80 @@ def load_registry_ids(root: Path) -> Optional[Set[str]]:
             if fm:
                 ids.add(f"{cid}/{fm}")
     return ids
+
+
+def load_asset_index(root: Path) -> Optional[Dict[str, Any]]:
+    """asset_registry.json → {ids, name_to_id, prefix_of}，供逐镜资产 id lint（A·把 CHAR_xx 那套对称到
+    LOC/PROP/OUTFIT/VFX）。缺/损坏 → None（lint 跳过资产合法性，记 note，不误报）。
+
+    name_to_id 把每个资产的 `name` 和 reference_group 文件名 stem（剥 `定妆_`/`_侧`等）映到其 id，
+    用来抓「用了 `定妆_<资产>` 却没绑 `PROP_xx/LOC_xx`」——执行端缺 id 就取不到 constraints/drift_forbidden。
+    asset_registry 只含非角色资产（场景/道具/服装/特效），角色在 identity_registry，二者不串。
+    """
+    path = root / "出图" / "共享" / "asset_registry.json"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    ids: Set[str] = set()
+    name_to_id: Dict[str, str] = {}
+    prefix_of: Dict[str, str] = {}
+    for a in (data.get("assets") or []):
+        aid = str(a.get("id") or "").strip()
+        if not aid:
+            continue
+        ids.add(aid)
+        m = re.match(r"([A-Za-z]+_)", aid)
+        if m:
+            prefix_of[aid] = m.group(1)
+        name = str(a.get("name") or "").strip()
+        if len(name) >= 2:
+            name_to_id.setdefault(name, aid)
+        for ref in _flatten_reference_paths(a.get("reference_group") or {}):
+            stem = Path(ref).stem
+            if stem.startswith("定妆_"):
+                stem = stem[len("定妆_"):]
+            stem = re.sub(r"_(侧|半身|全身|背|三视图|四视图|设定表)$", "", stem)
+            if len(stem) >= 2:
+                name_to_id.setdefault(stem, aid)
+    return {"ids": ids, "name_to_id": name_to_id, "prefix_of": prefix_of}
+
+
+# 资产 id 引用（场景/道具/服装/特效）+ 定妆资产名（用于抓"用了定妆却没绑 id"）。
+ASSET_ID_RE = re.compile(r"`?((?:LOC|PROP|OUTFIT|VFX)_[A-Za-z0-9_]+)`?")
+DEFINING_ASSET_RE = re.compile(r"定妆_([^\s`，。、）)/]+)")
+_ASSET_NAME_SUFFIX_RE = re.compile(r"_(侧|半身|全身|背|三视图|四视图|设定表|脸部特写|表情)$")
+
+
+def _lint_asset_binding(label: str, body: str, asset_index: Optional[Dict[str, Any]]) -> List[Dict[str, str]]:
+    """资产 id lint（A，所有镜都跑，不限角色镜）：
+    - 写了 `LOC/PROP/OUTFIT/VFX_xx` 但 registry 没有 → block `unknown_asset_id`（对称 unknown_char_id）；
+    - 用了 `定妆_<已登记资产>` 却没绑对应 id → warn `asset_ref_without_id`（执行端取不到 constraints/drift_forbidden）。
+    纯函数·可测。asset_index=None（registry 缺）→ 跳过。"""
+    findings: List[Dict[str, str]] = []
+    if not asset_index:
+        return findings
+    text = str(body or "")
+    ids: Set[str] = asset_index.get("ids") or set()
+    name_to_id: Dict[str, str] = asset_index.get("name_to_id") or {}
+    prefix_of: Dict[str, str] = asset_index.get("prefix_of") or {}
+    body_ids = set(ASSET_ID_RE.findall(text))
+    for rid in sorted(body_ids):
+        if rid not in ids:
+            findings.append({"level": "block", "code": "unknown_asset_id",
+                             "msg": f"{label}：资产引用 `{rid}` 在 asset_registry 不存在（场景/道具/服装/特效 id 写错或未登记）"})
+    flagged: Set[str] = set()
+    for raw in DEFINING_ASSET_RE.findall(text):
+        stem = raw[:-4] if raw.endswith(".png") else raw
+        name = _ASSET_NAME_SUFFIX_RE.sub("", stem)
+        aid = name_to_id.get(name) or name_to_id.get(stem) or name_to_id.get(raw)
+        if aid and aid not in body_ids and aid not in flagged:
+            flagged.add(aid)
+            kind = {"LOC_": "场景", "PROP_": "道具", "OUTFIT_": "服装", "VFX_": "特效"}.get(prefix_of.get(aid, ""), "资产")
+            findings.append({"level": "warn", "code": "asset_ref_without_id",
+                             "msg": f"{label}：用了 `定妆_{raw}`({kind}) 但未绑 `{aid}`；写上资产 id 执行端才会自动取 "
+                                    "reference_group/constraints/drift_forbidden（防场景/道具/特效跨镜漂移）"})
+    return findings
 
 
 def _registry_path() -> Path:
@@ -183,16 +270,28 @@ def load_registry_forms(root: Path) -> Optional[List[Dict[str, Any]]]:
                     if parts and len(parts[0]) >= 2:
                         weak_aliases.add(parts[0])
             display = asset_key or "/".join([cid, fm])
+            ref_count = len({Path(p).stem for p in _flatten_reference_paths(form.get("reference_group") or {})})
             forms.append({
                 "id": cid,
                 "form": fm,
                 "key": key,
                 "asset_key": asset_key,
                 "display": display,
+                "ref_count": ref_count,  # 该形态 reference_group 的多角度参考张数（C4：喂全角度组给多参考后端）
                 "strong_aliases": strong_aliases,
                 "weak_aliases": weak_aliases,
             })
     return forms
+
+
+def registry_ref_counts(forms: Optional[List[Dict[str, Any]]]) -> Dict[str, int]:
+    """角色 base id → 其各形态 reference_group 的最大多角度张数。纯函数·可测（C4 用）。"""
+    out: Dict[str, int] = {}
+    for f in forms or []:
+        cid = str(f.get("id") or "")
+        if cid:
+            out[cid] = max(out.get(cid, 0), int(f.get("ref_count") or 0))
+    return out
 
 
 # 逐镜块里 `资产身份注册层` 行引用的身份键，形如 `CHAR_01/常态`、`CHAR_SHEN/常态`
@@ -233,6 +332,78 @@ def _identity_layer_text(body: str) -> str:
         line for line in str(body or "").splitlines()
         if "资产身份注册层" in line or "身份注册层" in line
     )
+
+
+def _is_character_shot_body(body: str, id_refs: Optional[Sequence[str]] = None) -> bool:
+    """角色镜判定的单一口径：有身份注册层 CHAR 引用，或身份层绑定了定妆角色参考。"""
+    text = str(body or "")
+    identity_layer = _identity_layer_text(text)
+    if _declares_no_face_coverage(text):
+        return False
+    refs = list(id_refs) if id_refs is not None else IDENTITY_REF_RE.findall(text)
+    if not refs and re.search(r"无人物|人物不露脸|无角色", identity_layer):
+        return False
+    has_identity = bool(refs) and bool(identity_layer)
+    has_makeup_ref = bool(re.search(r"定妆_[^_\s`，；]+", identity_layer))
+    return has_identity or has_makeup_ref
+
+
+def _declares_no_face_coverage(body: str) -> bool:
+    text = str(body or "")
+    return bool(re.search(r"脸部覆盖豁免|无可比对人脸|人物不露脸|不露正脸|只拍手|只拍腕|手腕特写|物件特写", text))
+
+
+PNG_TOKEN_RE = re.compile(r"`([^`]+\.png)`|([^\s`，；。)）]+\.png)")
+TARGET_PNG_LINE_MARKERS = ("目标", "输出", "落档", "存档", "首帧", "本镜")
+
+
+def _png_tokens(text: str) -> List[str]:
+    out: List[str] = []
+    for m in PNG_TOKEN_RE.finditer(str(text or "")):
+        raw = next((g for g in m.groups() if g), "")
+        token = raw.strip().strip("`'\"，。；、:：)）]")
+        if token:
+            out.append(token)
+    return out
+
+
+def _is_reference_png(path: str) -> bool:
+    s = str(path or "")
+    stem = Path(s).stem
+    return bool(stem.startswith("定妆_") or "/共享/" in s or "出图/共享/" in s)
+
+
+def _extract_target_png(body: str) -> Optional[str]:
+    """从逐镜 prompt 提取本镜落档 PNG。优先目标/落档行，排除定妆/共享参考图。"""
+    fallback: List[str] = []
+    for line in str(body or "").splitlines():
+        tokens = [p for p in _png_tokens(line) if not _is_reference_png(p)]
+        if not tokens:
+            continue
+        if any(marker in line for marker in TARGET_PNG_LINE_MARKERS):
+            return tokens[0]
+        fallback.extend(tokens)
+    return fallback[0] if fallback else None
+
+
+def character_shot_manifest(block: Dict[str, str]) -> Optional[Dict[str, Any]]:
+    """逐镜 prompt → 角色镜覆盖清单项。
+
+    该清单是后续 full 精度脸部参考覆盖闸门的输入，不依赖像素引擎。
+    """
+    body = block.get("body", "")
+    label = block.get("label", "")
+    id_refs = [normalize_identity_ref(ref) for ref in IDENTITY_REF_RE.findall(body)]
+    if not _is_character_shot_body(body, id_refs):
+        return None
+    png = _extract_target_png(body)
+    shot = _shot_key(png) or _shot_key(label) or label
+    return {
+        "label": label,
+        "shot": shot,
+        "png": png,
+        "identity_refs": sorted(set(id_refs)),
+    }
 
 
 def _declares_no_tail_frame(body: str) -> bool:
@@ -360,12 +531,28 @@ def _lint_tail_relay_method(label: str, body: str) -> List[Dict[str, str]]:
     if not has_tail:
         return []
     relay_ok = bool(re.search(r"image2image|图生图|i2i|母图|以.{0,16}首帧.{0,8}为母", body, re.I))
-    text2img = bool(re.search(r"纯文生图|text2image|t2i|文生图", body, re.I))
+    text2img = _has_unnegated_text2img(body)
     if relay_ok and not text2img:
         return []
     return [{"level": "block", "code": "tail_relay_not_image2image",
              "msg": f"{label}：本镜产出尾帧但未声明『以首帧 image2image 为母图、只改表情不重画脸』"
                     "（缺锁脸接力 → 纯文生图兜底 → 尾帧脸漂）"}]
+
+
+def _has_unnegated_text2img(text: str) -> bool:
+    """Return true only when text2image appears as an allowed fallback, not as a ban."""
+    pattern = re.compile(r"纯文生图|text2image|t2i|文生图", re.I)
+    negation = re.compile(
+        r"(禁|禁止|严禁|不得|不许|不要|不能|不可|避免|无|no|not|never)"
+        r"[\s`*_（(]*[^\n。；;，,、]{0,14}$",
+        re.I,
+    )
+    for match in pattern.finditer(str(text or "")):
+        before = text[max(0, match.start() - 32):match.start()]
+        if negation.search(before):
+            continue
+        return True
+    return False
 
 
 # 近景大表情表情库 gate（④ 治表情镜脸漂）：近景/特写/反打 + 强情绪的角色镜，若 prompt
@@ -405,29 +592,83 @@ def _lint_closeup_expression_lib(label: str, body: str) -> List[Dict[str, str]]:
                     "（大表情会让 AI 重画整张脸 → 表情镜脸漂；建议引同源表情库，首尾双帧只插值）"}]
 
 
+# C3 多主体空间绑定：同框 ≥2 角色需逐角色绑画面站位，否则多主体易串脸。
+SPATIAL_POSITION_MARKERS = ("画左", "画右", "画中", "靠左", "靠右", "左侧", "右侧", "居中",
+                            "前景", "后景", "背景", "中景", "近端", "远端", "左", "右",
+                            "left", "right", "center", "foreground", "background")
+BLOCKING_FIELD_MARKERS = ("blocking", "站位", "走位", "机位站位")
+
+
+def _distinct_char_bases(id_refs: Sequence[str]) -> Set[str]:
+    """身份引用集合 → 去掉形态/星标后的角色 base id 集合（判多人同框）。"""
+    return {normalize_identity_ref(r).split("/")[0] for r in (id_refs or []) if r}
+
+
+def _lint_multi_subject_spatial_binding(label: str, body: str,
+                                        id_refs: Sequence[str]) -> List[Dict[str, str]]:
+    """多人同框防串脸（C3·生成端预防）：≥2 具名角色同框却没声明逐角色空间站位时 warn。
+
+    2026 研究：多主体身份混淆随参考数上升（DreamO/UMO）。Seedream4.5 / Nano Banana2 已支持多主体
+    空间区域绑定——把每个角色绑到画面位置（画左/画右/前景）可在生成端按位锁主体、显著降串脸。
+    这里只在出图前 lint「多人同框是否声明了空间站位」，缺则 warn（不阻断，交人补 blocking）。纯函数·可测。"""
+    if len(_distinct_char_bases(id_refs)) < 2:
+        return []
+    low = str(body or "").lower()
+    if any(m.lower() in low for m in BLOCKING_FIELD_MARKERS):
+        return []
+    if sum(1 for m in SPATIAL_POSITION_MARKERS if m.lower() in low) >= 2:
+        return []
+    return [{"level": "warn", "code": "multi_person_no_spatial_binding",
+             "msg": f"{label}：多人同框但未声明逐角色空间站位（blocking / 画左·画右 / 前后景）"
+                    "——多主体易串脸，给每角色绑画面位置喂多主体后端可在生成端按位锁主体防串脸"}]
+
+
+def _lint_native_multiref_coverage(label: str, body: str, id_refs: Sequence[str],
+                                   form_ref_counts: Optional[Dict[str, int]]) -> List[Dict[str, str]]:
+    """多角度参考喂养充分性（C4·advisory）：定妆库有多角度组、本镜却只引用了 1 张时提示喂全组。
+
+    2026 原生多参考已 table-stakes（Seedream≤14 / 可灵 Elements≤4 张锁主体）。定妆库建了正/侧/背
+    多角度组，却只把正面喂进去 = 没吃满后端锁主体能力。只在 registry 确有多角度组(≥3)时才 info，
+    不噪；单参考后端可忽略。纯函数·可测。"""
+    if not form_ref_counts:
+        return []
+    avail = max((form_ref_counts.get(b, 0) for b in _distinct_char_bases(id_refs)), default=0)
+    if avail < 3:
+        return []  # 没有多角度组可喂，免谈
+    refd = len({t for t in _png_tokens(body) if "定妆_" in t})
+    if refd >= min(avail, 3):
+        return []  # 已喂≥3张（或全部）→ 充分
+    return [{"level": "info", "code": "native_multiref_underfed",
+             "msg": f"{label}：定妆库有 {avail} 张多角度参考，本镜参考图块只引用了 {refd} 张——"
+                    "多参考后端(Seedream≤14 / 可灵Elements≤4)喂全角度组(正/侧/背)锁主体更稳；单参考后端可忽略"}]
+
+
 def lint_shot_block(
     block: Dict[str, str],
     valid_ids: Optional[Set[str]],
     registry_forms: Optional[List[Dict[str, Any]]] = None,
+    asset_index: Optional[Dict[str, Any]] = None,
+    form_ref_counts: Optional[Dict[str, int]] = None,
 ) -> List[Dict[str, str]]:
     """单镜块执行层 lint：返回 findings [{level, code, msg}]。纯函数·可测（不读盘）。
 
     block/warn 取舍：
-    - block：含角色却无参考图块（纯文生图风险）、引用了 registry 里不存在的 CHAR_xx（gate 不查）
-    - warn ：角色镜漏 视线方向/锚点句/身份锁定句（gate 部分查视线，这里做快检+补查另两项）
+    - block：含角色却无参考图块（纯文生图风险）、引用了 registry 里不存在的 CHAR_xx / LOC·PROP·OUTFIT·VFX_xx
+    - warn ：角色镜漏 视线方向/锚点句/身份锁定句；用了定妆资产却没绑资产 id
     """
     body = block.get("body", "")
     label = block.get("label", "")
     findings: List[Dict[str, str]] = []
 
+    # 资产 id lint（A）：场景/道具/服装/特效，所有镜都跑（含纯场景/道具空镜），先于角色镜早返回。
+    findings.extend(_lint_asset_binding(label, body, asset_index))
+
     id_refs = IDENTITY_REF_RE.findall(body)
-    # 是否角色镜：有身份注册层 CHAR 引用，或参考图块里引用了 定妆_<角色>
-    has_identity = bool(id_refs) and ("资产身份注册层" in body or "身份注册" in body)
     ref_block_present = "参考图" in body and "定妆_" in body
-    is_char_shot = has_identity or bool(re.search(r"定妆_[^_\s`，；]+", body)) and "资产身份注册层" in body
+    is_char_shot = _is_character_shot_body(body, id_refs)
 
     if not is_char_shot:
-        return findings  # 空镜/纯场景镜不强求身份字段
+        return findings  # 空镜/纯场景镜不强求身份字段（但上面的资产 id lint 已对它生效）
 
     if not ref_block_present:
         findings.append({"level": "block", "code": "no_reference_block",
@@ -453,12 +694,20 @@ def lint_shot_block(
     findings.extend(_lint_tail_identity_handoff(label, body, registry_forms))
     findings.extend(_lint_tail_relay_method(label, body))
     findings.extend(_lint_closeup_expression_lib(label, body))
+    findings.extend(_lint_multi_subject_spatial_binding(label, body, id_refs))      # C3
+    findings.extend(_lint_native_multiref_coverage(label, body, id_refs, form_ref_counts))  # C4
     return findings
 
 
 def lint_prompts(root: Path, ep: str) -> Dict[str, Any]:
     """读 01_分镜出图.md 跑逐镜 lint。缺文件 → 记 note。"""
-    res: Dict[str, Any] = {"available": True, "findings": [], "shots_linted": 0, "notes": []}
+    res: Dict[str, Any] = {
+        "available": True,
+        "findings": [],
+        "shots_linted": 0,
+        "character_shots": [],
+        "notes": [],
+    }
     path = root / "出图" / ep / "prompt" / "01_分镜出图.md"
     try:
         text = path.read_text(encoding="utf-8")
@@ -472,10 +721,17 @@ def lint_prompts(root: Path, ep: str) -> Dict[str, Any]:
     registry_forms = load_registry_forms(root)
     if registry_forms is None:
         res["notes"].append("identity_registry.json 缺失/损坏——跳过尾帧身份交接校验。")
+    form_ref_counts = registry_ref_counts(registry_forms)  # C4：角色→多角度参考张数
+    asset_index = load_asset_index(root)
+    if asset_index is None:
+        res["notes"].append("asset_registry.json 缺失/损坏——跳过 LOC/PROP/OUTFIT/VFX_xx 资产 id 合法性校验。")
     blocks = split_shot_blocks(text)
     for blk in blocks:
         res["shots_linted"] += 1
-        res["findings"].extend(lint_shot_block(blk, valid_ids, registry_forms))
+        manifest = character_shot_manifest(blk)
+        if manifest:
+            res["character_shots"].append(manifest)
+        res["findings"].extend(lint_shot_block(blk, valid_ids, registry_forms, asset_index, form_ref_counts))
     return res
 
 
@@ -518,6 +774,17 @@ def run_pixel_checks(root: Path, ep: str) -> Dict[str, Any]:
     else:
         checks["scene"] = {"available": False, "notes": ["scene_consistency 不可用——场景机检跳过。"]}
 
+    # 道具/法宝/特效 P2（B）：按 asset_registry 分组的 RGB+dHash 组内离群，前移到出图落档当初筛项
+    # （与 outfit/scene 同级 advisory，不阻断），让道具/特效漂移在出图就被抓，而非等审片。
+    mc = _load_review_module("multimodal_consistency")
+    if mc is not None:
+        try:
+            checks["multimodal"] = mc.analyze(r, ep)
+        except Exception as exc:
+            checks["multimodal"] = {"available": False, "notes": [f"multimodal_consistency.analyze 失败：{exc}"]}
+    else:
+        checks["multimodal"] = {"available": False, "notes": ["multimodal_consistency 不可用——道具/特效机检跳过。"]}
+
     tc = _load_review_module("temporal_consistency")
     if tc is not None:
         try:
@@ -546,11 +813,16 @@ HARD_LINT_CODES = (
     "tail_identity_handoff_missing_prompt",
     "tail_identity_handoff_unlocked",
     "tail_relay_not_image2image",
+    "unknown_asset_id",
+    "lifecycle_regression",
+    "lifecycle_unknown_from_state",
+    "lifecycle_unknown_to_state",
 )
 VISUAL_CHECK_LABELS = {
     "face": "崩脸 G1",
     "outfit": "服装 N1",
     "scene": "场景 O2",
+    "multimodal": "道具/特效 P2",
     "seam": "接缝接力",
     "anchors": "锚点门 N3",
 }
@@ -558,6 +830,7 @@ VISUAL_CHECK_DIMS = {
     "face": "character_consistency",
     "outfit": "outfit_consistency",
     "scene": "scene_consistency",
+    "multimodal": "asset_consistency",
     "seam": "scene_consistency",
     "anchors": "character_consistency",
 }
@@ -695,6 +968,102 @@ def build_face_review_queue(payload: Dict[str, Any], root: Path, ep: str) -> Lis
     return targets
 
 
+# ── D 漂移人审拼图扩展：场景 O2 / 道具·特效 P2 漂移也拼「资产参考 ↔ 本镜」并排图 ──────────
+
+def _asset_primary_map(root: Path) -> Dict[str, str]:
+    """asset_registry.json → {id / name / 定妆stem: reference_group.primary 相对路径}，给漂移人审找参考面板。"""
+    out: Dict[str, str] = {}
+    try:
+        data = json.loads((Path(root) / "出图" / "共享" / "asset_registry.json").read_text(encoding="utf-8"))
+    except Exception:
+        return out
+    for a in (data.get("assets") or []):
+        primary = ((a.get("reference_group") or {}).get("primary") or "").strip()
+        if not primary:
+            continue
+        aid = str(a.get("id") or "").strip()
+        name = str(a.get("name") or "").strip()
+        stem = Path(primary).stem
+        if stem.startswith("定妆_"):
+            stem = stem[len("定妆_"):]
+        for k in (aid, name, stem):
+            if len(k) >= 2:
+                out.setdefault(k, primary)
+    return out
+
+
+def _resolve_asset_ref(root: Path, primary_map: Dict[str, str], hint: str) -> Optional[str]:
+    """资产名/id/group → 参考图相对路径。先查 asset_registry primary，再兜底 出图/共享/图片/定妆_<hint>.png。"""
+    h = str(hint or "").strip()
+    if h.endswith(".png"):
+        h = h[:-4]
+    if not h:
+        return None
+    if h in primary_map:
+        return primary_map[h]
+    cand = Path("出图") / "共享" / "图片" / f"定妆_{h}.png"
+    if (Path(root) / cand).exists():
+        return str(cand)
+    return primary_map.get(h)
+
+
+def asset_review_targets(payload: Dict[str, Any], root: Path, ep: str,
+                         primary_map: Optional[Dict[str, str]] = None) -> List[Dict[str, Any]]:
+    """场景 O2 / 道具·特效 P2 报漂移(block/warn)的镜 → 人审拼图目标（纯路径计算·可测）。
+
+    每项 {kind, asset, shot, png, png_abs, ref, stitch}。primary_map 缺时用 {}（ref 走兜底解析）。
+    """
+    pm = primary_map if primary_map is not None else {}
+    checks = payload.get("checks", {}) or {}
+    out: List[Dict[str, Any]] = []
+    seen: Set[str] = set()
+
+    def _add(kind: str, png: Optional[str], hint: str) -> None:
+        if not png:
+            return
+        key = (_shot_key(png) or "shot")
+        uid = f"{kind}:{key}:{png}"
+        if uid in seen:
+            return
+        seen.add(uid)
+        ref = _resolve_asset_ref(Path(root), pm, hint)
+        png_abs = str(Path(root) / "出图" / ep / png)
+        stitch = str(production_dir(Path(root)) / "image_qc" / ep / "asset_review" / f"{kind}_{key}_compare.png")
+        out.append({"kind": kind, "asset": hint, "shot": key, "png": png, "png_abs": png_abs,
+                    "ref": ref, "stitch": stitch})
+
+    for s in (checks.get("scene") or {}).get("shots", []):
+        if s.get("verdict") in ("block", "warn"):
+            _add("scene", s.get("png"), str(s.get("scene") or s.get("group") or ""))
+    for s in (checks.get("multimodal") or {}).get("shots", []):
+        if s.get("verdict") in ("block", "warn"):
+            _add("asset", s.get("png"), str(s.get("asset") or s.get("group") or s.get("scene") or ""))
+    return out
+
+
+def build_asset_review_queue(payload: Dict[str, Any], root: Path, ep: str) -> List[Dict[str, Any]]:
+    """为 场景/道具/特效 漂移镜生成「资产参考 ↔ 本镜」并排图（D）。best-effort，never crash。"""
+    targets = asset_review_targets(payload, root, ep, _asset_primary_map(root))
+    if not targets:
+        payload["asset_human_review"] = []
+        return []
+    stitch_mod = _load_review_module("face_compare_stitch")  # 通用拼图模块，不限脸
+    label = {"scene": "场景", "asset": "道具/特效"}
+    for t in targets:
+        t["stitched"] = False
+        if stitch_mod is not None and t.get("ref") and t.get("png_abs"):
+            ref_abs = os.path.join(str(root), t["ref"])
+            try:
+                t["stitched"] = bool(stitch_mod.build_comparison(
+                    [(f"参考·{t.get('asset') or t['kind']}", ref_abs),
+                     (f"本镜·{t['shot']}", t["png_abs"])],
+                    t["stitch"]))
+            except Exception:
+                t["stitched"] = False
+    payload["asset_human_review"] = targets
+    return targets
+
+
 def _stitch_for_png(payload: Dict[str, Any], png: Optional[str]) -> Optional[str]:
     for t in payload.get("face_human_review") or []:
         if t.get("png") == png and t.get("stitched"):
@@ -702,12 +1071,172 @@ def _stitch_for_png(payload: Dict[str, Any], png: Optional[str]) -> Optional[str
     return None
 
 
+def _episode_rel_path(root: Path, ep: str, path: Path) -> str:
+    try:
+        return path.relative_to(Path(root) / "出图" / ep).as_posix()
+    except Exception:
+        try:
+            return path.relative_to(Path(root)).as_posix()
+        except Exception:
+            return path.as_posix()
+
+
+def _resolve_existing_character_png(root: Path, ep: str, rec: Mapping[str, Any]) -> Optional[str]:
+    """角色镜 manifest → 已落档 PNG（相对 `出图/<ep>`）。未出图返回 None。"""
+    root = Path(root)
+    png = str(rec.get("png") or "").strip()
+    candidates: List[Path] = []
+    if png:
+        p = Path(png)
+        if p.is_absolute():
+            candidates.append(p)
+        candidates.extend([
+            root / png,
+            root / "出图" / ep / png,
+            root / "出图" / ep / "图片" / png,
+        ])
+    for cand in candidates:
+        if cand.exists() and cand.is_file():
+            return _episode_rel_path(root, ep, cand)
+
+    shot = str(rec.get("shot") or "")
+    if not shot:
+        return None
+    img_dir = root / "出图" / ep / "图片"
+    if not img_dir.exists():
+        return None
+    for cand in sorted(img_dir.glob("*.png")):
+        if _shot_key(cand.name) == shot:
+            return _episode_rel_path(root, ep, cand)
+    return None
+
+
+def _face_full_precision(face: Mapping[str, Any]) -> bool:
+    mode = str(face.get("mode") or "")
+    precision = str(face.get("precision_level") or "")
+    if face.get("available") is False:
+        return False
+    if mode in FACE_DEGRADED_MODES or precision in ("degraded", "none", "insufficient_precision"):
+        return False
+    return mode not in ("", "None", "none", "null")
+
+
+def face_reference_coverage(payload: Dict[str, Any], root: Path, ep: str) -> Dict[str, Any]:
+    """铁律：每张已落档角色 PNG 必须有 full 精度定妆/身份主参考脸部比对证据。
+
+    - prompt 阶段尚未出图的角色镜只列入 pending，不阻断。
+    - 一旦 PNG 已存在，缺 full 精度、缺 face row、face row=warn/noface 都是 hard block。
+    - face row=block 已由 G1 硬伤本身阻断，这里只视为“有比对证据”，避免重复计数。
+    """
+    lint = payload.get("lint") or {}
+    manifest = [r for r in (lint.get("character_shots") or []) if isinstance(r, Mapping)]
+    face = (payload.get("checks") or {}).get("face") or {}
+    notes: List[str] = []
+    required: List[Dict[str, Any]] = []
+    pending: List[Dict[str, Any]] = []
+
+    if not lint.get("available", True):
+        png_dir = Path(root) / "出图" / ep / "图片"
+        landed = sorted(png_dir.glob("*.png")) if png_dir.exists() else []
+        missing = []
+        if landed:
+            missing.append({
+                "shot": "unknown",
+                "png": None,
+                "label": "prompt_missing",
+                "reason": "no_character_manifest",
+            })
+        return {
+            "available": False,
+            "required": len(landed),
+            "covered": 0,
+            "missing": missing,
+            "pending": [],
+            "precision_level": "unknown",
+            "face_mode": face.get("mode"),
+            "verdict": "block" if missing else "ok",
+            "notes": ["缺出图 prompt lint，无法建立角色镜覆盖清单；已有落档 PNG 时不得进入 video。"],
+        }
+
+    for raw in manifest:
+        rec = dict(raw)
+        resolved = _resolve_existing_character_png(Path(root), ep, rec)
+        if resolved:
+            rec["png"] = resolved
+            rec["shot"] = rec.get("shot") or _shot_key(resolved)
+            required.append(rec)
+        else:
+            pending.append(rec)
+
+    full = _face_full_precision(face)
+    rows_by_shot: Dict[str, List[Dict[str, Any]]] = {}
+    for row in (face.get("shots") or []):
+        if not isinstance(row, dict):
+            continue
+        key = _shot_key(row.get("png"))
+        if key:
+            rows_by_shot.setdefault(key, []).append(row)
+
+    missing: List[Dict[str, Any]] = []
+    covered: List[Dict[str, Any]] = []
+    if required and not full:
+        missing = [{**rec, "reason": "face_precision_not_full"} for rec in required]
+        notes.append("已落档角色 PNG 存在，但 face_consistency 不是 full 精度；不能证明与定妆照同人。")
+    elif required:
+        for rec in required:
+            rows = rows_by_shot.get(str(rec.get("shot") or ""))
+            if not rows:
+                missing.append({**rec, "reason": "no_face_comparison"})
+                continue
+            row = max(rows, key=lambda r: SEVERITY.get(str(r.get("verdict") or ""), 0))
+            verdict = str(row.get("verdict") or "")
+            if verdict in ("warn", "noface"):
+                missing.append({**rec, "reason": f"face_verdict_{verdict}", "face_verdict": verdict})
+            else:
+                covered.append({**rec, "face_verdict": verdict or "unknown"})
+
+    # disk-scoped 兜底：lint 跑了但漏分类的角色镜。required 只来自 character_shots 清单，
+    # 若某张已落档 PNG 被 lint 漏判为角色镜，它永远进不了 required、永不与定妆比对。
+    # 以「face_consistency 在该 PNG 实检出人脸」为证据（noface/场景镜天然排除，低误报），
+    # 把不在 required 的有脸镜列为 advisory「待人工确认是否角色镜」——不硬拦，但不再静默漏检。
+    # 仅在 full 精度下信任「检出人脸」这一信号；非 full 时 required 已整组 missing 硬拦，无需再列。
+    unclassified: List[Dict[str, Any]] = []
+    if full:
+        required_keys = {str(rec.get("shot") or "") for rec in required}
+        for key, rows in rows_by_shot.items():
+            if not key or key in required_keys:
+                continue
+            row = max(rows, key=lambda r: SEVERITY.get(str(r.get("verdict") or ""), 0))
+            verdict = str(row.get("verdict") or "")
+            if verdict in ("ok", "warn"):  # 检出人脸；block 已由 G1 硬阻断，noface=无脸不计
+                unclassified.append({
+                    "shot": key,
+                    "png": row.get("png"),
+                    "label": "lint_unclassified",
+                    "reason": "unclassified_face_shot",
+                    "face_verdict": verdict,
+                })
+
+    return {
+        "available": True,
+        "required": len(required),
+        "covered": len(covered),
+        "missing": missing,
+        "unclassified": unclassified,
+        "pending": pending,
+        "precision_level": "full" if full else ("degraded" if face else "none"),
+        "face_mode": face.get("mode"),
+        "verdict": "block" if missing else "ok",
+        "notes": notes,
+    }
+
+
 def summarize(payload: Dict[str, Any]) -> Dict[str, Any]:
     """汇总各项机检 + lint，区分 hard（必须修）与 advisory（非阻断初筛）。"""
     hard = advisory = 0
     rows_by_check: Dict[str, Dict[str, int]] = {}
     for key, shots_key in (("face", "shots"), ("outfit", "shots"),
-                           ("scene", "shots"), ("seam", "seams")):
+                           ("scene", "shots"), ("multimodal", "shots"), ("seam", "seams")):
         res = payload.get("checks", {}).get(key) or {}
         cnt = count_verdicts(res.get(shots_key) or [])
         rows_by_check[key] = cnt
@@ -728,6 +1257,20 @@ def summarize(payload: Dict[str, Any]) -> Dict[str, Any]:
     if degraded_cu:
         rows_by_check["face_degraded_closeup"] = {"block": degraded_cu, "warn": 0, "noface": 0, "ok": 0}
         hard += degraded_cu
+    coverage = payload.get("face_reference_coverage") or {}
+    coverage_missing = coverage.get("missing") or []
+    if coverage_missing:
+        rows_by_check["face_reference_coverage"] = {
+            "block": len(coverage_missing), "warn": 0, "noface": 0, "ok": int(coverage.get("covered") or 0)
+        }
+        hard += len(coverage_missing)
+    # 漏分类有脸镜（disk-scoped 兜底）：advisory，不入 hard——交人判是否角色镜
+    coverage_unclassified = coverage.get("unclassified") or []
+    if coverage_unclassified:
+        rows_by_check["face_reference_coverage_unclassified"] = {
+            "block": 0, "warn": len(coverage_unclassified), "noface": 0, "ok": 0
+        }
+        advisory += len(coverage_unclassified)
     lint = payload.get("lint") or {}
     l_hard = sum(1 for f in lint.get("findings", [])
                  if f.get("level") == "block" and f.get("code") in HARD_LINT_CODES)
@@ -842,6 +1385,32 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         out.append(_qc_finding("block", "character_consistency", s.get("png"),
                                f"降级精度近景：{s.get('png')} 在 Pillow 降级模式下无法验脸（无 insightface）；"
                                f"近景/特写脸是否同人未经核验，不放行{aid}"))
+    reason_text = {
+        "face_precision_not_full": "缺 full 精度脸部 embedding 比对",
+        "no_face_comparison": "缺逐镜脸部参考比对记录",
+        "face_verdict_warn": "脸部比对为 warn，疑似身份漂移",
+        "face_verdict_noface": "本镜未检出可比对人脸",
+        "no_character_manifest": "缺角色镜覆盖清单",
+    }
+    for s in (payload.get("face_reference_coverage") or {}).get("missing", []):
+        reason = str(s.get("reason") or "")
+        label = s.get("label") or s.get("shot") or "角色镜"
+        out.append(_qc_finding(
+            "block",
+            "character_consistency",
+            s.get("png") or label,
+            f"角色脸定妆比对覆盖缺口：{label} {s.get('png') or ''}；"
+            f"{reason_text.get(reason, reason or '未通过')}。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+        ))
+    # 漏分类有脸镜（advisory）：lint 没把它当角色镜，但 face 检出人脸 → 提示人工确认，不硬拦
+    for s in (payload.get("face_reference_coverage") or {}).get("unclassified", []):
+        out.append(_qc_finding(
+            "warn",
+            "character_consistency",
+            s.get("png") or s.get("shot"),
+            f"疑似漏分类角色镜：{s.get('png') or s.get('shot')} 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。"
+            "确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景脸）可忽略。",
+        ))
     # 服装 N1 / 场景 O2 / 锚点门 N3（advisory）：即便 block 也降 warn 作为非阻断初筛入账
     for s in (checks.get("outfit") or {}).get("shots", []):
         if s.get("verdict") in ("block", "warn"):
@@ -851,6 +1420,12 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         if s.get("verdict") in ("block", "warn"):
             out.append(_qc_finding("warn", "scene_consistency", s.get("png"),
                                    f"场景 O2 初筛：{s.get('png')} {s.get('kind', '')}（非阻断）"))
+    # 道具/特效 P2（advisory·B）：按 asset_registry 分组的组内离群，初筛交人判（武器/法宝/特效漂移早抓）
+    for s in (checks.get("multimodal") or {}).get("shots", []):
+        if s.get("verdict") in ("block", "warn"):
+            out.append(_qc_finding("warn", "asset_consistency", s.get("png"),
+                                   f"道具/特效 P2 初筛：{s.get('png')} {s.get('asset') or s.get('group') or ''}"
+                                   "（资产组内离群，非阻断）"))
     # 接缝接力（hard·与崩脸同级）：block 原样上报，gate 据此硬拦——尾帧没接上下镜首帧出视频必跳切
     for s in (checks.get("seam") or {}).get("seams", []):
         v = s.get("verdict")
@@ -862,10 +1437,11 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         if a.get("verdict") in ("block", "warn"):
             out.append(_qc_finding("warn", "character_consistency", a.get("char"),
                                    f"锚点门 N3：{a.get('char')} {a.get('reason', '主参考非单张清晰正脸')}（非阻断）"))
-    # 执行层 lint：硬码项（非法 ID / 纯文生图）→ block，其余 → warn
+    # 执行层 lint：硬码项（非法 ID / 纯文生图）→ block，info 级（如多参考喂养建议）保 info，其余 → warn
     for f in (payload.get("lint", {}) or {}).get("findings", []):
         hard = f.get("level") == "block" and f.get("code") in HARD_LINT_CODES
-        out.append(_qc_finding("block" if hard else "warn", "image_prompt_lint", None, f.get("msg")))
+        sev = "block" if hard else ("info" if f.get("level") == "info" else "warn")
+        out.append(_qc_finding(sev, "image_prompt_lint", None, f.get("msg")))
     return out
 
 
@@ -917,6 +1493,8 @@ def to_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
     for f in (payload.get("lint", {}) or {}).get("findings", []):
         if f.get("level") == "block" and f.get("code") in HARD_LINT_CODES:
             add(f.get("msg"), f"prompt:{f.get('code')}")
+    for s in (payload.get("face_reference_coverage") or {}).get("missing", []):
+        add(s.get("png") or s.get("label") or s.get("shot"), f"脸部定妆比对覆盖:{s.get('reason')}")
     return sorted(by_shot.values(), key=lambda d: d["shot"])
 
 
@@ -965,6 +1543,8 @@ def to_strict_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         for s in (res.get("shots") or res.get("seams") or []):
             add(s.get("png") or s.get("tail") or s.get("loc"),
                 f"strict:{VISUAL_CHECK_LABELS.get(key, key)} 降级未完整校验")
+    for s in (payload.get("face_reference_coverage") or {}).get("missing", []):
+        add(s.get("png") or s.get("label") or s.get("shot"), f"strict:脸部定妆比对覆盖 {s.get('reason')}")
     return sorted(by_shot.values(), key=lambda d: d["shot"])
 
 
@@ -1004,7 +1584,23 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True) -> Dict[str, Any]:
             annotate_degraded_closeups(payload, root, ep)
             # ① 降级近景脸：拼并排对比图 + Haar 粗筛，落人审队列（stdout 噪声重定向到 stderr）。
             build_face_review_queue(payload, root, ep)
+            # D 场景/道具/特效漂移：同样拼「资产参考 ↔ 本镜」并排图，落资产人审队列。
+            build_asset_review_queue(payload, root, ep)
     payload["lint"] = lint_prompts(root, ep)
+    # F 资产状态机校验（registry 级，与逐镜 prompt 无关）：状态回退/未知态=hard，其余 warn 并入 lint 管道，
+    # 自由文本 lifecycle 的 info 提示只留在 asset_lifecycle 专段、不污染 lint。
+    al = _load_sibling("asset_lifecycle")
+    if al is not None:
+        try:
+            lc = al.validate_registry(root)
+            for f in lc.get("findings", []):
+                if f.get("level") in ("block", "warn"):
+                    payload["lint"].setdefault("findings", []).append(
+                        {"level": f["level"], "code": f["code"], "msg": f["msg"]})
+            payload["asset_lifecycle"] = lc
+        except Exception as exc:
+            payload["asset_lifecycle"] = {"available": False, "notes": [f"asset_lifecycle 校验失败：{exc}"]}
+    payload["face_reference_coverage"] = face_reference_coverage(payload, root, ep)
     payload["summary"] = summarize(payload)
     payload["qc_environment"] = qc_environment(payload, with_pixel=with_pixel)
     payload = json_safe(payload)
@@ -1057,8 +1653,31 @@ def render_markdown(payload: Dict[str, Any]) -> str:
         _check_line("崩脸 G1", checks.get("face"), by.get("face", {})),
         _check_line("服装 N1", checks.get("outfit"), by.get("outfit", {})),
         _check_line("场景 O2", checks.get("scene"), by.get("scene", {})),
+        _check_line("道具/特效 P2", checks.get("multimodal"), by.get("multimodal", {})),
         _check_line("接缝接力", checks.get("seam"), by.get("seam", {})),
         _check_line("锚点门 N3", checks.get("anchors"), by.get("anchors", {})),
+        "",
+        "## 角色脸定妆比对覆盖（硬闸）",
+    ])
+    coverage = payload.get("face_reference_coverage") or {}
+    if coverage:
+        missing = coverage.get("missing") or []
+        pending = coverage.get("pending") or []
+        flag = "🔴" if missing else "🟢"
+        lines.append(
+            f"- {flag} 已落档角色图 required {coverage.get('required', 0)} · "
+            f"covered {coverage.get('covered', 0)} · missing {len(missing)} · "
+            f"pending {len(pending)} · precision {coverage.get('precision_level')}"
+        )
+        for s in missing:
+            lines.append(f"  - 🔴 {s.get('label') or s.get('shot')} {s.get('png') or ''}：{s.get('reason')}")
+        for s in coverage.get("unclassified", []):
+            lines.append(f"  - 🟡 漏分类有脸镜 {s.get('shot')} {s.get('png') or ''}：未在 character_shots 清单，待人工确认是否角色镜（非阻断）")
+        for note in coverage.get("notes", []):
+            lines.append(f"- note: {note}")
+    else:
+        lines.append("- ⏭ 未生成覆盖结果（旧版 image_qc 或未执行 lint）")
+    lines.extend([
         "",
         "## 执行层 lint（逐镜 prompt）",
     ])
@@ -1082,6 +1701,13 @@ def render_markdown(payload: Dict[str, Any]) -> str:
             stitch = t.get("stitch") if t.get("stitched") else "(拼图未生成·缺 Pillow/参考图)"
             pn = f"；{t['priority_note']}" if t.get("priority_note") else ""
             lines.append(f"  - {t.get('shot')}（{t.get('char') or '?'}）：{stitch}{pn}")
+    asset_review = payload.get("asset_human_review") or []
+    if asset_review:
+        lines.extend(["", "## 场景/道具/特效漂移人审队列（D）",
+                      f"- {len(asset_review)} 个资产漂移镜需人审：开并排对比图『资产参考 ↔ 本镜』判是否漂"])
+        for t in asset_review:
+            stitch = t.get("stitch") if t.get("stitched") else "(拼图未生成·缺 Pillow/参考图)"
+            lines.append(f"  - {t.get('kind')} {t.get('shot')}（{t.get('asset') or '?'}）：{stitch}")
     lines.append("")
     lines.append("落档判定：**verdict=block** → 有硬阻断（崩脸/纯文生图/非法 CHAR_id），必须修复后重跑；"
                  "**verdict=review** → 只有非阻断初筛时不挡 video；若是视觉机检降级/依赖缺失，按阶段跳转先补依赖或复核；"

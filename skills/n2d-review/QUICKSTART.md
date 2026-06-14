@@ -25,7 +25,6 @@ What is deterministic:
 - required tail-frame PNGs
 - clip count and native audio streams
 - rough clip duration consistency
-- final watermark presence
 
 What still needs human/LLM judgment:
 - face drift

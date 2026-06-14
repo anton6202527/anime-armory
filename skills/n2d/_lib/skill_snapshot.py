@@ -4,20 +4,23 @@
 
 Provides stable, unified methods to track skill file changes, compute hashes,
 and compare states against a baseline to determine if a rebuild is needed.
+
+交付铁律：本库**不依赖任何版本控制**。变更检测完全基于文件内容快照（SHA256），
+用户端无需 git/任何 VCS——直接读文件内容算 hash 比对即可，中文路径天然无障碍。
 """
 
 import datetime as dt
 import hashlib
 import json
 import os
-import subprocess
 from typing import Any, Dict, Iterable, List, Optional
 
 TEXT_EXTS = {
     ".md", ".py", ".json", ".yaml", ".yml", ".txt", ".sh", ".js", ".ts",
     ".toml", ".cfg", ".ini", ".csv",
 }
-SKIP_DIRS = {"__pycache__", "node_modules", ".git", "tests"}
+# 点开头目录（含任何 VCS 元数据目录）已被 os.walk 里的 `d.startswith(".")` 跳过。
+SKIP_DIRS = {"__pycache__", "node_modules", "tests"}
 
 
 def is_test_path(path: str) -> bool:
@@ -77,28 +80,3 @@ def changed_files_since(old: Optional[Dict[str, Any]], new: Dict[str, Any]) -> L
     after = new.get("files") if isinstance(new.get("files"), dict) else {}
     keys = set(before) | set(after)
     return sorted(k for k in keys if before.get(k) != after.get(k))
-
-def git_changed_files(repo_root: str) -> List[str]:
-    """Query git status for uncommitted changes in the skills directory."""
-    try:
-        proc = subprocess.run(
-            ["git", "-C", repo_root, "status", "--short", "--untracked-files=all"],
-            check=False,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
-            text=True,
-        )
-    except OSError:
-        return []
-    if proc.returncode != 0:
-        return []
-    out: List[str] = []
-    for line in proc.stdout.splitlines():
-        if not line.strip():
-            continue
-        path = line[3:].strip()
-        if " -> " in path:
-            path = path.split(" -> ", 1)[1].strip()
-        if path.startswith("skills/"):
-            out.append(path)
-    return sorted(set(out))

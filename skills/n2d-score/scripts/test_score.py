@@ -262,7 +262,7 @@ def _all_ok_voice_print() -> dict:
 
 
 def test_unmapped_block_does_not_silently_pass() -> None:
-    # 健康集（七维全过=100）+ 一个无法归维的 block（水印/完整性）→ 不能 pass，必须 warn + 分诊
+    # 健康集（七维全过=100）+ 一个无法归维的 block（完整性）→ 不能 pass，必须 warn + 分诊
     base = score.score_episode(
         "/tmp/w", "第1集", consistency=_all_ok_consistency(), visual=_all_ok_visual(),
         voice_print=_all_ok_voice_print(), mechanical=[], threshold=85)
@@ -271,11 +271,11 @@ def test_unmapped_block_does_not_silently_pass() -> None:
     res = score.score_episode(
         "/tmp/w", "第1集", consistency=_all_ok_consistency(), visual=_all_ok_visual(),
         voice_print=_all_ok_voice_print(),
-        mechanical=[{"sev": "🔴", "dim": "水印", "loc": "成片", "msg": "缺 AI 可见标识"}],
+        mechanical=[{"sev": "🔴", "dim": "完整性", "loc": "成片", "msg": "缺产物"}],
         threshold=85,
     )
     assert res["status"] == "warn"          # 关键：不再静默放行
-    assert [u["dim"] for u in res["unmapped_findings"]] == ["水印"]
+    assert [u["dim"] for u in res["unmapped_findings"]] == ["完整性"]
     assert any(t.get("action") == "triage_unmapped" for t in res["data_collection_tasks"])
 
 
@@ -297,11 +297,11 @@ def test_dashboard_unmapped_blocker_is_surfaced() -> None:
         "/tmp/w", "第1集", consistency=_all_ok_consistency(), visual=_all_ok_visual(),
         voice_print=_all_ok_voice_print(),
         dashboard_ep={"episode": "第1集", "final_pass_rate": 0.95,
-                      "recent_blockers": [{"stage": "compose", "dim": "水印", "loc": "成片", "msg": "AI标识缺失"}]},
+                      "recent_blockers": [{"stage": "compose", "dim": "完整性", "loc": "成片", "msg": "缺产物"}]},
         threshold=85,
     )
     assert res["status"] == "warn"
-    assert any(u["source"] == "dashboard" and u["dim"] == "水印" for u in res["unmapped_findings"])
+    assert any(u["source"] == "dashboard" and u["dim"] == "完整性" for u in res["unmapped_findings"])
 
 
 def test_mapped_findings_still_route_normally() -> None:

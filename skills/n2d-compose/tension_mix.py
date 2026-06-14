@@ -26,31 +26,33 @@ import sys
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 # 张力词（rhythm 含此子串即命中）→ BGM 基准增益。爽点顶上去、细节压下来。
-# 顺序即优先级：靠前的强张力优先匹配（'爽点·碎切' 同时含'碎切'，但'爽点'先命中）。
+# 顺序即优先级：靠前的强张力优先匹配。
 TENSION_GAIN: List[Tuple[str, float]] = [
     ("爽点", 0.95), ("爆发", 0.95), ("反转", 0.92), ("高潮", 0.95),
     ("危机", 0.82), ("压迫", 0.80), ("对峙", 0.80), ("钩子", 0.80), ("加速", 0.82),
+    ("说话", 0.45), ("台词", 0.45), ("对白", 0.45), ("口型", 0.45),  # 针对原生音画/说话镜压低BGM
     ("定场", 0.62), ("铺垫", 0.58), ("反应", 0.60), ("反压", 0.66),
     ("悬念", 0.40), ("细节", 0.38), ("留白", 0.36), ("定格", 0.36), ("集尾", 0.42),
 ]
 DEFAULT_GAIN = 0.60
-SFX_EMPHASIS = ("爽点", "爆发", "反转", "危机", "高潮")  # 这些镜建议叠打击/音效强调
+SFX_EMPHASIS = ("爽点", "爆发", "反转", "危机", "高潮")
 
 
-def tension_gain(rhythm: Optional[str]) -> float:
-    """rhythm 张力词 → BGM 基准增益。未命中 → DEFAULT_GAIN。纯函数。"""
-    text = str(rhythm or "")
+def tension_gain(clip: Dict[str, Any]) -> float:
+    """按 Clip 属性（rhythm/mode）决定 BGM 基准增益。纯函数。"""
+    rhythm = str(clip.get("rhythm") or "")
+    mode = str(clip.get("mode") or "").lower()
+    
+    # 优先级 1：明确的说话镜（含原生音画）压低 BGM 以突出台词
+    if "native_av" in mode or "speech" in rhythm or "说话" in rhythm or "台词" in rhythm:
+        return 0.42
+        
+    # 优先级 2：按 TENSION_GAIN 关键词匹配
     for key, gain in TENSION_GAIN:
-        if key in text:
+        if key in rhythm:
             return gain
+            
     return DEFAULT_GAIN
-
-
-def _as_float(value: Any) -> Optional[float]:
-    try:
-        return float(value)
-    except (TypeError, ValueError):
-        return None
 
 
 def build_segments(clips: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -63,11 +65,12 @@ def build_segments(clips: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
         dur = _as_float(c.get("duration")) or 0.0
         if dur <= 0:
             continue
-        gain = tension_gain(c.get("rhythm"))
+        gain = tension_gain(c)
         segs.append({"start": round(t, 3), "end": round(t + dur, 3), "gain": gain,
                      "rhythm": str(c.get("rhythm") or ""), "id": str(c.get("id") or c.get("label") or "")})
         t += dur
     return segs
+
 
 
 def build_volume_expr(segments: Sequence[Dict[str, Any]], default: float = DEFAULT_GAIN) -> str:

@@ -19,7 +19,7 @@ description: 跨项目 n2d 资产库/模板市场：把角色原型、identity_r
 - **输入**：源项目 `identity_registry.json`、定妆/reference files、视频模型路由表、目标项目角色命名和授权说明。
 - **输出**：`资产库/.../asset_pack.json`、导入后的目标项目 registry fragment、`fork_history`、路由模板包。
 - **读写边界**：导入默认 fork 新身份并重置后端 adapter；不复用旧项目 Character ID/Face Lock/LoRA ready，不生成新图/视频。
-- **契约关系**：registry kind、fork_history 字段、adapter status 和 LoRA 清理规则来自 `skills/common/n2d_contract.py`。
+- **契约关系**：registry kind、fork_history 字段、adapter status 和 LoRA 清理规则来自 `skills/n2d/_lib/n2d_contract.py`。
 
 ## 给用户的提示方式
 

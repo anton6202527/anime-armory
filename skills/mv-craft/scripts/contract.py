@@ -43,7 +43,7 @@ AI_VISUAL_USAGE_MODES = ("AI-generated", "AI-assisted", "未使用AI视觉")
 # ── 生图后端治理：阶段1（解除 Codex 垄断，与 n2d 同构，本线自持）──────────
 # `生图AI` 是真选择点，默认 Codex；放行官方多参考一致性后端；mv-image / mv-review
 # 不再因"非 Codex"拦截，只拦 ① 项目内后端混用 ② 逆向/未授权出图路径（安全 invariant）。
-# 合规闸门（AI 标识水印 / 换脸授权）与本治理无关，保持不变。
+# AI 标识/披露/水印不再由本流水线处理，移到工具之外按平台/地区法规自行处理，与本治理无关。
 MV_APPROVED_IMAGE_BACKENDS = {
     "codex":    {"label": "Codex / 官方 OpenAI gpt-image", "multi_reference": False, "native_subject": False, "default": True},
     "openai":   {"label": "官方 OpenAI gpt-image / DALL·E", "multi_reference": False, "native_subject": False},

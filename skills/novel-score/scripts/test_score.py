@@ -103,6 +103,7 @@ class TestNovelScore(unittest.TestCase):
         self.assertEqual(report["total_score"], 95.0)
         self.assertEqual(report["tier"], "爆款潜力")
         self.assertEqual(report["verdict"], "过")
+        self.assertEqual(report["production_decision"]["decision"], "go")
         self.assertEqual(report["score_task_id"], task["score_task_id"])
         self.assertEqual(report["source_snapshot"]["kind"], "novel_text_snapshot")
         self.assertEqual(len(report["source_snapshot"]["files"]), 1)
@@ -114,6 +115,24 @@ class TestNovelScore(unittest.TestCase):
         self.assertFalse(report["title_check"]["needs_rename"])
         self.assertEqual(report["title_check"]["collision"]["status"], "unchecked")
         self.assertNotIn("novel-title", [a["recommended_skill"] for a in report["next_actions"]])
+
+    def test_n2d_target_gets_adapt_decision(self):
+        with open(os.path.join(self.tmp, "_设置.md"), "w", encoding="utf-8") as f:
+            f.write("# 设置\n- 目标平台：红果\n- 输出格式：txt,docx,n2d\n")
+        task = self.generate_score_task()
+        mock_path = os.path.join(self.tmp, "mock.json")
+        with open(mock_path, "w", encoding="utf-8") as f:
+            json.dump(valid_assessment(task["score_task_id"]), f, ensure_ascii=False)
+        old_argv = sys.argv
+        sys.argv = ["score.py", self.tmp, "--mock-assessment", mock_path]
+        try:
+            score.main()
+        finally:
+            sys.argv = old_argv
+        with open(os.path.join(self.score_dir, "score_report.json"), encoding="utf-8") as f:
+            report = json.load(f)
+        self.assertEqual(report["production_decision"]["decision"], "n2d-adapt")
+        self.assertEqual(report["next_actions"][0]["recommended_skill"], "n2d")
 
     def test_assessment_must_match_score_task(self):
         self.generate_score_task()

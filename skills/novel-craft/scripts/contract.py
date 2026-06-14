@@ -34,6 +34,8 @@ RIGHTS_STATUS_CANONICAL = {
     "公版": "public-domain",
     "unknown": "unknown",
     "未判定": "unknown",
+    "未声明": "unknown",
+    "未确认": "unknown",
 }
 
 PUBLIC_DOMAIN_LICENSE_URLS = {

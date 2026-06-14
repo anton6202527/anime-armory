@@ -311,3 +311,76 @@ def test_route_episode_no_baseline_no_anchor(tmp_path):
     _write_storyboard(root, [{"id": "Clip 1", "template": "fight_exchange", "scene": "挥剑命中"}])
     plan = router.route_episode(root, "第1集")  # 无基线
     assert "baseline_anchored" not in plan
+
+
+def test_backend_supports_dual_keyframe():
+    # kling/dreamina/seedance 带 first_last_frame 或 native_multiframe → True
+    assert router.backend_supports_dual_keyframe("kling") is True
+    assert router.backend_supports_dual_keyframe("dreamina") is True
+    assert router.backend_supports_dual_keyframe("seedance") is False  # 仅 multimodal_reference，非首尾硬约束
+    assert router.backend_supports_dual_keyframe("sora") is False
+
+
+def test_is_relay_clip_signals():
+    assert router.is_relay_clip({"transition": "接力"}) is True
+    # 规范字段 need_endframe（无下划线）——画板真实数据用的就是这个
+    assert router.is_relay_clip({"continuity": {"need_endframe": True}}) is True
+    assert router.is_relay_clip({"need_endframe": True}) is True
+    # 旧别名 need_end_frame 仍兜底
+    assert router.is_relay_clip({"continuity": {"need_end_frame": True}}) is True
+    assert router.is_relay_clip({"relay": True}) is True
+    assert router.is_relay_clip({"transition": "硬切"}) is False
+    assert router.is_relay_clip({}) is False
+
+
+def test_seam_relay_plan_guaranteed_vs_fallback():
+    # 接力镜 + primary 支持双关键帧 → seam_guaranteed
+    p = router.seam_relay_plan({"transition": "接力"}, "kling", ["seedance"])
+    assert p["is_relay"] and p["seam_guaranteed"] and p["boundary_frame_shared"]
+    # 接力镜 + primary 不支持 → 从 fallback 挑一个支持的
+    p2 = router.seam_relay_plan({"relay": True}, "seedance", ["sora", "kling"])
+    assert p2["is_relay"] and p2["seam_guaranteed"] is False
+    assert p2["dual_keyframe_fallback"] == "kling"
+    # 非接力镜 → is_relay False，不带 boundary 字段
+    p3 = router.seam_relay_plan({"transition": "硬切"}, "seedance", ["kling"])
+    assert p3["is_relay"] is False and "boundary_frame_shared" not in p3
+
+
+# ── E4 QC失败→升锁 ─────────────────────────────────────────────────────────
+def test_backend_has_native_identity():
+    assert router.backend_has_native_identity("kling") is True     # character_id
+    assert router.backend_has_native_identity("seedance") is True  # face_lock
+    assert router.backend_has_native_identity("dreamina") is False
+    assert router.backend_has_native_identity("sora") is False
+
+
+def test_escalate_below_threshold_noop():
+    entry = {"primary_backend": "dreamina", "identity_requirement": "x", "rationale": [], "fallback_backends": ["kling"]}
+    assert router.escalate_identity_for_failures(dict(entry), 1) == entry
+
+
+def test_escalate_switches_to_native_identity_backend():
+    entry = {"primary_backend": "dreamina", "identity_requirement": "character_id_or_reference_group",
+             "rationale": [], "risk_flags": [], "fallback_backends": ["kling", "seedance"]}
+    out = router.escalate_identity_for_failures(entry, 2)
+    assert out["identity_requirement"] == "native_identity_lock_required"
+    assert out["primary_backend"] == "kling"             # 换到有 Character ID 的后端
+    assert "identity_escalated" in out["risk_flags"]
+    assert any("已失败 2 次" in r for r in out["rationale"])
+
+
+def test_escalate_fixed_mode_does_not_switch_backend():
+    entry = {"primary_backend": "dreamina", "identity_requirement": "x", "rationale": [],
+             "risk_flags": [], "fallback_backends": ["kling"]}
+    out = router.escalate_identity_for_failures(entry, 3, fixed_mode=True)
+    assert out["primary_backend"] == "dreamina"          # 固定模式不换厂
+    assert out["identity_requirement"] == "native_identity_lock_required"
+    assert any("不擅自换厂" in r for r in out["rationale"])
+
+
+def test_clip_id_and_identity_failure_helpers():
+    assert router._clip_id_from_text("出图/第1集/图片/Clip_04_x.png") == "Clip_04"
+    assert router._clip_id_from_text("镜头7 崩脸") == "Clip_07"
+    assert router._clip_id_from_text("定妆_赐死托盘.png") is None
+    assert router._is_identity_failure("崩脸/身份漂移") is True
+    assert router._is_identity_failure("缺短匕首，未过道具自检") is False

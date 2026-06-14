@@ -12,7 +12,7 @@ description: "P0 横切 skill for novel2drama/n2d production metrics, ROI dashbo
 - **输入**：各 stage 的 generation/redraw/manual/release 事件、gate findings、平台投放指标、告警阈值。
 - **输出**：`生产数据/production_events.jsonl`、`dashboard.json/md/html`、`alerts.json/md`、`gate_findings_*_第N集.json`。
 - **读写边界**：只记账、汇总、告警和 gate 入账；不修改 `_进度.md`、不执行实际生成、不解释评分维度。
-- **契约关系**：事件枚举、重抽分类、gate stage 和 finding schema 与 `skills/common/n2d_contract.py` 对齐；生产 gate 推荐从本 skill 入口调用。
+- **契约关系**：事件枚举、重抽分类、gate stage 和 finding schema 与 `skills/n2d/_lib/n2d_contract.py` 对齐；生产 gate 推荐从本 skill 入口调用。
 
 ## 核心原则
 
@@ -61,7 +61,7 @@ python3 skills/n2d-dashboard/scripts/dashboard.py record <作品根> \
   --provider codex
 ```
 
-> **从 Python 记账走 `common/n2d_telemetry.record_event`**（封装本 CLI，是脚本侧的规范写入口）：它强校验 `event ∈ VALID_EVENTS`（与本命令 `--event` 白名单一致），批量记账传 `build=False` 走 `--no-build` 避免每条都重建抢锁。直接 shell 出本命令也可（image/video/compose SKILL 的「记账铁律」即如此）；`n2d-batch/runner` 则直接 import dashboard 模块批量追加。三条路径都写同一份 `production_events.jsonl`。
+> **从 Python 记账走 `n2d/_lib/n2d_telemetry.record_event`**（封装本 CLI，是脚本侧的规范写入口）：它强校验 `event ∈ VALID_EVENTS`（与本命令 `--event` 白名单一致），批量记账传 `build=False` 走 `--no-build` 避免每条都重建抢锁。直接 shell 出本命令也可（image/video/compose SKILL 的「记账铁律」即如此）；`n2d-batch/runner` 则直接 import dashboard 模块批量追加。三条路径都写同一份 `production_events.jsonl`。
 
 重抽必须写原因：
 
@@ -175,7 +175,7 @@ python3 skills/n2d-dashboard/scripts/dashboard.py build <作品根> --html --fai
 | `voice` | 后端、总耗时、失败/占位句数、成本或本地耗时；若单句降级占位，记 `redraw_reason` 或 `meta` |
 | `image` | 每张定妆/分镜 PNG 的尝试次数、通过/失败、重抽原因、成本、耗时 |
 | `video` | 每个 Clip 的尝试次数、通过/失败、重跑原因、成本、耗时、是否含原生音轨可写 `meta=native_audio=yes/no` |
-| `compose` | 合成耗时、输出文件、原生音轨策略、水印状态；失败则记 QA 或 manual 事件 |
+| `compose` | 合成耗时、输出文件、原生音轨策略；失败则记 QA 或 manual 事件 |
 | `review` | gate/review finding：`block/warn/info`、定位、修法回流 stage |
 
 ## 验收

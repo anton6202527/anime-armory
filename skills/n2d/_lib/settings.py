@@ -44,7 +44,6 @@ DEFAULTS = {
     "重抽预算策略": "预算充足",
     "出视频规格": "预算一般",
     "视频原生音轨": "丢弃",
-    "水印": "AI合规标识",
     "字幕语言": "中文",
 }
 
@@ -172,17 +171,9 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("生成优先序", ("n2d",), ("关键镜优先", "分镜顺序", "先易后难")),
     SettingSpec("一致性增强", ("n2d",), ("锚点+参考图", "指定参考图", "+LoRA"), key_aliases=("一致性增强(LoRA)",), parameterized=True),
     SettingSpec("重抽预算策略", ("n2d", "mv", "ad"), ("预算充足", "预算一般")),
-    SettingSpec("更新重制策略", ("n2d",), ("最小", "保图刷新")),
+    SettingSpec("更新重制策略", ("n2d",), ("最小", "严审刷新")),
     SettingSpec("BGM来源", ("n2d",), ("占位", "文件", "Suno"), parameterized=True),
     SettingSpec("接缝兜底", ("n2d",), ("硬切", "微溶解", "报警"), parameterized=True),
-    SettingSpec("水印", ("n2d", "mv"), ("不打", "AI合规标识", "品牌", "AI合规+品牌"), sensitive=True),
-    SettingSpec("水印文字", ("n2d", "mv", "ad"), parameterized=True),
-    SettingSpec("水印logo文件", ("n2d", "mv", "ad"), parameterized=True),
-    SettingSpec("水印位置", ("n2d", "mv", "ad"), ("tl", "tr", "bl", "br", "center"), parameterized=True),
-    SettingSpec("水印透明度", ("n2d", "mv", "ad"), parameterized=True),
-    SettingSpec("水印大小", ("n2d", "mv", "ad"), parameterized=True),
-    SettingSpec("水印-AI合规标识", ("ad", "n2d"), ("投放前必打", "始终打"), sensitive=True),
-    SettingSpec("水印-品牌账号", ("ad", "n2d"), ("打", "不打")),
     SettingSpec("目标平台", ("n2d", "ad"), ("抖音", "快手", "B站", "小红书", "红果", "YouTube", "TikTok", "ReelShort", "视频号", "朋友圈", "OTT电视", "电梯分众", "电商", "跨平台", "未定"), parameterized=True, sensitive=True),
     SettingSpec("发行地区", ("n2d", "ad"), ("中国大陆", "港澳台", "北美", "东南亚", "全球", "自定义"), parameterized=True, sensitive=True),
     SettingSpec("合规用途", ("n2d",), ("internal_only", "publish_candidate", "paid_distribution"), sensitive=True),
@@ -463,6 +454,7 @@ def set_project_setting(
         check = validate_setting(key, value, family=family)
         if check["level"] in ("warn", "error"):
             raise ValueError(_format_validation_error(check))
+        value = str(check.get("value", value))
     canonical = canonical_setting_key(key, family)
     path = os.path.join(work_root, "_设置.md")
     content = _read_text(path)
@@ -693,6 +685,8 @@ def normalize_setting_value(key: str, value: str) -> str:
     normalized = (value or "").strip()
     if key == "重抽预算策略" and normalized in {"预算不足", "预算不够"}:
         return "预算一般"
+    if key == "更新重制策略" and normalized == "保图刷新":
+        return "严审刷新"
     return normalized
 
 
@@ -725,7 +719,3 @@ def is_native_av(work_root: str) -> bool:
     """`制作模式=原生音画`: speaking shots use native synchronized A/V."""
     mode = production_mode(work_root)
     return "原生音画" in mode or "native_av" in mode.lower()
-
-
-def watermark_setting(work_root: str) -> str:
-    return get_setting(work_root, "水印", DEFAULTS["水印"])

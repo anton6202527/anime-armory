@@ -55,8 +55,6 @@ DELIVERY_SPECS = ("平台默认", "广电TVC", "自定义")
 GRANULARITY = ("逐个", "小批", "按场景分批", "整片", "自定义")
 GEN_PRIORITY = ("关键镜优先", "分镜顺序", "先易后难")
 REDRAW_BUDGET = ("预算充足", "预算一般")
-WATERMARK_AI = ("投放前必打", "始终打")          # 合规·不可逆点：即便记录过每次仍确认
-WATERMARK_BRAND = ("打", "不打")
 TARGET_PLATFORMS = (
     "抖音", "快手", "视频号", "B站", "小红书", "朋友圈",
     "OTT电视", "电梯分众", "电商", "YouTube", "TikTok", "跨平台", "未定",
@@ -65,7 +63,7 @@ RELEASE_REGIONS = ("中国大陆", "港澳台", "北美", "东南亚", "全球",
 
 # ── 生图后端治理（解除 Codex 垄断，与 n2d/mv 同构，本线自持）────────────────
 # `生图AI` 是真选择点，默认 Codex；放行官方多参考一致性后端；只拦 ① 项目内后端混用
-# ② 逆向/未授权出图路径（安全 invariant）。合规闸门（AI 标识水印）与本治理无关。
+# ② 逆向/未授权出图路径（安全 invariant）。AI 标识/披露义务移到工具之外，与本治理无关。
 # 候选快照新鲜度戳记（本线 _lib/freshness.py 据此判过期）。
 # 注意：ad 线策略与 n2d 故意不同——ad 把 dreamina/即梦放进 FORBIDDEN（投放广告侧合规口径），
 # n2d 则放行即梦官方 CLI。两份白名单是「不同策略」不是「重复」，不得合并。
@@ -127,8 +125,6 @@ DEFAULT_SETTINGS = {
     "品牌包装模板": "标准片尾",
     "字幕语言": "中文",
     "AI视觉使用披露": "AI-generated",
-    "水印-AI合规标识": "投放前必打",
-    "水印-品牌账号": "不打",
     "广告法地区": "中国大陆",
     "交付规格": "平台默认",
     "生成粒度": "逐个",
@@ -155,8 +151,6 @@ CHOICE_POINTS = {
     "品牌包装模板": ENDCARD_TEMPLATES,
     "字幕语言": SUBTITLE_LANGS,
     "AI视觉使用披露": AI_VISUAL_USAGE_MODES,
-    "水印-AI合规标识": WATERMARK_AI,
-    "水印-品牌账号": WATERMARK_BRAND,
     "广告法地区": ADLAW_REGIONS,
     "交付规格": DELIVERY_SPECS,
     "生成粒度": GRANULARITY,
@@ -165,7 +159,7 @@ CHOICE_POINTS = {
 }
 
 # 合规/不可逆/花钱多的点：即便已记录，每次仍确认（见 skills/ad-craft/references/选择点与偏好.md 例外条）。
-RECONFIRM_CHOICE_POINTS = ("水印-AI合规标识", "广告法地区", "音乐来源")
+RECONFIRM_CHOICE_POINTS = ("广告法地区", "音乐来源")
 
 # ── brief 必填分层（一句话入口的机器判据）────────────────────────────────────
 # 必问最小集：缺任一项 ad-concept 不应开工创意（由其第0步访谈式补齐，别让用户填 JSON）。

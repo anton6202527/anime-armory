@@ -17,7 +17,6 @@ import sys, os, re, json, glob, subprocess
 _COMMON = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "n2d", "_lib"))
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
-from n2d_settings import watermark_setting  # noqa: E402  水印设置读取单一真值源
 from n2d_text_utils import is_placeholder  # noqa: E402  占位检测单一真值源
 
 BLOCK, WARN, INFO = "🔴", "🟡", "🟢"
@@ -271,18 +270,6 @@ def check_storyboard_and_video(root, ep):
             pass
 
 
-def check_watermark(root, ep):
-    settings = os.path.join(root, "_设置.md")
-    wm = watermark_setting(root)  # 与 gate 同源（默认 AI合规标识；支持 - 水印: / 水印： 各式）
-    if wm == "不打":
-        add(WARN, "水印", settings, "水印设置为不打；正式投放 AI 合成内容建议保留 AI 合规标识")
-        return
-    finals = glob.glob(os.path.join(root, "合成", ep, f"成片_{ep}_*_水印.mp4"))
-    plain = glob.glob(os.path.join(root, "合成", ep, f"成片_{ep}_*.mp4"))
-    if plain and not finals:
-        add(BLOCK, "水印", os.path.join(root, "合成", ep), f"水印设置为「{wm}」，但未找到 *_水印.mp4")
-
-
 def check_face_consistency(root, ep):
     """可选·脸部一致性度量。缺库时显式标跳过（绝不静默）。"""
     try:
@@ -373,7 +360,6 @@ def main():
     check_subtitles(root, ep, manifest, zh_max, en_max)
     check_rhythm(ep, manifest)
     check_storyboard_and_video(root, ep)
-    check_watermark(root, ep)
     check_face_consistency(root, ep)
     check_voice_consistency(root, ep, manifest)
 

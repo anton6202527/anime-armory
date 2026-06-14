@@ -17,11 +17,11 @@ description: "P1 batch task queue and worker runner for n2d. Build/manage a queu
 - **输入**：`_进度.md`、stage contract、gate/review/score/identity findings、可选 `batch_runner.json` 命令配置。
 - **输出**：`生产数据/batch_queue.json/md`、worker claim/lease/mark 状态、runner telemetry。
 - **读写边界**：队列层只排任务和调用已配置命令；不内置 stage 业务逻辑、不擅自整集重跑、不绕过对应 skill 的 gate。
-- **契约关系**：stage key、owner、输出验收、finding 回流字段来自 `skills/common/n2d_contract.py`；无稳定 readiness，所以登记为 `CROSS_CUTTING_TOOLS` 而不是进度横切就绪项。
+- **契约关系**：stage key、owner、输出验收、finding 回流字段来自 `skills/n2d/_lib/n2d_contract.py`；无稳定 readiness，所以登记为 `CROSS_CUTTING_TOOLS` 而不是进度横切就绪项。
 
 ## 核心原则
 
-- **路由真值源仍是 `_进度.md` + `common/n2d_contract.py`**：队列只消费现有状态机，不自创阶段顺序。
+- **路由真值源仍是 `_进度.md` + `n2d/_lib/n2d_contract.py`**：队列只消费现有状态机，不自创阶段顺序。
 - **队列是机器账本**：`制漫剧/<剧名>/生产数据/batch_queue.json` 是机器真值，`batch_queue.md` 供人读。
 - **排队默认合并，不覆盖在跑队列**：`plan` 默认在文件锁内合并到现有账本，保留 `running/retry_queued/done/failed` 历史，只刷新未开始的 `queued/blocked_budget` 同 ID 任务；要整队替换必须显式 `--replace`，若队列里有 `running` 还必须再加 `--force`。
 - **并发靠 claim，不靠口头分配**：多个 agent/工位从同一队列 `claim` 任务，状态从 `queued/retry_queued` 变 `running`，并发槽由 `max_concurrency` 限制。

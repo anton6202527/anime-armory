@@ -1,6 +1,6 @@
 ---
 name: novel
-description: Top-level dispatcher for the novel-* skill family — inspects an open-ended novel request (a bare idea / few words / book name / URL / dragged file path / spin-off character / expand·condense·rewrite / 审稿查硬伤 / 评分·能不能火) and routes to the right sub-skill, imports a dragged novel file/link into 写小说/<项目>/ when no action is specified, or resumes an in-progress 写小说/<项目>/ from its _进度.md. Use when the user gives a novel-related task without specifying which tool. Does not write novels itself — only routes/imports source material; the canonical sub-skill roster is the routing table in the body. Triggers 小说工坊, novel, 小说相关任务, 拖进一本小说, 导入小说, 帮我处理小说, 不知道用哪个小说 skill, 小说打分, 小说评分, 能不能火, 值不值得改, 审稿.
+description: Top-level dispatcher for the novel-* skill family — inspects an open-ended novel request (a bare idea / few words / book name / URL / dragged file path / spin-off character / expand·condense·rewrite / 审稿查硬伤 / 评分·能不能火) and routes to the right sub-skill, imports a dragged novel file/link into 写小说/<项目>/ when no action is specified, or resumes an in-progress 写小说/<项目>/ from its _进度.md. Use when the user gives a novel-related task without specifying which tool. Does not write novels itself — only routes/imports source material; the canonical sub-skill roster is the routing table in the body. Triggers 小说工坊, novel, 小说相关任务, 拖进一本小说, 导入小说, 帮我处理小说, 不知道用哪个小说 skill, 小说打分, 小说评分, 能不能火, 值不值得改, 审稿, 小说进度, novel-progress.
 ---
 
 # novel — 小说工坊调度入口
@@ -59,10 +59,12 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 
 ## 决策树
 
-0. **先看有没有在建项目**：用户指向（或当前正处于）某个 `写小说/<项目>/`，且其下有 `_进度.md` → **先审计设置，再读进度**：
-   - **设置审计**：跑 `python3 skills/novel/_lib/settings_manager.py audit "<作品根>"`（本线自带，vendored）检查 `_设置.md` 是否合规（如篇幅档与平台是否匹配）。若有 ERR，先引导用户修复或重置设置（`python3 skills/novel/_lib/settings_manager.py reset "<作品根>"`）。
-   - **进度路由**：跑 `python3 skills/novel-craft/scripts/progress.py "<作品根>"` 找第一条未完成项、stage owner/gate/on_fail，以及 review/score 阻断；再路由到对应阶段 skill。若 `progress.py` 显示 QA gate 阻断，先按 `return_to_stage` 回流，不能直接导出。
-   - 仅当 `_进度.md` 显示已全部完成、且 `report_gate.py` 无阻断、或用户明确要开新动作时，才往下走 1-5。
+0. **先看有没有在建项目**：用户指向（或当前正处于）某个 `写小说/<项目>/`，且其下有 `_进度.md` → **先读进度**：
+   - **进度路由**：跑 `python3 skills/novel/progress.py "<作品根>"` 找第一条未完成项（基于章节矩阵表）；也可调 `novel-progress` 查看全线看板。
+   - **准入检查 (Gate)**：在进入 `drafting` (写正文) 或 `export` 前，跑 `python3 skills/novel/novel-gate.py <作品根> --stage <阶段>`；该入口统一调用 novel QA gate，覆盖 rights/review/score 阻断。
+   - **写后自动化**：每写完一章，建议跑 `python3 skills/novel/scripts/post_write.py <作品根> --chapter 第N章` 自动勾选进度并更新百科。
+   - **标准化旧项目**：若 `_进度.md` 格式陈旧，跑 `python3 skills/novel/scripts/standardize_progress.py <作品根>` 迁移到标准矩阵。
+   - 仅当 `_进度.md` 显示已全部完成、或用户明确要开新动作时，才往下走 1-5。
 1. 用户给了**本地 .txt/.md/.docx、目录、file:// 或 URL**，且意图是"拖进来/导入/先建作品/纳管源书"，或没说具体动作 → 先跑 `python3 skills/novel/scripts/import_novel.py "<路径或URL>"` 建 `写小说/<书名>/`。
 2. 用户给了**本地文件路径** + 明确动作（续写XX视角 / 起书名 / 扩 / 缩 / 漫剧改编）→ 直接按动作路由。
 3. 用户给了**书名 / 作者 / 公版目录 URL**，明确说"抓回来/下载公版/联网取书" → `novel-fetch`。

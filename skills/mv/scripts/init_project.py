@@ -129,7 +129,6 @@ def build_progress(title, meta):
 | 阶段 | skill | 状态 |
 |---|---|---|
 {stages}
-| （可选）换脸 | mv-video-faceswap（本线） | [ ] |
 
 ## 导出
 - [ ] 成片_MV.mp4

@@ -88,6 +88,24 @@ def test_seam_strictness_respects_storyboard_intent() -> None:
     assert video_qc.seam_strictness({"transition": ""}) == "strict"
 
 
+def test_load_seam_intents_does_not_treat_hard_cut_endframe_as_relay(tmp_path: Path) -> None:
+    import json
+
+    sb = tmp_path / "脚本" / "第1集"
+    sb.mkdir(parents=True)
+    (sb / "storyboard.json").write_text(json.dumps({"clips": [
+        {"id": "EP01_CLIP01", "continuity": {"transition": "hard_cut", "need_endframe": True}},
+        {"id": "EP01_CLIP02", "need_end_frame": True, "continuity": {"transition": "接力"}},
+        {"id": "EP01_CLIP03", "continuity": {"need_endframe": True}},
+    ]}, ensure_ascii=False), encoding="utf-8")
+
+    intents = video_qc.load_seam_intents(tmp_path, "第1集")
+
+    assert intents[1]["transition"] == "hard_cut" and intents[1]["relay"] is False
+    assert intents[2]["relay"] is True
+    assert intents[3]["transition"] is None and intents[3]["relay"] is True
+
+
 def test_is_closeup_lens_markers() -> None:
     assert video_qc.is_closeup_lens("CU 50mm 缓推")
     assert video_qc.is_closeup_lens("ECU")
@@ -130,7 +148,7 @@ def _make_gradient_frame(tmp_path: Path, name: str, reverse: bool) -> str:
 def test_intra_clip_check_flags_gross_face_jump(tmp_path: Path) -> None:
     import pytest
     pytest.importorskip("PIL")
-    # 近景 clip 的 start/end 帧结构剧变（水平梯度方向全反）→ 远超 block 阈值 → warn
+    # 近景 clip 的 start/end 帧结构剧变（水平梯度方向全反）→ 远超重画阈值 → block
     start = _make_gradient_frame(tmp_path, "Clip_03_01_start.jpg", reverse=False)
     end = _make_gradient_frame(tmp_path, "Clip_03_03_end.jpg", reverse=True)
     payload = {"clips": [{"file": "Clip_03_face.mp4",
@@ -138,9 +156,9 @@ def test_intra_clip_check_flags_gross_face_jump(tmp_path: Path) -> None:
                                      {"label": "end", "path": end}]}]}
     video_qc.intra_clip_check(payload, shot_types={3: {"closeup": True, "lens": "CU 50mm"}})
     assert payload["machine_summary"]["intra_checked"] == 1
-    assert payload["machine_summary"]["intra_warns"] == 1
+    assert payload["machine_summary"]["intra_blocks"] == 1
     assert payload["intra_clips"][0]["clip"] == "Clip_03"
-    assert payload["intra_clips"][0]["verdict"] == "warn"  # 粗筛只 warn，永不 block
+    assert payload["intra_clips"][0]["verdict"] == "block"
 
 
 def test_intra_clip_check_skips_non_closeup(tmp_path: Path) -> None:

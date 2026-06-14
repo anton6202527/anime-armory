@@ -100,7 +100,7 @@
   - `face_lock_or_reference_group`
   - `reference_controls_or_reference_group`
 - `max_clip_seconds`: 该 primary 后端建议单 Clip 上限。超出后回 `n2d-script` 拆 Clip 或换长单镜后端。
-- `risk_flags`: `multi_person`、`mouth_visible`、`native_audio_risk`、`native_speech`（原生音画说话镜，须查唇音同步+AI标识）、`long_duration`、`contact_motion`、`identity_drift_risk` 等。
+- `risk_flags`: `multi_person`、`mouth_visible`、`native_audio_risk`、`native_speech`（原生音画说话镜，须查唇音同步）、`long_duration`、`contact_motion`、`identity_drift_risk` 等。
 - `motion_control`: 复杂物理交互控制契约，所有 route 都必须有；普通镜写 `level=none`。`fight_exchange`、`intimate_interaction`、`hug_or_pull` 或带 `physical_interaction/contact_motion/feature_melting_risk` 的镜头必须 `level=required`、`manifest_required=true`，并指向 `出视频/第N集/control/Clip_XX/motion_control_manifest.json`。
   - `level`: `none|recommended|required`。`recommended` 用于多人站位/追逐/飞行等可选增强；`required` 用于打斗命中、拥抱、抓腕、拉扯、近距离接触。
   - `required_inputs`: 该镜头需要的控制资产键。高危接触通常至少包含 `pose_sequence`、`depth_sequence`、`instance_masks`；武器/接触点再加 `contact_map`。

@@ -1,6 +1,6 @@
 ---
 name: mv
-description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视频，开跑先让用户选择【歌曲输入时序】：先传音乐（先有成品歌/用户音频，按真实 beatgrid 卡点）或后配歌曲（先做视觉蓝图 rough，后续由 song 线/用户上传定稿歌，再重跑卡点与正式 timeline）。是与 n2d(制漫剧) 平行的"制MV"生产线，产物落 制MV/曲名/(成片_MV.mp4)。**mv 视觉/剪辑阶段自包含，不复用 n2d-*；后配歌曲只在成品文件层面衔接 song 线或用户上传**。读 _进度.md 路由到 mv-craft(共享契约/AI披露) / mv-script(视觉蓝图) / mv-beat(卡点) / mv-plan(clip/timeline规划) / mv-image(出图) / mv-video(出视频+挑版) / mv-lyric-sync(卡拉OK字幕) / mv-compose(合成)。换脸用本线 mv-video-faceswap。Use when given a finished song/audio, a song concept that needs MV planning before final audio, or an existing 制MV/曲名/ folder, or asked 做MV / 给这首歌做视频 / 先做MV后配歌 / 先传音乐做MV / 卡点 / 卡拉OK / MV出图出视频 / 合成成片. Triggers MV, 音乐视频, 做MV, 给歌做视频, 先传音乐, 后配歌曲, 卡点, 卡拉OK, 歌词字幕, MV出图, MV出视频, MV合成, mv.
+description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视频，开跑先让用户选择【歌曲输入时序】：先传音乐（先有成品歌/用户音频，按真实 beatgrid 卡点）或后配歌曲（先做视觉蓝图 rough，后续由 song 线/用户上传定稿歌，再重跑卡点与正式 timeline）。是与 n2d(制漫剧) 平行的"制MV"生产线，产物落 制MV/曲名/(成片_MV.mp4)。**mv 视觉/剪辑阶段自包含，不复用 n2d-*；后配歌曲只在成品文件层面衔接 song 线或用户上传**。读 _进度.md 路由到 mv-craft(共享契约/AI披露) / mv-script(视觉蓝图) / mv-beat(卡点) / mv-plan(clip/timeline规划) / mv-image(出图) / mv-video(出视频+挑版) / mv-lyric-sync(卡拉OK字幕) / mv-compose(合成)。Use when given a finished song/audio, a song concept that needs MV planning before final audio, or an existing 制MV/曲名/ folder, or asked 做MV / 给这首歌做视频 / 先做MV后配歌 / 先传音乐做MV / 卡点 / 卡拉OK / MV出图出视频 / 合成成片. Triggers MV, 音乐视频, 做MV, 给歌做视频, 先传音乐, 后配歌曲, 卡点, 卡拉OK, 歌词字幕, MV出图, MV出视频, MV合成, mv.
 ---
 
 # mv — 制MV 生产线 · 总调度
@@ -11,7 +11,7 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 
 与 `n2d`（小说→漫剧）平行：**写歌 → 制MV**，正如 **写小说 → 制漫剧**。后配歌曲时，写歌仍交给 `song` 线或用户上传；mv 线只做视觉和剪辑。
 
-**完全独立铁律**：mv-* 的视觉、卡点、分镜、出图、出视频、字幕、合成阶段**自包含，不复用 n2d-* / novel-* 或 song-* 的内部实现**。后配歌曲只把“最终歌/歌词产出”路由给 `song` 线或用户上传，并在文件层面接入 `歌/song.*` + `词/lyrics.md`；mv 阶段仍用自己的脚本和契约。换脸调**本线能力 `mv-video-faceswap`**。
+**完全独立铁律**：mv-* 的视觉、卡点、分镜、出图、出视频、字幕、合成阶段**自包含，不复用 n2d-* / novel-* 或 song-* 的内部实现**。后配歌曲只把“最终歌/歌词产出”路由给 `song` 线或用户上传，并在文件层面接入 `歌/song.*` + `词/lyrics.md`；mv 阶段仍用自己的脚本和契约。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
@@ -65,7 +65,6 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 | 要给 MV 出画 | `mv-image`（出图）→ `mv-video`（出视频）；整首当一个"作品"，段落≈分镜组 |
 | 要卡拉OK字幕 | `mv-lyric-sync` |
 | 素材齐了要合成成片 | `mv-compose` |
-| 要给某段视频换脸 | 本线 `mv-video-faceswap`（先过其合规闸门） |
 | 审 MV / 卡点对账 / 字幕检查 / 成片体检 / 流程自审 | `mv-review`（成品后审，出定位报告） |
 | 给了 `制MV/<曲名>/` 没说动作 | 读 `_进度.md` 报进度 + 建议下一步 |
 
@@ -82,11 +81,11 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 
 ## 合法性
 - 输入歌的版权随歌而定（自有/授权/原创）；本线只做视觉，不改词曲版权属性。
-- 用 `mv-video-faceswap` 换脸时，遵守它的合规闸门（仅本人/授权/合成脸 + 强制 AI 标识）。
+- AI 标识/AI 披露/水印不再由本流水线处理：mv-compose 出成片即收尾，不生成可见水印、不调用任何 watermark skill；若投放地区/平台需要 AI 标识或披露，由使用方在工具之外按当地法规自行处理。
 
 ## 与别的线
 - **创作线**：`novel`(写小说) / `song`(写歌)。**生产线**：`n2d`(制漫剧) / **`mv`(制MV)**。写小说→制漫剧、**写歌→制MV**。
-- 各线**互不依赖**（自包含）；换脸是**本线** `mv-video-faceswap`。
+- 各线**互不依赖**（自包含）。
 
 ## 持续改进
 工艺/翻车 → 写进对应 mv-* skill 的 `references/`。**新增/改 mv-* skill 后同步更新 `skills/README.md`。**
@@ -98,4 +97,4 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 | 后配歌曲路线在未定稿音频前就正式拆 timeline/出视频 | 只能先做 rough 视觉蓝图；最终歌入库后必须跑 `mv-beat` + `mv-plan` |
 | 将半成品或尚未完成创作的音频当成先传音乐路线送入制MV管线 | 先传音乐路线要求音频是最终成品；若还会改歌，请选后配歌曲 |
 | 跳过视觉蓝图直接批量生成片段 | 分镜与生成必须要有总体视觉规划和卡点策略引导，不要无脑调用 `mv-video` |
-| 不打合规/AI披露标签直接发布 | 无论是音频、视频还是换脸生成，在交付最终 MP4 之前必须通过 `mv-craft` 完成 AI 使用说明和披露登记 |
+| 交付前遗漏 AI 使用留痕 | 在交付最终 MP4 之前通过 `mv-craft` 完成 AI 使用说明和披露登记（项目留痕）；AI 标识/披露/水印不由本流水线处理，按各平台/地区法规自行处理 |

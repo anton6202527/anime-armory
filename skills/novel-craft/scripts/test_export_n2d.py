@@ -51,6 +51,10 @@ def test_resolve_legacy_fallback(tmp_path):
 def test_write_n2d_lays_docx_and_handoff(tmp_path):
     proj = str(tmp_path / "写小说" / "暗河")
     os.makedirs(proj)
+    chapter_dir = os.path.join(proj, "章节")
+    os.makedirs(chapter_dir)
+    with open(os.path.join(chapter_dir, "第01章.md"), "w", encoding="utf-8") as f:
+        f.write("沈念[CHAR_沈念]在冷宫[LOC_冷宫]握着玉佩[PROP_玉佩]，白衣[OUTFIT_白衣]上燃起火光[VFX_火光]。")
     src_docx = tmp_path / "src.docx"
     src_docx.write_bytes(b"PK\x03\x04 fake-docx-bytes")  # 任意文件即可，shutil.copy 不校验
     dest = str(tmp_path / "制漫剧" / "暗河")
@@ -70,3 +74,12 @@ def test_write_n2d_lays_docx_and_handoff(tmp_path):
     assert ho["source_novel_project"] == "暗河"
     assert ho["rights_status"] == "owned"
     assert len(ho["docx_sha256"]) == 64  # 真算了 hash
+
+    preflight = os.path.join(dest, "小说", "asset_registry_preflight.json")
+    assert os.path.isfile(preflight)
+    assets = json.load(open(preflight, encoding="utf-8"))
+    assert "CHAR_沈念" in assets["characters"]
+    assert "LOC_冷宫" in assets["locations"]
+    assert "PROP_玉佩" in assets["props"]
+    assert "OUTFIT_白衣" in assets["outfits"]
+    assert "VFX_火光" in assets["vfx"]

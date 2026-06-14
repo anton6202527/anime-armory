@@ -113,3 +113,34 @@ def test_chapters_helper_sorts_by_index():
     chs = consistency_audit._chapters(root)
     indices = [idx for idx, _ in chs]
     assert indices == [1, 2, 10]
+
+
+def test_run_style_reuses_chapter_fingerprint_cache(monkeypatch):
+    root = _make_project(
+        "## 李锦云\n",
+        {
+            "第1章.md": "李锦云走进庭院。她看见春光明亮，语句舒展而平稳。",
+            "第2章.md": "李锦云在雨声里写信。她慢慢解释旧日误会。",
+        },
+    )
+    anchor_path = os.path.join(root, "设定", "风格指纹.json")
+    anchor_fp = consistency_audit.extract_style.fingerprint(
+        "李锦云走进庭院。她看见春光明亮，语句舒展而平稳。",
+        source="anchor",
+    )
+    with open(anchor_path, "w", encoding="utf-8") as f:
+        json.dump(anchor_fp, f, ensure_ascii=False)
+
+    cache = {}
+    first = consistency_audit.run_style(root, anchor_path, cache=cache)
+    assert first["ran"] is True
+    assert first["cache_misses"] == 2
+
+    def fail_if_recomputed(*_args, **_kwargs):
+        raise AssertionError("cached chapter fingerprints should be reused")
+
+    monkeypatch.setattr(consistency_audit.extract_style, "fingerprint", fail_if_recomputed)
+    second = consistency_audit.run_style(root, anchor_path, cache=cache)
+    assert second["ran"] is True
+    assert second["cache_hits"] == 2
+    assert second["cache_misses"] == 0

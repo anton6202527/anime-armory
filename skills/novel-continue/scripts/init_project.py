@@ -4,11 +4,11 @@
 init_project.py — 建续写项目骨架；docx → txt 抽取。
 
 用法:
-    python3 init_project.py <原作路径> \\
-        --mode sequel|continuation \\
-        --new-chapters 20 \\
-        [--target-platform <name>] \\
-        [--out <输出根>] [--outputs txt,docx,outline] \\
+    python3 init_project.py <原作路径> \
+        --mode sequel|continuation \
+        --new-chapters 20 \
+        [--target-platform <name>] \
+        [--out <输出根>] [--outputs txt,docx,outline] \
         [--i-have-rights]
 
 依赖: python-docx (仅当原作是 .docx 时)
@@ -16,12 +16,14 @@ init_project.py — 建续写项目骨架；docx → txt 抽取。
 import argparse, json, os, shutil, sys
 from datetime import date
 
-# 共享工具（docx→txt / 版权判定 / 落 _设置.md）上移至 novel-craft，避免各 init 各写一份
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                "..", "..", "novel-craft", "scripts"))
-from contract import (AI_TEXT_USAGE_MODES, CHAPTER_GRANULARITY, NOVEL_DRAFT_MODES,
-                      base_meta, demo_chapters_for, derived_stage_markdown, parse_outputs)
-from derive_common import build_rights_metadata, docx_to_txt, detect_rights_status, write_settings
+# Standardized imports from novel/_lib
+LIB = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "novel", "_lib"))
+if LIB not in sys.path:
+    sys.path.insert(0, LIB)
+
+from novel_contract import (base_meta, build_progress_markdown, routing_stages,
+                            SCALE_CHOICES, scale_profile, detect_rights_status,
+                            docx_to_txt, write_project_settings, demo_chapters_for)
 
 
 def words_per_chapter_for(target_platform):
@@ -48,11 +50,11 @@ def main():
                     help="公版/授权依据适用辖区，如 US/CN/GLOBAL；缺省按来源推断")
     ap.add_argument("--distribution-regions", default=None,
                     help="计划发行/交付地区，逗号分隔，如 CN,US；公版跨区时必须复核")
-    ap.add_argument("--draft-mode", default=None, choices=NOVEL_DRAFT_MODES,
+    ap.add_argument("--draft-mode", default=None, choices=["极速初稿", "稳妥初稿", "商业连载", "漫剧源书"],
                     help="小说生成模式；缺省按目标平台/输出格式推导")
-    ap.add_argument("--chapter-granularity", default="逐章", choices=CHAPTER_GRANULARITY,
+    ap.add_argument("--chapter-granularity", default="逐章", choices=["逐章", "小批", "全书草稿"],
                     help="章节生成粒度：逐章/小批/全书草稿")
-    ap.add_argument("--ai-text-usage", default=None, choices=AI_TEXT_USAGE_MODES,
+    ap.add_argument("--ai-text-usage", default=None, choices=["AI-generated", "AI-assisted", "未使用AI文本"],
                     help="发布披露用：AI-generated / AI-assisted / 未使用AI文本")
     args = ap.parse_args()
 
@@ -87,15 +89,14 @@ def main():
         print("[err] --new-chapters 应在 1-100 之间", file=sys.stderr)
         shutil.rmtree(out_root); sys.exit(2)
 
-    # 简单估算原作章节数（找 第N章 行）
+    # 简单估算原作章节数
     import re
     chap_re = re.compile(r"^\s*第\s*[0-9零一二三四五六七八九十百千两]+\s*[章回节卷]")
     orig_chapter_count = sum(1 for ln in open(novel_txt, encoding="utf-8")
                               if chap_re.match(ln))
 
-    # Demo 章数走共享真值源（与 expand/condense/spinoff/rewrite 同口径），勿自定义阈值
     demo = demo_chapters_for(args.new_chapters)
-    outputs = parse_outputs(args.outputs)
+    outputs = [s.strip() for s in args.outputs.split(",")]
     target_wpc = words_per_chapter_for(args.target_platform)
     draft_mode = args.draft_mode or (
         "漫剧源书" if "n2d" in outputs or any(k in args.target_platform for k in ("漫剧", "红果", "抖音"))
@@ -103,12 +104,6 @@ def main():
     )
 
     meta = base_meta("continue", outputs=outputs, rights_status=rights)
-    meta.update(build_rights_metadata(
-        rights,
-        i_have_rights=args.i_have_rights,
-        rights_jurisdiction=args.rights_jurisdiction,
-        distribution_regions=args.distribution_regions,
-    ))
     meta.update({
         "source_novel": source_path,
         "source_title": source_title,
@@ -130,9 +125,12 @@ def main():
         "chapter_granularity": args.chapter_granularity,
         "ai_text_usage": args.ai_text_usage,
     })
+    
+    W = lambda rel, txt: open(os.path.join(out_root, rel), "w", encoding="utf-8").write(txt)
     json.dump(meta, open(os.path.join(out_root, "_meta.json"), "w", encoding="utf-8"),
               ensure_ascii=False, indent=2)
-    write_settings(out_root, {
+    
+    write_project_settings(out_root, {
         "目标平台": args.target_platform,
         "权利来源": rights,
         "权利辖区": meta.get("rights_jurisdiction", ""),
@@ -163,23 +161,13 @@ def main():
          f"# 续写方向候选 — {mode_label}\n\n> 第 3 步由主对话填写：给 2-3 个方向候选，每个含主线一句话、"
          "用上的伏笔、风险点。用户选定后回写 _meta.json.direction_chosen。\n"),
         ("设定/章纲.md", f"# 章纲 — 续写 {args.new_chapters} 章\n\n> 第 4 步由主对话填写。**未敲定不进 Demo。**\n"),
-        ("_进度.md",
-         f"# 进度 — 续写（{mode_label}）\n\n"
-         f"{derived_stage_markdown('continue')}\n\n"
-         f"- [x] 项目骨架（原作估计 {orig_chapter_count} 章，续写 {args.new_chapters} 章）\n"
-         "- [ ] 吸收原作（人物 / 世界观 / 主线骨架 / 末章状态 / 作者口吻）\n"
-         "- [ ] 续写方向（用户已选定）\n"
-         "- [ ] 新章纲（用户已确认）\n"
-         "- [ ] 书名（如需，调 novel-title）\n"
-         f"- [ ] Demo 前 {demo} 章审过\n"
-         "- [ ] 续余下新章节\n"
-         "- [ ] 一致性回扫\n"
-         "- [ ] 导出\n"),
     ]
     for name, content in skeletons:
         path = os.path.join(out_root, name)
         os.makedirs(os.path.dirname(path), exist_ok=True)
-        open(path, "w", encoding="utf-8").write(content)
+        W(name, content)
+
+    W("_进度.md", build_progress_markdown(source_title, "continue", args.new_chapters))
 
     print(f"[ok] 项目骨架 → {out_root}")
     print(f"     模式：{mode_label}")

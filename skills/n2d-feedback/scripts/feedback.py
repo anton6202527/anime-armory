@@ -1091,7 +1091,7 @@ def update_director_guide(guide_path: str, feedback: Dict[str, Any]) -> None:
 def find_repo_root(start: str) -> str:
     cur = os.path.abspath(start)
     while True:
-        if os.path.isdir(os.path.join(cur, "skills")) or os.path.isdir(os.path.join(cur, ".git")):
+        if os.path.isdir(os.path.join(cur, "skills")) or os.path.isfile(os.path.join(cur, "AGENTS.md")):
             return cur
         parent = os.path.dirname(cur)
         if parent == cur:

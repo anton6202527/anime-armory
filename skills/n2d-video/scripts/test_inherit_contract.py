@@ -239,3 +239,75 @@ def test_identity_handoff_skipped_when_routes_absent(tmp_path):
     rep = _report(root)
     assert rep["identity_handoff"]["available"] is False
     assert rep["identity_handoff"]["findings"] == []
+
+
+# ── C 物料约束继承（场景/道具/特效逐镜交接 Diff） ───────────────────────────────
+
+_IMG_CLIPS = """## Clip 01 EP01_CLIP01
+**资产引用注册层**：`LOC_01` 冷宫寝殿；`PROP_01` 斑驳铜镜；锁 layout/axis/light_anchor。
+
+## Clip 02 EP01_CLIP02
+**资产引用注册层**：`LOC_01` 冷宫寝殿；`VFX_01` 暗金妖力脉冲；锁颜色拖尾。
+
+## Clip 03 EP01_CLIP03
+空镜，无注册资产。
+"""
+
+_VID_CLIPS_OK = """## Clip 01 EP01_CLIP01
+**场面调度**：资产=LOC_01 冷宫寝殿 + PROP_01 斑驳铜镜；轴线不变。
+
+## Clip 02 EP01_CLIP02
+**场面调度**：资产=LOC_01 冷宫寝殿 + VFX_01 暗金妖力脉冲。
+
+## Clip 03 EP01_CLIP03
+空镜。
+"""
+
+
+def _write_clip_prompts(tmp_path, img_clips=_IMG_CLIPS, vid_clips=_VID_CLIPS_OK):
+    root = _write_project(tmp_path, IMG_CONTRACT, VID_VERBATIM)
+    (tmp_path / "剧" / "出图" / EP / "prompt" / "01_分镜出图.md").write_text(img_clips, encoding="utf-8")
+    (tmp_path / "剧" / "出视频" / EP / "prompt" / "01_clips.md").write_text(vid_clips, encoding="utf-8")
+    return root
+
+
+def test_extract_asset_ids():
+    ids = ic.extract_asset_ids("资产=LOC_01 冷宫 + PROP_01 铜镜；VFX_01 脉冲；OUTFIT_02 战袍")
+    assert ids == {"LOC_01", "PROP_01", "VFX_01", "OUTFIT_02"}
+    assert ic.extract_asset_ids("无注册资产的空镜") == set()
+
+
+def test_asset_handoff_passes_when_assets_preserved(tmp_path):
+    root = _write_clip_prompts(tmp_path)
+    assert ic.run(root, EP) == 0
+    rep = _report(root)
+    assert rep["asset_handoff"]["available"] is True
+    assert rep["asset_handoff"]["checked"] == 2          # Clip 01/02 带资产；Clip 03 空镜不计
+    assert rep["asset_handoff"]["findings"] == []
+
+
+def test_asset_handoff_warns_dropped_asset(tmp_path):
+    # 出视频 Clip 02 把 VFX_01 丢了 id → warn（可能有意松引用），exit 0 不拦但醒目入账
+    vid = _VID_CLIPS_OK.replace("资产=LOC_01 冷宫寝殿 + VFX_01 暗金妖力脉冲。", "资产=LOC_01 冷宫寝殿。")
+    root = _write_clip_prompts(tmp_path, vid_clips=vid)
+    assert ic.run(root, EP) == 0
+    rep = _report(root)
+    assert rep["verdict"] == "warn"
+    f = next(f for f in rep["asset_handoff"]["findings"] if f["code"] == "asset_handoff_dropped")
+    assert "VFX_01" in f["note"] and f["clip_id"] == "Clip_02" and f["severity"] == "warn"
+
+
+def test_asset_handoff_blocks_missing_clip(tmp_path):
+    # 出视频缺 Clip 02 整块 → asset_clip_prompt_missing block
+    vid = "## Clip 01 EP01_CLIP01\n资产=LOC_01 + PROP_01\n"
+    root = _write_clip_prompts(tmp_path, vid_clips=vid)
+    assert ic.run(root, EP) == 1
+    codes = {f["code"] for f in _report(root)["asset_handoff"]["findings"]}
+    assert "asset_clip_prompt_missing" in codes
+
+
+def test_asset_handoff_skipped_when_clip_files_absent(tmp_path):
+    # 旧项目无逐镜文件 → 不拦
+    root = _write_project(tmp_path, IMG_CONTRACT, VID_VERBATIM)
+    assert ic.run(root, EP) == 0
+    assert _report(root)["asset_handoff"]["available"] is False

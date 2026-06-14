@@ -77,5 +77,5 @@ def write_settings(out_root, fields, *, note=None):
     fields: 有序 dict {中文标签: 值}（如 目标平台/权利来源/输出格式/篇幅档）。
     init 时按 CLI/默认值落定一次，同项目后续沉默沿用；改了在此更新。
     """
-    # 使用 common/settings.py 的单一真值源实现，保持 Novel 线路的 bold_keys=True
+    # 使用 skills/novel/_lib/settings.py 的单一真值源实现，保持 Novel 线路的 bold_keys=True
     _write_settings(out_root, fields, note=note, bold_keys=True)

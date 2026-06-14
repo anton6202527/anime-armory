@@ -357,7 +357,7 @@ def apply_voice_print(dims: Dict[str, Dict[str, Any]], report: Optional[Dict[str
 
 def apply_mechanical(dims: Dict[str, Dict[str, Any]], mechanical: Optional[List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
     """把 mechanical_check findings 并进维度分，返回**无法归到任一维度的 findings**。
-    历史 bug：dim 命不中关键词就 `continue` 静默丢弃——`BLOCK 完整性`(缺产物)/`BLOCK 水印`(AI 标识)
+    历史 bug：dim 命不中关键词就 `continue` 静默丢弃——`BLOCK 完整性`(缺产物)/`BLOCK 视频`
     这类真问题不归任何七维，曾被静默吞掉、不扣分、可放行。现改为回传给上层显式留痕、阻断静默通过。"""
     unmapped: List[Dict[str, Any]] = []
     if not isinstance(mechanical, list):
@@ -632,7 +632,7 @@ def build_triage_tasks(unmapped: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         tasks.append({
             "skill": "n2d-score",
             "action": "triage_unmapped",
-            "scope": "存在无法自动归到七维的 block 级证据（如 完整性/水印/视频）——必须人判归类或修复，不能直接放行。"
+            "scope": "存在无法自动归到七维的 block 级证据（如 完整性/视频）——必须人判归类或修复，不能直接放行。"
                      + "；".join(f"[{b['dim']}] {b['loc']}: {b['msg']}" for b in blocks[:6]),
             "findings": blocks,
         })

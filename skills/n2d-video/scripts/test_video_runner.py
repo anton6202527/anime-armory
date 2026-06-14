@@ -111,6 +111,7 @@ def test_submit_clip_runs_video_preflight_before_backend(monkeypatch, tmp_path: 
         stderr = ""
 
     monkeypatch.setattr(video_runner, "run_preflight_gate", fake_preflight)
+    monkeypatch.setattr(video_runner, "verify_cli_contract", lambda *_args, **_kwargs: None)
     monkeypatch.setattr(video_runner.subprocess, "run", lambda *args, **kwargs: Proc())
 
     result = video_runner.submit_clip(tmp_path, manifest_file, "Clip_01")
@@ -118,6 +119,51 @@ def test_submit_clip_runs_video_preflight_before_backend(monkeypatch, tmp_path: 
     assert preflight_calls == [(tmp_path, "第1集", "video_preflight")]
     assert result["submit_id"] == "abc123"
     assert result["status"] == "submitted"
+
+
+def test_resolve_video_backend_dreamina_and_aliases():
+    for raw in ("dreamina", "即梦", "Jimeng", None, ""):
+        key, adapter = video_runner.resolve_video_backend({"backend": raw} if raw is not None else {})
+        assert key == "dreamina"
+        assert adapter["provider"] == "dreamina"
+        assert adapter["submit_args"] is video_runner._dreamina_args
+
+
+def test_resolve_video_backend_unsupported_reports_gap_not_silent_switch():
+    import pytest
+
+    with pytest.raises(RuntimeError) as exc:
+        video_runner.resolve_video_backend({"backend": "kling"})
+    msg = str(exc.value)
+    assert "kling" in msg and "不偷偷换路" in msg  # C2: stop & report, never substitute dreamina
+
+
+def test_resolve_video_backend_manual_points_to_accept():
+    import pytest
+
+    with pytest.raises(RuntimeError) as exc:
+        video_runner.resolve_video_backend({"backend": "manual"})
+    assert "accept" in str(exc.value)
+
+
+def test_submit_clip_unsupported_backend_never_calls_a_cli(monkeypatch, tmp_path: Path):
+    import pytest
+
+    manifest_file = tmp_path / "manifest.json"
+    video_runner.atomic_write_json(
+        manifest_file,
+        {"episode": "第1集", "backend": "veo",
+         "items": [{"clip": "Clip_01", "target": "Clip_01.mp4", "image": str(tmp_path / "f.png"),
+                    "prompt_file": str(tmp_path / "p.txt"), "submit_duration": 4, "status": "prepared"}]},
+    )
+
+    def boom(*_a, **_k):  # any subprocess call = silent switch leaked through
+        raise AssertionError("must not invoke any backend CLI for an unsupported backend")
+
+    monkeypatch.setattr(video_runner.subprocess, "run", boom)
+    # even dry_run resolves the backend first, so it fails fast without building dreamina argv
+    with pytest.raises(RuntimeError):
+        video_runner.submit_clip(tmp_path, manifest_file, "Clip_01", dry_run=True)
 
 
 def test_qc_override_payload_marks_false_positive_sample():

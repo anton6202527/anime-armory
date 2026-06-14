@@ -29,8 +29,8 @@ python3 skills/song-craft/scripts/ai_usage.py "<写歌作品根>" \
 
 ## 设计原则
 
-- **选择点不写死**：后端、用途、时长、语言、BPM、调性、生成版数、挑版策略、AI 使用披露都读 `<作品根>/_设置.md`，没有再按 `skills/song-craft/references/选择点与偏好.md` 处理。
-- **脚本不伪装云端自动化**：没有凭证或后端 SDK 时，只生成稳定 prompt 包、take manifest 和合规留痕；真正调用 Suno/Udio/ACE-Step/DiffRhythm 由对应后端工具完成。
+> 跨线通用原则（选择点不写死 C1/C2、脚本不伪装云端自动化 B4、阶段回写 B5、合规闸门 D1…）见 [`docs/skill-design-principles.md`](../../docs/skill-design-principles.md)，此处只列 song 线特有原则。song 的选择点目录：`skills/song-craft/references/选择点与偏好.md`。
+
 - **多版是默认工程事实**：音乐生成随机性高，正式定稿应从 `歌/takes_manifest.json` 记录的多版里挑，不把第一版默认为成品。
 
 ## 常见错误

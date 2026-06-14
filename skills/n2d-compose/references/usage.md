@@ -55,7 +55,7 @@ clip 原生音频：
 - clips：<作品根>/出视频/第N集/视频/*.mp4（n2d-video 产物，出视频阶段唯一产物；保留 AI 原片，不放 `.noaudio.mp4` 或 `_raw_with_audio/`）
 - 配音轨：<作品根>/合成/第N集/配音/voice_{zh,en}.wav（n2d-voice 产物，可选）
 - 字幕：<作品根>/脚本/第N集/字幕_{中文,英文}.srt
-- 成片输出：<作品根>/合成/第N集/成片_第N集_{mode}.mp4（可选再加水印 → 成片_…_水印.mp4）
+- 成片输出：<作品根>/合成/第N集/成片_第N集_{mode}.mp4
 
 ## 配音轨来源 / 占位守门 / 先出视频后配音拟合
 - **VOICEFILE 覆盖**：默认用 `配音/voice_{zh,en}.wav`；设 `VOICEFILE=/path/x.wav` 可指定别的轨（如拟合轨）。
@@ -82,15 +82,8 @@ clip 原生音频：
 ## 行业参考（决定音频时展示）
 90 秒一集漫剧工作室标配：1 条循环 BGM + 2~5 个转场音效 + AI 角色配音。
 
-## 加水印（可选 · 本线 n2d-watermark skill）
-成片后可选打水印，调与 faceswap 同级的本线 `n2d-watermark` skill（图/视频同一工具）；产物落 `合成/第N集/`：
-```
-# AI 合规标识（含 AI 配音/生图/换脸的投放成片应打，只加不去）
-python3 <n2d-watermark-skill>/watermark.py <作品根>/合成/第N集/成片_第N集_zh.mp4 <作品根>/合成/第N集/成片_第N集_zh_水印.mp4 --mode ai
-# 品牌/账号水印（按 _设置.md 的 水印 选择点：文字/logo/位置/透明度）
-python3 <n2d-watermark-skill>/watermark.py <作品根>/合成/第N集/成片_第N集_zh.mp4 <作品根>/合成/第N集/成片_第N集_zh_水印.mp4 --mode brand --text "@账号" --pos br --opacity 0.8
-```
-注：`watermark.py` 依赖 Pillow + ffmpeg，须在带 Pillow 的环境跑（如 facefusion/cosyvoice conda env）。
+## AI 标识/水印（不在本流水线处理）
+compose 出成片即收尾，不再生成可见 AI 标识/水印、不再调用任何 watermark skill。若投放地区/平台需要 AI 标识或披露，由使用方在工具之外按当地法规自行处理。
 
 ## 进度回写
 完成后回写「成片」列：`python3 <n2d skill>/progress.py set <作品根> 第N集 成片 ✅`。

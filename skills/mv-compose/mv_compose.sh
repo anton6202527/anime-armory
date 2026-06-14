@@ -20,7 +20,7 @@ TIMELINE="$ROOT/分镜/timeline_manifest.json"
 OUT="$ROOT/成片_MV.mp4"
 WK="$ROOT/_mvwork"; rm -rf "$WK"; mkdir -p "$WK"
 
-[ -d "$VID" ] || { echo "缺 clips 目录（先 /mv-video，作品根=$ROOT）"; exit 1; }
+[ -d "$VID" ] || { echo "缺 clips 目录（先 mv-video，作品根=$ROOT）"; exit 1; }
 [ -n "$SONG" ] || { echo "缺 $ROOT/歌/song.*（先用 song 线产出或让用户上传最终成品歌）"; exit 1; }
 [ -f "$TIMELINE" ] || [ "$ALLOW_FALLBACK" = "1" ] || { echo "缺 $TIMELINE（默认不按目录猜顺序；确认要兜底时传 --allow-fallback）"; exit 1; }
 

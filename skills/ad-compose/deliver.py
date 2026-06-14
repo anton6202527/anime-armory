@@ -103,7 +103,6 @@ def build_plan(root, progress_text):
             "exists": os.path.isfile(abs_path),
             "command": planned_command(row, root),
             "loudness_lufs": profile["loudness_lufs"],
-            "watermark_required": True,
         })
     return {"schema_version": 1, "kind": "ad_delivery_plan", "project_root": root, "deliverables": items}
 

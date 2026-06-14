@@ -36,14 +36,16 @@ from n2d_route import (  # noqa: E402
     parse_progress,
     stage_of,
 )
+from n2d_platform_profiles import backend_supports_three_plus_frames  # noqa: E402
+from n2d_findings_utils import findings_status
 
 from skill_snapshot import (  # noqa: E402
     changed_files_since,
-    git_changed_files,
     is_test_path,
     now_iso,
     snapshot_for_skills,
 )
+from settings import get_setting as get_project_setting  # noqa: E402
 
 KIND_SNAPSHOT = SKILL_UPDATE_SNAPSHOT_KIND
 KIND_PLAN = SKILL_UPDATE_PLAN_KIND
@@ -51,7 +53,6 @@ SNAPSHOT_FILE = "skill_update_snapshot.json"
 PLAN_PREFIX = "skill_update_plan"
 
 ALWAYS_RELEVANT_SKILLS = {
-    "common",
     "n2d",
     "n2d-dashboard",
     "n2d-review",
@@ -59,8 +60,6 @@ ALWAYS_RELEVANT_SKILLS = {
     "n2d-update",
 }
 OBSERVE_ONLY_SKILLS = {
-    "common",
-    "n2d",
     "n2d-dashboard",
     "n2d-review",
     "n2d-batch",
@@ -208,7 +207,126 @@ GATE_ONLY_FILE_STAGE_HINTS: Dict[str, Tuple[Tuple[str, Tuple[str, ...]], ...]] =
     "n2d-image": (
         ("image", ("scripts/image_qc.py",)),
     ),
+    # 后端探活/阈值/finding 工具只影响 gate/review 结论，不直接改变已生成媒体。
+    "n2d": (
+        ("image_prompt", ("_lib/image_backends.py",)),
+    ),
 }
+
+# `skills/n2d/_lib` 是 n2d 运行期契约层；不能整体当 observe-only。
+# 这里按文件影响面映射到最早需要回放的阶段。未列入的 _lib 文件默认保守回到
+# script_stage1；确认为观测/维护工具的文件列入 N2D_LIB_OBSERVE_ONLY_TOKENS。
+N2D_LIB_FILE_STAGE_HINTS: Tuple[Tuple[str, Tuple[str, ...]], ...] = (
+    (
+        "script_stage1",
+        (
+            "_lib/n2d_const.py",
+            "_lib/n2d_schema.py",
+            "_lib/n2d_logic.py",
+            "_lib/n2d_route.py",
+            "_lib/n2d_contract.py",
+            "_lib/settings.py",
+            "_lib/n2d_settings.py",
+            "_lib/markdown_parser.py",
+            "_lib/n2d_visual_styles.py",
+        ),
+    ),
+    (
+        "voice",
+        (
+            "_lib/voice_backends.py",
+            "_lib/n2d_text_utils.py",
+            "_lib/text_utils.py",
+        ),
+    ),
+    (
+        "script_stage2",
+        (
+            "_lib/n2d_platform_profiles.py",
+        ),
+    ),
+    (
+        "image_prompt",
+        (
+            "_lib/n2d_registry.py",
+        ),
+    ),
+    (
+        "compose",
+        (
+            "_lib/subtitle_render.py",
+        ),
+    ),
+)
+
+N2D_LIB_OBSERVE_ONLY_TOKENS: Tuple[str, ...] = (
+    "_lib/skill_snapshot.py",
+    "_lib/n2d_findings_utils.py",
+    "_lib/n2d_thresholds.py",
+    "_lib/n2d_telemetry.py",
+    "_lib/freshness.py",
+    "_lib/refresh.py",
+    "_lib/n2d_contract_diff.py",
+    "_lib/n2d_maintenance.py",
+)
+
+# 出图阶段是两层架构：共享定妆库（定妆照/场景照/identity_registry，全篇复用的锁定档案）
+# + 本集分镜帧（一镜一图）。n2d-image 变更命中以下片段，才说明"共享定妆库生产规则"变了
+# （标准三视图/角色一致性/资产注册/LoRA 一致性），此时定妆库本身需按最新规则复核、必要时重出。
+# 否则 image 进入重制范围时，共享定妆库默认沿用——n2d-image 的"共享先行硬闸门"本就会复用已 ✅
+# 的共享 PNG、只重出本集分镜帧；本规则把这层"定妆库默认沿用"在计划里显式说清。
+SHARED_LOCK_PRODUCTION_TOKENS: Tuple[str, ...] = (
+    "prompt_format",          # references §1.2 标准三视图/定妆生产铁律
+    "角色一致性checklist",
+    "资产身份注册层",
+    "资产引用注册层",
+    "lora_consistency",
+    "identity_registry",
+    "asset_registry",
+)
+
+N2D_IMAGE_SHARED_LOCK_RULE_FILES: Dict[str, str] = {
+    "skills/n2d-image/SKILL.md": "skill_rule_unknown",
+    "skills/n2d-image/references/prompt_format.md": "prompt_format",
+    "skills/n2d-image/references/角色一致性checklist.md": "identity_checklist",
+    "skills/n2d-image/references/资产身份注册层.md": "asset_identity_registry",
+    "skills/n2d-image/references/资产引用注册层.md": "asset_reference_registry",
+    "skills/n2d-image/references/lora_consistency.md": "lora_consistency",
+    "skills/n2d-image/references/platforms.md": "backend_capability_rules",
+}
+
+
+def shared_lock_production_touched(changed_files: Iterable[str]) -> List[str]:
+    """n2d-image 变更里命中"共享定妆库生产规则"的文件（三视图/一致性/资产注册/LoRA）。
+
+    非空 = 定妆库本身可能漂移，需复核/重出；空 = image 重制时共享定妆库默认沿用。
+    """
+    hits: List[str] = []
+    for path in changed_files:
+        if skill_name_for_path(os.path.join(REPO_ROOT, path)) != "n2d-image":
+            continue
+        if n2d_image_shared_lock_impact(path):
+            hits.append(path)
+    return sorted(set(hits))
+
+
+def n2d_image_shared_lock_impact(rel_path: str) -> Optional[str]:
+    """Return why an n2d-image change requires shared lock review, if any.
+
+    Known shared-lock rule files are explicit. Unknown n2d-image references and
+    SKILL.md changes are treated as "review shared lock" instead of silently
+    reusing lock assets, because prose rule updates can change定妆生产策略 without
+    matching a filename token.
+    """
+    if rel_path in N2D_IMAGE_SHARED_LOCK_RULE_FILES:
+        return N2D_IMAGE_SHARED_LOCK_RULE_FILES[rel_path]
+    if rel_path.startswith("skills/n2d-image/references/"):
+        return "unknown_reference_rule"
+    if rel_path == "skills/n2d-image/SKILL.md":
+        return "skill_rule_unknown"
+    if any(tok in rel_path for tok in SHARED_LOCK_PRODUCTION_TOKENS):
+        return "shared_lock_token"
+    return None
 
 
 def observe_only_changed_file(rel_path: str) -> bool:
@@ -226,9 +344,33 @@ def gate_only_stage_for_changed_file(rel_path: str, until_key: str) -> Optional[
     return None
 
 
+def explicit_stage_hint_for_changed_file(rel_path: str, until_key: str) -> Optional[str]:
+    """Map cross-cutting runtime-contract files to concrete production stages."""
+    if rel_path.startswith("skills/n2d/_lib/"):
+        if any(tok in rel_path for tok in N2D_LIB_OBSERVE_ONLY_TOKENS):
+            return None
+        for stage_key, tokens in N2D_LIB_FILE_STAGE_HINTS:
+            if any(tok in rel_path for tok in tokens):
+                return stage_key if stage_index(stage_key) <= stage_index(until_key) else None
+        # Unknown runtime-contract files are safer to replay from the first routed stage.
+        return "script_stage1" if stage_index("script_stage1") <= stage_index(until_key) else None
+    return None
+
+
+def artifact_affecting_changed_file(rel_path: str, until_key: str) -> bool:
+    if gate_only_stage_for_changed_file(rel_path, until_key):
+        return False
+    if explicit_stage_hint_for_changed_file(rel_path, until_key):
+        return True
+    return not observe_only_changed_file(rel_path)
+
+
 def stage_key_for_changed_file(rel_path: str, until_key: str) -> Optional[str]:
     if gate_only_stage_for_changed_file(rel_path, until_key):
         return None
+    explicit = explicit_stage_hint_for_changed_file(rel_path, until_key)
+    if explicit:
+        return explicit
     skill = skill_name_for_path(os.path.join(REPO_ROOT, rel_path))
     if not skill or skill in OBSERVE_ONLY_SKILLS:
         return None
@@ -287,6 +429,45 @@ def scoped_changed_files(
     )
 
 
+def is_stale_baseline(snap: Optional[Dict[str, Any]]) -> bool:
+    """旧版 git 派生基线（只有 git_commit/dirty_files、无内容 `files` 表）。
+
+    交付环境无 git，无法对这种基线 diff——必须提示用户重新 record 建立内容基线。
+    """
+    return bool(snap and snap.get("git_commit") and not isinstance(snap.get("files"), dict))
+
+
+def build_baseline_snapshot(skills: Iterable[str]) -> Dict[str, Any]:
+    """Build a content-hash baseline (git-free).
+
+    交付铁律：基线只用文件内容 SHA256 快照，不依赖任何版本控制。
+    """
+    return snapshot_for_skills(REPO_ROOT, REPO_SKILLS, skills)
+
+
+def baseline_changed_files(
+    old: Optional[Dict[str, Any]], relevant_skills: Iterable[str], old_skills: Set[str]
+) -> Tuple[List[str], bool]:
+    """Diff the recorded baseline against the current skills tree (content-hash only).
+
+    Restricted to skills present in BOTH the baseline and the current relevant
+    scope (range differences from record --all vs single-episode are not changes).
+    Returns (changed_paths, baseline_stale). `baseline_stale` is True only for a
+    legacy git-derived baseline that has no content map and so cannot be diffed
+    without git — the caller then asks the user to re-record.
+    """
+    if not old:
+        return [], False
+    if is_stale_baseline(old):
+        return [], True
+    scope = sorted(old_skills & set(relevant_skills))
+    scope_prefixes = tuple(f"skills/{s}/" for s in scope)
+    if not scope_prefixes:
+        return [], False
+    new = snapshot_for_skills(REPO_ROOT, REPO_SKILLS, relevant_skills)
+    return scoped_changed_files(old, new, set(scope)), False
+
+
 def plan_paths(root: str, ep: str) -> Tuple[str, str]:
     safe_ep = normalize_episode(ep)
     base = os.path.join(production_dir(root), f"{PLAN_PREFIX}_{safe_ep}")
@@ -299,20 +480,13 @@ LEGACY_REGEN_MODE_KEEP_IMAGES = "保图刷新"
 
 
 def read_setting(root: str, key: str) -> Optional[str]:
-    """从 `<作品根>/_设置.md` 读一行 `- <key>：<值>` / `- <key>: <值>`。缺文件/缺键 → None。纯解析。"""
-    path = os.path.join(root, "_设置.md")
-    try:
-        with open(path, encoding="utf-8") as fh:
-            text = fh.read()
-    except Exception:
-        return None
-    import re as _re
-    m = _re.search(rf"^[\-\*\s]*{_re.escape(key)}\s*[:：]\s*(.+?)\s*$", text, _re.MULTILINE)
-    return m.group(1).strip() if m else None
+    """Read one setting through n2d settings parser; project/global missing/empty -> None."""
+    value = get_project_setting(root, key, "")
+    return value.strip() if value else None
 
 
 def resolve_regen_mode(root: str, cli_mode: Optional[str]) -> str:
-    """更新重制策略选择点：CLI 显式 > `_设置.md 更新重制策略` > 默认 最小（保守，不打扰现有流程）。"""
+    """更新重制策略选择点：CLI 显式 > `_设置.md` > 全局默认 > 默认 最小。"""
     if cli_mode:
         return REGEN_MODE_STRICT_REFRESH if cli_mode == LEGACY_REGEN_MODE_KEEP_IMAGES else cli_mode
     setting = read_setting(root, "更新重制策略")
@@ -323,7 +497,22 @@ def resolve_regen_mode(root: str, cli_mode: Optional[str]) -> str:
     return REGEN_MODE_MINIMAL
 
 
-def commands_for_strict_image_refresh(root: str, ep: str, start_key: Optional[str], until_key: str) -> List[str]:
+def command_step(command: str, *, role: str = "command", run_when: str = "") -> Dict[str, str]:
+    out = {"type": "command", "role": role, "command": command}
+    if run_when:
+        out["run_when"] = run_when
+    return out
+
+
+def agent_step(instruction: str, *, role: str = "agent_step") -> Dict[str, str]:
+    return {"type": "agent_step", "role": role, "instruction": instruction}
+
+
+def commands_from_steps(steps: Sequence[Dict[str, str]]) -> List[str]:
+    return [s["command"] for s in steps if s.get("type") == "command" and s.get("command")]
+
+
+def steps_for_strict_image_refresh(root: str, ep: str, start_key: Optional[str], until_key: str) -> List[Dict[str, str]]:
     """「严审刷新」命令序列：按最新 skill 刷新文字阶段/prompt → 对旧图按最新 prompt/QC 标准严审
     → 只把不符合最新标准的镜排进重出。旧图不是默认受保护对象。"""
     epn = ep.replace("第", "").replace("集", "")
@@ -332,19 +521,42 @@ def commands_for_strict_image_refresh(root: str, ep: str, start_key: Optional[st
     qc = f'python3 skills/n2d-image/scripts/image_qc.py "{root}" {ep}'
     return [
         # 1) 按最新 skill 刷新分镜/出图 prompt，生成新的审查标准。
-        (f'python3 skills/n2d-batch/scripts/queue.py plan "{root}" --episodes {epn} '
-         f'--rerun-from {text_start} --scope "严审刷新·按最新skill刷新文字阶段与出图prompt" '
-         '--max-concurrency 1 --max-retries 1'),
+        command_step(
+            f'python3 skills/n2d-batch/scripts/queue.py plan "{root}" --episodes {epn} '
+            f'--rerun-from {text_start} --scope "严审刷新·按最新skill刷新文字阶段与出图prompt" '
+            '--max-concurrency 1 --max-retries 1',
+            role="queue_text_prompt_refresh",
+        ),
         # 2) 用最新 prompt/QC/review 标准严审现有图片：block/warn/降级都先列入候选重出。
-        f'{qc} --regen-list --strict',
+        command_step(f'{qc} --regen-list --strict', role="collect_strict_image_evidence"),
         # 3) 只把严审命中的镜排进重生成；为空表示最新证据未发现需要舍弃的旧图。
-        (f'shots=$({qc} --affected-shots --strict); [ -n "$shots" ] && '
-         f'python3 skills/n2d-batch/scripts/queue.py plan "{root}" --episodes {epn} '
-         f'--rerun-from image $shots --scope "严审刷新·重出不符合最新prompt/QC标准的镜" '
-         '--max-concurrency 1 --max-retries 1 || echo "严审未发现需舍弃旧图的镜"'),
+        command_step(
+            (
+                f'if ! shots=$({qc} --affected-shots --strict); then\n'
+                '  echo "image_qc --affected-shots --strict failed" >&2\n'
+                '  exit 1\n'
+                'fi\n'
+                'if [ -n "$shots" ]; then\n'
+                f'  python3 skills/n2d-batch/scripts/queue.py plan "{root}" --episodes {epn} '
+                f'--rerun-from image $shots --scope "严审刷新·重出不符合最新prompt/QC标准的镜" '
+                '--max-concurrency 1 --max-retries 1\n'
+                'else\n'
+                '  echo "严审未发现需舍弃旧图的镜"\n'
+                'fi'
+            ),
+            role="queue_failed_strict_image_shots",
+        ),
         # 4) 重出的镜回验像素一致性（dashboard gate --stage image 已含 image_qc）
-        image_qc_verify_command(root, ep),
+        command_step(
+            image_qc_verify_command(root, ep),
+            role="verify_after_image_regen",
+            run_when="仅在 n2d-batch/阶段 skill 已实际完成图片重出后运行；只生成队列计划时不要当作已验收。",
+        ),
     ]
+
+
+def commands_for_strict_image_refresh(root: str, ep: str, start_key: Optional[str], until_key: str) -> List[str]:
+    return commands_from_steps(steps_for_strict_image_refresh(root, ep, start_key, until_key))
 
 
 def rerun_covers_image(start_key: Optional[str], until_key: str) -> bool:
@@ -364,14 +576,44 @@ def image_qc_verify_command(root: str, ep: str) -> str:
 
 
 def gate_refresh_commands(root: str, ep: str, stage_keys: Sequence[str]) -> List[str]:
-    cmds: List[str] = []
+    return commands_from_steps(gate_refresh_steps(root, ep, stage_keys))
+
+
+def gate_refresh_steps(root: str, ep: str, stage_keys: Sequence[str]) -> List[Dict[str, str]]:
+    steps: List[Dict[str, str]] = []
     for stage_key in stage_keys:
         gate_stage = (stage_for_key(stage_key) or {}).get("gate_stage")
         if gate_stage:
-            cmds.append(
-                f"python3 skills/n2d-dashboard/scripts/dashboard.py gate \"{root}\" {ep} --stage {gate_stage}"
-            )
-    return cmds
+            steps.append(command_step(
+                f"python3 skills/n2d-dashboard/scripts/dashboard.py gate \"{root}\" {ep} --stage {gate_stage}",
+                role="refresh_gate",
+            ))
+    return steps
+
+
+def review_refresh_commands(root: str, ep: str, until_key: str) -> List[str]:
+    return commands_from_steps(review_refresh_steps(root, ep, until_key))
+
+
+def review_refresh_steps(root: str, ep: str, until_key: str) -> List[Dict[str, str]]:
+    """Refresh cross-cutting review/gate outputs without implying artifact rebuilds."""
+    steps: List[Dict[str, str]] = []
+    gate_stage = (stage_for_key(until_key) or {}).get("gate_stage")
+    if gate_stage:
+        steps.append(command_step(
+            f"python3 skills/n2d-dashboard/scripts/dashboard.py gate \"{root}\" {ep} --stage {gate_stage}",
+            role="refresh_gate",
+        ))
+    if stage_index(until_key) >= stage_index("image"):
+        steps.append(command_step(
+            f"python3 skills/n2d-review/scripts/consistency_audit.py \"{root}\" {ep}"
+            "  # 刷新 review findings；不重制产物",
+            role="refresh_review_findings",
+        ))
+    if not steps:
+        steps.append(command_step("python3 skills/n2d-review/scripts/self_audit.py --json",
+                                  role="self_audit"))
+    return steps
 
 
 def image_qc_report_path(root: str, ep: str) -> str:
@@ -392,13 +634,31 @@ def load_image_qc_context(root: str, ep: str) -> Optional[Dict[str, Any]]:
     try:
         with open(path, encoding="utf-8") as fh:
             data = json.load(fh)
-    except Exception:
-        return None
+    except Exception as exc:
+        return {
+            "status": "error",
+            "report_json": path,
+            "report_md": os.path.splitext(path)[0] + ".md",
+            "error": f"{type(exc).__name__}: {exc}",
+        }
     env = data.get("qc_environment") or {}
     summary = data.get("summary") or {}
     if not isinstance(env, dict) or not env:
-        return None
+        return {
+            "status": "unavailable",
+            "report_json": path,
+            "report_md": os.path.splitext(path)[0] + ".md",
+            "error": "image_qc report missing qc_environment",
+        }
+
+    # Prefer hard blocker samples from image_qc itself; the broader findings pool
+    # also contains non-blocking visual-review samples whose detector-level
+    # "block" wording is advisory, and is misleading in this image_qc banner.
+    active, _ = findings_status(root, ep)
+    samples = image_qc_hard_samples(data) or active.get("samples") or []
+
     return {
+        "status": "ok",
         "report_json": path,
         "report_md": os.path.splitext(path)[0] + ".md",
         "precision_level": env.get("precision_level"),
@@ -411,31 +671,88 @@ def load_image_qc_context(root: str, ep: str) -> Optional[Dict[str, Any]]:
         "hard_blocks": summary.get("hard_blocks"),
         "advisory": summary.get("advisory"),
         "degraded": summary.get("degraded"),
+        "finding_samples": samples,
     }
 
 
-def command_for_rerun(root: str, ep: str, start_key: Optional[str], until_key: str) -> List[str]:
+def image_qc_hard_samples(data: Dict[str, Any]) -> List[str]:
+    samples: List[str] = []
+    face = (((data.get("checks") or {}).get("face") or {}).get("shots") or [])
+    if isinstance(face, list):
+        for row in face:
+            if not isinstance(row, dict) or str(row.get("verdict") or "").lower() != "block":
+                continue
+            png = row.get("png") or row.get("shot") or ""
+            samples.append(f"崩脸 G1: {png}")
+            if len(samples) >= 3:
+                return samples
+    lint = ((data.get("lint") or {}).get("findings") or [])
+    if isinstance(lint, list):
+        for row in lint:
+            if not isinstance(row, dict) or str(row.get("level") or "").lower() != "block":
+                continue
+            msg = row.get("msg") or row.get("code") or ""
+            shot = row.get("shot") or ""
+            samples.append(f"prompt lint: {shot} {msg}".strip())
+            if len(samples) >= 3:
+                return samples
+    coverage = data.get("face_reference_coverage") or {}
+    if isinstance(coverage, dict):
+        for row in coverage.get("missing") or []:
+            if isinstance(row, dict):
+                samples.append(f"脸部覆盖缺失: {row.get('png') or row.get('shot') or row}")
+            else:
+                samples.append(f"脸部覆盖缺失: {row}")
+            if len(samples) >= 3:
+                return samples
+    return samples
+
+
+def steps_for_rerun(root: str, ep: str, start_key: Optional[str], until_key: str,
+                    shared_lock_reuse: bool = False) -> List[Dict[str, str]]:
     if not start_key:
         gate_stage = (stage_for_key(until_key) or {}).get("gate_stage")
         if not gate_stage:
-            return [f"python3 skills/n2d-update/scripts/update_plan.py record \"{root}\" {ep}"]
+            return [command_step(f"python3 skills/n2d-update/scripts/update_plan.py record \"{root}\" {ep}",
+                                 role="record_snapshot")]
         return [
-            f"python3 skills/n2d-dashboard/scripts/dashboard.py gate \"{root}\" {ep} --stage {gate_stage}",
+            command_step(f"python3 skills/n2d-dashboard/scripts/dashboard.py gate \"{root}\" {ep} --stage {gate_stage}",
+                         role="refresh_gate"),
         ]
     start = stage_for_key(start_key) or {}
-    cmds = [
-        (
+    # 定妆库默认沿用时，把"复用共享定妆库·只重出本集分镜帧"写进队列 scope，记录意图；
+    # n2d-image 共享先行硬闸门会跳过已 ✅ 的共享 PNG，实际不重出定妆/场景。
+    scope = f"skill 更新后重制到 {until_key}"
+    if shared_lock_reuse:
+        scope += "·复用共享定妆库·只重出本集分镜帧"
+    steps: List[Dict[str, str]] = [
+        command_step(
             "python3 skills/n2d-batch/scripts/queue.py plan "
             f"\"{root}\" --episodes {ep.replace('第', '').replace('集', '')} "
-            f"--rerun-from {start_key} --scope \"skill 更新后重制到 {until_key}\" "
+            f"--rerun-from {start_key} --scope \"{scope}\" "
             "--max-concurrency 1 --max-retries 1"
+            ,
+            role="queue_bounded_rerun",
         ),
-        str(start.get("command", "")).format(root=root, ep=ep),
+        agent_step(
+            "排队后由 n2d-batch runner 或对应 stage skill 执行返工；不要同时手工运行阶段命令，避免队列账本与实际产物分叉。"
+            f" 手工替代路径仅在不使用 batch 时执行：`{str(start.get('command', '')).format(root=root, ep=ep)}`",
+            role="manual_alternative",
+        ),
     ]
     # A：重制范围覆盖出图 → 追加出图落档机检验证步（避免"重出图后没人验像素"）
     if rerun_covers_image(start_key, until_key):
-        cmds.append(image_qc_verify_command(root, ep))
-    return cmds
+        steps.append(command_step(
+            image_qc_verify_command(root, ep),
+            role="verify_after_image_regen",
+            run_when="仅在 n2d-batch/阶段 skill 已实际完成图片重出后运行；只生成队列计划时不要当作已验收。",
+        ))
+    return steps
+
+
+def command_for_rerun(root: str, ep: str, start_key: Optional[str], until_key: str,
+                      shared_lock_reuse: bool = False) -> List[str]:
+    return commands_from_steps(steps_for_rerun(root, ep, start_key, until_key, shared_lock_reuse=shared_lock_reuse))
 
 
 def render_markdown(plan: Dict[str, Any]) -> str:
@@ -456,6 +773,13 @@ def render_markdown(plan: Dict[str, Any]) -> str:
         f"- 重制策略：`{plan.get('regen_mode', REGEN_MODE_MINIMAL)}`"
         + ("（严审：按最新 prompt/QC 标准复核旧图，不符合即舍弃重出）" if plan.get("strict_image_refresh") else ""),
     ]
+    if plan.get("shared_lock_reuse"):
+        lines.append("- 共享定妆库：默认沿用（定妆照/场景照 PNG 复用，重制只覆盖本集分镜帧）")
+    elif plan.get("shared_lock_changed_files"):
+        lines.append(
+            "- 共享定妆库：需复核（变更命中定妆库生产规则："
+            + ", ".join(plan["shared_lock_changed_files"]) + "）"
+        )
     if plan.get("gate_refresh_needed"):
         lines.append(f"- 需刷新 gate/QC：是（{', '.join(plan.get('gate_refresh_stages') or [])}）")
     if plan.get("needs_record"):
@@ -487,19 +811,82 @@ def render_markdown(plan: Dict[str, Any]) -> str:
             lines.append(f"- 备注：{todo.get('note')}")
     qc = plan.get("image_qc_environment")
     if qc:
-        lines.extend([
-            "",
-            "## 图片质检环境与阶段跳转",
-            f"- 机检能力：`{qc.get('precision_level')}`",
-            f"- 当前解释器：`{qc.get('python')}`",
-            f"- 当前 image_qc：`verdict={qc.get('verdict')}`，硬阻断 `{qc.get('hard_blocks')}`，非阻断初筛 `{qc.get('advisory')}`，降级 `{qc.get('degraded')}`",
-            f"- 当前应停在/回退：`{qc.get('jump_to_stage')}` — {qc.get('jump_reason')}",
-            f"- 建议安装：{qc.get('recommended_install') or '无需补装'}",
-            f"- 报告：`{qc.get('report_md') or qc.get('report_json')}`",
-        ])
-    if plan.get("commands"):
+        lines.extend(["", "## 图片质检环境与阶段跳转"])
+        if qc.get("status") in {"error", "unavailable"}:
+            lines.append(f"- 状态：`{qc.get('status')}` — {qc.get('error') or qc.get('reason')}")
+            lines.append(f"- 报告：`{qc.get('report_md')}`")
+        else:
+            lines.extend([
+                f"- 机检能力：`{qc.get('precision_level')}`",
+                f"- 当前解释器：`{qc.get('python')}`",
+                f"- 当前 image_qc：`verdict={qc.get('verdict')}`，硬阻断 `{qc.get('hard_blocks')}`，非阻断初筛 `{qc.get('advisory')}`，降级 `{qc.get('degraded')}`",
+            ])
+            if qc.get("finding_samples"):
+                samples = " | ".join(qc["finding_samples"])
+                lines.append(f"- block 摘要：{samples}")
+            lines.extend([
+                f"- 当前应停在/回退：`{qc.get('jump_to_stage')}` — {qc.get('jump_reason')}",
+                f"- 建议安装：{qc.get('recommended_install') or '无需补装'}",
+                f"- 报告：`{qc.get('report_md')}`",
+            ])
+
+    sd = plan.get("source_drift")
+    tf = plan.get("three_frame_compliance")
+    ic = plan.get("image_consistency")
+    if sd or tf or ic:
+        lines.extend(["", "## 健康检测（源/三帧/图片）"])
+        if sd:
+            st = sd.get("status")
+            mark = {"clean": "✅ 源未变动", "drift": "⚠️ 源已漂移",
+                    "no_baseline": "— 源未建基线",
+                    "error": "⚠️ 源检测失败",
+                    "unavailable": "⚠️ 源检测不可用"}.get(st, f"源状态={st}")
+            chs = sd.get("changed_chapters") or sd.get("changed") or []
+            lines.append(f"- **源小说**：{mark}" + (f"（变动 {len(chs)} 章）" if chs else ""))
+        if tf:
+            if not tf.get("enforced"):
+                lines.append(f"- **三帧契约**：豁免（后端 `{tf.get('backend')}` 不支持≥3帧·能力门控）")
+            elif tf.get("compliant"):
+                lines.append(f"- **三帧契约**：✅ 达标（{tf.get('total_clips')} Clip 全有锚帧/豁免）")
+            else:
+                vc = tf.get("violating_clips") or []
+                lines.append(
+                    f"- **三帧契约**：⚠️ {len(vc)}/{tf.get('total_clips')} Clip 缺中段锚帧"
+                    f"（后端 `{tf.get('backend')}` 强制）：{', '.join(vc[:8])}"
+                    + (f" 等" if len(vc) > 8 else "")
+                )
+        if ic:
+            if ic.get("status") in {"error", "unavailable"}:
+                flag = f"⚠️ 检测{ic.get('status')}"
+            else:
+                flag = "✅ 无硬阻断" if ic.get("consistent") else f"⚠️ hard_blocks={ic.get('hard_blocks')}"
+            lines.append(f"- **图片一致性**：{flag}（verdict=`{ic.get('verdict')}`，精度 `{ic.get('precision_level')}`）")
+
+    steps = plan.get("execution_steps") or []
+    if steps:
+        lines.extend(["", "## 执行步骤"])
+        for idx, step in enumerate(steps, start=1):
+            role = step.get("role") or step.get("type") or "step"
+            if step.get("type") == "command":
+                lines.append(f"{idx}. `{role}`")
+                if step.get("run_when"):
+                    lines.append(f"   - 运行条件：{step.get('run_when')}")
+                lines.append(f"```bash\n{step.get('command', '')}\n```")
+            else:
+                lines.append(f"{idx}. `{role}`：{step.get('instruction', '')}")
+    elif plan.get("commands"):
         lines.extend(["", "## 建议命令"])
         lines.extend(f"```bash\n{cmd}\n```" for cmd in plan["commands"])
+    if plan.get("smart_suggestions"):
+        lines.extend(["", "## 智能优化建议"])
+        for item in plan["smart_suggestions"]:
+            lines.append(
+                f"- `{item.get('priority', 'medium')}` {item.get('character_name') or item.get('character_id')} "
+                f"@ {item.get('backend')}: {item.get('action')}（{item.get('reason')}）"
+            )
+    if plan.get("smart_suggestions_error"):
+        lines.extend(["", "## 智能优化建议"])
+        lines.append(f"- 生成失败：{plan.get('smart_suggestions_error')}")
     if plan.get("notes"):
         lines.extend(["", "## 备注"])
         lines.extend(f"- {note}" for note in plan["notes"])
@@ -507,8 +894,133 @@ def render_markdown(plan: Dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-def build_plan(root: str, ep: str, *, include_git: bool = True,
-               regen_mode: Optional[str] = None) -> Dict[str, Any]:
+SOURCE_CHECK = os.path.join(REPO_SKILLS, "n2d", "source_check.py")
+
+
+def detect_source_drift(root: str) -> Optional[Dict[str, Any]]:
+    """检测「源文件=小说」是否变动：跑 n2d/source_check.py，解析末行 DRIFT={...}。
+
+    只在已有源指纹基线（`小说/_源指纹.json`）时跑（否则无基线可比、且省去 subprocess）。
+    返回 source_check 的 DRIFT dict（status: clean/drift/no_baseline/...）或 None（无基线/不可用）。
+    """
+    if not os.path.isfile(os.path.join(root, "小说", "_源指纹.json")):
+        return None
+    if not os.path.isfile(SOURCE_CHECK):
+        return {"status": "unavailable", "reason": "source_check_missing", "script": SOURCE_CHECK}
+    try:
+        proc = subprocess.run([sys.executable, SOURCE_CHECK, root],
+                              capture_output=True, text=True, timeout=120)
+    except Exception as exc:
+        return {"status": "error", "reason": f"{type(exc).__name__}: {exc}", "script": SOURCE_CHECK}
+    for line in reversed((proc.stdout or "").splitlines()):
+        if line.startswith("DRIFT="):
+            try:
+                return json.loads(line[len("DRIFT="):])
+            except Exception as exc:
+                return {"status": "error", "reason": f"invalid_drift_json:{type(exc).__name__}", "script": SOURCE_CHECK}
+    return {
+        "status": "error",
+        "reason": f"source_check_no_drift_line:exit={proc.returncode}",
+        "script": SOURCE_CHECK,
+        "stderr": (proc.stderr or "")[:1000],
+    }
+
+
+def storyboard_path_for(root: str, ep: str) -> str:
+    return os.path.join(root, "脚本", normalize_episode(ep), "storyboard.json")
+
+
+def check_three_frame_compliance(root: str, ep: str) -> Optional[Dict[str, Any]]:
+    """检测本集 clip 是否遵循「至少三帧契约」（能力门控）。
+
+    读 storyboard.json：按 policy.video_backend 的后端能力判定是否强制；列出缺
+    midframe/anchors 且无豁免理由的违规 Clip。storyboard 未定稿则返回 None（无可检对象）。
+    """
+    path = storyboard_path_for(root, ep)
+    if not os.path.isfile(path):
+        return None
+    try:
+        with open(path, encoding="utf-8") as fh:
+            sb = json.load(fh)
+    except Exception:
+        return None
+    clips = sb.get("clips") if isinstance(sb, dict) else None
+    if not isinstance(clips, list) or not clips:
+        return None
+    policy = sb.get("policy") if isinstance(sb.get("policy"), dict) else {}
+    backend = policy.get("video_backend")
+    enforced = backend_supports_three_plus_frames(backend)
+    violating: List[str] = []
+    exempt = 0
+    for i, clip in enumerate(clips, 1):
+        cont = (clip.get("continuity") or {}) if isinstance(clip, dict) else {}
+        if has_valid_midframe(cont.get("midframe")) or has_valid_anchors(cont.get("anchors")):
+            continue
+        if cont.get("midframe_exempt_reason"):
+            exempt += 1
+            continue
+        violating.append(str((clip.get("id") if isinstance(clip, dict) else None) or f"clip#{i}"))
+    return {
+        "backend": backend,
+        "enforced": enforced,
+        "total_clips": len(clips),
+        "exempt_clips": exempt,
+        "violating_clips": violating,
+        # 后端不支持≥3帧（唯一豁免）时不算违规；强制时缺锚帧才违规。
+        "compliant": (not enforced) or (not violating),
+    }
+
+
+def has_valid_frame_ref(value: Any, keys: Sequence[str]) -> bool:
+    if isinstance(value, str):
+        return bool(value.strip())
+    if isinstance(value, dict):
+        return any(str(value.get(k) or "").strip() for k in keys)
+    return False
+
+
+def has_valid_midframe(value: Any) -> bool:
+    return has_valid_frame_ref(value, ("midframe_png", "anchor_png", "png", "path", "image"))
+
+
+def has_valid_anchors(value: Any) -> bool:
+    if isinstance(value, dict):
+        return has_valid_frame_ref(value, ("anchor_png", "midframe_png", "png", "path", "image"))
+    if not isinstance(value, list) or not value:
+        return False
+    return any(has_valid_frame_ref(item, ("anchor_png", "midframe_png", "png", "path", "image")) for item in value)
+
+
+def summarize_image_consistency(qc: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    """从已有 image_qc 报告上下文压出「图片一致性」摘要（崩脸/服装/场景/接缝硬阻断）。"""
+    if not qc:
+        return None
+    if qc.get("status") in {"error", "unavailable"}:
+        return {
+            "status": qc.get("status"),
+            "verdict": qc.get("status"),
+            "hard_blocks": None,
+            "advisory": None,
+            "degraded": None,
+            "precision_level": qc.get("precision_level"),
+            "report_md": qc.get("report_md"),
+            "samples": [qc.get("error") or qc.get("reason") or "image_qc unavailable"],
+            "consistent": False,
+        }
+    return {
+        "status": qc.get("status") or "ok",
+        "verdict": qc.get("verdict"),
+        "hard_blocks": qc.get("hard_blocks"),
+        "advisory": qc.get("advisory"),
+        "degraded": qc.get("degraded"),
+        "precision_level": qc.get("precision_level"),
+        "report_md": qc.get("report_md"),
+        "samples": qc.get("finding_samples") or [],
+        "consistent": (qc.get("hard_blocks") in (0, None)),
+    }
+
+
+def build_plan(root: str, ep: str, *, regen_mode: Optional[str] = None) -> Dict[str, Any]:
     root = os.path.abspath(root)
     ep = normalize_episode(ep)
     header, rows = rows_by_episode(root)
@@ -519,36 +1031,35 @@ def build_plan(root: str, ep: str, *, include_git: bool = True,
     current_todo = current_todo_context(root, ep, header, row)
     relevant_skills = relevant_skills_for_stage(until_key)
     old = load_snapshot(root)
-    new = snapshot_for_skills(REPO_ROOT, REPO_SKILLS, relevant_skills)
     old_skills = snapshot_skills(old) if old else set()
     newly_relevant = sorted(set(relevant_skills) - old_skills) if old else []
-    snapshot_changes = scoped_changed_files(old, new, old_skills & set(relevant_skills))
+    snapshot_changes, baseline_stale = baseline_changed_files(
+        old, relevant_skills, old_skills
+    )
     changed = set(snapshot_changes)
-    if include_git and old is None:
-        relevant_prefixes = tuple(f"skills/{s}/" for s in relevant_skills)
-        changed.update(
-            p for p in git_changed_files(REPO_ROOT)
-            if p.startswith(relevant_prefixes) and not is_test_path(p)
-        )
-    elif include_git and newly_relevant:
-        newly_relevant_prefixes = tuple(f"skills/{s}/" for s in newly_relevant)
-        changed.update(
-            p for p in git_changed_files(REPO_ROOT)
-            if p.startswith(newly_relevant_prefixes) and not is_test_path(p)
-        )
     changed_files = sorted(changed)
     changed_skills = sorted({skill_name_for_path(os.path.join(REPO_ROOT, p)) or "" for p in changed_files} - {""})
     gate_refresh_stages = gate_refresh_stage_keys(changed_files, until_key)
     artifact_changed_files = [
         p for p in changed_files
-        if not observe_only_changed_file(p) and not gate_only_stage_for_changed_file(p, until_key)
+        if artifact_affecting_changed_file(p, until_key)
     ]
     rerun_from = earliest_rerun_stage(artifact_changed_files, until_key)
-    rebuild_needed = bool(artifact_changed_files)
+    # 不变量：rebuild_needed 必须配有可执行的回放起点 rerun_from。artifact 文件虽变，
+    # 但都映射不到本集已达阶段（横切层 / 仅涉及尚未到达的阶段）时，没有可跑的重制起点，
+    # 不能报“建议重制”——转 gate/审查刷新，否则下游（n2d-batch）会拿到 rerun_from=None 无从执行。
+    unmapped_artifact_changes = bool(artifact_changed_files) and rerun_from is None
+    rebuild_needed = rerun_from is not None
     gate_refresh_needed = bool(gate_refresh_stages)
+    # 出图两层：共享定妆库默认沿用，除非变更命中定妆库生产规则。
+    image_in_scope = rebuild_needed and rerun_covers_image(rerun_from, until_key)
+    shared_lock_changed = shared_lock_production_touched(changed_files)
+    shared_lock_reuse = image_in_scope and not shared_lock_changed
     notes: List[str] = []
     if not old:
-        notes.append("当前作品没有 skill_update_snapshot 基线；本次结果会结合 git 工作区变动提示，建议先 record 建立基线。")
+        notes.append("当前作品没有 skill_update_snapshot 基线；首次无法检测变更，请先 record 建立内容快照基线。")
+    if baseline_stale:
+        notes.append("基线为旧版格式（无内容快照、不可用于变更检测）；请重新 record 建立内容基线。")
     if newly_relevant:
         notes.append(
             f"{', '.join(newly_relevant)} 因阶段推进首次纳入相关范围，本次不计为变更；该阶段完成后请 record 刷新基线。"
@@ -556,33 +1067,89 @@ def build_plan(root: str, ep: str, *, include_git: bool = True,
     if changed_files and not artifact_changed_files and gate_refresh_needed:
         notes.append("变动只影响 QC/gate 报告，不重制 prompt/图片/视频；重跑对应 gate 刷新结论即可。")
     elif changed_files and not artifact_changed_files:
-        notes.append("变动集中在 common/review/dashboard/batch/n2d-update 等横切层，不默认重制生产产物；先重跑 gate/审查/计划。")
-    elif rebuild_needed and not rerun_from:
-        notes.append("变动集中在 common/review/dashboard/batch/n2d 等横切层，或只涉及该集尚未到达的阶段文件；先重跑 gate/审查/计划，不默认重抽图。")
+        notes.append("变动集中在 n2d/_lib/review/dashboard/batch/n2d-update 等横切层，不默认重制生产产物；先刷新当前 gate/审查 findings。")
+    elif unmapped_artifact_changes:
+        notes.append("变动集中在 n2d/_lib/review/dashboard/batch/n2d 等横切层，或只涉及该集尚未到达的阶段文件；先重跑 gate/审查/计划，不默认重抽图。")
     if rebuild_needed and rerun_from:
         notes.append("真正执行前先看 diff/计划；涉及出图/出视频/配音/合成等付费或不可逆步骤时必须再次确认。")
+    if image_in_scope and shared_lock_reuse:
+        notes.append(
+            "共享定妆库默认沿用：本次变更未命中定妆库生产规则（标准三视图/角色一致性/资产注册/LoRA），"
+            "`出图/共享/图片/` 的定妆照/场景照 PNG 与 identity_registry 复用不重出，重制范围只覆盖本集分镜帧。"
+            "n2d-image 共享先行硬闸门会跳过已 ✅ 的共享 PNG，直接以其为参考重出分镜。"
+        )
+    elif image_in_scope and shared_lock_changed:
+        notes.append(
+            "共享定妆库需复核（非默认沿用）：本次变更命中定妆库生产规则（"
+            + ", ".join(shared_lock_changed)
+            + "）。先按最新规则复核、必要时重出共享定妆/场景，再用 "
+            "`python3 skills/n2d-image/scripts/asset_impact.py <作品根> <改动的定妆资产>` "
+            "级联出引用它、需跟着重出的本集分镜。"
+        )
 
     mode = resolve_regen_mode(root, regen_mode)
     strict_image_refresh = (mode == REGEN_MODE_STRICT_REFRESH and rebuild_needed
                             and rerun_covers_image(rerun_from, until_key))
     if strict_image_refresh:
-        commands = commands_for_strict_image_refresh(root, ep, rerun_from, until_key)
+        execution_steps = steps_for_strict_image_refresh(root, ep, rerun_from, until_key)
         notes.append(
             "【严审刷新】本模式不是保旧图：先按最新 skill 刷新文字阶段与出图 prompt，"
             "再用最新 prompt/QC/review 标准严审现有图片；凡 block/warn/降级或人工判定不符合预期的镜，"
             "都应舍弃旧图并排入重出。只有已有 finding/人工判定明确可沿用的镜，才允许保留。"
         )
     elif rebuild_needed:
-        commands = command_for_rerun(root, ep, rerun_from, until_key)
+        execution_steps = steps_for_rerun(root, ep, rerun_from, until_key, shared_lock_reuse=shared_lock_reuse)
     elif gate_refresh_needed:
-        commands = gate_refresh_commands(root, ep, gate_refresh_stages)
+        execution_steps = gate_refresh_steps(root, ep, gate_refresh_stages)
+    elif changed_files:
+        execution_steps = review_refresh_steps(root, ep, until_key)
     else:
-        commands = []
+        execution_steps = []
+    commands = commands_from_steps(execution_steps)
     image_qc_context = (
         load_image_qc_context(root, ep)
         if stage_index(until_key) >= stage_index("image")
         else None
     )
+    # 三大健康检测（除 skill 变更外）：源小说漂移 / 三帧契约遵循 / 图片一致性。
+    source_drift = detect_source_drift(root)
+    three_frame = check_three_frame_compliance(root, ep)
+    image_consistency = summarize_image_consistency(image_qc_context)
+    if source_drift and source_drift.get("status") == "drift":
+        chs = source_drift.get("changed_chapters") or source_drift.get("changed") or []
+        notes.append(
+            f"源小说已变动（{len(chs)} 章漂移）：写小说成品改了，本剧源过期。"
+            "重切属不可逆/花钱点——先看 `source_check.py` 报告，确认后再决定重切哪些集。"
+        )
+    elif source_drift and source_drift.get("status") in {"error", "unavailable"}:
+        notes.append(
+            f"源小说漂移检测不可用（status={source_drift.get('status')}，reason={source_drift.get('reason')}）；"
+            "这不是源未变动，需先修复检测再判断是否重切。"
+        )
+    if three_frame and three_frame.get("enforced") and not three_frame.get("compliant"):
+        vc = three_frame.get("violating_clips") or []
+        notes.append(
+            f"三帧契约未达标：{len(vc)} 个 Clip 缺中段锚帧（后端 {three_frame.get('backend')} 支持≥3帧·强制）。"
+            "回 n2d-script 跑 `anchor_planner.py <作品根> "
+            f"{ep} --write` 补齐，再出 `_mid` 帧。违规：{', '.join(vc[:6])}"
+            + (f" 等 {len(vc)} 个" if len(vc) > 6 else "")
+        )
+    elif three_frame and not three_frame.get("enforced"):
+        notes.append(
+            f"三帧契约豁免：路由后端 {three_frame.get('backend')} 不支持≥3帧（能力门控自动豁免），本集不强制中段锚帧。"
+        )
+    if image_consistency and not image_consistency.get("consistent"):
+        if image_consistency.get("status") in {"error", "unavailable"}:
+            notes.append(
+                f"图片一致性检测不可用（status={image_consistency.get('status')}）："
+                f"{'; '.join(image_consistency.get('samples') or [])}。这不是图片一致，需先修复/重跑 image_qc。"
+            )
+        else:
+            notes.append(
+                f"图片一致性存在硬阻断（image_qc verdict={image_consistency.get('verdict')}，"
+                f"hard_blocks={image_consistency.get('hard_blocks')}）：见 `{image_consistency.get('report_md')}`，"
+                "崩脸/服装/场景/接缝需重出受影响镜。"
+            )
     return {
         "kind": KIND_PLAN,
         "created_at": now_iso(),
@@ -596,6 +1163,8 @@ def build_plan(root: str, ep: str, *, include_git: bool = True,
         "gate_refresh_stages": gate_refresh_stages,
         "regen_mode": mode,
         "strict_image_refresh": strict_image_refresh,
+        "shared_lock_reuse": shared_lock_reuse,
+        "shared_lock_changed_files": shared_lock_changed,
         "needs_record": old is None,
         "relevant_skills": relevant_skills,
         "newly_relevant_skills": newly_relevant,
@@ -604,6 +1173,10 @@ def build_plan(root: str, ep: str, *, include_git: bool = True,
         "snapshot_changed_files": snapshot_changes,
         "current_todo": current_todo,
         "image_qc_environment": image_qc_context,
+        "source_drift": source_drift,
+        "three_frame_compliance": three_frame,
+        "image_consistency": image_consistency,
+        "execution_steps": execution_steps,
         "commands": commands,
         "notes": notes,
     }
@@ -623,7 +1196,7 @@ def record(root: str, episodes: Sequence[str]) -> Dict[str, Any]:
         normalized.append(ep)
         until_key = current_stage_key(root, ep, header, rows[ep])
         skills.update(relevant_skills_for_stage(until_key))
-    snap = snapshot_for_skills(REPO_ROOT, REPO_SKILLS, skills)
+    snap = build_baseline_snapshot(skills)
     snap["kind"] = KIND_SNAPSHOT
     snap["root"] = os.path.abspath(root)
     snap["episodes"] = normalized
@@ -659,22 +1232,60 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     add_common(p_check)
     p_check.add_argument("--write-plan", action="store_true", help="write 生产数据/skill_update_plan_第N集.json/md")
     p_check.add_argument("--json", action="store_true", help="print JSON")
-    p_check.add_argument("--no-git", action="store_true", help="ignore git working-tree changes")
     p_check.add_argument(
         "--regen-mode",
         choices=[REGEN_MODE_MINIMAL, REGEN_MODE_STRICT_REFRESH, LEGACY_REGEN_MODE_KEEP_IMAGES],
         default=None,
-        help="重制策略；缺省读 _设置.md『更新重制策略』，再缺省=最小。严审刷新=刷新最新prompt后严审旧图，不符合即重出；保图刷新为旧别名",
+        help="重制策略；缺省读 _设置.md『更新重制策略』，再读私有全局默认，再缺省=最小。严审刷新=刷新最新prompt后严审旧图，不符合即重出；保图刷新为旧别名",
     )
 
     p_record = sub.add_parser("record", help="record current relevant skill fingerprints as baseline")
     add_common(p_record)
     p_record.add_argument("--json", action="store_true", help="print JSON")
+
+    p_media = sub.add_parser(
+        "media",
+        help="selective image/video refresh plan for a few shots (evidence-first, no audit)",
+    )
+    p_media.add_argument("root", help="制漫剧/<剧名> 作品根")
+    p_media.add_argument("episode", nargs="?", help="第N集（必填，避免误扫全剧）")
+    p_media.add_argument("--image", action="append", default=[], help="候选复核/可能刷新的图片目标，可逗号分隔；不是坏图判定")
+    p_media.add_argument("--video", action="append", default=[], help="候选复核/可能刷新的视频目标，可逗号分隔；不是坏视频判定")
+    p_media.add_argument("--target", action="append", default=[], help="同时作为图片和视频目标的通用 selector")
+    p_media.add_argument("--write-plan", action="store_true", help="写入 生产数据/media_refresh_plan*.json/md 并追加 update runs 日志")
+    p_media.add_argument("--json", action="store_true", help="输出 JSON")
     return parser.parse_args(argv)
+
+
+def run_media(args: argparse.Namespace) -> int:
+    here = os.path.abspath(SCRIPT_DIR)
+    if here not in sys.path:
+        sys.path.insert(0, here)
+    import media_refresh  # noqa: E402  局部导入，避免 check/record 也加载
+
+    plan = media_refresh.build_plan(
+        args.root,
+        episode=args.episode,
+        image_targets=args.image,
+        video_targets=args.video,
+        generic_targets=args.target,
+    )
+    if args.write_plan:
+        plan = media_refresh.write_plan(os.path.abspath(args.root), plan)
+    if args.json:
+        print(json.dumps(plan, ensure_ascii=False, indent=2, sort_keys=True))
+    else:
+        marker = "已生成候选计划（需证据确认）" if plan["needs_media_review"] else "无图片/视频 target"
+        print(f"{plan['line']}: {marker} images={len(plan['targets']['images'])} videos={len(plan['targets']['videos'])}")
+        if plan.get("plan_md"):
+            print(f"  plan: {plan['plan_md']}")
+    return 0
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
     args = parse_args(argv)
+    if args.cmd == "media":
+        return run_media(args)
     root = os.path.abspath(args.root)
     episodes = all_episodes(root) if args.all else [args.episode]
     if not episodes or any(not ep for ep in episodes):
@@ -685,17 +1296,37 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         if args.json:
             print(json.dumps(snap, ensure_ascii=False, indent=2, sort_keys=True))
         else:
-            print(f"已记录 skill 快照：{snapshot_path(root)}（{len(snap.get('files', {}))} files）")
+            print(f"已记录 skill 快照：{snapshot_path(root)}（{len(snap.get('files', {}))} files 内容基线）")
         return 0
 
     regen_mode = getattr(args, "regen_mode", None)
-    plans = [build_plan(root, str(ep), include_git=not args.no_git, regen_mode=regen_mode) for ep in episodes]
+    plans = [build_plan(root, str(ep), regen_mode=regen_mode) for ep in episodes]
+
+    # 注入智能优化建议（附加功能，失败不影响重制计划主流程）。
+    # JSON 模式必须保持 stdout 为纯 JSON；人读打印只在非 JSON 模式走 stdout。
+    smart_suggestions: List[Dict[str, Any]] = []
+    smart_suggestions_error = ""
+    try:
+        from smart_suggestions import get_smart_suggestions, print_suggestions
+        smart_suggestions = get_smart_suggestions(root)
+    except Exception as e:
+        smart_suggestions_error = f"{type(e).__name__}: {e}"
+        print(f"智能建议生成失败（不影响重制计划）：{smart_suggestions_error}", file=sys.stderr)
+        print_suggestions = None  # type: ignore[assignment]
+
+    for plan in plans:
+        plan["smart_suggestions"] = smart_suggestions
+        if smart_suggestions_error:
+            plan["smart_suggestions_error"] = smart_suggestions_error
+
     if args.write_plan:
         for plan in plans:
             write_plan(root, plan)
     if args.json:
         print(json.dumps(plans[0] if len(plans) == 1 else plans, ensure_ascii=False, indent=2, sort_keys=True))
     else:
+        if smart_suggestions and print_suggestions:
+            print_suggestions(smart_suggestions)
         for plan in plans:
             marker = (
                 "建议重制" if plan["rebuild_needed"]
@@ -721,6 +1352,21 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     f"{todo.get('column')}={todo.get('status')} "
                     f"→ {todo.get('skill')}"
                 )
+            sd, tf, ic = plan.get("source_drift"), plan.get("three_frame_compliance"), plan.get("image_consistency")
+            health = []
+            if sd:
+                health.append(f"源={sd.get('status')}")
+            if tf:
+                health.append("三帧=豁免" if not tf.get("enforced")
+                              else ("三帧=达标" if tf.get("compliant")
+                                    else f"三帧=缺{len(tf.get('violating_clips') or [])}镜"))
+            if ic:
+                if ic.get("status") in {"error", "unavailable"}:
+                    health.append(f"图片={ic.get('status')}")
+                else:
+                    health.append("图片=" + ("一致" if ic.get("consistent") else f"硬阻断{ic.get('hard_blocks')}"))
+            if health:
+                print("  health: " + " | ".join(health))
             for note in plan.get("notes", []):
                 print(f"  - {note}")
         return 0

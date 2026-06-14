@@ -12,7 +12,7 @@ description: P2 automatic review scoring for n2d. Produce a machine score per ep
 - **输入**：mechanical/consistency/visual checks、dashboard gate/review findings、identity drift、字幕/成片/配音/SRT/storyboard 时长信号。
 - **输出**：`生产数据/score_inputs/*`、`score_第N集.json/md`，可选低分回流任务写入 `batch_queue.json`。
 - **读写边界**：只评分和排队；不修改图/视频/字幕/配音，不直接判定最终美学质量。
-- **契约关系**：finding kind、回流 stage、合规/水印等未映射 block 的处理与 `n2d_contract.py` 对齐；通过率阈值优先读 dashboard 阈值配置。
+- **契约关系**：finding kind、回流 stage、合规等未映射 block 的处理与 `n2d_contract.py` 对齐；通过率阈值优先读 dashboard 阈值配置。
 
 ## 评分维度
 
@@ -31,7 +31,7 @@ description: P2 automatic review scoring for n2d. Produce a machine score per ep
 
 默认阈值 `85`。任一维度 block 会让该维度 fail；总分低于阈值或存在 fail 时，整集状态为 `fail`，输出 `auto_return_tasks`。缺机器信号的维度是 `insufficient_data`：只输出 `data_collection_tasks`，先采集检查信号，不直接排返工。
 
-**无静默丢弃（P1）**：mechanical_check / dashboard 的 findings 若 `dim` 归不到评分维度（如 `完整性`=缺产物、`水印`=AI 标识、`视频`），不再被 `continue` 静默吞掉，而是落进 `unmapped_findings`。其中 **block 级会强制整集不给 `pass`（降 `warn`）并出 `triage_unmapped` 人判分诊任务**；warn/info 仅留痕。历史 bug：`BLOCK 完整性 / BLOCK 水印` 因关键词没命中被丢弃、不扣分、可放行。
+**无静默丢弃（P1）**：mechanical_check / dashboard 的 findings 若 `dim` 归不到评分维度（如 `完整性`=缺产物、`视频`），不再被 `continue` 静默吞掉，而是落进 `unmapped_findings`。其中 **block 级会强制整集不给 `pass`（降 `warn`）并出 `triage_unmapped` 人判分诊任务**；warn/info 仅留痕。历史 bug：`BLOCK 完整性` 因关键词没命中被丢弃、不扣分、可放行。
 
 ## 标准命令
 

@@ -85,6 +85,7 @@
 | `total_score` | number | 是 | 百分制总分 |
 | `tier` | string | 是 | `爆款潜力/合格偏上/及格线下/不及格` |
 | `verdict` | string | 是 | `过/小改/大改/弃稿重立` |
+| `production_decision` | object | 是 | `decision/route/reason/score/verdict`，其中 `decision` 为 `go/revise/kill/n2d-adapt` |
 | `rewrite_roi` | string | 是 | `high/medium/low` |
 | `waivers` | list[object] | 是 | 评分阶段显式豁免；没有豁免时为空数组 |
 | `next_actions` | list[object] | 是 | 推荐下一步 |

@@ -9,6 +9,7 @@
 
 - **角色/形态**：`[CHAR_角色名_形态]`
 - **核心道具**：`[PROP_道具名]`
+- **独立服装/盔甲**：`[OUTFIT_服装名]`
 - **关键视觉特效**：`[VFX_特效名]`
 - **主场景**：`[LOC_场景名]`
 
@@ -19,6 +20,6 @@
 ## N2D 导出联动 (Export Bridge)
 
 当执行 `export.py --formats n2d` 时，导出器会：
-1. 用正则 `\[(CHAR|PROP|VFX|LOC)_([^\]]+)\]` 扫描全书 Markdown。
-2. 自动汇总并在 `导出/n2d-script/小说/` 目录下生成 `asset_registry_preflight.json`。
+1. 用正则 `\[(CHAR|PROP|VFX|LOC|OUTFIT)_([^\]]+)\]` 扫描全书 Markdown。
+2. 自动汇总并在 `制漫剧/<书名>/小说/`（或显式 `--n2d-dest`）下生成 `asset_registry_preflight.json`。
 3. N2D 管线在启动分镜时，可以直接读取这些预置标签，无需大语言模型二次盲猜。

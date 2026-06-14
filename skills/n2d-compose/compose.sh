@@ -24,8 +24,8 @@ fi
 KEEP_CLIP_AUDIO="${KEEP_CLIP_AUDIO:-0}"  # 默认在 compose 工作缓存丢弃 AI clip 原生音频；设 1 才低音量混入环境音底。源 clip 不改写。
 J_CUT_SEC="${J_CUT_SEC:-0.25}"           # 默认轻量 J-cut：基于 line_*.wav 提前入声；设 0 关闭。正面口型特写慎用
 VIDEO_NATIVE_AUDIO_POLICY="${VIDEO_NATIVE_AUDIO_POLICY:-}"
-# 使用 common/n2d_settings.py 的单一真值源
-_GET_SETTING="PYTHONPATH=\"$SKILL_DIR/../common\" python3 -c \"import sys; from n2d_settings import get_setting; print(get_setting(sys.argv[1], sys.argv[2], sys.argv[3]))\""
+# 使用 n2d/_lib/n2d_settings.py 的单一真值源
+_GET_SETTING="PYTHONPATH=\"$SKILL_DIR/../n2d/_lib\" python3 -c \"import sys; from n2d_settings import get_setting; print(get_setting(sys.argv[1], sys.argv[2], sys.argv[3]))\""
 if [ -z "$VIDEO_NATIVE_AUDIO_POLICY" ]; then
   VIDEO_NATIVE_AUDIO_POLICY=$(eval $_GET_SETTING "\"$ROOT\" \"视频原生音轨\" \"丢弃\"")
 fi
@@ -63,18 +63,18 @@ ZH_SRT="$ROOT/脚本/$EP/字幕_中文.srt"; EN_SRT="$ROOT/脚本/$EP/字幕_英
 W="$ROOT/合成/$EP/_work"; rm -rf "$W"; mkdir -p "$W"
 OUT="$ROOT/合成/$EP/成片_${EP}_${MODE}.mp4"
 
-[ -d "$VID" ] || { echo "缺 $VID（先 /n2d-video）"; exit 1; }
+[ -d "$VID" ] || { echo "缺 $VID（先 n2d-video）"; exit 1; }
 CLIPS=("$VID"/*.mp4)
 [ -e "${CLIPS[0]}" ] || { echo "$VID 无 clip"; exit 1; }
 
 # 占位配音守门：除非显式用 VOICEFILE 指了别的轨（如拟合轨），否则不许把占位音色烧进成片。
-# `制作模式=先出视频后配音` 时：先 /n2d-voice 补真音 → fit_voice_to_clips.py → VOICEFILE=拟合轨。
+# `制作模式=先出视频后配音` 时：先 n2d-voice 补真音 → fit_voice_to_clips.py → VOICEFILE=拟合轨。
 MAN_J="$ROOT/合成/$EP/配音/时长清单.json"
 if [ -z "${VOICEFILE:-}" ] && [ -f "$MAN_J" ] && [ "${ALLOW_PLACEHOLDER_COMPOSE:-0}" != "1" ]; then
-  if PYTHONPATH="$SKILL_DIR/../common" python3 -c "import json,sys;from n2d_route import manifest_is_placeholder;sys.exit(0 if manifest_is_placeholder(json.load(open(sys.argv[1]))) else 1)" "$MAN_J"; then
+  if PYTHONPATH="$SKILL_DIR/../n2d/_lib" python3 -c "import json,sys;from n2d_route import manifest_is_placeholder;sys.exit(0 if manifest_is_placeholder(json.load(open(sys.argv[1]))) else 1)" "$MAN_J"; then
     echo "⛔ 本集配音仍是占位音色，拒绝合成（占位轨与镜头时长不是真实时长，成片音画会错）。"
-    echo "   · 配音先行：先 /n2d-voice 换真实配音（CosyVoice/克隆/MiniMax）重跑。"
-    echo "   · 先出视频后配音模式：/n2d-voice 补真音后，跑 fit_voice_to_clips.py 出拟合轨，再 VOICEFILE=…/voice_${VLANG}_fitted.wav 合成。"
+    echo "   · 配音先行：先 n2d-voice 换真实配音（CosyVoice/克隆/MiniMax）重跑。"
+    echo "   · 先出视频后配音模式：n2d-voice 补真音后，跑 fit_voice_to_clips.py 出拟合轨，再 VOICEFILE=…/voice_${VLANG}_fitted.wav 合成。"
     echo "   · 仅要占位 rough preview：ALLOW_PLACEHOLDER_COMPOSE=1 重跑（产物不可用于交付）。"
     exit 1
   fi
@@ -98,13 +98,24 @@ if clips:
         path = clip.get("video_out")
         if path:
             path = os.path.join(root, path)
-        if not path or not os.path.exists(path):
-            cid = clip.get("id")
-            if cid:
+        
+        cid = clip.get("id")
+        if cid:
+            # 优先找 part 拆段 (automated split relay)
+            parts = sorted(glob.glob(os.path.join(vid, f"*{cid}*part*.mp4")))
+            if parts:
+                for p in parts:
+                    # 拆段后的子文件时长由生成时控制，此处设为 None 让 ffmpeg 取全长，
+                    # 速度模式设为 trim（生成时已对齐时长，不需要整体 warp，否则会把子段拉长到总时长）
+                    ordered.append((p, "None", "trim"))
+                continue
+            
+            # 无拆段时，尝试精确匹配或模糊匹配
+            if not path or not os.path.exists(path):
                 cands = sorted(glob.glob(os.path.join(vid, f"*{cid}*.mp4")))
                 if cands: path = cands[0]
+        
         if path and os.path.exists(path):
-            # n2d 默认开启 warp，解决视频比配音慢导致被截断的问题
             ordered.append((path, clip.get("duration", "None"), clip.get("speed_mode", "warp")))
 else:
     for p in sorted(glob.glob(os.path.join(vid, "*.mp4"))):
@@ -248,6 +259,16 @@ if [ -f "$VOICE" ]; then
       [sfx][bgmduck][vox]amix=inputs=3:normalize=0:duration=first:dropout_transition=0,dynaudnorm[a];
       ${VFILTER}" \
     -map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p -c:a aac -b:a 192k -movflags +faststart "$OUT"
+elif [ "$NATIVE_AV_MODE" = "1" ] && [ "$NATIVE_AUDIO_MODE" != "discard" ]; then
+  echo "（原生音画模式：使用 clip 原生音频作为侧链 ducking 源）"
+  ffmpeg -y -loglevel error -i "$W/concat.mp4" -i "$W/bgm.wav" -i "$W/clip_audio.wav" "${PNG_INPUTS[@]}" \
+    -filter_complex "
+      [2:a]asplit=2[sfx][sfxB];
+      [1:a]${BGM_VOL_VOICE}[bgm0];
+      [bgm0][sfxB]sidechaincompress=threshold=${DUCK_THRESHOLD}:ratio=${DUCK_RATIO}:attack=${DUCK_ATTACK}:release=${DUCK_RELEASE}[bgmduck];
+      [sfx][bgmduck]amix=inputs=2:normalize=0:duration=first:dropout_transition=0,dynaudnorm[a];
+      ${VFILTER}" \
+    -map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p -c:a aac -b:a 192k -movflags +faststart "$OUT"
 else
   echo "（无配音轨，纯 BGM+音效底+字幕）"
   ffmpeg -y -loglevel error -i "$W/concat.mp4" -i "$W/bgm.wav" -i "$W/clip_audio.wav" "${PNG_INPUTS[@]}" \
@@ -255,22 +276,21 @@ else
     -map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p -c:a aac -b:a 192k -movflags +faststart "$OUT"
 fi
 
+
 echo "=== [6/6] 完成: $OUT ==="
 ls -la "$OUT"
 
 # 回写进度
 if [ "${N2D_UPDATE_PROGRESS:-1}" != "0" ]; then
-  PYTHONPATH="$SKILL_DIR/../common" python3 "$SKILL_DIR/../n2d/progress.py" set "$ROOT" "$EP" "成片" "✅" || true
+  PYTHONPATH="$SKILL_DIR/../n2d/_lib" python3 "$SKILL_DIR/../n2d/progress.py" set "$ROOT" "$EP" "成片" "✅" || true
 fi
 
 # 记录生产数据 (P0)
-WM_STATUS=$(eval $_GET_SETTING "\"$ROOT\" \"水印\" \"ai\"")
 python3 "$SKILL_DIR/../n2d-dashboard/scripts/dashboard.py" record "$ROOT" \
   --episode "$EP" --stage compose --event generation \
   --asset "$OUT" --status pass \
   --duration-sec "$SECONDS" --provider local-ffmpeg \
-  --meta native_audio_policy="$VIDEO_NATIVE_AUDIO_POLICY" \
-  --meta watermark="$WM_STATUS" || true
+  --meta native_audio_policy="$VIDEO_NATIVE_AUDIO_POLICY" || true
 
 # 时长对账（非阻断）：成片 ≈ 配音 ≈ 字幕末行。amix=duration=first 会静默把超长配音裁到视频长——
 # 配音先行上游漂移、或先出视频后配音漏跑 fit 时音画错位，这里至少报出来。

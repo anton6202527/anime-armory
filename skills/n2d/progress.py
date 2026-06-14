@@ -198,6 +198,49 @@ def warn_contract_version(root):
     elif stale:
         print(f"⚠️ 发现 {stale} 个 manifest 缺失或 schema_version 落后；建议先跑：python3 skills/n2d/_lib/n2d_contract.py migrate-version '{root}'")
 
+def print_active_settings(root):
+    try:
+        from settings import load_settings, get_setting, DEFAULTS
+    except ImportError:
+        from n2d_settings import load_settings, get_setting, DEFAULTS
+    
+    # 核心关注的选择点
+    keys = ["制作模式", "生图AI", "生视频模型", "生视频渠道", "视频模型路由", "配音后端", "字幕语言"]
+    
+    print("\n--- 生效设置 (Active Settings) ---")
+    for k in keys:
+        val = get_setting(root, k)
+        is_default = (val == DEFAULTS.get(k))
+        suffix = " (默认)" if is_default else ""
+        print(f"  {k}: {val}{suffix}")
+    print("----------------------------------\n")
+
+def auto_update_identity_matrix(root):
+    """静默检查并更新身份矩阵，减少 image/video 阶段前的人工操作。"""
+    matrix_path = os.path.join(root, "生产数据", "identity_adapter_matrix.json")
+    registry_path = os.path.join(root, "出图", "共享", "identity_registry.json")
+    
+    if not os.path.exists(registry_path):
+        return
+
+    # 检查矩阵是否过期（按修改时间）
+    stale = False
+    if not os.path.exists(matrix_path):
+        stale = True
+    elif os.path.getmtime(registry_path) > os.path.getmtime(matrix_path):
+        stale = True
+        
+    if stale:
+        print("  🔄 检测到身份注册表更新，正在静默刷新身份矩阵...")
+        script = os.path.join(os.path.dirname(__file__), "..", "n2d-identity", "scripts", "identity.py")
+        if os.path.exists(script):
+            import subprocess
+            try:
+                subprocess.run([sys.executable, script, root, "--write"], capture_output=True, check=True)
+                print("  ✅ 身份矩阵已同步。")
+            except Exception as e:
+                print(f"  ⚠️ 身份矩阵同步失败：{e}")
+
 def main():
     if len(sys.argv) >= 2 and sys.argv[1] == 'set':
         if len(sys.argv) != 6:
@@ -214,6 +257,10 @@ def main():
     root = sys.argv[1].rstrip('/'); only = sys.argv[2] if len(sys.argv) > 2 else None
     header, rows = parse(root)
     warn_contract_version(root)
+    
+    # 自动执行横切前置任务
+    auto_update_identity_matrix(root)
+
     if only:
         r = next((x for x in rows if x['_ep'] == only), None)
         if not r: print(f"{only} 不在进度表"); sys.exit(1)
@@ -222,6 +269,10 @@ def main():
         if route.get('note'):
             print(f"  ⚠️ {route['note']}")
         return
+    
+    # 打印全局状态前先显示设置概览
+    print_active_settings(root)
+    
     summary = summarize(root)
     done = summary["done"]; bottleneck = summary["bottleneck"]; first = summary["first"]
     print(f"作品: {os.path.basename(root)}（共 {len(rows)} 集）")
@@ -235,6 +286,7 @@ def main():
         order = [s[1] for s in STAGES] + ['补真实配音', '✅已成片']
         items = sorted(bottleneck.items(), key=lambda kv: order.index(kv[0]) if kv[0] in order else 99)
         print("各阶段卡集数: " + " · ".join(f"{k}={v}" for k, v in items))
+
 
 if __name__ == '__main__':
     main()

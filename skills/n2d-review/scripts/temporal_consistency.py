@@ -25,7 +25,11 @@ from typing import Any, Dict, List, Optional, Sequence
 
 import face_consistency as fc  # 复用 cosine
 
-DEFAULT_FRAMES = 6
+DEFAULT_FRAMES = 6          # 采样下限（floor）——短镜/无时长信息时的兜底帧数
+SAMPLE_PER_SEC = 1.0        # 自适应基准：约 1 帧/秒（长镜抽更多，抓片中段渐变脸漂）
+CLOSEUP_DENSITY = 1.5       # 近景镜采样加密系数（脸占画幅大，渐变更刺眼，多采几帧）
+SAMPLE_CAP = 24            # 采样上限（cap）——封顶单镜 insightface 嵌入成本
+CLOSEUP_MARKERS = ("ECU", "MCU", "BCU", "CU", "OTS", "反打", "特写", "近景", "过肩")  # 与 video_qc 同义
 DEFAULT_ID_FLOOR = 0.60     # 相邻帧同人余弦下限（低于=片内身份漂移）
 DEFAULT_FLICKER_MAX = 0.06  # 相邻帧亮度归一化绝对差均值上限（高于=闪烁）
 SEAM_WARN = 18   # 尾帧 vs 下一首帧 64位dHash 距 > 此 → 接缝构图对不上（尾帧接力本应近乎同构图）
@@ -157,6 +161,21 @@ def _max(a: str, b: str) -> str:
     return a if order[a] >= order[b] else b
 
 
+def adaptive_frame_count(duration_sec: Optional[float], *, closeup: bool = False,
+                         floor: int = DEFAULT_FRAMES, per_sec: float = SAMPLE_PER_SEC,
+                         cap: int = SAMPLE_CAP) -> int:
+    """按 clip 时长（+近景加密）自适应采样帧数，抓「片中段才渐变」的脸漂。纯函数·可测。
+
+    固定 6 帧对 10–60s 的长镜太稀（2026 各家 long-range 时序仍是软肋）：一条 15s 镜只看 6 帧，
+    中间 2–3 秒的渐变脸漂会从采样缝里漏过去。这里 ≈1 帧/秒、近景再 ×1.5，floor 兜底短镜、
+    cap 封顶单镜 insightface 成本。无时长信息（探测失败）→ 退回 floor。"""
+    if not duration_sec or duration_sec <= 0:
+        return floor
+    rate = per_sec * (CLOSEUP_DENSITY if closeup else 1.0)
+    n = int(round(duration_sec * rate))
+    return max(floor, min(cap, n))
+
+
 # ---------- 抽帧 + 嵌入（需 ffmpeg / Pillow / insightface） ----------
 
 def _sample_frames(mp4: str, k: int, outdir: str) -> List[str]:
@@ -277,9 +296,14 @@ def analyze(root: str, ep: str, frames: int = DEFAULT_FRAMES,
     app = fc._load_embedder()  # 可能 None（缺 insightface）→ 只测 flicker
     if app is None:
         res["notes"].append("未装 insightface——仅测 flicker/TCI，身份漂移交人判。")
+    closeup_map = _load_closeup_map(root, ep)  # 镜号→近景：近景镜采样加密
     for mp4 in vids:
+        num = _shot_num(os.path.basename(mp4))
+        dur = fc_duration(mp4)
+        closeup = bool(closeup_map.get(num)) if num is not None else False
+        k = adaptive_frame_count(dur, closeup=closeup, floor=frames)
         with tempfile.TemporaryDirectory() as td:
-            fpaths = _sample_frames(mp4, frames, td)
+            fpaths = _sample_frames(mp4, k, td)
             lumas = [x for x in (_luma(p) for p in fpaths) if x is not None]
             embs = [e for e in (_face_emb(app, p) for p in fpaths) if e is not None] if app else []
             fl = flicker_index(lumas)
@@ -287,6 +311,7 @@ def analyze(root: str, ep: str, frames: int = DEFAULT_FRAMES,
             v = verdict(mid, fl, id_floor, flicker_max)
             res["clips"].append({
                 "clip": os.path.basename(mp4), "frames": len(fpaths),
+                "sampled_target": k, "duration": round(dur, 2) if dur else None, "closeup": closeup,
                 "min_id_cos": round(mid, 4) if mid is not None else None,
                 "flicker": round(fl, 4), "tci": round(temporal_consistency_index(lumas), 4),
                 "verdict": v,
@@ -299,9 +324,50 @@ def _shot_num(name: str) -> Optional[int]:
     return int(m.group(1)) if m else None
 
 
+def _is_closeup_lens(lens: str) -> bool:
+    s = str(lens or "").upper()
+    return any(m.upper() in s for m in CLOSEUP_MARKERS)
+
+
+def _load_closeup_map(root: str, ep: str) -> Dict[int, bool]:
+    """镜号 → 是否近景镜（任一分镜 lens 命中近景档）。喂自适应采样加密。缺 storyboard → 空表。"""
+    sb = _load_json(os.path.join(root, "脚本", ep, "storyboard.json"))
+    out: Dict[int, bool] = {}
+    if not isinstance(sb, dict):
+        return out
+    for clip in (sb.get("clips") or sb.get("shots") or []):
+        if not isinstance(clip, dict):
+            continue
+        num = _shot_num(str(clip.get("id") or clip.get("clip") or clip.get("shot") or ""))
+        if num is None:
+            continue
+        out[num] = any(_is_closeup_lens((s or {}).get("lens", "")) for s in (clip.get("shots") or []))
+    return out
+
+
 # ── 接缝意图（storyboard 是唯一真值源）──────────────────────────────────────
 # 与 n2d-video/scripts/video_qc.py 的 seam_strictness/RELAY_TRANSITIONS 同义，两处保持同步。
 RELAY_TRANSITIONS = ("接力", "relay", "seamless", "continuous")
+
+
+def _is_relay_transition(transition: Any) -> bool:
+    return str(transition or "").strip().lower() in RELAY_TRANSITIONS
+
+
+def _declared_relay(transition: Any, need_endframe: bool) -> bool:
+    """Whether this seam should be treated as a strict cross-clip relay.
+
+    `need_endframe=true` also exists for the triframe contract: it means an end
+    frame asset is required for video guidance, but an explicit hard/match/action
+    cut still means the cross-clip dHash distance is informational.  If the
+    storyboard omits transition intent, keep the old conservative strict mode.
+    """
+    text = str(transition or "").strip()
+    if _is_relay_transition(text):
+        return True
+    if text:
+        return False
+    return bool(need_endframe)
 
 
 def seam_strictness(intent: Optional[Dict[str, Any]]) -> str:
@@ -331,9 +397,18 @@ def load_seam_intents(root: str, ep: str) -> Dict[int, Dict[str, Any]]:
         if n is None:
             continue
         cont = clip.get("continuity") or {}
+        transition = cont.get("transition")
+        need_end = bool(clip.get("need_endframe") or cont.get("need_endframe")
+                        or clip.get("need_end_frame") or cont.get("need_end_frame"))
         out[n] = {"transition": cont.get("transition"),
-                  "relay": bool(clip.get("need_end_frame") or cont.get("need_end_frame"))}
+                  # 规范字段 need_endframe（无下划线）；need_end_frame 仅旧别名兜底。
+                  "relay": _declared_relay(transition, need_end)}
     return out
+
+
+def _is_anchor_png_name(name: str) -> bool:
+    stem = os.path.splitext(os.path.basename(name))[0]
+    return stem.endswith("_mid") or re.search(r"_a\d+$", stem) is not None
 
 
 def _face_cos(app, p1: Optional[str], p2: Optional[str]) -> Optional[float]:
@@ -390,7 +465,7 @@ def seam_analyze(root: str, ep: str, warn: int = SEAM_WARN, block: int = SEAM_BL
             continue
         if nm[:-4].endswith("_end"):
             tails[n] = p
-        else:
+        elif not _is_anchor_png_name(nm):
             firsts.setdefault(n, p)
     fnums = sorted(firsts)
     app = fc._load_embedder()  # 人脸身份比对用；None=缺 insightface（静默退化为纯构图/色彩，交人判）
@@ -442,7 +517,7 @@ def seam_analyze(root: str, ep: str, warn: int = SEAM_WARN, block: int = SEAM_BL
                 "transition": (intent or {}).get("transition"),
                 "msg": f"镜头{n} 存在接力尾帧 _end.png，但 storyboard 声明 "
                        f"{(intent or {}).get('transition')}（非接力）——真值源矛盾，"
-                       "以 storyboard 为准；请补 need_end_frame 或移除 _end 尾帧",
+                       "以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
             })
             if v != "ok":
                 v = "info"
@@ -471,7 +546,8 @@ def main(argv: List[str]) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("root")
     ap.add_argument("episode")
-    ap.add_argument("--frames", type=int, default=DEFAULT_FRAMES)
+    ap.add_argument("--frames", type=int, default=DEFAULT_FRAMES,
+                    help="采样下限（floor）；实际每镜按时长自适应加密（≈1帧/秒，近景×1.5，封顶24）")
     ap.add_argument("--id-floor", type=float, default=DEFAULT_ID_FLOOR)
     ap.add_argument("--flicker-max", type=float, default=DEFAULT_FLICKER_MAX)
     ap.add_argument("--seam", action="store_true", help="改跑接缝机检（尾帧 vs 下一首帧 dHash，出图后即可）")
@@ -514,7 +590,9 @@ def main(argv: List[str]) -> int:
         if c["verdict"] == "block":
             nblk += 1
         if c["verdict"] in ("block", "warn"):
-            print(f"{icon[c['verdict']]} {c['clip']}: 帧间身份min={c['min_id_cos']} flicker={c['flicker']} TCI={c['tci']}")
+            print(f"{icon[c['verdict']]} {c['clip']}: 帧间身份min={c['min_id_cos']} flicker={c['flicker']} "
+                  f"TCI={c['tci']} 采样{c['frames']}/{c.get('sampled_target','?')}帧"
+                  f"（{c.get('duration','?')}s{'·近景' if c.get('closeup') else ''}）")
     print(f"\n片内崩 🔴 {nblk} · 共评 {len(res['clips'])} clip")
     return 1 if nblk else 0
 

@@ -60,10 +60,10 @@ CANDIDATE_SOURCES: List[Dict[str, object]] = [
     },
     {
         "id": "n2d-image-backends",
-        "path": "skills/n2d/_lib/n2d_contract.py",
+        "path": "skills/n2d/_lib/n2d_schema.py",
         "choice_points": ["生图AI"],
         "max_age_days": 45,
-        "note": "APPROVED/FORBIDDEN_IMAGE_BACKENDS 生图后端白名单/黑名单（n2d 线策略）。",
+        "note": "APPROVED_IMAGE_BACKENDS 生图后端白名单（n2d 线策略）；定义在 n2d_schema.py，n2d_contract.py 仅 facade 转出。",
     },
     {
         "id": "voice-backends",
@@ -71,6 +71,13 @@ CANDIDATE_SOURCES: List[Dict[str, object]] = [
         "choice_points": ["配音后端", "演唱音色"],
         "max_age_days": 60,
         "note": "VOICE_BACKEND_SPECS 配音后端注册表（env/优先级/能力，n2d 线本地）。",
+    },
+    {
+        "id": "image-backend-probes",
+        "path": "skills/n2d/_lib/image_backends.py",
+        "choice_points": ["生图AI"],
+        "max_age_days": 45,
+        "note": "IMAGE_BACKEND_PROBES 出图后端连通性探针口径（CLI/HTTP/env，gate image_preflight 用）。",
     },
 ]
 

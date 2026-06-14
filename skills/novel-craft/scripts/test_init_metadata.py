@@ -16,6 +16,7 @@ CONDENSE_INIT = os.path.join(REPO, "skills", "novel-condense", "scripts", "init_
 CONTINUE_INIT = os.path.join(REPO, "skills", "novel-continue", "scripts", "init_project.py")
 SPINOFF_INIT = os.path.join(REPO, "skills", "novel-spinoff", "scripts", "init_project.py")
 REWRITE_INIT = os.path.join(REPO, "skills", "novel-rewrite", "scripts", "init_project.py")
+CREATE_INIT = os.path.join(REPO, "skills", "novel-create", "scripts", "init_project.py")
 DRAFT_PACKETS = os.path.join(HERE, "draft_packets.py")
 sys.path.insert(0, HERE)
 from contract import demo_chapters_for  # noqa: E402  共享 demo 章数真值源
@@ -147,6 +148,30 @@ class InitMetadataTest(unittest.TestCase):
                 self.assertEqual(self._meta_demo(init, src, os.path.join(tmp, f"{name}03"), "--target-chapters", 3), 0, name)
             self.assertEqual(self._meta_demo(CONTINUE_INIT, src, os.path.join(tmp, "cont30"), "--new-chapters", 30, ("--mode", "sequel")), 3)
             self.assertEqual(self._meta_demo(CONTINUE_INIT, src, os.path.join(tmp, "cont03"), "--new-chapters", 3, ("--mode", "sequel")), 0)
+
+    def test_create_demo_chapters_respects_target_override(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            for n, expected in ((3, 0), (30, 3)):
+                root = os.path.join(tmp, f"create{n}")
+                subprocess.run(
+                    [
+                        sys.executable, CREATE_INIT,
+                        "--title", f"测试新书{n}",
+                        "--genre", "玄幻",
+                        "--premise", "少年以有代价的雷火术逆转宗门危机",
+                        "--scale", "long",
+                        "--target-chapters", str(n),
+                        "--out", root,
+                    ],
+                    cwd=REPO,
+                    check=True,
+                    capture_output=True,
+                    text=True,
+                )
+                with open(os.path.join(root, "_meta.json"), encoding="utf-8") as f:
+                    meta = json.load(f)
+                self.assertEqual(meta["target_chapters"], n)
+                self.assertEqual(meta["demo_chapters"], expected)
 
     def test_spinoff_writes_generation_metadata(self):
         with tempfile.TemporaryDirectory() as tmp:

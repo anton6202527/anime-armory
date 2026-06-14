@@ -20,7 +20,7 @@ description: Shared machine contracts and deterministic helpers for the mv-* ski
 | 机器契约 | `references/contract.md` + `scripts/contract.py` | 初始化项目、写 `_设置.md` / `_meta.json`、按 `歌曲输入时序` 决定阶段顺序、生成 clip/timeline/video job manifest 时 |
 | 阶段 gate | `scripts/gate.py` | `mv-plan` / `mv-video` / `mv-lyric-sync` / `mv-compose` 等正式阶段开跑前做确定性前置检查 |
 | 进度回写 | `scripts/progress_set.py` + `scripts/mv_utils.py` | 阶段脚本完成后回写 `_进度.md`，并同步 `_meta.has_song/has_lyrics` |
-| AI 视觉使用披露 | `scripts/ai_usage.py` | 发布、交平台前记录输入歌、AI 生图/视频、换脸、水印/AI 标识等使用情况 |
+| AI 视觉使用披露 | `scripts/ai_usage.py` | 发布、交平台前记录输入歌、AI 生图/视频等使用情况（仅项目留痕；AI 标识/披露/水印不由本流水线处理，移到工具之外按平台/地区法规自行处理） |
 
 ## 共享脚本
 
@@ -40,11 +40,10 @@ python3 skills/mv-craft/scripts/ai_usage.py "<制MV作品根>" \
 
 ## 设计原则
 
-- **选择点不写死**：MV 用途、歌曲输入时序、视觉风格、规划粒度、卡点策略、生图后端、MV 一致性增强、视频后端、规格、画幅、AI 使用披露都读 `<作品根>/_设置.md`。
+> 跨线通用原则（选择点不写死 C1/C2、阶段回写 B5、脚本不伪装云端自动化 B4、合规闸门 D1…）见 [`docs/skill-design-principles.md`](../../docs/skill-design-principles.md)，此处只列 mv 线特有原则。mv 的选择点目录：`skills/mv-craft/references/选择点与偏好.md`。
+
 - **manifest 是源头**：clip 时长、转场、尾帧、prompt、已登记视频都落 manifest；`mv-compose` 不再凭文件名猜时间线。
-- **脚本先过 gate**：正式产物阶段默认调用 `scripts/gate.py`，缺最终 `歌/song.*`、歌词、beatgrid、正式视觉蓝图、首帧或已选视频时先停下。
-- **阶段完成即回写**：确定性脚本成功产物后调用 `progress_set.py` / `mv_utils.update_progress_stage()`，不要只在文档里说“更新进度”。
-- **不伪装云端自动化**：没有后端 SDK/凭证时，只生成稳定 job 包；外部生成后再登记。
+- **脚本先过 gate（本线前置条件）**：正式产物阶段默认调用 `scripts/gate.py`，缺最终 `歌/song.*`、歌词、beatgrid、正式视觉蓝图、首帧或已选视频时先停下。
 
 ## 常见错误
 

@@ -148,6 +148,24 @@ def setup_function():
     gate.findings.clear()
 
 
+def test_route_frame_capability_warns_for_mid_anchor_on_first_last_backend(tmp_path):
+    route = {"clip_id": "Clip_01", "primary_backend": "kling"}
+    requirements = {1: {"need_end": True, "anchor_count": 1, "total_timeline_frames": 3}}
+
+    gate.check_route_frame_capability(str(tmp_path), "第1集", route, "routes.json", 1, requirements, "可灵/Kling")
+
+    assert any(f["dim"] == "多帧能力" and f["sev"] == "warn" for f in gate.findings)
+
+
+def test_route_frame_capability_allows_seedance_via_dreamina_multiframe(tmp_path):
+    route = {"clip_id": "Clip_01", "primary_backend": "seedance"}
+    requirements = {1: {"need_end": True, "anchor_count": 1, "total_timeline_frames": 3}}
+
+    gate.check_route_frame_capability(str(tmp_path), "第1集", route, "routes.json", 1, requirements, "即梦/Dreamina")
+
+    assert not gate.findings
+
+
 def test_preflight_gate_stages_are_registered():
     assert "image_preflight" in gate.GATE_STAGES
     assert "video_preflight" in gate.GATE_STAGES
@@ -617,18 +635,6 @@ def _good_compliance(root, *, status_overrides=None):
             "authorization_status": "not_applicable",
             "evidence": "未使用真人参考音",
         },
-        "ai_disclosure": {
-            "required": True,
-            "visible_label": {"status": "planned", "text": "AI 合成"},
-            "metadata_label": {"status": "planned"},
-            "c2pa_or_content_credentials": {"status": "not_supported"},
-            "hidden_or_platform_watermark": {"status": "planned"},
-        },
-        "watermark": {
-            "ai_visible": {"status": "planned"},
-            "metadata": {"status": "planned"},
-            "final_assets": [],
-        },
         "platform_review": {
             "targets": [{
                 "platform": "抖音",
@@ -637,7 +643,6 @@ def _good_compliance(root, *, status_overrides=None):
                 "policy_profile": "douyin_cn_ai_drama_2026-06-08",
                 "profile_checked_at": "2026-06-08",
                 "copyright_review": "ready",
-                "ai_disclosure_upload": "ready",
                 "content_rating_review": "ready",
                 "requires_localization": False,
             }],
@@ -778,17 +783,6 @@ def test_compliance_manifest_requires_overseas_localization(tmp_path):
 
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "合规前置" and "出海本地化" in f["msg"] for f in gate.findings)
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "合规前置" and "目标语言 en" in f["msg"] for f in gate.findings)
-
-
-def test_compliance_manifest_review_requires_done_watermark_asset(tmp_path):
-    root = tmp_path / "制漫剧" / "测试剧"
-    _write_identity_registry(tmp_path)
-    _good_compliance(root)
-
-    gate.check_compliance_manifest(str(root), "第1集", "review")
-
-    assert any(f["sev"] == gate.BLOCK and f["dim"] == "合规前置" and "必须 done" in f["msg"] for f in gate.findings)
-    assert any(f["sev"] == gate.BLOCK and f["dim"] == "合规前置" and "最终水印资产" in f["msg"] for f in gate.findings)
 
 
 def test_identity_registry_missing_is_blocked(tmp_path):
@@ -1182,11 +1176,11 @@ def test_image_overview_requires_style_contract_when_visual_contract_exists(tmp_
 
 
 def test_native_av_mode_allows_native_speech_no_block(tmp_path):
-    # 制作模式=原生音画：native_speech 是有意路由，不再强制 no_native_speech，仅 WARN 提示 AI 标识。
+    # 制作模式=原生音画：native_speech 是有意路由，不再强制 no_native_speech。
     root = tmp_path / "制漫剧" / "测试剧"
     root.mkdir(parents=True)
     (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 制作模式: 原生音画\n- 视频原生音轨: 保留原片音轨\n", encoding="utf-8")
-    overview = "本集原生音画 opt-in 清单：native_speech 有意生成，成片须带 AI 标识水印。"
+    overview = "本集原生音画 opt-in 清单：native_speech 有意生成。"
 
     gate.check_native_audio_opt_in_overview(str(root), "第1集", overview, "loc")
 
@@ -1202,17 +1196,6 @@ def test_voice_first_mode_still_blocks_native_speech_without_disclaimer(tmp_path
     gate.check_native_audio_opt_in_overview(str(root), "第1集", overview, "loc")
 
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "原生音画" for f in gate.findings)
-
-
-def test_compose_gate_warns_watermark_pending(tmp_path):
-    root = tmp_path / "制漫剧" / "测试剧"
-    (root / "脚本" / "第1集").mkdir(parents=True)
-    (root / "脚本" / "第1集" / "字幕_中文.srt").write_text("1\n00:00:00,000 --> 00:00:01,000\n你好\n", encoding="utf-8")
-    (root / "_设置.md").write_text("# _设置\n- 水印: AI标识+品牌\n", encoding="utf-8")
-    (root / "出视频" / "第1集" / "视频").mkdir(parents=True)
-    (root / "出视频" / "第1集" / "视频" / "Clip01.mp4").write_text("x", encoding="utf-8")
-    gate.check_compose_inputs(str(root), "第1集")
-    assert any(f["sev"] == gate.WARN and f["dim"] == "水印" and "AI 合规标识" in f["msg"] for f in gate.findings)
 
 
 def test_compose_gate_blocks_missing_srt_voice_first(tmp_path):
@@ -2571,7 +2554,37 @@ def test_check_shot_scale_progression_exempts_reverse_shots(tmp_path):
     assert [f for f in gate.findings if f["dim"] == "景别阶梯"] == []
 
 
-def _seed_pngs_and_qc(root, ep, hard_blocks, qc_present=True):
+def test_check_shot_scale_progression_warns_unparseable_lens(tmp_path):
+    # G：lens 写了但非标准景别词（抽不出分级）→ 单调性机检静默失效，补一条 warn 提示规范 lens
+    gate.findings.clear()
+    root = tmp_path / "work"
+    ep = "第1集"
+    _write_scale_sb(root, ep, [
+        {"id": "Clip_01", "shots": [{"lens": "手持跟拍 缓推"}]},     # 无景别词 → None
+        {"id": "Clip_02", "shots": [{"lens": "固定机位 微晃"}]},     # 无景别词 → None
+        {"id": "Clip_03", "shots": [{"lens": "LS 35mm"}]},          # 标准
+    ])
+    gate.check_shot_scale_progression(str(root), ep)
+    unparsed = [f for f in gate.findings if f["dim"] == "景别阶梯" and "抽不出景别分级" in f["msg"]]
+    assert len(unparsed) == 1 and unparsed[0]["sev"] == gate.WARN
+    assert "Clip_01" in unparsed[0]["loc"] and "Clip_02" in unparsed[0]["loc"]
+
+
+def test_check_shot_scale_progression_no_unparsed_warn_when_one_offbeat(tmp_path):
+    # 只有 1 个非标准 lens（<2）→ 不报（单个可能是有意写法，不噪声）
+    gate.findings.clear()
+    root = tmp_path / "work"
+    ep = "第1集"
+    _write_scale_sb(root, ep, [
+        {"id": "Clip_01", "shots": [{"lens": "CU 85mm"}]},
+        {"id": "Clip_02", "shots": [{"lens": "手持跟拍 缓推"}]},   # 唯一无景别词镜（1 个 <2）
+        {"id": "Clip_03", "shots": [{"lens": "LS 35mm"}]},
+    ])
+    gate.check_shot_scale_progression(str(root), ep)
+    assert not [f for f in gate.findings if f["dim"] == "景别阶梯" and "抽不出景别分级" in f["msg"]]
+
+
+def _seed_pngs_and_qc(root, ep, hard_blocks, qc_present=True, *, precision="full", coverage=None, legacy=False):
     import os, time
     png_dir = root / "出图" / ep / "图片"
     png_dir.mkdir(parents=True, exist_ok=True)
@@ -2580,8 +2593,13 @@ def _seed_pngs_and_qc(root, ep, hard_blocks, qc_present=True):
     qc_path = root / "生产数据" / "image_qc" / ep / f"image_qc_{ep}.json"
     if qc_present:
         qc_path.parent.mkdir(parents=True, exist_ok=True)
-        qc_path.write_text(json.dumps({"summary": {"hard_blocks": hard_blocks, "verdict":
-                            "block" if hard_blocks else "ok"}}, ensure_ascii=False), encoding="utf-8")
+        payload = {"summary": {"hard_blocks": hard_blocks, "verdict": "block" if hard_blocks else "ok"}}
+        if not legacy:
+            payload["qc_environment"] = {"precision_level": precision}
+            payload["face_reference_coverage"] = coverage or {
+                "verdict": "ok", "missing": [], "required": 1, "covered": 1,
+            }
+        qc_path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
         # make QC newer than the PNG so the freshness branch passes
         future = time.time() + 100
         os.utime(qc_path, (future, future))
@@ -2598,13 +2616,13 @@ def test_input_frame_qc_blocks_when_image_qc_has_hard(tmp_path):
     assert blocks[0].get("return_to_stage") == "image"
 
 
-def test_input_frame_qc_warns_when_no_qc_result(tmp_path):
+def test_input_frame_qc_blocks_when_no_qc_result(tmp_path):
     gate.findings.clear()
     root = tmp_path / "work"; ep = "第1集"
     _seed_pngs_and_qc(root, ep, hard_blocks=0, qc_present=False)
     gate.check_input_frame_qc(str(root), ep)
-    warns = [f for f in gate.findings if f["dim"] == "出图落档QC" and f["sev"] == gate.WARN]
-    assert len(warns) == 1 and "未见 image_qc" in warns[0]["msg"]
+    blocks = [f for f in gate.findings if f["dim"] == "出图落档QC" and f["sev"] == gate.BLOCK]
+    assert len(blocks) == 1 and "未见 image_qc" in blocks[0]["msg"]
 
 
 def test_input_frame_qc_passes_when_clean_and_fresh(tmp_path):
@@ -2615,7 +2633,7 @@ def test_input_frame_qc_passes_when_clean_and_fresh(tmp_path):
     assert [f for f in gate.findings if f["dim"] == "出图落档QC"] == []
 
 
-def test_input_frame_qc_warns_when_qc_stale(tmp_path):
+def test_input_frame_qc_blocks_when_qc_stale(tmp_path):
     import os, time
     gate.findings.clear()
     root = tmp_path / "work"; ep = "第1集"
@@ -2624,8 +2642,40 @@ def test_input_frame_qc_warns_when_qc_stale(tmp_path):
     future = time.time() + 500
     os.utime(png, (future, future))
     gate.check_input_frame_qc(str(root), ep)
-    warns = [f for f in gate.findings if f["dim"] == "出图落档QC" and f["sev"] == gate.WARN]
-    assert len(warns) == 1 and "晚于上次 image_qc" in warns[0]["msg"]
+    blocks = [f for f in gate.findings if f["dim"] == "出图落档QC" and f["sev"] == gate.BLOCK]
+    assert len(blocks) == 1 and "晚于上次 image_qc" in blocks[0]["msg"]
+
+
+def test_input_frame_qc_blocks_degraded_qc_precision(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"; ep = "第1集"
+    _seed_pngs_and_qc(root, ep, hard_blocks=0, precision="degraded")
+    gate.check_input_frame_qc(str(root), ep)
+    blocks = [f for f in gate.findings if f["dim"] == "出图落档QC" and f["sev"] == gate.BLOCK]
+    assert len(blocks) == 1 and "不是 full" in blocks[0]["msg"]
+
+
+def test_input_frame_qc_blocks_legacy_qc_without_face_coverage(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"; ep = "第1集"
+    _seed_pngs_and_qc(root, ep, hard_blocks=0, legacy=True)
+    gate.check_input_frame_qc(str(root), ep)
+    blocks = [f for f in gate.findings if f["dim"] == "出图落档QC" and f["sev"] == gate.BLOCK]
+    assert len(blocks) == 1 and "face_reference_coverage" in blocks[0]["msg"]
+
+
+def test_input_frame_qc_blocks_face_reference_coverage_missing(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"; ep = "第1集"
+    _seed_pngs_and_qc(root, ep, hard_blocks=0, coverage={
+        "verdict": "block",
+        "missing": [{"shot": "Clip_01", "png": "图片/镜头01.png", "reason": "no_face_comparison"}],
+        "required": 1,
+        "covered": 0,
+    })
+    gate.check_input_frame_qc(str(root), ep)
+    blocks = [f for f in gate.findings if f["dim"] == "出图落档QC" and f["sev"] == gate.BLOCK]
+    assert len(blocks) == 1 and "角色脸定妆比对覆盖未过" in blocks[0]["msg"]
 
 
 def _seed_video_prompt(root, ep, clips_md, storyboard=None):
@@ -2707,9 +2757,10 @@ def test_video_prompt_frames_passes_when_all_present(tmp_path):
     assert [f for f in gate.findings if f["dim"] in ("首帧", "尾帧")] == []
 
 
-# ── 中段锚帧（opt-in midframe split）契约 ──
+# ── 中段锚帧（default/planned midframe）契约 ──
 
-def _write_midframe_storyboard(tmp_path, midframe, *, duration=10, make_png=False):
+def _write_midframe_storyboard(tmp_path, midframe, *, duration=10, make_png=False,
+                               midframe_default=None, video_backend=None):
     import json
     root = tmp_path / "work"; ep = "第1集"
     sb_dir = root / "脚本" / ep
@@ -2721,7 +2772,12 @@ def _write_midframe_storyboard(tmp_path, midframe, *, duration=10, make_png=Fals
         cont["midframe"] = midframe
     if make_png:
         _mk_png(root, ep, "Clip_01_mid.png")
-    data = {"episode": 1, "policy": {"tailframe_default": True},
+    policy = {"tailframe_default": True}
+    if midframe_default is not None:
+        policy["midframe_default"] = midframe_default
+    if video_backend is not None:
+        policy["video_backend"] = video_backend
+    data = {"episode": 1, "policy": policy,
             "clips": [{"id": "EP01_CLIP01", "duration": duration,
                        "firstframe_png": "出图/第1集/图片/Clip_01.png", "continuity": cont}]}
     (sb_dir / "storyboard.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
@@ -2732,10 +2788,42 @@ def _midframe_findings():
     return [f for f in gate.findings if f["dim"] == "中段锚帧"]
 
 
-def test_midframe_absent_is_fine(tmp_path):
+def test_midframe_absent_blocks_by_default(tmp_path):
+    # 三帧契约默认铁律：backend 缺/未知 → 按支持（向前看）→ 强制，缺锚帧即 BLOCK。
+    # 契约前定稿、无 video_backend 的旧集据此被拦。
     root = _write_midframe_storyboard(tmp_path, None)
     gate.check_storyboard_contract(root, "第1集")
-    assert _midframe_findings() == []
+    assert any(f["sev"] == gate.BLOCK and "三帧契约" in f["msg"] for f in _midframe_findings())
+
+
+def test_midframe_blocks_on_capable_backend(tmp_path):
+    # 即梦/dreamina 原生多帧 → 必须三帧，缺锚帧 BLOCK。
+    root = _write_midframe_storyboard(tmp_path, None, video_backend="即梦")
+    gate.check_storyboard_contract(root, "第1集")
+    assert any(f["sev"] == gate.BLOCK and "三帧契约" in f["msg"] for f in _midframe_findings())
+
+
+def test_midframe_enforced_despite_disabled_flag_on_capable_backend(tmp_path):
+    # 不管 cost：后端支持≥3帧时，即便项目想用 midframe_default=false 关掉也不放行（成本不是豁免理由）。
+    root = _write_midframe_storyboard(tmp_path, None, video_backend="dreamina", midframe_default=False)
+    gate.check_storyboard_contract(root, "第1集")
+    assert any(f["sev"] == gate.BLOCK and "三帧契约" in f["msg"] for f in _midframe_findings())
+
+
+def test_midframe_exempt_only_when_backend_cannot_3plus(tmp_path):
+    # 唯一豁免：first-frame-only 后端（runway/seedance/sora/pika）连首尾拆段都钉不住第3帧 → 不强制。
+    for backend in ("runway", "seedance", "sora", "pika"):
+        root = _write_midframe_storyboard(tmp_path, None, video_backend=backend)
+        gate.findings.clear()
+        gate.check_storyboard_contract(root, "第1集")
+        assert _midframe_findings() == [], f"{backend} 不应强制三帧"
+
+
+def test_midframe_first_last_backend_still_enforced(tmp_path):
+    # 可灵/Veo/Luma 首尾档（max=2）可拆段接力凑≥3帧 → 仍强制（不管 cost）。
+    root = _write_midframe_storyboard(tmp_path, None, video_backend="kling")
+    gate.check_storyboard_contract(root, "第1集")
+    assert any(f["sev"] == gate.BLOCK and "三帧契约" in f["msg"] for f in _midframe_findings())
 
 
 def test_midframe_must_be_object(tmp_path):
@@ -3025,3 +3113,139 @@ def test_compliance_regulatory_filing_good_passes_at_compose(tmp_path):
     _good_compliance(root)  # filled regulatory_filing, publish_candidate
     gate.check_compliance_manifest(str(root), "第1集", "compose")
     assert not any("regulatory_filing" in f["loc"] for f in gate.findings)
+
+
+# ── P1-C: 时长清单逐句完整性（非占位但残缺也拦）─────────────────────────────
+def _write_timing(tmp_path, vo_text, rows, monkeypatch):
+    monkeypatch.setattr(gate, "is_native_av_production", lambda _root: False)
+    (tmp_path / "脚本" / "第1集").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "脚本" / "第1集" / "voiceover.txt").write_text(vo_text, encoding="utf-8")
+    md = tmp_path / "合成" / "第1集" / "配音"
+    md.mkdir(parents=True, exist_ok=True)
+    (md / "时长清单.json").write_text(json.dumps(rows, ensure_ascii=False), encoding="utf-8")
+    return str(tmp_path)
+
+
+_VO2 = "[镜头1·沈念·克制] 你来了。\n[镜头2·柳娘子·冷] 我一直在。\n"
+
+
+def test_timing_complete_passes(tmp_path, monkeypatch):
+    rows = [{"镜头": "镜头1", "voice_key": "沈念#cosy", "时长": 1.2},
+            {"镜头": "镜头2", "voice_key": "柳娘子#cosy", "时长": 1.0}]
+    root = _write_timing(tmp_path, _VO2, rows, monkeypatch)
+    gate.findings.clear()
+    gate.check_timing_manifest_complete(root, "第1集")
+    assert gate.findings == []
+
+
+def test_timing_missing_voice_key_blocks(tmp_path, monkeypatch):
+    rows = [{"镜头": "镜头1", "voice_key": "沈念#cosy", "时长": 1.2},
+            {"镜头": "镜头2", "voice_key": "", "时长": 1.0}]
+    root = _write_timing(tmp_path, _VO2, rows, monkeypatch)
+    gate.findings.clear()
+    gate.check_timing_manifest_complete(root, "第1集")
+    b = [f for f in gate.findings if f["sev"] == gate.BLOCK and "voice_key" in f["msg"]]
+    assert b and b[0]["return_to_stage"] == "voice"
+
+
+def test_timing_zero_duration_blocks(tmp_path, monkeypatch):
+    rows = [{"镜头": "镜头1", "voice_key": "沈念#cosy", "时长": 0},
+            {"镜头": "镜头2", "voice_key": "柳娘子#cosy", "时长": 1.0}]
+    root = _write_timing(tmp_path, _VO2, rows, monkeypatch)
+    gate.findings.clear()
+    gate.check_timing_manifest_complete(root, "第1集")
+    assert any(f["sev"] == gate.BLOCK and "时长" in f["msg"] for f in gate.findings)
+
+
+def test_timing_row_count_mismatch_blocks(tmp_path, monkeypatch):
+    rows = [{"镜头": "镜头1", "voice_key": "沈念#cosy", "时长": 1.2}]  # 缺第2句
+    root = _write_timing(tmp_path, _VO2, rows, monkeypatch)
+    gate.findings.clear()
+    gate.check_timing_manifest_complete(root, "第1集")
+    b = [f for f in gate.findings if f["sev"] == gate.BLOCK and "句数" in f["msg"]]
+    assert b and b[0]["return_to_stage"] == "voice"
+
+
+def test_timing_legacy_key_field_accepted(tmp_path, monkeypatch):
+    # 旧产物用中文 legacy 字段「音色键」，不应误报缺 voice_key
+    rows = [{"镜头": "镜头1", "音色键": "沈念#cosy", "时长": 1.2},
+            {"镜头": "镜头2", "音色键": "柳娘子#cosy", "时长": 1.0}]
+    root = _write_timing(tmp_path, _VO2, rows, monkeypatch)
+    gate.findings.clear()
+    gate.check_timing_manifest_complete(root, "第1集")
+    assert gate.findings == []
+
+
+def test_timing_missing_manifest_no_double_report(tmp_path, monkeypatch):
+    # 缺清单由 check_progress_artifact_signoff 覆盖，这里不重复 BLOCK
+    monkeypatch.setattr(gate, "is_native_av_production", lambda _root: False)
+    (tmp_path / "脚本" / "第1集").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "脚本" / "第1集" / "voiceover.txt").write_text(_VO2, encoding="utf-8")
+    gate.findings.clear()
+    gate.check_timing_manifest_complete(str(tmp_path), "第1集")
+    assert gate.findings == []
+
+
+# ── P1-A: 出图后端连通性预检 ──────────────────────────────────────────────
+def test_backend_reachable_down_blocks(tmp_path, monkeypatch):
+    monkeypatch.setattr(gate, "get_setting", lambda *a, **k: "Codex")
+    monkeypatch.setattr(gate.image_backends, "probe_backend",
+                        lambda *a, **k: ("down", "HTTP 502"))
+    gate.findings.clear()
+    gate.check_backend_reachable(str(tmp_path), "第1集")
+    b = [f for f in gate.findings if f["sev"] == gate.BLOCK and f["dim"] == "生图后端连通性"]
+    assert b and b[0]["return_to_stage"] == "image"
+    assert "502" in b[0]["msg"] and "兜底" in b[0]["msg"]
+
+
+def test_backend_reachable_unknown_warns_only(tmp_path, monkeypatch):
+    monkeypatch.setattr(gate, "get_setting", lambda *a, **k: "Codex")
+    monkeypatch.setattr(gate.image_backends, "probe_backend",
+                        lambda *a, **k: ("unknown", "未找到 CLI"))
+    gate.findings.clear()
+    gate.check_backend_reachable(str(tmp_path), "第1集")
+    assert not any(f["sev"] == gate.BLOCK for f in gate.findings)
+    assert any(f["sev"] == gate.WARN and f["dim"] == "生图后端连通性" for f in gate.findings)
+
+
+def test_backend_reachable_ok_silent(tmp_path, monkeypatch):
+    monkeypatch.setattr(gate, "get_setting", lambda *a, **k: "Codex")
+    monkeypatch.setattr(gate.image_backends, "probe_backend",
+                        lambda *a, **k: ("ok", ""))
+    gate.findings.clear()
+    gate.check_backend_reachable(str(tmp_path), "第1集")
+    assert gate.findings == []
+
+
+def test_drift_advisory_findings_face_band_to_severity():
+    report = {
+        "kind": "n2d_face_drift_risk",
+        "characters": [
+            {"character_id": "CHAR_A", "name": "沈念", "band": "high", "score": 72,
+             "tier": "reference_group", "suggestions": ["建表情库 expressions + 脸部特写参考"]},
+            {"character_id": "CHAR_B", "name": "柳娘子", "band": "medium", "score": 55,
+             "tier": "native", "suggestions": ["补侧/背角度参考"]},
+            {"character_id": "CHAR_C", "name": "路人", "band": "low", "score": 10, "suggestions": []},
+        ],
+    }
+    rows = gate.drift_advisory_findings(report)
+    assert len(rows) == 2  # low 不入
+    sevs = {loc.split("（")[0]: sev for sev, _dim, loc, _msg in rows}
+    assert sevs["沈念"] == gate.WARN   # high → WARN
+    assert sevs["柳娘子"] == gate.INFO  # medium → INFO
+    assert all(dim == "脸漂预案" for _sev, dim, _loc, _msg in rows)
+    assert "建表情库" in rows[0][3]
+
+
+def test_drift_advisory_findings_asset_and_empty():
+    asset_report = {
+        "kind": "n2d_asset_drift_risk",
+        "assets": [
+            {"id": "PROP_SWORD", "name": "断魂剑", "band": "high", "score": 80,
+             "scope": "全篇", "suggestions": ["锁结构件数 + 颜色拖尾防窜色"]},
+        ],
+    }
+    rows = gate.drift_advisory_findings(asset_report)
+    assert len(rows) == 1 and rows[0][0] == gate.WARN and rows[0][1] == "物料漂移预案"
+    # 全低危 / 空 → 无行
+    assert gate.drift_advisory_findings({"kind": "n2d_face_drift_risk", "characters": []}) == []

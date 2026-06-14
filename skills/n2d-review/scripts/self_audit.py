@@ -67,7 +67,17 @@ def load_contract(root: Path):
         if spec is None or spec.loader is None:
             return None, "无法加载 n2d_contract.py"
         module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
+        # n2d_contract.py 是 facade，内部 `from n2d_const import *` 需要 _lib 在 sys.path 上
+        # （否则回退到相对导入又因无包父级失败）。与 gate.py 同源做法。
+        lib_dir = str(path.parent)
+        added = lib_dir not in sys.path
+        if added:
+            sys.path.insert(0, lib_dir)
+        try:
+            spec.loader.exec_module(module)
+        finally:
+            if added and sys.path and sys.path[0] == lib_dir:
+                sys.path.pop(0)
         return module, None
     except Exception as exc:  # pragma: no cover - defensive report path
         return None, str(exc)

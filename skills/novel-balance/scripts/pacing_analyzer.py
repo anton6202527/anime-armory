@@ -17,7 +17,15 @@ import os
 import re
 import json
 import argparse
+import sys
 from datetime import datetime
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_SKILLS = os.path.abspath(os.path.join(_HERE, "..", ".."))
+_COMMON = os.path.join(_SKILLS, "novel", "_lib")
+if _COMMON not in sys.path:
+    sys.path.insert(0, _COMMON)
+from project_io import parse_chapter_range, read_chapters  # noqa: E402
 
 _CJK = r"一-鿿"
 
@@ -65,36 +73,11 @@ def _chapter_num(name):
 
 
 def list_chapters(project, rng=None):
-    cdir = os.path.join(project, "章节")
-    if not os.path.isdir(cdir):
-        return []
-    lo, hi = (rng or (None, None))
-    items = []
-    for name in os.listdir(cdir):
-        if not name.lower().endswith((".md", ".txt")) or name.startswith("_"):
-            continue
-        n = _chapter_num(name)
-        if lo is not None and (n < lo or n > hi):
-            continue
-        items.append((n, os.path.join(cdir, name)))
-    items.sort()
-    out = []
-    for idx, path in items:
-        with open(path, "r", encoding="utf-8") as f:
-            out.append((idx, f.read()))
-    return out
+    return [(idx, text) for idx, _path, text in read_chapters(project, rng)]
 
 
 def parse_range(s):
-    if not s:
-        return None
-    m = re.match(r"^\s*(\d+)\s*-\s*(\d+)\s*$", s)
-    if m:
-        return int(m.group(1)), int(m.group(2))
-    if s.strip().isdigit():
-        n = int(s.strip())
-        return n, n
-    raise ValueError(f"--range 格式应为 'N' 或 'N-M'，收到：{s!r}")
+    return parse_chapter_range(s)
 
 
 def analyze(project, rng=None):

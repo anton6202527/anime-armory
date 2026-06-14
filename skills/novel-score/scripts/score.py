@@ -94,7 +94,7 @@ def load_meta(root):
 
 
 def load_settings(root):
-    """读作品根下的 _设置.md；单一真值源在 common/settings.py。"""
+    """读作品根下的 _设置.md；单一真值源在 skills/novel/_lib/settings.py。"""
     return _load_settings(root)
 
 
@@ -360,7 +360,7 @@ LEDGER_REL_PATH = os.path.join("生产战绩", "genre_ledger.jsonl")
 def _find_repo_root(start):
     cur = os.path.abspath(start)
     while True:
-        if os.path.isdir(os.path.join(cur, "skills")) or os.path.isdir(os.path.join(cur, ".git")):
+        if os.path.isdir(os.path.join(cur, "skills")) or os.path.isfile(os.path.join(cur, "AGENTS.md")):
             return cur
         parent = os.path.dirname(cur)
         if parent == cur:
@@ -689,6 +689,54 @@ def build_next_actions(verdict, processed_scores):
     }]
 
 
+def wants_n2d_adaptation(meta, settings):
+    outputs = meta.get("outputs") or settings.get("输出格式") or []
+    if isinstance(outputs, str):
+        output_text = outputs
+    else:
+        output_text = " ".join(str(item) for item in outputs)
+    target_text = " ".join(str(x or "") for x in (
+        meta.get("target_platform"),
+        settings.get("目标平台"),
+        meta.get("scale"),
+        settings.get("篇幅档"),
+        meta.get("draft_mode"),
+        settings.get("小说生成模式"),
+        output_text,
+    ))
+    return "n2d" in target_text.lower() or any(key in target_text for key in ("漫剧", "短剧", "红果", "抖音"))
+
+
+def build_production_decision(verdict, total_score, meta, settings):
+    if verdict == "弃稿重立":
+        decision = "kill"
+        route = "novel-create"
+        reason = "题材/主线或市场匹配度不足，继续改写 ROI 低"
+    elif verdict == "大改":
+        decision = "revise"
+        route = "novel-rewrite"
+        reason = "结构级问题仍需先修，不进入批量生产"
+    elif wants_n2d_adaptation(meta, settings):
+        decision = "n2d-adapt"
+        route = "n2d"
+        reason = "目标或输出面向漫剧/短剧，评分通过后应导出 n2d handoff"
+    elif verdict == "小改":
+        decision = "revise"
+        route = "novel-review"
+        reason = "具备潜力，但投产前应先按低分维度小修"
+    else:
+        decision = "go"
+        route = "novel-review"
+        reason = "评分达标，可进入后续质检/导出"
+    return {
+        "decision": decision,
+        "route": route,
+        "reason": reason,
+        "score": round(float(total_score), 1),
+        "verdict": verdict,
+    }
+
+
 def get_tier_verdict(total_score):
     if total_score >= 85:
         return "爆款潜力", "过", "high"
@@ -806,6 +854,9 @@ def generate_markdown_report(root, meta, result, total_score, tier, verdict, roi
     lines.append("")
     lines.append(f"- **档位**：{tier}")
     lines.append(f"- **判定**：{verdict}")
+    decision = result.get("production_decision") or {}
+    if decision:
+        lines.append(f"- **生产决策**：{decision.get('decision')} → {decision.get('route')}（{decision.get('reason')}）")
     lines.append(f"- **改写 ROI**：{roi}")
     lines.append("")
 
@@ -1041,6 +1092,17 @@ def main():
     tier, verdict, roi = get_tier_verdict(final_score)
 
     next_actions = build_next_actions(verdict, processed_scores)
+    production_decision = build_production_decision(verdict, final_score, meta, settings)
+    if production_decision["decision"] == "n2d-adapt" and not any(
+        action.get("recommended_skill") == "n2d" for action in next_actions
+    ):
+        next_actions.insert(0, {
+            "priority": "must",
+            "recommended_skill": "n2d",
+            "return_to_stage": "script",
+            "action": "先用 novel-craft export --formats n2d 导出 handoff，再进入 n2d 改编漫剧",
+            "dimension": "production_decision",
+        })
     title_check = build_title_check(assessment.get("title_check"), book_title, title_collision)
     # 弃稿重立时换名无意义（novel-create 重开自带新名）；其余判定下书名不过关都值得顺手换。
     if title_check and title_check["needs_rename"] and verdict != "弃稿重立":
@@ -1092,6 +1154,7 @@ def main():
         "total_score": final_score,
         "tier": tier,
         "verdict": verdict,
+        "production_decision": production_decision,
         "rewrite_roi": roi,
         "waivers": waivers,
         "next_actions": next_actions

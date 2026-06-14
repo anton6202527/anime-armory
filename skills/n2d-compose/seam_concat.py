@@ -104,24 +104,62 @@ def load_storyboard_seams(storyboard_path: str) -> Tuple[List[str], List[str]]:
     return transitions, ctxs
 
 
-def build_plan(n_clips: int, transitions: List[str], ctxs: List[str], fallback: str = "cut") -> Dict[str, Any]:
-    """逐接缝（共 n_clips-1 个）判定。clip 数与 storyboard 对不上时全硬切并告警。"""
+def _logical_cid(path: str) -> str:
+    """从文件名提取逻辑 ID（如 Clip_01_part1 -> Clip_01）。"""
+    name = os.path.basename(path)
+    # 匹配 Clip_NN 或类似的 ID，忽略 _partN 后缀
+    match = re.search(r"(Clip[_\s-]*\d+)", name, re.IGNORECASE)
+    return match.group(1).lower() if match else name
+
+
+def build_plan(files: List[str], transitions: List[str], ctxs: List[str], fallback: str = "cut") -> Dict[str, Any]:
+    """逐接缝判定。支持 _partN 拆段：子段间强制硬切，跨逻辑镜接缝查 storyboard。"""
+    n_files = len(files)
     warnings: List[str] = []
     seams: List[Dict[str, Any]] = []
-    use_sb = bool(transitions) and len(transitions) == n_clips
+    
+    # 建立逻辑 ID 序列
+    logical_ids = [_logical_cid(f) for f in files]
+    # 唯一逻辑 ID 序列（去重并保持顺序）
+    unique_logical = []
+    for lid in logical_ids:
+        if not unique_logical or lid != unique_logical[-1]:
+            unique_logical.append(lid)
+    
+    n_logical = len(unique_logical)
+    n_sb = len(transitions)
+    use_sb = bool(transitions) and n_logical == n_sb
+    
     if transitions and not use_sb:
-        warnings.append(f"clip 数({n_clips}) 与 storyboard clips({len(transitions)}) 不一致 → 全部硬切兜底，请核对挑版/顺序")
-    for i in range(max(0, n_clips - 1)):
-        if use_sb:
-            decision, reason = classify_seam(transitions[i], ctxs[i] if i < len(ctxs) else "", fallback)
+        warnings.append(f"逻辑镜数({n_logical}) 与 storyboard clips({n_sb}) 不一致 → 全部硬切兜底")
+
+    for i in range(max(0, n_files - 1)):
+        cid_a = logical_ids[i]
+        cid_b = logical_ids[i+1]
+        
+        if cid_a == cid_b:
+            # 同一逻辑镜内部拆段（Split Relay）——强制硬切（无缝接力）
+            decision, reason = "cut", f"内部拆段接力({cid_a})"
+        elif use_sb:
+            # 跨逻辑镜接缝，查 storyboard
+            try:
+                logical_idx = unique_logical.index(cid_a)
+                decision, reason = classify_seam(transitions[logical_idx], 
+                                                 ctxs[logical_idx] if logical_idx < len(ctxs) else "", 
+                                                 fallback)
+            except ValueError:
+                decision, reason = "cut", "逻辑 ID 匹配失败，硬切"
         else:
-            decision, reason = ("cut", "无 storyboard 接缝信息，硬切" if not transitions else "clip 数不符，硬切")
+            decision, reason = ("cut", "无 storyboard 或镜数不符，硬切")
+            
         seam = {"seam": i, "between": [i, i + 1], "decision": decision, "reason": reason}
         seams.append(seam)
         if decision == "warn":
-            warnings.append(f"接缝 {i}→{i+1}：{reason}；建议在合成前补一个空镜/缓冲 clip，否则此处会是生硬跳切")
+            warnings.append(f"接缝 {i}→{i+1}：{reason}；建议补缓冲 clip")
+            
     return {
-        "n_clips": n_clips,
+        "n_clips": n_files,
+        "n_logical": n_logical,
         "seams": seams,
         "warnings": warnings,
         "dissolve_count": sum(1 for s in seams if s["decision"] == "dissolve"),
@@ -221,7 +259,7 @@ def run(list_txt: str, out: str, *, storyboard: str = "", fallback: str = "cut",
         dissolve_sec: float = DEFAULT_DISSOLVE_SEC, report: str = "", plan_only: bool = False) -> int:
     files = parse_list_file(list_txt)
     transitions, ctxs = load_storyboard_seams(storyboard)
-    plan = build_plan(len(files), transitions, ctxs, fallback)
+    plan = build_plan(files, transitions, ctxs, fallback)
     work = os.path.dirname(os.path.abspath(out)) or "."
 
     if report:

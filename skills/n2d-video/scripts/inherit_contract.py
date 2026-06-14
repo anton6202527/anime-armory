@@ -29,7 +29,7 @@ _COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import CONTRACT_INHERITANCE_KIND, VISUAL_CONTRACT_FIELDS, production_dir  # noqa: E402
-# 比对核心已上移到 common/n2d_contract_diff.py（单一真值源），让 gate.py 也能在 common 层调用，
+# 比对核心已上移到 n2d/_lib/n2d_contract_diff.py（单一真值源），让 gate.py 也能在 common 层调用，
 # 而非 n2d-review 反向 import n2d-video。此处 re-export 以保持本模块/测试的既有 API。
 from n2d_contract_diff import (  # noqa: E402,F401
     BLOCK_ON_DRIFT,
@@ -171,6 +171,100 @@ def _render_identity_md(identity: dict) -> list:
     return lines
 
 
+# ── 物料约束继承（C：场景/道具/服装/特效的逐镜资产交接 Diff） ────────────────────────
+# 视觉契约五字段在 episode 级管场景光位锚/轴线（已 block），但**逐镜**绑定的具体资产
+# （LOC_xx 场景 / PROP_xx 道具 / OUTFIT_xx 服装 / VFX_xx 特效）有没有从出图诚实交接到出视频，
+# 此前无机检。出图逐镜 `资产引用注册层` 绑了 PROP_01，出视频该镜若把它丢了 → 该道具在视频侧无
+# reference_group/constraints/drift_forbidden 锚 → 道具/特效跨镜漂移。本检查逐镜 Diff 资产 id 集合，
+# 出图绑定的资产在出视频对应镜丢失 = block（资产无锚漂移）。
+ASSET_HANDOFF_ID_RE = re.compile(r"(?:LOC|PROP|OUTFIT|VFX)_[A-Za-z0-9]+")
+
+
+def extract_asset_ids(text: str) -> set:
+    """逐镜块文本 → 资产 id 集合（LOC/PROP/OUTFIT/VFX_xx）。纯函数·可测。"""
+    return set(ASSET_HANDOFF_ID_RE.findall(str(text or "")))
+
+
+def asset_id_to_name(root: str) -> dict:
+    """asset_registry.json → {asset_id: name}，用于区分『id 丢但名字还在』(warn) 与『整个资产没了』(block)。"""
+    try:
+        data = json.loads(open(os.path.join(root, "出图", "共享", "asset_registry.json"), encoding="utf-8").read())
+    except Exception:
+        return {}
+    out = {}
+    for a in (data.get("assets") or []):
+        aid = str(a.get("id") or "").strip()
+        name = str(a.get("name") or "").strip()
+        if aid and name:
+            out[aid] = name
+    return out
+
+
+def check_asset_handoff(root: str, ep: str) -> dict:
+    """逐镜资产约束继承 Diff（C）：出图 01_分镜出图.md 绑定的资产，出视频 01_clips.md 对应镜不得丢失。
+
+    缺任一逐镜文件 → available=False、无 finding（上游未到位，各自 gate 负责）。
+    """
+    img_rel = os.path.join("出图", ep, "prompt", "01_分镜出图.md")
+    vid_rel = os.path.join("出视频", ep, "prompt", "01_clips.md")
+    img_path = os.path.join(root, img_rel)
+    vid_path = os.path.join(root, vid_rel)
+    res = {"available": False, "findings": [], "checked": 0, "notes": [],
+           "image_clips_file": img_rel, "video_clips_file": vid_rel}
+    if not os.path.isfile(img_path):
+        res["notes"].append("无 出图/01_分镜出图.md——跳过资产约束继承校验。")
+        return res
+    if not os.path.isfile(vid_path):
+        res["notes"].append("无 出视频/01_clips.md——跳过资产约束继承校验（先跑 n2d-video 阶段A）。")
+        return res
+    img_blocks = split_video_clip_blocks(open(img_path, encoding="utf-8").read())
+    vid_blocks = split_video_clip_blocks(open(vid_path, encoding="utf-8").read())
+    id2name = asset_id_to_name(root)
+    res["available"] = True
+    for num in sorted(img_blocks):
+        img_assets = extract_asset_ids(img_blocks[num])
+        if not img_assets:
+            continue
+        res["checked"] += 1
+        clip_id = f"Clip_{num:02d}"
+        vblk = vid_blocks.get(num)
+        if vblk is None:
+            # 整个逐镜 prompt 缺失（结构性、高精度）= block，同 identity_clip_prompt_missing。
+            res["findings"].append({
+                "clip_id": clip_id, "severity": "block", "code": "asset_clip_prompt_missing",
+                "note": (f"{clip_id}：出图绑定资产 {sorted(img_assets)}，但 01_clips.md 无对应逐镜 prompt"
+                         "——资产在视频侧无锚，易场景/道具/特效漂移。"),
+            })
+            continue
+        dropped = sorted(img_assets - extract_asset_ids(vblk))
+        if dropped:
+            # 资产 id 丢失（可能是有意的松引用，如记忆遮罩/转场只提名字）= warn，交人确认；
+            # 不 block（不像人脸交接那样必然崩），但每个丢失都要醒目入账，避免执行端默默取不到 constraints。
+            names = "、".join(f"{aid}({id2name.get(aid, '?')})" for aid in dropped)
+            res["findings"].append({
+                "clip_id": clip_id, "severity": "warn", "code": "asset_handoff_dropped",
+                "note": (f"{clip_id}：出图绑定的资产 {names} 在出视频逐镜 prompt 丢了 id"
+                         "——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，"
+                         "补回 LOC/PROP/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/特效跨镜漂移）。"),
+            })
+    return res
+
+
+def _render_asset_md(asset: dict) -> list:
+    if not asset.get("available"):
+        note = "；".join(asset.get("notes", [])) or "未执行"
+        return ["", "## 物料约束继承（场景/道具/服装/特效逐镜交接）", f"- ⏭ 跳过：{note}"]
+    blocks = [f for f in asset.get("findings", []) if f.get("severity") == "block"]
+    warns = [f for f in asset.get("findings", []) if f.get("severity") == "warn"]
+    flag = "⛔" if blocks else ("⚠️" if warns else "✅")
+    lines = ["", "## 物料约束继承（场景/道具/服装/特效逐镜交接）",
+             f"- {flag} 带资产的镜 {asset.get('checked', 0)} 个已核验 · 资产丢失 block {len(blocks)} · id 缺 warn {len(warns)}"]
+    for f in asset.get("findings", []):
+        ic = "⛔" if f.get("severity") == "block" else "⚠️"
+        lines.append(f"  - {ic} [{f.get('code')}] {f.get('note')}")
+    return lines
+
+
 def _render_md(ep: str, results: list, img_rel: str, vid_rel: str, verdict: str) -> str:
     sev_icon = {"pass": "✅", "warn": "⚠️", "block": "⛔"}
     lines = [
@@ -216,7 +310,13 @@ def run(root: str, ep: str) -> int:
     identity = check_identity_handoff(root, ep)
     identity_blocks = [f for f in identity.get("findings", []) if f.get("severity") == "block"]
 
-    verdict = "block" if (summary["block"] or identity_blocks) else ("warn" if summary["warn"] else "pass")
+    # C 物料约束继承：出图逐镜绑定的场景/道具/服装/特效资产，出视频不得丢失。
+    asset = check_asset_handoff(root, ep)
+    asset_blocks = [f for f in asset.get("findings", []) if f.get("severity") == "block"]
+    asset_warns = [f for f in asset.get("findings", []) if f.get("severity") == "warn"]
+
+    verdict = ("block" if (summary["block"] or identity_blocks or asset_blocks)
+               else ("warn" if (summary["warn"] or asset_warns) else "pass"))
 
     out_dir = production_dir(root)
     os.makedirs(out_dir, exist_ok=True)
@@ -228,8 +328,9 @@ def run(root: str, ep: str) -> int:
         "fields": results,
         "summary": summary,
         "identity_handoff": identity,
+        "asset_handoff": asset,
         "verdict": verdict,
-        "rule": "视频侧契约可有意收紧/细化（归一化后包含出图侧原文即 pass）；只拦改写/丢失；光位锚+轴线视线漂移=block；命名角色镜逐镜 prompt 未锁身份=block",
+        "rule": "视频侧契约可有意收紧/细化（归一化后包含出图侧原文即 pass）；只拦改写/丢失；光位锚+轴线视线漂移=block；命名角色镜逐镜 prompt 未锁身份=block；出图绑定资产在出视频丢失=block",
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
     }
     json_path = os.path.join(out_dir, f"contract_inheritance_{ep}.json")
@@ -237,22 +338,28 @@ def run(root: str, ep: str) -> int:
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(report, f, ensure_ascii=False, indent=2)
         f.write("\n")
-    md = _render_md(ep, results, img_rel, vid_rel, verdict) + "\n".join(_render_identity_md(identity))
+    md = (_render_md(ep, results, img_rel, vid_rel, verdict)
+          + "\n".join(_render_identity_md(identity))
+          + "\n".join(_render_asset_md(asset)))
     open(md_path, "w", encoding="utf-8").write(md + "\n")
 
     icon = {"pass": "✅", "warn": "⚠️", "block": "⛔"}[verdict]
     print(f"{icon} 契约继承 {ep}: {verdict}（pass={summary['pass']} warn={summary['warn']} block={summary['block']}"
-          f" · 身份未锁 {len(identity_blocks)}）→ {json_path}")
+          f" · 身份未锁 {len(identity_blocks)} · 资产丢失 {len(asset_blocks)} · 资产id缺 {len(asset_warns)}）→ {json_path}")
     for r in results:
         if r["severity"] != "pass":
             print(f"  - [{r['severity']}] {r['field']}: {r['status']} — {r['note']}")
     for f in identity_blocks:
         print(f"  - [block] 身份交接 {f.get('clip_id')}: {f.get('code')} — {f.get('note')}")
+    for f in asset_blocks:
+        print(f"  - [block] 物料交接 {f.get('clip_id')}: {f.get('code')} — {f.get('note')}")
     if verdict == "block":
         if summary["block"]:
             print("⛔ 有契约 block：先按出图侧原文修 出视频/prompt/00_总览.md 的视觉契约，再出视频。", file=sys.stderr)
         if identity_blocks:
             print("⛔ 有身份交接 block：先在 出视频/prompt/01_clips.md 给这些命名角色镜补『身份锁定+具体锚点』，再出视频。", file=sys.stderr)
+        if asset_blocks:
+            print("⛔ 有物料交接 block：出图绑定的场景/道具/特效资产在出视频逐镜 prompt 丢了，补回 LOC/PROP/VFX_xx 再出视频。", file=sys.stderr)
         return 1
     return 0
 

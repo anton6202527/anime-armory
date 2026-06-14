@@ -52,7 +52,7 @@ PLACEHOLDER_MARKERS = COMPLIANCE_PLACEHOLDER_MARKERS
 # internal_only 免检范围（与 n2d-review gate 同源，取契约常量）：
 # distribution_intent ∈ COMPLIANCE_INTERNAL_DISTRIBUTION_INTENTS 时，
 # COMPLIANCE_INTERNAL_SKIPPABLE_SECTIONS（platform_review / overseas_localization）字段域的
-# BLOCK 降为 INFO 并加注「内部 demo 免检，转投放前需补」；角色/声音授权、AI 标识、水印照常 BLOCK。
+# BLOCK 降为 INFO 并加注「内部 demo 免检，转投放前需补」；角色/声音授权照常 BLOCK。
 INTERNAL_SKIP_NOTE = "（内部 demo 免检，转投放前需补）"
 
 
@@ -166,18 +166,6 @@ def default_manifest(root: Path, episode: str | None = None) -> Dict[str, Any]:
             "authorization_status": "not_applicable",
             "evidence": "未使用真人参考音；若使用参考音，改为 authorized_clone + approved + evidence",
         },
-        "ai_disclosure": {
-            "required": True,
-            "visible_label": {"status": "planned", "text": "AI 合成"},
-            "metadata_label": {"status": "planned"},
-            "c2pa_or_content_credentials": {"status": "not_supported", "fallback": "平台上传披露 + 项目合规留痕"},
-            "hidden_or_platform_watermark": {"status": "planned", "note": "按目标平台要求补隐式/自动标识"},
-        },
-        "watermark": {
-            "ai_visible": {"status": "planned", "tool": "skills/n2d-watermark/watermark.py --mode ai"},
-            "metadata": {"status": "planned"},
-            "final_assets": [],
-        },
         "platform_review": {
             "targets": [{
                 "platform": "TODO",
@@ -186,7 +174,6 @@ def default_manifest(root: Path, episode: str | None = None) -> Dict[str, Any]:
                 "policy_profile": f"TODO_profile_{now_date()}",
                 "profile_checked_at": now_date(),
                 "copyright_review": "ready",
-                "ai_disclosure_upload": "ready",
                 "content_rating_review": "ready",
                 "requires_localization": False,
             }],
@@ -238,7 +225,7 @@ def check_manifest(root: Path, episode: str | None, stage: str = "compose") -> L
 
     if data.get("kind") != KIND:
         issues.append(f"BLOCK {path}: kind must be {KIND}")
-    for key in ("rights", "character_likeness", "voice", "ai_disclosure", "watermark", "platform_review", "localization", "regulatory_filing"):
+    for key in ("rights", "character_likeness", "voice", "platform_review", "localization", "regulatory_filing"):
         if not isinstance(data.get(key), dict):
             if key in INTERNAL_SKIPPABLE_MANIFEST_KEYS:
                 flag_skippable(f"missing {key}")
@@ -288,34 +275,6 @@ def check_manifest(root: Path, episode: str | None, stage: str = "compose") -> L
             issues.append(f"BLOCK {path}: voice clone requires authorization_status=approved")
         if not has_real_value(voice.get("evidence")):
             issues.append(f"BLOCK {path}: voice clone requires evidence/ref")
-    ai_disclosure = data.get("ai_disclosure") if isinstance(data.get("ai_disclosure"), dict) else {}
-    if ai_disclosure.get("required") is not True:
-        issues.append(f"BLOCK {path}: ai_disclosure.required must be true")
-    for key in ("visible_label", "metadata_label", "c2pa_or_content_credentials", "hidden_or_platform_watermark"):
-        item = ai_disclosure.get(key)
-        if not isinstance(item, dict):
-            issues.append(f"BLOCK {path}: missing ai_disclosure.{key}")
-            continue
-        status = str(item.get("status") or "").strip()
-        if status not in COMPLIANCE_READY:
-            issues.append(f"BLOCK {path}: ai_disclosure.{key} status not releasable: {status or 'missing'}")
-        if stage == "review" and key in ("visible_label", "metadata_label") and status not in COMPLIANCE_DONE:
-            issues.append(f"BLOCK {path}: ai_disclosure.{key} must be done before review")
-    watermark = data.get("watermark") if isinstance(data.get("watermark"), dict) else {}
-    visible = watermark.get("ai_visible")
-    if not isinstance(visible, dict):
-        issues.append(f"BLOCK {path}: missing watermark.ai_visible")
-    else:
-        status = str(visible.get("status") or "").strip()
-        if status not in COMPLIANCE_READY:
-            issues.append(f"BLOCK {path}: watermark.ai_visible status not releasable: {status or 'missing'}")
-        if stage == "review" and status != "done":
-            issues.append(f"BLOCK {path}: watermark.ai_visible must be done before review")
-    metadata = watermark.get("metadata")
-    if isinstance(metadata, dict):
-        status = str(metadata.get("status") or "").strip()
-        if status and status not in COMPLIANCE_READY:
-            issues.append(f"BLOCK {path}: watermark.metadata status not releasable: {status}")
     # platform_review / overseas_localization：internal_only 不再整体跳过，而是同样检查、
     # 把 BLOCK 降为 INFO（内部 demo 免检，转投放前需补）——与 n2d-review gate 同源行为。
     targets = ((data.get("platform_review") or {}).get("targets")) or []
@@ -325,7 +284,7 @@ def check_manifest(root: Path, episode: str | None, stage: str = "compose") -> L
         if not isinstance(target, dict):
             flag_skippable(f"platform_review.targets[{idx}] must be object")
             continue
-        for key in ("platform", "region", "policy_profile", "profile_checked_at", "copyright_review", "ai_disclosure_upload", "content_rating_review"):
+        for key in ("platform", "region", "policy_profile", "profile_checked_at", "copyright_review", "content_rating_review"):
             if not has_real_value(target.get(key)):
                 flag_skippable(f"platform_review.targets[{idx}] requires real {key}")
         for key in ("platform", "region"):
@@ -335,7 +294,7 @@ def check_manifest(root: Path, episode: str | None, stage: str = "compose") -> L
             flag_skippable(f"platform_review.targets[{idx}] policy_profile must include YYYY-MM-DD checked date")
         if has_real_value(target.get("profile_checked_at")) and not valid_iso_date(target.get("profile_checked_at")):
             flag_skippable(f"platform_review.targets[{idx}] profile_checked_at must be YYYY-MM-DD")
-        for key in ("copyright_review", "ai_disclosure_upload", "content_rating_review"):
+        for key in ("copyright_review", "content_rating_review"):
             value = str(target.get(key) or "").strip()
             if value and value not in PLATFORM_REVIEW_STATUSES:
                 flag_skippable(f"platform_review.targets[{idx}] {key} must be ready/done/not_applicable")
@@ -376,21 +335,6 @@ def check_manifest(root: Path, episode: str | None, stage: str = "compose") -> L
             if has_real_value(reg.get("filed_at")) and not valid_iso_date(reg.get("filed_at")):
                 flag_skippable("regulatory_filing.filed_at 须为 YYYY-MM-DD")
 
-    if episode:
-        final_assets = (data.get("watermark") or {}).get("final_assets") or []
-        if (data.get("watermark") or {}).get("ai_visible", {}).get("status") == "done":
-            assets = [item for item in final_assets if isinstance(item, dict) and episode_in_scope(episode, item.get("episode"))]
-            if not assets:
-                level = "BLOCK" if stage == "review" else "WARN"
-                issues.append(f"{level} {path}: ai_visible done but no final asset registered for {episode}")
-            for item in assets:
-                rel = str(item.get("path") or "").strip()
-                if not rel:
-                    issues.append(f"BLOCK {path}: watermark final asset for {episode} requires path")
-                    continue
-                full = Path(rel) if Path(rel).is_absolute() else root / rel
-                if not full.exists():
-                    issues.append(f"BLOCK {path}: registered watermark asset missing: {rel}")
     return issues
 
 

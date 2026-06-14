@@ -104,7 +104,7 @@ python3 <skill>/scripts/init_project.py "<原作路径>" \
 
 用户选定后：
 - 确认 `_meta.json.title` 已被 novel-title 回写。
-- 在本项目 `_进度.md` 把"书名"勾上。
+- 用统一进度入口标记书名阶段，例如 `python3 skills/novel-craft/scripts/progress.py set "<作品根>" title done`；若项目使用章节矩阵进度，则用 `python3 skills/novel/progress.py set "<作品根>" 第N章 <列名> ✅`。
 - **用户审过 → 进第 4 步**。
 
 ### 第 4 步 — 章纲表
@@ -191,7 +191,7 @@ python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --range 4-8
 - 每写完一组（如 5 章），跑一次第 7 步的轻量一致性扫描，再决定是否继续。
 
 主对话每章写完后：
-- 更新 `_进度.md` 把该章勾上。
+- 用 `python3 skills/novel/progress.py set "<作品根>" 第N章 正文初稿 ✅` 勾选该章，不手改 `_进度.md`。
 - 短报告：第 N 章 ✓，字数 X，涉及锚点 Y。
 
 ### 第 7 步 — 一致性回扫（交 `novel-review` 跑，别手搓）

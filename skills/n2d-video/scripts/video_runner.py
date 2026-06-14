@@ -42,6 +42,11 @@ except Exception:  # pragma: no cover
 
 import video_qc
 
+try:
+    from n2d_platform_profiles import video_backend_frame_control
+except ImportError:
+    video_backend_frame_control = lambda m, c: {}  # type: ignore
+
 CLIP_HEADING_RE = re.compile(r"^##\s*Clip[_\s]*(\d+)(?:（([^）]+)）)?", re.MULTILINE)
 FIRST_FRAME_RE = re.compile(r"\*\*首帧\*\*[^`]*`([^`]+\.png)`")
 END_FRAME_RE = re.compile(r"\*\*尾帧\*\*[^`]*`([^`]+\.png)`")
@@ -174,53 +179,42 @@ def _clip_number(item: Dict[str, Any]) -> Optional[int]:
 
 
 def attach_multiframe(root: Path, item: Dict[str, Any], prompt_text: str,
-                      anchors_by_clip: Dict[int, Dict[str, Any]]) -> None:
+                      anchors_by_clip: Dict[int, Dict[str, Any]]) -> bool:
     """If the clip has valid in-range mid-anchors, attach multiframe2video fields to the item.
-
-    Builds the ordered keyframe list [首帧, *锚帧(按 at_sec), 尾帧] and per-segment durations.
-    Requires an end frame (the chain terminates at it) and a real clip duration. On any contract
-    violation (segment out of [0.5,8], total<2, missing PNG) records item['multiframe_skip'] and
-    leaves the item to fall back to the existing image2video/multimodal2video path."""
+    Returns True if attached, False if skipped or failed (needs fallback)."""
     num = _clip_number(item)
     info = anchors_by_clip.get(num) if num is not None else None
     if not info:
-        return
-    # Capability-driven, not label-driven: multiframe2video segments only need ≥0.5s, so EVERY
-    # valid anchor is a usable keyframe — including ones the planner marked use=qc back when the
-    # only executor was the ≥4s frames2video relay. The `use` field is now an advisory hint; the
-    # multiframe_segments contract below is the real gate. (frames2video-only backends still treat
-    # qc anchors as验收 baselines — that lives in their own path, not here.)
+        return False
     split = [(t, png, hint) for t, png, use, hint in
              zip(info["times"], info["images"], info["uses"], info["hints"])
              if t is not None and png]
     if not split:
-        item["multiframe_skip"] = "no anchors with both at_sec and png"
-        return
+        return False
     end_rel = item.get("end_image_rel")
     if not (end_rel and item.get("end_image") and Path(item["end_image"]).is_file()):
         item["multiframe_skip"] = "no end frame; multiframe chain needs a terminal keyframe"
-        return
+        return False
     duration = item.get("story_duration") or info.get("duration")
     if not isinstance(duration, (int, float)):
         item["multiframe_skip"] = "no clip duration to derive segment timing"
-        return
+        return False
     split.sort(key=lambda x: float(x[0]))
     anchor_times = [float(t) for t, _, _ in split]
     try:
         seg_durs = multiframe_segments(float(duration), anchor_times)
     except ValueError as exc:
         item["multiframe_skip"] = str(exc)
-        return
+        return False
     images_rel = [item["image_rel"]] + [png for _, png, _ in split] + [end_rel]
     images_abs = [str((root / r).resolve()) if not Path(r).is_absolute() else r for r in images_rel]
     missing = [r for r, a in zip(images_rel, images_abs) if not Path(a).is_file()]
     if missing:
         item["multiframe_skip"] = "anchor/keyframe PNG not yet generated: " + ", ".join(missing)
-        return
+        return False
     head = prompt_text.splitlines()[0].strip() if prompt_text.strip() else ""
-    # 末段转场 prompt 用 Clip 的 end_state（具体落幅），缺则泛化句兜底
     last_dest = (info.get("end_state") or "").strip() or "承接进行中的动作，停在尾帧落幅"
-    seg_prompts = []  # N-1 transition prompts; destination keyframe's beat hint, else clip head
+    seg_prompts = []
     dests = [h for _, _, h in split] + [last_dest]
     for hint in dests:
         seg_prompts.append((hint or head or "continue the motion smoothly").strip()[:200])
@@ -229,6 +223,7 @@ def attach_multiframe(root: Path, item: Dict[str, Any], prompt_text: str,
     item["multiframe_images_rel"] = images_rel
     item["multiframe_segment_durations"] = seg_durs
     item["multiframe_segment_prompts"] = seg_prompts
+    return True
 
 
 def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend: str, resolution: str,
@@ -240,14 +235,55 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
     prompts_dir = stable_prompt_dir(root, episode, start, end)
     prompts_dir.mkdir(parents=True, exist_ok=True)
     anchors_by_clip = clip_anchor_index(root, episode)
+    
+    # 获取后端能力档案
+    capability = video_backend_frame_control(backend, "") # 渠道暂空
+    supports_mf = capability.get("mode") == "multiframe2video"
+    supports_last = capability.get("supports_last_frame", False)
+
     items = []
     for item in parse_prompt_pack(root, episode, start, end):
         prompt_text = item.pop("prompt_text")
         prompt_file = prompts_dir / f"{item['target'][:-4]}.prompt.txt"
         prompt_file.write_text(prompt_text + "\n", encoding="utf-8")
         item["prompt_file"] = str(prompt_file)
-        attach_multiframe(root, item, prompt_text, anchors_by_clip)
+
+        # 尝试接入原生多帧
+        attached_mf = False
+        if supports_mf:
+            attached_mf = attach_multiframe(root, item, prompt_text, anchors_by_clip)
+        
+        # 如果不支持原生多帧，或者 attach 失败，但有中锚 -> 自动化拆段接力 (Split Relay)
+        num = _clip_number(item)
+        anchors_info = anchors_by_clip.get(num) if num is not None else None
+        
+        if not attached_mf and anchors_info and anchors_info.get("times"):
+            # 执行自动化拆段 (仅当有 end_frame 且后端支持首尾帧或明确要求拆段时)
+            if item.get("end_image") and Path(item["end_image"]).is_file():
+                # 构造子段列表
+                t_list = [0.0] + [float(t) for t in anchors_info["times"]] + [float(item["story_duration"])]
+                png_list = [item["image_rel"]] + anchors_info["images"] + [item["end_image_rel"]]
+                
+                parts = []
+                for p_idx in range(len(t_list) - 1):
+                    seg_dur = t_list[p_idx+1] - t_list[p_idx]
+                    part_item = item.copy()
+                    part_item["clip"] = f"{item['clip']}_part{p_idx+1}"
+                    part_item["target"] = f"{item['target'][:-4]}_part{p_idx+1}.mp4"
+                    part_item["image_rel"] = png_list[p_idx]
+                    part_item["image"] = str((root / png_list[p_idx]).resolve()) if not Path(png_list[p_idx]).is_absolute() else png_list[p_idx]
+                    part_item["end_image_rel"] = png_list[p_idx+1]
+                    part_item["end_image"] = str((root / png_list[p_idx+1]).resolve()) if not Path(png_list[p_idx+1]).is_absolute() else png_list[p_idx+1]
+                    part_item["story_duration"] = seg_dur
+                    part_item["submit_duration"] = submit_duration(seg_dur)
+                    part_item["relay_parent"] = item["clip"]
+                    parts.append(part_item)
+                
+                items.extend(parts)
+                continue # 已拆段，跳过原 item
+        
         items.append(item)
+    
     payload = {
         "kind": "n2d_video_batch",
         "version": 1,
@@ -479,6 +515,49 @@ def _dreamina_args(item: Dict[str, Any], manifest: Dict[str, Any]) -> List[str]:
     ]
 
 
+def _dreamina_query_args(submit_id: str, download_dir: Path) -> List[str]:
+    return ["dreamina", "query_result", f"--submit_id={submit_id}", f"--download_dir={download_dir}"]
+
+
+# ── 后端适配层（C2：适配不了就停下报缺口，不偷偷换路）──────────────────────────
+# 本 runner 只内置了即梦/Dreamina CLI 的自动化契约（命令/旗标见上方探针快照 + _CLI_REQUIRED_FLAGS）。
+# n2d-model-router 会把镜头路由到 Kling/Veo/Seedance 等后端，但本机若没有对应 CLI 自动化契约，
+# 绝不静默改用即梦顶替（那是 C2 禁的「偷偷换路」，也会按即梦计费记错账）——而是停下报缺口，
+# 指引走 manual 出视频后用 `accept` 登记。新增一个自动化后端 = 在此注册一个 adapter
+# （submit_args/query_args/provider），submit/query 调用点不动。
+VIDEO_BACKEND_ADAPTERS: Dict[str, Dict[str, Any]] = {
+    "dreamina": {
+        "provider": "dreamina",
+        "submit_args": _dreamina_args,
+        "query_args": _dreamina_query_args,
+    },
+}
+# 走人工出视频的 backend 取值（prepare 仍产 prompt 包，但 submit/query 不适用于人工后端）。
+_MANUAL_BACKENDS = {"manual", "手动", "手工", "人工"}
+_BACKEND_ALIASES = {"即梦": "dreamina", "jimeng": "dreamina", "dreamina": "dreamina",
+                    "即梦/dreamina": "dreamina", "dreamina/即梦": "dreamina"}
+
+
+def resolve_video_backend(manifest: Dict[str, Any]) -> Tuple[str, Dict[str, Any]]:
+    """manifest backend → (规范名, adapter)。无内置自动化 adapter 时停下报缺口，绝不顶替换路。"""
+    raw = str(manifest.get("backend") or "dreamina").strip()
+    low = raw.lower()
+    if low in _MANUAL_BACKENDS:
+        raise RuntimeError(
+            f"backend={raw}：本批次走人工出视频。把生成好的 clip 放进 出视频/<集>/视频/，"
+            "再用 `accept` 登记验收；submit/query 不适用于人工后端。")
+    key = _BACKEND_ALIASES.get(low, low)
+    adapter = VIDEO_BACKEND_ADAPTERS.get(key)
+    if not adapter:
+        supported = ", ".join(sorted(VIDEO_BACKEND_ADAPTERS))
+        raise RuntimeError(
+            f"后端 '{raw}' 没有内置自动化 runner（当前仅 {supported} 有 CLI 契约）。"
+            "不会静默改用其它后端顶替（C2：适配不了就停下报缺口，不偷偷换路）。"
+            "→ 改用 manual 出视频后用 `accept` 登记，或在 video_runner.py 的 "
+            "VIDEO_BACKEND_ADAPTERS 为该后端注册 adapter（submit_args/query_args/provider）。")
+    return key, adapter
+
+
 def append_submission_log(root: Path, episode: str, row: Dict[str, Any]) -> None:
     append_jsonl(production_dir(root) / f"video_submissions_{episode}.jsonl", row)
 
@@ -503,12 +582,14 @@ def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = F
     item = find_item(manifest, clip)
     if item.get("submit_id") and item.get("status") not in {"failed", "rejected"}:
         raise RuntimeError(f"{item['clip']} already has submit_id={item['submit_id']}; query or reject before resubmitting")
-    args = _dreamina_args(item, manifest)
+    backend_key, adapter = resolve_video_backend(manifest)
+    item["cost_provider"] = adapter["provider"]
+    args = adapter["submit_args"](item, manifest)
     command = args[1] if len(args) > 1 else args[0]
     safe_args = [args[0], command, "…(args elided)…"]
     if dry_run:
         return {"dry_run": True, "cmd_argv": safe_args, "clip": item["clip"],
-                "backend_command": command}
+                "backend": backend_key, "backend_command": command}
     # "每次都跑一遍": cheap live --help check before spending credits — fail fast if the CLI
     # contract drifted out from under the arg builder (no-op/skip if probe unavailable).
     verify_cli_contract(args[0], command)
@@ -577,9 +658,10 @@ def query_clip(root: Path, manifest_file: Path, clip: str, *, download: bool = T
     submit_id = item.get("submit_id")
     if not submit_id:
         raise RuntimeError(f"{item['clip']} has no submit_id")
+    _backend_key, adapter = resolve_video_backend(manifest)
     download_dir = formal_video_dir(root, episode) / "_downloads"
     before = _mp4_set(download_dir)
-    args = ["dreamina", "query_result", f"--submit_id={submit_id}", f"--download_dir={download_dir}"]
+    args = adapter["query_args"](submit_id, download_dir)
     proc = subprocess.run(args, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
     item["last_query_returncode"] = proc.returncode
     item["last_query_at"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")
@@ -653,7 +735,7 @@ def record_acceptance(root: Path, episode: str, item: Dict[str, Any], qc_clip: O
             "amount": item.get("credit_count"),
             "currency": "credits",
             "unit": "credits",
-            "provider": "dreamina",
+            "provider": item.get("cost_provider") or "dreamina",
         }
     duration = item.get("last_submit_elapsed_sec")
     meta = {"native_audio": "unknown"}

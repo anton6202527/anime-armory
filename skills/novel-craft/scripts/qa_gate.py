@@ -8,8 +8,15 @@ blocking rules.
 """
 import json
 import os
-import re
+import sys
 from datetime import date
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_SKILLS = os.path.abspath(os.path.join(_HERE, "..", ".."))
+_COMMON = os.path.join(_SKILLS, "novel", "_lib")
+if _COMMON not in sys.path:
+    sys.path.insert(0, _COMMON)
+from project_io import load_project_settings  # noqa: E402
 
 from contract import normalize_rights_status, parse_regions
 from report_snapshot import snapshot_chapters, validate_snapshot
@@ -52,6 +59,7 @@ SCORE_REQUIRED_FIELDS = (
     "total_score",
     "tier",
     "verdict",
+    "production_decision",
     "rewrite_roi",
     "waivers",
     "next_actions",
@@ -70,19 +78,7 @@ def _load_meta(project_root):
 
 
 def _load_settings(project_root):
-    path = os.path.join(project_root, "_设置.md")
-    if not os.path.exists(path):
-        return {}
-    settings = {}
-    pat = re.compile(r"^\s*-\s*([^:：]+)\s*[:：]\s*(.*?)\s*(?:#.*)?$")
-    with open(path, encoding="utf-8") as f:
-        for line in f:
-            m = pat.match(line)
-            if not m:
-                continue
-            key = re.sub(r"[*`\s]+", "", m.group(1))
-            settings[key] = m.group(2).strip()
-    return settings
+    return load_project_settings(project_root)
 
 
 def _load_source_manifest(project_root, meta):
@@ -305,7 +301,7 @@ def validate_score_report_schema(payload, project_root=None):
     for field in ("generated_at", "target_platform", "score_task_id", "score_task_path",
                   "assessment_prompt_hash", "tier", "verdict", "rewrite_roi"):
         _require_nonempty_string(payload, field, issues)
-    for field in ("scope", "source_snapshot", "market_baseline"):
+    for field in ("scope", "source_snapshot", "market_baseline", "production_decision"):
         _require_dict(payload, field, issues)
     for field in ("scores", "deductions", "waivers", "next_actions"):
         _require_list(payload, field, issues)

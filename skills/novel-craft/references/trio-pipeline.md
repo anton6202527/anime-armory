@@ -2,7 +2,7 @@
 
 为了彻底消除"AI味"并极大提升文学质感，长篇小说的单章写作从"单步直出"升级为"三步独立角色接力"（Architect → Ghostwriter → Senior Editor）。
 
-在使用 `draft_packets.py` 时，通过传入 `--step` 参数，为每一章生成专属于该角色的任务包。
+在使用 `draft_packets.py` 时，通过传入 `--step` 参数，为每一章生成专属于该角色的任务包。`商业连载` / `漫剧源书` / `小说生成工作流=三步迭代` 默认 `--step auto` 即生成 `第NN章_architect.md`、`第NN章_ghostwriter.md`、`第NN章_editor.md`；显式 `--step trio` 可强制三包。
 
 ## 1. Architect Pass（剧情架构师）
 **目标**：将骨感的章纲转化为「节拍与潜台词（Beats & Subtext）」脚本。

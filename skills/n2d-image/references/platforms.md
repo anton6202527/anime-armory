@@ -1,6 +1,6 @@
 # 平台档案（Platform Profiles）
 
-> **机器真值源**：视频后端别名、`max_clip_seconds`、原生音画后端集合等可执行字段集中在 `skills/common/n2d_platform_profiles.py`；生图后端白名单在 `skills/common/n2d_contract.py` 的 `APPROVED_IMAGE_BACKENDS`。本文件负责人读解释；若两者不一致，以 common 模块为准，并同步修本文。
+> **机器真值源**：视频后端别名、`max_clip_seconds`、原生音画后端集合等可执行字段集中在 `skills/n2d/_lib/n2d_platform_profiles.py`；生图后端白名单在 `skills/n2d/_lib/n2d_contract.py` 的 `APPROVED_IMAGE_BACKENDS`。本文件负责人读解释；若两者不一致，以 `_lib` 模块为准，并同步修本文。
 
 本 skill 的核心产物——分镜剧本、角色/场景卡、爽剧节拍、双语字幕——**平台无关**。
 各 AI 生成平台的差异，由下面的「平台档案」描述。

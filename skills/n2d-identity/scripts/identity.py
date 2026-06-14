@@ -176,7 +176,7 @@ def adapter_binding(
             ready = ref_ready
             needs_action = f"fill_{mode}_handle"
     elif status in FALLBACK_STATUSES:
-        binding = "reference_group"
+        binding = "fallback_reference_group" if status == "unregistered" else "reference_group"
         ready = ref_ready
         if not ref_ready:
             gaps.append("reference_group_assets_missing")

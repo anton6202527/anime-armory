@@ -136,6 +136,35 @@ class DraftPacketsTest(unittest.TestCase):
             self.assertIn("状态增量模板", text)
             self.assertIn("reader_contract_progress", text)
 
+    def test_auto_uses_trio_for_commercial_serial(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n- 小说生成模式：商业连载\n")
+            got = subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3"],
+                capture_output=True, text=True, check=True,
+            )
+            task_dir = os.path.join(tmp, "写作任务")
+            self.assertIn("三步迭代顺序", got.stdout)
+            self.assertTrue(os.path.exists(os.path.join(task_dir, "第03章_architect.md")))
+            self.assertTrue(os.path.exists(os.path.join(task_dir, "第03章_ghostwriter.md")))
+            self.assertTrue(os.path.exists(os.path.join(task_dir, "第03章_editor.md")))
+            self.assertFalse(os.path.exists(os.path.join(task_dir, "第03章.md")))
+
+    def test_explicit_full_overrides_trio_default(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n- 小说生成模式：漫剧源书\n")
+            subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3", "--step", "full"],
+                capture_output=True, text=True, check=True,
+            )
+            task_dir = os.path.join(tmp, "写作任务")
+            self.assertTrue(os.path.exists(os.path.join(task_dir, "第03章.md")))
+            self.assertFalse(os.path.exists(os.path.join(task_dir, "第03章_architect.md")))
+
     def test_blocks_without_demo_gate_by_default(self):
         with tempfile.TemporaryDirectory() as tmp:
             make_project(tmp, demo=False)

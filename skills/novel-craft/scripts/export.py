@@ -264,8 +264,8 @@ def write_n2d(n2d_root, docx_path, title, meta, project_root):
         json.dump(handoff, f, ensure_ascii=False, indent=2)
 
     # Asset-Aware Extraction
-    asset_registry = {"characters": {}, "props": {}, "vfx": {}, "locations": {}}
-    tag_pattern = re.compile(r"\[(CHAR|PROP|VFX|LOC)_([^\]]+)\]")
+    asset_registry = {"characters": {}, "props": {}, "vfx": {}, "locations": {}, "outfits": {}}
+    tag_pattern = re.compile(r"\[(CHAR|PROP|VFX|LOC|OUTFIT)_([^\]]+)\]")
     ch_dir = os.path.join(project_root, "章节")
     if os.path.exists(ch_dir):
         for fname in sorted(os.listdir(ch_dir)):
@@ -282,6 +282,8 @@ def write_n2d(n2d_root, docx_path, title, meta, project_root):
                             asset_registry["vfx"][key] = {"id": key, "name": name, "source_chapter": fname}
                         elif kind == "LOC" and key not in asset_registry["locations"]:
                             asset_registry["locations"][key] = {"id": key, "name": name, "source_chapter": fname}
+                        elif kind == "OUTFIT" and key not in asset_registry["outfits"]:
+                            asset_registry["outfits"][key] = {"id": key, "name": name, "source_chapter": fname}
     
     if any(asset_registry.values()):
         with open(os.path.join(novel_dir, "asset_registry_preflight.json"), "w", encoding="utf-8") as f:

@@ -18,7 +18,8 @@ import disclosure  # noqa: E402
 from contract import AI_VISUAL_USAGE_MODES  # noqa: E402
 
 NOTES = [
-    "- 广告若图像/视频主要由 AI 生成，通常按 AI-generated 留痕，并按目标平台规则打 AI 标识。",
+    "- 广告若图像/视频主要由 AI 生成，通常按 AI-generated 留痕。",
+    "- AI 标识/水印不再由本流水线处理：本线只记录 AI 使用披露文本，AI 标识/水印义务由使用方在工具之外按目标平台/各地区法规自行处理。",
     "- 代言人肖像 / 真人声音 / 授权音乐 / 商业字体均需可追溯授权；未授权不得投放。",
     "- 广告语 claim（功效、对比、数据）须有依据；绝对化用语等违禁词由 `ad-script/ad_law_check.py` 机检拦截。",
     "- 本文件只做项目留痕，不替代法律意见；完整合规清单见二期 `ad-compliance`。",
@@ -35,7 +36,6 @@ def main():
     ap.add_argument("--music-status", default="未记录")
     ap.add_argument("--voice-status", default="未记录")
     ap.add_argument("--asset-status", default="未记录")
-    ap.add_argument("--watermark-status", default="未记录")
     ap.add_argument("--human-contribution", default="")
     args = ap.parse_args()
 
@@ -58,7 +58,6 @@ def main():
         "music_status": args.music_status,
         "talent_status": args.talent_status,
         "asset_status": args.asset_status,
-        "watermark_status": args.watermark_status,
         "adlaw_region": meta.get("adlaw_region") or "中国大陆",
     })
     field_lines = [
@@ -72,7 +71,6 @@ def main():
         f"- 音乐来源 / 授权：{payload['music_status']}",
         f"- 代言人 / 真人肖像授权：{payload['talent_status']}",
         f"- 字体 / 第三方素材授权：{payload['asset_status']}",
-        f"- 水印 / AI 标识：{payload['watermark_status']}",
         f"- 广告法地区：{payload['adlaw_region']}",
         f"- 投放平台 / 用途：{payload['publish_target']}",
     ]

@@ -28,7 +28,6 @@ Only use this after n2d-video has marked the clips as low-risk ambience/SFX with
 
 Outputs:
 - `合成/第N集/成片_第N集_zh.mp4`
-- optional watermarked final in `合成/第N集/成片_第N集_zh_水印.mp4`
 
 Progress:
 - `compose.sh` updates `成片 ✅` automatically after successful output.

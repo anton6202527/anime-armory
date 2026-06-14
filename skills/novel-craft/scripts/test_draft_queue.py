@@ -73,7 +73,45 @@ class DraftQueueTest(unittest.TestCase):
             self.assertNotEqual(got.returncode, 0)
             self.assertIn("没有可认领章节", got.stderr)
 
+    def test_trio_queue_claims_and_marks_steps(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n- 小说生成模式：漫剧源书\n")
+            subprocess.run(
+                [sys.executable, DRAFT_QUEUE, "--json", tmp, "init"],
+                capture_output=True, text=True, check=True,
+            )
+            qpath = os.path.join(tmp, "写作任务", "draft_queue.json")
+            with open(qpath, encoding="utf-8") as f:
+                queue = json.load(f)
+            self.assertEqual(queue["workflow"], "trio")
+            self.assertEqual(queue["chapters"]["04"]["steps"]["architect"]["status"], "todo")
+
+            claimed = subprocess.run(
+                [sys.executable, DRAFT_QUEUE, "--json", tmp, "claim", "--agent", "a1"],
+                capture_output=True, text=True, check=True,
+            )
+            payload = json.loads(claimed.stdout)
+            self.assertEqual(payload["claimed"]["chapter"], 4)
+            self.assertEqual(payload["claimed"]["step"], "architect")
+
+            subprocess.run(
+                [sys.executable, DRAFT_QUEUE, "--json", tmp, "done", "4", "--step", "architect", "--agent", "a1"],
+                capture_output=True, text=True, check=True,
+            )
+            with open(qpath, encoding="utf-8") as f:
+                queue = json.load(f)
+            self.assertEqual(queue["chapters"]["04"]["steps"]["architect"]["status"], "done")
+            self.assertEqual(queue["chapters"]["04"]["status"], "todo")
+
+            claimed = subprocess.run(
+                [sys.executable, DRAFT_QUEUE, "--json", tmp, "claim", "--agent", "a2"],
+                capture_output=True, text=True, check=True,
+            )
+            payload = json.loads(claimed.stdout)
+            self.assertEqual(payload["claimed"]["step"], "ghostwriter")
+
 
 if __name__ == "__main__":
     unittest.main()
-

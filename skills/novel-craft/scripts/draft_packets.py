@@ -18,12 +18,20 @@ import re
 import sys
 from datetime import date
 
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_SKILLS = os.path.abspath(os.path.join(_HERE, "..", ".."))
+_COMMON = os.path.join(_SKILLS, "novel", "_lib")
+if _COMMON not in sys.path:
+    sys.path.insert(0, _COMMON)
+from project_io import load_project_settings  # noqa: E402
+
 from contract import scale_profile
 from store import atomic_write_json, atomic_write_text, file_lock
 from waivers import append_waiver, make_waiver
 
 
 CHAPTER_RE = re.compile(r"第\s*0*(\d+)\s*章\s*(?:[《<]([^》>]+)[》>])?\s*(?:[—-]\s*(.*))?")
+TRIO_STEPS = ("architect", "ghostwriter", "editor")
 
 COMMON_SOURCE_PATHS = (
     "设定/章纲.md",
@@ -206,12 +214,37 @@ def previous_chapter_excerpt(root, chapter):
     return clip(text[-1800:], 1800)
 
 
+def setting_value(root, key):
+    return load_project_settings(root).get(key, "")
+
+
 def draft_mode_from_settings(root, meta):
-    settings = read_text(os.path.join(root, "_设置.md"))
-    m = re.search(r"(?:\*\*)?小说生成模式(?:\*\*)?[：:]\s*([^\n]+)", settings)
-    if m:
-        return m.group(1).strip()
+    value = setting_value(root, "小说生成模式")
+    if value:
+        return value
     return meta.get("draft_mode") or "稳妥初稿"
+
+
+def draft_workflow_from_settings(root, meta):
+    value = setting_value(root, "小说生成工作流")
+    if value:
+        return value
+    return meta.get("draft_workflow") or meta.get("writing_workflow") or ""
+
+
+def use_trio_pipeline(root, meta):
+    mode = draft_mode_from_settings(root, meta)
+    workflow = draft_workflow_from_settings(root, meta)
+    return mode in {"商业连载", "漫剧源书"} or "三步" in workflow or "trio" in workflow.lower()
+
+
+def packet_steps_for_request(root, requested_step):
+    if requested_step == "trio":
+        return list(TRIO_STEPS)
+    if requested_step != "auto":
+        return [requested_step]
+    meta = load_json(os.path.join(root, "_meta.json"), {})
+    return list(TRIO_STEPS) if use_trio_pipeline(root, meta) else ["full"]
 
 
 def target_words(meta):
@@ -463,7 +496,12 @@ def main():
     ap.add_argument("--out-dir", default=None, help="缺省 <作品根>/写作任务")
     ap.add_argument("--stdout", action="store_true", help="只打印，不写文件")
     ap.add_argument("--allow-missing-demo", action="store_true", help="Demo gate 未通过时也允许生成准备包")
-    ap.add_argument("--step", default="full", choices=["full", "architect", "ghostwriter", "editor"], help="工作流步骤 (Trio Pipeline)")
+    ap.add_argument(
+        "--step",
+        default="auto",
+        choices=["auto", "full", "trio", "architect", "ghostwriter", "editor"],
+        help="工作流步骤；auto 会让 商业连载/漫剧源书/三步迭代 默认生成 trio 三段任务包",
+    )
     args = ap.parse_args()
 
     root = os.path.abspath(args.project_root)
@@ -472,14 +510,18 @@ def main():
         sys.exit(2)
     try:
         chapters = resolve_chapters(args, root)
-        packets = [(chapter, build_packet(root, chapter, allow_missing_demo=args.allow_missing_demo, step=args.step))
-                   for chapter in chapters]
+        steps = packet_steps_for_request(root, args.step)
+        packets = [
+            (chapter, step, build_packet(root, chapter, allow_missing_demo=args.allow_missing_demo, step=step))
+            for chapter in chapters
+            for step in steps
+        ]
     except Exception as e:
         print(f"[err] {e}", file=sys.stderr)
         sys.exit(2)
 
     if args.stdout:
-        for idx, (chapter, packet) in enumerate(packets):
+        for idx, (chapter, step, packet) in enumerate(packets):
             if idx:
                 print("\n\n" + "=" * 60 + "\n")
             print(packet)
@@ -487,12 +529,17 @@ def main():
 
     out_dir = os.path.abspath(args.out_dir or os.path.join(root, "写作任务"))
     os.makedirs(out_dir, exist_ok=True)
-    for chapter, packet in packets:
-        suffix = f"_{args.step}" if args.step != "full" else ""
+    wrote_steps = []
+    for chapter, step, packet in packets:
+        suffix = f"_{step}" if step != "full" else ""
         path = os.path.join(out_dir, f"第{chapter:02d}章{suffix}.md")
         atomic_write_text(path, packet)
+        wrote_steps.append(step)
         print(f"[ok] 写作任务包：{path}")
-    print("[next] 按任务包写入 章节/第NN章.md，填写 审稿/state_delta_第NN章.json，再跑 novel-review 机检/人判。")
+    if any(step in TRIO_STEPS for step in wrote_steps):
+        print("[next] 三步迭代顺序：先按 _architect 产 beats，再按 _ghostwriter 产 draft，最后按 _editor 写入 章节/第NN章.md；完成后填写 state_delta 并跑 novel-review。")
+    else:
+        print("[next] 按任务包写入 章节/第NN章.md，填写 审稿/state_delta_第NN章.json，再跑 novel-review 机检/人判。")
 
 
 if __name__ == "__main__":

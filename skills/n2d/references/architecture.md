@@ -91,13 +91,12 @@
 │       │   ├── 00_总览.md                本集 Clip 清单
 │       │   └── 01_clips.md               每 Clip 视频 prompt
 │       └── 视频/                         ClipK_*.mp4 定稿片段（供 n2d-compose 归集）
-└── 合成/                                 ← n2d-voice 配音轨 + n2d-compose（⑥合成）+ 可选水印同住此层
+└── 合成/                                 ← n2d-voice 配音轨 + n2d-compose（⑥合成）同住此层
     └── 第N集/
         ├── 配音/                         ← n2d-voice 产物（line_NN.wav / voice_zh.wav / 时长清单.json）
         ├── _voicecache/                  配音缓存
         ├── _work/                        compose 中间件（每次重建）
-        ├── 成片_第N集_<mode>.mp4         ← n2d-compose 最终成片
-        └── 成片_第N集_<mode>_水印.mp4    ← （可选）本线 n2d-watermark skill 打 AI合规/品牌水印后产物
+        └── 成片_第N集_<mode>.mp4         ← n2d-compose 最终成片
 ```
 
 ### prompt / 产物分离铁律（n2d-image / n2d-video 通用）
@@ -105,7 +104,7 @@
 每个 `出图/` 或 `出视频/` 文件夹（`共享/` 或 `第N集/`；旧项目 `common/` 仅读取兼容）一律分两层：
 
 - **`prompt/` 子目录** 装该文件夹所有 prompt md（共享层的 00_索引 + 角色/场景/道具定妆，或本集的 00_总览 + 01_分镜/clips）
-- **生成产物**：PNG 进 **`图片/` 子目录**（与 `prompt/` 同级；含分镜首帧 `镜头N_*.png` + 尾帧接力 `镜头N_end.png`，共享层为 `图片/定妆_*.png`）；**clip MP4 进 `出视频/第N集/视频/` 子目录**（出视频阶段唯一产物，供 n2d-compose 归集）；**配音 / 成片 / 水印产物落 `合成/第N集/`**（不在出视频层）
+- **生成产物**：PNG 进 **`图片/` 子目录**（与 `prompt/` 同级；含分镜首帧 `镜头N_*.png` + 尾帧接力 `镜头N_end.png`，共享层为 `图片/定妆_*.png`）；**clip MP4 进 `出视频/第N集/视频/` 子目录**（出视频阶段唯一产物，供 n2d-compose 归集）；**配音 / 成片产物落 `合成/第N集/`**（不在出视频层）
 
 好处：
 - 一目了然——浏览父目录只看到产物缩略图，找 prompt 进 `prompt/` 子目录
@@ -147,9 +146,9 @@
 
 ## 三、机器契约与进度表（_进度.md）协议
 
-机器契约真值源在 `skills/common/n2d_contract.py`，人读版见 `references/contract.md`。阶段图、列名、gate stage、manifest 路径、回退目标都从这里派生；`common/n2d_route.py`、`n2d/progress.py`、`n2d-progress/scan.py`、`n2d-review/scripts/gate.py` 不应各自维护一张阶段表。
+机器契约真值源在 `skills/n2d/_lib/n2d_contract.py`，人读版见 `references/contract.md`。阶段图、列名、gate stage、manifest 路径、回退目标都从这里派生；`n2d/_lib/n2d_route.py`、`n2d/progress.py`、`n2d-progress/scan.py`、`n2d-review/scripts/gate.py` 不应各自维护一张阶段表。
 
-进度表是六阶段所有 skill 的 **single source of truth**。**表头由 `skills/common/n2d_contract.py` 定义，`n2d-script/scripts/split_novel.py` 生成时读取它**——本文与调度器 SKILL 只复述、不另立一套。当前 16 列格式：
+进度表是六阶段所有 skill 的 **single source of truth**。**表头由 `skills/n2d/_lib/n2d_contract.py` 定义，`n2d-script/scripts/split_novel.py` 生成时读取它**——本文与调度器 SKILL 只复述、不另立一套。当前 16 列格式：
 
 ```markdown
 # <剧名> — 生产进度
@@ -280,7 +279,7 @@ def dispatch(work_root):
     return (None, None, "全集完工")
 ```
 
-> 实际不需要另写脚本——机读路由用 `n2d/progress.py`，它经 `common/n2d_route.py` 复用 `n2d_contract.STAGE_GRAPH` 并按 `制作模式` 调整依赖。`制作模式=先出视频后配音` 的 `⏳rough` 放行/合成前补真音、`制作模式=原生音画` 的配音可选旁白层，都在同一套路由里生效。
+> 实际不需要另写脚本——机读路由用 `n2d/progress.py`，它经 `n2d/_lib/n2d_route.py` 复用 `n2d_contract.STAGE_GRAPH` 并按 `制作模式` 调整依赖。`制作模式=先出视频后配音` 的 `⏳rough` 放行/合成前补真音、`制作模式=原生音画` 的配音可选旁白层，都在同一套路由里生效。
 
 ---
 

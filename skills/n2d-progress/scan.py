@@ -21,12 +21,14 @@ import json
 import os
 import re
 import sys
+from concurrent.futures import ThreadPoolExecutor
 
 COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'n2d', '_lib'))
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 from n2d_route import flow_columns, is_done, is_flow_complete, is_progress_satisfied, is_started, parse_progress, stage_of
 from n2d_settings import is_native_av, is_video_first
+from n2d_findings_utils import findings_status
 try:
     from n2d_contract import cross_cutting, cross_cutting_tools, COSTLY_HINTS
 except Exception:  # pragma: no cover - 横切检查可选，缺契约也不影响主流程扫描
@@ -120,64 +122,6 @@ def parallel_suggestion(root, rows, header, flow, gaps):
     return ""
 
 
-def _finding_counts(data):
-    """Return (block, warn) for consistency/gate findings payloads.
-
-    Supports both current `severity/dimension/message` rows and older
-    `sev/dim/msg` rows. Files with only info rows are not actionable gaps.
-    """
-    summary = data.get("summary") if isinstance(data, dict) else None
-    if isinstance(summary, dict):
-        sev = summary.get("severity")
-        if isinstance(sev, dict):
-            return int(sev.get("block") or 0), int(sev.get("warn") or 0)
-    rows = data.get("findings") if isinstance(data, dict) else None
-    if not isinstance(rows, list):
-        return 0, 0
-    block = warn = 0
-    for row in rows:
-        if not isinstance(row, dict):
-            continue
-        sev = str(row.get("severity") or row.get("sev") or "").lower()
-        if row.get("resolved") is True:
-            continue
-        if sev == "block":
-            block += 1
-        elif sev == "warn":
-            warn += 1
-    return block, warn
-
-
-def findings_status(root, ep):
-    """Summarize active/stale findings for one episode.
-
-    A findings file older than `_进度.md` may describe a previous production
-    state. Report it as stale instead of "unresolved" so progress does not keep
-    sending the user into already-superseded return tasks.
-    """
-    # 用「本集」的 manifest mtime 当陈旧基准，而非整份 _进度.md：给别的集设一列也会 touch
-    # _进度.md，会把本集仍未解决的 block 误降级成「已过期」。本集 manifest 只在本集 set 时刷新。
-    ep_manifest = os.path.join(root, "脚本", ep, "manifest.json")
-    progress_file = os.path.join(root, "_进度.md")
-    ref_path = ep_manifest if os.path.exists(ep_manifest) else progress_file
-    progress_mtime = os.path.getmtime(ref_path) if os.path.exists(ref_path) else 0
-    active = {"block": 0, "warn": 0, "files": 0}
-    stale = {"block": 0, "warn": 0, "files": 0}
-    for path in glob.glob(os.path.join(root, "生产数据", f"*findings*{ep}.json")):
-        try:
-            data = json.load(open(path, encoding="utf-8"))
-        except (OSError, json.JSONDecodeError):
-            continue
-        block, warn = _finding_counts(data)
-        if block <= 0 and warn <= 0:
-            continue
-        bucket = stale if os.path.getmtime(path) < progress_mtime else active
-        bucket["block"] += block
-        bucket["warn"] += warn
-        bucket["files"] += 1
-    return active, stale
-
-
 def report(root, out):
     try:
         header, dict_rows = parse_progress(root)
@@ -200,14 +144,20 @@ def report(root, out):
     episodes = [r.get("_ep", "") for r in dict_rows if r.get("_ep")]
     cross_cutting_check(root, out, episodes)  # 横切就绪（合规/身份/LoRA/仪表盘/回灌）+ 观察工具（评分/UI/更新）——不在流程表里但要可见
 
+    progress_file = os.path.join(root, "_进度.md")
     findings_gaps = []
     for ep in episodes:
-        active, stale = findings_status(root, ep)
+        ep_manifest = os.path.join(root, "脚本", ep, "manifest.json")
+        ref_path = ep_manifest if os.path.exists(ep_manifest) else progress_file
+        ep_ref_mtime = os.path.getmtime(ref_path) if os.path.exists(ref_path) else 0
+        
+        active, stale = findings_status(root, ep, ep_ref_mtime)
         if active["block"] or active["warn"]:
-            findings_gaps.append(
-                f"  - {ep} 当前 findings: block {active['block']} / warn {active['warn']} "
-                f"（{active['files']} 个文件，建议调 n2d-batch 修复或重跑对应 gate）"
-            )
+            msg = f"  - {ep} 当前 findings: block {active['block']} / warn {active['warn']}"
+            if active["samples"]:
+                sample_str = " | ".join(active["samples"])
+                msg += f"（{sample_str}）"
+            findings_gaps.append(msg)
         elif stale["block"] or stale["warn"]:
             findings_gaps.append(
                 f"  - {ep} 有过期 findings: block {stale['block']} / warn {stale['warn']} "
@@ -368,11 +318,17 @@ def main(argv):
         print(f"未找到任何含 _进度.md 的剧。线根目录：{LINE_DIR}/")
         return 0
 
-    blocks = []
-    for root, rel in works:
+    def run_report(root, rel):
         out = [f"=== {rel} ==="]
-        report(root, out)
-        blocks.append("\n".join(out))
+        try:
+            report(root, out)
+        except Exception as exc:  # 仪表盘韧性：单部剧解析异常不该让整块看板空白
+            out.append(f"（扫描失败，跳过本剧：{type(exc).__name__}: {exc}）")
+        return "\n".join(out)
+
+    with ThreadPoolExecutor(max_workers=min(len(works), 16)) as executor:
+        blocks = list(executor.map(lambda w: run_report(*w), works))
+
     print("\n\n".join(blocks))
     print(f"\n--- 共 {len(works)} 部剧 ---")
     return 0

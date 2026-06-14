@@ -11,7 +11,7 @@
   合规   —— AI 视觉使用披露留痕。
   对账   —— 词/歌/beatgrid/出图/clip/成片 快照、_meta.has_song/has_lyrics vs 实际、段落数 vs structure。
 
-**不覆盖**需要语义判断的维度（崩脸/场景漂移/画风/运镜服务节奏/卡点体感/换脸合规水印）——
+**不覆盖**需要语义判断的维度（崩脸/场景漂移/画风/运镜服务节奏/卡点体感）——
 那些走 references/checklist.md 的「人判」清单（崩脸并排读图）。输入歌的音质/词体检属 song-review。
 
 只用标准库；clip/成片 的时长·分辨率·音轨需 `ffprobe`，缺失时**显式标「跳过」**，绝不静默略过。
@@ -415,7 +415,7 @@ def main():
               + ("" if have_ffprobe() else "　（未装 ffprobe：clip/成片 时长·画幅·音轨 = 跳过）") + "\n")
         for s, d, l, m in sorted(findings, key=lambda f: order[f[0]]):
             print(f"{s} [{d}] {l}: {m}")
-        print("\n（语义维度——崩脸/场景漂移/画风/运镜服务节奏/卡点体感/换脸合规——见 references/checklist.md 人判清单）")
+        print("\n（语义维度——崩脸/场景漂移/画风/运镜服务节奏/卡点体感——见 references/checklist.md 人判清单）")
     sys.exit(1 if any(f[0] == BLOCK for f in findings) else 0)
 
 

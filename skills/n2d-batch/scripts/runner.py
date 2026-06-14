@@ -111,12 +111,26 @@ def resolve_command(root: str, task: Dict[str, Any], config: Dict[str, Any], ove
     if not template:
         raise UnrunnableTask("task has no command")
     command = str(template).format(**task_format_map(root, task))
-    if command.strip().startswith("/"):
+    if looks_like_agent_skill_command(command):
         raise UnrunnableTask(
-            "task command is an agent slash command, not a shell command; "
+            "task command is an agent slash command or skill command, not a shell command; "
             f"add {DEFAULT_CONFIG_NAME}.commands['{task.get('stage_key')}'] or pass --command"
         )
     return command
+
+
+def looks_like_agent_skill_command(command: str) -> bool:
+    text = str(command or "").strip()
+    if text.startswith("/"):
+        return True
+    try:
+        parts = shlex.split(text)
+    except ValueError:
+        parts = text.split()
+    if not parts:
+        return False
+    first = parts[0]
+    return first == "n2d" or first.startswith("n2d-")
 
 
 def env_for_task(root: str, task: Dict[str, Any], config: Dict[str, Any]) -> Dict[str, str]:

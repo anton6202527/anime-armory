@@ -1,6 +1,6 @@
 # 平台档案（Platform Profiles）
 
-> **机器真值源**：视频后端别名、`max_clip_seconds`、原生音画后端集合等可执行字段集中在 `skills/common/n2d_platform_profiles.py`。本文件负责人读解释；若两者不一致，以 common 模块为准，并同步修本文。
+> **机器真值源**：视频后端别名、`max_clip_seconds`、原生音画后端集合等可执行字段集中在 `skills/n2d/_lib/n2d_platform_profiles.py`。本文件负责人读解释；若两者不一致，以 `_lib` 模块为准，并同步修本文。
 
 本 skill 的核心产物——分镜剧本、角色/场景卡、爽剧节拍、双语字幕——**平台无关**。
 各 AI 生成平台的差异，由下面的「平台档案」描述。
@@ -69,6 +69,22 @@ image prompt = [图AI 的 prompt 写法] + [生视频模型的图像风格锚定
 > **分辨率铁律**：所有平台**默认 720p**（省积分/出片快），1080p 仅在用户明确要时用。开跑前把选项给用户确认一次，用户指定后按用户的来。
 
 > **单 Clip 上限铁律（2026-06）**：单 Clip 时长上限**按所选后端档案，不是一刀切 8s**。**能一镜到底就别切碎**——更长单镜 = 更少拼接缝 = **跨镜一致性更稳 + 更省**。只在 Clip 时长（=所含镜头时长之和，配音驱动）**超该后端上限**时才拆 Clip，拆点尾帧=下一首帧。各后端当前上限见下方档案；n2d-script 阶段2 拆 Clip 时**读该后端上限值**，不要写死 8s。后端能力会变，以 `n2d/references/模型矩阵.md` 最新快照为准。
+
+## 关键帧/多帧能力口径（2026-06-13）
+
+机器真值源在 `skills/n2d/_lib/n2d_platform_profiles.py::frame_control`；gate 和 runner 读机器档案，本文只解释给人看。**主流后端并不都支持首/中/尾三帧同一次请求**。至少首帧图生视频普遍可用；首尾两帧在 Dreamina、Luma/Ray、Veo 3.1、Kling 路径可用或按档案保守放行；任意中段时间轴锚帧目前只在本仓库核验过 Dreamina `multiframe2video` 原生路径。
+
+| 后端/渠道 | 时间轴帧能力 | n2d 落地 | fallback |
+|---|---:|---|---|
+| Dreamina / 即梦 `multiframe2video` | 2-20 张，段长 0.5-8s | 原生吃 `[首, 中锚..., 尾]`，一条连续 Clip，无 concat | 若帧数/段长不合法，退 first+last `frames2video` 或单首帧 |
+| Dreamina / 即梦 `frames2video` | 首尾 2 张 | 常规接缝锁定；近景大表情起止表情插值 | 中段需要改 `multiframe2video` 或拆段 |
+| Kling / 可灵 | 首尾 2 张（保守档） | 打斗/接触/释放帧适合 first+last；Character ID 另管身份 | `_mid` 不能假定原生生效，拆 A→M、M→B 或 reroute |
+| Seedance 直连 | 按首帧/参考图保守处理 | 只有执行渠道是 Dreamina 时，帧能力改按 Dreamina | 直连要先复核当前 API，再付费批量 |
+| Veo 3.1 / Gemini API | first+last + 最多 3 张 reference images | 首尾锁接点，reference 管角色/风格 | 中段时间轴锚不是 arbitrary keyframe，需 extend/split 或 reroute |
+| Luma / Ray | `frame0` + `frame1` | 首尾锁起止画面 | 中段锚需拆段/interpolate |
+| Runway / Pika / Sora | 未在本仓库核验任意多帧 | 按首帧/参考媒体保守处理 | 当前官方 API 明确支持前不得吞 `_mid`；gate 应 WARN |
+
+用户问“每个 Clip 分几张帧”时，先回答能力边界：**首尾两帧是较稳的通用 fallback，但不是所有 API 都无条件支持；首/中/尾三帧不是主流统一能力，只有 Dreamina 原生多帧已在本仓库打通。** 因此 n2d 默认仍可以规划三帧契约来保证审查和可升级，但执行前必须让 `video_preflight` 核验：后端不能吃中锚时，明示用户改首尾帧、拆段接力或换原生多帧后端。
 
 ---
 

@@ -27,20 +27,38 @@ import sys
 import re
 from datetime import date
 
-# 共享：落 _设置.md（skills/novel-craft/references/选择点与偏好.md 选择点存储）上移至 novel-craft，与派生类 init 同源
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                "..", "..", "novel-craft", "scripts"))
-from contract import (AI_TEXT_USAGE_MODES, CHAPTER_GRANULARITY, NOVEL_DRAFT_MODES,
-                      SCALE_CHOICES, SCALE_PROFILES, base_meta, create_stage_markdown,
-                      normalize_scale, parse_outputs, scale_profile)
-from derive_common import write_settings
+# Standardized imports from novel/_lib
+LIB = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "novel", "_lib"))
+if LIB not in sys.path:
+    sys.path.insert(0, LIB)
 
-SCALE_PROFILE = SCALE_PROFILES  # backwards-compatible alias for tests/importers
+from novel_contract import (base_meta, build_progress_markdown, routing_stages,
+                            SCALE_CHOICES, scale_profile, NOVEL_DEFAULTS,
+                            NOVEL_STAGES, normalize_scale)
+from settings import write_settings
 
+# Simple fallback for missing constants in novel_contract
+NOVEL_DRAFT_MODES = ("极速初稿", "稳妥初稿", "商业连载", "漫剧源书")
+CHAPTER_GRANULARITY = ("逐章", "小批", "全书草稿")
+AI_TEXT_USAGE_MODES = ("AI-generated", "AI-assisted", "未使用AI文本")
+
+def parse_outputs(value):
+    return [s.strip() for s in value.split(",") if s.strip()]
+
+
+def demo_chapters_for(target_chapters):
+    if target_chapters <= 3:
+        return 0
+    if target_chapters <= 20:
+        return 2
+    return 3
 
 def slug(s):
     s = re.sub(r"[^\w一-鿿-]+", "", (s or "").strip())
     return s or "新书待定"
+
+# ... (keep blueprint, bible, character_card, worldview, outline builders as they are)
+
 
 
 def build_blueprint(title, genre, platform, premise, scale, n, wpc, person):
@@ -269,7 +287,7 @@ def main():
         "person": args.person,
         "target_platform": args.platform,
         "ingested": ingested,
-        "demo_chapters": profile["demo"],
+        "demo_chapters": demo_chapters_for(n),
         "demo_passed_at": None,
         "title_chosen_at": None,
         "draft_mode": args.draft_mode,
@@ -297,7 +315,12 @@ def main():
     W("设定/角色卡.md", build_character_card(title))
     W("设定/世界观.md", build_worldview(title))
     W("设定/章纲.md", build_outline(title, n, args.premise))
-    W("_进度.md", build_progress(title, meta))
+    # ... (inside main)
+    n = args.target_chapters or profile["target_chapters"]
+    wpc = profile["words_per_chapter"]
+    
+    # ... (around line 210)
+    W("_进度.md", build_progress_markdown(title, "create", n))
 
     print(f"[ok] 原创项目骨架 → {out_root}")
     print(f"     设定/创作蓝图.md ← 骨架（第 2 步填：logline/主角/金手指/爽点/冲突/风格卡）★最重要")

@@ -90,7 +90,7 @@ python3 skills/n2d-batch/scripts/runner.py <作品根> --until-empty --limit 1 -
 python3 skills/n2d-batch/scripts/runner.py <作品根> --until-empty --verify-outputs
 ```
 
-`--verify-outputs` 会读取 `common/n2d_contract.py` 的 `output_contract`：普通阶段按 required outputs 校验；配音/合成/水印成片等存在合法替代产物的阶段按 `any_of` 组合校验，避免真实配音与占位清单、中文成片与双语成片互相误判。
+`--verify-outputs` 会读取 `n2d/_lib/n2d_contract.py` 的 `output_contract`：普通阶段按 required outputs 校验；配音/合成成片等存在合法替代产物的阶段按 `any_of` 组合校验，避免真实配音与占位清单、中文成片与双语成片互相误判。
 
 runner 行为：
 

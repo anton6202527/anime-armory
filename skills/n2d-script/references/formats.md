@@ -95,7 +95,7 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 - 出点：本 Clip 结束时人物姿态/视线/道具/空镜停在哪里，下一 Clip 从哪里接。**这句会成为下一 Clip 的入点。**
 - 转场：match cut / eyeline cut / 动作切 / 空镜缓冲 / 声音先行(J-cut) / 硬切。
 - 需要尾帧?：是/否。**默认首尾双帧接力：除最终 Clip 外均为是**（n2d-image 出尾帧 PNG=下一 Clip 首帧构图，**尾帧命名=对应首帧名+`_end`**：`镜头N_xxx.png`→`镜头N_end.png`、`Clip_NN.png`→`Clip_NN_end.png`；n2d-video 用首尾双帧引导锁死接点）；只有换场空镜/时间大跳/明确不连续的接缝可设否，并必须写豁免原因。
-- 中段锚帧?（opt-in·默认否）：长 Clip（≥8s 且 表演节拍 ≥3 拍）或已有中段漂移重抽记录的镜头，可声明**额外锚帧**——单锚帧写 `continuity.midframe`（命名=首帧名+`_mid`），多锚帧写 `continuity.anchors` 链（命名=首帧名+`_a1.._aN`，二选一），n2d-video 按锚点把 Clip 拆成 K+1 段双帧接力再焊回一条。**K+1× 视频成本 + K 道内部接缝**，只救已证明漂移的镜头，不作默认（默认仍"能一镜到底就别切碎"）。声明即必须填全字段，gate 阻断缺项/不递增/越界。**自动识别**：分镜定稿后跑 `python3 skills/n2d-script/scripts/anchor_planner.py <作品根> 第N集`——按三条确定性规则（R1 高运动模板镜：打斗/追逐/法术爆发/飞行/拥抱拉扯/亲密互动；R2 ≥8s 多拍长镜；R3 dashboard 漂移重抽实证）出 `生产数据/anchor_plan_第N集.json/md` 规划（锚点吸附分镜边界=自然换拍点）。**打斗/长镜会出多个中锚（>3 帧）**：R1 段目标 3.5s（一拍一段），10s 打斗→2 锚=4帧、15s→3 锚=5帧；R2 段目标 5s（长镜密度适中）；密度按 **multiframe 段地板 1.5s** 排（对齐 multiframe2video 的 0.5s 下限），不再被旧 relay 4s 地板卡死。**报告含成本增量、人确认后 `--write` 才注回** storyboard.json；已手动声明的 Clip 一律跳过。**三帧契约铁律（选择点 `中段锚帧默认`=开启）**：planner 加 `--default-midframe`，普通镜也默认得一张 `_mid` 锚帧（`use=split` 可拆段 / `use=qc` 短镜不拆段、作视频验收中段基准），<3s 极短镜写 `midframe_exempt_reason` 豁免；`policy.midframe_default=true` 后 gate 强制每镜有声明或豁免。
+- 中段锚帧?（默认规划·按后端能力落地）：选择点 `中段锚帧默认=开启` 时，普通镜默认得一张 `_mid` 锚帧（`use=split` 可拆段 / `use=qc` 短镜只作视频验收中段基准），<3s 极短镜写 `midframe_exempt_reason` 豁免；高运动模板、≥8s 多拍长镜或已有中段漂移重抽记录的镜头，可声明多锚 `continuity.anchors`（命名=首帧名+`_a1.._aN`）。声明即必须填全字段，gate 阻断缺项/不递增/越界。**自动识别**：分镜定稿后跑 `python3 skills/n2d-script/scripts/anchor_planner.py <作品根> 第N集`，按 R1 高运动模板 / R2 ≥8s 多拍长镜 / R3 dashboard 漂移重抽实证出 `生产数据/anchor_plan_第N集.json/md`；`--write` 后写回 `policy.midframe_default=true` 与逐镜锚点/豁免。**执行口径**：即梦 `multiframe2video` 可原生吃 2–20 张时间轴关键帧，无 K+1 视频倍数；Veo/Luma/可灵等首尾帧后端只确认 first/last，中锚需拆段接力、extend/interpolate 或仅作 QC/参考；首帧/参考图后端退回单首帧 + 强 end_state 文字或 reroute。video_preflight 会对不支持中锚的路由给 WARN，不能静默吞 `_mid`。
 - 连贯性：轴线方向、人物左右站位、出入画方向、首尾帧是否可用于双帧引导；非最终 Clip 不能省略接力契约。
 **分镜1：0-4s**
 镜头：{景别}，{距离}，{机位角度}，{运镜}。
@@ -129,7 +129,7 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 ```json
 { "episode": 1, "title": "本宫才是这皇宫最大的妖·第1集", "source": "原著章节1-2",
   "total_duration": 86.5,
-  "policy": { "tailframe_default": true, "midframe_default": false },  // tailframe gate 要求 =true；midframe_default=true 时三帧契约铁律生效（anchor_planner --default-midframe --write 写入）
+  "policy": { "tailframe_default": true, "midframe_default": true },   // tailframe gate 要求 =true；midframe_default=true 时每镜须有中锚声明或豁免（anchor_planner --write 写入）
 
   "visual_contract": {                            // ← 视觉契约种子（keystone）；n2d-image 继承，勿留空
     "色调基线": "冷青压暗红；金瞳/妖气只在镜7爽点后出现，之前不得泄露",
@@ -180,10 +180,10 @@ character design / reference sheet: {name}, minimum reference set with front-fac
         "transition": "match_cut",                      // match_cut|eyeline|action_cut|empty_buffer|j_cut|hard_cut
         "need_endframe": true,                          // 默认 true；非最终 Clip 若 false 必填 endframe_exempt_reason
         "endframe_png": "出图/第1集/图片/镜头02_end.png",     // need_endframe 时由 n2d-image 落档后回填
-        "midframe": {                                   // ← 可选·中段锚帧·单锚帧手写糖（opt-in 拆段，2× 视频成本，绝大多数 Clip 不填）
+        "midframe": {                                   // ← 中段锚帧·单锚帧手写糖（默认规划；执行成本按后端能力：native multiframe / split / qc）
           "midframe_png": "出图/第1集/图片/镜头01_mid.png",   // 命名=首帧名+`_mid`；由 n2d-image 落档后回填
-          "split_at_sec": 4.0,                          // 焊点秒数（A 段时长）；两段各自须 ≥ 目标后端最短时长
-          "reason": "9s 三拍动作，redraw×2 中段动作漂移"      // 必填：为什么值得付 2× 成本（漂移证据/重抽记录）
+          "split_at_sec": 4.0,                          // 建议锚点秒数；native multiframe 为时间轴约束，split 时为 A 段时长
+          "reason": "9s 三拍动作，redraw×2 中段动作漂移"      // 必填：为什么需要中锚（漂移风险/重抽记录/三帧契约默认）
         },
         "anchors": [                                    // ← 可选·N 锚帧链通用形（与 midframe 二选一，同时声明 gate 阻断）
           // 由 scripts/anchor_planner.py 自动识别+规划写入（打斗等高运动模板/≥8s 长镜/漂移重抽实证），也可手写

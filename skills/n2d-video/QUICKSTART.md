@@ -27,6 +27,8 @@ python3 skills/n2d-video/scripts/video_runner.py qc <作品根> <manifest.json>
 ```
 `video_runner.py submit` runs `video_preflight` by default before calling the backend; use `--skip-preflight` only for an already-checked controlled rerun. After MP4s are accepted, run `dashboard.py gate <作品根> 第N集 --stage video` for post-generation verification.
 
+**后端范围（C2·适配不了就停下报缺口）**：`submit`/`query` 只内置了**即梦/Dreamina CLI** 的自动化契约（`prepare --backend` 默认 `dreamina`，别名 `即梦`）。路由到 **Kling/Veo/Seedance 等没有内置 CLI 契约的后端，或 `--backend manual`** 时，runner **不会静默改用即梦顶替**（那会换错路、按即梦记错账）——它会停下报缺口，让你按 SKILL.md「一步步指导手动跑」在对应渠道出片，把 MP4 放进 `出视频/第N集/视频/`，再直接 `accept` 登记验收（`accept` 不依赖 submit）。要给某后端加自动化，在 `video_runner.py` 的 `VIDEO_BACKEND_ADAPTERS` 注册一个 adapter（`submit_args`/`query_args`/`provider`）。
+
 Progress:
 ```bash
 python3 skills/n2d/progress.py ensure-col <作品根> 视频prompt ⬜

@@ -20,6 +20,14 @@ import os
 import re
 import json
 import argparse
+import sys
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_SKILLS = os.path.abspath(os.path.join(_HERE, "..", ".."))
+_COMMON = os.path.join(_SKILLS, "novel", "_lib")
+if _COMMON not in sys.path:
+    sys.path.insert(0, _COMMON)
+from project_io import parse_chapter_range, read_chapters  # noqa: E402
 
 DEATH_KEYWORDS = ["死了", "身亡", "阵亡", "殒命", "殒", "葬身", "气绝", "咽气",
                   "命丧", "战死", "殉", "毙命", "丧命", "已死", "死去"]
@@ -31,41 +39,11 @@ _CJK = r"一-鿿"
 
 def list_chapters(project, chap_range=None, single=None):
     """返回 [(chapter_index, path, text)]，按章号自然序。"""
-    cdir = os.path.join(project, "章节")
-    if not os.path.isdir(cdir):
-        return []
-    items = []
-    for name in os.listdir(cdir):
-        if not name.lower().endswith((".md", ".txt")) or name.startswith("_"):
-            continue
-        m = re.search(r"(\d+)", name)
-        idx = int(m.group(1)) if m else None
-        items.append([idx, os.path.join(cdir, name), name])
-    items.sort(key=lambda x: (x[0] is None, x[0] if x[0] is not None else x[2]))
-    # 补齐没有数字的章号为序号
-    for seq, it in enumerate(items, 1):
-        if it[0] is None:
-            it[0] = seq
-    lo, hi = _parse_range(chap_range)
-    out = []
-    for idx, path, _ in items:
-        if single is not None and idx != single:
-            continue
-        if chap_range and not (lo <= idx <= hi):
-            continue
-        with open(path, "r", encoding="utf-8") as f:
-            out.append((idx, path, f.read()))
-    return out
+    return read_chapters(project, chap_range, single, fill_missing_numbers=True)
 
 
 def _parse_range(chap_range):
-    if not chap_range:
-        return (0, 10 ** 9)
-    if "-" in chap_range:
-        a, b = chap_range.split("-", 1)
-        return (int(a), int(b))
-    v = int(chap_range)
-    return (v, v)
+    return parse_chapter_range(chap_range) or (0, 10 ** 9)
 
 
 def parse_character_names(project):

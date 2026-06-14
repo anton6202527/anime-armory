@@ -17,8 +17,9 @@ from contract import AI_VISUAL_USAGE_MODES  # noqa: E402
 
 NOTES = [
     "- 若 MV 的图像或视频主要由 AI 生成，通常按 AI-generated 留痕。",
-    "- 使用真人肖像、换脸或真实人物风格时，需记录授权；未授权不得用于投放。",
-    "- 发布前按目标平台最新规则复核 AI 标识、水印、版权和音乐授权；本文件只做项目留痕，不替代法律意见。",
+    "- 使用真人肖像或真实人物风格时，需记录授权；未授权不得用于投放。",
+    "- AI 标识/AI 披露/水印不再由本流水线处理：本文件只做项目留痕，不生成可见水印、不调用任何 watermark skill；"
+    "发布前按目标平台/各地区最新法规自行复核 AI 标识、披露、版权和音乐授权，本文件不替代法律意见。",
 ]
 
 
@@ -28,8 +29,6 @@ def main():
     ap.add_argument("--visual-mode", required=True, choices=AI_VISUAL_USAGE_MODES)
     ap.add_argument("--video-mode", default="AI-generated", choices=AI_VISUAL_USAGE_MODES)
     ap.add_argument("--publish-target", default="未定")
-    ap.add_argument("--faceswap-status", default="未使用")
-    ap.add_argument("--watermark-status", default="未记录")
     ap.add_argument("--human-contribution", default="")
     args = ap.parse_args()
 
@@ -48,8 +47,6 @@ def main():
         "video_model": meta.get("video_model") or "未记录",
         "video_channel": meta.get("video_channel") or meta.get("video_backend") or "未记录",
         "video_backend": meta.get("video_backend") or "未记录",
-        "faceswap_status": args.faceswap_status,
-        "watermark_status": args.watermark_status,
     })
     field_lines = [
         f"- 输入歌权利状态：{payload['song_rights_status']}",
@@ -58,8 +55,6 @@ def main():
         f"- 生图后端：{payload['image_backend']}",
         f"- 生视频模型：{payload['video_model']}",
         f"- 生视频渠道：{payload['video_channel']}",
-        f"- 换脸/真人肖像：{payload['faceswap_status']}",
-        f"- 水印 / AI 标识：{payload['watermark_status']}",
         f"- 发布平台/用途：{payload['publish_target']}",
     ]
     _, md_path = disclosure.write(

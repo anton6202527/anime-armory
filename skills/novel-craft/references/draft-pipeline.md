@@ -10,14 +10,33 @@
 - `审稿/demo_gate.json.status == passed`。未通过时只能写 Demo 或准备包，不能批量写余章。
 - `_设置.md` 已落 `小说生成模式` 与 `章节生成粒度`；缺则按 `skills/novel-craft/references/选择点与偏好.md` 问一次或用全局默认预填。
 
-## 三档小说生成模式
+## 四档小说生成模式
 
 | 模式 | 适合 | gate 密度 |
 |---|---|---|
 | `极速初稿` | 用户要尽快得到可读草稿/大纲化正文 | Demo 过后按小批写，轻量机检，最后全量 review |
 | `稳妥初稿` | 默认；兼顾速度和一致性 | 每章任务包 + 每 3-5 章轻量 review + 全量 review |
-| `商业连载` | 要投平台或长期连载 | 每章任务包 + 每章状态增量 + 小批 score/review，开篇三章重点打磨 |
-| `漫剧源书` | 主要服务 n2d | 章纲和正文优先镜头化、事件密度、角色动作可视化；输出建议含 `n2d` |
+| `商业连载` | 要投平台或长期连载 | 默认 Architect → Ghostwriter → Senior Editor 三段式；每章状态增量 + 小批 score/review，开篇三章重点打磨 |
+| `漫剧源书` | 主要服务 n2d | 默认三段式；章纲和正文优先镜头化、事件密度、角色动作可视化；输出必须含 `n2d` |
+
+`商业连载`、`漫剧源书`，或 `_设置.md` 写 `小说生成工作流：三步迭代` 时，`draft_packets.py` 的默认 `--step auto` 会一次生成三份任务包：
+
+```bash
+python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --chapter 4
+# 等价于：
+python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --chapter 4 --step trio
+```
+
+若项目只需要旧式单包，显式传 `--step full`。只补某一段可传 `--step architect|ghostwriter|editor`。
+
+`draft_queue.py` 同样会在这些项目里初始化 `workflow=trio`，按 pass 认领和标记：
+
+```bash
+python3 skills/novel-craft/scripts/draft_queue.py "<作品根>" claim --agent agent-a
+python3 skills/novel-craft/scripts/draft_queue.py "<作品根>" done 4 --step architect --agent agent-a
+```
+
+三个 pass 都 `done` 后，该章才聚合为 `done`；普通项目仍按整章队列运行。
 
 ## 执行闭环
 
@@ -31,7 +50,7 @@ python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --next
 
 `--allow-missing-demo` 只能用于准备包或修复流程，不代表批量写章 gate 通过；脚本会在任务包、`审稿/state_ledger.json.waivers[]` 和 `审稿/waiver_log.jsonl` 中记录 `missing_demo_gate`。
 
-2. 按 `写作任务/第NN章.md` 写入 `章节/第NN章.md`。
+2. 按任务包写作：普通项目按 `写作任务/第NN章.md` 写入 `章节/第NN章.md`；三段式项目按 `第NN章_architect.md` 产 beats，按 `第NN章_ghostwriter.md` 产 draft，按 `第NN章_editor.md` 写最终正文。
 3. 填写 `审稿/state_delta_第NN章.json`，记录人物、关系、伏笔、设定变化。
 4. 先对账再合并到 `审稿/state_ledger.json`。如果增量改变了设定圣经，回写 `设定/设定圣经.md` 或 `设定/角色卡.md`。
 
@@ -70,6 +89,7 @@ python3 skills/novel-review/scripts/mechanical_check.py "<作品根>" --json-out
 - 上一章结尾摘录。
 - Demo 风格锚点、读者承诺、设定硬约束、禁止漂移项。
 - 状态增量 JSON 模板。
+- `漫剧源书` 必须在 ghostwriter/editor 任务里要求可视化资产标签：人物 `[CHAR_xx]`，地点 `[LOC_xx]`，道具 `[PROP_xx]`，服装 `[OUTFIT_xx]`，特效 `[VFX_xx]`。导出 `n2d` 时这些标签会进入 `asset_registry_preflight.json`，后续由 n2d 线正式建 identity/asset registry 和一致性闸门。
 
 ## 反模式
 

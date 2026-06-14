@@ -11,7 +11,7 @@ description: Stage 1+定稿 of n2d — 阶段1·剧本改编：split a novel int
 
 本 skill 的可选项**不写死在源码里**。按 `../skills/n2d/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
-本 skill 涉及的选择点：`制作模式`（决定阶段2 是否等真实配音·见阶段2 触发）、`基础视觉风格`（写入 global_style + style_contract·见第 2 步）、`生视频模型`、`生视频渠道`、`生图AI`、`画幅`、`单集时长`（拆集/台词篇幅·见第 1 步预设）、`首切范围`（首次拆集是部分先切还是全篇粗切·见第 1 步）、`字幕语言`（中文/中英双语/仅英文·见阶段2）、`脚本批次`（量产时几集一停·见「脚本批次」段）、`中段锚帧默认`（关闭=R1/R2/R3 规则 opt-in / 开启=三帧契约铁律：每镜默认 首帧+中段锚帧+尾帧，极短镜豁免·见阶段2「中段锚帧自动规划」）、`目标平台`、`发行地区`、`合规用途`。源文本版权/改编权不是普通偏好，必须进入 `合规/compliance_manifest.json`。
+本 skill 涉及的选择点：`制作模式`（决定阶段2 是否等真实配音·见阶段2 触发）、`基础视觉风格`（写入 global_style + style_contract·见第 2 步）、`生视频模型`、`生视频渠道`、`生图AI`、`画幅`、`单集时长`（拆集/台词篇幅·见第 1 步预设）、`首切范围`（首次拆集是部分先切还是全篇粗切·见第 1 步）、`字幕语言`（中文/中英双语/仅英文·见阶段2）、`脚本批次`（量产时几集一停·见「脚本批次」段）、`中段锚帧默认`（**默认铁律·能力门控**=三帧契约：默认每镜至少 3 帧 首帧+中段锚帧+尾帧、gate 默认强制、**不管 cost**；唯一豁免=后端不支持≥3帧·由 adapter 按能力自动判定，不因 cost/风格关·见阶段2「中段锚帧自动规划」）、`目标平台`、`发行地区`、`合规用途`。源文本版权/改编权不是普通偏好，必须进入 `合规/compliance_manifest.json`。
 
 ## 核心原则
 
@@ -230,10 +230,10 @@ python3 skills/n2d-dashboard/scripts/dashboard.py record <作品根> \
    - **每 Clip 标节奏注记**（`导演节奏.md §四/§五`）：`铺垫·长镜` / `加速·碎切` / `爽点·CU硬切` / `留白·定格` 四选，让镜头时长成"曲线"而非等长堆叠——铺垫拉长、临近爽点逐个变短、爽点后给 1-2s 留白。
    - **标爽点累计时间戳**（如 `💥爽点 @ 0:48`）：供 n2d-compose 把 BGM drop / 重音效卡在这一帧。
    - 设计完对照 `分镜语法.md`（镜头空间）+ `导演节奏.md`（时间留存）**两份**自查清单。
-   - **中段锚帧自动规划（storyboard.json 定稿后·收尾必跑）**：按 `../skills/n2d/references/选择点与偏好.md` 读选择点 `中段锚帧默认`（**默认 开启**）。
-     - **`开启`（默认·三帧契约）**：跑 `python3 skills/n2d-script/scripts/anchor_planner.py <作品根> 第N集 --default-midframe`——**每个 Clip 默认规划 首帧+中段锚帧(`_mid`)+尾帧**，多关键帧治中段漂移、更连贯；打斗/长镜由 R1/R2/R3 出更多中锚（10s 打斗→4帧、15s→5帧；转场 prompt 按 `template_contract.beats` 取真运动「起手→命中→收势」）；**极短镜(<3s)与末镜豁免**（写 `midframe_exempt_reason`/本就无尾帧）。
-     - **`关闭`（opt-in）**：去掉 `--default-midframe`，只对命中 R1/R2/R3（高运动模板镜 / ≥8s 长镜 / dashboard 漂移重抽实证）的镜加锚。
-     - **流程**：先 **dry-run** 出 `生产数据/anchor_plan_第N集.json/md`（命中规则 + 成本增量：每镜多 K 张出图；**视频走 multiframe2video 仍 1 次/Clip 不翻倍**）→ 人确认 → `--write` 注回 `continuity.anchors` + `policy.midframe_default=true`（已手动声明的 Clip 跳过，人工优先）。此后 gate 强制每镜有锚帧声明或豁免。下游 n2d-image 据此出 `_mid`/`_aK` 锚帧、n2d-video 即梦走 `multiframe2video` 原生多帧出连续镜（见 `n2d-video` SKILL「中段锚帧」节）。
+   - **中段锚帧自动规划（storyboard.json 定稿后·收尾必跑·三帧契约默认铁律·能力门控）**：按 `../skills/n2d/references/选择点与偏好.md` 读选择点 `中段锚帧默认`。**默认每镜至少 3 帧（首+中+尾），不管 cost**；**唯一豁免=路由视频后端不支持 ≥3 帧**（由 adapter `backend_supports_three_plus_frames` 按 `生视频AI` 后端能力自动判定：即梦/可灵/Veo/Luma/未知后端=支持→强制；仅 seedance/sora/runway/pika 这类 first-frame-only 才豁免）。gate 默认按强制（读 `policy.video_backend`、缺/未知=强制），所以**每集定稿后必须跑本步**，否则下游 image gate 会拦缺锚帧的镜（契约前定稿的旧集同样被拦、须补跑）。
+     - **能力支持的后端（默认·绝大多数）**：跑 `python3 skills/n2d-script/scripts/anchor_planner.py <作品根> 第N集`（自动按后端能力强制开，无需手加 `--default-midframe`；设选择点关闭也无效）——**每个 Clip 强制规划 首帧+中段锚帧(`_mid`)+尾帧**，多关键帧治中段漂移、更连贯；打斗/长镜由 R1/R2/R3 出更多中锚（10s 打斗→4帧、15s→5帧；转场 prompt 按 `template_contract.beats` 取真运动「起手→命中→收势」）；**极短镜(<3s)与末镜豁免**（写 `midframe_exempt_reason`/本就无尾帧）。
+     - **唯一豁免（first-frame-only 后端）**：仅当 `生视频AI` 是连首尾拆段都钉不住第 3 帧的后端时，adapter 自动判定为不支持，本步回到只对命中 R1/R2/R3 的镜加锚的 opt-in，`--write` 把 `policy.midframe_default=false` 写进 storyboard 留痕，gate 据此跳过。**不因省成本/纯静态而豁免**——cost 不是理由。
+     - **流程**：先 **dry-run** 出 `生产数据/anchor_plan_第N集.json/md`（命中规则 + 成本增量：每镜多 K 张出图；**视频走 multiframe2video 仍 1 次/Clip 不翻倍**）→ 人确认 → `--write` 注回 `continuity.anchors` + `policy.midframe_default`（已手动声明的 Clip 跳过，人工优先）。此后 gate 强制每镜有锚帧声明或豁免。下游 n2d-image 据此出 `_mid`/`_aK` 锚帧、n2d-video 即梦走 `multiframe2video` 原生多帧出连续镜（见 `n2d-video` SKILL「中段锚帧」节）。
 4. `素材清单.md` — 角色/场景/道具的 AI 图片 prompt（复用角色卡锚定，**中文+英文双版默认都写**）。中文 prompt 偶尔会触发平台安全规避或误判，英文版作为同义兜底；执行下游出图/出视频时默认建议中英都保留，由平台/CLI 选择更稳的一版。
 
 **完成后**：`_进度.md` 勾选 `分镜设计` / `素材清单` / `字幕中` ✅（默认中文-only 不勾 `字幕英`；项目显式选中英双语/仅英文且已产 `字幕_英文.srt` 时才同步勾 `字幕英`）。记录生产数据：

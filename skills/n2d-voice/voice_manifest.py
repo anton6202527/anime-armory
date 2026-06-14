@@ -11,8 +11,9 @@ if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import VOICE_KEY_FIELD, VOICE_KEY_LEGACY_FIELD, VOICE_KEY_PLACEHOLDER_SUFFIX  # noqa: E402
 
-# 占位后端（macOS say 应急轨）的 voice_key 标记后缀：记「所用占位声音名#placeholder」，
+# 占位后端（macOS say 应急轨）的 voice_key 标记后缀：记「say:<占位声音名>_placeholder」，
 # 既留痕实际发声又显式声明这不是 voicemap 注册音色——对账方据此识别需重配音。
+# （旧项目可能留有 say:<声音名>#placeholder 井号格式，_is_placeholder_voice_row 一并兼容识别。）
 PLACEHOLDER_SUFFIX = VOICE_KEY_PLACEHOLDER_SUFFIX
 
 
@@ -47,7 +48,7 @@ def role_key(role, voicemap):
 
 def voice_key_for(role, voicemap, real_backend, placeholder_voice='Tingting'):
     """该句实际应用的 voice_key：真后端（零样本克隆/MiniMax/火山）= voicemap 音色键；
-    占位后端（macOS say）没有走 voicemap 选音，记 `say:<声音名>#placeholder` 留痕。"""
+    占位后端（macOS say）没有走 voicemap 选音，记 `say:<声音名>_placeholder` 留痕。"""
     if real_backend:
         return role_key(role, voicemap)
     return f'say:{placeholder_voice}{PLACEHOLDER_SUFFIX}'

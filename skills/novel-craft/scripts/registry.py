@@ -89,6 +89,11 @@ NOVEL_SKILLS = [
         "role": "promotion",
         "summary": "promotion hooks and short-video scripts",
     },
+    {
+        "name": "novel-progress",
+        "role": "progress",
+        "summary": "read-only progress dashboard for novel projects",
+    },
 ]
 
 
@@ -101,4 +106,3 @@ def skill_by_name(name):
         if item["name"] == name:
             return dict(item)
     return None
-

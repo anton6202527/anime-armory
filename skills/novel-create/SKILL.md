@@ -24,7 +24,7 @@ description: Cold-start ORIGINAL novel creation from scratch — when the user h
 - **设定圣经做一致性追踪**：原创最大翻车点是设定前后矛盾、金手指无代价。`设定/设定圣经.md` 逐条登记 + 回扫核对。
 - **平台决定形态**：题材/爽点/篇幅/开篇钩按目标平台（起点/番茄/晋江/抖音漫剧/红果/历史向）走；起名委托 `novel-title`。
 - **Demo gate 最重要**：前 1-3 章定文风/爽点密度/钩子/设定自洽，用户审过才批量写。
-- **批量写章先出任务包**：Demo 过审后先跑 `novel-craft/scripts/draft_packets.py`，每章带蓝图/设定/章纲/Demo 风格锚点/状态账本，再写正文。写完填 `审稿/state_delta_第NN章.json`，避免长篇越写越漂。
+- **批量写章先出任务包**：Demo 过审后先跑 `novel-craft/scripts/draft_packets.py`，每章带蓝图/设定/章纲/Demo 风格锚点/状态账本，再写正文。`商业连载` / `漫剧源书` 默认自动走 Architect → Ghostwriter → Senior Editor 三段式任务包；写完填 `审稿/state_delta_第NN章.json`，避免长篇越写越漂。
 - **原创=用户自有，天然合法**：无版权筛查（区别于 spinoff/rewrite/expand/condense 的合法性铁律）。
 
 ## 工作流（八步，每步末用户审 gate）
@@ -38,7 +38,7 @@ description: Cold-start ORIGINAL novel creation from scratch — when the user h
 - **核心爽点**（这本"爽"在哪）+ **主线冲突/反派**
 - **规模档**（short/medium/long/微短剧/漫剧 —— 见 `novel-craft/references/split.md` 字数分档）+ **人称视角** + 目标读者
 - **风格**：给了样本就吃（→ 风格卡）；没给则记"Demo 后回填"
-- **输出**：txt/docx/outline
+- **输出**：txt/docx/outline；规模或平台为微短剧/漫剧/红果/抖音漫剧时默认包含 n2d。
 > 用户给了碎片（风格样本/笔记/半成品）→ 先复述你的理解、确认，再补缺口。**别让用户重答他已经给过的。**
 
 ### 1. 建骨架
@@ -66,11 +66,11 @@ python3 <skill>/scripts/init_project.py \
 
 ### 6. Demo（前 1-3 章）+ 用户审【最重要 gate】
 逐章写（每章一个戏剧节拍 + ≥1 钩子，用 `novel-craft/references/chapter.md` 的单章守则 + 子代理 prompt 模板）。验：文风对不对 / 爽点够不够 / 钩子留没留 / 设定自洽。**每章独立审**。文风定了回填 `创作蓝图.md` 风格卡。
-> **可选市场体检（批量前最便宜的 go/no-go）**：Demo 过审后，可对 Demo 章跑一次 `novel-score`（题材够不够热、黄金三章钩子、能不能火）——在投入逐章写满全书前用最低成本验证方向。题材冷/开篇弱时回第 1-2 步改 premise/题材，比写完再推翻划算。用户说"先确认能不能火"时必跑。
+> **市场体检（批量前最便宜的 go/no-go）**：Demo 过审后，对 `商业连载` / `漫剧源书` 必跑一次 `novel-score`（题材够不够热、黄金三章钩子、能不能火）。`score_report.json.production_decision` 只允许四类：`go` / `revise` / `kill` / `n2d-adapt`；`n2d-adapt` 才进入 n2d handoff，`revise` 先回蓝图/章纲/开篇修，`kill` 停止批量写。普通稳妥初稿可由用户选择是否评分。
 > **机器留痕（必做）**：Demo 审完必须写 `审稿/demo_gate.json`（schema 见 `novel-craft/references/demo-gate.md`）。`status != passed` 不批量写；`style_anchor`、`reader_promises`、`setting_constraints`、`reader_contract` 必须喂给后续逐章子任务和 `novel-review`。
 
 ### 7. 续写余下 + 状态增量 + 回扫 + 导出
-- **定模式**：按 `skills/novel-craft/references/选择点与偏好.md` 读/问 `小说生成模式`（极速初稿/稳妥初稿/商业连载/漫剧源书）和 `章节生成粒度`（逐章/小批/全书草稿）。缺省推荐 `稳妥初稿 + 逐章`；用户明确要快时用 `极速初稿 + 小批`；要喂漫剧线时用 `漫剧源书`。
+- **定模式**：按 `skills/novel-craft/references/选择点与偏好.md` 读/问 `小说生成模式`（极速初稿/稳妥初稿/商业连载/漫剧源书）和 `章节生成粒度`（逐章/小批/全书草稿）。缺省推荐 `稳妥初稿 + 逐章`；用户明确要快时用 `极速初稿 + 小批`；要喂漫剧线时用 `漫剧源书`，并把 `输出格式` 设为包含 `n2d`。
 - **出任务包**：先读 `novel-craft/references/draft-pipeline.md`；进入小批/全书草稿时先建队列并认领章节，避免多代理重复写：
 ```bash
 python3 skills/novel-craft/scripts/draft_queue.py "<作品根>" init
@@ -81,6 +81,7 @@ python3 skills/novel-craft/scripts/draft_queue.py "<作品根>" claim --agent "<
 python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --next
 python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --range 4-8
 ```
+- `商业连载` / `漫剧源书` 或 `_设置.md` 写 `小说生成工作流：三步迭代` 时，`draft_packets.py` 的 `auto` 默认会一次生成 `第NN章_architect.md`、`第NN章_ghostwriter.md`、`第NN章_editor.md`。只想强制单包时显式传 `--step full`；只想补三段包时传 `--step trio`。
 - **逐章写**：按 `写作任务/第NN章.md` 写到 `章节/第NN章.md`。不要跳过任务包直接凭记忆写长篇。
 - **状态增量**：每章写完填 `审稿/state_delta_第NN章.json`；涉及人物/能力/伏笔/关系变化时合并回 `审稿/state_ledger.json`，必要时同步 `设定/设定圣经.md` / `设定/角色卡.md`。
 - **队列回写**：该章 review/对账通过后跑 `python3 skills/novel-craft/scripts/draft_queue.py "<作品根>" done NN --agent "<名字>"`；返工则 `fail NN --reason "<原因>"` 或 `todo NN`。
@@ -92,7 +93,7 @@ python3 skills/novel-review/scripts/mechanical_check.py "<作品根>" --json-out
 ```bash
 python3 skills/novel-craft/scripts/ai_usage.py "<作品根>" --text-mode AI-generated --publish-target "<平台>"
 ```
-- **导出**：`python3 skills/novel-craft/scripts/export.py "<作品根>" --formats txt,docx,outline[,n2d]`（家族通用导出器）→ `导出/`。**要直接喂漫剧线就加 `n2d`**——在 `导出/n2d-script/小说/<书名>.docx` 铺好 n2d-script 入口，成稿即可交 `n2d` 改编漫剧（原创从零是 写小说→制漫剧 管线的源头，最该出 n2d 形态）。
+- **导出**：`python3 skills/novel-craft/scripts/export.py "<作品根>" --formats txt,docx,outline[,n2d]`（家族通用导出器）→ `导出/`。`小说生成模式=漫剧源书`、目标平台含抖音漫剧/红果/微短剧/漫剧、或 `score_report.json.production_decision=n2d-adapt` 时，`n2d` 是默认必带格式：导出器会铺 `制漫剧/<书名>/小说/<书名>.docx`、`_n2d_handoff.json`、`asset_registry_preflight.json`，成稿即可交 `n2d` 改编漫剧。
 
 ## 与家族其它 skill 的边界（防误路由）
 

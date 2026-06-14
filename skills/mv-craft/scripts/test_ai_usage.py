@@ -33,7 +33,6 @@ class MvAiUsageTest(unittest.TestCase):
                     "--visual-mode", "AI-generated",
                     "--video-mode", "AI-generated",
                     "--publish-target", "抖音",
-                    "--watermark-status", "AI合规标识",
                     "--human-contribution", "用户挑选视觉方案并审片。",
                 ],
                 capture_output=True, text=True, check=True,

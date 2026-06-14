@@ -26,7 +26,6 @@ def test_init_manifest_uses_identity_registry_characters(tmp_path: Path) -> None
 
     ids = [item["character_id"] for item in data["character_likeness"]["characters"]]
     assert ids == ["CHAR_A", "CHAR_B"]
-    assert data["ai_disclosure"]["required"] is True
 
 
 def test_check_manifest_reports_missing_registry_character(tmp_path: Path) -> None:
@@ -86,7 +85,7 @@ def test_check_manifest_blocks_invalid_rights_status(tmp_path: Path) -> None:
     assert any("rights.source_text" in item and "status must be one of" in item and "pending" in item for item in issues)
 
 
-def test_check_manifest_blocks_invalid_character_voice_ai_and_watermark_status(tmp_path: Path) -> None:
+def test_check_manifest_blocks_invalid_character_and_voice_status(tmp_path: Path) -> None:
     root = tmp_path / "制漫剧" / "测试剧"
     reg = root / "出图" / "common"
     comp = root / "合规"
@@ -101,15 +100,12 @@ def test_check_manifest_blocks_invalid_character_voice_ai_and_watermark_status(t
     data["rights"]["adaptation"] = {"status": "original", "evidence": "同源改编"}
     data["character_likeness"]["characters"][0]["status"] = "unknown"
     data["voice"]["status"] = "pending"
-    data["ai_disclosure"]["visible_label"]["status"] = "pending"
-    data["watermark"]["ai_visible"]["status"] = "pending"
     data["platform_review"]["targets"][0].update({
         "platform": "抖音",
         "region": "CN",
-        "policy_profile": "douyin_ai_disclosure_2026-06-08",
+        "policy_profile": "douyin_policy_2026-06-08",
         "profile_checked_at": "2026-06-08",
         "copyright_review": "ready",
-        "ai_disclosure_upload": "ready",
         "content_rating_review": "ready",
     })
     (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
@@ -118,8 +114,6 @@ def test_check_manifest_blocks_invalid_character_voice_ai_and_watermark_status(t
 
     assert any("character_likeness.CHAR_A" in item and "unknown" in item for item in issues)
     assert any("voice status" in item and "pending" in item for item in issues)
-    assert any("ai_disclosure.visible_label" in item and "pending" in item for item in issues)
-    assert any("watermark.ai_visible" in item and "pending" in item for item in issues)
 
 
 def test_check_manifest_blocks_overseas_target_without_localization(tmp_path: Path) -> None:
@@ -191,7 +185,7 @@ def test_check_manifest_blocks_invalid_platform_review_fields(tmp_path: Path) ->
 
 
 def test_internal_only_downgrades_platform_fields_but_keeps_authorization_blocks(tmp_path: Path) -> None:
-    """internal_only：platform_review/localization 域降 INFO（带免检注），授权/AI 标识照常 BLOCK。"""
+    """internal_only：platform_review/localization 域降 INFO（带免检注），授权照常 BLOCK。"""
     root = tmp_path / "制漫剧" / "测试剧"
     comp = root / "合规"
     comp.mkdir(parents=True)

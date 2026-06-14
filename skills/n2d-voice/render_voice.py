@@ -8,7 +8,7 @@ _COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'n2d', '
 if _COMMON not in sys.path: sys.path.insert(0, _COMMON)
 from n2d_settings import load_settings, get_setting  # noqa: E402
 from n2d_text_utils import clean_punctuation  # noqa: E402
-from n2d_route import voiceover_fingerprint  # noqa: E402  配音源指纹（治"配音后改 voiceover 导致清单过期"）
+from n2d_route import voiceover_fingerprint, manifest_is_placeholder  # noqa: E402  配音源指纹 + 占位判定单一真值源（治"配音后改 voiceover 导致清单过期" / 占位口径不一致）
 from n2d_telemetry import record_event, Timer  # noqa: E402
 from voice_text import clean_text  # 念白文本清洗（独立模块·带单测，治 ||→「。，」脏标点）
 import voice_manifest as vmf  # 时长清单条目 + voice_key 音色留痕（独立模块·带单测；契约字段 VOICE_KEY_FIELD）
@@ -46,7 +46,7 @@ VOLC_APPID=os.environ.get('VOLC_APPID'); VOLC_TOKEN=os.environ.get('VOLC_TOKEN')
 VOLC_CLUSTER=os.environ.get('VOLC_CLUSTER','volcano_tts'); VOLC_ENDPOINT=os.environ.get('VOLC_ENDPOINT','https://openspeech.bytedance.com/api/v1/tts')
 # 零样本克隆后端：本地服务统一 GET /inference_zero_shot?text=&prompt_text=&prompt_wav= 契约（端点随 fork，见 backends.md）。
 # (URL_env, 参考音 env 前缀, 显示名, HTTP 超时秒)，按优先级取第一个设了 URL 的；任一存在即优先于 MiniMax/火山。
-# 后端清单单一真值源在 common/voice_backends.py（候选快照+适配层）；此处只取用，不再各抄一份。
+# 后端清单单一真值源在 skills/n2d/_lib/voice_backends.py（候选快照+适配层）；此处只取用，不再各抄一份。
 try:
     from voice_backends import zs_specs_legacy as _zs_legacy  # noqa: E402
     ZS_SPECS=[tuple(t) for t in _zs_legacy()]
@@ -348,7 +348,9 @@ if placeholders:
 if LANG == 'zh' and os.environ.get('N2D_UPDATE_PROGRESS', '1') != '0':
     prog = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'n2d', 'progress.py'))
     try:
-        progress_value = '⏳rough' if placeholders else '✅'
+        # 占位判定走单一真值源：不仅静音回退算占位，say 占位级音色（voice_key=say:...）
+        # 也算——否则 say 有声会误写 ✅，而 finalize/validate 用同一谓词判 12/12 占位、口径打架。
+        progress_value = '⏳rough' if manifest_is_placeholder(manifest) else '✅'
         subprocess.run(['python3', prog, 'set', ROOT, EP, '配音', progress_value], check=False)
     except Exception:
         pass

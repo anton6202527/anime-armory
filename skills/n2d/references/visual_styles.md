@@ -1,6 +1,6 @@
 # 基础视觉风格（选择点 `基础视觉风格`）
 
-本文件只定义可选风格和派生规则。用户的实际选择写入 `<作品根>/_设置.md`，不写进 skill 源码。新项目在写 `设定库/global_style.md` 前先定本项；已有项目按 `_设置.md` / `global_style.md` 沉默沿用。脚本侧预设落在 `skills/common/n2d_visual_styles.py`，改菜单或预设时需要同步本页与脚本。
+本文件只定义可选风格和派生规则。用户的实际选择写入 `<作品根>/_设置.md`，不写进 skill 源码。新项目在写 `设定库/global_style.md` 前先定本项；已有项目按 `_设置.md` / `global_style.md` 沉默沿用。脚本侧预设落在 `skills/n2d/_lib/n2d_visual_styles.py`，改菜单或预设时需要同步本页与脚本。
 
 ## 使用规则
 

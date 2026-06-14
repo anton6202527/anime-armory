@@ -1,6 +1,6 @@
 ---
 name: ad-review
-description: 拍广告 M0 质检/自审 — 投放前检查广告主片与交付包的硬阻断项：成片存在、广告法机检 0 block、VO 非占位、AI 使用披露与水印状态、交付矩阵回写、产品/logo/品牌包装人工复核提示。Use when asked 广告质检, 广告审片, 投放前检查, 品牌一致性审查, ad-review for a 拍广告 project.
+description: 拍广告 M0 质检/自审 — 投放前检查广告主片与交付包的硬阻断项：成片存在、广告法机检 0 block、VO 非占位、AI 使用披露留痕存在、交付矩阵回写、产品/logo/品牌包装人工复核提示。Use when asked 广告质检, 广告审片, 投放前检查, 品牌一致性审查, ad-review for a 拍广告 project.
 ---
 
 # ad-review — 拍广告 · M0 质检/自审
@@ -23,7 +23,7 @@ python3 skills/ad-review/scripts/review.py "<作品根>" --json "<作品根>/合
 4. **万能安全区核查**：确认核心产品和 USP 落在 8x8 网格中心，无遮挡且适配裁切。
 5. **视觉虚假宣传检测**：核对产品比例与真人比例的逻辑合理性。
 6. `配音/时长清单.json.has_placeholder=false`。
-4. `合规/ai_usage.json` 存在，且水印/AI 标识不是“未记录”。
+4. `合规/ai_usage.json` AI 使用披露留痕存在。（AI 标识/水印不再由本流水线把关，移到工具之外由使用方按平台/地区法规自行处理。）
 5. `_进度.md` 的交付矩阵至少有主片路径；缺回写则先跑 `ad-compose/deliver.py --mark-existing`。
 6. 产品/logo/品牌色/字幕/音画同步列为人工复核清单。
 

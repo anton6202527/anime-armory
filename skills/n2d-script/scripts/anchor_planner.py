@@ -50,6 +50,11 @@ try:
 except Exception:  # 退化：settings 不可用时按全局默认（开启）走，不阻断规划
     def get_setting(root, key, default=None):  # type: ignore
         return default
+try:
+    from n2d_platform_profiles import backend_supports_three_plus_frames
+except Exception:  # 退化：能力档不可用时按"支持"（向前看·强制三帧）走
+    def backend_supports_three_plus_frames(backend, channel=None):  # type: ignore
+        return True
 
 HIGH_MOTION_TEMPLATES = {
     "fight_exchange", "chase", "magic_burst", "flight",
@@ -316,7 +321,8 @@ def plan_episode(root: str, ep: str, *, min_seg: float = 4.0, target_seg: float 
 def write_back(root: str, ep: str, plan: Dict[str, Any]) -> int:
     """把 plan 注回 storyboard.json 的 continuity.anchors（原子写）；返回写入 Clip 数。
     default_midframe 模式下同时写 policy.midframe_default=true 和豁免镜的
-    continuity.midframe_exempt_reason（gate 据此强制三帧契约）。"""
+    continuity.midframe_exempt_reason（gate 据此强制三帧契约）；关闭模式写
+    policy.midframe_default=false 作为逃生舱（gate 默认铁律据此跳过本剧的三帧强制）。"""
     path = storyboard_path(root, ep)
     sb = load_json(path)
     if not isinstance(sb, dict):
@@ -339,6 +345,10 @@ def write_back(root: str, ep: str, plan: Dict[str, Any]) -> int:
             cont["midframe_exempt_reason"] = exempt_by_index[i]["reason"]
     if default_mode:
         sb.setdefault("policy", {})["midframe_default"] = True
+    else:
+        # 三帧契约默认铁律下，gate 缺 policy=按强制；选择点「中段锚帧默认=关闭」是逃生舱，
+        # 必须把 false 显式写进 storyboard，否则只规划了 R1/R2/R3 锚的镜外其余镜会被 gate 拦。
+        sb.setdefault("policy", {})["midframe_default"] = False
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
         json.dump(sb, f, ensure_ascii=False, indent=2)
@@ -376,13 +386,20 @@ def render_md(plan: Dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def resolve_default_midframe(force_on: bool, force_off: bool, setting_value: Optional[str]) -> bool:
-    """「中段锚帧默认」选择点解析：CLI 显式 --default-midframe / --no-default-midframe 优先；
-    否则按项目 `_设置.md` 值，缺省=开启（三帧契约全局默认）。纯函数·可测。"""
+def resolve_default_midframe(force_on: bool, force_off: bool, setting_value: Optional[str],
+                             backend_capable: Optional[bool] = None) -> bool:
+    """三帧契约默认开关解析（能力门控铁律）。优先级：
+      1. CLI --default-midframe → True；--no-default-midframe → False（dev/临时覆盖）。
+      2. 路由后端支持 ≥3 帧（backend_capable=True）→ True：能力门控铁律，不因 cost/风格关闭，
+         覆盖项目设置「中段锚帧默认=关闭」。
+      3. 否则（后端不支持 ≥3 帧 / 未传能力）→ 按 `_设置.md` 值，缺省=开启。
+    纯函数·可测。"""
     if force_on:
         return True
     if force_off:
         return False
+    if backend_capable:
+        return True
     return "关闭" not in str("开启" if setting_value is None else setting_value)
 
 
@@ -407,10 +424,11 @@ def main(argv: Optional[List[str]] = None) -> int:
     args = ap.parse_args(argv)
 
     root = os.path.abspath(args.project_root)
-    # 「中段锚帧默认」选择点：全局默认=开启（三帧契约）。CLI 显式标志优先于项目 _设置.md。
+    # 三帧契约能力门控：路由视频后端支持 ≥3 帧时强制开（覆盖设置关闭，不因 cost）；CLI 标志最高优先。
+    backend_capable = backend_supports_three_plus_frames(get_setting(root, "生视频AI", "") or None)
     default_mid = resolve_default_midframe(
         args.default_midframe, args.no_default_midframe,
-        get_setting(root, "中段锚帧默认", "开启"))
+        get_setting(root, "中段锚帧默认", "开启"), backend_capable)
     plan = plan_episode(root, args.episode, min_seg=args.min_segment,
                         target_seg=args.target_segment, fight_target=args.fight_target,
                         long_shot_threshold=args.long_shot_threshold,

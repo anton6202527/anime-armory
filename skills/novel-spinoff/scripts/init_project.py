@@ -4,14 +4,14 @@
 init_project.py — 建外传项目骨架；docx → txt 抽取；调 extract_anchors 做粗筛。
 
 用法:
-    python3 init_project.py <原作路径> \\
-        --character "<配角名>" \\
-        --mode parallel|sequel|branch \\
-        --scale short|medium|long|微短剧|漫剧 \\
-        [--target-chapters N] \\
-        [--branch-point "第N章"] \\
-        [--person first|third-limited] \\
-        [--out <输出根>] \\
+    python3 init_project.py <原作路径> \
+        --character "<配角名>" \
+        --mode parallel|sequel|branch \
+        --scale short|medium|long|微短剧|漫剧 \
+        [--target-chapters N] \
+        [--branch-point "第N章"] \
+        [--person first|third-limited] \
+        [--out <输出根>] \
         [--i-have-rights]
 
 依赖: python-docx (仅当原作是 .docx 时)
@@ -23,62 +23,24 @@ import shutil
 import sys
 from datetime import date
 
+# Standardized imports from novel/_lib
+LIB = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "novel", "_lib"))
+if LIB not in sys.path:
+    sys.path.insert(0, LIB)
+
+from novel_contract import (base_meta, build_progress_markdown, routing_stages,
+                            SCALE_CHOICES, scale_profile, detect_rights_status,
+                            docx_to_txt, write_project_settings, demo_chapters_for,
+                            normalize_scale)
+
 # 让本脚本能 import 同目录下 extract_anchors
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from extract_anchors import scan_candidates, write_anchor_table
-# 共享工具（docx→txt / 版权判定 / 落 _设置.md）上移至 novel-craft，避免各 init 各写一份
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                "..", "..", "novel-craft", "scripts"))
-from contract import (AI_TEXT_USAGE_MODES, CHAPTER_GRANULARITY, NOVEL_DRAFT_MODES,
-                      SCALE_CHOICES, SCALE_PROFILES, base_meta, demo_chapters_for,
-                      derived_stage_markdown, normalize_scale, parse_outputs, scale_profile)
-from derive_common import build_rights_metadata, docx_to_txt, detect_rights_status, write_settings
-
-SCALE_PROFILE = SCALE_PROFILES  # backwards-compatible alias for tests/importers
 
 
 def detect_source_title(novel_path):
     base = os.path.splitext(os.path.basename(novel_path))[0]
     return base
-
-
-def build_progress_md(meta):
-    n = meta["target_chapters"]
-    rows = []
-    for i in range(1, n + 1):
-        rows.append(f"| {i:02d} |  | - | - | [ ] |")
-    chapters_table = "\n".join(rows)
-    light_scans = "\n".join(
-        f"- [ ] 轻量扫描（第 {a}-{min(a+4, n)} 章）"
-        for a in range(1, n + 1, 5)
-    )
-    outputs = meta["outputs"]
-    out_lines = "\n".join(f"- [ ] {fmt}" for fmt in outputs)
-    return f"""# 进度
-
-{derived_stage_markdown("spinoff")}
-
-## 准备阶段
-- [x] 项目骨架
-- [x] 锚点表粗筛
-- [ ] 锚点表精筛
-- [ ] 角色卡
-- [ ] 世界观卡
-- [ ] 章纲（用户已确认）
-
-## 写作阶段
-| 章 | 标题 | 锚点 | 字数 | 状态 |
-|---|---|---|---|---|
-{chapters_table}
-
-## 回扫阶段
-{light_scans}
-- [ ] 全量一致性扫描
-- [ ] 锚点对齐验证
-
-## 导出
-{out_lines}
-"""
 
 
 def build_character_card_skeleton(character_name, source_title, mode):
@@ -173,11 +135,11 @@ def main():
                     help="逗号分隔，可含 txt,docx,outline,n2d")
     ap.add_argument("--target-platform", default="跨平台",
                     help="目标平台（第 3 步书名候选用）：起点/晋江/抖音漫剧/番茄/红果/历史向/跨平台")
-    ap.add_argument("--draft-mode", default="稳妥初稿", choices=NOVEL_DRAFT_MODES,
+    ap.add_argument("--draft-mode", default="稳妥初稿", choices=["极速初稿", "稳妥初稿", "商业连载", "漫剧源书"],
                     help="小说生成模式：决定速度/质量 gate 密度")
-    ap.add_argument("--chapter-granularity", default="逐章", choices=CHAPTER_GRANULARITY,
+    ap.add_argument("--chapter-granularity", default="逐章", choices=["逐章", "小批", "全书草稿"],
                     help="章节生成粒度：逐章/小批/全书草稿")
-    ap.add_argument("--ai-text-usage", default=None, choices=AI_TEXT_USAGE_MODES,
+    ap.add_argument("--ai-text-usage", default=None, choices=["AI-generated", "AI-assisted", "未使用AI文本"],
                     help="发布披露用：AI-generated / AI-assisted / 未使用AI文本")
     ap.add_argument("--i-have-rights", action="store_true",
                     help="原作非公版时声明你有权使用")
@@ -223,13 +185,7 @@ def main():
     # 版权状态
     rights_status = detect_rights_status(novel_txt, args.i_have_rights)
     if rights_status == "unknown":
-        print(
-            "[err] 无法判定原作版权状态。\n"
-            "    若是公版来源（如用 novel-fetch 抓的 Gutenberg/维基文库），\n"
-            "    请在原作 txt 头加 `# copyright: public-domain` 注释；\n"
-            "    若是你自有/已授权的原作，重跑时加 --i-have-rights。",
-            file=sys.stderr,
-        )
+        print("[err] 无法判定原作版权状态。", file=sys.stderr)
         shutil.rmtree(out_root)
         sys.exit(2)
 
@@ -238,16 +194,10 @@ def main():
     profile = scale_profile(scale)
     if args.target_chapters is not None:
         profile["target_chapters"] = args.target_chapters
-    outputs = parse_outputs(args.outputs)
-    # Demo 章数按规模
+    outputs = [s.strip() for s in args.outputs.split(",")]
     demo_chapters = demo_chapters_for(profile["target_chapters"])
+    
     meta = base_meta("spinoff", outputs=outputs, rights_status=rights_status)
-    meta.update(build_rights_metadata(
-        rights_status,
-        i_have_rights=args.i_have_rights,
-        rights_jurisdiction=args.rights_jurisdiction,
-        distribution_regions=args.distribution_regions,
-    ))
     meta.update({
         "source_novel": source_path,
         "source_title": source_title,
@@ -268,14 +218,16 @@ def main():
         "chapter_granularity": args.chapter_granularity,
         "ai_text_usage": args.ai_text_usage,
     })
-    with open(os.path.join(out_root, "_meta.json"), "w", encoding="utf-8") as f:
-        json.dump(meta, f, ensure_ascii=False, indent=2)
-    write_settings(out_root, {
+    
+    W = lambda rel, txt: open(os.path.join(out_root, rel), "w", encoding="utf-8").write(txt)
+    json.dump(meta, open(os.path.join(out_root, "_meta.json"), "w", encoding="utf-8"),
+              ensure_ascii=False, indent=2)
+    
+    write_project_settings(out_root, {
         "目标平台": args.target_platform,
         "权利来源": rights_status,
         "权利辖区": meta.get("rights_jurisdiction", ""),
         "发行地区": ",".join(meta.get("distribution_regions") or []) or "未定",
-        "篇幅档": f"{scale}（{profile['target_chapters']}章×{profile['words_per_chapter'][0]}-{profile['words_per_chapter'][1]}字）",
         "外传模式": args.mode,
         "输出格式": ",".join(outputs) + "（novel-craft/scripts/export.py）",
         "小说生成模式": args.draft_mode,
@@ -284,20 +236,16 @@ def main():
     }, note="外传：配角平行视角，锚点处锁原作事件。")
 
     # 设定卡骨架
-    with open(os.path.join(out_root, "设定", "角色卡.md"), "w", encoding="utf-8") as f:
-        f.write(build_character_card_skeleton(args.character, source_title, args.mode))
-    with open(os.path.join(out_root, "设定", "世界观.md"), "w", encoding="utf-8") as f:
-        f.write(build_worldview_skeleton(source_title))
-    with open(os.path.join(out_root, "设定", "章纲.md"), "w", encoding="utf-8") as f:
-        f.write(build_outline_skeleton(meta))
+    W("设定/角色卡.md", build_character_card_skeleton(args.character, source_title, args.mode))
+    W("设定/世界观.md", build_worldview_skeleton(source_title))
+    W("设定/章纲.md", build_outline_skeleton(meta))
 
     # 锚点粗筛
     candidates = scan_candidates(novel_txt, args.character)
     anchor_path = write_anchor_table(out_root, args.character, novel_txt, candidates)
 
     # _进度.md
-    with open(os.path.join(out_root, "_进度.md"), "w", encoding="utf-8") as f:
-        f.write(build_progress_md(meta))
+    W("_进度.md", build_progress_markdown(project_name, "spinoff", profile["target_chapters"]))
 
     # 报告
     print(f"[ok] 项目骨架 → {out_root}")

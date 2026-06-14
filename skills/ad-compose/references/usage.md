@@ -47,7 +47,8 @@ ffmpeg -i 成片_主片.mp4 -af loudnorm=I=-16:TP=-1:LRA=11 -c:v copy 合成/交
 python3 skills/ad-compose/deliver.py "<作品根>" --mark-existing
 ```
 
-## AI 标识 + 披露（投放前必做）
+## AI 使用披露（投放前必做）
 
-1. `ad-watermark` 打 AI 标识（可见 + 元数据，只加不去）。
-2. `ad-craft/scripts/ai_usage.py` 记 AI 使用 + 授权（音乐/代言人/字体/素材）。
+`ad-craft/scripts/ai_usage.py` 记 AI 使用 + 授权（音乐/代言人/字体/素材）。
+
+> AI 标识/水印不再由本流水线处理：ad-compose 出成片/交付件即收尾，不再生成可见 AI 标识/水印、不再调用任何 watermark skill。若投放地区/平台需要 AI 标识，由使用方在工具之外按当地法规自行处理。

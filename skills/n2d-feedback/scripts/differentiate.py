@@ -52,7 +52,7 @@ def default_ledger_path(start: str = ".") -> str:
         return env
     cur = os.path.abspath(start)
     while True:
-        if os.path.isdir(os.path.join(cur, "skills")) or os.path.isdir(os.path.join(cur, ".git")):
+        if os.path.isdir(os.path.join(cur, "skills")) or os.path.isfile(os.path.join(cur, "AGENTS.md")):
             return os.path.join(cur, LEDGER_REL_PATH)
         parent = os.path.dirname(cur)
         if parent == cur:

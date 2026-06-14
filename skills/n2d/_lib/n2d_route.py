@@ -197,7 +197,10 @@ def _is_placeholder_voice_row(row: dict) -> bool:
     if row.get("占位"):
         return True
     voice_key = str(row.get(VOICE_KEY_FIELD) or row.get("voice_key") or "")
-    if voice_key.endswith(VOICE_KEY_PLACEHOLDER_SUFFIX):
+    # macOS say is an emergency/placeholder backend, never a registered timbre — any
+    # say: voice_key is placeholder-grade regardless of marker separator (canonical
+    # `say:<voice>_placeholder` and legacy `say:<voice>#placeholder` both count).
+    if voice_key.startswith("say:") or voice_key.endswith(VOICE_KEY_PLACEHOLDER_SUFFIX) or "#placeholder" in voice_key:
         return True
     voice_id = str(row.get("voice_id") or "")
     return voice_id.startswith("say:")

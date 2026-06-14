@@ -17,6 +17,7 @@ description: Shared writing-primitives and deterministic production helpers for 
 | **读者契约 / 题旨契约** | `references/reader-contract.md` | 蓝图/spec/章纲通过后固化 `设定/读者契约.md`；Demo gate 同步 `reader_contract`；每章任务包用它防止偏题、承诺遗忘和文学质感变薄 |
 | **设定圣经 schema（统一·单一真值源）** | `references/setting-bible.md` | 建设定/角色卡/世界观时——create 从零建、spinoff/rewrite/continue 从原作抽改，**都用这一套字段**（含金手指必有代价 + 首现章/复用范围一致性三列） |
 | **批量写章闭环** | `references/draft-pipeline.md` | Demo 过审后进入 draft；需要任务包、状态增量、章节生成粒度、写章回扫时 |
+| **三段式精品写章** | `references/trio-pipeline.md` | `商业连载` / `漫剧源书` / `小说生成工作流=三步迭代`；每章拆成 Architect → Ghostwriter → Senior Editor 三个任务包 |
 | **派生流水线后半段（rewrite/continue/expand/condense/spinoff 共用）** | `references/derive-pipeline.md` | 任一派生 skill 的阶段表 / demo_gate / draft / export / ai_usage 通用机制——各 skill 只写自己的 source_model/direction_spec 映射，通用部分引此 |
 | 拆分标准（章 / 集 边界 + 字数分档） | `references/split.md` | 章纲编织**之前**先定总章数与字数分档 |
 | 章纲编织 | `references/outline.md` | 拆分定下后；进入逐章写作前 |
@@ -38,14 +39,14 @@ description: Shared writing-primitives and deterministic production helpers for 
 | `scripts/export.py` | 章节/第NN章.md 合并 → txt / docx / 大纲 / n2d-script 目录；默认执行 export QA gate，缺 review 或阻断未清不能导出；`--ignore-qa-gate` 会写带章节 hash / blocker ids / formats 的 waiver log；`--combine` 走续写合本 | create / spinoff / rewrite / expand / condense / continue **共用同一份** |
 | `scripts/progress.py` | 扫描 `<作品根>/_进度.md`，输出第一条未完成项 + stage owner/gate/on_fail + QA 阻断；`set <stage> done|todo` 通过 `_进度.lock` 加锁原子更新机器阶段 | 所有会写 `_进度.md` 的 novel-* 项目 |
 | `scripts/draft_queue.py` | 批量写章队列：初始化待写章节、claim 租约认领、done/fail/todo 标记，避免小批/多代理重复写同一章 | `draft` 阶段，尤其小批/全书草稿 |
-| `scripts/draft_packets.py` | 生成 `写作任务/第NN章.md` + 初始化 `审稿/state_ledger.json`；默认要求 Demo gate passed；不调用 AI | 所有 `draft` 阶段，先包上下文再写章 |
+| `scripts/draft_packets.py` | 生成 `写作任务/第NN章.md` 或三段式 `第NN章_{architect,ghostwriter,editor}.md` + 初始化 `审稿/state_ledger.json`；默认要求 Demo gate passed；不调用 AI | 所有 `draft` 阶段，先包上下文再写章；商业连载/漫剧源书默认三段式 |
 | `scripts/reconcile_ledger.py` | 输出正文/Delta 核对 prompt；仅在提供已通过核对的 `--verified` JSON 后合并入 `state_ledger.json` | 所有 `draft` 阶段，写章后同步状态 |
 | `scripts/ai_usage.py` | 写 `合规/ai_usage.json` + `合规/AI使用说明.md`，记录 AI-generated / AI-assisted / 未使用 AI 文本 | 发布、导出、交平台前 |
 
 ## 工业化生产线（批量写章闭环）
 
-1.  **准备阶段**：先用 `python3 skills/novel-craft/scripts/draft_queue.py <作品根> init` 建队列；小批/多代理写章时用 `claim --agent <名字>` 认领章节，再跑 `python3 skills/novel-craft/scripts/draft_packets.py <作品根> --chapter NN`。任务包内含本章章纲、前文摘要、风格锚点及**当前状态账本（State Ledger）**快照。
-2.  **写章阶段**：按任务包要求完成 `章节/第NN章.md`，并根据内容填写 `审稿/state_delta_第NN章.json`（记录本章引入的新事实、人设变动、新线索）。
+1.  **准备阶段**：先用 `python3 skills/novel-craft/scripts/draft_queue.py <作品根> init` 建队列；小批/多代理写章时用 `claim --agent <名字>` 认领章节，再跑 `python3 skills/novel-craft/scripts/draft_packets.py <作品根> --chapter NN`。任务包内含本章章纲、前文摘要、风格锚点及**当前状态账本（State Ledger）**快照。`商业连载` / `漫剧源书` 或 `_设置.md` 写 `小说生成工作流：三步迭代` 时，默认生成 `_architect`、`_ghostwriter`、`_editor` 三份任务包；显式 `--step full` 可降回单包，显式 `--step trio` 可强制三包。
+2.  **写章阶段**：普通项目按 `第NN章.md` 完成 `章节/第NN章.md`；三段式按 `_architect` 产 beats、`_ghostwriter` 产 draft、`_editor` 写最终正文。然后根据内容填写 `审稿/state_delta_第NN章.json`（记录本章引入的新事实、人设变动、新线索）。
 3.  **对账与同步**：
     -   **Audit**：`python3 skills/novel-craft/scripts/reconcile_ledger.py <作品根> --chapter NN --audit`，用输出 prompt 核对正文与 Delta 是否一致，防止「记了没写」或「写了没记」。
     -   **Merge**：把核对结论保存成 `审稿/state_verify_第NN章.json`（必须含 `chapter: NN`、`status: ok`、`chapter_file_hash`、`delta_hash`；hash 由 audit prompt 给出），再跑 `python3 skills/novel-craft/scripts/reconcile_ledger.py <作品根> --chapter NN --merge --verified 审稿/state_verify_第NN章.json`。未经验证不合并，泛化 `{"status":"ok"}` 不合并；正文或 delta 改动导致 hash 不匹配时必须重新 audit。
@@ -59,7 +60,7 @@ python3 skills/novel-craft/scripts/export.py "<作品根>" --formats txt,docx,ou
 - `--formats` 缺省读 `_meta.json.outputs`；书名缺省按 `_meta.json` 的 `kind` 推导（spinoff=「原作-配角外传」、expand=「原作-扩写」、condense=「原作-精简」、continue=「原作-续写」、rewrite=「原作-改写」、create=`title`）。
 - 导出前默认要求 `审稿/review_report.json` 存在，并读取 `评分/score_report.json`；报告必须符合 `qa-report-schema.md` 且带 `source_snapshot` 绑定当前 `章节/` 正文 hash，正文新增、删除或改动后旧报告会阻断。商业连载/漫剧源书或目标平台含红果/番茄/抖音/漫剧时，缺 score 也阻断；其他项目缺 score 显示 warning。确需跳过评分，用 `report_gate.py --waive-missing-score --reason "<原因>"` 写带章节 hash 的豁免；只有用户明确要求强制导出时才加 `--ignore-qa-gate`，并自动写带作用域的 `审稿/waiver_log.jsonl`。
 - 若未传 `--formats` 且 `_meta.json.outputs` 缺失 / 为空，导出器会直接报错，不再“成功但无产物”。
-- 含 `n2d` 时**自动把交接稿铺进 `制漫剧/<书名>/小说/<书名>.docx` + `_n2d_handoff.json`（留痕来源/版权/hash）**——落点是 n2d 标准作品根，`split_novel.py` 直接吃该 docx 即把生产树建在正确位置，**无需 `--out`、不用人工搬运**；export 末尾打印可一键运行的 split 命令。`--n2d-dest` 显式指定落点；找不到含『制漫剧/』的仓库根时回退项目内 `导出/n2d-script/`（此时 split 须带 `--out`，脚本会提示）。
+- 含 `n2d` 时**自动把交接稿铺进 `制漫剧/<书名>/小说/<书名>.docx` + `_n2d_handoff.json` + `asset_registry_preflight.json`（留痕来源/版权/hash/资产标签预检）**——落点是 n2d 标准作品根，`split_novel.py` 直接吃该 docx 即把生产树建在正确位置，**无需 `--out`、不用人工搬运**；export 末尾打印可一键运行的 split 命令。`--n2d-dest` 显式指定落点；找不到含『制漫剧/』的仓库根时回退项目内 `导出/n2d-script/`（此时 split 须带 `--out`，脚本会提示）。
 - 依赖：`python-docx`（仅 docx/n2d 格式时）。
 
 ```bash
@@ -83,6 +84,7 @@ python3 skills/novel-craft/scripts/draft_queue.py "<作品根>" done 4 --agent a
 python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --chapter 4
 python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --range 4-8
 python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --next
+python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --chapter 4 --step trio
 ```
 
 ```bash
@@ -100,6 +102,8 @@ python3 skills/novel-craft/scripts/ai_usage.py "<作品根>" --text-mode AI-gene
 - 用户在写完全原创小说没有锚点约束 → 本 skill 的 chapter.md / outline.md 仍可用。
 
 ## 设计原则
+
+> 跨线通用原则（选择点不写死 C1/C2、脚本不伪装云端自动化 B4、合规闸门 D1…）见 [`docs/skill-design-principles.md`](../../docs/skill-design-principles.md)，此处只列 novel 线特有原则。
 
 - **不抢写作权**：`draft_packets.py` 只生成任务包和状态模板，不直接生成正文；正文仍由当前 novel skill / agent 按项目目标写。
 - **可独立摘录**：每个 references 文件都是自包含的，引用方可以只摘其中一节。

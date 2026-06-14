@@ -175,12 +175,23 @@ def test_load_seam_intents_parses_storyboard(tmp_path):
     (d / "storyboard.json").write_text(json.dumps({"clips": [
         {"id": "EP01_CLIP01", "continuity": {"transition": "match_cut"}},
         {"id": "EP01_CLIP02", "need_end_frame": True, "continuity": {"transition": "接力"}},
+        {"id": "EP01_CLIP03", "continuity": {"transition": "hard_cut", "need_endframe": True}},
+        {"id": "EP01_CLIP04", "continuity": {"need_endframe": True}},
         "junk",
     ]}), encoding="utf-8")
     intents = tc.load_seam_intents(str(tmp_path), "第1集")
     assert intents[1]["transition"] == "match_cut" and not intents[1]["relay"]
     assert intents[2]["relay"] is True
+    assert intents[3]["transition"] == "hard_cut" and not intents[3]["relay"]
+    assert intents[4]["transition"] is None and intents[4]["relay"] is True
     assert tc.load_seam_intents(str(tmp_path), "第99集") == {}
+
+
+def test_anchor_png_names_are_not_first_frames():
+    assert tc._is_anchor_png_name("Clip_02_左腕旧疤_mid.png") is True
+    assert tc._is_anchor_png_name("Clip_02_左腕旧疤_a1.png") is True
+    assert tc._is_anchor_png_name("Clip_02_左腕旧疤.png") is False
+    assert tc._is_anchor_png_name("Clip_02_end.png") is False
 
 
 def test_seam_analyze_reports_truth_source_contradiction(tmp_path):
@@ -210,3 +221,26 @@ def test_seam_analyze_reports_truth_source_contradiction(tmp_path):
     res2 = tc.seam_analyze(str(tmp_path), "第1集")
     assert res2["contradictions"] == []
     assert any(s["verdict"] in ("warn", "block") for s in res2["seams"])
+
+
+def test_adaptive_frame_count_floor_and_density():
+    # 无时长 → floor
+    assert tc.adaptive_frame_count(None) == tc.DEFAULT_FRAMES
+    assert tc.adaptive_frame_count(0) == tc.DEFAULT_FRAMES
+    # 短镜（3s）不低于 floor
+    assert tc.adaptive_frame_count(3.0) == tc.DEFAULT_FRAMES
+    # 长镜 ≈1帧/秒
+    assert tc.adaptive_frame_count(15.0) == 15
+    # 近景加密 ×1.5
+    assert tc.adaptive_frame_count(10.0, closeup=True) == 15
+    assert tc.adaptive_frame_count(10.0, closeup=False) == 10
+    # cap 封顶
+    assert tc.adaptive_frame_count(120.0) == tc.SAMPLE_CAP
+    assert tc.adaptive_frame_count(120.0, closeup=True) == tc.SAMPLE_CAP
+
+
+def test_is_closeup_lens_markers():
+    assert tc._is_closeup_lens("CU 50mm 缓推") is True
+    assert tc._is_closeup_lens("特写反打") is True
+    assert tc._is_closeup_lens("WS 远景") is False
+    assert tc._is_closeup_lens("") is False

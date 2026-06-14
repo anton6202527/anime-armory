@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # mv 自带歌词渲染器（无 libass 时的字幕降级）——把 .lrc / .ass 渲染成逐行透明 PNG，
 # 并产出 ffmpeg overlay 用的 sub_inputs.txt + sub_filter.txt。解析/字体/overlay 链复用
-# common/subtitle_render 共享原语（不依赖其他生产线 skill）；逐行描边/版式本地保留。
+# skills/mv/_lib/subtitle_render.py（不依赖其他生产线 skill）；逐行描边/版式本地保留。
 # 用法: render_lyrics.py <src .lrc|.ass> <workdir> <W> <H>
 import sys, os
 

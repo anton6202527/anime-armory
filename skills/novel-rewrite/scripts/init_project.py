@@ -21,13 +21,15 @@ import shutil
 import sys
 from datetime import date
 
-# 共享工具（docx→txt / 版权判定 / 落 _设置.md）上移至 novel-craft，避免各 init 各写一份
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                "..", "..", "novel-craft", "scripts"))
-from contract import (AI_TEXT_USAGE_MODES, CHAPTER_GRANULARITY, NOVEL_DRAFT_MODES,
-                      SCALE_CHOICES, SCALE_PROFILES, base_meta, demo_chapters_for,
-                      derived_stage_markdown, normalize_scale, parse_outputs, scale_profile)
-from derive_common import build_rights_metadata, docx_to_txt, detect_rights_status, write_settings
+# Standardized imports from novel/_lib
+LIB = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "novel", "_lib"))
+if LIB not in sys.path:
+    sys.path.insert(0, LIB)
+
+from novel_contract import (base_meta, build_progress_markdown, routing_stages,
+                            SCALE_CHOICES, scale_profile, detect_rights_status,
+                            docx_to_txt, write_project_settings, demo_chapters_for,
+                            normalize_scale)
 
 SCALE_PROFILE = SCALE_PROFILES  # backwards-compatible alias for tests/importers
 
@@ -270,9 +272,14 @@ def main():
     W("设定/角色卡.md", build_character_card(source_title))
     W("设定/世界观.md", build_worldview(source_title))
     W("设定/章纲.md", build_outline(n, args.rewrite_type))
-    W("_进度.md", build_progress(meta))
+    # ... (inside main)
+    # W("_进度.md", ...) around line 240
+    W("_进度.md", build_progress_markdown("<新书名待定>", "rewrite", n))
 
     print(f"[ok] 改写项目骨架 → {out_root}")
+
+def parse_outputs(value):
+    return [s.strip() for s in value.split(",") if s.strip()]
     print(f"     原作.txt        ← {ext} 抽取（参考素材，非底稿）")
     print(f"     设定/改动spec.md ← 骨架（第 2 步填：保留/改/加 三栏）★最重要")
     print(f"     设定/新设定.md   ← 骨架（第 3 步填：新增/覆盖设定 + 一致性约束）")

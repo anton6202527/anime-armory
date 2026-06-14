@@ -34,8 +34,41 @@ def test_cross_cutting_glob_reports_episode_coverage(tmp_path: Path) -> None:
     scan.report(str(tmp_path), out)
     report = "\n".join(out)
 
-    assert "自动审片评分(n2d-score) ◐1/3" in report
-    assert "人审可视化(n2d-review-ui) ○0/3" in report
+    # 断言用稳定的 skill id + 覆盖标记，不耦合易变的中文 label（label 是契约单一真值源，
+    # 改名/增删 skill 都不该让本测试变脆——它测的是“逐集 glob 产物按 N/M 计覆盖”这件事）。
+    # score_第1集.json 存在 1/3 → ◐1/3；无 skill_update_plan → ○0/3（非前置、glob、0 命中）。
+    assert "(n2d-score) ◐1/3" in report
+    assert "(n2d-update) ○0/3" in report
+
+
+def test_one_broken_work_does_not_blank_whole_board(tmp_path, monkeypatch, capsys) -> None:
+    # 仪表盘韧性：一部剧扫描抛非 OSError/ValueError 异常时，其余剧仍正常出报告，
+    # 整块看板不能因一部坏剧而全空白。
+    (tmp_path / "skills").mkdir()
+    (tmp_path / "AGENTS.md").write_text("x", encoding="utf-8")
+    line = tmp_path / "制漫剧"
+    for name in ("好剧", "坏剧"):
+        d = line / name
+        d.mkdir(parents=True)
+        (d / "_进度.md").write_text(
+            "| 集 | raw | 剧本改编 |\n|---|---|---|\n| 第1集 | ✅ | ✅ |\n", encoding="utf-8"
+        )
+
+    real_report = scan.report
+
+    def flaky_report(root, out):
+        if str(root).endswith("坏剧"):
+            raise RuntimeError("boom")
+        real_report(root, out)
+
+    monkeypatch.setattr(scan, "report", flaky_report)
+
+    rc = scan.main(["--root", str(tmp_path)])
+    captured = capsys.readouterr().out
+    assert rc == 0
+    assert "好剧" in captured                       # 正常剧仍出报告
+    assert "扫描失败，跳过本剧" in captured           # 坏剧被隔离
+    assert "RuntimeError: boom" in captured
 
 
 def test_findings_report_distinguishes_stale_from_active(tmp_path: Path) -> None:

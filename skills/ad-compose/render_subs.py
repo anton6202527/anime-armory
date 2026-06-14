@@ -3,8 +3,8 @@
 """字幕 PNG 渲染（本机 ffmpeg 无 libass/drawtext，走 Pillow 渲 PNG + overlay）。
 
 读 SRT → 每条字幕渲一张透明 PNG（带描边，安全框内居中底部），输出 PNG + overlay 时间表，
-供 compose.sh 用 ffmpeg overlay 烧进成片。SRT 解析/字体回退复用 common/subtitle_render
-共享原语；描边/版式/overlay_table 本地保留。依赖 Pillow。
+供 compose.sh 用 ffmpeg overlay 烧进成片。SRT 解析/字体回退复用
+skills/ad/_lib/subtitle_render.py；描边/版式/overlay_table 本地保留。依赖 Pillow。
 
 用法：
     python3 render_subs.py 脚本/字幕_zh.srt --out-dir 合成/_work/subs --size 1920x1080

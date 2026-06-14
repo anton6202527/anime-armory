@@ -130,6 +130,36 @@ def test_lint_passes_clean_char_block() -> None:
     assert findings == []   # 参考图/视线/锚点句/身份锁定句/合法ID 齐 → 无 finding
 
 
+def test_character_shot_manifest_extracts_target_png() -> None:
+    blk = _char_block("Clip 02 冷开场")
+    blk["body"] = "**目标存档**：`出图/第1集/图片/Clip_02_冷开场.png`\n" + blk["body"]
+    manifest = image_qc.character_shot_manifest(blk)
+    assert manifest["shot"] == "Clip_02"
+    assert manifest["png"] == "出图/第1集/图片/Clip_02_冷开场.png"
+    assert manifest["identity_refs"] == ["CHAR_01/常态"]
+
+
+def test_character_shot_manifest_skips_no_face_asset_only_shot() -> None:
+    blk = {
+        "label": "Clip 16 毒酒碎裂",
+        "body": (
+            "**目标**：`出图/第1集/图片/Clip_16_毒酒碎裂.png`\n"
+            "**参考图**：`出图/共享/图片/定妆_冷宫寝殿.png`；"
+            "`出图/共享/图片/定妆_毒酒碎瓷.png`\n"
+            "**资产身份注册层**：从 `出图/共享/identity_registry.json` 继承；"
+            "无人物或人物不露脸：以场景/道具锚为主。\n"
+            "**资产引用注册层**：`LOC_01`；`PROP_03`。"
+        ),
+    }
+    assert image_qc.character_shot_manifest(blk) is None
+
+
+def test_character_shot_manifest_skips_explicit_no_face_coverage_shot() -> None:
+    blk = _char_block("Clip 14 左腕特写", char_id="CHAR_01/觉醒态")
+    blk["body"] += "\n**脸部覆盖豁免**：本镜是手腕特写，无可比对人脸；身份由袖口和相邻镜头连续性锁定。"
+    assert image_qc.character_shot_manifest(blk) is None
+
+
 def test_lint_accepts_semantic_char_ids_and_primary_marker() -> None:
     valid = {"CHAR_SHEN", "CHAR_SHEN/受难", "CHAR_LIU"}
     assert image_qc.lint_shot_block(_char_block("Clip 02", char_id="CHAR_SHEN/受难"), valid) == []
@@ -216,6 +246,29 @@ def test_lint_passes_tail_with_image2image_relay() -> None:
     assert not any(f["code"] == "tail_relay_not_image2image" for f in findings)
 
 
+def test_lint_tail_relay_allows_negated_text2image_phrase() -> None:
+    valid = {"CHAR_01/常态"}
+    blk = _char_block("Clip 31 转身")
+    blk["body"] += (
+        "\n**参考图**（多图参考派生铁律：禁纯文生图）"
+        "\n**尾帧接力生成方式**：以 `Clip_31.png` 图生图为母图，只改表情，"
+        "不得纯文生图。接力尾帧 `Clip_31_end.png`"
+    )
+    findings = image_qc.lint_shot_block(blk, valid)
+    assert not any(f["code"] == "tail_relay_not_image2image" for f in findings)
+
+
+def test_lint_tail_relay_blocks_unnegated_text2image_fallback() -> None:
+    valid = {"CHAR_01/常态"}
+    blk = _char_block("Clip 31 转身")
+    blk["body"] += (
+        "\n**尾帧接力生成方式**：以 `Clip_31.png` 图生图为母图，只改表情，"
+        "失败时纯文生图兜底。接力尾帧 `Clip_31_end.png`"
+    )
+    codes = {f["code"]: f["level"] for f in image_qc.lint_shot_block(blk, valid)}
+    assert codes.get("tail_relay_not_image2image") == "block"
+
+
 def test_lint_no_tail_relay_finding_when_shot_has_no_tail() -> None:
     # 没有尾帧的普通角色镜不应被尾帧锁脸铁律误伤
     valid = {"CHAR_01/常态"}
@@ -274,6 +327,134 @@ def test_lint_expression_gate_skips_non_character_shot() -> None:
     # 空镜即便写了近景+情绪词也不触发（非角色镜先被 is_char_shot 挡掉）
     blk = {"label": "Clip 44 空镜", "body": "**景别**：ECU 特写\n残烛痛苦地摇曳，无人物。"}
     assert image_qc.lint_shot_block(blk, {"CHAR_01"}) == []
+
+
+# ── A 资产 id lint 对称化 ───────────────────────────────────────────────────────
+
+def _asset_index() -> dict:
+    return {
+        "ids": {"LOC_01", "PROP_01", "VFX_01"},
+        "name_to_id": {"冷宫寝殿": "LOC_01", "斑驳铜镜": "PROP_01", "暗金妖力脉冲": "VFX_01"},
+        "prefix_of": {"LOC_01": "LOC_", "PROP_01": "PROP_", "VFX_01": "VFX_"},
+    }
+
+
+def test_load_asset_index(tmp_path: Path) -> None:
+    reg = tmp_path / "出图" / "共享"
+    reg.mkdir(parents=True)
+    (reg / "asset_registry.json").write_text(json.dumps({"assets": [
+        {"id": "LOC_01", "type": "scene", "name": "冷宫寝殿",
+         "reference_group": {"primary": "出图/共享/图片/定妆_冷宫寝殿.png"}},
+        {"id": "PROP_01", "type": "prop", "name": "斑驳铜镜",
+         "reference_group": {"primary": "出图/共享/图片/定妆_斑驳铜镜.png"}},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    idx = image_qc.load_asset_index(tmp_path)
+    assert idx["ids"] == {"LOC_01", "PROP_01"}
+    assert idx["name_to_id"]["冷宫寝殿"] == "LOC_01"
+    assert idx["name_to_id"]["斑驳铜镜"] == "PROP_01"   # 由 name 与 reference_group stem 双路映射
+    assert idx["prefix_of"]["PROP_01"] == "PROP_"
+    assert image_qc.load_asset_index(tmp_path / "nope") is None
+
+
+def test_lint_flags_unknown_asset_id() -> None:
+    blk = {"label": "Clip 05 道具", "body": "**资产引用注册层**：`PROP_99`；从 asset_registry 取参考。"}
+    findings = image_qc.lint_shot_block(blk, None, None, _asset_index())
+    codes = {f["code"]: f["level"] for f in findings}
+    assert codes.get("unknown_asset_id") == "block"
+
+
+def test_lint_warns_asset_ref_without_id() -> None:
+    # 用了 定妆_斑驳铜镜（已登记 PROP_01）却没绑 PROP_01 → warn
+    blk = {"label": "Clip 06 铜镜", "body": "**参考图**：`出图/共享/图片/定妆_斑驳铜镜.png`（道具定妆）"}
+    findings = image_qc.lint_shot_block(blk, None, None, _asset_index())
+    codes = {f["code"]: f["level"] for f in findings}
+    assert codes.get("asset_ref_without_id") == "warn"
+
+
+def test_lint_asset_binding_clean_when_id_present() -> None:
+    blk = {"label": "Clip 07", "body": "**参考图**：`定妆_斑驳铜镜.png`；资产引用注册层：`PROP_01`。"}
+    findings = image_qc.lint_shot_block(blk, None, None, _asset_index())
+    assert not any(f["code"] in ("unknown_asset_id", "asset_ref_without_id") for f in findings)
+
+
+def test_lint_asset_runs_on_pure_scene_shot() -> None:
+    # 纯场景镜（非角色镜）也要跑资产 lint，不被 is_char_shot 早返回挡掉
+    blk = {"label": "Clip 08 空镜", "body": "纯场景空镜，用了 `定妆_冷宫寝殿.png` 但没写 LOC 绑定。"}
+    findings = image_qc.lint_shot_block(blk, {"CHAR_01"}, None, _asset_index())
+    assert any(f["code"] == "asset_ref_without_id" for f in findings)
+
+
+def test_lint_asset_skipped_when_no_registry() -> None:
+    blk = {"label": "Clip 09", "body": "`PROP_99` 与 `定妆_斑驳铜镜.png`"}
+    assert image_qc.lint_shot_block(blk, None, None, None) == []   # asset_index=None → 跳过
+
+
+def test_unknown_asset_id_is_hard_lint() -> None:
+    assert "unknown_asset_id" in image_qc.HARD_LINT_CODES
+
+
+# ── B 道具/特效漂移进落档 ──────────────────────────────────────────────────────
+
+def test_summarize_multimodal_is_advisory() -> None:
+    payload = {"checks": {"multimodal": {"available": True, "shots": [
+        {"verdict": "block"}, {"verdict": "warn"}]}}, "lint": {"available": True, "findings": []}}
+    s = image_qc.summarize(payload)
+    assert s["hard_blocks"] == 0          # 道具/特效初筛即便 block 也只算人判
+    assert s["advisory"] == 2
+    assert s["verdict"] == "review"
+
+
+def test_to_findings_emits_multimodal_warn() -> None:
+    payload = {"checks": {"multimodal": {"shots": [
+        {"png": "图片/Clip_05.png", "verdict": "block", "asset": "PROP_01"}]}},
+        "lint": {"findings": []}}
+    fnds = image_qc.to_findings(payload)
+    mm = [f for f in fnds if f["dim"] == "asset_consistency"]
+    assert len(mm) == 1 and mm[0]["sev"] == "warn" and "PROP_01" in mm[0]["msg"]
+
+
+# ── D 场景/道具/特效漂移人审拼图 ───────────────────────────────────────────────
+
+def test_asset_review_targets_scene_and_multimodal() -> None:
+    payload = {"checks": {
+        "scene": {"shots": [{"png": "图片/Clip_03.png", "scene": "冷宫寝殿.png", "verdict": "warn"},
+                            {"png": "图片/Clip_04.png", "scene": "冷宫寝殿.png", "verdict": "ok"}]},
+        "multimodal": {"shots": [{"png": "图片/Clip_07.png", "asset": "PROP_01", "verdict": "block"}]},
+    }}
+    pm = {"冷宫寝殿": "出图/共享/图片/定妆_冷宫寝殿.png", "PROP_01": "出图/共享/图片/定妆_斑驳铜镜.png"}
+    targets = image_qc.asset_review_targets(payload, Path("/r/剧"), "第1集", pm)
+    kinds = {(t["kind"], t["shot"]) for t in targets}
+    assert ("scene", "Clip_03") in kinds        # warn 进队列
+    assert ("asset", "Clip_07") in kinds        # multimodal block 进队列
+    assert not any(t["shot"] == "Clip_04" for t in targets)   # ok 不进
+    scene_t = next(t for t in targets if t["kind"] == "scene")
+    assert scene_t["ref"] == "出图/共享/图片/定妆_冷宫寝殿.png"
+    assert scene_t["png_abs"] == "/r/剧/出图/第1集/图片/Clip_03.png"
+    assert scene_t["stitch"].endswith("生产数据/image_qc/第1集/asset_review/scene_Clip_03_compare.png")
+
+
+def test_asset_review_targets_empty_when_clean() -> None:
+    payload = {"checks": {"scene": {"shots": [{"png": "a.png", "scene": "x.png", "verdict": "ok"}]},
+                          "multimodal": {"shots": []}}}
+    assert image_qc.asset_review_targets(payload, Path("/r"), "第1集", {}) == []
+
+
+def test_resolve_asset_ref_falls_back(tmp_path: Path) -> None:
+    # primary_map 命中优先
+    pm = {"斑驳铜镜": "出图/共享/图片/定妆_斑驳铜镜.png"}
+    assert image_qc._resolve_asset_ref(tmp_path, pm, "斑驳铜镜.png") == "出图/共享/图片/定妆_斑驳铜镜.png"
+    # 不命中且无文件 → None
+    assert image_qc._resolve_asset_ref(tmp_path, {}, "不存在的资产") is None
+
+
+def test_lifecycle_regression_is_hard_lint() -> None:
+    # F：资产状态回退作为 lint 硬码项，summarize 当 hard
+    payload = {"checks": {}, "lint": {"available": True, "findings": [
+        {"level": "block", "code": "lifecycle_regression", "msg": "PROP_03：状态回退"}]}}
+    s = image_qc.summarize(payload)
+    assert s["hard_blocks"] == 1
+    assert s["verdict"] == "block"
+    assert "lifecycle_regression" in image_qc.HARD_LINT_CODES
 
 
 def test_summarize_hard_vs_advisory() -> None:
@@ -475,6 +656,82 @@ def test_to_findings_degraded_closeup_appends_stitch_path() -> None:
     assert "人审并排图" in deg[0]["msg"] and "Clip_12_compare.png" in deg[0]["msg"]
 
 
+def _coverage_payload(verdict: str = "ok") -> dict:
+    return {
+        "checks": {"face": {"available": True, "mode": "insightface", "shots": [
+            {"png": "图片/Clip_02_冷开场.png", "verdict": verdict, "chars": ["沈念"]},
+        ]}},
+        "lint": {"available": True, "findings": [], "character_shots": [
+            {"label": "Clip 02 冷开场", "shot": "Clip_02",
+             "png": "出图/第1集/图片/Clip_02_冷开场.png", "identity_refs": ["CHAR_01/常态"]},
+        ]},
+    }
+
+
+def test_face_reference_coverage_requires_full_face_row_for_landed_character_png(tmp_path: Path) -> None:
+    png = tmp_path / "出图" / "第1集" / "图片" / "Clip_02_冷开场.png"
+    png.parent.mkdir(parents=True)
+    png.write_bytes(b"x")
+    payload = _coverage_payload()
+    payload["checks"]["face"]["shots"] = []
+    coverage = image_qc.face_reference_coverage(payload, tmp_path, "第1集")
+    assert coverage["verdict"] == "block"
+    assert coverage["missing"][0]["reason"] == "no_face_comparison"
+
+    payload["face_reference_coverage"] = coverage
+    s = image_qc.summarize(payload)
+    assert s["hard_blocks"] == 1
+    assert s["verdict"] == "block"
+
+
+def test_face_reference_coverage_blocks_warn_face_match(tmp_path: Path) -> None:
+    png = tmp_path / "出图" / "第1集" / "图片" / "Clip_02_冷开场.png"
+    png.parent.mkdir(parents=True)
+    png.write_bytes(b"x")
+    payload = _coverage_payload("warn")
+    coverage = image_qc.face_reference_coverage(payload, tmp_path, "第1集")
+    assert coverage["verdict"] == "block"
+    assert coverage["missing"][0]["reason"] == "face_verdict_warn"
+
+    payload["face_reference_coverage"] = coverage
+    findings = image_qc.to_findings(payload)
+    strict = [f for f in findings if "角色脸定妆比对覆盖缺口" in f["msg"]]
+    assert len(strict) == 1 and strict[0]["sev"] == "block"
+
+
+def test_face_reference_coverage_passes_full_ok_match(tmp_path: Path) -> None:
+    png = tmp_path / "出图" / "第1集" / "图片" / "Clip_02_冷开场.png"
+    png.parent.mkdir(parents=True)
+    png.write_bytes(b"x")
+    coverage = image_qc.face_reference_coverage(_coverage_payload("ok"), tmp_path, "第1集")
+    assert coverage["verdict"] == "ok"
+    assert coverage["required"] == 1
+    assert coverage["covered"] == 1
+    assert coverage["missing"] == []
+
+
+def test_face_reference_coverage_does_not_block_prompt_before_png(tmp_path: Path) -> None:
+    coverage = image_qc.face_reference_coverage(_coverage_payload("ok"), tmp_path, "第1集")
+    assert coverage["verdict"] == "ok"
+    assert coverage["required"] == 0
+    assert len(coverage["pending"]) == 1
+
+
+def test_to_regen_list_includes_face_reference_coverage_missing() -> None:
+    payload = {
+        "checks": {},
+        "lint": {"findings": []},
+        "face_reference_coverage": {"missing": [
+            {"label": "Clip 02 冷开场", "shot": "Clip_02", "png": "图片/Clip_02_冷开场.png",
+             "reason": "no_face_comparison"}
+        ]},
+    }
+    regen = image_qc.to_regen_list(payload)
+    assert len(regen) == 1
+    assert regen[0]["shot"] == "Clip_02"
+    assert "脸部定妆比对覆盖:no_face_comparison" in regen[0]["reasons"]
+
+
 def test_to_findings_maps_severity_and_dims() -> None:
     payload = {
         "checks": {
@@ -581,3 +838,79 @@ def test_to_regen_list_empty_when_only_advisory() -> None:
                           "scene": {"shots": [{"png": "b.png", "verdict": "warn"}]}},
                "lint": {"findings": [{"level": "warn", "code": "no_eyeline", "msg": "Clip 1"}]}}
     assert image_qc.to_regen_list(payload) == []   # 全是能用项 → 不重生成任何镜
+
+
+# --- P2-A：disk-scoped 兜底——lint 漏分类的有脸镜列为 advisory，不静默漏检 ---
+def test_coverage_flags_unclassified_face_shot(tmp_path: Path) -> None:
+    # character_shots 空（lint 漏判），但 face 在某 PNG 检出人脸 → 应列 unclassified（非阻断）
+    payload = {
+        "lint": {"available": True, "character_shots": []},
+        "checks": {"face": {"available": True, "mode": "insightface",
+                            "shots": [{"png": "图片/Clip_05.png", "verdict": "ok"}]}},
+    }
+    cov = image_qc.face_reference_coverage(payload, tmp_path, "第1集")
+    assert cov["required"] == 0
+    assert cov["verdict"] == "ok"  # 无硬缺口
+    uncl = cov["unclassified"]
+    assert len(uncl) == 1
+    assert uncl[0]["reason"] == "unclassified_face_shot"
+    # summarize：advisory，不进 hard_blocks
+    payload["face_reference_coverage"] = cov
+    s = image_qc.summarize(payload)
+    assert s["hard_blocks"] == 0
+    assert s["advisory"] >= 1
+
+
+def test_coverage_ignores_noface_and_degraded(tmp_path: Path) -> None:
+    # noface（场景/无脸镜）不应被当作漏分类角色镜
+    payload = {
+        "lint": {"available": True, "character_shots": []},
+        "checks": {"face": {"available": True, "mode": "insightface",
+                            "shots": [{"png": "图片/bg_01.png", "verdict": "noface"}]}},
+    }
+    cov = image_qc.face_reference_coverage(payload, tmp_path, "第1集")
+    assert cov["unclassified"] == []
+    # 降级精度（pillow_fallback）下不信任「检出人脸」，不产 unclassified（避免误报）
+    payload_deg = {
+        "lint": {"available": True, "character_shots": []},
+        "checks": {"face": {"available": True, "mode": "pillow_fallback",
+                            "shots": [{"png": "图片/Clip_05.png", "verdict": "ok"}]}},
+    }
+    cov_deg = image_qc.face_reference_coverage(payload_deg, tmp_path, "第1集")
+    assert cov_deg["unclassified"] == []
+
+
+# ── C3 多主体空间绑定 ──────────────────────────────────────────────────────
+def test_multi_subject_spatial_binding_warns_without_blocking():
+    body = "**资产身份注册层**：`CHAR_01/常态` 与 `CHAR_03/常态` 同框对峙。"
+    out = image_qc._lint_multi_subject_spatial_binding("镜头5", body, ["CHAR_01/常态", "CHAR_03/常态"])
+    assert len(out) == 1 and out[0]["code"] == "multi_person_no_spatial_binding" and out[0]["level"] == "warn"
+
+
+def test_multi_subject_spatial_binding_ok_with_blocking_or_positions():
+    refs = ["CHAR_01", "CHAR_03"]
+    assert image_qc._lint_multi_subject_spatial_binding("镜头5", "blocking=沈念画左，柳娘子画右", refs) == []
+    assert image_qc._lint_multi_subject_spatial_binding("镜头5", "沈念在画左，柳娘子在画右对峙", refs) == []
+    # 单人镜不触发
+    assert image_qc._lint_multi_subject_spatial_binding("镜头1", "CHAR_01 独自", ["CHAR_01/常态"]) == []
+
+
+# ── C4 多角度参考喂养 ──────────────────────────────────────────────────────
+def test_native_multiref_underfed_info_when_group_underused():
+    body = "**参考图**：\n- `定妆_沈念.png`（正脸主参考）"
+    out = image_qc._lint_native_multiref_coverage("镜头1", body, ["CHAR_01/常态"], {"CHAR_01": 4})
+    assert len(out) == 1 and out[0]["code"] == "native_multiref_underfed" and out[0]["level"] == "info"
+
+
+def test_native_multiref_ok_when_enough_or_no_group():
+    body3 = "`定妆_沈念.png` `定妆_沈念_侧.png` `定妆_沈念_背.png`"
+    assert image_qc._lint_native_multiref_coverage("镜头1", body3, ["CHAR_01"], {"CHAR_01": 4}) == []
+    # 没有多角度组（avail<3）→ 不提
+    assert image_qc._lint_native_multiref_coverage("镜头1", "`定妆_沈念.png`", ["CHAR_01"], {"CHAR_01": 1}) == []
+    # 无 form_ref_counts → 不提
+    assert image_qc._lint_native_multiref_coverage("镜头1", "`定妆_沈念.png`", ["CHAR_01"], None) == []
+
+
+def test_registry_ref_counts_takes_max_per_char():
+    forms = [{"id": "CHAR_01", "ref_count": 2}, {"id": "CHAR_01", "ref_count": 4}, {"id": "CHAR_02", "ref_count": 1}]
+    assert image_qc.registry_ref_counts(forms) == {"CHAR_01": 4, "CHAR_02": 1}
