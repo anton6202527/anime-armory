@@ -85,6 +85,8 @@ def make_kind_project(root, kind):
         }, f, ensure_ascii=False)
     with open(os.path.join(root, "审稿", "demo_gate.json"), "w", encoding="utf-8") as f:
         json.dump({"schema_version": 1, "kind": "novel_demo_gate", "status": "passed"}, f, ensure_ascii=False)
+    with open(os.path.join(root, "设定", "读者契约.md"), "w", encoding="utf-8") as f:
+        f.write("# 读者契约\n核心题旨：代价换来的力量是否值得。\n")
     with open(os.path.join(root, "设定", "章纲.md"), "w", encoding="utf-8") as f:
         f.write("# 章纲\n- 第 02 章 《推进》 — 推进主线\n")
     with open(os.path.join(root, "原作.txt"), "w", encoding="utf-8") as f:
@@ -174,6 +176,27 @@ class DraftPacketsTest(unittest.TestCase):
             )
             self.assertNotEqual(got.returncode, 0)
             self.assertIn("demo_gate.json", got.stderr)
+
+    def test_blocks_without_reader_contract_by_default(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            os.remove(os.path.join(tmp, "设定", "读者契约.md"))
+            got = subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3"],
+                capture_output=True, text=True,
+            )
+            self.assertNotEqual(got.returncode, 0)
+            self.assertIn("读者契约.md", got.stderr)
+
+    def test_allow_missing_reader_contract_records_waiver(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            os.remove(os.path.join(tmp, "设定", "读者契约.md"))
+            got = subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3", "--allow-missing-reader-contract"],
+                capture_output=True, text=True,
+            )
+            self.assertEqual(got.returncode, 0, got.stderr)
 
     def test_allow_missing_demo_records_waiver(self):
         with tempfile.TemporaryDirectory() as tmp:

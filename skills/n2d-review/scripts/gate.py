@@ -64,6 +64,7 @@ from n2d_contract import (  # noqa: E402
     IDENTITY_REFERENCE_KEYS,
     IDENTITY_REGISTRY_KIND,
     IDENTITY_VIDEO_ADAPTERS,
+    image_backend_supports_persistent_subject,
     identity_allowed_modes,
     identity_registry_path,
     MOTION_CONTROL_MANIFEST_KIND,
@@ -1062,6 +1063,20 @@ def check_asset_handoff_inheritance(root: str, ep: str) -> None:
             add(WARN, "契约继承", vid_p, f"资产逐镜交接[{f.get('code')}]：{f.get('note')}")
 
 
+# 核心长线角色判定：scope 自由文本里的"贯穿全篇/长线/主角/主反派"标记。短线配角/单元妖不命中，
+# 避免对前几集退场的角色前置高档（对齐 n2d-image「ROI 驱动、默认最小化」）。
+_CORE_SCOPE_RE = re.compile(r"全篇|全程|长线|核心|主角|女主|男主|主反派")
+
+
+def _image_backend_supports_native_subject(canon: str) -> bool:
+    """该图后端是否支持注册原生角色主体/Character ID（梯子第②档）。
+
+    真值取 IMAGE_IDENTITY_PROFILES：Dreamina/Nano 属于多参考但无持久主体；
+    seedream/kling/sora 才触发注册主体提示。
+    """
+    return image_backend_supports_persistent_subject(canon or "")
+
+
 def check_image_ai_policy(root: str, ep: str) -> None:
     """阶段2：`生图AI` 是选择点（默认 Codex），放行官方/已登录多参考后端，只拦混用 + 未授权出图。
 
@@ -1141,6 +1156,84 @@ def check_image_ai_policy(root: str, ep: str) -> None:
             f"同项目/同集混用多个生图后端（{'、'.join(sorted(used))}）；混用会让同角色脸型/服装/画风跨镜漂移。"
             "请把 _设置.md 与所有 prompt 统一到同一个生图后端后再出图。",
         )
+
+    # 主动引导（一致性梯子第②档）：所选后端**支持原生角色主体/Character ID**（seedream/可灵/sora 等）
+    # 而核心长线角色还停在 unregistered 时，付费出图前 WARN 提示去注册主体——注册一次按 ID 跨镜跨集
+    # 引用，比每张重喂参考图更稳更省，是压住跨集脸漂的省钱前置。Codex/OpenAI 等无持久主体的后端不触发
+    # （default_status=fallback_reference_group → 自动回退参考图派生，不打扰）。advisory：WARN 不 BLOCK
+    # 合法的参考图兜底路径。"不靠想起来"：靠 registry adapter 状态机检，不靠人脑记。
+    if kind == "approved" and _image_backend_supports_native_subject(canon):
+        reg = load_json(identity_registry_path(root))
+        if isinstance(reg, dict):
+            label = next(
+                (cfg["label"] for cfg in APPROVED_IMAGE_BACKENDS.values() if cfg.get("canonical") == canon),
+                canon,
+            )
+            pending: List[str] = []
+            for char in reg.get("characters", []) or []:
+                if not isinstance(char, dict):
+                    continue
+                if not _CORE_SCOPE_RE.search(str(char.get("scope") or "")):
+                    continue  # 默认最小化：短线配角/单元妖不前置高档，只 nudge 核心长线角
+                for form in char.get("forms", []) or []:
+                    if not isinstance(form, dict):
+                        continue
+                    img = (form.get("identity_adapters") or {}).get("image") or {}
+                    entry = img.get(canon)
+                    status = entry.get("status") if isinstance(entry, dict) else entry
+                    if status not in ("registered", "ready"):
+                        pending.append(f"{char.get('id')}/{form.get('form')}")
+            if pending:
+                shown = "、".join(pending[:8]) + ("…" if len(pending) > 8 else "")
+                add(
+                    WARN,
+                    "原生主体注册",
+                    settings_loc,
+                    f"生图AI「{label}」支持原生角色主体/Character ID（一致性梯子第②档），但核心长线角色尚未注册："
+                    f"{shown}。注册一次后按 ID 跨镜跨集引用，比每张重喂参考图更稳更省，能压住跨集脸漂。"
+                    f"请在该后端控制台用已过自检的定妆三视图注册主体，把返回的 ID/句柄写进 identity_registry "
+                    f"对应 forms[].identity_adapters.image.{canon}（status→registered + id/handle），再跑 "
+                    "`python3 skills/n2d-identity/scripts/identity.py <作品根> --write` 刷新 adapter matrix。"
+                    "（Codex/OpenAI 等无持久主体的后端不触发本提示，自动回退参考图派生）",
+                )
+
+
+def check_reference_plan_applied(root: str, ep: str) -> None:
+    """逐镜参考规划（reference_planner.py）→ 落实对账（advisory）。
+
+    跨集脸漂的处方在 `生产数据/reference_plan_第N集.json`（弱后端按每镜变化量该补哪些参考/控制网/升档）。
+    本检查在 image_preflight 把该 plan 的**行动项**surfaced 到付费闸门，提醒人审落进 01_分镜出图.md，
+    避免"规划了却忘了补"。**纯 advisory（WARN）**：plan 是 opt-in 前置，缺 plan 文件→静默；
+    不阻断合法的参考图兜底路径（与 image_qc 的 no_expression_lib_ref 互补：前者 pre-gen 选参考、
+    后者 post-gen 验落档）。
+    """
+    plan_path = os.path.join(root, "生产数据", f"reference_plan_{ep}.json")
+    plan = load_json(plan_path)
+    if not isinstance(plan, dict) or plan.get("kind") != "n2d_reference_plan":
+        return  # 未跑规划器 / 非本类产物：静默
+    summary = plan.get("summary") or {}
+    actions = summary.get("action_required") or []
+    if not actions:
+        return
+    weak = summary.get("weak_backend_large_delta_clips") or 0
+    reg = summary.get("chars_need_native_registration") or []
+    lora = summary.get("chars_need_lora") or []
+    clips = sorted({str(a.get("clip")) for a in actions if a.get("clip")})
+    shown = "、".join(clips[:8]) + ("…" if len(clips) > 8 else "")
+    tail = ""
+    if reg:
+        tail += f" 待注册原生主体：{'、'.join(reg)}。"
+    if lora:
+        tail += f" 建议升 LoRA：{'、'.join(lora)}。"
+    add(
+        WARN,
+        "参考规划落实",
+        plan_path,
+        f"逐镜参考规划有 {len(actions)} 条行动项未确认落实（弱后端×大变化镜 {weak} 镜）："
+        f"镜头 {shown}。请按 reference_plan_{ep}.md 把补拍/多样参考/控制网/升档落进 "
+        f"出图/{ep}/prompt/01_分镜出图.md 后再付费出图（advisory，不阻断兜底）。{tail}",
+        return_to_stage="image",
+    )
 
 
 def storyboard_path(root: str, ep: str) -> str:
@@ -1851,8 +1944,10 @@ def check_shot_scale_progression(root: str, ep: str) -> None:
     for i, clip in enumerate(clips, 1):
         if not isinstance(clip, dict):
             classes.append(None); lens_texts.append(""); ids.append(f"Clip_{i:02d}"); continue
-        lens = "；".join(str((s or {}).get("lens", "")) for s in (clip.get("shots") or []))
-        scale_text = lens or str(clip.get("景别") or clip.get("shot_size") or "")
+        # 新 schema 的 shots 可能是 int 列表（非 dict）；只读 dict 形 shot，并兜底 continuity.shot_size。
+        lens = "；".join(str(s.get("lens", "")) for s in (clip.get("shots") or []) if isinstance(s, dict))
+        cont = clip.get("continuity") if isinstance(clip.get("continuity"), dict) else {}
+        scale_text = lens or str(clip.get("景别") or clip.get("shot_size") or cont.get("shot_size") or "")
         classes.append(shot_scale_class(scale_text))
         lens_texts.append(lens or scale_text)
         ids.append(str(clip.get("id") or clip.get("clip") or clip.get("shot") or f"Clip_{i:02d}"))
@@ -1959,8 +2054,12 @@ def check_prompt_checklists(root: str, ep: str, kind: str) -> None:
         if not sections:
             add(BLOCK, "prompt", p, "未识别到逐镜 prompt 块")
             return
+        # 单图参考后端(无原生主体锁，如 Codex)下，双人同框是实锤脸漂真凶 → 该镜的多角色检查升 BLOCK；
+        # 有原生主体能力的后端(Seedream/可灵/Sora)仍按 WARN。能力判定走契约 persistent_subject，不 hardcode。
+        _img_canon, _ = classify_image_backend(get_setting(root, "生图AI", "Codex").strip())
+        single_ref_backend = not image_backend_supports_persistent_subject(_img_canon)
         for idx, sec in enumerate(sections, 1):
-            check_image_shot_prompt_section(p, idx, sec)
+            check_image_shot_prompt_section(p, idx, sec, single_ref_backend=single_ref_backend)
         return
     else:
         check_video_prompt_overview(root, ep)
@@ -2912,7 +3011,8 @@ def _needs_prop_structure_gate(section: str, name: str, refs: str) -> bool:
     return heavy_title_or_refs or risky_wording
 
 
-def check_image_shot_prompt_section(path: str, idx: int, section: str) -> None:
+def check_image_shot_prompt_section(path: str, idx: int, section: str,
+                                    single_ref_backend: bool = False) -> None:
     name = _headline(section, f"镜头 {idx}")
     loc = f"{path} {name}"
 
@@ -3025,9 +3125,20 @@ def check_image_shot_prompt_section(path: str, idx: int, section: str) -> None:
             add(WARN, "角色一致性", loc, "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂")
         chars = _character_names_in_refs(refs)
         if len(chars) >= 2 and not _has_any(section, ("多参考", "主体库", "角色ID", "分别出图", "Seedream", "Nano Banana")):
-            add(WARN, "角色一致性", loc,
-                f"单镜多角色同框（{'/'.join(sorted(chars))}）：单图参考后端(如 Codex)难保多人各自一致——"
-                "优先切官方多参考后端(Seedream 14图/Nano Banana Pro 5人/可灵主体库/Sora Cameo)或走「分别出图+合成」并登记降级")
+            # 双人同框 × 单图参考后端(无原生主体/Character ID，如 Codex) × 未声明任一多主体策略
+            #   = 实测脸漂真凶（单图只锁得住一个主体，第二人随机重画）→ 升 BLOCK。
+            # 有原生主体能力的后端(persistent_subject=True：Seedream/可灵/Sora)按 WARN，不过度阻断。
+            # 逃生门「分别出图+合成 并登记降级」/ 声明多参考策略 已在上面 _has_any 放行。
+            if single_ref_backend:
+                add(BLOCK, "角色一致性", loc,
+                    f"单镜多角色同框（{'/'.join(sorted(chars))}）× 单图参考后端(如 Codex，无原生主体锁)：单图只锁一个主体，"
+                    "第二人必随机重画=脸漂真凶；本镜又未声明任一多主体策略，硬阻断。"
+                    "须切官方多参考/原生主体后端(Seedream 14图/Nano Banana Pro 5人/可灵主体库/Sora Cameo)，"
+                    "或走「分别出图+合成」并在本镜登记降级。")
+            else:
+                add(WARN, "角色一致性", loc,
+                    f"单镜多角色同框（{'/'.join(sorted(chars))}）：单图参考后端(如 Codex)难保多人各自一致——"
+                    "优先切官方多参考后端(Seedream 14图/Nano Banana Pro 5人/可灵主体库/Sora Cameo)或走「分别出图+合成」并登记降级")
 
 
 def check_common_image_prompts(root: str) -> None:
@@ -3774,6 +3885,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_backend_reachable(root, ep)
         if stage == "image_preflight":
             check_drift_risk_advisories(root, ep)  # 出图前预案折进预检：一个入口拿齐阻断+预案
+            check_reference_plan_applied(root, ep)  # 逐镜参考规划落实对账（advisory·治跨集脸漂）
         check_identity_registry(root, require_reference_assets=False)
         check_costume_registry_reconcile(root)
         check_asset_reference_registry(root, require_reference_assets=False)

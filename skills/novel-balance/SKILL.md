@@ -41,7 +41,8 @@ python3 skills/novel-balance/scripts/pacing_analyzer.py "<作品根>" [--range 1
 - **vs novel-review / novel-score（别混）**：balance 给"全书哪段塌"的鸟瞰节奏曲线；`novel-review` 逐章挑硬伤（这章钩子弱不弱）；`novel-score` 判"能不能火"。**balance 不把热力图喂给 score**——score 自有 `payoff_density` 维度、独立判定；两者只是概念互补，无数据依赖。
 - **→ novel-condense / novel-promote**：注水段推给 `novel-condense` 压缩；高燃章推给 `novel-promote` 当宣发爆点源。修法回写章纲（`novel-craft/references/outline.md`），本 skill 不直接改文。
 - **novel-craft (章纲编织)**：编排章纲时预填目标热力值，作为写作时的“配速员”。
-- 确定性信号的口径定义见 `references/heatmap-method.md`——它是 novel 家族 **pacing 确定性信号的单一定义源**（novel-simulate 的 `爽点关键词` 与本 skill 的 `爽点密度` 共用同一口径）。
+- 确定性信号的**口径文档**是 `references/heatmap-method.md`；其**代码侧单一定义源**是 `skills/novel/_lib/keyword_banks.py`——爽点/冲突/钩子/情感/套路词表在那里定义一次，novel-balance / novel-simulate / novel-promote 共同 import，不再逐脚本复制（避免漂移）。novel-simulate 的 `爽点关键词` 与本 skill 的 `爽点密度` 即共用其中的 `PAYOFF_KW`。
+- **按目标平台调档**：脚本读 `目标平台` 选择点（经 `keyword_banks.classify_platform` 归一为 `商业爽文向`/`品质向`，口径同 novel-score）。品质向小说节奏天然更缓、爽点稀薄是文体而非注水，故收紧"低冲突=注水"阈值，且不据爽点低升级到 🔴弃书点风险；爽文向保留原密尺。
 
 ## 详细参考
 - 两条曲线算法、预警规则、修法回流：`references/heatmap-method.md`

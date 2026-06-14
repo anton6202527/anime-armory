@@ -23,11 +23,20 @@ MASTER_DURATIONS = ("6s", "15s", "30s", "60s", "自定义")
 DELIVERY_ASPECTS = ("16:9", "9:16", "1:1", "多比例")
 CUTDOWN_PLANS = ("主片+15s+6s", "主片+15s", "仅主片", "自定义")
 CONSISTENCY_MODES = ("共享定妆+锚点", "指定参考图", "后端主体库", "+LoRA")
+# 生视频模型/渠道候选快照（高频变动，freshness.py 据 采集日期 判过期）。
+# 采集日期：2026-06-13  来源：各后端官方文档（待复核）
+AD_VIDEO_BACKENDS_VERIFIED = {"date": "2026-06-13", "source": "各生视频后端官方文档(待复核)"}
 VIDEO_MODELS = (
     "Seedance 2.0", "Veo 3.1", "Kling 3.0", "Hailuo 02", "Hailuo 2.3",
     "Runway Gen-4", "Luma Ray3.2", "Pika 2.5",
     "HunyuanVideo 1.5", "Wan 2.2", "LTX-2.3", "Sora", "manual",
 )
+# 渠道的「规范菜单」——每个渠道一行，用于选择点展示 / init 提示（不含别名，避免重复项）。
+VIDEO_CHANNELS_MENU = (
+    "即梦/Dreamina", "豆包", "海螺AI", "可灵/Kling", "Google Gemini API",
+    "Runway API", "Luma Dream Machine", "Pika", "本地/开源", "manual",
+)
+# 渠道的「可接受全集」——菜单 + 常见别名，用于宽容校验 / 旧项目兼容（不要当 argparse closed-choices 用）。
 VIDEO_CHANNELS = (
     "即梦/Dreamina", "即梦", "Dreamina",
     "豆包",
@@ -142,7 +151,7 @@ CHOICE_POINTS = {
     "生图AI": IMAGE_BACKENDS,
     "一致性增强": CONSISTENCY_MODES,
     "生视频模型": VIDEO_MODELS,
-    "生视频渠道": VIDEO_CHANNELS,
+    "生视频渠道": VIDEO_CHANNELS_MENU,
     "视频模型路由": VIDEO_ROUTING,
     "出视频规格": VIDEO_SPECS,
     "视频分辨率": VIDEO_RESOLUTIONS,
@@ -159,7 +168,11 @@ CHOICE_POINTS = {
 }
 
 # 合规/不可逆/花钱多的点：即便已记录，每次仍确认（见 skills/ad-craft/references/选择点与偏好.md 例外条）。
-RECONFIRM_CHOICE_POINTS = ("广告法地区", "音乐来源")
+# 合规面：广告法地区 / 音乐来源；花钱·不可逆面：出图与出视频后端/规格（一旦开跑即烧积分）。
+RECONFIRM_CHOICE_POINTS = (
+    "广告法地区", "音乐来源",
+    "生图AI", "生视频模型", "生视频渠道", "出视频规格",
+)
 
 # ── brief 必填分层（一句话入口的机器判据）────────────────────────────────────
 # 必问最小集：缺任一项 ad-concept 不应开工创意（由其第0步访谈式补齐，别让用户填 JSON）。
@@ -241,11 +254,20 @@ DELIVERABLE_FIELDS = ("deliverable_id", "label", "duration", "aspect", "kind", "
 DELIVERABLE_KINDS = ("master", "cutdown", "reframe", "ab_variant")
 
 
+# 「多比例」展开成的具体交付比例（中心裁切/加边由 ad-compose reframe 产出）。
+MULTI_ASPECT_RATIOS = ("16:9", "9:16", "1:1")
+
+
 def default_deliverables(master_duration="30s", aspect="16:9", cutdown_plan="主片+15s+6s"):
-    """按主片时长/比例/cutdown 方案派生默认交付件清单（master + cutdowns）。"""
+    """按主片时长/比例/cutdown 方案派生默认交付件清单。
+
+    - master + cutdowns（按 cutdown 方案）；
+    - 当 `交付比例=多比例` 时，再为每个目标比例派生 reframe 交付件（master 比例视为原生，不重复）。
+    """
+    master_aspect = MULTI_ASPECT_RATIOS[0] if aspect == "多比例" else aspect
     rows = [{
         "deliverable_id": "master", "label": "主片", "duration": master_duration,
-        "aspect": aspect, "kind": "master", "spec": "平台默认", "status": "⬜", "path": "",
+        "aspect": master_aspect, "kind": "master", "spec": "平台默认", "status": "⬜", "path": "",
     }]
     extra = {
         "主片+15s+6s": ["15s", "6s"],
@@ -255,8 +277,17 @@ def default_deliverables(master_duration="30s", aspect="16:9", cutdown_plan="主
     for d in extra:
         rows.append({
             "deliverable_id": f"cut_{d}", "label": f"cutdown {d}", "duration": d,
-            "aspect": aspect, "kind": "cutdown", "spec": "平台默认", "status": "⬜", "path": "",
+            "aspect": master_aspect, "kind": "cutdown", "spec": "平台默认", "status": "⬜", "path": "",
         })
+    if aspect == "多比例":
+        for ratio in MULTI_ASPECT_RATIOS:
+            if ratio == master_aspect:
+                continue
+            rows.append({
+                "deliverable_id": f"reframe_{ratio.replace(':', 'x')}",
+                "label": f"reframe {ratio}", "duration": master_duration,
+                "aspect": ratio, "kind": "reframe", "spec": "平台默认", "status": "⬜", "path": "",
+            })
     return rows
 
 

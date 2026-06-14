@@ -65,10 +65,6 @@ def main():
         rows = parse_stage_rows(f.read())
 
     stage_by_label = {s["label"]: s for s in contract.stage_table()}
-    # Backward compatibility for projects initialized before ad-review M0 landed.
-    review_meta = next((s for s in contract.stage_table() if s["key"] == "review"), None)
-    if review_meta:
-        stage_by_label["质检自审(二期)"] = review_meta
     frontier = None
     print(f"# {os.path.basename(root)} — 拍广告进度\n")
     for label, status in rows:

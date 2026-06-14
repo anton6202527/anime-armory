@@ -31,7 +31,8 @@ if LIB not in sys.path:
 from novel_contract import (base_meta, build_progress_markdown, routing_stages,
                             SCALE_CHOICES, scale_profile, detect_rights_status,
                             docx_to_txt, write_project_settings, demo_chapters_for,
-                            normalize_scale, SCALE_PROFILES, parse_outputs)
+                            normalize_scale, SCALE_PROFILES, parse_outputs,
+                            rights_metadata)
 
 SCALE_PROFILE = SCALE_PROFILES  # scale-band 契约：test_scale_contract 校验其与规模档一致
 
@@ -200,6 +201,14 @@ def main():
     demo_chapters = demo_chapters_for(profile["target_chapters"])
     
     meta = base_meta("spinoff", outputs=outputs, rights_status=rights_status)
+    # 派生权利字段统一由 rights_metadata 计算（此前 --rights-jurisdiction/--distribution-regions
+    # 解析了却没落进 meta）；使公版外传也能触发 qa_gate 的发行地区复核。
+    meta.update(rights_metadata(
+        rights_status,
+        rights_declared=args.i_have_rights or rights_status in ("original", "user-owned", "user-declared"),
+        rights_jurisdiction=args.rights_jurisdiction,
+        distribution_regions=args.distribution_regions,
+    ))
     meta.update({
         "source_novel": source_path,
         "source_title": source_title,

@@ -157,6 +157,20 @@ def load_demo_gate(root, allow_missing=False):
     return data
 
 
+def require_reader_contract(root, allow_missing=False):
+    """读者契约是逐章写作的承重输入（题旨/读者承诺/文学质感）；缺它批量写章会失锚。
+    与 demo_gate 同档硬闸：默认缺失即阻断，--allow-missing-reader-contract 才放行（记 waiver）。"""
+    path = os.path.join(root, "设定", "读者契约.md")
+    if os.path.exists(path) and os.path.getsize(path) > 0:
+        return True
+    if allow_missing:
+        return False
+    raise RuntimeError(
+        "缺少 设定/读者契约.md；批量写章前先按 novel-craft/references/reader-contract.md "
+        "补题旨/读者承诺/文学质感/禁偏清单。可加 --allow-missing-reader-contract 暂时跳过（会记 waiver）。"
+    )
+
+
 def state_ledger_path(root):
     return os.path.join(root, "审稿", "state_ledger.json")
 
@@ -272,7 +286,7 @@ def source_paths_for_kind(kind):
     return out
 
 
-def build_packet(root, chapter, *, allow_missing_demo=False, step="full"):
+def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reader_contract=False, step="full"):
     meta = load_json(os.path.join(root, "_meta.json"), {})
     if not meta:
         raise RuntimeError("缺少 _meta.json")
@@ -289,6 +303,17 @@ def build_packet(root, chapter, *, allow_missing_demo=False, step="full"):
         )
         append_waiver(root, demo_waiver)
         record_ledger_waiver(root, demo_waiver)
+    has_reader_contract = require_reader_contract(root, allow_missing=allow_missing_reader_contract)
+    if allow_missing_reader_contract and not has_reader_contract:
+        rc_waiver = make_waiver(
+            "missing_reader_contract",
+            reason="explicit --allow-missing-reader-contract while generating draft packet",
+            affected_gate="reader_contract",
+            source="novel-craft/scripts/draft_packets.py",
+            details={"chapter": chapter},
+        )
+        append_waiver(root, rc_waiver)
+        record_ledger_waiver(root, rc_waiver)
     ledger = ensure_state_ledger(root)
     plot_loops = load_json(os.path.join(root, "设定", "剧情环.json"), {}).get("loops", [])
     pending_loops = [L for L in plot_loops if L.get("status") in ("buried", "teasing")]
@@ -496,6 +521,8 @@ def main():
     ap.add_argument("--out-dir", default=None, help="缺省 <作品根>/写作任务")
     ap.add_argument("--stdout", action="store_true", help="只打印，不写文件")
     ap.add_argument("--allow-missing-demo", action="store_true", help="Demo gate 未通过时也允许生成准备包")
+    ap.add_argument("--allow-missing-reader-contract", action="store_true",
+                    help="设定/读者契约.md 缺失时也允许生成任务包（记 waiver）")
     ap.add_argument(
         "--step",
         default="auto",
@@ -512,7 +539,8 @@ def main():
         chapters = resolve_chapters(args, root)
         steps = packet_steps_for_request(root, args.step)
         packets = [
-            (chapter, step, build_packet(root, chapter, allow_missing_demo=args.allow_missing_demo, step=step))
+            (chapter, step, build_packet(root, chapter, allow_missing_demo=args.allow_missing_demo,
+                                         allow_missing_reader_contract=args.allow_missing_reader_contract, step=step))
             for chapter in chapters
             for step in steps
         ]

@@ -50,11 +50,17 @@ def main():
     ap.add_argument("--master-duration", default=None, help="覆盖默认主片时长")
     ap.add_argument("--aspect", default=None, help="覆盖默认交付比例")
     ap.add_argument("--cutdown-plan", default=None, help="覆盖默认 cutdown 方案")
-    ap.add_argument("--video-model", default=None, choices=contract.VIDEO_MODELS,
-                    help="首跑选择的生视频模型；应由 agent 先问用户，再传入本脚本")
-    ap.add_argument("--video-channel", default=None, choices=contract.VIDEO_CHANNELS,
-                    help="首跑选择的生视频渠道/产品；应由 agent 先问用户，再传入本脚本")
-    ap.add_argument("--video-backend", default=None, choices=contract.VIDEO_BACKENDS,
+    # 选择点 = 候选菜单，不是封闭枚举：不绑 argparse choices，保留手输兜底（新后端/别名不被拒）。
+    ap.add_argument("--video-model", default=None,
+                    metavar="MODEL",
+                    help="首跑生视频模型（菜单：%s …；可手输其它）；应由 agent 先问用户再传入"
+                         % " / ".join(contract.VIDEO_MODELS[:4]))
+    ap.add_argument("--video-channel", default=None,
+                    metavar="CHANNEL",
+                    help="首跑生视频渠道（菜单：%s …；可手输其它）；应由 agent 先问用户再传入"
+                         % " / ".join(contract.VIDEO_CHANNELS_MENU[:4]))
+    ap.add_argument("--video-backend", default=None,
+                    metavar="CHANNEL",
                     help="兼容旧参数：等同于 --video-channel")
     args = ap.parse_args()
 

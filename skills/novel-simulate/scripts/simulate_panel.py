@@ -25,26 +25,35 @@ _COMMON = os.path.join(_SKILLS, "novel", "_lib")
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from project_io import read_chapters  # noqa: E402
+from keyword_banks import (  # noqa: E402  单一定义源
+    CLICHE_KW,
+    EMOTION_KW,
+    HOOK_MARKERS,
+    LOGIC_KW,
+    PAYOFF_KW,
+    classify_platform,
+)
+from settings import get_setting  # noqa: E402
 
 _CJK = r"一-鿿"
 
 PERSONAS = {
     "rookie": {"name": "小白爽文党", "focus": "节奏/升级感/反杀/不憋屈",
-               "kw": ["打脸", "逆袭", "碾压", "突破", "反杀", "升级", "扮猪", "装", "解气",
-                      "翻盘", "吊打", "震惊", "废柴", "崛起", "无敌", "暴击", "斩杀"]},
+               "kw": PAYOFF_KW},
     "logic": {"name": "逻辑考据党", "focus": "设定自洽/力量体系/无降智",
-              "kw": ["因为", "所以", "原理", "规则", "体系", "推断", "逻辑", "境界",
-                     "等级", "代价", "限制", "条件", "破绽", "证据", "推理", "布局"]},
+              "kw": LOGIC_KW},
     "emote": {"name": "情感/互动党", "focus": "人物弧光/CP/情感张力/金句",
-              "kw": ["心疼", "温柔", "守护", "拥抱", "告白", "吃醋", "暧昧", "牵手",
-                     "对视", "脸红", "心动", "眼泪", "微笑", "羁绊", "并肩", "回眸"]},
+              "kw": EMOTION_KW},
     "critic": {"name": "毒舌老书虫", "focus": "同质化套路/文笔/新意",
-               "kw": ["退婚", "老爷爷", "戒指", "系统", "穿越", "重生", "神医", "赘婿",
-                      "废柴逆袭", "扮猪吃虎", "纨绔", "圣女", "天才", "炼丹", "宗门"]},
+               "kw": CLICHE_KW},
 }
 
-HOOK_MARKERS = ["？", "?", "但", "却", "突然", "竟", "竟然", "居然", "不料", "没想到",
-                "此时", "就在", "猛地", "骤然", "下一刻", "原来"]
+# 各档默认人格集：品质/情感向不该默认把小白爽点党当留存主力（爽点稀薄不等于会被弃），
+# 默认换成情感党+逻辑党+毒舌，rookie 仍可显式 --personas 加回。爽文向保留全人格。
+DEFAULT_PERSONAS_BY_PROFILE = {
+    "商业爽文向": ["rookie", "logic", "emote", "critic"],
+    "品质向": ["emote", "logic", "critic"],
+}
 
 
 def _cjk_len(s):
@@ -81,7 +90,7 @@ def _lexical_diversity(text):
     return round(len(set(grams)) / len(grams), 3)
 
 
-def analyze(project, scope, chapter, personas):
+def analyze(project, scope, chapter, personas, profile="商业爽文向"):
     chs = list_chapters(project)
     if not chs:
         return None
@@ -102,12 +111,20 @@ def analyze(project, scope, chapter, personas):
 
     hook = sum(_hook_strength(t) for _, t in target) / len(target)
     diversity = _lexical_diversity(text)
-    cliche = _density(text, PERSONAS["critic"]["kw"])
+    cliche = _density(text, CLICHE_KW)
 
-    # 留存先验：爽点密度 + 钩子强度 为正，套路堆叠为负，归一到 0-1
-    shuang = persona_signals.get("rookie", {}).get("keyword_density_per_kchar", 0)
-    retention_prior = max(0.0, min(1.0, round(
-        0.45 * min(shuang / 6, 1) + 0.35 * hook + 0.20 * min(diversity / 0.9, 1) - 0.10 * min(cliche / 5, 1), 3)))
+    # 留存先验：归一到 0-1。爽文向以爽点密度为主驱动；品质/情感向不把爽点稀薄当劝退，
+    # 改以情感张力 + 钩子 + 文笔多样性为主驱动（套路堆叠仍为负项）。
+    shuang = _density(text, PAYOFF_KW)
+    emote = _density(text, EMOTION_KW)
+    if profile == "品质向":
+        retention_prior = max(0.0, min(1.0, round(
+            0.40 * min(emote / 6, 1) + 0.30 * hook + 0.30 * min(diversity / 0.9, 1)
+            - 0.10 * min(cliche / 5, 1), 3)))
+    else:
+        retention_prior = max(0.0, min(1.0, round(
+            0.45 * min(shuang / 6, 1) + 0.35 * hook + 0.20 * min(diversity / 0.9, 1)
+            - 0.10 * min(cliche / 5, 1), 3)))
 
     return {
         "analysis_mode": "signal_only",
@@ -115,6 +132,7 @@ def analyze(project, scope, chapter, personas):
         "qualitative_completed": False,
         "personas_completed": [],
         "agent_filled_at": None,
+        "profile": profile,
         "scope": scope,
         "chapters_read": [idx for idx, _ in target],
         "sampled_chars": _cjk_len(text),
@@ -177,17 +195,24 @@ def main():
     p.add_argument("project_path")
     p.add_argument("--scope", default="opening", choices=["opening", "chapter"])
     p.add_argument("--chapter", type=int, default=1)
-    p.add_argument("--personas", default="rookie,logic,emote,critic")
+    p.add_argument("--personas", default=None,
+                   help="逗号分隔人格集；缺省按 `目标平台` 评判档选默认人格集")
     args = p.parse_args()
 
-    personas = [x.strip() for x in args.personas.split(",") if x.strip() in PERSONAS]
+    # 读 `目标平台` 选择点（_设置.md → 全局默认 → 缺省），归一成评判档。
+    profile = classify_platform(get_setting(args.project_path, "目标平台"))
+    if args.personas:
+        personas = [x.strip() for x in args.personas.split(",") if x.strip() in PERSONAS]
+    else:
+        personas = list(DEFAULT_PERSONAS_BY_PROFILE.get(profile, list(PERSONAS)))
     if not personas:
         personas = list(PERSONAS)
-    sig = analyze(args.project_path, args.scope, args.chapter, personas)
+    sig = analyze(args.project_path, args.scope, args.chapter, personas, profile)
     if sig is None:
         print(f"Error: {args.project_path}/章节 下没有可读章节")
         return
     md_path, sig_path = write_report(args.project_path, sig, personas)
+    print(f"评判档：{profile}（按目标平台定默认人格与留存先验）")
     print(f"模拟读者面板：{', '.join(PERSONAS[p]['name'] for p in personas)}")
     print(f"  留存先验 {sig['retention_prior']} · 钩子 {sig['hook_strength']} · 套路 {sig['cliche_density_per_kchar']}/千字")
     print(f"  报告骨架 → {md_path}")

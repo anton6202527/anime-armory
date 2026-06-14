@@ -13,6 +13,35 @@ if COMMON not in sys.path:
 
 from novel_route import STAGES, cell_state, format_route, parse_progress, progress_path, stage_of, summarize, chapter_number
 
+try:
+    from qa_gate import collect_gate_status, format_gate_status
+except Exception:  # qa_gate 缺失时优雅降级，不挡进度查询
+    collect_gate_status = None
+    format_gate_status = None
+
+_STAGE_TABLE_MARKERS = ("novel-derived-stage-table", "novel-create-stage-table")
+
+
+def _is_stage_checklist(root):
+    p = progress_path(root)
+    try:
+        text = open(p, encoding="utf-8").read()
+    except OSError:
+        return False
+    return any(mk in text for mk in _STAGE_TABLE_MARKERS)
+
+
+def _print_gate_blockers(root):
+    if collect_gate_status is None:
+        return
+    try:
+        gate = collect_gate_status(root)
+    except Exception:
+        return
+    if gate.get("blocking"):
+        print()
+        print(format_gate_status(gate))
+
 def prog_path(root):
     return progress_path(root)
 
@@ -157,16 +186,21 @@ def main():
     
     res = summarize(root)
     if "error" in res:
+        if _is_stage_checklist(root):
+            print("[redirect] 本项目是『同构阶段清单型』进度，请用：")
+            print(f"    python3 skills/novel-craft/scripts/progress.py {root!r}")
+            return
         print(f"错误: {res['error']}"); sys.exit(1)
-        
+
     header = res["header"]
     rows = res["rows"]
-    
+
     if only:
         r = next((x for x in rows if x['_ch'] == only), None)
         if not r: print(f"{only} 不在进度表"); sys.exit(1)
         route = stage_of(root, r, header)
         print(format_route(root, route))
+        _print_gate_blockers(root)
         return
     
     done = res["done"]; bottleneck = res["bottleneck"]; first = res["first"]
@@ -181,6 +215,8 @@ def main():
         order = STAGES + ['✅已完结']
         items = sorted(bottleneck.items(), key=lambda kv: order.index(kv[0]) if kv[0] in order else 99)
         print("各阶段卡章数: " + " · ".join(f"{k}={v}" for k, v in items))
+
+    _print_gate_blockers(root)
 
 if __name__ == '__main__':
     main()

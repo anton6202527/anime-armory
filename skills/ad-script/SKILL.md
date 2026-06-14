@@ -28,7 +28,7 @@ description: 拍广告 第2阶段·脚本 + 第4阶段·分镜（配音后回跑
    ```bash
    python3 skills/ad-script/ad_law_check.py "<作品根>" --region 中国大陆 --json "<作品根>/脚本/广告法机检报告.json"
    ```
-   🔴 block（国家级/最佳/治愈/100%有效…）必须改；🟡 warn（裸"最"/促销时限词）结合资质与依据人判。改完复跑到 0 block。
+   🔴 block（国家级/遥遥领先/治愈/100%有效/祛斑生发/保收益/全网最低价…）必须改；🟡 warn（裸"最"/海外绝对化降级）结合资质与依据人判。改完复跑到 0 block。机检前先把文案**归一化**（NFKC+去零宽+去插空格+常见繁体→简体），`最 佳`/`１００％`/`療效` 等绕过手法照样命中。报告写 `脚本/广告法机检报告.json`（含 `region`/`disabled`/`summary`/`findings`，`--region 关闭` 也照写 `disabled:true`）。也扫 `storyboard.json`（递归 frame/legal_lines/字幕）与 `字幕_英文.srt`。
 5. 回写 `_进度.md` 脚本 ✅，提示下一步 `ad-voice`。
 
 ### 分镜 pass（配音后回跑）
@@ -38,12 +38,12 @@ description: 拍广告 第2阶段·脚本 + 第4阶段·分镜（配音后回跑
    ```bash
    python3 skills/ad-script/finalize_storyboard.py "<作品根>" --master 30s --json "<作品根>/脚本/镜头时长.json"
    ```
-   对账分镜总时长≈主片目标（超/欠都报）、VO 不被截断、接缝有 transition。
+   对账分镜总时长≈主片目标（超/欠都报，容差随主片长度缩放 `max(0.5, master*0.03)`；缺 `--master` 时退读 `_设置.md` 主片时长，仍缺则 warn 不静默放过）、整片 + **单镜** VO 不被截断、**强制项落镜**（brief mandatories logo/slogan/法律声明/CTA 缺一即 block）、接缝有 transition。**占位 VO 默认硬拦**（看时长清单顶层 `has_placeholder`），rough preview 用 `--allow-placeholder` 或 `FINALIZE_ALLOW_PLACEHOLDER=1` 放行。
 4. 0 block 后回写 `_进度.md` 分镜(实测时长驱动) ✅，提示下一步 `ad-image`（⚠️ 花钱 gate：先确认 `生图AI`/`一致性增强`，并补齐 brief 可延后合规项——`ad-craft/scripts/progress.py` 会列缺项）。
 
 ## 广告专有强化
 
-- **《广告法》违禁词硬闸门**（差异化核心）：`ad_law_check.py` 内置绝对化用语/医疗保健极限词/虚假承诺/迷信/促销欺诈词库 + 白名单降噪（最后/最初/第一时间…不误杀），带 pytest。命中 block 退出码非零。
+- **《广告法》违禁词硬闸门**（差异化核心）：`ad_law_check.py` 内置绝对化用语/医疗保健极限词/化妆品禁用功效/金融教育不可证承诺/迷信/促销欺诈词库（含市场监管总局案例补充：遥遥领先/领导者/填补国内空白/祛斑生发/保收益/保录取…）+ 归一化绕过防护 + 白名单降噪（最后/最初/第一时间…不误杀），带 pytest。命中 block 退出码非零。海外仅绝对化降 warn，促销欺诈（FTC/EU）仍硬 block。
 - **总时长是硬约束**：广告 30s 就得 30s，`finalize_storyboard.py` 对账超/欠（n2d 没有这条硬约束）。
 - **强制项落镜**：brief 的 logo/slogan/法律声明/CTA 必须在脚本里有对应镜头/字幕条（片尾包装由 `ad-compose` 做 end card）。
 - **黄金 3 秒**：脚本第一段必须是钩子镜（信息流划走率最高的窗口）。

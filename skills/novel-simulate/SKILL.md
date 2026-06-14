@@ -24,6 +24,8 @@ python3 skills/novel-simulate/scripts/simulate_panel.py "<作品根>" [--scope o
 ```
 - **opening**：读前 3 章，模拟新读者的留存决策。
 - **chapter**：读指定章节，模拟追更读者的反馈。
+- **按目标平台定默认人格集与留存先验**：不传 `--personas` 时，脚本读 `目标平台` 选择点（经 `keyword_banks.classify_platform` 归一为 `商业爽文向`/`品质向`，口径同 novel-score）选默认人格——爽文向用全人格、品质/情感向默认换成情感党+逻辑党+毒舌（不把小白爽点党当留存主力），rookie 仍可显式 `--personas` 加回。`retention_prior` 同样按档加权：品质向以情感张力+钩子+文笔多样性为主驱动，不把爽点稀薄当劝退。
+- 关键词词表来自单一定义源 `skills/novel/_lib/keyword_banks.py`（与 novel-balance/novel-promote 共用）。
 
 ### 2. 产出报告（确定性信号 + LLM 定性骨架）
 脚本产两份：

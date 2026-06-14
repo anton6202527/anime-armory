@@ -51,6 +51,14 @@ CANDIDATE_SOURCES: List[Dict[str, object]] = [
         "max_age_days": 45,
         "note": "AD_APPROVED/FORBIDDEN 生图后端白名单（ad 线策略，与 n2d 故意不同：禁即梦）。",
     },
+    {
+        "id": "ad-video-backends",
+        "path": "skills/ad-craft/scripts/contract.py",
+        "choice_points": ["生视频模型", "生视频渠道"],
+        "max_age_days": 30,
+        "note": "VIDEO_MODELS / VIDEO_CHANNELS 高频变动（Seedance/Veo/Kling 版本…）；"
+                "与生图后端同源于 contract.py，共用文件首个采集日期戳。",
+    },
 ]
 
 

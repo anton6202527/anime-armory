@@ -20,8 +20,64 @@ import sys
 
 import voice_manifest as vm
 
-CLONE_BACKENDS = {"cosyvoice", "gpt-sovits", "minimax", "clone", "火山"}
 CN_CHARS_PER_SEC = 4.5   # 中文播报约每秒 4–5 字，用于 estimate 占位估时
+
+# 占位后端（不产生真实声纹）——这些后端永远不触发克隆闸门。
+PLACEHOLDER_BACKENDS = {"say", "estimate"}
+# 云端商用后端：请求具体「代言人/名人」voice_id（仿真人音色）须有授权痕迹。
+CLOUD_BACKENDS = {"minimax", "火山", "volc", "volcano"}
+
+
+def norm_backend(name):
+    """后端名归一：小写 + 去连字符/下划线，使 cosyvoice-v2 / Cosy_Voice / XTTS 等变体统一比对。"""
+    return (name or "").strip().lower().replace("-", "").replace("_", "")
+
+
+def _is_ref_audio_env(key, prefix=None):
+    """env 名是否是「参考音」(声纹来源)？匹配 <PFX>_REF_* 且非 *_TEXT（_TEXT 是逐字稿）。
+
+    prefix=None 时匹配任意前缀的 *_REF_* —— 任何参考音的存在即表明意图克隆，
+    比按后端名猜前缀更稳（变体名/自定义命名都拦得住）。
+    """
+    if key.endswith("_TEXT"):
+        return False
+    if prefix:
+        pfx = prefix.strip().upper()
+        return key == f"{pfx}_REF_AUDIO" or key.startswith(f"{pfx}_REF_")
+    return key.endswith("_REF_AUDIO") or "_REF_" in key
+
+
+def clone_refs(prefix=None):
+    """扫描环境里的参考音 env，返回命中的 env 名列表（排序，便于报错信息稳定）。"""
+    return sorted(k for k, v in os.environ.items()
+                  if v and _is_ref_audio_env(k, prefix))
+
+
+def clone_authorization_check(backend, args):
+    """克隆授权硬闸门：仅当**真的在克隆**时才要求 VOICE_CLONE_AUTHORIZED=1。
+
+    触发条件（任一）——按"实际是否克隆/仿真人音色"判定，**不**按后端名是否在某固定集合：
+      - 显式传了参考音/克隆开关：--ref / --clone；
+      - 环境里给了参考音 env（<PREFIX>_REF_*，默认 PREFIX 取归一后端名大写）；
+      - 请求了具体的代言人/名人 voice_id（--voice-id / 云端商用后端的指定音色）。
+    占位后端（say/estimate）合成的是默认占位嗓，不克隆任何人，绝不触发。
+    返回触发闸门的原因列表（空=无需授权）。
+    """
+    nb = norm_backend(backend)
+    if nb in PLACEHOLDER_BACKENDS:
+        return []
+    reasons = []
+    if args.ref:
+        reasons.append(f"--ref {args.ref}（参考音克隆）")
+    if args.clone:
+        reasons.append("--clone（克隆开关）")
+    # 环境参考音：给了 --ref-prefix 就按它精确匹配，否则扫任意 *_REF_*（参考音存在=意图克隆）。
+    refs = clone_refs(args.ref_prefix)
+    if refs:
+        reasons.append(f"参考音 env：{','.join(refs)}")
+    if args.voice_id:
+        reasons.append(f"--voice-id {args.voice_id}（指定代言人/名人音色）")
+    return reasons
 
 
 def run(cmd):
@@ -74,6 +130,10 @@ def main():
     ap.add_argument("--backend", default="say", help="say | estimate | <真后端名>")
     ap.add_argument("--gap", type=float, default=0.25, help="句间停顿秒")
     ap.add_argument("--placeholder-voice", default="Tingting")
+    ap.add_argument("--ref", help="参考音 wav（克隆他人嗓）——触发授权闸门")
+    ap.add_argument("--clone", action="store_true", help="显式克隆开关——触发授权闸门")
+    ap.add_argument("--ref-prefix", help="参考音 env 前缀（默认=归一后端名大写，如 COSYVOICE_REF_*）")
+    ap.add_argument("--voice-id", help="指定代言人/名人 voice_id（仿真人音色）——触发授权闸门")
     args = ap.parse_args()
 
     root = os.path.abspath(args.project_root)
@@ -83,9 +143,14 @@ def main():
         sys.exit(2)
 
     backend = args.backend.strip().lower()
-    if backend in CLONE_BACKENDS and os.environ.get("VOICE_CLONE_AUTHORIZED") != "1":
-        print("[block] 克隆真人嗓需 VOICE_CLONE_AUTHORIZED=1（肖像/声音授权）。"
-              "未授权拒做——可改用 --backend say 占位先把时长跑出来。", file=sys.stderr)
+    # 克隆/仿真人音色授权硬闸门：按"实际是否在克隆"判定，不按后端名固定集合（详见 clone_authorization_check）。
+    clone_reasons = clone_authorization_check(backend, args)
+    if clone_reasons and os.environ.get("VOICE_CLONE_AUTHORIZED") != "1":
+        print("[block] 检测到克隆/仿真人音色（" + "；".join(clone_reasons) + "），"
+              "需 VOICE_CLONE_AUTHORIZED=1（肖像+声音授权，2026 opt-in）。"
+              "代言人/名人真声另需授权痕迹（ad-craft/ai_usage.py --talent-status）。"
+              "未授权拒做——用默认嗓（不喂参考音/不指定 voice_id）或 --backend say 占位先跑时长。",
+              file=sys.stderr)
         sys.exit(3)
 
     voicemap = {}

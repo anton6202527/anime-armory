@@ -1,6 +1,6 @@
 # 平台档案（Platform Profiles）
 
-> **机器真值源**：视频后端别名、`max_clip_seconds`、原生音画后端集合等可执行字段集中在 `skills/n2d/_lib/n2d_platform_profiles.py`；生图后端白名单在 `skills/n2d/_lib/n2d_contract.py` 的 `APPROVED_IMAGE_BACKENDS`。本文件负责人读解释；若两者不一致，以 `_lib` 模块为准，并同步修本文。
+> **机器真值源**：视频后端别名、`max_clip_seconds`、原生音画后端集合等可执行字段集中在 `skills/n2d/_lib/n2d_platform_profiles.py`；生图后端白名单在 `skills/n2d/_lib/n2d_contract.py` 的 `APPROVED_IMAGE_BACKENDS`，出图侧身份能力档在 `IMAGE_IDENTITY_PROFILES`。本文件负责人读解释；若两者不一致，以 `_lib` 模块为准，并同步修本文。
 
 本 skill 的核心产物——分镜剧本、角色/场景卡、爽剧节拍、双语字幕——**平台无关**。
 各 AI 生成平台的差异，由下面的「平台档案」描述。
@@ -37,7 +37,8 @@ image prompt = [图AI 的 prompt 写法] + [生视频模型的图像风格锚定
 |---|---|---|
 | 国风短剧（默认 Codex） | Codex/官方 OpenAI 生图 + Seedance 锚定句 → `生视频模型=Seedance 2.0` + `生视频渠道=即梦/Dreamina` | 默认出图链路；所选后端不可用就停下报告，不偷偷换后端 |
 | 国风短剧（即梦闭环） | Dreamina/即梦官方 CLI 出图 + Seedance via 即梦/Dreamina | 已登录会员可直调；角色镜头优先 image2image/多参考；整集统一后端 |
-| 国风短剧（多参考锁人） | Seedream / 可灵主体库 / Nano Banana 官方出图 + Seedance/Kling 锚定句 → 视频 | 多角色同框/跨集脸漂时更稳；**整集统一这一个后端，不与 Codex 混用** |
+| 国风短剧（多参考锁人） | Dreamina/即梦官方 CLI / Nano Banana / OpenAI 等多参考出图 + Seedance/Kling 锚定句 → 视频 | 无持久主体 ID；每镜必须喂定妆组/表情库/场景图，**整集统一这一个后端，不与 Codex 混用** |
+| 国风短剧（持久主体锁人） | Seedream / 可灵主体库 / Sora Cameo 官方出图 + Seedance/Kling 锚定句 → 视频 | 可注册主体/角色 ID 后跨集引用；核心长线角和多人同框优先用这一档 |
 | 国风短剧（备选视频） | 官方图后端 + Kling 锚定句 → `生视频模型=Kling 3.0` + `生视频渠道=可灵/Kling` | 图后端整集统一一个 |
 | 海外英文短剧 | 官方图后端（Codex/Seedream/Sora Cameo 等）+ Veo 锚定句 → `生视频模型=Veo 3.1` + `生视频渠道=Google Gemini API` | 全英文 prompt 优先 |
 | 禁止 | 第三方逆向 CLI / `同视频AI` 或 `同视频模型` 含糊口径 / web 自动化出图 | 安全 invariant：未授权路径禁用 |
@@ -177,9 +178,10 @@ image prompt = [图AI 的 prompt 写法] + [生视频模型的图像风格锚定
 | Seedream 5.0/4.5 | **Universal Reference（免 LoRA 跨图锁人）** | 喂锁定参考即跨图保持，无需训练；4.5 最多 14 张参考 |
 | Sora 2 | **Character Cameo（可复用角色ID）** | 建角色 ID 后跨场景复用，face-shifting 最少 |
 | Dreamina/即梦官方 CLI | 多参考/参考框，无持久角色 ID | 可作图后端；参考框粘性强，切换角色前必须清空；无持久主体 ID 时回退第①档参考图派生 |
-| Codex/官方 OpenAI gpt-image · DALL-E · Gemini(Imagen) · Flux | **无持久角色ID** | 回退第①档：多图参考派生 + 锚点句（注：Nano Banana/Gemini 多参考另算，见 SKILL） |
+| Nano Banana / Gemini 多参考 | 多图参考，无持久角色 ID | 与 Seedream Universal Reference 不是同一档；不得把 `生图AI=Nano/Gemini` 归到 seedream adapter |
+| Codex/官方 OpenAI gpt-image · DALL-E · Flux | **无持久角色ID** | 回退第①档：多图参考派生 + 锚点句；full QC 仍是进入视频前硬证据 |
 
-- **怎么用**：定妆过硬闸门自检 → 在支持的后端注册角色ID/主体 → 把平台返回的 ID/句柄写进 `出图/共享/identity_registry.json`（**机器真值源**，gate 从这里取 binding）；`00_索引.md` 只做人读提示，不当机器真值 → 分镜按 ID 引用 + 仍拼锚点句（双保险）。形态变体各注册各的。
+- **怎么用**：定妆过硬闸门自检 → 在支持的后端注册角色ID/主体（**注册时喂多样参考集：多角度+多表情+多光，而非单张定妆 sheet**；Kling 优先 Custom Model 吃多帧/视频拿最丰富身份，是治"定妆照=板式"的首选）→ 把平台返回的 ID/句柄写进 `出图/共享/identity_registry.json`（**机器真值源**，gate 从这里取 binding）；`00_索引.md` 只做人读提示，不当机器真值 → 分镜按 ID 引用 + 仍拼锚点句（双保险）。形态变体各注册各的。逐镜该喂哪些参考由 `reference_planner.py` 按后端能力规划（见 SKILL「逐镜参考规划」）。
 - **降级铁律**：后端无持久角色ID（Codex/DALL-E/Imagen/Flux）→ **自动回退多图参考派生**（第①档），绝不阻塞。它是增稳/提效层，先于 LoRA 用尽。当前若项目就选了支持主体的官方后端（Seedream/可灵/Sora Cameo），优先走第②档原生主体——但整集统一一个后端，不与 Codex 混用。
 
 ## 如何新增一个平台（保持拓展性）

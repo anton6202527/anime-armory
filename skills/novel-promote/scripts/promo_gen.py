@@ -18,24 +18,33 @@ _COMMON = os.path.join(_SKILLS, "novel", "_lib")
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from project_io import chapter_label, find_chapter_file, read_text  # noqa: E402
+from keyword_banks import (  # noqa: E402  单一定义源
+    PROMO_CONFLICT_KW as CONFLICT_KW,
+    PROMO_EMOTION_KW as EMOTION_KW,
+    PROMO_HOOK_KW as HOOK_KW,
+    PROMO_VISUAL_KW as VISUAL_KW,
+)
+from settings import get_setting  # noqa: E402
 
 
-VISUAL_KW = (
-    "血", "光", "火", "雷", "剑", "刀", "影", "雾", "雨", "风", "焰", "骨",
-    "裂", "碎", "爆", "坠", "冲", "领域", "符", "阵", "城", "宫", "殿",
+# `目标平台`（起点/红果/晋江/抖音漫剧…）→ 宣发投放平台默认值。
+# 仅作 --platform 缺省回退，用户显式 --platform 永远优先。
+TARGET_TO_PROMO_PLATFORM = (
+    ("xiaohongshu", ("晋江", "情感", "言情")),
+    ("douyin", ("红果", "抖音", "漫剧", "番茄", "短剧")),
+    ("bilibili", ("b站", "bilibili", "历史")),
 )
-CONFLICT_KW = (
-    "杀", "战", "斗", "反杀", "逼", "怒", "敌", "危", "险", "背叛", "夺",
-    "破", "逃", "追", "撞", "斩", "跪", "威胁", "审判",
-)
-EMOTION_KW = (
-    "心疼", "泪", "恨", "爱", "痛", "冷笑", "颤", "绝望", "不甘", "宿命",
-    "温柔", "沉默", "崩溃", "拥抱", "告白", "抬头",
-)
-HOOK_KW = (
-    "突然", "竟", "竟然", "却", "不料", "没想到", "下一刻", "原来", "真相",
-    "秘密", "最后", "只见", "谁也没想到",
-)
+
+
+def default_promo_platform(project):
+    """从项目 `目标平台` 选择点推断默认宣发平台；推不出落 tiktok。"""
+    target = str(get_setting(project, "目标平台") or "").strip().lower()
+    if not target:
+        return "tiktok"
+    for promo_platform, markers in TARGET_TO_PROMO_PLATFORM:
+        if any(marker.lower() in target for marker in markers):
+            return promo_platform
+    return "tiktok"
 
 PLATFORM_PROFILES = {
     "tiktok": {
@@ -269,16 +278,25 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description="Generate promotion scripts for novel chapters.")
     parser.add_argument("project_path", help="Path to the novel project root")
     parser.add_argument("--chapter", required=True, type=_chapter_number, help="Chapter number to analyze")
-    parser.add_argument("--platform", default="tiktok", help="Target platform: tiktok/douyin/xiaohongshu/bilibili")
+    parser.add_argument("--platform", default=None,
+                        help="投放平台 tiktok/douyin/xiaohongshu/bilibili；"
+                             "缺省按项目 `目标平台` 选择点推断")
     args = parser.parse_args(argv)
 
-    platform = args.platform.strip().lower()
+    project = os.path.abspath(args.project_path)
+    if args.platform is None:
+        # 未显式传 → 从 `目标平台` 选择点推断（_设置.md → 全局默认 → tiktok）。
+        platform = default_promo_platform(project)
+        print(f"[info] 未指定 --platform，按目标平台推断为 {platform}（可用 --platform 覆盖）",
+              file=sys.stderr)
+    else:
+        platform = args.platform.strip().lower()
     if platform not in PLATFORM_PROFILES:
         known = ", ".join(sorted(PLATFORM_PROFILES))
         print(f"[warn] 未知平台 {args.platform!r}，按 tiktok 模板生成；可选：{known}", file=sys.stderr)
         platform = "tiktok"
 
-    promo_path, n2d_path = write_outputs(os.path.abspath(args.project_path), args.chapter, platform)
+    promo_path, n2d_path = write_outputs(project, args.chapter, platform)
     print(f"Promotion script generated at {promo_path}")
     print(f"n2d-ready draft generated at {n2d_path}")
 

@@ -279,6 +279,7 @@ def load_registry_forms(root: Path) -> Optional[List[Dict[str, Any]]]:
                 "form": fm,
                 "key": key,
                 "asset_key": asset_key,
+                "anchor_phrase": str(form.get("anchor_phrase") or ""),
                 "display": display,
                 "ref_count": ref_count,  # 该形态 reference_group 的多角度参考张数（C4：喂全角度组给多参考后端）
                 "reference_stems": reference_stems,
@@ -640,6 +641,7 @@ def _form_advertises_outfit_group(form: Dict[str, Any], group: str) -> bool:
     haystack = " ".join([
         str(form.get("form") or ""),
         str(form.get("asset_key") or ""),
+        str(form.get("anchor_phrase") or ""),
         str(form.get("display") or ""),
         " ".join(str(s) for s in form.get("reference_stems") or []),
         " ".join(str(a) for a in aliases),

@@ -270,6 +270,27 @@ def test_lint_allows_matching_outfit_form() -> None:
     assert not any(f["code"] == "outfit_form_mismatch" for f in findings)
 
 
+def test_lint_allows_outfit_group_declared_in_anchor_phrase() -> None:
+    valid = {"CHAR_01", "CHAR_01/觉醒态"}
+    forms = [
+        {
+            "id": "CHAR_01",
+            "form": "觉醒态",
+            "key": "CHAR_01/觉醒态",
+            "asset_key": "沈念_觉醒态",
+            "anchor_phrase": "凤眼薄唇·乌黑半披发带·月白粗布·左腕淡疤",
+            "display": "沈念_觉醒态",
+            "reference_stems": {"定妆_沈念_觉醒态"},
+            "strong_aliases": {"CHAR_01", "CHAR_01/觉醒态", "沈念_觉醒态", "定妆_沈念_觉醒态"},
+            "weak_aliases": {"沈念"},
+        }
+    ]
+    blk = _char_block("Clip 12 月白旧宫装近景", char_id="CHAR_01/觉醒态")
+    blk["body"] += "\n**正向 prompt（中文）**：沈念月白旧宫装，金瞳觉醒态残留，CU 近景。"
+    findings = image_qc.lint_shot_block(blk, valid, forms)
+    assert not any(f["code"] == "outfit_form_mismatch" for f in findings)
+
+
 def test_lint_blocks_tail_without_image2image_relay() -> None:
     # 同角色尾帧：声明了接力尾帧素材，但没写 image2image 锁脸 → 纯文生图兜底脸漂 → hard block
     valid = {"CHAR_01/常态"}

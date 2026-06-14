@@ -32,6 +32,16 @@ DONE_TABLE_RE = re.compile(r"^\|\s*([^|]+?)\s*\|.*\[[xX]\]\s*\|")
 STAGE_RE = re.compile(r"<!--\s*stage:([a-z_]+)\s*-->")
 COMMENT_RE = re.compile(r"\s*<!--.*?-->\s*")
 
+# 本 reader 只懂「同构阶段清单」schema（novel-derived/create-stage-table）。
+# 章节矩阵型（build_progress_markdown，仅带 novel-progress-schema + 章节表）由
+# skills/novel/progress.py 负责；两种 schema 都带 novel-progress-schema，故必须用
+# 阶段表专属标记区分，否则会把满是 ⬜ 的矩阵误判成「无未完成项」。
+STAGE_TABLE_MARKERS = ("novel-derived-stage-table", "novel-create-stage-table")
+
+
+class ChapterMatrixSchema(Exception):
+    """_进度.md 是章节矩阵型，应由 skills/novel/progress.py 读取。"""
+
 
 def progress_path(root):
     return os.path.join(root, "_进度.md")
@@ -58,7 +68,14 @@ def scan_progress(root):
     section = "未分组"
     with open(path, encoding="utf-8") as f:
         lines = f.readlines()
-    has_machine_schema = any("novel-progress-schema" in line for line in lines)
+    is_stage_checklist = any(any(mk in line for mk in STAGE_TABLE_MARKERS) for line in lines)
+    # 章节矩阵型：带 novel-progress-schema 但不是阶段清单 → 交给 novel/progress.py，
+    # 切勿在这里静默返回空 items（会被误读成「全部完成」）。
+    if not is_stage_checklist and any(
+        ln.lstrip().startswith("| 章节 |") or ln.lstrip().startswith("| 章 |") for ln in lines
+    ):
+        raise ChapterMatrixSchema(path)
+    has_machine_schema = is_stage_checklist
     for lineno, raw in enumerate(lines, 1):
         line = raw.rstrip("\n")
         if line.startswith("## "):
@@ -122,6 +139,12 @@ def scan_main(argv=None):
     except FileNotFoundError as e:
         print(f"[err] 找不到进度文件：{e.filename}", file=sys.stderr)
         sys.exit(2)
+    except ChapterMatrixSchema:
+        print(f"# novel progress — {os.path.basename(root)}")
+        print("[redirect] 本项目是『章节矩阵型』进度，请用：")
+        print(f"    python3 skills/novel/progress.py {root!r}")
+        print("（本 reader 只读同构阶段清单型 _进度.md；矩阵型由 novel/progress.py 路由逐章。）")
+        return
 
     meta = load_meta(root)
     title = meta.get("title") or meta.get("source_title") or os.path.basename(root)

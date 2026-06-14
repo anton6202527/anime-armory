@@ -1,29 +1,39 @@
 # ad-compose 用法与交付（参考）
 
+## 自动 vs 操作者手工
+
+| 步骤 | 状态 |
+|---|---|
+| 主片拼接 + end card + 字幕烧录 + 混音 + 响度归一 | **自动**（`compose.sh` 调 ffmpeg 出 MP4）|
+| 多时长 cutdown | **自动**（`cutdown.py --render`，无 ffmpeg 时降级只出 plan）|
+| 多比例 reframe | **自动**（`reframe.py --render`，无 ffmpeg 时降级只出滤镜串）|
+| A/B 版本 | **操作者手工**（`deliver.py` 只给 expected_path，不代生成）|
+
 ## 脚本一览
 
 | 脚本 | 作用 |
 |---|---|
-| `compose.sh <作品根> [比例]` | 拼 clips + 混 VO/音乐床 + 追加 end card → `合成/成片_主片.mp4` |
-| `endcard.py` | 品牌包装片尾 PNG（品牌色 + logo + slogan + CTA 胶囊），Pillow |
-| `render_subs.py` | SRT → 字幕 PNG + overlay 时间表（无 libass）|
-| `cutdown.py <作品根> --target 15s` | 多时长重剪规划（按镜头优先级保骨架），带 pytest |
-| `reframe.py --src WxH --target 9:16` | 多比例 crop/pad 滤镜计算，带 pytest |
-| `deliver.py <作品根> --mark-existing` | 读 `_进度.md` 交付矩阵，生成 delivery_plan，并把已存在交付件回写 ✅ |
+| `compose.sh <作品根> [比例] [字幕语言] [交付规格]` | 拼 clips（filter-concat 归一）+ 混 VO/音乐床 + 烧字幕 + 追加 end card + 响度归一 → `合成/成片_主片.mp4`(+`_loud.mp4`) |
+| `endcard.py --out … (--size WxH \| --aspect 9:16) …` | 品牌包装片尾 PNG；尺寸按 `--size`/`--aspect` 推（不再写死 1920x1080），版式用实测文字高度堆叠 |
+| `render_subs.py <srt> --out-dir … --png-input-base 1` | SRT → 字幕 PNG + `overlay_table.json` + `inputs.txt` + `vfilter.txt`（compose.sh 直接消费 vfilter）|
+| `cutdown.py <作品根> --target 15s [--aspect 16:9] [--render]` | 多时长重剪规划（必保镜先占预算 + 权威时长源 + 缺失 block）；`--render` 实际出 MP4，带 pytest |
+| `reframe.py --src WxH --target 9:16 [--crop-x/--crop-y] [--in … --render]` | 多比例 crop/pad 滤镜 + 焦点裁切；`--render` 实际出 MP4，带 pytest |
+| `deliver.py <作品根> --mark-existing` | 读 `_进度.md` 交付矩阵，生成 delivery_plan（含可执行 `--render` 命令），并把已存在交付件回写 ✅ |
 
 ## 交付规格（响度归一）
 
-按 `_设置.md` 的 `交付规格`：
+按 `_设置.md` 的 `交付规格`，`compose.sh` 第 4 参数即此值，成片有音轨时**自动**跑 loudnorm：
 - 平台默认：`-16 LUFS`，true peak `-1 dB`（抖音/快手/信息流）。
 - 广电 TVC：`-23 LUFS`，true peak `-2 dB`。
 
 ```bash
-ffmpeg -i 成片_主片.mp4 -af loudnorm=I=-16:TP=-1:LRA=11 -c:v copy 合成/交付/成片_主片_loud.mp4
+# compose.sh 自动产出 合成/成片_主片_loud.mp4；如需单独跑：
+ffmpeg -i 成片_主片.mp4 -af loudnorm=I=-16:TP=-1:LRA=11 -c:v copy 合成/成片_主片_loud.mp4
 ```
 
 ## 安全框
 
-竖版/方版 reframe 会裁掉两侧；标题/logo/CTA 须在 title-safe（≈90%），主体/产品在 action-safe（≈93%）。出图出视频阶段已留余量；reframe 用 `crop` 居中裁切，主体偏置时改 `crop` 的 x/y 偏移。
+竖版/方版 reframe 会裁掉两侧；标题/logo/CTA 须在 title-safe（≈90%），主体/产品在 action-safe（≈93%）。出图出视频阶段已留余量。`reframe.py` 默认**中心裁切**（偏置主体会被裁掉，脚本会提示）；主体不在中心时用 `--crop-x/--crop-y` 指定归一焦点（0..1），裁切窗会对到主体并夹进画内。
 
 ## 接缝（与 storyboard.transition 对应）
 

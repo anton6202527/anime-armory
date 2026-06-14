@@ -60,7 +60,8 @@
 }
 ```
 
-- `assets`：逐镜绑定 `PROD_xx`（产品）/`CHAR_xx`（角色）/`LOC_xx`（场景），供 `ad-image` 三层定妆库锁一致性。产品镜必带 `PROD_xx`。
+- `vo_lines`：该镜承载的 VO 句子下标（指向 `配音/时长清单.json` 每句的 `idx`，1-based）。`finalize_storyboard.py` 据此查**单镜 VO 溢出**（单镜 VO 秒数 > 该镜 duration → 旁白被截断 block）。
+- `assets`：逐镜绑定 `PROD_xx`（产品）/`CHAR_xx`（角色）/`LOC_xx`（场景）/`logo`/`slogan`/`CTA`，供 `ad-image` 三层定妆库锁一致性、并供定稿闸门做**强制项落镜**判定。产品镜必带 `PROD_xx`；brief mandatories（logo/slogan/法律声明/CTA）须由某镜的 `frame`/`assets`/`legal_lines`/end card 承载，否则定稿 block。
 - `continuity.transition`：硬切 / 微溶解 / 跳切；`need_end_frame`：是否要尾帧接力（`ad-image` 出 `镜头N_end.png`，`ad-video` 双帧引导）。
 - 总时长（Σ duration）必须 ≈ `master_seconds`，由 `finalize_storyboard.py` 闸门对账。
 

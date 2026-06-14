@@ -31,3 +31,15 @@ python3 skills/novel-progress/scan.py <作品根>         # 只看指定项目
 | 评分 | `novel-score` |
 | 改写 | `novel-rewrite` |
 | 导出 | `novel-craft` |
+
+> `scan.py` 现在还会在每部作品末尾追加一行 `⛔ QA gate 阻断: N 项`（当 rights/review/score gate 有阻断时），让进度看板和 `novel-gate.py` 不再两套口径。
+
+## 进度矩阵之外的「常被漏掉」分析仪（建议在写完一卷后主动提示）
+
+进度矩阵只逐章跟踪 大纲→…→导出，**不含**下列项目级 QA。它们不是 gate，但写完一卷只跑 review/score 会漏掉节奏、伏笔、留存问题——当某卷正文初稿已成段时，主动建议用户补跑：
+
+- `novel-wiki`：伏笔台账（planted→payoff 逾期）+ 设定一致性（`设定/foreshadowing_ledger.json` / `动态百科.json`）。
+- `novel-balance`：节奏热力图 / 注水 / 烂尾预警（读 wiki 的伏笔回收率）。
+- `novel-simulate`：模拟读者留存 / 找弃书点。
+
+（三者都按 `目标平台` 自适应口径：品质向不会被爽文尺子误判。）

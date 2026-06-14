@@ -276,6 +276,12 @@ RIGHTS_STATUS_CANONICAL = {
     "未确认": "unknown",
 }
 
+# 与 novel-craft/scripts/contract.py 的同名表逐值一致（vendored，由 test_contract_sync.py 守护）。
+PUBLIC_DOMAIN_LICENSE_URLS = {
+    "gutenberg": "https://www.gutenberg.org/policy/license.html",
+    "wikisource": "https://wikisource.org/wiki/Wikisource:Copyright_policy",
+}
+
 REGION_ALIASES = {
     "us": "US",
     "usa": "US",
@@ -293,6 +299,84 @@ REGION_ALIASES = {
     "未定": "UNSPECIFIED",
     "": "",
 }
+
+def rights_metadata(
+    rights_status,
+    *,
+    source_type="",
+    rights_declared=False,
+    source_url="",
+    rights_jurisdiction=None,
+    rights_basis=None,
+    source_license_url=None,
+    distribution_regions=None,
+):
+    """Return normalized rights fields for _meta.json/source_manifest.json.
+
+    Public-domain is jurisdiction-sensitive. We record the source-side basis and
+    distribution regions separately so QA/export gates can reason about gaps.
+    Vendored copy of novel-craft/scripts/contract.py::rights_metadata —
+    test_contract_sync.py 守护两份逐值一致。
+    """
+    status = normalize_rights_status(rights_status)
+    source_type = str(source_type or "").strip()
+    regions = parse_regions(distribution_regions)
+    covered_regions = []
+    declared = bool(rights_declared)
+    jurisdiction = str(rights_jurisdiction or "").strip()
+    basis = str(rights_basis or "").strip()
+    license_url = str(source_license_url or "").strip()
+
+    if status == "original":
+        jurisdiction = jurisdiction or "GLOBAL"
+        basis = basis or "original_creation"
+        regions = regions or ["GLOBAL"]
+        covered_regions = ["GLOBAL"]
+        declared = True
+    elif status == "user-owned":
+        jurisdiction = jurisdiction or "user-declared"
+        basis = basis or "user_attested_ownership"
+        regions = regions or ["GLOBAL"]
+        covered_regions = ["GLOBAL"]
+        declared = True
+    elif status == "user-declared":
+        jurisdiction = jurisdiction or "user-declared"
+        basis = basis or "user_attested_authorization"
+        regions = regions or ["GLOBAL"]
+        covered_regions = ["GLOBAL"]
+        declared = True
+    elif status == "public-domain":
+        if source_type == "gutenberg":
+            jurisdiction = jurisdiction or "US"
+            basis = basis or "Project Gutenberg public-domain claim; verify outside US"
+            license_url = license_url or PUBLIC_DOMAIN_LICENSE_URLS["gutenberg"]
+            covered_regions = ["US"]
+        elif source_type == "wikisource":
+            jurisdiction = jurisdiction or "source-site"
+            basis = basis or "Wikisource page-level public-domain/free-license claim; verify target region"
+            license_url = license_url or PUBLIC_DOMAIN_LICENSE_URLS["wikisource"]
+        else:
+            jurisdiction = jurisdiction or "declared-by-source-header"
+            basis = basis or "source provenance header says public-domain; target region still needs review"
+    else:
+        status = "unknown"
+        jurisdiction = jurisdiction or "unknown"
+        basis = basis or "rights_not_established"
+
+    requires_user_rights = status not in {"original", "user-owned", "user-declared", "public-domain"}
+    requires_region_review = status == "public-domain" and "GLOBAL" not in covered_regions
+    return {
+        "rights_status": status,
+        "rights_jurisdiction": jurisdiction,
+        "rights_basis": basis,
+        "source_license_url": license_url or source_url or "",
+        "rights_covered_regions": covered_regions,
+        "distribution_regions": regions,
+        "requires_user_rights": requires_user_rights,
+        "requires_region_rights_review": requires_region_review,
+        "rights_declared": declared,
+    }
+
 
 # ── Utility Helpers (Facade) ──────────────────────────────────────────────────
 def docx_to_txt(docx_path, out_txt_path):
@@ -319,8 +403,10 @@ def detect_rights_status(novel_txt_path, i_have_rights):
             break
         if "copyright" in line.lower():
             val = line.split(":", 1)[1].strip().lower() if ":" in line else ""
-            if any(k in val for k in ("public", "公版", "gutenberg", "wikisource")):
+            if any(k in val for k in ("public", "公版", "gutenberg", "wikisource", "维基文库")):
                 return "public-domain"
+            if any(k in val for k in ("用户声明", "user-declared")):
+                return "user-declared"
     return "user-declared" if i_have_rights else "unknown"
 
 def write_project_settings(out_root, fields, *, note=None):

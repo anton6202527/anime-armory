@@ -44,6 +44,8 @@ def write_demo_gate(root):
 
 def assert_next_packet_runs(testcase, root):
     write_demo_gate(root)
+    with open(os.path.join(root, "设定", "读者契约.md"), "w", encoding="utf-8") as f:
+        f.write("# 读者契约\n核心题旨：测试占位。\n")
     got = subprocess.run(
         [sys.executable, DRAFT_PACKETS, root, "--next"],
         cwd=REPO,

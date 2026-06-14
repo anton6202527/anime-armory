@@ -564,7 +564,7 @@ APPROVED_IMAGE_BACKENDS: Dict[str, Dict[str, Any]] = {
         "label": "Dreamina/即梦官方 CLI",
         "canonical": "dreamina",
         "multi_reference": True,
-        "native_subject": True,
+        "native_subject": False,
         "tier": "tier-1",
     },
     "seedream": {
@@ -613,10 +613,99 @@ IMAGE_BACKEND_ALIASES = {
     "可灵": "kling_subject",
     "kling": "kling_subject",
     "nano banana": "nano_banana",
+    "nano_banana": "nano_banana",
+    "nanobanana": "nano_banana",
+    "gemini": "nano_banana",
     "sora": "sora_cameo",
 }
 
 FORBIDDEN_IMAGE_BACKEND_KEYWORDS = ("同视频ai", "同视频AI", "第三方", "逆向", "web自动化", "web 自动化")
+
+# 图后端身份一致性能力档（出图侧）。
+#
+# `APPROVED_IMAGE_BACKENDS` 只回答「这个出图后端是否可用/官方」；
+# 本表回答「它能把角色身份锁到哪一级」。`face_drift_risk.py`、gate 和后续路由建议应读这里，
+# 避免把 Dreamina 这类“多参考但无持久主体 ID”的后端误当成 Seedream/可灵主体库。
+# 采集日期同 APPROVED_IMAGE_BACKENDS：2026-06-14；易变事实需走 freshness/refresh 流程刷新。
+IMAGE_IDENTITY_PROFILES: Dict[str, Dict[str, Any]] = {
+    "codex": {
+        "label": "Codex",
+        "persistent_subject": False,
+        "multi_reference": True,
+        "strategy": "multi_reference",
+        "max_reference_images": None,
+        "ingests_video": False,
+        "recommended_diverse_reference_min": None,
+        "native_modes": (),
+        "notes": "无持久角色 ID；每镜使用 reference_group + 锚点句 + full QC。",
+    },
+    "openai": {
+        "label": "官方 OpenAI gpt-image / DALL·E",
+        "persistent_subject": False,
+        "multi_reference": True,
+        "strategy": "multi_reference",
+        "max_reference_images": None,
+        "ingests_video": False,
+        "recommended_diverse_reference_min": None,
+        "native_modes": (),
+        "notes": "支持图片输入/编辑，但无 n2d 持久主体 ID；按 reference_group 兜底。",
+    },
+    "dreamina": {
+        "label": "Dreamina/即梦官方 CLI",
+        "persistent_subject": False,
+        "multi_reference": True,
+        "strategy": "multi_reference_sticky_reference",
+        "max_reference_images": None,
+        "ingests_video": False,
+        "recommended_diverse_reference_min": None,
+        "native_modes": (),
+        "notes": "官方 CLI 可多参考/图生图；按无持久角色 ID 处理，切角色前必须清空参考框。",
+    },
+    "nano_banana": {
+        "label": "Nano Banana / Gemini 多参考",
+        "persistent_subject": False,
+        "multi_reference": True,
+        "strategy": "multi_reference",
+        "max_reference_images": None,
+        "ingests_video": False,
+        "recommended_diverse_reference_min": None,
+        "native_modes": (),
+        "notes": "多图参考后端；不等同 Seedream Universal Reference，不写入 seedream adapter。",
+    },
+    "seedream": {
+        "label": "Seedream Universal Reference",
+        "persistent_subject": True,
+        "multi_reference": True,
+        "strategy": "universal_reference",
+        "max_reference_images": 14,
+        "ingests_video": False,
+        "recommended_diverse_reference_min": 8,
+        "native_modes": ("universal_reference",),
+        "notes": "支持原生主体/通用参考能力；注册或 ready 后按 ID/handle/reference 跨镜复用。注册时喂多样参考集（多角度+多表情+多光）比单 sheet 稳。",
+    },
+    "kling": {
+        "label": "可灵 Kling 主体库",
+        "persistent_subject": True,
+        "multi_reference": True,
+        "strategy": "subject_library",
+        "max_reference_images": None,
+        "ingests_video": True,
+        "recommended_diverse_reference_min": 10,
+        "native_modes": ("character_id", "subject_library", "custom_model", "element_library"),
+        "notes": "支持主体库/角色 ID 类能力；高危多人同框与接触镜优先注册。Custom Model 可吃 10–30 段视频/多帧拿最丰富身份，是治板式的首选。",
+    },
+    "sora": {
+        "label": "Sora Character Cameo",
+        "persistent_subject": True,
+        "multi_reference": True,
+        "strategy": "character_cameo",
+        "max_reference_images": None,
+        "ingests_video": True,
+        "recommended_diverse_reference_min": 8,
+        "native_modes": ("character_cameo",),
+        "notes": "支持可复用角色 Cameo；以官方当前能力为准，执行前刷新候选。",
+    },
+}
 
 # ── 横切 readiness 注册表 ───────────────────────────────────────────────
 READINESS_TRACKED_SKILLS: List[Dict[str, Any]] = [

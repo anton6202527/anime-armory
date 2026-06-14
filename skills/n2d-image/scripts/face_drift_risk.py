@@ -10,8 +10,8 @@
   - 大表情数   ：desc 命中强情绪（哭/怒/狂喜/崩溃…）的镜（大表情让 AI 重画整张脸）；
   - 多人同框   ：与其它命名角色同框的镜（单图参考后端难分别控脸，易串脸）；
   - 极端角度   ：lens/desc 命中该角色 angle_policy.risky（俯仰/远景/逆光暗部）的镜；
-  - 锁脸档位   ：默认后端是否有原生锁脸——Codex/即梦只有 reference_group（底色更高危），
-                 可灵/Seedream/Sora 原生主体库更稳，LoRA 最稳。
+  - 锁脸档位   ：默认后端的身份能力——Codex/OpenAI/Dreamina/Nano 只有多图参考/图生图、无持久主体 ID，
+                 Seedream/可灵/Sora 可注册原生主体库更稳，LoRA 最稳。
 
 输出 生产数据/face_drift_risk_<ep>.json + .md，按风险排序，对 high/medium 角色给出可执行建议
 （与 image_qc 的 no_expression_lib_ref gate、n2d-lora init 对齐）。**只提示不阻断**——出图前的预案，
@@ -30,6 +30,16 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Set, Tuple
 
+_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
+if _COMMON not in sys.path:
+    sys.path.insert(0, _COMMON)
+try:
+    from n2d_contract import classify_image_backend, image_identity_profile, image_lock_tier
+except Exception:  # pragma: no cover - 测试/异常布局兜底
+    classify_image_backend = None  # type: ignore
+    image_identity_profile = None  # type: ignore
+    image_lock_tier = None  # type: ignore
+
 # 近景景别（与 image_qc.CLOSEUP_MARKERS / video_qc 同义；本 skill 自留一份，不跨 import）。
 CLOSEUP_MARKERS = ("ECU", "MCU", "BCU", "CU", "OTS", "反打", "特写", "近景", "过肩", "脸部")
 # 强情绪（与 image_qc.STRONG_EMOTION_MARKERS 对齐：表情镜脸漂的触发词）。
@@ -38,11 +48,10 @@ STRONG_EMOTION_MARKERS = (
     "狂喜", "大笑", "狂笑", "嘶吼", "咆哮", "嚎", "痛苦", "崩溃", "狰狞", "扭曲", "癫狂",
     "失控", "绝望", "悲恸", "惊愕",
 )
-# 默认后端有原生锁脸能力的（image 阶段主体库/Cameo）；其余（codex/openai/dreamina）只有 reference_group。
-NATIVE_LOCK_BACKENDS = {"kling", "seedream", "sora"}
 READY_STATUSES = {"registered", "ready"}
 
-WEIGHTS = {"base_reference_group": 25, "base_native": 8, "base_lora": 0,
+WEIGHTS = {"base_reference_group": 28, "base_multi_reference": 22, "base_native_unregistered": 20,
+           "base_native": 8, "base_lora": 0,
            "closeup": 30, "emotion_each": 8, "emotion_cap": 24,
            "multi": 20, "angle_each": 6, "angle_cap": 24}
 BAND_HIGH, BAND_MEDIUM = 55, 30
@@ -77,14 +86,16 @@ def extreme_angle_tokens(lens: str, desc: str, risky: Sequence[str]) -> List[str
 
 
 def lock_tier(default_backend: str, image_adapters: Mapping[str, Any], lora: Mapping[str, Any]) -> str:
-    """该角色当前锁脸档位：'lora'（最稳）/ 'native'（后端原生主体库）/ 'reference_group'（仅参考图，最高危底色）。纯函数·可测。"""
+    """该角色当前锁脸档位。
+
+    档位由 `n2d/_lib/n2d_schema.py::IMAGE_IDENTITY_PROFILES` 驱动，避免把
+    Dreamina/Nano 这类多参考后端误判成 Seedream/可灵的持久主体层。
+    """
+    if image_lock_tier is not None:
+        return image_lock_tier(str(default_backend or ""), dict(image_adapters or {}), dict(lora or {}))  # type: ignore[misc]
     if str((lora or {}).get("status") or "").strip() in {"ready", "training"}:
         return "lora"
-    be = str(default_backend or "").strip().lower()
-    ad = (image_adapters or {}).get(be) or {}
-    if be in NATIVE_LOCK_BACKENDS and str(ad.get("status") or "").strip() in READY_STATUSES:
-        return "native"
-    return "reference_group"
+    return "multi_reference"
 
 
 def score_character(signals: Mapping[str, Any], tier: str) -> Dict[str, Any]:
@@ -93,8 +104,14 @@ def score_character(signals: Mapping[str, Any], tier: str) -> Dict[str, Any]:
     signals: {appear, closeup, emotion, multi, angle}（计数）。score 0–100，band high/medium/low。
     """
     appear = max(int(signals.get("appear", 0)), 0)
-    base = {"reference_group": WEIGHTS["base_reference_group"], "native": WEIGHTS["base_native"],
-            "lora": WEIGHTS["base_lora"]}.get(tier, WEIGHTS["base_reference_group"])
+    base = {
+        "reference_group": WEIGHTS["base_reference_group"],
+        "multi_reference": WEIGHTS["base_multi_reference"],
+        "native_unregistered": WEIGHTS["base_native_unregistered"],
+        "native_subject": WEIGHTS["base_native"],
+        "native": WEIGHTS["base_native"],  # 兼容旧 report
+        "lora": WEIGHTS["base_lora"],
+    }.get(tier, WEIGHTS["base_reference_group"])
     drivers: List[Dict[str, Any]] = [{"factor": f"锁脸档位={tier}", "points": base}]
     closeup_ratio = (signals.get("closeup", 0) / appear) if appear else 0.0
     multi_ratio = (signals.get("multi", 0) / appear) if appear else 0.0
@@ -117,20 +134,32 @@ def score_character(signals: Mapping[str, Any], tier: str) -> Dict[str, Any]:
 
 
 def suggestions_for(name: str, scored: Mapping[str, Any], signals: Mapping[str, Any],
-                    char_id: str, form: str, root_hint: str = "<作品根>") -> List[str]:
+                    char_id: str, form: str, root_hint: str = "<作品根>",
+                    backend_profile: Optional[Mapping[str, Any]] = None) -> List[str]:
     """按驱动因子 + 档位给可执行建议（与 image_qc 表情库 gate、n2d-lora init 对齐）。纯函数·可测。"""
     out: List[str] = []
     tier = scored.get("tier")
     appear = max(int(signals.get("appear", 0)), 1)
     # 阈值化：只在某高危信号**材料性出现**时给对应建议，避免每个角色都堆同一套样板话。
     if tier == "reference_group":
-        out.append("默认后端无原生锁脸（Codex/即梦仅 reference_group）——跨镜全靠参考图，是脸漂高危底色。")
+        out.append("当前后端无已知多参考/持久主体能力——跨镜全靠单组参考图和锚点句，是脸漂高危底色。")
+    elif tier == "multi_reference":
+        label = str((backend_profile or {}).get("label") or "当前后端")
+        out.append(f"{label} 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。")
+        if str((backend_profile or {}).get("canonical") or "") == "dreamina":
+            out.append("Dreamina/即梦参考框有粘性：切换角色前清空参考图；场景定妆必须清空人物参考。")
+    elif tier == "native_unregistered":
+        label = str((backend_profile or {}).get("label") or "所选后端")
+        out.append(f"{label} 支持持久主体/角色 ID，但该角色尚未 registered/ready；核心或高危镜建议先注册主体再出图。")
     if int(signals.get("emotion", 0)) >= 2:
         out.append("大表情镜多：必建表情库 expressions + 脸部特写参考，首尾双帧只插值（对齐 image_qc no_expression_lib_ref）。")
     if int(signals.get("closeup", 0)) / appear >= 0.4:
         out.append("近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。")
     if int(signals.get("multi", 0)) >= 2:
-        out.append("多人同框多：用多参考后端（Seedream/可灵主体库）或把同框拆成正反打分别出，避免单图参考串脸。")
+        if tier in {"native_unregistered", "native_subject"}:
+            out.append("多人同框多：按 registry priority 标 primary，优先给 primary 使用原生主体名额，其余角色降级参考图组。")
+        else:
+            out.append("多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出，避免串脸。")
     if int(signals.get("angle", 0)) >= 1:
         out.append("极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。")
     if scored.get("band") == "high" and tier != "lora":
@@ -151,14 +180,25 @@ def project_default_backend(root: Path) -> str:
             raw = m.group(1).strip()
     except Exception:
         pass
+    if classify_image_backend is not None:
+        canon, kind = classify_image_backend(raw)  # type: ignore[misc]
+        if kind == "approved" and canon:
+            return canon
     low = raw.lower()
     alias = {"codex": "codex", "openai": "openai", "即梦": "dreamina", "dreamina": "dreamina",
              "可灵": "kling", "kling": "kling", "seedream": "seedream", "即梦seedream": "seedream",
-             "sora": "sora", "nano": "seedream"}
+             "sora": "sora", "nano banana": "nano_banana", "nano_banana": "nano_banana",
+             "nanobanana": "nano_banana", "gemini": "nano_banana"}
     for k, v in alias.items():
         if k in low:
             return v
     return "codex"
+
+
+def backend_profile(default_backend: str) -> Dict[str, Any]:
+    if image_identity_profile is not None:
+        return image_identity_profile(default_backend)  # type: ignore[misc]
+    return {"canonical": default_backend, "label": default_backend, "persistent_subject": False, "multi_reference": True}
 
 
 def _split_aliases(*texts: str) -> Set[str]:
@@ -238,6 +278,7 @@ def analyze(root: Path, ep: str) -> Dict[str, Any]:
     chars = load_characters(root)
     clips = load_clips(root, ep)
     default_backend = project_default_backend(root)
+    profile = backend_profile(default_backend)
     by_id: Dict[str, Dict[str, Any]] = {
         c["id"]: {"char": c, "appear": 0, "closeup": 0, "emotion": 0, "multi": 0, "angle": 0,
                   "angle_tokens": set(), "clips": []}
@@ -274,7 +315,7 @@ def analyze(root: Path, ep: str) -> Dict[str, Any]:
         tier = lock_tier(default_backend, c.get("image_adapters") or {}, c.get("lora") or {})
         signals = {k: agg[k] for k in ("appear", "closeup", "emotion", "multi", "angle")}
         scored = score_character(signals, tier)
-        sug = suggestions_for(c["name"], scored, signals, cid, c["form"], str(root))
+        sug = suggestions_for(c["name"], scored, signals, cid, c["form"], str(root), profile)
         results.append({
             "character_id": cid, "name": c["name"], "form": c["form"],
             "signals": signals, "angle_tokens": sorted(agg["angle_tokens"]),
@@ -284,6 +325,7 @@ def analyze(root: Path, ep: str) -> Dict[str, Any]:
     return {
         "kind": "n2d_face_drift_risk", "version": 1, "root": str(root), "episode": ep,
         "default_backend": default_backend,
+        "backend_profile": profile,
         "high": sum(1 for r in results if r["band"] == "high"),
         "medium": sum(1 for r in results if r["band"] == "medium"),
         "characters": results, "notes": notes,

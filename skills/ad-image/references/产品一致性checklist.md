@@ -31,8 +31,21 @@ AI 生图对**小文字 / logo 字形**仍不稳。策略：
 - 产品 hero / logo 特写镜：出图先占位，**关键 logo/包装文字镜在 `ad-compose` 用真 logo/包装贴图合成或后期叠加**（最稳）。
 - 中远景产品镜：靠产品定妆参考 + 身份锁定句锁形态与色。
 
-## 机检建议（二期 ad-review）
+## 机检（已落地 · `scripts/product_qc.py`）
 
-- 产品镜组内 dHash/直方图离群 → 产品漂移。
-- 品牌色：取产品区域主色与 `品牌色` HEX 比对色差（ΔE）超阈值 → 偏色 warn。
-- logo 区域模板匹配（有 logo 模板时）→ 变形/缺失 flag。
+二期设想的产品一致性机检**已实现并前移到出图落档**，是 gate spend 的硬闸（不再只是散文/人审）。出完图、还没继续出视频时跑：
+
+```bash
+python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--strict]
+```
+
+落档 `出图/分镜/product_qc.json`（`summary.block>0` → 退出非零，`ad-craft/gate.py` 据此挡 spend）。四项检：
+
+| 检项 | severity 语义 | 实现 |
+|---|---|---|
+| **prompt-lint**（绝不文生图产品） | 产品镜缺 参考图块 / 身份锁定句 / 负向(不要改包装文字·不要变形logo) → **block**（无 Pillow 也跑） | 解析 `prompt/镜头N.md` |
+| **品牌色 ΔE** | 产品区域主色 vs `品牌色` HEX，CIE76 ΔE 超阈 → **block**，临界 → warn；无区域取整图主色降级 warn | Pillow+numpy；缺则 info 降级 |
+| **product dHash 离群** | 产品镜组内最近邻 Hamming 距离离群 → 漂移 warn/block（组 <3 张降 info） | Pillow |
+| **logo 模板匹配** | 注册 `出图/共享/定妆库/产品/logo.png` 时 NCC 粗匹配；缺失/形变 → flag；无模板干净跳过 | Pillow+numpy |
+
+缺 Pillow/numpy 时优雅降级（只跑 prompt-lint，报告标 `degraded`，不臆造通过）。测试：`cd skills/ad-image/scripts && python3 -m pytest test_product_qc.py`。logo/小文字仍建议关键镜用真 logo 贴图后期合成（见上节）——机检兜底，不替代该铁律。

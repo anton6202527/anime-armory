@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""字幕/歌词渲染共享原语（跨生产线）。
+"""字幕渲染原语（ad 线自带·vendored）。
 
-本机 ffmpeg 是裁剪版、无 libass/drawtext，所以 n2d / ad / mv 的 compose 都得自己
-把字幕渲成透明 PNG 再 overlay 烧录。三条线此前各抄了一份「SRT/LRC/ASS 解析 + 时间戳
-解析 + 字体回退加载 + CJK 折行 + ffmpeg overlay 链拼装」——这些原语没有任何画线语义、
-纯确定性、可单测，是教科书级的「抽进 common/ 共享」对象（与 text_utils / settings /
-disclosure 同档：common 是各线都 import 的共享地基，不是某条线的 skill，故不破坏
-「线之间不互相复用 skill」边界）。
+本机 ffmpeg 是裁剪版、无 libass/drawtext，所以 ad-compose 得自己把字幕渲成透明 PNG 再
+overlay 烧录。本模块是 ad 线**自包含**的字幕底层：SRT/LRC/ASS 解析 + 时间戳解析 + 字体
+回退加载 + CJK 折行 + ffmpeg overlay 链拼装——纯确定性、可单测，随 ad 线一起交付。
+（n2d/mv 各自有自己的同名副本；ad 不复用别线的副本，别线也不复用本份。）
 
-留在各 compose 本地的是**视觉部分**（描边技法、版式、样式分级、输出文件命名）——那才是
-各线真正分叉、且改一像素就动既有 demo 产物的部分，不强行统一。
+ad-compose/render_subs.py 在此之上叠**视觉部分**（描边技法、版式、输出文件命名）——
+那是 ad 线真正分叉、改一像素就动既有产物的部分。
 
 无 PIL 环境也能 import：解析/链路原语不碰 PIL，只有 load_font 内部惰性 import PIL。
 """
@@ -93,7 +91,7 @@ def parse_ass(text: str) -> List[Dict[str, Any]]:
 
 # ── 字体回退加载（路径解析纯函数·可测；truetype 惰性 import PIL） ──────────────
 
-# 跨平台中文优先字体回退序（macOS 优先，Linux DejaVu 兜底）。各线可传自己的 paths 覆盖。
+# 跨平台中文优先字体回退序（macOS 优先，Linux DejaVu 兜底）。调用方可传自己的 paths 覆盖。
 DEFAULT_CJK_FONTS: Tuple[str, ...] = (
     "/System/Library/Fonts/PingFang.ttc",
     "/System/Library/Fonts/STHeiti Medium.ttc",
@@ -152,7 +150,7 @@ def wrap_cjk(draw: Any, text: str, font: Any, max_width: float) -> List[str]:
     return out
 
 
-# ── ffmpeg overlay 链拼装（纯函数·无 PIL·字节级可复现各线既有输出） ──────────
+# ── ffmpeg overlay 链拼装（纯函数·无 PIL·字节级可复现既有输出） ──────────
 
 def overlay_filter_chain(cues: Sequence[Tuple[float, float]], *, png_input_base: int,
                          first_input: str = "[0:v]", inter_prefix: str = "v",
@@ -161,10 +159,9 @@ def overlay_filter_chain(cues: Sequence[Tuple[float, float]], *, png_input_base:
     """把 N 张时间门控 PNG 拼成 ffmpeg overlay 滤镜链字符串。
 
     每张 PNG 是第 `png_input_base+k` 路输入，时间窗 `enable='between(t,start,end)'`。
-    参数化以字节级复现各线既有写法：
-      - n2d: png_input_base=3, inter_prefix='v', pre_final='[vsub]', overlay_xy='0:0',
-              format_tail='yuv420p', format_final='[v]'
-      - mv:  png_input_base=2, inter_prefix='s', pre_final='[v]'（无 format_tail）
+    参数化便于 ad-compose 按不同输入布局复用，例如：
+      - ad 烧字幕（底片在 0 路）：png_input_base=1, inter_prefix='s', pre_final='[v]',
+              overlay_xy='0:0', format_tail='yuv420p', format_final='[v]'
 
     cues 为 (start, end) 秒序列。空列表：有 format_tail 时回 `<first>format=<tail><final>`，
     否则回 first_input。

@@ -22,10 +22,12 @@ description: 宣发一体化与爆点挖掘 — 挖掘小说中的"高光时刻"
 
 ### 1. 生成宣发脚本
 ```bash
-python3 skills/novel-promote/scripts/promo_gen.py "<作品根>" --chapter <章节号> --platform tiktok
+python3 skills/novel-promote/scripts/promo_gen.py "<作品根>" --chapter <章节号> [--platform tiktok]
 ```
 - 读取指定章节。
 - 产出：`导出/宣发/第NN章_引流脚本_<平台>.md`。
+- **`--platform` 缺省自动推断**：不显式传 `--platform` 时，按项目 `目标平台` 选择点推断投放平台（晋江/情感→xiaohongshu，红果/抖音/漫剧/番茄→douyin，历史/B站→bilibili，否则 tiktok）；显式 `--platform` 永远优先（CLI 覆盖）。
+- 爆点关键词词表来自单一定义源 `skills/novel/_lib/keyword_banks.py`（与 novel-balance/novel-simulate 共用）。
 
 ### 2. 对接漫剧线（成品级交接，不互相 import）
 - 产出 `导出/宣发/第NN章_n2d_ready.md`：把高光片段整理成 `n2d` 可直接吃的预告片骨架（场景/角色/动作/字幕/时长建议），字段对齐 n2d-script 的 beat 结构。

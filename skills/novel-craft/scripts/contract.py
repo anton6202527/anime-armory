@@ -256,6 +256,10 @@ KIND_SPEC_LABEL = {
     "continue": "末章状态 / 续写方向",
 }
 
+# 这些派生类沿用原作书名（续/扩/缩不另起书名），不该带 title 阶段——否则
+# _进度.md 永远卡在「书名」这一未完成项上。rewrite/spinoff 仍走 novel-title。
+NO_TITLE_KINDS = {"continue", "expand", "condense"}
+
 
 def normalize_scale(scale):
     key = str(scale or "").strip()
@@ -445,6 +449,8 @@ def derived_stage_markdown(kind):
         f"<!-- novel-derived-stage-table: {CONTRACT_VERSION}; kind: {kind} -->",
     ]
     for stage in DERIVED_STAGE_TABLE:
+        if stage["key"] == "title" and kind in NO_TITLE_KINDS:
+            continue  # 续/扩/缩沿用原作书名，不发 title 阶段
         mark = "x" if stage["key"] == "setup" else " "
         label = stage["label"]
         if stage["key"] == "source_model" and kind in KIND_SPEC_LABEL:

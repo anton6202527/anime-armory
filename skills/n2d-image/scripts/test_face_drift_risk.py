@@ -40,19 +40,21 @@ def test_extreme_angle_tokens_maps_text_to_risky() -> None:
 
 
 def test_lock_tier() -> None:
-    # Codex 默认（reference_group only）
-    assert fdr.lock_tier("codex", {"codex": {"status": "fallback_reference_group"}}, {"status": "not_needed"}) == "reference_group"
-    # 可灵原生主体库 registered → native
-    assert fdr.lock_tier("kling", {"kling": {"status": "registered"}}, {"status": "not_needed"}) == "native"
-    # 可灵但未注册 → 回退 reference_group
-    assert fdr.lock_tier("kling", {"kling": {"status": "unregistered"}}, {}) == "reference_group"
+    # Codex 默认：多图参考/图生图可用，但无持久主体 ID。
+    assert fdr.lock_tier("codex", {"codex": {"status": "fallback_reference_group"}}, {"status": "not_needed"}) == "multi_reference"
+    # Dreamina/即梦官方 CLI 可多参考，但无 n2d 持久主体 ID；不要误判 native。
+    assert fdr.lock_tier("dreamina", {"dreamina": {"status": "registered"}}, {"status": "not_needed"}) == "multi_reference"
+    # 可灵原生主体库 registered → native_subject。
+    assert fdr.lock_tier("kling", {"kling": {"status": "registered"}}, {"status": "not_needed"}) == "native_subject"
+    # 可灵但未注册 → native_unregistered，风险建议应提示先注册。
+    assert fdr.lock_tier("kling", {"kling": {"status": "unregistered"}}, {}) == "native_unregistered"
     # LoRA ready 压倒一切 → lora
     assert fdr.lock_tier("codex", {"codex": {"status": "fallback_reference_group"}}, {"status": "ready"}) == "lora"
 
 
 def test_score_reference_group_closeup_emotion_is_high() -> None:
-    # reference_group 底色 25 + 近景全占 30 + 大表情 3 镜(24) → high
-    s = fdr.score_character({"appear": 4, "closeup": 4, "emotion": 3, "multi": 0, "angle": 0}, "reference_group")
+    # multi_reference 底色 22 + 近景全占 30 + 大表情 3 镜(24) → high
+    s = fdr.score_character({"appear": 4, "closeup": 4, "emotion": 3, "multi": 0, "angle": 0}, "multi_reference")
     assert s["band"] == "high"
     assert s["score"] >= fdr.BAND_HIGH
     assert s["drivers"][0]["points"] >= s["drivers"][-1]["points"]   # 已按贡献降序
@@ -65,18 +67,20 @@ def test_score_lora_low_signal_is_low() -> None:
 
 
 def test_score_native_midrange() -> None:
-    s = fdr.score_character({"appear": 4, "closeup": 2, "emotion": 1, "multi": 0, "angle": 1}, "native")
+    s = fdr.score_character({"appear": 4, "closeup": 2, "emotion": 1, "multi": 0, "angle": 1}, "native_subject")
     assert s["band"] in {"medium", "high"}
 
 
 def test_suggestions_align_with_expression_gate_and_lora() -> None:
-    scored = {"tier": "reference_group", "band": "high"}
+    scored = {"tier": "multi_reference", "band": "high"}
     sig = {"appear": 4, "closeup": 3, "emotion": 2, "multi": 2, "angle": 1}
-    sug = fdr.suggestions_for("沈念", scored, sig, "CHAR_01", "常态", "/r/剧")
+    sug = fdr.suggestions_for("沈念", scored, sig, "CHAR_01", "常态", "/r/剧",
+                              {"canonical": "dreamina", "label": "Dreamina/即梦官方 CLI"})
     joined = " ".join(sug)
     assert "expressions" in joined            # 对齐 ④ 表情库 gate
     assert "lora.py init" in joined           # 对齐 n2d-lora 事前升档
     assert "多人同框" in joined
+    assert "清空参考图" in joined              # Dreamina 的粘性参考框要单独提醒
     # 阈值化：单镜 multi（<2）不应触发"多人同框"样板话
     sug_thin = fdr.suggestions_for("沈念", scored, {"appear": 4, "closeup": 0, "emotion": 0, "multi": 1, "angle": 0},
                                    "CHAR_01", "常态")
@@ -84,6 +88,15 @@ def test_suggestions_align_with_expression_gate_and_lora() -> None:
     # 低危角色（lora 档、无信号）→ 不强推 LoRA
     sug_low = fdr.suggestions_for("配角", {"tier": "lora", "band": "low"}, {"appear": 2}, "CHAR_X", "常态")
     assert not any("lora.py init" in s for s in sug_low)
+
+
+def test_project_default_backend_keeps_nano_banana_separate(tmp_path: Path) -> None:
+    root = tmp_path / "剧"
+    root.mkdir()
+    (root / "_设置.md").write_text("- 生图AI：Nano Banana\n", encoding="utf-8")
+    assert fdr.project_default_backend(root) == "nano_banana"
+    (root / "_设置.md").write_text("- 生图AI：Gemini\n", encoding="utf-8")
+    assert fdr.project_default_backend(root) == "nano_banana"
 
 
 def test_present_characters_matches_aliases() -> None:

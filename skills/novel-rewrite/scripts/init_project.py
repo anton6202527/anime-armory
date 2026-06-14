@@ -29,7 +29,7 @@ if LIB not in sys.path:
 from novel_contract import (base_meta, build_progress_markdown, routing_stages,
                             SCALE_CHOICES, scale_profile, detect_rights_status,
                             docx_to_txt, write_project_settings, demo_chapters_for,
-                            normalize_scale, parse_outputs, parse_regions,
+                            normalize_scale, parse_outputs, parse_regions, rights_metadata,
                             SCALE_PROFILES, NOVEL_DRAFT_MODES, CHAPTER_GRANULARITY,
                             AI_TEXT_USAGE_MODES)
 
@@ -200,9 +200,15 @@ def main():
     n = args.target_chapters or profile["target_chapters"]
     outputs = parse_outputs(args.outputs)
     meta = base_meta("rewrite", outputs=outputs, rights_status=rights)
+    # 派生权利字段（rights_covered_regions / requires_region_rights_review 等）统一由
+    # rights_metadata 计算，使公版改写也能触发 qa_gate 的发行地区复核。
+    meta.update(rights_metadata(
+        rights,
+        rights_declared=args.i_have_rights or rights in ("original", "user-owned", "user-declared"),
+        rights_jurisdiction=args.rights_jurisdiction,
+        distribution_regions=args.distribution_regions,
+    ))
     meta.update({
-        "rights_jurisdiction": args.rights_jurisdiction or "",
-        "distribution_regions": parse_regions(args.distribution_regions),
         "source_novel": source_path,
         "source_title": source_title,
         "rewrite_type": args.rewrite_type,

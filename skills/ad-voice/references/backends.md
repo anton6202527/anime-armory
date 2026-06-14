@@ -20,17 +20,24 @@ ad-voice 自带 `say`（macOS 占位）与 `estimate`（跨平台静音占位）
 
 ## 合规
 
-克隆/仿真人音色 = 强监管。`render_voice.py` 对克隆类后端硬性要求 `VOICE_CLONE_AUTHORIZED=1`。代言人真声、名人音色须有授权痕迹，投放前在 `合规/AI使用说明.md`（`ad-craft/ai_usage.py --voice-status` / `--talent-status`）留档。
+克隆/仿真人音色 = 强监管。`render_voice.py` 的硬闸门按**实际是否在克隆**判定（不按后端名固定集合）：
+传了 `--ref`/`--clone`、给了参考音 env（`*_REF_*`，`*_TEXT` 逐字稿除外）、或请求具体代言人/名人 `--voice-id`（云端商用后端的指定音色）时，须 `VOICE_CLONE_AUTHORIZED=1`，否则拒做。
+默认嗓（不喂参考音、不指定 voice_id）即便是真后端也无需授权；占位后端 `say`/`estimate` 永不触发。
+后端名做归一（小写、去连字符/下划线）后再比对，`cosyvoice-v2` / `Cosy_Voice` / `XTTS` / `fishspeech` 等变体不会绕过。
+代言人真声、名人音色还须有授权痕迹，投放前在 `合规/AI使用说明.md`（`ad-craft/ai_usage.py --voice-status` / `--talent-status`）留档。
 
 ## 时长清单.json schema（驱动镜头时长）
+
+权威字段（ad-script finalize / ad-review 依赖）：顶层 `has_placeholder` == any(line `占位`)；
+每句 `idx`/`role`/`text`/`seconds`/`占位`/`voice_key`（附带 `start`/`end`/`gap_after`/`line_wav`/`音色键`）。
 
 ```json
 {
   "kind": "ad_voice_manifest", "backend": "say", "total_seconds": 28.4,
   "has_placeholder": true,
   "lines": [
-    {"idx": 1, "角色": "旁白", "文本": "又是被闹钟拖起来的一天？",
-     "时长": 2.3, "start": 0.0, "end": 2.3, "gap_after": 0.25,
+    {"idx": 1, "role": "旁白", "text": "又是被闹钟拖起来的一天？",
+     "seconds": 2.3, "start": 0.0, "end": 2.3, "gap_after": 0.25,
      "line_wav": "line_01.wav", "音色键": "VO", "voice_key": "say:Tingting#placeholder", "占位": true}
   ]
 }

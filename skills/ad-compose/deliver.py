@@ -78,10 +78,20 @@ def planned_command(row, root):
         return f"bash skills/ad-compose/compose.sh {quoted} {row['aspect']}"
     if row["kind"] == "cutdown":
         plan = os.path.join(root, "合成", "cutdown", f"plan_{_safe_name(row['duration'])}.json")
-        return f"python3 skills/ad-compose/cutdown.py {quoted} --target {row['duration']} --json {json.dumps(plan, ensure_ascii=False)}"
+        outp = os.path.join(root, out)
+        # --render 实际拼接产出 MP4（需 ffmpeg）；--json 同时落计划
+        return (f"python3 skills/ad-compose/cutdown.py {quoted} --target {row['duration']} "
+                f"--aspect {row['aspect']} --render "
+                f"--out {json.dumps(outp, ensure_ascii=False)} "
+                f"--json {json.dumps(plan, ensure_ascii=False)}")
     if row["kind"] == "reframe":
-        return f"# 先用 reframe.py 计算滤镜，再 ffmpeg 输出 {out}"
-    return f"# 手工生成 A/B 版本输出 {out}"
+        src = os.path.join(root, "合成", "成片_主片.mp4")
+        outp = os.path.join(root, out)
+        # reframe --render 实际跑 ffmpeg crop/pad 输出 MP4（主体偏置时补 --crop-x/--crop-y）
+        return (f"python3 skills/ad-compose/reframe.py --src 1920x1080 --target {row['aspect']} "
+                f"--in {json.dumps(src, ensure_ascii=False)} --render "
+                f"--out {json.dumps(outp, ensure_ascii=False)}")
+    return f"# A/B 版本需操作者手工生成 → {out}"
 
 
 def build_plan(root, progress_text):

@@ -24,7 +24,7 @@ if LIB not in sys.path:
 from novel_contract import (base_meta, build_progress_markdown, routing_stages,
                             SCALE_CHOICES, scale_profile, detect_rights_status,
                             docx_to_txt, write_project_settings, demo_chapters_for,
-                            CHAPTER_RE)
+                            rights_metadata, CHAPTER_RE)
 
 
 def words_per_chapter_for(target_platform):
@@ -103,6 +103,14 @@ def main():
     )
 
     meta = base_meta("continue", outputs=outputs, rights_status=rights)
+    # 计算派生权利字段（rights_covered_regions / requires_region_rights_review 等），
+    # 否则公版续写不会触发 qa_gate 的发行地区复核（与 expand/condense 对齐）。
+    meta.update(rights_metadata(
+        rights,
+        rights_declared=args.i_have_rights or rights in ("original", "user-owned", "user-declared"),
+        rights_jurisdiction=args.rights_jurisdiction,
+        distribution_regions=args.distribution_regions,
+    ))
     meta.update({
         "source_novel": source_path,
         "source_title": source_title,

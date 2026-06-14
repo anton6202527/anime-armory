@@ -51,13 +51,19 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 - **视角续写** = **换 POV** 写同一段时间、**事件锁定不改** → novel-spinoff
 - **改写** = **改主线 / 换设定 / 加原创材料**（事件可改、可新增设定，与视角续写正相反）→ novel-rewrite
 
-⚠️ **五个 QA skill 别混**（用户给"已写好的若干章 + 一个评估诉求"时按诉求**性质**分流）：
+⚠️ **QA 不是五个对等裁决，而是「3 个裁决 + 2 个分析仪」**（用户给"已写好的若干章 + 一个评估诉求"时按诉求**性质**分流）：
+
+**裁决型（直接出结论，可入 gate）**
 - **写得对不对**（人设崩/视角穿帮/设定矛盾/原文照搬/题旨偏移）→ `novel-review`（挑硬伤）
 - **值不值得做 / 能不能火**（题材热度/爽点/留存/文学性 → 总分+判定+改写ROI）→ `novel-score`
-- **逻辑/设定一致性**（角色生死、伏笔回收、关系温度、设定百科是否自洽）→ `novel-wiki`
-- **节奏对不对**（注水、断章、高潮密集度、情节热力图）→ `novel-balance`
 - **读者会不会弃书**（模拟读者反馈、测留存、找弃书点）→ `novel-simulate`
-- 速记：问"能不能火/要不要继续写"=score；"哪里写崩了"=review；"设定有没有矛盾"=wiki；"节奏拖不拖"=balance；"读者爱不爱看"=simulate。可串用：先 score 定方向 → review 抠硬伤 → wiki/balance 收一致性与节奏。
+
+**分析仪型（产出数据/台账，喂给上面的裁决，不单独当验收结论）**
+- **逻辑/设定一致性 + 动态百科 + 伏笔台账**（角色生死、伏笔 planted→payoff 逾期、关系温度、设定自洽）→ `novel-wiki`。它是 `novel-review` 的一致性引擎（由 review 的 `consistency_audit.py` 一键串跑），也是 `设定/动态百科.json` 与 `设定/foreshadowing_ledger.json` 的权威存储。
+- **节奏热力图**（注水、断章、高潮密集度）→ `novel-balance`；其「烂尾预警」读 `novel-wiki` 的伏笔台账回收率。
+
+- 速记：问"能不能火/要不要继续写"=score；"哪里写崩了"=review；"读者爱不爱看"=simulate；"设定/伏笔有没有漏"=wiki；"节奏拖不拖"=balance。
+- 串用顺序：先 score 定方向 → review 抠硬伤（自动调 wiki 查一致性/伏笔）→ balance 收节奏 → simulate 验留存。**写完一卷别只跑 review/score**：wiki（伏笔逾期）+ balance（节奏）+ simulate（留存）是常被漏掉的三项，建议一并提示用户。
 
 ⚠️ **"文风漂移"双触发仲裁**：提取/分析文风指纹、查笔力一致 → `novel-style`（文风是它的主责）；只有当诉求是"**作为质检项**报告某章偏离全书文风"且同时要查别的硬伤时，才并入 `novel-review`。单看文风一律走 style。
 

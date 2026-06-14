@@ -176,53 +176,6 @@ def build_outline(title, n, premise):
 """
 
 
-def build_progress(title, meta):
-    n = meta["target_chapters"]
-    rows = "\n".join(f"| {i:02d} |  | - | [ ] |" for i in range(1, n + 1))
-    packets = "\n".join(
-        f"- [ ] 写作任务包（第 {a}-{min(a+4, n)} 章）"
-        for a in range(1, n + 1, 5))
-    scans = "\n".join(
-        f"- [ ] 轻量扫描（第 {a}-{min(a+4, n)} 章）" for a in range(1, n + 1, 5))
-    outs = "\n".join(f"- [ ] {fmt}" for fmt in meta["outputs"])
-    return f"""# 进度 — 《{title}》（原创）
-
-{create_stage_markdown()}
-
-> {meta['scale']} 档：约 {n} 章 × {meta['target_words_per_chapter'][0]}-{meta['target_words_per_chapter'][1]} 字。平台={meta['target_platform']}。
-
-## 准备阶段
-- [x] 项目骨架
-- [ ] 创作蓝图（用户已确认）★最重要
-- [ ] 设定圣经
-- [ ] 角色卡 / 世界观卡
-- [ ] 书名（用户已选）
-- [ ] 章纲（用户已确认）
-
-## 写作阶段
-### 任务包
-{packets}
-
-| 章 | 标题 | 字数 | 状态 |
-|---|---|---|---|
-{rows}
-
-## 状态账本
-- [ ] `审稿/state_ledger.json`
-- [ ] 逐章 `审稿/state_delta_第NN章.json`
-
-## 回扫阶段（novel-review）
-{scans}
-- [ ] 全量一致性扫描（设定圣经一致 / 人设不崩 / 钩子回收 / 文风不漂）
-
-## 导出
-{outs}
-
-## 合规 / 发布
-- [ ] `合规/AI使用说明.md`
-"""
-
-
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--title", default="待定", help="书名；未定填'待定'，后续 novel-title 选定")

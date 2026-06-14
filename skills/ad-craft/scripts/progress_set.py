@@ -74,6 +74,25 @@ def append_note(lines, note):
     return lines
 
 
+def get_stage_status(text, stage):
+    """读「阶段进度」表里某阶段的当前状态；找不到返回 None。"""
+    label = stage_label(stage)
+    in_stage = False
+    for line in text.splitlines():
+        s = line.strip()
+        if s.startswith("## "):
+            in_stage = "阶段进度" in s
+            continue
+        if not in_stage or not s.startswith("|"):
+            continue
+        cells = _split_row(s)
+        if len(cells) < 4 or _is_separator(cells):
+            continue
+        if cells[0] == label:
+            return cells[1]
+    return None
+
+
 def set_stage_text(text, stage, status, artifact=None, remark=None, note=None):
     label = stage_label(stage)
     lines = text.splitlines()

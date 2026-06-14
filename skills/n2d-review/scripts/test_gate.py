@@ -439,6 +439,45 @@ def test_good_character_shot_prompt_passes_strict_structure():
     assert gate.findings == []
 
 
+# ── 双人同框 × 单图参考后端 升 BLOCK（脸漂真凶工程化）─────────────────────────
+TWO_CHAR_SHOT = GOOD_SHOT.replace(
+    "- `出图/共享/图片/定妆_沈念_半身.png`（服装锚，强度 0.5）\n",
+    "- `出图/共享/图片/定妆_沈念_半身.png`（服装锚，强度 0.5）\n"
+    "- `出图/共享/图片/定妆_柳娘子.png`（柳娘子正脸主参考，强度 0.6）\n",
+)
+
+
+def test_two_char_shot_on_single_ref_backend_is_blocked():
+    # 单图参考后端(Codex 类，无原生主体锁) + 双人同框 + 未声明多主体策略 → BLOCK
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, TWO_CHAR_SHOT, single_ref_backend=True)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "角色一致性" and "同框" in str(f["msg"])
+               for f in gate.findings)
+
+
+def test_two_char_shot_on_native_subject_backend_only_warns():
+    # 有原生主体能力的后端(Seedream/可灵/Sora) → 不过度阻断，保持 WARN
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, TWO_CHAR_SHOT, single_ref_backend=False)
+    assert any(f["sev"] == gate.WARN and f["dim"] == "角色一致性" and "同框" in str(f["msg"])
+               for f in gate.findings)
+    assert not any(f["sev"] == gate.BLOCK and "同框" in str(f["msg"]) for f in gate.findings)
+
+
+def test_two_char_shot_with_registered_degradation_escapes_even_on_single_ref():
+    # 即便单图参考后端，本镜声明「分别出图」登记降级 → 逃生门放行，无同框 finding
+    shot = TWO_CHAR_SHOT.replace(
+        "**专项镜头模板**：dialogue_shot_reverse；",
+        "**专项镜头模板**：dialogue_shot_reverse；分别出图+合成（登记降级）；",
+    )
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot, single_ref_backend=True)
+    assert not any("同框" in str(f["msg"]) for f in gate.findings)
+
+
+def test_default_single_ref_backend_arg_preserves_warn_behavior():
+    # 不传 single_ref_backend（旧调用方）保持原 WARN 行为，向后兼容
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, TWO_CHAR_SHOT)
+    assert not any(f["sev"] == gate.BLOCK and "同框" in str(f["msg"]) for f in gate.findings)
+
+
 def test_character_shot_missing_anchor_is_blocked():
     shot = GOOD_SHOT.replace("锚点句：", "").replace("锚点句已拼", "人物已拼")
     gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot)
@@ -1484,6 +1523,147 @@ def test_image_ai_mixing_codex_and_dreamina_is_blocked(tmp_path):
     gate.check_image_ai_policy(str(root), "第1集")
 
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "生图AI一致性" and "混用" in f["msg"] for f in gate.findings)
+
+
+def test_shot_scale_progression_survives_int_shots_schema(tmp_path):
+    # 回归：新 storyboard schema 的 shots 是 int 列表（非 dict）；check_shot_scale_progression
+    # 旧实现 (s or {}).get(...) 会 AttributeError 整段崩 gate。修后应不崩，并能从 continuity.shot_size 判景别。
+    root = tmp_path / "制漫剧" / "测试剧"
+    sb_dir = root / "脚本" / "第1集"
+    sb_dir.mkdir(parents=True)
+    clips = [{"id": f"Clip_{i:02d}", "shots": [1],
+              "continuity": {"shot_size": "近景"}} for i in range(1, 5)]
+    (sb_dir / "storyboard.json").write_text(
+        json.dumps({"clips": clips}, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_shot_scale_progression(str(root), "第1集")  # 不应抛异常
+    # 连续 4 镜同近景 → 景别阶梯单调 WARN（证明 continuity.shot_size 被读到）
+    assert any(f["dim"] == "景别阶梯" and f["sev"] == gate.WARN for f in gate.findings)
+
+
+def _write_reference_plan(root, summary):
+    prod = root / "生产数据"
+    prod.mkdir(parents=True, exist_ok=True)
+    plan = {"kind": "n2d_reference_plan", "episode": "第1集", "backend": "codex",
+            "clips": [], "summary": summary}
+    (prod / "reference_plan_第1集.json").write_text(
+        json.dumps(plan, ensure_ascii=False), encoding="utf-8")
+
+
+def test_reference_plan_warns_when_actions_pending(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    _write_reference_plan(root, {
+        "weak_backend_large_delta_clips": 3,
+        "chars_need_lora": ["CHAR_01/常态"],
+        "chars_need_native_registration": [],
+        "action_required": [{"clip": "C1", "char_id": "CHAR_01", "form": "常态"}],
+    })
+
+    gate.check_reference_plan_applied(str(root), "第1集")
+
+    matches = [f for f in gate.findings if f["dim"] == "参考规划落实"]
+    assert matches and all(f["sev"] == gate.WARN for f in matches)
+    assert any("CHAR_01/常态" in f["msg"] for f in matches)
+
+
+def test_reference_plan_silent_when_no_plan(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+
+    gate.check_reference_plan_applied(str(root), "第1集")
+
+    assert not any(f["dim"] == "参考规划落实" for f in gate.findings)
+
+
+def test_reference_plan_silent_when_no_actions(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    _write_reference_plan(root, {"weak_backend_large_delta_clips": 0, "action_required": []})
+
+    gate.check_reference_plan_applied(str(root), "第1集")
+
+    assert not any(f["dim"] == "参考规划落实" for f in gate.findings)
+
+
+def _write_registry(root, characters):
+    shared = root / "出图" / "共享"
+    shared.mkdir(parents=True, exist_ok=True)
+    (shared / "identity_registry.json").write_text(
+        json.dumps({"kind": "n2d_identity_registry", "characters": characters}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+
+def _char(cid, name, scope, form, image_status, backend="seedream"):
+    return {
+        "id": cid,
+        "name": name,
+        "scope": scope,
+        "forms": [{"form": form, "identity_adapters": {"image": {backend: {"status": image_status}}}}],
+    }
+
+
+def test_native_subject_not_prompted_for_codex(tmp_path):
+    # Codex 无持久主体：即便核心角色未注册原生主体，也不该提示去注册（自动回退参考图派生）。
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 生图AI: Codex\n", encoding="utf-8")
+    _write_registry(root, [_char("CHAR_01", "女主", "全篇", "常态", "unregistered")])
+
+    gate.check_image_ai_policy(str(root), "第1集")
+
+    assert not any(f["dim"] == "原生主体注册" for f in gate.findings)
+
+
+def test_native_subject_not_prompted_for_dreamina(tmp_path):
+    # Dreamina/即梦官方 CLI 可多参考，但无持久主体 ID；不能误提示去注册原生主体。
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 生图AI: Dreamina\n", encoding="utf-8")
+    _write_registry(root, [_char("CHAR_01", "沈念", "长线女主·全篇", "常态", "unregistered", backend="dreamina")])
+
+    gate.check_image_ai_policy(str(root), "第1集")
+
+    assert not any(f["dim"] == "原生主体注册" for f in gate.findings)
+
+
+def test_native_subject_prompted_when_capable_backend_and_core_unregistered(tmp_path):
+    # 选了支持原生主体的后端（Seedream）且核心长线角色未注册 → 主动 WARN 引导去注册。
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 生图AI: Seedream\n", encoding="utf-8")
+    _write_registry(root, [_char("CHAR_01", "沈念", "长线女主·全篇", "常态", "unregistered")])
+
+    gate.check_image_ai_policy(str(root), "第1集")
+
+    matches = [f for f in gate.findings if f["dim"] == "原生主体注册"]
+    assert matches and all(f["sev"] == gate.WARN for f in matches)
+    assert any("CHAR_01/常态" in f["msg"] for f in matches)
+
+
+def test_native_subject_not_prompted_when_registered(tmp_path):
+    # 核心角色已在该后端注册（status=registered）→ 不再提示。
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 生图AI: Seedream\n", encoding="utf-8")
+    _write_registry(root, [_char("CHAR_01", "沈念", "全篇", "常态", "registered")])
+
+    gate.check_image_ai_policy(str(root), "第1集")
+
+    assert not any(f["dim"] == "原生主体注册" for f in gate.findings)
+
+
+def test_native_subject_not_prompted_for_shortline_only(tmp_path):
+    # ROI 默认最小化：只有短线单元妖未注册时不打扰，不对前几集退场的角色前置高档。
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 生图AI: Seedream\n", encoding="utf-8")
+    _write_registry(root, [_char("CHAR_06", "小妖A", "第3集短线单元妖", "覆鳞宫女", "unregistered")])
+
+    gate.check_image_ai_policy(str(root), "第1集")
+
+    assert not any(f["dim"] == "原生主体注册" for f in gate.findings)
 
 
 def test_role_makeup_prompt_requires_standard_three_view(tmp_path):

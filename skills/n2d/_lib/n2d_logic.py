@@ -66,6 +66,57 @@ def classify_image_backend(text: str) -> Tuple[str, str]:
             return (APPROVED_IMAGE_BACKENDS[canonical_key]["canonical"], "approved")
     return ("", "unknown")
 
+def image_identity_profile(backend: str) -> Dict[str, Any]:
+    """Return image identity capability profile for a backend canonical/raw value."""
+    canonical, kind = classify_image_backend(backend)
+    key = canonical if kind == "approved" else str(backend or "").strip().lower()
+    profile = IMAGE_IDENTITY_PROFILES.get(key)
+    if isinstance(profile, dict):
+        out = dict(profile)
+        out["canonical"] = key
+        return out
+    return {
+        "canonical": key or "",
+        "label": key or "unknown",
+        "persistent_subject": False,
+        "multi_reference": False,
+        "strategy": "reference_group",
+        "max_reference_images": None,
+        "native_modes": (),
+        "notes": "未知图后端；按 reference_group 兜底并要求人工确认。",
+    }
+
+def image_backend_supports_persistent_subject(backend: str) -> bool:
+    """Whether the image backend has a reusable native subject/character ID layer."""
+    return bool(image_identity_profile(backend).get("persistent_subject"))
+
+def image_lock_tier(
+    backend: str,
+    image_adapters: Optional[Dict[str, Any]] = None,
+    lora: Optional[Dict[str, Any]] = None,
+) -> str:
+    """Classify the effective image identity lock tier for one character form.
+
+    Return values, weakest to strongest:
+      reference_group      unknown/single-reference fallback only
+      multi_reference      multiple references or image-to-image, no persistent subject ID
+      native_unregistered  backend has persistent subject ability, but this form is not registered
+      native_subject       backend subject/character binding is registered or ready
+      lora                 LoRA ready/training, strongest identity lock
+    """
+    if str((lora or {}).get("status") or "").strip() in {"ready", "training"}:
+        return "lora"
+    profile = image_identity_profile(backend)
+    canonical = str(profile.get("canonical") or "")
+    adapters = image_adapters or {}
+    entry = adapters.get(canonical)
+    status = str(entry.get("status") if isinstance(entry, dict) else entry or "").strip()
+    if bool(profile.get("persistent_subject")):
+        return "native_subject" if status in {"registered", "ready"} else "native_unregistered"
+    if bool(profile.get("multi_reference")):
+        return "multi_reference"
+    return "reference_group"
+
 def motion_control_required(shot_type: Optional[str] = None, risk_flags: Optional[List[str]] = None) -> bool:
     """Determine if a shot requires motion control based on type or risk flags."""
     from n2d_schema import MOTION_CONTROL_REQUIRED_SHOT_TYPES, MOTION_CONTROL_RISK_FLAGS

@@ -26,17 +26,14 @@ _COMMON = os.path.join(_SKILLS, "novel", "_lib")
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from project_io import parse_chapter_range, read_chapters  # noqa: E402
+from keyword_banks import (  # noqa: E402  单一定义源
+    CONFLICT_KW,
+    PAYOFF_KW,
+    classify_platform,
+)
+from settings import get_setting  # noqa: E402
 
 _CJK = r"一-鿿"
-
-# 冲突/转折关键词（冲突强度近似）
-CONFLICT_KW = ["杀", "血", "刀", "剑", "怒", "吼", "战", "斗", "击", "破", "死", "逼",
-               "撕", "崩", "爆", "厉", "狠", "拼", "夺", "反", "叛", "敌", "危", "险",
-               "突然", "猛地", "骤然", "竟", "却", "不料", "没想到"]
-
-# 爽点关键词（与 novel-simulate rookie 人格 kw 同一口径，见 heatmap-method.md）
-PAYOFF_KW = ["打脸", "逆袭", "碾压", "突破", "反杀", "升级", "扮猪", "装", "解气",
-             "翻盘", "吊打", "震惊", "废柴", "崛起", "无敌", "暴击", "斩杀"]
 
 
 def _cjk_len(s):
@@ -102,24 +99,39 @@ def analyze(project, rng=None):
     return rows
 
 
-def flag_rows(rows):
-    """逐章判定 + 连续注水检测（确定性预警；语义由 LLM 复核）。"""
-    n = len(rows)
-    for i, r in enumerate(rows):
+# 按评判档调注水阈值：品质向小说节奏天然更缓、爽点稀薄是文体而非注水，
+# 故收紧"低冲突=注水"判据（要求信息密度也真低才算），避免把品质向误判注水。
+# 爽文向保留原密尺（多报不漏报）。
+PROFILE_THRESHOLDS = {
+    "商业爽文向": {"conflict": 3, "info": 2, "run": 5},
+    "品质向": {"conflict": 2, "info": 1, "run": 6},
+}
+
+
+def flag_rows(rows, profile="商业爽文向"):
+    """逐章判定 + 连续注水检测（确定性预警；语义由 LLM 复核）。
+
+    profile：评判档（'商业爽文向' | '品质向'），由 `目标平台` 选择点归一而来。
+    """
+    th = PROFILE_THRESHOLDS.get(profile, PROFILE_THRESHOLDS["商业爽文向"])
+    for r in rows:
         verdict = "✅ 节奏紧凑"
         # 单章低谷
-        if r["conflict_score"] <= 3 and r["info_score"] <= 2:
+        if r["conflict_score"] <= th["conflict"] and r["info_score"] <= th["info"]:
             verdict = "⚠️ 低冲突+低信息，疑似注水"
-        if r["conflict_score"] <= 2 and r["info_score"] <= 1 and r["payoff_score"] <= 1:
+        # 弃书点风险含「爽点也低」一项——只对爽文向成立；品质向爽点稀薄是文体，
+        # 不据此判弃书（仍走上面的低冲突+低信息注水判定，但不升级到 🔴）。
+        if (profile != "品质向"
+                and r["conflict_score"] <= 2 and r["info_score"] <= 1 and r["payoff_score"] <= 1):
             verdict = "🔴 三项皆低，弃书点风险"
         r["verdict"] = verdict
-    # 连续注水段：≥5 章 conflict≤3 且 info≤2
+    # 连续注水段：≥run 章 conflict≤阈 且 info≤阈
     run = 0
     for r in rows:
-        low = r["conflict_score"] <= 3 and r["info_score"] <= 2
+        low = r["conflict_score"] <= th["conflict"] and r["info_score"] <= th["info"]
         run = run + 1 if low else 0
-        if run >= 5:
-            r["verdict"] = "🌊 连续注水段（≥5章）"
+        if run >= th["run"]:
+            r["verdict"] = f"🌊 连续注水段（≥{th['run']}章）"
     return rows
 
 
@@ -173,8 +185,11 @@ def main():
     if not rows:
         print(f"Error: {args.project_path}/章节 下没有可读章节（或 --range 无命中）")
         return
-    flag_rows(rows)
+    # 读 `目标平台` 选择点（_设置.md → 全局默认 → 缺省），归一成评判档。
+    profile = classify_platform(get_setting(args.project_path, "目标平台"))
+    flag_rows(rows, profile)
     md_path, sig_path = write_report(args.project_path, rows)
+    print(f"评判档：{profile}（按目标平台调注水阈值）")
     flagged = sum(1 for r in rows if not r["verdict"].startswith("✅"))
     print(f"情节热力图：{len(rows)} 章，{flagged} 章有节奏预警")
     print(f"  人读报告 → {md_path}")
