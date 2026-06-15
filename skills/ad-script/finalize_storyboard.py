@@ -21,6 +21,7 @@
 import argparse
 import json
 import os
+import re
 import sys
 
 
@@ -38,6 +39,15 @@ def load_json(path, default=None):
         return default
     with open(path, encoding="utf-8") as f:
         return json.load(f)
+
+
+def _read_text(path):
+    """读纯文本文件（缺失/不可读 → 空串）；供 USP 宣称扫描读 广告脚本.md / voiceover.txt。"""
+    try:
+        with open(path, encoding="utf-8") as f:
+            return f.read()
+    except OSError:
+        return ""
 
 
 def has_placeholder(duration_list):
@@ -221,6 +231,73 @@ def forced_asset_check(brief, storyboard):
     return findings
 
 
+# ── USP↔免责联动：做了受规管的功效/收益宣称，就必须带对应免责声明 ───────────────
+# claim 在 脚本/VO/分镜 任意处命中 → 分镜 legal_lines/字幕 必须有对应免责之一，否则报。
+# 金融/加盟/保健食品 的免责是**法定强制**→ block；功效类（化妆品/减肥/教育）平台强烈要求但
+# 表述多变、依资质而定 → warn（人判补全，不硬拦误杀）。claim 词刻意避开 ad_law_check 已 block 的
+# 违禁词（如祛斑/生发/保收益），两者互补不重叠：一个拦「不能说的词」，一个拦「说了就得配免责」。
+CLAIM_DISCLAIMER_RULES = [
+    {"label": "金融理财收益", "severity": "block",
+     "claims": ["年化", "理财", "收益率", "投资回报", "私募", "基金定投", "稳健增值", "躺赚"],
+     "disclaimers": ["投资有风险", "入市需谨慎", "市场有风险", "过往业绩", "不代表未来",
+                     "理财非存款", "产品有风险", "谨慎投资"],
+     "fix": "金融/理财宣称须带风险提示——在 legal_lines/字幕补「投资有风险，入市需谨慎」（或「过往业绩不代表未来表现」）。"},
+    {"label": "加盟招商", "severity": "block",
+     "claims": ["加盟", "招商", "0元开店", "零元开店", "小本创业", "连锁加盟", "合伙人计划"],
+     "disclaimers": ["加盟有风险", "投资需谨慎", "投资有风险", "经营需谨慎", "谨慎投资"],
+     "fix": "加盟/招商宣称须带风险提示——在 legal_lines/字幕补「加盟有风险，投资需谨慎」。"},
+    {"label": "保健食品", "severity": "block",
+     "claims": ["保健食品", "膳食补充剂", "增强免疫力", "改善睡眠", "缓解疲劳", "辅助降血脂"],
+     "disclaimers": ["不能代替药物", "不能替代药物", "不是药物", "保健食品不能"],
+     "fix": "保健食品须声明「本品不能代替药物」（蓝帽子标识声明）——在 legal_lines/字幕补上。"},
+    {"label": "化妆品功效", "severity": "warn",
+     "claims": ["美白", "祛痘", "淡化细纹", "抗皱", "紧致提拉", "去黑头", "淡纹", "去痘印"],
+     "disclaimers": ["效果因人而异", "因人而异", "个体差异", "效果视个人"],
+     "fix": "功效宣称建议带「效果因人而异」并避免保证性承诺；做效果展示需标注「演示/对比图，效果因人而异」。"},
+    {"label": "减肥瘦身", "severity": "warn",
+     "claims": ["减肥", "燃脂", "瘦下来", "月瘦", "暴瘦"],
+     "disclaimers": ["效果因人而异", "因人而异", "个体差异", "需配合"],
+     "fix": "减肥宣称建议带「效果因人而异，需配合饮食运动」，避免保证性减重承诺。"},
+    {"label": "教育培训效果", "severity": "warn",
+     "claims": ["提分", "提升成绩", "通过率", "上岸", "快速提升", "学完就会"],
+     "disclaimers": ["效果因人而异", "因人而异", "个体差异", "学习效果"],
+     "fix": "培训效果宣称建议带「学习效果因人而异」；升学率/通过率保证已被广告法机检拦，删除即可。"},
+]
+
+
+def _usp_norm(text):
+    """轻归一化：去全部空白（防「效果 因人而异」被空格隔开漏判）。文案非对抗，无需 NFKC。"""
+    return re.sub(r"\s+", "", str(text or ""))
+
+
+def usp_disclaimer_check(brief, storyboard, claim_text=""):
+    """USP↔免责联动闸门：受规管的功效/收益宣称必须带对应免责声明，否则报（金融/加盟/保健=block，
+    功效类=warn）。claim 扫 脚本+VO+分镜；免责须落在「会播出」的分镜 legal_lines/字幕，或 brief 已声明
+    的 legal_lines（经 forced_asset_check 保证落镜）。每条命中附 suggestion（该补哪句免责）。"""
+    sb_text = _collect_storyboard_text(storyboard)
+    claim_corpus = _usp_norm(claim_text) + _usp_norm(sb_text)
+    mand = (brief or {}).get("mandatories") or {}
+    legal_decl = mand.get("legal_lines") if isinstance(mand, dict) else None
+    if isinstance(legal_decl, (list, tuple)):
+        legal_decl_text = " ".join(str(v) for v in legal_decl)
+    else:
+        legal_decl_text = str(legal_decl or "")
+    disc_corpus = _usp_norm(sb_text) + _usp_norm(legal_decl_text)
+    findings = []
+    for rule in CLAIM_DISCLAIMER_RULES:
+        hit = next((c for c in rule["claims"] if _usp_norm(c) in claim_corpus), None)
+        if not hit:
+            continue
+        if any(_usp_norm(d) in disc_corpus for d in rule["disclaimers"]):
+            continue  # 已带对应免责 → 合规，放行
+        findings.append({
+            "severity": rule["severity"], "kind": "usp_disclaimer_missing",
+            "msg": f"宣称「{rule['label']}」（命中「{hit}」）但分镜/法律声明里缺对应免责声明",
+            "suggestion": rule["fix"],
+        })
+    return findings
+
+
 def seam_check(storyboard):
     """逐接缝查：标了 need_end_frame 但无尾帧约定 → warn。"""
     findings = []
@@ -272,9 +349,14 @@ def main():
 
     allow_ph = args.allow_placeholder or os.environ.get("FINALIZE_ALLOW_PLACEHOLDER", "") == "1"
 
+    # USP↔免责联动：扫脚本+VO 找受规管宣称，分镜缺对应免责则报（金融/加盟/保健=block，功效类=warn）。
+    claim_src = "\n".join(_read_text(os.path.join(root, "脚本", n))
+                          for n in ("广告脚本.md", "voiceover.txt"))
+
     findings = fit_check(master_sec, sb_total, vo_sec, tol)
     findings += shot_vo_overflow_check(sb, dl)
     findings += forced_asset_check(brief, sb)
+    findings += usp_disclaimer_check(brief, sb, claim_src)
     findings += seam_check(sb)
 
     # 主片时长缺失：不静默放过整条总时长约束，至少 warn。
@@ -310,6 +392,8 @@ def main():
           + ("  ⏳占位VO" if placeholder else ""))
     for f in findings:
         print(("🔴" if f["severity"] == "block" else "🟡") + f" {f['msg']}")
+        if f.get("suggestion"):
+            print(f"    ↳ 改法：{f['suggestion']}")
     if not findings:
         print("✅ 时长对账通过")
     if placeholder and allow_ph:

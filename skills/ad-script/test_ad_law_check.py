@@ -154,6 +154,62 @@ class AdLawCheckTest(unittest.TestCase):
             report = alc.scan_files([p], "中国大陆")
             self.assertGreaterEqual(report["summary"]["block"], 2)
 
+    # ── 新增广告元素类别：房地产 / 数据引证 / 时限 / 医疗级 / 金融教育 / 第九条 ──
+    def test_realestate_appreciation_blocks(self):
+        f = alc.scan_text("本盘升值空间巨大，买到就是赚到。")
+        re_f = [x for x in f if x["category"] == "房地产违规"]
+        self.assertTrue(re_f)
+        self.assertTrue(all(x["severity"] == "block" for x in re_f))
+        self.assertIn("升值空间", terms(f))
+
+    def test_realestate_overseas_downgraded(self):
+        f = alc.scan_text("升值空间大", region="海外")
+        hit = [x for x in f if x["term"] == "升值空间"][0]
+        self.assertEqual(hit["severity"], "warn")
+
+    def test_substantiation_terms_warn(self):
+        f = alc.scan_text("据调查好评率高达九成，复购率第一。")
+        sub = [x for x in f if x["category"] == "数据引证待证"]
+        self.assertTrue(sub)
+        self.assertTrue(all(x["severity"] == "warn" for x in sub))
+        self.assertIn("好评率", terms(f))
+
+    def test_urgency_terms_warn(self):
+        f = alc.scan_text("今天最后，涨价在即！")
+        urg = [x for x in f if x["category"] == "时限诱导待证"]
+        self.assertEqual({x["term"] for x in urg}, {"今天最后", "涨价在即"})
+        self.assertTrue(all(x["severity"] == "warn" for x in urg))
+
+    def test_medical_grade_confusion_blocks(self):
+        f = alc.scan_text("医疗级护肤，临床级修护。")
+        self.assertIn("医疗级", terms(f))
+        self.assertIn("临床级", terms(f))
+        self.assertTrue(any(x["category"] == "医疗保健极限词" and x["severity"] == "block" for x in f))
+
+    def test_finance_education_guarantee_blocks(self):
+        f = alc.scan_text("保证收益刚性兑付，升学率第一，提分保证。")
+        t = terms(f)
+        for w in ("保证收益", "刚性兑付", "升学率", "提分保证"):
+            self.assertIn(w, t)
+        self.assertTrue(all(x["severity"] == "block" for x in f if x["term"] in t and x["category"] == "虚假/绝对承诺"))
+
+    def test_article9_explicit_bans_block(self):
+        f = alc.scan_text("驰名商标，国家免检产品，国家机关推荐。")
+        t = terms(f)
+        for w in ("驰名商标", "国家免检", "免检产品"):
+            self.assertIn(w, t)
+        self.assertTrue(all(x["severity"] == "block" for x in f if x["term"] in ("驰名商标", "国家免检")))
+
+    def test_every_finding_carries_suggestion(self):
+        f = alc.scan_text("国家级最佳，升值空间大，据调查好评率第一，七天根治。")
+        self.assertTrue(f)
+        self.assertTrue(all(x.get("suggestion") for x in f), "每条命中都应带 suggestion 改法")
+
+    def test_medical_grade_traditional_variant(self):
+        # 繁体 醫療級 应归一化成 医疗级 后命中（验证新增繁体字映射 醫→医）
+        f = alc.scan_text("採用醫療級配方。")
+        self.assertIn("医疗级", terms(f))
+
     def test_disabled_region_writes_report_file(self):
         # region 关闭：main 仍写一份 disabled 报告，不只 print-and-exit
         import os

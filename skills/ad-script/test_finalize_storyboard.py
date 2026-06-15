@@ -110,6 +110,52 @@ class FinalizeStoryboardTest(unittest.TestCase):
         sb = {"shots": [{"shot_id": "S1", "frame": "x"}]}
         self.assertEqual(fs.forced_asset_check(brief, sb), [])
 
+    # ── USP↔免责联动 ──────────────────────────────────────────────────
+    def test_usp_financial_claim_without_disclaimer_blocks(self):
+        sb = {"shots": [{"shot_id": "S1", "frame": "年化收益率高达8%，稳健增值"}]}
+        f = fs.usp_disclaimer_check({}, sb)
+        self.assertEqual(len(f), 1)
+        self.assertEqual(f[0]["severity"], "block")
+        self.assertEqual(f[0]["kind"], "usp_disclaimer_missing")
+        self.assertTrue(f[0]["suggestion"])
+
+    def test_usp_financial_claim_with_disclaimer_ok(self):
+        sb = {"shots": [{"shot_id": "S1", "frame": "年化收益率高",
+                         "legal_lines": ["投资有风险，入市需谨慎"]}]}
+        self.assertEqual(fs.usp_disclaimer_check({}, sb), [])
+
+    def test_usp_franchise_claim_blocks(self):
+        sb = {"shots": [{"shot_id": "S1", "frame": "0元开店，连锁加盟"}]}
+        f = fs.usp_disclaimer_check({}, sb)
+        self.assertTrue(f and all(x["severity"] == "block" for x in f))
+
+    def test_usp_cosmetic_effect_is_warn_not_block(self):
+        sb = {"shots": [{"shot_id": "S1", "frame": "七天美白，淡化细纹"}]}
+        f = fs.usp_disclaimer_check({}, sb)
+        self.assertTrue(f and all(x["severity"] == "warn" for x in f))
+
+    def test_usp_claim_in_script_text_detected(self):
+        # claim 只在脚本/VO（不在分镜），免责也缺 → 仍应命中
+        sb = {"shots": [{"shot_id": "S1", "frame": "产品展示"}]}
+        f = fs.usp_disclaimer_check({}, sb, claim_text="VO：基金定投，让财富稳健增值")
+        self.assertTrue(f and f[0]["severity"] == "block")
+
+    def test_usp_brief_declared_legal_lines_satisfies(self):
+        # brief 已声明对应免责（经 forced_asset_check 保证落镜）→ 视为满足
+        brief = {"mandatories": {"legal_lines": ["加盟有风险，投资需谨慎"]}}
+        sb = {"shots": [{"shot_id": "S1", "frame": "加盟招商火热进行"}]}
+        self.assertEqual(fs.usp_disclaimer_check(brief, sb), [])
+
+    def test_usp_disclaimer_tolerates_inserted_space(self):
+        # 免责被空格隔开仍应识别（去空白归一化）
+        sb = {"shots": [{"shot_id": "S1", "frame": "理财首选",
+                         "legal_lines": ["投资 有 风险，入市 需 谨慎"]}]}
+        self.assertEqual(fs.usp_disclaimer_check({}, sb), [])
+
+    def test_usp_clean_copy_no_findings(self):
+        sb = {"shots": [{"shot_id": "S1", "frame": "用更轻盈的方式开启一天"}]}
+        self.assertEqual(fs.usp_disclaimer_check({}, sb, claim_text="清新好心情"), [])
+
 
 class FinalizeMainTest(unittest.TestCase):
     """端到端跑 main()：占位硬拦 / --allow-placeholder 放行 / master 缺失 warn。"""

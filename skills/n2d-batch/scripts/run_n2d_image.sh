@@ -18,7 +18,18 @@ EP="${2:?episode required}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 
+set +e
 python3 "$REPO_DIR/skills/n2d-dashboard/scripts/dashboard.py" gate "$ROOT" "$EP" --stage image_preflight
+PREFLIGHT_CODE=$?
+set -e
+
+if [[ "$PREFLIGHT_CODE" -ne 0 ]]; then
+  if [[ "${N2D_REASON:-}" == "rerun" && -n "${N2D_AFFECTED_SHOTS:-}" ]]; then
+    echo "image_preflight reported blockers; continuing because this is a targeted image rerun for: ${N2D_AFFECTED_SHOTS}" >&2
+  else
+    exit "$PREFLIGHT_CODE"
+  fi
+fi
 
 if [[ -z "${N2D_IMAGE_COMMAND:-}" ]]; then
   echo "N2D_IMAGE_COMMAND is required for image generation. Refusing to guess an image backend or paid batch." >&2

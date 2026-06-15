@@ -1678,6 +1678,25 @@ def _field_is_missing(contract: dict, key: str) -> bool:
     return False
 
 
+def _is_restricted_partial_form(char: dict, form: dict) -> bool:
+    """局部出镜角色不应该被强行要求正/侧/背/三视图。"""
+    form_name = str(form.get("form") or "").strip()
+    atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), dict) else {}
+    build_tier = str(atlas.get("build_tier") or "").strip()
+    face_policy = str(char.get("face_policy") or form.get("face_policy") or "").strip()
+    forbidden = form.get("drift_forbidden") or char.get("drift_forbidden") or []
+    forbidden_blob = " ".join(str(x) for x in forbidden) if isinstance(forbidden, list) else str(forbidden)
+    return (
+        form_name in {"局部参考", "局部参考（暂不正脸）"}
+        and (
+            face_policy == "no_full_face"
+            or build_tier == "restricted_partial"
+            or "no_full_face" in forbidden_blob
+            or "no_clear_facial_features" in forbidden_blob
+        )
+    )
+
+
 def check_storyboard_special_templates(root: str, ep: str) -> None:
     """Complex shots must be declared through reusable storyboard templates.
 
@@ -2009,21 +2028,33 @@ def check_identity_registry(
             else:
                 asset_key = str(form.get("asset_key") or "").strip()
                 form_name = str(form.get("form") or "").strip()
+                restricted_partial = _is_restricted_partial_form(char, form)
                 # Legacy single-form baseline characters may use `定妆_<角色>.png`.
                 # Multi-form or named variant forms must advertise the exact asset_key.
                 enforce_asset_key_filename = form_count > 1 or form_name not in {"常态", "局部参考", "局部参考（暂不正脸）"}
-                for key in IDENTITY_REFERENCE_FIELDS:
-                    if _field_is_missing(reference_group, key):
-                        if strict_references:
-                            add(BLOCK, "资产身份注册层", floc, f"reference_group 缺核心路径：{key}")
-                        continue
-                    rel = str(reference_group.get(key, "")).strip()
-                    if asset_key and enforce_asset_key_filename and not _identity_reference_matches_asset_key(asset_key, rel):
-                        add(BLOCK, "资产身份注册层", floc,
-                            f"reference_group.{key} 路径 `{rel}` 未包含 asset_key={asset_key}；"
-                            "服饰/形态变体必须独立定妆，禁止复用其它服饰形态参考")
-                    if require_reference_assets and strict_references and not _identity_reference_exists(root, rel):
-                        add(BLOCK, "资产身份注册层", os.path.join(root, rel) if not os.path.isabs(rel) else rel, f"reference_group.{key} 路径不存在")
+                if restricted_partial:
+                    partial_keys = ("hand", "silhouette")
+                    if strict_references and not any(not _field_is_missing(reference_group, key) for key in partial_keys):
+                        add(BLOCK, "资产身份注册层", floc, "restricted_partial reference_group 至少需要 hand 或 silhouette 局部参考路径")
+                    for key in partial_keys:
+                        if _field_is_missing(reference_group, key):
+                            continue
+                        rel = str(reference_group.get(key, "")).strip()
+                        if require_reference_assets and strict_references and not _identity_reference_exists(root, rel):
+                            add(BLOCK, "资产身份注册层", os.path.join(root, rel) if not os.path.isabs(rel) else rel, f"reference_group.{key} 路径不存在")
+                else:
+                    for key in IDENTITY_REFERENCE_FIELDS:
+                        if _field_is_missing(reference_group, key):
+                            if strict_references:
+                                add(BLOCK, "资产身份注册层", floc, f"reference_group 缺核心路径：{key}")
+                            continue
+                        rel = str(reference_group.get(key, "")).strip()
+                        if asset_key and enforce_asset_key_filename and not _identity_reference_matches_asset_key(asset_key, rel):
+                            add(BLOCK, "资产身份注册层", floc,
+                                f"reference_group.{key} 路径 `{rel}` 未包含 asset_key={asset_key}；"
+                                "服饰/形态变体必须独立定妆，禁止复用其它服饰形态参考")
+                        if require_reference_assets and strict_references and not _identity_reference_exists(root, rel):
+                            add(BLOCK, "资产身份注册层", os.path.join(root, rel) if not os.path.isabs(rel) else rel, f"reference_group.{key} 路径不存在")
                 expressions = reference_group.get("expressions", [])
                 if expressions is not None and not isinstance(expressions, list):
                     add(BLOCK, "资产身份注册层", floc, "reference_group.expressions 必须是列表")
@@ -3447,6 +3478,22 @@ def _has_standard_character_turnaround(section: str) -> bool:
     return has_front and has_side and has_back and has_board
 
 
+def _is_restricted_partial_prompt_section(section: str) -> bool:
+    return _has_any(section, ("局部参考", "restricted_partial", "no_full_face")) and _has_any(section, (
+        "绝不正脸",
+        "暂不正脸",
+        "不建完整正脸",
+        "只手",
+        "帘后剪影",
+        "no_full_face",
+        "NEVER showing the face",
+    ))
+
+
+def _has_positive_prompt_heading(section: str, lang: str) -> bool:
+    return f"正向 prompt（{lang}" in section
+
+
 def _uses_halfbody_outfit_ref(section: str) -> bool:
     return _has_any(section, ("_半身", "半身服装", "半身参考", "半身.png", "半身图"))
 
@@ -3564,9 +3611,9 @@ def check_image_shot_prompt_section(path: str, idx: int, section: str,
         add(BLOCK, "prompt", loc, "缺生成后逐张自检段")
     if "重抽预算" not in section:
         add(BLOCK, "prompt", loc, "缺重抽预算字段；无法按主要人物/关键镜策略收口")
-    if "正向 prompt（中文）" not in section:
+    if not _has_positive_prompt_heading(section, "中文"):
         add(BLOCK, "prompt", loc, "缺正向 prompt（中文）")
-    if "正向 prompt（英文）" not in section:
+    if not _has_positive_prompt_heading(section, "英文"):
         add(BLOCK, "prompt", loc, "缺正向 prompt（英文）兜底")
     if "负向 prompt" not in section:
         add(BLOCK, "prompt", loc, "缺负向 prompt；人物/场景堵漏不可控")
@@ -3734,9 +3781,9 @@ def check_common_image_prompts(root: str) -> None:
             loc = f"{p} {name}"
             if "目标存档" not in sec:
                 add(BLOCK, "共享定妆", loc, "缺目标存档；共享资产无法归档追踪")
-            if "正向 prompt（中文）" not in sec:
+            if not _has_positive_prompt_heading(sec, "中文"):
                 add(BLOCK, "共享定妆", loc, "缺正向 prompt（中文）")
-            if "正向 prompt（英文）" not in sec:
+            if not _has_positive_prompt_heading(sec, "英文"):
                 add(BLOCK, "共享定妆", loc, "缺正向 prompt（英文）")
             if "负向 prompt" not in sec:
                 add(BLOCK, "共享定妆", loc, "缺负向 prompt")
@@ -3749,10 +3796,12 @@ def check_common_image_prompts(root: str) -> None:
             if filename == "角色定妆.md":
                 if "身份注册" not in sec and "identity_registry" not in sec:
                     add(BLOCK, "资产身份注册层", loc, "角色定妆缺身份注册字段；必须指向 `出图/共享/identity_registry.json` 对应 characters[].forms[]")
-                if "角色定妆组" not in sec:
-                    add(BLOCK, "角色一致性", loc, "角色定妆缺定妆组说明；核心角色不能只靠单张正脸")
-                if not _has_standard_character_turnaround(sec):
-                    add(BLOCK, "角色三视图", loc, "人物定妆必须是标准三视图：正面主参考 + 侧面参考 + 背面参考 + `定妆_<角色>_三视图.png` 人审拼版；不得只出正脸/半身或把背面按需省略")
+                restricted_partial = _is_restricted_partial_prompt_section(sec)
+                if not restricted_partial:
+                    if "角色定妆组" not in sec:
+                        add(BLOCK, "角色一致性", loc, "角色定妆缺定妆组说明；核心角色不能只靠单张正脸")
+                    if not _has_standard_character_turnaround(sec):
+                        add(BLOCK, "角色三视图", loc, "人物定妆必须是标准三视图：正面主参考 + 侧面参考 + 背面参考 + `定妆_<角色>_三视图.png` 人审拼版；不得只出正脸/半身或把背面按需省略")
                 if _uses_halfbody_outfit_ref(sec) and not _has_halfbody_crop_rule(sec):
                     add(BLOCK, "服装参考", loc, "半身服装参考必须写明：`定妆_<角色>_半身.png` 从已通过自检的正面主参考裁切并放大/重采样回 9:16；人物主体居中、头身中线接近画面中线、左右留白基本均衡；不得新抽半身导致脸漂，也不得用白底/浅灰底/空白补下半截")
                 if "锚点" not in sec:

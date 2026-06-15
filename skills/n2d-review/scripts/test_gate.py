@@ -1239,6 +1239,35 @@ def test_identity_registry_missing_reference_field_is_blocked(tmp_path):
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产身份注册层" and "reference_group 缺核心路径：side" in f["msg"] for f in gate.findings)
 
 
+def test_identity_registry_restricted_partial_uses_partial_refs(tmp_path):
+    data = _identity_registry()
+    char = data["characters"][0]
+    char["id"] = "CHAR_QUEEN"
+    char["name"] = "皇后"
+    char["scope"] = "长线反派·局部参考"
+    char["face_policy"] = "no_full_face"
+    form = char["forms"][0]
+    form["form"] = "局部参考"
+    form["asset_key"] = "皇后_局部参考"
+    form["reference_group"] = {
+        "front": "",
+        "side": "",
+        "back": "",
+        "outfit": "",
+        "turnaround": "",
+        "hand": "出图/共享/图片/定妆_皇后_局部_手部搁茶.png",
+        "silhouette": "出图/共享/图片/定妆_皇后_局部_帘后剪影.png",
+        "expressions": [],
+    }
+    form["reference_atlas"] = {"build_tier": "restricted_partial"}
+    form["drift_forbidden"] = ["no_full_face_ever", "no_clear_facial_features"]
+    root = _write_identity_registry(tmp_path, data)
+
+    gate.check_identity_registry(root, require_reference_assets=False)
+
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "资产身份注册层" and "reference_group 缺核心路径" in f["msg"] for f in gate.findings)
+
+
 def test_identity_registry_missing_character_dna_layer_is_blocked(tmp_path):
     data = _identity_registry()
     del data["characters"][0]["forms"][0]["character_dna"]["hair"]
@@ -2015,6 +2044,49 @@ Character reference sheet.
     gate.check_common_image_prompts(str(root))
 
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "角色三视图" and "标准三视图" in f["msg"] for f in gate.findings)
+
+
+def test_role_makeup_prompt_allows_restricted_partial_without_three_view(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    prompt_dir = root / "出图" / "common" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    (prompt_dir / "角色定妆.md").write_text(
+        """## CHAR_04 皇后·局部参考（⬜ 暂不正脸出镜）
+
+**目标存档（局部）**：`出图/共享/图片/定妆_皇后_局部_手部搁茶.png`、`出图/共享/图片/定妆_皇后_局部_帘后剪影.png`
+**身份注册**：`出图/共享/identity_registry.json` → `CHAR_04.局部参考`
+**硬约束**：restricted_partial / no_full_face；只手 + 帘后剪影，绝不正脸，不建完整正脸。
+- 锚点句：保养得宜的手·暗红宫装袖口·垂帘后朦胧人影（绝不正脸）
+
+### 正向 prompt（中文·手部搁茶局部）
+```text
+皇后局部参考，只见保养得宜的手、暗红宫装袖口、帘后剪影，绝不正脸。
+```
+
+### 正向 prompt（英文·手部搁茶局部）
+```text
+Queen restricted partial reference, well-kept hand, dark-red robe cuff, behind-curtain silhouette, NEVER showing the face.
+```
+
+### 负向 prompt
+```text
+皇后正脸/清脸/可辨五官（硬禁）、补全上半身正脸、现代物件、水印。
+```
+
+### 检查清单（定妆自查·最易漏③人物/⑥中性光影/一致性）
+1. ✅ 只手 + 帘后剪影 + 暗红宫装袖口，绝无正脸。
+
+### 自检（生成后逐张过 · 落档闸门）
+**自检**：
+- [ ] 无正脸、无可辨五官。
+""",
+        encoding="utf-8",
+    )
+
+    gate.check_common_image_prompts(str(root))
+
+    assert not any(f["sev"] == gate.BLOCK and "缺正向 prompt" in f["msg"] for f in gate.findings)
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] in {"角色三视图", "角色一致性"} for f in gate.findings)
 
 
 def test_role_makeup_prompt_requires_halfbody_crop_rule(tmp_path):
