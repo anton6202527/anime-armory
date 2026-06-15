@@ -392,6 +392,47 @@ def test_lint_expression_gate_skips_non_character_shot() -> None:
     assert image_qc.lint_shot_block(blk, {"CHAR_01"}) == []
 
 
+# ── ④ 核心角近景大表情无表情库 = block ──────────────────────────────
+def test_core_char_ids():
+    forms = [{"id": "CHAR_01", "scope": "全篇"}, {"id": "CHAR_02", "scope": "第1集起复用"},
+             {"id": "CHAR_03", "scope": "核心"}, {"id": "CHAR_04", "scope": ""}]
+    assert image_qc.core_char_ids(forms) == {"CHAR_01", "CHAR_03"}
+
+
+def test_lint_closeup_core_strong_emotion_blocks():
+    # 核心角（core_ids 命中）近景大表情无表情库 → block
+    out = image_qc._lint_closeup_expression_lib(
+        "Clip 50", "ECU 面部特写，沈念崩溃落泪 CHAR_01/常态",
+        id_refs=["CHAR_01/常态"], core_ids={"CHAR_01"})
+    assert out and out[0]["level"] == "block" and out[0]["code"] == "closeup_core_no_expression_lib"
+    assert "closeup_core_no_expression_lib" in image_qc.HARD_LINT_CODES
+
+
+def test_lint_closeup_noncore_stays_warn():
+    # 同样的镜但角色非核心（core_ids 不含）→ 维持 warn（不冤拦配角）
+    out = image_qc._lint_closeup_expression_lib(
+        "Clip 51", "ECU 面部特写，路人崩溃落泪 CHAR_09/常态",
+        id_refs=["CHAR_09/常态"], core_ids={"CHAR_01"})
+    assert out and out[0]["level"] == "warn" and out[0]["code"] == "no_expression_lib_ref"
+
+
+def test_lint_closeup_core_with_expression_lib_passes():
+    out = image_qc._lint_closeup_expression_lib(
+        "Clip 52", "ECU 面部特写，崩溃落泪 CHAR_01/常态，表情库 expressions 首尾双帧只插值",
+        id_refs=["CHAR_01/常态"], core_ids={"CHAR_01"})
+    assert out == []
+
+
+def test_lint_shot_block_core_expression_block_integration():
+    valid = {"CHAR_01/常态"}
+    blk = _char_block("Clip 53 痛哭")
+    blk["body"] += "\n**景别**：ECU 面部特写\n**情绪**：崩溃落泪、面部扭曲"
+    forms = [{"id": "CHAR_01", "scope": "全篇"}]
+    codes = {f["code"]: f["level"] for f in image_qc.lint_shot_block(blk, valid, forms)}
+    assert codes.get("closeup_core_no_expression_lib") == "block"
+    assert "no_expression_lib_ref" not in codes  # 升级为 block 后不再重复出 warn
+
+
 # ── A 资产 id lint 对称化 ───────────────────────────────────────────────────────
 
 def _asset_index() -> dict:
@@ -1125,3 +1166,116 @@ def test_mark_finalized_asset(tmp_path: Path) -> None:
     assert image_qc.mark_finalized(tmp_path, "PROP_01")["ok"] is True
     reg = json.loads((tmp_path / "出图" / "共享" / "asset_registry.json").read_text(encoding="utf-8"))
     assert reg["assets"][0]["self_check_passed"] is True
+
+
+# ── 锚点指纹钉死（P0-b）─────────────────────────────────────────────
+def _registry_with_anchor(tmp_path: Path) -> Path:
+    img = tmp_path / "出图" / "共享" / "图片"
+    img.mkdir(parents=True)
+    (img / "定妆_沈念_常态.png").write_bytes(b"\x89PNG-anchor-bytes-v1")
+    (tmp_path / "出图" / "共享" / "identity_registry.json").write_text(json.dumps({
+        "characters": [{"id": "CHAR_01", "name": "沈念", "forms": [
+            {"form": "常态", "reference_group": {"front": "出图/共享/图片/定妆_沈念_常态.png"}},
+        ]}]
+    }, ensure_ascii=False), encoding="utf-8")
+    return tmp_path
+
+
+def test_pin_anchor_writes_sha(tmp_path: Path) -> None:
+    root = _registry_with_anchor(tmp_path)
+    r = image_qc.pin_anchor(root, "CHAR_01/常态")
+    assert r["ok"] is True
+    reg = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))
+    sha = reg["characters"][0]["forms"][0]["anchor_sha"]
+    assert sha and len(sha) == 64
+
+
+def test_pin_anchor_missing_front_image_fails(tmp_path: Path) -> None:
+    root = _registry_with_anchor(tmp_path)
+    (root / "出图" / "共享" / "图片" / "定妆_沈念_常态.png").unlink()
+    assert image_qc.pin_anchor(root, "CHAR_01/常态")["ok"] is False
+
+
+def test_unpin_anchor_removes_sha(tmp_path: Path) -> None:
+    root = _registry_with_anchor(tmp_path)
+    image_qc.pin_anchor(root, "CHAR_01/常态")
+    image_qc.pin_anchor(root, "CHAR_01/常态", unpin=True)
+    reg = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))
+    assert "anchor_sha" not in reg["characters"][0]["forms"][0]
+
+
+# ── ①a 落档自检自动钉死 anchor_sha ─────────────────────────────────
+def test_mark_finalized_auto_pins_anchor(tmp_path: Path) -> None:
+    root = _registry_with_anchor(tmp_path)
+    r = image_qc.mark_finalized(root, "CHAR_01/常态")
+    assert r["ok"] is True and r["auto_pinned"] is True
+    fm = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))["characters"][0]["forms"][0]
+    assert fm["self_check_passed"] is True
+    # 自动钉死的 sha 必须等于手动 pin 的结果（同一母图同一指纹）
+    assert fm["anchor_sha"] == image_qc._sha256_file(root / "出图" / "共享" / "图片" / "定妆_沈念_常态.png")
+
+
+def test_mark_finalized_no_auto_pin_flag_keeps_optin(tmp_path: Path) -> None:
+    root = _registry_with_anchor(tmp_path)
+    r = image_qc.mark_finalized(root, "CHAR_01/常态", auto_pin=False)
+    assert r["ok"] is True and r["auto_pinned"] is False
+    fm = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))["characters"][0]["forms"][0]
+    assert fm["self_check_passed"] is True and "anchor_sha" not in fm
+
+
+def test_mark_finalized_unfinalize_does_not_pin(tmp_path: Path) -> None:
+    root = _registry_with_anchor(tmp_path)
+    image_qc.mark_finalized(root, "CHAR_01/常态", value=False)
+    fm = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))["characters"][0]["forms"][0]
+    assert fm["self_check_passed"] is False and "anchor_sha" not in fm
+
+
+def test_mark_finalized_auto_pin_graceful_when_front_missing(tmp_path: Path) -> None:
+    # form 无 reference_group front（不可钉）→ 落档仍成功，只是不自动钉死，不抛错
+    root = _registry_with_form(tmp_path, [{"form": "常态", "asset_key": "x"}])
+    r = image_qc.mark_finalized(root, "CHAR_01")
+    assert r["ok"] is True and r["auto_pinned"] is False
+    fm = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))["characters"][0]["forms"][0]
+    assert fm["self_check_passed"] is True and "anchor_sha" not in fm
+
+
+# ── 表情库跨集共享锁定（P1-b）─────────────────────────────────────
+def _registry_with_expr(tmp_path: Path, make_file: bool = True) -> Path:
+    img = tmp_path / "出图" / "共享" / "图片"
+    img.mkdir(parents=True)
+    if make_file:
+        (img / "定妆_沈念_常态_表情_怒.png").write_bytes(b"\x89PNG-expr-v1")
+    (tmp_path / "出图" / "共享" / "identity_registry.json").write_text(json.dumps({
+        "characters": [{"id": "CHAR_01", "name": "沈念", "forms": [
+            {"form": "常态", "expression_anchors": [
+                {"emotion": "怒", "path": "出图/共享/图片/定妆_沈念_常态_表情_怒.png"},
+            ]},
+        ]}]
+    }, ensure_ascii=False), encoding="utf-8")
+    return tmp_path
+
+
+def test_finalize_expression_sets_passed_and_sha(tmp_path: Path) -> None:
+    root = _registry_with_expr(tmp_path)
+    r = image_qc.finalize_expression(root, "CHAR_01/常态/怒")
+    assert r["ok"] is True
+    a = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))["characters"][0]["forms"][0]["expression_anchors"][0]
+    assert a["self_check_passed"] is True and len(a["anchor_sha"]) == 64
+
+
+def test_finalize_expression_unfinalize_clears_sha(tmp_path: Path) -> None:
+    root = _registry_with_expr(tmp_path)
+    image_qc.finalize_expression(root, "CHAR_01/常态/怒")
+    image_qc.finalize_expression(root, "CHAR_01/常态/怒", value=False)
+    a = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))["characters"][0]["forms"][0]["expression_anchors"][0]
+    assert a["self_check_passed"] is False and "anchor_sha" not in a
+
+
+def test_finalize_expression_unknown_emotion_fails(tmp_path: Path) -> None:
+    root = _registry_with_expr(tmp_path)
+    assert image_qc.finalize_expression(root, "CHAR_01/常态/惊")["ok"] is False
+
+
+def test_finalize_expression_missing_image_fails(tmp_path: Path) -> None:
+    root = _registry_with_expr(tmp_path, make_file=False)
+    assert image_qc.finalize_expression(root, "CHAR_01/常态/怒")["ok"] is False

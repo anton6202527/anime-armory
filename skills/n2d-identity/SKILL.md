@@ -78,6 +78,13 @@ adapter matrix 的 `summary.characters_needing_lora_upgrade`。机检不可用�
 （`return_to_stage="voice"`、`affected_shots`、`scope`），供 n2d-batch 只重配受影响角色/集；
 重配后时长清单变化，需复核 n2d-script 阶段2 的分镜时长。
 
+> **这套对账已自动落地进 n2d-review 的 image gate**（`gate.py check_voice_cross_episode`，`dashboard.py gate --stage image`/`image_preflight` 内部直接调 `voice_consistency.build_report` 与 `voice_print_consistency.analyze`）：**voicemap_mismatch=BLOCK**（确定性失配，渲染前拦），跨集 voice_key 漂移=WARN（可能有意换嗓），声纹 embedding 漂移=WARN（启发式·后端缺则静默跳过）。本 skill 的 `identity.py --write` 仍产出完整报表供人/dashboard 阅览，但「拦渲染」不再依赖有人记得手动跑它——gate 每次出图前都会跑。
+
+**⑥ 配音前 pre-flight（事前·无需 conda）**：上面是**事后**对账（已渲染 manifest）；pre-flight 在**渲染前**就拦"本集会跟前集换声"。读目标集 `脚本/第N集/voiceover.txt` 的说话角色，按当前 `voicemap.json` 子串解析出"本集渲染会用的音色键"，和前面各集**已渲染**的键对比：① 角色在 voicemap 现解析键 ≠ 前集已用键 → `cross_episode_drift`（voicemap 被改→本集换声，先对齐再配音）；② 角色未登记 voicemap → `unregistered_in_voicemap`（将走内置兜底猜测，跨集不稳）。命中即非零退出，供配音 SOP 卡住。
+```bash
+python3 skills/n2d-identity/scripts/voice_consistency.py <作品根> --preflight 第N集
+```
+
 ### 1d. 声纹实际漂移（voice_print_consistency）
 
 `voice_consistency.py` 只对账 `voice_key` 字符串；`voice_print_consistency.py` 量逐句 wav 的 speaker embedding，

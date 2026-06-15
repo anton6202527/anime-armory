@@ -53,7 +53,7 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 说话近景/特写（CU/MCU）若口型与配音对不上会很跳。**默认不做**（远景/侧脸/背身/旁白镜头看不出，不值这成本）。仅当**人脸正面说话的特写**且预算允许时启用：
 
 - **配音对齐·音频参考口型（首选·voice_conditioned_lipsync）**：`制作模式=配音先行` 且 `对口型≠关闭` 时，`n2d-model-router` 会把说话镜路由成 `mode=voice_conditioned_lipsync`、`native_audio_policy=lipsync_condition_only`，primary 选支持音频参考口型的后端（Seedance 2.0 音素级 / 可灵 Omni）。执行时**把该 Clip 的配音 `line_NN.wav` 当作音频参考/口型驱动输入喂给后端**，同帧出对口型画面。**铁律：模型这条音频只作口型条件、不接管声音**——成片音轨仍用 voice-first 克隆配音轨（compose 丢弃模型音频），既不双人声、又省一道后期对口型 pass。后端不支持音频参考口型/对不齐 → 按路由 `degrade_plan` 回退后期 pass 或分镜规避。**与 native_av 区别**：native_av 是后端自生成台词（绕过配音先行、换掉逐句音色控制），voice_conditioned_lipsync 保留克隆音色只借口型。
-- **后期对口型 pass（回退档）**：后端不支持音频参考口型时，clip 出好后用本地对口型工具把口型对到配音轨（合成前的可选层）。工具按需选（2026-06）：**MuseTalk**（口型+画质均衡、近实时，当前最佳免费，**首选**）｜ **Wav2Lip**（SyncNet 同步精度最稳，规模化/真人底片）｜ **LatentSync**（ByteDance 扩散、身份保持好）。能力会变，以 `n2d/references/模型矩阵.md` 横切「音画联合」为准。
+- **后期对口型 pass（回退档·有执行入口）**：后端不支持音频参考口型时，clip 出好后用本地工具把口型对到配音轨（合成前的可选层）。**别手搓**——跑 `python3 skills/n2d-video/scripts/lipsync_pass.py <作品根> 第N集`：它读 `对口型` 设置 + `video_model_routes.json`，挑出需要后期对口型的说话镜、配对各自驱动音轨 `合成/<集>/配音/line_NN.wav`，落 `出视频/<集>/control/lipsync_jobs.json` 作业清单并探测本地工具；本地工具可用时加 `--apply` 逐 clip 执行，不可用则降级成手工清单（绝不静默跳过）。工具优先序（2026-06·能力会变，以 `n2d/references/模型矩阵.md` 横切「音画联合」为准）：**LatentSync**（ByteDance 扩散、身份保持最好）｜ **MuseTalk**（口型+画质均衡、近实时）｜ **Wav2Lip**（SyncNet 同步精度最稳但偏糊）。重型权重在 conda env、不入本仓——CLI 路径用 `LATENTSYNC_CLI`/`MUSETALK_CLI`/`WAV2LIP_CLI` 环境变量指向。**铁律同上：模型只对口型、不接管声音**，成片音轨仍是 voice-first 克隆配音轨。
 - 启用与否 + 档位记入 `_设置.md`（选择点 `对口型`：`关闭`(默认) / `配音对齐`(=voice_conditioned_lipsync·后端音频参考口型，首选) / `后期pass`(强制走 MuseTalk 等后期)）；不启用时在分镜阶段就**少给正面大特写说话镜**（用侧脸/背身/空镜配旁白规避），是零成本的替代。
 
 ## 出视频规格（选择点 `出视频规格` · 三档预算 · 每次调 AI 前告知）
@@ -142,6 +142,13 @@ python3 skills/n2d-video/scripts/inherit_contract.py <作品根> 第N集
 > **同一条 Diff 还做「物料约束继承」（C·场景/道具/服装/特效逐镜资产交接）**：出图逐镜 `资产引用注册层` 绑定的 `LOC_xx/PROP_xx/OUTFIT_xx/VFX_xx`，出视频对应 Clip 的逐镜 prompt 不得丢失——丢了执行端取不到该资产的 `reference_group/constraints/drift_forbidden`，场景/道具/特效跨镜必漂。inherit_contract 逐 Clip 对账两侧资产 id 集合：出视频该 Clip 整块缺失 = block（`asset_clip_prompt_missing`）；资产 id 在出视频该镜丢了 = warn（`asset_handoff_dropped`，可能是记忆遮罩/转场的有意松引用，交人确认、补回 id 让结构/颜色/光位锚自动继承）。报告写进同一份 `contract_inheritance_第N集.json/md` 的 `asset_handoff` 段。
 
 > **这套契约继承机检已接进 video_preflight/video gate 退出码**（`dashboard.py gate --stage video_preflight` 和生成后 `--stage video` 都会内部调 `inherit_contract.diff_contracts`，光位锚/轴线/角色状态演进漂移→BLOCK），不再只靠这条裸命令的"自觉跑"——裸命令用于单独复核。**原生音画(native_av)不绕过这条链**：native_av 说话镜仍以出图首帧 PNG 作图生视频引导，像素层五字段契约链与配音先行模式完全一致，gate 同样强制；只有"纯文生视频同步音画、无首帧 PNG"的特殊后端才不适用（此类镜须在总览标注并降级为运动层约束）。
+
+> **⑦ 跨集视觉契约一致性（advisory·warn-only）**：`inherit_contract` 管**同集内**出图↔出视频逐字一致；跨集是另一类穿帮——**同一地点跨集光位/轴线翻**（第1集冷宫画左光、第4集冷宫右侧光=越轴/光跳）。判定**同名场景方向反转**（只在 `asset_registry` 的 LOC 地点两集都出现、且光位左右/轴线走向反转时报，靠地点共现门控压噪音）。**不阻断**（启发式不当硬闸）。
+> **这套检测已接进 image/video gate 自动落地**（`gate.py` 的 `check_cross_episode_contract` 在 `--stage image`/`--stage video` 内部调 `n2d_cross_episode.cross_episode_diff`，命中→WARN 进结构化 findings，n2d-batch/score/dashboard 一并消费），不再只靠人手动跑——过去那条裸命令几乎没人记得跑＝白写。裸命令仅用于单独复核 + 落盘 `生产数据/cross_episode_contract_第N集.{json,md}`：
+> ```bash
+> python3 skills/n2d-video/scripts/cross_episode_contract.py <作品根> 第N集
+> ```
+> 方向/地点门控核心是 `skills/n2d/_lib/n2d_cross_episode.py`（纯函数·有 pytest），CLI 与 gate 共用同一份，不各自抄。
 
 同时必须包含 **本集基础视觉风格契约**（继承出图总览，不重发明）：
 - 风格名：来自 `_设置.md` 的 `基础视觉风格`。

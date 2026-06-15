@@ -12,7 +12,7 @@ description: 长篇小说逻辑一致性守护者 — 自动提取并维护《�
 ## 核心机制（确定性骨架 + LLM 补语义）
 
 1. **增量提取 (Wiki Builder)**：`wiki_builder.py` 从 `设定/角色卡.md` 播种实体、扫章节算 `last_seen_chapter`、用死亡关键词做**疑似阵亡候选**（带 `auto` 标志 + 证据章，非闪回语境才记）。伤势细节、道具归属精确变更等语义状态由 LLM 在交互节点补全——脚本给确定性底座，让哨兵有真实可比对的状态。
-2. **交叉验证 (Logic Sentry)**：`logic_sentry.py` 确定性扫**硬冲突候选**（死人复活/弃置道具复用/位置跳变），只报硬冲突，软性突变交 `novel-review`。
+2. **交叉验证 (Logic Sentry)**：`logic_sentry.py` 确定性扫**硬冲突候选**（死人复活/弃置道具复用/位置跳变/**数值漂移**——角色卡声明的年龄锚点被本章写成不同年龄且非时间跳跃语境），只报硬冲突，软性突变交 `novel-review`。
 3. **伏笔台账 (Foreshadow Ledger)**：`foreshadow_ledger.py` 维护 `设定/foreshadowing_ledger.json`，把「埋了哪些伏笔、该在哪一章收、收没收」记成账。**伏笔的识别（哪段算埋、哪段算收）是 LLM/人工的活，脚本不做正则式"自动伏笔检测"**（中文长篇里那只会制造噪声）；脚本负责的确定性部分是：超期(overdue)判定、回收率计算、状态机合法迁移与 JSON 完整性——和 logic_sentry 的"只报硬冲突候选"同一条诚实边界。
 
 ## 工作流
@@ -106,7 +106,7 @@ python3 skills/novel-wiki/scripts/foreshadow_ledger.py "<作品根>" scan --thro
 - **novel-review**：作为"机检"环节的深度增强，由 `novel-review/scripts/consistency_audit.py` 一键串跑（建百科 → 逐章哨兵 → 汇总 `审稿/logic_alerts_summary.json`）；哨兵候选带 `auto` 标志，最终由人/LLM 定夺。`consistency_audit.py` 是顺带串跑伏笔巡检（`foreshadow_ledger.py scan --through <进度章>`）的天然位置——把 `审稿/foreshadow_report.json` 并进汇总即可；该挂接留给 novel-review，本 skill 不越界改它。
 
 ## 详细参考
-- 百科 + 告警字段定义、死亡候选规则、三类硬冲突：`references/entity-schema.md`
+- 百科 + 告警字段定义、死亡候选规则、四类硬冲突（死人复活/弃置道具复用/位置跳变/数值漂移）：`references/entity-schema.md`
 
 ## 常见错误
 

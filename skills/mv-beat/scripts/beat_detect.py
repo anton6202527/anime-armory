@@ -112,7 +112,8 @@ def main():
     out = os.path.join(out_dir, "beatgrid.json")
     json.dump(grid, open(out, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
     mv_utils.update_meta_flags(args.root)
-    mv_utils.update_progress_stage(args.root, "song_ingest")
+    # 只盖 beat 阶段；song_ingest（歌曲入库/定稿）由 song/用户上传线拥有，
+    # 卡点检测对占位/真歌都会跑，不能据此判定"歌曲已正式入库"（否则后配歌曲模式状态机失真）。
     mv_utils.update_progress_stage(args.root, "beat")
     print(f"[ok] BPM={grid['bpm']} 拍数={len(beats)} 小节首={len(downbeats)} 时长={grid['duration']}s → {out}")
     next_script = "mv-script 复核 rough 蓝图" if meta.get("song_timing") == "后配歌曲" else "mv-script 创作视觉蓝图"

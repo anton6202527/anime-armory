@@ -90,6 +90,11 @@ NOVEL_SKILLS = [
         "summary": "promotion hooks and short-video scripts",
     },
     {
+        "name": "novel-localize",
+        "role": "localize",
+        "summary": "overseas localization: glossary-locked translation + cultural adaptation",
+    },
+    {
         "name": "novel-progress",
         "role": "progress",
         "summary": "read-only progress dashboard for novel projects",

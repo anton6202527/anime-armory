@@ -27,6 +27,7 @@ import datetime as dt
 import glob
 import json
 import os
+import re
 import sys
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Tuple
@@ -53,6 +54,15 @@ LEGACY_VOICE_KEY_FIELD = VOICE_KEY_LEGACY_FIELD
 # 占位后端（macOS say 应急轨）voice_key 后缀：显式声明「不是 voicemap 注册音色，需重配」——
 # 不参与漂移/对账比对（避免假漂移），单独记入 placeholder_revoice 待重配清单。
 PLACEHOLDER_SUFFIX = VOICE_KEY_PLACEHOLDER_SUFFIX
+
+
+def _is_placeholder_key(voice_key: str) -> bool:
+    """与单一真值源 n2d_route._is_placeholder_voice_row 同口径识别占位 voice_key：
+    say 是应急后端、永远非注册音色 → 任何 `say:` 前缀都算占位；后缀兼容 canonical
+    `_placeholder` 与旧项目 `#placeholder`。旧实现只 `.endswith('_placeholder')` 会漏掉
+    `say:<声音>#placeholder` 旧格式，把占位→真音色误报成跨集漂移。"""
+    k = str(voice_key or "")
+    return k.startswith("say:") or k.endswith(PLACEHOLDER_SUFFIX) or "#placeholder" in k
 # 逐句条目的角色字段（n2d-voice 写中文「角色」；保底也认 char）
 CHARACTER_FIELDS = ("角色", "char", "character")
 # 镜头定位字段（用于 affected_shots）
@@ -246,8 +256,8 @@ def build_report(root: Path, generated_at: Optional[str] = None) -> Dict[str, An
             continue  # insufficient_data / invalid：宁缺勿假，跳过比对
         for char, spans in sorted(ep_info["characters"].items()):
             # 占位应急轨（say:<声音名>#placeholder）单列：声明性"未配真音色"，不进漂移/对账比对
-            real_spans = [s for s in spans if not s["voice_key"].endswith(PLACEHOLDER_SUFFIX)]
-            placeholder_spans = [s for s in spans if s["voice_key"].endswith(PLACEHOLDER_SUFFIX)]
+            real_spans = [s for s in spans if not _is_placeholder_key(s["voice_key"])]
+            placeholder_spans = [s for s in spans if _is_placeholder_key(s["voice_key"])]
             if placeholder_spans:
                 placeholders.append({
                     "character": char,
@@ -329,6 +339,122 @@ def build_report(root: Path, generated_at: Optional[str] = None) -> Dict[str, An
     }
 
 
+# ── ⑥ 配音前 pre-flight：渲染（贵·要 conda）之前就拦下"本集会跟前集换声" ──────────────
+# build_report 是**事后**对账（已渲染的 manifest）；本节是**事前**：读目标集 voiceover.txt 的说话角色，
+# 按当前 voicemap 解析出"本集渲染会用的音色键"，和前面各集**已渲染**的键对比，提前揪
+# "voicemap 被改→本集要换声"和"角色没登记 voicemap→将走兜底猜测"。纯 stdlib，无需 conda。
+
+VOICEOVER_LINE_RE = re.compile(r"\[(镜头[^·]*)·([^·]+)·[^\]]*\]")
+
+
+def parse_voiceover_roles(root: Path, ep: str) -> List[str]:
+    """目标集 脚本/<ep>/voiceover.txt 的说话角色（按出现顺序去重）。读不到 → []。纯 I/O。"""
+    path = Path(root) / "脚本" / ep / "voiceover.txt"
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return []
+    roles: List[str] = []
+    for m in VOICEOVER_LINE_RE.finditer(text):
+        role = m.group(2).strip()
+        if role and role not in roles:
+            roles.append(role)
+    return roles
+
+
+def resolve_intended_key(role: str, voicemap: Optional[Mapping[str, str]]) -> str:
+    """role → voicemap 子串匹配登记键（与 n2d-voice voice_manifest.vm_match 同子串语义）。无匹配 → ''。
+    纯函数·可测。注意只判 voicemap 登记键，不复刻 render 的项目专属兜底（未登记本就是跨集风险）。"""
+    if not voicemap:
+        return ""
+    for sub, key in voicemap.items():
+        if sub and sub in role:
+            return key
+    return ""
+
+
+def prior_voice_keys(root: Path, target_ep: str) -> Dict[str, Dict[str, Any]]:
+    """目标集**之前**各可检集，逐角色最后用过的真音色键 {role: {episode, voice_key}}。占位键不计。"""
+    out: Dict[str, Dict[str, Any]] = {}
+    target_n = route_episode_number(target_ep)
+    for ep in discover_episodes(root):
+        n = route_episode_number(ep)
+        if target_n is not None and n is not None and n >= target_n:
+            continue
+        info = parse_episode(root, ep)
+        if info["status"] != "ok":
+            continue
+        for char, spans in info["characters"].items():
+            real = [s for s in spans if not _is_placeholder_key(s["voice_key"])]
+            if real:
+                out[char] = {"episode": ep, "voice_key": real[-1]["voice_key"]}
+    return out
+
+
+def preflight(root: Path, ep: str, generated_at: Optional[str] = None) -> Dict[str, Any]:
+    """配音前一致性预检：本集说话角色 × 当前 voicemap × 前集已用键，提前报跨集换声/未登记。纯 stdlib。"""
+    root = Path(root)
+    roles = parse_voiceover_roles(root, ep)
+    voicemap = load_voicemap(root)
+    prior = prior_voice_keys(root, ep)
+    warnings: List[Dict[str, Any]] = []
+    notes: List[str] = []
+    if not roles:
+        notes.append(f"{ep} voiceover.txt 缺失/无可解析台词行——先跑 n2d-script 配音文案再做 preflight")
+    if voicemap is None:
+        notes.append("voicemap.json 缺失/不可解析——配音将全靠内置兜底音色，跨集极不稳；先建 设定库/voicemap.json")
+    for role in roles:
+        intended = resolve_intended_key(role, voicemap)
+        prev = prior.get(role)
+        if voicemap is not None and not intended:
+            warnings.append({
+                "character": role, "type": "unregistered_in_voicemap",
+                "intended_key": "", "prior_episode": (prev or {}).get("episode", ""),
+                "prior_key": (prev or {}).get("voice_key", ""), "return_to_stage": "voice",
+                "scope": f"角色「{role}」未在 voicemap 登记：渲染将走内置兜底猜测，跨集音色不稳。"
+                         "先在 设定库/voicemap.json 登记其音色键再配音。",
+            })
+            continue
+        if prev and intended and intended != prev["voice_key"]:
+            warnings.append({
+                "character": role, "type": "cross_episode_drift",
+                "intended_key": intended, "prior_episode": prev["episode"],
+                "prior_key": prev["voice_key"], "return_to_stage": "voice",
+                "scope": f"角色「{role}」voicemap 现解析为 {intended}，但前集 {prev['episode']} 已用 "
+                         f"{prev['voice_key']}：本集配音前先对齐 voicemap，否则跨集换声（事前拦下，免得渲染完才发现）。",
+            })
+    return {
+        "kind": "n2d_voice_preflight", "version": VERSION, "root": str(root), "episode": ep,
+        "generated_at": generated_at or now_iso(),
+        "roles": roles, "warnings": warnings, "notes": notes,
+        "summary": {
+            "roles": len(roles), "warnings": len(warnings),
+            "drift": sum(1 for w in warnings if w["type"] == "cross_episode_drift"),
+            "unregistered": sum(1 for w in warnings if w["type"] == "unregistered_in_voicemap"),
+        },
+    }
+
+
+def render_preflight_md(report: Mapping[str, Any]) -> str:
+    s = report.get("summary", {})
+    lines = [
+        f"# 配音前一致性预检 · {report.get('episode')}",
+        "",
+        f"- 说话角色 {s.get('roles', 0)} · 告警 {s.get('warnings', 0)}"
+        f"（跨集换声 {s.get('drift', 0)} · 未登记 {s.get('unregistered', 0)}）",
+        "",
+    ]
+    for n in report.get("notes", []):
+        lines.append(f"- note: {n}")
+    lines.append("")
+    for w in report.get("warnings", []):
+        tag = "🔁 跨集换声" if w["type"] == "cross_episode_drift" else "❓ 未登记"
+        lines.append(f"- {tag}「{w['character']}」：{w['scope']}")
+    if not report.get("warnings"):
+        lines.append("- ✅ 本集说话角色音色与前集一致、且均已登记 voicemap，可放心配音。")
+    return "\n".join(lines) + "\n"
+
+
 def render_md(report: Mapping[str, Any]) -> str:
     s = report.get("summary", {})
     lines = [
@@ -389,10 +515,19 @@ def write_outputs(root: Path, report: Mapping[str, Any]) -> Dict[str, Path]:
 def main() -> int:
     ap = argparse.ArgumentParser(description="n2d 音色跨集漂移检测（时长清单 voice_key × voicemap 对账）")
     ap.add_argument("root")
+    ap.add_argument("--preflight", metavar="第N集",
+                    help="配音前预检该集：本集说话角色 × voicemap × 前集已用键，提前报跨集换声/未登记（无需 conda）")
     ap.add_argument("--write", action="store_true", help="写 生产数据/identity_voice_drift_report.{json,md}")
     ap.add_argument("--json", action="store_true", help="打印 JSON 报表")
     ns = ap.parse_args()
     root = Path(ns.root)
+    if ns.preflight:
+        report = preflight(root, ns.preflight)
+        if ns.json:
+            print(json.dumps(report, ensure_ascii=False, indent=2))
+        else:
+            print(render_preflight_md(report))
+        return 1 if report["summary"]["warnings"] else 0
     report = build_report(root)
     if ns.write:
         for p in write_outputs(root, report).values():

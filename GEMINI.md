@@ -1,13 +1,10 @@
 # Anime Armory - AI Content Creation Factory
 
-Industrial-grade AI content production pipeline for Novels, Anime/Dramas (N2D), Songs, and Music Videos (MV).
+Industrial-grade AI content production pipeline for turning novels into AI comic-dramas / short-dramas (N2D).
 
 ## Project Overview
 
-Anime Armory is a collection of automated workflows (Skills) designed to streamline the transition from raw creative ideas to polished digital assets. It operates on parallel production lines:
-1.  **Narrative Line:** `novel-author` (Writing/Editing) → `novel2drama` (Anime/Drama Video Production).
-2.  **Audio-Visual Line:** `song` (Lyrics/Composition) → `mv` (Music Video Production).
-3.  **Advertising Line:** `ad` (Client brief → creative → script → storyboard → image → video → voice → editing/packaging → master). Self-contained `ad-*`; **not split into episodes** (multi-duration cutdowns + multi-aspect deliverables instead), with a built-in 《广告法》(Ad Law) banned-term checker.
+Anime Armory is a collection of automated workflows (Skills) designed to streamline the transition from raw creative ideas to polished digital assets. It hosts **five parallel creative production lines — novel / n2d / song / mv / ad**. The flagship is **n2d**: turn a novel into an AI comic-drama / short-drama — the `n2d` dispatcher routes script → voice → storyboard → image → video → compose, with cross-cutting skills for identity/LoRA/model-routing/QA/compliance/dashboard. Each line is self-contained and separately packageable (本线 scripts only import their own `_lib`/craft, never `skills/common/` or another line's code; cross-line is optional file/data handoff only).
 
 The project is built on **Claude Code Skills**, making it highly portable and compatible with various AI agents and local automation scripts.
 
@@ -20,36 +17,40 @@ The engine of the project. Each sub-directory is an atomic "Skill" containing:
 -   `references/`: Specialized knowledge bases (e.g., fight scene storyboarding, platform limits).
 
 ### 2. State Management
-Projects are tracked via two local markdown files (stored in project roots like `写小说/<project>/` or `制漫剧/<project>/`):
+Projects are tracked via two local markdown files (stored in project roots like `制漫剧/<project>/`):
 -   **`_进度.md` (Status):** A state machine tracking the progress of each episode or chapter. Always read this first to determine the next step.
 -   **`_设置.md` (Settings):** Project-specific configurations (platforms, models, resolution, languages). This file is private and should not be committed to shared templates.
 
 ### 3. Preference Layering
 Preferences are resolved in this order:
 1.  **Project Level:** `<project_root>/_设置.md` (Overrides everything).
-2.  **Global Default:** `.claude/创作偏好-默认.md` (User's personal defaults).
+2.  **Global Default:** `创作偏好-默认.md`, `.agents/创作偏好-默认.md`, or `.codex/创作偏好-默认.md` (private user defaults; `.claude/` is legacy-compatible).
 3.  **Interactive:** Prompt the user once, then record to `_设置.md`.
 
-## Key Commands (via AI Agents)
+## Routing — pick a skill by intent (mirrors `AGENTS.md`)
 
-| Line | Entry Point | Primary Tasks |
-| :--- | :--- | :--- |
-| **Novel** | `/novel-author` | Route to create, fetch, title, spinoff, rewrite, continue, or review. |
-| **Drama** | `/novel2drama` | Route to script, voice, image, video, or compose. |
-| **Song** | `/song` | Route to lyrics, compose, cover, or review. |
-| **MV** | `/mv` | Route to beat detection, image, video, lyric-sync, or compose. |
-| **Ad** | `/ad` | Route to craft, concept, script (+Ad-Law check), voice, image (3-layer lockup incl. product), video, or compose (cutdowns + reframes + delivery). |
-| **Public** | `/image-faceswap` | Face swapping for images (FaceFusion based). |
-| **Public** | `/video-faceswap` | Face swapping for videos (FaceFusion based). |
-| **Public** | `/watermark` | Watermark images/videos: compliance AI label (add-only) or brand/logo. faceswap calls it for AI labelling. |
+Match user intent against the table below (and each `SKILL.md`'s Triggers). Recommend skills by **bare name** (write `n2d`, not `/n2d`).
+
+| User wants to | Entry skill (dispatcher → routes to sub-skills) |
+|---|---|
+| Write a novel, import a source book, expand/rewrite/continue/score/review | **`novel`** (→ novel-create/fetch/rewrite/review/score …) |
+| Turn a novel into an AI comic-drama / short-drama (storyboard/voice/image/video/compose) | **`n2d`** (→ n2d-script/voice/image/video/compose) |
+| Write a song, edit lyrics, compose, pick takes, cover/voice-swap, review | **`song`** (→ song-lyrics/compose/cover/review …) |
+| Make an MV for a song, beat-sync, image/video, karaoke subtitles, compose | **`mv`** (→ mv-script/beat/plan/image/video/compose …) |
+| Make an ad / TVC / feed ad / product demo / promo video | **`ad`** (→ ad-concept/script/voice/image/video/compose/review) |
+| See project progress / next step, or summarize every n2d project at repo root | **`n2d-progress`** (read-only scan; never writes `_进度.md`) |
+| Edit/audit project settings, choice points, or global defaults | **`n2d-settings`** (wraps `_设置.md` read/validate/reset/sync) |
+| Check whether skill updates affect a project, plan a rebuild, re-render some images/videos | **`n2d-update`** (snapshot diff + minimal rebuild plan; `media` subcommand for selective image/video refresh) |
+| Clean up / slim generated junk | **`tools/shared-cleanup`** (repo dev tool; scans `skills/` by default, `--repo` for whole repo; deletes only low-risk cache/temp and reports saved space) |
+| Audit whether lines are still independent / wrongly import a shared layer or another line | **`tools/independence-audit`** (static scan; code-level cross-line dependency fails) |
+| Refresh choice-point candidates (are model/backend lists stale?) | per-line **`skills/<line>/_lib/refresh.py`** (only n2d/ad have candidate sources; machine-checks snapshot freshness → live-search verify → edit candidates + bump 采集日期 + log provenance; keeps per-line policy differences un-merged) |
 
 ## Technical Stack & Environment
 
 -   **OS:** macOS (Primary development environment).
 -   **Python:** 3.14 (System) + Specialized Conda environments:
-    -   `cosyvoice`: Audio processing, Whisper, librosa.
-    -   `acestep`: Local song composition.
-    -   `facefusion`: Face swapping.
+    -   `cosyvoice`: Voice cloning / character voicing, Whisper, librosa.
+    -   `facefusion`: Pixel QC stack (insightface / onnxruntime / buffalo_l).
 -   **Media Tools:**
     -   `ffmpeg`: Heavy lifting for video/audio composition (note: use Pillow for text rendering as the local ffmpeg may lack libass).
     -   `whisper` / `whisperx`: For lyric/subtitle synchronization.
@@ -57,20 +58,19 @@ Preferences are resolved in this order:
 
 ## Development Conventions
 
-1.  **Independence:** The `mv-*`, `n2d-*`, and `ad-*` lines are strictly independent. Do not share code or skills between them to maintain modularity (each line has its own `*-craft`/contract).
-2.  **Non-Hardcoded Platforms:** Never hardcode a specific AI platform (e.g., Suno, Kling) as the only path. Always use the "Choice Point" mechanism via `_偏好约定.md`.
+> **The authoritative "how to *build* a skill" design law is [`docs/skill-design-principles.md`](docs/skill-design-principles.md)** (cross-line constitution: independence / choice-point adapter / compliance gates / VCS-free delivery / README sync). The points below are a summary — read the constitution before adding or changing a skill. Machine-checkable clauses: `python3 tools/validate_skills.py` (E1 no-git / B2 bare skill names / F1 README index / F3 entry-doc sync) and `tools/independence-audit/scripts/check_independence.py` (line independence).
+
+1.  **Self-contained line:** Each creative line is **separately packageable** — as of the 2026-06 refactor there is **no shared layer** (`skills/common/` deleted; pipeline modules vendored into each line's own `_lib`/craft area; watermark & faceswap skills retired 2026-06). The `tools/independence-audit/scripts/check_independence.py` gate enforces "no `skills/common`, no cross-line import, no `shared-*` reference".
+2.  **Non-Hardcoded Platforms:** Never hardcode a specific AI platform (e.g., Suno, Kling) as the only path. Always use the "Choice Point" mechanism via each line's `references/选择点与偏好.md`.
 3.  **Progress Tracking:** Every skill that advances a project MUST update the corresponding `_进度.md`.
-4.  **Compliance:** All face-swapping and voice-cloning activities must pass the "Compliance Gate" (user authorization + mandatory AI watermark).
+4.  **Compliance:** Voice-cloning and character-likeness activities must pass the "Compliance Gate" (user authorization required).
 5.  **Output Paths:**
-    -   `写小说/`: Pure text outputs.
-    -   `制漫剧/`: Video/Drama production assets and final MP4.
-    -   `写歌/`: Lyrics and WAV/MP3 files.
-    -   `制MV/`: MV production assets and final MP4.
-    -   `拍广告/`: Ad production assets, master MP4 + cutdowns + multi-aspect deliverables.
+    -   `制漫剧/`: Drama production assets — per-episode `出视频/` clips + `合成/` audio/post and final MP4.
+    -   `资产库/`: Cross-project reusable asset packs (character archetypes, scenes, props, route experience).
 
 ## Building and Running
 
 There is no global "build" command. Individual steps are run via their respective scripts:
 -   Check `skills/<skill_name>/scripts/` for implementation details.
 -   Use `run_shell_command` to execute Python scripts within the appropriate Conda environment.
--   Always verify the current status using `/n2d-progress` or by reading `_进度.md` before initiating a new stage.
+-   Always verify the current status using the relevant progress skill such as `n2d-progress` / `novel-progress`, or by reading `_进度.md` before initiating a new stage.

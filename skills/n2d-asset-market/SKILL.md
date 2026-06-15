@@ -21,6 +21,12 @@ description: 跨项目 n2d 资产库/模板市场：把角色原型、identity_r
 - **读写边界**：导入默认 fork 新身份并重置后端 adapter；不复用旧项目 Character ID/Face Lock/LoRA ready，不生成新图/视频。
 - **契约关系**：registry kind、fork_history 字段、adapter status 和 LoRA 清理规则来自 `skills/n2d/_lib/n2d_contract.py`。
 
+## 与项目内 Character Assets 的关系
+
+- `设定库/character_assets/` 是**单项目内角色资产包层**：服务同一部剧 100+ 集生产，归拢 reference / prompts / lora / voice / adapters / qc，并指回本项目 `identity_registry.json` / `character_bible.json`。它可以作为导出模板的来源索引。
+- `资产库/characters/<slug>/asset_pack.json` 是**跨项目模板市场层**：服务新剧 fork 复用，导入后必须生成新项目本地身份，重置后端 Character ID / Face Lock / LoRA ready / voice id，并重新跑 QC。
+- 规则：项目内包可以继承同一个角色；跨项目包只能继承结构和素材线索，不能默认宣称是同一个可执行角色身份。
+
 ## 给用户的提示方式
 
 **不要让用户背 CLI。** 遇到上述触发点，AI 先用人话提示：
@@ -133,12 +139,14 @@ python3 skills/n2d-asset-market/scripts/market.py export-routes <作品根> 第1
 
 `characters/`、`scenes/`、`props/` 与 `templates/model_routes/` 都有成对导出/导入命令。场景/道具导入会合并到目标项目 `出图/共享/asset_registry.json`，复制参考图到 `出图/共享/图片/`；导入后仍要在逐镜 prompt 的「资产引用注册层」绑定 `LOC_` / `PROP_`，并重跑 image/video gate。
 
+若源项目已有 `设定库/character_assets/<CHAR_ID>__<slug>/manifest.json`，导出角色模板时优先读取其中的 reference/prompts/lora/voice/adapters/qc 缺口说明；导出的 `asset_pack.json` 仍要按跨项目 schema 写 fork_required 和 adapter 重置策略。
+
 Schema 见 `references/schema.md`。
 
 ## 和其它 skill 的关系
 
 - `n2d-script`：建角色/场景/关键道具前先查资产库，命中则导入原型再改写本剧设定。
-- `n2d-image`：新增共享定妆前先查资产库，命中则导入定妆组和 `identity_registry` / `asset_registry` fragment。
+- `n2d-image`：新增共享定妆前先查资产库，命中则导入定妆组和 `identity_registry` / `asset_registry` fragment；核心/长线角色在项目内同步维护 `设定库/character_assets/` manifest。
 - `n2d-identity`：导入角色后必须重建 adapter matrix。
 - `n2d-model-router`：路由模板仅作对照，逐集路由仍由它生成。
 - `n2d-dashboard`：后续可统计资产复用次数、节省重抽成本、模板成功率。

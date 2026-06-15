@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import glob
+import hashlib
 import importlib.util
 import json
 import os
@@ -65,6 +66,8 @@ IN_PROGRESS_STATUSES = IDENTITY_ADAPTER_IN_PROGRESS_STATUSES
 KNOWN_STATUSES = IDENTITY_ADAPTER_KNOWN_STATUSES
 # LoRA 升档判定：status 已在这些值时不再建议升档（ready=已上 LoRA；training=已在路上）
 LORA_UPGRADE_EXEMPT_STATUSES = frozenset({"ready", "training"})
+# 主动升档阈值：核心长线角色跨 ≥ 这么多集 × 无原生主体锁 → 在烧穿多集积分前就建议升档（不等漂移坐实）
+PROACTIVE_EPISODE_THRESHOLD = 3
 HANDLE_FIELDS = IDENTITY_HANDLE_FIELDS
 REFERENCE_FIELDS = IDENTITY_REFERENCE_KEYS
 
@@ -282,12 +285,29 @@ def _match_registry_character(registry: Mapping[str, Any], drift_char: str) -> O
     return fallback
 
 
+def _form_has_native_image_subject(form: Mapping[str, Any]) -> bool:
+    """form 是否在某出图后端已登记原生主体锁（Character ID / 主体库 / cameo，已 registered/ready）。
+    全是 reference_group 兜底 = 无原生锁 = 跨集靠参考图硬撑（弱后端结构性风险）。纯函数·可测。"""
+    adapters = form.get("identity_adapters") if isinstance(form.get("identity_adapters"), Mapping) else {}
+    image = adapters.get("image") if isinstance(adapters.get("image"), Mapping) else {}
+    for cfg in image.values():
+        if not isinstance(cfg, Mapping):
+            continue
+        mode = str(cfg.get("mode", "")).strip()
+        status = str(cfg.get("status", "")).strip()
+        if mode and mode not in NON_NATIVE_BINDINGS and status in ("registered", "ready"):
+            return True
+    return False
+
+
 def lora_upgrade_candidates(registry: Optional[Mapping[str, Any]], drift: Optional[Mapping[str, Any]]) -> List[Dict[str, Any]]:
     """LoRA 升档自动建议（drift report recommendations / matrix summary 同判定）。
 
-    条件：① drift report 可用且该角色跨集漂移显著（_drift_char_significant）；
-         ② 该角色在 registry 能对上号；③ 其 lora status 不在 ready/training。
-    数据不足（无 registry / drift 不可用 / 无角色数据）一律返回空列表，不瞎编。
+    三类触发，任一即建议（角色须在 registry 对上号、lora status 不在 ready/training）：
+      ① 跨集漂移显著（_drift_char_significant：≥2 集 warn/block 或出过 block）；
+      ② 跨集 embedding 质心漂移 high（P1-a：每集各自过 floor 但整体逐集偏离锚点）；
+      ③ **主动**：核心长线角色跨 ≥PROACTIVE_EPISODE_THRESHOLD 集 × 无原生主体锁——在烧穿多集积分前就建议升档。
+    数据不足（无 registry / drift 不可用）一律返回空列表，不瞎编。
     """
     if not isinstance(registry, Mapping) or not isinstance(drift, Mapping):
         return []
@@ -295,12 +315,15 @@ def lora_upgrade_candidates(registry: Optional[Mapping[str, Any]], drift: Option
         return []
     out: List[Dict[str, Any]] = []
     root_str = str(drift.get("root") or registry.get("root") or "<作品根>")
+    emb_map = drift.get("embedding_drift") if isinstance(drift.get("embedding_drift"), Mapping) else {}
     for drift_char, info in sorted((drift.get("characters") or {}).items()):
         if not isinstance(info, Mapping):
             continue
         significant, bad_episodes, first_bad = _drift_char_significant(info)
-        if not significant:
-            continue
+        emb_entries = emb_map.get(drift_char) or []
+        emb_high = [e for e in emb_entries if isinstance(e, Mapping) and e.get("severity") == "high"]
+        episodes = info.get("episodes") if isinstance(info.get("episodes"), Mapping) else {}
+        ep_count = len(episodes)
         matched = _match_registry_character(registry, drift_char)
         if matched is None:
             continue  # registry 对不上号 → 无法判 lora status，也给不出可执行命令，不输出半截建议
@@ -310,6 +333,11 @@ def lora_upgrade_candidates(registry: Optional[Mapping[str, Any]], drift: Option
         lora_status = str(lora_cfg.get("status", "")).strip()
         if lora_status in LORA_UPGRADE_EXEMPT_STATUSES:
             continue
+        native_subject = _form_has_native_image_subject(form)
+        proactive = (not significant and not emb_high
+                     and ep_count >= PROACTIVE_EPISODE_THRESHOLD and not native_subject)
+        if not (significant or emb_high or proactive):
+            continue
         character_id = str(char.get("id", "")).strip()
         form_name = str(form.get("form", "")).strip() or "常态"
         reason_bits = []
@@ -317,7 +345,15 @@ def lora_upgrade_candidates(registry: Optional[Mapping[str, Any]], drift: Option
             reason_bits.append(f"{len(bad_episodes)} 集脸部相似度低于阈值（{','.join(bad_episodes)}）")
         if first_bad:
             reason_bits.append(f"first_bad_episode={first_bad}（出现过 block 级漂移）")
-        reason_bits.append(f"LoRA status={lora_status or 'absent'}，reference_group/原生主体未压住跨集漂移")
+        if emb_high:
+            spans = "，".join(f"{e.get('episode_from')}→{e.get('episode_to')}(掉{e.get('drop')})" for e in emb_high)
+            reason_bits.append(f"跨集 embedding 质心漂移 {len(emb_high)} 段（{spans}）")
+        if proactive:
+            reason_bits.append(
+                f"核心长线角色跨 {ep_count} 集 × 无原生主体锁（reference_group 兜底）——"
+                "弱后端逐镜重画脸，集数越多越易跨集漂；建议在烧穿多集积分前升档 LoRA/原生主体")
+        else:
+            reason_bits.append(f"LoRA status={lora_status or 'absent'}，reference_group/原生主体未压住跨集漂移")
         out.append({
             "type": "lora_upgrade",
             "character": drift_char,
@@ -327,6 +363,9 @@ def lora_upgrade_candidates(registry: Optional[Mapping[str, Any]], drift: Option
             "lora_status": lora_status,
             "bad_episodes": bad_episodes,
             "first_bad_episode": first_bad,
+            "embedding_drift_high": len(emb_high),
+            "episode_count": ep_count,
+            "proactive": proactive,
             "reason": "；".join(reason_bits),
             "next_command": (
                 f"python3 skills/n2d-lora/scripts/lora.py init '{root_str}' "
@@ -334,6 +373,49 @@ def lora_upgrade_candidates(registry: Optional[Mapping[str, Any]], drift: Option
             ),
         })
     return out
+
+
+def registry_anchor_fingerprint(registry: Mapping[str, Any]) -> str:
+    """跨集锚点版本快照：把每个 form 的「锚点身份」（asset_key + anchor_sha + 表情锚 sha）摘成一个
+    稳定 sha256。回灌进 adapter_matrix 后，**每次生成 matrix 都留下「当时锁的是哪个锚点版本」的留痕**——
+    front 定妆图被悄改 → anchor_sha 变 → fingerprint 变 → git/diff 里立刻看得见，治"共享 registry 只有
+    updated_at、改了锚点无版本可追"的审计盲区。纯函数（仅 hashlib，可测）；anchor_sha 为空的 form 仍计入
+    （以空串占位），避免"没钉死"和"钉了空"指纹相同。"""
+    items: List[List[str]] = []
+    for char in registry.get("characters", []) or []:
+        if not isinstance(char, Mapping):
+            continue
+        cid = str(char.get("id", "")).strip()
+        for form in char.get("forms", []) or []:
+            if not isinstance(form, Mapping):
+                continue
+            exprs = []
+            for a in form.get("expression_anchors", []) or []:
+                if isinstance(a, Mapping):
+                    exprs.append([str(a.get("emotion", "")).strip(), str(a.get("anchor_sha", "")).strip()])
+            exprs.sort()
+            items.append([
+                cid,
+                str(form.get("form", "")).strip(),
+                str(form.get("asset_key", "")).strip(),
+                str(form.get("anchor_sha", "")).strip(),
+                json.dumps(exprs, ensure_ascii=False, sort_keys=True),
+            ])
+    items.sort()
+    blob = json.dumps(items, ensure_ascii=False, sort_keys=True)
+    return hashlib.sha256(blob.encode("utf-8")).hexdigest()
+
+
+def count_pinned_anchors(registry: Mapping[str, Any]) -> int:
+    """已钉死 anchor_sha 的 form 数（审计/进度可见性用）。纯函数·可测。"""
+    n = 0
+    for char in registry.get("characters", []) or []:
+        if not isinstance(char, Mapping):
+            continue
+        for form in char.get("forms", []) or []:
+            if isinstance(form, Mapping) and str(form.get("anchor_sha", "")).strip():
+                n += 1
+    return n
 
 
 def build_adapter_matrix(
@@ -414,6 +496,9 @@ def build_adapter_matrix(
         "forms_with_native_video_ready": sum(1 for f in forms_out if any(binding_is_native_ready(b) for b in f.get("video_bindings", {}).values())),
         "forms_with_lora_ready": sum(1 for f in forms_out if f.get("lora_binding", {}).get("ready")),
         "forms_with_gaps": sum(1 for f in forms_out if f.get("gaps")),
+        # 跨集锚点版本快照：matrix 留痕「本次锁的是哪个锚点版本」；锚点被悄改 → 指纹变 → diff 里可见
+        "anchor_fingerprint": registry_anchor_fingerprint(registry),
+        "forms_with_anchor_pinned": count_pinned_anchors(registry),
         # 与 drift report recommendations 同判定（lora_upgrade_candidates）；无 drift 数据时为空列表
         "characters_needing_lora_upgrade": sorted({
             c["character_id"] for c in lora_upgrade_candidates(registry, drift_report) if c.get("character_id")
@@ -514,6 +599,17 @@ def summarize_face_results(root: Path, episodes: List[str], face_results: Mappin
                     e["worst_score"] = score
             if shot.get("floor") is not None:
                 e["floor"] = shot.get("floor")
+        # 每角色本集质心相对锚点的接近度（face_consistency 在 result["characters"] 里给的 ep_mean_score）
+        for char, crec in (res.get("characters") or {}).items():
+            if not isinstance(crec, dict) or crec.get("ep_mean_score") is None:
+                continue
+            char = str(char).strip()
+            if not char:
+                continue
+            c = chars.setdefault(char, {"episodes": {}, "total_warn": 0, "total_block": 0, "first_bad_episode": ""})
+            e = c["episodes"].setdefault(ep, {"ok": 0, "warn": 0, "block": 0, "noface": 0, "worst_score": None, "floor": None})
+            e["mean_score"] = crec.get("ep_mean_score")
+            e["n_shots"] = crec.get("ep_n_shots")
     return {
         "kind": DRIFT_KIND,
         "version": VERSION,
@@ -561,9 +657,79 @@ def build_drift_report(
         }
     results = {ep: fc.analyze(str(root), ep) for ep in episodes}
     report = summarize_face_results(root, episodes, results, generated_at=generated_at)
+    # 跨集 embedding 漂移：逐角色按集质心 vs 锚点接近度，揪"每集各自过 floor 但整体逐集偏离"的系统性漂移
+    # （registry 传入做 P1 tier 感知标注：升档角色的偏移可能是换分布而非崩脸）
+    report["embedding_drift"] = build_embedding_drift(fc, report, registry)
     # LoRA 升档自动建议：漂移显著 + registry 对得上号 + lora 未 ready/training 才输出；数据不足为空
     report["recommendations"] = lora_upgrade_candidates(registry, report)
     return report
+
+
+def calibrated_abs_low(floors: Iterable[Optional[float]]) -> Optional[float]:
+    """⑤ 跨集 embedding 漂移的「绝对地板」按项目/角色**标定**，不再用全局硬 0.45。
+
+    floors 是该角色各集的 calibrate_floor 值（定妆组内部同人余弦下限，face_consistency 逐镜已算）。取
+    中位数做该角色的同人地板：风格化漫剧脸同人余弦常 <0.45，全局 0.45 会系统性误报 high；写实/3D 同人
+    可达 0.6+，0.45 又太松会漏报。用标定地板让"本集均值 < 同人线 = 硬漂移"对每种画风都成立。
+    无可用 floor（pillow 降级 / 单张定妆无内部对）→ None，调用方回退 cross_episode_drift 的默认 0.45。
+    纯函数·可测。"""
+    vals = sorted(float(f) for f in floors if f is not None)
+    if not vals:
+        return None
+    n = len(vals)
+    mid = n // 2
+    return round((vals[mid] if n % 2 else (vals[mid - 1] + vals[mid]) / 2), 4)
+
+
+def character_current_tier(registry: Optional[Mapping[str, Any]], drift_char: str) -> str:
+    """drift report 的角色 → registry 当前出图锁脸档：'lora' / 'native_subject' / 'reference_group' / ''(对不上号)。
+    纯函数·可测。P1：lora/native_subject 是相对 reference_group 兜底的**升档**，会移动 embedding 分布。"""
+    matched = _match_registry_character(registry or {}, drift_char)
+    if matched is None:
+        return ""
+    _char, form = matched
+    lora = form.get("identity_adapters", {}) if isinstance(form.get("identity_adapters"), Mapping) else {}
+    lora = lora.get("lora") if isinstance(lora.get("lora"), Mapping) else {}
+    if str(lora.get("status", "")).strip() == "ready":
+        return "lora"
+    if _form_has_native_image_subject(form):
+        return "native_subject"
+    return "reference_group"
+
+
+def build_embedding_drift(fc: Any, report: Mapping[str, Any],
+                          registry: Optional[Mapping[str, Any]] = None) -> Dict[str, List[Dict[str, Any]]]:
+    """逐角色把按集质心均值序列喂给 face_consistency.cross_episode_drift，产 episode_from/to 漂移条目。
+    无 cross_episode_drift（旧版 fc）或无 mean_score 数据 → 空。⑤ abs_low 用该角色标定地板（无则默认）。
+
+    **P1 tier 感知标注**：跨集 embedding 锚点基线建在「建立集」（多为 reference_group 兜底）。若该角色现已
+    **升档**（lora / 原生主体），其后期集的脸由不同分布的后端所出，质心相对早期锚点偏移**可能是升档所致而非脸崩**。
+    给这类角色的漂移条目打 `tier_confound`，提示"以升档集为新基线重测"，不误判升档为崩脸。
+    （注：n2d 出图为外部/手动执行，事件不记逐集后端 provenance；这里用 registry **当前**档位做诚实标注，
+    不假装能还原逐集后端历史。）"""
+    fn = getattr(fc, "cross_episode_drift", None)
+    if fn is None:
+        return {}
+    episodes = report.get("episodes") or []
+    out: Dict[str, List[Dict[str, Any]]] = {}
+    for char, info in (report.get("characters") or {}).items():
+        eps = info.get("episodes") or {}
+        seq = [(ep, eps.get(ep, {}).get("mean_score")) for ep in episodes if ep in eps]
+        if sum(1 for _, m in seq if m is not None) < 2:
+            continue
+        abs_low = calibrated_abs_low(eps.get(ep, {}).get("floor") for ep in episodes if ep in eps)
+        entries = fn(seq, abs_low=abs_low) if abs_low is not None else fn(seq)
+        if not entries:
+            continue
+        tier = character_current_tier(registry, char)
+        if tier in ("lora", "native_subject"):
+            for e in entries:
+                e["tier_confound"] = tier
+                e["tier_confound_note"] = (
+                    f"该角色现处 {tier} 档（早期集多为 reference_group 兜底所出）：跨集质心偏移可能是升档"
+                    "换分布所致而非脸崩——建议以升档集为新基线重测，勿径直判崩脸。")
+        out[char] = entries
+    return out
 
 
 def render_matrix_md(matrix: Mapping[str, Any]) -> str:
@@ -572,6 +738,8 @@ def render_matrix_md(matrix: Mapping[str, Any]) -> str:
         "",
         f"- root: {matrix.get('root')}",
         f"- generated_at: {matrix.get('generated_at')}",
+        f"- anchor_fingerprint: `{str(matrix.get('summary', {}).get('anchor_fingerprint', ''))[:16]}…`"
+        f"（锚点版本快照·{matrix.get('summary', {}).get('forms_with_anchor_pinned', 0)} form 已钉死；指纹变=锚点被改，跨集继承换脸风险）",
         "",
         "| 角色 | 形态 | reference_group | image native ready | video native ready | LoRA | gaps |",
         "|---|---|---|---|---|---|---|",
@@ -632,6 +800,31 @@ def render_drift_md(report: Mapping[str, Any]) -> str:
         )
     if not report.get("characters"):
         lines.append("| - | - | 0 | 0 | 无可机检角色或机检跳过 |")
+    emb = report.get("embedding_drift") or {}
+    if emb:
+        lines.extend([
+            "",
+            "## 跨集 embedding 漂移（质心 vs 锚点，逐集偏离）",
+            "",
+            "> 即使每集各自过 floor，整体相对建立集的脸质心若逐集下滑也是跨集漂移；high=掉幅≥0.15 或本集均值<0.45。",
+            "",
+            "| 角色 | 从 | 到 | from_mean | to_mean | 掉幅 | 严重度 |",
+            "|---|---|---|---|---|---|---|",
+        ])
+        for char, entries in sorted(emb.items()):
+            for d in entries:
+                sev = d.get("severity")
+                if d.get("tier_confound"):
+                    sev = f"{sev}·{d['tier_confound']}升档?"
+                lines.append(
+                    f"| {char} | {d.get('episode_from')} | {d.get('episode_to')} | {d.get('from_mean')} | "
+                    f"{d.get('to_mean')} | {d.get('drop')} | {sev} |"
+                )
+        confound = [(c, d) for c, ents in emb.items() for d in ents if d.get("tier_confound")]
+        if confound:
+            lines.append("")
+            for c, d in confound:
+                lines.append(f"> ⚠️ {c}：{d.get('tier_confound_note')}")
     recs = report.get("recommendations") or []
     if recs:
         lines.extend(["", "## LoRA 升档建议", ""])

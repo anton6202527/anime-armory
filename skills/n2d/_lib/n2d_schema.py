@@ -157,37 +157,108 @@ IDENTITY_FORK_HISTORY_ENTRY_FIELDS = (
 )
 
 # ── 一致性维度定义 ────────────────────────────────────────────────────────────
+# 一致性维度富表（评分维度·单一真值源）——n2d-score 按 weight 加权打分，consistency_audit / gate /
+# feedback / batch 按 audit_labels 把检测器段(脸(G1)/服装配色(N1)…)归并到评分维度并据 return_to_stage 回流。
+# 字段：label(中文名) · weight(评分权重·不必和=100，score 按 total_weight 归一) · return_to_stage(回流 stage) ·
+# scope(回流修法) · audit_labels(consistency_audit 段名→本维度) · keywords(自由文本兜底解析)。
+# 2026-06-15：modularize 重构曾误把本表换成 7 键精简表(face/voice/motion…)致 n2d-score 全挂；此处恢复
+# 富表为单一真值源，并把发型机检 发型(H1) 折进 character_consistency（发型属角色 DNA）。
 CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
-    "face": {
-        "label": "人脸一致性",
-        "keywords": ("脸", "不像", "漂移", "face"),
+    "character_consistency": {
+        "label": "角色 DNA 一致性（脸/发型）",
+        "weight": 20,
         "return_to_stage": "image",
+        "scope": "回 n2d-image 重出脸/发型漂移镜头；必要时补 identity_registry.character_dna / reference_group。",
+        "audit_labels": ("锚点门(N3)", "脸(G1)", "发型(H1)", "片内时序(N2)"),
+        "keywords": ("角色", "角色DNA", "DNA", "脸", "发型", "资产身份", "identity", "face", "锚点"),
     },
-    "voice": {
-        "label": "音色一致性",
-        "keywords": ("声音", "音色", "配音", "voice"),
-        "return_to_stage": "voice",
-    },
-    "outfit": {
-        "label": "服装一致性",
-        "keywords": ("衣服", "服装", "饰品", "outfit"),
+    "outfit_consistency": {
+        "label": "角色 DNA 一致性（服装/配饰）",
+        "weight": 12,
         "return_to_stage": "image",
+        "scope": "回 n2d-image 重出服装/配色/配饰漂移镜头；先检查 character_dna、定妆组和服装参考图。",
+        "audit_labels": ("服装配色(N1)",),
+        "keywords": ("服装", "配色", "妆造", "配饰", "accessory", "outfit"),
     },
-    "scene": {
+    "scene_consistency": {
         "label": "场景一致性",
-        "keywords": ("场景", "环境", "背景", "scene"),
+        "weight": 12,
         "return_to_stage": "image",
+        "scope": "回 n2d-image 修场景定妆、光位锚或尾帧；必要时回 n2d-video 重出接缝 clip。",
+        "audit_labels": ("场景(O2)", "接缝接力"),
+        "keywords": ("场景", "接缝", "尾帧", "场景资产"),
     },
-    "motion": {
-        "label": "动作连贯性",
-        "keywords": ("动作", "连贯", "穿模", "motion"),
-        "return_to_stage": "video",
+    "subtitle_correctness": {
+        "label": "字幕正确性",
+        "weight": 16,
+        "return_to_stage": "script_stage2",
+        "scope": "回 n2d-script 阶段2重跑 finalize_storyboard / 字幕重定时 / 修翻译层；必要时重出配音 manifest。",
+        "audit_labels": ("字幕对齐(L1)",),
+        "keywords": ("字幕", "srt", "cue", "对齐", "断句", "漏译", "阅读速度", "双语", "subtitle"),
+    },
+    "audio_visual_sync": {
+        "label": "音画同步",
+        "weight": 16,
+        "return_to_stage": "compose",
+        "scope": "回 n2d-compose 对齐配音轨、clip 时长、原生音轨策略；若时长源头错，回 n2d-script 阶段2。",
+        "audit_labels": (),
+        "keywords": ("音画", "配音", "原生音", "双人声", "时长", "voice", "audio", "口型", "mouth"),
+    },
+    "voice_consistency": {
+        "label": "音色一致性",
+        "weight": 10,
+        "return_to_stage": "voice",
+        "scope": "回 n2d-voice 按 voicemap 注册音色重配受影响角色台词；重配后复核时长清单与分镜时长。",
+        "audit_labels": ("音色声纹", "声纹一致性", "音色漂移"),
+        "keywords": ("音色", "声纹", "speaker", "voice print", "voice_key", "voicemap", "克隆音色"),
+    },
+    "rhythm_density": {
+        "label": "节奏密度",
+        "weight": 12,
+        "return_to_stage": "script_stage2",
+        "scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。",
+        "audit_labels": (),
+        "keywords": ("节奏", "钩子", "爽点", "留存", "集尾", "rhythm"),
+    },
+    "style_consistency": {
+        "label": "风格一致性",
+        "weight": 12,
+        "return_to_stage": "image",
+        "scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。",
+        "audit_labels": ("风格(S1)", "糊/低质(N4)"),
+        "keywords": ("风格", "style", "画风", "基础视觉", "糊", "低质", "清晰度"),
+    },
+    "semantic_continuity": {
+        "label": "语义继承",
+        "weight": 8,
+        "return_to_stage": "script_stage2",
+        "scope": "回 n2d-script 阶段2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点。",
+        "audit_labels": ("语义谱系(P0)",),
+        "keywords": ("语义", "谱系", "继承", "semantic", "voiceover", "storyboard"),
+    },
+    "state_continuity": {
+        "label": "状态百科",
+        "weight": 8,
+        "return_to_stage": "image",
+        "scope": "回 n2d-image 修 visual_state_ledger / 出图分镜状态锁；必要时回 storyboard 修角色状态演进。",
+        "audit_labels": ("状态百科(P1)",),
+        "keywords": ("状态", "动态百科", "visual_state_ledger", "state"),
+    },
+    "multimodal_continuity": {
+        "label": "多模态漂移",
+        "weight": 8,
+        "return_to_stage": "image",
+        "scope": "回 n2d-image 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy。",
+        "audit_labels": ("多模态(P2)",),
+        "keywords": ("多模态", "道具", "法宝", "视觉语义", "embedding"),
     },
     "contract_inheritance": {
-        "label": "契约继承",
-        "keywords": ("契约", "继承", "光位", "轴线", "contract"),
+        "label": "视觉契约继承",
+        "weight": 8,
         "return_to_stage": "video_prompt",
-        "scope": "修正出视频总览/逐 Clip prompt，使其继承出图侧视觉契约。",
+        "scope": "回 n2d-video 修 出视频/prompt/00_总览.md 的本集视觉一致性契约；以出图总览原文为准，光位锚/轴线视线不得改写。",
+        "audit_labels": ("契约继承", "视觉契约继承"),
+        "keywords": ("契约继承", "contract_inheritance", "光位锚", "轴线视线", "导演一致性"),
     },
 }
 

@@ -28,7 +28,7 @@ if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 from n2d_route import flow_columns, is_done, is_flow_complete, is_progress_satisfied, is_started, parse_progress, stage_of
 from n2d_settings import is_native_av, is_video_first
-from n2d_findings_utils import findings_status
+from n2d_findings_utils import findings_status, review_report_status, score_status
 try:
     from n2d_contract import cross_cutting, cross_cutting_tools, COSTLY_HINTS
 except Exception:  # pragma: no cover - 横切检查可选，缺契约也不影响主流程扫描
@@ -122,6 +122,39 @@ def parallel_suggestion(root, rows, header, flow, gaps):
     return ""
 
 
+def review_qa_line(root, ep, ref_mtime):
+    """One compact QA-verdict line per episode, or "" when there's nothing to show.
+
+    Surfaces the human review report (`_质检_<ep>.md`) date + staleness and the
+    deterministic score verdict (pass/fail vs threshold). Verdict-level signal —
+    distinct from findings' block/warn counts. Only nags "未质检" when the machine
+    score already failed but no human report exists (avoids false nags on early eps).
+    """
+    rev = review_report_status(root, ep, ref_mtime)
+    sc = score_status(root, ep)
+
+    sc_seg = sc_stale = ""
+    if sc and sc.get("total") is not None:
+        verdict = "✅过阈" if sc.get("status") == "pass" else "⚠️未过阈"
+        sc_seg = f"总分 {sc['total']}/{sc.get('threshold', '?')} {verdict}"
+        if ref_mtime > 0 and sc.get("mtime", 0) < ref_mtime:
+            sc_stale = "·评分早于当前产物"
+
+    if rev:
+        scope = "" if rev["scope"] == "本集" else f"[{rev['scope']}]"
+        date = f"，{rev['date']}" if rev["date"] else ""
+        # 报告 tail 已统一标 stale 时，不再重复 score 的 stale 后缀，避免双标
+        sc_seg2 = f"{sc_seg}{sc_stale}" if (sc_seg and not rev["stale"]) else sc_seg
+        tail = "  ⚠️ 早于当前产物，结论可能过期，建议重审" if rev["stale"] else ""
+        seg = f"（{sc_seg2}{date}）" if sc_seg2 else (f"（{rev['date']}）" if rev["date"] else "")
+        return f"  - {ep} 质检报告 {rev['name']}{scope}{seg}{tail}"
+
+    # 无人审报告，但机器评分已判 fail → 提示补人审；pass/缺评分不打扰
+    if sc and sc.get("status") == "fail" and sc.get("total") is not None:
+        return f"  - {ep} {sc_seg}{sc_stale}（无人审报告，建议跑 n2d-review 出 _质检_{ep}.md）"
+    return ""
+
+
 def report(root, out):
     try:
         header, dict_rows = parse_progress(root)
@@ -146,11 +179,12 @@ def report(root, out):
 
     progress_file = os.path.join(root, "_进度.md")
     findings_gaps = []
+    qa_lines = []  # 人审质检报告 + 评分判定（verdict 级，区别于 findings 的 block/warn 计数）
     for ep in episodes:
         ep_manifest = os.path.join(root, "脚本", ep, "manifest.json")
         ref_path = ep_manifest if os.path.exists(ep_manifest) else progress_file
         ep_ref_mtime = os.path.getmtime(ref_path) if os.path.exists(ref_path) else 0
-        
+
         active, stale = findings_status(root, ep, ep_ref_mtime)
         if active["block"] or active["warn"]:
             msg = f"  - {ep} 当前 findings: block {active['block']} / warn {active['warn']}"
@@ -163,6 +197,16 @@ def report(root, out):
                 f"  - {ep} 有过期 findings: block {stale['block']} / warn {stale['warn']} "
                 "（进度已更新，建议重跑 score/review/gate 刷新，不按旧结果直接返工）"
             )
+
+        qa_line = review_qa_line(root, ep, ep_ref_mtime)
+        if qa_line:
+            qa_lines.append(qa_line)
+
+    if qa_lines:
+        out.append("质检结果:")
+        out.extend(qa_lines[:6])
+        if len(qa_lines) > 6:
+            out.append(f"  - …另有 {len(qa_lines)-6} 集有质检记录")
 
     gaps = []  # (集, 列, 值, skill, note)
     for r in dict_rows:

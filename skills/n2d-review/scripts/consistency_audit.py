@@ -5,7 +5,7 @@
 本脚本把散落的检测器统一调起来，n2d-review 模式①工作流第 1 步「跑机检套件」即调它：
 
   语义谱系 P0 · 状态百科 P1 · 多模态 P2 · 视觉契约继承 · 锚点门 N3 · 脸 G1 ·
-  服装/配色 N1 · 片内时序 N2 · 场景 O2 · 糊/低质 N4 · 风格 S1 · 字幕对齐 L1
+  发型 H1 · 服装/配色 N1 · 片内时序 N2 · 场景 O2 · 糊/低质 N4 · 风格 S1 · 字幕对齐 L1
 
 每个子检测器各自缺库优雅跳过（见各脚本）；本编排只汇总、不重复实现。
 纯函数 `summarize` 无依赖、带 pytest。
@@ -36,6 +36,7 @@ from n2d_contract_diff import diff_contracts  # noqa: E402  视觉契约继承 D
 
 import face_consistency as fc
 import outfit_consistency as oc
+import hair_consistency as hc
 import temporal_consistency as tcheck
 import quality_check as qc
 import scene_consistency as sc
@@ -268,7 +269,7 @@ def probe_capabilities() -> Dict[str, Any]:
     }
     notes: List[str] = []
     if not caps["pillow"]:
-        notes.append("本机无 Pillow——全部像素级一致性机检（脸/服装/接缝/风格/时序）不可用，交人判。")
+        notes.append("本机无 Pillow——全部像素级一致性机检（脸/发型/服装/接缝/风格/时序）不可用，交人判。")
     elif not caps["insightface"]:
         notes.append("本机无 insightface——脸部/片内身份机检运行在 Pillow 降级精度，"
                      "机检通过≠脸部一致已验证；正式定稿前在装好 insightface 的环境复跑。")
@@ -360,6 +361,12 @@ def run(root: str, ep: str) -> dict:
     sections["服装配色(N1)"] = {"skipped": not o.get("available", False),
                               "verdicts": _verdicts(o.get("shots", [])), "notes": o.get("notes", [])}
     collect_simple("服装配色(N1)", o.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
+
+    # H1 发型/发色（脸、服装之外的第三类漂移；缺 Pillow 优雅跳过）
+    hr = hc.analyze(root, ep)
+    sections["发型(H1)"] = {"skipped": not hr.get("available", False),
+                          "verdicts": _verdicts(hr.get("shots", [])), "notes": hr.get("notes", [])}
+    collect_simple("发型(H1)", hr.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
 
     # N2 片内时序
     t = tcheck.analyze(root, ep)

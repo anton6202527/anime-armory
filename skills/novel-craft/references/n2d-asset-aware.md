@@ -23,3 +23,7 @@
 1. 用正则 `\[(CHAR|PROP|VFX|LOC|OUTFIT)_([^\]]+)\]` 扫描全书 Markdown。
 2. 自动汇总并在 `制漫剧/<书名>/小说/`（或显式 `--n2d-dest`）下生成 `asset_registry_preflight.json`。
 3. N2D 管线在启动分镜时，可以直接读取这些预置标签，无需大语言模型二次盲猜。
+
+> **导出前先过就绪机检**：本文件管"标了什么"，不管"够不够拍"。流向 n2d 前建议先跑
+> `skills/novel-review/scripts/n2d_readiness_check.py`（逐章查资产标签密度/对白占比/视觉锚/场景锚），
+> 就绪清单见 [`n2d-readiness.md`](n2d-readiness.md)——避免到分镜阶段才发现细节不足、回小说返工。

@@ -3,10 +3,11 @@
 """
 logic_sentry.py — 逻辑哨兵：拿《动态百科》确定性扫硬冲突（纯标准库）
 
-跑真活，不是 mock：对目标章节扫三类**硬冲突**（确定性可机检，不靠 LLM）：
+跑真活，不是 mock：对目标章节扫多类**硬冲突**（确定性可机检，不靠 LLM）：
   1) 死人复活：百科里已 deceased 的角色，在其死亡章之后又"在场行动"（且非闪回/托梦语境）
   2) 弃置道具复用：百科里已 discarded/shattered/lost 的道具，又被"使用/催动/祭出"
   3) 位置跳变（保守）：角色在本章被写在与百科记录不同的已知地点，且无位移过渡词
+  4) 数值/事实漂移（年龄）：角色卡声明了年龄锚点，本章却把同一角色写成不同年龄（非时间跳跃语境）
 
 软冲突（性格突变、动机不合理）不在此列——交 novel-review 人判。
 哨兵只报"硬冲突候选"，每条带证据 + auto 标志，最终由人/LLM 定夺（容错铁律：宁缺毋滥）。
@@ -26,6 +27,143 @@ ITEM_USE_VERBS = ["用", "使", "催动", "祭出", "举起", "握", "拔", "挥
 DISCARDED_STATUS = {"discarded", "shattered", "lost", "丢弃", "损毁", "破碎", "遗失", "摧毁"}
 MOVE_HINTS = ["赶往", "前往", "来到", "回到", "抵达", "瞬移", "传送", "疾驰", "飞往", "动身", "启程", "赶赴"]
 
+# 时间跳跃语境：合法地改变角色年龄，命中则豁免数值漂移（宁缺毋滥）。
+TIMESKIP_HINTS = ["多年", "年后", "数年", "转眼", "岁月", "长大", "成年", "许多年", "光阴", "春秋", "几年后", "十年", "如今已"]
+_AGE_NUM = r"(\d{1,3}|[〇零一二三四五六七八九十百两廿]{1,5})"
+# 角色卡声明锚点：`年龄：17` / `年龄 十七` / `17岁` / `年方十八`
+_CARD_AGE_RES = [
+    re.compile(r"年龄[：:\s]*" + _AGE_NUM),
+    re.compile(r"年方" + _AGE_NUM),
+    re.compile(_AGE_NUM + r"\s*岁"),
+]
+# 正文年龄表达：`X岁` / `今年X` / `年方X` / `芳龄X`
+_TEXT_AGE_RES = [
+    re.compile(_AGE_NUM + r"\s*岁"),
+    re.compile(r"(?:今年|年方|芳龄|年纪)\s*" + _AGE_NUM),
+]
+
+_CJK_DIGITS = {"〇": 0, "零": 0, "一": 1, "二": 2, "两": 2, "三": 3, "四": 4,
+               "五": 5, "六": 6, "七": 7, "八": 8, "九": 9}
+
+
+def cjk_to_int(token):
+    """把年龄 token（阿拉伯或 0-999 中文数字）转 int；无法解析返回 None。
+
+    支持 十七=17 / 二十=20 / 三十五=35 / 一百=100 / 廿=20。容错：只覆盖年龄常见量级。
+    """
+    token = (token or "").strip()
+    if token.isdigit():
+        return int(token)
+    if token == "廿":
+        return 20
+    if not token or any(c not in _CJK_DIGITS and c not in "十百廿" for c in token):
+        return None
+    total = 0
+    current = 0
+    for ch in token:
+        if ch in _CJK_DIGITS:
+            current = _CJK_DIGITS[ch]
+        elif ch == "十":
+            current = current or 1
+            total += current * 10
+            current = 0
+        elif ch == "百":
+            current = current or 1
+            total += current * 100
+            current = 0
+        elif ch == "廿":
+            total += 20
+        else:
+            return None
+    return total + current
+
+
+def load_numeric_anchors(project_root):
+    """从 设定/角色卡.md 抽取每个角色声明的年龄锚点 → {角色名: age_int}。
+
+    角色卡按 `#`/`##` 标题分段，段标题=角色名；段内首个年龄声明即锚点。
+    无角色卡 / 无年龄声明 → 返回空 dict（优雅跳过，不臆造）。
+    """
+    anchors = {}
+    card = os.path.join(project_root, "设定", "角色卡.md")
+    if not os.path.isfile(card):
+        return anchors
+    with open(card, "r", encoding="utf-8") as f:
+        lines = f.read().splitlines()
+    cur_name = None
+    body = []
+    skip_titles = {"角色卡", "人物卡", "角色", "人物", "角色表"}
+
+    def _flush(name, text):
+        if not name or name in skip_titles:
+            return
+        for rgx in _CARD_AGE_RES:
+            m = rgx.search(text)
+            if m:
+                val = cjk_to_int(m.group(1))
+                if val is not None and 0 < val < 1000:
+                    anchors[name] = val
+                    return
+
+    for ln in lines:
+        h = re.match(r"^#{1,3}\s+(.+?)\s*$", ln)
+        if h:
+            _flush(cur_name, "\n".join(body))
+            cur_name = h.group(1).strip()
+            body = []
+        else:
+            body.append(ln)
+    _flush(cur_name, "\n".join(body))
+    return anchors
+
+
+def _ages_in_text(text):
+    """返回正文里所有年龄表达 (age_int, position)。"""
+    out = []
+    for rgx in _TEXT_AGE_RES:
+        for m in rgx.finditer(text):
+            val = cjk_to_int(m.group(1))
+            if val is not None and 0 < val < 1000:
+                out.append((val, m.start()))
+    return out
+
+
+def scan_numeric_drift(anchors, text, chapter_index):
+    """角色卡年龄锚点 vs 本章年龄表达，邻近不一致即报候选（非时间跳跃语境）。"""
+    alerts = []
+    if not anchors:
+        return alerts
+    ages = _ages_in_text(text)
+    if not ages:
+        return alerts
+    for name, canonical in anchors.items():
+        if name not in text:
+            continue
+        name_positions = [m.start() for m in re.finditer(re.escape(name), text)]
+        for age_val, age_pos in ages:
+            if age_val == canonical:
+                continue
+            # 中文里年龄紧贴主语：名字须在年龄前 12 字内或后 8 字内（覆盖"沈念今年十七岁"
+            # 与"年方十八的沈念"两种语序）。窗口收紧避免把邻句别的角色的年龄算到本角色头上。
+            if not any(-12 <= (np - age_pos) <= 8 for np in name_positions):
+                continue
+            ctx = _context(text, age_pos, 24)
+            if any(h in ctx for h in TIMESKIP_HINTS):
+                continue  # 时间跳跃合法改年龄，豁免
+            alerts.append({
+                "type": "numeric_drift_age",
+                "entity": name,
+                "severity": "建议级",
+                "chapter": chapter_index,
+                "canonical_age": canonical,
+                "found_age": age_val,
+                "evidence": ctx.strip(),
+                "auto": True,
+                "note": f"角色卡声明 {name} 年龄 {canonical}，本章邻近写作 {age_val} 岁且无时间跳跃语境（候选，请人判：可能为虚岁/笔误/真漂移）",
+            })
+            break
+    return alerts
+
 
 def _resolve_chapter(project, chapter):
     """--chapter 可给章号或文件路径。返回 (idx, text)。"""
@@ -41,8 +179,11 @@ def _resolve_chapter(project, chapter):
     return idx, ""
 
 
-def scan_chapter(wiki, text, chapter_index, project_root=None):
-    """确定性扫描，返回 alerts 列表。纯函数，便于单测。"""
+def scan_chapter(wiki, text, chapter_index, project_root=None, numeric_anchors=None):
+    """确定性扫描，返回 alerts 列表。纯函数，便于单测。
+
+    numeric_anchors：{角色名: 年龄} 锚点；普通模式由 main 从角色卡加载，单测可直接传。
+    """
     alerts = []
 
     for name, e in wiki.items():
@@ -118,6 +259,9 @@ def scan_chapter(wiki, text, chapter_index, project_root=None):
                     "note": "角色出现在与百科记录不同的地点且全章无位移过渡词（保守候选，易误报，请人判）",
                 })
                 break
+
+    # 数值/事实漂移（年龄）：角色卡声明锚点 vs 本章年龄表达
+    alerts.extend(scan_numeric_drift(numeric_anchors, text, chapter_index))
 
     # 新增：伏笔回收对账 (Foreshadowing Audit)
     if project_root:
@@ -226,7 +370,8 @@ def main():
         wiki = json.load(f)
 
     idx, text = _resolve_chapter(args.project_path, args.chapter)
-    alerts = scan_chapter(wiki, text, idx, project_root=args.project_path)
+    anchors = load_numeric_anchors(args.project_path)
+    alerts = scan_chapter(wiki, text, idx, project_root=args.project_path, numeric_anchors=anchors)
 
     out_dir = os.path.join(args.project_path, "审稿")
     os.makedirs(out_dir, exist_ok=True)

@@ -46,6 +46,7 @@ copy_file pytest.ini
 copy_file conftest.py
 
 copy_dir skills
+copy_dir tools
 copy_dir docs
 copy_dir desktop/src
 copy_file desktop/README.md
@@ -56,7 +57,7 @@ copy_file desktop/package-lock.json
 copy_file 资产库/README.md
 copy_file scripts/package_release.sh
 
-for dir in 写小说 制漫剧 写歌 制MV; do
+for dir in 制漫剧; do
   mkdir -p "${PKG}/${dir}"
   cat > "${PKG}/${dir}/README.md" <<EOF
 # ${dir}
@@ -75,9 +76,10 @@ cat > "${PKG}/版本说明.md" <<EOF
 包含：
 - README.md / AGENTS.md
 - skills/ 全部 workflow skill
+- tools/ 仓库级维护工具
 - docs/ 文档与截图
 - desktop/ 桌面端源码，不含 node_modules 和构建产物
-- 写小说/、制漫剧/、写歌/、制MV/ 空作品目录
+- 制漫剧/ 空作品目录
 - 资产库/README.md
 
 不包含：

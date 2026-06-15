@@ -72,7 +72,7 @@ function shortDesc(d) {
 
 const FAMILIES = [
   { id: 'novel', label: '✍️ 写小说 novel-*', test: (n) => n.startsWith('novel-') },
-  { id: 'n2d', label: '🎬 制漫剧 n2d-*', test: (n) => n.startsWith('n2d-') || n === 'novel2drama' },
+  { id: 'n2d', label: '🎬 制漫剧 n2d-*', test: (n) => n.startsWith('n2d-') || n === 'n2d' },
   { id: 'shared', label: '🔧 共享能力', test: () => true },
 ];
 function scanSkills(skillsDir) {
@@ -94,7 +94,7 @@ const WORK_LINES = [
 const DOCS = [
   { rel: 'README.md', desc: '使用说明 · 工作流与批量生产' },
 ];
-const FIRST_OPEN_TERMINAL_MESSAGE = '进入ai，输入‘/制漫剧/本宫才是这皇宫最大的妖/小说/本宫才是这皇宫最大的妖.txt 拆脚本’，开始你的漫剧制作吧！';
+const FIRST_OPEN_TERMINAL_MESSAGE = '进入你的AI，输入‘/制漫剧/本宫才是这皇宫最大的妖 拆脚本’，开始制作漫剧吧！';
 
 // 作品区 source: prefer the extension's own bundled work root, then an explicitly
 // configured external root, then the open workspace.

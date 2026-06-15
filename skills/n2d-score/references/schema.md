@@ -56,8 +56,8 @@
 
 | key | label | 权重 | 默认回流 |
 |---|---|---:|---|
-| `character_consistency` | 角色一致性 | 20 | `image` |
-| `outfit_consistency` | 服装一致性 | 12 | `image` |
+| `character_consistency` | 角色 DNA 一致性（脸/发型） | 20 | `image` |
+| `outfit_consistency` | 角色 DNA 一致性（服装/配饰） | 12 | `image` |
 | `scene_consistency` | 场景一致性 | 12 | `image` |
 | `subtitle_correctness` | 字幕正确性 | 16 | `script_stage2` |
 | `audio_visual_sync` | 音画同步 | 16 | `compose` |
@@ -69,7 +69,7 @@
 ```json
 {
   "key": "character_consistency",
-  "label": "角色一致性",
+  "label": "角色 DNA 一致性（脸/发型）",
   "weight": 20,
   "score": 53,
   "status": "fail",
@@ -79,7 +79,7 @@
   "skipped": false,
   "evidence": ["脸(G1): block=1 warn=0 ok=4 skipped=False"],
   "return_to_stage": "image",
-  "rerun_scope": "回 n2d-image 重出崩脸/身份漂移镜头；必要时补 identity_registry / reference_group。"
+  "rerun_scope": "回 n2d-image 重出脸/发型漂移镜头；必要时补 identity_registry.character_dna / reference_group。"
 }
 ```
 
@@ -144,8 +144,8 @@ python3 skills/n2d-score/scripts/visual_checks.py <作品根> 第N集 --json
 ```json
 {
   "return_to_stage": "image",
-  "dimensions": ["角色一致性", "服装一致性"],
-  "scope": "回 n2d-image 重出崩脸/身份漂移镜头；回 n2d-image 重出服装/配色漂移镜头；先检查定妆组和服装参考图。",
+  "dimensions": ["角色 DNA 一致性（脸/发型）", "角色 DNA 一致性（服装/配饰）"],
+  "scope": "回 n2d-image 重出脸/发型漂移镜头；回 n2d-image 重出服装/配色/配饰漂移镜头；先检查 character_dna、定妆组和服装参考图。",
   "affected_artifacts": [],
   "affected_shots": []
 }

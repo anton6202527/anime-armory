@@ -10,6 +10,8 @@
 └── templates/model_routes/<slug>/asset_pack.json
 ```
 
+注意：这份 schema 描述的是**跨项目模板市场包**。项目内长线角色资产包使用 `设定库/character_assets/<CHAR_ID>__<slug>/manifest.json`，用于同一部剧内归拢 reference / prompts / lora / voice / adapters / qc；它可以作为导出来源，但不是 `asset_pack.json`，也不能替代 `identity_registry.json`。
+
 ## 通用字段
 
 ```json
@@ -39,7 +41,7 @@
 
 ## character pack
 
-角色包包含一个 `identity_registry.json` 片段和 `files/` 下的定妆 PNG。
+角色包包含一个 `identity_registry.json` 片段和 `files/` 下的定妆 PNG。若源项目有 `设定库/character_assets/.../manifest.json`，导出时可把其中的 lora/voice/adapters/qc 缺口说明写入 `notes` 或扩展字段，但跨项目导入仍按 fork 处理。
 
 关键字段：
 

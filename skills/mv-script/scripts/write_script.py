@@ -113,16 +113,9 @@ def main():
         sys.exit(2)
 
     meta = load_json(os.path.join(root, "_meta.json"), {})
-    settings_content = read_text(os.path.join(root, "_设置.md"))
-    
-    # 简单解析 _设置.md 中的 key-value
-    settings = {}
-    for line in settings_content.splitlines():
-        if ":" in line and line.strip().startswith("- "):
-            parts = line.split(":", 1)
-            k = parts[0].replace("- ", "").strip()
-            v = parts[1].split("#")[0].strip()
-            settings[k] = v
+    # 统一走本线 settings loader（正确处理 **加粗** key、跳过 `## 记录` 区），不再手写解析——
+    # 旧的内联解析会误读加粗键、且会吃进 ## 记录 块的行。
+    settings = mv_utils.parse_settings(root)
 
     lyrics = read_text(os.path.join(root, "词", "lyrics.md"))
     beatgrid = load_json(os.path.join(root, "节拍", "beatgrid.json"))

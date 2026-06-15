@@ -78,8 +78,10 @@ def asset_registry_path(root: str) -> str:
     return shared_asset_path(root, "asset_registry.json")
 
 def voicemap_path(root: str) -> str:
-    """Path to the voicemap.json: `<作品根>/合成/voicemap.json`."""
-    return os.path.join(os.fspath(root).rstrip("/"), "合成", "voicemap.json")
+    """Path to the voicemap.json: `<作品根>/设定库/voicemap.json`（角色→音色注册表）。
+    与生产者 n2d-voice(render_voice.py 读 设定库/voicemap.json) 及 n2d-identity 对账消费者一致；
+    旧实现误指向 合成/voicemap.json 致音色对账永远读空、voicemap_mismatch 漏报。"""
+    return os.path.join(os.fspath(root).rstrip("/"), "设定库", "voicemap.json")
 
 def load_json_registry(path: str) -> Dict[str, Any]:
     if not os.path.exists(path):

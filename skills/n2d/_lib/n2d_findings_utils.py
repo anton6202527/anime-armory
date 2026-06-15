@@ -3,6 +3,7 @@
 import glob
 import json
 import os
+import re
 from typing import Any, Dict, List, Optional, Tuple
 
 def finding_counts(data: Any) -> Tuple[int, int, List[str]]:
@@ -104,5 +105,65 @@ def findings_status(root: str, ep: str, progress_mtime: float = 0) -> Tuple[Dict
         active["samples"] = all_block_samples[:2]
     else:
         active["samples"] = all_warn_samples[:2]
-        
+
     return active, stale
+
+
+_REVIEW_DATE_RE = re.compile(r"生成时间[:：]\s*([0-9]{4}[-/][0-9]{1,2}[-/][0-9]{1,2})")
+
+
+def review_report_status(root: str, ep: str, ref_mtime: float = 0) -> Optional[Dict[str, Any]]:
+    """Locate the human QA report (`_质检_<ep>.md`, else whole-work `_质检_全片.md`) for one episode.
+
+    Read-only existence/date/staleness — does NOT parse severity from the free-form
+    markdown body (that comes from the deterministic findings/score JSON instead).
+    Returns None when no report exists. `stale` mirrors findings_status: if ref_mtime
+    is given and the report predates it, the products changed after the review.
+    """
+    candidates = [
+        (os.path.join(root, f"_质检_{ep}.md"), "本集"),
+        (os.path.join(root, "_质检_全片.md"), "全片"),
+    ]
+    for path, scope in candidates:
+        if not os.path.isfile(path):
+            continue
+        mtime = os.path.getmtime(path)
+        date = ""
+        try:
+            with open(path, encoding="utf-8") as fh:
+                head = fh.read(2000)
+            m = _REVIEW_DATE_RE.search(head)
+            if m:
+                date = m.group(1)
+        except OSError:
+            pass
+        return {
+            "name": os.path.basename(path),
+            "scope": scope,
+            "date": date,
+            "mtime": mtime,
+            "stale": bool(ref_mtime > 0 and mtime < ref_mtime),
+        }
+    return None
+
+
+def score_status(root: str, ep: str) -> Optional[Dict[str, Any]]:
+    """Read the deterministic score verdict (`生产数据/score_<ep>.json`) for one episode.
+
+    Returns {total, threshold, status, mtime} or None. `status` is "pass"/"fail" as
+    written by n2d-score; surfaces the verdict, not just whether score ran.
+    """
+    path = os.path.join(root, "生产数据", f"score_{ep}.json")
+    if not os.path.isfile(path):
+        return None
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except (OSError, json.JSONDecodeError):
+        return None
+    return {
+        "total": data.get("total_score"),
+        "threshold": data.get("threshold"),
+        "status": data.get("status"),
+        "mtime": os.path.getmtime(path),
+    }

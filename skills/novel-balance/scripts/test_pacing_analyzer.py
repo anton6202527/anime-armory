@@ -75,3 +75,40 @@ def test_writes_both_artifacts():
     assert data["kind"] == "novel_pacing_signals"
     assert len(data["chapters"]) == 2
     assert "冲突强度" in open(md_path, encoding="utf-8").read()
+
+
+# ── G1：女频情绪兑现不被打脸尺误判 ───────────────────────────────
+def test_female_emotion_payoff_not_starved():
+    # 暧昧拉扯文：几乎无打脸/逆袭词，但情绪兑现密集。通用桶 payoff 近 0，女频桶应明显抬高。
+    text = "他吃醋了沉默着终于还是拥抱了她两人破镜重圆双向奔赴告白心动" * 20
+    root = _mk_project({1: text})
+    base = pa.analyze(root, None, payoff_kw=pa.PAYOFF_KW)[0]
+    fem = pa.analyze(root, None, payoff_kw=pa.payoff_bank_for("番茄女频"))[0]
+    assert fem["payoff_score"] > base["payoff_score"]
+
+
+def test_female_oriented_exempt_from_dropbook_escalation():
+    # 三项皆低的拉扯章：爽文向→🔴弃书；女频→不升级到🔴（同品质向豁免）。
+    low = {"chapter": 1, "conflict_score": 2, "info_score": 1, "payoff_score": 1}
+    commercial = dict(low); pa.flag_rows([commercial], profile="商业爽文向")
+    assert "🔴" in commercial["verdict"]
+    female = dict(low); pa.flag_rows([female], profile="商业爽文向", female_oriented=True)
+    assert "🔴" not in female["verdict"]
+
+
+# ── G3：前30章反转密度对账 ───────────────────────────────────────
+def test_early_reversal_below_floor_flagged():
+    flat = [{"chapter": i, "twist_count": 0} for i in range(1, 11)]
+    res = pa.early_reversal_check(flat, "商业爽文向")
+    assert res and res["below"] and res["avg"] == 0.0
+
+
+def test_early_reversal_meets_floor():
+    rich = [{"chapter": i, "twist_count": 2} for i in range(1, 11)]
+    res = pa.early_reversal_check(rich, "商业爽文向")
+    assert res and not res["below"]
+
+
+def test_early_reversal_skips_literary():
+    rows = [{"chapter": i, "twist_count": 0} for i in range(1, 11)]
+    assert pa.early_reversal_check(rows, "品质向") is None

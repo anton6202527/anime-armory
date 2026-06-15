@@ -2,7 +2,7 @@
   "kind": "n2d_cli_snapshot_index",
   "cli": "dreamina",
   "binary": "/Users/lalala/.local/bin/dreamina",
-  "captured_at": "2026-06-12T16:09:45Z",
+  "captured_at": "2026-06-15T01:10:42Z",
   "available": true,
   "commands": [
     {
@@ -19,7 +19,7 @@
         "help",
         "version"
       ],
-      "captured_at": "2026-06-12T16:09:45Z"
+      "captured_at": "2026-06-15T01:10:42Z"
     },
     {
       "command": "frames2video",
@@ -36,7 +36,7 @@
         "help",
         "version"
       ],
-      "captured_at": "2026-06-12T16:09:45Z"
+      "captured_at": "2026-06-15T01:10:42Z"
     },
     {
       "command": "image2video",
@@ -52,7 +52,7 @@
         "help",
         "version"
       ],
-      "captured_at": "2026-06-12T16:09:45Z"
+      "captured_at": "2026-06-15T01:10:42Z"
     },
     {
       "command": "multimodal2video",
@@ -71,7 +71,7 @@
         "help",
         "version"
       ],
-      "captured_at": "2026-06-12T16:09:45Z"
+      "captured_at": "2026-06-15T01:10:42Z"
     },
     {
       "command": "text2video",
@@ -87,7 +87,7 @@
         "help",
         "version"
       ],
-      "captured_at": "2026-06-12T16:09:45Z"
+      "captured_at": "2026-06-15T01:10:42Z"
     }
   ],
   "drift": []

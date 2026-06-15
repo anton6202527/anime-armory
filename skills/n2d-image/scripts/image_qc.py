@@ -7,6 +7,7 @@
 
 四项像素机检（全部读 `出图/第N集/图片/*.png`，Pillow-or-fallback，缺料必须在报告中明示，不臆造通过）：
 - 崩脸 G1   ← face_consistency.analyze（insightface 优先，无则 Pillow 查分辨率/清晰度）
+- 发型 H1   ← hair_consistency.analyze（Pillow 头部发色+发型轮廓指纹）
 - 服装 N1   ← outfit_consistency.analyze（Pillow 调色板直方图）
 - 场景 O2   ← scene_consistency.analyze（Pillow dHash 结构 + 色调指纹离群）
 - 接缝接力  ← temporal_consistency.seam_analyze（镜头N_end.png vs 下镜首帧 dHash）
@@ -42,6 +43,7 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import hashlib
 import json
 import os
 import re
@@ -279,6 +281,7 @@ def load_registry_forms(root: Path) -> Optional[List[Dict[str, Any]]]:
                 "form": fm,
                 "key": key,
                 "asset_key": asset_key,
+                "scope": str(ch.get("scope") or "").strip(),  # 核心/长线/全篇 → ④ 表情库硬闸只对核心角生效
                 "anchor_phrase": str(form.get("anchor_phrase") or ""),
                 "display": display,
                 "ref_count": ref_count,  # 该形态 reference_group 的多角度参考张数（C4：喂全角度组给多参考后端）
@@ -585,9 +588,24 @@ def _references_expression_lib(body: str) -> bool:
     return any(m in str(body or "") for m in EXPRESSION_LIB_MARKERS)
 
 
-def _lint_closeup_expression_lib(label: str, body: str) -> List[Dict[str, str]]:
-    """近景大表情表情库 gate（仅角色镜调用）：近景/特写/反打 + 强情绪角色镜须引用同源表情库/
-    脸部特写参考，否则大表情让 AI 自由重画整张脸 → 表情镜脸漂。warn 级·纯函数·可测。"""
+# ④ 表情库硬闸只对核心角生效（与 build_adapter_matrix / 一角一后端同口径）；配角维持 warn。
+CORE_SCOPES = ("全篇", "长线", "核心")
+
+
+def core_char_ids(registry_forms: Optional[Sequence[Mapping[str, Any]]]) -> Set[str]:
+    """registry_forms → 核心角色 base id 集合（scope ∈ 核心/长线/全篇）。纯函数·可测。"""
+    return {str(f.get("id") or "").strip()
+            for f in (registry_forms or [])
+            if str(f.get("scope") or "").strip() in CORE_SCOPES and f.get("id")}
+
+
+def _lint_closeup_expression_lib(label: str, body: str,
+                                 id_refs: Optional[Sequence[str]] = None,
+                                 core_ids: Optional[Set[str]] = None) -> List[Dict[str, str]]:
+    """近景大表情表情库 gate（仅角色镜调用）：近景/特写/反打 + 强情绪角色镜须引用同源表情库/脸部特写参考，
+    否则大表情让 AI 自由重画整张脸 → 表情镜脸漂。纯函数·可测。
+
+    ④ 分档：命中**核心角色**（scope 核心/长线/全篇）→ **block**（最易漂的镜，不许裸出）；其余角色 → warn。"""
     text = str(body or "")
     if not _CLOSEUP_LINT_RE.search(text):
         return []
@@ -595,6 +613,13 @@ def _lint_closeup_expression_lib(label: str, body: str) -> List[Dict[str, str]]:
         return []
     if _references_expression_lib(text):
         return []
+    refs = {normalize_identity_ref(r).split("/")[0] for r in (id_refs or []) if r}
+    hit_core = sorted(refs & set(core_ids or set()))
+    if hit_core:
+        return [{"level": "block", "code": "closeup_core_no_expression_lib",
+                 "msg": f"{label}：核心角色近景大表情镜（{'、'.join(hit_core)}）未引用『表情库 expressions / 脸部特写参考』"
+                        "——大表情让 AI 重画整张脸=跨集脸漂高发；必须先建同源表情库"
+                        "（image_qc --finalize-expr CHAR_xx/形态/情绪）并在本镜引用，首尾双帧只插值。"}]
     return [{"level": "warn", "code": "no_expression_lib_ref",
              "msg": f"{label}：近景/特写大表情角色镜未引用『表情库 expressions / 脸部特写参考』"
                     "（大表情会让 AI 重画整张脸 → 表情镜脸漂；建议引同源表情库，首尾双帧只插值）"}]
@@ -781,7 +806,7 @@ def lint_shot_block(
                          "msg": f"{label}：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"})
     findings.extend(_lint_tail_identity_handoff(label, body, registry_forms))
     findings.extend(_lint_tail_relay_method(label, body))
-    findings.extend(_lint_closeup_expression_lib(label, body))
+    findings.extend(_lint_closeup_expression_lib(label, body, id_refs, core_char_ids(registry_forms)))
     findings.extend(_lint_multi_subject_spatial_binding(label, body, id_refs))      # C3
     findings.extend(_lint_native_multiref_coverage(label, body, id_refs, form_ref_counts))  # C4
     return findings
@@ -826,7 +851,7 @@ def lint_prompts(root: Path, ep: str) -> Dict[str, Any]:
 # ── 像素机检（复用 n2d-review 纯函数） ──────────────────────────────────────────
 
 def run_pixel_checks(root: Path, ep: str) -> Dict[str, Any]:
-    """崩脸 G1 / 服装 N1 / 场景 O2 / 接缝接力 / 锚点门 N3，复用 n2d-review analyze。
+    """崩脸 G1 / 发型 H1 / 服装 N1 / 场景 O2 / 接缝接力 / 锚点门 N3，复用 n2d-review analyze。
     每模块独立 try——某项不可用只影响该项，其余照跑。"""
     r = str(root)
     checks: Dict[str, Any] = {}
@@ -843,6 +868,15 @@ def run_pixel_checks(root: Path, ep: str) -> Dict[str, Any]:
             checks["anchors"] = {"available": False, "notes": [f"audit_anchors 失败：{exc}"]}
     else:
         checks["face"] = {"available": False, "notes": ["face_consistency 不可用——崩脸机检跳过，交人判。"]}
+
+    hc = _load_review_module("hair_consistency")
+    if hc is not None:
+        try:
+            checks["hair"] = hc.analyze(r, ep)
+        except Exception as exc:
+            checks["hair"] = {"available": False, "notes": [f"hair_consistency.analyze 失败：{exc}"]}
+    else:
+        checks["hair"] = {"available": False, "notes": ["hair_consistency 不可用——发型机检跳过。"]}
 
     oc = _load_review_module("outfit_consistency")
     if oc is not None:
@@ -906,9 +940,11 @@ HARD_LINT_CODES = (
     "lifecycle_regression",
     "lifecycle_unknown_from_state",
     "lifecycle_unknown_to_state",
+    "closeup_core_no_expression_lib",  # ④ 核心角近景大表情无表情库 = 跨集脸漂高发，硬拦
 )
 VISUAL_CHECK_LABELS = {
     "face": "崩脸 G1",
+    "hair": "发型 H1",
     "outfit": "服装 N1",
     "scene": "场景 O2",
     "multimodal": "道具/特效 P2",
@@ -917,6 +953,7 @@ VISUAL_CHECK_LABELS = {
 }
 VISUAL_CHECK_DIMS = {
     "face": "character_consistency",
+    "hair": "character_consistency",
     "outfit": "outfit_consistency",
     "scene": "scene_consistency",
     "multimodal": "asset_consistency",
@@ -1526,7 +1563,7 @@ def summarize(payload: Dict[str, Any]) -> Dict[str, Any]:
     """汇总各项机检 + lint，区分 hard（必须修）与 advisory（非阻断初筛）。"""
     hard = advisory = 0
     rows_by_check: Dict[str, Dict[str, int]] = {}
-    for key, shots_key in (("face", "shots"), ("outfit", "shots"),
+    for key, shots_key in (("face", "shots"), ("hair", "shots"), ("outfit", "shots"),
                            ("scene", "shots"), ("multimodal", "shots"), ("seam", "seams")):
         res = payload.get("checks", {}).get(key) or {}
         cnt = count_verdicts(res.get(shots_key) or [])
@@ -1589,11 +1626,12 @@ def qc_environment(payload: Dict[str, Any], *, with_pixel: bool = True) -> Dict[
 
     full: face embedding + pixel checks available.
     degraded: some visual checks unavailable, or face falls back to Pillow quality-only mode.
-    none: no pixel checks were requested, or every core visual check is unavailable.
+    none: no pixel checks were requested, or every declared core visual check is unavailable.
     """
     checks = payload.get("checks", {}) or {}
     unavailable = unavailable_visual_checks(payload)
-    core_checks = {"face", "outfit", "scene", "seam"}
+    core_checks = {"face", "hair", "outfit", "scene", "seam"}
+    declared_core_checks = {k for k in core_checks if k in checks}
     face_mode = str((checks.get("face") or {}).get("mode") or "")
     degraded_face = face_mode in FACE_DEGRADED_MODES
     missing: List[str] = []
@@ -1601,7 +1639,7 @@ def qc_environment(payload: Dict[str, Any], *, with_pixel: bool = True) -> Dict[
     if not with_pixel:
         level = "none"
         missing.append("pixel checks disabled by --no-pixel")
-    elif core_checks.issubset(set(unavailable)):
+    elif not declared_core_checks or declared_core_checks.issubset(set(unavailable)):
         level = "none"
         missing.extend(VISUAL_CHECK_LABELS.get(k, k) for k in unavailable)
     elif unavailable or degraded_face:
@@ -1716,7 +1754,11 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
             f"疑似漏分类角色镜：{s.get('png') or s.get('shot')} 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。"
             "确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景脸）可忽略。",
         ))
-    # 服装 N1 / 场景 O2 / 锚点门 N3（advisory）：即便 block 也降 warn 作为非阻断初筛入账
+    # 发型 H1 / 服装 N1 / 场景 O2 / 锚点门 N3（advisory）：即便 block 也降 warn 作为非阻断初筛入账
+    for s in (checks.get("hair") or {}).get("shots", []):
+        if s.get("verdict") in ("block", "warn"):
+            out.append(_qc_finding("warn", "character_consistency", s.get("png"),
+                                   f"发型 H1 初筛：{s.get('png')}（发色/发型轮廓离群，非阻断）"))
     for s in (checks.get("outfit") or {}).get("shots", []):
         if s.get("verdict") in ("block", "warn"):
             out.append(_qc_finding("warn", "outfit_consistency", s.get("png"),
@@ -1853,7 +1895,7 @@ def to_strict_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
             add(s.get("png"), f"strict:崩脸/身份 {s.get('verdict')}")
     for s in (checks.get("outfit") or {}).get("shots", []):
         if s.get("verdict") in ("block", "warn"):
-            add(s.get("png"), f"strict:服装一致性 {s.get('verdict')}")
+            add(s.get("png"), f"strict:角色DNA服装 {s.get('verdict')}")
     for s in (checks.get("scene") or {}).get("shots", []):
         if s.get("verdict") in ("block", "warn"):
             add(s.get("png"), f"strict:场景/光色 {s.get('verdict')}")
@@ -1984,6 +2026,7 @@ def render_markdown(payload: Dict[str, Any]) -> str:
         "",
         "## 一致性机检（复用 n2d-review 阈值，单一真值源；崩脸=硬阻断，其余=非阻断初筛）",
         _check_line("崩脸 G1", checks.get("face"), by.get("face", {})),
+        _check_line("发型 H1", checks.get("hair"), by.get("hair", {})),
         _check_line("服装 N1", checks.get("outfit"), by.get("outfit", {})),
         _check_line("场景 O2", checks.get("scene"), by.get("scene", {})),
         _check_line("道具/特效 P2", checks.get("multimodal"), by.get("multimodal", {})),
@@ -2065,11 +2108,17 @@ def render_markdown(payload: Dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def mark_finalized(root: Path, target: str, value: bool = True) -> Dict[str, Any]:
+def mark_finalized(root: Path, target: str, value: bool = True, auto_pin: bool = True) -> Dict[str, Any]:
     """把共享定妆/资产的机器可读 finalize 真值 `self_check_passed` 置位（补 `00_索引.md` 人读 ✅）。
 
     target：角色 `CHAR_xx/形态` 或单形态时裸 `CHAR_xx`；资产 `LOC/PROP/OUTFIT/VFX_xx`。
-    人工/AI 过落档自检后调用，让 `gate` 的 `check_referenced_assets_finalized` 能机检"引用必须 finalized"。"""
+    人工/AI 过落档自检后调用，让 `gate` 的 `check_referenced_assets_finalized` 能机检"引用必须 finalized"。
+
+    `auto_pin=True`（默认）：对**角色 form** 落档自检时顺带把 front 主参考的 sha256 钉进 `anchor_sha`
+    （等价于自动 `--pin-anchor`），治"锚点静默漂移"结构根因——过自检的脸即刻被锚点指纹保护，gate
+    `check_anchor_fingerprints` 立即生效，不再依赖人手记得单独跑一遍 pin。front 锚点图缺失时优雅跳过
+    （不阻断落档，回执提示补图后手动 pin）。`auto_pin=False`（`--no-auto-pin`）保留旧的纯 opt-in 行为。
+    资产（LOC/PROP/…）无锚点概念，不受 auto_pin 影响。"""
     root = Path(root)
     t = str(target or "").strip()
     if t.split("/")[0].startswith(("LOC_", "PROP_", "OUTFIT_", "VFX_")):
@@ -2103,10 +2152,148 @@ def mark_finalized(root: Path, target: str, value: bool = True) -> Dict[str, Any
             return {"ok": False, "msg": f"`{cid}` 有多个形态，请指明 `CHAR_xx/形态`"}
         if not matches:
             return {"ok": False, "msg": f"`{cid}` 无形态 `{form_name}`"}
+        auto_pinned: List[str] = []
+        anchor_missing = False
         for fm in matches:
             fm["self_check_passed"] = bool(value)
+            if value and auto_pin:
+                rel = _anchor_relpath(fm)
+                sha = _sha256_file(root / rel) if rel else None
+                if sha:
+                    fm["anchor_sha"] = sha
+                    auto_pinned.append(sha)
+                else:
+                    anchor_missing = True
         p.write_text(json.dumps(reg, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-        return {"ok": True, "target": t, "value": bool(value), "msg": f"{t}.self_check_passed={value}"}
+        msg = f"{t}.self_check_passed={value}"
+        if value and auto_pin:
+            if auto_pinned:
+                msg += f" + anchor_sha 自动钉死={auto_pinned[0][:12]}…"
+            elif anchor_missing:
+                msg += "（front 锚点图缺失，未自动钉死——补图后跑 --pin-anchor）"
+        return {"ok": True, "target": t, "value": bool(value),
+                "auto_pinned": bool(auto_pinned), "msg": msg}
+    return {"ok": False, "msg": f"identity_registry 无角色 `{cid}`"}
+
+
+def _anchor_relpath(form: Mapping[str, Any]) -> str:
+    """form 锚点定妆图（front 主参考）项目相对路径；缺 front 回退第一张可用视图。
+    与 gate.py `_form_anchor_relpath` 同口径。"""
+    rg = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
+    front = rg.get("front")
+    if isinstance(front, str) and front.strip():
+        return front.strip()
+    for v in rg.values():
+        if isinstance(v, str) and v.strip():
+            return v.strip()
+    return ""
+
+
+def _sha256_file(path: Path) -> Optional[str]:
+    try:
+        h = hashlib.sha256()
+        with open(path, "rb") as f:
+            for chunk in iter(lambda: f.read(1 << 20), b""):
+                h.update(chunk)
+        return h.hexdigest()
+    except Exception:
+        return None
+
+
+def pin_anchor(root: Path, target: str, unpin: bool = False) -> Dict[str, Any]:
+    """把共享定妆锚点（form 的 front 主参考定妆图）的内容 sha256 钉进 identity_registry 的 `anchor_sha`。
+
+    钉死后 `gate check_anchor_fingerprints` 会校验磁盘 sha 不变；锚点被悄改/丢失即 BLOCK，治跨集脸漂的
+    结构根因（锚点静默漂移）。target：`CHAR_xx/形态`（多形态必须指明）或单形态时裸 `CHAR_xx`。
+    `unpin=True` 删除 anchor_sha（停用钉死）。出锚点定妆图、过自检后调用。"""
+    root = Path(root)
+    t = str(target or "").strip()
+    p = root / "出图" / "共享" / "identity_registry.json"
+    try:
+        reg = json.loads(p.read_text(encoding="utf-8"))
+    except Exception as exc:
+        return {"ok": False, "msg": f"读 identity_registry 失败：{exc}"}
+    cid, _, form_name = t.partition("/")
+    for c in (reg.get("characters") or []):
+        if str(c.get("id") or "").strip() != cid:
+            continue
+        forms = c.get("forms") or []
+        if form_name:
+            matches = [fm for fm in forms if str(fm.get("form") or "").strip() == form_name]
+        elif len(forms) == 1:
+            matches = forms
+        else:
+            return {"ok": False, "msg": f"`{cid}` 有多个形态，请指明 `CHAR_xx/形态`"}
+        if not matches:
+            return {"ok": False, "msg": f"`{cid}` 无形态 `{form_name}`"}
+        for fm in matches:
+            if unpin:
+                fm.pop("anchor_sha", None)
+                continue
+            rel = _anchor_relpath(fm)
+            if not rel:
+                return {"ok": False, "msg": f"`{t}` 的 reference_group 缺 front 主参考，无法钉锚点"}
+            sha = _sha256_file(root / rel)
+            if not sha:
+                return {"ok": False, "msg": f"锚点定妆图不存在或不可读：{rel}（先出 front 定妆照）"}
+            fm["anchor_sha"] = sha
+        p.write_text(json.dumps(reg, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        if unpin:
+            return {"ok": True, "target": t, "msg": f"{t}.anchor_sha 已移除（停用钉死）"}
+        return {"ok": True, "target": t, "msg": f"{t}.anchor_sha={matches[0].get('anchor_sha', '')[:12]}…（{_anchor_relpath(matches[0])}）"}
+    return {"ok": False, "msg": f"identity_registry 无角色 `{cid}`"}
+
+
+def finalize_expression(root: Path, target: str, value: bool = True) -> Dict[str, Any]:
+    """把表情库锚（form 的某情绪脸部特写）落档为跨集共享锁定资产：置 self_check_passed 并钉 anchor_sha。
+
+    target=`CHAR_xx/形态/情绪`（单形态时可 `CHAR_xx//情绪`）。form 的 `expression_anchors` 是
+    `[{emotion, path, self_check_passed, anchor_sha}]`；缺该情绪条目时报错（先在 registry 登记 path）。
+    `value=False` 标脏（gate 引用即 block）。让 `gate check_expression_anchors` 能机检同情绪近景跨集同源。"""
+    root = Path(root)
+    t = str(target or "").strip()
+    parts = t.split("/")
+    if len(parts) != 3:
+        return {"ok": False, "msg": "target 需为 `CHAR_xx/形态/情绪`（单形态用 `CHAR_xx//情绪`）"}
+    cid, form_name, emotion = (p.strip() for p in parts)
+    if not cid or not emotion:
+        return {"ok": False, "msg": "缺角色 ID 或情绪"}
+    p = root / "出图" / "共享" / "identity_registry.json"
+    try:
+        reg = json.loads(p.read_text(encoding="utf-8"))
+    except Exception as exc:
+        return {"ok": False, "msg": f"读 identity_registry 失败：{exc}"}
+    for c in (reg.get("characters") or []):
+        if str(c.get("id") or "").strip() != cid:
+            continue
+        forms = c.get("forms") or []
+        if form_name:
+            matches = [fm for fm in forms if str(fm.get("form") or "").strip() == form_name]
+        elif len(forms) == 1:
+            matches = forms
+        else:
+            return {"ok": False, "msg": f"`{cid}` 有多个形态，请指明 `CHAR_xx/形态/情绪`"}
+        if not matches:
+            return {"ok": False, "msg": f"`{cid}` 无形态 `{form_name}`"}
+        fm = matches[0]
+        anchors = fm.get("expression_anchors")
+        if not isinstance(anchors, list):
+            return {"ok": False, "msg": f"`{cid}/{form_name}` 未登记 expression_anchors；先在 registry 加 `{{emotion, path}}`"}
+        hit = next((a for a in anchors if isinstance(a, dict) and str(a.get("emotion") or "").strip() == emotion), None)
+        if hit is None:
+            return {"ok": False, "msg": f"`{cid}/{form_name}` 无情绪锚 `{emotion}`；先登记其 path"}
+        hit["self_check_passed"] = bool(value)
+        if value:
+            rel = str(hit.get("path") or "").strip()
+            sha = _sha256_file(root / rel) if rel else None
+            if not sha:
+                return {"ok": False, "msg": f"情绪锚图不存在或不可读：{rel}（先出该情绪脸部特写）"}
+            hit["anchor_sha"] = sha
+        else:
+            hit.pop("anchor_sha", None)
+        p.write_text(json.dumps(reg, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        return {"ok": True, "target": t, "value": bool(value),
+                "msg": f"{t}.self_check_passed={value}" + (f" anchor_sha={hit.get('anchor_sha','')[:12]}…" if value else "")}
     return {"ok": False, "msg": f"identity_registry 无角色 `{cid}`"}
 
 
@@ -2118,6 +2305,16 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     help="把共享定妆/资产 `self_check_passed` 置 true（过落档自检后调用）：CHAR_xx/形态 或 LOC/PROP/OUTFIT/VFX_xx")
     ap.add_argument("--unfinalize", action="store_true",
                     help="与 --mark-finalized 连用：改置 false（标记脏定妆，gate 引用即 block）")
+    ap.add_argument("--no-auto-pin", action="store_true",
+                    help="与 --mark-finalized 连用：落档时不自动钉死 anchor_sha（保留旧的纯 opt-in pin 行为）")
+    ap.add_argument("--pin-anchor", metavar="TARGET",
+                    help="把共享定妆锚点 front 主参考的内容 sha256 钉进 identity_registry `anchor_sha`（gate 校验锚点不被悄改）：CHAR_xx/形态")
+    ap.add_argument("--unpin-anchor", action="store_true",
+                    help="与 --pin-anchor 连用：删除 anchor_sha（停用锚点钉死）")
+    ap.add_argument("--finalize-expr", metavar="TARGET",
+                    help="把表情库锚落档为跨集共享锁定（self_check_passed=true + 钉 sha）：CHAR_xx/形态/情绪")
+    ap.add_argument("--unfinalize-expr", action="store_true",
+                    help="与 --finalize-expr 连用：标脏（self_check_passed=false，gate 引用即 block）")
     ap.add_argument("--no-pixel", action="store_true", help="只跑 prompt lint，不跑像素机检")
     ap.add_argument("--json", action="store_true", help="打印机器可读 payload")
     ap.add_argument("--findings", action="store_true",
@@ -2131,11 +2328,19 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ns = ap.parse_args(argv)
     root = Path(ns.root).expanduser().resolve()
     if ns.mark_finalized:
-        r = mark_finalized(root, ns.mark_finalized, value=not ns.unfinalize)
+        r = mark_finalized(root, ns.mark_finalized, value=not ns.unfinalize, auto_pin=not ns.no_auto_pin)
+        print(("✅ " if r.get("ok") else "⛔ ") + r.get("msg", ""))
+        return 0 if r.get("ok") else 1
+    if ns.pin_anchor:
+        r = pin_anchor(root, ns.pin_anchor, unpin=ns.unpin_anchor)
+        print(("✅ " if r.get("ok") else "⛔ ") + r.get("msg", ""))
+        return 0 if r.get("ok") else 1
+    if ns.finalize_expr:
+        r = finalize_expression(root, ns.finalize_expr, value=not ns.unfinalize_expr)
         print(("✅ " if r.get("ok") else "⛔ ") + r.get("msg", ""))
         return 0 if r.get("ok") else 1
     if not ns.episode:
-        ap.error("episode 必填（除非用 --mark-finalized 写 registry）")
+        ap.error("episode 必填（除非用 --mark-finalized / --pin-anchor / --finalize-expr 写 registry）")
     payload = run_qc(root, ns.episode, with_pixel=not ns.no_pixel)
     regen = to_strict_regen_list(payload) if ns.strict else to_regen_list(payload)
     if ns.affected_shots:

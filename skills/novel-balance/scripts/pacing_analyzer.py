@@ -29,8 +29,15 @@ from project_io import parse_chapter_range, read_chapters  # noqa: E402
 from keyword_banks import (  # noqa: E402  单一定义源
     CONFLICT_KW,
     PAYOFF_KW,
+    REVERSAL_KW,
     classify_platform,
+    is_female_oriented,
+    payoff_bank_for,
 )
+
+# 2026 都市爽文反转密度基准：前 30 章每章≥1.5 个反转/转折（起点 top50 都市量化）。
+EARLY_REVERSAL_CHAPTERS = 30
+EARLY_REVERSAL_FLOOR = 1.5
 from settings import get_setting  # noqa: E402
 
 _CJK = r"一-鿿"
@@ -77,26 +84,51 @@ def parse_range(s):
     return parse_chapter_range(s)
 
 
-def analyze(project, rng=None):
+def analyze(project, rng=None, payoff_kw=None):
+    """payoff_kw：爽点词桶。默认通用 PAYOFF_KW；女频项目传入并入情绪兑现的桶
+    （见 keyword_banks.payoff_bank_for），避免拉扯文被打脸尺误判低爽点。"""
+    payoff_kw = payoff_kw or PAYOFF_KW
     chs = list_chapters(project, rng)
     if not chs:
         return None
     rows = []
     for idx, text in chs:
         conflict = _density(text, CONFLICT_KW)
-        payoff = _density(text, PAYOFF_KW)
+        payoff = _density(text, payoff_kw)
         diversity = _lexical_diversity(text)
+        twists = sum(text.count(w) for w in REVERSAL_KW)  # 反转引子绝对计数（候选线索）
         rows.append({
             "chapter": idx,
             "chars": _cjk_len(text),
             "conflict_per_kchar": conflict,
             "payoff_per_kchar": payoff,
             "lexical_diversity": diversity,
+            "twist_count": twists,
             "conflict_score": _scale(conflict, 0, 12),      # 冲突强度 1-10
             "info_score": _scale(diversity, 0.50, 0.95),    # 信息密度 1-10
             "payoff_score": _scale(payoff, 0, 10),          # 爽点密度 1-10
         })
     return rows
+
+
+def early_reversal_check(rows, profile):
+    """前 30 章平均反转密度对账（仅商业爽文向有意义；品质向慢热不卡）。
+
+    返回 None（不适用/无早章）或 {avg, floor, n_chapters, below}。这是确定性候选线索——
+    反转引子词命中近似"反转事件"，闪回/伏笔可能虚高或漏计，最终由 LLM 复核。
+    """
+    if profile == "品质向":
+        return None
+    early = [r for r in rows if r["chapter"] <= EARLY_REVERSAL_CHAPTERS]
+    if not early:
+        return None
+    avg = sum(r["twist_count"] for r in early) / len(early)
+    return {
+        "avg": round(avg, 2),
+        "floor": EARLY_REVERSAL_FLOOR,
+        "n_chapters": len(early),
+        "below": avg < EARLY_REVERSAL_FLOOR,
+    }
 
 
 # 按评判档调注水阈值：品质向小说节奏天然更缓、爽点稀薄是文体而非注水，
@@ -108,10 +140,12 @@ PROFILE_THRESHOLDS = {
 }
 
 
-def flag_rows(rows, profile="商业爽文向"):
+def flag_rows(rows, profile="商业爽文向", female_oriented=False):
     """逐章判定 + 连续注水检测（确定性预警；语义由 LLM 复核）。
 
     profile：评判档（'商业爽文向' | '品质向'），由 `目标平台` 选择点归一而来。
+    female_oriented：女频项目（正交于 profile）。女频的爽是情绪兑现，爽点桶已并入
+    FEMALE_PAYOFF_KW；这里再豁免"爽点低→🔴弃书"的升级（同品质向待遇），避免拉扯文误杀。
     """
     th = PROFILE_THRESHOLDS.get(profile, PROFILE_THRESHOLDS["商业爽文向"])
     for r in rows:
@@ -119,9 +153,9 @@ def flag_rows(rows, profile="商业爽文向"):
         # 单章低谷
         if r["conflict_score"] <= th["conflict"] and r["info_score"] <= th["info"]:
             verdict = "⚠️ 低冲突+低信息，疑似注水"
-        # 弃书点风险含「爽点也低」一项——只对爽文向成立；品质向爽点稀薄是文体，
+        # 弃书点风险含「爽点也低」一项——只对爽文向且非女频成立；品质向/女频爽点形态不同，
         # 不据此判弃书（仍走上面的低冲突+低信息注水判定，但不升级到 🔴）。
-        if (profile != "品质向"
+        if (profile != "品质向" and not female_oriented
                 and r["conflict_score"] <= 2 and r["info_score"] <= 1 and r["payoff_score"] <= 1):
             verdict = "🔴 三项皆低，弃书点风险"
         r["verdict"] = verdict
@@ -135,7 +169,7 @@ def flag_rows(rows, profile="商业爽文向"):
     return rows
 
 
-def write_report(project, rows):
+def write_report(project, rows, reversal=None):
     date = datetime.now().strftime("%Y-%m-%d")
     rdir = os.path.join(project, "评分")
     os.makedirs(rdir, exist_ok=True)
@@ -146,6 +180,7 @@ def write_report(project, rows):
             "date": date,
             "kind": "novel_pacing_signals",
             "note": "确定性近似信号；语义校准（真注水/真高潮）待 LLM 代理读文本补全",
+            "early_reversal": reversal,
             "chapters": rows,
         }, f, ensure_ascii=False, indent=2)
 
@@ -156,13 +191,24 @@ def write_report(project, rows):
         f"- 章节数：{len(rows)}",
         "- 信号为确定性近似（口径见 `novel-balance/references/heatmap-method.md`）；语义校准由 AI 代理读文本补全。",
         "",
-        "| 章节 | 冲突强度 | 信息密度 | 爽点分 | 判定 |",
-        "|---|---|---|---|---|",
+        "| 章节 | 冲突强度 | 信息密度 | 爽点分 | 反转数 | 判定 |",
+        "|---|---|---|---|---|---|",
     ]
     for r in rows:
         lines.append(
             f"| 第{r['chapter']}章 | {r['conflict_score']} | {r['info_score']} | "
-            f"{r['payoff_score']} | {r['verdict']} |")
+            f"{r['payoff_score']} | {r.get('twist_count', 0)} | {r['verdict']} |")
+    if reversal:
+        mark = "⚠️ 低于基准" if reversal["below"] else "✅"
+        lines += [
+            "",
+            f"**前 {reversal['n_chapters']} 章反转密度**：均 {reversal['avg']}/章 "
+            f"（2026 都市爽文基准 ≥{reversal['floor']}/章）{mark}",
+        ]
+        if reversal["below"]:
+            lines.append(
+                "> 反转引子偏稀——前 30 章是付费/追更生死区，建议回章纲（`novel-craft/references/"
+                "outline.md` 节奏模板）补反转 beat。注：此为确定性候选，闪回/伏笔可能漏计，需 LLM 复核。")
     lines += [
         "",
         "> 「判定」为脚本按确定性阈值给出的初判；连续注水段 / 高潮过密 / 节奏脱节的"
@@ -181,17 +227,25 @@ def main():
     args = parser.parse_args()
 
     rng = parse_range(args.range)
-    rows = analyze(args.project_path, rng)
+    # 读 `目标平台` + `题材` 选择点（_设置.md → 全局默认 → 缺省）：前者归一评判档，
+    # 两者一起判女频（番茄女频=商业向、晋江=品质向都可能女频）。
+    target_platform = get_setting(args.project_path, "目标平台")
+    genre = get_setting(args.project_path, "题材")
+    profile = classify_platform(target_platform)
+    female = is_female_oriented(target_platform, genre)
+    rows = analyze(args.project_path, rng, payoff_kw=payoff_bank_for(target_platform, genre))
     if not rows:
         print(f"Error: {args.project_path}/章节 下没有可读章节（或 --range 无命中）")
         return
-    # 读 `目标平台` 选择点（_设置.md → 全局默认 → 缺省），归一成评判档。
-    profile = classify_platform(get_setting(args.project_path, "目标平台"))
-    flag_rows(rows, profile)
-    md_path, sig_path = write_report(args.project_path, rows)
-    print(f"评判档：{profile}（按目标平台调注水阈值）")
+    flag_rows(rows, profile, female_oriented=female)
+    reversal = early_reversal_check(rows, profile)
+    md_path, sig_path = write_report(args.project_path, rows, reversal)
+    fem_note = "·女频（爽点含情绪兑现）" if female else ""
+    print(f"评判档：{profile}{fem_note}（按目标平台调注水阈值）")
     flagged = sum(1 for r in rows if not r["verdict"].startswith("✅"))
     print(f"情节热力图：{len(rows)} 章，{flagged} 章有节奏预警")
+    if reversal and reversal["below"]:
+        print(f"  ⚠️ 前{reversal['n_chapters']}章反转密度 {reversal['avg']}/章 < 基准 {reversal['floor']}/章")
     print(f"  人读报告 → {md_path}")
     print(f"  机读信号 → {sig_path}")
     print("  ⚠️ 注水/高潮过密/脱节的最终判定需 AI 代理读文本做语义校准")

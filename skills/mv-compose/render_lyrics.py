@@ -9,9 +9,7 @@ import sys, os
 SRC, WK, W, H = sys.argv[1], sys.argv[2], int(sys.argv[3]), int(sys.argv[4])
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "mv", "_lib"))
 import subtitle_render as sr  # 本线自包含原语（vendored mv/_lib）：LRC/ASS 解析 / 字体回退 / overlay 链
-
-MV_FONTS = ["/System/Library/Fonts/PingFang.ttc", "/System/Library/Fonts/STHeiti Medium.ttc",
-            "/System/Library/Fonts/Hiragino Sans GB.ttc", "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"]
+# 字体列表不在此重复：sr.load_font(paths=None) 自动回退 sr.DEFAULT_CJK_FONTS（单一真值源）。
 
 
 def main():
@@ -21,7 +19,7 @@ def main():
         sys.exit("无可渲染歌词行")
     from PIL import Image, ImageDraw
     fsize = int(H * 0.055)
-    font = sr.load_font(fsize, paths=MV_FONTS)
+    font = sr.load_font(fsize)  # 默认回退 sr.DEFAULT_CJK_FONTS
 
     inputs = []
     for i, c in enumerate(cues):

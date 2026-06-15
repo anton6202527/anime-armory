@@ -230,7 +230,13 @@ def finding_fingerprint(episode: Any, stage: Any, dim: Any, scope: Any = "") -> 
     key = "|".join(key_parts)
     return hashlib.sha1(key.encode("utf-8")).hexdigest()[:16]
 
-_DIM_KEY_BY_LABEL = {spec["label"]: key for key, spec in CONSISTENCY_DIMENSIONS.items()}
+# label + audit_labels 都精确映射到评分维度键（consistency_audit 段名如 脸(G1)/发型(H1) 走 audit_labels）。
+_DIM_KEY_BY_LABEL = {}
+for _key, _spec in CONSISTENCY_DIMENSIONS.items():
+    for _label in (_spec.get("label"), *tuple(_spec.get("audit_labels", ()))):
+        _label = str(_label or "").strip()
+        if _label:
+            _DIM_KEY_BY_LABEL.setdefault(_label, _key)
 
 def resolve_dim_key(dim: Any) -> str:
     d = str(dim or "").strip()
@@ -238,7 +244,7 @@ def resolve_dim_key(dim: Any) -> str:
         return ""
     if d in CONSISTENCY_DIMENSIONS:
         return d
-    if d in _DIM_KEY_BY_LABEL:
+    if d in _DIM_KEY_BY_LABEL:        # 精确 label / audit_label 命中优先于关键词兜底，避免误归并
         return _DIM_KEY_BY_LABEL[d]
     for key, spec in CONSISTENCY_DIMENSIONS.items():
         if any(kw and kw in d for kw in spec.get("keywords", ())):

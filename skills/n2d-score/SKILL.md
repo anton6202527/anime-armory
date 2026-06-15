@@ -1,6 +1,6 @@
 ---
 name: n2d-score
-description: P2 automatic review scoring for n2d. Produce a machine score per episode across semantic continuity, state continuity, multimodal continuity, character consistency, outfit consistency, scene consistency, subtitle correctness, audio-visual sync, rhythm density, and style consistency; integrates visual checks such as image similarity, subtitle OCR, audio/video duration reconciliation, lip-sync risk/report ingestion, and final rhythm density; write score JSON/Markdown, feed n2d-review-ui visual human review canvas, and optionally enqueue low-score reruns into n2d-batch. Use when asked for 自动审片评分, 机器分, 每集评分, 低于阈值自动回流, 语义继承评分, 状态一致性评分, 多模态漂移评分, 角色一致性评分, 字幕正确性评分, 音画同步评分, 节奏密度评分, 图像相似度评分, 字幕OCR, 口型检测, 成片节奏密度, style score, review score.
+description: P2 automatic review scoring for n2d. Produce a machine score per episode across semantic continuity, state continuity, multimodal continuity, character DNA consistency (face/hair/outfit/accessories), scene consistency, subtitle correctness, audio-visual sync, rhythm density, and style consistency; integrates visual checks such as image similarity, subtitle OCR, audio/video duration reconciliation, lip-sync risk/report ingestion, and final rhythm density; write score JSON/Markdown, feed n2d-review-ui visual human review canvas, and optionally enqueue low-score reruns into n2d-batch. Use when asked for 自动审片评分, 机器分, 每集评分, 低于阈值自动回流, 语义继承评分, 状态一致性评分, 多模态漂移评分, 角色DNA评分, 角色一致性评分, 字幕正确性评分, 音画同步评分, 节奏密度评分, 图像相似度评分, 字幕OCR, 口型检测, 成片节奏密度, style score, review score.
 ---
 
 # n2d-score — P2 自动审片评分体系
@@ -21,8 +21,8 @@ description: P2 automatic review scoring for n2d. Produce a machine score per ep
 | 语义继承 | 8 | `semantic_continuity.py` 的 P0 语义谱系 Diff：voiceover/storyboard/出图/出视频 prompt 是否逐层继承 | `script_stage2` |
 | 状态百科 | 8 | `state_continuity.py` 的 P1 动态百科：状态提前泄露、区间结束后泄露、开始后漏继承 | `image` |
 | 多模态漂移 | 8 | `multimodal_consistency.py` 的 P2 非角色资产组 embedding 离群，按 identity_registry 排除角色 | `image` |
-| 角色一致性 | 20 | `consistency_audit` 的 锚点门/脸/片内时序 + dashboard 角色类 block + **`n2d-identity` 跨集漂移**（早集稳·本集崩的回归，warn 级，不重复计片内崩脸） | `image` |
-| 服装一致性 | 12 | 服装配色机检 | `image` |
+| 角色 DNA 一致性（脸/发型） | 20 | `consistency_audit` 的 锚点门/脸/发型/片内时序 + dashboard 角色类 block + **`n2d-identity` 跨集漂移**（早集稳·本集崩的回归，warn 级，不重复计片内崩脸） | `image` |
+| 角色 DNA 一致性（服装/配饰） | 12 | 服装配色机检 + 配饰人审/registry 约束 | `image` |
 | 场景一致性 | 12 | 场景机检 + 接缝接力 + 尾帧/下一首帧图像相似度 | `image` / 必要时 `video` |
 | 字幕正确性 | 16 | `mechanical_check` 字幕 findings + 成片字幕 OCR 抽检 | `script_stage2` |
 | 音画同步 | 16 | 配音/故事板/时长/原生音轨 findings + 成片/配音/SRT 时长对账 + 口型检测报告/口型风险 | `compose`，源头错回 `script_stage2` |
@@ -52,7 +52,7 @@ python3 skills/n2d-score/scripts/score.py <作品根> 第1集 --run-checks
 生产数据/score_第1集.md
 ```
 
-`第N集_identity.json` 由 `n2d-identity`（窗口=本集+前两集）产出的 `drift` 报告：单集评分本来对**跨集**角色漂移是盲的（片内每镜对定妆库都过，但相对前几集已经换了脸也看不出）。评分只采纳其中的**跨集回归**信号（某角色早集 ok、本集开始 block/临界），按 warn 级并进角色一致性——片内崩脸的 block 已由 `脸(G1)` 计，不在此重复扣分。`identity_registry.json` 缺失或 insightface/cv2 没装时该输入缺席，角色一致性按 `insufficient_data` 显式标注，不臆造通过。
+`第N集_identity.json` 由 `n2d-identity`（窗口=本集+前两集）产出的 `drift` 报告：单集评分本来对**跨集**角色漂移是盲的（片内每镜对定妆库都过，但相对前几集已经换了脸也看不出）。评分只采纳其中的**跨集回归**信号（某角色早集 ok、本集开始 block/临界），按 warn 级并进角色 DNA 一致性——片内崩脸的 block 已由 `脸(G1)` 计，不在此重复扣分。`identity_registry.json` 缺失或 insightface/cv2 没装时该输入缺席，角色 DNA 一致性按 `insufficient_data` 显式标注，不臆造通过。
 
 `第N集_visual.json` 由 `scripts/visual_checks.py` 生成，包含：
 
@@ -83,7 +83,7 @@ python3 skills/n2d-score/scripts/score.py <作品根> 第1集 \
   --max-retries 1
 ```
 
-低分时会调用 `n2d-batch` 安全合并写入 `生产数据/batch_queue.json`，把每个低分维度聚合到对应 `return_to_stage`。例如语义继承/字幕/节奏低分 → `script_stage2` rerun；状态百科/多模态/角色/服装/风格低分 → `image` rerun；音画同步低分 → `compose` rerun。证据里出现 `Clip 2`、`Clip_02`、`EP01_CLIP02`、`镜头2` 或 `出图/出视频/合成/脚本/...` 路径时，会落到 `affected_shots` / `affected_artifacts`，让 batch 优先按最小范围返工。若只有缺数据，`--enqueue-low` 不会写 batch 队列。
+低分时会调用 `n2d-batch` 安全合并写入 `生产数据/batch_queue.json`，把每个低分维度聚合到对应 `return_to_stage`。例如语义继承/字幕/节奏低分 → `script_stage2` rerun；状态百科/多模态/角色 DNA/风格低分 → `image` rerun；音画同步低分 → `compose` rerun。证据里出现 `Clip 2`、`Clip_02`、`EP01_CLIP02`、`镜头2` 或 `出图/出视频/合成/脚本/...` 路径时，会落到 `affected_shots` / `affected_artifacts`，让 batch 优先按最小范围返工。若只有缺数据，`--enqueue-low` 不会写 batch 队列。
 
 ### 生成可视化人审画布
 

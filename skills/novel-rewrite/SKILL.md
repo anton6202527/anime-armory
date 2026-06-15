@@ -37,9 +37,9 @@ description: Use when rewriting / reimagining / 魔改 an existing novel into a 
 
 > **派生流水线**：阶段表 + demo_gate / draft_packets / 状态账本 / export / ai_usage 的通用机制见 `novel-craft/references/derive-pipeline.md`。本 skill 的 `source_model` = 原作内核/旧设定吸收，`direction_spec` = 改动spec / 新设定确认。
 
-0. **确认输入 + 合法性**：原作路径、**改动方向**（一句话：要把它改成什么）、规模（short/medium/long/微短剧/漫剧）、目标平台、输出（txt/docx/outline/n2d）。判版权。
-1. **建骨架**：`python3 <skill>/scripts/init_project.py "<原作>" --rewrite-type "<方向>" --scale <档> [--draft-mode 稳妥初稿] [--chapter-granularity 逐章] [--ai-text-usage AI-assisted] [--i-have-rights]` → `写小说/<原作名>-改写/`（设定/{改动spec,新设定,角色卡,世界观,章纲} + 原作.txt 参考 + 章节/ + 导出/ + _meta + _进度）。
-2. **填改动spec + 读者契约**（最重要）：三栏【保留内核 / 改什么 / 加什么】写实写细。→ 用户审。审过后按 `novel-craft/references/reader-contract.md` 补 `设定/读者契约.md`，把“保留内核如何在新版本里兑现”写成后续每章可检查的题旨、读者承诺、好看机制、文学质感和禁偏清单。
+0. **确认输入 + 合法性**：原作路径、**改动方向**（一句话：要把它改成什么；若是 N2D 反馈驱动，加 `--feedback-source n2d` 指向 `制漫剧/<剧名>/反馈/n2d_feedback_ledger.json`）、规模（short/medium/long/微短剧/漫剧）、目标平台、输出（txt/docx/outline/n2d）。判版权。
+1. **建骨架**：`python3 <skill>/scripts/init_project.py "<原作>" --rewrite-type "<方向>" [--feedback-source n2d] ...` → `写小说/<原作名>-改写/`。
+2. **填改动spec + 读者契约**（最重要）：三栏【保留内核 / 改什么 / 加什么】写实写细。若是 N2D 反馈驱动，**【改什么】一栏优先填入 N2D 侧反馈的视觉/逻辑硬伤**（如：场景描述模糊、角色服装冲突、转场逻辑断裂）。→ 用户审。
 3. **建新设定圣经 + 角色/世界观卡**：把"加的新设定/材料"系统化、列一致性约束，**按家族统一 schema `novel-craft/references/setting-bible.md`**（新金手指也必写代价、新设定标"改自原作哪条"+首现章）。→ 用户审。
 4. **书名**：委托 `novel-title`（同人改写/魔改类型）。→ 用户审。
 5. **章纲**：自由编织（不受原作章节束缚，可大改顺序/结局），三幕 + 反转 + 钩子；用 `novel-craft/references/{outline,split}.md`。→ 用户审。

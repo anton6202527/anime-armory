@@ -86,10 +86,62 @@ def calibrate_floor(intra_scores: Sequence[float], fallback: float = 0.50) -> fl
     return min(vals)
 
 
+def best_anchor_score(emb: Sequence[float], variant_embs: Sequence[Sequence[float]]) -> Optional[float]:
+    """镜头脸 vs 该角色【全部定妆视图】（主/侧/背/半身…）余弦的**最大值**（P3 角度感知）。
+
+    只比主参考(正脸)时，侧/背/大角度的同人镜余弦天然低、卡在 floor 边缘易误报 🟡。改取"对任一
+    canonical 视图最像即可"：真同人换角度 → 命中对应视图 → 高分放行；真崩脸 → 对哪个视图都不像 →
+    仍低分被抓。不需逐镜判角度。无可用 variant → None。纯函数·可测。"""
+    vals = [cosine(emb, e) for e in variant_embs if e]
+    return max(vals) if vals else None
+
+
 def floor_calibrated(intra_scores: Sequence[float]) -> bool:
     """定妆组是否有内部对可自标定地板（≥1 对）。单张/无对 → False：地板退回保守经验值 0.50，
     风格化漫剧脸跨图余弦常 <0.5 会系统性误报——此时标低精度，让 n2d-score 像 pillow_fallback 那样降权而非硬判。"""
     return any(s is not None for s in intra_scores)
+
+
+def episode_mean(scores: Sequence[Optional[float]]) -> Optional[float]:
+    """本集某角色所有镜「脸 vs 共享定妆主参考」余弦的均值（角色本集质心相对锚点的接近度）。
+    无样本→None。纯函数·可测。"""
+    vals = [float(s) for s in scores if s is not None]
+    return round(sum(vals) / len(vals), 4) if vals else None
+
+
+def cross_episode_drift(
+    per_ep_mean: Sequence[Tuple[str, Optional[float]]],
+    *,
+    drop_warn: float = 0.08,
+    drop_block: float = 0.15,
+    abs_low: float = 0.45,
+) -> List[dict]:
+    """单角色跨集 embedding 漂移检测（治"每集各自过 floor、但整体逐集偏离锚点"的系统性漂移）。
+
+    入参 per_ep_mean 是该角色按集**时间序**的 (集, 本集均值)；均值=本集脸 vs 共享定妆主参考的平均余弦。
+    基线=首个有样本的集（建立参考的那一集）。对其后每一集：相对基线掉幅 ≥ drop_block 或本集均值 < abs_low
+    → severity=high；掉幅 ≥ drop_warn → medium。返回 episode_from/to 漂移条目（对齐 voice 线结构）。
+    纯数学，不依赖 insightface，可单测。"""
+    entries: List[dict] = []
+    seq = [(ep, float(m)) for ep, m in per_ep_mean if m is not None]
+    if len(seq) < 2:
+        return entries
+    base_ep, base_mean = seq[0]
+    for ep, m in seq[1:]:
+        drop = round(base_mean - m, 4)
+        below_low = m < abs_low
+        if drop >= drop_block or below_low:
+            sev = "high"
+        elif drop >= drop_warn:
+            sev = "medium"
+        else:
+            continue
+        entries.append({
+            "episode_from": base_ep, "episode_to": ep,
+            "from_mean": round(base_mean, 4), "to_mean": round(m, 4),
+            "drop": drop, "below_abs_low": below_low, "severity": sev,
+        })
+    return entries
 
 
 def detect_face_swaps(face_embs: Sequence[Sequence[float]],
@@ -493,12 +545,14 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN) -> dict:
     char_floor: Dict[str, float] = {}
     char_calibrated: Dict[str, bool] = {}
     char_main_emb: Dict[str, List[float]] = {}
+    char_variant_embs: Dict[str, List[List[float]]] = {}  # P3：主+侧+背+半身… 全视图，逐镜取最像的比
     for char, variants in sets.items():
         embs = {v: _embed(app, p) for v, p in variants.items()}
         main = embs.get("主")
         intra = []
         if main is not None:
             char_main_emb[char] = main
+            char_variant_embs[char] = [e for e in embs.values() if e is not None]
             for v, e in embs.items():
                 if v != "主" and e is not None:
                     intra.append(cosine(main, e))
@@ -511,6 +565,7 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN) -> dict:
 
     # 2) 每镜 vs 其角色主参考
     smap = shot_character_map(root, ep)
+    char_ep_scores: Dict[str, List[float]] = {}  # 跨集 embedding 漂移用：本集每角色全镜「vs 共享定妆主参考」余弦
     for png, chars in sorted(smap.items()):
         full = os.path.join(root, "出图", ep, png)
         if not os.path.exists(full):
@@ -522,11 +577,18 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN) -> dict:
         worst = None
         for c in chars:
             if c in char_main_emb:
-                sc = cosine(emb, char_main_emb[c])
+                # 跨集漂移基线用「vs 主参考」（稳定可比，驱动 identity.py ②/⑤）；
+                # P3 逐镜 verdict 用「vs 最像视图」，避免侧/背/大角度同人镜被正脸基线误判 🟡。
+                sc_main = cosine(emb, char_main_emb[c])
+                char_ep_scores.setdefault(c, []).append(sc_main)
+                sc = best_anchor_score(emb, char_variant_embs.get(c) or [char_main_emb[c]]) or sc_main
                 fl = char_floor.get(c, 0.50)
                 v = band(sc, fl, margin)
                 row = {"char": c, "score": round(sc, 4), "floor": round(fl, 4), "verdict": v,
                        "floor_calibrated": char_calibrated.get(c, False)}
+                if round(sc, 4) != round(sc_main, 4):
+                    row["score_vs_main"] = round(sc_main, 4)
+                    row["anchor"] = "best_of_variants"  # P3：本镜按最像视图判，非仅正脸
                 # 地板未自标定（单张定妆）时，block/warn 标低精度——score 降权，不当硬判
                 if not char_calibrated.get(c, False) and v in ("block", "warn"):
                     row["precision"] = "low_floor_uncalibrated"
@@ -549,6 +611,11 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN) -> dict:
                         if swap["swap_suspected"] and _sev(row["verdict"]) < _sev("warn"):
                             row["verdict"] = "warn"  # 串脸至少 🟡，交人判
             result["shots"].append(row)
+    # 本集每角色质心相对锚点的接近度（驱动 identity.py 跨集 embedding 漂移报表）
+    for char, scores in char_ep_scores.items():
+        rec = result["characters"].setdefault(char, {})
+        rec["ep_mean_score"] = episode_mean(scores)
+        rec["ep_n_shots"] = len(scores)
     return result
 
 

@@ -56,10 +56,10 @@ def test_voice_key_real_backend_uses_voicemap_key():
 
 
 def test_voice_key_placeholder_backend_marked():
-    # 占位后端（macOS say）：记所用占位声音名并带 #placeholder 标记，不冒充 voicemap 音色
+    # 占位后端（macOS say）：记所用占位声音名并带 canonical _placeholder 标记，不冒充 voicemap 音色
     key = vmf.voice_key_for("柳娘子", {"柳娘子": {"key": "LIU_V2"}}, real_backend=False)
     assert key == "say:Tingting" + vmf.PLACEHOLDER_SUFFIX
-    assert key.endswith("#placeholder")
+    assert key.endswith("_placeholder")   # canonical 后缀（旧项目 #placeholder 仅向后兼容识别）
 
 
 def _entries(real_backend):
@@ -83,8 +83,8 @@ def test_manifest_entries_contain_voice_key_real_backend():
 
 
 def test_manifest_entries_contain_voice_key_placeholder_backend():
-    # say 占位轨：逐句 voice_key=say:Tingting#placeholder + 占位:true，对账方可识别需重配音
+    # say 占位轨：逐句 voice_key=say:Tingting_placeholder + 占位:true，对账方可识别需重配音
     for e in _entries(real_backend=False):
-        assert e[VOICE_KEY_FIELD] == "say:Tingting#placeholder"
+        assert e[VOICE_KEY_FIELD] == "say:Tingting" + vmf.PLACEHOLDER_SUFFIX
         assert e["占位"] is True
         assert e["音色键"]   # 音色槽仍留痕（角色本应绑哪个键）

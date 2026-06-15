@@ -110,3 +110,90 @@ def test_findings_report_distinguishes_stale_from_active(tmp_path: Path) -> None
     scan.report(str(tmp_path), out)
     report = "\n".join(out)
     assert "当前 findings: block 0 / warn 1" in report
+
+
+def _progress_one_ep(tmp_path: Path) -> Path:
+    progress = tmp_path / "_进度.md"
+    progress.write_text(
+        "\n".join(
+            [
+                "| 集 | raw | 剧本改编 | 配音 | 分镜设计 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |",
+                "|---|---|---|---|---|---|---|---|---|---|",
+                "| 第1集 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |",
+            ]
+        ),
+        encoding="utf-8",
+    )
+    return progress
+
+
+def test_review_report_surfaced_with_score_verdict(tmp_path: Path) -> None:
+    progress = _progress_one_ep(tmp_path)
+    prod = tmp_path / "生产数据"
+    prod.mkdir()
+    (prod / "score_第1集.json").write_text(
+        json.dumps({"total_score": 53, "threshold": 85, "status": "fail"}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    rep = tmp_path / "_质检_第1集.md"
+    rep.write_text("# 质检报告\n\n生成时间：2026-06-13\n", encoding="utf-8")
+    # 报告与评分都晚于进度 → 不应标 stale
+    fresh = progress.stat().st_mtime + 10
+    os.utime(rep, (fresh, fresh))
+    os.utime(prod / "score_第1集.json", (fresh, fresh))
+
+    out: list[str] = []
+    scan.report(str(tmp_path), out)
+    report = "\n".join(out)
+
+    assert "质检结果:" in report
+    assert "质检报告 _质检_第1集.md" in report
+    assert "总分 53/85 ⚠️未过阈" in report
+    assert "2026-06-13" in report
+    assert "建议重审" not in report  # 未过期
+
+
+def test_review_report_marked_stale_when_products_newer(tmp_path: Path) -> None:
+    progress = _progress_one_ep(tmp_path)
+    rep = tmp_path / "_质检_第1集.md"
+    rep.write_text("生成时间：2026-06-01\n", encoding="utf-8")
+    os.utime(rep, (progress.stat().st_mtime - 100, progress.stat().st_mtime - 100))
+
+    out: list[str] = []
+    scan.report(str(tmp_path), out)
+    report = "\n".join(out)
+
+    assert "质检报告 _质检_第1集.md" in report
+    assert "结论可能过期，建议重审" in report
+
+
+def test_score_fail_without_report_nags_for_review(tmp_path: Path) -> None:
+    _progress_one_ep(tmp_path)
+    prod = tmp_path / "生产数据"
+    prod.mkdir()
+    (prod / "score_第1集.json").write_text(
+        json.dumps({"total_score": 40, "threshold": 85, "status": "fail"}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+    out: list[str] = []
+    scan.report(str(tmp_path), out)
+    report = "\n".join(out)
+
+    assert "无人审报告，建议跑 n2d-review" in report
+
+
+def test_score_pass_without_report_is_quiet(tmp_path: Path) -> None:
+    _progress_one_ep(tmp_path)
+    prod = tmp_path / "生产数据"
+    prod.mkdir()
+    (prod / "score_第1集.json").write_text(
+        json.dumps({"total_score": 92, "threshold": 85, "status": "pass"}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+    out: list[str] = []
+    scan.report(str(tmp_path), out)
+    report = "\n".join(out)
+
+    assert "质检结果:" not in report  # pass + 无报告 → 不打扰

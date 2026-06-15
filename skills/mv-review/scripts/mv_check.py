@@ -27,19 +27,24 @@ import importlib.util
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 MV_UTILS_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "mv_utils.py")
+PACING_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "pacing.py")
 
-def load_mv_utils():
-    spec = importlib.util.spec_from_file_location("mv_utils", MV_UTILS_PATH)
+def _load_module(name, path):
+    spec = importlib.util.spec_from_file_location(name, path)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
 
+def load_mv_utils():
+    return _load_module("mv_utils", MV_UTILS_PATH)
+
 mv_utils = load_mv_utils()
+pacing = _load_module("mv_pacing", PACING_PATH)   # 共享卡点/节奏/时长确定性引擎（与 mv-score 同源）
 
 BLOCK, WARN, INFO = "🔴", "🟡", "🟢"
-DUR_TOL = 2.0         # 时长一致允许差（秒，或按 10% 取大）
+DUR_TOL = pacing.DUR_TOL    # 时长一致允许差（秒，或按 10% 取大）—— 单一真相源在 pacing.py
 BPM_LO, BPM_HI = 50, 200   # 合理 BPM 区间（外则疑半/倍速）
-EQUAL_CV = 0.05       # clip 时长极差/均值 低于此 → 疑似等长不卡点
+EQUAL_CV = pacing.EQUAL_CV  # clip 时长极差/均值 低于此 → 疑似等长不卡点（同源 pacing.py）
 
 findings = []  # (sev, dim, loc, msg)
 def add(sev, dim, loc, msg): findings.append((sev, dim, loc, msg))
@@ -81,7 +86,8 @@ def probe_video(path):
 
 
 def tol(songlen):
-    return max(DUR_TOL, 0.1 * songlen) if songlen else DUR_TOL
+    # 复用 pacing.duration_tol；DUR_TOL 可被 --tol 覆盖，故显式透传当前值
+    return pacing.duration_tol(songlen, base_tol=DUR_TOL)
 
 
 def check_completeness(root):
@@ -142,11 +148,11 @@ def check_clips(root, songlen):
         d = probe_duration(c)
         if d:
             durs.append(d)
-    if len(durs) >= 4:
-        spread = (max(durs) - min(durs)) / (sum(durs) / len(durs))
-        if spread < EQUAL_CV:
-            add(WARN, "卡点", "出视频/视频",
-                f"{len(durs)} 个 clip 时长几乎一致（极差/均值={spread:.3f}）——疑似等长不卡点（MV 命门，回 mv-video 按 beatgrid 重定 clip 时长）")
+    # 等长检测复用 pacing.equal_length_cv（与 mv-score 同一引擎）；durs 来自 ffprobe，包成 clip_plan 形喂入
+    cv, suspicious, n = pacing.equal_length_cv({"clips": [{"duration": d} for d in durs]})
+    if suspicious:
+        add(WARN, "卡点", "出视频/视频",
+            f"{n} 个 clip 时长几乎一致（极差/均值={cv:.3f}）——疑似等长不卡点（MV 命门，回 mv-video 按 beatgrid 重定 clip 时长）")
     total = sum(durs)
     if songlen and abs(total - songlen) > tol(songlen):
         add(WARN, "卡点", "出视频/视频",
@@ -249,8 +255,9 @@ def check_plan_manifests(root, songlen):
     plan_ids = [c.get("clip_id") for c in clips]
     if len(plan_ids) != len(set(plan_ids)):
         add(BLOCK, "规划", "分镜/clip_plan.json", "clip_id 重复")
-    total = sum(float(c.get("duration") or 0) for c in clips)
-    if songlen and abs(total - songlen) > tol(songlen):
+    # 总时长 vs 歌长复用 pacing.planned_duration_vs_song（与 mv-score 同一引擎）
+    total, _song, _diff, mismatch = pacing.planned_duration_vs_song(plan, songlen)
+    if mismatch:
         add(WARN, "规划", "分镜/clip_plan.json", f"clip_plan 总时长 {total:.1f}s 与 歌长 {songlen:.1f}s 差大")
     add(INFO, "规划", "分镜/clip_plan.json", f"快照：{len(clips)} clips · 总时长 {total:.1f}s")
     if not os.path.exists(timeline_path):

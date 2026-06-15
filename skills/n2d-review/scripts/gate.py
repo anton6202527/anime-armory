@@ -21,17 +21,24 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import glob
+import hashlib
 import json
 import os
 import re
 import subprocess
 import sys
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 SCRIPT_DIR = os.path.dirname(__file__)
 COMMON = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "..", "n2d", "_lib"))
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
+# n2d 同线姊妹 skill：声纹/音色键跨集一致性核心住在 n2d-identity（独立性审计只拦跨创作线，
+# 同线 n2d-* 互引允许）。gate 直接调，让「声纹漂移」在 image gate 渲染前自动落地，
+# 不再只靠人手动跑 identity.py --write 当副作用。
+_IDENTITY_SCRIPTS = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "..", "n2d-identity", "scripts"))
+if _IDENTITY_SCRIPTS not in sys.path:
+    sys.path.insert(0, _IDENTITY_SCRIPTS)
 
 from n2d_contract import (  # noqa: E402
     APPROVED_IMAGE_BACKENDS,
@@ -104,10 +111,18 @@ from n2d_route import (  # noqa: E402
     voiceover_fingerprint,
 )
 from n2d_settings import get_setting, is_video_first  # noqa: E402
+from n2d_cross_episode import (  # noqa: E402  跨集视觉契约方向反转（同地点光位/轴线翻）核心
+    cross_episode_diff as _cross_episode_diff,
+    overview_rel as _ce_overview_rel,
+    prior_episode as _ce_prior_episode,
+    scene_names as _ce_scene_names,
+)
 import semantic_continuity as semc  # noqa: E402
 import state_continuity as statec  # noqa: E402
 import multimodal_consistency as mmc  # noqa: E402
 import subtitle_align as sa  # noqa: E402
+import voice_consistency as vcons  # noqa: E402  音色键/voicemap 跨集对账（确定性）
+import voice_print_consistency as vprint  # noqa: E402  声纹 embedding 跨集漂移（启发式·后端可缺）
 
 BLOCK, WARN, INFO = "block", "warn", "info"
 findings: List[Dict[str, object]] = []
@@ -184,13 +199,25 @@ IDENTITY_FORM_FIELDS = (
     "form",
     "asset_key",
     "anchor_phrase",
+    "character_dna",
     "reference_group",
     "identity_adapters",
     "angle_policy",
     "drift_forbidden",
 )
+CHARACTER_DNA_FIELDS = ("face", "hair", "outfit", "accessories")
+ASSET_BUNDLE_REQUIRED_SECTIONS = ("reference", "prompts", "lora", "voice", "adapters", "qc")
 IDENTITY_ANGLE_FIELDS = ("allowed", "risky", "requires_extra_reference")
 IDENTITY_ADAPTER_SECTIONS = ("image", "video")
+GENERATION_CONTROL_ALLOWED_SUPPORT = {
+    "supported",
+    "unsupported",
+    "unsupported_or_unknown",
+    "backend_dependent",
+    "backend_dependent_verify_adapter",
+}
+GENERATION_CONTROL_USAGE_KEYS = ("turnaround", "expression", "closeup", "shot")
+GENERATION_CONTROL_RECORD_KEYS = ("requested_seed", "effective_seed", "seed_effective", "seed_support", "seed_strategy")
 # 身份适配状态枚举从契约派生（与 n2d-identity 写入/校验、n2d-asset-market 重置同源，杜绝 gate 单边漂移）
 from n2d_contract import (  # noqa: E402
     IDENTITY_ADAPTER_READY_STATUSES as IDENTITY_READY_STATUSES,
@@ -212,6 +239,15 @@ ASSET_REFERENCE_TYPE_PREFIX = {
 ASSET_REFERENCE_REQUIRED_FIELDS = ("id", "type", "name", "reference_group", "constraints", "drift_forbidden")
 ASSET_PROP_REQUIRED_FIELDS = ("owner", "current_state", "lifecycle")
 ASSET_SCENE_REQUIRED_FIELDS = ("spatial_layout",)
+SCENE_DNA_REQUIRED_FIELDS = (
+    "belonging_anchor",
+    "landmarks",
+    "spatial_layout",
+    "architecture_materials",
+    "color_lighting_weather",
+    "resident_assets",
+    "forbidden",
+)
 
 NATIVE_AUDIO_DISCARD = "discard"
 NATIVE_AUDIO_AMBIENCE = "ambience"
@@ -446,6 +482,49 @@ def _prohibited_face_patch_outputs(root: str, ep: str) -> List[Dict[str, Any]]:
             "method": str(meta.get("method") or generation.get("method") or cost.get("method") or event.get("method") or ""),
         })
     return sorted(out, key=lambda r: str(r.get("png") or ""))
+
+
+def _seed_record_value(event: Dict[str, Any], key: str) -> str:
+    meta = _event_meta(event)
+    generation = _event_generation(event)
+    for source in (meta, generation, event):
+        value = source.get(key) if isinstance(source, dict) else None
+        value_s = str(value or "").strip()
+        if value_s:
+            return value_s
+    return ""
+
+
+def check_seed_event_records(root: str, ep: str) -> None:
+    """If a generation tried to use a seed, the ledger must say whether it worked.
+
+    Closed backends may not expose seed. That is acceptable only when the
+    production event records `seed_effective=false` and the support state, so the
+    project does not accidentally treat the output as reproducible.
+    """
+    path = _production_events_path(root)
+    for idx, event in enumerate(_load_production_events(root), start=1):
+        if str(event.get("episode") or "").strip() != ep:
+            continue
+        if str(event.get("stage") or "").strip() != "image":
+            continue
+        if str(event.get("event") or "").strip() not in {"generation", "redraw"}:
+            continue
+        requested = _seed_record_value(event, "requested_seed")
+        if not requested:
+            continue
+        missing = [
+            key for key in ("seed_strategy", "seed_support", "seed_effective")
+            if not _seed_record_value(event, key)
+        ]
+        if missing:
+            add(WARN, "固定 Seed", f"{path}:line {idx}",
+                "image 生成事件记录了 requested_seed，但缺少 " + ", ".join(missing) +
+                "；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。")
+        effective = _seed_record_value(event, "seed_effective").lower()
+        if effective in {"true", "1", "yes", "pass", "supported"} and not _seed_record_value(event, "effective_seed"):
+            add(WARN, "固定 Seed", f"{path}:line {idx}",
+                "seed_effective=true 但缺 effective_seed；无法证明实际传入的是固定 seed pool。")
 
 
 def _midframe_self_check_value(event: Dict[str, Any]) -> str:
@@ -922,6 +1001,70 @@ def check_timing_manifest_complete(root: str, ep: str) -> None:
             return_to_stage="voice")
 
 
+def check_voice_cross_episode(root: str, ep: str) -> None:
+    """声纹/音色键跨集一致性，在 image gate 渲染前自动落地（此前只在手动 identity.py --write 时打印、不拦）。
+
+    三层信号，按确定性分级：
+    - **voicemap 对账失配 → BLOCK**：本集某角色实际用的音色键 ≠ 设定库/voicemap.json 注册键＝确定性配置
+      矛盾（你登记 A 却用了 B），出图/出视频前必须修，否则跨集换脸又换声。占位/应急轨与未登记角色已被
+      voice_consistency 排除，不会误判。
+    - **音色键跨集漂移 → WARN**：同角色相邻集音色键变了（可能是有意——附身/苍老/闪回换嗓，故只告警交人确认；
+      若真是错且 voicemap 在册，上面的 BLOCK 已强制修）。
+    - **声纹 embedding 跨集漂移 → WARN**：resemblyzer/speechbrain 量同角色逐句余弦相似度跌破校准 floor。
+      纯启发式 + 后端可缺（未装则 available=false，静默跳过、交人判，绝不报假漂移）——不当硬闸，只 WARN。
+
+    全部 try/except 包住：声纹/对账是 advisory 增强，任何数据/后端异常都不该让 gate 崩或误拦正片。
+    """
+    # ① + ② 音色键 / voicemap（确定性，纯 stdlib，几乎不会异常）
+    try:
+        report = vcons.build_report(root)
+    except Exception:
+        report = None
+    if isinstance(report, dict):
+        man_rel = f"合成/{ep}/配音/时长清单.json"
+        for m in report.get("voicemap_mismatches", []):
+            if str(m.get("episode")) != ep:
+                continue
+            add(BLOCK, "跨集音色", f"voicemap:{m.get('character')}",
+                f"角色「{m.get('character')}」实际音色键 {m.get('voice_key_used')} ≠ voicemap 注册键 "
+                f"{m.get('voice_key_registered')}：跨集会换声穿帮，按注册音色重配（n2d-voice）后再出图。",
+                return_to_stage="voice", rerun_scope=m.get("scope", ""),
+                affected_shots=m.get("affected_shots", []),
+                affected_artifacts=[man_rel, "设定库/voicemap.json"])
+        for d in report.get("drifts", []):
+            if str(d.get("episode_to")) != ep or d.get("episode_from") == d.get("episode_to"):
+                continue  # 只看真·跨集漂移；同集内换键由其它链覆盖
+            add(WARN, "跨集音色", f"voice_key:{d.get('character')}",
+                f"角色「{d.get('character')}」音色键自 {d.get('episode_from')} 的 {d.get('voice_from')} 漂为 "
+                f"{d.get('voice_to')}：确认是否有意（附身/苍老/闪回换嗓），否则回 n2d-voice 对齐前集音色。",
+                return_to_stage="voice", rerun_scope=d.get("scope", ""),
+                affected_shots=d.get("affected_shots", []),
+                affected_artifacts=[man_rel, "设定库/voicemap.json"])
+    # ③ 声纹 embedding（启发式·后端可缺）
+    try:
+        vp = vprint.analyze(root, ep)
+    except Exception:
+        vp = None
+    if isinstance(vp, dict) and vp.get("available"):
+        man = str(vp.get("manifest") or "")
+        for label, group in sorted((vp.get("groups") or {}).items()):
+            if not isinstance(group, dict):
+                continue
+            sev = vprint._severity_for_group(group)
+            if sev not in {"block", "warn"}:
+                continue
+            lines = group.get("lines") if isinstance(group.get("lines"), list) else []
+            bad = sum(1 for ln in lines if isinstance(ln, dict) and ln.get("band") == "bad")
+            warn = sum(1 for ln in lines if isinstance(ln, dict) and ln.get("band") == "warn")
+            # 声纹是启发式，gate 内统一降为 WARN（不当硬闸）——确定性拦截交给上面的 voicemap BLOCK。
+            add(WARN, "跨集声纹", f"voice_print:{label}",
+                f"声纹机检「{label}」音色漂移：bad={bad} warn={warn}（floor={group.get('floor')} "
+                f"mode={vp.get('mode')}）：核对是否同一音色，必要时回 n2d-voice 重配。",
+                return_to_stage="voice",
+                rerun_scope="声纹余弦跌破校准 floor；回 n2d-voice 重配受影响角色台词后重测。",
+                affected_artifacts=[man] if man else [])
+
+
 def check_backend_reachable(root: str, ep: str) -> None:
     """付费出图前确认所选生图后端「能落 PNG」。
 
@@ -947,10 +1090,13 @@ def check_backend_reachable(root: str, ep: str) -> None:
 
 
 def drift_advisory_findings(report: Dict[str, Any]) -> List[Tuple[str, str, str, str]]:
-    """drift-risk report → [(sev, dim, loc, msg)]（high→WARN·medium→INFO，只取 high/medium）。
+    """drift-risk report → [(sev, dim, loc, msg)]。
 
-    纯函数·可测：不读盘、不 add()，方便单测。face/asset 两种 report 同形（characters/assets +
-    band/score/tier/suggestions），统一处理。advisory：绝不 BLOCK——出图前预案，落档闸是 image_qc。"""
+    两类档分开处理：
+      - **预测档** high→WARN·medium→INFO（advisory 出图前预案，落档闸是 image_qc）；
+      - **实测档** band=="block"（face_drift_risk ② 回灌 identity_drift_report 的**已实测**跨集漂移，
+        既成事实非预测）→ **BLOCK**：上一集已漂的角色，本集出图前 preflight 硬拦，闭合"测了就拦"的环。
+    纯函数·可测：不读盘、不 add()。face/asset 两种 report 同形。"""
     items = report.get("characters") or report.get("assets") or []
     is_face = report.get("kind") == "n2d_face_drift_risk"
     dim = "脸漂预案" if is_face else "物料漂移预案"
@@ -958,12 +1104,17 @@ def drift_advisory_findings(report: Dict[str, Any]) -> List[Tuple[str, str, str,
     out: List[Tuple[str, str, str, str]] = []
     for r in items:
         band = r.get("band")
-        if band not in ("high", "medium"):
-            continue
-        sev = WARN if band == "high" else INFO
         rid = r.get("character_id") or r.get("id") or ""
         name = r.get("name") or rid
         tip = (r.get("suggestions") or [""])[0]
+        if band == "block":
+            # 实测跨集漂移（measured_drift 已坐实）→ 真 BLOCK，不再当 advisory 滤掉（曾被漏报）
+            out.append((BLOCK, "脸漂实测" if is_face else "物料漂移实测", f"{name}（{rid}）",
+                        f"上一集已实测{label}漂移（既成事实非预测）：{tip}"))
+            continue
+        if band not in ("high", "medium"):
+            continue
+        sev = WARN if band == "high" else INFO
         tier = r.get("tier") or r.get("scope") or ""
         out.append((sev, dim, f"{name}（{rid}）",
                     f"本集{label}风险 {band}（分{r.get('score')}{'·'+str(tier) if tier else ''}）：{tip}"))
@@ -1002,7 +1153,11 @@ def check_drift_risk_advisories(root: str, ep: str) -> None:
             add(INFO, "漂移预案", ep, f"{human}风险预案：本集无 high/医 medium 角色/物料（🟢 全低危）。")
             continue
         for sev, dim, loc, msg in rows:
-            add(sev, dim, loc, msg, advisory=True)
+            # 实测漂移=真 BLOCK（return_to_stage=image，须先处置再出图）；预测档仍 advisory
+            if sev == BLOCK:
+                add(sev, dim, loc, msg, return_to_stage="image")
+            else:
+                add(sev, dim, loc, msg, advisory=True)
 
 
 def check_contract_inheritance(root: str, ep: str) -> None:
@@ -1465,6 +1620,37 @@ def check_cross_episode_style(root: str, ep: str) -> None:
             return_to_stage="script_stage2")
 
 
+def check_cross_episode_contract(root: str, ep: str) -> None:
+    """跨集视觉契约方向反转（advisory·WARN）：同一地点跨集光位左右/轴线走向翻 = 越轴/光跳穿帮。
+
+    `check_contract_inheritance` 管**同集内**出图↔出视频逐字一致；`check_cross_episode_style` 管整部色调/
+    风格名恒定。本检查补第三类跨集穿帮——读本集与**前一可比集**的 `出图/第N集/prompt/00_总览.md` 视觉契约，
+    只在 asset_registry 的 LOC 地点**两集都出现且方向反转**时报（地点共现门控压噪音）。纯启发式，**只 WARN
+    不 BLOCK**（同 cross_episode_contract.py 设计）；过去靠人手动跑那个脚本→几乎没人跑，现在并进 gate 自动落地。
+    """
+    cur_rel = _ce_overview_rel(ep)
+    cur_path = os.path.join(root, cur_rel)
+    if not os.path.isfile(cur_path):
+        return  # 本集出图总览未生成（如 image_preflight 早于出图）——跳过，不误报
+    prev_ep = _ce_prior_episode(root, ep)
+    if not prev_ep:
+        return  # 首集无前集可比
+    prev_path = os.path.join(root, _ce_overview_rel(prev_ep))
+    if not os.path.isfile(prev_path):
+        return
+    try:
+        prev_text = open(prev_path, encoding="utf-8").read()
+        cur_text = open(cur_path, encoding="utf-8").read()
+    except OSError:
+        return
+    diff = _cross_episode_diff(prev_text, cur_text, _ce_scene_names(root), prev_ep=prev_ep, cur_ep=ep)
+    for w in diff.get("warnings", []):
+        add(WARN, "跨集光位轴线", f"{cur_path}（vs {prev_ep}）", w.get("note", ""),
+            return_to_stage="image", scene=w.get("scene", ""), kind=w.get("kind", ""),
+            rerun_scope="同地点跨集光位/轴线翻=越轴/光跳穿帮；确认是否有意（反打/换机位），否则回 n2d-image 对齐前集 00_总览 视觉契约。",
+            affected_artifacts=[cur_rel, _ce_overview_rel(prev_ep), "出图/共享/asset_registry.json"])
+
+
 def _clip_blob(clip: dict) -> str:
     try:
         return json.dumps(clip, ensure_ascii=False)
@@ -1613,6 +1799,143 @@ def _validate_identity_lora(section: object, loc: str, root: str) -> None:
             add(BLOCK, "资产身份注册层", f"{loc} identity_adapters.lora{_lora_gap_loc_suffix(code)}", lora_gap_message(code))
 
 
+def _validate_generation_control(section: object, loc: str) -> None:
+    """Validate optional fixed seed-pool execution metadata.
+
+    Legacy registries may omit this block; once present, it must be executable so
+    backends that expose seed can pass it and backends that do not can record a
+    no-op degradation instead of pretending to be reproducible.
+    """
+    if section is None:
+        add(WARN, "固定 Seed", loc,
+            "未登记 generation_control 固定 seed pool；若后端支持 seed 将无法统一传参，"
+            "不支持 seed 的后端也缺 no-op 降级记录口径。")
+        return
+    if not isinstance(section, dict):
+        add(BLOCK, "固定 Seed", f"{loc} generation_control", "generation_control 必须是对象")
+        return
+    strategy = str(section.get("seed_strategy") or "").strip()
+    if strategy != "fixed_pool":
+        add(BLOCK, "固定 Seed", f"{loc} generation_control.seed_strategy",
+            "seed_strategy 必须为 fixed_pool；不要无限随机抽 seed。")
+    pool = section.get("seed_pool")
+    if not isinstance(pool, list) or len(pool) < 4 or not all(isinstance(v, int) for v in pool):
+        add(BLOCK, "固定 Seed", f"{loc} generation_control.seed_pool",
+            "seed_pool 必须是至少 4 个整数的固定种子池")
+        pool_set = set()
+    else:
+        pool_set = set(pool)
+        if len(pool_set) != len(pool):
+            add(BLOCK, "固定 Seed", f"{loc} generation_control.seed_pool", "seed_pool 不能有重复 seed")
+    usage = section.get("usage")
+    if not isinstance(usage, dict):
+        add(BLOCK, "固定 Seed", f"{loc} generation_control.usage",
+            "usage 必须映射 turnaround/expression/closeup/shot 到 seed")
+    else:
+        for key in GENERATION_CONTROL_USAGE_KEYS:
+            value = usage.get(key)
+            if not isinstance(value, int):
+                add(BLOCK, "固定 Seed", f"{loc} generation_control.usage.{key}", "usage seed 必须是整数")
+            elif pool_set and value not in pool_set:
+                add(BLOCK, "固定 Seed", f"{loc} generation_control.usage.{key}",
+                    f"usage seed={value} 不在 seed_pool 内")
+    support = section.get("backend_support")
+    if not isinstance(support, dict) or not support:
+        add(BLOCK, "固定 Seed", f"{loc} generation_control.backend_support",
+            "backend_support 必须声明各生图后端支持状态")
+    else:
+        for backend, status in support.items():
+            status_s = str(status or "").strip()
+            if status_s not in GENERATION_CONTROL_ALLOWED_SUPPORT:
+                add(BLOCK, "固定 Seed", f"{loc} generation_control.backend_support.{backend}",
+                    f"未知 seed 支持状态「{status_s}」；必须用 supported / unsupported_or_unknown / backend_dependent_verify_adapter 等结构化值")
+        codex_status = str(support.get("codex") or "").strip()
+        if codex_status != "unsupported_or_unknown":
+            add(WARN, "固定 Seed", f"{loc} generation_control.backend_support.codex",
+                "Codex 当前不应被默认当成可复现 seed 后端；除非执行 adapter 明确暴露 seed，否则应写 unsupported_or_unknown。")
+    fallback = str(section.get("fallback_policy") or "").strip()
+    if "record" not in fallback or "seed" not in fallback:
+        add(BLOCK, "固定 Seed", f"{loc} generation_control.fallback_policy",
+            "fallback_policy 必须说明不支持 seed 时记录 no-op/degraded，而不是静默当可复现")
+    record_required = section.get("record_required")
+    if not isinstance(record_required, list):
+        add(BLOCK, "固定 Seed", f"{loc} generation_control.record_required",
+            "record_required 必须列出 seed 记账字段")
+    else:
+        missing = [key for key in GENERATION_CONTROL_RECORD_KEYS if key not in record_required]
+        if missing:
+            add(BLOCK, "固定 Seed", f"{loc} generation_control.record_required",
+                "record_required 缺字段：" + ", ".join(missing))
+
+
+def _validate_character_dna(section: object, loc: str) -> None:
+    """Validate the four-layer character DNA lock: face + hair + outfit + accessories."""
+    if not isinstance(section, dict):
+        add(BLOCK, "角色 DNA", f"{loc} character_dna",
+            "character_dna 必须是对象，且固定包含 face/hair/outfit/accessories 四层；不能只锁脸。")
+        return
+    for key in CHARACTER_DNA_FIELDS:
+        value = section.get(key)
+        if not isinstance(value, str) or not value.strip():
+            add(BLOCK, "角色 DNA", f"{loc} character_dna.{key}",
+                "角色 DNA 四层必须非空；无配饰也要写“无”，避免下游临场补设定。")
+
+
+def _validate_character_asset_bundle(root: str, char: dict, loc: str) -> None:
+    """Core/longline characters must have a portable project-local asset bundle."""
+    scope = str(char.get("scope") or "")
+    if not _CORE_SCOPE_RE.search(scope):
+        return
+    bundle = char.get("asset_bundle")
+    char_id = str(char.get("id") or "").strip()
+    if not isinstance(bundle, dict):
+        add(BLOCK, "角色资产包", loc,
+            "核心/长线角色缺 asset_bundle；必须指向 设定库/character_assets/<CHAR_ID>__<slug>/manifest.json，"
+            "否则换模型/工作流/视频工具时无法继承 reference/prompts/lora/voice/adapters/qc。")
+        return
+    manifest_rel = str(bundle.get("manifest") or "").strip()
+    package_dir = str(bundle.get("package_dir") or "").strip()
+    if not manifest_rel:
+        add(BLOCK, "角色资产包", f"{loc} asset_bundle.manifest", "asset_bundle.manifest 缺失")
+        return
+    if not package_dir:
+        add(BLOCK, "角色资产包", f"{loc} asset_bundle.package_dir", "asset_bundle.package_dir 缺失")
+    sections = bundle.get("sections")
+    if sections is not None:
+        missing_sections = [s for s in ASSET_BUNDLE_REQUIRED_SECTIONS if s not in sections]
+        if missing_sections:
+            add(BLOCK, "角色资产包", f"{loc} asset_bundle.sections",
+                "asset_bundle.sections 缺分区：" + ", ".join(missing_sections))
+    manifest_path = manifest_rel if os.path.isabs(manifest_rel) else os.path.join(root, manifest_rel)
+    manifest = load_json(manifest_path)
+    if not isinstance(manifest, dict):
+        add(BLOCK, "角色资产包", manifest_path,
+            "核心/长线角色 asset_bundle.manifest 不存在或无法解析；资产包不能只写口头约定。")
+        return
+    if manifest.get("kind") != "n2d_project_character_asset_bundle":
+        add(BLOCK, "角色资产包", manifest_path, "manifest.kind 必须是 n2d_project_character_asset_bundle")
+    if char_id and str(manifest.get("character_id") or "").strip() != char_id:
+        add(BLOCK, "角色资产包", manifest_path,
+            f"manifest.character_id 必须等于 registry character id {char_id}")
+    directories = manifest.get("directories")
+    if not isinstance(directories, dict):
+        add(BLOCK, "角色资产包", manifest_path,
+            "manifest.directories 必须列出 reference/prompts/lora/voice/adapters/qc")
+    else:
+        for section in ASSET_BUNDLE_REQUIRED_SECTIONS:
+            rel = str(directories.get(section) or "").strip()
+            if not rel:
+                add(BLOCK, "角色资产包", manifest_path, f"manifest.directories 缺 {section}")
+                continue
+            full = rel if os.path.isabs(rel) else os.path.join(root, rel)
+            if not os.path.isdir(full):
+                add(BLOCK, "角色资产包", full, f"角色资产包分区不存在：{section}")
+    truth_sources = manifest.get("truth_sources")
+    if not isinstance(truth_sources, dict) or not truth_sources.get("identity_registry"):
+        add(BLOCK, "角色资产包", manifest_path,
+            "manifest.truth_sources 必须指回 identity_registry；资产包不得成为第二真值。")
+
+
 def _identity_reference_exists(root: str, rel: str) -> bool:
     full = rel if os.path.isabs(rel) else os.path.join(root, rel)
     return os.path.exists(full)
@@ -1660,6 +1983,8 @@ def check_identity_registry(
                 add(BLOCK, "资产身份注册层", loc, f"重复 character id：{char_id}")
             seen_ids.add(char_id)
 
+        _validate_character_asset_bundle(root, char, loc)
+
         strict_references = required_character_ids is None or char_id in required_character_ids
 
         forms = char.get("forms")
@@ -1675,6 +2000,8 @@ def check_identity_registry(
             for key in IDENTITY_FORM_FIELDS:
                 if _field_is_missing(form, key):
                     add(BLOCK, "资产身份注册层", floc, f"form 缺字段：{key}")
+
+            _validate_character_dna(form.get("character_dna"), floc)
 
             reference_group = form.get("reference_group")
             if not isinstance(reference_group, dict):
@@ -1717,6 +2044,8 @@ def check_identity_registry(
                 for section in IDENTITY_ADAPTER_SECTIONS:
                     _validate_identity_adapter_map(adapters.get(section), floc, section)
                 _validate_identity_lora(adapters.get("lora"), floc, root)
+
+            _validate_generation_control(form.get("generation_control"), floc)
 
             angle_policy = form.get("angle_policy")
             if not isinstance(angle_policy, dict):
@@ -1787,6 +2116,21 @@ def check_costume_registry_reconcile(root: str) -> None:
                 f"face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除")
 
 
+def _validate_scene_dna(asset: dict, loc: str) -> None:
+    scene_dna = asset.get("scene_dna")
+    if not isinstance(scene_dna, dict):
+        add(BLOCK, "场景 DNA", loc,
+            "反复场景缺 scene_dna；必须锁归属锚、地标/识别物、空间布局、建筑材质/主色、光色天气、常驻物件、禁漂项。")
+        return
+    for key in SCENE_DNA_REQUIRED_FIELDS:
+        value = scene_dna.get(key)
+        if isinstance(value, list):
+            if not any(str(v).strip() for v in value):
+                add(BLOCK, "场景 DNA", f"{loc} scene_dna.{key}", "scene_dna 字段必须是非空列表")
+        elif not isinstance(value, str) or not value.strip():
+            add(BLOCK, "场景 DNA", f"{loc} scene_dna.{key}", "scene_dna 字段必须非空")
+
+
 def check_asset_reference_registry(
     root: str,
     require_reference_assets: bool = False,
@@ -1839,6 +2183,7 @@ def check_asset_reference_registry(
             for key in ASSET_SCENE_REQUIRED_FIELDS:
                 if _field_is_missing(asset, key):
                     add(BLOCK, "资产引用注册层", loc, f"反复场景资产缺空间布局字段：{key}")
+            _validate_scene_dna(asset, loc)
 
         reference_group = asset.get("reference_group")
         if not isinstance(reference_group, dict):
@@ -2419,6 +2764,16 @@ def check_video_model_routes(root: str, ep: str, overview_text: str, overview_pa
             )
         check_route_frame_capability(root, ep, route, p, idx, frame_requirements, video_channel)
         check_motion_control_route(root, ep, route, p, idx)
+        # ③ 一角一后端亲和（advisory·warn-only）：核心角色已注册原生主体后端 ≠ 本镜 primary → 提示人裁
+        conflicts = route.get("character_backend_conflicts")
+        if isinstance(conflicts, list) and conflicts:
+            clip_id = str(route.get("clip_id") or f"routes[{idx}]")
+            bits = "；".join(f"{c.get('character')} 原生主体在 {c.get('prefers_backend')}，本镜路由 {c.get('routed_backend')}"
+                             for c in conflicts if isinstance(c, dict))
+            add(WARN, "一角一后端", p,
+                f"{clip_id} 跨集后端亲和冲突：{bits}。同角色跨集换后端→脸质感漂移；裁决：拆正反打让该角色单独走其原生后端、"
+                "或本镜改走该后端、或人工确认可接受。（仅告警不改路由）",
+                return_to_stage="video")
 
 
 # 非原生锁绑定 = 仅靠参考组兜底/不支持（换后端会丢真正的锁脸力）。
@@ -2855,6 +3210,193 @@ def _has_i2i_tail_continuity_lock(section: str) -> bool:
     return has_method and forbids_text_only
 
 
+# 无持久角色 ID 后端（Codex/OpenAI/Dreamina/Nano）逐镜重画脸——不仅尾帧，**每个**角色镜（含首帧）
+# 都必须从共享定妆 image2image / 多图参考派生，否则纯文重抽=跨集换演员。判定走声明的生成方式。
+I2I_DERIVATION_MARKERS = (
+    "image2image",
+    "image-to-image",
+    "img2img",
+    "i2i",
+    "图生图",
+    "母图",
+    "多图参考派生",
+    "参考派生",
+    "参考图派生",
+    "以定妆",
+    "基于定妆",
+    "定妆图为底",
+    "定妆为母图",
+)
+
+
+def _has_i2i_derivation(section: str) -> bool:
+    """本镜是否声明从共享定妆 image2image / 多图参考派生（而非纯文生图）。纯函数·可测。"""
+    return _has_any(section, I2I_DERIVATION_MARKERS)
+
+
+CODEX_FACE_REFERENCE_MARKERS = (
+    "脸部特写",
+    "面部特写",
+    "头部特写",
+    "表情库",
+    "expressions",
+    "表情参考",
+    "表情_",
+    "_表情",
+    "情绪库",
+    "微表情参考",
+)
+
+CODEX_STRONG_EXPRESSION_MARKERS = (
+    "大表情",
+    "哭",
+    "泣",
+    "落泪",
+    "含泪",
+    "怒",
+    "暴怒",
+    "狂怒",
+    "震惊",
+    "惊恐",
+    "恐惧",
+    "大笑",
+    "狂笑",
+    "嘶吼",
+    "咆哮",
+    "痛苦",
+    "崩溃",
+    "狰狞",
+    "扭曲",
+    "癫狂",
+    "失控",
+    "绝望",
+    "悲恸",
+    "惊愕",
+)
+
+CODEX_DARK_VFX_FACE_RISK_MARKERS = (
+    "暗光",
+    "深暗",
+    "深阴影",
+    "黑烟",
+    "烟雾",
+    "浓雾",
+    "遮脸",
+    "遮住脸",
+    "法术特效",
+    "特效压脸",
+    "脸上叠特效",
+    "血光",
+    "红纱",
+    "金光爆发",
+    "黑气",
+    "雾化",
+)
+
+CODEX_FACE_VISIBILITY_GUARDS = (
+    "眼鼻嘴三角区",
+    "不遮住眼鼻嘴",
+    "不得遮住眼鼻嘴",
+    "脸部不被遮挡",
+    "脸不被遮挡",
+    "特效不遮脸",
+    "黑烟不得遮脸",
+    "烟雾不得遮脸",
+    "保留五官",
+    "不重画脸",
+    "特效只叠在脸外侧",
+    "VFX只叠在脸外侧",
+    "五官清晰可见",
+)
+
+CODEX_SPLIT_COMPOSITE_MARKERS = (
+    "分别出图+合成",
+    "分别出图 + 合成",
+    "分角色出图+合成",
+    "分角色出图 + 合成",
+    "拆成单人镜",
+    "拆单人镜",
+    "单人分层出图",
+    "分层合成",
+    "登记降级",
+)
+
+CODEX_CONDITIONAL_SPLIT_MARKERS = (
+    "若多主体仍不稳",
+    "若多人仍不稳",
+    "如果多主体仍不稳",
+    "如果多人仍不稳",
+    "不稳再",
+    "仍不稳再",
+    "必要时再",
+    "需要时再",
+)
+
+GENERIC_REFERENCE_INDEX_MARKERS = (
+    "参考图①",
+    "参考图1",
+    "reference image 1",
+    "ref image 1",
+)
+
+NATIVE_MULTI_SUBJECT_STRATEGY_MARKERS = (
+    "主体库",
+    "角色ID",
+    "角色 ID",
+    "Character ID",
+    "persistent subject",
+    "原生主体",
+    "多主体",
+    "区域绑定",
+    "画面区域绑定",
+    "Universal Reference",
+    "Seedream",
+    "可灵",
+    "Kling",
+    "Sora Cameo",
+    "Nano Banana",
+    "多参考",
+)
+
+
+def _codex_needs_face_reference(section: str, name: str) -> bool:
+    """Codex-like backends re-solve the face per shot; closeups/large expressions need face refs."""
+    closeup_or_reaction = _needs_closeup_identity_lock(section, name) or _has_any(
+        section,
+        ("ECU", "BCU", "CU", "MCU", "近景", "特写", "面部", "脸部", "反打", "过肩", "表情镜", "反应镜"),
+    )
+    return closeup_or_reaction and _has_any(section, CODEX_STRONG_EXPRESSION_MARKERS + ("正反打", "反打", "过肩", "反应镜", "表情镜"))
+
+
+def _codex_has_face_reference(section: str) -> bool:
+    return _has_any(section, CODEX_FACE_REFERENCE_MARKERS)
+
+
+def _codex_dark_vfx_face_risk(section: str, name: str) -> bool:
+    closeup_or_face = _needs_closeup_identity_lock(section, name) or _has_any(section, ("CU", "MCU", "近景", "特写", "脸", "面部"))
+    return closeup_or_face and _has_any(section, CODEX_DARK_VFX_FACE_RISK_MARKERS)
+
+
+def _codex_has_face_visibility_guard(section: str) -> bool:
+    return _has_any(section, CODEX_FACE_VISIBILITY_GUARDS)
+
+
+def _has_codex_split_composite_strategy(section: str) -> bool:
+    if not _has_any(section, CODEX_SPLIT_COMPOSITE_MARKERS):
+        return False
+    # “若不稳再分层”只是口头兜底，不是执行策略。Codex/OpenAI/Dreamina/Nano/Gemini
+    # 这类无持久主体 ID 后端下，多角色同框必须在 prompt 中把分层/合成登记成硬执行。
+    return not _has_any(section, CODEX_CONDITIONAL_SPLIT_MARKERS)
+
+
+def _has_generic_reference_index_lock(section: str) -> bool:
+    return _has_any(section.lower(), GENERIC_REFERENCE_INDEX_MARKERS)
+
+
+def _has_native_multi_subject_strategy(section: str) -> bool:
+    return _has_any(section, NATIVE_MULTI_SUBJECT_STRATEGY_MARKERS + CODEX_SPLIT_COMPOSITE_MARKERS)
+
+
 def _has_character_id_binding(section: str) -> bool:
     """Character shots must bind concrete registry IDs, not just prose names."""
     return bool(re.search(r"`?CHAR_[A-Za-z0-9_]+/[^`\s；;，,]+`?", section))
@@ -3085,6 +3627,16 @@ def check_image_shot_prompt_section(path: str, idx: int, section: str,
             add(BLOCK, "角色一致性", loc, "含角色镜头自检未显式检查脸/妆造漂移")
         if not _has_any(section, ("服装配色一致", "服装", "配色")):
             add(BLOCK, "角色一致性", loc, "含角色镜头未显式锁服装/配色")
+        if single_ref_backend and not _has_i2i_derivation(section):
+            add(
+                BLOCK,
+                "角色一致性",
+                loc,
+                "无持久角色 ID 后端(如 Codex/OpenAI/Dreamina/Nano)逐镜重画脸：本镜(含首帧)未声明从共享定妆 "
+                "image2image/多图参考派生——纯文生图会把角色重抽成新演员，跨集必漂。"
+                "请写明生成方式=以 `定妆_<角色>` 为母图做 image2image/多图参考派生，禁纯文生图。"
+                "（原生主体锁后端可豁免；本后端下**每个**角色镜都须 i2i 派生，不止尾帧。）",
+            )
         if not _has_any(section, ("资产身份注册层", "身份注册", "identity_registry", "reference_group", "drift_forbidden")):
             add(BLOCK, "资产身份注册层", loc, "含角色镜头缺资产身份注册层约束；必须从 identity_registry.json 继承 reference_group / angle_policy / drift_forbidden")
         if not _has_character_id_binding(section):
@@ -3121,24 +3673,49 @@ def check_image_shot_prompt_section(path: str, idx: int, section: str,
                 "请补 `尾帧接力生成方式` 字段：尾帧必须以上一张成图或同镜首帧 image2image/图生图为母图，"
                 "只改表情/眼神/嘴角，不得纯文生图。",
             )
+        if single_ref_backend and _codex_needs_face_reference(section, name) and not _codex_has_face_reference(section):
+            add(
+                BLOCK,
+                "Codex锁脸",
+                loc,
+                "Codex/OpenAI/Dreamina/Nano/Gemini 这类无持久角色 ID 后端会逐镜重新解脸；"
+                "近景/反打/大表情镜不能只靠普通多参考或锚点句。请在本镜显式引用同源脸部特写/表情库 "
+                "（expressions / `定妆_<角色>_脸部特写.png` / `定妆_<角色>_表情*.png`），并让尾帧用 image2image 接力，只改表情不重画五官。",
+            )
+        if single_ref_backend and _codex_dark_vfx_face_risk(section, name) and not _codex_has_face_visibility_guard(section):
+            add(
+                BLOCK,
+                "Codex锁脸",
+                loc,
+                "暗光/烟雾/VFX 叠脸会诱导无持久角色 ID 后端重画五官；本镜缺脸部可见性约束。"
+                "请补约束：眼鼻嘴三角区清晰、特效/黑烟只在脸外侧或后景、不得遮住五官、不得重画脸。",
+            )
         if "_侧" not in refs and "_半身" not in refs and "_全身" not in refs and "主体库" not in section and "角色ID" not in section:
             add(WARN, "角色一致性", loc, "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂")
         chars = _character_names_in_refs(refs)
-        if len(chars) >= 2 and not _has_any(section, ("多参考", "主体库", "角色ID", "分别出图", "Seedream", "Nano Banana")):
-            # 双人同框 × 单图参考后端(无原生主体/Character ID，如 Codex) × 未声明任一多主体策略
-            #   = 实测脸漂真凶（单图只锁得住一个主体，第二人随机重画）→ 升 BLOCK。
-            # 有原生主体能力的后端(persistent_subject=True：Seedream/可灵/Sora)按 WARN，不过度阻断。
-            # 逃生门「分别出图+合成 并登记降级」/ 声明多参考策略 已在上面 _has_any 放行。
+        if len(chars) >= 2:
+            if single_ref_backend and _has_generic_reference_index_lock(section):
+                add(
+                    BLOCK,
+                    "Codex锁脸",
+                    loc,
+                    "多角色同框镜使用了“参考图①/reference image 1”这类泛化身份锁。"
+                    "无持久角色 ID 后端会把第 1 张参考误当成所有人的身份锚，造成配角串脸或重解脸。"
+                    "请改成逐主体锁脸句：每个 `CHAR_xx/形态` 分别对应自己的定妆/脸部特写/表情库；"
+                    "并在同框镜登记分别出图+合成或切统一的原生主体后端。",
+                    return_to_stage="image",
+                )
             if single_ref_backend:
-                add(BLOCK, "角色一致性", loc,
-                    f"单镜多角色同框（{'/'.join(sorted(chars))}）× 单图参考后端(如 Codex，无原生主体锁)：单图只锁一个主体，"
-                    "第二人必随机重画=脸漂真凶；本镜又未声明任一多主体策略，硬阻断。"
-                    "须切官方多参考/原生主体后端(Seedream 14图/Nano Banana Pro 5人/可灵主体库/Sora Cameo)，"
-                    "或走「分别出图+合成」并在本镜登记降级。")
-            else:
+                if not _has_codex_split_composite_strategy(section):
+                    add(BLOCK, "角色一致性", loc,
+                        f"单镜多角色同框（{'/'.join(sorted(chars))}）× 无持久角色 ID 后端(如 Codex)：普通多参考不是持久主体锁，"
+                        "每个主体都会被重新解脸，且多人同框无硬位置/主体 ID 绑定时极易串脸。"
+                        "本后端下只有「分别出图+合成/单人分层出图」这类硬降级能放行；"
+                        "或把项目生图AI统一切到支持原生主体/角色ID的官方后端后再跑 gate。")
+            elif not _has_native_multi_subject_strategy(section):
                 add(WARN, "角色一致性", loc,
                     f"单镜多角色同框（{'/'.join(sorted(chars))}）：单图参考后端(如 Codex)难保多人各自一致——"
-                    "优先切官方多参考后端(Seedream 14图/Nano Banana Pro 5人/可灵主体库/Sora Cameo)或走「分别出图+合成」并登记降级")
+                    "优先用原生主体/角色ID/区域绑定，或走「分别出图+合成」并登记降级。普通多参考只能算弱参考，不等于持久角色 ID。")
 
 
 def check_common_image_prompts(root: str) -> None:
@@ -3295,6 +3872,150 @@ def check_referenced_assets_finalized(root: str, ep: str) -> None:
         add(BLOCK, "共享定妆", shots_md,
             f"本集逐镜引用了未过落档自检的共享定妆/资产 `{rid}`（registry `self_check_passed=false`）——"
             "脏定妆是锚点，脸/结构漂了下游每镜继承；先过自检并把该项置 true（或人工复核后 `image_qc --mark-finalized`），再付费出图。")
+
+
+def _sha256_file(path: str) -> Optional[str]:
+    try:
+        h = hashlib.sha256()
+        with open(path, "rb") as f:
+            for chunk in iter(lambda: f.read(1 << 20), b""):
+                h.update(chunk)
+        return h.hexdigest()
+    except Exception:
+        return None
+
+
+def _form_anchor_relpath(form: Mapping) -> str:
+    """form 的锚点定妆图（front 主参考）项目相对路径；缺 front 时回退第一张可用视图。"""
+    rg = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
+    front = rg.get("front")
+    if isinstance(front, str) and front.strip():
+        return front.strip()
+    for v in rg.values():
+        if isinstance(v, str) and v.strip():
+            return v.strip()
+    return ""
+
+
+def check_anchor_fingerprints(root: str, ep: str) -> None:
+    """共享定妆锚点指纹钉死（治跨集脸漂的结构根因之一）：identity_registry 的 form 若显式登记
+    `anchor_sha`（opt-in），就校验磁盘上 front 定妆图当前 sha256 == 注册值。锚点被悄改/丢失 =
+    下游每镜（含跨集每一集）继承换脸 → BLOCK。
+
+    **纯 opt-in**：未登记 `anchor_sha` 的 form = 未启用钉死 → 跳过（向后兼容，现有作品/先出视频
+    demo 不被突然阻断）。写入口：`image_qc.py <root> --pin-anchor CHAR_xx/形态`。"""
+    reg = load_json(identity_registry_path(root))
+    if not isinstance(reg, dict):
+        return
+    reg_path = identity_registry_path(root)
+    pinned: List[Tuple[str, str, str]] = []  # (label, expected_sha, rel_path)
+    for c in (reg.get("characters") or []):
+        if not isinstance(c, dict):
+            continue
+        cid = str(c.get("id") or "").strip()
+        for fm in (c.get("forms") or []):
+            if not isinstance(fm, dict):
+                continue
+            exp = str(fm.get("anchor_sha") or "").strip()
+            if not exp:
+                continue
+            form_name = str(fm.get("form") or "").strip()
+            label = f"{cid}/{form_name}" if form_name else (cid or "?")
+            pinned.append((label, exp, _form_anchor_relpath(fm)))
+    if not pinned:
+        return
+    for label, exp, rel in pinned:
+        full = os.path.join(root, rel) if rel else ""
+        if not rel or not os.path.isfile(full):
+            add(BLOCK, "共享定妆", reg_path,
+                f"定妆锚点 `{label}` 已登记 anchor_sha 但 front 定妆图缺失"
+                f"（{rel or 'reference_group 未填 front'}）——锚点丢失，下游每镜无母图可派生，跨集必漂；"
+                "补回原锚点定妆图，或重新 `image_qc --pin-anchor`。")
+            continue
+        actual = _sha256_file(full)
+        if actual != exp:
+            add(BLOCK, "共享定妆", reg_path,
+                f"定妆锚点 `{label}` 被改动：磁盘 sha256 与 registry `anchor_sha` 不一致"
+                f"（pinned={exp[:12]}… actual={(actual or 'none')[:12]}…）——锚点一漂，所有引用它的集都继承换脸。"
+                "若为有意更新：重出依赖镜后用 `image_qc --pin-anchor` 重新钉死；否则恢复原锚点定妆图。")
+
+
+def check_expression_anchors(root: str, ep: str) -> None:
+    """表情库跨集共享锁定（治"第2集的怒和第5集的怒各画各的"）：form 若显式登记 `expression_anchors`
+    （opt-in，每条 `{emotion, path, self_check_passed?, anchor_sha?}`），则该情绪锚必须存在、过自检、未被悄改——
+    否则跨集同情绪近景就没有同源母图可派生 → BLOCK。
+
+    **纯 opt-in**：未登记 `expression_anchors` 的 form 跳过（向后兼容）。
+    写入口：`image_qc.py <root> --finalize-expr CHAR_xx/形态/情绪`（落自检真值 + 钉 sha）。"""
+    reg = load_json(identity_registry_path(root))
+    if not isinstance(reg, dict):
+        return
+    reg_path = identity_registry_path(root)
+    for c in (reg.get("characters") or []):
+        if not isinstance(c, dict):
+            continue
+        cid = str(c.get("id") or "").strip()
+        for fm in (c.get("forms") or []):
+            if not isinstance(fm, dict):
+                continue
+            anchors = fm.get("expression_anchors")
+            if not isinstance(anchors, list):
+                continue
+            form_name = str(fm.get("form") or "").strip()
+            for a in anchors:
+                if not isinstance(a, dict):
+                    continue
+                emotion = str(a.get("emotion") or "?").strip()
+                rel = str(a.get("path") or "").strip()
+                label = f"{cid}/{form_name}#{emotion}" if form_name else f"{cid}#{emotion}"
+                full = os.path.join(root, rel) if rel else ""
+                if not rel or not os.path.isfile(full):
+                    add(BLOCK, "共享定妆", reg_path,
+                        f"表情锚 `{label}` 已登记但图缺失（{rel or '未填 path'}）——跨集同情绪近景无同源母图，"
+                        "各集各画各的=情绪一致性崩；补出该情绪脸部特写并 `image_qc --finalize-expr`。")
+                    continue
+                if a.get("self_check_passed") is False:
+                    add(BLOCK, "共享定妆", reg_path,
+                        f"表情锚 `{label}` 未过落档自检（self_check_passed=false）——脏情绪锚是跨集同情绪近景的源头；"
+                        "先过自检并 `image_qc --finalize-expr` 再付费出图。")
+                    continue
+                exp = str(a.get("anchor_sha") or "").strip()
+                if exp:
+                    actual = _sha256_file(full)
+                    if actual != exp:
+                        add(BLOCK, "共享定妆", reg_path,
+                            f"表情锚 `{label}` 被改动：磁盘 sha256 与登记 `anchor_sha` 不一致——一漂则所有引用集同情绪近景换脸；"
+                            "有意更新就重出依赖镜后 `image_qc --finalize-expr` 重钉，否则恢复原图。")
+
+
+def check_character_backend_pin(root: str, ep: str) -> None:
+    """一角一后端跨集钉（advisory）：form 若登记 `backend_pin`（该角色身份建立/锁定的出图后端），
+    而本集项目 `生图AI` 与之不同 → WARN。同一角色跨集换后端本身是脸漂源（不同模型脸的先验不同），
+    弱后端尤甚。**纯 opt-in**：未登记 backend_pin 跳过。"""
+    reg = load_json(identity_registry_path(root))
+    if not isinstance(reg, dict):
+        return
+    cur_canon, _ = classify_image_backend(get_setting(root, "生图AI", "Codex").strip())
+    reg_path = identity_registry_path(root)
+    for c in (reg.get("characters") or []):
+        if not isinstance(c, dict):
+            continue
+        cid = str(c.get("id") or "").strip()
+        for fm in (c.get("forms") or []):
+            if not isinstance(fm, dict):
+                continue
+            pin = str(fm.get("backend_pin") or "").strip()
+            if not pin:
+                continue
+            pin_canon, _ = classify_image_backend(pin)
+            if pin_canon == cur_canon:
+                continue
+            form_name = str(fm.get("form") or "").strip()
+            label = f"{cid}/{form_name}" if form_name else (cid or "?")
+            add(WARN, "角色一致性", reg_path,
+                f"角色 `{label}` 身份钉在出图后端 `{pin_canon}`，本集项目 生图AI=`{cur_canon}`——"
+                "同一角色跨集换后端本身是脸漂源（不同模型脸的先验不同），弱后端尤甚。"
+                "要么切回原后端出本集，要么先把该角色升原生主体库/LoRA 再换；确认有意更换则更新 backend_pin。")
 
 
 def check_image_assets(root: str, ep: str) -> None:
@@ -3881,6 +4602,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_placeholder_policy(root, ep, check_stage)
         check_voiceover_fingerprint(root, ep)
         check_timing_manifest_complete(root, ep)
+        check_voice_cross_episode(root, ep)
         check_image_ai_policy(root, ep)
         check_backend_reachable(root, ep)
         if stage == "image_preflight":
@@ -3893,6 +4615,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_storyboard_visual_contract(root, ep)
         check_storyboard_style_contract(root, ep)
         check_cross_episode_style(root, ep)
+        check_cross_episode_contract(root, ep)
         check_storyboard_special_templates(root, ep)
         check_image_prompt_overview(root, ep)
         check_prompt_checklists(root, ep, "image")
@@ -3900,6 +4623,10 @@ def run(root: str, ep: str, stage: str) -> None:
         check_state_continuity(root, ep)
         check_shared_image_index(root, ep)
         check_referenced_assets_finalized(root, ep)
+        check_anchor_fingerprints(root, ep)
+        check_expression_anchors(root, ep)
+        check_character_backend_pin(root, ep)
+        check_seed_event_records(root, ep)
         check_common_image_prompts(root)
         check_cinematic_optical_continuity(root, ep)
         check_shot_scale_progression(root, ep)
@@ -3927,6 +4654,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_prompt_checklists(root, ep, "video")
         check_video_stage_raw_output_policy(root, ep)
         check_contract_inheritance(root, ep)
+        check_cross_episode_contract(root, ep)
         check_asset_handoff_inheritance(root, ep)
         check_semantic_lineage(root, ep)
         check_state_continuity(root, ep)

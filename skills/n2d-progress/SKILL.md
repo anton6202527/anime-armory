@@ -46,6 +46,7 @@ python3 skills/n2d-update/scripts/update_plan.py check <剧根> 第N集 --write-
 - `可并行: 第M+1集「剧本改编」 → n2d-script（低成本前期，可和当前阶段并行）`（如果存在安全的跨集/次要缺口可做；没有则省略）
 - `次要缺口:`（其它已开工但没补齐的集）
 - `findings` 提示只看仍有效的 block/warn：脚本会读取 `生产数据/*findings*第N集.json` 的 severity 计数；若 findings 文件早于 `_进度.md`，会标为“过期 findings，建议刷新 gate/score/review”，不会再当成“未解决”直接要求返工。
+- `质检结果:`（verdict 级，区别于 findings 的逐条 block/warn）——逐集汇报 `n2d-review` 的两样产物：① 人审报告 `_质检_第N集.md`（无则回退整部 `_质检_全片.md`）的**存在 + 生成日期 + 是否过期**（报告早于当前产物时标“⚠️ 结论可能过期，建议重审”，与 findings 同套 stale 逻辑，避免拿旧结论逼返工）；② 确定性评分 `生产数据/score_第N集.json` 的**总分 + 是否过阈**（pass/fail，不只是“跑没跑”）。严重度数字只从这两份确定性 JSON 取，不解析自由格式报告正文。无人审报告但机器评分已 `fail` 时，提示补跑 `n2d-review`；评分 pass 且无报告则不打扰。
 
 转述这些输出时，skill 名只写 `n2d-image` 这类裸名，不加 `/`，避免部分 AI agent 把它解析成不支持的斜杠命令。
 

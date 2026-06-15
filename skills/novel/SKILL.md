@@ -36,6 +36,7 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 | 已有长篇，要**压缩为短版 / 漫剧脚本量级** | `novel-condense` |
 | 自己手写小说时要**工艺指南**（章纲 / 单章 / 扩 / 缩 / 续 的原则） | `novel-craft` |
 | 已有在建项目，要看**当前进度 / 全线看板 / 下一步该跑哪个 skill** | `novel-progress` |
+| 已有在建项目，要**消除操作摩擦 / 找精准下一步指令 / 检查状态缺失** | `python3 skills/novel/scripts/flow.py "<作品根>"` |
 | 已写好若干章，要**质检 / 审稿 / 查问题**（人设崩 / 视角穿帮 / 设定矛盾 / 锚点漂移 / 题旨偏移 / 读者承诺违约 / 文学性变薄 / 节奏 / 原文照搬 / **五感缺失 / 伏笔逾期**） | `novel-review` |
 | 已写好若干章，要**打分 / 评分 / 市场体检**（题材够不够热、能不能火、值不值得继续写/改、要不要弃稿重立） | `novel-score` |
 | 已写好若干章，要**查逻辑硬伤 / 维护设定百科 / 角色生死状态 / 伏笔回收 / 关系温度** | `novel-wiki` |
@@ -43,6 +44,7 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 | 想要**提取授权样本/项目 Demo 的文风指纹 / 保持笔力一致 / 查文风漂移** | `novel-style` |
 | 想要**分析情节节奏 / 画热力图 / 查注水 / 查断章** | `novel-balance` |
 | 想要**宣发引流 / 写视频脚本 / 挖掘爆点章节** | `novel-promote` |
+| 想要**出海 / 本地化 / 翻译成英文·东南亚等多语言版本** | `novel-localize` |
 | 把小说改成**漫剧 / 短剧** | `n2d`（另一条管线） |
 
 ⚠️ **续 / 扩 / 视角 / 改 四者很容易混**：
@@ -73,6 +75,7 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 
 0. **先看有没有在建项目**：用户指向（或当前正处于）某个 `写小说/<项目>/`，且其下有 `_进度.md` → **先读进度**：
    - **进度路由**：跑 `python3 skills/novel/progress.py "<作品根>"` 找第一条未完成项（基于章节矩阵表）；也可调 `novel-progress` 查看全线看板。
+   - **操作指挥 (Flow)**：若对下一步命令有疑虑、或想检查状态对账/就绪度，跑 `python3 skills/novel/scripts/flow.py "<作品根>"` 获取精准下一步指令。
    - **准入检查 (Gate)**：在进入 `drafting` (写正文) 或 `export` 前，跑 `python3 skills/novel/novel-gate.py <作品根> --stage <阶段>`；该入口统一调用 novel QA gate，覆盖 rights/review/score 阻断。
    - **写后自动化**：每写完一章，建议跑 `python3 skills/novel/scripts/post_write.py <作品根> --chapter 第N章` 自动勾选进度并更新百科。
    - **标准化旧项目**：若 `_进度.md` 格式陈旧，跑 `python3 skills/novel/scripts/standardize_progress.py <作品根>` 迁移到标准矩阵。

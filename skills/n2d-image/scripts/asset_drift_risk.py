@@ -42,6 +42,16 @@ BAND_HIGH, BAND_MEDIUM = 50, 28
 
 # ── 纯函数（无依赖·可测） ──────────────────────────────────────────────────────
 
+def root_label(root: Path) -> str:
+    """Report a stable project path when the work root is inside this repository."""
+    repo_root = Path(__file__).resolve().parents[3]
+    resolved = root.resolve()
+    try:
+        return str(resolved.relative_to(repo_root))
+    except ValueError:
+        return str(resolved)
+
+
 def reuse_base(scope: str) -> int:
     """scope 文本 → 复用底分。命中跨集复用词 = 高底分（背景/道具反复出现，漂移机会多）。纯函数·可测。"""
     return WEIGHTS["reuse_high"] if any(m in str(scope or "") for m in REUSE_MARKERS) else WEIGHTS["reuse_single"]
@@ -175,7 +185,7 @@ def analyze(root: Path, ep: str) -> Dict[str, Any]:
         })
     results.sort(key=lambda r: r["score"], reverse=True)
     return {
-        "kind": "n2d_asset_drift_risk", "version": 1, "root": str(root), "episode": ep,
+        "kind": "n2d_asset_drift_risk", "version": 1, "root": root_label(root), "episode": ep,
         "high": sum(1 for r in results if r["band"] == "high"),
         "medium": sum(1 for r in results if r["band"] == "medium"),
         "assets": results, "notes": notes,

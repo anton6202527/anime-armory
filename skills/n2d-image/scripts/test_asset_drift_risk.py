@@ -22,6 +22,11 @@ def test_reuse_base() -> None:
     assert adr.reuse_base("") == adr.WEIGHTS["reuse_single"]
 
 
+def test_root_label_prefers_repo_relative_path() -> None:
+    repo_root = Path(adr.__file__).resolve().parents[3]
+    assert adr.root_label(repo_root / "制漫剧" / "测试项目") == "制漫剧/测试项目"
+
+
 def test_score_high_reuse_multiform_is_high() -> None:
     s = adr.score_asset({"reuse_base": 25, "appear": 6, "drift_forbidden": 5,
                          "has_structure": True, "has_color": True, "has_multiform": True})

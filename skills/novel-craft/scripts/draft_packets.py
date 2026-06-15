@@ -379,7 +379,12 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
         out_file = f"写作任务/第{chapter:02d}章_draft.md"
         source_paths.append(f"写作任务/第{chapter:02d}章_beats.md")
     elif step == "editor":
-        step_note = "\n## 当前子任务：Senior Editor Pass (主编润色)\n- **前提**：已完成 Ghostwriter 初稿。\n- **目标**：专门进行「五感丰富」与「去AI味」的滤网打磨（杀掉抽象词、动词升级、环境映衬）。\n- **输出**：最终交付正文。"
+        step_note = f"""
+## 当前子任务：Senior Editor Pass (主编润色)
+- **前提**：已完成 Ghostwriter 初稿。
+- **目标**：专门进行「五感丰富」与「去AI味」的滤网打磨（杀掉抽象词、动词升级、环境映衬）。
+- **同步产出 (重要)**：除正文外，必须同时输出本章的「状态增量 JSON」(State Delta)，用于更新作品百科与伏笔账本。
+- **输出**：最终交付正文写入 `章节/第{chapter:02d}章.md`；状态增量写入 `{delta_path}`。"""
         out_file = f"章节/第{chapter:02d}章.md"
         source_paths.append(f"写作任务/第{chapter:02d}章_draft.md")
 

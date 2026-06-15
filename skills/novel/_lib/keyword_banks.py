@@ -22,6 +22,17 @@ PAYOFF_KW = [
     "翻盘", "吊打", "震惊", "废柴", "崛起", "无敌", "暴击", "斩杀",
 ]
 
+# ── 女频「情绪兑现」爽点（拉扯/虐恋/双向奔赴的满足 beat）──────────────
+# 2026 女频（无CP大女主 / 强暧昧拉扯 / 古言情绪）的"爽"是情绪价值被满足，不是打脸逆袭。
+# 单用 PAYOFF_KW（打脸/碾压）量女频会把拉扯文误判"低爽点/注水"——本桶作为正交叠加，
+# 女频项目里并入爽点池（见 payoff_bank_for）。与 EMOTION_KW 区别：EMOTION_KW 是情绪"存在"，
+# 本桶是情绪"兑现/翻盘"（破镜重圆/双向奔赴/护妻/复合/打脸情敌）这类期待被满足的高光。
+FEMALE_PAYOFF_KW = [
+    "双向奔赴", "破镜重圆", "复合", "告白", "心动", "吃醋", "独宠", "护妻",
+    "宠溺", "撩", "暧昧", "拉扯", "醋意", "占有", "心疼", "守护", "回应",
+    "和好", "表白", "牵手", "对视", "反差", "下跪", "追妻", "悔",
+]
+
 # ── 冲突 / 转折（冲突强度近似）──────────────────────────────────
 CONFLICT_KW = [
     "杀", "血", "刀", "剑", "怒", "吼", "战", "斗", "击", "破", "死", "逼",
@@ -47,6 +58,16 @@ HOOK_MARKERS = [
 PROMO_HOOK_KW = [
     "突然", "竟", "竟然", "却", "不料", "没想到", "下一刻", "原来", "真相",
     "秘密", "最后", "只见", "谁也没想到",
+]
+
+# ── 反转 / 转折标记（反转密度近似）────────────────────────────────
+# 2026 都市爽文量化基准：前 30 章每章≥1.5 个反转/转折（起点 top50 都市）。
+# 反转 = 身份/关系/目标/信息态势的实质翻转，这里用确定性"翻转引子词"做近似计数，
+# 命中是**候选线索**（闪回/伏笔可豁免），最终是否真反转由 LLM 复核。
+REVERSAL_KW = [
+    "反转", "逆转", "竟然", "没想到", "没料到", "不料", "原来", "惊变",
+    "突变", "陡然", "骤变", "反杀", "翻盘", "揭穿", "真相", "身份暴露",
+    "竟是", "居然是", "却不知", "万万没想到", "峰回路转",
 ]
 
 # ── 情感 / 互动（emote 人格、宣发情绪爆点）────────────────────────
@@ -92,6 +113,14 @@ COMMERCIAL_PLATFORM_MARKERS = (
 PROFILE_LITERARY = "品质向"
 PROFILE_COMMERCIAL = "商业爽文向"
 
+# 女频是**正交**维度（与品质/商业二分独立）：番茄女频=商业向、晋江=品质向，都可能是女频。
+# 命中只决定"爽点是否并入情绪兑现桶"，不改 classify_platform 的二分（避免下游分支全改）。
+# 女频信号可来自 `目标平台` 也可来自 `题材`/`赛道` 选择点（如"无CP大女主""暧昧拉扯""古言"）。
+FEMALE_ORIENTED_MARKERS = (
+    "女频", "女生", "言情", "古言", "现言", "大女主", "无cp", "无 cp", "甜宠",
+    "虐恋", "暧昧", "拉扯", "宠文", "耽美", "bl", "girl", "晋江",
+)
+
 
 def classify_platform(target_platform: Optional[str]) -> str:
     """把 `目标平台` 归一成评判档：'品质向' 或 '商业爽文向'。
@@ -111,3 +140,24 @@ def classify_platform(target_platform: Optional[str]) -> str:
 
 def is_literary(target_platform: Optional[str]) -> bool:
     return classify_platform(target_platform) == PROFILE_LITERARY
+
+
+def is_female_oriented(*signals: Optional[str]) -> bool:
+    """女频判定（正交于品质/商业档）。任一选择点信号命中女频标记即 True。
+
+    传 `目标平台`、`题材`、`赛道` 等任意若干信号字符串；空/无命中 → False（按通用爽文量爽点）。
+    """
+    text = " ".join(str(s or "") for s in signals).strip().lower()
+    if not text:
+        return False
+    return any(marker in text for marker in FEMALE_ORIENTED_MARKERS)
+
+
+def payoff_bank_for(*signals: Optional[str]) -> list:
+    """返回该项目应使用的爽点词桶：女频并入情绪兑现桶，否则只用通用 PAYOFF_KW。
+
+    balance/simulate 等"爽点密度"消费方用它取桶，避免女频拉扯文被打脸尺误判注水。
+    """
+    if is_female_oriented(*signals):
+        return PAYOFF_KW + FEMALE_PAYOFF_KW
+    return list(PAYOFF_KW)

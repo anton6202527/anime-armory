@@ -384,3 +384,62 @@ def test_clip_id_and_identity_failure_helpers():
     assert router._clip_id_from_text("定妆_赐死托盘.png") is None
     assert router._is_identity_failure("崩脸/身份漂移") is True
     assert router._is_identity_failure("缺短匕首，未过道具自检") is False
+
+
+# ── ③ 一角一后端亲和（advisory·warn-only）─────────────────────────────
+def _write_registry(root: Path, characters):
+    p = root / "出图" / "共享" / "identity_registry.json"
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps({"kind": "n2d_asset_identity_registry", "characters": characters},
+                            ensure_ascii=False), encoding="utf-8")
+
+
+def test_build_backend_affinity_only_counts_registered_native_video():
+    reg = {"characters": [
+        {"id": "CHAR_01", "name": "沈念 / 林婉儿", "forms": [{"form": "常态", "identity_adapters": {"video": {
+            "seedance": {"mode": "face_lock", "status": "registered"}}}}]},
+        # 全 fallback/未注册 → 无原生主体可锁，不进 affinity（零噪音）
+        {"id": "CHAR_03", "name": "柳娘子", "forms": [{"form": "常态", "identity_adapters": {"video": {
+            "kling": {"mode": "character_id", "status": "unregistered"},
+            "dreamina": {"mode": "first_last_frame", "status": "fallback_reference_group"}}}}]},
+    ]}
+    aff = router.build_backend_affinity(reg)
+    assert len(aff) == 1
+    assert aff[0]["id"] == "CHAR_01" and aff[0]["backend"] == "seedance"
+    assert "沈念" in aff[0]["aliases"]
+
+
+def test_character_backend_conflicts_detects_and_skips():
+    aff = [{"id": "CHAR_01", "name": "沈念", "aliases": {"沈念"}, "backend": "seedance"}]
+    clip = {"id": "C1", "characters": ["CHAR_01/常态"], "scene": "沈念近景"}
+    # 路由到 kling ≠ 亲和 seedance → 冲突
+    conf = router.character_backend_conflicts(clip, "kling", aff)
+    assert conf and conf[0]["prefers_backend"] == "seedance" and conf[0]["routed_backend"] == "kling"
+    # 路由到 seedance（= 亲和）→ 无冲突
+    assert router.character_backend_conflicts(clip, "seedance", aff) == []
+    # 角色不在本镜 → 无冲突
+    assert router.character_backend_conflicts({"id": "C2", "scene": "空镜"}, "kling", aff) == []
+
+
+def test_route_episode_flags_character_backend_conflict(tmp_path):
+    root = _root(tmp_path, "- 生视频AI: 可灵\n- 视频模型路由: 固定生视频AI\n- 视频备用后端: 无\n")
+    _write_registry(root, [{"id": "CHAR_01", "name": "沈念", "forms": [
+        {"form": "常态", "identity_adapters": {"video": {"seedance": {"mode": "face_lock", "status": "registered"}}}}]}])
+    _write_storyboard(root, [{"id": "EP01_CLIP01", "scene": "沈念近景", "characters": ["CHAR_01/常态"]}])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+    assert route["primary_backend"] == "kling"               # 路由不变（warn-only）
+    assert "character_backend_conflict" in route["risk_flags"]
+    assert route["character_backend_conflicts"][0]["prefers_backend"] == "seedance"
+
+
+def test_route_episode_no_conflict_when_no_native_subject(tmp_path):
+    # 没注册原生主体（demo 现状）→ 零告警
+    root = _root(tmp_path, "- 生视频AI: 可灵\n- 视频模型路由: 固定生视频AI\n- 视频备用后端: 无\n")
+    _write_registry(root, [{"id": "CHAR_01", "name": "沈念", "forms": [
+        {"form": "常态", "identity_adapters": {"video": {"kling": {"mode": "character_id", "status": "unregistered"}}}}]}])
+    _write_storyboard(root, [{"id": "EP01_CLIP01", "scene": "沈念近景", "characters": ["CHAR_01/常态"]}])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+    assert route["character_backend_conflicts"] == []
+    assert "character_backend_conflict" not in route["risk_flags"]

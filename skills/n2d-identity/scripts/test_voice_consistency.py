@@ -145,3 +145,75 @@ def test_write_outputs_atomic_and_md(tmp_path):
     assert list((root / "生产数据").glob("*.tmp.*")) == []
     data = json.loads(paths["json"].read_text(encoding="utf-8"))
     assert data["kind"] == "n2d_identity_voice_drift_report"
+
+
+# ── ⑥ 配音前 pre-flight ────────────────────────────────────────────
+def _write_voiceover(root: Path, ep: str, roles):
+    path = root / "脚本" / ep / "voiceover.txt"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    lines = [f"[镜头{i + 1}·{r}·平静·常速] 台词{i}" for i, r in enumerate(roles)]
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def _write_voicemap(root: Path, mapping):
+    path = root / "设定库" / "voicemap.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps({k: {"key": v} for k, v in mapping.items()}, ensure_ascii=False), encoding="utf-8")
+
+
+def test_parse_voiceover_roles_dedupes_in_order(tmp_path):
+    root = _root(tmp_path)
+    _write_voiceover(root, "第2集", ["沈念", "柳娘子", "沈念"])
+    assert vc.parse_voiceover_roles(root, "第2集") == ["沈念", "柳娘子"]
+
+
+def test_resolve_intended_key_substring():
+    vm = {"沈念": "SHEN", "旁白": "NARR"}
+    assert vc.resolve_intended_key("沈念旁白", vm) == "SHEN"   # 子串匹配（与 vm_match 同语义）
+    assert vc.resolve_intended_key("柳娘子", vm) == ""          # 未登记 → 空
+
+
+def test_preflight_flags_cross_episode_drift(tmp_path):
+    root = _root(tmp_path)
+    # 前集已渲染 沈念=SHEN；但 voicemap 被改成 沈念→LIU；本集 voiceover 有 沈念 → 跨集换声预警
+    _write_manifest(root, "第1集", [_entry(0, "沈念", "SHEN")])
+    _write_voicemap(root, {"沈念": "LIU"})
+    _write_voiceover(root, "第2集", ["沈念"])
+
+    rep = vc.preflight(root, "第2集")
+    assert rep["summary"]["drift"] == 1
+    w = rep["warnings"][0]
+    assert w["type"] == "cross_episode_drift" and w["intended_key"] == "LIU" and w["prior_key"] == "SHEN"
+    assert w["prior_episode"] == "第1集"
+
+
+def test_preflight_flags_unregistered_role(tmp_path):
+    root = _root(tmp_path)
+    _write_voicemap(root, {"沈念": "SHEN"})
+    _write_voiceover(root, "第1集", ["小禾"])   # 小禾 不在 voicemap
+
+    rep = vc.preflight(root, "第1集")
+    assert rep["summary"]["unregistered"] == 1
+    assert rep["warnings"][0]["type"] == "unregistered_in_voicemap"
+
+
+def test_preflight_clean_when_consistent(tmp_path):
+    root = _root(tmp_path)
+    _write_manifest(root, "第1集", [_entry(0, "沈念", "SHEN")])
+    _write_voicemap(root, {"沈念": "SHEN"})
+    _write_voiceover(root, "第2集", ["沈念"])
+
+    rep = vc.preflight(root, "第2集")
+    assert rep["summary"]["warnings"] == 0
+    assert "✅" in vc.render_preflight_md(rep)
+
+
+def test_preflight_excludes_target_and_later_episodes(tmp_path):
+    root = _root(tmp_path)
+    # 目标集自己已有 manifest（重跑场景）不应被当作"前集"用来比对
+    _write_manifest(root, "第2集", [_entry(0, "沈念", "SHEN")])
+    _write_voicemap(root, {"沈念": "SHEN"})
+    _write_voiceover(root, "第2集", ["沈念"])
+
+    rep = vc.preflight(root, "第2集")
+    assert rep["summary"]["warnings"] == 0

@@ -163,7 +163,9 @@ def main():
                     help="兼容旧参数：等同于 --video-channel")
     ap.add_argument("--video-spec", default=contract.DEFAULT_SETTINGS["出视频规格"], choices=contract.MV_VIDEO_SPECS)
     ap.add_argument("--ai-visual-usage", default=contract.DEFAULT_SETTINGS["AI视觉使用披露"], choices=contract.AI_VISUAL_USAGE_MODES)
-    ap.add_argument("--song-rights-status", default="original", help="original/licensed/public-domain/unknown")
+    ap.add_argument("--song-rights-status", default="unknown",
+                    help="original/licensed/public-domain/unknown（默认 unknown：不静默假设自有；"
+                         "付费视觉阶段前 gate 会要求确认，与 novel 线权利默认一致）")
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
 

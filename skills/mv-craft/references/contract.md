@@ -48,13 +48,16 @@
 
 ## 阶段表
 
+> 行序＝机器 `MV_STAGE_TABLE`（contract.py）的默认（`先传音乐`）顺序，仅作 owner/gate 速查。
+> **实际跑序随 `歌曲输入时序` 变**（`后配歌曲` 把 `script(rough)` 提到 `beat` 之前）——见下方「歌曲输入时序分支」，勿据本表推断默认流。
+
 | key | 阶段 | owner | gate |
 |---|---|---|---|
 | `setup` | 项目骨架 | `mv/scripts/init_project.py` | deterministic |
 | `song_ingest` | 歌曲入库/定稿 | `song/user-upload` | `歌/song.*` + `词/lyrics.md` |
+| `beat` | 节拍/能量 | `mv-beat/scripts/beat_detect.py` | beatgrid |
 | `script` | 视觉蓝图/设定 | `mv-script` | visual blueprint |
 | `script_review` | 视觉蓝图复核 | `mv-script` | beatgrid-reviewed blueprint |
-| `beat` | 节拍/能量 | `mv-beat/scripts/beat_detect.py` | beatgrid |
 | `plan` | clip/timeline 规划 | `mv-plan/scripts/plan_clips.py` | clip_plan + timeline_manifest |
 | `image` | 定妆/首帧/尾帧 | `mv-image` | visual identity |
 | `video_jobs` | 视频生成任务包 | `mv-video/scripts/video_jobs.py` | jobs_manifest |

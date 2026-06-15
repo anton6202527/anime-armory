@@ -14,11 +14,14 @@
                  Seedream/可灵/Sora 可注册原生主体库更稳，LoRA 最稳。
 
 输出 生产数据/face_drift_risk_<ep>.json + .md，按风险排序，对 high/medium 角色给出可执行建议
-（与 image_qc 的 no_expression_lib_ref gate、n2d-lora init 对齐）。**只提示不阻断**——出图前的预案，
-不是落档闸门（落档由 image_qc 管）。
+（与 image_qc 的 no_expression_lib_ref gate、n2d-lora init 对齐）。预测档（high/medium）**只提示不阻断**。
+
+**实测漂移回灌（②）**：本脚本还读 生产数据/identity_drift_report.json——n2d-identity 对**已出图集**
+真量出的跨集漂移（embedding 质心 high / block 级脸漂镜）。命中的角色升 **block** 档（既成事实，非预测），
+退出码 2，让 SOP/gate 能卡住"带病继续出下一集图"。无该报告 / 无 insightface → 仅预测档生效，不假报。
 
 用法：python3 face_drift_risk.py <作品根> <第N集> [--json]
-纯 stdlib；评分纯函数有 pytest 覆盖。
+纯 stdlib（实测数只读 identity 产出的 JSON，本脚本不读像素、不依赖 insightface）；纯函数有 pytest 覆盖。
 """
 from __future__ import annotations
 
@@ -168,6 +171,65 @@ def suggestions_for(name: str, scored: Mapping[str, Any], signals: Mapping[str, 
     return out
 
 
+# ── 实测漂移回灌（②：把 n2d-identity 已**测**出的跨集漂移，前移成本集出图前的 block） ──────────
+
+def measured_block_reason(measured: Mapping[str, Any]) -> str:
+    """把实测漂移命中明细拼成人读理由（纯函数·可测）。"""
+    bits: List[str] = []
+    if measured.get("embedding_drift_high"):
+        spans = str(measured.get("spans") or "").strip()
+        bits.append(f"跨集质心漂移 high×{measured['embedding_drift_high']}" + (f"（{spans}）" if spans else ""))
+    if measured.get("total_block"):
+        fb = str(measured.get("first_bad_episode") or "").strip()
+        bits.append(f"已出现 block 级脸漂 {measured['total_block']} 镜" + (f"（first={fb}）" if fb else ""))
+    return "；".join(bits)
+
+
+def measured_drift_block(drift_report: Optional[Mapping[str, Any]],
+                         aliases: Set[str], name: str) -> Optional[Dict[str, Any]]:
+    """该角色在 identity_drift_report 里是否已**实测**到该升 block 的跨集漂移（既成事实，非预测）。
+
+    命中任一即返回明细（否则 None）：
+      ① embedding_drift 里有 severity=high 段（每集各自过 floor 但质心逐集偏离锚点）；
+      ② characters[char].total_block>0（已出现 block 级脸漂镜）。
+    drift_report.available=False（无 insightface / 跳过机检）→ 一律 None，不假报。
+    角色对号：drift report 的 char 名 == 本角色 name 或落在其 aliases 里。纯函数·可测。"""
+    if not isinstance(drift_report, Mapping) or not drift_report.get("available"):
+        return None
+    chars = drift_report.get("characters") if isinstance(drift_report.get("characters"), Mapping) else {}
+    emb = drift_report.get("embedding_drift") if isinstance(drift_report.get("embedding_drift"), Mapping) else {}
+    name = str(name or "").strip()
+    alias_set = set(aliases or set())
+    for drift_char in set(chars.keys()) | set(emb.keys()):
+        dc = str(drift_char).strip()
+        if not dc or (dc != name and dc not in alias_set):
+            continue
+        emb_high = [e for e in (emb.get(drift_char) or [])
+                    if isinstance(e, Mapping) and e.get("severity") == "high"]
+        info = chars.get(drift_char) if isinstance(chars.get(drift_char), Mapping) else {}
+        total_block = int(info.get("total_block", 0) or 0)
+        if not emb_high and total_block <= 0:
+            continue
+        return {
+            "drift_char": dc,
+            "embedding_drift_high": len(emb_high),
+            "total_block": total_block,
+            "first_bad_episode": str(info.get("first_bad_episode") or "").strip(),
+            "spans": "，".join(f"{e.get('episode_from')}→{e.get('episode_to')}(掉{e.get('drop')})"
+                               for e in emb_high),
+        }
+    return None
+
+
+def load_prior_drift(root: Path) -> Dict[str, Any]:
+    """读 生产数据/identity_drift_report.json（n2d-identity 对已出图集机检的真值）。读不到/无效 → {}。"""
+    try:
+        data = json.loads((root / "生产数据" / "identity_drift_report.json").read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
 # ── 数据装载 + 推断（best-effort I/O） ──────────────────────────────────────────
 
 def project_default_backend(root: Path) -> str:
@@ -279,6 +341,7 @@ def analyze(root: Path, ep: str) -> Dict[str, Any]:
     clips = load_clips(root, ep)
     default_backend = project_default_backend(root)
     profile = backend_profile(default_backend)
+    prior_drift = load_prior_drift(root)  # ② 已出图集的实测漂移（identity_drift_report.json）
     by_id: Dict[str, Dict[str, Any]] = {
         c["id"]: {"char": c, "appear": 0, "closeup": 0, "emotion": 0, "multi": 0, "angle": 0,
                   "angle_tokens": set(), "clips": []}
@@ -316,35 +379,51 @@ def analyze(root: Path, ep: str) -> Dict[str, Any]:
         signals = {k: agg[k] for k in ("appear", "closeup", "emotion", "multi", "angle")}
         scored = score_character(signals, tier)
         sug = suggestions_for(c["name"], scored, signals, cid, c["form"], str(root), profile)
-        results.append({
+        rec = {
             "character_id": cid, "name": c["name"], "form": c["form"],
             "signals": signals, "angle_tokens": sorted(agg["angle_tokens"]),
             "appears_in": agg["clips"], **scored, "suggestions": sug,
-        })
-    results.sort(key=lambda r: r["score"], reverse=True)
+        }
+        # ② 实测漂移回灌：上一集已**测**出该升 block 的跨集漂移 → 本集预测分直接 block（既成事实，非预测）
+        measured = measured_drift_block(prior_drift, c.get("aliases") or set(), c["name"])
+        if measured:
+            rec["band"] = "block"
+            rec["measured_drift"] = measured
+            rec["suggestions"] = [
+                "⛔ 上一集已实测跨集脸漂（" + measured_block_reason(measured)
+                + "）：本集出图前先处置（重出漂移集 / 升原生主体或 LoRA），别带病续出——这是既成事实不是预测。"
+            ] + sug
+        results.append(rec)
+    band_rank = {"block": 3, "high": 2, "medium": 1, "low": 0}
+    results.sort(key=lambda r: (band_rank.get(r["band"], 0), r["score"]), reverse=True)
     return {
         "kind": "n2d_face_drift_risk", "version": 1, "root": str(root), "episode": ep,
         "default_backend": default_backend,
         "backend_profile": profile,
+        "block": sum(1 for r in results if r["band"] == "block"),
         "high": sum(1 for r in results if r["band"] == "high"),
         "medium": sum(1 for r in results if r["band"] == "medium"),
+        "blocking": any(r["band"] == "block" for r in results),
+        "prior_drift_available": bool(prior_drift.get("available")),
         "characters": results, "notes": notes,
     }
 
 
 def render_markdown(report: Mapping[str, Any]) -> str:
-    icon = {"high": "🔴", "medium": "🟡", "low": "🟢"}
+    icon = {"block": "⛔", "high": "🔴", "medium": "🟡", "low": "🟢"}
     lines = [
-        "# 出图前·脸漂风险分（事前预测·只提示不阻断）",
+        "# 出图前·脸漂风险分（事前预测 + 实测漂移回灌）",
         "",
         f"- episode: {report.get('episode')} · 默认后端: {report.get('default_backend')}",
-        f"- 高危角色 🔴 {report.get('high', 0)} · 中危 🟡 {report.get('medium', 0)}",
+        f"- ⛔ 实测已漂 {report.get('block', 0)} · 🔴 预测高危 {report.get('high', 0)} · 🟡 中危 {report.get('medium', 0)}",
         "",
         "| 角色 | 风险 | 分 | 锁脸档 | 主驱动 |",
         "|---|---|---|---|---|",
     ]
     for r in report.get("characters", []):
         drv = "；".join(f"{d['factor']}(+{d['points']})" for d in r.get("drivers", [])[:3])
+        if r.get("measured_drift"):
+            drv = "实测跨集漂移（既成事实）｜" + drv
         lines.append(f"| {r['name']}（{r['character_id']}/{r['form']}） | {icon.get(r['band'],'?')} {r['band']} "
                      f"| {r['score']} | {r['tier']} | {drv} |")
     lines.append("")
@@ -358,8 +437,10 @@ def render_markdown(report: Mapping[str, Any]) -> str:
     for n in report.get("notes", []):
         lines.append(f"- note: {n}")
     lines.append("")
-    lines.append("说明：本表是**出图前**的脸漂预案——high/medium 角色按建议提前加强参考/建表情库/上 LoRA，"
-                 "比等跨集漂了再由 n2d-identity 事后升档省一大截返工。不阻断出图（落档闸门是 image_qc）。")
+    lines.append("说明：🔴/🟡 是**出图前预测**（按建议提前加强参考/建表情库/上 LoRA）；⛔ 是 n2d-identity 对"
+                 "已出图集**实测**到的跨集漂移回灌——既成事实不是预测，本集出图前应先处置。"
+                 + ("（本次无可用实测数据：identity_drift_report 缺失或无 insightface，仅预测档生效。）"
+                    if not report.get("prior_drift_available") else ""))
     return "\n".join(lines) + "\n"
 
 
@@ -386,8 +467,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if ns.json:
         print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
         return 0
-    icon = {"high": "🔴", "medium": "🟡", "low": "🟢"}
-    print(f"出图前脸漂风险（{ns.episode}·后端 {report['default_backend']}）：🔴 {report['high']} · 🟡 {report['medium']}")
+    icon = {"block": "⛔", "high": "🔴", "medium": "🟡", "low": "🟢"}
+    print(f"出图前脸漂风险（{ns.episode}·后端 {report['default_backend']}）："
+          f"⛔ {report.get('block', 0)} · 🔴 {report['high']} · 🟡 {report['medium']}")
     for r in report["characters"]:
         if r["band"] == "low":
             continue
@@ -397,7 +479,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     for n in report["notes"]:
         print("ℹ️ " + n)
     print(f"→ {report['markdown_path']}")
-    return 0
+    # 实测漂移 → 非零退出，让 SOP / gate 能据此卡住"带病续出图"
+    return 2 if report.get("blocking") else 0
 
 
 if __name__ == "__main__":

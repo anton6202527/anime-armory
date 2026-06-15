@@ -58,7 +58,7 @@ description: 制MV 出视频 — 把 mv-image 的 PNG 图生视频成 MV clip，
    ```
 4. 对 take 评分/挑版：
    ```bash
-   python3 skills/mv-video/scripts/video_jobs.py "<制MV作品根>" --score Clip_001 --take 1 --motion-score 90 --identity-score 88 --beat-score 92 --clarity-score 86
+   python3 skills/mv-video/scripts/video_jobs.py "<制MV作品根>" --score Clip_001 --take 1 --motion-score 5 --identity-score 4 --beat-score 5 --clarity-score 4   # 各项 1-5 分
    python3 skills/mv-video/scripts/video_jobs.py "<制MV作品根>" --select Clip_001 --take 1
    ```
    `--select` 会复制到 `出视频/视频/Clip_001.mp4`，并同步 `分镜/timeline_manifest.json`；全部 clip 都选中后脚本自动回写 `_进度.md` 的 `video` 行。

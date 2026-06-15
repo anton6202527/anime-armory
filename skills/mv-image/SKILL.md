@@ -68,7 +68,38 @@ description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json，为 MV 
 2. 出共享定妆（主角/场景）→ `出图/共享/图片/`，建/复用 `设定/characters|locations` 卡 + 锚点句。若 `MV一致性增强=指定参考图/后端主体库/+LoRA`，先登记参考图、主体 ID 或 LoRA 卡，再生成第一组图。
 3. 按 `clip_plan.json` 出首帧 → `出图/段落/图片/Clip_XXX.png`，每张拼锚点句与 `image_prompt_path`。**接力补尾帧**：`need_end_frame=true` 的 clip，额外出 `图片/Clip_XXX_end.png`（=下一 clip 首帧构图）。
 4. 筛选（脸/画风一致优先）：每张按 `references/prompt_format.md` 自检栏过——轻微偏差放行，命中硬伤才按 `重抽预算策略` 档位重抽，废图归 `common/废料/`。
-5. 回写 `_进度.md` 出图行. 下一步 mv-video（图生视频）.
+5. **出图落档机检**：出完一批图后跑 `python3 skills/mv-image/scripts/image_qc.py <作品根>`，机检主角脸漂移/主色漂移/锚点句落地，按 `verdict` 决定是否要重抽（见下节）。
+6. 回写 `_进度.md` 出图行. 下一步 mv-video（图生视频）.
+
+## 出图落档机检（image_qc · MV 版，对标 n2d-image 的 image_qc）
+
+单主角跨 16-64 个 clip 是脸一致性重灾区——光靠散文规则不够。`scripts/image_qc.py` 把一致性机检**前移到出图落档**（刚出完一批、还没继续的最便宜的点），省下等 `mv-review` 审片才发现的返工。**mv 线自包含**：脸 embedding QC 是从 n2d 的 `image_qc`/`face_consistency` **vendored（复制 + 改写）**来的独立副本（市场验证过的 insightface/buffalo_l 自标定余弦 flag-band），**不 import 任何 n2d 模块**。
+
+**三类检查（确定性 vs 脸栈的边界）**：
+| 检查 | 类型 | 依赖 | 严重度 | 做法 |
+|---|---|---|---|---|
+| 主角脸漂移 `G1` | **脸栈** | insightface/cv2/onnxruntime + buffalo_l | **hard（block=崩脸必重抽）** | 主角共享定妆组内部互相余弦自标定「同人下限」floor，每个 clip 首/尾帧脸 vs 主角主参考落 ok/warn/block。风格化 MV 脸跨图余弦偏低，**不写死阈值**，用本曲定妆组做地板 |
+| 主色漂移 `palette` | **确定性** | 仅 Pillow（无需脸栈） | advisory（warn） | 从 `视觉蓝图.md` 抽 `palette_anchor`（`#rrggbb`/`rgb()`/中文色名），每个 clip 首帧主色 vs anchor 取最近距离，超阈值→warn。MV 段落允许加亮/变暗，故只人判不硬拦 |
+| 锚点句落地 lint | **确定性** | 无（纯文本） | advisory（warn） | 按 `clip_plan.json` 逐 clip 读其 `image_prompt_path` 指向的 prompt，校验 `visual_consistency` 规定的『身份锚点 / 视觉锚点 / 禁止漂移』锚点块是否真抄进了 prompt（此前**没有任何东西**校验锚点句落地） |
+
+**优雅降级（与 n2d 同哲学，绝不静默报通过）**：缺 insightface → 脸检降级 Pillow（只验 图损坏/分辨率/清晰度，不臆造相似度）；更缺 Pillow → 整项跳过交人判；缺 `palette_anchor` / `clip_plan.json` → 对应检查跳过并记 note。报告写 `qc_environment.precision_level=full|degraded|none`，degraded/none 时提示先补依赖再进 mv-video。
+
+**CLI**：
+```bash
+python3 skills/mv-image/scripts/image_qc.py <作品根>              # 跑全部，打印报告路径
+python3 skills/mv-image/scripts/image_qc.py <作品根> --json       # 机器可读 payload
+python3 skills/mv-image/scripts/image_qc.py <作品根> --findings   # mv-review/gate 同形 findings
+python3 skills/mv-image/scripts/image_qc.py <作品根> --regen-list # 「要重抽」的 clip（只脸 block，主色/锚点 warn 不进）
+python3 skills/mv-image/scripts/image_qc.py <作品根> --strict     # 严审刷新：block/warn/降级都进候选重出清单
+python3 skills/mv-image/scripts/image_qc.py <作品根> --no-pixel   # 只跑锚点 lint（无 Pillow/insightface 时）
+# 可调：--margin 0.08（脸 flag-band 缓冲）、--palette-threshold 110（主色最近距离阈值）
+```
+
+**JSON schema**（落 `生产数据/image_qc/image_qc.json`(+`.md`)）：`{kind:"mv_image_qc", version, root, checks:{face:{available,mode,lead_floor,lead_calibrated,shots:[{clip,png,score,floor,verdict}]}, palette:{available,palette_anchor,threshold,shots:[{clip,png,verdict,nearest_dist,dominant}]}}, lint:{available,clips_linted,findings:[{level,code,msg}]}, summary:{hard_blocks,advisory,verdict,degraded,unavailable_visual_checks}, qc_environment:{precision_level,jump_to_stage,...}}`。
+
+**落档判定（MV 筛选宽容铁律）**：`verdict=block`（主角脸崩/图损坏）→ 必须重抽后重跑；`verdict=review`（只有主色/锚点初筛或视觉降级）→ 不挡 mv-video，按 `jump_to_stage` 补依赖/复核；`verdict=ok` → 放行。退出码恒 0（建议性闸门）。
+
+测试：`cd skills/mv-image/scripts && python3 -m pytest test_image_qc.py`（CI-safe，走纯函数/降级路径/fixtures，不需要实跑脸栈）。
 
 ## 详细参考
 - 导演视角八维 prompt 装配（画师→导演升级·MV版）：`mv/references/导演视角prompt.md`

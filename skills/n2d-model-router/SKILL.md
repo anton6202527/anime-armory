@@ -106,6 +106,8 @@ python3 skills/n2d-model-router/scripts/router.py <作品根> 第2集 --write
 
 锚定时若本集某 clip 的自然路由与基线不符，会在 `video_model_routes.json.baseline_drift` 留痕，并由 video gate 出一条「后端跨集锁」WARN 提示复核（基线胜，原后端进 fallback）。
 
+**③ 一角一后端亲和（advisory·warn-only）**：基线按 `shot_type` 锁后端，但同一**核心角色**若跨镜被不同 shot_type 路由到不同后端，脸质感会漂。router 读 `identity_registry`，对**已注册原生视频主体**（Character ID / face_lock，status registered/ready）的角色，逐镜对账"该角色原生主体后端 vs 本镜 primary"——不符则在该 route 写 `character_backend_conflicts` + risk_flag `character_backend_conflict`，并由 video gate 出「一角一后端」WARN。**裁决=仅告警不改路由**（拆正反打让该角色单独走其原生后端 / 本镜改走该后端 / 人工确认）。没注册原生主体的角色零告警（避免噪音）。
+
 ### 4. 接入 n2d-video
 
 `n2d-video` 生成 `00_总览.md` 前先生成路由表；`00_总览.md` 必须包含「本集模型路由表」；每个 Clip prompt 必须包含：

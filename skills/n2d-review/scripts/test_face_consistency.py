@@ -26,10 +26,58 @@ def test_calibrate_floor_takes_min():
     assert fc.calibrate_floor([0.9, 0.7, 0.82]) == 0.7
 
 
+def test_best_anchor_score_takes_max_over_views():
+    # 侧脸镜：vs 正脸低、vs 侧脸高 → 取最大（角度感知，去正脸偏惩罚）
+    front = [1.0, 0.0]
+    side = [0.0, 1.0]
+    shot_sideish = [0.1, 0.99]  # 明显更像 side
+    s = fc.best_anchor_score(shot_sideish, [front, side])
+    assert abs(s - fc.cosine(shot_sideish, side)) < 1e-9   # = 最像那个视图
+    assert s > fc.cosine(shot_sideish, front)               # 比只比正脸高
+    # 真崩脸：对哪个视图都不像 → 最大值仍低（不放过）
+    drifted = [-1.0, 0.0]
+    assert fc.best_anchor_score(drifted, [front, side]) <= 0.0
+    # 无 variant → None
+    assert fc.best_anchor_score(shot_sideish, []) is None
+
+
 def test_calibrate_floor_fallback_when_single():
     # 单张定妆（无内部对）→ 回退保守同人下限
     assert fc.calibrate_floor([]) == 0.50
     assert fc.calibrate_floor([], fallback=0.55) == 0.55
+
+
+def test_episode_mean():
+    assert fc.episode_mean([0.8, 0.6, 0.7]) == 0.7
+    assert fc.episode_mean([0.8, None, 0.6]) == 0.7
+    assert fc.episode_mean([None, None]) is None
+    assert fc.episode_mean([]) is None
+
+
+def test_cross_episode_drift_flags_systematic_decline():
+    # ep1 基线 0.75 → ep2 0.55（掉 0.20 ≥ block 阈）→ high；尽管各集可能都过了自己的 floor
+    seq = [("第1集", 0.75), ("第2集", 0.55)]
+    out = fc.cross_episode_drift(seq)
+    assert len(out) == 1
+    assert out[0]["episode_from"] == "第1集" and out[0]["episode_to"] == "第2集"
+    assert out[0]["severity"] == "high" and out[0]["drop"] == 0.2
+
+
+def test_cross_episode_drift_medium_and_stable():
+    # 掉 0.10 → medium；掉 0.03 → 不报
+    assert fc.cross_episode_drift([("第1集", 0.75), ("第2集", 0.65)])[0]["severity"] == "medium"
+    assert fc.cross_episode_drift([("第1集", 0.75), ("第2集", 0.72)]) == []
+
+
+def test_cross_episode_drift_abs_low_is_high():
+    # 即便掉幅不大，本集均值 < 0.45 也是 high（绝对崩）
+    out = fc.cross_episode_drift([("第1集", 0.50), ("第2集", 0.44)])
+    assert out and out[0]["severity"] == "high" and out[0]["below_abs_low"] is True
+
+
+def test_cross_episode_drift_needs_two_episodes():
+    assert fc.cross_episode_drift([("第1集", 0.7)]) == []
+    assert fc.cross_episode_drift([("第1集", None), ("第2集", 0.4)]) == []
 
 
 def test_band_three_zones():

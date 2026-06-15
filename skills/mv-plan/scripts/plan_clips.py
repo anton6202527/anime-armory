@@ -383,6 +383,9 @@ def main():
         "strategy": strategy,
         "visual_style": visual_style,
         "beatgrid_path": "节拍/beatgrid.json",
+        # 内容快照：下游 gate 用它判定换歌/重算 beatgrid 后 clip_plan 是否过期（git-free 失效检测）。
+        "beatgrid_hash": mv_utils.content_hash(bg_path),
+        "song_hash": mv_utils.content_hash(mv_utils.find_song(root)),
         "clips": clips,
     }
     song_path = mv_utils.find_song(root)

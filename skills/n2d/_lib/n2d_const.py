@@ -42,28 +42,32 @@ COMPLIANCE_STATUS_LIKE_VALUES = (
 
 # ── 重抽原因分类 ────────────────────────────────────────────────────────────
 REDRAW_REASON_ENUM = ("identity_drift", "composition", "action_quality", "glitch", "prompt_adjustment", "other")
+# 重抽原因九类维度（单一真值源）。键名与消费端对齐：dashboard render 的「一致性小计」按
+# (face_consistency/outfit_consistency/scene_drift/style_drift) 求和，n2d-score / SKILL.md 同此命名。
+# 2026-06-15：const 曾漂成另一套键(identity_drift/composition/glitch…)与 render+test+doc 全部脱节，
+# 致「一致性小计」恒为 0、文本归类落不进消费维度；此处恢复为文档化的九类。
 REDRAW_REASON_CATEGORIES = {
-    "face": "脸漂/身份",
-    "outfit": "服装/配色",
-    "scene": "场景/光位",
-    "style": "画风",
-    "prop": "道具/特效",
+    "face_consistency": "脸漂/身份",
+    "outfit_consistency": "服装/配色",
+    "scene_drift": "场景/光位",
+    "style_drift": "画风",
+    "prop_structure": "道具/特效",
     "reference_crop": "参考图裁切",
     "prompt_conflict": "prompt 冲突",
     "temporal": "时序/接缝",
-    "identity_drift": "脸漂/身份",
-    "composition": "构图/景别",
-    "action_quality": "动作质量",
-    "glitch": "画质瑕疵",
-    "prompt_adjustment": "prompt 调整",
     "other": "其他",
 }
+# 自由文本 → 维度：按序首个命中即归类（顺序即优先级），无命中落 other。
+# 顺序上 prop_structure 放在 scene_drift 前——"道具/法宝结构"含"结构"易被场景类误吞。
 REDRAW_REASON_KEYWORDS = (
-    ("identity_drift", ("崩脸", "不像", "脸飘", "衣服错", "人不对", "身份", "identity", "face")),
-    ("composition", ("构图", "景别", "比例", "位置", "遮挡", "composition", "framing")),
-    ("action_quality", ("动作", "僵硬", "穿模", "物理", "崩坏", "action", "motion")),
-    ("glitch", ("闪烁", "噪点", "画质", "坏帧", "glitch", "artifact")),
-    ("prompt_adjustment", ("微调", "加词", "减词", "权重", "prompt")),
+    ("face_consistency", ("崩脸", "不像", "脸飘", "脸漂", "人不对", "换脸", "身份", "identity", "face")),
+    ("outfit_consistency", ("衣服", "服装", "配色", "妆造", "outfit")),
+    ("prop_structure", ("道具", "法宝", "结构", "件数", "特效", "prop")),
+    ("scene_drift", ("场景", "光位", "背景", "环境", "scene")),
+    ("style_drift", ("画风", "风格", "style")),
+    ("temporal", ("接缝", "时序", "闪烁", "跳切", "flicker", "seam", "temporal")),
+    ("reference_crop", ("参考图", "裁切", "crop")),
+    ("prompt_conflict", ("prompt 冲突", "提示词冲突", "词冲突", "prompt conflict")),
 )
 
 # ── 音色一致性契约 ──────────────────────────────────────────────────────────
@@ -157,7 +161,10 @@ ASSET_RERUN_PLAN_KIND = "n2d_asset_rerun_plan"
 BATCH_QUEUE_KIND = "n2d_batch_queue"
 DIFFERENTIATION_CANDIDATES_KIND = "n2d_differentiation_candidates"
 EPISODE_REVIEW_SCORE_KIND = "n2d_episode_review_score"
-GENRE_PERFORMANCE_RECORD_KIND = "n2d_genre_performance_record"
+# ⚠️ 跨线 wire constant：novel-score 端硬写字面量 "genre_performance_record" 匹配本字段、不 import 本常量
+# （见 novel-score/score.py + n2d-feedback/feedback.py 注释）。**不得加 n2d_ 前缀**——加了 novel-score
+# 读不到 n2d 写的题材战绩库，跨线题材先验闭环静默断开。
+GENRE_PERFORMANCE_RECORD_KIND = "genre_performance_record"
 LORA_CARD_KIND = "n2d_lora_card"
 LORA_DATASET_MANIFEST_KIND = "n2d_lora_dataset_manifest"
 LORA_TRAIN_JOB_KIND = "n2d_lora_train_job"

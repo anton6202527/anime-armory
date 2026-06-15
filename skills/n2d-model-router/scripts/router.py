@@ -36,6 +36,10 @@ from n2d_platform_profiles import (  # noqa: E402  视频后端档案单一真�
     video_backend_max_seconds,
 )
 from n2d_settings import load_settings as _load_settings_md  # noqa: E402  _设置.md 解析单一真值源
+try:  # ③ 一角一后端亲和（advisory）：读 identity_registry 找已注册原生视频主体的角色
+    from n2d_registry import load_identity_registry as _load_identity_registry  # noqa: E402
+except Exception:  # pragma: no cover - 布局兜底
+    _load_identity_registry = None  # type: ignore
 
 
 BACKEND_LABELS = VIDEO_BACKEND_LABELS
@@ -300,6 +304,68 @@ def clip_named_character_count(clip: Mapping[str, Any]) -> int:
         if isinstance(val, (list, tuple)):
             return len(val)
     return 0
+
+
+# ── ③ 一角一后端亲和（advisory·warn-only，不改路由）────────────────────────────
+# 治"同一核心角色跨集/跨镜被路由到不同视频后端 → 脸质感漂移"。只对**已注册原生视频主体**
+# （Character ID / face_lock，status registered|ready）的角色生效：注册了原生主体 = 这角色的脸被
+# 该后端锁住了，再被路由到别的后端就是跨集一致性风险。没注册原生主体的角色不产任何告警（零噪音）。
+_NATIVE_VIDEO_NONNATIVE_MODES = {"reference_group", "fallback_reference_group"}
+
+
+def _native_video_backend(form: Mapping[str, Any]) -> str:
+    """form 已注册原生主体的视频后端（mode 非 reference_group 兜底 + status registered/ready）；无则 ''。纯函数。"""
+    adapters = form.get("identity_adapters") if isinstance(form.get("identity_adapters"), Mapping) else {}
+    video = adapters.get("video") if isinstance(adapters.get("video"), Mapping) else {}
+    for backend, cfg in video.items():
+        if not isinstance(cfg, Mapping):
+            continue
+        mode = str(cfg.get("mode") or "").strip()
+        status = str(cfg.get("status") or "").strip()
+        if mode and mode not in _NATIVE_VIDEO_NONNATIVE_MODES and status in ("registered", "ready"):
+            return normalize_video_backend(backend) or str(backend)
+    return ""
+
+
+def build_backend_affinity(registry: Optional[Mapping[str, Any]]) -> List[Dict[str, Any]]:
+    """角色 → 其跨集应锁定的视频后端（仅取已注册原生主体的角色）。返回 [{id, name, aliases, backend}]。
+    纯函数·可测。advisory 用——这条只产告警，绝不改路由（裁决策略：冲突仅告警）。"""
+    out: List[Dict[str, Any]] = []
+    if not isinstance(registry, Mapping):
+        return out
+    for ch in registry.get("characters") or []:
+        if not isinstance(ch, Mapping):
+            continue
+        backend = ""
+        for f in ch.get("forms") or []:
+            if isinstance(f, Mapping):
+                backend = _native_video_backend(f)
+                if backend:
+                    break
+        if not backend:
+            continue  # 无原生视频主体 = 无后端可锁 → 不产冲突噪音
+        name = str(ch.get("name") or "").strip()
+        aliases = {p.strip() for p in re.split(r"[/／、,，|\s]+", name) if len(p.strip()) >= 2}
+        out.append({"id": str(ch.get("id") or "").strip(), "name": name, "aliases": aliases, "backend": backend})
+    return out
+
+
+def character_backend_conflicts(clip: Mapping[str, Any], primary: str,
+                                affinity: Optional[List[Dict[str, Any]]]) -> List[Dict[str, str]]:
+    """本镜命中的原生主体角色里，亲和后端 != 本镜 primary 的冲突明细（advisory）。纯函数·可测。"""
+    if not affinity:
+        return []
+    text = _clip_text(clip)
+    ids = set(re.findall(r"CHAR_[A-Za-z0-9_]+", text))
+    primary_n = normalize_video_backend(primary) or str(primary or "")
+    out: List[Dict[str, str]] = []
+    for a in affinity:
+        present = (a.get("id") and a["id"] in ids) or any(al in text for al in a.get("aliases") or ())
+        if present and a.get("backend") and a["backend"] != primary_n:
+            out.append({"character": a.get("name") or a.get("id") or "?",
+                        "character_id": a.get("id") or "",
+                        "prefers_backend": a["backend"], "routed_backend": primary_n})
+    return out
 
 
 def clip_multi_person(clip: Mapping[str, Any]) -> bool:
@@ -913,6 +979,7 @@ def route_clip(
     av_mode: str = "voice_first",
     fixed_fallback_backends: Optional[List[str]] = None,
     failure_counts: Optional[Dict[str, int]] = None,
+    backend_affinity: Optional[List[Dict[str, Any]]] = None,
 ) -> Dict[str, Any]:
     shot_type = infer_shot_type(clip)
     route = choose_route(
@@ -928,6 +995,10 @@ def route_clip(
     primary = normalize_backend(route["primary_backend"], default_backend)
     clip_id = make_clip_id(clip, index)
     risk_flags = risk_flags_for_clip(clip, shot_type, primary)
+    # ③ 一角一后端亲和（advisory）：本镜核心角色的原生主体后端 != 本镜 primary → 只标告警，不改路由
+    backend_conflicts = character_backend_conflicts(clip, primary, backend_affinity)
+    if backend_conflicts:
+        risk_flags = sorted(set(risk_flags) | {"character_backend_conflict"})
     if route.get("native_audio_policy") == "native_speech":
         risk_flags = sorted(set(risk_flags) | {"native_speech"})
     seam_relay = seam_relay_plan(clip, primary, route["fallback_backends"])
@@ -961,6 +1032,7 @@ def route_clip(
         "rationale": rationale,
         "prompt_requirements": prompt_requirements,
         "degrade_plan": route["degrade_plan"],
+        "character_backend_conflicts": backend_conflicts,
     }
     fc = (failure_counts or {}).get(clip_id, 0)
     if fc:  # E4：本镜 identity 反复失败 → 升锁（含固定后端模式只收紧不换厂）
@@ -989,6 +1061,14 @@ def route_episode(
     if not isinstance(clips, list):
         raise ValueError("storyboard.json clips must be a list")
     failure_counts = load_identity_failure_counts(root, episode)  # E4：identity 反复失败镜升锁
+    # ③ 一角一后端亲和（advisory）：读 identity_registry 找已注册原生视频主体的角色，逐镜对账 primary
+    registry = {}
+    if _load_identity_registry is not None:
+        try:
+            registry = _load_identity_registry(str(root)) or {}
+        except Exception:
+            registry = {}
+    backend_affinity = build_backend_affinity(registry)
     plan = {
         "kind": VIDEO_MODEL_ROUTES_KIND,
         "version": 1,
@@ -1011,6 +1091,7 @@ def route_episode(
                 av_mode=av_mode,
                 fixed_fallback_backends=fixed_fallback_backends,
                 failure_counts=failure_counts,
+                backend_affinity=backend_affinity,
             )
             for i, clip in enumerate(clips, 1)
         ],

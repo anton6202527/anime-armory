@@ -37,10 +37,11 @@ description: 漫剧质检 + 流程自审（n2d 的 QA 环节，不生产内容�
 - **阶段 gate（确定性，生产前跑）**：正式生产入口统一用 `python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage image_preflight|video_preflight|image|video|compose|review`。默认在正式调用后端前跑 `image_preflight` / `video_preflight`，生成落档后跑 `image` / `video` 回验。它会调用底层 `scripts/gate.py --json`，把高风险流程规则脚本化检查并把 `block/warn/info`、回流 stage、重跑范围写进 `生产数据/`，同时外发 `gate_findings_<stage>_第N集.json`（kind=`n2d_consistency_findings`，可直接交给 `n2d-batch --from-consistency-findings`）；`block` 退出码 1，先修再进入该阶段。底层 `scripts/gate.py --json` 只作调试/机器消费入口，不作为生产推荐入口。检查范围包括：合规包、`storyboard.json` continuity、尾帧、prompt 检查段、共享定妆、资产身份注册层、占位配音、clip 原生音轨/原生音画 opt-in/时长、基础视觉风格契约、复杂镜头模板、Motion Control、生图 AI 一致性、**P0 语义谱系 / P1 状态百科前置**；`review` gate 另跑 **P2 多模态漂移**。
   - **输入首帧脸一致性硬闸**：`video_preflight`/`video` 读取 `生产数据/image_qc/<ep>/image_qc_<ep>.json`，不重跑像素引擎但严格消费证据。缺 image_qc、旧版 QC 缺 `face_reference_coverage`、`qc_environment.precision_level!=full`、`summary.hard_blocks>0`、`face_reference_coverage.missing>0`、PNG 晚于 QC，全部 BLOCK 回 `image`。每张已落档角色 PNG 必须逐张对定妆/身份主参考过 full 精度脸部比对；这是图生视频前置铁律，不能降级成 WARN。
 - **QA 入账铁律（P0）**：每次跑 gate 或作品质检，都要把 QA 结果写入 `n2d-dashboard`。生产前 gate 不再先跑裸 `gate.py` 再补记账；直接用上面的 `dashboard.py gate` 单入口。人判报告里的新增阻断用 `record --stage review --event qa --qa-sev block|warn|info` 补录；否则仪表盘无法统计 QA 阻断率。
-- **自动审片评分（P2）**：作品质检完成后跑 `python3 skills/n2d-score/scripts/score.py <作品根> 第N集 --run-checks --threshold 85`，把语义继承、状态百科、多模态漂移、角色一致性、服装一致性、场景一致性、字幕正确性、音画同步、音色一致性、节奏密度、风格一致性汇总成机器分。`--run-checks` 还会缓存 `score_inputs/第N集_visual.json` 与 `score_inputs/第N集_voice_print.json`，接入图像相似度、字幕 OCR、成片/配音/SRT/storyboard 时长对账、口型风险/检测报告、成片节奏密度和声纹机检，让机器分更贴近观感。若用户要求自动返工或批量回流，加 `--enqueue-low`，低分维度会转成 `n2d-batch` 的 rerun 队列。评分后需要人审时，跑 `python3 skills/n2d-review-ui/scripts/review_ui.py <作品根> 第N集 --write --markdown`，把机器分、QA flag、首尾帧、clip、接缝和定妆参考放进可视化画布。
+- **自动审片评分（P2）**：作品质检完成后跑 `python3 skills/n2d-score/scripts/score.py <作品根> 第N集 --run-checks --threshold 85`，把语义继承、状态百科、多模态漂移、角色 DNA 一致性（脸/发型/服装/配饰）、场景一致性、字幕正确性、音画同步、音色一致性、节奏密度、风格一致性汇总成机器分。`--run-checks` 还会缓存 `score_inputs/第N集_visual.json` 与 `score_inputs/第N集_voice_print.json`，接入图像相似度、字幕 OCR、成片/配音/SRT/storyboard 时长对账、口型风险/检测报告、成片节奏密度和声纹机检，让机器分更贴近观感。若用户要求自动返工或批量回流，加 `--enqueue-low`，低分维度会转成 `n2d-batch` 的 rerun 队列。评分后需要人审时，跑 `python3 skills/n2d-review-ui/scripts/review_ui.py <作品根> 第N集 --write --markdown`，把机器分、QA flag、首尾帧、clip、接缝和定妆参考放进可视化画布。
 - **人判（LLM 判断题）**：机检覆盖不了的语义维度——崩脸/场景漂移、**clip 接缝跳切/闪烁**、构图景别（对 `n2d-script/references/分镜语法.md`）、节奏体感（对 `n2d/references/导演节奏.md`）、口型、原生音频双人声。逐维见 `references/checklist.md`。
-  - **崩脸用图判**：把该集 `出图/第N集/图片/镜头*.png` 与 `出图/共享/图片/定妆_<角色>.png` **并排读图比对**（脸型/发型/服色/配饰/锚点特征），漂了就标。装了 `insightface` 时跑 `scripts/face_consistency.py <作品根> 第N集` 给余弦相似度分——**不写死阈值**，而是**自标定 flag-band**：用本作定妆组内部互相余弦（同角色 正脸↔侧脸/半身 本就该高度相似）当"同一人下限"地板，每镜低于 地板−margin 标 🔴、地板带标 🟡（写死 0.45 对风格化脸要么误杀要么放过；业界 ArcFace 同人≈0.5–0.68 且因画风而异）。注意：进入视频前不只靠审片人“看过”，必须先由 `image_qc.face_reference_coverage` 证明每张已落档角色 PNG 都有 full 精度定妆/身份主参考比对记录；缺库、降级、warn/noface、缺比对行都回 `n2d-image`。
+  - **角色 DNA 用图判**：先读 `设定库/角色圣经.md`（人读总入口）和 `出图/共享/identity_registry.json`（机器真值），再把该集 `出图/第N集/图片/镜头*.png` 与 `出图/共享/图片/定妆_<角色>.png` / 半身 / 侧背 / 表情参考 **并排读图比对**，按四层判：脸（脸型/五官/疤鳞痣）、发型（发色/发髻/披发轮廓/发饰）、服装（款式/主色/剪影）、配饰（发簪/腰牌/钥匙/护甲等）；气质/动作习惯按角色圣经做人审表演层。任一层漂到观众认人断层都标问题。装了 `insightface` 时跑 `scripts/face_consistency.py <作品根> 第N集` 给脸部余弦相似度分——**不写死阈值**，而是**自标定 flag-band**：用本作定妆组内部互相余弦（同角色 正脸↔侧脸/半身 本就该高度相似）当"同一人下限"地板，每镜低于 地板−margin 标 🔴、地板带标 🟡（写死 0.45 对风格化脸要么误杀要么放过；业界 ArcFace 同人≈0.5–0.68 且因画风而异）。注意：进入视频前不只靠审片人“看过”，必须先由 `image_qc.face_reference_coverage` 证明每张已落档角色 PNG 都有 full 精度定妆/身份主参考比对记录；缺库、降级、warn/noface、缺比对行都回 `n2d-image`。
   - **服装/配色漂移用机检（脸之外的漂）**：脸锁住不等于服装锁住——2026 公认"夹克色第 4 镜就漂"。装 Pillow 时跑 `scripts/outfit_consistency.py <作品根> 第N集`：对人物镜取**加权色相直方图**（饱和度×明度加权，压低灰暗背景），与该角色定妆组（优先半身）比，同样**自标定 flag-band**（定妆组内部直方图余弦设地板）。缺库由人判并排比服色/发型。
+  - **发型/发色漂移用机检（脸和服装之外的漂）**：装 Pillow 时跑 `scripts/hair_consistency.py <作品根> 第N集`，对头部区域取发色 + 发型轮廓复合指纹，专抓披发变盘发、长发变短发、黑发漂成白/红发、发饰丢失这类“脸过了但角色 DNA 换了”的问题。缺库由人判并排比发型和发饰。
   - **片内时序用机检（单 clip 内身份漂移 + flicker）**：n2d-review 只查首帧 + 接缝，漏查 clip 内部"几秒后脸渐变/发际线闪"。装 ffmpeg(+insightface) 时跑 `scripts/temporal_consistency.py <作品根> 第N集`：每条 clip **按时长自适应抽帧**（≈1帧/秒，近景镜 ×1.5 加密，floor=6·封顶24——固定 6 帧对 10–60s 长镜太稀，片中段渐变脸漂会从采样缝漏过，2026 各家 long-range 时序仍是软肋），量 ① 相邻帧人脸余弦最小值（片内身份漂移）② 相邻帧亮度绝对差均值=flicker/TCI，超阈标 🔴/🟡。对标行业 scene-stability 记分卡；缺库由人判抽帧看。
   - **定妆主参考质量门（N3·锚点不能脏）**：锚点一脏下游每镜继承错。装 insightface+cv2 跑 `scripts/face_consistency.py <作品根> 第N集 --audit-anchor`：每个 `定妆_<角色>.png` 主参考须**恰好 1 张清晰、够大的正脸**（0 张/多张=🔴，脸太小=🟡）——出图共享先行闸门前就拦，别让脏锚点污染全集。
   - **糊/低质无参考质检（N4）**：装 Pillow 跑 `scripts/quality_check.py <作品根> 第N集`：用 **Laplacian 方差**测清晰度，**自标定本集中位数**（绝对阈值因画风漂），显著低于中位数=相对糊（关键镜更严），标 🔴/🟡。与一致性正交，同属「崩脸/糊」族。
@@ -72,7 +73,9 @@ description: 漫剧质检 + 流程自审（n2d 的 QA 环节，不生产内容�
 
 > **生图 AI 不一致单独提级**：生产前发现设置/prompt 口径混用多个官方/已登录后端，或出现 `同视频AI` 含糊口径、第三方逆向/web 自动化出图口径，按 🔴 阻断处理；成片后才发现，按画面结果定级，但报告必须写清"疑似因生图后端混用造成一致性税"，修法是回 `n2d-image` 统一到同一个官方后端并重出受影响定妆/分镜。
 
-> **双人同框 × 单图参考后端 硬阻断（脸漂真凶工程化）**：`image_preflight` gate 在「生图AI=无原生主体锁的单图参考后端（persistent_subject=False，如 Codex/OpenAI/Dreamina/Nano Banana）」时，对任一 ≥2 具名角色同框、且未声明多主体策略（多参考/主体库/角色ID/Seedream/Nano Banana）也未登记「分别出图+合成」降级的镜头 **升 🔴 BLOCK**（单图只锁一个主体、第二人必随机重画）。有原生主体能力的后端（Seedream/可灵/Sora）按 🟡 WARN，不过度阻断。逃生门：本镜显式登记「分别出图+合成」降级即放行。能力判定走契约 `persistent_subject`，不 hardcode 后端名。
+> **双人同框 × 无持久主体后端 硬阻断（脸漂真凶工程化）**：`image_preflight` gate 在「生图AI=无原生主体锁的后端（persistent_subject=False，如 Codex/OpenAI/Dreamina/Nano/Gemini）」时，对任一 ≥2 具名角色同框，若只写普通多参考、多图参考或锚点句，一律 **升 🔴 BLOCK**：普通多参考不是持久角色 ID，每镜仍会重新解脸；多人同框再缺硬位置/主体约束时尤其容易串脸。逃生门只有两类：① 本镜显式登记「分别出图+合成/单人分层出图」降级；② 项目统一切到支持原生主体/角色 ID 的官方后端后重跑 gate。Seedream/可灵/Sora 等有原生主体能力的后端按 🟡 WARN 提醒写主体 ID / 区域绑定 / blocking，不对合法参考图兜底过度阻断。能力判定走契约 `persistent_subject`，不 hardcode 后端名。`若多主体仍不稳再分别出图` 这类条件式兜底不算降级登记；多人同框若出现 `参考图①/reference image 1` 泛化身份锁，按 Codex 锁脸 BLOCK，因为它会把第一张参考误当成所有主体身份锚。
+
+> **Codex 近景/特效锁脸硬阻断**：同一套 `image_preflight` gate 还会对无持久主体后端硬卡两类高风险镜：① 近景/反打/大表情角色镜缺同源脸部特写或 expressions 表情库参考；② 暗光、黑烟、烟雾、VFX 叠脸时缺「眼鼻嘴三角区清晰 / 特效不遮脸 / 不重画五官」约束。修法回 `n2d-image` 补逐镜 prompt，而不是等出完再靠审片发现。
 
 **容错铁律**：只报"真问题"。轻微主观偏好不入报告（等同 n2d 出图的「筛选宽容铁律」、novel-review 的容错铁律）——否则噪声淹没硬伤。
 
@@ -101,7 +104,7 @@ description: 漫剧质检 + 流程自审（n2d 的 QA 环节，不生产内容�
 - 各轴 SOTA vs n2d 默认 vs 升级触发（防过期快照；report-only 只给刷新建议，用户确认后再改）：`n2d/references/模型矩阵.md`
 - 定妆变更影响扫描（崩脸/换装重抽后，列出引用该资产的下游镜头一并重出）：`n2d-image/scripts/asset_impact.py`
 - 正向标准（镜头空间 / 时间留存）：`n2d-script/references/分镜语法.md` + `n2d/references/导演节奏.md`
-- 一致性全链：`n2d-image/references/角色一致性checklist.md`
+- 角色 DNA 全链：`n2d-image/references/角色一致性checklist.md`
 - 角色身份闭环 + 跨集漂移报表：`n2d-identity/SKILL.md`
 - 翻车修正沉淀：`n2d/Q&A.md`
 

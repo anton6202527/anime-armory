@@ -1,4 +1,5 @@
 import array
+import hashlib
 import importlib.util
 import json
 import math
@@ -46,6 +47,16 @@ def find_song(root):
 
 def relpath(root, path):
     return os.path.relpath(path, root).replace(os.sep, "/")
+
+def content_hash(path):
+    """文件内容短 hash（git-free 失效检测：beatgrid/song 换了就变）。缺文件返回 ''。"""
+    if not path or not os.path.exists(path):
+        return ""
+    h = hashlib.sha1()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(65536), b""):
+            h.update(chunk)
+    return h.hexdigest()[:16]
 
 def wav_duration(path):
     if not os.path.exists(path):

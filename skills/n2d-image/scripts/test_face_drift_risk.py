@@ -164,3 +164,72 @@ def test_run_writes_reports(tmp_path: Path) -> None:
     assert Path(rep["json_path"]).is_file()
     assert Path(rep["markdown_path"]).is_file()
     assert "脸漂风险" in Path(rep["markdown_path"]).read_text(encoding="utf-8")
+
+
+# ── ② 实测漂移回灌：identity_drift_report.json → block ──────────────────────────
+
+def test_measured_block_reason_composes() -> None:
+    reason = fdr.measured_block_reason(
+        {"embedding_drift_high": 1, "spans": "第1集→第2集(掉0.2)", "total_block": 0})
+    assert "质心漂移 high×1" in reason and "第1集→第2集" in reason
+    reason2 = fdr.measured_block_reason(
+        {"embedding_drift_high": 0, "total_block": 3, "first_bad_episode": "第2集"})
+    assert "block 级脸漂 3 镜" in reason2 and "first=第2集" in reason2
+
+
+def test_measured_drift_block_embedding_high() -> None:
+    drift = {"available": True, "characters": {}, "embedding_drift": {
+        "沈念": [{"episode_from": "第1集", "episode_to": "第2集", "drop": 0.2, "severity": "high"}]}}
+    hit = fdr.measured_drift_block(drift, {"沈念", "沈念_常态"}, "沈念 / 林婉儿")
+    assert hit and hit["embedding_drift_high"] == 1
+    # warn 级（非 high）不命中
+    drift_warn = {"available": True, "characters": {},
+                  "embedding_drift": {"沈念": [{"severity": "medium"}]}}
+    assert fdr.measured_drift_block(drift_warn, {"沈念"}, "沈念") is None
+
+
+def test_measured_drift_block_total_block_and_alias_match() -> None:
+    drift = {"available": True, "embedding_drift": {},
+             "characters": {"柳娘子": {"total_block": 2, "first_bad_episode": "第3集"}}}
+    # alias 对号（drift char == name）
+    assert fdr.measured_drift_block(drift, {"柳娘子"}, "柳娘子")["total_block"] == 2
+    # 对不上号 → None（别人的漂移不算到本角色头上）
+    assert fdr.measured_drift_block(drift, {"沈念"}, "沈念") is None
+
+
+def test_measured_drift_block_respects_available_flag() -> None:
+    # available=False（无 insightface / 跳过机检）→ 一律 None，不假报
+    drift = {"available": False, "embedding_drift": {
+        "沈念": [{"severity": "high"}]}, "characters": {}}
+    assert fdr.measured_drift_block(drift, {"沈念"}, "沈念") is None
+
+
+def _write_drift_report(root: Path, payload: dict) -> None:
+    out = root / "生产数据"
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "identity_drift_report.json").write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+
+
+def test_analyze_escalates_to_block_on_measured_drift(tmp_path: Path) -> None:
+    root = _make_project(tmp_path)
+    _write_drift_report(root, {"available": True, "characters": {}, "embedding_drift": {
+        "沈念": [{"episode_from": "第1集", "episode_to": "第2集", "drop": 0.2, "severity": "high"}]}})
+    rep = fdr.analyze(root, "第1集")
+    by = {r["character_id"]: r for r in rep["characters"]}
+    # 沈念实测已漂 → block（盖过原本的 high 预测）
+    assert by["CHAR_01"]["band"] == "block"
+    assert by["CHAR_01"].get("measured_drift")
+    assert rep["block"] == 1 and rep["blocking"] is True
+    assert rep["prior_drift_available"] is True
+    # block 排在最前
+    assert rep["characters"][0]["character_id"] == "CHAR_01"
+    # 第一条建议是实测漂移的硬处置
+    assert "实测" in by["CHAR_01"]["suggestions"][0]
+
+
+def test_analyze_no_drift_report_stays_predictive(tmp_path: Path) -> None:
+    root = _make_project(tmp_path)  # 不写 identity_drift_report.json
+    rep = fdr.analyze(root, "第1集")
+    assert rep["block"] == 0 and rep["blocking"] is False
+    assert rep["prior_drift_available"] is False
+    assert {r["character_id"]: r for r in rep["characters"]}["CHAR_01"]["band"] == "high"

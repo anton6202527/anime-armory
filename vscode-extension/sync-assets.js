@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-// Copy the REAL skills/ + entry docs from the repo into ./assets so they ship
+// Copy the REAL skills/ + tools/ + entry docs from the repo into ./assets so they ship
 // INSIDE the .vsix — making the extension self-contained (install on any VS Code,
 // no anime-armory source checkout needed). Run automatically on `vsce package` via
 // the `vscode:prepublish` hook; run manually with `npm run sync-assets`.
 //
 // Works/创作区 live next to the extension source, not under assets/. The packaged
-// default keeps an independent work root: 写小说 empty, 制漫剧 source-novel only.
+// default keeps an independent work root: 制漫剧 source-novel only (n2d line).
 const fs = require('fs');
 const path = require('path');
 
@@ -18,10 +18,19 @@ const filter = (src) => {
   if (SKIP_NAMES.has(b)) return false;
   if (b.endsWith('.pyc') || b.endsWith('.vsix')) return false;
   if (fs.lstatSync(src).isSymbolicLink()) return false; // never bundle dangling links
-  // /tov: only bundle the novel + n2d lines (+ shared deps). Drop 写歌/制MV/拍广告:
-  // skip the song-*/mv-*/ad-* skill dirs at the skills/ root.
+  // /tov: bundle only the 写小说(novel-*) + 制漫剧(n2d-*) lines (+ shared deps).
+  // skip the other lines' skill dirs at the skills/ root: 写歌(song-*) / 制MV(mv-*) / 拍广告(ad-*).
   if (path.dirname(src) === path.join(repo, 'skills') && /^(song|mv|ad)(-|$)/.test(b)) return false;
   return true;
+};
+
+const count = (dir) => {
+  let n = 0;
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (e.isDirectory()) n += count(path.join(dir, e.name));
+    else n += 1;
+  }
+  return n;
 };
 
 function main() {
@@ -35,7 +44,16 @@ function main() {
   // 1) the core asset: skills/
   fs.cpSync(path.join(repo, 'skills'), path.join(assets, 'skills'), { recursive: true, filter });
 
-  // 2) public usage docs (flat in assets/). This is the extension README, not
+  // 2) repo-level maintenance tools
+  const cleanupTool = path.join(repo, 'tools', 'shared-cleanup');
+  let toolFiles = 0;
+  if (fs.existsSync(cleanupTool)) {
+    fs.mkdirSync(path.join(assets, 'tools'), { recursive: true });
+    fs.cpSync(cleanupTool, path.join(assets, 'tools', 'shared-cleanup'), { recursive: true, filter });
+    toolFiles = count(path.join(assets, 'tools', 'shared-cleanup'));
+  }
+
+  // 3) public usage docs (flat in assets/). This is the extension README, not
   // the repo overview, so the sidebar stays focused on using the workflow.
   fs.copyFileSync(path.join(__dirname, 'README.md'), path.join(assets, 'README.md'));
 
@@ -44,15 +62,7 @@ function main() {
     path.join(assets, '_synced_at.txt'),
     new Date().toISOString() + '\n', 'utf8');
 
-  const count = (dir) => {
-    let n = 0;
-    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
-      if (e.isDirectory()) n += count(path.join(dir, e.name));
-      else n += 1;
-    }
-    return n;
-  };
-  console.log(`[sync-assets] bundled ${count(path.join(assets, 'skills'))} skill files + docs → assets/`);
+  console.log(`[sync-assets] bundled ${count(path.join(assets, 'skills'))} skill files + ${toolFiles} tool files + docs → assets/`);
 }
 
 main();

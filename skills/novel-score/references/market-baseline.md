@@ -30,3 +30,4 @@ python3 skills/novel-score/scripts/collect_market_baseline.py "<作品根>/评�
 - 基准建议有效期 14-28 天；超过 `expires_after_days` 重新采集。`score.py` 默认会硬性检查缺失/过期基准，只有离线测试或人工明确豁免才加 `--allow-stale-baseline`。该豁免必须写入 `score_report.waivers[]` 和 `审稿/waiver_log.jsonl`，且 QA gate 会把 `market_baseline.freshness.blocking=true` 作为 `SCORE-BASELINE` 处理；有豁免时只降为 warning。
 - score 判单本作品；review/self-audit 判产线升级。两者可共用同一份基准，但不要复用旧报告替代重新核验。
 - 抓取失败不是趋势证据，只能作为“该来源本次不可用”的记录。
+- **拥挤度/同质化要单独留痕**（不只记"热不热"，还要记"挤不挤"）：采集时顺手记同题材占榜比例、雷同套路扎堆程度，写进 baseline 的 `signals`（或 `manual_evidence` 的 `summary`）。`rubric.md` 的「题材红海/同质化饱和」扣分项据此判——2025 下半年热门 IP 改编均 ROI 已跌破 1:1.5 盈亏线，正是同质化所致；只看热度不看拥挤会把红海题材当成机会。

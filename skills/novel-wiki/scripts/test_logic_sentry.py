@@ -107,3 +107,57 @@ def test_rebuild_clears_stale_auto_death(tmp_path):
 def test_clean_chapter_no_alerts():
     wiki = {"王敦": {"category": "character", "status": "active"}}
     assert logic_sentry.scan_chapter(wiki, "王敦继续赶路。", 10) == []
+
+
+# ── NG1：数值/事实漂移（年龄）─────────────────────────────────────
+def test_cjk_to_int():
+    cases = {"17": 17, "十七": 17, "二十": 20, "三十五": 35, "一百": 100,
+             "十": 10, "廿": 20, "九": 9, "二十八": 28}
+    for tok, exp in cases.items():
+        assert logic_sentry.cjk_to_int(tok) == exp, f"{tok} -> {logic_sentry.cjk_to_int(tok)}"
+    assert logic_sentry.cjk_to_int("abc") is None
+
+
+def test_load_numeric_anchors(tmp_path):
+    proj = tmp_path / "书"
+    (proj / "设定").mkdir(parents=True)
+    (proj / "设定" / "角色卡.md").write_text(
+        "# 角色卡\n\n## 沈念\n年龄：18\n身份：贵妃\n\n## 王敦\n年方十七\n", encoding="utf-8")
+    anchors = logic_sentry.load_numeric_anchors(str(proj))
+    assert anchors == {"沈念": 18, "王敦": 17}
+
+
+def test_numeric_drift_flagged():
+    a = {"沈念": 18}
+    alerts = logic_sentry.scan_numeric_drift(a, "沈念今年十七岁了，依旧美貌。", 5)
+    assert alerts and alerts[0]["type"] == "numeric_drift_age"
+    assert alerts[0]["canonical_age"] == 18 and alerts[0]["found_age"] == 17
+
+
+def test_numeric_drift_timeskip_exempt():
+    a = {"沈念": 18}
+    assert logic_sentry.scan_numeric_drift(a, "多年后，沈念已二十五岁。", 9) == []
+
+
+def test_numeric_drift_consistent_no_flag():
+    a = {"沈念": 18}
+    assert logic_sentry.scan_numeric_drift(a, "沈念十八岁，正值芳华。", 3) == []
+
+
+def test_numeric_drift_other_character_age_not_misattributed():
+    # 别的角色（宫女）的年龄在锚点角色名邻句出现，不得算到锚点角色头上。
+    a = {"沈念": 18}
+    assert logic_sentry.scan_numeric_drift(a, "沈念走进大殿。许多宫女不过十五岁。", 3) == []
+
+
+def test_numeric_drift_via_scan_chapter(tmp_path):
+    # 端到端：scan_chapter 接 numeric_anchors 透传。
+    wiki = {"沈念": {"category": "character", "status": "active"}}
+    alerts = logic_sentry.scan_chapter(
+        wiki, "沈念年方十六，却已掌权。", 7, numeric_anchors={"沈念": 18})
+    assert any(a["type"] == "numeric_drift_age" for a in alerts)
+
+
+def test_no_anchors_no_numeric_alerts():
+    # 无年龄锚点（角色卡没声明）→ 优雅跳过，不臆造。
+    assert logic_sentry.scan_numeric_drift({}, "沈念今年十七岁。", 5) == []
