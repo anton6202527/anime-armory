@@ -147,7 +147,10 @@ def load_shared_sections(root: Path) -> List[Target]:
 
 def shared_aliases(title: str, body: str, rel_path: str) -> set:
     aliases = {Path(rel_path).stem, Path(rel_path).name}
-    ids = re.findall(r"`((?:CHAR|LOC|PROP|OUTFIT|VFX)_[A-Za-z0-9_]+)`", title + "\n" + body)
+    # The section title owns the shared target identity.  Body text may mention
+    # related assets, such as VFX_01 in a character form, but those references
+    # must not become selectable aliases for this target.
+    ids = re.findall(r"`((?:CHAR|LOC|PROP|OUTFIT|VFX)_[A-Za-z0-9_]+)`", title)
     aliases.update(ids)
     if "CHAR_01" in aliases and "常态" in title:
         aliases.add("CHAR_01/常态")
