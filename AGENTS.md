@@ -20,7 +20,6 @@
 
 | 用户想做 | 入口 skill（总调度，会再分诊到子 skill） |
 |---|---|
-| 写小说、导入源书、扩写/改写/续写/评分/审稿 | **`novel`**（分诊到 novel-create/fetch/rewrite/review/score 等） |
 | 把小说做成 AI 漫剧/短剧（分镜/配音/出图/出视频/合成） | **`n2d`**（分诊到 n2d-script/voice/image/video/compose） |
 | 写歌、改词、作曲、多版挑版、翻唱/换声、审歌 | **`song`**（分诊到 song-lyrics/compose/cover/review 等） |
 | 给歌曲做 MV、卡点、出图出视频、卡拉 OK 字幕、合成 | **`mv`**（分诊到 mv-script/beat/plan/image/video/compose 等） |
@@ -32,7 +31,7 @@
 | 审计各系列是否仍独立、是否误引公共层/别线代码 | **`tools/independence-audit`**（静态扫描；代码级跨线依赖会失败） |
 | 刷新选择点候选（模型/后端清单是否过期）| 本线 **`skills/<line>/_lib/refresh.py`**（仅 n2d/ad 有候选源；机检快照新鲜度 → 实时搜索核验 → 改候选 + bump 采集日期 + 落 provenance；守各线策略差异不合并） |
 
-> 本仓库包含 **novel / n2d / song / mv / ad** 五条并列创作生产线。每条线都必须自包含、可单独分发：本线脚本只 import 本线 `_lib` 或本线 craft 工具，不依赖 `skills/common/`，也不 import 其他系列实现。跨线只允许**可选文件/数据交接**，例如 novel 导出 n2d 源书、song 交成品歌给 mv、n2d-feedback 写题材战绩 JSONL 供 novel-score 读取；交接缺失时必须优雅降级，不能让本线主流程跑不起来。
+> 本仓库包含 **n2d / song / mv / ad** 四条并列创作生产线。每条线都必须自包含、可单独分发：本线脚本只 import 本线 `_lib` 或本线 craft 工具，不依赖 `skills/common/`，也不 import 其他系列实现。跨线只允许**可选文件/数据交接**，例如 song 交成品歌给 mv；交接缺失时必须优雅降级，不能让本线主流程跑不起来。
 
 ## 必须遵守的项目约定
 

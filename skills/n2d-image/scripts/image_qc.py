@@ -1040,19 +1040,43 @@ def closeup_shot_nums(root: Path, ep: str) -> set:
     return out
 
 
+def multi_person_shot_nums(root: Path, ep: str) -> set:
+    """storyboard.json 里同框 ≥2 具名角色的镜号集合（驱动「降级精度多人同框铁律」A）。
+
+    降级精度下 detect_face_swaps（多人串脸检测）整组失效——次要角色脸无人核验。读不到→空集。"""
+    out: set = set()
+    try:
+        data = json.loads((Path(root) / "脚本" / ep / "storyboard.json").read_text(encoding="utf-8"))
+    except Exception:
+        return out
+    for clip in (data.get("clips") or data.get("shots") or []):
+        if not isinstance(clip, dict):
+            continue
+        m = _REGEN_CLIP_RE.search(str(clip.get("id") or clip.get("clip") or clip.get("shot") or ""))
+        if not m:
+            continue
+        cids = {str(c) for c in (clip.get("character_ids") or []) if c}
+        if len(cids) >= 2:
+            out.add(int(m.group(1)))
+    return out
+
+
 def annotate_degraded_closeups(payload: Dict[str, Any], root: Path, ep: str) -> None:
-    """降级精度近景铁律：insightface 缺席时崩脸机检降到 Pillow（只验图损坏/分辨率，不验真脸相似度）。
-    近景/特写/反打镜在降级下放行 = 脸是否同人无人核验——给这些 face shot 打 `degraded_face` + `closeup`，
-    summarize / to_findings 据此把「降级近景」升为 hard block（普通景别仍只 review，不误杀远景）。"""
+    """降级精度近景/多人同框铁律：insightface 缺席时崩脸机检降到 Pillow（只验图损坏/分辨率，不验真脸相似度）。
+    ① 近景/特写/反打镜在降级下放行 = 脸是否同人无人核验；② 多人同框在降级下 detect_face_swaps 整组失效=
+    次要角色脸无人核验。给这两类 face shot 打 `degraded_face` + `closeup`/`multi_person`，
+    summarize / to_findings 据此升为 hard block（普通单人景别仍只 review，不误杀远景）。"""
     face = (payload.get("checks") or {}).get("face") or {}
     if face.get("mode") not in FACE_DEGRADED_MODES:
         return
     closeups = closeup_shot_nums(root, ep)
+    multi = multi_person_shot_nums(root, ep)
     for s in face.get("shots", []):
         m = _REGEN_CLIP_RE.search(str(s.get("png") or ""))
         idx = int(m.group(1)) if m else None
         s["degraded_face"] = True
         s["closeup"] = bool(idx is not None and idx in closeups)
+        s["multi_person"] = bool(idx is not None and idx in multi)
 
 
 def _degraded_closeup_face_shots(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -1060,6 +1084,22 @@ def _degraded_closeup_face_shots(payload: Dict[str, Any]) -> List[Dict[str, Any]
     face = (payload.get("checks") or {}).get("face") or {}
     return [s for s in face.get("shots", [])
             if s.get("degraded_face") and s.get("closeup") and s.get("verdict") != "block"]
+
+
+def _degraded_multi_person_face_shots(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """降级精度下、多人同框、非近景（近景已被 closeup 规则覆盖，避免重复计）、且未单独 block 的 face shot。
+
+    这些是 A 补的洞：双人/多人中景在降级精度下既不触发近景铁律、又没 embedding 做串脸检测，
+    次要角色脸完全无验证。比照近景处理：不 auto-pass，升 hard、落人审队列。"""
+    face = (payload.get("checks") or {}).get("face") or {}
+    return [s for s in face.get("shots", [])
+            if s.get("degraded_face") and s.get("multi_person") and not s.get("closeup")
+            and s.get("verdict") != "block"]
+
+
+def _degraded_unverifiable_face_shots(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """降级精度下无法验同人的 face shot 合集（近景 ∪ 多人同框），供人审队列用。"""
+    return _degraded_closeup_face_shots(payload) + _degraded_multi_person_face_shots(payload)
 
 
 # ── 状态账本启发式（advisory）：把「这剧状态简不简单、要不要强制 visual_state_ledger」从人脑
@@ -1117,7 +1157,7 @@ def face_review_targets(payload: Dict[str, Any], root: Path, ep: str) -> List[Di
     每项 {shot, png, png_abs, char, ref, stitch}：ref=该角色定妆主参考，stitch=并排图落点。
     """
     out: List[Dict[str, Any]] = []
-    for s in _degraded_closeup_face_shots(payload):
+    for s in _degraded_unverifiable_face_shots(payload):
         png = s.get("png")
         chars = s.get("chars") or []
         char = chars[0] if chars else None
@@ -1585,6 +1625,11 @@ def summarize(payload: Dict[str, Any]) -> Dict[str, Any]:
     if degraded_cu:
         rows_by_check["face_degraded_closeup"] = {"block": degraded_cu, "warn": 0, "noface": 0, "ok": 0}
         hard += degraded_cu
+    # A 降级精度多人同框：detect_face_swaps 失效，次要角色脸无人核验 → 比照近景升 hard（去重近景，不双计）。
+    degraded_multi = len(_degraded_multi_person_face_shots(payload))
+    if degraded_multi:
+        rows_by_check["face_degraded_multi_person"] = {"block": degraded_multi, "warn": 0, "noface": 0, "ok": 0}
+        hard += degraded_multi
     coverage = payload.get("face_reference_coverage") or {}
     coverage_missing = coverage.get("missing") or []
     if coverage_missing:
@@ -1604,6 +1649,13 @@ def summarize(payload: Dict[str, Any]) -> Dict[str, Any]:
         "block": len(prohibited), "warn": 0, "noface": 0, "ok": 0
     }
     hard += len(prohibited)
+    # 跨集脸漂移趋势（B）：advisory 级——趋势是慢性预警，不是单张坏像素，不 hard block。
+    drift_entries = (payload.get("cross_episode_face_drift") or {}).get("entries") or []
+    if drift_entries:
+        rows_by_check["cross_episode_face_drift"] = {
+            "block": 0, "warn": len(drift_entries), "noface": 0, "ok": 0
+        }
+        advisory += len(drift_entries)
     lint = payload.get("lint") or {}
     l_hard = sum(1 for f in lint.get("findings", [])
                  if f.get("level") == "block" and f.get("code") in HARD_LINT_CODES)
@@ -1719,6 +1771,13 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         out.append(_qc_finding("block", "character_consistency", s.get("png"),
                                f"降级精度近景：{s.get('png')} 在 Pillow 降级模式下无法验脸（无 insightface）；"
                                f"近景/特写脸是否同人未经核验，不放行{aid}"))
+    # A 降级精度多人同框（hard）：detect_face_swaps 整组失效，次要角色脸无人核验——比照近景不放行。
+    for s in _degraded_multi_person_face_shots(payload):
+        stitch = _stitch_for_png(payload, s.get("png"))
+        aid = f"；人审并排图：{stitch}" if stitch else ""
+        out.append(_qc_finding("block", "character_consistency", s.get("png"),
+                               f"降级精度多人同框：{s.get('png')} 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；"
+                               f"同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行{aid}"))
     for s in (payload.get("prohibited_face_patch") or {}).get("outputs", []):
         out.append(_qc_finding(
             "block",
@@ -1946,6 +2005,86 @@ def json_safe(value: Any) -> Any:
     return value
 
 
+FACE_DRIFT_HISTORY_KIND = "n2d_face_drift_history"
+
+
+def _ep_num(ep: Any) -> int:
+    m = re.search(r"\d+", str(ep or ""))
+    return int(m.group()) if m else 0
+
+
+def _face_drift_history_path(root: Path) -> Path:
+    return production_dir(root) / "face_drift_history.json"
+
+
+def update_face_drift_history(root: Path, ep: str, payload: Mapping[str, Any]) -> Optional[Dict[str, Any]]:
+    """把本集每角色 `ep_mean_score`（脸 vs 共享定妆主参考均值）落进跨集历史侧车（幂等覆盖本集条目）。
+
+    只在 **full 精度**（insightface）且本集有均值时写——降级精度的均值不可比，写进去会污染漂移基线。
+    返回更新后的历史 dict；无可写均值时返回 None。
+    """
+    face = (payload.get("checks") or {}).get("face") or {}
+    chars = face.get("characters") or {}
+    means = {c: v.get("ep_mean_score") for c, v in chars.items()
+             if isinstance(v, Mapping) and v.get("ep_mean_score") is not None}
+    if not _face_full_precision(face) or not means:
+        return None
+    path = _face_drift_history_path(root)
+    data: Dict[str, Any] = {}
+    if path.exists():
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            data = {}
+    chars_hist = data.get("characters") if isinstance(data, dict) else None
+    if not isinstance(chars_hist, dict):
+        chars_hist = {}
+    for c, m in means.items():
+        rec = chars_hist.setdefault(c, {})
+        if isinstance(rec, dict):
+            rec[ep] = round(float(m), 4)
+    out = {"kind": FACE_DRIFT_HISTORY_KIND, "version": 1, "characters": chars_hist}
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(out, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return out
+
+
+def cross_episode_face_drift(root: Path, ep: str, payload: Mapping[str, Any]) -> Dict[str, Any]:
+    """跨集脸 embedding **趋势**漂移（治"每集各自过 floor、但整体逐集偏离锚点"的慢性漂移）。
+
+    单帧 G1 只看本集 vs 定妆；这条把历年 `ep_mean_score` 串成时间序，调 face_consistency.cross_episode_drift
+    抓相对基线集的系统性掉幅。增量、便宜：本集已由 analyze 嵌入，历史只读侧车，趋势判定是纯数学。
+    advisory 级（不 hard block）——趋势是预警信号，不是单张坏像素。
+    """
+    fc = _load_review_module("face_consistency")
+    if fc is None or not hasattr(fc, "cross_episode_drift"):
+        return {"available": False, "entries": [], "notes": ["face_consistency.cross_episode_drift 不可用"]}
+    hist = update_face_drift_history(root, ep, payload)
+    if hist is None:
+        # 降级精度 / 本集无均值：用已落档历史只读评估（不含本集）
+        path = _face_drift_history_path(root)
+        if path.exists():
+            try:
+                hist = json.loads(path.read_text(encoding="utf-8"))
+            except Exception:
+                hist = None
+    chars_hist = (hist or {}).get("characters") if isinstance(hist, dict) else None
+    if not isinstance(chars_hist, dict) or not chars_hist:
+        return {"available": True, "entries": [], "history_chars": 0,
+                "notes": ["无跨集历史（首集或降级精度未累积均值）"]}
+    cur_n = _ep_num(ep)
+    entries: List[Dict[str, Any]] = []
+    for c, rec in chars_hist.items():
+        if not isinstance(rec, dict):
+            continue
+        seq = sorted(((e, m) for e, m in rec.items()
+                      if isinstance(m, (int, float)) and _ep_num(e) <= cur_n),
+                     key=lambda x: _ep_num(x[0]))
+        for d in fc.cross_episode_drift(seq):
+            entries.append({"char": c, **d})
+    return {"available": True, "entries": entries, "history_chars": len(chars_hist)}
+
+
 def run_qc(root: Path, ep: str, with_pixel: bool = True) -> Dict[str, Any]:
     payload: Dict[str, Any] = {
         "kind": "n2d_image_qc", "version": 1, "root": str(root), "episode": ep,
@@ -1974,6 +2113,7 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True) -> Dict[str, Any]:
         except Exception as exc:
             payload["asset_lifecycle"] = {"available": False, "notes": [f"asset_lifecycle 校验失败：{exc}"]}
     payload["face_reference_coverage"] = face_reference_coverage(payload, root, ep)
+    payload["cross_episode_face_drift"] = cross_episode_face_drift(root, ep, payload)
     payload["prohibited_face_patch"] = prohibited_face_patch_outputs(root, ep)
     payload["state_ledger"] = audit_state_ledger(root, ep)
     payload["summary"] = summarize(payload)
@@ -2053,6 +2193,21 @@ def render_markdown(payload: Dict[str, Any]) -> str:
             lines.append(f"- note: {note}")
     else:
         lines.append("- ⏭ 未生成覆盖结果（旧版 image_qc 或未执行 lint）")
+    drift = payload.get("cross_episode_face_drift") or {}
+    drift_entries = drift.get("entries") or []
+    if drift.get("available") and (drift_entries or drift.get("history_chars")):
+        lines.extend(["", "## 跨集脸漂移趋势（B·治每集过floor但逐集偏离·advisory）"])
+        if drift_entries:
+            for e in drift_entries:
+                icon = "🔴" if e.get("severity") == "high" else "🟡"
+                tail = "（跌破绝对下限）" if e.get("below_abs_low") else ""
+                lines.append(
+                    f"- {icon} {e.get('char')}：{e.get('episode_from')}→{e.get('episode_to')} "
+                    f"均值 {e.get('from_mean')}→{e.get('to_mean')}（掉幅 {e.get('drop')}）{tail}"
+                )
+            lines.append("- 处置：以基线集为准重审该角色定妆继承链，或确认是有意的成长态(evolution_profile)；趋势性掉幅在硬伤前就该收。")
+        else:
+            lines.append(f"- 🟢 已累积 {drift.get('history_chars')} 个角色历史，暂无趋势性漂移。")
     lines.extend([
         "",
         "## 本地贴脸修复禁用（硬闸）",

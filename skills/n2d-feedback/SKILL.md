@@ -1,6 +1,6 @@
 ---
 name: n2d-feedback
-description: P2 platform performance feedback loop for novel2drama/n2d. Ingest platform metrics, analyze retention/follow/A-B lift, write platform_feedback, optionally update director rhythm, emit genre-ledger records for novel-score, and generate anti-homogenization differentiation candidates. Use when asked for 投放数据回灌, 平台数据反哺, 留存数据, 追更率, 跳出率, 投放A/B, 反哺选题, 题材战绩库, genre ledger, 反同质化, 差异化选题, differentiation, platform feedback.
+description: P2 platform performance feedback loop for n2d. Ingest platform metrics, analyze retention/follow/A-B lift, write platform_feedback, and optionally update director rhythm. Use when asked for 投放数据回灌, 平台数据反哺, 留存数据, 追更率, 跳出率, 投放A/B, platform feedback.
 ---
 
 # n2d-feedback — P2 投放数据回灌
@@ -16,9 +16,9 @@ description: P2 platform performance feedback loop for novel2drama/n2d. Ingest p
 
 ## 输入 / 输出 / 读写边界
 
-- **输入**：`platform_metrics.*`、`creative_features.*`、`storyboard.json` 自动导演标签、consistency/review-ui findings、可选公榜基线和自有题材战绩库。
-- **输出**：`生产数据/platform_feedback.json/md`、可选 `导演节奏.md` 快照块、`生产战绩/genre_ledger.jsonl`、`差异化候选.json/md`。
-- **读写边界**：只做投放归因和选题反哺；不审片、不重剪已上线集、不直接改生产产物。
+- **输入**：`platform_metrics.*`、`creative_features.*`、`storyboard.json` 自动导演标签、consistency/review-ui findings。
+- **输出**：`生产数据/platform_feedback.json/md`、可选 `导演节奏.md` 快照块。
+- **读写边界**：只做投放归因和节奏反哺；不审片、不重剪已上线集、不直接改生产产物。
 - **契约关系**：一致性 findings 使用统一 kind；ROI 指标与 `n2d-dashboard` 共享数据边界但不重复记账。
 
 ## 输入数据
@@ -79,44 +79,6 @@ python3 skills/n2d-feedback/scripts/feedback.py <作品根> \
 ```
 
 `--update-guide` 只替换 `导演节奏.md` 里的 `n2d-feedback` 快照块，不改基础规则。样本不足时只写“观察中”，不把偶然值升级成铁律。
-
-## 反哺选题（跨项目「自有题材战绩库」· 闭环上游）
-
-`--update-guide` 反哺的是**节奏层**（开场/集尾/密度/钩子）。要闭合**选题→生产→投放→反哺选题**的环，还要把本剧第一方战绩**按题材**沉淀进一个**跨项目战绩库**，供 `novel-score` 当题材热度的第一方先验——这是 n2d 在内卷市场的结构性优势（公榜谁都能爬，自有 ROI/留存只有你有）。
-
-```bash
-python3 skills/n2d-feedback/scripts/feedback.py <作品根> \
-  --metrics <平台指标.csv> --emit-ledger --genre 仙侠 --subgenres 复仇,马甲
-```
-
-- 把本剧按播放量加权的 `retention_3s/retention_15s/completion_rate/follow_next_rate/roi/plays` 聚合成一条 `genre_performance_record`，按 **(work, genre, platform) upsert** 写入战绩库（JSONL）——同剧同题材同平台**重 emit 替换旧快照、不堆重复行**（战绩库是作品级聚合，重复行会让 novel-score 按播放量重复加权、带偏题材先验）；不同剧/题材/平台各占一行。无 ROI（缺 roi/roas/回收比，也无 revenue+spend）时 stderr 提示，novel-score 该维度将缺席。
-- 默认路径 `$N2D_GENRE_LEDGER` 或 `<repo>/生产战绩/genre_ledger.jsonl`（`--ledger` 可改）。**跨项目共享**，不是 per-work。
-- `--genre` 缺省时读 `_meta.json` 的 `genre/题材` 或 `_设置.md 题材`；读不到记 `unknown` 并告警（无法按题材反哺）。
-- ROI 来自 metrics 的 `roi/roas/回收比`（按播放量加权）或 `revenue÷spend` 汇总。
-- **闭环对端**：`novel-score` 用 `--genre-ledger`（默认同路径）读它 → 把「题材自有战绩」注入打分 prompt 的市场基准；本题材自有 ROI/留存若明显低于公榜热度，`topic_heat` 应下调并提示选题代差。两条线**只在这个文件层连接**，不互相 import。
-
-> 架构：novel-* 与 n2d-* 是独立生产线，本战绩库是它们在**数据产物层**的唯一连接点（一端写、一端读，各自实现读写）。记录格式见 `references/schema.md`「自有题材战绩库」。
-> `--emit-ledger` 还会把该剧**主导创意特征**（按播放量加权众数的 opening_type / cliffhanger_type / shot_density_bucket）写进记录的 `features`，供下面的差异化引擎做"题材×特征"白空间分析。
-
-## 反同质化差异化引擎（反推"未被做烂的组合"）
-
-内卷市场（爆款率仅 0.16%）里，光知道"什么题材热"不够——还要知道"什么组合还没被做烂"。`differentiate.py` 从战绩库这朵点云（`题材 × 开场 × 结尾节奏 × 镜头密度`）+（可选）novel-score 公榜基线，反推**差异化选题候选**：
-
-```bash
-python3 skills/n2d-feedback/scripts/differentiate.py \
-  [--ledger genre_ledger.jsonl] [--baseline 评分/market_baseline_*.json] \
-  [--genres 悬疑,年代] [--metric follow_next_rate] [--top 12] [--out 生产战绩/差异化候选.md]
-```
-
-三路信号合成（透明启发式，非黑箱）：
-- **占用度**：战绩库里每个 `题材×开场×结尾` 组合我们做过几次 → 没做过的是白空间。
-- **已验证轴**：战绩库 metrics 里加权高于均值的 opening/cliffhanger 值 = 对我们有效的节奏轴，可复用进新组合。
-- **市场饱和**：公榜基线里某题材出现越多 = 越被全行业做烂 → 差异化应避开/慎投（惩罚因子）。
-- **白空间候选** = 我们没做过 × 复用 ≥1 已验证轴 × 避开最饱和题材，排序输出（如「都市 × 倒叙闪回 × 危机悬置」：把仙侠里验证有效的倒叙+危机节奏，搬到没做烂的都市题材）。
-
-`--genres` 可注入"有需求但我们没做过"的题材一起探索；只在被告知的题材集合内推荐，**不凭空捏造题材**。**诚实纪律**：战绩库样本 <3 时只作启发不作铁律；无公榜基线时仅按自有占用+已验证轴推荐，引擎会在 notes 里明说。
-
-**缺省双写 canonical 文件**：不带 `--out` 时，`differentiate.py` 把候选写到 `<repo>/生产战绩/差异化候选.{md,json}`（固定路径，不再只打印），`novel-create` 立项访谈、`novel-title` 起名时会**自动读这个 json** 作为差异化方向输入——把"反哺选题"从产物落到选题端能稳定发现的位置。仍只在数据产物层连接，**不互相 import**。
 
 ## 投放摄取适配器（实时投放 API → 标准文件）
 

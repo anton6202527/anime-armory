@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Iterable
 
 
-SERIES = ("ad", "mv", "n2d", "novel", "song")
+SERIES = ("ad", "mv", "n2d", "song")
 TEXT_SUFFIXES = {".md", ".py", ".sh", ".json", ".txt"}
 CODE_SUFFIXES = {".py", ".sh"}
 
@@ -57,13 +57,6 @@ HARD_COUPLING_MARKERS = (
 # File-level exceptions for deliberate product handoffs. These should never be
 # Python imports of another series; they are file/media/JSONL contracts only.
 ALLOWED_CODE_HANDOFFS = {
-    ("novel", "n2d", "skills/novel-craft/scripts/export.py"),
-    ("novel", "n2d", "skills/novel-craft/scripts/test_export_n2d.py"),
-    ("novel", "n2d", "skills/novel-condense/scripts/init_project.py"),
-    ("novel", "n2d", "skills/novel-spinoff/scripts/init_project.py"),
-    ("novel", "n2d", "skills/novel-score/scripts/score.py"),
-    ("n2d", "novel", "skills/n2d-feedback/scripts/feedback.py"),
-    ("n2d", "novel", "skills/n2d-feedback/scripts/differentiate.py"),
     ("song", "mv", "skills/song-craft/scripts/init_project.py"),
 }
 

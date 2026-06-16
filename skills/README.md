@@ -1,6 +1,6 @@
 # Skills 索引
 
-本项目包含 **novel（写小说 / 源书孵化）**、**n2d（小说 → AI 漫剧/短剧）**、**song（写歌）**、**mv（制 MV）**、**ad（拍广告）** 五条并列生产线。每条线都必须**自包含、可单独分发、零公共层**：脚本只 import 本线 `_lib` 或本线 craft 工具，不依赖 `skills/common/`，也不 import 其他系列实现。跨线只允许可选文件/数据交接（如 novel 导出 n2d 源书、song 交成品歌给 mv、n2d-feedback 写题材战绩 JSONL 供 novel-score 读取）。**目录保持扁平**（每个 skill 仍是 `skills/<name>/SKILL.md`）——
+本项目包含 **n2d（小说 → AI 漫剧/短剧）**、**song（写歌）**、**mv（制 MV）**、**ad（拍广告）** 四条并列生产线。每条线都必须**自包含、可单独分发、零公共层**：脚本只 import 本线 `_lib` 或本线 craft 工具，不依赖 `skills/common/`，也不 import 其他系列实现。跨线只允许可选文件/数据交接（如 song 交成品歌给 mv）。**目录保持扁平**（每个 skill 仍是 `skills/<name>/SKILL.md`）——
 skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目录，否则交叉引用与 skill 发现会失效。
 仓库级维护工具不属于 workflow skill，放在根目录 `tools/`。
 本文件仅作分类说明。
@@ -24,11 +24,10 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 | 系列 | 统计范围 | Skill 数 | SKILL.md 总行数 | 目录文本总行数 |
 |---|---|---:|---:|---:|
 | n2d | `n2d` + `n2d-*` | 20 | 3426 | 53086 |
-| novel | `novel` + `novel-*` | 19 | 1758 | — |
 | song | `song` + `song-*` | 7 | 418 | — |
 | mv | `mv` + `mv-*` | 11 | 781 | — |
 | ad | `ad` + `ad-*` | 9 | 579 | — |
-| **合计** | `skills/*/SKILL.md` | **65** | 6962 | — |
+| **合计** | `skills/*/SKILL.md` | **47** | 5204 | — |
 
 > 仓库级清理工具 `tools/shared-cleanup` 已移出 `skills/`，不计入 skill 统计。
 
@@ -44,7 +43,7 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 
 | 阶段 | Skill | 职责 |
 |---|---|---|
-| 调度 | `n2d` | 检查 作品 根目录，**入口先跑源新鲜度自检**（`source_check.py`：比对 `小说/<剧>.txt` 与 `小说/_源指纹.json`，写小说成品更新→列出变动章/受影响集/是否触及已生产集，提示同步+重切，重切每次确认不自动），读 `_进度.md`，按 `skills/n2d/_lib/n2d_contract.py` 的阶段契约路由到下面的阶段 |
+| 调度 | `n2d` | 检查 作品 根目录，**入口先跑源新鲜度自检**（`source_check.py`：比对 `小说/<剧>.txt` 与 `小说/_源指纹.json`，源小说更新→列出变动章/受影响集/是否触及已生产集，提示同步+重切，重切每次确认不自动），读 `_进度.md`，按 `skills/n2d/_lib/n2d_contract.py` 的阶段契约路由到下面的阶段 |
 | 1 剧本改编 | `n2d-script` | 拆集 + 精修前 5-10 集窗口复核边界 + 配音台词/BGM/封面/角色场景卡/global_style |
 | 2 配音 | `n2d-voice` | voiceover.txt → 角色配音 + 拼接音轨 + 时长清单.json（驱动下游镜头时长；逐句记 `voice_key` 实际音色键，一角一色跨集对账数据源，`n2d-identity` 消费）；macOS say 中文空音频时自动降级静音占位并醒目告警 |
 | 3 分镜设计 | `n2d-script` | 配音后回跑：按实测时长生成分镜剧本/故事板/素材清单/字幕/镜头时长 |
@@ -64,14 +63,12 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 | 批量任务队列（横切） | `n2d-batch` | P1 批量编排 + worker 层：按 `_进度.md` 自动排队，支持并发 claim、失败重试、预算上限、按受影响镜头/Clip/产物最小范围重跑，并可直接承接 `n2d_consistency_findings`（一致性审查 / 人审 UI 导出）生成返工队列；`runner.py` 可自动 claim、执行配置命令、写 dashboard telemetry、回写 pass/fail；生成 `生产数据/batch_queue.json`、`batch_queue.md`。**单机多 worker 安全（纯本地·零后端）**：`flock` 原子认领 + 原子写账本 + 任务租约(心跳续租) + 过期租约自动回收 + `--resume` 崩溃自愈；多机/私有算力池仍需真正的协调后端（flock 跨 NFS 不可靠） |
 | 自动审片评分（横切） | `n2d-score` | P2 机器评分层：每集输出语义继承/状态百科/多模态漂移 + 角色/服装/场景/字幕/音画/节奏/风格维度分，并接入图像相似度、字幕 OCR、音画时长对账、口型风险/检测报告、成片节奏密度；脸 G1 无 insightface 时按 `pillow_fallback` 降权分消费（不再整维度缺数据）；低于阈值生成 `auto_return_tasks`，可写入 `n2d-batch` 定向返工队列 |
 | 人审可视化 UI（横切） | `n2d-review-ui` | P2 可视化层（零构建 HTML/JSON，只读不改状态）：① `review_ui.py` 单集人审画布（首帧/尾帧/clip/接缝/定妆/QA flag/机器分；接缝卡装配 video_qc 机检距离并按 transition 分级——**match/hard/action cut 标必看人判**，机检对设计切镜不可判匹配元素），可 `--export-findings` 输出 `review_ui_findings_第N集.json` 供 `n2d-batch --from-consistency-findings` 回流；② `board.py` 整部生产看板（读 `_进度.md`→作品/集/阶段/Clip+接力链+进度色，`--serve` 本地 127.0.0.1）——PC端+无限画布愿景的 MVP（Q36） |
-| 投放数据回灌（横切） | `n2d-feedback` | P2 增长反馈层：导入平台留存/追更/跳出数据（实时投放 API 经摄取适配器规范化成标准 `platform_metrics` 文件，支持中文列名别名），并从 `storyboard.json` 自动抽取导演标签；同集开场/封面/集尾断点/标题文案 A/B，按 paired lift 分析；生成 `platform_feedback.json/md`，可更新 `导演节奏.md` 快照；**`--emit-ledger` 把第一方战绩按题材写入跨项目「自有题材战绩库」(`生产战绩/genre_ledger.jsonl`)，做题材热度第一方先验，供 n2d 选题输入**；另读 `生产数据/consistency_findings_*.json` / `review_ui_findings_*.json` 出「一致性问题 Top」与留存/跳出并排（QA 线接进投放闭环） |
+| 投放数据回灌（横切） | `n2d-feedback` | P2 增长反馈层：导入平台留存/追更/跳出数据（实时投放 API 经摄取适配器规范化成标准 `platform_metrics` 文件，支持中文列名别名），并从 `storyboard.json` 自动抽取导演标签；同集开场/封面/集尾断点/标题文案 A/B，按 paired lift 分析；生成 `platform_feedback.json/md`，可更新 `导演节奏.md` 快照；另读 `生产数据/consistency_findings_*.json` / `review_ui_findings_*.json` 出「一致性问题 Top」与留存/跳出并排（QA 线接进投放闭环） |
 
 > **选择点 `制作模式`（出片顺序）**：默认 `配音先行`（真实配音时长驱动镜头，音画准·返工少）。另支持 `先出视频后配音`（**快速 demo·不推荐**：镜头时长靠估算锁死，后期补真音对不上 → 音画不同步/可能重切重出视频）；以及 `原生音画`（**native AV·按剧选**：Seedance 2.0/Veo 3/Sora 类后端对说话镜一次出同步音画[台词+口型+环境声]，绕过配音先行链路与对口型，规避代差与占位返工，代价是少了逐句音色控制；仿真人音色仍需授权）。三种流程图 + 完整理由见 `n2d/SKILL.md`「制作模式」节；选择点定义见 n2d 线 `references/选择点与偏好.md`。
 > **机器契约层**：n2d 的阶段图、`_进度.md` schema、gate stage、manifest 与结构化回滚字段集中在 `skills/n2d/_lib/n2d_contract.py`，人读版见 `n2d/references/contract.md`。`skills/n2d/_lib/n2d_route.py`、`n2d/progress.py`、`n2d-progress/scan.py` 和 `n2d-review/scripts/gate.py` 复用同一契约；阶段职责变更时先改 contract，再同步本索引与各 SKILL.md。**横切口径分两层**（判据=「在位与否是否影响生产推进」，不是「有没有输出文件」）：① 影响生产推进的就绪信号（合规[硬前置]/身份/LoRA/资产库/仪表盘/投放回灌）登记在 `n2d_contract.CROSS_CUTTING_READINESS`（旧别名 `CROSS_CUTTING` 兼容），`n2d-progress` 据此输出「横切就绪」；② 无稳定就绪标志、或本身是调度/观察/计划工具的（model-router/batch/progress/review + **评分/审片UI/skill 更新重制**这类可选观察产物）登记在 `n2d_contract.CROSS_CUTTING_TOOLS`，不进「就绪」行（`n2d-progress` 把有 per-work 产物的工具单列为「横切观察·非前置」），不污染 `_进度.md` 流程表。新增横切能力时按这两个边界登记 + 同步本索引。每次 `progress.py set` 会自动刷新 `脚本/第N集/manifest.json` 快照，也可用 `python3 skills/n2d/manifest.py <作品根> 第N集 [--stage stage_key]` 手动重建。
 
 > **合规与版权前置（P0）**：新剧或投放前先跑 `python3 skills/n2d-compliance/scripts/compliance.py <作品根> --init`，人工补齐后用 `--check` 预检。`n2d-review/scripts/gate.py` 在 image/video/compose/review 四个阶段都会读取 `合规/compliance_manifest.json`：源文本/改编权、角色肖像授权、声音克隆授权、平台审核、出海本地化或广电备案缺任一项，先阻断，不能等成片后补救。AI 标识/披露/水印不再由本流水线强制处理。
-> **投放战绩沉淀（自有题材战绩库）**：生产（n2d 全链）→ `n2d-feedback`（投放回灌）→ 写入**数据产物层**的跨项目「自有题材战绩库」（append-only JSONL，默认 `生产战绩/genre_ledger.jsonl`）：`n2d-feedback --emit-ledger --genre <题材>` 按题材写入第一方留存/追更/完播/ROI，做题材热度的**第一方先验**（自有 ROI/留存权重高于公榜）。实时投放 API 经 `n2d-feedback` 的摄取适配器规范化成标准 `platform_metrics` 文件（支持中文列名别名）。
-> **反同质化差异化引擎（反内卷延伸）**：`n2d-feedback/scripts/differentiate.py` 从战绩库点云（`题材×开场×结尾×密度`，每条记录带主导 `features`）+ 公榜基线反推**"未被做烂的组合"**——占用度(我们做过几次)×已验证轴(战绩里有效的开场/结尾节奏)×市场饱和(公榜避热门)，排序出差异化选题候选写 `生产战绩/差异化候选.{json,md}`，供 n2d 选题输入。爆款率仅 0.16% 的内卷市场里，这是把"反哺"从节奏层升到**选题层**的关键。样本/基线不足时诚实降级、不捏造题材。
 > **仙侠武侠打斗专项工艺**：`n2d-script/references/打斗分镜.md`（五帧拆招/命中帧出图/首尾帧锁动作/后期补打击感），已挂接 script/image/video/compose/review 全链；总纲见 `n2d/Q&A.md` Q31。
 > **仙侠非打斗奇观工艺**：`n2d-script/references/仙侠场面分镜.md`（御剑飞行/追逐/渡劫突破/炼丹炼器/大阵法阵/大场面 establish/斗法对轰/神魂(神识·元神出窍·夺舍)——飞行追逐锁姿态动背景、渡劫炼丹法阵对轰爆发帧出图+元素入库、神魂元神=肉身半透明派生治"二我"、大场面三镜由远及近），同样挂接全链；总纲见 `n2d/Q&A.md` Q33。
 > **资产库题材自适应**：共享定妆库通用三类（角色/场景/道具）+ ⚙️仙侠玄幻可选两类（**法宝/特效**，本命法宝按形态多态、剑气/光效锁颜色拖尾）；**人物定妆固定标准三视图**——所有人物角色先出正面 / 侧面 / 背面生产拆图，并生成 `定妆_<角色>_三视图.png` 人审拼版；场景才按题材和复用程度补**场景多视图（四视图）**保跨镜背景自洽；见 `n2d-image/references/prompt_format.md §1`+`角色一致性checklist.md`、`Q&A.md` Q32。
@@ -110,37 +107,7 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 
 ---
 
-## 二、novel ——「写小说 → n2d 源书」上游工坊
-
-novel 负责从点子/源书/派生需求生产可审计文本资产，产物落 `写小说/<项目>/`。它不直接做图像、视频或定妆一致性；当目标是漫剧/短剧时，输出 `n2d` handoff 后交给 n2d 的身份、镜头、出图、出视频闸门。
-
-| 类型 | Skill | 职责 |
-|---|---|---|
-| 调度 | `novel` | 路由 novel 请求、导入源书、读取 `_进度.md` 续跑；把漫剧/短剧改编请求交给 n2d |
-| 原创新书 | `novel-create` | 访谈 → 创作蓝图 → 设定圣经 → 章纲 → Demo gate → 逐章写作 → 导出 |
-| 书名 | `novel-title` | 标题候选、平台适配、撞名风险初判 |
-| 公版/源书 | `novel-fetch` | 获取公版或授权源书并落 manifest |
-| 写作 primitives | `novel-craft` | contract、draft packets、queue、progress、QA gate、export、AI 使用披露等家族共享工具 |
-| 扩写 | `novel-expand` | 把短文本扩成章节内细节，时间不推进 |
-| 精简 | `novel-condense` | 长篇压缩成短版或漫剧友好源书 |
-| 续写 | `novel-continue` | 从已有末章继续往后写新章节 |
-| 改写 | `novel-rewrite` | 改主线、换设定、重构派生作品 |
-| 外传/视角 | `novel-spinoff` | 锁定原事件，换角色 POV 或写配角外传 |
-| 质检 | `novel-review` | OOC、视角、设定、节奏、伏笔、文风漂移、流程自审 |
-| 市场评分 | `novel-score` | 当前市场基准 + 第一方 n2d 投放战绩 + 模拟读者信号，输出 go/revise/kill/n2d-adapt 决策 |
-| 文风 | `novel-style` | 文风指纹、样本授权、漂移检查 |
-| 动态百科 | `novel-wiki` | 人物状态、伏笔、关系温度、设定一致性维护 |
-| 模拟读者 | `novel-simulate` | 虚拟试读、留存先验、弃书点和套路密度 |
-| 节奏平衡 | `novel-balance` | 情节热力图、注水、断章、爽点节奏 |
-| 宣发 | `novel-promote` | 爆点提取、短视频脚本底稿、n2d-ready 宣发骨架 |
-| 出海/本地化 | `novel-localize` | 术语锁（专名跨章 canonical 译名）+ 文化适配逐章翻译 + 未译残留/术语/覆盖机检；翻译后端选择点；源书权利/目标辖区/AI 标识三连合规 |
-| 进度·下一步（只读）| `novel-progress` | 扫 `写小说/<项目>/_进度.md` 章节矩阵 → 汇总完成度 + 创作前沿（下一步该跑哪个 novel skill）+ 可并行事项；只读不改文件 |
-
-**默认产品路径**：`novel-create` / 派生 skill 产源书 → `novel-score` 给生产决策 → `novel-craft` 导出 `n2d` → `n2d` 接手镜头、定妆、出图、视频和一致性闸门。novel 没有独立设置 skill；项目设置只是 `_设置.md` 数据文件，由各 novel 脚本读写。
-
----
-
-## 三、song ——「写歌 / 作曲 / 翻唱」
+## 二、song ——「写歌 / 作曲 / 翻唱」
 
 song 负责从点子、歌词草稿或半成品音频生产可审计歌曲资产，产物落 `写歌/<项目>/`。它不依赖 mv；交给 MV 时只输出成品歌和歌词文件。
 
@@ -158,7 +125,7 @@ song 负责从点子、歌词草稿或半成品音频生产可审计歌曲资产
 
 ---
 
-## 四、mv ——「歌曲 → 音乐视频」
+## 三、mv ——「歌曲 → 音乐视频」
 
 mv 负责把已有歌曲或后配歌曲企划做成音乐视频，产物落 `制MV/<项目>/`。它的视觉、卡点、字幕、合成脚本自包含；输入歌只按文件接入。
 
@@ -179,7 +146,7 @@ mv 负责把已有歌曲或后配歌曲企划做成音乐视频，产物落 `制
 
 ---
 
-## 五、ad ——「Brief → 广告片」
+## 四、ad ——「Brief → 广告片」
 
 ad 负责把客户 brief 或产品需求做成广告主片与多版本交付件，产物落 `拍广告/<项目>/`。它不拆集，不复用 n2d/mv 的实现。
 

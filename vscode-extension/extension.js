@@ -71,7 +71,7 @@ function shortDesc(d) {
 }
 
 const FAMILIES = [
-  { id: 'novel', label: '✍️ 写小说 novel-*', test: (n) => n.startsWith('novel-') },
+  { id: 'novel', label: '✍️ 写小说 novel-*', test: (n) => n.startsWith('novel-') || n === 'novel' },
   { id: 'n2d', label: '🎬 制漫剧 n2d-*', test: (n) => n.startsWith('n2d-') || n === 'n2d' },
   { id: 'shared', label: '🔧 共享能力', test: () => true },
 ];

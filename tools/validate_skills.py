@@ -25,8 +25,8 @@ SKILLS = REPO / "skills"
 README = SKILLS / "README.md"
 ENTRY_DOCS = ("AGENTS.md", "GEMINI.md", "CLAUDE.md")
 
-# 五条创作线的 skill 名前缀（用于 B2 斜杠命令检测）
-LINE_PREFIXES = ("n2d", "novel", "song", "mv", "ad")
+# 四条创作线的 skill 名前缀（用于 B2 斜杠命令检测）
+LINE_PREFIXES = ("n2d", "song", "mv", "ad")
 
 # E1 grandfathered 例外清单 —— 现已清空。
 # n2d-update 历史上用 git 基线比对，2026-06 已重构为纯内容 SHA256 快照
@@ -54,7 +54,6 @@ ENTRY_REQUIRED_ALL = (
 
 ROUTING_DOCS = ("AGENTS.md", "GEMINI.md")
 ROUTING_SNIPPETS = (
-    "`novel`",
     "`n2d`",
     "`song`",
     "`mv`",

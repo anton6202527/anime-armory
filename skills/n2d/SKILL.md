@@ -45,7 +45,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 > **工业化北极星（2026-06-09 口径）**：n2d 的目标不是承诺“一键无人值守百集”，而是做到**工作室级轻工业化**：可复制、可度量、可批量、可回滚、可数据迭代。放量前必须先用第 1 集打样锁定风格/定妆/声音/模型路由，再用 `n2d-batch + n2d-dashboard + n2d-score + n2d-review-ui` 小批量验证成本、通过率、漂移、QA 阻断和投放回收；任何红灯都先回产线修，不盲目追加集数。
 
 > **2026 市场现实 → 两条运营铁律（联网基准·见 `n2d-dashboard/references/industry_benchmark.json`）**：
-> 1. **速度即生死（R3·爆款新鲜期缩至 ~3 周·ROI 中位 ~1.1）**：抢新鲜趋势窗口比打磨更值钱。**立项即先跑 `n2d-feedback/scripts/differentiate.py`** 从战绩库反推未做烂的差异化方向（题材×开场×结尾），再让 `novel-create/novel-title/novel-score` 据此立项；打样与抢先**并行**（第 1 集打样的同时，用 `n2d-batch` 把后续集的文字/出图 prompt 先备好），不串行等。成本侧守 dashboard 的 `cost_per_finished_min`（全链行业带 400-1000 元/分）与 `recoup_ratio`，红线先治。
+> 1. **速度即生死（R3·爆款新鲜期缩至 ~3 周·ROI 中位 ~1.1）**：抢新鲜趋势窗口比打磨更值钱。打样与抢先**并行**（第 1 集打样的同时，用 `n2d-batch` 把后续集的文字/出图 prompt 先备好），不串行等。成本侧守 dashboard 的 `cost_per_finished_min`（全链行业带 400-1000 元/分）与 `recoup_ratio`，红线先治。
 > 2. **Agent 自动串接，人只做决策（I2·行业 Agent 取代工具链）**：确定性步骤（机检/规划/记账/gate）应由代理**自动链式跑完**，只在**决策点 + 花钱点 + 合规点**停下问人（见 `skills/n2d/references/选择点与偏好.md`「AI 代理交互节点」）。不要把割裂的 CLI 命令甩给用户手敲；`anchor_planner → 确认 → n2d-image`、`gate → score → review-ui` 这类"机器算完接语义判断"的组合，代理应在后台一气呵成，用户感受到的是连贯创作助理。
 
 ### 横切 skill 速查（非必经 · 全文见 [`references/横切skill地图.md`](references/横切skill地图.md)）

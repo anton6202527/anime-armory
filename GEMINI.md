@@ -4,7 +4,7 @@ Industrial-grade AI content production pipeline for turning novels into AI comic
 
 ## Project Overview
 
-Anime Armory is a collection of automated workflows (Skills) designed to streamline the transition from raw creative ideas to polished digital assets. It hosts **five parallel creative production lines — novel / n2d / song / mv / ad**. The flagship is **n2d**: turn a novel into an AI comic-drama / short-drama — the `n2d` dispatcher routes script → voice → storyboard → image → video → compose, with cross-cutting skills for identity/LoRA/model-routing/QA/compliance/dashboard. Each line is self-contained and separately packageable (本线 scripts only import their own `_lib`/craft, never `skills/common/` or another line's code; cross-line is optional file/data handoff only).
+Anime Armory is a collection of automated workflows (Skills) designed to streamline the transition from raw creative ideas to polished digital assets. It hosts **four parallel creative production lines — n2d / song / mv / ad**. The flagship is **n2d**: turn a novel into an AI comic-drama / short-drama — the `n2d` dispatcher routes script → voice → storyboard → image → video → compose, with cross-cutting skills for identity/LoRA/model-routing/QA/compliance/dashboard. Each line is self-contained and separately packageable (本线 scripts only import their own `_lib`/craft, never `skills/common/` or another line's code; cross-line is optional file/data handoff only).
 
 The project is built on **Claude Code Skills**, making it highly portable and compatible with various AI agents and local automation scripts.
 
@@ -33,7 +33,6 @@ Match user intent against the table below (and each `SKILL.md`'s Triggers). Reco
 
 | User wants to | Entry skill (dispatcher → routes to sub-skills) |
 |---|---|
-| Write a novel, import a source book, expand/rewrite/continue/score/review | **`novel`** (→ novel-create/fetch/rewrite/review/score …) |
 | Turn a novel into an AI comic-drama / short-drama (storyboard/voice/image/video/compose) | **`n2d`** (→ n2d-script/voice/image/video/compose) |
 | Write a song, edit lyrics, compose, pick takes, cover/voice-swap, review | **`song`** (→ song-lyrics/compose/cover/review …) |
 | Make an MV for a song, beat-sync, image/video, karaoke subtitles, compose | **`mv`** (→ mv-script/beat/plan/image/video/compose …) |
@@ -73,4 +72,4 @@ Match user intent against the table below (and each `SKILL.md`'s Triggers). Reco
 There is no global "build" command. Individual steps are run via their respective scripts:
 -   Check `skills/<skill_name>/scripts/` for implementation details.
 -   Use `run_shell_command` to execute Python scripts within the appropriate Conda environment.
--   Always verify the current status using the relevant progress skill such as `n2d-progress` / `novel-progress`, or by reading `_进度.md` before initiating a new stage.
+-   Always verify the current status using the relevant progress skill such as `n2d-progress`, or by reading `_进度.md` before initiating a new stage.

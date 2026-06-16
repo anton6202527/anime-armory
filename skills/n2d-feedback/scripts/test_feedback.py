@@ -189,67 +189,6 @@ def test_update_guide_replaces_marker_block(tmp_path: Path) -> None:
     assert "尾部" in text
 
 
-def test_genre_ledger_record_aggregates_metrics_and_roi(tmp_path):
-    root = tmp_path / "制漫剧" / "某仙侠剧"
-    root.mkdir(parents=True)
-    (root / "_meta.json").write_text(
-        json.dumps({"title": "某仙侠剧", "genre": "仙侠"}, ensure_ascii=False), encoding="utf-8"
-    )
-    rows = [
-        {"episode": "第1集", "platform": "红果", "retention_3s": "0.6", "follow_next_rate": "0.34",
-         "plays": "800000", "revenue": "12000", "spend": "8000"},
-        {"episode": "第2集", "platform": "红果", "retention_3s": "0.5", "follow_next_rate": "0.30",
-         "plays": "200000", "revenue": "2000", "spend": "2000"},
-    ]
-    record = feedback.build_genre_record(
-        str(root), rows,
-        genre=feedback.detect_genre(str(root), None),
-        subgenres=feedback.detect_subgenres(str(root), "复仇"),
-        platform=feedback.detect_platform_tag(rows, None),
-    )
-    assert record["kind"] == "genre_performance_record"
-    assert record["genre"] == "仙侠"
-    assert record["subgenres"] == ["复仇"]
-    assert record["platform"] == "红果"
-    assert record["metrics"]["plays"] == 1000000
-    # 留存按播放量加权：(0.6*800000+0.5*200000)/1000000 = 0.58
-    assert abs(record["metrics"]["retention_3s"] - 0.58) < 1e-6
-    # ROI = 总营收/总花费 = 14000/10000 = 1.4
-    assert abs(record["metrics"]["roi"] - 1.4) < 1e-6
-
-    ledger = tmp_path / "生产战绩" / "genre_ledger.jsonl"
-    # upsert：同 (work, genre, platform) 重 emit 替换旧快照，不堆重复行（否则 novel-score 重复加权）
-    assert feedback.upsert_genre_ledger(str(ledger), record) is False  # 首次：无旧行可替
-    assert feedback.upsert_genre_ledger(str(ledger), record) is True   # 再次：替换了旧快照
-    lines = [l for l in ledger.read_text(encoding="utf-8").splitlines() if l.strip()]
-    assert len(lines) == 1  # 仍只一行
-
-    # 不同主键（另一部剧）= 不同行，正常保留
-    other = dict(record, work=str(tmp_path / "制漫剧" / "另一部仙侠剧"))
-    assert feedback.upsert_genre_ledger(str(ledger), other) is False
-    lines = [l for l in ledger.read_text(encoding="utf-8").splitlines() if l.strip()]
-    assert len(lines) == 2
-
-    # 非法/外来行原样保留，不被静默丢
-    with open(ledger, "a", encoding="utf-8") as fh:
-        fh.write("not-json-foreign-line\n")
-    feedback.upsert_genre_ledger(str(ledger), record)  # 再 upsert 一次
-    text = ledger.read_text(encoding="utf-8")
-    assert "not-json-foreign-line" in text
-    assert len([l for l in text.splitlines() if l.strip()]) == 3  # 两剧 + 外来行
-
-
-def test_genre_record_without_roi_omits_key(tmp_path):
-    # 没有 roi/roas/回收比 也没有 revenue+spend → record.metrics 无 roi 键（cmd 据此发缺-ROI warn）
-    root = tmp_path / "制漫剧" / "无ROI剧"
-    root.mkdir(parents=True)
-    (root / "_meta.json").write_text(json.dumps({"title": "无ROI剧", "genre": "仙侠"}, ensure_ascii=False), encoding="utf-8")
-    rows = [{"episode": "第1集", "platform": "红果", "retention_3s": "0.6", "plays": "100000"}]
-    record = feedback.build_genre_record(str(root), rows, genre="仙侠", subgenres=[], platform="红果")
-    assert "roi" not in record["metrics"]
-    assert record["metrics"]["plays"] == 100000
-
-
 def test_metric_alias_resolution_ingests_chinese_export_columns(tmp_path):
     # 实时投放 API 导出的中文列名也能被摄取（投放适配器契约）。
     row = {"episode": "第1集", "3秒留存率": "0.62", "追更率": "0.33", "播放量": "500000"}

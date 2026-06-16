@@ -447,6 +447,13 @@ TWO_CHAR_SHOT = GOOD_SHOT.replace(
     "- `出图/共享/图片/定妆_柳娘子.png`（柳娘子正脸主参考，强度 0.6）\n",
 )
 
+MULTI_SUBJECT_SLOT_FIELDS = (
+    "**多人同框身份槽位**：LEFT_SLOT=`CHAR_SHEN/常态*`（primary，画左前景，视线画右，参考=沈念 front+脸部特写/expressions）；"
+    "RIGHT_SLOT=`CHAR_LIU/常服`（secondary，画右后景，视线画左，参考=柳娘子 front+半身）。\n"
+    "**多人同框执行策略**：split_composite_required；分别出图+合成（登记降级），这是硬执行，不是条件式兜底。\n"
+    "**区分锚点**：沈念=乌黑半披+月白粗布；柳娘子=高髻+绛红裙；两两发色/服装主色互斥不撞色。\n"
+)
+
 
 def test_two_char_shot_on_single_ref_backend_is_blocked():
     # 单图参考后端(Codex 类，无原生主体锁) + 双人同框 + 未声明多主体策略 → BLOCK
@@ -475,13 +482,56 @@ def test_two_char_shot_on_native_subject_backend_only_warns():
 
 
 def test_two_char_shot_with_registered_degradation_escapes_even_on_single_ref():
-    # 即便单图参考后端，本镜声明「分别出图」登记降级 → 逃生门放行，无同框 finding
+    # 即便单图参考后端，本镜声明「分别出图」登记降级 + 身份槽位 → 逃生门放行，无同框 finding
+    shot = TWO_CHAR_SHOT.replace(
+        "**专项镜头模板**：dialogue_shot_reverse；",
+        "**专项镜头模板**：dialogue_shot_reverse；分别出图+合成（登记降级）；\n" + MULTI_SUBJECT_SLOT_FIELDS,
+    )
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot, single_ref_backend=True)
+    assert not any("同框" in str(f["msg"]) for f in gate.findings)
+
+
+def test_four_named_chars_in_one_shot_is_blocked_as_over_cap():
+    # ≥4 具名角色清晰同框 → 硬上限 BLOCK（任何后端单帧压不住 4+ 张清晰脸）
+    shot = TWO_CHAR_SHOT.replace(
+        "- `出图/共享/图片/定妆_柳娘子.png`（柳娘子正脸主参考，强度 0.6）\n",
+        "- `出图/共享/图片/定妆_柳娘子.png`（柳娘子正脸主参考，强度 0.6）\n"
+        "- `出图/共享/图片/定妆_王敦.png`（王敦正脸，强度 0.6）\n"
+        "- `出图/共享/图片/定妆_小禾.png`（小禾正脸，强度 0.6）\n",
+    )
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot, single_ref_backend=True)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "构图景别" and "≥4 具名角色" in str(f["msg"])
+               for f in gate.findings)
+
+
+def test_four_named_chars_wide_crowd_shot_escapes_over_cap():
+    # 远景群像（脸不解析）显式标记 → 不触发 ≥4 硬上限
+    shot = TWO_CHAR_SHOT.replace(
+        "- `出图/共享/图片/定妆_柳娘子.png`（柳娘子正脸主参考，强度 0.6）\n",
+        "- `出图/共享/图片/定妆_柳娘子.png`（柳娘子正脸主参考，强度 0.6）\n"
+        "- `出图/共享/图片/定妆_王敦.png`（王敦正脸，强度 0.6）\n"
+        "- `出图/共享/图片/定妆_小禾.png`（小禾正脸，强度 0.6）\n",
+    ).replace("**专项镜头模板**：dialogue_shot_reverse；",
+              "**专项镜头模板**：群像远景，脸不解析；")
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot, single_ref_backend=True)
+    assert not any("≥4 具名角色" in str(f["msg"]) for f in gate.findings)
+
+
+def test_multi_char_missing_distinct_anchor_warns_on_codex():
+    # ④ 多人同框 × Codex 缺 区分锚点 → WARN
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, TWO_CHAR_SHOT, single_ref_backend=True)
+    assert any(f["sev"] == gate.WARN and "区分锚点" in str(f["msg"]) for f in gate.findings)
+
+
+def test_split_composite_without_identity_slots_still_blocks_codex_multichar():
+    # 有硬分层策略但没给每个 CHAR 绑定槽位，合成阶段仍会串脸/不可追责
     shot = TWO_CHAR_SHOT.replace(
         "**专项镜头模板**：dialogue_shot_reverse；",
         "**专项镜头模板**：dialogue_shot_reverse；分别出图+合成（登记降级）；",
     )
     gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot, single_ref_backend=True)
-    assert not any("同框" in str(f["msg"]) for f in gate.findings)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "角色一致性" and "身份槽位" in str(f["msg"])
+               for f in gate.findings)
 
 
 def test_conditional_split_composite_does_not_escape_codex_two_char_block():
@@ -4204,3 +4254,46 @@ def test_voice_cross_episode_drift_only_targets_current_episode(tmp_path):
     gate.findings.clear()
     gate.check_voice_cross_episode(root, "第1集")
     assert not [f for f in gate.findings if f["dim"] == "跨集音色"]
+
+
+# ── E 成长派生形态定妆必须 image2image 派生（防纯文生图重抽新脸）─────────────────────
+
+def _evo_registry(tmp_path, derived_mode="same_identity_progressive_upgrade"):
+    import json as _json
+    root = tmp_path / "制漫剧" / "剧"
+    (root / "出图" / "共享").mkdir(parents=True)
+    reg = {"characters": [{
+        "id": "CHAR_01", "name": "沈念",
+        "evolution_profile": {"mode": derived_mode, "identity_anchor_form": "常态"},
+        "forms": [
+            {"form": "常态", "asset_key": "沈念_常态"},
+            {"form": "红衣觉醒态", "asset_key": "沈念_红衣觉醒态"},
+        ],
+    }]}
+    (root / "出图" / "共享" / "identity_registry.json").write_text(
+        _json.dumps(reg, ensure_ascii=False), encoding="utf-8")
+    return root
+
+
+def test_evolution_derived_forms_excludes_anchor_and_nonprogressive(tmp_path):
+    root = _evo_registry(tmp_path)
+    df = gate._evolution_derived_forms(str(root))
+    assert [d["form"] for d in df] == ["红衣觉醒态"]   # 锚定 常态 不算派生
+    # restricted_partial 模式不纳入
+    root2 = _evo_registry(tmp_path / "x", derived_mode="restricted_partial_until_reveal")
+    assert gate._evolution_derived_forms(str(root2)) == []
+
+
+def test_derived_form_costume_without_i2i_derivation_blocks(tmp_path):
+    root = _evo_registry(tmp_path)
+    df = {"char_id": "CHAR_01", "char_name": "沈念", "asset_key": "沈念_红衣觉醒态",
+          "form": "红衣觉醒态", "anchor_form": "常态"}
+    sec_bad = "## 沈念/红衣觉醒态\n目标存档: 定妆_沈念_红衣觉醒态.png\n正向 prompt：红衣觉醒，全新造型"
+    assert gate._section_is_derived_form(sec_bad, df)
+    assert gate._declares_evolution_derivation(sec_bad, "常态") is False
+
+
+def test_derived_form_with_anchor_i2i_derivation_passes(tmp_path):
+    sec_ok = ("## 沈念/红衣觉醒态\n目标存档: 定妆_沈念_红衣觉醒态.png\n"
+              "生成方式: 以 定妆_沈念_常态 正脸为母图做 image2image 派生，只升级服装与气场")
+    assert gate._declares_evolution_derivation(sec_ok, "常态") is True

@@ -1,0 +1,107 @@
+:root {
+  --bg: #0b0e14;
+  --bg-2: #11151f;
+  --panel: #151a26;
+  --border: #232a3a;
+  --text: #d6deeb;
+  --muted: #8a95ad;
+  --accent: #6cb6ff;
+  --block: #ff6b6b;
+  --warn: #ffcc66;
+  --info: #6cb6ff;
+  --good: #4ec9b0;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, "Helvetica Neue", "PingFang SC", Menlo, sans-serif;
+  font-size: 13px;
+  overflow: hidden;
+}
+
+button {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+button:hover { border-color: var(--accent); }
+
+/* ---- Home ---- */
+.home { padding: 28px 36px; height: 100%; overflow: auto; }
+.home h1 { font-size: 20px; margin: 0 0 4px; }
+.home .repo { color: var(--muted); font-size: 12px; margin-bottom: 22px; display: flex; gap: 10px; align-items: center; }
+.line-block { margin-bottom: 26px; }
+.line-block h2 { font-size: 14px; margin: 0 0 10px; color: var(--accent); }
+.roots { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.root-card {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px; cursor: pointer; transition: border-color .15s;
+}
+.root-card:hover { border-color: var(--accent); }
+.root-card .name { font-weight: 600; margin-bottom: 6px; }
+.root-card .meta { color: var(--muted); font-size: 11px; }
+.empty { color: var(--muted); font-style: italic; }
+
+/* ---- Operation ---- */
+.op { display: flex; flex-direction: column; height: 100%; }
+.op-top {
+  display: flex; align-items: center; gap: 12px; padding: 8px 12px;
+  border-bottom: 1px solid var(--border); background: var(--bg-2);
+}
+.op-top .crumb { color: var(--muted); }
+.op-top .crumb b { color: var(--text); }
+.ep-switch { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.ep-switch .ep { padding: 3px 9px; border-radius: 999px; border: 1px solid var(--border); cursor: pointer; }
+.ep-switch .ep.active { background: var(--accent); color: #06223f; border-color: var(--accent); }
+
+.op-body { flex: 1; display: flex; min-height: 0; }
+.op-left { flex: 1; min-width: 0; position: relative; }
+.op-right { width: 42%; min-width: 320px; border-left: 1px solid var(--border); display: flex; flex-direction: column; }
+
+.next-strip {
+  padding: 8px 12px; border-bottom: 1px solid var(--border); background: var(--panel);
+  font-size: 12px; display: flex; gap: 10px; align-items: center;
+}
+.next-strip .headline { color: var(--good); font-weight: 600; }
+.next-strip code {
+  background: #0b0e14; border: 1px solid var(--border); border-radius: 5px;
+  padding: 2px 7px; color: var(--accent); font-family: Menlo, monospace; user-select: all;
+}
+.next-strip .reason { color: var(--muted); }
+
+.terminal-pane { flex: 1; min-height: 0; background: #0b0e14; padding: 6px; }
+
+/* ---- Canvas / ClipNode ---- */
+.canvas-wrap { position: absolute; inset: 0; }
+.clip-node {
+  width: 240px; background: var(--panel); border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden; font-size: 11px;
+}
+.clip-node.selected { border-color: var(--accent); }
+.clip-node .thumb {
+  height: 130px; background: #0b0e14 center/cover no-repeat;
+  display: flex; align-items: center; justify-content: center; color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+.clip-node .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.clip-node .body { padding: 8px 10px; }
+.clip-node .label { font-weight: 600; margin-bottom: 4px; color: var(--text); }
+.clip-node .row { display: flex; gap: 6px; flex-wrap: wrap; color: var(--muted); }
+.chip { background: #0b0e14; border: 1px solid var(--border); border-radius: 999px; padding: 1px 7px; }
+.chip.rhythm { color: var(--accent); }
+.qa { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
+.qa .badge { border-radius: 4px; padding: 1px 6px; font-size: 10px; }
+.qa .block { background: rgba(255,107,107,.16); color: var(--block); }
+.qa .warn { background: rgba(255,204,102,.16); color: var(--warn); }
+.qa .info { background: rgba(108,182,255,.16); color: var(--info); }
+
+.stub-view { padding: 30px; color: var(--muted); }
+.stub-view h3 { color: var(--text); }
+.tree { font-family: Menlo, monospace; font-size: 12px; line-height: 1.7; }

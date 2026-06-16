@@ -10,7 +10,8 @@
 
 本规划器是 `face_drift_risk.py`（逐镜**诊断**）的**处方层**：逐镜逐角色算"变化量 delta"，再按
 所选生图后端的真实能力（`image_identity_profile`）路由出"这一镜该喂哪些参考 + 要不要控制网 +
-要不要升档"，写成**建议侧车** `生产数据/reference_plan_第N集.{json,md}`，人审后落进 prompt；
+要不要升档"；多人同框再给 clip 级"身份槽位 + 执行策略"，写成**建议侧车**
+`生产数据/reference_plan_第N集.{json,md}`，人审后落进 prompt；
 gate 用它在 image_preflight 对账（`参考规划落实`）。**只建议不阻断**——零像素、零花钱、纯 stdlib。
 
 复用（不重造）：face_drift_risk 的 is_closeup/has_strong_emotion/extreme_angle_tokens/clip_text/
@@ -206,6 +207,276 @@ def plan_character_in_clip(
     }
 
 
+def _slot_name(index: int) -> str:
+    names = ("LEFT_SLOT", "RIGHT_SLOT", "FOREGROUND_SLOT", "BACKGROUND_SLOT")
+    return names[index] if index < len(names) else f"EXTRA_SLOT_{index + 1}"
+
+
+# 锚点去重：把发色/服装主色归一到颜色桶，同框同桶=高串脸风险（模型易把两张近似的脸平均掉）。
+_COLOR_BUCKETS: Sequence[tuple] = (
+    ("红", ("红", "赤", "朱", "绛", "丹", "胭脂", "猩红", "酒红")),
+    ("白", ("白", "素", "皓", "雪", "月白", "缟")),
+    ("黑", ("黑", "玄", "墨", "乌", "缁", "黛")),
+    ("蓝", ("蓝", "青", "碧", "靛", "藏青", "天青")),
+    ("绿", ("绿", "翠", "葱", "苍", "竹")),
+    ("紫", ("紫", "绛紫", "藕")),
+    ("金", ("金", "黄", "鎏金", "杏", "明黄")),
+    ("银灰", ("银", "灰", "缃", "霜")),
+    ("粉", ("粉", "桃", "藕荷", "嫣")),
+    ("褐", ("褐", "棕", "黄褐", "栗", "驼", "土")),
+)
+
+
+def _color_bucket(text: str) -> Optional[str]:
+    """从 DNA 描述里取第一个命中的颜色桶；取不到返回 None（不参与撞色判定）。"""
+    t = str(text or "")
+    for name, kws in _COLOR_BUCKETS:
+        if any(k in t for k in kws):
+            return name
+    return None
+
+
+def _is_closeup(parsed: Mapping[str, Any]) -> bool:
+    """近景/特写判定（多人近景=脸漂最高发档，触发降景别/拆反打处方）。纯函数·可测。"""
+    blob = " ".join(str(parsed.get(k) or "") for k in ("shot_size", "lens", "text"))
+    if _has(blob, ("远景", "大全景", "全景", "群像", "wide", "long shot", "ELS", "LS")):
+        return False
+    return _has(blob, ("ECU", "BCU", "CU", "MCU", "近景", "特写", "面部", "脸部", "反应镜", "表情镜"))
+
+
+def _has(text: str, kws: Sequence[str]) -> bool:
+    low = str(text or "").lower()
+    return any(k.lower() in low for k in kws)
+
+
+_REVIEW_SCRIPTS_DIR = Path(__file__).resolve().parents[1] / "n2d-review" / "scripts"
+
+
+def _load_face_consistency():
+    """惰性加载 n2d-review/face_consistency（embedding）；缺 insightface/模块即返回 None，降级回颜色桶。"""
+    d = str(_REVIEW_SCRIPTS_DIR)
+    if d not in sys.path:
+        sys.path.insert(0, d)
+    try:
+        return __import__("face_consistency")
+    except Exception:
+        return None
+
+
+def _front_ref_abs(root: Path, form: Mapping[str, Any]) -> Optional[str]:
+    """取一个 form 最适合做脸部身份比对的参考图绝对路径：优先脸部特写(face)，回退正面(front)。"""
+    rg = form.get("reference_group") or {}
+    for key in ("face", "front"):
+        v = rg.get(key)
+        if isinstance(v, str) and v:
+            return str(Path(root) / v)
+    return None
+
+
+def compute_confusable_pairs(root: Path, ref_paths_by_id: Mapping[str, Optional[str]],
+                             threshold: float = 0.6) -> Dict[str, Any]:
+    """对多人镜涉及的角色，用 insightface 嵌入参考脸算两两余弦，≥threshold 标"易混对"。
+
+    这是比颜色词更硬的串脸真信号：两张参考脸客观相似时，模型最容易把同框两人画成一张脸。
+    insightface 缺席 / 参考图缺失 → available=False，调用方回退颜色桶。每角色只嵌入一次。
+    阈值 0.6：风格化漫剧脸跨"不同角色"余弦常 0.3–0.5，同人 0.6–0.8，故 ≥0.6 视为不同角色却高度相似。"""
+    fc = _load_face_consistency()
+    if fc is None or not hasattr(fc, "_load_embedder"):
+        return {"available": False, "pairs": set()}
+    app = fc._load_embedder()
+    if app is None:
+        return {"available": False, "pairs": set()}
+    embs: Dict[str, Any] = {}
+    for cid, path in ref_paths_by_id.items():
+        if path and os.path.exists(path):
+            try:
+                e = fc._embed(app, path)
+            except Exception:
+                e = None
+            if e:
+                embs[cid] = e
+    ids = [c for c in ref_paths_by_id if c in embs]
+    pairs: set = set()
+    for i in range(len(ids)):
+        for j in range(i + 1, len(ids)):
+            try:
+                if fc.cosine(embs[ids[i]], embs[ids[j]]) >= threshold:
+                    pairs.add(frozenset((ids[i], ids[j])))
+            except Exception:
+                continue
+    return {"available": True, "pairs": pairs}
+
+
+def plan_distinct_anchors(dna_by_id: Mapping[str, Mapping[str, Any]],
+                          unique_ids: Sequence[str],
+                          confusable_pairs: Optional[Sequence[Any]] = None) -> Dict[str, Any]:
+    """同框各角色的发色/服装主色桶 + 撞色判定（颜色桶 + 可选参考脸 embedding 易混对）。纯函数·可测。
+
+    撞色定义（取并集）：① 颜色桶——「服装主色桶相同」且「发色桶相同（或任一缺失）」；
+    ② embedding——`confusable_pairs` 里的角色对（参考脸客观高度相似，比颜色更硬的真信号，优先级更高）。
+    只要任一对命中就 collision=True，并给出"哪两个、撞在哪层"的处方。
+    """
+    confusable: set = set()
+    for p in (confusable_pairs or []):
+        try:
+            a, b = tuple(p)
+            confusable.add(frozenset((a, b)))
+        except Exception:
+            continue
+    per_char: List[Dict[str, Any]] = []
+    for cid in unique_ids:
+        dna = dna_by_id.get(cid) or {}
+        per_char.append({
+            "char_id": cid,
+            "hair_bucket": _color_bucket(dna.get("hair")),
+            "outfit_bucket": _color_bucket(dna.get("outfit")),
+            "anchor_phrase": str(dna.get("anchor_phrase") or ""),
+        })
+    collisions: List[Dict[str, Any]] = []
+    for i in range(len(per_char)):
+        for j in range(i + 1, len(per_char)):
+            a, b = per_char[i], per_char[j]
+            emb_conf = frozenset((a["char_id"], b["char_id"])) in confusable
+            same_outfit = a["outfit_bucket"] and a["outfit_bucket"] == b["outfit_bucket"]
+            same_hair = (a["hair_bucket"] == b["hair_bucket"]) or not a["hair_bucket"] or not b["hair_bucket"]
+            color_collide = bool(same_outfit and same_hair)
+            if not (emb_conf or color_collide):
+                continue
+            layers: List[str] = []
+            if emb_conf:
+                layers.append("参考脸 embedding 高度相似（模型最易混的硬信号）")
+            if color_collide:
+                layers.append(f"服装主色同为「{a['outfit_bucket']}」"
+                              + (f"、发色同为「{a['hair_bucket']}」" if a["hair_bucket"] and a["hair_bucket"] == b["hair_bucket"] else "、发色未区分"))
+            collisions.append({
+                "pair": f"{a['char_id']}↔{b['char_id']}",
+                "layer": "；".join(layers),
+                "embedding_confusable": emb_conf,
+            })
+    collision = bool(collisions)
+    if collision:
+        guidance = (
+            "同框角色易混=高串脸风险：给每个角色 5–7 个互斥锚点，至少在发色/发型/服装主色HEX/标志配饰上"
+            "拉开区分；embedding 易混对（参考脸本就像）尤其要靠服装/配饰强分，必要时拆反打避免同框近景，"
+            "并在逐镜 prompt 写 `区分锚点` 字段。"
+        )
+    else:
+        guidance = "同框角色主色/参考脸已可区分；逐镜 prompt 仍写 `区分锚点` 字段把各自唯一发色/服装主色/配饰锚点列清楚。"
+    return {"per_char": per_char, "collision": collision, "collisions": collisions,
+            "embedding_checked": confusable_pairs is not None, "guidance": guidance}
+
+
+def plan_multi_subject_strategy(
+    char_plans: Sequence[Mapping[str, Any]],
+    profile: Mapping[str, Any],
+    dna_by_id: Optional[Mapping[str, Mapping[str, Any]]] = None,
+    closeup: bool = False,
+    confusable_pairs: Optional[Sequence[Any]] = None,
+) -> Optional[Dict[str, Any]]:
+    """多人同框 clip 级处方：身份槽位 + 后端能力路由 + prompt 必填字段。纯函数·可测。
+
+    逐角色参考只能解决"每个人喂什么图"；多人同框真正的漂脸/串脸高发点在于：
+    生成端不知道每个身份绑定哪个画面位置，也不知道弱后端是否必须分层合成。因此 clip 级单独
+    输出确定性执行策略，供 `01_分镜出图.md` 登记、gate 对账。
+    """
+    chars = [c for c in char_plans if c.get("char_id")]
+    unique_ids = []
+    for c in chars:
+        cid = str(c.get("char_id") or "")
+        if cid and cid not in unique_ids:
+            unique_ids.append(cid)
+    if len(unique_ids) < 2:
+        return None
+
+    persistent = bool(profile.get("persistent_subject"))
+    tiers = {str(c.get("char_id")): str(c.get("tier") or "") for c in chars}
+    all_native_ready = persistent and all(tiers.get(cid) in {"native_subject", "lora"} for cid in unique_ids)
+    needs_registration = persistent and any(tiers.get(cid) == "native_unregistered" for cid in unique_ids)
+
+    if not persistent:
+        mode = "split_composite_required"
+        execution = (
+            "无持久角色 ID 后端：每个角色单独以自己的 reference_group / expressions 做 image2image 出图，"
+            "再按同一构图槽位合成同框；这是硬执行，不是条件式兜底。"
+        )
+    elif all_native_ready:
+        mode = "native_subject_slots"
+        execution = (
+            "按后端原生主体/角色 ID 逐槽位引用；每个槽位绑定 CHAR_xx/形态 + 屏幕位置 + 视线方向，"
+            "pose/depth/区域绑定可用时作为站位双保险。"
+        )
+    else:
+        mode = "register_subjects_or_split"
+        execution = (
+            "当前后端支持持久主体但至少一个角色未 registered/ready：核心角色先注册主体；"
+            "来不及注册时本镜按 split_composite_required 登记降级。"
+        )
+
+    slots: List[Dict[str, Any]] = []
+    seen_slots: set = set()
+    for i, c in enumerate(chars):
+        cid = str(c.get("char_id") or "")
+        if cid not in unique_ids or cid in seen_slots:
+            continue
+        seen_slots.add(cid)
+        slots.append({
+            "slot": _slot_name(len(slots)),
+            "char_id": cid,
+            "form": c.get("form") or "常态",
+            "tier": c.get("tier"),
+            "face_priority": "primary" if i == 0 else "secondary",
+            "required_binding": f"`{cid}/{c.get('form') or '常态'}` + 自己的 reference_group / 脸部特写 / 表情库",
+        })
+
+    required_prompt_fields = [
+        "多人同框身份槽位",
+        "多人同框执行策略",
+        "screen_positions/blocking",
+        "逐主体参考绑定",
+        "primary 星标 CHAR_xx*",
+        "区分锚点（互斥发色/服装主色/配饰）",
+    ]
+    if mode != "split_composite_required":
+        required_prompt_fields.append("区域绑定/pose-depth（后端支持时）")
+
+    distinct = plan_distinct_anchors(dna_by_id or {}, unique_ids, confusable_pairs=confusable_pairs)
+
+    # ① 分镜调度：默认避开多人近景同框。≥4 清晰同框=任何后端都压不住（实测 ≤3 上限）。
+    n = len(unique_ids)
+    if n >= 4:
+        shot_scheduling = {
+            "verdict": "over_cap",
+            "default": "拆镜：清晰同框 ≤3 具名角色，其余推背景/虚焦/背身/过肩或拆成反打/分镜",
+            "note": f"{n} 个具名角色清晰同框超出 ≤3 上限——单帧里 4+ 张清晰脸必崩，确属远景群像请标 `远景/群像` 豁免。",
+        }
+    elif closeup:
+        shot_scheduling = {
+            "verdict": "downgrade_recommended",
+            "default": "优先拆「单人CU + 反打」或降到中景/全景做景别分层（清晰主角1人，余者推后景/虚焦）",
+            "note": "多人近景同框是脸漂/串脸最高发档；保留同框近景须显式登记 split_composite/分层合成。",
+        }
+    else:
+        shot_scheduling = {
+            "verdict": "ok",
+            "default": "中景/全景同框可行；按身份槽位 + 区分锚点出图",
+            "note": "",
+        }
+
+    return {
+        "applies": True,
+        "mode": mode,
+        "backend_label": profile.get("label") or profile.get("canonical") or "当前后端",
+        "persistent_subject": persistent,
+        "needs_registration": needs_registration,
+        "slots": slots,
+        "required_prompt_fields": required_prompt_fields,
+        "execution": execution,
+        "distinct_anchors": distinct,
+        "shot_scheduling": shot_scheduling,
+        "needs_action": True,
+    }
+
+
 # ── 装配（读盘 → 计划 → 落档） ─────────────────────────────────────────────────
 
 def load_character_forms(root: Path) -> List[Dict[str, Any]]:
@@ -239,6 +510,8 @@ def load_character_forms(root: Path) -> List[Dict[str, Any]]:
             "reference_group": f.get("reference_group") or {},
             "angle_policy": f.get("angle_policy") or {},
             "image_adapters": (f.get("identity_adapters") or {}).get("image") or {},
+            "character_dna": f.get("character_dna") or {},
+            "anchor_phrase": str(f.get("anchor_phrase") or ""),
         } for f in forms]
         out.append({
             "id": cid,
@@ -316,7 +589,20 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
     action_required: List[Dict[str, Any]] = []
     need_registration: set = set()
     need_lora: set = set()
+    multi_subject_actions: List[Dict[str, Any]] = []
     weak_big_delta_clips = 0
+
+    # C: 预扫所有多人镜涉及的角色，一次性算"参考脸 embedding 易混对"（embedder 只加载一次、每角色只嵌入一次）。
+    multiframe_ids: set = set()
+    for clip in clips:
+        present_ids = {c["id"] for c in clip_present(parse_clip(clip), chars)}
+        if len(present_ids) >= 2:
+            multiframe_ids |= present_ids
+    ref_paths = {}
+    for c in chars:
+        if c["id"] in multiframe_ids and c.get("forms"):
+            ref_paths[c["id"]] = _front_ref_abs(root, c["forms"][0])
+    confusable_pairs = compute_confusable_pairs(root, ref_paths)["pairs"] if ref_paths else set()
 
     for clip in clips:
         parsed = parse_clip(clip)
@@ -354,7 +640,37 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
                 clip_has_weak_big = True
         if clip_has_weak_big:
             weak_big_delta_clips += 1
-        clip_plans.append({"clip_id": clip_id, "lens": lens, "characters": char_plans})
+        clip_plan: Dict[str, Any] = {"clip_id": clip_id, "lens": lens, "characters": char_plans}
+        dna_by_id = {}
+        for c in present:
+            form = _pick_form(c, text)
+            dna = dict(form.get("character_dna") or {})
+            dna["anchor_phrase"] = form.get("anchor_phrase") or ""
+            dna_by_id[c["id"]] = dna
+        clip_confusable = [p for p in confusable_pairs if set(p) <= {c["id"] for c in present}]
+        strategy = plan_multi_subject_strategy(char_plans, profile,
+                                               dna_by_id=dna_by_id, closeup=_is_closeup(parsed),
+                                               confusable_pairs=clip_confusable)
+        if strategy:
+            clip_plan["multi_subject_strategy"] = strategy
+            _sched = strategy.get("shot_scheduling") or {}
+            _dist = strategy.get("distinct_anchors") or {}
+            action = {
+                "kind": "multi_subject_strategy",
+                "clip": clip_id,
+                "mode": strategy["mode"],
+                "chars": [f"{s['char_id']}/{s['form']}" for s in strategy.get("slots") or []],
+                "required_prompt_fields": strategy.get("required_prompt_fields") or [],
+                "execution": strategy.get("execution"),
+                "shot_scheduling": _sched.get("verdict"),
+                "shot_scheduling_default": _sched.get("default"),
+                "anchor_collision": bool(_dist.get("collision")),
+                "anchor_embedding_confusable": any(c.get("embedding_confusable") for c in (_dist.get("collisions") or [])),
+                "anchor_guidance": _dist.get("guidance"),
+            }
+            action_required.append(action)
+            multi_subject_actions.append(action)
+        clip_plans.append(clip_plan)
 
     return {
         "kind": PLAN_KIND,
@@ -370,6 +686,7 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
             "weak_backend_large_delta_clips": weak_big_delta_clips,
             "chars_need_native_registration": sorted(need_registration),
             "chars_need_lora": sorted(need_lora),
+            "multi_subject_actions": multi_subject_actions,
             "action_required": action_required,
         },
         "notes": notes,
@@ -400,6 +717,26 @@ def render_md(plan: Mapping[str, Any]) -> str:
     if lora:
         lines += [f"## 建议升 LoRA（弱后端压不住的核心角）", f"- {'、'.join(lora)}", ""]
 
+    multi_actions = s.get("multi_subject_actions") or []
+    if multi_actions:
+        lines += ["## 多人同框策略", "",
+                  "> ① 分镜调度优先：`over_cap`=拆镜(≥4清晰同框)、`downgrade_recommended`=多人近景建议拆反打/降景别；"
+                  "④ 锚点撞色=同框角色发色/服装主色雷同，逐主体补互斥 `区分锚点`。",
+                  "",
+                  "| 镜头 | 模式 | 角色槽位 | 分镜调度 | 撞色 | prompt 必填 | 执行 |",
+                  "|---|---|---|---|---|---|---|"]
+        for a in multi_actions:
+            sched = a.get("shot_scheduling") or "ok"
+            sched_cell = sched if sched == "ok" else f"⚠️{sched}"
+            coll_cell = ("🔴脸像" if a.get("anchor_embedding_confusable")
+                         else ("⚠️撞色" if a.get("anchor_collision") else "-"))
+            lines.append(
+                f"| {a.get('clip')} | {a.get('mode')} | {'、'.join(a.get('chars') or []) or '-'} "
+                f"| {sched_cell} | {coll_cell} "
+                f"| {'、'.join(a.get('required_prompt_fields') or []) or '-'} | {a.get('execution') or '-'} |"
+            )
+        lines.append("")
+
     lines += ["## 逐镜处方", "", "| 镜头 | 角色/形态 | 档位 | 变化量 | 推荐参考 | 控制网 | 补拍缺口 | 升档 |",
               "|---|---|---|---|---|---|---|---|"]
     for clip in plan.get("clips") or []:
@@ -417,6 +754,13 @@ def render_md(plan: Mapping[str, Any]) -> str:
     if actions:
         lines += ["## 行动项（人审后落进 prompt）"]
         for a in actions:
+            if a.get("kind") == "multi_subject_strategy":
+                lines.append(
+                    f"- [{a.get('clip')}] 多人同框：{a.get('mode')}；"
+                    f"角色槽位={'、'.join(a.get('chars') or []) or '-'}；"
+                    f"必填={'、'.join(a.get('required_prompt_fields') or []) or '-'}；{a.get('execution') or ''}"
+                )
+                continue
             bits = []
             if a.get("missing"):
                 bits.append("补拍：" + "；".join(a["missing"]))

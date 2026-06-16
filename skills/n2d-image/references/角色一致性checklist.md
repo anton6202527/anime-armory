@@ -135,7 +135,12 @@
 - [ ] prompt 结构：`主体 + 外貌锚定 + 动作 + 环境 + 景别 + 画风词 + [锚点句] + [生视频模型锚定句]`
 - [ ] 锚点句放**最后做风格说明**，不要插进主体描述（会扰乱构图）
 - [ ] 多角色同框：每个角色各拼各的锚点句
-- [ ] **多角色同框是高危触发点（`gate.py` 会 WARN 单镜 ≥2 具名角色）**：单图参考后端难保多人各自不漂。处置二选一并登记——① opt-in 官方多参考后端（Seedream 14 图 / Nano Banana Pro 5 人免微调 / 可灵主体库按 ID）；② 沿用当前官方图后端走「**分别出图锁脸 + 合成同框**」（或把两人位置交 n2d-video 用首尾双帧焊住）。别拿单图参考硬抽多人同框反复烧 credit。
+- [ ] **多角色同框是高危触发点（`gate.py` 会 WARN 单镜 ≥2 具名角色；无持久主体后端会 BLOCK）**：单图参考后端难保多人各自不漂。**按 ROI 从高到低处置（前两步默认、后三步兜底）**：
+  - **① 分镜调度优先避开（默认·最便宜）**：真正要高保真的脸别同框——双人/多人 CU 默认拆「单人 CU + 反打」，必须同框默认中景/全景 + 景别分层（清晰主角 1 人，其余推背景/虚焦/背身/过肩），**清晰同框 ≤3 具名角色**。这条在 `n2d-script` 分镜阶段就设默认；gate 对清晰同框 ≥4 具名角色 BLOCK、多人近景未拆 WARN（远景群像标 `远景/群像` 豁免）。
+  - **② 路由强后端（有则用·无则回退 Codex）**：含 ≥2 具名角色镜优先路由可注册持久主体后端（Nano Banana Pro 最多 5 人 / Seedream 多图编辑 / 可灵 Character ID / Sora Cameo）写 `native_subject_slots`。当前默认 Codex，路由不到时不强切，继续 Codex 做 ③④。多参考 2–5 张最佳，过阈反降精度。
+  - **③ 留 Codex 走分区构建（首选实现）**：写 `split_composite_required` + `多人同框身份槽位`（LEFT/RIGHT/FOREGROUND/BACKGROUND 逐一绑定 `CHAR_xx/形态`、画面位置、视线、face_priority、自己的脸部参考/表情库、primary 星标）。实现 = 空场景底板 → inpaint/regional 逐区域各喂该角色 reference_group 画进去 → Adetailer/IP-Adapter Face 精修（合法分区构建，非事后贴脸）。别拿普通多参考硬抽多人同框反复烧 credit。
+  - **④ 锚点去重**：逐主体 5–7 个互斥锚点（唯一发色/发型/服装主色 HEX/标志配饰），两两不撞色；reference_planner 的 `distinct_anchors` 给撞色对，逐镜写 `区分锚点` 字段（缺则 gate WARN）。
+  - **⑤ LoRA 兜底**：核心角必须 CU 同框且前四步压不住 → `n2d-lora`，一角一 LoRA。
 
 ## 五、跨工具 / 跨阶段（治"风格中途跳变"）
 
@@ -192,6 +197,7 @@
 ☐ 核心角色资产包齐？       → 长线/主角有 `设定库/character_assets/.../manifest.json`，reference/prompts/lora/voice/adapters/qc 与缺口可追溯
 ☐ 场景 DNA 齐？             → 长线场景走 `asset_registry.scene_dna`，固定地标/布局/材质/光色/常驻物件，角色有稳定归属环境
 ☐ 扫过角色圣经+共享库？    → 没扫必漂移（§三①），角色圣经/00_索引/registry/场景都扫
+☐ 多人同框身份槽位写了吗？ → 同框 ≥2 个 `CHAR_` 必须写 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位 + 执行策略；Codex 类后端写 `split_composite_required`
 ☐ **物理身高比例对账？**  → 多人同框须显式写身高差（如 沈念仰视柳娘子，柳娘子俯视）
 ☐ **性格表情 DNA 匹配？** → 按角色性格描述肌肉状态（如 咬牙/垂眸/下颌收紧），禁泛化情绪词
 ☐ **电影光学焦段锁定？**  → ECU/CU=85mm, MS=50mm, LS=35mm, ELS=24mm；写进 prompt

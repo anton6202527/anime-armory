@@ -231,6 +231,11 @@
 **光位锚**（继承本场 · 跨镜不各打各的光）：继承 `00_总览.md` 本场「场景光位锚」（主光方向 + 色温 + 动机光源）；本镜默认不改光，若改光写剧情理由
 **起幅·运动余量**（出图为视频铺路 · clip 首帧=起幅，非动作顶点）：本镜为 Clip K **首帧=起幅**（动作顶点交尾帧 `镜头N_end.png`，封面/定格图才抓顶点）；按 `故事板.md` 本镜节奏/张力反推的运镜（推近/环绕/跟摇）**预留构图余量**——推近→框略宽、环绕→主体周围留空、跟摇→运动方向留 lead room
 **专项镜头模板**（复杂镜必填 · 普通镜写“无”）：若所属 Clip 有 `template/template_contract`，这里誊抄模板 ID + 本镜要落实的 `beats/blocking/camera_rule/continuity_must/negative` + 模板专属字段（如 `impact_frame`、`screen_direction`、`axis`、`effect_asset`、`contact_points`、`screen_positions`）。本镜构图必须服务模板契约：例如反打锁轴线、飞行锁姿态动背景、亲密互动锁接触点、多人数锁主次站位。
+**多人同框身份槽位**（同框 ≥2 个 `CHAR_` 必填；否则写“无”）：从 `reference_plan_第N集.md` / `storyboard.json.template_contract.character_slots` 誊抄逐主体槽位，格式固定为 `LEFT_SLOT: CHAR_xx/形态*（primary；画左/前景/视线画右；参考=该角色 front+脸部特写/expressions）`、`RIGHT_SLOT: CHAR_yy/形态（secondary；画右/后景/视线画左；参考=该角色 front+服装锚）`。三人以上继续用 `FOREGROUND_SLOT` / `BACKGROUND_SLOT` / `EXTRA_SLOT_N`。每个槽位必须同时写：`CHAR_xx/形态`、屏幕位置、前后景/遮挡关系、视线方向、脸部优先级、对应参考图组；不得只写“参考图①/②”或只写中文角色名。
+**多人同框执行策略**（同框 ≥2 个 `CHAR_` 必填；否则写“无”）：按所选后端能力写一个确定模式，不写条件式兜底。无持久角色 ID 后端（Codex/OpenAI/Dreamina/Nano/Gemini）写 `split_composite_required`：逐角色分别以自己的 reference_group / expressions 做 image2image 出图，再按上面槽位合成同框；这是本镜硬执行。持久主体后端且所有角色已 registered/ready 写 `native_subject_slots`：逐槽位绑定原生主体/角色 ID + 区域/站位；若有角色未注册，先写 `register_subjects_or_split` 并明确“先注册主体”或“本镜登记降级为 split_composite_required”。若导演上允许拆镜，写 `shot_reverse_shot` 并回到 storyboard/prompt 拆成正反打，不硬塞同框。
+**多人同框分镜调度**（同框 ≥2 个 `CHAR_` 必填）：誊抄 `reference_plan_第N集.md` 的 `shot_scheduling`。① **默认避开**：真正要高保真的脸别同框——多人同框默认中景/全景 + 景别分层（清晰主角 1 人，其余推背景/虚焦/背身/过肩），**双人/多人 CU 默认拆「单人 CU + 反打」**。② **硬上限 ≤3 具名角色清晰同框**：`shot_scheduling.verdict=over_cap`（≥4）必须回 storyboard 拆镜，gate 对 ≥4 清晰同框 BLOCK；确属远景群像（脸不解析）在本镜显式标 `远景/群像` 豁免。③ `downgrade_recommended`（多人近景）须写明本镜为何保留同框近景，且必须配 `split_composite_required`/分层合成。
+**区分锚点**（同框 ≥2 个 `CHAR_` 必填，治④串脸）：誊抄 `reference_plan_第N集.md` 的 `distinct_anchors`，逐主体写 **5–7 个互斥锚点**（各自唯一发色 / 发型 / 服装主色 HEX / 标志配饰），并显式声明两两**不撞色**（发色 + 服装主色至少一层拉开）；规划器标 `collision=true` 的撞色对，改其中一方服装主色或加唯一配饰再落档。缺本字段 gate 对 Codex 多人镜记 WARN。
+**Codex 分区构建实现**（`split_composite_required` 时建议写）：实现路径 = 空场景底板 →（官方后端）inpaint / regional-prompt 逐区域各喂该角色自己的 `reference_group` 把人一个个画进对应槽位区域 → Adetailer / IP-Adapter Face 脸部二次精修。这是合法的「分区逐次构建」（模型重绘整张脸并自然融光），**不是**禁用的「对成片抠脸贴回」（见 SKILL.md「本地贴脸修复禁用铁律」边界澄清）。inpaint 多主体时 prompt 须保留人数标识、删掉单主体关键词，避免 inpaint 把主体擦除而非替换。
 **角色圣经引用**（含角色镜必填）：`设定库/角色圣经.md` → `CHAR_xx/形态`；本镜人物描述先继承圣经里的锚点句、四层角色 DNA 和气质/动作习惯，再写本镜状态。普通无人物镜写“无”。
 **角色资产包引用**（核心/长线角色镜必填；普通/短线角色可写“无”）：`设定库/character_assets/<CHAR_ID>__<slug>/manifest.json`；本镜若调用 LoRA、voice、后端主体 ID 或迁移过来的参考图，必须能在 manifest 或其 truth_sources 中追溯。
 **跨集成长阶段**（长线角色必填；普通角色写“无”）：`evolution_profile.stage_id=<...>`；本镜属于哪个境界/权势/气场阶段，锁 `identity_invariants`，只允许 `allowed_evolution_axes` 中的服装/法宝/气场/VFX/姿态气质变化。若本镜是新阶段首现，写“从上一阶段 <stage_id/form> 的正脸/脸部特写派生”。
@@ -259,11 +264,12 @@
 \`\`\`
 （按八维装配顺序：[①镜头][②机位]，[③同一少女·锚点句·此刻状态] 正在 [④动作],
 置身 [⑤场景+时间+环境]，[⑥光影]，整体 [⑦情绪+张力+色调]，[⑧画风+渲染+画幅+生视频模型锚定句]，
- [含角色镜头末尾加**身份锁定句**：保持与参考图①的人脸/五官比例/发型完全一致]）
+ [含角色镜头末尾加**身份锁定句**：单人镜可写保持与主参考的人脸/五官比例/发型完全一致；多人同框必须按「多人同框身份槽位」逐主体写锁定句，不得用“参考图①”泛化到所有人]）
 
 # 身份锁定句（多参考后端必加·与锚点句互补别混）：锚点句锁"特征词不漂"，身份锁定句锁"与参考图就是同一张脸"——
-# Nano Banana Pro/Seedream/Gemini 这类多参考·编辑类模型对它最敏感（2026-06 标配）。英文版："keep the face,
-# facial proportions and hairstyle identical to reference image 1"。单图参考后端也写，无害。
+# Nano Banana Pro/Seedream/Gemini 这类多参考·编辑类模型对它最敏感（2026-06 标配）。单人镜英文版可写：
+# "keep this character's face, facial proportions and hairstyle identical to the primary face reference"。
+# 多人镜必须逐槽位写：LEFT_SLOT keeps CHAR_xx face identical to its own face reference; RIGHT_SLOT keeps CHAR_yy face identical to its own face reference。
 \`\`\`
 
 ### 正向 prompt（英文）

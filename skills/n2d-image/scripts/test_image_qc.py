@@ -1279,3 +1279,95 @@ def test_finalize_expression_unknown_emotion_fails(tmp_path: Path) -> None:
 def test_finalize_expression_missing_image_fails(tmp_path: Path) -> None:
     root = _registry_with_expr(tmp_path, make_file=False)
     assert image_qc.finalize_expression(root, "CHAR_01/常态/怒")["ok"] is False
+
+
+# ── B 跨集脸漂移趋势 ─────────────────────────────────────────────────────────────
+
+def _drift_payload(mean: float, mode: str = "insightface") -> dict:
+    return {"checks": {"face": {"mode": mode, "characters": {
+        "CHAR_01": {"ep_mean_score": mean, "ep_n_shots": 3}}}}}
+
+
+def test_update_face_drift_history_writes_full_precision(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "剧"
+    (root / "生产数据").mkdir(parents=True)
+    out = image_qc.update_face_drift_history(root, "第1集", _drift_payload(0.82))
+    assert out is not None
+    assert out["characters"]["CHAR_01"]["第1集"] == 0.82
+    assert out["kind"] == image_qc.FACE_DRIFT_HISTORY_KIND
+
+
+def test_update_face_drift_history_skips_degraded_precision(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "剧"
+    (root / "生产数据").mkdir(parents=True)
+    # pillow_fallback = 降级精度，均值不可比，不写历史
+    assert image_qc.update_face_drift_history(root, "第1集", _drift_payload(0.82, mode="pillow_fallback")) is None
+    assert not image_qc._face_drift_history_path(root).exists()
+
+
+def test_cross_episode_face_drift_flags_systematic_decline(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "剧"
+    (root / "生产数据").mkdir(parents=True)
+    image_qc.cross_episode_face_drift(root, "第1集", _drift_payload(0.82))
+    image_qc.cross_episode_face_drift(root, "第2集", _drift_payload(0.78))
+    drift = image_qc.cross_episode_face_drift(root, "第3集", _drift_payload(0.60))  # 基线0.82→0.60 掉0.22≥block
+    if not drift.get("available"):
+        import pytest
+        pytest.skip("face_consistency 模块在测试环境不可用")
+    assert any(e["char"] == "CHAR_01" and e["severity"] == "high" for e in drift["entries"])
+
+
+def test_cross_episode_face_drift_quiet_when_stable(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "剧"
+    (root / "生产数据").mkdir(parents=True)
+    image_qc.cross_episode_face_drift(root, "第1集", _drift_payload(0.82))
+    drift = image_qc.cross_episode_face_drift(root, "第2集", _drift_payload(0.81))
+    if not drift.get("available"):
+        import pytest
+        pytest.skip("face_consistency 模块在测试环境不可用")
+    assert drift["entries"] == []
+
+
+# ── A 降级精度多人同框不放行 ─────────────────────────────────────────────────────
+
+def _degraded_face_payload_with_shots(shots: list) -> dict:
+    return {"checks": {"face": {"mode": "pillow_fallback", "shots": shots}}}
+
+
+def test_multi_person_shot_nums_reads_character_ids(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "剧"
+    (root / "脚本" / "第1集").mkdir(parents=True)
+    (root / "脚本" / "第1集" / "storyboard.json").write_text(json.dumps({"clips": [
+        {"id": "Clip_01", "character_ids": ["CHAR_01"]},
+        {"id": "Clip_02", "character_ids": ["CHAR_01", "CHAR_02"]},
+    ]}), encoding="utf-8")
+    nums = image_qc.multi_person_shot_nums(root, "第1集")
+    assert nums == {2}
+
+
+def test_degraded_multi_person_medium_shot_is_hard_block(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "剧"
+    (root / "脚本" / "第1集").mkdir(parents=True)
+    (root / "脚本" / "第1集" / "storyboard.json").write_text(json.dumps({"clips": [
+        {"id": "Clip_02", "character_ids": ["CHAR_01", "CHAR_02"], "shots": [{"lens": "中景"}]},
+    ]}), encoding="utf-8")
+    payload = _degraded_face_payload_with_shots([{"png": "Clip_02.png", "verdict": "ok"}])
+    image_qc.annotate_degraded_closeups(payload, root, "第1集")
+    assert payload["checks"]["face"]["shots"][0]["multi_person"] is True
+    assert len(image_qc._degraded_multi_person_face_shots(payload)) == 1
+    summary = image_qc.summarize(payload)
+    assert summary["by_check"].get("face_degraded_multi_person", {}).get("block") == 1
+    assert summary["verdict"] == "block"
+
+
+def test_degraded_single_person_medium_shot_not_blocked(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "剧"
+    (root / "脚本" / "第1集").mkdir(parents=True)
+    (root / "脚本" / "第1集" / "storyboard.json").write_text(json.dumps({"clips": [
+        {"id": "Clip_01", "character_ids": ["CHAR_01"], "shots": [{"lens": "中景"}]},
+    ]}), encoding="utf-8")
+    payload = _degraded_face_payload_with_shots([{"png": "Clip_01.png", "verdict": "ok"}])
+    image_qc.annotate_degraded_closeups(payload, root, "第1集")
+    assert image_qc._degraded_multi_person_face_shots(payload) == []
+    # 单人中景在降级下不升 hard（不误杀），仍走 review/降级路径
+    assert image_qc.summarize(payload)["by_check"].get("face_degraded_multi_person") is None

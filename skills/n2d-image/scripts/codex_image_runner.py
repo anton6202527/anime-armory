@@ -90,24 +90,115 @@ def load_sections(root: Path, episode: str) -> List[ClipSection]:
     if not prompt_path.is_file():
         raise FileNotFoundError(f"prompt pack not found: {prompt_path}")
     text = prompt_path.read_text(encoding="utf-8")
-    headers = list(re.finditer(r"^##\s+(Clip\s+\d+)[^\n]*$", text, re.M))
+    headers = list(re.finditer(r"^##\s+(?:(Clip)\s+(\d+)|(镜头)\s*([0-9０-９]+))[^\n]*$", text, re.M))
     sections: List[ClipSection] = []
     for index, header in enumerate(headers):
         start = header.start()
         end = headers[index + 1].start() if index + 1 < len(headers) else len(text)
         body = text[start:end].strip()
         title = header.group(0).strip()
-        clip_num = re.search(r"Clip\s+(\d+)", header.group(1))
-        if not clip_num:
+        raw_num = header.group(2) or header.group(4)
+        if not raw_num:
             continue
-        clip = f"Clip_{int(clip_num.group(1)):02d}"
-        target_match = re.search(r"^\*\*目标\*\*：([^\n]+)$", body, re.M)
+        raw_num = raw_num.translate(str.maketrans("０１２３４５６７８９", "0123456789"))
+        clip = f"Clip_{int(raw_num):02d}"
+        target_match = re.search(r"^\*\*(?:目标|目标落档)\*\*：([^\n]+)$", body, re.M)
         target_line = target_match.group(1).strip() if target_match else ""
         sections.append(ClipSection(clip=clip, title=title, body=body, target_line=target_line))
     return sections
 
 
+def load_shared_sections(root: Path) -> List[Target]:
+    """Resolve shared makeup/reference prompt sections into generation targets.
+
+    Shared prompt files use a different schema from episode shots.  We only
+    generate the primary file listed first in ``目标存档``; derived face/half-body
+    references can be generated later as explicit follow-up targets if needed.
+    """
+    prompt_dir = root / "出图" / "共享" / "prompt"
+    files = ["角色定妆.md", "场景定妆.md", "道具定妆.md", "特效定妆.md"]
+    targets: List[Target] = []
+    for filename in files:
+        path = prompt_dir / filename
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8")
+        headers = list(re.finditer(r"^##\s+(.+)$", text, re.M))
+        for index, header in enumerate(headers):
+            start = header.start()
+            end = headers[index + 1].start() if index + 1 < len(headers) else len(text)
+            body = text[start:end].strip()
+            target_match = re.search(r"^\*\*目标存档\*\*：([^\n]+)$", body, re.M)
+            if not target_match:
+                continue
+            first = first_backticked(target_match.group(1))
+            if not first:
+                continue
+            title = header.group(0).strip()
+            aliases = shared_aliases(title, body, first)
+            shot = preferred_shared_shot(title, aliases, first)
+            section = ClipSection(clip=shot, title=title, body=body, target_line=target_match.group(1).strip())
+            target = Target(shot=shot, clip=shot, mode="shared", rel_path=rel_to_root(first, "共享"), section=section)
+            # Attach aliases dynamically to keep the dataclass simple.
+            setattr(target, "aliases", aliases)
+            targets.append(target)
+    return targets
+
+
+def shared_aliases(title: str, body: str, rel_path: str) -> set:
+    aliases = {Path(rel_path).stem, Path(rel_path).name}
+    ids = re.findall(r"`((?:CHAR|LOC|PROP|OUTFIT|VFX)_[A-Za-z0-9_]+)`", title + "\n" + body)
+    aliases.update(ids)
+    if "CHAR_01" in aliases and "常态" in title:
+        aliases.add("CHAR_01/常态")
+    if "CHAR_01" in aliases and "觉醒态" in title:
+        aliases.add("CHAR_01/觉醒态")
+    if "CHAR_02" in aliases:
+        aliases.add("CHAR_02/常态")
+    if "CHAR_03" in aliases and "人皮态" in title:
+        aliases.add("CHAR_03/人皮态")
+    return {a for a in aliases if a}
+
+
+def preferred_shared_shot(title: str, aliases: set, rel_path: str) -> str:
+    title_ids = re.findall(r"`((?:CHAR|LOC|PROP|OUTFIT|VFX)_[A-Za-z0-9_]+)`", title)
+    for ident in title_ids:
+        form_alias = ""
+        if ident == "CHAR_01" and "常态" in title:
+            form_alias = "CHAR_01/常态"
+        elif ident == "CHAR_01" and "觉醒态" in title:
+            form_alias = "CHAR_01/觉醒态"
+        elif ident == "CHAR_02":
+            form_alias = "CHAR_02/常态"
+        elif ident == "CHAR_03" and "人皮态" in title:
+            form_alias = "CHAR_03/人皮态"
+        if form_alias and form_alias in aliases:
+            return form_alias
+        if ident in aliases:
+            return ident
+    for prefix in ("CHAR_", "LOC_", "PROP_", "OUTFIT_", "VFX_"):
+        candidates = sorted(a for a in aliases if isinstance(a, str) and a.startswith(prefix))
+        if candidates:
+            return candidates[0]
+    return Path(rel_path).stem
+
+
+def normalize_shot_name(shot: str) -> str:
+    text = str(shot).strip()
+    text = text.translate(str.maketrans("０１２３４５６７８９", "0123456789"))
+    match = re.fullmatch(r"(?:镜头|shot|clip)?[_\s-]*([0-9]+)(?:_(mid|end|first_mid|a[0-9]+))?", text, re.I)
+    if match:
+        suffix = f"_{match.group(2)}" if match.group(2) else ""
+        return f"Clip_{int(match.group(1)):02d}{suffix}"
+    match = re.fullmatch(r"Clip[_\s-]*([0-9]+)(?:_(mid|end|first_mid|a[0-9]+))?", text, re.I)
+    if match:
+        suffix = f"_{match.group(2)}" if match.group(2) else ""
+        return f"Clip_{int(match.group(1)):02d}{suffix}"
+    return text
+
+
 def section_for(sections: Sequence[ClipSection], shot: str) -> ClipSection:
+    shot = normalize_shot_name(shot)
     match = re.search(r"Clip_(\d+)", shot)
     if not match:
         raise ValueError(f"invalid shot name: {shot}")
@@ -119,29 +210,26 @@ def section_for(sections: Sequence[ClipSection], shot: str) -> ClipSection:
 
 
 def target_for_shot(shot: str, section: ClipSection, episode: str) -> Target:
+    shot = normalize_shot_name(shot)
     line = section.target_line
     if not line:
         raise ValueError(f"{section.clip}: target line missing")
+    paths = backticked(line)
 
     if shot.endswith("_end"):
-        tail = re.search(r"尾帧[^：]*：([^；\n]+)", line)
-        if not tail:
-            raise ValueError(f"{shot}: tail-frame target missing")
-        path = first_backticked(tail.group(1))
+        path = next((p for p in paths if "_end" in Path(p).stem), paths[-1] if paths else "")
         if not path:
-            raise ValueError(f"{shot}: tail-frame target is not a file path ({tail.group(1).strip()})")
+            raise ValueError(f"{shot}: tail-frame target missing")
         return Target(shot=shot, clip=section.clip, mode="tailframe", rel_path=rel_to_root(path, episode), section=section)
 
-    anchor_suffix = re.search(r"_(first_(?:mid|a\d+))$", shot)
+    anchor_suffix = re.search(r"_(mid|first_(?:mid|a\d+)|a\d+)$", shot)
     if anchor_suffix:
-        wanted = f"{shot}.png"
-        anchors = re.search(r"中锚：([^；\n]+)", line)
-        for item in backticked(anchors.group(1) if anchors else ""):
-            if Path(item).name == wanted:
-                return Target(shot=shot, clip=section.clip, mode="midframe", rel_path=rel_to_root(item, episode), section=section)
+        path = next((p for p in paths if "_mid" in Path(p).stem or "_a" in Path(p).stem), paths[1] if len(paths) > 1 else "")
+        if path:
+            return Target(shot=shot, clip=section.clip, mode="midframe", rel_path=rel_to_root(path, episode), section=section)
         raise ValueError(f"{shot}: mid/anchor target missing")
 
-    first = first_backticked(line)
+    first = paths[0] if paths else first_backticked(line)
     if not first:
         raise ValueError(f"{shot}: first-frame target missing")
     return Target(shot=shot, clip=section.clip, mode="firstframe", rel_path=rel_to_root(first, episode), section=section)
@@ -150,6 +238,11 @@ def target_for_shot(shot: str, section: ClipSection, episode: str) -> Target:
 def logical_seed(root: Path, episode: str, shot: str, rel_path: str) -> str:
     data = f"{root.name}|{episode}|{shot}|{rel_path}".encode("utf-8")
     return str(1000 + int(hashlib.sha1(data).hexdigest()[:8], 16) % 9000)
+
+
+def temp_token(value: str) -> str:
+    text = re.sub(r"[^\w.-]+", "_", str(value), flags=re.UNICODE).strip("_")
+    return text or "target"
 
 
 def png_valid(path: Path) -> bool:
@@ -173,7 +266,7 @@ def build_codex_prompt(root: Path, episode: str, target: Target, temp_path: Path
     state = root / "出图" / "共享" / "visual_state_ledger.json"
     final_path = root / target.rel_path
     source_for_tail = root / target.rel_path
-    if target.mode != "firstframe":
+    if target.mode not in {"firstframe", "shared"}:
         source_for_tail = root / target_for_shot(target.clip, target.section, episode).rel_path
 
     return f"""你正在为 N2D 项目生成正式分镜 PNG。必须使用内置 AI 生图能力（imagegen/image_generation），不要用 Python/SVG/canvas/纯色图/占位图伪造。
@@ -199,12 +292,12 @@ shot：{target.shot}
 - identity_registry: {registry}
 - asset_registry: {assets}
 - visual_state_ledger: {state}
-{"尾帧/中段可参考已有源图：" + str(source_for_tail) if target.mode != "firstframe" else ""}
+{"尾帧/中段可参考已有源图：" + str(source_for_tail) if target.mode not in {"firstframe", "shared"} else ""}
 
 本集总览节选：
 {overview}
 
-本镜完整 prompt 区块：
+本次完整 prompt 区块：
 {target.section.body}
 
 执行方式：
@@ -348,7 +441,7 @@ def process_target(
     final = root / target.rel_path
     temp_dir = Path(tempfile.gettempdir()) / "n2d_codex_image_runner" / (task_id or "manual")
     temp_dir.mkdir(parents=True, exist_ok=True)
-    temp_path = temp_dir / f"{episode}_{target.shot}_{Path(target.rel_path).stem}.png"
+    temp_path = temp_dir / f"{episode}_{temp_token(target.shot)}_{Path(target.rel_path).stem}.png"
     if temp_path.exists():
         temp_path.unlink()
 
@@ -453,11 +546,35 @@ def build_targets(root: Path, episode: str, shots: Iterable[str]) -> List[Target
     return targets
 
 
+def build_shared_targets(root: Path, requested: Iterable[str]) -> List[Target]:
+    available = load_shared_sections(root)
+    requests = list(requested)
+    if not requests or requests == ["all"]:
+        return available
+    targets: List[Target] = []
+    seen = set()
+    for req in requests:
+        req = req.strip()
+        found = None
+        for target in available:
+            aliases = getattr(target, "aliases", set())
+            if req == target.shot or req == Path(target.rel_path).stem or req in aliases:
+                found = target
+                break
+        if not found:
+            raise ValueError(f"no shared target found for {req}")
+        if found.rel_path not in seen:
+            seen.add(found.rel_path)
+            targets.append(found)
+    return targets
+
+
 def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description="Codex image_generation adapter for n2d image tasks")
     ap.add_argument("root")
     ap.add_argument("episode")
     ap.add_argument("--shots", default=os.environ.get("N2D_AFFECTED_SHOTS", ""))
+    ap.add_argument("--shared-targets", default="", help="comma-separated shared assets to generate; use 'all' for all primary shared prompt targets")
     ap.add_argument("--max-shots", type=int)
     ap.add_argument("--timeout-sec", type=float, default=float(os.environ.get("N2D_CODEX_IMAGE_TIMEOUT", "900")))
     ap.add_argument("--dry-run", action="store_true")
@@ -471,12 +588,17 @@ def main(argv: Sequence[str]) -> int:
     root = Path(ns.root).resolve()
     episode = normalize_episode(ns.episode)
     shots = split_csv(ns.shots)
-    if not shots:
-        raise SystemExit("--shots or N2D_AFFECTED_SHOTS is required")
+    shared_targets = split_csv(ns.shared_targets)
+    if not shots and not shared_targets:
+        raise SystemExit("--shots/--shared-targets or N2D_AFFECTED_SHOTS is required")
     if ns.max_shots is not None:
         shots = shots[: ns.max_shots]
     task_id = os.environ.get("N2D_TASK_ID") or f"manual-{episode}"
-    targets = build_targets(root, episode, shots)
+    targets = []
+    if shared_targets:
+        targets.extend(build_shared_targets(root, shared_targets))
+    if shots:
+        targets.extend(build_targets(root, episode, shots))
     if not targets:
         raise SystemExit("no targets resolved")
 

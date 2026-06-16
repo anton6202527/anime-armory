@@ -154,6 +154,101 @@ def test_shortline_no_escalation() -> None:
     assert p["escalation"] is None  # 短线角不前置升档（ROI 最小化）
 
 
+def test_multi_subject_strategy_requires_split_for_codex_like_backend() -> None:
+    chars = [
+        {"char_id": "CHAR_01", "form": "常态", "tier": "multi_reference"},
+        {"char_id": "CHAR_02", "form": "常服", "tier": "multi_reference"},
+    ]
+    strategy = rp.plan_multi_subject_strategy(chars, _MULTI_REF)
+    assert strategy
+    assert strategy["mode"] == "split_composite_required"
+    assert "多人同框身份槽位" in strategy["required_prompt_fields"]
+    assert "硬执行" in strategy["execution"]
+    assert [s["slot"] for s in strategy["slots"]] == ["LEFT_SLOT", "RIGHT_SLOT"]
+
+
+def test_distinct_anchors_collision_when_same_palette() -> None:
+    dna = {
+        "CHAR_01": {"hair": "乌黑长发", "outfit": "绛红长袍"},
+        "CHAR_02": {"hair": "黑发束冠", "outfit": "朱红劲装"},
+    }
+    out = rp.plan_distinct_anchors(dna, ["CHAR_01", "CHAR_02"])
+    assert out["collision"] is True
+    assert out["collisions"] and "红" in out["collisions"][0]["layer"]
+
+
+def test_distinct_anchors_no_collision_when_palettes_differ() -> None:
+    dna = {
+        "CHAR_01": {"hair": "乌黑长发", "outfit": "月白宫装"},
+        "CHAR_02": {"hair": "金发", "outfit": "玄黑战甲"},
+    }
+    out = rp.plan_distinct_anchors(dna, ["CHAR_01", "CHAR_02"])
+    assert out["collision"] is False
+
+
+def test_multi_subject_strategy_adds_distinct_anchor_field_and_scheduling() -> None:
+    chars = [
+        {"char_id": "CHAR_01", "form": "常态", "tier": "multi_reference"},
+        {"char_id": "CHAR_02", "form": "常服", "tier": "multi_reference"},
+    ]
+    dna = {"CHAR_01": {"hair": "乌黑", "outfit": "红衣"},
+           "CHAR_02": {"hair": "乌黑", "outfit": "绛红"}}
+    strategy = rp.plan_multi_subject_strategy(chars, _MULTI_REF, dna_by_id=dna, closeup=True)
+    assert "区分锚点（互斥发色/服装主色/配饰）" in strategy["required_prompt_fields"]
+    assert strategy["distinct_anchors"]["collision"] is True
+    assert strategy["shot_scheduling"]["verdict"] == "downgrade_recommended"
+
+
+def test_distinct_anchors_embedding_confusable_overrides_distinct_palette() -> None:
+    # 服装/发色不同（颜色桶不撞），但参考脸 embedding 判定易混 → 仍 collision=True，标 embedding_confusable
+    dna = {
+        "CHAR_01": {"hair": "金发", "outfit": "玄黑战甲"},
+        "CHAR_02": {"hair": "乌黑", "outfit": "月白宫装"},
+    }
+    out = rp.plan_distinct_anchors(dna, ["CHAR_01", "CHAR_02"],
+                                   confusable_pairs=[("CHAR_01", "CHAR_02")])
+    assert out["collision"] is True
+    assert out["collisions"][0]["embedding_confusable"] is True
+    assert "embedding" in out["collisions"][0]["layer"]
+    assert out["embedding_checked"] is True
+
+
+def test_distinct_anchors_no_embedding_pairs_falls_back_to_color() -> None:
+    dna = {
+        "CHAR_01": {"hair": "乌黑", "outfit": "月白宫装"},
+        "CHAR_02": {"hair": "金发", "outfit": "玄黑战甲"},
+    }
+    out = rp.plan_distinct_anchors(dna, ["CHAR_01", "CHAR_02"], confusable_pairs=[])
+    assert out["collision"] is False
+    assert out["embedding_checked"] is True
+
+
+def test_compute_confusable_pairs_unavailable_without_insightface(tmp_path) -> None:
+    # 无参考图 / 无 insightface → available False，pairs 空（调用方回退颜色桶），不崩
+    out = rp.compute_confusable_pairs(tmp_path, {"CHAR_01": None, "CHAR_02": None})
+    assert out["pairs"] == set()
+
+
+def test_multi_subject_strategy_over_cap_when_four_named() -> None:
+    chars = [{"char_id": f"CHAR_0{i}", "form": "常态", "tier": "multi_reference"} for i in range(1, 5)]
+    strategy = rp.plan_multi_subject_strategy(chars, _MULTI_REF, closeup=False)
+    assert strategy["shot_scheduling"]["verdict"] == "over_cap"
+
+
+def test_multi_subject_strategy_native_subject_slots_when_registered() -> None:
+    profile = {"label": "可灵主体库", "canonical": "kling", "persistent_subject": True,
+               "multi_reference": True}
+    chars = [
+        {"char_id": "CHAR_01", "form": "常态", "tier": "native_subject"},
+        {"char_id": "CHAR_02", "form": "常服", "tier": "native_subject"},
+    ]
+    strategy = rp.plan_multi_subject_strategy(chars, profile)
+    assert strategy
+    assert strategy["mode"] == "native_subject_slots"
+    assert strategy["persistent_subject"] is True
+    assert strategy["needs_registration"] is False
+
+
 # ── 端到端 ─────────────────────────────────────────────────────────────────────
 
 def _setup_work(tmp_path: Path) -> Path:
@@ -201,3 +296,38 @@ def test_build_plan_end_to_end(tmp_path: Path) -> None:
     jp, mp = rp.write_plan(root, "第1集", plan)
     assert jp.exists() and mp.exists()
     assert "逐镜参考规划" in mp.read_text(encoding="utf-8")
+
+
+def test_build_plan_emits_multi_subject_actions(tmp_path: Path) -> None:
+    root = _setup_work(tmp_path)
+    reg_path = root / "出图" / "共享" / "identity_registry.json"
+    registry = json.loads(reg_path.read_text(encoding="utf-8"))
+    registry["characters"].append({
+        "id": "CHAR_02", "name": "柳娘子", "scope": "单集配角",
+        "forms": [{
+            "form": "常服", "asset_key": "柳娘子_常服",
+            "reference_group": {
+                "front": "出图/共享/图片/定妆_柳娘子.png",
+                "outfit": "出图/共享/图片/定妆_柳娘子_半身.png",
+            },
+            "angle_policy": {"risky": []},
+            "identity_adapters": {"image": {"codex": {"status": "fallback_reference_group"}}},
+        }],
+    })
+    reg_path.write_text(json.dumps(registry, ensure_ascii=False), encoding="utf-8")
+    storyboard_path = root / "脚本" / "第1集" / "storyboard.json"
+    storyboard = json.loads(storyboard_path.read_text(encoding="utf-8"))
+    storyboard["clips"][0]["character_ids"] = ["CHAR_01", "CHAR_02"]
+    storyboard["clips"][0]["template_contract"] = {
+        "blocking": "CHAR_01 画左，CHAR_02 画右",
+        "character_slots": {"LEFT_SLOT": "CHAR_01", "RIGHT_SLOT": "CHAR_02"},
+    }
+    storyboard_path.write_text(json.dumps(storyboard, ensure_ascii=False), encoding="utf-8")
+
+    plan = rp.build_plan(root, "第1集")
+
+    actions = plan["summary"]["multi_subject_actions"]
+    assert actions and actions[0]["mode"] == "split_composite_required"
+    assert "多人同框策略" in rp.render_md(plan)
+    assert "CHAR_01/常态" in actions[0]["chars"]
+    assert "CHAR_02/常服" in actions[0]["chars"]

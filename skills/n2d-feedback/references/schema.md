@@ -168,68 +168,6 @@ A/B 分析说明：
 
 只替换快照，不覆盖人工维护的基础规则。
 
-## 自有题材战绩库（genre_performance_record · 跨项目闭环）
-
-`--emit-ledger` 把本剧第一方战绩聚合成一条记录，按 **(work, genre, platform) upsert** 写入 JSONL 战绩库（同键重 emit 替换旧快照、不堆重复行；不同剧/题材/平台各占一行），供 `novel-score` 读为题材热度的第一方先验，闭合 **选题→生产→投放→反哺选题**。
-
-- 路径：`$N2D_GENRE_LEDGER` 或 `<repo>/生产战绩/genre_ledger.jsonl`（`--ledger` 覆盖）。**跨项目共享**。
-- 一条记录 = 一次「某剧×某次回灌」的题材级聚合：
-
-```json
-{
-  "kind": "genre_performance_record",
-  "version": 1,
-  "recorded_at": "2026-06-08T00:00:00+00:00",
-  "work": "制漫剧/某仙侠剧",
-  "title": "某仙侠剧",
-  "genre": "仙侠",
-  "subgenres": ["复仇", "马甲"],
-  "platform": "红果",
-  "episode_count": 12,
-  "metrics": {
-    "retention_3s": 0.58,
-    "retention_15s": 0.41,
-    "completion_rate": 0.29,
-    "follow_next_rate": 0.33,
-    "roi": 1.4,
-    "plays": 1200000
-  },
-  "features": {
-    "opening_type": "cold_conflict",
-    "cliffhanger_type": "crisis_suspend",
-    "shot_density_bucket": "20-30/m 标准快节奏"
-  },
-  "source": "n2d-feedback"
-}
-```
-
-- `metrics` 内除 `plays`（总和）外均按播放量加权；`roi` 取 metrics 的 `roi/roas/回收比`（加权）或 `revenue÷spend`（汇总），无则省略。
-- `features`：该剧主导创意特征（按播放量加权众数）；缺 creative_features/storyboard 时为 `{}`。供差异化引擎做"题材×特征"白空间分析。
-- 读取端（novel-score）按 `genre` 聚合匹配记录；题材未命中时回退全库整体水位并标注。两条线**只在此文件层连接，不互相 import**。
-
-## 差异化候选 差异化候选.json（反同质化引擎 differentiate.py 产物）
-
-读战绩库点云 +（可选）公榜基线 → `生产战绩/差异化候选.{json,md}`：
-
-```json
-{
-  "kind": "n2d_differentiation_candidates", "version": 1, "metric": "follow_next_rate",
-  "ledger_records": 5, "candidate_genres": ["仙侠", "都市"],
-  "proven_opening": {"reverse_flash": 0.41},
-  "proven_cliffhanger": {"crisis_suspend": 0.39, "reversal_signal": 0.41},
-  "saturated_genres": {"仙侠": 4, "都市": 1},
-  "occupied_combos": [{"combo": ["仙侠", "cold_conflict", "crisis_suspend"], "n": 2}],
-  "candidates": [
-    {"genre": "都市", "opening_type": "reverse_flash", "cliffhanger_type": "crisis_suspend",
-     "label": "都市 × 倒叙闪回 × 危机悬置", "score": 2.49, "market_saturation": 1,
-     "reuses_proven": ["开场 倒叙闪回(已验证追更 41%)", "结尾 危机悬置(已验证 39%)"]}
-  ],
-  "notes": ["样本不足只作启发…"]
-}
-```
-
-`candidates` = 未被我们做过（occupancy=0）× 复用 ≥1 已验证轴 × 避开最饱和题材，按"是否复用已验证轴→市场饱和→分数"排序。选题端（novel-create/novel-title/novel-score）读它当差异化输入；novel-score 第一方题材先验仍优先。`--genres` 注入候选题材；引擎不凭空捏造题材，样本/基线不足时在 notes 显式降级。
-
 ## 投放摄取适配器（实时投放 API → 标准文件）
 
 `生产数据/platform_metrics.{csv,jsonl,json}` 是**摄取边界契约**。实时投放数据由定时任务/webhook 规范化成该文件，feedback 再消费——平台/后端可换，闭环不变。`metric()` 解析时按下表把常见列名（含中文）映射到 canonical，所以平台原始导出无需手工改列：

@@ -18,7 +18,6 @@ if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import (  # noqa: E402  生产数据目录 / kind 单一真值源
     CONSISTENCY_FINDINGS_KIND,
-    GENRE_PERFORMANCE_RECORD_KIND,
     PLATFORM_FEEDBACK_KIND,
     PRODUCTION_DIR,
     normalize_finding,
@@ -31,16 +30,6 @@ KIND = PLATFORM_FEEDBACK_KIND
 # 15s 留存低于此线 + 有一致性 block → 触发优先返工写回信号（投放反哺闭环回火端）
 LOW_RETENTION_15S = 0.5
 
-# ── 选题→投放→反哺选题闭环：跨项目「自有题材战绩库」（append-only JSONL）──
-# n2d-feedback 写、novel-score 读（两条线只在此数据文件层连接，不互相 import）。
-# ⚠️ LEDGER_KIND 的字面值是跨线 wire constant：novel-score 端硬写 "genre_performance_record" 匹配、不 import 本常量。
-#    改名前必须同步改 novel-score/scripts/score.py 的读取处，否则题材先验反哺会静默失效。
-LEDGER_KIND = GENRE_PERFORMANCE_RECORD_KIND
-LEDGER_VERSION = 1
-LEDGER_REL_PATH = os.path.join("生产战绩", "genre_ledger.jsonl")
-ROI_KEYS = ("roi", "roas", "recoup_ratio", "回收比", "投产比")
-REVENUE_KEYS = ("revenue", "income", "营收", "收入", "回收")
-SPEND_KEYS = ("spend", "cost", "投放成本", "成本", "花费")
 START_MARKER = "<!-- n2d-feedback:start -->"
 END_MARKER = "<!-- n2d-feedback:end -->"
 AUTO_FEATURES_FILENAME = "creative_features.auto.json"
@@ -1088,223 +1077,6 @@ def update_director_guide(guide_path: str, feedback: Dict[str, Any]) -> None:
         fh.write(new_text)
 
 
-def find_repo_root(start: str) -> str:
-    cur = os.path.abspath(start)
-    while True:
-        if os.path.isdir(os.path.join(cur, "skills")) or os.path.isfile(os.path.join(cur, "AGENTS.md")):
-            return cur
-        parent = os.path.dirname(cur)
-        if parent == cur:
-            return os.path.abspath(start)
-        cur = parent
-
-
-def default_ledger_path(root: str) -> str:
-    env = os.environ.get("N2D_GENRE_LEDGER")
-    if env:
-        return env
-    return os.path.join(find_repo_root(root), LEDGER_REL_PATH)
-
-
-def load_work_meta(root: str) -> Dict[str, Any]:
-    path = os.path.join(root, "_meta.json")
-    if os.path.isfile(path):
-        try:
-            with open(path, encoding="utf-8") as fh:
-                data = json.load(fh)
-            if isinstance(data, dict):
-                return data
-        except (ValueError, OSError):
-            return {}
-    return {}
-
-
-def load_settings_md(root: str) -> Dict[str, str]:
-    # 解析 _设置.md → dict 的单一真值源在 n2d_settings.load_settings；此处保留薄包装兼容旧调用。
-    return load_settings(root)
-
-
-def detect_genre(root: str, explicit: Optional[str]) -> str:
-    if explicit and explicit.strip():
-        return explicit.strip()
-    meta = load_work_meta(root)
-    for key in ("genre", "题材"):
-        if text_value(meta.get(key)):
-            return text_value(meta.get(key))
-    settings = load_settings_md(root)
-    for key in ("题材", "genre"):
-        if text_value(settings.get(key)):
-            return text_value(settings.get(key))
-    return UNKNOWN
-
-
-def detect_subgenres(root: str, explicit: Optional[str]) -> List[str]:
-    raw = explicit
-    if not raw:
-        meta = load_work_meta(root)
-        raw = first_text(meta, "subgenres", "套路", "tags") or ""
-        if isinstance(meta.get("subgenres"), list):
-            return [text_value(x) for x in meta["subgenres"] if text_value(x)]
-    return [part.strip() for part in re.split(r"[,，/、]+", raw or "") if part.strip()]
-
-
-def detect_platform_tag(rows: List[Dict[str, Any]], explicit: Optional[str]) -> str:
-    if explicit and explicit.strip():
-        return explicit.strip()
-    counts: Dict[str, int] = defaultdict(int)
-    for row in rows:
-        p = first_text(row, "platform", "平台")
-        if p:
-            counts[p] += 1
-    if not counts:
-        return "mixed"
-    return max(counts, key=lambda k: counts[k]) if len(counts) == 1 else "mixed"
-
-
-def aggregate_roi(rows: List[Dict[str, Any]]) -> Optional[float]:
-    # 1) 显式 roi/roas/回收比，按播放量加权
-    total = 0.0
-    weight_total = 0.0
-    for row in rows:
-        value = None
-        for key in ROI_KEYS:
-            value = numeric_feature(row, key)
-            if value is not None:
-                break
-        if value is None:
-            continue
-        weight = row_weight(row)
-        total += value * weight
-        weight_total += weight
-    if weight_total:
-        return total / weight_total
-    # 2) revenue / spend 汇总相除
-    revenue = 0.0
-    spend = 0.0
-    have = False
-    for row in rows:
-        rev = next((numeric_feature(row, k) for k in REVENUE_KEYS if numeric_feature(row, k) is not None), None)
-        sp = next((numeric_feature(row, k) for k in SPEND_KEYS if numeric_feature(row, k) is not None), None)
-        if rev is not None:
-            revenue += rev
-            have = True
-        if sp is not None:
-            spend += sp
-    if have and spend > 0:
-        return revenue / spend
-    return None
-
-
-def dominant_features(root: str, metrics_rows: List[Dict[str, Any]], features_path: Optional[str] = None) -> Dict[str, str]:
-    """该剧主导创意特征（按播放量加权众数）：opening_type / cliffhanger_type / shot_density_bucket。
-    best-effort：缺 creative_features 且无 storyboard 可抽时返回 {}（差异化引擎据此降级）。"""
-    try:
-        feature_rows, _, _ = resolve_feature_rows(root, metrics_rows, features_path, auto_features=True)
-    except ValueError:
-        return {}
-    merged = prepare_rows(metrics_rows, feature_rows)
-    add_derived_features(merged)
-
-    def weighted_mode(key: str) -> str:
-        bucket: Dict[str, float] = defaultdict(float)
-        for row in merged:
-            value = str(row.get(key) or "").strip()
-            if value and value != UNKNOWN:
-                bucket[value] += row_weight(row)
-        return max(bucket, key=lambda k: bucket[k]) if bucket else ""
-
-    out = {k: weighted_mode(k) for k in ("opening_type", "cliffhanger_type", "shot_density_bucket")}
-    return {k: v for k, v in out.items() if v}
-
-
-def build_genre_record(
-    root: str,
-    metrics_rows: List[Dict[str, Any]],
-    *,
-    genre: str,
-    subgenres: List[str],
-    platform: str,
-    features: Optional[Dict[str, str]] = None,
-) -> Dict[str, Any]:
-    meta = load_work_meta(root)
-    rec_metrics: Dict[str, Any] = {}
-    for key in ("retention_3s", "retention_15s", "completion_rate", "follow_next_rate"):
-        value = weighted_mean(metrics_rows, key)
-        if value is not None:
-            rec_metrics[key] = round(value, 4)
-    roi = aggregate_roi(metrics_rows)
-    if roi is not None:
-        rec_metrics["roi"] = round(roi, 4)
-    rec_metrics["plays"] = int(sum(row_weight(row) for row in metrics_rows))
-    episodes = sorted(
-        {normalize_episode(row.get("episode")) for row in metrics_rows if normalize_episode(row.get("episode"))},
-        key=episode_sort_key,
-    )
-    return {
-        "kind": LEDGER_KIND,
-        "version": LEDGER_VERSION,
-        "recorded_at": now_iso(),
-        "work": root,
-        "title": text_value(meta.get("title")) or os.path.basename(root.rstrip("/")),
-        "genre": genre,
-        "subgenres": subgenres,
-        "platform": platform,
-        "episode_count": len(episodes),
-        "metrics": rec_metrics,
-        "features": features or {},
-        "source": "n2d-feedback",
-    }
-
-
-def _ledger_record_key(rec: Dict[str, Any]) -> Tuple[str, str, str]:
-    """战绩库行的天然主键。战绩库是作品级聚合（metrics 已按 episode 加权），
-    同 (work, genre, platform) 的多行 = 同一快照的新旧版本，不是 A/B 变体（A/B 在 episode 层）。"""
-    return (str(rec.get("work", "")), str(rec.get("genre", "")), str(rec.get("platform", "")))
-
-
-def upsert_genre_ledger(ledger_path: str, record: Dict[str, Any]) -> bool:
-    """按 (work, genre, platform) upsert：同键旧快照被新行替换，而非重复 append。
-
-    历史 bug：纯 append 让"投放数据成熟后重 emit / 手滑跑两次"在战绩库里堆重复行，
-    novel-score 读侧按播放量加权时会把同一部剧重复计数、带偏第一方题材热度先验。
-    无法解析的旧行原样保留（不静默丢）；tmp+os.replace 原子重写（读者看不到半截文件）。
-    注：低频手动步骤，不加 flock；并发 emit 极端情况下可能丢一次写，可接受。返回是否替换了旧行。"""
-    directory = os.path.dirname(ledger_path)
-    if directory:
-        os.makedirs(directory, exist_ok=True)
-    key = _ledger_record_key(record)
-    kept: List[str] = []
-    replaced = False
-    if os.path.isfile(ledger_path):
-        with open(ledger_path, encoding="utf-8") as fh:
-            for line in fh:
-                s = line.strip()
-                if not s:
-                    continue
-                try:
-                    rec = json.loads(s)
-                except ValueError:
-                    kept.append(s)  # 非法/外来行原样保留，绝不静默丢数据
-                    continue
-                if isinstance(rec, dict) and rec.get("kind") == LEDGER_KIND and _ledger_record_key(rec) == key:
-                    replaced = True
-                    continue  # 丢同键旧快照，下面追加最新行
-                kept.append(json.dumps(rec, ensure_ascii=False, sort_keys=True))
-    kept.append(json.dumps(record, ensure_ascii=False, sort_keys=True))
-    tmp = f"{ledger_path}.tmp.{os.getpid()}"
-    try:
-        with open(tmp, "w", encoding="utf-8") as fh:
-            fh.write("\n".join(kept) + "\n")
-        os.replace(tmp, ledger_path)
-    except Exception:
-        try:
-            os.remove(tmp)
-        except OSError:
-            pass
-        raise
-    return replaced
-
-
 def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description="n2d platform feedback loop")
     ap.add_argument("root")
@@ -1324,12 +1096,6 @@ def parser() -> argparse.ArgumentParser:
         default=os.path.join("skills", "n2d", "references", "导演节奏.md"),
         help="director rhythm guide to update when --update-guide is set",
     )
-    # 选题→投放→反哺选题闭环：把本剧第一方战绩按题材写入跨项目战绩库，供 novel-score 读为题材热度先验。
-    ap.add_argument("--emit-ledger", action="store_true", help="把本剧第一方留存/追更/完播/ROI 按题材追加进跨项目战绩库（供 novel-score 反哺选题）")
-    ap.add_argument("--ledger", help=f"战绩库路径；默认 $N2D_GENRE_LEDGER 或 <repo>/{LEDGER_REL_PATH}")
-    ap.add_argument("--genre", help="本剧题材（仙侠/复仇/穿越…）；缺省读 _meta.json genre/题材 或 _设置.md 题材")
-    ap.add_argument("--subgenres", help="套路标签，逗号分隔（复仇,马甲,扮猪吃虎）")
-    ap.add_argument("--platform-tag", help="战绩库记录的平台标签；缺省按 metrics 推断")
     return ap
 
 
@@ -1369,27 +1135,6 @@ def cmd(ns: argparse.Namespace) -> int:
         write_feedback(root, feedback)
     if ns.update_guide:
         update_director_guide(ns.guide, feedback)
-    if ns.emit_ledger:
-        metrics_rows = read_records(metrics_path)
-        genre = detect_genre(root, ns.genre)
-        record = build_genre_record(
-            root,
-            metrics_rows,
-            genre=genre,
-            subgenres=detect_subgenres(root, ns.subgenres),
-            platform=detect_platform_tag(metrics_rows, ns.platform_tag),
-            features=dominant_features(root, metrics_rows, features_path),
-        )
-        ledger_path = ns.ledger or default_ledger_path(root)
-        if "roi" not in record.get("metrics", {}):
-            print("[ledger][warn] 本剧战绩缺 ROI（metrics 无 roi/roas/回收比，也无 revenue+spend 可推）；"
-                  "novel-score 题材先验将不计 ROI 维度。补 ROI 或 revenue/spend 字段后重 emit。", file=sys.stderr)
-        if not ns.no_write:
-            replaced = upsert_genre_ledger(ledger_path, record)
-            verb = "updated" if replaced else "appended"
-            print(f"[ledger] {verb} genre={record['genre']} platform={record['platform']} work={record['work']} → {ledger_path}", file=sys.stderr)
-            if genre == UNKNOWN:
-                print("[ledger][warn] genre=unknown：建议用 --genre 或在 _meta.json 写 genre，否则反哺选题无法按题材聚合", file=sys.stderr)
     print(render_markdown(feedback) if ns.markdown else json.dumps(feedback, ensure_ascii=False, indent=2))
     return 0
 

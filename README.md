@@ -2,15 +2,14 @@
 
 一套面向 AI 内容生产的本地流水线：把一个点子、一本书、一首歌或一份客户需求，推进成可交付的小说、AI 漫剧短视频、AI 音乐 MV 或 商业广告片。
 
-仓库的核心不是单个脚本，而是根目录 `skills/` 下的一组可复用 workflow skill。它们构成五条彼此独立、可单独分发的生产线：
+仓库的核心不是单个脚本，而是根目录 `skills/` 下的一组可复用 workflow skill。它们构成四条彼此独立、可单独分发的生产线：
 
-- **小说文本（novel）**：点子 / 源书 -> 立项 -> 写作 / 派生 -> 审稿 / 评分 -> 可导出给 n2d
 - **小说文本 -> AI 漫剧 / 短剧（n2d）**：拆集 -> 配音 -> 分镜 -> 出图 -> 出视频 -> 合成
 - **歌曲（song）**：作词 -> 作曲 / 多版挑版 -> 翻唱 / 换声 -> 审歌
 - **音乐 MV（mv）**：歌曲入库 -> beatgrid -> 视觉蓝图 -> clip 规划 -> 出图 / 出视频 -> 卡拉 OK 字幕 -> 合成
 - **广告片（ad）**：brief -> 创意 -> 脚本 / VO -> 分镜 -> 产品 / 场景 / 角色定妆 -> 出图 / 出视频 -> 交付件
 
-产物分别落在顶层中文目录 `写小说/`、`制漫剧/`、`写歌/`、`制MV/`、`拍广告/`（跨项目可复用资产在 `资产库/`）。每个作品一个子目录，通常都有 `_进度.md` 和 `_设置.md` 来记录状态与选择。
+产物分别落在顶层中文目录 `制漫剧/`、`写歌/`、`制MV/`、`拍广告/`（跨项目可复用资产在 `资产库/`）。每个作品一个子目录，通常都有 `_进度.md` 和 `_设置.md` 来记录状态与选择。
 
 > 给 AI agent 或人快速进仓库：先读 [AGENTS.md](AGENTS.md)。  
 > skill 完整索引与职责边界：读 [skills/README.md](skills/README.md)。
@@ -33,7 +32,6 @@ skill 名称按跨工具兼容写法展示：直接写 `n2d-image`、`n2d-progre
 
 | 你想做什么 | 入口 |
 |---|---|
-| 写小说 / 导入源书 / 改写续写 / 审稿评分 | `novel <想法、文件或 写小说/项目>` |
 | 把小说做成 AI 漫剧 | `n2d <小说路径或 制漫剧/项目>` |
 | 写歌 / 改词 / 作曲 / 多版挑版 / 审歌 | `song <想法、歌词或 写歌/项目>` |
 | 给歌曲做 MV / 卡点 / 出 MV 成片 | `mv <歌曲或 制MV/项目>` |
@@ -42,12 +40,11 @@ skill 名称按跨工具兼容写法展示：直接写 `n2d-image`、`n2d-progre
 | 修改或审计项目设置 | `n2d-settings set/audit/reset/sync-global [作品目录] …` |
 | 检查流水线更新与生成重制计划 | `n2d-update check [作品目录]` 或问“看看有没有更新”；只重出部分图片/视频走 `n2d-update media …` |
 | 清理缓存和临时文件 | `tools/shared-cleanup`（默认 `skills/`，可 `--repo` 全仓） |
-| 检查五条线是否仍独立 | `python3 tools/independence-audit/scripts/check_independence.py` |
+| 检查四条线是否仍独立 | `python3 tools/independence-audit/scripts/check_independence.py` |
 
 常见完整链路：
 
 ```text
-小说：novel -> novel-create/rewrite/continue/... -> novel-review/novel-score -> export
 制漫剧：n2d -> n2d-script -> n2d-voice -> n2d-script(分镜) -> n2d-image -> n2d-video -> n2d-compose
 写歌：song -> song-lyrics -> song-score -> song-compose -> song-cover(可选) -> song-review
 MV：mv -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-sync -> mv-compose
@@ -124,7 +121,7 @@ shasum -a 256 dist/anime-armory-full.zip > dist/anime-armory-full.zip.sha256
 - **skill 保持通用**：不要把个人偏好、平台账号、唯一后端写死进 skill。
 - **合规前置**：仿声、改编权不要等成片后补救。
 - **改 skill 集合要同步索引**：新增、删除或改变职责时，同步更新 [skills/README.md](skills/README.md)。
-- **系列互相独立**：novel / n2d / song / mv / ad 不 import 彼此实现；跨线只走可选文件或数据交接。
+- **系列互相独立**：n2d / song / mv / ad 不 import 彼此实现；跨线只走可选文件或数据交接。
 - **不要覆盖 AGENTS.md**：它是手工维护的工具中立入口，不要用任何 init 命令重建。
 
 ## 本地环境
@@ -146,7 +143,6 @@ anime-armory/
 ├── AGENTS.md                 工具中立入口，AI agent 先读
 ├── skills/                   全部 workflow skill
 │   ├── README.md             skill 分类索引
-│   ├── novel/ novel-*        写小说 / 源书孵化能力
 │   ├── n2d/ n2d-*            制漫剧能力（契约与通用脚本 vendored 进 n2d/_lib/）
 │   ├── song/ song-*          写歌、作曲、翻唱与审歌能力
 │   ├── mv/ mv-*              制 MV、卡点、字幕与合成能力
@@ -155,7 +151,6 @@ anime-armory/
 │   ├── shared-cleanup/       仓库级清理 dev 工具
 │   └── independence-audit/   系列独立性静态审计
 ├── .claude/skills -> ../skills
-├── 写小说/<项目>/             小说工程与源书产物
 ├── 制漫剧/<项目>/             漫剧工程与成片产物
 ├── 写歌/<项目>/               歌曲工程与成品歌
 ├── 制MV/<项目>/               MV 工程与成片

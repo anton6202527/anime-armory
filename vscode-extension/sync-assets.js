@@ -18,7 +18,7 @@ const filter = (src) => {
   if (SKIP_NAMES.has(b)) return false;
   if (b.endsWith('.pyc') || b.endsWith('.vsix')) return false;
   if (fs.lstatSync(src).isSymbolicLink()) return false; // never bundle dangling links
-  // /tov: bundle only the 写小说(novel-*) + 制漫剧(n2d-*) lines (+ shared deps).
+  // /tov: bundle the 制漫剧(n2d-*) + 写小说(novel-*) lines (+ shared deps).
   // skip the other lines' skill dirs at the skills/ root: 写歌(song-*) / 制MV(mv-*) / 拍广告(ad-*).
   if (path.dirname(src) === path.join(repo, 'skills') && /^(song|mv|ad)(-|$)/.test(b)) return false;
   return true;

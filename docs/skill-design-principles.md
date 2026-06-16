@@ -1,7 +1,7 @@
 # Skill 设计原则（设计宪法）
 
 > **这是本仓库唯一的「怎么*建造* skill」权威法条**（authoring-time constitution）。
-> 跨工具、随仓库交付、对所有五条线（novel / n2d / song / mv / ad）生效。
+> 跨工具、随仓库交付、对所有四条线（n2d / song / mv / ad）生效。
 >
 > **三层分工，别放错层：**
 > | 层 | 管什么 | 住在哪 |
@@ -18,9 +18,9 @@
 
 ## A. 仓库形态与独立性
 
-- **A1 五线自包含、可单独分发** ✅ — 每条线本线脚本只 import 本线 `_lib`/craft 工具，**不依赖 `skills/common/`**（已删），**不 import 别线实现**。跨线只允许**可选文件/数据交接**（novel 导出 n2d 源书、song 交成品歌给 mv、n2d-feedback 写题材战绩 JSONL 供 novel-score）；交接缺失必须**优雅降级**，不能让本线主流程跑不起来。机检：`tools/independence-audit/scripts/check_independence.py`。
-- **A2 仓库级 meta 工具放 `tools/`，不放 `skills/`** — 不是某条创作线能力的单副本维护工具（independence-audit、shared-cleanup、validate_skills、打包/发布脚本等）留 `tools/` 或独立单副本，不混进 `skills/` 的创作线命名空间。**例外**：属于某条线用户工作流的一线能力（如 `n2d-progress`、`novel-progress`）仍是该线 skill，可以留在 `skills/`。
-- **A3 `skills/` 扁平、按名字前缀分组** — `n2d-*` / `novel-*` 等。SKILL.md frontmatter `description` + 正文 `Triggers`/`Use when` **就是路由依据**，匹配用户意图，不另建路由表逻辑。
+- **A1 四线自包含、可单独分发** ✅ — 每条线本线脚本只 import 本线 `_lib`/craft 工具，**不依赖 `skills/common/`**（已删），**不 import 别线实现**。跨线只允许**可选文件/数据交接**（song 交成品歌给 mv）；交接缺失必须**优雅降级**，不能让本线主流程跑不起来。机检：`tools/independence-audit/scripts/check_independence.py`。
+- **A2 仓库级 meta 工具放 `tools/`，不放 `skills/`** — 不是某条创作线能力的单副本维护工具（independence-audit、shared-cleanup、validate_skills、打包/发布脚本等）留 `tools/` 或独立单副本，不混进 `skills/` 的创作线命名空间。**例外**：属于某条线用户工作流的一线能力（如 `n2d-progress`）仍是该线 skill，可以留在 `skills/`。
+- **A3 `skills/` 扁平、按名字前缀分组** — `n2d-*` / `song-*` 等。SKILL.md frontmatter `description` + 正文 `Triggers`/`Use when` **就是路由依据**，匹配用户意图，不另建路由表逻辑。
 
 ## B. Skill 编写法
 
@@ -56,6 +56,6 @@
 
 ## 不属于本宪法的（别往这塞）
 
-- **本线特有工艺原则**留在各线 `*-craft/SKILL.md` 的 `## 设计原则`：n2d 配音先行 + 两层出图、ad 不拆集 + cutdown 轴、novel 不抢写作权、song/mv 多版是默认工程事实。
+- **本线特有工艺原则**留在各线 `*-craft/SKILL.md` 的 `## 设计原则`：n2d 配音先行 + 两层出图、ad 不拆集 + cutdown 轴、song/mv 多版是默认工程事实。
 - **n2d 契约层治理**（invariant vs contested、版本迁移）是运行期契约层的演进，见 `docs/n2d-原则变更提案-契约治理与一致性占位.md`，不在本跨线宪法内。
 - **机器/会话事实**（哪台机器装了什么、哪个后端宕了）进 memory，不进本文件。

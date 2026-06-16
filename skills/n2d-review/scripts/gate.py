@@ -3389,6 +3389,42 @@ NATIVE_MULTI_SUBJECT_STRATEGY_MARKERS = (
     "多参考",
 )
 
+MULTI_SUBJECT_SLOT_MARKERS = (
+    "多人同框身份槽位",
+    "身份槽位",
+    "LEFT_SLOT",
+    "RIGHT_SLOT",
+    "FOREGROUND_SLOT",
+    "BACKGROUND_SLOT",
+    "EXTRA_SLOT",
+    "画左槽",
+    "画右槽",
+    "前景槽",
+    "后景槽",
+)
+
+MULTI_SUBJECT_EXECUTION_STRATEGY_MARKERS = (
+    "多人同框执行策略",
+    "multi_subject_strategy",
+    "native_subject_slots",
+    "split_composite_required",
+    "register_subjects_or_split",
+    "shot_reverse_shot",
+)
+
+MULTI_SUBJECT_POSITION_MARKERS = (
+    "画左",
+    "画右",
+    "左侧",
+    "右侧",
+    "前景",
+    "后景",
+    "前后景",
+    "screen_position",
+    "screen positions",
+    "blocking",
+)
+
 
 def _codex_needs_face_reference(section: str, name: str) -> bool:
     """Codex-like backends re-solve the face per shot; closeups/large expressions need face refs."""
@@ -3425,7 +3461,17 @@ def _has_generic_reference_index_lock(section: str) -> bool:
 
 
 def _has_native_multi_subject_strategy(section: str) -> bool:
-    return _has_any(section, NATIVE_MULTI_SUBJECT_STRATEGY_MARKERS + CODEX_SPLIT_COMPOSITE_MARKERS)
+    return _has_any(section, NATIVE_MULTI_SUBJECT_STRATEGY_MARKERS + CODEX_SPLIT_COMPOSITE_MARKERS + MULTI_SUBJECT_EXECUTION_STRATEGY_MARKERS)
+
+
+def _has_multi_subject_identity_slots(section: str) -> bool:
+    """多人同框必须把每个身份绑定到画面槽位；只写多张参考图或中文名不算。"""
+    if not _has_any(section, MULTI_SUBJECT_SLOT_MARKERS):
+        return False
+    ids = {m.split("/")[0].rstrip("*") for m in re.findall(r"CHAR_[A-Za-z0-9_]+(?:/[^\s`；;，,]*)?", section)}
+    if len(ids) < 2:
+        return False
+    return _has_any(section, MULTI_SUBJECT_POSITION_MARKERS)
 
 
 def _has_character_id_binding(section: str) -> bool:
@@ -3740,7 +3786,39 @@ def check_image_shot_prompt_section(path: str, idx: int, section: str,
         if "_侧" not in refs and "_半身" not in refs and "_全身" not in refs and "主体库" not in section and "角色ID" not in section:
             add(WARN, "角色一致性", loc, "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂")
         chars = _character_names_in_refs(refs)
+        # 多人同框分镜调度（① 默认避开同框 CU·硬上限 ≤3）+ 锚点去重（④）。
+        _wide_crowd = _has_any(section, ("远景", "大全景", "群像", "人海", "crowd", "wide shot", "extreme long", "ELS"))
+        _multi_closeup = _has_any(section, ("ECU", "BCU", "CU", "MCU", "近景", "特写", "面部", "脸部", "反应镜", "表情镜")) \
+            and not _has_any(section, ("远景", "全景", "中景"))
+        if len(chars) >= 4 and not _wide_crowd:
+            add(
+                BLOCK,
+                "构图景别",
+                loc,
+                f"单镜清晰同框 ≥4 具名角色（{'/'.join(sorted(chars))}）：任何后端在单帧里都压不住 4+ 张清晰脸（实测 ≤3 是上限）。"
+                "按 n2d-script 默认分镜调度铁律拆镜——清晰同框 ≤3 具名角色，其余推背景/虚焦/背身/过肩或拆成反打/分镜；"
+                "确属远景群像（脸不解析）请在本镜显式标 `远景/群像`。",
+                return_to_stage="image",
+            )
         if len(chars) >= 2:
+            if _multi_closeup and not _has_any(section, ("反打", "正反打", "shot_reverse_shot", "降景别", "景别分层", "单人分层", "分别出图", "分层合成")):
+                add(
+                    WARN,
+                    "构图景别",
+                    loc,
+                    f"多人近景同框（{'/'.join(sorted(chars))}）：近景同框是脸漂/串脸最高发档。"
+                    "按默认调度优先拆「单人CU + 反打」或降到中景/全景做景别分层（清晰主角1人，余者推后景/虚焦）；"
+                    "确需多人近景请登记 split_composite/分层合成执行策略。",
+                )
+            if single_ref_backend and not _has_any(section, ("区分锚点", "互斥锚点", "可区分性", "distinct anchor", "去重锚点", "撞色")):
+                add(
+                    WARN,
+                    "角色一致性",
+                    loc,
+                    f"多人同框（{'/'.join(sorted(chars))}）缺 `区分锚点` 字段：同框角色发色/发型/服装主色越接近，越易被模型平均成同一张脸。"
+                    "逐主体写 5–7 个互斥锚点（各自唯一发色/发型/服装主色HEX/标志配饰）并确保两两不撞色；"
+                    "可读 reference_planner 的 `distinct_anchors` 处方。",
+                )
             if single_ref_backend and _has_generic_reference_index_lock(section):
                 add(
                     BLOCK,
@@ -3759,10 +3837,67 @@ def check_image_shot_prompt_section(path: str, idx: int, section: str,
                         "每个主体都会被重新解脸，且多人同框无硬位置/主体 ID 绑定时极易串脸。"
                         "本后端下只有「分别出图+合成/单人分层出图」这类硬降级能放行；"
                         "或把项目生图AI统一切到支持原生主体/角色ID的官方后端后再跑 gate。")
+                elif not _has_multi_subject_identity_slots(section):
+                    add(
+                        BLOCK,
+                        "角色一致性",
+                        loc,
+                        f"单镜多角色同框（{'/'.join(sorted(chars))}）虽登记了分层/合成，但缺 `多人同框身份槽位`。"
+                        "无持久角色 ID 后端必须逐主体写 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位，"
+                        "每个槽位绑定 `CHAR_xx/形态`、画面位置、视线、自己的脸部参考/表情库和 primary 星标；"
+                        "否则分层合成阶段仍会串脸或无法追责。",
+                        return_to_stage="image",
+                    )
             elif not _has_native_multi_subject_strategy(section):
                 add(WARN, "角色一致性", loc,
                     f"单镜多角色同框（{'/'.join(sorted(chars))}）：单图参考后端(如 Codex)难保多人各自一致——"
                     "优先用原生主体/角色ID/区域绑定，或走「分别出图+合成」并登记降级。普通多参考只能算弱参考，不等于持久角色 ID。")
+            elif not _has_multi_subject_identity_slots(section):
+                add(WARN, "角色一致性", loc,
+                    f"单镜多角色同框（{'/'.join(sorted(chars))}）缺 `多人同框身份槽位`：建议逐主体绑定 CHAR_xx/形态、画面位置、视线与参考图组，"
+                    "避免多主体后端把参考身份混到错误位置。")
+
+
+def _evolution_derived_forms(root: str) -> List[Dict[str, str]]:
+    """registry → 成长态派生形态清单：非 `identity_anchor_form` 的 form 必须从锚定/上一形态 image2image 派生。
+
+    治「新境界 form 首现纯文生图重抽新脸」(E)——只纳入渐进升级 evolution_profile 的角色；
+    restricted_partial（如垂帘皇后）只有锚定形态、无派生形态，不纳入。纯函数·依赖 registry。"""
+    data = load_json(identity_registry_path(root))
+    out: List[Dict[str, str]] = []
+    if not isinstance(data, dict):
+        return out
+    for ch in data.get("characters") or []:
+        if not isinstance(ch, dict):
+            continue
+        ep = ch.get("evolution_profile")
+        if not isinstance(ep, dict) or "progressive_upgrade" not in str(ep.get("mode") or ""):
+            continue
+        anchor = str(ep.get("identity_anchor_form") or "")
+        for f in ch.get("forms") or []:
+            if not isinstance(f, dict):
+                continue
+            form = str(f.get("form") or "")
+            if not form or form == anchor:
+                continue
+            out.append({"char_id": str(ch.get("id") or ""), "char_name": str(ch.get("name") or ""),
+                        "asset_key": str(f.get("asset_key") or ""), "form": form, "anchor_form": anchor})
+    return out
+
+
+def _section_is_derived_form(sec: str, df: Dict[str, str]) -> bool:
+    """该定妆 section 是否属于某成长派生形态（按 asset_key 命中，否则 角色名+形态名 同时出现）。"""
+    ak = df.get("asset_key") or ""
+    if ak and ak in sec:
+        return True
+    return bool(df.get("char_name") and df["char_name"] in sec and df.get("form") and df["form"] in sec)
+
+
+def _declares_evolution_derivation(sec: str, anchor_form: str) -> bool:
+    """成长派生形态定妆是否声明「从锚定/上一形态 image2image 派生」（而非纯文生图重抽新脸）。"""
+    prior_markers = [m for m in (anchor_form, "上一阶段", "上一形态", "前一形态", "上一形",
+                                 "基线形态", "锚定形态", "identity_anchor", "派生自", "成长派生") if m]
+    return _has_i2i_derivation(sec) and _has_any(sec, prior_markers)
 
 
 def check_common_image_prompts(root: str) -> None:
@@ -3770,6 +3905,7 @@ def check_common_image_prompts(root: str) -> None:
     if not os.path.isdir(prompt_dir):
         add(BLOCK, "共享定妆", prompt_dir, "缺共享定妆 prompt 目录")
         return
+    derived_forms = _evolution_derived_forms(root)
     for filename in ("角色定妆.md", "场景定妆.md", "道具定妆.md", "法宝定妆.md", "特效定妆.md"):
         p = os.path.join(prompt_dir, filename)
         if not os.path.isfile(p):
@@ -3806,6 +3942,18 @@ def check_common_image_prompts(root: str) -> None:
                     add(BLOCK, "服装参考", loc, "半身服装参考必须写明：`定妆_<角色>_半身.png` 从已通过自检的正面主参考裁切并放大/重采样回 9:16；人物主体居中、头身中线接近画面中线、左右留白基本均衡；不得新抽半身导致脸漂，也不得用白底/浅灰底/空白补下半截")
                 if "锚点" not in sec:
                     add(BLOCK, "角色一致性", loc, "角色定妆缺锚点字段；下游每镜无锚可拼")
+                # E 跨集成长派生形态：新境界/换装升级 form 的定妆必须从锚定/上一形态 image2image 派生，
+                # 不得纯文生图重抽一张新脸——否则"同一个人变强"变成"换演员"，且下游每镜会忠实继承这张错脸。
+                for df in derived_forms:
+                    if _section_is_derived_form(sec, df) and not _declares_evolution_derivation(sec, df["anchor_form"]):
+                        add(BLOCK, "跨集成长一致性", loc,
+                            f"成长派生形态 `{df['char_name']}/{df['form']}` 的定妆未声明从锚定形态"
+                            f"`{df['anchor_form']}` 的正脸/脸部特写 image2image 派生（evolution_profile 渐进升级）。"
+                            "纯文生图重抽新脸=同一个人被换成另一张脸，下游每镜还会忠实继承错脸。"
+                            "请写明：以 `定妆_<角色>_<锚定形态>` 正脸/脸部特写为母图做 image2image 派生，"
+                            "只升级服装/法宝/气场/VFX，锁 identity_invariants（脸型/五官比例/发际线/标志疤痣）。",
+                            return_to_stage="image")
+                        break
 
 
 def check_shared_image_index(root: str, ep: str) -> None:
