@@ -312,7 +312,11 @@ shot：{target.shot}
 
 
 def run_codex(repo: Path, prompt: str, timeout_sec: Optional[float]) -> subprocess.CompletedProcess[str]:
-    cmd = ["codex", "exec", "--enable", "image_generation", "-C", str(repo), prompt]
+    cmd = ["codex", "exec"]
+    model = os.environ.get("N2D_CODEX_MODEL")
+    if model:
+        cmd.extend(["-m", model])
+    cmd.extend(["--enable", "image_generation", "-C", str(repo), prompt])
     return subprocess.run(
         cmd,
         text=True,
@@ -374,6 +378,8 @@ def record_event(
         "credits",
         "--meta",
         f"mode=codex_exec_image_generation_{target.mode}",
+        "--meta",
+        f"codex_model={os.environ.get('N2D_CODEX_MODEL') or 'default'}",
         "--meta",
         f"task={task_id}",
         "--meta",
