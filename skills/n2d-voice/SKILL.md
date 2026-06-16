@@ -64,6 +64,24 @@ description: Stage 2 of n2d (前移到出图之前) — turn a 作品 episode's 
      --meta lines=<句数> --meta placeholder_lines=<占位句数>
    ```
 
+## 完成后 · 详列下一步（收尾必做）
+
+回写「配音」列后，跑 `python3 skills/n2d/progress.py <作品根>`（或 `run.py next <作品根>`，按 `制作模式` 给正确前沿），把「下一步」念给用户——调哪个 skill · 干什么 · 确切命令 · 可并行项：
+
+```
+第K集 配音完成：
+- 时长清单.json：N 句、总时长 ~Y 秒；voice_key 已逐句记录（n2d-identity 消费）
+- _进度.md「配音」列已回写：真实配音=✅ / 任一句占位=⏳rough
+下一步建议（以 progress.py 前沿为准）：
+- 配音先行：回跑 n2d-script <作品根> 第K集 做阶段2 分镜设计（实测时长驱动镜头/Clip）
+- 先出视频后配音（占位轨）：回跑 n2d-script 阶段2 用 FINALIZE_ALLOW_PLACEHOLDER=1 放行（产物仅 rough）；
+  若这是「出视频后补真音」那一轮 → 先 n2d-compose/fit_voice_to_clips.py 拟合，再 n2d-compose 合成
+- 可并行：n2d-voice <作品根> 第K+1集 配下一集
+```
+
+> ⚠️ **占位提醒**：若本集是 macOS `say` 占位（`时长清单.json` 有 `占位:true`），明确告诉用户：占位时长不准，正式出图/出视频前必须换真实配音重跑 + 回跑阶段2 重定时，否则 finalize/n2d-video 会硬闸拦截。
+> `制作模式=原生音画` 时说话镜不跑本 skill；本 skill 只处理旁白/系统音/非说话镜，回写后下一步通常直接 n2d-image。
+
 ## 常见错误
 
 | 错误 | 纠正 |

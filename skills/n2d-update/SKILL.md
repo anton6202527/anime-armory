@@ -127,6 +127,25 @@ python3 skills/n2d-update/scripts/update_plan.py check <作品根> <集号> --wr
 
 无基线时，`check` 会给出 `needs_record=true`，并提示先 `record` 建立内容快照基线；在建立基线之前无法检测变更（不依赖 git 工作区兜底）。读到旧版 git 派生基线（无内容表）时同样提示重新 `record`。
 
+## 完成后 · 详列下一步（收尾必做 · 只提示不自动跑）
+
+`check`/`media` 跑完后，**把计划念给用户**——重制要花钱/覆盖产物，必须等用户确认再交 `n2d-batch` 或对应 stage skill 执行（见 `n2d` SKILL 情境 D）：
+
+```
+第K集 skill 更新影响检查完成：
+- 变更 skill：<changed_skills>（无变化则报"无更新，静默继续"；无基线则提示先 record）
+- 当前阶段上界 current_stage=<…>；当前缺口 current_todo=<…>
+- 计划：从 <rerun_from> 回放，最多重制到 <rerun_until>（永不超过该集当前进度）
+- 共享定妆库：<沿用不重出 / 需复核>；源漂移：<clean/drift/no_baseline>
+下一步建议（按 execution_steps 念给用户，逐条标"可执行命令 / 需人确认 / 验收命令"）：
+- 确认重制范围后：python3 skills/n2d-batch/scripts/queue.py plan <作品根> --episodes K --rerun-from <stage> [--affected-shot …]
+- 或直接回跑对应 stage skill（n2d-image / n2d-video / …）从 <rerun_from> 起
+- 重制结束后记录新基线：python3 skills/n2d-update/scripts/update_plan.py record <作品根> 第K集
+- 整部进度总览：n2d-progress <作品根>
+```
+
+> 无变化时也要明确告诉用户"本集 skill 无更新，按原前沿继续"，并给出 `n2d-progress` / `progress.py` 的下一步，别让用户卡在不确定。
+
 ## 常见错误
 
 | 错误 | 纠正 |

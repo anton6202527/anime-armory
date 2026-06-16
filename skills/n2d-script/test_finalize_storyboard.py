@@ -18,11 +18,13 @@ def _write_manifest(root, ep, manifest):
 
 def test_placeholder_gate_blocks_finalize(tmp_path):
     # 占位音色定稿会污染镜头时长 → finalize 必须拒绝（退出码 2），除非 FINALIZE_ALLOW_PLACEHOLDER=1
+    # 默认现为「原生音画」（占位不作硬闸），本用例显式选「配音先行」以触发占位闸门。
     root, ep = str(tmp_path), "第1集"
     _write_manifest(root, ep, [
         {"idx": 0, "镜头": "镜头1", "文本": "甲。", "时长": 2.0, "占位": True},
         {"idx": 1, "镜头": "镜头1", "文本": "乙。", "时长": 1.0},
     ])
+    open(os.path.join(root, "_设置.md"), "w", encoding="utf-8").write("# _设置\n## 选择\n- 制作模式: 配音先行\n")
     cmd = [sys.executable, os.path.join(_HERE, "finalize_storyboard.py"), root, ep]
     blocked = subprocess.run(cmd, capture_output=True, text=True)
     assert blocked.returncode == 2 and "拒绝定稿" in blocked.stdout
@@ -125,7 +127,9 @@ def test_native_av_builds_shots_from_storyboard_without_manifest(tmp_path):
 
 def test_non_native_still_requires_manifest(tmp_path):
     root = str(tmp_path)
-    os.makedirs(os.path.join(root, "脚本", "第1集"), exist_ok=True)  # 无 _设置/制作模式 → 默认配音先行
+    os.makedirs(os.path.join(root, "脚本", "第1集"), exist_ok=True)
+    # 默认现为「原生音画」，本用例显式选回「配音先行」以验证非原生音画仍要求配音清单。
+    open(os.path.join(root, "_设置.md"), "w", encoding="utf-8").write("# _设置\n## 选择\n- 制作模式: 配音先行\n")
     r = subprocess.run([sys.executable, os.path.join(_HERE, "finalize_storyboard.py"), root, "第1集"],
                        capture_output=True, text=True)
     assert r.returncode == 2 and "缺 时长清单" in r.stdout      # 非原生音画仍要求配音清单

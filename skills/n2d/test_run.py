@@ -45,7 +45,8 @@ def test_resolve_frontier_image():
 
 
 def test_resolve_frontier_voice():
-    root = make_work(ALL_DONE_TO["voice"])
+    # 默认现为「原生音画」（路由跳过 n2d-voice），显式选「配音先行」以验证 voice 前沿。
+    root = make_work(ALL_DONE_TO["voice"], settings="# _设置\n- 制作模式: 配音先行\n")
     route = run.resolve_frontier(root)
     assert run.stage_key_of(route) == "voice"
 
