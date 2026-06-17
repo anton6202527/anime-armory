@@ -188,3 +188,32 @@ def test_contract_allows_clip_with_duration(tmp_path):
     ])
     res = VC.validate(root, ep)
     assert not [r for r in res["findings"] if r["dimension"] == "镜头时长"]
+
+
+# ── 集长目标自动取（从 _设置.md「单集时长」预设区间） ──
+def _write_setting(root, value):
+    with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as fh:
+        fh.write(f"# 设置\n- 单集时长: {value}\n")
+
+
+def test_episode_target_default_front_long_short_first_vs_rest(tmp_path):
+    root = str(tmp_path)
+    # 缺设置 = 默认「前长后短」：第1集 mid 150 / 其余集 mid 90
+    assert V.episode_target_seconds(root, "第1集") == 150.0
+    assert V.episode_target_seconds(root, "第2集") == 90.0
+
+
+def test_episode_target_preset_presets(tmp_path):
+    root = str(tmp_path)
+    _write_setting(root, "快节奏")
+    assert V.episode_target_seconds(root, "第1集") == 60.0  # 45–75 mid
+    _write_setting(root, "长集")
+    assert V.episode_target_seconds(root, "第3集") == 150.0
+
+
+def test_episode_target_parameterized_override(tmp_path):
+    root = str(tmp_path)
+    _write_setting(root, "自定义(95s)")
+    assert V.episode_target_seconds(root, "第2集") == 95.0
+    _write_setting(root, "快节奏(70-90)")  # 括号区间中点优先于预设
+    assert V.episode_target_seconds(root, "第2集") == 80.0

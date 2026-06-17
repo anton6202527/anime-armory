@@ -1,11 +1,51 @@
 #!/usr/bin/env python3
 # 时长一致性守门人：核对配音→字幕→镜头时长这条链是否对齐（治"成片时长对不上/字幕错位/镜头时长漂"）。
-# 用法: validate_timings.py <作品根> <第N集> [--tol 0.5]
+# 用法: validate_timings.py <作品根> <第N集> [--tol 0.5] [--target-seconds N | --no-target]
+#       不给 --target-seconds 时默认从 _设置.md「单集时长」预设区间自动取本集目标做集长对账（--no-target 关闭）。
 # 退出码: 0=全过 / 1=有硬不一致或缺文件（可接 CI）。所有检查仅读取，不改文件。
 import sys, os, re, json, subprocess
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'n2d', '_lib'))
-from n2d_settings import is_native_av  # 制作模式判定单一真值源
+from n2d_settings import is_native_av, get_setting  # 制作模式判定 + 选择点读取（单一真值源）
 from n2d_route import placeholder_indices, voiceover_fingerprint  # 占位判定 + 配音源指纹（单一真值源）
+
+# 单集时长 选择点 → 验收目标秒（区间中点）。区间见 n2d-script SKILL.md 第1步预设表。
+# 「前长后短」第1集与其余集不同档：用 (ep1_target, rest_target)；其余预设第1集同其余集。
+_DURATION_PRESET_TARGETS = {
+    "前长后短": (150.0, 90.0),   # 第1集 120–180s（mid 150）/ 其余集 60–120s（mid 90）
+    "均衡": (90.0, 90.0),        # 每集 60–120s（mid 90）
+    "快节奏": (60.0, 60.0),      # 每集 45–75s（mid 60）
+    "长集": (150.0, 150.0),      # 每集 120–180s（mid 150）
+}
+_EP_NUM_RE = re.compile(r"\d+")
+
+
+def _episode_is_first(ep):
+    m = _EP_NUM_RE.search(str(ep or ""))
+    return m is not None and int(m.group(0)) == 1
+
+
+def episode_target_seconds(root, ep):
+    """从 _设置.md「单集时长」自动取本集验收目标秒；取不到返回 None（不引入新行为，向后兼容）。
+
+    支持：预设名（前长后短/均衡/快节奏/长集，按区间中点；前长后短第1集单独档）；
+    参数化覆盖 `自定义(90s)` / `快节奏(85s)` 取括号内显式秒；`(60-120)` 取区间中点。
+    显式 --target-seconds 仍优先（main 里若已给就不调本函数）。"""
+    raw = (get_setting(root, "单集时长", "") or "").strip()
+    if not raw:
+        raw = "前长后短"  # 选择点默认（见 n2d/references/选择点与偏好.md）
+    # 括号内显式参数优先（半/全角括号）：单值 90s 或区间 60-120。
+    m = re.search(r"[（(]([^（）()]+)[)）]", raw)
+    if m:
+        inner = m.group(1)
+        rng = re.findall(r"\d+(?:\.\d+)?", inner)
+        if len(rng) >= 2:
+            return (float(rng[0]) + float(rng[1])) / 2.0
+        if len(rng) == 1:
+            return float(rng[0])
+    for name, (ep1, rest) in _DURATION_PRESET_TARGETS.items():
+        if name in raw:
+            return ep1 if _episode_is_first(ep) else rest
+    return None
 
 def validate_storyboard_contract(root, ep):
     script = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'validate_storyboard_contract.py')
@@ -117,8 +157,8 @@ def main():
             tol = float(sys.argv[i + 1])
         except ValueError:
             sys.exit(f'⛔ --tol 数值无效: {sys.argv[i + 1]}')
-    # 可选意图集长对账：给了 --target-seconds 才生效（不给→无新行为，向后兼容）。
-    # ∑镜头时长 偏离目标超 15% 仅 WARN 不硬拦。FOLLOW-UP: 从 _设置.md「单集时长」区间/平台 profile 自动取 target。
+    # 集长对账：显式 --target-seconds 优先；否则从 _设置.md「单集时长」预设区间自动取本集目标
+    # （--no-target 显式关闭自动取）。∑镜头时长 偏离目标超 15% 仅 WARN 不硬拦。
     target = None
     if '--target-seconds' in sys.argv:
         i = sys.argv.index('--target-seconds')
@@ -128,6 +168,8 @@ def main():
             target = float(sys.argv[i + 1])
         except ValueError:
             sys.exit(f'⛔ --target-seconds 数值无效: {sys.argv[i + 1]}')
+    elif '--no-target' not in sys.argv:
+        target = episode_target_seconds(root, ep)  # 自动取（取不到 → None → 无新行为）
     # 配音一律落 合成/（render_voice 与制作模式无关地写 合成/，见 2026 出视频↔合成分家）；出视频/ 为已废弃历史路径，仅防御性兜底探测
     vbase = next((b for b in ('合成','出视频') if os.path.isfile(os.path.join(root,b,ep,'配音','时长清单.json'))), '合成')
     vd  = os.path.join(root,vbase,ep,'配音')

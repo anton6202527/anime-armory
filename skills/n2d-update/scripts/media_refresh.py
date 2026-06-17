@@ -148,6 +148,51 @@ def get_cascade_impacts(root: str, ep: str, image_targets: List[str]) -> Dict[st
     return impacts
 
 
+def _identity_registry_path(root: str) -> str:
+    """`出图/共享/identity_registry.json`（新）→ 旧 `出图/_shared/` 兜底。自包含解析，不引 n2d/_lib。"""
+    cur = os.path.join(root, "出图", "共享", "identity_registry.json")
+    legacy = os.path.join(root, "出图", "_shared", "identity_registry.json")
+    return legacy if (not os.path.exists(cur) and os.path.exists(legacy)) else cur
+
+
+def get_anchor_impacts(root: str, image_targets: List[str]) -> List[str]:
+    """选中重刷的图里，哪些是 identity_registry 的定妆锚点（reference_group.front / 已 pin 的 anchor_sha）。
+
+    锁脸锚点被重生成 = 下游每镜（含跨集每一集）继承新脸；且 anchor_sha 已登记的，重出后磁盘 sha 失配
+    会触发 n2d-review `check_anchor_fingerprints` BLOCK。返回命中锚点的标签列表（注明是否已 pin），供
+    计划里追加"重出后须重新 --pin-anchor + 复核跨集引用集"的预警。"""
+    if not image_targets:
+        return []
+    try:
+        with open(_identity_registry_path(root), encoding="utf-8") as fh:
+            data = json.load(fh)
+    except Exception:
+        return []
+    chars = data.get("characters") if isinstance(data, dict) else None
+    if isinstance(chars, dict):
+        chars = list(chars.values())
+    if not isinstance(chars, list):
+        return []
+    target_bases = {os.path.basename(t) for t in image_targets}
+    hits: List[str] = []
+    for c in chars:
+        if not isinstance(c, dict):
+            continue
+        cid = str(c.get("id") or "").strip()
+        for fm in (c.get("forms") or []):
+            if not isinstance(fm, dict):
+                continue
+            rg = fm.get("reference_group") if isinstance(fm.get("reference_group"), dict) else {}
+            front = str(rg.get("front") or "").strip()
+            if not front or os.path.basename(front) not in target_bases:
+                continue
+            form_name = str(fm.get("form") or "").strip()
+            label = f"{cid}/{form_name}" if form_name else (cid or "?")
+            pinned = bool(str(fm.get("anchor_sha") or "").strip())
+            hits.append(f"{label}（{'已 pin anchor_sha' if pinned else '未 pin'}）")
+    return hits
+
+
 def episode_number(ep: Optional[str]) -> str:
     text = str(ep or "").strip()
     if not text:
@@ -187,6 +232,14 @@ def n2d_plan(root: str, episode: Optional[str], image_targets: List[str], video_
             for img, cids in impacts.items():
                 flattened.append(f"{img} -> {', '.join(cids)}")
             cascade_note = f"\n  ⚠️ 级联影响预警：选中图片关联了以下视频 Clip 的首/尾/锚点帧：\n    - " + "\n    - ".join(flattened) + "\n  重出图后请务必同步复核/重制受影响的视频切片。"
+
+        # 锚点级联：选中图若是定妆锚点（reference_group.front），重出后跨集每一集都换脸。
+        anchor_hits = get_anchor_impacts(root, image_targets)
+        if anchor_hits:
+            cascade_note += ("\n  ⛔ 定妆锚点预警：选中图是以下角色定妆锚点 —— " + "、".join(anchor_hits)
+                             + "。重生成会让**所有跨集引用集**继承新脸；已 pin 的还会因 sha 失配触发 "
+                             "check_anchor_fingerprints BLOCK。重制后必须 `image_qc --pin-anchor CHAR_xx/形态` 重新钉死，"
+                             "并对所有引用该锚点的集回 gate/review 复核跨集一致性。")
 
         steps.extend([
             command_step(f"python3 skills/n2d-image/scripts/image_qc.py {quote(root)} {episode} --regen-list"),

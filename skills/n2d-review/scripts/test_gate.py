@@ -4589,11 +4589,9 @@ def test_skip_backend_probe_noted_in_warn(monkeypatch, tmp_path):
 
 
 # ── L6 孤儿守卫：check_* 定义了就必须有调用点（防再出 orphan）──
-_KNOWN_ORPHAN_CHECKS = {
-    # 既存未接线（dead code，TODO 接进 run 或删除）——非本轮引入：
-    "check_markdown_cinematic_contract",
-    "check_storyboard_cinematic_contract",
-}
+_KNOWN_ORPHAN_CHECKS: set = set()
+# 2026-06：原两个孤儿 check_{markdown,storyboard}_cinematic_contract（纯转调 *_style_contract 的空壳）
+# 已删；守卫现要求零孤儿——新增 check_* 必须有调用点，否则本测试 BLOCK。
 
 
 def test_no_new_orphan_check_functions():
@@ -4609,3 +4607,80 @@ def test_voice_cross_episode_wired_into_video_and_compose():
     src = _inspect.getsource(gate.run)
     assert src.count("check_voice_cross_episode(root, ep)") >= 3
     assert src.count("check_timing_manifest_complete(root, ep)") >= 3
+
+
+# ── 物理尺寸对账：角色名取自 registry，不再写死 demo 名 ──
+def _write_idreg_simple(root, characters):
+    import json as _json
+    p = gate.identity_registry_path(root)
+    os.makedirs(os.path.dirname(p), exist_ok=True)
+    with open(p, "w", encoding="utf-8") as fh:
+        _json.dump({"characters": characters}, fh, ensure_ascii=False)
+
+
+def _write_shots_md(root, ep, body):
+    pd = os.path.join(root, "出图", ep, "prompt")
+    os.makedirs(pd, exist_ok=True)
+    with open(os.path.join(pd, "01_分镜出图.md"), "w", encoding="utf-8") as fh:
+        fh.write(body)
+
+
+def test_physical_scale_audit_reads_registry_names_not_hardcoded(tmp_path):
+    gate.findings.clear()
+    root = str(tmp_path)
+    # 非 demo 角色名：旧硬编码实现会对这些名字一律静默放行（假绿灯），新实现应命中。
+    _write_idreg_simple(root, [{"id": "CHAR_10", "name": "阿离"},
+                                    {"id": "CHAR_11", "name": "墨尘"}])
+    _write_shots_md(root, "第1集", "## 镜头 1\n目标：阿离 与 墨尘 对峙\n正文\n")
+    gate.check_physical_scale_audit(root, "第1集")
+    assert any(f["dim"] == "物理尺寸对账" for f in gate.findings)
+
+
+def test_physical_scale_audit_silent_when_scale_declared(tmp_path):
+    gate.findings.clear()
+    root = str(tmp_path)
+    _write_idreg_simple(root, [{"id": "CHAR_10", "name": "阿离"},
+                                    {"id": "CHAR_11", "name": "墨尘"}])
+    # `## 镜头1`（无空格）顺带验 robust split；已写「高半个头」→ 不告警。
+    _write_shots_md(root, "第1集", "## 镜头1\n目标：阿离 与 墨尘，阿离比墨尘高半个头\n")
+    gate.check_physical_scale_audit(root, "第1集")
+    assert not any(f["dim"] == "物理尺寸对账" for f in gate.findings)
+
+
+# ── 核心长线角色未钉死锚点 → WARN（advisory） ──
+def _ref_episode(root, ep, text):
+    d = os.path.join(root, "脚本", ep)
+    os.makedirs(d, exist_ok=True)
+    with open(os.path.join(d, "voiceover.txt"), "w", encoding="utf-8") as fh:
+        fh.write(text)
+
+
+def test_core_anchor_pinning_warns_unpinned_referenced_core(tmp_path):
+    gate.findings.clear()
+    root = str(tmp_path)
+    _write_idreg_simple(root, [{"id": "CHAR_10", "name": "阿离", "scope": "贯穿全篇女主",
+                                     "forms": [{"form": "常态", "reference_group": {"front": "x.png"}}]}])
+    _ref_episode(root, "第1集", "CHAR_10 出场")
+    gate.check_core_anchor_pinning(root, "第1集")
+    assert any(f["dim"] == "锚点钉死" for f in gate.findings)
+
+
+def test_core_anchor_pinning_silent_when_pinned(tmp_path):
+    gate.findings.clear()
+    root = str(tmp_path)
+    _write_idreg_simple(root, [{"id": "CHAR_10", "name": "阿离", "scope": "贯穿全篇女主",
+                                     "forms": [{"form": "常态", "anchor_sha": "deadbeef",
+                                                "reference_group": {"front": "x.png"}}]}])
+    _ref_episode(root, "第1集", "CHAR_10 出场")
+    gate.check_core_anchor_pinning(root, "第1集")
+    assert not any(f["dim"] == "锚点钉死" for f in gate.findings)
+
+
+def test_core_anchor_pinning_skips_minor_role(tmp_path):
+    gate.findings.clear()
+    root = str(tmp_path)
+    _write_idreg_simple(root, [{"id": "CHAR_99", "name": "门口杂役", "scope": "单元配角",
+                                     "forms": [{"form": "常态", "reference_group": {"front": "x.png"}}]}])
+    _ref_episode(root, "第1集", "CHAR_99 出场")
+    gate.check_core_anchor_pinning(root, "第1集")
+    assert not any(f["dim"] == "锚点钉死" for f in gate.findings)

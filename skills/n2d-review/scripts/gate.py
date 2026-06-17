@@ -293,6 +293,10 @@ def load_json(path: str):
 CHARACTER_ID_RE = re.compile(r"\bCHAR_\d{2,}\b")
 ASSET_ID_RE = re.compile(r"\b(?:LOC|PROP|OUTFIT|VFX)_\d{2,}\b")
 
+# 一致性机检的结构阈值（单一真值源·别再散成内联魔数）：改判据来这里，别埋进各 check 体里。
+ENDFRAME_EXEMPT_REASON_MIN_CHARS = 6   # 首尾双帧豁免理由的实质字数下限（< 此 = 占位/单字 → BLOCK）
+ANCHOR_TOKEN_MIN_CHARS = 2             # 锚定相按「·」切后单 token 的最短可比长度（过滤单字噪声）
+
 
 def _episode_reference_texts(root: str, ep: str) -> Iterable[str]:
     """Text surfaces that define the current episode's registry references."""
@@ -1518,7 +1522,7 @@ def check_storyboard_contract(root: str, ep: str, require_frame_assets: bool = T
             exempt = cont.get("endframe_exempt_reason")
             if not exempt:
                 add(BLOCK, "尾帧", loc, "非最终 Clip 默认必须 need_endframe=true；若豁免需填写 endframe_exempt_reason")
-            elif len(str(exempt).strip()) < 6:
+            elif len(str(exempt).strip()) < ENDFRAME_EXEMPT_REASON_MIN_CHARS:
                 add(BLOCK, "尾帧", loc,
                     f"endframe_exempt_reason 过短（{str(exempt).strip()!r}）——豁免首尾双帧必须写明实质理由"
                     "（如「极短镜<3s 无表情变化」），不接受占位/单字。")
@@ -1648,11 +1652,6 @@ def check_storyboard_style_contract(root: str, ep: str) -> None:
                 f"style_contract.风格名「{name}」与 _设置.md 基础视觉风格「{chosen}」不一致——风格真值应同源；核对是否选错风格或契约写偏")
 
 
-def check_storyboard_cinematic_contract(root: str, ep: str) -> None:
-    """Backward-compatible wrapper for old tests/scripts."""
-    check_storyboard_style_contract(root, ep)
-
-
 _TONE_SPLIT_RE = re.compile(r"[；;。.，,\n]")
 
 
@@ -1742,7 +1741,7 @@ def check_cross_episode_character_definition(root: str, ep: str) -> None:
         anchor = str((forms[0] if forms else {}).get("anchor_phrase") or "").strip()
         if not anchor:
             continue  # 无锚定相可比
-        tokens = [t.strip() for t in anchor.replace("，", "·").replace(",", "·").split("·") if len(t.strip()) >= 2]
+        tokens = [t.strip() for t in anchor.replace("，", "·").replace(",", "·").split("·") if len(t.strip()) >= ANCHOR_TOKEN_MIN_CHARS]
         if tokens and not any(t in overview for t in tokens):
             label = names[0] if names else cid
             add(WARN, "跨集角色定义", overview_path,
@@ -2575,26 +2574,55 @@ def check_shot_scale_progression(root: str, ep: str) -> None:
             return_to_stage="image")
 
 
+# 逐镜块切分：`prompt_format.md` 写 `## 镜头 N`，但生成器/旧稿也有 `## 镜头N`（无空格，见
+# test_visual_state_manager）——空格设为可选，否则无空格写法整块漏检＝机检静默失效（假绿灯）。
+_SHOT_BLOCK_SPLIT_RE = re.compile(r"##\s*镜头\s*\d+")
+# 多人同框已显式写清相对尺度的标记（命中任一＝已交代，不告警）。
+_PHYSICAL_SCALE_TOKENS = ("仰视", "俯视", "高半个头", "身长", "身高", "比例", "高矮")
+
+
+def _registry_character_names(root: str) -> List[str]:
+    """从 identity_registry 取所有角色显示名/别名（按 / ／ 切）——物理尺寸对账靠它识别同框人物，
+    不再硬编码某部 demo 的角色名（旧实现写死「沈念/柳娘子/王敦/小禾」，对其它作品一律静默放行＝假绿灯）。"""
+    data = load_json(identity_registry_path(root))
+    if not isinstance(data, dict):
+        return []
+    chars = data.get("characters")
+    if isinstance(chars, dict):
+        chars = list(chars.values())
+    if not isinstance(chars, list):
+        return []
+    names: List[str] = []
+    for c in chars:
+        if not isinstance(c, dict):
+            continue
+        for n in str(c.get("name") or "").replace("／", "/").split("/"):
+            n = n.strip()
+            if len(n) >= 2 and n not in names:
+                names.append(n)
+    return names
+
+
 def check_cinematic_optical_continuity(root: str, ep: str) -> None:
     """Validate that focal lengths match shot sizes to prevent perspective distortion."""
     pd = os.path.join(root, "出图", ep, "prompt")
     f = os.path.join(pd, "01_分镜出图.md")
     if not os.path.exists(f):
         return
-    
+
     content = open(f, encoding="utf-8").read()
-    shots = re.split(r"## 镜头 \d+", content)
-    
+    shots = _SHOT_BLOCK_SPLIT_RE.split(content)
+
     # ECU/CU=85mm, MS=50mm, LS=35mm, ELS=24mm
     mapping = {
         "ECU": "85mm", "CU": "85mm",
         "MCU": "50mm", "MS": "50mm",
         "LS": "35mm", "ELS": "24mm"
     }
-    
+
     for shot in shots:
         if not shot.strip(): continue
-        
+
         shot_size_match = re.search(r"景别\((ELS|LS|MS|MCU|CU|ECU).*?\)", shot)
         if shot_size_match:
             size = shot_size_match.group(1)
@@ -2604,24 +2632,33 @@ def check_cinematic_optical_continuity(root: str, ep: str) -> None:
 
 
 def check_physical_scale_audit(root: str, ep: str) -> None:
-    """Validate relative heights in multi-character shots."""
+    """Validate relative heights in multi-character shots.
+
+    同框 ≥2 个 identity_registry 角色却没交代身高比例/仰俯视 → WARN（多人同框易出比例穿帮）。
+    角色名从 registry 取（见 `_registry_character_names`），不写死 demo 名。"""
     pd = os.path.join(root, "出图", ep, "prompt")
     f = os.path.join(pd, "01_分镜出图.md")
     if not os.path.exists(f):
         return
-        
+
+    names = _registry_character_names(root)
+    if len(names) < 2:
+        return  # 不足两名可识别角色：无从判定同框，跳过（不臆造）
+
     content = open(f, encoding="utf-8").read()
-    shots = re.split(r"## 镜头 \d+", content)
-    
+    shots = _SHOT_BLOCK_SPLIT_RE.split(content)
+
     for shot in shots:
         if not shot.strip(): continue
-        
-        # Simple detection of multi-character shots (names often appear in '目标：')
-        # This is a heuristic; real implementation would read identity_registry and storyboard.json
-        char_mentions = re.findall(r"目标：.*?(沈念|柳娘子|王敦|小禾)", shot)
-        if len(set(char_mentions)) >= 2:
-            if not any(k in shot for k in ("仰视", "俯视", "高半个头", "身长", "比例")):
-                add(WARN, "物理尺寸对账", f, f"检测到多人同框镜头，建议显式写明人物之间的【身高比例差】或【仰俯视关系】")
+        # 取镜内「目标：…」行（出图块标注同框人物处）；无该行则全块兜底扫名字。
+        target_lines = re.findall(r"目标：[^\n]*", shot)
+        scope = "\n".join(target_lines) if target_lines else shot
+        present = {n for n in names if n in scope}
+        if len(present) >= 2:
+            if not any(k in shot for k in _PHYSICAL_SCALE_TOKENS):
+                who = "、".join(sorted(present))
+                add(WARN, "物理尺寸对账", f,
+                    f"检测到多人同框镜头（{who}），建议显式写明人物之间的【身高比例差】或【仰俯视关系】，防同框比例穿帮")
 
 
 def check_identity_adapter_matrix(root: str) -> None:
@@ -2817,11 +2854,6 @@ def check_markdown_style_contract(text: str, loc: str, layer: str) -> None:
             add(BLOCK, "基础视觉风格契约", loc, f"本集真实电影感契约缺字段：{missing[0]}")
         return
     add(BLOCK, "基础视觉风格契约", loc, f"缺「本集基础视觉风格契约」；{layer} 必须继承 storyboard.json style_contract，而不是只在 prompt 末尾加某一种风格词")
-
-
-def check_markdown_cinematic_contract(text: str, loc: str, layer: str) -> None:
-    """Backward-compatible wrapper for old tests/scripts."""
-    check_markdown_style_contract(text, loc, layer)
 
 
 def check_video_prompt_overview(root: str, ep: str) -> None:
@@ -4393,6 +4425,50 @@ def check_anchor_fingerprints(root: str, ep: str) -> None:
                 "若为有意更新：重出依赖镜后用 `image_qc --pin-anchor` 重新钉死；否则恢复原锚点定妆图。")
 
 
+def check_core_anchor_pinning(root: str, ep: str) -> None:
+    """核心长线角色未启用锚点钉死的前置提醒（advisory·WARN）。
+
+    `check_anchor_fingerprints` 是纯 opt-in：没登记 `anchor_sha` 的 form 直接跳过——意味着一张被多集
+    引用的锁脸定妆图，若在 `n2d-update media` 重刷或重生成时被换掉，下游每一集静默继承新脸而无任何机检
+    （`check_referenced_assets_finalized` 只信 self_check_passed 标志、不验像素）。这里补「该钉没钉」的信号：
+    对**本集引用到的核心长线角色**（scope/tier 命中贯穿全篇/主角/主反派等），若其 form 一个都没登记
+    `anchor_sha` → WARN 建议 `image_qc --pin-anchor` 钉死。只对核心角色报（短线配角/单元妖不前置高档，
+    对齐 n2d-image「ROI 驱动」），单条 rollup 不刷屏；纯 WARN 不 BLOCK（向后兼容现有未钉作品）。"""
+    data = load_json(identity_registry_path(root))
+    if not isinstance(data, dict):
+        return
+    chars = data.get("characters")
+    if isinstance(chars, dict):
+        chars = list(chars.values())
+    if not isinstance(chars, list) or not chars:
+        return
+    referenced_ids, _ = episode_registry_reference_ids(root, ep)
+    if not referenced_ids:
+        return  # 本集还没引用任何登记角色（如出图前早期）——不前置提醒
+    unpinned: List[str] = []
+    for c in chars:
+        if not isinstance(c, dict):
+            continue
+        cid = str(c.get("id") or "").strip()
+        if cid not in referenced_ids:
+            continue
+        scope = f"{c.get('tier') or ''} {c.get('scope') or ''}"
+        if not _CORE_SCOPE_RE.search(scope):
+            continue  # 仅核心长线角色前置高档
+        forms = c.get("forms") if isinstance(c.get("forms"), list) else []
+        if any(str((fm or {}).get("anchor_sha") or "").strip() for fm in forms if isinstance(fm, dict)):
+            continue  # 已有任一 form 钉死
+        names = [n.strip() for n in str(c.get("name") or "").replace("／", "/").split("/") if n.strip()]
+        unpinned.append(f"{names[0] if names else cid}({cid})")
+    if unpinned:
+        add(WARN, "锚点钉死", identity_registry_path(root),
+            f"核心长线角色未启用定妆锚点钉死：{('、'.join(unpinned))}——这些脸被多集引用，"
+            "重刷/重生成定妆若换脸则下游每集静默继承（anchor_sha 未登记 = check_anchor_fingerprints 跳过）。"
+            "建议对其 front 定妆图 `image_qc --pin-anchor CHAR_xx/形态` 钉死，"
+            "重制后用 n2d-update media 复核跨集引用集。",
+            return_to_stage="image")
+
+
 def check_expression_anchors(root: str, ep: str) -> None:
     """表情库跨集共享锁定（治"第2集的怒和第5集的怒各画各的"）：form 若显式登记 `expression_anchors`
     （opt-in，每条 `{emotion, path, self_check_passed?, anchor_sha?}`），则该情绪锚必须存在、过自检、未被悄改——
@@ -5195,6 +5271,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_shared_image_index(root, ep)
         check_referenced_assets_finalized(root, ep)
         check_anchor_fingerprints(root, ep)
+        check_core_anchor_pinning(root, ep)
         check_expression_anchors(root, ep)
         check_character_backend_pin(root, ep)
         check_seed_event_records(root, ep)
@@ -5248,6 +5325,11 @@ def run(root: str, ep: str, stage: str) -> None:
         check_storyboard_special_templates(root, ep)
         check_semantic_lineage(root, ep)
         check_state_continuity(root, ep)
+        # 跨集视觉契约（光位/轴线翻）+ 跨集角色文字定义漂移：出图后到合成前若改了 00_总览.md，
+        # 越轴/光跳/换脸会一路绿灯到成片。compose 终装前再校一次——和 check_voice_cross_episode 进
+        # compose 同理（不让出图后编辑悄悄绕过跨集一致性），补此前只在 image/video 校验的不对称遗留。
+        check_cross_episode_contract(root, ep)
+        check_cross_episode_character_definition(root, ep)
         sb = load_json(os.path.join(root, "脚本", ep, "storyboard.json"))
         if sb:
             check_voice_conditioned_lipsync_policy(root, ep, sb)
@@ -5266,6 +5348,8 @@ def run(root: str, ep: str, stage: str) -> None:
         check_state_continuity(root, ep)
         check_multimodal_continuity(root, ep)
         check_subtitle_alignment(root, ep)
+        check_cross_episode_contract(root, ep)
+        check_cross_episode_character_definition(root, ep)
         check_consistency_audit_gate(root, ep, stage="review")
     else:
         add(BLOCK, "参数", stage, "未知 stage")

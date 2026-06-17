@@ -87,3 +87,29 @@ def test_media_subcommand_wires_into_update_plan(tmp_path, capsys):
     out = capsys.readouterr().out
     assert "n2d:" in out
     assert (root / "生产数据" / "media_refresh_plan_第2集.json").exists()
+
+
+def test_media_plan_warns_when_refreshing_a_locked_anchor(tmp_path):
+    root = _project(tmp_path)
+    reg = root / "出图" / "共享"
+    reg.mkdir(parents=True)
+    (reg / "identity_registry.json").write_text(json.dumps({"characters": [
+        {"id": "CHAR_10", "name": "阿离", "forms": [
+            {"form": "常态", "anchor_sha": "deadbeef",
+             "reference_group": {"front": "出图/共享/图片/定妆_阿离.png"}}]}
+    ]}, ensure_ascii=False), encoding="utf-8")
+    plan = m.build_plan(root=str(root), episode="第2集", image_targets=["定妆_阿离.png"])
+    blob = json.dumps(plan, ensure_ascii=False)
+    assert "定妆锚点预警" in blob and "CHAR_10/常态" in blob and "pin-anchor" in blob
+
+
+def test_media_plan_no_anchor_warning_for_non_anchor_image(tmp_path):
+    root = _project(tmp_path)
+    reg = root / "出图" / "共享"
+    reg.mkdir(parents=True)
+    (reg / "identity_registry.json").write_text(json.dumps({"characters": [
+        {"id": "CHAR_10", "name": "阿离", "forms": [
+            {"form": "常态", "reference_group": {"front": "出图/共享/图片/定妆_阿离.png"}}]}
+    ]}, ensure_ascii=False), encoding="utf-8")
+    plan = m.build_plan(root=str(root), episode="第2集", image_targets=["Clip_007_背景.png"])
+    assert "定妆锚点预警" not in json.dumps(plan, ensure_ascii=False)
