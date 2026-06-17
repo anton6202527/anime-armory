@@ -353,12 +353,12 @@ def test_lint_skips_tail_identity_handoff_when_tail_declared_none() -> None:
 
 
 def test_lint_warns_closeup_strong_emotion_without_expression_lib() -> None:
-    # 近景 + 强情绪角色镜，未引表情库/脸部特写 → warn（表情镜脸漂风险）
+    # 近景 + 强情绪角色镜，未引表情库/脸部特写 → block（表情镜脸漂风险）
     valid = {"CHAR_01/常态"}
     blk = _char_block("Clip 40 痛哭")
     blk["body"] += "\n**景别**：ECU 面部特写\n**情绪**：崩溃落泪、面部扭曲"
     codes = {f["code"]: f["level"] for f in image_qc.lint_shot_block(blk, valid)}
-    assert codes.get("no_expression_lib_ref") == "warn"
+    assert codes.get("no_expression_lib_ref") == "block"
 
 
 def test_lint_passes_closeup_emotion_with_expression_lib_ref() -> None:
@@ -392,7 +392,7 @@ def test_lint_expression_gate_skips_non_character_shot() -> None:
     assert image_qc.lint_shot_block(blk, {"CHAR_01"}) == []
 
 
-# ── ④ 核心角近景大表情无表情库 = block ──────────────────────────────
+# ── ④ 所有人物近景大表情无表情库 = block ──────────────────────────────
 def test_core_char_ids():
     forms = [{"id": "CHAR_01", "scope": "全篇"}, {"id": "CHAR_02", "scope": "第1集起复用"},
              {"id": "CHAR_03", "scope": "核心"}, {"id": "CHAR_04", "scope": ""}]
@@ -404,16 +404,16 @@ def test_lint_closeup_core_strong_emotion_blocks():
     out = image_qc._lint_closeup_expression_lib(
         "Clip 50", "ECU 面部特写，沈念崩溃落泪 CHAR_01/常态",
         id_refs=["CHAR_01/常态"], core_ids={"CHAR_01"})
-    assert out and out[0]["level"] == "block" and out[0]["code"] == "closeup_core_no_expression_lib"
-    assert "closeup_core_no_expression_lib" in image_qc.HARD_LINT_CODES
+    assert out and out[0]["level"] == "block" and out[0]["code"] == "no_expression_lib_ref"
+    assert "no_expression_lib_ref" in image_qc.HARD_LINT_CODES
 
 
-def test_lint_closeup_noncore_stays_warn():
-    # 同样的镜但角色非核心（core_ids 不含）→ 维持 warn（不冤拦配角）
+def test_lint_closeup_noncore_also_blocks():
+    # 同样的镜但角色非核心（core_ids 不含）→ 仍然 block；基础表情参考不按主配角放松。
     out = image_qc._lint_closeup_expression_lib(
         "Clip 51", "ECU 面部特写，路人崩溃落泪 CHAR_09/常态",
         id_refs=["CHAR_09/常态"], core_ids={"CHAR_01"})
-    assert out and out[0]["level"] == "warn" and out[0]["code"] == "no_expression_lib_ref"
+    assert out and out[0]["level"] == "block" and out[0]["code"] == "no_expression_lib_ref"
 
 
 def test_lint_closeup_core_with_expression_lib_passes():
@@ -429,8 +429,8 @@ def test_lint_shot_block_core_expression_block_integration():
     blk["body"] += "\n**景别**：ECU 面部特写\n**情绪**：崩溃落泪、面部扭曲"
     forms = [{"id": "CHAR_01", "scope": "全篇"}]
     codes = {f["code"]: f["level"] for f in image_qc.lint_shot_block(blk, valid, forms)}
-    assert codes.get("closeup_core_no_expression_lib") == "block"
-    assert "no_expression_lib_ref" not in codes  # 升级为 block 后不再重复出 warn
+    assert codes.get("no_expression_lib_ref") == "block"
+    assert "closeup_core_no_expression_lib" not in codes
 
 
 # ── A 资产 id lint 对称化 ───────────────────────────────────────────────────────

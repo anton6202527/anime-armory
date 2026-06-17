@@ -9,6 +9,7 @@ use std::time::{Duration, Instant};
 
 use serde::Serialize;
 use serde_json::Value;
+use tauri::Manager;
 
 // ---- workspace scan ----
 
@@ -71,6 +72,208 @@ pub fn scan_workspace(repo_root: String) -> Vec<LineInfo> {
             }
         })
         .collect()
+}
+
+// ---- skills (per-line SKILL.md roster) ----
+
+#[derive(Serialize)]
+pub struct SkillInfo {
+    name: String,
+    description: String,
+}
+
+/// Pull `name:` / `description:` out of a SKILL.md YAML frontmatter block
+/// (the single-line values between the leading `---` fences).
+fn parse_frontmatter(md: &str) -> Option<(String, String)> {
+    let mut lines = md.lines();
+    if lines.next()?.trim() != "---" {
+        return None;
+    }
+    let (mut name, mut desc) = (None, None);
+    for line in lines {
+        let t = line.trim_start();
+        if t == "---" {
+            break;
+        }
+        if let Some(v) = t.strip_prefix("name:") {
+            name = Some(unquote(v.trim()));
+        } else if let Some(v) = t.strip_prefix("description:") {
+            desc = Some(unquote(v.trim()));
+        }
+    }
+    Some((name?, desc.unwrap_or_default()))
+}
+
+fn unquote(s: &str) -> String {
+    let s = s.trim();
+    if s.len() >= 2
+        && ((s.starts_with('"') && s.ends_with('"')) || (s.starts_with('\'') && s.ends_with('\'')))
+    {
+        s[1..s.len() - 1].to_string()
+    } else {
+        s.to_string()
+    }
+}
+
+/// List the skills belonging to one creative line: the dispatcher `<line>`
+/// plus every `<line>-*` member, dispatcher first then alphabetical.
+#[tauri::command]
+pub fn list_skills(repo_root: String, line: String) -> Vec<SkillInfo> {
+    let skills_dir = Path::new(&repo_root).join("skills");
+    let prefix = format!("{line}-");
+    let mut members: Vec<(String, SkillInfo)> = Vec::new();
+    if let Ok(entries) = fs::read_dir(&skills_dir) {
+        for e in entries.flatten() {
+            let p = e.path();
+            if !p.is_dir() {
+                continue;
+            }
+            let dir_name = e.file_name().to_string_lossy().to_string();
+            if dir_name != line && !dir_name.starts_with(&prefix) {
+                continue;
+            }
+            let md = match fs::read_to_string(p.join("SKILL.md")) {
+                Ok(t) => t,
+                Err(_) => continue,
+            };
+            let (name, description) =
+                parse_frontmatter(&md).unwrap_or_else(|| (dir_name.clone(), String::new()));
+            members.push((dir_name, SkillInfo { name, description }));
+        }
+    }
+    // dispatcher (exact line name) first, then the rest alphabetically by dir name
+    members.sort_by(|a, b| {
+        let rank = |n: &str| if n == line { 0 } else { 1 };
+        rank(&a.0).cmp(&rank(&b.0)).then(a.0.cmp(&b.0))
+    });
+    members.into_iter().map(|(_, s)| s).collect()
+}
+
+/// Resolve (and create) the app's dedicated works workspace `<home>/AnimeArsenal/`.
+/// This is kept SEPARATE from the skills repo so app works never touch the
+/// repo's demo product dirs (制漫剧/ etc.). Cross-platform (HOME / USERPROFILE).
+#[tauri::command]
+pub fn default_workspace() -> Result<String, String> {
+    let home = dirs::home_dir().ok_or("无法定位用户主目录")?;
+    let ws = home.join("AnimeArsenal");
+    fs::create_dir_all(&ws).map_err(|e| e.to_string())?;
+    Ok(ws.to_string_lossy().to_string())
+}
+
+/// Resolve which directory the app uses as its **skills repo** (drives the skill
+/// roster + `run.py`). Priority:
+///   1. the live `dev_repo` checkout if it actually has a `skills/` dir — so on a
+///      dev machine skill edits are always picked up (the bundle is ignored);
+///   2. else the `/tod`-bundled copy shipped inside the app
+///      (`<resourceDir>/resources`, written by sync-skills.js) — the
+///      self-contained path for an installed app with no source checkout.
+/// Falls back to `dev_repo` as a last resort so the frontend always has a value.
+#[tauri::command]
+pub fn resolve_repo(app: tauri::AppHandle, dev_repo: String) -> String {
+    if Path::new(&dev_repo).join("skills").is_dir() {
+        return dev_repo;
+    }
+    if let Ok(res) = app.path().resource_dir() {
+        let bundled = res.join("resources");
+        if bundled.join("skills").is_dir() {
+            return bundled.to_string_lossy().to_string();
+        }
+    }
+    dev_repo
+}
+
+fn copy_dir_all(src: &Path, dst: &Path) -> std::io::Result<()> {
+    fs::create_dir_all(dst)?;
+    for entry in fs::read_dir(src)? {
+        let entry = entry?;
+        let from = entry.path();
+        let to = dst.join(entry.file_name());
+        if from.is_dir() {
+            copy_dir_all(&from, &to)?;
+        } else {
+            fs::copy(&from, &to)?;
+        }
+    }
+    Ok(())
+}
+
+/// Seed the `/tod --demos` sample works into the app's works workspace, ONCE.
+/// For each bundled `resources/demos/<产品目录>/<作品>`, if the same path is
+/// missing under `workspace_root`, copy it in. A `.demos_seeded` sentinel in the
+/// workspace makes this idempotent and means user-deleted demos stay deleted.
+/// Returns the number of works seeded (0 if nothing bundled / already seeded).
+#[tauri::command]
+pub fn seed_demos(app: tauri::AppHandle, workspace_root: String) -> Result<usize, String> {
+    let ws = Path::new(&workspace_root);
+    let sentinel = ws.join(".demos_seeded");
+    if sentinel.exists() {
+        return Ok(0);
+    }
+    let res = match app.path().resource_dir() {
+        Ok(r) => r,
+        Err(e) => return Err(e.to_string()),
+    };
+    let demos = res.join("resources").join("demos");
+    if !demos.is_dir() {
+        return Ok(0); // app was built without --demos
+    }
+    let mut seeded = 0usize;
+    // demos/<产品目录>/<作品>/
+    for line in fs::read_dir(&demos).map_err(|e| e.to_string())?.flatten() {
+        let line_dir = line.path();
+        if !line_dir.is_dir() {
+            continue;
+        }
+        let product = line.file_name();
+        for work in fs::read_dir(&line_dir).map_err(|e| e.to_string())?.flatten() {
+            let from = work.path();
+            if !from.is_dir() {
+                continue;
+            }
+            let dst = ws.join(&product).join(work.file_name());
+            if dst.exists() {
+                continue; // never clobber existing user work
+            }
+            copy_dir_all(&from, &dst).map_err(|e| e.to_string())?;
+            seeded += 1;
+        }
+    }
+    let _ = fs::write(&sentinel, b"1");
+    Ok(seeded)
+}
+
+/// Move a work folder to the OS Trash / Recycle Bin (recoverable). Guarded so
+/// it can ONLY delete folders that live inside the given workspace root — never
+/// the skills repo or anything outside the app's own workspace.
+#[tauri::command]
+pub fn delete_work(workspace_root: String, path: String) -> Result<(), String> {
+    let ws = fs::canonicalize(&workspace_root).map_err(|e| e.to_string())?;
+    let target = fs::canonicalize(&path).map_err(|e| e.to_string())?;
+    if target == ws || !target.starts_with(&ws) {
+        return Err("拒绝删除：该作品不在 app 工作区内".into());
+    }
+    trash::delete(&target).map_err(|e| format!("移入垃圾桶失败：{e}"))?;
+    Ok(())
+}
+
+/// Create an empty work folder `<line product dir>/<name>/` and return its
+/// absolute path. The actual content pipeline is then driven by the line's
+/// skill / terminal inside the Operation page.
+#[tauri::command]
+pub fn create_work(dir: String, name: String) -> Result<String, String> {
+    let trimmed = name.trim();
+    if trimmed.is_empty() {
+        return Err("作品名不能为空".into());
+    }
+    if trimmed.contains('/') || trimmed.contains('\\') || trimmed.starts_with('.') {
+        return Err("作品名含非法字符".into());
+    }
+    let path = Path::new(&dir).join(trimmed);
+    if path.exists() {
+        return Err(format!("作品已存在：{trimmed}"));
+    }
+    fs::create_dir_all(&path).map_err(|e| e.to_string())?;
+    Ok(path.to_string_lossy().to_string())
 }
 
 // ---- canvas ----

@@ -281,7 +281,7 @@ def load_registry_forms(root: Path) -> Optional[List[Dict[str, Any]]]:
                 "form": fm,
                 "key": key,
                 "asset_key": asset_key,
-                "scope": str(ch.get("scope") or "").strip(),  # 核心/长线/全篇 → ④ 表情库硬闸只对核心角生效
+                "scope": str(ch.get("scope") or "").strip(),  # 核心/长线/全篇只用于提示文案；④ 表情库硬闸对所有人物生效
                 "anchor_phrase": str(form.get("anchor_phrase") or ""),
                 "display": display,
                 "ref_count": ref_count,  # 该形态 reference_group 的多角度参考张数（C4：喂全角度组给多参考后端）
@@ -568,8 +568,7 @@ def _has_unnegated_text2img(text: str) -> bool:
 
 # 近景大表情表情库 gate（④ 治表情镜脸漂）：近景/特写/反打 + 强情绪的角色镜，若 prompt
 # 未引用同源『表情库 expressions / 脸部特写』参考，AI 会为大表情重画整张脸 → 表情镜脸漂。
-# 软约束（warn，非 hard）：表情库是降风险强手段，但主参考+锚点句仍可能够用，故标 warn 交人判，
-# 不当 hard 拦（与本文件 hard-block 仅留高精度无歧义硬伤的哲学一致；不进 HARD_LINT_CODES）。
+# 2026-06：基础定妆包不再按主配角放松；所有人物近景大表情都 hard block，角色体量只影响 LoRA/主体库升档。
 STRONG_EMOTION_MARKERS = (
     "哭", "泣", "落泪", "含泪", "泪", "怒", "愤", "暴怒", "狂怒", "震惊", "惊恐", "恐惧",
     "狂喜", "大笑", "狂笑", "嘶吼", "咆哮", "嚎", "痛苦", "崩溃", "狰狞", "扭曲", "癫狂",
@@ -588,7 +587,7 @@ def _references_expression_lib(body: str) -> bool:
     return any(m in str(body or "") for m in EXPRESSION_LIB_MARKERS)
 
 
-# ④ 表情库硬闸只对核心角生效（与 build_adapter_matrix / 一角一后端同口径）；配角维持 warn。
+# ④ 表情库硬闸对所有人物生效；核心/长线只决定提示文案和是否升 LoRA/主体库。
 CORE_SCOPES = ("全篇", "长线", "核心")
 
 
@@ -605,7 +604,7 @@ def _lint_closeup_expression_lib(label: str, body: str,
     """近景大表情表情库 gate（仅角色镜调用）：近景/特写/反打 + 强情绪角色镜须引用同源表情库/脸部特写参考，
     否则大表情让 AI 自由重画整张脸 → 表情镜脸漂。纯函数·可测。
 
-    ④ 分档：命中**核心角色**（scope 核心/长线/全篇）→ **block**（最易漂的镜，不许裸出）；其余角色 → warn。"""
+    ④ 分档更新：所有人物 → **block**。核心/长线只决定是否升 LoRA/原生主体 ID，不决定基础表情参考是否可省。"""
     text = str(body or "")
     if not _CLOSEUP_LINT_RE.search(text):
         return []
@@ -615,14 +614,11 @@ def _lint_closeup_expression_lib(label: str, body: str,
         return []
     refs = {normalize_identity_ref(r).split("/")[0] for r in (id_refs or []) if r}
     hit_core = sorted(refs & set(core_ids or set()))
-    if hit_core:
-        return [{"level": "block", "code": "closeup_core_no_expression_lib",
-                 "msg": f"{label}：核心角色近景大表情镜（{'、'.join(hit_core)}）未引用『表情库 expressions / 脸部特写参考』"
-                        "——大表情让 AI 重画整张脸=跨集脸漂高发；必须先建同源表情库"
-                        "（image_qc --finalize-expr CHAR_xx/形态/情绪）并在本镜引用，首尾双帧只插值。"}]
-    return [{"level": "warn", "code": "no_expression_lib_ref",
-             "msg": f"{label}：近景/特写大表情角色镜未引用『表情库 expressions / 脸部特写参考』"
-                    "（大表情会让 AI 重画整张脸 → 表情镜脸漂；建议引同源表情库，首尾双帧只插值）"}]
+    scope_hint = f"（命中核心/长线：{'、'.join(hit_core)}）" if hit_core else ""
+    return [{"level": "block", "code": "no_expression_lib_ref",
+             "msg": f"{label}：近景/特写大表情角色镜{scope_hint}未引用『表情库 expressions / 脸部特写参考』"
+                    "——大表情让 AI 重画整张脸=脸漂高发；所有人物（含短线/功能角色）都必须先建同源表情库"
+                    "或脸部特写参考，并在本镜引用，首尾双帧只插值。"}]
 
 
 # C3 多主体空间绑定：同框 ≥2 角色需逐角色绑画面站位，否则多主体易串脸。
@@ -940,7 +936,8 @@ HARD_LINT_CODES = (
     "lifecycle_regression",
     "lifecycle_unknown_from_state",
     "lifecycle_unknown_to_state",
-    "closeup_core_no_expression_lib",  # ④ 核心角近景大表情无表情库 = 跨集脸漂高发，硬拦
+    "no_expression_lib_ref",  # ④ 所有人物近景大表情无表情库/脸部特写 = 脸漂高发，硬拦
+    "closeup_core_no_expression_lib",  # 旧报告码兼容；新报告统一用 no_expression_lib_ref
 )
 VISUAL_CHECK_LABELS = {
     "face": "崩脸 G1",

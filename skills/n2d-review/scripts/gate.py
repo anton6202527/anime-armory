@@ -201,6 +201,7 @@ IDENTITY_FORM_FIELDS = (
     "anchor_phrase",
     "character_dna",
     "reference_group",
+    "reference_atlas",
     "identity_adapters",
     "angle_policy",
     "drift_forbidden",
@@ -1960,16 +1961,14 @@ def _validate_character_dna(section: object, loc: str) -> None:
 
 
 def _validate_character_asset_bundle(root: str, char: dict, loc: str) -> None:
-    """Core/longline characters must have a portable project-local asset bundle."""
-    scope = str(char.get("scope") or "")
-    if not _CORE_SCOPE_RE.search(scope):
-        return
+    """Every image-entering character must have a portable project-local asset bundle."""
     bundle = char.get("asset_bundle")
     char_id = str(char.get("id") or "").strip()
     if not isinstance(bundle, dict):
         add(BLOCK, "角色资产包", loc,
-            "核心/长线角色缺 asset_bundle；必须指向 设定库/character_assets/<CHAR_ID>__<slug>/manifest.json，"
-            "否则换模型/工作流/视频工具时无法继承 reference/prompts/lora/voice/adapters/qc。")
+            "人物角色缺 asset_bundle；所有入镜人物（含短线/功能角色）都必须指向 "
+            "设定库/character_assets/<CHAR_ID>__<slug>/manifest.json。角色体量只影响 LoRA/原生主体是否升档，"
+            "不影响基础定妆包完整度；否则换模型/工作流/视频工具时无法继承 reference/prompts/lora/voice/adapters/qc。")
         return
     manifest_rel = str(bundle.get("manifest") or "").strip()
     package_dir = str(bundle.get("package_dir") or "").strip()
@@ -1988,7 +1987,7 @@ def _validate_character_asset_bundle(root: str, char: dict, loc: str) -> None:
     manifest = load_json(manifest_path)
     if not isinstance(manifest, dict):
         add(BLOCK, "角色资产包", manifest_path,
-            "核心/长线角色 asset_bundle.manifest 不存在或无法解析；资产包不能只写口头约定。")
+            "人物角色 asset_bundle.manifest 不存在或无法解析；资产包不能只写口头约定。")
         return
     if manifest.get("kind") != "n2d_project_character_asset_bundle":
         add(BLOCK, "角色资产包", manifest_path, "manifest.kind 必须是 n2d_project_character_asset_bundle")
@@ -2012,6 +2011,47 @@ def _validate_character_asset_bundle(root: str, char: dict, loc: str) -> None:
     if not isinstance(truth_sources, dict) or not truth_sources.get("identity_registry"):
         add(BLOCK, "角色资产包", manifest_path,
             "manifest.truth_sources 必须指回 identity_registry；资产包不得成为第二真值。")
+
+
+def _identity_expression_path(expr: object) -> str:
+    """Return an expression reference path from legacy string or structured dict form."""
+    if isinstance(expr, str):
+        return expr.strip()
+    if isinstance(expr, dict):
+        return str(expr.get("path") or "").strip()
+    return ""
+
+
+def _validate_reference_atlas(form: dict, floc: str, strict_references: bool,
+                              restricted_partial: bool = False) -> None:
+    atlas = form.get("reference_atlas")
+    if not isinstance(atlas, dict):
+        if strict_references:
+            add(BLOCK, "资产身份注册层", floc,
+                "reference_atlas 必须是对象；所有人物/形态都要登记基础视角、表情参考和动作缺口状态。")
+        return
+    if restricted_partial:
+        if str(atlas.get("build_tier") or "").strip() != "restricted_partial" and strict_references:
+            add(BLOCK, "资产身份注册层", floc,
+                "restricted_partial 形态的 reference_atlas.build_tier 必须标为 restricted_partial，避免误当完整人物参考。")
+        return
+    base_views = atlas.get("base_views")
+    if not isinstance(base_views, dict):
+        if strict_references:
+            add(BLOCK, "资产身份注册层", floc,
+                "reference_atlas.base_views 缺失；必须登记 front/side/back/half_body 或 full_body 的 ready/planned 状态。")
+    else:
+        missing_views = [key for key in ("front", "side", "back") if key not in base_views]
+        if "half_body" not in base_views and "full_body" not in base_views:
+            missing_views.append("half_body_or_full_body")
+        if missing_views and strict_references:
+            add(BLOCK, "资产身份注册层", floc,
+                "reference_atlas.base_views 缺基础视角：" + ", ".join(missing_views))
+    expression_refs = atlas.get("expression_refs")
+    if not isinstance(expression_refs, list) or not expression_refs:
+        if strict_references:
+            add(BLOCK, "资产身份注册层", floc,
+                "reference_atlas.expression_refs 至少登记一个同源脸部特写/表情参考；功能角色也不能只靠正脸硬扛近景。")
 
 
 def _identity_reference_exists(root: str, rel: str) -> bool:
@@ -2082,12 +2122,13 @@ def check_identity_registry(
             _validate_character_dna(form.get("character_dna"), floc)
 
             reference_group = form.get("reference_group")
+            restricted_partial = _is_restricted_partial_form(char, form)
+            _validate_reference_atlas(form, floc, strict_references, restricted_partial=restricted_partial)
             if not isinstance(reference_group, dict):
                 add(BLOCK, "资产身份注册层", floc, "reference_group 必须是对象")
             else:
                 asset_key = str(form.get("asset_key") or "").strip()
                 form_name = str(form.get("form") or "").strip()
-                restricted_partial = _is_restricted_partial_form(char, form)
                 # Legacy single-form baseline characters may use `定妆_<角色>.png`.
                 # Multi-form or named variant forms must advertise the exact asset_key.
                 enforce_asset_key_filename = form_count > 1 or form_name not in {"常态", "局部参考", "局部参考（暂不正脸）"}
@@ -2117,10 +2158,16 @@ def check_identity_registry(
                 expressions = reference_group.get("expressions", [])
                 if expressions is not None and not isinstance(expressions, list):
                     add(BLOCK, "资产身份注册层", floc, "reference_group.expressions 必须是列表")
+                    expressions = []
+                if not restricted_partial and strict_references and not expressions:
+                    add(BLOCK, "资产身份注册层", floc,
+                        "reference_group.expressions 至少需要一个同源脸部特写/表情参考；"
+                        "所有人物（含短线/功能角色）都按主角基础定妆包标准执行。")
                 for expr in expressions or []:
-                    rel = str(expr or "").strip()
+                    rel = _identity_expression_path(expr)
                     if not rel:
-                        add(BLOCK, "资产身份注册层", floc, "reference_group.expressions 存在空路径")
+                        add(BLOCK, "资产身份注册层", floc,
+                            "reference_group.expressions 存在空路径；可用字符串路径或 {emotion, path} 对象")
                         continue
                     if require_reference_assets and strict_references and not _identity_reference_exists(root, rel):
                         add(BLOCK, "资产身份注册层", os.path.join(root, rel) if not os.path.isabs(rel) else rel, "reference_group.expressions 路径不存在")
@@ -4016,7 +4063,7 @@ def check_common_image_prompts(root: str) -> None:
                 restricted_partial = _is_restricted_partial_prompt_section(sec)
                 if not restricted_partial:
                     if "角色定妆组" not in sec:
-                        add(BLOCK, "角色一致性", loc, "角色定妆缺定妆组说明；核心角色不能只靠单张正脸")
+                        add(BLOCK, "角色一致性", loc, "角色定妆缺定妆组说明；人物角色不能只靠单张正脸")
                     if not _has_standard_character_turnaround(sec):
                         add(BLOCK, "角色三视图", loc, "人物定妆必须是标准三视图：正面主参考 + 侧面参考 + 背面参考 + `定妆_<角色>_三视图.png` 人审拼版；不得只出正脸/半身或把背面按需省略")
                 if _uses_halfbody_outfit_ref(sec) and not _has_halfbody_crop_rule(sec):

@@ -17,6 +17,8 @@ portable-pty = "0.8"
 base64 = "0.22"
 tiny_http = "0.12"
 notify = "6"
+dirs = "5"      # cross-platform home dir (HOME / USERPROFILE)
+trash = "5"     # cross-platform Trash / Recycle Bin
 
 [[bin]]
 name = "anime-arsenal-desktop"

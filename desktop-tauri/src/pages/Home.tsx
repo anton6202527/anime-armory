@@ -1,50 +1,61 @@
 import { useEffect, useState } from "react";
 import { scanWorkspace } from "../api";
-import type { LineInfo, WorkRoot } from "../types";
+import type { LineInfo } from "../types";
+
+// Placeholder cover glyph per line (until real cover art is wired).
+const GLYPH: Record<string, string> = {
+  n2d: "🎬",
+  ad: "📣",
+  mv: "🎵",
+  song: "🎤",
+  novel: "📖",
+};
 
 export function Home(props: {
-  repoRoot: string;
-  onPickRepo: () => void;
-  onOpen: (line: LineInfo, root: WorkRoot) => void;
+  workspaceRoot: string;
+  onPickWorkspace: () => void;
+  onShowSkills: (line: LineInfo) => void;
+  onEnter: (line: LineInfo) => void;
 }) {
-  const { repoRoot, onPickRepo, onOpen } = props;
+  const { workspaceRoot, onPickWorkspace, onShowSkills, onEnter } = props;
   const [lines, setLines] = useState<LineInfo[]>([]);
   const [err, setErr] = useState<string>("");
 
   useEffect(() => {
     setErr("");
-    scanWorkspace(repoRoot)
+    scanWorkspace(workspaceRoot)
       .then(setLines)
       .catch((e) => setErr(String(e)));
-  }, [repoRoot]);
+  }, [workspaceRoot]);
 
   return (
     <div className="home">
       <h1>Anime Arsenal</h1>
       <div className="repo">
-        <span>workspace: {repoRoot}</span>
-        <button onClick={onPickRepo}>切换工作区…</button>
+        <span>workspace: {workspaceRoot}</span>
+        <button onClick={onPickWorkspace}>切换工作区…</button>
       </div>
       {err && <div className="empty">扫描失败：{err}</div>}
-      {lines.map((line) => (
-        <div className="line-block" key={line.line}>
-          <h2>
-            {line.label} <span style={{ color: "var(--muted)", fontWeight: 400 }}>· {line.dir.split("/").pop()}/ · {line.view}</span>
-          </h2>
-          {line.roots.length === 0 ? (
-            <div className="empty">（暂无作品）</div>
-          ) : (
-            <div className="roots">
-              {line.roots.map((root) => (
-                <div className="root-card" key={root.path} onClick={() => onOpen(line, root)}>
-                  <div className="name">{root.name}</div>
-                  <div className="meta">{root.has_progress ? "● 有进度" : "○ 仅初始化"}</div>
-                </div>
-              ))}
+
+      <div className="line-grid">
+        {lines.map((line) => (
+          <div className="line-card" key={line.line}>
+            <div className="line-cover">{GLYPH[line.line] ?? "✦"}</div>
+            <div className="line-info">
+              <div className="line-title">{line.label}</div>
+              <div className="line-sub">
+                {line.dir.split("/").pop()}/ · {line.roots.length} 部作品
+              </div>
             </div>
-          )}
-        </div>
-      ))}
+            <div className="card-actions">
+              <button onClick={() => onShowSkills(line)}>skills 详情</button>
+              <button className="primary" onClick={() => onEnter(line)}>
+                进入创作区 →
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

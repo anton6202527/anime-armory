@@ -44,10 +44,84 @@ button:hover { border-color: var(--accent); }
   background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
   padding: 14px; cursor: pointer; transition: border-color .15s;
 }
+.root-card { position: relative; }
 .root-card:hover { border-color: var(--accent); }
+.del-btn {
+  position: absolute; top: 7px; right: 7px; width: 22px; height: 22px; padding: 0;
+  line-height: 1; border-radius: 6px; color: var(--muted); opacity: 0; transition: opacity .12s;
+}
+.root-card:hover .del-btn { opacity: 1; }
+.del-btn:hover { color: var(--block); border-color: var(--block); }
 .root-card .name { font-weight: 600; margin-bottom: 6px; }
 .root-card .meta { color: var(--muted); font-size: 11px; }
 .empty { color: var(--muted); font-style: italic; }
+
+/* ---- Home: line picker ---- */
+.line-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.line-card {
+  position: relative; background: var(--panel); border: 1px solid var(--border);
+  border-radius: 14px; padding: 18px; overflow: hidden; transition: border-color .15s, transform .15s;
+}
+.line-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.line-cover {
+  height: 96px; border-radius: 10px; background: var(--bg-2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; font-size: 42px; margin-bottom: 12px;
+}
+.line-info .line-title { font-weight: 600; font-size: 15px; }
+.line-info .line-sub { color: var(--muted); font-size: 11px; margin-top: 4px; }
+.card-actions {
+  position: absolute; inset: 0; display: flex; gap: 10px; align-items: center; justify-content: center;
+  background: rgba(11, 14, 20, .82); opacity: 0; transition: opacity .15s; backdrop-filter: blur(1px);
+}
+.line-card:hover .card-actions { opacity: 1; }
+.card-actions button { padding: 8px 14px; font-size: 13px; }
+.card-actions button.primary { background: var(--accent); color: #06223f; border-color: var(--accent); font-weight: 600; }
+
+/* ---- Line page (创作区) ---- */
+.line-page { padding: 0; height: 100%; overflow: auto; }
+.line-page-top {
+  display: flex; align-items: center; gap: 12px; padding: 10px 14px;
+  border-bottom: 1px solid var(--border); background: var(--bg-2); position: sticky; top: 0; z-index: 1;
+}
+.line-page-top .crumb { font-weight: 600; }
+.line-page .roots { padding: 20px; }
+.root-card.new-card {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  border-style: dashed; color: var(--muted); min-height: 78px;
+}
+.root-card.new-card .plus { font-size: 24px; line-height: 1; margin-bottom: 6px; }
+.root-card.new-card.editing { cursor: default; align-items: stretch; justify-content: flex-start; }
+.new-input {
+  background: var(--bg); color: var(--text); border: 1px solid var(--border);
+  border-radius: 6px; padding: 6px 8px; font-size: 13px; margin-bottom: 8px; width: 100%;
+}
+.new-actions { display: flex; gap: 8px; }
+
+/* ---- Skills modal ---- */
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(0, 0, 0, .55);
+  display: flex; align-items: center; justify-content: center; z-index: 100;
+}
+.modal {
+  width: min(720px, 90vw); max-height: 80vh; display: flex; flex-direction: column;
+  background: var(--panel); border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+}
+.modal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px; border-bottom: 1px solid var(--border); background: var(--bg-2);
+}
+.modal-head h2 { font-size: 15px; margin: 0; color: var(--accent); }
+.modal-head .count { color: var(--muted); font-weight: 400; margin-left: 6px; }
+.modal-close { padding: 4px 9px; }
+.modal-body { padding: 8px 0; overflow: auto; }
+.skill-row { padding: 11px 18px; border-bottom: 1px solid var(--border); }
+.skill-row:last-child { border-bottom: none; }
+.skill-name { font-weight: 600; font-family: Menlo, monospace; color: var(--text); margin-bottom: 4px; }
+.dispatch-tag {
+  background: var(--accent); color: #06223f; border-radius: 4px; font-size: 10px;
+  padding: 1px 6px; margin-right: 8px; font-family: -apple-system, sans-serif; font-weight: 600;
+}
+.skill-desc { color: var(--muted); font-size: 12px; line-height: 1.6; }
 
 /* ---- Operation ---- */
 .op { display: flex; flex-direction: column; height: 100%; }

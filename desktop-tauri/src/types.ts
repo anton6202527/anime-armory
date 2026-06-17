@@ -17,6 +17,12 @@ export interface LineInfo {
   roots: WorkRoot[];
 }
 
+// One skill in a line's roster (parsed from skills/<name>/SKILL.md frontmatter).
+export interface SkillInfo {
+  name: string;
+  description: string;
+}
+
 // QA flag, normalized from review_ui qa_flags / gate findings.
 export interface QaFlag {
   severity: "block" | "warn" | "info" | string;

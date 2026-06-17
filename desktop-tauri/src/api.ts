@@ -1,9 +1,10 @@
 // Thin wrappers over the Rust commands + a media-server URL helper.
 import { invoke } from "@tauri-apps/api/core";
-import type { CanvasData, LineInfo, NextAction } from "./types";
+import type { CanvasData, LineInfo, NextAction, SkillInfo } from "./types";
 
-// Default workspace = the anime-arsenal repo root. Change via the folder picker.
-export const DEFAULT_REPO = "/Users/lalala/learn/anime-arsenal";
+// The skills repo (where skills/n2d/run.py + SKILL.md live). Fixed; drives the
+// pipeline. Kept SEPARATE from the works workspace below.
+export const DEFAULT_REPO = "/Users/wesley/learn/anime-arsenal";
 
 let mediaPort = 0;
 const mediaListeners = new Set<() => void>();
@@ -39,6 +40,39 @@ export function mediaUrl(abs: string): string {
 
 export async function scanWorkspace(repoRoot: string): Promise<LineInfo[]> {
   return invoke<LineInfo[]>("scan_workspace", { repoRoot });
+}
+
+/** The skill roster for one creative line (dispatcher + `<line>-*` members). */
+export async function listSkills(repoRoot: string, line: string): Promise<SkillInfo[]> {
+  return invoke<SkillInfo[]>("list_skills", { repoRoot, line });
+}
+
+/** Create an empty work folder under a line's product dir; returns its absolute path. */
+export async function createWork(dir: string, name: string): Promise<string> {
+  return invoke<string>("create_work", { dir, name });
+}
+
+/** Resolve (and create) the app's dedicated works workspace (~/AnimeArsenal). */
+export async function defaultWorkspace(): Promise<string> {
+  return invoke<string>("default_workspace");
+}
+
+/**
+ * Resolve the skills repo: the live `devRepo` checkout if it has skills/ (dev),
+ * else the /tod-bundled copy shipped inside the app (installed/self-contained).
+ */
+export async function resolveRepo(devRepo: string): Promise<string> {
+  return invoke<string>("resolve_repo", { devRepo });
+}
+
+/** Seed the /tod --demos sample works into the workspace once; returns count. */
+export async function seedDemos(workspaceRoot: string): Promise<number> {
+  return invoke<number>("seed_demos", { workspaceRoot });
+}
+
+/** Move a work folder to the system Trash; guarded to the workspace root. */
+export async function deleteWork(workspaceRoot: string, path: string): Promise<void> {
+  return invoke("delete_work", { workspaceRoot, path });
 }
 
 export async function readCanvas(root: string, ep: string): Promise<CanvasData> {

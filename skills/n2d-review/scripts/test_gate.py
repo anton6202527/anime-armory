@@ -957,7 +957,23 @@ def _identity_registry(overrides=None):
                             "back": "出图/共享/图片/定妆_沈念_背.png",
                             "outfit": "出图/共享/图片/定妆_沈念_半身.png",
                             "turnaround": "出图/共享/图片/定妆_沈念_三视图.png",
-                            "expressions": [],
+                            "expressions": [
+                                {"emotion": "中性", "path": "出图/共享/图片/定妆_沈念_脸部特写.png"},
+                            ],
+                        },
+                        "reference_atlas": {
+                            "version": 1,
+                            "build_tier": "standard_full",
+                            "base_views": {
+                                "front": {"path": "出图/共享/图片/定妆_沈念.png", "status": "ready"},
+                                "side": {"path": "出图/共享/图片/定妆_沈念_侧.png", "status": "ready"},
+                                "back": {"path": "出图/共享/图片/定妆_沈念_背.png", "status": "ready"},
+                                "half_body": {"path": "出图/共享/图片/定妆_沈念_半身.png", "status": "ready"},
+                            },
+                            "expression_refs": [
+                                {"emotion": "中性", "path": "出图/共享/图片/定妆_沈念_脸部特写.png", "status": "ready"},
+                            ],
+                            "action_refs": [],
                         },
                         "identity_adapters": {
                             "image": {
@@ -1028,12 +1044,23 @@ def _write_identity_registry(tmp_path, data=None, make_assets=False):
             "directories": directories,
         }, ensure_ascii=False), encoding="utf-8")
     if make_assets:
-        for rel in registry["characters"][0]["forms"][0]["reference_group"].values():
-            if not isinstance(rel, str) or not rel.endswith(".png"):
-                continue
-            path = root / rel
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_bytes(b"\x89PNG\r\n\x1a\n")
+        def _reference_paths(reference_group):
+            for value in reference_group.values():
+                values = value if isinstance(value, list) else [value]
+                for item in values:
+                    if isinstance(item, str):
+                        yield item
+                    elif isinstance(item, dict):
+                        yield str(item.get("path") or "")
+
+        for char in registry.get("characters", []):
+            for form in char.get("forms", []):
+                for rel in _reference_paths(form.get("reference_group", {})):
+                    if not isinstance(rel, str) or not rel.endswith(".png"):
+                        continue
+                    path = root / rel
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    path.write_bytes(b"\x89PNG\r\n\x1a\n")
     return str(root)
 
 
@@ -1289,6 +1316,32 @@ def test_identity_registry_missing_reference_field_is_blocked(tmp_path):
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产身份注册层" and "reference_group 缺核心路径：side" in f["msg"] for f in gate.findings)
 
 
+def test_identity_registry_missing_expression_reference_is_blocked(tmp_path):
+    data = _identity_registry()
+    data["characters"][0]["forms"][0]["reference_group"]["expressions"] = []
+    root = _write_identity_registry(tmp_path, data)
+    gate.check_identity_registry(root, require_reference_assets=False)
+    assert any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "资产身份注册层"
+        and "reference_group.expressions 至少需要" in f["msg"]
+        for f in gate.findings
+    )
+
+
+def test_identity_registry_missing_reference_atlas_is_blocked(tmp_path):
+    data = _identity_registry()
+    del data["characters"][0]["forms"][0]["reference_atlas"]
+    root = _write_identity_registry(tmp_path, data)
+    gate.check_identity_registry(root, require_reference_assets=False)
+    assert any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "资产身份注册层"
+        and "reference_atlas 必须是对象" in f["msg"]
+        for f in gate.findings
+    )
+
+
 def test_identity_registry_restricted_partial_uses_partial_refs(tmp_path):
     data = _identity_registry()
     char = data["characters"][0]
@@ -1332,6 +1385,23 @@ def test_identity_registry_core_character_missing_asset_bundle_is_blocked(tmp_pa
     root = _write_identity_registry(tmp_path, data)
     gate.check_identity_registry(root, require_reference_assets=False)
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "角色资产包" for f in gate.findings)
+
+
+def test_identity_registry_shortline_character_missing_asset_bundle_is_blocked(tmp_path):
+    data = _identity_registry()
+    char = data["characters"][0]
+    char["id"] = "CHAR_XIAOHE"
+    char["name"] = "小禾"
+    char["scope"] = "第1集功能角色"
+    del char["asset_bundle"]
+    root = _write_identity_registry(tmp_path, data)
+    gate.check_identity_registry(root, require_reference_assets=False)
+    assert any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "角色资产包"
+        and "所有入镜人物" in f["msg"]
+        for f in gate.findings
+    )
 
 
 def test_identity_registry_rejects_cross_character_expression_reference(tmp_path):
@@ -1567,13 +1637,18 @@ def test_identity_adapter_matrix_missing_is_blocked(tmp_path):
 
 def test_identity_adapter_matrix_minimal_contract_passes(tmp_path):
     import json
-    root = tmp_path / "制漫剧" / "测试剧"
+    from identity import registry_anchor_fingerprint
+
+    root = Path(_write_identity_registry(tmp_path))
+    registry = json.loads((root / "出图" / "common" / "identity_registry.json").read_text(encoding="utf-8"))
+    anchor_fingerprint = registry_anchor_fingerprint(registry)
     data_dir = root / "生产数据"
     data_dir.mkdir(parents=True)
     (data_dir / "identity_adapter_matrix.json").write_text(
         json.dumps({
             "kind": "n2d_identity_adapter_matrix",
             "version": 1,
+            "summary": {"anchor_fingerprint": anchor_fingerprint},
             "forms": [{
                 "character_id": "CHAR_SHEN",
                 "form": "常态",
