@@ -14,6 +14,32 @@
 > 给 AI agent 或人快速进仓库：先读 [AGENTS.md](AGENTS.md)。  
 > skill 完整索引与职责边界：读 [skills/README.md](skills/README.md)。
 
+## 下载安装
+
+开箱即用的安装包，点击直接下载（链接始终指向最新发布版本）：
+
+| 安装包 | 平台 | 下载 |
+|---|---|---|
+| 🖥️ 桌面端 App | macOS | [**AnimeArsenal_macos.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_macos.dmg) |
+| 🧩 VS Code 插件 | 跨平台（`.vsix`） | [**anime-armory.vsix**](https://github.com/anton6202527/anime-armory/releases/latest/download/anime-armory.vsix) |
+
+- **桌面端 App**：下载 `.dmg` 后双击安装，打开即用，内置全部 skill。
+- **VS Code 插件**：下载 `.vsix` 后，在 VS Code 命令面板执行 `Extensions: Install from VSIX…` 选中该文件安装。
+
+> 桌面端目前提供 macOS 版；Windows 端可从 `desktop/` 源码用 `tauri build` 自行打包（见下方“自行打包发布”）。
+
+### 核心资产是 skill —— 也可以不装 App，自行下载调试
+
+本项目真正可复用的核心不是某个安装包，而是 `skills/` 下那组 workflow skill；安装包只是把它们包进了更顺手的界面。你完全可以跳过 App，直接拿到 skill 自己跑、自己改：
+
+```bash
+# 克隆仓库，skill 全在 skills/ 下
+git clone https://github.com/anton6202527/anime-armory
+cd anime-armory
+```
+
+或在上面 Release 页面下载源码包 / starter 包。拿到后用本地 AI agent（Claude Code、Codex 等）打开目录，先读 [AGENTS.md](AGENTS.md)，再按下面的入口 skill 调试；改 skill、加后端、调提示词都直接编辑 `skills/<name>/SKILL.md` 即可。
+
 ## 先看 Demo
 
 仓库里现有作品就是端到端样例，可以直接看目录结构、进度文件和产物组织方式。
@@ -51,9 +77,23 @@ MV：mv -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-s
 广告：ad -> ad-concept -> ad-script -> ad-voice -> ad-script(分镜) -> ad-image -> ad-video -> ad-compose
 ```
 
-## 打包与下载版本
+## 自行打包发布（维护者）
 
-给用户分发时，推荐发轻量 starter 包：只包含 README、AGENTS、`skills/`、`tools/`、`docs/`、桌面端源码和空作品目录，不包含仓库里的 demo 媒体、未追踪产物、`.venv`、`node_modules`、私有 agent 配置和缓存。
+上面“下载安装”里的安装包就是用本节脚本打出来后上传到 anime-armory 的 GitHub Release 的。自己分发或出新版时按下面流程重新打包即可。
+
+**桌面端 App / VS Code 插件**：
+
+```bash
+# 桌面端：在 desktop/ 里用 Tauri 打 .dmg（macOS）/ .exe（Windows）
+cd desktop && npm install && npm run tauri build
+
+# VS Code 插件：在 vscode-extension/ 里打 .vsix
+cd vscode-extension && npx @vscode/vsce package
+```
+
+把产物（`AnimeArsenal_macos.dmg`、`anime-armory.vsix` 等）作为附件传到 anime-armory 的 Release，文件名与“下载安装”表里的直链对应，`releases/latest/download/...` 链接即自动指向最新版本。
+
+**轻量 starter 包（只发 skill 与工具）**：推荐发轻量 starter 包给只想用 skill 的用户——只包含 README、AGENTS、`skills/`、`tools/`、`docs/`、桌面端源码和空作品目录，不包含仓库里的 demo 媒体、未追踪产物、`.venv`、`node_modules`、私有 agent 配置和缓存。
 
 本仓库提供打包脚本：
 

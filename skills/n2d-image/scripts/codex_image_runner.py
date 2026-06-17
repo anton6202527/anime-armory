@@ -5,14 +5,16 @@ This is the Codex backend adapter used by N2D_IMAGE_COMMAND.  It keeps the
 batch wrapper backend-agnostic while giving Codex a real PNG-producing path:
 
 1. Parse the episode prompt pack.
-2. Ask ``codex exec --enable image_generation`` to generate one target image.
-3. Require a valid PNG at a temporary path.
+2. Ask ``codex exec --json --enable image_generation`` to generate one target image.
+3. Decode the ``image_generation_end`` event payload into a temporary PNG.
 4. Archive the old target, move the new PNG into place, and record dashboard
    telemetry including the seed downgrade status.
 """
 from __future__ import annotations
 
 import argparse
+import base64
+import binascii
 import datetime as dt
 import hashlib
 import json
@@ -276,8 +278,7 @@ def build_codex_prompt(root: Path, episode: str, target: Target, temp_path: Path
 
 输出要求：
 - 只生成 1 张 9:16 竖版电影感 PNG。
-- 先生成到临时文件：{temp_path}
-- 生成后必须确认这个临时文件存在且是 PNG。不要直接覆盖正式文件。
+- 使用内置 image_generation/image_gen 生成真实位图；不要自己写本地文件，外层 runner 会从事件流解码图片并落到：{temp_path}
 - 禁止水印、字幕、logo、文字、漫画分格、UI 边框。
 
 一致性硬约束：
@@ -306,8 +307,8 @@ shot：{target.shot}
 执行方式：
 1. 读取/参考 prompt 中列出的参考图；如果同一角色有脸部特写和半身，优先使用它们。
 2. 根据本镜中文正向 prompt 与负向 prompt 生成画面。
-3. 把最终 PNG 保存/复制到临时文件路径：{temp_path}
-4. 只要无法生成真实 PNG，就不要创建任何替代文件，直接说明失败。
+3. 生成完成后只用一句话说明完成；不要搜索文件系统，不要创建替代文件。
+4. 只要无法生成真实 PNG，就直接说明失败。
 """
 
 
@@ -316,7 +317,7 @@ def run_codex(repo: Path, prompt: str, timeout_sec: Optional[float]) -> subproce
     model = os.environ.get("N2D_CODEX_MODEL")
     if model:
         cmd.extend(["-m", model])
-    cmd.extend(["--enable", "image_generation", "-C", str(repo), prompt])
+    cmd.extend(["--json", "--enable", "image_generation", "-C", str(repo), prompt])
     return subprocess.run(
         cmd,
         text=True,
@@ -325,6 +326,80 @@ def run_codex(repo: Path, prompt: str, timeout_sec: Optional[float]) -> subproce
         check=False,
         timeout=timeout_sec,
     )
+
+
+def decode_image_event(stdout: str, out_path: Path) -> bool:
+    """Decode Codex CLI's built-in image_generation result from JSONL output.
+
+    The built-in tool returns the PNG as base64 in an ``image_generation_end``
+    event. In ``codex exec`` this event is reliably persisted to the session
+    JSONL; it may not be mirrored to stdout, so stdout is used first and the
+    session file is used as the fallback.
+    """
+    thread_id = ""
+    payload = _image_payload_from_jsonl(stdout)
+    for line in stdout.splitlines():
+        line = line.strip()
+        if not line.startswith("{"):
+            continue
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if event.get("type") == "thread.started" and isinstance(event.get("thread_id"), str):
+            thread_id = event["thread_id"]
+            break
+    if not payload and thread_id:
+        session_path = _codex_session_path(thread_id)
+        if session_path:
+            payload = _image_payload_from_jsonl(session_path.read_text(encoding="utf-8", errors="ignore"))
+    if not payload:
+        return False
+    return _write_image_payload(payload, out_path)
+
+
+def _image_payload_from_jsonl(text: str) -> str:
+    payload = ""
+    for line in text.splitlines():
+        line = line.strip()
+        if not line.startswith("{"):
+            continue
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        data = event.get("payload") if isinstance(event, dict) else None
+        if not isinstance(data, dict) or data.get("type") != "image_generation_end":
+            continue
+        result = data.get("result")
+        if isinstance(result, str) and result.strip():
+            payload = result.strip()
+    return payload
+
+
+def _codex_session_path(thread_id: str) -> Optional[Path]:
+    sessions_dir = Path.home() / ".codex" / "sessions"
+    if not sessions_dir.is_dir():
+        return None
+    matches = list(sessions_dir.glob(f"**/*{thread_id}.jsonl"))
+    if not matches:
+        return None
+    matches.sort(key=lambda p: p.stat().st_mtime, reverse=True)
+    return matches[0]
+
+
+def _write_image_payload(payload: str, out_path: Path) -> bool:
+    if not payload:
+        return False
+    if payload.startswith("data:"):
+        payload = payload.split(",", 1)[-1]
+    try:
+        raw = base64.b64decode(payload, validate=True)
+    except (binascii.Error, ValueError):
+        return False
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_bytes(raw)
+    return png_valid(out_path)
 
 
 def archive_existing(root: Path, rel_path: str, task_id: str) -> Optional[Path]:
@@ -514,8 +589,8 @@ def process_target(
         proc = run_codex(repo_root(), prompt, timeout_sec)
         if proc.returncode != 0:
             error = f"codex exit {proc.returncode}: {proc.stderr or proc.stdout}"
-        elif not png_valid(temp_path):
-            error = f"codex completed but valid PNG missing at {temp_path}"
+        elif not png_valid(temp_path) and not decode_image_event(proc.stdout, temp_path):
+            error = f"codex completed but no valid PNG file or image_generation_end payload was available for {temp_path}"
         else:
             archive_path = archive_existing(root, target.rel_path, task_id)
             final.parent.mkdir(parents=True, exist_ok=True)
