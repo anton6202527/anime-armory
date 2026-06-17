@@ -41,6 +41,7 @@ AGENT_GEN_STAGES = {"script_stage1", "script_stage2", "image_prompt", "video_pro
 GENERATION_STAGES = {"voice", "image", "video", "compose"}
 PAID_STAGES = {"image", "video", "compose"}          # 进这些前必过合规闸门
 ROUTER_STAGES = {"video_prompt", "video"}            # 出视频前置：先写模型路由表
+IDENTITY_REFRESH_STAGES = {"image_prompt", "image", "video_prompt", "video", "compose", "review"}
 FIRST_RUN_CHOICES = ("制作模式", "生视频模型", "生视频渠道", "基础视觉风格")
 # 各生成阶段"放行前必问"的选择点（菜单随动作卡一起给，不另起一次 needs_choice）
 STAGE_MENU = {
@@ -241,6 +242,17 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str) -> Probes:
                 p.prework.append({"step": "model_router", "status": "ok" if r.returncode == 0 else "warn"})
             except Exception as e:  # pragma: no cover
                 p.prework.append({"step": "model_router", "status": "skip", "detail": str(e)[:120]})
+
+    # identity：把 identity_registry 展开成 adapter matrix，供后续 gate 按执行后端核验。
+    # --skip-face 只刷新矩阵/漂移报告骨架，避免 run.py next 在日常路由时触发重视觉机检。
+    if stage_key in IDENTITY_REFRESH_STAGES:
+        script = os.path.join(SKILLS_DIR, "n2d-identity", "scripts", "identity.py")
+        if os.path.exists(script):
+            try:
+                r = _run([sys.executable, script, root, "--write", "--skip-face"])
+                p.prework.append({"step": "identity", "status": "ok" if r.returncode == 0 else "warn"})
+            except Exception as e:  # pragma: no cover
+                p.prework.append({"step": "identity", "status": "skip", "detail": str(e)[:120]})
 
     # gate：有 gate_stage 的阶段先过 dashboard gate（退出码 1=block）
     gate_stage = spec.get("gate_stage")

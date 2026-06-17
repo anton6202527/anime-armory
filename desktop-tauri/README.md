@@ -10,14 +10,13 @@ This is a **scaffold/spike**. It reuses the repo's existing `--json` contracts a
 
 ## Prerequisites
 
-- **Node ≥ 18** (have: v26) — already used; `npm install` done.
-- **Rust toolchain** (NOT installed yet) — required to build the Tauri shell:
+- **Node ≥ 18** — `npm install` for the frontend deps.
+- **Rust ≥ 1.88** — required to build the Tauri shell (some transitive deps need 1.88; 1.87 fails to resolve). `rustup update stable` if older.
   ```sh
-  curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
-  # then restart the shell so ~/.cargo/bin is on PATH
-  rustc --version   # verify
+  curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh   # if not installed
+  rustc --version   # verify ≥ 1.88
   ```
-  macOS also needs Xcode Command Line Tools (`xcode-select --install`). Tauri uses the system WebKit — no extra webview download on macOS.
+  macOS also needs Xcode Command Line Tools (`xcode-select --install`). Tauri uses the system WebKit — no extra webview download on macOS. The crate **builds + bundles clean** (`.app` + `.dmg`) as of 2026-06.
 
 ## Run
 
@@ -26,7 +25,7 @@ cd desktop-tauri
 npm install                 # done (frontend deps)
 npm run app:dev             # = tauri dev: builds Rust, launches the app, hot-reloads the React side
 ```
-First `tauri dev` compiles the Rust crate (a few minutes once). The default workspace is `/Users/wesley/learn/anime-arsenal` — change it via the "切换工作区…" button (uses the native folder picker).
+First `tauri dev` compiles the Rust crate (a few minutes once). The default workspace is hardcoded in `src/api.ts` (`DEFAULT_REPO`, machine-specific) — change it there, or at runtime via the "切换工作区…" button (uses the native folder picker).
 
 Frontend-only (no native shell, for quick UI work):
 ```sh
@@ -69,16 +68,16 @@ src-tauri/src/
 |---|---|
 | Tauri shell + Vite/React/TS | ✅ scaffolded, frontend builds clean |
 | Native terminal (portable-pty ↔ xterm) | ✅ written (needs Rust to run) |
-| Canvas (React Flow) from review_ui/storyboard | ✅ shows 本宫 第1集 13 clips via storyboard fallback |
-| NextAction strip (run.py next --json) | ✅ |
-| Media server (range requests) | ✅ images now; video when 出视频 exists |
+| Canvas (React Flow) from review_ui/storyboard | ✅ shows 本宫 第1集 13 clips via storyboard fallback; node virtualization on |
+| NextAction strip (run.py next --json) | ✅ async + 30s timeout (off main thread) |
+| Media server (range requests) | ✅ images + inline video (`<video>` when 出视频 exists); path-confined to allowed roots, 4-thread pool |
 | Home launcher + folder picker | ✅ |
+| File-watch live refresh (`notify` → `fs-changed` → debounced re-pull) | ✅ |
 | novel view (file tree) | ⛔ stub |
 | song view (waveform/takes) | ⛔ stub |
-| File-watch live refresh | ⛔ TODO (add `notify` crate → emit → re-pull canvas) |
 | Interactive canvas editing | ⛔ TODO (v1 is display-only) |
 
 ## Known notes
-- Rust code is unverified-compiled here (no cargo in this env). The first `tauri dev` is the real check.
+- The crate compiles + bundles clean (verified via `npm run app:build` → `.app` + `.dmg`).
 - Icons are flat-color placeholders; run `tauri icon` with a real logo before shipping installers.
 - The existing Electron app under `../desktop/` is the prior approach; this `desktop-tauri/` is the new direction.

@@ -404,6 +404,26 @@ def record_event(
     subprocess.run(cmd, check=False, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
+def run_image_gate(root: Path, episode: str) -> bool:
+    cmd = [
+        sys.executable,
+        str(repo_root() / DASHBOARD),
+        "gate",
+        str(root),
+        episode,
+        "--stage",
+        "image",
+    ]
+    proc = subprocess.run(cmd, check=False, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if proc.returncode == 0:
+        print(f"[gate] image gate passed for {episode}")
+        return True
+    print(proc.stdout, end="", file=sys.stderr)
+    print(proc.stderr, end="", file=sys.stderr)
+    print(f"[gate] image gate blocked for {episode}", file=sys.stderr)
+    return False
+
+
 def append_log(root: Path, row: dict) -> None:
     path = root / "生产数据" / "codex_image_runner.jsonl"
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -625,6 +645,8 @@ def main(argv: Sequence[str]) -> int:
         ok_all = ok_all and ok
         if not ok and ns.stop_on_fail:
             break
+    if ok_all and not ns.dry_run:
+        ok_all = run_image_gate(root, episode)
     return 0 if ok_all else 1
 
 

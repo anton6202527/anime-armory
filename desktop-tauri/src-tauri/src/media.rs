@@ -3,7 +3,8 @@
 //   GET /media?path=<absolute file path>
 use std::fs::File;
 use std::io::{Read, Seek, SeekFrom};
-use std::sync::Mutex;
+use std::path::PathBuf;
+use std::sync::{Arc, Mutex};
 use std::thread;
 
 use tauri::State;
@@ -12,6 +13,8 @@ use tiny_http::{Header, Response, Server, StatusCode};
 #[derive(Default)]
 pub struct MediaState {
     port: Mutex<Option<u16>>,
+    // files are only served if they canonicalize under one of these roots
+    roots: Arc<Mutex<Vec<PathBuf>>>,
 }
 
 fn content_type(path: &str) -> &'static str {
@@ -95,7 +98,7 @@ fn parse_range(headers: &[Header], len: u64) -> Option<(u64, u64)> {
     None
 }
 
-fn handle(req: tiny_http::Request) {
+fn handle(req: tiny_http::Request, roots: Arc<Mutex<Vec<PathBuf>>>) {
     let abs = match query_path(req.url()) {
         Some(p) => p,
         None => {
@@ -103,7 +106,21 @@ fn handle(req: tiny_http::Request) {
             return;
         }
     };
-    let mut file = match File::open(&abs) {
+    // Resolve symlinks/.. and confine to an allowed root before opening anything.
+    let canon = match std::fs::canonicalize(&abs) {
+        Ok(c) => c,
+        Err(_) => {
+            let _ = req.respond(Response::from_string("not found").with_status_code(404));
+            return;
+        }
+    };
+    let allowed = roots.lock().unwrap().iter().any(|r| canon.starts_with(r));
+    if !allowed {
+        let _ = req.respond(Response::from_string("forbidden").with_status_code(403));
+        return;
+    }
+    let path_str = canon.to_string_lossy().to_string();
+    let mut file = match File::open(&canon) {
         Ok(f) => f,
         Err(_) => {
             let _ = req.respond(Response::from_string("not found").with_status_code(404));
@@ -111,7 +128,7 @@ fn handle(req: tiny_http::Request) {
         }
     };
     let len = file.metadata().map(|m| m.len()).unwrap_or(0);
-    let ct = Header::from_bytes("Content-Type", content_type(&abs)).unwrap();
+    let ct = Header::from_bytes("Content-Type", content_type(&path_str)).unwrap();
     let accept = Header::from_bytes("Accept-Ranges", "bytes").unwrap();
 
     match parse_range(req.headers(), len) {
@@ -138,19 +155,37 @@ impl MediaState {
         if let Some(p) = *self.port.lock().unwrap() {
             return Ok(p);
         }
-        let server = Server::http("127.0.0.1:0").map_err(|e| e.to_string())?;
+        let server = Arc::new(Server::http("127.0.0.1:0").map_err(|e| e.to_string())?);
         let port = server.server_addr().to_ip().map(|a| a.port()).ok_or("no port")?;
         *self.port.lock().unwrap() = Some(port);
-        thread::spawn(move || {
-            for req in server.incoming_requests() {
-                thread::spawn(move || handle(req));
-            }
-        });
+        // Fixed worker pool instead of one thread per request (bounded fan-out).
+        for _ in 0..4 {
+            let server = server.clone();
+            let roots = self.roots.clone();
+            thread::spawn(move || {
+                for req in server.incoming_requests() {
+                    handle(req, roots.clone());
+                }
+            });
+        }
         Ok(port)
+    }
+
+    fn allow_root(&self, root: String) {
+        let canon = std::fs::canonicalize(&root).unwrap_or_else(|_| PathBuf::from(&root));
+        let mut g = self.roots.lock().unwrap();
+        if !g.contains(&canon) {
+            g.push(canon);
+        }
     }
 }
 
 #[tauri::command]
 pub fn start_media(state: State<MediaState>) -> Result<u16, String> {
     state.start()
+}
+
+#[tauri::command]
+pub fn media_allow_root(state: State<MediaState>, root: String) {
+    state.allow_root(root);
 }

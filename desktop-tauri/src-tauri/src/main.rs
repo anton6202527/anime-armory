@@ -18,6 +18,7 @@ fn main() {
             pty::pty_resize,
             pty::pty_kill,
             media::start_media,
+            media::media_allow_root,
             commands::scan_workspace,
             commands::read_canvas,
             commands::read_next_action,

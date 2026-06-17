@@ -39,6 +39,7 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 | 已有在建项目，要**消除操作摩擦 / 找精准下一步指令 / 检查状态缺失** | `python3 skills/novel/scripts/flow.py "<作品根>"` |
 | 已写好若干章，要**质检 / 审稿 / 查问题**（人设崩 / 视角穿帮 / 设定矛盾 / 锚点漂移 / 题旨偏移 / 读者承诺违约 / 文学性变薄 / 节奏 / 原文照搬 / **五感缺失 / 伏笔逾期**） | `novel-review` |
 | 已写好若干章，要**打分 / 评分 / 市场体检**（题材够不够热、能不能火、值不值得继续写/改、要不要弃稿重立） | `novel-score` |
+| **跑过 score、想据评分弱项直接开改写**（评分→改写串法） | `novel-rewrite --score-source 评分/score_report.json`（读 scores/verdict/deductions 预填 改动spec②，建议·待与用户要求对账） |
 | 已写好若干章，要**查逻辑硬伤 / 维护设定百科 / 角色生死状态 / 伏笔回收 / 关系温度** | `novel-wiki` |
 | 已写好若干章，要**模拟读者反馈 / 测留存 / 找弃书点** | `novel-simulate` |
 | 想要**提取授权样本/项目 Demo 的文风指纹 / 保持笔力一致 / 查文风漂移** | `novel-style` |
@@ -65,7 +66,8 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 - **节奏热力图**（注水、断章、高潮密集度）→ `novel-balance`；其「烂尾预警」读 `novel-wiki` 的伏笔台账回收率。
 
 - 速记：问"能不能火/要不要继续写"=score；"哪里写崩了"=review；"读者爱不爱看"=simulate；"设定/伏笔有没有漏"=wiki；"节奏拖不拖"=balance。
-- 串用顺序：先 score 定方向 → review 抠硬伤（自动调 wiki 查一致性/伏笔）→ balance 收节奏 → simulate 验留存。**写完一卷别只跑 review/score**：wiki（伏笔逾期）+ balance（节奏）+ simulate（留存）是常被漏掉的三项，建议一并提示用户。
+- 串用顺序：先 score 定方向 → review 抠硬伤（自动调 wiki 查一致性/伏笔）→ balance 收节奏 → simulate 验留存。
+- **score→rewrite 串法**：若 score 判 `小改/大改`（非 `弃稿重立`）且用户要据评分开改写，把报告喂给 `novel-rewrite --score-source 评分/score_report.json`——弱项/扣分雷点会预填进新项目 `设定/改动spec.md` 的②栏，作为**建议待对账**（与用户要求冲突时以用户要求为准）。评分判 `弃稿重立` 时改写未必合适，先确认是否走 `novel-create` 另起。改写后可回跑 score 做 before/after 对照。**写完一卷别只跑 review/score**：wiki（伏笔逾期）+ balance（节奏）+ simulate（留存）是常被漏掉的三项，建议一并提示用户。
 
 ⚠️ **"文风漂移"双触发仲裁**：提取/分析文风指纹、查笔力一致 → `novel-style`（文风是它的主责）；只有当诉求是"**作为质检项**报告某章偏离全书文风"且同时要查别的硬伤时，才并入 `novel-review`。单看文风一律走 style。
 

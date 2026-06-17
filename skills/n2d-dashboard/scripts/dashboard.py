@@ -1112,13 +1112,14 @@ def build(root: str, *, write: bool = True, alerts: bool = True, notify: bool = 
 
 
 def event_from_record_args(ns: argparse.Namespace) -> Dict[str, Any]:
+    provider = str(ns.provider or "").strip()
     cost = None
     if ns.cost is not None:
         cost = {
             "amount": ns.cost,
             "currency": ns.currency,
             "unit": ns.unit or ns.currency,
-            "provider": ns.provider,
+            "provider": provider,
         }
     generation = None
     if ns.asset or ns.attempt or ns.status or ns.redraw_reason or ns.attempts:
@@ -1128,6 +1129,7 @@ def event_from_record_args(ns: argparse.Namespace) -> Dict[str, Any]:
             "attempts": ns.attempts,
             "status": ns.status,
             "redraw_reason": ns.redraw_reason,
+            "provider": provider if provider and provider != "unknown" else None,
         }
         if ns.redraw_reason or getattr(ns, "redraw_category", None):
             explicit = str(getattr(ns, "redraw_category", "") or "").strip()
@@ -1269,23 +1271,39 @@ def write_gate_findings(root: str, episode: str, stage: str, findings: List[Dict
     return path
 
 
-def image_qc_findings(root: str, episode: str) -> List[Dict[str, Any]]:
-    """出图阶段额外跑 image_qc.py（生图后像素一致性 + 逐镜 prompt lint），转成与 gate.py
-    同形的 findings 合并入账。dashboard 在 n2d-image / n2d-review 之上，用 subprocess 调
-    避免 n2d-review→n2d-image 循环依赖。脚本缺失/出错/输出非 JSON → 返回 []（绝不阻断 gate）。
-    生图前跑（无 PNG）时像素项自然空，lint 仍能提前抓非法 CHAR_id；生图后跑则验像素。"""
+def image_qc_failure_finding(root: str, episode: str, reason: str) -> Dict[str, Any]:
+    return {
+        "sev": "block",
+        "dim": "出图落档QC",
+        "loc": os.path.join(root, "生产数据", "image_qc", normalize_episode(episode)),
+        "msg": f"image gate 无法取得 image_qc findings：{reason}；出图落档回验必须 fail-closed，先修复 image_qc 再放行。",
+        "return_to_stage": "image",
+        "rerun_scope": "修复 n2d-image/scripts/image_qc.py 或本机依赖后，重跑 dashboard gate --stage image。",
+        "affected_artifacts": [f"生产数据/image_qc/{normalize_episode(episode)}"],
+    }
+
+
+def run_image_qc_findings(root: str, episode: str, *, fail_closed: bool) -> List[Dict[str, Any]]:
     script = os.path.join(REPO_SKILLS, "n2d-image", "scripts", "image_qc.py")
     if not os.path.isfile(script):
-        return []
+        return [image_qc_failure_finding(root, episode, f"脚本缺失：{script}")] if fail_closed else []
     try:
         proc = subprocess.run(
             [sys.executable, script, root, episode, "--findings"],
             text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False, timeout=600,
         )
+    except Exception as exc:
+        return [image_qc_failure_finding(root, episode, f"{type(exc).__name__}: {exc}")] if fail_closed else []
+    try:
         data = json.loads(proc.stdout or "[]")
-    except Exception:
-        return []
-    return [f for f in data if isinstance(f, dict)] if isinstance(data, list) else []
+    except Exception as exc:
+        detail = str(exc)
+        if proc.stderr:
+            detail += f"; stderr={proc.stderr[:500]}"
+        return [image_qc_failure_finding(root, episode, detail)] if fail_closed else []
+    if not isinstance(data, list):
+        return [image_qc_failure_finding(root, episode, "输出不是 findings list")] if fail_closed else []
+    return [f for f in data if isinstance(f, dict)]
 
 
 def gate_events(root: str, episode: str, stage: str) -> Tuple[List[Dict[str, Any]], int, List[Dict[str, Any]]]:
@@ -1308,7 +1326,7 @@ def gate_events(root: str, episode: str, stage: str) -> Tuple[List[Dict[str, Any
     # image_preflight 也合并它：无 PNG 时像素项自然为空，但 prompt lint 可在付费生图前拦非法 CHAR_id/纯文生图风险。
     return_code = proc.returncode
     if stage in {"image_preflight", "image"}:
-        qc = image_qc_findings(root, episode)
+        qc = run_image_qc_findings(root, episode, fail_closed=(stage == "image"))
         findings.extend(qc)
         if return_code == 0 and any(str(f.get("sev")).lower() == "block" for f in qc):
             return_code = 1   # image_qc 硬阻断也让出图 gate 失败

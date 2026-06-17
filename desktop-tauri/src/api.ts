@@ -3,14 +3,32 @@ import { invoke } from "@tauri-apps/api/core";
 import type { CanvasData, LineInfo, NextAction } from "./types";
 
 // Default workspace = the anime-arsenal repo root. Change via the folder picker.
-export const DEFAULT_REPO = "/Users/wesley/learn/anime-arsenal";
+export const DEFAULT_REPO = "/Users/lalala/learn/anime-arsenal";
 
 let mediaPort = 0;
+const mediaListeners = new Set<() => void>();
 export async function ensureMedia(): Promise<number> {
   if (!mediaPort) {
     mediaPort = await invoke<number>("start_media");
+    mediaListeners.forEach((l) => l()); // wake components that read the port
   }
   return mediaPort;
+}
+
+/** External-store hooks so components re-render once the port is ready. */
+export function getMediaPort(): number {
+  return mediaPort;
+}
+export function subscribeMediaPort(cb: () => void): () => void {
+  mediaListeners.add(cb);
+  return () => {
+    mediaListeners.delete(cb);
+  };
+}
+
+/** Confine the media server to files under this root (path-traversal guard). */
+export async function mediaAllowRoot(root: string): Promise<void> {
+  return invoke("media_allow_root", { root });
 }
 
 /** Build a localhost media URL (range-request capable) for an absolute file path. */

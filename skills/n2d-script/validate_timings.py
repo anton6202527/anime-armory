@@ -7,6 +7,15 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'
 from n2d_settings import is_native_av  # 制作模式判定单一真值源
 from n2d_route import placeholder_indices, voiceover_fingerprint  # 占位判定 + 配音源指纹（单一真值源）
 
+def validate_storyboard_contract(root, ep):
+    script = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'validate_storyboard_contract.py')
+    proc = subprocess.run([sys.executable, script, root, ep], capture_output=True, text=True)
+    if proc.stdout:
+        print(proc.stdout.rstrip())
+    if proc.stderr:
+        print(proc.stderr.rstrip(), file=sys.stderr)
+    return proc.returncode
+
 def ffdur(p):
     try:
         out = subprocess.run(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',p],
@@ -99,12 +108,14 @@ def main():
     zh_srt= os.path.join(root,'脚本',ep,'字幕_中文.srt')
     en_srt= os.path.join(root,'脚本',ep,'字幕_英文.srt')
     shots_p=os.path.join(root,'脚本',ep,'镜头时长.json')
+    contract_code = validate_storyboard_contract(root, ep)
 
     fails=[]; warns=[]; oks=[]
     if not os.path.exists(man_p):
         # 原生音画：说话镜由视频后端一次出同步音画，没有逐句配音清单——改走 storyboard 驱动对账，不误报"先 n2d-voice"。
         if is_native_av(root):
-            sys.exit(_validate_native_av(root, ep, shots_p, tol))
+            native_code = _validate_native_av(root, ep, shots_p, tol)
+            sys.exit(1 if contract_code or native_code else 0)
         print(f"⛔ 缺 {man_p}（先 n2d-voice）"); sys.exit(1)
     man = json.load(open(man_p,encoding='utf-8'))
     n = len(man)
@@ -190,6 +201,9 @@ def main():
     miss = [r.get('line_wav') for r in man if r.get('line_wav') and not os.path.exists(os.path.join(vd, r['line_wav']))]
     if miss:
         warns.append(f"{len(miss)} 个 line_*.wav 缺失（如 {miss[0]}）——重拼配音轨前先补")
+
+    if contract_code:
+        fails.append("storyboard 契约校验未通过")
 
     print(f"=== 时长一致性 {ep}（tol={tol}s）===")
     for s in oks:   print(f"  ✅ {s}")

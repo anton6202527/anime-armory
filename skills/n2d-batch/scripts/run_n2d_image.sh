@@ -42,3 +42,5 @@ export N2D_EPISODE="$EP"
 export N2D_STAGE="image"
 
 bash -lc "$N2D_IMAGE_COMMAND"
+
+python3 "$REPO_DIR/skills/n2d-dashboard/scripts/dashboard.py" gate "$ROOT" "$EP" --stage image

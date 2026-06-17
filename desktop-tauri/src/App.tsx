@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { open } from "@tauri-apps/plugin-dialog";
 import { Home } from "./pages/Home";
 import { Operation } from "./pages/Operation";
-import { DEFAULT_REPO, ensureMedia } from "./api";
+import { DEFAULT_REPO, ensureMedia, mediaAllowRoot } from "./api";
 import type { LineInfo, WorkRoot } from "./types";
 
 export interface Selection {
@@ -15,9 +15,11 @@ export function App() {
   const [sel, setSel] = useState<Selection | null>(null);
 
   useEffect(() => {
-    // boot the media server early (idempotent)
-    ensureMedia().catch(() => {});
-  }, []);
+    // boot the media server early (idempotent) and confine it to this workspace
+    ensureMedia()
+      .then(() => mediaAllowRoot(repoRoot))
+      .catch(() => {});
+  }, [repoRoot]);
 
   async function pickRepo() {
     const picked = await open({ directory: true, multiple: false, defaultPath: repoRoot });

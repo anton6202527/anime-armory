@@ -1232,6 +1232,19 @@ def _image_backend_supports_native_subject(canon: str) -> bool:
     return image_backend_supports_persistent_subject(canon or "")
 
 
+def _image_event_provider(event: Dict[str, Any]) -> str:
+    generation = _event_generation(event)
+    cost = _event_cost(event)
+    meta = _event_meta(event)
+    for source in (generation, cost, event, meta):
+        if not isinstance(source, dict):
+            continue
+        value = str(source.get("provider") or "").strip()
+        if value and value.lower() not in {"unknown", "manual", "none", "null"}:
+            return value
+    return ""
+
+
 def check_image_ai_policy(root: str, ep: str) -> None:
     """阶段2：`生图AI` 是选择点（默认 Codex），放行官方/已登录多参考后端，只拦混用 + 未授权出图。
 
@@ -1302,6 +1315,52 @@ def check_image_ai_policy(root: str, ep: str) -> None:
                 )
             elif pk == "approved":
                 used.add(pc)
+
+    missing_event_providers: List[str] = []
+    event_path = _production_events_path(root)
+    for idx, event in enumerate(_load_production_events(root), start=1):
+        if str(event.get("episode") or "").strip() != ep:
+            continue
+        if str(event.get("stage") or "").strip() != "image":
+            continue
+        if str(event.get("event") or "").strip() not in {"generation", "redraw"}:
+            continue
+        generation = _event_generation(event)
+        status = str(generation.get("status") or event.get("status") or "").strip().lower()
+        if status == "fail":
+            continue
+        provider = _image_event_provider(event)
+        asset = _event_asset_rel(root, event) or str(generation.get("asset") or "")
+        if not provider:
+            missing_event_providers.append(f"line {idx}: {asset or '(no asset)'}")
+            continue
+        pc, pk = classify_image_backend(provider)
+        if pk == "forbidden":
+            add(
+                BLOCK,
+                "生图AI一致性",
+                event_path,
+                f"production_events 第{idx}行记录了未授权/含糊出图 provider「{provider}」；真实落档事件不得使用第三方逆向/web 自动化/同视频AI 口径。",
+            )
+        elif pk == "unknown":
+            add(
+                WARN,
+                "生图AI一致性",
+                event_path,
+                f"production_events 第{idx}行 provider「{provider}」不在官方后端清单内；请确认其为官方 API/CLI，并补充后端适配。",
+            )
+        else:
+            used.add(pc)
+    if missing_event_providers:
+        add(
+            BLOCK,
+            "生图AI一致性",
+            event_path,
+            "成功/待验收的 image generation/redraw 事件缺 provider，无法证明本集未混用后端："
+            + "；".join(missing_event_providers[:8])
+            + ("；..." if len(missing_event_providers) > 8 else "")
+            + "。请用 dashboard record --provider 补录或重跑生成 adapter。",
+        )
 
     if len(used) >= 2:
         add(
@@ -2415,6 +2474,28 @@ def check_identity_adapter_matrix(root: str) -> None:
         for key in ("character_id", "form", "reference_group", "image_bindings", "video_bindings", "lora_binding"):
             if _field_is_missing(form, key):
                 add(BLOCK, "资产身份闭环", loc, f"adapter matrix form 缺字段：{key}")
+    summary = data.get("summary") if isinstance(data.get("summary"), dict) else {}
+    matrix_fp = str(summary.get("anchor_fingerprint") or "").strip()
+    registry = load_json(identity_registry_path(root))
+    if not isinstance(registry, dict):
+        add(BLOCK, "资产身份闭环", identity_registry_path(root), "无法解析 identity_registry.json；matrix 无法证明相对当前身份库新鲜")
+        return
+    try:
+        from identity import registry_anchor_fingerprint  # type: ignore
+        current_fp = registry_anchor_fingerprint(registry)
+    except Exception as exc:
+        add(BLOCK, "资产身份闭环", p, f"无法计算当前 identity_registry anchor_fingerprint：{type(exc).__name__}: {exc}")
+        return
+    if not matrix_fp:
+        add(BLOCK, "资产身份闭环", p, "identity_adapter_matrix.summary 缺 anchor_fingerprint；请重跑 `python3 skills/n2d-identity/scripts/identity.py <作品根> --write`")
+    elif matrix_fp != current_fp:
+        add(
+            BLOCK,
+            "资产身份闭环",
+            p,
+            "identity_adapter_matrix 已过期：summary.anchor_fingerprint 与当前 identity_registry 不一致；"
+            "共享定妆/锚点被改后必须重跑 `python3 skills/n2d-identity/scripts/identity.py <作品根> --write`。",
+        )
 
 
 def check_prompt_checklists(root: str, ep: str, kind: str) -> None:
@@ -4783,6 +4864,92 @@ def check_subtitle_alignment(root: str, ep: str) -> None:
     )
 
 
+def check_consistency_audit_gate(root: str, ep: str) -> None:
+    """Final consistency suite gate.
+
+    The detector bundle is useful only if it is on a mandatory path.  Run the
+    full audit before compose/review and mirror active findings into gate output;
+    the complete report remains in 生产数据/consistency_findings_<ep>.json.
+    """
+    script = os.path.join(SCRIPT_DIR, "consistency_audit.py")
+    loc = os.path.join(root, "生产数据", f"consistency_findings_{ep}.json")
+    try:
+        proc = subprocess.run(
+            [sys.executable, script, root, ep, "--json"],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+            timeout=1200,
+        )
+    except Exception as exc:
+        add(BLOCK, "一致性总审", loc, f"consistency_audit.py 无法运行：{type(exc).__name__}: {exc}", return_to_stage="review")
+        return
+    try:
+        res = json.loads(proc.stdout or "{}")
+    except Exception as exc:
+        add(
+            BLOCK,
+            "一致性总审",
+            loc,
+            f"consistency_audit.py --json 输出不可解析：{type(exc).__name__}: {exc}；stderr={proc.stderr[:500]}",
+            return_to_stage="review",
+        )
+        return
+    if not isinstance(res, dict):
+        add(BLOCK, "一致性总审", loc, "consistency_audit.py --json 未返回对象", return_to_stage="review")
+        return
+
+    summary = res.get("summary") if isinstance(res.get("summary"), dict) else {}
+    precision = str(summary.get("precision_level") or "full")
+    if precision != "full":
+        add(
+            WARN,
+            "一致性总审",
+            loc,
+            f"一致性审计精度为 {precision}；机检通过不等于脸部/像素一致性已完整验证，正式定稿前应在 full 环境复跑。",
+            return_to_stage="review",
+        )
+
+    block_count = 0
+    mapped_warns = 0
+    for row in res.get("findings", []) or []:
+        if not isinstance(row, dict):
+            continue
+        sev = str(row.get("severity") or row.get("verdict") or "").lower()
+        if sev not in {BLOCK, WARN}:
+            continue
+        if sev == WARN:
+            if mapped_warns >= 12:
+                continue
+            mapped_warns += 1
+        else:
+            block_count += 1
+        dim = str(row.get("dimension") or row.get("dim") or "一致性总审")
+        msg = str(row.get("message") or row.get("msg") or row.get("reason") or "一致性审计发现问题")
+        artifacts = row.get("affected_artifacts") if isinstance(row.get("affected_artifacts"), list) else []
+        shots = row.get("affected_shots") if isinstance(row.get("affected_shots"), list) else []
+        add(
+            sev,
+            dim,
+            str(artifacts[0] if artifacts else loc),
+            msg,
+            return_to_stage=row.get("return_to_stage") or ("image" if sev == BLOCK else "review"),
+            rerun_scope=row.get("rerun_scope") or "按 consistency_findings 报告回源头修复对应一致性维度。",
+            affected_shots=shots,
+            affected_artifacts=artifacts or [os.path.relpath(loc, root)],
+        )
+
+    if proc.returncode != 0 and not block_count:
+        add(
+            BLOCK,
+            "一致性总审",
+            loc,
+            f"consistency_audit.py 退出码 {proc.returncode}，但未导出 block finding；stderr={proc.stderr[:500]}",
+            return_to_stage="review",
+        )
+
+
 def run(root: str, ep: str, stage: str) -> None:
     if not os.path.isdir(root):
         add(BLOCK, "路径", root, "作品根不存在")
@@ -4871,6 +5038,7 @@ def run(root: str, ep: str, stage: str) -> None:
         if sb:
             check_voice_conditioned_lipsync_policy(root, ep, sb)
         check_compose_inputs(root, ep)
+        check_consistency_audit_gate(root, ep)
     elif check_stage == "review":
         check_compliance_manifest(root, ep, check_stage)
         referenced_characters, referenced_assets = episode_registry_reference_ids(root, ep)
@@ -4884,6 +5052,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_state_continuity(root, ep)
         check_multimodal_continuity(root, ep)
         check_subtitle_alignment(root, ep)
+        check_consistency_audit_gate(root, ep)
     else:
         add(BLOCK, "参数", stage, "未知 stage")
 

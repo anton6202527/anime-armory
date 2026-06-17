@@ -1,17 +1,27 @@
+import { useSyncExternalStore } from "react";
 import { Handle, Position, type NodeProps } from "@xyflow/react";
-import { mediaUrl } from "../api";
+import { getMediaPort, mediaUrl, subscribeMediaPort } from "../api";
 import type { CanvasClip } from "../types";
 
 // Custom React Flow node = one storyboard Clip card with a frame thumbnail,
 // rhythm chip, duration, and QA badges.
 export function ClipNode({ data, selected }: NodeProps) {
   const clip = data as unknown as CanvasClip;
+  // re-render once the media server port is ready (else thumbs stay "未出图")
+  useSyncExternalStore(subscribeMediaPort, getMediaPort);
   const thumb = clip.first_frame_exists && clip.first_frame_abs ? mediaUrl(clip.first_frame_abs) : "";
+  const video = clip.video_exists && clip.video_abs ? mediaUrl(clip.video_abs) : "";
   return (
     <div className={"clip-node" + (selected ? " selected" : "")}>
       <Handle type="target" position={Position.Left} />
       <div className="thumb">
-        {thumb ? <img src={thumb} alt={clip.label} /> : <span>未出图</span>}
+        {video ? (
+          <video src={video} poster={thumb || undefined} controls preload="none" />
+        ) : thumb ? (
+          <img src={thumb} alt={clip.label} />
+        ) : (
+          <span>未出图</span>
+        )}
       </div>
       <div className="body">
         <div className="label">

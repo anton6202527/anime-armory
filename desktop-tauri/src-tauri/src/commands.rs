@@ -1,8 +1,11 @@
 // Bridge commands: scan the workspace, read the canvas (review_ui or
 // storyboard fallback), and shell out to the repo's `--json` tools.
 use std::fs;
+use std::io::Read;
 use std::path::{Path, PathBuf};
-use std::process::Command;
+use std::process::{Command, Stdio};
+use std::thread;
+use std::time::{Duration, Instant};
 
 use serde::Serialize;
 use serde_json::Value;
@@ -165,7 +168,7 @@ fn from_storyboard(root: &Path, ep: &str, data: &Value) -> Vec<CanvasClip> {
             };
             CanvasClip {
                 id: s(c, "id").unwrap_or_else(|| format!("{ep}_CLIP{:02}", i + 1)),
-                number: Some((i + 1) as i64),
+                number: c.get("number").and_then(|n| n.as_i64()).or(Some((i + 1) as i64)),
                 label: s(c, "label").unwrap_or_default(),
                 duration: c.get("duration").and_then(|d| d.as_f64()),
                 scene: s(c, "scene"),
@@ -305,20 +308,63 @@ pub fn read_canvas(root: String, ep: String) -> CanvasData {
 
 // ---- run.py next --json bridge ----
 
+// Async so the python shell-out runs off the main thread (no UI freeze), with a
+// hard timeout so a hung run.py can't wedge the call.
 #[tauri::command]
-pub fn read_next_action(repo_root: String, root: String, ep: String) -> Result<String, String> {
-    let script = Path::new(&repo_root).join("skills/n2d/run.py");
-    let out = Command::new("python3")
+pub async fn read_next_action(repo_root: String, root: String, ep: String) -> Result<String, String> {
+    tauri::async_runtime::spawn_blocking(move || run_next_blocking(&repo_root, &root, &ep))
+        .await
+        .map_err(|e| e.to_string())?
+}
+
+fn run_next_blocking(repo_root: &str, root: &str, ep: &str) -> Result<String, String> {
+    let script = Path::new(repo_root).join("skills/n2d/run.py");
+    let mut child = Command::new("python3")
         .arg(script)
         .arg("next")
-        .arg(&root)
-        .arg(&ep)
+        .arg(root)
+        .arg(ep)
         .arg("--json")
-        .current_dir(&repo_root)
-        .output()
+        .current_dir(repo_root)
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
         .map_err(|e| e.to_string())?;
-    if !out.stdout.is_empty() {
-        return Ok(String::from_utf8_lossy(&out.stdout).to_string());
+
+    // Drain pipes on threads so a chatty child can't dead-lock on a full buffer.
+    let mut out_pipe = child.stdout.take().ok_or("no stdout pipe")?;
+    let mut err_pipe = child.stderr.take().ok_or("no stderr pipe")?;
+    let oh = thread::spawn(move || {
+        let mut b = Vec::new();
+        let _ = out_pipe.read_to_end(&mut b);
+        b
+    });
+    let eh = thread::spawn(move || {
+        let mut b = Vec::new();
+        let _ = err_pipe.read_to_end(&mut b);
+        b
+    });
+
+    let deadline = Instant::now() + Duration::from_secs(30);
+    loop {
+        match child.try_wait().map_err(|e| e.to_string())? {
+            Some(_) => break,
+            None => {
+                if Instant::now() >= deadline {
+                    let _ = child.kill();
+                    let _ = child.wait();
+                    return Err("run.py 超时（>30s）".into());
+                }
+                thread::sleep(Duration::from_millis(50));
+            }
+        }
     }
-    Err(String::from_utf8_lossy(&out.stderr).to_string())
+
+    let stdout = oh.join().unwrap_or_default();
+    let stderr = eh.join().unwrap_or_default();
+    if !stdout.is_empty() {
+        Ok(String::from_utf8_lossy(&stdout).to_string())
+    } else {
+        Err(String::from_utf8_lossy(&stderr).to_string())
+    }
 }

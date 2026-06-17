@@ -50,6 +50,7 @@ export function CanvasPane({ canvas }: ViewProps) {
         nodeTypes={nodeTypes}
         fitView
         minZoom={0.1}
+        onlyRenderVisibleElements
         proOptions={{ hideAttribution: true }}
       >
         <Background gap={24} color="#1b2230" />

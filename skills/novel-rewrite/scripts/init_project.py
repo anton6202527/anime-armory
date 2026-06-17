@@ -36,7 +36,60 @@ from novel_contract import (base_meta, build_progress_markdown, routing_stages,
 SCALE_PROFILE = SCALE_PROFILES  # scale-band 契约：test_scale_contract 校验其与规模档一致
 
 
-def build_change_spec(source_title):
+def load_score_report(path):
+    """读 novel-score 的 评分/score_report.json。容错：任何问题只告警不阻断 init
+    （评分是改写的【建议输入】，不是前置门）。返回 dict 或 None。"""
+    try:
+        with open(path, encoding="utf-8") as f:
+            report = json.load(f)
+    except FileNotFoundError:
+        print(f"[warn] --score-source 找不到：{path}（跳过评分诊断，改动spec 用空骨架）", file=sys.stderr)
+        return None
+    except (json.JSONDecodeError, OSError) as e:
+        print(f"[warn] --score-source 读取失败：{e}（跳过评分诊断）", file=sys.stderr)
+        return None
+    if report.get("kind") != "novel_score_report":
+        print(f"[warn] --score-source 不是 novel-score 报告（kind={report.get('kind')}），跳过诊断",
+              file=sys.stderr)
+        return None
+    return report
+
+
+def build_score_diagnosis(report):
+    """把 score_report.json 的弱项/扣分/结论压成一段【建议·待对账】，注入 改动spec ② 栏。
+    诊断是参考不是指令——与用户要求冲突时以用户要求为准。"""
+    verdict = report.get("verdict", "?")
+    total = report.get("total_score")
+    tier = report.get("tier", "?")
+    roi = report.get("rewrite_roi", "?")
+    gen = report.get("generated_at", "?")
+    weak = sorted((s for s in report.get("scores", []) if s.get("raw_score", 10) < 6),
+                  key=lambda s: s.get("raw_score", 10))
+    deductions = report.get("deductions", [])
+
+    total_s = f"{total:.0f}" if isinstance(total, (int, float)) else "?"
+    lines = [
+        f"> ⟦评分诊断·建议待对账⟧ 来源 评分/score_report.json（{gen}）"
+        f"｜总分 {total_s}（{tier}）｜结论 **{verdict}**｜改写ROI {roi}",
+        "> 以下是机器评分点出的弱项，**仅供改写参考**：与用户要求冲突时以用户要求为准，"
+        "采纳的并入下方对应栏、保留的请显式标注。",
+    ]
+    if str(verdict) == "弃稿重立":
+        lines.append("> ⚠ 评分判「弃稿重立」：改写未必是对的工具——先与用户确认是否该走 novel-create 另起。")
+    if weak:
+        lines += [">", "> **建议优先改的弱项：**"]
+        for s in weak:
+            label = s.get("dimension_label") or s.get("dimension")
+            hint = (s.get("improve_by") or s.get("comment") or "").strip()
+            lines.append(f"> - {label}（{s.get('raw_score')}/10）{(' → ' + hint) if hint else ''}")
+    if deductions:
+        lines += [">", "> **触发的扣分雷点（改写应规避）：**"]
+        for d in deductions:
+            lines.append(f"> - {d.get('item', '?')}（{d.get('points')}）：{(d.get('reason') or '').strip()}")
+    return "\n".join(lines) + "\n\n"
+
+
+def build_change_spec(source_title, diagnosis=""):
     return f"""# 改动spec — 《{source_title}》→《<新书名待定>》
 
 > 这部改写的"宪法"。动笔前与用户敲定。每条要具体可判定，别写空话。
@@ -51,7 +104,7 @@ def build_change_spec(source_title):
 - 必须保留的标志性桥段/意象：
 
 ## ② 改的部分（事件 / 设定 / 结局）
-- 改主线走向：原作是… → 改成…
+{diagnosis}- 改主线走向：原作是… → 改成…
 - 改/删的事件：
 - 改的设定（改了的要在 新设定.md 登记新值）：
 - 改的结局：
@@ -158,6 +211,9 @@ def main():
                     help="章节生成粒度：逐章/小批/全书草稿")
     ap.add_argument("--ai-text-usage", default=None, choices=AI_TEXT_USAGE_MODES,
                     help="发布披露用：AI-generated / AI-assisted / 未使用AI文本")
+    ap.add_argument("--score-source", default=None,
+                    help="可选：novel-score 的 评分/score_report.json；读 scores/verdict/deductions "
+                         "预填 改动spec② 弱项（建议·待对账，对称于 --feedback-source）")
     ap.add_argument("--i-have-rights", action="store_true")
     ap.add_argument("--rights-jurisdiction", default=None,
                     help="公版/授权依据适用辖区，如 US/CN/GLOBAL；缺省按来源推断")
@@ -195,6 +251,9 @@ def main():
               "自有/已授权重跑加 --i-have-rights。", file=sys.stderr)
         shutil.rmtree(out_root); sys.exit(2)
 
+    score_report = load_score_report(os.path.abspath(args.score_source)) if args.score_source else None
+    diagnosis = build_score_diagnosis(score_report) if score_report else ""
+
     scale = normalize_scale(args.scale)
     profile = scale_profile(scale)
     n = args.target_chapters or profile["target_chapters"]
@@ -223,6 +282,9 @@ def main():
         "draft_mode": args.draft_mode,
         "chapter_granularity": args.chapter_granularity,
         "ai_text_usage": args.ai_text_usage,
+        "score_source": os.path.abspath(args.score_source) if args.score_source else None,
+        "score_verdict": score_report.get("verdict") if score_report else None,
+        "score_total": score_report.get("total_score") if score_report else None,
     })
     W = lambda rel, txt: open(os.path.join(out_root, rel), "w", encoding="utf-8").write(txt)
     json.dump(meta, open(os.path.join(out_root, "_meta.json"), "w", encoding="utf-8"),
@@ -238,8 +300,10 @@ def main():
         "小说生成模式": args.draft_mode,
         "章节生成粒度": args.chapter_granularity,
         "AI使用披露": args.ai_text_usage or "（发布前用 ai_usage.py 确认）",
+        "评分诊断": (f"评分/score_report.json（verdict={score_report.get('verdict')}）"
+                   if score_report else "（未提供 --score-source）"),
     }, note="改写：改主线/换设定/加原创料，新设定圣经为准。")
-    W("设定/改动spec.md", build_change_spec(source_title))
+    W("设定/改动spec.md", build_change_spec(source_title, diagnosis))
     W("设定/新设定.md", build_new_settings(source_title))
     W("设定/角色卡.md", build_character_card(source_title))
     W("设定/世界观.md", build_worldview(source_title))
@@ -248,7 +312,11 @@ def main():
 
     print(f"[ok] 改写项目骨架 → {out_root}")
     print(f"     原作.txt        ← {ext} 抽取（参考素材，非底稿）")
-    print(f"     设定/改动spec.md ← 骨架（第 2 步填：保留/改/加 三栏）★最重要")
+    if score_report:
+        print(f"     设定/改动spec.md ← 骨架 + 评分诊断已预填②栏"
+              f"（verdict={score_report.get('verdict')}，建议·待与用户要求对账）★最重要")
+    else:
+        print(f"     设定/改动spec.md ← 骨架（第 2 步填：保留/改/加 三栏）★最重要")
     print(f"     设定/新设定.md   ← 骨架（第 3 步填：新增/覆盖设定 + 一致性约束）")
     print(f"     设定/角色卡.md / 世界观.md / 章纲.md ← 骨架")
     print(f"     _meta: kind=rewrite type=\"{args.rewrite_type}\" 章数={n} 版权={rights}")
