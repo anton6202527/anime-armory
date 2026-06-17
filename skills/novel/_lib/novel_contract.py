@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import os
+from copy import deepcopy
 
 # ── Symbols ──────────────────────────────────────────────────────────────
 PROGRESS_DONE = "✅"
@@ -193,8 +194,8 @@ def normalize_scale(scale):
 def scale_profile(scale):
     key = normalize_scale(scale)
     if key not in SCALE_PROFILES:
-        return SCALE_PROFILES["medium"] # fallback
-    return SCALE_PROFILES[key]
+        key = "medium"  # fallback
+    return deepcopy(SCALE_PROFILES[key])
 
 # ── Metadata Helpers ──────────────────────────────────────────────────────────
 def base_meta(kind, *, outputs, rights_status, title=None):

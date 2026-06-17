@@ -423,6 +423,27 @@ def test_lint_closeup_core_with_expression_lib_passes():
     assert out == []
 
 
+def test_lint_closeup_core_with_face_anchor_refs_passes():
+    out = image_qc._lint_closeup_expression_lib(
+        "Clip 52", "ECU 面部特写，崩溃落泪 CHAR_01/常态，引用 face_anchor_refs 基础脸锚和脸部特写，首尾双帧只插值",
+        id_refs=["CHAR_01/常态"], core_ids={"CHAR_01"})
+    assert out == []
+
+
+def test_lint_closeup_strong_emotion_only_in_negative_does_not_block():
+    # Fix3：负向 prompt 里 ban 哭/崩溃，正向段是平静镜——不该误判大表情硬拦。
+    body = ("ECU 面部特写，CHAR_01/常态 平静凝视\n"
+            "**负向 prompt**：崩溃, 哭, 落泪, 狰狞")
+    out = image_qc._lint_closeup_expression_lib(
+        body and "Clip 53", body, id_refs=["CHAR_01/常态"], core_ids={"CHAR_01"})
+    assert out == []
+    # 同一强情绪词出现在正向段则照常 block（确认没把整条检查关掉）。
+    pos = "ECU 面部特写，CHAR_01/常态 崩溃落泪\n**负向 prompt**：模糊"
+    out2 = image_qc._lint_closeup_expression_lib(
+        "Clip 53b", pos, id_refs=["CHAR_01/常态"], core_ids={"CHAR_01"})
+    assert out2 and out2[0]["code"] == "no_expression_lib_ref"
+
+
 def test_lint_shot_block_core_expression_block_integration():
     valid = {"CHAR_01/常态"}
     blk = _char_block("Clip 53 痛哭")
@@ -689,6 +710,53 @@ def test_to_findings_emits_seam_block_as_block() -> None:
     findings = image_qc.to_findings(payload)
     seam_f = [f for f in findings if "接缝" in f["msg"]]
     assert seam_f and seam_f[0]["sev"] == "block"
+
+
+def test_normalize_seam_availability_marks_absent_dir_unverified(tmp_path) -> None:
+    # Fix1：seam_analyze 在缺/空 图片目录回 {"seams":[], "notes":[...]} 无 available 键。
+    # 缺目录 → available False（未验，不是 ok）。
+    res = image_qc._normalize_seam_availability(
+        {"seams": [], "notes": ["无 …图片——出图后再跑接缝机检。"]}, str(tmp_path), "第1集")
+    assert res["available"] is False
+    # 空目录（存在但无 PNG）同样 available False——这是最隐蔽的零覆盖。
+    (tmp_path / "出图" / "第1集" / "图片").mkdir(parents=True)
+    res2 = image_qc._normalize_seam_availability({"seams": [], "notes": []}, str(tmp_path), "第1集")
+    assert res2["available"] is False
+    # 有真实 PNG → available True。
+    (tmp_path / "出图" / "第1集" / "图片" / "Clip_01.png").write_bytes(b"x")
+    res3 = image_qc._normalize_seam_availability({"seams": [], "notes": []}, str(tmp_path), "第1集")
+    assert res3["available"] is True
+    # seam_analyze 自置 available（失败/缺依赖）时不被覆盖。
+    res4 = image_qc._normalize_seam_availability(
+        {"available": False, "notes": ["未装 Pillow"]}, str(tmp_path), "第1集")
+    assert res4["available"] is False
+
+
+def test_seam_unverified_degrades_to_review_like_face() -> None:
+    # Fix1：seam available False 与 face 一致——经 unavailable_visual_checks 走 degraded→review，
+    # 不再因 seams 为空被当成干净 ok（零接缝覆盖却放行）。
+    payload = {"checks": {"face": {"available": True, "mode": "insightface", "shots": [{"verdict": "ok"}]},
+                          "seam": {"available": False, "seams": [], "notes": ["无 …图片"]}},
+               "lint": {"available": True, "findings": []}}
+    s = image_qc.summarize(payload)
+    assert s["hard_blocks"] == 0
+    assert "seam" in s["unavailable_visual_checks"]
+    assert s["degraded"] is True
+    assert s["verdict"] == "review"
+
+
+def test_summarize_strict_pixel_promotes_outfit_block_to_hard() -> None:
+    # Fix2：默认 off 时 outfit/scene block 仍是 advisory（review）；--strict-pixel 升 hard（block）。
+    payload = {"checks": {"outfit": {"available": True, "shots": [{"verdict": "block"}]},
+                          "scene": {"available": True, "shots": [{"verdict": "block"}, {"verdict": "warn"}]}},
+               "lint": {"available": True, "findings": []}}
+    lax = image_qc.summarize(payload)
+    assert lax["hard_blocks"] == 0 and lax["verdict"] == "review"
+    strict = image_qc.summarize(payload, strict_pixel=True)
+    assert strict["hard_blocks"] == 2   # outfit block + scene block
+    assert strict["verdict"] == "block"
+    # warn 不升 hard，仍计 advisory。
+    assert strict["advisory"] == 1
 
 
 def test_degraded_closeup_face_is_hard_block_but_non_closeup_is_review() -> None:

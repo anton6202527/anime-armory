@@ -36,6 +36,10 @@ SHARED_TABLES = (
     "ALLOWED_OUTPUT_FORMATS",
 )
 
+# scale_profile 也是 vendored 纯函数：合法档 + 别名 + 未知档（落 medium fallback）
+# 都必须两份逐值一致——历史上这里曾漂移（一份 raise、一份 fallback）且无护栏。
+SCALE_CASES = ("short", "medium", "long", "漫剧", "", "不存在的档")
+
 # rights_metadata 在两份模块里必须给出逐字段一致的结果（vendored 纯函数）
 RIGHTS_CASES = (
     ("original", {}),
@@ -56,6 +60,15 @@ class ContractSyncTest(unittest.TestCase):
                 self.assertTrue(hasattr(lib, name), f"novel_contract 缺 {name}")
                 self.assertEqual(getattr(craft, name), getattr(lib, name),
                                  f"{name} 在两份契约模块间漂移——请同步")
+
+    def test_scale_profile_value_equal(self):
+        for scale in SCALE_CASES:
+            with self.subTest(scale=scale):
+                self.assertEqual(
+                    craft.scale_profile(scale),
+                    lib.scale_profile(scale),
+                    f"scale_profile({scale!r}) 两份契约模块结果不一致——请同步",
+                )
 
     def test_rights_metadata_value_equal(self):
         for status, kwargs in RIGHTS_CASES:

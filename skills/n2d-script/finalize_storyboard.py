@@ -86,14 +86,15 @@ def _clip_duration(c):
 def build_from_storyboard(clips):
     # 原生音画：镜头时长来自脚本规划的 storyboard clips[].duration（不读配音清单）。
     # 一 clip 一条，∑ 与 ∑clip.duration 一致，供 validate_timings 对账与下游读取。
+    # 缺 duration 的 clip 不静默丢（会变 0 长镜头·无时间预算出视频）——直接报错点名 clip。
     shots = {}
-    for c in clips:
+    for i, c in enumerate(clips, 1):
         if not isinstance(c, dict):
             continue
         dur = _clip_duration(c)
+        key = str(c.get('镜头') or c.get('id') or c.get('label') or f'clip{i}')
         if dur is None:
-            continue
-        key = str(c.get('镜头') or c.get('id') or c.get('label') or f'clip{len(shots)+1}')
+            raise ValueError(f"clip「{key}」缺可解析的 duration（duration/duration_sec/时长/seconds 之一）——分镜设计时按脚本规划填 Clip duration。")
         shots[key] = round(shots.get(key, 0.0) + dur, 3)
     return shots
 
@@ -137,7 +138,10 @@ def main():
             if not os.path.isfile(sb_p):
                 print('⛔ 原生音画模式但缺 storyboard.json，无法从脚本推镜头时长——请先 n2d-script 阶段2 分镜设计。'); sys.exit(2)
             clips = (json.load(open(sb_p,encoding='utf-8')) or {}).get('clips') or []
-            shots = build_from_storyboard(clips)
+            try:
+                shots = build_from_storyboard(clips)
+            except ValueError as e:
+                print('⛔ 原生音画定稿失败：'+str(e)); sys.exit(2)
             if not shots:
                 print('⛔ 原生音画模式：storyboard.json clips 缺 duration，无法定稿镜头时长——分镜设计时按脚本规划填 Clip duration。'); sys.exit(2)
             json.dump(shots, open(os.path.join(root,'脚本',ep,'镜头时长.json'),'w',encoding='utf-8'), ensure_ascii=False, indent=2)

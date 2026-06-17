@@ -418,7 +418,7 @@ class TestFirstPartyGenrePrior(unittest.TestCase):
 
     def test_empty_ledger_returns_loop_hint(self):
         self.assertIsNone(score.summarize_first_party_genre([], "仙侠"))
-        self.assertIn("n2d-feedback", score.first_party_genre_text(None))
+        self.assertIn("回灌", score.first_party_genre_text(None))
 
     def test_ledger_roundtrip_jsonl(self):
         tmp = tempfile.mkdtemp()

@@ -2,10 +2,13 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import sys
 from pathlib import Path
 
 
 SCRIPT = Path(__file__).with_name("queue.py")
+SCRIPT_DIR = SCRIPT.resolve().parent
+sys.path = [p for p in sys.path if Path(p or ".").resolve() != SCRIPT_DIR]
 spec = importlib.util.spec_from_file_location("n2d_batch_queue", SCRIPT)
 queue = importlib.util.module_from_spec(spec)
 assert spec.loader is not None
@@ -13,6 +16,7 @@ spec.loader.exec_module(queue)
 
 
 def write_progress(root: Path) -> None:
+    (root / "_设置.md").write_text("- 制作模式: 配音先行\n", encoding="utf-8")
     (root / "_进度.md").write_text(
         "\n".join(
             [
@@ -386,7 +390,7 @@ def test_replace_refuses_running_without_force(tmp_path: Path) -> None:
 
 
 # ── T4: 回流闭环后半环（指纹 + resolved 回写 + 复检）──────────────────────────
-import queue as q
+q = queue
 from n2d_contract import finding_fingerprint
 
 

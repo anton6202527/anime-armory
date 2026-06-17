@@ -1306,6 +1306,15 @@ def run_image_qc_findings(root: str, episode: str, *, fail_closed: bool) -> List
     return [f for f in data if isinstance(f, dict)]
 
 
+def image_qc_findings(root: str, episode: str) -> List[Dict[str, Any]]:
+    """Backward-compatible helper for preflight callers/tests.
+
+    Preflight should be best-effort because an empty/new project can legitimately
+    have no generated PNGs yet.  The post-image gate still uses fail-closed mode.
+    """
+    return run_image_qc_findings(root, episode, fail_closed=False)
+
+
 def gate_events(root: str, episode: str, stage: str) -> Tuple[List[Dict[str, Any]], int, List[Dict[str, Any]]]:
     gate_py = os.path.join(REPO_SKILLS, "n2d-review", "scripts", "gate.py")
     proc = subprocess.run(
@@ -1326,7 +1335,7 @@ def gate_events(root: str, episode: str, stage: str) -> Tuple[List[Dict[str, Any
     # image_preflight 也合并它：无 PNG 时像素项自然为空，但 prompt lint 可在付费生图前拦非法 CHAR_id/纯文生图风险。
     return_code = proc.returncode
     if stage in {"image_preflight", "image"}:
-        qc = run_image_qc_findings(root, episode, fail_closed=(stage == "image"))
+        qc = image_qc_findings(root, episode) if stage == "image_preflight" else run_image_qc_findings(root, episode, fail_closed=True)
         findings.extend(qc)
         if return_code == 0 and any(str(f.get("sev")).lower() == "block" for f in qc):
             return_code = 1   # image_qc 硬阻断也让出图 gate 失败

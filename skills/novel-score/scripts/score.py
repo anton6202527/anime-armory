@@ -23,6 +23,12 @@ _COMMON = os.path.join(SKILLS_ROOT, "novel", "_lib")
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from settings import load_settings as _load_settings  # noqa: E402  vendored 进 novel/_lib
+from io_utils import load_meta  # noqa: E402  本线 _lib 单一真值源
+from report_snapshot import (  # noqa: E402  章号/哈希纯函数走 _lib，不再本地复制
+    chapter_number_from_path,
+    chapter_sort_key,
+    sha256_file,
+)
 
 try:
     import contract
@@ -85,14 +91,6 @@ WEIGHTS = {
 SHORT_DRAMA_KEYWORDS = ("红果", "抖音", "漫剧", "短剧")
 
 
-def load_meta(root):
-    path = os.path.join(root, "_meta.json")
-    if not os.path.exists(path):
-        return {}
-    with open(path, encoding="utf-8") as f:
-        return json.load(f)
-
-
 def load_settings(root):
     """读作品根下的 _设置.md；单一真值源在 skills/novel/_lib/settings.py。"""
     return _load_settings(root)
@@ -100,14 +98,6 @@ def load_settings(root):
 
 def sha256_text(text):
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
-
-
-def sha256_file(path):
-    h = hashlib.sha256()
-    with open(path, "rb") as f:
-        for chunk in iter(lambda: f.read(1024 * 1024), b""):
-            h.update(chunk)
-    return h.hexdigest()
 
 
 def rel_path(root, path):
@@ -434,7 +424,7 @@ def summarize_first_party_genre(records, genre, platform_mode=None):
 
 def first_party_genre_text(summary):
     if not summary:
-        return "无（尚无自有投放战绩库；先用 n2d-feedback --emit-ledger 回灌，闭环后此处显示第一方题材热度）"
+        return "无（尚无自有投放战绩库；由外部投放侧回灌 生产战绩/genre_ledger.jsonl 后此处显示第一方题材热度）"
     m = summary["metrics"]
     def pct(k):
         return f"{m[k]*100:.1f}%" if k in m and m[k] is not None else "—"
@@ -559,16 +549,6 @@ ACTION_BY_DIMENSION = {
     "prose": ("novel-review", "draft", "回到章节层做文风与表达修订"),
     "retention": ("novel-craft", "outline", "重排章末钩子、悬念间隔和完读节奏"),
 }
-
-
-def chapter_number_from_path(path):
-    match = re.search(r"第0*(\d+)章", os.path.basename(path))
-    return int(match.group(1)) if match else None
-
-
-def chapter_sort_key(path):
-    number = chapter_number_from_path(path)
-    return (number is None, number or 0, os.path.basename(path))
 
 
 def validate_assessment(assessment, expect_title_check=False):
@@ -930,7 +910,7 @@ def main():
     ap.add_argument("--task", default=None,
                     help="score_task.json 路径；缺省 <作品根>/评分/score_task.json")
     ap.add_argument("--json", action="store_true", help="输出机器可读报告")
-    ap.add_argument("--genre-ledger", help=f"自有题材战绩库路径（n2d-feedback --emit-ledger 写）；默认 $N2D_GENRE_LEDGER 或 <repo>/{LEDGER_REL_PATH}")
+    ap.add_argument("--genre-ledger", help=f"自有题材战绩库路径（外部投放侧回灌）；默认 $N2D_GENRE_LEDGER 或 <repo>/{LEDGER_REL_PATH}")
     ap.add_argument("--allow-stale-baseline", action="store_true",
                     help="允许缺失/过期/无证据市场基准，仅用于离线测试或人工明确豁免")
     args = ap.parse_args()

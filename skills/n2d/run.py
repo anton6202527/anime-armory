@@ -85,7 +85,7 @@ def stage_key_of(route: Dict[str, Any]) -> Optional[str]:
     特例：先出视频后配音模式下，compose 前沿会被重定向成 label='补真实配音'、skill='n2d-voice'
     （col 仍是 '成片'）——这里按 voice 处理，否则 stage_for_progress_column('成片') 会误判成 compose。
     """
-    if route.get("label") == "补真实配音" or route.get("skill") == "n2d-voice" and route.get("col") == "成片":
+    if route.get("label") == "补真实配音" or (route.get("skill") == "n2d-voice" and route.get("col") == "成片"):
         return "voice"
     spec = stage_for_progress_column(route["col"])
     return spec["key"] if spec else None
@@ -315,7 +315,11 @@ def next_action(root: str, ep: Optional[str] = None, auto: bool = False) -> Dict
         route = resolve_frontier(root, ep)
         if route is None:
             return {"frontier": None, "prework": [], "stop_reason": "done",
-                    "action_card": {"headline": "🎉 该作品/该集已成片，无下一步"},
+                    "action_card": {
+                        "headline": "🎉 该作品/该集已成片，无下一步",
+                        "to_user": "已成片。可选收尾：跑 n2d-review 做成片体检（崩脸/穿帮/字幕对账），"
+                                   "或 n2d-score 给市场+品质综合评分。",
+                    },
                     "gate": None, "auto_continue": False}
         stage_key = stage_key_of(route)
         if stage_key is None:

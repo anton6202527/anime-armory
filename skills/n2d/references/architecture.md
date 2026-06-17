@@ -224,7 +224,7 @@ n2d-script（阶段1·剧本改编）→
   3. 在 _进度.md 写入 N 集骨架（raw 列 ✅，其他全 ⬜）
   4. 精修 设定库/global_style.md + 设定库/characters/ + 设定库/locations/
   5. 精修第1集 阶段1剧本(台词+bgm+封面) → 剧本改编/bgm/封面列 ✅（**此阶段不做分镜**）
-  6. 报告：第1集剧本齐，下一步 n2d-voice 配音（配音先行：真音时长驱动镜头）
+  6. 报告：第1集剧本齐，下一步按制作模式走——默认原生音画直接回 n2d-script 做阶段2分镜；配音先行才先 n2d-voice（真音时长驱动镜头）
 
 用户：跑 n2d-voice 制漫剧/我的小说 第1集
 
@@ -263,10 +263,11 @@ n2d-image →
 ```
 def dispatch(work_root):
     progress = read(f"{work_root}/_进度.md")
+    mode = read_setting(work_root, "制作模式", default="原生音画")
     for episode in episodes_sorted_by_number(progress):
         if any(episode[c] != "✅" for c in ["剧本改编", "bgm", "封面"]):
             return ("n2d-script(阶段1)", episode.id, "剧本改编未齐")
-        if episode["配音"] != "✅":
+        if mode == "配音先行" and episode["配音"] != "✅":
             return ("n2d-voice", episode.id, "未配音")
         if episode["分镜设计"] != "✅":   # 实际路由只闸 分镜设计；素材清单/字幕中是阶段2 副产物、字幕英仅海外投放才出，均不阻塞路由（与 progress.py STAGES 一致）
             return ("n2d-script(阶段2)", episode.id, "分镜设计未齐（配音后回跑）")

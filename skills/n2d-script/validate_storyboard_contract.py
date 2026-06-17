@@ -54,8 +54,17 @@ def clip_blob(clip: Dict[str, Any]) -> str:
 def first_template_keyword_hit(text: str) -> Optional[str]:
     low = text.lower()
     for template, words in special_template_keywords():
-        if any(str(w).lower() in low for w in words):
-            return str(template)
+        for word in words:
+            token = str(word).lower().strip()
+            if not token:
+                continue
+            # Short ASCII triggers such as "ots" must not fire inside schema
+            # keys like "shots"; CJK triggers still use substring matching.
+            if token.isascii() and re.fullmatch(r"[a-z0-9_+-]+", token):
+                if re.search(rf"(?<![a-z0-9]){re.escape(token)}(?![a-z0-9])", low):
+                    return str(template)
+            elif token in low:
+                return str(template)
     return None
 
 
@@ -192,6 +201,10 @@ def validate(root: str, ep: str) -> Dict[str, Any]:
             add(rows, "block", "故事板", f"{path} clip#{index}", "clip 必须是对象。")
             continue
         loc = f"{path} {clip_id(clip, index)}"
+        # 镜头时长是 storyboard-driven（原生音画）下 finalize/出视频的唯一时间预算来源；
+        # 缺 duration 的 clip 会在 finalize 里被静默丢成 0 长 → 无时间预算出视频。这里硬拦。
+        if duration_of(clip) is None:
+            add(rows, "block", "镜头时长", loc, "clip 缺可解析的 duration（duration/duration_sec/时长/seconds 之一）；原生音画下镜头时长靠它定时间预算，分镜设计时必须填 Clip duration。")
         check_template_contract(rows, clip, loc)
         check_anchor_contract(rows, clip, loc, enforce_midframe)
     return {"ok": not any(r["severity"] == "block" for r in rows), "findings": rows}

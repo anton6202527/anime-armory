@@ -23,6 +23,7 @@ _SKILLS = os.path.abspath(os.path.join(_HERE, "..", ".."))
 _COMMON = os.path.join(_SKILLS, "novel", "_lib")
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
+from io_utils import load_json  # noqa: E402  本线 _lib 单一真值源
 from project_io import load_project_settings  # noqa: E402
 
 from contract import scale_profile
@@ -89,13 +90,6 @@ def read_text(path, default=""):
         return default
     with open(path, encoding="utf-8", errors="replace") as f:
         return f.read()
-
-
-def load_json(path, default):
-    if not os.path.exists(path):
-        return default
-    with open(path, encoding="utf-8") as f:
-        return json.load(f)
 
 
 def clip(text, limit=2200):

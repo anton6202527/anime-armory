@@ -142,8 +142,8 @@ def test_native_av_mode_leaves_action_shots_unchanged(tmp_path):
 
 
 def test_voice_first_mode_keeps_dialogue_no_native_speech(tmp_path):
-    # 默认配音先行：对话镜仍不让视频后端生成台词。
-    root = _root(tmp_path)
+    # 显式配音先行：对话镜仍不让视频后端生成台词。
+    root = _root(tmp_path, "- 生视频AI: 即梦\n- 视频模型路由: 自动按镜头路由\n- 制作模式: 配音先行\n")
     _write_storyboard(root, [{"id": "Clip 1", "template": "dialogue_shot_reverse", "scene": "对话反打台词"}])
 
     route = router.route_episode(root, "第1集")["routes"][0]
@@ -421,16 +421,18 @@ def test_character_backend_conflicts_detects_and_skips():
     assert router.character_backend_conflicts({"id": "C2", "scene": "空镜"}, "kling", aff) == []
 
 
-def test_route_episode_flags_character_backend_conflict(tmp_path):
+def test_route_episode_pins_core_character_to_locked_backend(tmp_path):
+    # 核心角色（已注册原生视频主体 seedance）被路由到 kling → 硬钉回 seedance（不再 warn-only）
     root = _root(tmp_path, "- 生视频AI: 可灵\n- 视频模型路由: 固定生视频AI\n- 视频备用后端: 无\n")
     _write_registry(root, [{"id": "CHAR_01", "name": "沈念", "forms": [
         {"form": "常态", "identity_adapters": {"video": {"seedance": {"mode": "face_lock", "status": "registered"}}}}]}])
     _write_storyboard(root, [{"id": "EP01_CLIP01", "scene": "沈念近景", "characters": ["CHAR_01/常态"]}])
 
     route = router.route_episode(root, "第1集")["routes"][0]
-    assert route["primary_backend"] == "kling"               # 路由不变（warn-only）
-    assert "character_backend_conflict" in route["risk_flags"]
-    assert route["character_backend_conflicts"][0]["prefers_backend"] == "seedance"
+    assert route["primary_backend"] == "seedance"            # 硬钉到 locked_backend
+    assert "kling" in route["fallback_backends"]             # 原 primary 降为 fallback
+    assert route["character_backend_conflicts"] == []        # 钉回后冲突消解
+    assert any("硬钉" in r for r in route["rationale"])
 
 
 def test_route_episode_no_conflict_when_no_native_subject(tmp_path):
@@ -443,3 +445,42 @@ def test_route_episode_no_conflict_when_no_native_subject(tmp_path):
     route = router.route_episode(root, "第1集")["routes"][0]
     assert route["character_backend_conflicts"] == []
     assert "character_backend_conflict" not in route["risk_flags"]
+
+
+def test_build_backend_affinity_marks_core_and_locked_backend():
+    reg = {"characters": [{"id": "CHAR_01", "name": "沈念", "forms": [
+        {"form": "常态", "identity_adapters": {"video": {"seedance": {"mode": "face_lock", "status": "registered"}}}}]}]}
+    aff = router.build_backend_affinity(reg)
+    assert aff[0]["core"] is True and aff[0]["backend"] == "seedance"
+
+
+def test_character_backend_conflict_core_enforces_noncore_warns():
+    # core 角色冲突 → enforce=True + locked_backend；非 core → enforce=False（仅 warn）
+    clip = {"id": "C1", "characters": ["CHAR_01/常态"], "scene": "沈念近景"}
+    core_aff = [{"id": "CHAR_01", "name": "沈念", "aliases": {"沈念"}, "backend": "seedance", "core": True}]
+    c = router.character_backend_conflicts(clip, "kling", core_aff)[0]
+    assert c["enforce"] is True and c["core"] is True and c["locked_backend"] == "seedance"
+    noncore_aff = [{"id": "CHAR_01", "name": "沈念", "aliases": {"沈念"}, "backend": "seedance"}]  # 无 core
+    c2 = router.character_backend_conflicts(clip, "kling", noncore_aff)[0]
+    assert c2["enforce"] is False and c2["locked_backend"] == "seedance"
+
+
+def test_escalate_persists_locked_backend_for_retries():
+    # 升锁换厂后 locked_backend = 最终 primary，重试复用它不再轮换 fallback
+    entry = {"primary_backend": "dreamina", "identity_requirement": "character_id_or_reference_group",
+             "rationale": [], "risk_flags": [], "fallback_backends": ["kling", "seedance"]}
+    out = router.escalate_identity_for_failures(entry, 2)
+    assert out["primary_backend"] == "kling"
+    assert out["locked_backend"] == "kling"            # 钉死最终 primary 供重试复用
+    # 固定后端模式不换厂 → locked_backend = 原 primary
+    fixed = {"primary_backend": "dreamina", "identity_requirement": "x", "rationale": [],
+             "risk_flags": [], "fallback_backends": ["kling"]}
+    out2 = router.escalate_identity_for_failures(fixed, 3, fixed_mode=True)
+    assert out2["locked_backend"] == "dreamina"
+
+
+def test_escalate_below_threshold_persists_no_locked_backend():
+    # 未到阈值原样返回，不写 locked_backend（避免给未升锁的镜误钉后端）
+    entry = {"primary_backend": "dreamina", "identity_requirement": "x", "rationale": [], "fallback_backends": ["kling"]}
+    out = router.escalate_identity_for_failures(dict(entry), 1)
+    assert "locked_backend" not in out

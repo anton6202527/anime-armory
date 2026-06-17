@@ -317,9 +317,11 @@ def verify_task_completion(root: str, task: Dict[str, Any]) -> List[str]:
             row = None
             header = []
         if row is not None:
+            # 用 mode-aware 的 is_progress_satisfied，而非裸 is_done——原生音画下「配音=⬜」、
+            # 先出视频下「配音=⏳rough」都属"已满足"，不能误判成 not done。
             missing = [
                 col for col in progress_cols
-                if col in header and not queue_mod.is_done(str(row.get(col, "")))
+                if col in header and not queue_mod.is_progress_satisfied(root, row, col)
             ]
             if missing:
                 issues.append(f"progress not done: {', '.join(missing)}")

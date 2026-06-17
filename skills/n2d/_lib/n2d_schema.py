@@ -424,6 +424,7 @@ STAGE_GRAPH: List[Dict[str, Any]] = [
             "any_of": (
                 {"label": "中文字幕成片", "all_of": ("合成/{ep}/成片_{ep}_zh.mp4",)},
                 {"label": "双语成片", "all_of": ("合成/{ep}/成片_{ep}_bilingual.mp4",)},
+                {"label": "英文字幕成片", "all_of": ("合成/{ep}/成片_{ep}_en.mp4",)},
             ),
         },
         "return_to_stage": "compose",
@@ -445,6 +446,7 @@ STAGE_GRAPH: List[Dict[str, Any]] = [
             "any_of": (
                 {"label": "中文字幕成片", "all_of": ("合成/{ep}/成片_{ep}_zh.mp4",)},
                 {"label": "双语成片", "all_of": ("合成/{ep}/成片_{ep}_bilingual.mp4",)},
+                {"label": "英文字幕成片", "all_of": ("合成/{ep}/成片_{ep}_en.mp4",)},
             ),
         },
         "return_to_stage": "review",

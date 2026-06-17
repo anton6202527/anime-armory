@@ -18,8 +18,12 @@ from datetime import date
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SKILLS_ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
-sys.path.append(os.path.join(SKILLS_ROOT, "novel-craft", "scripts"))
+# 本线自包含：report_snapshot/waivers 的真身在 novel/_lib（不伸手进 novel-craft/scripts）
+_COMMON = os.path.join(SKILLS_ROOT, "novel", "_lib")
+if _COMMON not in sys.path:
+    sys.path.insert(0, _COMMON)
 
+from io_utils import load_json, write_json
 from report_snapshot import snapshot_chapters
 from waivers import make_waiver
 
@@ -54,19 +58,6 @@ RETURN_STAGE_BY_DIM = {
     "reader_promise": "demo",
     "prose": "draft",
 }
-
-
-def load_json(path, default=None):
-    if not os.path.exists(path):
-        return default
-    with open(path, encoding="utf-8") as f:
-        return json.load(f)
-
-
-def write_json(path, payload):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(payload, f, ensure_ascii=False, indent=2)
 
 
 def read_meta(root):

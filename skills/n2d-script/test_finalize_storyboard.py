@@ -125,6 +125,31 @@ def test_native_av_builds_shots_from_storyboard_without_manifest(tmp_path):
     assert shots == {"EP01_CLIP01": 7.0, "EP01_CLIP02": 5.5}  # 时长来自 storyboard 脚本规划
 
 
+def test_build_from_storyboard_raises_on_missing_duration():
+    # 缺 duration 的 clip 不静默丢成 0 长镜头——直接报错点名 clip（治"无时间预算出视频"）
+    import pytest
+    with pytest.raises(ValueError) as ei:
+        F.build_from_storyboard([
+            {"id": "EP01_CLIP01", "duration": 7},
+            {"id": "EP01_CLIP02"},  # 缺 duration
+        ])
+    assert "EP01_CLIP02" in str(ei.value)
+
+
+def test_native_av_finalize_fails_on_missing_clip_duration(tmp_path):
+    # 原生音画定稿：storyboard 某 clip 缺 duration → finalize 退出码 2，点名 clip，不静默产 0 长镜头
+    root, ep = str(tmp_path), "第1集"
+    os.makedirs(os.path.join(root, "脚本", ep), exist_ok=True)
+    open(os.path.join(root, "_设置.md"), "w", encoding="utf-8").write("# _设置\n## 选择\n- 制作模式: 原生音画\n")
+    json.dump({"clips": [{"id": "EP01_CLIP01", "duration": 7}, {"id": "EP01_CLIP02"}]},
+              open(os.path.join(root, "脚本", ep, "storyboard.json"), "w", encoding="utf-8"), ensure_ascii=False)
+    r = subprocess.run([sys.executable, os.path.join(_HERE, "finalize_storyboard.py"), root, ep],
+                       capture_output=True, text=True)
+    assert r.returncode == 2, r.stdout + r.stderr
+    assert "EP01_CLIP02" in r.stdout
+    assert not os.path.exists(os.path.join(root, "脚本", ep, "镜头时长.json"))
+
+
 def test_non_native_still_requires_manifest(tmp_path):
     root = str(tmp_path)
     os.makedirs(os.path.join(root, "脚本", "第1集"), exist_ok=True)

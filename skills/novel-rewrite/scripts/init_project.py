@@ -213,7 +213,7 @@ def main():
                     help="发布披露用：AI-generated / AI-assisted / 未使用AI文本")
     ap.add_argument("--score-source", default=None,
                     help="可选：novel-score 的 评分/score_report.json；读 scores/verdict/deductions "
-                         "预填 改动spec② 弱项（建议·待对账，对称于 --feedback-source）")
+                         "预填 改动spec② 弱项（建议·待对账）")
     ap.add_argument("--i-have-rights", action="store_true")
     ap.add_argument("--rights-jurisdiction", default=None,
                     help="公版/授权依据适用辖区，如 US/CN/GLOBAL；缺省按来源推断")

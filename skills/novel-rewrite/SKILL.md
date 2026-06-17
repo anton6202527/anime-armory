@@ -37,8 +37,8 @@ description: Use when rewriting / reimagining / 魔改 an existing novel into a 
 
 > **派生流水线**：阶段表 + demo_gate / draft_packets / 状态账本 / export / ai_usage 的通用机制见 `novel-craft/references/derive-pipeline.md`。本 skill 的 `source_model` = 原作内核/旧设定吸收，`direction_spec` = 改动spec / 新设定确认。
 
-0. **确认输入 + 合法性**：原作路径、**改动方向**（一句话：要把它改成什么；若是 N2D 反馈驱动，加 `--feedback-source n2d` 指向 `制漫剧/<剧名>/反馈/n2d_feedback_ledger.json`；**若先跑过 `novel-score`，加 `--score-source 评分/score_report.json` 让评分弱项驱动改写方向**）、规模（short/medium/long/微短剧/漫剧）、目标平台、输出（txt/docx/outline/n2d）。判版权。
-1. **建骨架**：`python3 <skill>/scripts/init_project.py "<原作>" --rewrite-type "<方向>" [--feedback-source n2d] [--score-source 评分/score_report.json] ...` → `写小说/<原作名>-改写/`。
+0. **确认输入 + 合法性**：原作路径、**改动方向**（一句话：要把它改成什么；**若先跑过 `novel-score`，加 `--score-source 评分/score_report.json` 让评分弱项驱动改写方向**；若是 N2D 投放反馈驱动，把硬伤手动写进步骤 2 的【改什么】栏即可，无需额外 flag）、规模（short/medium/long/微短剧/漫剧）、目标平台、输出（txt/docx/outline/n2d）。判版权。
+1. **建骨架**：`python3 <skill>/scripts/init_project.py "<原作>" --rewrite-type "<方向>" [--score-source 评分/score_report.json] ...` → `写小说/<原作名>-改写/`。
 2. **填改动spec + 读者契约**（最重要）：三栏【保留内核 / 改什么 / 加什么】写实写细。若是 N2D 反馈驱动，**【改什么】一栏优先填入 N2D 侧反馈的视觉/逻辑硬伤**（如：场景描述模糊、角色服装冲突、转场逻辑断裂）。**若传了 `--score-source`，②栏已预填评分诊断（弱项/扣分雷点，标记「建议·待对账」）——逐条与用户要求对账：采纳的并入对应栏，保留的显式标注；冲突时以用户要求为准。评分判 `弃稿重立` 时先确认是否该走 `novel-create` 另起。** → 用户审。
 3. **建新设定圣经 + 角色/世界观卡**：把"加的新设定/材料"系统化、列一致性约束，**按家族统一 schema `novel-craft/references/setting-bible.md`**（新金手指也必写代价、新设定标"改自原作哪条"+首现章）。→ 用户审。
 4. **书名**：委托 `novel-title`（同人改写/魔改类型）。→ 用户审。

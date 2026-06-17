@@ -38,10 +38,21 @@ DEFAULT_GAIN = 0.60
 SFX_EMPHASIS = ("爽点", "爆发", "反转", "危机", "高潮")
 
 
-def tension_gain(clip: Dict[str, Any]) -> float:
+def _as_float(value: Any) -> Optional[float]:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def tension_gain(clip: Dict[str, Any] | str | None) -> float:
     """按 Clip 属性（rhythm/mode）决定 BGM 基准增益。纯函数。"""
-    rhythm = str(clip.get("rhythm") or "")
-    mode = str(clip.get("mode") or "").lower()
+    if isinstance(clip, dict):
+        rhythm = str(clip.get("rhythm") or "")
+        mode = str(clip.get("mode") or "").lower()
+    else:
+        rhythm = str(clip or "")
+        mode = ""
     
     # 优先级 1：明确的说话镜（含原生音画）压低 BGM 以突出台词
     if "native_av" in mode or "speech" in rhythm or "说话" in rhythm or "台词" in rhythm:

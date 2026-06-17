@@ -1,34 +1,32 @@
 {
   "name": "anime-arsenal-desktop",
-  "version": "0.0.2",
   "private": true,
-  "author": "anime-arsenal",
-  "description": "VS Code-like desktop client for the anime-arsenal AI creation factory. MVP: open folder + file tree, Monaco editor with tabs, integrated resizable terminal. Standalone app that CONSUMES the skills — not part of the skills library.",
-  "main": "src/main.js",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Tauri + React desktop shell for the anime-arsenal creation factory (left infinite canvas / right native terminal).",
   "scripts": {
-    "start": "electron .",
-    "rebuild": "electron-rebuild -f -w node-pty && chmod +x node_modules/node-pty/prebuilds/*/spawn-helper",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder"
-  },
-  "build": {
-    "appId": "com.anime-arsenal.desktop",
-    "productName": "anime-arsenal",
-    "afterPack": "build/afterPack.js",
-    "directories": { "output": "dist", "buildResources": "build" },
-    "asarUnpack": ["**/node_modules/node-pty/**"],
-    "mac": { "target": "dmg", "category": "public.app-category.developer-tools", "icon": "build/icon.icns" },
-    "dmg": { "title": "anime-arsenal ${version}" }
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "app:dev": "tauri dev",
+    "app:build": "tauri build"
   },
   "dependencies": {
+    "@tauri-apps/api": "^2.1.1",
+    "@tauri-apps/plugin-dialog": "^2.2.0",
     "@xterm/addon-fit": "^0.10.0",
     "@xterm/xterm": "^5.5.0",
-    "monaco-editor": "^0.52.2",
-    "node-pty": "^1.0.0"
+    "@xyflow/react": "^12.3.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@electron/rebuild": "^3.7.0",
-    "electron": "^31.7.0",
-    "electron-builder": "^24.13.3"
+    "@tauri-apps/cli": "^2.1.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11"
   }
 }

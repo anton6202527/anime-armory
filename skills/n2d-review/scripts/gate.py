@@ -115,6 +115,7 @@ from n2d_cross_episode import (  # noqa: E402  跨集视觉契约方向反转（
     cross_episode_diff as _cross_episode_diff,
     overview_rel as _ce_overview_rel,
     prior_episode as _ce_prior_episode,
+    _episode_number as _ce_episode_number,
     scene_names as _ce_scene_names,
 )
 import semantic_continuity as semc  # noqa: E402
@@ -1085,8 +1086,10 @@ def check_backend_reachable(root: str, ep: str) -> None:
             "先修后端（验内网/重登 CLI/补 API key）再出图；禁止静默兜底换别的后端（会引入跨镜后端混用漂移）。",
             return_to_stage="image")
     elif status == "unknown":
+        bypass = "（注意：N2D_SKIP_BACKEND_PROBE 已设置，探活被显式跳过）" \
+            if os.environ.get("N2D_SKIP_BACKEND_PROBE") else ""
         add(WARN, "生图后端连通性", settings_loc,
-            f"生图后端「{setting}」无法自动探活：{detail}。出图前请人工确认它能落 PNG"
+            f"生图后端「{setting}」无法自动探活：{detail}{bypass}。出图前请人工确认它能落 PNG"
             "（如 curl 内网健康端点 / 确认即梦官方 CLI 已登录·会员有效 / 确认 API 额度），不通即停，勿静默兜底换后端。")
 
 
@@ -1496,9 +1499,29 @@ def check_storyboard_contract(root: str, ep: str, require_frame_assets: bool = T
         if prev_end and cont.get("start_state") != prev_end:
             add(BLOCK, "故事板", loc, "start_state 未原样继承上一 Clip 的 end_state")
         prev_end = cont.get("end_state")
+        # 近景/特写/反打镜必须声明 expression_span——把「跨情绪近景首尾双帧」闸门从 opt-in 收成强制。
+        # 没标 span 的大表情近景正是脸被表情带着重画的头号根因；不能靠作者记得打标签，否则双帧保护
+        # 恰好在最该保护的未标镜上静默 no-op。远景/空镜由 _clip_is_closeup 收口、不误伤。
+        if _clip_is_closeup(clip):
+            span = cont.get("expression_span")
+            if span in (None, ""):
+                add(BLOCK, "表情一致性", loc,
+                    "近景/特写/反打镜必须声明 continuity.expression_span（微/中/大）——跨情绪近景是脸随表情"
+                    f"漂移的头号根因，不可 opt-in。按起止情绪（{cont.get('start_state')!r}→{cont.get('end_state')!r}）"
+                    "补标；大表情(大)须配首尾双帧 need_endframe=true。",
+                    return_to_stage="script_stage2")
+            elif span not in EXPRESSION_SPAN_VALUES:
+                add(BLOCK, "表情一致性", loc,
+                    f"continuity.expression_span={span!r} 非法；必须是 {'/'.join(EXPRESSION_SPAN_VALUES)} 之一。",
+                    return_to_stage="script_stage2")
         if i < len(clips) and cont.get("need_endframe") is not True:
-            if not cont.get("endframe_exempt_reason"):
+            exempt = cont.get("endframe_exempt_reason")
+            if not exempt:
                 add(BLOCK, "尾帧", loc, "非最终 Clip 默认必须 need_endframe=true；若豁免需填写 endframe_exempt_reason")
+            elif len(str(exempt).strip()) < 6:
+                add(BLOCK, "尾帧", loc,
+                    f"endframe_exempt_reason 过短（{str(exempt).strip()!r}）——豁免首尾双帧必须写明实质理由"
+                    "（如「极短镜<3s 无表情变化」），不接受占位/单字。")
         if cont.get("need_endframe") is True:
             end_png = cont.get("endframe_png")
             if not end_png:
@@ -1680,6 +1703,55 @@ def check_cross_episode_style(root: str, ep: str) -> None:
             return_to_stage="script_stage2")
 
 
+def check_cross_episode_character_definition(root: str, ep: str) -> None:
+    """跨集「角色文字定义」漂移信号（advisory·WARN）：本集是否在悄悄重新派生角色而非复用定妆锚。
+
+    identity_registry 是跨集共享的单一真值源（一部一份），但**每集的出图总览/prompt 文字**是手/AI
+    现写的，可能把已建卡角色重描成与锚定相矛盾的样子（换发色/换装/换配饰）——这类文字漂移在出图前
+    此前零机检（只有渲染后人脸 embedding 可能抓到，且发型/服装人脸检测看不见）。
+
+    本检查保守取信号、不误伤：对 registry 里每个有 `forms[].anchor_phrase`（锚定相）的角色，若其名字/别名
+    或 CHAR_id 在本集出图总览里**被引用**，却**一个锚定相描述符都没出现**（凤眼薄唇/乌黑.../月白粗布旧宫装…
+    按 `·` 切的 token 全缺）→ WARN：可能跨集重新派生，请核对发型/瞳色/服装/配饰与定妆库一致。只要总览引用了
+    锚定相里任一描述符即放行（低误报）。纯 WARN 不 BLOCK——文字矛盾判定本身模糊，先把"零信号"补成"有信号"。
+    """
+    data = load_json(identity_registry_path(root))
+    if not isinstance(data, dict):
+        return  # 定妆库未建（如出图前早期）——跳过
+    chars = data.get("characters")
+    if isinstance(chars, dict):
+        chars = list(chars.values())
+    if not isinstance(chars, list) or not chars:
+        return
+    overview_path = os.path.join(root, _ce_overview_rel(ep))
+    if not os.path.isfile(overview_path):
+        return  # 本集出图总览未生成——跳过，不误报
+    try:
+        overview = open(overview_path, encoding="utf-8").read()
+    except OSError:
+        return
+    for c in chars:
+        if not isinstance(c, dict):
+            continue
+        cid = str(c.get("id") or "").strip()
+        names = [n.strip() for n in str(c.get("name") or "").replace("／", "/").split("/") if n.strip()]
+        referenced = (cid and cid in overview) or any(n in overview for n in names)
+        if not referenced:
+            continue
+        forms = c.get("forms") if isinstance(c.get("forms"), list) else []
+        anchor = str((forms[0] if forms else {}).get("anchor_phrase") or "").strip()
+        if not anchor:
+            continue  # 无锚定相可比
+        tokens = [t.strip() for t in anchor.replace("，", "·").replace(",", "·").split("·") if len(t.strip()) >= 2]
+        if tokens and not any(t in overview for t in tokens):
+            label = names[0] if names else cid
+            add(WARN, "跨集角色定义", overview_path,
+                f"本集出图总览引用了角色「{label}」({cid})，却未出现其 identity_registry 锚定相任一描述符"
+                f"（{anchor}）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，"
+                "并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+                return_to_stage="image")
+
+
 def check_cross_episode_contract(root: str, ep: str) -> None:
     """跨集视觉契约方向反转（advisory·WARN）：同一地点跨集光位左右/轴线走向翻 = 越轴/光跳穿帮。
 
@@ -1695,9 +1767,18 @@ def check_cross_episode_contract(root: str, ep: str) -> None:
     prev_ep = _ce_prior_episode(root, ep)
     if not prev_ep:
         return  # 首集无前集可比
+    # 乱序/跳集生产：prior_episode 取的是"最近一个有出图总览的前集"，可能跨过缺总览的中间集。
+    # 跨过缺口的对比会让"已覆盖"悄悄变成"跨集没逐集比过"——留个 WARN 信号，别静默跳。
+    cur_n = _ce_episode_number(ep)
+    prev_n = _ce_episode_number(prev_ep)
+    if cur_n is not None and prev_n is not None and prev_n < cur_n - 1:
+        add(WARN, "跨集契约", cur_path,
+            f"跨集视觉契约对比跨过了缺失的中间集：本集（{ep}）只与 {prev_ep} 比对，"
+            f"第 {prev_n + 1}–{cur_n - 1} 集 的出图总览缺失、未参与逐集核对。"
+            "按集顺序补齐中间集总览后再核对跨集光位/轴线一致性。")
     prev_path = os.path.join(root, _ce_overview_rel(prev_ep))
     if not os.path.isfile(prev_path):
-        return
+        return  # 防御：prior_episode 已保证存在
     try:
         prev_text = open(prev_path, encoding="utf-8").read()
         cur_text = open(cur_path, encoding="utf-8").read()
@@ -1719,9 +1800,20 @@ def _clip_blob(clip: dict) -> str:
 
 
 def _first_template_keyword_hit(blob: str) -> Optional[str]:
+    low = blob.lower()
     for template_id, words in SPECIAL_SHOT_KEYWORDS:
-        if any(w in blob for w in words):
-            return template_id
+        for word in words:
+            token = str(word).strip()
+            if not token:
+                continue
+            low_token = token.lower()
+            # Short ASCII triggers such as "ots" must not fire inside schema
+            # keys like "shots"; CJK triggers still use substring matching.
+            if low_token.isascii() and re.fullmatch(r"[a-z0-9_+-]+", low_token):
+                if re.search(rf"(?<![a-z0-9]){re.escape(low_token)}(?![a-z0-9])", low):
+                    return template_id
+            elif token in blob:
+                return template_id
     return None
 
 
@@ -2013,13 +2105,24 @@ def _validate_character_asset_bundle(root: str, char: dict, loc: str) -> None:
             "manifest.truth_sources 必须指回 identity_registry；资产包不得成为第二真值。")
 
 
+def _identity_reference_item_path(item: object) -> str:
+    """Return a reference path from legacy string or structured dict form."""
+    if isinstance(item, str):
+        return item.strip()
+    if isinstance(item, dict):
+        return str(item.get("path") or "").strip()
+    return ""
+
+
 def _identity_expression_path(expr: object) -> str:
     """Return an expression reference path from legacy string or structured dict form."""
-    if isinstance(expr, str):
-        return expr.strip()
-    if isinstance(expr, dict):
-        return str(expr.get("path") or "").strip()
-    return ""
+    return _identity_reference_item_path(expr)
+
+
+def _identity_reference_list_paths(value: object) -> List[str]:
+    if isinstance(value, list):
+        return [_identity_reference_item_path(item) for item in value]
+    return []
 
 
 def _validate_reference_atlas(form: dict, floc: str, strict_references: bool,
@@ -2047,11 +2150,15 @@ def _validate_reference_atlas(form: dict, floc: str, strict_references: bool,
         if missing_views and strict_references:
             add(BLOCK, "资产身份注册层", floc,
                 "reference_atlas.base_views 缺基础视角：" + ", ".join(missing_views))
+    face_anchor_refs = atlas.get("face_anchor_refs")
     expression_refs = atlas.get("expression_refs")
-    if not isinstance(expression_refs, list) or not expression_refs:
+    has_face_anchor_refs = isinstance(face_anchor_refs, list) and any(_identity_reference_item_path(item) for item in face_anchor_refs)
+    has_expression_refs = isinstance(expression_refs, list) and any(_identity_reference_item_path(item) for item in expression_refs)
+    if not has_face_anchor_refs and not has_expression_refs:
         if strict_references:
             add(BLOCK, "资产身份注册层", floc,
-                "reference_atlas.expression_refs 至少登记一个同源脸部特写/表情参考；功能角色也不能只靠正脸硬扛近景。")
+                "reference_atlas 至少登记一个同源脸部特写/表情参考（face_anchor_refs 或 expression_refs）；"
+                "功能角色也不能只靠正脸硬扛近景。")
 
 
 def _identity_reference_exists(root: str, rel: str) -> bool:
@@ -2155,14 +2262,30 @@ def check_identity_registry(
                                 "服饰/形态变体必须独立定妆，禁止复用其它服饰形态参考")
                         if require_reference_assets and strict_references and not _identity_reference_exists(root, rel):
                             add(BLOCK, "资产身份注册层", os.path.join(root, rel) if not os.path.isabs(rel) else rel, f"reference_group.{key} 路径不存在")
+                face_anchor_refs = reference_group.get("face_anchor_refs", [])
                 expressions = reference_group.get("expressions", [])
+                if face_anchor_refs is not None and not isinstance(face_anchor_refs, list):
+                    add(BLOCK, "资产身份注册层", floc, "reference_group.face_anchor_refs 必须是列表")
+                    face_anchor_refs = []
                 if expressions is not None and not isinstance(expressions, list):
                     add(BLOCK, "资产身份注册层", floc, "reference_group.expressions 必须是列表")
                     expressions = []
-                if not restricted_partial and strict_references and not expressions:
+                face_anchor_paths = [p for p in _identity_reference_list_paths(face_anchor_refs) if p]
+                expression_paths = [p for p in _identity_reference_list_paths(expressions) if p]
+                if not restricted_partial and strict_references and not (face_anchor_paths or expression_paths):
                     add(BLOCK, "资产身份注册层", floc,
-                        "reference_group.expressions 至少需要一个同源脸部特写/表情参考；"
-                        "所有人物（含短线/功能角色）都按主角基础定妆包标准执行。")
+                        "reference_group 至少需要一个同源脸部特写/表情参考：优先写 face_anchor_refs，"
+                        "也兼容 expressions；所有人物（含短线/功能角色）都按主角基础定妆包标准执行。")
+                for face_ref in face_anchor_refs or []:
+                    rel = _identity_reference_item_path(face_ref)
+                    if not rel:
+                        add(BLOCK, "资产身份注册层", floc,
+                            "reference_group.face_anchor_refs 存在空路径；可用字符串路径或 {label/emotion, path} 对象")
+                        continue
+                    if require_reference_assets and strict_references and not _identity_reference_exists(root, rel):
+                        add(BLOCK, "资产身份注册层", os.path.join(root, rel) if not os.path.isabs(rel) else rel, "reference_group.face_anchor_refs 路径不存在")
+                    if asset_key and asset_key not in os.path.basename(rel):
+                        add(BLOCK, "资产身份注册层", floc, f"reference_group.face_anchor_refs 跨角色/形态污染：{rel} 不属于 asset_key={asset_key}")
                 for expr in expressions or []:
                     rel = _identity_expression_path(expr)
                     if not rel:
@@ -3644,12 +3767,14 @@ def _needs_prop_asset_binding(refs: str) -> bool:
 
 
 def _has_standard_character_turnaround(section: str) -> bool:
-    """角色定妆必须具备标准正/侧/背三视图口径。"""
+    """角色定妆基础包：正/侧/背 + 服装参考 + 脸锚 + 人审拼版。"""
     has_front = _has_any(section, ("正面", "正脸", "主参考", "定妆_<角色>.png"))
     has_side = _has_any(section, ("_侧", "侧面", "侧脸"))
     has_back = _has_any(section, ("_背", "背面", "背身"))
+    has_outfit = _has_any(section, ("_半身", "_全身", "半身服装", "全身服装", "服装参考", "体态参考"))
+    has_face_anchor = _has_any(section, ("脸部特写", "面部特写", "face_anchor_refs", "基础脸部参考", "表情参考", "同源表情", "表情_"))
     has_board = _has_any(section, ("_三视图", "标准三视图", "正/侧/背", "正面 / 侧面 / 背面"))
-    return has_front and has_side and has_back and has_board
+    return has_front and has_side and has_back and has_outfit and has_face_anchor and has_board
 
 
 def _is_restricted_partial_prompt_section(section: str) -> bool:
@@ -4065,7 +4190,10 @@ def check_common_image_prompts(root: str) -> None:
                     if "角色定妆组" not in sec:
                         add(BLOCK, "角色一致性", loc, "角色定妆缺定妆组说明；人物角色不能只靠单张正脸")
                     if not _has_standard_character_turnaround(sec):
-                        add(BLOCK, "角色三视图", loc, "人物定妆必须是标准三视图：正面主参考 + 侧面参考 + 背面参考 + `定妆_<角色>_三视图.png` 人审拼版；不得只出正脸/半身或把背面按需省略")
+                        add(BLOCK, "角色定妆基础包", loc,
+                            "人物定妆基础包必须写齐：正面主参考 + 侧面参考 + 背面参考 + 半身/全身服装参考 + "
+                            "脸部特写/同源表情参考 + `定妆_<角色>_三视图.png` 人审拼版。"
+                            "45°、完整表情组、动作参考、主体库/LoRA 是风险升档项，不替代基础包。")
                 if _uses_halfbody_outfit_ref(sec) and not _has_halfbody_crop_rule(sec):
                     add(BLOCK, "服装参考", loc, "半身服装参考必须写明：`定妆_<角色>_半身.png` 从已通过自检的正面主参考裁切并放大/重采样回 9:16；人物主体居中、头身中线接近画面中线、左右留白基本均衡；不得新抽半身导致脸漂，也不得用白底/浅灰底/空白补下半截")
                 if "锚点" not in sec:
@@ -4911,12 +5039,16 @@ def check_subtitle_alignment(root: str, ep: str) -> None:
     )
 
 
-def check_consistency_audit_gate(root: str, ep: str) -> None:
+def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> None:
     """Final consistency suite gate.
 
     The detector bundle is useful only if it is on a mandatory path.  Run the
     full audit before compose/review and mirror active findings into gate output;
     the complete report remains in 生产数据/consistency_findings_<ep>.json.
+
+    `stage` gates how降级精度 is treated: at final `review` a non-full precision
+    (insightface 缺失→脸/像素一致性其实没验证) is a BLOCK unless explicitly waived
+    via `N2D_ALLOW_DEGRADED_QC=1`; at `compose` it stays a WARN (still in-flight).
     """
     script = os.path.join(SCRIPT_DIR, "consistency_audit.py")
     loc = os.path.join(root, "生产数据", f"consistency_findings_{ep}.json")
@@ -4950,16 +5082,30 @@ def check_consistency_audit_gate(root: str, ep: str) -> None:
     summary = res.get("summary") if isinstance(res.get("summary"), dict) else {}
     precision = str(summary.get("precision_level") or "full")
     if precision != "full":
-        add(
-            WARN,
-            "一致性总审",
-            loc,
-            f"一致性审计精度为 {precision}；机检通过不等于脸部/像素一致性已完整验证，正式定稿前应在 full 环境复跑。",
-            return_to_stage="review",
-        )
+        # 终验(review)：降级精度=脸/像素一致性其实没机检过——不给绿灯，除非显式放行并留痕。
+        allow_degraded = os.environ.get("N2D_ALLOW_DEGRADED_QC") == "1"
+        if stage == "review" and not allow_degraded:
+            add(
+                BLOCK,
+                "一致性总审",
+                loc,
+                f"一致性审计精度为 {precision}（insightface 等不可用，脸/像素一致性未真正验证）；"
+                "终验不放行——请在 full 环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 放行并自负其责。",
+                return_to_stage="review",
+            )
+        else:
+            note = "（已显式 N2D_ALLOW_DEGRADED_QC 放行）" if (stage == "review" and allow_degraded) else ""
+            add(
+                WARN,
+                "一致性总审",
+                loc,
+                f"一致性审计精度为 {precision}；机检通过不等于脸部/像素一致性已完整验证，正式定稿前应在 full 环境复跑。{note}",
+                return_to_stage="review",
+            )
 
     block_count = 0
     mapped_warns = 0
+    skipped_warns = 0
     for row in res.get("findings", []) or []:
         if not isinstance(row, dict):
             continue
@@ -4968,6 +5114,7 @@ def check_consistency_audit_gate(root: str, ep: str) -> None:
             continue
         if sev == WARN:
             if mapped_warns >= 12:
+                skipped_warns += 1  # 不静默丢——循环后出一条 rollup，避免"12 条已处理"的错觉
                 continue
             mapped_warns += 1
         else:
@@ -4985,6 +5132,16 @@ def check_consistency_audit_gate(root: str, ep: str) -> None:
             rerun_scope=row.get("rerun_scope") or "按 consistency_findings 报告回源头修复对应一致性维度。",
             affected_shots=shots,
             affected_artifacts=artifacts or [os.path.relpath(loc, root)],
+        )
+
+    if skipped_warns:
+        add(
+            WARN,
+            "一致性总审",
+            loc,
+            f"另有 {skipped_warns} 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 "
+            f"生产数据/consistency_findings_{ep}.json，勿当作已全部处理。",
+            return_to_stage="review",
         )
 
     if proc.returncode != 0 and not block_count:
@@ -5016,8 +5173,11 @@ def run(root: str, ep: str, stage: str) -> None:
         check_voice_cross_episode(root, ep)
         check_image_ai_policy(root, ep)
         check_backend_reachable(root, ep)
+        # 已测得的跨集脸/资产漂移 BLOCK 不分预检/出图后——整个 image family 都跑，避免直接 `--stage image`
+        # 跳过预检时上一集已漂移的角色蒙混过出图后 gate。
+        check_drift_risk_advisories(root, ep)
+        check_cross_episode_character_definition(root, ep)  # 跨集角色文字定义漂移（重派生）信号
         if stage == "image_preflight":
-            check_drift_risk_advisories(root, ep)  # 出图前预案折进预检：一个入口拿齐阻断+预案
             check_reference_plan_applied(root, ep)  # 逐镜参考规划落实对账（advisory·治跨集脸漂）
         check_identity_registry(root, require_reference_assets=False)
         check_costume_registry_reconcile(root)
@@ -5049,6 +5209,9 @@ def run(root: str, ep: str, stage: str) -> None:
         check_progress_artifact_signoff(root, ep, video_prereq)
         check_placeholder_policy(root, ep, check_stage)
         check_voiceover_fingerprint(root, ep)
+        # 一角一色跨集契约：video 阶段也再校一次（出图→出视频之间若改了 voicemap/补配音）。
+        check_timing_manifest_complete(root, ep)
+        check_voice_cross_episode(root, ep)
         referenced_characters, referenced_assets = episode_registry_reference_ids(root, ep)
         check_identity_registry(root, require_reference_assets=True, required_character_ids=referenced_characters)
         check_asset_reference_registry(root, require_reference_assets=True, required_asset_ids=referenced_assets)
@@ -5073,6 +5236,10 @@ def run(root: str, ep: str, stage: str) -> None:
         check_compliance_manifest(root, ep, check_stage)
         require_progress(root, ep, ("视频",))
         check_progress_artifact_signoff(root, ep, ("视频",))
+        # 一角一色跨集契约在出图后若被改 voicemap/补配音会失效——compose 终装前再校一次，
+        # 不让出图后编辑悄悄绕过跨集换声 BLOCK。（原仅在 image 阶段校验，是上次审计的遗留 gap）
+        check_timing_manifest_complete(root, ep)
+        check_voice_cross_episode(root, ep)
         referenced_characters, referenced_assets = episode_registry_reference_ids(root, ep)
         check_identity_registry(root, require_reference_assets=True, required_character_ids=referenced_characters)
         check_asset_reference_registry(root, require_reference_assets=True, required_asset_ids=referenced_assets)
@@ -5085,7 +5252,7 @@ def run(root: str, ep: str, stage: str) -> None:
         if sb:
             check_voice_conditioned_lipsync_policy(root, ep, sb)
         check_compose_inputs(root, ep)
-        check_consistency_audit_gate(root, ep)
+        check_consistency_audit_gate(root, ep, stage="compose")
     elif check_stage == "review":
         check_compliance_manifest(root, ep, check_stage)
         referenced_characters, referenced_assets = episode_registry_reference_ids(root, ep)
@@ -5099,7 +5266,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_state_continuity(root, ep)
         check_multimodal_continuity(root, ep)
         check_subtitle_alignment(root, ep)
-        check_consistency_audit_gate(root, ep)
+        check_consistency_audit_gate(root, ep, stage="review")
     else:
         add(BLOCK, "参数", stage, "未知 stage")
 

@@ -566,15 +566,18 @@ def _has_unnegated_text2img(text: str) -> bool:
     return False
 
 
-# 近景大表情表情库 gate（④ 治表情镜脸漂）：近景/特写/反打 + 强情绪的角色镜，若 prompt
-# 未引用同源『表情库 expressions / 脸部特写』参考，AI 会为大表情重画整张脸 → 表情镜脸漂。
+# 近景大表情脸锚 gate（④ 治表情镜脸漂）：近景/特写/反打 + 强情绪的角色镜，若 prompt
+# 未引用同源『基础脸锚 face_anchor_refs / 表情库 expressions / 脸部特写』参考，AI 会为大表情重画整张脸 → 表情镜脸漂。
 # 2026-06：基础定妆包不再按主配角放松；所有人物近景大表情都 hard block，角色体量只影响 LoRA/主体库升档。
 STRONG_EMOTION_MARKERS = (
     "哭", "泣", "落泪", "含泪", "泪", "怒", "愤", "暴怒", "狂怒", "震惊", "惊恐", "恐惧",
     "狂喜", "大笑", "狂笑", "嘶吼", "咆哮", "嚎", "痛苦", "崩溃", "狰狞", "扭曲", "癫狂",
     "失控", "绝望", "悲恸", "惊愕", "狂怒",
 )
-EXPRESSION_LIB_MARKERS = ("表情库", "expressions", "脸部特写", "表情_", "_表情", "情绪库", "微表情参考")
+EXPRESSION_LIB_MARKERS = (
+    "face_anchor_refs", "基础脸锚", "脸部特写",
+    "表情库", "expressions", "表情_", "_表情", "情绪库", "微表情参考",
+)
 # 近景识别：仅认中文近景词 + 作为整 token 的英文景别码，避免 "CU" 子串误命中正文。
 _CLOSEUP_LINT_RE = re.compile(r"特写|近景|反打|过肩|ECU|BCU|MCU|(?<![A-Za-z])CU(?![A-Za-z])")
 
@@ -601,14 +604,15 @@ def core_char_ids(registry_forms: Optional[Sequence[Mapping[str, Any]]]) -> Set[
 def _lint_closeup_expression_lib(label: str, body: str,
                                  id_refs: Optional[Sequence[str]] = None,
                                  core_ids: Optional[Set[str]] = None) -> List[Dict[str, str]]:
-    """近景大表情表情库 gate（仅角色镜调用）：近景/特写/反打 + 强情绪角色镜须引用同源表情库/脸部特写参考，
+    """近景大表情脸锚 gate（仅角色镜调用）：近景/特写/反打 + 强情绪角色镜须引用同源基础脸锚/表情库/脸部特写参考，
     否则大表情让 AI 自由重画整张脸 → 表情镜脸漂。纯函数·可测。
 
     ④ 分档更新：所有人物 → **block**。核心/长线只决定是否升 LoRA/原生主体 ID，不决定基础表情参考是否可省。"""
     text = str(body or "")
     if not _CLOSEUP_LINT_RE.search(text):
         return []
-    if not _has_strong_emotion(text):
+    # 只在正向段扫强情绪：负向 prompt 里 ban 哭/崩溃 不是要画大表情，扫全文会误判硬拦（同 _lint_outfit_form_binding）。
+    if not _has_strong_emotion(_positive_prompt_text(text)):
         return []
     if _references_expression_lib(text):
         return []
@@ -616,7 +620,7 @@ def _lint_closeup_expression_lib(label: str, body: str,
     hit_core = sorted(refs & set(core_ids or set()))
     scope_hint = f"（命中核心/长线：{'、'.join(hit_core)}）" if hit_core else ""
     return [{"level": "block", "code": "no_expression_lib_ref",
-             "msg": f"{label}：近景/特写大表情角色镜{scope_hint}未引用『表情库 expressions / 脸部特写参考』"
+             "msg": f"{label}：近景/特写大表情角色镜{scope_hint}未引用『基础脸锚 face_anchor_refs / 表情库 expressions / 脸部特写参考』"
                     "——大表情让 AI 重画整张脸=脸漂高发；所有人物（含短线/功能角色）都必须先建同源表情库"
                     "或脸部特写参考，并在本镜引用，首尾双帧只插值。"}]
 
@@ -906,13 +910,32 @@ def run_pixel_checks(root: Path, ep: str) -> Dict[str, Any]:
     tc = _load_review_module("temporal_consistency")
     if tc is not None:
         try:
-            checks["seam"] = tc.seam_analyze(r, ep)
+            checks["seam"] = _normalize_seam_availability(tc.seam_analyze(r, ep), r, ep)
         except Exception as exc:
             checks["seam"] = {"available": False, "notes": [f"temporal_consistency.seam_analyze 失败：{exc}"]}
     else:
         checks["seam"] = {"available": False, "notes": ["temporal_consistency 不可用——接缝机检跳过。"]}
 
     return checks
+
+
+def _seam_image_dir_has_pngs(root: str, ep: str) -> bool:
+    """seam_analyze 读 出图/<ep>/图片/*.png；目录缺失或无 PNG = 接缝 0 覆盖。"""
+    d = Path(root) / "出图" / ep / "图片"
+    try:
+        return d.is_dir() and any(d.glob("*.png"))
+    except OSError:
+        return False
+
+
+def _normalize_seam_availability(res: Dict[str, Any], root: str, ep: str) -> Dict[str, Any]:
+    """seam_analyze 在缺/空 图片目录时只回 {"seams":[], "notes":[...]} 无 available 键，
+    HARD 路径会把"零覆盖"误判成 ok。这里补 available：有真实 PNG 可比对才 True，否则 False（=未验，走 review）。
+    seam_analyze 自己已置 available（如失败/缺依赖）时尊重原值不覆盖。"""
+    if not isinstance(res, dict) or res.get("available") is not None:
+        return res if isinstance(res, dict) else {"available": False, "notes": ["seam_analyze 返回非 dict——接缝机检跳过。"]}
+    res["available"] = _seam_image_dir_has_pngs(root, ep)
+    return res
 
 
 # ── 汇总 ───────────────────────────────────────────────────────────────────────
@@ -1596,8 +1619,11 @@ def prohibited_face_patch_outputs(root: Path, ep: str) -> Dict[str, Any]:
     }
 
 
-def summarize(payload: Dict[str, Any]) -> Dict[str, Any]:
-    """汇总各项机检 + lint，区分 hard（必须修）与 advisory（非阻断初筛）。"""
+def summarize(payload: Dict[str, Any], *, strict_pixel: bool = False) -> Dict[str, Any]:
+    """汇总各项机检 + lint，区分 hard（必须修）与 advisory（非阻断初筛）。
+
+    strict_pixel（默认 off，保留现行宽松判定）：把任何像素机检的 block 升为 hard
+    （服装换装/场景换景/道具特效漂移=真硬伤而非初筛噪声）→ verdict=block。"""
     hard = advisory = 0
     rows_by_check: Dict[str, Dict[str, int]] = {}
     for key, shots_key in (("face", "shots"), ("hair", "shots"), ("outfit", "shots"),
@@ -1605,7 +1631,7 @@ def summarize(payload: Dict[str, Any]) -> Dict[str, Any]:
         res = payload.get("checks", {}).get(key) or {}
         cnt = count_verdicts(res.get(shots_key) or [])
         rows_by_check[key] = cnt
-        if key in HARD_CHECKS:
+        if key in HARD_CHECKS or strict_pixel:
             hard += cnt["block"]
             advisory += cnt["warn"]
         else:
@@ -2082,7 +2108,7 @@ def cross_episode_face_drift(root: Path, ep: str, payload: Mapping[str, Any]) ->
     return {"available": True, "entries": entries, "history_chars": len(chars_hist)}
 
 
-def run_qc(root: Path, ep: str, with_pixel: bool = True) -> Dict[str, Any]:
+def run_qc(root: Path, ep: str, with_pixel: bool = True, strict_pixel: bool = False) -> Dict[str, Any]:
     payload: Dict[str, Any] = {
         "kind": "n2d_image_qc", "version": 1, "root": str(root), "episode": ep,
         "checks": {}, "lint": {},
@@ -2113,7 +2139,7 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True) -> Dict[str, Any]:
     payload["cross_episode_face_drift"] = cross_episode_face_drift(root, ep, payload)
     payload["prohibited_face_patch"] = prohibited_face_patch_outputs(root, ep)
     payload["state_ledger"] = audit_state_ledger(root, ep)
-    payload["summary"] = summarize(payload)
+    payload["summary"] = summarize(payload, strict_pixel=strict_pixel)
     payload["qc_environment"] = qc_environment(payload, with_pixel=with_pixel)
     payload = json_safe(payload)
     out_dir = production_dir(root) / "image_qc" / ep
@@ -2477,6 +2503,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     help="打印 regen 镜的 `--affected-shot Clip_NN ...` 串（直接喂 n2d-batch；无则空）")
     ap.add_argument("--strict", action="store_true",
                     help="严审刷新：block/warn/降级命中都进入候选重出清单，供 n2d-update 使用")
+    ap.add_argument("--strict-pixel", action="store_true",
+                    help="把像素机检 block（服装换装/场景换景/道具特效漂移）升为 hard → verdict=block（默认 off 保留宽松判定）")
     ns = ap.parse_args(argv)
     root = Path(ns.root).expanduser().resolve()
     if ns.mark_finalized:
@@ -2493,7 +2521,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         return 0 if r.get("ok") else 1
     if not ns.episode:
         ap.error("episode 必填（除非用 --mark-finalized / --pin-anchor / --finalize-expr 写 registry）")
-    payload = run_qc(root, ns.episode, with_pixel=not ns.no_pixel)
+    payload = run_qc(root, ns.episode, with_pixel=not ns.no_pixel, strict_pixel=ns.strict_pixel)
     regen = to_strict_regen_list(payload) if ns.strict else to_regen_list(payload)
     if ns.affected_shots:
         print(" ".join(f"--affected-shot {s['shot']}" for s in regen))

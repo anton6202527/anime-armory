@@ -49,6 +49,7 @@ from n2d_contract import (  # noqa: E402  生产数据目录 / kind 单一真值
 from n2d_route import (  # noqa: E402
     episode_number as route_episode_number,
     is_done,
+    is_progress_satisfied,
     normalize_episode as route_normalize_episode,
     parse_progress,
     stage_of,

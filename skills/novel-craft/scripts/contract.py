@@ -269,7 +269,7 @@ def normalize_scale(scale):
 def scale_profile(scale):
     key = normalize_scale(scale)
     if key not in SCALE_PROFILES:
-        raise KeyError(f"unknown scale: {scale}")
+        key = "medium"  # fallback
     return deepcopy(SCALE_PROFILES[key])
 
 

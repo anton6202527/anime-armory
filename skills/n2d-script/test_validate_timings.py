@@ -12,6 +12,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # Importing the module triggers its own sys.path.insert for ../common.
 import validate_timings as V  # noqa: E402
+import validate_storyboard_contract as VC  # noqa: E402
 
 
 _SRT = (
@@ -122,3 +123,68 @@ def test_native_av_missing_shots_file_fails(tmp_path):
     shots_p = os.path.join(root, "脚本", ep, "镜头时长.json")  # not created
     rc = V._validate_native_av(root, ep, shots_p, 0.5)
     assert rc == 1
+
+
+# ── target-duration deviation WARN (Fix 2) ──
+def test_target_deviation_warn_none_without_target():
+    # 不给 target → 无新行为（向后兼容）
+    assert V.target_deviation_warn(90.0, None) is None
+    assert V.target_deviation_warn(90.0, 0) is None
+
+
+def test_target_deviation_warn_within_tolerance():
+    # 偏离在 15% 内 → 不 WARN
+    assert V.target_deviation_warn(95.0, 90.0) is None  # ~5.6%
+
+
+def test_target_deviation_warn_too_short():
+    # ∑镜头时长 远短于目标 → WARN（偏短）
+    msg = V.target_deviation_warn(50.0, 90.0)  # ~44% short
+    assert msg is not None and "偏短" in msg and "目标时长" in msg
+
+
+def test_target_deviation_warn_too_long():
+    msg = V.target_deviation_warn(130.0, 90.0)  # ~44% long
+    assert msg is not None and "偏长" in msg
+
+
+# ── storyboard contract blocks clip with missing duration (Fix 1a) ──
+def _write_storyboard(root, ep, clips):
+    sdir = os.path.join(root, "脚本", ep)
+    os.makedirs(sdir, exist_ok=True)
+    data = {
+        "visual_contract": {f: "x" for f in VC.VISUAL_CONTRACT_FIELDS},
+        "style_contract": {f: "x" for f in VC.STYLE_CONTRACT_FIELDS},
+        "clips": clips,
+    }
+    json.dump(data, open(os.path.join(sdir, "storyboard.json"), "w", encoding="utf-8"),
+              ensure_ascii=False)
+
+
+def test_contract_blocks_clip_missing_duration(tmp_path):
+    root, ep = str(tmp_path), "第1集"
+    _write_storyboard(root, ep, [
+        {"id": "EP01_CLIP01", "duration": 7, "continuity": {
+            "start_state": "a", "end_state": "b", "transition": "cut",
+            "need_endframe": False, "midframe_exempt_reason": "x"}},
+        {"id": "EP01_CLIP02", "continuity": {  # 缺 duration
+            "start_state": "a", "end_state": "b", "transition": "cut",
+            "need_endframe": False, "midframe_exempt_reason": "x"}},
+    ])
+    res = VC.validate(root, ep)
+    dur_blocks = [r for r in res["findings"]
+                  if r["dimension"] == "镜头时长" and r["severity"] == "block"]
+    assert len(dur_blocks) == 1
+    assert "EP01_CLIP02" in dur_blocks[0]["loc"]
+    assert res["ok"] is False
+
+
+def test_contract_allows_clip_with_duration(tmp_path):
+    root, ep = str(tmp_path), "第1集"
+    _write_storyboard(root, ep, [
+        {"id": "EP01_CLIP01", "duration": 7, "continuity": {
+            "start_state": "a", "end_state": "b", "transition": "cut",
+            "need_endframe": False, "midframe_exempt_reason": "x"}},
+    ])
+    res = VC.validate(root, ep)
+    assert not [r for r in res["findings"] if r["dimension"] == "镜头时长"]

@@ -2,10 +2,13 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import sys
 from pathlib import Path
 
 
 QUEUE_SCRIPT = Path(__file__).with_name("queue.py")
+SCRIPT_DIR = QUEUE_SCRIPT.resolve().parent
+sys.path = [p for p in sys.path if Path(p or ".").resolve() != SCRIPT_DIR]
 queue_spec = importlib.util.spec_from_file_location("n2d_batch_queue", QUEUE_SCRIPT)
 queue = importlib.util.module_from_spec(queue_spec)
 assert queue_spec.loader is not None

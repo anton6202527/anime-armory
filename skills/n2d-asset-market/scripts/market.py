@@ -89,6 +89,10 @@ def with_registry_lock(fn):
         root = getattr(args, "project_root", None)
         if not root:
             return fn(args)
+        # Import commands can target a brand-new project root.  Create the lock
+        # directory before opening `.registry.lock`, otherwise the first import
+        # fails before it can create identity/asset registries.
+        Path(root).mkdir(parents=True, exist_ok=True)
         with file_lock(registry_lock_path(str(root))):
             return fn(args)
     _wrapped.__name__ = getattr(fn, "__name__", "wrapped")

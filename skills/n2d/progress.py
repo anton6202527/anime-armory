@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # n2d 确定性路由 + 进度回写：读/写 <作品根>/_进度.md
 # 用法:
-#   python3 progress.py <作品根>                    # 全局：最小未完成集 + 各阶段卡集数
+#   python3 progress.py <作品根> [--refresh-identity] # 全局：最小未完成集 + 各阶段卡集数
 #   python3 progress.py <作品根> 第N集              # 查指定集所处阶段 + 推荐命令
 #   python3 progress.py set <作品根> 第N集 <列名> <值>   # 回写某列(✅ / ⬜ / ⏳rough / 12/19)，各 skill 收尾调用
 #   python3 progress.py ensure-col <作品根> <列名> [默认值] # 旧项目迁移：缺列则追加到「成片」前
@@ -143,7 +143,7 @@ def do_ensure_col(root, col, default='⬜'):
             print("未找到表头（| 集 | …）"); sys.exit(1)
         if col in header:
             print(f"✅ 列已存在：{col}"); return
-        preferred_before = {'视频prompt': '视频'}
+        preferred_before = {'视频prompt': '视频', '出图prompt': '出图'}
         before = preferred_before.get(col, '成片')
         insert_at = header.index(before) if before in header else (header.index('成片') if '成片' in header else len(header))
 
@@ -254,12 +254,19 @@ def main():
         if len(sys.argv) not in (3, 4) or (len(sys.argv) == 4 and sys.argv[3] != '--fix'):
             print("用法: progress.py audit-placeholders <作品根> [--fix]"); sys.exit(1)
         do_audit_placeholders(sys.argv[2], fix=len(sys.argv) == 4); return
-    root = sys.argv[1].rstrip('/'); only = sys.argv[2] if len(sys.argv) > 2 else None
+    args = sys.argv[1:]
+    refresh_identity = False
+    if "--refresh-identity" in args:
+        refresh_identity = True
+        args.remove("--refresh-identity")
+    if not args:
+        print("用法: progress.py <作品根> [第N集] [--refresh-identity]"); sys.exit(1)
+    root = args[0].rstrip('/'); only = args[1] if len(args) > 1 else None
     header, rows = parse(root)
     warn_contract_version(root)
     
-    # 自动执行横切前置任务
-    auto_update_identity_matrix(root)
+    if refresh_identity:
+        auto_update_identity_matrix(root)
 
     if only:
         r = next((x for x in rows if x['_ep'] == only), None)

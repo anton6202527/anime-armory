@@ -112,8 +112,10 @@ def _logical_cid(path: str) -> str:
     return match.group(1).lower() if match else name
 
 
-def build_plan(files: List[str], transitions: List[str], ctxs: List[str], fallback: str = "cut") -> Dict[str, Any]:
+def build_plan(files: List[str] | int, transitions: List[str], ctxs: List[str], fallback: str = "cut") -> Dict[str, Any]:
     """逐接缝判定。支持 _partN 拆段：子段间强制硬切，跨逻辑镜接缝查 storyboard。"""
+    if isinstance(files, int):
+        files = [f"Clip_{i + 1:02d}.mp4" for i in range(max(0, files))]
     n_files = len(files)
     warnings: List[str] = []
     seams: List[Dict[str, Any]] = []

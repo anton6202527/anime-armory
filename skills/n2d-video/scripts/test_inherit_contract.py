@@ -140,6 +140,32 @@ def test_state_progression_drift_blocks(tmp_path):
     assert state["status"] == "block_drift" and state["severity"] == "block"
 
 
+def test_state_progression_additive_leak_warns_not_passes(tmp_path):
+    # 角色状态演进：视频侧含出图侧原文但**追加**了提前金瞳预兆（superset 却早泄状态）
+    # → 不得 pass_superset，须 warn_drift 强制人工确认（exit 0 不拦，但醒目入账）
+    vid = VID_VERBATIM.replace(
+        "- 角色状态演进：沈念 Clip01-13 黑瞳常态；Clip14 起左腕疤裂暗金。",
+        "- 角色状态演进：沈念 Clip01-13 黑瞳常态；Clip14 起左腕疤裂暗金；Clip05 闪现金瞳预兆。")
+    root = _write_project(tmp_path, IMG_CONTRACT, vid)
+    assert ic.run(root, EP) == 0          # warn 不拦
+    rep = _report(root)
+    assert rep["verdict"] == "warn"
+    state = next(r for r in rep["fields"] if r["field"] == "角色状态演进")
+    assert state["status"] == "warn_drift" and state["severity"] == "warn"
+
+
+def test_light_anchor_additive_still_passes_superset(tmp_path):
+    # 对照：场景光位锚追加收紧约束（含原文）→ 仍 pass_superset（光位是收紧型超集，安全放行）
+    vid = VID_VERBATIM.replace(
+        "- 场景光位锚：冷宫寝殿=画左前 3000K 残烛暖主光；画右后冷月背光。",
+        "- 场景光位锚：冷宫寝殿=画左前 3000K 残烛暖主光；画右后冷月背光。运镜中烛光只许摇曳不许改向。")
+    root = _write_project(tmp_path, IMG_CONTRACT, vid)
+    assert ic.run(root, EP) == 0
+    rep = _report(root)
+    anchor = next(r for r in rep["fields"] if r["field"] == "场景光位锚")
+    assert anchor["status"] == "pass_superset" and anchor["severity"] == "pass"
+
+
 def test_upstream_missing_field_warns_not_blocks(tmp_path):
     # 出图侧本来就缺状态演进 → 提示但不拦（上游问题）；视频侧多写不构成 block
     img = "\n".join(ln for ln in IMG_CONTRACT.splitlines() if not ln.startswith("- 状态演进"))

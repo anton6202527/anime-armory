@@ -1324,7 +1324,30 @@ def test_identity_registry_missing_expression_reference_is_blocked(tmp_path):
     assert any(
         f["sev"] == gate.BLOCK
         and f["dim"] == "资产身份注册层"
-        and "reference_group.expressions 至少需要" in f["msg"]
+        and "reference_group 至少需要一个同源脸部特写/表情参考" in f["msg"]
+        for f in gate.findings
+    )
+
+
+def test_identity_registry_face_anchor_refs_satisfy_baseline_without_expression_library(tmp_path):
+    data = _identity_registry()
+    form = data["characters"][0]["forms"][0]
+    form["reference_group"]["face_anchor_refs"] = [
+        {"label": "基础脸锚", "path": "出图/共享/图片/定妆_沈念_脸部特写.png"}
+    ]
+    form["reference_group"]["expressions"] = []
+    form["reference_atlas"]["face_anchor_refs"] = [
+        {"label": "基础脸锚", "path": "出图/共享/图片/定妆_沈念_脸部特写.png", "status": "planned"}
+    ]
+    form["reference_atlas"]["expression_refs"] = []
+    root = _write_identity_registry(tmp_path, data)
+
+    gate.check_identity_registry(root, require_reference_assets=False)
+
+    assert not any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "资产身份注册层"
+        and "同源脸部特写/表情参考" in f["msg"]
         for f in gate.findings
     )
 
@@ -2168,7 +2191,12 @@ Character reference sheet.
 
     gate.check_common_image_prompts(str(root))
 
-    assert any(f["sev"] == gate.BLOCK and f["dim"] == "角色三视图" and "标准三视图" in f["msg"] for f in gate.findings)
+    assert any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "角色定妆基础包"
+        and "人物定妆基础包必须写齐" in f["msg"]
+        for f in gate.findings
+    )
 
 
 def test_role_makeup_prompt_allows_restricted_partial_without_three_view(tmp_path):
@@ -2211,7 +2239,7 @@ Queen restricted partial reference, well-kept hand, dark-red robe cuff, behind-c
     gate.check_common_image_prompts(str(root))
 
     assert not any(f["sev"] == gate.BLOCK and "缺正向 prompt" in f["msg"] for f in gate.findings)
-    assert not any(f["sev"] == gate.BLOCK and f["dim"] in {"角色三视图", "角色一致性"} for f in gate.findings)
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] in {"角色定妆基础包", "角色一致性"} for f in gate.findings)
 
 
 def test_role_makeup_prompt_requires_halfbody_crop_rule(tmp_path):
@@ -2229,6 +2257,7 @@ def test_role_makeup_prompt_requires_halfbody_crop_rule(tmp_path):
 - 侧面参考：`出图/共享/图片/定妆_沈念_侧.png`
 - 背面参考：`出图/共享/图片/定妆_沈念_背.png`
 - 服装参考：`出图/共享/图片/定妆_沈念_半身.png`
+- 脸部特写：`出图/共享/图片/定妆_沈念_脸部特写.png`
 - 人审拼版：`出图/共享/图片/定妆_沈念_三视图.png`
 - 锚点句：凤眼薄唇
 
@@ -2277,6 +2306,7 @@ def test_role_makeup_prompt_halfbody_crop_rule_passes(tmp_path):
 - 侧面参考：`出图/共享/图片/定妆_沈念_侧.png`
 - 背面参考：`出图/共享/图片/定妆_沈念_背.png`
 - 服装参考：`出图/共享/图片/定妆_沈念_半身.png`，从已通过自检的正面主参考裁切并放大/重采样回 9:16；人物主体居中、头身中线接近画面中线、左右留白基本均衡；不得用白底/浅灰底/空白补满下半截
+- 脸部特写：`出图/共享/图片/定妆_沈念_脸部特写.png`
 - 人审拼版：`出图/共享/图片/定妆_沈念_三视图.png`
 - 锚点句：凤眼薄唇
 
@@ -4372,3 +4402,210 @@ def test_derived_form_with_anchor_i2i_derivation_passes(tmp_path):
     sec_ok = ("## 沈念/红衣觉醒态\n目标存档: 定妆_沈念_红衣觉醒态.png\n"
               "生成方式: 以 定妆_沈念_常态 正脸为母图做 image2image 派生，只升级服装与气场")
     assert gate._declares_evolution_derivation(sec_ok, "常态") is True
+
+
+# ════════ 一致性审查加固回归（#1/#2/#3 + M4/M5 + L6/L7/L8 + voice 接线）════════
+import inspect as _inspect
+
+
+class _FakeProc:
+    def __init__(self, stdout, returncode=0, stderr=""):
+        self.stdout, self.returncode, self.stderr = stdout, returncode, stderr
+
+
+def _write_overview(root, ep, text):
+    p = Path(root) / "出图" / ep / "prompt"
+    p.mkdir(parents=True, exist_ok=True)
+    (p / "00_总览.md").write_text(text, encoding="utf-8")
+
+
+def _write_registry(root, characters):
+    p = Path(root) / "出图" / "共享"
+    p.mkdir(parents=True, exist_ok=True)
+    (p / "identity_registry.json").write_text(
+        json.dumps({"kind": "identity_registry", "characters": characters}, ensure_ascii=False),
+        encoding="utf-8")
+
+
+# ── #2 近景必须声明 expression_span（双帧契约从 opt-in 收成强制）──
+def _closeup_clip(span=None):
+    cont = {"start_state": "平静", "end_state": "爆哭", "transition": "硬切",
+            "need_endframe": True, "endframe_png": "出图/第1集/图片/c1_end.png"}
+    if span is not None:
+        cont["expression_span"] = span
+    return {"firstframe_png": "出图/第1集/图片/c1.png", "label": "近景特写", "continuity": cont}
+
+
+def test_closeup_missing_expression_span_blocks(tmp_path):
+    gate.findings.clear()
+    root = _write_storyboard_with_clips(tmp_path, [_closeup_clip(span=None)])
+    gate.check_storyboard_contract(root, "第1集", require_frame_assets=False)
+    assert any(f["dim"] == "表情一致性" and f["sev"] == "block"
+               and "expression_span" in str(f["msg"]) for f in gate.findings)
+
+
+def test_closeup_with_expression_span_no_block(tmp_path):
+    gate.findings.clear()
+    root = _write_storyboard_with_clips(tmp_path, [_closeup_clip(span="中")])
+    gate.check_storyboard_contract(root, "第1集", require_frame_assets=False)
+    assert not any(f["dim"] == "表情一致性" for f in gate.findings)
+
+
+def test_non_closeup_no_expression_span_ok(tmp_path):
+    gate.findings.clear()
+    clip = {"firstframe_png": "出图/第1集/图片/c1.png", "label": "远景空镜",
+            "continuity": {"start_state": "s", "end_state": "e", "transition": "硬切",
+                           "need_endframe": True, "endframe_png": "出图/第1集/图片/c1_end.png"}}
+    root = _write_storyboard_with_clips(tmp_path, [clip])
+    gate.check_storyboard_contract(root, "第1集", require_frame_assets=False)
+    assert not any(f["dim"] == "表情一致性" for f in gate.findings)
+
+
+# ── L7 endframe 豁免理由不能是占位/单字 ──
+def test_short_endframe_exempt_reason_blocks(tmp_path):
+    gate.findings.clear()
+    clips = [
+        {"firstframe_png": "a.png", "label": "远景",
+         "continuity": {"start_state": "s", "end_state": "e", "transition": "硬切",
+                        "need_endframe": False, "endframe_exempt_reason": "x",
+                        "midframe_exempt_reason": "极短镜<3s"}},
+        {"firstframe_png": "b.png", "label": "远景",
+         "continuity": {"start_state": "e", "end_state": "f", "transition": "硬切",
+                        "need_endframe": True, "endframe_png": "b_end.png"}},
+    ]
+    root = _write_storyboard_with_clips(tmp_path, clips)
+    gate.check_storyboard_contract(root, "第1集", require_frame_assets=False)
+    assert any(f["dim"] == "尾帧" and f["sev"] == "block" and "过短" in str(f["msg"])
+               for f in gate.findings)
+
+
+def test_substantive_endframe_exempt_reason_ok(tmp_path):
+    gate.findings.clear()
+    clips = [
+        {"firstframe_png": "a.png", "label": "远景",
+         "continuity": {"start_state": "s", "end_state": "e", "transition": "硬切",
+                        "need_endframe": False, "endframe_exempt_reason": "极短镜<3s 无表情变化",
+                        "midframe_exempt_reason": "极短镜<3s"}},
+        {"firstframe_png": "b.png", "label": "远景",
+         "continuity": {"start_state": "e", "end_state": "f", "transition": "硬切",
+                        "need_endframe": True, "endframe_png": "b_end.png"}},
+    ]
+    root = _write_storyboard_with_clips(tmp_path, clips)
+    gate.check_storyboard_contract(root, "第1集", require_frame_assets=False)
+    assert not any(f["dim"] == "尾帧" and "过短" in str(f["msg"]) for f in gate.findings)
+
+
+# ── #1 + M4 一致性总审：降级精度终验阻断 / compose 仅 warn / 显式放行 / WARN rollup ──
+def _run_consistency(monkeypatch, tmp_path, payload, stage, returncode=0, env=None):
+    gate.findings.clear()
+    root = tmp_path / "w"
+    (root / "生产数据").mkdir(parents=True)
+    monkeypatch.setattr(gate.subprocess, "run",
+                        lambda *a, **k: _FakeProc(json.dumps(payload), returncode))
+    for k, v in (env or {}).items():
+        monkeypatch.setenv(k, v)
+    monkeypatch.delenv("N2D_ALLOW_DEGRADED_QC", raising=False) if not (env or {}).get(
+        "N2D_ALLOW_DEGRADED_QC") else None
+    gate.check_consistency_audit_gate(str(root), "第1集", stage=stage)
+    return list(gate.findings)
+
+
+def test_degraded_precision_blocks_at_review(monkeypatch, tmp_path):
+    fs = _run_consistency(monkeypatch, tmp_path,
+                          {"summary": {"precision_level": "degraded"}, "findings": []}, "review")
+    assert any(f["dim"] == "一致性总审" and f["sev"] == "block" for f in fs)
+
+
+def test_degraded_precision_only_warns_at_compose(monkeypatch, tmp_path):
+    fs = _run_consistency(monkeypatch, tmp_path,
+                          {"summary": {"precision_level": "degraded"}, "findings": []}, "compose")
+    assert any(f["dim"] == "一致性总审" and f["sev"] == "warn" for f in fs)
+    assert not any(f["sev"] == "block" for f in fs)
+
+
+def test_degraded_precision_review_waived_by_env(monkeypatch, tmp_path):
+    fs = _run_consistency(monkeypatch, tmp_path,
+                          {"summary": {"precision_level": "degraded"}, "findings": []}, "review",
+                          env={"N2D_ALLOW_DEGRADED_QC": "1"})
+    assert not any(f["sev"] == "block" for f in fs)
+    assert any(f["sev"] == "warn" and "放行" in str(f["msg"]) for f in fs)
+
+
+def test_consistency_warn_rollup_over_cap(monkeypatch, tmp_path):
+    findings = [{"severity": "warn", "message": f"w{i}", "dimension": "x"} for i in range(20)]
+    fs = _run_consistency(monkeypatch, tmp_path,
+                          {"summary": {"precision_level": "full"}, "findings": findings}, "review")
+    assert any("未在此展开" in str(f["msg"]) for f in fs)
+
+
+# ── M5 跨集对比跨过缺失的中间集 → WARN ──
+def test_cross_episode_skipped_intermediate_warns(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "w"
+    root.mkdir()
+    _write_overview(root, "第1集", "场景 冷宫：光位 左；轴线 左→右")
+    _write_overview(root, "第3集", "场景 冷宫：光位 右；轴线 右→左")  # 第2集缺
+    gate.check_cross_episode_contract(str(root), "第3集")
+    assert any(f["dim"] == "跨集契约" and f["sev"] == "warn"
+               and "跨过了缺失的中间集" in str(f["msg"]) for f in gate.findings)
+
+
+# ── #3 跨集角色文字定义重派生 → WARN；引用了锚定相则放行 ──
+_REG = [{"id": "CHAR_01", "name": "沈念 / 林婉儿",
+         "forms": [{"anchor_phrase": "凤眼薄唇·乌黑半披素布发带·月白粗布旧宫装·左腕淡疤"}]}]
+
+
+def test_cross_episode_character_redrive_warns(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "w"
+    root.mkdir()
+    _write_registry(str(root), _REG)
+    _write_overview(root, "第2集", "本集 沈念 于金殿现身，红衣金发气场全开。")  # 零锚定相描述符
+    gate.check_cross_episode_character_definition(str(root), "第2集")
+    assert any(f["dim"] == "跨集角色定义" and f["sev"] == "warn" for f in gate.findings)
+
+
+def test_cross_episode_character_anchor_cited_ok(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "w"
+    root.mkdir()
+    _write_registry(str(root), _REG)
+    _write_overview(root, "第2集", "本集 沈念 月白粗布旧宫装 于冷宫现身。")  # 引用了锚定相 token
+    gate.check_cross_episode_character_definition(str(root), "第2集")
+    assert not any(f["dim"] == "跨集角色定义" for f in gate.findings)
+
+
+# ── L8 N2D_SKIP_BACKEND_PROBE 旁路应留痕 ──
+def test_skip_backend_probe_noted_in_warn(monkeypatch, tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "w"
+    root.mkdir()
+    (root / "_设置.md").write_text("生图AI: Codex\n", encoding="utf-8")
+    monkeypatch.setattr(gate.image_backends, "probe_backend", lambda s: ("unknown", "no probe"))
+    monkeypatch.setenv("N2D_SKIP_BACKEND_PROBE", "1")
+    gate.check_backend_reachable(str(root), "第1集")
+    assert any(f["dim"] == "生图后端连通性" and "N2D_SKIP_BACKEND_PROBE 已设置" in str(f["msg"])
+               for f in gate.findings)
+
+
+# ── L6 孤儿守卫：check_* 定义了就必须有调用点（防再出 orphan）──
+_KNOWN_ORPHAN_CHECKS = {
+    # 既存未接线（dead code，TODO 接进 run 或删除）——非本轮引入：
+    "check_markdown_cinematic_contract",
+    "check_storyboard_cinematic_contract",
+}
+
+
+def test_no_new_orphan_check_functions():
+    src = _inspect.getsource(gate)
+    orphans = [n for n in dir(gate)
+               if n.startswith("check_") and callable(getattr(gate, n))
+               and src.count(n) < 2 and n not in _KNOWN_ORPHAN_CHECKS]
+    assert not orphans, f"check_* 定义了却从未被调用（孤儿）: {orphans}"
+
+
+# ── voice 一角一色跨集校验已接进 image/video/compose 三处 ──
+def test_voice_cross_episode_wired_into_video_and_compose():
+    src = _inspect.getsource(gate.run)
+    assert src.count("check_voice_cross_episode(root, ep)") >= 3
+    assert src.count("check_timing_manifest_complete(root, ep)") >= 3

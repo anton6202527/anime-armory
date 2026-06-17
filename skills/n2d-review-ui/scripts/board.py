@@ -70,7 +70,10 @@ def episode_block(root: Path, html_dir: Path, header: List[str], stages: List[st
     ep = str(row.get("_ep") or row.get("集") or "").strip()
     ep_norm = n2d_route.normalize_episode(ep)
     stage_states = {col: n2d_route.cell_state(row.get(col, "")) for col in stages}
-    done_stages = sum(1 for col in stages if n2d_route.is_progress_satisfied(str(root), row, col))
+    # Display completion should reflect actual progress cells, not route
+    # satisfaction.  In 原生音画 mode `配音=⬜` is satisfied as an optional layer,
+    # but it is not a completed stage and should not inflate the board percent.
+    done_stages = sum(1 for col in stages if n2d_route.is_done(row.get(col, "")))
 
     # 前沿：下一步该跑哪个 skill（mode-aware；与 n2d-progress 同源）。
     # cmd = 契约里的下一步命令模板（跨工具裸 skill 名，如 n2d-image {root} {ep}），格式化好供桌面端命令面板预填。

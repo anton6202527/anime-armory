@@ -1,11 +1,11 @@
 ---
 name: n2d-script
-description: Stage 1+定稿 of n2d — 阶段1·剧本改编：split a novel into per-episode dramatic beats → voiceover台词 + bgm + 封面 + 角色/场景卡 + global_style（**不做分镜**）。阶段2·分镜设计（配音后回跑）：用配音时长设计 分镜剧本 + 故事板(Clip时长) + 素材清单 + 字幕SRT + 镜头时长。 Use when given a novel path (first run = split + refine episode 1) or asked to refine a specific episode's materials. Triggers 拆集, 分镜剧本, 故事板, 素材清单, 配音文案, BGM, 封面 prompt, 双语字幕, SRT, 角色卡, 场景卡, global_style.
+description: Stage 1+定稿 of n2d — 阶段1·剧本改编：split a novel into per-episode dramatic beats → voiceover台词 + bgm + 封面 + 角色/场景卡 + global_style（**不做分镜**）。阶段2·分镜设计（模式感知）：默认原生音画用脚本规划 Clip 时长；配音先行则配音后回跑，用真实配音时长设计 分镜剧本 + 故事板(Clip时长) + 素材清单 + 字幕SRT + 镜头时长。 Use when given a novel path (first run = split + refine episode 1) or asked to refine a specific episode's materials. Triggers 拆集, 分镜剧本, 故事板, 素材清单, 配音文案, BGM, 封面 prompt, 双语字幕, SRT, 角色卡, 场景卡, global_style.
 ---
 
-# n2d-script — 阶段1 剧本改编 + 阶段2 分镜设计（配音驱动）
+# n2d-script — 阶段1 剧本改编 + 阶段2 分镜设计（模式感知）
 
-你是 **AI 漫剧编剧/导演**。两阶段：**阶段1 剧本改编**（台词先行，不做分镜）→ n2d-voice 配音 → **阶段2 分镜设计**（配音后回跑，时长驱动镜头）。**不出图、不出视频**——那是 `n2d-image` 和 `n2d-video` 的事。
+你是 **AI 漫剧编剧/导演**。两阶段：**阶段1 剧本改编**（台词先行，不做分镜）→ 按 `制作模式` 决定是否先跑 n2d-voice → **阶段2 分镜设计**（默认原生音画由脚本规划 Clip 时长；配音先行由真实配音时长驱动镜头）。**不出图、不出视频**——那是 `n2d-image` 和 `n2d-video` 的事。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
@@ -178,7 +178,7 @@ python3 <skill>/scripts/boundary_audit.py <作品根> 2-10     # 精修窗口体
 3. `封面.md` — 高点击率封面/首图 prompt
 （角色/场景卡见第 2 步。**本步不写 分镜剧本 / 故事板 / 素材清单 / 字幕** —— 它们的镜头切分与时长要由真实配音决定，属配音后的"阶段2 分镜设计"。）
 
-完成后在 `_进度.md` 勾选阶段1 列：`剧本改编`(voiceover) / `bgm` / `封面` ✅。**下一步 n2d-voice 配音**（不是分镜、不是出图）。同时记录生产数据：
+完成后在 `_进度.md` 勾选阶段1 列：`剧本改编`(voiceover) / `bgm` / `封面` ✅。**下一步按 `制作模式` 走**：默认 `原生音画` 直接回跑本 skill 做阶段2分镜；`配音先行` 先 `n2d-voice` 配真实音再回跑阶段2；`先出视频后配音` 先用 `n2d-voice` 产占位时长并复述不推荐警告。不要直接出图。同时记录生产数据：
 
 ```bash
 python3 skills/n2d-dashboard/scripts/dashboard.py record <作品根> \

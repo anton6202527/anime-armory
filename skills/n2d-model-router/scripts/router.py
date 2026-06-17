@@ -22,6 +22,7 @@ if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import (  # noqa: E402  与 gate 共用的单一真值源
     MOTION_CONTROL_REQUIRED_SHOT_TYPES,  # 高危接触镜头集
+    PRODUCTION_MODE_DEFAULT,             # 制作模式默认值单一真值源
     SHOT_TYPE_KEYWORDS,                  # 镜头类型判定关键词（与 gate 专项模板检测同源）
     VIDEO_MODEL_ROUTES_KIND,             # 路由产物 kind
     is_native_av_mode,                   # 原生音画判定（与 n2d_settings/gate 同源）
@@ -147,9 +148,10 @@ def fixed_fallback_backends_from_settings(settings: Mapping[str, str], default_b
 
 
 def av_mode_from_settings(settings: Mapping[str, str]) -> str:
-    """生产模式 → 音画路线。`制作模式=原生音画` → native_av；否则 voice_first（默认）。
+    """生产模式 → 音画路线。默认制作模式来自 n2d_contract.PRODUCTION_MODE_DEFAULT。
     判定走 n2d_contract.is_native_av_mode（与 n2d_settings.is_native_av / gate 同源）。"""
-    return "native_av" if is_native_av_mode(settings.get("制作模式", "")) else "voice_first"
+    mode = settings.get("制作模式", "") or PRODUCTION_MODE_DEFAULT
+    return "native_av" if is_native_av_mode(mode) else "voice_first"
 
 
 def load_storyboard(root: Path, episode: str, storyboard: Optional[Path] = None) -> Dict[str, Any]:
@@ -346,25 +348,34 @@ def build_backend_affinity(registry: Optional[Mapping[str, Any]]) -> List[Dict[s
             continue  # 无原生视频主体 = 无后端可锁 → 不产冲突噪音
         name = str(ch.get("name") or "").strip()
         aliases = {p.strip() for p in re.split(r"[/／、,，|\s]+", name) if len(p.strip()) >= 2}
-        out.append({"id": str(ch.get("id") or "").strip(), "name": name, "aliases": aliases, "backend": backend})
+        # 进 affinity = 已注册原生视频主体 = 核心/主演（脸被该后端锁死）。core 角色的 backend 即其
+        # locked_backend：跨镜不得漂到别的后端（脸质感漂移）→ route_clip 对 core 冲突硬钉，非 core 仅 warn。
+        out.append({"id": str(ch.get("id") or "").strip(), "name": name, "aliases": aliases,
+                    "backend": backend, "core": True})
     return out
 
 
 def character_backend_conflicts(clip: Mapping[str, Any], primary: str,
-                                affinity: Optional[List[Dict[str, Any]]]) -> List[Dict[str, str]]:
-    """本镜命中的原生主体角色里，亲和后端 != 本镜 primary 的冲突明细（advisory）。纯函数·可测。"""
+                                affinity: Optional[List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
+    """本镜命中的原生主体角色里，亲和后端 != 本镜 primary 的冲突明细。纯函数·可测。
+
+    核心/主演角色（core，已注册原生视频主体=脸被该后端锁死）的冲突标 enforce=True，
+    `locked_backend` 即其应被强制路由的后端；非 core 角色 enforce=False（仅 warn）。
+    route_clip 据 enforce 决定是硬钉 primary 还是仅告警。"""
     if not affinity:
         return []
     text = _clip_text(clip)
     ids = set(re.findall(r"CHAR_[A-Za-z0-9_]+", text))
     primary_n = normalize_video_backend(primary) or str(primary or "")
-    out: List[Dict[str, str]] = []
+    out: List[Dict[str, Any]] = []
     for a in affinity:
         present = (a.get("id") and a["id"] in ids) or any(al in text for al in a.get("aliases") or ())
         if present and a.get("backend") and a["backend"] != primary_n:
+            core = bool(a.get("core"))
             out.append({"character": a.get("name") or a.get("id") or "?",
                         "character_id": a.get("id") or "",
-                        "prefers_backend": a["backend"], "routed_backend": primary_n})
+                        "prefers_backend": a["backend"], "routed_backend": primary_n,
+                        "locked_backend": a["backend"], "core": core, "enforce": core})
     return out
 
 
@@ -480,6 +491,9 @@ def escalate_identity_for_failures(route_entry: Dict[str, Any], failure_count: i
         else:
             rationale.append(
                 f"⚠️本镜 identity 已失败 {failure_count} 次且无原生身份锁后端可用：补 reference_group 角度 / 上 LoRA / 拆镜降难度。")
+    # 升锁后把最终 primary 钉成 locked_backend：重试/重跑须复用它，不得再轮换 fallback 后端
+    # （否则换脸-换后端-再换脸永不收敛）。固定后端模式不换厂时 locked_backend 即原 primary。
+    entry["locked_backend"] = entry.get("primary_backend")
     entry["rationale"] = rationale
     return entry
 
@@ -994,15 +1008,30 @@ def route_clip(
     )
     primary = normalize_backend(route["primary_backend"], default_backend)
     clip_id = make_clip_id(clip, index)
-    risk_flags = risk_flags_for_clip(clip, shot_type, primary)
-    # ③ 一角一后端亲和（advisory）：本镜核心角色的原生主体后端 != 本镜 primary → 只标告警，不改路由
+    # ③ 一角一后端亲和：核心/主演角色（已注册原生视频主体=脸被锁死）冲突=硬钉其 locked_backend，
+    #   把脸锁后端强加为 primary（原 primary 降为 fallback 首项），防核心角色跨镜漂后端→脸质感漂移；
+    #   非 core 角色仍仅 warn（advisory，不改路由）。
     backend_conflicts = character_backend_conflicts(clip, primary, backend_affinity)
+    pin_notes: List[str] = []
+    enforced = [c for c in backend_conflicts if c.get("enforce") and c.get("locked_backend")]
+    if enforced:
+        locked = normalize_backend(enforced[0]["locked_backend"], primary)
+        if locked and locked != primary:
+            fbs = [primary] + [b for b in route["fallback_backends"] if b != locked]
+            route["fallback_backends"] = fbs[:3]
+            pin_notes.append(
+                f"核心角色「{enforced[0]['character']}」原生主体锁在「{locked}」：硬钉 primary=「{locked}」"
+                f"（原「{primary}」降为 fallback），防核心角色跨镜换后端致脸质感漂移。")
+            primary = locked
+        # 重算冲突（primary 已被钉到 locked_backend，核心角色此时应无冲突，仅余其它 core 不可同时满足者）
+        backend_conflicts = character_backend_conflicts(clip, primary, backend_affinity)
+    risk_flags = risk_flags_for_clip(clip, shot_type, primary)
     if backend_conflicts:
         risk_flags = sorted(set(risk_flags) | {"character_backend_conflict"})
     if route.get("native_audio_policy") == "native_speech":
         risk_flags = sorted(set(risk_flags) | {"native_speech"})
     seam_relay = seam_relay_plan(clip, primary, route["fallback_backends"])
-    rationale = list(route["rationale"])
+    rationale = list(route["rationale"]) + pin_notes
     prompt_requirements = list(route["prompt_requirements"])
     if seam_relay.get("is_relay"):
         risk_flags = sorted(set(risk_flags) | {"seam_relay"})
@@ -1075,7 +1104,7 @@ def route_episode(
         "root": str(root),
         "episode": episode,
         "routing_mode": routing_mode,
-        "production_mode": settings.get("制作模式", "配音先行") or "配音先行",
+        "production_mode": settings.get("制作模式", "") or PRODUCTION_MODE_DEFAULT,
         "av_mode": av_mode,
         "default_backend": default_backend,
         "generated_at": generated_at or dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),

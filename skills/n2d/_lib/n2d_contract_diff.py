@@ -27,6 +27,12 @@ SECTION_TITLE = "本集视觉一致性契约"
 #     金瞳/伤/变身=连续性事故 + 剧透双杀，与像素层同级不可松（2026-06 由 warn 升 block）。
 BLOCK_ON_DRIFT = ("场景光位锚", "场景轴线视线", "角色状态演进")
 
+# 「超集即放行」对状态锁不安全：状态演进是剧情锁，视频侧追加内容（包含原文却多写）可能提前
+#   泄露未到点的状态（如 img="Clip01-13 黑瞳常态"，vid 追加 "Clip05 闪现金瞳预兆"——含原文却早泄金瞳）。
+#   故此字段不自动 pass_superset，additive 内容一律降级为 warn_drift 强制人工确认；
+#   光位锚/轴线是收紧型超集（追加约束只会更稳），仍按 pass_superset 放行。
+NO_AUTO_SUPERSET = ("角色状态演进",)
+
 # 字段标签别名 → 契约 canonical 名。demo 出图总览用短标签（光位锚/轴线/状态演进），
 # gate.py --stage image_preflight/image 也按短标签检——两种写法都认，比对仍按 VISUAL_CONTRACT_FIELDS 归一。
 _FIELD_ALIASES = {
@@ -112,8 +118,12 @@ def compare_field(field: str, img_val, vid_val) -> dict:
                     note="视频侧契约缺此字段：誊抄丢失，必须把出图侧原文补进 出视频/prompt/00_总览.md 再出视频")
     elif img_n == vid_n:
         item.update(status="pass", severity="pass", note="逐字一致")
-    elif img_n in vid_n:
+    elif img_n in vid_n and field not in NO_AUTO_SUPERSET:
         item.update(status="pass_superset", severity="pass", note="视频侧为出图侧的细化/收紧超集（包含原文），放行")
+    elif img_n in vid_n:  # 状态锁字段：含原文但有追加 → 不自动放行（追加内容可能提前泄露未到点状态）
+        item.update(status="warn_drift", severity="warn",
+                    note="状态锁追加内容：视频侧虽含出图侧原文但另有追加，可能提前泄露未到点的觉醒/伤/变身——"
+                         "人工确认追加内容不早泄状态，确属有意细化才放行，否则以出图侧为准")
     else:
         if field in BLOCK_ON_DRIFT:
             why = ("剧情状态锁：视频侧改写=提前泄露 觉醒/伤/变身 等状态（连续性事故+剧透）"

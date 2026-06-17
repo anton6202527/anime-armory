@@ -54,7 +54,22 @@ def srt_last_end(path):
             g = list(map(int, m.groups())); last = g[0]*3600+g[1]*60+g[2]+g[3]/1000.0
     return last
 
-def _validate_native_av(root, ep, shots_p, tol):
+# 目标时长偏差容忍（∑镜头时长 偏离意图集长超此比例即 WARN，不硬拦）。默认 15%。
+TARGET_DEVIATION_TOL = 0.15
+
+def target_deviation_warn(shots_total, target_seconds, tol=TARGET_DEVIATION_TOL):
+    """∑镜头时长 vs 意图集/平台时长：偏离超 tol 比例 → 返回一条 WARN 文案，否则 None。
+    仅在显式给了正的 target 时生效（不给→无新行为，向后兼容）。配音 40% 短/长此前过全部 gate。"""
+    if target_seconds is None or target_seconds <= 0:
+        return None
+    dev = abs(shots_total - target_seconds) / target_seconds
+    if dev > tol:
+        sign = '长' if shots_total > target_seconds else '短'
+        return (f"∑镜头时长 {shots_total:.2f}s 偏离目标时长 {target_seconds:.2f}s 达 {dev*100:.0f}%"
+                f"（>{tol*100:.0f}% 容忍·偏{sign}）→ 配音/分镜节奏与意图集长不符，复核台词篇幅或目标时长")
+    return None
+
+def _validate_native_av(root, ep, shots_p, tol, target=None):
     """原生音画对账：无配音清单，改核 storyboard ∑clip.duration ≈ ∑镜头时长（finalize 从脚本推的）。
     返回退出码（0=过 / 1=硬不一致或缺件）。字幕走成片后 whisperx 词级对齐，本步不校验。"""
     fails=[]; warns=[]; oks=[]
@@ -64,6 +79,8 @@ def _validate_native_av(root, ep, shots_p, tol):
         return 1
     shots = json.load(open(shots_p,encoding='utf-8'))
     st = sum(float(v) for v in shots.values())
+    tw = target_deviation_warn(st, target)
+    if tw: warns.append(tw)
     sb_p = os.path.join(root,'脚本',ep,'storyboard.json')
     if os.path.exists(sb_p):
         try:
@@ -100,6 +117,17 @@ def main():
             tol = float(sys.argv[i + 1])
         except ValueError:
             sys.exit(f'⛔ --tol 数值无效: {sys.argv[i + 1]}')
+    # 可选意图集长对账：给了 --target-seconds 才生效（不给→无新行为，向后兼容）。
+    # ∑镜头时长 偏离目标超 15% 仅 WARN 不硬拦。FOLLOW-UP: 从 _设置.md「单集时长」区间/平台 profile 自动取 target。
+    target = None
+    if '--target-seconds' in sys.argv:
+        i = sys.argv.index('--target-seconds')
+        if i + 1 >= len(sys.argv):
+            sys.exit('⛔ --target-seconds 后缺数值，例: --target-seconds 90')
+        try:
+            target = float(sys.argv[i + 1])
+        except ValueError:
+            sys.exit(f'⛔ --target-seconds 数值无效: {sys.argv[i + 1]}')
     # 配音一律落 合成/（render_voice 与制作模式无关地写 合成/，见 2026 出视频↔合成分家）；出视频/ 为已废弃历史路径，仅防御性兜底探测
     vbase = next((b for b in ('合成','出视频') if os.path.isfile(os.path.join(root,b,ep,'配音','时长清单.json'))), '合成')
     vd  = os.path.join(root,vbase,ep,'配音')
@@ -114,7 +142,7 @@ def main():
     if not os.path.exists(man_p):
         # 原生音画：说话镜由视频后端一次出同步音画，没有逐句配音清单——改走 storyboard 驱动对账，不误报"先 n2d-voice"。
         if is_native_av(root):
-            native_code = _validate_native_av(root, ep, shots_p, tol)
+            native_code = _validate_native_av(root, ep, shots_p, tol, target)
             sys.exit(1 if contract_code or native_code else 0)
         print(f"⛔ 缺 {man_p}（先 n2d-voice）"); sys.exit(1)
     man = json.load(open(man_p,encoding='utf-8'))
@@ -171,6 +199,8 @@ def main():
             fails.append(f"镜头时长.json 累计 {st:.2f}s ≠ 配音 {base:.2f}s → 故事板 Clip 时长会错，重跑 finalize_storyboard")
         else:
             oks.append(f"镜头时长累计 {st:.2f}s ≈ 配音 {base:.2f}s")
+        tw = target_deviation_warn(st, target)
+        if tw: warns.append(tw)
     else:
         warns.append("镜头时长.json 不存在（阶段2 未定稿）")
 
