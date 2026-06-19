@@ -515,3 +515,83 @@ def test_escalate_below_threshold_persists_no_locked_backend():
     entry = {"primary_backend": "dreamina", "identity_requirement": "x", "rationale": [], "fallback_backends": ["kling"]}
     out = router.escalate_identity_for_failures(dict(entry), 1)
     assert "locked_backend" not in out
+
+
+# ── 质量档 / 视频运动参考 / 多镜单次生成（2026-06-19 流程自审落地）──────────────────
+def test_quality_tier_high_for_identity_heavy_and_fast_for_general():
+    # 身份/物理吃重镜 → high（值 pro 档）；通用低风险镜 → fast（量产省成本）；后端无档位 → n/a
+    assert router.quality_tier_for_clip("fight_exchange", ["contact_motion"], "seedance") == "high"
+    assert router.quality_tier_for_clip("general_motion", [], "seedance") == "fast"
+    assert router.quality_tier_for_clip("general_motion", ["identity_drift_risk"], "seedance") == "high"
+    assert router.quality_tier_for_clip("general_motion", [], "veo") == "n/a"  # veo 档案无 fast/pro 档
+
+
+def test_fight_clip_gets_high_quality_tier(tmp_path):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{"id": "Clip 1", "template": "fight_exchange", "scene": "挥剑命中"}])
+    route = router.route_episode(root, "第1集")["routes"][0]
+    # fight primary=kling（无档位能力）→ n/a；改测 seedance 直配的镜见下
+    assert route["quality_tier"] in ("high", "n/a")
+
+
+def test_motion_reference_applicable_for_flight_on_seedance(tmp_path):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{"id": "Clip 1", "template": "flight", "scene": "御剑飞行追逐", "characters": ["主角"]}])
+    route = router.route_episode(root, "第1集")["routes"][0]
+    assert route["primary_backend"] == "seedance"
+    assert route["motion_reference"]["applicable"] is True
+    assert "motion_reference_candidate" in route["risk_flags"]
+
+
+def test_motion_reference_not_applicable_for_dialogue():
+    plan = router.motion_reference_plan("dialogue_closeup", "kling")
+    assert plan["applicable"] is False
+
+
+def test_multishot_groups_for_consecutive_relay_seedance_clips(tmp_path):
+    # 项目直连 Seedance（非即梦渠道）：primary 不会被换到 dreamina 多帧 API，保持 seedance·支持多镜。
+    # 即梦渠道下执行后端是 dreamina(非 multishot_native)，多镜叙事未在该渠道核验→保守不标注，是正确行为。
+    root = _root(tmp_path, settings="- 生视频模型: Seedance 2.0\n- 生视频渠道: Seedance\n- 视频模型路由: 自动按镜头路由\n")
+    # 两条连续接力 flight 镜（primary=seedance·支持多镜）→ 标注一个候选组，但不改 primary/mode
+    _write_storyboard(root, [
+        {"id": "Clip 1", "template": "flight", "scene": "飞行起势", "relay": True},
+        {"id": "Clip 2", "template": "flight", "scene": "飞行接续", "relay": True},
+    ])
+    plan = router.route_episode(root, "第1集")
+    assert len(plan["multishot_groups"]) == 1
+    grp = plan["multishot_groups"][0]
+    assert grp["members"] == ["Clip_01", "Clip_02"]
+    assert grp["backend"] == "seedance"
+    for r in plan["routes"]:
+        assert r["multishot_candidate"]["group_id"] == grp["group_id"]
+        assert "multishot_candidate" in r["risk_flags"]
+        assert r["mode"] != "merged"  # 仍是逐镜独立可重跑，未合并
+
+
+def test_multishot_group_capped_by_single_gen_duration():
+    # 累计时长护栏：单次多镜生成总长 ≤ 后端上限(seedance 15s)。
+    sr = {"is_relay": True}
+    # 两条 10s 接力镜：10+10=20 > 15 → 物理上没法一次出 → 不成组（各自已是长单镜，归"更长单镜"覆盖）
+    long_pair = [
+        {"clip_id": "Clip_01", "primary_backend": "seedance", "seam_relay": sr, "risk_flags": [], "clip_seconds": 10.0},
+        {"clip_id": "Clip_02", "primary_backend": "seedance", "seam_relay": sr, "risk_flags": [], "clip_seconds": 10.0},
+    ]
+    assert router.annotate_multishot_groups(long_pair) == []
+    # 三条 4s 短接力镜：4+4+4=12 ≤ 15 → 成一组（多个短镜一次 co-generate 才是多镜单次生成的甜点）
+    short_run = [
+        {"clip_id": f"Clip_{i:02d}", "primary_backend": "seedance", "seam_relay": sr, "risk_flags": [], "clip_seconds": 4.0}
+        for i in (1, 2, 3)
+    ]
+    groups = router.annotate_multishot_groups(short_run)
+    assert len(groups) == 1
+    assert groups[0]["members"] == ["Clip_01", "Clip_02", "Clip_03"]
+    assert groups[0]["approx_seconds"] == 12.0
+
+
+def test_no_multishot_group_for_non_multishot_backend():
+    # dreamina 非 multishot_native：即便连续接力也不标注（判定走能力字段）
+    routes = [
+        {"clip_id": "Clip_01", "primary_backend": "dreamina", "seam_relay": {"is_relay": True}, "risk_flags": []},
+        {"clip_id": "Clip_02", "primary_backend": "dreamina", "seam_relay": {"is_relay": True}, "risk_flags": []},
+    ]
+    assert router.annotate_multishot_groups(routes) == []

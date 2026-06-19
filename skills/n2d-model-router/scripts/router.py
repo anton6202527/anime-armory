@@ -36,8 +36,12 @@ from n2d_platform_profiles import (  # noqa: E402  视频后端档案单一真�
     anchor_consumption_plan,
     normalize_video_backend,
     video_backend_auto_routable,
+    video_backend_default_quality_tier,
     video_backend_frame_control,
     video_backend_max_seconds,
+    video_backend_supports_motion_reference,
+    video_backend_supports_multishot,
+    video_backend_supports_quality_tier,
 )
 from n2d_settings import load_settings as _load_settings_md  # noqa: E402  _设置.md 解析单一真值源
 try:  # ③ 一角一后端亲和（advisory）：读 identity_registry 找已注册原生视频主体的角色
@@ -526,6 +530,58 @@ def seam_relay_plan(clip: Mapping[str, Any], primary: str,
     if not prim_ok:
         plan["dual_keyframe_fallback"] = next(
             (b for b in fallback_backends if backend_supports_dual_keyframe(b)), None)
+    return plan
+
+
+# ── 质量档（fast/high）路由（成本×质量轴·2026-06-19 流程自审落地）─────────────────
+# Seedance 家族有 fast/pro 档（fast≈$0.022/s 量产默认，pro 留吃重镜）。这里只给**路由意图**
+# （fast | high），不写死具体模型版本字串（版本以 cli_snapshots 为准·防过期）。落档侧出片脚本/
+# CLI 把 high→pro、fast→fast 解析成实际 model_version；后端无档位能力时本字段为 n/a（不浪费意图）。
+# 判据：身份吃重/高风险镜值 pro（脸/接触/多人/原生台词/已升锁）；空镜/无人物通用镜走 fast 省钱。
+HIGH_TIER_SHOT_TYPES = {
+    "fight_exchange", "hug_or_pull", "intimate_interaction", "dialogue_closeup",
+    "dialogue_shot_reverse", "multi_character_same_frame", "ensemble_blocking",
+    "multi_person_blocking",
+}
+HIGH_TIER_RISK_FLAGS = {
+    "identity_drift_risk", "contact_motion", "feature_melting_risk", "physical_interaction",
+    "multi_person", "native_speech", "identity_escalated", "character_backend_conflict",
+}
+
+
+def quality_tier_for_clip(shot_type: str, risk_flags: Iterable[str], primary: str) -> str:
+    """本镜质量档路由意图。纯函数·可测。后端无 fast/pro 档 → 'n/a'。
+
+    high = 身份吃重/高风险镜（脸/接触/多人/原生台词/升锁），值得 pro 档把脸和物理钉稳；
+    fast = 空镜/通用镜，量产默认省成本。判据走 shot_type + risk_flags，不 hardcode 厂商。"""
+    if not video_backend_supports_quality_tier(primary):
+        return "n/a"
+    flags = set(risk_flags or [])
+    if shot_type in HIGH_TIER_SHOT_TYPES or (flags & HIGH_TIER_RISK_FLAGS):
+        return "high"
+    return "fast"
+
+
+# ── 视频运动参考（把已通过 clip 当运动/风格参考·reference_video_motion）─────────────
+# Seedance/Kling 等可吃「视频片段参考」锁运动节奏/风格——与图身份锁正交的**跨镜运动连续性**轴。
+# 对长连续运动镜（追逐/飞行/打斗），把前一条已通过的同段 clip 作 motion/style ref 喂进去，运镜节奏
+# 更连贯。只做预防侧指引（prompt_requirement + hint），不强制——首条镜无前序参考时自然跳过。
+MOTION_REFERENCE_SHOT_TYPES = {"chase", "flight", "fight_exchange"}
+
+
+def motion_reference_plan(shot_type: str, primary: str) -> Dict[str, Any]:
+    """长连续运动镜的视频运动参考计划。纯函数·可测。非适用镜返回 applicable=False。"""
+    applicable = (
+        shot_type in MOTION_REFERENCE_SHOT_TYPES
+        and video_backend_supports_motion_reference(primary)
+    )
+    plan: Dict[str, Any] = {"applicable": applicable}
+    if applicable:
+        plan["use"] = "prior_approved_clip_as_video_reference"
+        plan["note"] = (
+            f"{primary} 支持视频片段参考（reference_video_motion）：把同段前一条已通过的 clip 作"
+            "运动/风格参考喂进去，锁运镜节奏与运动风格（与图身份锁正交的跨镜运动连续性轴）。"
+        )
     return plan
 
 
@@ -1182,6 +1238,7 @@ def route_clip(
         "native_audio_policy": route["native_audio_policy"],
         "identity_requirement": route["identity_requirement"],
         "max_clip_seconds": video_backend_max_seconds(primary),
+        "clip_seconds": clip_duration_seconds(clip),
         "risk_flags": risk_flags,
         "seam_relay": seam_relay,
         "motion_control": motion_control_contract(clip, clip_id, shot_type, primary, episode),
@@ -1216,7 +1273,85 @@ def route_clip(
     fc = (failure_counts or {}).get(clip_id, 0)
     if fc:  # E4：本镜 identity 反复失败 → 升锁（含固定后端模式只收紧不换厂）
         entry = escalate_identity_for_failures(entry, fc, fixed_mode=(routing_mode == "fixed_default"))
+    # 质量档（成本×质量）+ 视频运动参考：用升锁/钉锁后的最终 primary 与 risk_flags 计算（增量字段）。
+    final_primary = entry["primary_backend"]
+    entry["quality_tier"] = quality_tier_for_clip(entry["shot_type"], entry["risk_flags"], final_primary)
+    if entry["quality_tier"] == "high":
+        entry["rationale"].append(
+            "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。")
+    elif entry["quality_tier"] == "fast":
+        entry["rationale"].append(
+            "质量档=fast：通用/低身份风险镜走量产快档省成本（落档侧解析为后端 fast model_version）。")
+    mref = motion_reference_plan(entry["shot_type"], final_primary)
+    entry["motion_reference"] = mref
+    if mref.get("applicable"):
+        entry["risk_flags"] = sorted(set(entry["risk_flags"]) | {"motion_reference_candidate"})
+        entry["rationale"].append(mref["note"])
+        entry["prompt_requirements"].append(
+            "若有同段前序已通过 clip：把它作为视频运动/风格参考(reference_video_motion)喂给后端，锁运镜节奏；首条镜无前序参考则跳过。")
     return entry
+
+
+# 多镜组成员上限（次级护栏，防 0/缺时长时无限聚集）。主护栏是累计时长 ≤ 后端单次输出上限。
+MULTISHOT_MAX_MEMBERS = 4
+
+
+def annotate_multishot_groups(routes: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """标注「多镜单次生成」候选组（2026-06-19 流程自审落地·advisory）。纯函数·可测。
+
+    Seedance 2.0 等可一次出多镜头叙事且跨镜一致、无缝转场。对**连续接力镜 + 同一支持多镜的
+    primary**，这段最适合一次 co-generate 消灭接缝。**但 n2d 立身之本是逐 Clip 可追踪可重跑**
+    （模型矩阵 line 17），所以只标 `multishot_candidate` 提示 + 返回组清单，**不合并 Clip、不改
+    primary/mode**——逐镜仍是独立可重跑单元；是否真的一次出由出片侧/用户按接缝风险决定。
+
+    **组大小受物理约束封顶**：单次多镜生成的总输出长度 ≤ 后端 `max_clip_seconds`（如 Seedance ~15s），
+    所以按**累计时长**切组——加入会超上限就断新组（缺/0 时长时退到 `MULTISHOT_MAX_MEMBERS` 成员护栏），
+    避免出「11 镜一次出」这种物理上不可能、误导操作者的巨组。返回 [{group_id, members, backend}]。"""
+    groups: List[Dict[str, Any]] = []
+    run: List[Dict[str, Any]] = []
+
+    def _flush() -> None:
+        if len(run) >= 2:
+            backend = run[0]["primary_backend"]
+            gid = f"MSG_{len(groups)+1:02d}"
+            members = [r["clip_id"] for r in run]
+            total = round(sum(float(r.get("clip_seconds") or 0) for r in run), 2)
+            for r in run:
+                r["multishot_candidate"] = {
+                    "group_id": gid,
+                    "members": members,
+                    "note": (
+                        f"接力镜组 {members}（≈{total}s）：primary「{backend}」支持多镜单次生成，可一次 co-generate "
+                        "这段消灭接缝/最稳跨镜一致；权衡=牺牲逐镜独立重跑粒度，按接缝风险与重跑需求决定是否合并。"
+                    ),
+                }
+                r["risk_flags"] = sorted(set(r.get("risk_flags", [])) | {"multishot_candidate"})
+            groups.append({"group_id": gid, "members": members, "backend": backend,
+                           "approx_seconds": total})
+        run.clear()
+
+    def _eligible(r: Mapping[str, Any]) -> bool:
+        relay = isinstance(r.get("seam_relay"), Mapping) and r["seam_relay"].get("is_relay")
+        return bool(relay and video_backend_supports_multishot(r.get("primary_backend")))
+
+    for r in routes:
+        if not _eligible(r):
+            _flush()
+            continue
+        backend = r.get("primary_backend")
+        if run and run[-1]["primary_backend"] != backend:
+            _flush()
+        # 累计时长护栏：加入本镜后超后端单次输出上限 → 先断组（已有成员先成组）。
+        cap = video_backend_max_seconds(backend)
+        cur_total = sum(float(x.get("clip_seconds") or 0) for x in run)
+        add = float(r.get("clip_seconds") or 0)
+        would_exceed_seconds = add and cur_total and cap and (cur_total + add) > cap
+        would_exceed_members = len(run) >= MULTISHOT_MAX_MEMBERS
+        if run and (would_exceed_seconds or would_exceed_members):
+            _flush()
+        run.append(r)
+    _flush()
+    return groups
 
 
 def route_episode(
@@ -1296,6 +1431,8 @@ def route_episode(
     if baseline:
         plan["baseline_drift"] = apply_baseline(plan, baseline)
         plan["baseline_anchored"] = True
+    # 多镜单次生成候选组（advisory）：在 primary 全部定稿（含 baseline 锚定）后再扫连续接力镜组。
+    plan["multishot_groups"] = annotate_multishot_groups(plan["routes"])
     if legacy_default_note:
         plan["routing_notes"] = [legacy_default_note]
     return plan
@@ -1313,8 +1450,8 @@ def render_markdown(plan: Mapping[str, Any]) -> str:
         "",
         "## 本集模型路由表",
         "",
-        "| Clip | shot_type | primary | fallback | mode | 帧消费 | native_audio | identity | motion_control | 风险 | 降级 |",
-        "|---|---|---|---|---|---|---|---|---|---|---|",
+        "| Clip | shot_type | primary | fallback | mode | 档 | 帧消费 | native_audio | identity | motion_control | 风险 | 降级 |",
+        "|---|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     for route in plan.get("routes", []):
         fallback = ", ".join(route.get("fallback_backends", []))
@@ -1324,12 +1461,13 @@ def render_markdown(plan: Mapping[str, Any]) -> str:
         anchor_plan = route.get("anchor_consumption") or {}
         frame_mode = anchor_plan.get("consumption_mode", "-") if isinstance(anchor_plan, Mapping) else "-"
         lines.append(
-            "| {clip} | {shot} | {primary} | {fallback} | {mode} | {frame_mode} | {audio} | {identity} | {motion} | {flags} | {degrade} |".format(
+            "| {clip} | {shot} | {primary} | {fallback} | {mode} | {tier} | {frame_mode} | {audio} | {identity} | {motion} | {flags} | {degrade} |".format(
                 clip=route.get("clip_id", ""),
                 shot=route.get("shot_type", ""),
                 primary=route.get("primary_backend", ""),
                 fallback=fallback,
                 mode=route.get("mode", ""),
+                tier=route.get("quality_tier", "-"),
                 frame_mode=frame_mode,
                 audio=route.get("native_audio_policy", ""),
                 identity=route.get("identity_requirement", ""),
@@ -1338,12 +1476,26 @@ def render_markdown(plan: Mapping[str, Any]) -> str:
                 degrade=str(route.get("degrade_plan", "")).replace("|", "/"),
             )
         )
+    groups = plan.get("multishot_groups") or []
+    if groups:
+        lines.extend(["", "## 多镜单次生成候选组（advisory·可选一次 co-generate 消缝）", ""])
+        for g in groups:
+            lines.append(
+                f"- {g.get('group_id')}（{g.get('backend')}）: {', '.join(g.get('members', []))} "
+                "— 连续接力镜，可一次出多镜消缝；权衡=牺牲逐镜独立重跑粒度，按接缝风险与重跑需求决定。")
     lines.extend(["", "## 逐 Clip 路由理由", ""])
     for route in plan.get("routes", []):
         lines.append(f"### {route.get('clip_id')} — {route.get('shot_type')}")
         lines.append(f"- primary: {route.get('primary_backend')}")
         lines.append(f"- fallback: {', '.join(route.get('fallback_backends', []))}")
         lines.append(f"- mode: {route.get('mode')}")
+        lines.append(f"- quality_tier: {route.get('quality_tier', '-')}")
+        mref = route.get("motion_reference") or {}
+        if isinstance(mref, Mapping) and mref.get("applicable"):
+            lines.append("- motion_reference: 用前序已通过 clip 作运动/风格参考(reference_video_motion)")
+        msg = route.get("multishot_candidate") or {}
+        if isinstance(msg, Mapping) and msg.get("group_id"):
+            lines.append(f"- multishot_candidate: {msg.get('group_id')} {msg.get('members')}")
         lines.append(f"- identity: {route.get('identity_requirement')}")
         anchor_plan = route.get("anchor_consumption") or {}
         if isinstance(anchor_plan, Mapping):

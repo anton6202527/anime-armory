@@ -18,7 +18,8 @@
   "av_mode": "voice_first",
   "default_backend": "dreamina",
   "generated_at": "2026-06-08T00:00:00Z",
-  "routes": []
+  "routes": [],
+  "multishot_groups": []
 }
 ```
 
@@ -29,6 +30,7 @@
 - `av_mode`: 音画路线，`voice_first`（默认，配音链路控制台词）或 `native_av`（`制作模式=原生音画`：说话镜一次出同步音画）。
 - `default_backend`: 从 `_设置.md 生视频模型` 归一化而来；旧项目 fallback 读取 `生视频AI`，再 fallback 到 `生视频渠道`。`Seedance 2.0` 归一为 `seedance`；`即梦/Dreamina` 归一为 `dreamina`；原生音画后端 `seedance|veo|sora`。
 - `routes`: 每条 Clip 一个对象。
+- `multishot_groups`: 多镜单次生成候选组清单 `[{group_id, members:[clip_id...], backend, approx_seconds}]`（**advisory**）。在 primary 全部定稿（含跨集 baseline 锚定）后，扫出**连续 ≥2 条接力镜 + 同一支持多镜的 primary**（如直连 Seedance 的项目）的镜组——这段最适合一次 co-generate 消灭接缝、最稳跨镜一致。**组大小受物理约束封顶**：单次多镜生成的总输出长度 ≤ 后端 `max_clip_seconds`（Seedance ~15s），按**累计时长**切组（缺时长时退到 ≤4 成员护栏），所以**镜本身已接近单镜上限时不会成组**（各自已是长单镜，归「更长单镜」覆盖）；多镜单次生成的甜点是**多个短接力镜**一次出。**只是提示，不合并 Clip、不改 primary/mode**：逐 Clip 仍是独立可追踪可重跑单元（模型矩阵立身原则），是否真的一次出由出片侧/用户按接缝风险与重跑需求决定。即梦渠道下执行后端是 dreamina（非多镜叙事核验渠道）→ 保守不标注。
 
 ## route 对象
 
@@ -90,7 +92,7 @@
 - `template`: 来自 `storyboard.json clips[].template`；没有写 `none`。
 - `primary_backend`: 首选后端，归一化为 `dreamina|kling|seedance|veo|sora`。
 - `fallback_backends`: 备用后端，按优先级排序。
-- `mode`: `image2video|frames2video|text2video|multi_shot|native_av|voice_conditioned_lipsync`。`native_av`=原生音画模式说话镜，一次出同步音画（后端自生成台词，绕过配音先行）；`voice_conditioned_lipsync`=`voice_first`+`对口型` opt-in 的说话镜，把克隆配音 `line_NN.wav` 当口型条件喂进支持音频参考的后端（Seedance 2.0 音素级 / 可灵 Omni）同帧出对口型画面，**音轨仍是配音轨、模型音频不接管声音**——区别于 native_av 的根本点。
+- `mode`: `image2video|frames2video|text2video|multi_shot|native_av|voice_conditioned_lipsync`。注：`multi_shot` 是保留值——多镜单次生成走 **advisory** 的 `multishot_groups` 候选组（见顶层），router **不会**把逐镜 mode 自动改成 `multi_shot`（保逐 Clip 可重跑粒度），需要真合并时由出片侧/用户显式决定。`native_av`=原生音画模式说话镜，一次出同步音画（后端自生成台词，绕过配音先行）；`voice_conditioned_lipsync`=`voice_first`+`对口型` opt-in 的说话镜，把克隆配音 `line_NN.wav` 当口型条件喂进支持音频参考的后端（Seedance 2.0 音素级 / 可灵 Omni）同帧出对口型画面，**音轨仍是配音轨、模型音频不接管声音**——区别于 native_av 的根本点。
 - `native_audio_policy`: `none|ambience|native_sfx|native_speech|lipsync_condition_only`，只表达生成意图；compose 是否混入仍由 `视频原生音轨`/`制作模式` 决定。`native_speech`（台词+口型由后端原生生成）只在 `av_mode=native_av` 的说话镜出现；`lipsync_condition_only`（配音仅作口型条件、不进音轨）只在 `voice_conditioned_lipsync` 镜出现，compose 必须用 voice-first 配音轨、丢弃模型这条音频。
 - `identity_requirement`: 身份层要求：
   - `none`
@@ -100,7 +102,10 @@
   - `face_lock_or_reference_group`
   - `reference_controls_or_reference_group`
 - `max_clip_seconds`: 该 primary 后端建议单 Clip 上限。超出后回 `n2d-script` 拆 Clip 或换长单镜后端。
-- `risk_flags`: `multi_person`、`mouth_visible`、`native_audio_risk`、`native_speech`（原生音画说话镜，须查唇音同步）、`long_duration`、`contact_motion`、`identity_drift_risk` 等。
+- `risk_flags`: `multi_person`、`mouth_visible`、`native_audio_risk`、`native_speech`（原生音画说话镜，须查唇音同步）、`long_duration`、`contact_motion`、`identity_drift_risk`、`motion_reference_candidate`（可用视频运动参考）、`multishot_candidate`（属多镜单次生成候选组）等。
+- `quality_tier`: 质量档路由意图，`fast|high|n/a`。`high`=身份/物理吃重镜（脸/接触/多人/原生台词/已升锁），值后端 pro 档把脸与运动钉稳；`fast`=空镜/通用低风险镜，量产省成本；`n/a`=该 primary 无 fast/pro 档（如 veo）。**只表达路由意图，不写死 model_version**——落档侧出片脚本把 `high→pro`、`fast→fast` 解析成后端实际质量档；成本事件带 `quality_tier` 时 dashboard 的 `cost_by_provider` 会按 `provider@tier:unit` 拆出 fast/pro 花销。
+- `motion_reference`: `{applicable, use, note}`。长连续运动镜（追逐/飞行/打斗）且 primary 支持 `reference_video_motion`（Seedance/Kling）时 `applicable=true`，提示把**同段前一条已通过 clip 作运动/风格视频参考**喂进去锁运镜节奏（与图身份锁正交的跨镜运动连续性轴）；首条镜无前序参考自然跳过。
+- `multishot_candidate`: `{group_id, members, note}`，仅当本镜属一个多镜单次生成候选组时出现。见顶层 `multishot_groups`。
 - `motion_control`: 复杂物理交互控制契约，所有 route 都必须有；普通镜写 `level=none`。`fight_exchange`、`intimate_interaction`、`hug_or_pull` 或带 `physical_interaction/contact_motion/feature_melting_risk` 的镜头必须 `level=required`、`manifest_required=true`，并指向 `出视频/第N集/control/Clip_XX/motion_control_manifest.json`。
   - `level`: `none|recommended|required`。`recommended` 用于多人站位/追逐/飞行等可选增强；`required` 用于打斗命中、拥抱、抓腕、拉扯、近距离接触。
   - `required_inputs`: 该镜头需要的控制资产键。高危接触通常至少包含 `pose_sequence`、`depth_sequence`、`instance_masks`；武器/接触点再加 `contact_map`。

@@ -175,6 +175,7 @@ def load_asset_index(root: Path) -> Optional[Dict[str, Any]]:
             "name": str(a.get("name") or "").strip(),
             "type": str(a.get("type") or "").strip(),
             "reference_group": a.get("reference_group") if isinstance(a.get("reference_group"), Mapping) else {},
+            "scale": str((a.get("constraints") or {}).get("scale") if isinstance(a.get("constraints"), Mapping) else a.get("scale") or "").strip(),
             "must_not_have": _asset_must_not_have_terms(a),
         }
         m = re.match(r"([A-Za-z]+_)", aid)
@@ -1511,11 +1512,12 @@ def _clip_pngs_on_disk(root: Path, ep: str, shot: Optional[str], fallback: Optio
 
 def prop_shape_review_targets(root: Path, ep: str,
                               asset_index: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
-    """高风险道具（PROP + must_not_have）逐图禁形复核目标。
+    """高风险道具（PROP + must_not_have）逐图禁形/尺寸复核目标。
 
     文字/registry 只能防止继续把“壶嘴”写进 prompt，不能证明既有 PNG 没长出禁形。
+    同理，scale 约束只能说明设计尺寸，不能证明既有 PNG 没被画成大酒坛/大罐。
     因此凡镜头引用了带 must_not_have 的 PROP，并且对应 PNG 已存在，就进入硬复核队列；
-    只有确认文件里逐图标 ok 才放行。
+    只有确认文件里逐图标 ok 才代表禁形和尺寸都人工/视觉模型确认通过。
     """
     idx = asset_index if asset_index is not None else load_asset_index(root)
     if not idx:
@@ -1557,6 +1559,7 @@ def prop_shape_review_targets(root: Path, ep: str,
                     "png_abs": str(root / "出图" / ep / png),
                     "ref": ref,
                     "must_not_have": must_not,
+                    "scale": entry.get("scale") or "",
                     "confirmed": confirmed,
                     "confirmation_path": str(_prop_shape_confirmation_path(root, ep)),
                     "reason": "registered_prop_must_not_have",
@@ -1565,7 +1568,7 @@ def prop_shape_review_targets(root: Path, ep: str,
 
 
 def build_prop_shape_review_queue(payload: Dict[str, Any], root: Path, ep: str) -> List[Dict[str, Any]]:
-    """为高风险道具禁形生成逐图复核队列 + 参考并排图。best-effort，never crash。"""
+    """为高风险道具禁形/尺寸生成逐图复核队列 + 参考并排图。best-effort，never crash。"""
     targets = prop_shape_review_targets(root, ep, load_asset_index(root))
     stitch_mod = _load_review_module("face_compare_stitch")
     for t in targets:
@@ -2202,9 +2205,11 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
             "block",
             "asset_consistency",
             t.get("png"),
-            f"高风险道具禁形未逐图确认：{t.get('label') or t.get('shot')} 的 `{t.get('asset')}`"
-            f"（{t.get('asset_name') or ''}）登记了 must_not_have={terms}。文字约束不能证明既有 PNG 没长出禁形，"
-            f"需人工/视觉模型确认 `{t.get('png')}` 无这些禁形，或重出该图；确认文件：{t.get('confirmation_path')}{stitch}",
+            f"高风险道具禁形/尺寸未逐图确认：{t.get('label') or t.get('shot')} 的 `{t.get('asset')}`"
+            f"（{t.get('asset_name') or ''}）登记了 must_not_have={terms}"
+            f"{'；scale=' + str(t.get('scale')) if t.get('scale') else ''}。"
+            f"文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `{t.get('png')}`"
+            f" 无这些禁形且大小符合道具设定，或重出该图；确认文件：{t.get('confirmation_path')}{stitch}",
         ))
     reason_text = {
         "face_precision_not_full": "缺 full 精度脸部 embedding 比对",
@@ -2339,7 +2344,7 @@ def to_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         add(s.get("png") or s.get("shot"), PROHIBITED_FACE_PATCH_LABEL)
     for t in (payload.get("prop_shape_review") or {}).get("targets", []):
         if not t.get("confirmed"):
-            add(t.get("png") or t.get("shot"), f"高风险道具禁形未确认:{t.get('asset')}")
+            add(t.get("png") or t.get("shot"), f"高风险道具禁形/尺寸未确认:{t.get('asset')}")
     return sorted(by_shot.values(), key=lambda d: d["shot"])
 
 
@@ -2401,7 +2406,7 @@ def to_strict_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         add(s.get("png") or s.get("shot"), f"strict:{PROHIBITED_FACE_PATCH_LABEL}")
     for t in (payload.get("prop_shape_review") or {}).get("targets", []):
         if not t.get("confirmed"):
-            add(t.get("png") or t.get("shot"), f"strict:高风险道具禁形未确认:{t.get('asset')}")
+            add(t.get("png") or t.get("shot"), f"strict:高风险道具禁形/尺寸未确认:{t.get('asset')}")
     return sorted(by_shot.values(), key=lambda d: d["shot"])
 
 
@@ -2691,7 +2696,7 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True, strict_pixel: bool = Fa
                 except Exception as exc:
                     payload["semantic_drift"] = {"available": False, "notes": [f"semantic_drift 失败：{exc}"], "findings": []}
     payload["lint"] = lint_prompts(root, ep)
-    # 高风险道具禁形逐图复核：prompt/registry 只能约束未来生成，不能证明既有 PNG 没有禁形。
+    # 高风险道具禁形/尺寸逐图复核：prompt/registry 只能约束未来生成，不能证明既有 PNG 没有禁形或尺寸漂移。
     # 这道门在 lint 之后跑，读取逐镜 PROP_xx 绑定和已落档 PNG；未确认则 summarize/to_findings 硬阻断。
     build_prop_shape_review_queue(payload, root, ep)
     # F 资产状态机校验（registry 级，与逐镜 prompt 无关）：状态回退/未知态=hard，其余 warn 并入 lint 管道，
@@ -2871,7 +2876,7 @@ def render_markdown(payload: Dict[str, Any]) -> str:
     prop_targets = prop_shape.get("targets") or []
     if prop_targets:
         pending = [t for t in prop_targets if not t.get("confirmed")]
-        lines.extend(["", "## 高风险道具禁形逐图复核（硬闸）",
+        lines.extend(["", "## 高风险道具禁形/尺寸逐图复核（硬闸）",
                       f"- total {len(prop_targets)} · pending {len(pending)} · confirmed {len(prop_targets) - len(pending)}",
                       f"- 确认文件: `{prop_shape.get('confirmation_path')}`"])
         for t in prop_targets:
@@ -2880,7 +2885,7 @@ def render_markdown(payload: Dict[str, Any]) -> str:
             terms = "、".join(str(x) for x in (t.get("must_not_have") or [])[:8])
             lines.append(
                 f"  - {mark} {t.get('shot')} {t.get('png')}（{t.get('asset')} {t.get('asset_name')}）"
-                f" 禁形={terms}；{stitch}"
+                f" 禁形={terms}{'；尺寸=' + str(t.get('scale')) if t.get('scale') else ''}；{stitch}"
             )
     lines.append("")
     lines.append("落档判定：**verdict=block** → 有硬阻断（崩脸/纯文生图/非法 CHAR_id），必须修复后重跑；"

@@ -37,6 +37,10 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "max_clip_seconds": 15,
         "default_mode": "image2video",
         "default_model_version": "seedance2.0fast",
+        # Seedance 家族有 fast/pro 质量档（fast≈$0.022/s，量产默认；pro 留给吃重镜）。这里只登记
+        # 「支持质量档 + 默认档」能力，不写死具体 pro 版本字串（防过期：版本名以 cli_snapshots 为准）。
+        "supports_quality_tier": True,
+        "default_quality_tier": "fast",
         "identity_mechanism": "first_last_frame_or_reference_group",
         "native_av": False,
         "frame_control": {
@@ -84,6 +88,11 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "identity_mechanism": "face_lock",
         "native_av": True,
         "lipsync_audio_ref": True,  # Seedance 2.0 音素级口型：可吃音频参考做口型驱动
+        # Seedance 2.0 一次生成可出「多镜头叙事 + 跨镜人物一致 + 无缝转场」（multi-shot single-gen），
+        # 也能收视频片段作运动/风格参考（reference_video_motion 已在 MOTION_CONTROL_PROFILES 登记）。
+        "multishot_native": True,
+        "supports_quality_tier": True,  # fast/pro 质量档；fast 量产默认，pro 留吃重镜
+        "default_quality_tier": "fast",
         "frame_control": {
             "mode": "first_frame_or_channel",
             "max_timeline_frames": 1,
@@ -257,6 +266,44 @@ MOTION_CONTROL_PROFILES: Dict[str, Dict[str, object]] = {
         "capabilities": ["pose_sequence", "depth_sequence", "edge_sequence", "instance_mask", "ic_lora"],
     },
 }
+
+
+# ── 多镜单次生成 / 视频运动参考 / 质量档 能力派生（CATALOG_VERIFIED 戳记覆盖）──────────
+# 三者都从档案字段派生，集中在本档（不散落在 router）。判定走能力字段，不 hardcode 厂商名。
+MULTISHOT_NATIVE_BACKENDS = frozenset(
+    key for key, spec in VIDEO_BACKEND_PROFILES.items()
+    if bool(spec.get("multishot_native")) and spec.get("auto_routing", True) is not False
+)
+QUALITY_TIER_BACKENDS = frozenset(
+    key for key, spec in VIDEO_BACKEND_PROFILES.items() if bool(spec.get("supports_quality_tier"))
+)
+# 视频运动参考（把一段已通过的 clip 当运动/风格参考喂进去）= 运动控制档里的 reference_video_motion 能力。
+MOTION_REFERENCE_BACKENDS = frozenset(
+    key for key, spec in MOTION_CONTROL_PROFILES.items()
+    if "reference_video_motion" in (spec.get("capabilities") or [])
+)
+
+
+def video_backend_supports_multishot(backend: Optional[str]) -> bool:
+    """该后端是否支持「多镜单次生成」（一次出多镜头叙事、跨镜一致、无缝转场）。纯函数·可测。"""
+    return normalize_video_backend(backend or "", default="") in MULTISHOT_NATIVE_BACKENDS
+
+
+def video_backend_supports_quality_tier(backend: Optional[str]) -> bool:
+    """该后端是否有 fast/pro 质量档（成本×质量路由轴）。纯函数·可测。"""
+    return normalize_video_backend(backend or "", default="") in QUALITY_TIER_BACKENDS
+
+
+def video_backend_default_quality_tier(backend: Optional[str]) -> str:
+    """该后端默认质量档（无档位能力→空串）。纯函数·可测。"""
+    key = normalize_video_backend(backend or "", default="")
+    spec = VIDEO_BACKEND_PROFILES.get(key, {})
+    return str(spec.get("default_quality_tier") or "") if spec.get("supports_quality_tier") else ""
+
+
+def video_backend_supports_motion_reference(backend: Optional[str]) -> bool:
+    """该后端能否吃「视频片段运动/风格参考」（reference_video_motion）。纯函数·可测。"""
+    return normalize_video_backend(backend or "", default="") in MOTION_REFERENCE_BACKENDS
 
 
 def video_backend_motion_control(backend: Optional[str], default: str = "dreamina") -> Dict[str, object]:

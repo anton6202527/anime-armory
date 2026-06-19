@@ -432,7 +432,11 @@ def add_counter_value(target: Dict[str, float], key: str, amount: float) -> None
 def cost_keys(cost: Dict[str, Any]) -> Tuple[str, str]:
     unit = str(cost.get("unit") or cost.get("currency") or "amount")
     provider = str(cost.get("provider") or "unknown")
-    return unit, f"{provider}:{unit}"
+    # quality_tier（fast/pro/high）随成本事件带上时折进 provider 维，让 cost_by_provider 自动拆出
+    # 同后端的 fast vs pro 花销（成本×质量轴的回看）；无 tier 时维持旧键格式，老事件零影响。
+    tier = str(cost.get("quality_tier") or "").strip()
+    provider_key = f"{provider}@{tier}:{unit}" if tier else f"{provider}:{unit}"
+    return unit, provider_key
 
 
 def add_release_amounts(summary: Dict[str, Any], *, unit: str, revenue: float = 0.0, spend: float = 0.0) -> None:

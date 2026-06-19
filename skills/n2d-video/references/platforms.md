@@ -151,6 +151,9 @@ Sora 降级依据：OpenAI Help Center `https://help.openai.com/en/articles/2000
 - **画幅**：9:16 / 16:9
 - **分辨率**：**默认 720p**（也支持 1080p；开跑前把选择给用户）
 - **单 Clip 时长**：**单镜可达 ~15s（Seedance 2.0）**——长单镜 = 更少拼接缝、跨镜漂移更少，本可一镜到底的段落别切碎
+- **多镜单次生成（multishot_native·2026-06-19）**：Seedance 2.0 可**一次生成出多镜头叙事**，跨镜人物一致、转场无缝（单次最多吃 9 图 + 3 视频 + 3 音频参考）。对连续接力镜组，比「更长单镜」再进一步——一次 co-generate 整段彻底消缝。`n2d-model-router` 对直连 Seedance 的项目把连续接力镜标 `multishot_groups` 候选（**advisory**：提示可一次出，不自动合并，保逐 Clip 可重跑粒度）。注意：**即梦渠道执行后端是 Dreamina `multiframe2video`（原生多关键帧，非多镜叙事），多镜单次生成在即梦渠道未核验**——直连 Seedance API 才走这条。
+- **视频运动参考（reference_video_motion·2026-06-19）**：单次可收**视频片段作运动/风格参考**——长连续运动镜（追逐/飞行/打斗）把同段前一条已通过 clip 喂进去当 motion/style ref，锁运镜节奏与运动风格（与图身份 Face Lock 正交的跨镜运动连续性轴）。`n2d-model-router` 对这类镜出 `motion_reference.applicable=true`。
+- **质量档（fast/pro·2026-06-19）**：Seedance 家族有 fast/pro 档（fast≈$0.022/s 量产默认，pro 留吃重镜）。`n2d-model-router` 出 `quality_tier`（吃重镜 `high`→pro、通用镜 `fast`），落档侧解析成实际 model_version；具体版本字串以 `cli_snapshots` 为准（防过期，不写死在档案正文）。
 - **角色一致性**：首帧图 → 图生视频；多镜头连续叙事能力较强；原生音视频联合生成；**Seedance 2.0 Face Lock**——单主参考 + 几何约束锁五官比例/位置（正脸、3⁄4 侧最稳；比多图嵌入更死守正脸）
 - **身份注册层字段**：`identity_adapters.video.seedance`（`mode=face_lock`；`registered/ready` 必填 `reference` 或 `id`）
 - **原生音画策略**：原生音视频联合是强项，但 n2d 默认仍禁原生人声；环境声/法术声/破空声可低风险 opt-in，compose 默认低音量混入

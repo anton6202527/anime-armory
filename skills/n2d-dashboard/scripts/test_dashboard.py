@@ -545,3 +545,12 @@ def test_identity_kpi_stable_when_no_drift():
 def test_identity_kpi_empty_report_unavailable():
     kpi = dashboard.identity_consistency_kpi({"available": True, "characters": {}})
     assert kpi["available"] is False
+
+
+def test_cost_keys_split_by_quality_tier():
+    # 带 quality_tier 的成本事件按 provider@tier:unit 拆桶；无 tier 维持旧键（老事件零影响）
+    assert dashboard.cost_keys({"unit": "USD", "provider": "seedance", "quality_tier": "fast"}) == (
+        "USD", "seedance@fast:USD")
+    assert dashboard.cost_keys({"unit": "USD", "provider": "seedance", "quality_tier": "pro"}) == (
+        "USD", "seedance@pro:USD")
+    assert dashboard.cost_keys({"unit": "USD", "provider": "seedance"}) == ("USD", "seedance:USD")

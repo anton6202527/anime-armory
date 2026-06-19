@@ -98,7 +98,7 @@ def test_prop_shape_review_targets_unconfirmed_high_risk_prop_png(tmp_path: Path
             "type": "prop",
             "name": "毒酒瓷瓶",
             "reference_group": {"primary": "出图/共享/图片/定妆_毒酒瓷瓶.png"},
-            "constraints": {"must_not_have": ["壶嘴", "喷口"]},
+            "constraints": {"must_not_have": ["壶嘴", "喷口"], "scale": "掌心小瓷瓶"},
         }],
     }, ensure_ascii=False), encoding="utf-8")
     pr = tmp_path / "出图" / "第1集" / "prompt"
@@ -116,6 +116,7 @@ def test_prop_shape_review_targets_unconfirmed_high_risk_prop_png(tmp_path: Path
     assert len(targets) == 1
     assert targets[0]["asset"] == "PROP_01"
     assert targets[0]["png"] == "图片/Clip_01_毒酒抵唇.png"
+    assert targets[0]["scale"] == "掌心小瓷瓶"
     assert targets[0]["confirmed"] is False
 
 
@@ -157,6 +158,7 @@ def test_prop_shape_review_is_hard_block_and_finding() -> None:
                 "label": "Clip 01",
                 "png": "图片/Clip_01.png",
                 "must_not_have": ["壶嘴", "喷口"],
+                "scale": "掌心小瓷瓶",
                 "confirmed": False,
                 "confirmation_path": "生产数据/image_qc/第1集/prop_shape_confirmations.json",
             }]
@@ -165,7 +167,8 @@ def test_prop_shape_review_is_hard_block_and_finding() -> None:
     summary = image_qc.summarize(payload)
     assert summary["verdict"] == "block"
     findings = image_qc.to_findings(payload)
-    assert any(f["sev"] == "block" and f["dim"] == "asset_consistency" and "高风险道具禁形" in f["msg"]
+    assert any(f["sev"] == "block" and f["dim"] == "asset_consistency" and "高风险道具禁形/尺寸" in f["msg"]
+               and "掌心小瓷瓶" in f["msg"]
                for f in findings)
 
 
