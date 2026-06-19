@@ -255,17 +255,33 @@ else
   ffmpeg -y -loglevel error -f lavfi -i "anullsrc=r=44100:cl=stereo" -t "$DUR" "$FOLEY_WAV"
 fi
 
-echo "=== [4/6] 字幕 PNG ==="
+echo "=== [4/6] 系统面板母题 overlay + 字幕 PNG ==="
+# 系统面板 overlay（穿越/系统流母题）：AI 出空光幕底框，等级/属性数值在此叠成清晰文字层。
+# 无 motif_registry.json 或本集无 system_panel 镜 → render_panel 写空文件、行为与旧版逐字节一致。
+: > "$W/panel_inputs.txt"; : > "$W/panel_vfilter.txt"
+PANEL_BASE=4 SUB_W="$PXW" SUB_H="$PXH" python3 "$SKILL_DIR/render_panel.py" "$ROOT" "$EP" "$W" || \
+  echo "⚠️ 系统面板 overlay 渲染失败 → 跳过（成片只缺面板数值层，不中断合成）"
+# 空文件时 grep -c 打印 0 且 exit 1；命令替换赋值不触发 set -e，故不需 `|| echo 0`（那会双打印 0）。
+NPANEL=$(grep -c . "$W/panel_inputs.txt" 2>/dev/null); NPANEL=${NPANEL:-0}
 # 字幕可选：默认仅中文（finalize_storyboard 仅在有英文译文时才产 字幕_英文.srt），EN 缺失不算错。
 # 注意 set -e：缺文件时 cp 会整体中断合成，故每个 cp 先判存在。render_subs.parse_srt 对缺轨已容错。
 [ -f "$ZH_SRT" ] && cp "$ZH_SRT" "$W/zh.srt" || echo "（无中文字幕 $ZH_SRT，跳过）"
 [ -f "$EN_SRT" ] && cp "$EN_SRT" "$W/en.srt" || true
 # 复制时长清单供字幕样式分级（旁白/系统→灰小字，爽点→暖金大字）；缺则字幕全 normal
 MANIFEST="$ROOT/合成/$EP/配音/时长清单.json"; [ -f "$MANIFEST" ] && cp "$MANIFEST" "$W/manifest.json" || true
-PNG_INPUT_BASE=4 SUB_W="$PXW" SUB_H="$PXH" python3 "$SKILL_DIR/render_subs.py" "$W" "$MODE"
-PNG_INPUTS=(); while IFS= read -r p; do PNG_INPUTS+=(-i "$p"); done < "$W/inputs.txt"
-NPNG=$(grep -c . "$W/inputs.txt"); VIDX=$((4+NPNG))
-VFILTER=$(cat "$W/vfilter.txt")
+# ffmpeg 输入序：0-3 固定(concat/bgm/clip_audio/foley) → 面板 PNG(从 4) → 字幕 PNG(从 4+NPANEL)。
+# 有面板时字幕链从 [vpanel] 起（叠在面板之上）；无面板时从 [0:v] 起（与旧版一致）。
+SUB_BASE=$((4+NPANEL))
+if [ "$NPANEL" -gt 0 ]; then SUB_FIRST="[vpanel]"; else SUB_FIRST="[0:v]"; fi
+PNG_INPUT_BASE=$SUB_BASE SUB_FIRST_INPUT="$SUB_FIRST" SUB_W="$PXW" SUB_H="$PXH" python3 "$SKILL_DIR/render_subs.py" "$W" "$MODE"
+PNG_INPUTS=()
+while IFS= read -r p; do [ -n "$p" ] && PNG_INPUTS+=(-i "$p"); done < "$W/panel_inputs.txt"
+while IFS= read -r p; do [ -n "$p" ] && PNG_INPUTS+=(-i "$p"); done < "$W/inputs.txt"
+NSUB=$(grep -c . "$W/inputs.txt"); VIDX=$((4+NPANEL+NSUB))
+# 合并 overlay 链：面板链([0:v]->[vpanel]) ; 字幕链([vpanel]->[v])；无面板时只字幕链。
+SUB_VFILTER=$(cat "$W/vfilter.txt")
+PANEL_VFILTER=$(cat "$W/panel_vfilter.txt" 2>/dev/null || true)
+if [ -n "$PANEL_VFILTER" ]; then VFILTER="${PANEL_VFILTER};${SUB_VFILTER}"; else VFILTER="$SUB_VFILTER"; fi
 
 echo "=== [5/6] 混音 + 烧字幕 ==="
 if [ -f "$VOICE" ]; then

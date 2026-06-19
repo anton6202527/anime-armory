@@ -126,6 +126,45 @@ HIGH_MOTION_TEMPLATES = frozenset({
 EXPRESSION_SPAN_VALUES = ("微", "中", "大")
 EXPRESSION_SPAN_BIG = "大"
 
+# ── 题材母题(motif) ──────────────────────────────────────────────────────────
+# 穿越/系统流等爽文里高频复现的"母题场景"（系统面板出现/升级/签到/抽奖/爆装备）：相对固定的
+# 场景模板 + 每次出现带成长属性（面板进化、等级只增不减）。motif 是 n2d 线内一等概念，靠
+# motif_registry.json（数据真值）+ 专项镜头模板库.md 的 motif 模板（镜头契约）+ asset_registry 的
+# VFX lifecycle（成长状态机·只进不退）+ n2d-compose 期 overlay（清晰数值文字层）贯穿全流程。
+# 检测特征是单一真值源：split/分镜检测器（motif_detector）与 gate 共用，避免两处各定义一份漂移。
+MOTIF_ID_PREFIX = "MOTIF_"
+# 题材 → 关键词。检测器据此识别题材；命中关键词数 ≥ GENRE_MIN_HITS 即判定，多题材取命中最多者。
+GENRE_KEYWORDS = (
+    ("系统流", ("系统", "面板", "宿主", "绑定", "签到", "任务奖励", "抽奖", "属性面板", "经验值", "升级", "金手指", "叮——", "恭喜宿主")),
+    ("穿越", ("穿越", "重生", "魂穿", "异世界", "回到古代", "前世", "上一世", "醒来发现", "莫名来到")),
+    ("修仙", ("修仙", "修真", "灵气", "渡劫", "金丹", "元婴", "筑基", "境界", "御剑", "宗门", "灵根")),
+    ("都市", ("总裁", "豪门", "霸总", "微信", "写字楼", "董事长", "集团", "都市")),
+    ("宫斗", ("皇上", "娘娘", "嫔妃", "后宫", "册封", "贵妃", "冷宫", "凤印", "圣旨")),
+    ("赘婿", ("赘婿", "上门女婿", "岳父", "丈母娘", "入赘", "废物女婿")),
+    ("战神", ("战神", "兵王", "退役", "佣兵", "龙组", "镇国", "特种兵")),
+)
+GENRE_MIN_HITS = 2
+# 母题类型 → 关键词。检测器在分镜/正文里据此识别母题桥段。系统面板是首个落地样板；
+# 后续 level_up/signin/gacha/loot/cheat 只在此加枚举值 + motif_registry 配置，不改架构。
+MOTIF_TYPE_KEYWORDS = (
+    ("system_panel", ("系统面板", "面板", "属性栏", "状态栏", "属性面板", "数据面板", "光幕", "虚拟屏", "信息面板", "等级", "经验条", "属性值")),
+    ("level_up", ("升级", "等级提升", "突破", "进阶", "level up", "境界提升", "属性提升", "经验满")),
+    ("system_refresh", ("系统刷新", "系统更新", "系统升级", "新功能解锁", "系统进化", "面板进化", "系统重启")),
+    ("signin", ("签到", "每日签到", "连续签到", "签到奖励", "打卡")),
+    ("gacha", ("抽奖", "抽卡", "转盘", "开箱", "幸运抽取", "十连")),
+    ("loot", ("爆装备", "掉落", "爆出", "获得装备", "开宝箱", "战利品", "掉宝")),
+    ("cheat", ("金手指", "外挂", "作弊器", "系统绑定", "激活系统", "系统降临")),
+)
+MOTIF_TYPE_MIN_HITS = 1
+# 母题首样板：系统面板。绑定的 VFX 资产 id（asset_registry 里的成长 VFX，lifecycle 锁档位只进不退）。
+SYSTEM_PANEL_MOTIF_ID = "MOTIF_系统面板"
+SYSTEM_PANEL_VFX_ID = "VFX_系统面板"
+SYSTEM_PANEL_TEMPLATE_ID = "system_panel"
+# motif 成长状态机：这些字段只增不减（机检退级=block），与 asset_lifecycle 的 lifecycle 单调校验同源。
+MOTIF_MONOTONIC_FIELDS_DEFAULT = ("level", "panel_tier")
+# system_panel overlay 文字层默认字段（n2d-compose render_panel 据此渲染清晰数值，AI 只出空光幕底）。
+SYSTEM_PANEL_OVERLAY_FIELDS = ("title", "level", "attrs")
+
 # ── 路径与目录 ─────────────────────────────────────────────────────────────
 SHARED_ASSET_DIR = "共享"
 LEGACY_SHARED_ASSET_DIR = "common"
@@ -166,6 +205,8 @@ PRODUCTION_DASHBOARD_KIND = "n2d_production_dashboard"
 PRODUCTION_ALERTS_KIND = "n2d_production_alerts"
 ASSET_PACK_KIND = "n2d_asset_pack"
 ASSET_RERUN_PLAN_KIND = "n2d_asset_rerun_plan"
+MOTIF_REGISTRY_KIND = "n2d_motif_registry"          # 题材母题数据真值（出图/共享/motif_registry.json）
+MOTIF_PLAN_KIND = "n2d_motif_plan"                  # 母题检测建议（生产数据/motif_plan_第N集.{json,md}）
 BATCH_QUEUE_KIND = "n2d_batch_queue"
 DIFFERENTIATION_CANDIDATES_KIND = "n2d_differentiation_candidates"
 EPISODE_REVIEW_SCORE_KIND = "n2d_episode_review_score"

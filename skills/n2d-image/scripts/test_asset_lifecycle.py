@@ -72,6 +72,27 @@ def test_vfx_forms_and_params() -> None:
     assert "vfx_params_type" in codes
 
 
+def test_system_panel_growth_passes() -> None:
+    # 母题样板：系统面板成长 VFX——forms 即等级档，lifecycle 锁档位前进，色锚/禁烤文字。
+    asset = {"id": "VFX_系统面板", "type": "vfx", "name": "系统面板光幕",
+             "forms": [{"id": "v1_素纹"}, {"id": "v2_流光"}, {"id": "v3_符纹"}],
+             "vfx_params": {"color_target": {"h": 195, "s": 0.4, "v": 0.95}, "trail": "无"},
+             "lifecycle": {"states": ["v1_素纹", "v2_流光", "v3_符纹"],
+                           "transitions": [{"from": "v1_素纹", "to": "v2_流光", "at_clip": "EP03_CLIP12"}]},
+             "drift_forbidden": ["color", "frame_shape", "text_baked_in"]}
+    assert al.validate_lifecycle(asset) == []
+
+
+def test_system_panel_tier_regression_blocks() -> None:
+    # 面板退档（v3_符纹 → v1_素纹）= 等级回退 → block。
+    asset = {"id": "VFX_系统面板", "type": "vfx",
+             "forms": [{"id": "v1_素纹"}, {"id": "v2_流光"}, {"id": "v3_符纹"}],
+             "lifecycle": {"states": ["v1_素纹", "v2_流光", "v3_符纹"],
+                           "transitions": [{"from": "v3_符纹", "to": "v1_素纹", "at_clip": "EP05_CLIP02"}]}}
+    codes = {f["code"]: f["level"] for f in al.validate_lifecycle(asset)}
+    assert codes.get("lifecycle_regression") == "block"
+
+
 def test_validate_registry_and_run(tmp_path: Path) -> None:
     reg = tmp_path / "出图" / "共享"
     reg.mkdir(parents=True)

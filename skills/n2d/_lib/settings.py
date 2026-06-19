@@ -147,6 +147,11 @@ VIDEO_CHANNEL_CHOICES = (
 
 SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("制作模式", ("n2d",), _PRODUCTION_MODE_KEYS, sensitive=True),
+    # 题材：弱选择点——split/分镜阶段 motif_detector 自动检测预填建议值，用户可覆盖。驱动母题增强
+    # （系统面板等复现桥段的镜头/台词/出图/overlay）。取值与 n2d_const.GENRE_KEYWORDS 的题材键对齐。
+    SettingSpec("题材", ("n2d",), ("系统流", "穿越", "修仙", "都市", "宫斗", "赘婿", "战神", "自定义"), parameterized=True),
+    # 母题增强：是否对检测到的复现母题桥段套用增强模板（默认建议待确认，注入下游前人确认）。
+    SettingSpec("母题增强", ("n2d",), ("开启", "关闭", "仅建议")),
     SettingSpec("基础视觉风格", ("n2d", "ad"), ("写实电影感", "国漫写实", "二次元赛璐璐", "二次元", "水墨国风", "厚涂幻想", "赛博霓虹", "Q版轻喜", "CG质感", "定格动画", "极简产品", "国风写意", "自定义"), parameterized=True),
     SettingSpec("单集时长", ("n2d",), ("前长后短", "均衡", "快节奏", "长集", "自定义"), parameterized=True),
     SettingSpec("首切范围", ("n2d",), ("部分先切", "全篇粗切"), parameterized=True),

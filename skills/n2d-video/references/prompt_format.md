@@ -156,6 +156,7 @@ native audio policy: audio_intent=none by default; for low-risk ambience/native 
 > **资产身份注册层也继承，不重发明**：`出图/共享/identity_registry.json` 是角色/形态身份真值源，`生产数据/identity_adapter_matrix.json` 是可执行视图。视频阶段先读 matrix 确定目标后端是 Character ID / Face Lock / reference controls / LoRA / reference_group fallback，再回 registry 取 `reference_group`、`angle_policy` 和 `drift_forbidden`；不能在视频 prompt 现场凭记忆写临时 ID。
 > **近景身份锁定也继承，不靠泛化锚点硬扛**：CU/MCU/反打/说话镜要把 registry 的脸部特写、表情参考、正侧面、半身参考拆成可执行约束；尤其配角近景必须显式锁脸型、五官比例、发型发髻、标志配饰和服装配色。若目标后端只有 fallback reference_group，没有原生 Face Lock/Character ID/reference controls，就把表情、张嘴、转头和运镜幅度降下来；配角连续脸漂时必须降级 MCU/OTS/侧脸/手部或物件反应镜，而不是继续加泛化形容词。
 > **原生音画策略也继承选择点，不临场乱开**：默认 `视频原生音轨=丢弃`。只有纯空镜/转场/远景氛围/背身侧脸等低风险镜头可写 `audio_intent=ambience|native_sfx`，并在总览「原生音画 opt-in 清单」列明为什么无口型、无台词、无原生人声风险。
+> **系统面板母题也继承，靠首帧锁不靠视频画**：`template=system_panel` 的镜（穿越/系统流系统面板/升级/签到/抽奖）面板视觉已在出图烤进首帧（`VFX_系统面板` 空光幕底框，锁色锁形、内部留空）。视频阶段把面板当**高频复现 VFX 锁死**：prompt 写"系统面板光幕悬浮位置/透明度固定，符纹仅做呼吸式微光，**面板不变形、不位移、不出任何文字数字**，主体只做反应表演"；系统光列为该镜专属色（主色调字段）。**等级/属性数值不在视频画**——它们是 n2d-compose 期 overlay 文字层，视频只负责让空面板稳定悬浮。升级镜的"数值跳变"靠首帧 form 档位差 + compose overlay 实现，不靠视频生成。沿用 magic_burst 高频特效入库锁色锁形工艺。
 
 至少包含：
 

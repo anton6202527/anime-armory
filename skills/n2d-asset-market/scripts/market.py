@@ -34,6 +34,8 @@ from n2d_contract import (  # noqa: E402  身份注册单一真值源
     IDENTITY_REFERENCE_KEYS,
     IDENTITY_REGISTRY_KIND,
     IDENTITY_VIDEO_ADAPTERS,
+    MOTIF_REGISTRY_KIND,
+    SYSTEM_PANEL_MOTIF_ID,
     identity_registry_path,
     asset_registry_path,
     identity_reset_template,
@@ -237,6 +239,8 @@ def pack_dir(library: Path, asset_type: str, slug: str) -> Path:
         return library / "props" / slug
     if asset_type == "route_template":
         return library / "templates" / "model_routes" / slug
+    if asset_type == "motif":
+        return library / "motifs" / slug
     return library / asset_type / slug
 
 
@@ -846,6 +850,160 @@ def cmd_import_routes(args: argparse.Namespace) -> int:
     return 0
 
 
+# ── 母题(motif) pack：跨剧复用系统面板等复现桥段 ─────────────────────────────────
+
+def motif_registry_path(root: Path) -> Path:
+    return Path(shared_asset_path(str(root), "motif_registry.json", prefer_existing=False))
+
+
+def load_motif_registry(root: Path) -> Dict[str, Any]:
+    path = motif_registry_path(root)
+    if not path.is_file():
+        raise FileNotFoundError(f"motif_registry.json not found: {path}")
+    data = read_json(path)
+    if not isinstance(data, dict) or data.get("kind") != MOTIF_REGISTRY_KIND:
+        raise ValueError(f"invalid motif_registry.json: {path}")
+    return data
+
+
+def find_motif(registry: Mapping[str, Any], motif_id: str) -> Dict[str, Any]:
+    for m in registry.get("motifs", []) or []:
+        if isinstance(m, dict) and str(m.get("motif_id")) == motif_id:
+            return m
+    raise KeyError(f"motif not found in motif_registry: {motif_id}")
+
+
+def cmd_export_motif(args: argparse.Namespace) -> int:
+    """导出一个母题（默认系统面板）为可复用 pack：母题定义 + 绑定的成长 VFX + 参考图。"""
+    root = Path(args.project_root)
+    motif_id = args.motif_id or SYSTEM_PANEL_MOTIF_ID
+    motif = copy.deepcopy(find_motif(load_motif_registry(root), motif_id))
+    title = args.title or str(motif.get("motif_type") or motif_id)
+    slug = slugify(args.slug or title)
+    out_dir = pack_dir(Path(args.library), "motif", slug)
+    if out_dir.exists() and not args.force:
+        raise FileExistsError(f"motif pack already exists, use --force: {out_dir}")
+    if out_dir.exists():
+        shutil.rmtree(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    # 绑定的成长 VFX（从 asset_registry 抽出 + 拷参考图），新剧 import 时一并落地。
+    gsm = motif.get("growth_state_machine") if isinstance(motif.get("growth_state_machine"), dict) else {}
+    bound_vfx_id = str(gsm.get("bound_vfx") or "")
+    vfx_assets: List[Dict[str, Any]] = []
+    files: List[Dict[str, Any]] = []
+    if bound_vfx_id:
+        try:
+            vfx_asset = copy.deepcopy(find_asset(load_asset_registry(root), asset_id=bound_vfx_id))
+            files = copy_asset_reference_files(root, out_dir, vfx_asset)
+            vfx_assets.append(vfx_asset)
+        except (FileNotFoundError, KeyError, ValueError):
+            print(f"[warn] 绑定 VFX `{bound_vfx_id}` 未在 asset_registry 找到——pack 只含母题定义，导入后需补建 VFX。")
+
+    pack = {
+        "kind": PACK_KIND,
+        "version": PACK_VERSION,
+        "asset_type": "motif",
+        "slug": slug,
+        "title": title,
+        "source_project": str(root),
+        "source_project_name": project_name(root),
+        "exported_at": now_iso(),
+        "license": {"status": args.license_status, "reuse": args.reuse, "notes": args.license_notes or ""},
+        "style_tags": args.style_tag or [],
+        "tags": args.tag or [],
+        "motif_fragment": {"kind": MOTIF_REGISTRY_KIND, "version": 1, "motifs": [motif]},
+        "asset_registry_fragment": {"kind": ASSET_REGISTRY_KIND, "version": 1, "assets": vfx_assets},
+        "files": files,
+        "reminders": [
+            "母题模板只复用结构（镜头模板/台词腔/VFX 定妆/overlay 规格），不复用具体剧情数值。",
+            "导入到新剧时 progression 成长档会被重置（新剧从 Lv.1 起按自身剧情重排）。",
+            "导入后跑 motif_detector 在新剧分镜上重新检测桥段、绑定 Clip，再重跑 image/video gate。",
+        ],
+    }
+    write_json(out_dir / "asset_pack.json", pack)
+    print(f"[ok] exported motif pack: {out_dir}")
+    return 0
+
+
+@with_registry_lock
+def cmd_import_motif(args: argparse.Namespace) -> int:
+    """把母题 pack 合并进目标项目 motif_registry.json + asset_registry.json，重置成长 progression。"""
+    root = Path(args.project_root)
+    pack_dir_path = Path(args.pack)
+    pack_path = pack_dir_path / "asset_pack.json" if pack_dir_path.is_dir() else pack_dir_path
+    pack_root = pack_path.parent
+    pack = read_json(pack_path)
+    if pack.get("kind") != PACK_KIND or pack.get("asset_type") != "motif":
+        raise ValueError(f"not a motif pack: {pack_path}")
+    motifs = pack.get("motif_fragment", {}).get("motifs", [])
+    if not motifs:
+        raise ValueError(f"motif pack has no motif fragment: {pack_path}")
+    motif = copy.deepcopy(motifs[0])
+    if args.as_id:
+        motif["motif_id"] = args.as_id
+    motif["source_motif_pack"] = str(pack_path)
+    motif["source_motif_slug"] = pack.get("slug", "")
+    # 重置成长档：新剧从 Lv.1 起，按自身剧情重排（类比 import-character 重置 Character ID）。
+    gsm = motif.get("growth_state_machine") if isinstance(motif.get("growth_state_machine"), dict) else {}
+    if isinstance(gsm, dict):
+        gsm["progression"] = []
+
+    # 合并绑定 VFX 进 asset_registry + 拷参考图（新剧路径）。
+    vfx_assets = pack.get("asset_registry_fragment", {}).get("assets", []) or []
+    if vfx_assets:
+        vfx = copy.deepcopy(vfx_assets[0])
+        as_name = str(vfx.get("name") or vfx.get("id") or "系统面板")
+        ref = vfx.get("reference_group") if isinstance(vfx.get("reference_group"), Mapping) else {}
+        new_ref: Dict[str, str] = {}
+        for role, value in ref.items():
+            pack_rel = ref_value_to_path(value)
+            if not pack_rel:
+                new_ref[str(role)] = ""
+                continue
+            source = pack_root / pack_rel
+            target_rel = target_asset_reference_path(as_name, str(role), source.suffix or ".png")
+            target = root / target_rel
+            if source.is_file():
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(source, target)
+                new_ref[str(role)] = target_rel
+            else:
+                new_ref[str(role)] = ""
+        vfx["reference_group"] = new_ref
+        asset_reg = ensure_asset_registry(root)
+        merge_asset(asset_reg, vfx, replace=args.replace)
+        write_json(asset_ref_registry_path(root), asset_reg)
+
+    # 合并母题进 motif_registry（去重 motif_id）。
+    mpath = motif_registry_path(root)
+    if mpath.is_file():
+        mreg = read_json(mpath)
+        if not isinstance(mreg, dict) or mreg.get("kind") != MOTIF_REGISTRY_KIND:
+            mreg = {"kind": MOTIF_REGISTRY_KIND, "version": 1, "motifs": []}
+    else:
+        mreg = {"kind": MOTIF_REGISTRY_KIND, "version": 1, "motifs": []}
+    mid = str(motif.get("motif_id"))
+    existing = [m for m in mreg.get("motifs", []) if isinstance(m, dict) and str(m.get("motif_id")) == mid]
+    if existing and not args.replace:
+        raise ValueError(f"motif id already exists: {mid} (use --replace)")
+    mreg["motifs"] = [m for m in mreg.get("motifs", []) if not (isinstance(m, dict) and str(m.get("motif_id")) == mid)]
+    mreg["motifs"].append(motif)
+    write_json(mpath, mreg)
+
+    append_import_log(
+        root,
+        f"""## {now_iso()} 导入母题(motif)
+
+- 来源：`{pack_path}`
+- 母题：`{mid}`（progression 已重置，新剧从 Lv.1 起）
+- 下一步：在新剧分镜上跑 `motif_detector.py <作品根> 第N集` 重新检测桥段并 --write 绑定 Clip，再重跑 image/video gate。
+""",
+    )
+    print(f"[ok] imported motif {mid} into {mpath}（progression 已重置）")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="n2d cross-project asset pack market")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -934,6 +1092,27 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("project_root")
     p.add_argument("pack")
     p.set_defaults(func=cmd_import_routes)
+
+    p = sub.add_parser("export-motif", help="export a motif (e.g. 系统面板) + its growth VFX as a reusable pack")
+    p.add_argument("project_root")
+    p.add_argument("--motif-id", default="", help=f"母题 id（默认 {SYSTEM_PANEL_MOTIF_ID}）")
+    p.add_argument("--title", default="")
+    p.add_argument("--slug", default="")
+    p.add_argument("--library", default=str(DEFAULT_LIBRARY))
+    p.add_argument("--force", action="store_true")
+    p.add_argument("--license-status", default="user_owned_or_synthetic")
+    p.add_argument("--reuse", default="template_only", choices=["template_only", "same_ip", "licensed_reuse"])
+    p.add_argument("--license-notes", default="")
+    p.add_argument("--style-tag", action="append")
+    p.add_argument("--tag", action="append")
+    p.set_defaults(func=cmd_export_motif)
+
+    p = sub.add_parser("import-motif", help="merge a motif pack into target motif_registry + asset_registry (progression reset)")
+    p.add_argument("project_root")
+    p.add_argument("pack")
+    p.add_argument("--as-id", default="", help="rename motif_id in target (default keep source id)")
+    p.add_argument("--replace", action="store_true")
+    p.set_defaults(func=cmd_import_motif)
 
     return parser
 

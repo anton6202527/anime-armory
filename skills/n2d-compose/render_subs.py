@@ -106,10 +106,13 @@ for i in idxs:
 # 写 inputs 与 overlay 链（ffmpeg 输入序: 0=concat 1=bgm 2=clip_audio，png 从 PNG_INPUT_BASE 开始）
 # compose.sh 始终传 PNG_INPUT_BASE=3（含 clip_audio 输入）；默认值与之对齐，便于独立跑。
 PNG_INPUT_BASE = int(os.environ.get('PNG_INPUT_BASE', '3'))
+# 字幕链起点：默认 [0:v]；有系统面板 overlay 时 compose 传 [vpanel]，让字幕叠在面板层之上。
+SUB_FIRST_INPUT = os.environ.get('SUB_FIRST_INPUT', '[0:v]')
 with open(os.path.join(W,'inputs.txt'),'w') as f:
     for p,_,_ in manifest: f.write(p+'\n')
 filt = sr.overlay_filter_chain([(s, e) for _, s, e in manifest],
-                               png_input_base=PNG_INPUT_BASE, inter_prefix='v',
+                               png_input_base=PNG_INPUT_BASE, first_input=SUB_FIRST_INPUT,
+                               inter_prefix='v',
                                pre_final='[vsub]', overlay_xy='0:0',
                                format_tail='yuv420p', format_final='[v]')
 open(os.path.join(W,'vfilter.txt'),'w').write(filt)

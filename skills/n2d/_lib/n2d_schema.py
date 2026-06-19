@@ -144,6 +144,21 @@ BOUNDARY_PRODUCT_KINDS = {
         "layer": "asset_market",
         "boundary": "asset_pack",
     },
+    MOTIF_REGISTRY_KIND: {
+        "owner": "n2d-script",
+        "path": f"出图/{SHARED_ASSET_DIR}/motif_registry.json",
+        "layer": "shared_asset",
+        # 题材母题真值：场景级母题(系统面板/升级/签到…)定义，引用 asset_registry 的成长 VFX，
+        # 持有镜头模板 id + 台词模式 + overlay 文字层规格 + 逐次成长 progression(单调不回退)。
+        # 与 asset_registry 互补：本表记【母题桥段】，asset_registry 记【单资产】，VFX 成长状态机本体落 asset_registry。
+        "boundary": "motif_definition",
+    },
+    MOTIF_PLAN_KIND: {
+        "owner": "n2d-script",
+        "path": f"{PRODUCTION_DIR}/motif_plan_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "motif_suggestion",
+    },
 }
 
 PRODUCT_KINDS = BOUNDARY_PRODUCT_KINDS
