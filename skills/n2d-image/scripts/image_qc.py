@@ -174,6 +174,7 @@ def load_asset_index(root: Path) -> Optional[Dict[str, Any]]:
         entries[aid] = {
             "name": str(a.get("name") or "").strip(),
             "type": str(a.get("type") or "").strip(),
+            "reference_group": a.get("reference_group") if isinstance(a.get("reference_group"), Mapping) else {},
             "must_not_have": _asset_must_not_have_terms(a),
         }
         m = re.match(r"([A-Za-z]+_)", aid)
@@ -1456,6 +1457,142 @@ def build_asset_review_queue(payload: Dict[str, Any], root: Path, ep: str) -> Li
     return targets
 
 
+def _prop_shape_confirmation_path(root: Path, ep: str) -> Path:
+    return production_dir(root) / "image_qc" / ep / "prop_shape_confirmations.json"
+
+
+def load_prop_shape_confirmations(root: Path, ep: str) -> Set[Tuple[str, str]]:
+    """读高风险道具禁形逐图人工确认。
+
+    文件格式（人工/agent 复核后可写）：
+      {"confirmations": [{"asset": "PROP_01", "png": "图片/Clip_01_x.png", "verdict": "ok"}]}
+
+    只接受 verdict=ok/pass/confirmed/通过/合格；缺文件 = 空集。
+    """
+    path = _prop_shape_confirmation_path(root, ep)
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return set()
+    rows = data.get("confirmations") if isinstance(data, Mapping) else None
+    if rows is None and isinstance(data, list):
+        rows = data
+    out: Set[Tuple[str, str]] = set()
+    ok_values = {"ok", "pass", "confirmed", "true", "yes", "通过", "合格", "确认"}
+    for row in rows or []:
+        if not isinstance(row, Mapping):
+            continue
+        asset = str(row.get("asset") or row.get("id") or "").strip()
+        png = str(row.get("png") or row.get("image") or "").strip()
+        verdict = str(row.get("verdict") or row.get("status") or "").strip().lower()
+        if asset and png and verdict in ok_values:
+            out.add((asset, png))
+    return out
+
+
+def _clip_pngs_on_disk(root: Path, ep: str, shot: Optional[str], fallback: Optional[str] = None) -> List[str]:
+    """返回某 Clip 已落档 PNG（相对 出图/<ep>），用于道具逐图复核。"""
+    img_dir = root / "出图" / ep / "图片"
+    out: List[str] = []
+    if shot and img_dir.is_dir():
+        for p in sorted(img_dir.glob(f"{shot}*.png")):
+            out.append((Path("图片") / p.name).as_posix())
+    if not out and fallback:
+        f = str(fallback)
+        if f.startswith(f"出图/{ep}/"):
+            f = f[len(f"出图/{ep}/"):]
+        elif f.startswith("出图/"):
+            parts = Path(f).parts
+            if len(parts) >= 4:
+                f = str(Path(*parts[2:]))
+        out.append(f)
+    return sorted(dict.fromkeys(out))
+
+
+def prop_shape_review_targets(root: Path, ep: str,
+                              asset_index: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+    """高风险道具（PROP + must_not_have）逐图禁形复核目标。
+
+    文字/registry 只能防止继续把“壶嘴”写进 prompt，不能证明既有 PNG 没长出禁形。
+    因此凡镜头引用了带 must_not_have 的 PROP，并且对应 PNG 已存在，就进入硬复核队列；
+    只有确认文件里逐图标 ok 才放行。
+    """
+    idx = asset_index if asset_index is not None else load_asset_index(root)
+    if not idx:
+        return []
+    entries: Dict[str, Dict[str, Any]] = idx.get("entries") or {}
+    try:
+        text = (root / "出图" / ep / "prompt" / "01_分镜出图.md").read_text(encoding="utf-8")
+    except Exception:
+        return []
+    confirmations = load_prop_shape_confirmations(root, ep)
+    pm = _asset_primary_map(root)
+    out: List[Dict[str, Any]] = []
+    seen: Set[Tuple[str, str]] = set()
+    for blk in split_shot_blocks(text):
+        body = str(blk.get("body") or "")
+        label = str(blk.get("label") or "")
+        shot = _shot_key(label)
+        fallback_png = _extract_target_png(body)
+        for aid in sorted(set(ASSET_ID_RE.findall(body))):
+            entry = entries.get(aid) or {}
+            if str(entry.get("type") or "").strip().lower() != "prop":
+                continue
+            must_not = [str(t).strip() for t in (entry.get("must_not_have") or []) if str(t).strip()]
+            if not must_not:
+                continue
+            ref = _resolve_asset_ref(root, pm, aid) or _resolve_asset_ref(root, pm, str(entry.get("name") or ""))
+            for png in _clip_pngs_on_disk(root, ep, shot, fallback_png):
+                key = (aid, png)
+                if key in seen:
+                    continue
+                seen.add(key)
+                confirmed = key in confirmations
+                out.append({
+                    "asset": aid,
+                    "asset_name": entry.get("name") or aid,
+                    "shot": shot or _shot_key(png) or label,
+                    "label": label,
+                    "png": png,
+                    "png_abs": str(root / "出图" / ep / png),
+                    "ref": ref,
+                    "must_not_have": must_not,
+                    "confirmed": confirmed,
+                    "confirmation_path": str(_prop_shape_confirmation_path(root, ep)),
+                    "reason": "registered_prop_must_not_have",
+                })
+    return out
+
+
+def build_prop_shape_review_queue(payload: Dict[str, Any], root: Path, ep: str) -> List[Dict[str, Any]]:
+    """为高风险道具禁形生成逐图复核队列 + 参考并排图。best-effort，never crash。"""
+    targets = prop_shape_review_targets(root, ep, load_asset_index(root))
+    stitch_mod = _load_review_module("face_compare_stitch")
+    for t in targets:
+        t["stitched"] = False
+        if stitch_mod is not None and t.get("ref") and t.get("png_abs"):
+            ref_abs = os.path.join(str(root), str(t["ref"]))
+            try:
+                t["stitch"] = str(production_dir(root) / "image_qc" / ep / "prop_shape_review" /
+                                  f"{t.get('asset')}_{t.get('shot')}_{Path(str(t.get('png'))).stem}_compare.png")
+                t["stitched"] = bool(stitch_mod.build_comparison(
+                    [(f"参考·{t.get('asset_name') or t.get('asset')}", ref_abs),
+                     (f"本镜·{t.get('shot')}", t["png_abs"])],
+                    t["stitch"]))
+            except Exception:
+                t["stitched"] = False
+    pending = [t for t in targets if not t.get("confirmed")]
+    payload["prop_shape_review"] = {
+        "available": True,
+        "confirmation_path": str(_prop_shape_confirmation_path(root, ep)),
+        "total": len(targets),
+        "pending": len(pending),
+        "confirmed": len(targets) - len(pending),
+        "targets": targets,
+    }
+    return targets
+
+
 def _stitch_for_png(payload: Dict[str, Any], png: Optional[str]) -> Optional[str]:
     for t in payload.get("face_human_review") or []:
         if t.get("png") == png and t.get("stitched"):
@@ -1878,6 +2015,11 @@ def summarize(payload: Dict[str, Any], *, strict_pixel: bool = False) -> Dict[st
         rows_by_check["vlm_semantic"] = {"block": vlm_block, "warn": vlm_warn, "noface": 0, "ok": 0}
         hard += vlm_block
         advisory += vlm_warn
+    prop_shape = payload.get("prop_shape_review") or {}
+    prop_pending = [t for t in (prop_shape.get("targets") or []) if not t.get("confirmed")]
+    if prop_pending:
+        rows_by_check["prop_shape_review"] = {"block": len(prop_pending), "warn": 0, "noface": 0, "ok": 0}
+        hard += len(prop_pending)
     lint = payload.get("lint") or {}
     l_hard = sum(1 for f in lint.get("findings", [])
                  if f.get("level") == "block" and f.get("code") in HARD_LINT_CODES)
@@ -2051,6 +2193,19 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
     for f in (payload.get("vlm_consistency") or {}).get("findings", []):
         dim = "character_consistency" if f.get("code") == "vlm_semantic_mismatch" and "角色「" in str(f.get("msg")) else "asset_consistency"
         out.append(_qc_finding(f.get("level", "warn"), dim, None, f.get("msg", "")))
+    for t in (payload.get("prop_shape_review") or {}).get("targets", []):
+        if t.get("confirmed"):
+            continue
+        stitch = f"；并排复核图：{t.get('stitch')}" if t.get("stitched") and t.get("stitch") else ""
+        terms = "、".join(str(x) for x in (t.get("must_not_have") or [])[:12])
+        out.append(_qc_finding(
+            "block",
+            "asset_consistency",
+            t.get("png"),
+            f"高风险道具禁形未逐图确认：{t.get('label') or t.get('shot')} 的 `{t.get('asset')}`"
+            f"（{t.get('asset_name') or ''}）登记了 must_not_have={terms}。文字约束不能证明既有 PNG 没长出禁形，"
+            f"需人工/视觉模型确认 `{t.get('png')}` 无这些禁形，或重出该图；确认文件：{t.get('confirmation_path')}{stitch}",
+        ))
     reason_text = {
         "face_precision_not_full": "缺 full 精度脸部 embedding 比对",
         "no_face_comparison": "缺逐镜脸部参考比对记录",
@@ -2125,7 +2280,7 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 # ── 重生成清单（update 刷新模式用） ───────────────────────────────────────────
 
-_REGEN_CLIP_RE = re.compile(r"(?:Clip[_\-\s]?|镜头)(\d+)")
+_REGEN_CLIP_RE = re.compile(r"(?:Clip[_\-\s]?|镜头\s*)(\d+)", re.IGNORECASE)
 
 
 def _shot_key(name: Optional[str]) -> Optional[str]:
@@ -2182,6 +2337,9 @@ def to_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         add(s.get("png") or s.get("label") or s.get("shot"), f"脸部定妆比对覆盖:{s.get('reason')}")
     for s in (payload.get("prohibited_face_patch") or {}).get("outputs", []):
         add(s.get("png") or s.get("shot"), PROHIBITED_FACE_PATCH_LABEL)
+    for t in (payload.get("prop_shape_review") or {}).get("targets", []):
+        if not t.get("confirmed"):
+            add(t.get("png") or t.get("shot"), f"高风险道具禁形未确认:{t.get('asset')}")
     return sorted(by_shot.values(), key=lambda d: d["shot"])
 
 
@@ -2241,6 +2399,9 @@ def to_strict_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         add(s.get("png") or s.get("label") or s.get("shot"), f"strict:脸部定妆比对覆盖 {s.get('reason')}")
     for s in (payload.get("prohibited_face_patch") or {}).get("outputs", []):
         add(s.get("png") or s.get("shot"), f"strict:{PROHIBITED_FACE_PATCH_LABEL}")
+    for t in (payload.get("prop_shape_review") or {}).get("targets", []):
+        if not t.get("confirmed"):
+            add(t.get("png") or t.get("shot"), f"strict:高风险道具禁形未确认:{t.get('asset')}")
     return sorted(by_shot.values(), key=lambda d: d["shot"])
 
 
@@ -2530,6 +2691,9 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True, strict_pixel: bool = Fa
                 except Exception as exc:
                     payload["semantic_drift"] = {"available": False, "notes": [f"semantic_drift 失败：{exc}"], "findings": []}
     payload["lint"] = lint_prompts(root, ep)
+    # 高风险道具禁形逐图复核：prompt/registry 只能约束未来生成，不能证明既有 PNG 没有禁形。
+    # 这道门在 lint 之后跑，读取逐镜 PROP_xx 绑定和已落档 PNG；未确认则 summarize/to_findings 硬阻断。
+    build_prop_shape_review_queue(payload, root, ep)
     # F 资产状态机校验（registry 级，与逐镜 prompt 无关）：状态回退/未知态=hard，其余 warn 并入 lint 管道，
     # 自由文本 lifecycle 的 info 提示只留在 asset_lifecycle 专段、不污染 lint。
     al = _load_sibling("asset_lifecycle")
@@ -2703,6 +2867,21 @@ def render_markdown(payload: Dict[str, Any]) -> str:
         for t in asset_review:
             stitch = t.get("stitch") if t.get("stitched") else "(拼图未生成·缺 Pillow/参考图)"
             lines.append(f"  - {t.get('kind')} {t.get('shot')}（{t.get('asset') or '?'}）：{stitch}")
+    prop_shape = payload.get("prop_shape_review") or {}
+    prop_targets = prop_shape.get("targets") or []
+    if prop_targets:
+        pending = [t for t in prop_targets if not t.get("confirmed")]
+        lines.extend(["", "## 高风险道具禁形逐图复核（硬闸）",
+                      f"- total {len(prop_targets)} · pending {len(pending)} · confirmed {len(prop_targets) - len(pending)}",
+                      f"- 确认文件: `{prop_shape.get('confirmation_path')}`"])
+        for t in prop_targets:
+            mark = "🟢" if t.get("confirmed") else "🔴"
+            stitch = t.get("stitch") if t.get("stitched") else "(拼图未生成·缺 Pillow/参考图)"
+            terms = "、".join(str(x) for x in (t.get("must_not_have") or [])[:8])
+            lines.append(
+                f"  - {mark} {t.get('shot')} {t.get('png')}（{t.get('asset')} {t.get('asset_name')}）"
+                f" 禁形={terms}；{stitch}"
+            )
     lines.append("")
     lines.append("落档判定：**verdict=block** → 有硬阻断（崩脸/纯文生图/非法 CHAR_id），必须修复后重跑；"
                  "**verdict=review** → 只有非阻断初筛时不挡 video；若是视觉机检降级/依赖缺失，按阶段跳转先补依赖或复核；"

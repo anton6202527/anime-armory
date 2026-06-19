@@ -89,6 +89,86 @@ def test_asset_must_not_have_must_be_propagated_to_prompt(tmp_path: Path) -> Non
     )
 
 
+def test_prop_shape_review_targets_unconfirmed_high_risk_prop_png(tmp_path: Path) -> None:
+    reg = tmp_path / "出图" / "共享"
+    reg.mkdir(parents=True)
+    (reg / "asset_registry.json").write_text(json.dumps({
+        "assets": [{
+            "id": "PROP_01",
+            "type": "prop",
+            "name": "毒酒瓷瓶",
+            "reference_group": {"primary": "出图/共享/图片/定妆_毒酒瓷瓶.png"},
+            "constraints": {"must_not_have": ["壶嘴", "喷口"]},
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+    pr = tmp_path / "出图" / "第1集" / "prompt"
+    pr.mkdir(parents=True)
+    (pr / "01_分镜出图.md").write_text(
+        "## 镜头 1（EP01_CLIP01 毒酒抵唇）\n"
+        "**资产引用注册层**：`PROP_01`；禁形：壶嘴、喷口。\n",
+        encoding="utf-8",
+    )
+    img = tmp_path / "出图" / "第1集" / "图片"
+    img.mkdir(parents=True)
+    (img / "Clip_01_毒酒抵唇.png").write_bytes(b"not-a-real-png")
+
+    targets = image_qc.prop_shape_review_targets(tmp_path, "第1集")
+    assert len(targets) == 1
+    assert targets[0]["asset"] == "PROP_01"
+    assert targets[0]["png"] == "图片/Clip_01_毒酒抵唇.png"
+    assert targets[0]["confirmed"] is False
+
+
+def test_prop_shape_review_confirmations_clear_target(tmp_path: Path) -> None:
+    reg = tmp_path / "出图" / "共享"
+    reg.mkdir(parents=True)
+    (reg / "asset_registry.json").write_text(json.dumps({
+        "assets": [{
+            "id": "PROP_01",
+            "type": "prop",
+            "name": "毒酒瓷瓶",
+            "constraints": {"must_not_have": ["壶嘴"]},
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+    pr = tmp_path / "出图" / "第1集" / "prompt"
+    pr.mkdir(parents=True)
+    (pr / "01_分镜出图.md").write_text("## Clip 01\n`PROP_01` 无壶嘴。\n", encoding="utf-8")
+    img = tmp_path / "出图" / "第1集" / "图片"
+    img.mkdir(parents=True)
+    (img / "Clip_01.png").write_bytes(b"x")
+    confirm = tmp_path / "生产数据" / "image_qc" / "第1集"
+    confirm.mkdir(parents=True)
+    (confirm / "prop_shape_confirmations.json").write_text(json.dumps({
+        "confirmations": [{"asset": "PROP_01", "png": "图片/Clip_01.png", "verdict": "ok"}]
+    }, ensure_ascii=False), encoding="utf-8")
+
+    targets = image_qc.prop_shape_review_targets(tmp_path, "第1集")
+    assert targets and targets[0]["confirmed"] is True
+
+
+def test_prop_shape_review_is_hard_block_and_finding() -> None:
+    payload = {
+        "checks": {},
+        "lint": {"findings": []},
+        "prop_shape_review": {
+            "targets": [{
+                "asset": "PROP_01",
+                "asset_name": "毒酒瓷瓶",
+                "label": "Clip 01",
+                "png": "图片/Clip_01.png",
+                "must_not_have": ["壶嘴", "喷口"],
+                "confirmed": False,
+                "confirmation_path": "生产数据/image_qc/第1集/prop_shape_confirmations.json",
+            }]
+        },
+    }
+    summary = image_qc.summarize(payload)
+    assert summary["verdict"] == "block"
+    findings = image_qc.to_findings(payload)
+    assert any(f["sev"] == "block" and f["dim"] == "asset_consistency" and "高风险道具禁形" in f["msg"]
+               for f in findings)
+
+
 def _char_block(label: str, *, ref=True, eyeline=True, anchor=True, lock=True, char_id="CHAR_01/常态") -> dict:
     body = []
     if ref:
