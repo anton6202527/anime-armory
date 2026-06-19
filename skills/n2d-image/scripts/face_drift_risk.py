@@ -56,8 +56,8 @@ READY_STATUSES = {"registered", "ready"}
 # 现在 three_quarter 是所有人物/形态的基础硬包；近景比例只影响完整表情库/动作参考等增强项。
 CU_HEAVY_RATIO = 0.4
 
-WEIGHTS = {"base_reference_group": 28, "base_multi_reference": 22, "base_native_unregistered": 20,
-           "base_native": 8, "base_lora": 0,
+WEIGHTS = {"base_reference_group": 28, "base_multi_reference": 22, "base_face_embedding": 14,
+           "base_native_unregistered": 20, "base_native": 8, "base_lora": 0,
            "closeup": 30, "emotion_each": 8, "emotion_cap": 24,
            "multi": 20, "angle_each": 6, "angle_cap": 24}
 BAND_HIGH, BAND_MEDIUM = 55, 30
@@ -142,6 +142,7 @@ def score_character(signals: Mapping[str, Any], tier: str) -> Dict[str, Any]:
     base = {
         "reference_group": WEIGHTS["base_reference_group"],
         "multi_reference": WEIGHTS["base_multi_reference"],
+        "face_embedding": WEIGHTS["base_face_embedding"],
         "native_unregistered": WEIGHTS["base_native_unregistered"],
         "native_subject": WEIGHTS["base_native"],
         "native": WEIGHTS["base_native"],  # 兼容旧 report
@@ -183,6 +184,9 @@ def suggestions_for(name: str, scored: Mapping[str, Any], signals: Mapping[str, 
         out.append(f"{label} 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。")
         if str((backend_profile or {}).get("canonical") or "") == "dreamina":
             out.append("Dreamina/即梦参考框有粘性：切换角色前清空参考图；场景定妆必须清空人物参考。")
+    elif tier == "face_embedding":
+        out.append("已挂脸嵌入锁（IP-Adapter FaceID 等）：比纯参考图组稳，但不是后端原生持久主体 ID——"
+                   "核心长线角若仍跨集漂，下一档考虑注册原生主体或上 LoRA。")
     elif tier == "native_unregistered":
         label = str((backend_profile or {}).get("label") or "所选后端")
         out.append(f"{label} 支持持久主体/角色 ID，但该角色尚未 registered/ready；核心或高危镜建议先注册主体再出图。")
@@ -191,10 +195,12 @@ def suggestions_for(name: str, scored: Mapping[str, Any], signals: Mapping[str, 
     if int(signals.get("closeup", 0)) / appear >= 0.4:
         out.append("近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。")
     if int(signals.get("multi", 0)) >= 2:
-        if tier in {"native_unregistered", "native_subject"}:
-            out.append("多人同框多：按 registry priority 标 primary，优先给 primary 使用原生主体名额，其余角色降级参考图组。")
+        if tier in {"native_unregistered", "native_subject", "face_embedding"}:
+            out.append("多人同框多：按 registry priority 标 primary，逐主体绑定画面槽位(LEFT/RIGHT/FOREGROUND/BACKGROUND)"
+                       "+各自原生主体名额/参考——空间槽位绑定是同框硬约束（gate 对所有后端 block），决不用一张共享参考喂整帧。")
         else:
-            out.append("多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出，避免串脸。")
+            out.append("多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；"
+                       "无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。")
     if int(signals.get("angle", 0)) >= 1:
         out.append("极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。")
     if scored.get("band") == "high" and tier != "lora":

@@ -30,6 +30,7 @@ from n2d_cross_episode import (  # noqa: E402
     overview_rel as _overview_rel,
     prior_episode,
     scene_names,
+    core_scene_names,
 )
 
 KIND = "n2d_cross_episode_contract"
@@ -40,8 +41,8 @@ def render_md(ep: str, prev_ep: str, report: dict) -> str:
     lines = [
         f"# 跨集视觉契约一致性 · {ep}（vs 前集 {prev_ep or '无'}）",
         "",
-        f"- 方向反转告警 {s.get('warnings', 0)}（光位 {s.get('light_inversions', 0)} · 轴线 {s.get('axis_inversions', 0)}）",
-        "- 说明：本检查 **advisory·warn-only**，不阻断出视频；只报「同名地点跨集光位/轴线翻」这类高精度穿帮。",
+        f"- 方向反转告警 {s.get('warnings', 0)}（光位 {s.get('light_inversions', 0)} · 轴线 {s.get('axis_inversions', 0)}）· 核心场景 BLOCK {s.get('blocks', 0)}",
+        "- 说明：非核心场景 **advisory·warn-only**；**核心主场景（asset_registry 显式标 core）跨集光位/轴线反转升 BLOCK**（P2b·硬伤，须对齐前集或写明有意换机位）。",
         "",
     ]
     for n in report.get("notes", []):
@@ -50,7 +51,8 @@ def render_md(ep: str, prev_ep: str, report: dict) -> str:
     if not report.get("warnings"):
         lines.append("- ✅ 无（两集共现地点的光位左右/轴线走向一致，或无可门控地点）")
     for w in report.get("warnings", []):
-        lines.append(f"- ⚠️「{w['scene']}」{w['kind']}：{w['note']}")
+        bi = "⛔" if w.get("level") == "block" else "⚠️"
+        lines.append(f"- {bi}「{w['scene']}」{w['kind']}：{w['note']}")
     lines.extend(["", "## 逐字段 side-by-side（信息·相似度越低差异越大）", "",
                   "| 字段 | 相似度 | 前集 | 本集 |", "|---|---|---|---|"])
     for f in report.get("fields", []):
@@ -83,7 +85,8 @@ def run(root: str, ep: str) -> int:
         return 0
     scenes = scene_names(root)
     diff = cross_episode_diff(open(os.path.join(root, _overview_rel(prev_ep)), encoding="utf-8").read(),
-                              open(cur_path, encoding="utf-8").read(), scenes, prev_ep=prev_ep, cur_ep=ep)
+                              open(cur_path, encoding="utf-8").read(), scenes, prev_ep=prev_ep, cur_ep=ep,
+                              core_scenes=core_scene_names(root))
     report = {"kind": KIND, "episode": ep, "prev_episode": prev_ep,
               "scenes_checked": scenes, **diff,
               "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
@@ -92,11 +95,14 @@ def run(root: str, ep: str) -> int:
         f.write("\n")
     open(md_path, "w", encoding="utf-8").write(render_md(ep, prev_ep, report))
     n = report["summary"]["warnings"]
-    icon = "⚠️" if n else "✅"
-    print(f"{icon} 跨集契约 {ep} vs {prev_ep}: 方向反转告警 {n} → {json_path}")
+    blocks = report["summary"].get("blocks", 0)
+    icon = "⛔" if blocks else ("⚠️" if n else "✅")
+    print(f"{icon} 跨集契约 {ep} vs {prev_ep}: 方向反转 {n}（核心场景 block {blocks}） → {json_path}")
     for w in report.get("warnings", []):
-        print(f"  - ⚠️ [{w['kind']}] {w['scene']}: {w['note']}")
-    return 0  # advisory：不因告警退非零（启发式不当硬闸）
+        bi = "⛔" if w.get("level") == "block" else "⚠️"
+        print(f"  - {bi} [{w['kind']}] {w['scene']}: {w['note']}")
+    # 核心主场景反转=硬伤 → 非零退出；非核心仍 advisory（启发式不当硬闸）。
+    return 2 if blocks else 0
 
 
 def main(argv=None) -> int:

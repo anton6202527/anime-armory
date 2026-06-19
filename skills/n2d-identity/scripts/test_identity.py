@@ -302,6 +302,35 @@ def test_proactive_skips_when_native_subject_registered(tmp_path):
     assert identity.lora_upgrade_candidates(_weak_registry(native=True), _drift(root, eps)) == []
 
 
+# ── P2a face_embedding 中间档 ──
+
+def test_upgrade_suggests_face_embedding_intermediate_rung(tmp_path):
+    # 弱后端长线角无 face_embedding → LoRA 建议附带 face_embedding 中间档（免训练先试）
+    root = _root(tmp_path)
+    eps = {f"第{i}集": {"ok": 3, "warn": 0, "block": 0} for i in (1, 2, 3)}
+    recs = identity.lora_upgrade_candidates(_weak_registry(), _drift(root, eps))
+    assert len(recs) == 1
+    assert recs[0]["intermediate_rung"] == "face_embedding"
+    assert recs[0]["has_face_embedding"] is False
+    assert "face_embedding" in recs[0]["reason"]
+
+
+def test_upgrade_omits_intermediate_when_face_embedding_present(tmp_path):
+    # 已挂 ready 的 face_embedding → 不再重复建议中间档（避免噪声），仍可升 LoRA
+    root = _root(tmp_path)
+    reg = _weak_registry()
+    reg["characters"][0]["forms"][0]["identity_adapters"]["image"]["face_embedding"] = {
+        "status": "ready", "type": "ip_adapter_faceid"}
+    eps = {f"第{i}集": {"ok": 3, "warn": 0, "block": 0} for i in (1, 2, 3)}
+    recs = identity.lora_upgrade_candidates(reg, _drift(root, eps))
+    assert len(recs) == 1
+    assert recs[0]["intermediate_rung"] is None
+    assert recs[0]["has_face_embedding"] is True
+    # face_embedding 不被误判为原生主体锁
+    assert identity._form_has_native_image_subject(reg["characters"][0]["forms"][0]) is False
+    assert identity._form_has_face_embedding(reg["characters"][0]["forms"][0]) is True
+
+
 def test_proactive_skips_below_episode_threshold(tmp_path):
     root = _root(tmp_path)
     eps = {f"第{i}集": {"ok": 3, "warn": 0, "block": 0} for i in (1, 2)}  # 仅 2 集 < 阈值 3

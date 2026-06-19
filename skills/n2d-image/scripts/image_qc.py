@@ -1507,9 +1507,13 @@ def face_reference_coverage(payload: Dict[str, Any], root: Path, ep: str) -> Dic
 
     full = _face_full_precision(face)
     rows_by_shot: Dict[str, List[Dict[str, Any]]] = {}
+    rows_by_png: Dict[str, Dict[str, Any]] = {}
     for row in (face.get("shots") or []):
         if not isinstance(row, dict):
             continue
+        png_key = _coverage_png_key(row.get("png"))
+        if png_key:
+            rows_by_png[png_key] = row
         key = _shot_key(row.get("png"))
         if key:
             rows_by_shot.setdefault(key, []).append(row)
@@ -1521,7 +1525,8 @@ def face_reference_coverage(payload: Dict[str, Any], root: Path, ep: str) -> Dic
         notes.append("已落档角色 PNG 存在，但 face_consistency 不是 full 精度；不能证明与定妆照同人。")
     elif required:
         for rec in required:
-            rows = rows_by_shot.get(str(rec.get("shot") or ""))
+            exact = rows_by_png.get(_coverage_png_key(rec.get("png")))
+            rows = [exact] if exact else rows_by_shot.get(str(rec.get("shot") or ""))
             if not rows:
                 missing.append({**rec, "reason": "no_face_comparison"})
                 continue
@@ -1566,6 +1571,21 @@ def face_reference_coverage(payload: Dict[str, Any], root: Path, ep: str) -> Dic
         "verdict": "block" if missing else "ok",
         "notes": notes,
     }
+
+
+def _coverage_png_key(value: Any) -> str:
+    """Normalize episode image paths for exact face-coverage matching."""
+    text = str(value or "").strip().replace("\\", "/")
+    if not text:
+        return ""
+    marker = "/图片/"
+    if marker in text:
+        return "图片/" + text.rsplit(marker, 1)[-1]
+    if text.startswith("图片/"):
+        return text
+    if text.endswith(".png") and "/" not in text:
+        return "图片/" + text
+    return text
 
 
 def _production_events_path(root: Path) -> Path:
@@ -1792,6 +1812,15 @@ def summarize(payload: Dict[str, Any], *, strict_pixel: bool = False) -> Dict[st
             "block": len(semantic_missing), "warn": 0, "noface": 0, "ok": 0
         }
         hard += len(semantic_missing)
+    # ④ VLM 语义判定：关键资产 VLM 判崩设定=hard（既成语义崩，不是预测）；低置信/非关键=warn advisory。
+    vlm = payload.get("vlm_consistency") or {}
+    vlm_findings = vlm.get("findings") or []
+    if vlm_findings:
+        vlm_block = sum(1 for f in vlm_findings if f.get("level") == "block")
+        vlm_warn = len(vlm_findings) - vlm_block
+        rows_by_check["vlm_semantic"] = {"block": vlm_block, "warn": vlm_warn, "noface": 0, "ok": 0}
+        hard += vlm_block
+        advisory += vlm_warn
     lint = payload.get("lint") or {}
     l_hard = sum(1 for f in lint.get("findings", [])
                  if f.get("level") == "block" and f.get("code") in HARD_LINT_CODES)
@@ -1961,6 +1990,10 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
             f"palette/dHash 只能做初筛，不能证明非脸资产身份稳定。先在 full QC 环境补 torch+transformers/open_clip "
             f"后重跑，或登记逐项人审确认。样例：{sample}",
         ))
+    # ④ VLM 语义判定（描述↔渲染图）：关键资产判崩设定=block，低置信/非关键=warn 人判。
+    for f in (payload.get("vlm_consistency") or {}).get("findings", []):
+        dim = "character_consistency" if f.get("code") == "vlm_semantic_mismatch" and "角色「" in str(f.get("msg")) else "asset_consistency"
+        out.append(_qc_finding(f.get("level", "warn"), dim, None, f.get("msg", "")))
     reason_text = {
         "face_precision_not_full": "缺 full 精度脸部 embedding 比对",
         "no_face_comparison": "缺逐镜脸部参考比对记录",
@@ -2459,6 +2492,16 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True, strict_pixel: bool = Fa
         payload["lint"].setdefault("findings", []).append(
             {"level": f["level"], "code": f["code"], "msg": f["msg"]})
     payload["face_anchor_quality"] = fa
+    # ④ VLM 语义判定（描述↔渲染图·opt-in）：关键注册角色/资产 VLM 判崩设定（剪裁/配饰/识别特征违反 canonical）
+    #    → block；走专属 payload key（不塞 lint，避免被 lint_prompts 覆盖+不依赖 HARD_LINT_CODES），summarize/to_findings 直接读。
+    #    无 N2D_VLM_CMD 后端 → available=False 整段跳过，绝不阻断默认无依赖产线。
+    vv = _load_sibling("vlm_verify")
+    if vv is not None:
+        try:
+            payload["vlm_consistency"] = vv.analyze(root, ep, payload)
+        except Exception as exc:
+            payload["vlm_consistency"] = {"available": False, "notes": [f"vlm_verify 失败：{exc}"],
+                                          "block": 0, "findings": []}
     payload["face_reference_coverage"] = face_reference_coverage(payload, root, ep)
     payload["cross_episode_face_drift"] = cross_episode_face_drift(root, ep, payload)
     payload["prohibited_face_patch"] = prohibited_face_patch_outputs(root, ep)

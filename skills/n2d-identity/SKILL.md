@@ -10,7 +10,7 @@ description: 横切角色身份闭环层：把 n2d 的 identity_registry.json �
 1. `identity_registry.json` 是角色/形态机器真值。
 2. reference group 是所有后端的兜底身份资产。
 3. Face Lock / Character ID / reference controls 是后端原生身份适配。
-4. LoRA 是重资产增强层，只给核心长线角色；何时升档由漂移报表的 `recommendations` 工程化判定，不靠拍脑袋。
+4. LoRA 是重资产增强层，只给核心长线角色；何时升档由漂移报表的 `recommendations` 工程化判定，不靠拍脑袋。一致性梯子：reference_group < multi_reference < **face_embedding（P2a·IP-Adapter FaceID 免训练脸嵌入锁·填 reference-group↔LoRA 断档）** < native_unregistered < native_subject < lora（`image_lock_tier` 真值）。`recommendations[].intermediate_rung="face_embedding"` 提示先走免训练中间档再考虑 LoRA；角色已挂 `identity_adapters.image.face_embedding`(ready) 或原生主体时为 `null`。
 5. 跨集漂移必须有报表，不靠人脑记“第几集开始不像”。
 6. 音色也是身份：一角一色、跨集持久。配音 manifest 的 voice_key × voicemap 注册表对账出 `voice_drift_report`。
 

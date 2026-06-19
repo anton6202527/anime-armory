@@ -100,6 +100,9 @@ def image_lock_tier(
     Return values, weakest to strongest:
       reference_group      unknown/single-reference fallback only
       multi_reference      multiple references or image-to-image, no persistent subject ID
+      face_embedding       backend-agnostic face-embedding lock (IP-Adapter FaceID etc.) is ready —
+                           stronger than plain multi_reference, fills the rung below native/LoRA for
+                           backends without a persistent subject ID
       native_unregistered  backend has persistent subject ability, but this form is not registered
       native_subject       backend subject/character binding is registered or ready
       lora                 LoRA ready/training, strongest identity lock
@@ -111,8 +114,18 @@ def image_lock_tier(
     adapters = image_adapters or {}
     entry = adapters.get(canonical)
     status = str(entry.get("status") if isinstance(entry, dict) else entry or "").strip()
+    # 背景无关的脸嵌入锁（IP-Adapter FaceID 等）：reference-group↔LoRA 间的中间档，
+    # 给「无持久主体 ID」后端一个比 reference-group 强的身份锚（不必训 LoRA）。
+    fe = adapters.get("face_embedding")
+    fe_status = str(fe.get("status") if isinstance(fe, dict) else fe or "").strip()
+    fe_ready = fe_status in {"registered", "ready"}
     if bool(profile.get("persistent_subject")):
-        return "native_subject" if status in {"registered", "ready"} else "native_unregistered"
+        if status in {"registered", "ready"}:
+            return "native_subject"
+        # 持久主体能力但本形态未注册：已挂 face_embedding 真锁 > 仅有「潜在能力」的 native_unregistered
+        return "face_embedding" if fe_ready else "native_unregistered"
+    if fe_ready:
+        return "face_embedding"
     if bool(profile.get("multi_reference")):
         return "multi_reference"
     return "reference_group"

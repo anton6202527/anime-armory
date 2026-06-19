@@ -24,6 +24,7 @@ description: LoRA 训练/部署生命周期管理：为 n2d 核心长线角色�
 
 - **默认不启用 LoRA**：先用参考图派生 + 后端原生角色 ID / 主体库。仍不稳才进本 skill。
 - **升档触发已工程化**：「要不要上 LoRA」不靠拍脑袋——`n2d-identity` 的漂移报表会在角色跨集漂移显著（warn/block 集数 ≥2 或有 first_bad_episode）且 lora status 不是 ready/training 时自动产出 `recommendations[]`（type=lora_upgrade，带 character_id/理由/下一步 init 命令）；本 skill 的 `suggest` 子命令只消费该判定，不另立标准。先跑 `suggest` 再决定 `init`。
+- **先看 face_embedding 中间档（P2a·别一步跳 LoRA）**：`recommendations[]` 带 `intermediate_rung`——当角色还没挂 `face_embedding`（IP-Adapter FaceID 等免训练脸嵌入锁）且非原生主体后端时值为 `"face_embedding"`，提示**先挂免训练脸嵌入锁（比训 LoRA 快/省），仍漂再 `init` LoRA**；已挂 face_embedding 或原生主体的角色该字段为 `null`，可直接评估 LoRA。LoRA 是一致性梯子最后一档，不是第一反应。
 - **只给核心长线角色**：女主、主反派、长期高频出镜角色；短线配角和路人不训练。
 - **商用许可先记账**：商用项目必须在 `train_job.json` 留底模许可风险；许可未明不能当“可商用 ready”。
 - **验证不过不注册 ready**：没有 `validation_report.json` 或 verdict 不是 `pass`，不得把 registry lora 标成 `ready`。`register --force` 只允许记录人工覆盖为 `candidate` + `manual_override.reasons`，不能绕过验证制造 ready。

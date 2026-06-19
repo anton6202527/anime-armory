@@ -290,7 +290,9 @@ def _form_has_native_image_subject(form: Mapping[str, Any]) -> bool:
     全是 reference_group 兜底 = 无原生锁 = 跨集靠参考图硬撑（弱后端结构性风险）。纯函数·可测。"""
     adapters = form.get("identity_adapters") if isinstance(form.get("identity_adapters"), Mapping) else {}
     image = adapters.get("image") if isinstance(adapters.get("image"), Mapping) else {}
-    for cfg in image.values():
+    for key, cfg in image.items():
+        if key == "face_embedding":  # 脸嵌入锁是中间档，不是后端原生主体锁——别误判成原生
+            continue
         if not isinstance(cfg, Mapping):
             continue
         mode = str(cfg.get("mode", "")).strip()
@@ -298,6 +300,16 @@ def _form_has_native_image_subject(form: Mapping[str, Any]) -> bool:
         if mode and mode not in NON_NATIVE_BINDINGS and status in ("registered", "ready"):
             return True
     return False
+
+
+def _form_has_face_embedding(form: Mapping[str, Any]) -> bool:
+    """form 是否已挂 ready 的脸嵌入锁（IP-Adapter FaceID 等·`identity_adapters.image.face_embedding`）。
+    reference-group↔LoRA 间的免训练中间档；纯函数·可测。"""
+    adapters = form.get("identity_adapters") if isinstance(form.get("identity_adapters"), Mapping) else {}
+    image = adapters.get("image") if isinstance(adapters.get("image"), Mapping) else {}
+    fe = image.get("face_embedding")
+    status = str(fe.get("status") if isinstance(fe, Mapping) else fe or "").strip()
+    return status in ("registered", "ready")
 
 
 def lora_upgrade_candidates(registry: Optional[Mapping[str, Any]], drift: Optional[Mapping[str, Any]]) -> List[Dict[str, Any]]:
@@ -334,6 +346,7 @@ def lora_upgrade_candidates(registry: Optional[Mapping[str, Any]], drift: Option
         if lora_status in LORA_UPGRADE_EXEMPT_STATUSES:
             continue
         native_subject = _form_has_native_image_subject(form)
+        has_face_embedding = _form_has_face_embedding(form)
         proactive = (not significant and not emb_high
                      and ep_count >= PROACTIVE_EPISODE_THRESHOLD and not native_subject)
         if not (significant or emb_high or proactive):
@@ -354,6 +367,12 @@ def lora_upgrade_candidates(registry: Optional[Mapping[str, Any]], drift: Option
                 "弱后端逐镜重画脸，集数越多越易跨集漂；建议在烧穿多集积分前升档 LoRA/原生主体")
         else:
             reason_bits.append(f"LoRA status={lora_status or 'absent'}，reference_group/原生主体未压住跨集漂移")
+        # P2a 中间档：还没挂 face_embedding 且非原生主体后端 → 先建议免训练的脸嵌入锁（IP-Adapter FaceID），
+        # 比直接训 LoRA 快/省，仍漂再升 LoRA。已挂 face_embedding/原生主体的角色不再提（避免噪声）。
+        suggest_face_embedding = not has_face_embedding and not native_subject
+        if suggest_face_embedding:
+            reason_bits.append(
+                "中间档建议：先挂 face_embedding（IP-Adapter FaceID 等免训练脸嵌入锁，比 LoRA 快/省），仍漂再升 LoRA")
         out.append({
             "type": "lora_upgrade",
             "character": drift_char,
@@ -366,6 +385,8 @@ def lora_upgrade_candidates(registry: Optional[Mapping[str, Any]], drift: Option
             "embedding_drift_high": len(emb_high),
             "episode_count": ep_count,
             "proactive": proactive,
+            "has_face_embedding": has_face_embedding,
+            "intermediate_rung": "face_embedding" if suggest_face_embedding else None,
             "reason": "；".join(reason_bits),
             "next_command": (
                 f"python3 skills/n2d-lora/scripts/lora.py init '{root_str}' "

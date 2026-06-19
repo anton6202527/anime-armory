@@ -904,12 +904,18 @@ def choose_route(
         ]
         if big_ensemble:
             mp_rationale.append("5+ 同框/群像：Sora 2 多角色一致性最强，超 Kling 2-3 张脸上限；仍不稳则按 degrade_plan 拆组")
+        # 空间绑定硬约束（与 gate 多人同框槽位 block 同源）：同框必须逐主体绑定到画面槽位+各自参考，
+        # 决不能用一张共享参考喂整帧——单参考会让模型把多张脸平均成同一张/混位（脸漂真凶）。
+        prompt_requirements = list(prompt_requirements) + [
+            "bind EACH named CHAR_xx to its own screen slot (LEFT/RIGHT/FOREGROUND/BACKGROUND) AND its own subject/reference anchor — regional/mask binding per subject; never feed one shared reference for the whole frame (single shared ref makes the model average faces)",
+        ]
         route = {
             "primary_backend": mp_primary,
             "fallback_backends": mp_fallback,
             "mode": "frames2video",
             "native_audio_policy": "none",
             "identity_requirement": "character_id_or_reference_group",
+            "spatial_binding_required": True,
             "rationale": mp_rationale,
             "prompt_requirements": prompt_requirements,
             "degrade_plan": degrade_plan,

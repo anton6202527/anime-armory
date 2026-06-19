@@ -32,6 +32,45 @@ def test_detect_light_inversion_only_same_scene():
     assert len(w) == 1 and w[0]["scene"] == "冷宫寝殿"
 
 
+def test_inversion_level_warn_by_default():
+    # 非核心场景反转 → level=warn（向后兼容，启发式不当硬闸）
+    w = cx.detect_inversions("冷宫寝殿=左侧光", "冷宫寝殿=右侧光", ["冷宫寝殿"], "light")
+    assert len(w) == 1 and w[0]["level"] == "warn"
+
+
+def test_inversion_level_block_for_core_scene():
+    # 核心主场景反转 → level=block（P2b·硬伤）
+    w = cx.detect_inversions("冷宫寝殿=左侧光", "冷宫寝殿=右侧光", ["冷宫寝殿"], "light",
+                             core_scenes=["冷宫寝殿"])
+    assert len(w) == 1 and w[0]["level"] == "block" and "核心主场景" in w[0]["note"]
+
+
+def test_cross_episode_diff_core_scene_block_summary():
+    prev = "## 本集视觉一致性契约\n- 光位锚：冷宫寝殿=左侧光\n"
+    cur = "## 本集视觉一致性契约\n- 光位锚：冷宫寝殿=右侧光\n"
+    d = cx.cross_episode_diff(prev, cur, ["冷宫寝殿"], "第1集", "第2集", core_scenes=["冷宫寝殿"])
+    assert d["summary"]["blocks"] == 1
+    assert any(w["level"] == "block" for w in d["warnings"])
+    # 非核心场景：同样反转只 warn，blocks=0（向后兼容）
+    d2 = cx.cross_episode_diff(prev, cur, ["冷宫寝殿"], "第1集", "第2集")
+    assert d2["summary"]["blocks"] == 0
+
+
+def test_core_scene_names_explicit_only(tmp_path):
+    # 只认显式 core/tier/scope/name 标记；普通 LOC 不算核心（不破坏旧 demo）
+    root = tmp_path / "作品"
+    shared = root / "出图" / "共享"
+    shared.mkdir(parents=True)
+    (shared / "asset_registry.json").write_text(json.dumps({"assets": [
+        {"id": "LOC_01", "name": "冷宫寝殿", "scope": "第1集起复用"},          # 普通 → 非核心
+        {"id": "LOC_02", "name": "金銮殿", "core": True},                      # 显式 core
+        {"id": "LOC_03", "name": "核心主舞台"},                                # name 命中标记
+    ]}, ensure_ascii=False), encoding="utf-8")
+    core = cx.core_scene_names(str(root))
+    assert "金銮殿" in core and "核心主舞台" in core
+    assert "冷宫寝殿" not in core
+
+
 def test_detect_no_false_positive_across_different_scenes():
     # 第1集冷宫画左、第2集御花园画右 = 不同地点，不该误报
     scenes = ["冷宫寝殿", "御花园"]

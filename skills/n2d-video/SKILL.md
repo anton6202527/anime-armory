@@ -74,6 +74,7 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 - **关键镜 = 故事板里 🔑 爽点/反转/钩子/封面候选 / 人脸特写**；其余为普通镜。「跑几条挑稳」就是下文「为什么大多数视频跑两遍才稳」的预算开关——本档统一决定，不再每 Clip 临时拍脑袋。
 - **单项可覆盖**：规格档只设默认，`视频分辨率` 等单项仍可在 `_设置.md` 单独覆盖（如选了 `预算一般` 但单独把分辨率改 1080p）。单 Clip **时长不在本档内**——由配音 `镜头时长.json` 驱动（见输入前置条件）；`画幅` 另见同名选择点。
 - **落实到调用**：选定档后，把该档的分辨率/帧率喂给 CLI 的 `--resolution`/`--fps`（或平台对应 flag，确切写法见 `references/cli_registry.md`），并按「跑几条」决定每 Clip 抽几条挑稳。
+- **帧插值后期 pass（P1b·`interp_pass.py`·可选质量增强·不默认）**：流水线内的 fps 提帧/运动平滑后处理（此前 n2d-video 完全靠后端原生 multiframe，无任何 RIFE/FILM 插帧）。两个用途：① **只能首帧/首尾帧的后端**（Seedance 直连/Sora/Runway/Pika）出的镜运动稠度先天弱 → 事后补帧拉到接近三帧多关键帧的平滑；② **fps 提帧**（源 24fps→交付 30/48/60）。规划：`python3 skills/n2d-video/scripts/interp_pass.py <作品根> 第N集`——ffprobe 探每 clip 源 fps（无 ffprobe 标 unknown 不臆造）、按 `出视频规格` 目标 fps + `video_model_routes.json` 后端能力判定哪些镜值得插（源 fps<目标/1.2，或 first-frame-only 后端补平滑；已达标的**不插**避免「肥皂剧感」），写 `出视频/<集>/control/interp_jobs.json` + 后端探针。执行：`--apply`——后端经 env 门控（`N2D_INTERP_CMD` 命令模板 `{input}{output}{fps}` / `N2D_RIFE_CMD` / `N2D_FILM_CMD`，或带 minterpolate 的 ffmpeg 兜底；本仓不内置重型权重），都不可用则只落清单 + 手工指引、**绝不静默跳过**。铁律：只补帧不改内容/不改声音（成片音轨仍走 voice-first 配音轨）。
 
 ## 生成粒度 + 优先序（选择点 · 逐单位停审，不满意即时调）
 
@@ -143,7 +144,7 @@ python3 skills/n2d-video/scripts/inherit_contract.py <作品根> 第N集
 
 > **这套契约继承机检已接进 video_preflight/video gate 退出码**（`dashboard.py gate --stage video_preflight` 和生成后 `--stage video` 都会内部调 `inherit_contract.diff_contracts`，光位锚/轴线/角色状态演进漂移→BLOCK），不再只靠这条裸命令的"自觉跑"——裸命令用于单独复核。**原生音画(native_av)不绕过这条链**：native_av 说话镜仍以出图首帧 PNG 作图生视频引导，像素层五字段契约链与配音先行模式完全一致，gate 同样强制；只有"纯文生视频同步音画、无首帧 PNG"的特殊后端才不适用（此类镜须在总览标注并降级为运动层约束）。
 
-> **⑦ 跨集视觉契约一致性（advisory·warn-only）**：`inherit_contract` 管**同集内**出图↔出视频逐字一致；跨集是另一类穿帮——**同一地点跨集光位/轴线翻**（第1集冷宫画左光、第4集冷宫右侧光=越轴/光跳）。判定**同名场景方向反转**（只在 `asset_registry` 的 LOC 地点两集都出现、且光位左右/轴线走向反转时报，靠地点共现门控压噪音）。**不阻断**（启发式不当硬闸）。
+> **⑦ 跨集视觉契约一致性（advisory·warn-only，核心场景升 BLOCK）**：`inherit_contract` 管**同集内**出图↔出视频逐字一致；跨集是另一类穿帮——**同一地点跨集光位/轴线翻**（第1集冷宫画左光、第4集冷宫右侧光=越轴/光跳）。判定**同名场景方向反转**（只在 `asset_registry` 的 LOC 地点两集都出现、且光位左右/轴线走向反转时报，靠地点共现门控压噪音）。**普通场景不阻断**（启发式不当硬闸）；**P2b：核心主场景升 🔴 BLOCK**——`asset_registry` 里**显式标核心**的 LOC（`core:true` / `tier:"core"` / `scope`/`name` 含「核心/主场景/主舞台/core/key_scene」）跨集光位/轴线反转=硬伤，必须对齐前集或写明有意换机位（`core_scene_names` 判定·显式标记口径不波及旧 demo）。
 > **这套检测已接进 image/video gate 自动落地**（`gate.py` 的 `check_cross_episode_contract` 在 `--stage image`/`--stage video` 内部调 `n2d_cross_episode.cross_episode_diff`，命中→WARN 进结构化 findings，n2d-batch/score/dashboard 一并消费），不再只靠人手动跑——过去那条裸命令几乎没人记得跑＝白写。裸命令仅用于单独复核 + 落盘 `生产数据/cross_episode_contract_第N集.{json,md}`：
 > ```bash
 > python3 skills/n2d-video/scripts/cross_episode_contract.py <作品根> 第N集

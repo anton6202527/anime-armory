@@ -147,7 +147,7 @@ def plan_character_in_clip(
     """逐镜逐角色处方：推荐参考集 + 控制网 + 原生主体动作 + 升档 + 补拍缺口。纯函数·可测。
 
     char: {id, name, form, reference_group(dict), angle_policy(dict)}。
-    tier: image_lock_tier → reference_group|multi_reference|native_unregistered|native_subject|lora。
+    tier: image_lock_tier → reference_group|multi_reference|face_embedding|native_unregistered|native_subject|lora。
     """
     rg = char.get("reference_group") or {}
     atlas = char.get("reference_atlas") or {}

@@ -474,12 +474,22 @@ def test_plain_multiref_does_not_escape_codex_two_char_block():
                for f in gate.findings)
 
 
-def test_two_char_shot_on_native_subject_backend_only_warns():
-    # 有原生主体能力的后端(Seedream/可灵/Sora) → 不过度阻断，保持 WARN
+def test_two_char_shot_on_native_subject_backend_blocks_without_slots():
+    # 2026-06：多主体后端(Seedream/可灵/Sora)同框缺空间槽位/执行策略也升 BLOCK——
+    # 空间绑定是同框一致性硬约束（无绑定 → 模型把两张脸平均/混位，多主体后端亦然）。
     gate.check_image_shot_prompt_section("01_分镜出图.md", 1, TWO_CHAR_SHOT, single_ref_backend=False)
-    assert any(f["sev"] == gate.WARN and f["dim"] == "角色一致性" and "同框" in str(f["msg"])
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "角色一致性" and "同框" in str(f["msg"])
                for f in gate.findings)
-    assert not any(f["sev"] == gate.BLOCK and "同框" in str(f["msg"]) for f in gate.findings)
+
+
+def test_native_subject_backend_with_slots_escapes_block():
+    # 多主体后端写齐执行策略 + 身份槽位 → 逃生门放行，无同框 finding
+    shot = TWO_CHAR_SHOT.replace(
+        "**专项镜头模板**：dialogue_shot_reverse；",
+        "**专项镜头模板**：dialogue_shot_reverse；native_subject_slots；\n" + MULTI_SUBJECT_SLOT_FIELDS,
+    )
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot, single_ref_backend=False)
+    assert not any("同框" in str(f["msg"]) for f in gate.findings)
 
 
 # ── ① 长线剧 × 无持久主体后端 → 建议升原生主体/主体库（advisory·治跨集脸漂累积）──
@@ -582,10 +592,10 @@ def test_generic_reference_image_index_lock_is_blocked_for_codex_multichar():
                for f in gate.findings)
 
 
-def test_default_single_ref_backend_arg_preserves_warn_behavior():
-    # 不传 single_ref_backend（旧调用方）保持原 WARN 行为，向后兼容
+def test_default_arg_blocks_multichar_without_slots():
+    # 不传 single_ref_backend（默认 False=多主体后端路径）：同框缺槽位/策略 → BLOCK（2026-06 起空间绑定硬约束）
     gate.check_image_shot_prompt_section("01_分镜出图.md", 1, TWO_CHAR_SHOT)
-    assert not any(f["sev"] == gate.BLOCK and "同框" in str(f["msg"]) for f in gate.findings)
+    assert any(f["sev"] == gate.BLOCK and "同框" in str(f["msg"]) for f in gate.findings)
 
 
 def test_codex_closeup_reaction_requires_face_or_expression_reference():

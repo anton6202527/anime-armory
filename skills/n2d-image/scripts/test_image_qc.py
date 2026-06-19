@@ -894,6 +894,27 @@ def test_face_reference_coverage_passes_full_ok_match(tmp_path: Path) -> None:
     assert coverage["missing"] == []
 
 
+def test_face_reference_coverage_prefers_exact_png_over_clip_worst(tmp_path: Path) -> None:
+    png = tmp_path / "出图" / "第1集" / "图片" / "Clip_02_冷开场_mid.png"
+    png.parent.mkdir(parents=True)
+    png.write_bytes(b"x")
+    payload = {
+        "checks": {"face": {"available": True, "mode": "insightface", "shots": [
+            {"png": "图片/Clip_02_冷开场.png", "verdict": "warn", "chars": ["沈念"]},
+            {"png": "图片/Clip_02_冷开场_mid.png", "verdict": "ok", "chars": ["沈念"]},
+        ]}},
+        "lint": {"available": True, "findings": [], "character_shots": [
+            {"label": "Clip 02 冷开场", "shot": "Clip_02",
+             "png": "Clip_02_冷开场_mid.png", "identity_refs": ["CHAR_01/常态"]},
+        ]},
+    }
+
+    coverage = image_qc.face_reference_coverage(payload, tmp_path, "第1集")
+    assert coverage["verdict"] == "ok"
+    assert coverage["covered"] == 1
+    assert coverage["missing"] == []
+
+
 def test_face_reference_coverage_does_not_block_prompt_before_png(tmp_path: Path) -> None:
     coverage = image_qc.face_reference_coverage(_coverage_payload("ok"), tmp_path, "第1集")
     assert coverage["verdict"] == "ok"

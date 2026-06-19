@@ -69,6 +69,36 @@ def scene_names(root: str) -> List[str]:
                 out.add(name)
     return sorted(out)
 
+
+# 核心场景标记词（scope 命中即视为核心主场景；显式标记不破坏旧 demo——旧 LOC 无这些标记仍只 warn）
+_CORE_SCENE_MARKERS = ("核心", "主场景", "主舞台", "core", "key_scene")
+
+
+def core_scene_names(root: str) -> List[str]:
+    """asset_registry 里**显式标核心**的 LOC 场景名——跨集光位/轴线反转对这些场景升 BLOCK（而非 WARN）。
+
+    判据（任一·显式）：LOC asset 有 `core=true` / `tier=core` / `scope`|`name` 命中核心标记词。
+    显式标记口径：旧项目未标 → 返回空 → 一律维持 warn，不破坏既有 demo。缺/解析失败 → []。"""
+    p = os.path.join(root, "出图", "共享", "asset_registry.json")
+    try:
+        data = json.load(open(p, encoding="utf-8"))
+    except Exception:
+        return []
+    out = set()
+    for a in data.get("assets") or []:
+        if not isinstance(a, dict) or not str(a.get("id") or "").upper().startswith("LOC"):
+            continue
+        name = str(a.get("name") or "").strip()
+        if len(name) < 2:
+            continue
+        is_core = bool(a.get("core")) or str(a.get("tier") or "").strip().lower() == "core" \
+            or any(m in str(a.get("scope") or "") for m in _CORE_SCENE_MARKERS) \
+            or any(m in name for m in _CORE_SCENE_MARKERS)
+        if is_core:
+            out.add(name)
+    return sorted(out)
+
+
 # 方向字段（只对这两个字段做方向反转检测；其余字段跨集本就该变，不检）
 LIGHT_FIELD = "场景光位锚"
 AXIS_FIELD = "场景轴线视线"
@@ -117,11 +147,15 @@ def _scene_signatures(field_text: str, scenes: Sequence[str], extractor) -> Dict
     return out
 
 
-def detect_inversions(prev_text: str, cur_text: str, scenes: Sequence[str], kind: str) -> List[Dict[str, str]]:
-    """同名场景跨集方向反转告警（kind='light'|'axis'）。两集都出现该场景、且方向互为反转才报。纯函数·可测。"""
+def detect_inversions(prev_text: str, cur_text: str, scenes: Sequence[str], kind: str,
+                      core_scenes: Sequence[str] = ()) -> List[Dict[str, str]]:
+    """同名场景跨集方向反转告警（kind='light'|'axis'）。两集都出现该场景、且方向互为反转才报。纯函数·可测。
+
+    core_scenes 里的场景反转升 `level=block`（核心主场景越轴/光跳=硬伤）；其余 `level=warn`（启发式·人判）。"""
     extractor = light_side if kind == "light" else axis_dir
     prev_sig = _scene_signatures(prev_text, scenes, extractor)
     cur_sig = _scene_signatures(cur_text, scenes, extractor)
+    core = set(core_scenes or ())
     out: List[Dict[str, str]] = []
     for scene in sorted(set(prev_sig) & set(cur_sig)):
         p_set, c_set = prev_sig[scene], cur_sig[scene]
@@ -130,12 +164,15 @@ def detect_inversions(prev_text: str, cur_text: str, scenes: Sequence[str], kind
                 inverted = (kind == "light" and {p, c} == {"L", "R"}) or \
                            (kind == "axis" and isinstance(p, tuple) and c == (p[1], p[0]) and p[0] != p[1])
                 if inverted:
+                    is_core = scene in core
                     out.append({
                         "scene": scene, "kind": kind,
+                        "level": "block" if is_core else "warn",
                         "prev": _sig_str(p), "cur": _sig_str(c),
                         "note": (f"同场景「{scene}」跨集{'光位左右' if kind == 'light' else '轴线走向'}反转"
                                  f"（前集 {_sig_str(p)} → 本集 {_sig_str(c)}）：同一地点光位/轴线翻=越轴/光跳穿帮；"
-                                 "确认是否有意（如反打/换机位），否则对齐前集。"),
+                                 + ("**核心主场景·硬伤**：必须对齐前集，除非确为有意换机位（写明）。"
+                                    if is_core else "确认是否有意（如反打/换机位），否则对齐前集。")),
                     })
     return out
 
@@ -161,8 +198,11 @@ def field_similarity(prev_val: str, cur_val: str) -> float:
 
 
 def cross_episode_diff(prev_text: str, cur_text: str, scenes: Sequence[str],
-                       prev_ep: str = "", cur_ep: str = "") -> Dict[str, object]:
-    """跨集契约对比：逐字段 side-by-side+相似度（信息）+ 同名场景方向反转告警（actionable·warn-only）。"""
+                       prev_ep: str = "", cur_ep: str = "",
+                       core_scenes: Sequence[str] = ()) -> Dict[str, object]:
+    """跨集契约对比：逐字段 side-by-side+相似度（信息）+ 同名场景方向反转告警（actionable）。
+
+    core_scenes（asset_registry 显式标核心的 LOC）反转 → warning.level=block（核心场景硬伤）；其余 warn。"""
     prev_sec, cur_sec = extract_section(prev_text), extract_section(cur_text)
     prev_fields = parse_contract_fields(prev_sec) if prev_sec is not None else {}
     cur_fields = parse_contract_fields(cur_sec) if cur_sec is not None else {}
@@ -172,8 +212,8 @@ def cross_episode_diff(prev_text: str, cur_text: str, scenes: Sequence[str],
         fields.append({"field": f, "prev_text": pv, "cur_text": cv,
                        "similarity": field_similarity(pv, cv)})
     warnings: List[Dict[str, str]] = []
-    warnings += detect_inversions(prev_fields.get(LIGHT_FIELD, ""), cur_fields.get(LIGHT_FIELD, ""), scenes, "light")
-    warnings += detect_inversions(prev_fields.get(AXIS_FIELD, ""), cur_fields.get(AXIS_FIELD, ""), scenes, "axis")
+    warnings += detect_inversions(prev_fields.get(LIGHT_FIELD, ""), cur_fields.get(LIGHT_FIELD, ""), scenes, "light", core_scenes)
+    warnings += detect_inversions(prev_fields.get(AXIS_FIELD, ""), cur_fields.get(AXIS_FIELD, ""), scenes, "axis", core_scenes)
     notes: List[str] = []
     if prev_sec is None:
         notes.append(f"前集 {prev_ep or 'N-1'} 缺「本集视觉一致性契约」整节——跨集对比降级（只列本集）")
@@ -185,6 +225,7 @@ def cross_episode_diff(prev_text: str, cur_text: str, scenes: Sequence[str],
         "prev_episode": prev_ep, "cur_episode": cur_ep,
         "fields": fields, "warnings": warnings, "notes": notes,
         "summary": {"warnings": len(warnings),
+                    "blocks": sum(1 for w in warnings if w.get("level") == "block"),
                     "light_inversions": sum(1 for w in warnings if w["kind"] == "light"),
                     "axis_inversions": sum(1 for w in warnings if w["kind"] == "axis")},
     }

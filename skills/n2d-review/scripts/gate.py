@@ -117,6 +117,7 @@ from n2d_cross_episode import (  # noqa: E402  跨集视觉契约方向反转（
     prior_episode as _ce_prior_episode,
     _episode_number as _ce_episode_number,
     scene_names as _ce_scene_names,
+    core_scene_names as _ce_core_scene_names,
 )
 import semantic_continuity as semc  # noqa: E402
 import state_continuity as statec  # noqa: E402
@@ -1875,9 +1876,12 @@ def check_cross_episode_contract(root: str, ep: str) -> None:
         cur_text = open(cur_path, encoding="utf-8").read()
     except OSError:
         return
-    diff = _cross_episode_diff(prev_text, cur_text, _ce_scene_names(root), prev_ep=prev_ep, cur_ep=ep)
+    diff = _cross_episode_diff(prev_text, cur_text, _ce_scene_names(root), prev_ep=prev_ep, cur_ep=ep,
+                               core_scenes=_ce_core_scene_names(root))
     for w in diff.get("warnings", []):
-        add(WARN, "跨集光位轴线", f"{cur_path}（vs {prev_ep}）", w.get("note", ""),
+        # P2b：核心主场景（asset_registry 显式标 core）跨集光位/轴线反转升 BLOCK；其余仍 WARN（启发式·人判）。
+        sev = BLOCK if w.get("level") == "block" else WARN
+        add(sev, "跨集光位轴线", f"{cur_path}（vs {prev_ep}）", w.get("note", ""),
             return_to_stage="image", scene=w.get("scene", ""), kind=w.get("kind", ""),
             rerun_scope="同地点跨集光位/轴线翻=越轴/光跳穿帮；确认是否有意（反打/换机位），否则回 n2d-image 对齐前集 00_总览 视觉契约。",
             affected_artifacts=[cur_rel, _ce_overview_rel(prev_ep), "出图/共享/asset_registry.json"])
@@ -4315,13 +4319,18 @@ def check_image_shot_prompt_section(path: str, idx: int, section: str,
                         return_to_stage="image",
                     )
             elif not _has_native_multi_subject_strategy(section):
-                add(WARN, "角色一致性", loc,
-                    f"单镜多角色同框（{'/'.join(sorted(chars))}）：单图参考后端(如 Codex)难保多人各自一致——"
-                    "优先用原生主体/角色ID/区域绑定，或走「分别出图+合成」并登记降级。普通多参考只能算弱参考，不等于持久角色 ID。")
+                add(BLOCK, "角色一致性", loc,
+                    f"单镜多角色同框（{'/'.join(sorted(chars))}）× 原生主体后端：缺 `多人同框执行策略`"
+                    "（native_subject_slots / 区域绑定 / 分别出图+合成）。多主体后端虽有主体绑定能力，但无显式"
+                    "空间/主体策略时仍会把参考身份混到错位或把两张脸平均成同一张——逐主体写原生主体名额或区域绑定策略，"
+                    "否则不放行（空间绑定是同框一致性硬约束，2026-06 起对所有后端 block，不再降级为建议）。",
+                    return_to_stage="image")
             elif not _has_multi_subject_identity_slots(section):
-                add(WARN, "角色一致性", loc,
-                    f"单镜多角色同框（{'/'.join(sorted(chars))}）缺 `多人同框身份槽位`：建议逐主体绑定 CHAR_xx/形态、画面位置、视线与参考图组，"
-                    "避免多主体后端把参考身份混到错误位置。")
+                add(BLOCK, "角色一致性", loc,
+                    f"单镜多角色同框（{'/'.join(sorted(chars))}）缺 `多人同框身份槽位`：逐主体绑定 CHAR_xx/形态、"
+                    "画面槽位（LEFT/RIGHT/FOREGROUND/BACKGROUND）、视线与各自参考图组，避免多主体后端把参考身份混到错误位置——"
+                    "空间槽位绑定是同框一致性硬约束，2026-06 起对所有后端 block，不再降级为建议。",
+                    return_to_stage="image")
 
 
 def _evolution_derived_forms(root: str) -> List[Dict[str, str]]:

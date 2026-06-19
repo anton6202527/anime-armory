@@ -96,6 +96,29 @@ def best_anchor_score(emb: Sequence[float], variant_embs: Sequence[Sequence[floa
     return max(vals) if vals else None
 
 
+def best_face_match(
+    face_embs: Sequence[Sequence[float]],
+    main_emb: Sequence[float],
+    variant_embs: Sequence[Sequence[float]],
+) -> Optional[Tuple[float, float, int]]:
+    """多脸镜中，为目标角色选择最像其定妆组的那张脸。
+
+    旧逻辑只取画面最大脸；双人接触镜里若受击者/反应者脸更大，会把那张脸拿去比主角，
+    造成误判。这里对所有检测到的人脸逐一与目标角色多角度锚点比对，返回
+    (best_of_variants, score_vs_main, face_idx)。
+    """
+    best: Optional[Tuple[float, float, int]] = None
+    anchors = list(variant_embs or [main_emb])
+    for idx, emb in enumerate(face_embs):
+        sc = best_anchor_score(emb, anchors)
+        if sc is None:
+            continue
+        sc_main = cosine(emb, main_emb)
+        if best is None or sc > best[0]:
+            best = (sc, sc_main, idx)
+    return best
+
+
 def floor_calibrated(intra_scores: Sequence[float]) -> bool:
     """定妆组是否有内部对可自标定地板（≥1 对）。单张/无对 → False：地板退回保守经验值 0.50，
     风格化漫剧脸跨图余弦常 <0.5 会系统性误报——此时标低精度，让 n2d-score 像 pillow_fallback 那样降权而非硬判。"""
@@ -721,8 +744,8 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN) -> dict:
         full = os.path.join(root, "出图", ep, png)
         if not os.path.exists(full):
             continue
-        emb = _embed(app, full)
-        if emb is None:
+        face_embs = _embed_all(app, full)
+        if not face_embs:
             result["shots"].append({"png": png, "verdict": "noface", "chars": chars})
             continue
         worst = None
@@ -730,13 +753,15 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN) -> dict:
             if c in char_main_emb:
                 # 跨集漂移基线用「vs 主参考」（稳定可比，驱动 identity.py ②/⑤）；
                 # P3 逐镜 verdict 用「vs 最像视图」，避免侧/背/大角度同人镜被正脸基线误判 🟡。
-                sc_main = cosine(emb, char_main_emb[c])
+                match = best_face_match(face_embs, char_main_emb[c], char_variant_embs.get(c) or [char_main_emb[c]])
+                if match is None:
+                    continue
+                sc, sc_main, face_idx = match
                 char_ep_scores.setdefault(c, []).append(sc_main)
-                sc = best_anchor_score(emb, char_variant_embs.get(c) or [char_main_emb[c]]) or sc_main
                 fl = char_floor.get(c, 0.50)
                 v = band(sc, fl, margin)
                 row = {"char": c, "score": round(sc, 4), "floor": round(fl, 4), "verdict": v,
-                       "floor_calibrated": char_calibrated.get(c, False)}
+                       "floor_calibrated": char_calibrated.get(c, False), "face_idx": face_idx}
                 if round(sc, 4) != round(sc_main, 4):
                     row["score_vs_main"] = round(sc_main, 4)
                     row["anchor"] = "best_of_variants"  # P3：本镜按最像视图判，非仅正脸
@@ -754,9 +779,8 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN) -> dict:
             # 多人同框：对所有脸做分配匹配，抓"张冠李戴"串脸（单脸 worst-of 测不出）
             present = {c: char_main_emb[c] for c in chars if c in char_main_emb}
             if len(present) >= 2:
-                all_faces = _embed_all(app, full)
-                if len(all_faces) >= 2:
-                    swap = detect_face_swaps(all_faces, present)
+                if len(face_embs) >= 2:
+                    swap = detect_face_swaps(face_embs, present)
                     if swap["duplicate_chars"] or swap["missing_chars"]:
                         row["face_swap"] = swap
                         if swap["swap_suspected"] and _sev(row["verdict"]) < _sev("warn"):

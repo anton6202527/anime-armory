@@ -63,6 +63,35 @@ except Exception:  # 退化：常量不可用时本地兜底，保持与 n2d_con
         "hug_or_pull", "intimate_interaction",
     })
 DRIFT_REASON_RE = re.compile(r"漂|drift|中段|动作崩|路径", re.I)
+# 运动幅度信号（P1a·关键帧密度自适应）：让「描述很激烈/运镜大但没标正式高运动模板」的镜
+# 也拿到 R1 级密锚帧，而不是掉到 D0 单中锚。高速动作 + 大幅运镜词。
+MOTION_SIGNAL_RE = re.compile(
+    r"疾驰|狂奔|奔跑|飞奔|快跑|冲刺|翻滚|腾空|跃起|起跳|跳跃|俯冲|急速|高速|快速|迅猛|猛地|"
+    r"激烈|扑向|扑倒|冲撞|撞飞|追逐|追击|逃窜|逃命|坠落|跌落|摔|甩出|挥砍|劈砍|横扫|连击|"
+    r"急转|急停|急刹|甩镜|快摇|快切|快速运镜|镜头疾|镜头猛|翻身|旋身|缠斗|扭打|爆冲|疾",
+    re.I)
+
+
+def clip_motion_text(clip: Dict[str, Any]) -> str:
+    """聚合 clip 的描述/运镜/状态文本，用于运动幅度判定。纯函数·可测。"""
+    parts: List[str] = [str(clip.get("label") or ""), str(clip.get("scene") or "")]
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), dict) else {}
+    parts += [str(cont.get("start_state") or ""), str(cont.get("end_state") or ""),
+              str(cont.get("camera") or ""), str(cont.get("motion") or "")]
+    for s in clip.get("shots") or []:
+        if isinstance(s, dict):
+            parts.append(str(s.get("desc") or ""))
+            parts.append(str(s.get("camera") or s.get("运镜") or ""))
+    return " ".join(parts)
+
+
+def high_motion_signal(clip: Dict[str, Any]) -> bool:
+    """非正式高运动模板镜的运动幅度信号：文本/运镜命中高速动作词，或 `expression_span=大`
+    （大表情峰值值得插一张中段锚帧捕捉峰值）。让这类镜也走 R1 级密锚帧。纯函数·可测。"""
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), dict) else {}
+    if str(cont.get("expression_span") or "").strip() == "大":
+        return True
+    return bool(MOTION_SIGNAL_RE.search(clip_motion_text(clip)))
 ASSET_CLIP_RE = re.compile(r"(?i)clip[_\s]*0*(\d+)")
 SHOT_T_RE = re.compile(r"(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)\s*s")
 
@@ -195,6 +224,9 @@ def classify_clip(clip: Dict[str, Any], *, min_seg: float, long_shot_threshold: 
     template = str(clip.get("template") or "")
     if template in HIGH_MOTION_TEMPLATES and beats >= 2:
         return f"R1 高运动模板 {template}（{duration}s/{beats}拍）"
+    if high_motion_signal(clip):
+        # P1a：文本/运镜高速动作 或 大表情峰值 → R1 级密锚帧（即便没标正式高运动模板）
+        return f"R1 高运动信号（文本/运镜或大表情，{duration}s）"
     if drift_hits > 0:
         return f"R3 漂移实证（redraw×{drift_hits}，{duration}s）"
     if duration >= long_shot_threshold and beats >= 3:
@@ -255,7 +287,8 @@ def plan_episode(root: str, ep: str, *, min_seg: float = 4.0, target_seg: float 
                              long_shot_threshold=long_shot_threshold, drift_hits=drift)
         if rule:
             template = str(clip.get("template") or "")
-            seg = fight_target if template in HIGH_MOTION_TEMPLATES else target_seg
+            # R1（正式高运动模板）与 R1b（文本/运镜运动信号·大表情）都用更短 fight_target → 更密锚帧。
+            seg = fight_target if (template in HIGH_MOTION_TEMPLATES or rule.startswith("R1")) else target_seg
             # R1/R2/R3 锚帧排给 multiframe2video（首选执行路径）→ 用 multiframe 段密度地板，
             # 让 10s 打斗出 2 锚(4帧)、15s 出 3 锚(5帧)，而非被 4s relay 地板卡成 1 锚。
             times = plan_anchor_times(float(duration), parse_shot_boundaries(clip),

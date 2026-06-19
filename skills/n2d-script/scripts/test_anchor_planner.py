@@ -143,6 +143,41 @@ def test_drift_redraw_promotes_clip_by_r3(tmp_path):
     assert len(plan["planned"]) == 1 and plan["planned"][0]["rule"].startswith("R3")
 
 
+# ── P1a 关键帧密度自适应：文本/运镜运动信号 + 大表情 → R1 级密锚帧 ──
+
+def test_high_motion_signal_pure():
+    assert ap.high_motion_signal({"shots": [{"desc": "主角疾驰冲入大殿"}]}) is True
+    assert ap.high_motion_signal({"continuity": {"camera": "镜头快摇跟随"}}) is True
+    assert ap.high_motion_signal({"continuity": {"expression_span": "大"}}) is True  # 大表情峰值
+    assert ap.high_motion_signal({"shots": [{"desc": "两人静坐对饮，缓慢交谈"}],
+                                  "continuity": {"expression_span": "中"}}) is False
+
+
+def test_text_motion_signal_promotes_to_r1(tmp_path):
+    # 10s 普通镜无高运动模板，但描述里「疾驰」→ R1b 密锚帧（2 锚=4 帧），而非掉到 D0 单中锚
+    root = _write_project(tmp_path, [
+        _clip(1, 10, shots=[{"t": "0-3s", "desc": "主角疾驰穿过长廊"},
+                            {"t": "3-6.5s", "desc": "翻身跃起"}, {"t": "6.5-10s", "desc": "落地收势"}]),
+    ])
+    plan = ap.plan_episode(root, "第1集")
+    assert len(plan["planned"]) == 1
+    p = plan["planned"][0]
+    assert p["rule"].startswith("R1") and "运动信号" in p["rule"]
+    assert len(p["anchors"]) == 2  # fight_target 密度 → 4 帧
+
+
+def test_big_expression_span_promotes_to_r1(tmp_path):
+    # 9s/2拍 本不够 R2（需 ≥3 拍），但 expression_span=大 → R1b 捕捉表情峰值
+    cont = {"start_state": "隐忍", "end_state": "崩溃痛哭", "transition": "硬切",
+            "need_endframe": True, "expression_span": "大"}
+    root = _write_project(tmp_path, [
+        _clip(1, 9, shots=[{"t": "0-4.5s"}, {"t": "4.5-9s"}], continuity=cont),
+    ])
+    plan = ap.plan_episode(root, "第1集")
+    assert len(plan["planned"]) == 1 and plan["planned"][0]["rule"].startswith("R1")
+    assert len(plan["planned"][0]["anchors"]) == 2
+
+
 def test_manual_declaration_is_skipped(tmp_path):
     cont = {"start_state": "s", "end_state": "e", "transition": "硬切", "need_endframe": True,
             "midframe": {"midframe_png": "出图/第1集/图片/镜头01_mid.png",

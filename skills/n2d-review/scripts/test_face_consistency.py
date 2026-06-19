@@ -41,6 +41,17 @@ def test_best_anchor_score_takes_max_over_views():
     assert fc.best_anchor_score(shot_sideish, []) is None
 
 
+def test_best_face_match_selects_expected_face_not_largest():
+    # 输入顺序模拟 detector 面积排序：face0 是最大脸但不像主角，face1 较小但像主角。
+    main = [1.0, 0.0]
+    side = [0.7, 0.7]
+    faces = [[0.0, 1.0], [0.98, 0.02]]
+    score, score_vs_main, face_idx = fc.best_face_match(faces, main, [main, side])
+    assert face_idx == 1
+    assert score > 0.95
+    assert score_vs_main > 0.95
+
+
 def test_calibrate_floor_fallback_when_single():
     # 单张定妆（无内部对）→ 回退保守同人下限
     assert fc.calibrate_floor([]) == 0.50
