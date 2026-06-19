@@ -50,6 +50,7 @@ description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 
 | 广告脚本+VO+时间轴 | **`ad-script`** | `脚本/广告脚本.md`+`voiceover.txt`+`时间轴.json`+**广告法机检** | ✅ |
 | VO配音 | **`ad-voice`** | `配音/时长清单.json`（驱动镜头时长） | ✅ |
 | 分镜（实测时长） | **`ad-script`** | `storyboard.json`+`镜头时长.json`+字幕 | ✅ |
+| 投放前评分(横切·出图前) | **`ad-score`** | `评分/ad_score.json`：钩子/卖点/CTA/品牌露出/广告法/时长 → 三档 go/revise/reject + 回流清单 | ✅ |
 | 三层定妆库+出图 | **`ad-image`** | 角色/场景/**产品**定妆 + 逐镜首尾帧 PNG | ✅ |
 | 图生视频 | **`ad-video`** | Clip MP4 + 契约继承机检 + 模型路由 | ✅ |
 | 剪辑包装+交付 | **`ad-compose`** | 成片 + 品牌包装 end card + cutdown + 多比例 + 交付规格 | ✅ |
@@ -64,10 +65,11 @@ description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 
 | 要配 VO/旁白 | `ad-voice` |
 | 要出定妆/产品图/分镜图 | `ad-image`（三层定妆库：角色/场景/产品）|
 | 要图生视频 | `ad-video` |
+| 出图前想评估广告值不值得做/打分/拦平庸 | `ad-score`（pre-spend 评分闸门，reject 就回上游改再出图）|
 | 素材齐了要剪辑包装/出 cutdown/多比例/交付 | `ad-compose` |
 | 给了 `拍广告/<项目>/` 没说动作 | `python3 skills/ad-craft/scripts/progress.py "<作品根>"` 报进度 + 建议下一步 |
 
-> 推荐顺序：**brief → ad-concept 创意 → ad-script 脚本(过广告法机检) → ad-voice VO → ad-script 分镜 → ad-image 三层定妆+出图 → ad-video 图生视频 → ad-compose 剪辑包装+cutdown+交付 → AI披露 → ad-review M0质检**。
+> 推荐顺序：**brief → ad-concept 创意 → ad-script 脚本(过广告法机检) → ad-voice VO → ad-script 分镜 → ad-score 投放前评分(出图前拦平庸·reject 回上游) → ad-image 三层定妆+出图 → ad-video 图生视频 → ad-compose 剪辑包装+cutdown+交付 → AI披露 → ad-review M0质检**。
 > **音频先行**：VO 实测时长驱动镜头时长，`ad-script` 跑两遍（脚本→配音后分镜），与 n2d 同构。广告常是「音乐床 + VO」混合驱动，音乐床作节奏锚一并记录。
 > **立项完成判据**：`brief.json` 过 `ad-craft contract.brief_check()` 必填最小集（brand/product/usp/audience）→ 回写 `_进度.md` 客户需求立项 ✅（通常由 `ad-concept` 第0步补完 brief 时顺手回写）；可延后合规项（claims依据/rights授权/legal_lines）允许标「待补」，进花钱 gate 前必须补齐（`ad-craft/scripts/gate.py --stage image|video|compose` 会阻断）。
 > **零成本 demo 通道**（一句话用户的推荐路径）：进花钱 gate（出图）之前全程免费——brief 访谈 → ad-concept 创意 → ad-script 脚本(机检) → `ad-voice --backend say|estimate` 占位配音 → ad-script 分镜 storyboard。先看到完整镜头设计再决定是否花钱出图/出视频；占位配音正式定稿前须真 VO 复跑。

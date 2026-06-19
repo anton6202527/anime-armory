@@ -1,6 +1,6 @@
 ---
 name: novel-review
-description: 小说质检 + 流程自审（novel-* 家族的 QA 环节，不写作只审，与 n2d-review/mv-review/song-review 同构）。双模——模式①「作品质检」：审 ALREADY-WRITTEN 章节（.md/.txt）——POV slips(串视角/视角穿帮)、OOC/人设崩、plot holes、anchor & timeline drift、设定矛盾、节奏/缺钩子、文风漂移、原文照搬——机检+人判，出严重度分级·定位到章/段的报告；续写/外传交叉核对 设定/(角色卡·世界观·锚点表·章纲) 与 原作。模式②「流程自审」：联网拉当前小说/网文市场基准，对照 novel-* 各 skill + novel-craft + Q&A，产出"差距清单 + 该改哪个 skill 哪段"的优化建议。Does NOT write/continue the story. Triggers 审稿, 质检, 检查小说质量, 查人设崩, 视角穿帮, 串视角, 设定矛盾, 锚点对齐, 一致性回扫, 伏笔回收, 节奏, 文风漂移, 原文照搬, 质量报告, 流程自审, 流程优化, 自我优化, novel 还能优化啥, novel review, QA.
+description: 小说质检 + 流程自审（novel-* 家族的 QA 环节，不写作只审，与 n2d-review/mv-review/song-review 同构）。双模——模式①「作品质检」：审 ALREADY-WRITTEN 章节（.md/.txt）——POV slips(串视角/视角穿帮)、OOC/人设崩、plot holes、anchor & timeline drift、设定矛盾、**力量体系一致性(穿越/系统流的等级·成长值·战力只增不减、未知境界、越级过快、面板属性≤7、系统流久无升级桥段)**、节奏/缺钩子、文风漂移、原文照搬——机检+人判，出严重度分级·定位到章/段的报告；续写/外传交叉核对 设定/(角色卡·世界观·锚点表·章纲) 与 原作。`consistency_audit.py` 含 `power_system` 子runner。模式②「流程自审」：联网拉当前小说/网文市场基准，对照 novel-* 各 skill + novel-craft + Q&A，产出"差距清单 + 该改哪个 skill 哪段"的优化建议。Does NOT write/continue the story. Triggers 审稿, 质检, 检查小说质量, 查人设崩, 视角穿帮, 串视角, 设定矛盾, 锚点对齐, 一致性回扫, 伏笔回收, 力量体系自检, 等级一致性, 战力崩坏, 升级数值, 节奏, 文风漂移, 原文照搬, 质量报告, 流程自审, 流程优化, 自我优化, novel 还能优化啥, novel review, QA.
 ---
 
 # novel-review — 小说质检 + 流程自审

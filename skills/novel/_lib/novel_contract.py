@@ -100,6 +100,15 @@ NOVEL_PRODUCT_KINDS = {
         "layer": "setting",
         "boundary": "foreshadowing_seeds",
     },
+    "power_system": {
+        # 力量体系真值：穿越/系统流/修仙的等级体系 + 系统面板字段 + 升级节奏 + 逐章成长 progression
+        # （等级/境界/战力只增不减·机检退档=阻断）。定义在 setting 层，由 novel-wiki 维护、
+        # novel-review 的 power_system 子runner 与 post_write 每章自检消费。schema 见 power_system_defs.py。
+        "owner": "novel-wiki",
+        "path": "设定/power_system_registry.json",
+        "layer": "setting",
+        "boundary": "power_system",
+    },
     "review_report": {
         "owner": "novel-review",
         "path": "审稿/review_report.json",

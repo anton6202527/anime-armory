@@ -35,6 +35,10 @@ description: 拍广告 第6阶段·图生视频 — 把 ad-image 的首帧 PNG �
    - 空镜/痛点/普通镜 → 通用后端（`_设置.md` 的 `生视频模型`/`生视频渠道`，旧 `生视频AI` 兼容）
    - end card/包装定格 → 静帧或极慢运镜
    - 镜头时长超 primary 后端单 Clip 上限 = 🔴 block（改用更长后端或拆镜）。
+   - **三轴增量字段（借鉴 n2d-model-router，ad 自包含重实现）**，逐镜写进 `video_model_routes.json`：
+     - **`quality_tier` 质量档（成本×质量）**：产品 hero/代言人特写/end card 品牌定格 → `high`（值后端 pro 档把脸·包装·logo·品牌色钉稳）；空镜/痛点/普通镜 → `fast`（量产省成本）；后端无 fast/pro 档 → `n/a`。只表达意图，落档侧把 `high→pro`、`fast→fast` 解析成实际档位，不写死 model_version。
+     - **`motion_reference` 视频运动参考**：产品环绕 hero/demo 连续动作镜 + primary 支持 `reference_video_motion`（Seedance/可灵）时 `applicable=true`，提示把同段前一条已通过 clip 作运动/风格参考喂进去锁运镜节奏（与图身份锁正交）。
+     - **`summary.multishot_groups` 多镜单次生成候选（advisory）**：连续 demo 步骤/产品多角度 + 支持多镜的后端 → 标候选组，可一次 co-generate 消缝；**只提示不合并**，逐镜仍是独立可重跑交付单元，组大小受单次输出时长上限封顶。
 2. **逐 Clip 视频 prompt**（`出视频/分镜/prompt/镜头N.md`）：在首帧基础上写运镜（推/拉/摇/环绕/手持）+ 表演节拍 + 节奏。逐镜继承上游契约（品牌色/光位/轴线/景别）；**绑定 `PROD_*` 的产品镜必须重写产品身份锁定句/资产引用（`PROD_xx` 或「同一包装/同一 logo/同一品牌色」）**。
 3. **契约继承机检（硬闸门）**：
    ```bash

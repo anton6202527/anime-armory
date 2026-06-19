@@ -61,6 +61,9 @@ python3 skills/n2d-batch/scripts/queue.py mark <作品根> <task_id> --status pa
 # 3) Worker 自动执行（命令配在 生产数据/batch_runner.json；--verify-outputs 用契约产物兜底 exit 0）
 python3 skills/n2d-batch/scripts/runner.py <作品根> --until-empty --limit 1 --verify-outputs
 
+# 3.1) 执行前消费 run.py next 动作卡；遇 gate/image_qc/合规/环境/选择点阻断就不跑命令
+python3 skills/n2d-batch/scripts/runner.py <作品根> --until-empty --limit 1 --next-preflight
+
 # 4) 单机多 worker 安全：稳定 worker id + 租约 + 断点恢复（多机/私有算力池需换协调后端，非本锁）
 python3 skills/n2d-batch/scripts/runner.py <作品根> --until-empty --worker w1 --lease-seconds 1800
 python3 skills/n2d-batch/scripts/runner.py <作品根> --until-empty --worker w1 --resume   # 崩溃重启自愈
@@ -90,6 +93,7 @@ python3 skills/n2d-batch/scripts/runner.py <作品根> --until-empty --recheck  
 | 错误 | 纠正 |
 |---|---|
 | 让 runner 直接重写阶段逻辑 | 不做。runner 只调配置好的阶段命令；阶段规则仍归对应 n2d skill |
+| batch 跑过单集编排器的硬阻断 | 开 `--next-preflight` 或在 `batch_runner.json` 写 `"next_preflight": true`，让 runner 执行前消费 `run.py next` 的 stop_reason |
 | 直接跑队列里的 `n2d-image` slash command | slash command 不是 shell 命令；在 `batch_runner.json` 配真实 shell 命令 |
 | 多个 agent 口头分任务 | 统一 `claim`（已上 flock 原子认领），否则并发槽和状态会乱 |
 | 多 worker 不给 `--worker` id | 给稳定 id；否则 `--resume` 无法回收"自己"上次残留的 running |

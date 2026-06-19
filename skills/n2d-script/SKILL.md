@@ -1,6 +1,6 @@
 ---
 name: n2d-script
-description: Stage 1+定稿 of n2d — 阶段1·剧本改编：split a novel into per-episode dramatic beats → voiceover台词 + bgm + 封面 + 角色/场景卡 + global_style（**不做分镜**）。阶段2·分镜设计（模式感知）：默认原生音画用脚本规划 Clip 时长；配音先行则配音后回跑，用真实配音时长设计 分镜剧本 + 故事板(Clip时长) + 素材清单 + 字幕SRT + 镜头时长。 Use when given a novel path (first run = split + refine episode 1) or asked to refine a specific episode's materials. Triggers 拆集, 分镜剧本, 故事板, 素材清单, 配音文案, BGM, 封面 prompt, 双语字幕, SRT, 角色卡, 场景卡, global_style.
+description: Stage 1+定稿 of n2d — 阶段1·剧本改编：split a novel into per-episode dramatic beats → voiceover台词 + bgm + 封面 + 角色/场景卡 + global_style（**不做分镜**）。阶段2·分镜设计（模式感知）：默认原生音画用脚本规划 Clip 时长；配音先行则配音后回跑，用真实配音时长设计 分镜剧本 + 故事板(Clip时长) + 素材清单 + 字幕SRT + 镜头时长。 阶段2 还检测题材与复现母题桥段（穿越/系统流的系统面板/升级/签到/抽奖），人确认后注入镜头/台词/出图（motif_detector）。 Use when given a novel path (first run = split + refine episode 1) or asked to refine a specific episode's materials, or to detect 题材/母题 and enhance 系统面板/升级 recurring scenes. Triggers 拆集, 分镜剧本, 故事板, 素材清单, 配音文案, BGM, 封面 prompt, 双语字幕, SRT, 角色卡, 场景卡, global_style, 题材检测, 母题, 系统面板, 升级场景, 穿越系统流增强.
 ---
 
 # n2d-script — 阶段1 剧本改编 + 阶段2 分镜设计（模式感知）

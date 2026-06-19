@@ -1,6 +1,6 @@
 ---
 name: n2d
-description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked anything about turning a novel into AI comic-drama / short-drama materials for 即梦AI / 可灵Kling / Seedance / Veo. Inspects the 作品 root, reads `_进度.md`, and routes the user to the right stage skill — `n2d-script` (阶段1 剧本改编 / 阶段2 分镜设计), `n2d-voice` (配音前移+时长清单), `n2d-image` (出图), `n2d-video` (出视频), or `n2d-compose` (合成成片). Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 分镜, 配音, 出图, 出视频, 合成, 成片, 即梦, 可灵, 双语字幕, 海外投放, n2d.
+description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked anything about turning a novel into AI comic-drama / short-drama materials for 即梦AI / 可灵Kling / Seedance / Veo. Inspects the 作品 root, reads `_进度.md`, and routes the user to the right stage skill — `n2d-script` (阶段1 剧本改编 / 阶段2 分镜设计), `n2d-voice` (配音前移+时长清单), `n2d-image` (出图), `n2d-video` (出视频), or `n2d-compose` (合成成片). Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 分镜, 配音, 出图, 出视频, 合成, 成片, 即梦, 可灵, 双语字幕, 海外投放, 题材, 母题, 系统面板, 穿越系统流, 升级场景增强, n2d.
 ---
 
 # n2d — 六阶段流水线 调度器
@@ -244,11 +244,12 @@ python3 skills/n2d-update/scripts/update_plan.py record <作品根> 第N集
 
 > **首选：跑编排器 `run.py next`**（I2 铁律的落地——一条命令把"找前沿 → 跑确定性前置（doctor / model-router / gate / compliance / 首跑选择探测）→ 停在第一个决策/花钱/合规点"收敛掉，别再手敲那串散装 CLI）：
 > ```bash
+> python3 skills/n2d/run.py enter <作品根>         # 进入作品：先跑源新鲜度 + skill 更新影响检查，再给下一步动作卡
 > python3 skills/n2d/run.py next <作品根>          # 最小未完成集：自动跑前置，停在下一个 stop-point，给「下一步动作卡」
 > python3 skills/n2d/run.py next <作品根> 第N集    # 指定集
 > python3 skills/n2d/run.py next <作品根> --json   # 机器可读 NextAction（代理消费 frontier/prework/stop_reason/action_card/gate）
 > ```
-> 它返回的 `stop_reason` ∈ `{needs_agent_gen, needs_payment_confirm, needs_choice, needs_compliance, blocked_by_gate, env_missing, done}`——**代理据此只在"需要脑子/钱包/签字"处停下问人，其余前置已自动跑完**。`blocked_by_gate` 会透传 `return_to_stage`/`findings_path` 指向最小返工。设计契约见 `../../docs/n2d-编排器设计.md`。
+> 它返回的 `stop_reason` ∈ `{needs_agent_gen, needs_payment_confirm, needs_choice, needs_compliance, blocked_by_gate, blocked_by_image_qc, env_missing, done}`——**代理据此只在"需要脑子/钱包/签字"处停下问人，其余前置已自动跑完**。`blocked_by_gate` 会透传 `return_to_stage`/`findings_path` 指向最小返工；`blocked_by_image_qc` 专指出图落档 QC 未过，先回 `n2d-image` 修复/确认受影响图，不当成后端环境缺失。设计契约见 `../../docs/n2d-编排器设计.md`。
 >
 > **底层/手查：确定性路由脚本 `progress.py`**（编排器内部即调它解析前沿；容错或只想看前沿表时直接用，别靠 LLM 推 16×N 大表）：
 > ```bash

@@ -33,16 +33,23 @@ CAP_CINEMATIC = "cinematic"                # 电影感（表演/质感）
 CAP_REALISTIC_MOTION = "realistic_motion"  # 真实运动（拟真手持、自然动态）
 CAP_GENERAL = "general"                    # 通用叙事
 CAP_STILL = "still"                        # 静帧 / 极慢运镜（文字/logo 要稳）
+CAP_MOTION_REF = "reference_video_motion"  # 吃视频片段当运动/风格参考（锁运镜节奏；与图身份锁正交）
+CAP_MULTISHOT = "multishot_native"         # 一次生成多镜头叙事、跨镜一致、无缝转场
 
+# Seedance 家族有 fast/pro 质量档（fast 量产默认、pro 留吃重镜）；登记「支持档位 + 默认档」，
+# 不写死 pro 版本字串（防过期，版本以渠道 CLI 为准）。
 BACKEND_PROFILES = {
     "seedance": {"label": "Seedance", "max_seconds": 15.0,
-                 "caps": [CAP_SUBJECT_LOCK, CAP_REALISTIC_MOTION, CAP_GENERAL, CAP_STILL]},
+                 "caps": [CAP_SUBJECT_LOCK, CAP_REALISTIC_MOTION, CAP_GENERAL, CAP_STILL,
+                          CAP_MOTION_REF, CAP_MULTISHOT],
+                 "supports_quality_tier": True, "default_quality_tier": "fast"},
     "kling":    {"label": "可灵Kling", "max_seconds": 10.0,
-                 "caps": [CAP_SUBJECT_LOCK, CAP_CINEMATIC, CAP_GENERAL, CAP_STILL]},
+                 "caps": [CAP_SUBJECT_LOCK, CAP_CINEMATIC, CAP_GENERAL, CAP_STILL, CAP_MOTION_REF]},
     "veo":      {"label": "Veo", "max_seconds": 8.0,
                  "caps": [CAP_CINEMATIC, CAP_GENERAL, CAP_STILL]},
     "dreamina": {"label": "即梦", "max_seconds": 8.0,
-                 "caps": [CAP_GENERAL, CAP_REALISTIC_MOTION, CAP_STILL]},
+                 "caps": [CAP_GENERAL, CAP_REALISTIC_MOTION, CAP_STILL],
+                 "supports_quality_tier": True, "default_quality_tier": "fast"},
 }
 DEFAULT_GENERAL_BACKEND = "dreamina"  # 普通镜/兜底默认（platforms.md：模型只作默认/普通镜兜底）
 
@@ -189,6 +196,81 @@ def clip_length_cap_check(primary, duration):
     return None
 
 
+# ── 三轴：质量档 / 视频运动参考 / 多镜单次生成（借鉴 n2d-model-router，ad 自包含重实现）──────
+# 质量档：身份/品牌吃重镜值 pro（产品 hero/代言人特写/end card 品牌定格），普通镜走 fast 省成本。
+HIGH_TIER_SHOT_TYPES = {"product_hero", "emotion_closeup", "endcard"}
+# 多镜单次生成的甜点镜型：连续 demo 步骤 / 产品多角度——天然接力、最适合一次 co-generate 消缝。
+MULTISHOT_SHOT_TYPES = {"demo_handheld", "product_hero"}
+MULTISHOT_MAX_MEMBERS = 4
+
+
+def backend_has_cap(backend, cap):
+    return cap in BACKEND_PROFILES.get(normalize_backend(backend), {}).get("caps", [])
+
+
+def backend_supports_quality_tier(backend):
+    return bool(BACKEND_PROFILES.get(normalize_backend(backend), {}).get("supports_quality_tier"))
+
+
+def quality_tier_for(shot_type, primary):
+    """本镜质量档路由意图：high|fast|n/a。纯函数·可测。后端无 fast/pro 档 → n/a。
+
+    high = 产品 hero / 代言人特写 / end card 品牌定格（脸·包装·logo·品牌色吃重，值 pro 钉稳）；
+    fast = 空镜/痛点/普通镜（量产省成本）。落档侧把 high→pro、fast→fast 解析成后端实际档位。"""
+    if not backend_supports_quality_tier(primary):
+        return "n/a"
+    return "high" if shot_type in HIGH_TIER_SHOT_TYPES else "fast"
+
+
+def motion_reference_plan(shot_type, primary):
+    """视频运动参考计划。纯函数·可测。demo 实拍/产品环绕镜 + primary 支持 reference_video_motion 时适用。"""
+    applicable = shot_type in MULTISHOT_SHOT_TYPES and backend_has_cap(primary, CAP_MOTION_REF)
+    plan = {"applicable": applicable}
+    if applicable:
+        plan["use"] = "prior_approved_clip_as_video_reference"
+        plan["note"] = (f"{BACKEND_PROFILES.get(primary, {}).get('label', primary)} 支持视频片段参考："
+                        "把同段前一条已通过 clip 作运动/风格参考喂进去，锁运镜节奏（产品环绕/demo 连续动作连贯）。")
+    return plan
+
+
+def annotate_multishot_groups(routes):
+    """标注多镜单次生成候选组（advisory）。纯函数·可测。
+
+    连续 ≥2 条同型镜（demo 步骤/产品多角度）+ 同一支持多镜的 primary → 可一次 co-generate 消缝。
+    **只提示不合并**：逐镜仍是独立可重跑交付单元。组大小受物理约束封顶（累计时长 ≤ 后端单次输出上限，
+    缺时长退 ≤4 成员护栏），避免「物理上一次出不下」的巨组。返回 [{group_id, members, backend, approx_seconds}]。"""
+    groups = []
+    run = []
+
+    def flush():
+        if len(run) >= 2:
+            backend = run[0]["primary"]
+            gid = "MSG_%02d" % (len(groups) + 1)
+            members = [r["clip"] for r in run]
+            total = round(sum(float(r.get("duration") or 0) for r in run), 2)
+            for r in run:
+                r["multishot_candidate"] = {"group_id": gid, "members": members,
+                                            "note": "连续同型镜可一次出多镜消缝（advisory，不合并、逐镜仍可独立重跑）。"}
+            groups.append({"group_id": gid, "members": members, "backend": backend, "approx_seconds": total})
+        run.clear()
+
+    for r in routes:
+        st, backend = r.get("shot_type"), r.get("primary")
+        eligible = st in MULTISHOT_SHOT_TYPES and backend_has_cap(backend, CAP_MULTISHOT)
+        if not eligible:
+            flush(); continue
+        if run and run[-1]["primary"] != backend:
+            flush()
+        cap = backend_max_seconds(backend)
+        cur = sum(float(x.get("duration") or 0) for x in run)
+        add = float(r.get("duration") or 0)
+        if run and ((add and cur and cap and cur + add > cap) or len(run) >= MULTISHOT_MAX_MEMBERS):
+            flush()
+        run.append(r)
+    flush()
+    return groups
+
+
 def _shot_id(shot, index):
     raw = str((shot.get("shot_id") or shot.get("clip_id") or "") if isinstance(shot, dict) else "").strip()
     m = re.search(r"(\d+)", raw)
@@ -242,13 +324,16 @@ def build_routes(storyboard, default_backend=DEFAULT_GENERAL_BACKEND):
             "fallback": r["fallback"],
             "max_clip_seconds": backend_max_seconds(r["primary"]),
             "duration": duration,
+            "quality_tier": quality_tier_for(r["shot_type"], r["primary"]),
+            "motion_reference": motion_reference_plan(r["shot_type"], r["primary"]),
             "reason": r["reason"],
             "prod_assets": sorted(shot_prod_ids(shot)),
             "findings": findings,
         })
+    multishot_groups = annotate_multishot_groups(routes)  # advisory：连续同型镜可一次出多镜消缝
     block = sum(1 for r in routes for f in r["findings"] if f["severity"] == "block")
     warn = sum(1 for r in routes for f in r["findings"] if f["severity"] == "warn")
-    return routes, {"block": block, "warn": warn}
+    return routes, {"block": block, "warn": warn, "multishot_groups": multishot_groups}
 
 
 def run(root, out_json=None):
@@ -278,10 +363,13 @@ def main(argv=None):
     b, w = payload["summary"]["block"], payload["summary"]["warn"]
     print(f"# 模型路由  默认后端={payload['default_backend']}  clips={len(payload['routes'])}  block={b}  warn={w}")
     for r in payload["routes"]:
+        mref = "+motion_ref" if r.get("motion_reference", {}).get("applicable") else ""
         print(f"[{r['clip']}] {r['shot_type']} → primary={r['primary']} "
-              f"fallback={','.join(r['fallback']) or '-'}  ({r['reason']})")
+              f"fallback={','.join(r['fallback']) or '-'}  档={r.get('quality_tier','-')}{mref}  ({r['reason']})")
         for f in r["findings"]:
             print(("  🔴" if f["severity"] == "block" else "  🟡") + f" {f['msg']}")
+    for g in payload["summary"].get("multishot_groups", []):
+        print(f"  ◇ 多镜单次生成候选 {g['group_id']}（{g['backend']}, ≈{g['approx_seconds']}s）: {', '.join(g['members'])}")
     if b == 0:
         print("✅ 路由完成，无时长超限")
     sys.exit(1 if b > 0 else 0)

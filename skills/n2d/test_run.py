@@ -139,10 +139,20 @@ def test_decide_gate_block_passes_through_recovery():
     assert na["gate"]["return_to_stage"] == "image_prompt"
 
 
+def test_decide_image_qc_block_is_not_env_missing():
+    root = make_work(ALL_DONE_TO["image"])
+    p = run.Probes(image_qc_block="image_qc 仍有硬阻断")
+    na = run.decide(root, _route("video"), "video", p)
+    assert na["stop_reason"] == "blocked_by_image_qc"
+    assert "image_qc" in na["action_card"]["headline"]
+    assert "--prop-shape-report" in na["action_card"]["exact_command"]
+
+
 def test_decide_env_missing_top_priority():
-    # env 缺失 > gate 阻断 > 合规缺口：三者同时存在时 env 优先
+    # env 缺失 > image_qc 阻断 > gate 阻断 > 合规缺口：三者同时存在时 env 优先
     root = make_work(ALL_DONE_TO["image"])
     p = run.Probes(env_missing="Codex（down）",
+                   image_qc_block="image_qc block",
                    gate={"stage": "image", "blocked": True},
                    compliance_gap=True)
     na = run.decide(root, _route("image"), "image", p)
@@ -202,6 +212,15 @@ def test_image_qc_gate_issue_passes_full_clean_report():
         json.dump({"qc_environment": {"precision_level": "full"}, "summary": {"hard_blocks": 0, "verdict": "ok"}}, fh)
 
     assert run._image_qc_gate_issue(root, "第1集") is None
+
+
+def test_enter_action_includes_entry_checks(monkeypatch):
+    root = make_work(ALL_DONE_TO["image"])
+    monkeypatch.setattr(run, "entry_checks", lambda root, ep=None: [{"step": "source_check", "status": "clean"}])
+    monkeypatch.setattr(run, "gather_probes", lambda *a, **k: run.Probes())
+    na = run.enter_action(root, "第1集")
+    assert na["entry_checks"][0]["step"] == "source_check"
+    assert na["stop_reason"] == "needs_payment_confirm"
 
 
 if __name__ == "__main__":

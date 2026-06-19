@@ -363,6 +363,9 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
         except Exception: pass
 
     source_paths = source_paths_for_kind(meta.get("kind"))
+    # 在分支前先算好：editor 子任务的 step_note（下方）也要引用它，否则 editor 步会
+    # 触发 "cannot access local variable 'delta_path'"。
+    delta_path = f"审稿/state_delta_第{chapter:02d}章.json"
 
     if step == "architect":
         step_note = "\n## 当前子任务：Architect Pass (剧情架构师)\n- **目标**：将骨干章纲转化为「节拍与潜台词(Beats & Subtext)」脚本。\n- **禁止**：禁止写优美的文学散文，纯干货输出。\n- **字数**：约 300-500 字。"
@@ -410,7 +413,6 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
 ### `设定/读者契约.md` 摘录
 {clip(contract_text, 1600) if contract_text else "（缺 `设定/读者契约.md`；至少按 reader-contract.md 模板补齐题旨、读者承诺、文学质感和禁偏清单。）"}
 """
-    delta_path = f"审稿/state_delta_第{chapter:02d}章.json"
     waiver_section = ""
     if demo_waiver:
         waiver_section = f"""

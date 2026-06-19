@@ -31,6 +31,7 @@
 用法：
   python3 image_qc.py <作品根> 第N集 [--json]
   python3 image_qc.py <作品根> 第N集 --no-pixel   # 只跑 prompt lint（无 Pillow 时）
+  python3 image_qc.py <作品根> 第N集 --prop-shape-report / --prop-shape-vlm-confirm / --prop-shape-confirm-ok all
 
 完整视觉质检推荐在可装重依赖的 conda env 跑：Pillow + cv2 + insightface + onnxruntime + buffalo_l model。
 报告会写 `qc_environment.precision_level=full|degraded|none`，
@@ -43,6 +44,7 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import datetime as dt
 import hashlib
 import json
 import os
@@ -1462,13 +1464,31 @@ def _prop_shape_confirmation_path(root: Path, ep: str) -> Path:
     return production_dir(root) / "image_qc" / ep / "prop_shape_confirmations.json"
 
 
+def _prop_shape_png_path(root: Path, ep: str, png: str) -> Path:
+    p = Path(str(png))
+    if p.is_absolute():
+        return p
+    s = p.as_posix()
+    if s.startswith("出图/"):
+        return root / p
+    return root / "出图" / ep / p
+
+
+def _prop_shape_png_sha(root: Path, ep: str, png: Any) -> Optional[str]:
+    png_s = str(png or "").strip()
+    if not png_s:
+        return None
+    return _sha256_file(_prop_shape_png_path(root, ep, png_s))
+
+
 def load_prop_shape_confirmations(root: Path, ep: str) -> Set[Tuple[str, str]]:
     """读高风险道具禁形逐图人工确认。
 
     文件格式（人工/agent 复核后可写）：
-      {"confirmations": [{"asset": "PROP_01", "png": "图片/Clip_01_x.png", "verdict": "ok"}]}
+      {"confirmations": [{"asset": "PROP_01", "png": "图片/Clip_01_x.png", "verdict": "ok", "png_sha256": "..."}]}
 
-    只接受 verdict=ok/pass/confirmed/通过/合格；缺文件 = 空集。
+    只接受 verdict=ok/pass/confirmed/通过/合格，且 png_sha256 必须匹配当前 PNG。
+    这样同名 PNG 重出后旧确认会自动失效；缺文件 = 空集。
     """
     path = _prop_shape_confirmation_path(root, ep)
     try:
@@ -1486,7 +1506,9 @@ def load_prop_shape_confirmations(root: Path, ep: str) -> Set[Tuple[str, str]]:
         asset = str(row.get("asset") or row.get("id") or "").strip()
         png = str(row.get("png") or row.get("image") or "").strip()
         verdict = str(row.get("verdict") or row.get("status") or "").strip().lower()
-        if asset and png and verdict in ok_values:
+        row_sha = str(row.get("png_sha256") or row.get("png_sha") or row.get("sha256") or "").strip()
+        current_sha = _prop_shape_png_sha(root, ep, png)
+        if asset and png and verdict in ok_values and row_sha and current_sha and row_sha == current_sha:
             out.add((asset, png))
     return out
 
@@ -1594,6 +1616,241 @@ def build_prop_shape_review_queue(payload: Dict[str, Any], root: Path, ep: str) 
         "targets": targets,
     }
     return targets
+
+
+def _prop_shape_target_id(target: Mapping[str, Any]) -> str:
+    return f"{target.get('asset')}::{target.get('png')}"
+
+
+def _load_prop_shape_confirmation_doc(root: Path, ep: str) -> Dict[str, Any]:
+    path = _prop_shape_confirmation_path(root, ep)
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        data = {}
+    if isinstance(data, list):
+        data = {"confirmations": data}
+    if not isinstance(data, dict):
+        data = {}
+    rows = data.get("confirmations")
+    if not isinstance(rows, list):
+        rows = []
+    data["kind"] = data.get("kind") or "n2d_prop_shape_confirmations"
+    data["version"] = data.get("version") or 1
+    data["confirmations"] = rows
+    return data
+
+
+def _save_prop_shape_confirmation_doc(root: Path, ep: str, data: Mapping[str, Any]) -> Path:
+    path = _prop_shape_confirmation_path(root, ep)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    out = dict(data)
+    out["updated_at"] = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+    path.write_text(json.dumps(out, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return path
+
+
+def _upsert_prop_shape_rows(root: Path, ep: str, rows: Sequence[Mapping[str, Any]],
+                            *, overwrite: bool = True) -> Dict[str, Any]:
+    data = _load_prop_shape_confirmation_doc(root, ep)
+    existing: Dict[Tuple[str, str], Dict[str, Any]] = {}
+    for row in data.get("confirmations") or []:
+        if not isinstance(row, Mapping):
+            continue
+        key = (str(row.get("asset") or row.get("id") or "").strip(),
+               str(row.get("png") or row.get("image") or "").strip())
+        if key[0] and key[1]:
+            existing[key] = dict(row)
+    changed = 0
+    for row in rows:
+        asset = str(row.get("asset") or row.get("id") or "").strip()
+        png = str(row.get("png") or row.get("image") or "").strip()
+        if not asset or not png:
+            continue
+        key = (asset, png)
+        if key in existing and not overwrite:
+            continue
+        new_row = dict(existing.get(key, {}))
+        new_row.update({k: v for k, v in row.items() if v is not None})
+        new_row["asset"] = asset
+        new_row["png"] = png
+        existing[key] = new_row
+        changed += 1
+    data["confirmations"] = sorted(existing.values(), key=lambda r: (str(r.get("asset")), str(r.get("png"))))
+    path = _save_prop_shape_confirmation_doc(root, ep, data)
+    return {"ok": True, "path": str(path), "changed": changed, "total": len(data["confirmations"])}
+
+
+def prop_shape_review_report(root: Path, ep: str, *, build_stitches: bool = True) -> Dict[str, Any]:
+    payload: Dict[str, Any] = {}
+    if build_stitches:
+        build_prop_shape_review_queue(payload, root, ep)
+        review = payload.get("prop_shape_review") or {}
+        targets = review.get("targets") or []
+        confirmation_path = review.get("confirmation_path") or str(_prop_shape_confirmation_path(root, ep))
+    else:
+        targets = prop_shape_review_targets(root, ep, load_asset_index(root))
+        confirmation_path = str(_prop_shape_confirmation_path(root, ep))
+    pending = [t for t in targets if not t.get("confirmed")]
+    rerun_shots = sorted({str(t.get("shot") or "").strip() for t in pending if str(t.get("shot") or "").strip()})
+    return {
+        "kind": "n2d_prop_shape_review",
+        "version": 1,
+        "episode": ep,
+        "confirmation_path": confirmation_path,
+        "total": len(targets),
+        "pending": len(pending),
+        "confirmed": len(targets) - len(pending),
+        "targets": targets,
+        "rerun_plan": {
+            "stage": "image",
+            "affected_shots": rerun_shots,
+            "command": " ".join(f"--affected-shot {s}" for s in rerun_shots),
+            "scope": "高风险道具禁形/尺寸未确认，需确认或重出受影响镜头",
+        },
+    }
+
+
+def write_prop_shape_skeleton(root: Path, ep: str, *, include_confirmed: bool = False) -> Dict[str, Any]:
+    report = prop_shape_review_report(root, ep, build_stitches=True)
+    rows: List[Dict[str, Any]] = []
+    for t in report.get("targets") or []:
+        if t.get("confirmed") and not include_confirmed:
+            continue
+        rows.append({
+            "asset": t.get("asset"),
+            "asset_name": t.get("asset_name"),
+            "png": t.get("png"),
+            "png_sha256": _prop_shape_png_sha(root, ep, t.get("png")),
+            "shot": t.get("shot"),
+            "verdict": "review",
+            "source": "image_qc:prop_shape_skeleton",
+            "reason": "待人工或 VLM 确认：禁形/尺寸是否符合 asset_registry",
+            "must_not_have": t.get("must_not_have") or [],
+            "scale": t.get("scale") or "",
+            "stitch": t.get("stitch") or "",
+        })
+    res = _upsert_prop_shape_rows(root, ep, rows, overwrite=False)
+    res["report"] = report
+    return res
+
+
+def confirm_prop_shape_targets(root: Path, ep: str, selector: str,
+                               *, reviewer: str = "manual", reason: str = "") -> Dict[str, Any]:
+    report = prop_shape_review_report(root, ep, build_stitches=True)
+    selector = str(selector or "").strip()
+    targets = report.get("targets") or []
+    if selector.lower() in {"all", "*", "pending"}:
+        chosen = [t for t in targets if not t.get("confirmed")]
+    else:
+        wanted = {s.strip() for s in re.split(r"[,;]", selector) if s.strip()}
+        chosen = [
+            t for t in targets
+            if str(t.get("asset")) in wanted
+            or str(t.get("png")) in wanted
+            or str(t.get("shot")) in wanted
+            or _prop_shape_target_id(t) in wanted
+        ]
+    rows: List[Dict[str, Any]] = []
+    now = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+    for t in chosen:
+        rows.append({
+            "asset": t.get("asset"),
+            "asset_name": t.get("asset_name"),
+            "png": t.get("png"),
+            "png_sha256": _prop_shape_png_sha(root, ep, t.get("png")),
+            "shot": t.get("shot"),
+            "verdict": "ok",
+            "reviewer": reviewer,
+            "source": "image_qc:manual_prop_shape_confirm",
+            "confirmed_at": now,
+            "reason": reason or "人工确认无禁形且尺寸符合设定",
+            "must_not_have": t.get("must_not_have") or [],
+            "scale": t.get("scale") or "",
+            "stitch": t.get("stitch") or "",
+        })
+    res = _upsert_prop_shape_rows(root, ep, rows, overwrite=True)
+    res.update({"selected": len(chosen), "pending_before": report.get("pending", 0)})
+    return res
+
+
+def _prop_shape_vlm_prompt(target: Mapping[str, Any]) -> str:
+    must_not = "、".join(str(x) for x in (target.get("must_not_have") or []) if str(x).strip())
+    scale = str(target.get("scale") or "").strip()
+    asset = str(target.get("asset_name") or target.get("asset") or "关键道具")
+    return (
+        f"{asset} 是关键剧情道具。请判定图中该道具是否满足设定："
+        f"不得出现以下禁形：{must_not or '无'}。"
+        f"{'尺寸/比例要求：' + scale + '。' if scale else ''}"
+        "如果看不清该道具、存在任一禁形、或尺寸明显不符，match=false；"
+        "只有清晰可见且无禁形并符合尺寸时 match=true。"
+    )
+
+
+def vlm_confirm_prop_shape_targets(root: Path, ep: str, *,
+                                   block_floor: float = 0.6,
+                                   reviewer: str = "vlm") -> Dict[str, Any]:
+    vv = _load_sibling("vlm_verify")
+    if vv is None or not hasattr(vv, "load_judge"):
+        return {"ok": False, "available": False, "reason": "vlm_verify 不可用"}
+    judge = vv.load_judge()
+    if judge is None:
+        return {"ok": False, "available": False, "reason": "未配置 N2D_VLM_CMD"}
+    report = prop_shape_review_report(root, ep, build_stitches=True)
+    rows: List[Dict[str, Any]] = []
+    rejected: List[Dict[str, Any]] = []
+    reviewed = 0
+    now = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+    for t in report.get("targets") or []:
+        if t.get("confirmed"):
+            continue
+        image = str(t.get("png_abs") or "")
+        if not image or not os.path.isfile(image):
+            continue
+        prompt = _prop_shape_vlm_prompt(t)
+        try:
+            verdict = vv.parse_verdict(judge(image, prompt, "asset"))
+        except Exception:
+            verdict = None
+        if verdict is None:
+            continue
+        reviewed += 1
+        conf = float(verdict.get("confidence") or 0.0)
+        if verdict.get("match") and conf >= block_floor:
+            rows.append({
+                "asset": t.get("asset"),
+                "asset_name": t.get("asset_name"),
+                "png": t.get("png"),
+                "png_sha256": _prop_shape_png_sha(root, ep, t.get("png")),
+                "shot": t.get("shot"),
+                "verdict": "ok",
+                "reviewer": reviewer,
+                "source": "image_qc:vlm_prop_shape_confirm",
+                "confirmed_at": now,
+                "confidence": conf,
+                "reason": verdict.get("reason") or "VLM 高置信确认无禁形且尺寸符合设定",
+                "must_not_have": t.get("must_not_have") or [],
+                "scale": t.get("scale") or "",
+                "stitch": t.get("stitch") or "",
+            })
+        else:
+            rejected.append({
+                "asset": t.get("asset"),
+                "png": t.get("png"),
+                "shot": t.get("shot"),
+                "confidence": conf,
+                "mismatches": verdict.get("mismatches") or [],
+                "reason": verdict.get("reason") or "",
+            })
+    res = _upsert_prop_shape_rows(root, ep, rows, overwrite=True)
+    res.update({
+        "available": True,
+        "reviewed": reviewed,
+        "confirmed": len(rows),
+        "rejected_or_review": rejected,
+        "block_floor": block_floor,
+    })
+    return res
 
 
 def _stitch_for_png(payload: Dict[str, Any], png: Optional[str]) -> Optional[str]:
@@ -3114,6 +3371,22 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     help="严审刷新：block/warn/降级命中都进入候选重出清单，供 n2d-update 使用")
     ap.add_argument("--strict-pixel", action="store_true",
                     help="把像素机检 block（服装换装/场景换景/道具特效漂移）升为 hard → verdict=block（默认 off 保留宽松判定）")
+    ap.add_argument("--prop-shape-report", action="store_true",
+                    help="只输出高风险 PROP 禁形/尺寸逐图复核队列与最小重出范围，不重跑完整 QC")
+    ap.add_argument("--prop-shape-write-skeleton", action="store_true",
+                    help="把当前高风险 PROP 复核队列写入 prop_shape_confirmations.json，verdict=review（不放行）")
+    ap.add_argument("--prop-shape-confirm-ok", metavar="SELECTOR",
+                    help="把指定高风险 PROP 复核项标 ok；SELECTOR=all/pending 或 asset/png/shot/id 列表。需人工已看过并排图")
+    ap.add_argument("--prop-shape-reviewer", default="manual",
+                    help="与 --prop-shape-confirm-ok 连用，写入 reviewer 字段")
+    ap.add_argument("--prop-shape-reason", default="",
+                    help="与 --prop-shape-confirm-ok 连用，写入人工确认原因")
+    ap.add_argument("--prop-shape-vlm-confirm", action="store_true",
+                    help="用 N2D_VLM_CMD 对 pending 逐图判定；高置信 match 才写 ok，其余保留复核/重出")
+    ap.add_argument("--prop-shape-vlm-floor", type=float, default=0.6,
+                    help="VLM 写 ok 的最低置信度；默认 0.6")
+    ap.add_argument("--prop-shape-affected-shots", action="store_true",
+                    help="只打印 pending 高风险 PROP 的 `--affected-shot ...` 串，便于 n2d-batch 最小重出")
     ns = ap.parse_args(argv)
     root = Path(ns.root).expanduser().resolve()
     if ns.mark_finalized:
@@ -3130,6 +3403,36 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         return 0 if r.get("ok") else 1
     if not ns.episode:
         ap.error("episode 必填（除非用 --mark-finalized / --pin-anchor / --finalize-expr 写 registry）")
+    if ns.prop_shape_report or ns.prop_shape_affected_shots:
+        report = prop_shape_review_report(root, ns.episode, build_stitches=True)
+        if ns.prop_shape_affected_shots:
+            print(report.get("rerun_plan", {}).get("command", ""))
+        else:
+            print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
+        return 0
+    if ns.prop_shape_write_skeleton:
+        res = write_prop_shape_skeleton(root, ns.episode)
+        print(json.dumps(res, ensure_ascii=False, indent=2, sort_keys=True))
+        return 0
+    if ns.prop_shape_confirm_ok:
+        res = confirm_prop_shape_targets(
+            root,
+            ns.episode,
+            ns.prop_shape_confirm_ok,
+            reviewer=ns.prop_shape_reviewer,
+            reason=ns.prop_shape_reason,
+        )
+        print(json.dumps(res, ensure_ascii=False, indent=2, sort_keys=True))
+        return 0 if res.get("ok") else 1
+    if ns.prop_shape_vlm_confirm:
+        res = vlm_confirm_prop_shape_targets(
+            root,
+            ns.episode,
+            block_floor=ns.prop_shape_vlm_floor,
+            reviewer="vlm",
+        )
+        print(json.dumps(res, ensure_ascii=False, indent=2, sort_keys=True))
+        return 0 if res.get("ok") else 2
     payload = run_qc(root, ns.episode, with_pixel=not ns.no_pixel, strict_pixel=ns.strict_pixel)
     regen = to_strict_regen_list(payload) if ns.strict else to_regen_list(payload)
     if ns.affected_shots:

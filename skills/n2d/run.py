@@ -57,6 +57,7 @@ STAGE_MENU = {
 @dataclass
 class Probes:
     env_missing: Optional[str] = None            # 该阶段所需后端缺失名；None=可跑
+    image_qc_block: Optional[str] = None         # 出图落档 QC 未过；不同于环境缺失
     gate: Optional[Dict[str, Any]] = None        # {stage,blocked,return_to_stage,affected_artifacts,rerun_scope,findings_path}
     compliance_gap: Optional[bool] = None        # True=有缺口；None=未检/检不了
     pending_choices: List[str] = field(default_factory=list)  # 首跑必给但尚未显式记录的选择点
@@ -122,6 +123,14 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
             "headline": f"{ep} {frontier['label']}：所需后端不可用（{probes.env_missing}）",
             "to_user": f"该阶段后端 {probes.env_missing} 探测不可用。先修复/换后端，或选占位路线后再放行。",
             "exact_command": cmd,
+        })
+
+    # 1.5 出图落档 QC 硬阻断 —— 已知图问题不能带进视频/合成
+    if probes.image_qc_block:
+        return na("blocked_by_image_qc", {
+            "headline": f"{ep} {frontier['label']}：image_qc 未放行",
+            "to_user": f"{probes.image_qc_block} 先回 n2d-image 修复/确认受影响图，再重跑 image_qc。",
+            "exact_command": f"python3 skills/n2d-image/scripts/image_qc.py {root} {ep} --prop-shape-report",
         })
 
     # 2. gate 阻断 —— 透传 gate.py 结构化字段，指向最小返工
@@ -287,7 +296,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str) -> Probes:
     if stage_key in IMAGE_QC_STRICT_STAGES and ep:
         issue = _image_qc_gate_issue(root, ep)
         if issue:
-            p.env_missing = issue
+            p.image_qc_block = issue
             p.prework.append({"step": "image_qc", "status": "block", "detail": issue[:160]})
         else:
             p.prework.append({"step": "image_qc", "status": "pass"})
@@ -372,9 +381,62 @@ def next_action(root: str, ep: Optional[str] = None, auto: bool = False) -> Dict
         return na
 
 
+def entry_checks(root: str, ep: Optional[str] = None) -> List[Dict[str, Any]]:
+    """Dispatcher-level entry checks: source freshness + skill update plan.
+
+    These are intentionally outside `next_action()` so a long-running agent can call
+    them once when entering a project, instead of paying the cost on every step.
+    """
+    checks: List[Dict[str, Any]] = []
+    source = os.path.join(SKILLS_DIR, "n2d", "source_check.py")
+    if os.path.exists(source):
+        try:
+            r = _run([sys.executable, source, root, "--quiet"])
+            status = "ok" if r.returncode == 0 else "warn"
+            detail = (r.stdout or r.stderr or "").strip().splitlines()[-1:] or [""]
+            if "DRIFT=" in (detail[0] or ""):
+                raw = detail[0].split("DRIFT=", 1)[1]
+                try:
+                    obj = json.loads(raw)
+                    status = obj.get("status") or status
+                except Exception:
+                    pass
+            checks.append({"step": "source_check", "status": status, "detail": detail[0]})
+        except Exception as exc:  # pragma: no cover
+            checks.append({"step": "source_check", "status": "skip", "detail": str(exc)[:160]})
+
+    target_ep = ep
+    if not target_ep:
+        route = resolve_frontier(root)
+        target_ep = route.get("ep") if route else None
+    update = os.path.join(SKILLS_DIR, "n2d-update", "scripts", "update_plan.py")
+    if target_ep and os.path.exists(update):
+        try:
+            r = _run([sys.executable, update, "check", root, target_ep, "--write-plan"])
+            status = "ok" if r.returncode == 0 else "warn"
+            checks.append({
+                "step": "update_plan",
+                "episode": target_ep,
+                "status": status,
+                "detail": (r.stdout or r.stderr or "").strip().splitlines()[-1] if (r.stdout or r.stderr).strip() else "",
+            })
+        except Exception as exc:  # pragma: no cover
+            checks.append({"step": "update_plan", "episode": target_ep, "status": "skip", "detail": str(exc)[:160]})
+    return checks
+
+
+def enter_action(root: str, ep: Optional[str] = None, auto: bool = False) -> Dict[str, Any]:
+    na = next_action(root, ep, auto=auto)
+    na["entry_checks"] = entry_checks(root, ep)
+    return na
+
+
 # ── 输出 ──────────────────────────────────────────────────────────────────────
 def render_human(na: Dict[str, Any]) -> str:
     lines = []
+    for chk in na.get("entry_checks", []) or []:
+        ep = f" [{chk.get('episode')}]" if chk.get("episode") else ""
+        lines.append(f"入口检查 {chk.get('step')}{ep}: {chk.get('status')}" + (f" · {chk.get('detail')}" if chk.get("detail") else ""))
     f = na.get("frontier") or {}
     if f.get("ep"):
         lines.append(f"前沿：{f.get('ep')} · {f.get('label')}（{f.get('owner')}）")
@@ -397,19 +459,20 @@ def render_human(na: Dict[str, Any]) -> str:
 
 
 def main(argv: List[str]) -> int:
-    if not argv or argv[0] != "next":
-        print("用法: run.py next <作品根> [第N集] [--json] [--auto]")
+    if not argv or argv[0] not in {"next", "enter"}:
+        print("用法: run.py next|enter <作品根> [第N集] [--json] [--auto]")
         return 1
+    command = argv[0]
     rest = argv[1:]
     as_json = "--json" in rest
     auto = "--auto" in rest
     pos = [a for a in rest if not a.startswith("--")]
     if not pos:
-        print("用法: run.py next <作品根> [第N集] [--json] [--auto]")
+        print("用法: run.py next|enter <作品根> [第N集] [--json] [--auto]")
         return 1
     root = pos[0].rstrip("/")
     ep = pos[1] if len(pos) > 1 else None
-    na = next_action(root, ep, auto=auto)
+    na = enter_action(root, ep, auto=auto) if command == "enter" else next_action(root, ep, auto=auto)
     print(json.dumps(na, ensure_ascii=False, indent=2) if as_json else render_human(na))
     return 0
 

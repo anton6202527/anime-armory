@@ -23,7 +23,7 @@ def make_project(root):
     with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
         f.write("# _设置\n\n## 选择\n- 生视频AI: manual\n- 出视频规格: 预算一般\n")
     with open(os.path.join(root, "_meta.json"), "w", encoding="utf-8") as f:
-        json.dump({"title": "测试MV", "song_timing": "先传音乐", "has_song": True, "has_lyrics": True}, f, ensure_ascii=False)
+        json.dump({"title": "测试MV", "song_timing": "先传音乐", "has_song": True, "has_lyrics": True, "song_rights_status": "owned"}, f, ensure_ascii=False)
     with open(os.path.join(root, "视觉蓝图.md"), "w", encoding="utf-8") as f:
         f.write("# 视觉蓝图\n")
     with open(os.path.join(root, "歌", "song.wav"), "wb") as f:
@@ -52,6 +52,7 @@ def make_project(root):
             "end": 6,
             "duration": 2,
             "beat_role": "key",
+            "action_family": "dance_hit/vfx_burst",
             "image_path": "出图/段落/图片/Clip_002.png",
             "selected_video_path": "出视频/视频/Clip_002.mp4",
             "transition": "卡点硬切",
@@ -81,6 +82,32 @@ class VideoJobsTest(unittest.TestCase):
             self.assertEqual(manifest["jobs"][1]["requested_takes"], 2)
             prompt = manifest["jobs"][1]["takes"][0]["prompt_path"]
             self.assertTrue(os.path.exists(os.path.join(tmp, prompt)))
+
+    def test_quality_tier_and_motion_reference_fields(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            # 用支持质量档 + 视频运动参考的渠道（可灵/Kling）覆盖默认 manual
+            subprocess.run([sys.executable, JOBS, tmp, "--backend", "可灵/Kling"],
+                           capture_output=True, text=True, check=True)
+            with open(os.path.join(tmp, "出视频", "jobs_manifest.json"), encoding="utf-8") as f:
+                manifest = json.load(f)
+            verse, chorus = manifest["jobs"][0], manifest["jobs"][1]
+            # verse 铺垫镜 → fast；副歌镜 → high
+            self.assertEqual(verse["quality_tier"], "fast")
+            self.assertEqual(chorus["quality_tier"], "high")
+            # 副歌舞蹈镜 + 支持视频参考的后端 → applicable；verse 非舞蹈镜 → not applicable
+            self.assertTrue(chorus["motion_reference"]["applicable"])
+            self.assertFalse(verse["motion_reference"]["applicable"])
+
+    def test_quality_tier_na_on_backend_without_tier(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            # 默认 manual 渠道无质量档 → n/a；无视频参考能力 → motion not applicable
+            subprocess.run([sys.executable, JOBS, tmp], capture_output=True, text=True, check=True)
+            with open(os.path.join(tmp, "出视频", "jobs_manifest.json"), encoding="utf-8") as f:
+                manifest = json.load(f)
+            self.assertEqual(manifest["jobs"][1]["quality_tier"], "n/a")
+            self.assertFalse(manifest["jobs"][1]["motion_reference"]["applicable"])
 
     def test_register_score_select(self):
         with tempfile.TemporaryDirectory() as tmp:

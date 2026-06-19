@@ -33,11 +33,11 @@ Match user intent against the table below (and each `SKILL.md`'s Triggers). Reco
 
 | User wants to | Entry skill (dispatcher → routes to sub-skills) |
 |---|---|
-| Write a novel, import a source book, expand/rewrite/continue/score/review | **`novel`** (→ novel-create/fetch/rewrite/review/score …) |
+| Write a novel, import a source book, expand/rewrite/continue/score/review, power-system / level / growth-number consistency self-check for 穿越/系统流 | **`novel`** (→ novel-create/fetch/rewrite/review/score/wiki …) |
 | Turn a novel into an AI comic-drama / short-drama (storyboard/voice/image/video/compose) | **`n2d`** (→ n2d-script/voice/image/video/compose) |
 | Write a song, edit lyrics, compose, pick takes, cover/voice-swap, review | **`song`** (→ song-lyrics/compose/cover/review …) |
 | Make an MV for a song, beat-sync, image/video, karaoke subtitles, compose | **`mv`** (→ mv-script/beat/plan/image/video/compose …) |
-| Make an ad / TVC / feed ad / product demo / promo video | **`ad`** (→ ad-concept/script/voice/image/video/compose/review) |
+| Make an ad / TVC / feed ad / product demo / promo video / pre-spend ad scoring | **`ad`** (→ ad-concept/script/voice/image/video/compose/score/review) |
 | See project progress / next step, or summarize every n2d project at repo root | **`n2d-progress`** (read-only scan; never writes `_进度.md`) |
 | Edit/audit project settings, choice points, or global defaults | **`n2d-settings`** (wraps `_设置.md` read/validate/reset/sync) |
 | Check whether skill updates affect a project, plan a rebuild, re-render some images/videos | **`n2d-update`** (snapshot diff + minimal rebuild plan; `media` subcommand for selective image/video refresh) |

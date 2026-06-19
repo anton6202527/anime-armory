@@ -102,6 +102,47 @@ def test_run_style_skips_without_anchor():
     assert "skipped" in res
 
 
+def test_run_power_system_skips_without_registry():
+    root = tempfile.mkdtemp()
+    os.makedirs(os.path.join(root, "章节"))
+    res = consistency_audit.run_power_system(root)
+    assert res["ran"] is False
+
+
+def test_run_power_system_flags_tier_regress():
+    root = tempfile.mkdtemp()
+    sdir = os.path.join(root, "设定")
+    os.makedirs(sdir)
+    reg = {
+        "kind": "novel_power_system_registry", "version": 1, "system_type": "修仙",
+        "tiers": {"sequence": ["练气", "筑基"], "subtiers": ["初期", "中期", "后期", "大圆满"]},
+        "progression": [
+            {"chapter": 5, "character": "主角", "tier": "筑基初期"},
+            {"chapter": 8, "character": "主角", "tier": "练气后期"},
+        ],
+    }
+    with open(os.path.join(sdir, "power_system_registry.json"), "w", encoding="utf-8") as f:
+        json.dump(reg, f, ensure_ascii=False)
+    res = consistency_audit.run_power_system(root)
+    assert res["ran"] is True
+    assert res["blocking"] >= 1
+    out = os.path.join(root, "审稿", "power_system_findings.json")
+    assert os.path.exists(out)
+
+
+def test_run_power_system_disabled_by_setting():
+    root = tempfile.mkdtemp()
+    sdir = os.path.join(root, "设定")
+    os.makedirs(sdir)
+    with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
+        f.write("# 设置\n\n- 力量体系自检：关闭\n")
+    with open(os.path.join(sdir, "power_system_registry.json"), "w", encoding="utf-8") as f:
+        json.dump({"kind": "novel_power_system_registry", "tiers": {}, "progression": []}, f, ensure_ascii=False)
+    res = consistency_audit.run_power_system(root)
+    assert res["ran"] is False
+    assert "关闭" in res.get("skipped", "")
+
+
 def test_chapters_helper_sorts_by_index():
     card = "## 李锦云\n"
     chapters = {

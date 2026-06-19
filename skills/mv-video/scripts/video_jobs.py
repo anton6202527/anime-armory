@@ -23,6 +23,11 @@ CONTRACT_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "contract.py
 MV_UTILS_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "mv_utils.py")
 GATE_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "gate.py")
 
+# mv 线自包含的两轴标记（质量档 + 运动参考），与本文件同目录。
+if HERE not in sys.path:
+    sys.path.insert(0, HERE)
+import motion_axes
+
 def load_contract():
     spec = importlib.util.spec_from_file_location("mv_contract", CONTRACT_PATH)
     mod = importlib.util.module_from_spec(spec)
@@ -71,8 +76,12 @@ def normalize_take_id(value):
     raise SystemExit(f"[err] take id 无效：{value}（用 1 / take_01）")
 
 
-def prompt_for_take(clip, backend, spec_profile, take_id, video_model=""):
+def prompt_for_take(clip, backend, spec_profile, take_id, video_model="", quality_tier=None, motion_reference=None):
     c = clip.get("continuity", {})
+    if quality_tier is None:
+        quality_tier = motion_axes.quality_tier_for_clip(clip, backend)
+    if motion_reference is None:
+        motion_reference = motion_axes.motion_reference_plan(clip, backend)
     lines = [
         f"# {clip['clip_id']} {take_id} 视频生成任务",
         "",
@@ -81,6 +90,8 @@ def prompt_for_take(clip, backend, spec_profile, take_id, video_model=""):
         f"- 分辨率：{spec_profile['resolution']}",
         f"- 帧率：{spec_profile['fps']}fps",
         f"- 质量档：{spec_profile['quality']}",
+        f"- 本镜质量档意图(quality_tier)：{quality_tier}  # high→后端 pro/高质量档，fast→量产省档，n/a→该后端无档（不改后端，仅意图）",
+        f"- 运动参考(motion_reference)：{'适用·' + motion_reference.get('note', '') if motion_reference.get('applicable') else '不适用（非舞蹈/环绕镜或后端不支持视频参考）'}",
         f"- 首帧：`{clip.get('image_path')}`",
         f"- 时长：{clip.get('duration')}s",
         f"- 转场：{clip.get('transition')}",
@@ -126,12 +137,14 @@ def create_jobs(root, args):
             if not os.path.exists(full_image_path):
                 print(f"[warn] {clip['clip_id']} 缺首帧 PNG：{image_path}，请确保 mv-image 出图完毕再开始生成视频。")
                 
+        quality_tier = motion_axes.quality_tier_for_clip(clip, backend)
+        motion_reference = motion_axes.motion_reference_plan(clip, backend)
         requested = profile["key_takes"] if clip.get("beat_role") == "key" else profile["normal_takes"]
         takes = []
         for i in range(1, requested + 1):
             take_id = f"take_{i:02d}"
             prompt_path = os.path.join("出视频", "prompt", f"{clip['clip_id']}_{take_id}.md")
-            mv_utils.write_text(os.path.join(root, prompt_path), prompt_for_take(clip, backend, profile, take_id, video_model))
+            mv_utils.write_text(os.path.join(root, prompt_path), prompt_for_take(clip, backend, profile, take_id, video_model, quality_tier, motion_reference))
             takes.append({
                 "take_id": take_id,
                 "status": "planned",
@@ -141,6 +154,10 @@ def create_jobs(root, args):
                 "notes": "",
                 "registered_at": None,
             })
+        # 两轴增量标记（quality_tier / motion_reference 已在 takes 循环前算好）：
+        #   quality_tier：副歌高光/卡点爽点镜→high，verse 铺垫镜→fast，后端无档→n/a
+        #   motion_reference：舞蹈/环绕运镜镜+后端支持 reference_video_motion 时 advisory 提示
+        #   均为增量字段·不改后端选择（mv 全程同一后端）
         jobs.append({
             "clip_id": clip["clip_id"],
             "section": clip["section"],
@@ -148,6 +165,8 @@ def create_jobs(root, args):
             "beat_role": clip.get("beat_role", "normal"),
             "backend": backend,
             "video_spec": spec,
+            "quality_tier": quality_tier,
+            "motion_reference": motion_reference,
             "requested_takes": requested,
             "selected_take": None,
             "selected_video_path": clip.get("selected_video_path") or os.path.join("出视频", "视频", f"{clip['clip_id']}.mp4"),

@@ -1,6 +1,6 @@
 ---
 name: n2d-asset-market
-description: 跨项目 n2d 资产库/模板市场：把角色原型、identity_registry 片段、定妆组、视频模型路由经验导出成可复用 asset pack，并导入新剧时 fork 新身份、重置后端 Character ID/Face Lock/LoRA 状态。Use when asked about 跨项目角色库, 模板市场, 资产库, 复用定妆, 复用角色, 导入角色模板, 导出角色模板, identity_registry 复用, 路由模板, 成本摊薄.
+description: 跨项目 n2d 资产库/模板市场：把角色原型、identity_registry 片段、定妆组、视频模型路由经验、题材母题(系统面板等复现桥段)导出成可复用 asset pack，并导入新剧时 fork 新身份、重置后端 Character ID/Face Lock/LoRA 状态（母题导入重置成长 progression）。Use when asked about 跨项目角色库, 模板市场, 资产库, 复用定妆, 复用角色, 导入角色模板, 导出角色模板, identity_registry 复用, 路由模板, 母题复用, 系统面板模板, 成本摊薄.
 ---
 
 # n2d-asset-market — 跨项目资产库 / 模板市场
@@ -99,6 +99,17 @@ python3 skills/n2d-asset-market/scripts/market.py import-prop <作品根> 资产
 python3 skills/n2d-asset-market/scripts/market.py export-routes <作品根> 第1集 --slug 宫斗对峙路由
 ```
 
+跨剧复用母题（系统面板等复现桥段·穿越/系统流）：
+
+```bash
+# 导出：母题定义 + 绑定的成长 VFX（VFX_系统面板 含 forms/lifecycle）+ 参考图
+python3 skills/n2d-asset-market/scripts/market.py export-motif <作品根> --slug 系统面板
+# 导入：合并进目标 motif_registry + asset_registry，progression 成长档重置（新剧从 Lv.1 起）
+python3 skills/n2d-asset-market/scripts/market.py import-motif <作品根> 资产库/motifs/系统面板
+```
+
+> 母题 pack 只复用**结构**（镜头模板 system_panel / 台词腔 / VFX 定妆锁色锁形 / overlay 文字层规格），不复用具体剧情数值；导入后 progression 重置，需在新剧分镜上跑 `motif_detector.py` 重新检测桥段、`--write` 绑定 Clip，再重跑 image/video gate。详见 `n2d-script/references/题材母题框架.md`。
+
 > 简写包装（便于记忆，等价上面的显式子命令）：`export_pack.py <作品根> CHAR_XXX`（= `market.py export-character … --character-id`）、`import_pack.py <作品根> <资产包> --as-id … --as-name …`（= `market.py import-character …`）。两者只是 `runpy` 转发到 `market.py`，行为完全一致；脚本/文档优先用显式 `market.py` 子命令。
 
 ## 工作流
@@ -133,6 +144,7 @@ python3 skills/n2d-asset-market/scripts/market.py export-routes <作品根> 第1
 │   └── files/
 ├── scenes/<slug>/              # export-scene / import-scene：LOC_ 场景定妆 + constraints
 ├── props/<slug>/               # export-prop / import-prop：PROP_ 道具定妆 + lifecycle/structure
+├── motifs/<slug>/              # export-motif / import-motif：母题定义 + 绑定成长 VFX（import 重置 progression）
 └── templates/model_routes/<slug>/
     └── asset_pack.json         # export-routes / import-routes
 ```

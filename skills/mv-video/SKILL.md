@@ -45,6 +45,22 @@ description: 制MV 出视频 — 把 mv-image 的 PNG 图生视频成 MV clip，
 - **单项可覆盖**：规格档只设默认，`视频分辨率` 等单项仍可在 `_设置.md` 单独覆盖。单 clip **时长不在本档内**——由 `beatgrid.json` 卡点驱动（见核心原则）；合成画幅另见 `合成画幅` 选择点（MV 默认 16:9 横屏）。
 - **落实到调用**：选定档后，把该档的分辨率/帧率喂给 CLI 的 `--resolution`/`--fps`（或平台对应 flag），并按「跑几版」决定每 clip抽几版挑稳。
 
+## 逐 clip 两轴标记：质量档 + 运动参考（不换后端 · 与 MV 同后端铁律不冲突）
+
+借鉴 n2d-model-router 的「成本×质量」「跨镜运动连续性」两轴思路，但 **mv 全程同一后端**（防跨 clip 风格跳变），所以 **不做 n2d 那种「按镜型换后端」的路由**——这里只做两件**不改后端选择**的事，由 `scripts/motion_axes.py`（mv 线自包含纯函数，不 import n2d-*/别线）逐 clip 算出，作为**增量字段**写进 `出视频/jobs_manifest.json` 的每个 job 和逐 take prompt：
+
+1. **`quality_tier`（质量档意图，替代粗放的全局规格三档对每 clip 的一刀切）**：
+   - **`high`** — 副歌高光镜 / 卡点爽点镜 / 高能量镜：值后端 pro/高质量档把脸和运动钉稳。
+   - **`fast`** — verse 空镜 / 铺垫镜：量产省成本。
+   - **`n/a`** — 所选后端无 fast/pro 档（如 manual）。
+   - **只表达意图，不写死 model_version**：落档侧出片/CLI 把 `high→pro`、`fast→fast` 解析成实际档位；与 `出视频规格` 三档（控分辨率/帧率/跑几版）正交——三档管「整体预算」，quality_tier 管「这一镜值不值高档」。
+   - **判据来源**（mv-plan 写进 `分镜/clip_plan.json` 的字段，任一命中即 high）：`beat_role=="key"`（mv-plan 已把副歌/桥段/`energy_level>=8` 聚成 key）· `section` 含 chorus/副歌/drop/hook/refrain 或 bridge/桥 · `transition=="卡点硬切"`（对齐 `beatgrid.downbeats` 的强拍切=爽点镜）· `energy_level>=8`。**缺这些字段时优雅降级为 `fast`，不臆造副歌。**
+2. **`motion_reference`（运动参考 · advisory · 仅提示不强制）**：
+   - **舞蹈镜 / 副歌环绕运镜镜**（判据：`action_family` 含 dance/舞/choreo，或 `action_family`/`transition_motif` 含 环绕/orbit/circle/whip/甩）**且**所选后端支持 `reference_video_motion`（Seedance/可灵）→ `applicable=true`，提示把**同段前一条已通过的 clip** 当运动/风格视频参考喂进去，锁运镜节奏（与图身份锁正交的跨镜运动连续性轴）。
+   - 非舞蹈/环绕镜，或后端不支持视频参考 → `applicable=false`。**首条镜无前序参考时自然跳过**，不强制、**不换后端**。
+
+后端能力判定走 `motion_axes.py` 内自持的关键词能力表（`Seedance/Kling/Veo/Hailuo/Runway/Luma` 有质量档；`Seedance/Kling` 支持视频运动参考），不对 contract 渠道字面值硬耦合、不 hardcode 厂商分支。
+
 ## 可选增强：演唱口型对齐（选择点 `演唱口型` · opt-in · 唱演镜才值得）
 
 MV 常有**主角正面演唱镜**（对麦/特写跟唱）；2026 共识：脸可见时演唱口型对人声可达约音素级 ~90% 对齐，对唱字幕成片很重要，但**远景/侧脸/B-roll/空镜看不出嘴，不值这成本**。这与 `mv-image` 的 `vocal_traits`（演唱神态锚点）配套——神态锚定在出图、嘴型对齐在这一步。选择点 `演唱口型`（记入 `_设置.md`，见 `mv-craft/references/选择点与偏好.md`）：
@@ -95,3 +111,5 @@ MV 常有**主角正面演唱镜**（对麦/特写跟唱）；2026 共识：脸�
 | 运镜乱炫 | 服务节奏：副歌快/verse 缓/爽点对 downbeat |
 | 有角色用文生视频 | 用图生视频，首帧=mv-image PNG |
 | 想复用 n2d-video | mv 自建，各写各的 |
+| 想按镜型换视频后端（学 n2d 路由） | mv 全程同一后端防风格跳变——只标 `quality_tier`/`motion_reference` 两轴，绝不换后端 |
+| 把 quality_tier 直接写成 model_version | 只表达 high/fast 意图，落档侧再解析成 pro/fast 档；后端无档位=n/a |

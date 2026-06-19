@@ -83,6 +83,22 @@ def main():
     sentry_script = os.path.join(_HERE, "..", "..", "novel-wiki", "scripts", "logic_sentry.py")
     subprocess.run([sys.executable, sentry_script, root, "--chapter", str(ch_num)], check=True)
 
+    # 4.5 力量体系自检（穿越/系统流/修仙：等级·成长值·战力逐章一致性）
+    #     受 `力量体系自检` 选择点控制（关闭→跳过；仅建议→全降建议级）。无 power_system_registry.json
+    #     时引擎自身优雅跳过，所以非力量题材项目这里几乎零成本。退档/未知境界=阻断级，写章后第一时间抓住。
+    ps_mode = str(settings.get("力量体系自检", "开启") or "开启")
+    if "关闭" not in ps_mode:
+        print(f"🔄 正在运行力量体系自检（等级/成长值/战力一致性）...")
+        ps_script = os.path.join(_HERE, "..", "..", "novel-wiki", "scripts", "power_system.py")
+        ps_cmd = [sys.executable, ps_script, root]
+        if "仅建议" in ps_mode:
+            ps_cmd.append("--advisory")
+        # 不 check=True：阻断级退出码 1 是"发现硬矛盾"，应提示而非中断整个 hook。
+        r = subprocess.run(ps_cmd)
+        if r.returncode == 1:
+            print("  ⛔ 力量体系发现阻断级矛盾（等级/境界/战力退档或未知境界）——见 审稿/power_system_findings.json，"
+                  "改 设定/power_system_registry.json 或本章再继续。")
+
     # 5. N2D 就绪检查 (如果是漫剧项目)
     if is_n2d_bound(root, meta, settings):
         print(f"🔄 检测到漫剧/短剧项目，正在运行 N2D 就绪机检...")

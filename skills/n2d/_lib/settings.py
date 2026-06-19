@@ -207,6 +207,11 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("AI音频使用披露", ("song",), ("AI-generated", "AI-assisted", "未使用AI音频"), sensitive=True),
 
     # novel family.
+    # 题材：弱选择点——novel-create 立项时写入（init 的 --genre），power_system 检测器据此判是否启用力量体系自检。
+    # 取值与 power_system_defs.GENRE_KEYWORDS 的题材键对齐（系统流/修仙/玄幻有等级数值，触发逐章成长一致性机检）。
+    SettingSpec("题材", ("novel",), ("系统流", "穿越", "修仙", "玄幻", "都市", "战神", "宫斗", "言情", "历史", "自定义"), parameterized=True),
+    # 力量体系自检：穿越/系统流/修仙等带等级数值成长的题材，写章后机检等级/境界/战力单调、属性≤7、升级节奏。
+    SettingSpec("力量体系自检", ("novel",), ("开启", "关闭", "仅建议")),
     SettingSpec("目标平台", ("novel",), ("起点", "番茄", "晋江", "抖音漫剧", "红果", "历史向", "跨平台"), parameterized=True, sensitive=True),
     SettingSpec("权利来源", ("novel",), ("公版", "自有", "授权"), sensitive=True),
     SettingSpec("输出格式", ("novel",), ("txt", "docx", "outline", "n2d", "txt+docx"), parameterized=True),

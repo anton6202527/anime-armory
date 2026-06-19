@@ -36,6 +36,41 @@ def load_blueprint_or_bible(root, filename):
             return f.read()
     return ""
 
+def load_power_system(root):
+    """力量体系登记 + 每角色"当前成长状态"（progression 中章号最大的快照）。
+
+    让写章上下文带上"主角现在 Lv.5/筑基中期/力量30"这种真值，作者/AI 在已知现状上推进，
+    而不是凭空发明等级数值（避免等级跳变/数值矛盾的根因）。缺登记返回空 dict。"""
+    path = os.path.join(root, "设定", "power_system_registry.json")
+    if not os.path.exists(path):
+        return {}
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            reg = json.load(f)
+    except (OSError, ValueError):
+        return {}
+    current = {}
+    for snap in reg.get("progression") or []:
+        if not isinstance(snap, dict):
+            continue
+        char = str(snap.get("character") or "主角")
+        ch = snap.get("chapter")
+        try:
+            ch_n = float(ch)
+        except (TypeError, ValueError):
+            ch_n = -1
+        if char not in current or ch_n >= current[char].get("_ch_n", -1):
+            current[char] = {**snap, "_ch_n": ch_n}
+    for v in current.values():
+        v.pop("_ch_n", None)
+    return {
+        "system_type": reg.get("system_type"),
+        "tiers": reg.get("tiers"),
+        "panel_schema": reg.get("panel_schema"),
+        "pacing": reg.get("pacing"),
+        "current_state": current,   # {角色: 最新快照(level/tier/attrs/战力)}
+    }
+
 def get_drafting_context(root, chapter_num, window_size=3):
     """为第 N 章创作提供完整上下文。"""
     settings = load_project_settings(root)
@@ -71,6 +106,8 @@ def get_drafting_context(root, chapter_num, window_size=3):
         "bible": bible,
         "character_card": char_card,
         "outline": outline,
+        # 力量体系现状：穿越/系统流写章前让作者/AI 知道主角当前等级/境界/属性/战力，按它推进不凭空发明。
+        "power_system": load_power_system(root),
         "previous_chapters": [
             {"idx": idx, "path": path, "text": text[:2000] + "..." if len(text) > 2000 else text}
             for idx, path, text in prev_chapters

@@ -29,6 +29,7 @@ def load_module(name: str, path: str) -> Any:
     if spec is None or spec.loader is None:
         raise RuntimeError(f"cannot load module: {path}")
     module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
     spec.loader.exec_module(module)
     return module
 
@@ -37,6 +38,10 @@ queue_mod = load_module("n2d_batch_queue_for_runner", os.path.join(SCRIPT_DIR, "
 dashboard_mod = load_module(
     "n2d_dashboard_for_runner",
     os.path.join(REPO_SKILLS, "n2d-dashboard", "scripts", "dashboard.py"),
+)
+run_mod = load_module(
+    "n2d_run_for_batch_runner",
+    os.path.join(REPO_SKILLS, "n2d", "run.py"),
 )
 
 
@@ -343,6 +348,41 @@ def run_process(command: str, *, shell: bool, timeout_sec: Optional[float], env:
     return proc.returncode, proc.stdout or "", proc.stderr or ""
 
 
+NEXT_PREFLIGHT_BLOCK_REASONS = {
+    "env_missing",
+    "blocked_by_gate",
+    "blocked_by_image_qc",
+    "needs_compliance",
+    "needs_choice",
+    "unknown_stage",
+}
+
+
+def next_preflight_issue(root: str, task: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """Ask n2d/run.py for the current single-episode action card before executing a queued task.
+
+    This keeps batch from drifting away from the single-episode orchestrator. It only blocks
+    structural stop-points; `needs_payment_confirm` and `needs_agent_gen` are allowed because
+    the user has already queued/configured a runner command for that task.
+    """
+    ep = str(task.get("episode") or "")
+    try:
+        na = run_mod.next_action(root, ep)
+    except Exception as exc:
+        return {"stop_reason": "next_preflight_error", "headline": str(exc)}
+    stop = str(na.get("stop_reason") or "")
+    if stop not in NEXT_PREFLIGHT_BLOCK_REASONS:
+        return None
+    card = na.get("action_card") or {}
+    return {
+        "stop_reason": stop,
+        "headline": card.get("headline") or "",
+        "to_user": card.get("to_user") or "",
+        "frontier": na.get("frontier"),
+        "gate": na.get("gate"),
+    }
+
+
 def execute_task(
     root: str,
     task: Dict[str, Any],
@@ -354,6 +394,7 @@ def execute_task(
     dry_run: bool,
     no_dashboard: bool,
     verify_outputs: bool,
+    next_preflight: bool = False,
     build_dashboard: bool = True,
 ) -> Dict[str, Any]:
     started = time.monotonic()
@@ -364,6 +405,13 @@ def execute_task(
     stdout = ""
     stderr = ""
     try:
+        if next_preflight:
+            issue = next_preflight_issue(root, task)
+            if issue:
+                raise UnrunnableTask(
+                    "next_preflight blocked: "
+                    f"{issue.get('stop_reason')} · {issue.get('headline') or issue.get('to_user')}"
+                )
         command = resolve_command(root, task, config, command_override)
         task.setdefault("history", []).append({
             "ts": queue_mod.now_iso(),
@@ -459,6 +507,7 @@ def run_claimed(
     no_dashboard: bool,
     verify_outputs: bool,
     stop_on_fail: bool,
+    next_preflight: bool = False,
     auto_gate: bool = True,
 ) -> List[Dict[str, Any]]:
     results: List[Dict[str, Any]] = []
@@ -483,6 +532,7 @@ def run_claimed(
                 dry_run=dry_run,
                 no_dashboard=no_dashboard,
                 verify_outputs=verify_outputs,
+                next_preflight=next_preflight,
                 build_dashboard=not defer_build,
             )
         finally:
@@ -558,12 +608,14 @@ def run_once(
     stop_on_fail: bool = False,
     worker: Optional[str] = None,
     lease_seconds: int = queue_mod.DEFAULT_LEASE_SECONDS,
+    next_preflight: bool = False,
     auto_gate: bool = True,
 ) -> Dict[str, Any]:
     config = load_config(root, config_path)
     worker = worker or queue_mod.default_worker()
     # 配置可关：batch_runner.json 里 "auto_gate": false → 关掉返工后自动重跑门禁（CLI --no-gate 同效）。
     effective_auto_gate = auto_gate and bool(config.get("auto_gate", True))
+    effective_next_preflight = next_preflight or bool(config.get("next_preflight", False))
     # claim() 锁内：先回收过期租约（自动断点恢复）再认领，并打 worker+lease。
     claimed = queue_mod.claim(root, limit=limit, worker=worker, lease_seconds=lease_seconds)
     results = run_claimed(
@@ -579,6 +631,7 @@ def run_once(
         no_dashboard=no_dashboard,
         verify_outputs=verify_outputs,
         stop_on_fail=stop_on_fail,
+        next_preflight=effective_next_preflight,
         auto_gate=effective_auto_gate,
     )
     return {
@@ -606,6 +659,7 @@ def run_until_empty(
     stop_on_fail: bool,
     worker: Optional[str] = None,
     lease_seconds: int = queue_mod.DEFAULT_LEASE_SECONDS,
+    next_preflight: bool = False,
     auto_gate: bool = True,
 ) -> Dict[str, Any]:
     all_results: List[Dict[str, Any]] = []
@@ -627,6 +681,7 @@ def run_until_empty(
             stop_on_fail=stop_on_fail,
             worker=worker,
             lease_seconds=lease_seconds,
+            next_preflight=next_preflight,
             auto_gate=auto_gate,
         )
         all_results.extend(result["results"])
@@ -661,6 +716,8 @@ def parser() -> argparse.ArgumentParser:
                     help="开跑前先回收本 --worker 上次崩溃残留的 running 任务（断点恢复），再继续认领")
     ap.add_argument("--no-gate", action="store_true",
                     help="关掉返工 pass 后自动重跑该 stage 门禁（默认开）；自动重跑让 --recheck 对的是返工后的现状")
+    ap.add_argument("--next-preflight", action="store_true",
+                    help="执行任务前先消费 n2d/run.py next 动作卡；遇 gate/image_qc/合规/环境/选择点阻断则不跑命令")
     ap.add_argument("--recheck", action="store_true",
                     help="跑完后用 生产数据/ 最新审查产物的指纹复检：问题消失的返工任务标 resolved、复发的 reopen"
                          "（闭环复检；返工后门禁已自动刷新，--recheck 即对现状判定）")
@@ -694,6 +751,7 @@ def main(argv: Sequence[str]) -> int:
             stop_on_fail=ns.stop_on_fail,
             worker=worker,
             lease_seconds=ns.lease_seconds,
+            next_preflight=ns.next_preflight,
             auto_gate=not ns.no_gate,
         )
     else:
@@ -710,6 +768,7 @@ def main(argv: Sequence[str]) -> int:
             stop_on_fail=ns.stop_on_fail,
             worker=worker,
             lease_seconds=ns.lease_seconds,
+            next_preflight=ns.next_preflight,
             auto_gate=not ns.no_gate,
         )
     if ns.recheck:

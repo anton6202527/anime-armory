@@ -28,9 +28,12 @@ stage skill **不是**"一条命令跑完即出产物"的子进程。它们混�
 ## 1. 命令面
 
 ```bash
-python3 skills/n2d/run.py next <作品根> [第N集] [--json] [--auto]
+python3 skills/n2d/run.py enter <作品根> [第N集] [--json] [--auto]
+python3 skills/n2d/run.py next  <作品根> [第N集] [--json] [--auto]
 ```
 
+- `enter` → 进入作品时先跑一次入口检查（`source_check` + `update_plan check --write-plan`），再返回同一张 `NextAction`；适合 agent 接手项目第一步。
+- `next` → 只做逐步推进和该阶段确定性前置；适合已在同一会话内连续推进时反复调用。
 - 无集号 → 用 `summarize()` 取**最小未完成集**为前沿。
 - 带集号 → 只推进该集。
 - `--json` → 输出机器可读的 `NextAction`（代理消费）；默认输出人话（用户可读）。
@@ -83,6 +86,7 @@ python3 skills/n2d/run.py next <作品根> [第N集] [--json] [--auto]
 | `needs_choice` | 该阶段有**未解析**的"首跑必给"/"每次必问"选择点（制作模式·生视频模型·生视频渠道·基础视觉风格·BGM来源·生成粒度） | 停，弹对应菜单（默认预选=设置里的上次值，但不沉默沿用） |
 | `needs_compliance` | `n2d-compliance --check` 在 image/video/compose 前报缺口 | 停，列缺口，绝不放行 |
 | `blocked_by_gate` | `dashboard gate` 退出码 1 | 停，透传 `return_to_stage/affected_artifacts/rerun_scope`，指向最小返工 |
+| `blocked_by_image_qc` | video/compose/review 前置发现 `image_qc` 缺失、非 full、或 hard block | 停，回 `n2d-image` 修复/确认受影响 PNG；不再误报为后端环境缺失 |
 | `env_missing` | `doctor.py` 报该阶段所需后端/精度档缺失 | 停（或路由占位+大声告警），不让代理跑到花钱工位才发现 |
 | `auto_ran` | 纯确定性步骤（router/gate-pass/矩阵刷新/进度回写） | **不停**，`--auto` 下继续推进 |
 | `done` | `stage_of` 返回 `col=None`（已成片） | 报完成 |
@@ -94,9 +98,7 @@ python3 skills/n2d/run.py next <作品根> [第N集] [--json] [--auto]
 
 ## 4. 执行循环（伪码）
 
-> **边界**：`源新鲜度自检`（source_check）与 `skill 更新影响检查`（update_plan）是 **dispatcher 进作品时的
-> 一次性入口步骤**（SKILL.md 情境B），**不**进 `run.py next` ——否则每步推进都会重跑、浪费。`run.py next`
-> 只管"逐步推进 + 每步的确定性前置（doctor/router/gate/compliance/首跑选择探测）"。
+> **边界**：`源新鲜度自检`（source_check）与 `skill 更新影响检查`（update_plan）是 **dispatcher 进作品时的一次性入口步骤**。它们进 `run.py enter`，**不**进 `run.py next` ——否则每步推进都会重跑、浪费。`run.py next` 只管"逐步推进 + 每步的确定性前置（doctor/router/gate/compliance/首跑选择探测）"。
 
 ```
 def next(root, ep=None, auto=False):
@@ -148,7 +150,6 @@ def next(root, ep=None, auto=False):
 
 ## 7. 待你拍板的开放问题
 
-1. **落点**：`skills/n2d/run.py`（与 doctor/progress/manifest 同级）——同意？
-2. **`--auto` 的默认边界**：我倾向 auto 也**永远**停在 `needs_agent_gen`（创作要代理脑子）。即 auto 只自动跑"确定性前置链"，不替代任何创作。认可？
-3. **是否本期就接 `n2d-batch`**（让 runner 每个 task 调 `run.py next` 步进）？我建议**本期不接**，先把单集前沿打通、配测试，batch 接入下一迭代。
-4. **人话输出**用中文动作卡（headline + 一句 to_user + 命令 + 菜单）即可，还是要更精简？
+1. **`--auto` 的默认边界**：仍然停在 `needs_agent_gen`（创作要代理脑子）。即 auto 只自动跑"确定性前置链"，不替代任何创作。
+2. **batch 接入边界**：`n2d-batch runner --next-preflight` 已可消费 `run.py next` 的硬阻断；默认仍兼容旧 runner，项目级可在 `batch_runner.json` 写 `"next_preflight": true`。
+3. **人话输出**目前保留中文动作卡（headline + 一句 to_user + 命令 + 菜单）；后续如要接 UI 可直接消费 `--json`。

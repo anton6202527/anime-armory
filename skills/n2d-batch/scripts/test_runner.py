@@ -122,6 +122,28 @@ def test_runner_marks_unconfigured_slash_command_as_retryable_failure(tmp_path: 
     assert loaded["tasks"][0]["status"] == "retry_queued"
 
 
+def test_runner_next_preflight_blocks_before_command(tmp_path: Path, monkeypatch) -> None:
+    write_image_queue(tmp_path, max_retries=1)
+    out_file = tmp_path / "should_not_exist.txt"
+    config = write_config(
+        tmp_path,
+        "python3 -c \"import os, pathlib; pathlib.Path(os.environ['N2D_ROOT']).joinpath('should_not_exist.txt').write_text('ran')\"",
+    )
+    monkeypatch.setattr(
+        runner,
+        "next_preflight_issue",
+        lambda root, task: {"stop_reason": "blocked_by_image_qc", "headline": "image_qc 未放行"},
+    )
+
+    result = runner.run_once(str(tmp_path), limit=1, config_path=str(config), next_preflight=True, no_dashboard=True)
+    loaded = queue.load_queue(str(tmp_path))
+
+    assert result["results"][0]["runner_status"] == "fail"
+    assert "next_preflight blocked" in result["results"][0]["note"]
+    assert loaded["tasks"][0]["status"] == "retry_queued"
+    assert not out_file.exists()
+
+
 def test_runner_marks_done_even_when_dashboard_telemetry_fails(tmp_path: Path) -> None:
     write_image_queue(tmp_path)
     config = write_config(tmp_path, "python3 -c \"pass\"")

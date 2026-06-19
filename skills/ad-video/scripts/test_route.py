@@ -152,5 +152,57 @@ class EndToEndTest(unittest.TestCase):
             self.assertEqual(payload["routes"][0]["primary"], "seedance")
 
 
+class ThreeAxisTest(unittest.TestCase):
+    def test_quality_tier_high_for_product_and_brand_shots(self):
+        # 产品 hero 镜 primary=seedance（支持档位）→ high
+        self.assertEqual(rt.quality_tier_for("product_hero", "seedance"), "high")
+        self.assertEqual(rt.quality_tier_for("endcard", "seedance"), "high")
+        # 普通镜 → fast
+        self.assertEqual(rt.quality_tier_for("painpoint_narrative", "seedance"), "fast")
+        # 无档位后端（veo）→ n/a
+        self.assertEqual(rt.quality_tier_for("product_hero", "veo"), "n/a")
+
+    def test_route_entry_carries_quality_tier(self):
+        routes, _ = rt.build_routes({"shots": [{"shot_id": "S1", "frame": "产品 hero shot", "duration": 4.0}]})
+        # 产品镜路由到主体一致后端（seedance/kling）；seedance 支持档位→high，kling 不支持→n/a
+        self.assertIn(routes[0]["quality_tier"], ("high", "n/a"))
+        self.assertIn("motion_reference", routes[0])
+
+    def test_motion_reference_applicable_for_demo_on_motion_ref_backend(self):
+        plan = rt.motion_reference_plan("demo_handheld", "seedance")
+        self.assertTrue(plan["applicable"])
+        self.assertFalse(rt.motion_reference_plan("empty_transition", "seedance")["applicable"])
+        self.assertFalse(rt.motion_reference_plan("demo_handheld", "veo")["applicable"])  # veo 无 motion_ref
+
+    def test_multishot_groups_consecutive_demo_on_seedance(self):
+        # 三条连续短 demo 镜（各 3s，3+3+3=9 ≤ seedance 15s）→ 成一组；逐镜不被合并
+        routes = [
+            {"clip": "镜头01", "shot_type": "demo_handheld", "primary": "seedance", "duration": 3.0},
+            {"clip": "镜头02", "shot_type": "demo_handheld", "primary": "seedance", "duration": 3.0},
+            {"clip": "镜头03", "shot_type": "demo_handheld", "primary": "seedance", "duration": 3.0},
+        ]
+        groups = rt.annotate_multishot_groups(routes)
+        self.assertEqual(len(groups), 1)
+        self.assertEqual(groups[0]["members"], ["镜头01", "镜头02", "镜头03"])
+        self.assertEqual(groups[0]["approx_seconds"], 9.0)
+        self.assertEqual(routes[0]["multishot_candidate"]["group_id"], "MSG_01")
+
+    def test_multishot_capped_by_duration(self):
+        # 两条 10s demo：10+10=20 > 15 → 物理上一次出不下 → 不成组
+        routes = [
+            {"clip": "镜头01", "shot_type": "demo_handheld", "primary": "seedance", "duration": 10.0},
+            {"clip": "镜头02", "shot_type": "demo_handheld", "primary": "seedance", "duration": 10.0},
+        ]
+        self.assertEqual(rt.annotate_multishot_groups(routes), [])
+
+    def test_no_multishot_on_non_multishot_backend(self):
+        # veo 无 multishot_native → 即便连续同型也不标注（判定走能力）
+        routes = [
+            {"clip": "镜头01", "shot_type": "demo_handheld", "primary": "veo", "duration": 3.0},
+            {"clip": "镜头02", "shot_type": "demo_handheld", "primary": "veo", "duration": 3.0},
+        ]
+        self.assertEqual(rt.annotate_multishot_groups(routes), [])
+
+
 if __name__ == "__main__":
     unittest.main()

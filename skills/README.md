@@ -73,6 +73,7 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 > **仙侠武侠打斗专项工艺**：`n2d-script/references/打斗分镜.md`（五帧拆招/命中帧出图/首尾帧锁动作/后期补打击感），已挂接 script/image/video/compose/review 全链；总纲见 `n2d/Q&A.md` Q31。
 > **仙侠非打斗奇观工艺**：`n2d-script/references/仙侠场面分镜.md`（御剑飞行/追逐/渡劫突破/炼丹炼器/大阵法阵/大场面 establish/斗法对轰/神魂(神识·元神出窍·夺舍)——飞行追逐锁姿态动背景、渡劫炼丹法阵对轰爆发帧出图+元素入库、神魂元神=肉身半透明派生治"二我"、大场面三镜由远及近），同样挂接全链；总纲见 `n2d/Q&A.md` Q33。
 > **资产库题材自适应**：共享定妆库通用三类（角色/场景/道具）+ ⚙️仙侠玄幻可选两类（**法宝/特效**，本命法宝按形态多态、剑气/光效锁颜色拖尾）；**人物定妆固定标准三视图**——所有人物角色先出正面 / 侧面 / 背面生产拆图，并生成 `定妆_<角色>_三视图.png` 人审拼版；场景才按题材和复用程度补**场景多视图（四视图）**保跨镜背景自洽；见 `n2d-image/references/prompt_format.md §1`+`角色一致性checklist.md`、`Q&A.md` Q32。
+> **题材母题(motif)增强工艺（穿越/系统流复现桥段·横切全链）**：穿越/系统流爽文里"系统面板出现/升级/系统刷新/签到/抽奖/爆装备"是相对固定但带成长（面板进化、等级只增不减）的高频复现母题，做好观众爱看。motif 是 n2d 线内一等概念：① `n2d-script/scripts/motif_detector.py` 在分镜阶段**检测题材+母题桥段**（关键词单一真值源 `n2d_const.GENRE_KEYWORDS/MOTIF_TYPE_KEYWORDS`），出 `生产数据/motif_plan_第N集.md` 建议→**人确认后** `--write` 注回 `storyboard.json`（`template=system_panel`/`motif_id`）+ 写 `出图/共享/motif_registry.json`；题材落 `_设置.md` `题材`/`母题增强` 弱选择点（检测预填可覆盖）。② 镜头模板 `专项镜头模板库.md` §0.2 通用 motif 形态 + §12 `system_panel`。③ **混合渲染**：`n2d-image` 让 AI 只出锁色锁形发光光幕底框（`VFX_系统面板`，`drift_forbidden` 含 `text_baked_in`、prompt 强制 negative 掉文字数字），成长用 `asset_lifecycle.py` 状态机机检面板档位只进不退（零新增代码）；④ `n2d-compose/render_panel.py` 读 `motif_registry` progression+overlay_spec，把等级/属性数值用 Pillow overlay 叠成清晰文字层（面板层在字幕层之下，复用 subtitle_render 链）；⑤ `n2d-asset-market export/import-motif` 跨剧复用母题 pack（import 重置成长 progression）。系统面板是首样板，后续金手指/签到/抽奖只加配置不改架构。总纲见 `n2d-script/references/题材母题框架.md`。
 > **模型矩阵 + 模型路由（防过期快照）**：各轴 SOTA vs n2d 默认 vs 升级触发（含图/视频/配音 + **口型 lip-sync**：后端音频参考口型（Seedance 2.0 音素级/可灵 Omni，由 router `voice_conditioned_lipsync` 喂克隆配音、不双人声）首选，后期 MuseTalk/Wav2Lip/LatentSync 兜底；配音情绪解耦 IndexTTS-2），见 `n2d/references/模型矩阵.md`，由 `n2d-review` 流程自审每次检查，默认只给刷新建议；用户确认落地后再刷新矩阵——版本名只活在带日期的快照里，正文写能力不绑版本。视频阶段新增 `n2d-model-router`：`视频模型路由=自动按镜头路由` 时，打斗/追逐/对话/飞行/空镜/法术爆发/亲密互动/拥抱拉扯/多人同框/群像站位按能力选择 primary/fallback；`生视频模型` 不再固定每个 Clip，只作为普通镜和兜底模型，`生视频渠道` 只决定执行入口。
 > **单 Clip 上限按后端（非一刀切 8s）**：机器真值源在 `skills/n2d/_lib/n2d_platform_profiles.py`（即梦 image2video≤8s / Seedance≤15s / 可灵≈10s / Veo≈8s / Sora≈20s），`n2d-video/references/platforms.md` 负责人读解释，`n2d-model-router` 与 gate 读 `_lib` 值——能一镜到底就别切碎（更少拼接缝·跨镜更稳）。
 > **clip 衔接接力链（治"剪起来跳"·横切全链）**：clip 间顺滑是一条逐级继承的接力链，单一真值源在 `n2d-script`。① `n2d-script` 在 `故事板.md`/`storyboard.json` 把每个接缝写成契约：`上一 Clip 出点 = 下一 Clip 入点`（同一句）+ `转场类型` + `需要尾帧?`（见 `references/formats.md §4`）。② `n2d-image` 在标 `需要尾帧` 的接缝出**尾帧 PNG `镜头N_end.png`**（命名=首帧名+`_end`，亦兼容 `Clip_NN.png`→`Clip_NN_end.png`；=下一 Clip 首帧构图，最省做法复用下一 Clip 参考图组）。③ `n2d-script/scripts/anchor_planner.py` 三帧契约（**默认铁律·能力门控·不管 cost**）给普通镜规划 `_mid` 或豁免，高运动/长镜/漂移重抽镜规划 `_a1.._aN`；`--write` 注回 `continuity.midframe/anchors` + `policy.midframe_default`。**gate 默认强制三帧**（读 `policy.video_backend` 判能力，缺/未知=强制，旧集须补跑）；**唯一豁免=后端不支持≥3帧**（first-frame-only，由 adapter `backend_supports_three_plus_frames` 自动判定），不因 cost/风格关。④ `n2d-video` **读取**契约不重写 start_state，并按后端能力落地：即梦 `multiframe2video` 已核验可原生吃 2–20 张首/中/尾时间轴帧；Veo/Luma/可灵等首尾帧后端只确认 first/last，中锚需拆段接力、extend/interpolate 或仅作 QC；首帧/参考图后端退回单首帧 + 强 end_state 文字或 reroute。`video_preflight` 查契约完整、prompt 誊抄不丢锚，并对不支持中锚的路由给「多帧能力」WARN，避免 `_mid` 被静默忽略。⑤ `n2d-compose` 按 `转场类型` 接 clip（有意硬切硬切/跳变微溶解/缺空镜报警），不盲拼。⑥ `n2d-review` 逐接缝并排读图查跳切/闪烁/接力断链。
@@ -136,6 +137,8 @@ novel 负责从点子/源书/派生需求生产可审计文本资产，产物落
 
 **默认产品路径**：`novel-create` / 派生 skill 产源书 → `novel-score` 给生产决策 → `novel-craft` 导出 `n2d` → `n2d` 接手镜头、定妆、出图、视频和一致性闸门。novel 没有独立设置 skill；项目设置只是 `_设置.md` 数据文件，由各 novel 脚本读写。
 
+> **力量体系自检（穿越/系统流/修仙·等级·成长值·战力严丝合缝·实时监控）**：网文力量体系是命门——等级跳变、战力前后矛盾、属性突变、升级节奏崩（数值膨胀/越级无代价）是高发穿帮，人脑记不住几百章。落地：① `novel-create` 立项按题材自动脚手架 `设定/power_system_registry.json`（研究落地的等级体系模板 + 系统面板字段[属性≤7] + 升级节奏[每章小奖/每5章中奖/每20章大奖] + 逐章成长 progression），见 `novel-craft/references/力量体系设计.md`；② 引擎 `novel-wiki/scripts/power_system.py` 确定性机检：等级/境界/战力**只增不减**（退档=阻断·除非标跌境/废修豁免）、未知境界=阻断、越级过快/面板属性超7/系统流久无升级桥段=建议；③ **实时监控**：`novel/scripts/post_write.py` 每章写后自动跑（受 `力量体系自检` 选择点控制），`context_loader` 写章前把"主角现状(Lv/境界/属性/战力)"喂给上下文让 AI 按现状推进；④ 审稿 `novel-review/consistency_audit.py` 含 `power_system` 子runner。真值/默认在 `novel/_lib/power_system_defs.py`。与 n2d 的"系统面板母题成长状态机"是平行同构（文本侧 vs 画面侧）。
+
 ---
 
 ## 三、song ——「写歌 / 作曲 / 翻唱」
@@ -191,7 +194,8 @@ ad 负责把客户 brief 或产品需求做成广告主片与多版本交付件�
 | 出图 | `ad-image` | 产品/角色/场景三层定妆与逐镜图 |
 | 出视频 | `ad-video` | 广告图生视频、模型路由、视觉契约继承 |
 | 合成/交付 | `ad-compose` | 主片、cutdown、多比例、包装、交付矩阵 |
-| 质检 | `ad-review` | 投放前 M0 硬项、交付件和人工复核清单 |
+| 评分（投放前·横切） | `ad-score` | 出图烧积分前 pre-spend 评分闸门：钩子前3秒/卖点/CTA/品牌露出/广告法/时长贴合，确定性 prescore + LLM 语义分 → 三档 go/revise/reject + 低分维度回流 ad-concept/ad-script/ad-image |
+| 质检/自审 | `ad-review` | 模式①投放前 M0 硬项+交付件人工复核；模式②流程自审（钩子/合规/成本三轴拉市场基准对照 ad-* 找差距） |
 
 **允许的跨线交接**：无默认必需交接。ad 可借鉴其他线工艺概念，但脚本和契约必须留在 ad 家族内。
 

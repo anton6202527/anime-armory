@@ -1,6 +1,6 @@
 ---
 name: novel-wiki
-description: 长篇小说逻辑一致性守护者 — 自动提取并维护《动态百科》,监控角色生死、地点变迁、道具归属、能力副作用等核心状态。提供"逻辑哨兵"功能,在写作前或写完后交叉比对最新章节与百科库,拦截硬性冲突(如死人复活、时间线倒流、技能副作用遗忘)。与 novel-review 配合,解决长篇小说"越写越崩"的问题。Use when asked to 维护百科, 查逻辑错误, 检查设定冲突, 动态设定, 逻辑哨兵, 自动更新设定, check novel consistency, world-building wiki. Triggers 动态百科, 逻辑哨兵, 查冲突, 查死人复活, 设定对齐, 状态追踪, novel wiki, logic sentry.
+description: 长篇小说逻辑一致性守护者 — 自动提取并维护《动态百科》,监控角色生死、地点变迁、道具归属、能力副作用等核心状态。提供"逻辑哨兵"功能,在写作前或写完后交叉比对最新章节与百科库,拦截硬性冲突(如死人复活、时间线倒流、技能副作用遗忘)。与 novel-review 配合,解决长篇小说"越写越崩"的问题。另含**力量体系自检引擎 `power_system.py`**：穿越/系统流/修仙的等级·成长值·战力逐章一致性机检（等级/境界/战力只增不减、未知境界、越级过快、面板属性≤7、系统流久无升级桥段），真值在 `设定/power_system_registry.json`。Use when asked to 维护百科, 查逻辑错误, 检查设定冲突, 动态设定, 逻辑哨兵, 自动更新设定, 力量体系自检, 等级一致性, 战力崩坏, 升级体系, 系统面板, check novel consistency, world-building wiki, power system. Triggers 动态百科, 逻辑哨兵, 查冲突, 查死人复活, 设定对齐, 状态追踪, 力量体系, 等级体系, 战力一致, 升级数值, 系统面板, novel wiki, logic sentry, power system.
 ---
 
 # novel-wiki — 动态百科与逻辑哨兵

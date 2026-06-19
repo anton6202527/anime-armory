@@ -160,6 +160,170 @@ def test_build_payload_bad_plan_penalized():
         shutil.rmtree(tmp)
 
 
+# ---- pre-spend 闸门：纯函数 ----
+
+def test_normalize_threshold_scales_ten_point():
+    assert sp.normalize_threshold(8) == 80.0
+    assert sp.normalize_threshold(80) == 80.0
+    assert sp.normalize_threshold(None) is None
+
+
+def test_pacing_score_pct():
+    assert sp.pacing_score_pct(10.0) == 100.0
+    assert sp.pacing_score_pct(7.0) == 70.0
+
+
+def test_map_semantic_dim_stage():
+    assert sp.map_semantic_dim_stage("视觉记忆点") == "mv-script"
+    assert sp.map_semantic_dim_stage("Visual Hook") == "mv-script"
+    assert sp.map_semantic_dim_stage("崩脸") == "mv-image"
+    assert sp.map_semantic_dim_stage("单曲视觉一致性") == "mv-image"
+    assert sp.map_semantic_dim_stage("踩鼓点率") is None
+
+
+def test_decide_block_none_threshold_never_blocks():
+    report = pacing.pacing_report(GOOD_PLAN, BEATGRID, 24.0)
+    score, _ = sp.pacing_score(report)
+    blocked, stages, reasons = sp.decide_block(score, report, [], None)
+    assert blocked is False and stages == [] and reasons == []
+
+
+def test_decide_block_good_plan_passes():
+    report = pacing.pacing_report(GOOD_PLAN, BEATGRID, 24.0)
+    score, _ = sp.pacing_score(report)
+    blocked, _stages, _r = sp.decide_block(score, report, [], 80)
+    assert blocked is False
+
+
+def test_decide_block_bad_pacing_returns_mv_plan():
+    # 等长 + 偏离歌长 + 副歌不快 → 卡点命门，回 mv-plan
+    bad = {"clips": [{"section": "chorus" if i > 3 else "verse1", "duration": 3.0,
+                      "start": i * 3.0, "end": (i + 1) * 3.0} for i in range(8)]}
+    report = pacing.pacing_report(bad, {"duration": 24.0, "downbeats": [100.0]}, 60.0)
+    score, _ = sp.pacing_score(report)
+    blocked, stages, reasons = sp.decide_block(score, report, [], 80)
+    assert blocked is True and "mv-plan" in stages and reasons
+
+
+def test_decide_block_low_semantic_dim_routes_to_stage():
+    report = pacing.pacing_report(GOOD_PLAN, BEATGRID, 24.0)
+    score, _ = sp.pacing_score(report)
+    low = sp.low_semantic_dims({"崩脸": 40, "视觉记忆点": 55}, 80.0)
+    blocked, stages, _r = sp.decide_block(score, report, low, 80)
+    assert blocked is True and "mv-image" in stages and "mv-script" in stages
+
+
+def test_low_semantic_dims_filters_by_threshold():
+    low = sp.low_semantic_dims({"崩脸": 90, "视觉记忆点": 55}, 80.0)
+    assert [d["dim"] for d in low] == ["视觉记忆点"]
+
+
+def test_pacing_affected_clips_flags_off_downbeat():
+    off = {"clips": [
+        {"clip_id": "Clip_001", "start": 0.0, "end": 1.3, "duration": 1.3},
+        {"clip_id": "Clip_002", "start": 1.3, "end": 2.7, "duration": 1.4},
+    ]}
+    grid = {"downbeats": [10.0, 20.0]}
+    report = pacing.pacing_report(off, grid, None)
+    clips = sp.pacing_affected_clips(off, grid, report)
+    ids = {c["clip_id"] for c in clips}
+    assert "Clip_002" in ids
+    assert all(c["return_to_stage"] == "mv-plan" for c in clips)
+
+
+def test_pacing_affected_clips_flags_duration_outlier():
+    plan = {"clips": [
+        {"clip_id": "Clip_001", "start": 0.0, "end": 2.0, "duration": 2.0},
+        {"clip_id": "Clip_002", "start": 2.0, "end": 4.0, "duration": 2.0},
+        {"clip_id": "Clip_003", "start": 4.0, "end": 6.0, "duration": 2.0},
+        {"clip_id": "Clip_OUT", "start": 6.0, "end": 16.0, "duration": 10.0},
+    ]}
+    report = pacing.pacing_report(plan, {"downbeats": []}, None)
+    clips = sp.pacing_affected_clips(plan, {"downbeats": []}, report)
+    outliers = [c for c in clips if c["reason"] == "duration_outlier"]
+    assert any(c["clip_id"] == "Clip_OUT" for c in outliers)
+
+
+def test_semantic_affected_clips_named_and_wildcard():
+    low = [{"dim": "崩脸", "score": 40, "clips": ["Clip_003"]}, {"dim": "视觉记忆点", "score": 55}]
+    out = sp.semantic_affected_clips(low)
+    by = {(c["clip_id"], c["return_to_stage"]) for c in out}
+    assert ("Clip_003", "mv-image") in by
+    assert ("*", "mv-script") in by
+
+
+# ---- 闸门 exit code 集成 ----
+
+def test_build_payload_no_threshold_not_blocked():
+    tmp = tempfile.mkdtemp()
+    try:
+        root = write_proj(tmp)
+        payload = sp.build_payload(root)
+        assert payload["blocked"] is False
+        assert payload["return_to_stages"] == []
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_build_payload_good_plan_passes_threshold():
+    tmp = tempfile.mkdtemp()
+    try:
+        root = write_proj(tmp)
+        payload = sp.build_payload(root, threshold=80)
+        assert payload["blocked"] is False
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_build_payload_bad_plan_blocks_threshold():
+    tmp = tempfile.mkdtemp()
+    try:
+        bad = {"clips": [
+            {"clip_id": f"Clip_{i:03d}", "section": "chorus" if i > 3 else "verse1",
+             "start": i * 3.0, "end": (i + 1) * 3.0, "duration": 3.0}
+            for i in range(8)
+        ]}
+        root = write_proj(tmp, plan=bad, beatgrid={"duration": 24.0, "downbeats": [100.0]})
+        payload = sp.build_payload(root, threshold=80)
+        assert payload["blocked"] is True
+        assert "mv-plan" in payload["return_to_stages"]
+        assert payload["affected_clips"]
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_build_payload_semantic_dim_blocks_and_routes():
+    tmp = tempfile.mkdtemp()
+    try:
+        root = write_proj(tmp)
+        payload = sp.build_payload(root, threshold=80, dim_scores={"崩脸": 40})
+        assert payload["blocked"] is True
+        assert "mv-image" in payload["return_to_stages"]
+        assert any(c["return_to_stage"] == "mv-image" for c in payload["affected_clips"])
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_enqueue_writes_mv_rework_queue():
+    tmp = tempfile.mkdtemp()
+    try:
+        bad = {"clips": [
+            {"clip_id": f"Clip_{i:03d}", "section": "chorus" if i > 3 else "verse1",
+             "start": i * 3.0, "end": (i + 1) * 3.0, "duration": 3.0}
+            for i in range(8)
+        ]}
+        root = write_proj(tmp, plan=bad, beatgrid={"duration": 24.0, "downbeats": [100.0]})
+        payload = sp.build_payload(root, threshold=80)
+        out, queue = sp.write_enqueue(root, payload)
+        assert os.path.exists(out)
+        assert queue["kind"] == "mv_score_rework_queue"
+        assert any(t["return_to_stage"] == "mv-plan" for t in queue["tasks"])
+        loaded = json.load(open(out, encoding="utf-8"))
+        assert loaded["blocked"] is True
+    finally:
+        shutil.rmtree(tmp)
+
+
 def main():
     tests = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
     for t in tests:

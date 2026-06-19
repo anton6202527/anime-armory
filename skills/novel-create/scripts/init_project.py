@@ -257,12 +257,28 @@ def main():
         "小说生成模式": args.draft_mode,
         "章节生成粒度": args.chapter_granularity,
         "AI使用披露": args.ai_text_usage or "（发布前用 ai_usage.py 确认）",
+        # 穿越/系统流/修仙等带等级数值成长的题材：默认开力量体系自检（写章后机检等级/成长值/战力一致性）。
+        # 非力量题材无 power_system_registry，引擎自跳过，此默认无副作用。仅建议=只提示不阻断。
+        "力量体系自检": "开启",
     }, note="原创从零：创作蓝图+设定圣经为宪法。")
     W("设定/创作蓝图.md", build_blueprint(title, args.genre, args.platform, args.premise, scale, n, wpc, args.person))
     W("设定/设定圣经.md", build_settings_bible(title))
     W("设定/角色卡.md", build_character_card(title))
     W("设定/世界观.md", build_worldview(title))
     W("设定/章纲.md", build_outline(title, n, args.premise))
+    # 力量体系脚手架（穿越/系统流/修仙/玄幻等带等级数值成长的题材）：立项即建 power_system_registry，
+    # 让写章前后能机检等级/成长值/战力一致性（见 novel-craft/references/力量体系设计.md）。
+    try:
+        from power_system_defs import detect_system_type, starter_registry, genre_needs_power_check
+        if genre_needs_power_check(args.genre):
+            system_type = detect_system_type(args.genre)
+            W("设定/power_system_registry.json",
+              json.dumps(starter_registry(system_type), ensure_ascii=False, indent=2))
+            scaffolded_power_system = system_type
+        else:
+            scaffolded_power_system = None
+    except Exception:
+        scaffolded_power_system = None
     # ... (inside main)
     n = args.target_chapters or profile["target_chapters"]
     wpc = profile["words_per_chapter"]
@@ -274,6 +290,9 @@ def main():
     print(f"     设定/创作蓝图.md ← 骨架（第 2 步填：logline/主角/金手指/爽点/冲突/风格卡）★最重要")
     print(f"     设定/设定圣经.md ← 骨架（第 3 步填：金手指代价 + 一致性约束）")
     print(f"     设定/角色卡.md / 世界观.md / 章纲.md ← 骨架")
+    if scaffolded_power_system:
+        print(f"     设定/power_system_registry.json ← 力量体系骨架（{scaffolded_power_system}）：填等级体系/面板/逐章成长，"
+              f"写章后自动机检等级·成长值·战力一致性（见 novel-craft/references/力量体系设计.md）")
     print(f"     写作任务/ ← draft_packets.py 生成逐章任务包；合规/ ← ai_usage.py 生成披露文件")
     if ingested:
         print(f"     素材/ ← 已收碎片：{', '.join(ingested)}")

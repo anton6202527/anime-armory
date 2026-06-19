@@ -50,3 +50,11 @@ def load_style_tool():
         return _load_from_skill("novel-style", "extract_style")
     except Exception:  # pragma: no cover
         return None
+
+
+def load_power_system_tool():
+    """Return power_system module (力量体系一致性引擎), or None when unavailable."""
+    try:
+        return _load_from_skill("novel-wiki", "power_system")
+    except Exception:  # pragma: no cover
+        return None

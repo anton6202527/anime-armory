@@ -32,14 +32,24 @@ if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 
 try:
-    from consistency_tools import load_style_tool, load_wiki_tools
+    from consistency_tools import load_style_tool, load_wiki_tools, load_power_system_tool
     wiki_builder, logic_sentry = load_wiki_tools()
 except Exception:  # pragma: no cover
     wiki_builder = logic_sentry = None
+    load_power_system_tool = None
 try:
     extract_style = load_style_tool()
 except Exception:  # pragma: no cover
     extract_style = None
+try:
+    power_system = load_power_system_tool() if load_power_system_tool else None
+except Exception:  # pragma: no cover
+    power_system = None
+try:
+    from settings import get_setting
+except Exception:  # pragma: no cover
+    def get_setting(root, key, default=None):  # type: ignore
+        return default
 try:
     from report_snapshot import rel_path, sha256_file, snapshot_chapters
 except Exception:  # pragma: no cover
@@ -245,6 +255,27 @@ def run_style(project, anchor, cache=None):
             "cache_hits": cache_hits, "cache_misses": cache_misses}
 
 
+def run_power_system(project):
+    """力量体系自检（穿越/系统流/修仙的等级·成长值·战力逐章一致性）。
+
+    受 `力量体系自检` 选择点控制：关闭→跳过；仅建议→全降建议级；其余→正常（退档/未知境界=阻断）。
+    无 设定/power_system_registry.json 时引擎自身优雅跳过。"""
+    if power_system is None:
+        return {"ran": False, "skipped": "novel-wiki/power_system 不可导入"}
+    mode = str(get_setting(project, "力量体系自检", "开启") or "开启")
+    if "关闭" in mode:
+        return {"ran": False, "skipped": "力量体系自检=关闭"}
+    res = power_system.run(project, advisory_only=("仅建议" in mode))
+    if not res.get("ran"):
+        return res
+    out = os.path.join(project, "审稿", "power_system_findings.json")
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    with open(out, "w", encoding="utf-8") as f:
+        json.dump(res, f, ensure_ascii=False, indent=2)
+    return {"ran": True, "json": out, "alerts": res["total"], "blocking": res["blocking"],
+            "system_type": res.get("system_type")}
+
+
 def main():
     p = argparse.ArgumentParser(description="novel-review 一键一致性机检 runner")
     p.add_argument("project_path")
@@ -267,6 +298,7 @@ def main():
             "mechanical": run_mechanical(args.project_path, args.pov, args.min, args.max),
             "logic_sentry": run_logic(args.project_path),
             "style_drift": run_style(args.project_path, args.anchor, cache=cache),
+            "power_system": run_power_system(args.project_path),
             "_cache": {"hit": False, "path": _cache_path(args.project_path)},
         }
         if snapshot:

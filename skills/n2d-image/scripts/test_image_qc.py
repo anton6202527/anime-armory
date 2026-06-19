@@ -120,7 +120,7 @@ def test_prop_shape_review_targets_unconfirmed_high_risk_prop_png(tmp_path: Path
     assert targets[0]["confirmed"] is False
 
 
-def test_prop_shape_review_confirmations_clear_target(tmp_path: Path) -> None:
+def test_prop_shape_review_confirmations_require_current_png_hash(tmp_path: Path) -> None:
     reg = tmp_path / "出图" / "共享"
     reg.mkdir(parents=True)
     (reg / "asset_registry.json").write_text(json.dumps({
@@ -144,7 +144,86 @@ def test_prop_shape_review_confirmations_clear_target(tmp_path: Path) -> None:
     }, ensure_ascii=False), encoding="utf-8")
 
     targets = image_qc.prop_shape_review_targets(tmp_path, "第1集")
+    assert targets and targets[0]["confirmed"] is False
+
+    image_qc.confirm_prop_shape_targets(tmp_path, "第1集", "all")
+    targets = image_qc.prop_shape_review_targets(tmp_path, "第1集")
     assert targets and targets[0]["confirmed"] is True
+
+    (img / "Clip_01.png").write_bytes(b"new-image")
+    targets = image_qc.prop_shape_review_targets(tmp_path, "第1集")
+    assert targets and targets[0]["confirmed"] is False
+
+
+def test_write_prop_shape_skeleton_does_not_confirm(tmp_path: Path) -> None:
+    reg = tmp_path / "出图" / "共享"
+    reg.mkdir(parents=True)
+    (reg / "asset_registry.json").write_text(json.dumps({
+        "assets": [{"id": "PROP_01", "type": "prop", "name": "毒酒瓷瓶", "constraints": {"must_not_have": ["壶嘴"]}}],
+    }, ensure_ascii=False), encoding="utf-8")
+    pr = tmp_path / "出图" / "第1集" / "prompt"
+    pr.mkdir(parents=True)
+    (pr / "01_分镜出图.md").write_text("## Clip 01\n`PROP_01` 无壶嘴。\n", encoding="utf-8")
+    img = tmp_path / "出图" / "第1集" / "图片"
+    img.mkdir(parents=True)
+    (img / "Clip_01.png").write_bytes(b"x")
+
+    res = image_qc.write_prop_shape_skeleton(tmp_path, "第1集")
+    assert res["changed"] == 1
+    targets = image_qc.prop_shape_review_targets(tmp_path, "第1集")
+    assert targets and targets[0]["confirmed"] is False
+
+
+def test_confirm_prop_shape_targets_marks_pending_ok(tmp_path: Path) -> None:
+    reg = tmp_path / "出图" / "共享"
+    reg.mkdir(parents=True)
+    (reg / "asset_registry.json").write_text(json.dumps({
+        "assets": [{"id": "PROP_01", "type": "prop", "name": "毒酒瓷瓶", "constraints": {"must_not_have": ["壶嘴"]}}],
+    }, ensure_ascii=False), encoding="utf-8")
+    pr = tmp_path / "出图" / "第1集" / "prompt"
+    pr.mkdir(parents=True)
+    (pr / "01_分镜出图.md").write_text("## Clip 01\n`PROP_01` 无壶嘴。\n", encoding="utf-8")
+    img = tmp_path / "出图" / "第1集" / "图片"
+    img.mkdir(parents=True)
+    (img / "Clip_01.png").write_bytes(b"x")
+
+    res = image_qc.confirm_prop_shape_targets(tmp_path, "第1集", "all", reviewer="qa")
+    assert res["selected"] == 1
+    targets = image_qc.prop_shape_review_targets(tmp_path, "第1集")
+    assert targets and targets[0]["confirmed"] is True
+    data = json.loads((tmp_path / "生产数据" / "image_qc" / "第1集" / "prop_shape_confirmations.json").read_text(encoding="utf-8"))
+    assert data["confirmations"][0]["reviewer"] == "qa"
+    assert data["confirmations"][0]["png_sha256"] == image_qc._sha256_file(img / "Clip_01.png")
+
+
+def test_vlm_confirm_prop_shape_targets_writes_only_high_confidence_ok(tmp_path: Path, monkeypatch) -> None:
+    reg = tmp_path / "出图" / "共享"
+    reg.mkdir(parents=True)
+    (reg / "asset_registry.json").write_text(json.dumps({
+        "assets": [{"id": "PROP_01", "type": "prop", "name": "毒酒瓷瓶", "constraints": {"must_not_have": ["壶嘴"]}}],
+    }, ensure_ascii=False), encoding="utf-8")
+    pr = tmp_path / "出图" / "第1集" / "prompt"
+    pr.mkdir(parents=True)
+    (pr / "01_分镜出图.md").write_text("## Clip 01\n`PROP_01` 无壶嘴。\n", encoding="utf-8")
+    img = tmp_path / "出图" / "第1集" / "图片"
+    img.mkdir(parents=True)
+    (img / "Clip_01.png").write_bytes(b"x")
+
+    class FakeVLM:
+        @staticmethod
+        def load_judge():
+            return lambda image, prompt, kind: {"match": True, "confidence": 0.9, "mismatches": [], "reason": "ok"}
+
+        @staticmethod
+        def parse_verdict(raw):
+            return raw
+
+    monkeypatch.setattr(image_qc, "_load_sibling", lambda name: FakeVLM if name == "vlm_verify" else None)
+    res = image_qc.vlm_confirm_prop_shape_targets(tmp_path, "第1集", block_floor=0.6)
+    assert res["confirmed"] == 1
+    assert image_qc.prop_shape_review_targets(tmp_path, "第1集")[0]["confirmed"] is True
+    data = json.loads((tmp_path / "生产数据" / "image_qc" / "第1集" / "prop_shape_confirmations.json").read_text(encoding="utf-8"))
+    assert data["confirmations"][0]["png_sha256"] == image_qc._sha256_file(img / "Clip_01.png")
 
 
 def test_prop_shape_review_is_hard_block_and_finding() -> None:
