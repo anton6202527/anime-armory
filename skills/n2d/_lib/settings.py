@@ -27,7 +27,7 @@ try:  # `制作模式` 取值的单一真值在 n2d_contract.PRODUCTION_MODES；
     _PRODUCTION_MODE_KEYS = _production_mode_keys()
 except Exception:  # pragma: no cover - keep generic settings usable outside n2d.
     _PRODUCTION_MODE_DEFAULT = "原生音画"  # 真值在 n2d_const.PRODUCTION_MODE_DEFAULT；此处仅为导入失败时的兜底
-    _PRODUCTION_MODE_KEYS = ("配音先行", "先出视频后配音", "原生音画")
+    _PRODUCTION_MODE_KEYS = ("原生音画", "配音先行", "先出视频后配音")
 
 
 DEFAULTS = {

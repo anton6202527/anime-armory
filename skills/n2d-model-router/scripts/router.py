@@ -34,6 +34,7 @@ from n2d_platform_profiles import (  # noqa: E402  视频后端档案单一真�
     VIDEO_BACKEND_LABELS,
     VIDEO_BACKEND_MAX_SECONDS,
     normalize_video_backend,
+    video_backend_frame_control,
     video_backend_max_seconds,
 )
 from n2d_settings import load_settings as _load_settings_md  # noqa: E402  _设置.md 解析单一真值源
@@ -275,6 +276,92 @@ def clip_duration_seconds(clip: Mapping[str, Any]) -> float:
     return 0.0
 
 
+def _timeline_frame_requirements(clip: Mapping[str, Any]) -> Dict[str, int | bool]:
+    """Storyboard timeline frame demand for route-time backend capability checks.
+
+    `gate.py` later enforces the same concern before paid generation.  The
+    router should avoid producing an obviously doomed primary when the current
+    execution channel already has a stronger multi-keyframe path.
+    """
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    anchor_count = 0
+    if isinstance(cont.get("midframe"), Mapping):
+        anchor_count = 1
+    elif isinstance(cont.get("anchors"), list):
+        anchor_count = len([a for a in cont.get("anchors") if isinstance(a, Mapping)])
+    need_end = cont.get("need_endframe") is True
+    return {
+        "anchor_count": anchor_count,
+        "need_end": need_end,
+        "total_frames": 1 + anchor_count + (1 if need_end else 0),
+    }
+
+
+def _primary_frame_capability_mismatch(clip: Mapping[str, Any], primary: str, video_channel: str) -> List[str]:
+    req = _timeline_frame_requirements(clip)
+    control = video_backend_frame_control(primary, video_channel)
+    reasons: List[str] = []
+    duration = clip_duration_seconds(clip)
+    max_sec = video_backend_max_seconds(primary)
+    if duration and max_sec and duration > max_sec:
+        reasons.append(f"duration {duration:g}s exceeds {primary} max {max_sec}s")
+    if req["need_end"] and not control.get("supports_last_frame"):
+        reasons.append("storyboard needs endframe but primary lacks last-frame control")
+    if req["anchor_count"] and not control.get("supports_native_mid_anchors"):
+        reasons.append("storyboard has mid anchors but primary lacks native mid-anchor control")
+    return reasons
+
+
+def prefer_execution_multiframe_backend(
+    clip: Mapping[str, Any],
+    route: Dict[str, Any],
+    *,
+    default_backend: str,
+    video_channel: str,
+) -> Dict[str, Any]:
+    """Use the project execution channel when it is the stronger frame contract.
+
+    Example: `生视频模型=Seedance 2.0` through `生视频渠道=即梦/Dreamina`
+    executes on Dreamina's verified multiframe API.  For high-risk clips that
+    have end/mid anchors or exceed a fallback backend's duration limit, a Sora
+    or Kling primary can make `video_preflight` fail even though the configured
+    execution channel can satisfy the storyboard frame contract.
+    """
+    primary = normalize_backend(str(route.get("primary_backend") or ""), default_backend)
+    default = normalize_backend(default_backend, default="")
+    if not default or primary == default:
+        return route
+    mismatch = _primary_frame_capability_mismatch(clip, primary, video_channel)
+    if not mismatch:
+        return route
+    default_control = video_backend_frame_control(default, video_channel)
+    req = _timeline_frame_requirements(clip)
+    duration = clip_duration_seconds(clip)
+    default_ok = True
+    if duration and video_backend_max_seconds(default) < duration:
+        default_ok = False
+    if req["need_end"] and not default_control.get("supports_last_frame"):
+        default_ok = False
+    if req["anchor_count"] and not default_control.get("supports_native_mid_anchors"):
+        default_ok = False
+    if not default_ok:
+        return route
+
+    updated = dict(route)
+    old_fallbacks = [normalize_backend(b, default="") for b in route.get("fallback_backends", [])]
+    fallback = [primary] + [b for b in old_fallbacks if b and b not in {primary, default}]
+    updated["primary_backend"] = default
+    updated["fallback_backends"] = fallback[:3]
+    rationale = list(route.get("rationale", []))
+    rationale.append(
+        f"执行渠道「{video_channel or default}」对 {default} 具备多关键帧/尾帧能力；"
+        f"原 primary「{primary}」与本镜 storyboard 帧/时长契约不匹配（{'; '.join(mismatch)}），"
+        "因此改用项目默认后端执行，原 primary 降为 fallback。"
+    )
+    updated["rationale"] = rationale
+    return updated
+
+
 def clip_has_named_characters(clip: Mapping[str, Any]) -> bool:
     text = _clip_text(clip)
     if _has_any(text, ("无人物", "空镜", "empty shot", "no character")):
@@ -308,7 +395,7 @@ def clip_named_character_count(clip: Mapping[str, Any]) -> int:
     return 0
 
 
-# ── ③ 一角一后端亲和（advisory·warn-only，不改路由）────────────────────────────
+# ── ③ 一角一后端亲和（核心硬钉，无法同时满足才告警）────────────────────────────
 # 治"同一核心角色跨集/跨镜被路由到不同视频后端 → 脸质感漂移"。只对**已注册原生视频主体**
 # （Character ID / face_lock，status registered|ready）的角色生效：注册了原生主体 = 这角色的脸被
 # 该后端锁住了，再被路由到别的后端就是跨集一致性风险。没注册原生主体的角色不产任何告警（零噪音）。
@@ -331,7 +418,7 @@ def _native_video_backend(form: Mapping[str, Any]) -> str:
 
 def build_backend_affinity(registry: Optional[Mapping[str, Any]]) -> List[Dict[str, Any]]:
     """角色 → 其跨集应锁定的视频后端（仅取已注册原生主体的角色）。返回 [{id, name, aliases, backend}]。
-    纯函数·可测。advisory 用——这条只产告警，绝不改路由（裁决策略：冲突仅告警）。"""
+    纯函数·可测。核心/主演角色进入亲和后会在 route_clip 中硬钉 primary，避免跨镜换后端漂脸。"""
     out: List[Dict[str, Any]] = []
     if not isinstance(registry, Mapping):
         return out
@@ -653,6 +740,7 @@ def choose_route(
     lip_sync_setting: str = "关闭",
     av_mode: str = "voice_first",
     fixed_fallback_backends: Optional[List[str]] = None,
+    t2v_action: bool = False,
 ) -> Dict[str, Any]:
     if routing_mode == "fixed_default":
         route = _route_fixed(clip, shot_type, default_backend, fixed_fallback_backends)
@@ -688,31 +776,33 @@ def choose_route(
         route["fallback_backends"] = fallbacks[:3]
         return route
     if shot_type == "fight_exchange":
+        mode = "text2video" if t2v_action else "frames2video"
         route = {
             "primary_backend": "kling",
             "fallback_backends": ["seedance", default_backend],
-            "mode": "frames2video",
+            "mode": mode,
             "native_audio_policy": "none",
             "identity_requirement": "character_id_or_reference_group",
             "rationale": [
-                "fight/contact motion benefits from first/last frame control and motion brush",
+                f"fight/contact motion benefits from {'T2V physics engine' if t2v_action else 'first/last frame control'}",
                 "impact beats need short controllable motion rather than free choreography",
             ],
             "prompt_requirements": [
-                "write first frame and end frame as hard constraints",
+                "write detailed action kinetics" if t2v_action else "write first frame and end frame as hard constraints",
                 "one contact action per clip; avoid multi-hit choreography",
             ],
             "degrade_plan": "Split into setup and impact clips; keep the hit frame as the end frame.",
         }
     elif shot_type in ("chase", "flight"):
+        mode = "text2video" if t2v_action else "image2video"
         route = {
             "primary_backend": "seedance",
             "fallback_backends": ["kling", default_backend],
-            "mode": "image2video",
+            "mode": mode,
             "native_audio_policy": "none",
             "identity_requirement": "face_lock_or_reference_group" if clip_has_named_characters(clip) else "none",
             "rationale": [
-                "long continuous motion and moving backgrounds benefit from longer single-shot generation",
+                f"long continuous motion and moving backgrounds benefit from {'T2V unconstrained physics' if t2v_action else 'longer single-shot generation'}",
                 "flight/chase should lock character pose and move background layers",
             ],
             "prompt_requirements": [
@@ -990,10 +1080,12 @@ def route_clip(
     routing_mode: str,
     native_audio_setting: str,
     lip_sync_setting: str,
+    video_channel: str,
     av_mode: str = "voice_first",
     fixed_fallback_backends: Optional[List[str]] = None,
     failure_counts: Optional[Dict[str, int]] = None,
     backend_affinity: Optional[List[Dict[str, Any]]] = None,
+    t2v_action: bool = False,
 ) -> Dict[str, Any]:
     shot_type = infer_shot_type(clip)
     route = choose_route(
@@ -1005,6 +1097,13 @@ def route_clip(
         lip_sync_setting=lip_sync_setting,
         av_mode=av_mode,
         fixed_fallback_backends=fixed_fallback_backends,
+        t2v_action=t2v_action,
+    )
+    route = prefer_execution_multiframe_backend(
+        clip,
+        route,
+        default_backend=default_backend,
+        video_channel=video_channel,
     )
     primary = normalize_backend(route["primary_backend"], default_backend)
     clip_id = make_clip_id(clip, index)
@@ -1084,7 +1183,9 @@ def route_episode(
     av_mode = av_mode_from_settings(settings)
     native_audio_setting = settings.get("视频原生音轨", "丢弃")
     lip_sync_setting = settings.get("对口型", "关闭")
+    video_channel = settings.get("生视频渠道", "")
     fixed_fallback_backends = fixed_fallback_backends_from_settings(settings, default_backend)
+    t2v_action = settings.get("T2V动作通道", "关闭") == "开启"
     storyboard = load_storyboard(root, episode, storyboard_path)
     clips = storyboard.get("clips") or []
     if not isinstance(clips, list):
@@ -1106,6 +1207,7 @@ def route_episode(
         "routing_mode": routing_mode,
         "production_mode": settings.get("制作模式", "") or PRODUCTION_MODE_DEFAULT,
         "av_mode": av_mode,
+        "t2v_action_channel": t2v_action,
         "default_backend": default_backend,
         "generated_at": generated_at or dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
         "routes": [
@@ -1117,10 +1219,12 @@ def route_episode(
                 routing_mode=routing_mode,
                 native_audio_setting=native_audio_setting,
                 lip_sync_setting=lip_sync_setting,
+                video_channel=video_channel,
                 av_mode=av_mode,
                 fixed_fallback_backends=fixed_fallback_backends,
                 failure_counts=failure_counts,
                 backend_affinity=backend_affinity,
+                t2v_action=t2v_action,
             )
             for i, clip in enumerate(clips, 1)
         ],

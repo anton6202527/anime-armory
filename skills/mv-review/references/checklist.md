@@ -16,6 +16,7 @@
 | 画面糊/低质 | 判 | 出图/clip 分辨率清晰度够投放 | 🟡 |
 | 单曲视觉一致性包缺失 | 判 | `lead_identity_anchor / global_style / palette_anchor / section_look / motif_ledger` 是否在视觉蓝图/设定/分镜里被继承；MV 可换段落 look，但不能一支歌内换脸换主画风 | 🟡 |
 | 参考输入/LoRA 未登记 | 判 | 若 `_设置.md` 写 `MV一致性增强=指定参考图/后端主体库/+LoRA`，检查 prompt 是否含 `reference_inputs`、参考图路径/主体 ID/LoRA trigger+底模+授权说明 | 🟡 |
+| 演唱镜口型对不上 | 判 | **正面跟唱大特写**主角嘴型是否对得上人声（仅 `演唱口型≠关闭` 时要求；远景/侧脸/B-roll/空镜豁免）。对不上→开 `演唱口型`(配音对齐/后期pass·LatentSync 优先)重出该 clip，或回 `mv-plan` 改分镜规避。见 `mv-video`「演唱口型对齐」 | 🟡 |
 
 ## B. 卡点 / 节奏（**MV 的命** —— 对 `mv-beat` 卡点原则）
 

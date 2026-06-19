@@ -127,6 +127,8 @@ def make_style(meta, settings, args):
         settings.get("语言") or args.language,
         settings.get("BPM/速度") or args.bpm,
         settings.get("调性") or args.key,
+        meta.get("instrumentation") or settings.get("乐器编制"),  # 2026 配方：明确器乐编制（piano and strings…）显著提升可控性
+        meta.get("vocal_type") or settings.get("人声类型"),      # 人声类型（female/male/duet/合成…），缺则跳过
         meta.get("theme"),
     ]
     seen = set()

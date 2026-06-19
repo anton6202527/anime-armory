@@ -13,6 +13,8 @@
   4. 章号连续性：与 章节/ 目录里其他章是否有缺号/重号；与 设定/章纲.md 标题是否一致
   5. 术语出现统计：自动从 设定/ 抽术语，也可用 --terms 追加（供人工看漂移）
   6. 原文照搬：24 字滑窗与 原作.txt 比对，命中即报（续写/外传用；--no-plagiarism 关闭）
+  7. AI 腔/同质化：议论文式连接词出现在叙事=🟡、万能金句套话密度=🟢（advisory·线索非定论，人判结合语境；
+     治 2026 平台 AI 双重质检·AI 检测率<60% 风险；--no-ai-tell 关闭）
 
 输出：人类可读清单 + 末尾机器可读 JSON（FINDINGS=[...]）。
 """
@@ -37,6 +39,37 @@ def body_of(md):
     lines = md.split("\n")
     body = [l for l in lines if not l.startswith("# 第") and not l.strip().startswith("<!--")]
     return "\n".join(body).strip()
+
+
+# ── AI 腔 / 同质化启发式（advisory·治"平台 AI 双重质检·AI检测率<60%"风险，2026）──
+# 议论文式连接词出现在叙事正文里基本是 AI 腔/出戏；万能金句套话按密度。绝不 🔴（容错铁律）。
+# 写时由 trio-pipeline 的 Senior Editor「去AI味」滤网兜，这里是 QA 侧确定性兜底，把主观项降成可机检线索。
+AI_EXPOSITORY = ("综上所述", "总而言之", "总的来说", "归根结底", "众所周知", "不可否认",
+                 "值得一提的是", "值得注意的是", "由此可见", "显而易见", "换言之", "不仅如此")
+AI_CLICHE = ("命运的齿轮", "仿佛整个世界", "空气仿佛凝固", "时间仿佛静止", "或许这就是",
+             "也许这就是", "不为人知的秘密", "在这个瞬间", "心中五味杂陈", "心中百感交集")
+
+
+def ai_tell_scan(body, cliche_per_k=3.0):
+    """AI 腔/同质化启发式（纯函数·可测·advisory）。返回 [(severity, msg, evidence)]。
+
+    ① 叙事正文出现议论文式连接词（综上所述/众所周知…）= 高信号 AI 腔 → 🟡；
+    ② 万能金句/套话按千字密度，超 `cliche_per_k` → 🟢（低优先 nudge）。
+    绝不 🔴（容错铁律）；线索非定论，仍需人判结合语境（金句在对白里可豁免）。"""
+    text = body or ""
+    cc = max(1, cjk_count(text))
+    out = []
+    expo = [w for w in AI_EXPOSITORY if w in text]
+    if expo:
+        ev = "、".join(expo[:5])
+        out.append(("🟡", f"叙事中出现议论文式连接词（AI 腔高发，建议改口语化叙述）：{ev}", ev))
+    n = sum(text.count(w) for w in AI_CLICHE)
+    density = n / cc * 1000.0
+    if density >= cliche_per_k:
+        top = sorted({w for w in AI_CLICHE if w in text}, key=lambda w: -text.count(w))[:5]
+        ev = "、".join(top)
+        out.append(("🟢", f"AI 套话/万能金句密度偏高（{density:.1f}/千字，疑似 AI 腔·平台 AI 检测率风险）：{ev}", ev))
+    return out
 
 
 def load_outline_titles(root):
@@ -135,6 +168,8 @@ def main():
     ap.add_argument("--no-auto-terms", action="store_true",
                     help="不从 设定/ 自动抽取术语，只使用 --terms")
     ap.add_argument("--no-plagiarism", action="store_true")
+    ap.add_argument("--no-ai-tell", action="store_true",
+                    help="关闭 AI 腔/同质化启发式（默认开；advisory，治平台 AI 双重质检风险）")
     ap.add_argument("--json-out", default=None,
                     help="可选：把机检结果写成 JSON，供 review_report.json 汇总")
     args = ap.parse_args()
@@ -219,6 +254,10 @@ def main():
                     break
             if hit:
                 add(ch, "🔴", "原文照搬", "发现与原作连续雷同片段（≥24字）", hit)
+        # 7 AI 腔/同质化（advisory·机检线索，人判结合语境；治平台 AI 检测率<60% 双重质检风险）
+        if not args.no_ai_tell:
+            for sev, msg, ev in ai_tell_scan(body):
+                add(ch, sev, "AI腔", msg, ev)
 
     # 术语出现矩阵（单列打印，不进 findings）
     term_matrix = {}

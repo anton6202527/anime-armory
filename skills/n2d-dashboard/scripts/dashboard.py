@@ -12,6 +12,7 @@ import argparse
 import contextlib
 import csv
 import datetime as dt
+import importlib.util
 import json
 import os
 import shutil
@@ -394,6 +395,8 @@ def blank_episode(ep: str, progress: Optional[Dict[str, Any]] = None) -> Dict[st
         "qa_infos": 0,
         "consistency_blockers": 0,
         "consistency_warnings": 0,
+        "generation_pass_rate": None,
+        "deliverable_pass_rate": None,
         "final_pass_rate": None,
         "release_rows": 0,
         "release_plays": 0,
@@ -624,8 +627,15 @@ def aggregate_events(root: str, events: List[Dict[str, Any]]) -> Dict[str, Any]:
             summary["cost_per_finished_min"] = divide_dict(summary["cost_totals"], runtime_min)
             summary["elapsed_per_finished_min_sec"] = round(summary["duration_sec"] / runtime_min, 3) if runtime_min > 0 else None
         denom = summary["generation_passes"] + summary["generation_fails"]
-        if denom:
-            summary["final_pass_rate"] = round(summary["generation_passes"] / denom, 4)
+        generation_rate = round(summary["generation_passes"] / denom, 4) if denom else None
+        summary["generation_pass_rate"] = generation_rate
+        if summary["qa_blockers"]:
+            summary["deliverable_pass_rate"] = 0.0
+        else:
+            summary["deliverable_pass_rate"] = generation_rate
+        # Backward-compatible threshold key. Semantics are now deliverability,
+        # not raw generation attempt pass rate.
+        summary["final_pass_rate"] = summary["deliverable_pass_rate"]
         if summary["generation_attempts"]:
             summary["one_pass_rate"] = round(summary["one_pass_count"] / summary["generation_attempts"], 4)
             summary["redraw_rate"] = round(summary["redraw_count"] / summary["generation_attempts"], 4)
@@ -672,7 +682,10 @@ def aggregate_events(root: str, events: List[Dict[str, Any]]) -> Dict[str, Any]:
     totals["duration_hms"] = hms(float(totals["duration_sec"]))
     totals["runtime_hms"] = hms(float(totals["runtime_sec"])) if totals["runtime_sec"] else "—"
     denom = totals["generation_passes"] + totals["generation_fails"]
-    totals["final_pass_rate"] = round(totals["generation_passes"] / denom, 4) if denom else None
+    generation_rate = round(totals["generation_passes"] / denom, 4) if denom else None
+    totals["generation_pass_rate"] = generation_rate
+    totals["deliverable_pass_rate"] = 0.0 if totals["qa_blockers"] else generation_rate
+    totals["final_pass_rate"] = totals["deliverable_pass_rate"]
     if totals["generation_attempts"]:
         totals["one_pass_rate"] = round(totals["one_pass_count"] / totals["generation_attempts"], 4)
         totals["redraw_rate"] = round(totals["redraw_count"] / totals["generation_attempts"], 4)
@@ -796,12 +809,13 @@ def render_markdown(dashboard: Dict[str, Any]) -> str:
         "",
         "## 总览",
         "",
-        "| 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 最终通过率 |",
-        "|---:|---:|---|---:|---:|---:|---:|---:|---:|",
+        "| 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 生成通过率 | 可交付通过率 |",
+        "|---:|---:|---|---:|---:|---:|---:|---:|---:|---:|",
         (
             f"| {totals['episode_count']} | {totals['event_count']} | {format_cost(totals['cost_totals'])} | "
             f"{totals['duration_hms']} | {totals['generation_attempts']} | {totals['redraw_count']} | "
-            f"{totals['qa_blockers']} | {totals['qa_warnings']} | {format_rate(totals['final_pass_rate'])} |"
+            f"{totals['qa_blockers']} | {totals['qa_warnings']} | {format_rate(totals.get('generation_pass_rate'))} | "
+            f"{format_rate(totals['final_pass_rate'])} |"
         ),
         "",
         "## ROI",
@@ -1053,7 +1067,8 @@ def render_html(dashboard: Dict[str, Any], alerts: List[Dict[str, Any]], *, refr
     for ep in dashboard.get("episodes", []) or []:
         rows.append(
             f"<tr><td>{ep.get('episode','')}</td><td>{format_cost(ep.get('cost_totals',{}))}</td>"
-            f"<td>{format_rate(ep.get('final_pass_rate'))}</td><td>{format_rate(ep.get('redraw_rate'))}</td>"
+            f"<td>{format_rate(ep.get('generation_pass_rate'))}</td><td>{format_rate(ep.get('final_pass_rate'))}</td>"
+            f"<td>{format_rate(ep.get('redraw_rate'))}</td>"
             f"<td>{ep.get('qa_blockers',0)}</td><td>{ep.get('qa_warnings',0)}</td></tr>"
         )
     alert_rows = "".join(
@@ -1071,13 +1086,14 @@ td,th{{border:1px solid #333;padding:6px 10px;text-align:left}} th{{background:#
 </style></head><body>
 <h1>n2d 生产数据仪表盘</h1>
 <div class="bar">root: {dashboard.get('root','')} ｜ 生成: {dashboard.get('generated_at','')} ｜
-成本 {format_cost(totals.get('cost_totals',{}))} ｜ 通过率 {format_rate(totals.get('final_pass_rate'))} ｜
+成本 {format_cost(totals.get('cost_totals',{}))} ｜ 生成通过率 {format_rate(totals.get('generation_pass_rate'))} ｜
+可交付通过率 {format_rate(totals.get('final_pass_rate'))} ｜
 重抽率 {format_rate(totals.get('redraw_rate'))} ｜ QA阻断 {totals.get('qa_blockers',0)} / warn {totals.get('qa_warnings',0)}</div>
 <h2>告警（{_count_level(alerts,'critical')} critical / {_count_level(alerts,'warn')} warn）</h2>
 <ul>{alert_rows}</ul>
 <h2>逐集</h2>
-<table><tr><th>集</th><th>成本</th><th>通过率</th><th>重抽率</th><th>QA阻断</th><th>QA警告</th></tr>
-{''.join(rows) or '<tr><td colspan=6>暂无数据</td></tr>'}</table>
+<table><tr><th>集</th><th>成本</th><th>生成通过率</th><th>可交付通过率</th><th>重抽率</th><th>QA阻断</th><th>QA警告</th></tr>
+{''.join(rows) or '<tr><td colspan=7>暂无数据</td></tr>'}</table>
 <p style="color:#888">{"自动刷新 "+str(refresh)+"s" if refresh else "静态快照"} ｜ 纯本地生成，无外部依赖</p>
 </body></html>"""
 
@@ -1283,7 +1299,37 @@ def image_qc_failure_finding(root: str, episode: str, reason: str) -> Dict[str, 
     }
 
 
+def image_qc_report_path(root: str, episode: str) -> str:
+    ep = normalize_episode(episode)
+    return os.path.join(root, "生产数据", "image_qc", ep, f"image_qc_{ep}.json")
+
+
+def image_qc_report_findings(root: str, episode: str) -> Tuple[Optional[List[Dict[str, Any]]], Optional[str]]:
+    path = image_qc_report_path(root, episode)
+    if not os.path.isfile(path):
+        return None, None
+    try:
+        payload = json.load(open(path, encoding="utf-8"))
+        script = os.path.join(REPO_SKILLS, "n2d-image", "scripts", "image_qc.py")
+        spec = importlib.util.spec_from_file_location("n2d_image_qc_for_dashboard", script)
+        if spec is None or spec.loader is None:
+            return None, f"无法加载 image_qc.py：{script}"
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        findings = mod.to_findings(payload)  # type: ignore[attr-defined]
+        if not isinstance(findings, list):
+            return None, "既有 image_qc 报告转换结果不是 findings list"
+        return [f for f in findings if isinstance(f, dict)], None
+    except Exception as exc:
+        return None, f"读取既有 image_qc 报告失败：{type(exc).__name__}: {exc}"
+
+
 def run_image_qc_findings(root: str, episode: str, *, fail_closed: bool) -> List[Dict[str, Any]]:
+    report_findings, report_error = image_qc_report_findings(root, episode)
+    if report_findings is not None:
+        return report_findings
+    if report_error:
+        return [image_qc_failure_finding(root, episode, report_error)] if fail_closed else []
     script = os.path.join(REPO_SKILLS, "n2d-image", "scripts", "image_qc.py")
     if not os.path.isfile(script):
         return [image_qc_failure_finding(root, episode, f"脚本缺失：{script}")] if fail_closed else []
@@ -1577,6 +1623,103 @@ def cmd_forecast(ns: argparse.Namespace) -> int:
     return 0
 
 
+def _ident_ep_num(name: str) -> int:
+    digits = "".join(c for c in str(name) if c.isdigit())
+    return int(digits) if digits else 0
+
+
+def identity_consistency_kpi(report: Dict[str, Any]) -> Dict[str, Any]:
+    """从 n2d-identity 的 identity_drift_report 滚出工作级「跨集角色一致性」KPI（纯函数·可测）。
+
+    不写死相似度阈值——显著漂移沿用报表里**自标定 flag-band** 产出的 warn/block；趋势=该角色 mean_score
+    按集号首→末是否下降。软门：有 block 级漂移 / ≥2 集 warn / mean_score 趋势下降 → degrade=True
+    （advisory，让"第几集开始系统性退化"可被监控，**不阻断生产**）。"""
+    chars = report.get("characters") or {}
+    rows: List[Dict[str, Any]] = []
+    earliest_bad: Optional[Tuple[int, str]] = None
+    for name, info in sorted(chars.items()):
+        if not isinstance(info, dict):
+            continue
+        eps = info.get("episodes") or {}
+        total_block = int(info.get("total_block") or 0)
+        total_warn = int(info.get("total_warn") or 0)
+        first_bad = str(info.get("first_bad_episode") or "").strip()
+        bad_ep_count = sum(1 for e in eps.values()
+                           if isinstance(e, dict) and ((e.get("warn") or 0) or (e.get("block") or 0)))
+        scored = sorted((_ident_ep_num(ep), e.get("mean_score")) for ep, e in eps.items()
+                        if isinstance(e, dict) and e.get("mean_score") is not None)
+        trend = None
+        if len(scored) >= 2:
+            first_s, last_s = scored[0][1], scored[-1][1]
+            trend = {"first": first_s, "last": last_s, "declining": float(last_s) < float(first_s)}
+        significant = (total_block > 0 or bad_ep_count >= 2 or first_bad != ""
+                       or bool(trend and trend["declining"]))
+        if significant and first_bad:
+            n = _ident_ep_num(first_bad)
+            if n and (earliest_bad is None or n < earliest_bad[0]):
+                earliest_bad = (n, first_bad)
+        rows.append({"character": name, "first_bad_episode": first_bad,
+                     "total_block": total_block, "total_warn": total_warn,
+                     "bad_episode_count": bad_ep_count, "trend": trend, "significant": significant})
+    drifting = [r for r in rows if r["significant"]]
+    return {
+        "available": bool(report.get("available", True)) and bool(chars),
+        "characters_tracked": len(rows),
+        "characters_drifting": len(drifting),
+        "earliest_systemic_episode": (earliest_bad[1] if earliest_bad else ""),
+        "degrade": bool(drifting),
+        "rows": rows,
+    }
+
+
+def cmd_identity(ns: argparse.Namespace) -> int:
+    root = ns.root
+    path = os.path.join(root, "生产数据", "identity_drift_report.json")
+    if not os.path.isfile(path):
+        note = ("缺 生产数据/identity_drift_report.json —— 先跑 "
+                "`python3 skills/n2d-identity/scripts/identity.py <作品根> --episodes 1-N --write`。")
+        if ns.json:
+            print(json.dumps({"kind": "n2d_identity_kpi", "available": False, "note": note},
+                             ensure_ascii=False, indent=2))
+        else:
+            print(f"=== 跨集角色一致性 KPI：{root} ===\n  · {note}")
+        return 0
+    try:
+        report = json.loads(open(path, encoding="utf-8").read())
+    except Exception as exc:  # noqa: BLE001
+        print(f"⛔ 无法解析 {path}：{exc}")
+        return 1
+    kpi = identity_consistency_kpi(report)
+    kpi["kind"] = "n2d_identity_kpi"
+    kpi["root"] = root
+    if ns.json:
+        print(json.dumps(kpi, ensure_ascii=False, indent=2))
+        return 0
+    print(f"=== 跨集角色一致性 KPI：{root} ===")
+    if not kpi["available"]:
+        print("  · 漂移报表无可用角色数据（available=false 或无角色）——先跑 n2d-identity 落档。")
+        return 0
+    flag = "⚠️ 有系统性退化" if kpi["degrade"] else "✅ 跨集稳定"
+    line = f"追踪角色 {kpi['characters_tracked']} · 漂移角色 {kpi['characters_drifting']} → {flag}"
+    if kpi["earliest_systemic_episode"]:
+        line += f"；系统性退化最早自 {kpi['earliest_systemic_episode']}"
+    print(line)
+    for r in kpi["rows"]:
+        if not r["significant"]:
+            continue
+        t = r["trend"]
+        trend_s = ""
+        if t and t.get("first") is not None and t.get("last") is not None:
+            arrow = "↓" if t.get("declining") else "→"
+            trend_s = f"，相似度 {float(t['first']):.2f}{arrow}{float(t['last']):.2f}"
+        bad = f"，首崩 {r['first_bad_episode']}" if r["first_bad_episode"] else ""
+        print(f"  · {r['character']}：block×{r['total_block']} warn×{r['total_warn']}{bad}{trend_s}")
+    if kpi["degrade"]:
+        print("  → 软门建议：核心角色跨集退化——回 n2d-image 升原生主体/主体库或 LoRA"
+              "（见 n2d/references/模型矩阵.md 一致性梯子），按 first_bad_episode 起重出受影响镜头。")
+    return 0
+
+
 def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description="n2d production data dashboard")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -1646,6 +1789,11 @@ def parser() -> argparse.ArgumentParser:
     forecast_cmd.add_argument("--unit", default="CNY", help="预算货币单位（默认 CNY，须与 record 的 cost.unit 一致）")
     forecast_cmd.add_argument("--json", action="store_true")
     forecast_cmd.set_defaults(func=cmd_forecast)
+
+    identity_cmd = sub.add_parser("identity", help="跨集角色一致性 KPI：读 identity_drift_report，汇报漂移角色/系统性退化起点/相似度趋势 + 软门告警")
+    identity_cmd.add_argument("root")
+    identity_cmd.add_argument("--json", action="store_true")
+    identity_cmd.set_defaults(func=cmd_identity)
 
     return ap
 

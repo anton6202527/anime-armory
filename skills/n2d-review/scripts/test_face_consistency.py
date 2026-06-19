@@ -144,7 +144,51 @@ def test_discover_costume_sets_uses_identity_registry_filter(tmp_path):
 
     sets = fc.discover_costume_sets(str(root))
     assert sorted(sets) == ["小妖A_覆鳞宫女", "沈念_常态"]
-    assert sorted(sets["沈念_常态"]) == ["主", "侧"]
+    assert sorted(sets["沈念_常态"]) == ["主", "侧", "脸部特写"]
+
+
+def test_discover_costume_sets_reads_registry_45_and_face_anchor(tmp_path):
+    import json
+    import face_consistency as fc
+
+    root = tmp_path
+    img_dir = root / "出图" / "共享" / "图片"
+    img_dir.mkdir(parents=True)
+    for name in [
+        "定妆_沈念_常态.png",
+        "定妆_沈念_常态_45度.png",
+        "定妆_沈念_常态_脸部特写.png",
+    ]:
+        (img_dir / name).write_bytes(b"png")
+    (root / "出图" / "共享" / "identity_registry.json").write_text(
+        json.dumps(
+            {
+                "characters": [
+                    {
+                        "id": "CHAR_01",
+                        "forms": [
+                            {
+                                "form": "常态",
+                                "asset_key": "沈念_常态",
+                                "reference_group": {
+                                    "front": "出图/共享/图片/定妆_沈念_常态.png",
+                                    "three_quarter": "出图/共享/图片/定妆_沈念_常态_45度.png",
+                                    "face_anchor_refs": [
+                                        {"path": "出图/共享/图片/定妆_沈念_常态_脸部特写.png"}
+                                    ],
+                                },
+                            }
+                        ],
+                    }
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    sets = fc.discover_costume_sets(str(root))
+    assert sorted(sets["沈念_常态"]) == ["45度", "主", "脸部特写"]
 
 
 def test_severity_order():
@@ -252,6 +296,65 @@ def test_shot_character_map_prefers_identity_layer_over_background_refs(tmp_path
     )
 
     assert fc.shot_character_map(str(root), ep)["图片/Clip_18_铜镜金瞳.png"] == ["沈念_觉醒态"]
+
+
+def test_shot_character_map_uses_storyboard_targets_when_prompt_has_no_target_line(tmp_path):
+    import json
+    import face_consistency as fc
+
+    root = tmp_path
+    ep = "第1集"
+    prompt_dir = root / "出图" / ep / "prompt"
+    prompt_dir.mkdir(parents=True)
+    script_dir = root / "脚本" / ep
+    script_dir.mkdir(parents=True)
+    reg_dir = root / "出图" / "共享"
+    reg_dir.mkdir(parents=True)
+    (reg_dir / "identity_registry.json").write_text(
+        json.dumps(
+            {
+                "characters": [
+                    {"id": "CHAR_01", "forms": [{"form": "常态", "asset_key": "沈念_常态"}]},
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    (script_dir / "storyboard.json").write_text(
+        json.dumps(
+            {
+                "clips": [
+                    {
+                        "id": "EP01_CLIP01",
+                        "firstframe_png": "出图/第1集/图片/Clip_01_毒酒抵唇.png",
+                        "continuity": {
+                            "midframe": {"midframe_png": "出图/第1集/图片/Clip_01_毒酒抵唇_mid.png"},
+                            "endframe_png": "出图/第1集/图片/Clip_01_毒酒抵唇_end.png",
+                        },
+                    }
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    (prompt_dir / "01_分镜出图.md").write_text(
+        "\n".join(
+            [
+                "## 镜头 1（EP01_CLIP01 毒酒抵唇）",
+                "参考图：`出图/共享/图片/定妆_沈念_常态.png`",
+                "**资产身份注册层**：`CHAR_01/常态*`；不得纯文生图。",
+                "**中段锚帧生成方式**：`Clip_01_毒酒抵唇_mid.png` 以首帧为母图。",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    shot_map = fc.shot_character_map(str(root), ep)
+    assert shot_map["图片/Clip_01_毒酒抵唇.png"] == ["沈念_常态"]
+    assert shot_map["图片/Clip_01_毒酒抵唇_mid.png"] == ["沈念_常态"]
+    assert shot_map["图片/Clip_01_毒酒抵唇_end.png"] == ["沈念_常态"]
 
 
 def test_shot_character_map_uses_starred_primary_identity(tmp_path):

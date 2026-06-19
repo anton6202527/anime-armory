@@ -39,6 +39,7 @@ description: 横切模型适配层：在 n2d 出视频前，按镜头类型/专�
   - `python3 scripts/motion_control.py <作品根> 第N集 check` —— 对照磁盘：文件已就位的 input 客观翻 `ready`（**不**自动翻顶层 status——`contact_points/occlusion_order/body_part_ownership` 语义要人确认后手改 ready），报告 gate 会不会过。
   - `python3 scripts/motion_control.py <作品根> 第N集 generate [--clip ...]` —— 可选：装 `controlnet_aux`(DWPose)/depth 库时从首/尾帧抽 pose/depth 种子帧；缺库优雅跳过、显式标，`instance_masks/contact_map` 始终留人工（需 SAM+人定接触点）。
   - 输出形状与 gate `check_motion_control_manifest` 单一真值源对齐（已交叉验证：planned 阻断 / 填齐 ready 放行 / degrade_only+plan 放行）。
+- **T2V 原生动作通道 (Mid-term Upgrade · 解锁物理引擎)**：对于标记为 `fight_exchange`（打斗）、`chase`（追逐）等高动量/复杂物理镜头，若 `_设置.md` 开启了 `T2V动作通道=开启`，路由将优先切换至 `mode=text2video`。**收益**：解除武打戏对静态首帧起幅的强物理约束，让 Sora 2 / Veo 3 等模型的原生物理引擎从头演算动量与物理反馈，彻底告别“幻灯片微动”感。**执行**：路由至 T2V 时，`n2d-image` 将跳过首帧生成（或仅作为参考）；`n2d-video` 闸门将自动豁免 `firstframe_png` 存在性校验。
 - **mouth_visible 自动预填**：`scripts/mouth_detect.py <作品根> 第N集` 为每 Clip 预填/复核 `mouth_visible`（决定原生音画 opt-in 与是否要口型同步）。文本端复用 `clip_has_mouth_visible`（单一真值源），图像端装 insightface 时从首帧 PNG 用 106 关键点判正脸+嘴可见（缺库优雅回退文本端、标 `image=unknown`，绝不臆造）。图↔文本/图↔prompt 不一致标 warn（以图为准），省得逐镜手判后还填错原生音画策略。
 - **三条音画路线，按 `制作模式` + `对口型` 选（避免被代差绕过）**：
   - **`配音先行`（强配音控制模式）**：说话镜由配音链路控制，**不让视频模型生成台词**；只有空镜/远景/无口型低风险镜头可 opt-in 原生环境声/音效（`ambience/native_sfx`）。
@@ -48,6 +49,7 @@ description: 横切模型适配层：在 n2d 出视频前，按镜头类型/专�
 - **接力镜 → 双关键帧（seam_relay，2026 起一等公民）**：接力/无缝镜（`continuity.need_endframe=true` 或 transition∈接力/relay/seamless）路由会带 `seam_relay` 子表。`backend_supports_dual_keyframe`（首尾硬约束插值：即梦 multiframe / 可灵 O3 的 `first_last_frame|native_multiframe`）的后端做 primary → `seam_guaranteed=true`：把上一镜尾帧作本镜首帧**硬约束**插值，接缝结构保证、且**边界帧两镜复用省一次出图**；primary 不支持则从 fallback 挑一个支持的（`dual_keyframe_fallback`）并在 rationale 里提示改用它。注意这是**预防侧**——落档侧 `temporal_consistency` 接缝机检照常 block（双关键帧镜接缝仍漂=后端没真消费尾帧/被拆段，是真故障，不因「声明了」就放过）。
 - **QC 失败自动升锁（E4·闭环）**：`route_episode` 开跑先读 `生产数据/production_events.jsonl`，按 clip 聚合**本集 identity 失败次数**（redraw status=fail / qa_gate block 且原因命中脸/身份关键词）。某镜 ≥2 次 → `escalate_identity_for_failures` 自动升锁：`identity_requirement=native_identity_lock_required` + `risk_flag=identity_escalated`，primary 无原生身份锁(Character ID/Face Lock)时换成有的后端（**固定后端模式只收紧 requirement + 提示手动换厂/补 ref/拆镜，绝不擅自换厂**）。把"反复崩脸还路由到同一弱锁后端白烧"的静态盲点闭环。
 - **失败可回滚**：每条路由都写 fallback 和 degrade plan，让 n2d-batch 只重跑受影响 Clip。
+- **空间复杂镜 → 评估世界模型类后端（spatial-heavy·新兴能力·防过期）**：同场景多镜需 **3D 空间一致 + 道具恒存**的镜——长连续运镜、绕物/环绕运镜、可探索环境、镜头穿越空间——纯 2D 视频后端易出空间漂移与道具凭空增减。命中这类镜时，在 fallback/rationale 里**提示评估世界模型类能力后端**（采集 2026-06-19：Kling 3.0 原生多镜+主体锁、Genie 3 类、NVIDIA Cosmos、Marble，原生维护 4D 空间与 object permanence）。**这类后端仍新兴、未必接入 n2d 渠道**：先作 primary 候选**评估**、不擅自硬切，落地前以 `n2d-video/references/platforms.md` 官方能力档案复核（与模型矩阵「二、视频」同源）。判定走能力档案，不 hardcode 厂商名。
 
 ## 工作流
 
@@ -106,7 +108,7 @@ python3 skills/n2d-model-router/scripts/router.py <作品根> 第2集 --write
 
 锚定时若本集某 clip 的自然路由与基线不符，会在 `video_model_routes.json.baseline_drift` 留痕，并由 video gate 出一条「后端跨集锁」WARN 提示复核（基线胜，原后端进 fallback）。
 
-**③ 一角一后端亲和（advisory·warn-only）**：基线按 `shot_type` 锁后端，但同一**核心角色**若跨镜被不同 shot_type 路由到不同后端，脸质感会漂。router 读 `identity_registry`，对**已注册原生视频主体**（Character ID / face_lock，status registered/ready）的角色，逐镜对账"该角色原生主体后端 vs 本镜 primary"——不符则在该 route 写 `character_backend_conflicts` + risk_flag `character_backend_conflict`，并由 video gate 出「一角一后端」WARN。**裁决=仅告警不改路由**（拆正反打让该角色单独走其原生后端 / 本镜改走该后端 / 人工确认）。没注册原生主体的角色零告警（避免噪音）。
+**③ 一角一后端亲和（核心硬钉）**：基线按 `shot_type` 锁后端，但同一**核心角色**若跨镜被不同 shot_type 路由到不同后端，脸质感会漂。router 读 `identity_registry`，对**已注册原生视频主体**（Character ID / face_lock，status registered/ready）的角色，逐镜对账"该角色原生主体后端 vs 本镜 primary"。核心/主演角色冲突时，router 会把本镜 `primary_backend` **硬钉**到该角色的原生主体后端，原 primary 降为 fallback，并在 rationale 留痕；若同镜多个原生主体无法同时满足，则保留 `character_backend_conflicts` + risk_flag `character_backend_conflict`，video gate 出「一角一后端」WARN，要求拆正反打/分区。没注册原生主体的角色零告警（避免噪音）。
 
 ### 4. 接入 n2d-video
 

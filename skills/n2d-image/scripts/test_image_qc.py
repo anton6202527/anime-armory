@@ -229,6 +229,18 @@ def test_lint_passes_tail_identity_handoff_with_target_reference() -> None:
     assert not any(f["code"].startswith("tail_identity_handoff_") for f in findings)
 
 
+def test_lint_skips_tail_identity_handoff_for_final_no_tail_frame() -> None:
+    valid = {"CHAR_01", "CHAR_01/觉醒态", "CHAR_03", "CHAR_03/人皮态", "CHAR_03/真容态"}
+    blk = _char_block("Clip 15 集尾", char_id="CHAR_01/觉醒态")
+    blk["body"] += (
+        "\n**剧本描述**：沈念看着地上空宫装与污水，意识到柳娘子是妖。"
+        "\n**尾帧接力生成方式**：无（最终镜，无尾帧）"
+        "\n**尾帧专用重抽提示**：无"
+    )
+    findings = image_qc.lint_shot_block(blk, valid, _registry_forms_for_tail_handoff())
+    assert not any(f["code"].startswith("tail_identity_handoff_") for f in findings)
+
+
 def test_lint_blocks_outfit_form_mismatch_for_single_character_shot() -> None:
     valid = {"CHAR_01", "CHAR_01/觉醒态", "CHAR_01/红衣觉醒态"}
     forms = [
@@ -388,7 +400,7 @@ def test_lint_no_expression_gate_when_neutral_closeup() -> None:
 
 def test_lint_expression_gate_skips_non_character_shot() -> None:
     # 空镜即便写了近景+情绪词也不触发（非角色镜先被 is_char_shot 挡掉）
-    blk = {"label": "Clip 44 空镜", "body": "**景别**：ECU 特写\n残烛痛苦地摇曳，无人物。"}
+    blk = {"label": "Clip 44 空镜", "body": "**景别**：ECU 特写，135mm\n残烛痛苦地摇曳，无人物。"}
     assert image_qc.lint_shot_block(blk, {"CHAR_01"}) == []
 
 
@@ -1015,6 +1027,53 @@ def test_to_findings_reports_unavailable_visual_checks() -> None:
     assert any(f["dim"] == "scene_consistency" and "未执行" in f["msg"] for f in fnds)
 
 
+def test_to_findings_blocks_precision_none() -> None:
+    payload = {
+        "qc_environment": {"precision_level": "none"},
+        "checks": {},
+        "lint": {"findings": []},
+    }
+    fnds = image_qc.to_findings(payload)
+    assert any(f["sev"] == "block" and f["dim"] == "image_qc_precision" for f in fnds)
+
+
+def test_to_findings_warns_precision_degraded() -> None:
+    payload = {
+        "qc_environment": {"precision_level": "degraded"},
+        "checks": {},
+        "lint": {"findings": []},
+    }
+    fnds = image_qc.to_findings(payload)
+    assert any(f["sev"] == "warn" and f["dim"] == "image_qc_precision" for f in fnds)
+
+
+def test_to_findings_blocks_semantic_embedding_missing_for_registered_assets() -> None:
+    payload = {
+        "semantic_drift": {"available": False, "notes": ["missing"], "findings": []},
+        "checks": {"multimodal": {"shots": [
+            {"png": "图片/Clip_01.png", "asset": "PROP_01", "verdict": "ok"},
+        ]}},
+        "lint": {"findings": []},
+    }
+    fnds = image_qc.to_findings(payload)
+    assert any(f["sev"] == "block" and f["dim"] == "asset_consistency" for f in fnds)
+    assert image_qc.summarize(payload)["verdict"] == "block"
+
+
+def test_to_findings_blocks_high_cross_episode_face_drift() -> None:
+    payload = {
+        "cross_episode_face_drift": {"entries": [
+            {"char": "CHAR_01", "episode_from": "第1集", "episode_to": "第3集",
+             "from_mean": 0.82, "to_mean": 0.60, "drop": 0.22, "severity": "high"},
+        ]},
+        "checks": {},
+        "lint": {"findings": []},
+    }
+    fnds = image_qc.to_findings(payload)
+    assert any(f["sev"] == "block" and f["dim"] == "character_consistency" for f in fnds)
+    assert image_qc.summarize(payload)["verdict"] == "block"
+
+
 def test_to_findings_empty_when_clean() -> None:
     payload = {"checks": {"face": {"shots": [{"png": "a.png", "verdict": "ok"}]}},
                "lint": {"findings": []}}
@@ -1151,6 +1210,89 @@ def test_native_multiref_ok_when_enough_or_no_group():
     assert image_qc._lint_native_multiref_coverage("镜头1", "`定妆_沈念.png`", ["CHAR_01"], {"CHAR_01": 1}) == []
     # 无 form_ref_counts → 不提
     assert image_qc._lint_native_multiref_coverage("镜头1", "`定妆_沈念.png`", ["CHAR_01"], None) == []
+
+
+def test_weak_face_anchor_reason_thresholds():
+    # 脸太小 + 低分辨率 → 两条原因
+    r = image_qc.weak_face_anchor_reason(0.05, 512)
+    assert r and "脸占画面" in r and "裁切短边" in r
+    # 脸占比够、分辨率够 → None
+    assert image_qc.weak_face_anchor_reason(0.4, 1024) is None
+    # 检测器漏检（ratio=None）→ 只按分辨率判
+    assert "裁切短边" in (image_qc.weak_face_anchor_reason(None, 600) or "")
+    assert image_qc.weak_face_anchor_reason(None, 1200) is None
+    # 两者皆 None → 不报
+    assert image_qc.weak_face_anchor_reason(None, None) is None
+
+
+def test_face_anchor_ref_items_collects_only_tight_crops():
+    form = {
+        "reference_group": {
+            "front": "出图/共享/图片/定妆_沈念.png",          # 宽身位主参考——不该被收
+            "face_anchor_refs": ["出图/共享/图片/定妆_沈念_脸部特写.png"],
+        },
+        "reference_atlas": {
+            "expression_refs": [{"emotion": "怒", "path": "出图/共享/图片/表情_沈念_怒.png"}],
+        },
+    }
+    items = image_qc._face_anchor_ref_items(form)
+    paths = {p for _, p in items}
+    assert "出图/共享/图片/定妆_沈念_脸部特写.png" in paths
+    assert "出图/共享/图片/表情_沈念_怒.png" in paths
+    assert "出图/共享/图片/定妆_沈念.png" not in paths  # 宽身位主参考不收
+
+
+def test_audit_face_anchor_quality_flags_low_res(tmp_path):
+    import pytest
+    Image = pytest.importorskip("PIL.Image", reason="Pillow 装在 facefusion conda env，系统 Python 无")
+    root = tmp_path / "剧"
+    img_dir = root / "出图" / "共享" / "图片"
+    img_dir.mkdir(parents=True)
+    # 故意低分辨率（短边 320 < 768）的脸部特写
+    Image.new("RGB", (320, 480), (128, 128, 128)).save(img_dir / "定妆_沈念_脸部特写.png")
+    (root / "出图" / "共享" / "identity_registry.json").write_text(json.dumps({
+        "characters": [{"id": "CHAR_01", "name": "沈念", "forms": [{
+            "form": "常态",
+            "reference_group": {"face_anchor_refs": ["出图/共享/图片/定妆_沈念_脸部特写.png"]},
+        }]}]
+    }, ensure_ascii=False), encoding="utf-8")
+    res = image_qc.audit_face_anchor_quality(root, "第1集")
+    assert res["available"] and res["checked"] == 1
+    codes = {f["code"] for f in res["findings"]}
+    assert "weak_face_anchor" in codes
+    assert any("裁切短边" in f["msg"] for f in res["findings"])
+
+
+def test_audit_face_anchor_quality_blocks_core_low_res(tmp_path):
+    import pytest
+    Image = pytest.importorskip("PIL.Image", reason="Pillow 装在 facefusion conda env，系统 Python 无")
+    root = tmp_path / "剧"
+    img_dir = root / "出图" / "共享" / "图片"
+    img_dir.mkdir(parents=True)
+    Image.new("RGB", (320, 480), (128, 128, 128)).save(img_dir / "定妆_沈念_脸部特写.png")
+    (root / "出图" / "共享" / "identity_registry.json").write_text(json.dumps({
+        "characters": [{"id": "CHAR_01", "name": "沈念", "scope": "长线女主·全篇", "forms": [{
+            "form": "常态",
+            "reference_group": {"face_anchor_refs": ["出图/共享/图片/定妆_沈念_脸部特写.png"]},
+        }]}]
+    }, ensure_ascii=False), encoding="utf-8")
+    res = image_qc.audit_face_anchor_quality(root, "第1集")
+    assert any(f["level"] == "block" and f["code"] == "weak_face_anchor_core" for f in res["findings"])
+    payload = {"checks": {}, "lint": {"findings": res["findings"]}}
+    assert image_qc.summarize(payload)["verdict"] == "block"
+
+
+def test_native_multiref_tiers_by_persistent_subject():
+    # ④ 持久主体后端（Seedream/可灵/Sora）：把「喂全组」换成「ID+单强锚」口径，不再误导堆图
+    body = "**参考图**：\n- `定妆_沈念.png`（正脸主参考）"
+    out = image_qc._lint_native_multiref_coverage("镜头1", body, ["CHAR_01/常态"], {"CHAR_01": 4},
+                                                  persistent_subject=True)
+    assert len(out) == 1 and out[0]["code"] == "native_subject_anchor_ok" and out[0]["level"] == "info"
+    assert "单强锚" in out[0]["msg"]
+    # 多参考后端（persistent_subject=False/未知）→ 仍是喂全组的旧 nudge
+    out2 = image_qc._lint_native_multiref_coverage("镜头1", body, ["CHAR_01/常态"], {"CHAR_01": 4},
+                                                   persistent_subject=False)
+    assert out2[0]["code"] == "native_multiref_underfed"
 
 
 def test_registry_ref_counts_takes_max_per_char():

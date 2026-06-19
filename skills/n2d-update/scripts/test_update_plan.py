@@ -822,3 +822,104 @@ def test_build_plan_surfaces_contract_block(tmp_path):
     assert any("契约继承存在 block" in n for n in plan["notes"])
     md = up.render_markdown(plan)
     assert "契约继承" in md
+
+
+def test_contract_inheritance_freshness(tmp_path):
+    from skill_snapshot import artifact_fingerprint
+    root = make_project(tmp_path)
+    p = root / "出图" / "第1集" / "prompt"
+    p.mkdir(parents=True)
+    (p / "00_总览.md").write_text("contract v1", encoding="utf-8")
+    rel = "出图/第1集/prompt/00_总览.md"
+    fp = artifact_fingerprint(str(root), [rel])
+    base = {
+        "summary": {"pass": 1, "warn": 0, "block": 0}, "fields": [],
+        "identity_handoff": {"findings": []}, "asset_handoff": {"findings": []},
+        "verdict": "pass",
+    }
+    _write_contract_report(root, "第1集", {**base, "inputs_fingerprint": fp})
+    assert up.check_contract_inheritance(str(root), "第1集")["freshness"] == "fresh"
+    # 输入被后续 prompt 重生成 → stale
+    (p / "00_总览.md").write_text("contract v2 — 出图改写过", encoding="utf-8")
+    assert up.check_contract_inheritance(str(root), "第1集")["freshness"] == "stale"
+    # 旧版报告无指纹 → unknown
+    _write_contract_report(root, "第1集", base)
+    assert up.check_contract_inheritance(str(root), "第1集")["freshness"] == "unknown"
+
+
+def test_build_plan_surfaces_stale_contract(tmp_path):
+    from skill_snapshot import artifact_fingerprint
+    root = _project_at_video_prompt(tmp_path)
+    p = root / "出图" / "第1集" / "prompt"
+    p.mkdir(parents=True)
+    (p / "00_总览.md").write_text("v1", encoding="utf-8")
+    fp = artifact_fingerprint(str(root), ["出图/第1集/prompt/00_总览.md"])
+    _write_contract_report(root, "第1集", {
+        "summary": {"pass": 1, "warn": 0, "block": 0}, "fields": [],
+        "identity_handoff": {"findings": []}, "asset_handoff": {"findings": []},
+        "verdict": "pass", "inputs_fingerprint": fp,
+    })
+    (p / "00_总览.md").write_text("v2 — 报告生成后又改了", encoding="utf-8")
+    plan = up.build_plan(str(root), "第1集")
+    assert plan["contract_inheritance"]["freshness"] == "stale"
+    assert any("契约继承报告已过期" in n for n in plan["notes"])
+
+
+def test_image_qc_freshness_stale_and_unknown(tmp_path):
+    from skill_snapshot import artifact_fingerprint
+    root = make_project(tmp_path)
+    img = root / "出图" / "第1集"
+    img.mkdir(parents=True)
+    (img / "Clip001.png").write_text("PNGDATA-v1", encoding="utf-8")
+    rel = "出图/第1集/Clip001.png"
+    fp = artifact_fingerprint(str(root), [rel])
+    qc_dir = root / "生产数据" / "image_qc" / "第1集"
+    qc_dir.mkdir(parents=True)
+    report = {
+        "qc_environment": {"precision_level": "full", "python": "/env/bin/python",
+                           "recommended_install": "", "jump_to_stage": None},
+        "summary": {"verdict": "ok", "hard_blocks": 0, "advisory": 0, "degraded": False},
+        "checks": {"face": {"shots": [{"png": rel, "verdict": "ok"}]}},
+        "inputs_fingerprint": fp,
+    }
+    (qc_dir / "image_qc_第1集.json").write_text(json.dumps(report, ensure_ascii=False), encoding="utf-8")
+    assert up.load_image_qc_context(str(root), "第1集")["freshness"] == "fresh"
+    # 图片被重出 → stale
+    (img / "Clip001.png").write_text("PNGDATA-v2-regenerated", encoding="utf-8")
+    ctx = up.load_image_qc_context(str(root), "第1集")
+    assert ctx["freshness"] == "stale"
+    assert up.summarize_image_consistency(ctx)["freshness"] == "stale"
+    # 无指纹 → unknown
+    report.pop("inputs_fingerprint")
+    (qc_dir / "image_qc_第1集.json").write_text(json.dumps(report, ensure_ascii=False), encoding="utf-8")
+    assert up.load_image_qc_context(str(root), "第1集")["freshness"] == "unknown"
+
+
+def test_check_auto_bootstraps_baseline(tmp_path, capsys):
+    # 无基线时 check 自动建立临时基线，不再死胡同 needs_record。
+    root = make_project(tmp_path)
+    assert up.load_snapshot(str(root)) is None
+    rc = up.main(["check", str(root), "第1集", "--json"])
+    assert rc == 0
+    out = json.loads(capsys.readouterr().out)
+    assert out["baseline_bootstrapped"] is True
+    assert out["needs_record"] is False
+    assert out["rebuild_needed"] is False
+    assert any("临时基线" in n for n in out["notes"])
+    # 基线已落盘且带 bootstrap 标记。
+    snap = up.load_snapshot(str(root))
+    assert snap is not None and snap.get("bootstrap") is True
+    # 正式 record 清除临时标记。
+    up.record(str(root), ["第1集"])
+    assert up.load_snapshot(str(root)).get("bootstrap") is None
+    assert up.build_plan(str(root), "第1集")["baseline_bootstrapped"] is False
+
+
+def test_check_no_bootstrap_keeps_needs_record(tmp_path, capsys):
+    root = make_project(tmp_path)
+    rc = up.main(["check", str(root), "第1集", "--json", "--no-bootstrap"])
+    assert rc == 0
+    out = json.loads(capsys.readouterr().out)
+    assert out["needs_record"] is True
+    assert out["baseline_bootstrapped"] is False
+    assert up.load_snapshot(str(root)) is None  # 未写基线

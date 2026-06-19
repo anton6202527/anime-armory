@@ -88,5 +88,30 @@ class ComposeSongTest(unittest.TestCase):
             self.assertEqual(take["notes"], "副歌最稳")
 
 
+import importlib.util
+import types
+
+_spec = importlib.util.spec_from_file_location("compose_song", COMPOSE)
+compose_song = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(compose_song)
+
+
+class MakeStyleTest(unittest.TestCase):
+    def _args(self):
+        return types.SimpleNamespace(style=None, bpm=None, key=None, language=None)
+
+    def test_make_style_includes_instrumentation_and_vocal(self):
+        meta = {"genre": "流行", "mood": "燃", "instrumentation": "piano and strings",
+                "vocal_type": "female vocals", "theme": "少年下山"}
+        s = compose_song.make_style(meta, {}, self._args())
+        self.assertIn("piano and strings", s)
+        self.assertIn("female vocals", s)
+
+    def test_make_style_skips_absent_fields(self):
+        # 缺器乐/人声字段时跳过，不塞空（向后兼容旧 meta）
+        s = compose_song.make_style({"genre": "流行"}, {}, self._args())
+        self.assertEqual(s, "流行")
+
+
 if __name__ == "__main__":
     unittest.main()

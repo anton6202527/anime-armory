@@ -53,7 +53,7 @@ _CORE_SCOPE_RE = re.compile(r"全篇|全程|长线|核心|主角|女主|男主|�
 # 参考角色 → 默认 image2image 强度建议（对齐现有 01_分镜出图.md 写法）。
 STRENGTH = {
     "front": 0.8, "expression": 0.6, "side": 0.55, "back": 0.5,
-    "outfit": 0.5, "turnaround": 0.5, "scene_light": 0.45,
+    "three_quarter": 0.65, "face_anchor": 0.7, "outfit": 0.5, "turnaround": 0.5, "scene_light": 0.45,
 }
 
 
@@ -91,6 +91,44 @@ def _expr_paths(reference_group: Mapping[str, Any]) -> List[str]:
     return out
 
 
+def _ref_item_path(item: object, *, require_ready: bool = False) -> str:
+    """路径项兼容字符串或 {path,status}；require_ready 时 planned 不当成可用参考。"""
+    if isinstance(item, str):
+        return item.strip()
+    if isinstance(item, dict):
+        if require_ready and str(item.get("status") or "").strip() != "ready":
+            return ""
+        return str(item.get("path") or "").strip()
+    return ""
+
+
+def _ref_list_paths(value: object, *, require_ready: bool = False) -> List[str]:
+    if not isinstance(value, list):
+        return []
+    return [p for p in (_ref_item_path(item, require_ready=require_ready) for item in value) if p]
+
+
+def _base_view_path(reference_atlas: Mapping[str, Any], key: str) -> str:
+    base = reference_atlas.get("base_views") if isinstance(reference_atlas, Mapping) else {}
+    if not isinstance(base, Mapping):
+        return ""
+    return _ref_item_path(base.get(key), require_ready=True)
+
+
+def _face_anchor_paths(reference_group: Mapping[str, Any], reference_atlas: Mapping[str, Any]) -> List[str]:
+    """基础脸锚：优先 face_anchor_refs；旧项目回退 expressions。"""
+    out: List[str] = []
+    out += _ref_list_paths((reference_group or {}).get("face_anchor_refs"), require_ready=False)
+    out += _ref_list_paths((reference_atlas or {}).get("face_anchor_refs"), require_ready=True)
+    seen = set()
+    uniq = []
+    for p in out:
+        if p not in seen:
+            uniq.append(p)
+            seen.add(p)
+    return uniq or _expr_paths(reference_group)
+
+
 def _is_emotion_bank(expr_paths: Sequence[str]) -> bool:
     """是否是真·情绪表情库（≥2 张或含情绪命名），而非只有一张中性脸部特写。"""
     if len(expr_paths) >= 2:
@@ -112,6 +150,7 @@ def plan_character_in_clip(
     tier: image_lock_tier → reference_group|multi_reference|native_unregistered|native_subject|lora。
     """
     rg = char.get("reference_group") or {}
+    atlas = char.get("reference_atlas") or {}
     ap = char.get("angle_policy") or {}
     cid, form = str(char.get("id") or ""), str(char.get("form") or "")
     label = str(profile.get("label") or profile.get("canonical") or "当前后端")
@@ -125,13 +164,24 @@ def plan_character_in_clip(
     controlnet: List[str] = []
 
     def add_ref(role: str, key: Optional[str] = None) -> None:
-        path = str(rg.get(key or role) or "").strip()
+        if role == "three_quarter":
+            path = _base_view_path(atlas, "three_quarter") or str(rg.get(key or role) or "").strip()
+        else:
+            path = str(rg.get(key or role) or "").strip()
         if path:
             refs.append({"role": role, "path": path, "strength_hint": STRENGTH.get(role, 0.5)})
 
-    # 身份主参考 + 服装体态锚（每镜底座）
+    # 身份核心集（每镜底座）：正面 + 45° + 基础脸锚 + 服装体态锚。
     add_ref("front")
+    add_ref("three_quarter")
+    face_anchor_paths = _face_anchor_paths(rg, atlas)
+    for p in face_anchor_paths[:1]:
+        refs.append({"role": "face_anchor", "path": p, "strength_hint": STRENGTH["face_anchor"]})
     add_ref("outfit")
+    if not _base_view_path(atlas, "three_quarter") and not str(rg.get("three_quarter") or "").strip():
+        missing.append("45°/three_quarter 基础角度参考（所有角色/形态强制 ready）")
+    if not face_anchor_paths:
+        missing.append("脸部特写基础锚（所有角色/形态强制 ready）")
 
     # 近景/大表情 → 表情库（治表情镜脸重画；与 image_qc no_expression_lib_ref 互补，前者 pre-gen 选）
     if closeup or strong_emotion:
@@ -165,10 +215,22 @@ def plan_character_in_clip(
     if multi and bool(profile.get("multi_reference")) and tier in {"reference_group", "multi_reference"}:
         controlnet = ["pose", "depth"]
 
-    # 按后端能力封顶参考张数
+    # 按后端能力封顶参考张数；预算溢出要显式写进 plan，不能静默吞参考。
+    requested_ref_count = len(refs)
+    dropped_refs: List[Dict[str, Any]] = []
     max_refs = profile.get("max_reference_images")
     if isinstance(max_refs, int) and max_refs > 0 and len(refs) > max_refs:
+        dropped_refs = refs[max_refs:]
         refs = refs[:max_refs]
+    reference_budget = {
+        "limit": max_refs if isinstance(max_refs, int) and max_refs > 0 else None,
+        "requested": requested_ref_count,
+        "selected": len(refs),
+        "dropped": len(dropped_refs),
+    }
+    if dropped_refs:
+        dropped_roles = "、".join(str(r.get("role") or "?") for r in dropped_refs)
+        missing.append(f"参考预算溢出（后端上限 {max_refs} 张，已丢弃 {dropped_roles}）；请拆镜/升档/重选参考包")
 
     # 原生主体动作（治"板式"根因：注册时喂多样集而非单 sheet）
     native_action: Optional[str] = None
@@ -199,6 +261,8 @@ def plan_character_in_clip(
         "tier": tier,
         "variation_delta": deltas + (["multi_character"] if multi else []),
         "recommended_references": refs,
+        "reference_budget": reference_budget,
+        "dropped_references": dropped_refs,
         "controlnet": controlnet,
         "missing_references": missing,
         "native_subject_action": native_action,
@@ -508,6 +572,7 @@ def load_character_forms(root: Path) -> List[Dict[str, Any]]:
             "form": str(f.get("form") or "常态"),
             "asset_key": str(f.get("asset_key") or ""),
             "reference_group": f.get("reference_group") or {},
+            "reference_atlas": f.get("reference_atlas") or {},
             "angle_policy": f.get("angle_policy") or {},
             "image_adapters": (f.get("identity_adapters") or {}).get("image") or {},
             "character_dna": f.get("character_dna") or {},
@@ -622,6 +687,7 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
                                       parsed["shot_size"], parsed["expression_span"])
             cf = {"id": c["id"], "name": c["name"], "form": form.get("form"),
                   "reference_group": form.get("reference_group") or {},
+                  "reference_atlas": form.get("reference_atlas") or {},
                   "angle_policy": form.get("angle_policy") or {}}
             p = plan_character_in_clip(cf, deltas, multi, profile, tier, scope_is_core)
             char_plans.append(p)
@@ -737,17 +803,23 @@ def render_md(plan: Mapping[str, Any]) -> str:
             )
         lines.append("")
 
-    lines += ["## 逐镜处方", "", "| 镜头 | 角色/形态 | 档位 | 变化量 | 推荐参考 | 控制网 | 补拍缺口 | 升档 |",
-              "|---|---|---|---|---|---|---|---|"]
+    lines += ["## 逐镜处方", "", "| 镜头 | 角色/形态 | 档位 | 变化量 | 推荐参考 | 预算 | 控制网 | 补拍缺口 | 升档 |",
+              "|---|---|---|---|---|---|---|---|---|"]
     for clip in plan.get("clips") or []:
         for c in clip.get("characters") or []:
             refs = "<br>".join(f"{r['role']}({r['strength_hint']})" for r in c.get("recommended_references") or []) or "-"
+            budget = c.get("reference_budget") or {}
+            limit = budget.get("limit")
+            dropped = budget.get("dropped") or 0
+            budget_cell = f"{budget.get('selected', '-')}/{limit or '不限'}"
+            if dropped:
+                budget_cell += f"<br>丢弃{dropped}"
             cn = "、".join(c.get("controlnet") or []) or "-"
             miss = "<br>".join(c.get("missing_references") or []) or "-"
             esc = "✅需升档" if c.get("escalation") else "-"
             lines.append(
                 f"| {clip.get('clip_id')} | {c.get('char_id')}/{c.get('form')} | {c.get('tier')} "
-                f"| {'、'.join(c.get('variation_delta') or []) or '-'} | {refs} | {cn} | {miss} | {esc} |"
+                f"| {'、'.join(c.get('variation_delta') or []) or '-'} | {refs} | {budget_cell} | {cn} | {miss} | {esc} |"
             )
     lines.append("")
     actions = s.get("action_required") or []

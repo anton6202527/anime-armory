@@ -164,9 +164,21 @@ while IFS=$'\t' read -r c dur speed_mode; do
       fi
     fi
 
+    # [NEW] 动态色调匹配 (Color Match) - 缓解多模型混剪的色彩断层
+    COLOR_FILTER=""
+    if [ "${#CLIPS[@]}" -gt 1 ]; then
+      # 以第一条 Clip 为基准参考色调
+      REF_CLIP="${CLIPS[0]}"
+      C_MATCH=$(python3 "$SKILL_DIR/scripts/color_match.py" "$c" "$REF_CLIP" 2>/dev/null || echo "")
+      if [ -n "$C_MATCH" ]; then
+        COLOR_FILTER=",${C_MATCH}"
+        echo "  🎨 Color Match: $(basename "$c") 匹配基准色调"
+      fi
+    fi
+
     # 只在 compose 的规格化缓存中 -an；出视频目录里的 AI 原片保持不变。
     ffmpeg -y -loglevel error -i "$c" \
-      -vf "${SETPTS_OPT}scale=${PXW}:${PXH}:force_original_aspect_ratio=decrease,pad=${PXW}:${PXH}:(ow-iw)/2:(oh-ih)/2:black,fps=30,format=yuv420p" \
+      -vf "${SETPTS_OPT}scale=${PXW}:${PXH}:force_original_aspect_ratio=decrease,pad=${PXW}:${PXH}:(ow-iw)/2:(oh-ih)/2:black,fps=30${COLOR_FILTER},format=yuv420p" \
       $TRIM_OPT -c:v libx264 -preset "$VIDEO_PRESET" -crf "$VIDEO_CRF" -an "$nf.tmp.mp4" && mv "$nf.tmp.mp4" "$nf"
   else
     echo "  ♻ 复用规格化缓存 $(basename "$c") -> ${dur}s"
@@ -235,6 +247,14 @@ else
   ffmpeg -y -loglevel error -f lavfi -i "anullsrc=r=44100:cl=stereo" -t "$DUR" "$W/clip_audio.wav"
 fi
 
+echo "=== [3.5/6] V2A Foley 拟音 (Next Gen) ==="
+FOLEY_WAV="$W/foley_mix.wav"
+if python3 "$SKILL_DIR/scripts/foley_agent.py" "$ROOT" "$EP"; then
+  echo "  🔊 Foley SFX 已就绪"
+else
+  ffmpeg -y -loglevel error -f lavfi -i "anullsrc=r=44100:cl=stereo" -t "$DUR" "$FOLEY_WAV"
+fi
+
 echo "=== [4/6] 字幕 PNG ==="
 # 字幕可选：默认仅中文（finalize_storyboard 仅在有英文译文时才产 字幕_英文.srt），EN 缺失不算错。
 # 注意 set -e：缺文件时 cp 会整体中断合成，故每个 cp 先判存在。render_subs.parse_srt 对缺轨已容错。
@@ -242,37 +262,44 @@ echo "=== [4/6] 字幕 PNG ==="
 [ -f "$EN_SRT" ] && cp "$EN_SRT" "$W/en.srt" || true
 # 复制时长清单供字幕样式分级（旁白/系统→灰小字，爽点→暖金大字）；缺则字幕全 normal
 MANIFEST="$ROOT/合成/$EP/配音/时长清单.json"; [ -f "$MANIFEST" ] && cp "$MANIFEST" "$W/manifest.json" || true
-PNG_INPUT_BASE=3 SUB_W="$PXW" SUB_H="$PXH" python3 "$SKILL_DIR/render_subs.py" "$W" "$MODE"
+PNG_INPUT_BASE=4 SUB_W="$PXW" SUB_H="$PXH" python3 "$SKILL_DIR/render_subs.py" "$W" "$MODE"
 PNG_INPUTS=(); while IFS= read -r p; do PNG_INPUTS+=(-i "$p"); done < "$W/inputs.txt"
-NPNG=$(grep -c . "$W/inputs.txt"); VIDX=$((3+NPNG))
+NPNG=$(grep -c . "$W/inputs.txt"); VIDX=$((4+NPNG))
 VFILTER=$(cat "$W/vfilter.txt")
 
 echo "=== [5/6] 混音 + 烧字幕 ==="
 if [ -f "$VOICE" ]; then
-  ffmpeg -y -loglevel error -i "$W/concat.mp4" -i "$W/bgm.wav" -i "$W/clip_audio.wav" "${PNG_INPUTS[@]}" -i "$VOICE" \
+  ffmpeg -y -loglevel error -i "$W/concat.mp4" -i "$W/bgm.wav" -i "$W/clip_audio.wav" -i "$FOLEY_WAV" "${PNG_INPUTS[@]}" -i "$VOICE" \
     -filter_complex "
       [${VIDX}:a]asplit=2[voxA][voxB];
       [voxA]volume=1.0[vox];
       [1:a]${BGM_VOL_VOICE}[bgm0];
       [bgm0][voxB]sidechaincompress=threshold=${DUCK_THRESHOLD}:ratio=${DUCK_RATIO}:attack=${DUCK_ATTACK}:release=${DUCK_RELEASE}[bgmduck];
-      [2:a]volume=1.0[sfx];
-      [sfx][bgmduck][vox]amix=inputs=3:normalize=0:duration=first:dropout_transition=0,dynaudnorm[a];
+      [2:a]volume=1.0[clip_a];
+      [3:a]volume=1.0[foley];
+      [clip_a][foley][bgmduck][vox]amix=inputs=4:normalize=0:duration=first:dropout_transition=0,dynaudnorm[a];
       ${VFILTER}" \
     -map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p -c:a aac -b:a 192k -movflags +faststart "$OUT"
 elif [ "$NATIVE_AV_MODE" = "1" ] && [ "$NATIVE_AUDIO_MODE" != "discard" ]; then
   echo "（原生音画模式：使用 clip 原生音频作为侧链 ducking 源）"
-  ffmpeg -y -loglevel error -i "$W/concat.mp4" -i "$W/bgm.wav" -i "$W/clip_audio.wav" "${PNG_INPUTS[@]}" \
+  ffmpeg -y -loglevel error -i "$W/concat.mp4" -i "$W/bgm.wav" -i "$W/clip_audio.wav" -i "$FOLEY_WAV" "${PNG_INPUTS[@]}" \
     -filter_complex "
       [2:a]asplit=2[sfx][sfxB];
       [1:a]${BGM_VOL_VOICE}[bgm0];
       [bgm0][sfxB]sidechaincompress=threshold=${DUCK_THRESHOLD}:ratio=${DUCK_RATIO}:attack=${DUCK_ATTACK}:release=${DUCK_RELEASE}[bgmduck];
-      [sfx][bgmduck]amix=inputs=2:normalize=0:duration=first:dropout_transition=0,dynaudnorm[a];
+      [3:a]volume=1.0[foley];
+      [sfx][foley][bgmduck]amix=inputs=3:normalize=0:duration=first:dropout_transition=0,dynaudnorm[a];
       ${VFILTER}" \
     -map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p -c:a aac -b:a 192k -movflags +faststart "$OUT"
 else
   echo "（无配音轨，纯 BGM+音效底+字幕）"
-  ffmpeg -y -loglevel error -i "$W/concat.mp4" -i "$W/bgm.wav" -i "$W/clip_audio.wav" "${PNG_INPUTS[@]}" \
-    -filter_complex "[2:a]volume=1.0[sfx];[1:a]${BGM_VOL_NOVOICE}[bgm];[sfx][bgm]amix=inputs=2:duration=first:dropout_transition=0,dynaudnorm[a];${VFILTER}" \
+  ffmpeg -y -loglevel error -i "$W/concat.mp4" -i "$W/bgm.wav" -i "$W/clip_audio.wav" -i "$FOLEY_WAV" "${PNG_INPUTS[@]}" \
+    -filter_complex "
+      [2:a]volume=1.0[clip_a];
+      [3:a]volume=1.0[foley];
+      [1:a]${BGM_VOL_NOVOICE}[bgm];
+      [clip_a][foley][bgm]amix=inputs=3:duration=first:dropout_transition=0,dynaudnorm[a];
+      ${VFILTER}" \
     -map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p -c:a aac -b:a 192k -movflags +faststart "$OUT"
 fi
 

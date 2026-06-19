@@ -38,7 +38,7 @@ def is_native_av_mode(mode: Any) -> bool:
 
 def production_mode_keys() -> Tuple[str, ...]:
     """Return valid production mode keys in order."""
-    return ("配音先行", "先出视频后配音", "原生音画")
+    return ("原生音画", "配音先行", "先出视频后配音")
 
 def normalize_production_mode(value: Any) -> str:
     """Normalize a production mode value."""

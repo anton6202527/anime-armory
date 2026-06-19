@@ -24,12 +24,14 @@ description: 制漫剧(n2d) skill 更新影响扫描与重制计划器（含少�
 - **图片一致性**：从已有 `image_qc` 报告压出崩脸/服装/场景/接缝硬阻断摘要（`hard_blocks`/verdict），有硬阻断则提示重出受影响镜。
 - **出图→出视频契约继承**：到 `video_prompt` 阶段后，读 `n2d-video/inherit_contract.py` 的产物 `生产数据/contract_inheritance_第N集.json`，压出 verdict + 字段漂移/身份未锁/资产丢失计数——校验**参考帧契约**（色调/光位锚/轴线视线/角色状态演进/景别）与**文字 prompt** 是否从出图侧正确传到出视频侧、命名角色镜是否锁脸、出图绑定的场景/道具/特效资产是否丢失。本 skill 只读报告不自己跑机检（出视频前的契约门由 n2d-video 把）：已到 `video_prompt` 但**缺报告** → 提示先跑 `inherit_contract.py <作品根> 第N集` 取证；verdict=`block` → 提示先按出图侧原文修 `出视频/prompt` 的视觉契约/身份锚点/物料绑定再出视频。
 
+**报告新鲜度（不信过期结论）**：image_qc 与 inherit_contract 报告都盖了 `inputs_fingerprint`（其判定所依据的 PNG/prompt/registry 文件内容快照，git-free SHA256）。`check` 重算同一组文件的指纹与报告里的比对，给出 `freshness`：`fresh`（输入未变）/ `stale`（报告生成后出图或 prompt 又被重生成，结论作废）/ `unknown`（旧版报告无指纹）。`stale`/`unknown` 时计划提示**先重跑对应 gate/机检再据此判断**，避免拿一份描述旧产物的报告当现状。
+
 ## 输入 / 输出 / 读写边界
 
 - **输入**：`_进度.md`、当前 `skills/` 相关文件内容、上次记录的 skill snapshot（内容 SHA 快照）、指定集当前前沿。**不读 git 状态。**
 - **输出**：`生产数据/skill_update_plan_第N集.json/md` 和 skill snapshot 记录（相关 skill 文件的内容 SHA 表，无版本控制依赖）。
 - **读写边界**：只写更新影响计划和基线；不删除旧产物、不重跑阶段、不改 `_进度.md`。
-- **契约关系**：阶段顺序、当前前沿和最多重制范围来自 `skills/n2d/_lib/n2d_contract.py`，避免把 stage 映射写散。
+- **契约关系**：阶段顺序、当前前沿和最多重制范围来自 `skills/n2d/_lib/n2d_contract.py`，避免把 stage 映射写散。变动文件→阶段的映射表（`N2D_LIB_FILE_STAGE_HINTS` / `…_OBSERVE_ONLY_TOKENS` / `SKILL_FILE_STAGE_HINTS` / `N2D_IMAGE_SHARED_LOCK_RULE_FILES`）由 `scripts/test_hint_coverage.py` 守护：新增 `_lib` 模块未分类、或被引用的文件被重命名导致 token 落空时测试即失败，防止"映射漂移→静默回退到 script_stage1 全链重制"的烧钱隐患。
 
 ## 快速使用
 
@@ -41,10 +43,11 @@ python3 skills/n2d-update/scripts/update_plan.py check <作品根> --all --write
 python3 skills/n2d-update/scripts/update_plan.py media <作品根> 第1集 --image Clip_001 --video Clip_002 --write-plan
 ```
 
-- `record`：在一次阶段完成、用户接受现状、或完成重制后，记录当前 skill 基线（相关 skill 文件的内容 SHA 快照）。
+- `record`：在一次阶段完成、用户接受现状、或完成重制后，记录当前 skill 基线（相关 skill 文件的内容 SHA 快照）。**推荐把它当成每个阶段的收尾步**（产完一阶段物料、验收通过即 record），这样基线始终贴着"这批产物是哪个 skill 版本出的"，而不是事后补记。
   - 作品级快照不会因只记录某一集的较早阶段而缩窄历史范围；已纳入过的 skill 会保留，避免第2集 record 覆盖掉第1集视频阶段的基线。
   - 基线即"record 当刻的文件内容"；记录后这些内容就是新基准，下次 `check` 只报相对它的真实改动。
 - `check`：对比基线；若相关 skill 变了，输出是否建议重制。
+  - **无基线自愈（bootstrap）**：若该作品还没有基线，`check` 会**自动建立一份临时基线**（`baseline_bootstrapped=true`）而不再死胡同在 `needs_record`——从这一刻起就能检测变更。临时基线看不到"此前已用过的更早 skill 版本"所致的差异；确认当前产物可接受后请 `record` 固化为正式基线（清除临时标记）。要保留旧的"无基线就罢工"行为，加 `--no-bootstrap`。
 - `--write-plan`：写入 `生产数据/skill_update_plan_第N集.json` 和 `.md`，供人审或后续排队。
 - `--all`：扫描 `_进度.md` 里所有集。
 - 计划 JSON 同时写 `execution_steps[]` 与兼容字段 `commands[]`。`execution_steps[]` 是权威：`type=command` 表示可执行命令，`type=agent_step` 表示需 AI/人按条件执行；带 `run_when` 的命令只有条件满足后才跑，不能把整段当作无条件 shell 顺序执行。
@@ -87,7 +90,8 @@ python3 skills/n2d-update/scripts/update_plan.py media <作品根> 第3集 --ima
 
 - **只生成计划**：`media` 是选择性刷新计划生成器，不替代 `n2d-review` 或各 gate/QC 做审片。
 - **判定来源**：所有"坏/能用/可沿用/需重制"的结论，必须来自已有 gate/QC/review findings（含 severity、affected shots/artifacts、return_to_stage 等）或显式人工输入。
-- **无证据不判**：没有 findings 或人工判定时，`media` 只能列出下一步复核命令/人工确认步骤；不得把 `--image`/`--video`/`--target` 直接当作坏目标，也不得无条件排入重制。
+- **预读已有证据**：磁盘上已有 `image_qc` / `contract_inheritance` 报告时，`media` 会**逐 target 预读**这些 findings，按 clip 号/png 名匹配，标出每个 target 的 `evidence_verdict`（`block`/`warn`/`no_evidence`）写进计划的 `evidence` 段——命中 block 的可在人工确认后直接排重出，无命中的留待复核。报告齐全时 `needs_decision_evidence=false`，不再把取证整段甩回操作者。
+- **无证据不判**：没有 findings 或人工判定时（无报告即 `evidence_verdict=no_evidence`），`media` 只能列出下一步复核命令/人工确认步骤；不得把 `--image`/`--video`/`--target` 直接当作坏目标，也不得无条件排入重制。
 - **不碰未列目标**：`media` 是少量图片/视频刷新工具，不做整集全链重跑。
 
 ## 主动提示
@@ -119,13 +123,15 @@ python3 skills/n2d-update/scripts/update_plan.py check <作品根> <集号> --wr
 - `shared_lock_changed_files`：命中定妆库生产规则的变动文件；非空表示共享定妆库需复核（`shared_lock_reuse=false`）。
 - `source_drift`：源小说漂移检测（`source_check.py` 的 DRIFT；`status` clean/drift/no_baseline）。无 `小说/_源指纹.json` 基线时为 `null`。
 - `three_frame_compliance`：三帧契约遵循（`enforced` 按后端能力门控、`violating_clips` 缺中段锚帧的 Clip、`compliant`）。storyboard 未定稿为 `null`。
-- `image_consistency`：图片一致性摘要（`hard_blocks`/`verdict`/`consistent`），来自 image_qc 报告；未到出图阶段为 `null`。
-- `contract_inheritance`：出图→出视频契约继承摘要（`verdict`/`field_blocks`/`identity_blocks`/`asset_blocks`/`inherited`，`status` ok/missing/error），来自 `inherit_contract.py` 报告；未到 `video_prompt` 阶段为 `null`，已到但报告缺失为 `status=missing`（提示先跑 inherit_contract 取证）。
+- `image_consistency`：图片一致性摘要（`hard_blocks`/`verdict`/`consistent`/`freshness`），来自 image_qc 报告；未到出图阶段为 `null`。`freshness=stale` 表示报告已被后续出图重生成作废。
+- `contract_inheritance`：出图→出视频契约继承摘要（`verdict`/`field_blocks`/`identity_blocks`/`asset_blocks`/`inherited`/`freshness`，`status` ok/missing/error），来自 `inherit_contract.py` 报告；未到 `video_prompt` 阶段为 `null`，已到但报告缺失为 `status=missing`（提示先跑 inherit_contract 取证）。
+- `freshness`（上两项内）：`fresh`/`stale`/`unknown` —— 报告的 `inputs_fingerprint` 与当前输入文件内容比对结果；`stale`/`unknown` 提示先重跑机检再信结论。
+- `baseline_bootstrapped`：基线是否为 `check` 自动建立的临时基线（bootstrap）。`true` 时计划照常输出，但提示此前更早 skill 版本的差异不可见，建议接受现状后 `record` 固化。
 - `execution_steps`：建议执行步骤；区分可执行命令、AI/人条件判断、以及重出完成后的验收命令。
 - `commands`：兼容旧调用方的命令字符串列表；新调用方应以 `execution_steps` 的 `type/run_when` 为准。
 - `smart_suggestions`：从 dashboard 生产事件中提取的角色/后端升档建议；`--json` 模式写进 JSON，不污染 stdout。
 
-无基线时，`check` 会给出 `needs_record=true`，并提示先 `record` 建立内容快照基线；在建立基线之前无法检测变更（不依赖 git 工作区兜底）。读到旧版 git 派生基线（无内容表）时同样提示重新 `record`。
+无基线时，`check` 默认**自动建立临时基线**（`baseline_bootstrapped=true`）让检测自愈，并提示确认现状后 `record` 固化；加 `--no-bootstrap` 则保留旧行为：给出 `needs_record=true`、在建立基线前不检测变更（不依赖 git 工作区兜底）。读到旧版 git 派生基线（无内容表）时同样提示重新 `record`。
 
 ## 完成后 · 详列下一步（收尾必做 · 只提示不自动跑）
 

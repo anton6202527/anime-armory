@@ -60,14 +60,14 @@ codex plugin list 2>/dev/null | rg -i 'image|openai|fal|replicate|browser|comput
 
 ```bash
 openai images create \
-  --model gpt-image-1 \
+  --model gpt-image-2 \
   --prompt "..." \
-  --size 1024x1792 \
+  --size "<官方支持的竖版尺寸；必要时生成后按 9:16 安全裁切>" \
   --n 1 \
   --out /tmp/openai_<name>/
 ```
 
-实际 CLI 参数随版本变化，首次使用前跑 `openai images --help` 或官方文档核对。
+实际模型名、尺寸枚举和 CLI 参数随版本变化，首次使用前跑 `openai images --help` 或官方文档核对；不要把旧模板里的 `gpt-image-1` 当固定真值。
 
 ---
 

@@ -8,7 +8,7 @@
 
 | 维度 | 机/判 | 怎么查 | 定级 |
 |---|---|---|---|
-| 角色 DNA 断层 | 判（+机选） | 先读 `设定库/角色圣经.md` + `identity_registry.json`，每集 `镜头*.png` 与 `定妆_<角色>.png` / 半身 / 侧背 / 表情参考并排比四层：脸、发型、服装、配饰；装库则跑 `scripts/face_consistency.py` 自标定 flag-band（脸层），低于 地板−margin=🔴/地板带=🟡，不写死阈值 | 任一层漂到识别不出 🔴 / 轻漂 🟡 |
+| 角色 DNA 断层 | 判（+机选） | 先读 `设定库/角色圣经.md` + `identity_registry.json`，每集 `镜头*.png` 与 `定妆_<角色>.png` / 半身 / 侧背 / 表情参考并排比五层：脸、发型、服装、配饰、质感；装库则跑 `scripts/face_consistency.py` 自标定 flag-band（脸层），低于 地板−margin=🔴/地板带=🟡，不写死阈值 | 任一层漂到识别不出 🔴 / 轻漂 🟡 |
 | 发型/发色漂移（DNA 第2层） | 判（+机选） | 脸锁住≠发型锁住。装 Pillow 跑 `scripts/hair_consistency.py`：头部区域发色 + 发型轮廓复合指纹 vs 定妆组，自标定 flag-band；人判看披发/盘发/发色/发饰是否漂 | 发型识别不出 🔴 / 轻漂 🟡 |
 | 服装/配色漂移（DNA 第3层）| 判（+机选）| 脸锁住≠服装锁住（"夹克色第4镜就漂"）。装 Pillow 跑 `scripts/outfit_consistency.py`：人物镜加权色相直方图 vs 定妆组(优先半身)，自标定 flag-band | 服色/剪影识别不出 🔴 / 轻漂 🟡 |
 | 片内时序（单 clip 内）| 判（+机选）| 首帧+接缝之外的盲区：clip 内"几秒后脸渐变/发际线闪"。装 ffmpeg(+insightface) 跑 `scripts/temporal_consistency.py`：帧间人脸余弦最小值(身份漂移)+帧间亮度差(flicker/TCI) | 片内身份漂/强闪 🔴 / 轻闪 🟡 |
@@ -19,6 +19,7 @@
 | 配饰漂移（DNA 第4层） | 判 | 发簪、腰牌、护甲、钥匙、标志挂件等是否与角色卡 / `character_dna.accessories` 一致；多/少配饰若改变身份识别，按断层处理 | 🔴/🟡 |
 | 气质/动作习惯偏离（表演层） | 判 | 对照 `设定库/角色圣经.md` 的气质/动作习惯：清冷角色是否忽然媚笑、低眉宫女是否变成威压主角姿态、帝王是否丢掉叩案/沉默压迫等；表演层偏离不改 `character_dna`，但会造成“不是这个角色在演”的观感 | 🟡 |
 | 道具漂移 | 判 | 反复入镜道具是否一致 | 🟢/🟡 |
+| 道具/背景结构在场恒存（object permanence） | 判 | 同场景内已确立的常驻物件（`scene_dna.常驻物件`）/已立 `PROP_xx` 与背景结构（门/窗/柱/陈设）是否跨镜持续在场——不凭空消失又凭空回来、不逐镜 pop in/out。**豁免**：近景把道具裁出画框=出框不算消失；剧情动作移除/取走需在 storyboard 状态/接力契约显式声明（声明了即合法）。见 n2d-image「在场恒存铁律」 | 凭空增减/结构跳变 🟡 / 关键道具该在却没了 🔴 |
 | 生图 AI 口径不一致 | 机+判 | 生产前：`_设置.md`、出图总览、逐镜 prompt 是否都统一到同一个官方/已登录生图后端（默认 Codex，可选 OpenAI/gpt-image、Dreamina/即梦官方 CLI、Seedream/可灵主体库/Nano Banana/Sora Cameo 等）；不得一部分 Codex、一部分其它官方后端，更不得写 `同视频AI` 含糊口径、第三方逆向/web 自动化出图。成片后：若画风/脸型跨镜跳变，追溯是否混用生图后端 | 生产前缺 🔴 / 成片后按结果 🔴/🟡 |
 | 固定 seed 可复现性误报 | 机+判 | 读 `identity_registry.json.generation_control` 与 `production_events.jsonl`。若记录了 `requested_seed`，必须同时有 `seed_strategy/seed_support/seed_effective`；支持 seed 的后端应有 `effective_seed`，Codex/未暴露 seed 后端必须记 `seed_effective=false`，不得在报告里宣称 seed 可复现 | 误报可复现 🟡 / 记录缺失 🟡 |
 | 角色资产包缺口 | 机+判 | 核心/长线角色读 `identity_registry.json.characters[].asset_bundle` 与 `设定库/character_assets/<CHAR_ID>__<slug>/manifest.json`：reference/prompts/lora/voice/adapters/qc 是否可追溯，缺口是否显式记录。短线角色可无资产包；资产包不得另写一套角色 DNA | 核心缺包或缺口未记 🟡 / 资产包与 registry 冲突 🔴 |
@@ -26,7 +27,7 @@
 | 标准三视图定妆缺失（Q28） | 机+判 | 人物定妆是否具备正面 / 侧面 / 背面生产拆图 + `定妆_<角色>_三视图.png` 拼版；只出正面/侧面/半身，或把背面按需省略，都会导致转身/过肩/背身镜漂移 | 缺 🔴 |
 | 角色参考图数据库缺口 | 机+判 | 读 `identity_registry.json.reference_atlas`：核心/动作重角色是否有基础视角（正脸/45°/侧脸/半身/全身/背影）和剧情需要的表情/动作参考；逐镜 prompt 的「参考图选择策略」是否只引用 ready 路径，缺 45°/表情/动作时是否写 `reference_gap` 和降级方案。短线角色只要求基础视角，不因没全套表情/动作扣分 | 核心缺且未降级 🟡 / 假引用 planned 🔴 |
 | 跨集成长升级断层 | 机+判 | 读 `identity_registry.json.characters[].evolution_profile`：长线角色升级阶段是否有 `stages[]` 映射到当前 form，阶段切换是否从上一阶段正脸/脸部特写派生；并排比上一阶段与新阶段，脸型、五官比例、核心发际线发量、体态、标志疤痣必须一致。衣服、法宝、气场/VFX、配饰权重、姿态气质可升级，但新增法宝/VFX 应进 `asset_registry.json` | 换脸/发际线/体态 🔴 / 缺 profile 或缺派生记录 🟡 |
-| 资产身份注册层缺失/假登记 | 机+判 | `gate.py --stage image_preflight|video_preflight|image|video|compose|review` 查 `出图/共享/identity_registry.json`：每个角色/形态须有 `character_dna` 四层、`reference_group`、图/视频 `identity_adapters`、LoRA 状态、`angle_policy`、`drift_forbidden`；`registered/ready` 必须有真实 ID/handle/reference/model_path。判读 prompt 是否先引用 `设定库/角色圣经.md` 并真正从 registry 继承，而非临时手写 | 缺 🔴 / 假登记 🔴 |
+| 资产身份注册层缺失/假登记 | 机+判 | `gate.py --stage image_preflight|video_preflight|image|video|compose|review` 查 `出图/共享/identity_registry.json`：每个角色/形态须有 `character_dna` 五层、`reference_group`、图/视频 `identity_adapters`、LoRA 状态、`angle_policy`、`drift_forbidden`；`registered/ready` 必须有真实 ID/handle/reference/model_path。判读 prompt 是否先引用 `设定库/角色圣经.md` 并真正从 registry 继承，而非临时手写 | 缺 🔴 / 假登记 🔴 |
 | 分镜图纯文生图（Q28） | 判 | 含角色镜头是否「定妆张+场景图」多图参考派生，而非纯 text2image（纯文生图跨镜相似度差） | 🟡 |
 | 分镜 prompt 结构漏项 | 机 | `gate.py --stage image_preflight` / 生成后 `--stage image` 查逐镜是否有参考图、双语 prompt、负向词、导演八维、检查清单、生成后自检、重抽预算 | 缺 🔴 |
 | 基础视觉风格契约漏项 | 机+判 | `gate.py --stage image_preflight|video_preflight|image|video` 查 `storyboard.json.style_contract` 与出图/出视频总览「本集基础视觉风格契约」是否齐全（旧 `cinematic_contract` 兼容）；人判角色比例/材质或线条、光色策略、运动边界、风格禁忌是否符合用户选择的 `基础视觉风格` | 缺 🔴 / 结果假 🟡 |

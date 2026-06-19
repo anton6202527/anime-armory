@@ -28,6 +28,13 @@ python3 skills/n2d-review/scripts/self_audit.py --json
 
 > 搜索词带"2026""最新""最佳实践""翻车"更易命中实战贴；中英文各搜一轮（国内红果/抖音生态 + 英文 filmmaking 圈）。
 
+## 固定复核点（每次流程自审都要过）
+- **image_qc 精度闭环**：视频/合成前是否强制消费 `生产数据/image_qc/<ep>/image_qc_<ep>.json`，并要求 `precision_level=full`、`hard_blocks=0`；缺依赖、degraded/none 或旧报告不得进入视频。
+- **交付口径 vs 生成口径**：仪表盘是否同时展示 `generation_pass_rate` 与 `deliverable_pass_rate`；任何 QA block 都应让可交付通过率归零，避免把生成尝试成功率误当成验收通过率。
+- **原生音画物理一致性**：`制作模式=原生音画` 是否在视频总览和人审中覆盖声源归属、口型策略、材质/动作声、空间声学、字幕/后期策略；成片后是否有 whisper/字幕对齐兜底。
+- **参考资产机器清单**：定妆、表情、尾帧、场景/道具 reference 是否有 registry/manifest 级证据，而不是只在 prompt 文本里写“参考图”；缺 machine-readable manifest 的建议优先落到 gate 或 image_qc。
+- **后端适配层**：生图/生视频的负向提示、主体锁、首尾帧、多参考、原生音轨策略是否经能力矩阵/adapter 归一；不要把某平台文案直接当跨平台契约。
+
 ## 对照 → 差距清单
 逐 stage 把"基准做法"对到 `n2d-*/SKILL.md` + `references/*` + `n2d/Q&A.md`：
 

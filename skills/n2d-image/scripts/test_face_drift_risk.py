@@ -52,6 +52,52 @@ def test_lock_tier() -> None:
     assert fdr.lock_tier("codex", {"codex": {"status": "fallback_reference_group"}}, {"status": "ready"}) == "lora"
 
 
+def test_three_quarter_ready_reads_atlas_and_reference_group() -> None:
+    # base_views.three_quarter.status=ready → 就绪
+    assert fdr.three_quarter_ready({"reference_atlas": {"base_views": {"three_quarter": {"status": "ready"}}}})
+    # planned 不算就绪
+    assert not fdr.three_quarter_ready({"reference_atlas": {"base_views": {"three_quarter": {"status": "planned"}}}})
+    # atlas 没建但 reference_group 直接挂 45° 命名图（旧项目兼容）→ 就绪
+    assert fdr.three_quarter_ready({"reference_group": {"three_quarter": "出图/共享/图片/定妆_X_45度.png"}})
+    # 空路径不算
+    assert not fdr.three_quarter_ready({"reference_group": {"three_quarter": ""}})
+    # 啥都没有 → 未就绪
+    assert not fdr.three_quarter_ready({})
+
+
+def test_missing_3q_baseline() -> None:
+    # 任一入镜人物缺 ready 的 3/4 侧脸 → 基础包缺口
+    assert fdr.missing_3q_baseline(appear=1, tq_ready=False)
+    # 已备 ready → 不报
+    assert not fdr.missing_3q_baseline(appear=6, tq_ready=True)
+    # 未入镜 → 不报
+    assert not fdr.missing_3q_baseline(appear=0, tq_ready=False)
+
+
+def test_analyze_flags_missing_3q_baseline(tmp_path: Path) -> None:
+    root = tmp_path / "剧"
+    (root / "出图" / "共享").mkdir(parents=True)
+    (root / "脚本" / "第1集").mkdir(parents=True)
+    (root / "出图" / "共享" / "identity_registry.json").write_text(json.dumps({
+        "characters": [{"id": "CHAR_01", "name": "沈念", "forms": [{
+            "form": "常态", "asset_key": "沈念_常态",
+            "identity_adapters": {"image": {"codex": {"status": "fallback_reference_group"}}},
+            "reference_atlas": {"base_views": {"three_quarter": {"status": "planned"}}},
+        }]}]
+    }, ensure_ascii=False), encoding="utf-8")
+    (root / "脚本" / "第1集" / "storyboard.json").write_text(json.dumps({
+        "clips": [
+            {"id": "Clip_01", "label": "沈念", "shots": [{"lens": "CU 85mm", "desc": "沈念 面部特写"}]},
+            {"id": "Clip_02", "label": "沈念", "shots": [{"lens": "ECU", "desc": "沈念 反打"}]},
+        ]
+    }, ensure_ascii=False), encoding="utf-8")
+    report = fdr.analyze(root, "第1集")
+    shen = next(r for r in report["characters"] if r["character_id"] == "CHAR_01")
+    assert "missing_3q_baseline" in shen["reference_gaps"]
+    assert report["missing_3q_baseline"] == 1
+    assert any("3/4 侧脸" in s and "基础定妆包" in s for s in shen["suggestions"])
+
+
 def test_score_reference_group_closeup_emotion_is_high() -> None:
     # multi_reference 底色 22 + 近景全占 30 + 大表情 3 镜(24) → high
     s = fdr.score_character({"appear": 4, "closeup": 4, "emotion": 3, "multi": 0, "angle": 0}, "multi_reference")

@@ -52,6 +52,9 @@ STRONG_EMOTION_MARKERS = (
     "失控", "绝望", "悲恸", "惊愕",
 )
 READY_STATUSES = {"registered", "ready"}
+# 2026 公认正面+3/4+侧面是身份核心集，纯 90° 正侧是较弱的重投影锚。
+# 现在 three_quarter 是所有人物/形态的基础硬包；近景比例只影响完整表情库/动作参考等增强项。
+CU_HEAVY_RATIO = 0.4
 
 WEIGHTS = {"base_reference_group": 28, "base_multi_reference": 22, "base_native_unregistered": 20,
            "base_native": 8, "base_lora": 0,
@@ -86,6 +89,35 @@ def extreme_angle_tokens(lens: str, desc: str, risky: Sequence[str]) -> List[str
     if ("deep_shadow" in risky_set) and re.search(r"逆光|暗部|阴影|剪影|暗光|背光|silhouet", text, re.I):
         hit.append("deep_shadow")
     return hit
+
+
+def three_quarter_ready(form: Mapping[str, Any]) -> bool:
+    """该形态是否已备好 ready 的 3/4 侧脸参考（reference_atlas.base_views.three_quarter，
+    或 reference_group 里 45°/三分之二/three_quarter 命名的图）。纯函数·可测。
+
+    口径：base_views.three_quarter.status ∈ {ready,registered} 为准；若 atlas 未建但
+    reference_group 直接挂了 45° 命名图，也算就绪（旧项目兼容）。planned 不算。"""
+    atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
+    base_views = atlas.get("base_views") if isinstance(atlas.get("base_views"), Mapping) else {}
+    tq = base_views.get("three_quarter")
+    if isinstance(tq, Mapping) and _status_value(tq.get("status")) in READY_STATUSES:
+        return True
+    rg = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
+    for key, val in rg.items():
+        if re.search(r"three_quarter|45|三分之二|三七", str(key), re.I) and str(val or "").strip():
+            return True
+    return False
+
+
+def _status_value(value: Any) -> str:
+    if isinstance(value, Mapping):
+        value = value.get("status")
+    return str(value or "").strip().lower()
+
+
+def missing_3q_baseline(appear: int, tq_ready: bool) -> bool:
+    """任一入镜人物缺 ready 的 3/4 侧脸 → True。纯函数·可测。"""
+    return int(appear) > 0 and not tq_ready
 
 
 def lock_tier(default_backend: str, image_adapters: Mapping[str, Any], lora: Mapping[str, Any]) -> str:
@@ -307,6 +339,7 @@ def load_characters(root: Path) -> List[Dict[str, Any]]:
             "angle_policy": f0.get("angle_policy") or {},
             "image_adapters": adapters.get("image") or {},
             "lora": lora,
+            "tq_ready": three_quarter_ready(f0),
         })
     return chars
 
@@ -379,10 +412,19 @@ def analyze(root: Path, ep: str) -> Dict[str, Any]:
         signals = {k: agg[k] for k in ("appear", "closeup", "emotion", "multi", "angle")}
         scored = score_character(signals, tier)
         sug = suggestions_for(c["name"], scored, signals, cid, c["form"], str(root), profile)
+        reference_gaps: List[str] = []
+        # ③ 基础包缺 ready 的 3/4 侧脸：45° 不再是近景重角增强项，而是所有人物/形态基础角。
+        if missing_3q_baseline(signals["appear"], bool(c.get("tq_ready"))):
+            reference_gaps.append("missing_3q_baseline")
+            sug = sug + [
+                "基础定妆包缺 ready 的 3/4 侧脸参考：补 `reference_atlas.base_views.three_quarter`（45°/三分之二侧脸）"
+                "并出图标 ready——45° 是全员基础角，不再按近景占比或角色体量延后。"
+            ]
         rec = {
             "character_id": cid, "name": c["name"], "form": c["form"],
             "signals": signals, "angle_tokens": sorted(agg["angle_tokens"]),
             "appears_in": agg["clips"], **scored, "suggestions": sug,
+            "reference_gaps": reference_gaps,
         }
         # ② 实测漂移回灌：上一集已**测**出该升 block 的跨集漂移 → 本集预测分直接 block（既成事实，非预测）
         measured = measured_drift_block(prior_drift, c.get("aliases") or set(), c["name"])
@@ -403,6 +445,8 @@ def analyze(root: Path, ep: str) -> Dict[str, Any]:
         "block": sum(1 for r in results if r["band"] == "block"),
         "high": sum(1 for r in results if r["band"] == "high"),
         "medium": sum(1 for r in results if r["band"] == "medium"),
+        "missing_3q_baseline": sum(1 for r in results
+                                   if "missing_3q_baseline" in r.get("reference_gaps", [])),
         "blocking": any(r["band"] == "block" for r in results),
         "prior_drift_available": bool(prior_drift.get("available")),
         "characters": results, "notes": notes,

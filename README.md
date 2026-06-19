@@ -20,13 +20,14 @@
 
 | 安装包 | 平台 | 下载 |
 |---|---|---|
-| 🖥️ 桌面端 App | macOS | [**AnimeArsenal_macos.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_macos.dmg) |
+| 🖥️ 桌面端 App | macOS（通用，Intel/Apple Silicon） | [**AnimeArsenal_macos.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_macos.dmg) |
+| 🖥️ 桌面端 App | Windows（`.exe` 安装程序） | [**AnimeArsenal_windows.exe**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_windows.exe) |
 | 🧩 VS Code 插件 | 跨平台（`.vsix`） | [**anime-armory.vsix**](https://github.com/anton6202527/anime-armory/releases/latest/download/anime-armory.vsix) |
 
-- **桌面端 App**：下载 `.dmg` 后双击安装，打开即用，内置全部 skill。
+- **桌面端 App**：macOS 下载 `.dmg` 双击安装；Windows 下载 `.exe` 运行安装程序。打开即用，内置全部 skill。
 - **VS Code 插件**：下载 `.vsix` 后，在 VS Code 命令面板执行 `Extensions: Install from VSIX…` 选中该文件安装。
 
-> 桌面端目前提供 macOS 版；Windows 端可从 `desktop/` 源码用 `tauri build` 自行打包（见下方“自行打包发布”）。
+> 链接始终指向 anime-armory **最新发布版**（已发布，可直接下载）；桌面端 App 内置当前全部 skill。历史版本与校验和见 [Releases 页](https://github.com/anton6202527/anime-armory/releases)。维护者出新版见下方“自行打包发布”（推 `desktop-v*` tag 触发云端构建，自动按稳定文件名发布到 Release）。
 
 ### 核心资产是 skill —— 也可以不装 App，自行下载调试
 
@@ -81,17 +82,29 @@ MV：mv -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-s
 
 上面“下载安装”里的安装包就是用本节脚本打出来后上传到 anime-armory 的 GitHub Release 的。自己分发或出新版时按下面流程重新打包即可。
 
-**桌面端 App / VS Code 插件**：
+**桌面端 App / VS Code 插件（推荐用云端构建，一步到位）**：
+
+Windows 安装包**无法在 macOS 上交叉编译**，必须在 Windows 上构建。仓库已内置云端流水线 [`​.github/workflows/desktop-release.yml`](.github/workflows/desktop-release.yml)，用 GitHub Actions 同时在 macOS 与 Windows 上构建，并把安装包按“下载安装”表里的**稳定文件名**发布到 anime-armory 的 Release：
 
 ```bash
-# 桌面端：在 desktop/ 里用 Tauri 打 .dmg（macOS）/ .exe（Windows）
+# 推一个 desktop-v* tag 即触发云端构建 + 发布（mac .dmg / win .exe[NSIS] / .vsix）
+git tag desktop-v0.1.3 && git push origin desktop-v0.1.3
+# 或在 Actions 页手动 workflow_dispatch（只产出 build artifact，不发 Release）
+```
+
+前置：在 anime-arsenal 仓库加一个 secret `ARMORY_RELEASE_TOKEN`（一个对 anime-armory 有 `contents: write` 权限的 PAT）——默认 `GITHUB_TOKEN` 只能写当前仓库，跨仓发布到 armory 必须用 PAT。流水线会自动把产物重命名为 `AnimeArsenal_macos.dmg`（macOS）/ `AnimeArsenal_windows.exe`（Windows NSIS 安装程序）/ `anime-armory.vsix`，与“下载安装”表里的 `releases/latest/download/...` 直链一一对应。Windows 只打 NSIS `.exe`（MSI/WiX 对大体积 `skills/` 资源树不稳定）。
+
+本地手动打包（仅产出当前系统的安装包；macOS 上得不到 Windows 包）：
+
+```bash
+# 桌面端：在 desktop/ 里用 Tauri 打当前平台的安装包
 cd desktop && npm install && npm run tauri build
 
 # VS Code 插件：在 vscode-extension/ 里打 .vsix
 cd vscode-extension && npx @vscode/vsce package
 ```
 
-把产物（`AnimeArsenal_macos.dmg`、`anime-armory.vsix` 等）作为附件传到 anime-armory 的 Release，文件名与“下载安装”表里的直链对应，`releases/latest/download/...` 链接即自动指向最新版本。
+手动产物需自行上传到 anime-armory 的 Release，并重命名成上表的稳定文件名，`releases/latest/download/...` 链接才会指向它。
 
 **轻量 starter 包（只发 skill 与工具）**：推荐发轻量 starter 包给只想用 skill 的用户——只包含 README、AGENTS、`skills/`、`tools/`、`docs/`、桌面端源码和空作品目录，不包含仓库里的 demo 媒体、未追踪产物、`.venv`、`node_modules`、私有 agent 配置和缓存。
 

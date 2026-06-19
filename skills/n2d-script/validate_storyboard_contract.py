@@ -48,7 +48,12 @@ def clip_id(clip: Dict[str, Any], index: int) -> str:
 
 
 def clip_blob(clip: Dict[str, Any]) -> str:
-    return json.dumps(clip, ensure_ascii=False, sort_keys=True)
+    """复杂镜头关键词检测只扫**散文描述**（label/scene/shots desc/video_prompt/template…），
+    不扫结构化 `continuity` 块——它的 schema 字段名/枚举值（如 `eyeline` 字段、`transition:"eyeline"`）
+    与 dialogue_shot_reverse 关键词 `eyeline` 撞名，会让**每个**合规 clip（formats §4 要求每 clip 填
+    continuity.eyeline）误判成对话反打。散文里真有 过肩/反打/对视/台词 仍会被正确命中。"""
+    scanned = {k: v for k, v in clip.items() if k != "continuity"}
+    return json.dumps(scanned, ensure_ascii=False, sort_keys=True)
 
 
 def first_template_keyword_hit(text: str) -> Optional[str]:

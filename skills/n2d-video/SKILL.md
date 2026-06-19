@@ -54,7 +54,7 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 
 - **配音对齐·音频参考口型（首选·voice_conditioned_lipsync）**：`制作模式=配音先行` 且 `对口型≠关闭` 时，`n2d-model-router` 会把说话镜路由成 `mode=voice_conditioned_lipsync`、`native_audio_policy=lipsync_condition_only`，primary 选支持音频参考口型的后端（Seedance 2.0 音素级 / 可灵 Omni）。执行时**把该 Clip 的配音 `line_NN.wav` 当作音频参考/口型驱动输入喂给后端**，同帧出对口型画面。**铁律：模型这条音频只作口型条件、不接管声音**——成片音轨仍用 voice-first 克隆配音轨（compose 丢弃模型音频），既不双人声、又省一道后期对口型 pass。后端不支持音频参考口型/对不齐 → 按路由 `degrade_plan` 回退后期 pass 或分镜规避。**与 native_av 区别**：native_av 是后端自生成台词（绕过配音先行、换掉逐句音色控制），voice_conditioned_lipsync 保留克隆音色只借口型。
 - **后期对口型 pass（回退档·有执行入口）**：后端不支持音频参考口型时，clip 出好后用本地工具把口型对到配音轨（合成前的可选层）。**别手搓**——跑 `python3 skills/n2d-video/scripts/lipsync_pass.py <作品根> 第N集`：它读 `对口型` 设置 + `video_model_routes.json`，挑出需要后期对口型的说话镜、配对各自驱动音轨 `合成/<集>/配音/line_NN.wav`，落 `出视频/<集>/control/lipsync_jobs.json` 作业清单并探测本地工具；本地工具可用时加 `--apply` 逐 clip 执行，不可用则降级成手工清单（绝不静默跳过）。工具优先序（2026-06·能力会变，以 `n2d/references/模型矩阵.md` 横切「音画联合」为准）：**LatentSync**（ByteDance 扩散、身份保持最好）｜ **MuseTalk**（口型+画质均衡、近实时）｜ **Wav2Lip**（SyncNet 同步精度最稳但偏糊）。重型权重在 conda env、不入本仓——CLI 路径用 `LATENTSYNC_CLI`/`MUSETALK_CLI`/`WAV2LIP_CLI` 环境变量指向。**铁律同上：模型只对口型、不接管声音**，成片音轨仍是 voice-first 克隆配音轨。
-- 启用与否 + 档位记入 `_设置.md`（选择点 `对口型`：`关闭`(默认) / `配音对齐`(=voice_conditioned_lipsync·后端音频参考口型，首选) / `后期pass`(强制走 MuseTalk 等后期)）；不启用时在分镜阶段就**少给正面大特写说话镜**（用侧脸/背身/空镜配旁白规避），是零成本的替代。
+- 启用与否 + 档位记入 `_设置.md`（选择点 `对口型`：`关闭`(默认) / `配音对齐`(=voice_conditioned_lipsync·后端音频参考口型，首选) / `后期pass`(强制走后期对口型 pass，工具优先序见上「后期对口型 pass」节：LatentSync 优先·身份保持)）；不启用时在分镜阶段就**少给正面大特写说话镜**（用侧脸/背身/空镜配旁白规避），是零成本的替代。
 
 ## 出视频规格（选择点 `出视频规格` · 三档预算 · 每次调 AI 前告知）
 
@@ -287,7 +287,6 @@ continuity constraint: begin from continuity.start_state, perform only continuit
 完成后：`_进度.md` 该集 `视频prompt` 列填 ✅。旧项目若表头缺 `视频prompt`，先迁移一次：
 ```bash
 python3 skills/n2d/progress.py ensure-col <作品根> 视频prompt ⬜
-```bash
 python3 skills/n2d/progress.py set <作品根> 第N集 视频prompt ✅
 ```
 

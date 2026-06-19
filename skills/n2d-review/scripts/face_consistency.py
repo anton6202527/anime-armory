@@ -32,7 +32,7 @@ import math
 import os
 import re
 import sys
-from typing import Dict, List, Optional, Sequence, Set, Tuple
+from typing import Dict, List, Mapping, Optional, Sequence, Set, Tuple
 
 COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if COMMON not in sys.path:
@@ -371,15 +371,22 @@ def _resolve_project_path(root: str, path: str) -> str:
 
 
 def discover_costume_sets(root: str) -> Dict[str, Dict[str, str]]:
-    """出图/共享/图片/定妆_<角色>[ _侧/_半身/_全身 ].png → {角色: {variant: path}}。仅角色类。"""
+    """出图共享定妆图 → {角色形态: {variant: path}}。仅角色类。
+
+    新项目优先从 identity_registry 的 reference_group/reference_atlas 读取全套锚点，
+    覆盖 45 度与脸部特写；旧项目再回退扫描文件名。
+    """
+    registered_sets = discover_costume_sets_from_registry(root)
+    if registered_sets:
+        return registered_sets
     sets: Dict[str, Dict[str, str]] = {}
     registered = registered_character_assets(root)
     for p in glob.glob(os.path.join(shared_asset_path(root, "图片"), "定妆_*.png")):
         base = os.path.basename(p)[len("定妆_"):-len(".png")]
         # 三视图/设定表/表情是人审拼版，不作脸度量基准
-        if any(t in base for t in ("三视图", "设定表", "表情", "脸部特写")):
+        if any(t in base for t in ("三视图", "设定表", "表情")):
             continue
-        m = re.match(r"^(.+?)(?:_(侧|半身|全身|背))?$", base)
+        m = re.match(r"^(.+?)(?:_(45度|侧|半身|全身|背|脸部特写))?$", base)
         if not m:
             continue
         char, variant = m.group(1), (m.group(2) or "主")
@@ -390,6 +397,65 @@ def discover_costume_sets(root: str) -> Dict[str, Dict[str, str]]:
             continue
         sets.setdefault(char, {})[variant] = p
     return sets
+
+
+def discover_costume_sets_from_registry(root: str) -> Dict[str, Dict[str, str]]:
+    """identity_registry.json → face-consistency anchor sets."""
+    path = os.path.join(root, "出图", "共享", "identity_registry.json")
+    try:
+        data = json.load(open(path, encoding="utf-8"))
+    except Exception:
+        return {}
+    out: Dict[str, Dict[str, str]] = {}
+    for ch in data.get("characters") or []:
+        for form in ch.get("forms") or []:
+            if not isinstance(form, dict):
+                continue
+            asset = str(form.get("asset_key") or "").strip()
+            if not asset:
+                continue
+            variants: Dict[str, str] = {}
+            for name, rel in registry_variant_paths(form).items():
+                full = _resolve_project_path(root, rel)
+                if os.path.isfile(full):
+                    variants[name] = full
+            if variants:
+                out[asset] = variants
+    return out
+
+
+def registry_variant_paths(form: Mapping[str, object]) -> Dict[str, str]:
+    """Extract canonical face anchor paths from a character form registry entry."""
+    out: Dict[str, str] = {}
+
+    def add(name: str, raw: object) -> None:
+        if isinstance(raw, str) and raw.strip():
+            out.setdefault(name, raw.strip())
+
+    ref = form.get("reference_group") if isinstance(form, dict) else {}
+    if isinstance(ref, dict):
+        add("主", ref.get("front"))
+        add("45度", ref.get("three_quarter"))
+        add("侧", ref.get("side"))
+        add("背", ref.get("back"))
+        add("半身", ref.get("outfit") or ref.get("half_body"))
+        for item in ref.get("face_anchor_refs") or []:
+            if isinstance(item, dict):
+                add("脸部特写", item.get("path"))
+
+    atlas = form.get("reference_atlas") if isinstance(form, dict) else {}
+    if isinstance(atlas, dict):
+        views = atlas.get("base_views") or {}
+        if isinstance(views, dict):
+            add("主", (views.get("front") or {}).get("path") if isinstance(views.get("front"), dict) else None)
+            add("45度", (views.get("three_quarter") or {}).get("path") if isinstance(views.get("three_quarter"), dict) else None)
+            add("侧", (views.get("side") or {}).get("path") if isinstance(views.get("side"), dict) else None)
+            add("背", (views.get("back") or {}).get("path") if isinstance(views.get("back"), dict) else None)
+            add("半身", (views.get("half_body") or {}).get("path") if isinstance(views.get("half_body"), dict) else None)
+        for item in atlas.get("face_anchor_refs") or []:
+            if isinstance(item, dict):
+                add("脸部特写", item.get("path"))
+    return out
 
 
 def identity_asset_map(root: str) -> Dict[str, str]:
@@ -455,6 +521,7 @@ def shot_character_map(root: str, ep: str) -> Dict[str, List[str]]:
     行的 定妆_<角色>。这样辅助参考图/后景反应锚不会被误当成最大脸身份。
     """
     prompt = os.path.join(root, "出图", ep, "prompt", "01_分镜出图.md")
+    target_lines = load_storyboard_target_lines(root, ep)
     out: Dict[str, List[str]] = {}
     if not os.path.isfile(prompt):
         return out
@@ -462,21 +529,105 @@ def shot_character_map(root: str, ep: str) -> Dict[str, List[str]]:
     blocks = re.split(r"(?m)(?=^## )", text)
     for blk in blocks:
         head = blk.splitlines()[0] if blk.strip() else ""
-        mt = re.search(r"出图/[^/]+/([^`』\s]+\.png)", blk)  # 目标 PNG
-        if not mt:
+        target_pngs = prompt_target_pngs(blk, ep)
+        if not target_pngs:
+            target_pngs = [p for p in target_lines.get(section_clip_key(head), [])]
+        if not target_pngs:
             continue
-        png = mt.group(1)
         chars = primary_identity_chars(root, blk)
         if not chars:
             for ref in re.findall(r"定妆_([^`\s，。、,）)]+)", _ref_block(blk)):
                 if ref.endswith(".png"):
                     ref = ref[:-4]
-                ref = re.sub(r"_(侧|半身|全身|背|三视图|设定表|表情)$", "", ref)
+                ref = re.sub(r"_(45度|侧|半身|全身|背|三视图|设定表|脸部特写|表情(?:_.+)?)$", "", ref)
                 if is_character_asset(ref) and ref not in chars:
                     chars.append(ref)
         if chars:
-            out[png] = chars
+            for png in target_pngs:
+                out[png] = chars
     return out
+
+
+def section_clip_key(header: str) -> str:
+    match = re.search(r"(?:Clip|CLIP|clip|镜头)[_\s-]*([0-9０-９]+)", str(header or ""))
+    if not match:
+        return ""
+    raw = match.group(1).translate(str.maketrans("０１２３４５６７８９", "0123456789"))
+    return f"Clip_{int(raw):02d}"
+
+
+def prompt_target_pngs(section: str, ep: str) -> List[str]:
+    """Return target PNGs under 出图/<ep>/图片 mentioned in a prompt section."""
+    out: List[str] = []
+    seen: Set[str] = set()
+    pattern = re.compile(rf"出图/{re.escape(ep)}/图片/([^`』\s，；。)）]+\.png)")
+    for match in pattern.finditer(str(section or "")):
+        rel = f"图片/{match.group(1)}"
+        if rel not in seen:
+            seen.add(rel)
+            out.append(rel)
+    return out
+
+
+def load_storyboard_target_lines(root: str, ep: str) -> Dict[str, List[str]]:
+    """storyboard.json → Clip_NN target PNGs relative to 出图/<ep>."""
+    path = os.path.join(root, "脚本", ep, "storyboard.json")
+    try:
+        data = json.load(open(path, encoding="utf-8"))
+    except Exception:
+        return {}
+    out: Dict[str, List[str]] = {}
+    for index, clip in enumerate(data.get("clips") or [], start=1):
+        if not isinstance(clip, dict):
+            continue
+        key = storyboard_clip_key(clip, index)
+        paths: List[str] = []
+        first = clip.get("firstframe_png")
+        if isinstance(first, str):
+            paths.append(first)
+        continuity = clip.get("continuity") or {}
+        if isinstance(continuity, dict):
+            mid = continuity.get("midframe") or {}
+            if isinstance(mid, dict):
+                paths.extend(p for p in (mid.get("anchor_png"), mid.get("midframe_png")) if isinstance(p, str))
+            for anchor in continuity.get("anchors") or []:
+                if isinstance(anchor, dict) and isinstance(anchor.get("anchor_png"), str):
+                    paths.append(anchor["anchor_png"])
+            if isinstance(continuity.get("endframe_png"), str):
+                paths.append(continuity["endframe_png"])
+        rels: List[str] = []
+        seen: Set[str] = set()
+        for raw in paths:
+            rel = episode_image_rel(raw, ep)
+            if rel and rel not in seen:
+                seen.add(rel)
+                rels.append(rel)
+        if rels:
+            out[key] = rels
+    return out
+
+
+def storyboard_clip_key(clip_data: Mapping[str, object], fallback_index: int) -> str:
+    for field in ("clip", "id"):
+        value = clip_data.get(field)
+        if value is None:
+            continue
+        match = re.search(r"(?:Clip|CLIP|clip|镜头)[_\s-]*([0-9]+)", str(value))
+        if match:
+            return f"Clip_{int(match.group(1)):02d}"
+    return f"Clip_{fallback_index:02d}"
+
+
+def episode_image_rel(path: str, ep: str) -> str:
+    text = str(path or "").strip().strip("`")
+    prefix = f"出图/{ep}/"
+    if text.startswith(prefix):
+        return text[len(prefix):]
+    if text.startswith("图片/"):
+        return text
+    if text.endswith(".png") and "/" not in text:
+        return f"图片/{text}"
+    return ""
 
 
 def _ref_block(section: str) -> str:

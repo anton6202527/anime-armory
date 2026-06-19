@@ -17,7 +17,7 @@ description: 小说质检 + 流程自审（novel-* 家族的 QA 环节，不写�
 ## 机检 / 人判分工
 
 - **机检（确定性，先跑）**：一键串跑用 `scripts/consistency_audit.py <作品根> [--pov 角色名] [--anchor 设定/风格指纹.json]`，它把家族里三个确定性检测器一次跑完并汇总到 `审稿/consistency_audit.json`：
-  - `scripts/mechanical_check.py` —— 格式/字数带宽/章号与章纲对齐/视角"我"密度提示/称谓·术语漂移/**原文照搬（n-gram vs 原作.txt）**。术语默认从 `设定/设定圣经.md`、`角色卡.md`、`世界观.md`、`锚点表.json` 自动抽取，也可用 `--terms` 追加。
+  - `scripts/mechanical_check.py` —— 格式/字数带宽/章号与章纲对齐/视角"我"密度提示/称谓·术语漂移/**原文照搬（n-gram vs 原作.txt）**/**AI腔·同质化启发式**（叙事中议论文式连接词=🟡·万能金句套话密度=🟢·advisory·线索非定论，`--no-ai-tell` 关闭；治 2026 平台 AI 双重质检·AI检测率<60% 风险——写作链路全程 AI 起草，故此项是过审硬约束而非纯文笔偏好）。术语默认从 `设定/设定圣经.md`、`角色卡.md`、`世界观.md`、`锚点表.json` 自动抽取，也可用 `--terms` 追加。
   - `novel-wiki/logic_sentry.py`（先 `wiki_builder.py` 建《动态百科》）—— **死人复活 / 弃置道具复用 / 位置跳变 / 数值漂移（年龄锚点跨章不一致）**等硬冲突候选 → `审稿/logic_alerts_*.json`。这是把"设定自相矛盾/锚点漂移"从纯人判下沉到机检的深度增强（无角色卡/无年龄锚点则优雅跳过并记原因）。
   - `novel-style/extract_style.py --compare` —— 每章文风指纹 vs **锚点章指纹**算漂移分，超带宽即记"文风漂移"候选 → `审稿/style_drift_summary.json`（无锚点指纹则跳过，提示先提取）。
   - `scripts/n2d_readiness_check.py`（**opt-in，仅流向 n2d 的项目跑**）—— 逐章查漫剧改编就绪 4 维（资产标签密度/对白占比/视觉锚/场景锚），标"画面感弱/旁白过重/无场景锚"候选弱章 → `审稿/n2d_readiness.json`。避免到 `n2d-script` 分镜才发现细节不足回小说返工；清单见 `novel-craft/references/n2d-readiness.md`。

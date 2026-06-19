@@ -296,6 +296,12 @@ def stage_of(root: str, row: Dict[str, str], header: List[str]) -> Dict[str, Opt
             continue
         col = next(c for c in cols if not satisfied(c))
         label, cmd = str(spec["label"]), str(spec["command"])
+        if native_av and spec.get("key") == "script_stage2":
+            label = "阶段2·分镜设计（原生音画·脚本时长定稿）"
+            cmd = cmd.replace("配音后定稿", "原生音画脚本时长定稿")
+            note = "原生音画模式：配音列不作为硬前置，按 storyboard.json clips[].duration 定稿分镜与字幕节奏。"
+        else:
+            note = ""
         if not native_av and is_video_first(root) and skill == "n2d-compose" and voice_is_placeholder(root, ep) is not False:
             return {
                 "ep": ep,
@@ -305,7 +311,7 @@ def stage_of(root: str, row: Dict[str, str], header: List[str]) -> Dict[str, Opt
                 "cmd": "n2d-voice {root} {ep}  (补真音；之后 fit_voice_to_clips + n2d-compose)",
                 "note": "先出视频后配音模式：当前真实配音未确认（缺清单或仍是占位），合成前必须先补真实配音。",
             }
-        return {"ep": ep, "col": col, "label": label, "skill": skill, "cmd": cmd, "note": ""}
+        return {"ep": ep, "col": col, "label": label, "skill": skill, "cmd": cmd, "note": note}
     return {"ep": ep, "col": None, "label": "✅已成片", "skill": None, "cmd": None, "note": ""}
 
 

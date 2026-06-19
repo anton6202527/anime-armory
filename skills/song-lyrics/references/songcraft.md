@@ -31,6 +31,15 @@
 常用流行结构：`intro–verse1–pre–chorus–verse2–pre–chorus–bridge–chorus–outro`。
 抖音神曲：**前 8 秒必出 hook**（黄金开头），结构更短、副歌前置。
 
+## §元标签（meta-tags · 控住 AI 作曲的关键手）
+
+段落标签（`[verse]/[chorus]/[bridge]…`）之外，**在歌词里内联元标签**是 2026 控住 Suno/Udio 等生成式作曲后端的主力手段——业界共识：这类后端**仍不能稳定听从"小节数/调式/曲式/速度"这类纯文字指令**，要靠**内联元标签**指挥转场、器乐高光与演唱方式（来源：Suno v5/v5.5 评测与制作指南，采集 2026-06-19）。两类，按需用、不堆砌：
+
+- **结构/转场标签**：`[Intro]` `[Verse]` `[Pre-Chorus]` `[Chorus]` `[Bridge]` `[Outro]`、`[Build]`（蓄力爬升）、`[Drop]`（炸点/副歌砸下）、`[Breakdown]`、`[Instrumental]` / `[Guitar Solo]` / `[Piano Break]`（器乐高光段，无词）、`[Big Finish]`（收尾拔高）。
+- **演唱/情绪交付标签**（写在该句前或行内）：`[Whispered]`（气声）、`[Spoken]`（念白）、`[Belting]`（强混声爆发）、`[Falsetto]`（假声）、`[Harmonies]`（和声叠唱）、`[Ad-libs]`、`[Soft]` / `[Powerful]`、`[Female vocal]` / `[Male vocal]` / `[Duet]`。
+
+> 用法：标签放方括号里、单独成行或行首；与该段情绪/编曲意图一致即可，不必每段都塞。元标签是**给作曲后端的舞台指令**，不是唱出来的词；下游 `song-compose` 的 Style Prompt 再补**整体**风格（BPM/调性/乐器/曲风/人声类型/参考情绪），两者一个管"段内怎么演"、一个管"整首什么味"。
+
 ## §副歌 & Hook（先写这个）
 
 - **副歌是全曲的脸**：最先写。定情绪顶点 + 韵脚 + 那句**最抓耳、可重复、易跟唱**的 hook。

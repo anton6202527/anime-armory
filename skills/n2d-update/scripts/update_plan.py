@@ -41,6 +41,7 @@ from n2d_findings_utils import findings_status
 
 from skill_snapshot import (  # noqa: E402
     changed_files_since,
+    fingerprint_is_fresh,
     is_test_path,
     now_iso,
     snapshot_for_skills,
@@ -69,6 +70,16 @@ OBSERVE_ONLY_SKILLS = {
 
 def rel(path: str) -> str:
     return os.path.relpath(path, REPO_ROOT).replace(os.sep, "/")
+
+
+def freshness_label(recorded: Optional[Dict[str, Any]], root: str) -> str:
+    """fresh / stale / unknown — has a report's inputs changed since it was written.
+
+    `unknown` = the report carried no `inputs_fingerprint` (older producer); the
+    plan then advises re-running the gate rather than trusting a possibly-stale verdict.
+    """
+    fresh = fingerprint_is_fresh(recorded, root)
+    return "unknown" if fresh is None else ("fresh" if fresh else "stale")
 
 
 def skill_name_for_path(path: str) -> Optional[str]:
@@ -286,6 +297,13 @@ N2D_LIB_FILE_STAGE_HINTS: Tuple[Tuple[str, Tuple[str, ...]], ...] = (
         ),
     ),
     (
+        "video_prompt",
+        (
+            # 出图→出视频逐镜身份/物料交接继承校验（inherit_contract.py 消费）。
+            "_lib/n2d_handoff.py",
+        ),
+    ),
+    (
         "compose",
         (
             "_lib/subtitle_render.py",
@@ -301,6 +319,9 @@ N2D_LIB_OBSERVE_ONLY_TOKENS: Tuple[str, ...] = (
     "_lib/freshness.py",
     "_lib/refresh.py",
     "_lib/n2d_contract_diff.py",
+    # 跨集视觉契约一致性是 warn-only 审计（建于 n2d_contract_diff 之上），不产物料：
+    # 改了只需重跑 gate/review 刷新告警，不触发任何阶段重制。
+    "_lib/n2d_cross_episode.py",
     "_lib/n2d_maintenance.py",
 )
 
@@ -695,6 +716,7 @@ def load_image_qc_context(root: str, ep: str) -> Optional[Dict[str, Any]]:
         "status": "ok",
         "report_json": path,
         "report_md": os.path.splitext(path)[0] + ".md",
+        "freshness": freshness_label(data.get("inputs_fingerprint"), root),
         "precision_level": env.get("precision_level"),
         "python": env.get("python"),
         "recommended_install": env.get("recommended_install") or "",
@@ -1059,6 +1081,7 @@ def summarize_image_consistency(qc: Optional[Dict[str, Any]]) -> Optional[Dict[s
     return {
         "status": qc.get("status") or "ok",
         "verdict": qc.get("verdict"),
+        "freshness": qc.get("freshness"),
         "hard_blocks": qc.get("hard_blocks"),
         "advisory": qc.get("advisory"),
         "degraded": qc.get("degraded"),
@@ -1117,6 +1140,7 @@ def check_contract_inheritance(root: str, ep: str) -> Optional[Dict[str, Any]]:
     return {
         "status": "ok",
         "verdict": verdict,
+        "freshness": freshness_label(data.get("inputs_fingerprint"), root),
         "field_blocks": summary.get("block"),
         "field_warns": summary.get("warn"),
         "identity_blocks": len(identity_blocks),
@@ -1154,6 +1178,7 @@ def build_plan(root: str, ep: str, *, regen_mode: Optional[str] = None) -> Dict[
         current_todo = image_qc_repair_todo(root, ep, row, image_qc_context or {})
     relevant_skills = relevant_skills_for_stage(until_key)
     old = load_snapshot(root)
+    baseline_bootstrapped = bool(old and old.get("bootstrap"))
     old_skills = snapshot_skills(old) if old else set()
     newly_relevant = sorted(set(relevant_skills) - old_skills) if old else []
     snapshot_changes, baseline_stale = baseline_changed_files(
@@ -1186,6 +1211,11 @@ def build_plan(root: str, ep: str, *, regen_mode: Optional[str] = None) -> Dict[
         )
     if not old:
         notes.append("当前作品没有 skill_update_snapshot 基线；首次无法检测变更，请先 record 建立内容快照基线。")
+    if baseline_bootstrapped:
+        notes.append(
+            "基线为 check 自动建立的临时基线（bootstrap）：从这一刻起能检测变更，但看不到此前"
+            "已用过的更早 skill 版本所致的差异。确认当前产物可接受后，请 `record` 固化为正式基线（清除临时标记）。"
+        )
     if baseline_stale:
         notes.append("基线为旧版格式（无内容快照、不可用于变更检测）；请重新 record 建立内容基线。")
     if newly_relevant:
@@ -1279,6 +1309,16 @@ def build_plan(root: str, ep: str, *, regen_mode: Optional[str] = None) -> Dict[
                 f"hard_blocks={image_consistency.get('hard_blocks')}）：见 `{image_consistency.get('report_md')}`，"
                 "崩脸/服装/场景/接缝需重出受影响镜。"
             )
+    if image_consistency and image_consistency.get("freshness") == "stale":
+        notes.append(
+            "图片一致性报告已过期（image_qc 之后出图被重生成，inputs_fingerprint 失配）："
+            "当前结论不可信，先重跑 `python3 skills/n2d-image/scripts/image_qc.py <作品根> "
+            f"{ep}` 再据此判断。"
+        )
+    elif image_consistency and image_consistency.get("freshness") == "unknown" and image_consistency.get("status") == "ok":
+        notes.append(
+            "图片一致性报告无输入指纹（旧版 image_qc 产出，无法判定是否对应当前图片）：建议重跑 image_qc 取得可核验报告。"
+        )
     if contract_inheritance and not contract_inheritance.get("inherited"):
         st = contract_inheritance.get("status")
         if st == "missing":
@@ -1301,6 +1341,16 @@ def build_plan(root: str, ep: str, *, regen_mode: Optional[str] = None) -> Dict[
                 f"资产丢失 {contract_inheritance.get('asset_blocks')}）：见 `{contract_inheritance.get('report_md')}`，"
                 "先按出图侧原文修 `出视频/prompt/00_总览.md` 的视觉契约/补 01_clips.md 的身份锚点与物料绑定，再出视频。"
             )
+    if contract_inheritance and contract_inheritance.get("status") == "ok":
+        if contract_inheritance.get("freshness") == "stale":
+            notes.append(
+                "契约继承报告已过期（生成后出图/出视频 prompt 又改了，inputs_fingerprint 失配）："
+                f"`inherited` 结论不可信，先重跑 `python3 skills/n2d-video/scripts/inherit_contract.py <作品根> {ep}` 再判。"
+            )
+        elif contract_inheritance.get("freshness") == "unknown":
+            notes.append(
+                "契约继承报告无输入指纹（旧版 inherit_contract 产出）：无法判定是否对应当前 prompt，建议重跑取得可核验报告。"
+            )
     return {
         "kind": KIND_PLAN,
         "created_at": now_iso(),
@@ -1317,6 +1367,7 @@ def build_plan(root: str, ep: str, *, regen_mode: Optional[str] = None) -> Dict[
         "shared_lock_reuse": shared_lock_reuse,
         "shared_lock_changed_files": shared_lock_changed,
         "needs_record": old is None,
+        "baseline_bootstrapped": baseline_bootstrapped,
         "relevant_skills": relevant_skills,
         "newly_relevant_skills": newly_relevant,
         "changed_skills": changed_skills,
@@ -1334,7 +1385,15 @@ def build_plan(root: str, ep: str, *, regen_mode: Optional[str] = None) -> Dict[
     }
 
 
-def record(root: str, episodes: Sequence[str]) -> Dict[str, Any]:
+def record(root: str, episodes: Sequence[str], *, bootstrap: bool = False) -> Dict[str, Any]:
+    """Record the current relevant-skill content snapshot as the baseline.
+
+    `bootstrap=True` marks the snapshot provisional — written automatically by
+    `check` when none existed, so detection self-heals instead of dead-ending on
+    `needs_record`. A provisional baseline cannot see changes made BEFORE it was
+    written; a later explicit `record` (bootstrap=False) clears the flag and
+    fixes the accepted state.
+    """
     header, rows = rows_by_episode(root)
     skills: Set[str] = set(ALWAYS_RELEVANT_SKILLS)
     old = load_snapshot(root)
@@ -1352,6 +1411,8 @@ def record(root: str, episodes: Sequence[str]) -> Dict[str, Any]:
     snap["kind"] = KIND_SNAPSHOT
     snap["root"] = os.path.abspath(root)
     snap["episodes"] = normalized
+    if bootstrap:
+        snap["bootstrap"] = True
     write_json(snapshot_path(root), snap)
     return snap
 
@@ -1384,6 +1445,10 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     add_common(p_check)
     p_check.add_argument("--write-plan", action="store_true", help="write 生产数据/skill_update_plan_第N集.json/md")
     p_check.add_argument("--json", action="store_true", help="print JSON")
+    p_check.add_argument(
+        "--no-bootstrap", action="store_true",
+        help="无基线时不自动建立临时基线，保留旧行为（needs_record=true、不检测变更）",
+    )
     p_check.add_argument(
         "--regen-mode",
         choices=[REGEN_MODE_MINIMAL, REGEN_MODE_STRICT_REFRESH, LEGACY_REGEN_MODE_KEEP_IMAGES],
@@ -1451,6 +1516,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             print(f"已记录 skill 快照：{snapshot_path(root)}（{len(snap.get('files', {}))} files 内容基线）")
         return 0
 
+    # 无基线时自动建立临时基线（bootstrap），让 check 自愈，不再因"忘了 record"永久失明。
+    # --no-bootstrap 保留旧的 needs_record 死胡同行为。
+    if (args.cmd == "check" and not getattr(args, "no_bootstrap", False)
+            and load_snapshot(root) is None):
+        record(root, [str(ep) for ep in episodes], bootstrap=True)
+
     regen_mode = getattr(args, "regen_mode", None)
     plans = [build_plan(root, str(ep), regen_mode=regen_mode) for ep in episodes]
 
@@ -1517,12 +1588,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 if ic.get("status") in {"error", "unavailable"}:
                     health.append(f"图片={ic.get('status')}")
                 else:
-                    health.append("图片=" + ("一致" if ic.get("consistent") else f"硬阻断{ic.get('hard_blocks')}"))
+                    stale = "·过期" if ic.get("freshness") == "stale" else ""
+                    health.append("图片=" + ("一致" if ic.get("consistent") else f"硬阻断{ic.get('hard_blocks')}") + stale)
             if ci:
                 if ci.get("status") in {"missing", "error"}:
                     health.append(f"契约={ci.get('status')}")
                 else:
-                    health.append("契约=" + ("已继承" if ci.get("inherited") else "block"))
+                    stale = "·过期" if ci.get("freshness") == "stale" else ""
+                    health.append("契约=" + ("已继承" if ci.get("inherited") else "block") + stale)
             if health:
                 print("  health: " + " | ".join(health))
             for note in plan.get("notes", []):

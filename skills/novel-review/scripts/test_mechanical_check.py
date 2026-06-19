@@ -175,6 +175,41 @@ def test_json_out_writes_machine_payload():
         assert payload["counts"]["🟡"] >= 1
 
 
+# ── AI 腔/同质化启发式（advisory）──
+def test_ai_tell_flags_expository_connectors():
+    body = "他走进房间。综上所述，这一切都是命中注定。众所周知，他不会回头。"
+    out = mc.ai_tell_scan(body)
+    assert any(sev == "🟡" and "议论文式连接词" in msg for sev, msg, ev in out)
+
+
+def test_ai_tell_clean_narrative_is_silent():
+    body = "他推开门，屋里一片漆黑。窗外的风卷着雪，远处传来钟声。她说，你终于来了。"
+    assert mc.ai_tell_scan(body) == []
+
+
+def test_ai_tell_cliche_density_is_green_nudge():
+    # 多条万能金句堆在短正文里 → 千字密度高 → 🟢 nudge（不阻断）
+    body = "命运的齿轮开始转动，仿佛整个世界都静止了，空气仿佛凝固，时间仿佛静止。"
+    out = mc.ai_tell_scan(body, cliche_per_k=2.0)
+    assert any(sev == "🟢" and "万能金句" in msg for sev, msg, ev in out)
+    assert all(sev != "🔴" for sev, msg, ev in out)  # 容错铁律：绝不 🔴
+
+
+def test_ai_tell_wired_into_findings_and_toggle(tmp_path):
+    chapters = {"第1章.md": "# 第 1 章 《题》\n<!-- meta: demo=false -->\n"
+                + "他停下脚步。综上所述，命运的齿轮已然转动。" * 30}
+    root = make_proj(str(tmp_path), chapters)
+    subprocess.run([sys.executable, SCRIPT, root, "--json-out", os.path.join(root, "f.json")],
+                   capture_output=True, text=True)
+    payload = json.load(open(os.path.join(root, "f.json"), encoding="utf-8"))
+    assert any(x["dim"] == "AI腔" for x in payload["findings"])
+    # --no-ai-tell 关闭
+    subprocess.run([sys.executable, SCRIPT, root, "--no-ai-tell",
+                    "--json-out", os.path.join(root, "f2.json")], capture_output=True, text=True)
+    payload2 = json.load(open(os.path.join(root, "f2.json"), encoding="utf-8"))
+    assert not any(x["dim"] == "AI腔" for x in payload2["findings"])
+
+
 if __name__ == "__main__":
     import pytest
     raise SystemExit(pytest.main([__file__]))

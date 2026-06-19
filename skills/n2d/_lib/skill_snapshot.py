@@ -80,3 +80,45 @@ def changed_files_since(old: Optional[Dict[str, Any]], new: Dict[str, Any]) -> L
     after = new.get("files") if isinstance(new.get("files"), dict) else {}
     keys = set(before) | set(after)
     return sorted(k for k in keys if before.get(k) != after.get(k))
+
+
+def artifact_fingerprint(base_dir: str, rel_paths: Iterable[str]) -> Dict[str, Any]:
+    """Content fingerprint over a set of production input files, for report freshness.
+
+    A QC/contract report stamps this over the inputs it actually read; a later
+    consumer (n2d-update) re-hashes the same file list to tell whether the report
+    still describes the current artifacts. Missing files hash as None so a later
+    add/delete flips the combined sha. Same git-free SHA256 ethos as the skill
+    snapshot — works on the user's machine with no VCS and Chinese paths.
+
+    Returns {"files": {rel: sha|None}, "sha": <combined>}; rel paths are relative
+    to base_dir (typically 作品根), normalized to forward slashes.
+    """
+    files: Dict[str, Optional[str]] = {}
+    h = hashlib.sha256()
+    for rel in sorted({str(r).replace(os.sep, "/") for r in rel_paths}):
+        path = os.path.join(base_dir, rel)
+        digest = file_sha256(path) if os.path.isfile(path) else None
+        files[rel] = digest
+        h.update(rel.encode("utf-8"))
+        h.update(b"\0")
+        h.update((digest or "-").encode("ascii"))
+        h.update(b"\n")
+    return {"files": files, "sha": h.hexdigest()}
+
+
+def fingerprint_is_fresh(recorded: Optional[Dict[str, Any]], base_dir: str) -> Optional[bool]:
+    """Recompute over a recorded fingerprint's own file list and compare its sha.
+
+    True = fresh (inputs unchanged since the report), False = stale (inputs changed),
+    None = unknown (the report carried no usable `inputs_fingerprint`). Decoupled by
+    design: the consumer trusts the producer's declared input list and only re-verifies
+    that those files still hash to the same combined sha.
+    """
+    if not isinstance(recorded, dict):
+        return None
+    files = recorded.get("files")
+    sha = recorded.get("sha")
+    if not isinstance(files, dict) or not isinstance(sha, str) or not sha:
+        return None
+    return artifact_fingerprint(base_dir, list(files.keys()))["sha"] == sha

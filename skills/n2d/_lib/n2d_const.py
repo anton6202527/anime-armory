@@ -74,6 +74,7 @@ REDRAW_REASON_KEYWORDS = (
 VOICE_KEY_FIELD = "voice_key"
 VOICE_KEY_LEGACY_FIELD = "音色键"
 VOICE_KEY_PLACEHOLDER_SUFFIX = "_placeholder"
+EMOTION_FLOW_FIELD = "emotion_flow"
 
 # ── 制作模式 ──────────────────────────────────────────────────────────────
 # 2026-06-16 默认由「配音先行」改为「原生音画」：初学者/快速预览优先——说话镜由原生音画
@@ -86,6 +87,8 @@ PRODUCTION_MODE_DEFAULT = "原生音画"
 STYLE_CONTRACT_FIELDS = ("风格名", "视觉基调", "镜头与构图", "光色策略", "运动边界", "风格禁忌")
 CINEMATIC_CONTRACT_FIELDS = ("摄影基调", "镜头焦段", "光源动机", "色彩策略", "运镜边界", "真实感禁忌")
 VISUAL_CONTRACT_FIELDS = ("色调基线", "场景光位锚", "场景轴线视线", "角色状态演进", "景别阶梯")
+SPATIAL_ANCHOR_FIELD = "spatial_anchor"
+IDENTITY_ANCHOR_POINTS_FIELD = "identity_anchor_points"
 
 # ── 镜头类型 ──────────────────────────────────────────────────────────────
 SHOT_TYPE_KEYWORDS = (
@@ -149,6 +152,7 @@ IDENTITY_ADAPTER_MATRIX_KIND = "n2d_identity_adapter_matrix"
 COMPLIANCE_MANIFEST_KIND = "n2d_compliance_manifest"
 VIDEO_MODEL_ROUTES_KIND = "n2d_video_model_routes"
 MOTION_CONTROL_MANIFEST_KIND = "n2d_motion_control_manifest"
+EMOTION_FLOW_KIND = "n2d_emotion_flow"
 LORA_VALIDATION_REPORT_KIND = "n2d_lora_validation_report"
 SKILL_UPDATE_PLAN_KIND = "n2d_skill_update_plan"
 SKILL_UPDATE_SNAPSHOT_KIND = "n2d_skill_update_snapshot"

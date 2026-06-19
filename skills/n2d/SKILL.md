@@ -108,11 +108,11 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 `制作模式` 影响全程出片顺序，**不**走"全局默认静默预填"那条——哪怕全局默认/缺省是 `原生音画`，**新作品第一次拆集（n2d-script 情境A / 本调度情境A）时也要把菜单念给用户选一次**，选后写入 `_设置.md`、之后沉默沿用、随时可改（机制见 `../skills/n2d/references/选择点与偏好.md`「制作模式」条的"首跑必给菜单"例外）。简明菜单原话：
 
 > 先定**出片顺序**（之后默认沿用，随时可改）：
-> - **C. 原生音画（默认·推荐 / native AV / Seedance 2.0 类一次出同步音画）** — 说话镜由原生音画后端一次出台词+口型+环境声，绕过前期配音/对口型，**最快看到出图/出视频、无重同步返工**；代价：需原生音画后端（image2video-only 后端说话镜会降级），少了逐句音色控制；仿真人音色仍需授权。
-> - **A. 配音先行（强配音控制时选）** — 先出真实配音、用实测时长驱动镜头，音画最准、逐句音色/语速可控、返工最少。**追求配音表演、或后端不支持原生音画时选这条。**
-> - **B. 先出视频后配音（快速 demo / 配音还没就绪）** — 先用估算时长把画面推起来，真实配音留到出视频后再补。代价：后期补音对不准、可能重切重出（最贵的返工），仅 demo/比稿或配音暂时缺位时用；补齐后仍要回来重定时。
+> - **A. 原生音画（默认·推荐 / native AV / Seedance 2.0 类一次出同步音画）** — 说话镜由原生音画后端一次出台词+口型+环境声，绕过前期配音/对口型，**最快看到出图/出视频、无重同步返工**；代价：需原生音画后端（image2video-only 后端说话镜会降级），少了逐句音色控制；仿真人音色仍需授权。
+> - **B. 配音先行（强配音控制时选）** — 先出真实配音、用实测时长驱动镜头，音画最准、逐句音色/语速可控、返工最少。**追求配音表演、或后端不支持原生音画时选这条。**
+> - **C. 先出视频后配音（快速 demo / 配音还没就绪）** — 先用估算时长把画面推起来，真实配音留到出视频后再补。代价：后期补音对不准、可能重切重出（最贵的返工），仅 demo/比稿或配音暂时缺位时用；补齐后仍要回来重定时。
 >
-> 你选哪个？（不选默认 C）
+> 你选哪个？（不选默认 A）
 
 > 实战注脚：本仓库前几集就是因为**早期配音没准备好**而走了 B（后配音）。这正是 B 的合理用途——但每到下一阶段仍会提醒你它的代价。用户一旦明确表态（如"用后配音""先把画面做出来"），按 `skills/n2d/references/选择点与偏好.md` 解析顺序第 0 条**当场落档** `制作模式=先出视频后配音`，不必再问。
 
@@ -274,9 +274,10 @@ python3 skills/n2d-update/scripts/update_plan.py record <作品根> 第N集
    - 非原生音画：`配音` ✅、`分镜设计` ⬜ → 回跑 n2d-script 阶段2·分镜设计（时长驱动：分镜剧本+故事板+素材清单+SRT）。原生音画：`配音` 可选，`分镜设计` 直接按 `storyboard.json clips[].duration` 定稿。
      - ⚠️ **占位检查**：新进度约定下，占位配音应写 `配音=⏳rough`，真实配音才写 `✅`。旧项目若仍显示 `配音=✅`，也要读该集 `合成/第N集/配音/时长清单.json`，若有 `占位:true`（macOS say 占位音色）→ 告知用户"当前是占位配音，时长不准；正式出视频前必须 n2d-voice 换真实配音重跑 + 回跑阶段2 重定时"。finalize_storyboard/n2d-video 都会硬闸门拦截，但这里提前透露省返工。
    - `分镜设计` ✅、`出图prompt`/`出图` 未满 → n2d-image
-   - `出图` 满、`视频` 未满 → 先跑 `python3 skills/n2d-model-router/scripts/router.py <作品根> 第N集 --write` → n2d-video
+   - `出图` 满、`视频` 未满 → 先确认 `生产数据/image_qc/<ep>/image_qc_<ep>.json` 存在、`qc_environment.precision_level=full` 且 `summary.hard_blocks=0`，再跑 `python3 skills/n2d-model-router/scripts/router.py <作品根> 第N集 --write` → n2d-video。缺报告、低精度或 hard block 都回 `n2d-image` / image_qc setup，不允许直接进视频。
    - `视频` 满、`成片` ⬜ → n2d-compose（剪辑合成+BGM+字幕；问用户 BGM 选项）
-   - **gate 前置（通用编排规则）**：路由到 image/video/compose 任一阶段时，正式生产入口统一跑 dashboard gate：正式生图前用 `--stage image_preflight`，正式出视频前用 `--stage video_preflight`，合成前用 `--stage compose`（它会调用 `n2d-review/scripts/gate.py --json`，退出码 1 即先补再做，并把 QA 阻断入账）。`gate.py --json` 只作底层/调试入口。结构化输出会带 `return_to_stage` / `affected_artifacts` / `rerun_scope`，用于按最小范围回退返工。image_preflight 还会拦「storyboard.json 缺 visual_contract 视觉契约种子 / style_contract 基础视觉风格种子 / 本集总览缺契约」，把跨镜一致性和所选基础风格挡在花钱出图之前；生成后落档回验仍用 `--stage image` / `--stage video`。旧 `cinematic_contract` 兼容但新产物不再使用该标题。
+   - **gate 前置（通用编排规则）**：路由到 image/video/compose 任一阶段时，正式生产入口统一跑 dashboard gate：正式生图前用 `--stage image_preflight`，正式出视频前用 `--stage video_preflight`，合成前用 `--stage compose`（它会调用 `n2d-review/scripts/gate.py --json`，退出码 1 即先补再做，并把 QA 阻断入账）。`gate.py --json` 只作底层/调试入口。结构化输出会带 `return_to_stage` / `affected_artifacts` / `rerun_scope`，用于按最小范围回退返工。image_preflight 还会拦「storyboard.json 缺 visual_contract 视觉契约种子 / style_contract 基础视觉风格种子 / 本集总览缺契约」，把跨镜一致性和所选基础风格挡在花钱出图之前；生成后落档回验仍用 `--stage image` / `--stage video`。旧 `cinematic_contract` 兼容但新产物不再使用该标题。dashboard 的 `generation_pass_rate` 只表示生产尝试效率；对外验收和告警看 `deliverable_pass_rate` / `final_pass_rate`，存在 QA block 时可交付通过率归零。
+   - **原生音画额外前置**：`制作模式=原生音画` 时，`出视频/第N集/prompt/00_总览.md` 必须写「原生音画物理一致性契约」，锁定声源归属、口型策略、材质/动作声、空间声学、字幕/后期策略；video_preflight 会缺字段即 BLOCK。该契约是视频后端一次生成台词+口型时的音画物理护栏，不替代成片后的 whisper/字幕对齐。
 4. **推荐策略**：
    - 用户没指定集 → 找"最小未完成集编号" + 它所处的阶段，给出对应 skill 建议
    - 用户指定集 → 直接报该集所处阶段

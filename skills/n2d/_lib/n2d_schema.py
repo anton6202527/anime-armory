@@ -52,6 +52,12 @@ BOUNDARY_PRODUCT_KINDS = {
         "layer": "production_data",
         "boundary": "control_readiness",
     },
+    EMOTION_FLOW_KIND: {
+        "owner": "n2d-voice",
+        "path": "合成/{ep}/配音/emotion_flow.json",
+        "layer": "production_data",
+        "boundary": "emotional_pacing",
+    },
     CONTRACT_INHERITANCE_KIND: {
         "owner": "n2d-video",
         "path": f"{PRODUCTION_DIR}/contract_inheritance_{{ep}}.json",
@@ -739,11 +745,19 @@ IMAGE_IDENTITY_PROFILES: Dict[str, Dict[str, Any]] = {
         "persistent_subject": False,
         "multi_reference": True,
         "strategy": "multi_reference",
-        "max_reference_images": None,
+        "max_reference_images": 14,
+        "max_character_refs": 5,
+        "max_object_refs": 10,
+        "max_style_refs": 3,
         "ingests_video": False,
         "recommended_diverse_reference_min": None,
         "native_modes": (),
-        "notes": "多图参考后端；不等同 Seedream Universal Reference，不写入 seedream adapter。",
+        "notes": (
+            "Google Gemini/Nano Banana 多图参考后端；无持久角色 ID，不等同 Seedream Universal Reference，"
+            "不写入 seedream adapter。按官方 2026-06 文档：Gemini 3 Pro Image 高保真人物参考最多 5 张、"
+            "总输入最多 14 张；Gemini 3.1 Flash Image 支持至多 4 个角色相似与 10 个对象保真。"
+            "reference_planner 应在容量内优先选当前镜角色 face_anchor/expression/服装/场景参考，禁止全量喂图。"
+        ),
     },
     "seedream": {
         "label": "Seedream Universal Reference",
@@ -821,6 +835,9 @@ CONTINUITY_FIELDS = (
     "negative",
     "transition",
     "need_endframe",
+    "spatial_anchor",
+    "identity_anchor_points",
+    "emotion_flow",
 )
 
 COSTLY_HINTS = {

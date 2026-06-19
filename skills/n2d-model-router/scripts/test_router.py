@@ -34,6 +34,33 @@ def test_fight_routes_to_kling_with_seedance_fallback(tmp_path):
     assert route["motion_control"]["manifest_path"].endswith("出视频/第1集/control/Clip_01/motion_control_manifest.json")
 
 
+def test_execution_multiframe_channel_overrides_doomed_kling_primary(tmp_path):
+    root = _root(
+        tmp_path,
+        "- 生视频模型: Seedance 2.0\n"
+        "- 生视频渠道: 即梦/Dreamina\n"
+        "- 视频模型路由: 自动按镜头路由\n",
+    )
+    _write_storyboard(root, [{
+        "id": "Clip 1",
+        "template": "fight_exchange",
+        "duration": 14,
+        "scene": "沈念按住柳娘子背部炼化",
+        "continuity": {
+            "need_endframe": True,
+            "midframe": {"midframe_png": "出图/第1集/图片/Clip_01_mid.png"},
+        },
+    }])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["shot_type"] == "fight_exchange"
+    assert route["primary_backend"] == "seedance"
+    assert route["fallback_backends"][0] == "kling"
+    assert route["max_clip_seconds"] == 15
+    assert any("执行渠道" in item and "多关键帧" in item for item in route["rationale"])
+
+
 def test_flight_routes_to_seedance(tmp_path):
     root = _root(tmp_path)
     _write_storyboard(root, [{"id": "Clip 2", "template": "flight", "scene": "御剑飞行，云层向后高速流动"}])
@@ -386,7 +413,7 @@ def test_clip_id_and_identity_failure_helpers():
     assert router._is_identity_failure("缺短匕首，未过道具自检") is False
 
 
-# ── ③ 一角一后端亲和（advisory·warn-only）─────────────────────────────
+# ── ③ 一角一后端亲和（核心硬钉）─────────────────────────────
 def _write_registry(root: Path, characters):
     p = root / "出图" / "共享" / "identity_registry.json"
     p.parent.mkdir(parents=True, exist_ok=True)

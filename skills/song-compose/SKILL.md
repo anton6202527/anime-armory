@@ -31,6 +31,7 @@ description: 写歌·作曲+演唱 — 把定稿歌词 + 曲风，生成一首�
    - `歌/compose_task.json`
    - `歌/compose_prompts/take_XX.md`
    - `歌/takes_manifest.json`
+   > **Style Prompt 配方（细节越足越可控）**：2026 生成式后端对"小节数/调式/曲式"这类纯文字指令仍跟不稳，所以 Style Prompt 要把**整体声音**写满——`曲风 + 情绪 + BPM + 调性 + 器乐编制（如 piano and strings）+ 人声类型（female/male/duet/合成）+ 动态走向（安静主歌推到大副歌）+ 参考情绪`。`make_style` 现已纳入 `instrumentation`/`vocal_type`（在 `_meta.json` 或 `_设置.md` 写 `乐器编制`/`人声类型` 即自动进 prompt，缺则跳过）。**段内的转场/器乐高光/演唱方式**则靠歌词里的**内联元标签**（`[Build]`/`[Drop]`/`[Instrumental]`/`[Whispered]`…）指挥——见 `song-lyrics/references/songcraft.md §元标签`，两者一个管整首一个管段内。
 2. **按后端生成多版**：
    - 云 Suno → web 生成或 API（见 backends.md），下载到 `歌/`。
    - 本地 ACE-Step → headless 调用（见 backends.md）。

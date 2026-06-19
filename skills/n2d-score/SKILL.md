@@ -33,6 +33,21 @@ description: P2 automatic review scoring for n2d. Produce a machine score per ep
 
 **无静默丢弃（P1）**：mechanical_check / dashboard 的 findings 若 `dim` 归不到评分维度（如 `完整性`=缺产物、`视频`），不再被 `continue` 静默吞掉，而是落进 `unmapped_findings`。其中 **block 级会强制整集不给 `pass`（降 `warn`）并出 `triage_unmapped` 人判分诊任务**；warn/info 仅留痕。历史 bug：`BLOCK 完整性` 因关键词没命中被丢弃、不扣分、可放行。
 
+### 对齐 2026 公开评测词汇（VBench-2.0 cross-walk·防过期参照）
+
+n2d 的维度是**面向漫剧产线的自定义口径**，但应能与公开评测（**VBench / VBench-2.0**，2026-03）对话——便于横向比对、采纳缺的维。映射（采集 2026-06-19，会过期，以一次 `n2d-review` 流程自审复核为准）：
+
+| VBench / VBench-2.0 维 | n2d 对应 | 状态 |
+|---|---|---|
+| Subject Consistency（DINO/DreamSim） | 角色 DNA（脸/发型/服装）+ `semantic_drift` | ✅ 有（`semantic_drift` 现支持 DreamSim 后端，见 `n2d-image`） |
+| Temporal Flickering | `temporal_consistency` TCI/flicker | ✅ 有 |
+| Background/Scene Consistency | 场景一致性 + `scene_consistency` | ✅ 有 |
+| Text/Prompt Alignment | 语义继承（P0 谱系 Diff） | ✅ 有 |
+| **Motion Smoothness / Dynamic Degree** | — | ⛳ **候选缺口**：n2d 无运动平滑/动态度评分 |
+| **Physics / Commonsense Plausibility**（VBench-2.0 intrinsic faithfulness） | — | ⛳ **候选缺口**：无物理/常识合理性维 |
+
+**候选缺口**（⛳）是可加的新维（运动平滑度、物理合理性），需视频级分析支撑，**属研究级、暂作 backlog**——先在此登记，不强行塞噪声维。已有维不重复造。
+
 ## 标准命令
 
 ### 跑机检并评分

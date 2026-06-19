@@ -42,6 +42,7 @@ GENERATION_STAGES = {"voice", "image", "video", "compose"}
 PAID_STAGES = {"image", "video", "compose"}          # 进这些前必过合规闸门
 ROUTER_STAGES = {"video_prompt", "video"}            # 出视频前置：先写模型路由表
 IDENTITY_REFRESH_STAGES = {"image_prompt", "image", "video_prompt", "video", "compose", "review"}
+IMAGE_QC_STRICT_STAGES = {"video_prompt", "video", "compose", "review"}
 FIRST_RUN_CHOICES = ("制作模式", "生视频模型", "生视频渠道", "基础视觉风格")
 # 各生成阶段"放行前必问"的选择点（菜单随动作卡一起给，不另起一次 needs_choice）
 STAGE_MENU = {
@@ -112,7 +113,8 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
         }
 
     ep = frontier["ep"]
-    cmd = (spec.get("command") or "").format(root=root, ep=ep)
+    cmd_template = route.get("cmd") or spec.get("command") or ""
+    cmd = cmd_template.format(root=root, ep=ep)
 
     # 1. env 缺失 —— 不让代理跑到花钱工位才发现
     if probes.env_missing:
@@ -175,17 +177,18 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
 
 
 def _menu(root: str, choice_point: str) -> Dict[str, Any]:
-    """选择点菜单：选项来自 SettingSpec（适配层真值），预选=设置里上次值；不 branch 菜单文字。"""
+    """选择点菜单：选项来自 SettingSpec（适配层真值），预选=设置里上次值或默认首项；不 branch 菜单文字。"""
     spec = None
     try:
         spec = get_setting_spec(choice_point, "n2d")
     except Exception:
         pass
-    options = list(getattr(spec, "choices", ()) or [])
+    options = list(getattr(spec, "allowed", ()) or getattr(spec, "choices", ()) or [])
+    preselect = get_setting(root, choice_point, None) or (options[0] if options else None)
     return {
         "choice_point": choice_point,
         "options": options,
-        "default_preselect": get_setting(root, choice_point, None) or None,
+        "default_preselect": preselect,
     }
 
 
@@ -213,6 +216,32 @@ def _parse_trailing_json(stdout: str) -> Dict[str, Any]:
             except Exception:
                 continue
     return {}
+
+
+def _image_qc_report_path(root: str, ep: str) -> str:
+    return os.path.join(root, "生产数据", "image_qc", ep, f"image_qc_{ep}.json")
+
+
+def _image_qc_gate_issue(root: str, ep: str) -> Optional[str]:
+    """Video/compose 前的硬护栏：缺报告、低精度或已有 hard block 都不能继续。"""
+    path = _image_qc_report_path(root, ep)
+    if not os.path.isfile(path):
+        return f"缺 image_qc 报告：{path}；先跑 n2d-image 的 image_qc 并确认 full 精度。"
+    try:
+        data = json.load(open(path, encoding="utf-8"))
+    except Exception as exc:
+        return f"image_qc 报告不可读：{path}（{exc}）；修复后重跑 image_qc。"
+    env = data.get("qc_environment") if isinstance(data, dict) else {}
+    summary = data.get("summary") if isinstance(data, dict) else {}
+    precision = str((env or {}).get("precision_level") or "").strip().lower()
+    if precision != "full":
+        label = precision or "unknown"
+        return f"image_qc 精度为 {label}：{path}；补依赖重跑到 full，或停下登记人审后再继续。"
+    hard_blocks = int((summary or {}).get("hard_blocks") or 0)
+    verdict = str((summary or {}).get("verdict") or "").strip().lower()
+    if hard_blocks > 0 or verdict == "block":
+        return f"image_qc 仍有硬阻断（hard_blocks={hard_blocks}, verdict={verdict or 'unknown'}）：{path}。"
+    return None
 
 
 def gather_probes(root: str, route: Dict[str, Any], stage_key: str) -> Probes:
@@ -253,6 +282,15 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str) -> Probes:
                 p.prework.append({"step": "identity", "status": "ok" if r.returncode == 0 else "warn"})
             except Exception as e:  # pragma: no cover
                 p.prework.append({"step": "identity", "status": "skip", "detail": str(e)[:120]})
+
+    # image_qc：出图落档后的机检报告必须 full 且无 hard block，才允许进入视频/合成链路。
+    if stage_key in IMAGE_QC_STRICT_STAGES and ep:
+        issue = _image_qc_gate_issue(root, ep)
+        if issue:
+            p.env_missing = issue
+            p.prework.append({"step": "image_qc", "status": "block", "detail": issue[:160]})
+        else:
+            p.prework.append({"step": "image_qc", "status": "pass"})
 
     # gate：有 gate_stage 的阶段先过 dashboard gate（退出码 1=block）
     gate_stage = spec.get("gate_stage")

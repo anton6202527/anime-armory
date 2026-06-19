@@ -5,6 +5,7 @@
     cd skills/n2d && python3 -m pytest test_run.py
 """
 import os
+import json
 import sys
 import tempfile
 
@@ -51,10 +52,35 @@ def test_resolve_frontier_voice():
     assert run.stage_key_of(route) == "voice"
 
 
+def test_resolve_frontier_native_av_script_stage2_labels_timing_not_voice():
+    root = make_work(ALL_DONE_TO["voice"])
+    route = run.resolve_frontier(root)
+    assert run.stage_key_of(route) == "script_stage2"
+    assert "原生音画" in route["label"]
+    assert "配音后" not in route["cmd"]
+    assert "storyboard.json" in route["note"]
+
+
+def test_decide_uses_mode_aware_route_command():
+    root = make_work(ALL_DONE_TO["voice"])
+    route = run.resolve_frontier(root)
+    na = run.decide(root, route, "script_stage2", run.Probes())
+    cmd = na["action_card"]["exact_command"]
+    assert "原生音画脚本时长定稿" in cmd
+    assert "配音后" not in cmd
+
+
 def test_resolve_frontier_done():
     cells = ["✅"] * 14
     root = make_work(cells)
     assert run.resolve_frontier(root) is None
+
+
+def test_production_mode_menu_defaults_to_shortest_path():
+    root = make_work(ALL_DONE_TO["script_stage1"])
+    menu = run._menu(root, "制作模式")
+    assert menu["options"][:3] == ["原生音画", "配音先行", "先出视频后配音"]
+    assert menu["default_preselect"] == "原生音画"
 
 
 def test_stage_key_of_voice_redirect():
@@ -147,6 +173,35 @@ def test_decide_is_pure_no_mutation():
     run.decide(root, _route("image"), "image", p)
     after = (p.env_missing, p.compliance_gap, list(p.pending_choices), list(p.prework))
     assert before == after
+
+
+def test_image_qc_gate_issue_blocks_missing_report():
+    root = make_work(ALL_DONE_TO["image"])
+    issue = run._image_qc_gate_issue(root, "第1集")
+    assert issue and "缺 image_qc 报告" in issue
+
+
+def test_image_qc_gate_issue_blocks_non_full_precision():
+    root = make_work(ALL_DONE_TO["image"])
+    out_dir = os.path.join(root, "生产数据", "image_qc", "第1集")
+    os.makedirs(out_dir, exist_ok=True)
+    path = os.path.join(out_dir, "image_qc_第1集.json")
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump({"qc_environment": {"precision_level": "none"}, "summary": {"hard_blocks": 0}}, fh)
+
+    issue = run._image_qc_gate_issue(root, "第1集")
+    assert issue and "精度为 none" in issue
+
+
+def test_image_qc_gate_issue_passes_full_clean_report():
+    root = make_work(ALL_DONE_TO["image"])
+    out_dir = os.path.join(root, "生产数据", "image_qc", "第1集")
+    os.makedirs(out_dir, exist_ok=True)
+    path = os.path.join(out_dir, "image_qc_第1集.json")
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump({"qc_environment": {"precision_level": "full"}, "summary": {"hard_blocks": 0, "verdict": "ok"}}, fh)
+
+    assert run._image_qc_gate_issue(root, "第1集") is None
 
 
 if __name__ == "__main__":

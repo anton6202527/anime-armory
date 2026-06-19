@@ -19,6 +19,7 @@ GOOD_SHOT = """## 镜头 1（冷开场）🔑关键镜
 **起幅·运动余量**：本镜为 Clip 1 首帧=起幅（顶点交尾帧），按缓慢推近预留构图余量、上下留 lead room
 **专项镜头模板**：dialogue_shot_reverse；blocking=沈念画左，柳娘子画右；camera_rule=守轴线；continuity_must=脸型发型不漂；negative=不要换脸。
 **资产身份注册层**：`CHAR_SHEN/常态`；reference_group=正/侧/半身/三视图；angle_policy=front/three_quarter allowed；drift_forbidden=face_shape/hairstyle/outfit_palette
+**人物审美基线**：默认主流审美、镜头友好、精致好看但不网红脸；五官比例协调、妆造服装耐看，同时保持沈念的年龄、病弱处境和角色 DNA。
 **资产引用注册层**：`LOC_01` 冷宫寝殿；从 `出图/共享/asset_registry.json` 继承 reference_group / constraints / drift_forbidden；锁本场 layout/axis/light_anchor。
 **近景/反打身份锁定**：本镜是 CU 近景，必须引用 `定妆_沈念_脸部特写.png` 或表情参考；锁脸型、五官比例、发型发髻、标志配饰和服装配色，不得换脸。
 **尾帧接力生成方式**：正反打/表情尾帧必须以同镜首帧或上一张成图 image2image 图生图为母图，不得纯文生图；只改表情/眼神/嘴角，不重画演员脸、发髻、配饰和服装。
@@ -28,7 +29,7 @@ GOOD_SHOT = """## 镜头 1（冷开场）🔑关键镜
 |---|---|
 | ① 镜头 | CU + 浅景深 |
 | ② 机位 | 微俯视 |
-| ③ 人物 | 锚点句：凤眼薄唇·乌黑半披发带·月白旧宫装 |
+| ③ 人物 | 锚点句：凤眼薄唇·乌黑半披发带·月白旧宫装；人物审美基线=主流审美、镜头友好、好看但不网红脸 |
 | ④ 动作 | 抬眼 |
 | ⑤ 场景 | 冷宫寝殿 |
 | ⑥ 光影 | 侧逆光 |
@@ -479,6 +480,29 @@ def test_two_char_shot_on_native_subject_backend_only_warns():
     assert any(f["sev"] == gate.WARN and f["dim"] == "角色一致性" and "同框" in str(f["msg"])
                for f in gate.findings)
     assert not any(f["sev"] == gate.BLOCK and "同框" in str(f["msg"]) for f in gate.findings)
+
+
+# ── ① 长线剧 × 无持久主体后端 → 建议升原生主体/主体库（advisory·治跨集脸漂累积）──
+def test_long_running_weak_backend_advises_on_codex_ep3():
+    # Codex(无持久主体) + 到第3集 → 建议升档
+    assert gate.long_running_weak_backend_advice("codex", 3, 1) is True
+
+
+def test_long_running_weak_backend_silent_on_short_drama():
+    # 单集/双集 demo 不打扰
+    assert gate.long_running_weak_backend_advice("codex", 1, 1) is False
+    assert gate.long_running_weak_backend_advice("codex", 2, 2) is False
+
+
+def test_long_running_weak_backend_counts_existing_episodes():
+    # 当前集号小但已有 ≥阈值 集存在（多集长剧）→ 仍建议
+    assert gate.long_running_weak_backend_advice("codex", 1, 4) is True
+
+
+def test_long_running_weak_backend_silent_on_persistent_subject_backend():
+    # 已是原生主体/主体库后端(Seedream/可灵/Sora) → 不提示，无论多少集
+    for canon in ("seedream", "kling", "sora"):
+        assert gate.long_running_weak_backend_advice(canon, 50, 50) is False
 
 
 def test_two_char_shot_with_registered_degradation_escapes_even_on_single_ref():
@@ -966,6 +990,7 @@ def _identity_registry(overrides=None):
                             "build_tier": "standard_full",
                             "base_views": {
                                 "front": {"path": "出图/共享/图片/定妆_沈念.png", "status": "ready"},
+                                "three_quarter": {"path": "出图/共享/图片/定妆_沈念_45度.png", "status": "ready"},
                                 "side": {"path": "出图/共享/图片/定妆_沈念_侧.png", "status": "ready"},
                                 "back": {"path": "出图/共享/图片/定妆_沈念_背.png", "status": "ready"},
                                 "half_body": {"path": "出图/共享/图片/定妆_沈念_半身.png", "status": "ready"},
@@ -1337,7 +1362,7 @@ def test_identity_registry_face_anchor_refs_satisfy_baseline_without_expression_
     ]
     form["reference_group"]["expressions"] = []
     form["reference_atlas"]["face_anchor_refs"] = [
-        {"label": "基础脸锚", "path": "出图/共享/图片/定妆_沈念_脸部特写.png", "status": "planned"}
+        {"label": "基础脸锚", "path": "出图/共享/图片/定妆_沈念_脸部特写.png", "status": "ready"}
     ]
     form["reference_atlas"]["expression_refs"] = []
     root = _write_identity_registry(tmp_path, data)
@@ -2048,17 +2073,44 @@ def test_reference_plan_warns_when_actions_pending(tmp_path):
     gate.check_reference_plan_applied(str(root), "第1集")
 
     matches = [f for f in gate.findings if f["dim"] == "参考规划落实"]
-    assert matches and all(f["sev"] == gate.WARN for f in matches)
+    assert matches and all(f["sev"] == gate.BLOCK for f in matches)
     assert any("CHAR_01/常态" in f["msg"] for f in matches)
 
 
-def test_reference_plan_silent_when_no_plan(tmp_path):
+def test_reference_plan_silent_when_no_plan_and_no_character_signal(tmp_path):
     root = tmp_path / "制漫剧" / "测试剧"
     root.mkdir(parents=True)
 
     gate.check_reference_plan_applied(str(root), "第1集")
 
     assert not any(f["dim"] == "参考规划落实" for f in gate.findings)
+
+
+def test_reference_plan_missing_blocks_for_core_registry(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    _write_registry(root, [_char("CHAR_01", "沈念", "长线女主·全篇", "常态", "registered")])
+
+    gate.check_reference_plan_applied(str(root), "第1集")
+
+    matches = [f for f in gate.findings if f["dim"] == "参考规划落实"]
+    assert matches and matches[0]["sev"] == gate.BLOCK
+    assert "reference_plan_第1集.json" in matches[0]["msg"]
+
+
+def test_reference_plan_missing_warns_for_character_storyboard_without_registry(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    sb_dir = root / "脚本" / "第1集"
+    sb_dir.mkdir(parents=True)
+    (sb_dir / "storyboard.json").write_text(
+        json.dumps({"clips": [{"id": "C1", "characters": ["CHAR_01/常态"]}]}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+    gate.check_reference_plan_applied(str(root), "第1集")
+
+    matches = [f for f in gate.findings if f["dim"] == "参考规划落实"]
+    assert matches and matches[0]["sev"] == gate.WARN
 
 
 def test_reference_plan_silent_when_no_actions(tmp_path):
@@ -2113,8 +2165,8 @@ def test_native_subject_not_prompted_for_dreamina(tmp_path):
     assert not any(f["dim"] == "原生主体注册" for f in gate.findings)
 
 
-def test_native_subject_prompted_when_capable_backend_and_core_unregistered(tmp_path):
-    # 选了支持原生主体的后端（Seedream）且核心长线角色未注册 → 主动 WARN 引导去注册。
+def test_native_subject_blocks_when_capable_backend_and_core_unregistered(tmp_path):
+    # 选了支持原生主体的后端（Seedream）且核心长线角色未注册 → BLOCK，先注册再付费出图。
     root = tmp_path / "制漫剧" / "测试剧"
     root.mkdir(parents=True)
     (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 生图AI: Seedream\n", encoding="utf-8")
@@ -2123,7 +2175,7 @@ def test_native_subject_prompted_when_capable_backend_and_core_unregistered(tmp_
     gate.check_image_ai_policy(str(root), "第1集")
 
     matches = [f for f in gate.findings if f["dim"] == "原生主体注册"]
-    assert matches and all(f["sev"] == gate.WARN for f in matches)
+    assert matches and all(f["sev"] == gate.BLOCK for f in matches)
     assert any("CHAR_01/常态" in f["msg"] for f in matches)
 
 
@@ -2254,6 +2306,7 @@ def test_role_makeup_prompt_requires_halfbody_crop_rule(tmp_path):
 **参考图来源**：无需参考图
 **角色定妆组**：
 - 正面主参考：`出图/共享/图片/定妆_沈念.png`
+- 45°参考：`出图/共享/图片/定妆_沈念_45度.png`
 - 侧面参考：`出图/共享/图片/定妆_沈念_侧.png`
 - 背面参考：`出图/共享/图片/定妆_沈念_背.png`
 - 服装参考：`出图/共享/图片/定妆_沈念_半身.png`
@@ -2303,6 +2356,7 @@ def test_role_makeup_prompt_halfbody_crop_rule_passes(tmp_path):
 **参考图来源**：无需参考图
 **角色定妆组**：
 - 正面主参考：`出图/共享/图片/定妆_沈念.png`
+- 45°参考：`出图/共享/图片/定妆_沈念_45度.png`
 - 侧面参考：`出图/共享/图片/定妆_沈念_侧.png`
 - 背面参考：`出图/共享/图片/定妆_沈念_背.png`
 - 服装参考：`出图/共享/图片/定妆_沈念_半身.png`，从已通过自检的正面主参考裁切并放大/重采样回 9:16；人物主体居中、头身中线接近画面中线、左右留白基本均衡；不得用白底/浅灰底/空白补满下半截
@@ -2533,6 +2587,44 @@ def test_video_overview_native_audio_mix_requires_opt_in_list(tmp_path):
     gate.check_video_prompt_overview(str(root), "第1集")
 
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "原生音画" and "opt-in 清单" in f["msg"] for f in gate.findings)
+
+
+def test_native_av_physical_contract_required_in_native_mode(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 制作模式: 原生音画\n", encoding="utf-8")
+    gate.check_native_av_physical_contract(str(root), "第1集", "native_speech 有意生成", "00_总览.md")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "原生音画物理一致性" and "缺「原生音画物理一致性契约」" in f["msg"] for f in gate.findings)
+
+
+def test_native_av_physical_contract_requires_all_fields(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 制作模式: 原生音画\n", encoding="utf-8")
+    text = "## 原生音画物理一致性契约\n- 声源归属：画内人物\n- 口型策略：说话镜必须口型同步\n"
+
+    gate.check_native_av_physical_contract(str(root), "第1集", text, "00_总览.md")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "原生音画物理一致性" and "材质/动作声" in f["msg"] for f in gate.findings)
+
+
+def test_native_av_physical_contract_passes_when_fields_present(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 制作模式: 原生音画\n", encoding="utf-8")
+    text = (
+        "## 原生音画物理一致性契约\n"
+        "- 声源归属：画内人物对白与可见动作声分离记录\n"
+        "- 口型策略：说话镜 native_speech 必须口型同步，非说话镜不得冒出对白\n"
+        "- 材质/动作声：衣料、脚步、器物只跟可见动作触发\n"
+        "- 空间声学：内景近声、远景衰减、遮挡和混响随景别变化\n"
+        "- 字幕/后期策略：成片后 whisperx 对齐，旁白层不得与原生台词重叠\n"
+    )
+
+    gate.check_native_av_physical_contract(str(root), "第1集", text, "00_总览.md")
+
+    assert not any(f["dim"] == "原生音画物理一致性" for f in gate.findings)
 
 
 def test_video_overview_requires_model_routes_json(tmp_path):

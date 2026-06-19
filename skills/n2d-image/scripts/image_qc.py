@@ -69,6 +69,32 @@ def _load_review_module(name: str):
         return None
 
 
+def _backend_identity_profile(root: Path) -> Optional[Dict[str, Any]]:
+    """读 _设置.md『生图AI』→ IMAGE_IDENTITY_PROFILES（含 persistent_subject）。
+    读不到/lib 不可用 → None（保持现状，不改变默认 lint 行为）。best-effort I/O。"""
+    lib = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
+    if lib not in sys.path:
+        sys.path.insert(0, lib)
+    try:
+        from n2d_contract import classify_image_backend, image_identity_profile  # type: ignore
+    except Exception:
+        return None
+    raw = ""
+    try:
+        m = re.search(r"生图AI[：:]\s*([^\n（(]+)", (root / "_设置.md").read_text(encoding="utf-8"))
+        if m:
+            raw = m.group(1).strip()
+    except Exception:
+        return None
+    try:
+        canon, kind = classify_image_backend(raw)
+        if kind != "approved" or not canon:
+            return None
+        return image_identity_profile(canon)
+    except Exception:
+        return None
+
+
 def _load_sibling(name: str):
     """惰性加载本 skill scripts 目录下的同级模块（如 asset_lifecycle）；不可用返回 None。"""
     d = str(Path(__file__).resolve().parent)
@@ -420,7 +446,8 @@ def character_shot_manifest(block: Dict[str, str]) -> Optional[Dict[str, Any]]:
 def _declares_no_tail_frame(body: str) -> bool:
     text = str(body or "")
     return bool(
-        re.search(r"尾帧[：:]\s*[`]*无[`]*", text)
+        re.search(r"尾帧(?:接力生成方式|专用重抽提示)?(?:\*\*)?\s*[：:]\s*[`]*无[`]*", text)
+        or re.search(r"最终镜[，,、；;\s]*无尾帧", text)
         or re.search(r"end_state\s*交尾帧\s*[`]*无[`]*", text)
     )
 
@@ -502,6 +529,8 @@ def _lint_tail_identity_handoff(
     registry_forms: Optional[List[Dict[str, Any]]],
 ) -> List[Dict[str, str]]:
     findings: List[Dict[str, str]] = []
+    if _declares_no_tail_frame(body):
+        return findings
     handoff_forms = _mentioned_handoff_forms(body, registry_forms)
     if not handoff_forms:
         return findings
@@ -590,15 +619,20 @@ def _references_expression_lib(body: str) -> bool:
     return any(m in str(body or "") for m in EXPRESSION_LIB_MARKERS)
 
 
-# ④ 表情库硬闸对所有人物生效；核心/长线只决定提示文案和是否升 LoRA/主体库。
+# ④ 表情库硬闸对所有人物生效；核心/长线还用于脸锚质量和跨集退化升硬闸。
 CORE_SCOPES = ("全篇", "长线", "核心")
+
+
+def is_core_scope(scope: str) -> bool:
+    """Free-text scope matcher for core/long-running characters."""
+    return any(marker in str(scope or "") for marker in CORE_SCOPES)
 
 
 def core_char_ids(registry_forms: Optional[Sequence[Mapping[str, Any]]]) -> Set[str]:
     """registry_forms → 核心角色 base id 集合（scope ∈ 核心/长线/全篇）。纯函数·可测。"""
     return {str(f.get("id") or "").strip()
             for f in (registry_forms or [])
-            if str(f.get("scope") or "").strip() in CORE_SCOPES and f.get("id")}
+            if is_core_scope(str(f.get("scope") or "")) and f.get("id")}
 
 
 def _lint_closeup_expression_lib(label: str, body: str,
@@ -736,12 +770,18 @@ def _lint_multi_subject_spatial_binding(label: str, body: str,
 
 
 def _lint_native_multiref_coverage(label: str, body: str, id_refs: Sequence[str],
-                                   form_ref_counts: Optional[Dict[str, int]]) -> List[Dict[str, str]]:
+                                   form_ref_counts: Optional[Dict[str, int]],
+                                   persistent_subject: Optional[bool] = None) -> List[Dict[str, str]]:
     """多角度参考喂养充分性（C4·advisory）：定妆库有多角度组、本镜却只引用了 1 张时提示喂全组。
 
     2026 原生多参考已 table-stakes（Seedream≤14 / 可灵 Elements≤4 张锁主体）。定妆库建了正/侧/背
     多角度组，却只把正面喂进去 = 没吃满后端锁主体能力。只在 registry 确有多角度组(≥3)时才 info，
-    不噪；单参考后端可忽略。纯函数·可测。"""
+    不噪；单参考后端可忽略。纯函数·可测。
+
+    **后端分层（④）**：`persistent_subject=True`（Seedream/可灵/Sora）逐镜应按已注册主体 ID 引用 +
+    单张干净强锚即可，2026 实践「单强锚 > 弱参考拼盘」——不必每镜堆全角度组（多样集只在*注册*环节喂）。
+    所以对持久主体后端把「喂全组」的 nudge 换成「ID+单强锚」口径，不再误导其堆图；只有多参考后端
+    （persistent_subject False/未知）才提示喂满全角度组。"""
     if not form_ref_counts:
         return []
     avail = max((form_ref_counts.get(b, 0) for b in _distinct_char_bases(id_refs)), default=0)
@@ -750,9 +790,41 @@ def _lint_native_multiref_coverage(label: str, body: str, id_refs: Sequence[str]
     refd = len({t for t in _png_tokens(body) if "定妆_" in t})
     if refd >= min(avail, 3):
         return []  # 已喂≥3张（或全部）→ 充分
+    if persistent_subject:
+        return [{"level": "info", "code": "native_subject_anchor_ok",
+                 "msg": f"{label}：持久主体后端(Seedream/可灵/Sora)逐镜按已注册主体 ID + 单张干净强锚引用即可"
+                        f"（2026：单强锚 > 弱参考拼盘），不必每镜堆全角度组——多样集只在注册主体时喂；"
+                        f"若该角色尚未注册主体，则回退多参考后端口径喂全组({avail} 张可喂，本镜 {refd})"}]
     return [{"level": "info", "code": "native_multiref_underfed",
              "msg": f"{label}：定妆库有 {avail} 张多角度参考，本镜参考图块只引用了 {refd} 张——"
                     "多参考后端(Seedream≤14 / 可灵Elements≤4)喂全角度组(正/侧/背)锁主体更稳；单参考后端可忽略"}]
+
+
+def _lint_physical_lens_parameters(label: str, body: str) -> List[Dict[str, str]]:
+    """物理镜头参数（advisory）：近景/特写镜头如果没有物理焦段/光圈参数，提示增强电影感。"""
+    is_closeup = re.search(r'\b(CU|ECU|特写|近景|大特写)\b', body, re.IGNORECASE)
+    
+    if is_closeup:
+        has_physical_params = re.search(r'\b(\d{2,3}mm|f/\d\.?\d?|焦段|光圈)\b', body, re.IGNORECASE)
+        if not has_physical_params:
+            return [{"level": "warn", "code": "missing_physical_lens_params",
+                     "msg": f"{label}：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"}]
+    
+    return []
+
+
+def _lint_semantic_conflict(label: str, body: str) -> List[Dict[str, str]]:
+    """语义冲突（advisory）：简单的文本级语义冲突排查（如白天与黑夜同现）。"""
+    findings = []
+    text = body.lower()
+    if re.search(r"深夜|夜晚|夜间|黑夜", text) and re.search(r"阳光|明媚|白昼|正午", text):
+         findings.append({"level": "warn", "code": "semantic_conflict",
+                          "msg": f"{label}：提示词语义冲突（同时存在“夜晚”和“白昼/阳光”相关描述），易导致 AI 光影错乱。"})
+    # 极简色温冲突
+    if re.search(r"5600k", text) and re.search(r"3200k", text):
+         findings.append({"level": "warn", "code": "semantic_conflict",
+                          "msg": f"{label}：色温锚点冲突（同时存在 5600K 与 3200K 主光描述）。"})
+    return findings
 
 
 def lint_shot_block(
@@ -761,6 +833,7 @@ def lint_shot_block(
     registry_forms: Optional[List[Dict[str, Any]]] = None,
     asset_index: Optional[Dict[str, Any]] = None,
     form_ref_counts: Optional[Dict[str, int]] = None,
+    persistent_subject: Optional[bool] = None,
 ) -> List[Dict[str, str]]:
     """单镜块执行层 lint：返回 findings [{level, code, msg}]。纯函数·可测（不读盘）。
 
@@ -774,6 +847,8 @@ def lint_shot_block(
 
     # 资产 id lint（A）：场景/道具/服装/特效，所有镜都跑（含纯场景/道具空镜），先于角色镜早返回。
     findings.extend(_lint_asset_binding(label, body, asset_index))
+    findings.extend(_lint_physical_lens_parameters(label, body))
+    findings.extend(_lint_semantic_conflict(label, body))
 
     id_refs = IDENTITY_REF_RE.findall(body)
     ref_block_present = "参考图" in body and "定妆_" in body
@@ -808,7 +883,7 @@ def lint_shot_block(
     findings.extend(_lint_tail_relay_method(label, body))
     findings.extend(_lint_closeup_expression_lib(label, body, id_refs, core_char_ids(registry_forms)))
     findings.extend(_lint_multi_subject_spatial_binding(label, body, id_refs))      # C3
-    findings.extend(_lint_native_multiref_coverage(label, body, id_refs, form_ref_counts))  # C4
+    findings.extend(_lint_native_multiref_coverage(label, body, id_refs, form_ref_counts, persistent_subject))  # C4
     return findings
 
 
@@ -835,6 +910,8 @@ def lint_prompts(root: Path, ep: str) -> Dict[str, Any]:
     if registry_forms is None:
         res["notes"].append("identity_registry.json 缺失/损坏——跳过尾帧身份交接校验。")
     form_ref_counts = registry_ref_counts(registry_forms)  # C4：角色→多角度参考张数
+    profile = _backend_identity_profile(root)  # ④ 后端身份能力档（persistent_subject 决定多参考 nudge 口径）
+    persistent_subject = bool(profile.get("persistent_subject")) if profile else None
     asset_index = load_asset_index(root)
     if asset_index is None:
         res["notes"].append("asset_registry.json 缺失/损坏——跳过 LOC/PROP/OUTFIT/VFX_xx 资产 id 合法性校验。")
@@ -844,7 +921,8 @@ def lint_prompts(root: Path, ep: str) -> Dict[str, Any]:
         manifest = character_shot_manifest(blk)
         if manifest:
             res["character_shots"].append(manifest)
-        res["findings"].extend(lint_shot_block(blk, valid_ids, registry_forms, asset_index, form_ref_counts))
+        res["findings"].extend(lint_shot_block(blk, valid_ids, registry_forms, asset_index,
+                                               form_ref_counts, persistent_subject))
     return res
 
 
@@ -961,6 +1039,7 @@ HARD_LINT_CODES = (
     "lifecycle_unknown_to_state",
     "no_expression_lib_ref",  # ④ 所有人物近景大表情无表情库/脸部特写 = 脸漂高发，硬拦
     "closeup_core_no_expression_lib",  # 旧报告码兼容；新报告统一用 no_expression_lib_ref
+    "weak_face_anchor_core",
 )
 VISUAL_CHECK_LABELS = {
     "face": "崩脸 G1",
@@ -1619,6 +1698,31 @@ def prohibited_face_patch_outputs(root: Path, ep: str) -> Dict[str, Any]:
     }
 
 
+def semantic_embedding_required(payload: Mapping[str, Any]) -> List[str]:
+    """Registered scene/asset pairs exist but DINO/CLIP semantic drift did not run.
+
+    Scene/multimodal checks are only produced for registered LOC_/PROP_/OUTFIT_/VFX-like assets.
+    If the semantic drift sidecar explicitly says unavailable, palette/dHash alone is too weak for
+    key non-face asset identity, so image_qc should stop before video.
+    """
+    sd = payload.get("semantic_drift")
+    if not isinstance(sd, Mapping) or sd.get("available") is not False:
+        return []
+    checks = payload.get("checks") or {}
+    out: List[str] = []
+    for key, asset_keys in (
+        ("scene", ("scene", "group", "asset")),
+        ("multimodal", ("asset", "group", "scene")),
+    ):
+        for item in ((checks.get(key) or {}).get("shots") or []):
+            if not isinstance(item, Mapping) or not item.get("png"):
+                continue
+            hint = next((str(item.get(k) or "").strip() for k in asset_keys if str(item.get(k) or "").strip()), "")
+            if hint:
+                out.append(f"{hint}:{item.get('png')}")
+    return sorted(set(out))
+
+
 def summarize(payload: Dict[str, Any], *, strict_pixel: bool = False) -> Dict[str, Any]:
     """汇总各项机检 + lint，区分 hard（必须修）与 advisory（非阻断初筛）。
 
@@ -1672,13 +1776,22 @@ def summarize(payload: Dict[str, Any], *, strict_pixel: bool = False) -> Dict[st
         "block": len(prohibited), "warn": 0, "noface": 0, "ok": 0
     }
     hard += len(prohibited)
-    # 跨集脸漂移趋势（B）：advisory 级——趋势是慢性预警，不是单张坏像素，不 hard block。
+    # 跨集脸漂移趋势（B）：high = 系统性退化，下一批必须停下修锚/主体库/重抽；medium 仍 advisory。
     drift_entries = (payload.get("cross_episode_face_drift") or {}).get("entries") or []
     if drift_entries:
+        drift_high = sum(1 for e in drift_entries if e.get("severity") == "high")
+        drift_warn = len(drift_entries) - drift_high
         rows_by_check["cross_episode_face_drift"] = {
-            "block": 0, "warn": len(drift_entries), "noface": 0, "ok": 0
+            "block": drift_high, "warn": drift_warn, "noface": 0, "ok": 0
         }
-        advisory += len(drift_entries)
+        hard += drift_high
+        advisory += drift_warn
+    semantic_missing = semantic_embedding_required(payload)
+    if semantic_missing:
+        rows_by_check["semantic_drift_embedding"] = {
+            "block": len(semantic_missing), "warn": 0, "noface": 0, "ok": 0
+        }
+        hard += len(semantic_missing)
     lint = payload.get("lint") or {}
     l_hard = sum(1 for f in lint.get("findings", [])
                  if f.get("level") == "block" and f.get("code") in HARD_LINT_CODES)
@@ -1771,6 +1884,23 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
     硬阻断（崩脸 / 纯文生图 / 非法 CHAR_id）= block，像素初筛 = warn。纯函数·可测。"""
     out: List[Dict[str, Any]] = []
     checks = payload.get("checks", {}) or {}
+    env = payload.get("qc_environment") or {}
+    precision = str(env.get("precision_level") or "").strip().lower()
+    if precision == "none":
+        out.append(_qc_finding(
+            "block",
+            "image_qc_precision",
+            None,
+            "image_qc 精度为 none：像素质检不可用，不能把图片视为机检通过；"
+            "先按 image_qc_setup 补 Pillow/cv2/insightface/onnxruntime 等依赖后重跑 image_qc。",
+        ))
+    elif precision == "degraded":
+        out.append(_qc_finding(
+            "warn",
+            "image_qc_precision",
+            None,
+            "image_qc 精度为 degraded：正式进 video 前需补依赖重跑，或对每个高风险近景/多人同框登记人审确认。",
+        ))
     for key in unavailable_visual_checks(payload):
         res = checks.get(key) or {}
         note = "；".join(res.get("notes", [])) if isinstance(res, dict) else ""
@@ -1809,6 +1939,27 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
             f"{PROHIBITED_FACE_PATCH_LABEL}：{s.get('png')} 最新落档事件来自 `{s.get('provider') or 'unknown'}`"
             f" / `{s.get('method') or 'unknown'}`。embedding 分数不是合格目标，不能用裁脸/贴脸/换脸"
             "把定妆照盖到镜头上骗过 QC；必须回 n2d-image 用真实重抽或官方 image2image 派生替换。",
+        ))
+    for e in (payload.get("cross_episode_face_drift") or {}).get("entries", []):
+        sev = "block" if e.get("severity") == "high" else "warn"
+        out.append(_qc_finding(
+            sev,
+            "character_consistency",
+            e.get("char") or e.get("episode_to"),
+            f"跨集脸漂移趋势 {e.get('severity')}：{e.get('char') or '角色'} "
+            f"{e.get('episode_from')}→{e.get('episode_to')} mean {e.get('from_mean')}→{e.get('to_mean')} "
+            f"drop={e.get('drop')}。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。",
+        ))
+    semantic_missing = semantic_embedding_required(payload)
+    if semantic_missing:
+        sample = "、".join(semantic_missing[:6]) + ("…" if len(semantic_missing) > 6 else "")
+        out.append(_qc_finding(
+            "block",
+            "asset_consistency",
+            None,
+            "关键场景/道具/服装/VFX 已进入 scene/multimodal QC，但 DINO/CLIP 语义漂移嵌入后端不可用；"
+            f"palette/dHash 只能做初筛，不能证明非脸资产身份稳定。先在 full QC 环境补 torch+transformers/open_clip "
+            f"后重跑，或登记逐项人审确认。样例：{sample}",
         ))
     reason_text = {
         "face_precision_not_full": "缺 full 精度脸部 embedding 比对",
@@ -2077,7 +2228,7 @@ def cross_episode_face_drift(root: Path, ep: str, payload: Mapping[str, Any]) ->
 
     单帧 G1 只看本集 vs 定妆；这条把历年 `ep_mean_score` 串成时间序，调 face_consistency.cross_episode_drift
     抓相对基线集的系统性掉幅。增量、便宜：本集已由 analyze 嵌入，历史只读侧车，趋势判定是纯数学。
-    advisory 级（不 hard block）——趋势是预警信号，不是单张坏像素。
+    high 级会在 summarize/to_findings 升 hard block；medium 仍作为趋势预警。
     """
     fc = _load_review_module("face_consistency")
     if fc is None or not hasattr(fc, "cross_episode_drift"):
@@ -2108,6 +2259,161 @@ def cross_episode_face_drift(root: Path, ep: str, payload: Mapping[str, Any]) ->
     return {"available": True, "entries": entries, "history_chars": len(chars_hist)}
 
 
+# ── ① 参考图脸部信噪比门（reference quality floor，治「脸太小/低分辨率 → 弱身份锚」） ──────────
+#
+# 2026 锁脸教头（Nano Banana Pro / Seedream 4.5）一致结论：脸部参考应 ≥1024px、脸占画面 30–50%；
+# 脸太小=身份信号弱，喂给下游每一镜都把脸漂带进去。项目已把「人物在画面太小」列为公认崩脸带，但只
+# 约束镜头，不约束**参考图本身**。这里只校验 face_anchor_refs / 表情库 / 脸部特写这类**应当紧裁**的脸锚
+# （不碰「双手可见」的宽身位主参考——那张本就该脸小）。只拦明显过弱，不追 30–50% 理想值，避免误杀。
+WEAK_FACE_RATIO_FLOOR = 0.12   # 脸 bbox 占整图面积低于此 = 脸太小、身份信号弱
+WEAK_FACE_CROP_MIN_PX = 768    # 脸部锚裁切短边低于此 = 分辨率不足以锁五官
+
+
+def weak_face_anchor_reason(face_area_ratio: Optional[float], min_dim: Optional[int]) -> Optional[str]:
+    """脸部锚质量判定：脸占比太小 / 裁切分辨率不足 → 返回人读原因；合格 → None。纯函数·可测。
+
+    `face_area_ratio=None`（检测器缺席/Haar 漏检风格化脸）时**不据占比误判**，只用分辨率判。
+    `min_dim=None`（读不到尺寸）时跳过分辨率判。两者皆 None → None（不报）。"""
+    reasons: List[str] = []
+    if face_area_ratio is not None and face_area_ratio < WEAK_FACE_RATIO_FLOOR:
+        reasons.append(f"脸占画面仅 {face_area_ratio * 100:.0f}%（建议 ≥30%，至少 ≥{int(WEAK_FACE_RATIO_FLOOR * 100)}%）")
+    if min_dim is not None and min_dim < WEAK_FACE_CROP_MIN_PX:
+        reasons.append(f"裁切短边 {min_dim}px（建议 ≥1024px，至少 ≥{WEAK_FACE_CROP_MIN_PX}px）")
+    return "；".join(reasons) or None
+
+
+def _face_anchor_ref_items(form: Mapping[str, Any]) -> List[Tuple[str, str]]:
+    """收集本形态**应紧裁的脸锚**参考：reference_group.face_anchor_refs、
+    reference_atlas.face_anchor_refs / expression_refs。返回 [(label, rel_path)]。纯函数·可测。
+    （不收 reference_group.front/half/full——那些是宽身位主参考/服装参考，本就脸小，不该被本门误判。）"""
+    out: List[Tuple[str, str]] = []
+    rg = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
+    atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
+    sources = [("face_anchor", rg.get("face_anchor_refs")),
+               ("face_anchor", atlas.get("face_anchor_refs")),
+               ("expression", atlas.get("expression_refs"))]
+    for kind, coll in sources:
+        if not coll:
+            continue
+        items = coll.values() if isinstance(coll, Mapping) else (coll if isinstance(coll, list) else [coll])
+        for item in items:
+            path = item
+            label = kind
+            if isinstance(item, Mapping):
+                path = item.get("path") or item.get("ref") or item.get("file")
+                label = str(item.get("label") or item.get("emotion") or kind)
+            rel = str(path or "").strip()
+            if rel and rel.lower().endswith(".png"):
+                out.append((label, rel))
+    return out
+
+
+def _png_face_ratio_and_size(face_mod: Any, abspath: str) -> Tuple[Optional[float], Optional[int]]:
+    """(最大脸 bbox 占整图面积比, 短边像素)。检测器缺席/漏检 → ratio=None；读不到尺寸 → min_dim=None。"""
+    size: Optional[Tuple[int, int]] = None
+    try:
+        from PIL import Image  # type: ignore
+        with Image.open(abspath) as im:
+            size = im.size
+    except Exception:
+        size = None
+    if size is None:
+        return None, None
+    w, h = size
+    min_dim = min(int(w), int(h)) if w and h else None
+    ratio: Optional[float] = None
+    if face_mod is not None and hasattr(face_mod, "cv2_face_boxes") and w and h:
+        try:
+            boxes = face_mod.cv2_face_boxes(abspath)
+        except Exception:
+            boxes = None
+        if boxes:  # 非空=真检到脸；[]=检测器跑了但 0 脸（风格化脸常漏）→ 不据占比判
+            bx = max(boxes, key=lambda b: int(b[2]) * int(b[3]))
+            ratio = (int(bx[2]) * int(bx[3])) / float(int(w) * int(h))
+    return ratio, min_dim
+
+
+def audit_face_anchor_quality(root: Path, ep: str) -> Dict[str, Any]:
+    """① 脸部锚信噪比门：对已落档的 face_anchor/表情/脸部特写参考，校验脸占比 + 裁切分辨率。
+    核心/长线角色 findings=block，普通角色 warn。缺图不报（那是 gate/coverage 的事，本门只判**已存在图**的质量）。"""
+    res: Dict[str, Any] = {"available": True, "findings": [], "notes": [], "checked": 0}
+    try:
+        data = json.loads((root / _registry_path()).read_text(encoding="utf-8"))
+    except Exception:
+        res["available"] = False
+        res["notes"].append("identity_registry.json 缺失/损坏——脸部锚信噪比门跳过。")
+        return res
+    face_mod = _load_review_module("face_consistency")
+    if face_mod is None or not hasattr(face_mod, "cv2_face_boxes"):
+        res["notes"].append("cv2_face_boxes 不可用——脸占比项降级跳过，仅按分辨率判（装 opencv 后复检脸占比）。")
+    for ch in (data.get("characters") or []):
+        cid = str(ch.get("id") or "").strip()
+        core = is_core_scope(str(ch.get("scope") or ""))
+        for form in (ch.get("forms") or []):
+            if not isinstance(form, Mapping):
+                continue
+            fm = str(form.get("form") or "").strip()
+            for label, rel in _face_anchor_ref_items(form):
+                abspath = rel if os.path.isabs(rel) else str(root / rel)
+                if not os.path.isfile(abspath):
+                    continue  # 缺图非本门职责
+                res["checked"] += 1
+                ratio, min_dim = _png_face_ratio_and_size(face_mod, abspath)
+                reason = weak_face_anchor_reason(ratio, min_dim)
+                if reason:
+                    level = "block" if core else "warn"
+                    code = "weak_face_anchor_core" if core else "weak_face_anchor"
+                    res["findings"].append({
+                        "level": level, "code": code,
+                        "msg": f"脸部锚弱信噪比 {cid}/{fm}「{label}」（{rel}）：{reason}"
+                               "——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写"
+                               "（脸占 30–50%、≥1024px）后再放行。",
+                        "asset": rel,
+                    })
+    return res
+
+
+def _qc_inputs_fingerprint(root: Path, ep: str, payload: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """Best-effort content fingerprint of the files this QC verdict rests on.
+
+    Stamps the prompt sources + every judged PNG so n2d-update can tell whether a
+    later 出图 regen has made this report stale (fresh/stale) instead of trusting a
+    report that predates the current images. Fully guarded — if the snapshot helper
+    is unavailable, return None and n2d-update treats freshness as unknown (safe)."""
+    try:
+        lib = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
+        if lib not in sys.path:
+            sys.path.insert(0, lib)
+        from skill_snapshot import artifact_fingerprint  # type: ignore
+    except Exception:
+        return None
+    base = str(root)
+    rels: Set[str] = {
+        os.path.join("出图", ep, "prompt", "00_总览.md"),
+        os.path.join("出图", ep, "prompt", "01_分镜出图.md"),
+        os.path.join("出图", "共享", "identity_registry.json"),
+        os.path.join("出图", "共享", "asset_registry.json"),
+    }
+
+    def _walk(obj: Any) -> None:
+        if isinstance(obj, dict):
+            for k, v in obj.items():
+                if k == "png" and isinstance(v, str) and v.strip():
+                    rels.add(v.strip())
+                else:
+                    _walk(v)
+        elif isinstance(obj, list):
+            for x in obj:
+                _walk(x)
+
+    _walk(payload)
+    norm = {r if not os.path.isabs(r) else os.path.relpath(r, base) for r in rels}
+    try:
+        return artifact_fingerprint(base, norm)
+    except Exception:
+        return None
+
+
 def run_qc(root: Path, ep: str, with_pixel: bool = True, strict_pixel: bool = False) -> Dict[str, Any]:
     payload: Dict[str, Any] = {
         "kind": "n2d_image_qc", "version": 1, "root": str(root), "episode": ep,
@@ -2121,6 +2427,18 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True, strict_pixel: bool = Fa
             build_face_review_queue(payload, root, ep)
             # D 场景/道具/特效漂移：同样拼「资产参考 ↔ 本镜」并排图，落资产人审队列。
             build_asset_review_queue(payload, root, ep)
+            # ③ 语义漂移信号（DINO/CLIP-I）：有已登记关键资产时，无嵌入后端会在 summarize/to_findings 升 hard；
+            #    跑通后 palette 漏报但语义低 → warn 人判。
+            sd = _load_sibling("semantic_drift")
+            if sd is not None:
+                try:
+                    sdr = sd.analyze(root, ep, payload)
+                    for f in sdr.get("findings", []):
+                        payload["lint"].setdefault("findings", []).append(
+                            {"level": f["level"], "code": f["code"], "msg": f["msg"]})
+                    payload["semantic_drift"] = sdr
+                except Exception as exc:
+                    payload["semantic_drift"] = {"available": False, "notes": [f"semantic_drift 失败：{exc}"], "findings": []}
     payload["lint"] = lint_prompts(root, ep)
     # F 资产状态机校验（registry 级，与逐镜 prompt 无关）：状态回退/未知态=hard，其余 warn 并入 lint 管道，
     # 自由文本 lifecycle 的 info 提示只留在 asset_lifecycle 专段、不污染 lint。
@@ -2135,12 +2453,19 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True, strict_pixel: bool = Fa
             payload["asset_lifecycle"] = lc
         except Exception as exc:
             payload["asset_lifecycle"] = {"available": False, "notes": [f"asset_lifecycle 校验失败：{exc}"]}
+    # ① 脸部锚信噪比门（registry 级，与逐镜 prompt 无关）：核心/长线弱脸锚 block，其余 warn，并入 lint 管道。
+    fa = audit_face_anchor_quality(root, ep)
+    for f in fa.get("findings", []):
+        payload["lint"].setdefault("findings", []).append(
+            {"level": f["level"], "code": f["code"], "msg": f["msg"]})
+    payload["face_anchor_quality"] = fa
     payload["face_reference_coverage"] = face_reference_coverage(payload, root, ep)
     payload["cross_episode_face_drift"] = cross_episode_face_drift(root, ep, payload)
     payload["prohibited_face_patch"] = prohibited_face_patch_outputs(root, ep)
     payload["state_ledger"] = audit_state_ledger(root, ep)
     payload["summary"] = summarize(payload, strict_pixel=strict_pixel)
     payload["qc_environment"] = qc_environment(payload, with_pixel=with_pixel)
+    payload["inputs_fingerprint"] = _qc_inputs_fingerprint(root, ep, payload)
     payload = json_safe(payload)
     out_dir = production_dir(root) / "image_qc" / ep
     out_dir.mkdir(parents=True, exist_ok=True)

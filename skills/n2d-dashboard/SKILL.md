@@ -117,6 +117,17 @@ python3 skills/n2d-dashboard/scripts/dashboard.py forecast <作品根> 第2集 -
 
 无历史成本 / 缺本集计划时长时**不臆造**，只给 note + 已有的重抽漏点（先 `record` 几集真实成本，或先跑分镜设计出 `storyboard.json`）。`--unit` 须与 `record` 的 `cost.unit` 一致。
 
+### 3.6 跨集角色一致性 KPI（监控"第几集开始系统性退化"）
+
+`identity` 读 `n2d-identity` 落档的 `生产数据/identity_drift_report.json`，把散在报表里的跨集脸漂滚成一条**工作级 KPI**：追踪角色数 / 漂移角色数 / **系统性退化最早自第几集** / 每个漂移角色的相似度趋势（`mean_score` 首→末）。看板侧仍输出 `degrade=true` 提示；落档侧由 `image_qc.cross_episode_face_drift` 接管执行闭环：`severity=high` 会进 hard block，必须回 n2d-image 补主体库/参考包/重抽并重跑 QC，`medium` 作为趋势预警。
+
+```bash
+python3 skills/n2d-identity/scripts/identity.py <作品根> --episodes 1-N --write   # 先落档漂移报表
+python3 skills/n2d-dashboard/scripts/dashboard.py identity <作品根>               # 再看 KPI（--json 喂回 LLM）
+```
+
+**不写死相似度阈值**——显著漂移沿用 `n2d-identity` 自标定 flag-band 的 warn/block，趋势只看首末方向。退化时按 `first_bad_episode` 起回 `n2d-image` 升原生主体/主体库或 LoRA（见 `n2d/references/模型矩阵.md` 一致性梯子）。
+
 ### 4. 投放回收入账
 
 优先把平台导出的留存/播放/收入表放到 `生产数据/platform_metrics.csv|jsonl|json`，字段见 `n2d-feedback/references/schema.md`。dashboard 会自动合并：

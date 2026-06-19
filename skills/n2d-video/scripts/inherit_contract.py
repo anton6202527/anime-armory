@@ -28,6 +28,7 @@ _COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import CONTRACT_INHERITANCE_KIND, VISUAL_CONTRACT_FIELDS, production_dir  # noqa: E402
+from skill_snapshot import artifact_fingerprint  # noqa: E402
 # 比对核心已上移到 n2d/_lib/n2d_contract_diff.py（单一真值源），让 gate.py 也能在 common 层调用，
 # 而非 n2d-review 反向 import n2d-video。此处 re-export 以保持本模块/测试的既有 API。
 from n2d_contract_diff import (  # noqa: E402,F401
@@ -152,6 +153,15 @@ def run(root: str, ep: str) -> int:
         "verdict": verdict,
         "rule": "视频侧契约可有意收紧/细化（归一化后包含出图侧原文即 pass）；只拦改写/丢失；光位锚+轴线视线漂移=block；命名角色镜逐镜 prompt 未锁身份=block；出图绑定资产在出视频丢失=block",
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        # 输入指纹：本报告判定所依据的出图/出视频 prompt + 资产文件内容快照。
+        # n2d-update 据此判断报告是否已被后续 prompt 重生成作废（fresh/stale）。
+        "inputs_fingerprint": artifact_fingerprint(root, [
+            img_rel, vid_rel,
+            os.path.join("出视频", ep, "prompt", "01_clips.md"),
+            os.path.join("出视频", ep, "prompt", "video_model_routes.json"),
+            os.path.join("出图", ep, "prompt", "01_分镜出图.md"),
+            os.path.join("出图", "共享", "asset_registry.json"),
+        ]),
     }
     json_path = os.path.join(out_dir, f"contract_inheritance_{ep}.json")
     md_path = os.path.join(out_dir, f"contract_inheritance_{ep}.md")

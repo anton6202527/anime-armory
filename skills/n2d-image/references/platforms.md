@@ -128,12 +128,16 @@ image prompt = [图AI 的 prompt 写法] + [生视频模型的图像风格锚定
 - **提示词语言**：英文最稳，中文次之
 - **prompt 长度**：偏好"描述性英文段落"，不要短关键词列表
 - **参考图**：支持（图生图 / Multi-image input）
+- **参考预算（2026-06-18 核验）**：Gemini 3 Pro Image 高保真人物参考最多 5 张、对象参考最多 6 张、风格参考最多 3 张、总输入最多 14 张；Gemini 3.1 Flash Image 支持最多 4 个角色相似与 10 个对象保真。`reference_planner` 必须在预算内挑选，不要把共享库全量塞入。
+- **高保真提示**：关键脸部/标志/服装细节要在 prompt 中明写；只给图不写细节，模型仍可能按新场景重画身份。
 - **强项**：质感真实、光感细腻
 - **弱项**：东方面孔需要显式描述（默认会偏西方），**所以生视频模型/渠道偏国风系（Seedance via 即梦、Kling/可灵）时锚定句必加**
 - **CLI**：`gemini-cli`（订阅制）
 
-### DALL-E 3 / gpt-image-1（OpenAI）
+### GPT Image / OpenAI Images（官方）
 - **提示词语言**：英文为主
+- **当前模型口径（2026-06-18 核验）**：官方 Image API 已列 `gpt-image-2` 为最新图像模型；具体 CLI 参数每次使用前按 `cli_registry.md` 重新核对。
+- **参考图**：支持图片输入/编辑与多轮高保真编辑，但无 n2d 持久角色 ID；跨镜一致性仍走 `reference_group + anchor_phrase + full QC`。
 - **强项**：构图想象力强、艺术感
 - **弱项**：写实人脸不如 Imagen / Flux；亚洲脸特征容易卡通化
 - **API**：OpenAI Images API
@@ -178,8 +182,8 @@ image prompt = [图AI 的 prompt 写法] + [生视频模型的图像风格锚定
 | Seedream 5.0/4.5 | **Universal Reference（免 LoRA 跨图锁人）** | 喂锁定参考即跨图保持，无需训练；4.5 最多 14 张参考 |
 | Sora 2 | **Character Cameo（可复用角色ID）** | 建角色 ID 后跨场景复用，face-shifting 最少 |
 | Dreamina/即梦官方 CLI | 多参考/参考框，无持久角色 ID | 可作图后端；参考框粘性强，切换角色前必须清空；无持久主体 ID 时回退第①档参考图派生 |
-| Nano Banana / Gemini 多参考 | 多图参考，无持久角色 ID | 与 Seedream Universal Reference 不是同一档；不得把 `生图AI=Nano/Gemini` 归到 seedream adapter |
-| Codex/官方 OpenAI gpt-image · DALL-E · Flux | **无持久角色ID** | 回退第①档：多图参考派生 + 锚点句；full QC 仍是进入视频前硬证据 |
+| Nano Banana / Gemini 多参考 | 多图参考，无持久角色 ID | Gemini 3 Pro Image 总参考最多 14 张、人物高保真最多 5 张；与 Seedream Universal Reference 不是同一档；不得把 `生图AI=Nano/Gemini` 归到 seedream adapter |
+| Codex/官方 OpenAI GPT Image · DALL·E · Flux | **无持久角色ID** | 回退第①档：多图参考派生 + 锚点句；full QC 仍是进入视频前硬证据 |
 
 - **怎么用**：定妆过硬闸门自检 → 在支持的后端注册角色ID/主体（**注册时喂多样参考集：多角度+多表情+多光，而非单张定妆 sheet**；Kling 优先 Custom Model 吃多帧/视频拿最丰富身份，是治"定妆照=板式"的首选）→ 把平台返回的 ID/句柄写进 `出图/共享/identity_registry.json`（**机器真值源**，gate 从这里取 binding）；`00_索引.md` 只做人读提示，不当机器真值 → 分镜按 ID 引用 + 仍拼锚点句（双保险）。形态变体各注册各的。逐镜该喂哪些参考由 `reference_planner.py` 按后端能力规划（见 SKILL「逐镜参考规划」）。
 - **降级铁律**：后端无持久角色ID（Codex/DALL-E/Imagen/Flux）→ **自动回退多图参考派生**（第①档），绝不阻塞。它是增稳/提效层，先于 LoRA 用尽。当前若项目就选了支持主体的官方后端（Seedream/可灵/Sora Cameo），优先走第②档原生主体——但整集统一一个后端，不与 Codex 混用。

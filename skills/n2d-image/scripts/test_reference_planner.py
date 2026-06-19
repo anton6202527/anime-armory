@@ -69,10 +69,12 @@ def test_is_emotion_bank() -> None:
 
 _RG = {
     "front": "出图/共享/图片/定妆_x.png",
+    "three_quarter": "出图/共享/图片/定妆_x_45度.png",
     "side": "出图/共享/图片/定妆_x_侧.png",
     "back": "出图/共享/图片/定妆_x_背.png",
     "outfit": "出图/共享/图片/定妆_x_半身.png",
     "turnaround": "出图/共享/图片/定妆_x_三视图.png",
+    "face_anchor_refs": ["出图/共享/图片/定妆_x_脸部特写.png"],
     "expressions": ["出图/共享/图片/定妆_x_脸部特写.png"],  # 仅中性
 }
 _AP = {"risky": ["deep_shadow", "extreme_low", "face_too_small"],
@@ -91,9 +93,23 @@ def test_multi_reference_closeup_emotion_flags_missing_bank_and_escalates() -> N
         profile=_MULTI_REF, tier="multi_reference", scope_is_core=True,
     )
     roles = [r["role"] for r in p["recommended_references"]]
-    assert "front" in roles and "expression" in roles
+    assert "front" in roles and "three_quarter" in roles and "face_anchor" in roles and "expression" in roles
     assert any("情绪表情库" in m for m in p["missing_references"])  # 仅中性特写 → 缺情绪库
     assert p["escalation"] and p["needs_action"]
+
+
+def test_character_plan_requires_baseline_three_quarter_and_face_anchor() -> None:
+    rg = dict(_RG)
+    rg.pop("three_quarter", None)
+    rg.pop("face_anchor_refs", None)
+    rg["expressions"] = []
+    p = rp.plan_character_in_clip(
+        _char(rg=rg), deltas=[], multi=False,
+        profile=_MULTI_REF, tier="multi_reference", scope_is_core=False,
+    )
+    assert any("45" in m or "three_quarter" in m for m in p["missing_references"])
+    assert any("脸部特写" in m for m in p["missing_references"])
+    assert p["needs_action"]
 
 
 def test_multi_character_adds_controlnet() -> None:
@@ -144,6 +160,10 @@ def test_max_reference_cap_respected() -> None:
         profile=profile, tier="multi_reference", scope_is_core=False,
     )
     assert len(p["recommended_references"]) <= 2
+    assert p["reference_budget"]["limit"] == 2
+    assert p["reference_budget"]["dropped"] >= 1
+    assert p["dropped_references"]
+    assert any("参考预算溢出" in m for m in p["missing_references"])
 
 
 def test_shortline_no_escalation() -> None:

@@ -96,6 +96,23 @@ def test_image_preflight_gate_events_merge_image_qc(monkeypatch, tmp_path: Path)
     assert events[0]["qa_gate"]["blocks"] == 1
 
 
+def test_image_qc_findings_prefers_existing_report(monkeypatch, tmp_path: Path) -> None:
+    report_dir = tmp_path / "生产数据" / "image_qc" / "第1集"
+    report_dir.mkdir(parents=True)
+    (report_dir / "image_qc_第1集.json").write_text(
+        json.dumps({"qc_environment": {"precision_level": "none"}, "checks": {}, "lint": {"findings": []}}),
+        encoding="utf-8",
+    )
+
+    def _unexpected_run(*_args, **_kwargs):
+        raise AssertionError("should not rerun image_qc when a report exists")
+
+    monkeypatch.setattr(dashboard.subprocess, "run", _unexpected_run)
+    findings = dashboard.run_image_qc_findings(str(tmp_path), "第1集", fail_closed=True)
+
+    assert any(f["sev"] == "block" and f["dim"] == "image_qc_precision" for f in findings)
+
+
 def test_aggregate_generation_cost_redraw_and_qa(tmp_path: Path) -> None:
     write_progress(tmp_path)
     events = [
@@ -141,7 +158,9 @@ def test_aggregate_generation_cost_redraw_and_qa(tmp_path: Path) -> None:
     assert ep1["qa_warnings"] == 1
     assert ep1["cost_totals"] == {"USD": 0.3}
     assert ep1["duration_sec"] == 50
-    assert ep1["final_pass_rate"] == 0.5
+    assert ep1["generation_pass_rate"] == 0.5
+    assert ep1["deliverable_pass_rate"] == 0.0
+    assert ep1["final_pass_rate"] == 0.0
     assert ep1["progress_next_stage"] == "出图"
 
 
@@ -480,3 +499,49 @@ def test_image_qc_findings_graceful_on_bad_root(tmp_path: Path) -> None:
     out = dashboard.image_qc_findings(str(tmp_path), "第1集")
     assert isinstance(out, out.__class__) and isinstance(out, list)
     assert all(isinstance(f, dict) for f in out)
+
+
+# ── ④ 跨集角色一致性 KPI（读 identity_drift_report，软门不阻断）──
+def test_identity_kpi_flags_declining_and_blocked_character():
+    report = {
+        "available": True,
+        "characters": {
+            "王敦": {
+                "episodes": {
+                    "第1集": {"ok": 4, "warn": 0, "block": 0, "mean_score": 0.75},
+                    "第2集": {"ok": 2, "warn": 1, "block": 1, "mean_score": 0.55},
+                },
+                "total_warn": 1, "total_block": 1, "first_bad_episode": "第2集",
+            },
+            "柳娘子": {  # 稳定且 mean_score 微升 → 不算漂
+                "episodes": {
+                    "第1集": {"ok": 5, "warn": 0, "block": 0, "mean_score": 0.80},
+                    "第2集": {"ok": 5, "warn": 0, "block": 0, "mean_score": 0.81},
+                },
+                "total_warn": 0, "total_block": 0, "first_bad_episode": "",
+            },
+        },
+    }
+    kpi = dashboard.identity_consistency_kpi(report)
+    assert kpi["available"] is True
+    assert kpi["characters_tracked"] == 2
+    assert kpi["characters_drifting"] == 1
+    assert kpi["earliest_systemic_episode"] == "第2集"
+    assert kpi["degrade"] is True
+    wang = next(r for r in kpi["rows"] if r["character"] == "王敦")
+    assert wang["significant"] is True and wang["trend"]["declining"] is True
+    liu = next(r for r in kpi["rows"] if r["character"] == "柳娘子")
+    assert liu["significant"] is False
+
+
+def test_identity_kpi_stable_when_no_drift():
+    report = {"available": True, "characters": {
+        "沈念": {"episodes": {"第1集": {"ok": 6, "warn": 0, "block": 0, "mean_score": 0.78}},
+                 "total_warn": 0, "total_block": 0, "first_bad_episode": ""}}}
+    kpi = dashboard.identity_consistency_kpi(report)
+    assert kpi["degrade"] is False and kpi["characters_drifting"] == 0
+
+
+def test_identity_kpi_empty_report_unavailable():
+    kpi = dashboard.identity_consistency_kpi({"available": True, "characters": {}})
+    assert kpi["available"] is False

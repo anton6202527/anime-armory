@@ -285,9 +285,19 @@ def route_tasks(
     stage_filters: Optional[Set[str]],
     cost_estimates: Dict[str, Dict[str, Any]],
     max_retries: int,
+    strategy: str = "default",
 ) -> List[Dict[str, Any]]:
     header, rows = parse_progress(root)
     tasks: List[Dict[str, Any]] = []
+    
+    # Check if Episode 1 Image is done for "front-light" strategy
+    ep1_image_done = False
+    if strategy == "front-light":
+        for row in rows:
+            if episode_num(row.get("_ep") or row.get("集", "")) == 1:
+                ep1_image_done = is_progress_satisfied(row, header, "出图")
+                break
+
     for row in sorted(rows, key=lambda item: int(item.get("_num", 10**9))):
         ep = row.get("_ep") or row.get("集")
         if not ep:
@@ -295,18 +305,25 @@ def route_tasks(
         ep_key = normalize_episode(ep)
         if episodes and ep not in episodes and ep_key not in episodes:
             continue
+            
         route = stage_of(root, row, header)
         col = route.get("col")
         if not col:
             continue
         spec = stage_for_progress_column(str(col))
         if not spec:
-            # Special production-mode routes can point to a skill instead of a
-            # direct progress column; currently this is used for补真实配音.
             owner = route.get("skill")
             spec = next((s for s in stage_specs() if s.get("owner") == owner), None)
         if not spec or not stage_matches(spec, stage_filters):
             continue
+            
+        # Optimization Point 4: Async Batch Gate (front-light strategy)
+        stage_key = str(spec["key"])
+        if strategy == "front-light":
+            # If Ep 1 image isn't done, defer image, video, compose for other episodes
+            if not ep1_image_done and episode_num(ep) > 1 and stage_key in ("image_prompt", "image", "video_prompt", "video", "compose"):
+                continue
+
         tasks.append(
             task_from_spec(
                 root,
@@ -1309,6 +1326,7 @@ def parser() -> argparse.ArgumentParser:
     plan.add_argument("--max-retries", type=int, default=1)
     plan.add_argument("--budget", type=float)
     plan.add_argument("--budget-unit")
+    plan.add_argument("--strategy", default="default", choices=["default", "front-light"], help="Batch planning strategy (e.g. 'front-light' to defer heavy render until Ep 1 style locked)")
     plan.add_argument("--rerun-from", help="stage key/alias for targeted rerun")
     plan.add_argument("--from-asset-impact",
                       help="读 n2d-image asset_impact.py --output-batch-tasks 的 JSON（kind=n2d_asset_rerun_plan），直接建受影响重跑任务")

@@ -50,6 +50,7 @@ class Target:
     mode: str
     rel_path: str
     section: ClipSection
+    variant_note: str = ""
 
 
 def repo_root() -> Path:
@@ -91,6 +92,7 @@ def load_sections(root: Path, episode: str) -> List[ClipSection]:
     prompt_path = root / str(PROMPT_REL).format(episode=episode)
     if not prompt_path.is_file():
         raise FileNotFoundError(f"prompt pack not found: {prompt_path}")
+    storyboard_targets = load_storyboard_target_lines(root, episode)
     text = prompt_path.read_text(encoding="utf-8")
     headers = list(re.finditer(r"^##\s+(?:(Clip)\s+(\d+)|(镜头)\s*([0-9０-９]+))[^\n]*$", text, re.M))
     sections: List[ClipSection] = []
@@ -105,9 +107,66 @@ def load_sections(root: Path, episode: str) -> List[ClipSection]:
         raw_num = raw_num.translate(str.maketrans("０１２３４５６７８９", "0123456789"))
         clip = f"Clip_{int(raw_num):02d}"
         target_match = re.search(r"^\*\*(?:目标|目标落档)\*\*：([^\n]+)$", body, re.M)
-        target_line = target_match.group(1).strip() if target_match else ""
+        target_line = target_match.group(1).strip() if target_match else storyboard_targets.get(clip, "")
         sections.append(ClipSection(clip=clip, title=title, body=body, target_line=target_line))
     return sections
+
+
+def load_storyboard_target_lines(root: Path, episode: str) -> dict[str, str]:
+    """Build target lines from storyboard frame paths when prompt omits them."""
+    path = root / "脚本" / episode / "storyboard.json"
+    if not path.is_file():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+    targets: dict[str, str] = {}
+    for index, clip_data in enumerate(data.get("clips") or [], start=1):
+        if not isinstance(clip_data, dict):
+            continue
+        clip = storyboard_clip_key(clip_data, index)
+        paths: list[str] = []
+        first = clip_data.get("firstframe_png")
+        if isinstance(first, str) and first.strip():
+            paths.append(first.strip())
+        continuity = clip_data.get("continuity") or {}
+        if isinstance(continuity, dict):
+            midframe = continuity.get("midframe") or {}
+            if isinstance(midframe, dict):
+                anchor = midframe.get("anchor_png") or midframe.get("midframe_png")
+                if isinstance(anchor, str) and anchor.strip():
+                    paths.append(anchor.strip())
+            for anchor_data in continuity.get("anchors") or []:
+                if not isinstance(anchor_data, dict):
+                    continue
+                anchor = anchor_data.get("anchor_png")
+                if isinstance(anchor, str) and anchor.strip():
+                    paths.append(anchor.strip())
+            endframe = continuity.get("endframe_png")
+            if isinstance(endframe, str) and endframe.strip():
+                paths.append(endframe.strip())
+        if paths:
+            deduped = list(dict.fromkeys(paths))
+            targets[clip] = " ".join(f"`{item}`" for item in deduped)
+    return targets
+
+
+def storyboard_clip_key(clip_data: dict, fallback_index: int) -> str:
+    for key in ("clip", "id"):
+        value = clip_data.get(key)
+        if value is None:
+            continue
+        text = str(value)
+        match = re.search(r"(?:CLIP|Clip|clip)[_\s-]*([0-9]+)", text)
+        if not match:
+            match = re.search(r"镜头[_\s-]*([0-9]+)", text)
+        if not match:
+            match = re.fullmatch(r"\s*([0-9]+)\s*", text)
+        if match:
+            return f"Clip_{int(match.group(1)):02d}"
+    return f"Clip_{fallback_index:02d}"
 
 
 def load_shared_sections(root: Path) -> List[Target]:
@@ -120,6 +179,17 @@ def load_shared_sections(root: Path) -> List[Target]:
     prompt_dir = root / "出图" / "共享" / "prompt"
     files = ["角色定妆.md", "场景定妆.md", "道具定妆.md", "特效定妆.md"]
     targets: List[Target] = []
+    section_by_alias: list[tuple[set, ClipSection]] = []
+    seen_paths: set[str] = set()
+
+    def add_target(shot: str, rel_path: str, section: ClipSection, aliases: set, variant_note: str = "") -> None:
+        rel = rel_to_root(rel_path, "共享")
+        if not is_shared_image_path(rel) or rel in seen_paths:
+            return
+        seen_paths.add(rel)
+        target = Target(shot=shot, clip=shot, mode="shared", rel_path=rel, section=section, variant_note=variant_note)
+        setattr(target, "aliases", aliases)
+        targets.append(target)
     for filename in files:
         path = prompt_dir / filename
         if not path.is_file():
@@ -140,11 +210,171 @@ def load_shared_sections(root: Path) -> List[Target]:
             aliases = shared_aliases(title, body, first)
             shot = preferred_shared_shot(title, aliases, first)
             section = ClipSection(clip=shot, title=title, body=body, target_line=target_match.group(1).strip())
-            target = Target(shot=shot, clip=shot, mode="shared", rel_path=rel_to_root(first, "共享"), section=section)
-            # Attach aliases dynamically to keep the dataclass simple.
-            setattr(target, "aliases", aliases)
-            targets.append(target)
+            section_by_alias.append((aliases, section))
+            for rel in shared_image_paths_from_text(body):
+                variant_shot = shared_variant_shot(shot, rel)
+                add_target(variant_shot, rel, section, aliases, shared_variant_note(rel))
+    add_registry_shared_targets(root, section_by_alias, add_target)
     return targets
+
+
+def is_shared_image_path(path: str) -> bool:
+    text = str(path or "").strip().strip("`")
+    suffix = Path(text).suffix.lower()
+    return text.startswith("出图/共享/图片/") and suffix in {".png", ".jpg", ".jpeg", ".webp"}
+
+
+def shared_image_paths_from_text(text: str) -> List[str]:
+    paths: List[str] = []
+    seen: set[str] = set()
+    for raw in backticked(text):
+        suffix = Path(raw).suffix.lower()
+        if suffix not in {".png", ".jpg", ".jpeg", ".webp"}:
+            continue
+        rel = rel_to_root(raw, "共享")
+        if is_shared_image_path(rel) and rel not in seen:
+            seen.add(rel)
+            paths.append(rel)
+    return paths
+
+
+def shared_variant_shot(base: str, rel_path: str) -> str:
+    stem = Path(rel_path).stem
+    token = re.sub(r"[^\w\u4e00-\u9fff.-]+", "_", stem, flags=re.UNICODE).strip("_")
+    return f"{base}::{token or stem}"
+
+
+def shared_variant_note(rel_path: str) -> str:
+    stem = Path(rel_path).stem
+    if "45度" in stem:
+        return "本次目标是 45° / 三分之二侧脸参考：同一角色同一服装，中性浅灰背景，脸部转向约 45°，不是正脸改名，也不是纯侧脸。"
+    if stem.endswith("_侧"):
+        return "本次目标是标准侧面参考：同一角色同一服装，中性浅灰背景，保持同身高同景别，脸部清楚。"
+    if stem.endswith("_背"):
+        return "本次目标是背面参考：同一角色同一服装，中性浅灰背景，重点锁发型背面、衣料结构和背影轮廓。"
+    if "半身" in stem:
+        return "本次目标是半身服装参考：人物主体居中，头身中线接近画面中线，左右留白均衡，重点锁服装剪裁、材质和配饰。"
+    if "脸部特写" in stem:
+        return "本次目标是脸部特写参考：肩颈以上近景，眼鼻嘴三角区清晰，五官与主参考同一张脸，服装/发型边缘可见。"
+    if "三视图" in stem:
+        return "本次目标是人审三视图拼版：同一角色同一服装，正面、45°、侧面、背面同框排列，同身高、同比例、水平视平线对齐。"
+    if "_表情_" in stem:
+        emotion = stem.split("_表情_", 1)[-1]
+        return (
+            f"本次目标是同源表情脸部近景参考：保持同一角色身份和妆造，只改变表情为「{emotion}」；"
+            "画面必须是肩颈以上到胸口以内的近景，脸部占画面 30%-50%，眼鼻嘴三角区清晰，"
+            "不得画成全身/远景/多人构图，脸部不可换人。"
+        )
+    return "本次目标是共享主参考图：中性档案，不带剧情戏剧动作，锁身份/场景/道具/特效基准。"
+
+
+def add_registry_shared_targets(root: Path, section_by_alias: list[tuple[set, ClipSection]], add_target) -> None:
+    identity_path = root / "出图" / "共享" / "identity_registry.json"
+    if identity_path.is_file():
+        try:
+            identity = json.loads(identity_path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            identity = {}
+        for character in identity.get("characters") or []:
+            char_id = str(character.get("id") or "")
+            for form in character.get("forms") or []:
+                if not isinstance(form, dict):
+                    continue
+                form_name = str(form.get("form") or "")
+                aliases = registry_form_aliases(char_id, form_name)
+                section = find_shared_section(section_by_alias, aliases)
+                if not section:
+                    continue
+                for rel in registry_image_paths(form):
+                    shot = shared_variant_shot(next(iter(sorted(aliases))) or char_id or "shared", rel)
+                    add_target(shot, rel, section, aliases, shared_variant_note(rel))
+
+    asset_path = root / "出图" / "共享" / "asset_registry.json"
+    if asset_path.is_file():
+        try:
+            assets = json.loads(asset_path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            assets = {}
+        for asset in assets.get("assets") or []:
+            if not isinstance(asset, dict):
+                continue
+            asset_id = str(asset.get("id") or "")
+            aliases = {asset_id, str(asset.get("name") or "")}
+            section = find_shared_section(section_by_alias, aliases)
+            if not section:
+                continue
+            for rel in registry_image_paths(asset):
+                shot = shared_variant_shot(asset_id or "asset", rel)
+                add_target(shot, rel, section, aliases, shared_variant_note(rel))
+
+
+def registry_form_aliases(char_id: str, form_name: str) -> set[str]:
+    aliases = {char_id, f"{char_id}/{form_name}", form_name}
+    if char_id == "CHAR_01" and "常态" in form_name:
+        aliases.add("CHAR_01/常态")
+    if char_id == "CHAR_01" and "觉醒" in form_name:
+        aliases.add("CHAR_01/觉醒态")
+    if char_id == "CHAR_02":
+        aliases.add("CHAR_02/常态")
+    if char_id == "CHAR_03" and "善姑" in form_name:
+        aliases.add("CHAR_03/善姑伪装")
+    if char_id == "CHAR_03" and "妖形" in form_name:
+        aliases.add("CHAR_03/妖形半露")
+    if char_id == "CHAR_04":
+        aliases.add("CHAR_04/常态")
+    return {item for item in aliases if item}
+
+
+def find_shared_section(section_by_alias: list[tuple[set, ClipSection]], aliases: set[str]) -> Optional[ClipSection]:
+    form_aliases = {alias for alias in aliases if "/" in alias}
+    if form_aliases:
+        for section_aliases, section in section_by_alias:
+            if section_aliases.intersection(form_aliases):
+                return section
+    for section_aliases, section in section_by_alias:
+        if section_aliases.intersection(aliases):
+            title = section.title
+            if any(alias in title for alias in aliases if alias.startswith(("CHAR_", "LOC_", "PROP_", "VFX_", "OUTFIT_"))):
+                return section
+    for section_aliases, section in section_by_alias:
+        if section_aliases.intersection(aliases):
+            return section
+    return None
+
+
+def registry_image_paths(value) -> List[str]:
+    paths: List[str] = []
+    seen: set[str] = set()
+
+    def walk(node) -> None:
+        if isinstance(node, dict):
+            status = str(node.get("status") or "").lower()
+            path = node.get("path")
+            if isinstance(path, str) and (not status or status in {"ready", "planned", "pass", "todo"}):
+                add(path)
+            for key, child in node.items():
+                if key in {"source", "source_image"}:
+                    continue
+                walk(child)
+        elif isinstance(node, list):
+            for child in node:
+                walk(child)
+        elif isinstance(node, str):
+            add(node)
+
+    def add(raw: str) -> None:
+        suffix = Path(raw).suffix.lower()
+        if suffix not in {".png", ".jpg", ".jpeg", ".webp"}:
+            return
+        rel = rel_to_root(raw, "共享")
+        if is_shared_image_path(rel) and rel not in seen:
+            seen.add(rel)
+            paths.append(rel)
+
+    walk(value.get("reference_group") if isinstance(value, dict) else value)
+    if isinstance(value, dict):
+        walk(value.get("reference_atlas"))
+    return paths
 
 
 def shared_aliases(title: str, body: str, rel_path: str) -> set:
@@ -152,7 +382,7 @@ def shared_aliases(title: str, body: str, rel_path: str) -> set:
     # The section title owns the shared target identity.  Body text may mention
     # related assets, such as VFX_01 in a character form, but those references
     # must not become selectable aliases for this target.
-    ids = re.findall(r"`((?:CHAR|LOC|PROP|OUTFIT|VFX)_[A-Za-z0-9_]+)`", title)
+    ids = re.findall(r"`?((?:CHAR|LOC|PROP|OUTFIT|VFX)_[A-Za-z0-9_]+)`?", title)
     aliases.update(ids)
     if "CHAR_01" in aliases and "常态" in title:
         aliases.add("CHAR_01/常态")
@@ -229,7 +459,11 @@ def target_for_shot(shot: str, section: ClipSection, episode: str) -> Target:
 
     anchor_suffix = re.search(r"_(mid|first_(?:mid|a\d+)|a\d+)$", shot)
     if anchor_suffix:
-        path = next((p for p in paths if "_mid" in Path(p).stem or "_a" in Path(p).stem), paths[1] if len(paths) > 1 else "")
+        suffix = anchor_suffix.group(1)
+        suffix = suffix.replace("first_", "")
+        path = next((p for p in paths if Path(p).stem.endswith(f"_{suffix}")), "")
+        if not path:
+            path = next((p for p in paths if "_mid" in Path(p).stem or re.search(r"_a\d+$", Path(p).stem)), paths[1] if len(paths) > 1 else "")
         if path:
             return Target(shot=shot, clip=section.clip, mode="midframe", rel_path=rel_to_root(path, episode), section=section)
         raise ValueError(f"{shot}: mid/anchor target missing")
@@ -292,6 +526,7 @@ def build_codex_prompt(root: Path, episode: str, target: Target, temp_path: Path
 shot：{target.shot}
 生成模式：{target.mode}
 正式目标：{final_path}
+{"共享定妆变体要求：" + target.variant_note if target.variant_note else ""}
 可读注册表：
 - identity_registry: {registry}
 - asset_registry: {assets}
@@ -472,6 +707,15 @@ def record_event(
     ]
     if event == "redraw":
         cmd.extend(["--redraw-reason", reason, "--redraw-category", category])
+    if target.mode == "midframe" and status == "pass":
+        try:
+            source_target = target_for_shot(target.clip, target.section, episode)
+            source_image = source_target.rel_path
+        except Exception:
+            source_image = ""
+        cmd.extend(["--meta", "self_check=pass", "--meta", "midframe_role=between_first_and_end"])
+        if source_image:
+            cmd.extend(["--meta", f"source_image={source_image}"])
     if archive_path:
         cmd.extend(["--meta", f"archived_previous={archive_path}"])
     if error:
@@ -679,11 +923,14 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("episode")
     ap.add_argument("--shots", default=os.environ.get("N2D_AFFECTED_SHOTS", ""))
     ap.add_argument("--shared-targets", default="", help="comma-separated shared assets to generate; use 'all' for all primary shared prompt targets")
+    ap.add_argument("--shared-offset", type=int, default=0, help="zero-based offset into resolved shared targets")
+    ap.add_argument("--max-shared-targets", type=int, help="maximum number of resolved shared targets to process")
     ap.add_argument("--max-shots", type=int)
     ap.add_argument("--timeout-sec", type=float, default=float(os.environ.get("N2D_CODEX_IMAGE_TIMEOUT", "900")))
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--stop-on-fail", action="store_true")
     ap.add_argument("--force", action="store_true", help="regenerate even when this task already has a pass event for the asset")
+    ap.add_argument("--skip-final-gate", action="store_true", help="do not run the whole-episode image gate after shot generation")
     return ap
 
 
@@ -700,7 +947,10 @@ def main(argv: Sequence[str]) -> int:
     task_id = os.environ.get("N2D_TASK_ID") or f"manual-{episode}"
     targets = []
     if shared_targets:
-        targets.extend(build_shared_targets(root, shared_targets))
+        resolved_shared = build_shared_targets(root, shared_targets)
+        start = max(ns.shared_offset, 0)
+        end = start + ns.max_shared_targets if ns.max_shared_targets is not None else None
+        targets.extend(resolved_shared[start:end])
     if shots:
         targets.extend(build_targets(root, episode, shots))
     if not targets:
@@ -720,7 +970,7 @@ def main(argv: Sequence[str]) -> int:
         ok_all = ok_all and ok
         if not ok and ns.stop_on_fail:
             break
-    if ok_all and not ns.dry_run:
+    if ok_all and shots and not ns.dry_run and not ns.skip_final_gate:
         ok_all = run_image_gate(root, episode)
     return 0 if ok_all else 1
 

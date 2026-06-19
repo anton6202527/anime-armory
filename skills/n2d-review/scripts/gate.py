@@ -207,7 +207,7 @@ IDENTITY_FORM_FIELDS = (
     "angle_policy",
     "drift_forbidden",
 )
-CHARACTER_DNA_FIELDS = ("face", "hair", "outfit", "accessories")
+CHARACTER_DNA_FIELDS = ("face", "hair", "outfit", "accessories", "texture")
 ASSET_BUNDLE_REQUIRED_SECTIONS = ("reference", "prompts", "lora", "voice", "adapters", "qc")
 IDENTITY_ANGLE_FIELDS = ("allowed", "risky", "requires_extra_reference")
 IDENTITY_ADAPTER_SECTIONS = ("image", "video")
@@ -1379,11 +1379,11 @@ def check_image_ai_policy(root: str, ep: str) -> None:
             "请把 _设置.md 与所有 prompt 统一到同一个生图后端后再出图。",
         )
 
-    # 主动引导（一致性梯子第②档）：所选后端**支持原生角色主体/Character ID**（seedream/可灵/sora 等）
-    # 而核心长线角色还停在 unregistered 时，付费出图前 WARN 提示去注册主体——注册一次按 ID 跨镜跨集
-    # 引用，比每张重喂参考图更稳更省，是压住跨集脸漂的省钱前置。Codex/OpenAI 等无持久主体的后端不触发
-    # （default_status=fallback_reference_group → 自动回退参考图派生，不打扰）。advisory：WARN 不 BLOCK
-    # 合法的参考图兜底路径。"不靠想起来"：靠 registry adapter 状态机检，不靠人脑记。
+    # 主体库硬闸（一致性梯子第②档）：所选后端**支持原生角色主体/Character ID**（seedream/可灵/sora 等）
+    # 而核心长线角色还停在 unregistered 时，付费出图前 BLOCK。注册一次按 ID 跨镜跨集引用，比每张重喂
+    # 参考图更稳更省，是压住跨集脸漂的省钱前置。Codex/OpenAI 等无持久主体的后端不触发
+    # （default_status=fallback_reference_group → 自动回退参考图派生，不打扰短线/弱后端路线）。"不靠想起来"：
+    # 靠 registry adapter 状态机检，不靠人脑记。
     if kind == "approved" and _image_backend_supports_native_subject(canon):
         reg = load_json(identity_registry_path(root))
         if isinstance(reg, dict):
@@ -1408,7 +1408,7 @@ def check_image_ai_policy(root: str, ep: str) -> None:
             if pending:
                 shown = "、".join(pending[:8]) + ("…" if len(pending) > 8 else "")
                 add(
-                    WARN,
+                    BLOCK,
                     "原生主体注册",
                     settings_loc,
                     f"生图AI「{label}」支持原生角色主体/Character ID（一致性梯子第②档），但核心长线角色尚未注册："
@@ -1416,23 +1416,65 @@ def check_image_ai_policy(root: str, ep: str) -> None:
                     f"请在该后端控制台用已过自检的定妆三视图注册主体，把返回的 ID/句柄写进 identity_registry "
                     f"对应 forms[].identity_adapters.image.{canon}（status→registered + id/handle），再跑 "
                     "`python3 skills/n2d-identity/scripts/identity.py <作品根> --write` 刷新 adapter matrix。"
-                    "（Codex/OpenAI 等无持久主体的后端不触发本提示，自动回退参考图派生）",
+                    "（Codex/OpenAI 等无持久主体的后端不触发本硬闸，自动回退参考图派生；"
+                    "核心长线角色若选择支持主体库的后端，则先注册再付费出图）",
                 )
 
 
+def _reference_plan_requirement(root: str, ep: str) -> Tuple[str, str]:
+    """Return (severity, reason) for missing per-shot reference plan.
+
+    No storyboard/registry signal means no noise.  Core/long-running characters are a hard
+    preflight dependency; ordinary character episodes still warn so short demos are not blocked
+    before their registry is complete.
+    """
+    reg = load_json(identity_registry_path(root))
+    core_forms: List[str] = []
+    if isinstance(reg, dict):
+        for char in reg.get("characters", []) or []:
+            if not isinstance(char, dict):
+                continue
+            if not _CORE_SCOPE_RE.search(str(char.get("scope") or "")):
+                continue
+            for form in char.get("forms", []) or []:
+                if isinstance(form, dict):
+                    core_forms.append(f"{char.get('id')}/{form.get('form')}")
+    if core_forms:
+        shown = "、".join(core_forms[:8]) + ("…" if len(core_forms) > 8 else "")
+        return BLOCK, f"identity_registry 含核心长线角色：{shown}"
+
+    sb = load_json(storyboard_path(root, ep))
+    if isinstance(sb, dict):
+        text = json.dumps(sb, ensure_ascii=False)
+        if re.search(r"CHAR_[A-Za-z0-9_]+|角色|人物|主角|女主|男主", text):
+            return WARN, "storyboard 含人物/角色镜头"
+    return "", ""
+
+
 def check_reference_plan_applied(root: str, ep: str) -> None:
-    """逐镜参考规划（reference_planner.py）→ 落实对账（advisory）。
+    """逐镜参考规划（reference_planner.py）→ 落实对账。
 
     跨集脸漂的处方在 `生产数据/reference_plan_第N集.json`（弱后端按每镜变化量该补哪些参考/控制网/升档）。
     本检查在 image_preflight 把该 plan 的**行动项**surfaced 到付费闸门，提醒人审落进 01_分镜出图.md，
-    避免"规划了却忘了补"。**纯 advisory（WARN）**：plan 是 opt-in 前置，缺 plan 文件→静默；
-    不阻断合法的参考图兜底路径（与 image_qc 的 no_expression_lib_ref 互补：前者 pre-gen 选参考、
-    后者 post-gen 验落档）。
+    避免"规划了却忘了补"。核心长线角色缺 plan 直接 BLOCK；普通角色镜缺 plan 只 WARN。
+    与 image_qc 的 no_expression_lib_ref 互补：前者 pre-gen 选参考，后者 post-gen 验落档。
     """
     plan_path = os.path.join(root, "生产数据", f"reference_plan_{ep}.json")
     plan = load_json(plan_path)
     if not isinstance(plan, dict) or plan.get("kind") != "n2d_reference_plan":
-        return  # 未跑规划器 / 非本类产物：静默
+        sev, reason = _reference_plan_requirement(root, ep)
+        if sev:
+            add(
+                sev,
+                "参考规划落实",
+                plan_path,
+                f"缺逐镜参考规划 reference_plan_{ep}.json（{reason}）。付费出图前先跑 "
+                f"`python3 skills/n2d-image/scripts/reference_planner.py <作品根> {ep}`，"
+                "把每镜该喂的脸锚/表情/侧背/服装/场景/道具/控制网/升档建议落实到 "
+                f"`出图/{ep}/prompt/01_分镜出图.md`；否则很容易只写了规则但实际未传对参考。",
+                return_to_stage="image",
+            )
+        return
     summary = plan.get("summary") or {}
     actions = summary.get("action_required") or []
     if not actions:
@@ -1448,12 +1490,12 @@ def check_reference_plan_applied(root: str, ep: str) -> None:
     if lora:
         tail += f" 建议升 LoRA：{'、'.join(lora)}。"
     add(
-        WARN,
+        BLOCK,
         "参考规划落实",
         plan_path,
         f"逐镜参考规划有 {len(actions)} 条行动项未确认落实（弱后端×大变化镜 {weak} 镜）："
         f"镜头 {shown}。请按 reference_plan_{ep}.md 把补拍/多样参考/控制网/升档落进 "
-        f"出图/{ep}/prompt/01_分镜出图.md 后再付费出图（advisory，不阻断兜底）。{tail}",
+        f"出图/{ep}/prompt/01_分镜出图.md 后再付费出图；不能让参考规划停在侧车文件里。{tail}",
         return_to_stage="image",
     )
 
@@ -1484,12 +1526,27 @@ def check_storyboard_contract(root: str, ep: str, require_frame_assets: bool = T
     if not isinstance(policy, dict) or policy.get("tailframe_default") is not True:
         add(BLOCK, "故事板", storyboard_path(root, ep), "storyboard.json 缺 policy.tailframe_default=true；首尾双帧接力必须作为默认契约")
     prev_end = None
+    routes_file = os.path.join(root, "出视频", ep, "prompt", "video_model_routes.json")
+    routes_map = {}
+    if os.path.exists(routes_file):
+        try:
+            with open(routes_file, encoding="utf-8") as f:
+                r_data = json.load(f)
+                if isinstance(r_data.get("routes"), list):
+                    routes_map = {item.get("id"): item for item in r_data["routes"]}
+        except Exception:
+            pass
+
     for i, clip in enumerate(clips, 1):
         loc = f"{storyboard_path(root, ep)} clip#{i}"
+        cid = clip.get("id", f"EP{data.get('episode', '01')}_CLIP{i:02d}")
+        route = routes_map.get(cid) or {}
+        is_t2v = (route.get("mode") == "text2video")
+
         first_png = clip.get("firstframe_png")
-        if not first_png:
+        if not first_png and not is_t2v:
             add(BLOCK, "首帧", loc, "缺 firstframe_png")
-        elif require_frame_assets:
+        elif first_png and require_frame_assets:
             first_full = first_png if os.path.isabs(first_png) else os.path.join(root, first_png)
             if not os.path.exists(first_full):
                 add(BLOCK, "首帧", first_full, "firstframe_png 不存在")
@@ -1674,6 +1731,41 @@ def _earliest_storyboard_ep(root: str) -> Optional[str]:
     return min(eps)[1] if eps else None
 
 
+LONG_RUNNING_EP_THRESHOLD = 3  # 到第3集起跨集脸漂累积已成真问题，长线剧用无持久主体后端该提示升档
+
+
+def long_running_weak_backend_advice(canon: str, cur_ep_num: int, ep_count: int) -> bool:
+    """长线剧 × 无持久主体后端 是否应提示升档（纯函数·可测）。
+    True = 当前后端无原生主体/角色 ID 能力，且项目确属多集长剧（当前集号或已有集数 ≥ 阈值）；
+    单集/双集 demo 与已是持久主体后端都返回 False，不打扰。"""
+    if image_backend_supports_persistent_subject(canon or ""):
+        return False
+    return max(int(cur_ep_num or 0), int(ep_count or 0)) >= LONG_RUNNING_EP_THRESHOLD
+
+
+def check_long_running_weak_backend(root: str, ep: str) -> None:
+    """image_preflight 专属·advisory(WARN，绝不阻断)：长线剧用「无持久主体」后端(如 Codex)逐镜参考图派生出图时，
+    提示核心/常驻角色从①参考图派生升到工业默认②后端原生主体ID/主体库(注册一次按 ID 引用)或③LoRA。
+    跨集脸漂真因=单张定妆照只是板式、每镜重画脸逐集累积(见 n2d-image 与 references/模型矩阵.md)；
+    2026 行业(Vidu 漫剧白皮书等)把「参考生视频+主体库」定为工业化默认，而非一致性吃紧才升。"""
+    setting = get_setting(root, "生图AI", "Codex").strip()
+    canon, _kind = classify_image_backend(setting)
+    try:
+        cur = _ce_episode_number(ep) or 0
+    except Exception:
+        cur = 0
+    ep_count = len({os.path.basename(os.path.dirname(p))
+                    for p in glob.glob(os.path.join(root, "脚本", "*", "storyboard.json"))})
+    if not long_running_weak_backend_advice(canon or "", cur, ep_count):
+        return
+    add(WARN, "生图AI一致性", f"生图AI={setting}",
+        f"长线剧（{ep}）仍用无持久主体后端（{canon or setting}）逐镜参考图派生：跨集脸漂会逐集累积"
+        "（单张定妆照只是板式、每镜重画脸）。2026 工业默认是「参考生视频+主体库」——核心/常驻角色建议升到 "
+        "②后端原生主体ID/主体库（Seedream Universal Reference / 可灵主体库 / Sora Cameo，注册一次按 ID 引用）"
+        "或 ③LoRA；单集/配角留①参考图派生即可。换后端=整集重做定妆（一致性税），换前在 n2d-image 选择点摆知情权衡。",
+        return_to_stage="image")
+
+
 def check_cross_episode_style(root: str, ep: str) -> None:
     """跨集色调/风格基线：以打样集为基准比对本集 色调基线基调 + 风格名。
 
@@ -1792,10 +1884,14 @@ def check_cross_episode_contract(root: str, ep: str) -> None:
 
 
 def _clip_blob(clip: dict) -> str:
+    # 复杂镜头关键词检测只扫散文描述，不扫结构化 `continuity` 块——其 schema 字段名/枚举值（如
+    # `eyeline` 字段、`transition:"eyeline"`）与 dialogue_shot_reverse 关键词 `eyeline` 撞名，会让
+    # 每个填了 continuity.eyeline（formats §4 要求每 clip 填）的合规 clip 误判成对话反打。
+    scanned = {k: v for k, v in clip.items() if k != "continuity"} if isinstance(clip, dict) else clip
     try:
-        return json.dumps(clip, ensure_ascii=False)
+        return json.dumps(scanned, ensure_ascii=False)
     except Exception:
-        return str(clip)
+        return str(scanned)
 
 
 def _first_template_keyword_hit(blob: str) -> Optional[str]:
@@ -2048,7 +2144,7 @@ def _validate_character_dna(section: object, loc: str) -> None:
         value = section.get(key)
         if not isinstance(value, str) or not value.strip():
             add(BLOCK, "角色 DNA", f"{loc} character_dna.{key}",
-                "角色 DNA 四层必须非空；无配饰也要写“无”，避免下游临场补设定。")
+                "角色 DNA 五层必须非空；无配饰也要写“无”，避免下游临场补设定。")
 
 
 def _validate_character_asset_bundle(root: str, char: dict, loc: str) -> None:
@@ -2124,6 +2220,24 @@ def _identity_reference_list_paths(value: object) -> List[str]:
     return []
 
 
+def _identity_ready_reference_list_paths(value: object) -> List[str]:
+    """Atlas references are ready only when status=ready/registered or legacy string has a path."""
+    out: List[str] = []
+    if not isinstance(value, list):
+        return out
+    for item in value:
+        if isinstance(item, str):
+            p = item.strip()
+            if p:
+                out.append(p)
+        elif isinstance(item, dict):
+            status = str(item.get("status") or "").strip()
+            p = str(item.get("path") or "").strip()
+            if p and status in {"ready", "registered"}:
+                out.append(p)
+    return out
+
+
 def _validate_reference_atlas(form: dict, floc: str, strict_references: bool,
                               restricted_partial: bool = False) -> None:
     atlas = form.get("reference_atlas")
@@ -2141,23 +2255,43 @@ def _validate_reference_atlas(form: dict, floc: str, strict_references: bool,
     if not isinstance(base_views, dict):
         if strict_references:
             add(BLOCK, "资产身份注册层", floc,
-                "reference_atlas.base_views 缺失；必须登记 front/side/back/half_body 或 full_body 的 ready/planned 状态。")
+                "reference_atlas.base_views 缺失；必须登记 front/three_quarter/side/back/half_body 或 full_body 的 ready 状态。")
     else:
-        missing_views = [key for key in ("front", "side", "back") if key not in base_views]
+        missing_views = [key for key in ("front", "three_quarter", "side", "back") if key not in base_views]
         if "half_body" not in base_views and "full_body" not in base_views:
             missing_views.append("half_body_or_full_body")
         if missing_views and strict_references:
             add(BLOCK, "资产身份注册层", floc,
                 "reference_atlas.base_views 缺基础视角：" + ", ".join(missing_views))
+        if strict_references:
+            not_ready: List[str] = []
+            required_view_keys = [key for key in ("front", "three_quarter", "side", "back") if key in base_views]
+            required_view_keys.append("half_body" if "half_body" in base_views else "full_body")
+            for key in required_view_keys:
+                item = base_views.get(key)
+                status = ""
+                path = ""
+                if isinstance(item, dict):
+                    status = str(item.get("status") or "").strip()
+                    path = _identity_reference_item_path(item)
+                else:
+                    path = _identity_reference_item_path(item)
+                if status != "ready" or not path:
+                    not_ready.append(key)
+            if not_ready:
+                add(BLOCK, "资产身份注册层", floc,
+                    "reference_atlas.base_views 基础视角必须为 ready 且有路径："
+                    + ", ".join(not_ready)
+                    + "；所有人物/形态都强制包含 45°/three_quarter 与脸部特写基础锚，不能登记为 planned 后放行。")
     face_anchor_refs = atlas.get("face_anchor_refs")
     expression_refs = atlas.get("expression_refs")
-    has_face_anchor_refs = isinstance(face_anchor_refs, list) and any(_identity_reference_item_path(item) for item in face_anchor_refs)
-    has_expression_refs = isinstance(expression_refs, list) and any(_identity_reference_item_path(item) for item in expression_refs)
+    has_face_anchor_refs = bool(_identity_ready_reference_list_paths(face_anchor_refs))
+    has_expression_refs = bool(_identity_ready_reference_list_paths(expression_refs))
     if not has_face_anchor_refs and not has_expression_refs:
         if strict_references:
             add(BLOCK, "资产身份注册层", floc,
-                "reference_atlas 至少登记一个同源脸部特写/表情参考（face_anchor_refs 或 expression_refs）；"
-                "功能角色也不能只靠正脸硬扛近景。")
+                "reference_atlas 至少登记一个 ready 的同源脸部特写/表情参考（face_anchor_refs 或 expression_refs）；"
+                "功能角色也不能只靠正脸硬扛近景，planned 脸锚不能放行。")
 
 
 def _identity_reference_exists(root: str, rel: str) -> bool:
@@ -2811,6 +2945,9 @@ def _native_audio_contract_ok(text: str) -> bool:
     return _has_any(text, ("无原生人声", "禁止原生人声", "no_native_speech", "no generated native voice"))
 
 
+NATIVE_AV_PHYSICAL_FIELDS = ("声源归属", "口型策略", "材质/动作声", "空间声学", "字幕/后期策略")
+
+
 def is_native_av_production(root: str) -> bool:
     """`制作模式=原生音画`：视频后端有意一次生成同步音画（含台词）。"""
     mode = get_setting(root, "制作模式", "配音先行")
@@ -2840,6 +2977,19 @@ def check_native_audio_opt_in_overview(root: str, ep: str, overview_text: str, l
         add(BLOCK, "原生音画", loc, f"`视频原生音轨={policy}` 不是默认丢弃；出视频总览必须写「原生音画 opt-in 清单」，逐 Clip 说明低风险、无口型、无原生人声")
     if not _native_audio_contract_ok(overview_text):
         add(BLOCK, "原生音画", loc, "原生音画 opt-in 清单必须明确 no_native_speech / 无原生人声；否则 compose 不得混入或保留原生音轨")
+
+
+def check_native_av_physical_contract(root: str, ep: str, overview_text: str, loc: str) -> None:
+    if not is_native_av_production(root):
+        return
+    title = "原生音画物理一致性契约"
+    if title not in overview_text:
+        add(BLOCK, "原生音画物理一致性", loc,
+            f"原生音画模式缺「{title}」；必须锁声源归属、口型策略、材质/动作声、空间声学、字幕/后期策略后才能进视频生成")
+        return
+    for key in NATIVE_AV_PHYSICAL_FIELDS:
+        if key not in overview_text:
+            add(BLOCK, "原生音画物理一致性", loc, f"{title} 缺字段：{key}")
 
 
 def check_markdown_style_contract(text: str, loc: str, layer: str) -> None:
@@ -2877,6 +3027,7 @@ def check_video_prompt_overview(root: str, ep: str) -> None:
     check_video_model_routes(root, ep, text, p)
     check_video_closeup_identity_overview(text, p)
     check_native_audio_opt_in_overview(root, ep, text, p)
+    check_native_av_physical_contract(root, ep, text, p)
 
 
 def check_video_closeup_identity_overview(overview_text: str, overview_path: str) -> None:
@@ -3078,15 +3229,17 @@ def check_video_model_routes(root: str, ep: str, overview_text: str, overview_pa
             )
         check_route_frame_capability(root, ep, route, p, idx, frame_requirements, video_channel)
         check_motion_control_route(root, ep, route, p, idx)
-        # ③ 一角一后端亲和（advisory·warn-only）：核心角色已注册原生主体后端 ≠ 本镜 primary → 提示人裁
+        # ③ 一角一后端亲和：router 已尽力把核心角色硬钉到原生主体后端；剩余冲突多为同镜多个锁脸后端
+        # 无法同时满足，需要拆镜/分区，核心冲突 BLOCK，非核心冲突 WARN。
         conflicts = route.get("character_backend_conflicts")
         if isinstance(conflicts, list) and conflicts:
             clip_id = str(route.get("clip_id") or f"routes[{idx}]")
             bits = "；".join(f"{c.get('character')} 原生主体在 {c.get('prefers_backend')}，本镜路由 {c.get('routed_backend')}"
                              for c in conflicts if isinstance(c, dict))
-            add(WARN, "一角一后端", p,
-                f"{clip_id} 跨集后端亲和冲突：{bits}。同角色跨集换后端→脸质感漂移；裁决：拆正反打让该角色单独走其原生后端、"
-                "或本镜改走该后端、或人工确认可接受。（仅告警不改路由）",
+            sev = BLOCK if any(isinstance(c, dict) and (c.get("enforce") or c.get("core")) for c in conflicts) else WARN
+            action = "必须拆正反打/分区让各核心角色走自己的原生后端，或重注册到同一后端" if sev == BLOCK else "拆正反打让该角色单独走其原生后端，或本镜改走该后端，或人工确认可接受"
+            add(sev, "一角一后端", p,
+                f"{clip_id} 跨集后端亲和冲突：{bits}。同角色跨集换后端→脸质感漂移；处理：{action}。",
                 return_to_stage="video")
 
 
@@ -3762,6 +3915,25 @@ def _has_character_id_binding(section: str) -> bool:
     return bool(re.search(r"`?CHAR_[A-Za-z0-9_]+/[^`\s；;，,]+`?", section))
 
 
+def _has_character_aesthetic_baseline(section: str) -> bool:
+    """人物镜默认要写审美基线；只做 WARN，避免误伤特殊丑化/怪异角色。"""
+    return _has_any(section, (
+        "人物审美基线",
+        "审美基线",
+        "主流审美",
+        "镜头友好",
+        "可播审美",
+        "精致好看",
+        "好看但不",
+        "五官协调",
+        "五官清晰",
+        "脸部比例协调",
+        "camera-friendly",
+        "appealing",
+        "attractive",
+    ))
+
+
 def _multi_char_binding_ambiguity(section: str) -> Optional[List[str]]:
     """同框 ≥2 个注册角色但未星标 primary（`CHAR_xx*`）→ 返回角色 ID 列表；否则 None。
 
@@ -3799,14 +3971,15 @@ def _needs_prop_asset_binding(refs: str) -> bool:
 
 
 def _has_standard_character_turnaround(section: str) -> bool:
-    """角色定妆基础包：正/侧/背 + 服装参考 + 脸锚 + 人审拼版。"""
+    """角色定妆基础包：正/45°/侧/背 + 服装参考 + 脸锚 + 人审拼版。"""
     has_front = _has_any(section, ("正面", "正脸", "主参考", "定妆_<角色>.png"))
+    has_three_quarter = _has_any(section, ("45°", "45度", "三分之二侧脸", "3/4", "three_quarter", "_45度"))
     has_side = _has_any(section, ("_侧", "侧面", "侧脸"))
     has_back = _has_any(section, ("_背", "背面", "背身"))
     has_outfit = _has_any(section, ("_半身", "_全身", "半身服装", "全身服装", "服装参考", "体态参考"))
     has_face_anchor = _has_any(section, ("脸部特写", "面部特写", "face_anchor_refs", "基础脸部参考", "表情参考", "同源表情", "表情_"))
     has_board = _has_any(section, ("_三视图", "标准三视图", "正/侧/背", "正面 / 侧面 / 背面"))
-    return has_front and has_side and has_back and has_outfit and has_face_anchor and has_board
+    return has_front and has_three_quarter and has_side and has_back and has_outfit and has_face_anchor and has_board
 
 
 def _is_restricted_partial_prompt_section(section: str) -> bool:
@@ -3997,6 +4170,14 @@ def check_image_shot_prompt_section(path: str, idx: int, section: str,
                 "②机位 为空或默认正面平视——机位即态度（八维最易漏）；给本镜一个有叙事理由的机位（俯/仰/过肩/侧/主观），默认平视须注明理由")
 
     if _section_has_character_refs(section):
+        if not _has_character_aesthetic_baseline(section):
+            add(
+                WARN,
+                "人物审美基线",
+                loc,
+                "含角色镜头缺 `人物审美基线` 或等价说明。除非角色圣经/剧情特别要求丑、怪、病、老、恐怖、粗粝或非主流，"
+                "人物默认应按主流可播审美和镜头友好来写：五官比例协调、妆造服装精致耐看、光影让脸好看，同时不覆盖角色 DNA。",
+            )
         if not re.search(r"(锚点句|anchor phrase)\s*[:：]", section, re.IGNORECASE):
             add(BLOCK, "角色一致性", loc, "含角色镜头缺锚点句；每镜必须拼角色卡锚点")
         if not _has_field(section, "视线方向"):
@@ -4223,9 +4404,9 @@ def check_common_image_prompts(root: str) -> None:
                         add(BLOCK, "角色一致性", loc, "角色定妆缺定妆组说明；人物角色不能只靠单张正脸")
                     if not _has_standard_character_turnaround(sec):
                         add(BLOCK, "角色定妆基础包", loc,
-                            "人物定妆基础包必须写齐：正面主参考 + 侧面参考 + 背面参考 + 半身/全身服装参考 + "
+                            "人物定妆基础包必须写齐：正面主参考 + 45°参考 + 侧面参考 + 背面参考 + 半身/全身服装参考 + "
                             "脸部特写/同源表情参考 + `定妆_<角色>_三视图.png` 人审拼版。"
-                            "45°、完整表情组、动作参考、主体库/LoRA 是风险升档项，不替代基础包。")
+                            "完整表情组、动作参考、主体库/LoRA 是风险升档项，不替代基础包。")
                 if _uses_halfbody_outfit_ref(sec) and not _has_halfbody_crop_rule(sec):
                     add(BLOCK, "服装参考", loc, "半身服装参考必须写明：`定妆_<角色>_半身.png` 从已通过自检的正面主参考裁切并放大/重采样回 9:16；人物主体居中、头身中线接近画面中线、左右留白基本均衡；不得新抽半身导致脸漂，也不得用白底/浅灰底/空白补下半截")
                 if "锚点" not in sec:
@@ -5255,6 +5436,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_cross_episode_character_definition(root, ep)  # 跨集角色文字定义漂移（重派生）信号
         if stage == "image_preflight":
             check_reference_plan_applied(root, ep)  # 逐镜参考规划落实对账（advisory·治跨集脸漂）
+            check_long_running_weak_backend(root, ep)  # 长线剧×弱后端→建议升原生主体/主体库（advisory·治跨集脸漂累积）
         check_identity_registry(root, require_reference_assets=False)
         check_costume_registry_reconcile(root)
         check_asset_reference_registry(root, require_reference_assets=False)

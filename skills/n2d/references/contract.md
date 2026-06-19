@@ -67,7 +67,7 @@
   "schema_version": 2,
   "episode": "第1集",
   "stage": "all",
-  "production_mode": "配音先行",
+  "production_mode": "原生音画",
   "artifacts": [
     {
       "stage": "script_stage2",

@@ -63,6 +63,9 @@ if USE_ZS:
     # 合规闸门（项目约定：声音克隆 non-negotiable）：用参考音克隆他人嗓须先声明授权。
     # 只打印提示不够——这里与 voice_clone.py 同级硬闸门：检测到任一 <PREFIX>_REF_* 参考音即要求 VOICE_CLONE_AUTHORIZED=1。
     _refs=[k for k,v in os.environ.items() if v and (k==f'{ZS_PREFIX}_REF_AUDIO' or (k.startswith(f'{ZS_PREFIX}_REF_') and not k.endswith('_TEXT')))]
+    # 音色定妆照：voicemap 钉死的逐角色 canonical 参考音同样是「用参考音克隆」，与 env 参考音同级触发授权闸门，绝不因来源换成项目内文件就绕过合规。
+    _vm_refs=sorted({f'voicemap[{sub}].ref' for sub,cfg in (VOICEMAP or {}).items() if isinstance(cfg,dict) and cfg.get('ref')})
+    _refs=sorted(set(_refs)|set(_vm_refs))
     if _refs and os.environ.get('VOICE_CLONE_AUTHORIZED')!='1':
         sys.exit(f'⛔ 合规闸门：{ZS_LABEL} 将用参考音克隆音色（{",".join(sorted(_refs))}），但未声明授权。\n'
                  f'   声音克隆仅限本人嗓 / 已授权他人嗓 / 纯合成音色（项目约定 non-negotiable，见 references/cloning.md）。\n'
@@ -150,6 +153,14 @@ def role_ref(prefix, role):
     k=role_key(role)
     ref=os.environ.get(f'{prefix}_REF_{k}') or os.environ.get(f'{prefix}_REF_AUDIO')
     txt=os.environ.get(f'{prefix}_REF_{k}_TEXT') or os.environ.get(f'{prefix}_REF_TEXT','')
+    # 音色定妆照（治"后端零样本每集重克隆漂"）：env 未指定参考音时，回退 voicemap 钉死的逐角色 canonical
+    # 参考音——项目内冻结一条 wav 全篇/跨集复用为克隆源，等价图像层「共享定妆库先行」。env 仍可临时覆盖。
+    if not ref:
+        cfg=vmf.vm_match(role, VOICEMAP) or {}
+        vmref=cfg.get('ref')
+        if vmref:
+            ref=vmref if os.path.isabs(vmref) else os.path.join(ROOT, vmref)
+            txt=txt or cfg.get('ref_text','')
     return ref, txt
 
 def http(url,body,hdr):
@@ -329,6 +340,16 @@ if LANG=='zh':
                                  i in placeholders) for i in range(n)]
     out_dir=os.path.dirname(os.path.join(W,'voice_zh.wav'))
     _json.dump(manifest, open(os.path.join(out_dir,'时长清单.json'),'w',encoding='utf-8'), ensure_ascii=False, indent=2)
+    
+    # --- Emotional Flow Analysis (Optimization Point 3) ---
+    try:
+        from voice_analysis import analyze_emotion_flow
+        emotion_flow_path = os.path.join(out_dir, 'emotion_flow.json')
+        analyze_emotion_flow(W, manifest, emotion_flow_path)
+        print(f"   [opt] 情感能量流已提取 → emotion_flow.json")
+    except Exception as e:
+        print(f"   [warn] 情感能量流提取失败: {e}")
+
     # 时长清单 sidecar：记录配音时 voiceover.txt 的台词指纹 + 后端 + 时间。
     # validate_timings 用它抓"配音之后又改 voiceover.txt（改词/插句/删句）→ 清单/字幕/镜头时长过期"，
     # 这条失配链 delete_shot 的强制 gate 对账（只管删镜）覆盖不到。清单本体保持纯 list，不破坏下游消费。

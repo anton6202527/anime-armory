@@ -193,6 +193,157 @@ def get_anchor_impacts(root: str, image_targets: List[str]) -> List[str]:
     return hits
 
 
+def _clip_num(text: Any) -> Optional[str]:
+    """Pull a clip number out of 'Clip_03' / 'clip3.png' / 'EP01_CLIP03' → '3'. None if absent."""
+    m = re.search(r"\d+", str(text or ""))
+    return str(int(m.group(0))) if m else None
+
+
+def _locator_matches_target(locator: str, target: str) -> bool:
+    """A finding locator (png/shot/clip_id) refers to a refresh target.
+
+    Match on basename containment OR same clip number, so 'Clip_001',
+    'clip_001.png' and '出图/.../Clip001首帧.png' all resolve to the same target.
+    """
+    loc = str(locator or "").strip()
+    tgt = str(target or "").strip()
+    if not loc or not tgt:
+        return False
+    lb, tb = os.path.basename(loc), os.path.basename(tgt)
+    if tb and (tb in loc or lb == tb):
+        return True
+    ln, tn = _clip_num(loc), _clip_num(tgt)
+    return bool(ln and tn and ln == tn)
+
+
+def _read_json(path: str) -> Optional[Dict[str, Any]]:
+    if not os.path.isfile(path):
+        return None
+    try:
+        with open(path, encoding="utf-8") as fh:
+            return json.load(fh)
+    except Exception:
+        return None
+
+
+def _image_qc_findings(root: str, ep: str) -> Tuple[str, str, List[Dict[str, Any]]]:
+    """Flatten existing image_qc report into (status, report_path, [finding]).
+
+    finding = {locator, severity, code, source}. status: ok|missing|error.
+    """
+    path = os.path.join(production_dir(root), "image_qc", ep, f"image_qc_{ep}.json")
+    if not os.path.isfile(path):
+        return "missing", path, []
+    data = _read_json(path)
+    if not isinstance(data, dict):
+        return "error", path, []
+    out: List[Dict[str, Any]] = []
+    checks = data.get("checks") if isinstance(data.get("checks"), dict) else {}
+    for name, blk in checks.items():
+        shots = (blk or {}).get("shots") if isinstance(blk, dict) else None
+        if not isinstance(shots, list):
+            continue
+        for row in shots:
+            if not isinstance(row, dict):
+                continue
+            sev = str(row.get("verdict") or "").lower()
+            if sev not in {"block", "warn"}:
+                continue
+            out.append({
+                "locator": row.get("png") or row.get("shot") or "",
+                "severity": sev,
+                "code": f"{name}",
+                "source": f"image_qc.{name}",
+            })
+    lint = (data.get("lint") or {}).get("findings") if isinstance(data.get("lint"), dict) else None
+    for row in lint or []:
+        if not isinstance(row, dict):
+            continue
+        sev = str(row.get("level") or "").lower()
+        if sev not in {"block", "warn"}:
+            continue
+        out.append({
+            "locator": row.get("shot") or "",
+            "severity": sev,
+            "code": str(row.get("code") or row.get("msg") or "lint"),
+            "source": "image_qc.lint",
+        })
+    return "ok", path, out
+
+
+def _contract_findings(root: str, ep: str) -> Tuple[str, str, List[Dict[str, Any]], List[str]]:
+    """Flatten existing inherit_contract report → (status, path, clip_findings, field_blocks).
+
+    clip_findings carry clip_id locators (identity/asset handoff); field_blocks are
+    episode-level visual-contract block fields with no per-clip locator.
+    """
+    path = os.path.join(production_dir(root), f"contract_inheritance_{ep}.json")
+    if not os.path.isfile(path):
+        return "missing", path, [], []
+    data = _read_json(path)
+    if not isinstance(data, dict):
+        return "error", path, [], []
+    out: List[Dict[str, Any]] = []
+    for section, src in (("identity_handoff", "身份未锁"), ("asset_handoff", "资产丢失")):
+        for row in (data.get(section) or {}).get("findings") or []:
+            if not isinstance(row, dict):
+                continue
+            sev = str(row.get("severity") or "").lower()
+            if sev not in {"block", "warn"}:
+                continue
+            out.append({
+                "locator": row.get("clip_id") or "",
+                "severity": sev,
+                "code": f"{src}:{row.get('code') or ''}".strip(":"),
+                "source": f"contract.{section}",
+            })
+    field_blocks = [
+        f"{r.get('field')}:{r.get('status')}"
+        for r in (data.get("fields") or [])
+        if isinstance(r, dict) and str(r.get("severity") or "").lower() == "block"
+    ]
+    return "ok", path, out, field_blocks
+
+
+def collect_evidence(root: str, ep: Optional[str], images: List[str], videos: List[str]) -> Dict[str, Any]:
+    """Pre-classify each refresh target by EXISTING gate/QC/review findings.
+
+    media still never invents a verdict, but when reports already exist on disk it
+    surfaces the evidence per target (block/warn/none) instead of deferring 100% to
+    the operator. No reports → every target stays 'no_evidence' (review-only).
+    """
+    epn = str(ep or "").strip()
+    img_status, img_path, img_findings = _image_qc_findings(root, epn) if epn else ("missing", "", [])
+    con_status, con_path, con_findings, field_blocks = (
+        _contract_findings(root, epn) if epn else ("missing", "", [], [])
+    )
+
+    def annotate(target: str, pool: List[Dict[str, Any]]) -> Dict[str, Any]:
+        hits = [f for f in pool if _locator_matches_target(f.get("locator", ""), target)]
+        if any(f["severity"] == "block" for f in hits):
+            verdict = "block"
+        elif any(f["severity"] == "warn" for f in hits):
+            verdict = "warn"
+        else:
+            verdict = "no_evidence"
+        return {"target": target, "evidence_verdict": verdict, "findings": hits}
+
+    targets = [annotate(t, img_findings) for t in images]
+    # video targets also inherit episode-level contract field blocks as shared evidence.
+    targets += [annotate(t, con_findings) for t in videos]
+    has_block = any(t["evidence_verdict"] == "block" for t in targets) or bool(field_blocks)
+    return {
+        "reports": {
+            "image_qc": {"status": img_status, "path": img_path},
+            "contract_inheritance": {"status": con_status, "path": con_path},
+        },
+        "field_blocks": field_blocks,
+        "targets": targets,
+        "has_block_evidence": has_block,
+        "any_report_present": img_status == "ok" or con_status == "ok",
+    }
+
+
 def episode_number(ep: Optional[str]) -> str:
     text = str(ep or "").strip()
     if not text:
@@ -297,6 +448,7 @@ def build_plan(
         videos = videos + [x for x in generic if x not in videos]
 
     family = n2d_plan(root, episode, images, videos)
+    evidence = collect_evidence(root, episode, images, videos)
 
     targets = {"images": images, "videos": videos}
     needs_media_review = bool(images or videos)
@@ -307,21 +459,53 @@ def build_plan(
         "line": "n2d",
         "episode": episode,
         "targets": targets,
+        "evidence": evidence,
         "policy": REUSE_POLICY,
         "decision_boundary": DECISION_BOUNDARY,
         "needs_media_review": needs_media_review,
-        "needs_decision_evidence": needs_media_review,
+        # 已有报告即可逐 target 预判；无报告时仍需人收集证据。
+        "needs_decision_evidence": needs_media_review and not evidence["any_report_present"],
         "latest_skill_flow": family["flow"],
         "execution_steps": family.get("execution_steps") or [],
         "commands": family["commands"],
         "agent_steps": family.get("agent_steps") or [],
-        "notes": [
+        "notes": _evidence_notes(evidence) + [
             "本计划只生成选择性刷新流程，不直接调用生图/生视频后端，也不替代审片/质检。",
             "执行前必须引用 gate/QC/review findings 或显式人工输入；未列入 targets 的图片/视频默认不动。",
             "没有证据时只推进复核步骤，不把 target 归类为坏/能用，也不无条件排入重制。",
             "如发生重制，必须回到 n2d-review/gate，不能只看生成是否成功。",
         ],
     }
+
+
+def _evidence_notes(evidence: Dict[str, Any]) -> List[str]:
+    """Lead notes with what existing reports already say about each target."""
+    if not evidence.get("any_report_present"):
+        reps = evidence.get("reports") or {}
+        miss = [k for k, v in reps.items() if (v or {}).get("status") != "ok"]
+        return [
+            "未找到可用的 image_qc / 契约继承报告"
+            + (f"（{', '.join(miss)} 缺失/不可读）" if miss else "")
+            + "：media 无证据可预判，按下方复核步骤先取证再决定重制。"
+        ]
+    notes: List[str] = []
+    blocks = [t["target"] for t in evidence["targets"] if t["evidence_verdict"] == "block"]
+    warns = [t["target"] for t in evidence["targets"] if t["evidence_verdict"] == "warn"]
+    clean = [t["target"] for t in evidence["targets"] if t["evidence_verdict"] == "no_evidence"]
+    if blocks:
+        notes.append(
+            "已有报告证据·命中 block（可在人工确认后直接排重出）：" + "、".join(blocks))
+    if evidence.get("field_blocks"):
+        notes.append(
+            "出图→出视频契约存在 episode 级字段 block（影响全部视频 target）："
+            + "、".join(evidence["field_blocks"]))
+    if warns:
+        notes.append("已有报告证据·命中 warn（交人判，不默认重出）：" + "、".join(warns))
+    if clean:
+        notes.append(
+            "已有报告里无命中 finding 的 target（无证据≠已合格，需人工确认或补跑对应 gate）："
+            + "、".join(clean))
+    return notes
 
 
 def plan_paths(root: str, episode: Optional[str]) -> Tuple[str, str]:
@@ -383,6 +567,20 @@ def render_markdown(plan: Dict[str, Any]) -> str:
     lines.extend(f"- {item}" for item in plan["policy"]["keep_if"])
     lines.extend(["", "### 可排重制"])
     lines.extend(f"- {item}" for item in plan["policy"]["regenerate_if"])
+
+    evidence = plan.get("evidence") or {}
+    if evidence:
+        lines.extend(["", "## 已有报告证据（逐 target 预判）"])
+        reps = evidence.get("reports") or {}
+        for name, info in reps.items():
+            lines.append(f"- {name}：{(info or {}).get('status')}（`{(info or {}).get('path')}`）")
+        if evidence.get("field_blocks"):
+            lines.append("- 契约 episode 级字段 block：" + "、".join(evidence["field_blocks"]))
+        for t in evidence.get("targets") or []:
+            detail = "；".join(
+                f"{f.get('source')}={f.get('severity')}({f.get('code')})" for f in t.get("findings") or []
+            ) or "（无命中 finding）"
+            lines.append(f"  - `{t['target']}` → **{t['evidence_verdict']}** · {detail}")
 
     lines.extend(["", "## 按最新 skill 的流程"])
     lines.extend(f"- {step}" for step in plan["latest_skill_flow"])

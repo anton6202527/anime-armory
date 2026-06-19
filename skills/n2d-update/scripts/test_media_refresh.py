@@ -103,6 +103,68 @@ def test_media_plan_warns_when_refreshing_a_locked_anchor(tmp_path):
     assert "定妆锚点预警" in blob and "CHAR_10/常态" in blob and "pin-anchor" in blob
 
 
+def _write_image_qc(root: Path, ep: str, report: dict) -> None:
+    d = root / "生产数据" / "image_qc" / ep
+    d.mkdir(parents=True, exist_ok=True)
+    (d / f"image_qc_{ep}.json").write_text(json.dumps(report, ensure_ascii=False), encoding="utf-8")
+
+
+def _write_contract(root: Path, ep: str, report: dict) -> None:
+    d = root / "生产数据"
+    d.mkdir(parents=True, exist_ok=True)
+    (d / f"contract_inheritance_{ep}.json").write_text(json.dumps(report, ensure_ascii=False), encoding="utf-8")
+
+
+def test_media_preclassifies_targets_from_existing_image_qc(tmp_path):
+    root = _project(tmp_path)
+    _write_image_qc(root, "第3集", {
+        "checks": {"face": {"shots": [
+            {"png": "Clip_001首帧.png", "verdict": "block"},
+            {"png": "Clip_002首帧.png", "verdict": "ok"},
+        ]}},
+        "lint": {"findings": [{"shot": "Clip_002", "level": "warn", "code": "构图"}]},
+    })
+    plan = m.build_plan(str(root), episode="第3集", image_targets=["Clip_001", "Clip_002"])
+
+    # Reports exist → media no longer demands the operator gather evidence from scratch.
+    assert plan["needs_decision_evidence"] is False
+    ev = plan["evidence"]
+    assert ev["any_report_present"] is True
+    assert ev["has_block_evidence"] is True
+    verdicts = {t["target"]: t["evidence_verdict"] for t in ev["targets"]}
+    assert verdicts["Clip_001"] == "block"   # matched by basename
+    assert verdicts["Clip_002"] == "warn"    # matched by clip number / lint shot
+    notes = "\n".join(plan["notes"])
+    assert "命中 block" in notes and "Clip_001" in notes
+
+
+def test_media_preclassifies_video_targets_from_contract_report(tmp_path):
+    root = _project(tmp_path)
+    _write_contract(root, "第5集", {
+        "identity_handoff": {"findings": [
+            {"clip_id": "Clip_004", "severity": "block", "code": "IDENTITY_UNLOCKED"}]},
+        "asset_handoff": {"findings": []},
+        "fields": [{"field": "光位锚", "status": "drift", "severity": "block"}],
+    })
+    plan = m.build_plan(str(root), episode="第5集", video_targets=["Clip_004", "Clip_009"])
+
+    ev = plan["evidence"]
+    verdicts = {t["target"]: t["evidence_verdict"] for t in ev["targets"]}
+    assert verdicts["Clip_004"] == "block"
+    assert verdicts["Clip_009"] == "no_evidence"
+    assert ev["field_blocks"] == ["光位锚:drift"]
+    assert "episode 级字段 block" in "\n".join(plan["notes"])
+
+
+def test_media_without_reports_stays_review_only(tmp_path):
+    root = _project(tmp_path)
+    plan = m.build_plan(str(root), episode="第2集", image_targets=["Clip_001"])
+    ev = plan["evidence"]
+    assert ev["any_report_present"] is False
+    assert plan["needs_decision_evidence"] is True
+    assert any("media 无证据可预判" in n for n in plan["notes"])
+
+
 def test_media_plan_no_anchor_warning_for_non_anchor_image(tmp_path):
     root = _project(tmp_path)
     reg = root / "出图" / "共享"
