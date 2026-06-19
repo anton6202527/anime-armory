@@ -51,3 +51,14 @@ def test_backend_supports_three_plus_frames_capability_gate():
     # 未知/缺省 → 向前看默认假定支持（强制）
     assert p.backend_supports_three_plus_frames(None) is True
     assert p.backend_supports_three_plus_frames("某新后端2027") is True
+
+
+def test_anchor_consumption_plan_distinguishes_native_and_split():
+    assert profiles.anchor_consumption_plan("dreamina", anchor_count=1, need_end=True)["consumption_mode"] == "native_multiframe"
+    assert profiles.anchor_consumption_plan("kling", anchor_count=1, need_end=True)["consumption_mode"] == "split_relay"
+    assert profiles.anchor_consumption_plan("seedance", anchor_count=1, need_end=True)["consumption_mode"] == "unsupported_mid_anchor"
+
+
+def test_sora_is_legacy_not_auto_routed_or_native_av():
+    assert profiles.video_backend_auto_routable("sora") is False
+    assert "sora" not in profiles.NATIVE_AV_BACKENDS

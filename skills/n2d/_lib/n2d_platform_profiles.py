@@ -8,17 +8,20 @@ these constants for routing/gate decisions.
 """
 from __future__ import annotations
 
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 
 # 候选快照新鲜度戳记（本线 _lib/freshness.py 据此判过期）。
 # 这是「生视频模型/渠道」选择点的能力档快照；max_clip_seconds/native_av/frame_control、以及
 # 下方 MOTION_CONTROL_PROFILES（运镜/运动控制能力）和 lipsync_audio_ref（音频参考口型）都随后端迭代变，
 # 同属本快照、同一个戳记覆盖（freshness 注册 id=n2d-video-backends）。
-# 采集日期：2026-06-13  来源：各后端官方文档 + cli_snapshots/（待逐条复核）
+# 采集日期：2026-06-19  来源：各后端官方文档 + cli_snapshots/（待逐条复核）
 CATALOG_VERIFIED = {
-    "date": "2026-06-13",
-    "source": "Dreamina CLI snapshots + Google Veo docs + Luma Ray docs; other entries are conservative fallbacks",
+    "date": "2026-06-19",
+    "source": (
+        "Dreamina CLI snapshots + Google Veo docs + Luma Ray docs + OpenAI Sora discontinuation notice; "
+        "other entries are conservative fallbacks"
+    ),
 }
 
 
@@ -115,7 +118,16 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "max_clip_seconds": 20,
         "default_mode": "image2video",
         "identity_mechanism": "reference_media",
-        "native_av": True,
+        # 2026-06：Sora Web/App 已公告停服，API 也处于终止窗口。保留档案只为读旧项目/人工补单；
+        # 自动路由、原生音画候选、批量付费提交不得再把 Sora 当 primary/fallback。
+        "native_av": False,
+        "auto_routing": False,
+        "availability": {
+            "status": "legacy_manual_only",
+            "web_app_discontinued_at": "2026-04-26",
+            "api_shutdown_at": "2026-09-24",
+            "source": "OpenAI Help Center: What to know about the Sora discontinuation",
+        },
         "frame_control": {
             "mode": "reference_media",
             "max_timeline_frames": 1,
@@ -123,7 +135,7 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
             "supports_last_frame": False,
             "supports_native_mid_anchors": False,
             "fallback": "Treat as reference/first-frame guided unless current API explicitly exposes first+last or multi-keyframe timeline control.",
-            "verified": "conservative n2d profile; re-verify current Sora API before paid batch",
+            "verified": "legacy/manual-only profile; do not auto-route paid batches to Sora",
         },
     },
     "luma": {
@@ -197,8 +209,12 @@ VIDEO_BACKEND_LABELS = {
 VIDEO_BACKEND_MAX_SECONDS = {
     key: int(spec["max_clip_seconds"]) for key, spec in VIDEO_BACKEND_PROFILES.items()
 }
+AUTO_ROUTABLE_VIDEO_BACKENDS = tuple(
+    key for key, spec in VIDEO_BACKEND_PROFILES.items() if spec.get("auto_routing", True) is not False
+)
 NATIVE_AV_BACKENDS = tuple(
-    key for key, spec in VIDEO_BACKEND_PROFILES.items() if bool(spec.get("native_av"))
+    key for key, spec in VIDEO_BACKEND_PROFILES.items()
+    if bool(spec.get("native_av")) and spec.get("auto_routing", True) is not False
 )
 
 # 支持「音频参考 / 口型驱动」的后端（能把一段配音当口型条件喂进去、同帧出对口型画面）。
@@ -279,6 +295,17 @@ def video_backend_profile(backend: str) -> Optional[Dict[str, object]]:
     return dict(spec) if spec else None
 
 
+def video_backend_auto_routable(backend: Optional[str]) -> bool:
+    """Whether a backend may be selected by automatic routing for new paid work."""
+    key = normalize_video_backend(backend or "", default="")
+    if not key:
+        return True
+    spec = VIDEO_BACKEND_PROFILES.get(key)
+    if not spec:
+        return True
+    return spec.get("auto_routing", True) is not False
+
+
 def effective_frame_backend(backend: Optional[str], channel: Optional[str] = None) -> str:
     """Return the backend whose frame-control contract will actually execute.
 
@@ -332,3 +359,74 @@ def video_backend_frame_control(backend: Optional[str], channel: Optional[str] =
         "fallback": "Unknown frame-control capability; assume first-frame only and require manual confirmation before paid generation.",
         "verified": "unknown",
     }
+
+
+def anchor_consumption_plan(
+    backend: Optional[str],
+    channel: Optional[str] = None,
+    *,
+    anchor_count: int = 0,
+    need_end: bool = False,
+) -> Dict[str, Any]:
+    """Describe how first/mid/end keyframes can actually be consumed by the backend.
+
+    `backend_supports_three_plus_frames()` answers the policy question ("do we still
+    require a 3-frame contract?").  This function answers the execution question:
+    whether declared mid anchors become native timeline keyframes, require split
+    relay, or are only available for QC/manual reference.
+    """
+    key = effective_frame_backend(backend, channel)
+    spec = VIDEO_BACKEND_PROFILES.get(key)
+    control = video_backend_frame_control(backend, channel)
+    supports_native_mid = bool(control.get("supports_native_mid_anchors"))
+    supports_last = bool(control.get("supports_last_frame"))
+    max_reference_images = int(control.get("max_reference_images") or 0)
+    known = spec is not None
+    mode = "first_frame"
+    if anchor_count > 0:
+        if supports_native_mid:
+            mode = "native_multiframe"
+        elif supports_last:
+            mode = "split_relay"
+        elif max_reference_images > 0:
+            mode = "reference_only_qc"
+        elif known:
+            mode = "unsupported_mid_anchor"
+        else:
+            mode = "unknown_manual_confirm"
+    elif need_end:
+        if supports_last:
+            mode = "first_last"
+        elif known:
+            mode = "unsupported_endframe"
+        else:
+            mode = "unknown_manual_confirm"
+    plan: Dict[str, Any] = {
+        "backend": normalize_video_backend(backend or "", default="") or (backend or ""),
+        "execution_backend": key,
+        "frame_control_mode": control.get("mode", "unknown"),
+        "anchor_count": int(anchor_count or 0),
+        "need_end": bool(need_end),
+        "consumption_mode": mode,
+        "consumes_mid_anchors_natively": mode == "native_multiframe",
+        "consumes_endframe": bool(supports_last or mode == "native_multiframe"),
+        "requires_split_relay": mode == "split_relay",
+        "reference_only": mode == "reference_only_qc",
+        "known_profile": known,
+        "supports_native_mid_anchors": supports_native_mid,
+        "supports_last_frame": supports_last,
+        "auto_routable": video_backend_auto_routable(backend),
+    }
+    if mode == "native_multiframe":
+        plan["action"] = "submit first/mid/end frames in one native multi-keyframe request"
+    elif mode == "split_relay":
+        plan["action"] = "split clip into first-last relay parts; mid anchors are segment boundary frames"
+    elif mode == "first_last":
+        plan["action"] = "submit first+last frames as timeline endpoints"
+    elif mode == "reference_only_qc":
+        plan["action"] = "do not assume timeline consumption; use anchors as references/QC or reroute"
+    elif mode.startswith("unsupported"):
+        plan["action"] = "reroute to native multiframe/first-last backend or rewrite storyboard frame contract"
+    else:
+        plan["action"] = "manual confirmation required before paid generation"
+    return plan

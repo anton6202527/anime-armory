@@ -97,6 +97,7 @@ from n2d_contract_diff import diff_contracts  # noqa: E402  视觉契约继承 D
 from n2d_handoff import check_asset_handoff  # noqa: E402  逐镜资产交接 Diff（common 层单一真值源，与 inherit_contract 共用）
 import image_backends  # noqa: E402  出图后端连通性探活 adapter（选择点→探针）
 from n2d_platform_profiles import (  # noqa: E402
+    anchor_consumption_plan,
     backend_supports_three_plus_frames,
     video_backend_frame_control,
     video_backend_max_seconds,
@@ -2528,6 +2529,43 @@ def _validate_scene_dna(asset: dict, loc: str) -> None:
             add(BLOCK, "场景 DNA", f"{loc} scene_dna.{key}", "scene_dna 字段必须非空")
 
 
+def _flatten_asset_terms(value) -> List[str]:
+    if value is None:
+        return []
+    if isinstance(value, str):
+        return [p.strip() for p in re.split(r"[,，、/；;\n]+", value) if p.strip()]
+    if isinstance(value, dict):
+        out: List[str] = []
+        for v in value.values():
+            out.extend(_flatten_asset_terms(v))
+        return out
+    if isinstance(value, (list, tuple, set)):
+        out = []
+        for v in value:
+            out.extend(_flatten_asset_terms(v))
+        return out
+    text = str(value).strip()
+    return [text] if text else []
+
+
+def _asset_must_not_have_terms(asset: Mapping[str, object]) -> List[str]:
+    constraints = asset.get("constraints") if isinstance(asset.get("constraints"), dict) else {}
+    terms: List[str] = []
+    for key in ("must_not_have", "forbidden_parts", "negative_structure", "negative"):
+        terms.extend(_flatten_asset_terms(asset.get(key)))
+        if isinstance(constraints, dict):
+            terms.extend(_flatten_asset_terms(constraints.get(key)))
+    out: List[str] = []
+    seen = set()
+    for term in terms:
+        t = str(term).strip(" `。，；;、")
+        if not t or t in seen:
+            continue
+        seen.add(t)
+        out.append(t)
+    return out
+
+
 def check_asset_reference_registry(
     root: str,
     require_reference_assets: bool = False,
@@ -2618,6 +2656,20 @@ def check_asset_reference_registry(
                 "单镜面", "唯一", "数量", "件数", "短颈圆口", "无侧嘴", "无斜嘴", "无双口", "一柄一刃", "同一只",
             )):
                 add(BLOCK, "资产引用注册层", loc, "关键道具 constraints 未写结构唯一性；铜镜/托盘/毒酒/碎瓷必须锁数量与部件")
+            must_not_terms = _asset_must_not_have_terms(asset)
+            if asset_type == "prop" and _has_any(name_blob, ("毒酒", "酒瓶", "瓷瓶", "药瓶", "瓶", "酒盏", "赐死")):
+                no_spout_terms = ("壶嘴", "侧嘴", "斜嘴", "喷口", "茶壶嘴", "出水口", "嘴")
+                if not any(term in must_not_terms for term in no_spout_terms):
+                    add(
+                        BLOCK,
+                        "资产引用注册层",
+                        loc,
+                        "瓶/酒/药类关键道具必须在 constraints.must_not_have（或 asset.must_not_have）登记"
+                        "壶嘴/侧嘴/喷口/出水口等禁形，避免把酒瓶生成茶壶嘴。",
+                    )
+            if "must_not_have" in constraints or "must_not_have" in asset:
+                if not must_not_terms:
+                    add(BLOCK, "资产引用注册层", loc, "must_not_have 必须是非空字符串/列表，不能留空")
 
         drift_forbidden = asset.get("drift_forbidden")
         if not isinstance(drift_forbidden, list) or not drift_forbidden:
@@ -3134,6 +3186,8 @@ def check_route_frame_capability(
     total_frames = int(req.get("total_timeline_frames") or 1)
     anchors = int(req.get("anchor_count") or 0)
     need_end = bool(req.get("need_end"))
+    consumption = anchor_consumption_plan(primary, video_channel, anchor_count=anchors, need_end=need_end)
+    consumption_mode = str(consumption.get("consumption_mode") or "unknown")
     high_risk = bool(req.get("high_risk"))
     sev = BLOCK if high_risk else WARN
     risk_note = (
@@ -3145,19 +3199,19 @@ def check_route_frame_capability(
     verified = str(control.get("verified") or "unknown")
     fallback = str(control.get("fallback") or "Use split relay/manual generation.")
     channel_note = f"（执行渠道：{video_channel}）" if video_channel else ""
-    if need_end and not bool(control.get("supports_last_frame")):
+    if need_end and not bool(consumption.get("consumes_endframe")):
         add(
             sev,
             "首尾帧能力",
             route_path,
             f"{clip_id} storyboard 需要尾帧接力，但 primary 后端 {primary or 'unknown'}{channel_note} "
-            f"的帧能力档案为 {mode}，未确认可原生消费尾帧。fallback：改走支持首尾帧的后端，"
+            f"的帧能力档案为 {mode}，消费计划为 {consumption_mode}，未确认可消费尾帧。fallback：改走支持首尾帧的后端，"
             f"或退回单首帧 + 强 end_state 文字（接缝/大表情近景风险升高）。能力来源：{verified}{risk_note}",
             return_to_stage="video",
         )
-    if anchors and not bool(control.get("supports_native_mid_anchors")):
-        if bool(control.get("supports_last_frame")):
-            consequence = "该后端通常只能吃首尾两帧，中段锚帧不会在一次请求里成为时间轴关键帧"
+    if anchors and not bool(consumption.get("consumes_mid_anchors_natively")):
+        if consumption.get("requires_split_relay"):
+            consequence = "该后端通常只能吃首尾两帧，中段锚帧不会在一次请求里成为时间轴关键帧，执行侧必须拆段接力"
         else:
             consequence = "该后端通常只按首帧/参考图生成，中段锚帧和尾帧都可能只剩文字约束"
         add(
@@ -3166,7 +3220,7 @@ def check_route_frame_capability(
             route_path,
             f"{clip_id} storyboard 声明了 {anchors} 个中段锚帧（共 {total_frames} 张时间轴帧），"
             f"但 primary 后端 {primary or 'unknown'}{channel_note} 的帧能力档案为 {mode}，"
-            f"最多 {max_frames} 张时间轴帧；{consequence}。fallback：{fallback}{risk_note}",
+            f"最多 {max_frames} 张时间轴帧，消费计划为 {consumption_mode}；{consequence}。fallback：{fallback}{risk_note}",
             return_to_stage="video",
         )
 

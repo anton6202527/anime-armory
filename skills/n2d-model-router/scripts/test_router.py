@@ -100,26 +100,29 @@ def test_multi_character_same_frame_routes_to_kling(tmp_path):
     assert "character_id_or_reference_group" == route["identity_requirement"]
 
 
-def test_ensemble_blocking_routes_to_sora(tmp_path):
-    # 群像(ensemble) → Sora primary（2026：Sora 2 对 5+/群像最稳，超 Kling 2-3 张脸上限）
+def test_ensemble_blocking_routes_to_kling_not_legacy_sora(tmp_path):
+    # Sora 已是 legacy/manual-only；群像不再自动路由到 Sora。
     root = _root(tmp_path)
     _write_storyboard(root, [{"id": "Clip 5", "template": "ensemble_blocking", "scene": "宗门大殿群像站位，门徒队列围住主角"}])
 
     route = router.route_episode(root, "第1集")["routes"][0]
 
     assert route["shot_type"] == "ensemble_blocking"
-    assert route["primary_backend"] == "sora"
-    assert "kling" in route["fallback_backends"]
+    assert route["primary_backend"] == "kling"
+    assert "sora" not in route["fallback_backends"]
     assert "multi_person" in route["risk_flags"]
+    assert any("Sora 已从自动路由移除" in r for r in route["rationale"])
 
 
-def test_five_plus_same_frame_routes_to_sora(tmp_path):
+def test_five_plus_same_frame_routes_to_kling_with_split_plan(tmp_path):
     root = _root(tmp_path)
     _write_storyboard(root, [{"id": "Clip 6", "template": "multi_character_same_frame",
                               "scene": "六人对峙同框",
                               "template_contract": {"character_slots": {"A": "", "B": "", "C": "", "D": "", "E": "", "F": ""}}}])
     route = router.route_episode(root, "第1集")["routes"][0]
-    assert route["primary_backend"] == "sora"
+    assert route["primary_backend"] == "kling"
+    assert "sora" not in route["fallback_backends"]
+    assert "multi_person" in route["risk_flags"]
 
 
 def test_two_three_same_frame_still_kling(tmp_path):
@@ -154,6 +157,7 @@ def test_native_av_mode_routes_dialogue_to_native_speech(tmp_path):
     assert route["mode"] == "native_av"
     assert route["native_audio_policy"] == "native_speech"
     assert route["primary_backend"] in router.NATIVE_AV_BACKENDS
+    assert "sora" not in route["fallback_backends"]
     assert "native_speech" in route["risk_flags"]
 
 

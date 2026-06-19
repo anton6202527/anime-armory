@@ -130,6 +130,24 @@ def _item(root, *, end=True):
     return it
 
 
+def _write_video_prompt_pack(root):
+    p = root / "出视频" / "第1集" / "prompt" / "01_clips.md"
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(
+        "\n".join([
+            "## Clip 01（时长 6s）",
+            "**首帧**：`出图/第1集/图片/Clip_01.png`",
+            "**尾帧**：`出图/第1集/图片/Clip_01_end.png`",
+            "### 视频 prompt（中文）",
+            "```text",
+            "推近，沈念抬眼。",
+            "```",
+            "",
+        ]),
+        encoding="utf-8",
+    )
+
+
 def test_clip_anchor_index_reads_anchors(tmp_path):
     root = _make_clip_project(tmp_path, duration=6.0, anchors=[
         {"anchor_png": "出图/第1集/图片/Clip_01_a1.png", "at_sec": 3.0, "use": "split", "reason": "中间拍"}])
@@ -164,6 +182,28 @@ def test_attach_multiframe_uses_qc_anchors_too(tmp_path):
     vr.attach_multiframe(root, item, "prompt", idx)
     assert item.get("mode_backend") == "multiframe2video"
     assert len(item["multiframe_images"]) == 3  # first + mid + end
+
+
+def test_prepare_manifest_uses_native_multiframe_capability_not_mode_string(tmp_path):
+    root = _make_clip_project(tmp_path, duration=6.0, anchors=[
+        {"anchor_png": "出图/第1集/图片/Clip_01_mid.png", "at_sec": 3.0, "use": "qc", "reason": "qc 基准"}])
+    _write_video_prompt_pack(root)
+    payload = vr.prepare_manifest(root, "第1集", 1, 1, backend="dreamina", resolution="720p",
+                                  model_version="3.0", force=True)
+    item = payload["items"][0]
+    assert item["mode_backend"] == "multiframe2video"
+    assert item["anchor_consumption_mode"] == "native_multiframe"
+    assert len(item["multiframe_images"]) == 3
+
+
+def test_prepare_manifest_splits_mid_anchor_only_when_backend_supports_last_frame(tmp_path):
+    root = _make_clip_project(tmp_path, duration=6.0, anchors=[
+        {"anchor_png": "出图/第1集/图片/Clip_01_mid.png", "at_sec": 3.0, "use": "split", "reason": "中间拍"}])
+    _write_video_prompt_pack(root)
+    payload = vr.prepare_manifest(root, "第1集", 1, 1, backend="kling", resolution="720p",
+                                  model_version="3.0", force=True)
+    assert [i["clip"] for i in payload["items"]] == ["Clip_01_part1", "Clip_01_part2"]
+    assert all(i["anchor_consumption_mode"] == "split_relay_part" for i in payload["items"])
 
 
 def test_attach_multiframe_skips_when_png_missing(tmp_path):

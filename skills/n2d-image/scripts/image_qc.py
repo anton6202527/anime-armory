@@ -165,11 +165,17 @@ def load_asset_index(root: Path) -> Optional[Dict[str, Any]]:
     ids: Set[str] = set()
     name_to_id: Dict[str, str] = {}
     prefix_of: Dict[str, str] = {}
+    entries: Dict[str, Dict[str, Any]] = {}
     for a in (data.get("assets") or []):
         aid = str(a.get("id") or "").strip()
         if not aid:
             continue
         ids.add(aid)
+        entries[aid] = {
+            "name": str(a.get("name") or "").strip(),
+            "type": str(a.get("type") or "").strip(),
+            "must_not_have": _asset_must_not_have_terms(a),
+        }
         m = re.match(r"([A-Za-z]+_)", aid)
         if m:
             prefix_of[aid] = m.group(1)
@@ -183,7 +189,44 @@ def load_asset_index(root: Path) -> Optional[Dict[str, Any]]:
             stem = re.sub(r"_(侧|半身|全身|背|三视图|四视图|设定表)$", "", stem)
             if len(stem) >= 2:
                 name_to_id.setdefault(stem, aid)
-    return {"ids": ids, "name_to_id": name_to_id, "prefix_of": prefix_of}
+    return {"ids": ids, "name_to_id": name_to_id, "prefix_of": prefix_of, "entries": entries}
+
+
+def _flatten_terms(value: Any) -> List[str]:
+    if value is None:
+        return []
+    if isinstance(value, str):
+        return [p.strip() for p in re.split(r"[,，、/；;\n]+", value) if p.strip()]
+    if isinstance(value, Mapping):
+        terms: List[str] = []
+        for v in value.values():
+            terms.extend(_flatten_terms(v))
+        return terms
+    if isinstance(value, Iterable) and not isinstance(value, (bytes, bytearray)):
+        terms = []
+        for v in value:
+            terms.extend(_flatten_terms(v))
+        return terms
+    text = str(value).strip()
+    return [text] if text else []
+
+
+def _asset_must_not_have_terms(asset: Mapping[str, Any]) -> List[str]:
+    constraints = asset.get("constraints") if isinstance(asset.get("constraints"), Mapping) else {}
+    terms: List[str] = []
+    for key in ("must_not_have", "forbidden_parts", "negative_structure", "negative"):
+        terms.extend(_flatten_terms(asset.get(key)))
+        if isinstance(constraints, Mapping):
+            terms.extend(_flatten_terms(constraints.get(key)))
+    out: List[str] = []
+    seen: Set[str] = set()
+    for term in terms:
+        t = str(term).strip(" `。，；;、")
+        if len(t) < 1 or t in seen:
+            continue
+        seen.add(t)
+        out.append(t)
+    return out
 
 
 # 资产 id 引用（场景/道具/服装/特效）+ 定妆资产名（用于抓"用了定妆却没绑 id"）。
@@ -204,11 +247,24 @@ def _lint_asset_binding(label: str, body: str, asset_index: Optional[Dict[str, A
     ids: Set[str] = asset_index.get("ids") or set()
     name_to_id: Dict[str, str] = asset_index.get("name_to_id") or {}
     prefix_of: Dict[str, str] = asset_index.get("prefix_of") or {}
+    entries: Dict[str, Dict[str, Any]] = asset_index.get("entries") or {}
     body_ids = set(ASSET_ID_RE.findall(text))
     for rid in sorted(body_ids):
         if rid not in ids:
             findings.append({"level": "block", "code": "unknown_asset_id",
                              "msg": f"{label}：资产引用 `{rid}` 在 asset_registry 不存在（场景/道具/服装/特效 id 写错或未登记）"})
+            continue
+        must_not = [t for t in (entries.get(rid) or {}).get("must_not_have", []) if t]
+        missing_terms = [t for t in must_not if t not in text]
+        if missing_terms:
+            findings.append({
+                "level": "block",
+                "code": "asset_must_not_have_not_propagated",
+                "msg": (
+                    f"{label}：资产 `{rid}` 在 asset_registry 登记了 must_not_have={must_not}，"
+                    f"但本镜 prompt 未继承禁项 {missing_terms}；关键道具禁形必须写进负向/结构约束。"
+                ),
+            })
     flagged: Set[str] = set()
     for raw in DEFINING_ASSET_RE.findall(text):
         stem = raw[:-4] if raw.endswith(".png") else raw
@@ -1034,6 +1090,7 @@ HARD_LINT_CODES = (
     "tail_identity_handoff_unlocked",
     "tail_relay_not_image2image",
     "unknown_asset_id",
+    "asset_must_not_have_not_propagated",
     "lifecycle_regression",
     "lifecycle_unknown_from_state",
     "lifecycle_unknown_to_state",

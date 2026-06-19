@@ -88,7 +88,7 @@ Windows 安装包**无法在 macOS 上交叉编译**，必须在 Windows 上构�
 
 ```bash
 # 推一个 desktop-v* tag 即触发云端构建 + 发布（mac .dmg / win .exe[NSIS] / .vsix）
-git tag desktop-v0.1.4 && git push origin desktop-v0.1.4
+git tag desktop-v0.1.5 && git push origin desktop-v0.1.5
 # 或在 Actions 页手动 workflow_dispatch（只产出 build artifact，不发 Release）
 ```
 

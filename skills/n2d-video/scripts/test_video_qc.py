@@ -79,6 +79,29 @@ def test_machine_check_uses_context_frames(tmp_path: Path) -> None:
     assert payload["seams"][0]["verdict"] == "ok"  # 同色同构图 → 接力正常
 
 
+def test_anchor_adherence_flags_mid_anchor_drift(tmp_path: Path) -> None:
+    import pytest
+
+    pytest.importorskip("PIL")
+    anchor = _make_frame(tmp_path, "anchor_mid.png", (220, 20, 20))
+    generated_mid = _make_frame(tmp_path, "Clip_01_02_mid.jpg", (20, 20, 220))
+    payload = {
+        "clips": [
+            {
+                "file": "Clip_01_x.mp4",
+                "duration_sec": 6.0,
+                "frames": [{"label": "mid", "time_sec": 3.0, "path": generated_mid}],
+            }
+        ]
+    }
+    video_qc.anchor_adherence_check(payload, tmp_path, {
+        1: {"duration": 6.0, "anchors": [{"anchor_png": anchor, "at_sec": 3.0}]}
+    })
+    summary = payload["machine_summary"]
+    assert summary["anchor_checked"] == 1
+    assert summary["anchor_blocks"] + summary["anchor_warns"] == 1
+
+
 def test_seam_strictness_respects_storyboard_intent() -> None:
     assert video_qc.seam_strictness(None) == "strict"                       # 无意图 → 宁可误报
     assert video_qc.seam_strictness({"transition": "match_cut"}) == "info"  # 设计切镜 → 只记录

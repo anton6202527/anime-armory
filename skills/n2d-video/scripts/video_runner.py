@@ -43,8 +43,9 @@ except Exception:  # pragma: no cover
 import video_qc
 
 try:
-    from n2d_platform_profiles import video_backend_frame_control
+    from n2d_platform_profiles import anchor_consumption_plan, video_backend_frame_control
 except ImportError:
+    anchor_consumption_plan = lambda m, c, **kw: {}  # type: ignore
     video_backend_frame_control = lambda m, c: {}  # type: ignore
 
 CLIP_HEADING_RE = re.compile(r"^##\s*Clip[_\s]*(\d+)(?:（([^）]+)）)?", re.MULTILINE)
@@ -219,6 +220,7 @@ def attach_multiframe(root: Path, item: Dict[str, Any], prompt_text: str,
     for hint in dests:
         seg_prompts.append((hint or head or "continue the motion smoothly").strip()[:200])
     item["mode_backend"] = "multiframe2video"
+    item["anchor_consumption_mode"] = "native_multiframe"
     item["multiframe_images"] = images_abs
     item["multiframe_images_rel"] = images_rel
     item["multiframe_segment_durations"] = seg_durs
@@ -236,10 +238,10 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
     prompts_dir.mkdir(parents=True, exist_ok=True)
     anchors_by_clip = clip_anchor_index(root, episode)
     
-    # 获取后端能力档案
-    capability = video_backend_frame_control(backend, "") # 渠道暂空
-    supports_mf = capability.get("mode") == "multiframe2video"
-    supports_last = capability.get("supports_last_frame", False)
+    # 获取后端能力档案；不要用 mode 字符串猜命令名，统一读能力字段。
+    capability = video_backend_frame_control(backend, "")  # 渠道暂空
+    supports_mf = bool(capability.get("supports_native_mid_anchors"))
+    supports_last = bool(capability.get("supports_last_frame"))
 
     items = []
     for item in parse_prompt_pack(root, episode, start, end):
@@ -248,21 +250,47 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
         prompt_file.write_text(prompt_text + "\n", encoding="utf-8")
         item["prompt_file"] = str(prompt_file)
 
+        num = _clip_number(item)
+        anchors_info = anchors_by_clip.get(num) if num is not None else None
+        anchor_times = [t for t in (anchors_info or {}).get("times", []) if t is not None]
+        frame_plan = anchor_consumption_plan(
+            backend,
+            "",
+            anchor_count=len(anchor_times),
+            need_end=bool(item.get("end_image_rel")),
+        )
+        item["frame_control_mode"] = capability.get("mode")
+        item["anchor_consumption"] = frame_plan
+        item["anchor_consumption_mode"] = frame_plan.get("consumption_mode")
+
         # 尝试接入原生多帧
         attached_mf = False
-        if supports_mf:
+        if supports_mf and anchor_times:
             attached_mf = attach_multiframe(root, item, prompt_text, anchors_by_clip)
         
         # 如果不支持原生多帧，或者 attach 失败，但有中锚 -> 自动化拆段接力 (Split Relay)
-        num = _clip_number(item)
-        anchors_info = anchors_by_clip.get(num) if num is not None else None
-        
         if not attached_mf and anchors_info and anchors_info.get("times"):
             # 执行自动化拆段 (仅当有 end_frame 且后端支持首尾帧或明确要求拆段时)
-            if item.get("end_image") and Path(item["end_image"]).is_file():
+            if supports_last and item.get("end_image") and Path(item["end_image"]).is_file():
                 # 构造子段列表
-                t_list = [0.0] + [float(t) for t in anchors_info["times"]] + [float(item["story_duration"])]
-                png_list = [item["image_rel"]] + anchors_info["images"] + [item["end_image_rel"]]
+                relay_anchors = sorted(
+                    [(float(t), png) for t, png in zip(anchors_info["times"], anchors_info["images"]) if t is not None and png],
+                    key=lambda x: x[0],
+                )
+                t_list = [0.0] + [t for t, _ in relay_anchors] + [float(item["story_duration"])]
+                png_list = [item["image_rel"]] + [png for _, png in relay_anchors] + [item["end_image_rel"]]
+                missing = []
+                for png in png_list:
+                    if not png:
+                        missing.append(str(png))
+                        continue
+                    abs_png = Path(png) if Path(png).is_absolute() else root / png
+                    if not abs_png.is_file():
+                        missing.append(str(png))
+                if missing:
+                    item["anchor_consumption_issue"] = "split relay keyframe PNG missing: " + ", ".join(missing)
+                    items.append(item)
+                    continue
                 
                 parts = []
                 for p_idx in range(len(t_list) - 1):
@@ -277,10 +305,16 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
                     part_item["story_duration"] = seg_dur
                     part_item["submit_duration"] = submit_duration(seg_dur)
                     part_item["relay_parent"] = item["clip"]
+                    part_item["anchor_consumption_mode"] = "split_relay_part"
+                    part_item["anchor_consumption_parent_mode"] = frame_plan.get("consumption_mode")
                     parts.append(part_item)
                 
                 items.extend(parts)
                 continue # 已拆段，跳过原 item
+            item["anchor_consumption_issue"] = (
+                "mid anchors declared but backend cannot consume native mid anchors"
+                if not supports_last else "mid anchors declared but end frame is missing for split relay"
+            )
         
         items.append(item)
     
@@ -715,6 +749,7 @@ def qc_override_payload(clip: str, machine: Dict[str, Any]) -> Dict[str, Any]:
             "seam_blocks": machine.get("seam_blocks", 0),
             "seam_warns": machine.get("seam_warns", 0),
             "intra_blocks": machine.get("intra_blocks", 0),
+            "anchor_blocks": machine.get("anchor_blocks", 0),
         },
         "meta": {"clip": clip, "note": "接缝/近景片内身份机检 block 被人工放行——误报样本，供阈值校准"},
     }
@@ -746,6 +781,8 @@ def record_acceptance(root: Path, episode: str, item: Dict[str, Any], qc_clip: O
         meta["seam_check"] = "block" if machine.get("seam_blocks") else ("warn" if machine.get("seam_warns") else "pass")
     if machine.get("intra_checked"):
         meta["intra_identity_check"] = "block" if machine.get("intra_blocks") else ("warn" if machine.get("intra_warns") else "pass")
+    if machine.get("anchor_checked"):
+        meta["anchor_adherence_check"] = "block" if machine.get("anchor_blocks") else ("warn" if machine.get("anchor_warns") else "pass")
     event = dashboard.make_event(
         episode,
         "video",
@@ -804,13 +841,21 @@ def accept_clip(root: Path, manifest_file: Path, clip: str, *, no_record: bool =
     qc_clip = qc["clips"][0] if qc.get("clips") else None
     machine = qc.get("machine_summary") or {}
     item["qc_machine"] = machine
-    qc_blocks = int(machine.get("seam_blocks") or 0) + int(machine.get("intra_blocks") or 0)
+    anchor_blocks = int(machine.get("anchor_blocks") or 0)
+    native_anchor_expected = item.get("anchor_consumption_mode") == "native_multiframe"
+    qc_blocks = (
+        int(machine.get("seam_blocks") or 0)
+        + int(machine.get("intra_blocks") or 0)
+        + (anchor_blocks if native_anchor_expected else 0)
+    )
     if qc_blocks and not allow_qc_block:
         reasons = []
         if machine.get("seam_blocks"):
             reasons.append(f"接缝机检 block×{machine['seam_blocks']}（尾帧没接上相邻镜首帧，出视频会跳切）")
         if machine.get("intra_blocks"):
             reasons.append(f"近景片内身份 block×{machine['intra_blocks']}（脸被表情带着重画，非双帧接力镜）")
+        if native_anchor_expected and machine.get("anchor_blocks"):
+            reasons.append(f"中段锚帧对账 block×{machine['anchor_blocks']}（声明原生消费中锚，但生成视频中段明显偏离锚帧）")
         item["status"] = "qc_blocked"
         item["qc_json"] = qc.get("json_path")
         item["fail_reason"] = "；".join(reasons) + "。重出本镜或确认误报后 --allow-qc-block 强制验收"
@@ -934,7 +979,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             print(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True))
         else:
             print(payload["markdown_path"])
-        return 1 if (payload.get("machine_summary") or {}).get("seam_blocks") else 0
+        summary = payload.get("machine_summary") or {}
+        return 1 if (summary.get("seam_blocks") or summary.get("anchor_blocks")) else 0
     return 2
 
 

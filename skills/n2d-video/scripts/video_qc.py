@@ -209,6 +209,46 @@ def load_shot_types(root: Path, episode: str) -> Dict[int, Dict[str, Any]]:
     return out
 
 
+def load_anchor_intents(root: Path, episode: str) -> Dict[int, Dict[str, Any]]:
+    """clip 序号 → storyboard 中段锚帧意图。
+
+    只读 `continuity.anchors[]` / `continuity.midframe`，给出视频后抽帧对账用：
+    如果后端声称原生消费中锚，生成视频在相邻采样点不应大幅偏离该锚帧。
+    """
+    path = root / "脚本" / episode / "storyboard.json"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    out: Dict[int, Dict[str, Any]] = {}
+    for i, clip in enumerate((data.get("clips") or data.get("shots") or []), 1):
+        if not isinstance(clip, dict):
+            continue
+        idx = clip_index(str(clip.get("id") or clip.get("clip") or clip.get("shot") or ""))
+        if idx is None:
+            idx = i
+        cont = clip.get("continuity") if isinstance(clip.get("continuity"), dict) else {}
+        raw = cont.get("anchors")
+        anchors: List[Dict[str, Any]] = []
+        if isinstance(raw, list):
+            for a in raw:
+                if not isinstance(a, dict):
+                    continue
+                rel = str(a.get("anchor_png") or "").strip()
+                at = a.get("at_sec")
+                if rel and isinstance(at, (int, float)):
+                    anchors.append({"anchor_png": rel, "at_sec": float(at), "use": a.get("use", "")})
+        elif isinstance(cont.get("midframe"), dict):
+            mid = cont["midframe"]
+            rel = str(mid.get("midframe_png") or "").strip()
+            at = mid.get("split_at_sec")
+            if rel and isinstance(at, (int, float)):
+                anchors.append({"anchor_png": rel, "at_sec": float(at), "use": "midframe"})
+        if anchors:
+            out[idx] = {"duration": clip.get("duration"), "anchors": anchors}
+    return out
+
+
 # 片内身份「重画」block 阈值：远超接缝 block（SEAM_BLOCK≈29/64）才判脸被重画。
 # 取 44/64≈69% 结构差——正常表演/运镜动不到，留足余量只抓真重画，非双帧近景镜适用。
 INTRA_REDRAW_BLOCK = 44
@@ -286,6 +326,91 @@ def intra_clip_check(payload: Dict[str, Any], shot_types: Optional[Dict[int, Dic
         summary["intra_blocks"] = blocks
         if not have_types:
             notes.append("storyboard 景别不可用——片内身份采样对全部 clip 抽样（可能含非近景）。")
+
+
+def anchor_adherence_check(payload: Dict[str, Any], root: Path,
+                           anchor_intents: Optional[Dict[int, Dict[str, Any]]] = None) -> None:
+    """中段锚帧消费对账：storyboard 锚帧 PNG vs 生成视频最近抽帧。
+
+    video_qc 只抽 start/mid/end 三帧，因此这是一道轻量初筛：锚点离三采样点太远时跳过；
+    能对上的采样点若与锚帧 dHash/色距大幅偏离，说明后端可能没消费中锚或中段漂移严重。
+    """
+    intents = anchor_intents or {}
+    if not intents:
+        return
+    notes = payload.setdefault("machine_notes", [])
+    tc = _load_temporal_module()
+    if tc is None:
+        return
+    checks: List[Dict[str, Any]] = []
+    checked = warns = blocks = skipped = 0
+    for item in payload.get("clips", []):
+        file_name = str(item.get("file") or "")
+        # split relay part 的时间轴是局部段时间，不再直接用原 Clip 的 at_sec 对齐，避免误报。
+        if "_part" in Path(file_name).stem:
+            continue
+        idx = clip_index(file_name)
+        if idx is None or idx not in intents:
+            continue
+        frames = [f for f in item.get("frames", [])
+                  if f.get("path") and not f.get("error") and Path(f["path"]).exists()]
+        if not frames:
+            continue
+        duration = item.get("duration_sec")
+        if not isinstance(duration, (int, float)):
+            duration = intents[idx].get("duration")
+        tolerance = max(0.75, float(duration or 0) * 0.22)
+        for anchor in intents[idx].get("anchors") or []:
+            at_sec = float(anchor.get("at_sec") or 0)
+            nearest = min(frames, key=lambda f: abs(float(f.get("time_sec") or 0) - at_sec))
+            delta = abs(float(nearest.get("time_sec") or 0) - at_sec)
+            if delta > tolerance:
+                skipped += 1
+                continue
+            rel = str(anchor.get("anchor_png") or "")
+            anchor_path = Path(rel) if Path(rel).is_absolute() else root / rel
+            if not anchor_path.is_file():
+                skipped += 1
+                checks.append({
+                    "clip": f"Clip_{idx:02d}",
+                    "anchor_png": rel,
+                    "at_sec": at_sec,
+                    "sample_label": nearest.get("label"),
+                    "sample_time_sec": nearest.get("time_sec"),
+                    "verdict": "skip",
+                    "reason": "anchor_png_missing",
+                })
+                continue
+            chk = tc.seam_pair_check(str(anchor_path), str(nearest["path"]))
+            if chk is None:
+                skipped += 1
+                continue
+            verdict = chk.get("verdict", "warn")
+            checked += 1
+            if verdict == "block":
+                blocks += 1
+            elif verdict == "warn":
+                warns += 1
+            checks.append({
+                "clip": f"Clip_{idx:02d}",
+                "anchor_png": rel,
+                "at_sec": at_sec,
+                "sample_label": nearest.get("label"),
+                "sample_time_sec": nearest.get("time_sec"),
+                "sample_delta_sec": round(delta, 3),
+                "dist": chk.get("dist"),
+                "color_dist": chk.get("color_dist"),
+                "verdict": verdict,
+            })
+    if checked or skipped:
+        payload["anchor_checks"] = checks
+        summary = payload.setdefault("machine_summary", {})
+        summary["anchor_checked"] = checked
+        summary["anchor_warns"] = warns
+        summary["anchor_blocks"] = blocks
+        summary["anchor_skipped"] = skipped
+        if skipped:
+            notes.append("部分中段锚帧离 start/mid/end 三采样点太远或 PNG 缺失，锚帧消费对账跳过；必要时加密抽帧复核。")
 
 
 def production_dir(root: Path) -> Path:
@@ -529,6 +654,25 @@ def render_markdown(payload: Dict[str, Any]) -> str:
             lines.append("|---|---|---:|---|")
             for s in intra:
                 lines.append(f"| {s.get('clip')} | {s.get('lens') or '-'} | {s.get('max_dist')} | {s.get('verdict')} |")
+    anchors = payload.get("anchor_checks") or []
+    if summary.get("anchor_checked") or summary.get("anchor_skipped"):
+        lines.append("")
+        lines.append("## Anchor adherence（中段锚帧消费对账 · storyboard anchor vs generated sample）")
+        lines.append("")
+        lines.append(f"- checked: {summary.get('anchor_checked', 0)}"
+                     f" · block: {summary.get('anchor_blocks', 0)} · warn: {summary.get('anchor_warns', 0)}"
+                     f" · skipped: {summary.get('anchor_skipped', 0)}")
+        flagged = [a for a in anchors if a.get("verdict") not in ("ok", "skip")]
+        if flagged:
+            lines.append("")
+            lines.append("| Clip | Anchor | Sample | Δs | dHash | Color dist | Verdict |")
+            lines.append("|---|---|---|---:|---:|---:|---|")
+            for a in flagged:
+                lines.append(
+                    f"| {a.get('clip')} | `{a.get('anchor_png')}` | {a.get('sample_label')}@{a.get('sample_time_sec')} "
+                    f"| {a.get('sample_delta_sec')} | {a.get('dist')} | "
+                    f"{a.get('color_dist') if a.get('color_dist') is not None else '-'} | {a.get('verdict')} |"
+                )
     lines.append("")
     lines.append("Status: pending human review unless the batch manifest marks it accepted.")
     return "\n".join(lines) + "\n"
@@ -559,6 +703,7 @@ def run_qc(root: Path, episode: str, clips: Sequence[Path], batch: str, out_dir:
     machine_check(payload, neighbor_context_frames(root, episode, payload, frames_dir),
                   load_seam_intents(root, episode) or None)
     intra_clip_check(payload, load_shot_types(root, episode) or None)
+    anchor_adherence_check(payload, root, load_anchor_intents(root, episode) or None)
     json_path = out_dir / f"video_qc_{episode}_{batch}.json"
     md_path = out_dir / f"video_qc_{episode}_{batch}.md"
     json_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")

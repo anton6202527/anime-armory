@@ -70,7 +70,7 @@ image prompt = [图AI 的 prompt 写法] + [生视频模型的图像风格锚定
 
 > **单 Clip 上限铁律（2026-06）**：单 Clip 时长上限**按所选后端档案，不是一刀切 8s**。**能一镜到底就别切碎**——更长单镜 = 更少拼接缝 = **跨镜一致性更稳 + 更省**。只在 Clip 时长（=所含镜头时长之和，配音驱动）**超该后端上限**时才拆 Clip，拆点尾帧=下一首帧。各后端当前上限见下方档案；n2d-script 阶段2 拆 Clip 时**读该后端上限值**，不要写死 8s。后端能力会变，以 `n2d/references/模型矩阵.md` 最新快照为准。
 
-## 关键帧/多帧能力口径（2026-06-13）
+## 关键帧/多帧能力口径（2026-06-19）
 
 机器真值源在 `skills/n2d/_lib/n2d_platform_profiles.py::frame_control`；gate 和 runner 读机器档案，本文只解释给人看。**主流后端并不都支持首/中/尾三帧同一次请求**。至少首帧图生视频普遍可用；首尾两帧在 Dreamina、Luma/Ray、Veo 3.1、Kling 路径可用或按档案保守放行；任意中段时间轴锚帧目前只在本仓库核验过 Dreamina `multiframe2video` 原生路径。
 
@@ -82,7 +82,10 @@ image prompt = [图AI 的 prompt 写法] + [生视频模型的图像风格锚定
 | Seedance 直连 | 按首帧/参考图保守处理 | 只有执行渠道是 Dreamina 时，帧能力改按 Dreamina | 直连要先复核当前 API，再付费批量 |
 | Veo 3.1 / Gemini API | first+last + 最多 3 张 reference images | 首尾锁接点，reference 管角色/风格 | 中段时间轴锚不是 arbitrary keyframe，需 extend/split 或 reroute |
 | Luma / Ray | `frame0` + `frame1` | 首尾锁起止画面 | 中段锚需拆段/interpolate |
-| Runway / Pika / Sora | 未在本仓库核验任意多帧 | 按首帧/参考媒体保守处理 | 当前官方 API 明确支持前不得吞 `_mid`；gate 应 WARN |
+| Runway / Pika | 未在本仓库核验任意多帧 | 按首帧/参考媒体保守处理 | 当前官方 API 明确支持前不得吞 `_mid`；gate 应 WARN |
+| Sora | legacy/manual-only | 不进自动路由和原生音画候选；只读旧项目/人工补单 | OpenAI 已公告 Web/App 于 2026-04-26 停服、API 于 2026-09-24 停止；不得作为新批量 primary/fallback |
+
+Sora 降级依据：OpenAI Help Center `https://help.openai.com/en/articles/20001152-what-to-know-about-the-sora-discontinuation`。
 
 用户问“每个 Clip 分几张帧”时，先回答能力边界：**首尾两帧是较稳的通用 fallback，但不是所有 API 都无条件支持；首/中/尾三帧不是主流统一能力，只有 Dreamina 原生多帧已在本仓库打通。** 因此 n2d 默认仍可以规划三帧契约来保证审查和可升级，但执行前必须让 `video_preflight` 核验：后端不能吃中锚时，明示用户改首尾帧、拆段接力或换原生多帧后端。
 
@@ -102,8 +105,8 @@ image prompt = [图AI 的 prompt 写法] + [生视频模型的图像风格锚定
 | 法术爆发 / 符阵 / 雷劫 | Seedance | 可灵 / 即梦 | 光效连续扩散、蓄力→释放→余波、较长单镜 | 锁特效颜色/形状/方向；可 opt-in 动作音效但禁止人声；失败拆蓄力/爆发/余波 |
 | 亲密互动 / 搀扶 / 牵手 | 可灵 Kling | Seedance | 接触点、遮挡、近距离身份保持；必要时 pose/depth/instance 控制 | `motion_control=required`；必须写 contact point、occlusion_order、body_part_ownership；不稳就拆手部/反应/过肩 |
 | 拥抱 / 拉扯 / 抓腕 | 可灵 Kling | Seedance + 拆镜 | 首尾帧、接触点、力量方向、近距离身份保持；高危时需要 pose/depth/instance/contact_map | `motion_control=required`；必须写 force_direction 和 release_frame；无 ready manifest 就 degrade_only 拆手部/反打/释放帧 |
-| 多人同框（2-3 具名） | 可灵 Kling | Seedance + 拆镜 | 多参考/主体控制、角色槽位、脸优先级 | 写 character_slots / face_priority / overlap_rules；**2-3 具名走 Kling，≥5 具名走 Sora**，错脸就拆 OTS/反打 |
-| 多人同框（5+ 具名）/ 群像站位 / 队列 / 围堵 | **Sora** | 可灵 Kling / Seedance + 拆镜 | 5+ 角色一致性、主次层级、背景人简化 | 2026：Sora 2 对 5+/群像同框最稳，超 Kling 2-3 张脸上限；写 character_slots/screen_positions/focus_hierarchy，仍不稳按 degrade_plan 拆组 |
+| 多人同框（2-3 具名） | 可灵 Kling | Seedance + 拆镜 | 多参考/主体控制、角色槽位、脸优先级 | 写 character_slots / face_priority / overlap_rules；错脸就拆 OTS/反打 |
+| 多人同框（5+ 具名）/ 群像站位 / 队列 / 围堵 | 可灵 Kling | Seedance + 拆镜 | 槽位绑定、主次层级、背景人简化 | Sora 已移出自动路由；Kling 只负责可控主脸，5+ 清晰正脸不要硬压同镜，按 establish + 反打 + 群体反应拆组 |
 | 普通单人运动 | `_设置.md 生视频模型` | Seedance / 可灵 | 成本、速度、普通 image2video | 若同类失败两次，改最近的专项镜头类型重新路由 |
 
 路由表只写能力层判断；具体版本名、SOTA 快照和升级触发在 `n2d/references/模型矩阵.md`。若新后端在某类镜头上明显更稳，先更新本表和 `n2d-model-router`，再同步 README/Q&A。

@@ -33,7 +33,9 @@ from n2d_platform_profiles import (  # noqa: E402  视频后端档案单一真�
     NATIVE_AV_BACKENDS,
     VIDEO_BACKEND_LABELS,
     VIDEO_BACKEND_MAX_SECONDS,
+    anchor_consumption_plan,
     normalize_video_backend,
+    video_backend_auto_routable,
     video_backend_frame_control,
     video_backend_max_seconds,
 )
@@ -383,7 +385,7 @@ def clip_has_mouth_visible(clip: Mapping[str, Any]) -> bool:
 
 def clip_named_character_count(clip: Mapping[str, Any]) -> int:
     """同框具名角色数（从 template_contract.character_slots / face_priority 取）。
-    ≥5 时路由偏好 Sora（2026 行业：Sora 2 对 5+ 角色同框最稳，超 Kling 2-3 张脸上限）。"""
+    ≥5 时仍按多人高风险处理，但不再自动路由到 legacy/manual-only 后端。"""
     tc = clip.get("template_contract") if isinstance(clip.get("template_contract"), Mapping) else {}
     slots = tc.get("character_slots")
     if isinstance(slots, Mapping):
@@ -711,7 +713,7 @@ def _route_native_av_speech(clip: Mapping[str, Any], shot_type: str, default_bac
     脚本提供、镜头时长由脚本规划驱动（不读配音先行的时长清单）。失败回退配音先行链路。
     """
     native_primary = default_backend if default_backend in NATIVE_AV_BACKENDS else "seedance"
-    fallback = [b for b in ("veo", "sora", "seedance") if b != native_primary]
+    fallback = [b for b in ("veo", "seedance") if b != native_primary]
     return {
         "primary_backend": native_primary,
         "fallback_backends": fallback,
@@ -892,18 +894,21 @@ def choose_route(
                 "if more than three named characters share frame, split into groups or reaction shots",
             ]
             degrade_plan = "Split crowd blocking into two-character OTS pairs plus establishing shot."
-        # 5+ 同框 或 群像(ensemble) → Sora primary（行业：Sora 2 对 5+ 角色同框最稳）；
-        # 2-3 具名脸的常见同框仍走 Kling（Character ID/主体库 + 运动笔刷锁站位）。
+        # 5+ 同框/群像不再自动切 Sora：Sora 已是 legacy/manual-only；自动路由优先 Kling 槽位绑定，
+        # 再用 Seedance/项目默认拆组。2-3 具名脸的常见同框仍走 Kling（Character ID/主体库 + 运动笔刷锁站位）。
         big_ensemble = shot_type == "ensemble_blocking" or clip_named_character_count(clip) >= 5
-        mp_primary = "sora" if big_ensemble else "kling"
-        mp_fallback = [b for b in (["kling", "seedance", default_backend] if big_ensemble
+        mp_primary = "kling"
+        mp_fallback = [b for b in (["seedance", default_backend] if big_ensemble
                                    else ["seedance", default_backend]) if b != mp_primary]
         mp_rationale = [
             "multi-person staging needs reference controls and stable screen direction",
             "single-backend generic generation often swaps faces or screen positions",
         ]
         if big_ensemble:
-            mp_rationale.append("5+ 同框/群像：Sora 2 多角色一致性最强，超 Kling 2-3 张脸上限；仍不稳则按 degrade_plan 拆组")
+            mp_rationale.append(
+                "5+ 同框/群像：Sora 已从自动路由移除；Kling 负责槽位/主体约束，仍不稳按 degrade_plan 拆组，"
+                "不要把 5+ 清晰正脸压在同一镜。"
+            )
         # 空间绑定硬约束（与 gate 多人同框槽位 block 同源）：同框必须逐主体绑定到画面槽位+各自参考，
         # 决不能用一张共享参考喂整帧——单参考会让模型把多张脸平均成同一张/混位（脸漂真凶）。
         prompt_requirements = list(prompt_requirements) + [
@@ -990,6 +995,23 @@ def risk_flags_for_clip(clip: Mapping[str, Any], shot_type: str, primary_backend
     if shot_type == "empty_establishing":
         flags.append("low_identity_risk")
     return sorted(set(flags))
+
+
+def _frame_risk_flags(plan: Mapping[str, Any]) -> List[str]:
+    mode = str(plan.get("consumption_mode") or "")
+    flags: List[str] = []
+    if not plan.get("auto_routable", True):
+        flags.append("legacy_manual_backend")
+    if int(plan.get("anchor_count") or 0) > 0:
+        if mode == "native_multiframe":
+            flags.append("native_multiframe")
+        elif mode == "split_relay":
+            flags.append("split_relay_required")
+        else:
+            flags.append("mid_anchor_not_consumed_natively")
+    if mode.startswith("unsupported") or mode == "unknown_manual_confirm":
+        flags.append("frame_contract_unsupported")
+    return flags
 
 
 def motion_control_contract(
@@ -1168,6 +1190,29 @@ def route_clip(
         "degrade_plan": route["degrade_plan"],
         "character_backend_conflicts": backend_conflicts,
     }
+    frame_req = _timeline_frame_requirements(clip)
+    frame_control = video_backend_frame_control(primary, video_channel)
+    anchor_plan = anchor_consumption_plan(
+        primary,
+        video_channel,
+        anchor_count=int(frame_req.get("anchor_count") or 0),
+        need_end=bool(frame_req.get("need_end")),
+    )
+    entry["frame_control"] = frame_control
+    entry["anchor_consumption"] = anchor_plan
+    extra_frame_flags = _frame_risk_flags(anchor_plan)
+    if extra_frame_flags:
+        entry["risk_flags"] = sorted(set(entry["risk_flags"]) | set(extra_frame_flags))
+    if frame_req.get("anchor_count"):
+        if anchor_plan["consumption_mode"] == "native_multiframe":
+            entry["rationale"].append("本镜中段锚帧会被后端作为原生时间轴关键帧消费。")
+        elif anchor_plan["consumption_mode"] == "split_relay":
+            entry["rationale"].append("本镜中段锚帧不能被 primary 原生消费，执行侧必须拆段接力，锚帧作为段边界首尾帧。")
+        else:
+            entry["rationale"].append(
+                f"本镜声明中段锚帧，但 primary 的消费模式为 {anchor_plan['consumption_mode']}；"
+                "出视频前需 reroute 到原生多帧/首尾帧后端或改 storyboard 帧契约。"
+            )
     fc = (failure_counts or {}).get(clip_id, 0)
     if fc:  # E4：本镜 identity 反复失败 → 升锁（含固定后端模式只收紧不换厂）
         entry = escalate_identity_for_failures(entry, fc, fixed_mode=(routing_mode == "fixed_default"))
@@ -1184,8 +1229,16 @@ def route_episode(
     anchor_baseline: bool = True,
 ) -> Dict[str, Any]:
     settings = load_settings(root)
-    default_backend = project_default_backend(settings)
     routing_mode = routing_mode_from_settings(settings)
+    configured_default_backend = project_default_backend(settings)
+    default_backend = configured_default_backend
+    legacy_default_note = ""
+    if routing_mode != "fixed_default" and not video_backend_auto_routable(default_backend):
+        default_backend = "seedance"
+        legacy_default_note = (
+            f"configured default backend {configured_default_backend} is legacy/manual-only; "
+            f"auto routing uses {default_backend} instead"
+        )
     av_mode = av_mode_from_settings(settings)
     native_audio_setting = settings.get("视频原生音轨", "丢弃")
     lip_sync_setting = settings.get("对口型", "关闭")
@@ -1215,6 +1268,7 @@ def route_episode(
         "av_mode": av_mode,
         "t2v_action_channel": t2v_action,
         "default_backend": default_backend,
+        "configured_default_backend": configured_default_backend,
         "generated_at": generated_at or dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
         "routes": [
             route_clip(
@@ -1242,6 +1296,8 @@ def route_episode(
     if baseline:
         plan["baseline_drift"] = apply_baseline(plan, baseline)
         plan["baseline_anchored"] = True
+    if legacy_default_note:
+        plan["routing_notes"] = [legacy_default_note]
     return plan
 
 
@@ -1257,21 +1313,24 @@ def render_markdown(plan: Mapping[str, Any]) -> str:
         "",
         "## 本集模型路由表",
         "",
-        "| Clip | shot_type | primary | fallback | mode | native_audio | identity | motion_control | 风险 | 降级 |",
-        "|---|---|---|---|---|---|---|---|---|---|",
+        "| Clip | shot_type | primary | fallback | mode | 帧消费 | native_audio | identity | motion_control | 风险 | 降级 |",
+        "|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     for route in plan.get("routes", []):
         fallback = ", ".join(route.get("fallback_backends", []))
         flags = ", ".join(route.get("risk_flags", [])) or "-"
         motion = route.get("motion_control") or {}
         motion_level = motion.get("level", "-") if isinstance(motion, Mapping) else "-"
+        anchor_plan = route.get("anchor_consumption") or {}
+        frame_mode = anchor_plan.get("consumption_mode", "-") if isinstance(anchor_plan, Mapping) else "-"
         lines.append(
-            "| {clip} | {shot} | {primary} | {fallback} | {mode} | {audio} | {identity} | {motion} | {flags} | {degrade} |".format(
+            "| {clip} | {shot} | {primary} | {fallback} | {mode} | {frame_mode} | {audio} | {identity} | {motion} | {flags} | {degrade} |".format(
                 clip=route.get("clip_id", ""),
                 shot=route.get("shot_type", ""),
                 primary=route.get("primary_backend", ""),
                 fallback=fallback,
                 mode=route.get("mode", ""),
+                frame_mode=frame_mode,
                 audio=route.get("native_audio_policy", ""),
                 identity=route.get("identity_requirement", ""),
                 motion=motion_level,
@@ -1286,6 +1345,13 @@ def render_markdown(plan: Mapping[str, Any]) -> str:
         lines.append(f"- fallback: {', '.join(route.get('fallback_backends', []))}")
         lines.append(f"- mode: {route.get('mode')}")
         lines.append(f"- identity: {route.get('identity_requirement')}")
+        anchor_plan = route.get("anchor_consumption") or {}
+        if isinstance(anchor_plan, Mapping):
+            lines.append(
+                f"- frame_consumption: {anchor_plan.get('consumption_mode')} "
+                f"(execution={anchor_plan.get('execution_backend')}, anchors={anchor_plan.get('anchor_count')}, "
+                f"need_end={anchor_plan.get('need_end')})"
+            )
         motion = route.get("motion_control") or {}
         if isinstance(motion, Mapping):
             lines.append(f"- motion_control: {motion.get('level')} (manifest={motion.get('manifest_path') or '-'})")
@@ -1343,11 +1409,27 @@ def apply_baseline(plan: Dict[str, Any], baseline: Mapping[str, str]) -> List[Di
         cur = str(route.get("primary_backend") or "")
         if not want or want == cur:
             continue
+        if not video_backend_auto_routable(want):
+            route["baseline_legacy_skipped"] = True
+            route["risk_flags"] = sorted(set(route.get("risk_flags", [])) | {"baseline_legacy_backend_skipped"})
+            route.setdefault("rationale", []).append(
+                f"跨集基线要求 legacy/manual-only 后端「{want}」，已跳过自动锚定；需要人工确认后再固定。"
+            )
+            drift.append({"clip_id": route.get("clip_id"), "shot_type": st, "was": cur, "now": cur,
+                          "skipped": want, "reason": "legacy_manual_backend"})
+            continue
         fb = [b for b in (route.get("fallback_backends") or []) if b != want]
         if cur:
             fb = [cur] + [b for b in fb if b != cur]
         route["fallback_backends"] = fb[:3]
         route["primary_backend"] = want
+        old_plan = route.get("anchor_consumption") if isinstance(route.get("anchor_consumption"), Mapping) else {}
+        route["frame_control"] = video_backend_frame_control(want)
+        route["anchor_consumption"] = anchor_consumption_plan(
+            want,
+            anchor_count=int(old_plan.get("anchor_count") or 0),
+            need_end=bool(old_plan.get("need_end")),
+        )
         route["baseline_anchored"] = True
         drift.append({"clip_id": route.get("clip_id"), "shot_type": st, "was": cur, "now": want})
     return drift

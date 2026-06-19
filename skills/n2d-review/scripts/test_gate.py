@@ -1628,6 +1628,41 @@ def test_asset_reference_registry_requires_prop_structure(tmp_path):
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产引用注册层" and "structure" in f["msg"] for f in gate.findings)
 
 
+def test_asset_reference_registry_requires_bottle_must_not_have_spout(tmp_path):
+    data = _asset_registry()
+    prop = data["assets"][1]
+    prop["name"] = "毒酒白瓷瓶"
+    prop["constraints"] = {"structure": "短颈圆口白瓷瓶，唯一一只，无双口"}
+    prop["drift_forbidden"] = ["bottle_shape", "era_style"]
+    root = _write_asset_registry(tmp_path, data)
+    gate.check_asset_reference_registry(root, require_reference_assets=False)
+    assert any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "资产引用注册层"
+        and "must_not_have" in f["msg"]
+        for f in gate.findings
+    )
+
+
+def test_asset_reference_registry_accepts_bottle_must_not_have_spout(tmp_path):
+    data = _asset_registry()
+    prop = data["assets"][1]
+    prop["name"] = "毒酒白瓷瓶"
+    prop["constraints"] = {
+        "structure": "短颈圆口白瓷瓶，唯一一只，无双口",
+        "must_not_have": ["壶嘴", "侧嘴", "喷口"],
+    }
+    prop["drift_forbidden"] = ["bottle_shape", "era_style"]
+    root = _write_asset_registry(tmp_path, data)
+    gate.check_asset_reference_registry(root, require_reference_assets=False)
+    assert not any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "资产引用注册层"
+        and "must_not_have" in f["msg"]
+        for f in gate.findings
+    )
+
+
 def test_asset_reference_registry_scene_missing_scene_dna_is_blocked(tmp_path):
     data = _asset_registry()
     del data["assets"][0]["scene_dna"]

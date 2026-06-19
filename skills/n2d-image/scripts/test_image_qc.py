@@ -60,6 +60,35 @@ def test_load_registry_ids(tmp_path: Path) -> None:
     assert image_qc.load_registry_ids(tmp_path / "nope") is None
 
 
+def test_asset_must_not_have_must_be_propagated_to_prompt(tmp_path: Path) -> None:
+    reg = tmp_path / "出图" / "共享"
+    reg.mkdir(parents=True)
+    (reg / "asset_registry.json").write_text(json.dumps({
+        "kind": "n2d_asset_reference_registry",
+        "assets": [{
+            "id": "PROP_01",
+            "type": "prop",
+            "name": "毒酒瓷瓶",
+            "reference_group": {"primary": "出图/共享/图片/定妆_毒酒瓷瓶.png"},
+            "constraints": {"structure": "短颈圆口白瓷酒瓶", "must_not_have": ["壶嘴", "喷口"]},
+            "drift_forbidden": ["壶嘴", "喷口"],
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+    asset_index = image_qc.load_asset_index(tmp_path)
+    bad = {"label": "Clip 01 毒酒抵唇", "body": "**资产引用注册层**：`PROP_01`。\n白瓷酒瓶抵近嘴唇。"}
+    codes = {f["code"]: f["level"] for f in image_qc.lint_shot_block(bad, None, asset_index=asset_index)}
+    assert codes.get("asset_must_not_have_not_propagated") == "block"
+
+    good = {
+        "label": "Clip 01 毒酒抵唇",
+        "body": "**资产引用注册层**：`PROP_01`。\n白瓷酒瓶抵近嘴唇；结构负向：无壶嘴、无喷口。",
+    }
+    assert not any(
+        f["code"] == "asset_must_not_have_not_propagated"
+        for f in image_qc.lint_shot_block(good, None, asset_index=asset_index)
+    )
+
+
 def _char_block(label: str, *, ref=True, eyeline=True, anchor=True, lock=True, char_id="CHAR_01/常态") -> dict:
     body = []
     if ref:
