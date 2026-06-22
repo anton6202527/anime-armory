@@ -5,7 +5,7 @@
 This module normalizes image-generation backends into one capability model so
 stage scripts can ask for capabilities instead of branching on vendor names.
 
-采集日期：2026-06-20
+采集日期：2026-06-22
 """
 from __future__ import annotations
 
@@ -37,14 +37,15 @@ except Exception:  # pragma: no cover
 
 
 CATALOG_VERIFIED = {
-    "date": "2026-06-20",
+    "date": "2026-06-22",
     "sources": [
         {
-            "name": "OpenAI image generation guide",
-            "url": "https://platform.openai.com/docs/guides/image-generation",
+            "name": "OpenAI image generation guide + GPT Image 2 docs",
+            "url": "https://developers.openai.com/api/docs/guides/image-generation",
             "facts": [
                 "official image generation is exposed through the Images API and Responses image-generation tool",
-                "official image editing supports image inputs and mask/inpaint style workflows where the current model allows it",
+                "GPT Image models include gpt-image-2; the model surface supports text+image inputs and image outputs",
+                "official image editing supports one or more source images and high-fidelity image inputs where the selected model allows it",
                 "current model names, sizes, quality parameters, and pricing must come from per-run official refresh evidence",
             ],
         },
@@ -94,7 +95,7 @@ BACKEND_API_ADAPTERS: Dict[str, Dict[str, Any]] = {
         "cost_tier": "project_default",
         "best_for": ("default_n2d", "multi_reference", "agentic_prompt_repair"),
         "limitations": ("no_persistent_subject_id", "reference_budget_local_policy"),
-        "evidence": {"verified_at": "2026-06-20", "source": "local codex CLI capability"},
+        "evidence": {"verified_at": "2026-06-22", "source": "local codex CLI capability: codex exec --image"},
     },
     "openai": {
         "label": "OpenAI Images API / Responses image tool",

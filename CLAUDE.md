@@ -46,7 +46,7 @@ cd skills/n2d-review/scripts && python -m pytest test_gate.py
 ## Hard conventions
 
 **Design law has one authoritative home: [`docs/skill-design-principles.md`](docs/skill-design-principles.md)** — the cross-line "how to *build* a skill" constitution (independence, generic-skill/private-choice, choice-point-as-adapter, compliance gates, VCS-free delivery, README-sync). Read it before adding/changing a skill. **Don't restate it here or per-skill** — point to it. Machine-checkable clauses are enforced:
-- `python3 tools/validate_skills.py` — E1 VCS-free (no git state checks in skills), B2 bare skill names, F1 `skills/README.md` index sync, F3 entry-doc sync.
+- `python3 tools/validate_skills.py` — E1 VCS-free (no git state checks in skills), B2 bare skill names, B7 character makeup base pack, B9 persistent-subject-vs-project-memory split, F1 `skills/README.md` index sync, F3 entry-doc sync.
 - `python3 tools/independence-audit/scripts/check_independence.py` — A1/F2 line independence (no `skills/common`, no cross-line import).
 
 Quick reminders of the highest-stakes clauses (full text + rationale in the constitution):

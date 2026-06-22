@@ -6,6 +6,7 @@
   - B2  推荐 skill 写裸名：skill 的 SKILL.md/.sh/.py 不得把 skill 当斜杠命令写成 /skillname
          （含脚本里打印给用户看的 echo —— agent 可能把 /name 当内置斜杠命令）。
   - B7  n2d 人物定妆基础包不可缺失：宪法、n2d-image 铁律、gate 常量和回归测试必须同时存在。
+  - B9  n2d 无持久主体 ID 与项目记忆分层：Codex/OpenAI 无公开 subject_id 不得等同不能锁角色。
   - F1  改了 skill 集合必须同步 skills/README.md 索引：每个 skills/<name>/ 都要在 README 出现。
   - F3  入口文档同步：AGENTS/GEMINI/CLAUDE 不得保留过期命令或旧路径，关键入口保持一致。
 
@@ -122,6 +123,60 @@ B7_REQUIRED_SNIPPETS = {
     ),
 }
 
+B9_REQUIRED_SNIPPETS = {
+    "docs/skill-design-principles.md": (
+        "B9 无持久主体 ID 与项目记忆分层铁律",
+        "公开服务端持久主体 ID / character subject handle",
+        "项目记忆式主体连续性",
+        "不得写成不能做角色一致性",
+        "不得因为 `persistent_subject=False` 自动阻断核心/长线角色出图",
+        "identity_registry",
+        "codex_reference_bundles",
+        "每镜真实图片入参",
+        "actual image inputs=0",
+        "missing_ready_refs",
+        "split_composite",
+        "full `image_qc`",
+    ),
+    "skills/n2d/_lib/n2d_schema.py": (
+        "无公开服务端持久角色 ID",
+        "项目记忆 reference_group",
+        "真实图片入参",
+        "高保真参考",
+        "无 n2d 持久主体 ID",
+    ),
+    "skills/n2d/_lib/image_backend_adapter.py": (
+        "codex exec --image",
+        "supports_high_fidelity_reference",
+        "no_persistent_subject_id",
+        "multi_image_flags",
+    ),
+    "skills/n2d-image/scripts/codex_image_runner.py": (
+        "n2d_codex_reference_bundle",
+        "true_image_reference_support",
+        "reference_input_mode",
+        "codex_exec_image_flags",
+        "persistent_subject_support",
+        "cli_image_input_count",
+        "missing_ready_refs",
+    ),
+    "skills/n2d-image/scripts/face_drift_risk.py": (
+        "PROJECT_MEMORY_BACKENDS",
+        "backend_can_use_project_memory",
+        "project_memory_mitigation",
+        "project_memory_reference_bundle",
+        "codex_reference_bundles",
+        "actual image inputs",
+        "missing_ready_refs",
+        "当前后端仍无持久主体 ID，但不再因这一点自动阻断",
+    ),
+    "skills/n2d-image/scripts/test_face_drift_risk.py": (
+        "test_analyze_core_high_risk_project_memory_mitigates_predicted_block",
+        "project_memory_reference_bundle",
+        "split_composite_required",
+    ),
+}
+
 
 def _rel(p: Path) -> str:
     return str(p.relative_to(SKILLS))
@@ -220,10 +275,26 @@ def check_n2d_character_makeup_constitution() -> list[str]:
     return bad
 
 
+def check_n2d_project_memory_constitution() -> list[str]:
+    """B9: 无持久主体 ID 不得被误写成不能锁角色；项目记忆路线必须保留机检锚点。"""
+    bad: list[str] = []
+    for rel, snippets in B9_REQUIRED_SNIPPETS.items():
+        p = REPO / rel
+        if not p.is_file():
+            bad.append(f"{rel}: 文件不存在，B9 项目记忆铁律失去覆盖")
+            continue
+        text = p.read_text("utf-8", "ignore")
+        for needle in snippets:
+            if needle not in text:
+                bad.append(f"{rel}: 缺少 B9 守护片段 '{needle}'")
+    return bad
+
+
 CHECKS = {
     "E1": ("交付端 VCS-free（无 git 调用）", check_no_git_calls),
     "B2": ("推荐 skill 写裸名（无 /skillname）", check_bare_skill_refs),
     "B7": ("n2d 人物定妆基础包不可缺失", check_n2d_character_makeup_constitution),
+    "B9": ("n2d 无持久主体 ID 与项目记忆分层", check_n2d_project_memory_constitution),
     "F1": ("skills/README.md 索引同步", check_readme_index),
     "F3": ("入口文档同步", check_entry_docs_sync),
 }

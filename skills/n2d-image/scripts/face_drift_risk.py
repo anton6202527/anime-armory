@@ -14,7 +14,9 @@
                  Seedream/可灵/Sora 可注册原生主体库更稳，LoRA 最稳。
 
 输出 生产数据/face_drift_risk_<ep>.json + .md，按风险排序，对 high/medium 角色给出可执行建议
-（与 image_qc 的 no_expression_lib_ref gate、n2d-lora init 对齐）。预测档（high/medium）**只提示不阻断**。
+（与 image_qc 的 no_expression_lib_ref gate、n2d-lora init 对齐）。预测档（high/medium）默认只提示不阻断；
+核心长线角在无持久主体后端上只有当项目没有明确的“项目记忆/真实参考图束/分层合成/QC”执行计划时，
+才升为出图前阻断。
 
 **实测漂移回灌（②）**：本脚本还读 生产数据/identity_drift_report.json——n2d-identity 对**已出图集**
 真量出的跨集漂移（embedding 质心 high / block 级脸漂镜）。命中的角色升 **block** 档（既成事实，非预测），
@@ -62,6 +64,16 @@ WEIGHTS = {"base_reference_group": 28, "base_multi_reference": 22, "base_face_em
            "closeup": 30, "emotion_each": 8, "emotion_cap": 24,
            "multi": 20, "angle_each": 6, "angle_cap": 24}
 BAND_HIGH, BAND_MEDIUM = 55, 30
+PROJECT_MEMORY_BACKENDS = {"codex", "openai", "dreamina", "nano_banana"}
+PROJECT_MEMORY_TOKENS = (
+    "参考图入参清单", "资产身份注册层", "identity_registry", "reference_group",
+    "image2image", "图生图", "多图参考", "真实附件", "真实参考图",
+)
+FACE_REFERENCE_TOKENS = ("脸部特写", "face_anchor", "expression", "表情库", "表情锚")
+MULTI_SUBJECT_TOKENS = (
+    "split_composite_required", "shot_reverse_shot_or_split_composite_required",
+    "分别出图", "分层合成", "单人分层", "多人同框身份槽位", "多人同框执行策略",
+)
 
 
 # ── 纯函数（无依赖·可测） ──────────────────────────────────────────────────────
@@ -146,6 +158,81 @@ def same_source_expression_ready(form: Mapping[str, Any]) -> bool:
             if emotion and emotion not in neutral and not emotion.endswith("同源脸锚"):
                 return True
     return False
+
+
+def _load_backend_capability_record(root: Path, backend: str) -> Dict[str, Any]:
+    path = root / "生产数据" / "image_backend_capabilities" / f"{backend}.json"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def _prompt_text(root: Path, ep: str) -> str:
+    path = root / "出图" / ep / "prompt" / "01_分镜出图.md"
+    try:
+        return path.read_text(encoding="utf-8")
+    except Exception:
+        return ""
+
+
+def backend_can_use_project_memory(root: Path, backend: str, profile: Mapping[str, Any]) -> bool:
+    """无持久主体 ID 不等于无一致性能力。
+
+    这里判的是“能否消费项目记忆”：项目文件中生成的定妆图、脸部锚、场景/道具参考和上一帧成图，
+    是否能作为真实图片入参传给当前后端。Codex 走 codex exec --image 的 auditable bundle；
+    OpenAI/Dreamina/Nano 这类多参考/编辑后端也按同一思想处理。它不是服务端 subject_id。
+    """
+    if bool(profile.get("persistent_subject")):
+        return False
+    capability = _load_backend_capability_record(root, backend)
+    ref = capability.get("reference_input") if isinstance(capability.get("reference_input"), Mapping) else {}
+    modes = {str(x).strip() for x in (capability.get("generation_modes") or []) if str(x).strip()}
+    true_refs = bool(profile.get("multi_reference")) or bool(capability.get("supports_high_fidelity_reference"))
+    true_refs = true_refs or bool(ref.get("mode")) or bool(modes & {"image_reference", "image_edit", "multi_turn_edit"})
+    if backend == "codex":
+        runner = Path(__file__).with_name("codex_image_runner.py")
+        return true_refs and runner.is_file()
+    return true_refs and (backend in PROJECT_MEMORY_BACKENDS or bool(profile.get("multi_reference")))
+
+
+def project_memory_mitigation(root: Path, ep: str, backend: str, profile: Mapping[str, Any],
+                              signals: Mapping[str, Any]) -> Dict[str, Any]:
+    """项目记忆缓解判定。
+
+    ready=True 只表示“预测 high 不应因无 subject_id 自动阻断”；不表示参考图已经生成完毕。
+    后续仍由 image_preflight / codex_reference_bundles / image_qc 检查 actual --image 入参、
+    missing_ready_refs 和 full QC。
+    """
+    gaps: List[str] = []
+    if not backend_can_use_project_memory(root, backend, profile):
+        gaps.append("backend_without_verified_true_image_reference_support")
+    text = _prompt_text(root, ep)
+    if not text:
+        gaps.append("episode_prompt_pack_missing")
+    elif not all(token in text for token in ("参考图入参清单", "资产身份注册层")):
+        gaps.append("prompt_missing_reference_bundle_contract")
+    elif not any(token in text for token in PROJECT_MEMORY_TOKENS):
+        gaps.append("prompt_missing_project_memory_tokens")
+    if int(signals.get("closeup", 0)) > 0 or int(signals.get("emotion", 0)) > 0:
+        if not any(token in text for token in FACE_REFERENCE_TOKENS):
+            gaps.append("prompt_missing_face_anchor_or_expression_refs")
+    if int(signals.get("multi", 0)) > 0:
+        if not any(token in text for token in MULTI_SUBJECT_TOKENS):
+            gaps.append("prompt_missing_split_composite_or_subject_slots")
+    return {
+        "ready": not gaps,
+        "strategy": "project_memory_reference_bundle",
+        "backend": backend,
+        "gaps": gaps,
+        "requirements": [
+            "先生成共享定妆/脸部特写/场景道具主参考并标 ready",
+            "正式分镜出图必须生成 codex_reference_bundles 或等价 reference_manifest",
+            "每个高风险镜 actual image inputs 不得为 0，missing_ready_refs 必须清零",
+            "多人同框按 split_composite/反打/单人分层执行，成图后跑 full image_qc",
+        ],
+    }
 
 
 def missing_3q_baseline(appear: int, tq_ready: bool) -> bool:
@@ -480,21 +567,33 @@ def analyze(root: Path, ep: str) -> Dict[str, Any]:
             and is_core_scope(str(c.get("scope") or ""), str(c.get("name") or ""))
             and rec.get("tier") in {"reference_group", "multi_reference", "native_unregistered"}
         ):
+            pm = project_memory_mitigation(root, ep, default_backend, profile, signals)
             if bool(c.get("expression_ready")):
                 rec["predicted_block_mitigated_by"] = "same_source_expression_refs"
                 rec["suggestions"] = [
                     "已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，"
                     "不再因预测 high 在 preflight 阶段硬阻断。"
                 ] + sug
+            elif pm.get("ready"):
+                rec["predicted_block_mitigated_by"] = "project_memory_reference_bundle"
+                rec["project_memory_mitigation"] = pm
+                rec["suggestions"] = [
+                    "已写明项目记忆/真实参考图束路线：当前后端仍无持久主体 ID，但不再因这一点自动阻断。"
+                    "后续必须先生成共享定妆和脸部锚，再让执行端把这些 PNG 作为真实图片入参传入，并以 full image_qc 回验。",
+                    "注意：这不是官方服务端 subject_id；若 codex_reference_bundles 出现 actual image inputs=0、"
+                    "missing_ready_refs 未清零或多人同框未按分层/反打执行，仍应在 image_preflight/image 阶段阻断。"
+                ] + sug
             else:
                 rec["band"] = "block"
+                rec["project_memory_mitigation"] = pm
                 rec["predicted_block_reason"] = (
                     f"核心/长线角色在 `{default_backend}` 这类无持久主体能力后端上预测 high，"
-                    "只靠普通参考图/文字锚无法满足正式出图一致性。"
+                    "且尚未写齐项目记忆/真实参考图束/分层合成/QC 执行计划。"
                 )
                 rec["suggestions"] = [
-                    "⛔ 预测高危已升级为阻断：先切到能真实消费参考图/持久主体的官方后端，"
-                    "或补 face_embedding/主体库/LoRA/同源表情库并重跑 preflight；不要带着 high 风险直接烧图。"
+                    "⛔ 预测高危已升级为阻断：先切到持久主体后端，或写齐项目记忆路线"
+                    "（真实参考图束/脸部锚/分层或反打/actual image input manifest/full QC），"
+                    "也可补 face_embedding/主体库/LoRA/同源表情库后重跑 preflight。"
                 ] + sug
         # ② 实测漂移回灌：上一集已**测**出该升 block 的跨集漂移 → 本集预测分直接 block（既成事实，非预测）
         measured = measured_drift_block(prior_drift, c.get("aliases") or set(), c["name"])
@@ -529,7 +628,7 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         "# 出图前·脸漂风险分（事前预测 + 实测漂移回灌）",
         "",
         f"- episode: {report.get('episode')} · 默认后端: {report.get('default_backend')}",
-        f"- ⛔ 实测已漂 {report.get('block', 0)} · 🔴 预测高危 {report.get('high', 0)} · 🟡 中危 {report.get('medium', 0)}",
+        f"- ⛔ 阻断 {report.get('block', 0)} · 🔴 预测高危 {report.get('high', 0)} · 🟡 中危 {report.get('medium', 0)}",
         "",
         "| 角色 | 风险 | 分 | 锁脸档 | 主驱动 |",
         "|---|---|---|---|---|",
@@ -538,6 +637,8 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         drv = "；".join(f"{d['factor']}(+{d['points']})" for d in r.get("drivers", [])[:3])
         if r.get("measured_drift"):
             drv = "实测跨集漂移（既成事实）｜" + drv
+        elif r.get("predicted_block_reason"):
+            drv = "预测阻断（缺项目记忆/参考图束执行计划）｜" + drv
         lines.append(f"| {r['name']}（{r['character_id']}/{r['form']}） | {icon.get(r['band'],'?')} {r['band']} "
                      f"| {r['score']} | {r['tier']} | {drv} |")
     lines.append("")
@@ -551,8 +652,9 @@ def render_markdown(report: Mapping[str, Any]) -> str:
     for n in report.get("notes", []):
         lines.append(f"- note: {n}")
     lines.append("")
-    lines.append("说明：🔴/🟡 是**出图前预测**（按建议提前加强参考/建表情库/上 LoRA）；⛔ 是 n2d-identity 对"
-                 "已出图集**实测**到的跨集漂移回灌——既成事实不是预测，本集出图前应先处置。"
+    lines.append("说明：🔴/🟡 是**出图前预测**（按建议提前加强参考/建表情库/上 LoRA）；⛔ 包含两类："
+                 "n2d-identity 对已出图集**实测**到的跨集漂移回灌，或核心长线角在无持久主体后端上"
+                 "预测 high 且缺项目记忆/真实参考图束/分层合成/QC 执行计划。前者先处置漂移，后者先补执行计划或升档。"
                  + ("（本次无可用实测数据：identity_drift_report 缺失或无 insightface，仅预测档生效。）"
                     if not report.get("prior_drift_available") else ""))
     return "\n".join(lines) + "\n"

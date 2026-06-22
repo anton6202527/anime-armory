@@ -7,7 +7,7 @@ import datetime as dt
 import json
 import os
 from collections import defaultdict
-from typing import Any, Dict, List, Mapping
+from typing import Dict, List
 
 
 def _jsonl(path: str) -> List[dict]:

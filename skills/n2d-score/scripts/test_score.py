@@ -266,7 +266,7 @@ def _all_ok_voice_print() -> dict:
 
 
 def test_unmapped_block_does_not_silently_pass() -> None:
-    # 健康集（七维全过=100）+ 一个无法归维的 block（完整性）→ 不能 pass，必须 warn + 分诊
+    # 健康集（schema 维度全过=100）+ 一个无法归维的 block（完整性）→ 不能 pass，必须 warn + 分诊
     base = score.score_episode(
         "/tmp/w", "第1集", consistency=_all_ok_consistency(), visual=_all_ok_visual(),
         voice_print=_all_ok_voice_print(), mechanical=[], threshold=85)

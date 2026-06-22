@@ -358,7 +358,7 @@ def apply_voice_print(dims: Dict[str, Dict[str, Any]], report: Optional[Dict[str
 def apply_mechanical(dims: Dict[str, Dict[str, Any]], mechanical: Optional[List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
     """把 mechanical_check findings 并进维度分，返回**无法归到任一维度的 findings**。
     历史 bug：dim 命不中关键词就 `continue` 静默丢弃——`BLOCK 完整性`(缺产物)/`BLOCK 视频`
-    这类真问题不归任何七维，曾被静默吞掉、不扣分、可放行。现改为回传给上层显式留痕、阻断静默通过。"""
+    这类真问题不归任何 schema 维度，曾被静默吞掉、不扣分、可放行。现改为回传给上层显式留痕、阻断静默通过。"""
     unmapped: List[Dict[str, Any]] = []
     if not isinstance(mechanical, list):
         return unmapped
@@ -622,7 +622,7 @@ def build_data_collection_tasks(dims: Dict[str, Dict[str, Any]]) -> List[Dict[st
 
 
 def build_triage_tasks(unmapped: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """无法归到七维的 findings → 分诊任务。block 级单列（必须人判归类，不能放行），warn/info 仅留痕。"""
+    """无法归到 schema 维度的 findings → 分诊任务。block 级单列（必须人判归类，不能放行），warn/info 仅留痕。"""
     if not unmapped:
         return []
     blocks = [u for u in unmapped if u.get("sev") == "block"]
@@ -632,7 +632,7 @@ def build_triage_tasks(unmapped: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         tasks.append({
             "skill": "n2d-score",
             "action": "triage_unmapped",
-            "scope": "存在无法自动归到七维的 block 级证据（如 完整性/视频）——必须人判归类或修复，不能直接放行。"
+            "scope": "存在无法自动归到 schema 维度的 block 级证据（如 完整性/视频）——必须人判归类或修复，不能直接放行。"
                      + "；".join(f"[{b['dim']}] {b['loc']}: {b['msg']}" for b in blocks[:6]),
             "findings": blocks,
         })
@@ -724,7 +724,7 @@ def score_episode(
     total = weighted_total(dims)
     hard_fail = any(item["status"] == "fail" for item in dims.values())
     insufficient = any(item["status"] == "insufficient_data" for item in dims.values())
-    # 无法归到七维的 findings 不能静默吞：block 级强制不通过（曾因关键词没命中而被丢弃、放行）。
+    # 无法归到 schema 维度的 findings 不能静默吞：block 级强制不通过（曾因关键词没命中而被丢弃、放行）。
     unmapped_blocks = [u for u in unmapped if u.get("sev") == "block"]
     status = "fail" if hard_fail or total < threshold else "pass"
     if unmapped_blocks and status == "pass":
@@ -806,7 +806,7 @@ def render_markdown(score: Dict[str, Any]) -> str:
             dims = "、".join(task.get("dimensions", []))
             lines.append(f"- `{task['skill']}`：{dims}；{task.get('scope', '')}")
     if score.get("unmapped_findings"):
-        lines.extend(["", "## 未归类证据（无法自动归到七维·需人判分诊）", ""])
+        lines.extend(["", "## 未归类证据（无法自动归到 schema 维度·需人判分诊）", ""])
         for u in score["unmapped_findings"]:
             lines.append(f"- {u.get('sev')} [{u.get('dim')}] {u.get('loc', '')}: {u.get('msg', '')}（来源 {u.get('source')}）")
     lines.extend(["", "## 证据", ""])

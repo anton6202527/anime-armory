@@ -36,7 +36,7 @@
 
 ## 必须遵守的项目约定
 
-> **完整设计法条（怎么*建造* skill）的唯一权威是 [`docs/skill-design-principles.md`](docs/skill-design-principles.md)**（跨线宪法：独立性 / 选择点适配 / 合规闸门 / VCS-free 交付 / README 同步）。下面是速查摘要，新增或改 skill 前请读宪法本体，别在各处复述。可机检的条文跑 `python3 tools/validate_skills.py`（E1 无 git / B2 裸 skill 名 / F1 README 索引 / F3 入口文档同步）与 `tools/independence-audit/scripts/check_independence.py`（跨线独立性）。
+> **完整设计法条（怎么*建造* skill）的唯一权威是 [`docs/skill-design-principles.md`](docs/skill-design-principles.md)**（跨线宪法：独立性 / 选择点适配 / 合规闸门 / VCS-free 交付 / README 同步）。下面是速查摘要，新增或改 skill 前请读宪法本体，别在各处复述。可机检的条文跑 `python3 tools/validate_skills.py`（E1 无 git / B2 裸 skill 名 / B7 定妆基础包 / B9 无持久主体 ID 与项目记忆分层 / F1 README 索引 / F3 入口文档同步）与 `tools/independence-audit/scripts/check_independence.py`（跨线独立性）。
 
 - **进度**：每个作品根有 `_进度.md`（状态机）。**先读它**判断走到哪一步、下一步做什么；做完**回写**。
 - **偏好/选择点**：凡"让用户选"的点（平台/后端/分辨率/音色…），首次问一次→用 `n2d-settings` 写进 `<作品根>/_设置.md`→同项目沉默沿用。**别在 skill 代码里写死**唯一路径。

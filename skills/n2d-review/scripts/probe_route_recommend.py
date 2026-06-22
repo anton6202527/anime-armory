@@ -21,14 +21,6 @@ def _num(value: Any) -> float | None:
         return None
 
 
-def _load_json(path: str) -> Any:
-    try:
-        with open(path, encoding="utf-8") as fh:
-            return json.load(fh)
-    except Exception:
-        return None
-
-
 def _probe_pack(root: str) -> tuple[Any, str]:
     data, rel = pc._probe_pack(root)  # intentionally reuse n2d-review's accepted locations
     return data, rel

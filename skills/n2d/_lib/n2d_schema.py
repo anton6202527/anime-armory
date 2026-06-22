@@ -838,7 +838,7 @@ IMAGE_IDENTITY_PROFILES: Dict[str, Dict[str, Any]] = {
         "ingests_video": False,
         "recommended_diverse_reference_min": None,
         "native_modes": (),
-        "notes": "无持久角色 ID；每镜使用 reference_group + 锚点句 + full QC。",
+        "notes": "无公开服务端持久角色 ID；每镜走项目记忆 reference_group + 真实图片入参 + 锚点句 + full QC。",
     },
     "openai": {
         "label": "官方 OpenAI gpt-image / DALL·E",
@@ -849,7 +849,7 @@ IMAGE_IDENTITY_PROFILES: Dict[str, Dict[str, Any]] = {
         "ingests_video": False,
         "recommended_diverse_reference_min": None,
         "native_modes": (),
-        "notes": "支持图片输入/编辑，但无 n2d 持久主体 ID；按 reference_group 兜底。",
+        "notes": "支持图片输入/编辑/高保真参考，但无 n2d 持久主体 ID；按项目记忆 reference_group 与 image edit 兜底。",
     },
     "dreamina": {
         "label": "Dreamina/即梦官方 CLI",

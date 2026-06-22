@@ -12,7 +12,6 @@ import datetime as dt
 import glob
 import json
 import os
-import re
 from typing import Any, Dict, List, Mapping, Sequence
 
 from video_consistency_common import clip_label, existing_media, load_json, read_text
@@ -28,7 +27,7 @@ QUESTION_TEMPLATES = {
     "camera": "该镜头相机运动方向、深度、越轴和抖动是否符合设计？",
 }
 
-SIDEcars = {
+SIDECARS = {
     "video_vlm": "生产数据/video_vlm_consistency_{ep}.json",
     "video_semantic": "生产数据/video_semantic_consistency_{ep}.json",
     "dialogue_av": "生产数据/dialogue_av_alignment_{ep}.json",
@@ -122,7 +121,7 @@ def build_manifest(root: str, ep: str) -> dict:
         "episode": ep,
         "generated_at": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
         "media": media,
-        "sidecar_targets": {key: value.format(ep=ep) for key, value in SIDEcars.items()},
+        "sidecar_targets": {key: value.format(ep=ep) for key, value in SIDECARS.items()},
         "judge_schema_required": [
             "judge_model", "rubric_version", "frame_sample_manifest",
             "question_chain", "self_consistency_votes",

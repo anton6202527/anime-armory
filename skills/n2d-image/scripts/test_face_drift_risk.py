@@ -237,6 +237,33 @@ def test_analyze_blocks_core_high_risk_on_non_persistent_backend(tmp_path: Path)
     assert rep["blocking"] is True
 
 
+def test_analyze_core_high_risk_project_memory_mitigates_predicted_block(tmp_path: Path) -> None:
+    root = _make_project(tmp_path)
+    reg = root / "出图" / "共享" / "identity_registry.json"
+    data = json.loads(reg.read_text(encoding="utf-8"))
+    data["characters"][0]["scope"] = "核心长线女主"
+    reg.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    prompt_dir = root / "出图" / "第1集" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    (prompt_dir / "01_分镜出图.md").write_text(
+        "## Clip 01\n"
+        "**参考图入参清单与预算**：backend=Codex；selected=[CHAR_01 front/face_anchor, CHAR_03 front/face_anchor]。\n"
+        "**资产身份注册层**：`CHAR_01/常态`、`CHAR_03/人皮态`，从 identity_registry 继承 reference_group。\n"
+        "**近景/反打身份锁定**：使用脸部特写与表情锚，尾帧 image2image 接力。\n"
+        "**多人同框身份槽位**：LEFT_SLOT CHAR_01*；RIGHT_SLOT CHAR_03。\n"
+        "**多人同框执行策略**：登记 `split_composite_required`，分别出图后分层合成。\n",
+        encoding="utf-8",
+    )
+
+    rep = fdr.analyze(root, "第1集")
+    row = {r["character_id"]: r for r in rep["characters"]}["CHAR_01"]
+
+    assert row["band"] == "high"
+    assert row["predicted_block_mitigated_by"] == "project_memory_reference_bundle"
+    assert row["project_memory_mitigation"]["ready"] is True
+    assert rep["blocking"] is False
+
+
 def test_analyze_core_high_risk_expression_refs_mitigate_predicted_block(tmp_path: Path) -> None:
     root = _make_project(tmp_path)
     reg = root / "出图" / "共享" / "identity_registry.json"
