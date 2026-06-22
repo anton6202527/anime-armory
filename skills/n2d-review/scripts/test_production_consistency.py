@@ -1,7 +1,9 @@
 import json
 from pathlib import Path
 
+import calibrate_thresholds
 import production_consistency as pc
+import probe_route_recommend
 
 
 def _write_json(path: Path, data: dict) -> None:
@@ -153,6 +155,24 @@ def test_review_calibration_requires_threshold_learning_for_repeated_fp(tmp_path
     assert any("阈值/规则没有形成可复跑学习闭环" in row["message"] for row in res["findings"])
 
 
+def test_calibrate_thresholds_writes_recommendations(tmp_path: Path) -> None:
+    root = tmp_path
+    prod = root / "生产数据"
+    prod.mkdir()
+    rows = [
+        {"label": "false_positive", "dimension": "脸(G1)", "reviewer": "qa", "reason": "遮挡", "finding_hash": "a"},
+        {"label": "false_positive", "dimension": "脸(G1)", "reviewer": "qa", "reason": "侧脸", "finding_hash": "b"},
+    ]
+    (prod / "consistency_calibration.jsonl").write_text(
+        "\n".join(json.dumps(row, ensure_ascii=False) for row in rows) + "\n",
+        encoding="utf-8",
+    )
+    path = calibrate_thresholds.write_recommendations(str(root))
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    assert data["recommendations"][0]["dimension"] == "脸(G1)"
+    assert data["recommendations"][0]["direction"] == "loosen_threshold_or_add_exemption"
+
+
 def test_probe_pack_requires_required_scenarios_and_baseline(tmp_path: Path) -> None:
     root = tmp_path
     ep = "第1集"
@@ -189,6 +209,30 @@ def test_probe_pack_compares_backend_scores_to_current_route(tmp_path: Path) -> 
     )
     res = pc.check_probe_pack(str(root), ep)
     assert any("高于当前路由" in row["message"] for row in res["findings"])
+
+
+def test_probe_route_recommend_writes_best_backend(tmp_path: Path) -> None:
+    root = tmp_path
+    ep = "第1集"
+    _write_json(
+        root / "生产数据" / "video_model_routes.json",
+        {"routes": [{"clip_id": "Clip_01", "primary_backend": "SlowGen"}]},
+    )
+    scenarios = [{"scenario": name, "baseline_hash": f"base-{name}", "verdict": "pass"} for name in pc.PROBE_SCENARIOS]
+    _write_json(
+        root / "生产数据" / "consistency_probe_pack.json",
+        {
+            "latest_result": "run-001",
+            "scenarios": scenarios,
+            "backend_scores": [
+                {"scenario": "character_turnaround", "backend": "FastGen", "consistency_score": 0.93},
+                {"scenario": "character_turnaround", "backend": "SlowGen", "consistency_score": 0.70},
+            ],
+        },
+    )
+    path = probe_route_recommend.write_recommendations(str(root), ep)
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    assert data["route_recommendations"][0]["recommended_backend"] == "FastGen"
 
 
 def test_dialogue_register_fallback_catches_mixed_self_address(tmp_path: Path) -> None:

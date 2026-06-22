@@ -10,7 +10,7 @@
   称谓口头禅 A1 · 风格 S1 · 字幕对齐 L1 · 音画同步 AV1（口型↔配音偏移·advisory）·
   节奏密度 Rhythm（节奏/留存启发式 advisory）· 空间站位 B1（跨镜站位/遮挡）·
   视频 VLM 判题 VLM1 · 视频语义一致 VSEM · 多人对话音画 DAV · 物理因果链 CG1 ·
-  相机空间轨迹 CAM1 ·
+  相机空间轨迹 CAM1 · 运动质量 MOT1 · 主体视频一致 S2V ·
   生产一致性补强（物件常驻/持有账本/状态转场/交互图谱/成片探针/强配方/包装/语域/平面图/成本路由/人审校准/probe）
 
 每个子检测器各自缺库优雅跳过（见各脚本）；本编排只汇总、不重复实现。
@@ -65,6 +65,8 @@ import video_semantic_consistency as vsem
 import dialogue_av_consistency as davc
 import causal_event_consistency as cg
 import camera_trajectory_consistency as camt
+import motion_quality_consistency as motq
+import subject_video_consistency as s2vc
 import production_consistency as pc
 
 
@@ -631,6 +633,18 @@ def run(root: str, ep: str) -> dict:
             camt.analyze(root, ep),
             "video",
             (f"生产数据/camera_trajectory_probe_{ep}.json", f"出视频/{ep}"),
+        ),
+        (
+            "运动质量(MOT1)",
+            motq.analyze(root, ep),
+            "video",
+            (f"生产数据/motion_quality_{ep}.json", f"出视频/{ep}"),
+        ),
+        (
+            "主体视频一致(S2V)",
+            s2vc.analyze(root, ep),
+            "video",
+            (f"生产数据/subject_video_consistency_{ep}.json", f"出视频/{ep}"),
         ),
     )
     for dim, raw, stage, artifacts in video_checks:

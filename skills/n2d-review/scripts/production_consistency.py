@@ -1541,7 +1541,7 @@ def check_review_calibration(root: str, ep: str) -> dict:
             res["findings"].append(_row(
                 "warn",
                 "校准集已有稳定误报/漏报样本，但缺 consistency_thresholds 或 threshold_recommendations；"
-                f"阈值/规则没有形成可复跑学习闭环（{summary}）。",
+                f"阈值/规则没有形成可复跑学习闭环（{summary}）。可运行 calibrate_thresholds.py --write 生成建议。",
                 stage="review",
                 artifacts=(os.path.relpath(cal_path, root), "生产数据/consistency_threshold_recommendations.json"),
             ))
@@ -1561,6 +1561,14 @@ def _probe_pack(root: str) -> Tuple[Optional[Any], str]:
         os.path.join("生产数据", "consistency_probe_pack.json"),
         os.path.join("设定库", "consistency_probe_pack.json"),
         os.path.join("生产数据", "probe_pack", "consistency_probe_pack.json"),
+    ))
+
+
+def _probe_route_recommendations(root: str, ep: str) -> Tuple[Optional[Any], str]:
+    return _load_first_json(root, (
+        os.path.join("生产数据", f"video_route_recommendations_{ep}.json"),
+        os.path.join("生产数据", "video_route_recommendations.json"),
+        os.path.join("设定库", "video_route_recommendations.json"),
     ))
 
 
@@ -1755,9 +1763,10 @@ def check_probe_pack(root: str, ep: str) -> dict:
             if isinstance(data, dict):
                 allowed_delta = _num(data.get("route_score_delta_tolerance")) or allowed_delta
             route_blob = _json_text(routes)
+            route_rec, route_rec_rel = _probe_route_recommendations(root, ep)
             has_selection_reason = bool(isinstance(data, dict) and (
                 data.get("route_recommendations") or data.get("selected_backend") or data.get("selection_reason") or data.get("fallback_reason")
-            )) or any(token in route_blob for token in ("selection_reason", "fallback_reason", "fallback_allowed", "route_recommendation"))
+            )) or bool(route_rec) or any(token in route_blob for token in ("selection_reason", "fallback_reason", "fallback_allowed", "route_recommendation"))
             for backend in primary_backends:
                 matched = next((name for name in averages if _backend_match(backend, name)), "")
                 if not matched:
@@ -1767,9 +1776,10 @@ def check_probe_pack(root: str, ep: str) -> dict:
                     res["findings"].append(_row(
                         "warn",
                         f"probe benchmark 显示 {best_backend} 平均一致性分 {best_score:.3f} 高于当前路由 {backend} "
-                        f"{delta:.3f}，但缺 selection_reason/fallback_reason；确认是否为成本/速度的显式取舍。",
+                        f"{delta:.3f}，但缺 selection_reason/fallback_reason；确认是否为成本/速度的显式取舍。"
+                        "可运行 probe_route_recommend.py --write 生成路由建议。",
                         stage="review",
-                        artifacts=(rel, f"出视频/{ep}/prompt/video_model_routes.json", "生产数据/video_model_routes.json"),
+                        artifacts=(rel, f"出视频/{ep}/prompt/video_model_routes.json", "生产数据/video_model_routes.json", route_rec_rel or f"生产数据/video_route_recommendations_{ep}.json"),
                     ))
         failing_backend = [
             row for row in backend_rows

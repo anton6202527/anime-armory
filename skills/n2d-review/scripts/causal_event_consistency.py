@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from typing import List
+from typing import Dict, List, Sequence
 
 from video_consistency_common import contains_any, existing_media, finding, load_first_json, rows_from, story_text, verdict_from
 
@@ -21,6 +21,16 @@ CAUSAL_WORDS = (
     "hit", "break", "shatter", "fall", "drop", "burn", "explode", "cause", "therefore",
 )
 
+RULE_LIBRARY: Dict[str, Sequence[str]] = {
+    "collision": ("击中", "命中", "刺中", "砍中", "撞", "打斗", "hit", "collision", "impact"),
+    "gravity_drop": ("掉落", "落地", "摔", "飞出", "坠", "fall", "drop", "gravity"),
+    "fracture": ("撞碎", "摔碎", "破裂", "断裂", "碎裂", "break", "shatter", "fracture"),
+    "combustion": ("燃起", "点燃", "熄灭", "火焰", "燃烧", "burn", "fire", "flame"),
+    "liquid": ("流血", "水", "泼", "洒", "液体", "blood", "water", "spill", "liquid"),
+    "contact_continuity": ("抓", "握", "递", "接过", "推", "拉", "扶", "grab", "hold", "push", "pull"),
+    "state_conservation": ("变成", "消失", "出现", "恢复", "复原", "becomes", "disappears", "appears"),
+}
+
 
 def _has_risk(root: str, ep: str) -> bool:
     text = story_text(root, ep)
@@ -29,6 +39,25 @@ def _has_risk(root: str, ep: str) -> bool:
 
 def _event_id(row: dict, idx: int) -> str:
     return str(row.get("id") or row.get("event_id") or row.get("name") or f"event_{idx + 1}")
+
+
+def infer_rules(text: str) -> List[str]:
+    lowered = str(text or "").lower()
+    rules: List[str] = []
+    for rule, tokens in RULE_LIBRARY.items():
+        if any(token.lower() in lowered for token in tokens):
+            rules.append(rule)
+    return rules
+
+
+def _row_rules(row: dict) -> List[str]:
+    raw = row.get("physical_rules") or row.get("rules") or row.get("rule") or row.get("physical_rule")
+    if isinstance(raw, list):
+        return [str(x).strip() for x in raw if str(x).strip()]
+    if raw:
+        return [str(raw).strip()]
+    blob = " ".join(str(row.get(key) or "") for key in ("cause", "effect", "action", "description", "before_state", "after_state"))
+    return infer_rules(blob)
 
 
 def analyze(root: str, ep: str) -> dict:
@@ -67,12 +96,25 @@ def analyze(root: str, ep: str) -> dict:
             ))
             continue
         missing = []
+        rules = _row_rules(row)
         if not (row.get("cause") or row.get("precondition") or row.get("before_state")):
             missing.append("cause/precondition")
         if not (row.get("effect") or row.get("after_state") or row.get("state_after")):
             missing.append("effect/after_state")
         if not (row.get("evidence_frames") or row.get("evidence_clips") or row.get("vlm_question") or row.get("evidence")):
             missing.append("video_evidence")
+        if not rules:
+            missing.append("physical_rule")
+        unknown = [rule for rule in rules if rule not in RULE_LIBRARY]
+        if unknown:
+            findings.append(finding(
+                "warn",
+                f"因果事件 {event_id} 使用未登记物理规则：{', '.join(unknown)}；请补进规则库或改成已知规则。",
+                shot=shot,
+                stage="script_stage2",
+                artifacts=(rel,),
+                event_id=event_id,
+            ))
         if missing:
             findings.append(finding(
                 "warn",
@@ -81,6 +123,17 @@ def analyze(root: str, ep: str) -> dict:
                 stage="script_stage2",
                 artifacts=(rel,),
                 event_id=event_id,
+            ))
+        pass_value = row.get("rule_pass") if "rule_pass" in row else row.get("physics_pass")
+        if str(pass_value).lower() in {"false", "0", "no", "fail", "failed"}:
+            findings.append(finding(
+                "block",
+                f"因果事件 {event_id} 违反物理规则：{', '.join(rules) or '(unknown)'}。",
+                shot=shot,
+                stage="video",
+                artifacts=(rel,),
+                event_id=event_id,
+                physical_rules=rules,
             ))
         if row.get("cause_clip") and row.get("effect_clip") and str(row.get("order_ok")).lower() in {"false", "0", "no"}:
             findings.append(finding(

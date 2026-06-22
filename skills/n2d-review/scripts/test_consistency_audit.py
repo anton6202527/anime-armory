@@ -26,7 +26,7 @@ def test_all_consistency_audit_sections_are_score_mapped():
         "成片时间线探针(FT1)", "生成配方(RCP)", "强配方Schema(RCP2)", "系列包装(PKG)",
         "台词语域(D1)", "场景平面(FP1)", "成本路由(K1)", "人审校准集(CAL)", "一致性探针包(PROBE)",
         "视频VLM判题(VLM1)", "视频语义一致(VSEM)", "多人对话音画(DAV)", "物理因果链(CG1)",
-        "相机空间轨迹(CAM1)",
+        "相机空间轨迹(CAM1)", "运动质量(MOT1)", "主体视频一致(S2V)",
     }
     mapped = {
         label

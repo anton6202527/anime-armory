@@ -1,6 +1,6 @@
 ---
 name: n2d-score
-description: P2 automatic review scoring for n2d. Produce a machine score per episode across semantic continuity, state continuity, multimodal continuity, character DNA consistency (face/hair/outfit/accessories), scene consistency, subtitle correctness, audio-visual sync, rhythm density, and style consistency; integrates visual checks such as image similarity, subtitle OCR, audio/video duration reconciliation, lip-sync risk/report ingestion, and final rhythm density; write score JSON/Markdown, feed n2d-review-ui visual human review canvas, and optionally enqueue low-score reruns into n2d-batch. Use when asked for 自动审片评分, 机器分, 每集评分, 低于阈值自动回流, 语义继承评分, 状态一致性评分, 多模态漂移评分, 角色DNA评分, 角色一致性评分, 字幕正确性评分, 音画同步评分, 节奏密度评分, 图像相似度评分, 字幕OCR, 口型检测, 成片节奏密度, style score, review score.
+description: P2 automatic review scoring for n2d. Produce a machine score per episode across the schema-driven consistency dimensions in n2d_schema, including semantic/state/multimodal continuity, character DNA, scene/camera/motion, subtitle correctness, audio-visual sync, voice, rhythm, style, contract inheritance, interaction/physics, delivery packaging, and production ops consistency; integrates visual checks such as image similarity, subtitle OCR, audio/video duration reconciliation, lip-sync risk/report ingestion, final rhythm density, and n2d-review consistency findings; write score JSON/Markdown, feed n2d-review-ui visual human review canvas, and optionally enqueue low-score reruns into n2d-batch. Use when asked for 自动审片评分, 机器分, 每集评分, 低于阈值自动回流, 语义继承评分, 状态一致性评分, 多模态漂移评分, 角色DNA评分, 角色一致性评分, 字幕正确性评分, 音画同步评分, 节奏密度评分, 图像相似度评分, 字幕OCR, 口型检测, 成片节奏密度, style score, review score.
 ---
 
 # n2d-score — P2 自动审片评分体系
@@ -23,13 +23,19 @@ description: P2 automatic review scoring for n2d. Produce a machine score per ep
 | 多模态漂移 | 8 | `multimodal_consistency.py` 的 P2 非角色资产组 embedding 离群，按 identity_registry 排除角色 | `image` |
 | 角色 DNA 一致性（脸/发型） | 20 | `consistency_audit` 的 锚点门/脸/发型/片内时序 + dashboard 角色类 block + **`n2d-identity` 跨集漂移**（早集稳·本集崩的回归，warn 级，不重复计片内崩脸） | `image` |
 | 角色 DNA 一致性（服装/配饰） | 12 | 服装配色机检 + 配饰人审/registry 约束 | `image` |
-| 场景一致性 | 12 | 场景机检 + 接缝接力 + 尾帧/下一首帧图像相似度 | `image` / 必要时 `video` |
+| 场景/构图连续性 | 12 | 场景机检 + 接缝接力 + 尾帧/下一首帧图像相似度 + 相机空间轨迹 CAM1 + 运动质量 MOT1 | `image` / 必要时 `video` |
 | 字幕正确性 | 16 | `mechanical_check` 字幕 findings + 成片字幕 OCR 抽检 | `script_stage2` |
 | 音画同步 | 16 | 配音/故事板/时长/原生音轨 findings + 成片/配音/SRT 时长对账 + 口型检测报告/口型风险 | `compose`，源头错回 `script_stage2` |
 | 节奏密度 | 12 | 钩子/爽点/集尾留存信号 + 成片镜头密度/钩子间隔 | `script_stage2` |
 | 风格一致性 | 12 | 风格机检 + 糊/低质 | `image` |
+| 视觉契约继承 | 8 | 出图总览 → 出视频总览的契约继承 diff | `video_prompt` |
+| 交互/接触因果一致性 | 8 | 持有账本、接触图谱、结构化交互图、物理因果链 CG1 | `script_stage2` |
+| 成片/包装一致性 | 8 | 成片统一、时间线探针、系列包装 | `compose` |
+| 生产操作一致性 | 6 | 生成配方、强配方 schema、成本路由、人审校准 CAL、一致性 PROBE | `review` |
 
 默认阈值 `85`。任一维度 block 会让该维度 fail；总分低于阈值或存在 fail 时，整集状态为 `fail`，输出 `auto_return_tasks`。缺机器信号的维度是 `insufficient_data`：只输出 `data_collection_tasks`，先采集检查信号，不直接排返工。
+
+评分维度、权重、`audit_labels` 和默认回流阶段的单一真值源是 `skills/n2d/_lib/n2d_schema.py::CONSISTENCY_DIMENSIONS`。本表只是人读摘要；新增检测器必须先进入 schema 的 `audit_labels`，否则 `test_consistency_audit.py` 会阻止“审得到但 score 不扣分”的松动。
 
 **无静默丢弃（P1）**：mechanical_check / dashboard 的 findings 若 `dim` 归不到评分维度（如 `完整性`=缺产物、`视频`），不再被 `continue` 静默吞掉，而是落进 `unmapped_findings`。其中 **block 级会强制整集不给 `pass`（降 `warn`）并出 `triage_unmapped` 人判分诊任务**；warn/info 仅留痕。历史 bug：`BLOCK 完整性` 因关键词没命中被丢弃、不扣分、可放行。
 
@@ -39,14 +45,16 @@ n2d 的维度是**面向漫剧产线的自定义口径**，但应能与公开评
 
 | VBench / VBench-2.0 维 | n2d 对应 | 状态 |
 |---|---|---|
-| Subject Consistency（DINO/DreamSim） | 角色 DNA（脸/发型/服装）+ `semantic_drift` | ✅ 有（`semantic_drift` 现支持 DreamSim 后端，见 `n2d-image`） |
+| Subject Consistency / Subject-to-Video | 角色 DNA + `主体视频一致(S2V)` + `视频语义一致(VSEM)` | ✅ 有 |
 | Temporal Flickering | `temporal_consistency` TCI/flicker | ✅ 有 |
 | Background/Scene Consistency | 场景一致性 + `scene_consistency` | ✅ 有 |
 | Text/Prompt Alignment | 语义继承（P0 谱系 Diff） | ✅ 有 |
-| **Motion Smoothness / Dynamic Degree** | — | ⛳ **候选缺口**：n2d 无运动平滑/动态度评分 |
-| **Physics / Commonsense Plausibility**（VBench-2.0 intrinsic faithfulness） | — | ⛳ **候选缺口**：无物理/常识合理性维 |
+| Motion Smoothness / Dynamic Degree | `运动质量(MOT1)` + `相机空间轨迹(CAM1)` | ✅ 有（读 sidecar；缺证据不当通过） |
+| Physics / Commonsense Plausibility（VBench-2.0 intrinsic faithfulness） | `物理因果链(CG1)` + 状态转场视频证据 ST1 | ✅ 有（规则库 + sidecar；复杂物理仍需人审） |
+| Human-aligned MLLM judging | `视频VLM判题(VLM1)` | ✅ 有（要求 judge schema/抽帧/问题链/投票元数据） |
+| Multi-talker AV social interaction | `多人对话音画(DAV)` | ✅ 有（说话人、台词归属、turn-taking、幻觉说话人） |
 
-**候选缺口**（⛳）是可加的新维（运动平滑度、物理合理性），需视频级分析支撑，**属研究级、暂作 backlog**——先在此登记，不强行塞噪声维。已有维不重复造。
+当前缺口不再是维度空白，而是证据生成：`video_eval_runner.py` 先生成抽帧/问题/sidecar manifest，重模型 runner 或人工复核再写回标准 sidecar；缺 sidecar 的维度按 skipped/warn 暴露，不静默当通过。
 
 ## 标准命令
 

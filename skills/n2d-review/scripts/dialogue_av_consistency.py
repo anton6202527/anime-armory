@@ -77,14 +77,22 @@ def analyze(root: str, ep: str) -> dict:
             ("speaker_match", "说话人身份与声道/字幕/画面对人不一致"),
             ("utterance_match", "台词内容与音频识别/字幕不一致"),
             ("turn_order_ok", "多人对话轮次顺序不一致"),
+            ("turn_taking_ok", "多人对话 turn-taking 逻辑不一致，出现跳轮次/截断/顺序错乱"),
+            ("overlap_ok", "多人对话出现非设计性的重叠说话或互相抢声"),
             ("camera_on_speaker", "镜头没有对准当前说话人"),
+            ("active_speaker_visible", "当前活跃说话人不可见或不可定位"),
+            ("voice_identity_match", "声纹/音色与当前可见角色不匹配"),
             ("emotion_match", "台词情绪与表演/配音情绪不一致"),
             ("lip_sync_ok", "当前说话人口型与音频不同步"),
+            ("narration_stability_ok", "旁白/角色对白归属发生漂移"),
         )
         for key, message in checks:
             if key in row and boolish_false(row.get(key)):
                 findings.append(finding(
-                    "block" if key in {"speaker_match", "utterance_match", "turn_order_ok"} else "warn",
+                    "block" if key in {
+                        "speaker_match", "utterance_match", "turn_order_ok", "turn_taking_ok",
+                        "voice_identity_match",
+                    } else "warn",
                     message,
                     shot=shot,
                     stage="compose",
@@ -92,6 +100,25 @@ def analyze(root: str, ep: str) -> dict:
                     speaker=row.get("speaker") or row.get("expected_speaker"),
                     utterance=row.get("utterance") or row.get("expected_text"),
                 ))
+        if row.get("hallucinated_speaker"):
+            findings.append(finding(
+                "block",
+                f"多人对话出现幻觉说话人：{row.get('hallucinated_speaker')}。",
+                shot=shot,
+                stage="compose",
+                artifacts=(rel,),
+                speaker=row.get("hallucinated_speaker"),
+            ))
+        if row.get("missing_turn") or row.get("extra_utterance"):
+            findings.append(finding(
+                "block",
+                "多人对话轮次缺失或多出未登记台词。",
+                shot=shot,
+                stage="compose",
+                artifacts=(rel,),
+                missing_turn=row.get("missing_turn"),
+                extra_utterance=row.get("extra_utterance"),
+            ))
     return {"available": True, "findings": findings, "notes": []}
 
 
