@@ -29,6 +29,8 @@ pub struct LineInfo {
     roots: Vec<WorkRoot>,
 }
 
+const CREATION_ROOT: &str = "创作区";
+
 const LINES: &[(&str, &str, &str, &str)] = &[
     // (key, label, product dir, view)
     ("n2d", "制漫剧 (n2d)", "制漫剧", "canvas"),
@@ -43,7 +45,7 @@ pub fn scan_workspace(repo_root: String) -> Vec<LineInfo> {
     LINES
         .iter()
         .map(|(key, label, dir, view)| {
-            let abs = Path::new(&repo_root).join(dir);
+            let abs = Path::new(&repo_root).join(CREATION_ROOT).join(dir);
             let mut roots = Vec::new();
             if let Ok(entries) = fs::read_dir(&abs) {
                 for e in entries.flatten() {
@@ -398,7 +400,7 @@ pub fn list_skills(repo_root: String, line: String) -> Vec<SkillInfo> {
 
 /// Resolve (and create) the app's dedicated works workspace `<home>/AnimeArsenal/`.
 /// This is kept SEPARATE from the skills repo so app works never touch the
-/// repo's demo product dirs (制漫剧/ etc.). Cross-platform (HOME / USERPROFILE).
+/// repo's demo product dirs (创作区/制漫剧/ etc.). Cross-platform (HOME / USERPROFILE).
 #[tauri::command]
 pub fn default_workspace() -> Result<String, String> {
     let home = dirs::home_dir().ok_or("无法定位用户主目录")?;
@@ -445,7 +447,7 @@ fn copy_dir_all(src: &Path, dst: &Path) -> std::io::Result<()> {
 }
 
 /// Seed the `/tod --demos` sample works into the app's works workspace, ONCE.
-/// For each bundled `resources/demos/<产品目录>/<作品>`, if the same path is
+/// For each bundled `resources/demos/创作区/<产品目录>/<作品>`, if the same path is
 /// missing under `workspace_root`, copy it in. A `.demos_seeded` sentinel in the
 /// workspace makes this idempotent and means user-deleted demos stay deleted.
 /// Returns the number of works seeded (0 if nothing bundled / already seeded).
@@ -460,12 +462,12 @@ pub fn seed_demos(app: tauri::AppHandle, workspace_root: String) -> Result<usize
         Ok(r) => r,
         Err(e) => return Err(e.to_string()),
     };
-    let demos = res.join("resources").join("demos");
+    let demos = res.join("resources").join("demos").join(CREATION_ROOT);
     if !demos.is_dir() {
         return Ok(0); // app was built without --demos
     }
     let mut seeded = 0usize;
-    // demos/<产品目录>/<作品>/
+    // demos/创作区/<产品目录>/<作品>/
     for line in fs::read_dir(&demos).map_err(|e| e.to_string())?.flatten() {
         let line_dir = line.path();
         if !line_dir.is_dir() {
@@ -477,7 +479,7 @@ pub fn seed_demos(app: tauri::AppHandle, workspace_root: String) -> Result<usize
             if !from.is_dir() {
                 continue;
             }
-            let dst = ws.join(&product).join(work.file_name());
+            let dst = ws.join(CREATION_ROOT).join(&product).join(work.file_name());
             if dst.exists() {
                 continue; // never clobber existing user work
             }

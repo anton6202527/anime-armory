@@ -32,7 +32,8 @@ except Exception:  # pragma: no cover - keep generic settings usable outside n2d
 
 DEFAULTS = {
     "制作模式": _PRODUCTION_MODE_DEFAULT,
-    "基础视觉风格": "写实电影感",
+    "基础视觉风格": "国漫写实角色审美 + 电影级布光与镜头语言",
+    "拆集节奏": "前长后短",
     "生图AI": "Codex",
     "生视频模型": "Seedance 2.0",
     "生视频渠道": "即梦/Dreamina",
@@ -45,22 +46,12 @@ DEFAULTS = {
     "出视频规格": "预算一般",
     "视频原生音轨": "丢弃",
     "字幕语言": "中文",
+    "变现模式": "免费",
 }
 
 
 FAMILY_ROOTS = {
     "制漫剧": "n2d",
-    "制MV": "mv",
-    "写歌": "song",
-    "写小说": "novel",
-    "拍广告": "ad",
-}
-
-FAMILY_MARKERS = {
-    "ad": (("需求", "brief.json"),),
-    "song": (("词", "lyrics.md"),),
-    "mv": (("视觉蓝图.md",), ("节拍", "beatgrid.json")),
-    "novel": (("章节",),),
 }
 
 N2D_PROJECT_MARKERS = (
@@ -152,86 +143,42 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("题材", ("n2d",), ("系统流", "穿越", "修仙", "都市", "宫斗", "赘婿", "战神", "自定义"), parameterized=True),
     # 母题增强：是否对检测到的复现母题桥段套用增强模板（默认建议待确认，注入下游前人确认）。
     SettingSpec("母题增强", ("n2d",), ("开启", "关闭", "仅建议")),
-    SettingSpec("基础视觉风格", ("n2d", "ad"), ("写实电影感", "国漫写实", "二次元赛璐璐", "二次元", "水墨国风", "厚涂幻想", "赛博霓虹", "Q版轻喜", "CG质感", "定格动画", "极简产品", "国风写意", "自定义"), parameterized=True),
-    SettingSpec("单集时长", ("n2d",), ("前长后短", "均衡", "快节奏", "长集", "自定义"), parameterized=True),
+    SettingSpec("基础视觉风格", ("n2d",), ("国漫写实角色审美 + 电影级布光与镜头语言", "写实电影感", "国漫写实", "二次元赛璐璐", "二次元", "水墨国风", "厚涂幻想", "赛博霓虹", "Q版轻喜", "CG质感", "定格动画", "国风写意", "自定义"), parameterized=True),
+    SettingSpec("拆集节奏", ("n2d",), ("前长后短", "均衡", "快节奏", "长集", "自定义"),
+                key_aliases=("单集时长", "单集节奏偏好"), parameterized=True, syncable=False),
+    # 变现模式：拆集结构的商业轴（软默认/高级覆盖，不列首跑必问）。免费(红果/番茄·完播率导向·
+    # 全剧延续性·断点平均强)/付费(小程序剧·前十集卡点峰值+付费墙集)/海外(ReelShort/TikTok·更碎更狠)。
+    # 驱动 boundary_audit 的剧级追更骨架与卡点定位。取值与 n2d-script/references/追更骨架.md 对齐。
+    SettingSpec("变现模式", ("n2d",), ("免费", "付费", "海外"), parameterized=True, syncable=False),
     SettingSpec("首切范围", ("n2d",), ("部分先切", "全篇粗切"), parameterized=True),
     SettingSpec("脚本批次", ("n2d",), ("逐集", "小批", "整批"), parameterized=True),
     SettingSpec("中段锚帧默认", ("n2d",), ("开启", "关闭")),
-    SettingSpec("生图AI", ("n2d", "mv", "ad"), ("Codex", "OpenAI", "Dreamina/即梦官方 CLI", "Dreamina", "即梦", "Seedream", "可灵主体库", "Nano Banana", "Sora Cameo", "自定义官方后端", "自定义"), parameterized=True),
-    SettingSpec("生视频模型", ("n2d", "mv", "ad"), VIDEO_MODEL_CHOICES, key_aliases=("视频模型", "目标视频模型"), parameterized=True),
-    SettingSpec("生视频渠道", ("n2d", "mv", "ad"), VIDEO_CHANNEL_CHOICES, key_aliases=("视频渠道", "目标视频渠道"), parameterized=True),
+    SettingSpec("生图AI", ("n2d",), ("Codex", "OpenAI", "Dreamina/即梦官方 CLI", "Dreamina", "即梦", "Seedream", "可灵主体库", "Nano Banana", "Sora Cameo", "自定义官方后端", "自定义"), parameterized=True),
+    SettingSpec("生视频模型", ("n2d",), VIDEO_MODEL_CHOICES, key_aliases=("视频模型", "目标视频模型"), parameterized=True),
+    SettingSpec("生视频渠道", ("n2d",), VIDEO_CHANNEL_CHOICES, key_aliases=("视频渠道", "目标视频渠道"), parameterized=True),
     # Legacy combined key kept for existing projects and old CLI flags.
-    SettingSpec("生视频AI", ("n2d", "mv", "ad"), ("即梦", "dreamina", "可灵", "kling", "Seedance", "Veo", "Sora", "Runway", "manual"), aliases=VIDEO_BACKEND_SETTING_ALIASES, parameterized=True),
-    SettingSpec("视频模型路由", ("n2d", "ad"), ("自动按镜头路由", "固定生视频模型", "固定生视频AI")),
-    SettingSpec("视频备用后端", ("n2d", "ad"), ("无", "即梦", "dreamina", "可灵", "kling", "Seedance", "Veo", "Sora", "Runway", "manual"), aliases=VIDEO_BACKEND_SETTING_ALIASES, parameterized=True),
-    SettingSpec("出视频规格", ("n2d", "mv", "ad"), ("预算充足", "预算一般", "预算不够")),
-    SettingSpec("视频分辨率", ("n2d", "mv", "ad"), ("720p", "1080p", "4K")),
+    SettingSpec("生视频AI", ("n2d",), ("即梦", "dreamina", "可灵", "kling", "Seedance", "Veo", "Sora", "Runway", "manual"), aliases=VIDEO_BACKEND_SETTING_ALIASES, parameterized=True),
+    SettingSpec("视频模型路由", ("n2d",), ("自动按镜头路由", "固定生视频模型", "固定生视频AI")),
+    SettingSpec("投放时效", ("n2d",), ("实时", "隔夜批量"), key_aliases=("时效档", "urgency")),
+    SettingSpec("视频备用后端", ("n2d",), ("无", "即梦", "dreamina", "可灵", "kling", "Seedance", "Veo", "Sora", "Runway", "manual"), aliases=VIDEO_BACKEND_SETTING_ALIASES, parameterized=True),
+    SettingSpec("出视频规格", ("n2d",), ("预算充足", "预算一般", "预算不够")),
+    SettingSpec("视频分辨率", ("n2d",), ("720p", "1080p", "4K")),
     SettingSpec("画幅", ("n2d",), ("9:16", "16:9"), key_aliases=("漫剧画幅",)),
-    SettingSpec("合成画幅", ("mv",), ("16:9", "9:16")),
     SettingSpec("对口型", ("n2d",), ("关闭", "配音对齐", "后期pass", "平台原生")),
-    SettingSpec("配音后端", ("n2d", "ad"), ("CosyVoice", "GPT-SoVITS", "MiniMax", "火山", "say占位", "自定义"), parameterized=True),
-    SettingSpec("字幕语言", ("n2d", "mv", "ad"), ("中文", "中英双语", "仅英文", "无字幕")),
+    SettingSpec("配音后端", ("n2d",), ("CosyVoice", "GPT-SoVITS", "MiniMax", "火山", "say占位", "自定义"), parameterized=True),
+    SettingSpec("字幕语言", ("n2d",), ("中文", "中英双语", "仅英文", "无字幕")),
     SettingSpec("视频原生音轨", ("n2d",), ("丢弃", "低音量混入环境声", "保留原片音轨")),
-    SettingSpec("生成粒度", ("n2d", "ad"), ("逐个", "小批", "按场景分批", "整集", "整片", "自定义"), parameterized=True, composite=True),
+    SettingSpec("生成粒度", ("n2d",), ("逐个", "小批", "按场景分批", "整集", "自定义"), parameterized=True, composite=True),
     SettingSpec("生成优先序", ("n2d",), ("关键镜优先", "分镜顺序", "先易后难")),
     SettingSpec("一致性增强", ("n2d",), ("锚点+参考图", "指定参考图", "+LoRA"), key_aliases=("一致性增强(LoRA)",), parameterized=True),
-    SettingSpec("重抽预算策略", ("n2d", "mv", "ad"), ("预算充足", "预算一般")),
+    SettingSpec("重抽预算策略", ("n2d",), ("预算充足", "预算一般")),
+    SettingSpec("脸一致性机检后端", ("n2d",), ("arcface", "styleid", "自动按画风"), key_aliases=("脸encoder", "face_encoder")),
     SettingSpec("更新重制策略", ("n2d",), ("最小", "严审刷新")),
     SettingSpec("BGM来源", ("n2d",), ("占位", "文件", "Suno"), parameterized=True),
     SettingSpec("接缝兜底", ("n2d",), ("硬切", "微溶解", "报警"), parameterized=True),
-    SettingSpec("目标平台", ("n2d", "ad"), ("抖音", "快手", "B站", "小红书", "红果", "YouTube", "TikTok", "ReelShort", "视频号", "朋友圈", "OTT电视", "电梯分众", "电商", "跨平台", "未定"), parameterized=True, sensitive=True),
-    SettingSpec("发行地区", ("n2d", "ad"), ("中国大陆", "港澳台", "北美", "东南亚", "全球", "自定义"), parameterized=True, sensitive=True),
+    SettingSpec("目标平台", ("n2d",), ("抖音", "快手", "B站", "小红书", "红果", "YouTube", "TikTok", "ReelShort", "视频号", "跨平台", "未定"), parameterized=True, sensitive=True),
+    SettingSpec("发行地区", ("n2d",), ("中国大陆", "港澳台", "北美", "东南亚", "全球", "自定义"), parameterized=True, sensitive=True),
     SettingSpec("合规用途", ("n2d",), ("internal_only", "publish_candidate", "paid_distribution"), sensitive=True),
-
-    # mv family.
-    SettingSpec("MV用途", ("mv",), ("短视频Hook", "歌曲Demo", "正式MV草稿", "投放版", "自定义"), parameterized=True),
-    SettingSpec("歌曲输入时序", ("mv",), ("先传音乐", "后配歌曲"), sensitive=True),
-    SettingSpec("MV视觉风格", ("mv",), ("电影叙事", "舞台演出", "国风写意", "赛博霓虹", "二次元", "抽象视觉器", "写实旅拍", "自定义"), parameterized=True),
-    SettingSpec("MV规划粒度", ("mv",), ("粗略", "标准", "精细")),
-    SettingSpec("卡点策略", ("mv",), ("副歌强卡点", "全程强卡点", "叙事优先", "歌词叙事优先", "人工指定", "自定义"), parameterized=True),
-    SettingSpec("MV一致性增强", ("mv",), ("共享定妆+锚点", "指定参考图", "后端主体库", "+LoRA"), parameterized=True),
-    SettingSpec("AI视觉使用披露", ("mv", "ad"), ("AI-generated", "AI-assisted", "未使用AI视觉"), sensitive=True),
-    SettingSpec("发行目标平台", ("mv", "song"), ("抖音", "B站", "小红书", "YouTube", "Spotify", "网易云", "QQ音乐", "跨平台", "未定"), parameterized=True, sensitive=True),
-
-    # song family.
-    SettingSpec("歌曲用途", ("song",), ("短视频Hook", "完整Demo", "发行母带前草稿", "MV源歌", "自定义"), parameterized=True),
-    SettingSpec("目标时长", ("song",), ("30s", "45s", "60s", "90s", "120s", "180s", "自定义"), parameterized=True),
-    SettingSpec("语言", ("song",), ("中文", "英文", "中英双语", "其他"), parameterized=True),
-    SettingSpec("BPM/速度", ("song",), ("慢速", "中速", "快速", "自定义BPM"), parameterized=True),
-    SettingSpec("调性", ("song",), ("未定", "C", "D", "E", "F", "G", "A", "B", "Am", "Dm", "Em", "自定义"), parameterized=True),
-    SettingSpec("作曲后端", ("song",), ("Suno", "Udio", "ACE-Step", "DiffRhythm", "manual"), parameterized=True),
-    SettingSpec("生成版数", ("song",), ("1", "2", "4", "6", "8")),
-    SettingSpec("挑版策略", ("song",), ("最佳hook", "最佳人声", "最贴蓝图", "最适合MV", "人工挑版")),
-    SettingSpec("翻唱后端", ("song",), ("RVC", "so-vits-svc")),
-    SettingSpec("演唱音色", ("song",), ("自有嗓", "授权音色", "合成音色"), key_aliases=("演唱音色(合规·需声明)",), sensitive=True),
-    SettingSpec("AI音频使用披露", ("song",), ("AI-generated", "AI-assisted", "未使用AI音频"), sensitive=True),
-
-    # novel family.
-    # 题材：弱选择点——novel-create 立项时写入（init 的 --genre），power_system 检测器据此判是否启用力量体系自检。
-    # 取值与 power_system_defs.GENRE_KEYWORDS 的题材键对齐（系统流/修仙/玄幻有等级数值，触发逐章成长一致性机检）。
-    SettingSpec("题材", ("novel",), ("系统流", "穿越", "修仙", "玄幻", "都市", "战神", "宫斗", "言情", "历史", "自定义"), parameterized=True),
-    # 力量体系自检：穿越/系统流/修仙等带等级数值成长的题材，写章后机检等级/境界/战力单调、属性≤7、升级节奏。
-    SettingSpec("力量体系自检", ("novel",), ("开启", "关闭", "仅建议")),
-    SettingSpec("目标平台", ("novel",), ("起点", "番茄", "晋江", "抖音漫剧", "红果", "历史向", "跨平台"), parameterized=True, sensitive=True),
-    SettingSpec("权利来源", ("novel",), ("公版", "自有", "授权"), sensitive=True),
-    SettingSpec("输出格式", ("novel",), ("txt", "docx", "outline", "n2d", "txt+docx"), parameterized=True),
-    SettingSpec("篇幅档", ("novel",), ("short", "medium", "long", "抖音漫剧"), parameterized=True),
-    SettingSpec("小说生成模式", ("novel",), ("极速初稿", "稳妥初稿", "商业连载", "漫剧源书")),
-    SettingSpec("小说生成工作流", ("novel",), ("默认单步", "三步迭代")),
-    SettingSpec("章节生成粒度", ("novel",), ("逐章", "小批", "全书草稿"), parameterized=True),
-    SettingSpec("AI使用披露", ("novel",), ("AI-generated", "AI-assisted", "未使用AI文本"), sensitive=True),
-
-    # ad family.
-    SettingSpec("广告类型", ("ad",), ("TVC", "信息流短视频", "品牌片", "产品demo", "电商详情视频", "直播切片", "自定义"), parameterized=True),
-    SettingSpec("创意路线", ("ad",), ("功能卖点", "情感共鸣", "幽默", "悬念反转", "名人代言", "场景种草", "自定义"), parameterized=True),
-    SettingSpec("主片时长", ("ad",), ("6s", "15s", "30s", "60s", "自定义"), parameterized=True),
-    SettingSpec("交付比例", ("ad",), ("16:9", "9:16", "1:1", "多比例"), parameterized=True),
-    SettingSpec("cutdown版本", ("ad",), ("主片+15s+6s", "主片+15s", "仅主片", "自定义"), parameterized=True),
-    SettingSpec("一致性增强", ("ad",), ("共享定妆+锚点", "指定参考图", "后端主体库", "+LoRA"), parameterized=True),
-    SettingSpec("音乐来源", ("ad",), ("授权曲库", "原创定制", "AI生成", "占位"), sensitive=True),
-    SettingSpec("品牌包装模板", ("ad",), ("标准片尾", "角标常驻", "片尾+角标", "无", "自定义"), parameterized=True),
-    SettingSpec("广告法地区", ("ad",), ("中国大陆", "海外", "关闭"), sensitive=True),
-    SettingSpec("交付规格", ("ad",), ("平台默认", "广电TVC", "自定义"), parameterized=True),
 
     # shared physical tools.
     SettingSpec("换脸后端", ("all",), ("FaceFusion",), syncable=False),
@@ -239,8 +186,6 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("增强模型", ("all",), ("gfpgan_1.4", "codeformer"), syncable=False),
     SettingSpec("源脸合法性", ("all",), ("本人", "授权", "合成"), syncable=False, sensitive=True),
 
-    SettingSpec("源小说项目", ("n2d",), metadata=True, syncable=False),
-    SettingSpec("源小说导出", ("n2d",), metadata=True, syncable=False),
     SettingSpec("生图AI-切换记录", ("n2d",), metadata=True, syncable=False),
 )
 
@@ -255,10 +200,6 @@ def detect_family(work_root: str) -> str:
     for part in reversed(parts):
         if part in FAMILY_ROOTS:
             return FAMILY_ROOTS[part]
-    for family, markers in FAMILY_MARKERS.items():
-        for marker in markers:
-            if os.path.exists(os.path.join(root, *marker)):
-                return family
     if os.path.isfile(os.path.join(root, "_进度.md")) and any(
         os.path.exists(os.path.join(root, marker)) for marker in N2D_PROJECT_MARKERS
     ):
@@ -700,20 +641,37 @@ def normalize_setting_value(key: str, value: str) -> str:
     return normalized
 
 
+def _setting_lookup_keys(key: str, family: Optional[str] = None) -> List[str]:
+    spec = get_setting_spec(key, family)
+    keys = [key]
+    if spec:
+        keys = [spec.key, *spec.key_aliases]
+        if key not in keys:
+            keys.append(key)
+    return keys
+
+
 def get_setting(work_root: str, key: str, default: Optional[str] = None) -> str:
     """Read a setting from `<作品根>/_设置.md`, then global defaults, then fallback."""
     work_root = work_root.rstrip("/")
-    project = _extract_setting(_read_text(os.path.join(work_root, "_设置.md")), key)
-    if project:
-        return normalize_setting_value(key, project)
+    spec = get_setting_spec(key)
+    canonical = spec.key if spec else key
+    lookup_keys = _setting_lookup_keys(key)
+    project_text = _read_text(os.path.join(work_root, "_设置.md"))
+    for lookup_key in lookup_keys:
+        project = _extract_setting(project_text, lookup_key)
+        if project:
+            return normalize_setting_value(canonical, project)
     repo = repo_root_from(work_root)
     for path in global_settings_paths(repo):
-        global_val = _extract_setting(_read_text(path), key)
-        if global_val:
-            return normalize_setting_value(key, global_val)
+        global_text = _read_text(path)
+        for lookup_key in lookup_keys:
+            global_val = _extract_setting(global_text, lookup_key)
+            if global_val:
+                return normalize_setting_value(canonical, global_val)
     if default is not None:
-        return normalize_setting_value(key, default)
-    return normalize_setting_value(key, DEFAULTS.get(key, ""))
+        return normalize_setting_value(canonical, default)
+    return normalize_setting_value(canonical, DEFAULTS.get(canonical, DEFAULTS.get(key, "")))
 
 
 def production_mode(work_root: str) -> str:

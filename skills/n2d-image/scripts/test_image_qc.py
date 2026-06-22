@@ -120,6 +120,34 @@ def test_prop_shape_review_targets_unconfirmed_high_risk_prop_png(tmp_path: Path
     assert targets[0]["confirmed"] is False
 
 
+def test_shared_asset_pngs_are_not_treated_as_shot_targets(tmp_path: Path) -> None:
+    body = (
+        "**参考图**：`出图/共享/图片/CHAR_01_常态_脸部特写.png`\n"
+        "**正向 prompt（中文）**：引用 `CHAR_01_常态_脸部特写.png` 锁脸，目标镜头尚未落档。"
+    )
+    assert image_qc._extract_target_pngs(body) == []
+
+    reg = tmp_path / "出图" / "共享"
+    reg.mkdir(parents=True)
+    (reg / "asset_registry.json").write_text(json.dumps({
+        "assets": [{
+            "id": "PROP_01",
+            "type": "prop",
+            "name": "毒酒瓷瓶",
+            "constraints": {"must_not_have": ["壶嘴", "喷口"]},
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+    pr = tmp_path / "出图" / "第1集" / "prompt"
+    pr.mkdir(parents=True)
+    (pr / "01_分镜出图.md").write_text(
+        "## Clip 05\n"
+        "`PROP_01` 禁形：壶嘴、喷口。\n"
+        "`出图/共享/图片/CHAR_01_常态_侧.png`\n",
+        encoding="utf-8",
+    )
+    assert image_qc.prop_shape_review_targets(tmp_path, "第1集") == []
+
+
 def test_prop_shape_review_confirmations_require_current_png_hash(tmp_path: Path) -> None:
     reg = tmp_path / "出图" / "共享"
     reg.mkdir(parents=True)
@@ -246,9 +274,22 @@ def test_prop_shape_review_is_hard_block_and_finding() -> None:
     summary = image_qc.summarize(payload)
     assert summary["verdict"] == "block"
     findings = image_qc.to_findings(payload)
-    assert any(f["sev"] == "block" and f["dim"] == "asset_consistency" and "高风险道具禁形/尺寸" in f["msg"]
+    assert any(f["sev"] == "block" and f["dim"] == "multimodal_continuity" and "高风险道具禁形/尺寸" in f["msg"]
                and "掌心小瓷瓶" in f["msg"]
                for f in findings)
+
+
+def test_qc_inputs_fingerprint_tracks_prop_shape_confirmations(tmp_path: Path) -> None:
+    payload = {
+        "checks": {},
+        "lint": {"findings": []},
+        "prop_shape_review": {"targets": [{"asset": "PROP_01", "png": "图片/Clip_01.png"}]},
+    }
+
+    fingerprint = image_qc._qc_inputs_fingerprint(tmp_path, "第1集", payload)
+
+    assert fingerprint is not None
+    assert "生产数据/image_qc/第1集/prop_shape_confirmations.json" in fingerprint["files"]
 
 
 def _char_block(label: str, *, ref=True, eyeline=True, anchor=True, lock=True, char_id="CHAR_01/常态") -> dict:
@@ -328,6 +369,27 @@ def test_character_shot_manifest_extracts_target_png() -> None:
     assert manifest["shot"] == "Clip_02"
     assert manifest["png"] == "出图/第1集/图片/Clip_02_冷开场.png"
     assert manifest["identity_refs"] == ["CHAR_01/常态"]
+
+
+def test_character_shot_manifests_include_mid_and_end_targets() -> None:
+    blk = _char_block("Clip 02 冷开场")
+    blk["body"] = (
+        "**目标落档**：`出图/第1集/图片/Clip_02_冷开场.png` "
+        "`出图/第1集/图片/Clip_02_冷开场_mid.png` "
+        "`出图/第1集/图片/Clip_02_冷开场_end.png`\n"
+        + blk["body"]
+    )
+    manifests = image_qc.character_shot_manifests(blk)
+    assert [m["png"] for m in manifests] == [
+        "出图/第1集/图片/Clip_02_冷开场.png",
+        "出图/第1集/图片/Clip_02_冷开场_mid.png",
+        "出图/第1集/图片/Clip_02_冷开场_end.png",
+    ]
+
+
+def test_identity_ref_regex_ignores_char_file_stems() -> None:
+    text = "`出图/共享/图片/CHAR_SHENNIAN_常态.png` `CHAR_SHENNIAN/常态`"
+    assert image_qc.IDENTITY_REF_RE.findall(text) == ["CHAR_SHENNIAN/常态"]
 
 
 def test_character_shot_manifest_skips_no_face_asset_only_shot() -> None:
@@ -490,6 +552,102 @@ def test_lint_allows_outfit_group_declared_in_anchor_phrase() -> None:
     ]
     blk = _char_block("Clip 12 月白旧宫装近景", char_id="CHAR_01/觉醒态")
     blk["body"] += "\n**正向 prompt（中文）**：沈念月白旧宫装，金瞳觉醒态残留，CU 近景。"
+    findings = image_qc.lint_shot_block(blk, valid, forms)
+    assert not any(f["code"] == "outfit_form_mismatch" for f in findings)
+
+
+def test_lint_allows_outfit_group_declared_in_character_dna() -> None:
+    valid = {"CHAR_01", "CHAR_01/觉醒态"}
+    forms = [
+        {
+            "id": "CHAR_01",
+            "form": "觉醒态",
+            "key": "CHAR_01/觉醒态",
+            "asset_key": "沈念_觉醒态",
+            "character_dna_text": "同一红色旧宫装，衣领袖型和暗纹延续常态",
+            "display": "沈念_觉醒态",
+            "reference_stems": {"定妆_沈念_觉醒态"},
+            "strong_aliases": {"CHAR_01", "CHAR_01/觉醒态", "沈念_觉醒态", "定妆_沈念_觉醒态"},
+            "weak_aliases": {"沈念"},
+        }
+    ]
+    blk = _char_block("Clip 12 红衣觉醒近景", char_id="CHAR_01/觉醒态")
+    blk["body"] += "\n**正向 prompt（中文）**：沈念穿红色旧宫装，金瞳觉醒态残留，CU 近景。"
+    findings = image_qc.lint_shot_block(blk, valid, forms)
+    assert not any(f["code"] == "outfit_form_mismatch" for f in findings)
+
+
+def test_lint_blocks_registry_driven_outfit_form_mismatch() -> None:
+    valid = {"CHAR_01", "CHAR_01/月白寝衣", "CHAR_01/玄青官袍"}
+    forms = [
+        {
+            "id": "CHAR_01",
+            "form": "月白寝衣",
+            "key": "CHAR_01/月白寝衣",
+            "asset_key": "沈念_月白寝衣",
+            "character_dna_text": "月白交领寝衣，宽袖，素布腰带",
+            "wardrobe_profile": {
+                "silhouette": "柔软寝衣，宽袖",
+                "collar": "月白交领",
+                "aliases": ["月白寝衣", "月白交领寝衣"],
+            },
+            "display": "沈念_月白寝衣",
+            "reference_stems": {"定妆_沈念_月白寝衣"},
+            "strong_aliases": {"CHAR_01", "CHAR_01/月白寝衣", "沈念_月白寝衣"},
+            "weak_aliases": {"沈念"},
+        },
+        {
+            "id": "CHAR_01",
+            "form": "玄青官袍",
+            "key": "CHAR_01/玄青官袍",
+            "asset_key": "沈念_玄青官袍",
+            "character_dna_text": "玄青窄袖官袍，暗银云纹腰封，低反光织物",
+            "wardrobe_profile": {
+                "silhouette": "直身窄袖官袍",
+                "collar": "交领",
+                "sleeve": "窄袖",
+                "waist": "暗银云纹腰封",
+                "aliases": ["玄青窄袖官袍", "暗银云纹腰封"],
+            },
+            "display": "沈念_玄青官袍",
+            "reference_stems": {"定妆_沈念_玄青官袍"},
+            "strong_aliases": {"CHAR_01/玄青官袍", "沈念_玄青官袍"},
+            "weak_aliases": {"沈念"},
+        },
+    ]
+    blk = _char_block("Clip 18 换官袍", char_id="CHAR_01/月白寝衣")
+    blk["body"] += "\n**正向 prompt（中文）**：沈念改穿玄青窄袖官袍，暗银云纹腰封，站在殿门前。"
+    findings = image_qc.lint_shot_block(blk, valid, forms)
+    assert any(
+        f["code"] == "outfit_form_mismatch" and "玄青窄袖官袍" in f["msg"]
+        for f in findings
+    )
+
+
+def test_lint_allows_registry_driven_outfit_form_match() -> None:
+    valid = {"CHAR_01", "CHAR_01/玄青官袍"}
+    forms = [
+        {
+            "id": "CHAR_01",
+            "form": "玄青官袍",
+            "key": "CHAR_01/玄青官袍",
+            "asset_key": "沈念_玄青官袍",
+            "character_dna_text": "玄青窄袖官袍，暗银云纹腰封，低反光织物",
+            "wardrobe_profile": {
+                "silhouette": "直身窄袖官袍",
+                "collar": "交领",
+                "sleeve": "窄袖",
+                "waist": "暗银云纹腰封",
+                "aliases": ["玄青窄袖官袍", "暗银云纹腰封"],
+            },
+            "display": "沈念_玄青官袍",
+            "reference_stems": {"定妆_沈念_玄青官袍"},
+            "strong_aliases": {"CHAR_01", "CHAR_01/玄青官袍", "沈念_玄青官袍"},
+            "weak_aliases": {"沈念"},
+        }
+    ]
+    blk = _char_block("Clip 18 官袍近景", char_id="CHAR_01/玄青官袍")
+    blk["body"] += "\n**正向 prompt（中文）**：沈念穿玄青窄袖官袍，暗银云纹腰封，MCU 近景。"
     findings = image_qc.lint_shot_block(blk, valid, forms)
     assert not any(f["code"] == "outfit_form_mismatch" for f in findings)
 
@@ -733,11 +891,13 @@ def test_summarize_multimodal_is_advisory() -> None:
 
 
 def test_to_findings_emits_multimodal_warn() -> None:
+    # sidecar 标 available（隔离 semantic_embedding_required 的缺席升级，专测 palette 初筛 warn 渲染）。
     payload = {"checks": {"multimodal": {"shots": [
         {"png": "图片/Clip_05.png", "verdict": "block", "asset": "PROP_01"}]}},
+        "semantic_drift": {"available": True, "findings": []},
         "lint": {"findings": []}}
     fnds = image_qc.to_findings(payload)
-    mm = [f for f in fnds if f["dim"] == "asset_consistency"]
+    mm = [f for f in fnds if f["dim"] == "multimodal_continuity"]
     assert len(mm) == 1 and mm[0]["sev"] == "warn" and "PROP_01" in mm[0]["msg"]
 
 
@@ -1268,8 +1428,88 @@ def test_to_findings_blocks_semantic_embedding_missing_for_registered_assets() -
         "lint": {"findings": []},
     }
     fnds = image_qc.to_findings(payload)
-    assert any(f["sev"] == "block" and f["dim"] == "asset_consistency" for f in fnds)
+    assert any(f["sev"] == "block" and f["dim"] == "multimodal_continuity" for f in fnds)
     assert image_qc.summarize(payload)["verdict"] == "block"
+
+
+def test_semantic_embedding_required_fires_when_sidecar_absent() -> None:
+    # 堵静默消失洞：semantic_drift sidecar 整段缺席（模块加载/执行异常被吞），payload 无 "semantic_drift" 键，
+    # 但有已登记关键资产 → 仍须升 hard block（否则一次模块加载失败就让非脸兜底无声蒸发）。
+    payload = {
+        "checks": {"scene": {"shots": [
+            {"png": "图片/Clip_01.png", "scene": "LOC_01", "verdict": "ok"},
+        ]}},
+        "lint": {"findings": []},
+    }
+    assert image_qc.semantic_embedding_required(payload)        # 缺席 == unavailable
+    assert image_qc.summarize(payload)["verdict"] == "block"
+
+
+def test_semantic_embedding_not_required_when_sidecar_ran_ok() -> None:
+    # 对照：sidecar 跑通(available True) → 不在此升 hard（改由 findings 表达），避免重复阻断。
+    payload = {
+        "semantic_drift": {"available": True, "findings": []},
+        "checks": {"scene": {"shots": [
+            {"png": "图片/Clip_01.png", "scene": "LOC_01", "verdict": "ok"},
+        ]}},
+        "lint": {"findings": []},
+    }
+    assert image_qc.semantic_embedding_required(payload) == []
+
+
+def test_semantic_drift_findings_enter_summary_and_gate_findings() -> None:
+    payload = {
+        "semantic_drift": {"available": True, "findings": [
+            {"level": "warn", "code": "semantic_drift_low", "msg": "PROP_01 语义漂移疑似"},
+            {"level": "info", "code": "semantic_drift_lighting", "msg": "LOC_01 只是灯光差异"},
+        ]},
+        "checks": {},
+        "lint": {"findings": []},
+    }
+
+    summary = image_qc.summarize(payload)
+    findings = image_qc.to_findings(payload)
+
+    assert summary["by_check"]["semantic_drift"]["warn"] == 1
+    assert summary["advisory"] == 1
+    assert any(f["sev"] == "warn" and f["dim"] == "multimodal_continuity" and "PROP_01" in f["msg"]
+               for f in findings)
+    assert any(f["sev"] == "info" and f["dim"] == "multimodal_continuity" and "LOC_01" in f["msg"]
+               for f in findings)
+
+
+def test_tone_light_contract_findings_enter_summary_and_gate_findings() -> None:
+    # 契约像素兜底（色调/光位）的 warn findings 进 summary.advisory + to_findings(style_consistency)。
+    payload = {
+        "tone_light_contract": {"available": True, "checked": 8, "findings": [
+            {"level": "warn", "code": "tone_warmth_contradiction", "msg": "色调像素兜底：契约冷 vs 渲染暖"},
+        ]},
+        "checks": {},
+        "lint": {"findings": []},
+    }
+    summary = image_qc.summarize(payload)
+    findings = image_qc.to_findings(payload)
+    assert summary["by_check"]["tone_light_contract"]["warn"] == 1
+    assert summary["advisory"] == 1
+    assert any(f["sev"] == "warn" and f["dim"] == "style_consistency" and "色调像素兜底" in f["msg"]
+               for f in findings)
+
+
+def test_shot_scale_contract_findings_enter_summary_and_gate_findings() -> None:
+    # 契约像素兜底（景别）的 warn findings 进 summary.advisory + to_findings(style_consistency)。
+    payload = {
+        "shot_scale_contract": {"available": True, "checked": 4, "findings": [
+            {"level": "warn", "code": "shot_scale_closeup_tiny_face", "msg": "景别像素兜底：镜1 声明 CU 但脸很小"},
+        ]},
+        "checks": {},
+        "lint": {"findings": []},
+    }
+    summary = image_qc.summarize(payload)
+    findings = image_qc.to_findings(payload)
+    assert summary["by_check"]["shot_scale_contract"]["warn"] == 1
+    assert summary["advisory"] == 1
+    assert any(f["sev"] == "warn" and f["dim"] == "style_consistency" and "景别像素兜底" in f["msg"]
+               for f in findings)
 
 
 def test_to_findings_blocks_high_cross_episode_face_drift() -> None:
@@ -1418,6 +1658,12 @@ def test_native_multiref_underfed_info_when_group_underused():
 def test_native_multiref_ok_when_enough_or_no_group():
     body3 = "`定妆_沈念.png` `定妆_沈念_侧.png` `定妆_沈念_背.png`"
     assert image_qc._lint_native_multiref_coverage("镜头1", body3, ["CHAR_01"], {"CHAR_01": 4}) == []
+    char_named = (
+        "`出图/共享/图片/CHAR_01_常态.png` "
+        "`出图/共享/图片/CHAR_01_常态_侧.png` "
+        "`出图/共享/图片/CHAR_01_常态_背.png`"
+    )
+    assert image_qc._lint_native_multiref_coverage("镜头1", char_named, ["CHAR_01"], {"CHAR_01": 4}) == []
     # 没有多角度组（avail<3）→ 不提
     assert image_qc._lint_native_multiref_coverage("镜头1", "`定妆_沈念.png`", ["CHAR_01"], {"CHAR_01": 1}) == []
     # 无 form_ref_counts → 不提

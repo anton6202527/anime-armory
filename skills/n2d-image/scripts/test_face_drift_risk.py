@@ -65,6 +65,24 @@ def test_three_quarter_ready_reads_atlas_and_reference_group() -> None:
     assert not fdr.three_quarter_ready({})
 
 
+def test_same_source_expression_ready_requires_non_neutral_ready_expression() -> None:
+    assert not fdr.same_source_expression_ready({
+        "reference_atlas": {"expression_refs": [
+            {"path": "出图/共享/图片/定妆_沈念_常态_脸部特写.png", "status": "ready", "emotion": "中性"}
+        ]}
+    })
+    assert fdr.same_source_expression_ready({
+        "reference_atlas": {"expression_refs": [
+            {"path": "出图/共享/图片/定妆_沈念_常态_表情_惊惶转冷静.png", "status": "ready", "emotion": "惊惶转冷静"}
+        ]}
+    })
+    assert not fdr.same_source_expression_ready({
+        "reference_group": {"expressions": [
+            {"path": "出图/共享/图片/定妆_沈念_常态_表情_惊惶转冷静.png", "status": "planned", "emotion": "惊惶转冷静"}
+        ]}
+    })
+
+
 def test_missing_3q_baseline() -> None:
     # 任一入镜人物缺 ready 的 3/4 侧脸 → 基础包缺口
     assert fdr.missing_3q_baseline(appear=1, tq_ready=False)
@@ -202,6 +220,42 @@ def test_analyze_end_to_end(tmp_path: Path) -> None:
     assert by["CHAR_03"]["score"] < by["CHAR_01"]["score"]
     # 排序：分高在前
     assert rep["characters"][0]["score"] >= rep["characters"][-1]["score"]
+
+
+def test_analyze_blocks_core_high_risk_on_non_persistent_backend(tmp_path: Path) -> None:
+    root = _make_project(tmp_path)
+    reg = root / "出图" / "共享" / "identity_registry.json"
+    data = json.loads(reg.read_text(encoding="utf-8"))
+    data["characters"][0]["scope"] = "核心长线女主"
+    reg.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    rep = fdr.analyze(root, "第1集")
+    row = {r["character_id"]: r for r in rep["characters"]}["CHAR_01"]
+
+    assert row["band"] == "block"
+    assert "预测高危" in row["suggestions"][0]
+    assert rep["blocking"] is True
+
+
+def test_analyze_core_high_risk_expression_refs_mitigate_predicted_block(tmp_path: Path) -> None:
+    root = _make_project(tmp_path)
+    reg = root / "出图" / "共享" / "identity_registry.json"
+    data = json.loads(reg.read_text(encoding="utf-8"))
+    data["characters"][0]["scope"] = "核心长线女主"
+    data["characters"][0]["forms"][0]["reference_atlas"] = {
+        "expression_refs": [
+            {"path": "出图/共享/图片/定妆_沈念_常态_表情_惊惶转冷静.png",
+             "status": "ready", "emotion": "惊惶转冷静"}
+        ]
+    }
+    reg.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    rep = fdr.analyze(root, "第1集")
+    row = {r["character_id"]: r for r in rep["characters"]}["CHAR_01"]
+
+    assert row["band"] == "high"
+    assert row["predicted_block_mitigated_by"] == "same_source_expression_refs"
+    assert rep["blocking"] is False
 
 
 def test_run_writes_reports(tmp_path: Path) -> None:

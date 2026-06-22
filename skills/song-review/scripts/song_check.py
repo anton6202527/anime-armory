@@ -200,7 +200,7 @@ def check_audio(root, progress_text, meta=None):
             f"开头静音约 {head_silence:.1f}s，短视频/平台投放可能丢 hook——回 song-compose 或剪头")
     if tail_silence is not None and tail_silence > EDGE_SILENCE_WARN:
         add(WARN, "音频", "歌/song.wav",
-            f"结尾静音约 {tail_silence:.1f}s，交 MV/发布前建议处理淡出或剪尾")
+            f"结尾静音约 {tail_silence:.1f}s，发布或对外交付前建议处理淡出或剪尾")
     chars = lyric_char_count(root)
     if dur and chars:
         density = chars / dur
@@ -273,7 +273,7 @@ def check_ai_usage(root, meta):
     path = os.path.join(root, "合规", "ai_usage.json")
     if not os.path.exists(path):
         add(WARN, "合规", "合规/ai_usage.json",
-            "成品歌存在但缺 AI 使用披露留痕——发布/交平台/交 MV 前跑 song-craft/scripts/ai_usage.py")
+            "成品歌存在但缺 AI 使用披露留痕——发布或对外交付前跑 song-craft/scripts/ai_usage.py")
         return
     try:
         payload = json.load(open(path, encoding="utf-8"))

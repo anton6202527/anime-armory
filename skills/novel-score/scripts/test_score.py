@@ -116,9 +116,9 @@ class TestNovelScore(unittest.TestCase):
         self.assertEqual(report["title_check"]["collision"]["status"], "unchecked")
         self.assertNotIn("novel-title", [a["recommended_skill"] for a in report["next_actions"]])
 
-    def test_n2d_target_gets_adapt_decision(self):
+    def test_visual_target_stays_with_novel_decision(self):
         with open(os.path.join(self.tmp, "_设置.md"), "w", encoding="utf-8") as f:
-            f.write("# 设置\n- 目标平台：红果\n- 输出格式：txt,docx,n2d\n")
+            f.write("# 设置\n- 目标平台：红果\n- 输出格式：txt,docx\n")
         task = self.generate_score_task()
         mock_path = os.path.join(self.tmp, "mock.json")
         with open(mock_path, "w", encoding="utf-8") as f:
@@ -131,8 +131,8 @@ class TestNovelScore(unittest.TestCase):
             sys.argv = old_argv
         with open(os.path.join(self.score_dir, "score_report.json"), encoding="utf-8") as f:
             report = json.load(f)
-        self.assertEqual(report["production_decision"]["decision"], "n2d-adapt")
-        self.assertEqual(report["next_actions"][0]["recommended_skill"], "n2d")
+        self.assertEqual(report["production_decision"]["decision"], "go")
+        self.assertNotIn("external-adaptation", [a["recommended_skill"] for a in report["next_actions"]])
 
     def test_assessment_must_match_score_task(self):
         self.generate_score_task()
@@ -390,7 +390,7 @@ class TestNovelScore(unittest.TestCase):
 
 
 class TestFirstPartyGenrePrior(unittest.TestCase):
-    """选题→投放→反哺选题闭环：读 n2d-feedback 写的题材战绩库做第一方先验。"""
+    """选题→投放→反哺选题闭环：读题材战绩库做第一方先验。"""
 
     def _records(self):
         return [

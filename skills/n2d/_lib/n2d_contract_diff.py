@@ -43,6 +43,12 @@ _FIELD_ALIASES = {
     "景别阶梯": ("景别阶梯",),
 }
 assert set(_FIELD_ALIASES) == set(VISUAL_CONTRACT_FIELDS), "字段别名表必须覆盖契约五字段"
+# block/no-superset 名单手维护，引用字段名字符串——字段重命名时这里若 typo 会让 block 静默降级为
+# warn（且无人察觉）。模块加载即断言两者都是契约字段子集，与上面的别名断言同为「字段漂移自爆」守卫。
+assert set(BLOCK_ON_DRIFT) <= set(VISUAL_CONTRACT_FIELDS), \
+    "BLOCK_ON_DRIFT 必须是 VISUAL_CONTRACT_FIELDS 子集（字段重命名请同步，否则 block 漂移检测静默失效）"
+assert set(NO_AUTO_SUPERSET) <= set(VISUAL_CONTRACT_FIELDS), \
+    "NO_AUTO_SUPERSET 必须是 VISUAL_CONTRACT_FIELDS 子集（字段重命名请同步）"
 
 _BULLET_RE = re.compile(r"^\s*[-*•]\s*(.+?)\s*$")
 _HEAD_RE = re.compile(r"^(#{1,6})\s")

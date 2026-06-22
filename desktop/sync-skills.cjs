@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// /tod engine — copy the REAL skills/ (+ repo maintenance tools) from the repo
+// desktop-bundle engine (driven by `/toa --desktop`) — copy the REAL skills/ (+ repo maintenance tools) from the repo
 // into ./src-tauri/resources/ so they ship INSIDE the packaged .app/.dmg, making
 // the desktop app self-contained (install on any machine; no anime-arsenal
 // source checkout needed). With --demos, ALSO bundle each creative line's
@@ -7,7 +7,8 @@
 //
 // Runs automatically before `tauri build` via tauri.conf.json `beforeBuildCommand`
 // (skills only — demos are preserved, never auto-rebuilt unless you pass --demos).
-// Run manually via the /tod slash command, or `node sync-skills.cjs [--demos]`.
+// Run manually via `/toa --desktop[-demos]` (formerly the /tod slash command), or
+// directly `node sync-skills.cjs [--demos|--no-demos]`.
 //
 // Consumption (wired in src-tauri): a packaged app whose live DEFAULT_REPO is
 // absent falls back to <resourceDir>/resources as its skills repo (Rust
@@ -19,7 +20,8 @@ const path = require('path');
 const repo = path.resolve(__dirname, '..');
 const bundle = path.join(__dirname, 'src-tauri', 'resources');
 
-// the 5 creative lines, by product dir (mirror src-tauri/src/commands.rs LINES)
+// the 5 creative lines, by product dir under 创作区 (mirror src-tauri/src/commands.rs LINES)
+const CREATION_ROOT = '创作区';
 const LINES = ['制漫剧', '拍广告', '制MV', '写歌', '写小说'];
 
 const SKIP_NAMES = new Set(['__pycache__', 'node_modules', '.git', '.DS_Store', '_voicecache']);
@@ -45,7 +47,7 @@ const count = (dir) => {
 function champions() {
   const picks = [];
   for (const line of LINES) {
-    const lineDir = path.join(repo, line);
+    const lineDir = path.join(repo, CREATION_ROOT, line);
     if (!fs.existsSync(lineDir)) continue;
     let best = null;
     for (const e of fs.readdirSync(lineDir, { withFileTypes: true })) {
@@ -65,7 +67,7 @@ function main() {
   const clearDemos = process.argv.includes('--no-demos');
 
   if (!fs.existsSync(path.join(repo, 'skills'))) {
-    console.error('[tod] 找不到 ../skills —— 必须在 anime-arsenal 仓库内运行');
+    console.error('[desktop-bundle] 找不到 ../skills —— 必须在 anime-arsenal 仓库内运行');
     process.exit(1);
   }
   fs.mkdirSync(bundle, { recursive: true });
@@ -84,21 +86,21 @@ function main() {
     toolFiles = count(path.join(bundle, 'tools', 'shared-cleanup'));
   }
 
-  // 3) demos — opt-in. Each line's most-complete work, kept under demos/<line>/<work>.
+  // 3) demos — opt-in. Each line's most-complete work, kept under demos/创作区/<line>/<work>.
   //    Without --demos we LEAVE existing demos untouched (so a skills-only resync
-  //    before `tauri build` never wipes demos a prior /tod --demos opted into).
+  //    before `tauri build` never wipes demos a prior `--desktop-demos` opted into).
   const demosDir = path.join(bundle, 'demos');
   let demoPicks = [];
   if (clearDemos) {
     fs.rmSync(demosDir, { recursive: true, force: true });
-    console.log('[tod] demos 已清空（--no-demos）');
+    console.log('[desktop-bundle] demos 已清空（--no-demos）');
   } else if (withDemos) {
     fs.rmSync(demosDir, { recursive: true, force: true });
     demoPicks = champions();
     for (const p of demoPicks) {
-      const dst = path.join(demosDir, p.line, p.name);
+      const dst = path.join(demosDir, CREATION_ROOT, p.line, p.name);
       fs.mkdirSync(path.dirname(dst), { recursive: true });
-      fs.cpSync(path.join(repo, p.line, p.name), dst, { recursive: true, filter });
+      fs.cpSync(path.join(repo, CREATION_ROOT, p.line, p.name), dst, { recursive: true, filter });
     }
   }
 
@@ -107,15 +109,15 @@ function main() {
     synced_at: new Date().toISOString(),
     skills: count(path.join(bundle, 'skills')),
     tools: toolFiles,
-    demos: demoPicks.map((p) => ({ line: p.line, name: p.name, done: p.done })),
+    demos: demoPicks.map((p) => ({ root: CREATION_ROOT, line: p.line, name: p.name, done: p.done })),
   };
   fs.writeFileSync(path.join(bundle, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
 
   const demoLine = withDemos
     ? `+ demos: ${demoPicks.map((p) => `${p.line}/${p.name}(✅×${p.done})`).join(', ') || '（无作品）'}`
     : '（skills only — demos 保持原样，加 --demos 才重建）';
-  console.log(`[tod] bundled ${manifest.skills} skill files + ${toolFiles} tool files → src-tauri/resources/`);
-  console.log(`[tod] ${demoLine}`);
+  console.log(`[desktop-bundle] bundled ${manifest.skills} skill files + ${toolFiles} tool files → src-tauri/resources/`);
+  console.log(`[desktop-bundle] ${demoLine}`);
 }
 
 main();

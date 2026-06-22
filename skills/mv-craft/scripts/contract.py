@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 """Machine-readable contract for the mv-* family.
 
-自包含，不引用 n2d-*。生图后端治理与 n2d 同构（阶段1·解除 Codex 垄断），但在本文件
-内独立维护一份，符合 mv 线"不复用 n2d-* 家族 skill"的硬约定。
+自包含：生图后端治理、阶段表、选择点都在 mv 系列内独立维护。
 """
 from copy import deepcopy
 
@@ -40,7 +39,7 @@ MV_VIDEO_SPECS = ("预算充足", "预算一般", "预算不够")
 MV_ASPECTS = ("16:9", "9:16", "1:1")
 AI_VISUAL_USAGE_MODES = ("AI-generated", "AI-assisted", "未使用AI视觉")
 
-# ── 生图后端治理：阶段1（解除 Codex 垄断，与 n2d 同构，本线自持）──────────
+# ── 生图后端治理：阶段1（解除 Codex 垄断，本线自持）──────────────────────
 # `生图AI` 是真选择点，默认 Codex；放行官方多参考一致性后端；mv-image / mv-review
 # 不再因"非 Codex"拦截，只拦 ① 项目内后端混用 ② 逆向/未授权出图路径（安全 invariant）。
 # AI 标识/披露/水印不再由本流水线处理，移到工具之外按平台/地区法规自行处理，与本治理无关。

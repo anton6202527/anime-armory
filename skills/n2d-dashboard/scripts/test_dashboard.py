@@ -96,11 +96,46 @@ def test_image_preflight_gate_events_merge_image_qc(monkeypatch, tmp_path: Path)
     assert events[0]["qa_gate"]["blocks"] == 1
 
 
+def test_dashboard_passively_reads_consistency_ledger(tmp_path: Path) -> None:
+    root = tmp_path
+    write_progress(root)
+    path = root / "生产数据" / "consistency_ledger_第1集.json"
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps({
+        "kind": "n2d_consistency_ledger",
+        "counts": {"block": 1, "high": 0, "medium": 1},
+        "rows": [
+            {"id": "CHAR_01", "name": "沈念", "kind": "character", "overall": "block"},
+            {"id": "PROP_01", "name": "铜镜", "kind": "prop", "overall": "medium"},
+        ],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    data = dashboard.aggregate_events(str(root), [])
+    ep1 = next(item for item in data["episodes"] if item["episode"] == "第1集")
+    markdown = dashboard.render_markdown(data)
+
+    assert ep1["consistency_ledger"]["counts"]["block"] == 1
+    assert data["totals"]["consistency_ledger_counts"]["medium"] == 1
+    assert "## 一致性总账" in markdown
+    assert "沈念(block)" in markdown
+
+
 def test_image_qc_findings_prefers_existing_report(monkeypatch, tmp_path: Path) -> None:
     report_dir = tmp_path / "生产数据" / "image_qc" / "第1集"
     report_dir.mkdir(parents=True)
+    prompt = tmp_path / "出图" / "第1集" / "prompt" / "01_分镜出图.md"
+    prompt.parent.mkdir(parents=True)
+    prompt.write_text("## Clip 01\n", encoding="utf-8")
     (report_dir / "image_qc_第1集.json").write_text(
-        json.dumps({"qc_environment": {"precision_level": "none"}, "checks": {}, "lint": {"findings": []}}),
+        json.dumps({
+            "qc_environment": {"precision_level": "none"},
+            "checks": {},
+            "lint": {"findings": []},
+            "inputs_fingerprint": dashboard.artifact_fingerprint(
+                str(tmp_path),
+                ["出图/第1集/prompt/01_分镜出图.md"],
+            ),
+        }),
         encoding="utf-8",
     )
 
@@ -111,6 +146,79 @@ def test_image_qc_findings_prefers_existing_report(monkeypatch, tmp_path: Path) 
     findings = dashboard.run_image_qc_findings(str(tmp_path), "第1集", fail_closed=True)
 
     assert any(f["sev"] == "block" and f["dim"] == "image_qc_precision" for f in findings)
+
+
+def test_image_qc_findings_reruns_stale_report(monkeypatch, tmp_path: Path) -> None:
+    report_dir = tmp_path / "生产数据" / "image_qc" / "第1集"
+    report_dir.mkdir(parents=True)
+    prompt = tmp_path / "出图" / "第1集" / "prompt" / "01_分镜出图.md"
+    prompt.parent.mkdir(parents=True)
+    prompt.write_text("old", encoding="utf-8")
+    fp = dashboard.artifact_fingerprint(str(tmp_path), ["出图/第1集/prompt/01_分镜出图.md"])
+    prompt.write_text("new", encoding="utf-8")
+    (report_dir / "image_qc_第1集.json").write_text(
+        json.dumps({"qc_environment": {"precision_level": "full"}, "inputs_fingerprint": fp}),
+        encoding="utf-8",
+    )
+
+    class Proc:
+        returncode = 0
+        stdout = '[{"sev":"block","dim":"出图落档QC","msg":"rerun"}]'
+        stderr = ""
+
+    monkeypatch.setattr(dashboard.subprocess, "run", lambda *args, **kwargs: Proc())
+    findings = dashboard.run_image_qc_findings(str(tmp_path), "第1集", fail_closed=True)
+
+    assert findings == [{"sev": "block", "dim": "出图落档QC", "msg": "rerun"}]
+
+
+def test_image_qc_findings_reruns_report_missing_prop_confirmation_dependency(monkeypatch, tmp_path: Path) -> None:
+    report_dir = tmp_path / "生产数据" / "image_qc" / "第1集"
+    report_dir.mkdir(parents=True)
+    prompt = tmp_path / "出图" / "第1集" / "prompt" / "01_分镜出图.md"
+    prompt.parent.mkdir(parents=True)
+    prompt.write_text("current", encoding="utf-8")
+    (report_dir / "image_qc_第1集.json").write_text(
+        json.dumps({
+            "qc_environment": {"precision_level": "full"},
+            "checks": {},
+            "lint": {"findings": []},
+            "prop_shape_review": {
+                "total": 1,
+                "pending": 1,
+                "targets": [{"asset": "PROP_01", "png": "图片/Clip_01.png", "confirmed": False}],
+            },
+            "inputs_fingerprint": dashboard.artifact_fingerprint(
+                str(tmp_path),
+                ["出图/第1集/prompt/01_分镜出图.md"],
+            ),
+        }),
+        encoding="utf-8",
+    )
+
+    class Proc:
+        returncode = 0
+        stdout = "[]"
+        stderr = ""
+
+    monkeypatch.setattr(dashboard.subprocess, "run", lambda *args, **kwargs: Proc())
+    findings = dashboard.run_image_qc_findings(str(tmp_path), "第1集", fail_closed=True)
+
+    assert findings == []
+
+
+def test_image_preflight_filters_prop_shape_pixel_confirmation(monkeypatch, tmp_path: Path) -> None:
+    monkeypatch.setattr(
+        dashboard,
+        "image_qc_findings",
+        lambda root, episode: [
+            {"sev": "block", "dim": "multimodal_continuity", "loc": "图片/Clip_01.png",
+             "msg": "高风险道具禁形/尺寸未逐图确认：Clip 01 的 `PROP_01`"},
+            {"sev": "block", "dim": "prompt lint", "loc": "Clip_02", "msg": "bad CHAR_id"},
+        ],
+    )
+    findings = dashboard.image_preflight_qc_findings(str(tmp_path), "第1集")
+    assert findings == [{"sev": "block", "dim": "prompt lint", "loc": "Clip_02", "msg": "bad CHAR_id"}]
 
 
 def test_aggregate_generation_cost_redraw_and_qa(tmp_path: Path) -> None:
@@ -164,6 +272,97 @@ def test_aggregate_generation_cost_redraw_and_qa(tmp_path: Path) -> None:
     assert ep1["progress_next_stage"] == "出图"
 
 
+def test_aggregate_blocks_missing_latest_pass_deliverable(tmp_path: Path) -> None:
+    write_progress(tmp_path)
+    asset = "出图/第1集/图片/Clip_01.png"
+    events = [
+        dashboard.make_event(
+            "第1集",
+            "image",
+            "generation",
+            generation={"asset": asset, "status": "pass"},
+        )
+    ]
+
+    result = dashboard.aggregate_events(str(tmp_path), events)
+    ep1 = next(item for item in result["episodes"] if item["episode"] == "第1集")
+
+    assert ep1["generation_passes"] == 1
+    assert ep1["qa_blockers"] == 1
+    assert ep1["deliverable_pass_rate"] == 0.0
+    assert ep1["missing_deliverables"][0]["asset"] == asset
+
+
+def test_aggregate_does_not_block_existing_latest_pass_deliverable(tmp_path: Path) -> None:
+    write_progress(tmp_path)
+    asset = "出图/第1集/图片/Clip_01.png"
+    path = tmp_path / asset
+    path.parent.mkdir(parents=True)
+    path.write_bytes(b"png")
+    events = [
+        dashboard.make_event(
+            "第1集",
+            "image",
+            "generation",
+            generation={"asset": asset, "status": "pass"},
+        )
+    ]
+
+    result = dashboard.aggregate_events(str(tmp_path), events)
+    ep1 = next(item for item in result["episodes"] if item["episode"] == "第1集")
+
+    assert ep1["qa_blockers"] == 0
+    assert ep1["missing_deliverables"] == []
+
+
+def test_aggregate_passively_counts_fresh_standalone_image_qc(tmp_path: Path) -> None:
+    write_progress(tmp_path)
+    report_dir = tmp_path / "生产数据" / "image_qc" / "第1集"
+    report_dir.mkdir(parents=True)
+    prompt = tmp_path / "出图" / "第1集" / "prompt" / "01_分镜出图.md"
+    prompt.parent.mkdir(parents=True)
+    prompt.write_text("## Clip 01\n", encoding="utf-8")
+    (report_dir / "image_qc_第1集.json").write_text(
+        json.dumps({
+            "summary": {"hard_blocks": 2, "advisory": 3},
+            "inputs_fingerprint": dashboard.artifact_fingerprint(
+                str(tmp_path),
+                ["出图/第1集/prompt/01_分镜出图.md"],
+            ),
+        }, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+    result = dashboard.aggregate_events(str(tmp_path), [])
+    ep1 = next(item for item in result["episodes"] if item["episode"] == "第1集")
+
+    assert ep1["qa_blockers"] == 2
+    assert ep1["qa_warnings"] == 3
+    assert ep1["consistency_blockers"] == 2
+    assert ep1["image_qc_passive"]["freshness"] == "fresh"
+
+
+def test_aggregate_blocks_stale_standalone_image_qc(tmp_path: Path) -> None:
+    write_progress(tmp_path)
+    report_dir = tmp_path / "生产数据" / "image_qc" / "第1集"
+    report_dir.mkdir(parents=True)
+    prompt = tmp_path / "出图" / "第1集" / "prompt" / "01_分镜出图.md"
+    prompt.parent.mkdir(parents=True)
+    prompt.write_text("old", encoding="utf-8")
+    fp = dashboard.artifact_fingerprint(str(tmp_path), ["出图/第1集/prompt/01_分镜出图.md"])
+    prompt.write_text("new", encoding="utf-8")
+    (report_dir / "image_qc_第1集.json").write_text(
+        json.dumps({"summary": {"hard_blocks": 0, "advisory": 0}, "inputs_fingerprint": fp}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+    result = dashboard.aggregate_events(str(tmp_path), [])
+    ep1 = next(item for item in result["episodes"] if item["episode"] == "第1集")
+
+    assert ep1["qa_blockers"] == 1
+    assert ep1["image_qc_passive"]["freshness"] == "stale"
+
+
 def test_append_and_build_writes_dashboard_files(tmp_path: Path) -> None:
     write_progress(tmp_path)
     event = dashboard.make_event(
@@ -185,6 +384,27 @@ def test_append_and_build_writes_dashboard_files(tmp_path: Path) -> None:
     assert "n2d 生产数据仪表盘" in (prod / "dashboard.md").read_text(encoding="utf-8")
     assert (prod / "production_events.lock").exists()
     assert [p for p in prod.iterdir() if ".tmp." in p.name] == []
+
+
+def test_waiver_command_records_auditable_event(tmp_path: Path) -> None:
+    """逃生口/闸门放行写一条 waiver 事件——执行时「松动」从静默变成 dashboard 可审计留痕。"""
+    rc = dashboard.main([
+        "waiver", str(tmp_path),
+        "--episode", "第1集", "--stage", "image",
+        "--waiver", "skip-final-gate", "--reason", "operator override",
+        "--scope", "第1集", "--no-build",
+    ])
+    assert rc == 0
+    events = dashboard.load_events(str(tmp_path))
+    waivers = [e for e in events if e.get("event") == "waiver"]
+    assert len(waivers) == 1
+    w = waivers[0]
+    assert w["stage"] == "image"
+    assert w["meta"]["waiver"] == "skip-final-gate"
+    assert w["meta"]["reason"] == "operator override"
+    # waiver 事件不带 generation/cost/qa，build 聚合必须无害容忍（不计入一次通过率/重抽率）
+    result = dashboard.build(str(tmp_path), write=False)
+    assert result["totals"]["generation_attempts"] == 0
 
 
 def test_gate_replace_predicate_keeps_latest_stage_events(tmp_path: Path) -> None:
@@ -554,3 +774,14 @@ def test_cost_keys_split_by_quality_tier():
     assert dashboard.cost_keys({"unit": "USD", "provider": "seedance", "quality_tier": "pro"}) == (
         "USD", "seedance@pro:USD")
     assert dashboard.cost_keys({"unit": "USD", "provider": "seedance"}) == ("USD", "seedance:USD")
+
+
+def test_cost_keys_fold_urgency_tier():
+    # G8：batch_24h 时效档加 #后缀拆 realtime vs batch 成本；realtime（默认）不污染旧键
+    assert dashboard.cost_keys({"unit": "USD", "provider": "seedance", "urgency_tier": "batch_24h"}) == (
+        "USD", "seedance#batch_24h:USD")
+    assert dashboard.cost_keys({"unit": "USD", "provider": "seedance", "quality_tier": "fast", "urgency_tier": "batch_24h"}) == (
+        "USD", "seedance@fast#batch_24h:USD")
+    # realtime / 缺省 → 维持旧键，老事件零影响
+    assert dashboard.cost_keys({"unit": "USD", "provider": "seedance", "urgency_tier": "realtime"}) == (
+        "USD", "seedance:USD")

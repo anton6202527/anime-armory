@@ -110,6 +110,48 @@ class BuildReviewReportTest(unittest.TestCase):
             self.assertEqual(by_dim["prose"]["return_to_stage"], "draft")
             self.assertIn("读者契约", by_dim["theme"]["fix_hint"])
 
+    def test_consistency_audit_blockers_are_promoted_into_review_report(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            os.makedirs(os.path.join(tmp, "审稿"), exist_ok=True)
+            mechanical = os.path.join(tmp, "审稿", "mechanical_findings.json")
+            with open(mechanical, "w", encoding="utf-8") as f:
+                json.dump({"kind": "novel_mechanical_findings", "findings": []}, f, ensure_ascii=False)
+            with open(os.path.join(tmp, "审稿", "consistency_audit.json"), "w", encoding="utf-8") as f:
+                json.dump({
+                    "reader_contract": {
+                        "ran": True,
+                        "json": os.path.join(tmp, "审稿", "reader_contract_sentry_summary.json"),
+                        "alerts": 1,
+                        "blocking": 1,
+                    },
+                    "logic_sentry": {
+                        "ran": True,
+                        "json": os.path.join(tmp, "审稿", "logic_alerts_summary.json"),
+                        "alerts": 2,
+                        "blocking": 1,
+                    },
+                    "style_drift": {
+                        "ran": True,
+                        "json": os.path.join(tmp, "审稿", "style_drift_summary.json"),
+                        "drifted": 1,
+                    },
+                    "power_system": {
+                        "ran": True,
+                        "json": os.path.join(tmp, "审稿", "power_system_findings.json"),
+                        "alerts": 0,
+                        "blocking": 0,
+                    },
+                }, f, ensure_ascii=False)
+
+            report = brr.build_report(tmp, mechanical)
+            by_dim = {finding["dimension"]: finding for finding in report["findings"]}
+            self.assertEqual(report["summary"]["blocking_count"], 2)
+            self.assertTrue(by_dim["reader_promise"]["blocking"])
+            self.assertTrue(by_dim["logic"]["blocking"])
+            self.assertEqual(by_dim["logic"]["recommended_skill"], "novel-wiki")
+            self.assertFalse(by_dim["style_drift"]["blocking"])
+            self.assertEqual(by_dim["style_drift"]["recommended_skill"], "novel-style")
+
 
 if __name__ == "__main__":
     unittest.main()

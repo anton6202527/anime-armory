@@ -46,10 +46,25 @@ def test_pairs_from_payload_pulls_all_shots():
     payload = {"checks": {
         "scene": {"shots": [{"png": "图片/Clip_01.png", "scene": "LOC_01", "verdict": "ok"}]},
         "multimodal": {"shots": [{"png": "图片/Clip_02.png", "asset": "PROP_01", "verdict": "warn"}]},
+        "outfit": {"shots": [{"png": "图片/Clip_03.png", "char": "沈念", "verdict": "ok"}]},
     }}
     pairs = sd._pairs_from_payload(payload)
-    assert {p["kind"] for p in pairs} == {"scene", "asset"}
+    # 服装(outfit)现在也进语义对照——本模块文档点名的头号用例（同色不同剪裁，palette 抓不到）。
+    assert {p["kind"] for p in pairs} == {"scene", "asset", "outfit"}
+    outfit = next(p for p in pairs if p["kind"] == "outfit")
+    assert outfit["asset"] == "沈念" and outfit["png"] == "图片/Clip_03.png"
     assert any(p["palette_verdict"] == "ok" for p in pairs)   # 全镜，不止 block/warn
+
+
+def test_resolve_char_makeup_ref_prefers_normal_form_excludes_face(tmp_path):
+    base = tmp_path / "出图" / "共享" / "图片"
+    base.mkdir(parents=True)
+    for n in ("定妆_沈念_常态.png", "定妆_沈念_脸部特写.png", "定妆_沈念_表情_怒目.png"):
+        (base / n).write_bytes(b"x")
+    ref = sd._resolve_char_makeup_ref(tmp_path, "沈念")
+    assert ref is not None and ref.endswith("定妆_沈念_常态.png")   # 优先常态全身，排除脸部特写/表情
+    assert sd._resolve_char_makeup_ref(tmp_path, "查无此人") is None
+    assert sd._resolve_char_makeup_ref(tmp_path, "") is None
 
 
 def test_model_download_is_opt_in(monkeypatch):

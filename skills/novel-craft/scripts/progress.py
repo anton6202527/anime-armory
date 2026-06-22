@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Generic progress scanner/updater for 写小说/<项目>/.
+"""Generic progress scanner/updater for 创作区/写小说/<项目>/.
 
 Usage:
     python3 skills/novel-craft/scripts/progress.py <作品根> [--limit 5]

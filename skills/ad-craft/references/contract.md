@@ -1,11 +1,11 @@
 # ad-* 机器契约（人读版）
 
-机器字段以 `scripts/contract.py` 为准。拍广告线**自包含**，不复用 n2d-* / mv-*。
+机器字段以 `scripts/contract.py` 为准。拍广告线**自包含**：字段、阶段、选择点和交付矩阵都在本系列独立维护。
 
 ## 作品根（不拆集）
 
 ```text
-拍广告/<项目名>/
+创作区/拍广告/<项目名>/
 ├── _设置.md / _meta.json / _进度.md
 ├── 需求/
 │   ├── brief.md            客户需求（人读）
@@ -56,7 +56,7 @@
 | `handoff` | AI披露/交付 | `ad-craft/scripts/ai_usage.py` | AI usage disclosure |
 
 > **不拆集**：一条主片是整体；`_进度.md` 用「阶段进度表」而非逐集矩阵。
-> **音频先行**：VO 实测时长驱动镜头时长，`script` 跑两遍（脚本 pass → 配音后 `storyboard` pass），与 n2d「配音先行」同构。广告常是「音乐床 + VO」混合驱动，音乐床作为节奏锚一并记录。
+> **音频先行**：VO 实测时长驱动镜头时长，`script` 跑两遍（脚本 pass → 配音后 `storyboard` pass）。广告常是「音乐床 + VO」混合驱动，音乐床作为节奏锚一并记录。
 
 ## cutdown / 多版本轴（不拆集的并行轴）
 

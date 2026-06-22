@@ -115,3 +115,121 @@ def test_readiness_ready_requires_inputs_and_contacts(tmp_path):
     for f in mc.CONTACT_FIELDS:
         man[f] = ["x"]
     assert mc.readiness(man, root, ["pose_sequence"])["gate_pass"] is True
+
+
+# ---- 步内中间产物指纹缓存（G11）----
+
+def _seed_frame(root, rel, content=b"px"):
+    """写一张假源首/尾帧 PNG（内容指纹只看字节，不需真 PNG）。"""
+    full = os.path.join(root, rel)
+    os.makedirs(os.path.dirname(full), exist_ok=True)
+    with open(full, "wb") as fh:
+        fh.write(content)
+    return rel
+
+
+def _seed_output(root, ep, clip, key):
+    """写该输入键的产物文件（让 _asset_present 命中）。返回 out_rel。"""
+    out_rel = f"{mc.control_dir_rel(ep, clip)}/{mc.input_filename(key)}"
+    # 产物是 %03d glob 模式 → 落一个具体帧
+    full = os.path.join(root, out_rel.replace("%03d", "000"))
+    os.makedirs(os.path.dirname(full), exist_ok=True)
+    open(full, "wb").close()
+    return out_rel
+
+
+def test_cache_fingerprint_folds_frames_and_params(tmp_path):
+    root = str(tmp_path)
+    rel = _seed_frame(root, "出图/第1集/图片/镜头01.png", b"aaa")
+    fp = mc.cache_fingerprint(root, [rel], "pose_sequence")
+    assert fp["sha"] and rel in fp["files"]
+    assert fp["params"] == mc._params_for("pose_sequence")
+    # 改源帧像素 → base sha 变
+    _seed_frame(root, rel, b"bbb")
+    assert mc.cache_fingerprint(root, [rel], "pose_sequence")["sha"] != fp["sha"]
+    # 同源帧不同输入键 → base sha 同（params 单独存），但 params 不同 → 缓存判定会失配
+    _seed_frame(root, rel, b"aaa")
+    depth_fp = mc.cache_fingerprint(root, [rel], "depth_sequence")
+    assert depth_fp["sha"] == fp["sha"]
+    assert depth_fp["params"] != fp["params"]
+
+
+def test_cache_is_fresh_tracks_frames_and_params(tmp_path):
+    root = str(tmp_path)
+    rel = _seed_frame(root, "出图/第1集/图片/镜头01.png", b"aaa")
+    rec = mc.cache_fingerprint(root, [rel], "pose_sequence")
+    assert mc.cache_is_fresh(rec, root, [rel], "pose_sequence") is True
+    # 源帧变 → 不新鲜
+    _seed_frame(root, rel, b"ccc")
+    assert mc.cache_is_fresh(rec, root, [rel], "pose_sequence") is False
+    # 记录缺失/形状不对 → False（诚实）
+    assert mc.cache_is_fresh(None, root, [rel], "pose_sequence") is False
+    assert mc.cache_is_fresh({"sha": "x"}, root, [rel], "pose_sequence") is False
+    # 参数版本变了（模拟 bump）→ 不新鲜
+    _seed_frame(root, rel, b"aaa")
+    stale_params = dict(rec, params={**rec["params"], "_version": 999})
+    assert mc.cache_is_fresh(stale_params, root, [rel], "pose_sequence") is False
+
+
+def test_cache_decision_skip_when_fresh(tmp_path):
+    root, ep, clip, key = str(tmp_path), "第1集", "Clip_01", "pose_sequence"
+    rel = _seed_frame(root, "出图/第1集/图片/镜头01.png", b"aaa")
+    out_rel = _seed_output(root, ep, clip, key)
+    man = mc.record_cache_fingerprint(mc.build_skeleton(ep, clip, [key]), root, key, [rel])
+    d = mc.cache_decision(man, root, key, [rel], out_rel)
+    assert d["action"] == "skip" and d["reason"] == "fresh"
+
+
+def test_cache_decision_extract_when_frames_changed(tmp_path):
+    root, ep, clip, key = str(tmp_path), "第1集", "Clip_01", "pose_sequence"
+    rel = _seed_frame(root, "出图/第1集/图片/镜头01.png", b"aaa")
+    out_rel = _seed_output(root, ep, clip, key)
+    man = mc.record_cache_fingerprint(mc.build_skeleton(ep, clip, [key]), root, key, [rel])
+    _seed_frame(root, rel, b"DIFFERENT")  # 源帧改了
+    d = mc.cache_decision(man, root, key, [rel], out_rel)
+    assert d["action"] == "extract" and d["reason"] == "stale"
+
+
+def test_cache_decision_extract_when_output_missing(tmp_path):
+    root, ep, clip, key = str(tmp_path), "第1集", "Clip_01", "pose_sequence"
+    rel = _seed_frame(root, "出图/第1集/图片/镜头01.png", b"aaa")
+    out_rel = f"{mc.control_dir_rel(ep, clip)}/{mc.input_filename(key)}"  # 不落产物
+    man = mc.record_cache_fingerprint(mc.build_skeleton(ep, clip, [key]), root, key, [rel])
+    d = mc.cache_decision(man, root, key, [rel], out_rel)
+    # 指纹新鲜但产物不在 → 不臆造跳过
+    assert d["action"] == "extract" and d["reason"] == "missing_output"
+
+
+def test_cache_decision_extract_when_no_fingerprint(tmp_path):
+    root, ep, clip, key = str(tmp_path), "第1集", "Clip_01", "pose_sequence"
+    rel = _seed_frame(root, "出图/第1集/图片/镜头01.png", b"aaa")
+    out_rel = _seed_output(root, ep, clip, key)
+    man = mc.build_skeleton(ep, clip, [key])  # 无 generate_cache
+    d = mc.cache_decision(man, root, key, [rel], out_rel)
+    assert d["action"] == "extract" and d["reason"] == "no_fingerprint"
+
+
+def test_cache_decision_force_overrides_fresh(tmp_path):
+    root, ep, clip, key = str(tmp_path), "第1集", "Clip_01", "pose_sequence"
+    rel = _seed_frame(root, "出图/第1集/图片/镜头01.png", b"aaa")
+    out_rel = _seed_output(root, ep, clip, key)
+    man = mc.record_cache_fingerprint(mc.build_skeleton(ep, clip, [key]), root, key, [rel])
+    # 不 force → skip
+    assert mc.cache_decision(man, root, key, [rel], out_rel)["action"] == "skip"
+    # --no-cache → 强制重抽，留痕 forced
+    d = mc.cache_decision(man, root, key, [rel], out_rel, force=True)
+    assert d["action"] == "extract" and d["reason"] == "forced"
+
+
+def test_env_truthy():
+    assert mc._env_truthy("1") and mc._env_truthy("true") and mc._env_truthy("ON")
+    assert not mc._env_truthy("") and not mc._env_truthy(None) and not mc._env_truthy("0")
+
+
+def test_record_cache_fingerprint_is_pure(tmp_path):
+    root = str(tmp_path)
+    rel = _seed_frame(root, "出图/第1集/图片/镜头01.png", b"aaa")
+    man = mc.build_skeleton("第1集", "Clip_01", ["pose_sequence"])
+    out = mc.record_cache_fingerprint(man, root, "pose_sequence", [rel])
+    assert "generate_cache" not in man  # 入参未被就地改
+    assert "pose_sequence" in out["generate_cache"]

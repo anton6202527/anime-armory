@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
-"""mv-image 出图落档机检 image_qc —— MV 版的「出图落档一致性机检」，对标 n2d-image 的 image_qc。
+"""mv-image 出图落档机检 image_qc —— MV 的「出图落档一致性机检」。
 
 MV 是单主角跨 16-64 个 clip 的脸一致性重灾区，但 mv-image 此前**没有任何机检脚本**——
 视觉一致性 100% 靠 SKILL.md + references/visual_consistency.md 的散文规则。本脚本把
 「主角脸是否漂、主色是否漂、锚点句是否真的拼进了 prompt」三件事在**刚出完一批图、还没继续**的
 最便宜的点机检初筛，省下等 mv-review 审片才发现的返工。
 
-**mv 线自包含**：本文件不 import 任何 n2d-* 模块；脸 embedding QC 的做法是从
-n2d-image/n2d-review 的 image_qc/face_consistency **vendored（复制 + 改写）**而来的独立副本
-（市场验证过的 insightface/buffalo_l 自标定余弦 flag-band），不是跨线 import。
+**mv 线自包含**：本文件内置脸 embedding QC、Pillow 降级、prompt lint 与报告 schema，
+不读取或导入其它创作系列的实现。
 
 三类检查：
 1. 主角脸漂移 G1（需 insightface · 缺则优雅降级）：
@@ -25,7 +24,7 @@ n2d-image/n2d-review 的 image_qc/face_consistency **vendored（复制 + 改写�
 落档判定：block=主角脸崩，必须重抽；warn=人判二次；ok=放行。退出码恒 0（建议性闸门）。
 mv 的『筛选宽容铁律』：只有脸/画风漂到识别不出才硬拦，主色/锚点轻微偏差是 advisory。
 
-报告写 `生产数据/image_qc/image_qc.json`(+`.md`)，shape/severity 镜像 n2d。
+报告写 `生产数据/image_qc/image_qc.json`(+`.md`)，schema 由本文件维护。
 
 用法：
   python3 image_qc.py <作品根> [--json]
@@ -50,7 +49,7 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
-# verdict 严重度（与 n2d 同序；noface=图里没脸，介于 ok 与 warn）。
+# verdict 严重度；noface=图里没脸，介于 ok 与 warn。
 SEVERITY = {"ok": 0, "info": 0, "noface": 1, "warn": 2, "block": 3}
 
 DEFAULT_MARGIN = 0.08
@@ -239,11 +238,21 @@ def palette_verdict(dominant: Sequence[Tuple[int, int, int]],
 # visual_consistency.md 规定每张分镜 prompt 末尾固定拼的锚点块字段。
 ANCHOR_FIELDS = {
     "identity": ("身份锚点", "lead_identity_anchor", "主角锚点", "锚点句"),
+    "reference": ("参考输入", "reference_inputs", "参考图", "后端主体", "主体库", "LoRA"),
     "visual": ("视觉锚点", "global_style", "palette_anchor", "视觉风格"),
     "forbidden": ("禁止漂移", "forbidden_drift", "禁漂", "不可漂"),
 }
 # 缺哪些块算 warn（identity/forbidden 是脸/画风护栏，最该有；visual 次之）。
-REQUIRED_ANCHOR_KEYS = ("identity", "visual", "forbidden")
+REQUIRED_ANCHOR_KEYS = ("identity", "reference", "visual", "forbidden")
+
+PROHIBITED_LOCAL_PATCH_STRONG_TOKENS = (
+    "local_face_patch", "face_patch", "facefix", "faceswap", "face_swap", "inswapper",
+    "facefusion", "roop", "poisson", "alpha_blend", "pasteback", "paste_back",
+    "贴脸", "换脸", "裁脸", "抠脸", "本地贴脸",
+)
+PROHIBITED_LOCAL_PATCH_OPERATION_TOKENS = (
+    "patch", "paste", "blend", "clone", "swap", "修脸", "贴回", "贴入", "移植",
+)
 
 
 def anchor_block_presence(text: str) -> Dict[str, bool]:
@@ -260,7 +269,9 @@ def lint_clip_prompt(clip_id: str, prompt_text: Optional[str]) -> List[Dict[str,
                          "msg": f"{clip_id}：clip_plan 指向的出图 prompt 文件不存在——先跑 mv-plan 或补 prompt 再出图。"})
         return findings
     present = anchor_block_presence(prompt_text)
-    label = {"identity": "身份锚点(lead_identity_anchor)", "visual": "视觉锚点(global_style/palette_anchor)",
+    label = {"identity": "身份锚点(lead_identity_anchor)",
+             "reference": "参考输入(reference_inputs)",
+             "visual": "视觉锚点(global_style/palette_anchor)",
              "forbidden": "禁止漂移(forbidden_drift)"}
     for key in REQUIRED_ANCHOR_KEYS:
         if not present.get(key):
@@ -605,6 +616,113 @@ def run_palette_check(root: Path, threshold: float = PALETTE_DRIFT_THRESHOLD) ->
     return result
 
 
+def _production_events_path(root: Path) -> Path:
+    return root / "生产数据" / "production_events.jsonl"
+
+
+def _load_production_events(root: Path) -> List[Dict[str, Any]]:
+    path = _production_events_path(root)
+    if not path.exists():
+        return []
+    rows: List[Dict[str, Any]] = []
+    try:
+        for line in path.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            item = json.loads(line)
+            if isinstance(item, dict):
+                rows.append(item)
+    except Exception:
+        return []
+    return rows
+
+
+def _event_mapping(event: Mapping[str, Any], key: str) -> Mapping[str, Any]:
+    value = event.get(key)
+    return value if isinstance(value, Mapping) else {}
+
+
+def _event_asset_rel(root: Path, event: Mapping[str, Any]) -> Optional[str]:
+    generation = _event_mapping(event, "generation")
+    asset = generation.get("asset") or event.get("asset") or event.get("path")
+    if not asset:
+        return None
+    raw = str(asset).strip()
+    if not raw:
+        return None
+    p = Path(raw)
+    if p.is_absolute():
+        try:
+            return p.resolve().relative_to(root.resolve()).as_posix()
+        except Exception:
+            return p.as_posix()
+    return p.as_posix()
+
+
+def _is_prohibited_local_patch_event(event: Mapping[str, Any]) -> bool:
+    generation = _event_mapping(event, "generation")
+    meta = _event_mapping(event, "meta")
+    cost = _event_mapping(event, "cost")
+    fields = [
+        event.get("provider"), event.get("source"), event.get("method"), event.get("event"),
+        cost.get("provider"), cost.get("method"),
+        generation.get("provider"), generation.get("method"), generation.get("redraw_reason"),
+        meta.get("provider"), meta.get("method"), meta.get("tool"),
+    ]
+    text = " ".join(str(v) for v in fields if v is not None).lower()
+    if any(token in text for token in PROHIBITED_LOCAL_PATCH_STRONG_TOKENS):
+        return True
+    return ("face" in text or "脸" in text) and any(
+        token in text for token in PROHIBITED_LOCAL_PATCH_OPERATION_TOKENS
+    )
+
+
+def prohibited_local_patch_outputs(root: Path) -> Dict[str, Any]:
+    """Reject local face-paste/faceswap outputs recorded as final image artifacts.
+
+    MV can use normal crop/color/archive work, but a clip frame whose latest image
+    event says it was made by local face patching must not be treated as a clean
+    image_qc pass. The fix is to regenerate the frame through the selected image
+    backend with real reference inputs.
+    """
+    latest: Dict[str, Tuple[int, Dict[str, Any]]] = {}
+    for idx, event in enumerate(_load_production_events(root), start=1):
+        stage = str(event.get("stage") or "").strip()
+        if stage and stage != "image":
+            continue
+        ev = str(event.get("event") or "").strip()
+        if ev and ev not in {"generation", "redraw", "fix", "repair"}:
+            continue
+        rel = _event_asset_rel(root, event)
+        if not rel or not rel.lower().endswith((".png", ".jpg", ".jpeg", ".webp")):
+            continue
+        latest[rel] = (idx, event)
+
+    outputs: List[Dict[str, Any]] = []
+    for rel, (line_no, event) in latest.items():
+        if not _is_prohibited_local_patch_event(event):
+            continue
+        generation = _event_mapping(event, "generation")
+        meta = _event_mapping(event, "meta")
+        outputs.append({
+            "png": rel,
+            "clip": _clip_key(rel),
+            "line": line_no,
+            "provider": str(generation.get("provider") or event.get("provider") or event.get("source") or ""),
+            "method": str(meta.get("method") or generation.get("method") or event.get("method") or ""),
+            "reason": str(generation.get("redraw_reason") or event.get("reason") or ""),
+            "verdict": "block",
+        })
+    outputs.sort(key=lambda r: (str(r.get("clip") or ""), str(r.get("png") or "")))
+    return {
+        "available": bool(_production_events_path(root).exists()),
+        "event_path": str(_production_events_path(root)),
+        "outputs": outputs,
+        "summary": {"block": len(outputs), "warn": 0, "ok": 0},
+    }
+
+
 def run_pixel_checks(root: Path, margin: float = DEFAULT_MARGIN,
                      palette_threshold: float = PALETTE_DRIFT_THRESHOLD) -> Dict[str, Any]:
     """脸漂移 G1 + 主色 palette；每项独立 try——某项不可用只影响该项。"""
@@ -620,7 +738,7 @@ def run_pixel_checks(root: Path, margin: float = DEFAULT_MARGIN,
     return checks
 
 
-# ── 汇总（hard vs advisory；与 n2d 同哲学） ──────────────────────────────────
+# ── 汇总（hard vs advisory）─────────────────────────────────────────────────
 
 # HARD：主角脸崩（insightface 模式 block=真崩脸 / Pillow 模式 block=图损坏/不存在）。
 # ADVISORY：主色 palette 初筛、锚点 lint、降级——汇报但不强制重抽（MV 筛选宽容）。
@@ -663,6 +781,10 @@ def summarize(payload: Dict[str, Any]) -> Dict[str, Any]:
     l_block = sum(1 for f in lint.get("findings", []) if f.get("level") == "block")
     rows_by_check["lint"] = {"block": l_block, "warn": l_warn, "noface": 0, "ok": 0}
     advisory += l_block + l_warn   # 锚点 lint 全 advisory（缺锚点块不硬拦，提示补）
+    patch_outputs = (payload.get("prohibited_local_patch_outputs") or {}).get("outputs") or []
+    if patch_outputs:
+        rows_by_check["prohibited_local_patch"] = {"block": len(patch_outputs), "warn": 0, "noface": 0, "ok": 0}
+        hard += len(patch_outputs)
     unavailable = unavailable_visual_checks(payload)
     face_mode = str((payload.get("checks", {}).get("face") or {}).get("mode") or "")
     degraded = bool(unavailable) or face_mode in FACE_DEGRADED_MODES
@@ -713,14 +835,14 @@ def qc_environment(payload: Dict[str, Any], *, with_pixel: bool = True) -> Dict[
     }
 
 
-# ── 转 findings（mv-review / dashboard 接入用，与 n2d 同形） ───────────────────
+# ── 转 findings（mv-review / dashboard 接入用）──────────────────────────────
 
 def _qc_finding(sev: str, dim: str, loc: Optional[str], msg: str) -> Dict[str, Any]:
     return {"sev": sev, "dim": dim, "loc": loc, "msg": msg, "return_to_stage": "image"}
 
 
 def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """image_qc payload → findings 列表（与 n2d 同形）。主角脸崩=block，主色/锚点=warn。纯函数·可测。"""
+    """image_qc payload → findings 列表。主角脸崩=block，主色/锚点=warn。纯函数·可测。"""
     out: List[Dict[str, Any]] = []
     checks = payload.get("checks", {}) or {}
     for key in unavailable_visual_checks(payload):
@@ -742,6 +864,11 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
                                    "（非阻断，MV 段落允许加亮/变暗）"))
     for f in (payload.get("lint", {}) or {}).get("findings", []):
         out.append(_qc_finding("warn", "anchor_prompt_lint", None, f.get("msg")))
+    for row in (payload.get("prohibited_local_patch_outputs") or {}).get("outputs", []):
+        out.append(_qc_finding("block", "local_patch_prohibited", row.get("png"),
+                               f"生产事件账本显示该 MV 帧来自本地贴脸/换脸/混合修复：{row.get('png')} "
+                               f"（line={row.get('line')} method={row.get('method')}）。"
+                               "不得用本地身份像素贴回画面来通过一致性 QC，需回 mv-image 重抽。"))
     return out
 
 
@@ -776,6 +903,8 @@ def to_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
     for s in (payload.get("checks", {}).get("face") or {}).get("shots", []):
         if s.get("verdict") == "block":
             add(s.get("png") or s.get("clip"), "主角脸崩 G1")
+    for row in (payload.get("prohibited_local_patch_outputs") or {}).get("outputs", []):
+        add(row.get("png") or row.get("clip"), "本地贴脸/换脸修复产物禁入")
     return sorted(by_clip.values(), key=lambda d: d["clip"])
 
 
@@ -803,6 +932,8 @@ def to_strict_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
     for f in (payload.get("lint", {}) or {}).get("findings", []):
         if f.get("level") in ("block", "warn"):
             add(f.get("msg"), f"strict:anchor:{f.get('code') or f.get('level')}")
+    for row in (payload.get("prohibited_local_patch_outputs") or {}).get("outputs", []):
+        add(row.get("png") or row.get("clip"), "strict:本地贴脸/换脸修复产物禁入")
     return sorted(by_clip.values(), key=lambda d: d["clip"])
 
 
@@ -835,6 +966,7 @@ def run_qc(root: Path, with_pixel: bool = True, margin: float = DEFAULT_MARGIN,
         with contextlib.redirect_stdout(sys.stderr):
             payload["checks"] = run_pixel_checks(root, margin, palette_threshold)
     payload["lint"] = lint_prompts(root)
+    payload["prohibited_local_patch_outputs"] = prohibited_local_patch_outputs(root)
     payload["summary"] = summarize(payload)
     payload["qc_environment"] = qc_environment(payload, with_pixel=with_pixel)
     payload = json_safe(payload)
@@ -862,7 +994,7 @@ def render_markdown(payload: Dict[str, Any]) -> str:
     by = summary.get("by_check", {})
     checks = payload.get("checks", {})
     lines = [
-        "# mv-image QC（出图落档机检 · MV 版，对标 n2d-image image_qc）",
+        "# mv-image QC（出图落档机检）",
         "",
         f"- 总判定: **{summary.get('verdict', 'ok')}** · 硬阻断 {summary.get('hard_blocks', 0)}（主角脸崩，必须重抽）"
         f" · 非阻断初筛 {summary.get('advisory', 0)} · 视觉降级 {len(summary.get('unavailable_visual_checks') or [])}",
@@ -903,6 +1035,17 @@ def render_markdown(payload: Dict[str, Any]) -> str:
             lines.append(f"  - 🟡 {f.get('msg')}")
     for n in lint.get("notes", []):
         lines.append(f"- note: {n}")
+    patch = payload.get("prohibited_local_patch_outputs") or {}
+    patch_rows = patch.get("outputs") or []
+    lines.extend(["", "## 禁用本地身份像素修复检查"])
+    if patch_rows:
+        lines.append(f"- 🔴 发现 {len(patch_rows)} 个本地贴脸/换脸/混合修复产物，不得进入 mv-video。")
+        for row in patch_rows:
+            lines.append(f"  - 🔴 {row.get('png')} · event line {row.get('line')} · method={row.get('method')}")
+    else:
+        event_path = patch.get("event_path")
+        status = "有事件账本，未命中禁用产物" if patch.get("available") else f"无事件账本（{event_path}）"
+        lines.append(f"- 🟢 {status}")
     lines.append("")
     lines.append("落档判定：**verdict=block** → 主角脸崩（崩脸/图损坏），必须重抽后重跑；"
                  "**verdict=review** → 只有主色/锚点等非阻断初筛或视觉降级时不挡 mv-video（按阶段跳转补依赖/复核）；"
@@ -912,7 +1055,7 @@ def render_markdown(payload: Dict[str, Any]) -> str:
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("root", help="制MV/<曲名>/ 作品根")
+    ap.add_argument("root", help="创作区/制MV/<曲名>/ 作品根")
     ap.add_argument("--no-pixel", action="store_true", help="只跑锚点 lint，不跑像素机检")
     ap.add_argument("--margin", type=float, default=DEFAULT_MARGIN, help="脸漂移 flag-band 缓冲（默认 0.08）")
     ap.add_argument("--palette-threshold", type=float, default=PALETTE_DRIFT_THRESHOLD,

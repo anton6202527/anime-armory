@@ -32,7 +32,9 @@ from novel_contract import (base_meta, build_progress_markdown, routing_stages,
                             SCALE_CHOICES, scale_profile, detect_rights_status,
                             docx_to_txt, write_project_settings, demo_chapters_for,
                             normalize_scale, SCALE_PROFILES, parse_outputs,
-                            rights_metadata)
+                            rights_metadata, DRAFT_WORKFLOWS,
+                            infer_novel_purpose, normalize_novel_purpose,
+                            resolve_novel_draft_mode, resolve_novel_draft_workflow)
 
 SCALE_PROFILE = SCALE_PROFILES  # scale-band 契约：test_scale_contract 校验其与规模档一致
 
@@ -133,13 +135,19 @@ def main():
                     help="覆盖规模档默认章数")
     ap.add_argument("--branch-point", default=None, help="分叉模式必填，例：'第15章'")
     ap.add_argument("--person", default="third-limited", choices=["first", "third-limited"])
-    ap.add_argument("--out", default=None, help="输出根，缺省 写小说/<原作名>-<配角名>外传/")
+    ap.add_argument("--out", default=None, help="输出根，缺省 创作区/写小说/<原作名>-<配角名>外传/")
     ap.add_argument("--outputs", default="txt,docx,outline",
-                    help="逗号分隔，可含 txt,docx,outline,n2d")
+                    help="逗号分隔，可含 txt,docx,outline")
     ap.add_argument("--target-platform", default="跨平台",
                     help="目标平台（第 3 步书名候选用）：起点/晋江/抖音漫剧/番茄/红果/历史向/跨平台")
-    ap.add_argument("--draft-mode", default="稳妥初稿", choices=["极速初稿", "稳妥初稿", "商业连载", "漫剧源书"],
+    ap.add_argument("--purpose", default=None,
+                    help="小说用途：传统小说/漫剧源书/微短剧源书/短读/短篇/出海译制底稿/自定义")
+    ap.add_argument("--draft-mode", default=None, choices=["极速初稿", "稳妥初稿", "商业连载", "漫剧源书"],
                     help="小说生成模式：决定速度/质量 gate 密度")
+    ap.add_argument("--draft-workflow", default=None, choices=DRAFT_WORKFLOWS,
+                    help="小说生成工作流：默认单步/三步迭代/边写边自检")
+    ap.add_argument("--batch-review-interval", default="5章",
+                    help="小批回扫间隔；默认 5章，可填 3章/5章/关闭")
     ap.add_argument("--chapter-granularity", default="逐章", choices=["逐章", "小批", "全书草稿"],
                     help="章节生成粒度：逐章/小批/全书草稿")
     ap.add_argument("--ai-text-usage", default=None, choices=["AI-generated", "AI-assisted", "未使用AI文本"],
@@ -163,7 +171,7 @@ def main():
 
     source_title = detect_source_title(source_path)
     project_name = f"{source_title}-{args.character}外传"
-    out_root = args.out or os.path.join("写小说", project_name)
+    out_root = args.out or os.path.join("创作区", "写小说", project_name)
     out_root = os.path.abspath(out_root)
 
     if os.path.exists(out_root):
@@ -199,6 +207,17 @@ def main():
         profile["target_chapters"] = args.target_chapters
     outputs = parse_outputs(args.outputs)
     demo_chapters = demo_chapters_for(profile["target_chapters"])
+    purpose = normalize_novel_purpose(args.purpose) or infer_novel_purpose(
+        platform=args.target_platform, scale=scale, target=args.draft_mode
+    )
+    draft_mode = resolve_novel_draft_mode(args.draft_mode, purpose=purpose, platform=args.target_platform, scale=scale)
+    draft_workflow = resolve_novel_draft_workflow(
+        args.draft_workflow,
+        draft_mode=draft_mode,
+        purpose=purpose,
+        scale=scale,
+        target_chapters=profile["target_chapters"],
+    )
     
     meta = base_meta("spinoff", outputs=outputs, rights_status=rights_status)
     # 派生权利字段统一由 rights_metadata 计算（此前 --rights-jurisdiction/--distribution-regions
@@ -216,8 +235,10 @@ def main():
         "mode": args.mode,
         "branch_point": args.branch_point,
         "scale": scale,
+        "purpose": purpose,
         "target_chapters": profile["target_chapters"],
         "target_words_per_chapter": profile["words_per_chapter"],
+        "target_wordcount_min_max": profile["min_max"],
         "person": args.person,
         "rights_declared_at": date.today().isoformat() if args.i_have_rights else None,
         "title": None,
@@ -225,7 +246,9 @@ def main():
         "target_platform": args.target_platform,
         "demo_chapters": demo_chapters,
         "demo_passed_at": None,
-        "draft_mode": args.draft_mode,
+        "draft_mode": draft_mode,
+        "draft_workflow": draft_workflow,
+        "batch_review_interval": args.batch_review_interval,
         "chapter_granularity": args.chapter_granularity,
         "ai_text_usage": args.ai_text_usage,
     })
@@ -236,12 +259,15 @@ def main():
     
     write_project_settings(out_root, {
         "目标平台": args.target_platform,
+        "小说用途": purpose,
         "权利来源": rights_status,
         "权利辖区": meta.get("rights_jurisdiction", ""),
         "发行地区": ",".join(meta.get("distribution_regions") or []) or "未定",
         "外传模式": args.mode,
         "输出格式": ",".join(outputs) + "（novel-craft/scripts/export.py）",
-        "小说生成模式": args.draft_mode,
+        "小说生成模式": draft_mode,
+        "小说生成工作流": draft_workflow,
+        "小批回扫间隔": args.batch_review_interval,
         "章节生成粒度": args.chapter_granularity,
         "AI使用披露": args.ai_text_usage or "（发布前用 ai_usage.py 确认）",
     }, note="外传：配角平行视角，锚点处锁原作事件。")
@@ -266,7 +292,7 @@ def main():
     print(f"     设定/锚点表.json    ← {len(candidates)} 个候选（待第 2 步精筛）")
     print(f"     设定/章纲.md        ← {meta['target_chapters']} 章占位（待第 4 步填）")
     print(f"     _meta.json: mode={args.mode} scale={args.scale} 人称={args.person} "
-          f"平台={args.target_platform} 版权={rights_status}")
+          f"用途={purpose} 平台={args.target_platform} 版权={rights_status}")
     print(f"[next] 主对话进第 2 步：精筛锚点表 + 填角色卡 + 填世界观。")
     print(f"       之后第 3 步 书名候选 / 第 4 步 章纲 / 第 5 步 Demo gate / 第 6 步 续写余下章节。")
 

@@ -83,7 +83,7 @@ python3 skills/n2d/run.py next  <作品根> [第N集] [--json] [--auto]
 |---|---|---|
 | `needs_agent_gen` | 前沿阶段 owner 的产出含"代理 LLM 创作"（script_stage1/2、image_prompt、video_prompt 文案） | 跑完脚手架，停，给"该生成什么 + prompt 包路径" |
 | `needs_payment_confirm` | 前沿 `STAGE_GRAPH[key].gate_stage` 属花钱档（image / video / compose；voice 走云后端时） | 停，附 `生成粒度` 菜单 + 放行确认 |
-| `needs_choice` | 该阶段有**未解析**的"首跑必给"/"每次必问"选择点（制作模式·生视频模型·生视频渠道·基础视觉风格·BGM来源·生成粒度） | 停，弹对应菜单（默认预选=设置里的上次值，但不沉默沿用） |
+| `needs_choice` | 该阶段有**未解析**的"首跑必给"/"每次必问"选择点（制作模式·基础视觉风格·BGM来源·生成粒度；生视频模型/渠道只在 n2d-video 出视频前因固定模式、账号硬约束或 probe 缺口才问） | 停，弹对应菜单（默认预选=设置里的上次值，但不沉默沿用） |
 | `needs_compliance` | `n2d-compliance --check` 在 image/video/compose 前报缺口 | 停，列缺口，绝不放行 |
 | `blocked_by_gate` | `dashboard gate` 退出码 1 | 停，透传 `return_to_stage/affected_artifacts/rerun_scope`，指向最小返工 |
 | `blocked_by_image_qc` | video/compose/review 前置发现 `image_qc` 缺失、非 full、或 hard block | 停，回 `n2d-image` 修复/确认受影响 PNG；不再误报为后端环境缺失 |

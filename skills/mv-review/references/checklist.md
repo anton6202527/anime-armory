@@ -3,7 +3,7 @@
 > 落到 mv 制MV 产线。**机** = `mv_check.py` 确定性查；**判** = LLM 语义判（含并排读图）。容错铁律：只记真问题。
 > 正向标尺：卡点 `mv-beat/SKILL.md` · 运镜/动作 `mv-video/references/prompt_format.md` + `action_knowledge.md` · 一致性 `mv-image/references/prompt_format.md` + `visual_consistency.md` · 合成 `mv-compose/references/usage.md`。
 
-## A. 视觉一致性（同 n2d 头号死因）
+## A. 视觉一致性（主角、场景、画风）
 
 > 判到崩脸/漂移要"回 `mv-image` 重出该镜"时，重出的重抽上限按作品 `重抽预算策略` 档位走（默认 预算充足=抽到自检过；主角脸/画风零漂移容忍）——别在报告里要求无止境重抽。
 

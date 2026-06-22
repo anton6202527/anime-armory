@@ -3,8 +3,8 @@
 `n2d-score` 的机器真值写入：
 
 ```text
-制漫剧/<剧名>/生产数据/score_第N集.json
-制漫剧/<剧名>/生产数据/score_第N集.md
+创作区/制漫剧/<剧名>/生产数据/score_第N集.json
+创作区/制漫剧/<剧名>/生产数据/score_第N集.md
 ```
 
 ## JSON 顶层
@@ -13,7 +13,7 @@
 {
   "kind": "n2d_episode_review_score",
   "version": 1,
-  "root": "制漫剧/<剧名>",
+  "root": "创作区/制漫剧/<剧名>",
   "episode": "第1集",
   "generated_at": "2026-06-08T00:00:00+00:00",
   "threshold": 85,
@@ -154,8 +154,8 @@ python3 skills/n2d-score/scripts/visual_checks.py <作品根> 第N集 --json
 启用 `--enqueue-low` 时，`n2d-score` 会把这些任务交给 `n2d-batch`，生成：
 
 ```text
-制漫剧/<剧名>/生产数据/batch_queue.json
-制漫剧/<剧名>/生产数据/batch_queue.md
+创作区/制漫剧/<剧名>/生产数据/batch_queue.json
+创作区/制漫剧/<剧名>/生产数据/batch_queue.md
 ```
 
 ## 输入缓存

@@ -87,3 +87,23 @@ def test_alias_normalizes_before_probe():
     # 「即梦」→ dreamina（none 探针）→ unknown
     status, _ = ib.probe_backend("即梦", env={})
     assert status == "unknown"
+
+
+def test_scan_backends_summarizes_multiple_usable_choices():
+    payload = ib.scan_backends(
+        env={"OPENAI_API_KEY": "sk-x"},
+        cli_runner=lambda argv, timeout: ("ok", ""),
+    )
+    assert payload["summary"]["usable_count"] >= 2
+    assert "codex" in payload["usable_backends"]
+    assert "openai" in payload["usable_backends"]
+    assert "dreamina" in payload["needs_confirmation_backends"]
+
+
+def test_scan_backends_reports_zero_usable():
+    payload = ib.scan_backends(
+        env={},
+        cli_runner=lambda argv, timeout: ("unknown", "no cli"),
+    )
+    assert payload["summary"]["usable_count"] == 0
+    assert payload["usable_backends"] == []

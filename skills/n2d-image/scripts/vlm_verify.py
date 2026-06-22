@@ -107,9 +107,11 @@ def verdict_finding(name: str, kind: str, png: str, verdict: Optional[Mapping[st
     kindlabel = "角色" if kind == "character" else "资产"
     if is_key and conf >= block_floor:
         return {"level": "block", "code": "vlm_semantic_mismatch",
+                "png": png, "name": name, "confidence": round(conf, 4),
                 "msg": (f"{kindlabel}「{name}」VLM 判定语义崩设定（conf={conf:.2f}≥{block_floor}）：{mis}。"
                         f"本镜 {png}——指纹/embedding 可能过但违反 canonical 设定，关键资产硬挡，重出。")}
     return {"level": "warn", "code": "vlm_semantic_review",
+            "png": png, "name": name, "confidence": round(conf, 4),
             "msg": (f"{kindlabel}「{name}」VLM 疑似不符（conf={conf:.2f}）：{mis}。本镜 {png}——人判是否真漂。")}
 
 
@@ -234,11 +236,27 @@ def resolve_canonical(name_hint: str, canon_map: Mapping[str, Dict[str, str]]) -
     return None
 
 
+def merge_shot_canonical(mask: Dict[str, Dict[str, Any]], png: str, matched: bool, conf: float) -> None:
+    """累积逐镜 canonical 通过表（纯函数·可测）：一张图判过多个资产，**任一不符即整镜 fail**
+    （fidelity-gate 取最严：一镜里有任何崩设定的实体，这镜就不该进一致性均值）。"""
+    rel = str(png or "").strip()
+    if not rel:
+        return
+    cur = mask.get(rel)
+    if cur is None:
+        mask[rel] = {"canonical_pass": bool(matched), "confidence": round(float(conf), 4)}
+        return
+    cur["canonical_pass"] = bool(cur["canonical_pass"]) and bool(matched)
+    cur["confidence"] = max(float(cur.get("confidence") or 0.0), round(float(conf), 4))
+
+
 def evaluate_pairs(pairs: Sequence[Mapping[str, Any]], canon_map: Mapping[str, Dict[str, str]],
                    judge: Judge, shot_abspath: Callable[[str], str],
                    block_floor: float = VLM_BLOCK_FLOOR) -> Dict[str, Any]:
-    """逐对 (canonical ↔ 本镜) 调 VLM judge → findings（注入 stub 可测）。"""
+    """逐对 (canonical ↔ 本镜) 调 VLM judge → findings（注入 stub 可测）。
+    同时产逐镜 canonical 通过表 shot_canonical（G3 fidelity-gate 用：face/语义一致性聚合前先剔崩设定镜）。"""
     findings: List[Dict[str, str]] = []
+    shot_canonical: Dict[str, Dict[str, Any]] = {}
     judged = 0
     cache: Dict[str, Optional[Dict[str, Any]]] = {}
     for p in pairs:
@@ -257,13 +275,15 @@ def evaluate_pairs(pairs: Sequence[Mapping[str, Any]], canon_map: Mapping[str, D
         if verdict is None:
             continue
         judged += 1
+        merge_shot_canonical(shot_canonical, str(png_rel),
+                             bool(verdict.get("match")), float(verdict.get("confidence") or 0.0))
         fnd = verdict_finding(str(p.get("name")), entry["kind"], str(png_rel), verdict,
                               is_key=True, block_floor=block_floor)
         if fnd:
             findings.append(fnd)
     block = sum(1 for f in findings if f["level"] == "block")
     return {"available": True, "judged": judged, "block_floor": block_floor,
-            "block": block, "findings": findings}
+            "block": block, "findings": findings, "shot_canonical": shot_canonical}
 
 
 # ── VLM 后端（best-effort·opt-in·不 hardcode 厂商） ───────────────────────────
@@ -317,12 +337,24 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("root")
     ap.add_argument("episode")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--write", action="store_true",
+                    help="落档逐镜 canonical 通过表 → 生产数据/vlm_canonical_<集>.json，供 G3 fidelity-gate 消费")
     ns = ap.parse_args(argv)
     root = Path(ns.root).expanduser().resolve()
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     import image_qc  # type: ignore
     payload = image_qc.run_qc(root, ns.episode)
     res = analyze(root, ns.episode, payload)
+    if ns.write:
+        out = root / "生产数据" / f"vlm_canonical_{ns.episode}.json"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps({
+            "kind": "n2d_vlm_canonical",
+            "episode": ns.episode,
+            "available": bool(res.get("available")),
+            "shot_canonical": res.get("shot_canonical", {}),
+        }, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(f"✓ canonical 通过表已落档：{out}")
     if ns.json:
         print(json.dumps(res, ensure_ascii=False, indent=2, sort_keys=True))
         return 0

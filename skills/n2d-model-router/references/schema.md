@@ -11,7 +11,7 @@
 {
   "kind": "n2d_video_model_routes",
   "version": 1,
-  "root": "制漫剧/剧名",
+  "root": "创作区/制漫剧/剧名",
   "episode": "第1集",
   "routing_mode": "auto",
   "production_mode": "配音先行",

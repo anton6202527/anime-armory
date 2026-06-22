@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-import_novel.py — 把用户拖进来的小说文件/链接纳管到 `写小说/<书名>/`。
+import_novel.py — 把用户拖进来的小说文件/链接纳管到 `创作区/写小说/<书名>/`。
 
 目标：
   - 自动推断书名，建立作品根；
@@ -577,7 +577,7 @@ def build_progress(title, payload, rights_status):
 - 类型：{payload.get('source_type', '')}
 - 字数：{len((payload.get('text') or '').replace(chr(10), ''))}
 
-> 这是源书纳管项目，不是原创/派生写作阶段。后续一旦进入 rewrite/condense/continue/n2d，
+> 这是源书纳管项目，不是原创/派生写作阶段。后续一旦进入 rewrite/condense/continue，
 > 对应 skill 会建立自己的阶段契约或生产进度。
 """
 
@@ -639,6 +639,7 @@ def write_project(root, title, payload, outputs, rights_status, *, replace=False
         "source": "原作.txt",
         "source_novel": payload.get("source_display", ""),
         "source_type": payload["source_type"],
+        "purpose": "未定",
         "rights_declared_at": date.today().isoformat() if rights_declared else None,
         "imported_at": date.today().isoformat(),
         "text_chars": manifest["chars"],
@@ -648,6 +649,7 @@ def write_project(root, title, payload, outputs, rights_status, *, replace=False
     write_json(os.path.join(target, "_meta.json"), meta)
 
     write_settings(target, {
+        "小说用途": "未定（导入源书；后续再选）",
         "目标平台": "跨平台（导入源书；后续再选）",
         "权利来源": rights_status,
         "权利辖区": manifest.get("rights_jurisdiction", ""),
@@ -723,10 +725,11 @@ def import_novel(source, args, *, input_func=input):
 
 
 def build_arg_parser():
-    ap = argparse.ArgumentParser(description="拖入小说路径/URL → 写小说/<书名>/ 源书项目")
+    ap = argparse.ArgumentParser(description="拖入小说路径/URL → 创作区/写小说/<书名>/ 源书项目")
     ap.add_argument("source", help="本地 .txt/.md/.docx、目录、file://、http(s) URL")
     ap.add_argument("--title", default=None, help="手动指定书名；缺省从文件名/URL/正文首行推断")
-    ap.add_argument("--out-root", default="写小说", help="作品根父目录；缺省 写小说")
+    ap.add_argument("--out-root", default=os.path.join("创作区", "写小说"),
+                    help="作品根父目录；缺省 创作区/写小说")
     ap.add_argument("--on-exists", default="ask",
                     choices=["ask", "abort", "new-version", "overwrite", "use-existing"],
                     help="同名作品已存在时的处理方式；缺省交互询问")

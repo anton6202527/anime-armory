@@ -5,7 +5,10 @@
 本脚本把散落的检测器统一调起来，n2d-review 模式①工作流第 1 步「跑机检套件」即调它：
 
   语义谱系 P0 · 状态百科 P1 · 多模态 P2 · 视觉契约继承 · 锚点门 N3 · 脸 G1 ·
-  发型 H1 · 服装/配色 N1 · 片内时序 N2 · 场景 O2 · 糊/低质 N4 · 风格 S1 · 字幕对齐 L1
+  发型 H1 · 服装/配色 N1 · 片内时序 N2 · 场景 O2 · 糊/低质 N4 · 手部/解剖 N5 ·
+  身高比例 R1 · 轴线视线 X1 · 天气时辰 W1（含光位方向 W2 advisory）· 字幕安全区 L2 ·
+  称谓口头禅 A1 · 风格 S1 · 字幕对齐 L1 · 音画同步 AV1（口型↔配音偏移·advisory）·
+  节奏密度 Rhythm（节奏/留存启发式 advisory）· 空间站位 B1（跨镜站位/遮挡）
 
 每个子检测器各自缺库优雅跳过（见各脚本）；本编排只汇总、不重复实现。
 纯函数 `summarize` 无依赖、带 pytest。
@@ -39,12 +42,21 @@ import outfit_consistency as oc
 import hair_consistency as hc
 import temporal_consistency as tcheck
 import quality_check as qc
+import hand_anatomy as hand
+import scale_consistency as scc
+import axis_geometry
+import world_continuity as wcont
+import subtitle_safearea as ssa
 import scene_consistency as sc
 import style_consistency as stc
 import semantic_continuity as semc
 import state_continuity as statec
+import address_consistency as addr
 import multimodal_consistency as mmc
 import subtitle_align as sa
+import lipsync_consistency as lipc
+import scene_blocking_continuity as sbc
+import pacing_retention as pr
 
 
 def _verdicts(rows: List[dict]) -> List[str]:
@@ -77,13 +89,23 @@ def audit_precision_level(capabilities: Dict[str, Any]) -> str:
     return "full"
 
 
-def exit_code_for(summary: dict) -> int:
+PRODUCTION_PROFILE_VALUES = {"production", "prod", "release", "strict", "投放", "上线", "正式", "发布", "严格", "生产"}
+
+
+def normalize_profile(value: str) -> str:
+    text = str(value or "").strip().lower()
+    return "production" if any(v in text for v in PRODUCTION_PROFILE_VALUES) else "demo"
+
+
+def exit_code_for(summary: dict, profile: str = "demo") -> int:
     """退出码：有 🔴=1；否则总精度=none（啥像素都没检过）=2 inconclusive；其余=0。
     让 CI/批处理调用方据退出码区分"检查了很干净"(0) 与"根本没法检查"(2)。"""
     if summary.get("total_block"):
         return 1
     if summary.get("precision_level") == "none":
         return 2
+    if normalize_profile(profile) == "production" and summary.get("precision_level") != "full":
+        return 1
     return 0
 
 
@@ -352,6 +374,11 @@ def run(root: str, ep: str) -> dict:
                          "verdicts": [s.get("verdict") for s in f.get("shots", []) if s.get("verdict") != "noface"],
                          "mode": f.get("mode"),
                          "precision": f.get("precision"),
+                         # G4 KPI 直读：每角色本集质心接近度 + 用了哪个 encoder + fidelity-gate 状态
+                         # （避免 score 侧重跑脸推理；ep_mean_score 已过 G3 fidelity-gate）
+                         "encoder": f.get("encoder"),
+                         "fidelity_gate": f.get("fidelity_gate"),
+                         "characters": f.get("characters", {}),
                          "notes": f.get("notes", [])}
     collect_simple("脸(G1)", [s for s in f.get("shots", []) if s.get("verdict") != "noface"],
                    stage="image", default_artifacts=(f"出图/{ep}/图片",))
@@ -380,6 +407,13 @@ def run(root: str, ep: str) -> dict:
                           "verdicts": _verdicts(s.get("shots", [])), "notes": s.get("notes", [])}
     collect_simple("场景(O2)", s.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
 
+    # B1 跨镜空间站位/遮挡（同 LOC 各镜站位声明 vs 注册场景站位；违锁=block，链式=warn；纯文本无依赖）
+    sb = sbc.analyze(root, ep)
+    sections["空间站位(B1)"] = {"skipped": not sb.get("available", False),
+                             "verdicts": _verdicts(sb.get("shots", [])), "notes": sb.get("notes", [])}
+    collect_simple("空间站位(B1)", sb.get("shots", []), stage="image",
+                   default_artifacts=(f"脚本/{ep}/storyboard.json", f"出图/{ep}/prompt/01_分镜出图.md"))
+
     # S1 风格漂移
     st = stc.analyze(root, ep)
     sections["风格(S1)"] = {"skipped": not st.get("available", False) or st.get("floor") is None,
@@ -391,6 +425,13 @@ def run(root: str, ep: str) -> dict:
     sections["接缝接力"] = {"skipped": bool(sm.get("notes")) and not sm.get("seams"),
                          "verdicts": _verdicts(sm.get("seams", [])), "notes": sm.get("notes", [])}
     collect_simple("接缝接力", sm.get("seams", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
+
+    # 称谓/口头禅(A1)——剧本层人设漂移（称呼/自称/口头禅忽 A 忽 B；缺词典优雅跳过）
+    ad = addr.analyze(root, ep)
+    sections["称谓口头禅(A1)"] = {"skipped": not ad.get("available", False),
+                              "verdicts": _verdicts(ad.get("findings", [])), "notes": ad.get("notes", [])}
+    collect_simple("称谓口头禅(A1)", ad.get("findings", []), stage="script_stage1",
+                   default_artifacts=(f"脚本/{ep}/voiceover.txt", "设定库/称谓表.json"))
 
     # 字幕对齐(L1)——双语短语边界/阅读速度/译文完整性（补 mechanical_check 的"条数对账"盲区）
     sub = sa.analyze(root, ep)
@@ -404,6 +445,82 @@ def run(root: str, ep: str) -> dict:
     sections["糊/低质(N4)"] = {"skipped": not q.get("available", False),
                              "verdicts": _verdicts(q.get("shots", [])), "notes": q.get("notes", [])}
     collect_simple("糊/低质(N4)", q.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
+
+    # N5 手部/解剖畸形（六指/粘连——AI 生图头号翻车点，face/outfit/hair/糊 都不看手；缺 cv2 优雅跳过）
+    ha = hand.analyze(root, ep)
+    sections["手部/解剖(N5)"] = {"skipped": not ha.get("available", False),
+                              "verdicts": _verdicts(ha.get("shots", [])), "notes": ha.get("notes", [])}
+    collect_simple("手部/解剖(N5)", ha.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
+
+    # R1 角色身高/体型比例（双人同框相对身高漂——shot_scale 只管景别不管角色间高矮；缺 insightface 优雅跳过）
+    sca = scc.analyze(root, ep)
+    sections["身高比例(R1)"] = {"skipped": not sca.get("available", False),
+                             "verdicts": _verdicts(sca.get("shots", [])), "notes": sca.get("notes", [])}
+    collect_simple("身高比例(R1)", sca.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
+
+    # X1 轴线/视线像素核验（场景轴线视线此前只查 prompt 写没写；这里从脸朝向/屏幕位像素验越轴。warn-only）
+    ax = axis_geometry.analyze(root, ep)
+    sections["轴线视线(X1)"] = {"skipped": not ax.get("available", False),
+                             "verdicts": _verdicts(ax.get("shots", [])), "notes": ax.get("notes", [])}
+    collect_simple("轴线视线(X1)", ax.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
+
+    # W1 天气/时辰推进连续性（同场景相邻镜时辰硬跳 day↔night + scene_dna 光色天气违锁；缺 Pillow 优雅跳过）
+    #    + W2 光位方向连续性（同场景相邻镜主光左右硬翻转 advisory·随 W1 同段产出 metric=light_dir）
+    wco = wcont.analyze(root, ep)
+    sections["天气时辰(W1)"] = {"skipped": not wco.get("available", False),
+                             "verdicts": _verdicts(wco.get("shots", [])), "notes": wco.get("notes", [])}
+    collect_simple("天气时辰(W1)", wco.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
+
+    # L2 字幕安全区构图一致（脸落进底部字幕带会被烧字幕遮挡——advisory，缺 insightface 优雅跳过）
+    ssec = ssa.analyze(root, ep)
+    sections["字幕安全区(L2)"] = {"skipped": not ssec.get("available", False),
+                              "verdicts": _verdicts(ssec.get("shots", [])), "notes": ssec.get("notes", [])}
+    collect_simple("字幕安全区(L2)", ssec.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
+
+    # AV1 音画同步（口型↔配音偏移）——advisory（block 已在 analyze 封顶到 warn，绝不硬阻断 gate）；
+    # 缺 SyncNet/ffmpeg 且无外部偏移报告时优雅跳过，交人判。实测严重档另喂 n2d-score（非 gate 退出码）。
+    lip = lipc.analyze(root, ep)
+    sections["音画同步(AV1)"] = {"skipped": not lip.get("available", False),
+                              "verdicts": _verdicts(lip.get("shots", [])), "notes": lip.get("notes", []),
+                              "mode": lip.get("mode"), "precision": lip.get("precision")}
+    collect_simple("音画同步(AV1)", lip.get("shots", []), stage="compose", default_artifacts=(f"合成/{ep}",))
+
+    # Rhythm 节奏/留存启发式（advisory）：不声称是成片观感模型，但把 storyboard 时长曲线/钩子密度纳入审计链。
+    pace = pr.analyze(root, ep)
+    pace_rows: List[dict] = []
+    if pace.get("available") and pace.get("verdict") == "warn":
+        score = pace.get("score")
+        pace_rows.append({
+            "verdict": "warn",
+            "message": f"节奏/留存 advisory 总分偏低：{score}",
+            "loc": f"脚本/{ep}/storyboard.json",
+            "affected_artifacts": [f"脚本/{ep}/storyboard.json"],
+        })
+    for risk in pace.get("risk_shots", []):
+        if not isinstance(risk, dict):
+            continue
+        row = dict(risk)
+        clips = [str(c) for c in row.get("clips", []) if c]
+        row.setdefault("verdict", "warn")
+        if clips:
+            row["affected_shots"] = clips
+            row["shot"] = " ".join(clips)
+        pace_rows.append(row)
+    sections["节奏密度(Rhythm)"] = {
+        "skipped": not pace.get("available", False),
+        "verdicts": _verdicts(pace_rows),
+        "notes": pace.get("notes", []),
+        "score": pace.get("score"),
+        "details": normalize_details(
+            pace_rows,
+            dim="节奏密度(Rhythm)",
+            ep=ep,
+            stage="script_stage2",
+            default_artifacts=(f"脚本/{ep}/storyboard.json",),
+        ),
+        "return_to_stage": "script_stage2",
+        "rerun_scope": default_scope("节奏密度(Rhythm)", "script_stage2"),
+    }
 
     # 结构化段（P0/P1/P2）已有 details：直接取检出条目，避免双重归一
     for sec in sections.values():
@@ -485,7 +602,24 @@ def export_findings(root: str, ep: str, res: dict) -> str:
         json.dump(findings_payload(res), fh, ensure_ascii=False, indent=2)
         fh.write("\n")
     _append_dashboard_event(root, ep, res, path)
+    _refresh_consistency_ledger(root, ep)
     return path
+
+
+def _refresh_consistency_ledger(root: str, ep: str) -> bool:
+    """Best-effort refresh of the read-only consistency ledger after findings export."""
+    try:
+        ledger_py = os.path.abspath(os.path.join(os.path.dirname(__file__), "consistency_ledger.py"))
+        spec = importlib.util.spec_from_file_location("n2d_consistency_ledger_for_audit", ledger_py)
+        if spec is None or spec.loader is None:
+            return False
+        ledger = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(ledger)
+        ledger.run(root, ep)
+        return True
+    except Exception as exc:
+        print(f"[consistency_audit][warn] consistency_ledger 刷新失败（忽略）：{exc}", file=sys.stderr)
+        return False
 
 
 def main(argv: List[str]) -> int:
@@ -493,16 +627,20 @@ def main(argv: List[str]) -> int:
     ap.add_argument("root")
     ap.add_argument("episode")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--profile", default=os.environ.get("N2D_CONSISTENCY_PROFILE", "demo"),
+                    help="demo|production；production 下 degraded 精度退出码为 1")
     ap.add_argument("--no-export", action="store_true",
                     help="只审计不外发（默认会写 生产数据/consistency_findings_<集>.json 并登记 dashboard 事件）")
     ns = ap.parse_args(argv)
     res = run(ns.root.rstrip("/"), ns.episode)
+    profile = normalize_profile(ns.profile)
+    res["profile"] = profile
     res["capabilities"] = probe_capabilities()
     # 总精度写进 summary（外发/score/gate/人 据此判"没检查"≠"通过"）——必须在 export 之前算
     res["summary"]["precision_level"] = audit_precision_level(res["capabilities"])
     if not ns.no_export and os.path.isdir(ns.root):
         export_findings(ns.root.rstrip("/"), ns.episode, res)
-    exit_code = exit_code_for(res["summary"])
+    exit_code = exit_code_for(res["summary"], profile=profile)
     if ns.json:
         print(json.dumps(res, ensure_ascii=False, indent=2)); return exit_code
     print(f"=== 一致性编排审计（O1·一键全跑）：{ns.root} {ns.episode} ===\n")

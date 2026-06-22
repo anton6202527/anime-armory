@@ -73,6 +73,23 @@ def test_flight_routes_to_seedance(tmp_path):
     assert route["max_clip_seconds"] == 15
 
 
+def test_reveal_template_routes_to_identity_sensitive_speech_path(tmp_path):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{
+        "id": "Clip 8",
+        "template": "reveal_reaction_chain",
+        "scene": "沈念拿出血书，当众揭穿皇叔真实身份，众人反应",
+    }])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["shot_type"] == "reveal_reaction_chain"
+    assert route["primary_backend"] == "kling"
+    assert route["identity_requirement"] == "character_id_or_reference_group"
+    assert route["quality_tier"] in ("high", "n/a")
+    assert any("knowledge_order" in item for item in route["prompt_requirements"])
+
+
 def test_hug_or_pull_routes_to_kling_and_contact_risk(tmp_path):
     root = _root(tmp_path)
     _write_storyboard(root, [{"id": "Clip 3", "template": "hug_or_pull", "scene": "沈念被抓腕拉扯后推开，王敦伸手护住"}])
@@ -521,9 +538,18 @@ def test_escalate_below_threshold_persists_no_locked_backend():
 def test_quality_tier_high_for_identity_heavy_and_fast_for_general():
     # 身份/物理吃重镜 → high（值 pro 档）；通用低风险镜 → fast（量产省成本）；后端无档位 → n/a
     assert router.quality_tier_for_clip("fight_exchange", ["contact_motion"], "seedance") == "high"
+    assert router.quality_tier_for_clip("reveal_reaction_chain", [], "seedance") == "high"
+    assert router.quality_tier_for_clip("public_confrontation", [], "seedance") == "high"
+    assert router.quality_tier_for_clip("relationship_turn", [], "seedance") == "high"
     assert router.quality_tier_for_clip("general_motion", [], "seedance") == "fast"
     assert router.quality_tier_for_clip("general_motion", ["identity_drift_risk"], "seedance") == "high"
     assert router.quality_tier_for_clip("general_motion", [], "veo") == "n/a"  # veo 档案无 fast/pro 档
+
+
+def test_new_scene_templates_get_identity_risk_for_named_characters():
+    clip = {"id": "Clip 8", "character_ids": ["CHAR_SHEN"], "scene": "沈念拿出血书揭穿真实身份"}
+    flags = router.risk_flags_for_clip(clip, "reveal_reaction_chain", "seedance")
+    assert "identity_drift_risk" in flags
 
 
 def test_fight_clip_gets_high_quality_tier(tmp_path):
@@ -595,3 +621,28 @@ def test_no_multishot_group_for_non_multishot_backend():
         {"clip_id": "Clip_02", "primary_backend": "dreamina", "seam_relay": {"is_relay": True}, "risk_flags": []},
     ]
     assert router.annotate_multishot_groups(routes) == []
+
+
+def test_multishot_group_for_kling_after_2026_06_registration():
+    # 可灵 Kling 3.0（6 连续镜 + 共享音轨）2026-06 补登记 multishot_native → 能力字段自动收录，
+    # 连续接力镜组应被标 multishot_candidate（与 Seedance 同走能力判定，不 hardcode 厂商）。
+    sr = {"is_relay": True}
+    short_run = [
+        {"clip_id": f"Clip_{i:02d}", "primary_backend": "kling", "seam_relay": sr, "risk_flags": [], "clip_seconds": 3.0}
+        for i in (1, 2, 3)
+    ]
+    groups = router.annotate_multishot_groups(short_run)
+    assert len(groups) == 1
+    assert groups[0]["members"] == ["Clip_01", "Clip_02", "Clip_03"]
+
+
+def test_urgency_tier_from_settings_default_realtime():
+    import router as r
+    assert r.urgency_tier_from_settings({}) == "realtime"
+    assert r.urgency_tier_from_settings({"投放时效": "实时"}) == "realtime"
+
+
+def test_urgency_tier_from_settings_batch_aliases():
+    import router as r
+    for v in ("隔夜批量", "批量", "batch", "batch_24h", "flex", "非紧急"):
+        assert r.urgency_tier_from_settings({"投放时效": v}) == "batch_24h", v

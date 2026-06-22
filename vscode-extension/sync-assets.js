@@ -5,7 +5,7 @@
 // the `vscode:prepublish` hook; run manually with `npm run sync-assets`.
 //
 // Works/创作区 live next to the extension source, not under assets/. The packaged
-// default keeps an independent work root: 制漫剧 source-novel only (n2d line).
+// default keeps an independent work root under 创作区/制漫剧 (n2d line).
 const fs = require('fs');
 const path = require('path');
 

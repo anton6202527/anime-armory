@@ -129,6 +129,15 @@ def test_build_manifest_collects_visual_review_assets(tmp_path: Path) -> None:
         "data_collection_tasks": [{"skill": "n2d-score", "action": "run_checks"}],
     }
     write_text(root / "生产数据" / f"score_{ep}.json", json.dumps(score, ensure_ascii=False))
+    ledger = {
+        "kind": "n2d_consistency_ledger",
+        "counts": {"block": 1, "high": 0, "medium": 1},
+        "rows": [
+            {"id": "CHAR_A", "name": "沈念", "kind": "character", "overall": "block"},
+            {"id": "PROP_01", "name": "铜镜", "kind": "prop", "overall": "medium"},
+        ],
+    }
+    write_text(root / "生产数据" / f"consistency_ledger_{ep}.json", json.dumps(ledger, ensure_ascii=False))
 
     manifest = review_ui.build_manifest(root, ep)
 
@@ -141,6 +150,9 @@ def test_build_manifest_collects_visual_review_assets(tmp_path: Path) -> None:
     assert manifest["identity_refs"][0]["name"] == "沈念"
     assert manifest["score"]["total_score"] == 72
     assert manifest["score"]["data_collection_tasks"][0]["action"] == "run_checks"
+    assert manifest["consistency_ledger"]["available"] is True
+    assert manifest["consistency_ledger"]["counts"]["block"] == 1
+    assert manifest["source"]["consistency_ledger"] == "生产数据/consistency_ledger_第1集.json"
     assert manifest["clips"][0]["qa_flags"][0]["dimension"] == "场景一致性"
 
     payload = review_ui.findings_payload(manifest)
@@ -192,6 +204,7 @@ def test_write_outputs_writes_html_and_json(tmp_path: Path) -> None:
     html_text = Path(paths["html"]).read_text(encoding="utf-8")
     json_text = Path(paths["json"]).read_text(encoding="utf-8")
     assert "人审画布" in html_text
+    assert "一致性总账" in html_text
     manifest_line = next(line for line in html_text.splitlines() if 'id="manifest"' in line)
     assert "&quot;" not in manifest_line
     assert '"kind": "n2d_review_ui"' in json_text

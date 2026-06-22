@@ -59,6 +59,41 @@ RETURN_STAGE_BY_DIM = {
     "prose": "draft",
 }
 
+CONSISTENCY_SECTION_MAP = {
+    "reader_contract": {
+        "dimension": "reader_promise",
+        "recommended_skill": "novel-review",
+        "return_to_stage": "demo",
+        "count_key": "alerts",
+        "problem": "逐章读者契约检查发现题旨/承诺推进缺失",
+        "fix_hint": "回读者契约、Demo gate 和相关章纲，补齐 reader_contract_progress/theme_alignment；必要时重排该段章纲。",
+    },
+    "logic_sentry": {
+        "dimension": "logic",
+        "recommended_skill": "novel-wiki",
+        "return_to_stage": "wiki",
+        "count_key": "alerts",
+        "problem": "逻辑哨兵发现状态/位置/人物事实冲突候选",
+        "fix_hint": "回动态百科和对应章节核对人物状态、地点、道具与时间线；确认后修正文或更新 state_ledger。",
+    },
+    "style_drift": {
+        "dimension": "style_drift",
+        "recommended_skill": "novel-style",
+        "return_to_stage": "draft",
+        "count_key": "drifted",
+        "problem": "文风指纹相对锚点章漂移",
+        "fix_hint": "回文风锚点和漂移章节做主编润色，统一句式节奏、意象密度、对白风格与叙述口吻。",
+    },
+    "power_system": {
+        "dimension": "power_system",
+        "recommended_skill": "novel-wiki",
+        "return_to_stage": "draft",
+        "count_key": "alerts",
+        "problem": "力量体系/等级/战力 progression 存在一致性风险",
+        "fix_hint": "回设定/power_system_registry.json 与相关章节，修正退档、未知境界、越级过快或面板字段漂移。",
+    },
+}
+
 
 def read_meta(root):
     return load_json(os.path.join(root, "_meta.json"), {}) or {}
@@ -140,7 +175,7 @@ def _fix_hint(dimension, raw):
     if dimension == "outline":
         return "同步正文标题与设定/章纲.md，或回章纲阶段确认新标题。"
     if dimension == "wordcount":
-        return "按目标平台字数带宽增删内容，保留本章戏剧节拍和钩子。"
+        return "按项目建议篇幅增删内容，保留本章戏剧节拍和钩子。"
     if dimension == "plagiarism":
         return "重写雷同段，保留事件骨架但不要复刻原文表达。"
     if dimension == "theme":
@@ -170,6 +205,48 @@ def normalize_human_finding(raw, idx):
     finding.setdefault("confidence", raw.get("confidence") or "medium")
     finding.setdefault("source", "human_assessment")
     return finding
+
+
+def normalize_consistency_findings(payload, meta, start_idx=1):
+    if not isinstance(payload, dict):
+        return []
+    findings = []
+    idx = start_idx
+    for section, spec in CONSISTENCY_SECTION_MAP.items():
+        data = payload.get(section) or {}
+        if not isinstance(data, dict) or not data.get("ran"):
+            continue
+        count = int(data.get(spec["count_key"]) or 0)
+        blocking = int(data.get("blocking") or 0)
+        if count <= 0 and blocking <= 0:
+            continue
+        severity = "blocking" if blocking > 0 else "suggestion"
+        problem = spec["problem"]
+        evidence_parts = []
+        if count:
+            evidence_parts.append(f"{spec['count_key']}={count}")
+        if blocking:
+            evidence_parts.append(f"blocking={blocking}")
+        if data.get("json"):
+            evidence_parts.append(f"source={data['json']}")
+        findings.append({
+            "id": f"REV-CONS-{idx:03d}",
+            "severity": severity,
+            "dimension": spec["dimension"],
+            "chapter": None,
+            "location": "全局",
+            "evidence": "；".join(evidence_parts),
+            "problem": problem,
+            "fix_hint": spec["fix_hint"],
+            "recommended_skill": spec["recommended_skill"],
+            "return_to_stage": spec["return_to_stage"],
+            "affected_files": [],
+            "blocking": severity == "blocking",
+            "confidence": "medium",
+            "source": "consistency_audit",
+        })
+        idx += 1
+    return findings
 
 
 def load_human_findings(path):
@@ -249,7 +326,8 @@ def write_markdown(path, meta, report):
         f.write("\n".join(lines) + "\n")
 
 
-def build_report(root, mechanical_path=None, human_path=None, scope="full", allow_missing_mechanical=False):
+def build_report(root, mechanical_path=None, human_path=None, consistency_path=None,
+                 scope="full", allow_missing_mechanical=False):
     meta = read_meta(root)
     if mechanical_path is None:
         mechanical_path = os.path.join(root, "审稿", "mechanical_findings.json")
@@ -270,6 +348,10 @@ def build_report(root, mechanical_path=None, human_path=None, scope="full", allo
         normalize_mechanical_finding(raw, idx + 1, meta)
         for idx, raw in enumerate(raw_mechanical)
     ]
+    if consistency_path is None:
+        consistency_path = os.path.join(root, "审稿", "consistency_audit.json")
+    consistency = load_json(consistency_path, {}) if os.path.exists(consistency_path) else {}
+    findings.extend(normalize_consistency_findings(consistency, meta, len(findings) + 1))
     human = load_human_findings(human_path)
     findings.extend(normalize_human_finding(raw, idx + 1) for idx, raw in enumerate(human))
     order = {"blocking": 0, "suggestion": 1, "polish": 2}
@@ -301,6 +383,8 @@ def main():
     ap.add_argument("project_root")
     ap.add_argument("--mechanical", default=None, help="mechanical_check.py --json-out 产物；缺省 审稿/mechanical_findings.json")
     ap.add_argument("--human-assessment", default=None, help="人工/LLM 审稿 JSON；list 或含 findings 字段")
+    ap.add_argument("--consistency", default=None,
+                    help="consistency_audit.py 汇总产物；缺省自动读取 审稿/consistency_audit.json（若存在）")
     ap.add_argument("--scope", default="full")
     ap.add_argument("--allow-missing-mechanical", action="store_true",
                     help="显式允许没有机检文件时生成报告；默认缺机检即失败")
@@ -315,6 +399,7 @@ def main():
             root,
             args.mechanical,
             args.human_assessment,
+            args.consistency,
             scope=args.scope,
             allow_missing_mechanical=args.allow_missing_mechanical,
         )

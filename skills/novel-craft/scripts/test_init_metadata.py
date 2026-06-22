@@ -67,6 +67,8 @@ class InitMetadataTest(unittest.TestCase):
                     "--out", root,
                     "--target-chapters", "5",
                     "--draft-mode", "商业连载",
+                    "--draft-workflow", "边写边自检",
+                    "--batch-review-interval", "3章",
                     "--chapter-granularity", "小批",
                     "--ai-text-usage", "AI-assisted",
                 ],
@@ -79,9 +81,18 @@ class InitMetadataTest(unittest.TestCase):
                 meta = json.load(f)
             self.assertEqual(meta["target_chapters"], 5)
             self.assertIn("target_words_per_chapter", meta)
+            self.assertEqual(meta["target_wordcount_min_max"], [2500, 6000])
             self.assertEqual(meta["draft_mode"], "商业连载")
+            self.assertEqual(meta["draft_workflow"], "边写边自检")
+            self.assertEqual(meta["batch_review_interval"], "3章")
             self.assertEqual(meta["chapter_granularity"], "小批")
             self.assertEqual(meta["ai_text_usage"], "AI-assisted")
+            self.assertEqual(meta["purpose"], "传统小说")
+            with open(os.path.join(root, "_设置.md"), encoding="utf-8") as f:
+                settings = f.read()
+            self.assertIn("小说用途**：传统小说", settings)
+            self.assertIn("小说生成工作流**：边写边自检", settings)
+            self.assertIn("小批回扫间隔**：3章", settings)
             assert_next_packet_runs(self, root)
 
     def test_condense_writes_manga_score_metadata(self):
@@ -99,11 +110,14 @@ class InitMetadataTest(unittest.TestCase):
                 meta = json.load(f)
             self.assertEqual(meta["target_chapters"], 5)
             self.assertEqual(meta["target_platform"], "漫剧")
+            self.assertEqual(meta["target_wordcount_min_max"], [800, 1800])
             self.assertEqual(meta["draft_mode"], "漫剧源书")
             self.assertEqual(meta["chapter_granularity"], "逐章")
             self.assertIn("ai_text_usage", meta)
+            self.assertEqual(meta["purpose"], "漫剧源书")
             with open(os.path.join(root, "_设置.md"), encoding="utf-8") as f:
                 settings = f.read()
+            self.assertIn("小说用途**：漫剧源书", settings)
             self.assertIn("小说生成模式**：漫剧源书", settings)
             assert_next_packet_runs(self, root)
 
@@ -122,12 +136,45 @@ class InitMetadataTest(unittest.TestCase):
                 meta = json.load(f)
             self.assertEqual(meta["target_chapters"], 5)
             self.assertIn("target_words_per_chapter", meta)
+            self.assertEqual(meta["target_wordcount_min_max"], [2500, 6000])
             self.assertEqual(meta["draft_mode"], "稳妥初稿")
             self.assertEqual(meta["chapter_granularity"], "逐章")
             self.assertIn("ai_text_usage", meta)
+            self.assertEqual(meta["purpose"], "传统小说")
             with open(os.path.join(root, "_设置.md"), encoding="utf-8") as f:
                 settings = f.read()
+            self.assertIn("小说用途**：传统小说", settings)
             self.assertIn("小说生成模式**：稳妥初稿", settings)
+            assert_next_packet_runs(self, root)
+
+    def test_continue_purpose_drives_micro_short_drama_defaults(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            src = write_source(tmp)
+            root = os.path.join(tmp, "continue_micro")
+            subprocess.run(
+                [
+                    sys.executable, CONTINUE_INIT, src,
+                    "--out", root,
+                    "--mode", "sequel",
+                    "--new-chapters", "5",
+                    "--target-platform", "跨平台",
+                    "--purpose", "微短剧源书",
+                ],
+                cwd=REPO,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            with open(os.path.join(root, "_meta.json"), encoding="utf-8") as f:
+                meta = json.load(f)
+            self.assertEqual(meta["purpose"], "微短剧源书")
+            self.assertEqual(meta["draft_mode"], "漫剧源书")
+            self.assertEqual(meta["target_words_per_chapter"], [1500, 2500])
+            self.assertEqual(meta["target_wordcount_min_max"], [1200, 3000])
+            with open(os.path.join(root, "_设置.md"), encoding="utf-8") as f:
+                settings = f.read()
+            self.assertIn("小说用途**：微短剧源书", settings)
+            self.assertIn("小说生成模式**：漫剧源书", settings)
             assert_next_packet_runs(self, root)
 
     def _meta_demo(self, init_script, src, root, chapter_flag, n, extra=()):
@@ -174,6 +221,69 @@ class InitMetadataTest(unittest.TestCase):
                     meta = json.load(f)
                 self.assertEqual(meta["target_chapters"], n)
                 self.assertEqual(meta["demo_chapters"], expected)
+                self.assertEqual(meta["target_wordcount_min_max"], [4000, 10000])
+                self.assertEqual(meta["purpose"], "传统小说")
+                with open(os.path.join(root, "_设置.md"), encoding="utf-8") as f:
+                    settings = f.read()
+                self.assertIn("小说用途：传统小说", settings)
+
+    def test_create_purpose_drives_manga_draft_mode_without_explicit_mode(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = os.path.join(tmp, "create_manga")
+            subprocess.run(
+                [
+                    sys.executable, CREATE_INIT,
+                    "--title", "测试漫剧源书",
+                    "--genre", "古言复仇",
+                    "--premise", "冷宫弃妃以妖力夺回皇权",
+                    "--scale", "漫剧",
+                    "--purpose", "漫剧源书",
+                    "--out", root,
+                ],
+                cwd=REPO,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            with open(os.path.join(root, "_meta.json"), encoding="utf-8") as f:
+                meta = json.load(f)
+            self.assertEqual(meta["purpose"], "漫剧源书")
+            self.assertEqual(meta["draft_mode"], "漫剧源书")
+            self.assertEqual(meta["target_words_per_chapter"], [1000, 1500])
+            self.assertEqual(meta["target_wordcount_min_max"], [800, 1800])
+            with open(os.path.join(root, "_设置.md"), encoding="utf-8") as f:
+                settings = f.read()
+            self.assertIn("小说用途：漫剧源书", settings)
+            self.assertIn("小说生成模式：漫剧源书", settings)
+
+    def test_expand_purpose_drives_manga_wordcount_without_platform_hint(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            src = write_source(tmp)
+            root = os.path.join(tmp, "expand_manga")
+            subprocess.run(
+                [
+                    sys.executable, EXPAND_INIT, src,
+                    "--out", root,
+                    "--target-chapters", "5",
+                    "--target-platform", "跨平台",
+                    "--purpose", "漫剧源书",
+                ],
+                cwd=REPO,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            with open(os.path.join(root, "_meta.json"), encoding="utf-8") as f:
+                meta = json.load(f)
+            self.assertEqual(meta["purpose"], "漫剧源书")
+            self.assertEqual(meta["draft_mode"], "漫剧源书")
+            self.assertEqual(meta["target_words_per_chapter"], [1000, 1500])
+            self.assertEqual(meta["target_wordcount_min_max"], [800, 1800])
+            with open(os.path.join(root, "_设置.md"), encoding="utf-8") as f:
+                settings = f.read()
+            self.assertIn("小说用途**：漫剧源书", settings)
+            self.assertIn("小说生成模式**：漫剧源书", settings)
+            assert_next_packet_runs(self, root)
 
     def test_spinoff_writes_generation_metadata(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -199,9 +309,14 @@ class InitMetadataTest(unittest.TestCase):
             with open(os.path.join(root, "_meta.json"), encoding="utf-8") as f:
                 meta = json.load(f)
             self.assertEqual(meta["target_chapters"], 5)
+            self.assertEqual(meta["target_wordcount_min_max"], [5000, 15000])
             self.assertEqual(meta["draft_mode"], "商业连载")
             self.assertEqual(meta["chapter_granularity"], "小批")
             self.assertEqual(meta["ai_text_usage"], "AI-assisted")
+            self.assertEqual(meta["purpose"], "短读/短篇")
+            with open(os.path.join(root, "_设置.md"), encoding="utf-8") as f:
+                settings = f.read()
+            self.assertIn("小说用途**：短读/短篇", settings)
             assert_next_packet_runs(self, root)
 
     def test_rewrite_writes_generation_metadata(self):
@@ -227,9 +342,14 @@ class InitMetadataTest(unittest.TestCase):
             with open(os.path.join(root, "_meta.json"), encoding="utf-8") as f:
                 meta = json.load(f)
             self.assertEqual(meta["target_chapters"], 5)
+            self.assertEqual(meta["target_wordcount_min_max"], [5000, 15000])
             self.assertEqual(meta["draft_mode"], "漫剧源书")
             self.assertEqual(meta["chapter_granularity"], "逐章")
             self.assertEqual(meta["ai_text_usage"], "AI-generated")
+            self.assertEqual(meta["purpose"], "漫剧源书")
+            with open(os.path.join(root, "_设置.md"), encoding="utf-8") as f:
+                settings = f.read()
+            self.assertIn("小说用途**：漫剧源书", settings)
             assert_next_packet_runs(self, root)
 
 

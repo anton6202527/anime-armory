@@ -5,7 +5,7 @@
 支持 CSV、JSONL、JSON list。推荐路径：
 
 ```text
-制漫剧/<剧名>/生产数据/platform_metrics.csv
+创作区/制漫剧/<剧名>/生产数据/platform_metrics.csv
 ```
 
 字段：
@@ -49,8 +49,8 @@ episode,platform,ab_test_id,variant_id,plays,revenue,distribution_spend,currency
 推荐路径：
 
 ```text
-制漫剧/<剧名>/生产数据/creative_features.csv
-制漫剧/<剧名>/生产数据/creative_features.auto.json
+创作区/制漫剧/<剧名>/生产数据/creative_features.csv
+创作区/制漫剧/<剧名>/生产数据/creative_features.auto.json
 ```
 
 `creative_features.csv|jsonl|json` 是手工覆盖文件；缺失时 `feedback.py` 默认从 `脚本/第N集/storyboard.json` 自动抽取。自动文件只作复核快照，不覆盖手工标签。
@@ -93,8 +93,8 @@ episode,ab_test_id,variant_id,opening_type,opening_variant,cover_variant,cliffha
 自动抽取命令：
 
 ```bash
-python3 skills/n2d-feedback/scripts/feedback.py 制漫剧/<剧名> --extract-features-only --write-features
-python3 skills/n2d-feedback/scripts/feedback.py 制漫剧/<剧名> --metrics 制漫剧/<剧名>/生产数据/platform_metrics.csv --write-features
+python3 skills/n2d-feedback/scripts/feedback.py 创作区/制漫剧/<剧名> --extract-features-only --write-features
+python3 skills/n2d-feedback/scripts/feedback.py 创作区/制漫剧/<剧名> --metrics 创作区/制漫剧/<剧名>/生产数据/platform_metrics.csv --write-features
 ```
 
 自动抽取规则：

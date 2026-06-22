@@ -161,3 +161,146 @@ def test_numeric_drift_via_scan_chapter(tmp_path):
 def test_no_anchors_no_numeric_alerts():
     # 无年龄锚点（角色卡没声明）→ 优雅跳过，不臆造。
     assert logic_sentry.scan_numeric_drift({}, "沈念今年十七岁。", 5) == []
+
+
+# ── N1 世界规则违背（阻断级）──
+
+def test_world_rule_forbidden_after():
+    world = {"major_changes": [{"event": "断剑彻底熔毁", "chapter": 40,
+                                "forbidden_after": ["祭起断剑", "断剑出鞘"]}]}
+    alerts = logic_sentry.scan_world_rules(world, "他祭起断剑，寒光大盛。", 55)
+    assert any(a["type"] == "world_rule_violation" and a["severity"] == "阻断级" for a in alerts)
+
+
+def test_world_rule_forbidden_before():
+    world = {"major_changes": [{"event": "瞬移禁制被破", "chapter": 42,
+                                "forbidden_before": ["瞬移"]}]}
+    # 第30章就瞬移 → 用了第42章才解锁的设定
+    alerts = logic_sentry.scan_world_rules(world, "他一个瞬移闪到敌后。", 30)
+    assert any(a["type"] == "world_rule_violation" for a in alerts)
+
+
+def test_world_rule_freetext_only_skips():
+    # 只给自由文本 impact、无 forbidden_* → 不臆造，跳过
+    world = {"major_changes": [{"event": "x", "impact": "禁术流出", "chapter": 10}]}
+    assert logic_sentry.scan_world_rules(world, "禁术流出江湖。", 20) == []
+
+
+def test_world_rule_respects_chapter_window():
+    world = {"major_changes": [{"event": "e", "chapter": 40, "forbidden_after": ["断剑"]}]}
+    # 第30章（早于确立章）不应被 forbidden_after 命中
+    assert logic_sentry.scan_world_rules(world, "断剑在手。", 30) == []
+
+
+# ── N2 关系温度计（建议级）──
+
+def _matrix(hist, pair="沈念|王敦"):
+    return {"matrix": {pair: {"temperature": hist[-1]["temperature"], "history": hist}}}
+
+
+def test_relationship_flip_detected():
+    m = _matrix([{"chapter": 40, "temperature": 70}, {"chapter": 48, "temperature": 20}])
+    alerts = logic_sentry.scan_relationship_flips(m, "两人寻常对话，并无波澜。", 48)
+    assert any(a["type"] == "relationship_flip" and a["delta"] == 50 for a in alerts)
+
+
+def test_relationship_flip_exempt_by_turning_point():
+    m = _matrix([{"chapter": 40, "temperature": 70}, {"chapter": 48, "temperature": 20}])
+    # 本章有"背叛"重大转折 → 豁免
+    assert logic_sentry.scan_relationship_flips(m, "原来是他背叛在先！", 48) == []
+
+
+def test_relationship_flip_small_swing_ok():
+    m = _matrix([{"chapter": 40, "temperature": 50}, {"chapter": 48, "temperature": 30}])
+    assert logic_sentry.scan_relationship_flips(m, "平淡。", 48) == []
+
+
+def test_relationship_flip_only_on_landing_chapter():
+    m = _matrix([{"chapter": 40, "temperature": 70}, {"chapter": 48, "temperature": 20}])
+    # 当前章 ≠ 最新一笔章 → 不报
+    assert logic_sentry.scan_relationship_flips(m, "平淡。", 50) == []
+
+
+def test_relationship_flip_no_history_skips():
+    assert logic_sentry.scan_relationship_flips({"matrix": {"a|b": {"temperature": 10}}}, "x", 5) == []
+
+
+# ── N3 张力账本 ──
+
+def test_hook_stale_high_urgency_overdue():
+    led = {"unresolved_hooks": [{"id": "h1", "question": "谁下的毒？",
+                                 "introduced_in_chapter": 3, "urgency": "high"}]}
+    alerts = logic_sentry.scan_tension(led, "正文。", 15)  # 15-3=12 > 10
+    assert any(a["type"] == "hook_stale" and a["severity"] == "建议级" for a in alerts)
+
+
+def test_hook_not_overdue_ok():
+    led = {"unresolved_hooks": [{"id": "h1", "introduced_in_chapter": 3, "urgency": "high"}]}
+    assert logic_sentry.scan_tension(led, "x", 10) == []  # 10-3=7 ≤ 10
+
+
+def test_hook_resolved_skipped():
+    led = {"unresolved_hooks": [{"id": "h1", "introduced_in_chapter": 3,
+                                 "urgency": "high", "status": "resolved"}]}
+    assert logic_sentry.scan_tension(led, "x", 30) == []
+
+
+def test_promise_broken_is_blocking():
+    led = {"reader_promises": [{"id": "p1", "promise": "初雪前杀王",
+                                "deadline_event": "初雪降临"}]}
+    alerts = logic_sentry.scan_tension(led, "这一夜，初雪降临，王却还活着。", 60)
+    assert any(a["type"] == "promise_broken" and a["severity"] == "阻断级" for a in alerts)
+
+
+def test_promise_kept_not_flagged():
+    led = {"reader_promises": [{"id": "p1", "promise": "x", "deadline_event": "初雪降临",
+                               "status": "fulfilled"}]}
+    assert logic_sentry.scan_tension(led, "初雪降临。", 60) == []
+
+
+def test_tension_fatigue_three_low():
+    led = {"chapter_tension_curve": [{"chapter": 8, "tension_score": 4},
+                                     {"chapter": 9, "tension_score": 3},
+                                     {"chapter": 10, "tension_score": 2}]}
+    alerts = logic_sentry.scan_tension(led, "x", 10)
+    assert any(a["type"] == "tension_fatigue" for a in alerts)
+
+
+def test_tension_fatigue_one_high_breaks_run():
+    led = {"chapter_tension_curve": [{"chapter": 8, "tension_score": 4},
+                                     {"chapter": 9, "tension_score": 7},
+                                     {"chapter": 10, "tension_score": 2}]}
+    assert logic_sentry.scan_tension(led, "x", 10) == []
+
+
+# ── N4 角色护栏（底线/禁行）──
+
+def test_character_hard_limit_violation_blocks():
+    guardrails = {"characters": {"沈念": {"hard_limits": ["伤害无辜"]}}}
+    alerts = logic_sentry.scan_character_guardrails(
+        guardrails, "沈念抬手伤害无辜，以此换来胜利。", 12)
+    assert any(a["type"] == "character_hard_limit_violation" and a["severity"] == "阻断级" for a in alerts)
+
+
+def test_character_forbidden_action_is_advisory():
+    guardrails = {"characters": {"沈念": {"forbidden_actions": ["背叛师门"]}}}
+    alerts = logic_sentry.scan_character_guardrails(
+        guardrails, "沈念在雨夜背叛师门，从此无法回头。", 12)
+    assert any(a["type"] == "character_forbidden_action" and a["severity"] == "建议级" for a in alerts)
+
+
+def test_character_guardrail_exempt_context():
+    guardrails = {"characters": {"沈念": {"hard_limits": ["伤害无辜"], "allow_if_context": ["夺舍"]}}}
+    assert logic_sentry.scan_character_guardrails(
+        guardrails, "沈念被夺舍后伤害无辜，醒来时浑身发抖。", 12) == []
+
+
+def test_character_guardrail_via_scan_chapter(tmp_path):
+    proj = tmp_path / "书"
+    (proj / "设定").mkdir(parents=True)
+    (proj / "设定" / "character_guardrails.json").write_text(
+        '{"characters":{"沈念":{"hard_limits":["伤害无辜"]}}}', encoding="utf-8")
+    wiki = {"沈念": {"category": "character", "status": "active"}}
+    alerts = logic_sentry.scan_chapter(
+        wiki, "沈念亲手伤害无辜，殿内忽然安静。", 18, project_root=str(proj))
+    assert any(a["type"] == "character_hard_limit_violation" for a in alerts)

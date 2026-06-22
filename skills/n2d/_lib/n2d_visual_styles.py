@@ -9,7 +9,10 @@ from __future__ import annotations
 from typing import Dict
 
 
+DEFAULT_STYLE = "国漫写实角色审美 + 电影级布光与镜头语言"
+
 STYLE_OPTIONS = (
+    DEFAULT_STYLE,
     "写实电影感",
     "国漫写实",
     "二次元赛璐璐",
@@ -22,6 +25,13 @@ STYLE_OPTIONS = (
 
 
 STYLE_CONTRACTS: Dict[str, Dict[str, str]] = {
+    "国漫写实角色审美 + 电影级布光与镜头语言": {
+        "视觉基调": "国漫写实角色审美，人物精致耐看、比例理想化但不幼态；场景、服装、皮肤和道具材质按电影写实处理，整体像高预算国风漫剧的影视剧照。",
+        "镜头与构图": "用电影镜头语言组织画面：明确景别、焦段、轴线和前中后景层次；角色轮廓和姿态保持国漫画面张力，避免只像静态概念设定图。",
+        "光色策略": "电影级动机光和场景光位优先，月光、烛火、窗光、符阵、兵器反光都要有来源；角色脸部保持好看、立体、可读，爽点允许更干净的高光和东方幻想色彩。",
+        "运动边界": "稳定推拉、固定、跟摇、轻微手持为主；高光镜头可短促环绕或轻甩，但必须有剧情动机，禁止无理由高速飞行和随机变焦。",
+        "风格禁忌": "欧美脸漂移、真人粗粝到影响角色美型、照片级毛孔喧宾夺主、页游塑料盔甲、廉价游戏CG、随机霓虹、过度磨皮、只像插画设定图没有影视镜头感。",
+    },
     "写实电影感": {
         "视觉基调": "写实电影剧照，低饱和，高动态范围，真实布料/皮肤/尘雾质感，轻微胶片颗粒。",
         "镜头与构图": "35mm 环境叙事 / 50mm 对话 / 85mm 情绪特写；避免无物理依据的漂浮超广角。",
@@ -76,7 +86,7 @@ STYLE_CONTRACTS: Dict[str, Dict[str, str]] = {
 
 def style_contract_for(style_name: str) -> Dict[str, str]:
     """Return the six-field `style_contract` values for a selected style."""
-    name = (style_name or "写实电影感").strip() or "写实电影感"
+    name = (style_name or DEFAULT_STYLE).strip() or DEFAULT_STYLE
     base = STYLE_CONTRACTS.get(name)
     if base is None:
         base = {

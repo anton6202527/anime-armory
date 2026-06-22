@@ -4,7 +4,7 @@
 
 This is deterministic scaffolding, not an LLM writer: it reads the requested
 chapter, mines high-signal snippets, then writes both platform copy and the
-finished-artifact n2d handoff skeleton documented by novel-promote.
+short-video brief documented by novel-promote.
 """
 import argparse
 import os
@@ -221,7 +221,7 @@ def build_platform_script(project, chapter, platform, chapter_path, text):
     return "\n".join(lines)
 
 
-def build_n2d_ready(project, chapter, chapter_path, text):
+def build_video_brief(project, chapter, chapter_path, text):
     rel_chapter = os.path.relpath(chapter_path, project).replace(os.sep, "/")
     highlights = mine_highlights(text)
     beats = highlights["beats"]
@@ -237,7 +237,7 @@ def build_n2d_ready(project, chapter, chapter_path, text):
         f"# 预告片底稿 · {label}",
         "",
         f"- 来源章节: `{rel_chapter}`",
-        "- 视觉风格建议: 对齐本项目 `设定/风格指纹.json` 或 Demo 文风锚点；若缺失，由 n2d 接手前补齐。",
+        "- 视觉风格建议: 对齐本项目 `设定/风格指纹.json` 或 Demo 文风锚点。",
         f"- 角色卡指针: `设定/角色卡.md`（本章候选角色：{chars}）",
         "- 禁剧透项: 幕后身份、终局真相、金手指最终代价。",
         "",
@@ -249,7 +249,7 @@ def build_n2d_ready(project, chapter, chapter_path, text):
         )
     lines += [
         "",
-        "> 这是 novel → n2d 的 finished-artifact 交接底稿；本脚本不调用任何 n2d-* skill。",
+        "> 这是小说宣发短视频 brief；本脚本只生成 novel 线内产物。",
         "",
     ]
     return "\n".join(lines)
@@ -265,13 +265,13 @@ def write_outputs(project, chapter, platform):
     os.makedirs(out_dir, exist_ok=True)
     label = chapter_label(chapter)
     promo_path = os.path.join(out_dir, f"{label}_引流脚本_{platform}.md")
-    n2d_path = os.path.join(out_dir, f"{label}_n2d_ready.md")
+    brief_path = os.path.join(out_dir, f"{label}_video_brief.md")
 
     with open(promo_path, "w", encoding="utf-8") as f:
         f.write(build_platform_script(project, chapter, platform, chapter_path, text))
-    with open(n2d_path, "w", encoding="utf-8") as f:
-        f.write(build_n2d_ready(project, chapter, chapter_path, text))
-    return promo_path, n2d_path
+    with open(brief_path, "w", encoding="utf-8") as f:
+        f.write(build_video_brief(project, chapter, chapter_path, text))
+    return promo_path, brief_path
 
 
 def main(argv=None):
@@ -296,9 +296,9 @@ def main(argv=None):
         print(f"[warn] 未知平台 {args.platform!r}，按 tiktok 模板生成；可选：{known}", file=sys.stderr)
         platform = "tiktok"
 
-    promo_path, n2d_path = write_outputs(project, args.chapter, platform)
+    promo_path, brief_path = write_outputs(project, args.chapter, platform)
     print(f"Promotion script generated at {promo_path}")
-    print(f"n2d-ready draft generated at {n2d_path}")
+    print(f"Video brief generated at {brief_path}")
 
 
 if __name__ == "__main__":

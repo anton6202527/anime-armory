@@ -26,6 +26,7 @@ def make_project(root, *, demo=True):
             "schema_version": 1,
             "kind": "create",
             "title": "测试新书",
+            "purpose": "传统小说",
             "rights_status": "original",
             "outputs": ["txt"],
             "scale": "medium",
@@ -75,6 +76,7 @@ def make_kind_project(root, kind):
             "schema_version": 1,
             "kind": kind,
             "title": "测试项目",
+            "purpose": "漫剧源书",
             "rights_status": "user-declared",
             "outputs": ["txt"],
             "scale": "short",
@@ -131,12 +133,36 @@ class DraftPacketsTest(unittest.TestCase):
             with open(packet, encoding="utf-8") as f:
                 text = f.read()
             self.assertIn("第 03 章写作任务包", text)
+            self.assertIn("小说用途：传统小说", text)
+            self.assertIn("建议篇幅：3000-5000 字", text)
             self.assertIn("发现代价", text)
             self.assertIn("题旨与读者契约", text)
             self.assertIn("力量必须付出代价", text)
             self.assertIn("代价换来的力量是否值得", text)
             self.assertIn("状态增量模板", text)
             self.assertIn("reader_contract_progress", text)
+
+    def test_settings_purpose_fills_packet_when_meta_missing_purpose(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            meta_path = os.path.join(tmp, "_meta.json")
+            with open(meta_path, encoding="utf-8") as f:
+                meta = json.load(f)
+            meta.pop("purpose", None)
+            meta["draft_mode"] = "稳妥初稿"
+            with open(meta_path, "w", encoding="utf-8") as f:
+                json.dump(meta, f, ensure_ascii=False)
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n- 小说用途：漫剧源书\n")
+            subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3", "--step", "full"],
+                capture_output=True, text=True, check=True,
+            )
+            packet = os.path.join(tmp, "写作任务", "第03章.md")
+            with open(packet, encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("小说用途：漫剧源书", text)
+            self.assertIn("小说生成模式：漫剧源书", text)
 
     def test_auto_uses_trio_for_commercial_serial(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -154,6 +180,69 @@ class DraftPacketsTest(unittest.TestCase):
             self.assertTrue(os.path.exists(os.path.join(task_dir, "第03章_editor.md")))
             self.assertFalse(os.path.exists(os.path.join(task_dir, "第03章.md")))
 
+    def test_auto_uses_trio_from_project_purpose_without_mode_setting(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            meta_path = os.path.join(tmp, "_meta.json")
+            with open(meta_path, encoding="utf-8") as f:
+                meta = json.load(f)
+            meta["draft_mode"] = "稳妥初稿"
+            with open(meta_path, "w", encoding="utf-8") as f:
+                json.dump(meta, f, ensure_ascii=False)
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n- 小说用途：漫剧源书\n")
+            got = subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3"],
+                capture_output=True, text=True, check=True,
+            )
+            task_dir = os.path.join(tmp, "写作任务")
+            self.assertIn("三步迭代顺序", got.stdout)
+            self.assertTrue(os.path.exists(os.path.join(task_dir, "第03章_architect.md")))
+            self.assertTrue(os.path.exists(os.path.join(task_dir, "第03章_ghostwriter.md")))
+            self.assertTrue(os.path.exists(os.path.join(task_dir, "第03章_editor.md")))
+            self.assertFalse(os.path.exists(os.path.join(task_dir, "第03章.md")))
+
+    def test_auto_uses_trio_for_long_project(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            meta_path = os.path.join(tmp, "_meta.json")
+            with open(meta_path, encoding="utf-8") as f:
+                meta = json.load(f)
+            meta["scale"] = "long"
+            meta["target_chapters"] = 80
+            with open(meta_path, "w", encoding="utf-8") as f:
+                json.dump(meta, f, ensure_ascii=False)
+            got = subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3"],
+                capture_output=True, text=True, check=True,
+            )
+            task_dir = os.path.join(tmp, "写作任务")
+            self.assertIn("三步迭代顺序", got.stdout)
+            self.assertTrue(os.path.exists(os.path.join(task_dir, "第03章_architect.md")))
+            with open(os.path.join(task_dir, "第03章_architect.md"), encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("小说生成工作流：三步迭代（长篇/商业自动）", text)
+
+    def test_explicit_default_single_overrides_long_trio_default(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            meta_path = os.path.join(tmp, "_meta.json")
+            with open(meta_path, encoding="utf-8") as f:
+                meta = json.load(f)
+            meta["scale"] = "long"
+            meta["target_chapters"] = 80
+            with open(meta_path, "w", encoding="utf-8") as f:
+                json.dump(meta, f, ensure_ascii=False)
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n- 小说生成工作流：默认单步\n")
+            subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3"],
+                capture_output=True, text=True, check=True,
+            )
+            task_dir = os.path.join(tmp, "写作任务")
+            self.assertTrue(os.path.exists(os.path.join(task_dir, "第03章.md")))
+            self.assertFalse(os.path.exists(os.path.join(task_dir, "第03章_architect.md")))
+
     def test_explicit_full_overrides_trio_default(self):
         with tempfile.TemporaryDirectory() as tmp:
             make_project(tmp)
@@ -166,6 +255,77 @@ class DraftPacketsTest(unittest.TestCase):
             task_dir = os.path.join(tmp, "写作任务")
             self.assertTrue(os.path.exists(os.path.join(task_dir, "第03章.md")))
             self.assertFalse(os.path.exists(os.path.join(task_dir, "第03章_architect.md")))
+
+    def test_live_check_workflow_adds_post_write_loop(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n- 小说生成工作流：边写边自检\n- 小批回扫间隔：3章\n")
+            got = subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3"],
+                capture_output=True, text=True, check=True,
+            )
+            packet = os.path.join(tmp, "写作任务", "第03章.md")
+            with open(packet, encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("小说生成工作流：边写边自检", text)
+            self.assertIn("边写边自检闭环", text)
+            self.assertIn("skills/novel/scripts/post_write.py", text)
+            self.assertIn("小批回扫修正点", text)
+            self.assertIn("--range 1-3", text)
+            self.assertIn("已选择 边写边自检", got.stdout)
+            self.assertIn("每 3 章跑一次 novel-review", got.stdout)
+
+    def test_action_scene_checklist_is_injected_from_outline(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            with open(os.path.join(tmp, "设定", "章纲.md"), "a", encoding="utf-8") as f:
+                f.write("\n- 第 04 章 《巷战追杀》 — 主角被追杀，屋脊追逐中临阵突破并反杀\n")
+            subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "4"],
+                capture_output=True, text=True, check=True,
+            )
+            packet = os.path.join(tmp, "写作任务", "第04章.md")
+            with open(packet, encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("`skills/novel-craft/references/action-scenes.md`", text)
+            self.assertIn("专项场景写作清单", text)
+            self.assertIn("打斗/战斗", text)
+            self.assertIn("追逐/逃亡", text)
+            self.assertIn("升级/突破", text)
+            self.assertIn("距离如何变化", text)
+            self.assertIn("power_system_registry", text)
+            self.assertIn("必须写入 `state_delta`", text)
+
+    def test_reveal_confrontation_relationship_checklists_are_injected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            with open(os.path.join(tmp, "设定", "章纲.md"), "a", encoding="utf-8") as f:
+                f.write(
+                    "\n- 第 05 章 《公堂掉马》 — 女主当众拿出血书证据链揭穿内鬼真实身份，"
+                    "逼问皇叔背叛真相，男女主误会爆发后决裂却仍互相救场\n"
+                )
+            subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "5"],
+                capture_output=True, text=True, check=True,
+            )
+            packet = os.path.join(tmp, "写作任务", "第05章.md")
+            with open(packet, encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("`skills/novel-craft/references/reveal-scenes.md`", text)
+            self.assertIn("`skills/novel-craft/references/confrontation-scenes.md`", text)
+            self.assertIn("`skills/novel-craft/references/relationship-scenes.md`", text)
+            self.assertIn("揭示场景写作清单", text)
+            self.assertIn("身份曝光/掉马", text)
+            self.assertIn("真相揭示/证据揭穿", text)
+            self.assertIn("对质/智斗场景写作清单", text)
+            self.assertIn("公开对质/当众打脸", text)
+            self.assertIn("审讯/逼问", text)
+            self.assertIn("关系情绪场景写作清单", text)
+            self.assertIn("决裂/误会爆发", text)
+            self.assertIn("和解/救赎/互相救场", text)
+            self.assertIn("关系温度", text)
+            self.assertIn("必须写入 `state_delta`", text)
 
     def test_blocks_without_demo_gate_by_default(self):
         with tempfile.TemporaryDirectory() as tmp:

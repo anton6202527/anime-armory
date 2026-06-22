@@ -3,7 +3,7 @@
 """品牌包装片尾 end card：logo + slogan + CTA 合成一张 PNG，供 ad-compose 接到成片尾。
 
 广告独有的后端包装。无 libass 也能做（Pillow 渲染）。可选叠 logo 图片，背景用品牌色。
-自包含；依赖 Pillow（与 n2d/mv 字幕渲染同栈）。
+自包含；依赖 Pillow 渲染文字和可选 logo。
 
 尺寸不再写死 1920x1080：可传 `--size WxH`，或传 `--aspect 9:16` 按比例推（竖版片尾不再被
 拉成横版）。版式用 Pillow 实测文字高度堆叠 slogan / CTA，避免比例变化时 slogan 与 CTA 叠死。

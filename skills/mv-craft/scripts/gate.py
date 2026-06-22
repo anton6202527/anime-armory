@@ -82,6 +82,67 @@ def _load_plan(root):
     return mv_utils.load_json(os.path.join(root, "分镜", "clip_plan.json"), {}) or {}
 
 
+def _image_qc_path(root):
+    return os.path.join(root, "生产数据", "image_qc", "image_qc.json")
+
+
+def _image_qc_errors_warnings(root, stage):
+    if stage not in {"video_jobs", "compose"}:
+        return [], []
+    path = _image_qc_path(root)
+    report = mv_utils.load_json(path, None)
+    if not isinstance(report, dict):
+        return [f"缺 mv-image 出图落档机检报告：{path}；先跑 `python3 skills/mv-image/scripts/image_qc.py <作品根>`"], []
+    summary = report.get("summary") or {}
+    env = report.get("qc_environment") or {}
+    errors = []
+    warnings = []
+    try:
+        hard = int(summary.get("hard_blocks") or 0)
+    except (TypeError, ValueError):
+        return [f"mv-image image_qc 报告格式异常：summary.hard_blocks 缺失或不是整数（{path}）"], []
+    if hard:
+        errors.append(f"mv-image image_qc 仍有 hard block={hard}（主角脸崩/图损坏/禁用本地贴脸产物）；先回 mv-image 修复重跑")
+    precision = str(env.get("precision_level") or "").strip()
+    manual_ok = bool(report.get("manual_review_accepted") or env.get("manual_review_accepted"))
+    if precision != "full" and not manual_ok:
+        errors.append(f"mv-image image_qc 机检精度为 {precision or 'unknown'}，未达到 full；正式进 mv-video 前需补依赖重跑，"
+                      "或在报告中人工留痕 manual_review_accepted=true 后再继续")
+    elif precision != "full" and manual_ok:
+        warnings.append(f"mv-image image_qc 机检精度为 {precision or 'unknown'}，但已有人工复核放行留痕")
+    try:
+        advisory = int(summary.get("advisory") or 0)
+    except (TypeError, ValueError):
+        advisory = 0
+    if advisory or summary.get("verdict") == "review":
+        warnings.append(f"mv-image image_qc 有非阻断初筛项 advisory={advisory}，进入视频前请确认主色/锚点/参考输入已复核")
+
+    plan = _load_plan(root)
+    try:
+        qc_mtime = os.path.getmtime(path)
+    except OSError:
+        qc_mtime = 0
+    stale = []
+    for clip in plan.get("clips", []):
+        if not isinstance(clip, dict):
+            continue
+        rels = [clip.get("image_path")]
+        if clip.get("need_end_frame"):
+            rels.append(clip.get("end_frame_path"))
+        for rel in rels:
+            if not rel:
+                continue
+            full = os.path.join(root, rel)
+            try:
+                if os.path.getmtime(full) > qc_mtime:
+                    stale.append(str(rel))
+            except OSError:
+                continue
+    if stale:
+        errors.append(f"mv-image image_qc 已过期：{len(stale)} 张图片晚于 QC 报告，例：{stale[0]}；重跑 image_qc")
+    return errors, warnings
+
+
 def check(root, stage):
     errors = []
     warnings = []
@@ -95,7 +156,7 @@ def check(root, stage):
     timeline = os.path.join(root, "分镜", "timeline_manifest.json")
 
     if stage in {"beat", "plan", "image", "video_jobs", "lyric_sync", "compose"} and not song:
-        errors.append("缺 歌/song.*，先用 song 线产出或让用户上传最终成品歌")
+        errors.append("缺 歌/song.*，请先补入最终成品歌")
     if stage in {"plan", "image", "video_jobs", "lyric_sync", "compose"} and not os.path.exists(lyrics):
         errors.append("缺 词/lyrics.md")
     if stage in {"plan", "image", "video_jobs", "compose"} and not os.path.exists(beatgrid):
@@ -118,6 +179,10 @@ def check(root, stage):
                 missing.append(f"{clip.get('clip_id')}:{image_path}")
         if missing:
             errors.append(f"缺 {len(missing)} 个首帧 PNG，先跑 mv-image；例：{missing[0]}")
+
+    qc_errors, qc_warnings = _image_qc_errors_warnings(root, stage)
+    errors.extend(qc_errors)
+    warnings.extend(qc_warnings)
 
     if stage == "compose" and os.path.exists(timeline):
         data = mv_utils.load_json(timeline, {}) or {}

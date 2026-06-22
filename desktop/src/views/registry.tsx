@@ -17,7 +17,7 @@ function FilesView({ root }: ViewProps) {
     <div className="stub-view">
       <h3>文件视图（novel 线 · 待实现）</h3>
       <p>v1 计划：Tauri fs 读取 {root.path} 的目录树 + Monaco markdown 预览。</p>
-      <div className="tree">写小说/&lt;剧名&gt;/<br/>&nbsp;&nbsp;├─ 章节/<br/>&nbsp;&nbsp;├─ 设定/<br/>&nbsp;&nbsp;└─ 导出/</div>
+      <div className="tree">创作区/写小说/&lt;剧名&gt;/<br/>&nbsp;&nbsp;├─ 章节/<br/>&nbsp;&nbsp;├─ 设定/<br/>&nbsp;&nbsp;└─ 导出/</div>
     </div>
   );
 }

@@ -52,6 +52,7 @@ STRONG_EMOTION_MARKERS = (
     "失控", "绝望", "悲恸", "惊愕",
 )
 READY_STATUSES = {"registered", "ready"}
+CORE_SCOPE_MARKERS = ("核心", "长线", "全篇", "主角", "女主", "男主", "主反派", "贯穿")
 # 2026 公认正面+3/4+侧面是身份核心集，纯 90° 正侧是较弱的重投影锚。
 # 现在 three_quarter 是所有人物/形态的基础硬包；近景比例只影响完整表情库/动作参考等增强项。
 CU_HEAVY_RATIO = 0.4
@@ -115,9 +116,46 @@ def _status_value(value: Any) -> str:
     return str(value or "").strip().lower()
 
 
+def _ref_path_status_ready(ref: Any) -> Tuple[str, bool]:
+    if isinstance(ref, Mapping):
+        path = str(ref.get("path") or "").strip()
+        return path, _status_value(ref.get("status")) in READY_STATUSES
+    path = str(ref or "").strip()
+    return path, bool(path)
+
+
+def same_source_expression_ready(form: Mapping[str, Any]) -> bool:
+    """是否已有 ready 的非中性同源表情参考。
+
+    中性脸锚能辅助锁脸，但不等于“表情库”；只有显式 `_表情_` 资产或 emotion/label
+    标为具体情绪的 ready 条目，才抵消 Codex-only 核心角色预测 high 的 preflight block。
+    """
+    rg = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
+    atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
+    neutral = {"", "中性", "neutral", "base", "基础", "脸锚", "同源脸锚"}
+    for source in (rg.get("expressions"), atlas.get("expression_refs")):
+        for ref in source or []:
+            path, ready = _ref_path_status_ready(ref)
+            if not path or not ready:
+                continue
+            emotion = ""
+            if isinstance(ref, Mapping):
+                emotion = str(ref.get("emotion") or ref.get("label") or "").strip().lower()
+            if "_表情_" in Path(path).stem:
+                return True
+            if emotion and emotion not in neutral and not emotion.endswith("同源脸锚"):
+                return True
+    return False
+
+
 def missing_3q_baseline(appear: int, tq_ready: bool) -> bool:
     """任一入镜人物缺 ready 的 3/4 侧脸 → True。纯函数·可测。"""
     return int(appear) > 0 and not tq_ready
+
+
+def is_core_scope(scope: str, name: str = "") -> bool:
+    text = f"{scope or ''} {name or ''}"
+    return any(marker in text for marker in CORE_SCOPE_MARKERS)
 
 
 def lock_tier(default_backend: str, image_adapters: Mapping[str, Any], lora: Mapping[str, Any]) -> str:
@@ -330,6 +368,7 @@ def load_characters(root: Path) -> List[Dict[str, Any]]:
             aliases |= _split_aliases(f.get("asset_key") or "")
         f0 = forms[0]
         adapters = f0.get("identity_adapters") or {}
+        expression_ready = any(same_source_expression_ready(f) for f in forms)
         # lora ready on ANY form 算已上档
         lora = {"status": "not_ready"}
         for f in forms:
@@ -340,12 +379,14 @@ def load_characters(root: Path) -> List[Dict[str, Any]]:
         chars.append({
             "id": cid,
             "name": str(ch.get("name") or cid),
+            "scope": str(ch.get("scope") or f0.get("scope") or ""),
             "aliases": aliases,
             "form": str(f0.get("form") or "常态"),
             "angle_policy": f0.get("angle_policy") or {},
             "image_adapters": adapters.get("image") or {},
             "lora": lora,
             "tq_ready": three_quarter_ready(f0),
+            "expression_ready": expression_ready,
         })
     return chars
 
@@ -428,10 +469,33 @@ def analyze(root: Path, ep: str) -> Dict[str, Any]:
             ]
         rec = {
             "character_id": cid, "name": c["name"], "form": c["form"],
+            "scope": c.get("scope") or "",
             "signals": signals, "angle_tokens": sorted(agg["angle_tokens"]),
             "appears_in": agg["clips"], **scored, "suggestions": sug,
             "reference_gaps": reference_gaps,
         }
+        if (
+            rec["band"] == "high"
+            and not bool(profile.get("persistent_subject"))
+            and is_core_scope(str(c.get("scope") or ""), str(c.get("name") or ""))
+            and rec.get("tier") in {"reference_group", "multi_reference", "native_unregistered"}
+        ):
+            if bool(c.get("expression_ready")):
+                rec["predicted_block_mitigated_by"] = "same_source_expression_refs"
+                rec["suggestions"] = [
+                    "已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，"
+                    "不再因预测 high 在 preflight 阶段硬阻断。"
+                ] + sug
+            else:
+                rec["band"] = "block"
+                rec["predicted_block_reason"] = (
+                    f"核心/长线角色在 `{default_backend}` 这类无持久主体能力后端上预测 high，"
+                    "只靠普通参考图/文字锚无法满足正式出图一致性。"
+                )
+                rec["suggestions"] = [
+                    "⛔ 预测高危已升级为阻断：先切到能真实消费参考图/持久主体的官方后端，"
+                    "或补 face_embedding/主体库/LoRA/同源表情库并重跑 preflight；不要带着 high 风险直接烧图。"
+                ] + sug
         # ② 实测漂移回灌：上一集已**测**出该升 block 的跨集漂移 → 本集预测分直接 block（既成事实，非预测）
         measured = measured_drift_block(prior_drift, c.get("aliases") or set(), c["name"])
         if measured:

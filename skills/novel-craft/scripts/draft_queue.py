@@ -15,6 +15,7 @@ if _COMMON not in sys.path:
 from io_utils import load_json  # noqa: E402  本线 _lib 单一真值源
 from project_io import list_chapter_files, load_project_settings  # noqa: E402
 
+from contract import normalize_novel_purpose, resolve_novel_draft_mode
 from store import atomic_write_json, file_lock
 
 
@@ -55,8 +56,26 @@ def setting_value(root, key):
     return load_project_settings(root).get(key, "")
 
 
+def purpose_from_settings(root, meta):
+    value = setting_value(root, "小说用途") or meta.get("purpose") or setting_value(root, "目标用途")
+    value = normalize_novel_purpose(value)
+    if value in {"", "未定", "（未定）", "未指定"}:
+        return ""
+    return value
+
+
 def use_trio_pipeline(root, meta):
-    mode = setting_value(root, "小说生成模式") or meta.get("draft_mode") or ""
+    mode = setting_value(root, "小说生成模式")
+    if not mode:
+        meta_mode = meta.get("draft_mode")
+        explicit_mode = None if meta_mode in {"", None, "稳妥初稿"} else meta_mode
+        mode = resolve_novel_draft_mode(
+            explicit_mode,
+            purpose=purpose_from_settings(root, meta),
+            platform=meta.get("target_platform"),
+            scale=meta.get("scale"),
+            fallback=meta_mode or "",
+        )
     workflow = setting_value(root, "小说生成工作流") or meta.get("draft_workflow") or meta.get("writing_workflow") or ""
     return mode in {"商业连载", "漫剧源书"} or "三步" in workflow or "trio" in str(workflow).lower()
 

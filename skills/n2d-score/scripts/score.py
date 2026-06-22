@@ -646,6 +646,58 @@ def build_triage_tasks(unmapped: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     return tasks
 
 
+def build_consistency_kpi(consistency: Optional[Dict[str, Any]],
+                          identity: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    """角色一致性 **报告型 KPI**（对标 EntityBench/MSVBench 2026·与人判 Spearman 94.4%）——
+    纯函数·可测。与 severity_counts_to_score 的"扣分式"正交：扣分回答"扣几分"，KPI 回答
+    "本集一致性 0.82、跨集 0.79、离可投放线 0.85 差多少"，供 n2d-review 模式② 横向对标。
+
+    - intra_episode：本集各角色「质心 vs 主参考」余弦（face_consistency.ep_mean_score）的均值。
+      该值已过 G3 fidelity-gate（崩 canonical 的镜不计入），不会被"稳定地错"抬高。
+    - cross_episode：n2d-identity 跨集漂移报告里各角色 mean_score 的均值（缺则 None）。
+    - release_line：可投放下限，默认 0.85，可经 N2D_CONSISTENCY_RELEASE_LINE 覆盖。
+      **必须随 encoder 重标定**——arcface 与 styleid 余弦尺度不同，不能共用同一条线。
+    verdict：intra ≥ line → above；< line → below；无 intra → None（不臆造）。"""
+    sections = (consistency or {}).get("sections")
+    face = sections.get(FACE_DIM) if isinstance(sections, dict) and isinstance(sections.get(FACE_DIM), dict) else {}
+    chars = face.get("characters") if isinstance(face.get("characters"), dict) else {}
+    intra_vals = [c["ep_mean_score"] for c in chars.values()
+                  if isinstance(c, dict) and isinstance(c.get("ep_mean_score"), (int, float))]
+    intra = round(sum(intra_vals) / len(intra_vals), 4) if intra_vals else None
+
+    cross_vals: List[float] = []
+    idchars = (identity or {}).get("characters") if isinstance(identity, dict) else None
+    if isinstance(idchars, dict):
+        for info in idchars.values():
+            if not isinstance(info, dict):
+                continue
+            ms = info.get("mean_score")
+            if isinstance(ms, (int, float)):
+                cross_vals.append(float(ms))
+            else:  # 退而求其次：逐集条目里的 mean_score
+                for e in (info.get("episodes") or {}).values():
+                    if isinstance(e, dict) and isinstance(e.get("mean_score"), (int, float)):
+                        cross_vals.append(float(e["mean_score"]))
+    cross = round(sum(cross_vals) / len(cross_vals), 4) if cross_vals else None
+
+    try:
+        line = float(os.environ.get("N2D_CONSISTENCY_RELEASE_LINE", "0.85"))
+    except ValueError:
+        line = 0.85
+    verdict = None if intra is None else ("above" if intra >= line else "below")
+    return {
+        "intra_episode": intra,
+        "cross_episode": cross,
+        "encoder": face.get("encoder"),
+        "fidelity_gate": face.get("fidelity_gate"),
+        "release_line": line,
+        "verdict": verdict,
+        "characters_counted": len(intra_vals),
+        "benchmark_ref": "EntityBench/MSVBench 2026（与人判 Spearman 94.4%）；可投放线须随 encoder 重标定",
+        "note": "报告型 KPI·不参与扣分；与 severity 扣分维度正交",
+    }
+
+
 def score_episode(
     root: str,
     ep: str,
@@ -688,6 +740,7 @@ def score_episode(
         "threshold": threshold,
         "total_score": total,
         "status": status,
+        "character_consistency_kpi": build_consistency_kpi(consistency, identity),
         "score_inputs": {
             "consistency": cached_path(root, ep, "consistency"),
             "mechanical": cached_path(root, ep, "mechanical"),
@@ -716,6 +769,22 @@ def render_markdown(score: Dict[str, Any]) -> str:
         f"- 状态：{format_status(score['status'])}",
         f"- 生成时间：{score['generated_at']}",
         "",
+    ]
+    kpi = score.get("character_consistency_kpi")
+    if isinstance(kpi, dict) and kpi.get("intra_episode") is not None:
+        cross = kpi.get("cross_episode")
+        verdict_zh = {"above": "达标", "below": "低于可投放线"}.get(kpi.get("verdict"), "—")
+        lines.extend([
+            "## 角色一致性 KPI（报告型·非扣分·对标 EntityBench/MSVBench）",
+            "",
+            f"- 本集 intra：{kpi['intra_episode']}"
+            + (f" · 跨集 cross：{cross}" if cross is not None else " · 跨集：缺数据")
+            + f" · 可投放线：{kpi['release_line']} → **{verdict_zh}**",
+            f"- encoder：{kpi.get('encoder')} · fidelity-gate：{kpi.get('fidelity_gate')} · 计入角色数：{kpi.get('characters_counted')}",
+            f"- 基准：{kpi.get('benchmark_ref')}",
+            "",
+        ])
+    lines += [
         "## 维度",
         "",
         "| 维度 | 权重 | 分数 | 状态 | block | warn | 回流 stage |",

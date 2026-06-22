@@ -8,7 +8,8 @@
 
 检查项：
   1. 格式：每章有 H1 标题 `# 第N章 标题`（N 可阿拉伯/中文数字，标题可带《》或裸标题）+ meta 注释头
-  2. 字数：CJK 字数在 [min,max] 带宽内（漫剧档默认 800-1800）
+  2. 字数：CJK 字数在项目带宽内（优先 _meta.target_wordcount_min_max / scale.min_max；
+     --min/--max 可覆盖；旧项目无元数据时回退 800-1800）
   3. 视角"我"密度：引号外出现的"我"计数（第三人称限定下交 LLM 抽查）
   4. 章号连续性：与 章节/ 目录里其他章是否有缺号/重号；与 设定/章纲.md 标题是否一致
   5. 术语出现统计：自动从 设定/ 抽术语，也可用 --terms 追加（供人工看漂移）
@@ -25,6 +26,7 @@ _COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from text_utils import cjk_count, strip_quotes  # noqa: E402  vendored 进 novel/_lib
+from novel_contract import scale_profile, wordcount_band_for_words_per_chapter  # noqa: E402
 
 # 章号数字：阿拉伯 / 全角 / 中文数字都接受（# 第1章 / # 第一章 / # 第 12 章 均合规）
 CH_NUM = r"[0-9０-９一二三四五六七八九十百千零〇两]+"
@@ -32,6 +34,52 @@ CH_NUM = r"[0-9０-９一二三四五六七八九十百千零〇两]+"
 
 def read(p):
     return open(p, encoding="utf-8", errors="replace").read()
+
+
+def load_json(path, default=None):
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError, OSError):
+        return default
+
+
+def _int_pair(value):
+    try:
+        lo, hi = [int(x) for x in value[:2]]
+    except (TypeError, ValueError):
+        return None
+    if lo <= 0 or hi <= 0:
+        return None
+    return [min(lo, hi), max(lo, hi)]
+
+
+def resolve_wordcount_band(root, explicit_min=None, explicit_max=None):
+    """Resolve review word-count band from project metadata, then CLI overrides."""
+    meta = load_json(os.path.join(root, "_meta.json"), {}) or {}
+    band = _int_pair(meta.get("target_wordcount_min_max"))
+    source = "_meta.target_wordcount_min_max"
+    if band is None and meta.get("scale"):
+        try:
+            band = scale_profile(meta.get("scale")).get("min_max")
+            source = f"scale:{meta.get('scale')}.min_max"
+        except Exception:
+            band = None
+    if band is None and meta.get("target_words_per_chapter"):
+        band = wordcount_band_for_words_per_chapter(meta.get("target_words_per_chapter"))
+        source = "_meta.target_words_per_chapter→derived"
+    if band is None:
+        band = [800, 1800]
+        source = "fallback:legacy_manga"
+    if explicit_min is not None:
+        band[0] = int(explicit_min)
+        source += "+cli_min"
+    if explicit_max is not None:
+        band[1] = int(explicit_max)
+        source += "+cli_max"
+    if band[0] > band[1]:
+        band[0], band[1] = band[1], band[0]
+    return band[0], band[1], source
 
 
 def body_of(md):
@@ -158,12 +206,32 @@ def chapter_sort_key(path):
     return (number is None, number or 0, os.path.basename(path))
 
 
+def parse_range(value):
+    if not value:
+        return None
+    text = str(value).strip()
+    match = re.fullmatch(r"(\d+)\s*-\s*(\d+)", text)
+    if match:
+        start, end = int(match.group(1)), int(match.group(2))
+    elif text.isdigit():
+        start = end = int(text)
+    else:
+        raise ValueError("--range 应为 N 或 N-M")
+    if end < start:
+        raise ValueError("--range 结束章不能小于开始章")
+    return start, end
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("root")
+    ap.add_argument("--range", dest="chapter_range", default=None,
+                    help="只检查指定章节范围，如 1-5；缺省检查全部章节")
     ap.add_argument("--pov", default=None, help="第三人称限定的 POV 角色名（用于'我'泄漏提示）")
-    ap.add_argument("--min", type=int, default=800)
-    ap.add_argument("--max", type=int, default=1800)
+    ap.add_argument("--min", type=int, default=None,
+                    help="覆盖字数下限；缺省自动读取项目 _meta")
+    ap.add_argument("--max", type=int, default=None,
+                    help="覆盖字数上限；缺省自动读取项目 _meta")
     ap.add_argument("--terms", default="", help="逗号分隔的规范术语，统计各章出现次数")
     ap.add_argument("--no-auto-terms", action="store_true",
                     help="不从 设定/ 自动抽取术语，只使用 --terms")
@@ -177,8 +245,19 @@ def main():
     chdir = os.path.join(args.root, "章节")
     if not os.path.isdir(chdir):
         sys.exit(f"找不到章节目录：{chdir}")
+    min_words, max_words, wordcount_source = resolve_wordcount_band(args.root, args.min, args.max)
 
+    try:
+        rng = parse_range(args.chapter_range)
+    except ValueError as exc:
+        sys.exit(f"[err] {exc}")
     files = sorted(glob.glob(os.path.join(chdir, "第*章*.md")), key=chapter_sort_key)  # 第N章.md 或 第N章_标题.md
+    if rng:
+        start, end = rng
+        files = [
+            path for path in files
+            if (chapter_number_from_path(path) is not None and start <= chapter_number_from_path(path) <= end)
+        ]
     nums = []
     for f in files:
         m = re.search(r"第0*(\d+)章", os.path.basename(f))
@@ -203,7 +282,7 @@ def main():
 
     # 章号连续性
     if nums:
-        full = set(range(min(nums), max(nums) + 1))
+        full = set(range(rng[0], rng[1] + 1)) if rng else set(range(min(nums), max(nums) + 1))
         miss = sorted(full - set(nums))
         dup = sorted({n for n in nums if nums.count(n) > 1})
         if miss:
@@ -230,10 +309,10 @@ def main():
         # 2 字数（demo 特长开篇豁免带宽）
         wc = cjk_count(body)
         if not is_demo:
-            if wc < args.min:
-                add(ch, "🟡", "字数", f"偏短 {wc} 字（<{args.min}）")
-            elif wc > args.max:
-                add(ch, "🟡", "字数", f"偏长 {wc} 字（>{args.max}）")
+            if wc < min_words:
+                add(ch, "🟡", "字数", f"偏短 {wc} 字（<{min_words}；带宽来源 {wordcount_source}）")
+            elif wc > max_words:
+                add(ch, "🟡", "字数", f"偏长 {wc} 字（>{max_words}；带宽来源 {wordcount_source}）")
         # 3 钩子 = 判断题，交 LLM（见 checklist.md 维度5）；机检不报，避免误判好钩子。
         # 4 视角"我"密度：内心独白（——我…/自由直接引语）在第三人称限定里合法，机检无法
         #    可靠区分"合法独白"与"真串视角"——这是判断题，交 LLM。机检只收集密度，末尾给一条
@@ -269,8 +348,11 @@ def main():
 
     # ---- 输出 ----
     print(f"# 机检报告 — {args.root}")
+    if rng:
+        print(f"范围：第{rng[0]}-{rng[1]}章")
     print(f"章节数：{len(files)}（{min(nums) if nums else '-'}–{max(nums) if nums else '-'}）"
           f" | POV：{args.pov or '未指定'} | 原文照搬检查：{'开' if src_shingles is not None else '关'}")
+    print(f"字数带宽：{min_words}-{max_words}（{wordcount_source}）")
     order = {"🔴": 0, "🟡": 1, "🟢": 2}
     findings.sort(key=lambda x: (order.get(x["severity"], 9), x["chapter"]))
     print(f"\n确定性问题 {len(findings)} 条：")
@@ -298,6 +380,9 @@ def main():
         "kind": "novel_mechanical_findings",
         "project_root": args.root,
         "generated_at": date.today().isoformat(),
+        "chapter_range": list(rng) if rng else None,
+        "wordcount_band": [min_words, max_words],
+        "wordcount_band_source": wordcount_source,
         "findings": findings,
         "counts": counts,
         "pov_density": pov_density,

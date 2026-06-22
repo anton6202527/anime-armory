@@ -1,15 +1,15 @@
 ---
 name: n2d
-description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked anything about turning a novel into AI comic-drama / short-drama materials for 即梦AI / 可灵Kling / Seedance / Veo. Inspects the 作品 root, reads `_进度.md`, and routes the user to the right stage skill — `n2d-script` (阶段1 剧本改编 / 阶段2 分镜设计), `n2d-voice` (配音前移+时长清单), `n2d-image` (出图), `n2d-video` (出视频), or `n2d-compose` (合成成片). Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 分镜, 配音, 出图, 出视频, 合成, 成片, 即梦, 可灵, 双语字幕, 海外投放, 题材, 母题, 系统面板, 穿越系统流, 升级场景增强, n2d.
+description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked anything about turning a novel into AI comic-drama / short-drama materials for 即梦AI / 可灵Kling / Seedance / Veo. Inspects the 作品 root, reads `_进度.md`, and routes the user to the right stage skill — `n2d-script` (阶段1 剧本改编 / 阶段2 分镜设计), `n2d-voice` (配音先行的配音+时长清单 / 原生音画的可选旁白层), `n2d-image` (出图), `n2d-video` (出视频), or `n2d-compose` (合成成片). Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 分镜, 配音, 出图, 出视频, 合成, 成片, 即梦, 可灵, 双语字幕, 海外投放, 题材, 母题, 系统面板, 穿越系统流, 升级场景增强, n2d.
 ---
 
 # n2d — 六阶段流水线 调度器
 
-> **n2d 系列**（本调度 + `n2d-script`/`n2d-voice`/`n2d-image`/`n2d-video`/`n2d-compose`）专管"小说→AI 漫剧/短剧"，**产物统一落 `制漫剧/<剧名>/`**。纯文本小说生产（取材/续写/外传/扩缩/审稿）走另一条线 `novel` 系列，产物落 `写小说/`。
+> **n2d 系列**（本调度 + `n2d-script`/`n2d-voice`/`n2d-image`/`n2d-video`/`n2d-compose`）专管"小说→AI 漫剧/短剧"，**产物统一落 `创作区/制漫剧/<剧名>/`**。
 
 你是 **AI 漫剧制作总调度**。这个 skill 本身不做生产工作，它的职责是：
 
-1. **定位作品根**（制漫剧/<剧名>/）
+1. **定位作品根**（创作区/制漫剧/<剧名>/）
 2. **读 `_进度.md`** 判断当前作品处于哪一阶段
 3. **推荐下一步该调哪个子 skill**（n2d-script 阶段1/2 · n2d-voice · n2d-image · n2d-video · n2d-compose）
 4. **解释流水线整体结构** 给第一次使用的用户
@@ -20,27 +20,30 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 本 skill 的可选项**不写死在源码里**。按 `../skills/n2d/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
-本 skill 涉及的选择点：`制作模式`、`基础视觉风格`、`单集时长`、`生视频模型`、`生视频渠道`、`视频模型路由`、`生图AI`、`配音后端`、`视频分辨率`、`画幅`、`对口型`、`BGM来源`、`一致性增强`、`目标平台`、`发行地区`、`合规用途`。
+本 skill 涉及的选择点：`制作模式`、`基础视觉风格`、`视频模型路由`（只记录用户主动固定约束；具体生视频后端到 n2d-video 阶段再定）、`生视频模型`、`生视频渠道`、`生图AI`、`配音后端`、`视频分辨率`、`画幅`、`对口型`、`BGM来源`、`一致性增强`、`目标平台`、`发行地区`、`合规用途`。
 
-> 作为生产线入口：开新作品（`制漫剧/<剧名>/`）时先给首跑选择包（至少 `制作模式` + `生视频模型` + `生视频渠道` + `基础视觉风格`；必要时再问 `生图AI`），选后初始化 `<作品根>/_设置.md`。若 `_设置.md` 已存在，直接沿用其中值；若用户本轮已明说某项，按其话覆盖落档。旧项目的 `生视频AI` 只作兼容 fallback，新项目不要再写这个合并字段。
+> 作为生产线入口：开新作品（`创作区/制漫剧/<剧名>/`）时先给首跑选择包（至少 `制作模式` + `基础视觉风格`；有明确账号/预算/后端约束时可先问 `生图AI`），选后初始化 `<作品根>/_设置.md`。真正进 `n2d-image` 付费生图前会重新扫描当前可用生图后端：多个可自动落 PNG 的官方/已登录后端则让用户选一个并写 `生图AI`，一个都没有则停下提示准备可用生图后端。拆集不再让用户选择单集时长；内部用 `拆集节奏=前长后短` 的节奏倾向，旧项目 `_设置.md` 的 `单集时长` 仅作兼容读取。粗拆默认按章/场景/强钩候选，不锚字数；剧情连贯和剧情丰满优先于时长，不能为省秒数删掉必要镜头、铺垫、动机或承接。**生视频后端选择不在开局出现**：开局只记录用户主动指定的固定后端/单账号/交付硬约束；默认写/沿用 `视频模型路由=自动按镜头路由`，具体 `生视频模型` / `生视频渠道` 到 `n2d-video` 出视频前由 router/probe + 适配层决定，无法自动执行或需要人工取舍时再问。若 `_设置.md` 已存在，直接沿用其中值；若用户本轮已明说某项，按其话覆盖落档。旧项目的 `生视频AI` 只作兼容 fallback，新项目不要再写这个合并字段。
 
-## 六阶段全景（配音前移·时长驱动镜头）
+## 六阶段全景（模式感知·同一套进度表）
 
 ```
 小说.txt/.docx
    ↓ n2d-script  阶段1·剧本改编   voiceover(台词) + 角色/场景/style + bgm + 封面（**不做分镜**）
-   ↓ n2d-voice                  角色配音 → 真实配音 + 统计每句台词时长（时长清单.json）
-   ↓ n2d-script  阶段2·分镜设计   时长驱动 → 分镜剧本 + 故事板(Clip时长) + 素材清单 + 字幕_中/英.srt + 镜头时长.json
+   ↓ 制作模式分流
+      A 原生音画（默认）      → 跳过逐句配音硬依赖；脚本时长驱动分镜
+      B 配音先行              → n2d-voice 真实配音 + 时长清单；配音时长驱动分镜
+      C 先出视频后配音        → 估算/占位时长脚手架；后期补真音（不推荐）
+   ↓ n2d-script  阶段2·分镜设计   按所选模式定稿 Clip 时长 → 分镜剧本 + 故事板 + 素材清单 + 字幕_中/英.srt + 镜头时长.json
    ↓ n2d-image                  出图 prompt + PNG
-   ↓ n2d-video                  图生视频（落 出视频/第N集/视频/，Clip长=配音驱动）
-   ↓ n2d-compose                剪辑合成 + 背景音乐 + 字幕 → 成片_第N集_{mode}.mp4
+   ↓ n2d-video                  图生视频；说话镜是否原生台词由 route.native_audio_policy 决定
+   ↓ n2d-compose                剪辑合成 + 背景音乐 + 字幕；原生音画模式保留 clip 原片音轨
 ```
 
 每个阶段都按 **集** 为单位推进；进度统一写进 `<作品根>/_进度.md`。
 
 > **机器契约层**：阶段顺序、列名、gate stage、每集 manifest、回退目标统一由 `skills/n2d/_lib/n2d_contract.py` 定义，`progress.py` / `n2d-progress` / `n2d-review gate` 复用它。改阶段职责或列名时，先改 contract，再同步 `references/contract.md` 与本说明。
 >
-> **开局能力自检（doctor·E2）**：接手一个作品后、跑重活前，先 `python3 skills/n2d/doctor.py [作品根]` 一次性摊开本机精度档——脸部机检 `full|degraded|none`（缺 insightface→近景自动转人审）、ffmpeg、配音后端（缺克隆环境→只能 `say` 占位·正式出图前必重配）、所选生图后端连通、生视频关键帧能力档。这些机检本会**静默降级**，doctor 把它前移到开局，让代理提前规划验收方式（近景要不要预留人审、先占位后重配），少在花钱工位才发现降级。只探不改、不花钱。
+> **开局能力自检（doctor·E2）**：接手一个作品后、跑重活前，先 `python3 skills/n2d/doctor.py [作品根]` 一次性摊开本机精度档——脸部机检 `full|degraded|none`（缺 insightface→近景自动转人审）、ffmpeg、配音后端（缺克隆环境→只能 `say` 占位·正式出图前必重配）、所选生图后端连通。生视频后端若未固定，doctor 只提示“后移到 n2d-video”，不在开局探默认模型/渠道；只有 `视频模型路由=固定生视频模型` 时才展示关键帧能力档。这些机检本会**静默降级**，doctor 把它前移到开局，让代理提前规划验收方式（近景要不要预留人审、先占位后重配），少在花钱工位才发现降级。只探不改、不花钱。
 
 > **工业化北极星（2026-06-09 口径）**：n2d 的目标不是承诺“一键无人值守百集”，而是做到**工作室级轻工业化**：可复制、可度量、可批量、可回滚、可数据迭代。放量前必须先用第 1 集打样锁定风格/定妆/声音/模型路由，再用 `n2d-batch + n2d-dashboard + n2d-score + n2d-review-ui` 小批量验证成本、通过率、漂移、QA 阻断和投放回收；任何红灯都先回产线修，不盲目追加集数。
 
@@ -99,9 +102,9 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 ```
 - **说话镜绕过配音先行链路**：`n2d-model-router` 在 `制作模式=原生音画` 时，把对话反打/说话特写/mouth_visible 镜头路由到原生音画后端（`mode=native_av`、`native_audio_policy=native_speech`），台词文本/情绪/单镜时长来自脚本，**这些镜头不出逐句 `时长清单`、不单独跑 n2d-voice 配音**；动作/空镜等非说话镜与配音先行一致。
 - **为什么有这条**：行业头部（Seedance 2.0 等）已能一次出同步音画，规避「配音→对口型」代差与「占位时长驱动→重定时返工」的坑。代价：少了逐句音色/语速精细控制；原生口型/音质不稳时本镜回退配音先行（router 写了 degrade_plan）。
-- **合规不变**：模仿某真人音色与声音克隆同级**需授权**（compliance gate 把关，不豁免）。（native_speech 是合成人声；AI 标识/披露义务由工具外处理，不再由本流水线强制。）
+- **合规不变**：模仿某真人音色与声音克隆同级**需授权**（compliance gate 把关，不豁免）。（native_speech 是合成人声；AI 标识/披露/水印只做非阻断发布待办，不影响主流程。）
 - **适用**：后端原生音画质量够、追求最短链路/规避对口型的项目；对逐句配音表演有强控需求（强情绪念白、特定配音演员音色）仍选 `配音先行`。
-- **全链已接通（不再只在 router 层声明）**：① `n2d-script/finalize_storyboard.py` 在原生音画模式下、无配音清单时从 `storyboard.json` 的脚本规划 `duration` 出 `镜头时长.json`（不崩、不读配音）；② `gate.py` 的 image/video 阶段对原生音画**不要求「配音」列就绪**、占位检查放行；③ `n2d-compose` 检测到原生音画时**自动把 `视频原生音轨` 转为「保留原片音轨」**（台词在 clip 自带音轨里，丢弃会丢台词）。说话镜字幕建议用 whisperx 对成片词级对齐（参考 mv-lyric-sync），不在 finalize 按配音重定时。
+- **全链已接通（不再只在 router 层声明）**：① `n2d-script/finalize_storyboard.py` 在原生音画模式下、无配音清单时从 `storyboard.json` 的脚本规划 `duration` 出 `镜头时长.json`（不崩、不读配音）；② `gate.py` 的 image/video 阶段对原生音画**不要求「配音」列就绪**、占位检查放行；③ `n2d-compose` 检测到原生音画时**自动把 `视频原生音轨` 转为「保留原片音轨」**（台词在 clip 自带音轨里，丢弃会丢台词）。说话镜字幕建议在成片侧做词级对齐，不在 finalize 按配音重定时。
 
 ### 制作模式 · 首跑选择（新作品首次拆集时必给菜单，别静默默认）
 
@@ -116,29 +119,27 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 > 实战注脚：本仓库前几集就是因为**早期配音没准备好**而走了 B（后配音）。这正是 B 的合理用途——但每到下一阶段仍会提醒你它的代价。用户一旦明确表态（如"用后配音""先把画面做出来"），按 `skills/n2d/references/选择点与偏好.md` 解析顺序第 0 条**当场落档** `制作模式=先出视频后配音`，不必再问。
 
-### 生视频模型 + 渠道 · 首跑选择（新作品首次拆集/立项时必给菜单）
+### 视频模型路由 · 后移到 n2d-video（开局不选具体后端）
 
-`生视频模型` 和 `生视频渠道` **不走"全局默认静默预填"**——哪怕 `_设置.md` 或全局默认已有值，新作品开局/立项**也要把菜单念给用户选一次**（与 `制作模式` 同属"首跑必给菜单"例外）。全局默认或历史偏好只作**菜单预选**，不是无感固定。选后写入 `_设置.md`，同项目之后沉默沿用；用户随时可说"这部模型改 Veo 3.1 / 渠道改 Google Gemini API"覆盖。**已存在但当初被 init 静默落定的项目**（如旧作 `_设置.md` 直接写了 `dreamina`），下次进该作时**主动复述一次当前模型/渠道 + 可改**，不要继续无感沿用。旧 `生视频AI` 兼容读取，但新项目不要再写这个合并字段。
+新作品默认写入/沿用 `视频模型路由=自动按镜头路由`。开局不再把 `生视频模型` + `生视频渠道` 当菜单问用户；它们只是**出视频阶段**的普通镜兜底、执行入口偏好或固定模式参数。真正的后端决策发生在 `n2d-video`：先跑 `n2d-model-router` + CLI/API 探测 + 适配层能力归一，再按每个 Clip 写 primary/fallback/degrade plan。旧项目的 `生视频AI` 兼容读取，但新项目不要再写这个合并字段。
 
-简明菜单原话：
+自动路由时的职责边界：
+- `生视频模型`：普通单人运动/低风险镜头的兜底建议，默认可用 `Seedance 2.0`；不代表每个 Clip 固定用它。
+- `生视频渠道`：本机优先尝试的调用入口，默认可用 `即梦/Dreamina`；真正能不能跑以当天 CLI/API 探测和适配层能力为准。
+- `n2d-model-router`：按镜头类型、专项模板、身份注册层、原生音画策略、首尾/多帧能力、时长上限、账号/CLI 可用性逐 Clip 写 `video_model_routes.json`。
 
-> 再定**默认生视频模型**（只作为普通镜/兜底；复杂镜仍会自动路由）：
-> - **A. Seedance 2.0（默认预选）** — 多镜/长镜/故事版多图、长动作、原生音画能力强；即梦/Dreamina 等渠道可调用它。
-> - **B. Veo 3.1** — 海外语境、英文 prompt、原生音画/高保真镜头优先时考虑。
-> - **C. Kling 3.0** — Character ID 主体库、运动笔刷、多参考，关键人物镜/复杂接触镜一致性强。
-> - **D. Hailuo 02/2.3 / Runway Gen-4 / Luma Ray3.2 / Pika 2.5 / HunyuanVideo 1.5 / Wan 2.2 / LTX-2.3** — 按账号、风格或预算选择。
-> - **E. manual** — 用外部工具/人工登记，不让脚本直接调用模型。
->
-> 再定**调用渠道/产品**：
-> - **A. 即梦 / Dreamina（默认预选）** — 国内账号常用；可调用 Seedance 2.0 相关能力。
-> - **B. 豆包**
-> - **C. 海螺AI**
-> - **D. 可灵 / Kling**
-> - **E. Google Gemini API / Runway API / Luma / Pika / 本地开源 / manual**
->
-> 你选哪组？（不选默认：模型 A + 渠道 A）
+只有下面情况才在 **n2d-video 出视频前** 问并落档具体模型/渠道：
+- 用户明确说"这部固定用 Veo/Kling/即梦/Google Gemini API"。
+- `_设置.md` 已设 `视频模型路由=固定生视频模型`，或客户/交付/预算/账号要求单后端。
+- `n2d-video` 的 router/probe 找不到可执行后端，必须让用户选择可用渠道或 `manual`。
+- 平台审核、发行地区、原生音画、口型、多人/打斗/多帧等能力缺口需要用户确认降级、重出图或换后端。
 
-> 注意：默认 `视频模型路由=自动按镜头路由`。这里选的 `生视频模型` 只决定普通镜/兜底，不等于每个 Clip 都固定用它；`生视频渠道` 只决定实际去哪调用。只有用户明确说账号/预算/交付只能单模型时，才把 `视频模型路由` 设为 `固定生视频模型`。
+固定模式才展示菜单：
+
+> 你要求固定生视频后端，本项目将不再逐镜自动换模型。请选择默认模型与调用渠道：
+> - 模型：Seedance 2.0 / Veo 3.1 / Kling 3.0 / Hailuo / Runway / Luma / Pika / 开源 / manual
+> - 渠道：即梦/Dreamina / 豆包 / 海螺AI / 可灵Kling / Google Gemini API / Runway API / 本地开源 / manual
+> 选后写 `_设置.md`；若后续某类镜头能力不足，router 只写降级方案或暂停询问，不偷偷切走。
 
 > **长镜/故事版多图走后端能力档，别拆段硬接**：`生视频渠道=即梦` 时，长镜或"一段多镜"用即梦官方 CLI 的 **`multiframe2video` 智能多帧**（2–20 张关键帧 → 一条连续视频，每段 0.5–8s，原生消除拼接"刹车感"）——这就是中段锚帧链的原生执行路径，**不需要为长镜/故事版另换模型或换厂**（旧文档曾误导"即梦 8s 装不下多镜、要换 Seedance/可灵"，已更正：即梦底层即 Seedance）。但这不是所有渠道的统一能力：Veo/Luma/可灵等先按首尾帧能力处理，Runway/Pika/Sora 未核验多帧时按首帧/参考图保守处理；`video_preflight` 会对不能消费 `_mid/_aK` 的路由给「多帧能力」WARN，并要求首尾 fallback、拆段接力或 reroute。各渠道 CLI 的真实命令/参数以 `n2d-video/references/cli_snapshots/` 的 `--help` 快照为准，由 `n2d-video/scripts/probe_cli.py` 抓取并可定期校验漂移。
 
@@ -147,7 +148,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 ### 入口判定
 
 **情境 A — 用户给了一个小说路径，作品根尚不存在**：
-→ 推荐 `n2d-script <小说路径>`（Stage 1 首跑：拆集 + 精修第1集）。**首跑时先把上面「制作模式 · 首跑选择」和「生视频模型 + 渠道 · 首跑选择」菜单念给用户选一次**，再按 `n2d/references/visual_styles.md` 选择 `基础视觉风格`；选后统一落 `_设置.md`。
+→ 推荐 `n2d-script <小说路径>`（Stage 1 首跑：拆集 + 精修第1集）。**首跑时先把上面「制作模式 · 首跑选择」菜单念给用户选一次**，再按 `n2d/references/visual_styles.md` 选择 `基础视觉风格`；生视频后端不在开局选择，除非用户主动固定某后端/账号硬约束，否则延后到 `n2d-video` 出视频前由 router/probe 决策。选后统一落 `_设置.md`。
 
 **情境 B — 用户给了一个已存在的作品根 或 `_进度.md` 路径**：
 → **先跑源新鲜度自检**（见下「源新鲜度自检」节）→ **再跑 skill 更新影响检查**（见下「skill 更新影响检查」节）→ 再走"读进度 → 路由"流程
@@ -199,26 +200,24 @@ python3 skills/n2d-dashboard/scripts/dashboard.py build <作品根> --markdown
 ```
 `platform_metrics.*` 里如果有 `revenue/distribution_spend/currency/duration_sec`，dashboard 会同时生成 ROI：每分钟成本、投放净回收、回收/生产成本。
 
-### 源新鲜度自检（写小说成品更新 → 漫剧源是否过期 + 重切影响）
+### 源新鲜度自检（本剧源文本更新 → 漫剧源是否过期 + 重切影响）
 
-两条创作线只在**成品文件**一处耦合：写小说导出 → 漫剧 `小说/<剧>.txt`。写小说改了之后，漫剧的源会过期，已拆的 raw 也跟着旧。**进作品根先跑一次自检**（确定性，秒级，不烧上下文）：
+本剧 `小说/<剧>.txt` 改了之后，已拆的 raw 也跟着旧。**进作品根先跑一次自检**（确定性，秒级，不烧上下文）：
 
 ```bash
-python3 <skill>/source_check.py <作品根>          # 自检：优先比对同名 写小说/<剧>/章节，找不到再比对 小说/<剧>.txt 与 小说/_源指纹.json
+python3 <skill>/source_check.py <作品根>          # 自检：比对 小说/<剧>.txt 与 小说/_源指纹.json
 python3 <skill>/source_check.py <作品根> --record # 记/更新指纹基线（首切定稿后、或同步并确认后）
 ```
 
 - **无基线** → 提示用户首切定稿后 `--record` 记一次（之后才能自动发现源更新）。
 - **clean** → 静默放行，直接进路由。
 - **drift（源已更新）** → 脚本会列出**变动章 + 落在哪些集 + 每集是 `raw-only(可安全重切)` 还是 `已生产(需谨慎)`**。把它讲给用户，给三选：
-  - ① **同步源**（若写小说侧改了还没同步）：写小说 `novel-craft/scripts/export.py` 重导出 → 覆盖漫剧 `小说/<剧>.txt`。
+  - ① **确认源**：确保本剧 `小说/<剧>.txt` 已是当前要使用的源文本。
   - ② **评估/重切**：⚠️**重切属"不可逆/花钱"点，每次确认、绝不自动执行**。只 raw-only 受影响 → 推进到那些集前从新源重切该窗口 raw（按 `n2d-script` P0→P6 + 精修窗口铁律）；**别为几章重跑整本 split**（字数变动会重排集号、波及已生产集）。触及已生产集 → 逐集评估配音/出图/出视频是否返工。
   - ③ **忽略本次** / 接受现状 → 处理完后 `--record` 更新基线。
 - 受影响集可登记进 `脚本/_拆集复核.md` 的"待重切"区，推进到时再切（配合 `首切范围=部分先切`：下游已生产集少 → 改动波及面天然小）。
 
-> 这不是单独的协调 agent——novel↔n2d 的耦合只有一个文件，盯它的新鲜度做进调度器入口即可；常驻 watcher 逆本仓库无状态 skill 架构。
->
-> **可选自动守望（agent hook）**：支持会话结束 hook 的 agent 可在自己的私有配置里让 Stop/after-response hook 跑 `source_watch.py`（例如 Claude Code 可放在 `.claude/settings.json`，其它工具按各自 hook 机制配置），扫所有有 `小说/_源指纹.json` 的漫剧，**仅在写小说成品变动时打一行提醒**（含变动章是否触及已生产集），clean 时全静默。即不进调度器、改完写小说也会自动弹。挂源 = 同名 `写小说/<剧名>/章节`（章一改即发现，不必等重导出）。新漫剧首切后跑一次 `source_check.py <作品根> --record` 才纳入守望。
+> **可选自动守望（agent hook）**：支持会话结束 hook 的 agent 可在自己的私有配置里让 Stop/after-response hook 跑 `source_watch.py`（例如 Claude Code 可放在 `.claude/settings.json`，其它工具按各自 hook 机制配置），扫所有有 `小说/_源指纹.json` 的漫剧，**仅在本剧源文本变动时打一行提醒**（含变动章是否触及已生产集），clean 时全静默。新漫剧首切后跑一次 `source_check.py <作品根> --record` 才纳入守望。
 
 ### skill 更新影响检查（skills 更新 → 是否需要重制到当前阶段）
 
@@ -299,7 +298,7 @@ python3 skills/n2d-update/scripts/update_plan.py record <作品根> 第N集
 ## 作品目录约定
 
 ```
-制漫剧/<剧名>/
+创作区/制漫剧/<剧名>/
 ├── 小说/                          原文（.txt/.docx）
 ├── _进度.md                       全作品 dashboard（4 skill 共用 single source of truth）
 ├── 设定库/                        跨阶段设定资产
@@ -376,7 +375,7 @@ python3 skills/n2d-update/scripts/update_plan.py record <作品根> 第N集
 | 不查进度直接猜测用户的当前阶段 | 每开始一个会话，务必调用脚本或人工确认 `_进度.md` 的前沿在哪 |
 | 跳过合规前置包 (n2d-compliance) | 后续的任何 image/video 生成都会因为 gate 被拦截，造成多次碰壁 |
 | 未让用户确认就设定了“先出视频后配音”模式 | 除非用户主动点名要求出 demo，否则别走 B；默认走 `原生音画`（最快出画、无重同步返工），强配音控制时走 `配音先行` |
-| 源文件更新后（写小说）不检查漫剧侧的过期漂移 | 应依赖于源新鲜度自检及 `update_plan` 判断，重切必要的窗口，以免两边脱节 |
+| 源文件更新后不检查漫剧侧的过期漂移 | 应依赖于源新鲜度自检及 `update_plan` 判断，重切必要的窗口，以免文本与生产资产脱节 |
 
 ## 实战参考
 

@@ -24,16 +24,15 @@ if LIB not in sys.path:
 from novel_contract import (base_meta, build_progress_markdown, routing_stages,
                             SCALE_CHOICES, scale_profile, detect_rights_status,
                             docx_to_txt, write_project_settings, demo_chapters_for,
-                            rights_metadata, CHAPTER_RE)
+                            rights_metadata, CHAPTER_RE, parse_outputs,
+                            DRAFT_WORKFLOWS, wordcount_band_for_words_per_chapter,
+                            infer_novel_purpose, normalize_novel_purpose,
+                            resolve_novel_draft_mode, resolve_novel_draft_workflow,
+                            words_per_chapter_for_context)
 
 
-def words_per_chapter_for(target_platform):
-    text = str(target_platform or "")
-    if any(key in text for key in ("漫剧", "红果", "抖音")):
-        return [1000, 1500]
-    if "短剧" in text:
-        return [1500, 2500]
-    return [3000, 5000]
+def words_per_chapter_for(target_platform, purpose=None):
+    return words_per_chapter_for_context(purpose=purpose, platform=target_platform)
 
 
 def main():
@@ -43,9 +42,11 @@ def main():
                     help="sequel = 续编（原作已完结）；continuation = 接更（原作未完结）")
     ap.add_argument("--new-chapters", type=int, default=20, help="续写章数（5-30）")
     ap.add_argument("--target-platform", default="跨平台")
+    ap.add_argument("--purpose", default=None,
+                    help="小说用途：传统小说/漫剧源书/微短剧源书/短读/短篇/出海译制底稿/自定义")
     ap.add_argument("--out", default=None)
     ap.add_argument("--outputs", default="txt,docx,outline",
-                    help="逗号分隔，可含 txt,docx,outline,n2d")
+                    help="逗号分隔，可含 txt,docx,outline")
     ap.add_argument("--i-have-rights", action="store_true")
     ap.add_argument("--rights-jurisdiction", default=None,
                     help="公版/授权依据适用辖区，如 US/CN/GLOBAL；缺省按来源推断")
@@ -53,6 +54,10 @@ def main():
                     help="计划发行/交付地区，逗号分隔，如 CN,US；公版跨区时必须复核")
     ap.add_argument("--draft-mode", default=None, choices=["极速初稿", "稳妥初稿", "商业连载", "漫剧源书"],
                     help="小说生成模式；缺省按目标平台/输出格式推导")
+    ap.add_argument("--draft-workflow", default=None, choices=DRAFT_WORKFLOWS,
+                    help="小说生成工作流：默认单步/三步迭代/边写边自检")
+    ap.add_argument("--batch-review-interval", default="5章",
+                    help="小批回扫间隔；默认 5章，可填 3章/5章/关闭")
     ap.add_argument("--chapter-granularity", default="逐章", choices=["逐章", "小批", "全书草稿"],
                     help="章节生成粒度：逐章/小批/全书草稿")
     ap.add_argument("--ai-text-usage", default=None, choices=["AI-generated", "AI-assisted", "未使用AI文本"],
@@ -64,7 +69,7 @@ def main():
         print(f"[err] 找不到原作：{source_path}", file=sys.stderr); sys.exit(2)
 
     source_title = os.path.splitext(os.path.basename(source_path))[0]
-    out_root = os.path.abspath(args.out or os.path.join("写小说", f"{source_title}-续写"))
+    out_root = os.path.abspath(args.out or os.path.join("创作区", "写小说", f"{source_title}-续写"))
     if os.path.exists(out_root):
         print(f"[err] 目标已存在：{out_root}", file=sys.stderr); sys.exit(2)
 
@@ -95,11 +100,22 @@ def main():
                               if CHAPTER_RE.match(ln))
 
     demo = demo_chapters_for(args.new_chapters)
-    outputs = [s.strip() for s in args.outputs.split(",")]
-    target_wpc = words_per_chapter_for(args.target_platform)
-    draft_mode = args.draft_mode or (
-        "漫剧源书" if "n2d" in outputs or any(k in args.target_platform for k in ("漫剧", "红果", "抖音"))
-        else "稳妥初稿"
+    try:
+        outputs = parse_outputs(args.outputs)
+    except ValueError as exc:
+        print(f"[err] {exc}", file=sys.stderr)
+        shutil.rmtree(out_root)
+        sys.exit(2)
+    purpose = normalize_novel_purpose(args.purpose) or infer_novel_purpose(
+        platform=args.target_platform, target=args.draft_mode
+    )
+    draft_mode = resolve_novel_draft_mode(args.draft_mode, purpose=purpose, platform=args.target_platform)
+    target_wpc = words_per_chapter_for(args.target_platform, purpose=purpose)
+    draft_workflow = resolve_novel_draft_workflow(
+        args.draft_workflow,
+        draft_mode=draft_mode,
+        purpose=purpose,
+        target_chapters=args.new_chapters,
     )
 
     meta = base_meta("continue", outputs=outputs, rights_status=rights)
@@ -116,8 +132,10 @@ def main():
         "source_title": source_title,
         "mode": args.mode,
         "new_chapters": args.new_chapters,
+        "purpose": purpose,
         "target_chapters": args.new_chapters,
         "target_words_per_chapter": target_wpc,
+        "target_wordcount_min_max": wordcount_band_for_words_per_chapter(target_wpc),
         "orig_chapter_count_estimate": orig_chapter_count,
         "target_platform": args.target_platform,
         "rights_declared_at": date.today().isoformat() if args.i_have_rights else None,
@@ -129,6 +147,8 @@ def main():
         "demo_passed_at": None,
         "combine_with_original": False,
         "draft_mode": draft_mode,
+        "draft_workflow": draft_workflow,
+        "batch_review_interval": args.batch_review_interval,
         "chapter_granularity": args.chapter_granularity,
         "ai_text_usage": args.ai_text_usage,
     })
@@ -139,6 +159,7 @@ def main():
     
     write_project_settings(out_root, {
         "目标平台": args.target_platform,
+        "小说用途": purpose,
         "权利来源": rights,
         "权利辖区": meta.get("rights_jurisdiction", ""),
         "发行地区": ",".join(meta.get("distribution_regions") or []) or "未定",
@@ -146,6 +167,8 @@ def main():
         "续写章数": args.new_chapters,
         "输出格式": ",".join(outputs) + "（合本加 --combine；novel-craft/scripts/export.py）",
         "小说生成模式": draft_mode,
+        "小说生成工作流": draft_workflow,
+        "小批回扫间隔": args.batch_review_interval,
         "章节生成粒度": args.chapter_granularity,
         "AI使用披露": args.ai_text_usage or "（发布前用 ai_usage.py 确认）",
     }, note="续写：从原作末章往后写新章节，沿用原作设定圣经/作者口吻。")
@@ -179,7 +202,7 @@ def main():
     print(f"[ok] 项目骨架 → {out_root}")
     print(f"     模式：{mode_label}")
     print(f"     原作估计 {orig_chapter_count} 章；续写目标 {args.new_chapters} 章；Demo 前 {demo} 章")
-    print(f"     版权状态：{rights}；平台：{args.target_platform}")
+    print(f"     版权状态：{rights}；用途：{purpose}；平台：{args.target_platform}")
     print(f"[next] 主对话第 2 步：吸收原作，填 5 张设定卡（末章状态最关键）。")
     print(f"       后续 第 3 步续写方向 → 第 4 步章纲 → 第 5 步 Demo → 第 6 步续 → 第 7 步回扫 → 第 8 步导出。")
 

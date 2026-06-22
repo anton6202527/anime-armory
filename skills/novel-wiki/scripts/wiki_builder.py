@@ -61,6 +61,13 @@ def parse_character_names(project):
             m = re.search(r"(?:姓名|名字|角色)[:：]\s*([" + _CJK + r"·]{2,6})", s)
             if m:
                 names.add(m.group(1))
+            # 别称/封号：一角多名（如 沈念=林婉儿=林贵妃），逗号/顿号分隔，全部计入已跟踪名
+            m = re.search(r"(?:别称|别名|封号|旧名|曾用名|尊称)[:：]\s*(.+)", s)
+            if m:
+                for alias in re.split(r"[、，,/\s]+", m.group(1).strip()):
+                    alias = alias.strip("（）()。 ")
+                    if 2 <= len(alias) <= 6 and re.fullmatch(r"[" + _CJK + r"·]+", alias):
+                        names.add(alias)
     return names
 
 
@@ -163,6 +170,13 @@ def init_ancillary_files(project, character_names):
         world = {"kind": "novel_world_state_evolution", "major_changes": []}
         with open(world_path, "w", encoding="utf-8") as f:
             json.dump(world, f, ensure_ascii=False, indent=2)
+
+    tension_path = os.path.join(project, "设定", "tension_ledger.json")
+    if not os.path.exists(tension_path):
+        tension = {"kind": "novel_tension_ledger", "version": 1,
+                   "unresolved_hooks": [], "reader_promises": [], "chapter_tension_curve": []}
+        with open(tension_path, "w", encoding="utf-8") as f:
+            json.dump(tension, f, ensure_ascii=False, indent=2)
 
 
 def main():

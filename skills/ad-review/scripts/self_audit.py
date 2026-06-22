@@ -7,7 +7,7 @@ fetch market benchmarks and does NOT edit files; it checks that the ad
 production line stays aligned around its own engineering / compliance
 guardrails before the agent spends time on online 市场对标.
 
-自包含：只查 ad 线自己的文件，绝不 import n2d-* / mv-* / novel-* / song-* 任何脚本。
+自包含：只查 ad 线自己的文件，不读取、不导入、不比较其它创作系列的任何脚本。
 纯标准库。0 block / 0 warn 才建议进入联网市场对标。
 
 用法：

@@ -613,7 +613,7 @@ def write_plan(root: str, plan: Dict[str, Any]) -> Dict[str, Any]:
 
 def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="按 n2d 最新 gate/QC/review findings 生成选择性图片/视频刷新计划；不自行审片。")
-    parser.add_argument("root", help="制漫剧/<剧名> 作品根")
+    parser.add_argument("root", help="创作区/制漫剧/<剧名> 作品根")
     parser.add_argument("--episode", help="n2d 集号，如 第3集（必填，避免误扫全剧）")
     parser.add_argument("--image", action="append", default=[], help="候选复核/可能刷新的图片目标，可逗号分隔；不是坏图判定")
     parser.add_argument("--video", action="append", default=[], help="候选复核/可能刷新的视频目标，可逗号分隔；不是坏视频判定")

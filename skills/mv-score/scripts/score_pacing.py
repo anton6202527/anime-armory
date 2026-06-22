@@ -9,11 +9,11 @@ MV 节奏铁律变成可量化的数字，喂给后续 LLM 语义评分，避免
 读 分镜/clip_plan.json + 节拍/beatgrid.json + 歌长（找得到成品歌则量真长，否则用 beatgrid.duration），
 输出机器预评分 JSON（四个指标 + 一个 0-10 的 pacing_score 供 LLM 参考 + 受影响 clip 回流清单）。
 
-**pre-spend 真闸门**（借鉴 n2d-score 的 --threshold/--enqueue 闭环，但 mv 线自包含、判据全在本线内）：
+**pre-spend 真闸门**（mv 线自包含、判据全在本线内）：
 给 --threshold 后，综合 pacing_score 或任一关键卡点维度低于阈值时 **exit 1**，在烧积分（出图/出视频）
 前把平庸/不卡点的分镜挡下来，并打印「该退回哪个上游 stage」。同时产出 affected_clips 结构化清单
 （clip_id + return_to_stage + reason），写进评分 JSON；可选 --enqueue 落一份 mv 自己的回流清单文件
-（评分/回流清单.json，不引用 n2d-batch，人/工具皆可消费）。
+（评分/回流清单.json，人/工具皆可消费）。
 
 受影响 clip → 源头 stage 映射（MV 专属）：
   - 卡点不准 / clip 边界偏离 downbeat / clip 时长偏离  → 回 mv-plan（重拆时长、对齐 beatgrid）
@@ -310,7 +310,7 @@ def build_payload(root, threshold=None, dim_scores=None):
 
 
 def write_enqueue(root, payload):
-    """落一份 mv 自己的回流清单（不引用 n2d-batch）：按 stage 聚合受影响 clip，人/工具皆可消费。"""
+    """落一份 mv 自己的回流清单：按 stage 聚合受影响 clip，人/工具皆可消费。"""
     by_stage = {}
     for item in payload.get("affected_clips", []):
         stage = item["return_to_stage"]
@@ -328,7 +328,7 @@ def write_enqueue(root, payload):
         "block_reasons": payload.get("block_reasons", []),
         "tasks": sorted(by_stage.values(), key=lambda t: t["return_to_stage"]),
         "note": "mv-score pre-spend 闸门回流清单：每个 task 是一个上游 stage + 该重做的 clip 列表。"
-                "mv 自有格式，不依赖 n2d-batch；按 return_to_stage 重跑对应 mv-* skill。",
+                "mv 自有格式；按 return_to_stage 重跑对应 mv-* skill。",
     }
     out = os.path.join(root, "评分", "回流清单.json")
     mv_utils.write_json(out, queue)
@@ -351,7 +351,7 @@ def _parse_dim(values):
 
 def main():
     ap = argparse.ArgumentParser(description="mv-score 确定性卡点前奏 + pre-spend 真闸门")
-    ap.add_argument("root", help="制MV/<曲名>/ 作品根")
+    ap.add_argument("root", help="创作区/制MV/<曲名>/ 作品根")
     ap.add_argument("--json", action="store_true", help="只打印机器预评分 JSON")
     ap.add_argument("--threshold", type=float, default=None,
                     help="pre-spend 闸门阈值；综合/关键卡点维度低于此则 exit 1。"
@@ -359,7 +359,7 @@ def main():
     ap.add_argument("--dim", action="append", default=[], metavar="维度名=分",
                     help="回灌 LLM 语义维度分（视觉记忆点/崩脸/视觉一致性…），可多次；低于阈值则触发回 mv-script/mv-image")
     ap.add_argument("--enqueue", action="store_true",
-                    help="把受影响 clip 按 stage 聚合，落 评分/回流清单.json（mv 自有格式，不依赖 n2d-batch）")
+                    help="把受影响 clip 按 stage 聚合，落 评分/回流清单.json（mv 自有格式）")
     args = ap.parse_args()
     root = os.path.abspath(args.root)
     if not os.path.isdir(root):

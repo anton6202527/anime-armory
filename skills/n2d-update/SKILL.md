@@ -19,7 +19,7 @@ description: 制漫剧(n2d) skill 更新影响扫描与重制计划器（含少�
 
 除了 skill 变更，`check` 还跑**四项产物健康检测**（写进计划 `source_drift`/`three_frame_compliance`/`image_consistency`/`contract_inheritance`，CLI 打 `health:` 行）：
 
-- **源小说漂移**：跑 `n2d/source_check.py`（有 `小说/_源指纹.json` 基线才跑），写小说成品一改即发现本剧源过期 → 列变动章 + 落在哪些集。重切属不可逆点，只提示不自动切。
+- **源小说漂移**：跑 `n2d/source_check.py`（有 `小说/_源指纹.json` 基线才跑），本剧源文本一改即发现源过期 → 列变动章 + 落在哪些集。重切属不可逆点，只提示不自动切。
 - **三帧契约遵循**：读 `脚本/第N集/storyboard.json`，按 `policy.video_backend` 的后端能力判定（能力门控铁律：支持≥3帧的后端强制），列出缺 `midframe/anchors` 且无豁免理由的违规 Clip → 指回 `anchor_planner.py --write` 补齐。后端不支持≥3帧（first-frame-only）则标豁免、不算违规。
 - **图片一致性**：从已有 `image_qc` 报告压出崩脸/服装/场景/接缝硬阻断摘要（`hard_blocks`/verdict），有硬阻断则提示重出受影响镜。
 - **出图→出视频契约继承**：到 `video_prompt` 阶段后，读 `n2d-video/inherit_contract.py` 的产物 `生产数据/contract_inheritance_第N集.json`，压出 verdict + 字段漂移/身份未锁/资产丢失计数——校验**参考帧契约**（色调/光位锚/轴线视线/角色状态演进/景别）与**文字 prompt** 是否从出图侧正确传到出视频侧、命名角色镜是否锁脸、出图绑定的场景/道具/特效资产是否丢失。本 skill 只读报告不自己跑机检（出视频前的契约门由 n2d-video 把）：已到 `video_prompt` 但**缺报告** → 提示先跑 `inherit_contract.py <作品根> 第N集` 取证；verdict=`block` → 提示先按出图侧原文修 `出视频/prompt` 的视觉契约/身份锚点/物料绑定再出视频。

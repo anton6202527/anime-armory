@@ -5,9 +5,11 @@ import json
 import os
 import tempfile
 import unittest
+import hashlib
 
 import qa_gate
 from report_snapshot import snapshot_chapters, snapshot_files
+from settings import normalize_setting_value
 from waivers import baseline_freshness_scope, make_waiver, append_waiver
 
 
@@ -75,6 +77,55 @@ def valid_score_report(root, chapter, freshness=None, **extra):
     }
     payload.update(extra)
     return payload
+
+
+def write_state_closure(root, chapter_num=1):
+    os.makedirs(os.path.join(root, "审稿"), exist_ok=True)
+    delta_path = os.path.join(root, "审稿", f"state_delta_第{chapter_num:02d}章.json")
+    with open(delta_path, "w", encoding="utf-8") as f:
+        json.dump({
+            "schema_version": 1,
+            "kind": "novel_state_delta",
+            "chapter": chapter_num,
+        }, f, ensure_ascii=False)
+    chapter_path = os.path.join(root, "章节", f"第{chapter_num:02d}章.md")
+    verification = {
+        "chapter": chapter_num,
+        "status": "passed",
+        "chapter_file_hash": file_sha256(chapter_path),
+        "delta_hash": file_sha256(delta_path),
+    }
+    with open(os.path.join(root, "审稿", "state_ledger.json"), "w", encoding="utf-8") as f:
+        json.dump({
+            "schema_version": 1,
+            "kind": "novel_state_ledger",
+            "chapter_deltas": {f"chapter_{chapter_num:02d}": {"merged": True, "verification": verification}},
+        }, f, ensure_ascii=False)
+
+
+def file_sha256(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def write_ai_usage(root, text_mode="AI-generated", human_contribution="人工完成创意、改写、审稿取舍。"):
+    os.makedirs(os.path.join(root, "合规"), exist_ok=True)
+    with open(os.path.join(root, "合规", "ai_usage.json"), "w", encoding="utf-8") as f:
+        json.dump({
+            "schema_version": 1,
+            "kind": "novel_ai_usage",
+            "generated_at": "2026-06-21",
+            "project_root": os.path.abspath(root),
+            "title": "测试书",
+            "publish_target": "红果",
+            "human_contribution": human_contribution,
+            "rights_status": "original",
+            "text_mode": text_mode,
+            "image_mode": "未使用AI图片",
+        }, f, ensure_ascii=False)
 
 
 class QAGateTest(unittest.TestCase):
@@ -159,6 +210,63 @@ class QAGateTest(unittest.TestCase):
             self.assertTrue(status["blocking"])
             self.assertTrue(any(b["id"] == "SCORE-MISSING" for b in status["blockers"]))
 
+    def test_require_score_false_does_not_block_commercial_drafting(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with open(os.path.join(tmp, "_meta.json"), "w", encoding="utf-8") as f:
+                json.dump({"draft_mode": "商业连载", "target_platform": "番茄"}, f, ensure_ascii=False)
+            status = qa_gate.collect_gate_status(tmp, require_score_report=False)
+            self.assertFalse(any(b["id"] == "SCORE-MISSING" for b in status["blockers"]))
+            self.assertTrue(any(w["id"] == "SCORE-MISSING" for w in status["warnings"]))
+
+    def test_state_closure_blocks_until_delta_is_merged(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write_chapter(tmp)
+            status = qa_gate.collect_gate_status(tmp, require_state_closure=True)
+            self.assertTrue(any(b["id"] == "STATE-DELTA-MISSING" for b in status["blockers"]))
+
+            os.makedirs(os.path.join(tmp, "审稿"), exist_ok=True)
+            with open(os.path.join(tmp, "审稿", "state_delta_第01章.json"), "w", encoding="utf-8") as f:
+                json.dump({"schema_version": 1, "kind": "novel_state_delta", "chapter": 1}, f, ensure_ascii=False)
+            status = qa_gate.collect_gate_status(tmp, require_state_closure=True)
+            self.assertTrue(any(b["id"] == "STATE-LEDGER-MISSING" for b in status["blockers"]))
+
+            write_state_closure(tmp)
+            status = qa_gate.collect_gate_status(tmp, require_state_closure=True)
+            self.assertFalse(any(b["id"].startswith("STATE-") for b in status["blockers"]))
+
+    def test_state_closure_blocks_stale_ledger_hash(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            chapter = write_chapter(tmp, "# 第1章\n旧正文\n")
+            write_state_closure(tmp)
+            self.assertFalse(qa_gate.collect_gate_status(tmp, require_state_closure=True)["blocking"])
+
+            with open(chapter, "w", encoding="utf-8") as f:
+                f.write("# 第1章\n新正文\n")
+            status = qa_gate.collect_gate_status(tmp, require_state_closure=True)
+            self.assertTrue(any(b["id"] == "STATE-LEDGER-STALE" for b in status["blockers"]))
+
+    def test_ai_usage_blocks_commercial_export_until_human_contribution_recorded(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            os.makedirs(os.path.join(tmp, "评分"), exist_ok=True)
+            chapter = write_chapter(tmp)
+            with open(os.path.join(tmp, "_meta.json"), "w", encoding="utf-8") as f:
+                json.dump({"draft_mode": "商业连载", "target_platform": "红果"}, f, ensure_ascii=False)
+            with open(os.path.join(tmp, "评分", "score_task.json"), "w", encoding="utf-8") as f:
+                json.dump({}, f)
+            with open(os.path.join(tmp, "评分", "score_report.json"), "w", encoding="utf-8") as f:
+                json.dump(valid_score_report(tmp, chapter), f, ensure_ascii=False)
+
+            status = qa_gate.collect_gate_status(tmp, export_formats=["txt"])
+            self.assertTrue(any(b["id"] == "AI-USAGE-MISSING" for b in status["blockers"]))
+
+            write_ai_usage(tmp, human_contribution="")
+            status = qa_gate.collect_gate_status(tmp, export_formats=["txt"])
+            self.assertTrue(any(b["id"] == "AI-USAGE-SCHEMA" for b in status["blockers"]))
+
+            write_ai_usage(tmp)
+            status = qa_gate.collect_gate_status(tmp, export_formats=["txt"])
+            self.assertFalse(any(b["id"].startswith("AI-USAGE") for b in status["blockers"]))
+
     def test_score_baseline_freshness_blocks_unless_waived(self):
         with tempfile.TemporaryDirectory() as tmp:
             os.makedirs(os.path.join(tmp, "评分"), exist_ok=True)
@@ -230,6 +338,31 @@ class QAGateTest(unittest.TestCase):
             self.assertTrue(status["blocking"])
             self.assertTrue(any(b["id"] == "SCORE-MISSING" for b in status["blockers"]))
 
+    def test_setting_normalization_keeps_target_use_separate_from_novel_purpose(self):
+        self.assertEqual(normalize_setting_value("小说用途", "红果漫剧源书"), "漫剧源书")
+        self.assertEqual(normalize_setting_value("目标用途", "红果漫剧源书"), "红果漫剧源书")
+        self.assertEqual(normalize_setting_value("目标用途", "短读"), "短读")
+
+    def test_settings_purpose_marks_score_required(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n\n- **小说用途**：漫剧源书\n")
+            scope = qa_gate.missing_score_report_scope(tmp)
+            self.assertEqual(scope["purpose"], "漫剧源书")
+            status = qa_gate.collect_gate_status(tmp)
+            self.assertTrue(status["blocking"])
+            self.assertTrue(any(b["id"] == "SCORE-MISSING" for b in status["blockers"]))
+
+    def test_settings_micro_short_drama_purpose_marks_score_required(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n\n- **小说用途**：微短剧源书\n")
+            scope = qa_gate.missing_score_report_scope(tmp)
+            self.assertEqual(scope["purpose"], "微短剧源书")
+            status = qa_gate.collect_gate_status(tmp)
+            self.assertTrue(status["blocking"])
+            self.assertTrue(any(b["id"] == "SCORE-MISSING" for b in status["blockers"]))
+
     def test_explicit_unknown_rights_blocks(self):
         with tempfile.TemporaryDirectory() as tmp:
             with open(os.path.join(tmp, "_meta.json"), "w", encoding="utf-8") as f:
@@ -238,7 +371,7 @@ class QAGateTest(unittest.TestCase):
             self.assertTrue(status["blocking"])
             self.assertTrue(any(b["id"] == "RIGHTS-UNKNOWN" for b in status["blockers"]))
 
-    def test_public_domain_without_target_region_blocks_n2d_export(self):
+    def test_public_domain_without_target_region_blocks_combine_export(self):
         with tempfile.TemporaryDirectory() as tmp:
             with open(os.path.join(tmp, "_meta.json"), "w", encoding="utf-8") as f:
                 json.dump({
@@ -247,7 +380,7 @@ class QAGateTest(unittest.TestCase):
                     "rights_covered_regions": ["US"],
                     "requires_region_rights_review": True,
                 }, f, ensure_ascii=False)
-            status = qa_gate.collect_gate_status(tmp, export_formats=["n2d"])
+            status = qa_gate.collect_gate_status(tmp, export_formats=["combine"])
             self.assertTrue(status["blocking"])
             self.assertTrue(any(b["id"] == "RIGHTS-PD-REGION-UNSET" for b in status["blockers"]))
 

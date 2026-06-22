@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""n2d 源新鲜度自检 —— 写小说成品一改，自动发现对应漫剧源过期 + 评估重切影响。
+"""n2d 源新鲜度自检 —— 检测本剧规范源文件是否变动并评估重切影响。
 
-两条创作线只在「成品」一处耦合：写小说 `章节/*.md`（真源）→ 导出 → 漫剧 `小说/<剧>.txt`。
 本脚本在漫剧侧自检：
-  · 优先挂到**同名写小说项目** `写小说/<剧名>/章节/*.md`（真源·章一改即可发现，不必等重导出/同步）；
-    找不到同名项目时回退用漫剧自己的 `小说/<剧>.txt`。
+  · 只读取本剧作品根下的 `小说/<剧>.txt` 规范源副本。
   · 给每章正文做指纹存 `小说/_源指纹.json`；自检时重算比对 → 列出**变动章 + 落在哪些集
     + 那些集是 raw-only(可安全重切) 还是已生产(需谨慎)**。
 不自动重切（重切属"不可逆/花钱"点，每次确认）。
@@ -13,7 +11,6 @@
 用法:
     python3 source_check.py <漫剧作品根>                 # 自检并报告漂移（dispatcher 入口/hook 调用）
     python3 source_check.py <漫剧作品根> --record         # 记/更新指纹基线（首切后 / 同步并确认后）
-    python3 source_check.py <漫剧作品根> --link <写小说根> # 显式指定真源项目（默认按同名自动找）
     python3 source_check.py <漫剧作品根> --quiet          # 仅 clean 时不打印（hook 用，少噪声）
 
 输出：人类可读报告 + 末行机器可读 JSON（DRIFT={...}）。纯标准库。
@@ -21,7 +18,6 @@
 import sys, os, re, json, glob, hashlib
 
 CH_TXT_RE = re.compile(r"^第\s*([0-9一二三四五六七八九十百零〇两]+)\s*章", re.M)  # 导出 txt 章标记
-CHAP_FILE_RE = re.compile(r"^第0*(\d+)章")          # 章节文件名：第NN章[_标题].md（数字）
 RAW_CH_RE = re.compile(r"第\s*([0-9一二三四五六七八九十百零〇两]+)\s*章")  # raw.txt 原文章号(中/阿)
 EP_RE = re.compile(r"第(\d+)集")
 _CN_D = {"零": 0, "〇": 0, "一": 1, "二": 2, "两": 2, "三": 3, "四": 4,
@@ -47,28 +43,6 @@ def _h(s):
     return hashlib.sha1(re.sub(r"\s+", "", s).encode("utf-8")).hexdigest()[:12]
 
 
-def derive_novel_project(drama_root):
-    """同名约定：.../制漫剧/<名>  →  .../写小说/<名>。存在且有 章节/ 才采用。"""
-    drama_root = os.path.abspath(drama_root.rstrip("/"))
-    repo = os.path.dirname(os.path.dirname(drama_root))   # 跳过 制漫剧/
-    cand = os.path.join(repo, "写小说", os.path.basename(drama_root))
-    return cand if os.path.isdir(os.path.join(cand, "章节")) else None
-
-
-def hashes_from_project(proj):
-    """从 写小说项目/章节/*.md 读 {章号: 正文hash}。章号取文件名，正文去 H1+meta 注释后哈希。"""
-    out = {}
-    for f in glob.glob(os.path.join(proj, "章节", "*.md")):
-        m = CHAP_FILE_RE.match(os.path.basename(f))
-        if not m:
-            continue
-        lines = open(f, encoding="utf-8", errors="replace").read().split("\n")
-        body = "\n".join(l for l in lines
-                         if not l.startswith("# 第") and not l.strip().startswith("<!--"))
-        out[int(m.group(1))] = _h(body)
-    return out
-
-
 def hashes_from_txt(txt_path):
     """从导出 txt 按 第N章 切开，每章正文哈希。"""
     text = open(txt_path, encoding="utf-8", errors="replace").read()
@@ -80,16 +54,15 @@ def hashes_from_txt(txt_path):
     return out
 
 
-def resolve_source(drama_root, link):
-    """返回 (hashes, label, kind)。kind: project|txt。"""
-    proj = link or derive_novel_project(drama_root)
-    if proj and os.path.isdir(os.path.join(proj, "章节")):
-        return hashes_from_project(proj), f"写小说项目 {os.path.basename(proj)}/章节", "project"
+def resolve_source(drama_root, link=None):
+    """返回 (hashes, label, kind)。kind: txt。"""
+    if link:
+        sys.exit("--link 已移除：n2d 源检查只读取本作品根下的 小说/*.txt")
     cands = glob.glob(os.path.join(drama_root, "小说", "*.txt"))
     if not cands:
-        sys.exit(f"未找到真源：既无同名 写小说/<剧>/章节，也无 {drama_root}/小说/*.txt")
+        sys.exit(f"未找到源文件：{drama_root}/小说/*.txt")
     txt = max(cands, key=os.path.getsize)
-    return hashes_from_txt(txt), f"漫剧源副本 小说/{os.path.basename(txt)}", "txt"
+    return hashes_from_txt(txt), f"源副本 小说/{os.path.basename(txt)}", "txt"
 
 
 def map_chapter_to_eps(root):
@@ -153,7 +126,7 @@ def main():
 
     if not os.path.isfile(fp_path):
         if not quiet:
-            print(f"⚠️ 无源指纹基线（{os.path.basename(root)}）。当前真源：{label}，{len(cur)} 章。")
+            print(f"⚠️ 无源指纹基线（{os.path.basename(root)}）。当前源文本：{label}，{len(cur)} 章。")
             print("   首切定稿后跑 `source_check.py <作品根> --record` 记基线，之后才能自动发现源更新。")
         print('DRIFT={"status":"no_baseline"}')
         return
@@ -166,13 +139,13 @@ def main():
 
     if not (changed or added or removed):
         if not quiet:
-            print(f"✅ 源未变动（{label}，{len(cur)} 章）。漫剧源与基线一致，无需重切。")
+            print(f"✅ 源未变动（{label}，{len(cur)} 章）。源文本与基线一致，无需重切。")
         print('DRIFT={"status":"clean"}')
         return
 
     chap_to_eps = map_chapter_to_eps(root)
     prog = ep_progress(root)
-    print(f"⚠️ 源小说已更新 → 漫剧《{os.path.basename(root)}》源过期（真源：{label}）：")
+    print(f"⚠️ 源文本已更新 → 漫剧《{os.path.basename(root)}》源过期（当前源：{label}）：")
     if changed: print(f"   变动章：{changed}")
     if added:   print(f"   新增章：{added}")
     if removed: print(f"   删除章：{removed}")
@@ -186,7 +159,7 @@ def main():
         print(f"   原文第{ch}章 → 集 {eps or '（未拆到）'}  [{tag}]" + (f"  已生产集={prod}" if prod else ""))
         affected.append({"chapter": ch, "eps": eps, "produced_eps": prod})
     print("下一步（重切属'不可逆/花钱'点，每次确认，绝不自动执行）：")
-    print("  ① 同步源：写小说 export.py 重导出 → 覆盖 漫剧 小说/<剧>.txt")
+    print("  ① 确认本剧 `小说/<剧>.txt` 已是当前要使用的源文本")
     if risky:
         print(f"  ② ⚠️ 触及已生产集（章 {risky}）：逐集评估配音/出图/出视频是否返工，与用户确认")
     print("  ② raw-only：推进到那些集前从新源重切该窗口 raw（P0→P6），勿重跑整本 split（会重排集号波及已做集）")

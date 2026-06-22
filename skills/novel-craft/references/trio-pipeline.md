@@ -2,7 +2,7 @@
 
 为了彻底消除"AI味"并极大提升文学质感，长篇小说的单章写作从"单步直出"升级为"三步独立角色接力"（Architect → Ghostwriter → Senior Editor）。
 
-在使用 `draft_packets.py` 时，通过传入 `--step` 参数，为每一章生成专属于该角色的任务包。`商业连载` / `漫剧源书` / `小说生成工作流=三步迭代` 默认 `--step auto` 即生成 `第NN章_architect.md`、`第NN章_ghostwriter.md`、`第NN章_editor.md`；显式 `--step trio` 可强制三包。
+在使用 `draft_packets.py` 时，通过传入 `--step` 参数，为每一章生成专属于该角色的任务包。`scale=long` / `target_chapters>=30` / `商业连载` / `漫剧源书` / `小说生成工作流=三步迭代` 默认 `--step auto` 即生成 `第NN章_architect.md`、`第NN章_ghostwriter.md`、`第NN章_editor.md`；显式 `--step trio` 可强制三包。项目若明确选择 `小说生成工作流=默认单步`，则尊重该覆盖。
 
 ## 1. Architect Pass（剧情架构师）
 **目标**：将骨感的章纲转化为「节拍与潜台词（Beats & Subtext）」脚本。
@@ -16,7 +16,7 @@
 
 ## 2. Ghostwriter Pass（代笔枪手）
 **目标**：将 Architect 的节拍脚本转化为流畅的小说正文，严格复刻文风指纹。
-**输入**：Architect 产出的节拍脚本、文风指纹（Style Fingerprint）、N2D 资产标签要求。
+**输入**：Architect 产出的节拍脚本、文风指纹（Style Fingerprint）、视觉资产标签要求。
 **禁止**：禁止擅自增加或删减 Architect 定好的剧情节拍；禁止使用套路化成语（如"倒吸一口凉气"）。
 **输出**：第一版初稿正文（Draft）。
 

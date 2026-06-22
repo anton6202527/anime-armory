@@ -1,13 +1,13 @@
 ---
 name: ad-score
-description: 拍广告 投放前 pre-spend 评分闸门——正式出图/出视频烧积分前，对广告脚本+分镜按「钩子前3秒 / 卖点清晰度 / CTA 强度 / 品牌露出充分度 / 广告法风险 / 时长贴合」打分体检，拦平庸 ROI。混合模型：确定性 prescore（读 ad-script 已有产物，广告法 block=硬地板）+ LLM 语义分 → 阈值三档（go/revise/reject）+ 低分维度按成因回流 ad-concept、ad-script、ad-image。ad 线自包含，不复用 n2d-* 与 mv-*。Use when asked 广告评分, 投放前评分, 广告分镜打分, 这广告行不行, 出图前体检, ad-score for a 拍广告 project. Triggers 广告评分, 投放前评分, 广告体检, 广告分镜打分, 钩子评分, 卖点评分, CTA评分, 广告能不能行, ad-score.
+description: 拍广告 投放前 pre-spend 评分闸门——正式出图/出视频烧积分前，对广告脚本+分镜按「钩子前3秒 / 卖点清晰度 / CTA 强度 / 品牌露出充分度 / 广告法风险 / 时长贴合」打分体检，拦平庸 ROI。混合模型：确定性 prescore（读 ad-script 已有产物，广告法 block=硬地板）+ LLM 语义分 → 阈值三档（go/revise/reject）+ 低分维度按成因回流 ad-concept、ad-script、ad-image。Use when asked 广告评分, 投放前评分, 广告分镜打分, 这广告行不行, 出图前体检, ad-score for a 拍广告 project. Triggers 广告评分, 投放前评分, 广告体检, 广告分镜打分, 钩子评分, 卖点评分, CTA评分, 广告能不能行, ad-score.
 ---
 
 # ad-score — 拍广告 投放前 pre-spend 评分闸门
 
 广告**一条主片就是全部产出**，正式出图/出视频一旦开跑即烧积分。`ad-score` 是出图前的**质量闸门**：用 `ad-script`/`ad-voice` 已产出的确定性产物先拦平庸 ROI（钩子塌、卖点糊、CTA 弱、品牌露出不足、广告法 block、总时长超标），比出完片再靠 `ad-review` 发现省得多。
 
-与 n2d-score、mv-score、novel-score、song-score 同构（每条线都有 pre-spend 评分），但 **ad 线自包含**：纯标准库，不 import 任何别线脚本。
+`ad-score` 纯标准库实现，评分口径只面向广告片。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
@@ -67,4 +67,4 @@ python3 skills/ad-score/scripts/score_pre.py <作品根> --master 30s --threshol
 | 出完片才发现钩子塌/卖点糊 | 出图前先跑 ad-score，pre-spend 拦截 |
 | 广告法有 block 还想靠高分放行 | block=硬地板，永远 reject，必须回 ad-script 改写违禁词 |
 | 把评分维度阈值写死在脚本 | 阈值是 `--threshold` 参数 / `_设置.md` 选择点，不 hardcode |
-| import n2d-score、mv-score 复用 | ad 线自包含，逻辑在 ad 内重写 |
+| 想复用其它评分脚本 | ad-score 自包含，逻辑按广告口径维护 |

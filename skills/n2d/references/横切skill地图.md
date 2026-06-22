@@ -21,7 +21,7 @@
 
 ## 合规与版权前置（P0 横切）— `n2d-compliance`
 
-用户要"合规前置 / 版权前置 / 角色授权 / 声音克隆授权 / 平台审核 / 出海本地化"时，调 `n2d-compliance`。它生成/检查 `合规/compliance_manifest.json`，作为 `n2d-review gate` 的硬输入；image 前阻断源文本/改编权/角色肖像授权缺口，video 前阻断声音克隆缺口，compose/review 前阻断平台审核和出海本地化缺口。合规不可沉默沿用，规则 profile 必须带检查日期。**AI 标识/AI 披露/水印不再由本流水线强制——该合规义务移到工具之外处理。**
+用户要"合规前置 / 版权前置 / 角色授权 / 声音克隆授权 / 平台审核 / 出海本地化"时，调 `n2d-compliance`。它生成/检查 `合规/compliance_manifest.json`，作为 `n2d-review gate` 的硬输入；image 前阻断源文本/改编权/角色肖像授权缺口，video 前阻断声音克隆缺口，compose/review 前阻断平台审核和出海本地化缺口。合规不可沉默沿用，规则 profile 必须带检查日期。**AI 标识/AI 披露/水印只做 INFO 发布待办；compose 可 best-effort 辅助，但不得阻断主流程。**
 
 ## 批量任务队列（P1 横切）— `n2d-batch`
 
@@ -29,7 +29,7 @@
 
 ## 模型适配层（P1 横切）— `n2d-model-router`
 
-路由到 `n2d-video` 前，先调 `n2d-model-router` 生成 `出视频/第N集/prompt/video_model_routes.json/md`。`视频模型路由=自动按镜头路由` 为默认：打斗、追逐、对话反打、飞行、空镜、法术爆发、亲密互动、拥抱拉扯、多人同框、群像站位按模型能力选 primary/fallback；`生视频模型` 只做普通镜/兜底，不再固定全片。`生视频渠道` 只决定实际通过哪个产品/API/CLI 调用。若用户明确账号/预算限制只能用单模型，才写 `视频模型路由=固定生视频模型`，但每 Clip 仍要写模型路由字段和 fallback/degrade plan。旧值 `固定生视频AI` 兼容。
+路由到 `n2d-video` 前，先调 `n2d-model-router` 生成 `出视频/第N集/prompt/video_model_routes.json/md`。`视频模型路由=自动按镜头路由` 为默认：打斗、追逐、对话反打、真相揭示、公开对质、关系转折、飞行、空镜、法术爆发、亲密互动、拥抱拉扯、多人同框、群像站位按模型能力选 primary/fallback；`生视频模型` 只做普通镜/兜底，不再固定全片。`生视频渠道` 只决定实际通过哪个产品/API/CLI 调用。若用户明确账号/预算限制只能用单模型，才写 `视频模型路由=固定生视频模型`，但每 Clip 仍要写模型路由字段和 fallback/degrade plan。旧值 `固定生视频AI` 兼容。
 
 ## 自动审片评分（P2 横切）— `n2d-score`
 

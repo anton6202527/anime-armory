@@ -12,6 +12,7 @@ from n2d_route import voiceover_fingerprint, manifest_is_placeholder  # noqa: E4
 from n2d_telemetry import record_event, Timer  # noqa: E402
 from voice_text import clean_text  # 念白文本清洗（独立模块·带单测，治 ||→「。，」脏标点）
 import voice_manifest as vmf  # 时长清单条目 + voice_key 音色留痕（独立模块·带单测；契约字段 VOICE_KEY_FIELD）
+import voice_lexicon as vlex  # 专名/多音字读音词典（谐音只下到声学层，字幕/清单保留正名；独立模块·带单测）
 
 if len(sys.argv) < 4:
     print("usage: render_voice.py <作品根> <第N集> <zh|en>", file=sys.stderr)
@@ -37,6 +38,10 @@ def _load_voicemap():
     except Exception: return {}
 VOICEMAP=_load_voicemap()
 def _vm_match(role): return vmf.vm_match(role, VOICEMAP)  # 实现已抽到 voice_manifest.py（带单测）
+LEXICON=vlex.load_lexicon(ROOT)  # 读音词典：缺则空词典=原样念，零副作用
+import reverb_profile as rvb  # 场景空间声学/混响（对白轨）：缺 声学表.json=全 dry，零回归
+ACOUSTIC=rvb.load_acoustic_table(ROOT)   # 缺/坏 → {} → 每句 line_reverb 恒为 ""（dry）
+SHOT_SCENE=rvb._shot_scene_index(ROOT, EP)  # {镜头号/CLIP号 → 场景串}，解析不到 → {} → dry
 
 MM_KEY=os.environ.get('MINIMAX_API_KEY'); MM_GROUP=os.environ.get('MINIMAX_GROUP_ID')
 MM_MODEL=os.environ.get('MINIMAX_MODEL','speech-02-hd')
@@ -221,6 +226,7 @@ def clamp_sp(x): return round(min(1.5,max(0.7,x)),3)
 wavs=[]; measured=[]; placeholders=[]; placeholder_reason=''
 for i in range(n):
     role,text,emo_c,spd_m,hk=items[i]
+    text=vlex.to_spoken(text,LEXICON)  # 念白文本：专名/多音字谐音替换，只喂 TTS+缓存键；清单/字幕仍用 items[i][1] 正名
     # 取原始音频(缓存)
     if USE_ZS:
         ref,rtext=role_ref(ZS_PREFIX,role)
@@ -277,7 +283,9 @@ for i in range(n):
             placeholder_reason='macOS say 中文语音输出为空;已自动生成静音占位时长轨'
             continue
     # FX + 统一电平（系统音"机械感"FX 可自定义/禁用：SYS_AUDIO_FX='' 关掉）
-    fx = (os.environ.get('SYS_AUDIO_FX', 'asetrate=44100*0.9,aresample=44100,atempo=1.111,aecho=0.6:0.5:24:0.35,') if sysfx else "")
+    # 场景混响前置（对白空间声学）：按该句所属场景取 aecho 片段（dry=""），叠在系统FX前、loudnorm前
+    _scene = rvb._resolve_scene(shots[i] if i < len(shots) else "", SHOT_SCENE)  # en 无 shots → ""=dry
+    fx = rvb.line_reverb(_scene, ACOUSTIC) + (os.environ.get('SYS_AUDIO_FX', 'asetrate=44100*0.9,aresample=44100,atempo=1.111,aecho=0.6:0.5:24:0.35,') if sysfx else "")
     tmp=os.path.join(vd,f't{i:02d}.wav')
     subprocess.run([FF,'-y','-loglevel','error','-i',raw,'-af',f'{fx}loudnorm=I=-16:TP=-1.5:LRA=11,aresample=44100','-ar','44100','-ac','2',tmp],check=True)
     out=os.path.join(W,f'line_{i:02d}.wav'); os.replace(tmp,out)  # 最终逐句落 配音/line_NN.wav（与 manifest/spec 一致）

@@ -1,13 +1,13 @@
 ---
 name: mv-compose
-description: MV 合成成片（mv 系列自包含，不依赖 n2d-compose）— 把 制MV/曲名/ 的 分镜/timeline_manifest.json 选中 clips（默认严格，不按目录猜；显式 --allow-fallback 才临时回退出视频/视频/文件顺序）+ 歌/song.*(整首歌作主音轨) + (可选)字幕/karaoke.ass 卡拉OK字幕烧成 成片_MV.mp4。剪辑点对齐 mv-plan/beatgrid，字幕缺失时优雅降级；无 libass 时用 mv 自带 render_lyrics.py。Use when asked to 合成MV / 出MV成片 / 歌轨合成 / 烧卡拉OK字幕 / MV导出. Triggers 合成MV, MV成片, 出MV, 卡拉OK烧录, 歌轨合成, mv-compose.
+description: MV 合成成片 — 把 创作区/制MV/曲名/ 的 分镜/timeline_manifest.json 选中 clips（默认严格，不按目录猜；显式 --allow-fallback 才临时回退出视频/视频/文件顺序）+ 歌/song.*(整首歌作主音轨) + (可选)字幕/karaoke.ass 卡拉OK字幕烧成 成片_MV.mp4。剪辑点对齐 mv-plan/beatgrid，字幕缺失时优雅降级；无 libass 时用 mv 自带 render_lyrics.py。Use when asked to 合成MV / 出MV成片 / 歌轨合成 / 烧卡拉OK字幕 / MV导出. Triggers 合成MV, MV成片, 出MV, 卡拉OK烧录, 歌轨合成, mv-compose.
 ---
 
 # mv-compose — MV 合成成片（mv 系列·自包含）
 
 把一支 MV 的 `分镜/timeline_manifest.json` 选中 clips + `歌/song.*`(整首歌=主音轨) + (可选)`字幕/karaoke.ass`(卡拉OK逐字字幕) 烧成 `成片_MV.mp4`。默认严格服从 timeline，不按目录猜顺序；临时救场才显式传 `--allow-fallback`。
 
-> **完全独立**：本 skill 不依赖 n2d-compose 或任何其他 skill；只用通用工具 ffmpeg + 自带 `render_lyrics.py`。
+> **完全独立**：本 skill 只用通用工具 ffmpeg + 自带 `render_lyrics.py`。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
@@ -23,10 +23,10 @@ description: MV 合成成片（mv 系列自包含，不依赖 n2d-compose）— 
 - **按转场类型接 clip，别盲拼**（接力链末端兜底）：读 `timeline_manifest.json` / `clip_plan.json` 每个接缝的 `transition` 决定接法——`卡点硬切 / 动作切 / 有尾帧接力的硬切` 直接硬切（踩 downbeat 同帧砸下最稳）；`空镜缓冲` 契约要缓冲但 `视频/` 缺对应空镜 clip → **停下报警**（缺料），别默默硬切；`闪白 / 光效切` 按 clip 自带处理；**非有意硬切又视觉跳变明显**的接缝可加 **0.1–0.3s 微交叉溶解**兜底（ffmpeg `xfade`，不依赖 libass，仅该接缝局部重编码、其余仍直拼）。**副歌踩鼓点的有意硬切不要加溶解**（会泄掉卡点冲击）。
 - **优雅降级**：无字幕 → 纯歌+画面；无 timeline / 缺视频不静默降级，除非显式 `--allow-fallback`。
 
-## 输入前置（作品根=`制MV/<曲名>/`）
+## 输入前置（作品根=`创作区/制MV/<曲名>/`）
 - `分镜/timeline_manifest.json`（mv-plan 产、mv-video 挑版后更新；必需，显式 fallback 除外）
 - `出视频/视频/*.mp4`（mv-video 产；显式 fallback 时才按目录顺序兜底）
-- `歌/song.*`（song 线产出或用户上传；必需，支持 wav/mp3/m4a/flac）
+- `歌/song.*`（用户提供或本项目内维护；必需，支持 wav/mp3/m4a/flac）
 - `节拍/beatgrid.json`（mv-beat 产；默认必需，显式 fallback 时才允许缺失）
 - `字幕/karaoke.ass` 或 `字幕/lyrics.lrc`（mv-lyric-sync 产；可选）
 
@@ -51,7 +51,7 @@ bash <skill>/mv_compose.sh <制MV作品根> 16:9 --allow-fallback  # 临时救�
 
 ## 详细参考
 - 调用 / 画幅 / 字幕降级：`references/usage.md`
-- 上游：`song` 线或用户上传(歌) · `mv-beat`(beatgrid) · `mv-lyric-sync`(卡拉OK) · `mv-video`(clips)
+- 上游：本项目输入歌 · `mv-beat`(beatgrid) · `mv-lyric-sync`(卡拉OK) · `mv-video`(clips)
 
 ## 常见错误
 | 错误 | 纠正 |
@@ -64,4 +64,4 @@ bash <skill>/mv_compose.sh <制MV作品根> 16:9 --allow-fallback  # 临时救�
 | 用配音 ducking 逻辑做 MV | MV 主音轴是整首歌，不 ducking |
 | 所有接缝一律裸切 | 按 timeline/clip_plan 的 `transition` 接：有意硬切踩鼓点硬切、跳变接缝微溶解、缺空镜缓冲报警 |
 | 后配歌曲 rough 蓝图没补最终歌就合成 | 先补 `歌/song.*`，跑 `mv-beat` 与正式 `mv-plan`，再合成 |
-| 想复用 n2d-compose 的脚本 | 本系列完全独立，用自带 mv_compose.sh + render_lyrics.py |
+| 想用别的合成脚本 | 本系列完全独立，用自带 mv_compose.sh + render_lyrics.py |

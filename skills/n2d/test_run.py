@@ -32,9 +32,26 @@ def make_work(cells, settings=None):
 ALL_DONE_TO = {
     "script_stage1": ["✅", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜"],
     "voice":         ["✅", "✅", "✅", "✅", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜"],
+    "image_prompt":  ["✅", "✅", "✅", "✅", "⬜", "✅", "✅", "✅", "✅", "⬜", "⬜", "⬜", "⬜", "⬜"],
     "image":         ["✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "0/10", "⬜", "⬜", "⬜"],
+    "video_prompt":  ["✅", "✅", "✅", "✅", "⬜", "✅", "✅", "✅", "✅", "✅", "✅", "⬜", "⬜", "⬜"],
     "compose":       ["✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "⬜"],
 }
+
+
+class _CP:
+    def __init__(self, returncode=0, stdout="", stderr=""):
+        self.returncode = returncode
+        self.stdout = stdout
+        self.stderr = stderr
+
+
+def _write_clean_image_qc(root, ep="第1集"):
+    out_dir = os.path.join(root, "生产数据", "image_qc", ep)
+    os.makedirs(out_dir, exist_ok=True)
+    path = os.path.join(out_dir, f"image_qc_{ep}.json")
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump({"qc_environment": {"precision_level": "full"}, "summary": {"hard_blocks": 0, "verdict": "ok"}}, fh)
 
 
 # ── 前沿解析 + stage key 反查（真实 fixture 文件）──────────────────────────────
@@ -74,6 +91,14 @@ def test_resolve_frontier_done():
     cells = ["✅"] * 14
     root = make_work(cells)
     assert run.resolve_frontier(root) is None
+
+
+def test_next_action_done_carries_post_qc_bundle():
+    cells = ["✅"] * 14
+    root = make_work(cells)
+    na = run.next_action(root, "第1集")
+    assert na["stop_reason"] == "done"
+    assert any("score.py" in cmd for cmd in na["action_card"]["post_qc_bundle"]["commands"])
 
 
 def test_production_mode_menu_defaults_to_shortest_path():
@@ -121,6 +146,9 @@ def test_decide_compose_payment_menu_is_bgm():
     na = run.decide(root, _route("compose"), "compose", run.Probes())
     assert na["stop_reason"] == "needs_payment_confirm"
     assert na["action_card"]["menu"][0]["choice_point"] == "BGM来源"
+    bundle = na["action_card"]["post_qc_bundle"]
+    assert bundle["scope"] == "pre_compose_review"
+    assert any("review_ui.py" in cmd and "--export-findings" in cmd for cmd in bundle["commands"])
 
 
 def test_decide_compliance_blocks_paid_stage():
@@ -159,13 +187,59 @@ def test_decide_env_missing_top_priority():
     assert na["stop_reason"] == "env_missing"
 
 
+def test_decide_prework_block_stops_before_agent_generation():
+    root = make_work(ALL_DONE_TO["image_prompt"])
+    p = run.Probes(prework_block="identity adapter matrix 刷新失败")
+    na = run.decide(root, _route("image_prompt"), "image_prompt", p)
+    assert na["stop_reason"] == "prework_failed"
+    assert "不能把 warn/skip 当放行" in na["action_card"]["to_user"]
+
+
 def test_decide_first_run_choice_package():
     root = make_work(ALL_DONE_TO["script_stage1"])
-    p = run.Probes(pending_choices=["制作模式", "生视频模型"])
+    p = run.Probes(pending_choices=["制作模式", "基础视觉风格"])
     na = run.decide(root, _route("script_stage1"), "script_stage1", p)
     assert na["stop_reason"] == "needs_choice"
     cps = [m["choice_point"] for m in na["action_card"]["menu"]]
-    assert "制作模式" in cps and "生视频模型" in cps
+    assert "制作模式" in cps and "基础视觉风格" in cps
+    assert "生视频后端选择已后移到 n2d-video" in na["action_card"]["to_user"]
+
+
+def test_gather_probes_blocks_script_stage1_on_unreviewed_boundary_risk():
+    root = make_work(ALL_DONE_TO["script_stage1"], settings="- 制作模式: 原生音画\n- 基础视觉风格: 写实电影感\n")
+    ep_dir = os.path.join(root, "脚本", "第1集")
+    os.makedirs(ep_dir, exist_ok=True)
+    open(os.path.join(ep_dir, "raw.txt"), "w", encoding="utf-8").write("她走进屋里。\n然后坐下。\n")
+
+    probes = run.gather_probes(root, _route("script_stage1"), "script_stage1")
+
+    assert probes.prework_block and "boundary_audit" in probes.prework_block
+    assert any(pw["step"] == "boundary_audit" and pw["status"] == "block" for pw in probes.prework)
+
+
+def test_gather_probes_does_not_block_short_episode_with_strong_hook():
+    root = make_work(ALL_DONE_TO["script_stage1"], settings="- 制作模式: 原生音画\n- 基础视觉风格: 写实电影感\n")
+    ep_dir = os.path.join(root, "脚本", "第1集")
+    os.makedirs(ep_dir, exist_ok=True)
+    open(os.path.join(ep_dir, "raw.txt"), "w", encoding="utf-8").write("第一章\n她被逼到宫墙下。\n门外突然传来脚步声！\n")
+
+    probes = run.gather_probes(root, _route("script_stage1"), "script_stage1")
+
+    assert not probes.prework_block
+    assert any(pw["step"] == "boundary_audit" and pw["status"] == "pass" for pw in probes.prework)
+
+
+def test_gather_probes_allows_script_stage1_when_boundary_review_exists():
+    root = make_work(ALL_DONE_TO["script_stage1"], settings="- 制作模式: 原生音画\n- 基础视觉风格: 写实电影感\n")
+    ep_dir = os.path.join(root, "脚本", "第1集")
+    os.makedirs(ep_dir, exist_ok=True)
+    open(os.path.join(ep_dir, "raw.txt"), "w", encoding="utf-8").write("她走进屋里。\n然后坐下。\n")
+    open(os.path.join(root, "脚本", "_拆集复核.md"), "w", encoding="utf-8").write("# 已复核\n")
+
+    probes = run.gather_probes(root, _route("script_stage1"), "script_stage1")
+
+    assert not probes.prework_block
+    assert any(pw["step"] == "boundary_audit" and pw["status"] == "reviewed" for pw in probes.prework)
 
 
 # ── --auto 不越过花钱点（loop 逻辑，注入探针避免 subprocess）───────────────────
@@ -174,6 +248,70 @@ def test_auto_does_not_cross_payment_point(monkeypatch):
     monkeypatch.setattr(run, "gather_probes", lambda *a, **k: run.Probes())
     na = run.next_action(root, "第1集", auto=True)
     assert na["stop_reason"] == "needs_payment_confirm"  # 没有因 --auto 而跑过出图
+
+
+def test_next_action_image_prompt_uses_prompt_preflight_gate(monkeypatch):
+    root = make_work(ALL_DONE_TO["image_prompt"])
+    gate_stages = []
+
+    def fake_run(cmd):
+        if cmd[1].endswith("dashboard.py"):
+            gate_stages.append(cmd[cmd.index("--stage") + 1])
+            return _CP(0, '{"findings_path": ""}', "")
+        return _CP(0, "", "")
+
+    monkeypatch.setattr(run, "_run", fake_run)
+    na = run.next_action(root, "第1集")
+    assert na["stop_reason"] == "needs_agent_gen"
+    assert gate_stages == ["image_prompt_preflight"]
+
+
+def test_next_action_video_prompt_uses_prompt_preflight_gate(monkeypatch):
+    root = make_work(ALL_DONE_TO["video_prompt"])
+    _write_clean_image_qc(root)
+    gate_stages = []
+
+    def fake_run(cmd):
+        if cmd[1].endswith("dashboard.py"):
+            gate_stages.append(cmd[cmd.index("--stage") + 1])
+            return _CP(0, '{"findings_path": ""}', "")
+        return _CP(0, "", "")
+
+    monkeypatch.setattr(run, "_run", fake_run)
+    na = run.next_action(root, "第1集")
+    assert na["stop_reason"] == "needs_agent_gen"
+    assert gate_stages == ["video_prompt_preflight"]
+
+
+def test_model_router_failure_is_prework_block(monkeypatch):
+    root = make_work(ALL_DONE_TO["video_prompt"])
+    _write_clean_image_qc(root)
+
+    def fake_run(cmd):
+        if cmd[1].endswith("router.py"):
+            return _CP(2, "", "router failed")
+        return _CP(0, '{"findings_path": ""}', "")
+
+    monkeypatch.setattr(run, "_run", fake_run)
+    probes = run.gather_probes(root, _route("video_prompt"), "video_prompt")
+    assert probes.prework_block and "model_router" in probes.prework_block
+    na = run.decide(root, _route("video_prompt"), "video_prompt", probes)
+    assert na["stop_reason"] == "prework_failed"
+
+
+def test_gate_exception_is_fail_closed(monkeypatch):
+    root = make_work(ALL_DONE_TO["image"])
+
+    def fake_run(cmd):
+        if cmd[1].endswith("dashboard.py"):
+            raise RuntimeError("gate crashed")
+        return _CP(0, "", "")
+
+    monkeypatch.setattr(run, "_run", fake_run)
+    probes = run.gather_probes(root, _route("image"), "image")
+    assert probes.gate and probes.gate["blocked"] is True
+    na = run.decide(root, _route("image"), "image", probes)
+    assert na["stop_reason"] == "blocked_by_gate"
 
 
 def test_decide_is_pure_no_mutation():

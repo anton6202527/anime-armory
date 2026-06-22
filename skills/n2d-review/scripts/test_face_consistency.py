@@ -202,6 +202,52 @@ def test_discover_costume_sets_reads_registry_45_and_face_anchor(tmp_path):
     assert sorted(sets["沈念_常态"]) == ["45度", "主", "脸部特写"]
 
 
+def test_discover_costume_sets_reads_registry_path_objects(tmp_path):
+    import json
+    import face_consistency as fc
+
+    root = tmp_path
+    img_dir = root / "出图" / "共享" / "图片"
+    img_dir.mkdir(parents=True)
+    for name in ["CHAR_SHENNIAN_常态.png", "CHAR_SHENNIAN_常态_脸部特写.png"]:
+        (img_dir / name).write_bytes(b"png")
+    (root / "出图" / "共享" / "identity_registry.json").write_text(
+        json.dumps(
+            {
+                "characters": [
+                    {
+                        "id": "CHAR_SHENNIAN",
+                        "forms": [
+                            {
+                                "form": "常态",
+                                "asset_key": "沈念_常态",
+                                "reference_group": {
+                                    "front": {"path": "出图/共享/图片/CHAR_SHENNIAN_常态.png", "status": "ready"},
+                                    "face_anchor_refs": [
+                                        {"path": "出图/共享/图片/CHAR_SHENNIAN_常态_脸部特写.png", "status": "ready"}
+                                    ],
+                                },
+                            }
+                        ],
+                    }
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    sets = fc.discover_costume_sets(str(root))
+    assert sorted(sets["沈念_常态"]) == ["主", "脸部特写"]
+
+
+def test_identity_ref_regex_ignores_char_file_stems():
+    import face_consistency as fc
+
+    text = "`出图/共享/图片/CHAR_SHENNIAN_常态.png` `CHAR_SHENNIAN/常态`"
+    assert fc.IDENTITY_REF_RE.findall(text) == ["CHAR_SHENNIAN/常态"]
+
+
 def test_severity_order():
     assert fc._sev("block") > fc._sev("warn") > fc._sev("ok") > fc._sev("noface")
 
@@ -464,3 +510,56 @@ def test_detect_face_swaps_empty_or_no_chars():
     import face_consistency as fc
     assert fc.detect_face_swaps([], {"沈念": [1.0, 0.0]})["assignments"] == []
     assert fc.detect_face_swaps([[1.0, 0.0]], {})["assignments"] == []
+
+
+def test_select_face_encoder_explicit_and_env(monkeypatch):
+    monkeypatch.delenv("N2D_FACE_EMBEDDER", raising=False)
+    assert fc.select_face_encoder("styleid") == "styleid"
+    assert fc.select_face_encoder("arcface") == "arcface"
+    # 显式 backend 覆盖 env
+    monkeypatch.setenv("N2D_FACE_EMBEDDER", "arcface")
+    assert fc.select_face_encoder("styleid") == "styleid"
+    # 仅 env
+    assert fc.select_face_encoder(None) == "arcface"
+    monkeypatch.setenv("N2D_FACE_EMBEDDER", "styleid")
+    assert fc.select_face_encoder(None) == "styleid"
+
+
+def test_select_face_encoder_style_hint(monkeypatch):
+    monkeypatch.delenv("N2D_FACE_EMBEDDER", raising=False)
+    assert fc.select_face_encoder(None, "anime") == "styleid"
+    assert fc.select_face_encoder(None, "illustration") == "styleid"
+    assert fc.select_face_encoder(None, "photo") == "arcface"
+    # 无法判定 → 保守 arcface（不擅自换后端）
+    assert fc.select_face_encoder(None, "unknown") == "arcface"
+    assert fc.select_face_encoder(None, None) == "arcface"
+
+
+def test_styleid_missing_weights_falls_back_to_arcface(monkeypatch):
+    # 诚实铁律：要 styleid 但权重缺 → 回退 arcface 标 fallback，绝不静默用裸 CLIP
+    monkeypatch.delenv("N2D_STYLEID_MODEL", raising=False)
+    assert fc._load_styleid_embedder() is None
+
+
+def test_fidelity_excluded_only_on_explicit_false():
+    mask = {"a.png": {"canonical_pass": False}, "b.png": {"canonical_pass": True}}
+    assert fc.fidelity_excluded("a.png", mask) is True
+    assert fc.fidelity_excluded("b.png", mask) is False
+    assert fc.fidelity_excluded("missing.png", mask) is False  # 未判定 → 不臆造剔除
+    assert fc.fidelity_excluded("a.png", {}) is False
+
+
+def test_load_fidelity_mask_missing_file(tmp_path):
+    assert fc._load_fidelity_mask(str(tmp_path), "第1集") == {}
+
+
+def test_load_fidelity_mask_reads_shot_canonical(tmp_path):
+    import json
+    import os
+    d = tmp_path / "生产数据"
+    d.mkdir()
+    (d / "vlm_canonical_第1集.json").write_text(
+        json.dumps({"shot_canonical": {"镜头01.png": {"canonical_pass": False}}}),
+        encoding="utf-8")
+    mask = fc._load_fidelity_mask(str(tmp_path), "第1集")
+    assert mask["镜头01.png"]["canonical_pass"] is False

@@ -33,8 +33,11 @@ from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence
 OFF_VALUES = ("关闭", "off", "none", "无", "")
 POST_PASS_VALUES = ("后期pass", "后期", "post", "post_pass", "musetalk", "wav2lip", "latentsync")
 # 说话镜判据（与 model-router 同义，但本脚本只读 route 自带信号，不反向 import 形成耦合）
-SPEECH_SHOT_TYPES = ("dialogue", "dialogue_shot_reverse", "speech", "closeup_speaking",
-                     "reaction", "monologue", "talking_head")
+SPEECH_SHOT_TYPES = (
+    "dialogue", "dialogue_shot_reverse", "reveal_reaction_chain",
+    "public_confrontation", "relationship_turn", "speech", "closeup_speaking",
+    "reaction", "monologue", "talking_head",
+)
 SPEECH_AUDIO_POLICIES = ("native_speech", "lipsync_condition_only")
 # 后期对口型工具优先序（2026-06 快照·能力会变，以 n2d/references/模型矩阵.md「音画联合」为准）：
 # LatentSync 身份保持最好(扩散)、MuseTalk 近实时画质均衡、Wav2Lip 同步精度最稳但糊。

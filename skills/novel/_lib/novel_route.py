@@ -62,7 +62,10 @@ def chapter_number(value: str) -> Optional[int]:
 
 def cell_state(v: str) -> str:
     v = (v or "").strip()
-    if v == PROGRESS_DONE:
+    if v == PROGRESS_DONE or v.startswith(f"{PROGRESS_DONE}("):
+        return "done"
+    if v.startswith("🟡"):
+        # 旧项目常用“🟡偏长”等记录已审出的建议级问题；它不是未跑该阶段。
         return "done"
     if v.startswith(PROGRESS_ROUGH_PREFIX):
         return "rough"

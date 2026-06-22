@@ -18,7 +18,7 @@ CLEAN = """# 第 1 章 《开端》
 """
 
 
-def make_proj(tmp, chapters, *, outline=None, source=None):
+def make_proj(tmp, chapters, *, outline=None, source=None, meta=None):
     """chapters: {filename: content}。"""
     root = os.path.join(tmp, "proj")
     os.makedirs(os.path.join(root, "章节"), exist_ok=True)
@@ -32,6 +32,9 @@ def make_proj(tmp, chapters, *, outline=None, source=None):
     if source is not None:
         with open(os.path.join(root, "原作.txt"), "w", encoding="utf-8") as f:
             f.write(source)
+    if meta is not None:
+        with open(os.path.join(root, "_meta.json"), "w", encoding="utf-8") as f:
+            json.dump(meta, f, ensure_ascii=False)
     return root
 
 
@@ -115,6 +118,44 @@ def test_wordcount_out_of_band():
         assert ("🟡", "字数") in sev_dims(f), f
 
 
+def test_wordcount_defaults_to_scale_metadata():
+    with tempfile.TemporaryDirectory() as t:
+        chapter = "# 第 1 章 《长篇》\n<!-- meta: demo=false -->\n" + ("风" * 4500) + "\n"
+        root = make_proj(t, {"第1章.md": chapter}, meta={
+            "schema_version": 1,
+            "kind": "create",
+            "scale": "long",
+            "target_words_per_chapter": [5000, 8000],
+        })
+        f = run(root)
+        assert ("🟡", "字数") not in sev_dims(f), f
+
+
+def test_wordcount_defaults_to_target_words_without_scale():
+    with tempfile.TemporaryDirectory() as t:
+        chapter = "# 第 1 章 《中篇》\n<!-- meta: demo=false -->\n" + ("风" * 2600) + "\n"
+        root = make_proj(t, {"第1章.md": chapter}, meta={
+            "schema_version": 1,
+            "kind": "expand",
+            "target_words_per_chapter": [3000, 5000],
+        })
+        f = run(root)
+        assert ("🟡", "字数") not in sev_dims(f), f
+
+
+def test_wordcount_metadata_band_overrides_scale():
+    with tempfile.TemporaryDirectory() as t:
+        chapter = "# 第 1 章 《自定义》\n<!-- meta: demo=false -->\n" + ("风" * 900) + "\n"
+        root = make_proj(t, {"第1章.md": chapter}, meta={
+            "schema_version": 1,
+            "kind": "create",
+            "scale": "long",
+            "target_wordcount_min_max": [800, 1800],
+        })
+        f = run(root)
+        assert ("🟡", "字数") not in sev_dims(f), f
+
+
 def test_demo_exempt_from_wordcount():
     with tempfile.TemporaryDirectory() as t:
         demo = CLEAN.replace("demo=false", "demo=true")
@@ -173,6 +214,22 @@ def test_json_out_writes_machine_payload():
         assert payload["kind"] == "novel_mechanical_findings"
         assert payload["findings"] == f
         assert payload["counts"]["🟡"] >= 1
+        assert payload["wordcount_band"] == [9000, 20000]
+        assert "cli_min" in payload["wordcount_band_source"]
+
+
+def test_range_filters_chapters_and_records_scope():
+    with tempfile.TemporaryDirectory() as t:
+        c1 = "# 第 1 章 《一》\n<!-- m -->\n正文。\n"
+        c2 = "第二章 二\n<!-- m -->\n正文。\n"
+        c3 = "# 第 3 章 《三》\n<!-- m -->\n正文。\n"
+        root = make_proj(t, {"第1章.md": c1, "第2章.md": c2, "第3章.md": c3})
+        out_path = os.path.join(t, "range_findings.json")
+        f = run(root, "--range", "1-1", "--min", "2", "--max", "200", "--json-out", out_path)
+        assert not any(x["chapter"] == 2 for x in f), f
+        with open(out_path, encoding="utf-8") as fp:
+            payload = json.load(fp)
+        assert payload["chapter_range"] == [1, 1]
 
 
 # ── AI 腔/同质化启发式（advisory）──

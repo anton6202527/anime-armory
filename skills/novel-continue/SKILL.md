@@ -11,7 +11,7 @@ description: Given an existing novel (.txt/.docx) — finished or in-progress �
 
 本 skill 的可选项**不写死在源码里**，按 `../skills/novel-craft/references/选择点与偏好.md`（家族统一的偏好读写机制 + 全部选择点目录与缺省）解析：`<作品根>/_设置.md` → 全局默认 `创作偏好-默认.md` 预填并告知一句 → 缺则**首次问一次**→写回 `_设置.md`→**沉默沿用**（合规/不可逆/花钱点每次仍确认）。
 
-本 skill 涉及的选择点：`目标平台`、`权利来源`、`输出格式`、`小说生成模式`、`章节生成粒度`、`AI使用披露`。
+本 skill 涉及的选择点：`小说用途`、`目标平台`、`权利来源`、`输出格式`、`小说生成模式`、`章节生成粒度`、`AI使用披露`。
 
 ## 和兄弟 skill 的区别（先看清楚再用）
 
@@ -51,7 +51,7 @@ description: Given an existing novel (.txt/.docx) — finished or in-progress �
 - 原作路径
 - **续写模式**：续编 / 接更
 - **新章数**：建议 5–30
-- 目标平台 / 风格
+- 小说用途 / 目标平台 / 风格
 - 是否输出**合本**（原作 + 新章节合一）还是**仅新章节**
 
 ### 第 1 步 — 建项目
@@ -66,8 +66,8 @@ python3 <skill>/scripts/init_project.py "<原作>" \
   [--i-have-rights]
 ```
 
-落点 `写小说/<原作名>-续写/`。骨架同其他 novel-* 派生 skill 模式（`设定/` / `章节/` / `导出/` / `_meta.json` / `_进度.md`）。
-`init_project.py` 会把 `--new-chapters` 同步写入 `_meta.json.target_chapters`，并按 `target_platform` 推导 `target_words_per_chapter / demo_chapters / draft_mode`，同时把 `draft_mode / chapter_granularity / ai_text_usage` 写进 `_meta.json` 与 `_设置.md`。后续 `draft_packets.py --next` 只读这些机器字段推进，不再靠人类文案猜章数。
+落点 `创作区/写小说/<原作名>-续写/`。骨架同其他 novel-* 派生 skill 模式（`设定/` / `章节/` / `导出/` / `_meta.json` / `_进度.md`）。
+`init_project.py` 会把 `--new-chapters` 同步写入 `_meta.json.target_chapters`，并按 `target_platform` 推导 `target_words_per_chapter / target_wordcount_min_max / demo_chapters / draft_mode`，同时把 `draft_mode / chapter_granularity / ai_text_usage` 写进 `_meta.json` 与 `_设置.md`。后续 `draft_packets.py --next` 只读这些机器字段推进，不再靠人类文案猜章数。
 
 ### 第 2 步 — 吸收原作（最长的一步）
 
@@ -144,7 +144,7 @@ python3 skills/novel-craft/scripts/export.py "<作品根>" --formats txt,docx[,o
 
 ## 输出约定
 
-- 默认作品根 `写小说/<原作名>-续写/`，`--out` 可改。
+- 默认作品根 `创作区/写小说/<原作名>-续写/`，`--out` 可改。
 - 终态进 `导出/`；中间产物（章节 md / 设定卡 / 末章状态）保留作品根。
 
 ## 何时不用本 skill

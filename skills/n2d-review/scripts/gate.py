@@ -6,7 +6,7 @@ not create assets; it only reports whether a stage may proceed.
 
 Usage:
   # Production entry: records QA findings and returns this gate's exit code.
-  python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage image_preflight|video_preflight|image|video|compose|review
+  python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage image_prompt_preflight|image_preflight|video_prompt_preflight|video_preflight|image|video|compose|review
 
   # Engine/debug entry: deterministic findings only, no dashboard telemetry.
   python3 skills/n2d-review/scripts/gate.py <作品根> 第N集 --stage video --json
@@ -45,6 +45,7 @@ from n2d_contract import (  # noqa: E402
     ASSET_REFERENCE_REGISTRY_KIND,
     CINEMATIC_CONTRACT_FIELDS,
     CONSISTENCY_DIMENSIONS,
+    COMPLIANCE_AI_LABEL_STATUSES,
     COMPLIANCE_ALLOWED_RIGHTS,
     COMPLIANCE_INTERNAL_DISTRIBUTION_INTENTS,
     COMPLIANCE_INTERNAL_SKIPPABLE_SECTIONS,
@@ -94,8 +95,13 @@ from n2d_contract import (  # noqa: E402
     stage_for_progress_column,
 )
 from n2d_contract_diff import diff_contracts  # noqa: E402  视觉契约继承 Diff 核心（common 层单一真值源）
-from n2d_handoff import check_asset_handoff  # noqa: E402  逐镜资产交接 Diff（common 层单一真值源，与 inherit_contract 共用）
+from n2d_handoff import (  # noqa: E402  逐镜身份/资产交接 Diff（common 层单一真值源，与 inherit_contract 共用）
+    check_asset_handoff,
+    check_identity_handoff,
+)
 import image_backends  # noqa: E402  出图后端连通性探活 adapter（选择点→探针）
+import image_backend_adapter  # noqa: E402  生图后端 API/能力适配层（选择点→能力/刷新证据/推荐）
+import video_backend_adapter  # noqa: E402  生视频后端 API/能力适配层（选择点→能力/刷新证据）
 from n2d_platform_profiles import (  # noqa: E402
     anchor_consumption_plan,
     backend_supports_three_plus_frames,
@@ -111,7 +117,7 @@ from n2d_route import (  # noqa: E402
     voice_meta_path,
     voiceover_fingerprint,
 )
-from n2d_settings import get_setting, is_video_first  # noqa: E402
+from n2d_settings import get_setting, is_native_av, is_video_first  # noqa: E402
 from n2d_cross_episode import (  # noqa: E402  跨集视觉契约方向反转（同地点光位/轴线翻）核心
     cross_episode_diff as _cross_episode_diff,
     overview_rel as _ce_overview_rel,
@@ -126,6 +132,10 @@ import multimodal_consistency as mmc  # noqa: E402
 import subtitle_align as sa  # noqa: E402
 import voice_consistency as vcons  # noqa: E402  音色键/voicemap 跨集对账（确定性）
 import voice_print_consistency as vprint  # noqa: E402  声纹 embedding 跨集漂移（启发式·后端可缺）
+try:
+    from skill_snapshot import fingerprint_is_fresh  # type: ignore
+except Exception:  # pragma: no cover - degraded local env
+    fingerprint_is_fresh = None  # type: ignore[assignment]
 
 BLOCK, WARN, INFO = "block", "warn", "info"
 findings: List[Dict[str, object]] = []
@@ -145,6 +155,14 @@ SPECIAL_SHOT_TEMPLATE_FIELDS: Dict[str, Tuple[str, ...]] = {
         "template_id", "beats", "blocking", "camera_rule", "continuity_must", "negative",
         "axis", "eyeline", "shot_pairing",
     ),
+    "reveal_reaction_chain": (
+        "template_id", "beats", "blocking", "camera_rule", "continuity_must", "negative",
+        "reveal_object", "knowledge_order", "reaction_beats", "cut_point",
+    ),
+    "public_confrontation": (
+        "template_id", "beats", "blocking", "camera_rule", "continuity_must", "negative",
+        "stakes", "evidence_ladder", "power_shift", "crowd_reaction_order",
+    ),
     "magic_burst": (
         "template_id", "beats", "blocking", "camera_rule", "continuity_must", "negative",
         "charge_frame", "release_frame", "effect_asset",
@@ -160,6 +178,10 @@ SPECIAL_SHOT_TEMPLATE_FIELDS: Dict[str, Tuple[str, ...]] = {
     "hug_or_pull": (
         "template_id", "beats", "blocking", "camera_rule", "continuity_must", "negative",
         "contact_points", "force_direction", "body_overlap_limit", "release_frame",
+    ),
+    "relationship_turn": (
+        "template_id", "beats", "blocking", "camera_rule", "continuity_must", "negative",
+        "relationship_state_before", "turning_action", "subtext", "relationship_state_after",
     ),
     "multi_character_same_frame": (
         "template_id", "beats", "blocking", "camera_rule", "continuity_must", "negative",
@@ -198,6 +220,22 @@ MOTION_CONTROL_CONTACT_FIELDS = ("contact_points", "occlusion_order", "body_part
 # IDENTITY_REGISTRY_KIND / IDENTITY_ADAPTER_MATRIX_KIND / IDENTITY_REFERENCE_FIELDS /
 # IDENTITY_HANDLE_FIELDS 从 n2d_contract 导入（写方 lora/market/identity 同源）
 IDENTITY_REFERENCE_FIELDS = IDENTITY_REFERENCE_KEYS
+# 角色定妆基础包不可缺失铁律（设计宪法 B7）：三视图是人审拼版，不能替代可喂图拆分资产。
+REQUIRED_CHARACTER_MAKEUP_REFERENCE_GROUP_FIELDS = ("front", "three_quarter", "side", "back", "turnaround")
+REQUIRED_CHARACTER_MAKEUP_ATLAS_VIEWS = ("front", "three_quarter", "side", "back")
+CHARACTER_MAKEUP_BODY_REFERENCE_FIELDS = ("half_body", "full_body", "outfit")
+CHARACTER_MAKEUP_FACE_REFERENCE_FIELDS = ("face_anchor_refs", "expressions")
+READY_CHARACTER_MAKEUP_STATUSES = {"ready", "registered"}
+DERIVED_CHARACTER_MAKEUP_REFERENCE_FIELDS = ("three_quarter", "side", "back", "half_body", "full_body", "face_anchor_refs")
+SAME_SOURCE_MAKEUP_DERIVATION_METHODS = {
+    "three_quarter": {"turnaround_split", "turnaround_crop"},
+    "side": {"turnaround_split", "turnaround_crop"},
+    "back": {"turnaround_split", "turnaround_crop"},
+    "half_body": {"front_crop", "turnaround_crop"},
+    "full_body": {"front_crop", "turnaround_crop"},
+    "face_anchor_refs": {"front_crop", "turnaround_crop"},
+}
+CHARACTER_MAKEUP_DERIVATION_REQUIRED_FIELDS = ("method", "source_path", "source_sha256", "crop_box")
 IDENTITY_FORM_FIELDS = (
     "form",
     "asset_key",
@@ -210,6 +248,15 @@ IDENTITY_FORM_FIELDS = (
     "drift_forbidden",
 )
 CHARACTER_DNA_FIELDS = ("face", "hair", "outfit", "accessories", "texture")
+WARDROBE_PROFILE_CORE_FIELDS = ("silhouette", "palette", "forbidden_drift")
+WARDROBE_PROFILE_STRUCTURE_FIELD_GROUPS = (
+    ("layers",),
+    ("collar", "neckline"),
+    ("sleeve",),
+    ("waist", "belt", "waist_belt"),
+    ("hem",),
+    ("fabric", "material", "texture"),
+)
 ASSET_BUNDLE_REQUIRED_SECTIONS = ("reference", "prompts", "lora", "voice", "adapters", "qc")
 IDENTITY_ANGLE_FIELDS = ("allowed", "risky", "requires_extra_reference")
 IDENTITY_ADAPTER_SECTIONS = ("image", "video")
@@ -262,6 +309,7 @@ COMPLIANCE_READY = COMPLIANCE_READY_STATUSES
 COMPLIANCE_DONE = COMPLIANCE_DONE_STATUSES
 PLATFORM_REVIEW_STATUSES = COMPLIANCE_PLATFORM_REVIEW_STATUSES
 PRE_BROADCAST_STATUSES = COMPLIANCE_PRE_BROADCAST_STATUSES
+AI_LABEL_STATUSES = COMPLIANCE_AI_LABEL_STATUSES
 STATUS_LIKE_VALUES = COMPLIANCE_STATUS_LIKE_VALUES
 OVERSEAS_PLATFORMS = COMPLIANCE_OVERSEAS_PLATFORMS
 DOMESTIC_REGIONS = COMPLIANCE_DOMESTIC_REGIONS
@@ -279,6 +327,30 @@ def add(sev: str, dim: str, loc: str, msg: str, **extra: object) -> None:
     item: Dict[str, object] = {"sev": sev, "dim": dim, "loc": loc, "msg": msg}
     item.update(extra)
     findings.append(item)
+
+
+PRODUCTION_CONSISTENCY_VALUES = {
+    "production", "prod", "release", "strict", "final", "publish", "published",
+    "投放", "上线", "正式", "发布", "严格", "生产", "可投放", "交付",
+}
+DEMO_CONSISTENCY_VALUES = {"demo", "draft", "internal", "relaxed", "测试", "草稿", "内部", "宽松"}
+
+
+def consistency_release_profile(root: str) -> str:
+    """Return demo|production for escalation rules that are too noisy during drafts."""
+    env = os.environ.get("N2D_CONSISTENCY_PROFILE", "").strip()
+    values = [env]
+    for key in ("一致性严格度", "一致性发布档", "一致性落地档", "一致性验收档", "制作质量档"):
+        try:
+            values.append(get_setting(root, key, "").strip())
+        except Exception:
+            continue
+    joined = " ".join(v for v in values if v).lower()
+    if any(v.lower() in joined for v in PRODUCTION_CONSISTENCY_VALUES):
+        return "production"
+    if any(v.lower() in joined for v in DEMO_CONSISTENCY_VALUES):
+        return "demo"
+    return "demo"
 
 
 def exists(path: str) -> bool:
@@ -816,10 +888,52 @@ def _check_regulatory_filing(data: dict, loc: str, stage: str) -> None:
         flag(f"{loc} regulatory_filing", "filed_at 须为 YYYY-MM-DD")
 
 
-def check_compliance_manifest(root: str, ep: str, stage: str) -> None:
-    """Front-load rights, character/voice authorization, platform and localization gates.
+def _ai_labeling_required(data: dict) -> bool:
+    """AI 生成合成内容标识是否适用。
+    默认适用；仅 ai_labeling.applicable is False 关闭提示。AI 标识不得阻断 n2d 主流程。"""
+    ai = data.get("ai_labeling")
+    if isinstance(ai, dict) and ai.get("applicable") is False:
+        return False
+    return True
 
-    (AI 标识/水印/AI 披露 不再由本流水线强制——已于 2026-06 下线，合规义务移到工具之外处理。)
+
+def _check_ai_labeling(data: dict, loc: str, stage: str) -> None:
+    """AI 生成合成内容标识只做 INFO 提醒，不阻断 compose/review 主流程。"""
+    if stage not in ("compose", "review"):
+        return
+
+    def flag(floc: str, msg: str) -> None:
+        add(INFO, "合规提示", floc, f"{msg}（AI 标识非阻断；发布前按目标地区/平台补齐）")
+
+    ai = data.get("ai_labeling")
+    if not isinstance(ai, dict):
+        flag(f"{loc} ai_labeling", "缺 ai_labeling；无法自动准备显式标签/元数据隐式标识")
+        return
+    if not _ai_labeling_required(data):
+        if not _filled(ai.get("notes")):
+            flag(f"{loc} ai_labeling", "applicable=false 建议在 notes 写明理由（纯海外按目标平台 AIGC 披露等）")
+        return
+    label = ai.get("explicit_label") if isinstance(ai.get("explicit_label"), dict) else {}
+    meta = ai.get("implicit_metadata") if isinstance(ai.get("implicit_metadata"), dict) else {}
+    lstatus = _status(label.get("status"))
+    if lstatus and lstatus not in AI_LABEL_STATUSES:
+        flag(f"{loc} ai_labeling", f"explicit_label.status 建议为 {'/'.join(AI_LABEL_STATUSES)}；got {lstatus}")
+    if not _filled(label.get("text")):
+        flag(f"{loc} ai_labeling", "explicit_label.text 缺显式标签文案（如「AI生成」）")
+    for key in ("service_provider_code", "content_id"):
+        if not _filled(meta.get(key)):
+            flag(f"{loc} ai_labeling", f"implicit_metadata.{key} 缺；无法自动写入完整元数据隐式标识")
+    if stage == "review":
+        if lstatus != "done":
+            flag(f"{loc} ai_labeling", "explicit_label.status 尚非 done；成片未确认已落显式标签")
+        if meta.get("applied") is not True:
+            flag(f"{loc} ai_labeling", "implicit_metadata.applied 尚非 true；成片未确认已写元数据")
+
+
+def check_compliance_manifest(root: str, ep: str, stage: str) -> None:
+    """Front-load rights, character/voice authorization, platform, localization and regulatory gates.
+
+    AI 标识仅做 INFO 待办；不得把未落标升级为 compose/review blocker。
     """
     p = compliance_manifest_path(root)
     data = load_json(p)
@@ -833,6 +947,7 @@ def check_compliance_manifest(root: str, ep: str, stage: str) -> None:
     _check_compliance_voice(data, p)
     _check_platform_targets(data, p, stage)
     _check_regulatory_filing(data, p, stage)
+    _check_ai_labeling(data, p, stage)
 
 
 def row_for(root: str, ep: str) -> Tuple[List[str], Optional[Dict[str, str]]]:
@@ -1099,13 +1214,234 @@ def check_backend_reachable(root: str, ep: str) -> None:
             "（如 curl 内网健康端点 / 确认即梦官方 CLI 已登录·会员有效 / 确认 API 额度），不通即停，勿静默兜底换后端。")
 
 
+def _image_backend_gate_workload(root: str, ep: str) -> Dict[str, Any]:
+    """把当前集粗略归一成适配层 workload，用于后端升档建议。"""
+    try:
+        cur = _ce_episode_number(ep) or 0
+    except Exception:
+        cur = 0
+    ep_count = len({os.path.basename(os.path.dirname(p))
+                    for p in glob.glob(os.path.join(root, "脚本", "*", "storyboard.json"))})
+    long_running = max(int(cur or 0), int(ep_count or 0)) >= LONG_RUNNING_EP_THRESHOLD
+    return {
+        "has_characters": True,
+        "core_character": long_running,
+        "needs_persistent_subject": long_running,
+        "reference_images": 6 if long_running else 4,
+        "official_only": True,
+    }
+
+
+def check_image_backend_api_refresh(root: str, ep: str) -> None:
+    """正式付费出图前要求本次后端 API/CLI 能力刷新证据。
+
+    后端能力和 API 名称变化快，不能把旧模型矩阵或菜单文案当事实。这里不在 gate 里联网，
+    而是要求操作者/agent 当次查官方文档或 CLI/API help 后，把来源和能力结论写入
+    `生产数据/image_backend_capabilities/<backend>.json`；gate 只检查这份证据是否是今天的。
+    """
+    settings_loc = os.path.join(root, "_设置.md")
+    setting = get_setting(root, "生图AI", "Codex").strip()
+    status = image_backend_adapter.refresh_evidence_status(root, setting)
+    if status.get("status") != "fresh":
+        add(
+            BLOCK,
+            "生图后端适配",
+            settings_loc,
+            f"生图后端「{setting}」缺少本次官方 API/CLI 刷新证据：{status.get('message')}。"
+            "正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，"
+            "再记录刷新证据：`python3 skills/n2d/_lib/image_backend_adapter.py record-refresh <作品根> --backend "
+            f"\"{setting}\" --source \"<官方文档或CLI/API证据>\" --note \"<本次能力结论>\"`。"
+            f"证据文件：{status.get('path')}。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+            return_to_stage="image",
+            affected_artifacts=[str(status.get("path") or "")],
+        )
+
+    rec = image_backend_adapter.recommend_backend(setting, _image_backend_gate_workload(root, ep))
+    standard_plan = image_backend_adapter.standard_plan(setting, _image_backend_gate_workload(root, ep))
+    if standard_plan.get("status") == "blocked":
+        add(
+            BLOCK,
+            "生图后端适配",
+            settings_loc,
+            f"所选生图后端「{setting}」无法满足统一出图能力标准："
+            f"{', '.join(standard_plan.get('blocked_standards') or [])}。"
+            "标准层不随后端降级；请换官方可审计后端，或先补适配层能力与弥补措施。",
+            return_to_stage="image",
+        )
+    elif standard_plan.get("status") == "mitigations_required":
+        items = [str(x) for x in (standard_plan.get("required_mitigations") or [])[:4]]
+        add(
+            WARN,
+            "生图后端适配",
+            settings_loc,
+            f"统一标准已按「{setting}」自动加载弥补措施：{'；'.join(items)}"
+            + ("；..." if len(standard_plan.get("required_mitigations") or []) > 4 else "")
+            + "。这些是后端差异的执行补偿，不降低 n2d 的出图标准。",
+            return_to_stage="image",
+        )
+    if rec.get("upgrade_recommended"):
+        cur = rec.get("current") or {}
+        best = rec.get("recommended") or {}
+        adapter = rec.get("adapter") or {}
+        add(
+            WARN,
+            "生图后端适配",
+            settings_loc,
+            f"适配层评分建议升档：当前「{setting}」score={cur.get('score')}，"
+            f"推荐「{best.get('label') or best.get('backend')}」score={best.get('score')}。"
+            f"理由：推荐后端能力={','.join(best.get('strengths') or []) or adapter.get('adapter_kind')}；"
+            "若确认切换，先统一 `_设置.md` 与全部 prompt 的生图后端，并按新后端重做/刷新本集定妆、参考包和身份注册，禁止半集混用。",
+            return_to_stage="image",
+        )
+
+
+def _route_video_backends(routes: Sequence[Dict[str, Any]], allow_empty_fallback: bool) -> List[str]:
+    selected: List[str] = []
+    for route in routes:
+        primary = str(route.get("primary_backend") or "").strip()
+        if primary:
+            selected.append(primary)
+        fallbacks = route.get("fallback_backends")
+        if isinstance(fallbacks, list):
+            selected.extend(str(item or "").strip() for item in fallbacks)
+        elif fallbacks and not allow_empty_fallback:
+            selected.append(str(fallbacks).strip())
+    out: List[str] = []
+    seen: set[str] = set()
+    for backend in selected:
+        if not backend or not video_backend_adapter.requires_refresh(backend):
+            continue
+        canonical = str(video_backend_adapter.backend_adapter(backend).get("canonical") or backend)
+        if canonical in seen:
+            continue
+        seen.add(canonical)
+        out.append(backend)
+    return out
+
+
+def _video_route_backend_roles(route: Mapping[str, Any], allow_empty_fallback: bool) -> List[Tuple[str, str]]:
+    out: List[Tuple[str, str]] = []
+    primary = str(route.get("primary_backend") or "").strip()
+    if primary:
+        out.append(("primary", primary))
+    fallbacks = route.get("fallback_backends")
+    if isinstance(fallbacks, list):
+        out.extend(("fallback", str(item or "").strip()) for item in fallbacks if str(item or "").strip())
+    elif fallbacks and not allow_empty_fallback:
+        out.append(("fallback", str(fallbacks).strip()))
+    return out
+
+
+def _cap_bool(assertions: Mapping[str, Any], key: str) -> bool:
+    value = assertions.get(key)
+    if isinstance(value, bool):
+        return value
+    return str(value).strip().lower() in {"true", "1", "yes", "是", "支持"}
+
+
+def _cap_number(assertions: Mapping[str, Any], key: str, default: float = 0) -> float:
+    try:
+        return float(assertions.get(key))
+    except Exception:
+        return default
+
+
+def _route_capability_assertion_gaps(route: Mapping[str, Any], assertions: Mapping[str, Any], role: str) -> List[str]:
+    gaps: List[str] = []
+    clip_id = str(route.get("clip_id") or "?")
+    duration = float(route.get("clip_seconds") or 0)
+    if duration > 0 and _cap_number(assertions, "max_clip_seconds") and _cap_number(assertions, "max_clip_seconds") < duration:
+        gaps.append(f"{clip_id} {role} max_clip_seconds<{duration:g}s")
+    mode = str(route.get("mode") or "").lower()
+    if mode not in {"text2video", "t2v"} and not _cap_bool(assertions, "supports_first_frame"):
+        gaps.append(f"{clip_id} {role} 未确认 supports_first_frame")
+    anchor = route.get("anchor_consumption") if isinstance(route.get("anchor_consumption"), Mapping) else {}
+    need_end = bool(anchor.get("need_end")) or bool(anchor.get("consumes_endframe"))
+    if need_end and not _cap_bool(assertions, "supports_last_frame"):
+        gaps.append(f"{clip_id} {role} 未确认 supports_last_frame/尾帧控制")
+    anchor_count = int(anchor.get("anchor_count") or 0)
+    consumption_mode = str(anchor.get("consumption_mode") or "")
+    if anchor_count and consumption_mode == "native_multiframe" and not _cap_bool(assertions, "supports_native_mid_anchors"):
+        gaps.append(f"{clip_id} {role} 原生多关键帧未确认 supports_native_mid_anchors")
+    if anchor_count and consumption_mode == "native_multiframe" and _cap_number(assertions, "max_timeline_frames", 1) < (1 + anchor_count + (1 if need_end else 0)):
+        gaps.append(f"{clip_id} {role} max_timeline_frames 不足以消费首/中/尾")
+    native_audio = str(route.get("native_audio_policy") or "").lower()
+    if native_audio == "native_speech" and not _cap_bool(assertions, "native_av"):
+        gaps.append(f"{clip_id} {role} native_speech 但未确认 native_av")
+    if native_audio == "lipsync_condition_only" and not _cap_bool(assertions, "lipsync_audio_ref"):
+        gaps.append(f"{clip_id} {role} 口型音频参考但未确认 lipsync_audio_ref")
+    identity = str(route.get("identity_requirement") or "").strip().lower()
+    if identity not in {"", "none", "not_needed"} and not str(assertions.get("identity_mechanism") or "").strip():
+        gaps.append(f"{clip_id} {role} 含角色身份要求但未确认 identity_mechanism")
+    motion = route.get("motion_control") if isinstance(route.get("motion_control"), Mapping) else {}
+    if motion.get("required") is True and not str(assertions.get("motion_control_level") or "").strip():
+        gaps.append(f"{clip_id} {role} Motion Control required 但未确认 motion_control_level")
+    return gaps
+
+
+def check_video_backend_api_refresh(
+    root: str,
+    ep: str,
+    routes: Sequence[Dict[str, Any]],
+    video_channel: str,
+    route_path: str,
+    allow_empty_fallback: bool = False,
+) -> None:
+    """正式付费出视频前要求本次视频后端 API/CLI 能力刷新证据。"""
+    for backend in _route_video_backends(routes, allow_empty_fallback):
+        status = video_backend_adapter.refresh_evidence_status(root, backend, video_channel)
+        if status.get("status") == "fresh":
+            continue
+        adapter = video_backend_adapter.backend_adapter(backend, video_channel)
+        channel_note = f"（渠道 {video_channel}，执行后端 {adapter.get('execution_backend')}）" if video_channel else ""
+        add(
+            BLOCK,
+            "生视频后端适配",
+            route_path,
+            f"生视频后端「{backend}」{channel_note}缺少本次官方 API/CLI 刷新证据：{status.get('message')}。"
+            "正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、"
+            "原生音画/口型、身份绑定、分辨率/价格/额度和输出 schema，再记录刷新证据："
+            "`python3 skills/n2d/_lib/video_backend_adapter.py record-refresh <作品根> --backend "
+            f"\"{backend}\" --channel \"{video_channel}\" --source \"<官方文档或CLI/API证据>\" "
+            "--note \"<本次能力结论>\"`。"
+            f"证据文件：{status.get('path')}。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+            return_to_stage="video",
+            affected_artifacts=[str(status.get("path") or "")],
+        )
+    capability_gap_records: List[str] = []
+    for route in routes:
+        if not isinstance(route, dict):
+            continue
+        for role, backend in _video_route_backend_roles(route, allow_empty_fallback):
+            if not backend or not video_backend_adapter.requires_refresh(backend):
+                continue
+            status = video_backend_adapter.refresh_evidence_status(root, backend, video_channel)
+            if status.get("status") != "fresh":
+                continue
+            assertions = status.get("capability_assertions") if isinstance(status.get("capability_assertions"), dict) else {}
+            capability_gap_records.extend(_route_capability_assertion_gaps(route, assertions, role))
+    if capability_gap_records:
+        add(
+            BLOCK,
+            "生视频后端适配",
+            route_path,
+            "本次视频后端刷新证据缺少或不满足 route 需要的结构化能力断言："
+            + "；".join(capability_gap_records[:8])
+            + ("；..." if len(capability_gap_records) > 8 else "")
+            + "。请重跑 record-refresh 并补 `--capability key=value`，确认首/尾/多帧、native_av、口型音频参考、身份机制和 Motion Control 后再付费出视频。",
+            return_to_stage="video",
+        )
+
+
 def drift_advisory_findings(report: Dict[str, Any]) -> List[Tuple[str, str, str, str]]:
     """drift-risk report → [(sev, dim, loc, msg)]。
 
     两类档分开处理：
-      - **预测档** high→WARN·medium→INFO（advisory 出图前预案，落档闸是 image_qc）；
-      - **实测档** band=="block"（face_drift_risk ② 回灌 identity_drift_report 的**已实测**跨集漂移，
-        既成事实非预测）→ **BLOCK**：上一集已漂的角色，本集出图前 preflight 硬拦，闭合"测了就拦"的环。
+      - **预测档** high→WARN·medium→INFO；预测 block 仍是 preflight BLOCK，但维度必须叫“预案”，
+        不能伪装成已实测漂移；
+      - **实测档** `measured_drift` 存在（face_drift_risk ② 回灌 identity_drift_report 的**已实测**
+        跨集漂移，既成事实非预测）→ **BLOCK**：上一集已漂的角色，本集出图前 preflight 硬拦，
+        闭合"测了就拦"的环。
     纯函数·可测：不读盘、不 add()。face/asset 两种 report 同形。"""
     items = report.get("characters") or report.get("assets") or []
     is_face = report.get("kind") == "n2d_face_drift_risk"
@@ -1117,14 +1453,14 @@ def drift_advisory_findings(report: Dict[str, Any]) -> List[Tuple[str, str, str,
         rid = r.get("character_id") or r.get("id") or ""
         name = r.get("name") or rid
         tip = (r.get("suggestions") or [""])[0]
-        if band == "block":
+        if band == "block" and r.get("measured_drift"):
             # 实测跨集漂移（measured_drift 已坐实）→ 真 BLOCK，不再当 advisory 滤掉（曾被漏报）
             out.append((BLOCK, "脸漂实测" if is_face else "物料漂移实测", f"{name}（{rid}）",
                         f"上一集已实测{label}漂移（既成事实非预测）：{tip}"))
             continue
-        if band not in ("high", "medium"):
+        if band not in ("block", "high", "medium"):
             continue
-        sev = WARN if band == "high" else INFO
+        sev = BLOCK if band == "block" else (WARN if band == "high" else INFO)
         tier = r.get("tier") or r.get("scope") or ""
         out.append((sev, dim, f"{name}（{rid}）",
                     f"本集{label}风险 {band}（分{r.get('score')}{'·'+str(tier) if tier else ''}）：{tip}"))
@@ -1168,6 +1504,67 @@ def check_drift_risk_advisories(root: str, ep: str) -> None:
                 add(sev, dim, loc, msg, return_to_stage="image")
             else:
                 add(sev, dim, loc, msg, advisory=True)
+
+
+def imaged_episodes(root: str) -> List[str]:
+    """已落 PNG 的出图集（出图/<集>/图片/*.png 存在）——measured-drift BLOCK 环应覆盖的历史集。"""
+    eps: set = set()
+    for p in glob.glob(os.path.join(root, "出图", "*", "图片", "*.png")):
+        eps.add(os.path.basename(os.path.dirname(os.path.dirname(p))))
+    return sorted(eps)
+
+
+def drift_report_freshness(prior_imaged_eps: Sequence[str],
+                           report: Mapping[str, Any]) -> List[Tuple[str, str]]:
+    """历史已出图集 vs identity_drift_report 覆盖集 → freshness findings（纯函数·可测）。
+
+    prior_imaged_eps：本集之前、已落 PNG 的集（measured-drift BLOCK 环理应覆盖的历史集）。
+    report：解析后的 identity_drift_report.json（{} = 缺失）。返回 [(severity, msg)]：
+      - 报告缺失/未实测(available≠True) 但已有历史出图集 → WARN（环此刻无数据，给重跑命令；
+        不硬拦无 insightface 的默认无依赖产线）；
+      - 报告在、已实测，却漏覆盖部分历史出图集 → BLOCK（present-but-stale：环会读它并据旧数据
+        误判『全绿』放行，比缺报告更危险）。
+    无历史出图集（首集）→ []。纯函数·可测。"""
+    prior = sorted({str(e).strip() for e in (prior_imaged_eps or []) if str(e).strip()})
+    if not prior:
+        return []
+    measured = isinstance(report, Mapping) and report.get("available") is True
+    if not measured:
+        return [(WARN,
+                 f"脸漂实测报告缺失/未实测（identity_drift_report.json 不存在或 available≠true），但历史集已出图 {prior}："
+                 "跨集脸漂「测了就拦」的 BLOCK 环此刻无数据兜底，上一集已漂的脸可能蒙混过本集。装 insightface 后跑 "
+                 "`python3 skills/n2d-identity/scripts/identity.py <作品根> --write` 生成实测报告再出图。")]
+    covered = {str(e).strip() for e in (report.get("episodes") or [])}
+    stale = [e for e in prior if e not in covered]
+    if stale:
+        return [(BLOCK,
+                 f"脸漂实测报告陈旧：已出图历史集 {prior} 中 {stale} 未进 identity_drift_report 覆盖集 {sorted(covered)}——"
+                 "报告在、measured-drift 环会读它并据旧数据误判『全绿』放行，比缺报告更危险。重跑 "
+                 "`python3 skills/n2d-identity/scripts/identity.py <作品根> --write` 覆盖全部历史出图集后再出图。")]
+    return []
+
+
+def check_drift_report_freshness(root: str, ep: str) -> None:
+    """measured-drift BLOCK 环的新鲜度闸：报告缺/陈旧时不让其静默退化成 advisory。
+
+    动机（堵静默退化洞）：跨集脸漂的实测 BLOCK 依赖 生产数据/identity_drift_report.json，而该报告只由
+    `identity.py --write` 手动生成、gate 只读不刷（drift_advisory_findings / measured_drift_block）。漏跑/陈旧 →
+    上一集已漂的脸蒙混过本集。这里把『历史已出图集是否都被报告覆盖』钉成闸：present-but-stale=BLOCK
+    （最危险，留 N2D_ALLOW_DEGRADED_QC=1 逃生口·留痕自负），缺失/未实测=WARN（不硬拦无 insightface 的默认产线）。"""
+    cur = _ce_episode_number(ep) or 0
+    prior_imaged = [e for e in imaged_episodes(root)
+                    if 0 < (_ce_episode_number(e) or 0) < cur] if cur else []
+    report = load_json(os.path.join(root, "生产数据", "identity_drift_report.json"))
+    if not isinstance(report, dict):
+        report = {}
+    for sev, msg in drift_report_freshness(prior_imaged, report):
+        if sev == BLOCK:
+            if os.environ.get("N2D_ALLOW_DEGRADED_QC") == "1":
+                add(WARN, "脸漂报告新鲜度", ep, msg + "（已显式 N2D_ALLOW_DEGRADED_QC 放行·自负其责）")
+            else:
+                add(BLOCK, "脸漂报告新鲜度", ep, msg, return_to_stage="image")
+        else:
+            add(sev, "脸漂报告新鲜度", ep, msg, advisory=True)
 
 
 def check_contract_inheritance(root: str, ep: str) -> None:
@@ -1226,6 +1623,34 @@ def check_asset_handoff_inheritance(root: str, ep: str) -> None:
             )
         else:
             add(WARN, "契约继承", vid_p, f"资产逐镜交接[{f.get('code')}]：{f.get('note')}")
+
+
+def check_identity_handoff_inheritance(root: str, ep: str) -> None:
+    """逐镜身份 出图→出视频 继承：命名角色镜必须锁身份；多锚帧角色 Clip 必须同源
+    reference_group / expressions；大表情近景必须锁脸不锁情。
+
+    之前 gate 只通过 video prompt 字段做散点检查，完整身份交接检查只在 inherit_contract.py 裸命令中
+    出现。接进 video gate 后，真正提交生视频前会统一阻断“首/中/尾锚图不是同一张脸”的流程漏洞。
+    """
+    res = check_identity_handoff(root, ep)
+    if not res.get("available"):
+        return
+    dim = CONSISTENCY_DIMENSIONS["contract_inheritance"]
+    vid_rel = res.get("clips_file", os.path.join("出视频", ep, "prompt", "01_clips.md"))
+    vid_p = os.path.join(root, vid_rel)
+    for f in res.get("findings", []):
+        if f.get("severity") == "block":
+            add(
+                BLOCK,
+                "契约继承",
+                vid_p,
+                f"身份逐镜交接[{f.get('code')}]：{f.get('note')}",
+                return_to_stage=dim["return_to_stage"],
+                rerun_scope=dim["scope"],
+                affected_artifacts=[vid_rel],
+            )
+        else:
+            add(WARN, "契约继承", vid_p, f"身份逐镜交接[{f.get('code')}]：{f.get('note')}")
 
 
 # 核心长线角色判定：scope 自由文本里的"贯穿全篇/长线/主角/主反派"标记。短线配角/单元妖不命中，
@@ -1328,6 +1753,8 @@ def check_image_ai_policy(root: str, ep: str) -> None:
 
     missing_event_providers: List[str] = []
     event_path = _production_events_path(root)
+    latest_success_events: Dict[str, Tuple[int, Dict[str, Any]]] = {}
+    unkeyed_success_events: List[Tuple[int, Dict[str, Any], str]] = []
     for idx, event in enumerate(_load_production_events(root), start=1):
         if str(event.get("episode") or "").strip() != ep:
             continue
@@ -1339,8 +1766,20 @@ def check_image_ai_policy(root: str, ep: str) -> None:
         status = str(generation.get("status") or event.get("status") or "").strip().lower()
         if status == "fail":
             continue
-        provider = _image_event_provider(event)
         asset = _event_asset_rel(root, event) or str(generation.get("asset") or "")
+        if asset:
+            latest_success_events[asset] = (idx, event)
+        else:
+            unkeyed_success_events.append((idx, event, asset))
+
+    # 只以同一 asset 的最新成功落档事件判定后端混用。旧的 pass 会被后续 redraw/generation
+    # 覆盖，否则一次全量迁移后端会被历史账本误判成“跨镜混用”。
+    event_checks = sorted(
+        [(idx, event, asset) for asset, (idx, event) in latest_success_events.items()] + unkeyed_success_events,
+        key=lambda item: item[0],
+    )
+    for idx, event, asset in event_checks:
+        provider = _image_event_provider(event)
         if not provider:
             missing_event_providers.append(f"line {idx}: {asset or '(no asset)'}")
             continue
@@ -1491,8 +1930,9 @@ def check_reference_plan_applied(root: str, ep: str) -> None:
         tail += f" 待注册原生主体：{'、'.join(reg)}。"
     if lora:
         tail += f" 建议升 LoRA：{'、'.join(lora)}。"
+    sev = BLOCK if (weak or reg or lora) else WARN
     add(
-        BLOCK,
+        sev,
         "参考规划落实",
         plan_path,
         f"逐镜参考规划有 {len(actions)} 条行动项未确认落实（弱后端×大变化镜 {weak} 镜）："
@@ -1745,11 +2185,63 @@ def long_running_weak_backend_advice(canon: str, cur_ep_num: int, ep_count: int)
     return max(int(cur_ep_num or 0), int(ep_count or 0)) >= LONG_RUNNING_EP_THRESHOLD
 
 
+IDENTITY_LOCK_READY_STATUSES = {"ready", "registered", "validated", "deployed"}
+
+
+def _image_form_has_identity_lock(form: Mapping[str, Any]) -> bool:
+    adapters = form.get("identity_adapters") if isinstance(form.get("identity_adapters"), Mapping) else {}
+    image = adapters.get("image") if isinstance(adapters.get("image"), Mapping) else {}
+    for backend, cfg in image.items():
+        if not isinstance(cfg, Mapping):
+            continue
+        status = str(cfg.get("status") or "").strip()
+        mode = str(cfg.get("mode") or "").strip()
+        if str(backend) == "face_embedding" and status in IDENTITY_LOCK_READY_STATUSES:
+            return True
+        if status in IDENTITY_LOCK_READY_STATUSES and (
+            image_backend_supports_persistent_subject(str(backend))
+            or mode not in {"", "reference_group", "fallback_reference_group", "unsupported", "not_needed"}
+        ):
+            return True
+    face_embedding = adapters.get("face_embedding") if isinstance(adapters.get("face_embedding"), Mapping) else {}
+    if str(face_embedding.get("status") or "").strip() in IDENTITY_LOCK_READY_STATUSES:
+        return True
+    lora = adapters.get("lora") if isinstance(adapters.get("lora"), Mapping) else {}
+    if str(lora.get("status") or "").strip() in {"ready", "validated", "deployed"}:
+        return True
+    return False
+
+
+def core_forms_without_image_identity_lock(root: str) -> Tuple[List[str], bool]:
+    reg = load_json(identity_registry_path(root))
+    if not isinstance(reg, dict):
+        return [], False
+    missing: List[str] = []
+    has_core = False
+    for char in reg.get("characters", []) or []:
+        if not isinstance(char, dict):
+            continue
+        scope = f"{char.get('tier') or ''} {char.get('scope') or ''}"
+        if not _CORE_SCOPE_RE.search(scope):
+            continue
+        has_core = True
+        cid = str(char.get("id") or "").strip()
+        name = str(char.get("name") or cid or "?").strip()
+        for form in char.get("forms", []) or []:
+            if not isinstance(form, dict):
+                continue
+            if _image_form_has_identity_lock(form):
+                continue
+            form_name = str(form.get("form") or "").strip()
+            missing.append(f"{name}({cid}/{form_name})" if form_name else f"{name}({cid})")
+    return missing, has_core
+
+
 def check_long_running_weak_backend(root: str, ep: str) -> None:
-    """image_preflight 专属·advisory(WARN，绝不阻断)：长线剧用「无持久主体」后端(如 Codex)逐镜参考图派生出图时，
-    提示核心/常驻角色从①参考图派生升到工业默认②后端原生主体ID/主体库(注册一次按 ID 引用)或③LoRA。
+    """image_preflight：长线剧用「无持久主体」后端逐镜参考图派生时，核心/常驻角色必须有身份锁。
+
     跨集脸漂真因=单张定妆照只是板式、每镜重画脸逐集累积(见 n2d-image 与 references/模型矩阵.md)；
-    2026 行业(Vidu 漫剧白皮书等)把「参考生视频+主体库」定为工业化默认，而非一致性吃紧才升。"""
+    到第3集仍无 native subject / face_embedding / LoRA 等执行层锁，不能只停留在 WARN。"""
     setting = get_setting(root, "生图AI", "Codex").strip()
     canon, _kind = classify_image_backend(setting)
     try:
@@ -1760,12 +2252,23 @@ def check_long_running_weak_backend(root: str, ep: str) -> None:
                     for p in glob.glob(os.path.join(root, "脚本", "*", "storyboard.json"))})
     if not long_running_weak_backend_advice(canon or "", cur, ep_count):
         return
-    add(WARN, "生图AI一致性", f"生图AI={setting}",
-        f"长线剧（{ep}）仍用无持久主体后端（{canon or setting}）逐镜参考图派生：跨集脸漂会逐集累积"
-        "（单张定妆照只是板式、每镜重画脸）。2026 工业默认是「参考生视频+主体库」——核心/常驻角色建议升到 "
-        "②后端原生主体ID/主体库（Seedream Universal Reference / 可灵主体库 / Sora Cameo，注册一次按 ID 引用）"
-        "或 ③LoRA；单集/配角留①参考图派生即可。换后端=整集重做定妆（一致性税），换前在 n2d-image 选择点摆知情权衡。",
-        return_to_stage="image")
+    missing, has_core = core_forms_without_image_identity_lock(root)
+    if missing:
+        shown = "、".join(missing[:8]) + ("…" if len(missing) > 8 else "")
+        add(
+            BLOCK,
+            "生图AI一致性",
+            f"生图AI={setting}",
+            f"长线剧（{ep}）仍用无持久主体后端（{canon or setting}）逐镜参考图派生，且核心/常驻角色缺 native subject / Face Lock / face_embedding / LoRA：{shown}。"
+            "第3集起这不是建议项，会跨集累积脸漂；请先注册原生主体、启用 face_embedding，或对核心角色完成 LoRA 后再付费出图。",
+            return_to_stage="image",
+        )
+        return
+    if not has_core:
+        add(WARN, "生图AI一致性", f"生图AI={setting}",
+            f"长线剧（{ep}）仍用无持久主体后端（{canon or setting}）逐镜参考图派生，但 registry 未标出核心/常驻角色；"
+            "请确认核心角色 scope/tier 已写入 identity_registry，否则无法判断谁必须升 native subject / Face Lock / face_embedding / LoRA。",
+            return_to_stage="image")
 
 
 def check_cross_episode_style(root: str, ep: str) -> None:
@@ -2140,16 +2643,43 @@ def _validate_generation_control(section: object, loc: str) -> None:
 
 
 def _validate_character_dna(section: object, loc: str) -> None:
-    """Validate the four-layer character DNA lock: face + hair + outfit + accessories."""
+    """Validate the five-layer character DNA lock: face + hair + outfit + accessories + texture."""
     if not isinstance(section, dict):
         add(BLOCK, "角色 DNA", f"{loc} character_dna",
-            "character_dna 必须是对象，且固定包含 face/hair/outfit/accessories 四层；不能只锁脸。")
+            "character_dna 必须是对象，且固定包含 face/hair/outfit/accessories/texture 五层；不能只锁脸。")
         return
     for key in CHARACTER_DNA_FIELDS:
         value = section.get(key)
         if not isinstance(value, str) or not value.strip():
             add(BLOCK, "角色 DNA", f"{loc} character_dna.{key}",
                 "角色 DNA 五层必须非空；无配饰也要写“无”，避免下游临场补设定。")
+
+
+def _profile_has_any(section: Mapping[str, object], keys: Sequence[str]) -> bool:
+    return any(not _field_is_missing(section, key) for key in keys)
+
+
+def _validate_wardrobe_profile(section: object, loc: str, *, field_name: str = "wardrobe_profile",
+                               required: bool = False) -> None:
+    """Advisory validation for structured costume contracts.
+
+    Missing profile remains warning-only for backward compatibility; once a
+    profile is present, empty shells are surfaced so prompt/QC can rely on it.
+    """
+    if not isinstance(section, dict):
+        sev = BLOCK if required else WARN
+        add(sev, "服装契约", f"{loc} {field_name}",
+            "缺少结构化服装契约；建议补 silhouette/layers/collar/sleeve/waist/hem/fabric/palette/forbidden_drift，"
+            "否则只能靠自由文本锁服装。")
+        return
+    missing_core = [key for key in WARDROBE_PROFILE_CORE_FIELDS if _field_is_missing(section, key)]
+    if missing_core:
+        add(WARN, "服装契约", f"{loc} {field_name}",
+            f"{field_name} 缺核心字段：" + ", ".join(missing_core))
+    missing_structure = ["/".join(group) for group in WARDROBE_PROFILE_STRUCTURE_FIELD_GROUPS if not _profile_has_any(section, group)]
+    if missing_structure:
+        add(WARN, "服装契约", f"{loc} {field_name}",
+            f"{field_name} 缺服装部件字段：" + ", ".join(missing_structure))
 
 
 def _validate_character_asset_bundle(root: str, char: dict, loc: str) -> None:
@@ -2214,6 +2744,73 @@ def _identity_reference_item_path(item: object) -> str:
     return ""
 
 
+def _identity_reference_item_ready(item: object) -> bool:
+    """A structured reference is usable only when it is explicitly ready."""
+    path = _identity_reference_item_path(item)
+    if not path:
+        return False
+    if isinstance(item, dict):
+        return str(item.get("status") or "").strip() in READY_CHARACTER_MAKEUP_STATUSES
+    return True
+
+
+def _identity_reference_item_derivation(item: object) -> dict:
+    if not isinstance(item, dict):
+        return {}
+    derivation = item.get("derivation")
+    return derivation if isinstance(derivation, dict) else {}
+
+
+def _file_sha256(path: str) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _validate_same_source_makeup_derivation(
+    root: str,
+    item: object,
+    key: str,
+    floc: str,
+    strict_references: bool,
+    verify_source_hash: bool,
+) -> None:
+    """B7: split makeup refs must be derived from one approved source image."""
+    if not strict_references or key not in DERIVED_CHARACTER_MAKEUP_REFERENCE_FIELDS:
+        return
+    if not _identity_reference_item_ready(item):
+        return
+    derivation = _identity_reference_item_derivation(item)
+    missing = [field for field in CHARACTER_MAKEUP_DERIVATION_REQUIRED_FIELDS if not derivation.get(field)]
+    method = str(derivation.get("method") or "").strip()
+    allowed_methods = SAME_SOURCE_MAKEUP_DERIVATION_METHODS.get(key, set())
+    if missing or method not in allowed_methods:
+        add(BLOCK, "资产身份注册层", floc,
+            f"{key} ready 拆分定妆必须是同源母本派生，登记 "
+            "derivation.method/source_path/source_sha256/crop_box；"
+            "45°/侧/背只能从人审通过 turnaround 拆，半身/脸部特写只能从已通过正面裁。"
+            "禁止逐张文生图补角度导致脸漂。")
+        return
+    crop_box = derivation.get("crop_box")
+    if not isinstance(crop_box, list) or len(crop_box) != 4:
+        add(BLOCK, "资产身份注册层", floc,
+            f"{key} 同源派生 crop_box 必须是四元数组；否则无法追溯它来自母本哪一块。")
+        return
+    source_rel = str(derivation.get("source_path") or "").strip()
+    if verify_source_hash and source_rel:
+        source_path = source_rel if os.path.isabs(source_rel) else os.path.join(root, source_rel)
+        if not os.path.exists(source_path):
+            add(BLOCK, "资产身份注册层", source_path,
+                f"{key} 同源派生 source_path 不存在；ready 拆图来源不可验证。")
+            return
+        actual = _file_sha256(source_path)
+        if actual != str(derivation.get("source_sha256") or "").strip():
+            add(BLOCK, "资产身份注册层", source_path,
+                f"{key} 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。")
+
+
 def _identity_expression_path(expr: object) -> str:
     """Return an expression reference path from legacy string or structured dict form."""
     return _identity_reference_item_path(expr)
@@ -2236,15 +2833,20 @@ def _identity_ready_reference_list_paths(value: object) -> List[str]:
             if p:
                 out.append(p)
         elif isinstance(item, dict):
-            status = str(item.get("status") or "").strip()
             p = str(item.get("path") or "").strip()
-            if p and status in {"ready", "registered"}:
+            if p and _identity_reference_item_ready(item):
                 out.append(p)
     return out
 
 
-def _validate_reference_atlas(form: dict, floc: str, strict_references: bool,
-                              restricted_partial: bool = False) -> None:
+def _validate_reference_atlas(
+    root: str,
+    form: dict,
+    floc: str,
+    strict_references: bool,
+    verify_source_hash: bool,
+    restricted_partial: bool = False,
+) -> None:
     atlas = form.get("reference_atlas")
     if not isinstance(atlas, dict):
         if strict_references:
@@ -2262,7 +2864,7 @@ def _validate_reference_atlas(form: dict, floc: str, strict_references: bool,
             add(BLOCK, "资产身份注册层", floc,
                 "reference_atlas.base_views 缺失；必须登记 front/three_quarter/side/back/half_body 或 full_body 的 ready 状态。")
     else:
-        missing_views = [key for key in ("front", "three_quarter", "side", "back") if key not in base_views]
+        missing_views = [key for key in REQUIRED_CHARACTER_MAKEUP_ATLAS_VIEWS if key not in base_views]
         if "half_body" not in base_views and "full_body" not in base_views:
             missing_views.append("half_body_or_full_body")
         if missing_views and strict_references:
@@ -2270,19 +2872,16 @@ def _validate_reference_atlas(form: dict, floc: str, strict_references: bool,
                 "reference_atlas.base_views 缺基础视角：" + ", ".join(missing_views))
         if strict_references:
             not_ready: List[str] = []
-            required_view_keys = [key for key in ("front", "three_quarter", "side", "back") if key in base_views]
+            required_view_keys = [key for key in REQUIRED_CHARACTER_MAKEUP_ATLAS_VIEWS if key in base_views]
             required_view_keys.append("half_body" if "half_body" in base_views else "full_body")
             for key in required_view_keys:
                 item = base_views.get(key)
-                status = ""
-                path = ""
-                if isinstance(item, dict):
-                    status = str(item.get("status") or "").strip()
-                    path = _identity_reference_item_path(item)
-                else:
-                    path = _identity_reference_item_path(item)
-                if status != "ready" or not path:
+                if not _identity_reference_item_ready(item):
                     not_ready.append(key)
+                else:
+                    _validate_same_source_makeup_derivation(
+                        root, item, key, floc, strict_references, verify_source_hash
+                    )
             if not_ready:
                 add(BLOCK, "资产身份注册层", floc,
                     "reference_atlas.base_views 基础视角必须为 ready 且有路径："
@@ -2297,6 +2896,11 @@ def _validate_reference_atlas(form: dict, floc: str, strict_references: bool,
             add(BLOCK, "资产身份注册层", floc,
                 "reference_atlas 至少登记一个 ready 的同源脸部特写/表情参考（face_anchor_refs 或 expression_refs）；"
                 "功能角色也不能只靠正脸硬扛近景，planned 脸锚不能放行。")
+    if isinstance(face_anchor_refs, list):
+        for face_ref in face_anchor_refs:
+            _validate_same_source_makeup_derivation(
+                root, face_ref, "face_anchor_refs", floc, strict_references, verify_source_hash
+            )
 
 
 def _identity_reference_exists(root: str, rel: str) -> bool:
@@ -2365,10 +2969,19 @@ def check_identity_registry(
                     add(BLOCK, "资产身份注册层", floc, f"form 缺字段：{key}")
 
             _validate_character_dna(form.get("character_dna"), floc)
+            if "wardrobe_profile" in form:
+                _validate_wardrobe_profile(form.get("wardrobe_profile"), floc)
 
             reference_group = form.get("reference_group")
             restricted_partial = _is_restricted_partial_form(char, form)
-            _validate_reference_atlas(form, floc, strict_references, restricted_partial=restricted_partial)
+            _validate_reference_atlas(
+                root,
+                form,
+                floc,
+                strict_references,
+                require_reference_assets,
+                restricted_partial=restricted_partial,
+            )
             if not isinstance(reference_group, dict):
                 add(BLOCK, "资产身份注册层", floc, "reference_group 必须是对象")
             else:
@@ -2388,18 +3001,48 @@ def check_identity_registry(
                         if require_reference_assets and strict_references and not _identity_reference_exists(root, rel):
                             add(BLOCK, "资产身份注册层", os.path.join(root, rel) if not os.path.isabs(rel) else rel, f"reference_group.{key} 路径不存在")
                 else:
-                    for key in IDENTITY_REFERENCE_FIELDS:
+                    for key in REQUIRED_CHARACTER_MAKEUP_REFERENCE_GROUP_FIELDS:
                         if _field_is_missing(reference_group, key):
                             if strict_references:
                                 add(BLOCK, "资产身份注册层", floc, f"reference_group 缺核心路径：{key}")
                             continue
-                        rel = str(reference_group.get(key, "")).strip()
+                        item = reference_group.get(key)
+                        rel = _identity_reference_item_path(item)
+                        if strict_references and not _identity_reference_item_ready(item):
+                            add(BLOCK, "资产身份注册层", floc,
+                                f"reference_group.{key} 必须为 ready 且有路径；planned/空路径只能表示待补，不能放行。"
+                                "三视图人审拼版不能替代正/45°/侧/背等拆分参考。")
+                            continue
                         if asset_key and enforce_asset_key_filename and not _identity_reference_matches_asset_key(asset_key, rel):
                             add(BLOCK, "资产身份注册层", floc,
                                 f"reference_group.{key} 路径 `{rel}` 未包含 asset_key={asset_key}；"
                                 "服饰/形态变体必须独立定妆，禁止复用其它服饰形态参考")
                         if require_reference_assets and strict_references and not _identity_reference_exists(root, rel):
                             add(BLOCK, "资产身份注册层", os.path.join(root, rel) if not os.path.isabs(rel) else rel, f"reference_group.{key} 路径不存在")
+                        _validate_same_source_makeup_derivation(
+                            root, item, key, floc, strict_references, require_reference_assets
+                        )
+                    body_keys = [key for key in CHARACTER_MAKEUP_BODY_REFERENCE_FIELDS if not _field_is_missing(reference_group, key)]
+                    if not body_keys:
+                        if strict_references:
+                            add(BLOCK, "资产身份注册层", floc,
+                                "reference_group 缺核心路径：half_body_or_full_body；基础定妆包必须有半身或全身服装参考。")
+                    else:
+                        body_key = body_keys[0]
+                        body_item = reference_group.get(body_key)
+                        body_rel = _identity_reference_item_path(body_item)
+                        if strict_references and not _identity_reference_item_ready(body_item):
+                            add(BLOCK, "资产身份注册层", floc,
+                                f"reference_group.{body_key} 必须为 ready 且有路径；planned 服装参考不能放行。")
+                        elif asset_key and enforce_asset_key_filename and not _identity_reference_matches_asset_key(asset_key, body_rel):
+                            add(BLOCK, "资产身份注册层", floc,
+                                f"reference_group.{body_key} 路径 `{body_rel}` 未包含 asset_key={asset_key}；"
+                                "服饰/形态变体必须独立定妆，禁止复用其它服饰形态参考")
+                        elif require_reference_assets and strict_references and not _identity_reference_exists(root, body_rel):
+                            add(BLOCK, "资产身份注册层", os.path.join(root, body_rel) if not os.path.isabs(body_rel) else body_rel, f"reference_group.{body_key} 路径不存在")
+                        _validate_same_source_makeup_derivation(
+                            root, body_item, body_key, floc, strict_references, require_reference_assets
+                        )
                 face_anchor_refs = reference_group.get("face_anchor_refs", [])
                 expressions = reference_group.get("expressions", [])
                 if face_anchor_refs is not None and not isinstance(face_anchor_refs, list):
@@ -2408,8 +3051,8 @@ def check_identity_registry(
                 if expressions is not None and not isinstance(expressions, list):
                     add(BLOCK, "资产身份注册层", floc, "reference_group.expressions 必须是列表")
                     expressions = []
-                face_anchor_paths = [p for p in _identity_reference_list_paths(face_anchor_refs) if p]
-                expression_paths = [p for p in _identity_reference_list_paths(expressions) if p]
+                face_anchor_paths = [p for p in _identity_ready_reference_list_paths(face_anchor_refs) if p]
+                expression_paths = [p for p in _identity_ready_reference_list_paths(expressions) if p]
                 if not restricted_partial and strict_references and not (face_anchor_paths or expression_paths):
                     add(BLOCK, "资产身份注册层", floc,
                         "reference_group 至少需要一个同源脸部特写/表情参考：优先写 face_anchor_refs，"
@@ -2420,16 +3063,25 @@ def check_identity_registry(
                         add(BLOCK, "资产身份注册层", floc,
                             "reference_group.face_anchor_refs 存在空路径；可用字符串路径或 {label/emotion, path} 对象")
                         continue
+                    if strict_references and not _identity_reference_item_ready(face_ref):
+                        add(BLOCK, "资产身份注册层", floc,
+                            "reference_group.face_anchor_refs 必须为 ready 且有路径；planned 脸部特写不能放行。")
                     if require_reference_assets and strict_references and not _identity_reference_exists(root, rel):
                         add(BLOCK, "资产身份注册层", os.path.join(root, rel) if not os.path.isabs(rel) else rel, "reference_group.face_anchor_refs 路径不存在")
                     if asset_key and asset_key not in os.path.basename(rel):
                         add(BLOCK, "资产身份注册层", floc, f"reference_group.face_anchor_refs 跨角色/形态污染：{rel} 不属于 asset_key={asset_key}")
+                    _validate_same_source_makeup_derivation(
+                        root, face_ref, "face_anchor_refs", floc, strict_references, require_reference_assets
+                    )
                 for expr in expressions or []:
                     rel = _identity_expression_path(expr)
                     if not rel:
                         add(BLOCK, "资产身份注册层", floc,
                             "reference_group.expressions 存在空路径；可用字符串路径或 {emotion, path} 对象")
                         continue
+                    if strict_references and not _identity_reference_item_ready(expr):
+                        add(BLOCK, "资产身份注册层", floc,
+                            "reference_group.expressions 必须为 ready 且有路径；planned 表情/脸锚不能放行。")
                     if require_reference_assets and strict_references and not _identity_reference_exists(root, rel):
                         add(BLOCK, "资产身份注册层", os.path.join(root, rel) if not os.path.isabs(rel) else rel, "reference_group.expressions 路径不存在")
                     if asset_key and asset_key not in os.path.basename(rel):
@@ -2458,8 +3110,8 @@ def check_identity_registry(
                 add(BLOCK, "资产身份注册层", floc, "drift_forbidden 必须是非空列表")
 
 
-_COSTUME_VARIANT_RE = re.compile(r"_(侧|半身|全身|背|三视图|设定表|表情)$")
-_COSTUME_NON_FACE = ("三视图", "设定表", "表情")  # 人审拼版，非脸度量基准
+_COSTUME_VARIANT_RE = re.compile(r"_(45度|三分之二|侧|侧面|半身|全身|背|背面|脸部特写|三视图|设定表|表情(?:_.+)?)$")
+_COSTUME_NON_FACE = ("三视图", "设定表")  # 人审拼版，非脸度量基准；脸部特写/表情仍是可喂图参考
 
 
 def _costume_stem(basename: str) -> str:
@@ -2486,8 +3138,9 @@ def check_costume_registry_reconcile(root: str) -> None:
                 continue
             for val in rg.values():
                 for v in (val if isinstance(val, list) else [val]):
-                    if isinstance(v, str) and v.strip():
-                        registered_rel.add(v.strip())
+                    rel = _identity_reference_item_path(v)
+                    if rel:
+                        registered_rel.add(rel)
     if not registered_rel:
         return
     registered_base = {os.path.basename(p) for p in registered_rel}
@@ -2606,6 +3259,9 @@ def check_asset_reference_registry(
             add(BLOCK, "资产引用注册层", loc, f"未知 type「{asset_type}」；允许：{', '.join(sorted(ASSET_REFERENCE_TYPE_PREFIX))}")
         elif expected_prefix and asset_id and not asset_id.startswith(expected_prefix):
             add(BLOCK, "资产引用注册层", loc, f"type={asset_type} 的 id 必须以 {expected_prefix} 开头")
+
+        if asset_type in {"outfit", "costume"}:
+            _validate_wardrobe_profile(asset.get("outfit_profile"), loc, field_name="outfit_profile")
 
         # 深度一致性检查：道具生命周期与所有权
         if asset_type == "prop":
@@ -2938,8 +3594,10 @@ def check_prompt_checklists(root: str, ep: str, kind: str) -> None:
         if not sections:
             add(BLOCK, "prompt", p, "未识别到 Clip prompt 块")
             return
-        for sec in sections:
-            check_video_clip_prompt_section(p, sec)
+        route_map = _video_route_policy_map(root, ep)
+        for idx, sec in enumerate(sections, 1):
+            clip_num = _clip_number_from_section(sec, idx)
+            check_video_clip_prompt_section(p, sec, route=route_map.get(clip_num))
         return
 
 
@@ -2950,6 +3608,11 @@ def _has_any(text: str, needles: Iterable[str]) -> bool:
 def _headline(section: str, fallback: str) -> str:
     first = next((ln.strip() for ln in section.splitlines() if ln.strip()), "")
     return first or fallback
+
+
+def _clip_number_from_section(section: str, fallback_index: int) -> int:
+    m = re.search(r"(?m)^##\s*Clip[_\s]*(\d+)", section)
+    return int(m.group(1)) if m else fallback_index
 
 
 def _has_field(section: str, label: str) -> bool:
@@ -3006,8 +3669,7 @@ NATIVE_AV_PHYSICAL_FIELDS = ("声源归属", "口型策略", "材质/动作声",
 
 def is_native_av_production(root: str) -> bool:
     """`制作模式=原生音画`：视频后端有意一次生成同步音画（含台词）。"""
-    mode = get_setting(root, "制作模式", "配音先行")
-    return "原生音画" in (mode or "") or "native_av" in (mode or "").lower()
+    return is_native_av(root)
 
 
 def _native_audio_policy_line(section: str) -> str:
@@ -3125,6 +3787,18 @@ def _route_clip_number(route: Dict[str, Any], fallback_index: int) -> int:
     return int(match.group(1)) if match else fallback_index
 
 
+def _video_route_policy_map(root: str, ep: str) -> Dict[int, Dict[str, Any]]:
+    data = load_json(os.path.join(root, "出视频", ep, "prompt", "video_model_routes.json"))
+    routes = data.get("routes") if isinstance(data, dict) else None
+    if not isinstance(routes, list):
+        return {}
+    out: Dict[int, Dict[str, Any]] = {}
+    for idx, route in enumerate(routes, 1):
+        if isinstance(route, dict):
+            out[_route_clip_number(route, idx)] = route
+    return out
+
+
 def _storyboard_frame_requirements(root: str, ep: str) -> Dict[int, Dict[str, int | bool]]:
     """Clip -> ordered frame contract declared by storyboard continuity."""
     data = load_json(storyboard_path(root, ep))
@@ -3225,6 +3899,106 @@ def check_route_frame_capability(
         )
 
 
+MODEL_ROUTE_BASELINE_HIGH_RISK_SHOT_TYPES = {
+    "action_fight",
+    "action_chase",
+    "escape",
+    "breakthrough",
+    "flight",
+    "magic_burst",
+    "multi_character_same_frame",
+    "ensemble_blocking",
+    "intimate_interaction",
+    "hug_or_pull",
+    "dialogue_closeup",
+    "dialogue_shot_reverse",
+    "reveal_reaction_chain",
+    "confrontation_power_shift",
+    "relationship_turn",
+}
+MODEL_ROUTE_BASELINE_HIGH_RISK_FLAGS = {
+    "multi_person",
+    "identity_escalated",
+    "character_backend_conflict",
+    "contact_motion",
+    "feature_melting_risk",
+    "mouth_visible",
+    "native_speech",
+    "seam_relay",
+    "motion_reference_candidate",
+    "requires_motion_control",
+    "frame_consumption_degraded",
+    "missing_last_frame_capability",
+}
+
+
+def _route_needs_model_baseline(route: Mapping[str, object]) -> bool:
+    st = str(route.get("shot_type") or "").strip()
+    flags = {str(item) for item in route.get("risk_flags", []) if item} if isinstance(route.get("risk_flags"), list) else set()
+    identity = str(route.get("identity_requirement") or "").strip().lower()
+    if st in MODEL_ROUTE_BASELINE_HIGH_RISK_SHOT_TYPES:
+        return True
+    if flags & MODEL_ROUTE_BASELINE_HIGH_RISK_FLAGS:
+        return True
+    return identity not in {"", "none", "not_needed", "no_character"}
+
+
+def _baseline_override_accepted(data: Mapping[str, object], route: Optional[Mapping[str, object]] = None) -> bool:
+    if os.environ.get("N2D_ALLOW_MODEL_ROUTE_BASELINE_DRIFT") == "1":
+        return True
+    for obj in (route or {}, data):
+        if not isinstance(obj, Mapping):
+            continue
+        if obj.get("baseline_override_accepted") is True:
+            return True
+        if str(obj.get("baseline_override_reason") or "").strip():
+            return True
+    return False
+
+
+def check_model_route_baseline_policy(root: str, ep: str, data: Mapping[str, object], routes: Sequence[Dict[str, Any]], path: str) -> None:
+    """Episode 2+ high-risk/core routes must be anchored to a cross-episode backend baseline."""
+    try:
+        ep_num = _ce_episode_number(ep) or 0
+    except Exception:
+        ep_num = 0
+    risky = [r for r in routes if isinstance(r, dict) and _route_needs_model_baseline(r)]
+    if ep_num < 2 or not risky:
+        return
+    baseline_path = os.path.join(root, "设定库", "model_routes_baseline.json")
+    if _baseline_override_accepted(data):
+        add(
+            WARN,
+            "后端跨集锁",
+            path,
+            "本集高风险/含角色路由使用了显式 baseline override；请确认这是有意换后端，而不是漏跑第1集模型路由基线。",
+            return_to_stage="video_prompt",
+        )
+        return
+    samples = "、".join(str(r.get("clip_id") or r.get("shot_type") or "?") for r in risky[:6])
+    if not os.path.isfile(baseline_path):
+        add(
+            BLOCK,
+            "后端跨集锁",
+            baseline_path,
+            f"{ep} 含高风险/含角色路由（{samples}）但缺 `设定库/model_routes_baseline.json`。"
+            "第2集起必须先用打样集 `n2d-model-router --write-baseline` 建立 shot_type→primary 后端基线，"
+            "否则跨集自然路由可能换后端导致脸质感、运动质感和画风漂移。",
+            return_to_stage="video_prompt",
+            affected_artifacts=[baseline_path, path],
+        )
+    elif data.get("baseline_anchored") is not True:
+        add(
+            BLOCK,
+            "后端跨集锁",
+            path,
+            f"{ep} 已存在 model_routes_baseline.json，但本集 video_model_routes.json 未标记 baseline_anchored=true。"
+            "请重跑 n2d-model-router 让路由按跨集基线锚定，或写明 baseline_override_reason。",
+            return_to_stage="video_prompt",
+            affected_artifacts=[baseline_path, path],
+        )
+
+
 def check_video_model_routes(root: str, ep: str, overview_text: str, overview_path: str) -> None:
     if "本集模型路由表" not in overview_text:
         add(BLOCK, "模型路由", overview_path, "缺「本集模型路由表」；出视频必须先跑 n2d-model-router，不能固定一个视频模型或临场乱选后端")
@@ -3239,16 +4013,36 @@ def check_video_model_routes(root: str, ep: str, overview_text: str, overview_pa
         return
     if data.get("kind") != VIDEO_MODEL_ROUTES_KIND:
         add(BLOCK, "模型路由", p, f"video_model_routes.json kind 必须是 {VIDEO_MODEL_ROUTES_KIND}")
-    drift = data.get("baseline_drift")
-    if isinstance(drift, list) and drift:
-        sample = "、".join(f"{d.get('clip_id')}({d.get('shot_type')}):{d.get('was')}→{d.get('now')}" for d in drift[:5])
-        add(WARN, "后端跨集锁", p,
-            f"{len(drift)} 个 clip 的 shot_type 自然路由与 设定库/model_routes_baseline 不符，已按基线锚定（原后端降 fallback）；"
-            f"确认基线后端仍合适，否则 --write-baseline 刷新基线。{sample}")
     routes = data.get("routes")
     if not isinstance(routes, list) or not routes:
         add(BLOCK, "模型路由", p, "video_model_routes.json routes 为空；逐 Clip 必须有 primary/fallback/mode")
         return
+    check_model_route_baseline_policy(root, ep, data, routes, p)
+    drift = data.get("baseline_drift")
+    if isinstance(drift, list) and drift:
+        route_by_id = {str(r.get("clip_id") or ""): r for r in routes if isinstance(r, dict)}
+        strict: List[object] = []
+        for d in drift:
+            route = route_by_id.get(str((d or {}).get("clip_id") or "")) if isinstance(d, dict) else None
+            if route is None and isinstance(d, dict):
+                route = {"shot_type": d.get("shot_type")}
+            if isinstance(route, dict) and _route_needs_model_baseline(route) and not _baseline_override_accepted(data, route):
+                strict.append(d)
+        sample = "、".join(
+            f"{d.get('clip_id')}({d.get('shot_type')}):{d.get('was')}→{d.get('now')}"
+            for d in drift[:5] if isinstance(d, dict)
+        )
+        sev = BLOCK if strict else WARN
+        add(
+            sev,
+            "后端跨集锁",
+            p,
+            f"{len(drift)} 个 clip 的 shot_type 自然路由与 设定库/model_routes_baseline 不符，已按基线锚定（原后端降 fallback）；"
+            + ("高风险/含角色镜头的路由漂移必须显式 baseline_override_reason 或刷新基线后重跑。"
+               if sev == BLOCK else "确认基线后端仍合适，否则 --write-baseline 刷新基线。")
+            + sample,
+            return_to_stage="video_prompt",
+        )
     fallback_setting = get_setting(root, "视频备用后端", "").strip()
     allow_empty_fallback = (
         data.get("routing_mode") == "fixed_default"
@@ -3258,6 +4052,7 @@ def check_video_model_routes(root: str, ep: str, overview_text: str, overview_pa
     required = ("clip_id", "shot_type", "primary_backend", "fallback_backends", "mode", "native_audio_policy", "identity_requirement", "motion_control", "degrade_plan")
     frame_requirements = _storyboard_frame_requirements(root, ep)
     video_channel = get_setting(root, "生视频渠道", "").strip()
+    check_video_backend_api_refresh(root, ep, routes, video_channel, p, allow_empty_fallback)
     for idx, route in enumerate(routes, 1):
         if not isinstance(route, dict):
             add(BLOCK, "模型路由", p, f"routes[{idx}] 不是对象")
@@ -3307,11 +4102,11 @@ _CORE_SCOPES = {"全篇", "长线", "核心", "主角"}
 
 
 def check_route_identity_readiness(root: str, ep: str) -> None:
-    """换后端丢锁机检：出视频路由用到的 primary 后端 × identity_adapter_matrix 的角色锁脸能力对账。
+    """换后端丢锁机检：出视频路由用到的 primary/fallback 后端 × identity_adapter_matrix 的角色锁脸能力对账。
 
     n2d-model-router 选后端时不读 matrix——一个在后端 A 原生注册了 character_id 的角色，若某 clip 被路由到
     后端 B（B 上只有 reference_group 兜底甚至无绑定），锁脸力骤降却无任何机检。本检查在出视频闸门前置对账：
-    - 角色在 matrix 有「原生锁」(ready 且 binding 非 reference_group 族)，但路由用到的某 primary 后端在该角色上
+    - 角色在 matrix 有「原生锁」(ready 且 binding 非 reference_group 族)，但路由用到的某 primary/fallback 后端在该角色上
       只有 reference_group 兜底 → 换后端丢原生锁（核心角色 BLOCK / 其余 WARN）；该后端连兜底都没有 → 必丢锁 BLOCK；
     - 全 reference_group 兜底（无任何原生锁，如当前 demo）= 后端间一致，不报（没有原生锁可丢，避免噪声）。
     """
@@ -3324,9 +4119,17 @@ def check_route_identity_readiness(root: str, ep: str) -> None:
     forms = matrix.get("forms")
     if not isinstance(routes, list) or not isinstance(forms, list):
         return
-    used = sorted({str(r.get("primary_backend") or "").strip()
-                   for r in routes if isinstance(r, dict)} - {""})  # primary 后端集合（fallback 仅失败时触发，主查 primary）
-    if not used:
+    used_roles: List[Tuple[str, str, str]] = []
+    for r in routes:
+        if not isinstance(r, dict):
+            continue
+        clip_id = str(r.get("clip_id") or "?")
+        for role, backend in _video_route_backend_roles(r, allow_empty_fallback=False):
+            if backend:
+                used_roles.append((clip_id, role, backend))
+    seen_used: set[Tuple[str, str, str]] = set()
+    used_roles = [item for item in used_roles if not (item in seen_used or seen_used.add(item))]
+    if not used_roles:
         return
     for form in forms:
         if not isinstance(form, dict):
@@ -3339,21 +4142,22 @@ def check_route_identity_readiness(root: str, ep: str) -> None:
             continue  # 无原生锁 → 全兜底，后端间一致，无锁可丢
         name = form.get("character_name") or form.get("character_id") or "?"
         sev = BLOCK if str(form.get("scope") or "").strip() in _CORE_SCOPES else WARN
-        for b in used:
+        for clip_id, role, b in used_roles:
             if b in native:
                 continue
             v = vb.get(b)
+            role_note = "fallback" if role == "fallback" else "primary"
             if not (isinstance(v, dict) and v.get("ready")):
                 add(BLOCK, "换后端丢锁", matrix_p,
-                    f"角色「{name}」已在 {native} 原生锁脸，但本集出视频路由用到后端 {b}，该后端无可用身份绑定（连 reference_group 兜底都没有）→ 必丢锁；改路由到 {native} 或先在 {b} 注册该角色身份",
+                    f"角色「{name}」已在 {native} 原生锁脸，但 {clip_id} 的 {role_note} 后端 {b} 无可用身份绑定（连 reference_group 兜底都没有）→ 必丢锁；改路由到 {native} 或先在 {b} 注册该角色身份",
                     return_to_stage="video_prompt",
-                    rerun_scope=f"重跑 n2d-model-router 把涉及「{name}」的 clip 路由到 {native}，或在 {b} 注册 character_id/face_lock 后再出视频。",
+                    rerun_scope=f"重跑 n2d-model-router 把涉及「{name}」的 clip primary/fallback 都约束到 {native}，或在 {b} 注册 character_id/face_lock 后再出视频。",
                     affected_artifacts=[f"出视频/{ep}/prompt/video_model_routes.json", "生产数据/identity_adapter_matrix.json"])
             elif str(v.get("binding") or "") in _NON_NATIVE_BINDINGS:
                 add(sev, "换后端丢锁", matrix_p,
-                    f"角色「{name}」已在 {native} 原生锁脸，但本集有 clip 路由到后端 {b}（{b} 上仅 reference_group 兜底）= 换后端丢原生锁、锁脸力下降；核心角色应改路由或在 {b} 注册原生身份",
+                    f"角色「{name}」已在 {native} 原生锁脸，但 {clip_id} 的 {role_note} 后端 {b} 仅 reference_group 兜底 = 换后端丢原生锁、锁脸力下降；核心角色 primary 与 fallback 都应改路由或在 {b} 注册原生身份",
                     return_to_stage="video_prompt",
-                    rerun_scope=f"重跑 n2d-model-router 让「{name}」的 clip 优先用 {native}，或在 {b} 注册原生身份。",
+                    rerun_scope=f"重跑 n2d-model-router 让「{name}」的 clip primary/fallback 优先用 {native}，或在 {b} 注册原生身份；不能让失败重试时 fallback 偷偷掉锁。",
                     affected_artifacts=[f"出视频/{ep}/prompt/video_model_routes.json"])
 
 
@@ -3513,7 +4317,7 @@ def check_image_prompt_overview(root: str, ep: str) -> None:
     check_markdown_style_contract(text, p, "出图总览")
 
 
-def check_video_clip_prompt_section(path: str, section: str) -> None:
+def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dict[str, Any]] = None) -> None:
     name = _headline(section, "Clip")
     loc = f"{path} {name}"
 
@@ -3605,7 +4409,23 @@ def check_video_clip_prompt_section(path: str, section: str) -> None:
         for key in ("audio_intent", "risk", "mouth_visible", "speech_policy", "compose_policy"):
             if key not in section:
                 add(BLOCK, "原生音画", loc, f"原生音画策略缺字段：{key}")
-        if _section_native_audio_opt_in(section):
+        route_native_policy = str((route or {}).get("native_audio_policy") or "").strip()
+        route_mode = str((route or {}).get("mode") or "").strip()
+        if route_native_policy == "native_speech" or route_mode == "native_av":
+            policy_line = _native_audio_policy_line(section)
+            if "native_speech" not in policy_line:
+                add(BLOCK, "原生音画", loc, "路由表 native_audio_policy=native_speech，但本 Clip 原生音画策略未写 speech_policy=native_speech")
+            if _has_any(policy_line, ("no_native_speech", "禁止原生人声", "无原生人声")):
+                add(BLOCK, "原生音画", loc, "路由表要求 native_speech，说话镜不能同时写 no_native_speech / 禁止原生人声；应改为台词+口型由原生音画后端生成并由 compose 保留原片音轨")
+            if not _has_any(policy_line, ("audio_intent=native_speech", "台词", "原生人声")):
+                add(WARN, "原生音画", loc, "native_speech 镜建议写 audio_intent=native_speech，并说明台词文本/声源/口型策略")
+            if not _has_any(policy_line, ("compose_policy=保留原片音轨", "保留原片音轨")):
+                add(BLOCK, "原生音画", loc, "native_speech 镜 compose_policy 必须保留原片音轨；否则合成会丢原生台词")
+        elif route_native_policy and route_native_policy != "native_speech":
+            policy_line = _native_audio_policy_line(section)
+            if "native_speech" in policy_line or "allow_native_speech" in policy_line:
+                add(BLOCK, "原生音画", loc, f"路由表 native_audio_policy={route_native_policy}，本 Clip 不得写 native_speech/allow_native_speech")
+        if _section_native_audio_opt_in(section) and route_native_policy != "native_speech" and route_mode != "native_av":
             native_policy = _native_audio_policy_line(section)
             if not _has_any(section, ("risk=low", "低风险")):
                 add(BLOCK, "原生音画", loc, "原生环境声/音效 opt-in 仅允许低风险镜头；必须写 risk=low / 低风险理由")
@@ -3615,6 +4435,12 @@ def check_video_clip_prompt_section(path: str, section: str) -> None:
                 add(BLOCK, "原生音画", loc, "原生环境声/音效 opt-in 必须明确 no_native_speech / 禁止原生人声")
     if "原生音画约束" not in section:
         add(BLOCK, "原生音画", loc, "中文视频 prompt 缺原生音画约束；必须说明默认禁止原生人声，或仅允许低风险环境声/动作音效")
+    elif route and (
+        str(route.get("native_audio_policy") or "").strip() == "native_speech"
+        or str(route.get("mode") or "").strip() == "native_av"
+    ):
+        if not _has_any(section, ("台词", "口型", "native_speech", "保留原片音轨")):
+            add(BLOCK, "原生音画", loc, "native_speech 镜的中文原生音画约束必须说明台词、口型和保留原片音轨")
 
     # ④ 运镜越界 trip-wire：镜头运动含"廉价漂浮/旋转飞行/急速"类运镜 → 疑越 style_contract.运动边界
     m_cam = re.search(r"镜头运动[：:]([^\n；;]*)", section)
@@ -4325,14 +5151,26 @@ def check_image_shot_prompt_section(path: str, idx: int, section: str,
                 return_to_stage="image",
             )
         if len(chars) >= 2:
-            if _multi_closeup and not _has_any(section, ("反打", "正反打", "shot_reverse_shot", "降景别", "景别分层", "单人分层", "分别出图", "分层合成")):
+            # 升 BLOCK 后，逃生口收紧为「显式 split/分层 执行 token」——不再认裸的「反打/正反打」字样：
+            # 那些常作为视线对位/身份锁定的样板话出现在每个对话镜里（一次生成多张脸的同框近景也会写），
+            # 认它就等于永不触发。真·反打是拆成单人镜（每帧 1 张脸），本就不该是「多人同框」，故同框近景的
+            # 放行只认 分别出图/分层合成/单人分层/景别分层 这类落地执行策略。
+            _CLOSEUP_SPLIT_TOKENS = ("shot_reverse_shot", "split_composite", "分别出图", "分角色出图",
+                                     "拆成单人镜", "拆单人镜", "单人分层", "分层合成", "景别分层")
+            if _multi_closeup and not _has_any(section, _CLOSEUP_SPLIT_TOKENS):
+                # 多人近景同框是 cross-attention 串脸最高发档（2026 SOTA：单帧多主体身份必相互渗透，
+                # 即便最强后端 ~85% 一致、近景更糟；公认最佳实践是「分开生成再合成」而非单帧绑定）。
+                # 槽位绑定仍是「一次生成多张脸」，治不了近景串脸——必须拆开生成。
+                # 2026-06 由 WARN 升 BLOCK（与「空间绑定对所有后端 block」同向，对最危险的近景档收口）。
                 add(
-                    WARN,
+                    BLOCK,
                     "构图景别",
                     loc,
-                    f"多人近景同框（{'/'.join(sorted(chars))}）：近景同框是脸漂/串脸最高发档。"
-                    "按默认调度优先拆「单人CU + 反打」或降到中景/全景做景别分层（清晰主角1人，余者推后景/虚焦）；"
-                    "确需多人近景请登记 split_composite/分层合成执行策略。",
+                    f"多人近景同框（{'/'.join(sorted(chars))}）未声明反打/分层/分别出图：近景是多主体 cross-attention "
+                    "串脸最高发档，槽位绑定（一次生成多张脸）治不住——必须拆「单人CU + 反打」或「单人分层出图 + 合成」"
+                    "分开生成各自的脸；确需同框请降到中景/全景做景别分层（清晰主角1人，余者推后景/虚焦），"
+                    "并登记 split_composite/分层合成执行策略。",
+                    return_to_stage="image",
                 )
             if single_ref_backend and not _has_any(section, ("区分锚点", "互斥锚点", "可区分性", "distinct anchor", "去重锚点", "撞色")):
                 add(
@@ -4537,70 +5375,107 @@ _FINALIZE_CHAR_RE = re.compile(r"CHAR_[A-Za-z0-9_]+(?:/[^\s`，；、*]+)?")
 _FINALIZE_ASSET_RE = re.compile(r"(?:LOC|PROP|OUTFIT|VFX)_[A-Za-z0-9_]+")
 
 
-def _finalize_tracked_map(root: str) -> Dict[str, bool]:
-    """registry 里**显式登记了** `self_check_passed` 的 form/asset → {引用键: passed}。
+def _finalize_evidence(root: str) -> Tuple[set, set, set]:
+    """registry → (all_keys, evidence_keys, dirty_keys) 三组机器可读引用键。
 
-    机器可读的 finalize 真值（补 `00_索引.md` 的人读 ✅）：键缺失 = 未启用追踪（向后兼容/先出视频 demo
-    天然豁免，不入表）。角色 form 同时登记 `CHAR_xx/形态` 与（单形态时）裸 `CHAR_xx` 两个键。"""
-    tracked: Dict[str, bool] = {}
+    - `all_keys`：所有已登记 form/asset 的引用键（含未追踪的），用于判定一个被引用 id 是否真属本 registry。
+    - `evidence_keys`：有**机器可读落档证据**的键——角色 form `self_check_passed==True` *或* 登记了 `anchor_sha`
+      （后者覆盖档①参考派生；档②原生主体 ID / 档③ LoRA 的就绪由 check_identity_registry/route 另验，
+      故这里 self_check_passed==True 即算证据，不强逼所有 form 都钉 anchor_sha 而误伤档②/③）；资产 `self_check_passed==True`。
+    - `dirty_keys`：`self_check_passed==False`（自检未过的脏定妆/脏资产）。
+    角色 form 同时登记 `CHAR_xx/形态` 与（单形态时）裸 `CHAR_xx` 两个键。"""
+    all_keys: set = set()
+    evidence: set = set()
+    dirty: set = set()
     try:
-        reg = json.loads(open(os.path.join(root, "出图", "共享", "identity_registry.json"), encoding="utf-8").read())
-        for c in (reg.get("characters") or []):
-            cid = str(c.get("id") or "").strip()
-            forms = c.get("forms") or []
-            for fm in forms:
-                if not isinstance(fm, dict) or "self_check_passed" not in fm:
-                    continue
-                passed = bool(fm.get("self_check_passed"))
-                form_name = str(fm.get("form") or "").strip()
-                if cid and form_name:
-                    tracked[f"{cid}/{form_name}"] = passed
-                if cid and len(forms) == 1:
-                    tracked[cid] = passed
+        reg = json.loads(open(identity_registry_path(root), encoding="utf-8").read())
     except Exception:
-        pass
+        reg = {}
+    for c in (reg.get("characters") or []):
+        if not isinstance(c, dict):
+            continue
+        cid = str(c.get("id") or "").strip()
+        forms = c.get("forms") or []
+        for fm in forms:
+            if not isinstance(fm, dict):
+                continue
+            form_name = str(fm.get("form") or "").strip()
+            keys = []
+            if cid and form_name:
+                keys.append(f"{cid}/{form_name}")
+            if cid and len(forms) == 1:
+                keys.append(cid)
+            all_keys.update(keys)
+            scp = fm.get("self_check_passed")
+            anchored = bool(str(fm.get("anchor_sha") or "").strip())
+            if scp is True or anchored:
+                evidence.update(keys)
+            if scp is False:
+                dirty.update(keys)
     try:
         areg = json.loads(open(os.path.join(root, "出图", "共享", "asset_registry.json"), encoding="utf-8").read())
-        for a in (areg.get("assets") or []):
-            if not isinstance(a, dict) or "self_check_passed" not in a:
-                continue
-            aid = str(a.get("id") or "").strip()
-            if aid:
-                tracked[aid] = bool(a.get("self_check_passed"))
     except Exception:
-        pass
-    return tracked
+        areg = {}
+    for a in (areg.get("assets") or []):
+        if not isinstance(a, dict):
+            continue
+        aid = str(a.get("id") or "").strip()
+        if not aid:
+            continue
+        all_keys.add(aid)
+        scp = a.get("self_check_passed")
+        if scp is True:
+            evidence.add(aid)
+        if scp is False:
+            dirty.add(aid)
+    return all_keys, evidence, dirty
 
 
 def check_referenced_assets_finalized(root: str, ep: str) -> None:
-    """付费出图前置·机器可读 finalize 闸门：本集逐镜引用的共享定妆/资产，若 registry 显式标
-    `self_check_passed=false`（自检未过的"脏定妆"）→ BLOCK。补 `check_shared_image_index` 只拦 ⬜
-    的缺口（⏳ 漏网）+ 总览表没列就静默放行的软肋——改查机器真值，不依赖手维护的人读表。
+    """付费出图前置·机器可读 finalize 闸门（被引用即必需机器证据）：
 
-    **纯 opt-in**：registry 没登记 `self_check_passed` 字段 = 未启用追踪 → 跳过（向后兼容，现有作品/
-    先出视频 demo 不会被突然阻断）。键=true 放行、=false 且被引用=block。"""
-    tracked = _finalize_tracked_map(root)
-    if not tracked:
-        return  # 未启用机器 finalize 追踪：保持 00_索引 人读 ✅ 的既有流程，不强加
+    - 引用了显式标 `self_check_passed=false` 的脏定妆/资产 → BLOCK（脏锚点下游每镜继承）。
+    - **被引用即必需**：一旦项目启用了 finalize/锚点追踪（任一 form/asset 登记过 `self_check_passed` 或 `anchor_sha`），
+      本集逐镜引用的、且确属本 registry 的共享定妆/资产，**必须**有机器可读落档证据（self_check_passed=true 或 anchor_sha）；
+      仅靠人读 ✅ 或干脆没登记 = 自断言/漏登记，**缺证据即 BLOCK**——堵住「给一部分置 true、其余留空就静默放行」的洞。
+
+    **adoption-gated**：完全没启用追踪的项目（现有作品/先出视频 demo，registry 无任何 self_check_passed/anchor_sha）
+    → 跳过，保持 00_索引 人读 ✅ 的既有流程，不突然阻断。"""
+    all_keys, evidence, dirty = _finalize_evidence(root)
+    if not (evidence or dirty):
+        return  # 未启用机器 finalize/锚点追踪：向后兼容，不强加
     shots_md = os.path.join(root, "出图", ep, "prompt", "01_分镜出图.md")
     try:
         text = open(shots_md, encoding="utf-8").read()
     except Exception:
         return  # 逐镜 prompt 未写：check_image_prompt_overview 等各自负责
     referenced = set(_FINALIZE_CHAR_RE.findall(text)) | set(_FINALIZE_ASSET_RE.findall(text))
-    unfinalized = sorted(rid for rid in referenced
-                         if rid in tracked and tracked[rid] is False)
-    # 裸 CHAR_xx 引用对应多形态时，逐形态查（任一形态显式 false 且被引用基名）
-    for rid in sorted(referenced):
+
+    def _resolve(rid: str, pool: set) -> bool:
         base = rid.split("/")[0]
-        if rid == base and base not in tracked:
-            bad = [k for k, v in tracked.items() if k.startswith(base + "/") and v is False]
-            if bad and base not in unfinalized:
-                unfinalized.extend(bad)
-    for rid in sorted(set(unfinalized)):
+        if rid in pool:
+            return True
+        # 裸 CHAR_xx 引用 → 命中其任一形态键
+        return rid == base and any(k == base or k.startswith(base + "/") for k in pool)
+
+    dirty_refs: List[str] = []
+    missing_refs: List[str] = []
+    for rid in sorted(referenced):
+        if not _resolve(rid, all_keys):
+            continue  # 不属本 registry（typo/未登记类型）→ unknown_char_id/unknown_asset_id 等别的检查负责
+        if _resolve(rid, dirty):
+            dirty_refs.append(rid)
+        elif not _resolve(rid, evidence):
+            missing_refs.append(rid)
+    for rid in dirty_refs:
         add(BLOCK, "共享定妆", shots_md,
             f"本集逐镜引用了未过落档自检的共享定妆/资产 `{rid}`（registry `self_check_passed=false`）——"
             "脏定妆是锚点，脸/结构漂了下游每镜继承；先过自检并把该项置 true（或人工复核后 `image_qc --mark-finalized`），再付费出图。")
+    for rid in missing_refs:
+        add(BLOCK, "共享定妆", shots_md,
+            f"项目已启用 finalize 追踪，但本集引用的共享定妆/资产 `{rid}` 没有任何机器可读落档证据"
+            "（既无 `self_check_passed=true` 也无 `anchor_sha`）——被引用即必需机器证据：人读 ✅/没登记都不算数，"
+            "先过落档自检 `image_qc --mark-finalized`（角色 form 默认顺带钉 `anchor_sha` 机器证据）再付费出图。")
 
 
 def _sha256_file(path: str) -> Optional[str]:
@@ -4762,8 +5637,9 @@ def check_expression_anchors(root: str, ep: str) -> None:
 
 
 def check_character_backend_pin(root: str, ep: str) -> None:
-    """一角一后端跨集钉（advisory）：form 若登记 `backend_pin`（该角色身份建立/锁定的出图后端），
-    而本集项目 `生图AI` 与之不同 → WARN。同一角色跨集换后端本身是脸漂源（不同模型脸的先验不同），
+    """一角一后端跨集钉：核心长线 form 若登记 `backend_pin` 后本集换生图后端 → BLOCK，其余 WARN。
+
+    同一角色跨集换后端本身是脸漂源（不同模型脸的先验不同），
     弱后端尤甚。**纯 opt-in**：未登记 backend_pin 跳过。"""
     reg = load_json(identity_registry_path(root))
     if not isinstance(reg, dict):
@@ -4785,10 +5661,13 @@ def check_character_backend_pin(root: str, ep: str) -> None:
                 continue
             form_name = str(fm.get("form") or "").strip()
             label = f"{cid}/{form_name}" if form_name else (cid or "?")
-            add(WARN, "角色一致性", reg_path,
+            is_core = bool(_CORE_SCOPE_RE.search(f"{c.get('tier') or ''} {c.get('scope') or ''}"))
+            sev = BLOCK if is_core else WARN
+            add(sev, "角色一致性", reg_path,
                 f"角色 `{label}` 身份钉在出图后端 `{pin_canon}`，本集项目 生图AI=`{cur_canon}`——"
                 "同一角色跨集换后端本身是脸漂源（不同模型脸的先验不同），弱后端尤甚。"
-                "要么切回原后端出本集，要么先把该角色升原生主体库/LoRA 再换；确认有意更换则更新 backend_pin。")
+                "要么切回原后端出本集，要么先把该角色升原生主体库/LoRA 再换；确认有意更换则更新 backend_pin。",
+                return_to_stage="image")
 
 
 def check_image_assets(root: str, ep: str) -> None:
@@ -5032,8 +5911,42 @@ def check_input_frame_qc(root: str, ep: str) -> None:
             add(BLOCK, "出图落档QC", qc_path,
                 "输入首帧晚于上次 image_qc（出图后改过帧未重验）——出视频前先重跑 image_qc，避免动画一张未验首帧。",
                 return_to_stage="image")
+            return
     except OSError:
         pass
+    if fingerprint_is_fresh is None:
+        add(BLOCK, "出图落档QC", qc_path,
+            "无法加载 image_qc 输入指纹校验器（skill_snapshot.fingerprint_is_fresh）——"
+            "不能确认该 QC 报告对应当前 prompt/registry/PNG；修复环境并重跑 image_qc。",
+            return_to_stage="image")
+        return
+    fresh = fingerprint_is_fresh(qc.get("inputs_fingerprint"), root)  # type: ignore[misc]
+    if fresh is None:
+        add(BLOCK, "出图落档QC", qc_path,
+            "输入首帧 image_qc 缺 `inputs_fingerprint`（旧版或手写报告），无法证明报告对应当前 prompt/registry/PNG。"
+            "重跑 image_qc 生成带输入指纹的报告后再出视频。",
+            return_to_stage="image")
+        return
+    if fresh is False:
+        add(BLOCK, "出图落档QC", qc_path,
+            "输入首帧 image_qc 的 `inputs_fingerprint` 与当前文件失配（prompt、registry 或 PNG 已变）。"
+            "当前结论作废；出视频前先重跑 image_qc。",
+            return_to_stage="image")
+        return
+    # 防伪造：freshness 只证明「报告声明的那批文件没变」，不证明「真把全部 PNG 都验了」——一份手写/陈旧
+    # 报告可以只声明 1 张图、算对那张 sha 就过 freshness。这里独立枚举 出图/<ep>/图片/ 的真实 PNG，核对
+    # image_qc 指纹是否覆盖每一张实际落档图（按文件名）；有真实 PNG 不在报告核验范围 = 这张根本没被机检 → BLOCK。
+    recorded = qc.get("inputs_fingerprint") or {}
+    declared_png = {os.path.basename(k) for k in (recorded.get("files") or {}) if str(k).endswith(".png")}
+    uncovered = sorted({os.path.basename(p) for p in pngs} - declared_png)
+    if uncovered:
+        sample = "、".join(uncovered[:5]) + (f" 等 {len(uncovered)} 张" if len(uncovered) > 5 else "")
+        add(BLOCK, "出图落档QC", qc_path,
+            f"image_qc 指纹只覆盖了报告声明的子集，{len(uncovered)} 张实际落档 PNG 不在核验范围（{sample}）——"
+            "这是手写/伪造/陈旧报告的典型特征：声明少量文件算对 sha 就想过 freshness，但这些图根本没被机检过。"
+            "重跑 image_qc，让 `inputs_fingerprint` 覆盖 出图/<ep>/图片/ 的全部 PNG 后再出视频。",
+            return_to_stage="image")
+        return
 
 
 def ffprobe_json(path: str) -> Optional[dict]:
@@ -5206,7 +6119,21 @@ def check_video_assets(root: str, ep: str) -> None:
     sb = load_storyboard(root, ep)
     if sb and len(clips) != len(sb.get("clips", [])):
         add(WARN, "视频", os.path.join(root, "出视频", ep, "视频"), f"clip 数 {len(clips)} 与 storyboard clips {len(sb.get('clips', []))} 不一致")
-    audio_hits = [c for c in clips if has_audio(c)]
+    audio_probe = [(c, has_audio(c)) for c in clips]
+    audio_hits = [c for c, a in audio_probe if a]
+    unprobeable = [c for c, a in audio_probe if a is None]
+    # 双人声硬闸门（原生台词 + n2d-voice 配音）依赖 ffprobe 探测 clip 原生音轨。ffprobe 缺失时
+    # has_audio 返回 None → audio_hits 收缩为空 → 双人声 BLOCK 静默到不了。review 是交付边界：
+    # 探不了原生音轨又存在配音轨 = 双人声硬闸门其实没校验过，默认 BLOCK（与降级精度一致性审计同一套
+    # 「缺核心检测工具→交付边界拦截」策略，逃生口同为 N2D_ALLOW_DEGRADED_QC=1·留痕自负其责）。
+    if unprobeable and voice_track_exists(root, ep):
+        allow_degraded = os.environ.get("N2D_ALLOW_DEGRADED_QC") == "1"
+        sev = WARN if allow_degraded else BLOCK
+        tail = ("（已显式 N2D_ALLOW_DEGRADED_QC 放行）" if allow_degraded
+                else "装 ffprobe 后重跑，或显式 N2D_ALLOW_DEGRADED_QC=1 放行并自负其责。")
+        add(sev, "原生音画", os.path.join(root, "出视频", ep, "视频"),
+            f"ffprobe 不可用，{len(unprobeable)} 个 clip 无法探测原生音轨——"
+            f"「原生台词 + n2d-voice 配音 = 双人声」硬闸门无法校验，交付边界不放行。{tail}")
     check_native_audio_compose_policy(root, ep, audio_hits)
     shots = load_json(os.path.join(root, "脚本", ep, "镜头时长.json"))
     if isinstance(shots, dict):
@@ -5359,22 +6286,78 @@ def check_subtitle_alignment(root: str, ep: str) -> None:
     )
 
 
+STRICT_ADVISORY_DIMENSIONS = {"轴线视线(X1)", "音画同步(AV1)", "节奏密度", "节奏密度(Rhythm)"}
+KEY_SCENE_MARKERS = ("关键", "钩子", "封面", "反转", "高潮", "爆点", "key", "hook", "climax")
+
+
+def _consistency_signoff_path(root: str, ep: str) -> str:
+    return os.path.join(root, "生产数据", f"consistency_advisory_signoff_{ep}.json")
+
+
+def _row_is_key_scene(row: Mapping[str, Any]) -> bool:
+    text = json.dumps(row, ensure_ascii=False).lower()
+    return any(marker.lower() in text for marker in KEY_SCENE_MARKERS)
+
+
+def _advisory_row_signed_off(root: str, ep: str, row: Mapping[str, Any]) -> bool:
+    data = load_json(_consistency_signoff_path(root, ep))
+    if not isinstance(data, dict):
+        return False
+    accepted = data.get("accepted") or data.get("signoffs") or []
+    dim = str(row.get("dimension") or row.get("dim") or "")
+    msg = str(row.get("message") or row.get("msg") or "")
+    loc = " ".join(str(x) for x in (row.get("affected_artifacts") or []) if x) if isinstance(row.get("affected_artifacts"), list) else ""
+    for item in accepted:
+        if isinstance(item, str):
+            token = item.strip()
+            if token and (token == dim or token in msg or token in loc):
+                return True
+        elif isinstance(item, dict):
+            if str(item.get("dimension") or item.get("dim") or "").strip() not in {"", dim}:
+                continue
+            token = str(item.get("message_contains") or item.get("loc_contains") or item.get("shot") or "").strip()
+            if not token or token in msg or token in loc:
+                return True
+    return False
+
+
+def _strict_advisory_should_block(root: str, ep: str, stage: str, row: Mapping[str, Any], summary: Mapping[str, Any]) -> Tuple[bool, str]:
+    if consistency_release_profile(root) != "production":
+        return False, ""
+    dim = str(row.get("dimension") or row.get("dim") or "")
+    if dim not in STRICT_ADVISORY_DIMENSIONS:
+        return False, ""
+    by_dim = summary.get("by_dim") if isinstance(summary.get("by_dim"), Mapping) else {}
+    stat = by_dim.get(dim) if isinstance(by_dim.get(dim), Mapping) else {}
+    repeated = int(stat.get("warn") or 0) >= 2
+    key_scene = _row_is_key_scene(row)
+    deliverable = stage in {"compose", "review"}
+    if not (repeated or key_scene or deliverable):
+        return False, ""
+    if _advisory_row_signed_off(root, ep, row):
+        return False, "已由 consistency_advisory_signoff 签收"
+    reason = "重复同维度" if repeated else ("关键场景" if key_scene else "交付边界")
+    return True, reason
+
+
 def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> None:
     """Final consistency suite gate.
 
     The detector bundle is useful only if it is on a mandatory path.  Run the
-    full audit before compose/review and mirror active findings into gate output;
-    the complete report remains in 生产数据/consistency_findings_<ep>.json.
+    full audit before image(出图后)/compose/review and mirror active findings into
+    gate output; the complete report remains in 生产数据/consistency_findings_<ep>.json.
 
-    `stage` gates how降级精度 is treated: at final `review` a non-full precision
-    (insightface 缺失→脸/像素一致性其实没验证) is a BLOCK unless explicitly waived
-    via `N2D_ALLOW_DEGRADED_QC=1`; at `compose` it stays a WARN (still in-flight).
+    `stage` gates how 降级精度 is treated: compose/review are deliverable boundaries,
+    so non-full precision (insightface 缺失→脸/像素一致性其实没验证) is a BLOCK there
+    unless explicitly waived via `N2D_ALLOW_DEGRADED_QC=1`. At the image 出图后闸门
+    降级精度只降为 WARN（不硬拦无依赖产线）——确定性 🔴 维度（手部/天气/身高/称谓/动作）
+    照常 BLOCK，把它们挡在最贵的出视频之前。
     """
     script = os.path.join(SCRIPT_DIR, "consistency_audit.py")
     loc = os.path.join(root, "生产数据", f"consistency_findings_{ep}.json")
     try:
         proc = subprocess.run(
-            [sys.executable, script, root, ep, "--json"],
+            [sys.executable, script, root, ep, "--json", "--profile", consistency_release_profile(root)],
             text=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -5402,19 +6385,19 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
     summary = res.get("summary") if isinstance(res.get("summary"), dict) else {}
     precision = str(summary.get("precision_level") or "full")
     if precision != "full":
-        # 终验(review)：降级精度=脸/像素一致性其实没机检过——不给绿灯，除非显式放行并留痕。
+        # compose/review 都是交付边界：降级精度=脸/像素一致性其实没机检过——不给绿灯，除非显式放行并留痕。
         allow_degraded = os.environ.get("N2D_ALLOW_DEGRADED_QC") == "1"
-        if stage == "review" and not allow_degraded:
+        if stage in {"compose", "review"} and not allow_degraded:
             add(
                 BLOCK,
                 "一致性总审",
                 loc,
                 f"一致性审计精度为 {precision}（insightface 等不可用，脸/像素一致性未真正验证）；"
-                "终验不放行——请在 full 环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 放行并自负其责。",
+                "交付边界不放行——请在 full 环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 放行并自负其责。",
                 return_to_stage="review",
             )
         else:
-            note = "（已显式 N2D_ALLOW_DEGRADED_QC 放行）" if (stage == "review" and allow_degraded) else ""
+            note = "（已显式 N2D_ALLOW_DEGRADED_QC 放行）" if allow_degraded else ""
             add(
                 WARN,
                 "一致性总审",
@@ -5432,6 +6415,9 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
         sev = str(row.get("severity") or row.get("verdict") or "").lower()
         if sev not in {BLOCK, WARN}:
             continue
+        strict_block, strict_reason = _strict_advisory_should_block(root, ep, stage, row, summary)
+        if sev == WARN and strict_block:
+            sev = BLOCK
         if sev == WARN:
             if mapped_warns >= 12:
                 skipped_warns += 1  # 不静默丢——循环后出一条 rollup，避免"12 条已处理"的错觉
@@ -5441,6 +6427,11 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
             block_count += 1
         dim = str(row.get("dimension") or row.get("dim") or "一致性总审")
         msg = str(row.get("message") or row.get("msg") or row.get("reason") or "一致性审计发现问题")
+        if strict_block:
+            msg = (
+                f"[production一致性升级:{strict_reason}] {msg}。如确认为可接受，写入 "
+                f"{os.path.relpath(_consistency_signoff_path(root, ep), root)} 的 accepted 后复跑。"
+            )
         artifacts = row.get("affected_artifacts") if isinstance(row.get("affected_artifacts"), list) else []
         shots = row.get("affected_shots") if isinstance(row.get("affected_shots"), list) else []
         add(
@@ -5480,7 +6471,26 @@ def run(root: str, ep: str, stage: str) -> None:
         return
     check_stage = gate_family(stage)
     av_native = is_native_av_production(root)  # 原生音画：说话镜不跑配音，不要求「配音」列就绪
-    if check_stage == "image":
+    if check_stage == "image_prompt_preflight":
+        check_compliance_manifest(root, ep, "image")
+        # Prompt 生成前只查上游确定性契约；不得要求本阶段即将生成的出图 prompt/registry 已存在。
+        image_prereq = ("分镜设计",) if av_native else ("配音", "分镜设计")
+        require_progress(root, ep, image_prereq)
+        check_progress_artifact_signoff(root, ep, image_prereq)
+        check_placeholder_policy(root, ep, "image")
+        check_voiceover_fingerprint(root, ep)
+        check_timing_manifest_complete(root, ep)
+        check_voice_cross_episode(root, ep)
+        check_image_ai_policy(root, ep)
+        check_backend_reachable(root, ep)
+        check_drift_risk_advisories(root, ep)
+        check_drift_report_freshness(root, ep)  # measured-drift BLOCK 环的报告新鲜度闸（堵静默退化）
+        check_cross_episode_character_definition(root, ep)
+        check_storyboard_contract(root, ep, require_frame_assets=False)
+        check_storyboard_visual_contract(root, ep)
+        check_storyboard_style_contract(root, ep)
+        check_storyboard_special_templates(root, ep)
+    elif check_stage == "image":
         check_compliance_manifest(root, ep, check_stage)
         # image 阶段只在「先出视频后配音」模式允许 rough timing 做 demo 出图；
         # 配音先行仍必须真实配音。不要把 rough 配音强写成 ✅。
@@ -5493,9 +6503,12 @@ def run(root: str, ep: str, stage: str) -> None:
         check_voice_cross_episode(root, ep)
         check_image_ai_policy(root, ep)
         check_backend_reachable(root, ep)
+        if stage == "image_preflight":
+            check_image_backend_api_refresh(root, ep)
         # 已测得的跨集脸/资产漂移 BLOCK 不分预检/出图后——整个 image family 都跑，避免直接 `--stage image`
         # 跳过预检时上一集已漂移的角色蒙混过出图后 gate。
         check_drift_risk_advisories(root, ep)
+        check_drift_report_freshness(root, ep)  # measured-drift BLOCK 环的报告新鲜度闸（堵静默退化）
         check_cross_episode_character_definition(root, ep)  # 跨集角色文字定义漂移（重派生）信号
         if stage == "image_preflight":
             check_reference_plan_applied(root, ep)  # 逐镜参考规划落实对账（advisory·治跨集脸漂）
@@ -5524,6 +6537,43 @@ def run(root: str, ep: str, stage: str) -> None:
         check_cinematic_optical_continuity(root, ep)
         check_shot_scale_progression(root, ep)
         check_physical_scale_audit(root, ep)
+        if stage == "image":
+            # 生成后落档机检：崩脸/接缝断/降级精度近景/角色脸覆盖缺口的**像素**硬挡，此前只挂在
+            # video / video_prompt_preflight 阶段（gate.py:5770/5794），出图阶段（runner 生成后跑的
+            # 就是 `--stage image`）一直不接 → 崩脸要拖到最贵的「出视频」工位才被拦。现接进 image 阶段，
+            # 让崩脸在最近的出图闸门即 BLOCK。pre-gen 的 image_preflight 不跑（此时还没 PNG/QC 报告，
+            # 见 check_input_frame_qc 对无 PNG 的优雅降级）。
+            check_input_frame_qc(root, ep)
+            # 一致性总审同样前移到出图后闸门：手部多指/天气硬跳/极端身高/禁用称谓/动作硬断等**确定性
+            # 🔴 维度**此前只在 compose/review（已花完出视频钱）才拦。出图后 PNG 已在、clip 未出——
+            # 此处跑全套 consistency_audit，确定性 block 维度即 BLOCK，把它们挡在最贵的「出视频」之前。
+            # stage="image"：降级精度（缺 insightface）按既有逻辑只降级为 WARN（不硬拦无依赖产线，
+            # 交付边界 compose/review 才对降级精度 BLOCK，逃生口仍是 N2D_ALLOW_DEGRADED_QC）。
+            check_consistency_audit_gate(root, ep, stage="image")
+    elif check_stage == "video_prompt_preflight":
+        check_compliance_manifest(root, ep, "video")
+        # 视频 prompt 生成前必须证明首帧/尾帧和身份矩阵已可继承，但不得要求视频 prompt 文件已存在。
+        video_prereq = ("分镜设计", "出图prompt", "出图") if av_native else ("配音", "分镜设计", "出图prompt", "出图")
+        require_progress(root, ep, video_prereq)
+        check_progress_artifact_signoff(root, ep, video_prereq)
+        check_placeholder_policy(root, ep, "video")
+        check_voiceover_fingerprint(root, ep)
+        check_timing_manifest_complete(root, ep)
+        check_voice_cross_episode(root, ep)
+        referenced_characters, referenced_assets = episode_registry_reference_ids(root, ep)
+        check_identity_registry(root, require_reference_assets=True, required_character_ids=referenced_characters)
+        check_asset_reference_registry(root, require_reference_assets=True, required_asset_ids=referenced_assets)
+        check_identity_adapter_matrix(root)
+        check_route_identity_readiness(root, ep)
+        check_storyboard_contract(root, ep, require_frame_assets=True)
+        check_storyboard_style_contract(root, ep)
+        check_storyboard_special_templates(root, ep)
+        check_expression_span_frame_contract(root, ep)
+        check_image_assets(root, ep)
+        check_input_frame_qc(root, ep)
+        check_multimodal_continuity(root, ep)
+        check_semantic_lineage(root, ep)
+        check_state_continuity(root, ep)
     elif check_stage == "video":
         check_compliance_manifest(root, ep, check_stage)
         video_prereq = ("分镜设计", "出图prompt") if av_native else ("配音", "分镜设计", "出图prompt")
@@ -5551,6 +6601,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_video_stage_raw_output_policy(root, ep)
         check_contract_inheritance(root, ep)
         check_cross_episode_contract(root, ep)
+        check_identity_handoff_inheritance(root, ep)
         check_asset_handoff_inheritance(root, ep)
         check_semantic_lineage(root, ep)
         check_state_continuity(root, ep)
@@ -5595,6 +6646,8 @@ def run(root: str, ep: str, stage: str) -> None:
         check_subtitle_alignment(root, ep)
         check_cross_episode_contract(root, ep)
         check_cross_episode_character_definition(root, ep)
+        check_identity_handoff_inheritance(root, ep)
+        check_asset_handoff_inheritance(root, ep)
         check_consistency_audit_gate(root, ep, stage="review")
     else:
         add(BLOCK, "参数", stage, "未知 stage")

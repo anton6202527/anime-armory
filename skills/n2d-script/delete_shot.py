@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # 删镜助手 — 后期删减「回流」的可自动推导部分一键完成（见 n2d/Q&A.md Q27）
 # 用法: delete_shot.py <作品根> <第N集> <镜头名> [镜头名...]
-#   例: delete_shot.py 制漫剧/冷宫有妖气 第2集 镜头6
+#   例: delete_shot.py 创作区/制漫剧/冷宫有妖气 第2集 镜头6
 # 自动做：voiceover.txt 删行 → 字幕_英文.srt 删对应块(EN文本源·必须同步) →
 #         时长清单.json reflow(丢句+重编号+重命名 line wav，被删句移废料) →
 #         voice_zh.wav 重拼轨(有 ffmpeg 时，含 hook 可变间隔) → finalize_storyboard 重定时

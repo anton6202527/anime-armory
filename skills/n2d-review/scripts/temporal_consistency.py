@@ -45,6 +45,13 @@ SEAM_COLOR_BLOCK = 0.30
 SEAM_FACE_WARN_COS = 0.50   # 尾帧 vs 首帧 人脸余弦 < 此 → warn（脸偏，疑似漂）
 SEAM_FACE_BLOCK_COS = 0.35  # < 此 → block（基本是另一张脸/严重漂）
 HIST_BINS = 16   # 每通道直方图 bin 数（16×3=48 维，够分辨色温/明暗跳，又不过拟合噪点）
+# 跨镜动作接力（match-on-action）：接力尾帧本应=下一首帧的同一瞬间，主体（人/肢体）位置应几乎不动。
+# dHash 抓全局结构、色距抓灯光、人脸抓身份——都抓不到"构图/色都对，但主体（抬到一半的手/迈出的腿）
+# 位置跳了"=动作没接上。这里用**边缘质心位移**作姿态/动作距：背景不动则质心稳（不误报灯光），主体
+# 大幅移位则其边缘搬家、质心偏移。只对 strict 接力对生效（硬切/溶解本就允许重新布主体，不判免误报）。
+SEAM_ACTION_GRID = 12       # 边缘图降到 GxG 网格算质心（够定位主体大块位移，又不被纹理噪点带偏）
+SEAM_ACTION_WARN = 0.16     # 归一质心位移 > 此 → warn（主体位置跳，动作疑似没接上）
+SEAM_ACTION_BLOCK = 0.30    # > 此 → block（动作硬断，出视频接缝会明显跳）
 
 
 # ---------- 纯数学（无依赖 · pytest 覆盖） ----------
@@ -121,6 +128,43 @@ def apply_relative_outlier(verdict: str, dist: Optional[float], floor: Optional[
     if verdict == "ok" and floor is not None and dist is not None and dist > floor:
         return "warn"
     return verdict
+
+
+def weighted_centroid(weights: Sequence[float], cols: int):
+    """row-major 权重网格（cols 列）的归一质心 (cx,cy)∈[0,1]。总权重<=0 / cols<=0 /
+    长度非 cols 整数倍 → None（不臆造）。单列/单行维度的该轴质心记 0。纯函数·可测。"""
+    total = float(sum(weights))
+    if total <= 0 or cols <= 0 or len(weights) % cols != 0:
+        return None
+    rows = len(weights) // cols
+    sx = sy = 0.0
+    for i, wt in enumerate(weights):
+        sx += wt * (i % cols)
+        sy += wt * (i // cols)
+    cx = (sx / total) / (cols - 1) if cols > 1 else 0.0
+    cy = (sy / total) / (rows - 1) if rows > 1 else 0.0
+    return (cx, cy)
+
+
+def centroid_shift(c1, c2) -> Optional[float]:
+    """两归一质心的欧氏距 ∈[0,√2]；任一为 None → None。纯函数·可测。"""
+    if c1 is None or c2 is None:
+        return None
+    return ((c1[0] - c2[0]) ** 2 + (c1[1] - c2[1]) ** 2) ** 0.5
+
+
+def action_match_verdict(shift: Optional[float],
+                         warn: float = SEAM_ACTION_WARN,
+                         block: float = SEAM_ACTION_BLOCK) -> Optional[str]:
+    """边缘质心位移 → ok/warn/block（主体跳=动作没接上）。None（缺 Pillow/算不出）→ None
+    （交人判，不臆造、不影响结构/色彩/身份定级）。纯函数·可测。"""
+    if shift is None:
+        return None
+    if shift > block:
+        return "block"
+    if shift > warn:
+        return "warn"
+    return "ok"
 
 
 def flicker_index(frame_luma: Sequence[float]) -> float:
@@ -443,6 +487,26 @@ def seam_pair_check(tail_path: str, first_path: str,
     }
 
 
+def _edge_centroid_of(path: str, grid: int = SEAM_ACTION_GRID):
+    """单帧边缘图（FIND_EDGES → GxG 网格）的归一质心；缺 Pillow/读不出 → None。"""
+    try:
+        from PIL import Image, ImageFilter  # type: ignore
+    except Exception:
+        return None
+    try:
+        im = Image.open(path).convert("L")
+        im.thumbnail((128, 128))
+        edges = im.filter(ImageFilter.FIND_EDGES).resize((grid, grid))
+        return weighted_centroid([float(p) for p in edges.getdata()], grid)
+    except Exception:
+        return None
+
+
+def seam_action_shift(tail: str, first: str, grid: int = SEAM_ACTION_GRID) -> Optional[float]:
+    """接力对（尾帧 vs 下一首帧）的主体边缘质心位移；任一帧算不出 → None。"""
+    return centroid_shift(_edge_centroid_of(tail, grid), _edge_centroid_of(first, grid))
+
+
 def seam_analyze(root: str, ep: str, warn: int = SEAM_WARN, block: int = SEAM_BLOCK) -> dict:
     """⑤ 接缝姿态/构图连续机检（PNG 层，出图后即可跑）——把"逐接缝人判并排读图"降成机检初筛。
     尾帧接力铁律：`镜头N_end.png` 构图 = 下一 Clip 首帧。两者 dHash 距应很小；
@@ -482,7 +546,8 @@ def seam_analyze(root: str, ep: str, warn: int = SEAM_WARN, block: int = SEAM_BL
             continue
         intra_cos = _face_cos(app, tail, firsts.get(n))   # 尾帧 vs 本镜首帧（最直接的"尾帧脸漂"）
         cross_cos = _face_cos(app, tail, firsts[nxt])      # 尾帧 vs 接力的下一镜首帧
-        pairs.append((n, tail, firsts[nxt], chk, intra_cos, cross_cos))
+        action_shift = seam_action_shift(tail, firsts[nxt])  # 主体动作接力位移（match-on-action）
+        pairs.append((n, tail, firsts[nxt], chk, intra_cos, cross_cos, action_shift))
     rel_floor = seam_relative_floor([p[3]["dist"] for p in pairs])
     if rel_floor is not None:
         res["relative_floor"] = round(rel_floor, 1)
@@ -493,7 +558,7 @@ def seam_analyze(root: str, ep: str, warn: int = SEAM_WARN, block: int = SEAM_BL
     if not intents and pairs:
         res["notes"].append("storyboard 接缝意图不可用——_end.png 接力对全部按接力铁律严格判（可能误报设计切镜）。")
     res["contradictions"] = []
-    for n, tail, first, chk, intra_cos, cross_cos in pairs:
+    for n, tail, first, chk, intra_cos, cross_cos, action_shift in pairs:
         v = apply_relative_outlier(chk["verdict"], chk["dist"], rel_floor)
         intent = intents.get(n)
         strictness = seam_strictness(intent) if intents else "strict"
@@ -509,6 +574,11 @@ def seam_analyze(root: str, ep: str, warn: int = SEAM_WARN, block: int = SEAM_BL
             face_v = apply_relative_outlier("ok", 1.0 - cross_cos, rel_face_floor)
         if face_v is not None:
             v = _worse(v, face_v)
+        # 跨镜动作接力（match-on-action）：仅 strict 接力对判——主体边缘质心大幅位移=动作没接上。
+        # 硬切/溶解（info/loose）本就允许重新布主体，不判免误报。
+        action_v = action_match_verdict(action_shift) if strictness == "strict" else None
+        if action_v is not None:
+            v = _worse(v, action_v)
         if intents and strictness == "info":
             # 真值源矛盾：出图层有 镜头N_end.png（接力素材），storyboard 却声明非接力切镜。
             # 以 storyboard 为准——dHash 降为 info，但矛盾本身要报（两套声明必须收敛）。
@@ -529,6 +599,8 @@ def seam_analyze(root: str, ep: str, warn: int = SEAM_WARN, block: int = SEAM_BL
                                  "face_verdict": face_v,
                                  "intra_face_cos": round(intra_cos, 3) if intra_cos is not None else None,
                                  "cross_face_cos": round(cross_cos, 3) if cross_cos is not None else None,
+                                 "action_verdict": action_v,
+                                 "action_shift": round(action_shift, 3) if action_shift is not None else None,
                                  "transition": (intent or {}).get("transition"),
                                  "relative_outlier": v == "warn" and chk["verdict"] == "ok"})
     return res

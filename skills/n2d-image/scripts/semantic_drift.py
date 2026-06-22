@@ -87,6 +87,12 @@ def _pairs_from_payload(payload: Mapping[str, Any]) -> List[Dict[str, Any]]:
         if isinstance(s, Mapping) and s.get("png"):
             out.append({"kind": "asset", "asset": str(s.get("asset") or s.get("group") or s.get("scene") or ""),
                         "png": s.get("png"), "palette_verdict": s.get("verdict")})
+    # 服装 N1：本模块文档点名的头号用例——「同色但剪裁/结构变了」（月白圆领→月白交领）调色板抓不到。
+    # outfit shot 的 asset 是角色名（非 LOC/PROP id），参考解析在 analyze 走 定妆_<角色> 兜底。
+    for s in (checks.get("outfit") or {}).get("shots", []):
+        if isinstance(s, Mapping) and s.get("png"):
+            out.append({"kind": "outfit", "asset": str(s.get("char") or s.get("group") or ""),
+                        "png": s.get("png"), "palette_verdict": s.get("verdict")})
     return out
 
 
@@ -234,6 +240,27 @@ def load_embedder() -> Optional[Embedder]:
     return _dreamsim_embedder()
 
 
+def _resolve_char_makeup_ref(root: Path, char: str) -> Optional[str]:
+    """outfit/角色名 → 该角色定妆参考图绝对路径（服装语义对照用）。
+
+    取 出图/共享/图片/定妆_<角色>*.png，优先「常态」全身定妆板；排除脸部特写/表情库
+    （那些主体是脸不是衣，喂给服装语义对照会失真）。找不到→None（该 pair 安全跳过）。"""
+    name = str(char or "").strip()
+    if not name:
+        return None
+    base = Path(root) / "出图" / "共享" / "图片"
+    if not base.is_dir():
+        return None
+    cands = [c for c in sorted(base.glob(f"定妆_{name}*.png"))
+             if not any(x in c.name for x in ("脸部特写", "表情", "_脸"))]
+    if not cands:
+        return None
+    for c in cands:
+        if "常态" in c.name:
+            return str(c)
+    return str(cands[0])
+
+
 def analyze(root: Path, ep: str, payload: Mapping[str, Any],
             embedder: Optional[Embedder] = None, floor: float = SEMANTIC_FLOOR) -> Dict[str, Any]:
     """image_qc 集成入口：从 payload 抽 (参考↔镜) 对，跑语义 cosine。embedder=None → 尝试自动加载。
@@ -244,14 +271,25 @@ def analyze(root: Path, ep: str, payload: Mapping[str, Any],
                 "notes": ["DINO/CLIP 嵌入后端不可用——语义漂移信号跳过（full env 装 torch+transformers 后复检）。"],
                 "findings": []}
     # 复用 image_qc 的资产参考解析（与人审拼图同一份），避免两套解析口径。
-    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    root_path = Path(root)
     try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
         import image_qc  # type: ignore
-        pm = image_qc._asset_primary_map(Path(root))
-        resolve_ref = lambda hint: image_qc._resolve_asset_ref(Path(root), pm, hint)  # noqa: E731
+        pm = image_qc._asset_primary_map(root_path)
+        _asset_ref = lambda hint: image_qc._resolve_asset_ref(root_path, pm, hint)  # noqa: E731
     except Exception:
-        resolve_ref = lambda hint: None  # noqa: E731
-    shot_abspath = lambda rel: str(Path(root) / "出图" / ep / rel)  # noqa: E731
+        _asset_ref = lambda hint: None  # noqa: E731
+
+    def resolve_ref(hint: str) -> Optional[str]:
+        # _resolve_asset_ref 返回 root-相对路径，绝对化后再喂 embed（embed 直开此路径，
+        # 不经 shot_abspath，否则 cwd≠root 时参考图打不开、整段静默 cosine=None）。
+        rel = _asset_ref(hint)
+        if rel:
+            return str(root_path / rel)
+        # outfit/角色名 不在 asset_registry → 兜底取角色定妆图（服装结构对照）。
+        return _resolve_char_makeup_ref(root_path, hint)
+
+    shot_abspath = lambda rel: str(root_path / "出图" / ep / rel)  # noqa: E731
     pairs = _pairs_from_payload(payload)
     return evaluate_pairs(pairs, emb, resolve_ref, shot_abspath, floor)
 

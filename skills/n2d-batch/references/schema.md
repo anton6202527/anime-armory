@@ -5,7 +5,7 @@
 Path:
 
 ```text
-制漫剧/<剧名>/生产数据/batch_queue.json
+创作区/制漫剧/<剧名>/生产数据/batch_queue.json
 ```
 
 Shape:
@@ -14,7 +14,7 @@ Shape:
 {
   "kind": "n2d_batch_queue",
   "version": 1,
-  "root": "制漫剧/剧名",
+  "root": "创作区/制漫剧/剧名",
   "generated_at": "2026-06-08T12:00:00+00:00",
   "updated_at": "2026-06-08T12:05:00+00:00",
   "max_concurrency": 2,
@@ -54,7 +54,7 @@ Shape:
   "stage_key": "image",
   "stage_label": "出图",
   "owner": "n2d-image",
-  "command": "n2d-image 制漫剧/剧名 第2集",
+  "command": "n2d-image 创作区/制漫剧/剧名 第2集",
   "gate_stage": "image",
   "status": "queued",
   "attempts": 0,
@@ -103,7 +103,7 @@ Progress plan reads `_进度.md` and creates one task per selected episode's cur
 Path:
 
 ```text
-制漫剧/<剧名>/生产数据/batch_runner.json
+创作区/制漫剧/<剧名>/生产数据/batch_runner.json
 ```
 
 Shape:
@@ -185,7 +185,7 @@ N2D_AFFECTED_ARTIFACTS
     "task_id": "001-image-progress",
     "runner_status": "pass",
     "exit_code": 0,
-    "command": "bash scripts/run_n2d_image.sh \"制漫剧/剧名\" \"第1集\"",
+    "command": "bash scripts/run_n2d_image.sh \"创作区/制漫剧/剧名\" \"第1集\"",
     "attempt": 1
   }
 }

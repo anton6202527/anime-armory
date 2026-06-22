@@ -5,7 +5,7 @@
 ## 作品根
 
 ```text
-写歌/<曲名>/
+创作区/写歌/<曲名>/
 ├── _设置.md
 ├── _meta.json
 ├── _进度.md
@@ -48,7 +48,7 @@
 | `selection` | 挑版定稿 | `compose_song.py score/select` | user-listening |
 | `cover` | 翻唱/换声 | `song-cover` | voice authorization |
 | `review` | 质检 | `song-review` | machine + listening checklist |
-| `handoff` | 交制 MV / 发布 | `mv` / platform | ai usage disclosure |
+| `handoff` | 发布 / 对外交付 | platform | ai usage disclosure |
 
 ## take manifest
 

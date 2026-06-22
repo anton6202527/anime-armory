@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Audit skill series independence.
 
-This is intentionally a static, conservative check. It blocks active references
-to the removed shared layer and code-level coupling between skill series. It
-does not block prose that describes optional file/data handoffs.
+This is a static check. It blocks active references to the removed shared layer
+and code-level coupling between skill series, and — by default — also blocks
+cross-series prose inside per-series docs (strict-docs). Pass --lenient-docs to
+drop the prose gate and only enforce code-level independence.
 """
 from __future__ import annotations
 
@@ -16,7 +17,14 @@ from pathlib import Path
 from typing import Iterable
 
 
-SERIES = ("ad", "mv", "n2d", "song")
+SERIES = ("ad", "mv", "n2d", "novel", "song")
+SERIES_ROOT_LABELS = {
+    "ad": ("拍广告",),
+    "mv": ("制MV",),
+    "n2d": ("制漫剧",),
+    "novel": ("写小说",),
+    "song": ("写歌",),
+}
 TEXT_SUFFIXES = {".md", ".py", ".sh", ".json", ".txt"}
 CODE_SUFFIXES = {".py", ".sh"}
 
@@ -54,11 +62,7 @@ HARD_COUPLING_MARKERS = (
     "shutil.copy",
 )
 
-# File-level exceptions for deliberate product handoffs. These should never be
-# Python imports of another series; they are file/media/JSONL contracts only.
-ALLOWED_CODE_HANDOFFS = {
-    ("song", "mv", "skills/song-craft/scripts/init_project.py"),
-}
+SERIES_SKILL_NAMES: dict[str, tuple[str, ...]] = {}
 
 
 @dataclass(frozen=True)
@@ -110,14 +114,46 @@ def is_historical_common(line: str) -> bool:
     return any(marker in lowered or marker in line for marker in HISTORICAL_COMMON_MARKERS)
 
 
+def discover_series_skill_names(root: Path) -> dict[str, tuple[str, ...]]:
+    names: dict[str, list[str]] = {series: [] for series in SERIES}
+    skills_dir = root / "skills"
+    if not skills_dir.is_dir():
+        return {series: () for series in SERIES}
+    for path in skills_dir.iterdir():
+        if not path.is_dir():
+            continue
+        top = path.name
+        for series in SERIES:
+            if top == series or top.startswith(series + "-"):
+                # Bare "song"/"novel"/"ad"/"mv" are also domain nouns, file
+                # fields, variable names, or shell commands. Treat the bare
+                # dispatcher name as a cross-series token only for n2d, whose
+                # spelling is not a normal production noun in this repo.
+                if top != series or series == "n2d":
+                    names[series].append(top)
+                break
+    return {series: tuple(sorted(items, key=len, reverse=True)) for series, items in names.items()}
+
+
 def other_series_reference(line: str, other: str) -> bool:
+    skill_names = SERIES_SKILL_NAMES.get(other, ())
     patterns = (
         rf"skills/{re.escape(other)}(?:/|-)",
         rf"\.\./{re.escape(other)}(?:/|-)",
-        rf"['\"]{re.escape(other)}(?:-[A-Za-z0-9_]+)?['\"]",
-        rf"\b{re.escape(other)}-[A-Za-z0-9_]+\b",
+        rf"\b{re.escape(other)}-\*(?![A-Za-z0-9_])",
+        rf"\b{re.escape(other)}\s*(?:线|系列|家族)",
+        rf"(?:交|给|转|推给|调用|跑|进入)\s*(?:[*_`]*\s*){re.escape(other)}(?:\s*[*_`]*)(?:\s|做|产|审|质检|$)",
     )
-    return any(re.search(pattern, line) for pattern in patterns)
+    if any(re.search(pattern, line) for pattern in patterns):
+        return True
+    return any(
+        re.search(rf"(?<![A-Za-z0-9_-]){re.escape(name)}(?![A-Za-z0-9_-])", line)
+        for name in skill_names
+    )
+
+
+def other_root_reference(line: str, other: str) -> bool:
+    return any(label in line for label in SERIES_ROOT_LABELS[other])
 
 
 def is_hard_coupling(line: str) -> bool:
@@ -126,6 +162,8 @@ def is_hard_coupling(line: str) -> bool:
 
 def check_file(path: Path, root: Path, strict_docs: bool) -> list[Issue]:
     issues: list[Issue] = []
+    if not SERIES_SKILL_NAMES:
+        SERIES_SKILL_NAMES.update(discover_series_skill_names(root))
     owner = series_for_path(path, root)
     relative = rel(path, root)
     try:
@@ -133,8 +171,13 @@ def check_file(path: Path, root: Path, strict_docs: bool) -> list[Issue]:
     except UnicodeDecodeError:
         return issues
 
+    in_block_comment = False
     for line_no, line in enumerate(lines, 1):
         stripped = line.strip()
+        code_prose = False
+        if path.suffix in CODE_SUFFIXES:
+            code_prose = in_block_comment or stripped.startswith("#") or stripped.startswith('"""') or stripped.startswith("'''")
+
         if any(pattern.search(line) for pattern in COMMON_PATTERNS) and not is_historical_common(line):
             issues.append(
                 Issue(relative, line_no, "legacy-common", "active reference to removed shared layer", stripped)
@@ -144,10 +187,11 @@ def check_file(path: Path, root: Path, strict_docs: bool) -> list[Issue]:
             for other in SERIES:
                 if other == owner:
                     continue
-                if not other_series_reference(line, other):
+                has_series_ref = other_series_reference(line, other)
+                has_root_ref = other_root_reference(line, other)
+                if not has_series_ref and not has_root_ref:
                     continue
-                allowed = (owner, other, relative) in ALLOWED_CODE_HANDOFFS
-                if is_hard_coupling(line) and not allowed:
+                if is_hard_coupling(line) or has_root_ref or code_prose or has_series_ref:
                     issues.append(
                         Issue(relative, line_no, "cross-series-code", f"{owner} code references {other}", stripped)
                     )
@@ -156,20 +200,35 @@ def check_file(path: Path, root: Path, strict_docs: bool) -> list[Issue]:
             for other in SERIES:
                 if other == owner:
                     continue
-                if other_series_reference(line, other):
+                if other_series_reference(line, other) or other_root_reference(line, other):
                     issues.append(
                         Issue(relative, line_no, "cross-series-doc", f"{owner} docs reference {other}", stripped)
                     )
+
+        if path.suffix in CODE_SUFFIXES:
+            quote_count = stripped.count('"""') + stripped.count("'''")
+            if quote_count % 2 == 1:
+                in_block_comment = not in_block_comment
 
     return issues
 
 
 def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description="check skill series independence")
-    parser.add_argument("--strict-docs", action="store_true", help="also fail on cross-series prose references")
+    # strict-docs is the enforced default; cross-series prose in per-series docs fails.
+    parser.add_argument(
+        "--lenient-docs",
+        dest="strict_docs",
+        action="store_false",
+        help="only enforce code-level independence; allow cross-series prose in docs",
+    )
+    # Accepted for backward compatibility — strict-docs is already the default.
+    parser.add_argument("--strict-docs", dest="strict_docs", action="store_true", help=argparse.SUPPRESS)
+    parser.set_defaults(strict_docs=True)
     args = parser.parse_args(argv)
 
     root = repo_root()
+    SERIES_SKILL_NAMES.update(discover_series_skill_names(root))
     all_issues: list[Issue] = []
     files_checked = 0
     for path in iter_text_files(root):

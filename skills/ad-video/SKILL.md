@@ -1,17 +1,17 @@
 ---
 name: ad-video
-description: 拍广告 第6阶段·图生视频 — 把 ad-image 的首帧 PNG 按 storyboard.json 逐镜图生视频，写 Clip 视频 prompt（运镜+表演+节奏），按镜头类型做模型路由（产品展示镜/情绪镜/demo实拍质感/手持 → primary/fallback），机检出图→出视频视觉契约继承（品牌色/光位/轴线漂移=block），首尾双帧接力焊接。ad-* 自包含，不复用 n2d-video；用通用生视频模型/渠道（Seedance/Veo/Kling/即梦/可灵/manual 等）。Use when asked 广告出视频/图生视频/视频prompt/运镜/模型路由/契约继承 for a 拍广告 project. Triggers 广告出视频, 图生视频, 视频prompt, 运镜, 模型路由, 契约继承, image2video, ad-video.
+description: 拍广告 第6阶段·图生视频 — 把 ad-image 的首帧 PNG 按 storyboard.json 逐镜图生视频，写 Clip 视频 prompt（运镜+表演+节奏），按镜头类型做模型路由（产品展示镜/情绪镜/demo实拍质感/手持 → primary/fallback），机检出图→出视频视觉契约继承（品牌色/光位/轴线漂移=block），首尾双帧接力焊接。用通用生视频模型/渠道（Seedance/Veo/Kling/即梦/可灵/manual 等）。Use when asked 广告出视频/图生视频/视频prompt/运镜/模型路由/契约继承 for a 拍广告 project. Triggers 广告出视频, 图生视频, 视频prompt, 运镜, 模型路由, 契约继承, image2video, ad-video.
 ---
 
 # ad-video — 拍广告 · 图生视频
 
 把 `ad-image` 的首帧 PNG 按 `storyboard.json` 逐镜**图生视频**：写 Clip 视频 prompt（运镜+表演+节奏），机检视觉契约继承，按镜头类型路由后端，首尾双帧接力。
 
-**自包含**：不复用 `n2d-video`；用通用生视频模型/渠道（Seedance/Veo/Kling/即梦/可灵/manual 等）。
+用通用生视频模型/渠道（Seedance/Veo/Kling/即梦/可灵/manual 等）。
 
 ## 偏好（私有）
 
-按 `../skills/ad-craft/references/选择点与偏好.md` 读 `<作品根>/_设置.md`。涉及：`生视频模型`、`生视频渠道`、`视频模型路由`、`出视频规格`、`视频分辨率`、`交付比例`。出视频是**花钱/高风险**阶段，正式跑前确认规格；写完视频 prompt 并跑完契约继承机检后、正式生成前跑 `python3 skills/ad-craft/scripts/gate.py "<作品根>" --stage video`。
+按 `../skills/ad-craft/references/选择点与偏好.md` 读 `<作品根>/_设置.md`。涉及：`生视频模型`（固定/兜底）、`生视频渠道`（固定/调用入口偏好）、`视频模型路由`、`出视频规格`、`视频分辨率`、`交付比例`。出视频是**花钱/高风险**阶段，正式跑前确认规格；若未显式固定后端，先按模型路由、CLI/API 探测与账号约束决定入口，探测不到可执行后端时再问用户选渠道或 `manual`。写完视频 prompt 并跑完契约继承机检后、正式生成前跑 `python3 skills/ad-craft/scripts/gate.py "<作品根>" --stage video`。
 
 ## 上游契约单一真值源
 
@@ -20,7 +20,7 @@ description: 拍广告 第6阶段·图生视频 — 把 ad-image 的首帧 PNG �
 1. **首选** `出图/分镜/prompt/00_总览.md` 的「视觉一致性契约」节（出图细化后的最终值）；
 2. **回退** `脚本/storyboard.json`.visual_contract（出图总览尚未生成时的脚本种子）。
 
-`inherit_contract.py` 与 `references/platforms.md` 都以此口径为准（与 n2d 的 image→video diff 同源）。
+`inherit_contract.py` 与 `references/platforms.md` 都以此口径为准。
 
 ## 工作流
 
@@ -35,7 +35,7 @@ description: 拍广告 第6阶段·图生视频 — 把 ad-image 的首帧 PNG �
    - 空镜/痛点/普通镜 → 通用后端（`_设置.md` 的 `生视频模型`/`生视频渠道`，旧 `生视频AI` 兼容）
    - end card/包装定格 → 静帧或极慢运镜
    - 镜头时长超 primary 后端单 Clip 上限 = 🔴 block（改用更长后端或拆镜）。
-   - **三轴增量字段（借鉴 n2d-model-router，ad 自包含重实现）**，逐镜写进 `video_model_routes.json`：
+   - **三轴增量字段**，逐镜写进 `video_model_routes.json`：
      - **`quality_tier` 质量档（成本×质量）**：产品 hero/代言人特写/end card 品牌定格 → `high`（值后端 pro 档把脸·包装·logo·品牌色钉稳）；空镜/痛点/普通镜 → `fast`（量产省成本）；后端无 fast/pro 档 → `n/a`。只表达意图，落档侧把 `high→pro`、`fast→fast` 解析成实际档位，不写死 model_version。
      - **`motion_reference` 视频运动参考**：产品环绕 hero/demo 连续动作镜 + primary 支持 `reference_video_motion`（Seedance/可灵）时 `applicable=true`，提示把同段前一条已通过 clip 作运动/风格参考喂进去锁运镜节奏（与图身份锁正交）。
      - **`summary.multishot_groups` 多镜单次生成候选（advisory）**：连续 demo 步骤/产品多角度 + 支持多镜的后端 → 标候选组，可一次 co-generate 消缝；**只提示不合并**，逐镜仍是独立可重跑交付单元，组大小受单次输出时长上限封顶。
@@ -50,7 +50,7 @@ description: 拍广告 第6阶段·图生视频 — 把 ad-image 的首帧 PNG �
 
 ## 广告专有强化
 
-- **品牌色 + 产品形态继承是硬闸门**：`inherit_contract.py` 把品牌色/光位/轴线漂移、产品镜丢产品身份锁定句拦在生成前（n2d 的契约继承基础上，广告加了品牌色 + 产品形态这两条像素级硬约束）。
+- **品牌色 + 产品形态继承是硬闸门**：`inherit_contract.py` 把品牌色/光位/轴线漂移、产品镜丢产品身份锁定句拦在生成前。
 - **产品镜稳定优先**：产品 hero 镜路由到主体一致性最强的后端，避免 image2video 把包装/logo 抖花。
 - **运镜服务节奏**：广告节奏紧，一镜一个主运镜，动作峰值对 VO/音乐床节奏点（`ad-script` 时间轴标）。
 - **多比例**：按主比例出视频，其它比例 `ad-compose` reframe；运镜别让主体/产品冲出 action-safe。

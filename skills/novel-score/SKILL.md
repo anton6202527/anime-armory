@@ -30,7 +30,7 @@ description: 给【已写好】的小说/章节做"市场 + 品质"综合评分�
 
 ## 输入
 
-- 一个项目作品根(`写小说/<项目>/`,含 `章节/*.md`,理想还有 `设定/`),**或**用户直接贴的文本 / `.txt`/`.docx` / 前几章。
+- 一个项目作品根(`创作区/写小说/<项目>/`,含 `章节/*.md`,理想还有 `设定/`),**或**用户直接贴的文本 / `.txt`/`.docx` / 前几章。
 - 篇幅不限:整本最好;只有**前 3 章**也能做"开篇市场体检"(开篇决定红果/抖音留存,价值最高)。
 
 ## 工作流
@@ -47,9 +47,9 @@ description: 给【已写好】的小说/章节做"市场 + 品质"综合评分�
 - `score.py` 会检查 `market_baseline_*.json` 的 `expires_after_days`、人读 md 文件、有效证据和短剧/漫剧覆盖缺口。缺失/过期/缺 md/无证据/coverage_gap 会失败并提示重拉。有效证据指至少一个 `status=ok` 且 `signals` 非空的来源，或 `manual_evidence[]` 有结构化人工核验补充；全是 `fetch_error` 或自由文本 `notes` 不算基准。只有离线测试或人工明确豁免时才加 `--allow-stale-baseline`；此时 `score_report.waivers[]` 与 `审稿/waiver_log.jsonl` 会记录 `score_baseline_freshness`，且 QA gate 只降为 warning，不会伪装成 fresh。
 
 ### 1.5 读「自有题材战绩库」做第一方先验(闭环 · 选题反哺)
-公榜热度谁都能爬;真正的护城河是**自有投放战绩**。`score.py` 会自动读跨项目战绩库(`$N2D_GENRE_LEDGER` 或 `<repo>/生产战绩/genre_ledger.jsonl`，`--genre-ledger` 可改;该文件由**外部投放侧回灌**——n2d 线内置的 `--emit-ledger` 写端 2026-06 已退出，现按外部数据源处理),按本书 `genre` 聚合出「题材自有 3秒留存/15秒留存/完播/追更/ROI」,注入打分 prompt 的市场基准。
+公榜热度谁都能爬;真正的护城河是**自有投放战绩**。`score.py` 会自动读跨项目战绩库(`$NOVEL_GENRE_LEDGER` 或 `<repo>/生产战绩/genre_ledger.jsonl`，`--genre-ledger` 可改;该文件由**外部投放侧回灌**),按本书 `genre` 聚合出「题材自有 3秒留存/15秒留存/完播/追更/ROI」,注入打分 prompt 的市场基准。
 - **判读铁律**:第一方实测**权重高于公榜热度**。本题材自有 ROI/留存若明显低于平台基准 → `topic_heat` 下调,并在短评里点明「选题代差/本题材我方做不动」,哪怕公榜还热也别盲目上。
-- 战绩库为空(还没回灌过)时正常退化为纯公榜评分。这是 **选题→生产→投放→反哺选题** 闭环的读端;架构上与 n2d 线只在该数据文件层连接,不互相 import——本 skill 只做容忍缺失的消费方,不依赖任何特定写端存在。
+- 战绩库为空(还没回灌过)时正常退化为纯公榜评分。本 skill 只做容忍缺失的消费方,不依赖任何特定写端存在。
 - **反同质化(立项前更有用)**:若外部回灌产出过 `生产战绩/差异化候选.{json,md}`(从战绩库反推「未被做烂的题材×开场×结尾组合」),**立项/换题材**时可先读它选差异化方向,再用本 skill 评具体稿——前者答"做什么不撞车",后者答"这稿能不能火"。无该文件则跳过。
 
 ### 1.6 读「模拟读者留存信号」做留存维度先验(选做 · 闭环读端)
@@ -79,7 +79,7 @@ description: 给【已写好】的小说/章节做"市场 + 品质"综合评分�
 - 加权总分(百分制)→ 落 `rubric.md` 的档位(爆款潜力 / 合格偏上 / 及格线下 / 不及格)。
 - **判定四选**:`过`(可投/可继续) / `小改`(润色+局部强化指定维度) / `大改`(结构级改写) / `弃稿重立`(题材/主线不行,改写ROI低)。
 - **改写ROI**:明说"继续改值不值"——提升空间 vs 改写成本。
-- **生产决策四选**：`go` / `revise` / `kill` / `n2d-adapt`。目标平台、篇幅档、输出格式或生成模式含抖音/红果/短剧/漫剧/n2d 且判定可推进时，必须给 `n2d-adapt`，并在 `next_actions[]` 里把下一步路由到 `n2d`；`revise` 先回蓝图/章纲/开篇弱项，`kill` 停止批量写。
+- **生产决策三选**：`go` / `revise` / `kill`。`revise` 先回蓝图/章纲/开篇弱项，`kill` 停止批量写。
 
 ### 5. 产出报告 + 推进
 写两份产物：
@@ -91,7 +91,7 @@ description: 给【已写好】的小说/章节做"市场 + 品质"综合评分�
   - `source_snapshot` 必须记录本次评分样本的 path/hash/aggregate hash；正文或 Take 文件改动后旧分数失效，QA gate 会提示重评。
   - `market_baseline` 必须带 `baseline_path`(人读 md)、`baseline_json_path`、`sources`、`expires_after_days` 和 freshness 状态。
   - `waivers[]` 必须记录所有评分阶段显式豁免；baseline freshness 阻断被豁免时仍保留 `freshness.blocking=true`，且 waiver scope 必须绑定当次 `baseline_date` 与 `freshness_status`。
-  - `production_decision` 必须包含 `decision/route/reason/score/verdict`，作为 demo 后 go/no-go/n2d handoff 的机器判断。
+  - `production_decision` 必须包含 `decision/route/reason/score/verdict`，作为 demo 后 go/no-go 的机器判断。
   - `next_actions[]` 必须写清 `recommended_skill` 和应回流的 `return_to_stage`。
   - 若针对 Take 评分，分数同步后可配合 `novel-craft/scripts/manage_takes.py --select --chapter N --take M` 定稿。
 

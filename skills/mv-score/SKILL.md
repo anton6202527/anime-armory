@@ -18,7 +18,7 @@ description: 在正式调用生图后端/生视频模型消耗大量积分前，
 卡点节奏不是只能"凭感觉"判——「副歌快切 / 主歌长镜 / clip 不等长 / 总时长≈歌长 / 切点踩鼓点」全是可机算的。**在任何生图/生视频烧积分前**，先跑确定性前奏把这些变成数字，喂给下面的 LLM 语义评分当卡点维度依据：
 
 ```bash
-python3 skills/mv-score/scripts/score_pacing.py 制MV/<曲名>/ [--json]
+python3 skills/mv-score/scripts/score_pacing.py 创作区/制MV/<曲名>/ [--json]
 ```
 
 它读 `分镜/clip_plan.json` + `节拍/beatgrid.json`（+ 成品歌量真长，缺则退回 beatgrid.duration），输出 `评分/pacing_prescore.json`，四个机器指标 + 一个 `pacing_score`(0-10) 机器先验：
@@ -36,7 +36,7 @@ python3 skills/mv-score/scripts/score_pacing.py 制MV/<曲名>/ [--json]
 
 ```bash
 # 阈值≤10 视为十分制（贴 pacing_score）；>10 视为百分制（贴综合分）
-python3 skills/mv-score/scripts/score_pacing.py 制MV/<曲名>/ --threshold 80 \
+python3 skills/mv-score/scripts/score_pacing.py 创作区/制MV/<曲名>/ --threshold 80 \
     --dim 视觉记忆点=55 --dim 崩脸=40 \      # 可选：把 LLM 语义维度分回灌进闸门
     --enqueue                                 # 可选：落回流清单文件
 ```
@@ -51,7 +51,7 @@ python3 skills/mv-score/scripts/score_pacing.py 制MV/<曲名>/ --threshold 80 \
 
 确定性卡点成因（前两类）机检直接定位到具体 clip；语义成因靠 `--dim 维度名=分` 把 LLM 打的视觉维度回灌进来，低于阈值即路由到 mv-script/mv-image（点名了 clip 就记 clip_id，没点名记 `*`=整段重做）。
 
-加 `--enqueue` 时额外写 `评分/回流清单.json`（`kind=mv_score_rework_queue`）：按 `return_to_stage` 聚合受影响 clip，**mv 自有格式、不依赖 n2d-batch**，人或工具都能消费——按每个 task 的 `return_to_stage` 重跑对应 mv-* skill 即可。
+加 `--enqueue` 时额外写 `评分/回流清单.json`（`kind=mv_score_rework_queue`）：按 `return_to_stage` 聚合受影响 clip，**mv 自有回流格式**，人或工具都能消费——按每个 task 的 `return_to_stage` 重跑对应 mv-* skill 即可。
 
 退出码：clip_plan/beatgrid 缺失或损坏 → 2；`--threshold` 下被拦截 → 1；否则 0。判据全在 `score_pacing.py` 的纯函数里（`decide_block` / `pacing_affected_clips` / `semantic_affected_clips` / `map_semantic_dim_stage`），mv 线自包含、可单测。
 
@@ -77,8 +77,8 @@ python3 skills/mv-score/scripts/score_pacing.py 制MV/<曲名>/ --threshold 80 \
 先跑确定性卡点前奏（0 积分），再让 LLM 在其量化结果上做语义评分：
 
 ```bash
-python3 skills/mv-score/scripts/score_pacing.py 制MV/<曲名>/        # 机器卡点预评分 → 评分/pacing_prescore.json
-cat 制MV/<曲名>/视觉蓝图.md 制MV/<曲名>/分镜/clip_plan.json 制MV/<曲名>/评分/pacing_prescore.json
+python3 skills/mv-score/scripts/score_pacing.py 创作区/制MV/<曲名>/        # 机器卡点预评分 → 评分/pacing_prescore.json
+cat 创作区/制MV/<曲名>/视觉蓝图.md 创作区/制MV/<曲名>/分镜/clip_plan.json 创作区/制MV/<曲名>/评分/pacing_prescore.json
 ```
 然后让 LLM 阅读视觉蓝图 + clip_plan + 机器预评分，给出综合评分报告（视觉维度靠 LLM，卡点/节奏维度以机器指标为准）。
 

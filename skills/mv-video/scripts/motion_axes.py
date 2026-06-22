@@ -3,8 +3,8 @@
 """MV 出视频两轴标记（纯函数·可测·mv 线自包含）。
 
 本模块**不路由后端**——mv-video 是「全程同一后端」设计（防跨 clip 风格跳变），
-所以这里只做两件不改后端的事，借鉴 n2d-model-router 思路但**结合 MV 特有场景**
-重写，绝不 import n2d-*/别线脚本：
+所以这里只做两件不改后端的事，判据全部结合 MV 特有场景，
+且不导入其它创作系列脚本：
 
 1. quality_tier_for_clip(clip, backend):
    副歌高光镜/卡点爽点镜（对齐 beatgrid downbeat 的强拍 clip、副歌/桥段段 clip、

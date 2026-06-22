@@ -342,8 +342,7 @@ def make_freshness_waiver(freshness):
     return waiver
 
 
-# ── 选题→投放→反哺选题闭环：读 n2d-feedback 写的「自有题材战绩库」做第一方题材热度先验 ──
-# 与 n2d 线只在此数据文件层连接，本端自带读取逻辑，不 import 任何 n2d-* 代码。
+# ── 选题→投放→反哺选题闭环：读「自有题材战绩库」做第一方题材热度先验 ──
 LEDGER_REL_PATH = os.path.join("生产战绩", "genre_ledger.jsonl")
 
 
@@ -359,7 +358,7 @@ def _find_repo_root(start):
 
 
 def default_ledger_path(root):
-    return os.environ.get("N2D_GENRE_LEDGER") or os.path.join(_find_repo_root(root), LEDGER_REL_PATH)
+    return os.environ.get("NOVEL_GENRE_LEDGER") or os.path.join(_find_repo_root(root), LEDGER_REL_PATH)
 
 
 def load_genre_ledger(path):
@@ -375,9 +374,6 @@ def load_genre_ledger(path):
                 rec = json.loads(line)
             except ValueError:
                 continue
-            # "genre_performance_record" 是跨线 wire constant（= n2d_contract.GENRE_PERFORMANCE_RECORD_KIND /
-            # n2d-feedback LEDGER_KIND）。novel-* 刻意不 import n2d-*，两线只在此 JSONL 文件层连接，故此处
-            # 硬写字面值——若该 kind 在 n2d 侧改名，必须同步改这里，否则题材先验反哺会静默失效。
             if isinstance(rec, dict) and rec.get("kind") == "genre_performance_record":
                 records.append(rec)
     return records
@@ -669,24 +665,6 @@ def build_next_actions(verdict, processed_scores):
     }]
 
 
-def wants_n2d_adaptation(meta, settings):
-    outputs = meta.get("outputs") or settings.get("输出格式") or []
-    if isinstance(outputs, str):
-        output_text = outputs
-    else:
-        output_text = " ".join(str(item) for item in outputs)
-    target_text = " ".join(str(x or "") for x in (
-        meta.get("target_platform"),
-        settings.get("目标平台"),
-        meta.get("scale"),
-        settings.get("篇幅档"),
-        meta.get("draft_mode"),
-        settings.get("小说生成模式"),
-        output_text,
-    ))
-    return "n2d" in target_text.lower() or any(key in target_text for key in ("漫剧", "短剧", "红果", "抖音"))
-
-
 def build_production_decision(verdict, total_score, meta, settings):
     if verdict == "弃稿重立":
         decision = "kill"
@@ -696,10 +674,6 @@ def build_production_decision(verdict, total_score, meta, settings):
         decision = "revise"
         route = "novel-rewrite"
         reason = "结构级问题仍需先修，不进入批量生产"
-    elif wants_n2d_adaptation(meta, settings):
-        decision = "n2d-adapt"
-        route = "n2d"
-        reason = "目标或输出面向漫剧/短剧，评分通过后应导出 n2d handoff"
     elif verdict == "小改":
         decision = "revise"
         route = "novel-review"
@@ -776,7 +750,7 @@ def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_
 ## 市场基准（当前热榜信号 · 外部公榜）
 {baseline_summary}
 
-## 第一方题材战绩（自有投放回灌 · n2d-feedback 闭环）
+## 第一方题材战绩（自有投放回灌）
 {first_party_genre_text(first_party)}
 
 ## 模拟读者留存信号（novel-simulate 虚拟试读 · retention 维度先验）
@@ -910,7 +884,7 @@ def main():
     ap.add_argument("--task", default=None,
                     help="score_task.json 路径；缺省 <作品根>/评分/score_task.json")
     ap.add_argument("--json", action="store_true", help="输出机器可读报告")
-    ap.add_argument("--genre-ledger", help=f"自有题材战绩库路径（外部投放侧回灌）；默认 $N2D_GENRE_LEDGER 或 <repo>/{LEDGER_REL_PATH}")
+    ap.add_argument("--genre-ledger", help=f"自有题材战绩库路径（外部投放侧回灌）；默认 $NOVEL_GENRE_LEDGER 或 <repo>/{LEDGER_REL_PATH}")
     ap.add_argument("--allow-stale-baseline", action="store_true",
                     help="允许缺失/过期/无证据市场基准，仅用于离线测试或人工明确豁免")
     args = ap.parse_args()
@@ -1073,16 +1047,6 @@ def main():
 
     next_actions = build_next_actions(verdict, processed_scores)
     production_decision = build_production_decision(verdict, final_score, meta, settings)
-    if production_decision["decision"] == "n2d-adapt" and not any(
-        action.get("recommended_skill") == "n2d" for action in next_actions
-    ):
-        next_actions.insert(0, {
-            "priority": "must",
-            "recommended_skill": "n2d",
-            "return_to_stage": "script",
-            "action": "先用 novel-craft export --formats n2d 导出 handoff，再进入 n2d 改编漫剧",
-            "dimension": "production_decision",
-        })
     title_check = build_title_check(assessment.get("title_check"), book_title, title_collision)
     # 弃稿重立时换名无意义（novel-create 重开自带新名）；其余判定下书名不过关都值得顺手换。
     if title_check and title_check["needs_rename"] and verdict != "弃稿重立":

@@ -382,3 +382,53 @@ def test_resolve_pass_rate_floor_reads_dashboard_thresholds(tmp_path):
     assert score.resolve_pass_rate_floor(str(tmp_path), None) == 0.8       # 同 dashboard 同源
     assert score.resolve_pass_rate_floor(str(tmp_path), 0.6) == 0.6        # 显式参数优先
     assert score.resolve_pass_rate_floor(str(tmp_path / "none"), None) is None  # 无配置→None
+
+
+def _consistency_with_face(chars, encoder="arcface_buffalo_l", gate="active"):
+    return {"sections": {"脸(G1)": {"encoder": encoder, "fidelity_gate": gate, "characters": chars}}}
+
+
+def test_build_consistency_kpi_below_line(monkeypatch):
+    monkeypatch.delenv("N2D_CONSISTENCY_RELEASE_LINE", raising=False)
+    cons = _consistency_with_face({"A": {"ep_mean_score": 0.82}, "B": {"ep_mean_score": 0.80}})
+    kpi = score.build_consistency_kpi(cons, {"characters": {"A": {"mean_score": 0.79}}})
+    assert kpi["intra_episode"] == 0.81 and kpi["verdict"] == "below"
+    assert kpi["cross_episode"] == 0.79
+    assert kpi["encoder"] == "arcface_buffalo_l" and kpi["fidelity_gate"] == "active"
+    assert kpi["characters_counted"] == 2
+
+
+def test_build_consistency_kpi_above_line(monkeypatch):
+    monkeypatch.delenv("N2D_CONSISTENCY_RELEASE_LINE", raising=False)
+    cons = _consistency_with_face({"A": {"ep_mean_score": 0.90}})
+    kpi = score.build_consistency_kpi(cons, None)
+    assert kpi["verdict"] == "above" and kpi["cross_episode"] is None
+
+
+def test_build_consistency_kpi_release_line_env(monkeypatch):
+    monkeypatch.setenv("N2D_CONSISTENCY_RELEASE_LINE", "0.75")
+    cons = _consistency_with_face({"A": {"ep_mean_score": 0.80}})
+    kpi = score.build_consistency_kpi(cons, None)
+    assert kpi["release_line"] == 0.75 and kpi["verdict"] == "above"
+
+
+def test_build_consistency_kpi_no_data():
+    kpi = score.build_consistency_kpi(None, None)
+    assert kpi["intra_episode"] is None and kpi["verdict"] is None
+    kpi2 = score.build_consistency_kpi({"sections": {}}, None)
+    assert kpi2["intra_episode"] is None
+
+
+def test_build_consistency_kpi_cross_from_episode_entries():
+    # cross 退路：identity 无顶层 mean_score 时，从逐集条目取
+    cons = _consistency_with_face({"A": {"ep_mean_score": 0.88}})
+    ident = {"characters": {"A": {"episodes": {"第1集": {"mean_score": 0.86}}}}}
+    kpi = score.build_consistency_kpi(cons, ident)
+    assert kpi["cross_episode"] == 0.86
+
+
+def test_score_episode_includes_kpi():
+    cons = _consistency_with_face({"A": {"ep_mean_score": 0.83}})
+    out = score.score_episode("/x", "第1集", consistency=cons)
+    assert "character_consistency_kpi" in out
+    assert out["character_consistency_kpi"]["intra_episode"] == 0.83

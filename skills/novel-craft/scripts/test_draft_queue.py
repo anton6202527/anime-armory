@@ -112,6 +112,21 @@ class DraftQueueTest(unittest.TestCase):
             payload = json.loads(claimed.stdout)
             self.assertEqual(payload["claimed"]["step"], "ghostwriter")
 
+    def test_project_purpose_drives_trio_queue_without_mode_setting(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n- 小说用途：漫剧源书\n")
+            subprocess.run(
+                [sys.executable, DRAFT_QUEUE, "--json", tmp, "init"],
+                capture_output=True, text=True, check=True,
+            )
+            qpath = os.path.join(tmp, "写作任务", "draft_queue.json")
+            with open(qpath, encoding="utf-8") as f:
+                queue = json.load(f)
+            self.assertEqual(queue["workflow"], "trio")
+            self.assertEqual(queue["chapters"]["04"]["steps"]["architect"]["status"], "todo")
+
 
 if __name__ == "__main__":
     unittest.main()

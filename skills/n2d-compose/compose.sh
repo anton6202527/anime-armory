@@ -2,9 +2,18 @@
 # 合成成片：视频/clips + (可选)配音轨 + BGM + 烧字幕 → 成片_第N集_{mode}.mp4
 # 用法: bash compose.sh <作品根> <第N集> [bilingual|zh|en]
 # 可选: BGMFILE=/path/to/music.mp3   传真实BGM(否则程序化占位)
+#
+# 交付矩阵子命令（G10·一母带→全平台）：成片母带产出后，从它派生 多比例 × 多时长 cutdown × 平台规格，
+# 落 合成/交付/<集>/。读 _设置.md 的 目标平台/画幅/交付时长 选择点决定派生哪些规格；缺母带优雅报错。
+#   bash compose.sh deliver <作品根> <第N集> [--run] [--aspects 9:16,16:9] [--durations 30s,15s]
 set -e
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 SKILL_DIR="$(cd "$(dirname "$0")" && pwd)"
+# 子命令分发：`deliver` → 交付矩阵（deliver.py），其余=合成主流程（默认）。
+if [ "$1" = "deliver" ]; then
+  shift
+  exec python3 "$SKILL_DIR/deliver.py" "$@"
+fi
 ROOT="$1"; EP="$2"; MODE="${3:-bilingual}"
 case "$MODE" in zh|bilingual) VLANG=zh;; en) VLANG=en;; *) echo "bad mode"; exit 1;; esac
 BGMFILE="${BGMFILE:-}"
@@ -322,6 +331,16 @@ fi
 
 echo "=== [6/6] 完成: $OUT ==="
 ls -la "$OUT"
+
+# 主题动机（leitmotif）确定性铺设：缺 设定库/motif.json → 空规划 → no-op，$OUT 一字不动
+python3 "$SKILL_DIR/motif_registry.py" "$ROOT" "$EP" --mix "$OUT" || true
+
+# 集成响度（LUFS）达标巡检：量成片集成响度/真峰 vs 平台目标（advisory，不阻断；超标给整改提示）
+python3 "$SKILL_DIR/loudness_conform.py" "$ROOT" "$EP" --platform "${PLATFORM:-default}" || true
+
+# AI 标识 best-effort 后处理：可落显式角标 + 元数据并回写 compliance_manifest。
+# 铁律：AI 标识/披露/水印不得阻断 compose、进度回写或 dashboard；失败仅作为发布待办提示。
+python3 "$SKILL_DIR/ai_label.py" "$ROOT" "$EP" "$OUT" || true
 
 # 回写进度
 if [ "${N2D_UPDATE_PROGRESS:-1}" != "0" ]; then

@@ -43,7 +43,7 @@ PAID_STAGES = {"image", "video", "compose"}          # 进这些前必过合规�
 ROUTER_STAGES = {"video_prompt", "video"}            # 出视频前置：先写模型路由表
 IDENTITY_REFRESH_STAGES = {"image_prompt", "image", "video_prompt", "video", "compose", "review"}
 IMAGE_QC_STRICT_STAGES = {"video_prompt", "video", "compose", "review"}
-FIRST_RUN_CHOICES = ("制作模式", "生视频模型", "生视频渠道", "基础视觉风格")
+FIRST_RUN_CHOICES = ("制作模式", "基础视觉风格")
 # 各生成阶段"放行前必问"的选择点（菜单随动作卡一起给，不另起一次 needs_choice）
 STAGE_MENU = {
     "voice": ("配音后端", False),    # (选择点, 是否每次必问)
@@ -57,6 +57,7 @@ STAGE_MENU = {
 @dataclass
 class Probes:
     env_missing: Optional[str] = None            # 该阶段所需后端缺失名；None=可跑
+    prework_block: Optional[str] = None          # 必跑确定性前置失败；不能继续生成/花钱
     image_qc_block: Optional[str] = None         # 出图落档 QC 未过；不同于环境缺失
     gate: Optional[Dict[str, Any]] = None        # {stage,blocked,return_to_stage,affected_artifacts,rerun_scope,findings_path}
     compliance_gap: Optional[bool] = None        # True=有缺口；None=未检/检不了
@@ -125,6 +126,14 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
             "exact_command": cmd,
         })
 
+    # 1.2 必跑前置失败 —— router/identity/gate/compliance 跑不通不等于通过
+    if probes.prework_block:
+        return na("prework_failed", {
+            "headline": f"{ep} {frontier['label']}：确定性前置失败",
+            "to_user": f"{probes.prework_block} 修复该前置脚本/产物后再继续；不能把 warn/skip 当放行。",
+            "exact_command": cmd,
+        })
+
     # 1.5 出图落档 QC 硬阻断 —— 已知图问题不能带进视频/合成
     if probes.image_qc_block:
         return na("blocked_by_image_qc", {
@@ -150,11 +159,15 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
             "exact_command": f"python3 skills/n2d-compliance/scripts/compliance.py {root} {ep} --check",
         })
 
-    # 4. 首跑必给但尚未显式选过的选择点（制作模式/生视频模型/渠道/基础视觉风格）
+    # 4. 首跑必给但尚未显式选过的选择点（制作模式/基础视觉风格）
     if probes.pending_choices:
         return na("needs_choice", {
             "headline": f"{ep} 开局必给选择包（之后沉默沿用，随时可改）",
-            "to_user": "新作品首跑必须显式选一次以下选项，再继续：" + "、".join(probes.pending_choices),
+            "to_user": (
+                "新作品首跑必须显式选一次以下选项，再继续："
+                + "、".join(probes.pending_choices)
+                + "。生视频后端选择已后移到 n2d-video；开局只记录用户主动指定的固定后端/账号硬约束。"
+            ),
             "menu": [_menu(root, cp) for cp in probes.pending_choices],
             "exact_command": cmd,
         })
@@ -177,6 +190,11 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
             "exact_command": cmd,
             "writeback_after": _writeback_hint(root, ep, spec),
         }
+        if stage_key == "compose":
+            card["post_qc_bundle"] = _post_qc_bundle(root, ep, "pre_compose_review")
+            card["to_user"] = (
+                f"确认后再合成；合成前建议先跑审查包，确认视频、接缝、身份和字幕没有把问题带进终片。"
+            )
         if cp:
             card["menu"] = [_menu(root, cp)]
         return na("needs_payment_confirm", card)
@@ -205,6 +223,20 @@ def _writeback_hint(root: str, ep: str, spec: Dict[str, Any]) -> str:
     cols = list(spec.get("progress_columns", ()))
     col = cols[0] if cols else "<列名>"
     return f"python3 skills/n2d/progress.py set {root} {ep} {col} <值>"
+
+
+def _post_qc_bundle(root: str, ep: str, scope: str = "post_compose") -> Dict[str, Any]:
+    """Post-video/post-compose review command bundle shown in action cards."""
+    return {
+        "scope": scope,
+        "headline": "合成/交付前审查包",
+        "commands": [
+            f"python3 skills/n2d-dashboard/scripts/dashboard.py gate {root} {ep} --stage review",
+            f"python3 skills/n2d-score/scripts/score.py {root} {ep} --run-checks --threshold 85",
+            f"python3 skills/n2d-review/scripts/consistency_ledger.py {root} {ep}",
+            f"python3 skills/n2d-review-ui/scripts/review_ui.py {root} {ep} --write --export-findings --markdown",
+        ],
+    }
 
 
 # ── 真实探针（subprocess/import；全部防御性，绝不让编排器崩）──────────────────
@@ -271,15 +303,48 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str) -> Probes:
     except Exception as e:  # pragma: no cover - 环境相关
         p.prework.append({"step": "doctor", "status": "skip", "detail": str(e)[:120]})
 
+    # boundary_audit：script stage1 前必须先确认粗胚边界没有把剧情闭环切断。
+    if stage_key == "script_stage1":
+        script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "boundary_audit.py")
+        review_note = os.path.join(root, "脚本", "_拆集复核.md")
+        if os.path.exists(script):
+            try:
+                r = _run([sys.executable, script, root, "--strict"])
+                if r.returncode == 0:
+                    p.prework.append({"step": "boundary_audit", "status": "pass"})
+                elif os.path.exists(review_note):
+                    detail = (r.stdout or r.stderr or "").strip().splitlines()[-1:] or [""]
+                    p.prework.append({"step": "boundary_audit", "status": "reviewed",
+                                      "detail": detail[0][:160]})
+                else:
+                    detail = (r.stdout or r.stderr or "").strip().splitlines()[-1:] or [""]
+                    p.prework_block = (
+                        "boundary_audit 标出高风险粗胚边界；先做 5-10 集窗口复核并写 "
+                        f"{review_note}，再写 voiceover。"
+                    )
+                    p.prework.append({"step": "boundary_audit", "status": "block",
+                                      "detail": (detail[0] if detail else "")[:160]})
+            except Exception as e:  # pragma: no cover
+                detail = str(e)[:160]
+                p.prework_block = f"boundary_audit 无法运行：{detail}"
+                p.prework.append({"step": "boundary_audit", "status": "block", "detail": detail})
+
     # model-router：出视频前置（写理论路由表），幂等
     if stage_key in ROUTER_STAGES:
         script = os.path.join(SKILLS_DIR, "n2d-model-router", "scripts", "router.py")
         if os.path.exists(script):
             try:
                 r = _run([sys.executable, script, root, ep, "--write"])
-                p.prework.append({"step": "model_router", "status": "ok" if r.returncode == 0 else "warn"})
+                if r.returncode == 0:
+                    p.prework.append({"step": "model_router", "status": "ok"})
+                else:
+                    detail = (r.stderr or r.stdout or "").strip()[:160]
+                    p.prework_block = f"model_router 退出码 {r.returncode}{f'：{detail}' if detail else ''}"
+                    p.prework.append({"step": "model_router", "status": "block", "detail": detail})
             except Exception as e:  # pragma: no cover
-                p.prework.append({"step": "model_router", "status": "skip", "detail": str(e)[:120]})
+                detail = str(e)[:160]
+                p.prework_block = f"model_router 无法运行：{detail}"
+                p.prework.append({"step": "model_router", "status": "block", "detail": detail})
 
     # identity：把 identity_registry 展开成 adapter matrix，供后续 gate 按执行后端核验。
     # --skip-face 只刷新矩阵/漂移报告骨架，避免 run.py next 在日常路由时触发重视觉机检。
@@ -288,9 +353,16 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str) -> Probes:
         if os.path.exists(script):
             try:
                 r = _run([sys.executable, script, root, "--write", "--skip-face"])
-                p.prework.append({"step": "identity", "status": "ok" if r.returncode == 0 else "warn"})
+                if r.returncode == 0:
+                    p.prework.append({"step": "identity", "status": "ok"})
+                else:
+                    detail = (r.stderr or r.stdout or "").strip()[:160]
+                    p.prework_block = f"identity adapter matrix 刷新退出码 {r.returncode}{f'：{detail}' if detail else ''}"
+                    p.prework.append({"step": "identity", "status": "block", "detail": detail})
             except Exception as e:  # pragma: no cover
-                p.prework.append({"step": "identity", "status": "skip", "detail": str(e)[:120]})
+                detail = str(e)[:160]
+                p.prework_block = f"identity adapter matrix 无法刷新：{detail}"
+                p.prework.append({"step": "identity", "status": "block", "detail": detail})
 
     # image_qc：出图落档后的机检报告必须 full 且无 hard block，才允许进入视频/合成链路。
     if stage_key in IMAGE_QC_STRICT_STAGES and ep:
@@ -318,7 +390,11 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str) -> Probes:
                 p.prework.append({"step": "gate", "stage": gate_stage,
                                   "status": "block" if blocked else "pass"})
             except Exception as e:  # pragma: no cover
-                p.prework.append({"step": "gate", "stage": gate_stage, "status": "skip", "detail": str(e)[:120]})
+                detail = str(e)[:160]
+                p.gate = {"stage": gate_stage, "blocked": True,
+                          "findings_path": None, "return_to_stage": stage_key,
+                          "affected_artifacts": [], "rerun_scope": detail}
+                p.prework.append({"step": "gate", "stage": gate_stage, "status": "block", "detail": detail})
 
     # compliance：花钱档前置检查
     if stage_key in PAID_STAGES:
@@ -329,7 +405,9 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str) -> Probes:
                 p.compliance_gap = (r.returncode != 0)
                 p.prework.append({"step": "compliance", "status": "gap" if p.compliance_gap else "ok"})
             except Exception as e:  # pragma: no cover
-                p.prework.append({"step": "compliance", "status": "skip", "detail": str(e)[:120]})
+                detail = str(e)[:160]
+                p.compliance_gap = True
+                p.prework.append({"step": "compliance", "status": "gap", "detail": detail})
 
     # 首跑必给：仅在 script_stage1 前沿，挑出尚未显式记录的选择点
     if stage_key == "script_stage1":
@@ -363,9 +441,9 @@ def next_action(root: str, ep: Optional[str] = None, auto: bool = False) -> Dict
         if route is None:
             return {"frontier": None, "prework": [], "stop_reason": "done",
                     "action_card": {
-                        "headline": "🎉 该作品/该集已成片，无下一步",
-                        "to_user": "已成片。可选收尾：跑 n2d-review 做成片体检（崩脸/穿帮/字幕对账），"
-                                   "或 n2d-score 给市场+品质综合评分。",
+                        "headline": "该作品/该集已成片，无下一步",
+                        "to_user": "已成片。建议按审查包收尾：先跑 review gate，再出机器分、一致性总账和人审画布。",
+                        "post_qc_bundle": _post_qc_bundle(root, ep or "<集>", "post_compose_review"),
                     },
                     "gate": None, "auto_continue": False}
         stage_key = stage_key_of(route)
@@ -455,6 +533,11 @@ def render_human(na: Dict[str, Any]) -> str:
         lines.append(f"   命令：{card['exact_command']}")
     if card.get("writeback_after"):
         lines.append(f"   完成后回写：{card['writeback_after']}")
+    bundle = card.get("post_qc_bundle") or {}
+    if bundle:
+        lines.append(f"   {bundle.get('headline', '审查包')}：")
+        for command in bundle.get("commands", []) or []:
+            lines.append(f"     - {command}")
     return "\n".join(lines)
 
 

@@ -3,7 +3,7 @@
 """Shared Markdown parsing library for Anime Armory progress files.
 
 Provides stable, unified methods to read and update Markdown checklists
-and tables across all production lines (n2d, novel, song, mv).
+and tables used by media production progress files.
 """
 import fcntl
 import os
@@ -43,7 +43,7 @@ def parse_checklist(content: str) -> List[Dict[str, Any]]:
     """
     items = []
     section = "未分组"
-    has_machine_schema = "novel-progress-schema" in content or "machine-readable" in content
+    has_machine_schema = "machine-readable" in content
     
     for lineno, raw in enumerate(content.splitlines(), 1):
         line = raw.rstrip("\n")

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""产品落档机检 product_qc —— 拍广告线的"产品/logo/品牌色漂移"前移闸门（ad 版的 image_qc）。
+"""产品落档机检 product_qc —— 拍广告线的"产品/logo/品牌色漂移"前移闸门。
 
 广告里**产品是主角**：包装/logo/品牌色一漂，整片报废，重抽要花真钱。本脚本把
 产品一致性机检前移到**刚出完一批图、还没继续出视频**的最便宜的点，让漂移在这里
-被硬挡，而不是等投放前 ad-review 才发现 → 省大量返工。架构对标 n2d-image/image_qc.py
-（Pillow-or-graceful-fallback、prompt-lint、summary/findings JSON、hard-block 语义），
-但**自包含**：只 re-implement 广告相关子集，绝不 import n2d-*。
+被硬挡，而不是等投放前 ad-review 才发现 → 省大量返工。机检架构包含
+Pillow-or-graceful-fallback、prompt-lint、summary/findings JSON、hard-block 语义，
+且**自包含**：只实现广告产品一致性相关子集。
 
 四项机检（缺料必须在报告里明示降级，不臆造通过）：
 1. PROMPT-LINT（HARD BLOCK，无 Pillow 也跑）：产品镜（storyboard.assets 标 `PROD_*: true`）
@@ -73,6 +73,15 @@ IDENTITY_LOCK_MARKERS = ("身份锁定句", "身份锁定", "同一款包装", "
 NEG_TEXT_MARKERS = ("不要改包装文字", "不改包装文字", "不要改文字", "包装文字不", "不要乱码", "不改文字")
 NEG_LOGO_MARKERS = ("不要变形 logo", "不要变形logo", "不变形 logo", "不变形logo",
                     "logo 不变形", "logo不变形", "不要改 logo", "不改 logo", "不要变形标志")
+PROHIBITED_LOCAL_PATCH_STRONG_TOKENS = (
+    "local_product_patch", "product_patch", "logo_patch", "packaging_patch", "package_patch",
+    "local_face_patch", "face_patch", "facefix", "faceswap", "face_swap", "poisson",
+    "alpha_blend", "pasteback", "paste_back", "贴包装", "贴logo", "贴 logo", "贴标",
+    "贴脸", "换脸", "裁脸", "本地贴图",
+)
+PROHIBITED_LOCAL_PATCH_OPERATION_TOKENS = (
+    "patch", "paste", "blend", "clone", "swap", "overlay", "贴回", "贴入", "移植", "换",
+)
 
 
 # ── Pillow / numpy 优雅降级 ─────────────────────────────────────────────────────
@@ -210,6 +219,10 @@ def lint_product_prompt(shot_label: str, text: Optional[str]) -> List[Dict[str, 
         findings.append(_finding("block", shot_label, "prompt_lint",
                                  "产品镜缺『参考图/资产引用』块（绝不文生图产品：必 image2image + 产品定妆参考）",
                                  {"missing": "reference_block"}))
+    if not PROD_ASSET_RE.search(text):
+        findings.append(_finding("block", shot_label, "prompt_lint",
+                                 "产品镜缺结构化产品资产 ID（PROD_*）；执行端无法把本镜绑定到产品定妆/禁改清单",
+                                 {"missing": "product_asset_id"}))
     if not any(m in text for m in IDENTITY_LOCK_MARKERS):
         findings.append(_finding("block", shot_label, "prompt_lint",
                                  "产品镜缺『身份锁定句』（同一款包装/同一 logo/同一品牌色——多参考后端最敏感的锁产品句）",
@@ -443,6 +456,118 @@ def check_logo(shot_label: str, img_path: Optional[Path], logo_template: Path,
     return []
 
 
+def _production_events_path(root: Path) -> Path:
+    return root / "生产数据" / "production_events.jsonl"
+
+
+def _load_production_events(root: Path) -> List[Dict[str, Any]]:
+    path = _production_events_path(root)
+    if not path.exists():
+        return []
+    rows: List[Dict[str, Any]] = []
+    try:
+        for line in path.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            item = json.loads(line)
+            if isinstance(item, dict):
+                rows.append(item)
+    except Exception:
+        return []
+    return rows
+
+
+def _event_mapping(event: Dict[str, Any], key: str) -> Dict[str, Any]:
+    value = event.get(key)
+    return value if isinstance(value, dict) else {}
+
+
+def _event_asset_rel(root: Path, event: Dict[str, Any]) -> Optional[str]:
+    generation = _event_mapping(event, "generation")
+    asset = generation.get("asset") or event.get("asset") or event.get("path")
+    if not asset:
+        return None
+    raw = str(asset).strip()
+    if not raw:
+        return None
+    p = Path(raw)
+    if p.is_absolute():
+        try:
+            return p.resolve().relative_to(root.resolve()).as_posix()
+        except Exception:
+            return p.as_posix()
+    return p.as_posix()
+
+
+def _is_prohibited_local_patch_event(event: Dict[str, Any]) -> bool:
+    generation = _event_mapping(event, "generation")
+    meta = _event_mapping(event, "meta")
+    cost = _event_mapping(event, "cost")
+    fields = [
+        event.get("provider"), event.get("source"), event.get("method"), event.get("event"),
+        cost.get("provider"), cost.get("method"),
+        generation.get("provider"), generation.get("method"), generation.get("redraw_reason"),
+        meta.get("provider"), meta.get("method"), meta.get("tool"),
+    ]
+    text = " ".join(str(v) for v in fields if v is not None).lower()
+    if any(token in text for token in PROHIBITED_LOCAL_PATCH_STRONG_TOKENS):
+        return True
+    subject_words = ("product", "logo", "packaging", "package", "face", "产品", "包装", "标志", "脸")
+    return any(word in text for word in subject_words) and any(
+        token in text for token in PROHIBITED_LOCAL_PATCH_OPERATION_TOKENS
+    )
+
+
+def check_prohibited_local_patch(root: Path, labels_paths: List[Tuple[str, Optional[Path]]]) -> List[Dict[str, Any]]:
+    """Block image-stage product/logo/face paste-back artifacts used as final ad frames.
+
+    True logo/package overlays belong in ad-compose delivery, not as a way to make an
+    image-stage frame pass product QC. A later clean backend redraw event for the same
+    asset naturally supersedes the old patched event because we only inspect latest rows.
+    """
+    latest: Dict[str, Tuple[int, Dict[str, Any]]] = {}
+    wanted: Dict[str, str] = {}
+    for label, path in labels_paths:
+        if not path:
+            continue
+        try:
+            wanted[Path(path).resolve().relative_to(root.resolve()).as_posix()] = label
+        except Exception:
+            wanted[Path(path).as_posix()] = label
+    if not wanted:
+        return []
+    for idx, event in enumerate(_load_production_events(root), start=1):
+        stage = str(event.get("stage") or "").strip()
+        if stage and stage != "image":
+            continue
+        ev = str(event.get("event") or "").strip()
+        if ev and ev not in {"generation", "redraw", "fix", "repair"}:
+            continue
+        rel = _event_asset_rel(root, event)
+        if rel in wanted:
+            latest[rel] = (idx, event)
+
+    findings: List[Dict[str, Any]] = []
+    for rel, (line_no, event) in latest.items():
+        if not _is_prohibited_local_patch_event(event):
+            continue
+        generation = _event_mapping(event, "generation")
+        meta = _event_mapping(event, "meta")
+        findings.append(_finding(
+            "block", wanted.get(rel, "-"), "local_patch_prohibited",
+            "生产事件账本显示该广告出图帧来自本地贴包装/logo/脸部像素修复；"
+            "不得用局部贴图伪造产品一致性通过，需回 ad-image 用参考图/官方 image2image 重抽",
+            {
+                "event_line": line_no,
+                "asset": rel,
+                "provider": generation.get("provider") or event.get("provider") or event.get("source"),
+                "method": meta.get("method") or generation.get("method") or event.get("method"),
+            },
+        ))
+    return findings
+
+
 # ── finding 构造 + 汇总 ──────────────────────────────────────────────────────────
 
 def _finding(severity: str, shot: str, check: str, reason: str,
@@ -542,6 +667,7 @@ def run_qc(stage_dir: Path, storyboard_arg: Optional[str] = None, strict: bool =
             findings.append(_finding("info", "-", "logo",
                                      f"未注册 logo 模板（{paths['logo_template']}），logo 模板匹配跳过",
                                      {"degraded": "no_template"}))
+        findings.extend(check_prohibited_local_patch(paths["root"], labels_paths))
 
     # strict：把 warn/info（降级）也提级为 warn 进候选重出（不动 block）。
     if strict:
@@ -550,9 +676,23 @@ def run_qc(stage_dir: Path, storyboard_arg: Optional[str] = None, strict: bool =
                 f["severity"] = "warn"
                 f["reason"] = "[strict] " + f["reason"]
 
+    precision = "full" if (Image is not None and np is not None) else "degraded"
+    pending_images = [
+        f for f in findings
+        if f.get("detail", {}).get("degraded") == "no_image"
+    ]
     payload = {
+        "kind": "ad_product_qc",
+        "version": 2,
         "summary": summarize(findings),
         "findings": findings,
+        "qc_environment": {
+            "precision_level": precision,
+            "python": sys.executable,
+            "missing_or_degraded": [] if precision == "full" else ["Pillow/numpy pixel checks"],
+            "pending_product_images": len(pending_images),
+            "manual_review_accepted": False,
+        },
     }
     # 落档到权威路径 出图/分镜/product_qc.json
     out_json = paths["out_json"]

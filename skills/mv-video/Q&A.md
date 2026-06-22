@@ -1,8 +1,8 @@
 # mv-video Q&A
 
-## Q1: MV 系列如何像 n2d-video 一样保证 clip 之间衔接顺畅？
+## Q1: MV 系列如何保证 clip 之间衔接顺畅？
 
-A: MV 的 clip 衔接不能照搬漫剧。漫剧更强调叙事空间连续，MV 更强调"视觉身份一致 + 卡点落点准 + 动作/视线/道具可切"。因此每个 MV clip 也必须增加 `continuity` 字段，但要同时读取相邻 clip、`beatgrid.json`、段落张力和歌词钩子。
+A: MV 的 clip 衔接强调"视觉身份一致 + 卡点落点准 + 动作/视线/道具可切"。因此每个 MV clip 必须增加 `continuity` 字段，并同时读取相邻 clip、`beatgrid.json`、段落张力和歌词钩子。
 
 每个 clip 必填 5 个字段：
 

@@ -14,20 +14,23 @@ for cli in codex openai dreamina gemini-cli seedream kling sora; do
 done
 codex features list 2>/dev/null | rg 'image_generation|artifact' || true
 codex plugin list 2>/dev/null | rg -i 'image|openai|fal|replicate|browser|computer-use' || true
+python3 skills/n2d/_lib/image_backend_adapter.py scan --json
 ```
+
+`scan --json` 的 `usable_backends` 是“当前可自动确认能落 PNG”的列表。若 **0 个可用**，停止并提示“当前无可用生图后端，请准备好可以生图的生图后端”；`needs_confirmation_backends` 只能列为检测到但需人工确认，不当作可用。若 **≥2 个可用**，必须先让用户选一个，并可按项目需求给建议（长篇/多集/核心角色/多人同框优先主体库或多参考强后端；单集 demo/快速迭代可选 Codex；文字/编辑/透明背景等能力按当天官方文档和 CLI/API help 核验；社区当前推荐需实时核验后再说）。用户选定后写 `<作品根>/_设置.md` 的 `生图AI`，整集统一一个后端。
 
 所选后端未找到可自动落 PNG 的入口 → **停下报告**（见 SKILL「生图后端规则」），不偷偷换后端兜底（换后端=混用）。`生图AI` 默认 Codex，当前也可选 Dreamina/即梦官方 CLI、Seedream/可灵主体库/Nano Banana/Sora Cameo 等官方/已登录后端（全集统一一个、不混用）。上面的通用探测覆盖白名单常见 CLI 名；具体是否可用仍以本文件各后端档案和官方帮助为准。禁止第三方逆向 CLI、`同视频AI` / `同视频模型` 含糊口径和 web 自动化出图；`<作品根>/_设置.md` 写 `同视频AI` 或 `同视频模型` 时改成显式后端名。
 
-## 优先级（以 `生视频模型=Seedance 2.0` + `生视频渠道=即梦/Dreamina` 为例）
+## 优先级（生视频后端未固定时）
 
 | 排名 | 组合 | 说明 |
 |---|---|---|
-| ① | Codex 会话内置 `image_gen` / Codex image_generation feature → 所选生视频模型 + 对应锚定句 | 当前 Codex 能力优先；生成后必须把图从 `$CODEX_HOME/generated_images/...` 移入作品目录 |
-| ② | 官方 OpenAI Images 入口（`openai` CLI 或 Codex/OpenAI 插件）→ 所选生视频模型 + 对应锚定句 | 可自动批量落 PNG 时优先于国内兜底；注意统一目标生视频模型的视觉锚点 |
+| ① | Codex 会话内置 `image_gen` / Codex image_generation feature → 通用视频兼容锚定；若已固定生视频模型则拼对应锚定句 | 当前 Codex 能力优先；生成后必须把图从 `$CODEX_HOME/generated_images/...` 移入作品目录 |
+| ② | 官方 OpenAI Images 入口（`openai` CLI 或 Codex/OpenAI 插件）→ 通用视频兼容锚定；若已固定生视频模型则拼对应锚定句 | 可自动批量落 PNG 时优先于国内兜底；注意统一视频兼容视觉锚点 |
 | 官方备选 | Dreamina/即梦官方 CLI / Seedream / 可灵主体库 / Nano Banana(Gemini) / Sora Cameo 官方 API | 当前可选；选定后整集统一、不与 Codex 混用；多角色同框/跨集锁人更稳 |
 | 禁止 | 第三方逆向 CLI / `同视频AI` 或 `同视频模型` 含糊口径 / 即梦 web 自动化出图 | 安全 invariant：未授权路径禁用；官方 Dreamina CLI 和官方 Seedream API 不在此列 |
 
-切换目标生视频模型/渠道时，图片阶段仍保持 Codex/OpenAI；需要风格兼容时拼目标生视频模型的图像风格锚定句。
+切换/固定目标生视频模型/渠道时，图片阶段仍保持所选图后端；需要风格兼容时拼目标生视频模型的图像风格锚定句。未固定时不回到开局强问视频后端，先拼通用视频兼容锚定并由 n2d-video 后续路由。
 
 ---
 
@@ -45,7 +48,7 @@ codex plugin list 2>/dev/null | rg -i 'image|openai|fal|replicate|browser|comput
   1. 当前 agent 有内置 `image_gen` 工具，或
   2. Codex 插件/配置明确暴露可生成并保存 PNG 的图像工具，或
   3. 用户提供了可由 `codex exec` 稳定调用且会把 PNG 写入指定路径的本地命令/工作流。
-- **落档规则**：内置 `image_gen` 生成图默认在 `$CODEX_HOME/generated_images/...`；项目资产必须复制/移动到 `制漫剧/<剧名>/出图/共享/图片/` 或 `制漫剧/<剧名>/出图/第N集/图片/`，不能只引用 `$CODEX_HOME` 路径。
+- **落档规则**：内置 `image_gen` 生成图默认在 `$CODEX_HOME/generated_images/...`；项目资产必须复制/移动到 `创作区/制漫剧/<剧名>/出图/共享/图片/` 或 `创作区/制漫剧/<剧名>/出图/第N集/图片/`，不能只引用 `$CODEX_HOME` 路径。
 - **批量策略**：多个不同镜头用多次内置生图调用或已验证的批量入口；不要用一个泛 prompt 代替逐镜 prompt。
 
 ---
@@ -55,7 +58,7 @@ codex plugin list 2>/dev/null | rg -i 'image|openai|fal|replicate|browser|comput
 - **来源**：OpenAI 官方 Images API / 官方 CLI / Codex OpenAI 插件（如已安装）。
 - **探测**：`command -v openai`、`OPENAI_API_KEY`、`codex plugin list`。
 - **强项**：构图、审美、文字理解。
-- **弱项**：古装东方脸和跨镜一致性要显式锚点；跨 Seedance/Kling/Veo 等生视频模型时必须拼目标生视频模型的图像风格锚定句。
+- **弱项**：古装东方脸和跨镜一致性要显式锚点；固定 Seedance/Kling/Veo 等生视频模型时必须拼目标生视频模型的图像风格锚定句，未固定时拼通用视频兼容锚定。
 - **调用模板**（仅在官方 CLI 可用且参数确认后使用）：
 
 ```bash

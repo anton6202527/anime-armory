@@ -12,15 +12,17 @@ import argparse
 import contextlib
 import csv
 import datetime as dt
+import glob
 import importlib.util
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
 import time
 from collections import Counter, defaultdict
-from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
+from typing import Any, Callable, Dict, Iterable, List, Optional, Set, Tuple
 
 try:
     import fcntl
@@ -55,6 +57,11 @@ from n2d_contract import (  # 生产数据目录 / kind / 重抽原因枚举 单
     production_dir,
 )
 from n2d_thresholds import DEFAULT_THRESHOLDS, THRESHOLDS_FILE, load_thresholds, load_benchmark  # 告警阈值单一真值源（与 n2d-score 共用）
+
+try:
+    from skill_snapshot import artifact_fingerprint  # type: ignore
+except Exception:  # pragma: no cover - degraded local env
+    artifact_fingerprint = None  # type: ignore[assignment]
 
 EVENT_KIND = PRODUCTION_EVENT_KIND
 DASHBOARD_KIND = PRODUCTION_DASHBOARD_KIND
@@ -406,6 +413,9 @@ def blank_episode(ep: str, progress: Optional[Dict[str, Any]] = None) -> Dict[st
         "recoup_ratio": {},
         "stages": {},
         "recent_blockers": [],
+        "missing_deliverables": [],
+        "image_qc_passive": {},
+        "consistency_ledger": {},
     }
 
 
@@ -421,8 +431,26 @@ def stage_bucket(ep_summary: Dict[str, Any], stage: str) -> Dict[str, Any]:
             "qa_blockers": 0,
             "qa_warnings": 0,
             "qa_infos": 0,
+            "missing_deliverables": 0,
         }
     return stages[stage]
+
+
+def add_qa_signal(summary: Dict[str, Any], stage: str, severity: str, dim: str, loc: str, msg: str) -> None:
+    """Fold synthetic/current-evidence QA into an episode summary."""
+    sb = stage_bucket(summary, stage)
+    severity = str(severity or "").lower()
+    if severity == "block":
+        summary["qa_blockers"] += 1
+        sb["qa_blockers"] += 1
+        if len(summary["recent_blockers"]) < 8:
+            summary["recent_blockers"].append({"stage": stage, "dim": dim, "loc": loc, "msg": msg})
+    elif severity == "warn":
+        summary["qa_warnings"] += 1
+        sb["qa_warnings"] += 1
+    elif severity == "info":
+        summary["qa_infos"] += 1
+        sb["qa_infos"] += 1
 
 
 def add_counter_value(target: Dict[str, float], key: str, amount: float) -> None:
@@ -435,7 +463,13 @@ def cost_keys(cost: Dict[str, Any]) -> Tuple[str, str]:
     # quality_tier（fast/pro/high）随成本事件带上时折进 provider 维，让 cost_by_provider 自动拆出
     # 同后端的 fast vs pro 花销（成本×质量轴的回看）；无 tier 时维持旧键格式，老事件零影响。
     tier = str(cost.get("quality_tier") or "").strip()
-    provider_key = f"{provider}@{tier}:{unit}" if tier else f"{provider}:{unit}"
+    # urgency_tier（realtime/batch_24h·G8）正交折进 provider 维，回看「隔夜批量档省了多少」；
+    # 仅 batch_24h 时加后缀（realtime 是默认·不污染旧键），老事件零影响。
+    urgency = str(cost.get("urgency_tier") or "").strip()
+    base = f"{provider}@{tier}" if tier else provider
+    if urgency and urgency != "realtime":
+        base = f"{base}#{urgency}"
+    provider_key = f"{base}:{unit}"
     return unit, provider_key
 
 
@@ -476,6 +510,84 @@ def apply_release_row(summary: Dict[str, Any], row: Dict[str, Any], source: str)
     unit = str(first_present(row, CURRENCY_FIELDS) or "CNY")
     add_release_amounts(summary, unit=unit, revenue=release_amount(row), spend=spend_amount(row))
     set_runtime(summary, first_float(row, RUNTIME_FIELDS), source)
+
+
+def resolvable_asset_path(root: str, raw: Any) -> Optional[str]:
+    """Return an absolute path for project-local assets that are meaningful to verify.
+
+    Old/manual events sometimes only recorded ``Clip_01.png``.  Those are not
+    enough to resolve unambiguously, so they are left out of current-file checks.
+    """
+    asset = str(raw or "").strip()
+    if not asset or re_like_url(asset):
+        return None
+    if os.path.isabs(asset):
+        return asset
+    norm = asset.replace("\\", "/")
+    if "/" not in norm:
+        return None
+    if norm.startswith(("../", "./")):
+        return None
+    return os.path.join(root, norm)
+
+
+def re_like_url(value: str) -> bool:
+    return bool(re.match(r"^[a-z][a-z0-9+.-]*://", value, re.I))
+
+
+def current_missing_pass_assets(root: str, events: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
+    """Latest pass events whose declared deliverable file no longer exists."""
+    latest: Dict[Tuple[str, str, str], Dict[str, Any]] = {}
+    for index, event in enumerate(events):
+        generation = event.get("generation") if isinstance(event.get("generation"), dict) else {}
+        asset = generation.get("asset") or event.get("asset")
+        resolved = resolvable_asset_path(root, asset)
+        if not resolved:
+            continue
+        ep = normalize_episode(str(event.get("episode") or "未知集"))
+        stage = str(event.get("stage") or "unknown")
+        key = (ep, stage, os.path.normpath(resolved))
+        latest[key] = {"event": event, "path": resolved, "index": index}
+    missing: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+    for (ep, stage, _path_key), row in latest.items():
+        event = row["event"]
+        generation = event.get("generation") if isinstance(event.get("generation"), dict) else {}
+        status = str(generation.get("status") or event.get("status") or "").lower()
+        if status not in {"pass", "passed", "ok", "accept", "accepted"}:
+            continue
+        path = str(row["path"])
+        if os.path.isfile(path):
+            continue
+        missing[ep].append({
+            "stage": stage,
+            "asset": generation.get("asset") or event.get("asset"),
+            "path": path,
+            "ts": event.get("ts"),
+            "provider": generation.get("provider") or event.get("source") or "",
+        })
+    return dict(missing)
+
+
+def apply_missing_deliverable_signals(root: str, events: List[Dict[str, Any]], episodes: Dict[str, Dict[str, Any]]) -> None:
+    for ep, rows in current_missing_pass_assets(root, events).items():
+        if ep not in episodes:
+            episodes[ep] = blank_episode(ep)
+        summary = episodes[ep]
+        for row in rows:
+            stage = str(row.get("stage") or "unknown")
+            rel = str(row.get("asset") or row.get("path") or "")
+            summary["missing_deliverables"].append(row)
+            sb = stage_bucket(summary, stage)
+            sb["missing_deliverables"] = int(sb.get("missing_deliverables") or 0) + 1
+            add_qa_signal(
+                summary,
+                stage,
+                "block",
+                "产物存在性",
+                rel,
+                f"最新 `{stage}` pass 事件登记的产物不存在：{rel}。"
+                "事件账本不能替代当前文件存在性；重出或恢复该产物后再放行。",
+            )
 
 
 def divide_dict(values: Dict[str, float], denominator: Optional[float]) -> Dict[str, float]:
@@ -566,22 +678,14 @@ def aggregate_events(root: str, events: List[Dict[str, Any]]) -> Dict[str, Any]:
         qa = event.get("qa") if isinstance(event.get("qa"), dict) else {}
         if qa:
             severity = str(qa.get("severity") or qa.get("sev") or "").lower()
-            if severity == "block":
-                summary["qa_blockers"] += 1
-                sb["qa_blockers"] += 1
-                if len(summary["recent_blockers"]) < 8:
-                    summary["recent_blockers"].append({
-                        "stage": stage,
-                        "dim": qa.get("dim", ""),
-                        "loc": qa.get("loc", ""),
-                        "msg": qa.get("msg", ""),
-                    })
-            elif severity == "warn":
-                summary["qa_warnings"] += 1
-                sb["qa_warnings"] += 1
-            elif severity == "info":
-                summary["qa_infos"] += 1
-                sb["qa_infos"] += 1
+            add_qa_signal(
+                summary,
+                stage,
+                severity,
+                str(qa.get("dim") or ""),
+                str(qa.get("loc") or ""),
+                str(qa.get("msg") or ""),
+            )
 
         # 一致性审查事件：consistency_audit 写 meta.{total_block,total_warn} 但此前无人读 → 统计失真。
         # 接入：单列 consistency_blockers/warnings，并把 block 计入 qa_blockers，让阈值告警看得到审查检出。
@@ -617,6 +721,10 @@ def aggregate_events(root: str, events: List[Dict[str, Any]]) -> Dict[str, Any]:
             if ep not in episodes:
                 episodes[ep] = blank_episode(ep)
             apply_release_row(episodes[ep], row, release_metrics_path)
+
+    apply_missing_deliverable_signals(root, events, episodes)
+    apply_passive_image_qc_signals(root, events, episodes)
+    apply_passive_consistency_ledger_signals(root, episodes)
 
     for summary in episodes.values():
         if not summary.get("runtime_sec"):
@@ -714,6 +822,10 @@ def aggregate_events(root: str, events: List[Dict[str, Any]]) -> Dict[str, Any]:
     totals["release_spend_totals"] = spend_total
     totals["release_net_totals"] = net_total
     totals["recoup_ratio"] = ratio_dict(net_total, cost_total)
+    totals["consistency_ledger_counts"] = {
+        key: sum(int((item.get("consistency_ledger") or {}).get("counts", {}).get(key) or 0) for item in ordered)
+        for key in ("block", "high", "medium")
+    }
 
     return {
         "kind": DASHBOARD_KIND,
@@ -884,6 +996,31 @@ def render_markdown(dashboard: Dict[str, Any]) -> str:
                 f"{blocker.get('loc', '')} — {blocker.get('msg', '')}"
             )
 
+    ledger_rows = [
+        item for item in dashboard["episodes"]
+        if (item.get("consistency_ledger") or {}).get("row_count")
+    ]
+    if ledger_rows:
+        lines.extend([
+            "",
+            "## 一致性总账",
+            "",
+            "| 集 | 实体数 | block | high | medium | 重点实体 |",
+            "|---|---:|---:|---:|---:|---|",
+        ])
+        for item in ledger_rows:
+            ledger = item.get("consistency_ledger") or {}
+            counts = ledger.get("counts") or {}
+            severe = ledger.get("severe_rows") or []
+            focus = "；".join(
+                f"{row.get('name') or row.get('id')}({row.get('overall')})"
+                for row in severe[:3]
+            ) or "—"
+            lines.append(
+                f"| {item['episode']} | {ledger.get('row_count', 0)} | "
+                f"{counts.get('block', 0)} | {counts.get('high', 0)} | {counts.get('medium', 0)} | {focus} |"
+            )
+
     lines.append("")
     return "\n".join(lines)
 
@@ -894,6 +1031,49 @@ def write_dashboard(root: str, dashboard: Dict[str, Any]) -> None:
     md_path = os.path.join(production_dir(root), DASHBOARD_MD)
     atomic_write_text(json_path, json.dumps(dashboard, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
     atomic_write_text(md_path, render_markdown(dashboard))
+
+
+def consistency_ledger_path(root: str, episode: str) -> str:
+    return os.path.join(production_dir(root), f"consistency_ledger_{normalize_episode(episode)}.json")
+
+
+def apply_passive_consistency_ledger_signals(root: str, episodes: Dict[str, Dict[str, Any]]) -> None:
+    pattern = os.path.join(production_dir(root), "consistency_ledger_*.json")
+    for path in sorted(glob.glob(pattern)):
+        name = os.path.basename(path)
+        if not name.startswith("consistency_ledger_") or not name.endswith(".json"):
+            continue
+        ep = normalize_episode(name[len("consistency_ledger_"):-len(".json")])
+        try:
+            with open(path, encoding="utf-8") as fh:
+                data = json.load(fh)
+        except Exception:
+            continue
+        if not isinstance(data, dict):
+            continue
+        if ep not in episodes:
+            episodes[ep] = blank_episode(ep)
+        counts = data.get("counts") if isinstance(data.get("counts"), dict) else {}
+        rows = [row for row in (data.get("rows") or []) if isinstance(row, dict)]
+        severe = [
+            {
+                "id": row.get("id"),
+                "name": row.get("name"),
+                "kind": row.get("kind"),
+                "overall": row.get("overall"),
+                "prevent": row.get("prevent"),
+                "detect": row.get("detect"),
+                "contract": row.get("contract"),
+            }
+            for row in rows
+            if str(row.get("overall") or "") in {"block", "high", "warn", "medium"}
+        ]
+        episodes[ep]["consistency_ledger"] = {
+            "path": os.path.relpath(path, root),
+            "counts": {k: int(counts.get(k) or 0) for k in ("block", "high", "medium")},
+            "severe_rows": severe[:8],
+            "row_count": len(rows),
+        }
 
 
 # ── 阈值告警引擎（纯本地·纯标准库·跨 AI 通用）────────────────────────────
@@ -1308,12 +1488,78 @@ def image_qc_report_path(root: str, episode: str) -> str:
     return os.path.join(root, "生产数据", "image_qc", ep, f"image_qc_{ep}.json")
 
 
+def image_qc_fingerprint_status(root: str, payload: Dict[str, Any]) -> Tuple[str, str]:
+    """fresh/stale/unknown for an image_qc report's declared input files."""
+    recorded = payload.get("inputs_fingerprint")
+    if not isinstance(recorded, dict):
+        return "unknown", "报告缺 `inputs_fingerprint`，无法确认它对应当前 prompt/registry/PNG"
+    files = recorded.get("files")
+    sha = recorded.get("sha")
+    if not isinstance(files, dict) or not isinstance(sha, str) or not sha:
+        return "unknown", "报告 `inputs_fingerprint` 结构不完整"
+    if artifact_fingerprint is None:
+        return "unknown", "无法加载 skill_snapshot.artifact_fingerprint，不能校验报告新鲜度"
+    current = artifact_fingerprint(root, list(files.keys()))  # type: ignore[misc]
+    if current.get("sha") == sha:
+        return "fresh", ""
+    current_files = current.get("files") if isinstance(current.get("files"), dict) else {}
+    changed: List[str] = []
+    for rel in sorted(set(files) | set(current_files)):
+        before = files.get(rel)
+        after = current_files.get(rel)
+        if before == after:
+            continue
+        if before and not after:
+            state = "缺失"
+        elif after and not before:
+            state = "新增"
+        else:
+            state = "变更"
+        changed.append(f"{rel}({state})")
+    sample = "、".join(changed[:8]) + ("…" if len(changed) > 8 else "")
+    return "stale", f"报告 `inputs_fingerprint` 与当前文件失配：{sample or '输入文件已变化'}"
+
+
+def image_qc_missing_prop_shape_confirmation_dependency(payload: Dict[str, Any], episode: str) -> bool:
+    """Old image_qc reports did not fingerprint manual prop-shape confirmations.
+
+    If a report contains prop-shape review state but its fingerprint does not
+    include the confirmation file, a later manual confirmation can make the
+    report stale without changing any of its recorded inputs.  Force a rerun
+    instead of trusting that old verdict.
+    """
+    review = payload.get("prop_shape_review")
+    if not isinstance(review, dict):
+        return False
+    targets = review.get("targets")
+    total = review.get("total")
+    if not targets and not total:
+        return False
+    recorded = payload.get("inputs_fingerprint")
+    files = recorded.get("files") if isinstance(recorded, dict) else None
+    if not isinstance(files, dict):
+        return False
+    ep = normalize_episode(episode)
+    confirmation_rel = os.path.join("生产数据", "image_qc", ep, "prop_shape_confirmations.json").replace(os.sep, "/")
+    return confirmation_rel not in {str(k).replace(os.sep, "/") for k in files.keys()}
+
+
+def image_qc_report_paths(root: str) -> List[str]:
+    base = os.path.join(root, "生产数据", "image_qc")
+    return sorted(glob.glob(os.path.join(base, "*", "image_qc_*.json")))
+
+
 def image_qc_report_findings(root: str, episode: str) -> Tuple[Optional[List[Dict[str, Any]]], Optional[str]]:
     path = image_qc_report_path(root, episode)
     if not os.path.isfile(path):
         return None, None
     try:
         payload = json.load(open(path, encoding="utf-8"))
+        status, _reason = image_qc_fingerprint_status(root, payload)
+        if status != "fresh":
+            return None, None
+        if image_qc_missing_prop_shape_confirmation_dependency(payload, episode):
+            return None, None
         script = os.path.join(REPO_SKILLS, "n2d-image", "scripts", "image_qc.py")
         spec = importlib.util.spec_from_file_location("n2d_image_qc_for_dashboard", script)
         if spec is None or spec.loader is None:
@@ -1326,6 +1572,97 @@ def image_qc_report_findings(root: str, episode: str) -> Tuple[Optional[List[Dic
         return [f for f in findings if isinstance(f, dict)], None
     except Exception as exc:
         return None, f"读取既有 image_qc 报告失败：{type(exc).__name__}: {exc}"
+
+
+def image_preflight_qc_findings(root: str, episode: str) -> List[Dict[str, Any]]:
+    """Return image_qc findings that are meaningful before paid shot generation.
+
+    `image_qc` also owns post-image pixel review.  Prop-shape confirmation is a
+    review of landed PNG pixels and belongs to the `image` gate; keeping it in
+    `image_preflight` blocks shared-library preparation with confirmations for
+    images that are not being generated in that phase.
+    """
+    findings = image_qc_findings(root, episode)
+    out: List[Dict[str, Any]] = []
+    for item in findings:
+        if not isinstance(item, dict):
+            continue
+        msg = str(item.get("msg") or item.get("message") or "")
+        if item.get("dim") == "multimodal_continuity" and "高风险道具禁形/尺寸未逐图确认" in msg:
+            continue
+        out.append(item)
+    return out
+
+
+def apply_passive_image_qc_signals(root: str, events: List[Dict[str, Any]], episodes: Dict[str, Dict[str, Any]]) -> None:
+    """Make standalone image_qc reports visible in dashboard builds.
+
+    Gate events remain authoritative.  This only fills the gap where image_qc
+    was run directly and no ``dashboard gate --stage image`` event exists.
+    """
+    gated_eps: Set[str] = {
+        normalize_episode(str(event.get("episode") or ""))
+        for event in events
+        if event.get("stage") == "image"
+        and event.get("event") == "qa_gate_run"
+        and event.get("source") == "n2d-review/scripts/gate.py"
+    }
+    for path in image_qc_report_paths(root):
+        name = os.path.basename(path)
+        match = re.match(r"image_qc_(.+)\.json$", name)
+        if not match:
+            continue
+        ep = normalize_episode(match.group(1))
+        if ep in gated_eps:
+            continue
+        try:
+            payload = json.load(open(path, encoding="utf-8"))
+        except Exception as exc:
+            payload = {}
+            status, reason = "unknown", f"image_qc 报告不可读：{type(exc).__name__}: {exc}"
+        else:
+            status, reason = image_qc_fingerprint_status(root, payload)
+        if ep not in episodes:
+            episodes[ep] = blank_episode(ep)
+        summary = episodes[ep]
+        summary["image_qc_passive"] = {"path": path, "freshness": status}
+        if status != "fresh":
+            add_qa_signal(
+                summary,
+                "image",
+                "block",
+                "出图落档QC",
+                path,
+                f"发现未入账 image_qc 报告但其新鲜度为 `{status}`：{reason}。"
+                "先重跑 `dashboard gate --stage image` 或 image_qc，不能用旧报告证明图片一致。",
+            )
+            continue
+        report_summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else {}
+        hard = int(as_float(report_summary.get("hard_blocks")) or 0)
+        advisory = int(as_float(report_summary.get("advisory")) or 0)
+        summary["image_qc_passive"].update({"hard_blocks": hard, "advisory": advisory})
+        if hard:
+            summary["consistency_blockers"] += hard
+            image_bucket = stage_bucket(summary, "image")
+            image_bucket["consistency_blockers"] = image_bucket.get("consistency_blockers", 0) + hard
+            add_qa_signal(
+                summary,
+                "image",
+                "block",
+                "出图落档QC",
+                path,
+                f"image_qc standalone 报告有 {hard} 个硬阻断但未见 dashboard image gate 入账；"
+                "必须修复/重抽并重跑 `dashboard gate --stage image`。",
+            )
+            if hard > 1:
+                summary["qa_blockers"] += hard - 1
+                image_bucket["qa_blockers"] += hard - 1
+        if advisory:
+            summary["consistency_warnings"] += advisory
+            image_bucket = stage_bucket(summary, "image")
+            image_bucket["consistency_warnings"] = image_bucket.get("consistency_warnings", 0) + advisory
+            summary["qa_warnings"] += advisory
+            image_bucket["qa_warnings"] += advisory
 
 
 def run_image_qc_findings(root: str, episode: str, *, fail_closed: bool) -> List[Dict[str, Any]]:
@@ -1382,10 +1719,11 @@ def gate_events(root: str, episode: str, stage: str) -> Tuple[List[Dict[str, Any
         raise RuntimeError("gate.py --json returned a non-list payload")
 
     # C：出图 gate 合并 image_qc 的生图后像素/lint 机检（崩脸/纯文生图/非法 CHAR_id = block）。
-    # image_preflight 也合并它：无 PNG 时像素项自然为空，但 prompt lint 可在付费生图前拦非法 CHAR_id/纯文生图风险。
+    # image_preflight 只合并可在付费前判断的 lint/精度/禁用产物类项；道具禁形逐图确认等像素复核
+    # 留到 image 阶段，避免未烧分镜图时被旧 PNG 或待确认 PNG 卡住。
     return_code = proc.returncode
     if stage in {"image_preflight", "image"}:
-        qc = image_qc_findings(root, episode) if stage == "image_preflight" else run_image_qc_findings(root, episode, fail_closed=True)
+        qc = image_preflight_qc_findings(root, episode) if stage == "image_preflight" else run_image_qc_findings(root, episode, fail_closed=True)
         findings.extend(qc)
         if return_code == 0 and any(str(f.get("sev")).lower() == "block" for f in qc):
             return_code = 1   # image_qc 硬阻断也让出图 gate 失败
@@ -1452,6 +1790,23 @@ def _build_kwargs(ns: argparse.Namespace, *, write: bool) -> Dict[str, Any]:
 
 def cmd_record(ns: argparse.Namespace) -> int:
     event = event_from_record_args(ns)
+    append_events(ns.root, [event])
+    if not ns.no_build:
+        dashboard = build(ns.root, **_build_kwargs(ns, write=True))
+        print_alerts(dashboard.get("alerts", []))
+    print(json.dumps(event, ensure_ascii=False, indent=2))
+    return 0
+
+
+def cmd_waiver(ns: argparse.Namespace) -> int:
+    """记录一次一致性闸门放行/逃生口（执行时「松动」留痕）。
+
+    任何绕过/降级硬闸门的逃生口——`--skip-preflight` / `--skip-final-gate` /
+    `--skip-image-qc` / `N2D_ALLOW_DEGRADED_QC` / 缺 ffprobe·insightface 降级 /
+    `lora register --force` / `validate --approved` 等——都该写一条 waiver 事件，
+    让「松动」从静默变成 dashboard 上可见、可审计的留痕。"""
+    meta = {"waiver": ns.waiver, "reason": ns.reason, "scope": ns.scope}
+    event = make_event(ns.episode, ns.stage, "waiver", source=ns.source, meta=meta)
     append_events(ns.root, [event])
     if not ns.no_build:
         dashboard = build(ns.root, **_build_kwargs(ns, write=True))
@@ -1758,6 +2113,19 @@ def parser() -> argparse.ArgumentParser:
     record.add_argument("--no-build", action="store_true")
     _add_alert_args(record)
     record.set_defaults(func=cmd_record)
+
+    waiver = sub.add_parser("waiver", help="记录一次一致性闸门放行/逃生口（执行时松动留痕）")
+    waiver.add_argument("root")
+    waiver.add_argument("--episode", required=True)
+    waiver.add_argument("--stage", required=True)
+    waiver.add_argument("--waiver", required=True,
+                        help="逃生口标识，如 skip-preflight / skip-final-gate / skip-image-qc / allow-degraded-qc / ffprobe-missing / lora-force")
+    waiver.add_argument("--reason", default="", help="为何放行（自负其责的依据）")
+    waiver.add_argument("--scope", default="", help="影响范围，如 第N集/全集/某Clip")
+    waiver.add_argument("--source", default="manual")
+    waiver.add_argument("--no-build", action="store_true")
+    _add_alert_args(waiver)
+    waiver.set_defaults(func=cmd_waiver)
 
     gate = sub.add_parser("gate", help="run n2d-review gate and record QA findings")
     gate.add_argument("root")

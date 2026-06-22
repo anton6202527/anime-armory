@@ -19,7 +19,7 @@
 - `+LoRA`：写 `LoRA：<model_path> trigger=<trigger> base=<base_model> license=<授权说明>`；缺任一项不启用。
 
 ## 单曲视觉一致性包
-详细见 `visual_consistency.md`。每支 MV 至少明确：主角身份锚点、global_style、palette_anchor、section_look、motif_ledger、forbidden_drift。它比 n2d 的跨集一致性宽松，但足够避免一支歌内换脸、换画风、换主色。
+详细见 `visual_consistency.md`。每支 MV 至少明确：主角身份锚点、global_style、palette_anchor、section_look、motif_ledger、forbidden_drift，避免一支歌内换脸、换画风、换主色。
 
 ## 分镜 prompt = 导演视角八维（不是画师视角的"好看主角图"）
 详见 `mv/references/导演视角prompt.md`。按八维装配：

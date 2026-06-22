@@ -14,6 +14,9 @@ _COMMON = str(Path(__file__).resolve().parent.parent.parent / "n2d" / "_lib")
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import (  # noqa: E402  合规清单 kind / 身份注册路径单一真值源
+    COMPLIANCE_AI_LABEL_DEFAULT_TEXT,
+    COMPLIANCE_AI_LABEL_SPEC,
+    COMPLIANCE_AI_LABEL_STATUSES,
     COMPLIANCE_ALLOWED_RIGHTS,
     COMPLIANCE_APPROVED_CHARACTER,
     COMPLIANCE_BLOCKED_CHARACTER,
@@ -48,6 +51,17 @@ STATUS_LIKE_VALUES = COMPLIANCE_STATUS_LIKE_VALUES
 OVERSEAS_PLATFORMS = COMPLIANCE_OVERSEAS_PLATFORMS
 DOMESTIC_REGIONS = COMPLIANCE_DOMESTIC_REGIONS
 PLACEHOLDER_MARKERS = COMPLIANCE_PLACEHOLDER_MARKERS
+AI_LABEL_STATUSES = COMPLIANCE_AI_LABEL_STATUSES
+
+
+def ai_labeling_required(data: Dict[str, Any]) -> bool:
+    """AI 生成合成内容标识是否适用（纯函数·可测）。
+    默认适用；仅当 `ai_labeling.applicable is False` 时关闭提示。AI 标识在 n2d 中是非阻断
+    后处理/发布待办，不得升级为主流程 BLOCK。"""
+    ai = data.get("ai_labeling")
+    if isinstance(ai, dict) and ai.get("applicable") is False:
+        return False
+    return True
 
 # internal_only 免检范围（与 n2d-review gate 同源，取契约常量）：
 # distribution_intent ∈ COMPLIANCE_INTERNAL_DISTRIBUTION_INTENTS 时，
@@ -196,6 +210,27 @@ def default_manifest(root: Path, episode: str | None = None) -> Dict[str, Any]:
             "filed_at": "",
             "notes": "境内付费投放须先备案后上线；纯海外/内部预览可 applicable=false 并写理由",
         },
+        # AI 生成合成内容标识：保留 manifest 和 compose best-effort 后处理，但不得阻断 n2d 主流程。
+        # 缺配置/未落标只出 INFO 待办；数字水印、平台侧披露与严格 GB 45438 字节级封装均可在工具外补。
+        "ai_labeling": {
+            "applicable": True,
+            "explicit_label": {
+                "status": "pending",  # pending → compose 落标后置 done；not_applicable 须 notes
+                "text": COMPLIANCE_AI_LABEL_DEFAULT_TEXT,
+                "position": "bottom-right",
+            },
+            "implicit_metadata": {
+                "spec": COMPLIANCE_AI_LABEL_SPEC,
+                "service_provider_code": "TODO: 服务提供者编码（GB 45438）",
+                "content_id": "TODO: 内容制作编号",
+                "applied": False,  # compose 写入成片元数据后置 True
+            },
+            "digital_watermark": {
+                "status": "optional_external",  # 第5条鼓励项·可由使用方外置
+                "notes": "数字水印为鼓励项，可外置；本流水线不强制",
+            },
+            "notes": "AI 标识为非阻断发布待办：compose 可 best-effort 落显式标签和元数据；失败不阻断成片/进度，发布前按目标地区/平台补齐",
+        },
     }
 
 
@@ -334,6 +369,34 @@ def check_manifest(root: Path, episode: str | None, stage: str = "compose") -> L
                 flag_skippable("regulatory_filing.release_filing_no（上线备案号）付费投放/review 前必填，不能留 TODO 占位")
             if has_real_value(reg.get("filed_at")) and not valid_iso_date(reg.get("filed_at")):
                 flag_skippable("regulatory_filing.filed_at 须为 YYYY-MM-DD")
+
+    # AI 生成合成内容标识：只产 INFO 待办，不阻断 compose/review。
+    if stage in ("compose", "review"):
+        def flag_ai_label(msg: str) -> None:
+            issues.append(f"INFO {path}: {msg}（AI 标识非阻断；发布前按目标地区/平台补齐）")
+
+        ai = data.get("ai_labeling")
+        if not isinstance(ai, dict):
+            flag_ai_label("缺 ai_labeling；无法自动准备显式标签/元数据隐式标识")
+        elif not ai_labeling_required(data):
+            if not has_real_value(ai.get("notes")):
+                flag_ai_label("ai_labeling.applicable=false 建议在 notes 写明理由（纯海外按目标平台 AIGC 披露等）")
+        else:
+            label = ai.get("explicit_label") if isinstance(ai.get("explicit_label"), dict) else {}
+            meta = ai.get("implicit_metadata") if isinstance(ai.get("implicit_metadata"), dict) else {}
+            lstatus = str(label.get("status") or "").strip()
+            if lstatus and lstatus not in AI_LABEL_STATUSES:
+                flag_ai_label(f"ai_labeling.explicit_label.status 建议为 {'/'.join(AI_LABEL_STATUSES)}；got {lstatus}")
+            if not has_real_value(label.get("text")):
+                flag_ai_label("ai_labeling.explicit_label.text 缺显式标签文案（如「AI生成」）")
+            for key in ("service_provider_code", "content_id"):
+                if not has_real_value(meta.get(key)):
+                    flag_ai_label(f"ai_labeling.implicit_metadata.{key} 缺；无法自动写入完整元数据隐式标识")
+            if stage == "review":
+                if lstatus != "done":
+                    flag_ai_label("ai_labeling.explicit_label.status 尚非 done；成片未确认已落显式标签")
+                if meta.get("applied") is not True:
+                    flag_ai_label("ai_labeling.implicit_metadata.applied 尚非 true；成片未确认已写元数据")
 
     return issues
 

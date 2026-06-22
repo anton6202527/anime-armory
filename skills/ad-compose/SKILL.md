@@ -1,13 +1,13 @@
 ---
 name: ad-compose
-description: 拍广告 第7阶段·剪辑包装 + 多版本交付 — 拼 clips + 混 VO/音乐床/SFX（张力 ducking）+ 字幕（Pillow PNG overlay，无 libass）+ 品牌包装片尾 end card（logo+slogan+CTA）→ 成片_主片.mp4；再派生多时长 cutdown（30→15→6s，按镜头优先级重剪保钩子/产品/CTA）+ 多比例 reframe（16:9/9:16/1:1 中心裁切/加边）+ 交付规格归一（响度 LUFS·安全框）。ad-* 自包含，不复用 n2d-compose。Use when asked 广告合成/剪辑包装/成片/cutdown/多比例/多时长/片尾包装/交付/响度 for a 拍广告 project. Triggers 广告合成, 剪辑包装, 成片, 片尾包装, end card, cutdown, 多比例, 多时长, reframe, 交付, 响度, LUFS, 安全框, ad-compose.
+description: 拍广告 第7阶段·剪辑包装 + 多版本交付 — 拼 clips + 混 VO/音乐床/SFX（张力 ducking）+ 字幕（Pillow PNG overlay，无 libass）+ 品牌包装片尾 end card（logo+slogan+CTA）→ 成片_主片.mp4；再派生多时长 cutdown（30→15→6s，按镜头优先级重剪保钩子/产品/CTA）+ 多比例 reframe（16:9/9:16/1:1 中心裁切/加边）+ 交付规格归一（响度 LUFS·安全框）。Use when asked 广告合成/剪辑包装/成片/cutdown/多比例/多时长/片尾包装/交付/响度 for a 拍广告 project. Triggers 广告合成, 剪辑包装, 成片, 片尾包装, end card, cutdown, 多比例, 多时长, reframe, 交付, 响度, LUFS, 安全框, ad-compose.
 ---
 
 # ad-compose — 拍广告 · 剪辑包装 + 多版本交付
 
-把 clips 拼成成片并做**品牌包装 + 多版本交付**——这是广告线相对 n2d 的后端强化。
+把 clips 拼成成片并做**品牌包装 + 多版本交付**。
 
-**自包含**：不复用 `n2d-compose`；ffmpeg 无 libass，字幕走 Pillow PNG overlay。
+ffmpeg 无 libass 时，字幕走 Pillow PNG overlay。
 
 ## 偏好（私有）
 
@@ -37,7 +37,7 @@ description: 拍广告 第7阶段·剪辑包装 + 多版本交付 — 拼 clips 
 - **品牌包装 end card**：`endcard.py` 用品牌色背景 + logo + slogan + CTA 胶囊按钮（Pillow，无 libass 也能做）。关键 logo/包装文字用真素材，不靠 AI 生。
 - **多时长 cutdown**：`cutdown.py` 不机械截断，按镜头优先级（CTA/产品/钩子必保）重剪——**必保镜先占预算、可选镜补剩余预算**（避免低优先级镜先吃预算把骨架挤溢出）；时长读权威 `镜头时长.json`，缺则 block（不会把 0s 骨架误判成通过）；`--render` 实际出 MP4，带 pytest。
 - **多比例 reframe**：`reframe.py` 算裁切/加边滤镜并 `--render` 出片。默认中心裁切；`--crop-x/--crop-y` 指定归一焦点把裁切窗对到主体（偏置主体不被裁）。不传焦点时不再宣称 safe-area 感知，只提示主体居中假设。带 pytest。
-- **交付规格**：响度归一（LUFS）+ 安全框 + 帧率，是广告投放硬指标（n2d 没有）。
+- **交付规格**：响度归一（LUFS）+ 安全框 + 帧率，是广告投放硬指标。
 
 ## 接缝处理（治"剪起来跳"）
 

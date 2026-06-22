@@ -1,7 +1,34 @@
 """consistency_audit.summarize 纯函数单测（无依赖）。
 cd skills/n2d-review/scripts && python -m pytest test_consistency_audit.py
 """
-import consistency_audit as ca
+import consistency_audit as ca  # noqa: F401  （导入即把 n2d/_lib 放进 sys.path）
+import n2d_schema
+
+
+def test_gate_unaudited_dimensions_allowlist_locked():
+    # #4：把「无 gate 机检 runner（空 audit_labels）」的维度钉成显式 allowlist，
+    # 防未来新增维度漏配 audit_labels 而**静默**失去机检（schema 模块加载已断言，这里给可读回归）。
+    empty = {k for k, v in n2d_schema.CONSISTENCY_DIMENSIONS.items() if not v.get("audit_labels")}
+    assert empty == n2d_schema.GATE_UNAUDITED_DIMENSIONS
+    # 2026-06：audio_visual_sync 已接入 音画同步(AV1)，rhythm_density 已接入 节奏密度(Rhythm)。
+    assert n2d_schema.GATE_UNAUDITED_DIMENSIONS == frozenset()
+
+
+def test_all_consistency_audit_sections_are_score_mapped():
+    # 新增检测器必须进入 n2d_schema audit_labels，否则 gate 能看见但 n2d-score 不会扣分。
+    expected = {
+        "语义谱系(P0)", "状态百科(P1)", "多模态(P2)", "契约继承", "锚点门(N3)", "脸(G1)",
+        "服装配色(N1)", "发型(H1)", "片内时序(N2)", "场景(O2)", "风格(S1)", "接缝接力",
+        "称谓口头禅(A1)", "字幕对齐(L1)", "糊/低质(N4)", "手部/解剖(N5)", "身高比例(R1)",
+        "轴线视线(X1)", "天气时辰(W1)", "字幕安全区(L2)", "音画同步(AV1)", "空间站位(B1)",
+        "节奏密度(Rhythm)",
+    }
+    mapped = {
+        label
+        for spec in n2d_schema.CONSISTENCY_DIMENSIONS.values()
+        for label in spec.get("audit_labels", ())
+    }
+    assert expected <= mapped
 
 
 def test_summarize_counts_and_total_block():
@@ -21,6 +48,12 @@ def test_summarize_counts_and_total_block():
 def test_summarize_empty():
     s = ca.summarize({})
     assert s["total_block"] == 0 and s["by_dim"] == {}
+
+
+def test_exit_code_for_production_blocks_degraded_precision():
+    summary = {"total_block": 0, "precision_level": "degraded"}
+    assert ca.exit_code_for(summary, profile="demo") == 0
+    assert ca.exit_code_for(summary, profile="production") == 1
 
 
 def test_section_details_keep_return_scope():
@@ -85,6 +118,9 @@ def test_findings_payload_and_export(tmp_path):
     assert data["kind"] == "n2d_consistency_findings"
     assert data["auto_return_tasks"][0]["scope"].startswith("脸(G1)")
     assert path.endswith("consistency_findings_第1集.json")
+    ledger_path = tmp_path / "生产数据" / "consistency_ledger_第1集.json"
+    assert ledger_path.exists()
+    assert json.loads(ledger_path.read_text(encoding="utf-8"))["kind"] == "n2d_consistency_ledger"
 
 
 def test_contract_inheritance_result_becomes_video_prompt_task(tmp_path):

@@ -13,10 +13,12 @@ from typing import Dict, List, Optional
 
 
 DEFAULTS = {
+    "小说用途": "未定",
     "权利来源": "未声明",
     "输出格式": "txt+docx",
     "小说生成模式": "稳妥初稿",
     "小说生成工作流": "默认单步",
+    "小批回扫间隔": "5章",
     "章节生成粒度": "逐章",
     "发行地区": "未定",
     "AI使用披露": "AI-assisted",
@@ -163,10 +165,47 @@ def global_settings_path(repo_root: str) -> str:
 def normalize_setting_value(key: str, value: str) -> str:
     """Normalize historical aliases that should not leak into novel execution."""
     normalized = (value or "").strip()
+    if key == "小说用途":
+        aliases = {
+            "红果": "漫剧源书",
+            "红果短剧": "漫剧源书",
+            "红果漫剧": "漫剧源书",
+            "红果漫剧源书": "漫剧源书",
+            "抖音": "漫剧源书",
+            "抖音短剧": "漫剧源书",
+            "抖音漫剧": "漫剧源书",
+            "抖音漫剧源书": "漫剧源书",
+            "短剧": "微短剧源书",
+            "微短剧": "微短剧源书",
+            "漫剧": "漫剧源书",
+            "传统": "传统小说",
+            "传统网文": "传统小说",
+            "传统连载": "传统小说",
+            "网文": "传统小说",
+            "长篇": "传统小说",
+            "短篇": "短读/短篇",
+            "短读": "短读/短篇",
+        }
+        return aliases.get(normalized, normalized)
     if key == "篇幅档" and normalized in {"抖音漫剧", "红果短剧"}:
         return "漫剧"
     if key == "小说生成工作流" and normalized in {"三段式", "Trio", "trio"}:
         return "三步迭代"
+    if key == "小说生成工作流" and normalized in {
+        "边写边检",
+        "边写边审",
+        "写后自检",
+        "实时自检",
+        "write-check",
+        "write_check",
+        "live-check",
+        "live_check",
+    }:
+        return "边写边自检"
+    if key == "小批回扫间隔" and normalized in {"off", "none", "0", "0章", "不回扫"}:
+        return "关闭"
+    if key == "小批回扫间隔" and normalized.isdigit():
+        return f"{normalized}章"
     return normalized
 
 

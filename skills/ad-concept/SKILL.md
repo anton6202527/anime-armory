@@ -1,11 +1,11 @@
 ---
 name: ad-concept
-description: 拍广告 第1阶段·创意策划 — 把 需求/brief.json（客户需求）转成创意：big idea / 一句话主张(key message) / 创意路线(功能卖点·情感·幽默·悬念·种草) / mood&reference / KV(key visual) 方向 / 故事线。产 创意/concept.md + 创意脚本.md，交给 ad-script 写脚本。ad-* 自包含，不复用 novel-create。Use when starting a 拍广告 project's creative, or asked 广告创意 / big idea / 创意策划 / 一句话主张 / 创意脚本 / mood board. Triggers 广告创意, 创意策划, big idea, 大创意, 一句话主张, key message, 创意路线, KV方向, 创意脚本, ad-concept.
+description: 拍广告 第1阶段·创意策划 — 把 需求/brief.json（客户需求）转成创意：big idea / 一句话主张(key message) / 创意路线(功能卖点·情感·幽默·悬念·种草) / mood&reference / KV(key visual) 方向 / 故事线。产 创意/concept.md + 创意脚本.md，交给 ad-script 写脚本。ad-* 自包含。Use when starting a 拍广告 project's creative, or asked 广告创意 / big idea / 创意策划 / 一句话主张 / 创意脚本 / mood board. Triggers 广告创意, 创意策划, big idea, 大创意, 一句话主张, key message, 创意路线, KV方向, 创意脚本, ad-concept.
 ---
 
 # ad-concept — 拍广告 · 创意策划（策略层）
 
-把**客户需求 brief** 转成**创意**。这是广告线相对 novel/n2d 独有的**策略层**：先有 big idea 和一句话主张，再有脚本分镜。**自身只产创意文档，不写分拆镜头脚本**（那是 `ad-script`）。
+把**客户需求 brief** 转成**创意**。广告创意先定 big idea 和一句话主张，再进入脚本分镜。**自身只产创意文档，不写分拆镜头脚本**（那是 `ad-script`）。
 
 **输入**：`需求/brief.json` + `brief.md`（若还没填全，先访谈式补齐）。
 **产物**：`创意/concept.md`（big idea/主张/路线/mood&reference/KV方向/故事线）+ `创意/创意脚本.md`（creative treatment：一段式叙述创意如何展开，给 ad-script 拆镜头用）。

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """n2d-progress/scan.py — 制漫剧(n2d)进度扫描器（只读）。
 
-只扫描 `制漫剧/<剧名>/_进度.md`，解析其中的逐集流程矩阵表，压缩输出：
+默认扫描 `创作区/制漫剧/<剧名>/_进度.md`，并兼容旧 `制漫剧/<剧名>/_进度.md`。
+解析其中的逐集流程矩阵表，压缩输出：
 每阶段完成数 + 生产前沿(下一步该跑哪个 n2d skill) + 次要缺口。
 **绝不把上百行的大表灌进上下文，绝不修改任何文件。**
 
@@ -12,7 +13,7 @@ raw=源文本，展示但不计入流程完成判定。
 纯标准库，系统 Python 即可。
 
 用法：
-  python3 scan.py                 # 扫描 制漫剧/ 下所有剧
+  python3 scan.py                 # 扫描 创作区/制漫剧/ 下所有剧（兼容旧 制漫剧/）
   python3 scan.py <剧根> [...]     # 只看指定剧（含 _进度.md 的目录）
   python3 scan.py --root <仓库根>  # 指定仓库根（默认=自动向上找）
 """
@@ -36,6 +37,7 @@ except Exception:  # pragma: no cover - 横切检查可选，缺契约也不影�
     cross_cutting_tools = None
     COSTLY_HINTS = None
 
+CREATION_ROOT_DIR = "创作区"
 LINE_DIR = "制漫剧"  # 只管 n2d 这一条线
 
 DISPATCHER = "n2d"  # 认不出列名时兜底
@@ -332,6 +334,14 @@ def find_repo_root(start):
     return os.path.abspath(start)
 
 
+def line_root_candidates(repo_root):
+    """Return preferred line roots, newest layout first, then legacy fallback."""
+    return [
+        os.path.join(repo_root, CREATION_ROOT_DIR, LINE_DIR),
+        os.path.join(repo_root, LINE_DIR),
+    ]
+
+
 def main(argv):
     args = list(argv)
     repo_root = None
@@ -351,15 +361,16 @@ def main(argv):
             else:
                 print(f"（跳过 {rel}：无 _进度.md）")
     else:
-        base = os.path.join(repo_root, LINE_DIR)
-        if os.path.isdir(base):
+        for base in line_root_candidates(repo_root):
+            if not os.path.isdir(base):
+                continue
             for name in sorted(os.listdir(base)):
                 root = os.path.join(base, name)
                 if os.path.isfile(os.path.join(root, "_进度.md")):
-                    works.append((root, os.path.join(LINE_DIR, name)))
+                    works.append((root, os.path.relpath(root, repo_root)))
 
     if not works:
-        print(f"未找到任何含 _进度.md 的剧。线根目录：{LINE_DIR}/")
+        print(f"未找到任何含 _进度.md 的剧。线根目录：{CREATION_ROOT_DIR}/{LINE_DIR}/")
         return 0
 
     def run_report(root, rel):

@@ -6,7 +6,7 @@
 
 ## `_meta.json` Schema
 
-所有 `写小说/<项目>/` 根目录必须有 `_meta.json`。
+所有 `创作区/写小说/<项目>/` 根目录必须有 `_meta.json`。
 
 ### 通用字段
 
@@ -25,8 +25,9 @@
 | `requires_region_rights_review` | bool | 公版推荐 | 公版但非全球覆盖时为 true |
 | `requires_user_rights` | bool | 来源要求时填 | 通用/授权来源是否要求用户自持权利 |
 | `rights_declared_at` | string/null | 派生授权时填 | `YYYY-MM-DD` |
-| `outputs` | list[string] | 是 | 只能含 `txt/docx/outline/n2d` |
+| `outputs` | list[string] | 是 | 只能含 `txt/docx/outline` |
 | `created_at` | string | 是 | `YYYY-MM-DD` |
+| `purpose` | string | 推荐 | 小说最终用途，如 `传统小说/漫剧源书/微短剧源书/短读/短篇/出海译制底稿/自定义`；用途先于平台决定交付形态，红果/抖音等差异写入 `target_platform` |
 | `target_platform` | string | 推荐 | 起名、评分、章长权重使用 |
 | `draft_mode` | string | 推荐 | `极速初稿/稳妥初稿/商业连载/漫剧源书`，决定写章 gate 密度 |
 | `chapter_granularity` | string | 推荐 | `逐章/小批/全书草稿`，决定生成任务包的批次 |
@@ -36,7 +37,7 @@
 
 `create/spinoff/rewrite` 使用统一 scale：
 
-| scale | 字数/章 target | min-max | 默认章数 |
+| scale | 单章建议篇幅 target | 质检预警带宽 min-max | 默认章数 |
 |---|---|---|---|
 | `漫剧` | 1000-1500 | 800-1800 | 90 |
 | `微短剧` | 1500-2500 | 1200-3000 | 50 |
@@ -48,7 +49,10 @@
 - `scale`
 - `target_chapters`
 - `target_words_per_chapter`
+- `target_wordcount_min_max`
 - `demo_chapters`
+
+`target_words_per_chapter` 与 `target_wordcount_min_max` 是历史字段名，当前语义分别是单章建议篇幅与 review 默认预警带宽。旧项目缺该字段时，`mechanical_check.py` 会按 `scale.min_max` 或 `target_words_per_chapter` 推导；再缺才回退旧漫剧带宽。该带宽只生成预警，不允许单独裁定拆章。
 
 ### kind 专属字段
 
@@ -115,7 +119,7 @@
 | `demo` | 前 1-3 章验证文风、爽点、钩子、设定自洽 | `novel-create` | 回蓝图/设定/章纲/风格卡，不批量写 |
 | `draft` | 批量写余下章节：先出章节任务包，再由 agent/子代理逐章写，写完填状态增量 | `novel-craft/scripts/draft_packets.py` + `novel-create/agent` | 就地修章、重出任务包，或回 `demo` |
 | `review` | 机检 + 人判一致性回扫 | `novel-review` | 按报告回源头阶段 |
-| `export` | QA gate 通过后导出 txt/docx/outline/n2d | `novel-craft/scripts/export.py` | 先清 `review_report/score_report` 阻断；再修 `_meta/章节` |
+| `export` | QA gate 通过后导出 txt/docx/outline | `novel-craft/scripts/export.py` | 先清 `review_report/score_report` 阻断；再修 `_meta/章节` |
 
 ## 派生同构阶段表
 
@@ -129,20 +133,22 @@
 | `demo` | 前 1-3 章验证文风/方向/设定 | 当前派生 skill | 回设定/章纲/口吻卡，不批量写 |
 | `draft` | 批量写余下章节：先出章节任务包，再由 agent/子代理逐章写，写完填状态增量 | `novel-craft/scripts/draft_packets.py` + 当前派生 skill/agent | 就地修章、重出任务包，或回 `demo` |
 | `review` | 机检 + 人判一致性回扫 | `novel-review` | 按报告回源头阶段 |
-| `export` | QA gate 通过后导出 txt/docx/outline/n2d | `novel-craft/scripts/export.py` | 先清 `review_report/score_report` 阻断；再修 `_meta/章节` |
+| `export` | QA gate 通过后导出 txt/docx/outline | `novel-craft/scripts/export.py` | 先清 `review_report/score_report` 阻断；再修 `_meta/章节` |
 
 ## QA gate
 
 `scripts/report_gate.py <作品根>` 是 rights/review/score 到调度器的硬闸：
 
 - 读取 `_meta.json` 和 `小说/source_manifest.json`：显式 `rights_status=unknown` 或来源要求用户权利但缺 `rights_declared/rights_declared_at` → `RIGHTS-*` 阻断。
-- 公版来源必须区分 `rights_covered_regions` 与 `distribution_regions`。普通文本导出缺发行区先 warning；导出 `n2d`/`combine`、商业连载/漫剧源书、目标平台含红果/番茄/抖音/漫剧时，缺发行区或发行区不被来源覆盖 → `RIGHTS-PD-REGION-*` 阻断。
+- 公版来源必须区分 `rights_covered_regions` 与 `distribution_regions`。普通文本导出缺发行区先 warning；导出 `combine`、商业连载、目标平台含红果/番茄/抖音/漫剧时，缺发行区或发行区不被来源覆盖 → `RIGHTS-PD-REGION-*` 阻断。
 - Export 硬闸默认要求 `审稿/review_report.json` 存在；缺失即 `REVIEW-MISSING` 阻断。`progress.py` 只做续跑提示，缺报告先显示 warning。
 - 读取 `source_snapshot`：review/score 报告必须绑定正文 hash。正文文件 hash、aggregate hash 不匹配，或 review 报告生成后 `章节/` 新增/删除文件，进入 `REVIEW-SNAPSHOT` / `SCORE-SNAPSHOT`；export 阶段阻断，progress 阶段提示。
 - 读取 `审稿/review_report.json`：任一 `blocking=true` 或 `severity=blocking` → 阻断。
 - 读取 `评分/score_report.json`：`verdict=大改/弃稿重立` → 阻断。
 - 读取 `评分/score_report.json.market_baseline.freshness`：`blocking=true` → `SCORE-BASELINE` 阻断；只有 `score_report.waivers[]` 或 `审稿/waiver_log.jsonl` 存在同 `baseline_date + freshness_status` 作用域的 `score_baseline_freshness` 时降为 warning。
-- 缺 `score_report.json`：商业连载、漫剧源书、目标平台含红果/番茄/抖音/漫剧时阻断；其他项目 warning。
+- 缺 `score_report.json`：商业连载、漫剧源书、目标平台含红果/番茄/抖音/漫剧时在 export / go-no-go 节点阻断；`drafting` 阶段不阻断，因为还没有可评分正文样本。
+- `review` / `score` / `export` 阶段要求章节写后闭环：`审稿/state_delta_第NN章.json` 必须存在，并且已合并进 `审稿/state_ledger.json.chapter_deltas.chapter_NN`。
+- 商业/平台/出海导出时要求 `合规/ai_usage.json`；`AI-generated` / `AI-assisted` 文本必须填写 `human_contribution`，记录创意、人工改写、审稿取舍等人类贡献。
 - 所有绕过 gate 的动作必须写 `审稿/waiver_log.jsonl`；报告自身也应带 `waivers[]`。waiver 必须写 `scope`，能绑定章节、报告、baseline 或具体 gate 时不能留空。
 - `scripts/progress.py` 会展示阻断和推荐回流 stage；`scripts/export.py` 默认阻断导出。
 
@@ -157,7 +163,7 @@
 
 ## AI 使用披露
 
-发布或交平台前跑 `scripts/ai_usage.py <作品根> --text-mode AI-generated|AI-assisted|未使用AI文本`，产出：
+发布或交平台前跑 `scripts/ai_usage.py <作品根> --text-mode AI-generated|AI-assisted|未使用AI文本 --human-contribution "<人工贡献>"`，产出：
 
 - `合规/ai_usage.json`
 - `合规/AI使用说明.md`

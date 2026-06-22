@@ -42,7 +42,19 @@ def write_review_pass(project_root):
             "mechanical_findings_path": "审稿/mechanical_findings.json",
             "waivers": [],
             "findings": [],
-            "next_actions": [],
+                "next_actions": [],
+        }, f, ensure_ascii=False)
+    with open(os.path.join(project_root, "审稿", "state_delta_第01章.json"), "w", encoding="utf-8") as f:
+        json.dump({
+            "schema_version": 1,
+            "kind": "novel_state_delta",
+            "chapter": 1,
+        }, f, ensure_ascii=False)
+    with open(os.path.join(project_root, "审稿", "state_ledger.json"), "w", encoding="utf-8") as f:
+        json.dump({
+            "schema_version": 1,
+            "kind": "novel_state_ledger",
+            "chapter_deltas": {"chapter_01": {"merged": True}},
         }, f, ensure_ascii=False)
 
 
@@ -157,7 +169,7 @@ class ExportContractTest(unittest.TestCase):
             self.assertEqual(waiver["type"], "ignore_qa_gate")
             self.assertEqual(waiver["scope"]["chapter_count"], 1)
             self.assertIn("source_aggregate_hash", waiver["scope"])
-            self.assertEqual(waiver["scope"]["blocker_ids"], ["REVIEW-MISSING"])
+            self.assertEqual(waiver["scope"]["blocker_ids"], ["REVIEW-MISSING", "STATE-DELTA-MISSING"])
             self.assertTrue(os.path.exists(os.path.join(project, "导出", "源书-扩写.txt")))
 
 

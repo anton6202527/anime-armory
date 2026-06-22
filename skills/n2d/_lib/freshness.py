@@ -59,6 +59,13 @@ CANDIDATE_SOURCES: List[Dict[str, object]] = [
         "note": "VIDEO_BACKEND_PROFILES 视频后端能力档（max_clip_seconds/native_av/identity）。",
     },
     {
+        "id": "n2d-video-backend-adapter",
+        "path": "skills/n2d/_lib/video_backend_adapter.py",
+        "choice_points": ["生视频模型", "生视频渠道", "视频模型路由"],
+        "max_age_days": 7,
+        "note": "VIDEO_BACKEND_ADAPTERS 生视频后端执行适配层（帧消费/原生音画/口型/身份/输出 schema）；付费出视频前还需落本次 per-run 刷新证据。",
+    },
+    {
         "id": "n2d-image-backends",
         "path": "skills/n2d/_lib/n2d_schema.py",
         "choice_points": ["生图AI"],
@@ -78,6 +85,13 @@ CANDIDATE_SOURCES: List[Dict[str, object]] = [
         "choice_points": ["生图AI"],
         "max_age_days": 45,
         "note": "IMAGE_BACKEND_PROBES 出图后端连通性探针口径（CLI/HTTP/env，gate image_preflight 用）。",
+    },
+    {
+        "id": "n2d-image-backend-adapter",
+        "path": "skills/n2d/_lib/image_backend_adapter.py",
+        "choice_points": ["生图AI"],
+        "max_age_days": 7,
+        "note": "IMAGE_BACKEND_ADAPTERS 官方 API/能力适配层（生成/编辑/多参考/主体库/掩码/输出 schema）；付费出图前还需落本次 per-run 刷新证据。",
     },
 ]
 

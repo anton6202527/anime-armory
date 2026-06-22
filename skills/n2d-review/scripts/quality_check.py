@@ -87,6 +87,23 @@ def _probe_pillow() -> bool:
         return False
 
 
+def episode_png_paths(root: str, ep: str) -> List[str]:
+    """Return episode PNGs from the canonical 图片/ directory, plus legacy flat files."""
+    patterns = [
+        os.path.join(root, "出图", ep, "图片", "*.png"),
+        os.path.join(root, "出图", ep, "*.png"),
+    ]
+    out: List[str] = []
+    seen = set()
+    for pattern in patterns:
+        for path in sorted(glob.glob(pattern)):
+            norm = os.path.normpath(path)
+            if norm not in seen:
+                seen.add(norm)
+                out.append(path)
+    return out
+
+
 def _key_shots(root: str, ep: str) -> set:
     """从 00_总览.md「关键镜」段或 01 prompt 的 🔑 标记里粗取关键镜 PNG 名（糊得更严）。"""
     keys = set()
@@ -97,7 +114,7 @@ def _key_shots(root: str, ep: str) -> set:
             if "🔑" in (blk.splitlines()[0] if blk.strip() else ""):
                 m = re.search(r"出图/[^/]+/([^`』\s]+\.png)", blk)
                 if m:
-                    keys.add(m.group(1))
+                    keys.add(os.path.basename(m.group(1)))
     return keys
 
 
@@ -107,7 +124,7 @@ def analyze(root: str, ep: str, block_frac: float = DEFAULT_BLOCK_FRAC,
     if not res["available"]:
         res["notes"].append("糊检已跳过（未装 Pillow）——清晰度/糊脸暂由人判。")
         return res
-    pngs = sorted(glob.glob(os.path.join(root, "出图", ep, "*.png")))
+    pngs = episode_png_paths(root, ep)
     if not pngs:
         res["notes"].append("本集无分镜 PNG。")
         return res

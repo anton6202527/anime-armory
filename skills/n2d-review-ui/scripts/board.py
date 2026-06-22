@@ -446,7 +446,7 @@ def serve(root: Path, manifest: Dict[str, Any], port: int) -> int:
 
 def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description="Build n2d work-level production board (whole-drama canvas).")
-    ap.add_argument("root", help="作品根, e.g. 制漫剧/剧名")
+    ap.add_argument("root", help="作品根, e.g. 创作区/制漫剧/剧名")
     ap.add_argument("--write", action="store_true", help="write 生产数据/board.html + board.json")
     ap.add_argument("--markdown", action="store_true", help="print a Markdown summary (with --write)")
     ap.add_argument("--serve", action="store_true", help="write then serve on 127.0.0.1")

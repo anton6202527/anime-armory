@@ -28,7 +28,7 @@ description: "Build a local visual UI for n2d. Two zero-build (self-contained HT
 python3 skills/n2d-review-ui/scripts/board.py <作品根> --write --markdown   # 生成 生产数据/board.html + board.json
 python3 skills/n2d-review-ui/scripts/board.py <作品根> --serve [--port 8765] # 本地起服务看板
 ```
-输出：`制漫剧/<剧名>/生产数据/board.html` + `board.json`。**只读不改任何状态**；要改进度/重跑仍走对应 skill。
+输出：`创作区/制漫剧/<剧名>/生产数据/board.html` + `board.json`。**只读不改任何状态**；要改进度/重跑仍走对应 skill。
 
 ## 触发
 
@@ -54,9 +54,9 @@ python3 skills/n2d-review-ui/scripts/review_ui.py <作品根> 第N集 --write --
 输出：
 
 ```text
-制漫剧/<剧名>/生产数据/review_ui_第N集.html
-制漫剧/<剧名>/生产数据/review_ui_第N集.json
-制漫剧/<剧名>/生产数据/review_ui_findings_第N集.json   # --export-findings 时生成，kind=n2d_consistency_findings
+创作区/制漫剧/<剧名>/生产数据/review_ui_第N集.html
+创作区/制漫剧/<剧名>/生产数据/review_ui_第N集.json
+创作区/制漫剧/<剧名>/生产数据/review_ui_findings_第N集.json   # --export-findings 时生成，kind=n2d_consistency_findings
 ```
 
 HTML 是静态文件，可直接用浏览器打开；不需要开发服务器。若媒体文件已落档，浏览器会直接显示图片和视频。

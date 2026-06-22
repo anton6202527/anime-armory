@@ -5,7 +5,7 @@ description: 写歌·作曲+演唱 — 把定稿歌词 + 曲风，生成一首�
 
 # song-compose — 作曲 + 演唱（写歌线第 2 步）
 
-把 `写歌/<曲名>/词/lyrics.md`（定稿）+ 曲风，生成**带人声的完整歌** `歌/song.wav`。**自包含**，只用通用音乐生成工具。
+把 `创作区/写歌/<曲名>/词/lyrics.md`（定稿）+ 曲风，生成**带人声的完整歌** `歌/song.wav`。**自包含**，只用通用音乐生成工具。
 
 > **关键认知**：项目里的 CosyVoice/FishSpeech 是 **TTS（说话），不会唱歌**。唱歌必须用**音乐生成模型**（出曲+人声）或歌声转换。
 
@@ -38,7 +38,7 @@ description: 写歌·作曲+演唱 — 把定稿歌词 + 曲风，生成一首�
    - DiffRhythm / manual → 按任务包生成。
 3. **登记 take**：外部生成的每版音频用 `compose_song.py --register <音频> --take N` 写回 `歌/takes/take_NN.wav` 和 manifest。
 4. **挑版**：音乐生成随机性大，**多生几版挑最佳**（副歌 hook / 人声清晰 / 与蓝图贴合 / MV 卡点适配）。用 `compose_song.py --score take_NN ...` 记录试听分。
-5. **落档**：用 `compose_song.py --select take_NN` 把选中版归一成 `歌/song.wav`；回写 `_进度.md`。下一步：继续 `song-cover`（可选换音色）或 `song-review` / `song-craft` 合规留痕，再交 **`mv`** 做视频。
+5. **落档**：用 `compose_song.py --select take_NN` 把选中版归一成 `歌/song.wav`；回写 `_进度.md`。下一步：继续 `song-cover`（可选换音色）或 `song-review` / `song-craft` 合规留痕；如需视频制作，交付最终音频成品即可。
 
 ## 多版任务包 / 挑版脚本
 ```bash
@@ -64,5 +64,5 @@ python3 <skill>/scripts/place_song.py <写歌作品根> <生成的歌文件> [--
 | 拿 TTS 来"唱" | TTS 不会唱；必用音乐生成模型(Suno/ACE-Step) |
 | 克隆真人歌手嗓未授权 | 拒做；只用自有/授权/合成音色 |
 | 一版就定 | 先生成/登记多版，按 take manifest 挑旋律/演唱最佳 |
-| 不分离人声直接给 mv-lyric-sync | demucs 分 vocals 对齐更准（--split） |
-| 想复用 n2d-voice | 那是说话 TTS；唱歌各写各的 |
+| 需要更准地检查人声 | 先用 demucs 分离 vocals，再做试听和时间点核对 |
+| 拿说话 TTS 当唱歌 | TTS 只能说话；唱歌必须走音乐生成或歌声转换 |

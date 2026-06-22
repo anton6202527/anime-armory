@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""配音/TTS 后端注册表（跨线管道 · 纯标准库 · 无网络调用）。
+"""配音/TTS 后端注册表（n2d 私有 · 纯标准库 · 无网络调用）。
 
-这是「配音后端」选择点的**候选快照 + 适配层**单一真值源。此前各线（n2d-voice /
-ad-voice）各自把后端优先级 + env 名硬编在 render 脚本里，新增一个零样本后端要改两处、
-易漂。本表把「有哪些后端、各自靠哪个 env 探测、优先级、能力、是否克隆真人嗓需授权」
-收敛到一处；render 脚本只 import 优先级 spec 与归一函数，不再各抄一份。
+这是 n2d「配音后端」选择点的**候选快照 + 适配层**单一真值源。它记录有哪些后端、
+各自靠哪个 env 探测、优先级、能力、是否克隆真人嗓需授权。render 脚本只 import
+优先级 spec 与归一函数，不再内联硬编一份。
 
-为何放 common/ 而非某条线：这是纯**管道注册**（env 名/优先级/能力标签），不含某条线
-的业务语义；授权闸门（克隆真人嗓需 VOICE_CLONE_AUTHORIZED=1）仍由各线 voice skill
-自己执行——见 `skills/n2d/references/选择点与偏好.md` common/ 判据：删掉后各线表现一致 → 进 common/。
+授权闸门（克隆真人嗓需 VOICE_CLONE_AUTHORIZED=1）由 n2d-voice 执行。
 
 戳记：催 本线 _lib/refresh.py 按需核验后端是否新增/改名/改 env。
 采集日期：2026-06-13  来源：n2d-voice/render_voice.py 现行优先级 + 各后端官方文档（待逐条复核）

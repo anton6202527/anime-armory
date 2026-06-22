@@ -7,18 +7,18 @@
 
   - 上游契约源（单一真值源，按优先级）：
       ① `出图/分镜/prompt/00_总览.md` 的「视觉一致性契约」节 —— 品牌色 HEX / 光位锚 / 轴线
-        在**出图阶段细化后**烤进首帧像素的地方（与 n2d 的 image→video 同口径）；
+        在**出图阶段细化后**烤进首帧像素的地方；
       ② 缺①时回退 `脚本/storyboard.json`.visual_contract（未细化的脚本种子）。
   - 品牌色/光位锚/轴线漂移 = block（广告产品色一漂就废）；画风/景别/构图 = warn。
   - **产品形态交接（PROD_*）**：出图逐镜绑定 PROD_xx 的产品镜，视频 prompt 必须重新
     携带产品的 身份锁定句/资产引用（PROD_xx 或 同一包装/同一 logo/同一品牌色），
-    否则 block —— 镜像 n2d 的 check_identity_handoff（命名角色镜逐镜锁脸）。
+    否则 block —— 产品镜逐镜锁住产品形态、logo 和品牌色。
 
 比对不做脆弱的裸子串匹配：
   - 品牌色按 HEX 归一（去 #/空格/大小写，认 rgb()/常见别名）比对；
-  - 光位/轴线按归一化超集比对（容忍 paraphrase / 标点差异），同 n2d 的 compare_field。
+  - 光位/轴线按归一化超集比对（容忍 paraphrase / 标点差异）。
 
-自包含纯标准库 + 单测，不 import n2d-* / mv-* / ad-craft。
+自包含纯标准库 + 单测，不导入其它系列或上游契约脚本。
 
 用法：
     python3 inherit_contract.py <作品根> --json 出视频/分镜/contract_inheritance.json
@@ -121,7 +121,7 @@ def _brand_color_inherited(img_val, clip_text):
 
 def _field_inherited(img_val, clip_text):
     """光位/轴线等：归一化超集比对（视频 prompt 含上游原文的归一化即视为继承）。
-    paraphrase/标点差异不算漂移（与 n2d compare_field 同口径的超集容忍）。"""
+    paraphrase/标点差异不算漂移。"""
     img_n = _norm(img_val)
     return bool(img_n) and img_n in _norm(clip_text)
 
@@ -152,7 +152,7 @@ def diff_contract(image_contract, clip_prompt_text):
 def check_product_handoff(prod_ids, clip_prompt_text):
     """产品形态交接：本镜绑定的 PROD_xx 产品，视频 prompt 必须重新携带产品身份锁定句/资产引用。
 
-    镜像 n2d 的 check_identity_handoff：命名主体（这里是产品）的逐镜 video prompt 若没锁住
+    命名主体（这里是产品）的逐镜 video prompt 若没锁住
     （既无 PROD_xx 资产引用，又无『同一包装/同一 logo/同一品牌色/身份锁定句』），→ block。
     返回 findings（不含 clip 键）。"""
     findings = []

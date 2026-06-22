@@ -192,6 +192,25 @@ def load_score_inputs(root: Path, ep: str) -> Dict[str, Any]:
     return out
 
 
+def consistency_ledger_path(root: Path, ep: str) -> Path:
+    return production_dir(root) / f"consistency_ledger_{ep}.json"
+
+
+def load_consistency_ledger(root: Path, ep: str) -> Dict[str, Any]:
+    path = consistency_ledger_path(root, ep)
+    data = load_json(path)
+    if not isinstance(data, dict):
+        return {"available": False, "path": rel_to_root(root, path)}
+    rows = [dict(row) for row in data.get("rows", []) if isinstance(row, dict)]
+    return {
+        "available": True,
+        "path": rel_to_root(root, path),
+        "counts": data.get("counts", {}),
+        "rows": rows,
+        "unattributed": data.get("unattributed", []),
+    }
+
+
 def flatten_evidence(score: Optional[Dict[str, Any]]) -> List[Dict[str, Any]]:
     if not isinstance(score, dict):
         return []
@@ -462,6 +481,7 @@ def build_manifest(root: Path, ep: str) -> Dict[str, Any]:
     storyboard = load_storyboard(root, ep)
     score = load_score(root, ep)
     score_inputs = load_score_inputs(root, ep)
+    ledger = load_consistency_ledger(root, ep)
     flags = flatten_evidence(score)
     clips = collect_clips(root, ep, html_dir, storyboard, flags)
     return {
@@ -473,6 +493,7 @@ def build_manifest(root: Path, ep: str) -> Dict[str, Any]:
         "source": {
             "storyboard": rel_to_root(root, storyboard_path(root, ep)),
             "score": rel_to_root(root, score_path(root, ep)),
+            "consistency_ledger": ledger.get("path", ""),
             "identity_registry": rel_to_root(root, registry_path(root)),
         },
         "storyboard": {
@@ -483,6 +504,7 @@ def build_manifest(root: Path, ep: str) -> Dict[str, Any]:
         },
         "score": score_summary(root, ep, score),
         "score_inputs": score_inputs,
+        "consistency_ledger": ledger,
         "clips": clips,
         "seams": collect_seams(clips, flags, load_video_qc_seams(root, ep)),
         "identity_refs": collect_identity_refs(root, html_dir),
@@ -754,13 +776,24 @@ function renderScore() {{
   </section>`;
 }}
 function renderRefs() {{
-  let y = 390;
+  let y = 520;
   return (data.identity_refs || []).map((ref, idx) => {{
     const media = (ref.media || []).map(m => `<div class="ref-img">${{m.exists ? `<img src="${{m.url}}" loading="lazy">` : `<span class="empty">缺<br>${{esc(m.role || '')}}</span>`}}</div>`).join('');
     const html = `<section class="card ref-card" data-kind="ref" style="${{cardStyle(40, y)}}"><div class="card-head"><div class="card-title">${{esc(ref.name || ref.character_id || '定妆参考')}}</div><span class="badge">${{esc(ref.form || '')}}</span></div><div class="ref-strip">${{media || '<span class="empty">无参考图</span>'}}</div><div class="meta">${{esc(ref.anchor_phrase || '')}}</div></section>`;
     y += 240;
     return html;
   }}).join('');
+}}
+function renderLedger() {{
+  const l = data.consistency_ledger || {{}};
+  const counts = l.counts || {{}};
+  const rows = (l.rows || []).slice(0, 5);
+  const worst = rows.some(r => r.overall === 'block') ? 'block' : rows.some(r => r.overall === 'high' || r.overall === 'warn' || r.overall === 'medium') ? 'warn' : 'pass';
+  const body = l.available
+    ? `<div class="meta">⛔ ${{esc(counts.block || 0)}} · high ${{esc(counts.high || 0)}} · medium ${{esc(counts.medium || 0)}}<br>${{esc(l.path || '')}}</div>
+       <div class="score-dims">${{rows.map(r => `<div class="dimrow"><span>${{esc(r.name || r.id)}} · ${{esc(r.kind || '')}}</span><strong>${{esc(r.overall || 'ok')}}</strong></div>`).join('')}}</div>`
+    : '<div class="empty">未生成 consistency_ledger；先跑 n2d-review consistency_audit</div>';
+  return `<section class="card" data-kind="ledger" style="${{cardStyle(40, 330)}}"><div class="card-head"><div class="card-title">一致性总账</div><span class="badge ${{worst}}">${{l.available ? rows.length : 'missing'}}</span></div>${{body}}</section>`;
 }}
 function renderClip(clip, idx) {{
   const x = 380 + idx * 360;
@@ -786,8 +819,8 @@ function renderGlobalFlags() {{
 }}
 function render() {{
   setTitle();
-  canvas.innerHTML = `<div class="lane" style="top:130px"></div><div class="lane-label" style="top:118px">Clip 时间线</div><div class="lane" style="top:675px"></div><div class="lane-label" style="top:663px">接缝</div><div class="lane-label" style="top:355px">定妆参考</div>` +
-    renderScore() + renderGlobalFlags() + renderRefs() + (data.clips || []).map(renderClip).join('') + (data.seams || []).map(renderSeam).join('');
+  canvas.innerHTML = `<div class="lane" style="top:130px"></div><div class="lane-label" style="top:118px">Clip 时间线</div><div class="lane" style="top:675px"></div><div class="lane-label" style="top:663px">接缝</div><div class="lane-label" style="top:500px">定妆参考</div>` +
+    renderScore() + renderGlobalFlags() + renderLedger() + renderRefs() + (data.clips || []).map(renderClip).join('') + (data.seams || []).map(renderSeam).join('');
   applyFilters();
 }}
 function applyFilters() {{
@@ -867,7 +900,7 @@ def write_outputs(root: Path, ep: str, manifest: Dict[str, Any]) -> Dict[str, st
 
 def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description="Build n2d human review UI canvas.")
-    ap.add_argument("root", help="作品根, e.g. 制漫剧/剧名")
+    ap.add_argument("root", help="作品根, e.g. 创作区/制漫剧/剧名")
     ap.add_argument("episode", help="第N集")
     ap.add_argument("--write", action="store_true", help="write 生产数据/review_ui_第N集.html/json")
     ap.add_argument("--export-findings", action="store_true", help="write batch-compatible review_ui_findings_第N集.json")

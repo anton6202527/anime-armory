@@ -1,16 +1,16 @@
 ---
 name: n2d-compliance
-description: P0 compliance and rights preflight for n2d. Create and validate 合规/compliance_manifest.json before paid image/video/compose/review gates, covering source/adaptation copyright, character likeness authorization, voice cloning authorization, target-platform review, NRTA 广电备案/分级/播前审核 (regulatory_filing), and overseas localization. (AI 标识/水印 enforcement was retired 2026-06 — that obligation is handled outside the pipeline.) Use when asked for 合规前置, 版权前置, 角色授权, 声音克隆授权, 平台审核, 广电备案, 网络微短剧备案, 播前审核, 分级, 出海本地化, compliance gate, copyright gate.
+description: P0 compliance and rights preflight for n2d. Create and validate 合规/compliance_manifest.json before paid image/video/compose/review gates, covering source/adaptation copyright, character likeness authorization, voice cloning authorization, target-platform review, NRTA 广电备案/分级/播前审核 (regulatory_filing), overseas localization, and AI 生成合成内容标识待办 (ai_labeling — 显式标签/元数据/水印只做 INFO 和 best-effort 后处理，不阻断主流程). Use when asked for 合规前置, 版权前置, 角色授权, 声音克隆授权, 平台审核, 广电备案, 网络微短剧备案, 播前审核, 分级, 出海本地化, AI标识, AI生成标识, compliance gate, copyright gate.
 ---
 
 # n2d-compliance — 合规与版权前置
 
-`n2d-compliance` 是 n2d 的 P0 合规包入口。它不做法律判断，也不替代律师或平台最终审核；它把“必须先确认的权利与披露事项”变成机器可读文件，让 `n2d-review/scripts/gate.py` 在出图、出视频、合成、审查前阻断。
+`n2d-compliance` 是 n2d 的 P0 合规包入口。它不做法律判断，也不替代律师或平台最终审核；它把“必须先确认的权利与监管事项”变成机器可读文件，让 `n2d-review/scripts/gate.py` 在出图、出视频、合成、审查前阻断。AI 标识/披露/水印例外：只做 INFO 待办和 best-effort 后处理，不阻断主流程。
 
 核心文件：
 
 ```text
-制漫剧/<剧名>/合规/compliance_manifest.json
+创作区/制漫剧/<剧名>/合规/compliance_manifest.json
 ```
 
 ## 输入 / 输出 / 读写边界
@@ -45,18 +45,19 @@ python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第1集 --sta
 - **平台审核**：发布候选必须写 `platform_review.targets[]`，含平台、地区、规则 profile、检查日期、版权审核、内容分级审核。
 - **广电备案/分级/播前审核（2026 新规·境内投放）**：`regulatory_filing` 段——`regime=NRTA_网络微短剧`、`tier`（分级：重点/普通/其他）、`planning_filing_no`（规划备案号）、`release_filing_no`（上线备案号）、`pre_broadcast_review`（pending/ready/done/not_applicable）、`filed_at`。**2026.3 起广电总局把全部 AIGC 作品纳入分级 + 播前审核**（已下架 25000+ 集），网络微短剧"先备案后上线"。检查：`pre_broadcast_review` 不能停 `pending`、review 前须 `done`；`paid_distribution`/review 前 `release_filing_no` 必填不留 TODO。纯海外/内部预览可 `applicable=false` 并在 `notes` 写理由——与 `platform_review` 同列内部 demo 免检域（`internal_only` 时 BLOCK 降 INFO）。**平台自审 ≠ 监管备案**，两者都要过。
 - **出海本地化**：海外平台或非 CN 地区必须 `localization.status=ready/done`，且字幕语言覆盖目标语言。
+- **AI 生成合成内容标识（非阻断发布待办）**：`ai_labeling` 段——`applicable`、`explicit_label`（显式可见标签·`text`/`position`/`status`）、`implicit_metadata`（元数据隐式标识·`service_provider_code`/`content_id`/`applied`）、`digital_watermark`（鼓励项·可外置）。`n2d-compose/ai_label.py` 可在导出后 best-effort 落显式角标 + 写元数据并回写 `status=done`/`applied=true`；失败、缺配置、未落标、未做数字水印或平台侧披露都只能出 INFO 待办，**不得阻断 compose/review、进度回写、dashboard 记账或后续集推进**。发布前按目标地区/平台补齐；严格 GB 45438 字节级扩展盒格式属工具外/后续专用编码器工作。
 
 ## 前置原则
 
 - 任何 `unknown/pending/unlicensed` 都不得进入付费 image/video/compose。
 - **internal_only 免检范围（已工程化）**：`distribution_intent=internal_only` 时，`compliance.py --check` 与 review gate 把 `platform_review` / `localization`（出海本地化）/ `regulatory_filing`（广电备案）域的 BLOCK 降为 INFO 并加注「内部 demo 免检，转投放前需补」；**角色/声音授权检查照常 BLOCK**——授权问题不因内部使用而豁免，且为日后转投放留底。判定同源于契约 `COMPLIANCE_INTERNAL_DISTRIBUTION_INTENTS` / `COMPLIANCE_INTERNAL_SKIPPABLE_SECTIONS`。
 - 平台规则会变：`policy_profile` 必须带检查日期，例如 `youtube_policy_2026-06-08`，不要把平台条款写死在脚本里。
-- **AI 标识/AI 披露/水印不再由本流水线处理**（2026-06 下线）：若投放地区/平台要求 AI 标注（如中国《标识办法》、YouTube/TikTok 的 AIGC 披露），由使用方在工具之外按当地法规自行处理。
+- **AI 标识非阻断铁律**：显式可见标签、元数据隐式标识、数字水印、平台侧 AIGC 披露和 C2PA Content Credentials 全部不得成为 n2d 主流程 blocker。`n2d-compose/ai_label.py` 只做 best-effort；`compliance.py --check` 与 review gate 只出 INFO。发布前若目标地区/平台要求标识，由使用方在发布工序或工具外补齐。
 
 ## 参考基准
 
 - 广电总局 2026 专项治理：自 2026.3 起把全部 AIGC 作品纳入分级 + 播前审核，网络微短剧需规划/上线备案号、先备案后上线（已下架 25000+ 违规集）。`regulatory_filing` 段对应此。
-- AI 标识/披露（YouTube/TikTok 的 AIGC 披露、中国《标识办法》的显式/隐式标识、C2PA Content Credentials 等）不再由本流水线处理；如目标平台要求，由使用方在工具之外自行完成。
+- **中国《人工智能生成合成内容标识办法》2025-09-01 生效 + 强制国标 GB 45438-2025**：显式标签、元数据隐式标识、数字水印和平台侧 AIGC 披露在本线统一视为发布前待办。`ai_labeling` 段 + `n2d-compose/ai_label.py` 只提供自动化辅助，不构成主流程放行条件。
 
 ## 常见错误
 

@@ -251,10 +251,19 @@ for _key, _spec in CONSISTENCY_DIMENSIONS.items():
         if _label:
             _DIM_KEY_BY_LABEL.setdefault(_label, _key)
 
+_DIM_KEY_ALIASES = {
+    # Historical image_qc/review-ui reports used this English bucket for
+    # registered props, VFX, scenes, and VLM asset checks. Keep it readable but
+    # aggregate it into the canonical scoring dimension.
+    "asset_consistency": "multimodal_continuity",
+}
+
 def resolve_dim_key(dim: Any) -> str:
     d = str(dim or "").strip()
     if not d:
         return ""
+    if d in _DIM_KEY_ALIASES:
+        return _DIM_KEY_ALIASES[d]
     if d in CONSISTENCY_DIMENSIONS:
         return d
     if d in _DIM_KEY_BY_LABEL:        # 精确 label / audit_label 命中优先于关键词兜底，避免误归并

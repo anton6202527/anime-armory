@@ -3,7 +3,7 @@
 """Shared Markdown parsing library for Anime Armory progress files.
 
 Provides stable, unified methods to read and update Markdown checklists
-and tables across all production lines (n2d, novel, song, mv).
+and tables used by novel progress files.
 """
 import fcntl
 import os

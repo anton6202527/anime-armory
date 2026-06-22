@@ -106,6 +106,7 @@ def _full_anchor_prompt() -> str:
     return (
         "# Clip_003 首帧\n画面：主角嘶吼\n\n"
         "身份锚点：凤眼薄唇·黑色短发·红披风（lead_identity_anchor）\n"
+        "参考输入：共享定妆+锚点；无外部 LoRA（reference_inputs）\n"
         "视觉锚点：电影颗粒 + palette_anchor 深红霓虹（global_style）\n"
         "母题锚点：红线\n"
         "禁止漂移：换脸/换发色/换主色（forbidden_drift）\n"
@@ -114,15 +115,16 @@ def _full_anchor_prompt() -> str:
 
 def test_anchor_block_presence() -> None:
     p = image_qc.anchor_block_presence(_full_anchor_prompt())
-    assert p == {"identity": True, "visual": True, "forbidden": True}
+    assert p == {"identity": True, "reference": True, "visual": True, "forbidden": True}
     p2 = image_qc.anchor_block_presence("# Clip_004\n只有画面描述，没有任何锚点块。")
-    assert p2 == {"identity": False, "visual": False, "forbidden": False}
+    assert p2 == {"identity": False, "reference": False, "visual": False, "forbidden": False}
 
 
 def test_lint_clip_prompt_flags_missing_anchor() -> None:
     findings = image_qc.lint_clip_prompt("Clip_004", "# 画面\n主角站在雨中，没有锚点块。")
     codes = {f["code"]: f["level"] for f in findings}
     assert codes.get("missing_anchor_identity") == "warn"
+    assert codes.get("missing_anchor_reference") == "warn"
     assert codes.get("missing_anchor_visual") == "warn"
     assert codes.get("missing_anchor_forbidden") == "warn"
 
@@ -196,7 +198,7 @@ def test_discover_lead_costume_set_picks_lead(tmp_path: Path) -> None:
     assert "主唱" in lead["主"]
 
 
-# ── 汇总 hard vs advisory（与 n2d 同哲学） ──────────────────────────────────
+# ── 汇总 hard vs advisory ───────────────────────────────────────────────────
 
 def test_summarize_face_block_is_hard() -> None:
     payload = {"checks": {"face": {"available": True, "mode": "insightface",
@@ -222,6 +224,14 @@ def test_summarize_anchor_lint_is_advisory() -> None:
     s = image_qc.summarize(payload)
     assert s["hard_blocks"] == 0 and s["advisory"] == 1
     assert s["verdict"] == "review"
+
+
+def test_summarize_local_patch_is_hard() -> None:
+    payload = {"checks": {}, "lint": {"available": True, "findings": []},
+               "prohibited_local_patch_outputs": {"outputs": [{"png": "出图/段落/图片/Clip_003.png"}]}}
+    s = image_qc.summarize(payload)
+    assert s["hard_blocks"] == 1
+    assert s["verdict"] == "block"
 
 
 def test_summarize_clean_is_ok() -> None:
@@ -278,7 +288,7 @@ def test_qc_environment_levels() -> None:
     assert env["precision_level"] == "none"
 
 
-# ── to_findings（与 n2d 同形） ──────────────────────────────────────────────
+# ── to_findings ────────────────────────────────────────────────────────────
 
 def test_to_findings_maps_severity_and_dims() -> None:
     payload = {
@@ -318,6 +328,16 @@ def test_to_findings_empty_when_clean() -> None:
     assert image_qc.to_findings(payload) == []
 
 
+def test_to_findings_reports_local_patch() -> None:
+    payload = {"checks": {}, "lint": {"findings": []},
+               "prohibited_local_patch_outputs": {"outputs": [
+                   {"png": "出图/段落/图片/Clip_003.png", "line": 2, "method": "local_face_patch"}]}}
+    fnds = image_qc.to_findings(payload)
+    assert len(fnds) == 1
+    assert fnds[0]["sev"] == "block"
+    assert fnds[0]["dim"] == "local_patch_prohibited"
+
+
 # ── 重生成清单 ────────────────────────────────────────────────────────────────
 
 def test_clip_key_extracts_number() -> None:
@@ -340,6 +360,15 @@ def test_to_regen_list_only_face_block() -> None:
     clips = {r["clip"] for r in regen}
     assert clips == {"Clip_003"}   # 只脸 block 进；脸 warn / 主色 block / 锚点 warn 都不进
     assert "主角脸崩 G1" in regen[0]["reasons"]
+
+
+def test_to_regen_list_includes_local_patch() -> None:
+    payload = {"checks": {}, "lint": {"findings": []},
+               "prohibited_local_patch_outputs": {"outputs": [
+                   {"png": "出图/段落/图片/Clip_07.png"}]}}
+    regen = image_qc.to_regen_list(payload)
+    assert regen[0]["clip"] == "Clip_007"
+    assert "本地贴脸/换脸修复产物禁入" in regen[0]["reasons"]
 
 
 def test_to_strict_regen_list_includes_warn_and_palette_and_lint() -> None:
@@ -376,3 +405,18 @@ def test_run_qc_no_pixel_writes_report(tmp_path: Path) -> None:
     assert payload["summary"]["verdict"] == "review"   # 锚点缺 → advisory
     on_disk = json.loads(Path(payload["json_path"]).read_text(encoding="utf-8"))
     assert on_disk["kind"] == "mv_image_qc"
+
+
+def test_prohibited_local_patch_outputs_reads_event_log(tmp_path: Path) -> None:
+    (tmp_path / "生产数据").mkdir()
+    (tmp_path / "生产数据" / "production_events.jsonl").write_text(
+        json.dumps({
+            "stage": "image",
+            "event": "generation",
+            "generation": {"asset": "出图/段落/图片/Clip_003.png", "method": "local_face_patch"},
+        }, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    report = image_qc.prohibited_local_patch_outputs(tmp_path)
+    assert report["summary"]["block"] == 1
+    assert report["outputs"][0]["clip"] == "Clip_003"

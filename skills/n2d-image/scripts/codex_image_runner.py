@@ -5,7 +5,7 @@ This is the Codex backend adapter used by N2D_IMAGE_COMMAND.  It keeps the
 batch wrapper backend-agnostic while giving Codex a real PNG-producing path:
 
 1. Parse the episode prompt pack.
-2. Ask ``codex exec --json --enable image_generation`` to generate one target image.
+2. Ask ``codex exec --image ... --json --enable image_generation`` to generate one target image.
 3. Decode the ``image_generation_end`` event payload into a temporary PNG.
 4. Archive the old target, move the new PNG into place, and record dashboard
    telemetry including the seed downgrade status.
@@ -27,12 +27,15 @@ import tempfile
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, List, Optional, Sequence
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Set
 
 
 PROMPT_REL = Path("出图") / "{episode}" / "prompt" / "01_分镜出图.md"
 DASHBOARD = Path("skills") / "n2d-dashboard" / "scripts" / "dashboard.py"
+IMAGE_QC = Path("skills") / "n2d-image" / "scripts" / "image_qc.py"
 SOURCE = "skills/n2d-image/scripts/codex_image_runner.py"
+MAX_CODEX_REFERENCE_IMAGES = int(os.environ.get("N2D_CODEX_MAX_REFERENCE_IMAGES", "24"))
+IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp"}
 
 
 @dataclass
@@ -268,6 +271,41 @@ def shared_variant_note(rel_path: str) -> str:
     return "本次目标是共享主参考图：中性档案，不带剧情戏剧动作，锁身份/场景/道具/特效基准。"
 
 
+def requires_controlled_makeup_derivation(rel_path: str) -> bool:
+    """Character split references cannot be safely text-generated one by one."""
+    stem = Path(rel_path).stem
+    if not stem.startswith(("CHAR_", "定妆_")):
+        return False
+    unsafe_tokens = ("45度", "_侧", "_背", "半身", "全身", "脸部特写")
+    return any(token in stem for token in unsafe_tokens)
+
+
+def requires_human_review_before_ready(rel_path: str) -> bool:
+    """Text-generated character front/turnaround images are only candidates until human-approved."""
+    stem = Path(rel_path).stem
+    if not stem.startswith(("CHAR_", "定妆_")):
+        return False
+    if requires_controlled_makeup_derivation(rel_path):
+        return False
+    if "_表情_" in stem:
+        return True
+    return True
+
+
+def has_controlled_makeup_source(rel_path: str, reference_inputs: Sequence[Dict[str, Any]]) -> bool:
+    """Allow split makeup refs only when a same-source parent image is attached."""
+    if not requires_controlled_makeup_derivation(rel_path):
+        return True
+    stem = Path(rel_path).stem
+    base = re.sub(r"_(?:45度|侧|背|半身|全身|脸部特写)$", "", stem)
+    expected = {base, f"{base}_三视图"}
+    for item in reference_inputs or []:
+        ref_stem = Path(str(item.get("rel_path") or item.get("abs_path") or "")).stem
+        if ref_stem in expected:
+            return True
+    return False
+
+
 def add_registry_shared_targets(root: Path, section_by_alias: list[tuple[set, ClipSection]], add_target) -> None:
     identity_path = root / "出图" / "共享" / "identity_registry.json"
     if identity_path.is_file():
@@ -350,7 +388,7 @@ def registry_image_paths(value) -> List[str]:
         if isinstance(node, dict):
             status = str(node.get("status") or "").lower()
             path = node.get("path")
-            if isinstance(path, str) and (not status or status in {"ready", "planned", "pass", "todo"}):
+            if isinstance(path, str) and (not status or status in {"ready", "planned", "pass", "todo", "review_pending"}):
                 add(path)
             for key, child in node.items():
                 if key in {"source", "source_image"}:
@@ -498,7 +536,394 @@ def brief_context(path: Path, limit: int = 1800) -> str:
     return text[:limit]
 
 
-def build_codex_prompt(root: Path, episode: str, target: Target, temp_path: Path, seed: str) -> str:
+def load_json_file(path: Path) -> Dict[str, Any]:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def _reference_relevant_text(body: str) -> str:
+    """Only scan positive reference declarations, not negative/prohibition text."""
+    lines: List[str] = []
+    in_reference_block = False
+    for line in str(body or "").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("**参考图**"):
+            in_reference_block = True
+            lines.append(line)
+            continue
+        if in_reference_block and stripped.startswith("**") and "参考图" not in stripped:
+            in_reference_block = False
+        if in_reference_block:
+            lines.append(line)
+            continue
+        if any(marker in line for marker in ("资产身份注册层", "身份注册层", "生成方式")):
+            lines.append(line)
+    return "\n".join(lines)
+
+
+def _shot_character_refs(body: str) -> Set[str]:
+    text = _reference_relevant_text(body)
+    refs = set(re.findall(r"CHAR_[A-Za-z0-9_]+(?:/[A-Za-z0-9_\u4e00-\u9fff·.-]+)?", text))
+    refs |= {m.strip("`") for m in re.findall(r"`(CHAR_[^`]+)`", text)}
+    return {r.strip("` ，,。；;、)）(") for r in refs if r.strip("` ，,。；;、)）(")}
+
+
+def _shot_asset_refs(body: str) -> Set[str]:
+    text = _reference_relevant_text(body)
+    refs: Set[str] = set()
+    for prefix in ("LOC", "PROP", "OUTFIT", "VFX"):
+        refs |= set(re.findall(rf"{prefix}_[A-Za-z0-9_]+", text))
+    return refs
+
+
+def _status_ready(node: Dict[str, Any], *, allow_pending_user_reference: bool = False) -> bool:
+    status = str(node.get("status") or "").strip().lower()
+    if allow_pending_user_reference and status in {
+        "available_pending_rights_review",
+        "user_provided_reference_pending_rights_review",
+        "accepted_for_internal_generation_pending_rights_review",
+    }:
+        return True
+    return not status or status in {"ready", "registered", "pass", "ok", "accepted"}
+
+
+def _collect_ready_image_paths(
+    node: Any,
+    root: Path,
+    out: List[str],
+    seen: Set[str],
+    *,
+    allow_non_shared: bool = False,
+    allow_pending_user_reference: bool = False,
+) -> None:
+    if isinstance(node, dict):
+        path = node.get("path")
+        if isinstance(path, str) and _status_ready(node, allow_pending_user_reference=allow_pending_user_reference):
+            _add_ready_image_path(path, root, out, seen, allow_non_shared=allow_non_shared)
+        for key, value in node.items():
+            if key in {"source", "source_image"}:
+                continue
+            _collect_ready_image_paths(
+                value,
+                root,
+                out,
+                seen,
+                allow_non_shared=allow_non_shared,
+                allow_pending_user_reference=allow_pending_user_reference,
+            )
+    elif isinstance(node, list):
+        for item in node:
+            _collect_ready_image_paths(
+                item,
+                root,
+                out,
+                seen,
+                allow_non_shared=allow_non_shared,
+                allow_pending_user_reference=allow_pending_user_reference,
+            )
+    elif isinstance(node, str):
+        _add_ready_image_path(node, root, out, seen, allow_non_shared=allow_non_shared)
+
+
+def _add_ready_image_path(raw: str, root: Path, out: List[str], seen: Set[str], *, allow_non_shared: bool = False) -> None:
+    if Path(raw).suffix.lower() not in IMAGE_SUFFIXES:
+        return
+    rel = raw if str(raw).startswith("出图/") else rel_to_root(str(raw), "共享")
+    if (not allow_non_shared and not is_shared_image_path(rel)) or rel in seen:
+        return
+    # A reference bundle is for actual backend image inputs; planned/missing paths
+    # belong in gate findings, not in a generation request.
+    if not (root / rel).is_file():
+        return
+    seen.add(rel)
+    out.append(rel)
+
+
+def reference_bundle_for_target(root: Path, episode: str, target: Target) -> Dict[str, Any]:
+    """Resolve per-shot character/asset references into a backend-friendly bundle."""
+    body = target.section.body
+    char_refs = _shot_character_refs(body)
+    asset_refs = _shot_asset_refs(body)
+    if target.mode == "shared":
+        for alias in getattr(target, "aliases", set()) or set():
+            text = str(alias).strip()
+            if re.fullmatch(r"CHAR_[A-Za-z0-9_]+(?:/[A-Za-z0-9_\u4e00-\u9fff·.-]+)?", text):
+                char_refs.add(text)
+            elif re.fullmatch(r"(?:LOC|PROP|OUTFIT|VFX)_[A-Za-z0-9_]+", text):
+                asset_refs.add(text)
+    identity = load_json_file(root / "出图" / "共享" / "identity_registry.json")
+    assets = load_json_file(root / "出图" / "共享" / "asset_registry.json")
+    items: List[Dict[str, Any]] = []
+    missing: List[str] = []
+
+    for ch in identity.get("characters") or []:
+        if not isinstance(ch, dict):
+            continue
+        cid = str(ch.get("id") or "").strip()
+        if not cid or not any(ref == cid or ref.startswith(f"{cid}/") for ref in char_refs):
+            continue
+        for form in ch.get("forms") or []:
+            if not isinstance(form, dict):
+                continue
+            fname = str(form.get("form") or "常态").strip()
+            if f"{cid}/{fname}" not in char_refs and cid not in char_refs:
+                continue
+            paths: List[str] = []
+            seen: Set[str] = set()
+            _collect_ready_image_paths(
+                ch.get("external_visual_references"),
+                root,
+                paths,
+                seen,
+                allow_non_shared=True,
+                allow_pending_user_reference=True,
+            )
+            _collect_ready_image_paths(form.get("reference_group"), root, paths, seen)
+            _collect_ready_image_paths(form.get("reference_atlas"), root, paths, seen)
+            if paths:
+                items.append({"kind": "character", "id": cid, "form": fname, "paths": paths})
+            else:
+                missing.append(f"{cid}/{fname}")
+
+    for asset in assets.get("assets") or []:
+        if not isinstance(asset, dict):
+            continue
+        aid = str(asset.get("id") or "").strip()
+        if not aid or aid not in asset_refs:
+            continue
+        paths = []
+        seen = set()
+        _collect_ready_image_paths(asset.get("reference_group"), root, paths, seen)
+        _collect_ready_image_paths(asset.get("reference_atlas"), root, paths, seen)
+        if paths:
+            items.append({"kind": "asset", "id": aid, "type": asset.get("type") or "", "paths": paths})
+        else:
+            missing.append(aid)
+
+    return {
+        "kind": "n2d_codex_reference_bundle",
+        "version": 2,
+        "episode": episode,
+        "shot": target.shot,
+        "target": target.rel_path,
+        "backend": "codex",
+        "true_image_reference_support": True,
+        "reference_input_mode": "codex_exec_image_flags",
+        "persistent_subject_support": False,
+        "items": items,
+        "missing_ready_refs": missing,
+    }
+
+
+def file_sha256(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def codex_reference_inputs_for_target(
+    root: Path,
+    episode: str,
+    target: Target,
+    bundle: Dict[str, Any],
+) -> List[Dict[str, Any]]:
+    """Materialize the auditable image attachments passed to ``codex exec``."""
+    inputs: List[Dict[str, Any]] = []
+    seen: Set[str] = set()
+    seq = 0
+
+    def priority_for(rel_path: str, role: str) -> int:
+        stem = Path(rel_path).stem
+        if role == "source_frame":
+            return 0
+        if role == "asset":
+            if stem.startswith("PROP_"):
+                return 10
+            if stem.startswith("LOC_"):
+                return 20
+            if stem.startswith("VFX_"):
+                return 30
+            return 40
+        if "脸部特写" in stem:
+            return 100
+        if "半身" in stem or "全身" in stem:
+            return 110
+        if not any(token in stem for token in ("45度", "三视图", "_侧", "_背", "侧", "背")):
+            return 120
+        if "45度" in stem or "_侧" in stem or stem.endswith("侧"):
+            return 130
+        if "三视图" in stem:
+            return 140
+        if "_背" in stem or stem.endswith("背"):
+            return 150
+        return 160
+
+    def add(rel: str, *, role: str, owner: str, source: str) -> None:
+        nonlocal seq
+        text = str(rel or "").strip()
+        if not text or Path(text).suffix.lower() not in IMAGE_SUFFIXES:
+            return
+        rel_path = text if text.startswith("出图/") else rel_to_root(text, episode)
+        path = root / rel_path
+        if not path.is_file() or rel_path in seen:
+            return
+        seen.add(rel_path)
+        try:
+            size = path.stat().st_size
+            sha = file_sha256(path)
+        except OSError:
+            return
+        inputs.append({
+            "role": role,
+            "owner": owner,
+            "source": source,
+            "rel_path": rel_path,
+            "abs_path": str(path),
+            "sha256": sha,
+            "bytes": size,
+            "priority": priority_for(rel_path, role),
+            "sequence": seq,
+        })
+        seq += 1
+
+    def add_explicit_source_frames() -> None:
+        clips: List[str] = []
+        seen_clips: Set[str] = set()
+        source_lines = [
+            line
+            for line in target.section.body.splitlines()
+            if re.search(r"(母图|同源成图|上一帧|上一张|成图|image2image|image-to-image)", line, re.I)
+        ]
+        for line in source_lines:
+            for match in re.finditer(r"Clip[_\s-]*([0-9０-９]{1,3})", line, re.I):
+                raw = match.group(1).translate(str.maketrans("０１２３４５６７８９", "0123456789"))
+                clip = f"Clip_{int(raw):02d}"
+                if clip == target.clip or clip in seen_clips:
+                    continue
+                seen_clips.add(clip)
+                clips.append(clip)
+        if not clips:
+            return
+        try:
+            sections = load_sections(root, episode)
+        except Exception:
+            return
+        for clip in clips:
+            try:
+                source_section = section_for(sections, clip)
+                source_target = target_for_shot(clip, source_section, episode)
+                add(source_target.rel_path, role="source_frame", owner=clip, source="explicit_source_clip")
+            except Exception:
+                continue
+
+    add_explicit_source_frames()
+
+    if target.mode not in {"firstframe", "shared"}:
+        try:
+            source_target = target_for_shot(target.clip, target.section, episode)
+            add(source_target.rel_path, role="source_frame", owner=target.clip, source="same_clip_firstframe")
+        except Exception:
+            pass
+        if target.mode == "tailframe":
+            for raw in backticked(target.section.target_line):
+                rel = rel_to_root(raw, episode)
+                stem = Path(rel).stem
+                if rel == target.rel_path:
+                    continue
+                if "_mid" in stem or re.search(r"_a\d+$", stem):
+                    add(rel, role="source_frame", owner=target.clip, source="same_clip_anchor")
+
+    for item in bundle.get("items") or []:
+        if not isinstance(item, dict):
+            continue
+        owner = str(item.get("id") or "")
+        form = str(item.get("form") or "")
+        if form:
+            owner = f"{owner}/{form}" if owner else form
+        for rel in item.get("paths") or []:
+            add(str(rel), role=str(item.get("kind") or "reference"), owner=owner, source="reference_bundle")
+
+    def sort_int(item: Dict[str, Any], key: str, default: int) -> int:
+        value = item.get(key)
+        if value is None or value == "":
+            return default
+        return int(value)
+
+    inputs.sort(key=lambda item: (sort_int(item, "priority", 999), sort_int(item, "sequence", 0)))
+    return inputs[:MAX_CODEX_REFERENCE_IMAGES]
+
+
+def attach_reference_inputs(bundle: Dict[str, Any], inputs: List[Dict[str, Any]]) -> Dict[str, Any]:
+    bundle["cli_image_input_count"] = len(inputs)
+    bundle["cli_image_inputs"] = inputs
+    bundle["cli_image_input_limit"] = MAX_CODEX_REFERENCE_IMAGES
+    if len(inputs) >= MAX_CODEX_REFERENCE_IMAGES:
+        bundle["cli_image_input_truncated"] = True
+    return bundle
+
+
+def write_reference_bundle_manifest(root: Path, episode: str, target: Target, bundle: Dict[str, Any]) -> Path:
+    out_dir = root / "生产数据" / "codex_reference_bundles" / episode
+    out_dir.mkdir(parents=True, exist_ok=True)
+    path = out_dir / f"{temp_token(target.shot)}.json"
+    path.write_text(json.dumps(bundle, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return path
+
+
+def high_risk_text_only_character_shot(target: Target) -> bool:
+    if target.mode == "shared":
+        return False
+    chars = _shot_character_refs(target.section.body)
+    if not chars:
+        return False
+    body = target.section.body
+    markers = (
+        "近景", "特写", "脸部", "反打", "过肩", "CU", "MCU", "ECU",
+        "大表情", "表情", "哭", "泪", "惊恐", "震惊", "冷笑", "怒",
+        "多人", "同框", "对峙", "暗光", "黑烟", "烟雾", "VFX",
+    )
+    return len({c.split("/", 1)[0] for c in chars}) >= 2 or any(m in body for m in markers)
+
+
+def reference_bundle_prompt_text(root: Path, bundle: Dict[str, Any], manifest_path: Optional[Path]) -> str:
+    lines = [
+        "参考图 bundle（结构化 + Codex CLI 真实附件入参；见 true_image_reference_support=true）：",
+        f"- manifest: {manifest_path}" if manifest_path else "- manifest: 未写入",
+        f"- true_image_reference_support: {bundle.get('true_image_reference_support')}",
+        f"- reference_input_mode: {bundle.get('reference_input_mode') or 'codex_exec_image_flags'}",
+        f"- cli_image_input_count: {bundle.get('cli_image_input_count', 0)}",
+    ]
+    for input_item in bundle.get("cli_image_inputs") or []:
+        lines.append(
+            "- --image "
+            f"{input_item.get('role')} {input_item.get('owner')}: {input_item.get('abs_path')}"
+        )
+    for item in bundle.get("items") or []:
+        label = f"{item.get('kind')} {item.get('id')}"
+        if item.get("form"):
+            label += f"/{item.get('form')}"
+        paths = [str(root / p) for p in (item.get("paths") or [])]
+        lines.append(f"- {label}: " + " | ".join(paths[:8]))
+    missing = bundle.get("missing_ready_refs") or []
+    if missing:
+        lines.append("- missing_ready_refs: " + "、".join(str(x) for x in missing))
+    return "\n".join(lines)
+
+
+def build_codex_prompt(
+    root: Path,
+    episode: str,
+    target: Target,
+    temp_path: Path,
+    seed: str,
+    reference_bundle: Optional[Dict[str, Any]] = None,
+    reference_manifest: Optional[Path] = None,
+) -> str:
     overview = brief_context(root / "出图" / episode / "prompt" / "00_总览.md")
     registry = root / "出图" / "共享" / "identity_registry.json"
     assets = root / "出图" / "共享" / "asset_registry.json"
@@ -516,7 +941,7 @@ def build_codex_prompt(root: Path, episode: str, target: Target, temp_path: Path
 - 禁止水印、字幕、logo、文字、漫画分格、UI 边框。
 
 一致性硬约束：
-- 角色 DNA = 脸 + 发型 + 服装 + 配饰。不要只锁脸。
+- 角色 DNA = 脸 + 发型 + 服装 + 配饰 + 质感。不要只锁脸；服装按 registry 的 wardrobe_profile 锁剪影、领袖腰摆、材质、纹样和色卡。
 - 近景优先参考“脸部特写 + 半身”，全身/三视图只作服装结构辅助。
 - 多人同框必须按 prompt 的 blocking 分层理解，避免串脸。
 - 若本镜有“资产身份注册层”且某角色带 *，该角色是主检身份：必须让主检角色成为画面中最清晰、最可比对的人脸；追身/背身/动作镜也要用 45°回头、过肩露脸或清楚侧脸露出眼鼻嘴三角区，避免纯背影、脸太小、被头发/暗影遮挡。
@@ -534,6 +959,7 @@ shot：{target.shot}
 - asset_registry: {assets}
 - visual_state_ledger: {state}
 {"尾帧/中段可参考已有源图：" + str(source_for_tail) if target.mode not in {"firstframe", "shared"} else ""}
+{reference_bundle_prompt_text(root, reference_bundle, reference_manifest) if reference_bundle else ""}
 
 本集总览节选：
 {overview}
@@ -542,21 +968,36 @@ shot：{target.shot}
 {target.section.body}
 
 执行方式：
-1. 读取/参考 prompt 中列出的参考图；如果同一角色有脸部特写和半身，优先使用它们。
+1. 优先使用本次 CLI 已通过 `codex exec --image` 附加的参考图；如果同一角色有脸部特写和半身，优先使用它们。
 2. 根据本镜中文正向 prompt 与负向 prompt 生成画面。
 3. 生成完成后只用一句话说明完成；不要搜索文件系统，不要创建替代文件。
 4. 只要无法生成真实 PNG，就直接说明失败。
 """
 
 
-def run_codex(repo: Path, prompt: str, timeout_sec: Optional[float]) -> subprocess.CompletedProcess[str]:
+def build_codex_command(repo: Path, prompt: str, reference_inputs: Sequence[Dict[str, Any]]) -> List[str]:
     cmd = ["codex", "exec"]
     model = os.environ.get("N2D_CODEX_MODEL")
     if model:
         cmd.extend(["-m", model])
+    image_paths = [str(item.get("abs_path") or "") for item in reference_inputs if item.get("abs_path")]
+    if image_paths:
+        cmd.append("--image")
+        cmd.extend(image_paths)
     cmd.extend(["--json", "--enable", "image_generation", "-C", str(repo), prompt])
+    return cmd
+
+
+def run_codex(
+    repo: Path,
+    prompt: str,
+    timeout_sec: Optional[float],
+    reference_inputs: Sequence[Dict[str, Any]],
+) -> subprocess.CompletedProcess[str]:
+    cmd = build_codex_command(repo, prompt, reference_inputs)
     return subprocess.run(
         cmd,
+        stdin=subprocess.DEVNULL,
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -662,6 +1103,8 @@ def record_event(
     seed: str,
     temp_path: Path,
     archive_path: Optional[Path] = None,
+    reference_manifest: Optional[Path] = None,
+    reference_inputs: Optional[Sequence[Dict[str, Any]]] = None,
     error: str = "",
 ) -> None:
     event = "redraw" if os.environ.get("N2D_REASON") == "rerun" else "generation"
@@ -707,6 +1150,15 @@ def record_event(
         "--meta",
         f"source={SOURCE}",
     ]
+    reference_inputs = list(reference_inputs or [])
+    if reference_manifest:
+        cmd.extend(["--meta", f"reference_bundle={reference_manifest}"])
+        cmd.extend(["--meta", f"reference_manifest={reference_manifest}"])
+    cmd.extend(["--meta", "reference_input_mode=codex_exec_image_flags"])
+    cmd.extend(["--meta", f"reference_input_count={len(reference_inputs)}"])
+    if reference_inputs:
+        rels = "|".join(str(item.get("rel_path") or "") for item in reference_inputs if item.get("rel_path"))
+        cmd.extend(["--meta", f"reference_input_paths={rels}"])
     if event == "redraw":
         cmd.extend(["--redraw-reason", reason, "--redraw-category", category])
     if target.mode == "midframe" and status == "pass":
@@ -725,7 +1177,7 @@ def record_event(
     subprocess.run(cmd, check=False, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
-def run_image_gate(root: Path, episode: str) -> bool:
+def run_image_gate(root: Path, episode: str, stage: str = "image") -> bool:
     cmd = [
         sys.executable,
         str(repo_root() / DASHBOARD),
@@ -733,16 +1185,127 @@ def run_image_gate(root: Path, episode: str) -> bool:
         str(root),
         episode,
         "--stage",
-        "image",
+        stage,
     ]
     proc = subprocess.run(cmd, check=False, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if proc.returncode == 0:
-        print(f"[gate] image gate passed for {episode}")
+        print(f"[gate] {stage} gate passed for {episode}")
         return True
     print(proc.stdout, end="", file=sys.stderr)
     print(proc.stderr, end="", file=sys.stderr)
-    print(f"[gate] image gate blocked for {episode}", file=sys.stderr)
+    print(f"[gate] {stage} gate blocked for {episode}", file=sys.stderr)
     return False
+
+
+def record_waiver(root: Path, episode: str, stage: str, waiver: str, reason: str) -> None:
+    """Log an escape-hatch / gate-bypass as a dashboard waiver event (执行时松动留痕).
+
+    Best-effort: never let waiver bookkeeping abort generation. The point is that
+    relaxing a gate becomes auditable on the dashboard, not silent.
+    """
+    cmd = [
+        sys.executable,
+        str(repo_root() / DASHBOARD),
+        "waiver",
+        str(root),
+        "--episode", episode,
+        "--stage", stage,
+        "--waiver", waiver,
+        "--reason", reason,
+        "--source", "n2d-image/scripts/codex_image_runner.py",
+        "--no-build",
+    ]
+    proc = subprocess.run(cmd, check=False, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if proc.returncode != 0:
+        print(f"[waiver] failed to record {waiver} for {episode}: {proc.stderr.strip()}", file=sys.stderr)
+    else:
+        print(f"[waiver] recorded {waiver} for {episode} (stage={stage})")
+
+
+def episode_png_key(rel_path: str, episode: str) -> str:
+    text = str(rel_path or "").strip().replace("\\", "/")
+    prefix = f"出图/{episode}/"
+    if text.startswith(prefix):
+        return text[len(prefix):]
+    marker = "/图片/"
+    if marker in text:
+        return "图片/" + text.rsplit(marker, 1)[-1]
+    if text.startswith("图片/"):
+        return text
+    if text.endswith(".png") and "/" not in text:
+        return "图片/" + text
+    return text
+
+
+def run_target_image_qc(root: Path, episode: str, target: Target) -> bool:
+    """Run image_qc after one landed shot and fail only this target on hard evidence gaps."""
+    cmd = [
+        sys.executable,
+        str(repo_root() / IMAGE_QC),
+        str(root),
+        episode,
+    ]
+    proc = subprocess.run(cmd, check=False, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if proc.returncode != 0:
+        print(proc.stdout, end="", file=sys.stderr)
+        print(proc.stderr, end="", file=sys.stderr)
+        print(f"[image_qc] failed to run for {target.shot}", file=sys.stderr)
+        return False
+
+    report = root / "生产数据" / "image_qc" / episode / f"image_qc_{episode}.json"
+    try:
+        payload = json.loads(report.read_text(encoding="utf-8"))
+    except Exception as exc:
+        print(f"[image_qc] missing/unreadable report for {target.shot}: {exc}", file=sys.stderr)
+        return False
+
+    env = payload.get("qc_environment") or {}
+    precision = str(env.get("precision_level") or "")
+    target_key = episode_png_key(target.rel_path, episode)
+    problems: List[str] = []
+    if precision != "full":
+        problems.append(f"precision={precision or 'unknown'}")
+
+    coverage = payload.get("face_reference_coverage") or {}
+    for row in coverage.get("missing") or []:
+        if episode_png_key(str(row.get("png") or ""), episode) == target_key:
+            problems.append(f"face_reference_coverage:{row.get('reason') or 'missing'}")
+
+    checks = payload.get("checks") or {}
+    strict_pixel = str(os.environ.get("N2D_TARGET_QC_STRICT_PIXEL") or "").strip().lower() in {
+        "1", "true", "yes", "on"
+    }
+    target_blocks = {
+        "face": {"block", "warn", "noface"},
+        "hair": {"block"} if strict_pixel else set(),
+        "outfit": {"block"} if strict_pixel else set(),
+    }
+    for check_name, blocked_verdicts in target_blocks.items():
+        for row in (checks.get(check_name) or {}).get("shots") or []:
+            if episode_png_key(str(row.get("png") or ""), episode) != target_key:
+                continue
+            verdict = str(row.get("verdict") or "")
+            if verdict in blocked_verdicts:
+                score = row.get("score")
+                floor = row.get("floor")
+                suffix = f":{verdict}"
+                if score is not None and floor is not None:
+                    suffix += f"(score={score},floor={floor})"
+                problems.append(f"{check_name}{suffix}")
+
+    clip_display = target.clip.replace("_", " ")
+    for finding in (payload.get("lint") or {}).get("findings") or []:
+        if str(finding.get("level") or "") != "block":
+            continue
+        msg = str(finding.get("msg") or "")
+        if target.clip in msg or clip_display in msg:
+            problems.append(f"prompt:{finding.get('code') or 'block'}")
+
+    if problems:
+        print(f"[image_qc] {target.shot} blocked: {', '.join(dict.fromkeys(problems))}", file=sys.stderr)
+        return False
+    print(f"[image_qc] {target.shot} target gate passed")
+    return True
 
 
 def append_log(root: Path, row: dict) -> None:
@@ -750,6 +1313,64 @@ def append_log(root: Path, row: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n")
+
+
+def mark_shared_reference_status(
+    root: Path,
+    rel_path: str,
+    status: str,
+    *,
+    preserve_ready: bool = False,
+) -> None:
+    """Mark matching shared reference registry entries after a real PNG exists."""
+    for registry_rel in (
+        Path("出图") / "共享" / "identity_registry.json",
+        Path("出图") / "共享" / "asset_registry.json",
+    ):
+        path = root / registry_rel
+        if not path.is_file():
+            continue
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        changed = False
+
+        def walk(node) -> None:
+            nonlocal changed
+            if isinstance(node, dict):
+                if node.get("path") == rel_path:
+                    if preserve_ready and node.get("status") == "ready":
+                        return
+                    if node.get("status") != status:
+                        node["status"] = status
+                        changed = True
+                    if status == "review_pending":
+                        review = node.get("human_review")
+                        if not isinstance(review, dict):
+                            review = {}
+                        review["status"] = "pending"
+                        review["reason"] = "Codex text-generated character candidate requires human approval before ready"
+                        node["human_review"] = review
+                        changed = True
+                for child in node.values():
+                    walk(child)
+            elif isinstance(node, list):
+                for child in node:
+                    walk(child)
+
+        walk(data)
+        if changed:
+            path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def status_after_shared_generation(rel_path: str) -> str:
+    if (
+        requires_human_review_before_ready(rel_path)
+        and os.environ.get("N2D_HUMAN_REVIEWED_SHARED") != "1"
+    ):
+        return "review_pending"
+    return "ready"
 
 
 def latest_recorded_status(root: Path, task_id: str, rel_path: str) -> str:
@@ -795,25 +1416,11 @@ def process_target(
     if temp_path.exists():
         temp_path.unlink()
 
+    existing_shared_png = target.mode == "shared" and png_valid(final)
     previous_status = latest_recorded_status(root, task_id, target.rel_path)
-    if not force and previous_status == "pass" and png_valid(final):
-        if dry_run:
-            skipped = True
-        else:
-            print(f"[skip] {target.shot} already has pass record for {task_id}: {target.rel_path}")
-            append_log(root, {
-                "ts": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
-                "episode": episode,
-                "shot": target.shot,
-                "mode": target.mode,
-                "target": target.rel_path,
-                "status": "skip_pass_recorded",
-                "logical_seed": seed,
-                "seed_effective": "unsupported",
-            })
-            return True
-    else:
-        skipped = False
+    reference_bundle = reference_bundle_for_target(root, episode, target)
+    reference_inputs = codex_reference_inputs_for_target(root, episode, target, reference_bundle)
+    attach_reference_inputs(reference_bundle, reference_inputs)
 
     if dry_run:
         print(json.dumps({
@@ -822,17 +1429,85 @@ def process_target(
             "target": target.rel_path,
             "temp": str(temp_path),
             "logical_seed": seed,
-            "skip_existing_pass": skipped,
+            "reference_input_mode": "codex_exec_image_flags",
+            "reference_input_count": len(reference_inputs),
+            "reference_input_paths": [item["rel_path"] for item in reference_inputs],
+            "skip_existing_pass": (not force and previous_status == "pass" and png_valid(final)),
+            "skip_existing_file": (not force and existing_shared_png),
         }, ensure_ascii=False))
         return True
 
-    prompt = build_codex_prompt(root, episode, target, temp_path, seed)
+    if not force and existing_shared_png:
+        mark_shared_reference_status(
+            root,
+            target.rel_path,
+            status_after_shared_generation(target.rel_path),
+            preserve_ready=True,
+        )
+        print(f"[skip] {target.shot} existing shared PNG: {target.rel_path}")
+        append_log(root, {
+            "ts": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
+            "episode": episode,
+            "shot": target.shot,
+            "mode": target.mode,
+            "target": target.rel_path,
+            "status": "skip_existing_png",
+            "logical_seed": seed,
+            "seed_effective": "unsupported",
+        })
+        return True
+
+    if not force and previous_status == "pass" and png_valid(final):
+        print(f"[skip] {target.shot} already has pass record for {task_id}: {target.rel_path}")
+        append_log(root, {
+            "ts": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
+            "episode": episode,
+            "shot": target.shot,
+            "mode": target.mode,
+            "target": target.rel_path,
+            "status": "skip_pass_recorded",
+            "logical_seed": seed,
+            "seed_effective": "unsupported",
+        })
+        return True
+
+    if (
+        target.mode == "shared"
+        and requires_controlled_makeup_derivation(target.rel_path)
+        and not has_controlled_makeup_source(target.rel_path, reference_inputs)
+        and os.environ.get("N2D_ALLOW_CODEX_TEXT_MAKEUP_VARIANTS") != "1"
+    ):
+        print(
+            "[fail] "
+            f"{target.shot}: character makeup split refs must be derived from an approved same-source "
+            "turnaround/front image or generated by a real image2image/multiref backend; Codex text-only "
+            f"generation is blocked for {target.rel_path}",
+            file=sys.stderr,
+        )
+        return False
+
+    reference_manifest = write_reference_bundle_manifest(root, episode, target, reference_bundle)
+    if (
+        high_risk_text_only_character_shot(target)
+        and (reference_bundle.get("items") or reference_bundle.get("missing_ready_refs"))
+        and not reference_inputs
+    ):
+        print(
+            "[fail] "
+            f"{target.shot}: 本镜是高风险角色镜（近景/大表情/多人/暗光/VFX 等），"
+            "但 reference_bundle 没有任何可作为 `codex exec --image` 附件传入的 ready 图片。"
+            f"参考 manifest 已写入 {reference_manifest}；先补 ready 参考图或切支持主体库的后端。",
+            file=sys.stderr,
+        )
+        return False
+
+    prompt = build_codex_prompt(root, episode, target, temp_path, seed, reference_bundle, reference_manifest)
     started = time.monotonic()
     error = ""
     archive_path: Optional[Path] = None
     ok = False
     try:
-        proc = run_codex(repo_root(), prompt, timeout_sec)
+        proc = run_codex(repo_root(), prompt, timeout_sec, reference_inputs)
         if proc.returncode != 0:
             error = f"codex exit {proc.returncode}: {proc.stderr or proc.stdout}"
         elif not png_valid(temp_path) and not decode_image_event(proc.stdout, temp_path):
@@ -842,6 +1517,8 @@ def process_target(
             final.parent.mkdir(parents=True, exist_ok=True)
             os.replace(temp_path, final)
             ok = png_valid(final)
+            if ok and target.mode == "shared":
+                mark_shared_reference_status(root, target.rel_path, status_after_shared_generation(target.rel_path))
             if not ok:
                 error = f"moved output is not a valid PNG: {final}"
     except subprocess.TimeoutExpired:
@@ -860,6 +1537,8 @@ def process_target(
         seed=seed,
         temp_path=temp_path,
         archive_path=archive_path,
+        reference_manifest=reference_manifest,
+        reference_inputs=reference_inputs,
         error=error,
     )
     append_log(root, {
@@ -872,6 +1551,10 @@ def process_target(
         "duration_sec": round(duration, 3),
         "logical_seed": seed,
         "seed_effective": "unsupported",
+        "reference_input_mode": "codex_exec_image_flags",
+        "reference_input_count": len(reference_inputs),
+        "reference_input_paths": [item["rel_path"] for item in reference_inputs],
+        "reference_manifest": str(reference_manifest),
         "archive": str(archive_path) if archive_path else "",
         "error": error[:1000],
     })
@@ -932,7 +1615,9 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--stop-on-fail", action="store_true")
     ap.add_argument("--force", action="store_true", help="regenerate even when this task already has a pass event for the asset")
+    ap.add_argument("--skip-image-qc", action="store_true", help="skip per-target image_qc after each generated episode shot")
     ap.add_argument("--skip-final-gate", action="store_true", help="do not run the whole-episode image gate after shot generation")
+    ap.add_argument("--skip-preflight", action="store_true", help="skip the pre-spend image_preflight gate (logs a dashboard waiver)")
     return ap
 
 
@@ -958,6 +1643,17 @@ def main(argv: Sequence[str]) -> int:
     if not targets:
         raise SystemExit("no targets resolved")
 
+    # Pre-spend interlock: 出图是 n2d 最贵工位之一，绝不能「烧完积分才发现崩脸/缺参考/契约不全」。
+    # 生成前先跑 image_preflight 硬闸门（不需要本集 PNG 已存在）；block 即拒绝生成，不花钱。
+    # 逃生口 --skip-preflight 必须留痕成 dashboard waiver（执行时松动可审计）。
+    if shots and not ns.dry_run:
+        if ns.skip_preflight:
+            record_waiver(root, episode, "image_preflight", "skip-preflight",
+                          "operator passed --skip-preflight; pre-spend image_preflight gate not run")
+        elif not run_image_gate(root, episode, stage="image_preflight"):
+            print("[gate] image_preflight blocked — refusing to spend on generation; fix upstream or pass --skip-preflight", file=sys.stderr)
+            return 1
+
     ok_all = True
     for target in targets:
         ok = process_target(
@@ -969,11 +1665,20 @@ def main(argv: Sequence[str]) -> int:
             dry_run=ns.dry_run,
             force=ns.force,
         )
+        if ok and shots and target.mode != "shared" and not ns.dry_run and not ns.skip_image_qc:
+            ok = run_target_image_qc(root, episode, target)
         ok_all = ok_all and ok
         if not ok and ns.stop_on_fail:
             break
-    if ok_all and shots and not ns.dry_run and not ns.skip_final_gate:
-        ok_all = run_image_gate(root, episode)
+    if ns.skip_image_qc and shots and not ns.dry_run:
+        record_waiver(root, episode, "image", "skip-image-qc",
+                      "operator passed --skip-image-qc; per-target landed-frame QC not run")
+    if ok_all and shots and not ns.dry_run:
+        if ns.skip_final_gate:
+            record_waiver(root, episode, "image", "skip-final-gate",
+                          "operator passed --skip-final-gate; whole-episode image gate not run")
+        else:
+            ok_all = run_image_gate(root, episode)
     return 0 if ok_all else 1
 
 

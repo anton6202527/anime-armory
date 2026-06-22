@@ -255,6 +255,65 @@ def test_consistency_findings_ingestion(tmp_path):
     assert feedback.analyze_consistency(feedback.load_consistency_reports(str(empty_root)), []) is None
 
 
+# ── G6: 投放→生成输入闭环 creative_priors 写端 ────────────────────────────────
+def _ab_analyses_with_winner():
+    """构造一份含显著胜出的 A/B analyses（仿 analyze_paired_ab 输出形状）。"""
+    return {
+        "ab_opening_retention": {
+            "best": {"name": "cold_open_first", "paired_lift": 0.18, "n": 2, "plays": 2000,
+                     "retention_3s": 0.82, "episodes": ["第1集", "第2集"]},
+        },
+        "ab_cliffhanger_follow": {
+            "best": {"name": "hard_cut_before_reveal", "paired_lift": 0.09, "n": 2, "plays": 2000,
+                     "follow_next_rate": 0.21, "episodes": ["第1集", "第2集"]},
+        },
+        "ab_cover_retention": {"best": None},          # 无胜出 → 缺省
+        "ab_title_retention": {                        # lift 不足 → 缺省
+            "best": {"name": "弱标题", "paired_lift": 0.01, "n": 3, "retention_3s": 0.5},
+        },
+    }
+
+
+def test_build_creative_priors_picks_significant_winners():
+    analyses = _ab_analyses_with_winner()
+    priors = feedback.build_creative_priors(analyses, min_lift=0.05, min_samples=2)
+
+    assert priors["kind"] == "n2d_creative_priors"
+    assert priors["generated_at"]  # 采集时间占位非空
+    p = priors["priors"]
+    # 开场 + 集尾断点达标 → 写；封面无胜出、标题 lift 不足 → 不写。
+    assert p["opening_variant"]["winner"] == "cold_open_first"
+    assert p["opening_variant"]["paired_lift"] == 0.18
+    assert p["opening_variant"]["n"] == 2
+    assert p["cliffhanger_cut_variant"]["winner"] == "hard_cut_before_reveal"
+    assert "cover_variant" not in p
+    assert "title_variant" not in p
+
+
+def test_build_creative_priors_skips_when_samples_insufficient():
+    analyses = _ab_analyses_with_winner()
+    # 抬高样本阈值：开场 n=2 < 3 → 跳过；断点 n=2 < 3 → 跳过。
+    priors = feedback.build_creative_priors(analyses, min_lift=0.05, min_samples=3)
+    assert priors["priors"] == {}
+
+
+def test_build_creative_priors_no_op_when_no_ab_data():
+    # 完全没有 A/B best（best=None 或键缺）→ 空先验（下游 no-op，不臆造）。
+    analyses = {k: {"best": None} for k in (
+        "ab_opening_retention", "ab_cliffhanger_follow", "ab_cover_retention", "ab_title_retention")}
+    priors = feedback.build_creative_priors(analyses, min_lift=0.05, min_samples=2)
+    assert priors["priors"] == {}
+    assert priors["kind"] == "n2d_creative_priors"
+
+
+def test_write_priors_round_trips_to_production_dir(tmp_path):
+    priors = feedback.build_creative_priors(_ab_analyses_with_winner(), min_lift=0.05, min_samples=2)
+    path = feedback.write_creative_priors(str(tmp_path), priors)
+    assert path.endswith("生产数据/creative_priors.json")
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    assert data["priors"]["opening_variant"]["winner"] == "cold_open_first"
+
+
 # ── T11: feedback 一致性写回信号 ─────────────────────────────────────────────
 def test_consistency_priority_signal_on_block_and_low_retention():
     import feedback as fb

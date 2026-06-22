@@ -1,8 +1,13 @@
 import json
+import hashlib
 import os
+import datetime as dt
 from pathlib import Path
 
 import gate
+
+_TEST_PNG_BYTES = b"\x89PNG\r\n\x1a\n"
+_TEST_PNG_SHA256 = hashlib.sha256(_TEST_PNG_BYTES).hexdigest()
 
 
 GOOD_SHOT = """## 镜头 1（冷开场）🔑关键镜
@@ -316,6 +321,7 @@ def test_image_preflight_reuses_image_checks(monkeypatch, tmp_path):
         "check_placeholder_policy",
         "check_voiceover_fingerprint",
         "check_image_ai_policy",
+        "check_image_backend_api_refresh",
         "check_identity_registry",
         "check_costume_registry_reconcile",
         "check_asset_reference_registry",
@@ -482,6 +488,37 @@ def test_two_char_shot_on_native_subject_backend_blocks_without_slots():
                for f in gate.findings)
 
 
+# ── #5 多人近景同框：槽位绑定不够，近景必须分开生成（SOTA：单帧多主体 cross-attention 串脸） ──
+# 仅靠单帧身份槽位（一次生成多张脸）、无反打/分别出图 → 即便原生主体后端也升 BLOCK（近景档收口）。
+SLOT_FIELDS_SLOTONLY = (
+    "**多人同框身份槽位**：LEFT_SLOT=`CHAR_SHEN/常态*`（primary，画左前景，视线画右）；"
+    "RIGHT_SLOT=`CHAR_LIU/常服`（secondary，画右后景，视线画左）。\n"
+    "**多人同框执行策略**：native_subject_slots；区域绑定。\n"   # 注意：无「分别出图」——纯单帧槽位绑定
+    "**区分锚点**：沈念=乌黑半披+月白粗布；柳娘子=高髻+绛红裙；两两互斥不撞色。\n"
+)
+
+
+def test_multi_person_closeup_on_native_backend_requires_split_not_just_slots():
+    # 原生主体后端 + 多人近景，只有单帧槽位绑定（无反打/分别出图）→ 升 BLOCK（近景串脸槽位治不了）。
+    shot = TWO_CHAR_SHOT.replace(
+        "**专项镜头模板**：dialogue_shot_reverse；",
+        "**专项镜头模板**：dialogue_shot_reverse；native_subject_slots；\n" + SLOT_FIELDS_SLOTONLY,
+    )
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot, single_ref_backend=False)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "构图景别" and "近景" in str(f["msg"])
+               for f in gate.findings)
+
+
+def test_multi_person_closeup_escapes_when_split_declared():
+    # 声明了分别出图+合成（真分开生成）→ 不再触发近景同框 BLOCK。
+    shot = TWO_CHAR_SHOT.replace(
+        "**专项镜头模板**：dialogue_shot_reverse；",
+        "**专项镜头模板**：dialogue_shot_reverse；native_subject_slots；\n" + MULTI_SUBJECT_SLOT_FIELDS,
+    )
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot, single_ref_backend=False)
+    assert not any(f["dim"] == "构图景别" and "近景" in str(f["msg"]) for f in gate.findings)
+
+
 def test_native_subject_backend_with_slots_escapes_block():
     # 多主体后端写齐执行策略 + 身份槽位 → 逃生门放行，无同框 finding
     shot = TWO_CHAR_SHOT.replace(
@@ -513,6 +550,36 @@ def test_long_running_weak_backend_silent_on_persistent_subject_backend():
     # 已是原生主体/主体库后端(Seedream/可灵/Sora) → 不提示，无论多少集
     for canon in ("seedream", "kling", "sora"):
         assert gate.long_running_weak_backend_advice(canon, 50, 50) is False
+
+
+def _write_weak_backend_registry(tmp_path, *, locked=False):
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True, exist_ok=True)
+    adapters = {"image": {}, "lora": {"status": "candidate"}}
+    if locked:
+        adapters = {"image": {"face_embedding": {"status": "ready"}}, "lora": {"status": "candidate"}}
+    (shared / "identity_registry.json").write_text(json.dumps({
+        "characters": [{
+            "id": "CHAR_01",
+            "name": "沈念",
+            "scope": "长线女主·全篇",
+            "forms": [{"form": "常态", "identity_adapters": adapters}],
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
+    return str(tmp_path)
+
+
+def test_long_running_weak_backend_blocks_core_without_identity_lock(tmp_path):
+    root = _write_weak_backend_registry(tmp_path, locked=False)
+    gate.check_long_running_weak_backend(root, "第3集")
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "生图AI一致性" and "缺 native subject" in str(f["msg"])
+               for f in gate.findings)
+
+
+def test_long_running_weak_backend_allows_core_with_face_embedding(tmp_path):
+    root = _write_weak_backend_registry(tmp_path, locked=True)
+    gate.check_long_running_weak_backend(root, "第3集")
+    assert not any(f["dim"] == "生图AI一致性" for f in gate.findings)
 
 
 def test_two_char_shot_with_registered_degradation_escapes_even_on_single_ref():
@@ -759,14 +826,14 @@ def test_expression_anchor_sha_mismatch_blocks(tmp_path):
                for f in gate.findings)
 
 
-# ── 一角一后端跨集钉（P2，advisory）──────────────────────────────────
-def _setup_backend_pin_registry(tmp_path, backend_pin):
+# ── 一角一后端跨集钉（核心 BLOCK / 非核心 WARN）──────────────────────
+def _setup_backend_pin_registry(tmp_path, backend_pin, scope="配角"):
     (tmp_path / "出图" / "共享").mkdir(parents=True)
     form = {"form": "常态"}
     if backend_pin is not None:
         form["backend_pin"] = backend_pin
     (tmp_path / "出图" / "共享" / "identity_registry.json").write_text(json.dumps({
-        "characters": [{"id": "CHAR_01", "name": "沈念", "forms": [form]}]
+        "characters": [{"id": "CHAR_01", "name": "沈念", "scope": scope, "forms": [form]}]
     }, ensure_ascii=False), encoding="utf-8")
     return str(tmp_path)  # 无 _设置.md → get_setting 默认 生图AI=Codex
 
@@ -787,6 +854,13 @@ def test_backend_pin_mismatch_warns(tmp_path):
     root = _setup_backend_pin_registry(tmp_path, "Seedream")  # 钉 Seedream，项目默认 Codex
     gate.check_character_backend_pin(root, "第1集")
     assert any(f["sev"] == gate.WARN and f["dim"] == "角色一致性" and "身份钉在出图后端" in str(f["msg"])
+               for f in gate.findings)
+
+
+def test_backend_pin_mismatch_blocks_for_core_character(tmp_path):
+    root = _setup_backend_pin_registry(tmp_path, "Seedream", scope="长线女主·全篇")
+    gate.check_character_backend_pin(root, "第1集")
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "角色一致性" and "身份钉在出图后端" in str(f["msg"])
                for f in gate.findings)
 
 
@@ -957,6 +1031,19 @@ def _write_storyboard_with_clips(tmp_path, clips):
     return str(root)
 
 
+def _derived_reference(path, method, source_path):
+    return {
+        "path": path,
+        "status": "ready",
+        "derivation": {
+            "method": method,
+            "source_path": source_path,
+            "source_sha256": _TEST_PNG_SHA256,
+            "crop_box": [0, 0, 1, 1],
+        },
+    }
+
+
 def _identity_registry(overrides=None):
     data = {
         "kind": "n2d_asset_identity_registry",
@@ -984,15 +1071,43 @@ def _identity_registry(overrides=None):
                             "hair": "乌黑半披发带",
                             "outfit": "月白旧宫装",
                             "accessories": "左腕淡疤",
+                            "texture": "旧宫装粗布微旧，皮肤自然不过磨",
                         },
                         "reference_group": {
                             "front": "出图/共享/图片/定妆_沈念.png",
-                            "side": "出图/共享/图片/定妆_沈念_侧.png",
-                            "back": "出图/共享/图片/定妆_沈念_背.png",
-                            "outfit": "出图/共享/图片/定妆_沈念_半身.png",
+                            "three_quarter": _derived_reference(
+                                "出图/共享/图片/定妆_沈念_45度.png",
+                                "turnaround_split",
+                                "出图/共享/图片/定妆_沈念_三视图.png",
+                            ),
+                            "side": _derived_reference(
+                                "出图/共享/图片/定妆_沈念_侧.png",
+                                "turnaround_split",
+                                "出图/共享/图片/定妆_沈念_三视图.png",
+                            ),
+                            "back": _derived_reference(
+                                "出图/共享/图片/定妆_沈念_背.png",
+                                "turnaround_split",
+                                "出图/共享/图片/定妆_沈念_三视图.png",
+                            ),
+                            "half_body": _derived_reference(
+                                "出图/共享/图片/定妆_沈念_半身.png",
+                                "front_crop",
+                                "出图/共享/图片/定妆_沈念.png",
+                            ),
                             "turnaround": "出图/共享/图片/定妆_沈念_三视图.png",
+                            "face_anchor_refs": [
+                                {
+                                    "label": "基础脸锚",
+                                    **_derived_reference(
+                                        "出图/共享/图片/定妆_沈念_脸部特写.png",
+                                        "front_crop",
+                                        "出图/共享/图片/定妆_沈念.png",
+                                    ),
+                                },
+                            ],
                             "expressions": [
-                                {"emotion": "中性", "path": "出图/共享/图片/定妆_沈念_脸部特写.png"},
+                                {"emotion": "中性", "path": "出图/共享/图片/定妆_沈念_脸部特写.png", "status": "ready"},
                             ],
                         },
                         "reference_atlas": {
@@ -1000,11 +1115,37 @@ def _identity_registry(overrides=None):
                             "build_tier": "standard_full",
                             "base_views": {
                                 "front": {"path": "出图/共享/图片/定妆_沈念.png", "status": "ready"},
-                                "three_quarter": {"path": "出图/共享/图片/定妆_沈念_45度.png", "status": "ready"},
-                                "side": {"path": "出图/共享/图片/定妆_沈念_侧.png", "status": "ready"},
-                                "back": {"path": "出图/共享/图片/定妆_沈念_背.png", "status": "ready"},
-                                "half_body": {"path": "出图/共享/图片/定妆_沈念_半身.png", "status": "ready"},
+                                "three_quarter": _derived_reference(
+                                    "出图/共享/图片/定妆_沈念_45度.png",
+                                    "turnaround_split",
+                                    "出图/共享/图片/定妆_沈念_三视图.png",
+                                ),
+                                "side": _derived_reference(
+                                    "出图/共享/图片/定妆_沈念_侧.png",
+                                    "turnaround_split",
+                                    "出图/共享/图片/定妆_沈念_三视图.png",
+                                ),
+                                "back": _derived_reference(
+                                    "出图/共享/图片/定妆_沈念_背.png",
+                                    "turnaround_split",
+                                    "出图/共享/图片/定妆_沈念_三视图.png",
+                                ),
+                                "half_body": _derived_reference(
+                                    "出图/共享/图片/定妆_沈念_半身.png",
+                                    "front_crop",
+                                    "出图/共享/图片/定妆_沈念.png",
+                                ),
                             },
+                            "face_anchor_refs": [
+                                {
+                                    "label": "基础脸锚",
+                                    **_derived_reference(
+                                        "出图/共享/图片/定妆_沈念_脸部特写.png",
+                                        "front_crop",
+                                        "出图/共享/图片/定妆_沈念.png",
+                                    ),
+                                },
+                            ],
                             "expression_refs": [
                                 {"emotion": "中性", "path": "出图/共享/图片/定妆_沈念_脸部特写.png", "status": "ready"},
                             ],
@@ -1095,7 +1236,7 @@ def _write_identity_registry(tmp_path, data=None, make_assets=False):
                         continue
                     path = root / rel
                     path.parent.mkdir(parents=True, exist_ok=True)
-                    path.write_bytes(b"\x89PNG\r\n\x1a\n")
+                    path.write_bytes(_TEST_PNG_BYTES)
     return str(root)
 
 
@@ -1210,6 +1351,14 @@ def _good_compliance(root, *, status_overrides=None):
             "release_filing_no": "网微剧上字(2026)第001号",
             "pre_broadcast_review": "ready",
             "filed_at": "2026-06-01",
+            "notes": "",
+        },
+        "ai_labeling": {
+            "applicable": True,
+            "explicit_label": {"status": "done", "text": "AI生成", "position": "bottom-right"},
+            "implicit_metadata": {"spec": "GB45438-2025", "service_provider_code": "SP-001",
+                                  "content_id": "C-2026-001", "applied": True},
+            "digital_watermark": {"status": "optional_external", "notes": ""},
             "notes": "",
         },
     }
@@ -1351,9 +1500,92 @@ def test_identity_registry_missing_reference_field_is_blocked(tmp_path):
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产身份注册层" and "reference_group 缺核心路径：side" in f["msg"] for f in gate.findings)
 
 
+def test_identity_registry_missing_three_quarter_is_blocked(tmp_path):
+    data = _identity_registry()
+    form = data["characters"][0]["forms"][0]
+    del form["reference_group"]["three_quarter"]
+    del form["reference_atlas"]["base_views"]["three_quarter"]
+    root = _write_identity_registry(tmp_path, data)
+
+    gate.check_identity_registry(root, require_reference_assets=False)
+
+    assert any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "资产身份注册层"
+        and "three_quarter" in f["msg"]
+        for f in gate.findings
+    )
+
+
+def test_identity_registry_planned_makeup_reference_is_blocked(tmp_path):
+    data = _identity_registry()
+    form = data["characters"][0]["forms"][0]
+    form["reference_group"]["three_quarter"] = {
+        "path": "出图/共享/图片/定妆_沈念_45度.png",
+        "status": "planned",
+    }
+    form["reference_atlas"]["base_views"]["three_quarter"]["status"] = "planned"
+    root = _write_identity_registry(tmp_path, data)
+
+    gate.check_identity_registry(root, require_reference_assets=False)
+
+    assert any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "资产身份注册层"
+        and "planned" in f["msg"]
+        and "不能放行" in f["msg"]
+        for f in gate.findings
+    )
+
+
+def test_identity_registry_ready_split_reference_requires_same_source_derivation(tmp_path):
+    data = _identity_registry()
+    form = data["characters"][0]["forms"][0]
+    form["reference_group"]["three_quarter"] = {
+        "path": "出图/共享/图片/定妆_沈念_45度.png",
+        "status": "ready",
+    }
+    form["reference_atlas"]["base_views"]["three_quarter"] = {
+        "path": "出图/共享/图片/定妆_沈念_45度.png",
+        "status": "ready",
+    }
+    root = _write_identity_registry(tmp_path, data)
+
+    gate.check_identity_registry(root, require_reference_assets=False)
+
+    assert any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "资产身份注册层"
+        and "同源母本派生" in f["msg"]
+        and "derivation.method" in f["msg"]
+        for f in gate.findings
+    )
+
+
+def test_identity_registry_turnaround_cannot_replace_split_makeup_refs(tmp_path):
+    data = _identity_registry()
+    form = data["characters"][0]["forms"][0]
+    for key in ("three_quarter", "side", "back", "half_body"):
+        del form["reference_group"][key]
+    for key in ("three_quarter", "side", "back", "half_body"):
+        del form["reference_atlas"]["base_views"][key]
+    root = _write_identity_registry(tmp_path, data)
+
+    gate.check_identity_registry(root, require_reference_assets=False)
+
+    missing = [f for f in gate.findings if f["sev"] == gate.BLOCK and f["dim"] == "资产身份注册层"]
+    assert any("three_quarter" in f["msg"] for f in missing)
+    assert any("side" in f["msg"] for f in missing)
+    assert any("back" in f["msg"] for f in missing)
+    assert any("half_body_or_full_body" in f["msg"] for f in missing)
+
+
 def test_identity_registry_missing_expression_reference_is_blocked(tmp_path):
     data = _identity_registry()
+    data["characters"][0]["forms"][0]["reference_group"]["face_anchor_refs"] = []
+    data["characters"][0]["forms"][0]["reference_atlas"]["face_anchor_refs"] = []
     data["characters"][0]["forms"][0]["reference_group"]["expressions"] = []
+    data["characters"][0]["forms"][0]["reference_atlas"]["expression_refs"] = []
     root = _write_identity_registry(tmp_path, data)
     gate.check_identity_registry(root, require_reference_assets=False)
     assert any(
@@ -1368,11 +1600,25 @@ def test_identity_registry_face_anchor_refs_satisfy_baseline_without_expression_
     data = _identity_registry()
     form = data["characters"][0]["forms"][0]
     form["reference_group"]["face_anchor_refs"] = [
-        {"label": "基础脸锚", "path": "出图/共享/图片/定妆_沈念_脸部特写.png"}
+        {
+            "label": "基础脸锚",
+            **_derived_reference(
+                "出图/共享/图片/定妆_沈念_脸部特写.png",
+                "front_crop",
+                "出图/共享/图片/定妆_沈念.png",
+            ),
+        }
     ]
     form["reference_group"]["expressions"] = []
     form["reference_atlas"]["face_anchor_refs"] = [
-        {"label": "基础脸锚", "path": "出图/共享/图片/定妆_沈念_脸部特写.png", "status": "ready"}
+        {
+            "label": "基础脸锚",
+            **_derived_reference(
+                "出图/共享/图片/定妆_沈念_脸部特写.png",
+                "front_crop",
+                "出图/共享/图片/定妆_沈念.png",
+            ),
+        }
     ]
     form["reference_atlas"]["expression_refs"] = []
     root = _write_identity_registry(tmp_path, data)
@@ -1435,6 +1681,20 @@ def test_identity_registry_missing_character_dna_layer_is_blocked(tmp_path):
     root = _write_identity_registry(tmp_path, data)
     gate.check_identity_registry(root, require_reference_assets=False)
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "角色 DNA" and "character_dna.hair" in f["loc"] for f in gate.findings)
+
+
+def test_identity_registry_incomplete_wardrobe_profile_warns(tmp_path):
+    data = _identity_registry()
+    data["characters"][0]["forms"][0]["wardrobe_profile"] = {
+        "silhouette": "月白交领寝衣，柔软宽袖"
+    }
+    root = _write_identity_registry(tmp_path, data)
+    gate.check_identity_registry(root, require_reference_assets=False)
+    assert any(
+        f["sev"] == gate.WARN and f["dim"] == "服装契约" and "wardrobe_profile" in f["loc"]
+        for f in gate.findings
+    )
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "服装契约" for f in gate.findings)
 
 
 def test_identity_registry_core_character_missing_asset_bundle_is_blocked(tmp_path):
@@ -1721,6 +1981,25 @@ def test_asset_reference_registry_full_contract_passes(tmp_path):
     assert not any(f["dim"] == "资产引用注册层" for f in gate.findings)
 
 
+def test_outfit_asset_missing_outfit_profile_warns(tmp_path):
+    data = _asset_registry()
+    data["assets"].append({
+        "id": "OUTFIT_01",
+        "type": "outfit",
+        "name": "玄青窄袖官袍",
+        "scope": "第3集起复用",
+        "reference_group": {"primary": "出图/共享/图片/定妆_玄青窄袖官袍.png"},
+        "constraints": {"structure": "交领+窄袖+暗银腰封+玄青主色"},
+        "drift_forbidden": ["silhouette", "collar", "sleeve", "palette"],
+    })
+    root = _write_asset_registry(tmp_path, data)
+    gate.check_asset_reference_registry(root, require_reference_assets=False)
+    assert any(
+        f["sev"] == gate.WARN and f["dim"] == "服装契约" and "outfit_profile" in f["loc"]
+        for f in gate.findings
+    )
+
+
 def test_identity_adapter_matrix_missing_is_blocked(tmp_path):
     root = tmp_path / "制漫剧" / "测试剧"
     root.mkdir(parents=True)
@@ -1870,6 +2149,91 @@ def test_storyboard_special_template_full_contract_passes(tmp_path):
     assert not any(f["dim"] == "专项镜头模板" for f in gate.findings)
 
 
+def test_storyboard_new_scene_templates_full_contracts_pass(tmp_path):
+    root = _write_storyboard_with_clips(
+        tmp_path,
+        [
+            {
+                "id": "EP01_CLIP08",
+                "label": "公堂掉马",
+                "template": "reveal_reaction_chain",
+                "template_contract": {
+                    "template_id": "reveal_reaction_chain",
+                    "beats": ["血书入画", "身份揭穿", "众人反应", "沈念改称谓"],
+                    "blocking": "血书在前景桌面，沈念画左，皇叔画右后，裁决者居中后景",
+                    "camera_rule": "证物特写接沈念 CU，再切皇叔反应，不越轴",
+                    "continuity_must": ["血书位置不变", "沈念始终画左", "皇叔衣冠不变"],
+                    "negative": ["不要新增证物", "不要让围观者抢焦点", "不要跳过反应链"],
+                    "reveal_object": "带旧印的血书",
+                    "knowledge_order": ["沈念已知", "皇叔假装不知道", "裁决者刚知道"],
+                    "reaction_beats": ["皇叔否认", "裁决者低头看印", "沈念改称皇叔为罪臣"],
+                    "cut_point": "裁决者抬头问最后一个名字前硬断",
+                },
+            },
+            {
+                "id": "EP01_CLIP09",
+                "label": "当众对质",
+                "template": "public_confrontation",
+                "template_contract": {
+                    "template_id": "public_confrontation",
+                    "beats": ["沈念递证", "皇叔反扑", "证人出列", "围观倒戈"],
+                    "blocking": "沈念画左前，皇叔画右前，证人从后景中线出列",
+                    "camera_rule": "中景建立公堂层级，证据特写后正反打",
+                    "continuity_must": ["裁决者居中后景", "围观者虚焦", "令牌始终在桌面"],
+                    "negative": ["不要让背景群像清脸", "不要交换左右站位", "不要凭空多出证人"],
+                    "stakes": "输者被当堂定罪并失去兵权",
+                    "evidence_ladder": ["令牌", "血书", "证人口供"],
+                    "power_shift": "皇叔从质问者变成被质问者",
+                    "crowd_reaction_order": ["裁决者", "证人", "群臣"],
+                },
+            },
+            {
+                "id": "EP01_CLIP10",
+                "label": "决裂救场",
+                "template": "relationship_turn",
+                "template_contract": {
+                    "template_id": "relationship_turn",
+                    "beats": ["王敦伸手", "沈念后退", "箭来时王敦挡下", "沈念改口"],
+                    "blocking": "沈念画左前，王敦画右前，两人间隔半步，箭从右后入画",
+                    "camera_rule": "MCU 正反打，挡箭只给肩部与眼神，不做复杂全身接触",
+                    "continuity_must": ["沈念泪痕不回退", "王敦衣袖破损持续", "两人左右关系不换"],
+                    "negative": ["不要突然拥抱", "不要换脸", "不要把决裂演成甜蜜和解"],
+                    "relationship_state_before": "误会爆发后互不信任",
+                    "turning_action": "王敦挡箭但沈念仍收回信物",
+                    "subtext": "嘴上割席，动作仍承认在意",
+                    "relationship_state_after": "正式决裂但留下互相保护的裂缝",
+                },
+            },
+        ],
+    )
+    gate.check_storyboard_special_templates(root, "第1集")
+    assert not any(f["dim"] == "专项镜头模板" for f in gate.findings)
+
+
+def test_storyboard_reveal_template_missing_reaction_beats_is_blocked(tmp_path):
+    root = _write_storyboard_with_clips(
+        tmp_path,
+        [{
+            "id": "EP01_CLIP08",
+            "label": "掉马",
+            "template": "reveal_reaction_chain",
+            "template_contract": {
+                "template_id": "reveal_reaction_chain",
+                "beats": ["证物入画", "身份揭穿"],
+                "blocking": "沈念画左，皇叔画右",
+                "camera_rule": "证物特写接反打",
+                "continuity_must": ["证物不变"],
+                "negative": ["不要跳轴"],
+                "reveal_object": "血书",
+                "knowledge_order": ["沈念已知", "皇叔刚知道"],
+                "cut_point": "皇叔开口前断",
+            },
+        }],
+    )
+    gate.check_storyboard_special_templates(root, "第1集")
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "专项镜头模板" and "reaction_beats" in f["msg"] for f in gate.findings)
+
+
 def test_storyboard_hug_or_pull_requires_special_template(tmp_path):
     root = _write_storyboard_with_clips(
         tmp_path,
@@ -1976,10 +2340,81 @@ def test_voice_first_mode_still_blocks_native_speech_without_disclaimer(tmp_path
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "原生音画" for f in gate.findings)
 
 
+def test_native_av_default_uses_contract_default(tmp_path):
+    root = tmp_path / "制漫剧" / "默认模式"
+    root.mkdir(parents=True)
+
+    assert gate.is_native_av_production(str(root)) is True
+
+
+def _patch_image_prompt_preflight_dependencies(monkeypatch):
+    for name in (
+        "check_compliance_manifest", "require_progress", "check_progress_artifact_signoff",
+        "check_placeholder_policy", "check_voiceover_fingerprint", "check_timing_manifest_complete",
+        "check_voice_cross_episode", "check_image_ai_policy", "check_backend_reachable",
+        "check_drift_risk_advisories", "check_cross_episode_character_definition",
+        "check_storyboard_contract", "check_storyboard_visual_contract",
+        "check_storyboard_style_contract", "check_storyboard_special_templates",
+    ):
+        monkeypatch.setattr(gate, name, lambda *a, **k: None)
+
+
+def _patch_video_prompt_preflight_dependencies(monkeypatch):
+    for name in (
+        "check_compliance_manifest", "require_progress", "check_progress_artifact_signoff",
+        "check_placeholder_policy", "check_voiceover_fingerprint", "check_timing_manifest_complete",
+        "check_voice_cross_episode", "check_identity_registry", "check_asset_reference_registry",
+        "check_identity_adapter_matrix", "check_route_identity_readiness", "check_storyboard_contract",
+        "check_storyboard_style_contract", "check_storyboard_special_templates",
+        "check_expression_span_frame_contract", "check_image_assets", "check_input_frame_qc",
+        "check_multimodal_continuity", "check_semantic_lineage", "check_state_continuity",
+    ):
+        monkeypatch.setattr(gate, name, lambda *a, **k: None)
+    monkeypatch.setattr(gate, "episode_registry_reference_ids", lambda *a, **k: (set(), set()))
+
+
+def test_image_prompt_preflight_does_not_require_image_prompt(monkeypatch, tmp_path):
+    root = tmp_path / "制漫剧" / "预检"
+    root.mkdir(parents=True)
+    _patch_image_prompt_preflight_dependencies(monkeypatch)
+
+    def fail(*_args, **_kwargs):
+        raise AssertionError("image prompt checks must not run before prompt generation")
+
+    monkeypatch.setattr(gate, "check_image_prompt_overview", fail)
+    monkeypatch.setattr(gate, "check_prompt_checklists", fail)
+
+    gate.findings.clear()
+    gate.run(str(root), "第1集", "image_prompt_preflight")
+
+    assert not gate.findings
+
+
+def test_video_prompt_preflight_does_not_require_video_prompt(monkeypatch, tmp_path):
+    root = tmp_path / "制漫剧" / "预检"
+    root.mkdir(parents=True)
+    _patch_video_prompt_preflight_dependencies(monkeypatch)
+
+    def fail(*_args, **_kwargs):
+        raise AssertionError("video prompt checks must not run before prompt generation")
+
+    monkeypatch.setattr(gate, "check_video_prompt_frames", fail)
+    monkeypatch.setattr(gate, "check_prompt_checklists", fail)
+    monkeypatch.setattr(gate, "check_video_stage_raw_output_policy", fail)
+    monkeypatch.setattr(gate, "check_contract_inheritance", fail)
+    monkeypatch.setattr(gate, "check_asset_handoff_inheritance", fail)
+
+    gate.findings.clear()
+    gate.run(str(root), "第1集", "video_prompt_preflight")
+
+    assert not gate.findings
+
+
 def test_compose_gate_blocks_missing_srt_voice_first(tmp_path):
     # 配音先行：缺中文字幕是硬闸
     root = tmp_path / "制漫剧" / "vf"
     (root / "脚本" / "第1集").mkdir(parents=True)
+    (root / "_设置.md").write_text("- 制作模式: 配音先行\n", encoding="utf-8")
     (root / "出视频" / "第1集" / "视频").mkdir(parents=True)
     (root / "出视频" / "第1集" / "视频" / "Clip01.mp4").write_text("x", encoding="utf-8")
     gate.check_compose_inputs(str(root), "第1集")
@@ -2080,6 +2515,45 @@ def test_image_ai_mixing_codex_and_dreamina_is_blocked(tmp_path):
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "生图AI一致性" and "混用" in f["msg"] for f in gate.findings)
 
 
+def _append_image_event(root: Path, asset: str, provider: str, event: str = "generation") -> None:
+    prod = root / "生产数据"
+    prod.mkdir(parents=True, exist_ok=True)
+    row = {
+        "kind": "n2d_production_event",
+        "version": 1,
+        "episode": "第1集",
+        "stage": "image",
+        "event": event,
+        "generation": {"asset": asset, "provider": provider, "status": "pass"},
+    }
+    with (prod / "production_events.jsonl").open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+
+def test_image_ai_backend_migration_uses_latest_event_per_asset(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 生图AI: Dreamina\n", encoding="utf-8")
+    _append_image_event(root, "出图/第1集/图片/Clip_01.png", "Codex")
+    _append_image_event(root, "出图/第1集/图片/Clip_01.png", "Dreamina", event="redraw")
+
+    gate.check_image_ai_policy(str(root), "第1集")
+
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "生图AI一致性" for f in gate.findings)
+
+
+def test_image_ai_backend_mixing_across_latest_assets_is_blocked(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 生图AI: Dreamina\n", encoding="utf-8")
+    _append_image_event(root, "出图/第1集/图片/Clip_01.png", "Dreamina")
+    _append_image_event(root, "出图/第1集/图片/Clip_02.png", "Codex")
+
+    gate.check_image_ai_policy(str(root), "第1集")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "生图AI一致性" and "混用" in f["msg"] for f in gate.findings)
+
+
 def test_shot_scale_progression_survives_int_shots_schema(tmp_path):
     # 回归：新 storyboard schema 的 shots 是 int 列表（非 dict）；check_shot_scale_progression
     # 旧实现 (s or {}).get(...) 会 AttributeError 整段崩 gate。修后应不崩，并能从 continuity.shot_size 判景别。
@@ -2120,6 +2594,22 @@ def test_reference_plan_warns_when_actions_pending(tmp_path):
     matches = [f for f in gate.findings if f["dim"] == "参考规划落实"]
     assert matches and all(f["sev"] == gate.BLOCK for f in matches)
     assert any("CHAR_01/常态" in f["msg"] for f in matches)
+
+
+def test_reference_plan_advisory_actions_warn_without_hard_escalation(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    _write_reference_plan(root, {
+        "weak_backend_large_delta_clips": 0,
+        "chars_need_lora": [],
+        "chars_need_native_registration": [],
+        "action_required": [{"clip": "C1", "char_id": "CHAR_01", "form": "常态"}],
+    })
+
+    gate.check_reference_plan_applied(str(root), "第1集")
+
+    matches = [f for f in gate.findings if f["dim"] == "参考规划落实"]
+    assert matches and all(f["sev"] == gate.WARN for f in matches)
 
 
 def test_reference_plan_silent_when_no_plan_and_no_character_signal(tmp_path):
@@ -2584,6 +3074,54 @@ def test_video_clip_native_audio_opt_in_requires_low_risk_no_speech():
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "原生音画" and "无口型" in f["msg"] for f in gate.findings)
 
 
+def test_video_clip_native_speech_route_allows_intentional_speech_policy():
+    clip = GOOD_VIDEO_CLIP.replace(
+        "native_audio_policy=none",
+        "native_audio_policy=native_speech",
+    ).replace(
+        "mode=image2video",
+        "mode=native_av",
+    ).replace(
+        "audio_intent=none；risk=low；mouth_visible=no；speech_policy=no_native_speech；compose_policy=丢弃；review=生成后确认无原生人声",
+        "audio_intent=native_speech；risk=medium；mouth_visible=yes；speech_policy=native_speech；compose_policy=保留原片音轨；review=生成后检查台词口型同步",
+    ).replace(
+        "原生音画约束：默认禁止原生人声，不生成对白/旁白/哼唱；本镜 compose_policy=丢弃；",
+        "原生音画约束：native_speech 有意生成台词和口型，声源来自画内沈念，compose_policy=保留原片音轨；",
+    ).replace(
+        "声音约束：无对白、无旁白、不要生成原生人声；",
+        "声音约束：本镜台词由原生音画后端生成，后期保留原片音轨；",
+    )
+
+    gate.check_video_clip_prompt_section("01_clips.md", clip, route={"mode": "native_av", "native_audio_policy": "native_speech"})
+
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "原生音画" for f in gate.findings)
+
+
+def test_video_clip_native_speech_route_blocks_old_no_native_policy():
+    route = {"mode": "native_av", "native_audio_policy": "native_speech"}
+
+    gate.check_video_clip_prompt_section("01_clips.md", GOOD_VIDEO_CLIP, route=route)
+
+    assert any(
+        f["sev"] == gate.BLOCK and f["dim"] == "原生音画" and "native_speech" in f["msg"]
+        for f in gate.findings
+    )
+
+
+def test_video_clip_voice_first_route_blocks_native_speech_policy():
+    clip = GOOD_VIDEO_CLIP.replace(
+        "audio_intent=none；risk=low；mouth_visible=no；speech_policy=no_native_speech；compose_policy=丢弃；review=生成后确认无原生人声",
+        "audio_intent=native_speech；risk=medium；mouth_visible=yes；speech_policy=native_speech；compose_policy=保留原片音轨；review=生成后检查台词口型同步",
+    )
+
+    gate.check_video_clip_prompt_section("01_clips.md", clip, route={"mode": "image2video", "native_audio_policy": "none"})
+
+    assert any(
+        f["sev"] == gate.BLOCK and f["dim"] == "原生音画" and "不得写 native_speech" in f["msg"]
+        for f in gate.findings
+    )
+
+
 def test_video_clip_missing_director_intent_is_blocked():
     clip = GOOD_VIDEO_CLIP.replace("**导演意图**：这条镜头不是展示人物漂亮，而是让观众感到沈念正在压住恐惧，镜头慢慢逼近她的眼神。\n", "")
     gate.check_video_clip_prompt_section("01_clips.md", clip)
@@ -2620,7 +3158,7 @@ def test_video_overview_native_audio_mix_requires_opt_in_list(tmp_path):
     root = tmp_path / "制漫剧" / "测试剧"
     prompt_dir = root / "出视频" / "第1集" / "prompt"
     prompt_dir.mkdir(parents=True)
-    (root / "_设置.md").write_text("# _设置\n- 视频原生音轨: 低音量混入环境声\n", encoding="utf-8")
+    (root / "_设置.md").write_text("# _设置\n- 制作模式: 配音先行\n- 视频原生音轨: 低音量混入环境声\n", encoding="utf-8")
     (prompt_dir / "00_总览.md").write_text(
         "# 总览\n\n## 本集导演一致性契约\n"
         "- 主色调：冷青\n- 镜头语法：慢推和固定\n- 轴线：床到门横轴\n- 剧情状态锁：觉醒前不发光\n- 场景状态：烛火不跳位\n\n"
@@ -2743,11 +3281,25 @@ def _motion_control_route(manifest_path="出视频/第1集/control/Clip_01/motio
     }
 
 
-def _write_routes(root, route):
-    prompt_dir = root / "出视频" / "第1集" / "prompt"
+def _write_routes(root, route, ep="第1集", **data_overrides):
+    prompt_dir = root / "出视频" / ep / "prompt"
     prompt_dir.mkdir(parents=True)
     data = {"kind": "n2d_video_model_routes", "routes": [route]}
+    data.update(data_overrides)
     (prompt_dir / "video_model_routes.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+
+def _record_video_backend_refresh(root, backend="dreamina", channel="", date=None):
+    import video_backend_adapter
+
+    return video_backend_adapter.write_refresh_evidence(
+        str(root),
+        backend,
+        channel=channel,
+        sources=["unit test official docs/cli evidence"],
+        note="unit test verified current video backend capability",
+        today=date or dt.date.today().isoformat(),
+    )
 
 
 def _basic_route(**overrides):
@@ -2788,6 +3340,103 @@ def test_long_duration_route_blocks_before_paid_video(tmp_path):
     assert finding["sev"] == gate.BLOCK
     assert finding["return_to_stage"] == "script_stage2"
     assert "storyboard.json" in " ".join(finding["affected_artifacts"])
+
+
+def test_video_model_routes_require_fresh_backend_evidence(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_routes(root, _basic_route(primary_backend="veo", fallback_backends=[]))
+
+    gate.check_video_model_routes(str(root), "第1集", "## 本集模型路由表\n", "00_总览.md")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "生视频后端适配" and "record-refresh" in f["msg"] for f in gate.findings)
+
+
+def test_video_model_routes_fresh_backend_evidence_passes_refresh_gate(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    _record_video_backend_refresh(root, "veo")
+    _write_routes(root, _basic_route(primary_backend="veo", fallback_backends=[]))
+
+    gate.check_video_model_routes(str(root), "第1集", "## 本集模型路由表\n", "00_总览.md")
+
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "生视频后端适配" for f in gate.findings)
+
+
+def test_video_model_routes_ep2_requires_baseline_for_identity_route(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_routes(root, _basic_route(primary_backend="veo", fallback_backends=[]), ep="第2集")
+
+    gate.check_video_model_routes(str(root), "第2集", "## 本集模型路由表\n", "00_总览.md")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "后端跨集锁" and "model_routes_baseline.json" in str(f["msg"])
+               for f in gate.findings)
+
+
+def test_video_model_routes_baseline_drift_blocks_for_high_risk(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    (root / "设定库").mkdir(parents=True)
+    (root / "设定库" / "model_routes_baseline.json").write_text(
+        json.dumps({"kind": "n2d_model_routes_baseline", "shot_type_backends": {"action_fight": "kling"}}),
+        encoding="utf-8",
+    )
+    route = _basic_route(
+        clip_id="Clip_01",
+        shot_type="action_fight",
+        primary_backend="kling",
+        fallback_backends=[],
+        risk_flags=["contact_motion"],
+    )
+    _write_routes(
+        root,
+        route,
+        ep="第2集",
+        baseline_anchored=True,
+        baseline_drift=[{"clip_id": "Clip_01", "shot_type": "action_fight", "was": "seedance", "now": "kling"}],
+    )
+
+    gate.check_video_model_routes(str(root), "第2集", "## 本集模型路由表\n", "00_总览.md")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "后端跨集锁" and "baseline_override_reason" in str(f["msg"])
+               for f in gate.findings)
+
+
+def test_video_model_routes_baseline_override_downgrades_drift_to_warn(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    (root / "设定库").mkdir(parents=True)
+    (root / "设定库" / "model_routes_baseline.json").write_text("{}", encoding="utf-8")
+    route = _basic_route(clip_id="Clip_01", shot_type="action_fight", fallback_backends=[], risk_flags=["contact_motion"])
+    _write_routes(
+        root,
+        route,
+        ep="第2集",
+        baseline_anchored=True,
+        baseline_override_reason="本集换成动作专用后端，已人工确认角色一致性",
+        baseline_drift=[{"clip_id": "Clip_01", "shot_type": "action_fight", "was": "seedance", "now": "dreamina"}],
+    )
+
+    gate.check_video_model_routes(str(root), "第2集", "## 本集模型路由表\n", "00_总览.md")
+
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "后端跨集锁" for f in gate.findings)
+    assert any(f["sev"] == gate.WARN and f["dim"] == "后端跨集锁" for f in gate.findings)
+
+
+def test_video_model_routes_blocks_fresh_evidence_without_required_capability(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    _record_video_backend_refresh(root, "veo")
+    evidence = root / "生产数据" / "video_backend_capabilities" / "veo.json"
+    data = json.loads(evidence.read_text(encoding="utf-8"))
+    data["capability_assertions"]["supports_last_frame"] = False
+    evidence.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    route = _basic_route(
+        primary_backend="veo",
+        fallback_backends=[],
+        anchor_consumption={"need_end": True, "anchor_count": 0, "consumption_mode": "first_last"},
+    )
+    _write_routes(root, route)
+
+    gate.check_video_model_routes(str(root), "第1集", "## 本集模型路由表\n", "00_总览.md")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "生视频后端适配" and "supports_last_frame" in str(f["msg"])
+               for f in gate.findings)
 
 
 def test_fixed_default_allows_empty_fallback_when_backup_disabled(tmp_path):
@@ -3209,6 +3858,7 @@ def test_contract_inheritance_missing_overview_skips_no_double_block(tmp_path):
 
 def _write_voice(tmp_path, vo_text, recorded_fp):
     (tmp_path / "脚本" / "第1集").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "_设置.md").write_text("- 制作模式: 配音先行\n", encoding="utf-8")
     (tmp_path / "脚本" / "第1集" / "voiceover.txt").write_text(vo_text, encoding="utf-8")
     meta_dir = tmp_path / "合成" / "第1集" / "配音"
     meta_dir.mkdir(parents=True, exist_ok=True)
@@ -3274,6 +3924,17 @@ def test_route_identity_native_lock_lost_core_blocks(tmp_path):
     gate.check_route_identity_readiness(root, "第1集")
     blocks = [f for f in gate.findings if f["dim"] == "换后端丢锁" and f["sev"] == gate.BLOCK]
     assert blocks and "seedance" in blocks[0]["msg"] and blocks[0]["return_to_stage"] == "video_prompt"
+
+
+def test_route_identity_fallback_losing_core_lock_blocks(tmp_path):
+    # primary 已在原生锁后端，但失败重试 fallback 只有 reference_group，也会在真实执行时丢锁。
+    forms = [_form("沈念", "核心", {"kling": ("character_id", True), "seedance": ("fallback_reference_group", True)})]
+    routes = [{"clip_id": "Clip_01", "primary_backend": "kling", "fallback_backends": ["seedance"]}]
+    root = _write_routes_and_matrix(tmp_path, routes, forms)
+    gate.findings.clear()
+    gate.check_route_identity_readiness(root, "第1集")
+    blocks = [f for f in gate.findings if f["dim"] == "换后端丢锁" and f["sev"] == gate.BLOCK]
+    assert blocks and "fallback" in blocks[0]["msg"] and "seedance" in blocks[0]["msg"]
 
 
 def test_route_identity_native_lock_downgrade_minor_warns(tmp_path):
@@ -3635,6 +4296,11 @@ def _seed_pngs_and_qc(root, ep, hard_blocks, qc_present=True, *, precision="full
             payload["face_reference_coverage"] = coverage or {
                 "verdict": "ok", "missing": [], "required": 1, "covered": 1,
             }
+            from skill_snapshot import artifact_fingerprint
+            payload["inputs_fingerprint"] = artifact_fingerprint(
+                str(root),
+                [f"出图/{ep}/图片/镜头01.png"],
+            )
         qc_path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
         # make QC newer than the PNG so the freshness branch passes
         future = time.time() + 100
@@ -3661,12 +4327,41 @@ def test_input_frame_qc_blocks_when_no_qc_result(tmp_path):
     assert len(blocks) == 1 and "未见 image_qc" in blocks[0]["msg"]
 
 
+def test_image_stage_runs_input_frame_qc_but_preflight_does_not(tmp_path, monkeypatch):
+    """崩脸/coverage 像素硬挡此前只挂 video 阶段——出图阶段(生成后 `--stage image`)现在也接，
+    但 pre-gen 的 image_preflight 不接(此时还没 PNG/QC 报告)。锁住这个不对称的接线。"""
+    root = tmp_path / "work"; root.mkdir()
+    ep = "第1集"
+    calls = []
+    monkeypatch.setattr(gate, "check_input_frame_qc", lambda r, e: calls.append((r, e)))
+    # 一致性总审同样只挂出图后 image，不挂 pre-gen——stub 掉避免真跑 consistency_audit 子进程
+    monkeypatch.setattr(gate, "check_consistency_audit_gate", lambda r, e, stage="review": None)
+    gate.findings.clear()
+    gate.run(str(root), ep, "image_preflight")
+    assert calls == []  # 生成前不跑首帧落档 QC（无 PNG/报告，避免误 BLOCK）
+    gate.findings.clear()
+    gate.run(str(root), ep, "image")
+    assert calls == [(str(root), ep)]  # 生成后出图闸门即拦崩脸，不拖到最贵的出视频工位
+
+
 def test_input_frame_qc_passes_when_clean_and_fresh(tmp_path):
     gate.findings.clear()
     root = tmp_path / "work"; ep = "第1集"
     _seed_pngs_and_qc(root, ep, hard_blocks=0)
     gate.check_input_frame_qc(str(root), ep)
     assert [f for f in gate.findings if f["dim"] == "出图落档QC"] == []
+
+
+def test_input_frame_qc_blocks_when_fingerprint_misses_real_pngs(tmp_path):
+    """防伪造：freshness 只证明声明文件没变。报告只指纹了 1 张，但磁盘上有 2 张真实落档 PNG（手写/陈旧
+    报告特征）——没被机检的那张必须拦下，否则 1 字节假图 + 最小声明就能蒙混过 freshness。"""
+    gate.findings.clear()
+    root = tmp_path / "work"; ep = "第1集"
+    _seed_pngs_and_qc(root, ep, hard_blocks=0)  # 指纹只覆盖 镜头01.png，clean+fresh
+    (root / "出图" / ep / "图片" / "镜头02.png").write_bytes(b"y")  # 真实落档但报告没覆盖
+    gate.check_input_frame_qc(str(root), ep)
+    blocks = [f for f in gate.findings if f["dim"] == "出图落档QC" and f["sev"] == gate.BLOCK]
+    assert len(blocks) == 1 and "不在核验范围" in blocks[0]["msg"]
 
 
 def test_input_frame_qc_blocks_latest_local_face_patch_even_when_qc_clean(tmp_path):
@@ -3718,6 +4413,32 @@ def test_input_frame_qc_blocks_legacy_qc_without_face_coverage(tmp_path):
     gate.check_input_frame_qc(str(root), ep)
     blocks = [f for f in gate.findings if f["dim"] == "出图落档QC" and f["sev"] == gate.BLOCK]
     assert len(blocks) == 1 and "face_reference_coverage" in blocks[0]["msg"]
+
+
+def test_input_frame_qc_blocks_qc_without_inputs_fingerprint(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"; ep = "第1集"
+    _png, qc_path = _seed_pngs_and_qc(root, ep, hard_blocks=0)
+    data = json.loads(qc_path.read_text(encoding="utf-8"))
+    data.pop("inputs_fingerprint", None)
+    qc_path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    gate.check_input_frame_qc(str(root), ep)
+    blocks = [f for f in gate.findings if f["dim"] == "出图落档QC" and f["sev"] == gate.BLOCK]
+    assert len(blocks) == 1 and "inputs_fingerprint" in blocks[0]["msg"]
+
+
+def test_input_frame_qc_blocks_inputs_fingerprint_mismatch(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"; ep = "第1集"
+    png, _qc_path = _seed_pngs_and_qc(root, ep, hard_blocks=0)
+    # Keep mtime old enough that the content fingerprint, not the mtime guard, catches this.
+    old_mtime = png.stat().st_mtime
+    png.write_bytes(b"new-png-content")
+    import os
+    os.utime(png, (old_mtime, old_mtime))
+    gate.check_input_frame_qc(str(root), ep)
+    blocks = [f for f in gate.findings if f["dim"] == "出图落档QC" and f["sev"] == gate.BLOCK]
+    assert len(blocks) == 1 and "inputs_fingerprint" in blocks[0]["msg"] and "失配" in blocks[0]["msg"]
 
 
 def test_input_frame_qc_blocks_face_reference_coverage_missing(tmp_path):
@@ -4281,6 +5002,27 @@ def test_backend_reachable_ok_silent(tmp_path, monkeypatch):
     assert gate.findings == []
 
 
+def test_image_backend_api_refresh_missing_blocks(tmp_path, monkeypatch):
+    monkeypatch.setattr(gate, "get_setting", lambda *a, **k: "Codex")
+    gate.findings.clear()
+    gate.check_image_backend_api_refresh(str(tmp_path), "第1集")
+    matches = [f for f in gate.findings if f["dim"] == "生图后端适配"]
+    assert any(f["sev"] == gate.BLOCK and "刷新证据" in f["msg"] for f in matches)
+
+
+def test_image_backend_api_refresh_fresh_allows_missing_block(tmp_path, monkeypatch):
+    monkeypatch.setattr(gate, "get_setting", lambda *a, **k: "Seedream")
+    gate.image_backend_adapter.write_refresh_evidence(
+        str(tmp_path),
+        "Seedream",
+        sources=["https://example.com/official-api-doc"],
+        note="official endpoint checked today",
+    )
+    gate.findings.clear()
+    gate.check_image_backend_api_refresh(str(tmp_path), "第1集")
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "生图后端适配" for f in gate.findings)
+
+
 def test_drift_advisory_findings_face_band_to_severity():
     report = {
         "kind": "n2d_face_drift_risk",
@@ -4316,6 +5058,23 @@ def test_drift_advisory_findings_measured_block_is_real_block():
     sev, dim, loc, msg = rows[0]
     assert sev == gate.BLOCK and dim == "脸漂实测" and "沈念" in loc
     assert "实测" in msg
+
+
+def test_drift_advisory_findings_predicted_block_is_preflight_plan_not_measured():
+    report = {
+        "kind": "n2d_face_drift_risk",
+        "characters": [
+            {"character_id": "CHAR_A", "name": "沈念", "band": "block", "score": 88,
+             "predicted_block_reason": "核心长线角色 + 弱后端预测 high",
+             "suggestions": ["⛔ 预测高危已升级为阻断：先补同源表情库"]},
+        ],
+    }
+    rows = gate.drift_advisory_findings(report)
+    assert len(rows) == 1
+    sev, dim, loc, msg = rows[0]
+    assert sev == gate.BLOCK and dim == "脸漂预案" and "沈念" in loc
+    assert "本集脸漂风险 block" in msg
+    assert "上一集已实测" not in msg
 
 
 def test_drift_advisory_findings_asset_and_empty():
@@ -4369,6 +5128,62 @@ def test_referenced_assets_finalized_bare_char_ref_single_form(tmp_path):
     gate.findings.clear()
     gate.check_referenced_assets_finalized(str(_finalize_work(tmp_path, self_check=False, ref="CHAR_01")), "第1集")
     assert any(f["dim"] == "共享定妆" and f["sev"] == "block" for f in gate.findings)
+
+
+def test_referenced_assets_finalized_requires_evidence_once_adopted(tmp_path):
+    """被引用即必需机器证据：项目一旦启用 finalize 追踪（CHAR_01 已 true），同集引用的、确属本 registry
+    的 CHAR_02 却无任何证据（无 self_check_passed/anchor_sha）= 漏登记的自断言 → BLOCK，不再静默放行。"""
+    d = tmp_path / "work"
+    (d / "出图" / "共享").mkdir(parents=True)
+    reg = {"characters": [
+        {"id": "CHAR_01", "name": "甲", "forms": [{"form": "常态", "self_check_passed": True}]},
+        {"id": "CHAR_02", "name": "乙", "forms": [{"form": "常态"}]},
+    ]}
+    (d / "出图" / "共享" / "identity_registry.json").write_text(json.dumps(reg), encoding="utf-8")
+    (d / "出图" / "第1集" / "prompt").mkdir(parents=True)
+    (d / "出图" / "第1集" / "prompt" / "01_分镜出图.md").write_text(
+        "## 镜头1\n资产身份注册层：`CHAR_01/常态`、`CHAR_02/常态`\n", encoding="utf-8")
+    gate.findings.clear()
+    gate.check_referenced_assets_finalized(str(d), "第1集")
+    blocks = [f for f in gate.findings if f["dim"] == "共享定妆" and f["sev"] == "block"]
+    assert len(blocks) == 1 and "CHAR_02/常态" in blocks[0]["msg"] and "被引用即必需" in blocks[0]["msg"]
+
+
+def test_ffprobe_missing_blocks_double_voice_at_review(tmp_path, monkeypatch):
+    """缺核心检测工具→交付边界拦截：ffprobe 不可用(has_audio→None)又存在 n2d-voice 配音轨时，
+    双人声硬闸门无法校验，review 默认 BLOCK；N2D_ALLOW_DEGRADED_QC=1 显式放行降级为 WARN。"""
+    root = tmp_path / "work"; ep = "第1集"
+    (root / "出视频" / ep / "视频").mkdir(parents=True)
+    (root / "出视频" / ep / "视频" / "Clip_01.mp4").write_bytes(b"x")
+    (root / "合成" / ep / "配音").mkdir(parents=True)
+    (root / "合成" / ep / "配音" / "voice_zh.wav").write_bytes(b"x")
+    monkeypatch.setattr(gate, "has_audio", lambda p: None)  # ffprobe 不可用
+    monkeypatch.delenv("N2D_ALLOW_DEGRADED_QC", raising=False)
+    gate.findings.clear()
+    gate.check_video_assets(str(root), ep)
+    blocks = [f for f in gate.findings if f["dim"] == "原生音画" and f["sev"] == gate.BLOCK]
+    assert blocks and "ffprobe" in blocks[0]["msg"]
+    # 逃生口：显式放行 → 降级 WARN，不再 BLOCK
+    monkeypatch.setenv("N2D_ALLOW_DEGRADED_QC", "1")
+    gate.findings.clear()
+    gate.check_video_assets(str(root), ep)
+    assert not [f for f in gate.findings if f["dim"] == "原生音画" and f["sev"] == gate.BLOCK]
+    assert [f for f in gate.findings if f["dim"] == "原生音画" and f["sev"] == gate.WARN]
+
+
+def test_referenced_assets_finalized_anchor_sha_counts_as_evidence(tmp_path):
+    """档①只钉了 anchor_sha（没显式写 self_check_passed=true）也算机器证据 → 不误拦。"""
+    d = tmp_path / "work"
+    (d / "出图" / "共享").mkdir(parents=True)
+    reg = {"characters": [{"id": "CHAR_01", "name": "甲",
+                           "forms": [{"form": "常态", "anchor_sha": "abc123"}]}]}
+    (d / "出图" / "共享" / "identity_registry.json").write_text(json.dumps(reg), encoding="utf-8")
+    (d / "出图" / "第1集" / "prompt").mkdir(parents=True)
+    (d / "出图" / "第1集" / "prompt" / "01_分镜出图.md").write_text(
+        "## 镜头1\n资产身份注册层：`CHAR_01/常态`\n", encoding="utf-8")
+    gate.findings.clear()
+    gate.check_referenced_assets_finalized(str(d), "第1集")
+    assert not [f for f in gate.findings if f["dim"] == "共享定妆"]
 
 
 # ── 跨集视觉契约方向反转 gate 落地（防回退成「脚本写了没人跑」的孤儿） ──
@@ -4632,7 +5447,7 @@ def test_substantive_endframe_exempt_reason_ok(tmp_path):
     assert not any(f["dim"] == "尾帧" and "过短" in str(f["msg"]) for f in gate.findings)
 
 
-# ── #1 + M4 一致性总审：降级精度终验阻断 / compose 仅 warn / 显式放行 / WARN rollup ──
+# ── #1 + M4 一致性总审：降级精度交付边界阻断 / 显式放行 / WARN rollup ──
 def _run_consistency(monkeypatch, tmp_path, payload, stage, returncode=0, env=None):
     gate.findings.clear()
     root = tmp_path / "w"
@@ -4653,11 +5468,10 @@ def test_degraded_precision_blocks_at_review(monkeypatch, tmp_path):
     assert any(f["dim"] == "一致性总审" and f["sev"] == "block" for f in fs)
 
 
-def test_degraded_precision_only_warns_at_compose(monkeypatch, tmp_path):
+def test_degraded_precision_blocks_at_compose(monkeypatch, tmp_path):
     fs = _run_consistency(monkeypatch, tmp_path,
                           {"summary": {"precision_level": "degraded"}, "findings": []}, "compose")
-    assert any(f["dim"] == "一致性总审" and f["sev"] == "warn" for f in fs)
-    assert not any(f["sev"] == "block" for f in fs)
+    assert any(f["dim"] == "一致性总审" and f["sev"] == "block" for f in fs)
 
 
 def test_degraded_precision_review_waived_by_env(monkeypatch, tmp_path):
@@ -4668,11 +5482,84 @@ def test_degraded_precision_review_waived_by_env(monkeypatch, tmp_path):
     assert any(f["sev"] == "warn" and "放行" in str(f["msg"]) for f in fs)
 
 
+def test_degraded_precision_compose_waived_by_env(monkeypatch, tmp_path):
+    fs = _run_consistency(monkeypatch, tmp_path,
+                          {"summary": {"precision_level": "degraded"}, "findings": []}, "compose",
+                          env={"N2D_ALLOW_DEGRADED_QC": "1"})
+    assert not any(f["sev"] == "block" for f in fs)
+    assert any(f["sev"] == "warn" and "放行" in str(f["msg"]) for f in fs)
+
+
+# ── 一致性总审前移到出图后 image 闸门：确定性 🔴 维度挡在出视频前 ──
+
+def test_consistency_block_dim_blocks_at_image(monkeypatch, tmp_path):
+    """手部多指/天气硬跳/禁用称谓等确定性 block 维度，在出图后 image 闸门即 BLOCK（不拖到 compose）。"""
+    payload = {"summary": {"precision_level": "full"},
+               "findings": [{"verdict": "block", "dimension": "手部/解剖(N5)",
+                             "message": "镜头3 单手 7 指尖（多指）", "return_to_stage": "image"}]}
+    fs = _run_consistency(monkeypatch, tmp_path, payload, "image")
+    assert any(f["dim"] == "手部/解剖(N5)" and f["sev"] == "block" for f in fs)
+
+
+def test_degraded_precision_image_is_warn_not_block(monkeypatch, tmp_path):
+    """出图后 image 闸门对降级精度只 WARN（不硬拦无依赖产线）——交付边界 compose/review 才 BLOCK。"""
+    fs = _run_consistency(monkeypatch, tmp_path,
+                          {"summary": {"precision_level": "degraded"}, "findings": []}, "image")
+    assert not any(f["sev"] == "block" for f in fs)
+    assert any(f["dim"] == "一致性总审" and f["sev"] == "warn" for f in fs)
+
+
+def test_image_stage_runs_consistency_audit_gate_but_preflight_does_not(tmp_path, monkeypatch):
+    """锁住接线：出图后 `--stage image` 跑一致性总审，pre-gen 的 image_preflight 不跑。"""
+    root = tmp_path / "work"; root.mkdir()
+    ep = "第1集"
+    calls = []
+    monkeypatch.setattr(gate, "check_input_frame_qc", lambda r, e: None)
+    monkeypatch.setattr(gate, "check_consistency_audit_gate",
+                        lambda r, e, stage="review": calls.append((r, e, stage)))
+    gate.findings.clear()
+    gate.run(str(root), ep, "image_preflight")
+    assert calls == []  # 生成前无 PNG，一致性总审不跑
+    gate.findings.clear()
+    gate.run(str(root), ep, "image")
+    assert calls == [(str(root), ep, "image")]  # 出图后即跑，stage=image（降级精度只 WARN）
+
+
 def test_consistency_warn_rollup_over_cap(monkeypatch, tmp_path):
     findings = [{"severity": "warn", "message": f"w{i}", "dimension": "x"} for i in range(20)]
     fs = _run_consistency(monkeypatch, tmp_path,
                           {"summary": {"precision_level": "full"}, "findings": findings}, "review")
     assert any("未在此展开" in str(f["msg"]) for f in fs)
+
+
+def test_production_profile_escalates_repeated_axis_warn_to_block(monkeypatch, tmp_path):
+    payload = {
+        "summary": {"precision_level": "full", "by_dim": {"轴线视线(X1)": {"warn": 2}}},
+        "findings": [{"severity": "warn", "dimension": "轴线视线(X1)", "message": "关键对峙镜视线越轴"}],
+    }
+    fs = _run_consistency(monkeypatch, tmp_path, payload, "image", env={"N2D_CONSISTENCY_PROFILE": "production"})
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "轴线视线(X1)" and "production一致性升级" in str(f["msg"])
+               for f in fs)
+
+
+def test_production_profile_advisory_signoff_keeps_warn(monkeypatch, tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "w"
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    (prod / "consistency_advisory_signoff_第1集.json").write_text(
+        json.dumps({"accepted": [{"dimension": "轴线视线(X1)", "message_contains": "关键对峙"}]}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    payload = {
+        "summary": {"precision_level": "full", "by_dim": {"轴线视线(X1)": {"warn": 2}}},
+        "findings": [{"severity": "warn", "dimension": "轴线视线(X1)", "message": "关键对峙镜视线越轴"}],
+    }
+    monkeypatch.setenv("N2D_CONSISTENCY_PROFILE", "production")
+    monkeypatch.setattr(gate.subprocess, "run", lambda *a, **k: _FakeProc(json.dumps(payload), 0))
+    gate.check_consistency_audit_gate(str(root), "第1集", stage="image")
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "轴线视线(X1)" for f in gate.findings)
+    assert any(f["sev"] == gate.WARN and f["dim"] == "轴线视线(X1)" for f in gate.findings)
 
 
 # ── M5 跨集对比跨过缺失的中间集 → WARN ──
@@ -4784,6 +5671,76 @@ def test_physical_scale_audit_silent_when_scale_declared(tmp_path):
     assert not any(f["dim"] == "物理尺寸对账" for f in gate.findings)
 
 
+# ── #2 脸漂实测报告新鲜度闸（堵 measured-drift BLOCK 环静默退化） ──
+def test_drift_report_freshness_pure_function_cases():
+    # 首集（无历史出图）→ 无 finding
+    assert gate.drift_report_freshness([], {"available": True, "episodes": []}) == []
+    # 报告缺失但有历史出图 → WARN（不硬拦无 insightface 产线）
+    out = gate.drift_report_freshness(["第1集"], {})
+    assert len(out) == 1 and out[0][0] == gate.WARN
+    # 未实测(available False) → WARN
+    out = gate.drift_report_freshness(["第1集"], {"available": False, "episodes": ["第1集"]})
+    assert len(out) == 1 and out[0][0] == gate.WARN
+    # present-but-stale：实测了但漏覆盖历史集 → BLOCK（最危险）
+    out = gate.drift_report_freshness(["第1集", "第2集"], {"available": True, "episodes": ["第1集"]})
+    assert len(out) == 1 and out[0][0] == gate.BLOCK and "第2集" in out[0][1]
+    # 覆盖齐全 → 无 finding
+    assert gate.drift_report_freshness(
+        ["第1集", "第2集"], {"available": True, "episodes": ["第1集", "第2集"]}) == []
+
+
+def _fresh_write_png(root, ep):
+    d = os.path.join(root, "出图", ep, "图片")
+    os.makedirs(d, exist_ok=True)
+    with open(os.path.join(d, "Clip_01.png"), "wb") as fh:
+        fh.write(b"x")
+
+
+def _fresh_write_report(root, available, episodes):
+    import json as _json
+    d = os.path.join(root, "生产数据")
+    os.makedirs(d, exist_ok=True)
+    with open(os.path.join(d, "identity_drift_report.json"), "w", encoding="utf-8") as fh:
+        _json.dump({"available": available, "episodes": episodes}, fh, ensure_ascii=False)
+
+
+def test_check_drift_report_freshness_blocks_stale_report(tmp_path):
+    gate.findings.clear()
+    root = str(tmp_path)
+    _fresh_write_png(root, "第1集")             # 历史集已出图
+    _fresh_write_report(root, True, [])         # 报告实测了但没覆盖第1集 → 陈旧
+    gate.check_drift_report_freshness(root, "第2集")
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "脸漂报告新鲜度" for f in gate.findings)
+
+
+def test_check_drift_report_freshness_warns_when_report_missing(tmp_path):
+    gate.findings.clear()
+    root = str(tmp_path)
+    _fresh_write_png(root, "第1集")             # 不写报告
+    gate.check_drift_report_freshness(root, "第2集")
+    assert any(f["sev"] == gate.WARN and f["dim"] == "脸漂报告新鲜度" for f in gate.findings)
+    assert not any(f["sev"] == gate.BLOCK for f in gate.findings)
+
+
+def test_check_drift_report_freshness_silent_on_first_episode(tmp_path):
+    gate.findings.clear()
+    root = str(tmp_path)
+    _fresh_write_png(root, "第1集")             # 只有当前集出图，无历史
+    gate.check_drift_report_freshness(root, "第1集")
+    assert not any(f["dim"] == "脸漂报告新鲜度" for f in gate.findings)
+
+
+def test_check_drift_report_freshness_stale_escapes_with_env(tmp_path, monkeypatch):
+    gate.findings.clear()
+    monkeypatch.setenv("N2D_ALLOW_DEGRADED_QC", "1")
+    root = str(tmp_path)
+    _fresh_write_png(root, "第1集")
+    _fresh_write_report(root, True, [])
+    gate.check_drift_report_freshness(root, "第2集")
+    assert any(f["sev"] == gate.WARN and "放行" in f["msg"] for f in gate.findings)
+    assert not any(f["sev"] == gate.BLOCK for f in gate.findings)
+
+
 # ── 核心长线角色未钉死锚点 → WARN（advisory） ──
 def _ref_episode(root, ep, text):
     d = os.path.join(root, "脚本", ep)
@@ -4821,3 +5778,83 @@ def test_core_anchor_pinning_skips_minor_role(tmp_path):
     _ref_episode(root, "第1集", "CHAR_99 出场")
     gate.check_core_anchor_pinning(root, "第1集")
     assert not any(f["dim"] == "锚点钉死" for f in gate.findings)
+
+
+# ── AI 生成合成内容标识（非阻断发布待办）────────────────────────────────────
+def test_compliance_ai_labeling_good_passes_at_compose(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_identity_registry(tmp_path)
+    _good_compliance(root)  # ai_labeling 已配置且 applied
+    gate.check_compliance_manifest(str(root), "第1集", "compose")
+    assert not any("ai_labeling" in f["loc"] for f in gate.findings)
+
+
+def test_compliance_ai_labeling_missing_codes_reports_info_at_compose(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_identity_registry(tmp_path)
+    _good_compliance(root, status_overrides={
+        "ai_labeling.implicit_metadata": {"spec": "GB45438-2025", "service_provider_code": "TODO", "content_id": "TODO", "applied": False},
+    })
+    gate.check_compliance_manifest(str(root), "第1集", "compose")
+    assert any(f["sev"] == gate.INFO and "ai_labeling" in f["loc"]
+               and "service_provider_code" in f["msg"] for f in gate.findings)
+
+
+def test_compliance_ai_labeling_missing_section_reports_info_at_compose(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_identity_registry(tmp_path)
+    _good_compliance(root, status_overrides={"ai_labeling": "missing"})
+    gate.check_compliance_manifest(str(root), "第1集", "compose")
+    assert any(f["sev"] == gate.INFO and "ai_labeling" in f["loc"]
+               and "缺 ai_labeling" in f["msg"] for f in gate.findings)
+
+
+def test_compliance_ai_labeling_not_applied_reports_info_at_review(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_identity_registry(tmp_path)
+    # 配置就绪但尚未由 compose 落标（pending/未 applied）
+    _good_compliance(root, status_overrides={
+        "ai_labeling.explicit_label": {"status": "pending", "text": "AI生成", "position": "bottom-right"},
+        "ai_labeling.implicit_metadata": {"spec": "GB45438-2025", "service_provider_code": "SP-001", "content_id": "C-1", "applied": False},
+    })
+    gate.check_compliance_manifest(str(root), "第1集", "review")
+    assert any(f["sev"] == gate.INFO and "ai_labeling" in f["loc"] and "status" in f["msg"] for f in gate.findings)
+    assert any(f["sev"] == gate.INFO and "ai_labeling" in f["loc"] and "applied" in f["msg"] for f in gate.findings)
+
+
+def test_compliance_ai_labeling_internal_only_downgrades_to_info(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_identity_registry(tmp_path)
+    _good_compliance(root, status_overrides={
+        "distribution_intent": "internal_only",
+        "ai_labeling": "missing",
+    })
+    gate.check_compliance_manifest(str(root), "第1集", "compose")
+    # 注意：loc 含 manifest 路径，pytest tmp 目录以测试名命名（含 "ai_labeling"），故按 msg token 过滤
+    ai = [f for f in gate.findings if "缺 ai_labeling" in f["msg"]]
+    assert ai and all(f["sev"] == gate.INFO for f in ai)  # 内部 demo 降 INFO
+
+
+def test_compliance_ai_labeling_not_checked_at_image(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_identity_registry(tmp_path)
+    _good_compliance(root, status_overrides={"ai_labeling": "missing"})
+    gate.check_compliance_manifest(str(root), "第1集", "image")
+    assert not any("ai_labeling" in f["msg"] for f in gate.findings)  # 标识只在 compose/review 检
+
+
+def test_compliance_ai_labeling_applicable_false_needs_notes(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_identity_registry(tmp_path)
+    _good_compliance(root, status_overrides={
+        "ai_labeling": {"applicable": False, "notes": ""},
+    })
+    gate.check_compliance_manifest(str(root), "第1集", "compose")
+    assert any(f["sev"] == gate.INFO and "ai_labeling" in f["loc"] and "applicable=false" in f["msg"] for f in gate.findings)

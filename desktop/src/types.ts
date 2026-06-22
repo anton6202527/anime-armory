@@ -12,7 +12,7 @@ export interface WorkRoot {
 export interface LineInfo {
   line: LineKey;
   label: string;
-  dir: string; // absolute product dir (制漫剧/ etc.)
+  dir: string; // absolute product dir (创作区/制漫剧/ etc.)
   view: "canvas" | "files" | "audio";
   roots: WorkRoot[];
 }

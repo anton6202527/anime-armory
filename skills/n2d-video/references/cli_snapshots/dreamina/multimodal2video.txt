@@ -1,4 +1,4 @@
-# captured_at: 2026-06-15T01:10:42Z
+# captured_at: 2026-06-22T01:11:11Z
 # cli: /Users/lalala/.local/bin/dreamina
 # command: multimodal2video
 

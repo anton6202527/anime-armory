@@ -244,3 +244,45 @@ def test_is_closeup_lens_markers():
     assert tc._is_closeup_lens("特写反打") is True
     assert tc._is_closeup_lens("WS 远景") is False
     assert tc._is_closeup_lens("") is False
+
+
+# ---- 跨镜动作接力 match-on-action（T6·边缘质心位移）----
+
+def test_weighted_centroid_uniform_is_center():
+    # 2x2 全等权 → 质心居中 (0.5,0.5)
+    c = tc.weighted_centroid([1, 1, 1, 1], cols=2)
+    assert c is not None and abs(c[0] - 0.5) < 1e-9 and abs(c[1] - 0.5) < 1e-9
+
+
+def test_weighted_centroid_corner_mass():
+    # 全部质量在左上角 (0,0) → 归一质心 (0,0)
+    c = tc.weighted_centroid([5, 0, 0, 0], cols=2)
+    assert c == (0.0, 0.0)
+    # 全部质量在右下角 → (1,1)
+    c2 = tc.weighted_centroid([0, 0, 0, 7], cols=2)
+    assert abs(c2[0] - 1.0) < 1e-9 and abs(c2[1] - 1.0) < 1e-9
+
+
+def test_weighted_centroid_guards():
+    assert tc.weighted_centroid([0, 0, 0, 0], cols=2) is None   # 总权重 0
+    assert tc.weighted_centroid([1, 2, 3], cols=2) is None       # 长度非整数倍
+    assert tc.weighted_centroid([1, 1], cols=0) is None          # cols<=0
+
+
+def test_centroid_shift():
+    assert tc.centroid_shift((0.0, 0.0), (0.0, 0.0)) == 0.0
+    assert abs(tc.centroid_shift((0.0, 0.0), (0.3, 0.4)) - 0.5) < 1e-9
+    assert tc.centroid_shift(None, (0.1, 0.1)) is None
+    assert tc.centroid_shift((0.1, 0.1), None) is None
+
+
+def test_action_match_verdict_bands():
+    assert tc.action_match_verdict(0.05) == "ok"
+    assert tc.action_match_verdict(0.20) == "warn"     # > WARN(0.16), <= BLOCK(0.30)
+    assert tc.action_match_verdict(0.40) == "block"    # > BLOCK
+    assert tc.action_match_verdict(None) is None       # 算不出 → 不臆造
+
+
+def test_action_match_verdict_custom_thresholds():
+    assert tc.action_match_verdict(0.1, warn=0.05, block=0.2) == "warn"
+    assert tc.action_match_verdict(0.25, warn=0.05, block=0.2) == "block"

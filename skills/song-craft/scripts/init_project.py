@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-init_project.py — 建【写歌】项目骨架（词 + 歌，不含 MV 视频部分）。
+init_project.py — 建【写歌】项目骨架（词 + 歌）。
 
-写歌线产出"一首成品歌"（歌/song.wav + 词/lyrics.md）；之后交给 制MV(mv) 做视频。
+写歌线产出"一首成品歌"（歌/song.wav + 词/lyrics.md）。
 独立的纯文本骨架 + _设置 + _meta + _进度。
 
 用法:
@@ -49,7 +49,7 @@ def build_blueprint(title, meta):
     duration = f"{meta['target_duration_seconds']}s" if meta.get("target_duration_seconds") else "未定"
     return f"""# 创作蓝图 — 歌《{title}》
 
-> 这首歌的"宪法"。动笔前敲定，每条具体可判定。写歌线产出成品歌交给 制MV 做视频。
+> 这首歌的"宪法"。动笔前敲定，每条具体可判定。写歌线只负责产出成品歌。
 
 ## 一句话主题 / 情绪
 {meta['theme']}
@@ -82,7 +82,7 @@ def build_lyrics(title, structure):
     blocks = "\n\n".join(f"[{s}]\n（歌词…）" for s in structure)
     return f"""# 歌词 — 《{title}》
 
-> 结构化歌词：段落标签 + 词。song-compose 用它生成歌；下游 制MV 的 mv-lyric-sync 用它对齐卡拉OK。
+> 结构化歌词：段落标签 + 词。song-compose 用它生成歌。
 > 作词工艺见 song-lyrics/references/songcraft.md（结构/押韵/字数贴旋律/hook）。
 
 {blocks}
@@ -113,8 +113,6 @@ def build_progress(title, meta):
 - [ ] 歌/song.wav（成品歌）
 - [ ] 合规/AI使用说明.md（发布/交平台前）
 
-## 交接
-- [ ] 成品歌交 制MV(mv) 做视频 → `制MV/<曲名>/`
 """
 
 
@@ -143,11 +141,11 @@ def main():
     ap.add_argument("--ai-audio-usage", default=contract.DEFAULT_SETTINGS["AI音频使用披露"], choices=contract.AI_AUDIO_USAGE_MODES)
     ap.add_argument("--vocal-source", default="", help="自有嗓 / 授权音色 / 合成音色；可先留空，出歌前必须补")
     ap.add_argument("--publish-target", default="未定")
-    ap.add_argument("--out", default=None, help="输出根，缺省 写歌/<曲名>/")
+    ap.add_argument("--out", default=None, help="输出根，缺省 创作区/写歌/<曲名>/")
     args = ap.parse_args()
 
     folder = slug(args.title) if args.title != "待定" else f"新歌待定-{slug(args.genre)}"
-    out_root = os.path.abspath(args.out or os.path.join("写歌", folder))
+    out_root = os.path.abspath(args.out or os.path.join("创作区", "写歌", folder))
     if os.path.exists(out_root):
         print(f"[err] 目标已存在：{out_root}（换 --title/--out 或先删）", file=sys.stderr)
         sys.exit(2)
@@ -209,7 +207,7 @@ def main():
     print(f"[ok] 写歌项目骨架 → {out_root}")
     print(f"     _设置.md / 创作蓝图.md / 词/lyrics.md（{len(structure)} 段）/ 歌/takes/ / 合规/")
     print(f"     _meta: kind=song 曲风=\"{args.genre}\" 后端={args.compose_backend} 生成版数={args.takes}")
-    print("[next] song-lyrics 填蓝图+词 → compose_song.py 生成任务包 → 多版挑版 → song-review → mv")
+    print("[next] song-lyrics 填蓝图+词 → compose_song.py 生成任务包 → 多版挑版 → song-review")
 
 
 if __name__ == "__main__":

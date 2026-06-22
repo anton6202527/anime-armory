@@ -321,6 +321,93 @@ def _add_alias(out: Set[str], raw: Any) -> None:
         out.add(alias.replace("_", ""))
 
 
+def _character_dna_text(*values: Any) -> str:
+    parts: List[str] = []
+    keys = ("face", "hair", "outfit", "accessories", "texture")
+    for value in values:
+        if isinstance(value, dict):
+            parts.extend(str(value.get(k) or "").strip() for k in keys)
+        elif isinstance(value, str):
+            parts.append(value.strip())
+    return " ".join(p for p in parts if p)
+
+
+def _flatten_text_atoms(value: Any) -> List[str]:
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, dict):
+        out: List[str] = []
+        for item in value.values():
+            out.extend(_flatten_text_atoms(item))
+        return out
+    if isinstance(value, (list, tuple, set)):
+        out = []
+        for item in value:
+            out.extend(_flatten_text_atoms(item))
+        return out
+    return []
+
+
+OUTFIT_SIGNAL_KEYWORDS = (
+    "衣", "袍", "装", "裙", "甲", "铠", "盔", "护", "披风", "斗篷", "披帛",
+    "腰封", "腰带", "袖", "领", "衣摆", "裙摆", "襟", "纹", "绣", "甲片",
+)
+OUTFIT_SKIP_TERMS = {"服装", "衣服", "衣着", "外衣", "造型", "妆造", "穿着", "无"}
+OUTFIT_SPLIT_RE = re.compile(r"[\s,，;；、/|·:：()（）\[\]【】{}<>《》\"'`]+")
+OUTFIT_NORM_RE = re.compile(r"[\s_.,，;；、/|·:：()（）\[\]【】{}<>《》\"'`-]+")
+
+
+def _normalize_outfit_match(raw: Any) -> str:
+    return OUTFIT_NORM_RE.sub("", str(raw or "").strip())
+
+
+def _looks_like_outfit_term(term: str) -> bool:
+    if len(term) < 2 or term in OUTFIT_SKIP_TERMS:
+        return False
+    return any(k in term for k in OUTFIT_SIGNAL_KEYWORDS)
+
+
+def _extract_outfit_terms(value: Any) -> Set[str]:
+    """Extract durable costume/garment tokens from registry prose.
+
+    This intentionally ignores generic identity/name aliases unless they contain a
+    garment signal. Costume lint can then be registry-driven without treating a
+    character name as an outfit claim.
+    """
+    terms: Set[str] = set()
+    for atom in _flatten_text_atoms(value):
+        raw = str(atom or "").strip()
+        if not raw:
+            continue
+        pieces = OUTFIT_SPLIT_RE.split(raw)
+        if len(_normalize_outfit_match(raw)) <= 28:
+            pieces.append(raw)
+        for piece in pieces:
+            norm = _normalize_outfit_match(piece)
+            if _looks_like_outfit_term(norm):
+                terms.add(norm)
+    return terms
+
+
+def _outfit_terms_from_form(form: Dict[str, Any]) -> Set[str]:
+    sources: List[Any] = [
+        form.get("form"),
+        form.get("asset_key"),
+        form.get("display"),
+        form.get("anchor_phrase"),
+        form.get("character_dna_text"),
+        form.get("wardrobe_profile"),
+        form.get("wardrobe_profile_text"),
+        form.get("outfit_aliases"),
+        form.get("wardrobe_aliases"),
+        form.get("outfit_terms"),
+        form.get("reference_stems"),
+        form.get("strong_aliases"),
+        form.get("weak_aliases"),
+    ]
+    return _extract_outfit_terms(sources)
+
+
 def load_registry_forms(root: Path) -> Optional[List[Dict[str, Any]]]:
     """identity_registry.json → 角色形态元数据（prompt 交接 lint 用）。
 
@@ -343,6 +430,7 @@ def load_registry_forms(root: Path) -> Optional[List[Dict[str, Any]]]:
             if not fm:
                 continue
             key = f"{cid}/{fm}"
+            wardrobe_profile = form.get("wardrobe_profile") if isinstance(form.get("wardrobe_profile"), dict) else {}
             strong_aliases: Set[str] = {cid, key}
             weak_aliases: Set[str] = set(name_aliases)
             reference_stems: Set[str] = set()
@@ -369,6 +457,15 @@ def load_registry_forms(root: Path) -> Optional[List[Dict[str, Any]]]:
                 "asset_key": asset_key,
                 "scope": str(ch.get("scope") or "").strip(),  # 核心/长线/全篇只用于提示文案；④ 表情库硬闸对所有人物生效
                 "anchor_phrase": str(form.get("anchor_phrase") or ""),
+                "character_dna_text": _character_dna_text(ch.get("character_dna"), form.get("character_dna")),
+                "wardrobe_profile": wardrobe_profile,
+                "wardrobe_profile_text": " ".join(_flatten_text_atoms(wardrobe_profile)),
+                "outfit_aliases": sorted(_extract_outfit_terms([
+                    form.get("character_dna", {}).get("outfit") if isinstance(form.get("character_dna"), dict) else "",
+                    wardrobe_profile,
+                    form.get("outfit_aliases"),
+                    form.get("wardrobe_aliases"),
+                ])),
                 "display": display,
                 "ref_count": ref_count,  # 该形态 reference_group 的多角度参考张数（C4：喂全角度组给多参考后端）
                 "reference_stems": reference_stems,
@@ -391,7 +488,10 @@ def registry_ref_counts(forms: Optional[List[Dict[str, Any]]]) -> Dict[str, int]
 # 逐镜块里 `资产身份注册层` 行引用的身份键，形如 `CHAR_01/常态`、`CHAR_SHEN/常态`
 # （反引号包裹）或裸 CHAR_SHEN。多人同框的主角星标（CHAR_SHEN* / CHAR_SHEN/常态*）
 # 是调度标记，不属于 registry id，比较前需剥掉。
-IDENTITY_REF_RE = re.compile(r"`?(CHAR_[A-Za-z0-9_]+\*?(?:/[^`\s，；、*]+)?\*?)`?")
+IDENTITY_REF_RE = re.compile(
+    r"(?<![A-Za-z0-9_])`?(CHAR_[A-Za-z0-9_]*[A-Za-z0-9]\*?(?:/[^`\s，；、*]+)?\*?)`?"
+    r"(?![A-Za-z0-9_\u4e00-\u9fff.-])"
+)
 TAIL_HANDOFF_FIELDS = ("近景/反打身份锁定", "近景身份锁定", "反打身份锁定", "细粒度身份锁定",
                        "尾帧接力生成方式", "尾帧专用", "尾帧身份", "尾帧重抽提示",
                        "接力身份", "尾帧锁脸")
@@ -467,23 +567,34 @@ def _png_tokens(text: str) -> List[str]:
 def _is_reference_png(path: str) -> bool:
     s = str(path or "")
     stem = Path(s).stem
-    return bool(stem.startswith("定妆_") or "/共享/" in s or "出图/共享/" in s)
+    return bool(
+        stem.startswith("定妆_")
+        or stem.startswith(("CHAR_", "LOC_", "PROP_", "OUTFIT_", "VFX_"))
+        or "/共享/" in s
+        or "出图/共享/" in s
+    )
 
 
-def _extract_target_png(body: str) -> Optional[str]:
-    """从逐镜 prompt 提取本镜落档 PNG。优先目标/落档行，排除定妆/共享参考图。"""
+def _extract_target_pngs(body: str) -> List[str]:
+    """从逐镜 prompt 提取本镜全部落档 PNG。优先目标/落档行，排除定妆/共享参考图。"""
     fallback: List[str] = []
     for line in str(body or "").splitlines():
         tokens = [p for p in _png_tokens(line) if not _is_reference_png(p)]
         if not tokens:
             continue
         if any(marker in line for marker in TARGET_PNG_LINE_MARKERS):
-            return tokens[0]
+            return tokens
         fallback.extend(tokens)
-    return fallback[0] if fallback else None
+    return fallback
 
 
-def character_shot_manifest(block: Dict[str, str]) -> Optional[Dict[str, Any]]:
+def _extract_target_png(body: str) -> Optional[str]:
+    """从逐镜 prompt 提取本镜首个落档 PNG。保留给旧调用点使用。"""
+    targets = _extract_target_pngs(body)
+    return targets[0] if targets else None
+
+
+def character_shot_manifests(block: Dict[str, str]) -> List[Dict[str, Any]]:
     """逐镜 prompt → 角色镜覆盖清单项。
 
     该清单是后续 full 精度脸部参考覆盖闸门的输入，不依赖像素引擎。
@@ -492,15 +603,24 @@ def character_shot_manifest(block: Dict[str, str]) -> Optional[Dict[str, Any]]:
     label = block.get("label", "")
     id_refs = [normalize_identity_ref(ref) for ref in IDENTITY_REF_RE.findall(body)]
     if not _is_character_shot_body(body, id_refs):
-        return None
-    png = _extract_target_png(body)
-    shot = _shot_key(png) or _shot_key(label) or label
-    return {
-        "label": label,
-        "shot": shot,
-        "png": png,
-        "identity_refs": sorted(set(id_refs)),
-    }
+        return []
+    targets = _extract_target_pngs(body) or [None]
+    out: List[Dict[str, Any]] = []
+    for png in targets:
+        shot = _shot_key(png) or _shot_key(label) or label
+        out.append({
+            "label": label,
+            "shot": shot,
+            "png": png,
+            "identity_refs": sorted(set(id_refs)),
+        })
+    return out
+
+
+def character_shot_manifest(block: Dict[str, str]) -> Optional[Dict[str, Any]]:
+    """Backward-compatible first manifest for tests and older callers."""
+    manifests = character_shot_manifests(block)
+    return manifests[0] if manifests else None
 
 
 def _declares_no_tail_frame(body: str) -> bool:
@@ -745,35 +865,61 @@ def _positive_prompt_text(body: str) -> str:
     return re.split(r"\*\*?负向\s*prompt|\bnegative\s*prompt", text, maxsplit=1, flags=re.I)[0]
 
 
-def _outfit_groups_in_text(text: str) -> Set[str]:
-    found: Set[str] = set()
+def _outfit_claims_in_text(text: str) -> Dict[str, Set[str]]:
+    found: Dict[str, Set[str]] = {}
     src = str(text or "")
     for group, tokens in OUTFIT_TOKEN_GROUPS.items():
         if any(token and token in src for token in tokens):
-            found.add(group)
+            found[group] = set(tokens)
     return found
 
 
-def _form_advertises_outfit_group(form: Dict[str, Any], group: str) -> bool:
-    tokens = OUTFIT_TOKEN_GROUPS.get(group) or ()
+def _add_registry_outfit_claims(text: str, registry_forms: Optional[Sequence[Dict[str, Any]]]) -> Dict[str, Set[str]]:
+    claims = _outfit_claims_in_text(text)
+    src_norm = _normalize_outfit_match(text)
+    for form in registry_forms or []:
+        terms = _outfit_terms_from_form(form)
+        hits = {term for term in terms if term and term in src_norm}
+        if not hits:
+            continue
+        key = str(form.get("key") or form.get("form") or "registry")
+        label = f"registry:{key}"
+        claims.setdefault(label, set()).update(hits)
+    return claims
+
+
+def _outfit_claim_display(group: str, tokens: Set[str]) -> str:
+    if not group.startswith("registry:"):
+        return group
+    return " / ".join(sorted(tokens, key=lambda s: (len(s), s), reverse=True)[:3])
+
+
+def _form_advertises_outfit_claim(form: Dict[str, Any], tokens: Set[str]) -> bool:
     aliases = sorted((form.get("strong_aliases") or set()) | (form.get("weak_aliases") or set()))
     haystack = " ".join([
         str(form.get("form") or ""),
         str(form.get("asset_key") or ""),
         str(form.get("anchor_phrase") or ""),
+        str(form.get("character_dna_text") or ""),
+        str(form.get("wardrobe_profile_text") or ""),
         str(form.get("display") or ""),
         " ".join(str(s) for s in form.get("reference_stems") or []),
         " ".join(str(a) for a in aliases),
+        " ".join(str(a) for a in form.get("outfit_aliases") or []),
     ])
-    return any(token and token in haystack for token in tokens)
+    haystack_norm = _normalize_outfit_match(haystack)
+    own_terms = _outfit_terms_from_form(form)
+    claim_terms = {_normalize_outfit_match(t) for t in tokens if t}
+    return bool(own_terms & claim_terms) or any(term and term in haystack_norm for term in claim_terms)
 
 
 def _lint_outfit_form_binding(label: str, body: str, id_refs: Sequence[str],
                               registry_forms: Optional[List[Dict[str, Any]]]) -> List[Dict[str, str]]:
     """Single-character costume/form guard.
 
-    If a shot explicitly asks for a durable outfit form (红衣/白衣/战甲...) it must bind
-    the matching CHAR_xx/形态, not a nearby identity state with another costume.
+    If a shot explicitly asks for a durable outfit form (红衣/白衣/战甲..., or a
+    wardrobe_profile/character_dna.outfit term from registry) it must bind the
+    matching CHAR_xx/形态, not a nearby identity state with another costume.
     Multi-character shots are left to human review to avoid assigning a costume token to
     the wrong person.
     """
@@ -785,8 +931,8 @@ def _lint_outfit_form_binding(label: str, body: str, id_refs: Sequence[str],
     exact_refs = sorted({ref for ref in normalized if "/" in ref})
     if not exact_refs:
         return []
-    groups = _outfit_groups_in_text(_positive_prompt_text(body))
-    if not groups:
+    claims = _add_registry_outfit_claims(_positive_prompt_text(body), registry_forms)
+    if not claims:
         return []
 
     by_key = {str(form.get("key") or ""): form for form in registry_forms}
@@ -795,16 +941,17 @@ def _lint_outfit_form_binding(label: str, body: str, id_refs: Sequence[str],
         form = by_key.get(rid)
         if not form:
             continue
-        for group in sorted(groups):
-            if _form_advertises_outfit_group(form, group):
+        for group, tokens in sorted(claims.items()):
+            if _form_advertises_outfit_claim(form, tokens):
                 continue
+            display = _outfit_claim_display(group, tokens)
             findings.append({
                 "level": "block",
                 "code": "outfit_form_mismatch",
                 "msg": (
-                    f"{label}：正向 prompt 写了「{group}」类服饰/形态，但资产身份注册层绑定 `{rid}` "
+                    f"{label}：正向 prompt 写了「{display}」类服饰/形态，但资产身份注册层绑定 `{rid}` "
                     f"（asset_key={form.get('asset_key') or '-'}）没有对应服饰定妆。"
-                    "换装/形态变体必须新建独立 `CHAR_xx/形态` 和 reference_group，禁止复用其它服饰状态参考。"
+                    "换装/形态变体必须新建独立 `CHAR_xx/形态`、wardrobe_profile 和 reference_group，禁止复用其它服饰状态参考。"
                 ),
             })
     return findings
@@ -847,7 +994,10 @@ def _lint_native_multiref_coverage(label: str, body: str, id_refs: Sequence[str]
     avail = max((form_ref_counts.get(b, 0) for b in _distinct_char_bases(id_refs)), default=0)
     if avail < 3:
         return []  # 没有多角度组可喂，免谈
-    refd = len({t for t in _png_tokens(body) if "定妆_" in t})
+    refd = len({
+        t for t in _png_tokens(body)
+        if "定妆_" in t or Path(str(t)).stem.startswith("CHAR_")
+    })
     if refd >= min(avail, 3):
         return []  # 已喂≥3张（或全部）→ 充分
     if persistent_subject:
@@ -978,8 +1128,7 @@ def lint_prompts(root: Path, ep: str) -> Dict[str, Any]:
     blocks = split_shot_blocks(text)
     for blk in blocks:
         res["shots_linted"] += 1
-        manifest = character_shot_manifest(blk)
-        if manifest:
+        for manifest in character_shot_manifests(blk):
             res["character_shots"].append(manifest)
         res["findings"].extend(lint_shot_block(blk, valid_ids, registry_forms, asset_index,
                                                form_ref_counts, persistent_subject))
@@ -1116,7 +1265,7 @@ VISUAL_CHECK_DIMS = {
     "hair": "character_consistency",
     "outfit": "outfit_consistency",
     "scene": "scene_consistency",
-    "multimodal": "asset_consistency",
+    "multimodal": "multimodal_continuity",
     "seam": "scene_consistency",
     "anchors": "character_consistency",
 }
@@ -1171,7 +1320,7 @@ def unavailable_visual_checks(payload: Dict[str, Any]) -> List[str]:
     return out
 
 
-# 近景景别标记（与 n2d-video/video_qc.CLOSEUP_MARKERS 同义；ad-* 不跨 import，本 skill 独立留一份）。
+# 近景景别标记（与 n2d-video/video_qc.CLOSEUP_MARKERS 同义；本 skill 独立留一份）。
 CLOSEUP_MARKERS = ("ECU", "MCU", "BCU", "CU", "OTS", "反打", "特写", "近景", "过肩")
 FACE_DEGRADED_MODES = ("pillow_fallback",)
 
@@ -2178,9 +2327,15 @@ def semantic_embedding_required(payload: Mapping[str, Any]) -> List[str]:
     Scene/multimodal checks are only produced for registered LOC_/PROP_/OUTFIT_/VFX-like assets.
     If the semantic drift sidecar explicitly says unavailable, palette/dHash alone is too weak for
     key non-face asset identity, so image_qc should stop before video.
+
+    Robustness（堵静默消失洞）：sidecar **整段缺席**（semantic_drift.py 加载/执行异常被 run_qc 吞掉，
+    payload 里根本没有 "semantic_drift" 键）与 available=False 等价处理——否则一次模块加载失败就让非脸
+    关键资产的 hard 兜底无声蒸发。只有 sidecar **确实跑通**（available is True）才不在此升 hard（改由
+    findings 表达）。
     """
     sd = payload.get("semantic_drift")
-    if not isinstance(sd, Mapping) or sd.get("available") is not False:
+    ran_ok = isinstance(sd, Mapping) and sd.get("available") is True
+    if ran_ok:
         return []
     checks = payload.get("checks") or {}
     out: List[str] = []
@@ -2266,6 +2421,32 @@ def summarize(payload: Dict[str, Any], *, strict_pixel: bool = False) -> Dict[st
             "block": len(semantic_missing), "warn": 0, "noface": 0, "ok": 0
         }
         hard += len(semantic_missing)
+    semantic_findings = (payload.get("semantic_drift") or {}).get("findings") or []
+    if semantic_findings:
+        sd_warn = sum(1 for f in semantic_findings if f.get("level") == "warn")
+        rows_by_check["semantic_drift"] = {
+            "block": 0, "warn": sd_warn, "noface": 0,
+            "ok": max(0, len(semantic_findings) - sd_warn),
+        }
+        advisory += sd_warn
+    # 契约像素兜底（色调/光位）：暖冷·明暗矛盾=advisory（WARN·人判，色调模糊不升 hard 避免误杀）。
+    tone_findings_list = (payload.get("tone_light_contract") or {}).get("findings") or []
+    if tone_findings_list:
+        tl_warn = sum(1 for f in tone_findings_list if f.get("level") == "warn")
+        rows_by_check["tone_light_contract"] = {
+            "block": 0, "warn": tl_warn, "noface": 0,
+            "ok": max(0, len(tone_findings_list) - tl_warn),
+        }
+        advisory += tl_warn
+    # 契约像素兜底（景别阶梯）：声明景别 vs 实测脸占比矛盾=advisory（WARN·人判）。
+    scale_findings_list = (payload.get("shot_scale_contract") or {}).get("findings") or []
+    if scale_findings_list:
+        ss_warn = sum(1 for f in scale_findings_list if f.get("level") == "warn")
+        rows_by_check["shot_scale_contract"] = {
+            "block": 0, "warn": ss_warn, "noface": 0,
+            "ok": max(0, len(scale_findings_list) - ss_warn),
+        }
+        advisory += ss_warn
     # ④ VLM 语义判定：关键资产 VLM 判崩设定=hard（既成语义崩，不是预测）；低置信/非关键=warn advisory。
     vlm = payload.get("vlm_consistency") or {}
     vlm_findings = vlm.get("findings") or []
@@ -2332,7 +2513,7 @@ def qc_environment(payload: Dict[str, Any], *, with_pixel: bool = True) -> Dict[
         reason = "像素质检不可用，不能把图片视为机检通过"
     elif level == "degraded":
         jump_to = "image"
-        reason = "视觉质检为降级结果，正式进 video 前需补依赖重跑或逐项人审确认"
+        reason = "视觉质检为降级结果，正式进 video 前需补依赖重跑到 full 精度"
     elif verdict == "block":
         jump_to = "image"
         reason = "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
@@ -2387,7 +2568,8 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
             "warn",
             "image_qc_precision",
             None,
-            "image_qc 精度为 degraded：正式进 video 前需补依赖重跑，或对每个高风险近景/多人同框登记人审确认。",
+            "image_qc 精度为 degraded：正式进 video 前需补依赖重跑到 full 精度；"
+            "普通人审记录只能辅助定位，不能替代 video/compose 前的 full QC gate。",
         ))
     for key in unavailable_visual_checks(payload):
         res = checks.get(key) or {}
@@ -2443,15 +2625,29 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         sample = "、".join(semantic_missing[:6]) + ("…" if len(semantic_missing) > 6 else "")
         out.append(_qc_finding(
             "block",
-            "asset_consistency",
+            "multimodal_continuity",
             None,
             "关键场景/道具/服装/VFX 已进入 scene/multimodal QC，但 DINO/CLIP 语义漂移嵌入后端不可用；"
             f"palette/dHash 只能做初筛，不能证明非脸资产身份稳定。先在 full QC 环境补 torch+transformers/open_clip "
-            f"后重跑，或登记逐项人审确认。样例：{sample}",
+            f"后重跑。样例：{sample}",
         ))
+    for f in (payload.get("semantic_drift") or {}).get("findings", []):
+        level = str(f.get("level") or "warn")
+        sev = "warn" if level == "warn" else "info"
+        out.append(_qc_finding(sev, "multimodal_continuity", None, f.get("msg", "")))
+    # 契约像素兜底（色调/光位）→ style_consistency（色调/光位属基础视觉风格契约，回 n2d-image/契约）。
+    for f in (payload.get("tone_light_contract") or {}).get("findings", []):
+        level = str(f.get("level") or "warn")
+        sev = "warn" if level == "warn" else "info"
+        out.append(_qc_finding(sev, "style_consistency", None, f.get("msg", "")))
+    # 契约像素兜底（景别阶梯）→ style_consistency（构图/景别 → 重出该镜，return_to_stage=image）。
+    for f in (payload.get("shot_scale_contract") or {}).get("findings", []):
+        level = str(f.get("level") or "warn")
+        sev = "warn" if level == "warn" else "info"
+        out.append(_qc_finding(sev, "style_consistency", None, f.get("msg", "")))
     # ④ VLM 语义判定（描述↔渲染图）：关键资产判崩设定=block，低置信/非关键=warn 人判。
     for f in (payload.get("vlm_consistency") or {}).get("findings", []):
-        dim = "character_consistency" if f.get("code") == "vlm_semantic_mismatch" and "角色「" in str(f.get("msg")) else "asset_consistency"
+        dim = "character_consistency" if f.get("code") == "vlm_semantic_mismatch" and "角色「" in str(f.get("msg")) else "multimodal_continuity"
         out.append(_qc_finding(f.get("level", "warn"), dim, None, f.get("msg", "")))
     for t in (payload.get("prop_shape_review") or {}).get("targets", []):
         if t.get("confirmed"):
@@ -2460,7 +2656,7 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         terms = "、".join(str(x) for x in (t.get("must_not_have") or [])[:12])
         out.append(_qc_finding(
             "block",
-            "asset_consistency",
+            "multimodal_continuity",
             t.get("png"),
             f"高风险道具禁形/尺寸未逐图确认：{t.get('label') or t.get('shot')} 的 `{t.get('asset')}`"
             f"（{t.get('asset_name') or ''}）登记了 must_not_have={terms}"
@@ -2510,7 +2706,7 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
     # 道具/特效 P2（advisory·B）：按 asset_registry 分组的组内离群，初筛交人判（武器/法宝/特效漂移早抓）
     for s in (checks.get("multimodal") or {}).get("shots", []):
         if s.get("verdict") in ("block", "warn"):
-            out.append(_qc_finding("warn", "asset_consistency", s.get("png"),
+            out.append(_qc_finding("warn", "multimodal_continuity", s.get("png"),
                                    f"道具/特效 P2 初筛：{s.get('png')} {s.get('asset') or s.get('group') or ''}"
                                    "（资产组内离群，非阻断）"))
     # 接缝接力（hard·与崩脸同级）：block 原样上报，gate 据此硬拦——尾帧没接上下镜首帧出视频必跳切
@@ -2906,6 +3102,7 @@ def _qc_inputs_fingerprint(root: Path, ep: str, payload: Dict[str, Any]) -> Opti
         os.path.join("出图", ep, "prompt", "01_分镜出图.md"),
         os.path.join("出图", "共享", "identity_registry.json"),
         os.path.join("出图", "共享", "asset_registry.json"),
+        os.path.join("生产数据", "image_qc", ep, "prop_shape_confirmations.json"),
     }
 
     def _walk(obj: Any) -> None:
@@ -2946,12 +3143,24 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True, strict_pixel: bool = Fa
             if sd is not None:
                 try:
                     sdr = sd.analyze(root, ep, payload)
-                    for f in sdr.get("findings", []):
-                        payload["lint"].setdefault("findings", []).append(
-                            {"level": f["level"], "code": f["code"], "msg": f["msg"]})
                     payload["semantic_drift"] = sdr
                 except Exception as exc:
                     payload["semantic_drift"] = {"available": False, "notes": [f"semantic_drift 失败：{exc}"], "findings": []}
+            # 契约像素兜底（④·色调/光位）：把 00_总览 契约的暖冷·明暗意图量到实际帧像素上对照——
+            # 补「色调基线/光位锚 声称焊像素却只验文本誊抄」这道洞。纯 Pillow·默认环境可跑·WARN 人判。
+            tl = _load_sibling("tone_light_contract")
+            if tl is not None:
+                try:
+                    payload["tone_light_contract"] = tl.analyze(root, ep)
+                except Exception as exc:
+                    payload["tone_light_contract"] = {"available": False, "notes": [f"tone_light_contract 失败：{exc}"], "findings": []}
+            # 契约像素兜底（④·景别阶梯）：storyboard 声明景别 × 实测脸占比对照——补「景别只查文本标签、不看 PNG 实际景别」。
+            ssc = _load_sibling("shot_scale_contract")
+            if ssc is not None:
+                try:
+                    payload["shot_scale_contract"] = ssc.analyze(root, ep)
+                except Exception as exc:
+                    payload["shot_scale_contract"] = {"available": False, "notes": [f"shot_scale_contract 失败：{exc}"], "findings": []}
     payload["lint"] = lint_prompts(root, ep)
     # 高风险道具禁形/尺寸逐图复核：prompt/registry 只能约束未来生成，不能证明既有 PNG 没有禁形或尺寸漂移。
     # 这道门在 lint 之后跑，读取逐镜 PROP_xx 绑定和已落档 PNG；未确认则 summarize/to_findings 硬阻断。

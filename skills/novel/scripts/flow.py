@@ -9,6 +9,7 @@ import os
 import sys
 import json
 import re
+import subprocess
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _SKILLS = os.path.abspath(os.path.join(_HERE, "..", ".."))
@@ -16,22 +17,16 @@ _LIB = os.path.abspath(os.path.join(_HERE, "..", "_lib"))
 if _LIB not in sys.path:
     sys.path.insert(0, _LIB)
 
-from novel_route import summarize, STAGES, is_done
+from novel_route import summarize
 from project_io import load_project_settings
+
+_STAGE_TABLE_MARKERS = ("novel-derived-stage-table", "novel-create-stage-table")
 
 def load_json(path):
     if not os.path.exists(path):
         return {}
     with open(path, encoding="utf-8") as f:
         return json.load(f)
-
-def is_n2d_bound(root, meta, settings):
-    if meta.get("scale") == "漫剧" or meta.get("kind") == "漫剧源书":
-        return True
-    platform = str(settings.get("目标平台", "")).lower()
-    if any(k in platform for k in ["漫剧", "短剧", "n2d"]):
-        return True
-    return False
 
 def get_task_packets(root, ch_num):
     task_dir = os.path.join(root, "写作任务")
@@ -43,6 +38,66 @@ def get_task_packets(root, ch_num):
             packets.append(f)
     return packets
 
+
+def batch_review_interval(settings, meta):
+    value = settings.get("小批回扫间隔") or meta.get("batch_review_interval") or meta.get("review_interval") or "5章"
+    text = str(value or "").strip().lower()
+    if text in {"", "关闭", "off", "none", "0", "0章"}:
+        return 0
+    match = re.search(r"(\d+)", text)
+    return max(1, int(match.group(1))) if match else 5
+
+
+def batch_review_window(ch_num, interval, meta):
+    if interval <= 0:
+        return None
+    target = int(meta.get("target_chapters") or 0)
+    if ch_num % interval == 0 or (target and ch_num == target and ch_num % interval != 0):
+        return ((ch_num - 1) // interval) * interval + 1, ch_num
+    next_due = ((ch_num - 1) // interval + 1) * interval
+    return None, min(next_due, target) if target else next_due
+
+
+def arc_window_for_chapter(ch_num, interval, meta):
+    interval = interval or 5
+    target = int(meta.get("target_chapters") or 0)
+    start = ((ch_num - 1) // interval) * interval + 1
+    end = start + interval - 1
+    if target:
+        end = min(end, target)
+    return start, end
+
+
+def long_arc_mode(settings, meta):
+    scale = str(meta.get("scale") or "").lower()
+    try:
+        target = int(meta.get("target_chapters") or 0)
+    except (TypeError, ValueError):
+        target = 0
+    mode = str(settings.get("小说生成模式") or meta.get("draft_mode") or "")
+    purpose = str(settings.get("小说用途") or meta.get("purpose") or "")
+    return (
+        scale in {"long", "长篇"}
+        or target >= 30
+        or mode in {"商业连载", "漫剧源书"}
+        or purpose in {"漫剧源书", "微短剧源书"}
+    )
+
+
+def is_stage_checklist(root):
+    path = os.path.join(root, "_进度.md")
+    try:
+        text = open(path, encoding="utf-8").read()
+    except OSError:
+        return False
+    return any(marker in text for marker in _STAGE_TABLE_MARKERS)
+
+def run_stage_checklist_flow(root):
+    script = os.path.join(_SKILLS, "novel-craft", "scripts", "progress.py")
+    print("📍 当前项目使用同构阶段清单进度；转交 novel-craft progress reader。")
+    result = subprocess.run([sys.executable, script, root])
+    sys.exit(result.returncode)
+
 def main():
     if len(sys.argv) < 2:
         print("用法: flow.py <作品根>"); sys.exit(1)
@@ -53,6 +108,17 @@ def main():
 
     meta = load_json(os.path.join(root, "_meta.json"))
     settings = load_project_settings(root)
+    draft_workflow = (
+        settings.get("小说生成工作流")
+        or meta.get("draft_workflow")
+        or meta.get("writing_workflow")
+        or "默认单步"
+    )
+    live_check = "边写边自检" in str(draft_workflow)
+    review_interval = batch_review_interval(settings, meta)
+    if is_stage_checklist(root):
+        run_stage_checklist_flow(root)
+
     res = summarize(root)
     if "error" in res:
         print(f"[err] 进度读取失败: {res['error']}"); sys.exit(1)
@@ -66,6 +132,7 @@ def main():
     stage_label = first["label"]
     
     print(f"📍 当前进度焦点：{ch_text}「{stage_label}」")
+    print(f"⚙️ 小说生成工作流：{draft_workflow}")
     
     # 状态哨兵
     advice = []
@@ -93,24 +160,47 @@ def main():
                 blockers.append(f"🟡 状态增量尚未合并入 Master Ledger")
                 advice.append(f"运行对账并合并：python3 skills/novel-craft/scripts/reconcile_ledger.py \"{root}\" --chapter {ch_num} --merge --verified <结论.json>")
 
-    # 3. N2D 就绪检查
-    if is_n2d_bound(root, meta, settings) and stage_label in ["机检", "审稿"]:
-        n2d_res = load_json(os.path.join(root, "审稿", "n2d_readiness.json"))
-        # 简单查一下当前章是否有结果
-        found_ch = False
-        for c in n2d_res.get("chapters", []):
-            if c["chapter"] == ch_num:
-                found_ch = True; break
-        if not found_ch:
-            advice.append(f"建议运行 N2D 就绪机检：python3 skills/novel-review/scripts/n2d_readiness_check.py \"{root}\" --range {ch_num}")
-
-    # 4. 任务包检查 (如果是正文初稿阶段)
+    # 3. 任务包检查 (如果是正文初稿阶段)
     if stage_label == "正文初稿":
+        if long_arc_mode(settings, meta):
+            start, end = arc_window_for_chapter(ch_num, review_interval or 5, meta)
+            arc_plan = os.path.join(root, "审稿", f"arc_plan_第{start:02d}-{end:02d}章.json")
+            if not os.path.exists(arc_plan):
+                advice.append(
+                    f"长篇弧段包：先生成第 {start:02d}-{end:02d} 章弧段计划："
+                    f"python3 skills/novel-craft/scripts/arc_packets.py \"{root}\" --arc {start}-{end}"
+                )
         packets = get_task_packets(root, ch_num)
         if not packets:
             advice.append(f"生成写作任务包：python3 skills/novel-craft/scripts/draft_packets.py \"{root}\" --chapter {ch_num}")
         else:
             advice.append(f"检测到现有任务包：{', '.join(packets)}。请按任务包要求完成写作。")
+            if live_check:
+                advice.append(
+                    f"边写边自检：正文与 审稿/state_delta_{ch_text}.json 落盘后，执行 "
+                    f"python3 skills/novel/scripts/post_write.py \"{root}\" --chapter {ch_text}"
+                )
+                window = batch_review_window(ch_num, review_interval, meta)
+                if window and window[0] is not None:
+                    start, end = window
+                    advice.append(
+                        f"小批回扫：本章自检通过后跑第 {start:02d}-{end:02d} 章 review："
+                        f"python3 skills/novel-review/scripts/mechanical_check.py \"{root}\" "
+                        f"--range {start}-{end} --json-out \"{root}/审稿/batch_mechanical_第{start:02d}-{end:02d}章.json\""
+                    )
+                elif window:
+                    _unused, next_due = window
+                    advice.append(f"小批回扫节奏：每 {review_interval} 章一次，下一次预计第 {next_due:02d} 章写后触发。")
+
+    if long_arc_mode(settings, meta) and stage_label in ["机检", "审稿", "评分"]:
+        start, end = arc_window_for_chapter(ch_num, review_interval or 5, meta)
+        if ch_num == end:
+            arc_report = os.path.join(root, "审稿", f"arc_gate_第{start:02d}-{end:02d}章.json")
+            if not os.path.exists(arc_report):
+                advice.append(
+                    f"长篇弧段 gate：本窗口到第 {end:02d} 章，建议跑 "
+                    f"python3 skills/novel-review/scripts/arc_gate.py \"{root}\" --arc {start}-{end}"
+                )
 
     # 输出
     if blockers:
@@ -126,7 +216,10 @@ def main():
         cmd = first.get("cmd", "").format(root=root, ch=ch_text)
         print(f"  - 按照进度建议执行：{cmd}")
 
-    print(f"\n[提示] 运行 post_write 脚本可自动勾选进度并触发百科/哨兵/N2D 检查。")
+    if live_check:
+        print(f"\n[提示] 当前已选择 边写边自检；post_write 是每章写完后的必经闭环。")
+    else:
+        print(f"\n[提示] 运行 post_write 脚本可自动勾选进度并触发百科/哨兵/力量体系检查；也可在 `_设置.md` 选择 `小说生成工作流：边写边自检`。")
 
 if __name__ == "__main__":
     main()

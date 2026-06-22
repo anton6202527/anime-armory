@@ -6,7 +6,8 @@
 
   - 身份交接（②）：命名角色镜（identity_requirement != none）的逐镜 video prompt 是否
     真锁了身份（声明 + 具体锚点 CHAR_xx/定妆_/reference_group/character_id/face_lock/…），
-    否则 block（首帧脸→视频脸无契约锚，出视频必脸漂）；
+    同时检查多锚帧 Clip 是否把首/中/尾锚到同一 registry/reference_group，跨情绪近景是否使用
+    expressions +「锁脸不锁情」契约，否则 block（首帧脸→视频脸无契约锚，出视频必脸漂）；
   - 物料约束交接（C）：出图逐镜绑定的 LOC/PROP/OUTFIT/VFX 资产，出视频对应镜不得丢失
     （整镜 prompt 缺失=block；仅 id 丢失=warn，交人确认是否有意松引用）。
 
@@ -29,6 +30,26 @@ IDENTITY_DECL_MARKERS = ("身份锁定", "身份注册层", "identity lock", "id
 IDENTITY_ANCHOR_RE = re.compile(
     r"CHAR_[A-Za-z0-9_]+|定妆_|reference_group|character_id|face_lock|reference[ _]controls|脸部特写|主体库|cameo",
     re.IGNORECASE,
+)
+CHAR_REF_RE = re.compile(r"\b(CHAR_[A-Za-z0-9_]+(?:/[^\s`，；、。*）)]+)?)")
+FIRST_FRAME_RE = re.compile(r"\*\*首帧\*\*[^`]*`([^`]+\.png)`")
+END_FRAME_RE = re.compile(r"\*\*尾帧\*\*[^`]*`([^`]+\.png)`")
+MID_FRAME_RE = re.compile(r"\*\*(?:中段)?锚帧\s*\d*\*\*[^`]*`([^`]+\.png)`")
+EXPR_SOURCE_RE = re.compile(r"expressions|表情参考|表情定妆|_expr|_表情_|expression reference", re.IGNORECASE)
+LOCK_FACE_RE = re.compile(r"锁脸不锁情|lock face not emotion|face shape|facial proportions|脸型|五官比例|眼距|鼻梁|下颌|骨相", re.IGNORECASE)
+FACE_INVARIANT_RE = re.compile(r"脸型|五官|眼距|鼻梁|下颌|骨相|发际线|痣疤|facial proportions|face shape", re.IGNORECASE)
+HAIR_OR_ACCESSORY_RE = re.compile(r"发型|发髻|发色|标志配饰|配饰|signature", re.IGNORECASE)
+OUTFIT_RE = re.compile(r"服装配色|服装|配色|costume palette|outfit", re.IGNORECASE)
+NATIVE_BINDING_RE = re.compile(r"character_id|face_lock|reference[ _]controls|主体库|cameo|LoRA", re.IGNORECASE)
+REFERENCE_GROUP_BINDING_RE = re.compile(
+    r"(?:reference_group|参考组)\s*(?:=|:|：)\s*[^；;，。\n]+|"
+    r"identity_registry\.reference_group\s*(?:=|:|：)\s*[^；;，。\n]+",
+    re.IGNORECASE,
+)
+BIG_EXPRESSION_VALUES = {"大", "big", "large", "cross_emotion"}
+CLOSEUP_MARKERS = (
+    "CU", "ECU", "MCU", "BCU", "特写", "近景", "脸部", "面部",
+    "反打", "正反打", "过肩", "OTS", "dialogue_shot_reverse", "dialogue_closeup",
 )
 # 逐镜资产 id（场景/道具/服装/特效）。
 ASSET_HANDOFF_ID_RE = re.compile(r"(?:LOC|PROP|OUTFIT|VFX)_[A-Za-z0-9]+")
@@ -88,6 +109,164 @@ def clip_block_locks_identity(block_text: str) -> bool:
     return has_decl and has_anchor
 
 
+def _load_json(path: str):
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return None
+
+
+def _frame_refs(block_text: str) -> dict:
+    """逐镜 video prompt 块里的首/中/尾锚帧引用。纯函数·可测。"""
+    text = str(block_text or "")
+    first = [m.group(1).strip() for m in FIRST_FRAME_RE.finditer(text)]
+    mid = [m.group(1).strip() for m in MID_FRAME_RE.finditer(text)]
+    end = [m.group(1).strip() for m in END_FRAME_RE.finditer(text)]
+    return {"first": first, "mid": mid, "end": end, "all": first + mid + end}
+
+
+def _char_refs(text: str) -> set:
+    """文本里的显式角色身份绑定，归一掉 primary 星号等装饰。纯函数·可测。"""
+    out = set()
+    for raw in CHAR_REF_RE.findall(str(text or "")):
+        item = raw.strip().strip("*`，；、。)")
+        if item:
+            out.add(item)
+    return out
+
+
+def _base_char(ref: str) -> str:
+    return str(ref or "").split("/", 1)[0]
+
+
+def _has_face_invariants(text: str) -> bool:
+    """同一角色首/中/尾多锚帧必须锁住脸、发型/配饰、服装配色三组身份不变量。"""
+    value = str(text or "")
+    return bool(FACE_INVARIANT_RE.search(value) and HAIR_OR_ACCESSORY_RE.search(value) and OUTFIT_RE.search(value))
+
+
+def _has_reference_group(text: str) -> bool:
+    return bool(REFERENCE_GROUP_BINDING_RE.search(str(text or "")))
+
+
+def _has_native_binding(text: str) -> bool:
+    return bool(NATIVE_BINDING_RE.search(str(text or "")))
+
+
+def _storyboard_clip_meta(root: str, ep: str) -> dict:
+    """storyboard.json → {clip_num: {expression_span, closeup, need_endframe}}。缺文件返回空。"""
+    path = os.path.join(root, "脚本", ep, "storyboard.json")
+    data = _load_json(path)
+    if not isinstance(data, dict) or not isinstance(data.get("clips"), list):
+        return {}
+    out = {}
+    for idx, clip in enumerate(data.get("clips") or [], 1):
+        if not isinstance(clip, dict):
+            continue
+        cont = clip.get("continuity") if isinstance(clip.get("continuity"), dict) else {}
+        blob = " ".join(str(clip.get(k) or "") for k in ("template", "label", "shot_type", "description"))
+        for shot in clip.get("shots") or []:
+            if isinstance(shot, dict):
+                blob += " " + " ".join(str(shot.get(k) or "") for k in ("lens", "desc", "shot_size"))
+        out[idx] = {
+            "expression_span": str(cont.get("expression_span") or "").strip(),
+            "need_endframe": cont.get("need_endframe") is True,
+            "closeup": any(m in blob for m in CLOSEUP_MARKERS),
+        }
+    return out
+
+
+def _check_multiframe_identity_contract(res: dict, clip_id: str, block: str, image_block: str = "") -> None:
+    """首/中/尾多锚帧角色镜：同一角色必须走同一 registry/reference_group 身份契约。"""
+    refs = _frame_refs(block)
+    if len(refs["all"]) <= 1:
+        return
+    video_chars = _char_refs(block)
+    image_chars = _char_refs(image_block)
+    if not video_chars:
+        res["findings"].append({
+            "clip_id": clip_id,
+            "severity": "block",
+            "code": "identity_anchor_character_missing",
+            "note": (f"{clip_id}：本 Clip 使用首/中/尾多锚帧 {refs['all']}，但逐镜 prompt 未写明确 `CHAR_xx/形态`。"
+                     "多锚帧必须绑定同一 identity_registry 角色/形态，禁止只靠画面路径或中文姓名让后端猜同一张脸。"),
+        })
+        return
+    if image_chars and not {_base_char(c) for c in image_chars}.issubset({_base_char(c) for c in video_chars}):
+        res["findings"].append({
+            "clip_id": clip_id,
+            "severity": "block",
+            "code": "identity_anchor_character_mismatch",
+            "note": (f"{clip_id}：出图逐镜绑定角色 {sorted(image_chars)}，但出视频逐镜只绑定 {sorted(video_chars)}。"
+                     "首/中/尾锚帧必须继承同一角色身份，不能在视频 prompt 里漏角色或换形态。"),
+        })
+    if not _has_reference_group(block):
+        res["findings"].append({
+            "clip_id": clip_id,
+            "severity": "block",
+            "code": "identity_anchor_reference_group_missing",
+            "note": (f"{clip_id}：多锚帧角色 Clip 缺 `reference_group` 兜底。"
+                     "即使目标后端支持 Character ID / Face Lock / reference controls，也必须把同一套 registry reference_group 作为首/中/尾同源身份锚，防止锚图脸不一致时被视频模型放大成片内脸漂。"),
+        })
+    if not _has_face_invariants(block):
+        res["findings"].append({
+            "clip_id": clip_id,
+            "severity": "block",
+            "code": "identity_anchor_invariants_missing",
+            "note": (f"{clip_id}：多锚帧角色 Clip 未同时锁住脸型/五官比例、发型/配饰、服装配色。"
+                     "首/中/尾锚图看起来各自合格也可能不是同一个人；视频 prompt 必须显式写这些不变量，做到锁脸不锁表演。"),
+        })
+    # 有原生绑定时它是加分项；没有时不单独 block，因为 reference_group + 双/多帧是合法 fallback。
+    if not _has_native_binding(block):
+        res["findings"].append({
+            "clip_id": clip_id,
+            "severity": "warn",
+            "code": "identity_anchor_native_binding_absent",
+            "note": (f"{clip_id}：多锚帧角色 Clip 未见 Character ID / Face Lock / reference controls / LoRA 等原生身份绑定。"
+                     "若目标后端支持，应同时喂角色 ID；不支持时需限制表情/转头/运镜幅度，必要时降 MCU/侧脸/手部反应镜或拆 Clip。"),
+        })
+
+
+def _check_big_expression_contract(res: dict, clip_id: str, block: str, meta: dict) -> None:
+    """大表情近景：必须同源 expressions + 首尾双帧 + 锁脸不锁情。"""
+    if not meta or meta.get("expression_span") not in BIG_EXPRESSION_VALUES or not meta.get("closeup"):
+        return
+    refs = _frame_refs(block)
+    if not refs["end"]:
+        res["findings"].append({
+            "clip_id": clip_id,
+            "severity": "block",
+            "code": "big_expression_endframe_missing",
+            "note": (f"{clip_id}：storyboard 标记大表情近景，但视频 prompt 没有 `**尾帧**`。"
+                     "大表情近景必须首=起表情、尾=止表情同源定妆/expressions，只做插值；单首帧自由生成会把脸型和五官比例带着重画。"),
+        })
+    if not EXPR_SOURCE_RE.search(block):
+        res["findings"].append({
+            "clip_id": clip_id,
+            "severity": "block",
+            "code": "big_expression_expressions_missing",
+            "note": (f"{clip_id}：大表情近景缺同源 `expressions` / 表情参考 / 表情定妆引用。"
+                     "止表情必须来自 identity_registry.reference_group.expressions 或同源表情定妆，不得让模型凭文字跨情绪改脸。"),
+        })
+    for marker in ("表情锚", "表情幅度"):
+        if marker not in block:
+            res["findings"].append({
+                "clip_id": clip_id,
+                "severity": "block",
+                "code": "big_expression_field_missing",
+                "note": f"{clip_id}：大表情近景缺 `{marker}` 字段；必须写起→止表情和幅度封顶，避免表情自由发挥成换脸。",
+            })
+    if not LOCK_FACE_RE.search(block):
+        res["findings"].append({
+            "clip_id": clip_id,
+            "severity": "block",
+            "code": "big_expression_lock_face_missing",
+            "note": (f"{clip_id}：大表情近景缺「锁脸不锁情」/脸型五官比例不变的负向约束。"
+                     "必须声明表情只动面部肌肉，脸型、眼距、鼻梁、下颌、发际线、痣疤保持不变。"),
+        })
+
+
 def check_identity_handoff(root: str, ep: str) -> dict:
     """对每个命名角色镜核验逐镜 video prompt 写了身份锁定 + 具体锚点（②）。
 
@@ -111,6 +290,11 @@ def check_identity_handoff(root: str, ep: str) -> dict:
         res["notes"].append("无 01_clips.md——跳过身份交接校验（先跑 n2d-video 阶段A 写逐镜 prompt）。")
         return res
     blocks = split_video_clip_blocks(open(clips_path, encoding="utf-8").read())
+    img_blocks = {}
+    img_path = os.path.join(root, "出图", ep, "prompt", "01_分镜出图.md")
+    if os.path.isfile(img_path):
+        img_blocks = split_video_clip_blocks(open(img_path, encoding="utf-8").read())
+    clip_meta = _storyboard_clip_meta(root, ep)
     res["available"] = True
     for nr in named:
         res["checked"] += 1
@@ -129,6 +313,14 @@ def check_identity_handoff(root: str, ep: str) -> dict:
                          "（缺『身份锁定/身份注册层』声明或缺具体锚 CHAR_xx/定妆_/reference_group/character_id/face_lock/脸部特写）"
                          "——出图首帧脸→出视频脸无契约锚，易脸漂。"),
             })
+            continue
+        _check_multiframe_identity_contract(
+            res,
+            nr["clip_id"],
+            blk,
+            img_blocks.get(nr["clip_num"], ""),
+        )
+        _check_big_expression_contract(res, nr["clip_id"], blk, clip_meta.get(nr["clip_num"], {}))
     return res
 
 

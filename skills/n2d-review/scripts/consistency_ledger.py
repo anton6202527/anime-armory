@@ -13,10 +13,19 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import os
 import sys
 from typing import Any, Dict, List, Optional, Sequence
+
+COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
+if COMMON not in sys.path:
+    sys.path.insert(0, COMMON)
+try:
+    from n2d_contract import CONSISTENCY_LEDGER_KIND  # noqa: E402
+except Exception:  # pragma: no cover - standalone degraded fallback
+    CONSISTENCY_LEDGER_KIND = "n2d_consistency_ledger"
 
 # ---------- 纯逻辑（无 I/O · pytest 覆盖） ----------
 
@@ -113,7 +122,7 @@ def build_ledger(*, characters: List[Dict[str, Any]], assets: List[Dict[str, Any
     out_rows.sort(key=lambda x: -SEV_RANK.get(x["overall"], 0))
     counts = {k: sum(1 for r in out_rows if r["overall"] == k) for k in ("block", "high", "medium")}
     return {
-        "kind": "n2d_consistency_ledger", "version": 1,
+        "kind": CONSISTENCY_LEDGER_KIND, "version": 1,
         "rows": out_rows, "counts": counts,
         "unattributed": attr.get("_unattributed", []),
     }
@@ -189,10 +198,12 @@ def collect_findings(root: str, ep: str) -> List[Dict[str, Any]]:
         sev = str(f.get("severity") or f.get("verdict") or "ok")
         text = " ".join(str(f.get(k, "")) for k in ("char", "dimension", "note", "message", "msg"))
         out.append({"sev": sev, "source": "detect", "text": text})
-    # detect：image_qc lint findings（msg 内含镜头/资产名）
+    # detect：image_qc 完整 gate findings（复用 image_qc.to_findings，避免只读 lint 漏掉像素/语义/道具复核）
     iq = _load(os.path.join(root, "生产数据", "image_qc", ep, f"image_qc_{ep}.json")) or {}
-    for f in ((iq.get("lint") or {}).get("findings") or []):
-        out.append({"sev": str(f.get("level") or "warn"), "source": "detect", "text": str(f.get("msg") or "")})
+    if isinstance(iq, dict) and iq:
+        for f in _image_qc_to_findings(iq):
+            text = " ".join(str(f.get(k, "")) for k in ("dim", "loc", "msg", "message"))
+            out.append({"sev": str(f.get("sev") or "warn"), "source": "detect", "text": text})
     # contract：契约继承 identity/asset handoff findings
     ci = _load(os.path.join(root, "生产数据", f"contract_inheritance_{ep}.json")) or {}
     for bucket in ("identity_handoff", "asset_handoff"):
@@ -200,6 +211,26 @@ def collect_findings(root: str, ep: str) -> List[Dict[str, Any]]:
             text = " ".join(str(f.get(k, "")) for k in ("clip_id", "code", "note"))
             out.append({"sev": str(f.get("severity") or "warn"), "source": "contract", "text": text})
     return out
+
+
+def _image_qc_to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
+    script = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d-image", "scripts", "image_qc.py"))
+    try:
+        spec = importlib.util.spec_from_file_location("n2d_image_qc_for_ledger", script)
+        if spec is None or spec.loader is None:
+            raise RuntimeError("module spec unavailable")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        findings = module.to_findings(payload)
+        return [f for f in findings if isinstance(f, dict)]
+    except Exception:
+        # Fallback for damaged local environments: lint-only is older behavior,
+        # kept so ledger generation never blocks consistency_audit export.
+        return [
+            {"sev": str(f.get("level") or "warn"), "dim": "image_prompt_lint", "msg": str(f.get("msg") or "")}
+            for f in ((payload.get("lint") or {}).get("findings") or [])
+            if isinstance(f, dict)
+        ]
 
 
 def run(root: str, ep: str) -> Dict[str, Any]:

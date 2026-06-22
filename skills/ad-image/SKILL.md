@@ -1,18 +1,18 @@
 ---
 name: ad-image
-description: 拍广告 第5阶段·三层定妆库 + AI出图 — 为广告片建共享定妆库（角色/代言人 + 场景 + **产品定妆 hero product**：包装/logo/品牌色跨镜零漂移），再按 storyboard.json 逐镜出首帧/尾帧 PNG。视觉契约（品牌色/光位/构图）烤进首帧。生图AI 是选择点（默认 Codex），放行官方多参考后端（Seedream/可灵主体库/Nano Banana/Sora Cameo），拦项目内后端混用 + 逆向出图。ad-* 自包含，不复用 n2d-image。Use when asked 广告出图/定妆/产品定妆/品牌色/出图prompt/分镜图/KV for a 拍广告 project. Triggers 广告出图, 定妆, 产品定妆, 品牌色, KV, 出图, 出图prompt, 分镜图, 首帧, 尾帧, ad-image.
+description: 拍广告 第5阶段·三层定妆库 + AI出图 — 为广告片建共享定妆库（角色/代言人 + 场景 + **产品定妆 hero product**：包装/logo/品牌色跨镜零漂移），再按 storyboard.json 逐镜出首帧/尾帧 PNG。视觉契约（品牌色/光位/构图）烤进首帧。生图AI 是选择点（默认 Codex），放行官方多参考后端（Seedream/可灵主体库/Nano Banana/Sora Cameo），拦项目内后端混用 + 逆向出图。Use when asked 广告出图/定妆/产品定妆/品牌色/出图prompt/分镜图/KV for a 拍广告 project. Triggers 广告出图, 定妆, 产品定妆, 品牌色, KV, 出图, 出图prompt, 分镜图, 首帧, 尾帧, ad-image.
 ---
 
 # ad-image — 拍广告 · 三层定妆库 + 出图
 
-两层出图（与 n2d 同构）但定妆库是**三层**：
+广告出图使用**三层定妆库**：
 1. **角色定妆**（代言人/模特/虚拟人）——标准三视图（正/侧/背）。
 2. **场景定妆**——关键场景多视图。
 3. **产品定妆（hero product）**——广告独有、最严：包装/logo/品牌色/材质跨镜**零漂移**，是最严格的"角色"。
 
 然后按 `storyboard.json` 逐镜出**首帧**（+ 标了 `need_end_frame` 的接缝出**尾帧** `镜头N_end.png`）。视觉契约（品牌色 HEX/光位锚/构图）烤进首帧像素。
 
-**自包含**：不复用 `n2d-image`；借鉴两层出图/一致性梯子/尾帧接力思路，落成 ad 自己的 references。
+三层定妆、产品一致性、尾帧接力和机检都落成 ad 自己的 references。
 
 ## 偏好（私有）
 
@@ -26,15 +26,16 @@ description: 拍广告 第5阶段·三层定妆库 + AI出图 — 为广告片�
 python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--storyboard PATH] [--strict]
 ```
 
-四项检（自包含，借鉴 `n2d-image/image_qc.py` 架构但不 import n2d；缺 Pillow/numpy 优雅降级，只跑 prompt-lint 并在报告标降级）：
-1. **prompt-lint（HARD BLOCK，无 Pillow 也跑）**：每个产品镜（`storyboard.assets` 标 `PROD_*: true`）的 `出图/分镜/prompt/镜头N.md` 必须有 参考图/资产引用块 + 身份锁定句 + 负向(不要改包装文字 / 不要变形 logo)。缺任一 → block。把"绝不文生图产品"从散文落成机检硬约束。
+五项检（自包含；缺 Pillow/numpy 优雅降级，只跑 prompt-lint 并在报告标降级）：
+1. **prompt-lint（HARD BLOCK，无 Pillow 也跑）**：每个产品镜（`storyboard.assets` 标 `PROD_*: true`）的 `出图/分镜/prompt/镜头N.md` 必须有 参考图/资产引用块 + 结构化 `PROD_*` 资产 ID + 身份锁定句 + 负向(不要改包装文字 / 不要变形 logo)。缺任一 → block。把"绝不文生图产品"从散文落成机检硬约束。
 2. **brand-color ΔE**：产品镜主色 vs `visual_contract.品牌色` HEX（CIE76 Lab）。超阈 → block，临界 → warn；无区域信息取整图主色并降级 warn。
 3. **product dHash 离群**：产品镜组内 dHash 最近邻 Hamming 距离离群 → 漂移 warn/block。
 4. **logo 模板匹配**：仅当注册了 `出图/共享/定妆库/产品/logo.png` 时做 NCC 粗匹配；缺失/形变 → flag。无模板干净跳过。
+5. **禁本地贴图伪修复**：若 `生产数据/production_events.jsonl` 记录某最终产品镜来自 `local_product_patch` / `logo_patch` / `packaging_patch` / alpha blend / pasteback 等 image-stage 局部贴图链路，直接 block。真 logo/包装文字贴图应在 `ad-compose` 交付层做，不得拿来伪造出图阶段产品一致性通过。
 
-报告写 **`出图/分镜/product_qc.json`**，schema `{"summary":{"block":N,"warn":N,"info":N},"findings":[{"severity","shot","check","reason","detail"},...]}`；`summary.block>0` → 退出非零。`ad-craft/gate.py` 读 `summary.block` 据此挡 spend（与 `video_contract_findings` 读 `contract_inheritance.json` 同形）。`--strict` 给 `ad-review`/刷新用：降级 info 提级 warn 进候选重出。测试：`cd skills/ad-image/scripts && python3 -m pytest test_product_qc.py`。
+报告写 **`出图/分镜/product_qc.json`**，schema `{"kind":"ad_product_qc","version":2,"summary":{"block":N,"warn":N,"info":N},"findings":[{"severity","shot","check","reason","detail"}],"qc_environment":{"precision_level","pending_product_images",...}}`；`summary.block>0` → 退出非零。`ad-craft/gate.py` 读 `summary.block`、`qc_environment.precision_level` 和 `pending_product_images` 据此挡 spend（与 `video_contract_findings` 读 `contract_inheritance.json` 同形）。`--strict` 给 `ad-review`/刷新用：降级 info 提级 warn 进候选重出。测试：`cd skills/ad-image/scripts && python3 -m pytest test_product_qc.py`。
 
-## 生图后端治理（与 mv/n2d 同构，本线自持）
+## 生图后端治理
 
 `生图AI` 默认 Codex；放行官方多参考一致性后端（OpenAI/gpt-image、Seedream Universal Reference、可灵主体库、Nano Banana、Sora Cameo）。两条硬闸门：① **项目内不混用后端** ② **禁第三方逆向/未授权出图**（即梦/Dreamina 逆向路径 forbidden）。判定逻辑见 `ad-craft/scripts/contract.py` `classify_image_backend`。
 
@@ -61,7 +62,7 @@ python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--sto
 ## 一致性梯子（出图）
 ①参考图派生（默认）→ ②后端原生主体ID/主体库（Seedream/可灵/Sora Cameo·opt-in）→ ③LoRA（仅核心长线代言人）。锚点句（锁特征词）+ 身份锁定句（锁"同一张脸/同一个包装"）叠加用。产品/logo 用后端原生主体库或多参考最稳。
 
-## 重抽预算策略（两档全局统一 · n2d/mv/ad 同义）
+## 重抽预算策略（两档）
 
 图片重抽只保留两档：`预算充足` / `预算一般`，默认 `预算充足`。旧值 `预算不足` / `预算不够` 一律归并为 `预算一般`。这里的“满意”以本张图的落档自检 + 用户/制作判断为准，每次重抽都必须记录事件、保留候选或废料，不设固定次数上限。
 

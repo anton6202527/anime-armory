@@ -19,13 +19,17 @@ from datetime import date
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                 "..", "..", "novel-craft", "scripts"))
 from contract import (AI_TEXT_USAGE_MODES, CHAPTER_GRANULARITY, NOVEL_DRAFT_MODES,
-                      base_meta, demo_chapters_for, derived_stage_markdown, parse_outputs)
+                      DRAFT_WORKFLOWS, base_meta, demo_chapters_for,
+                      derived_stage_markdown, parse_outputs,
+                      wordcount_band_for_words_per_chapter,
+                      infer_novel_purpose, normalize_novel_purpose,
+                      resolve_novel_draft_mode, resolve_novel_draft_workflow)
 from derive_common import build_rights_metadata, docx_to_txt, detect_rights_status, write_settings
 
 
 def chapter_plan(target_chars, target, outputs, target_chapters=None):
     text = f"{target or ''} {','.join(outputs or [])}"
-    if any(key in text for key in ("漫剧", "红果", "抖音", "n2d")):
+    if any(key in text for key in ("漫剧", "红果", "抖音")):
         wpc = [1000, 1500]
     elif "大纲" in text:
         wpc = [1500, 2500]
@@ -43,11 +47,13 @@ def main():
     ap.add_argument("--ratio", type=float, default=5.0, help="压缩倍数（默认 5×；20+ 为大纲级）")
     ap.add_argument("--target", default="短读",
                     choices=["短读", "漫剧", "大纲"], help="目标用途")
+    ap.add_argument("--purpose", default=None,
+                    help="小说用途：传统小说/漫剧源书/微短剧源书/短读/短篇/出海译制底稿/自定义")
     ap.add_argument("--target-chapters", type=int, default=None,
-                    help="覆盖精简后目标章数；缺省按目标字数/用途估算")
+                    help="覆盖精简后目标章数；缺省按目标总量/用途估算")
     ap.add_argument("--out", default=None)
     ap.add_argument("--outputs", default="txt,docx,outline",
-                    help="逗号分隔，可含 txt,docx,outline,n2d")
+                    help="逗号分隔，可含 txt,docx,outline")
     ap.add_argument("--i-have-rights", action="store_true")
     ap.add_argument("--rights-jurisdiction", default=None,
                     help="公版/授权依据适用辖区，如 US/CN/GLOBAL；缺省按来源推断")
@@ -55,6 +61,10 @@ def main():
                     help="计划发行/交付地区，逗号分隔，如 CN,US；公版跨区时必须复核")
     ap.add_argument("--draft-mode", default=None, choices=NOVEL_DRAFT_MODES,
                     help="小说生成模式；缺省按目标用途/输出格式推导")
+    ap.add_argument("--draft-workflow", default=None, choices=DRAFT_WORKFLOWS,
+                    help="小说生成工作流：默认单步/三步迭代/边写边自检")
+    ap.add_argument("--batch-review-interval", default="5章",
+                    help="小批回扫间隔；默认 5章，可填 3章/5章/关闭")
     ap.add_argument("--chapter-granularity", default="逐章", choices=CHAPTER_GRANULARITY,
                     help="章节生成粒度：逐章/小批/全书草稿")
     ap.add_argument("--ai-text-usage", default=None, choices=AI_TEXT_USAGE_MODES,
@@ -66,7 +76,7 @@ def main():
         print(f"[err] 找不到原作：{source_path}", file=sys.stderr); sys.exit(2)
 
     source_title = os.path.splitext(os.path.basename(source_path))[0]
-    out_root = os.path.abspath(args.out or os.path.join("写小说", f"{source_title}-精简"))
+    out_root = os.path.abspath(args.out or os.path.join("创作区", "写小说", f"{source_title}-精简"))
     if os.path.exists(out_root):
         print(f"[err] 目标已存在：{out_root}", file=sys.stderr); sys.exit(2)
 
@@ -92,7 +102,21 @@ def main():
     target_chars = int(orig_chars / args.ratio)
     outputs = parse_outputs(args.outputs)
     target_chapters, target_wpc = chapter_plan(target_chars, args.target, outputs, args.target_chapters)
-    draft_mode = args.draft_mode or ("漫剧源书" if args.target == "漫剧" or "n2d" in outputs else "稳妥初稿")
+    purpose = normalize_novel_purpose(args.purpose) or infer_novel_purpose(
+        target=args.target
+    )
+    draft_mode = resolve_novel_draft_mode(
+        args.draft_mode,
+        purpose=purpose,
+        target=args.target,
+        fallback=("漫剧源书" if args.target == "漫剧" else "稳妥初稿"),
+    )
+    draft_workflow = resolve_novel_draft_workflow(
+        args.draft_workflow,
+        draft_mode=draft_mode,
+        purpose=purpose,
+        target_chapters=target_chapters,
+    )
 
     meta = base_meta("condense", outputs=outputs, rights_status=rights)
     meta.update(build_rights_metadata(
@@ -107,8 +131,10 @@ def main():
         "ratio": args.ratio,
         "orig_chars_estimate": orig_chars,
         "target_chars_estimate": target_chars,
+        "purpose": purpose,
         "target_chapters": target_chapters,
         "target_words_per_chapter": target_wpc,
+        "target_wordcount_min_max": wordcount_band_for_words_per_chapter(target_wpc),
         "target": args.target,
         "target_platform": args.target if args.target == "漫剧" else "跨平台",
         "rights_declared_at": date.today().isoformat() if args.i_have_rights else None,
@@ -117,6 +143,8 @@ def main():
         "demo_chapters": demo_chapters_for(target_chapters),  # 共享真值源，勿硬编码 min(2,…)
         "demo_passed_at": None,
         "draft_mode": draft_mode,
+        "draft_workflow": draft_workflow,
+        "batch_review_interval": args.batch_review_interval,
         "chapter_granularity": args.chapter_granularity,
         "ai_text_usage": args.ai_text_usage,
     })
@@ -124,15 +152,18 @@ def main():
               ensure_ascii=False, indent=2)
     write_settings(out_root, {
         "目标用途": args.target,
+        "小说用途": purpose,
         "权利来源": rights,
         "权利辖区": meta.get("rights_jurisdiction", ""),
         "发行地区": ",".join(meta.get("distribution_regions") or []) or "未定",
         "压缩倍数": f"÷{args.ratio}",
-        "输出格式": ",".join(outputs) + "（漫剧友好版可加 n2d；novel-craft/scripts/export.py）",
+        "输出格式": ",".join(outputs) + "（novel-craft/scripts/export.py）",
         "小说生成模式": draft_mode,
+        "小说生成工作流": draft_workflow,
+        "小批回扫间隔": args.batch_review_interval,
         "章节生成粒度": args.chapter_granularity,
         "AI使用披露": args.ai_text_usage or "（发布前用 ai_usage.py 确认）",
-    }, note="精简：保主线/锚点/反转/钩子，砍描写支线并章。漫剧用途可 --formats n2d 直喂 n2d-script。")
+    }, note="精简：保主线/锚点/反转/钩子，砍描写支线并章。")
 
     skeletons = [
         ("设定/主线骨架.json", '{"主线": [], "锚点": [], "反转点": [], "状态": "待第 2 步精筛"}'),
@@ -150,7 +181,7 @@ def main():
         open(path, "w", encoding="utf-8").write(content)
 
     print(f"[ok] 项目骨架 → {out_root}")
-    print(f"     原作字数估计：{orig_chars}；目标字数估计：{target_chars}（÷{args.ratio}）；目标章数：{target_chapters}")
+    print(f"     原作字数估计：{orig_chars}；目标总量估计：{target_chars}（÷{args.ratio}）；目标章数：{target_chapters}")
     print(f"     版权状态：{rights}；目标用途：{args.target}")
     print(f"[next] 主对话第 2 步：标主线 / 锚点 / 反转点。")
 

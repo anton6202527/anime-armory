@@ -3,7 +3,7 @@
 cd skills/n2d-video/scripts && python3 -m pytest test_inherit_contract.py
 构造临时项目验证：一致→pass；轴线被改→block；视频缺字段→block；视频细化超集→pass；
 色调漂移→warn 不拦；出图侧缺字段→提示不拦。格式按 demo
-（制漫剧/本宫才是这皇宫最大的妖/出图/第1集/prompt/00_总览.md）的短标签 bullet 校准。
+（创作区/制漫剧/本宫才是这皇宫最大的妖/出图/第1集/prompt/00_总览.md）的短标签 bullet 校准。
 """
 import json
 import os
@@ -185,12 +185,58 @@ def test_missing_files_precondition(tmp_path):
     assert ic.run(root, EP) == 2  # 只缺视频侧
 
 
+# ── ①' generator↔parser 标签往返 sync（堵「字段标签一漂、该字段漂移机检静默失效」的 BLOCK 会漏洞） ──
+# 背景：diff_contracts 逐 VISUAL_CONTRACT_FIELDS 比对，两侧都解析不出某字段时会被当成「两侧都缺」而
+# 非「漂移」。若 generator 改了写进 00_总览.md 的标签措辞、而 parser 的 _FIELD_ALIASES 没跟上，该字段的
+# 漂移检测就静默失效。下面把「generator 真实输出的两种标签风格 → parser 必须解析出全部 5 字段」钉成测试。
+
+import n2d_contract_diff as cdiff  # noqa: E402  （inherit_contract 导入时已把 n2d/_lib 放进 sys.path）
+
+
+def _parse_visual(text):
+    sec = ic.extract_section(text)
+    assert sec is not None, "必须能取到「本集视觉一致性契约」节"
+    return ic.parse_contract_fields(sec)
+
+
+def test_demo_shortlabel_generator_roundtrips_all_five_fields():
+    # 出图侧 demo 短标签风格（光位锚/轴线/状态演进）必须往返解析出全部 5 个 canonical 字段且非空。
+    fields = _parse_visual(IMG_CONTRACT)
+    assert set(fields) == set(ic.VISUAL_CONTRACT_FIELDS), \
+        f"短标签 generator 输出漏解析字段：{set(ic.VISUAL_CONTRACT_FIELDS) - set(fields)}（_FIELD_ALIASES 未跟上标签改写？）"
+    assert all(fields[f].strip() for f in ic.VISUAL_CONTRACT_FIELDS), "解析出的字段值不得为空"
+
+
+def test_video_longlabel_generator_roundtrips_all_five_fields():
+    # 出视频侧长标签风格（场景光位锚/场景轴线视线/角色状态演进）同样必须往返解析出全部 5 字段。
+    fields = _parse_visual(VID_VERBATIM)
+    assert set(fields) == set(ic.VISUAL_CONTRACT_FIELDS), \
+        f"长标签 generator 输出漏解析字段：{set(ic.VISUAL_CONTRACT_FIELDS) - set(fields)}"
+
+
+def test_every_registered_alias_parses_to_its_canonical_field():
+    # 别名表里登记的每个写法都必须真能被 _norm/_ALIAS_LOOKUP 认出（防「加了别名却没生效」）。
+    for canon, aliases in cdiff._FIELD_ALIASES.items():
+        for alias in aliases:
+            parsed = ic.parse_contract_fields(f"- {alias}：占位值")
+            assert parsed.get(canon) == "占位值", f"别名「{alias}」未解析回 canonical「{canon}」"
+
+
+def test_block_and_no_superset_are_contract_field_subsets():
+    # 与模块加载期断言同义，给一条可读的回归用例（字段重命名后 block 名单 typo 不至于无声降级）。
+    assert set(cdiff.BLOCK_ON_DRIFT) <= set(ic.VISUAL_CONTRACT_FIELDS)
+    assert set(cdiff.NO_AUTO_SUPERSET) <= set(ic.VISUAL_CONTRACT_FIELDS)
+
+
 # ── ② 身份交接契约（出图首帧脸 → 出视频脸） ────────────────────────────────────
 
 _ROUTES = json.dumps({"kind": "n2d_video_model_routes", "routes": [
     {"clip_id": "Clip_01", "identity_requirement": "reference_group"},
     {"clip_id": "Clip_02", "identity_requirement": "character_id_or_reference_group"},
     {"clip_id": "Clip_03", "identity_requirement": "none"},   # 空镜：不要求锁脸
+]}, ensure_ascii=False)
+_ROUTES_ONE = json.dumps({"kind": "n2d_video_model_routes", "routes": [
+    {"clip_id": "Clip_01", "identity_requirement": "reference_group"},
 ]}, ensure_ascii=False)
 
 _CLIP_LOCKED = """## Clip 01（时长 5.6s · 镜头 EP01_CLIP01）
@@ -236,6 +282,102 @@ def _write_with_video_prompts(tmp_path, routes=_ROUTES, clips=_CLIP_LOCKED):
     if clips is not None:
         open(os.path.join(vp, "01_clips.md"), "w", encoding="utf-8").write(clips)
     return root
+
+
+def _write_storyboard(root, expression_span="大", need_endframe=True):
+    d = os.path.join(root, "脚本", EP)
+    os.makedirs(d, exist_ok=True)
+    with open(os.path.join(d, "storyboard.json"), "w", encoding="utf-8") as f:
+        json.dump({
+            "clips": [{
+                "template": "dialogue_shot_reverse",
+                "label": "CU 近景 大表情",
+                "shots": [{"lens": "CU", "desc": "沈念从克制到暴怒"}],
+                "continuity": {
+                    "expression_span": expression_span,
+                    "need_endframe": need_endframe,
+                },
+            }]
+        }, f, ensure_ascii=False)
+
+
+_MULTI_ANCHOR_OK = """## Clip 01（时长 5.6s · 镜头 EP01_CLIP01）
+**首帧**：`出图/第1集/图片/Clip_01.png`
+**尾帧**：`出图/第1集/图片/Clip_01_end.png`
+**角色身份注册层**：CHAR_01/常态；reference_group=出图/共享/图片/定妆_沈念_常态.png；character_id=KLG_001。
+**近景/反打身份锁定**：脸型、五官比例、眼距、鼻梁、下颌保持不变；发型发髻与标志配饰保持；服装配色保持。
+**表情锚**（起→止）：中性→怒目，引用 expressions/定妆_沈念_表情_怒目.png。
+**表情幅度**：大。
+**锁脸不锁情**：只动面部肌肉，脸型/五官比例/眼距/鼻梁/下颌/发际线/痣疤 must hold。
+"""
+
+
+def test_multiframe_identity_contract_passes_when_reference_group_and_invariants_present(tmp_path):
+    root = _write_with_video_prompts(tmp_path, routes=_ROUTES_ONE, clips=_MULTI_ANCHOR_OK)
+    _write_storyboard(root)
+    img_prompt = os.path.join(root, "出图", EP, "prompt", "01_分镜出图.md")
+    open(img_prompt, "w", encoding="utf-8").write("## Clip 01\n**资产身份注册层**：CHAR_01/常态；reference_group。\n")
+    assert ic.run(root, EP) == 0
+    rep = _report(root)
+    assert rep["identity_handoff"]["findings"] == []
+
+
+def test_multiframe_identity_contract_blocks_missing_reference_group(tmp_path):
+    clips = _MULTI_ANCHOR_OK.replace("；reference_group=出图/共享/图片/定妆_沈念_常态.png", "")
+    root = _write_with_video_prompts(tmp_path, routes=_ROUTES_ONE, clips=clips)
+    assert ic.run(root, EP) == 1
+    rep = _report(root)
+    codes = {f["code"] for f in rep["identity_handoff"]["findings"]}
+    assert "identity_anchor_reference_group_missing" in codes
+
+
+def test_multiframe_identity_contract_blocks_reference_group_keyword_without_binding(tmp_path):
+    clips = _MULTI_ANCHOR_OK.replace(
+        "reference_group=出图/共享/图片/定妆_沈念_常态.png",
+        "reference_group 保持一致",
+    )
+    root = _write_with_video_prompts(tmp_path, routes=_ROUTES_ONE, clips=clips)
+    assert ic.run(root, EP) == 1
+    rep = _report(root)
+    codes = {f["code"] for f in rep["identity_handoff"]["findings"]}
+    assert "identity_anchor_reference_group_missing" in codes
+
+
+def test_multiframe_identity_contract_blocks_character_mismatch(tmp_path):
+    root = _write_with_video_prompts(tmp_path, routes=_ROUTES_ONE, clips=_MULTI_ANCHOR_OK.replace("CHAR_01/常态", "CHAR_02/常态"))
+    img_prompt = os.path.join(root, "出图", EP, "prompt", "01_分镜出图.md")
+    open(img_prompt, "w", encoding="utf-8").write("## Clip 01\n**资产身份注册层**：CHAR_01/常态；reference_group。\n")
+    assert ic.run(root, EP) == 1
+    rep = _report(root)
+    codes = {f["code"] for f in rep["identity_handoff"]["findings"]}
+    assert "identity_anchor_character_mismatch" in codes
+
+
+def test_big_expression_closeup_requires_expressions_and_expression_fields(tmp_path):
+    clips = _MULTI_ANCHOR_OK.replace(
+        "**表情锚**（起→止）：中性→怒目，引用 expressions/定妆_沈念_表情_怒目.png。\n"
+        "**表情幅度**：大。\n",
+        "",
+    )
+    root = _write_with_video_prompts(tmp_path, routes=_ROUTES_ONE, clips=clips)
+    _write_storyboard(root)
+    assert ic.run(root, EP) == 1
+    rep = _report(root)
+    codes = {f["code"] for f in rep["identity_handoff"]["findings"]}
+    assert "big_expression_expressions_missing" in codes
+    assert "big_expression_field_missing" in codes
+
+
+def test_big_expression_closeup_expression_field_without_source_still_blocks(tmp_path):
+    clips = _MULTI_ANCHOR_OK.replace(
+        "**表情锚**（起→止）：中性→怒目，引用 expressions/定妆_沈念_表情_怒目.png。",
+        "**表情锚**（起→止）：中性→怒目。")
+    root = _write_with_video_prompts(tmp_path, routes=_ROUTES_ONE, clips=clips)
+    _write_storyboard(root)
+    assert ic.run(root, EP) == 1
+    rep = _report(root)
+    codes = {f["code"] for f in rep["identity_handoff"]["findings"]}
+    assert "big_expression_expressions_missing" in codes
 
 
 def test_identity_handoff_passes_when_all_clips_lock(tmp_path):

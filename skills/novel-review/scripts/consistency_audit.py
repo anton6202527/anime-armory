@@ -3,10 +3,11 @@
 """
 consistency_audit.py — novel-review 一键一致性审计 runner（确定性机检串跑）
 
-把分散在三个 skill 的确定性检测器串成一次调用，对标 n2d-review/consistency_audit.py：
+把分散在三个 skill 的确定性检测器串成一次调用：
   1) novel-review/mechanical_check.py  —— 格式/字数/章号/视角"我"密度/术语漂移/原文照搬
   2) novel-wiki/logic_sentry.py        —— 死人复活/弃置道具复用/位置跳变（先 wiki_builder 建百科）
-  3) novel-style/extract_style.py      —— 文风漂移（每章指纹 vs 锚点指纹）
+  3) novel-review/reader_contract_sentry.py —— 逐章读者契约推进/题旨对齐
+  4) novel-style/extract_style.py      —— 文风漂移（每章指纹 vs 锚点指纹）
 
 凡某检测器输入缺失（如没角色卡 / 没锚点指纹）一律**优雅跳过并记录跳过原因**——
 不静默略过（无声上限即谎报"全覆盖"，违 repo 留痕约定）。
@@ -37,6 +38,17 @@ try:
 except Exception:  # pragma: no cover
     wiki_builder = logic_sentry = None
     load_power_system_tool = None
+
+# 2026 新增检测器：novel-review 同目录直接 import；novel-wiki 系（反派战力/时间线/配角）依赖
+# load_wiki_tools 已把 novel-wiki/scripts 加进 sys.path。任一缺失优雅置 None（subrunner 报跳过）。
+try:
+    import hook_endings, voice_drift, tone_check, thread_resolution, reader_contract_sentry  # noqa: E401  (同目录)
+except Exception:  # pragma: no cover
+    hook_endings = voice_drift = tone_check = thread_resolution = reader_contract_sentry = None
+try:
+    import antagonist_scaling, timeline_check, minor_characters  # noqa: E401  (novel-wiki/scripts)
+except Exception:  # pragma: no cover
+    antagonist_scaling = timeline_check = minor_characters = None
 try:
     extract_style = load_style_tool()
 except Exception:  # pragma: no cover
@@ -100,6 +112,7 @@ def _tool_fingerprint():
     files = {
         "consistency_audit": __file__,
         "mechanical_check": os.path.join(_HERE, "mechanical_check.py"),
+        "reader_contract_sentry": os.path.join(_HERE, "reader_contract_sentry.py"),
         "wiki_builder": getattr(wiki_builder, "__file__", "") if wiki_builder else "",
         "logic_sentry": getattr(logic_sentry, "__file__", "") if logic_sentry else "",
         "extract_style": getattr(extract_style, "__file__", "") if extract_style else "",
@@ -140,7 +153,7 @@ def _snapshot(project):
 def _result_outputs_exist(result):
     if not isinstance(result, dict):
         return False
-    for key in ("mechanical", "logic_sentry", "style_drift"):
+    for key in ("mechanical", "reader_contract", "logic_sentry", "style_drift"):
         section = result.get(key) or {}
         path = section.get("json")
         if section.get("ran") and path and not os.path.exists(path):
@@ -205,10 +218,13 @@ def run_logic(project):
     with open(wiki_path, "w", encoding="utf-8") as f:
         json.dump(wiki, f, ensure_ascii=False, indent=2)
 
+    # 传 project_root + 年龄锚点：让账本类检查（伏笔逾期/世界规则/关系温度计/张力账本）在 review 汇总也跑，
+    # 不再只在 post_write 单章路径出现（此前 review 漏了这些 ledger 维度）。
+    anchors = logic_sentry.load_numeric_anchors(project) if hasattr(logic_sentry, "load_numeric_anchors") else None
     all_alerts = []
     for idx, path in _chapters(project):
         text = read_text(path) if read_text else open(path, encoding="utf-8").read()
-        all_alerts += logic_sentry.scan_chapter(wiki, text, idx)
+        all_alerts += logic_sentry.scan_chapter(wiki, text, idx, project_root=project, numeric_anchors=anchors)
     summary = os.path.join(project, "审稿", "logic_alerts_summary.json")
     os.makedirs(os.path.dirname(summary), exist_ok=True)
     blocking = sum(1 for a in all_alerts if a["severity"] == "阻断级")
@@ -276,6 +292,61 @@ def run_power_system(project):
             "system_type": res.get("system_type")}
 
 
+def run_reader_contract(project):
+    if reader_contract_sentry is None:
+        return {"ran": False, "skipped": "reader_contract_sentry 不可导入"}
+    chapters = _chapters(project)
+    if not chapters:
+        return {"ran": False, "skipped": "无 章节/*.md"}
+    summaries = []
+    findings = []
+    for idx, _path in chapters:
+        report = reader_contract_sentry.analyze(project, idx)
+        summaries.append({
+            "chapter": idx,
+            "status": report.get("status"),
+            "blocking": report.get("blocking", 0),
+            "warnings": report.get("warnings", 0),
+        })
+        for item in report.get("findings", []):
+            item = dict(item)
+            item.setdefault("chapter", idx)
+            findings.append(item)
+    blocking = sum(1 for item in findings if item.get("severity") == "阻断级")
+    out = os.path.join(project, "审稿", "reader_contract_sentry_summary.json")
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    with open(out, "w", encoding="utf-8") as f:
+        json.dump({
+            "blocking": blocking,
+            "total": len(findings),
+            "chapters": summaries,
+            "findings": findings,
+        }, f, ensure_ascii=False, indent=2)
+    return {"ran": True, "json": out, "alerts": len(findings), "blocking": blocking}
+
+
+def _run_detector(label, module, project, out_name):
+    """统一 subrunner：缺模块/缺输入优雅跳过；否则 module.analyze(project) → 写 审稿/<out_name>，
+    汇总 alerts/blocking（阻断级计数）。新检测器 analyze 均以 project 为首参、其余有默认值。"""
+    if module is None:
+        return {"ran": False, "skipped": f"{label} 不可导入"}
+    try:
+        res = module.analyze(project)
+    except Exception as exc:  # pragma: no cover
+        return {"ran": False, "skipped": f"{label} 调用失败: {exc}"}
+    if not isinstance(res, dict):
+        return {"ran": False, "skipped": f"{label} 返回异常"}
+    alerts = res.get("alerts") or []
+    if res.get("ran") is False or (res.get("skipped") and not alerts):
+        return {"ran": False, "skipped": res.get("skipped", "skipped")}
+    blocking = sum(1 for a in alerts if isinstance(a, dict) and a.get("severity") == "阻断级")
+    out = os.path.join(project, "审稿", out_name)
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    with open(out, "w", encoding="utf-8") as f:
+        json.dump(res, f, ensure_ascii=False, indent=2)
+    return {"ran": True, "json": out, "alerts": len(alerts), "blocking": blocking}
+
+
 def main():
     p = argparse.ArgumentParser(description="novel-review 一键一致性机检 runner")
     p.add_argument("project_path")
@@ -296,9 +367,18 @@ def main():
     else:
         result = {
             "mechanical": run_mechanical(args.project_path, args.pov, args.min, args.max),
+            "reader_contract": run_reader_contract(args.project_path),
             "logic_sentry": run_logic(args.project_path),
             "style_drift": run_style(args.project_path, args.anchor, cache=cache),
             "power_system": run_power_system(args.project_path),
+            # 2026 新增维度（断章钩子/角色语感/情绪曲线/支线收口/反派战力/时间线/配角连续性）
+            "hook_endings": _run_detector("断章钩子", hook_endings, args.project_path, "hook_findings.json"),
+            "voice_drift": _run_detector("角色语感", voice_drift, args.project_path, "voice_findings.json"),
+            "tone_curve": _run_detector("情绪曲线", tone_check, args.project_path, "tone_findings.json"),
+            "thread_resolution": _run_detector("支线收口", thread_resolution, args.project_path, "thread_findings.json"),
+            "antagonist_scaling": _run_detector("反派战力", antagonist_scaling, args.project_path, "antagonist_findings.json"),
+            "timeline": _run_detector("时间线", timeline_check, args.project_path, "timeline_findings.json"),
+            "minor_characters": _run_detector("配角连续性", minor_characters, args.project_path, "minor_character_findings.json"),
             "_cache": {"hit": False, "path": _cache_path(args.project_path)},
         }
         if snapshot:

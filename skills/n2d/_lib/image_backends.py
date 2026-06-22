@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import os
 import subprocess
-from typing import Callable, Dict, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 try:  # 包内/独立两种 import 路径都可用
     from n2d_contract import classify_image_backend
@@ -120,6 +120,63 @@ def probe_backend(
         return cli_runner(spec.get("argv") or (), int(spec.get("timeout", 8)))
     # kind == "none" 或未知
     return ("unknown", str(spec.get("manual") or "无自动探针，需人工确认后端可用"))
+
+
+def scan_backends(
+    *,
+    env: Optional[Dict[str, str]] = None,
+    cli_runner: Optional[Callable[..., Tuple[Status, str]]] = None,
+    http_runner: Optional[Callable[..., Tuple[Status, str]]] = None,
+) -> Dict[str, Any]:
+    """Probe every known image backend and summarize usable choices.
+
+    `ok` is the only status counted as auto-usable. `unknown` means the backend
+    may exist but cannot be proven ready by the current probe; it needs manual
+    confirmation before a paid image run.
+    """
+    env = dict(os.environ) if env is None else env
+    results: List[Dict[str, Any]] = []
+    for backend in sorted(IMAGE_BACKEND_PROBES):
+        spec = IMAGE_BACKEND_PROBES[backend]
+        status, detail = probe_backend(
+            backend,
+            env=env,
+            cli_runner=cli_runner,
+            http_runner=http_runner,
+        )
+        item = {
+            "backend": backend,
+            "status": status,
+            "auto_usable": status == "ok",
+            "detail": detail,
+            "probe_kind": str(spec.get("kind") or "unknown"),
+        }
+        if spec.get("kind") == "cli":
+            argv = spec.get("argv") or ()
+            if argv:
+                item["cli"] = list(argv)[0]
+        elif spec.get("kind") == "env":
+            var = str(spec.get("env") or "")
+            item["env"] = var
+            item["env_present"] = bool(var and env.get(var))
+        results.append(item)
+
+    usable = [r for r in results if r["auto_usable"]]
+    needs_confirmation = [r for r in results if r["status"] == "unknown"]
+    down = [r for r in results if r["status"] == "down"]
+    return {
+        "kind": "n2d_image_backend_scan",
+        "verified": CATALOG_VERIFIED,
+        "results": results,
+        "usable_backends": [r["backend"] for r in usable],
+        "needs_confirmation_backends": [r["backend"] for r in needs_confirmation],
+        "down_backends": [r["backend"] for r in down],
+        "summary": {
+            "usable_count": len(usable),
+            "needs_confirmation_count": len(needs_confirmation),
+            "down_count": len(down),
+        },
+    }
 
 
 def candidate_snapshot() -> Dict[str, object]:

@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""novel-progress/scan.py — 写小说进度扫描器（只读）。"""
+"""novel-progress/scan.py — 写小说进度扫描器（只读）。
+
+默认扫描 `创作区/写小说/`，并兼容旧 `写小说/`。
+"""
 import os
 import sys
 from concurrent.futures import ThreadPoolExecutor
@@ -22,6 +25,7 @@ except Exception:  # qa_gate 缺失时优雅降级
     collect_gate_status = None
     format_gate_status = None
 
+CREATION_ROOT_DIR = "创作区"
 LINE_DIR = "写小说"
 
 def find_repo_root(start):
@@ -31,6 +35,15 @@ def find_repo_root(start):
             return d
         d = os.path.dirname(d)
     return os.path.abspath(start)
+
+
+def line_root_candidates(repo_root):
+    """Return preferred line roots, newest layout first, then legacy fallback."""
+    return [
+        os.path.join(repo_root, CREATION_ROOT_DIR, LINE_DIR),
+        os.path.join(repo_root, LINE_DIR),
+    ]
+
 
 def report(root, out):
     res = novel_summarize(root)
@@ -83,15 +96,16 @@ def main():
             if os.path.isfile(os.path.join(root, "_进度.md")):
                 works.append((root, os.path.relpath(root, repo_root)))
     else:
-        base = os.path.join(repo_root, LINE_DIR)
-        if os.path.isdir(base):
+        for base in line_root_candidates(repo_root):
+            if not os.path.isdir(base):
+                continue
             for name in sorted(os.listdir(base)):
                 root = os.path.join(base, name)
                 if os.path.isfile(os.path.join(root, "_进度.md")):
-                    works.append((root, os.path.join(LINE_DIR, name)))
+                    works.append((root, os.path.relpath(root, repo_root)))
 
     if not works:
-        print(f"未找到任何含 _进度.md 的小说。线根目录：{LINE_DIR}/")
+        print(f"未找到任何含 _进度.md 的小说。线根目录：{CREATION_ROOT_DIR}/{LINE_DIR}/")
         return
 
     def run_report(root, rel):

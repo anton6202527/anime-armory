@@ -2,6 +2,7 @@
 cd skills/n2d-review/scripts && python -m pytest test_consistency_ledger.py
 """
 import consistency_ledger as cl
+import json
 
 
 def test_worse_and_band_to_sev():
@@ -49,3 +50,22 @@ def test_build_ledger_overall_is_worst_of_three():
     # 综合排序：high 排在前
     assert led["rows"][0]["id"] == "CHAR_01"
     assert led["counts"]["high"] == 1
+
+
+def test_collect_findings_uses_full_image_qc_findings(tmp_path):
+    ep = "第1集"
+    report = tmp_path / "生产数据" / "image_qc" / ep / f"image_qc_{ep}.json"
+    report.parent.mkdir(parents=True)
+    report.write_text(json.dumps({
+        "semantic_drift": {"available": True, "findings": [
+            {"level": "warn", "code": "semantic_drift_low", "msg": "PROP_01 铜镜 语义漂移疑似"},
+        ]},
+        "checks": {},
+        "lint": {"findings": []},
+        "qc_environment": {"precision_level": "full"},
+    }, ensure_ascii=False), encoding="utf-8")
+
+    findings = cl.collect_findings(str(tmp_path), ep)
+
+    assert any(f["source"] == "detect" and f["sev"] == "warn" and "PROP_01" in f["text"]
+               for f in findings)

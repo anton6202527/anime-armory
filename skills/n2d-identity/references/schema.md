@@ -7,7 +7,7 @@
 路径：
 
 ```text
-制漫剧/<剧名>/生产数据/identity_adapter_matrix.json
+创作区/制漫剧/<剧名>/生产数据/identity_adapter_matrix.json
 ```
 
 顶层：
@@ -16,7 +16,7 @@
 {
   "kind": "n2d_identity_adapter_matrix",
   "version": 1,
-  "root": "制漫剧/剧名",
+  "root": "创作区/制漫剧/剧名",
   "generated_at": "2026-06-08T00:00:00Z",
   "summary": {},
   "forms": []
@@ -102,7 +102,7 @@ LoRA ready 由 `n2d-lora` 生命周期写回。`model_path/base_model/trigger/mo
 路径：
 
 ```text
-制漫剧/<剧名>/生产数据/identity_drift_report.json
+创作区/制漫剧/<剧名>/生产数据/identity_drift_report.json
 ```
 
 顶层：
@@ -111,7 +111,7 @@ LoRA ready 由 `n2d-lora` 生命周期写回。`model_path/base_model/trigger/mo
 {
   "kind": "n2d_identity_drift_report",
   "version": 1,
-  "root": "制漫剧/剧名",
+  "root": "创作区/制漫剧/剧名",
   "generated_at": "2026-06-08T00:00:00Z",
   "available": true,
   "episodes": ["第1集", "第2集"],
@@ -137,7 +137,7 @@ LoRA ready 由 `n2d-lora` 生命周期写回。`model_path/base_model/trigger/mo
       "bad_episodes": ["第1集", "第2集"],
       "first_bad_episode": "第2集",
       "reason": "2 集脸部相似度低于阈值（第1集,第2集）；first_bad_episode=第2集（出现过 block 级漂移）；LoRA status=candidate，reference_group/原生主体未压住跨集漂移",
-      "next_command": "python3 skills/n2d-lora/scripts/lora.py init '制漫剧/剧名' --character-id CHAR_WANG --form '常态'"
+      "next_command": "python3 skills/n2d-lora/scripts/lora.py init '创作区/制漫剧/剧名' --character-id CHAR_WANG --form '常态'"
     }
   ],
   "notes": []
@@ -159,7 +159,7 @@ LoRA ready 由 `n2d-lora` 生命周期写回。`model_path/base_model/trigger/mo
 路径：
 
 ```text
-制漫剧/<剧名>/生产数据/identity_voice_drift_report.json
+创作区/制漫剧/<剧名>/生产数据/identity_voice_drift_report.json
 ```
 
 由 `voice_consistency.py` 产出（`identity.py --write` 在存在配音时长清单时顺带跑）。输入：各集
@@ -172,7 +172,7 @@ LoRA ready 由 `n2d-lora` 生命周期写回。`model_path/base_model/trigger/mo
 {
   "kind": "n2d_identity_voice_drift_report",
   "version": 1,
-  "root": "制漫剧/剧名",
+  "root": "创作区/制漫剧/剧名",
   "generated_at": "2026-06-10T00:00:00Z",
   "episodes": [
     {"episode": "第1集", "manifest": "合成/第1集/配音/时长清单.json", "status": "ok", "lines": 16,
@@ -224,8 +224,8 @@ LoRA ready 由 `n2d-lora` 生命周期写回。`model_path/base_model/trigger/mo
 路径：
 
 ```text
-制漫剧/<剧名>/生产数据/identity_voice_print_第N集.json
-制漫剧/<剧名>/生产数据/consistency_findings_voice_print_第N集.json
+创作区/制漫剧/<剧名>/生产数据/identity_voice_print_第N集.json
+创作区/制漫剧/<剧名>/生产数据/consistency_findings_voice_print_第N集.json
 ```
 
 由 `voice_print_consistency.py` 产出（`identity.py --write` 在存在配音时长清单时逐集顺带跑）。

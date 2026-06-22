@@ -59,7 +59,8 @@ BACKEND_MAX_SECONDS = VIDEO_BACKEND_MAX_SECONDS
 # 仍是两个刻意不合并的关注点，身份类能力词若在契约改名，platform_profiles 里的同名字串要同步。
 BACKEND_MOTION_CONTROL = MOTION_CONTROL_PROFILES
 
-SPEECH_SHOT_TYPES = {"dialogue_shot_reverse", "dialogue_closeup"}
+SPEECH_SHOT_TYPES = {"dialogue_shot_reverse", "dialogue_closeup", "reveal_reaction_chain", "public_confrontation", "relationship_turn"}
+NARRATIVE_STATE_SHOT_TYPES = {"reveal_reaction_chain", "public_confrontation", "relationship_turn"}
 
 # 关闭对口型的 _设置.md 值；其余值（开启/配音对齐/原生口型/on…）视为 opt-in。
 LIPSYNC_OFF_VALUES = {"", "关闭", "否", "off", "no", "none", "disable", "disabled"}
@@ -69,10 +70,13 @@ COMPLEX_TEMPLATES = {
     "fight_exchange",
     "chase",
     "dialogue_shot_reverse",
+    "reveal_reaction_chain",
+    "public_confrontation",
     "magic_burst",
     "flight",
     "intimate_interaction",
     "hug_or_pull",
+    "relationship_turn",
     "multi_character_same_frame",
     "ensemble_blocking",
     "multi_person_blocking",
@@ -159,6 +163,23 @@ def av_mode_from_settings(settings: Mapping[str, str]) -> str:
     判定走 n2d_contract.is_native_av_mode（与 n2d_settings.is_native_av / gate 同源）。"""
     mode = settings.get("制作模式", "") or PRODUCTION_MODE_DEFAULT
     return "native_av" if is_native_av_mode(mode) else "voice_first"
+
+
+# ── 时效档（成本轴·与质量档正交·G8）────────────────────────────────────────────
+# 2026 视频生成 API 首现「batch/隔夜半价」（Sora2 Batch 24h SLA -50%、Seedance flex -50% 预告）。
+# 非赶投放窗口的量产放量集，可路由 batch_24h 档省成本；首集打样/赶投放走 realtime。
+# **诚实边界**：实际 async batch endpoint 由后端能力决定，属执行适配层 follow-up（视频后端 batch
+# 通道接入后才真省）；本函数只产**路由意图**，供 dashboard 拆 realtime vs batch 成本账与执行侧消费。
+URGENCY_REALTIME = "realtime"
+URGENCY_BATCH = "batch_24h"
+
+
+def urgency_tier_from_settings(settings: Mapping[str, str]) -> str:
+    """项目级时效档路由意图。纯函数·可测。读 `投放时效`（实时/隔夜批量），默认 realtime（安全·绝不静默延迟）。"""
+    raw = str(settings.get("投放时效", "") or "").strip().lower()
+    if raw in ("隔夜批量", "批量", "隔夜", "batch", "batch_24h", "flex", "非紧急"):
+        return URGENCY_BATCH
+    return URGENCY_REALTIME
 
 
 def load_storyboard(root: Path, episode: str, storyboard: Optional[Path] = None) -> Dict[str, Any]:
@@ -540,7 +561,8 @@ def seam_relay_plan(clip: Mapping[str, Any], primary: str,
 # 判据：身份吃重/高风险镜值 pro（脸/接触/多人/原生台词/已升锁）；空镜/无人物通用镜走 fast 省钱。
 HIGH_TIER_SHOT_TYPES = {
     "fight_exchange", "hug_or_pull", "intimate_interaction", "dialogue_closeup",
-    "dialogue_shot_reverse", "multi_character_same_frame", "ensemble_blocking",
+    "dialogue_shot_reverse", "reveal_reaction_chain", "public_confrontation", "relationship_turn",
+    "multi_character_same_frame", "ensemble_blocking",
     "multi_person_blocking",
 }
 HIGH_TIER_RISK_FLAGS = {
@@ -788,6 +810,58 @@ def _route_native_av_speech(clip: Mapping[str, Any], shot_type: str, default_bac
     }
 
 
+def _route_narrative_state_scene(
+    clip: Mapping[str, Any],
+    shot_type: str,
+    default_backend: str,
+    *,
+    native_audio_setting: str,
+    lip_sync_setting: str,
+    av_mode: str,
+) -> Dict[str, Any]:
+    """真相/对质/关系转折镜头：优先身份、表情和叙事状态一致性，而非普通说话镜快捷路由。"""
+    primary = "kling"
+    fallback = ["veo", "seedance"] if _lipsync_enabled(lip_sync_setting) or "保留" in native_audio_setting else ["seedance", default_backend]
+    template_notes = {
+        "reveal_reaction_chain": (
+            "reveal scenes are identity- and reaction-chain-sensitive",
+            "lock reveal_object, knowledge_order, reaction_beats, and cut_point from template_contract",
+            "Split into evidence insert, first reaction, and follow-up reaction if faces or evidence drift.",
+        ),
+        "public_confrontation": (
+            "confrontations need stable speaker focus, evidence ladder, and crowd hierarchy",
+            "lock stakes, evidence_ladder, power_shift, and crowd_reaction_order from template_contract",
+            "Split into evidence insert, speaker OTS, judge/witness reaction, and crowd cutaway if staging drifts.",
+        ),
+        "relationship_turn": (
+            "relationship turns depend on micro-expression, eyeline, and precise before/after state",
+            "lock relationship_state_before, turning_action, subtext, and relationship_state_after from template_contract",
+            "Switch to single-face CU, hand insert, or OTS if the two-shot overplays contact or expression.",
+        ),
+    }[shot_type]
+    rationale = [
+        template_notes[0],
+        "these shots carry irreversible story state changes, so visual identity, eyeline, and reaction order outrank generic speech routing",
+    ]
+    prompt_requirements = [
+        "mark mouth_visible when faces speak; speech_policy=no_native_speech unless this clip is explicitly rerouted to a native AV backend",
+        template_notes[1],
+    ]
+    if av_mode == "native_av":
+        rationale.append("制作模式=原生音画，但本专项模板优先锁身份/表情/反应链；若必须原生人声，拆成说话特写或手动改用 native AV fallback。")
+        prompt_requirements.append("native_av_project_note=visual_consistency_first_for_narrative_state_scene")
+    return {
+        "primary_backend": primary,
+        "fallback_backends": [b for b in fallback if b != primary],
+        "mode": "image2video",
+        "native_audio_policy": "none",
+        "identity_requirement": "character_id_or_reference_group",
+        "rationale": rationale,
+        "prompt_requirements": prompt_requirements,
+        "degrade_plan": template_notes[2],
+    }
+
+
 def choose_route(
     clip: Mapping[str, Any],
     shot_type: str,
@@ -806,6 +880,16 @@ def choose_route(
             route["rationale"].append("制作模式=原生音画，但视频模型路由=固定生视频模型；固定选择优先，不自动切 native_speech 后端")
             route["prompt_requirements"].append("speech_policy=no_native_speech unless the fixed backend is explicitly configured downstream for native AV")
         return route
+
+    if shot_type in NARRATIVE_STATE_SHOT_TYPES:
+        return _route_narrative_state_scene(
+            clip,
+            shot_type,
+            default_backend,
+            native_audio_setting=native_audio_setting,
+            lip_sync_setting=lip_sync_setting,
+            av_mode=av_mode,
+        )
 
     # 原生音画模式：说话镜优先走原生同步音画路由（绕过配音先行）。其余镜头走常规路由。
     if av_mode == "native_av" and _is_speech_shot(clip, shot_type):
@@ -1046,7 +1130,10 @@ def risk_flags_for_clip(clip: Mapping[str, Any], shot_type: str, primary_backend
         flags.append("contact_motion")
         flags.append("feature_melting_risk")
         flags.append("physical_interaction")
-    if clip_has_named_characters(clip) and shot_type in {"fight_exchange", "flight", *CONTACT_SHOT_TYPES, *MULTI_PERSON_SHOT_TYPES}:
+    if clip_has_named_characters(clip) and shot_type in {
+        "fight_exchange", "flight", "reveal_reaction_chain", "public_confrontation", "relationship_turn",
+        *CONTACT_SHOT_TYPES, *MULTI_PERSON_SHOT_TYPES,
+    }:
         flags.append("identity_drift_risk")
     if shot_type == "empty_establishing":
         flags.append("low_identity_risk")
@@ -1393,6 +1480,7 @@ def route_episode(
         except Exception:
             registry = {}
     backend_affinity = build_backend_affinity(registry)
+    urgency_tier = urgency_tier_from_settings(settings)  # G8 时效档（成本轴·项目级意图）
     plan = {
         "kind": VIDEO_MODEL_ROUTES_KIND,
         "version": 1,
@@ -1401,6 +1489,7 @@ def route_episode(
         "routing_mode": routing_mode,
         "production_mode": settings.get("制作模式", "") or PRODUCTION_MODE_DEFAULT,
         "av_mode": av_mode,
+        "urgency_tier": urgency_tier,
         "t2v_action_channel": t2v_action,
         "default_backend": default_backend,
         "configured_default_backend": configured_default_backend,
@@ -1424,6 +1513,9 @@ def route_episode(
             for i, clip in enumerate(clips, 1)
         ],
     }
+    # G8 时效档：项目级意图逐镜留痕，供 dashboard 拆 realtime vs batch 成本账、执行侧消费 batch 通道。
+    for _entry in plan["routes"]:
+        _entry["urgency_tier"] = urgency_tier
     # 跨集后端锁：第1集打样落 设定库/model_routes_baseline.json，后续集按 shot_type 锚定同一后端，
     # 防"换集漂到别的后端→同角色跨集风格/质感漂移"。baseline=None 时不锚定（首集或显式跳过）。
     if baseline is None and anchor_baseline:
@@ -1612,7 +1704,7 @@ def write_plan(plan: Mapping[str, Any], root: Path, episode: str) -> Dict[str, P
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Route n2d video clips to suitable model backends.")
-    parser.add_argument("root", help="作品根, e.g. 制漫剧/剧名")
+    parser.add_argument("root", help="作品根, e.g. 创作区/制漫剧/剧名")
     parser.add_argument("episode", help="第N集")
     parser.add_argument("--storyboard", help="override storyboard.json path")
     parser.add_argument("--write", action="store_true", help="write video_model_routes.json/md under 出视频/第N集/prompt")

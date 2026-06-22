@@ -11,8 +11,7 @@
 + 单 Clip 时长上限校验（chosen primary 的 per-backend 时长上限按 platforms.md 文档化，
 镜头时长超 primary 上限 → block；接近上限 → warn）。
 
-镜像 n2d-model-router 的精神（能力驱动、稳定可 gate），但自包含纯标准库，
-不 import n2d-* / mv-* / ad-craft。
+路由按能力驱动，产物稳定可 gate；本脚本自包含纯标准库，不导入其它系列或上游契约脚本。
 
 用法：
     python3 route.py <作品根> [--json 出视频/分镜/prompt/video_model_routes.json]
@@ -196,7 +195,7 @@ def clip_length_cap_check(primary, duration):
     return None
 
 
-# ── 三轴：质量档 / 视频运动参考 / 多镜单次生成（借鉴 n2d-model-router，ad 自包含重实现）──────
+# ── 三轴：质量档 / 视频运动参考 / 多镜单次生成（ad 自包含实现）──────────────
 # 质量档：身份/品牌吃重镜值 pro（产品 hero/代言人特写/end card 品牌定格），普通镜走 fast 省成本。
 HIGH_TIER_SHOT_TYPES = {"product_hero", "emotion_closeup", "endcard"}
 # 多镜单次生成的甜点镜型：连续 demo 步骤 / 产品多角度——天然接力、最适合一次 co-generate 消缝。

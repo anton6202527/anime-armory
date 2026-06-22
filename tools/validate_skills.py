@@ -5,6 +5,7 @@
   - E1  交付端 VCS-free：skill 不得用 git 做本仓状态/基线/变更检测（内容快照除外）。
   - B2  推荐 skill 写裸名：skill 的 SKILL.md/.sh/.py 不得把 skill 当斜杠命令写成 /skillname
          （含脚本里打印给用户看的 echo —— agent 可能把 /name 当内置斜杠命令）。
+  - B7  n2d 人物定妆基础包不可缺失：宪法、n2d-image 铁律、gate 常量和回归测试必须同时存在。
   - F1  改了 skill 集合必须同步 skills/README.md 索引：每个 skills/<name>/ 都要在 README 出现。
   - F3  入口文档同步：AGENTS/GEMINI/CLAUDE 不得保留过期命令或旧路径，关键入口保持一致。
 
@@ -70,6 +71,55 @@ ENTRY_FORBIDDEN = {
     "tools/check_independence.py": "旧 independence audit 命令，应用 tools/independence-audit/scripts/check_independence.py",
     "/progress": "旧斜杠进度入口，入口文档应写裸 skill 名或直接读 _进度.md",
     ".claude/创作偏好-默认.md": "Claude 私有旧路径不应作为唯一全局默认；应写工具中立私有默认并注明 .claude legacy",
+}
+
+B7_REQUIRED_SNIPPETS = {
+    "docs/skill-design-principles.md": (
+        "B7 人物定妆基础包不可缺失铁律",
+        "七类基础定妆包",
+        "三视图不能替代拆分 PNG",
+        "同源母本派生",
+        "derivation.method/source_path/source_sha256/crop_box",
+        "planned",
+    ),
+    "skills/n2d-image/SKILL.md": (
+        "角色定妆基础包铁律",
+        "基础包至少七类",
+        "不能替代正/45°/侧/背/半身/脸锚任一拆图",
+        "同源母本派生铁律",
+        "derive_makeup_pack.py",
+        "derivation.method/source_path/source_sha256/crop_box",
+        "未过人审不得标 ready",
+    ),
+    "skills/n2d-image/scripts/derive_makeup_pack.py": (
+        "turnaround_split",
+        "front_crop",
+        "source_sha256",
+    ),
+    "skills/n2d-image/scripts/codex_image_runner.py": (
+        "requires_human_review_before_ready",
+        "review_pending",
+        "N2D_HUMAN_REVIEWED_SHARED",
+    ),
+    "skills/n2d-image/scripts/test_derive_makeup_pack.py": (
+        "test_derive_project_splits_turnaround_and_front_crops",
+        "turnaround_split",
+        "front_crop",
+    ),
+    "skills/n2d-review/scripts/gate.py": (
+        "REQUIRED_CHARACTER_MAKEUP_REFERENCE_GROUP_FIELDS",
+        "REQUIRED_CHARACTER_MAKEUP_ATLAS_VIEWS",
+        "CHARACTER_MAKEUP_BODY_REFERENCE_FIELDS",
+        "DERIVED_CHARACTER_MAKEUP_REFERENCE_FIELDS",
+        "derivation.method/source_path/source_sha256/crop_box",
+        "三视图人审拼版不能替代正/45°/侧/背等拆分参考",
+    ),
+    "skills/n2d-review/scripts/test_gate.py": (
+        "test_identity_registry_missing_three_quarter_is_blocked",
+        "test_identity_registry_planned_makeup_reference_is_blocked",
+        "test_identity_registry_ready_split_reference_requires_same_source_derivation",
+        "test_identity_registry_turnaround_cannot_replace_split_makeup_refs",
+    ),
 }
 
 
@@ -155,9 +205,25 @@ def check_entry_docs_sync() -> list[str]:
     return bad
 
 
+def check_n2d_character_makeup_constitution() -> list[str]:
+    """B7: n2d 人物定妆基础包铁律不能只剩口号，必须有文档、gate 和测试锚点。"""
+    bad: list[str] = []
+    for rel, snippets in B7_REQUIRED_SNIPPETS.items():
+        p = REPO / rel
+        if not p.is_file():
+            bad.append(f"{rel}: 文件不存在，B7 人物定妆基础包铁律失去覆盖")
+            continue
+        text = p.read_text("utf-8", "ignore")
+        for needle in snippets:
+            if needle not in text:
+                bad.append(f"{rel}: 缺少 B7 守护片段 '{needle}'")
+    return bad
+
+
 CHECKS = {
     "E1": ("交付端 VCS-free（无 git 调用）", check_no_git_calls),
     "B2": ("推荐 skill 写裸名（无 /skillname）", check_bare_skill_refs),
+    "B7": ("n2d 人物定妆基础包不可缺失", check_n2d_character_makeup_constitution),
     "F1": ("skills/README.md 索引同步", check_readme_index),
     "F3": ("入口文档同步", check_entry_docs_sync),
 }

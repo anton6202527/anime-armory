@@ -3,7 +3,7 @@
 """
 init_project.py — 建【制MV】项目骨架（输入=成品歌或歌曲企划，做视频）。
 
-制MV 线可消费一首"已经做好的歌"（来自 写歌/<曲名>/ 或用户给的音频），
+制MV 线可消费一首"已经做好的歌"（用户给的音频或本项目内文件），
 也可先按歌曲企划做 rough 视觉蓝图，等最终歌入库后再进入正式卡点和 timeline。
 mv 系列自包含，不复用其它家族 skill；出图/出视频/合成都由 mv 自家 skill 产出。
 
@@ -52,9 +52,9 @@ def build_visual_blueprint(title, meta):
         else "正式蓝图输入就绪"
     )
     song_line = (
-        "`歌/song.wav`（待 song 线产出或用户上传最终音频）"
+        "`歌/song.wav`（待用户提供或本项目内补入最终音频）"
         if meta["song_timing"] == "后配歌曲" and not meta["has_song"]
-        else "`歌/song.wav`（来自 写歌/<曲名>/ 或用户提供）"
+        else "`歌/song.wav`（本项目输入音频）"
     )
     lyrics_line = (
         "`词/lyrics.md`（可先用草稿；最终歌入库后按实唱复核）"
@@ -122,7 +122,7 @@ def build_progress(title, meta):
 > 平台={meta['target_platform']} 画幅={meta['aspect']} 段落={len(meta['structure'])}。歌曲输入时序={meta['song_timing']}。输入歌={'已入' if meta['has_song'] else '待放入 歌/'}。
 
 ## 输入
-- [{'x' if meta['has_song'] else ' '}] 歌/song.wav（成品歌，来自 写歌/ 或用户）
+- [{'x' if meta['has_song'] else ' '}] 歌/song.wav（本项目输入音频）
 - [{'x' if meta['has_lyrics'] else ' '}] 词/lyrics.md（卡拉OK对齐用）
 
 ## 制MV 阶段
@@ -156,20 +156,20 @@ def main():
     ap.add_argument("--plan-granularity", default=contract.DEFAULT_SETTINGS["MV规划粒度"], choices=contract.MV_PLAN_GRANULARITY)
     ap.add_argument("--beat-strategy", default=contract.DEFAULT_SETTINGS["卡点策略"], choices=contract.MV_BEAT_STRATEGIES)
     ap.add_argument("--video-model", default=None, choices=contract.MV_VIDEO_MODELS,
-                    help="首跑选择的生视频模型；应由 agent 先问用户，再传入本脚本")
+                    help="可选：固定/覆盖生视频模型；默认不在立项时强问")
     ap.add_argument("--video-channel", default=None, choices=contract.MV_VIDEO_CHANNELS,
-                    help="首跑选择的生视频渠道/产品；应由 agent 先问用户，再传入本脚本")
+                    help="可选：固定/覆盖生视频渠道/产品；默认在 mv-video 阶段按可用入口处理")
     ap.add_argument("--video-backend", default=None, choices=contract.MV_VIDEO_BACKENDS,
                     help="兼容旧参数：等同于 --video-channel")
     ap.add_argument("--video-spec", default=contract.DEFAULT_SETTINGS["出视频规格"], choices=contract.MV_VIDEO_SPECS)
     ap.add_argument("--ai-visual-usage", default=contract.DEFAULT_SETTINGS["AI视觉使用披露"], choices=contract.AI_VISUAL_USAGE_MODES)
     ap.add_argument("--song-rights-status", default="unknown",
                     help="original/licensed/public-domain/unknown（默认 unknown：不静默假设自有；"
-                         "付费视觉阶段前 gate 会要求确认，与 novel 线权利默认一致）")
+                         "付费视觉阶段前 gate 会要求确认）")
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
 
-    out_root = os.path.abspath(args.out or os.path.join("制MV", slug(args.title)))
+    out_root = os.path.abspath(args.out or os.path.join("创作区", "制MV", slug(args.title)))
     if os.path.exists(out_root):
         print(f"[err] 目标已存在：{out_root}（换 --title/--out 或先删）", file=sys.stderr)
         sys.exit(2)
@@ -256,7 +256,7 @@ def main():
     print("     节拍/ 字幕/ 设定/ 出图/ 出视频/ 合规/ ← 预建（mv 自家阶段产物）")
     print(f"     _meta: kind=mv 平台={args.platform} 画幅={args.aspect} 风格={args.visual_style} 歌曲输入时序={song_timing}")
     if song_timing == "后配歌曲" and not has_song:
-        print("[next] mv-script rough视觉蓝图 → song/用户上传成品歌 → mv-beat → mv-script复核 → mv-plan → mv-image → mv-video → mv-compose")
+        print("[next] mv-script rough视觉蓝图 → 补入成品歌 → mv-beat → mv-script复核 → mv-plan → mv-image → mv-video → mv-compose")
     else:
         print("[next] 放入/确认成品歌 → mv-beat → mv-script → mv-plan → mv-image → video_jobs.py → mv-video → mv-lyric-sync → mv-compose")
 

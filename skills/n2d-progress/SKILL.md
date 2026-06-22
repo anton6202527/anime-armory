@@ -1,17 +1,17 @@
 ---
 name: n2d-progress
-description: 制漫剧(n2d)「当前进度仪表盘 + 下一步建议」（只读 QA，不生产内容）。只扫描制漫剧作品根的 `_进度.md` 逐集流程矩阵，压缩汇总每部剧的完成度 + 生产前沿（下一步该跑哪个 n2d skill）+ 可并行事项 + 次要缺口，并给出可一键继续的建议；出图/出视频/合成/配音等花钱·不可逆·合规步骤会先提醒确认。不改任何文件，也不管 写小说/写歌/制MV 三条线。Use when the user wants an n2d/漫剧 status overview or asks "what's next" for a 漫剧 project. Triggers progress, checklist, check, status, 当前进度, 进度, 进展, 漫剧进度, 到哪了, 到哪一步, 下一步, 下一步做什么, 还差什么, 还差啥, 卡在哪, 看进度, 查进度, 进度查询, 接着做, n2d-progress.
+description: 制漫剧(n2d)「当前进度仪表盘 + 下一步建议」（只读 QA，不生产内容）。只扫描制漫剧作品根的 `_进度.md` 逐集流程矩阵，压缩汇总每部剧的完成度 + 生产前沿（下一步该跑哪个 n2d skill）+ 可并行事项 + 次要缺口，并给出可一键继续的建议；出图/出视频/合成/配音等花钱·不可逆·合规步骤会先提醒确认。不改任何文件。Use when the user wants an n2d/漫剧 status overview or asks "what's next" for a 漫剧 project. Triggers progress, checklist, check, status, 当前进度, 进度, 进展, 漫剧进度, 到哪了, 到哪一步, 下一步, 下一步做什么, 还差什么, 还差啥, 卡在哪, 看进度, 查进度, 进度查询, 接着做, n2d-progress.
 ---
 
 # n2d-progress — 漫剧进度仪表盘 + 下一步建议
 
 你是制漫剧线的**只读进度向导**。只做三件事：① 扫描每部剧的 `_进度.md`，② 报告完成度 + 生产前沿 + 可并行事项，③ 给出下一步该跑哪个 n2d skill 的具体建议并**询问是否现在就跑**。**绝不修改任何文件、绝不自己生产内容**——真正干活交给被推荐的 stage skill。
 
-**范围**：只管 `制漫剧/`（n2d）。写小说 / 写歌 / 制MV 三条线**不在本 skill 范围内**，用户问那些线时说明本 skill 只查漫剧，让其去对应线的总调度。
+**范围**：只管 `创作区/制漫剧/`（n2d）。
 
 ## 输入 / 输出 / 读写边界
 
-- **输入**：`制漫剧/<剧名>/_进度.md`、`_设置.md`、各横切 readiness 产物、可选 skill 更新计划。
+- **输入**：`创作区/制漫剧/<剧名>/_进度.md`、`_设置.md`、各横切 readiness 产物、可选 skill 更新计划。
 - **输出**：终端摘要：阶段完成度、横切就绪、当前前沿、可并行事项、次要缺口和下一步建议。
 - **读写边界**：严格只读；不写 `_进度.md`、不写生产数据、不启动付费/不可逆阶段。
 - **契约关系**：主流程列和横切 readiness 都来自 `skills/n2d/_lib/n2d_contract.py`；`CROSS_CUTTING_READINESS` 用于“横切就绪”，`CROSS_CUTTING_TOOLS` 只做调度说明，不在本行展示。
@@ -21,7 +21,7 @@ description: 制漫剧(n2d)「当前进度仪表盘 + 下一步建议」（只�
 用自带脚本（纯标准库，系统 Python 即可，**无需 conda env**）。它解析进度表并**压缩输出**，不会把上百行的逐集大表灌进上下文：
 
 ```bash
-python3 skills/n2d-progress/scan.py                 # 扫描 制漫剧/ 下所有剧
+python3 skills/n2d-progress/scan.py                 # 扫描 创作区/制漫剧/ 下所有剧
 python3 skills/n2d-progress/scan.py <剧根> [...]      # 只看指定剧（含 _进度.md 的目录）
 ```
 
@@ -109,7 +109,7 @@ n2d 阶段顺序（模式感知，记牢）：`n2d-script(改编)` → 按 `制�
 
 - 不写 / 不改 `_进度.md` 或任何产物（回写进度是各 stage skill 的职责）。
 - 不替用户决定花钱的步骤——只建议 + 询问。
-- 不碰 写小说 / 写歌 / 制MV 三条线。
+- 不碰其它生产线。
 - 表格认不出（自由格式 `_进度.md`）时，据实说明，不要硬套。
 
 ## 常见错误

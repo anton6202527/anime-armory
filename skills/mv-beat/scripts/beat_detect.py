@@ -57,7 +57,7 @@ def tempo_candidates(bpm):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("root", help="制MV/<曲名>/ 作品根")
+    ap.add_argument("root", help="创作区/制MV/<曲名>/ 作品根")
     ap.add_argument("--meter", type=int, default=4, help="每小节拍数（4/4 默认 4）")
     args = ap.parse_args()
 
@@ -65,7 +65,7 @@ def main():
     if not song:
         meta = load_meta(args.root)
         if meta.get("song_timing") == "后配歌曲":
-            sys.exit(f"找不到 {args.root}/歌/song.*（后配歌曲路线需先由 song 线产出或用户上传最终成品歌）")
+            sys.exit(f"找不到 {args.root}/歌/song.*（后配歌曲路线需先补入最终成品歌）")
         sys.exit(f"找不到 {args.root}/歌/song.*（先放入成品歌）")
 
     try:

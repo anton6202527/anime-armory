@@ -71,10 +71,30 @@
 }
 ```
 
-## 5. 逻辑告警（`审稿/logic_alerts_<章>.json`）
+## 5. 张力账本（`设定/tension_ledger.json`）
 
-新增类型：
-- `foreshadowing_overdue`（阻断级）：高价值种子超过 `expected_payoff_chapter` 仍未处理。
+情绪 ROI 追踪（schema 见 `novel-craft/references/tension-ledger.md`）：`unresolved_hooks`（高悬念钩子）、
+`reader_promises`（读者承诺 + `deadline_event`）、`chapter_tension_curve`（逐章张力分 + 主导情绪）。
+由 LLM/编辑经 state_delta 维护（与 character_changes/伏笔种子同一套纪律）；逻辑哨兵据此跑钩子过期/
+承诺违约/张力疲劳三规则。
+
+## 6. 剧情环 vs 伏笔账本——明确分工（去冗余）
+
+两者都"追埋了没收"，但**分层不同，勿双重登记同一条**：
+- **`foreshadowing_ledger.json`（细伏笔·机检层）**：具体种子（某物/某话/某细节）→ 回收章。有确定性
+  机检（`foreshadow_ledger.py` / 逻辑哨兵 `foreshadowing_overdue`：高价值超窗 = 阻断级）。**需要机器盯
+  回收率的，登记在这里。**
+- **`剧情环.json`（卷级结构大环·提醒层）**：明线循环/角色弧/卷级悬念这类**结构性大环**，作 `draft_packets`
+  写作包里的人读提醒（不做独立机检，避免与伏笔账本重复打分）。**结构编排提示登记在这里。**
+- 同一条线索二选一登记：细节级 → 伏笔账本；结构级 → 剧情环。
+
+## 7. 逻辑告警（`审稿/logic_alerts_<章>.json`）
+
+类型：
+- `foreshadowing_overdue`（建议级）：高价值种子超过 `expected_payoff_chapter` 仍未处理。
 - `relationship_flip`（建议级）：人物关系温度在单章内波动超过 40 度（除非有重大转折事件）。
-- `world_rule_violation`（阻断级）：违反了 `world_state_ledger` 中已确立的演进事实。
+- `world_rule_violation`（阻断级）：违反 `world_state_ledger` 中已确立/未确立的演进事实（需声明 `forbidden_before`/`forbidden_after` 关键词）。
+- `hook_stale`（建议级）：`urgency=high` 钩子超过 10 章未解。
+- `promise_broken`（阻断级）：`deadline_event` 已在本章触发但读者承诺未兑现。
+- `tension_fatigue`（建议级）：连续 3 章 `tension_score < 5`。
 

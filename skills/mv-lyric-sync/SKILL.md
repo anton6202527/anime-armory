@@ -20,8 +20,8 @@ pip install whisperx   # 首次下 wav2vec2 对齐模型；CPU 可跑(慢)，有
 
 ## 用法
 ```bash
-python3 <skill>/scripts/align.py 制MV/<曲名> [--lang zh] [--device cpu]
-python3 <skill>/scripts/align.py 制MV/<曲名> --audio 制MV/<曲名>/歌/vocals.wav
+python3 <skill>/scripts/align.py 创作区/制MV/<曲名> [--lang zh] [--device cpu]
+python3 <skill>/scripts/align.py 创作区/制MV/<曲名> --audio 创作区/制MV/<曲名>/歌/vocals.wav
 ```
 - 读 `歌/song.*`（或 `--audio` 指定 vocals）+ `词/lyrics.md`（剥段落标签/占位）→ 强制对齐（拿**已知歌词**当 transcript，不靠转写猜词）→ 写 `字幕/karaoke.ass` + `lyrics.lrc` + `alignment_report.json`。
 
@@ -44,6 +44,5 @@ python3 <skill>/scripts/align.py 制MV/<曲名> --audio 制MV/<曲名>/歌/vocal
 | 歌词与实唱不一致致对齐乱 | lyrics.md 改成与实际演唱一致再跑 |
 | 伴奏太响对齐不准 | 先 demucs 分离 vocals 再对齐 |
 | 有字幕但 review 提示缺对齐报告 | 重跑新版 align.py，产 `alignment_report.json` |
-| 没填词就跑 | 先 song-lyrics 定稿 `词/lyrics.md` |
-| 后配歌曲还没最终歌就对齐字幕 | 等 song 线产出或用户上传最终 `歌/song.*` 后再跑 |
-| 想复用 n2d 脚本 | mv 系列独立，用自带 align.py |
+| 没填词就跑 | 先补齐本项目 `词/lyrics.md` |
+| 后配歌曲还没最终歌就对齐字幕 | 等用户补入最终 `歌/song.*` 后再跑 |

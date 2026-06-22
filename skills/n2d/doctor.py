@@ -9,8 +9,9 @@
 
   python3 skills/n2d/doctor.py [作品根]
 
-不带作品根 → 只探机器能力（库/CLI）；带作品根 → 额外按 `_设置.md` 探所选生图/生视频/配音
-后端的连通与能力档。纯探针，不改任何文件、不花钱。
+不带作品根 → 只探机器能力（库/CLI）；带作品根 → 额外按 `_设置.md` 探所选生图/配音
+后端的连通与能力档。生视频后端若未固定，只标记“后移到 n2d-video”，不在开局探默认
+模型/渠道。纯探针，不改任何文件、不花钱。
 """
 from __future__ import annotations
 
@@ -77,7 +78,11 @@ def precision_lines(probes: Dict[str, Any]) -> List[str]:
 
     vid = probes.get("video_backend")
     if vid:
-        lines.append(f"ℹ️ 生视频后端「{vid.get('name')}」：关键帧能力档={vid.get('mode')}（max_timeline_frames={vid.get('max_frames')}；来源 {vid.get('verified')}）。")
+        if vid.get("deferred"):
+            route = vid.get("route") or "自动按镜头路由"
+            lines.append(f"ℹ️ 生视频后端：未固定（视频模型路由={route}），具体模型/渠道后移到 n2d-video 出视频前由 router/probe + 适配层决定。")
+        else:
+            lines.append(f"ℹ️ 生视频后端「{vid.get('name')}」：关键帧能力档={vid.get('mode')}（max_timeline_frames={vid.get('max_frames')}；来源 {vid.get('verified')}）。")
     return lines
 
 
@@ -121,10 +126,14 @@ def probe_video_backend(root: Optional[str]) -> Optional[Dict[str, Any]]:
     if not root:
         return None
     try:
-        from n2d_settings import get_setting
+        from n2d_settings import get_setting, load_settings
         from n2d_platform_profiles import video_backend_frame_control
     except Exception:
         return None
+    settings = load_settings(root)
+    route = (settings.get("视频模型路由") or get_setting(root, "视频模型路由", "自动按镜头路由") or "自动按镜头路由").strip()
+    if route not in ("固定生视频模型", "固定生视频AI"):
+        return {"deferred": True, "route": route}
     model = (get_setting(root, "生视频模型", "Seedance 2.0") or "Seedance 2.0").strip()
     channel = (get_setting(root, "生视频渠道", "即梦/Dreamina") or "即梦/Dreamina").strip()
     ctrl = video_backend_frame_control(model, channel)

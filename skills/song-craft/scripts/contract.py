@@ -7,10 +7,10 @@ from copy import deepcopy
 CONTRACT_VERSION = 1
 
 COMPOSE_BACKENDS = ("Suno", "Udio", "ACE-Step", "DiffRhythm", "manual")
-SONG_USE_CASES = ("短视频Hook", "完整Demo", "发行母带前草稿", "MV源歌", "自定义")
+SONG_USE_CASES = ("短视频Hook", "完整Demo", "发行母带前草稿", "自定义")
 SONG_LANGUAGES = ("中文", "英文", "中英双语", "其他")
 TEMPO_PRESETS = ("慢速", "中速", "快速", "自定义BPM")
-TAKE_SELECTION_STRATEGIES = ("最佳hook", "最佳人声", "最贴蓝图", "最适合MV", "人工挑版")
+TAKE_SELECTION_STRATEGIES = ("最佳hook", "最佳人声", "最贴蓝图", "最贴成品用途", "人工挑版")
 AI_AUDIO_USAGE_MODES = ("AI-generated", "AI-assisted", "未使用AI音频")
 AI_LYRICS_USAGE_MODES = ("AI-generated", "AI-assisted", "未使用AI歌词")
 
@@ -18,7 +18,6 @@ DEFAULT_DURATIONS = {
     "短视频Hook": 45,
     "完整Demo": 120,
     "发行母带前草稿": 180,
-    "MV源歌": 120,
     "自定义": None,
 }
 
@@ -100,8 +99,8 @@ SONG_STAGE_TABLE = [
     },
     {
         "key": "handoff",
-        "label": "交制 MV / 发布",
-        "owner": "mv + song-craft/scripts/ai_usage.py",
+        "label": "发布 / 对外交付",
+        "owner": "song-craft/scripts/ai_usage.py",
         "gate": "AI usage disclosure",
         "on_fail": "补合规留痕或目标平台信息",
     },

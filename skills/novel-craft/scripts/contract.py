@@ -11,13 +11,56 @@ from datetime import date
 
 CONTRACT_VERSION = 1
 
-ALLOWED_OUTPUT_FORMATS = ("txt", "docx", "outline", "n2d")
+ALLOWED_OUTPUT_FORMATS = ("txt", "docx", "outline")
 
 NOVEL_DRAFT_MODES = ("极速初稿", "稳妥初稿", "商业连载", "漫剧源书")
+
+DRAFT_WORKFLOWS = ("默认单步", "三步迭代", "边写边自检")
 
 CHAPTER_GRANULARITY = ("逐章", "小批", "全书草稿")
 
 AI_TEXT_USAGE_MODES = ("AI-generated", "AI-assisted", "未使用AI文本")
+
+NOVEL_PURPOSES = (
+    "传统小说",
+    "漫剧源书",
+    "微短剧源书",
+    "短读/短篇",
+    "出海译制底稿",
+    "自定义",
+)
+
+NOVEL_PURPOSE_ALIASES = {
+    "红果": "漫剧源书",
+    "红果短剧": "漫剧源书",
+    "红果漫剧": "漫剧源书",
+    "红果漫剧源书": "漫剧源书",
+    "抖音": "漫剧源书",
+    "抖音短剧": "漫剧源书",
+    "抖音漫剧": "漫剧源书",
+    "抖音漫剧源书": "漫剧源书",
+    "短剧": "微短剧源书",
+    "微短剧": "微短剧源书",
+    "漫剧": "漫剧源书",
+    "漫剧档": "漫剧源书",
+    "传统": "传统小说",
+    "传统网文": "传统小说",
+    "传统连载": "传统小说",
+    "网文": "传统小说",
+    "长篇": "传统小说",
+    "短篇": "短读/短篇",
+    "短读": "短读/短篇",
+    "出海": "出海译制底稿",
+    "翻译": "出海译制底稿",
+}
+
+COMMERCIAL_NOVEL_PURPOSES = ("漫剧源书", "微短剧源书")
+
+PURPOSE_SCALE_DEFAULTS = {
+    "漫剧源书": "漫剧",
+    "微短剧源书": "微短剧",
+    "短读/短篇": "short",
+}
 
 RIGHTS_STATUS_CANONICAL = {
     "original": "original",
@@ -104,6 +147,14 @@ SCALE_PROFILES = {
         "min_max": [800, 1800],
         "demo": 3,
     },
+}
+
+WORDCOUNT_BANDS_BY_TARGET = {
+    (1000, 1500): [800, 1800],
+    (1500, 2500): [1200, 3000],
+    (3000, 5000): [2500, 6000],
+    (5000, 8000): [4000, 10000],
+    (6000, 10000): [5000, 15000],
 }
 
 SCALE_ALIASES = {
@@ -271,6 +322,92 @@ def scale_profile(scale):
     if key not in SCALE_PROFILES:
         key = "medium"  # fallback
     return deepcopy(SCALE_PROFILES[key])
+
+
+def normalize_novel_purpose(value):
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    return NOVEL_PURPOSE_ALIASES.get(text, text)
+
+
+def infer_novel_purpose(platform=None, scale=None, target=None):
+    """Infer a reasonable project purpose from existing platform/scale fields."""
+    text = " ".join(str(x or "") for x in (target, platform, scale))
+    if "微短剧" in text:
+        return "微短剧源书"
+    if any(key in text for key in ("红果", "抖音", "漫剧")):
+        return "漫剧源书"
+    if "短剧" in text:
+        return "微短剧源书"
+    if any(key in text for key in ("short", "短篇", "短读")):
+        return "短读/短篇"
+    return "传统小说"
+
+
+def scale_for_novel_purpose(purpose, fallback=None):
+    purpose = normalize_novel_purpose(purpose)
+    return PURPOSE_SCALE_DEFAULTS.get(purpose, fallback)
+
+
+def words_per_chapter_for_context(purpose=None, platform=None, scale=None):
+    purpose_scale = scale_for_novel_purpose(purpose)
+    if purpose_scale:
+        return scale_profile(purpose_scale)["words_per_chapter"]
+    text = str(platform or "")
+    if any(key in text for key in ("漫剧", "红果", "抖音")):
+        return scale_profile("漫剧")["words_per_chapter"]
+    if "短剧" in text:
+        return scale_profile("微短剧")["words_per_chapter"]
+    if scale:
+        return scale_profile(scale)["words_per_chapter"]
+    return scale_profile("medium")["words_per_chapter"]
+
+
+def resolve_novel_draft_mode(explicit_mode=None, purpose=None, platform=None, scale=None, target=None, fallback="稳妥初稿"):
+    if explicit_mode:
+        return explicit_mode
+    purpose = normalize_novel_purpose(purpose) or infer_novel_purpose(platform=platform, scale=scale, target=target)
+    if purpose in COMMERCIAL_NOVEL_PURPOSES:
+        return "漫剧源书"
+    return fallback
+
+
+def resolve_novel_draft_workflow(explicit_workflow=None, *, draft_mode=None, purpose=None, scale=None, target_chapters=None, fallback="默认单步"):
+    if explicit_workflow:
+        return explicit_workflow
+    purpose = normalize_novel_purpose(purpose)
+    try:
+        chapters = int(target_chapters or 0)
+    except (TypeError, ValueError):
+        chapters = 0
+    if (
+        draft_mode in {"商业连载", "漫剧源书"}
+        or purpose in COMMERCIAL_NOVEL_PURPOSES
+        or normalize_scale(scale) in {"long", "长篇"}
+        or chapters >= 30
+    ):
+        return "三步迭代"
+    return fallback
+
+
+def wordcount_band_for_words_per_chapter(words_per_chapter):
+    """Return review min/max band for a target words-per-chapter pair.
+
+    Exact known bands come from SCALE_PROFILES. For custom target ranges, keep
+    the band broad enough to avoid forcing a dramatic beat split merely to hit
+    a number: low target gets 80%, high target gets 120%.
+    """
+    try:
+        lo, hi = [int(x) for x in words_per_chapter[:2]]
+    except (TypeError, ValueError):
+        return [800, 1800]
+    if lo > hi:
+        lo, hi = hi, lo
+    known = WORDCOUNT_BANDS_BY_TARGET.get((lo, hi))
+    if known:
+        return list(known)
+    return [max(1, int(round(lo * 0.8))), max(1, int(round(hi * 1.2)))]
 
 
 def normalize_rights_status(status):

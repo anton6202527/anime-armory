@@ -31,8 +31,8 @@ description: P2 platform performance feedback loop for n2d. Ingest platform metr
 默认读取：
 
 ```text
-制漫剧/<剧名>/生产数据/platform_metrics.csv|jsonl|json
-制漫剧/<剧名>/生产数据/creative_features.csv|jsonl|json（可选，覆盖自动抽取）
+创作区/制漫剧/<剧名>/生产数据/platform_metrics.csv|jsonl|json
+创作区/制漫剧/<剧名>/生产数据/creative_features.csv|jsonl|json（可选，覆盖自动抽取）
 ```
 
 详细 schema 见 `references/schema.md`。
@@ -79,6 +79,20 @@ python3 skills/n2d-feedback/scripts/feedback.py <作品根> \
 ```
 
 `--update-guide` 只替换 `导演节奏.md` 里的 `n2d-feedback` 快照块，不改基础规则。样本不足时只写“观察中”，不把偶然值升级成铁律。
+
+## 写回机器可读先验（投放→生成输入闭环）
+
+`--update-guide` 写的是给人看的导演节奏规则；`--write-priors` 写的是给机器读的**第一方先验**——把 A/B paired-lift 胜出的开场/集尾断点/封面/标题变体凝成 `生产数据/creative_priors.json`（kind `n2d_creative_priors`），`n2d-script` 阶段2 finalize 读它作开场/断点设计的**建议先验**。
+
+```bash
+python3 skills/n2d-feedback/scripts/feedback.py <作品根> \
+  --metrics <平台指标.csv> \
+  --write-priors
+```
+
+每个维度只在「同集内 `paired_lift ≥ --min-lift` 且 paired context 数 `≥ --min-samples`」时才写先验，缺省维度直接不写（**不臆造**）；无任一维度达标时落空 `priors:{}`，下游 no-op。每条先验带 `winner / paired_lift / primary_metric / metric_value / n / plays / episodes`，并写入 `generated_at` 采集时间供下游判先验新鲜度。`--no-write` 同时抑制 priors 写出。
+
+读端在 `n2d-script` 阶段2 finalize：存在 `creative_priors.json` 才读（缺则 no-op·向后兼容），把胜出先验作为开场/断点设计的建议注入——落 `脚本/第N集/applied_creative_priors.json` 证据 + 打印人可见提示（逐维度点名 winner / lift / n），不静默吞。先验是建议非硬约束，样本不足的维度不出现、不必强套。
 
 ## 投放摄取适配器（实时投放 API → 标准文件）
 

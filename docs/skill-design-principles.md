@@ -18,7 +18,7 @@
 
 ## A. 仓库形态与独立性
 
-- **A1 四线自包含、可单独分发** ✅ — 每条线本线脚本只 import 本线 `_lib`/craft 工具，**不依赖 `skills/common/`**（已删），**不 import 别线实现**。跨线只允许**可选文件/数据交接**（song 交成品歌给 mv）；交接缺失必须**优雅降级**，不能让本线主流程跑不起来。机检：`tools/independence-audit/scripts/check_independence.py`。
+- **A1 四线自包含、可单独分发** ✅ — 每条线本线脚本只 import 本线 `_lib`/craft 工具，**不依赖 `skills/common/`**（已删），**不 import 别线实现**。novel 与 n2d 之间必须零交接、零数据耦合；其它跨线交付只能是用户显式选择的成品文件交接，交接缺失必须**优雅降级**，不能让本线主流程跑不起来。**独立性延伸到散文**：`skills/<line>/**.md` 不得提别线名/别线根标签/别线 skill —— 这条 strict-docs 门已是 `check_independence.py` 的**默认行为**（`--lenient-docs` 仅在确有需要时降级为只查代码级耦合）。机检：`tools/independence-audit/scripts/check_independence.py`，novel/n2d 另跑 `tools/independence-audit/scripts/check_novel_n2d_zero_coupling.py`。
 - **A2 仓库级 meta 工具放 `tools/`，不放 `skills/`** — 不是某条创作线能力的单副本维护工具（independence-audit、shared-cleanup、validate_skills、打包/发布脚本等）留 `tools/` 或独立单副本，不混进 `skills/` 的创作线命名空间。**例外**：属于某条线用户工作流的一线能力（如 `n2d-progress`）仍是该线 skill，可以留在 `skills/`。
 - **A3 `skills/` 扁平、按名字前缀分组** — `n2d-*` / `song-*` 等。SKILL.md frontmatter `description` + 正文 `Triggers`/`Use when` **就是路由依据**，匹配用户意图，不另建路由表逻辑。
 
@@ -29,16 +29,21 @@
 - **B3 prompt / 产物分离** — prompt 包与生成产物分目录、分文件，不混写。
 - **B4 脚本不伪装云端自动化** — 没有凭证/后端 SDK 时，只产稳定 prompt/job 包 + 合规留痕；真正调用 Suno/即梦/Kling 等交对应后端工具，外部生成后再登记。
 - **B5 阶段完成即回写 `_进度.md`** — 用确定性脚本（`progress_set.py` / `update_progress_stage()`）回写，不只在文档里说「更新进度」。正式产物阶段默认先过 `gate.py`。
+- **B6 高风险连续性铁律必须机器化** ◑ — 跨阶段/跨帧/高成本的身份、资产、合规、成本规则不得只写在 SKILL.md 里靠人记；必须有确定性 gate、生产入口 guard 或回归测试覆盖，且正式产物入口不能提供无保护绕过。**n2d 图生视频非协商例**：同一角色多关键帧 Clip 的首/中/尾锚图必须来自同一个 `identity_registry` 角色/形态和同一套可执行 `reference_group`，prompt 必须绑定 `CHAR_xx/形态`、`reference_group=<同源组>`、脸型/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色等身份不变量；大表情近景必须使用同源 `reference_group.expressions` 或表情定妆首尾双帧，并写 `表情锚`、`表情幅度`、`锁脸不锁情`。后端支持 Character ID / Face Lock / reference controls / LoRA 时必须同时传原生身份；不支持时只能降运动/降景别/侧脸手部反应镜或拆 Clip。未来改 skill 不得删除、绕过或弱化这类铁律；若确需重构，只能用等价或更严格的确定性机检 + 回归测试替换。
+- **B7 人物定妆基础包不可缺失铁律** ✅ — n2d 中任何会入镜的人物、角色形态、服装/觉醒/妖形变体，只要不是明示 `restricted_partial` 且永不露完整脸的局部参考，都必须先具备**七类基础定妆包**：① 正面主参考 `front`；② 45°/三分之二侧脸 `three_quarter`；③ 侧面 `side`；④ 背面 `back`；⑤ 半身或全身服装体态 `half_body`/`full_body`；⑥ 同源脸部特写或基础表情脸锚 `face_anchor_refs`/`expressions`；⑦ 三视图/设定表人审拼版 `turnaround`。**三视图不能替代拆分 PNG**，且拆分 PNG 也不能逐张重生：45°/侧/背必须从同一张人审通过 turnaround 同源母本派生，半身/脸部特写必须从已通过正面裁切，`ready` 必须登记 `derivation.method/source_path/source_sha256/crop_box`。`planned` 只能表示待补缺口，不能放行；主角、配角、功能角色、路人和一次性人物同一基础门槛，角色体量只影响表情库、动作参考、主体库/LoRA 是否升档。机器覆盖：`n2d-image/scripts/derive_makeup_pack.py` 同源派生、`n2d-review/scripts/gate.py` 的 `check_identity_registry` 与回归测试，`tools/validate_skills.py --only B7` 防止宪法、n2d-image 铁律、gate 常量或测试被删弱。
+- **B8 分集叙事连续性铁律** ◑ — 凡做拆集、分集、分段剧本的 skill，**不得设置单集时长硬性上限或下限**，也不得为了凑时长/字数把一场戏、一个爽点或一个 cliffhanger 劈断。时长只能是软节奏意图、容量估算或统计 WARN；最终边界必须优先服从剧情连贯性与完整闭环。每集至少完成 **冲突 → 爽点/反转 → 钩子** 的戏剧闭环，允许短集或长集，只要闭环成立且下一集能冷开场。粗拆脚本只能产脚手架，正式写词前必须用确定性边界预筛或等价 guard 把「章内续切、弱钩、半句、纯过渡、短/长但无闭环」标出；高风险窗口未写边界复核记录时，不得进入正式 voiceover/分镜定稿。
 
 ## C. 选择点与适配层
 
 - **C1 通用 skill、私有选择** — skill **不得硬编码**唯一平台/后端/分辨率/音色。凡「让用户选」的点：读 `<作品根>/_设置.md` → 否则读用户私有全局默认（如 `创作偏好-默认.md`、`.agents/创作偏好-默认.md`、`.codex/创作偏好-默认.md`，`.claude/` 仅作 legacy 兼容）并预填 + 告知一次 → 否则问一次，然后持久化沉默沿用。**例外**：合规 / 不可逆 / 花钱的点每次都复确认。
 - **C2 选择菜单 = 带日期候选快照，不是真理** ◑ — 模型/平台/法规/价格/规格等会变的信息：执行前按需用专业知识/项目 references/官方文档/实时搜索核验刷新；用户永远可手输 `自定义`/`manual`（逃生口常驻）；每份易变候选清单带 `采集日期：YYYY-MM-DD` 戳。skill **不直接依赖菜单文案**，而经本线适配层（本线 `_lib` / craft contract / backend registry / model router 等）把选择归一到能力、参数、CLI/API、降级方案和合规闸门；**适配不了就停下报缺口，不偷偷换路**。各线策略差异是故意的（如 ad 禁即梦 ≠ n2d 放行即梦官方），**分别刷新、绝不合并候选清单**。新易变清单注册到对应线 `_lib/freshness.py:CANDIDATE_SOURCES`（若该线有候选源；目前 n2d/ad 有），用同目录 `refresh.py` 刷新。
+- **C3 后端能力结论必须查证再落地** — 任何“某后端不能/能做多图、主体 ID、seed、批量、分辨率、价格/额度、合规输出”的结论都属于易变事实，不能凭模型记忆、旧项目经验或一次失败直接写死。做阻断、迁移、降级、推荐或修改 skill 前，必须先查官方文档/实时资料，再查本机 CLI/API `--help` / features / 版本，必要时跑最小 smoke test；把日期、来源、命令和结果落进 adapter 注释、manifest、进度或候选 provenance。证据不足时只允许写“当前未证实/当前 runner 未接入”，不得写“后端没有”。若查证能力存在，适配层必须把能力接成结构化、可审计入参（如 `--image` 文件、subject_id、seed 字段）并写生产事件，而不是继续把能力退化成 prompt 文本。
 
 ## D. 合规硬闸门（非协商）
 
 - **D1 授权与来源** — 声音克隆只在本人 / 已授权嗓音上做；克隆真人嗓需授权（2026 opt-in），未授权拒做。源小说/词曲默认公版 / 自有 / 已授权。合规 / 不可逆 / 高成本的选择点即使已记录也每次复确认（见 C1 例外）。
-- **D2 各线合规策略不强行对齐** — 例如 AI 标识/水印义务在 n2d 线于 2026-06 退出管道（移到管道外处理），其他线按各自法规要求；改一条线的合规闸门不自动套到别线。
+- **D2 各线合规策略不强行对齐** — 例如 AI 标识/水印义务在 n2d 线只作为非阻断发布待办，其他线按各自法规要求；改一条线的合规闸门不自动套到别线。
+- **D3 AI 标识非阻断铁律** — n2d 的 AI 标识 / AI 披露 / 水印不得阻塞主生产流程：不得因为缺 `ai_labeling`、未落显式角标、未写元数据、未做数字水印或平台侧披露而阻断 compose/review、进度回写、dashboard 记账或后续集推进。流水线可以提供 manifest、INFO 提醒和 best-effort 后处理脚本，但失败只能形成发布前待办；若目标地区/平台要求标识，由使用方在发布工序或工具外补齐。未来改 gate、合规脚本、compose 或 review 时，只允许保持或放宽这个非阻断语义，不得把 AI 标识升级为 BLOCK。
 
 ## E. 交付约束
 

@@ -138,9 +138,9 @@ def test_target_deviation_warn_within_tolerance():
 
 
 def test_target_deviation_warn_too_short():
-    # ∑镜头时长 远短于目标 → WARN（偏短）
+    # ∑镜头时长 远短于软节奏意图 → WARN（偏短），不是硬闸门。
     msg = V.target_deviation_warn(50.0, 90.0)  # ~44% short
-    assert msg is not None and "偏短" in msg and "目标时长" in msg
+    assert msg is not None and "偏短" in msg and "软节奏意图" in msg and "WARN" in msg
 
 
 def test_target_deviation_warn_too_long():
@@ -190,15 +190,20 @@ def test_contract_allows_clip_with_duration(tmp_path):
     assert not [r for r in res["findings"] if r["dimension"] == "镜头时长"]
 
 
-# ── 集长目标自动取（从 _设置.md「单集时长」预设区间） ──
+# ── 软节奏目标自动取（从 _设置.md「拆集节奏」预设；兼容旧「单集时长」） ──
 def _write_setting(root, value):
+    with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as fh:
+        fh.write(f"# 设置\n- 拆集节奏: {value}\n")
+
+
+def _write_legacy_duration_setting(root, value):
     with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as fh:
         fh.write(f"# 设置\n- 单集时长: {value}\n")
 
 
 def test_episode_target_default_front_long_short_first_vs_rest(tmp_path):
     root = str(tmp_path)
-    # 缺设置 = 默认「前长后短」：第1集 mid 150 / 其余集 mid 90
+    # 缺设置 = 默认「前长后短」：第1集 soft 150 / 其余集 soft 90
     assert V.episode_target_seconds(root, "第1集") == 150.0
     assert V.episode_target_seconds(root, "第2集") == 90.0
 
@@ -206,7 +211,7 @@ def test_episode_target_default_front_long_short_first_vs_rest(tmp_path):
 def test_episode_target_preset_presets(tmp_path):
     root = str(tmp_path)
     _write_setting(root, "快节奏")
-    assert V.episode_target_seconds(root, "第1集") == 60.0  # 45–75 mid
+    assert V.episode_target_seconds(root, "第1集") == 60.0  # compatible soft seconds
     _write_setting(root, "长集")
     assert V.episode_target_seconds(root, "第3集") == 150.0
 
@@ -215,5 +220,11 @@ def test_episode_target_parameterized_override(tmp_path):
     root = str(tmp_path)
     _write_setting(root, "自定义(95s)")
     assert V.episode_target_seconds(root, "第2集") == 95.0
-    _write_setting(root, "快节奏(70-90)")  # 括号区间中点优先于预设
+    _write_setting(root, "快节奏(70-90)")  # 括号软范围中点优先于预设
     assert V.episode_target_seconds(root, "第2集") == 80.0
+
+
+def test_episode_target_reads_legacy_single_episode_duration_key(tmp_path):
+    root = str(tmp_path)
+    _write_legacy_duration_setting(root, "快节奏")
+    assert V.episode_target_seconds(root, "第2集") == 60.0

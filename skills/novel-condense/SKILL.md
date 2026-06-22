@@ -11,7 +11,7 @@ description: Given a long novel (.txt/.docx), compress it into a shorter version
 
 本 skill 的可选项**不写死在源码里**，按 `../skills/novel-craft/references/选择点与偏好.md`（家族统一的偏好读写机制 + 全部选择点目录与缺省）解析：`<作品根>/_设置.md` → 全局默认 `创作偏好-默认.md` 预填并告知一句 → 缺则**首次问一次**→写回 `_设置.md`→**沉默沿用**（合规/不可逆/花钱点每次仍确认）。
 
-本 skill 涉及的选择点：`权利来源`、`输出格式`、`小说生成模式`、`章节生成粒度`、`AI使用披露`。
+本 skill 涉及的选择点：`小说用途`、`权利来源`、`输出格式`、`小说生成模式`、`章节生成粒度`、`AI使用披露`。
 
 ## 合法性铁律
 
@@ -23,7 +23,7 @@ description: Given a long novel (.txt/.docx), compress it into a shorter version
 | 目标用途 | 压缩比 | 输出形态 |
 |---|---|---|
 | 短读版 | 1.5–3× | txt+docx，章节结构基本保留 |
-| 漫剧友好版 | 5–10× | txt+docx + n2d-script 友好目录，按戏剧节拍重切 |
+| 短篇改写版 | 5–10× | txt+docx + outline，按戏剧节拍重切 |
 | 大纲级 | 20×+ | outline.md 为主，不再是小说 |
 
 ## 工作流（七步）
@@ -33,7 +33,7 @@ description: Given a long novel (.txt/.docx), compress it into a shorter version
 ### 第 0 步 — 输入
 
 - 原作路径
-- **目标压缩比** 或 目标字数
+- **目标压缩比** 或 目标总量
 - **目标用途**（短读版 / 漫剧版 / 大纲）
 - 输出形式
 
@@ -49,7 +49,7 @@ python3 <skill>/scripts/init_project.py "<原作>" \
   [--i-have-rights]
 ```
 
-`init_project.py` 会根据 `target_chars_estimate + target/outputs` 推导 `target_chapters / target_words_per_chapter / demo_chapters / draft_mode`，并把 `draft_mode / chapter_granularity / ai_text_usage` 同步写进 `_meta.json` 与 `_设置.md`；若漫剧版已有明确集/章规划，必须传 `--target-chapters`，保证后续 `draft_packets.py --next` 按机器字段推进。
+`init_project.py` 会根据 `target_chars_estimate + target/outputs` 推导 `target_chapters / target_words_per_chapter / target_wordcount_min_max / demo_chapters / draft_mode`，并把 `draft_mode / chapter_granularity / ai_text_usage` 同步写进 `_meta.json` 与 `_设置.md`；若漫剧版已有明确集/章规划，必须传 `--target-chapters`，保证后续 `draft_packets.py --next` 按机器字段推进。
 
 ### 第 2 步 — 标主线 / 锚点 / 反转点
 
@@ -93,12 +93,12 @@ Demo 审完必须写 `审稿/demo_gate.json`（见 `novel-craft/references/demo-
 发布/交平台前先用 `novel-craft/scripts/ai_usage.py` 写 AI 使用披露。
 
 ```bash
-python3 skills/novel-craft/scripts/export.py "<作品根>" --formats txt,docx[,n2d,outline]   # 家族通用导出器（漫剧友好版传 n2d 喂 n2d-script）
+python3 skills/novel-craft/scripts/export.py "<作品根>" --formats txt,docx[,outline]   # 家族通用导出器
 ```
 
 ## 输出约定
 
-- 默认落 `写小说/<原作名>-精简/`。
+- 默认落 `创作区/写小说/<原作名>-精简/`。
 - 终态进 `导出/`，中间产物留作品根。
 
 ## 何时不用本 skill
@@ -107,7 +107,7 @@ python3 skills/novel-craft/scripts/export.py "<作品根>" --formats txt,docx[,n
 - 用户想**配角视角续写** → 用 novel-spinoff。
 - 用户想**改设定 / 换主线魔改重写** → 用 novel-rewrite。
 - 用户想**接着原作末章往后写新章** → 用 novel-continue。
-- 用户想**做漫剧脚本但不要精简版小说** → 直接 n2d / n2d-script，更直接。
+- 用户不需要精简版小说 → 不用本 skill。
 
 ## 常见错误
 

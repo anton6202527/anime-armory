@@ -69,7 +69,7 @@ python3 skills/n2d-batch/scripts/queue.py claim <作品根> --limit 2
 保存到：
 
 ```text
-制漫剧/<剧名>/生产数据/batch_runner.json
+创作区/制漫剧/<剧名>/生产数据/batch_runner.json
 ```
 
 执行一轮：
@@ -220,7 +220,7 @@ python3 skills/n2d-score/scripts/score.py <作品根> 第1集 \
 保存到：
 
 ```text
-制漫剧/<剧名>/生产数据/stage_cost_estimates.json
+创作区/制漫剧/<剧名>/生产数据/stage_cost_estimates.json
 ```
 
 再用：

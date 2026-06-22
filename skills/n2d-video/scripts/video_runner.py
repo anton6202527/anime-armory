@@ -40,6 +40,7 @@ except Exception:  # pragma: no cover
     normalize_episode = lambda value: str(value).strip()  # type: ignore[assignment]
     parse_progress = None  # type: ignore[assignment]
 
+from n2d_handoff import check_identity_handoff
 import video_qc
 
 try:
@@ -609,6 +610,34 @@ def run_preflight_gate(root: Path, episode: str, stage: str = "video_preflight")
         raise RuntimeError(f"{stage} gate blocked video backend submission.\n{detail}")
 
 
+def run_identity_handoff_guard(root: Path, episode: str) -> None:
+    """Hard guard for paid submits: same-character keyframes must share identity anchors.
+
+    `--skip-preflight` is useful for debugging full dashboard gates, but it must not
+    bypass the face-lock contract.  Missing route/prompt files are blockers here
+    because this function only runs at the paid submit boundary.
+    """
+    res = check_identity_handoff(str(root), episode)
+    if not res.get("available"):
+        notes = "; ".join(str(n) for n in res.get("notes", [])) or "identity handoff check unavailable"
+        raise RuntimeError(
+            "identity handoff guard unavailable before paid video submission. "
+            f"{notes} Run n2d-model-router and regenerate n2d-video prompts first."
+        )
+    blocks = [f for f in res.get("findings", []) if f.get("severity") == "block"]
+    if blocks:
+        detail = "\n".join(
+            f"- {f.get('clip_id', '?')} [{f.get('code', '?')}]: {f.get('note', '')}"
+            for f in blocks
+        )
+        raise RuntimeError(
+            "identity handoff guard blocked paid video submission. "
+            "Same-character first/mid/end anchors must come from one identity_registry/reference_group, "
+            "and big-expression closeups must use same-source expressions with 锁脸不锁情.\n"
+            f"{detail}"
+        )
+
+
 def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = False,
                 skip_preflight: bool = False) -> Dict[str, Any]:
     manifest = load_json(manifest_file)
@@ -627,6 +656,7 @@ def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = F
     # "每次都跑一遍": cheap live --help check before spending credits — fail fast if the CLI
     # contract drifted out from under the arg builder (no-op/skip if probe unavailable).
     verify_cli_contract(args[0], command)
+    run_identity_handoff_guard(root, episode)
     if not skip_preflight:
         run_preflight_gate(root, episode)
     item.update({"status": "submitting", "submitted_at": time.strftime("%Y-%m-%dT%H:%M:%S%z")})

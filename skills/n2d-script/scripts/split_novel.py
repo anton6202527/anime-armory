@@ -8,11 +8,12 @@ split_novel.py — 把长篇小说自动拆分成粗胚分块，并搭好 AI漫�
     python3 split_novel.py <小说路径> [选项]
 
 常用选项:
-    --by-chapter       按「第X章」边界+字数双约束切（更贴戏剧节拍）
+    --by-chapter       按「第X章」+ 强钩候选切（更贴戏剧节拍）
     --per-chapter      每章独立成一集（最贴节拍；长章保持整章，精修时再拆）
     --keep-frontmatter 保留开头简介/标签/看点（默认自动剥离）
     --out 目录          作品根（默认=小说同级；小说在 …/小说/ 下时自动取其父）
-    --target/--min/--max 每集目标/最小(尾段并入阈值)/最大 字数（默认 810/540/1080 = SKILL 默认 60–120s 档 band；按预设传值见 SKILL「时长区间」表）
+    --target 高级参数：粗胚字数参考（仅用于报告/人工复核，不参与默认切点决策）
+    --min/--max 旧参数兼容（仅作历史命令占位，不再作为硬性上下限）
     --name 标题         素材文件头用的标题（默认取小说文件名）
 
 支持 .txt / .docx 输入。默认输出布局：
@@ -36,6 +37,7 @@ COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 
+from n2d_const import boundary_buckets, boundary_lexicon
 from n2d_contract import PROGRESS_COLUMNS
 from n2d_settings import DEFAULTS, get_setting
 from n2d_visual_styles import format_style_contract_markdown, style_options_text
@@ -117,87 +119,98 @@ def split_sentences(para):
     return [s for s in (p.strip() for p in parts) if s]
 
 
-def chunk_text(paras, target, hi, lo=None):
-    """把段落列表合并成若干集，每集尽量接近 target 字，不超过 hi 太多，在段/句边界切。
-    末尾残料若不足 lo 字（默认 target*0.5）则并入上一集。"""
-    if lo is None:
-        lo = target * 0.5
+def build_boundary_res(genre_text=None):
+    """按题材构建 (强钩收尾, 冲突, 爽点/反转) 三条正则。
+
+    词面来自 `n2d_const.boundary_lexicon`（base ∪ 命中题材桶），治"古言爽文词典对
+    女频情感/悬疑/都市退化成无闭环"。未识别题材时复刻历史覆盖（base ∪ 古装动作）。
+    """
+    strong, conflict, payoff = boundary_lexicon(genre_text)
+    strong_re = re.compile(r"(" + "|".join(re.escape(t) for t in strong) + r")\s*$")
+    conflict_re = re.compile(r"(" + "|".join(re.escape(t) for t in conflict) + r")")
+    payoff_re = re.compile(r"(" + "|".join(re.escape(t) for t in payoff) + r")")
+    return strong_re, conflict_re, payoff_re
+
+
+# 模块级默认（题材=None：复刻历史古言/修仙覆盖）。main() 解析 _设置.md `题材` 后按题材重建。
+STRONG_EPISODE_END_RE, CONFLICT_RE, PAYOFF_OR_REVERSAL_RE = build_boundary_res(None)
+
+SCENE_BREAK_RE = re.compile(
+    r"^\s*(?:[-—*]{3,}|[一二三四五六七八九十0-9]+[、.．]\s*|【[^】]{1,24}】|"
+    r"(?:翌日|次日|当夜|与此同时|另一边|片刻后|三日后|半个时辰后))"
+)
+
+
+def strong_episode_end(text):
+    """启发式识别可作为粗胚右边界的强钩。
+
+    这不是最终剧情判断；它只避免 split 阶段在普通段落末尾按字数硬切。
+    """
+    return bool(STRONG_EPISODE_END_RE.search((text or "")[-180:]))
+
+
+def has_conflict(text):
+    return bool(CONFLICT_RE.search(text or ""))
+
+
+def has_payoff_or_reversal(text):
+    return bool(PAYOFF_OR_REVERSAL_RE.search(text or ""))
+
+
+def natural_scene_break(next_para):
+    return bool(next_para and (CHAPTER_RE.match(next_para) or SCENE_BREAK_RE.match(next_para)))
+
+
+def boundary_candidate(end_para, next_para=None):
+    return strong_episode_end(end_para) or natural_scene_break(next_para)
+
+
+def loop_ready(text, end_para, next_para=None):
+    """粗胚闭环启发式：有冲突、有释放/反转，并落在章节/场景/强钩候选处。"""
+    return boundary_candidate(end_para, next_para) and has_conflict(text) and has_payoff_or_reversal(text)
+
+
+def chunk_text(paras, target=None, hi=None, lo=None):
+    """连续性优先粗切：默认不锚字数，target/hi/lo 为旧参数兼容与报告参考。
+
+    不再因为超过 max 或低于 min 硬切/硬并，也不再等到 target 才允许切。
+    只有当前窗口出现「冲突→释放/反转→章节/场景/强钩候选」，才落一个粗胚分块；
+    否则继续并入后文，交给精修阶段按 P0→P6 重切。
+    """
     episodes = []
     buf = []
-    buf_len = 0
-    for para in paras:
-        # 超长段落先按句拆
-        units = [para] if len(para) <= hi else split_sentences(para)
-        for u in units:
-            if buf and buf_len + len(u) > hi:
-                episodes.append("\n".join(buf))
-                buf, buf_len = [], 0
-            buf.append(u)
-            buf_len += len(u)
-            if buf_len >= target:
-                episodes.append("\n".join(buf))
-                buf, buf_len = [], 0
-    if buf:
-        # 末尾残料并入上一集（若不足 lo）或独立成集
-        tail = "\n".join(buf)
-        if episodes and buf_len < lo:
-            episodes[-1] = episodes[-1] + "\n" + tail
-        else:
-            episodes.append(tail)
-    return episodes
 
-
-def split_by_chapter(paras, target, hi, lo=None):
-    """按「第X章」边界 + 字数双约束切集：
-
-    - 在章节标题处优先断集，让分集贴近戏剧节拍；
-    - 累积到 target 字才出一集；单章过长则用 chunk_text 再按句/段细拆；
-    - 末尾过短的残料并入上一集。
-    无章节标题时退回纯字数切分。
-    """
-    if lo is None:
-        lo = target * 0.5
-    chapters = []
-    cur = []
-    for p in paras:
-        if CHAPTER_RE.match(p) and cur:
-            chapters.append(cur)
-            cur = [p]
-        else:
-            cur.append(p)
-    if cur:
-        chapters.append(cur)
-    if len(chapters) <= 1:
-        return chunk_text(paras, target, hi, lo)
-
-    episodes = []
-    buf, buf_len = [], 0
-    for ch in chapters:
-        ch_len = sum(len(p) for p in ch)
-        if buf and buf_len + ch_len > hi:
+    def flush():
+        nonlocal buf
+        if buf:
             episodes.append("\n".join(buf))
-            buf, buf_len = [], 0
-        buf.extend(ch)
-        buf_len += ch_len
-        if buf_len >= target:
-            if buf_len > hi:
-                episodes.extend(chunk_text(buf, target, hi, lo))
-            else:
-                episodes.append("\n".join(buf))
-            buf, buf_len = [], 0
-    if buf:
-        tail = "\n".join(buf)
-        if episodes and buf_len < lo:
-            episodes[-1] = episodes[-1] + "\n" + tail
-        else:
-            episodes.append(tail)
+            buf = []
+
+    for i, para in enumerate(paras):
+        buf.append(para)
+        text = "\n".join(buf)
+        next_para = paras[i + 1] if i + 1 < len(paras) else None
+        if loop_ready(text, para, next_para):
+            flush()
+    flush()
     return episodes
+
+
+def split_by_chapter(paras, target=None, hi=None, lo=None):
+    """按「第X章」边界 + 强钩候选切粗胚：
+
+    - 章是候选场，不等于集；章节/场景/强钩候选若形成「冲突→释放/反转」才落集；
+    - target 只作报告参考，不参与默认切点决策；
+    - 未形成闭环时继续并入下一章/场景。
+    无章节标题时退回强钩候选切分。
+    """
+    return chunk_text(paras, target, hi, lo)
 
 
 def split_per_chapter(paras, min_chars=100):
     """每章独立成一集（最贴戏剧节拍）；过短章节（疑似误判的标题行）并入上一集。
 
-    无「第X章」标题时返回 None（由调用方退回字数切分）。
+    无「第X章」标题时返回 None（由调用方退回强钩候选切分）。
     """
     chapters, cur = [], []
     for p in paras:
@@ -221,9 +234,18 @@ def split_per_chapter(paras, min_chars=100):
     return episodes
 
 
+def length_hint(chars):
+    """字数只作复核提示，不参与切点决策。"""
+    if chars < 650:
+        return "偏短，复核闭环完整"
+    if chars > 1100:
+        return "偏长，复核中段钩子密度"
+    return ""
+
+
 PLACEHOLDERS = {
     "分镜剧本.md": "# {title}_第{n}集_分镜剧本\n\n> 待精修：参考 references/formats.md「分镜剧本」格式逐镜头填写。\n",
-    "故事板.md": "# {title}_第{n}集_故事板\n\n> 待精修：参考 references/formats.md「故事板 Clip 表」格式，供 AI 视频生成（目标视频模型/渠道见 _设置.md；平台档案见 references/platforms.md）。\n",
+    "故事板.md": "# {title}_第{n}集_故事板\n\n> 待精修：参考 references/formats.md「故事板 Clip 表」格式，供 AI 视频生成（具体生视频后端在 n2d-video 阶段由 router/probe 决定；平台档案见 references/platforms.md）。\n",
     "素材清单.md": "# {title}_第{n}集_素材清单\n\n> 待精修：参考 references/formats.md「素材清单」格式，供 AI 图片生成（中文为主+英文备用；平台档案见 references/platforms.md）。\n",
     "voiceover.txt": "# {title}_第{n}集_配音文案\n# 待精修：按镜头顺序填写旁白/台词，标注角色与情绪。\n",
     "bgm.txt": "# {title}_第{n}集_BGM与音效\n# 待精修：填写整体情绪、BGM风格、关键音效点。\n",
@@ -251,16 +273,11 @@ def write_source_snapshot(root, title, source_text):
 
 def global_style_scaffold(title, root):
     base_style = get_setting(root, "基础视觉风格", DEFAULTS["基础视觉风格"])
-    legacy_video_ai = get_setting(root, "生视频AI", DEFAULTS.get("生视频AI", "即梦"))
-    video_model = get_setting(root, "生视频模型", legacy_video_ai or DEFAULTS["生视频模型"])
-    video_channel = get_setting(root, "生视频渠道", DEFAULTS["生视频渠道"])
     style_note = f"{base_style}（来自 _设置.md 或全局默认；可选 {style_options_text()}）"
-    model_note = f"{video_model}（来自 _设置.md；新作品首跑应先让用户选一次，默认只作预选/兜底）"
-    channel_note = f"{video_channel}（调用渠道/产品，可与模型不同；旧项目 `生视频AI` 只作兼容 fallback）"
     return (
         f"# {title} — 全局画风与世界观\n\n"
-        f"## 目标视频模型\n{model_note}；可选 Seedance 2.0 / Veo 3.1 / Kling 3.0 / Hailuo / Runway / Luma / Pika / 开源模型 / manual —— 平台档案见 references/platforms.md\n\n"
-        f"## 生视频渠道\n{channel_note}；可选 即梦/Dreamina / 豆包 / 海螺AI / 可灵Kling / Google Gemini API / Runway API / 本地开源 / manual\n\n"
+        "## 视频模型路由\n自动按镜头路由（首跑不选择具体生视频后端；n2d-video 阶段按 `video_model_routes.json` + CLI/API 探测决定 primary/fallback）\n\n"
+        "## 生视频后端决策\n延后到 n2d-video 出视频前；若用户明确固定后端或账号/交付只能单后端，再写 `_设置.md` 的 `视频模型路由/生视频模型/生视频渠道`。\n\n"
         f"## 基础视觉风格\n{style_note}\n\n"
         "## 画风\n高质量AI漫剧风格，统一色调，高细节；具体提示词随「基础视觉风格」派生。\n\n"
         "## 基础视觉风格契约（style_contract 源头）\n"
@@ -274,15 +291,15 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("novel")
     ap.add_argument("--out", default=None,
-                    help="作品根（直接包含 脚本/ 出图/ 出视频/ + 全局文件）。缺省：小说在 .../小说/<X> 下→取其父；否则落到最近含『制漫剧/』的仓库根下的 制漫剧/<剧名>/（找不到才回退小说同级并告警）")
-    ap.add_argument("--target", type=int, default=810, help="每集目标字数（默认 810 = SKILL 默认 60–120s 档）")
-    ap.add_argument("--min", type=int, default=540, help="末尾残料不足此字数则并入上一集（默认 540）")
-    ap.add_argument("--max", type=int, default=1080, help="每集字数上限（超出在段/句边界断开；默认 1080）")
+                    help="作品根（直接包含 脚本/ 出图/ 出视频/ + 全局文件）。缺省：小说在 .../小说/<X> 下→取其父；否则落到最近仓库根的 创作区/制漫剧/<剧名>/（找不到才回退小说同级并告警）")
+    ap.add_argument("--target", type=int, default=None, help="高级参数：粗胚字数参考（仅用于报告/人工复核，不参与默认切点决策）")
+    ap.add_argument("--min", type=int, default=None, help="旧参数兼容：不再作为硬性下限")
+    ap.add_argument("--max", type=int, default=None, help="旧参数兼容：不再作为硬性上限")
     ap.add_argument("--name", default=None, help="标题（用于各素材文件头），默认取小说文件名")
     ap.add_argument("--by-chapter", action="store_true",
-                    help="优先按「第X章」边界+字数双约束切集（更贴戏剧节拍）；无章节标题时自动退回纯字数切")
+                    help="优先按「第X章」+ 强钩候选切集（更贴戏剧节拍）；无章节标题时自动退回强钩候选切")
     ap.add_argument("--per-chapter", action="store_true",
-                    help="每章独立成一集（最贴戏剧节拍，一章=一集；长章保持整章，精修时按上/下集再拆）；无章节标题时自动退回纯字数切")
+                    help="每章独立成一集（最贴戏剧节拍，一章=一集；长章保持整章，精修时按上/下集再拆）；无章节标题时自动退回强钩候选切")
     ap.add_argument("--keep-frontmatter", action="store_true",
                     help="保留开头的简介/标签/看点等元数据（默认自动剥离）")
     ap.add_argument("--limit", type=int, default=None,
@@ -302,11 +319,15 @@ def main():
         if os.path.basename(novel_dir) == "小说":
             root = os.path.dirname(novel_dir)
         else:
-            # n2d 产物应落 制漫剧/<剧名>/：向上找含『制漫剧/』的仓库根，
-            # 避免把作品根误建在输入文件同级（如 写小说/<X>/导出/）。
+            # n2d 产物应落 创作区/制漫剧/<剧名>/：向上找仓库根，
+            # 避免把作品根误建在输入文件同级。
             d, repo = novel_dir, None
             while True:
-                if os.path.isdir(os.path.join(d, "制漫剧")):
+                if (
+                    os.path.isdir(os.path.join(d, "创作区", "制漫剧"))
+                    or os.path.isdir(os.path.join(d, "制漫剧"))
+                    or os.path.isdir(os.path.join(d, "skills"))
+                ):
                     repo = d
                     break
                 parent = os.path.dirname(d)
@@ -314,23 +335,11 @@ def main():
                     break
                 d = parent
             if repo:
-                root = os.path.join(repo, "制漫剧", title)
+                root = os.path.join(repo, "创作区", "制漫剧", title)
             else:
                 root = novel_dir
-                print(f"[warn] 未找到含『制漫剧/』的仓库根，作品根回退到小说同级：{root}"
-                      f"（建议用 --out 指定 制漫剧/<剧名>/）", file=sys.stderr)
-    # novel-craft/export.py 交接来的稿件带 _n2d_handoff.json，留痕来源/版权/hash。
-    handoff_path = os.path.join(os.path.dirname(os.path.abspath(args.novel)), "_n2d_handoff.json")
-    if os.path.exists(handoff_path):
-        try:
-            import json
-            ho = json.load(open(handoff_path, encoding="utf-8"))
-            print(f"[novel→n2d] 接手 写小说/{ho.get('source_novel_project', '?')} 的交接稿"
-                  f"（原书《{ho.get('source_title') or ho.get('title', '')}》，"
-                  f"rights={ho.get('rights_status', '—')}，sha256={str(ho.get('docx_sha256', ''))[:12]}…）")
-        except Exception:
-            pass
-
+                print(f"[warn] 未找到含『创作区/制漫剧/』的仓库根，作品根回退到小说同级：{root}"
+                      f"（建议用 --out 指定 创作区/制漫剧/<剧名>/）", file=sys.stderr)
     text = read_text(args.novel)
     write_source_snapshot(root, title, text)
     paras = normalize_paragraphs(text)
@@ -342,6 +351,13 @@ def main():
         before = len(paras)
         paras = strip_frontmatter(paras)
         dropped = before - len(paras)
+
+    # 题材感知边界词典：读 _设置.md `题材`（弱选择点；未设则 base ∪ 古装动作=历史默认）→
+    # 重建模块级强钩/冲突/爽点正则，治女频情感/悬疑/都市粗切退化成无闭环。
+    global STRONG_EPISODE_END_RE, CONFLICT_RE, PAYOFF_OR_REVERSAL_RE
+    genre = get_setting(root, "题材", "")
+    buckets = boundary_buckets(genre)
+    STRONG_EPISODE_END_RE, CONFLICT_RE, PAYOFF_OR_REVERSAL_RE = build_boundary_res(genre)
 
     if args.per_chapter:
         episodes = split_per_chapter(paras) or chunk_text(paras, args.target, args.max, args.min)
@@ -366,6 +382,14 @@ def main():
     write_if_absent(
         os.path.join(settings, "locations", "_场景总表.md"),
         f"# {title} — 场景卡总表\n\n> 全篇首次出现即建卡，后续镜头保持一致。格式见 references/formats.md。\n",
+    )
+    write_if_absent(
+        os.path.join(settings, "characters", "_生命周期.md"),
+        f"# {title} — 角色形象生命周期时间线（跨集·全局产物）\n\n"
+        "> 跨集造型/年龄/服装/形态里程碑的**全局产物**（Gap2）。第2步建卡后跑：\n"
+        "> `python3 skills/n2d-script/scripts/lifecycle_scan.py <作品根> --write` 自动扫候选→人确认。\n"
+        "> 用途：提前规划定妆库何时派生新『形态变体』；作 n2d-identity 跨集漂移的预期变化基线。\n"
+        "> 格式见 references/formats.md §1.1。\n",
     )
 
     total_est = len(episodes)
@@ -413,15 +437,21 @@ def main():
             f.write("\n".join(prog_lines) + "\n")
 
     print(f"作品根: {root}")
-    mode = "每章一集" if args.per_chapter else ("按章节+字数" if args.by_chapter else "按字数")
-    print(f"切分方式：{mode}；剥离开头元数据 {dropped} 段。")
+    mode = "每章一集" if args.per_chapter else ("按章节+强钩候选" if args.by_chapter else "按强钩候选")
+    target_note = f"；字数参考 {args.target}（仅报告，不参与切点）" if args.target else "；未设置字数参考"
+    genre_note = f"{genre}→{'/'.join(buckets)}" if genre else f"未设题材→{'/'.join(buckets)}(默认)"
+    print(f"切分方式：{mode}；边界词典题材：{genre_note}；剥离开头元数据 {dropped} 段。")
     if partial:
-        print(f"部分先切：已落地前 {n_make} 集（全本按当前 band 约估 {total_est} 集）。"
-              f"字数范围 {min(lengths)}~{max(lengths)}（目标 {args.target}）")
+        print(f"部分先切：已落地前 {n_make} 集（全本按候选断点约估 {total_est} 集）。"
+              f"字数范围 {min(lengths)}~{max(lengths)}{target_note}；无硬上下限")
         print(f"下一步：精修第1集验证节拍/画风/角色卡；满意后重跑 split 加大 --limit 续切（旧集与进度勾选保留）。")
     else:
-        print(f"共 {n_make} 集，字数范围 {min(lengths)}~{max(lengths)}（目标 {args.target}）")
+        print(f"共 {n_make} 集，字数范围 {min(lengths)}~{max(lengths)}{target_note}；无硬上下限")
         print("目录骨架已生成。下一步：精修每集素材。")
+    hints = [f"第{i}集 {length_hint(n)}" for i, n in enumerate(lengths, 1) if length_hint(n)]
+    if hints:
+        tail = "；…" if len(hints) > 8 else ""
+        print("字数提示（仅复核，不参与切点）： " + "；".join(hints[:8]) + tail)
 
 
 if __name__ == "__main__":

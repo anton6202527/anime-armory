@@ -17,7 +17,10 @@ BOUNDARY_PRODUCT_KINDS = {
         "boundary": "episode_summary",
     },
     IDENTITY_REGISTRY_KIND: {
-        "owner": "n2d-identity",
+        "owner": "n2d-image",
+        "writer_owner": "n2d-image",
+        "schema_owner": "n2d (contract)",
+        "consumer_owner": "n2d-identity",
         "path": f"出图/{SHARED_ASSET_DIR}/identity_registry.json",
         "layer": "shared_asset",
         "boundary": "identity_definition",
@@ -39,6 +42,30 @@ BOUNDARY_PRODUCT_KINDS = {
         "path": "合规/compliance_manifest.json",
         "layer": "governance",
         "boundary": "rights_clearance",
+    },
+    IMAGE_QC_REPORT_KIND: {
+        "owner": "n2d-image",
+        "path": f"{PRODUCTION_DIR}/image_qc/{{ep}}/image_qc_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "image_drop_qc",
+    },
+    CONSISTENCY_FINDINGS_KIND: {
+        "owner": "n2d-review",
+        "path": f"{PRODUCTION_DIR}/consistency_findings_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "consistency_findings",
+    },
+    GATE_FINDINGS_KIND: {
+        "owner": "n2d-dashboard",
+        "path": f"{PRODUCTION_DIR}/gate_findings_{{stage}}_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "gate_findings",
+    },
+    CONSISTENCY_LEDGER_KIND: {
+        "owner": "n2d-review",
+        "path": f"{PRODUCTION_DIR}/consistency_ledger_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "consistency_ledger",
     },
     VIDEO_MODEL_ROUTES_KIND: {
         "owner": "n2d-model-router",
@@ -63,6 +90,24 @@ BOUNDARY_PRODUCT_KINDS = {
         "path": f"{PRODUCTION_DIR}/contract_inheritance_{{ep}}.json",
         "layer": "production_data",
         "boundary": "visual_contract_handoff",
+    },
+    IDENTITY_DRIFT_REPORT_KIND: {
+        "owner": "n2d-identity",
+        "path": f"{PRODUCTION_DIR}/identity_drift_report.json",
+        "layer": "production_data",
+        "boundary": "identity_drift",
+    },
+    IDENTITY_VOICE_DRIFT_REPORT_KIND: {
+        "owner": "n2d-identity",
+        "path": f"{PRODUCTION_DIR}/identity_voice_drift_report.json",
+        "layer": "production_data",
+        "boundary": "voice_key_drift",
+    },
+    IDENTITY_VOICE_PRINT_REPORT_KIND: {
+        "owner": "n2d-identity",
+        "path": f"{PRODUCTION_DIR}/identity_voice_print_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "voice_print_consistency",
     },
     VISUAL_STATE_LEDGER_KIND: {
         "owner": "n2d-image",
@@ -186,12 +231,12 @@ IDENTITY_FORK_HISTORY_ENTRY_FIELDS = (
 # 富表为单一真值源，并把发型机检 发型(H1) 折进 character_consistency（发型属角色 DNA）。
 CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
     "character_consistency": {
-        "label": "角色 DNA 一致性（脸/发型）",
+        "label": "角色 DNA/形体一致性（脸/发型/身形/手）",
         "weight": 20,
         "return_to_stage": "image",
-        "scope": "回 n2d-image 重出脸/发型漂移镜头；必要时补 identity_registry.character_dna / reference_group。",
-        "audit_labels": ("锚点门(N3)", "脸(G1)", "发型(H1)", "片内时序(N2)"),
-        "keywords": ("角色", "角色DNA", "DNA", "脸", "发型", "资产身份", "identity", "face", "锚点"),
+        "scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表。",
+        "audit_labels": ("锚点门(N3)", "脸(G1)", "发型(H1)", "片内时序(N2)", "手部/解剖(N5)", "身高比例(R1)"),
+        "keywords": ("角色", "角色DNA", "DNA", "脸", "发型", "身高", "体型", "手部", "解剖", "资产身份", "identity", "face", "锚点"),
     },
     "outfit_consistency": {
         "label": "角色 DNA 一致性（服装/配饰）",
@@ -202,12 +247,12 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "keywords": ("服装", "配色", "妆造", "配饰", "accessory", "outfit"),
     },
     "scene_consistency": {
-        "label": "场景一致性",
+        "label": "场景/构图连续性",
         "weight": 12,
         "return_to_stage": "image",
-        "scope": "回 n2d-image 修场景定妆、光位锚或尾帧；必要时回 n2d-video 重出接缝 clip。",
-        "audit_labels": ("场景(O2)", "接缝接力"),
-        "keywords": ("场景", "接缝", "尾帧", "场景资产"),
+        "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝 clip。",
+        "audit_labels": ("场景(O2)", "接缝接力", "轴线视线(X1)", "天气时辰(W1)", "光位方向(W2)", "字幕安全区(L2)", "空间站位(B1)"),
+        "keywords": ("场景", "接缝", "尾帧", "场景资产", "轴线", "视线", "站位", "遮挡", "前后景", "天气", "时辰", "字幕安全区", "字幕带", "构图"),
     },
     "subtitle_correctness": {
         "label": "字幕正确性",
@@ -222,7 +267,7 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "weight": 16,
         "return_to_stage": "compose",
         "scope": "回 n2d-compose 对齐配音轨、clip 时长、原生音轨策略；若时长源头错，回 n2d-script 阶段2。",
-        "audit_labels": (),
+        "audit_labels": ("音画同步(AV1)",),
         "keywords": ("音画", "配音", "原生音", "双人声", "时长", "voice", "audio", "口型", "mouth"),
     },
     "voice_consistency": {
@@ -238,7 +283,7 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "weight": 12,
         "return_to_stage": "script_stage2",
         "scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。",
-        "audit_labels": (),
+        "audit_labels": ("节奏密度(Rhythm)",),
         "keywords": ("节奏", "钩子", "爽点", "留存", "集尾", "rhythm"),
     },
     "style_consistency": {
@@ -253,9 +298,9 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "label": "语义继承",
         "weight": 8,
         "return_to_stage": "script_stage2",
-        "scope": "回 n2d-script 阶段2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点。",
-        "audit_labels": ("语义谱系(P0)",),
-        "keywords": ("语义", "谱系", "继承", "semantic", "voiceover", "storyboard"),
+        "scope": "回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点与称谓口头禅漂移。",
+        "audit_labels": ("语义谱系(P0)", "称谓口头禅(A1)"),
+        "keywords": ("语义", "谱系", "继承", "称谓", "口头禅", "人设", "semantic", "voiceover", "storyboard"),
     },
     "state_continuity": {
         "label": "状态百科",
@@ -282,6 +327,23 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "keywords": ("契约继承", "contract_inheritance", "光位锚", "轴线视线", "导演一致性"),
     },
 }
+
+# 显式声明：以下维度**有意**不接 consistency_audit / gate 机检 runner（audit_labels 为空）。
+# 当前没有空 audit_labels 维度；仍保留 allowlist 断言，让未来新增维度不会因漏配 audit_labels 而
+# **静默**失去机检（要么接 runner，要么显式登记进这里）。
+# 注 1：voice_consistency 的声纹机检走 n2d-identity 的 identity.py --write 旁路（非 consistency_audit），
+#       故其 audit_labels 非空但不在本表——它有机检，只是不在主审计套件内。
+# 注 2：audio_visual_sync 已于 2026-06 接入 consistency_audit 的 音画同步(AV1) advisory runner
+#       （lipsync_consistency.py·口型↔配音偏移，SyncNet/LatentSync/外部偏移报告，缺则优雅降级，
+#       block 封顶到 warn 不硬阻断 gate；实测严重档喂 n2d-score）——故已移出本缺口表。
+# 注 3：rhythm_density 已接入 consistency_audit 的 节奏密度(Rhythm) advisory runner（pacing_retention.py）。
+#       它仍不是成片观感模型，常规 profile 不硬阻断；production profile 可按 gate 策略对重复/关键场景
+#       或人工未签收问题升级。
+GATE_UNAUDITED_DIMENSIONS: frozenset = frozenset()
+assert {k for k, v in CONSISTENCY_DIMENSIONS.items() if not v.get("audit_labels")} == GATE_UNAUDITED_DIMENSIONS, (
+    "空 audit_labels 的一致性维度必须与 GATE_UNAUDITED_DIMENSIONS 显式一致——"
+    "新增维度请配 audit_labels 接机检 runner，或显式登记为已知缺口，别让机检静默蒸发。"
+)
 
 # ── STAGE_GRAPH ──────────────────────────────────────────────────────────────
 STAGE_GRAPH: List[Dict[str, Any]] = [
@@ -377,7 +439,7 @@ STAGE_GRAPH: List[Dict[str, Any]] = [
         "progress_columns": ("出图prompt",),
         "command": "n2d-image {root} {ep}",
         "routes": True,
-        "gate_stage": "image_preflight",
+        "gate_stage": "image_prompt_preflight",
         "requires": ("配音", "分镜设计"),
         "outputs": (
             f"出图/{SHARED_ASSET_DIR}/prompt/00_索引.md",
@@ -408,7 +470,7 @@ STAGE_GRAPH: List[Dict[str, Any]] = [
         "progress_columns": ("视频prompt",),
         "command": "n2d-video {root} {ep}",
         "routes": True,
-        "gate_stage": "video_preflight",
+        "gate_stage": "video_prompt_preflight",
         "requires": ("出图",),
         "outputs": (
             "出视频/{ep}/prompt/00_总览.md",
@@ -475,6 +537,14 @@ STAGE_GRAPH: List[Dict[str, Any]] = [
 ]
 
 GATE_RECOVERY: Dict[str, Any] = {
+    "image_prompt_preflight": {
+        "return_to_stage": "script_stage2",
+        "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+        "affected_artifacts": (
+            "合规/compliance_manifest.json",
+            "脚本/{ep}/storyboard.json",
+        ),
+    },
     "image_preflight": {
         "return_to_stage": "image_prompt",
         "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
@@ -497,6 +567,19 @@ GATE_RECOVERY: Dict[str, Any] = {
             f"出图/{SHARED_ASSET_DIR}/prompt",
             "出图/{ep}/prompt",
             "出图/{ep}/图片",
+        ),
+    },
+    "video_prompt_preflight": {
+        "return_to_stage": "image",
+        "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
+        "affected_artifacts": (
+            "合规/compliance_manifest.json",
+            "脚本/{ep}/storyboard.json",
+            f"出图/{SHARED_ASSET_DIR}/identity_registry.json",
+            f"出图/{SHARED_ASSET_DIR}/asset_registry.json",
+            f"{PRODUCTION_DIR}/identity_adapter_matrix.json",
+            "出图/{ep}/图片",
+            f"{PRODUCTION_DIR}/image_qc/{{ep}}",
         ),
     },
     "video_preflight": {

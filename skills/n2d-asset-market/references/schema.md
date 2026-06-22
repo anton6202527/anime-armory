@@ -21,7 +21,7 @@
   "asset_type": "character",
   "slug": "冷宫废妃",
   "title": "冷宫废妃",
-  "source_project": "制漫剧/旧剧",
+  "source_project": "创作区/制漫剧/旧剧",
   "exported_at": "2026-06-08T00:00:00Z",
   "license": {
     "status": "user_owned_or_synthetic",

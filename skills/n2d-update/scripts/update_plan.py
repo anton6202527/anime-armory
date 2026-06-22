@@ -1277,7 +1277,7 @@ def build_plan(root: str, ep: str, *, regen_mode: Optional[str] = None) -> Dict[
     if source_drift and source_drift.get("status") == "drift":
         chs = source_drift.get("changed_chapters") or source_drift.get("changed") or []
         notes.append(
-            f"源小说已变动（{len(chs)} 章漂移）：写小说成品改了，本剧源过期。"
+            f"源文本已变动（{len(chs)} 章漂移）：本剧源过期。"
             "重切属不可逆/花钱点——先看 `source_check.py` 报告，确认后再决定重切哪些集。"
         )
     elif source_drift and source_drift.get("status") in {"error", "unavailable"}:
@@ -1437,7 +1437,7 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     sub = parser.add_subparsers(dest="cmd", required=True)
 
     def add_common(p: argparse.ArgumentParser) -> None:
-        p.add_argument("root", help="制漫剧/<剧名> 作品根")
+        p.add_argument("root", help="创作区/制漫剧/<剧名> 作品根")
         p.add_argument("episode", nargs="?", help="第N集；--all 时可省略")
         p.add_argument("--all", action="store_true", help="扫描/记录所有进度表集")
 
@@ -1464,7 +1464,7 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
         "media",
         help="selective image/video refresh plan for a few shots (evidence-first, no audit)",
     )
-    p_media.add_argument("root", help="制漫剧/<剧名> 作品根")
+    p_media.add_argument("root", help="创作区/制漫剧/<剧名> 作品根")
     p_media.add_argument("episode", nargs="?", help="第N集（必填，避免误扫全剧）")
     p_media.add_argument("--image", action="append", default=[], help="候选复核/可能刷新的图片目标，可逗号分隔；不是坏图判定")
     p_media.add_argument("--video", action="append", default=[], help="候选复核/可能刷新的视频目标，可逗号分隔；不是坏视频判定")

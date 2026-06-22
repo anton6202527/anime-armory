@@ -46,3 +46,35 @@ def test_precision_lines_full_path_clean():
     lines = "\n".join(doctor.precision_lines(probes))
     assert "full 精度" in lines
     assert "正式配音" in lines
+
+
+def test_precision_lines_reports_deferred_video_backend():
+    probes = {
+        "libs": {"insightface": True, "onnxruntime": True, "PIL": True},
+        "cli": {"ffmpeg": True, "ffprobe": True},
+        "voice": {"say": True, "heavy_env": True},
+        "image_backend": None,
+        "video_backend": {"deferred": True, "route": "自动按镜头路由"},
+    }
+    lines = "\n".join(doctor.precision_lines(probes))
+    assert "生视频后端：未固定" in lines
+    assert "后移到 n2d-video" in lines
+
+
+def test_probe_video_backend_defers_auto_route(tmp_path):
+    (tmp_path / "_设置.md").write_text("- 视频模型路由: 自动按镜头路由\n", encoding="utf-8")
+    result = doctor.probe_video_backend(str(tmp_path))
+    assert result and result["deferred"] is True
+
+
+def test_probe_video_backend_checks_fixed_route(tmp_path):
+    (tmp_path / "_设置.md").write_text(
+        "- 视频模型路由: 固定生视频模型\n"
+        "- 生视频模型: Seedance 2.0\n"
+        "- 生视频渠道: 即梦/Dreamina\n",
+        encoding="utf-8",
+    )
+    result = doctor.probe_video_backend(str(tmp_path))
+    assert result and not result.get("deferred")
+    assert result["name"] == "Seedance 2.0"
+    assert result["mode"] != "unknown"

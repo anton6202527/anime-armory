@@ -57,14 +57,14 @@ copy_file desktop/package-lock.json
 copy_file 资产库/README.md
 copy_file scripts/package_release.sh
 
-for dir in 制漫剧; do
-  mkdir -p "${PKG}/${dir}"
-  cat > "${PKG}/${dir}/README.md" <<EOF
-# ${dir}
+for dir in 制漫剧 写小说 写歌 制MV 拍广告; do
+  mkdir -p "${PKG}/创作区/${dir}"
+  cat > "${PKG}/创作区/${dir}/README.md" <<EOF
+# 创作区/${dir}
 
 这里放新项目产物。starter 包默认不带仓库里的 demo 媒体和工程产物，避免下载包过大。
 
-需要参考 demo 时，请回到完整仓库查看同名顶层目录。
+需要参考 demo 时，请回到完整仓库查看同名创作区目录。
 EOF
 done
 
@@ -79,7 +79,7 @@ cat > "${PKG}/版本说明.md" <<EOF
 - tools/ 仓库级维护工具
 - docs/ 文档与截图
 - desktop/ 桌面端源码，不含 node_modules 和构建产物
-- 制漫剧/ 空作品目录
+- 创作区/ 五条空作品线目录
 - 资产库/README.md
 
 不包含：

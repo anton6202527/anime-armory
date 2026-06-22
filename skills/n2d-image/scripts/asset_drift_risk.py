@@ -36,7 +36,8 @@ TYPE_LABEL = {"scene": "场景", "location": "场景", "prop": "道具", "vfx": 
 WEIGHTS = {"reuse_high": 25, "reuse_single": 6,
            "appear_each": 3, "appear_cap": 24,
            "drift_each": 4, "drift_cap": 20,
-           "structure": 8, "color": 8, "multiform": 15}
+           "structure": 8, "color": 8, "multiform": 15,
+           "missing_contract": 14}
 BAND_HIGH, BAND_MEDIUM = 50, 28
 
 
@@ -69,6 +70,7 @@ def score_asset(signals: Mapping[str, Any]) -> Dict[str, Any]:
     structure = WEIGHTS["structure"] if signals.get("has_structure") else 0
     color = WEIGHTS["color"] if signals.get("has_color") else 0
     multiform = WEIGHTS["multiform"] if signals.get("has_multiform") else 0
+    missing_contract = WEIGHTS["missing_contract"] if signals.get("missing_contract") else 0
     if appear:
         drivers.append({"factor": f"本集出镜 {signals.get('appear', 0)} 次", "points": appear})
     if drift:
@@ -79,7 +81,9 @@ def score_asset(signals: Mapping[str, Any]) -> Dict[str, Any]:
         drivers.append({"factor": "颜色/拖尾强锁", "points": color})
     if multiform:
         drivers.append({"factor": "多形态(跨形态易窜色)", "points": multiform})
-    score = min(base + appear + drift + structure + color + multiform, 100)
+    if missing_contract:
+        drivers.append({"factor": "高频资产缺结构/颜色/禁漂约束", "points": missing_contract})
+    score = min(base + appear + drift + structure + color + multiform + missing_contract, 100)
     band = "high" if score >= BAND_HIGH else ("medium" if score >= BAND_MEDIUM else "low")
     drivers.sort(key=lambda d: d["points"], reverse=True)
     return {"score": score, "band": band, "drivers": drivers}
@@ -100,6 +104,8 @@ def suggestions_for(atype: str, scored: Mapping[str, Any], signals: Mapping[str,
         out.append("颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。")
     if signals.get("has_multiform"):
         out.append("多形态：每个形态各自定妆 + 各自锁颜色拖尾；用结构化 states/transitions（asset 状态机）防形态回退/窜色。")
+    if signals.get("missing_contract"):
+        out.append("高频资产缺注册约束：补 `constraints.structure/layout/color/light_anchor` 与 `drift_forbidden`，否则风险分低不是稳定，而是登记信息不足。")
     if scored.get("band") == "high":
         out.append(f"风险 high：出图后重点看 image_qc 道具/特效 P2 + 场景 O2 初筛，必要时上 asset 状态机结构化 lifecycle（防回退）。")
     return out
@@ -122,7 +128,9 @@ def load_assets(root: Path) -> List[Dict[str, Any]]:
         name = str(a.get("name") or "").strip()
         cons = a.get("constraints") or {}
         forms = a.get("forms") or a.get("morph_states")
-        aliases = {name} if len(name) >= 2 else set()
+        aliases = {aid}
+        if len(name) >= 2:
+            aliases.add(name)
         out.append({
             "id": aid, "type": str(a.get("type") or "").strip(), "name": name or aid,
             "scope": str(a.get("scope") or ""),
@@ -175,11 +183,18 @@ def analyze(root: Path, ep: str) -> Dict[str, Any]:
             "has_color": any(k in ("color", "lighting_signature", "light_anchor") for k in cons),
             "has_multiform": a["has_multiform"],
         }
+        signals["missing_contract"] = (
+            appear >= 3
+            and int(signals["drift_forbidden"]) == 0
+            and not signals["has_structure"]
+            and not signals["has_color"]
+        )
         scored = score_asset(signals)
         results.append({
             "id": a["id"], "type": a["type"], "name": a["name"], "scope": a["scope"],
             "signals": {k: signals[k] for k in ("appear", "drift_forbidden", "has_structure",
-                                                "has_color", "has_multiform", "reuse_base")},
+                                                "has_color", "has_multiform", "reuse_base",
+                                                "missing_contract")},
             **scored,
             "suggestions": suggestions_for(a["type"], scored, signals),
         })

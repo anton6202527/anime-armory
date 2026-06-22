@@ -1,16 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""字幕/歌词渲染共享原语（跨生产线）。
+"""字幕/歌词渲染原语（mv 线自带·vendored）。
 
-本机 ffmpeg 是裁剪版、无 libass/drawtext，所以 n2d / ad / mv 的 compose 都得自己
-把字幕渲成透明 PNG 再 overlay 烧录。三条线此前各抄了一份「SRT/LRC/ASS 解析 + 时间戳
-解析 + 字体回退加载 + CJK 折行 + ffmpeg overlay 链拼装」——这些原语没有任何画线语义、
-纯确定性、可单测，是教科书级的「抽进 common/ 共享」对象（与 text_utils / settings /
-disclosure 同档：common 是各线都 import 的共享地基，不是某条线的 skill，故不破坏
-「线之间不互相复用 skill」边界）。
+本机 ffmpeg 是裁剪版、无 libass/drawtext，所以 mv-compose 需要把字幕渲成透明 PNG
+再 overlay 烧录。本模块是 mv 线**自包含**的字幕底层：SRT/LRC/ASS 解析 + 时间戳解析 +
+字体回退加载 + CJK 折行 + ffmpeg overlay 链拼装。纯确定性、可单测，随 mv 线一起交付。
 
-留在各 compose 本地的是**视觉部分**（描边技法、版式、样式分级、输出文件命名）——那才是
-各线真正分叉、且改一像素就动既有 demo 产物的部分，不强行统一。
+留在调用方的是**视觉部分**（描边技法、版式、样式分级、输出文件命名），避免底层解析逻辑
+和视觉风格混在一起。
 
 无 PIL 环境也能 import：解析/链路原语不碰 PIL，只有 load_font 内部惰性 import PIL。
 """
@@ -161,10 +158,8 @@ def overlay_filter_chain(cues: Sequence[Tuple[float, float]], *, png_input_base:
     """把 N 张时间门控 PNG 拼成 ffmpeg overlay 滤镜链字符串。
 
     每张 PNG 是第 `png_input_base+k` 路输入，时间窗 `enable='between(t,start,end)'`。
-    参数化以字节级复现各线既有写法：
-      - n2d: png_input_base=3, inter_prefix='v', pre_final='[vsub]', overlay_xy='0:0',
-              format_tail='yuv420p', format_final='[v]'
-      - mv:  png_input_base=2, inter_prefix='s', pre_final='[v]'（无 format_tail）
+    参数化以字节级复现调用方既有写法，例如可调整 PNG 输入序号、中间 label 前缀、
+    最终 label、overlay 坐标和尾部 format。
 
     cues 为 (start, end) 秒序列。空列表：有 format_tail 时回 `<first>format=<tail><final>`，
     否则回 first_input。

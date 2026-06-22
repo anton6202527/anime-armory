@@ -1,7 +1,7 @@
 # ad-voice 后端接入（参考）
 
 ad-voice 自带 `say`（macOS 占位）与 `estimate`（跨平台静音占位）。真后端各自产 wav 后登记，
-逻辑与 n2d 同构但不复用其代码。
+时长清单与 voice_key 对账逻辑由 ad-voice 自己维护。
 
 ## 占位后端（无凭证也能跑时长）
 

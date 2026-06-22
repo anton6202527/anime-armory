@@ -1,6 +1,6 @@
 ---
 name: novel-promote
-description: 宣发一体化与爆点挖掘 — 挖掘小说中的"高光时刻"(视觉冲击力强的战斗、情感爆发点、神反转),自动生成适用于抖音/TikTok/小红书的短视频脚本、高燃预告片文案或引流切片建议。对接 n2d 线,实现从文字到视觉宣发的工业化闭环。Use when asked to 宣发, 引流, 出视频脚本, 爆点挖掘, 推广文案, novel promotion, marketing script, viral hook. Triggers 宣发, 推广, 引流脚本, 预告片, 爆点, 抖音文案, 视频分镜, novel promote.
+description: 宣发一体化与爆点挖掘 — 挖掘小说中的"高光时刻"(视觉冲击力强的战斗、情感爆发点、神反转),自动生成适用于抖音/TikTok/小红书的短视频脚本、高燃预告片文案或引流切片建议。Use when asked to 宣发, 引流, 出视频脚本, 爆点挖掘, 推广文案, novel promotion, marketing script, viral hook. Triggers 宣发, 推广, 引流脚本, 预告片, 爆点, 抖音文案, 视频分镜, novel promote.
 ---
 
 # novel-promote — 宣发一体化与爆点挖掘
@@ -29,9 +29,8 @@ python3 skills/novel-promote/scripts/promo_gen.py "<作品根>" --chapter <章�
 - **`--platform` 缺省自动推断**：不显式传 `--platform` 时，按项目 `目标平台` 选择点推断投放平台（晋江/情感→xiaohongshu，红果/抖音/漫剧/番茄→douyin，历史/B站→bilibili，否则 tiktok）；显式 `--platform` 永远优先（CLI 覆盖）。
 - 爆点关键词词表来自单一定义源 `skills/novel/_lib/keyword_banks.py`（与 novel-balance/novel-simulate 共用）。
 
-### 2. 对接漫剧线（成品级交接，不互相 import）
-- 产出 `导出/宣发/第NN章_n2d_ready.md`：把高光片段整理成 `n2d` 可直接吃的预告片骨架（场景/角色/动作/字幕/时长建议），字段对齐 n2d-script 的 beat 结构。
-- **这是跨线交接点**：novel 线产文字爆点底稿 → 落 `导出/宣发/` → 交 `n2d`(制漫剧) 出视觉预告片，与"成稿交 n2d 改编正片"同属**finished-artifact 级衔接**（架构铁律：两条线只在产物层连接，不作 skill 依赖）。promote 只产底稿，不调任何 n2d-* skill。
+### 2. 生成短视频 brief
+- 同步产出 `导出/宣发/第NN章_video_brief.md`：把高光片段整理成短视频预告骨架（场景/角色/动作/字幕/时长建议）。
 
 ## 脚本示例
 > **【抖音高燃向】**
@@ -42,10 +41,10 @@ python3 skills/novel-promote/scripts/promo_gen.py "<作品根>" --chapter <章�
 ## 与家族其它 Skill 的联动
 
 - **novel-balance**：热力图中的“高冲突点”自动标记为 `novel-promote` 的推荐源。
-- **n2d**：直接输出视频生产用的脚本底稿。
+- **novel-style**：为宣发脚本提供文风质感约束。
 
 ## 详细参考
-- 各平台脚本范式、爆点三类、剧透红线、n2d 交接契约：`references/platform-patterns.md`
+- 各平台脚本范式、爆点三类、剧透红线：`references/platform-patterns.md`
 
 ## 常见错误
 

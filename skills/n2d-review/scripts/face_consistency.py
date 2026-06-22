@@ -40,7 +40,10 @@ if COMMON not in sys.path:
 from n2d_contract import shared_asset_path  # noqa: E402  共享定妆目录单一真值源
 
 DEFAULT_MARGIN = 0.08
-IDENTITY_REF_RE = re.compile(r"`?(CHAR_[A-Za-z0-9_]+\*?(?:/[^`\s，；、*]+)?\*?)`?")
+IDENTITY_REF_RE = re.compile(
+    r"(?<![A-Za-z0-9_])`?(CHAR_[A-Za-z0-9_]*[A-Za-z0-9]\*?(?:/[^`\s，；、*]+)?\*?)`?"
+    r"(?![A-Za-z0-9_\u4e00-\u9fff.-])"
+)
 
 # ── Pillow 降级档（无 insightface 时的基础机检）────────────────────────────
 # 只做四件事：图存在 / 可解码 / 分辨率达标 / 清晰度（PIL+stdlib 近似 Laplacian 方差）。
@@ -254,9 +257,40 @@ def pillow_shot_verdict(
     return ("warn", reasons) if reasons else ("ok", [])
 
 
-# ---------- 嵌入（需 insightface · 缺则 None） ----------
+# ---------- 嵌入（按画风可插拔 · 缺则 None） ----------
 
-def _load_embedder():
+# 脸 embedder 是选择点：ArcFace 按真人脸标定，在**风格化/漫剧脸**上 TPR 系统性掉到
+# ~0.76（StyleID 论文 arXiv:2604.21689，2026-04：ArcFace/AdaFace 0.76–0.78、裸 CLIP 仅
+# 0.17–0.25、CLIP-L+LoRA+angular-margin 的 StyleID 0.90）。漫剧产物正是风格化脸——拿真人
+# 阈值的 ArcFace 余弦判崩脸要么误杀要么放过。故把后端做成选择点，并把"用了哪个 encoder"
+# 写进产物供 identity 矩阵/score KPI 对账。
+#
+# 诚实边界（写死成铁律）：**裸 CLIP 比 ArcFace 还差**，所以 styleid 路径必须加载真正的
+# StyleID 权重（N2D_STYLEID_MODEL 指向论文发布的 CLIP-L+LoRA checkpoint）；缺权重时**绝不
+# 静默退化成裸 CLIP**，而是回退 ArcFace 并标 encoder=arcface_fallback（消费端据此降精度）。
+
+ENCODER_ARCFACE = "arcface_buffalo_l"
+ENCODER_STYLEID = "styleid_clip_l"
+ENCODER_ARCFACE_FALLBACK = "arcface_fallback"  # 想要 styleid 但权重缺、回退 arcface
+
+
+def select_face_encoder(backend: Optional[str] = None, style_hint: Optional[str] = None) -> str:
+    """纯函数·决定脸 encoder：'arcface' | 'styleid'。
+    优先级：显式 backend > 环境变量 N2D_FACE_EMBEDDER > style_hint 自动 > arcface 默认（向后兼容）。
+    style_hint 取本集风格指纹的粗分类：'illustration'/'anime'/'stylized' → styleid；'photo'/'realistic' → arcface。
+    无法判定 → arcface（保守，不擅自换后端）。"""
+    raw = (backend or os.environ.get("N2D_FACE_EMBEDDER") or "").strip().lower()
+    if raw in ("arcface", "buffalo_l", "buffalo"):
+        return "arcface"
+    if raw in ("styleid", "anime", "clip", "clip_l"):
+        return "styleid"
+    hint = (style_hint or "").strip().lower()
+    if hint in ("illustration", "anime", "stylized", "cartoon", "manga"):
+        return "styleid"
+    return "arcface"
+
+
+def _load_arcface():
     try:
         from insightface.app import FaceAnalysis  # type: ignore
     except Exception:
@@ -267,6 +301,104 @@ def _load_embedder():
         return app
     except Exception:
         return None
+
+
+def _load_styleid_embedder():
+    """StyleID（CLIP-L+LoRA，风格化脸专调）best-effort·opt-in。返回与 insightface 同接口的对象
+    （.get(img) → 每脸带 .bbox/.normed_embedding；.prepare(...)），便于 _embed/_embed_all 无差别消费。
+
+    需 N2D_STYLEID_MODEL 指向 StyleID checkpoint + torch；同时复用 insightface 的检测器拿 bbox
+    （保持与 arcface 同一套脸框，仅替换 embedding）。任一缺失/加载失败 → None（调用方回退 arcface，
+    绝不退化成裸 CLIP）。模型加载在 full 精度 conda env（facefusion）内做。"""
+    model_path = os.environ.get("N2D_STYLEID_MODEL", "").strip()
+    if not model_path or not allow_model_download_ok():
+        return None
+    try:
+        import torch  # type: ignore  # noqa: F401
+        from insightface.app import FaceAnalysis  # type: ignore
+    except Exception:
+        return None
+    try:
+        det = FaceAnalysis(name="buffalo_l")  # 仅借其检测器拿 bbox，embedding 走 StyleID
+        det.prepare(ctx_id=-1, det_size=(640, 640))
+        encoder = _load_styleid_checkpoint(model_path)  # 论文发布的 CLIP-L+LoRA；缺实现/权重 → 抛错
+        if encoder is None:
+            return None
+        return _StyleIDFaceApp(det, encoder)
+    except Exception:
+        return None
+
+
+def allow_model_download_ok() -> bool:
+    """与 semantic_drift 同源的下载/重模型 opt-in 门：N2D_ALLOW_MODEL_DOWNLOAD!=0 才放行重后端。"""
+    return os.environ.get("N2D_ALLOW_MODEL_DOWNLOAD", "1") != "0"
+
+
+def _load_styleid_checkpoint(model_path: str):
+    """加载 StyleID CLIP-L+LoRA checkpoint。当前为接口占位：真实权重接入时在此 torch.load + 构图。
+    返回一个 callable(face_bgr_crop)->List[float]（归一化 embedding）或 None。缺真实实现时返回 None，
+    使 _load_styleid_embedder 回退 arcface——绝不静默用裸 CLIP 充数。"""
+    return None
+
+
+class _FaceObj:
+    """insightface 同形脸对象：.bbox(x1,y1,x2,y2) + .normed_embedding。"""
+    __slots__ = ("bbox", "normed_embedding")
+
+    def __init__(self, bbox, normed_embedding):
+        self.bbox = bbox
+        self.normed_embedding = normed_embedding
+
+
+class _StyleIDFaceApp:
+    """把『insightface 检测 + StyleID 嵌入』包成 .get()/.prepare() 接口，drop-in 替换 buffalo_l。"""
+
+    def __init__(self, detector, encoder):
+        self._det = detector
+        self._encode = encoder
+
+    def prepare(self, *args, **kwargs):  # 接口兼容（检测器已 prepare 过）
+        return None
+
+    def get(self, img):
+        faces = self._det.get(img) or []
+        out = []
+        for f in faces:
+            x1, y1, x2, y2 = (int(v) for v in f.bbox[:4])
+            crop = img[max(0, y1):max(0, y2), max(0, x1):max(0, x2)]
+            if crop.size == 0:
+                continue
+            emb = self._encode(crop)
+            if emb is None:
+                continue
+            out.append(_FaceObj(f.bbox, emb))
+        return out
+
+
+def _encoder_from_settings(root: str) -> Optional[str]:
+    """从 `_设置.md` 读选择点 `脸一致性机检后端`（arcface|styleid）。缺/读不到/「自动按画风」→ None，
+    交还 select_face_encoder 走 env→style_hint→arcface。让脸 encoder 成为真正的 _设置.md 选择点
+    （n2d/_lib 已在 sys.path 上，见文件顶 COMMON）。"""
+    try:
+        import settings as _settings  # type: ignore  # n2d/_lib via COMMON
+        val = (_settings.load_settings(root) or {}).get("脸一致性机检后端")
+    except Exception:
+        return None
+    v = str(val or "").strip().lower()
+    return v if v in ("arcface", "styleid") else None
+
+
+def _load_embedder(backend: Optional[str] = None, style_hint: Optional[str] = None):
+    """返回 (app, encoder_name)。app 缺则 (None, None)。styleid 缺权重 → 回退 arcface 标 fallback。"""
+    choice = select_face_encoder(backend, style_hint)
+    if choice == "styleid":
+        app = _load_styleid_embedder()
+        if app is not None:
+            return app, ENCODER_STYLEID
+        app = _load_arcface()  # 缺 StyleID 权重：回退 arcface，绝不用裸 CLIP
+        return (app, ENCODER_ARCFACE_FALLBACK) if app is not None else (None, None)
+    app = _load_arcface()
+    return (app, ENCODER_ARCFACE) if app is not None else (None, None)
 
 
 def _load_pillow():
@@ -452,6 +584,8 @@ def registry_variant_paths(form: Mapping[str, object]) -> Dict[str, str]:
     out: Dict[str, str] = {}
 
     def add(name: str, raw: object) -> None:
+        if isinstance(raw, Mapping):
+            raw = raw.get("path")
         if isinstance(raw, str) and raw.strip():
             out.setdefault(name, raw.strip())
 
@@ -701,11 +835,46 @@ def pillow_fallback_analyze(root: str, ep: str, image_mod, margin: float = DEFAU
     return result
 
 
-def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN) -> dict:
+# ---------- G3：fidelity-gate（崩 canonical 的镜不进一致性均值） ----------
+# 一个从第1镜就略错的脸，后续每镜稳定继承这个错——余弦/dHash 反判"高度一致=过"，把"稳定地错"
+# 刷成高一致性分（EntityBench 2026 的 fidelity gate 正堵此漏）。机制：算每角色 ep_mean_score
+# （驱动跨集漂移 + score KPI）前，先读 vlm_verify --write 落的逐镜 canonical 通过表，canonical_pass
+# 为 False 的镜从一致性均值中剔除，单列 render_errors（归"渲染错误"维度，回 n2d-image），不让它
+# 的"稳定相似"掩盖崩设定。掩码缺失（没跑 vlm_verify --write）→ 无门，退回旧行为并 notes 诚实标注。
+
+def fidelity_excluded(png: str, mask: Mapping[str, Any]) -> bool:
+    """纯函数：该镜是否被 fidelity-gate 剔除。仅当掩码明确标 canonical_pass=False 才剔——
+    缺记录（None）按"未判定"放行，绝不臆造剔除。"""
+    rec = (mask or {}).get(str(png or "").strip())
+    if not isinstance(rec, Mapping):
+        return False
+    return rec.get("canonical_pass") is False
+
+
+def _load_fidelity_mask(root: str, ep: str) -> Dict[str, Any]:
+    """读 生产数据/vlm_canonical_<ep>.json 的逐镜 canonical 通过表；缺文件/坏 JSON → {}（无门）。"""
+    path = os.path.join(root, "生产数据", f"vlm_canonical_{ep}.json")
+    try:
+        with open(path, "r", encoding="utf-8") as fh:
+            data = json.load(fh)
+    except Exception:
+        return {}
+    sc = data.get("shot_canonical") if isinstance(data, dict) else None
+    return sc if isinstance(sc, dict) else {}
+
+
+def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN,
+            encoder: Optional[str] = None, style_hint: Optional[str] = None) -> dict:
     sets = discover_costume_sets(root)
-    app = _load_embedder()
+    if encoder is None:  # 显式 CLI/参数 > _设置.md > env > 默认（选择点解析顺序）
+        encoder = _encoder_from_settings(root)
+    app, encoder_name = _load_embedder(encoder, style_hint)
     result: dict = {"available": app is not None, "mode": "insightface", "margin": margin,
-                    "characters": {}, "shots": [], "notes": []}
+                    "encoder": encoder_name, "characters": {}, "shots": [], "notes": []}
+    if encoder_name == ENCODER_ARCFACE_FALLBACK:
+        result["notes"].append(
+            "请求 styleid 但 StyleID 权重缺失（设 N2D_STYLEID_MODEL）——已回退 ArcFace；"
+            "风格化脸下 ArcFace 余弦偏低，按低精度看待，崩脸仍需人判兜底。")
     if app is None:
         image_mod = _load_pillow()
         if image_mod is not None:
@@ -739,11 +908,18 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN) -> dict:
 
     # 2) 每镜 vs 其角色主参考
     smap = shot_character_map(root, ep)
+    canon_mask = _load_fidelity_mask(root, ep)  # G3：崩 canonical 的镜剔出一致性均值
+    result["fidelity_gate"] = "active" if canon_mask else "absent"
+    if not canon_mask:
+        result["notes"].append(
+            "无 fidelity-gate（未跑 vlm_verify --write）——一致性均值可能被'稳定地错'的镜抬高；"
+            "如需剔除崩 canonical 的镜，先跑 vlm_verify --write 落 canonical 通过表再复审。")
     char_ep_scores: Dict[str, List[float]] = {}  # 跨集 embedding 漂移用：本集每角色全镜「vs 共享定妆主参考」余弦
     for png, chars in sorted(smap.items()):
         full = os.path.join(root, "出图", ep, png)
         if not os.path.exists(full):
             continue
+        excluded = fidelity_excluded(png, canon_mask)  # 崩 canonical → 不进一致性均值
         face_embs = _embed_all(app, full)
         if not face_embs:
             result["shots"].append({"png": png, "verdict": "noface", "chars": chars})
@@ -757,7 +933,8 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN) -> dict:
                 if match is None:
                     continue
                 sc, sc_main, face_idx = match
-                char_ep_scores.setdefault(c, []).append(sc_main)
+                if not excluded:  # fidelity-gate：崩 canonical 镜的"稳定相似"不许喂进一致性均值
+                    char_ep_scores.setdefault(c, []).append(sc_main)
                 fl = char_floor.get(c, 0.50)
                 v = band(sc, fl, margin)
                 row = {"char": c, "score": round(sc, 4), "floor": round(fl, 4), "verdict": v,
@@ -785,6 +962,11 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN) -> dict:
                         row["face_swap"] = swap
                         if swap["swap_suspected"] and _sev(row["verdict"]) < _sev("warn"):
                             row["verdict"] = "warn"  # 串脸至少 🟡，交人判
+            if excluded:
+                row["fidelity_gate_excluded"] = True  # 已剔出一致性均值；归"渲染错误"维度
+                result.setdefault("render_errors", []).append(
+                    {"png": png, "char": row.get("char"), "code": "fidelity_gate_excluded",
+                     "reason": "VLM 判 canonical 崩设定——不计入一致性均值，回 n2d-image 重出"})
             result["shots"].append(row)
     # 本集每角色质心相对锚点的接近度（驱动 identity.py 跨集 embedding 漂移报表）
     for char, scores in char_ep_scores.items():
@@ -818,7 +1000,7 @@ def anchor_verdict(face_count: int, box_ratio: float, min_ratio: float = 0.06) -
 def audit_anchors(root: str, min_ratio: float = 0.06) -> dict:
     """审 出图/共享/图片/定妆_<角色>.png 主参考：恰好 1 张清晰、够大的正脸。"""
     sets = discover_costume_sets(root)
-    app = _load_embedder()
+    app, _ = _load_embedder()  # 锚点质量只需检测器（单张清晰正脸），encoder 选择无关
     out: dict = {"available": app is not None, "anchors": [], "notes": []}
     if app is None:
         out["notes"].append("锚点质量门已跳过（未装 insightface/cv2）——主参考是否单张清晰正脸暂由人判。")
@@ -858,6 +1040,9 @@ def main(argv: List[str]) -> int:
     ap.add_argument("root")
     ap.add_argument("episode")
     ap.add_argument("--margin", type=float, default=DEFAULT_MARGIN)
+    ap.add_argument("--encoder", choices=["arcface", "styleid"], default=None,
+                    help="脸 embedder 选择点：arcface(真人风默认)/styleid(风格化漫剧脸·需 N2D_STYLEID_MODEL)；"
+                         "省略则读 N2D_FACE_EMBEDDER，再默认 arcface")
     ap.add_argument("--audit-anchor", action="store_true", help="N3：只审定妆主参考自身质量（单张清晰正脸）")
     ap.add_argument("--cross-ep", action="store_true", help="⑦：逐集跑崩脸机检，汇总每集 🔴/🟡，找出跨集开始漂的那一集")
     ap.add_argument("--json", action="store_true")
@@ -869,7 +1054,7 @@ def main(argv: List[str]) -> int:
                      for d in _glob.glob(os.path.join(root, "出图", "第*集", "图片")))
         rows = []
         for ep in eps:
-            r = analyze(root, ep, ns.margin)
+            r = analyze(root, ep, ns.margin, encoder=ns.encoder)
             if not r.get("available"):
                 rows.append({"episode": ep, "skipped": True}); continue
             vs = [s.get("verdict") for s in r.get("shots", [])]
@@ -903,11 +1088,11 @@ def main(argv: List[str]) -> int:
                 print(f"{icon.get(r['verdict'],'?')} 定妆_{r['char']}: {r.get('reason') or ('faces='+str(r.get('faces'))+' box_ratio='+str(r.get('box_ratio')))}")
         print(f"\n锚点不合格 🔴 {nb} · 共审 {len(a['anchors'])}")
         return 1 if nb else 0
-    res = analyze(ns.root.rstrip("/"), ns.episode, ns.margin)
+    res = analyze(ns.root.rstrip("/"), ns.episode, ns.margin, encoder=ns.encoder)
     if ns.json:
         print(json.dumps(res, ensure_ascii=False, indent=2))
         return 0
-    print(f"=== 崩脸机检（自标定 flag-band · margin {res['margin']}）：{ns.root} {ns.episode} ===")
+    print(f"=== 崩脸机检（自标定 flag-band · margin {res['margin']} · encoder {res.get('encoder')}）：{ns.root} {ns.episode} ===")
     for n in res["notes"]:
         print("ℹ️ " + n)
     if not res["available"]:

@@ -12,7 +12,7 @@
   对账   —— 词/歌/beatgrid/出图/clip/成片 快照、_meta.has_song/has_lyrics vs 实际、段落数 vs structure。
 
 **不覆盖**需要语义判断的维度（崩脸/场景漂移/画风/运镜服务节奏/卡点体感）——
-那些走 references/checklist.md 的「人判」清单（崩脸并排读图）。输入歌的音质/词体检属 song-review。
+那些走 references/checklist.md 的「人判」清单（崩脸并排读图）。输入歌的音质/词体检由项目外部来源保证，本脚本只查 MV 产物。
 
 只用标准库；clip/成片 的时长·分辨率·音轨需 `ffprobe`，缺失时**显式标「跳过」**，绝不静默略过。
 WAV 时长走标准库 wave，不依赖 ffprobe。
@@ -407,7 +407,7 @@ def main():
     check_final(root, meta, songlen)
     check_ai_usage(root)
     if songlen:
-        add(INFO, "音画", mv_utils.relpath(root, song_path), f"歌长基准：{songlen:.2f}s（深度音质体检见 song-review）")
+        add(INFO, "音画", mv_utils.relpath(root, song_path), f"歌长基准：{songlen:.2f}s")
 
     if "--json" in opts:
         print(json.dumps([{"sev": s, "dim": d, "loc": l, "msg": m}

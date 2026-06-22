@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Read 制MV/<项目>/_进度.md and report the current frontier.
+"""Read 创作区/制MV/<项目>/_进度.md and report the current frontier.
 
 只读，不改文件。MV 线不按集拆分，进度以阶段表为主；本脚本兼容历史
 `| 阶段 | skill | 状态 |` 表，并用 mv-craft 契约补充 gate 提示。
@@ -29,7 +29,7 @@ except Exception:  # pragma: no cover - 进度查询不能因契约导入失败�
 
 PARTIAL_RE = re.compile(r"(\d+)\s*/\s*(\d+)")
 HIGH_RISK_HINTS = {
-    "song": "后配歌曲路线需要 song 线产出或用户上传最终 song.*；没有最终歌不能继续正式卡点、timeline、出图、出视频或合成。",
+    "song": "后配歌曲路线需要补入最终 song.*；没有最终歌不能继续正式卡点、timeline、出图、出视频或合成。",
     "mv-image": "会真出图并消耗额度；进入组图前先确认生图AI、参考图/主体库/LoRA一致性增强。",
     "mv-video": "会真出视频并消耗额度；开跑前确认出视频规格、后端与生成粒度。",
     "mv-compose": "合成会覆盖/产出成片文件；先确认画幅、字幕与 AI 视觉披露。",

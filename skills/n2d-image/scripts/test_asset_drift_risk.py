@@ -24,7 +24,8 @@ def test_reuse_base() -> None:
 
 def test_root_label_prefers_repo_relative_path() -> None:
     repo_root = Path(adr.__file__).resolve().parents[3]
-    assert adr.root_label(repo_root / "制漫剧" / "测试项目") == "制漫剧/测试项目"
+    root = repo_root / "创作区" / "制漫剧" / "测试项目"
+    assert adr.root_label(root) == "创作区/制漫剧/测试项目"
 
 
 def test_score_high_reuse_multiform_is_high() -> None:
@@ -39,6 +40,14 @@ def test_score_single_use_low() -> None:
     s = adr.score_asset({"reuse_base": 6, "appear": 1, "drift_forbidden": 1,
                          "has_structure": False, "has_color": False, "has_multiform": False})
     assert s["band"] == "low"
+
+
+def test_score_high_frequency_missing_contract_is_medium() -> None:
+    s = adr.score_asset({"reuse_base": 6, "appear": 4, "drift_forbidden": 0,
+                         "has_structure": False, "has_color": False, "has_multiform": False,
+                         "missing_contract": True})
+    assert s["band"] == "medium"
+    assert any("缺结构" in d["factor"] for d in s["drivers"])
 
 
 def test_suggestions_color_and_multiform() -> None:
@@ -90,6 +99,29 @@ def test_analyze_end_to_end(tmp_path: Path) -> None:
     assert by["PROP_09"]["band"] == "low"
     # 排序：分高在前
     assert rep["assets"][0]["score"] >= rep["assets"][-1]["score"]
+
+
+def test_analyze_penalizes_high_frequency_asset_with_missing_constraints(tmp_path: Path) -> None:
+    root = tmp_path / "剧"
+    reg = root / "出图" / "共享"
+    reg.mkdir(parents=True)
+    (reg / "asset_registry.json").write_text(json.dumps({"assets": [
+        {"id": "LOC_EMPTY", "type": "scene", "name": "空白寝殿", "scope": "第1集单集"},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    sb = root / "脚本" / "第1集"
+    sb.mkdir(parents=True)
+    (sb / "storyboard.json").write_text(json.dumps({"clips": [
+        {"label": "LOC_EMPTY", "scene": "LOC_EMPTY", "shots": [{"desc": "LOC_EMPTY"}]},
+        {"label": "LOC_EMPTY", "scene": "LOC_EMPTY", "shots": [{"desc": "LOC_EMPTY"}]},
+        {"label": "LOC_EMPTY", "scene": "LOC_EMPTY", "shots": [{"desc": "LOC_EMPTY"}]},
+    ]}, ensure_ascii=False), encoding="utf-8")
+
+    rep = adr.analyze(root, "第1集")
+    row = rep["assets"][0]
+    assert row["signals"]["appear"] == 3
+    assert row["signals"]["missing_contract"] is True
+    assert row["band"] == "medium"
+    assert any("登记信息不足" in s for s in row["suggestions"])
 
 
 def test_run_writes_reports(tmp_path: Path) -> None:

@@ -9,6 +9,7 @@ blocking rules.
 import json
 import os
 import sys
+import hashlib
 from datetime import date
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
@@ -25,8 +26,13 @@ from waivers import baseline_freshness_scope, has_waiver, load_waivers
 
 BLOCKING_SCORE_VERDICTS = {"大改", "弃稿重立"}
 COMMERCIAL_SCORE_MODES = {"商业连载", "漫剧源书"}
-COMMERCIAL_SCORE_TARGETS = ("红果", "番茄", "抖音", "漫剧")
-RIGHTS_REGION_EXPORT_FORMATS = {"n2d", "combine"}
+COMMERCIAL_SCORE_TARGETS = ("红果", "番茄", "抖音", "漫剧", "短剧", "微短剧")
+RIGHTS_REGION_EXPORT_FORMATS = {"combine"}
+AI_USAGE_MODES = {"AI-generated", "AI-assisted", "未使用AI文本"}
+AI_USAGE_REQUIRED_TARGETS = (
+    "红果", "番茄", "抖音", "漫剧", "短剧", "微短剧", "商业连载",
+    "出海", "海外", "KDP", "Kindle", "Amazon", "YouTube", "TikTok",
+)
 
 REVIEW_REQUIRED_FIELDS = (
     "schema_version",
@@ -99,9 +105,11 @@ def _score_required(project_root):
     settings = _load_settings(project_root)
     mode = str(meta.get("draft_mode") or settings.get("小说生成模式") or "").strip()
     target_parts = [
+        meta.get("purpose"),
         meta.get("target_platform"),
         meta.get("target"),
         ",".join(meta.get("outputs") or []),
+        settings.get("小说用途"),
         settings.get("目标平台"),
         settings.get("目标用途"),
         settings.get("输出格式"),
@@ -138,6 +146,29 @@ def _region_covered(target_regions, source_regions):
 def _rights_blocking_context(project_root, export_formats):
     formats = set(export_formats or [])
     return bool(formats & RIGHTS_REGION_EXPORT_FORMATS) or _score_required(project_root)
+
+
+def _ai_usage_required(project_root, export_formats):
+    if not export_formats:
+        return False
+    if _score_required(project_root):
+        return True
+    meta = _load_meta(project_root)
+    settings = _load_settings(project_root)
+    target_parts = [
+        meta.get("draft_mode"),
+        meta.get("purpose"),
+        meta.get("target_platform"),
+        meta.get("target"),
+        ",".join(meta.get("outputs") or []),
+        settings.get("小说用途"),
+        settings.get("目标平台"),
+        settings.get("目标用途"),
+        settings.get("出海目标平台"),
+        settings.get("目标语言"),
+    ]
+    target = " ".join(str(part or "") for part in target_parts)
+    return any(key in target for key in AI_USAGE_REQUIRED_TARGETS)
 
 
 def _rights_gate(project_root, *, export_formats=None):
@@ -246,6 +277,214 @@ def _warning(wid, stage, skill, reason):
     return {"id": wid, "stage": stage, "skill": skill, "reason": reason}
 
 
+def _chapter_number_from_name(path):
+    import re
+    match = re.search(r"第0*(\d+)章", os.path.basename(path))
+    return int(match.group(1)) if match else None
+
+
+def _chapter_files(project_root):
+    chapter_dir = os.path.join(project_root, "章节")
+    if not os.path.isdir(chapter_dir):
+        return []
+    out = []
+    for name in os.listdir(chapter_dir):
+        if not name.endswith(".md"):
+            continue
+        num = _chapter_number_from_name(name)
+        if num is not None:
+            out.append((num, os.path.join(chapter_dir, name)))
+    out.sort(key=lambda item: (item[0], item[1]))
+    return out
+
+
+def _state_delta_path(project_root, chapter):
+    return os.path.join(project_root, "审稿", f"state_delta_第{chapter:02d}章.json")
+
+
+def _chapter_path(project_root, chapter, fallback=None):
+    if fallback:
+        return fallback
+    canonical = os.path.join(project_root, "章节", f"第{chapter:02d}章.md")
+    if os.path.exists(canonical):
+        return canonical
+    for ch_num, path in _chapter_files(project_root):
+        if ch_num == chapter:
+            return path
+    return canonical
+
+
+def _chapter_ledger_key(chapter):
+    return f"chapter_{chapter:02d}"
+
+
+def _sha256_file(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _state_closure_gate(project_root, *, chapter=None, require=False):
+    report = {
+        "kind": "state_closure",
+        "path": os.path.join(project_root, "审稿", "state_ledger.json"),
+        "exists": os.path.exists(os.path.join(project_root, "审稿", "state_ledger.json")),
+        "blocking": False,
+        "blockers": [],
+        "warnings": [],
+        "next_actions": [],
+    }
+    chapters = [(chapter, None)] if chapter else _chapter_files(project_root)
+    if not chapters:
+        return report
+    ledger = _load_json(report["path"]) or {}
+    chapter_deltas = ledger.get("chapter_deltas") if isinstance(ledger, dict) else {}
+    if not isinstance(chapter_deltas, dict):
+        chapter_deltas = {}
+    for ch_num, chapter_path in chapters:
+        chapter_file = _chapter_path(project_root, ch_num, chapter_path)
+        if not os.path.exists(chapter_file):
+            item = _warning(
+                "STATE-CHAPTER-MISSING",
+                "state_closure",
+                "novel",
+                f"第{ch_num:02d}章正文缺失：章节/第{ch_num:02d}章.md。",
+            )
+            (report["blockers"] if require else report["warnings"]).append(item)
+            continue
+        delta_path = _state_delta_path(project_root, ch_num)
+        if not os.path.exists(delta_path):
+            item = _warning(
+                "STATE-DELTA-MISSING",
+                "state_closure",
+                "novel",
+                f"第{ch_num:02d}章缺少写后状态增量：审稿/state_delta_第{ch_num:02d}章.json。",
+            )
+            (report["blockers"] if require else report["warnings"]).append(item)
+            continue
+        delta = _load_json(delta_path)
+        if not isinstance(delta, dict):
+            item = _warning(
+                "STATE-DELTA-SCHEMA",
+                "state_closure",
+                "novel",
+                f"第{ch_num:02d}章状态增量不是 JSON object：审稿/state_delta_第{ch_num:02d}章.json。",
+            )
+            (report["blockers"] if require else report["warnings"]).append(item)
+            continue
+        got = delta.get("chapter")
+        if got is not None:
+            try:
+                got = int(got)
+            except (TypeError, ValueError):
+                got = None
+            if got != ch_num:
+                item = _warning(
+                    "STATE-DELTA-CHAPTER",
+                    "state_closure",
+                    "novel",
+                    f"第{ch_num:02d}章状态增量 chapter 字段不匹配。",
+                )
+                (report["blockers"] if require else report["warnings"]).append(item)
+                continue
+        key = _chapter_ledger_key(ch_num)
+        if key not in chapter_deltas:
+            item = _warning(
+                "STATE-LEDGER-MISSING",
+                "state_closure",
+                "novel-craft",
+                f"第{ch_num:02d}章 state_delta 尚未合并进 审稿/state_ledger.json。",
+            )
+            (report["blockers"] if require else report["warnings"]).append(item)
+            continue
+        entry = chapter_deltas.get(key)
+        verification = entry.get("verification") if isinstance(entry, dict) else None
+        if not isinstance(verification, dict):
+            item = _warning(
+                "STATE-LEDGER-UNVERIFIED",
+                "state_closure",
+                "novel-craft",
+                f"第{ch_num:02d}章账本缺少 verification 指纹，无法证明 state_delta 与正文是同一版。",
+            )
+            (report["blockers"] if require else report["warnings"]).append(item)
+            continue
+        expected = {
+            "chapter_file_hash": _sha256_file(chapter_file),
+            "delta_hash": _sha256_file(delta_path),
+        }
+        for hash_key, current in expected.items():
+            recorded = str(verification.get(hash_key) or "").strip()
+            if not recorded:
+                item = _warning(
+                    "STATE-LEDGER-UNVERIFIED",
+                    "state_closure",
+                    "novel-craft",
+                    f"第{ch_num:02d}章账本 verification 缺少 {hash_key}。",
+                )
+                (report["blockers"] if require else report["warnings"]).append(item)
+                break
+            if recorded != current:
+                item = _warning(
+                    "STATE-LEDGER-STALE",
+                    "state_closure",
+                    "novel-craft",
+                    f"第{ch_num:02d}章账本 verification.{hash_key} 已过期；正文或 state_delta 修改后需重新对账并合并。",
+                )
+                (report["blockers"] if require else report["warnings"]).append(item)
+                break
+    report["blocking"] = bool(report["blockers"])
+    return report
+
+
+def _ai_usage_gate(project_root, *, require=False):
+    path = os.path.join(project_root, "合规", "ai_usage.json")
+    payload = _load_json(path)
+    report = {
+        "kind": "ai_usage",
+        "path": path,
+        "exists": payload is not None,
+        "blocking": False,
+        "blockers": [],
+        "warnings": [],
+        "next_actions": [],
+    }
+    if payload is None:
+        item = _warning(
+            "AI-USAGE-MISSING",
+            "compliance",
+            "novel-craft",
+            "缺少 合规/ai_usage.json；发布、商用、平台交付或出海前必须记录 AI 使用披露。",
+        )
+        (report["blockers"] if require else report["warnings"]).append(item)
+        report["blocking"] = bool(report["blockers"])
+        return report
+    issues = []
+    if not isinstance(payload, dict):
+        issues.append("ai_usage 必须是 JSON object")
+    else:
+        if payload.get("schema_version") != 1:
+            issues.append("schema_version 必须为 1")
+        if payload.get("kind") != "novel_ai_usage":
+            issues.append("kind 必须为 novel_ai_usage")
+        text_mode = payload.get("text_mode")
+        if text_mode not in AI_USAGE_MODES:
+            issues.append("text_mode 必须为 AI-generated/AI-assisted/未使用AI文本")
+        if text_mode in {"AI-generated", "AI-assisted"} and not str(payload.get("human_contribution") or "").strip():
+            issues.append("AI 生成/辅助文本必须填写 human_contribution，记录创意、改写、审稿取舍等人工贡献")
+    if issues:
+        item = _warning(
+            "AI-USAGE-SCHEMA",
+            "compliance",
+            "novel-craft",
+            "；".join(issues[:6]),
+        )
+        (report["blockers"] if require else report["warnings"]).append(item)
+    report["blocking"] = bool(report["blockers"])
+    return report
+
+
 def _missing_fields(payload, fields):
     return [field for field in fields if field not in payload]
 
@@ -340,6 +579,7 @@ def missing_score_report_scope(project_root):
     snapshot = snapshot_chapters(project_root, mode="missing_score_report")
     return {
         "draft_mode": str(meta.get("draft_mode") or settings.get("小说生成模式") or ""),
+        "purpose": str(meta.get("purpose") or settings.get("小说用途") or settings.get("目标用途") or ""),
         "target_platform": str(meta.get("target_platform") or settings.get("目标平台") or ""),
         "target": str(meta.get("target") or settings.get("目标用途") or ""),
         "outputs": ",".join(meta.get("outputs") or []),
@@ -508,14 +748,21 @@ def _first_recommended_skill(payload):
 
 
 def collect_gate_status(project_root, *, require_review_report=False, require_score_report=None,
-                        export_formats=None):
+                        export_formats=None, require_state_closure=False,
+                        state_chapter=None, require_ai_usage=None):
     root = os.path.abspath(project_root)
     global_waivers = load_waivers(root)
+    if require_ai_usage is None:
+        require_ai_usage = _ai_usage_required(root, export_formats)
     reports = [
         _rights_gate(root, export_formats=export_formats),
         _review_gate(root, require_report=require_review_report),
         _score_gate(root, require_report=require_score_report, global_waivers=global_waivers),
     ]
+    if require_state_closure:
+        reports.append(_state_closure_gate(root, chapter=state_chapter, require=True))
+    if require_ai_usage or export_formats:
+        reports.append(_ai_usage_gate(root, require=require_ai_usage))
     blockers = []
     warnings = []
     next_actions = []

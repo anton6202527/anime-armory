@@ -25,6 +25,8 @@
 - **身份锁定句**：「与产品参考图①同一款包装、同一 logo、同一品牌色」（多参考/编辑类后端最敏感）
 - **负向**：「不要改包装文字、不要变形 logo、不要偏色」
 
+`PROD_*` 不是可有可无的文案标签：`product_qc.py` 会硬查逐镜 prompt 是否写了结构化产品资产 ID。只写“参考图/定妆图”但不写 `PROD_main`，执行端就无法读取产品禁改清单和后续交接契约，按 block 处理。
+
 ## logo / 文字的现实约束
 
 AI 生图对**小文字 / logo 字形**仍不稳。策略：
@@ -43,9 +45,10 @@ python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--str
 
 | 检项 | severity 语义 | 实现 |
 |---|---|---|
-| **prompt-lint**（绝不文生图产品） | 产品镜缺 参考图块 / 身份锁定句 / 负向(不要改包装文字·不要变形logo) → **block**（无 Pillow 也跑） | 解析 `prompt/镜头N.md` |
+| **prompt-lint**（绝不文生图产品） | 产品镜缺 参考图块 / `PROD_*` 资产 ID / 身份锁定句 / 负向(不要改包装文字·不要变形logo) → **block**（无 Pillow 也跑） | 解析 `prompt/镜头N.md` |
 | **品牌色 ΔE** | 产品区域主色 vs `品牌色` HEX，CIE76 ΔE 超阈 → **block**，临界 → warn；无区域取整图主色降级 warn | Pillow+numpy；缺则 info 降级 |
 | **product dHash 离群** | 产品镜组内最近邻 Hamming 距离离群 → 漂移 warn/block（组 <3 张降 info） | Pillow |
 | **logo 模板匹配** | 注册 `出图/共享/定妆库/产品/logo.png` 时 NCC 粗匹配；缺失/形变 → flag；无模板干净跳过 | Pillow+numpy |
+| **禁本地贴图伪修复** | image-stage 事件若显示最终产品镜来自本地贴包装/logo/脸部像素贴回 → **block** | 读 `生产数据/production_events.jsonl` |
 
-缺 Pillow/numpy 时优雅降级（只跑 prompt-lint，报告标 `degraded`，不臆造通过）。测试：`cd skills/ad-image/scripts && python3 -m pytest test_product_qc.py`。logo/小文字仍建议关键镜用真 logo 贴图后期合成（见上节）——机检兜底，不替代该铁律。
+缺 Pillow/numpy 时优雅降级（只跑 prompt-lint，报告标 `degraded`，不臆造通过）；`ad-craft gate --stage video` 会阻断降级报告和 pending 产品图，直到补依赖重跑或人工在报告里留痕放行。logo/小文字仍建议关键镜用真 logo 贴图后期合成（见上节），但那属于 `ad-compose` 交付层；不要用局部贴图伪装成出图阶段已经一致。测试：`cd skills/ad-image/scripts && python3 -m pytest test_product_qc.py`。

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""拍广告 立项脚手架：在 拍广告/<项目名>/ 下建目录骨架 + _设置.md + _进度.md + _meta.json
+"""拍广告 立项脚手架：在 创作区/拍广告/<项目名>/ 下建目录骨架 + _设置.md + _进度.md + _meta.json
 + 需求/brief.json 模板。不拆集（一条主片是整体）；cutdown/多比例交付件登记在 _进度.md。
 
 用法：
-    python3 skills/ad/scripts/init_project.py "拍广告/某品牌618" --title 某品牌618秒杀 --brand 某品牌
+    python3 skills/ad/scripts/init_project.py "创作区/拍广告/某品牌618" --title 某品牌618秒杀 --brand 某品牌
 契约（阶段表/选择点/交付件）来自 ad-craft；本脚本只摆骨架，不写死偏好。
 """
 import argparse
@@ -44,7 +44,7 @@ BRIEF_TEMPLATE = {
 
 def main():
     ap = argparse.ArgumentParser(description="拍广告项目立项脚手架")
-    ap.add_argument("project_root", help="如 拍广告/某品牌618")
+    ap.add_argument("project_root", help="如 创作区/拍广告/某品牌618")
     ap.add_argument("--title", default=None)
     ap.add_argument("--brand", default="")
     ap.add_argument("--master-duration", default=None, help="覆盖默认主片时长")
@@ -53,11 +53,11 @@ def main():
     # 选择点 = 候选菜单，不是封闭枚举：不绑 argparse choices，保留手输兜底（新后端/别名不被拒）。
     ap.add_argument("--video-model", default=None,
                     metavar="MODEL",
-                    help="首跑生视频模型（菜单：%s …；可手输其它）；应由 agent 先问用户再传入"
+                    help="可选：固定/覆盖生视频模型（菜单：%s …；可手输其它）；默认不在立项时强问"
                          % " / ".join(contract.VIDEO_MODELS[:4]))
     ap.add_argument("--video-channel", default=None,
                     metavar="CHANNEL",
-                    help="首跑生视频渠道（菜单：%s …；可手输其它）；应由 agent 先问用户再传入"
+                    help="可选：固定/覆盖生视频渠道（菜单：%s …；可手输其它）；默认由路由/探测决定"
                          % " / ".join(contract.VIDEO_CHANNELS_MENU[:4]))
     ap.add_argument("--video-backend", default=None,
                     metavar="CHANNEL",

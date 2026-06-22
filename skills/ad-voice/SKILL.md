@@ -1,13 +1,13 @@
 ---
 name: ad-voice
-description: 拍广告 第3阶段·VO配音 — 把 脚本/voiceover.txt（旁白/台词）转成 AI 配音：逐句音频 + 整轨 vo.wav + 时长清单.json（每句实测时长，驱动下游镜头时长；逐句记 voice_key 音色键供跨镜对账）。多后端可插拔（CosyVoice/GPT-SoVITS/MiniMax/火山 真后端 + macOS say / estimate 占位）。克隆真人嗓需 VOICE_CLONE_AUTHORIZED=1 硬闸门。ad-* 自包含，不复用 n2d-voice。Use when asked to 广告配音/VO/旁白配音/生成配音/时长清单 for a 拍广告 project. Triggers 广告配音, VO, 旁白, 配音, 时长清单, voice_key, voiceover, 声音克隆, ad-voice.
+description: 拍广告 第3阶段·VO配音 — 把 脚本/voiceover.txt（旁白/台词）转成 AI 配音：逐句音频 + 整轨 vo.wav + 时长清单.json（每句实测时长，驱动下游镜头时长；逐句记 voice_key 音色键供跨镜对账）。多后端可插拔（CosyVoice/GPT-SoVITS/MiniMax/火山 真后端 + macOS say / estimate 占位）。克隆真人嗓需 VOICE_CLONE_AUTHORIZED=1 硬闸门。ad-* 自包含。Use when asked to 广告配音/VO/旁白配音/生成配音/时长清单 for a 拍广告 project. Triggers 广告配音, VO, 旁白, 配音, 时长清单, voice_key, voiceover, 声音克隆, ad-voice.
 ---
 
 # ad-voice — 拍广告 · VO 配音（音频先行）
 
-把 `脚本/voiceover.txt` 转成 **逐句音频 + 整轨 `vo.wav` + `时长清单.json`**。`时长清单.json` 的**每句实测时长驱动分镜镜头时长**（与 n2d「配音先行」同构）——`ad-script` 分镜 pass 读它定镜头长度。
+把 `脚本/voiceover.txt` 转成 **逐句音频 + 整轨 `vo.wav` + `时长清单.json`**。`时长清单.json` 的**每句实测时长驱动分镜镜头时长**，`ad-script` 分镜 pass 读它定镜头长度。
 
-**自包含**：不复用 `n2d-voice`，逻辑各写各的。
+**自包含**：只使用 ad-voice 自己的脚本、references 和产物契约。
 
 ## 偏好（私有）
 

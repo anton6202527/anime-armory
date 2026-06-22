@@ -15,7 +15,7 @@ Demo gate 通过后必须留下一个机器可读文件，供批量写章、revi
   "schema_version": 1,
   "kind": "novel_demo_gate",
   "generated_at": "YYYY-MM-DD",
-  "project_root": "写小说/<项目>",
+  "project_root": "创作区/写小说/<项目>",
   "status": "passed|needs_revision",
   "approved_chapters": ["章节/第1章.md", "章节/第2章.md"],
   "style_anchor": {

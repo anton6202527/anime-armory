@@ -1,11 +1,11 @@
 ---
 name: novel-review
-description: 小说质检 + 流程自审（novel-* 家族的 QA 环节，不写作只审，与 n2d-review/mv-review/song-review 同构）。双模——模式①「作品质检」：审 ALREADY-WRITTEN 章节（.md/.txt）——POV slips(串视角/视角穿帮)、OOC/人设崩、plot holes、anchor & timeline drift、设定矛盾、**力量体系一致性(穿越/系统流的等级·成长值·战力只增不减、未知境界、越级过快、面板属性≤7、系统流久无升级桥段)**、节奏/缺钩子、文风漂移、原文照搬——机检+人判，出严重度分级·定位到章/段的报告；续写/外传交叉核对 设定/(角色卡·世界观·锚点表·章纲) 与 原作。`consistency_audit.py` 含 `power_system` 子runner。模式②「流程自审」：联网拉当前小说/网文市场基准，对照 novel-* 各 skill + novel-craft + Q&A，产出"差距清单 + 该改哪个 skill 哪段"的优化建议。Does NOT write/continue the story. Triggers 审稿, 质检, 检查小说质量, 查人设崩, 视角穿帮, 串视角, 设定矛盾, 锚点对齐, 一致性回扫, 伏笔回收, 力量体系自检, 等级一致性, 战力崩坏, 升级数值, 节奏, 文风漂移, 原文照搬, 质量报告, 流程自审, 流程优化, 自我优化, novel 还能优化啥, novel review, QA.
+description: 小说质检 + 流程自审（novel-* 家族的 QA 环节，不写作只审）。双模——模式①「作品质检」：审 ALREADY-WRITTEN 章节（.md/.txt）——POV slips(串视角/视角穿帮)、OOC/人设崩、plot holes、anchor & timeline drift、设定矛盾、读者契约兑现、弧段跑偏、**力量体系一致性(穿越/系统流的等级·成长值·战力只增不减、未知境界、越级过快、面板属性≤7、系统流久无升级桥段)**、节奏/缺钩子、文风漂移、原文照搬——机检+人判，出严重度分级·定位到章/段的报告；续写/外传交叉核对 设定/(角色卡·世界观·锚点表·章纲) 与 原作。`consistency_audit.py` 含 `power_system` 子runner。模式②「流程自审」：联网拉当前小说/网文市场基准，对照 novel-* 各 skill + novel-craft + Q&A，产出"差距清单 + 该改哪个 skill 哪段"的优化建议。Does NOT write/continue the story. Triggers 审稿, 质检, 检查小说质量, 查人设崩, 视角穿帮, 串视角, 设定矛盾, 读者契约, 弧段 gate, 长篇跑偏, 锚点对齐, 一致性回扫, 伏笔回收, 力量体系自检, 等级一致性, 战力崩坏, 升级数值, 节奏, 文风漂移, 原文照搬, 质量报告, 流程自审, 流程优化, 自我优化, novel 还能优化啥, novel review, QA.
 ---
 
 # novel-review — 小说质检 + 流程自审
 
-不写、不续小说，只**审**。是 novel-* 家族的 QA 环节，与 `n2d-review`/`mv-review`/`song-review` 同构。两个模式：
+不写、不续小说，只**审**。是 novel-* 家族的 QA 环节。两个模式：
 
 - **模式①「作品质检」**——审**已写的章节**：扫出问题 → 定位（章 + 行/段）→ 定级 → 给可执行修法 → 产出审稿报告。把 `novel-spinoff` 第 7 步回扫 + Demo 自检清单**通用化、独立化**。
 - **模式②「流程自审」**——审**写小说流水线本身**：联网拉市场基准，对照 novel-* 各 skill + novel-craft + 累积 Q&A，产出"差距清单 + 建议改哪个 skill 哪段"。让"整条创作线不断自我优化"成为可复跑命令。
@@ -17,10 +17,10 @@ description: 小说质检 + 流程自审（novel-* 家族的 QA 环节，不写�
 ## 机检 / 人判分工
 
 - **机检（确定性，先跑）**：一键串跑用 `scripts/consistency_audit.py <作品根> [--pov 角色名] [--anchor 设定/风格指纹.json]`，它把家族里三个确定性检测器一次跑完并汇总到 `审稿/consistency_audit.json`：
-  - `scripts/mechanical_check.py` —— 格式/字数带宽/章号与章纲对齐/视角"我"密度提示/称谓·术语漂移/**原文照搬（n-gram vs 原作.txt）**/**AI腔·同质化启发式**（叙事中议论文式连接词=🟡·万能金句套话密度=🟢·advisory·线索非定论，`--no-ai-tell` 关闭；治 2026 平台 AI 双重质检·AI检测率<60% 风险——写作链路全程 AI 起草，故此项是过审硬约束而非纯文笔偏好）。术语默认从 `设定/设定圣经.md`、`角色卡.md`、`世界观.md`、`锚点表.json` 自动抽取，也可用 `--terms` 追加。
+  - `scripts/mechanical_check.py` —— 格式/字数带宽（默认读 `_meta.target_wordcount_min_max` / scale / target_words_per_chapter，可用 `--min/--max` 覆盖）/章号与章纲对齐/视角"我"密度提示/称谓·术语漂移/**原文照搬（n-gram vs 原作.txt）**/**AI腔·同质化启发式**（叙事中议论文式连接词=🟡·万能金句套话密度=🟢·advisory·线索非定论，`--no-ai-tell` 关闭；治 2026 平台 AI 双重质检·AI检测率<60% 风险——写作链路全程 AI 起草，故此项是过审硬约束而非纯文笔偏好）。术语默认从 `设定/设定圣经.md`、`角色卡.md`、`世界观.md`、`锚点表.json` 自动抽取，也可用 `--terms` 追加。
   - `novel-wiki/logic_sentry.py`（先 `wiki_builder.py` 建《动态百科》）—— **死人复活 / 弃置道具复用 / 位置跳变 / 数值漂移（年龄锚点跨章不一致）**等硬冲突候选 → `审稿/logic_alerts_*.json`。这是把"设定自相矛盾/锚点漂移"从纯人判下沉到机检的深度增强（无角色卡/无年龄锚点则优雅跳过并记原因）。
   - `novel-style/extract_style.py --compare` —— 每章文风指纹 vs **锚点章指纹**算漂移分，超带宽即记"文风漂移"候选 → `审稿/style_drift_summary.json`（无锚点指纹则跳过，提示先提取）。
-  - `scripts/n2d_readiness_check.py`（**opt-in，仅流向 n2d 的项目跑**）—— 逐章查漫剧改编就绪 4 维（资产标签密度/对白占比/视觉锚/场景锚），标"画面感弱/旁白过重/无场景锚"候选弱章 → `审稿/n2d_readiness.json`。避免到 `n2d-script` 分镜才发现细节不足回小说返工；清单见 `novel-craft/references/n2d-readiness.md`。
+  - **2026 新增 9 个子检测器（一键串跑或按需跑，各自缺输入优雅跳过）**：① **断章钩子**(`hook_endings.py`)逐章末尾打钩子分、黄金三章更严(建议级)；② **角色语感**(`voice_drift.py`)口头禅消失/句长漂(读 `设定/角色语感.json`·建议级)；③ **情绪曲线**(`tone_check.py`)实测每章主导情绪 vs `设定/tone_curve.json` 目标弧(建议级)；④ **支线收口**(`thread_resolution.py`)open_threads 超期(建议级)、`--finale` 卷末/书末未收支线=阻断级烂尾防线；⑤ **反派战力**(`antagonist_scaling.py`)反向战力崩坏(建议级·需 registry 标 role/阵营)；⑥ **时间线**(`timeline_check.py`)年份倒流(建议级)+ `设定/timeline.json` 事件乱序(阻断级)；⑦ **配角连续性**(`minor_characters.py`)反复出场却未建卡(建议级)；⑧ **逐章读者契约**(`reader_contract_sentry.py`)阻断缺 `reader_contract_progress` / `theme_alignment` 的章节；⑨ **弧段 gate**(`arc_gate.py`)检查连续 3 章不推进契约、整段无题旨对齐、长窗口只种不收。另：`logic_sentry` 已通电的 **world_rule_violation(阻断级)/relationship_flip/钩子过期/承诺违约(阻断级)/张力疲劳/character_guardrails** 也随 `run_logic` 在 review 汇总（已传 project_root）。
   缺输入的检测器一律**跳过并落原因**，不静默略过冒充全覆盖。
 - **人判（LLM 判断题）**：机检覆盖不了的——视角穿帮、OOC、情节漏洞、锚点语义对齐、**题旨契约 / 读者承诺兑现**、节奏（爽点/钩子/反转）、伏笔回收、留白、文风漂移、文学质感、show-don't-tell、过度直白。维度逐条见 `references/checklist.md`。机检产出的 `logic_alerts`/`style_drift` 候选是**线索不是定论**（带 `auto` 标志），仍需人判结合语境确认（容错铁律：宁缺毋滥，闪回/伏笔可豁免）。
 
@@ -28,12 +28,17 @@ description: 小说质检 + 流程自审（novel-* 家族的 QA 环节，不写�
 
 0. **定位项目**：作品根需含 `章节/*.md`（理想还有 `设定/`、`原作.txt`、`设定/章纲.md`）。先读 `_进度.md` 和 `审稿/demo_gate.json`（如存在）；确认三件事：① POV 角色 + 人称（如"王敦/第三人称限定"）② 文风锚点章（优先 `demo_gate.style_anchor.source_chapter`）③ 是否续写/外传（是 → 需锚点对齐 + 原文照搬检查）。
 1. **跑机检脚本** → 确定性问题清单；同时落盘机器结果。一次跑全套：
-   `python3 skills/novel-review/scripts/consistency_audit.py <作品根> [--pov 角色名] [--anchor 设定/风格指纹.json]`（内部串跑 mechanical_check + logic_sentry + style-drift，汇总 `审稿/consistency_audit.json`）。
+   `python3 skills/novel-review/scripts/consistency_audit.py <作品根> [--pov 角色名] [--anchor 设定/风格指纹.json]`（内部串跑 mechanical_check + reader_contract_sentry + logic_sentry + style-drift，汇总 `审稿/consistency_audit.json`）。
    只想跑基础机检也可单独：`python3 skills/novel-review/scripts/mechanical_check.py <作品根> ... --json-out 审稿/mechanical_findings.json`。
+   长篇逐章写后由 `novel/scripts/post_write.py` 自动调用 `reader_contract_sentry.py`；对已写窗口或历史项目，可手动跑：
+   `python3 skills/novel-review/scripts/reader_contract_sentry.py <作品根> --chapter 第NN章`。
+   每 3-5 章或自然 arc 写完后跑：
+   `python3 skills/novel-review/scripts/arc_gate.py <作品根> --arc 1-5`。
 2. **分 arc 人判**：章多时**每个 arc 拆给子任务/子代理**审（省主上下文），每章对照 `references/checklist.md` 维度，**只记真问题**，每条带原文引文证据。
-3. **汇总报告** → 先用汇总器把机检 + 人判 JSON 转成调度器可消费的报告：
+3. **汇总报告** → 先用汇总器把机检 + 一致性审计 + 人判 JSON 转成调度器可消费的报告：
    `python3 skills/novel-review/scripts/build_review_report.py <作品根> [--human-assessment 审稿/human_findings.json]`。
    默认缺少 `审稿/mechanical_findings.json` 会失败；只有人工明确只做纯人判报告时才加 `--allow-missing-mechanical`，且报告必须在 `waivers[]` 和 Markdown「显式豁免」中记录 `missing_mechanical`，不能伪装成正常全量通过。
+   若存在 `审稿/consistency_audit.json`，汇总器会自动把 `logic_sentry` / `style_drift` / `power_system` 的阻断或建议级结果提升进 `review_report.findings`；不要只跑一致性审计却不让导出 gate 看见。
    该脚本会写两份产物：
    - `审稿/审稿报告.md`：给人读，按严重度排序，每条 = 位置（第N章·第X段）+ 维度 + 问题 + **建议修法** + 证据引文。附"健康度概览"表（各维度通过/问题数）。
    - `审稿/review_report.json`：给调度器读，遵守 `novel-craft/references/qa-report-schema.md`，必须带 `source_snapshot` 绑定当前 `章节/` 全量 hash；每条问题必须带 `recommended_skill`、`return_to_stage`、`affected_files`、`blocking`；所有显式豁免必须进 `waivers[]`。
@@ -47,9 +52,9 @@ description: 小说质检 + 流程自审（novel-* 家族的 QA 环节，不写�
 | 🟡 建议级 | 节奏拖/爽点弱、题旨推进不足、读者承诺长期无递进、伏笔未回收、信息密度低、留白未填、配角脸谱化、文学质感薄 | 建议改 |
 | 🟢 润色级 | 用词重复、个别过度直白、标点/错别字 | 可改可不改，`--fix` 可自动 |
 
-**容错铁律**：只报"真问题"。轻微主观偏好（"我会换个词"）**不入报告**——否则噪声淹没硬伤。这条等同 n2d 出图的"筛选宽容铁律"。
+**容错铁律**：只报"真问题"。轻微主观偏好（"我会换个词"）**不入报告**——否则噪声淹没硬伤。
 
-> **修法回哪个 skill**（同 n2d/mv-review 的回流定位）：每条阻断/建议级修法都指明回源头重跑——OOC/设定矛盾→回 `novel-rewrite`/`novel-create` 改设定圣经再回扫；锚点漂移→对 `novel-spinoff` 锚点表；节奏塌/钩子弱→回写章纲（`novel-craft/references/outline.md`）；原文照搬→回对应派生 skill 重写该章。审已写章节、**未到的阶段不当问题报**（先读 `_进度.md`）。
+> **修法回哪个 skill**：每条阻断/建议级修法都指明回源头重跑——OOC/设定矛盾→回 `novel-rewrite`/`novel-create` 改设定圣经再回扫；锚点漂移→对 `novel-spinoff` 锚点表；节奏塌/钩子弱→回写章纲（`novel-craft/references/outline.md`）；原文照搬→回对应派生 skill 重写该章。审已写章节、**未到的阶段不当问题报**（先读 `_进度.md`）。
 
 ---
 

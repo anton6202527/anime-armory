@@ -7,7 +7,7 @@ description: Given a book name (or chapter-index URL), find and fetch a public-d
 
 给定**书名**（或章节目录页 URL）→ 联网抓公版小说全文 → 输出 `<书名>.txt` + `<书名>.docx` + `source_manifest.json`。
 
-这是一个**独立工具**，不依赖任何其它 skill。抓下来的文件可以直接用，也可以喂给别的流水线（比如本仓的 `n2d-script` 做漫剧），但那是用户的选择，不是本 skill 的职责。
+这是一个**独立工具**，不依赖任何其它 skill。抓下来的文件可以直接用，也可以交给用户自行处理，但那不是本 skill 的职责。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
@@ -18,7 +18,7 @@ description: Given a book name (or chapter-index URL), find and fetch a public-d
 ## 合法性铁律（不可逾越）
 
 - **只抓公版 / 开放授权来源**：已过版权期的经典、CC 授权、作者自授权、或用户明确声明有权使用的文本。
-- **公版要记辖区**：Gutenberg 默认按美国公版依据落 `rights_covered_regions=["US"]`；Wikisource 按页面/站点授权留 `source_license_url`。跨地区发行、商用、n2d 改编前必须补 `--distribution-regions` 并过 QA gate。
+- **公版要记辖区**：Gutenberg 默认按美国公版依据落 `rights_covered_regions=["US"]`；Wikisource 按页面/站点授权留 `source_license_url`。跨地区发行、商用前必须补 `--distribution-regions` 并过 QA gate。
 - 脚本对已知付费墙/反爬站（起点、番茄、晋江 等，见 `references/sources.md`）**直接拒抓**，不替用户规避。
 - 通用兜底抓**非公版** URL 时，抓取前必须让用户**声明有权使用**（CLI `--i-have-rights`）。
 - 不实现绕过反爬 / 付费墙 / 登录墙的逻辑。
@@ -47,10 +47,10 @@ python3 <skill>/scripts/fetch_novel.py "<目录页URL>" --name "<书名>" [--out
 
 ## 输出约定
 
-- 默认落点 `写小说/<书名>/小说/`；用 `--out <输出根>` 可改到任意目录（输出 = `<输出根>/小说/`）。
+- 默认落点 `创作区/写小说/<书名>/小说/`；用 `--out <输出根>` 可改到任意目录（输出 = `<输出根>/小说/`）。
 - txt 章节用 `第N章 标题` 行（通用且利于后续按章拆分）；文件头是 provenance 注释块（来源/日期/章节数/字数/版权判定）。
 - docx 章节标题用 Heading 1，正文段落化，便于人读 / 导入飞书云文档。
-- `source_manifest.json` 是机器溯源文件，后续 `novel-spinoff/rewrite/expand/condense` 和 `n2d` 应优先读它判断 `source_type`、`rights_status`、`rights_jurisdiction`、`rights_covered_regions`、`distribution_regions`、`requires_user_rights`，不要解析正文头。
+- `source_manifest.json` 是机器溯源文件，后续 `novel-spinoff/rewrite/expand/condense` 应优先读它判断 `source_type`、`rights_status`、`rights_jurisdiction`、`rights_covered_regions`、`distribution_regions`、`requires_user_rights`，不要解析正文头。
 - 详见 `references/formats.md`。
 
 ## 常见错误
@@ -61,4 +61,4 @@ python3 <skill>/scripts/fetch_novel.py "<目录页URL>" --name "<书名>" [--out
 | 把搜索得到的第一个结果就抓 | 必先列候选 + 用户确认唯一一本 |
 | 通用兜底硬抓非公版还不声明授权 | 必须 `--i-have-rights`（用户已确认有权时） |
 | 把 Gutenberg/Wikisource 当全球自动公版 | 只能按 manifest 里的辖区依据使用；跨区发行先补地区复核 |
-| 输出散落 | 一律落 `<输出根>/小说/`（默认 `写小说/<书名>/小说/`） |
+| 输出散落 | 一律落 `<输出根>/小说/`（默认 `创作区/写小说/<书名>/小说/`） |

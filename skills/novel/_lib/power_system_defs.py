@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """力量体系(power system) 单一真值源：题材/母题关键词 + 研究落地的等级体系/面板/升级节奏候选模板。
 
-novel 线内独立模块（不跨线 import n2d_const——独立性铁律；与 n2d 那套是平行同构）。被
+novel 线内独立模块。被
 novel-wiki/scripts/power_system.py（检测+机检引擎）、novel-review consistency_audit、post_write 消费。
 
 为什么需要：穿越/系统流爽文的"等级/成长数值"一致性是命门——等级跳变、战力前后矛盾、属性突变、
@@ -36,7 +36,7 @@ GENRE_MIN_HITS = 2
 POWER_GENRES = ("系统流", "修仙", "玄幻", "战神")
 
 # ── 母题桥段关键词（系统面板/升级 等复现场景"在场"检测）──────────────────────────────
-# 与 n2d MOTIF_TYPE_KEYWORDS 同构；novel 侧只用来判"系统流小说在某段落里有没有该出现的面板/升级桥段"。
+# novel 侧只用来判"系统流小说在某段落里有没有该出现的面板/升级桥段"。
 MOTIF_KEYWORDS: Tuple[Tuple[str, Tuple[str, ...]], ...] = (
     ("system_panel", ("系统面板", "面板", "属性栏", "状态栏", "属性面板", "数据面板", "光幕", "信息面板")),
     ("level_up", ("升级", "等级提升", "突破", "进阶", "境界提升", "属性提升", "经验满", "恭喜宿主")),

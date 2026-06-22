@@ -113,3 +113,44 @@ def test_pairs_from_payload_dedup():
     keys = {(p["name"], p["png"]) for p in pairs}
     assert ("沈念", "p1.png") in keys and ("冷宫寝殿", "p2.png") in keys
     assert len(pairs) == 2
+
+
+def test_merge_shot_canonical_any_fail_wins():
+    # 一镜判多个资产：任一不符 → 整镜 canonical_pass=False（fidelity-gate 取最严）
+    mask = {}
+    vv.merge_shot_canonical(mask, "镜头03.png", True, 0.90)
+    vv.merge_shot_canonical(mask, "镜头03.png", False, 0.70)
+    assert mask["镜头03.png"]["canonical_pass"] is False
+    assert mask["镜头03.png"]["confidence"] == 0.9  # 置信取最大
+
+
+def test_merge_shot_canonical_all_pass():
+    mask = {}
+    vv.merge_shot_canonical(mask, "a.png", True, 0.8)
+    vv.merge_shot_canonical(mask, "a.png", True, 0.6)
+    assert mask["a.png"]["canonical_pass"] is True
+
+
+def test_merge_shot_canonical_ignores_blank_png():
+    mask = {}
+    vv.merge_shot_canonical(mask, "", True, 0.9)
+    assert mask == {}
+
+
+def test_verdict_finding_carries_structured_png():
+    # G3：finding 带结构化 png/name/confidence，供 canonical 通过表无歧义消费（不靠正则抠 msg）
+    verdict = {"match": False, "confidence": 0.9, "mismatches": ["发色错"], "reason": ""}
+    fnd = vv.verdict_finding("沈念", "character", "镜头01.png", verdict, is_key=True, block_floor=0.6)
+    assert fnd["level"] == "block"
+    assert fnd["png"] == "镜头01.png" and fnd["name"] == "沈念" and fnd["confidence"] == 0.9
+
+
+def test_evaluate_pairs_emits_shot_canonical():
+    canon = {"沈念": {"kind": "character", "canonical": "黑长直、红衣"}}
+
+    def judge(_abspath, _canon, _kind):
+        return {"match": False, "confidence": 0.9, "mismatches": ["发色"], "reason": ""}
+
+    pairs = [{"name": "沈念", "png": "镜头01.png"}]
+    res = vv.evaluate_pairs(pairs, canon, judge, lambda r: "/abs/" + r, block_floor=0.6)
+    assert res["shot_canonical"]["镜头01.png"]["canonical_pass"] is False

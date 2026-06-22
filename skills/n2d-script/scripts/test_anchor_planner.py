@@ -24,6 +24,22 @@ def test_default_midframe_cli_flags_override_setting():
     assert ap.resolve_default_midframe(False, True, "开启") is False
 
 
+def test_video_backend_selection_uses_model_and_channel(tmp_path):
+    root = tmp_path / "作品"
+    root.mkdir()
+    (root / "_设置.md").write_text(
+        "- 生视频模型: Seedance 2.0\n- 生视频渠道: 即梦/Dreamina\n",
+        encoding="utf-8",
+    )
+
+    sel = ap.video_backend_selection(str(root))
+
+    assert sel["backend"] == "Seedance 2.0"
+    assert sel["channel"] == "即梦/Dreamina"
+    assert sel["supports_three_plus_frames"] is True
+    assert sel["anchor_consumption_plan"]["consumption_mode"] == "native_multiframe"
+
+
 # ── plan_anchor_times（纯函数）──
 
 def test_times_snap_to_shot_boundaries():

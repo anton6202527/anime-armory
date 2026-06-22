@@ -7,7 +7,7 @@ description: Shared machine contracts and deterministic helpers for the ad-* (�
 
 `ad-craft` 是 `ad-*`（拍广告）家族的机器单一真值源，不写文案、不出图、不剪辑。它只沉淀字段、选择点、阶段表、交付件（cutdown/多比例）约定和合规留痕脚本，避免 `ad-script` / `ad-image` / `ad-video` / `ad-compose` 各自解释同一件事。
 
-**自包含铁律**：`ad-*` 不复用 n2d-* / mv-* / novel-* / song-* 任何家族 skill。可借鉴 n2d 的配音先行、两层定妆、契约继承、接缝逻辑等成熟思路，但代码与文档各写各的。
+**自包含铁律**：`ad-*` 的工艺、脚本、契约和文档都在广告系列内独立维护；任何通用能力都必须先落成本系列自己的适配层和测试。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
@@ -56,7 +56,7 @@ python3 skills/ad-craft/scripts/ai_usage.py "<拍广告作品根>" \
 > 跨线通用原则（选择点不写死 C1/C2、脚本不伪装云端自动化 B4、阶段回写 B5、合规闸门 D1…）见 [`docs/skill-design-principles.md`](../../docs/skill-design-principles.md)，此处只列 ad 线特有原则。ad 的选择点目录：`skills/ad-craft/references/选择点与偏好.md`。
 
 - **不拆集 + cutdown 轴**：一条主片是整体；多时长/多比例/A·B 是「交付件 deliverable」，登记在 `_进度.md` 交付版本矩阵，由 `default_deliverables()` 按 `主片时长`/`交付比例`/`cutdown版本` 派生。
-- **音频先行**：VO 实测时长驱动镜头时长，`ad-script` 跑两遍（脚本 → 配音后分镜），与 n2d 同构。
+- **音频先行**：VO 实测时长驱动镜头时长，`ad-script` 跑两遍（脚本 → 配音后分镜），确保广告主片总时长、强制露出和节奏锚点可对账。
 
 ## 测试
 

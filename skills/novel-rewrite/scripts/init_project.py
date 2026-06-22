@@ -31,7 +31,9 @@ from novel_contract import (base_meta, build_progress_markdown, routing_stages,
                             docx_to_txt, write_project_settings, demo_chapters_for,
                             normalize_scale, parse_outputs, parse_regions, rights_metadata,
                             SCALE_PROFILES, NOVEL_DRAFT_MODES, CHAPTER_GRANULARITY,
-                            AI_TEXT_USAGE_MODES)
+                            DRAFT_WORKFLOWS, AI_TEXT_USAGE_MODES,
+                            infer_novel_purpose, normalize_novel_purpose,
+                            resolve_novel_draft_mode, resolve_novel_draft_workflow)
 
 SCALE_PROFILE = SCALE_PROFILES  # scale-band 契约：test_scale_contract 校验其与规模档一致
 
@@ -202,11 +204,17 @@ def main():
     ap.add_argument("--scale", required=True, choices=list(SCALE_CHOICES))
     ap.add_argument("--target-chapters", type=int, default=None, help="覆盖规模档的章数")
     ap.add_argument("--person", default="third-limited", choices=["first", "third-limited"])
-    ap.add_argument("--out", default=None, help="输出根，缺省 写小说/<原作名>-改写/")
+    ap.add_argument("--out", default=None, help="输出根，缺省 创作区/写小说/<原作名>-改写/")
     ap.add_argument("--outputs", default="txt,docx,outline")
     ap.add_argument("--target-platform", default="跨平台")
-    ap.add_argument("--draft-mode", default="稳妥初稿", choices=NOVEL_DRAFT_MODES,
+    ap.add_argument("--purpose", default=None,
+                    help="小说用途：传统小说/漫剧源书/微短剧源书/短读/短篇/出海译制底稿/自定义")
+    ap.add_argument("--draft-mode", default=None, choices=NOVEL_DRAFT_MODES,
                     help="小说生成模式：决定速度/质量 gate 密度")
+    ap.add_argument("--draft-workflow", default=None, choices=DRAFT_WORKFLOWS,
+                    help="小说生成工作流：默认单步/三步迭代/边写边自检")
+    ap.add_argument("--batch-review-interval", default="5章",
+                    help="小批回扫间隔；默认 5章，可填 3章/5章/关闭")
     ap.add_argument("--chapter-granularity", default="逐章", choices=CHAPTER_GRANULARITY,
                     help="章节生成粒度：逐章/小批/全书草稿")
     ap.add_argument("--ai-text-usage", default=None, choices=AI_TEXT_USAGE_MODES,
@@ -227,7 +235,7 @@ def main():
         sys.exit(2)
 
     source_title = os.path.splitext(os.path.basename(source_path))[0]
-    out_root = os.path.abspath(args.out or os.path.join("写小说", f"{source_title}-改写"))
+    out_root = os.path.abspath(args.out or os.path.join("创作区", "写小说", f"{source_title}-改写"))
     if os.path.exists(out_root):
         print(f"[err] 目标已存在：{out_root}（备份/删除后重试）", file=sys.stderr)
         sys.exit(2)
@@ -258,6 +266,17 @@ def main():
     profile = scale_profile(scale)
     n = args.target_chapters or profile["target_chapters"]
     outputs = parse_outputs(args.outputs)
+    purpose = normalize_novel_purpose(args.purpose) or infer_novel_purpose(
+        platform=args.target_platform, scale=scale, target=args.draft_mode
+    )
+    draft_mode = resolve_novel_draft_mode(args.draft_mode, purpose=purpose, platform=args.target_platform, scale=scale)
+    draft_workflow = resolve_novel_draft_workflow(
+        args.draft_workflow,
+        draft_mode=draft_mode,
+        purpose=purpose,
+        scale=scale,
+        target_chapters=n,
+    )
     meta = base_meta("rewrite", outputs=outputs, rights_status=rights)
     # 派生权利字段（rights_covered_regions / requires_region_rights_review 等）统一由
     # rights_metadata 计算，使公版改写也能触发 qa_gate 的发行地区复核。
@@ -272,14 +291,18 @@ def main():
         "source_title": source_title,
         "rewrite_type": args.rewrite_type,
         "scale": scale,
+        "purpose": purpose,
         "target_chapters": n,
         "target_words_per_chapter": profile["words_per_chapter"],
+        "target_wordcount_min_max": profile["min_max"],
         "person": args.person,
         "rights_declared_at": date.today().isoformat() if args.i_have_rights else None,
         "title": None,
         "target_platform": args.target_platform,
         "demo_chapters": demo_chapters_for(n),
-        "draft_mode": args.draft_mode,
+        "draft_mode": draft_mode,
+        "draft_workflow": draft_workflow,
+        "batch_review_interval": args.batch_review_interval,
         "chapter_granularity": args.chapter_granularity,
         "ai_text_usage": args.ai_text_usage,
         "score_source": os.path.abspath(args.score_source) if args.score_source else None,
@@ -291,13 +314,16 @@ def main():
               ensure_ascii=False, indent=2)
     write_project_settings(out_root, {
         "目标平台": args.target_platform,
+        "小说用途": purpose,
         "权利来源": rights,
         "权利辖区": meta.get("rights_jurisdiction", ""),
         "发行地区": ",".join(meta.get("distribution_regions") or []) or "未定",
         "篇幅档": f"{scale}（{n}章×{profile['words_per_chapter'][0]}-{profile['words_per_chapter'][1]}字）",
         "改动方向": args.rewrite_type,
         "输出格式": ",".join(outputs) + "（novel-craft/scripts/export.py）",
-        "小说生成模式": args.draft_mode,
+        "小说生成模式": draft_mode,
+        "小说生成工作流": draft_workflow,
+        "小批回扫间隔": args.batch_review_interval,
         "章节生成粒度": args.chapter_granularity,
         "AI使用披露": args.ai_text_usage or "（发布前用 ai_usage.py 确认）",
         "评分诊断": (f"评分/score_report.json（verdict={score_report.get('verdict')}）"

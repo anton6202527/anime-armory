@@ -12,7 +12,16 @@ from visual_state_manager import (
     init_ledger,
     inject_into_prompts,
 )
-from n2d_contract import VISUAL_STATE_LEDGER_KIND, product_kind
+from n2d_contract import (
+    CONSISTENCY_FINDINGS_KIND,
+    CONSISTENCY_LEDGER_KIND,
+    GATE_FINDINGS_KIND,
+    IDENTITY_DRIFT_REPORT_KIND,
+    IDENTITY_VOICE_PRINT_REPORT_KIND,
+    IMAGE_QC_REPORT_KIND,
+    VISUAL_STATE_LEDGER_KIND,
+    product_kind,
+)
 
 
 def _add(char, mod_id, desc="伤", control="prompt_tag", ep="第2集"):
@@ -35,6 +44,22 @@ def test_product_kind_registered_with_boundary():
     # layer 是结构化分层 taxonomy（全英文：production_data/shared_asset/...），本账本落共享资产层；
     # 「状态演进」的语义由 boundary 承载（上一条断言），不放进结构 layer 字段。
     assert spec["layer"] == "shared_asset"
+
+
+def test_consistency_boundary_products_registered():
+    expected = {
+        IMAGE_QC_REPORT_KIND: ("n2d-image", "生产数据/image_qc/{ep}/image_qc_{ep}.json"),
+        CONSISTENCY_FINDINGS_KIND: ("n2d-review", "生产数据/consistency_findings_{ep}.json"),
+        GATE_FINDINGS_KIND: ("n2d-dashboard", "生产数据/gate_findings_{stage}_{ep}.json"),
+        CONSISTENCY_LEDGER_KIND: ("n2d-review", "生产数据/consistency_ledger_{ep}.json"),
+        IDENTITY_DRIFT_REPORT_KIND: ("n2d-identity", "生产数据/identity_drift_report.json"),
+        IDENTITY_VOICE_PRINT_REPORT_KIND: ("n2d-identity", "生产数据/identity_voice_print_{ep}.json"),
+    }
+    for kind, (owner, path) in expected.items():
+        spec = product_kind(kind)
+        assert spec and spec["owner"] == owner
+        assert spec["path"] == path
+        assert spec["layer"] == "production_data"
 
 
 def test_apply_add_then_dedup_update(tmp_path):

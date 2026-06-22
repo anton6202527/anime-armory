@@ -35,6 +35,20 @@ END_MARKER = "<!-- n2d-feedback:end -->"
 AUTO_FEATURES_FILENAME = "creative_features.auto.json"
 UNKNOWN = "unknown"
 
+# 投放→生成输入闭环的「写端」：把 A/B paired-lift 胜出变体凝成机器可读的第一方先验，
+# 给 n2d-script 阶段2 finalize 当开场/断点设计先验读（第一方实测先验：本线投放实测，权重高于通用经验）。
+# kind 本线自定义（不进 n2d/_lib 共享常量），消费端按 kind 校验。
+CREATIVE_PRIORS_KIND = "n2d_creative_priors"
+CREATIVE_PRIORS_FILENAME = "creative_priors.json"
+CREATIVE_PRIORS_VERSION = 1
+# A/B 维度 → 先验字段 / 取胜的 paired-lift 主指标。顺序即报告呈现顺序。
+CREATIVE_PRIOR_DIMENSIONS: Tuple[Tuple[str, str, str], ...] = (
+    ("opening_variant", "ab_opening_retention", "retention_3s"),
+    ("cliffhanger_cut_variant", "ab_cliffhanger_follow", "follow_next_rate"),
+    ("cover_variant", "ab_cover_retention", "retention_3s"),
+    ("title_variant", "ab_title_retention", "retention_3s"),
+)
+
 CONFLICT_WORDS = (
     "赐死", "鸩酒", "追杀", "围住", "抓住", "拖走", "刺", "刀", "剑", "血", "死", "杀",
     "危机", "威胁", "压迫", "冲入", "逼近", "倒下", "跪", "审问", "对峙",
@@ -742,6 +756,58 @@ def build_recommendations(analyses: Dict[str, Dict[str, Any]], min_lift: float) 
     return recs
 
 
+def build_creative_priors(
+    analyses: Dict[str, Dict[str, Any]],
+    *,
+    min_lift: float,
+    min_samples: int,
+    generated_at: Optional[str] = None,
+) -> Dict[str, Any]:
+    """A/B paired-lift 胜出变体 → 机器可读第一方先验（投放→生成输入闭环的写端）。
+
+    诚实边界：每个维度只在「同集内 paired_lift ≥ min_lift 且 paired context 数 n ≥ min_samples」
+    时才写先验——样本不足或无显著胜出的维度直接缺省（不臆造），消费端按缺省 no-op。
+    每条先验带 winner / lift / 样本量 / 采集时间，供 n2d-script 阶段2 finalize 当开场/断点设计先验读。
+    """
+    priors: Dict[str, Any] = {}
+    for field, analysis_key, primary_metric in CREATIVE_PRIOR_DIMENSIONS:
+        analysis = analyses.get(analysis_key) or {}
+        best = analysis.get("best")
+        if not isinstance(best, dict):
+            continue
+        paired_lift = best.get("paired_lift")
+        n = int(best.get("n") or 0)
+        # 双闸：lift 不够显著 或 paired context 样本不足 → 该维度不写先验。
+        if paired_lift is None or paired_lift < min_lift or n < min_samples:
+            continue
+        priors[field] = {
+            "winner": best.get("name"),
+            "paired_lift": round(float(paired_lift), 4),
+            "primary_metric": primary_metric,
+            "metric_value": best.get(primary_metric),
+            "n": n,
+            "plays": int(best.get("plays") or 0),
+            "episodes": list(best.get("episodes") or []),
+        }
+    return {
+        "kind": CREATIVE_PRIORS_KIND,
+        "version": CREATIVE_PRIORS_VERSION,
+        "generated_at": generated_at or now_iso(),  # 采集时间占位（消费端可据此判先验新鲜度）
+        "min_lift": min_lift,
+        "min_samples": min_samples,
+        "priors": priors,
+    }
+
+
+def write_creative_priors(root: str, priors: Dict[str, Any]) -> str:
+    os.makedirs(production_dir(root), exist_ok=True)
+    path = os.path.join(production_dir(root), CREATIVE_PRIORS_FILENAME)
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(priors, fh, ensure_ascii=False, indent=2, sort_keys=True)
+        fh.write("\n")
+    return path
+
+
 def load_consistency_reports(root: str) -> List[Dict[str, Any]]:
     """读 n2d-review/review-ui 外发的 n2d_consistency_findings（无文件优雅返回空）。"""
     reports: List[Dict[str, Any]] = []
@@ -1089,6 +1155,11 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--min-samples", type=int, default=2)
     ap.add_argument("--min-lift", type=float, default=0.05)
     ap.add_argument("--no-write", action="store_true")
+    ap.add_argument(
+        "--write-priors",
+        action="store_true",
+        help=f"write A/B-won 开场/断点/封面/标题 winners to 生产数据/{CREATIVE_PRIORS_FILENAME} (n2d-script 阶段2 finalize 读为先验)",
+    )
     ap.add_argument("--markdown", action="store_true")
     ap.add_argument("--update-guide", action="store_true")
     ap.add_argument(
@@ -1133,6 +1204,20 @@ def cmd(ns: argparse.Namespace) -> int:
         write_creative_features(features_out, extract_storyboard_features(root, episodes=episodes))
     if not ns.no_write:
         write_feedback(root, feedback)
+    if ns.write_priors and not ns.no_write:
+        priors = build_creative_priors(
+            feedback["analyses"],
+            min_lift=ns.min_lift,
+            min_samples=ns.min_samples,
+            generated_at=feedback.get("generated_at"),
+        )
+        priors_path = write_creative_priors(root, priors)
+        kept = sorted(priors["priors"])
+        # 诚实可见提示：无显著胜出维度会落空文件（priors={}），明说不是 bug。
+        print(
+            f"creative_priors → {priors_path}：{('写入 ' + '、'.join(kept)) if kept else '无维度达 lift/样本阈值（priors 为空，下游 no-op）'}",
+            file=sys.stderr,
+        )
     if ns.update_guide:
         update_director_guide(ns.guide, feedback)
     print(render_markdown(feedback) if ns.markdown else json.dumps(feedback, ensure_ascii=False, indent=2))

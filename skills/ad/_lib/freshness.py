@@ -49,7 +49,7 @@ CANDIDATE_SOURCES: List[Dict[str, object]] = [
         "path": "skills/ad-craft/scripts/contract.py",
         "choice_points": ["生图AI"],
         "max_age_days": 45,
-        "note": "AD_APPROVED/FORBIDDEN 生图后端白名单（ad 线策略，与 n2d 故意不同：禁即梦）。",
+        "note": "AD_APPROVED/FORBIDDEN 生图后端白名单（广告投放侧从严：禁即梦）。",
     },
     {
         "id": "ad-video-backends",

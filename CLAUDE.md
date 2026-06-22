@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-`anime-armory` is **not** an application — it's a library of Claude Code **skills** that form the **n2d** creation + production factory: 小说→制漫剧 (novel → AI comic-drama). The "source code" is the skills under `skills/`; the top-level Chinese folder `制漫剧/` holds **demo outputs**, not application data.
+`anime-armory` is **not** an application — it's a library of Claude Code **skills** that form the **n2d** creation + production factory: 小说→制漫剧 (novel → AI comic-drama). The "source code" is the skills under `skills/`; the top-level Chinese folder `创作区/制漫剧/` holds **demo outputs**, not application data.
 
 Orientation order: `AGENTS.md` (tool-neutral entry, has the intent→skill routing table) → `skills/README.md` (skill index) → individual `skills/<name>/SKILL.md`. `README.md` is the project overview. Don't duplicate those here — read them. `GEMINI.md` is a per-tool mirror of `AGENTS.md` — if you change the routing table or entry doc, keep it in sync. Deeper design notes that don't belong in a skill live under `docs/` (e.g. `docs/n2d-声音工程化方案.md`, the voice-engineering rationale behind `n2d-voice`).
 
@@ -19,7 +19,7 @@ Orientation order: `AGENTS.md` (tool-neutral entry, has the intent→skill routi
 - **Two-layer image gen**: `n2d-image` first builds a shared 定妆库 (locked character faces / scenes / style) and only then per-shot frames, to keep characters consistent across shots. Stage order: `n2d-script`(改编) → `n2d-voice` → `n2d-script`(分镜) → `n2d-image` → `n2d-video` → `n2d-compose`.
 - **`出视频/` vs `合成/` split (2026)**: `出视频/第N集/` holds ONLY the per-shot clips (`视频/`) + video prompts (`prompt/`). Everything audio/post — `配音/` (n2d-voice output, incl. `时长清单.json`), `_voicecache/`, compose `_work/`, the final `成片_*.mp4`, and optional watermark output — lives in the sibling `合成/第N集/`. compose reads clips from `出视频/`, voice from `合成/`, and writes 成片 to `合成/`. `n2d-compose` can optionally call `watermark` after 成片 (`水印` choice point).
 
-**Per-work state lives in two sibling files** at each work root (`制漫剧/<剧名>/`):
+**Per-work state lives in two sibling files** at each work root (`创作区/制漫剧/<剧名>/`):
 - `_进度.md` — the **state machine**. Read it first to know what stage a work is at; write it back when a stage completes.
 - `_设置.md` — the **private per-work choices** (platform/backend/resolution/voice…), authoritative.
 
@@ -55,5 +55,5 @@ Quick reminders of the highest-stakes clauses (full text + rationale in the cons
 - **Compliance is non-negotiable** (D1): voice-clone only on self/authorized voices (2026 opt-in); source novels default to public-domain/owned/licensed. (Note: forced AI-identification/watermark enforcement was **retired from the n2d pipeline 2026-06** — handled outside the tool now; see `n2d-compliance`.)
 
 Claude-Code-operational rules not in the constitution:
-- **Existing works are demos** — keep the `制漫剧/` demos; do not suggest deleting them or adding them to `.gitignore` (that decision is already made; see `TODO.md` for the optional strip-to-template path).
+- **Existing works are demos** — keep the `创作区/制漫剧/` demos; do not suggest deleting them or adding them to `.gitignore` (that decision is already made; see `TODO.md` for the optional strip-to-template path).
 - Commits go directly to `main` (not a PR flow).

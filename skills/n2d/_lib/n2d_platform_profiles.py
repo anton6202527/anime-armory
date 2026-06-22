@@ -70,6 +70,11 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "identity_mechanism": "character_id",
         "native_av": False,
         "lipsync_audio_ref": True,  # 可灵 Omni 原生口型：可吃音频参考做口型驱动
+        # Kling 3.0（2026 市场报告）：单次生成可出**最多 6 个连续镜头 + 共享音轨时间线**的多镜叙事，
+        # 字符一致性显著增强——同 Seedance 一样属「多镜单次生成」能力，对连续接力镜组可一次 co-generate
+        # 整段消缝。判定走能力字段，由 MULTISHOT_NATIVE_BACKENDS 自动收录 → router 标 multishot_candidate。
+        # 保守起见：付费批量前仍按 verified 复核当前 Kling API 是否暴露该多镜接口。
+        "multishot_native": True,
         "frame_control": {
             "mode": "first_last",
             "max_timeline_frames": 2,
@@ -77,7 +82,7 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
             "supports_last_frame": True,
             "supports_native_mid_anchors": False,
             "fallback": "Use first+last frame control. Extra mid anchors require split relay/concat or reroute to a native multi-keyframe backend.",
-            "verified": "conservative n2d profile; re-verify against current Kling API before paid batch",
+            "verified": "conservative n2d profile; re-verify against current Kling API before paid batch (incl. 6-shot multi-shot + shared audio timeline)",
         },
     },
     "seedance": {

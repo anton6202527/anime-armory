@@ -34,7 +34,7 @@ pip install demucs    # 先分离人声再转换，质量更高（Mac 可跑）
 2. **分离人声**：demucs 把目标歌分成 vocals / instrumental。
 3. **转换音色**：RVC（用目标音色模型）把 vocals 转成目标嗓。
 4. **回混**：转换后 vocals + 原 instrumental → 新 `歌/song.wav`（覆盖或另存 `歌/song_cover.wav`）。
-5. 落档 + 回写 `_进度.md`；记音色来源到 `_meta.vocal_source`。下一步交 `mv` 做视频。
+5. 落档 + 回写 `_进度.md`；记音色来源到 `_meta.vocal_source`。后续如需视频制作，交付最终音频成品即可。
 
 ## 详细参考
 - RVC / so-vits-svc 安装·训练音色·转换·回混：`references/rvc.md`
@@ -45,4 +45,4 @@ pip install demucs    # 先分离人声再转换，质量更高（Mac 可跑）
 | 跳过合规闸门 | 先确认音色合法 + 原曲权利 |
 | 换未授权真人歌手嗓 | 拒做 |
 | 不分离直接转整首 | 先 demucs 分 vocals，只转人声再回混 |
-| 想复用 n2d/mv 的视频换脸 | 那是换脸/说话；歌声转换各写各的 |
+| 想把歌声转换当成视频换脸 | 那是另一类音画处理；歌声转换只处理人声音色 |

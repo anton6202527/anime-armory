@@ -154,6 +154,26 @@ def product_qc_findings(root):
     if blocks:
         out.append(finding("block", "product_qc_block",
                             f"产品/logo/品牌色一致性仍有 block={blocks}（含文生图产品/品牌色漂移）", path))
+    env = report.get("qc_environment") or {}
+    precision = str(env.get("precision_level") or "").strip()
+    manual_ok = bool(report.get("manual_review_accepted") or env.get("manual_review_accepted"))
+    if precision and precision != "full" and not manual_ok:
+        out.append(finding("block", "product_qc_precision_not_full",
+                           f"产品一致性机检精度为 {precision}，品牌色/dHash/logo 像素检未完整执行；"
+                           "正式出视频前需补依赖重跑，或在报告中人工留痕 manual_review_accepted=true", path))
+    elif precision and precision != "full" and manual_ok:
+        out.append(finding("warn", "product_qc_precision_manual_override",
+                           f"产品一致性机检精度为 {precision}，但已有人工复核放行留痕", path))
+    try:
+        pending = int((env.get("pending_product_images") or 0) if isinstance(env, dict) else 0)
+    except (TypeError, ValueError):
+        pending = 0
+    if pending:
+        out.append(finding("block", "product_qc_pending_images",
+                           f"产品一致性机检有 {pending} 个产品镜图未落档/未读到，不能进出视频", path))
+    if any((f.get("detail") or {}).get("degraded") == "no_image" for f in report.get("findings") or []):
+        out.append(finding("block", "product_qc_pending_images",
+                           "产品一致性报告仍含 no_image pending 项，需先补产品镜图并重跑 product_qc", path))
     if warns:
         out.append(finding("warn", "product_qc_warn", f"产品一致性 warn={warns}，需人工确认", path))
     return out

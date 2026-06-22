@@ -79,6 +79,7 @@ def test_lint_block_missing_reference_identity_negatives():
     codes = {x["detail"].get("missing") for x in f}
     assert "reference_block" in codes
     assert "identity_lock" in codes
+    assert "product_asset_id" in codes
     # 负向缺失 finding
     assert any(x["detail"].get("missing_negatives") for x in f)
 
@@ -104,7 +105,8 @@ def test_run_qc_writes_authoritative_json_and_block_exit(tmp_path):
     out = root / "出图" / "分镜" / "product_qc.json"
     assert out.exists()
     payload = json.loads(out.read_text(encoding="utf-8"))
-    assert set(payload.keys()) == {"summary", "findings"}
+    assert set(payload.keys()) == {"kind", "version", "summary", "findings", "qc_environment"}
+    assert payload["kind"] == "ad_product_qc"
     assert set(payload["summary"].keys()) == {"block", "warn", "info"}
     assert payload["summary"]["block"] >= 1
     # 每条 finding 符合权威 schema
@@ -134,6 +136,30 @@ def test_degraded_no_pillow_still_lints(tmp_path, monkeypatch):
     assert any(f["detail"].get("degraded") == "no_pillow" for f in payload["findings"])
     # prompt-lint 仍然抓到镜头2 的 block
     assert any(f["check"] == "prompt_lint" and f["severity"] == "block" and f["shot"] == "镜头2"
+               for f in payload["findings"])
+    assert payload["qc_environment"]["precision_level"] == "degraded"
+
+
+def test_local_product_patch_event_blocks(tmp_path):
+    Image = pytest.importorskip("PIL.Image")
+    pytest.importorskip("numpy")
+    root, stage = _make_project(tmp_path, {"镜头1.md": GOOD_PROMPT})
+    imgdir = stage / "图片"
+    imgdir.mkdir()
+    Image.new("RGB", (64, 64), (0xE6, 0x00, 0x12)).save(str(imgdir / "镜头1.png"))
+    event_dir = root / "生产数据"
+    event_dir.mkdir()
+    (event_dir / "production_events.jsonl").write_text(
+        json.dumps({
+            "stage": "image",
+            "event": "generation",
+            "generation": {"asset": "出图/分镜/图片/镜头1.png", "method": "local_product_patch"},
+        }, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    payload = pq.run_qc(stage)
+    assert payload["summary"]["block"] >= 1
+    assert any(f["check"] == "local_patch_prohibited" and f["severity"] == "block"
                for f in payload["findings"])
 
 

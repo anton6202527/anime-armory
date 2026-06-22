@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 # 时长一致性守门人：核对配音→字幕→镜头时长这条链是否对齐（治"成片时长对不上/字幕错位/镜头时长漂"）。
 # 用法: validate_timings.py <作品根> <第N集> [--tol 0.5] [--target-seconds N | --no-target]
-#       不给 --target-seconds 时默认从 _设置.md「单集时长」预设区间自动取本集目标做集长对账（--no-target 关闭）。
+#       不给 --target-seconds 时默认从 _设置.md「拆集节奏」预设自动取软节奏目标做集长 WARN（--no-target 关闭）。
 # 退出码: 0=全过 / 1=有硬不一致或缺文件（可接 CI）。所有检查仅读取，不改文件。
 import sys, os, re, json, subprocess
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'n2d', '_lib'))
 from n2d_settings import is_native_av, get_setting  # 制作模式判定 + 选择点读取（单一真值源）
 from n2d_route import placeholder_indices, voiceover_fingerprint  # 占位判定 + 配音源指纹（单一真值源）
 
-# 单集时长 选择点 → 验收目标秒（区间中点）。区间见 n2d-script SKILL.md 第1步预设表。
+# 拆集节奏 → 软节奏目标秒（仅用于 WARN，不作硬上下限；旧键「单集时长」兼容读取）。
 # 「前长后短」第1集与其余集不同档：用 (ep1_target, rest_target)；其余预设第1集同其余集。
 _DURATION_PRESET_TARGETS = {
-    "前长后短": (150.0, 90.0),   # 第1集 120–180s（mid 150）/ 其余集 60–120s（mid 90）
-    "均衡": (90.0, 90.0),        # 每集 60–120s（mid 90）
-    "快节奏": (60.0, 60.0),      # 每集 45–75s（mid 60）
-    "长集": (150.0, 150.0),      # 每集 120–180s（mid 150）
+    "前长后短": (150.0, 90.0),   # 第1集 soft 150 / 其余集 soft 90
+    "均衡": (90.0, 90.0),        # soft 90
+    "快节奏": (60.0, 60.0),      # soft 60
+    "长集": (150.0, 150.0),      # soft 150
 }
 _EP_NUM_RE = re.compile(r"\d+")
 
@@ -25,14 +25,14 @@ def _episode_is_first(ep):
 
 
 def episode_target_seconds(root, ep):
-    """从 _设置.md「单集时长」自动取本集验收目标秒；取不到返回 None（不引入新行为，向后兼容）。
+    """从 _设置.md「拆集节奏」自动取本集软节奏目标秒；取不到返回 None（不引入新行为，向后兼容）。
 
-    支持：预设名（前长后短/均衡/快节奏/长集，按区间中点；前长后短第1集单独档）；
-    参数化覆盖 `自定义(90s)` / `快节奏(85s)` 取括号内显式秒；`(60-120)` 取区间中点。
+    支持：预设名（前长后短/均衡/快节奏/长集，取兼容软秒数；前长后短第1集单独档）；
+    参数化覆盖 `自定义(90s)` / `快节奏(85s)` 取括号内显式秒；`(60-120)` 取软范围中点。
     显式 --target-seconds 仍优先（main 里若已给就不调本函数）。"""
-    raw = (get_setting(root, "单集时长", "") or "").strip()
+    raw = (get_setting(root, "拆集节奏", "") or "").strip()
     if not raw:
-        raw = "前长后短"  # 选择点默认（见 n2d/references/选择点与偏好.md）
+        raw = "前长后短"  # 内部默认（见 n2d/references/选择点与偏好.md）
     # 括号内显式参数优先（半/全角括号）：单值 90s 或区间 60-120。
     m = re.search(r"[（(]([^（）()]+)[)）]", raw)
     if m:
@@ -94,19 +94,19 @@ def srt_last_end(path):
             g = list(map(int, m.groups())); last = g[0]*3600+g[1]*60+g[2]+g[3]/1000.0
     return last
 
-# 目标时长偏差容忍（∑镜头时长 偏离意图集长超此比例即 WARN，不硬拦）。默认 15%。
+# 软节奏偏差容忍（∑镜头时长 偏离意图超此比例即 WARN，不硬拦）。默认 15%。
 TARGET_DEVIATION_TOL = 0.15
 
 def target_deviation_warn(shots_total, target_seconds, tol=TARGET_DEVIATION_TOL):
-    """∑镜头时长 vs 意图集/平台时长：偏离超 tol 比例 → 返回一条 WARN 文案，否则 None。
-    仅在显式给了正的 target 时生效（不给→无新行为，向后兼容）。配音 40% 短/长此前过全部 gate。"""
+    """∑镜头时长 vs 软节奏意图：偏离超 tol 比例 → 返回一条 WARN 文案，否则 None。
+    仅在显式给了正的 target 时生效（不给→无新行为，向后兼容）；不作为集长硬闸门。"""
     if target_seconds is None or target_seconds <= 0:
         return None
     dev = abs(shots_total - target_seconds) / target_seconds
     if dev > tol:
         sign = '长' if shots_total > target_seconds else '短'
-        return (f"∑镜头时长 {shots_total:.2f}s 偏离目标时长 {target_seconds:.2f}s 达 {dev*100:.0f}%"
-                f"（>{tol*100:.0f}% 容忍·偏{sign}）→ 配音/分镜节奏与意图集长不符，复核台词篇幅或目标时长")
+        return (f"∑镜头时长 {shots_total:.2f}s 偏离软节奏意图 {target_seconds:.2f}s 达 {dev*100:.0f}%"
+                f"（>{tol*100:.0f}% 容忍·偏{sign}）→ 仅作节奏 WARN；优先复核冲突→爽点→钩子闭环，必要时调台词篇幅或节奏目标")
     return None
 
 def _validate_native_av(root, ep, shots_p, tol, target=None):
@@ -135,7 +135,7 @@ def _validate_native_av(root, ep, shots_p, tol, target=None):
                 oks.append(f"∑clip.duration {cd:.2f}s ≈ 镜头时长累计 {st:.2f}s")
     else:
         warns.append("storyboard.json 不存在（阶段2 未定稿）——无法核对 clip 时长")
-    warns.append("原生音画：字幕未在本步校验，成片后用 whisperx 对原生台词做词级对齐（参考 mv-lyric-sync）")
+    warns.append("原生音画：字幕未在本步校验，成片后用 whisperx 对原生台词做词级对齐")
     for s in oks:   print(f"  ✅ {s}")
     for s in warns: print(f"  ⚠️  {s}")
     for s in fails: print(f"  ⛔ {s}")
@@ -157,8 +157,8 @@ def main():
             tol = float(sys.argv[i + 1])
         except ValueError:
             sys.exit(f'⛔ --tol 数值无效: {sys.argv[i + 1]}')
-    # 集长对账：显式 --target-seconds 优先；否则从 _设置.md「单集时长」预设区间自动取本集目标
-    # （--no-target 显式关闭自动取）。∑镜头时长 偏离目标超 15% 仅 WARN 不硬拦。
+    # 集长对账：显式 --target-seconds 优先；否则从 _设置.md「拆集节奏」预设自动取软节奏目标
+    # （--no-target 显式关闭自动取）。∑镜头时长 偏离软目标超 15% 仅 WARN，不硬拦。
     target = None
     if '--target-seconds' in sys.argv:
         i = sys.argv.index('--target-seconds')

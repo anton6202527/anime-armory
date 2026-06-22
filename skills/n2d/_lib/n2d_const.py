@@ -35,6 +35,12 @@ COMPLIANCE_PLACEHOLDER_MARKERS = ("todo", "待补", "待办", "xxx", "xxx", "...
 COMPLIANCE_OVERSEAS_PLATFORMS = ("tiktok", "youtube", "reelshort", "instagram", "facebook")
 COMPLIANCE_DOMESTIC_REGIONS = ("cn", "china", "mainland", "中国", "中国大陆", "内地")
 COMPLIANCE_INTERNAL_SKIPPABLE_SECTIONS = ("platform_review", "localization", "regulatory_filing")
+# AI 生成合成内容标识：n2d 只保留非阻断 manifest / best-effort 后处理 / 发布待办提示。
+# 显式标签、元数据隐式标识、数字水印和平台披露不得成为主流程 blocker。
+COMPLIANCE_AI_LABEL_STATUSES = ("pending", "done", "not_applicable")
+COMPLIANCE_AI_LABEL_DEFAULT_TEXT = "AI生成"
+COMPLIANCE_AI_LABEL_SPEC = "GB45438-2025"
+# AI 标识字段仅供 INFO 提醒和发布检查参考，不参与主流程放行。
 COMPLIANCE_STATUS_LIKE_VALUES = (
     "pending", "ready", "done", "not_applicable", "filed", "approved",
     "blocked", "missing", "unknown", "todo",
@@ -95,11 +101,14 @@ SHOT_TYPE_KEYWORDS = (
     ("fight_exchange", ("打斗", "搏斗", "交手", "格挡", "出拳", "挥剑", "命中", "受击", "撞击", "掌风", "刀光", "fight", "combat", "hit")),
     ("chase", ("追逐", "追赶", "追杀", "奔逃", "逃跑", "追上", "紧追", "chase", "running away")),
     ("flight", ("御剑", "飞行", "凌空", "腾空", "掠空", "掠过云", "飞掠", "坠落", "飞檐", "云海穿行", "flight", "flying")),
+    ("reveal_reaction_chain", ("真相揭示", "身份曝光", "身份揭露", "掉马", "马甲暴露", "真实身份", "当众揭穿", "揭穿", "揭露", "证据链", "血书", "遗诏", "密信", "内鬼", "身世", "认亲", "reveal", "identity reveal")),
+    ("public_confrontation", ("公开对质", "当众对质", "公堂", "朝堂", "审讯", "逼问", "盘问", "质问", "谈判", "交易", "交涉", "智斗", "权谋", "当众打脸", "反将一军", "confrontation", "interrogation", "negotiation")),
     ("dialogue_shot_reverse", ("对话反打", "正反打", "反打", "过肩", "对视", "视线对位", "台词", "dialogue", "shot reverse", "ots", "eyeline")),
     ("dialogue_closeup", ("说话特写", "口型", "嘴部", "近景说话", "lip-sync", "mouth", "close-up dialogue")),
     ("magic_burst", ("法术", "符阵", "符纹", "灵光", "灵力", "爆发", "雷劫", "雷落", "光束", "剑气", "护盾", "阵法", "magic", "burst", "spell")),
     ("hug_or_pull", ("拥抱", "抱住", "拉扯", "拉住", "抓腕", "拽住", "推开", "扯住", "拉袖", "tug", "pull", "grab", "hug")),
     ("intimate_interaction", ("牵手", "靠近", "亲密", "搀扶", "扶住", "抚脸", "扶肩", "贴近", "疗伤", "intimate", "touch")),
+    ("relationship_turn", ("告白", "表白", "承认心意", "心动", "定情", "决裂", "分手", "误会爆发", "反目", "和解", "破镜重圆", "救赎", "互相救场", "吃醋", "护短", "原谅", "relationship turn", "confession", "reconciliation")),
     ("multi_character_same_frame", ("多人同框", "双人同框", "两人同框", "三人同框", "同框", "同画面", "two-shot", "group shot")),
     ("ensemble_blocking", ("群像", "群戏", "群臣", "门徒", "人群", "围观", "队列", "站位", "多人站位", "围住", "围堵", "众人", "ensemble", "crowd")),
     ("multi_person_blocking", ("多人", "三人", "四人", "multi-person", "blocking")),
@@ -108,6 +117,7 @@ SHOT_TYPE_KEYWORDS = (
 
 SPECIAL_TEMPLATE_SHOT_TYPES = (
     "fight_exchange", "chase", "flight", "dialogue_shot_reverse", "magic_burst",
+    "reveal_reaction_chain", "public_confrontation", "relationship_turn",
     "hug_or_pull", "intimate_interaction", "multi_character_same_frame",
     "ensemble_blocking", "multi_person_blocking",
 )
@@ -165,6 +175,106 @@ MOTIF_MONOTONIC_FIELDS_DEFAULT = ("level", "panel_tier")
 # system_panel overlay 文字层默认字段（n2d-compose render_panel 据此渲染清晰数值，AI 只出空光幕底）。
 SYSTEM_PANEL_OVERLAY_FIELDS = ("title", "level", "attrs")
 
+# ── 拆集边界启发式词典（题材可扩展·单一真值源）─────────────────────────────
+# split_novel.py（粗切）与 boundary_audit.py（预筛）共用：识别"可作粗胚右边界的强钩"+
+# "冲突→爽点/反转"闭环信号。仅启发式，最终钩力/闭环由人或 LLM 精修判定。
+# 题材词面在 base 之上按命中题材合并——治"词典只覆盖古言爽文/修仙，女频情感/悬疑/都市退化成无闭环"。
+# 默认（未识别题材）= base ∪ 古装动作，复刻历史正则覆盖，保证旧项目行为不变。
+# 取值键与 GENRE_KEYWORDS 题材键松对齐；女频/悬疑等可经 _设置.md `题材` 自由文本子串命中。
+
+# 集尾强钩（句尾收束信号）：悬念/惊叹/省略/破折号 + 反转/突变/疑问/紧迫词（题材无关，恒并入）。
+BOUNDARY_STRONG_END_BASE = (
+    "？", "！", "…", "——", "?", "!",
+    "竟然", "竟", "居然", "原来", "没想到", "不料", "岂料",
+    "突然", "猛地", "猛然", "骤然", "霎时", "忽然",
+    "难道", "莫非", "是谁", "什么", "为什么", "怎么", "凭什么",
+    "来了", "出事", "不好了", "糟了", "完了",
+)
+# 冲突信号（base：通用对抗/危机·题材无关）
+BOUNDARY_CONFLICT_BASE = (
+    "逼", "威胁", "羞辱", "责罚", "围住", "拦住", "抓住", "质问", "审问",
+    "怒", "恨", "怕", "惊", "哭", "跪", "危", "险", "死", "陷害", "冤", "背叛", "惩罚",
+)
+# 爽点/反转信号（base：通用反击/翻盘/揭示·题材无关）
+BOUNDARY_PAYOFF_BASE = (
+    "反击", "还手", "夺回", "臣服", "震住", "压住", "赢", "胜", "救", "成功",
+    "冷笑", "一笑", "抬头", "睁眼", "原来", "竟然", "竟", "居然", "没想到",
+    "不料", "岂料", "突然", "猛地", "反而", "却",
+)
+
+# 题材扩展词面：base ∪ 命中题材桶。
+BOUNDARY_GENRE_LEXICON = {
+    # 古装动作（宫斗/修仙/武侠/战神古装向）：原正则覆盖的古言爽文/打斗词面（=历史默认）。
+    "古装动作": {
+        "strong_end": ("妖", "斩了", "破阵"),
+        "conflict": ("冷宫", "刀", "剑", "血", "毒", "妖", "怪", "追", "逃", "抢", "夺", "打", "杀"),
+        "payoff": ("夺回", "跪倒", "跪下", "觉醒", "突破", "升级", "斩", "破阵", "出关", "破境"),
+    },
+    # 女频情感/言情/虐恋/甜宠/霸总：误会/心动/醋意/告白/虐恋/HE。
+    "女频情感": {
+        "strong_end": ("心动了", "脸红了", "她哭了", "他走了", "分手吧", "我喜欢你", "原来你也"),
+        "conflict": ("误会", "争吵", "冷战", "吃醋", "醋意", "心碎", "失望", "决裂", "分手",
+                     "退婚", "嫉妒", "猜忌", "绿茶", "白莲", "抢走", "插足", "误解", "怀疑"),
+        "payoff": ("告白", "表白", "和好", "心动", "脸红", "护住", "宠", "撑腰", "复合",
+                   "在一起", "拥抱", "破镜重圆", "释怀", "原谅", "心软", "动情"),
+    },
+    # 悬疑/推理/犯罪/探案：线索/真凶/反转/不在场。
+    "悬疑": {
+        "strong_end": ("是凶手", "另有其人", "他没死", "线索断了", "真相是", "活着"),
+        "conflict": ("尸体", "凶手", "失踪", "被杀", "命案", "嫌疑", "跟踪", "陷阱",
+                     "栽赃", "灭口", "勒索", "绑架", "密室", "作案"),
+        "payoff": ("真凶", "破案", "真相", "证据", "识破", "反杀", "翻案", "锁定",
+                   "招供", "落网", "反转", "水落石出"),
+    },
+    # 都市/职场/逆袭/赘婿/战神现代向：身份反差/打脸/逆袭。
+    "都市": {
+        "strong_end": ("打脸", "是大佬", "真实身份", "后台竟是"),
+        "conflict": ("看不起", "嘲讽", "针对", "排挤", "刁难", "解雇", "下马威",
+                     "踩", "欺压", "讽刺", "刁蛮"),
+        "payoff": ("打脸", "逆袭", "真实身份", "扮猪吃虎", "碾压", "震惊全场",
+                   "封神", "翻盘", "实力", "曝光", "镇住"),
+    },
+}
+
+# 题材自由文本子串 → lexicon 桶（别名归一）。同一 genre_text 可命中多桶，全部并入。
+BOUNDARY_GENRE_ALIASES = (
+    (("女频", "情感", "言情", "虐恋", "甜宠", "恋爱", "霸总", "总裁", "豪门", "宠妻", "婚"), "女频情感"),
+    (("悬疑", "推理", "犯罪", "探案", "罪案", "刑侦", "灵异", "无限"), "悬疑"),
+    (("都市", "职场", "逆袭", "赘婿", "战神", "兵王", "高武"), "都市"),
+    (("宫斗", "宅斗", "后宫", "古言", "古装", "宫廷"), "古装动作"),
+    (("修仙", "修真", "玄幻", "仙侠", "武侠", "洪荒"), "古装动作"),
+)
+
+
+def boundary_buckets(genre_text):
+    """题材文本 → 命中的 lexicon 桶名列表；未命中返回历史默认 ['古装动作']。"""
+    text = (genre_text or "").strip().lower()
+    hits = []
+    for needles, bucket in BOUNDARY_GENRE_ALIASES:
+        if any(n in text for n in needles) and bucket not in hits:
+            hits.append(bucket)
+    return hits or ["古装动作"]
+
+
+def boundary_lexicon(genre_text=None):
+    """返回 (strong_end, conflict, payoff) 三元组：base ∪ 命中题材桶。
+
+    供 split_novel / boundary_audit 构建正则。未识别题材时复刻历史覆盖（base ∪ 古装动作）。
+    """
+    buckets = boundary_buckets(genre_text)
+    strong = list(BOUNDARY_STRONG_END_BASE)
+    conflict = list(BOUNDARY_CONFLICT_BASE)
+    payoff = list(BOUNDARY_PAYOFF_BASE)
+    for b in buckets:
+        spec = BOUNDARY_GENRE_LEXICON.get(b, {})
+        strong += list(spec.get("strong_end", ()))
+        conflict += list(spec.get("conflict", ()))
+        payoff += list(spec.get("payoff", ()))
+    # 去重保序
+    dedup = lambda xs: list(dict.fromkeys(xs))
+    return dedup(strong), dedup(conflict), dedup(payoff)
+
+
 # ── 路径与目录 ─────────────────────────────────────────────────────────────
 SHARED_ASSET_DIR = "共享"
 LEGACY_SHARED_ASSET_DIR = "common"
@@ -196,6 +306,9 @@ LORA_VALIDATION_REPORT_KIND = "n2d_lora_validation_report"
 SKILL_UPDATE_PLAN_KIND = "n2d_skill_update_plan"
 SKILL_UPDATE_SNAPSHOT_KIND = "n2d_skill_update_snapshot"
 CONSISTENCY_FINDINGS_KIND = "n2d_consistency_findings"
+IMAGE_QC_REPORT_KIND = "n2d_image_qc"
+GATE_FINDINGS_KIND = "n2d_gate_findings"
+CONSISTENCY_LEDGER_KIND = "n2d_consistency_ledger"
 CONTRACT_INHERITANCE_KIND = "n2d_contract_inheritance"
 IDENTITY_DRIFT_REPORT_KIND = "n2d_identity_drift_report"
 IDENTITY_VOICE_DRIFT_REPORT_KIND = "n2d_identity_voice_drift_report"
@@ -210,9 +323,7 @@ MOTIF_PLAN_KIND = "n2d_motif_plan"                  # 母题检测建议（生�
 BATCH_QUEUE_KIND = "n2d_batch_queue"
 DIFFERENTIATION_CANDIDATES_KIND = "n2d_differentiation_candidates"
 EPISODE_REVIEW_SCORE_KIND = "n2d_episode_review_score"
-# ⚠️ 跨线 wire constant：novel-score 端硬写字面量 "genre_performance_record" 匹配本字段、不 import 本常量
-# （见 novel-score/score.py + n2d-feedback/feedback.py 注释）。**不得加 n2d_ 前缀**——加了 novel-score
-# 读不到 n2d 写的题材战绩库，跨线题材先验闭环静默断开。
+# 外部投放战绩 JSONL 可复用该 kind；保持无前缀便于非 n2d 工具读取。
 GENRE_PERFORMANCE_RECORD_KIND = "genre_performance_record"
 LORA_CARD_KIND = "n2d_lora_card"
 LORA_DATASET_MANIFEST_KIND = "n2d_lora_dataset_manifest"

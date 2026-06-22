@@ -59,6 +59,9 @@ def test_import_txt_creates_project_with_manifest(tmp_path):
     meta = json.loads((project / "_meta.json").read_text(encoding="utf-8"))
     assert meta["kind"] == "import"
     assert meta["source"] == "原作.txt"
+    assert meta["purpose"] == "未定"
+    settings = (project / "_设置.md").read_text(encoding="utf-8")
+    assert "小说用途**：未定（导入源书；后续再选）" in settings
 
 
 def test_import_docx_uses_stdlib_extractor(tmp_path):

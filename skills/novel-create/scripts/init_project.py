@@ -11,6 +11,7 @@ init_project.py — 建【原创从零】小说项目骨架（无源文本·访�
 用法:
     python3 init_project.py --title "<书名或'待定'>" --genre "<题材类型>" \\
         --premise "<一句话故事>" --scale short|medium|long|微短剧|漫剧 \\
+        [--purpose 传统小说|漫剧源书|自定义] \\
         [--platform 起点|番茄|晋江|抖音漫剧|红果|历史向|跨平台] \\
         [--person first|third-limited] [--target-chapters N] \\
         [--ingest <碎片路径>]...  [--out <根>] [--outputs txt,docx,outline]
@@ -35,7 +36,10 @@ if LIB not in sys.path:
 from novel_contract import (base_meta, build_progress_markdown, routing_stages,
                             SCALE_CHOICES, scale_profile, NOVEL_DEFAULTS,
                             NOVEL_STAGES, normalize_scale, parse_outputs, SCALE_PROFILES,
-                            NOVEL_DRAFT_MODES, CHAPTER_GRANULARITY, AI_TEXT_USAGE_MODES)
+                            NOVEL_DRAFT_MODES, DRAFT_WORKFLOWS, CHAPTER_GRANULARITY,
+                            AI_TEXT_USAGE_MODES, infer_novel_purpose,
+                            normalize_novel_purpose, resolve_novel_draft_mode,
+                            resolve_novel_draft_workflow)
 from settings import write_settings
 
 SCALE_PROFILE = SCALE_PROFILES  # scale-band 契约：test_scale_contract 校验其与规模档一致
@@ -56,7 +60,7 @@ def slug(s):
 
 
 
-def build_blueprint(title, genre, platform, premise, scale, n, wpc, person):
+def build_blueprint(title, genre, purpose, platform, premise, scale, n, wpc, person):
     return f"""# 创作蓝图 — 《{title}》
 
 > 这部原创小说的"宪法"。动笔前与用户敲定，每条**具体可判定**，别写空话。
@@ -66,9 +70,10 @@ def build_blueprint(title, genre, platform, premise, scale, n, wpc, person):
 {premise}
 （标准式：谁，在什么处境，靠什么金手指，去对抗什么，最终要得到什么）
 
-## 题材 / 平台 / 基调
+## 题材 / 用途 / 平台 / 基调
 - 题材类型：{genre}
-- 目标平台：{platform}（决定篇幅档 / 爽点节奏 / 开篇钩；起名按平台见 novel-title）
+- 小说用途：{purpose}（决定交付形态：传统连载、漫剧源书、短篇试写等；红果/抖音差异写在目标平台）
+- 目标平台：{platform}（决定读者口味 / 爽点节奏 / 开篇钩；起名按平台见 novel-title）
 - 基调：（热血/爽/虐/治愈/暗黑/诙谐…）
 
 ## 主角
@@ -79,6 +84,13 @@ def build_blueprint(title, genre, platform, premise, scale, n, wpc, person):
 ## 核心爽点（这本"爽"在哪，按平台密度铺）
 -
 
+## 市场假设 / 差异化（商业/平台项目必填 evidence）
+- 市场基准：`评分/market_baseline_<YYYY-MM-DD>.json`（未采集前写“待采集”）
+- 采集日期 / 来源：
+- 热度信号：
+- 拥挤度 / 同质化风险：
+- 本书差异化：
+
 ## 主线冲突（主角要对抗的最大阻力 / 反派 / 困局）
 -
 
@@ -86,7 +98,7 @@ def build_blueprint(title, genre, platform, premise, scale, n, wpc, person):
 -
 
 ## 规模 / 视角
-- 规模档：{scale}（约 {n} 章 × {wpc[0]}-{wpc[1]} 字 target）
+- 规模档：{scale}（约 {n} 章；{wpc[0]}-{wpc[1]} 字仅作建议篇幅与质检预警，不按字数硬切）
 - 人称视角：{person}
 
 ## 风格卡（有样本就此刻填；没有则 Demo 后回填锚定）
@@ -132,10 +144,23 @@ def build_character_card(title):
 ## 能力体系（依 设定圣经.md，含代价）
 ## 性格底色
 ## 动机 / 心结 / 渴望（驱动主线）
+## 核心恐惧
+## 底线 / 不可做之事
+## 不能主动做的事（除非伪装/被控制/重大转折）
+## 关系温度边界
+## 口吻禁忌
 ## 关键关系
 ## 说话习惯（口头禅 / 句式 / 语气）
 ## 成长弧线（起点 → 终点）
 """
+
+
+def build_character_guardrails():
+    return {
+        "schema_version": 1,
+        "kind": "novel_character_guardrails",
+        "characters": {}
+    }
 
 
 def build_worldview(title):
@@ -183,14 +208,20 @@ def main():
     ap.add_argument("--premise", required=True, help="一句话故事（logline）")
     ap.add_argument("--scale", required=True, choices=list(SCALE_CHOICES))
     ap.add_argument("--platform", default="跨平台")
+    ap.add_argument("--purpose", default=None,
+                    help="小说用途：传统小说/漫剧源书/微短剧源书/短读/短篇/出海译制底稿/自定义")
     ap.add_argument("--person", default="third-limited", choices=["first", "third-limited"])
     ap.add_argument("--target-chapters", type=int, default=None)
     ap.add_argument("--ingest", action="append", default=[],
                     help="用户给的碎片(风格样本/笔记/半成品)，可多次；收进 素材/")
-    ap.add_argument("--out", default=None, help="输出根，缺省 写小说/<书名>/")
+    ap.add_argument("--out", default=None, help="输出根，缺省 创作区/写小说/<书名>/")
     ap.add_argument("--outputs", default="txt,docx,outline")
-    ap.add_argument("--draft-mode", default="稳妥初稿", choices=NOVEL_DRAFT_MODES,
+    ap.add_argument("--draft-mode", default=None, choices=NOVEL_DRAFT_MODES,
                     help="小说生成模式：决定速度/质量 gate 密度")
+    ap.add_argument("--draft-workflow", default=None, choices=DRAFT_WORKFLOWS,
+                    help="小说生成工作流：默认单步/三步迭代/边写边自检")
+    ap.add_argument("--batch-review-interval", default="5章",
+                    help="小批回扫间隔；默认 5章，可填 3章/5章/关闭")
     ap.add_argument("--chapter-granularity", default="逐章", choices=CHAPTER_GRANULARITY,
                     help="章节生成粒度：逐章/小批/全书草稿")
     ap.add_argument("--ai-text-usage", default=None, choices=AI_TEXT_USAGE_MODES,
@@ -198,12 +229,12 @@ def main():
     args = ap.parse_args()
 
     folder = slug(args.title) if args.title != "待定" else f"新书待定-{slug(args.genre)}"
-    out_root = os.path.abspath(args.out or os.path.join("写小说", folder))
+    out_root = os.path.abspath(args.out or os.path.join("创作区", "写小说", folder))
     if os.path.exists(out_root):
         print(f"[err] 目标已存在：{out_root}（备份/删除后重试，或换 --title/--out）", file=sys.stderr)
         sys.exit(2)
 
-    for sub in ("设定", "章节", "素材", "审稿", "导出", "写作任务", "合规"):
+    for sub in ("设定", "章节", "素材", "审稿", "评分", "导出", "写作任务", "合规"):
         os.makedirs(os.path.join(out_root, sub), exist_ok=True)
 
     # 吃碎片：把用户给的风格样本/笔记/半成品复制进 素材/
@@ -221,6 +252,17 @@ def main():
     profile = scale_profile(scale)
     n = args.target_chapters or profile["target_chapters"]
     wpc = profile["words_per_chapter"]
+    purpose = normalize_novel_purpose(args.purpose) or infer_novel_purpose(
+        platform=args.platform, scale=scale, target=args.draft_mode
+    )
+    draft_mode = resolve_novel_draft_mode(args.draft_mode, purpose=purpose, platform=args.platform, scale=scale)
+    draft_workflow = resolve_novel_draft_workflow(
+        args.draft_workflow,
+        draft_mode=draft_mode,
+        purpose=purpose,
+        scale=scale,
+        target_chapters=n,
+    )
     outputs = parse_outputs(args.outputs)
     title = args.title
     meta = base_meta("create", outputs=outputs, rights_status="original",
@@ -230,15 +272,19 @@ def main():
         "genre": args.genre,
         "premise": args.premise,
         "scale": scale,
+        "purpose": purpose,
         "target_chapters": n,
         "target_words_per_chapter": wpc,
+        "target_wordcount_min_max": profile["min_max"],
         "person": args.person,
         "target_platform": args.platform,
         "ingested": ingested,
         "demo_chapters": demo_chapters_for(n),
         "demo_passed_at": None,
         "title_chosen_at": None,
-        "draft_mode": args.draft_mode,
+        "draft_mode": draft_mode,
+        "draft_workflow": draft_workflow,
+        "batch_review_interval": args.batch_review_interval,
         "chapter_granularity": args.chapter_granularity,
         "ai_text_usage": args.ai_text_usage,
         "split_standard": "novel-craft/references/split.md",
@@ -248,22 +294,26 @@ def main():
               ensure_ascii=False, indent=2)
     write_settings(out_root, {
         "目标平台": args.platform,
+        "小说用途": purpose,
         "题材": args.genre,
         "权利辖区": meta.get("rights_jurisdiction", ""),
         "发行地区": ",".join(meta.get("distribution_regions") or []) or "GLOBAL",
         "篇幅档": f"{scale}（{n}章×{wpc[0]}-{wpc[1]}字）",
         "权利来源": "original（原创自有）",
-        "输出格式": ",".join(outputs) + "（novel-craft/scripts/export.py；漫剧线加 n2d）",
-        "小说生成模式": args.draft_mode,
+        "输出格式": ",".join(outputs) + "（novel-craft/scripts/export.py）",
+        "小说生成模式": draft_mode,
+        "小说生成工作流": draft_workflow,
+        "小批回扫间隔": args.batch_review_interval,
         "章节生成粒度": args.chapter_granularity,
         "AI使用披露": args.ai_text_usage or "（发布前用 ai_usage.py 确认）",
         # 穿越/系统流/修仙等带等级数值成长的题材：默认开力量体系自检（写章后机检等级/成长值/战力一致性）。
         # 非力量题材无 power_system_registry，引擎自跳过，此默认无副作用。仅建议=只提示不阻断。
         "力量体系自检": "开启",
     }, note="原创从零：创作蓝图+设定圣经为宪法。")
-    W("设定/创作蓝图.md", build_blueprint(title, args.genre, args.platform, args.premise, scale, n, wpc, args.person))
+    W("设定/创作蓝图.md", build_blueprint(title, args.genre, purpose, args.platform, args.premise, scale, n, wpc, args.person))
     W("设定/设定圣经.md", build_settings_bible(title))
     W("设定/角色卡.md", build_character_card(title))
+    W("设定/character_guardrails.json", json.dumps(build_character_guardrails(), ensure_ascii=False, indent=2))
     W("设定/世界观.md", build_worldview(title))
     W("设定/章纲.md", build_outline(title, n, args.premise))
     # 力量体系脚手架（穿越/系统流/修仙/玄幻等带等级数值成长的题材）：立项即建 power_system_registry，
@@ -289,14 +339,14 @@ def main():
     print(f"[ok] 原创项目骨架 → {out_root}")
     print(f"     设定/创作蓝图.md ← 骨架（第 2 步填：logline/主角/金手指/爽点/冲突/风格卡）★最重要")
     print(f"     设定/设定圣经.md ← 骨架（第 3 步填：金手指代价 + 一致性约束）")
-    print(f"     设定/角色卡.md / 世界观.md / 章纲.md ← 骨架")
+    print(f"     设定/角色卡.md / character_guardrails.json / 世界观.md / 章纲.md ← 骨架")
     if scaffolded_power_system:
         print(f"     设定/power_system_registry.json ← 力量体系骨架（{scaffolded_power_system}）：填等级体系/面板/逐章成长，"
               f"写章后自动机检等级·成长值·战力一致性（见 novel-craft/references/力量体系设计.md）")
     print(f"     写作任务/ ← draft_packets.py 生成逐章任务包；合规/ ← ai_usage.py 生成披露文件")
     if ingested:
         print(f"     素材/ ← 已收碎片：{', '.join(ingested)}")
-    print(f"     _meta: kind=create 题材=\"{args.genre}\" 档={scale}({n}章×{wpc[0]}-{wpc[1]}字) 平台={args.platform}")
+    print(f"     _meta: kind=create 题材=\"{args.genre}\" 用途={purpose} 档={scale}({n}章；{wpc[0]}-{wpc[1]}字为建议篇幅) 平台={args.platform}")
     print(f"[next] 第 2 步填创作蓝图（用户审）→ 第 3 步设定圣经+卡 → 书名(novel-title) → 章纲 → Demo gate → draft_packets 写章+回扫 → AI披露+导出。")
 
 

@@ -290,3 +290,102 @@ def test_regulatory_filing_not_applicable_needs_reason(tmp_path):
     (root / "合规" / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
     issues = compliance.check_manifest(root, "第1集")
     assert any("applicable=false" in m for m, _ in _msgs(issues))
+
+
+def _write(root: Path, data: dict) -> None:
+    comp = root / "合规"
+    comp.mkdir(parents=True, exist_ok=True)
+    (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+
+# 注意：issue 字符串含 manifest 路径，pytest 的 tmp_path 以测试名命名（含 "ai_labeling"），
+# 故不能用裸 "ai_labeling" 判定——改用只出现在本检查消息体里的 token。
+_AI_TOKENS = ("explicit_label", "implicit_metadata", "缺 ai_labeling", "applicable=false")
+
+
+def _ai_only(issues):
+    return [i for i in issues if any(t in i for t in _AI_TOKENS)]
+
+
+def test_default_manifest_has_ai_labeling(tmp_path: Path) -> None:
+    data = compliance.default_manifest(tmp_path / "x", "第1集")
+    ai = data["ai_labeling"]
+    assert ai["applicable"] is True
+    assert ai["explicit_label"]["text"] == "AI生成"
+    assert ai["implicit_metadata"]["applied"] is False
+
+
+def test_ai_labeling_required_helper() -> None:
+    assert compliance.ai_labeling_required({"ai_labeling": {"applicable": True}}) is True
+    assert compliance.ai_labeling_required({"ai_labeling": {"applicable": False}}) is False
+    assert compliance.ai_labeling_required({}) is True  # 缺段默认提示
+
+
+def _ready_for_compose(root: Path) -> dict:
+    """构造一个除 AI 标识外都过的 manifest（compose 阶段），AI 标识填好配置。"""
+    data = compliance.default_manifest(root, "第1集")
+    data["ai_labeling"]["implicit_metadata"]["service_provider_code"] = "SP-12345"
+    data["ai_labeling"]["implicit_metadata"]["content_id"] = "C-2026-001"
+    return data
+
+
+def test_ai_labeling_compose_reports_placeholder_codes_as_info(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    data = compliance.default_manifest(root, "第1集")  # 编码仍是 TODO 占位
+    _write(root, data)
+    issues = compliance.check_manifest(root, "第1集", stage="compose")
+    assert any("ai_labeling" in i and "service_provider_code" in i and i.startswith("INFO") for i in issues)
+    assert any("ai_labeling" in i and "content_id" in i for i in issues)
+
+
+def test_ai_labeling_compose_passes_when_configured(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write(root, _ready_for_compose(root))
+    issues = compliance.check_manifest(root, "第1集", stage="compose")
+    assert not _ai_only(issues)  # compose 只需配置就绪
+
+
+def test_ai_labeling_review_requires_applied(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    data = _ready_for_compose(root)  # 配置就绪但尚未落标（status=pending, applied=False）
+    _write(root, data)
+    issues = compliance.check_manifest(root, "第1集", stage="review")
+    assert any("explicit_label.status 尚非 done" in i and i.startswith("INFO") for i in issues)
+    assert any("implicit_metadata.applied" in i for i in issues)
+
+
+def test_ai_labeling_review_passes_when_applied(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    data = _ready_for_compose(root)
+    data["ai_labeling"]["explicit_label"]["status"] = "done"
+    data["ai_labeling"]["implicit_metadata"]["applied"] = True
+    _write(root, data)
+    issues = compliance.check_manifest(root, "第1集", stage="review")
+    assert not _ai_only(issues)
+
+
+def test_ai_labeling_internal_downgrades_to_info(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    data = compliance.default_manifest(root, "第1集")  # TODO 占位
+    data["distribution_intent"] = "internal_only"
+    _write(root, data)
+    issues = compliance.check_manifest(root, "第1集", stage="compose")
+    ai_issues = _ai_only(issues)
+    assert ai_issues and all(i.startswith("INFO") for i in ai_issues)  # 内部 demo 降 INFO
+
+
+def test_ai_labeling_applicable_false_requires_notes(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    data = _ready_for_compose(root)
+    data["ai_labeling"]["applicable"] = False
+    data["ai_labeling"]["notes"] = ""
+    _write(root, data)
+    issues = compliance.check_manifest(root, "第1集", stage="compose")
+    assert any("applicable=false 建议在 notes" in i and i.startswith("INFO") for i in issues)
+
+
+def test_ai_labeling_not_checked_at_image_stage(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write(root, compliance.default_manifest(root, "第1集"))  # TODO 占位
+    issues = compliance.check_manifest(root, "第1集", stage="image")
+    assert not _ai_only(issues)  # 标识只在 compose/review 检

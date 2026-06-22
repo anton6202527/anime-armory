@@ -4,17 +4,17 @@
 ```bash
 bash <skill>/mv_compose.sh <制MV作品根> [16:9|9:16|1:1]
 # 例：横屏 MV
-bash <skill>/mv_compose.sh "制MV/我的歌" 16:9
+bash <skill>/mv_compose.sh "创作区/制MV/我的歌" 16:9
 # 抖音竖屏
-bash <skill>/mv_compose.sh "制MV/我的歌" 9:16
+bash <skill>/mv_compose.sh "创作区/制MV/我的歌" 9:16
 # 临时救场：缺 timeline 或未选视频时才允许按目录顺序兜底
-bash <skill>/mv_compose.sh "制MV/我的歌" 16:9 --allow-fallback
+bash <skill>/mv_compose.sh "创作区/制MV/我的歌" 16:9 --allow-fallback
 ```
 
-## 输入约定（作品根 = `制MV/<曲名>/`）
+## 输入约定（作品根 = `创作区/制MV/<曲名>/`）
 - timeline：`<根>/分镜/timeline_manifest.json`（必需；mv-plan 产、mv-video 挑版后更新；显式 `--allow-fallback` 除外）
 - clips：`<根>/出视频/视频/*.mp4`（mv-video 产；显式 `--allow-fallback` 时才按目录顺序兜底）
-- 歌轨：`<根>/歌/song.*`（song 线产出或用户上传，**必需**，支持 wav/mp3/m4a/flac，整首歌作主音轨）
+- 歌轨：`<根>/歌/song.*`（最终成品歌，**必需**，支持 wav/mp3/m4a/flac，整首歌作主音轨）
 - beatgrid：`<根>/节拍/beatgrid.json`（mv-beat 产，默认必需；显式 fallback 时仅提示缺失）
 - 字幕：`<根>/字幕/karaoke.ass` 或 `lyrics.lrc`（mv-lyric-sync 产，可选）
 

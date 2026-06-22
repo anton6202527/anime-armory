@@ -1,6 +1,6 @@
 ---
 name: novel-spinoff
-description: Given a source novel (.txt/.docx) and the name of a side/支线 character in it, write a parallel-POV spin-off novel from that character's perspective — locked to the source's events at anchor points, otherwise free. Defaults to public-domain / user-owned / user-licensed source novels and refuses copyrighted contemporary web novels without an explicit rights declaration. Outputs full text (txt + docx), chapter outline (md), and an optional n2d-script-friendly skeleton ready for the AI 漫剧 pipeline. Use when asked to 同人, 外传, 配角视角, 换视角写, 平行视角, 重写视角, write spin-off, POV rewrite, parallel POV. Triggers 同人, 外传, 视角续写, 配角视角, 平行外传, 分叉外传, spin-off, POV rewrite, fan fiction (own work / public domain only).
+description: Given a source novel (.txt/.docx) and the name of a side/支线 character in it, write a parallel-POV spin-off novel from that character's perspective — locked to the source's events at anchor points, otherwise free. Defaults to public-domain / user-owned / user-licensed source novels and refuses copyrighted contemporary web novels without an explicit rights declaration. Outputs full text (txt + docx) and chapter outline (md). Use when asked to 同人, 外传, 配角视角, 换视角写, 平行视角, 重写视角, write spin-off, POV rewrite, parallel POV. Triggers 同人, 外传, 视角续写, 配角视角, 平行外传, 分叉外传, spin-off, POV rewrite, fan fiction (own work / public domain only).
 ---
 
 # novel-spinoff — 从配角视角写外传
@@ -12,13 +12,13 @@ description: Given a source novel (.txt/.docx) and the name of a side/支线 cha
 - **续接后传** —— 原作结束之后该角色的故事，自由度最大但需要为原作结局接一个钩子。
 - **分叉外传** —— 在原作某节点分叉，该角色走另一条路（用户指定分叉点）。
 
-输出（可多选）：txt + docx 全文 / 章节大纲 md / n2d-script 友好的 `脚本/第N集/raw.txt` 目录结构。
+输出（可多选）：txt + docx 全文 / 章节大纲 md。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
 本 skill 的可选项**不写死在源码里**，按 `../skills/novel-craft/references/选择点与偏好.md`（家族统一的偏好读写机制 + 全部选择点目录与缺省）解析：`<作品根>/_设置.md` → 全局默认 `创作偏好-默认.md` 预填并告知一句 → 缺则**首次问一次**→写回 `_设置.md`→**沉默沿用**（合规/不可逆/花钱点每次仍确认）。
 
-本 skill 涉及的选择点：`目标平台`、`权利来源`、`输出格式`、`篇幅档`、`小说生成模式`、`章节生成粒度`、`AI使用披露`。
+本 skill 涉及的选择点：`小说用途`、`目标平台`、`权利来源`、`输出格式`、`篇幅档`、`小说生成模式`、`章节生成粒度`、`AI使用披露`。
 
 ## 合法性铁律（不可逾越）
 
@@ -43,7 +43,7 @@ description: Given a source novel (.txt/.docx) and the name of a side/支线 cha
 - **时间线关系**：并行 / 续接 / 分叉（分叉需指定原作第几章/什么节点起分叉）。
 - **规模**：short / medium / long / 微短剧 / 漫剧（见 `novel-craft/references/split.md`；必要时用 `--target-chapters` 覆盖章数）。
 - **目标平台**（第 3 步书名候选要用）：起点 / 晋江 / 抖音漫剧 / 番茄 / 红果 / 历史向 / 跨平台。
-- **输出形式**（可多选）：txt+docx 全文 / 大纲 md / n2d-script 目录结构。
+- **输出形式**（可多选）：txt+docx 全文 / 大纲 md。
 
 判合法性：原作版权状态。**当代受版权 → 拒做并退出**。公版 / 用户自有 / `--i-have-rights` → 继续。
 
@@ -61,7 +61,7 @@ python3 <skill>/scripts/init_project.py "<原作路径>" \
   [--i-have-rights]
 ```
 
-落点 = `写小说/<原作名>-<配角名>外传/`（可 `--out` 改）。目录骨架（`设定/{角色卡,世界观,锚点表.json,书名候选,章纲}` + `章节/` + `导出/` + `_meta.json` + `原作.txt` + `_进度.md`）完整结构见 `references/formats.md`。
+落点 = `创作区/写小说/<原作名>-<配角名>外传/`（可 `--out` 改）。目录骨架（`设定/{角色卡,世界观,锚点表.json,书名候选,章纲}` + `章节/` + `导出/` + `_meta.json` + `原作.txt` + `_进度.md`）完整结构见 `references/formats.md`。
 
 脚本只做确定性活：建目录、抽 docx → txt、用正则把"明显提到配角名"的章节段落粗筛进 `锚点表.json` 的 `candidates` 字段（待第 2 步精筛）。LLM 判断由主对话的当前 agent 接管。
 
@@ -183,7 +183,7 @@ python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --range 4-8
 - **`设定/读者契约.md` + `审稿/demo_gate.json.reader_contract`**（题旨 / 读者承诺 / 好看机制 / 文学质感 / 禁偏清单）
 - 写作守则（来自 `references/pov-craft.md`）：第几人称 / 不要 OOC / 不大段复刻原作 / 视角一致性
 
-子代理输出 = 一份 markdown 文件，写到 `章节/第NN章.md`。**单章目标字数**：漫剧 1000-1500 字/章，微短剧 1500-2500，中篇 3000-5000，长篇 5000-8000，短篇 6000-10000。
+子代理输出 = 一份 markdown 文件，写到 `章节/第NN章.md`。**单章建议篇幅**读 `_meta.target_words_per_chapter`；常用档为漫剧源书短章 1000-1500 字/章、微短剧源书短章 1500-2500、中篇 3000-5000、长篇 5000-8000、短篇 6000-10000。超出 `_meta.target_wordcount_min_max` 只做预警，先复核节拍闭环再决定合章/拆章。
 写完后填写 `审稿/state_delta_第NN章.json`，把人物状态、锚点兑现、伏笔新增/回收合并进 `审稿/state_ledger.json`。
 
 **调度建议**：
@@ -211,7 +211,7 @@ python3 skills/novel-review/scripts/mechanical_check.py "<作品根>" --pov "<�
 
 ```bash
 python3 skills/novel-craft/scripts/export.py "<作品根>" \
-  --formats txt,docx,outline,n2d \
+  --formats txt,docx,outline \
   [--title "<书名>"]   # 家族通用导出器（原 spinoff/scripts/export.py 已上移至 novel-craft 共用）
 ```
 
@@ -221,13 +221,12 @@ python3 skills/novel-craft/scripts/export.py "<作品根>" \
 - `章节/第NN章.md` 合并 → `导出/<书名>.txt`（与 novel-fetch 同款格式：provenance 头 + `第N章 标题` 行 + 段落正文）。
 - 同源 → `导出/<书名>.docx`（章标题 Heading 1）。
 - 章纲表 → `导出/大纲.md`（清版，给读者看）。
-- `--formats` 含 `n2d` → 在 `导出/n2d-script/` 下铺出 `小说/<书名>.docx` 等待 n2d-script 处理。
 
 报告：四个产物路径 + 锚点对齐报告 + 总字数。完工。
 
 ## 输出约定
 
-- 默认作品根 = `写小说/<原作名>-<配角名>外传/`；用 `--out` 可改。
+- 默认作品根 = `创作区/写小说/<原作名>-<配角名>外传/`；用 `--out` 可改。
 - 三种最终产物都进 `导出/`；中间产物（章节 md / 设定卡 / 锚点表 / 书名候选）保留在作品根，方便用户复盘和二次修改。
 - 详见 `references/formats.md`。
 

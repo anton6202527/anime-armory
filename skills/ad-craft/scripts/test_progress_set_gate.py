@@ -127,6 +127,36 @@ class GateTest(unittest.TestCase):
             self.assertTrue(any(f["code"] == "product_qc_block" and f["severity"] == "block"
                                 for f in payload["findings"]))
 
+    def test_video_gate_blocks_degraded_product_qc(self):
+        with tempfile.TemporaryDirectory() as root:
+            self._base_project(root)
+            os.makedirs(os.path.join(root, "出图", "分镜"), exist_ok=True)
+            open(os.path.join(root, "出图", "分镜", "镜头1.png"), "wb").close()
+            self._write_json(root, "出图/分镜/product_qc.json", {
+                "summary": {"block": 0, "warn": 0},
+                "qc_environment": {"precision_level": "degraded"},
+                "findings": [],
+            })
+            self._write_json(root, "出视频/分镜/contract_inheritance.json", {"summary": {"block": 0, "warn": 0}})
+            payload = gate.run_gate(root, "video")
+            self.assertTrue(any(f["code"] == "product_qc_precision_not_full" and f["severity"] == "block"
+                                for f in payload["findings"]))
+
+    def test_video_gate_blocks_pending_product_qc_images(self):
+        with tempfile.TemporaryDirectory() as root:
+            self._base_project(root)
+            os.makedirs(os.path.join(root, "出图", "分镜"), exist_ok=True)
+            open(os.path.join(root, "出图", "分镜", "镜头1.png"), "wb").close()
+            self._write_json(root, "出图/分镜/product_qc.json", {
+                "summary": {"block": 0, "warn": 0},
+                "qc_environment": {"precision_level": "full", "pending_product_images": 1},
+                "findings": [],
+            })
+            self._write_json(root, "出视频/分镜/contract_inheritance.json", {"summary": {"block": 0, "warn": 0}})
+            payload = gate.run_gate(root, "video")
+            self.assertTrue(any(f["code"] == "product_qc_pending_images" and f["severity"] == "block"
+                                for f in payload["findings"]))
+
 
 class GateProgressWritebackTest(unittest.TestCase):
     def _make_progress(self, root):

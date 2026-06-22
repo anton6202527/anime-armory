@@ -5,7 +5,7 @@
 本机 ffmpeg 是裁剪版、无 libass/drawtext，所以 ad-compose 得自己把字幕渲成透明 PNG 再
 overlay 烧录。本模块是 ad 线**自包含**的字幕底层：SRT/LRC/ASS 解析 + 时间戳解析 + 字体
 回退加载 + CJK 折行 + ffmpeg overlay 链拼装——纯确定性、可单测，随 ad 线一起交付。
-（n2d/mv 各自有自己的同名副本；ad 不复用别线的副本，别线也不复用本份。）
+本文件随 ad 系列交付，不依赖其它创作系列的副本。
 
 ad-compose/render_subs.py 在此之上叠**视觉部分**（描边技法、版式、输出文件命名）——
 那是 ad 线真正分叉、改一像素就动既有产物的部分。

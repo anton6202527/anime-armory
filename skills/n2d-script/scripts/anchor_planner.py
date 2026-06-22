@@ -51,10 +51,17 @@ except Exception:  # 退化：settings 不可用时按全局默认（开启）�
     def get_setting(root, key, default=None):  # type: ignore
         return default
 try:
-    from n2d_platform_profiles import backend_supports_three_plus_frames
+    from n2d_platform_profiles import anchor_consumption_plan, backend_supports_three_plus_frames
 except Exception:  # 退化：能力档不可用时按"支持"（向前看·强制三帧）走
     def backend_supports_three_plus_frames(backend, channel=None):  # type: ignore
         return True
+    def anchor_consumption_plan(backend, channel=None, *, anchor_count=0, need_end=False):  # type: ignore
+        return {
+            "backend": backend or "",
+            "execution_backend": backend or "",
+            "consumption_mode": "unknown_manual_confirm",
+            "action": "manual confirmation required before paid generation",
+        }
 try:
     from n2d_const import HIGH_MOTION_TEMPLATES  # 单一真值源（gate 帧能力闸门共用同一份）
 except Exception:  # 退化：常量不可用时本地兜底，保持与 n2d_const 同步
@@ -394,6 +401,16 @@ def write_back(root: str, ep: str, plan: Dict[str, Any]) -> int:
 def render_md(plan: Dict[str, Any]) -> str:
     lines = [f"# 中段锚帧规划 — {plan['episode']}", ""]
     s = plan["summary"]
+    backend = plan.get("backend_selection") if isinstance(plan.get("backend_selection"), dict) else {}
+    consumption = backend.get("anchor_consumption_plan") if isinstance(backend.get("anchor_consumption_plan"), dict) else {}
+    if backend:
+        lines.append(
+            f"- **视频后端消费计划**：backend={backend.get('backend') or '未固定'}；"
+            f"channel={backend.get('channel') or '未固定'}；"
+            f"execution={consumption.get('execution_backend') or 'unknown'}；"
+            f"mode={consumption.get('consumption_mode') or 'unknown'}；"
+            f"action={consumption.get('action') or 'manual confirmation required'}"
+        )
     lines.append(f"- 命中 Clip：{s['clips_planned']} 个；新增锚帧 {s['total_anchors']} 张")
     lines.append(
         f"- **成本增量**：多出图 **{s['added_images']} 张**（便宜）。视频成本看执行后端："
@@ -438,6 +455,23 @@ def resolve_default_midframe(force_on: bool, force_off: bool, setting_value: Opt
     return "关闭" not in str("开启" if setting_value is None else setting_value)
 
 
+def video_backend_selection(root: str) -> Dict[str, Any]:
+    backend = (
+        get_setting(root, "生视频模型", "")
+        or get_setting(root, "生视频AI", "")
+        or ""
+    )
+    channel = get_setting(root, "生视频渠道", "") or ""
+    capable = backend_supports_three_plus_frames(backend or None, channel or None)
+    consumption = anchor_consumption_plan(backend or None, channel or None, anchor_count=1, need_end=True)
+    return {
+        "backend": backend,
+        "channel": channel,
+        "supports_three_plus_frames": bool(capable),
+        "anchor_consumption_plan": consumption,
+    }
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     ap = argparse.ArgumentParser(description="中段锚帧自动规划器")
     ap.add_argument("project_root")
@@ -460,7 +494,8 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     root = os.path.abspath(args.project_root)
     # 三帧契约能力门控：路由视频后端支持 ≥3 帧时强制开（覆盖设置关闭，不因 cost）；CLI 标志最高优先。
-    backend_capable = backend_supports_three_plus_frames(get_setting(root, "生视频AI", "") or None)
+    backend_selection = video_backend_selection(root)
+    backend_capable = bool(backend_selection["supports_three_plus_frames"])
     default_mid = resolve_default_midframe(
         args.default_midframe, args.no_default_midframe,
         get_setting(root, "中段锚帧默认", "开启"), backend_capable)
@@ -471,6 +506,7 @@ def main(argv: Optional[List[str]] = None) -> int:
                         default_midframe=default_mid,
                         midframe_exempt_below=args.midframe_exempt_below,
                         multiframe_seg_min=args.multiframe_min_segment)
+    plan["backend_selection"] = backend_selection
     out_dir = os.path.join(root, "生产数据")
     os.makedirs(out_dir, exist_ok=True)
     json_path = os.path.join(out_dir, f"anchor_plan_{args.episode}.json")

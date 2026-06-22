@@ -50,6 +50,12 @@ class ScaleContractTest(unittest.TestCase):
                 got = {k: v["words_per_chapter"] for k, v in mod.SCALE_PROFILE.items()}
                 expected = {k: v["words_per_chapter"] for k, v in contract.SCALE_PROFILES.items()}
                 self.assertEqual(got, expected)
+                got_band = {k: v["min_max"] for k, v in mod.SCALE_PROFILE.items()}
+                expected_band = {k: v["min_max"] for k, v in contract.SCALE_PROFILES.items()}
+                self.assertEqual(got_band, expected_band)
+                got_chapters = {k: v["target_chapters"] for k, v in mod.SCALE_PROFILE.items()}
+                expected_chapters = {k: v["target_chapters"] for k, v in contract.SCALE_PROFILES.items()}
+                self.assertEqual(got_chapters, expected_chapters)
 
 
 if __name__ == "__main__":

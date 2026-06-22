@@ -12,7 +12,7 @@ description: Shared machine contracts and deterministic helpers for the song-* s
 | 主题 | 参考 / 脚本 | 何时用 |
 |---|---|---|
 | 机器契约 | `references/contract.md` + `scripts/contract.py` | 初始化项目、写 `_设置.md` / `_meta.json`、路由阶段、生成多版 take manifest 时 |
-| AI 音频使用披露 | `scripts/ai_usage.py` | 发布、交平台、交 MV 前记录歌词/音频/音色的 AI 使用情况 |
+| AI 音频使用披露 | `scripts/ai_usage.py` | 发布或对外交付前记录歌词/音频/音色的 AI 使用情况 |
 
 ## 共享脚本
 
@@ -38,4 +38,4 @@ python3 skills/song-craft/scripts/ai_usage.py "<写歌作品根>" \
 | 错误 | 纠正 |
 |---|---|
 | 将选择点（如 BPM/调性）直接写死在提示词中 | 统一从 `_设置.md` 读取，确保整个管线的私有偏好可以被沉默沿用或跨环节修改 |
-| 忘记运行 `ai_usage.py` 留痕 | 发布或交接给 MV 管线之前，必须进行 AI 使用披露，否则可能会被下游质检驳回 |
+| 忘记运行 `ai_usage.py` 留痕 | 发布或对外交付前必须进行 AI 使用披露，否则可能会被交付质检驳回 |

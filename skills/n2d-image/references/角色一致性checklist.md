@@ -94,6 +94,16 @@
   - `restricted_partial`：不露脸/只局部角色，只登记允许的手部/剪影/背影；正脸/表情槽位写 restricted，不得 planned 后被误引用。
   - 每个槽位都写 `ready|planned|restricted|deprecated`；逐镜只允许引用 `ready`。缺 45° 或脸部特写基础锚必须先补共享参考；缺表情/动作时写 `reference_gap` + 降级方案（降 MCU/OTS、拆正反打、先补共享参考）。
 
+- [ ] **服装契约（Wardrobe Contract）已建**：
+  - 每个会复用、会影响身份识别、或会被 prompt 明确点名的角色形态，都在 `identity_registry.characters[].forms[].wardrobe_profile` 写清剪影、层次、领型、袖型、腰封、下摆、材质、纹样、主辅点缀色、禁漂项和允许状态。
+  - `character_dna.outfit` 只做摘要；真正执行和 QC 继承 `wardrobe_profile`。没有独立服装变化的短线角色也至少写 `silhouette/palette/forbidden_drift/aliases` 四项，避免下游只记“白衣/黑衣”。
+  - `reference_atlas.outfit_refs` 至少登记全身服装锚；核心/长线角色补领口袖口、腰封下摆、纹样材质色卡。只有 `ready` 的服装局部锚可进入分镜参考。
+  - 本镜临时血迹、灰尘、破损、雨湿走 `visual_state_ledger`；跨镜复用或改变主色/剪影的换装必须新建 `CHAR_xx/形态`。
+
+- [ ] **服装选择评分卡已过**（出图前、付费重抽前先判）：剧情身份/阶层信号、剪影辨识度、与其他角色主色差异、竖屏小图可读性、AI 可复现难度、动作/视频友好度、跨集复用价值。任一主角/主反派低于可接受线，先回角色卡/角色圣经改服装，不进出图。
+
+- [ ] **角色服装对比矩阵已过**：把本集重要角色/形态按全身剪影 + 主辅色 + 标志配饰并排审；若两名以上角色在同场景里同时出现且服装主色、剪影、发型都接近，必须至少改一项锚点，避免模型和观众都分不清。
+
 - [ ] **跨集成长升级机制（Evolution Profile）已建**：
   - 长线角色必须在 `identity_registry.characters[].evolution_profile` 写 `identity_anchor_form`、`identity_invariants`、`allowed_evolution_axes`、`stages[]` 和 `transition_policy`。
   - 新境界/成长阶段首现前，新建独立 `form`（如 金丹态 / 化神态 / 掌权态），并挂到 `evolution_profile.stages[].forms[]`；不要用旧 form 临时加“更强气场”长期复用。
@@ -110,7 +120,8 @@
 `出图/共享/identity_registry.json` 是机器真值；`00_索引.md` 是人读摘要。角色/形态只要会入镜，就要登记成可复用身份，而不是只留几张 PNG：
 
 - [ ] 每个角色/形态都有 `characters[].forms[]`：`form`、`asset_key`、`anchor_phrase` 与角色卡/定妆 prompt 对齐
-- [ ] 每个角色/形态都有 `character_dna`：`face / hair / outfit / accessories` 五层都非空（无配饰写 `无`），并与角色卡一致
+- [ ] 每个角色/形态都有 `character_dna`：`face / hair / outfit / accessories / texture` 五层都非空（无配饰写 `无`），并与角色卡一致
+- [ ] 会复用或影响身份识别的服装有 `wardrobe_profile`：剪影/层次/领袖腰摆/材质/纹样/色卡/禁漂/允许状态齐；`image_qc` 会用它派生服装别名，拦换装串 form
 - [ ] `reference_group` 齐：正面主参考、侧面、背面、服装、三视图拼版；路径为作品根相对路径
 - [ ] `identity_adapters.image` 齐：Codex/OpenAI/Dreamina 写 `fallback_reference_group`；可灵/Seedream/Sora 等支持主体库或角色 ID 的后端写 `unregistered|registered|ready`
 - [ ] `identity_adapters.video` 齐：Dreamina fallback、Kling Character ID、Seedance Face Lock、Veo reference controls 等状态可查；后端不支持可以 fallback，但不能缺登记
@@ -139,6 +150,7 @@
 - [ ] **关键反复场景出多视图（场景四视图·题材自适应）**：贯穿多集的核心场景（主殿/洞府/山门/大阵地）除主图外，按机位需要补不同朝向/景深参考 → `定妆_<场景>_<向>.png`（如正向全景 / 侧向 / 反向（过肩背景）/ 俯瞰），让**跨镜头切换背景自洽**——同一空间这面墙切到那面墙不穿帮。一次性/单镜场景单图即可，**不必铺四视图**（按反复程度自适应，别给路人场景浪费额度）
 - [ ] **共享 PNG 先行硬闸门**：本集分镜 PNG 生成前，`出图/共享/prompt/00_索引.md` 中本集引用的共享角色/场景/道具必须全部 ✅，且对应 PNG 文件真实存在；**✅ = 该定妆已过「生成后落档闸门自检」**（妆造逐项对卡 / 三件套同一个人 / 主要角色零漂移，见 `prompt_format.md §1.2` 自检块），出了图但没过自检不算 ✅；缺任一项或自检未过时**禁止生成本集分镜图**，先补共享层并过自检
 - [ ] **参考图/图生图复用**：定妆照设为"角色参考图"，每张分镜基于它生成；重生成分镜图时也必须先加载/引用共享定妆 PNG
+- [ ] **外部人物参考图只借身份，不借衣装**：生成定妆照若喂了外部人物参考图，参考范围只允许脸型 / 五官 / 眼睛神态 / 体态比例 / 身材气质；发型、发饰、服装、配饰、妆容、身份阶层和剧情状态必须按小说原文、角色圣经、当前形态变体和本集剧情定。参考图里的衣服、首饰、现代发型、拍摄妆造不得继承；除非角色卡明确要求同款，否则 prompt 要写“不要继承参考图服装/发型/配饰，只继承脸与体态”。
 - [ ] 进度算法 `出图列 = 已有PNG / (共享需要 + 本集分镜)`——复用让分子跨集累积（第2集开局就有起步分）
 
 ## 四、锚点层（每镜拼锚点句 + 多图参考派生 —— 双保险）
@@ -146,7 +158,7 @@
 - [ ] **多图参考派生（铁律）**：含角色的镜头图**一律基于参考图派生**（image-to-image / 多图参考 / 平台角色绑定），**禁纯文生图**。喂：正面主参考（主 ~0.8）+ 侧面锚（~0.5-0.6）+ 背面锚（背身/转身/过肩镜加，~0.5-0.6）+ 半身/全身服装锚（~0.5，全身动作或服装易漂时加）+ 本镜场景定妆（~0.4-0.5），并在 prompt 写入 `LOC_xx.scene_dna` 的地标/材质/光色/常驻物件摘要
 - [ ] **锚点句 + 多图参考叠加用，不互斥**：参考图锁"像不像"，锚点句锁"特征词不漂"；两条都做，跨镜相似度才稳到 90%+
 - [ ] **每张含角色的分镜 image prompt 末尾，拼该角色卡的『锚点句』**（比单纯调参考图强度更稳，直接治脸漂移）
-- [ ] prompt 结构：`主体 + 外貌锚定 + 动作 + 环境 + 景别 + 画风词 + [锚点句] + [生视频模型锚定句]`
+- [ ] prompt 结构：`主体 + 外貌锚定 + 动作 + 环境 + 景别 + 画风词 + [锚点句] + [固定生视频模型锚定句 / 通用视频兼容锚定句]`
 - [ ] 锚点句放**最后做风格说明**，不要插进主体描述（会扰乱构图）
 - [ ] 多角色同框：每个角色各拼各的锚点句
 - [ ] **多角色同框是高危触发点（`gate.py` 会 WARN 单镜 ≥2 具名角色；无持久主体后端会 BLOCK）**：单图参考后端难保多人各自不漂。**按 ROI 从高到低处置（前两步默认、后三步兜底）**：
@@ -161,10 +173,11 @@
 - [ ] **同一集绝不换图 AI**（换工具=整集所有定妆重做，"一致性税"）；集间要换也得重做全部定妆
 - [ ] **切换角色前清空参考图**（即梦参考框是"粘性"的，不清会把上一角色的脸带过来）——只有**同角色形态变体**才保留参考图
 - [ ] **场景定妆必须清空人物参考图**（否则会出"角色躺在床上"等鬼画面）
-- [ ] **图 AI ≠ 生视频模型时**：每张 image prompt 末尾拼**目标生视频模型的图像风格锚定句**（否则 image2video 运动估计崩）
+- [ ] **视频兼容锚定**：若项目已固定生视频模型，每张 image prompt 末尾拼目标模型的图像风格锚定句；若未固定，拼通用视频兼容锚定并记录 `video_backend_decision=deferred`，后续由 n2d-video 选择能消化现有首帧的后端
 - [ ] **有角色的镜头一律用图生视频**（首帧=定妆/分镜 PNG 锁脸），不用文生视频
 - [ ] **图片质检环境先告知（不静默降级）**：跑 `image_qc` / `dashboard gate --stage image` 前，记录并告知 `precision_level=full|degraded|none`、当前解释器、缺失依赖、建议安装、当前应停/回退阶段。`full` 需要 Pillow + cv2 + insightface + onnxruntime + buffalo_l；优先用 `facefusion` conda env 跑，系统 Python 3.14 不作为重视觉依赖首选
 - [ ] **本集分镜出完跑出图落档机检**：首选 `/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python skills/n2d-image/scripts/image_qc.py <作品根> 第N集 --json`，再跑同解释器的 `skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage image`。机检覆盖角色 DNA 第1层脸 G1 / 第2层发型 H1 / 第3层服装 N1 / 场景 O2 / 接缝 / 锚点门 N3（复用 n2d-review 阈值）+ 逐镜 prompt lint（参考图块/视线/锚点句/`CHAR_xx` 合法性；第4层配饰由 registry + 人审对照）。`block`（崩脸/纯文生图/非法ID/接缝断/降级精度近景）必修，`review`（像素初筛）人判。这是把审片阶段的一致性机检前移到落档、最便宜的点抓漂移
+  > **风格化项目的脸机检后端（选择点 `脸一致性机检后端`·见 `n2d/references/选择点与偏好.md`）**：审片侧崩脸机检（`n2d-review/face_consistency.py`）的人脸 embedder 默认 ArcFace，对**风格化/漫剧脸 TPR 系统性偏低 ~0.76**（StyleID 论文 arXiv:2604.21689）；插画/动漫项目应切 `脸一致性机检后端: styleid`（需 StyleID 权重，缺则回退 arcface 标 `arcface_fallback`，绝不用裸 CLIP）。**诚实边界**：本 `image_qc.face_reference_coverage` 的 full 精度脸比对仍走 insightface(ArcFace) 同一栈、**尚未接该选择点**——风格化项目读 image_qc 脸覆盖结论时按此偏差留余量，styleid 接入 image_qc 是 follow-up
 - [ ] **阶段跳转写清**：`full+ok` 才能进 `video`；`full+block` → `return_to_stage=image`，列受影响 PNG/镜头/prompt 并最小范围重出；`full+review` → 停在 `image_human_review` 人审；`degraded` → 停在 `image` 补装 full stack 后重跑或记录人审放行理由；`none` → 停在 `image_qc_setup`，先装依赖，不得把缺依赖当作图片通过
 
 ## 六、区分层（反派/配角不要"长得像主角"）
@@ -201,6 +214,7 @@
 ☐ 图片质检环境告知了？    → full/degraded/none + 当前解释器 + 缺失依赖 + 安装建议 + 当前应停/回退阶段（§五）；缺 full stack 不许静默跳 video
 ☐ image_qc 阶段跳转写了吗？→ full+ok 进 video；block 回 image 最小范围重出；review 人审；degraded/none 先装依赖或记录人工放行
 ☐ 角色卡有角色 DNA 五层？ → 没有先补脸 / 发型 / 服装 / 配饰 / 质感，再建锚点句（§一）
+☐ 外部参考图范围写清？     → 只借脸/五官/眼神/体态/身材；发型服饰配饰按小说和角色圣经，不继承参考图衣装（§三）
 ☐ 角色圣经有这一形态？    → 没有先补 `设定库/角色圣经.md`，再绑定 registry 的 `CHAR_xx/形态`
 ☐ 角色卡有锚点句？        → 没有先建卡（§一）
 ☐ 人物定妆组齐？          → 标准正/侧/背三视图 + 半身或全身服装参考 + `定妆_<角色>_三视图.png` 拼版（§二）；表情/设定表按剧情增强
@@ -208,7 +222,7 @@
 ☐ 固定 seed pool 口径齐？  → 支持 seed 就传 registry 池内值；Codex/未暴露 seed 后端记 seed_effective=false，不宣称可复现（§二点五）
 ☐ 角色参考图数据库齐？     → `reference_atlas` 有基础视角/表情/动作状态；本镜只用 ready 图，planned 缺口写 reference_gap（§二）
 ☐ reference_plan 跑并落实？→ 核心/长线角色付费出图前必须跑 `reference_planner.py <作品根> 第N集`；把 recommended_references / distinct_anchors / shot_scheduling / controlnet / 升档建议落进逐镜 prompt，未落实会被 `参考规划落实` BLOCK
-☐ 关键非脸资产语义复核？→ 场景/道具/独立服装/VFX 已登记且进入 scene/multimodal QC 时，full QC 环境需跑 DINO/CLIP-I 语义漂移；缺嵌入后端会 block，需补环境重跑或登记逐项人审确认
+☐ 关键非脸资产语义复核？→ 场景/道具/独立服装/VFX 已登记且进入 scene/multimodal QC 时，full QC 环境需跑 DINO/CLIP-I 语义漂移；缺嵌入后端会 block，需补环境重跑，人工复核记录只能辅助定位，不能替代 video/compose 前的 full QC gate
 ☐ 参考图入参预算齐？       → 每镜写 selected/dropped、后端图数上限、控制图/遮罩/区域槽位；剔除低清、非 ready、水印/Logo/无关文字/NSFW 参考
 ☐ 跨集成长阶段齐？         → 长线角色升级走 `evolution_profile`，同一张脸不变，只升级衣服/法宝/气场/姿态；新阶段从上一阶段锚图派生
 ☐ 核心角色资产包齐？       → 长线/主角有 `设定库/character_assets/.../manifest.json`，reference/prompts/lora/voice/adapters/qc 与缺口可追溯
@@ -224,7 +238,7 @@
 ☐ 这张要拼的锚点句备好？  → 每镜必拼，与参考图叠加（§四）
 ☐ 负向 prompt 适配了吗？   → 人读禁忌可写完整句；实际提交后端前归一成短负面词/短语，硬性动作约束放正向 prompt/本镜约束
 ☐ 参考图框是不是上一角色的？ → 切角色先清空（§五）
-☐ 图AI≠生视频模型？       → 末尾拼生视频模型锚定句（§五）
+☐ 视频后端已固定？         → 固定则末尾拼对应模型锚定句；未固定则拼通用视频兼容锚定并标 deferred（§五）
 ```
 
 > 一句话：**先生成共享定妆 PNG → 每镜引用共享图 + 拼锚点句 → 再生成本集分镜图**。顺序错了就先停，不要继续烧图。

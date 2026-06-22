@@ -88,13 +88,13 @@ function scanSkills(skillsDir) {
 }
 
 const WORK_LINES = [
-  { label: '✍️ 写小说', dir: '写小说' },
-  { label: '🎬 制漫剧', dir: '制漫剧' },
+  { label: '✍️ 写小说', dir: path.join('创作区', '写小说') },
+  { label: '🎬 制漫剧', dir: path.join('创作区', '制漫剧') },
 ];
 const DOCS = [
   { rel: 'README.md', desc: '使用说明 · 工作流与批量生产' },
 ];
-const FIRST_OPEN_TERMINAL_MESSAGE = '进入你的AI，输入‘/制漫剧/本宫才是这皇宫最大的妖 拆脚本’，开始制作漫剧吧！';
+const FIRST_OPEN_TERMINAL_MESSAGE = '进入你的AI，输入‘/创作区/创作区/制漫剧/本宫才是这皇宫最大的妖 拆脚本’，开始制作漫剧吧！';
 
 // 作品区 source: prefer the extension's own bundled work root, then an explicitly
 // configured external root, then the open workspace.
@@ -316,7 +316,7 @@ function activate(context) {
     vscode.commands.registerCommand('animeArsenal.selectRepo', async () => {
       const pick = await vscode.window.showOpenDialog({
         canSelectFolders: true, canSelectFiles: false, canSelectMany: false,
-        openLabel: '选含 写小说/制漫剧 的项目根（用于作品区）',
+        openLabel: '选含 创作区/写小说 或 创作区/制漫剧 的项目根（用于作品区）',
       });
       if (!pick || !pick[0]) return;
       const dir = findProjectRoot(pick[0].fsPath) || pick[0].fsPath;

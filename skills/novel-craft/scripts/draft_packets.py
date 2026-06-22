@@ -25,14 +25,166 @@ if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from io_utils import load_json  # noqa: E402  本线 _lib 单一真值源
 from project_io import load_project_settings  # noqa: E402
+try:
+    from retrieval import relevant_chapters  # noqa: E402  跨窗口语义检索（检索增强长程一致性）
+except Exception:  # pragma: no cover
+    relevant_chapters = None
 
-from contract import scale_profile
+from contract import normalize_novel_purpose, resolve_novel_draft_mode, scale_profile
 from store import atomic_write_json, atomic_write_text, file_lock
 from waivers import append_waiver, make_waiver
 
 
 CHAPTER_RE = re.compile(r"第\s*0*(\d+)\s*章\s*(?:[《<]([^》>]+)[》>])?\s*(?:[—-]\s*(.*))?")
 TRIO_STEPS = ("architect", "ghostwriter", "editor")
+ACTION_SCENE_REFERENCE = "skills/novel-craft/references/action-scenes.md"
+ACTION_SCENE_KEYWORDS = {
+    "combat": ("打斗", "战斗", "大战", "交手", "厮杀", "搏杀", "拼杀", "对战", "围攻", "反杀", "决斗", "斗法", "巷战"),
+    "chase": ("追逐", "追逃", "追杀", "追击", "逃亡", "逃跑", "逃离", "奔逃", "追兵", "甩开", "围堵", "突围"),
+    "upgrade": ("升级", "突破", "进阶", "晋级", "境界提升", "破境", "渡劫", "觉醒", "面板", "经验满", "属性提升", "临阵突破"),
+}
+ACTION_SCENE_LABELS = {
+    "combat": "打斗/战斗",
+    "chase": "追逐/逃亡",
+    "upgrade": "升级/突破",
+}
+ACTION_SCENE_CHECKLISTS = {
+    "combat": (
+        "战前写清双方目标、战力差、限制和误判点。",
+        "每轮按「动作 -> 反应 -> 结果 -> 新问题」推进，不堆招式名。",
+        "至少保留一种代价：伤势、资源消耗、暴露底牌、误伤、时间损失或关系裂痕。",
+        "胜负理由来自布局、信息、代价或性格选择，不能作者硬按。",
+    ),
+    "chase": (
+        "写清追逃双方的相对距离如何变化，禁止凭空追上或甩开。",
+        "给路线锚和障碍：街巷/屋脊/山道/人群/岔路/伤腿/负重等。",
+        "追逐必须消耗体力、灵力、马力、载具、道具或隐蔽性，并影响后续动作。",
+        "设置明确终点或倒计时：城门关闭、援兵抵达、毒发、天亮、阵法合拢等。",
+    ),
+    "upgrade": (
+        "突破必须有触发条件：积累、危机、悟到规则、外部机缘或牺牲。",
+        "让阈值可见：经验满、灵力冲关、瓶颈松动、面板提示、旧伤反噬。",
+        "收益要具体：新增能力、属性变化、感知变化或打法变化。",
+        "升级后的战力必须符合 power_system_registry；越级需代价、机缘或限制。",
+    ),
+}
+REVEAL_SCENE_REFERENCE = "skills/novel-craft/references/reveal-scenes.md"
+CONFRONTATION_SCENE_REFERENCE = "skills/novel-craft/references/confrontation-scenes.md"
+RELATIONSHIP_SCENE_REFERENCE = "skills/novel-craft/references/relationship-scenes.md"
+SCENE_GUIDES = (
+    {
+        "key": "action",
+        "reference": ACTION_SCENE_REFERENCE,
+        "heading": "专项场景写作清单（自动命中）",
+        "lead": "本章先写目标和空间，再写动作；每 300-600 字必须有局势变化或代价增加。",
+        "keywords": ACTION_SCENE_KEYWORDS,
+        "labels": ACTION_SCENE_LABELS,
+        "checklists": ACTION_SCENE_CHECKLISTS,
+        "state_note": "本场造成的伤势、消耗、道具损坏、暴露底牌、关系变化、境界变化必须写入 `state_delta`。",
+    },
+    {
+        "key": "reveal",
+        "reference": REVEAL_SCENE_REFERENCE,
+        "heading": "揭示场景写作清单（自动命中）",
+        "lead": "本章先写清谁知道、谁不知道、证据从哪里来，再写反应；揭示不是解释设定，而是改变局势。",
+        "keywords": {
+            "identity": ("身份曝光", "身份揭露", "掉马", "马甲暴露", "真实身份", "认亲", "身世", "血脉", "冒名", "替身"),
+            "truth": ("真相揭示", "真相大白", "揭穿", "揭露", "拆穿", "证据链", "血书", "遗诏", "密信", "内鬼", "背叛真相"),
+            "secret": ("秘密暴露", "旧案", "隐情", "封印记忆", "被隐瞒", "伪装", "假死", "幕后黑手"),
+        },
+        "labels": {
+            "identity": "身份曝光/掉马",
+            "truth": "真相揭示/证据揭穿",
+            "secret": "秘密暴露/旧案回收",
+        },
+        "checklists": {
+            "identity": (
+                "写清身份揭示前后，主角的权力、危险或关系地位发生了什么变化。",
+                "掉马必须有外部证据或行为破绽，不能只靠旁白宣布。",
+                "至少安排一个误判者的反应：否认、沉默、反咬、崩溃或立刻改站队。",
+            ),
+            "truth": (
+                "证据链按「线索 -> 指向 -> 反驳 -> 反证」递进，不一次性倒完设定。",
+                "揭穿时保留一个未尽问题，作为下一章动作或集尾钩子。",
+                "真相必须迫使角色做选择：认罪、逃跑、翻脸、保护、牺牲或交易。",
+            ),
+            "secret": (
+                "旧秘密回收要标出对应伏笔或前文疑点，避免像临时补丁。",
+                "秘密公开后立刻改变至少一条关系线、敌我线或目标线。",
+                "不要用大段说明替代现场动作；让证物、表情、沉默和打断承载信息。",
+            ),
+        },
+        "state_note": "本场揭示的新身份、真相、旧案状态、知情人范围和未回答问题必须写入 `state_delta`。",
+    },
+    {
+        "key": "confrontation",
+        "reference": CONFRONTATION_SCENE_REFERENCE,
+        "heading": "对质/智斗场景写作清单（自动命中）",
+        "lead": "本章先写赌注和权力位置，再写证据递进；对质的爽感来自权力翻转，不来自吵得更大声。",
+        "keywords": {
+            "public": ("公开对质", "当众对质", "当众揭穿", "公堂", "朝堂", "宴席发难", "众目睽睽", "围观", "打脸"),
+            "interrogation": ("审讯", "逼问", "盘问", "质问", "拷问", "问供", "套话", "审问"),
+            "negotiation": ("谈判", "交易", "交涉", "博弈", "智斗", "设局", "反制", "反将一军", "权谋"),
+        },
+        "labels": {
+            "public": "公开对质/当众打脸",
+            "interrogation": "审讯/逼问",
+            "negotiation": "谈判/智斗",
+        },
+        "checklists": {
+            "public": (
+                "写清现场规则：谁有话语权，谁能裁决，围观者为什么重要。",
+                "证据每抛一次，权力位置要变化一次：沉默、倒戈、失态、反击或被迫承认。",
+                "当众打脸必须给被打脸者一个反扑动作，避免单向碾压变平。",
+            ),
+            "interrogation": (
+                "逼问要有筹码：证据、时间、疼痛、利益、亲人、把柄或心理漏洞。",
+                "每一问都推进信息，不写重复威胁；回答可以是谎言，但要留下可验证裂缝。",
+                "审讯结束必须带出新行动：抓人、放人、交易、灭口、逃脱或更大嫌疑。",
+            ),
+            "negotiation": (
+                "谈判双方都要有底线和可让步项；不能只有主角单方面聪明。",
+                "智斗至少包含一个信息差和一个反信息差，让胜负来自布局而非降智。",
+                "交易结果要留下代价或后患，方便后续章节继续滚动。",
+            ),
+        },
+        "state_note": "本场产生的证据归属、权力翻转、交易条款、敌我变化和新增把柄必须写入 `state_delta`。",
+    },
+    {
+        "key": "relationship",
+        "reference": RELATIONSHIP_SCENE_REFERENCE,
+        "heading": "关系情绪场景写作清单（自动命中）",
+        "lead": "本章先标关系温度变化，再写动作和台词；情绪兑现必须让关系进入不可完全回退的新状态。",
+        "keywords": {
+            "confession": ("告白", "表白", "承认心意", "心动", "定情", "吻", "亲吻", "牵手", "拥抱"),
+            "break": ("决裂", "分手", "翻脸", "误会爆发", "反目", "绝交", "背离", "离开他", "离开她"),
+            "repair": ("和解", "破镜重圆", "救赎", "疗伤", "互相救场", "吃醋", "护短", "原谅", "冰释前嫌"),
+        },
+        "labels": {
+            "confession": "告白/心动兑现",
+            "break": "决裂/误会爆发",
+            "repair": "和解/救赎/互相救场",
+        },
+        "checklists": {
+            "confession": (
+                "告白前要有压抑、误会、危机或选择压力；不能凭空甜。",
+                "用一个具体动作兑现情绪：递物、挡刀、停步、收手、靠近或主动承认。",
+                "台词要有潜台词，避免把所有感受解释成独白。",
+            ),
+            "break": (
+                "决裂必须有触发点：谎言暴露、价值冲突、保护失败、身份差或旧伤复燃。",
+                "让双方都付出代价，别把一方写成纯工具人。",
+                "结尾留下可追的裂缝：误会未解、证据缺一环、仍有牵挂或共同敌人逼近。",
+            ),
+            "repair": (
+                "和解不是一句道歉，要有补偿动作、风险承担或旧承诺兑现。",
+                "救赎场景要写清被救者选择，而不是只被拯救。",
+                "关系回暖后必须改变下一章行为：信任额度、称谓、距离、阵营或共同目标。",
+            ),
+        },
+        "state_note": "本场关系温度、称谓变化、承诺、误会状态、阵营/信任变化必须写入 `state_delta`。",
+    },
+)
 
 COMMON_SOURCE_PATHS = (
     "设定/章纲.md",
@@ -226,11 +378,27 @@ def setting_value(root, key):
     return load_project_settings(root).get(key, "")
 
 
+def purpose_from_settings(root, meta):
+    value = setting_value(root, "小说用途") or meta.get("purpose") or setting_value(root, "目标用途")
+    value = normalize_novel_purpose(value)
+    if value in {"", "未定", "（未定）", "未指定"}:
+        return ""
+    return value
+
+
 def draft_mode_from_settings(root, meta):
     value = setting_value(root, "小说生成模式")
     if value:
         return value
-    return meta.get("draft_mode") or "稳妥初稿"
+    meta_mode = meta.get("draft_mode")
+    explicit_mode = None if meta_mode in {"", None, "稳妥初稿"} else meta_mode
+    return resolve_novel_draft_mode(
+        explicit_mode,
+        purpose=purpose_from_settings(root, meta),
+        platform=meta.get("target_platform"),
+        scale=meta.get("scale"),
+        fallback=meta_mode or "稳妥初稿",
+    )
 
 
 def draft_workflow_from_settings(root, meta):
@@ -240,10 +408,61 @@ def draft_workflow_from_settings(root, meta):
     return meta.get("draft_workflow") or meta.get("writing_workflow") or ""
 
 
+def live_check_workflow_from_settings(root, meta):
+    workflow = str(draft_workflow_from_settings(root, meta) or "默认单步")
+    lowered = workflow.lower()
+    return "边写边自检" in workflow or "live" in lowered or "write-check" in lowered
+
+
+def batch_review_interval_from_settings(root, meta):
+    value = (
+        setting_value(root, "小批回扫间隔")
+        or meta.get("batch_review_interval")
+        or meta.get("review_interval")
+        or "5章"
+    )
+    text = str(value or "").strip().lower()
+    if text in {"", "关闭", "off", "none", "0", "0章"}:
+        return 0
+    match = re.search(r"(\d+)", text)
+    if not match:
+        return 5
+    return max(1, int(match.group(1)))
+
+
+def batch_review_window(chapter, interval, meta):
+    if interval <= 0:
+        return None
+    target = int(meta.get("target_chapters") or 0)
+    is_interval_end = chapter % interval == 0
+    is_project_tail = bool(target and chapter == target and chapter % interval != 0)
+    if not (is_interval_end or is_project_tail):
+        next_due = ((chapter - 1) // interval + 1) * interval
+        if target:
+            next_due = min(next_due, target)
+        return {"due": False, "next_due": next_due}
+    start = ((chapter - 1) // interval) * interval + 1
+    return {"due": True, "start": start, "end": chapter}
+
+
 def use_trio_pipeline(root, meta):
     mode = draft_mode_from_settings(root, meta)
-    workflow = draft_workflow_from_settings(root, meta)
-    return mode in {"商业连载", "漫剧源书"} or "三步" in workflow or "trio" in workflow.lower()
+    workflow = str(draft_workflow_from_settings(root, meta) or "")
+    workflow_lower = workflow.lower()
+    if "默认单步" in workflow or "single" in workflow_lower:
+        return False
+    if "三步" in workflow or "trio" in workflow_lower:
+        return True
+    scale = str(meta.get("scale") or "").lower()
+    try:
+        target_chapters = int(meta.get("target_chapters") or 0)
+    except (TypeError, ValueError):
+        target_chapters = 0
+    return (
+        mode in {"商业连载", "漫剧源书"}
+        or scale in {"long", "长篇"}
+        or target_chapters >= 30
+    )
 
 
 def packet_steps_for_request(root, requested_step):
@@ -278,6 +497,77 @@ def source_paths_for_kind(kind):
             out.append(path)
             seen.add(path)
     return out
+
+
+def scene_match_text(outline_item):
+    """Collect chapter outline text used by deterministic scene guide matching."""
+    return "\n".join(
+        str(outline_item.get(key) or "")
+        for key in ("title", "beat", "raw")
+    )
+
+
+def guide_tags_for_outline(outline_item, guide):
+    """Detect scene guide tags from chapter title/outline text."""
+    text = scene_match_text(outline_item)
+    tags = []
+    for tag, keywords in guide["keywords"].items():
+        if any(keyword in text for keyword in keywords):
+            tags.append(tag)
+    return tags
+
+
+def action_scene_tags_for_outline(outline_item):
+    """Detect high-motion scene types from chapter title/outline text."""
+    return guide_tags_for_outline(outline_item, SCENE_GUIDES[0])
+
+
+def scene_guide_matches(outline_item):
+    matches = []
+    for guide in SCENE_GUIDES:
+        tags = guide_tags_for_outline(outline_item, guide)
+        if tags:
+            matches.append((guide, tags))
+    return matches
+
+
+def scene_guide_references(matches):
+    refs = []
+    seen = set()
+    for guide, _tags in matches:
+        ref = guide["reference"]
+        if ref not in seen:
+            refs.append(ref)
+            seen.add(ref)
+    return refs
+
+
+def scene_guide_section(guide, tags):
+    if not tags:
+        return ""
+    labels = "、".join(guide["labels"][tag] for tag in tags)
+    lines = [
+        f"\n## {guide['heading']}",
+        f"- 命中类型：{labels}",
+        f"- 参考全文：`{guide['reference']}`",
+        f"- {guide['lead']}",
+    ]
+    for tag in tags:
+        lines.append(f"\n### {guide['labels'][tag]}")
+        for item in guide["checklists"][tag]:
+            lines.append(f"- {item}")
+    lines.append("\n### 状态增量提醒")
+    lines.append(f"- {guide['state_note']}")
+    return "\n".join(lines) + "\n"
+
+
+def scene_guide_sections(matches):
+    return "".join(scene_guide_section(guide, tags) for guide, tags in matches)
+
+
+def action_scene_section(tags):
+    """Backward-compatible wrapper for the action scene guide."""
+    return scene_guide_section(SCENE_GUIDES[0], tags)
 
 
 def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reader_contract=False, step="full"):
@@ -318,6 +608,7 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
     outline_item = outline.get(chapter, {"title": "", "beat": "（章纲未写本章条目）", "raw": ""})
     title = outline_item.get("title") or ""
     beat_text = outline_item.get("beat") or ""
+    scene_matches = scene_guide_matches(outline_item)
     
     active_voices = []
     for char_name, vfp in char_voices.items():
@@ -332,6 +623,10 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
             voice_section += f"- **{name}**: 句均长 {sp.get('avg_sentence_length')} 字，短句比 {sp.get('short_sentence_ratio')}，长句比 {sp.get('long_sentence_ratio')}。词频特征: {', '.join(x['term'] for x in fp.get('lexicon_anchor', [])[:5])}\n"
     
     draft_mode = draft_mode_from_settings(root, meta)
+    workflow_setting = draft_workflow_from_settings(root, meta)
+    draft_workflow = workflow_setting or ("三步迭代（长篇/商业自动）" if use_trio_pipeline(root, meta) else "默认单步")
+    live_check = live_check_workflow_from_settings(root, meta)
+    batch_interval = batch_review_interval_from_settings(root, meta)
     
     # Workflow step adjustments
     step_note = ""
@@ -363,6 +658,9 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
         except Exception: pass
 
     source_paths = source_paths_for_kind(meta.get("kind"))
+    for ref in scene_guide_references(scene_matches):
+        if ref not in source_paths:
+            source_paths.append(ref)
     # 在分支前先算好：editor 子任务的 step_note（下方）也要引用它，否则 editor 步会
     # 触发 "cannot access local variable 'delta_path'"。
     delta_path = f"审稿/state_delta_第{chapter:02d}章.json"
@@ -372,7 +670,7 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
         words = [300, 600]
         out_file = f"写作任务/第{chapter:02d}章_beats.md"
     elif step == "ghostwriter":
-        step_note = "\n## 当前子任务：Ghostwriter Pass (代笔枪手)\n- **前提**：已完成 Architect 节拍脚本。\n- **目标**：基于节拍脚本，填充环境描写、心理活动，输出流畅的初稿正文。\n- **注意**：请严格复刻文风指纹，并使用 `[CHAR_xx]`、`[PROP_xx]` 等标签标记N2D视觉资产。"
+        step_note = "\n## 当前子任务：Ghostwriter Pass (代笔枪手)\n- **前提**：已完成 Architect 节拍脚本。\n- **目标**：基于节拍脚本，填充环境描写、心理活动，输出流畅的初稿正文。\n- **注意**：请严格复刻文风指纹，并使用 `[CHAR_xx]`、`[PROP_xx]` 等标签标记视觉资产。"
         out_file = f"写作任务/第{chapter:02d}章_draft.md"
         source_paths.append(f"写作任务/第{chapter:02d}章_beats.md")
     elif step == "editor":
@@ -413,6 +711,7 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
 ### `设定/读者契约.md` 摘录
 {clip(contract_text, 1600) if contract_text else "（缺 `设定/读者契约.md`；至少按 reader-contract.md 模板补齐题旨、读者承诺、文学质感和禁偏清单。）"}
 """
+    special_scene_sections = scene_guide_sections(scene_matches)
     waiver_section = ""
     if demo_waiver:
         waiver_section = f"""
@@ -426,15 +725,65 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
         for L in pending_loops:
             loop_section += f"- **{L['title']}** ({L['id']}): {L['description']} [状态: {L['status']}, 埋于: {L.get('buried_in', '未知')}, 预计回收: {L.get('expected_recovery', '未知')}]\n"
 
+    # 跨窗口语义检索（检索增强）：用本章章纲当 query，在前 3 章窗口**之外**的旧章里召回最相关的，
+    # 补"固定窗口够不着久远相关旧章"的长程依赖盲区（写第230章想得起第47章埋的伏笔）。
+    retrieval_section = ""
+    if relevant_chapters is not None and chapter > 4:
+        query = " ".join(str(x) for x in (outline_item.get("raw") or outline_item.get("beat") or "", title) if x)
+        try:
+            hits = relevant_chapters(root, chapter, query, k=3, window=3)
+        except Exception:
+            hits = []
+        if hits:
+            retrieval_section = "\n## 相关历史回溯（跨窗口检索·写前必读）\n" \
+                "> 以下旧章经词面相关度召回，可能含本章要呼应/承接的久远伏笔或设定，注意保持一致：\n"
+            for h in hits:
+                retrieval_section += f"- **第{h['chapter']:02d}章**（相关度 {h['score']}）：{h['excerpt'][:140]}…\n"
+
+    live_check_section = ""
+    if live_check:
+        live_check_section = f"""
+## 边写边自检闭环（已选择）
+- 本章交付不只写正文：必须同步产出 `章节/第{chapter:02d}章.md` 和 `{delta_path}`。
+- 写完正文和状态增量后，立即执行：
+```bash
+python3 skills/novel/scripts/post_write.py "{root}" --chapter 第{chapter:02d}章
+```
+- `post_write.py` 会跑状态账本对账、百科更新、逻辑哨兵和力量体系自检；任一硬闸失败时先修正文或状态增量，再重跑，不要手动把进度标 ✅。
+"""
+    batch_section = ""
+    if live_check and batch_interval > 0:
+        window = batch_review_window(chapter, batch_interval, meta)
+        if window and window.get("due"):
+            start, end = window["start"], window["end"]
+            batch_json = f"审稿/batch_mechanical_第{start:02d}-{end:02d}章.json"
+            batch_section = f"""
+## 小批回扫修正点（第 {start:02d}-{end:02d} 章）
+- 本章写后自检通过后，进入小批回扫：集中看文风、节奏、钩子、人设和读者承诺，不要只看格式机检。
+- 先跑确定性机检：
+```bash
+python3 skills/novel-review/scripts/mechanical_check.py "{root}" --range {start}-{end} --json-out "{root}/{batch_json}"
+```
+- 然后让 AI/人工按 `novel-review/references/checklist.md` 审第 {start:02d}-{end:02d} 章，重点输出需集中修正的章节、问题维度和修法；修完后重跑本窗口机检。
+"""
+        elif window:
+            batch_section = f"""
+## 小批回扫节奏
+- 已开启小批回扫：每 {batch_interval} 章集中跑一次 `novel-review`（文风/节奏/钩子/人设/读者承诺）。
+- 当前未到回扫点；下一次预计在第 {window["next_due"]:02d} 章写后触发。
+"""
+
     return f"""# 第 {chapter:02d} 章写作任务包 ({step if step != "full" else "完整稿"})
 
 ## 任务
 - 输出文件：`{out_file}`
 - 标题：{title or "按章纲拟一个短标题"}
-- 目标字数：{words[0]}-{words[1]} 字
+- 小说用途：{purpose_from_settings(root, meta) or "未指定"}
+- 建议篇幅：{words[0]}-{words[1]} 字（仅作容量参考和质检预警，节拍闭环优先）
 - 人称视角：{meta.get("person", "未指定")}
 - 目标平台：{meta.get("target_platform", "未指定")}
-- 小说生成模式：{draft_mode}{step_note}
+- 小说生成模式：{draft_mode}
+- 小说生成工作流：{draft_workflow}{step_note}
 
 ## 必读源文件
 {chr(10).join(f"- `{p}`" for p in source_paths)}
@@ -444,7 +793,7 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
 
 ## 上一章承接
 {previous_chapter_excerpt(root, chapter)}
-{loop_section}{voice_section}
+{retrieval_section}{loop_section}{voice_section}
 ## Demo 风格锚点
 - 来源章节：{demo_anchor.get("source_chapter", "未指定")}
 - 风格要点：{demo_anchor.get("summary", "未填写；写前先从 Demo 章抽取")}
@@ -453,6 +802,9 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
 - 禁止漂移：{", ".join(banned) if banned else "未填写"}
 {waiver_section}
 {contract_section}
+{special_scene_sections}
+{live_check_section}
+{batch_section}
 
 ## 当前状态账本摘录
 ```json
@@ -465,7 +817,7 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
 - 本章必须兑现章纲里的戏剧节拍，至少保留一个钩子或承诺。
 - 本章必须推进 `读者契约` 中的至少一项：核心题旨、读者承诺、关系弧光、秘密揭示、能力代价或文学质感；不能只刷事件。
 - 不新增会推翻必读设定/骨架文件的能力、关系、地点规则；新增设定必须写入章末状态增量。
-- 写完后填写 `{delta_path}`，再跑 `python3 skills/novel-review/scripts/mechanical_check.py "{root}"`。
+- 写完后填写 `{delta_path}`，再跑 `python3 skills/novel-review/scripts/mechanical_check.py "{root}"`（字数带宽会自动读取 `_meta.target_wordcount_min_max`，不要手填旧默认）；若已选择 `边写边自检`，继续跑 `python3 skills/novel/scripts/post_write.py "{root}" --chapter 第{chapter:02d}章`。
 
 ## 状态增量模板
 ```json
@@ -528,7 +880,7 @@ def main():
         "--step",
         default="auto",
         choices=["auto", "full", "trio", "architect", "ghostwriter", "editor"],
-        help="工作流步骤；auto 会让 商业连载/漫剧源书/三步迭代 默认生成 trio 三段任务包",
+        help="工作流步骤；auto 会让 长篇/商业连载/漫剧源书/三步迭代 默认生成 trio 三段任务包",
     )
     args = ap.parse_args()
 
@@ -569,6 +921,12 @@ def main():
         print("[next] 三步迭代顺序：先按 _architect 产 beats，再按 _ghostwriter 产 draft，最后按 _editor 写入 章节/第NN章.md；完成后填写 state_delta 并跑 novel-review。")
     else:
         print("[next] 按任务包写入 章节/第NN章.md，填写 审稿/state_delta_第NN章.json，再跑 novel-review 机检/人判。")
+    meta = load_json(os.path.join(root, "_meta.json"), {})
+    if live_check_workflow_from_settings(root, meta):
+        print("[next] 已选择 边写边自检：每章正文和 state_delta 落盘后，立刻跑 novel/scripts/post_write.py 自动过账本/百科/逻辑/力量体系自检。")
+        interval = batch_review_interval_from_settings(root, meta)
+        if interval > 0:
+            print(f"[next] 小批回扫保留：每 {interval} 章跑一次 novel-review，集中修文风/节奏/钩子/人设/读者承诺。")
 
 
 if __name__ == "__main__":

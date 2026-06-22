@@ -106,6 +106,67 @@ def _parse_srt_texts(path):
         if len(ls)>=3: out.append(' '.join(ls[2:]))
     return out
 
+# ── 投放→生成输入闭环（读端）：n2d-feedback 把 A/B 胜出的开场/断点写成机器可读先验，
+#    阶段2 finalize 读它做开场/断点设计先验（第一方实测先验：本线投放实测，优先于通用经验）。
+#    存在才读、缺则 no-op（向后兼容）；不臆造、不静默吞——读到就落 applied_creative_priors 证据 + 人可见提示。
+CREATIVE_PRIORS_KIND = 'n2d_creative_priors'  # 与 n2d-feedback 同一真值（本线自定义·不进共享常量）
+CREATIVE_PRIORS_FILENAME = 'creative_priors.json'
+
+def load_creative_priors(root):
+    """读 生产数据/creative_priors.json；缺/坏/kind 不符 → None（no-op，向后兼容）。"""
+    path = os.path.join(root, '生产数据', CREATIVE_PRIORS_FILENAME)
+    if not os.path.isfile(path):
+        return None
+    try:
+        data = json.load(open(path, encoding='utf-8'))
+    except (OSError, ValueError):
+        return None
+    if not isinstance(data, dict) or data.get('kind') != CREATIVE_PRIORS_KIND:
+        return None
+    priors = data.get('priors')
+    if not isinstance(priors, dict) or not priors:
+        return None  # 文件在但无胜出维度（样本不足）→ 等同无先验
+    return data
+
+def creative_priors_evidence(data):
+    """先验 → 可落盘的 applied_creative_priors 证据字段（建议先验·非硬约束）。"""
+    priors = data.get('priors') or {}
+    applied = {}
+    for field, p in priors.items():
+        if not isinstance(p, dict):
+            continue
+        applied[field] = {
+            'winner': p.get('winner'),
+            'paired_lift': p.get('paired_lift'),
+            'primary_metric': p.get('primary_metric'),
+            'n': p.get('n'),
+        }
+    return {
+        'source': CREATIVE_PRIORS_FILENAME,
+        'priors_generated_at': data.get('generated_at'),
+        'applied_creative_priors': applied,
+    }
+
+def creative_priors_hint(data):
+    """人可见提示：胜出先验逐条点名，提醒阶段2 开场/断点设计参考（不静默吞）。"""
+    _LABEL = {
+        'opening_variant': '开场',
+        'cliffhanger_cut_variant': '集尾断点',
+        'cover_variant': '封面',
+        'title_variant': '标题文案',
+    }
+    priors = data.get('priors') or {}
+    lines = [f"投放回灌先验（{data.get('generated_at') or '?'} 采集，A/B paired-lift 胜出·建议先验）："]
+    for field, p in priors.items():
+        if not isinstance(p, dict):
+            continue
+        label = _LABEL.get(field, field)
+        lift = p.get('paired_lift')
+        lift_s = f"+{lift*100:.1f}%" if isinstance(lift, (int, float)) else '—'
+        lines.append(f"  - {label}优先复用 `{p.get('winner')}`：同集 paired-lift {lift_s}（{p.get('primary_metric')}，n={p.get('n')}）")
+    lines.append("  → 阶段2 开场/断点设计参考上表；样本不足的维度不在此列，不必强套。")
+    return "\n".join(lines)
+
 def _is_placeholder_en_texts(texts):
     if not texts:
         return False
@@ -128,6 +189,15 @@ def main():
         return 2
     root, ep = sys.argv[1], sys.argv[2]
     gap = float(sys.argv[3]) if len(sys.argv)>3 else 0.4
+    # 投放回灌先验（闭环读端）：存在才读，缺则 None（no-op，向后兼容）。两条定稿路径末尾都落证据+提示。
+    priors = load_creative_priors(root)
+    def _apply_priors():
+        if not priors:
+            return
+        ev = creative_priors_evidence(priors)
+        json.dump(ev, open(os.path.join(root,'脚本',ep,'applied_creative_priors.json'),'w',encoding='utf-8'),
+                  ensure_ascii=False, indent=2)
+        print(creative_priors_hint(priors))
     # 时长清单一律落 合成/（render_voice 与制作模式无关；出视频/ 为已废弃历史路径的兜底）——走 n2d_route 单一真值源
     man_p = manifest_path(root, ep)
     native_av = is_native_av(root)
@@ -146,7 +216,8 @@ def main():
                 print('⛔ 原生音画模式：storyboard.json clips 缺 duration，无法定稿镜头时长——分镜设计时按脚本规划填 Clip duration。'); sys.exit(2)
             json.dump(shots, open(os.path.join(root,'脚本',ep,'镜头时长.json'),'w',encoding='utf-8'), ensure_ascii=False, indent=2)
             print(f"原生音画定稿: 从 storyboard 取 {len(shots)} 镜时长 → 镜头时长.json。")
-            print("  说话镜台词由视频后端原生生成，字幕请用 whisperx 对成片词级对齐（参考 mv-lyric-sync），不在本步按配音重定时。")
+            print("  说话镜台词由视频后端原生生成，字幕请用 whisperx 对成片词级对齐，不在本步按配音重定时。")
+            _apply_priors()
             sys.exit(0)
         print('⛔ 缺 时长清单.json（合成/'+ep+'/配音/ 或 出视频/'+ep+'/配音/）——请先 n2d-voice 配音。'); sys.exit(2)
     manifest=json.load(open(man_p,encoding='utf-8'))
@@ -178,5 +249,6 @@ def main():
         os.remove(en_path)
     json.dump(shots, open(os.path.join(root,'脚本',ep,'镜头时长.json'),'w',encoding='utf-8'), ensure_ascii=False, indent=2)
     print(f"定稿: {len(manifest)} 句重定时 → 字幕_中文.srt{'+字幕_英文.srt' if want_en else '(仅中文)'}；{len(shots)} 镜 → 镜头时长.json")
+    _apply_priors()
 
 if __name__=='__main__': main()

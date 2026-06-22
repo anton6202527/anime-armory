@@ -2,9 +2,9 @@
 
 所有每集脚本素材按本文档模板填写。**提示词一律中文为主 + 英文备用**。
 
-> 下文 prompt 示例以**图 AI = `生图AI` 所选官方/已登录后端（默认 Codex，可选 Dreamina/即梦官方 CLI 等），生视频模型可为 Seedance/Veo/Kling 等，生视频渠道可为即梦/Dreamina/可灵/Gemini API 等** 的写法为准。若图 AI 与生视频模型不同，image prompt 末尾拼对应生视频模型的图像风格锚定句（核心分镜/卡片不变）。
+> 下文 prompt 示例以**图 AI = `生图AI` 所选官方/已登录后端（默认 Codex，可选 Dreamina/即梦官方 CLI 等），生视频模型/渠道后移到 n2d-video 出视频前由 router/probe 决定** 的写法为准。若用户已固定生视频模型，image prompt 末尾拼对应模型的图像风格锚定句；未固定时拼通用视频兼容锚定（核心分镜/卡片不变）。
 
-> **跨 AI 强制规则**：若**图 AI ≠ 生视频模型**（例：Codex 出图 + Seedance 2.0，或 Seedream 出图 + Kling 3.0），所有 image prompt 末尾**必须**拼接目标生视频模型的"图像风格锚定句"（见 `platforms.md` 各档案）。
+> **视频兼容锚定规则**：出图阶段不强迫用户先选生视频后端。已固定模型时拼目标生视频模型的"图像风格锚定句"；未固定时拼通用视频兼容锚定并记录 `video_backend_decision=deferred`，由 n2d-video 选择能消化现有首帧的后端（见 `platforms.md` 各档案）。
 
 > **出图 prompt 两层架构（共享 + 本集）属于 Stage 2**，不在本文档；由 `n2d-image` skill 负责。本 skill 的角色卡只写"① 定妆照 prompt"作为 Stage 2 的来源。
 
@@ -22,6 +22,7 @@
 - 固定服装：款式、颜色、材质、配饰
 - 固定配色：（主色+辅色，便于一致性）
 - 固定表情风格 / 动作习惯：
+- 外部人物参考图使用范围（如有）：只取脸型 / 五官 / 眼睛神态 / 体态比例 / 身材气质；发型、发饰、服装、配饰、妆容、身份阶层和剧情状态必须按小说原文、角色圣经、当前形态变体与本集剧情决定，不继承参考图衣装。
 
 ## 妆造拆解（锁一致性用）
 - 发型/发色/发饰：（如：乌黑长发半披，无华饰 / 双环髻）
@@ -29,13 +30,16 @@
 - 服装：（上下身款式、领口、袖型、材质、新旧、腰带）
 - 配饰：（簪、耳饰、玉佩、腰牌等；没有也写"无"）
 - 色卡：主色 + 辅色 + 点缀色（便于跨集统一）
+- 服装选择评分卡：（剧情身份/阶层信号、剪影辨识度、与其他主要角色主色差异、竖屏小图可读性、AI 可复现难度、动作/视频友好度、跨集复用价值；低分项先改服装，不带病进入出图）
+- `wardrobe_profile` 源头：（剪影 / 层次 / 领型 / 袖型 / 腰封 / 下摆 / 材质 / 纹样 / 主辅点缀色 HEX或HSV / 禁漂项 / 本形态允许状态；后续同步到 `identity_registry.characters[].forms[].wardrobe_profile`）
 - **识别锚点（3-5 个绝不能漂的特征，跨集锁脸/锁妆造的最高优先）**：（如 沈念：① 凤眼薄唇 ② 乌黑长发半披素布发带 ③ 左腕淡旧疤 ④ 月白粗布旧宫装）
 - **锚点句（把上面压成一句，每张分镜 prompt 末尾必拼，确保不漂移）**：（如「凤眼薄唇·乌黑半披发带·月白粗布·左腕淡疤」）
 - 形态变体：（如沈念 常态/觉醒态；记录差异点，避免漂移）
+- **形象里程碑（跨集生命周期·Gap2）**：（按集号列本角色的造型/年龄/服装/标志变化，如「第3集 换嫁衣→婚礼变体；第20集 十年后年龄跳+华发；第40集 黑化冷色造型」。全局汇总见 `设定库/characters/_生命周期.md`；每个里程碑到达前由 `n2d-image` 派生对应『形态变体』定妆，避免锁死后返工。无变化写「全程沿用」）
 
 **① 定妆照 / 角色参考图 Prompt（中文）：** ← Stage 2 会据此生成定妆组，作为后续所有镜头与视频首帧的"角色参考/图生图"锚点
-角色定妆设定图：{姓名}，{年龄性别}，标准三视图定妆组：正面中性主参考 + 侧面参考 + 背面参考，另补半身或全身服装参考，{发型妆容服装配饰色卡}，干净浅灰纯色背景，柔和均匀打光、无强阴影，五官清晰、服装完整可辨，按 `基础视觉风格` 的角色设定图，高细节，竖版9:16
-（备注：所有人物定妆都按"正面 + 侧面 + 背面"标准三视图出生产拆图，并生成 `定妆_<角色>_三视图.png` 人审拼版；短线配角也不省背面。半身/全身服装参考用于锁衣领/袖型/腰带/配色/体态，表情条是增强项。定妆照用"干净背景+均匀光"以便锁脸锁妆造，不用强戏剧光；进入分镜后再套全局 `style_contract` 的光色与画风。）
+角色定妆设定图：{姓名}，{年龄性别}，标准三视图定妆组：正面中性主参考 + 侧面参考 + 背面参考，另补半身或全身服装参考，以及领口/袖口/腰封/衣摆/纹样/材质色卡局部锚，{发型妆容服装配饰色卡}，干净浅灰纯色背景，柔和均匀打光、无强阴影，五官清晰、服装完整可辨；若使用外部人物参考图，只继承脸型/五官/眼睛神态/体态比例/身材气质，不继承参考图服装/发型/配饰/妆容；按 `基础视觉风格` 的角色设定图，高细节，竖版9:16
+（备注：所有人物定妆都按"正面 + 侧面 + 背面"标准三视图出生产拆图，并生成 `定妆_<角色>_三视图.png` 人审拼版；短线配角也不省背面。半身/全身服装参考用于锁衣领/袖型/腰带/配色/体态，核心/长线角色再补服装局部锚和材质色卡，写入 `reference_atlas.outfit_refs`。定妆照用"干净背景+均匀光"以便锁脸锁妆造，不用强戏剧光；进入分镜后再套全局 `style_contract` 的光色与画风。）
 
 **① 英文（备用）：**
 character design / reference sheet: {name}, minimum reference set with front-face neutral main reference + side-profile angle reference + half-body or full-body outfit reference, {hair makeup outfit accessories palette}, clean light-grey solid background, soft even lighting no harsh shadows, clear face and complete outfit, Chinese ancient-fantasy webcomic character sheet, ultra detailed, vertical 9:16
@@ -49,6 +53,31 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 
 > 流程：先用 ① 定妆照锁定角色 → 在所选 `生图AI` 中用定妆组做参考派生 → 之后每个分镜与视频首帧都基于它生成，保证脸和妆造不漂移。**实际生成定妆照在 Stage 2（`n2d-image`）做**，本 skill 只准备 prompt。
 > 后续所有镜头严格复用角色卡，禁止外貌/发型/服装/年龄漂移，除非剧情明确要求并在卡上记录"变体"。
+
+---
+
+## 1.1 角色形象生命周期时间线（设定库/characters/_生命周期.md，全局唯一·Gap2）
+
+**为什么单列一个全局产物**：角色卡的『形态变体』『形象里程碑』是**单角色**视角；但"第几集谁该变造型/年龄跳/换装"是**跨集×跨角色**的排程问题。定妆库一旦锁死，到第 N 集才发现该变=返工。对标字节小云雀短剧 Agent 的"全局角色管理·全生命周期形象变化自动扫描"。本文件是拆集/建卡阶段就预规划的**全局形象排程表**。
+
+**怎么产**：建卡后跑 `python3 skills/n2d-script/scripts/lifecycle_scan.py <作品根> --write`（确定性预扫 raw，扫"时间/年龄、换装/造型、形态/状态"三类信号 → 候选里程碑）→ 人确认/合并到「人工确认时间线」。自动段每次扫描重生成，人工区保留。
+
+```markdown
+# {剧名} — 角色形象生命周期时间线（跨集·全局产物）
+
+## 人工确认时间线
+| 集 | 角色 | 形象变化 | 定妆动作（新建变体/换卡/沿用） |
+|---|---|---|---|
+| 第3集 | 沈念 | 大婚换嫁衣凤冠 | 新建『婚礼态』变体定妆 |
+| 第20集 | 沈念 | 十年后年龄跳+华发 | 新建『中年态』变体定妆 |
+
+<!-- AUTO:lifecycle_scan 以下为每次扫描重生成… -->
+## 自动检测里程碑候选（已建卡角色：…）
+| 集 | 信号类别 | 触发词 | 片段 | 疑似涉及角色 | 待人确认 |
+| … |
+```
+
+**下游怎么用**：① `n2d-image` 在里程碑集到达前派生对应『形态变体』定妆，而非临场重画；② `n2d-identity` 跨集漂移报表把里程碑当**预期变化基线**——里程碑解释的形象变化=合法演进，里程碑之外的形象变化=漂移（崩脸/服装漂）。这条与 `n2d-identity` 的**集内** state 校验、`visual_contract.角色状态演进` 的**集内**单调推进互补，专补"跨集造型排程"这一层。
 
 ---
 
@@ -69,7 +98,7 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 
 ## 3. 分镜剧本（脚本/第N集/分镜剧本.md）— 逐镜头脚本
 
-每集 6~16 个镜头（随单集时长浮动，以 SKILL.md 为准）。每镜头：
+每集 6~16 个镜头（随剧情闭环、爽点密度和实测节奏浮动，以 SKILL.md 为准）。每镜头：
 
 ```markdown
 ## 镜头 N
@@ -83,7 +112,7 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 
 ## 4. 故事板 Clip 表（脚本/第N集/故事板.md）— **AI 视频生成输入**
 
-把相邻分镜合成 **片段（Clip）**，每片段 1~2 个分镜，作为"一次视频生成"的单元。**Clip 时长按所选生视频模型/渠道的单次生成上限定，别一刀切 8s**（即梦≤8s / Seedance≤15s / 可灵更长，见 `platforms.md`）——能一镜到底就别为凑时长切碎，节奏曲线优先（铺垫长镜 / 爽点碎切）。
+把相邻分镜合成 **片段（Clip）**，每片段 1~2 个分镜，作为"一次视频生成"的单元。剧本阶段按剧情节奏、动作闭环和接力契约合成 Clip，**不因首跑未选视频后端而硬按某个 8s/15s 上限切碎**；到 n2d-video 出视频前，再用实际路由后端能力复核单 Clip 上限，必要时只做不破坏剧情连贯的拆段接力或 reroute。
 
 ```markdown
 ## Clip 表（分镜连贯性校验后）
@@ -122,7 +151,7 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 
 **`style_contract` 是基础视觉风格的上游真值源**：风格来自选择点 `基础视觉风格` 与 `global_style.md`。不要只在 prompt 末尾加 `cinematic/realistic/anime`；必须在分镜设计阶段定死风格名、视觉基调、镜头与构图、光色策略、运动边界和风格禁忌。n2d-image 的「本集基础视觉风格契约」继承本块，把所选风格烤进首帧；n2d-video 再继承同一契约，只做与风格相容的运动。缺字段时 gate 阻断。旧 `cinematic_contract` 仅作历史兼容。
 
-**`template` + `template_contract` 是复杂镜头的上游真值源**：凡 Clip 涉及打斗、追逐、对话反打、法术爆发、飞行、亲密互动、拥抱拉扯、多人同框、群像站位，必须按 `专项镜头模板库.md` 选模板并写契约。允许的模板 ID：`fight_exchange`、`chase`、`dialogue_shot_reverse`、`magic_burst`、`flight`、`intimate_interaction`、`hug_or_pull`、`multi_character_same_frame`、`ensemble_blocking`、`multi_person_blocking`（legacy）。普通空镜/单人静态反应可省略；复杂镜头缺模板或字段不全时 gate 阻断。
+**`template` + `template_contract` 是复杂镜头的上游真值源**：凡 Clip 涉及打斗、追逐、对话反打、真相揭示/身份曝光、公开对质/审讯/谈判、法术爆发、飞行、亲密互动、拥抱拉扯、关系转折、多人同框、群像站位，必须按 `专项镜头模板库.md` 选模板并写契约。允许的模板 ID：`fight_exchange`、`chase`、`dialogue_shot_reverse`、`reveal_reaction_chain`、`public_confrontation`、`magic_burst`、`flight`、`intimate_interaction`、`hug_or_pull`、`relationship_turn`、`multi_character_same_frame`、`ensemble_blocking`、`multi_person_blocking`（legacy）。普通空镜/单人静态反应可省略；复杂镜头缺模板或字段不全时 gate 阻断。
 
 每个 clip 带 `continuity` 块，`start_state` 应等于上一 clip 的 `end_state`：
 
@@ -137,6 +166,9 @@ character design / reference sheet: {name}, minimum reference set with front-fac
       "冷宫寝殿": { "主光方向": "画左前", "色温": "3000K 暖", "动机光源": "残烛" }
     },
     "场景轴线视线": {
+      // 站位 = 该场景**注册的跨镜空间布局（四维坐标锚）**：逐角色写「方位（画左/画右/居中）+ 前后景遮挡序（…前/…后）」。
+      // 同 LOC 各镜不论换什么机位都须守这套站位/遮挡序（反打镜左右翻转合法）；n2d-review 的 空间站位(B1)
+      // 机检（scene_blocking_continuity.py）按本字段对逐镜 blocking/continuity_must 验跨镜站位连续性，违锁=block。
       "冷宫寝殿": { "站位": "沈念居画左、柳娘子居画右后", "轴线": "床→门 横轴", "默认视线": "沈念看画右门口" }
     },
     "角色状态演进": {

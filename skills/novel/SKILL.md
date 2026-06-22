@@ -1,13 +1,13 @@
 ---
 name: novel
-description: Top-level dispatcher for the novel-* skill family — inspects an open-ended novel request (a bare idea / few words / book name / URL / dragged file path / spin-off character / expand·condense·rewrite / 审稿查硬伤 / 评分·能不能火) and routes to the right sub-skill, imports a dragged novel file/link into 写小说/<项目>/ when no action is specified, or resumes an in-progress 写小说/<项目>/ from its _进度.md. Use when the user gives a novel-related task without specifying which tool. Does not write novels itself — only routes/imports source material; the canonical sub-skill roster is the routing table in the body. Triggers 小说工坊, novel, 小说相关任务, 拖进一本小说, 导入小说, 帮我处理小说, 不知道用哪个小说 skill, 小说打分, 小说评分, 能不能火, 值不值得改, 审稿, 力量体系, 等级一致性, 战力崩坏, 系统流升级, 系统面板, 小说进度, novel-progress.
+description: Top-level dispatcher for the novel-* skill family — inspects an open-ended novel request (a bare idea / few words / book name / URL / dragged file path / spin-off character / expand·condense·rewrite / 审稿查硬伤 / 评分·能不能火) and routes to the right sub-skill, imports a dragged novel file/link into 创作区/写小说/<项目>/ when no action is specified, or resumes an in-progress 创作区/写小说/<项目>/ from its _进度.md. Use when the user gives a novel-related task without specifying which tool. Does not write novels itself — only routes/imports source material; the canonical sub-skill roster is the routing table in the body. Triggers 小说工坊, novel, 小说相关任务, 拖进一本小说, 导入小说, 帮我处理小说, 不知道用哪个小说 skill, 小说打分, 小说评分, 能不能火, 值不值得改, 审稿, 力量体系, 等级一致性, 战力崩坏, 系统流升级, 系统面板, 小说进度, novel-progress.
 ---
 
 # novel — 小说工坊调度入口
 
 不直接写小说，**读取用户输入 → 路由**到 novel-* 家族最合适的 sub-skill。
 
-和已存在的 `n2d` 平行：那条线管漫剧/视频生产、产物落 `制漫剧/`；这条线管纯文本小说生产、**产物统一落 `写小说/<项目>/`**（如 `写小说/仙界闭关小能手-王敦外传/`）。两条线在 novel-fetch（取材）和 novel-spinoff/expand 的输出处自然衔接——`写小说/` 里的成品可交给 `n2d` 改编，产物再流向 `制漫剧/`。
+本线只管纯文本小说生产，**产物统一落 `创作区/写小说/<项目>/`**（如 `创作区/写小说/仙界闭关小能手-王敦外传/`）。
 
 **本系列成员**见下方"路由规则"表（家族唯一权威名册；新增/移除子 skill 只改那张表）。
 
@@ -15,7 +15,7 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 
 本 skill 的可选项**不写死在源码里**。按 `../skills/novel-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
-本 skill 涉及的选择点：`目标平台`、`权利来源`、`权利辖区`、`发行地区`、`输出格式`、`篇幅档`、`小说生成模式`、`章节生成粒度`、`AI使用披露`。
+本 skill 涉及的选择点：`小说用途`、`目标平台`、`权利来源`、`权利辖区`、`发行地区`、`输出格式`、`篇幅档`、`小说生成模式`、`小说生成工作流`、`小批回扫间隔`、`章节生成粒度`、`AI使用披露`。
 
 > 作为入口：路由到子 skill 前，若已有项目则读其 `<作品根>/_设置.md`，新项目按全局默认初始化。
 
@@ -26,7 +26,7 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 | 用户输入形态 | 路由到 |
 |---|---|
 | **只有几个字 / 一个想法 / 部分风格 / 零散笔记 / 半成品片段**，没有成型源文 → 要写一本**原创新书** | `novel-create`（访谈→蓝图→设定→章纲→Demo→成书） |
-| 拖进来一本**本地小说文件/目录/file:///URL**，但没说下一步动作，只是要先建档 | `novel/scripts/import_novel.py` → `写小说/<书名>/` |
+| 拖进来一本**本地小说文件/目录/file:///URL**，但没说下一步动作，只是要先建档 | `novel/scripts/import_novel.py` → `创作区/写小说/<书名>/` |
 | 给了**书名 / 作者 / URL**，明确要把公版书"取回来" | `novel-fetch` |
 | 已有原作 + 想**起一个好书名** | `novel-title` |
 | 已有原作 + 指定一个**配角名**，要**视角续写**（POV 切换、事件锁定） | `novel-spinoff` |
@@ -46,7 +46,6 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 | 想要**分析情节节奏 / 画热力图 / 查注水 / 查断章** | `novel-balance` |
 | 想要**宣发引流 / 写视频脚本 / 挖掘爆点章节** | `novel-promote` |
 | 想要**出海 / 本地化 / 翻译成英文·东南亚等多语言版本** | `novel-localize` |
-| 把小说改成**漫剧 / 短剧** | `n2d`（另一条管线） |
 
 ⚠️ **续 / 扩 / 视角 / 改 四者很容易混**：
 - **续写** = 加**新章节**（时间向前推） → novel-continue
@@ -75,14 +74,14 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 
 ## 决策树
 
-0. **先看有没有在建项目**：用户指向（或当前正处于）某个 `写小说/<项目>/`，且其下有 `_进度.md` → **先读进度**：
+0. **先看有没有在建项目**：用户指向（或当前正处于）某个 `创作区/写小说/<项目>/`，且其下有 `_进度.md` → **先读进度**：
    - **进度路由**：跑 `python3 skills/novel/progress.py "<作品根>"` 找第一条未完成项（基于章节矩阵表）；也可调 `novel-progress` 查看全线看板。
    - **操作指挥 (Flow)**：若对下一步命令有疑虑、或想检查状态对账/就绪度，跑 `python3 skills/novel/scripts/flow.py "<作品根>"` 获取精准下一步指令。
-   - **准入检查 (Gate)**：在进入 `drafting` (写正文) 或 `export` 前，跑 `python3 skills/novel/novel-gate.py <作品根> --stage <阶段>`；该入口统一调用 novel QA gate，覆盖 rights/review/score 阻断。
-   - **写后自动化**：每写完一章，建议跑 `python3 skills/novel/scripts/post_write.py <作品根> --chapter 第N章` 自动勾选进度并更新百科。
+   - **准入检查 (Gate)**：在进入 `drafting` (写正文)、`review`/`score` 或 `export` 前，跑 `python3 skills/novel/novel-gate.py <作品根> --stage <阶段>`；该入口统一调用 novel QA gate。`drafting` 只查写作前置物，不要求既有 `score_report`；`review`/`score` 要求本章 `state_delta` 已合并进 `state_ledger`；`export` 覆盖 rights/review/score/state closure，并在商业/平台/出海导出时要求 AI 使用披露。
+   - **写后自动化**：每写完一章，先填 `审稿/state_delta_第NN章.json`，再跑 `python3 skills/novel/scripts/post_write.py <作品根> --chapter 第N章`；该入口会先过状态对账/百科/逻辑/力量体系机检，全部硬闸通过后才自动勾选进度。若 `_设置.md` 选 `小说生成工作流：边写边自检`，`draft_packets.py` 会把这套闭环自动写进每章任务包，`flow.py` 也会把执行命令作为下一步提示；同时按 `小批回扫间隔`（默认 5 章，可改 3 章/关闭）保留 novel-review 的文风、节奏、钩子、人设、读者承诺集中修正。
    - **标准化旧项目**：若 `_进度.md` 格式陈旧，跑 `python3 skills/novel/scripts/standardize_progress.py <作品根>` 迁移到标准矩阵。
    - 仅当 `_进度.md` 显示已全部完成、或用户明确要开新动作时，才往下走 1-5。
-1. 用户给了**本地 .txt/.md/.docx、目录、file:// 或 URL**，且意图是"拖进来/导入/先建作品/纳管源书"，或没说具体动作 → 先跑 `python3 skills/novel/scripts/import_novel.py "<路径或URL>"` 建 `写小说/<书名>/`。
+1. 用户给了**本地 .txt/.md/.docx、目录、file:// 或 URL**，且意图是"拖进来/导入/先建作品/纳管源书"，或没说具体动作 → 先跑 `python3 skills/novel/scripts/import_novel.py "<路径或URL>"` 建 `创作区/写小说/<书名>/`。
 2. 用户给了**本地文件路径** + 明确动作（续写XX视角 / 起书名 / 扩 / 缩 / 漫剧改编）→ 直接按动作路由。
 3. 用户给了**书名 / 作者 / 公版目录 URL**，明确说"抓回来/下载公版/联网取书" → `novel-fetch`。
 4. 用户的输入是**只言片语 / 一个想法 / 一点风格 / 零散碎片**，要写一本**原创新书**（没有成型源文）→ `novel-create`（它会用访谈把碎片补全成蓝图，**别在这里反问"给我个文件"**）。
@@ -97,9 +96,9 @@ python3 skills/novel/scripts/import_novel.py "<路径或URL>"
 ```
 
 脚本行为：
-- 自动从文件名、URL、HTML title 或正文首行推断书名，落到 `写小说/<书名>/`。
+- 自动从文件名、URL、HTML title 或正文首行推断书名，落到 `创作区/写小说/<书名>/`。
 - 写入 `原作.txt`、`小说/<书名>.txt`、可用时写 `小说/<书名>.docx`、`小说/source_manifest.json`、`_meta.json`、`_设置.md`、`_进度.md`。
-- 本地 `.txt/.md/.docx` 可直接纳管；通用 URL 必须加 `--i-have-rights`，Project Gutenberg / Wikisource 自动记为 `public-domain`，但只写入来源侧公版依据和辖区提示；跨地区发行、商用或 n2d 改编前必须补 `--distribution-regions`/权利复核；已知付费墙站拒抓。
+- 本地 `.txt/.md/.docx` 可直接纳管；通用 URL 必须加 `--i-have-rights`，Project Gutenberg / Wikisource 自动记为 `public-domain`，但只写入来源侧公版依据和辖区提示；跨地区发行或商用前必须补 `--distribution-regions`/权利复核；已知付费墙站拒抓。
 - 如果目标作品已存在，交互环境会提示 `新建版本 / 覆盖 / 使用现有 / 取消`。非交互环境不会自动覆盖，必须显式传：
 
 ```bash
@@ -110,7 +109,6 @@ python3 skills/novel/scripts/import_novel.py "<路径或URL>" --on-exists use-ex
 
 ## 何时不路由
 
-- 用户在 `制漫剧/<剧名>/` 目录里有 `_进度.md`（漫剧管线状态）→ 让 `n2d` 接手，不要硬塞进 novel-* 家族。
 - 用户在写**完全原创**小说（无源文本）→ 路由到 `novel-create`（它有访谈立项 + 蓝图/设定/章纲/Demo/进度跟踪的引导流程）。**只有**用户明确只想"随手聊两句、不要立项不要建项目"时，才不走 skill、直接帮写。
 
 ## 合法性继承（铁律）
@@ -119,7 +117,7 @@ novel-* 家族的合法性规则一致：**公版 / 自有 / 用户声明授权�
 
 - 命中付费墙站或当代受版权网文，本 skill **拒绝路由** novel-spinoff / novel-rewrite / novel-expand / novel-condense（这些都会派生作品）。
 - 仅当 `novel-fetch` 用来取公版书、或 `novel-title` 用来起原创书名时，才可对原作版权状态宽松。
-- `public-domain` 不是“全球自动可商用”。`source_manifest.json/_meta.json` 会记录 `rights_jurisdiction`、`rights_covered_regions`、`distribution_regions`、`source_license_url`；导出 n2d/合本或商业/漫剧项目前，QA gate 会阻断发行地区未写或不被来源辖区覆盖的公版素材。
+- `public-domain` 不是“全球自动可商用”。`source_manifest.json/_meta.json` 会记录 `rights_jurisdiction`、`rights_covered_regions`、`distribution_regions`、`source_license_url`；导出合本或商业项目前，QA gate 会阻断发行地区未写或不被来源辖区覆盖的公版素材。
 - 路由前先做一次铁律筛查；命中即拒做并解释为什么。
 
 ## 持续改进（meta-capability）
@@ -163,6 +161,5 @@ novel 同时承担 novel-* 家族的**经验累积**职责。在跑任何 novel-
 | 错误 | 纠正 |
 |---|---|
 | 拿到模糊请求就硬路由 | 先问澄清问题，2-3 句话搞清楚动作再路由 |
-| 把漫剧改编请求路由进 novel-* | 改用 n2d 那条线 |
 | 跳过合法性筛查 | 路由前必须查；本 skill 的最大职责就是把铁律前置 |
 | 在本 skill 里直接开始写 | 不写；路由出去 |

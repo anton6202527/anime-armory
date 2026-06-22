@@ -158,3 +158,73 @@ def test_non_native_still_requires_manifest(tmp_path):
     r = subprocess.run([sys.executable, os.path.join(_HERE, "finalize_storyboard.py"), root, "第1集"],
                        capture_output=True, text=True)
     assert r.returncode == 2 and "缺 时长清单" in r.stdout      # 非原生音画仍要求配音清单
+
+
+# ── G6: 投放→生成输入闭环（读端）creative_priors 注入 ─────────────────────────
+def _write_priors(root, priors):
+    d = os.path.join(root, "生产数据")
+    os.makedirs(d, exist_ok=True)
+    json.dump(priors, open(os.path.join(d, "creative_priors.json"), "w", encoding="utf-8"),
+              ensure_ascii=False)
+
+
+def test_load_creative_priors_noop_when_missing(tmp_path):
+    # 缺文件 → None（向后兼容 no-op）
+    assert F.load_creative_priors(str(tmp_path)) is None
+
+
+def test_load_creative_priors_ignores_wrong_kind_and_empty(tmp_path):
+    _write_priors(str(tmp_path), {"kind": "other", "priors": {"opening_variant": {"winner": "x"}}})
+    assert F.load_creative_priors(str(tmp_path)) is None
+    _write_priors(str(tmp_path), {"kind": "n2d_creative_priors", "priors": {}})
+    assert F.load_creative_priors(str(tmp_path)) is None   # 文件在但无胜出维度 → 等同无先验
+
+
+def test_creative_priors_evidence_shape(tmp_path):
+    data = {"kind": "n2d_creative_priors", "generated_at": "2026-06-22T00:00:00+00:00",
+            "priors": {"opening_variant": {"winner": "cold_open_first", "paired_lift": 0.18,
+                                           "primary_metric": "retention_3s", "n": 2}}}
+    ev = F.creative_priors_evidence(data)
+    assert ev["source"] == "creative_priors.json"
+    assert ev["priors_generated_at"] == "2026-06-22T00:00:00+00:00"
+    assert ev["applied_creative_priors"]["opening_variant"]["winner"] == "cold_open_first"
+    hint = F.creative_priors_hint(data)
+    assert "开场优先复用" in hint and "cold_open_first" in hint
+
+
+def test_finalize_emits_priors_evidence_native_av(tmp_path):
+    # 原生音画定稿成功路径：有 creative_priors.json → 落 applied_creative_priors.json + 打提示
+    root, ep = str(tmp_path), "第1集"
+    os.makedirs(os.path.join(root, "脚本", ep), exist_ok=True)
+    open(os.path.join(root, "_设置.md"), "w", encoding="utf-8").write(
+        "# _设置\n## 选择\n- 制作模式: 原生音画\n")
+    json.dump({"clips": [{"id": "EP01_CLIP01", "duration": 7}]},
+              open(os.path.join(root, "脚本", ep, "storyboard.json"), "w", encoding="utf-8"),
+              ensure_ascii=False)
+    _write_priors(root, {"kind": "n2d_creative_priors", "generated_at": "2026-06-22T00:00:00+00:00",
+                         "priors": {"opening_variant": {"winner": "cold_open_first", "paired_lift": 0.18,
+                                                        "primary_metric": "retention_3s", "n": 2}}})
+    r = subprocess.run([sys.executable, os.path.join(_HERE, "finalize_storyboard.py"), root, ep],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "投放回灌先验" in r.stdout and "cold_open_first" in r.stdout
+    ev_path = os.path.join(root, "脚本", ep, "applied_creative_priors.json")
+    assert os.path.exists(ev_path)
+    ev = json.load(open(ev_path, encoding="utf-8"))
+    assert ev["applied_creative_priors"]["opening_variant"]["winner"] == "cold_open_first"
+
+
+def test_finalize_noop_without_priors_native_av(tmp_path):
+    # 缺先验文件 → 不打提示、不落证据（向后兼容）
+    root, ep = str(tmp_path), "第1集"
+    os.makedirs(os.path.join(root, "脚本", ep), exist_ok=True)
+    open(os.path.join(root, "_设置.md"), "w", encoding="utf-8").write(
+        "# _设置\n## 选择\n- 制作模式: 原生音画\n")
+    json.dump({"clips": [{"id": "EP01_CLIP01", "duration": 7}]},
+              open(os.path.join(root, "脚本", ep, "storyboard.json"), "w", encoding="utf-8"),
+              ensure_ascii=False)
+    r = subprocess.run([sys.executable, os.path.join(_HERE, "finalize_storyboard.py"), root, ep],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "投放回灌先验" not in r.stdout
+    assert not os.path.exists(os.path.join(root, "脚本", ep, "applied_creative_priors.json"))

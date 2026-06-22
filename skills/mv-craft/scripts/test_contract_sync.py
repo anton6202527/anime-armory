@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """漂移护栏：mv-craft/scripts/contract.py 的 CHOICE_POINTS（mv-craft 生成 _设置.md
-菜单用）与 mv/_lib/settings.py 的 SETTING_SPECS（set_project_setting / n2d-settings
-校验用）是两条独立 import 路径下的 vendored 契约。
+菜单用）与 mv/_lib/settings.py 的 SETTING_SPECS（设置校验用）是两条独立 import 路径下的 vendored 契约。
 
 不变量：**contract 菜单里给用户的每个候选值，settings 校验器都必须接受**
 （contract.CHOICE_POINTS[key] ⊆ settings_spec(key, "mv").allowed）。
 否则会出现「菜单给了 1:1 / 自定义，用户一选 validate_setting 却判 invalid」这类
 split-brain。settings 允许额外携带便捷别名（如 Seedance↔Seedance 2.0），故用子集而非等值。
 
-与 novel-craft/scripts/test_contract_sync.py 同构。从脚本自身目录跑：
+从脚本自身目录跑：
     cd skills/mv-craft/scripts && python3 -m pytest test_contract_sync.py
 """
 import os

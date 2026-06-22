@@ -3,7 +3,7 @@
 `n2d-lora` 把 LoRA 从“散落的 `.safetensors` 文件”变成可审计资产。默认目录：
 
 ```text
-制漫剧/<剧名>/设定库/lora/<CHAR_ID>/<形态>/
+创作区/制漫剧/<剧名>/设定库/lora/<CHAR_ID>/<形态>/
 ├── dataset/
 ├── dataset_manifest.json
 ├── train_job.json

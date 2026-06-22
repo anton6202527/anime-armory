@@ -17,7 +17,7 @@ The engine of the project. Each sub-directory is an atomic "Skill" containing:
 -   `references/`: Specialized knowledge bases (e.g., fight scene storyboarding, platform limits).
 
 ### 2. State Management
-Projects are tracked via two local markdown files (stored in project roots like `制漫剧/<project>/`):
+Projects are tracked via two local markdown files (stored in project roots like `创作区/制漫剧/<project>/`):
 -   **`_进度.md` (Status):** A state machine tracking the progress of each episode or chapter. Always read this first to determine the next step.
 -   **`_设置.md` (Settings):** Project-specific configurations (platforms, models, resolution, languages). This file is private and should not be committed to shared templates.
 
@@ -65,7 +65,7 @@ Match user intent against the table below (and each `SKILL.md`'s Triggers). Reco
 3.  **Progress Tracking:** Every skill that advances a project MUST update the corresponding `_进度.md`.
 4.  **Compliance:** Voice-cloning and character-likeness activities must pass the "Compliance Gate" (user authorization required).
 5.  **Output Paths:**
-    -   `制漫剧/`: Drama production assets — per-episode `出视频/` clips + `合成/` audio/post and final MP4.
+    -   `创作区/制漫剧/`: Drama production assets — per-episode `出视频/` clips + `合成/` audio/post and final MP4.
     -   `资产库/`: Cross-project reusable asset packs (character archetypes, scenes, props, route experience).
 
 ## Building and Running

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Read 写歌/<项目>/_进度.md and report the current frontier.
+"""Read 创作区/写歌/<项目>/_进度.md and report the current frontier.
 
 只读，不改文件。写歌线历史进度文件格式比较宽松，本脚本只依赖
 `| 阶段 | skill | 状态 |` 表，缺少机器契约字段时也能给出下一步。
@@ -31,7 +31,7 @@ PARTIAL_RE = re.compile(r"(\d+)\s*/\s*(\d+)")
 HIGH_RISK_HINTS = {
     "song-compose": "会调用作曲/人声后端或登记外部成品；生成版数、后端与费用先确认。",
     "song-cover": "翻唱/换声涉及真人嗓授权，未授权不得克隆真人歌手嗓。",
-    "song-review": "交 MV 或发布前建议跑质检与 AI 音频使用披露。",
+    "song-review": "发布或对外交付前建议跑质检与 AI 音频使用披露。",
 }
 
 
@@ -110,7 +110,7 @@ def report(root, limit):
 
     print()
     if frontier is None:
-        print("[done] 写歌阶段未发现阻断项。下一步：song-review 质检，或交给 mv 制作 MV。")
+    print("[done] 写歌阶段未发现阻断项。下一步：song-review 质检；如需视频制作，交付最终音频成品即可。")
         return 0
 
     row, state = frontier

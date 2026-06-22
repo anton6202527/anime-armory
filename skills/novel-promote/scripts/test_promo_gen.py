@@ -22,20 +22,20 @@ def _project():
     return root
 
 
-def test_promo_reads_requested_chapter_and_writes_n2d_ready():
+def test_promo_reads_requested_chapter_and_writes_video_brief():
     root = _project()
-    promo_path, n2d_path = promo_gen.write_outputs(root, 1, "tiktok")
+    promo_path, brief_path = promo_gen.write_outputs(root, 1, "tiktok")
 
     assert os.path.exists(promo_path)
-    assert os.path.exists(n2d_path)
+    assert os.path.exists(brief_path)
     promo = open(promo_path, encoding="utf-8").read()
-    n2d = open(n2d_path, encoding="utf-8").read()
+    brief = open(brief_path, encoding="utf-8").read()
 
     assert "银白雷火" in promo
     assert "今日这座旧殿" in promo
     assert "暗金汞液" not in promo
-    assert "Beat 1 [0-3s]" in n2d
-    assert "林澈" in n2d
+    assert "Beat 1 [0-3s]" in brief
+    assert "林澈" in brief
 
 
 def test_missing_chapter_fails_explicitly():

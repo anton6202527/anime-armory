@@ -26,7 +26,7 @@ description: 横切角色身份闭环层：把 n2d 的 identity_registry.json �
 - **输入**：`identity_registry.json`、reference group、后端 adapter 状态、LoRA 绑定、配音时长清单、voicemap、声纹机检依赖。
 - **输出**：`identity_adapter_matrix.json/md`、`identity_drift_report.json/md`、音色/声纹 drift 报表和 batch 可消费 findings。
 - **读写边界**：只读 registry 并写报表；不写 registry 本体、不训练 LoRA、不重配音、不重出图。
-- **契约关系**：registry owner/path、adapter status、LoRA ready 阻断、voice finding kind 都来自 `skills/n2d/_lib/n2d_contract.py`。
+- **契约关系**：registry path/schema owner、writer owner、adapter status、LoRA ready 阻断、voice finding kind 都来自 `skills/n2d/_lib/n2d_contract.py`；本 skill 是 registry 消费方与 identity_adapter_matrix 写入方，不是 registry 本体写入方。
 
 ## 核心规则
 

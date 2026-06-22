@@ -20,7 +20,7 @@ from n2d_contract import stage_for_key, stage_specs, write_episode_manifest  # n
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("root", help="作品根，例如 制漫剧/剧名")
+    ap.add_argument("root", help="作品根，例如 创作区/制漫剧/剧名")
     ap.add_argument("episode", help="集号，例如 第1集")
     ap.add_argument("--stage", default=None, help="只记录某个阶段 key；默认记录全阶段")
     ns = ap.parse_args(argv)

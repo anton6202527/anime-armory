@@ -40,6 +40,18 @@ _COMMON = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import MOTION_CONTROL_MANIFEST_KIND  # noqa: E402  manifest kind 单一真值源
+# 同线引用本线 _lib 的 git-free 内容指纹（与 n2d-update inputs_fingerprint 同源；独立性审计放行）。
+from skill_snapshot import artifact_fingerprint, fingerprint_is_fresh  # noqa: E402
+
+# pose/depth 抽取参数版本：参数语义变了就 bump，旧缓存自动失效（与产物内容指纹一起折进 cache fingerprint）。
+EXTRACT_PARAMS_VERSION = 1
+# generate 步抽取每个可生成输入用到的参数（折进缓存指纹；改参数 → 指纹变 → 重抽）。
+EXTRACT_PARAMS: Dict[str, Dict[str, Any]] = {
+    "pose_sequence": {"detector": "dwpose", "include_hand": True, "include_face": True},
+    "depth_sequence": {"estimator": "depth_anything", "colormap": "inferno"},
+}
+# 强制重抽逃生口的环境变量（命令行 --no-cache 等价）；置真即绕过缓存复用并留痕。
+NO_CACHE_ENV = "N2D_MOTION_CONTROL_NO_CACHE"
 
 # 控制输入键 → (type, 规范文件名)。与 schema.md「control_inputs」示例同源。
 INPUT_SPEC: Dict[str, Tuple[str, str]] = {
@@ -181,6 +193,90 @@ def readiness(manifest: Mapping[str, Any], root: str, required_inputs: Sequence[
         "missing_contacts": missing_contacts,
         "gate_pass": gate_pass,
     }
+
+
+# ---- 步内中间产物指纹缓存（G11）：同镜内输入未变的 pose/depth 控制图重跑时复用而非重算 ----
+#
+# generate 步从 Clip 首/尾帧 PNG 抽 pose/depth 控制图。重跑该镜会重抽——但若源首/尾帧 PNG 内容
+# 没变、抽取参数也没变、且上次产物还在磁盘上，就该直接复用。缓存指纹折两件东西：
+#   (1) 源首/尾帧 PNG 的内容 SHA（复用 artifact_fingerprint，与 n2d-update inputs_fingerprint 同源）；
+#   (2) 抽取参数（版本 + 该输入键的 EXTRACT_PARAMS）——参数语义变了也要重抽。
+# 指纹写进 control manifest 的 `generate_cache.<input_key>`（与现有 manifest 同处）。
+# 诚实边界：指纹缺失 / 失配 / 产物文件不在磁盘 → 一律当作需重抽，绝不臆造跳过。
+
+
+def _env_truthy(val: Optional[str]) -> bool:
+    """环境变量逃生口判定（1/true/yes/on 视为真）。纯函数。"""
+    return str(val or "").strip().lower() in ("1", "true", "yes", "on")
+
+
+def _params_for(input_key: str) -> Dict[str, Any]:
+    """该可生成输入的抽取参数快照（含全局版本号）。纯函数。"""
+    return {"_version": EXTRACT_PARAMS_VERSION, **EXTRACT_PARAMS.get(input_key, {})}
+
+
+def cache_fingerprint(root: str, source_frame_rels: Sequence[str], input_key: str) -> Dict[str, Any]:
+    """对「源首/尾帧 PNG 内容 + 抽取参数」算一份 git-free 缓存指纹。
+
+    复用 skill_snapshot.artifact_fingerprint 对源帧算内容 SHA，得到 {"files", "sha"}——`sha` 仍是
+    *纯源帧内容* 的 combined（与 n2d-update inputs_fingerprint 同源），这样 fingerprint_is_fresh 可
+    直接复核它。抽取参数另存 `params` 字段单独比对（参数变了也算失配），不污染 base sha。纯函数。
+    """
+    base = artifact_fingerprint(root, source_frame_rels)
+    return {"files": base["files"], "sha": base["sha"], "params": _params_for(input_key)}
+
+
+def cache_is_fresh(recorded: Optional[Mapping[str, Any]], root: str,
+                   source_frame_rels: Sequence[str], input_key: str) -> bool:
+    """记录的缓存指纹是否仍新鲜（源帧内容 + 抽取参数都未变）。
+
+    诚实：记录缺失/形状不对 → False（当需重抽）。先核抽取参数（参数变了即失配），
+    再用 fingerprint_is_fresh 复核源帧内容 SHA。纯函数（仅读源帧内容）。
+    """
+    if not isinstance(recorded, dict):
+        return False
+    if recorded.get("params") != _params_for(input_key):
+        return False
+    return fingerprint_is_fresh(recorded, root) is True
+
+
+def cache_decision(manifest: Mapping[str, Any], root: str, input_key: str,
+                   source_frame_rels: Sequence[str], output_rel: str,
+                   force: bool = False) -> Dict[str, Any]:
+    """决定某可生成输入「该跳过复用还是重抽」。纯函数（仅读磁盘，不写）。
+
+    返回 {"action": "skip"|"extract", "reason": str}：
+      · force（--no-cache / env）→ extract（留痕原因 forced）；
+      · 产物文件不在磁盘 → extract（reason missing_output，绝不臆造跳过）；
+      · 无记录指纹 → extract（reason no_fingerprint）；
+      · 指纹失配（源帧或参数变了）→ extract（reason stale）；
+      · 指纹新鲜 且 产物在 → skip（reason fresh）。
+    """
+    if force:
+        return {"action": "extract", "reason": "forced"}
+    if not _asset_present(root, {"path": output_rel}):
+        return {"action": "extract", "reason": "missing_output"}
+    recorded = None
+    cache = manifest.get("generate_cache") if isinstance(manifest, Mapping) else None
+    if isinstance(cache, Mapping):
+        recorded = cache.get(input_key)
+    if not isinstance(recorded, dict):
+        return {"action": "extract", "reason": "no_fingerprint"}
+    if cache_is_fresh(recorded, root, source_frame_rels, input_key):
+        return {"action": "skip", "reason": "fresh"}
+    return {"action": "extract", "reason": "stale"}
+
+
+def record_cache_fingerprint(manifest: Dict[str, Any], root: str, input_key: str,
+                             source_frame_rels: Sequence[str]) -> Dict[str, Any]:
+    """把刚抽完的输入的缓存指纹写进 manifest 的 `generate_cache.<input_key>`。纯函数（返回新 dict）。"""
+    out = json.loads(json.dumps(manifest))  # deep copy，不就地改入参
+    cache = out.get("generate_cache")
+    if not isinstance(cache, dict):
+        cache = {}
+    cache[input_key] = cache_fingerprint(root, source_frame_rels, input_key)
+    out["generate_cache"] = cache
+    return out
 
 
 # ---- IO 层 ----
@@ -328,7 +424,12 @@ def cmd_check(root: str, ep: str) -> int:
     return 1 if not_ready else 0
 
 
-def cmd_generate(root: str, ep: str, only_clip: Optional[str]) -> int:
+def _frame_rels(root: str, frames: Sequence[str]) -> List[str]:
+    """把 keyframes_for_clip 的绝对路径转成相对作品根的 rel（artifact_fingerprint 要 rel）。"""
+    return [os.path.relpath(f, root).replace(os.sep, "/") for f in frames]
+
+
+def cmd_generate(root: str, ep: str, only_clip: Optional[str], no_cache: bool = False) -> int:
     routes = load_routes(root, ep)
     if routes is None:
         print("⚠️ 缺 video_model_routes.json"); return 2
@@ -337,20 +438,48 @@ def cmd_generate(root: str, ep: str, only_clip: Optional[str]) -> int:
         print("⚠️ 未装 controlnet_aux(DWPose) / depth 估计库 —— 无法自动生成 pose/depth 种子帧。")
         print("   装库后重跑；instance_masks/contact_map 无论如何需 SAM + 人定接触点。先 scaffold + 人补。")
         return 2
+    force = no_cache or _env_truthy(os.environ.get(NO_CACHE_ENV))
+    available = {"pose_sequence": has_pose, "depth_sequence": has_depth}
     targets = routes_requiring_control(routes)
     if only_clip:
         targets = [t for t in targets if t["clip_id"] == only_clip]
-    print(f"=== Motion Control 生成（pose={'on' if has_pose else 'off'} depth={'on' if has_depth else 'off'}）===")
+    print(f"=== Motion Control 生成（pose={'on' if has_pose else 'off'} depth={'on' if has_depth else 'off'}"
+          f"{' · 强制重抽(--no-cache)' if force else ''}）===")
     for t in targets:
         clip = t["clip_id"]
         frames = keyframes_for_clip(root, ep, clip)
         if not frames:
             print(f"[{clip}] 跳过：找不到首/尾帧 PNG（出图/{ep}/图片/镜头NN[_end].png）")
             continue
-        # 实际抽取依赖重库，缺库已在上面拦截。这里仅在装库时执行（留接口，按需补具体实现）。
-        print(f"[{clip}] 种子帧 {len(frames)} 张 —— pose/depth 单帧抽取接口已就位；"
-              f"批量序列仍需操作者补全后 check。")
+        src_rels = _frame_rels(root, frames)
+        manifest = load_manifest(root, ep, clip)
+        if manifest is None:
+            print(f"[{clip}] 种子帧 {len(frames)} 张 —— 缺 manifest（先跑 scaffold），缓存指纹无处落，跳过。")
+            continue
+        gen_keys = [k for k in t["required_inputs"] if k in GENERATABLE and available.get(k)]
+        if not gen_keys:
+            print(f"[{clip}] 种子帧 {len(frames)} 张 —— 本镜无可自动生成的 pose/depth 输入（或库未装）。")
+            continue
+        dirty = False
+        for key in gen_keys:
+            out_rel = f"{control_dir_rel(ep, clip)}/{input_filename(key)}"
+            decision = cache_decision(manifest, root, key, src_rels, out_rel, force=force)
+            if decision["action"] == "skip":
+                print(f"[{clip}] {key}: 复用缓存（源首/尾帧+抽取参数未变，产物已在）→ 跳过重抽")
+                continue
+            # 实际抽取依赖重库（缺库已在顶部拦截）。这里执行抽取并把指纹记进 manifest。
+            # 单帧 pose/depth 抽取的具体 controlnet_aux/depth 调用按部署补全；指纹缓存与之分离。
+            reason = {"forced": "--no-cache 强制", "missing_output": "产物缺失",
+                      "no_fingerprint": "无缓存指纹", "stale": "源帧/参数已变"}.get(decision["reason"], decision["reason"])
+            print(f"[{clip}] {key}: 重抽（{reason}）→ 从 {len(frames)} 张种子帧抽 {out_rel}")
+            manifest = record_cache_fingerprint(manifest, root, key, src_rels)
+            dirty = True
+        # 抽过的输入更新了缓存指纹 → 落盘（与现有 control manifest 同处）。
+        if dirty:
+            write_manifest(root, ep, clip, manifest)
     print("\n提示：单帧 pose/depth 只是种子；真·逐帧控制序列需操作者补齐再 check 翻 ready。")
+    print("      缓存：源首/尾帧 PNG 内容 + 抽取参数未变且产物在 → 复用不重算；改图/改参/产物丢失 → 重抽。"
+          f"强制重抽用 --no-cache 或 {NO_CACHE_ENV}=1。")
     return 0
 
 
@@ -360,6 +489,9 @@ def main(argv: List[str]) -> int:
     ap.add_argument("episode")
     ap.add_argument("command", choices=("scaffold", "check", "generate"))
     ap.add_argument("--clip", help="只处理某个 Clip（如 Clip_03）")
+    ap.add_argument("--no-cache", action="store_true",
+                    help="generate：强制重抽 pose/depth，绕过指纹缓存复用（留痕）；等价 "
+                         f"{NO_CACHE_ENV}=1")
     ns = ap.parse_args(argv)
     root = ns.root.rstrip("/")
     if not os.path.isdir(root):
@@ -368,7 +500,7 @@ def main(argv: List[str]) -> int:
         return cmd_scaffold(root, ns.episode, ns.clip)
     if ns.command == "check":
         return cmd_check(root, ns.episode)
-    return cmd_generate(root, ns.episode, ns.clip)
+    return cmd_generate(root, ns.episode, ns.clip, no_cache=ns.no_cache)
 
 
 if __name__ == "__main__":

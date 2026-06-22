@@ -86,7 +86,7 @@ def audit_market_baseline(project_root):
             "MARKET-NO-PROJECT",
             "未检查项目级市场基准",
             "未传 --project-root；本地流程自审只检查 skill 治理项。",
-            "对具体作品自审时加 --project-root <写小说/项目>，脚本会检查评分基准新鲜度。",
+            "对具体作品自审时加 --project-root <创作区/写小说/项目>，脚本会检查评分基准新鲜度。",
         )]
     path = latest_market_baseline(project_root)
     if not path:

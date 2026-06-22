@@ -28,9 +28,14 @@ SHARED_TABLES = (
     "REGION_ALIASES",
     "PUBLIC_DOMAIN_LICENSE_URLS",
     "SCALE_PROFILES",
+    "WORDCOUNT_BANDS_BY_TARGET",
     "SCALE_ALIASES",
     "SCALE_CHOICES",
     "NOVEL_DRAFT_MODES",
+    "NOVEL_PURPOSES",
+    "NOVEL_PURPOSE_ALIASES",
+    "COMMERCIAL_NOVEL_PURPOSES",
+    "PURPOSE_SCALE_DEFAULTS",
     "CHAPTER_GRANULARITY",
     "AI_TEXT_USAGE_MODES",
     "ALLOWED_OUTPUT_FORMATS",
@@ -69,6 +74,71 @@ class ContractSyncTest(unittest.TestCase):
                     lib.scale_profile(scale),
                     f"scale_profile({scale!r}) 两份契约模块结果不一致——请同步",
                 )
+
+    def test_wordcount_band_value_equal(self):
+        cases = ([1000, 1500], [3000, 5000], [3333, 4444], [], None)
+        for words in cases:
+            with self.subTest(words=words):
+                self.assertEqual(
+                    craft.wordcount_band_for_words_per_chapter(words),
+                    lib.wordcount_band_for_words_per_chapter(words),
+                    f"wordcount_band_for_words_per_chapter({words!r}) 两份契约模块结果不一致——请同步",
+                )
+
+    def test_novel_purpose_helpers_value_equal(self):
+        cases = (
+            ("红果", None, None),
+            ("红果漫剧源书", None, None),
+            ("抖音漫剧", "漫剧", None),
+            ("起点", "long", None),
+            (None, "short", None),
+            (None, None, "短剧"),
+        )
+        for platform, scale, target in cases:
+            with self.subTest(platform=platform, scale=scale, target=target):
+                self.assertEqual(
+                    craft.normalize_novel_purpose(platform),
+                    lib.normalize_novel_purpose(platform),
+                )
+                self.assertEqual(
+                    craft.infer_novel_purpose(platform=platform, scale=scale, target=target),
+                    lib.infer_novel_purpose(platform=platform, scale=scale, target=target),
+                )
+        self.assertEqual(craft.normalize_novel_purpose("红果漫剧源书"), "漫剧源书")
+        self.assertEqual(craft.normalize_novel_purpose("抖音漫剧源书"), "漫剧源书")
+        self.assertEqual(craft.infer_novel_purpose(platform="红果"), "漫剧源书")
+        self.assertEqual(craft.infer_novel_purpose(platform="抖音漫剧"), "漫剧源书")
+
+        purpose_cases = ("漫剧源书", "微短剧源书", "短读/短篇", "传统小说", "红果漫剧源书", "")
+        for purpose in purpose_cases:
+            with self.subTest(purpose=purpose):
+                self.assertEqual(
+                    craft.scale_for_novel_purpose(purpose),
+                    lib.scale_for_novel_purpose(purpose),
+                )
+                self.assertEqual(
+                    craft.words_per_chapter_for_context(purpose=purpose),
+                    lib.words_per_chapter_for_context(purpose=purpose),
+                )
+                self.assertEqual(
+                    craft.resolve_novel_draft_mode(None, purpose=purpose),
+                    lib.resolve_novel_draft_mode(None, purpose=purpose),
+                )
+                self.assertEqual(
+                    craft.resolve_novel_draft_workflow(None, purpose=purpose, target_chapters=20),
+                    lib.resolve_novel_draft_workflow(None, purpose=purpose, target_chapters=20),
+                )
+        self.assertEqual(craft.scale_for_novel_purpose("漫剧源书"), "漫剧")
+        self.assertEqual(craft.scale_for_novel_purpose("微短剧源书"), "微短剧")
+        self.assertEqual(craft.words_per_chapter_for_context(purpose="漫剧源书"), [1000, 1500])
+        self.assertEqual(craft.words_per_chapter_for_context(purpose="微短剧源书"), [1500, 2500])
+        self.assertEqual(craft.resolve_novel_draft_mode(None, purpose="漫剧源书"), "漫剧源书")
+        self.assertEqual(craft.resolve_novel_draft_mode(None, purpose="微短剧源书"), "漫剧源书")
+        self.assertEqual(craft.resolve_novel_draft_mode("稳妥初稿", purpose="漫剧源书"), "稳妥初稿")
+        self.assertEqual(craft.resolve_novel_draft_workflow(None, scale="long", target_chapters=10), "三步迭代")
+        self.assertEqual(craft.resolve_novel_draft_workflow(None, target_chapters=30), "三步迭代")
+        self.assertEqual(craft.resolve_novel_draft_workflow(None, draft_mode="商业连载"), "三步迭代")
+        self.assertEqual(craft.resolve_novel_draft_workflow("默认单步", scale="long"), "默认单步")
 
     def test_rights_metadata_value_equal(self):
         for status, kwargs in RIGHTS_CASES:

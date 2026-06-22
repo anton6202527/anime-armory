@@ -139,7 +139,7 @@ By default, a new gate run replaces previous gate events for the same episode an
 
 ```json
 {
-  "kind": "n2d_production_alerts", "version": 1, "root": "制漫剧/剧名",
+  "kind": "n2d_production_alerts", "version": 1, "root": "创作区/制漫剧/剧名",
   "generated_at": "...", "thresholds": { ... },
   "counts": {"critical": 1, "warn": 2},
   "alerts": [

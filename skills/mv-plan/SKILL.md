@@ -5,7 +5,7 @@ description: 制MV clip/timeline 规划 — 从 视觉蓝图 + lyrics + beatgrid
 
 # mv-plan — clip/timeline 规划
 
-把 `制MV/<曲名>/` 里的 `节拍/beatgrid.json`、`词/lyrics.md`、`视觉蓝图.md` 和 `_设置.md` 变成机器可读的 MV 时间线。若项目选择 `歌曲输入时序=后配歌曲`，必须等最终 `歌/song.*` 入库并跑完真实 beatgrid 后再执行本阶段。
+把 `创作区/制MV/<曲名>/` 里的 `节拍/beatgrid.json`、`词/lyrics.md`、`视觉蓝图.md` 和 `_设置.md` 变成机器可读的 MV 时间线。若项目选择 `歌曲输入时序=后配歌曲`，必须等最终 `歌/song.*` 入库并跑完真实 beatgrid 后再执行本阶段。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
@@ -54,7 +54,7 @@ python3 skills/mv-plan/scripts/plan_clips.py "<制MV作品根>" --granularity �
 | 错误 | 纠正 |
 |---|---|
 | 没有生成 `beatgrid.json` 就尝试切分镜头 | 必须先由 `mv-beat` 确定歌曲真实的重拍 (downbeat) 阵列后，才能进行有效卡点切分 |
-| 后配歌曲路线未补最终歌就跑 mv-plan | 先让 song 线产歌或用户上传成品歌，再跑 mv-beat；然后重跑/复核 mv-script |
+| 后配歌曲路线未补最终歌就跑 mv-plan | 先补入最终成品歌，再跑 mv-beat；然后重跑/复核 mv-script |
 | 让 compose 自己猜播放顺序 | compose 只能严格服从 `timeline_manifest.json`，如果该清单为空或内容未更新，合成将会混乱 |
 | 生成后完全不让用户确认直接发往下游 | 本阶段结束后**必须**询问用户是否要人工调整或启动「语义分镜引擎」，否则画面将会高度重复或平淡 |
 | 语义分镜只靠聊天记录 | 语义补全必须写回 `clip_plan.json`，并落 `semantic_prompts.json` 作为可追踪产物 |

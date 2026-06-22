@@ -16,7 +16,7 @@ description: "P0 横切 skill for novel2drama/n2d production metrics, ROI dashbo
 
 ## 核心原则
 
-- **事件日志是机器真值**：所有生产数据先追加到 `制漫剧/<剧名>/生产数据/production_events.jsonl`，再由脚本汇总成 `dashboard.json` + `dashboard.md`。不要把成本/重抽原因塞进 `_进度.md`。
+- **事件日志是机器真值**：所有生产数据先追加到 `创作区/制漫剧/<剧名>/生产数据/production_events.jsonl`，再由脚本汇总成 `dashboard.json` + `dashboard.md`。不要把成本/重抽原因塞进 `_进度.md`。
 - **事件读写带本地锁**：`record` / `gate` / `build` / `watch` 对 `production_events.jsonl` 和 dashboard 输出统一走 `production_events.lock`；JSON/MD/HTML 用临时文件原子替换，避免多 worker 同时记账时读半截或互相覆盖。
 - **每次生成都记账**：n2d-image / n2d-video / n2d-voice / n2d-compose 的每次 AI 调用或实质性处理，都记录 `stage`、`asset`、`duration_sec`、`cost`、`status`。重抽必须写 `redraw_reason`。
 - **重抽原因分维度（契约枚举）**：`redraw_reason` 仍写自由文本，但记账时同步归入契约 `REDRAW_REASON_CATEGORIES` 九类维度（脸漂/服装/场景/画风/道具/参考图裁切/prompt 冲突/时序/其他）——显式传 `--redraw-category` 则尊重，否则按关键词自动归类；存量自由文本事件在 rebuild 时读时归类，不改写历史 jsonl。`dashboard.md` 出「重抽原因分维度」表并单列**一致性小计**（face/outfit/scene/style），让"一致性是不是最大成本杀手"一眼可见、可驱动投入决策。
@@ -33,7 +33,7 @@ description: "P0 横切 skill for novel2drama/n2d production metrics, ROI dashbo
 ## 文件结构
 
 ```text
-制漫剧/<剧名>/生产数据/
+创作区/制漫剧/<剧名>/生产数据/
   production_events.jsonl   # 事件日志，append-only 为主
   production_events.lock    # 本地文件锁，保护事件读写 + dashboard 重建
   platform_metrics.csv      # 可选：平台播放/收入/投放成本，dashboard 自动合并 ROI

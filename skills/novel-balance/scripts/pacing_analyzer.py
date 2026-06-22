@@ -35,7 +35,8 @@ from keyword_banks import (  # noqa: E402  单一定义源
     payoff_bank_for,
 )
 
-# 2026 都市爽文反转密度基准：前 30 章每章≥1.5 个反转/转折（起点 top50 都市量化）。
+# 商业爽文早期反转密度默认预警线；这是候选线索，不是验收硬闸。
+# 若有最新市场基线，应在报告解释层覆盖/校准该 floor。
 EARLY_REVERSAL_CHAPTERS = 30
 EARLY_REVERSAL_FLOOR = 1.5
 from settings import get_setting  # noqa: E402
@@ -203,7 +204,7 @@ def write_report(project, rows, reversal=None):
         lines += [
             "",
             f"**前 {reversal['n_chapters']} 章反转密度**：均 {reversal['avg']}/章 "
-            f"（2026 都市爽文基准 ≥{reversal['floor']}/章）{mark}",
+            f"（商业爽文默认预警线 ≥{reversal['floor']}/章；需随市场基线校准）{mark}",
         ]
         if reversal["below"]:
             lines.append(

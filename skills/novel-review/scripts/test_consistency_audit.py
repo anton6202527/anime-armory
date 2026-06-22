@@ -94,6 +94,25 @@ def test_run_logic_clean_when_no_conflict():
     assert summary["blocking"] == 0
 
 
+def test_run_reader_contract_flags_missing_delta_fields():
+    root = _make_project(
+        "## 李锦云\n\n姓名：李锦云\n",
+        {"第1章.md": "李锦云走进庭院，看着满园花开。"},
+    )
+    os.makedirs(os.path.join(root, "审稿"), exist_ok=True)
+    with open(os.path.join(root, "审稿", "state_delta_第01章.json"), "w", encoding="utf-8") as f:
+        json.dump({"schema_version": 1, "kind": "novel_state_delta", "chapter": 1}, f, ensure_ascii=False)
+    res = consistency_audit.run_reader_contract(root)
+    assert res["ran"] is True
+    assert res["blocking"] >= 1
+    out = os.path.join(root, "审稿", "reader_contract_sentry_summary.json")
+    assert os.path.exists(out)
+    with open(out, encoding="utf-8") as f:
+        summary = json.load(f)
+    types = {item["type"] for item in summary["findings"]}
+    assert "reader_contract_progress_missing" in types
+
+
 def test_run_style_skips_without_anchor():
     root = tempfile.mkdtemp()
     os.makedirs(os.path.join(root, "章节"))

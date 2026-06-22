@@ -36,6 +36,19 @@ def test_blur_band():
     assert q.blur_band(10, 0.0) == "ok"          # 无参考中位数 → 不误杀
 
 
+def test_episode_png_paths_reads_canonical_image_dir(tmp_path):
+    ep = "第1集"
+    img = tmp_path / "出图" / ep / "图片"
+    flat = tmp_path / "出图" / ep
+    img.mkdir(parents=True)
+    (img / "Clip_01.png").write_bytes(b"x")
+    (flat / "legacy.png").write_bytes(b"x")
+
+    names = [p.rsplit("/", 1)[-1] for p in q.episode_png_paths(str(tmp_path), ep)]
+
+    assert names == ["Clip_01.png", "legacy.png"]
+
+
 # ---------- O3 图像路径回归（合成图·缺 PIL 跳过） ----------
 
 def test_gray2d_and_variance_image_path(tmp_path):

@@ -3,24 +3,23 @@
 """
 export.py — novel-* 家族通用导出器（单一真值源）。
 
-章节/第NN章.md 合并 → txt / docx / 大纲 md / n2d-script 目录结构。
+章节/第NN章.md 合并 → txt / docx / 大纲 md。
 被 novel-create / spinoff / rewrite / expand / condense / continue 共用，
 各 skill 不再各写一份 export 脚本（旧的 expand.py/condense.py/continue.py 已删除）。
 
 用法:
-    python3 export.py <作品根> [--formats txt,docx,outline,n2d] [--title <书名>] [--combine]
+    python3 export.py <作品根> [--formats txt,docx,outline] [--title <书名>] [--combine]
 
 缺省 --formats 取 _meta.json 里的 outputs。
 缺省 --title 按 kind 推导（见 derive_title）。
 --combine 仅用于 novel-continue：原作 + 新章节合一输出（章号续编），输出单个合本 txt。
 
-依赖: python-docx（仅 --formats 含 docx 或 n2d 时）
+依赖: python-docx（仅 --formats 含 docx 时）
 """
 import argparse
 import json
 import os
 import re
-import shutil
 import sys
 from datetime import date
 
@@ -208,90 +207,6 @@ def write_outline(out_path, project_root, meta, chapters):
         f.write(cleaned + summary)
 
 
-def _find_drama_repo_root(start):
-    """向上找含『制漫剧/』的仓库根；找不到返回 None。与 split_novel 的作品根定位同源。"""
-    d = os.path.abspath(start)
-    while True:
-        if os.path.isdir(os.path.join(d, "制漫剧")):
-            return d
-        parent = os.path.dirname(d)
-        if parent == d:
-            return None
-        d = parent
-
-
-def resolve_n2d_dest(project_root, title, explicit):
-    """决定 n2d 交接落点（= 作品根，其下铺 小说/）。返回 (dest, mode)。
-
-    - explicit（--n2d-dest）优先。
-    - 否则自动定位 <repo>/制漫剧/<title>/：这样 split_novel 直接吃 小说/<title>.docx
-      就会把 n2d 生产树建在正确位置（split 取 小说/ 的父级为作品根），无需 --out。
-    - 都不行才回退项目内 导出/n2d-script/（此时 split 必须带 --out，否则会建错位置）。
-    """
-    if explicit:
-        return os.path.abspath(explicit), "explicit"
-    repo = _find_drama_repo_root(project_root)
-    if repo:
-        return os.path.join(repo, "制漫剧", title), "canonical"
-    return os.path.join(project_root, "导出", "n2d-script"), "legacy"
-
-
-def write_n2d(n2d_root, docx_path, title, meta, project_root):
-    """铺 n2d-script 友好的目录结构 + 交接清单（_n2d_handoff.json，留痕来源/版权/hash）。返回落地 docx 路径。"""
-    novel_dir = os.path.join(n2d_root, "小说")
-    os.makedirs(novel_dir, exist_ok=True)
-    dest_docx = os.path.join(novel_dir, f"{title}.docx")
-    shutil.copy(docx_path, dest_docx)
-    handoff = {
-        "schema_version": 1,
-        "source_novel_project": os.path.basename(project_root.rstrip("/\\")),
-        "source_novel_path": project_root,
-        "source_title": meta.get("source_title") or meta.get("source") or "",
-        "title": title,
-        "kind": meta.get("kind", ""),
-        "rights_status": meta.get("rights_status", ""),
-        "rights_jurisdiction": meta.get("rights_jurisdiction", ""),
-        "rights_basis": meta.get("rights_basis", ""),
-        "source_license_url": meta.get("source_license_url", ""),
-        "rights_covered_regions": meta.get("rights_covered_regions", []),
-        "distribution_regions": meta.get("distribution_regions", []),
-        "requires_region_rights_review": meta.get("requires_region_rights_review", False),
-        "docx": f"{title}.docx",
-        "docx_sha256": sha256_file(dest_docx),
-        "exported": date.today().isoformat(),
-    }
-    with open(os.path.join(novel_dir, "_n2d_handoff.json"), "w", encoding="utf-8") as f:
-        json.dump(handoff, f, ensure_ascii=False, indent=2)
-
-    # Asset-Aware Extraction
-    asset_registry = {"characters": {}, "props": {}, "vfx": {}, "locations": {}, "outfits": {}}
-    tag_pattern = re.compile(r"\[(CHAR|PROP|VFX|LOC|OUTFIT)_([^\]]+)\]")
-    ch_dir = os.path.join(project_root, "章节")
-    if os.path.exists(ch_dir):
-        for fname in sorted(os.listdir(ch_dir)):
-            if fname.endswith(".md"):
-                with open(os.path.join(ch_dir, fname), "r", encoding="utf-8") as f:
-                    for match in tag_pattern.finditer(f.read()):
-                        kind, name = match.group(1), match.group(2)
-                        key = f"{kind}_{name}"
-                        if kind == "CHAR" and key not in asset_registry["characters"]:
-                            asset_registry["characters"][key] = {"id": key, "name": name, "source_chapter": fname}
-                        elif kind == "PROP" and key not in asset_registry["props"]:
-                            asset_registry["props"][key] = {"id": key, "name": name, "source_chapter": fname}
-                        elif kind == "VFX" and key not in asset_registry["vfx"]:
-                            asset_registry["vfx"][key] = {"id": key, "name": name, "source_chapter": fname}
-                        elif kind == "LOC" and key not in asset_registry["locations"]:
-                            asset_registry["locations"][key] = {"id": key, "name": name, "source_chapter": fname}
-                        elif kind == "OUTFIT" and key not in asset_registry["outfits"]:
-                            asset_registry["outfits"][key] = {"id": key, "name": name, "source_chapter": fname}
-    
-    if any(asset_registry.values()):
-        with open(os.path.join(novel_dir, "asset_registry_preflight.json"), "w", encoding="utf-8") as f:
-            json.dump(asset_registry, f, ensure_ascii=False, indent=2)
-
-    return dest_docx
-
-
 def _rel(project_root, path):
     return os.path.relpath(os.path.abspath(path), project_root).replace(os.sep, "/")
 
@@ -321,15 +236,12 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("project_root", help="作品根（init_project.py 建的那个）")
     ap.add_argument("--formats", default=None,
-                    help="逗号分隔，可含 txt,docx,outline,n2d；缺省 = _meta.json.outputs")
+                    help="逗号分隔，可含 txt,docx,outline；缺省 = _meta.json.outputs")
     ap.add_argument("--title", default=None, help="缺省按 kind 推导")
     ap.add_argument("--combine", action="store_true",
                     help="novel-continue 合本：原作 + 新章节合一（章号续编）")
     ap.add_argument("--ignore-qa-gate", action="store_true",
                     help="强制导出：忽略 review/score 阻断报告（只用于人工明确要求）")
-    ap.add_argument("--n2d-dest", default=None,
-                    help="n2d 交接落点（制漫剧作品根，其下铺 小说/）。缺省自动取 <repo>/制漫剧/<书名>/，"
-                         "让 split_novel 无需 --out 即建在正确位置；仅 n2d 格式生效")
     args = ap.parse_args()
 
     project_root = os.path.abspath(args.project_root)
@@ -350,7 +262,7 @@ def main():
         formats = (args.formats.split(",") if args.formats else meta.get("outputs", []))
         formats = [f.strip() for f in formats if f.strip()]
         if not formats:
-            print("[err] 未指定导出格式：请传 --formats txt,docx,outline,n2d，"
+            print("[err] 未指定导出格式：请传 --formats txt,docx,outline，"
                   "或在 _meta.json 写 outputs。", file=sys.stderr)
             sys.exit(2)
         unknown = sorted(set(formats) - set(ALLOWED_OUTPUT_FORMATS))
@@ -359,7 +271,12 @@ def main():
                   f"{','.join(ALLOWED_OUTPUT_FORMATS)}", file=sys.stderr)
             sys.exit(2)
 
-    gate_status = collect_gate_status(project_root, require_review_report=True, export_formats=formats)
+    gate_status = collect_gate_status(
+        project_root,
+        require_review_report=True,
+        export_formats=formats,
+        require_state_closure=True,
+    )
     if gate_status["blocking"] and not args.ignore_qa_gate:
         print(format_gate_status(gate_status), file=sys.stderr)
         print("[err] QA gate 阻断导出；按报告回流修改，或人工确认后加 --ignore-qa-gate。", file=sys.stderr)
@@ -393,38 +310,22 @@ def main():
         return
 
     paths = {}
-    docx_path = None
     if "txt" in formats:
         p = os.path.join(out_dir, f"{title}.txt")
         write_txt(p, meta, chapters, title)
         paths["txt"] = p
-    if "docx" in formats or "n2d" in formats:
+    if "docx" in formats:
         p = os.path.join(out_dir, f"{title}.docx")
         write_docx(p, meta, chapters, title)
         paths["docx"] = p
-        docx_path = p
     if "outline" in formats:
         p = os.path.join(out_dir, "大纲.md")
         write_outline(p, project_root, meta, chapters)
         paths["outline"] = p
-    n2d_mode = n2d_docx = None
-    if "n2d" in formats:
-        dest, n2d_mode = resolve_n2d_dest(project_root, title, args.n2d_dest)
-        n2d_docx = write_n2d(dest, docx_path, title, meta, project_root)
-        paths["n2d"] = dest
 
     print(f"[ok] 导出完成：{len(chapters)} 章, {total_chars(chapters)} 字")
     for k, v in paths.items():
         print(f"     {k:<8} → {v}")
-    if "n2d" in paths:
-        if n2d_mode == "legacy":
-            print(f"[warn] 未找到含『制漫剧/』的仓库根，n2d 交接回退项目内：{paths['n2d']}")
-            print(f"[next] 进 n2d-script（须带 --out 指定剧名，否则会建错位置）：\n"
-                  f"       python3 skills/n2d-script/scripts/split_novel.py \"{n2d_docx}\" --out 制漫剧/{title}")
-        else:
-            print(f"[ok] n2d 交接已落入作品根：{paths['n2d']}（小说/ + _n2d_handoff.json）")
-            print(f"[next] 进 n2d-script（小说在 制漫剧/<剧名>/小说/ 下，split 自动取父级为作品根，无需 --out）：\n"
-                  f"       python3 skills/n2d-script/scripts/split_novel.py \"{n2d_docx}\"")
 
 
 if __name__ == "__main__":
