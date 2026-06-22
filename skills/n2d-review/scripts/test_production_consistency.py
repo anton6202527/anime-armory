@@ -134,6 +134,25 @@ def test_review_calibration_required_when_signoff_exists(tmp_path: Path) -> None
     assert any("consistency_calibration.jsonl" in row["message"] for row in res["findings"])
 
 
+def test_review_calibration_requires_threshold_learning_for_repeated_fp(tmp_path: Path) -> None:
+    root = tmp_path
+    ep = "第1集"
+    prod = root / "生产数据"
+    prod.mkdir()
+    _write_json(prod / f"human_review_signoff_{ep}.json", {"episode": ep, "reviewer": "qa"})
+    rows = [
+        {"label": "false_positive", "dimension": "脸(G1)", "reviewer": "qa", "reason": "遮挡误报", "finding_hash": "a"},
+        {"label": "false_positive", "dimension": "脸(G1)", "reviewer": "qa", "reason": "侧脸误报", "finding_hash": "b"},
+        {"label": "missed_by_machine", "dimension": "服装配色(N1)", "reviewer": "qa", "reason": "腰带漏检", "finding_hash": "c"},
+    ]
+    (prod / "consistency_calibration.jsonl").write_text(
+        "\n".join(json.dumps(row, ensure_ascii=False) for row in rows) + "\n",
+        encoding="utf-8",
+    )
+    res = pc.check_review_calibration(str(root), ep)
+    assert any("阈值/规则没有形成可复跑学习闭环" in row["message"] for row in res["findings"])
+
+
 def test_probe_pack_requires_required_scenarios_and_baseline(tmp_path: Path) -> None:
     root = tmp_path
     ep = "第1集"
@@ -147,6 +166,29 @@ def test_probe_pack_requires_required_scenarios_and_baseline(tmp_path: Path) -> 
     messages = "\n".join(row["message"] for row in res["findings"])
     assert "缺哨兵场景" in messages
     assert "baseline/input 指纹" in messages
+
+
+def test_probe_pack_compares_backend_scores_to_current_route(tmp_path: Path) -> None:
+    root = tmp_path
+    ep = "第1集"
+    _write_json(
+        root / "生产数据" / "video_model_routes.json",
+        {"routes": [{"clip_id": "Clip_01", "primary_backend": "SlowGen"}]},
+    )
+    scenarios = [{"scenario": name, "baseline_hash": f"base-{name}", "verdict": "pass"} for name in pc.PROBE_SCENARIOS]
+    _write_json(
+        root / "生产数据" / "consistency_probe_pack.json",
+        {
+            "latest_result": "run-001",
+            "scenarios": scenarios,
+            "backend_scores": [
+                {"scenario": "character_turnaround", "backend": "FastGen", "consistency_score": 0.93},
+                {"scenario": "character_turnaround", "backend": "SlowGen", "consistency_score": 0.70},
+            ],
+        },
+    )
+    res = pc.check_probe_pack(str(root), ep)
+    assert any("高于当前路由" in row["message"] for row in res["findings"])
 
 
 def test_dialogue_register_fallback_catches_mixed_self_address(tmp_path: Path) -> None:

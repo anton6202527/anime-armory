@@ -9,6 +9,8 @@
   身高比例 R1 · 轴线视线 X1 · 天气时辰 W1（含光位方向 W2 advisory）· 字幕安全区 L2 ·
   称谓口头禅 A1 · 风格 S1 · 字幕对齐 L1 · 音画同步 AV1（口型↔配音偏移·advisory）·
   节奏密度 Rhythm（节奏/留存启发式 advisory）· 空间站位 B1（跨镜站位/遮挡）·
+  视频 VLM 判题 VLM1 · 视频语义一致 VSEM · 多人对话音画 DAV · 物理因果链 CG1 ·
+  相机空间轨迹 CAM1 ·
   生产一致性补强（物件常驻/持有账本/状态转场/交互图谱/成片探针/强配方/包装/语域/平面图/成本路由/人审校准/probe）
 
 每个子检测器各自缺库优雅跳过（见各脚本）；本编排只汇总、不重复实现。
@@ -58,6 +60,11 @@ import subtitle_align as sa
 import lipsync_consistency as lipc
 import scene_blocking_continuity as sbc
 import pacing_retention as pr
+import video_vlm_consistency as vvlm
+import video_semantic_consistency as vsem
+import dialogue_av_consistency as davc
+import causal_event_consistency as cg
+import camera_trajectory_consistency as camt
 import production_consistency as pc
 
 
@@ -591,6 +598,51 @@ def run(root: str, ep: str) -> dict:
         "return_to_stage": "script_stage2",
         "rerun_scope": default_scope("节奏密度(Rhythm)", "script_stage2"),
     }
+
+    # 视频侧一致性补强：VLM/LMM 判题、视频 embedding 语义漂移、原生多人对话音画结构、
+    # 物理因果链与相机/空间轨迹。重模型 runner 只需写 sidecar；主审计纯标准库读取。
+    video_checks = (
+        (
+            "视频VLM判题(VLM1)",
+            vvlm.analyze(root, ep),
+            "video",
+            (f"生产数据/video_vlm_consistency_{ep}.json", f"出视频/{ep}/video_vlm_consistency.json"),
+        ),
+        (
+            "视频语义一致(VSEM)",
+            vsem.analyze(root, ep),
+            "video",
+            (f"生产数据/video_semantic_consistency_{ep}.json", f"出视频/{ep}/video_semantic_consistency.json"),
+        ),
+        (
+            "多人对话音画(DAV)",
+            davc.analyze(root, ep),
+            "compose",
+            (f"生产数据/dialogue_av_alignment_{ep}.json", f"合成/{ep}"),
+        ),
+        (
+            "物理因果链(CG1)",
+            cg.analyze(root, ep),
+            "script_stage2",
+            (f"脚本/{ep}/storyboard.json", f"生产数据/causal_event_graph_{ep}.json"),
+        ),
+        (
+            "相机空间轨迹(CAM1)",
+            camt.analyze(root, ep),
+            "video",
+            (f"生产数据/camera_trajectory_probe_{ep}.json", f"出视频/{ep}"),
+        ),
+    )
+    for dim, raw, stage, artifacts in video_checks:
+        sections[dim] = section_from_result(
+            dim=dim,
+            result=raw,
+            detail_key="findings",
+            skipped=not raw.get("available", False),
+            ep=ep,
+            stage=stage,
+            default_artifacts=artifacts,
+        )
 
     # 生产一致性补强：纯标准库检查器，覆盖物件/持有/状态转场、交互因果/图谱、
     # 成片统一/时间线探针、生成配方/强 schema、系列包装、语域、场景平面图、

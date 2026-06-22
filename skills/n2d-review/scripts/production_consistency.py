@@ -715,15 +715,26 @@ def _holder_mentions(text: str) -> List[Tuple[str, str]]:
 
 
 def _load_routes(root: str, ep: str) -> Dict[str, dict]:
-    data = _load_json(os.path.join(root, "出视频", ep, "prompt", "video_model_routes.json"))
-    routes = data.get("routes") if isinstance(data, dict) else []
-    out = {}
-    for route in routes or []:
-        if not isinstance(route, dict):
-            continue
-        cid = _clip_num(str(route.get("clip_id") or route.get("id") or ""))
-        if cid:
-            out[cid] = route
+    out: Dict[str, dict] = {}
+    for rel in (
+        os.path.join("生产数据", "video_model_routes.json"),
+        os.path.join("出视频", ep, "prompt", "video_model_routes.json"),
+    ):
+        data = _load_json(os.path.join(root, rel))
+        if isinstance(data, dict):
+            routes = data.get("routes") or data.get("clips") or []
+            if isinstance(routes, dict):
+                routes = [{**(v if isinstance(v, dict) else {}), "clip_id": k} for k, v in routes.items()]
+        elif isinstance(data, list):
+            routes = data
+        else:
+            routes = []
+        for route in routes or []:
+            if not isinstance(route, dict):
+                continue
+            cid = _clip_num(str(route.get("clip_id") or route.get("id") or route.get("clip") or ""))
+            if cid:
+                out[cid] = route
     return out
 
 
@@ -1417,6 +1428,46 @@ def _calibration_path(root: str) -> str:
     return os.path.join(root, "生产数据", "consistency_calibration.jsonl")
 
 
+def _threshold_path(root: str) -> str:
+    for rel in (
+        os.path.join("生产数据", "consistency_threshold_recommendations.json"),
+        os.path.join("设定库", "consistency_threshold_recommendations.json"),
+        os.path.join("生产数据", "consistency_thresholds.json"),
+        os.path.join("设定库", "consistency_thresholds.json"),
+    ):
+        path = os.path.join(root, rel)
+        if os.path.isfile(path):
+            return path
+    return ""
+
+
+def _row_has_threshold_advice(row: Mapping[str, Any]) -> bool:
+    return any(row.get(key) not in (None, "", [], {}) for key in (
+        "threshold_recommendation",
+        "threshold_delta",
+        "new_threshold",
+        "suggested_threshold",
+        "detector_patch",
+        "rule_patch",
+    ))
+
+
+def _calibration_threshold_needs(rows: Sequence[Mapping[str, Any]]) -> List[Tuple[str, int, int]]:
+    by_dim: Dict[str, Dict[str, int]] = defaultdict(lambda: defaultdict(int))
+    for row in rows:
+        label = str(row.get("label") or row.get("review_label") or "").strip()
+        dim = str(row.get("dimension") or row.get("dim") or "(unknown)").strip()
+        if label:
+            by_dim[dim][label] += 1
+    needs: List[Tuple[str, int, int]] = []
+    for dim, counts in by_dim.items():
+        false_positive = counts.get("false_positive", 0)
+        missed = counts.get("missed_by_machine", 0)
+        if false_positive >= 2 or missed >= 1:
+            needs.append((dim, false_positive, missed))
+    return needs
+
+
 def check_review_calibration(root: str, ep: str) -> dict:
     """把一次性人审签收沉淀为全局校准集，供后续误报/漏报回归使用。"""
     res = {"available": True, "findings": [], "notes": []}
@@ -1478,6 +1529,25 @@ def check_review_calibration(root: str, ep: str) -> dict:
                 stage="review",
                 artifacts=(os.path.relpath(cal_path, root),),
             ))
+    threshold_needs = _calibration_threshold_needs(rows)
+    if threshold_needs:
+        threshold_path = _threshold_path(root)
+        embedded_advice = any(_row_has_threshold_advice(row) for row in rows)
+        summary = "；".join(
+            f"{dim}: false_positive={fp}, missed_by_machine={missed}"
+            for dim, fp, missed in threshold_needs[:6]
+        )
+        if not threshold_path and not embedded_advice:
+            res["findings"].append(_row(
+                "warn",
+                "校准集已有稳定误报/漏报样本，但缺 consistency_thresholds 或 threshold_recommendations；"
+                f"阈值/规则没有形成可复跑学习闭环（{summary}）。",
+                stage="review",
+                artifacts=(os.path.relpath(cal_path, root), "生产数据/consistency_threshold_recommendations.json"),
+            ))
+        else:
+            rel = os.path.relpath(threshold_path, root) if threshold_path else os.path.relpath(cal_path, root)
+            res["notes"].append(f"CAL 阈值学习样本：{summary}；已检测到阈值建议/配置 {rel}。")
     return res
 
 
@@ -1492,6 +1562,109 @@ def _probe_pack(root: str) -> Tuple[Optional[Any], str]:
         os.path.join("设定库", "consistency_probe_pack.json"),
         os.path.join("生产数据", "probe_pack", "consistency_probe_pack.json"),
     ))
+
+
+def _probe_scenario_name(row: Mapping[str, Any]) -> str:
+    return str(row.get("scenario") or row.get("name") or row.get("id") or "").strip()
+
+
+def _backend_score_value(row: Mapping[str, Any]) -> Optional[float]:
+    for key in ("consistency_score", "score", "avg_score", "mean_score", "pass_rate", "quality_score"):
+        num = _num(row.get(key))
+        if num is not None:
+            return num
+    return None
+
+
+def _backend_name(value: Mapping[str, Any]) -> str:
+    for key in ("backend", "provider", "model", "model_id", "primary_backend", "selected_backend", "name"):
+        text = str(value.get(key) or "").strip()
+        if text:
+            return text
+    return ""
+
+
+def _looks_like_backend_score(value: Mapping[str, Any]) -> bool:
+    return bool(_backend_name(value)) or any(key in value for key in (
+        "score", "consistency_score", "avg_score", "pass_rate", "passed", "verdict", "status",
+    ))
+
+
+def _collect_backend_scores(value: Any, *, scenario: str = "", backend: str = "") -> List[dict]:
+    rows: List[dict] = []
+    if isinstance(value, list):
+        for item in value:
+            rows.extend(_collect_backend_scores(item, scenario=scenario, backend=backend))
+        return rows
+    if not isinstance(value, dict):
+        return rows
+    current_scenario = str(value.get("scenario") or value.get("name") or value.get("id") or scenario or "").strip()
+    current_backend = _backend_name(value) or backend
+    if _looks_like_backend_score(value) and current_backend:
+        row = dict(value)
+        row.setdefault("scenario", current_scenario)
+        row.setdefault("backend", current_backend)
+        rows.append(row)
+    for key, child in value.items():
+        if key in {"scenario", "name", "id", "backend", "provider", "model", "model_id"}:
+            continue
+        if isinstance(child, dict):
+            next_scenario = current_scenario
+            next_backend = current_backend
+            if key not in {"backend_scores", "backend_results", "scores", "results", "route_scores"}:
+                if _looks_like_backend_score(child):
+                    next_backend = key
+                elif not next_scenario:
+                    next_scenario = key
+            rows.extend(_collect_backend_scores(child, scenario=next_scenario, backend=next_backend))
+        elif isinstance(child, list):
+            next_scenario = current_scenario if key in {"backend_scores", "backend_results", "scores", "results", "route_scores"} else (current_scenario or key)
+            rows.extend(_collect_backend_scores(child, scenario=next_scenario, backend=current_backend))
+    return rows
+
+
+def _probe_backend_scores(data: Any, scenarios: Sequence[Mapping[str, Any]]) -> List[dict]:
+    rows: List[dict] = []
+    if isinstance(data, dict):
+        for key in ("backend_scores", "backend_results", "route_scores", "model_scores", "results"):
+            if key in data:
+                rows.extend(_collect_backend_scores(data.get(key)))
+    for scenario in scenarios:
+        name = _probe_scenario_name(scenario)
+        for key in ("backend_scores", "backend_results", "route_scores", "model_scores", "results"):
+            if key in scenario:
+                rows.extend(_collect_backend_scores(scenario.get(key), scenario=name))
+    dedup: List[dict] = []
+    seen = set()
+    for row in rows:
+        sig = (
+            str(row.get("scenario") or ""),
+            str(row.get("backend") or ""),
+            str(_backend_score_value(row)),
+            str(row.get("verdict") or row.get("status") or ""),
+        )
+        if sig in seen:
+            continue
+        seen.add(sig)
+        dedup.append(row)
+    return dedup
+
+
+def _route_primary_backends(routes: Mapping[str, Mapping[str, Any]]) -> List[str]:
+    names: List[str] = []
+    for route in routes.values():
+        if not isinstance(route, Mapping):
+            continue
+        name = _backend_name(route)
+        if name:
+            names.append(name)
+    return _unique(names)
+
+
+def _backend_match(a: str, b: str) -> bool:
+    aa = re.sub(r"\s+", "", str(a or "").lower())
+    bb = re.sub(r"\s+", "", str(b or "").lower())
+    return bool(aa and bb and (aa in bb or bb in aa))
 
 
 def check_probe_pack(root: str, ep: str) -> dict:
@@ -1548,6 +1721,67 @@ def check_probe_pack(root: str, ep: str) -> dict:
             stage="review",
             artifacts=(rel,),
         ))
+    routes = _load_routes(root, ep)
+    primary_backends = _route_primary_backends(routes)
+    backend_rows = _probe_backend_scores(data, scenarios)
+    if primary_backends and not backend_rows:
+        res["findings"].append(_row(
+            "warn",
+            "项目已有视频模型路由，但 consistency_probe_pack 缺 backend_scores/backend_results；"
+            "probe 仍停留在场景小样，未形成后端选择基准。",
+            stage="review",
+            artifacts=(rel, f"出视频/{ep}/prompt/video_model_routes.json", "生产数据/video_model_routes.json"),
+        ))
+    elif backend_rows:
+        measured_backends = _unique(str(row.get("backend") or "") for row in backend_rows)
+        for backend in primary_backends:
+            if not any(_backend_match(backend, measured) for measured in measured_backends):
+                res["findings"].append(_row(
+                    "warn",
+                    f"当前 route.primary_backend={backend} 未出现在 probe backend_scores；路由没有哨兵基准兜底。",
+                    stage="review",
+                    artifacts=(rel, f"出视频/{ep}/prompt/video_model_routes.json", "生产数据/video_model_routes.json"),
+                ))
+        scored: Dict[str, List[float]] = defaultdict(list)
+        for row in backend_rows:
+            backend = str(row.get("backend") or "").strip()
+            score = _backend_score_value(row)
+            if backend and score is not None:
+                scored[backend].append(score)
+        averages = {backend: sum(values) / len(values) for backend, values in scored.items() if values}
+        if averages:
+            best_backend, best_score = max(averages.items(), key=lambda item: item[1])
+            allowed_delta = 0.05
+            if isinstance(data, dict):
+                allowed_delta = _num(data.get("route_score_delta_tolerance")) or allowed_delta
+            route_blob = _json_text(routes)
+            has_selection_reason = bool(isinstance(data, dict) and (
+                data.get("route_recommendations") or data.get("selected_backend") or data.get("selection_reason") or data.get("fallback_reason")
+            )) or any(token in route_blob for token in ("selection_reason", "fallback_reason", "fallback_allowed", "route_recommendation"))
+            for backend in primary_backends:
+                matched = next((name for name in averages if _backend_match(backend, name)), "")
+                if not matched:
+                    continue
+                delta = best_score - averages[matched]
+                if best_backend != matched and delta > allowed_delta and not has_selection_reason:
+                    res["findings"].append(_row(
+                        "warn",
+                        f"probe benchmark 显示 {best_backend} 平均一致性分 {best_score:.3f} 高于当前路由 {backend} "
+                        f"{delta:.3f}，但缺 selection_reason/fallback_reason；确认是否为成本/速度的显式取舍。",
+                        stage="review",
+                        artifacts=(rel, f"出视频/{ep}/prompt/video_model_routes.json", "生产数据/video_model_routes.json"),
+                    ))
+        failing_backend = [
+            row for row in backend_rows
+            if str(row.get("verdict") or row.get("status") or row.get("result") or "").lower() in {"block", "fail", "failed", "red"}
+        ]
+        for row in failing_backend[:8]:
+            res["findings"].append(_row(
+                "block",
+                f"probe 后端基准未通过：scenario={row.get('scenario') or '(unknown)'} backend={row.get('backend') or '(unknown)'}。",
+                stage="review",
+                artifacts=(rel,),
+            ))
     return res
 
 
