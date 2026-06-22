@@ -1,6 +1,6 @@
 ---
 name: novel-review
-description: 小说质检 + 流程自审（novel-* 家族的 QA 环节，不写作只审）。双模——模式①「作品质检」：审 ALREADY-WRITTEN 章节（.md/.txt）——POV slips(串视角/视角穿帮)、OOC/人设崩、plot holes、anchor & timeline drift、设定矛盾、读者契约兑现、弧段跑偏、**力量体系一致性(穿越/系统流的等级·成长值·战力只增不减、未知境界、越级过快、面板属性≤7、系统流久无升级桥段)**、节奏/缺钩子、文风漂移、原文照搬——机检+人判，出严重度分级·定位到章/段的报告；续写/外传交叉核对 设定/(角色卡·世界观·锚点表·章纲) 与 原作。`consistency_audit.py` 含 `power_system` 子runner。模式②「流程自审」：联网拉当前小说/网文市场基准，对照 novel-* 各 skill + novel-craft + Q&A，产出"差距清单 + 该改哪个 skill 哪段"的优化建议。Does NOT write/continue the story. Triggers 审稿, 质检, 检查小说质量, 查人设崩, 视角穿帮, 串视角, 设定矛盾, 读者契约, 弧段 gate, 长篇跑偏, 锚点对齐, 一致性回扫, 伏笔回收, 力量体系自检, 等级一致性, 战力崩坏, 升级数值, 节奏, 文风漂移, 原文照搬, 质量报告, 流程自审, 流程优化, 自我优化, novel 还能优化啥, novel review, QA.
+description: 小说质检 + 流程自审（novel-* 家族的 QA 环节，不写作只审）。双模——模式①「作品质检」：审 ALREADY-WRITTEN 章节（.md/.txt）——POV slips(串视角/视角穿帮)、OOC/人设崩、plot holes、anchor & timeline drift、设定矛盾、读者契约兑现、弧段跑偏、**力量体系一致性(穿越/系统流的等级·成长值·战力只增不减、未知境界、越级过快、面板属性≤7、系统流久无升级桥段)**、节奏/缺钩子、文风漂移、原文照搬、微短剧/漫剧源书平台合规预检——机检+人判，出严重度分级·定位到章/段的报告；续写/外传交叉核对 设定/(角色卡·世界观·锚点表·章纲) 与 原作。`consistency_audit.py` 含 `power_system` 子runner；`platform_compliance.py` 做小说侧微短剧合规预检。模式②「流程自审」：联网拉当前小说/网文市场基准，对照 novel-* 各 skill + novel-craft + Q&A，产出"差距清单 + 该改哪个 skill 哪段"的优化建议。Does NOT write/continue the story. Triggers 审稿, 质检, 检查小说质量, 查人设崩, 视角穿帮, 串视角, 设定矛盾, 读者契约, 弧段 gate, 长篇跑偏, 锚点对齐, 一致性回扫, 伏笔回收, 微短剧合规, 平台合规, 力量体系自检, 等级一致性, 战力崩坏, 升级数值, 节奏, 文风漂移, 原文照搬, 质量报告, 流程自审, 流程优化, 自我优化, novel 还能优化啥, novel review, QA.
 ---
 
 # novel-review — 小说质检 + 流程自审
@@ -21,6 +21,9 @@ description: 小说质检 + 流程自审（novel-* 家族的 QA 环节，不写�
   - `novel-wiki/logic_sentry.py`（先 `wiki_builder.py` 建《动态百科》）—— **死人复活 / 弃置道具复用 / 位置跳变 / 数值漂移（年龄锚点跨章不一致）**等硬冲突候选 → `审稿/logic_alerts_*.json`。这是把"设定自相矛盾/锚点漂移"从纯人判下沉到机检的深度增强（无角色卡/无年龄锚点则优雅跳过并记原因）。
   - `novel-style/extract_style.py --compare` —— 每章文风指纹 vs **锚点章指纹**算漂移分，超带宽即记"文风漂移"候选 → `审稿/style_drift_summary.json`（无锚点指纹则跳过，提示先提取）。
   - **2026 新增 9 个子检测器（一键串跑或按需跑，各自缺输入优雅跳过）**：① **断章钩子**(`hook_endings.py`)逐章末尾打钩子分、黄金三章更严(建议级)；② **角色语感**(`voice_drift.py`)口头禅消失/句长漂(读 `设定/角色语感.json`·建议级)；③ **情绪曲线**(`tone_check.py`)实测每章主导情绪 vs `设定/tone_curve.json` 目标弧(建议级)；④ **支线收口**(`thread_resolution.py`)open_threads 超期(建议级)、`--finale` 卷末/书末未收支线=阻断级烂尾防线；⑤ **反派战力**(`antagonist_scaling.py`)反向战力崩坏(建议级·需 registry 标 role/阵营)；⑥ **时间线**(`timeline_check.py`)年份倒流(建议级)+ `设定/timeline.json` 事件乱序(阻断级)；⑦ **配角连续性**(`minor_characters.py`)反复出场却未建卡(建议级)；⑧ **逐章读者契约**(`reader_contract_sentry.py`)阻断缺 `reader_contract_progress` / `theme_alignment` 的章节；⑨ **弧段 gate**(`arc_gate.py`)检查连续 3 章不推进契约、整段无题旨对齐、长窗口只种不收。另：`logic_sentry` 已通电的 **world_rule_violation(阻断级)/relationship_flip/钩子过期/承诺违约(阻断级)/张力疲劳/character_guardrails** 也随 `run_logic` 在 review 汇总（已传 project_root）。
+  - **微短剧/漫剧源书平台合规预检**（小说侧）：当 `_设置.md` / `_meta.json` 命中 `微短剧/短剧/漫剧/红果/抖音`，先跑
+    `python3 skills/novel-review/scripts/platform_compliance.py <作品根>`。
+    它按最新广电公开要求做标题/正文关键词预检与上线前许可证/备案待办提示：片名不得恶俗恶趣味或渲染极端复仇暴戾焦虑；文本中色情低俗、血腥暴力、未成年人敏感、政治安全等明显风险可阻断。产物 `审稿/platform_compliance.json` 只是小说侧预检，不替代平台审核、法律意见或成片报审。
   缺输入的检测器一律**跳过并落原因**，不静默略过冒充全覆盖。
 - **人判（LLM 判断题）**：机检覆盖不了的——视角穿帮、OOC、情节漏洞、锚点语义对齐、**题旨契约 / 读者承诺兑现**、节奏（爽点/钩子/反转）、伏笔回收、留白、文风漂移、文学质感、show-don't-tell、过度直白。维度逐条见 `references/checklist.md`。机检产出的 `logic_alerts`/`style_drift` 候选是**线索不是定论**（带 `auto` 标志），仍需人判结合语境确认（容错铁律：宁缺毋滥，闪回/伏笔可豁免）。
 
@@ -34,6 +37,8 @@ description: 小说质检 + 流程自审（novel-* 家族的 QA 环节，不写�
    `python3 skills/novel-review/scripts/reader_contract_sentry.py <作品根> --chapter 第NN章`。
    每 3-5 章或自然 arc 写完后跑：
    `python3 skills/novel-review/scripts/arc_gate.py <作品根> --arc 1-5`。
+   微短剧/漫剧源书或目标平台含红果/抖音时，同时跑：
+   `python3 skills/novel-review/scripts/platform_compliance.py <作品根>`。
 2. **分 arc 人判**：章多时**每个 arc 拆给子任务/子代理**审（省主上下文），每章对照 `references/checklist.md` 维度，**只记真问题**，每条带原文引文证据。
 3. **汇总报告** → 先用汇总器把机检 + 一致性审计 + 人判 JSON 转成调度器可消费的报告：
    `python3 skills/novel-review/scripts/build_review_report.py <作品根> [--human-assessment 审稿/human_findings.json]`。

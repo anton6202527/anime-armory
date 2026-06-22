@@ -79,6 +79,11 @@
 | `scope` | object | 是 | 整本 / 前三章 / 指定 arc |
 | `source_snapshot` | object | 是 | 本次评分取样绑定的正文快照；含样本文件 path/hash 与 aggregate hash |
 | `market_baseline` | object | 是 | 热榜基准日期、来源文件、来源链接 |
+| `first_party_genre` | object/null | 否 | 自有投放题材战绩聚合；缺战绩库时为 null |
+| `reader_telemetry_path` | string/null | 否 | `评分/reader_telemetry_summary.json`；真实读者反馈存在时填写 |
+| `reader_telemetry_summary` | object/null | 否 | `novel-feedback` 聚合摘要：章节完读/弃读/评论/weakest_chapters |
+| `reader_panel_path` | string/null | 否 | `评分/reader_panel_signals.json`；模拟读者信号存在时填写 |
+| `benchmark_percentile` | object/null | 否 | 合规参考分布百分位；无 `reference_distribution*.json` 时为 null |
 | `scores` | list[object] | 是 | 七维分数 |
 | `title_check` | object/null | 否 | 书名体检（附加项，不计入总分）；新版 `score.py` 总会写入，书名未定时为 null；更早的旧报告可缺省 |
 | `deductions` | list[object] | 是 | 雷点扣分 |
@@ -123,11 +128,27 @@
 | `baseline_json_path` | string | `评分/market_baseline_<YYYY-MM-DD>.json` |
 | `sources` | list[object] | 每个来源含 `platform/url/title/collected_at/use_for/status/signals` |
 | `manual_evidence` | list[object] | 结构化人工证据，含 `platform/date/source/summary[/url]` |
+| `evidence_quality` | object/null | 整体证据质量，含 `score/confidence/effective_evidence_count` |
 | `coverage_warnings` | list[string] | 红果/抖音/漫剧等目标平台覆盖缺口 |
 | `expires_after_days` | int | 建议 14-28；过期重拉 |
 | `freshness` | object | `status/blocking/reason/expires_on`；`no_evidence` 必须阻断，除非人工显式豁免 |
 
 有效市场基准必须至少满足其一：存在 `status=ok` 且 `signals` 非空的来源；或存在结构化 `manual_evidence` 人工补充。全是 `fetch_error`、空 signals 或自由文本 `notes` 的 baseline 不能作为评分证据；红果/抖音/漫剧目标缺覆盖时 `freshness.status=coverage_gap` 并阻断。
+
+`benchmark_percentile` 字段（存在时）：
+
+| 字段 | 类型 | 说明 |
+|---|---|---|
+| `status` | string | `ok/no_eligible_samples` |
+| `distribution_title` | string | 参考分布标题 |
+| `distribution_path` | string/null | `评分/reference_distribution*.json` |
+| `sample_count` | int | 实际纳入的合规样本数 |
+| `total_score_percentile` | number/null | 当前总分在参考样本中的百分位 |
+| `by_dimension` | object | 各维 raw_score 百分位，含 `percentile/sample_count` |
+| `skipped_samples` | list[object] | 因权利状态未知或缺分数被跳过的样本 |
+| `rights_policy` | string | 仅纳入公版/自有/原创/已授权/许可样本 |
+
+`reader_telemetry_summary` 由 `novel-feedback/scripts/ingest_reader_events.py` 生成；真实读者反馈权重高于 `reader_panel_signals.json`。若同时存在真实反馈和模拟反馈，score 维度说明必须以真实反馈为主，模拟反馈只作为原因假设。
 
 `source_snapshot` 由 `novel-craft/scripts/report_snapshot.py` 生成。`review_report` 应对当前 `章节/` 全量快照负责；`score_report` 应对本次评分样本负责。`score:full` 与 review 一样会校验当前章节全集，新增/删除章节后旧 full score 失效；`score:opening` 只绑定前 3 章样本。正文变更后旧 report/task 失效，必须重审/重评。`qa_gate.py` 会先校验 `review_report` / `score_report` 必填字段和基础类型；schema 缺字段、`kind/schema_version` 不匹配、缺 `score_task_id/assessment_prompt_hash` 等旧报告在 export gate 下阻断。
 

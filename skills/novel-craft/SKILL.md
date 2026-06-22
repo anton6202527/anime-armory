@@ -52,7 +52,7 @@ description: Shared writing-primitives and deterministic production helpers for 
 | `scripts/draft_packets.py` | 生成 `写作任务/第NN章.md` 或三段式 `第NN章_{architect,ghostwriter,editor}.md` + 初始化 `审稿/state_ledger.json`；默认要求 Demo gate passed；章纲命中打斗/追逐/逃亡/突破/升级、真相揭示/掉马、公开对质/审讯/谈判、告白/决裂/和解时自动注入专项清单；不调用 AI | 所有 `draft` 阶段，先包上下文再写章；长篇/商业连载/漫剧源书默认三段式 |
 | `scripts/arc_packets.py` | 生成 `写作任务/弧段_第AA-BB章.md` + `审稿/arc_plan_第AA-BB章.json`，把一小段章节的章纲、读者契约、未收线程和 gate 命令物化 | 长篇每 3-5 章或一个自然 arc 的写前计划 |
 | `scripts/reconcile_ledger.py` | 输出正文/Delta 核对 prompt；仅在提供已通过核对的 `--verified` JSON 后合并入 `state_ledger.json` | 所有 `draft` 阶段，写章后同步状态 |
-| `scripts/ai_usage.py` | 写 `合规/ai_usage.json` + `合规/AI使用说明.md`，记录 AI-generated / AI-assisted / 未使用 AI 文本与人工贡献 | 发布、导出、交平台前 |
+| `scripts/ai_usage.py` | 写 `合规/ai_usage.json` + `合规/AI使用说明.md`，记录 AI-generated / AI-assisted / 未使用 AI 文本、人工贡献、AI 介入直接程度、人类 steering、可替代性、直接纳入程度与复核步骤 | 发布、导出、交平台前 |
 
 ## 工业化生产线（批量写章闭环）
 
@@ -98,7 +98,16 @@ python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --chapter 4 --
 ```
 
 ```bash
-python3 skills/novel-craft/scripts/ai_usage.py "<作品根>" --text-mode AI-generated --publish-target KDP
+python3 skills/novel-craft/scripts/ai_usage.py "<作品根>" \
+  --text-mode AI-generated \
+  --publish-target KDP \
+  --human-contribution "用户提供蓝图、设定并人工审稿" \
+  --text-directness outline_to_draft \
+  --human-steering "人工指定大纲、角色弧和终稿取舍" \
+  --replaceability assistive_non_replaceable \
+  --direct-incorporation substantial_passages \
+  --review-step 人工通读 \
+  --review-step 设定一致性审稿
 ```
 
 ## 用法

@@ -8,6 +8,7 @@ localize_check.py — 出海本地化「确定性」机检（纯标准库）
   1. 未译 CJK 残留 —— 拉丁/非 CJK 目标语译文里残留中文 = 漏译段落（ja/zh 等 CJK 系目标语跳过）。
   2. 术语未本地化 —— 术语表 source 专名仍出现在译文 = 专名漏锁（跨章漂移的源头）。
   3. 章节覆盖 + 长度比 —— 缺章 / 译文异常短（截断）。
+  4. DITING 式叙事/文化保真复核线索 —— 成语俗语、歧义术语、时态体貌、零主语、文化安全。
 
   python3 localize_check.py <项目根> --lang en
 
@@ -37,6 +38,19 @@ CJK_SCRIPT_LANGS = {"ja", "jp", "zh", "zh-hans", "zh-hant", "zh-tw", "yue"}
 LEN_RATIO_FLOOR = 0.5
 # 整章 CJK 残留占比超此值 → block（大段未译）；0<占比≤此 → warn（零星专名/漏改）。
 RESIDUE_BLOCK_RATIO = 0.02
+
+IDIOM_CANDIDATES = (
+    "杀鸡儆猴", "一箭双雕", "画蛇添足", "狐假虎威", "心照不宣", "心中一动",
+    "破釜沉舟", "螳螂捕蝉", "借刀杀人", "瓮中捉鳖", "大道无情",
+)
+AMBIGUOUS_XIANXIA_TERMS = (
+    "道", "大道", "气", "丹", "炉鼎", "灵根", "金丹", "元婴", "师兄", "师姐",
+    "宗门", "魔道", "正道", "心魔",
+)
+TENSE_ASPECT_MARKERS = ("曾经", "当年", "后来", "正在", "忽然", "已经", "即将", "方才", "从前")
+EN_TENSE_HINTS = ("had ", "was ", "were ", "would ", "used to", "suddenly", "already", "then", "later", "about to")
+ZERO_PRONOUN_VERBS = ("抬手", "转身", "皱眉", "冷笑", "推门", "走进", "看向", "开口", "拔剑", "跪下")
+CULTURAL_SAFETY_TERMS = ("蛮夷", "奴婢", "贱民", "丑八怪", "残废", "疯子", "种族", "血统低贱")
 
 
 def _cjk_len(s):
@@ -85,6 +99,64 @@ def load_translated(project, lang):
     return out
 
 
+def _glossary_sources(glossary):
+    return {src for src, _tgt, _typ in glossary if src}
+
+
+def narrative_fidelity_checks(src_text, tgt_text, glossary, lang):
+    """Return DITING-style human-review signals.
+
+    These are not deterministic translation errors. They mark places where web-novel
+    localization often loses narrative or cultural fidelity and should be reviewed by
+    a human/LLM editor.
+    """
+    lower_tgt = tgt_text.lower()
+    glossary_src = _glossary_sources(glossary)
+    checks = []
+    idioms = [term for term in IDIOM_CANDIDATES if term in src_text]
+    if idioms:
+        checks.append({
+            "dimension": "idiom_proverb",
+            "severity": "review",
+            "items": idioms[:8],
+            "message": "源文含成语/俗语/修仙套语，需确认译文是意译而非硬直译。",
+        })
+    ambiguous = [term for term in AMBIGUOUS_XIANXIA_TERMS if term in src_text and term not in glossary_src]
+    if ambiguous:
+        checks.append({
+            "dimension": "lexical_ambiguity",
+            "severity": "review",
+            "items": ambiguous[:8],
+            "message": "源文含高歧义网文术语且术语表未锁译名。",
+        })
+    if lang.lower().startswith("en") and any(marker in src_text for marker in TENSE_ASPECT_MARKERS):
+        if not any(hint in lower_tgt for hint in EN_TENSE_HINTS):
+            checks.append({
+                "dimension": "tense_aspect",
+                "severity": "review",
+                "items": [m for m in TENSE_ASPECT_MARKERS if m in src_text][:8],
+                "message": "源文有时间/体貌标记，英文译文缺明显 tense/aspect 线索，需复核事件顺序。",
+            })
+    if lang.lower().startswith("en") and any(verb in src_text for verb in ZERO_PRONOUN_VERBS):
+        has_pronoun = any(token in lower_tgt for token in (" he ", " she ", " they ", " i ", "shen ", "wang ", "lin "))
+        if not has_pronoun:
+            checks.append({
+                "dimension": "zero_pronoun",
+                "severity": "review",
+                "items": [v for v in ZERO_PRONOUN_VERBS if v in src_text][:8],
+                "message": "中文零主语动作在英文中可能丢主体，需确认代词/人物名补足。",
+            })
+    cultural = [term for term in CULTURAL_SAFETY_TERMS if term in src_text]
+    if cultural:
+        checks.append({
+            "dimension": "cultural_safety",
+            "severity": "review",
+            "items": cultural[:8],
+            "message": "源文含可能需要出海文化安全处理的称谓/身份词。",
+        })
+    return checks
+
+
 def check(project, lang):
     residue_on = lang.lower() not in CJK_SCRIPT_LANGS
     glossary = load_glossary(project, lang)
@@ -114,15 +186,25 @@ def check(project, lang):
         ratio = round(tgt_chars / src_len, 2)
         if ratio < LEN_RATIO_FLOOR:
             flags.append(f"译文异常短(长度比 {ratio})，疑似截断")
+        fidelity = narrative_fidelity_checks(src_text, tgt, glossary, lang)
+        if fidelity:
+            dims = "、".join(item["dimension"] for item in fidelity)
+            flags.append(f"DITING叙事/文化保真复核: {dims}")
         rows.append({
             "chapter": idx,
             "status": "ok" if not flags else "flagged",
             "residue_cjk": residue,
             "len_ratio": ratio,
             "unlocalized_terms": unlocalized,
+            "narrative_fidelity_review": fidelity,
             "flags": flags,
         })
     block = sum(1 for r in rows for f in r["flags"] if "大段未译" in f) + len(missing)
+    fidelity_counts = {}
+    for row in rows:
+        for item in row.get("narrative_fidelity_review") or []:
+            dim = item.get("dimension")
+            fidelity_counts[dim] = fidelity_counts.get(dim, 0) + 1
     summary = {
         "lang": lang,
         "residue_check": residue_on,
@@ -131,6 +213,7 @@ def check(project, lang):
         "translated_chapters": len(translated),
         "missing_chapters": missing,
         "flagged_chapters": [r["chapter"] for r in rows if r["flags"]],
+        "narrative_fidelity_review_counts": fidelity_counts,
         "blocking": block,
     }
     return rows, summary

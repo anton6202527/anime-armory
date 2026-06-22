@@ -134,6 +134,84 @@ class TestNovelScore(unittest.TestCase):
         self.assertEqual(report["production_decision"]["decision"], "go")
         self.assertNotIn("external-adaptation", [a["recommended_skill"] for a in report["next_actions"]])
 
+    def test_reader_telemetry_is_injected_and_reported(self):
+        telemetry = {
+            "schema_version": 1,
+            "kind": "novel_reader_telemetry_summary",
+            "generated_at": date.today().isoformat(),
+            "platform": "红果测试",
+            "latest_source_name": "小流量",
+            "records_ingested": 3,
+            "aggregate": {
+                "chapter_count": 1,
+                "total_starts": 100,
+                "total_completes": 40,
+                "total_drops": 45,
+                "completion_rate": 0.4,
+                "drop_rate": 0.45,
+                "total_comments": 2,
+            },
+            "weakest_chapters": [1],
+            "chapters": [{
+                "chapter": 1,
+                "completion_rate": 0.4,
+                "drop_rate": 0.45,
+                "flags": ["low_completion", "high_drop"],
+            }],
+        }
+        with open(os.path.join(self.score_dir, "reader_telemetry_summary.json"), "w", encoding="utf-8") as f:
+            json.dump(telemetry, f, ensure_ascii=False)
+        task = self.generate_score_task()
+        self.assertIn("真实读者反馈", task["assessment_prompt"])
+        self.assertIn("总完读率 0.4", task["assessment_prompt"])
+        mock_path = os.path.join(self.tmp, "mock.json")
+        with open(mock_path, "w", encoding="utf-8") as f:
+            json.dump(valid_assessment(task["score_task_id"]), f, ensure_ascii=False)
+        old_argv = sys.argv
+        sys.argv = ["score.py", self.tmp, "--mock-assessment", mock_path]
+        try:
+            score.main()
+        finally:
+            sys.argv = old_argv
+        with open(os.path.join(self.score_dir, "score_report.json"), encoding="utf-8") as f:
+            report = json.load(f)
+        self.assertEqual(report["reader_telemetry_path"], "评分/reader_telemetry_summary.json")
+        self.assertEqual(report["reader_telemetry_summary"]["aggregate"]["drop_rate"], 0.45)
+
+    def test_reference_distribution_percentile_reported(self):
+        samples = []
+        for total, raw in [(50, 5), (80, 8), (100, 10)]:
+            samples.append({
+                "title": f"sample-{total}",
+                "rights_status": "original",
+                "total_score": total,
+                "scores": {dim: raw for dim, _label in score.DIMENSIONS},
+            })
+        with open(os.path.join(self.score_dir, "reference_distribution_2026-01-01.json"), "w", encoding="utf-8") as f:
+            json.dump({
+                "schema_version": 1,
+                "kind": "novel_reference_score_distribution",
+                "title": "测试参考分布",
+                "sample_count": len(samples),
+                "samples": samples,
+            }, f, ensure_ascii=False)
+        task = self.generate_score_task()
+        self.assertIn("参考分布", task["assessment_prompt"])
+        mock_path = os.path.join(self.tmp, "mock.json")
+        with open(mock_path, "w", encoding="utf-8") as f:
+            json.dump(valid_assessment(task["score_task_id"]), f, ensure_ascii=False)
+        old_argv = sys.argv
+        sys.argv = ["score.py", self.tmp, "--mock-assessment", mock_path]
+        try:
+            score.main()
+        finally:
+            sys.argv = old_argv
+        with open(os.path.join(self.score_dir, "score_report.json"), encoding="utf-8") as f:
+            report = json.load(f)
+        self.assertEqual(report["benchmark_percentile"]["status"], "ok")
+        self.assertEqual(report["benchmark_percentile"]["sample_count"], 3)
+        self.assertEqual(report["benchmark_percentile"]["total_score_percentile"], 66.7)
+
     def test_assessment_must_match_score_task(self):
         self.generate_score_task()
         mock_path = os.path.join(self.tmp, "mock.json")

@@ -195,7 +195,11 @@ def test_enqueue_low_does_not_queue_missing_data(tmp_path: Path) -> None:
 
 
 def _all_ok_consistency() -> dict:
-    keys = ["语义谱系(P0)", "状态百科(P1)", "多模态(P2)", "契约继承", "锚点门(N3)", "脸(G1)", "片内时序(N2)", "服装配色(N1)", "场景(O2)", "接缝接力", "风格(S1)", "糊/低质(N4)"]
+    keys = [
+        label
+        for spec in score.DIMENSIONS.values()
+        for label in spec.get("audit_labels", ())
+    ]
     return {"summary": {"by_dim": {k: {"block": 0, "warn": 0, "ok": 5, "skipped": False} for k in keys}}}
 
 

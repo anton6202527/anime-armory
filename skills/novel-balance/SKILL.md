@@ -1,6 +1,6 @@
 ---
 name: novel-balance
-description: 情节热力图与节奏平衡仪 — 扫描全书文本的"情绪起伏度"和"信息密度",产出情节热力图(Heatmap)。识别高潮密集度、平淡铺垫期、节奏断裂点。自动给出"注水警告"或"节奏脱节"预警。Use when asked to 分析节奏, 情节热力图, 测一下注水, 节奏平衡, 扫一下全书起伏, plot heatmap, pacing balance, pacing analysis. Triggers 情节热力图, 节奏平衡, 节奏分析, 注水预警, 高潮密集度, 节奏断裂, novel balance, plot balance.
+description: 情节热力图与节奏平衡仪 — 扫描全书文本的"情绪起伏度"和"信息密度",产出情节热力图(Heatmap)。识别高潮密集度、平淡铺垫期、节奏断裂点；若存在 novel-feedback 的真实读者掉点摘要，可优先检查低完读/高弃读章节窗口。自动给出"注水警告"或"节奏脱节"预警。Use when asked to 分析节奏, 情节热力图, 测一下注水, 节奏平衡, 扫一下全书起伏, 读者掉点, plot heatmap, pacing balance, pacing analysis. Triggers 情节热力图, 节奏平衡, 节奏分析, 注水预警, 高潮密集度, 节奏断裂, 读者掉点, novel balance, plot balance.
 ---
 
 # novel-balance — 情节热力图与节奏平衡仪
@@ -39,6 +39,7 @@ python3 skills/novel-balance/scripts/pacing_analyzer.py "<作品根>" [--range 1
 ## 与家族其它 Skill 的边界与联动
 
 - **vs novel-review / novel-score（别混）**：balance 给"全书哪段塌"的鸟瞰节奏曲线；`novel-review` 逐章挑硬伤（这章钩子弱不弱）；`novel-score` 判"能不能火"。**balance 不把热力图喂给 score**——score 自有 `payoff_density` 维度、独立判定；两者只是概念互补，无数据依赖。
+- **读真实反馈掉点**：若 `评分/reader_telemetry_summary.json` 存在，先看 `weakest_chapters` 和 `flags`，把这些章节窗口作为热力图重点解释对象。真实反馈只定位“哪里掉”，本 skill 负责解释是否节奏/注水/信息密度导致；最终能不能火仍由 `novel-score` 判。
 - **→ novel-condense / novel-promote**：注水段推给 `novel-condense` 压缩；高燃章推给 `novel-promote` 当宣发爆点源。修法回写章纲（`novel-craft/references/outline.md`），本 skill 不直接改文。
 - **novel-craft (章纲编织)**：编排章纲时预填目标热力值，作为写作时的“配速员”。
 - 确定性信号的**口径文档**是 `references/heatmap-method.md`；其**代码侧单一定义源**是 `skills/novel/_lib/keyword_banks.py`——爽点/冲突/钩子/情感/套路词表在那里定义一次，novel-balance / novel-simulate / novel-promote 共同 import，不再逐脚本复制（避免漂移）。novel-simulate 的 `爽点关键词` 与本 skill 的 `爽点密度` 即共用其中的 `PAYOFF_KW`。

@@ -105,6 +105,101 @@ def parse_manual_evidence(value):
     }
 
 
+def _quality_band(score):
+    if score >= 0.78:
+        return "high"
+    if score >= 0.45:
+        return "medium"
+    return "low"
+
+
+def _https_bonus(url):
+    return 0.08 if str(url or "").startswith("https://") else 0.0
+
+
+def source_quality(item):
+    """Deterministic evidence quality score, 0-1.
+
+    The score is a confidence hint for prompt/reporting, not a truth detector.
+    """
+    reasons = []
+    score = 0.0
+    status = str(item.get("status") or "")
+    signals = [str(s).strip() for s in item.get("signals") or [] if str(s).strip()]
+    if status == "ok" and signals:
+        score += 0.42
+        reasons.append("status=ok 且 signals 非空")
+        signal_score = min(0.25, len(signals) / 80.0)
+        score += signal_score
+        reasons.append(f"signals={len(signals)}")
+    elif status == "manual_required":
+        reasons.append("manual_required 占位，不计有效证据")
+    elif status == "fetch_error":
+        reasons.append("fetch_error，不计有效证据")
+    else:
+        reasons.append(f"status={status or 'missing'}")
+    if item.get("title"):
+        score += 0.08
+        reasons.append("有页面标题")
+    bonus = _https_bonus(item.get("url"))
+    if bonus:
+        score += bonus
+        reasons.append("https 来源")
+    if str(item.get("use_for") or "").endswith("_rank"):
+        score += 0.08
+        reasons.append("rank 用途匹配")
+    score = min(1.0, round(score, 4))
+    return {"score": score, "confidence": _quality_band(score), "reasons": reasons[:6]}
+
+
+def manual_evidence_quality(item):
+    reasons = []
+    score = 0.0
+    if item.get("status") == "manual_ok":
+        score += 0.38
+        reasons.append("结构化 manual_evidence")
+    if item.get("url"):
+        score += 0.14
+        reasons.append("带 URL")
+    source = str(item.get("source") or "")
+    if any(key in source for key in ("官方", "平台", "榜单", "报告", "数据")):
+        score += 0.16
+        reasons.append("来源类型较明确")
+    summary = str(item.get("summary") or "")
+    if len(summary) >= 12:
+        score += 0.14
+        reasons.append("结论非空且有信息量")
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(item.get("date") or "")):
+        score += 0.10
+        reasons.append("带核验日期")
+    score = min(1.0, round(score, 4))
+    return {"score": score, "confidence": _quality_band(score), "reasons": reasons[:6]}
+
+
+def attach_evidence_quality(result):
+    source_scores = []
+    for source in result.get("sources") or []:
+        quality = source_quality(source)
+        source["source_quality"] = quality
+        source_scores.append(quality["score"])
+    manual_scores = []
+    for item in result.get("manual_evidence") or []:
+        quality = manual_evidence_quality(item)
+        item["evidence_quality"] = quality
+        manual_scores.append(quality["score"])
+    effective_scores = [s for s in source_scores + manual_scores if s > 0]
+    avg = round(sum(effective_scores) / len(effective_scores), 4) if effective_scores else 0.0
+    result["evidence_quality"] = {
+        "score": avg,
+        "confidence": _quality_band(avg),
+        "source_count": len(source_scores),
+        "manual_evidence_count": len(manual_scores),
+        "effective_evidence_count": len(effective_scores),
+        "note": "证据质量只作为评分 prompt 的可信度提示；不替代人工核验。",
+    }
+    return result
+
+
 def collect(args):
     sources = list(DEFAULT_SOURCES) if args.defaults else []
     sources.extend(parse_source(v) for v in args.source)
@@ -177,6 +272,7 @@ def collect(args):
                 "请补 --manual-evidence '红果短剧|YYYY-MM-DD|第三方榜单|结论|URL' "
                 "或 --source '红果短剧|<第三方报告URL>'。"
             )
+    attach_evidence_quality(result)
     return result
 
 
@@ -196,6 +292,9 @@ def write_artifacts(result, out_dir):
             f.write(f"## {source['platform']}\n\n")
             f.write(f"- URL：{source['url']}\n")
             f.write(f"- 状态：{source['status']}\n")
+            if source.get("source_quality"):
+                q = source["source_quality"]
+                f.write(f"- 证据质量：{q['confidence']} ({q['score']})；{'; '.join(q.get('reasons') or [])}\n")
             if source.get("title"):
                 f.write(f"- 页面标题：{source['title']}\n")
             if source.get("error"):
@@ -214,7 +313,14 @@ def write_artifacts(result, out_dir):
             f.write("\n## 结构化人工证据\n\n")
             for ev in result["manual_evidence"]:
                 url = f" [{ev['url']}]" if ev.get("url") else ""
-                f.write(f"- {ev['platform']}｜{ev['date']}｜{ev['source']}{url}：{ev['summary']}\n")
+                q = ev.get("evidence_quality") or {}
+                suffix = f"（证据质量 {q.get('confidence')} {q.get('score')}）" if q else ""
+                f.write(f"- {ev['platform']}｜{ev['date']}｜{ev['source']}{url}：{ev['summary']}{suffix}\n")
+        if result.get("evidence_quality"):
+            q = result["evidence_quality"]
+            f.write("\n## 证据质量汇总\n\n")
+            f.write(f"- 置信度：{q['confidence']} ({q['score']})\n")
+            f.write(f"- 有效证据数：{q['effective_evidence_count']}\n")
         if result.get("coverage_warnings"):
             f.write("\n## ⚠️ 覆盖告警\n\n")
             for w in result["coverage_warnings"]:

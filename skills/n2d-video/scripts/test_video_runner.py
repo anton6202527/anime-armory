@@ -111,6 +111,7 @@ def test_submit_clip_runs_video_preflight_before_backend(monkeypatch, tmp_path: 
         stderr = ""
 
     monkeypatch.setattr(video_runner, "run_preflight_gate", fake_preflight)
+    monkeypatch.setattr(video_runner, "run_identity_handoff_guard", lambda *_args, **_kwargs: None)
     monkeypatch.setattr(video_runner, "verify_cli_contract", lambda *_args, **_kwargs: None)
     monkeypatch.setattr(video_runner.subprocess, "run", lambda *args, **kwargs: Proc())
 

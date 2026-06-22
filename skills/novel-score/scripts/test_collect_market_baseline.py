@@ -81,6 +81,8 @@ def test_manual_evidence_covering_short_drama_suppresses_warning():
         manual_evidence=["红果短剧|2026-01-01|第三方榜单|复仇逆袭题材占多数|https://example.com/rank"]
     ))
     assert result["coverage_warnings"] == []
+    assert result["manual_evidence"][0]["evidence_quality"]["score"] > 0
+    assert result["evidence_quality"]["effective_evidence_count"] == 1
 
 
 def test_no_warning_when_platform_not_short_drama():
@@ -140,10 +142,12 @@ def test_write_artifacts_writes_both_files_and_md_warning_section():
         loaded = json.load(f)
     assert loaded["kind"] == "novel_market_baseline"
     assert loaded["baseline_date"] == "2026-01-01"
+    assert "evidence_quality" in loaded
 
     with open(md_path, encoding="utf-8") as f:
         md = f.read()
     assert "覆盖告警" in md
+    assert "证据质量汇总" in md
 
 
 def test_write_artifacts_no_warning_section_when_clean():
@@ -154,3 +158,23 @@ def test_write_artifacts_no_warning_section_when_clean():
     with open(md_path, encoding="utf-8") as f:
         md = f.read()
     assert "覆盖告警" not in md
+
+
+def test_source_quality_marks_ok_signal_source():
+    result = cmb.collect(_args(
+        source=["番茄|https://example.com/rank|web_novel_rank"],
+        defaults=False,
+    ))
+    source = result["sources"][0]
+    # Fetch is not run in this test because urlopen may fail; assess deterministic helper directly.
+    quality = cmb.source_quality({
+        "platform": "番茄",
+        "url": "https://example.com/rank",
+        "use_for": "web_novel_rank",
+        "status": "ok",
+        "title": "rank",
+        "signals": ["仙侠", "复仇"],
+    })
+    assert quality["score"] > 0.5
+    assert quality["confidence"] in {"medium", "high"}
+    assert "source_quality" in source

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """Regression tests for novel orchestration entrypoints."""
 import importlib.util
+import hashlib
 import json
 import os
 import subprocess
@@ -44,6 +45,14 @@ def write_json(path, payload):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
+
+
+def sha256_file(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
 
 
 def make_matrix_project(root):
@@ -220,7 +229,13 @@ class NovelGateTest(unittest.TestCase):
             write_json(os.path.join(root, "审稿", "state_ledger.json"), {
                 "schema_version": 1,
                 "kind": "novel_state_ledger",
-                "chapter_deltas": {"chapter_03": {"merged": True}},
+                "chapter_deltas": {"chapter_03": {
+                    "merged": True,
+                    "verification": {
+                        "chapter_file_hash": sha256_file(os.path.join(root, "章节", "第03章.md")),
+                        "delta_hash": sha256_file(os.path.join(root, "审稿", "state_delta_第03章.json")),
+                    },
+                }},
             })
             blockers, _warnings = novel_gate.check_qa_blockers(root, "review", "第03章")
             self.assertFalse(any("STATE-" in item for item in blockers), blockers)

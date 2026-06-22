@@ -66,6 +66,14 @@ python3 <skill>/scripts/init_project.py \
 ### 3. 建设定圣经 + 角色卡 + 世界观
 把蓝图展开成可一致性追踪的设定：金手指的**代价/边界**、势力、关键人物、地理、术语 + 一致性约束清单。**严格按家族统一 schema `novel-craft/references/setting-bible.md`**（设定圣经字段 + 角色卡字段 + 首现章/复用范围/代价三列），这样 spinoff/rewrite/review 读的是同一套字段、不漂。长篇/商业项目同步建 `设定/character_guardrails.json`：把主要角色的 `hard_limits` / `forbidden_actions` / `allow_if_context` 结构化，供 `logic_sentry.py` 机检底线违背。→ **用户审**。
 
+长篇/商业连载/系统流/修仙/群像/复杂世界观项目，设定完成后、章纲批量展开前先跑 storyworld 写前压力测试：
+
+```bash
+python3 skills/novel-wiki/scripts/storyworld_pressure_test.py "<作品根>"
+```
+
+若 `verdict=block_pre_draft`，先补角色目标、世界规则、地理势力、时间线、章纲压力或读者契约，不进入 Demo/批量写章。
+
 ### 4. 书名
 委托 `novel-title`（原创类型，按目标平台 5 维打分）。蓝图/设定齐了再起，名字才贴。→ **用户审**，选定写回 `_meta.title` + 各文件标题。
 
@@ -76,6 +84,12 @@ python3 <skill>/scripts/init_project.py \
 逐章写（每章一个戏剧节拍 + ≥1 钩子，用 `novel-craft/references/chapter.md` 的单章守则 + 子代理 prompt 模板）。验：文风对不对 / 爽点够不够 / 钩子留没留 / 设定自洽。**每章独立审**。文风定了回填 `创作蓝图.md` 风格卡。
 > **市场体检（批量前最便宜的 go/no-go）**：Demo 过审后，对 `商业连载` 必跑一次 `novel-score`（题材够不够热、黄金三章钩子、能不能火）。`score_report.json.production_decision` 只允许三类：`go` / `revise` / `kill`；`revise` 先回蓝图/章纲/开篇修，`kill` 停止批量写。普通稳妥初稿可由用户选择是否评分。
 > **机器留痕（必做）**：Demo 审完必须写 `审稿/demo_gate.json`（schema 见 `novel-craft/references/demo-gate.md`）。`status != passed` 不批量写；`style_anchor`、`reader_promises`、`setting_constraints`、`reader_contract` 必须喂给后续逐章子任务和 `novel-review`。
+
+> **微短剧/漫剧源书合规预检**：小说用途为 `微短剧源书` / `漫剧源书`，或目标平台含红果/抖音时，Demo 过审后、批量写章前跑：
+```bash
+python3 skills/novel-review/scripts/platform_compliance.py "<作品根>"
+```
+`block` 风险先回蓝图/章纲/正文修；`review` 风险作为发布前待办记录。
 
 ### 7. 续写余下 + 状态增量 + 回扫 + 导出
 - **定模式**：按 `skills/novel-craft/references/选择点与偏好.md` 读/问 `小说生成模式`（极速初稿/稳妥初稿/商业连载）、`小说生成工作流`（默认单步/三步迭代/边写边自检）、`小批回扫间隔`（3章/5章/关闭）和 `章节生成粒度`（逐章/小批/全书草稿）。缺省推荐 `稳妥初稿 + 5章回扫 + 逐章`；长篇/商业连载/漫剧源书在 `draft_packets.py --step auto` 下自动升三步迭代，用户明确写 `默认单步` 才降回单包。用户明确要写完每章立刻自动自检时选 `边写边自检`，用户明确要快时用 `极速初稿 + 小批`。
@@ -108,7 +122,13 @@ python3 skills/novel-review/scripts/mechanical_check.py "<作品根>" --json-out
 ```
 - **AI 使用披露**：发布/交平台前按 `_设置.md` 的 `AI使用披露` 跑：
 ```bash
-python3 skills/novel-craft/scripts/ai_usage.py "<作品根>" --text-mode AI-generated --publish-target "<平台>"
+python3 skills/novel-craft/scripts/ai_usage.py "<作品根>" \
+  --text-mode AI-generated \
+  --publish-target "<平台>" \
+  --human-contribution "<人工蓝图/设定/审稿贡献>" \
+  --text-directness outline_to_draft \
+  --human-steering "<人工如何控制目标、取舍和终稿>" \
+  --review-step 人工通读
 ```
 - **导出**：`python3 skills/novel-craft/scripts/export.py "<作品根>" --formats txt,docx,outline`（家族通用导出器）→ `导出/`。
 

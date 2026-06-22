@@ -79,6 +79,7 @@ def test_reveal_template_routes_to_identity_sensitive_speech_path(tmp_path):
         "id": "Clip 8",
         "template": "reveal_reaction_chain",
         "scene": "沈念拿出血书，当众揭穿皇叔真实身份，众人反应",
+        "characters": ["CHAR_01/常态"],
     }])
 
     route = router.route_episode(root, "第1集")["routes"][0]
@@ -86,6 +87,7 @@ def test_reveal_template_routes_to_identity_sensitive_speech_path(tmp_path):
     assert route["shot_type"] == "reveal_reaction_chain"
     assert route["primary_backend"] == "kling"
     assert route["identity_requirement"] == "character_id_or_reference_group"
+    assert route["clip_characters"]
     assert route["quality_tier"] in ("high", "n/a")
     assert any("knowledge_order" in item for item in route["prompt_requirements"])
 
@@ -249,6 +251,10 @@ def test_fixed_mode_uses_structured_characters_for_identity_requirement(tmp_path
     route = router.route_episode(root, "第1集")["routes"][0]
 
     assert route["identity_requirement"] == "reference_group"
+    assert route["clip_characters"] == [
+        {"character_id": "CHAR_01", "form": "常态"},
+        {"character_id": "CHAR_03", "form": "人皮态"},
+    ]
 
 
 def test_fixed_mode_uses_character_template_for_identity_requirement(tmp_path):
@@ -258,6 +264,7 @@ def test_fixed_mode_uses_character_template_for_identity_requirement(tmp_path):
         "label": "沈念轻笑",
         "scene": "冷宫寝殿/夜/内",
         "template": "dialogue_shot_reverse",
+        "characters": ["CHAR_01/常态"],
         "template_contract": {
             "blocking": "沈念画左近景，柳娘子在画右压力源方向。",
             "eyeline": "沈念抬眼看画右柳娘子，柳娘子看画左沈念",
@@ -267,6 +274,7 @@ def test_fixed_mode_uses_character_template_for_identity_requirement(tmp_path):
     route = router.route_episode(root, "第1集")["routes"][0]
 
     assert route["identity_requirement"] == "reference_group"
+    assert route["clip_characters"]
 
 
 def test_fixed_mode_keeps_explicit_empty_shot_identity_none(tmp_path):

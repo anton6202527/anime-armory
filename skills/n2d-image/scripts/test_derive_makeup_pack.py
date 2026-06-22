@@ -3,7 +3,9 @@ import json
 import sys
 from pathlib import Path
 
-from PIL import Image
+import pytest
+
+Image = pytest.importorskip("PIL.Image")
 
 
 MODULE_PATH = Path(__file__).with_name("derive_makeup_pack.py")

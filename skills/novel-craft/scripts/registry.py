@@ -80,6 +80,11 @@ NOVEL_SKILLS = [
         "summary": "simulated reader retention signals",
     },
     {
+        "name": "novel-feedback",
+        "role": "qa",
+        "summary": "real reader telemetry ingestion and drop-off summaries",
+    },
+    {
         "name": "novel-balance",
         "role": "qa",
         "summary": "plot heatmap and pacing balance",

@@ -294,6 +294,8 @@ N2D_LIB_FILE_STAGE_HINTS: Tuple[Tuple[str, Tuple[str, ...]], ...] = (
         "image_prompt",
         (
             "_lib/n2d_registry.py",
+            "_lib/image_backend_adapter.py",
+            "_lib/image_backend_standards.py",
         ),
     ),
     (
@@ -301,6 +303,7 @@ N2D_LIB_FILE_STAGE_HINTS: Tuple[Tuple[str, Tuple[str, ...]], ...] = (
         (
             # 出图→出视频逐镜身份/物料交接继承校验（inherit_contract.py 消费）。
             "_lib/n2d_handoff.py",
+            "_lib/video_backend_adapter.py",
         ),
     ),
     (

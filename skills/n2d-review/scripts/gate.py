@@ -336,8 +336,8 @@ PRODUCTION_CONSISTENCY_VALUES = {
 DEMO_CONSISTENCY_VALUES = {"demo", "draft", "internal", "relaxed", "测试", "草稿", "内部", "宽松"}
 
 
-def consistency_release_profile(root: str) -> str:
-    """Return demo|production for escalation rules that are too noisy during drafts."""
+def _profile_values(root: str) -> List[str]:
+    """Collect explicit consistency profile values from env and project settings."""
     env = os.environ.get("N2D_CONSISTENCY_PROFILE", "").strip()
     values = [env]
     for key in ("一致性严格度", "一致性发布档", "一致性落地档", "一致性验收档", "制作质量档"):
@@ -345,11 +345,54 @@ def consistency_release_profile(root: str) -> str:
             values.append(get_setting(root, key, "").strip())
         except Exception:
             continue
+    return [v for v in values if v]
+
+
+def _contains_profile_marker(values: Sequence[str], markers: set) -> bool:
     joined = " ".join(v for v in values if v).lower()
-    if any(v.lower() in joined for v in PRODUCTION_CONSISTENCY_VALUES):
+    return any(str(v).lower() in joined for v in markers)
+
+
+def _production_profile_inferred(root: str, stage: str = "", ep: str = "") -> bool:
+    stage_key = gate_family(stage or "")
+    if stage_key in {"compose", "review"}:
+        return True
+    try:
+        if len(glob.glob(os.path.join(root, "脚本", "*", "storyboard.json"))) >= 2:
+            return True
+    except Exception:
+        pass
+    ep_dirs: List[str] = []
+    if ep:
+        ep_dirs.extend([
+            os.path.join(root, "出视频", ep),
+            os.path.join(root, "合成", ep),
+            os.path.join(root, "成片", ep),
+            os.path.join(root, "交付", ep),
+        ])
+    ep_dirs.extend([
+        os.path.join(root, "合成"),
+        os.path.join(root, "成片"),
+        os.path.join(root, "交付"),
+    ])
+    for base in ep_dirs:
+        try:
+            if any(glob.glob(os.path.join(base, "**", pattern), recursive=True) for pattern in ("*.mp4", "*.mov", "*.m4v")):
+                return True
+        except Exception:
+            continue
+    return False
+
+
+def consistency_release_profile(root: str, stage: str = "", ep: str = "") -> str:
+    """Return demo|production for consistency escalation rules."""
+    values = _profile_values(root)
+    if _contains_profile_marker(values, PRODUCTION_CONSISTENCY_VALUES):
         return "production"
-    if any(v.lower() in joined for v in DEMO_CONSISTENCY_VALUES):
+    if _contains_profile_marker(values, DEMO_CONSISTENCY_VALUES):
         return "demo"
+    if _production_profile_inferred(root, stage, ep):
+        return "production"
     return "demo"
 
 
@@ -1333,7 +1376,7 @@ def _video_route_backend_roles(route: Mapping[str, Any], allow_empty_fallback: b
 
 
 def _cap_bool(assertions: Mapping[str, Any], key: str) -> bool:
-    value = assertions.get(key)
+    value = _cap_value(assertions, key)
     if isinstance(value, bool):
         return value
     return str(value).strip().lower() in {"true", "1", "yes", "是", "支持"}
@@ -1341,9 +1384,16 @@ def _cap_bool(assertions: Mapping[str, Any], key: str) -> bool:
 
 def _cap_number(assertions: Mapping[str, Any], key: str, default: float = 0) -> float:
     try:
-        return float(assertions.get(key))
+        return float(_cap_value(assertions, key))
     except Exception:
         return default
+
+
+def _cap_value(assertions: Mapping[str, Any], key: str) -> Any:
+    value = assertions.get(key)
+    if isinstance(value, Mapping) and "value" in value:
+        return value.get("value")
+    return value
 
 
 def _route_capability_assertion_gaps(route: Mapping[str, Any], assertions: Mapping[str, Any], role: str) -> List[str]:
@@ -1371,10 +1421,10 @@ def _route_capability_assertion_gaps(route: Mapping[str, Any], assertions: Mappi
     if native_audio == "lipsync_condition_only" and not _cap_bool(assertions, "lipsync_audio_ref"):
         gaps.append(f"{clip_id} {role} 口型音频参考但未确认 lipsync_audio_ref")
     identity = str(route.get("identity_requirement") or "").strip().lower()
-    if identity not in {"", "none", "not_needed"} and not str(assertions.get("identity_mechanism") or "").strip():
+    if identity not in {"", "none", "not_needed"} and not str(_cap_value(assertions, "identity_mechanism") or "").strip():
         gaps.append(f"{clip_id} {role} 含角色身份要求但未确认 identity_mechanism")
     motion = route.get("motion_control") if isinstance(route.get("motion_control"), Mapping) else {}
-    if motion.get("required") is True and not str(assertions.get("motion_control_level") or "").strip():
+    if motion.get("required") is True and not str(_cap_value(assertions, "motion_control_level") or "").strip():
         gaps.append(f"{clip_id} {role} Motion Control required 但未确认 motion_control_level")
     return gaps
 
@@ -2186,9 +2236,36 @@ def long_running_weak_backend_advice(canon: str, cur_ep_num: int, ep_count: int)
 
 
 IDENTITY_LOCK_READY_STATUSES = {"ready", "registered", "validated", "deployed"}
+LOCAL_LORA_IMAGE_BACKENDS = {"local", "local_open_source", "comfyui", "sdxl", "flux", "stable_diffusion", "stable-diffusion"}
 
 
-def _image_form_has_identity_lock(form: Mapping[str, Any]) -> bool:
+def _normalize_lora_backend(value: object) -> str:
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    canon, kind = classify_image_backend(text)
+    if canon and kind == "approved":
+        return canon
+    compact = text.lower().replace(" ", "_")
+    if compact in {"stable_diffusion", "stable-diffusion", "sd", "sdxl"}:
+        return "sdxl"
+    return compact
+
+
+def _lora_usable_on_image_backend(lora: Mapping[str, Any], image_backend: str) -> bool:
+    if str(lora.get("status") or "").strip() not in {"ready", "validated", "deployed"}:
+        return False
+    current = _normalize_lora_backend(image_backend)
+    targets: List[str] = []
+    for key in ("target_backends", "backends", "providers", "provider", "backend", "execution_backends"):
+        targets.extend(_as_string_list(lora.get(key)))
+    normalized_targets = {_normalize_lora_backend(v) for v in targets if _normalize_lora_backend(v)}
+    if normalized_targets:
+        return "*" in normalized_targets or "any" in normalized_targets or current in normalized_targets
+    return current in LOCAL_LORA_IMAGE_BACKENDS
+
+
+def _image_form_has_identity_lock(form: Mapping[str, Any], image_backend: str = "") -> bool:
     adapters = form.get("identity_adapters") if isinstance(form.get("identity_adapters"), Mapping) else {}
     image = adapters.get("image") if isinstance(adapters.get("image"), Mapping) else {}
     for backend, cfg in image.items():
@@ -2207,12 +2284,12 @@ def _image_form_has_identity_lock(form: Mapping[str, Any]) -> bool:
     if str(face_embedding.get("status") or "").strip() in IDENTITY_LOCK_READY_STATUSES:
         return True
     lora = adapters.get("lora") if isinstance(adapters.get("lora"), Mapping) else {}
-    if str(lora.get("status") or "").strip() in {"ready", "validated", "deployed"}:
+    if _lora_usable_on_image_backend(lora, image_backend):
         return True
     return False
 
 
-def core_forms_without_image_identity_lock(root: str) -> Tuple[List[str], bool]:
+def core_forms_without_image_identity_lock(root: str, image_backend: str = "") -> Tuple[List[str], bool]:
     reg = load_json(identity_registry_path(root))
     if not isinstance(reg, dict):
         return [], False
@@ -2230,7 +2307,7 @@ def core_forms_without_image_identity_lock(root: str) -> Tuple[List[str], bool]:
         for form in char.get("forms", []) or []:
             if not isinstance(form, dict):
                 continue
-            if _image_form_has_identity_lock(form):
+            if _image_form_has_identity_lock(form, image_backend):
                 continue
             form_name = str(form.get("form") or "").strip()
             missing.append(f"{name}({cid}/{form_name})" if form_name else f"{name}({cid})")
@@ -2252,7 +2329,7 @@ def check_long_running_weak_backend(root: str, ep: str) -> None:
                     for p in glob.glob(os.path.join(root, "脚本", "*", "storyboard.json"))})
     if not long_running_weak_backend_advice(canon or "", cur, ep_count):
         return
-    missing, has_core = core_forms_without_image_identity_lock(root)
+    missing, has_core = core_forms_without_image_identity_lock(root, canon or setting)
     if missing:
         shown = "、".join(missing[:8]) + ("…" if len(missing) > 8 else "")
         add(
@@ -3943,16 +4020,101 @@ def _route_needs_model_baseline(route: Mapping[str, object]) -> bool:
     return identity not in {"", "none", "not_needed", "no_character"}
 
 
+def _identity_route_requires_character_refs(route: Mapping[str, object]) -> bool:
+    identity = str(route.get("identity_requirement") or "").strip().lower()
+    return identity not in {"", "none", "not_needed", "no_character"}
+
+
+def _route_clip_character_refs(route: Mapping[str, object]) -> List[Dict[str, str]]:
+    raw = route.get("clip_characters")
+    refs: List[Dict[str, str]] = []
+    if not isinstance(raw, list):
+        return refs
+    for item in raw:
+        cid = ""
+        form = ""
+        if isinstance(item, Mapping):
+            cid = str(item.get("character_id") or item.get("id") or "").strip()
+            form = str(item.get("form") or item.get("形态") or "").strip()
+        elif isinstance(item, str):
+            m = re.search(r"\b(CHAR_[A-Za-z0-9_]+)(?:/([^\s，；、`,|]+))?\b", item)
+            if m:
+                cid = m.group(1)
+                form = (m.group(2) or "").strip()
+        if not cid:
+            continue
+        ref = {"character_id": cid}
+        if form:
+            ref["form"] = form
+        if ref not in refs:
+            refs.append(ref)
+    return refs
+
+
 def _baseline_override_accepted(data: Mapping[str, object], route: Optional[Mapping[str, object]] = None) -> bool:
     if os.environ.get("N2D_ALLOW_MODEL_ROUTE_BASELINE_DRIFT") == "1":
         return True
+    return not _baseline_override_errors(data, route)
+
+
+def _as_string_list(value: object) -> List[str]:
+    if isinstance(value, list):
+        return [str(v).strip() for v in value if str(v).strip()]
+    if isinstance(value, str):
+        return [part.strip() for part in re.split(r"[,，、\s]+", value) if part.strip()]
+    return []
+
+
+def _baseline_override_payload(data: Mapping[str, object], route: Optional[Mapping[str, object]] = None) -> Dict[str, object]:
     for obj in (route or {}, data):
         if not isinstance(obj, Mapping):
             continue
-        if obj.get("baseline_override_accepted") is True:
-            return True
-        if str(obj.get("baseline_override_reason") or "").strip():
-            return True
+        raw = obj.get("baseline_override")
+        if isinstance(raw, Mapping):
+            return dict(raw)
+        if any(k in obj for k in ("baseline_override_accepted", "baseline_override_reason", "baseline_override_reviewer", "baseline_override_expires_at", "baseline_override_affected_routes")):
+            return {
+                "accepted": obj.get("baseline_override_accepted"),
+                "reason": obj.get("baseline_override_reason"),
+                "reviewer": obj.get("baseline_override_reviewer"),
+                "expires_at": obj.get("baseline_override_expires_at"),
+                "affected_routes": obj.get("baseline_override_affected_routes"),
+            }
+    return {}
+
+
+def _override_expiry_ok(value: object) -> bool:
+    raw = str(value or "").strip()
+    if not raw:
+        return False
+    try:
+        expiry = dt.date.fromisoformat(raw[:10])
+    except Exception:
+        return False
+    return expiry >= dt.date.today()
+
+
+def _baseline_override_errors(data: Mapping[str, object], route: Optional[Mapping[str, object]] = None) -> List[str]:
+    payload = _baseline_override_payload(data, route)
+    if not payload:
+        return ["missing baseline_override"]
+    errors: List[str] = []
+    if payload.get("accepted") is not True:
+        errors.append("accepted 必须为 true")
+    if not str(payload.get("reviewer") or "").strip():
+        errors.append("reviewer 缺失")
+    if not str(payload.get("reason") or "").strip():
+        errors.append("reason 缺失")
+    if not _override_expiry_ok(payload.get("expires_at") or payload.get("expires")):
+        errors.append("expires_at 缺失/过期/格式错误")
+    affected = _as_string_list(payload.get("affected_routes"))
+    if not affected:
+        errors.append("affected_routes 缺失")
+    elif route is not None:
+        clip_id = str(route.get("clip_id") or "").strip()
+        if "*" not in affected and clip_id and clip_id not in affected:
+            errors.append(f"affected_routes 未覆盖 {clip_id}")
+    return errors
     return False
 
 
@@ -3966,12 +4128,12 @@ def check_model_route_baseline_policy(root: str, ep: str, data: Mapping[str, obj
     if ep_num < 2 or not risky:
         return
     baseline_path = os.path.join(root, "设定库", "model_routes_baseline.json")
-    if _baseline_override_accepted(data):
+    if all(_baseline_override_accepted(data, r) for r in risky):
         add(
             WARN,
             "后端跨集锁",
             path,
-            "本集高风险/含角色路由使用了显式 baseline override；请确认这是有意换后端，而不是漏跑第1集模型路由基线。",
+            "本集高风险/含角色路由使用了结构化 baseline_override；请确认这是有意换后端，而不是漏跑第1集模型路由基线。",
             return_to_stage="video_prompt",
         )
         return
@@ -3993,7 +4155,7 @@ def check_model_route_baseline_policy(root: str, ep: str, data: Mapping[str, obj
             "后端跨集锁",
             path,
             f"{ep} 已存在 model_routes_baseline.json，但本集 video_model_routes.json 未标记 baseline_anchored=true。"
-            "请重跑 n2d-model-router 让路由按跨集基线锚定，或写明 baseline_override_reason。",
+            "请重跑 n2d-model-router 让路由按跨集基线锚定，或写结构化 baseline_override（accepted/reviewer/reason/expires_at/affected_routes）。",
             return_to_stage="video_prompt",
             affected_artifacts=[baseline_path, path],
         )
@@ -4038,7 +4200,7 @@ def check_video_model_routes(root: str, ep: str, overview_text: str, overview_pa
             "后端跨集锁",
             p,
             f"{len(drift)} 个 clip 的 shot_type 自然路由与 设定库/model_routes_baseline 不符，已按基线锚定（原后端降 fallback）；"
-            + ("高风险/含角色镜头的路由漂移必须显式 baseline_override_reason 或刷新基线后重跑。"
+            + ("高风险/含角色镜头的路由漂移必须写结构化 baseline_override（accepted/reviewer/reason/expires_at/affected_routes）或刷新基线后重跑。"
                if sev == BLOCK else "确认基线后端仍合适，否则 --write-baseline 刷新基线。")
             + sample,
             return_to_stage="video_prompt",
@@ -4062,6 +4224,16 @@ def check_video_model_routes(root: str, ep: str, overview_text: str, overview_pa
                 continue
             if key not in route or route.get(key) in (None, "", []):
                 add(BLOCK, "模型路由", p, f"{route.get('clip_id', f'routes[{idx}]')} 缺字段：{key}")
+        if _identity_route_requires_character_refs(route) and not _route_clip_character_refs(route):
+            clip_id = str(route.get("clip_id") or f"routes[{idx}]")
+            add(
+                BLOCK,
+                "模型路由",
+                p,
+                f"{clip_id} identity_requirement={route.get('identity_requirement')} 但缺结构化 clip_characters[]；"
+                "请重跑 n2d-model-router 生成逐镜角色绑定，避免 gate 无法判断本 clip 的真实身份锁范围。",
+                return_to_stage="video_prompt",
+            )
         flags = route.get("risk_flags")
         if isinstance(flags, list) and "long_duration" in flags:
             clip_id = str(route.get("clip_id") or f"routes[{idx}]")
@@ -4119,21 +4291,27 @@ def check_route_identity_readiness(root: str, ep: str) -> None:
     forms = matrix.get("forms")
     if not isinstance(routes, list) or not isinstance(forms, list):
         return
-    used_roles: List[Tuple[str, str, str]] = []
+    used_roles: List[Tuple[str, str, str, Tuple[Tuple[str, str], ...]]] = []
     for r in routes:
         if not isinstance(r, dict):
             continue
         clip_id = str(r.get("clip_id") or "?")
+        refs = tuple(
+            (str(ref.get("character_id") or ""), str(ref.get("form") or ""))
+            for ref in _route_clip_character_refs(r)
+        )
         for role, backend in _video_route_backend_roles(r, allow_empty_fallback=False):
             if backend:
-                used_roles.append((clip_id, role, backend))
-    seen_used: set[Tuple[str, str, str]] = set()
+                used_roles.append((clip_id, role, backend, refs))
+    seen_used: set[Tuple[str, str, str, Tuple[Tuple[str, str], ...]]] = set()
     used_roles = [item for item in used_roles if not (item in seen_used or seen_used.add(item))]
     if not used_roles:
         return
     for form in forms:
         if not isinstance(form, dict):
             continue
+        form_cid = str(form.get("character_id") or form.get("id") or "").strip()
+        form_name = str(form.get("form") or form.get("form_name") or "").strip()
         vb = form.get("video_bindings") if isinstance(form.get("video_bindings"), dict) else {}
         native = sorted(b for b, v in vb.items()
                         if isinstance(v, dict) and v.get("ready")
@@ -4142,7 +4320,18 @@ def check_route_identity_readiness(root: str, ep: str) -> None:
             continue  # 无原生锁 → 全兜底，后端间一致，无锁可丢
         name = form.get("character_name") or form.get("character_id") or "?"
         sev = BLOCK if str(form.get("scope") or "").strip() in _CORE_SCOPES else WARN
-        for clip_id, role, b in used_roles:
+        for clip_id, role, b, refs in used_roles:
+            if refs:
+                matched = False
+                for cid, ref_form in refs:
+                    if cid != form_cid:
+                        continue
+                    if ref_form and form_name and ref_form != form_name:
+                        continue
+                    matched = True
+                    break
+                if not matched:
+                    continue
             if b in native:
                 continue
             v = vb.get(b)
@@ -6299,6 +6488,22 @@ def _row_is_key_scene(row: Mapping[str, Any]) -> bool:
     return any(marker.lower() in text for marker in KEY_SCENE_MARKERS)
 
 
+def _consistency_finding_hash(row: Mapping[str, Any]) -> str:
+    stable = {
+        "dimension": row.get("dimension") or row.get("dim") or "",
+        "message": row.get("message") or row.get("msg") or row.get("reason") or "",
+        "affected_shots": row.get("affected_shots") if isinstance(row.get("affected_shots"), list) else [],
+        "affected_artifacts": row.get("affected_artifacts") if isinstance(row.get("affected_artifacts"), list) else [],
+        "loc": row.get("loc") or row.get("path") or "",
+    }
+    blob = json.dumps(stable, ensure_ascii=False, sort_keys=True)
+    return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:12]
+
+
+def _signoff_expiry_ok(value: object) -> bool:
+    return _override_expiry_ok(value)
+
+
 def _advisory_row_signed_off(root: str, ep: str, row: Mapping[str, Any]) -> bool:
     data = load_json(_consistency_signoff_path(root, ep))
     if not isinstance(data, dict):
@@ -6307,22 +6512,37 @@ def _advisory_row_signed_off(root: str, ep: str, row: Mapping[str, Any]) -> bool
     dim = str(row.get("dimension") or row.get("dim") or "")
     msg = str(row.get("message") or row.get("msg") or "")
     loc = " ".join(str(x) for x in (row.get("affected_artifacts") or []) if x) if isinstance(row.get("affected_artifacts"), list) else ""
+    shots = " ".join(str(x) for x in (row.get("affected_shots") or []) if x) if isinstance(row.get("affected_shots"), list) else ""
+    row_hash = _consistency_finding_hash(row)
     for item in accepted:
-        if isinstance(item, str):
-            token = item.strip()
-            if token and (token == dim or token in msg or token in loc):
-                return True
-        elif isinstance(item, dict):
-            if str(item.get("dimension") or item.get("dim") or "").strip() not in {"", dim}:
-                continue
-            token = str(item.get("message_contains") or item.get("loc_contains") or item.get("shot") or "").strip()
-            if not token or token in msg or token in loc:
-                return True
+        if not isinstance(item, dict):
+            continue
+        if item.get("accepted") is not True:
+            continue
+        if not str(item.get("reviewer") or "").strip():
+            continue
+        if not str(item.get("reason") or "").strip():
+            continue
+        if not _signoff_expiry_ok(item.get("expires_at") or item.get("expires")):
+            continue
+        if str(item.get("finding_hash") or "").strip() == row_hash:
+            return True
+        if str(item.get("dimension") or item.get("dim") or "").strip() != dim:
+            continue
+        message_token = str(item.get("message_contains") or "").strip()
+        loc_token = str(item.get("loc_contains") or "").strip()
+        shot_token = str(item.get("shot") or item.get("affected_shot") or "").strip()
+        if message_token and message_token in msg:
+            return True
+        if loc_token and loc_token in loc:
+            return True
+        if shot_token and shot_token in shots:
+            return True
     return False
 
 
 def _strict_advisory_should_block(root: str, ep: str, stage: str, row: Mapping[str, Any], summary: Mapping[str, Any]) -> Tuple[bool, str]:
-    if consistency_release_profile(root) != "production":
+    if consistency_release_profile(root, stage, ep) != "production":
         return False, ""
     dim = str(row.get("dimension") or row.get("dim") or "")
     if dim not in STRICT_ADVISORY_DIMENSIONS:
@@ -6355,9 +6575,10 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
     """
     script = os.path.join(SCRIPT_DIR, "consistency_audit.py")
     loc = os.path.join(root, "生产数据", f"consistency_findings_{ep}.json")
+    profile = consistency_release_profile(root, stage, ep)
     try:
         proc = subprocess.run(
-            [sys.executable, script, root, ep, "--json", "--profile", consistency_release_profile(root)],
+            [sys.executable, script, root, ep, "--json", "--profile", profile],
             text=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -6430,7 +6651,9 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
         if strict_block:
             msg = (
                 f"[production一致性升级:{strict_reason}] {msg}。如确认为可接受，写入 "
-                f"{os.path.relpath(_consistency_signoff_path(root, ep), root)} 的 accepted 后复跑。"
+                f"{os.path.relpath(_consistency_signoff_path(root, ep), root)} 的 accepted 后复跑；"
+                f"finding_hash={_consistency_finding_hash(row)}，签收需包含 accepted=true/reviewer/reason/expires_at，"
+                "并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。"
             )
         artifacts = row.get("affected_artifacts") if isinstance(row.get("affected_artifacts"), list) else []
         shots = row.get("affected_shots") if isinstance(row.get("affected_shots"), list) else []

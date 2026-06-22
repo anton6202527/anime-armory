@@ -15,7 +15,7 @@ import datetime as dt
 import json
 import re
 from pathlib import Path
-from typing import Any, Dict, Optional, Sequence, Tuple
+from typing import Any, Dict, Mapping, Optional, Sequence, Tuple
 
 try:
     from n2d_platform_profiles import (
@@ -151,6 +151,62 @@ def default_capability_assertions(raw: Optional[str], channel: Optional[str] = N
     }
 
 
+def _capability_evidence_source(
+    *,
+    sources: Sequence[str],
+    source_urls: Sequence[str],
+    evidence_kind: str,
+    note: str,
+) -> Dict[str, str]:
+    return {
+        "source": str(sources[0]).strip() if sources else "",
+        "source_url": str(source_urls[0]).strip() if source_urls else "",
+        "evidence_kind": str(evidence_kind or "").strip(),
+        "observed_text": str(note or "").strip(),
+    }
+
+
+def structured_capability_assertions(
+    values: Mapping[str, Any],
+    *,
+    sources: Sequence[str],
+    source_urls: Sequence[str] = (),
+    evidence_kind: str = "",
+    note: str = "",
+) -> Dict[str, Dict[str, Any]]:
+    """Wrap each capability assertion with auditable per-capability evidence."""
+    evidence = _capability_evidence_source(
+        sources=sources,
+        source_urls=source_urls,
+        evidence_kind=evidence_kind,
+        note=note,
+    )
+    return {str(key): {"value": value, **evidence} for key, value in values.items()}
+
+
+def capability_assertion_value(assertion: Any) -> Any:
+    if isinstance(assertion, Mapping) and "value" in assertion:
+        return assertion.get("value")
+    return assertion
+
+
+def _capability_assertion_evidence_gaps(assertions: Mapping[str, Any]) -> Dict[str, str]:
+    gaps: Dict[str, str] = {}
+    for key, item in assertions.items():
+        if not isinstance(item, Mapping) or "value" not in item:
+            gaps[str(key)] = "missing structured value"
+            continue
+        source = str(item.get("source") or "").strip()
+        source_url = str(item.get("source_url") or "").strip()
+        observed = str(item.get("observed_text") or item.get("note") or "").strip()
+        kind = str(item.get("evidence_kind") or "").strip()
+        if not source:
+            gaps[str(key)] = "missing source"
+        elif not (source_url or observed or kind):
+            gaps[str(key)] = "missing source_url/observed_text/evidence_kind"
+    return gaps
+
+
 def _coerce_capability_value(value: str) -> Any:
     text = str(value).strip()
     lower = text.lower()
@@ -233,6 +289,19 @@ def refresh_evidence_status(
             "max_age_days": int(max_age_days),
             "message": "freshness evidence lacks structured capability_assertions",
         }
+    evidence_gaps = _capability_assertion_evidence_gaps(assertions)
+    if evidence_gaps:
+        sample = "; ".join(f"{key}: {reason}" for key, reason in list(evidence_gaps.items())[:8])
+        return {
+            "status": "missing_capability_evidence",
+            "path": str(path),
+            "verified_at": verified.isoformat(),
+            "age_days": age,
+            "max_age_days": int(max_age_days),
+            "capability_assertions": assertions,
+            "capability_evidence_gaps": evidence_gaps,
+            "message": f"capability_assertions lack per-capability evidence ({sample})",
+        }
     return {
         "status": "fresh" if fresh else "stale",
         "path": str(path),
@@ -260,8 +329,15 @@ def write_refresh_evidence(
     path.parent.mkdir(parents=True, exist_ok=True)
     date_s = today or dt.date.today().isoformat()
     adapter = backend_adapter(backend, channel)
-    assertions = default_capability_assertions(backend, channel)
-    assertions.update(capability_overrides or {})
+    values = default_capability_assertions(backend, channel)
+    values.update(capability_overrides or {})
+    assertions = structured_capability_assertions(
+        values,
+        sources=sources,
+        source_urls=source_urls,
+        evidence_kind=evidence_kind,
+        note=note,
+    )
     payload = {
         "kind": "n2d_video_backend_refresh_evidence",
         "backend": adapter.get("canonical"),

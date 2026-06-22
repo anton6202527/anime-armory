@@ -19,16 +19,16 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 
 ## Skills 规模统计
 
-> 统计时间：2026-06-12。`SKILL.md 总行数` 仅统计 `skills/*/SKILL.md` 的物理行数（`wc -l`）；`目录文本总行数` 统计每个 skill 目录下的 `.md/.py/.sh/.json/.html` 文本文件，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
+> 统计时间：2026-06-22。`SKILL.md 总行数` 仅统计 `skills/*/SKILL.md` 的物理行数（`wc -l`）；`目录文本总行数` 统计每个 skill 目录下的 `.md/.py/.sh/.json/.html` 文本文件，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
 
 | 系列 | 统计范围 | Skill 数 | SKILL.md 总行数 | 目录文本总行数 |
 |---|---|---:|---:|---:|
-| n2d | `n2d` + `n2d-*` | 20 | 3426 | 53086 |
-| novel | `novel` + `novel-*` | 19 | 1758 | — |
-| song | `song` + `song-*` | 7 | 418 | — |
-| mv | `mv` + `mv-*` | 11 | 781 | — |
-| ad | `ad` + `ad-*` | 9 | 579 | — |
-| **合计** | `skills/*/SKILL.md` | **66** | 6962 | — |
+| n2d | `n2d` + `n2d-*` | 20 | 3771 | 53086 |
+| novel | `novel` + `novel-*` | 20 | 2113 | — |
+| song | `song` + `song-*` | 7 | 414 | — |
+| mv | `mv` + `mv-*` | 11 | 874 | — |
+| ad | `ad` + `ad-*` | 10 | 701 | — |
+| **合计** | `skills/*/SKILL.md` | **68** | 7873 | — |
 
 > 仓库级清理工具 `tools/shared-cleanup` 已移出 `skills/`，不计入 skill 统计。
 
@@ -126,10 +126,11 @@ novel 负责从点子/源书/派生需求生产可审计文本资产，产物落
 | 改写 | `novel-rewrite` | 改主线、换设定、重构派生作品 |
 | 外传/视角 | `novel-spinoff` | 锁定原事件，换角色 POV 或写配角外传 |
 | 质检 | `novel-review` | OOC、视角、设定、节奏、伏笔、文风漂移、逐章读者契约与弧段 gate、流程自审 |
-| 市场评分 | `novel-score` | 当前市场基准 + 第一方投放战绩 + 模拟读者信号，输出 go/revise/kill 决策 |
+| 市场评分 | `novel-score` | 当前市场基准 + 证据质量 + 第一方投放战绩 + 真实读者反馈 + 模拟读者信号 + 参考分布百分位，输出 go/revise/kill 决策 |
 | 文风 | `novel-style` | 文风指纹、样本授权、漂移检查 |
 | 动态百科 | `novel-wiki` | 人物状态、伏笔、关系温度、设定一致性维护 |
 | 模拟读者 | `novel-simulate` | 虚拟试读、留存先验、弃书点和套路密度 |
+| 真实反馈 | `novel-feedback` | 导入平台后台/测试读者 CSV·JSONL，聚合章节完读率、弃读率、评论情绪和掉点 |
 | 节奏平衡 | `novel-balance` | 情节热力图、注水、断章、爽点节奏 |
 | 宣发 | `novel-promote` | 爆点提取、短视频脚本底稿、视频 brief |
 | 出海/本地化 | `novel-localize` | 术语锁（专名跨章 canonical 译名）+ 文化适配逐章翻译 + 未译残留/术语/覆盖机检；翻译后端选择点；源书权利/目标辖区/AI 标识三连合规 |

@@ -67,8 +67,9 @@ def test_refresh_evidence_status_lifecycle(tmp_path):
         today=dt.date(2026, 6, 22),
     )
     assert fresh["status"] == "fresh"
-    assert fresh["capability_assertions"]["supports_last_frame"] is True
-    assert fresh["capability_assertions"]["native_av"] is True
+    assert fresh["capability_assertions"]["supports_last_frame"]["value"] is True
+    assert fresh["capability_assertions"]["supports_last_frame"]["source"] == "Google Gemini API Veo docs"
+    assert fresh["capability_assertions"]["native_av"]["value"] is True
     assert stale["status"] == "stale"
 
 
@@ -92,6 +93,29 @@ def test_refresh_evidence_requires_structured_capability_assertions(tmp_path):
     )
 
     assert status["status"] == "missing_capability_assertions"
+
+
+def test_refresh_evidence_rejects_bare_capability_values(tmp_path):
+    path = adapter.refresh_evidence_path(str(tmp_path), "Veo 3.1", "Google Gemini API")
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps({
+        "kind": "n2d_video_backend_refresh_evidence",
+        "backend": "veo",
+        "channel": "google_gemini_api",
+        "verified_at": "2026-06-21",
+        "sources": ["official docs"],
+        "capability_assertions": {"supports_last_frame": True},
+        "note": "old bare capability values",
+    }, ensure_ascii=False), encoding="utf-8")
+
+    status = adapter.refresh_evidence_status(
+        str(tmp_path),
+        "Veo 3.1",
+        "Google Gemini API",
+        today=dt.date(2026, 6, 21),
+    )
+
+    assert status["status"] == "missing_capability_evidence"
 
 
 def test_parse_capability_overrides_coerces_values():

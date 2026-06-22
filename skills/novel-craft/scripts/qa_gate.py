@@ -473,6 +473,9 @@ def _ai_usage_gate(project_root, *, require=False):
             issues.append("text_mode 必须为 AI-generated/AI-assisted/未使用AI文本")
         if text_mode in {"AI-generated", "AI-assisted"} and not str(payload.get("human_contribution") or "").strip():
             issues.append("AI 生成/辅助文本必须填写 human_contribution，记录创意、改写、审稿取舍等人工贡献")
+        detail = payload.get("disclosure_detail")
+        if detail is not None and not isinstance(detail, dict):
+            issues.append("disclosure_detail 必须是 object")
     if issues:
         item = _warning(
             "AI-USAGE-SCHEMA",
@@ -481,6 +484,21 @@ def _ai_usage_gate(project_root, *, require=False):
             "；".join(issues[:6]),
         )
         (report["blockers"] if require else report["warnings"]).append(item)
+    elif isinstance(payload, dict):
+        detail = payload.get("disclosure_detail") or {}
+        missing_detail = []
+        for key in ("text_directness", "human_steering", "replaceability", "direct_incorporation", "review_steps"):
+            if key not in detail:
+                missing_detail.append(key)
+        if missing_detail:
+            report["warnings"].append(_warning(
+                "AI-USAGE-DETAIL-MISSING",
+                "compliance",
+                "novel-craft",
+                "AI 使用披露缺少细粒度字段："
+                + "、".join(missing_detail)
+                + "；建议用 novel-craft/scripts/ai_usage.py 重新生成，便于平台/读者披露。",
+            ))
     report["blocking"] = bool(report["blockers"])
     return report
 

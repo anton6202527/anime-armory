@@ -1,6 +1,6 @@
 ---
 name: novel-score
-description: 给【已写好】的小说/章节做"市场 + 品质"综合评分体检——联网实时拉取红果/抖音/番茄当前最火题材与套路作基准,按 题材热度匹配 / 开篇黄金三章钩子 / 爽点密度与节奏 / 人设与金手指 / 剧情结构主线 / 文学性文笔 / 完读留存潜力 多维打分,出加权总分 + 平台档位 + 「过 / 小改 / 大改 / 弃稿重立」判定 + 改写ROI(值不值得继续改) + 该改哪几章哪几维。与 novel-review(挑硬伤)互补:本 skill 判"值不值得做、能不能火"。题材热度除了联网拉公榜,还读外部投放侧回灌的「自有题材战绩库」做第一方先验(选题↔投放闭环的读端),自有 ROI/留存权重高于公榜。已定名项目附带「书名体检」:按 novel-title 5 维标准体检现有书名(不计入总分),弱名/撞名时 next_actions 路由 novel-title 重起候选。Use when asked to 给小说打分/评分/测一下能不能火/这本值不值得写下去/要不要继续改/市场体检/题材够不够热/爆款潜力/自有战绩/选题反哺/顺带看看书名行不行. Triggers 小说评分, 打分, 测评, 能不能火, 爆款潜力, 题材热度, 市场体检, 值不值得改, 要不要继续改, 改写ROI, 题材战绩库, 选题反哺, 书名体检, novel score, novel rating.
+description: 给【已写好】的小说/章节做"市场 + 品质"综合评分体检——联网实时拉取红果/抖音/番茄当前最火题材与套路作基准,记录证据质量,按 题材热度匹配 / 开篇黄金三章钩子 / 爽点密度与节奏 / 人设与金手指 / 剧情结构主线 / 文学性文笔 / 完读留存潜力 多维打分,出加权总分 + 平台档位 + 「过 / 小改 / 大改 / 弃稿重立」判定 + 改写ROI(值不值得继续改) + 该改哪几章哪几维。与 novel-review(挑硬伤)互补:本 skill 判"值不值得做、能不能火"。题材热度除了联网拉公榜,还读外部投放侧回灌的「自有题材战绩库」、novel-feedback 真实读者反馈、novel-simulate 虚拟试读信号和合规参考分布百分位；真实反馈/自有 ROI 权重高于公榜。已定名项目附带「书名体检」:按 novel-title 5 维标准体检现有书名(不计入总分),弱名/撞名时 next_actions 路由 novel-title 重起候选。Use when asked to 给小说打分/评分/测一下能不能火/这本值不值得写下去/要不要继续改/市场体检/题材够不够热/爆款潜力/自有战绩/真实读者反馈/参考分布/选题反哺/顺带看看书名行不行. Triggers 小说评分, 打分, 测评, 能不能火, 爆款潜力, 题材热度, 市场体检, 值不值得改, 要不要继续改, 改写ROI, 题材战绩库, 真实读者反馈, 完读率, 参考分布, 百分位, 选题反哺, 书名体检, novel score, novel rating.
 ---
 
 # novel-score — 小说「市场 + 品质」综合评分体检
@@ -26,7 +26,7 @@ description: 给【已写好】的小说/章节做"市场 + 品质"综合评分�
 
 本 skill 选择点:`目标平台`(决定**评分权重档**——商业爽文向 vs 品质向,见 `references/rubric.md`)。缺省按 **红果/抖音 商业爽文向**。
 
-> 第一方先验有两源(权重均高于公榜):**真实投放战绩**(外部回灌的题材战绩库,见 1.5)+ **模拟读者留存信号**(`novel-simulate` 写的 `reader_panel_signals.json`,见 1.6,属虚拟试读、权重低于真实战绩)。
+> 读端先验权重序：**真实读者反馈**(`novel-feedback` 的 `reader_telemetry_summary.json`) > **真实投放战绩**(外部回灌的题材战绩库) > **模拟读者留存信号**(`novel-simulate` 的 `reader_panel_signals.json`) > 外部公榜泛化。
 
 ## 输入
 
@@ -44,6 +44,7 @@ description: 给【已写好】的小说/章节做"市场 + 品质"综合评分�
 - 同步跑共享采集器落盘，避免 score/self-audit 各拉一份：
   `python3 skills/novel-score/scripts/collect_market_baseline.py "<作品根>/评分" --target-platform "<目标平台>" --allow-fetch-errors`。
 - 红果/抖音/漫剧等 app 内榜无公开网页时，用结构化人工证据补齐：`--manual-evidence "红果短剧|YYYY-MM-DD|第三方榜单|结论|URL"`；`--note` 只做人读备注，不计入有效证据。
+- 采集器会给每个来源写 `source_quality`，给整份基准写 `evidence_quality`；评分 prompt 会显示 high/medium/low 置信度。低质量证据不是不能看，但不能与官方/结构化/信号充足来源等权处理。
 - `score.py` 会检查 `market_baseline_*.json` 的 `expires_after_days`、人读 md 文件、有效证据和短剧/漫剧覆盖缺口。缺失/过期/缺 md/无证据/coverage_gap 会失败并提示重拉。有效证据指至少一个 `status=ok` 且 `signals` 非空的来源，或 `manual_evidence[]` 有结构化人工核验补充；全是 `fetch_error` 或自由文本 `notes` 不算基准。只有离线测试或人工明确豁免时才加 `--allow-stale-baseline`；此时 `score_report.waivers[]` 与 `审稿/waiver_log.jsonl` 会记录 `score_baseline_freshness`，且 QA gate 只降为 warning，不会伪装成 fresh。
 
 ### 1.5 读「自有题材战绩库」做第一方先验(闭环 · 选题反哺)
@@ -52,12 +53,39 @@ description: 给【已写好】的小说/章节做"市场 + 品质"综合评分�
 - 战绩库为空(还没回灌过)时正常退化为纯公榜评分。本 skill 只做容忍缺失的消费方,不依赖任何特定写端存在。
 - **反同质化(立项前更有用)**:若外部回灌产出过 `生产战绩/差异化候选.{json,md}`(从战绩库反推「未被做烂的题材×开场×结尾组合」),**立项/换题材**时可先读它选差异化方向,再用本 skill 评具体稿——前者答"做什么不撞车",后者答"这稿能不能火"。无该文件则跳过。
 
-### 1.6 读「模拟读者留存信号」做留存维度先验(选做 · 闭环读端)
+### 1.6 读「真实读者反馈」做留存维度最高优先级证据(选做 · 真实读端)
+若作品根有 `评分/reader_telemetry_summary.json`（`novel-feedback` 产）,`score.py` 会自动读取并把章节完读率、弃读率、评论情绪和 `weakest_chapters` 注入评分 prompt。有效注入时 `score_report.reader_telemetry_path` 与 `score_report.reader_telemetry_summary` 会记录来源。
+
+```bash
+python3 skills/novel-feedback/scripts/ingest_reader_events.py "<作品根>" \
+  --input "<平台后台.csv或测试读者.jsonl>" \
+  --platform "<平台>" \
+  --source-name "<批次名>"
+```
+
+- **判读铁律**：真实读者反馈高于模拟读者和公榜；真实完读/弃读与模拟信号冲突时，retention 维度以真实反馈为准，模拟只当原因假设。
+- `low_sample` 只提示样本小，不当硬证据。低完读/高弃读/负评集中时，score 应下调 retention，并把 `next_actions` 指向 `novel-review` / `novel-balance` 查具体定因。
+- 无该文件正常退化；尚未发布/内测时可先跑 `novel-simulate`。
+
+### 1.7 读「模拟读者留存信号」做留存维度先验(选做 · 虚拟试读)
 若作品根有 `评分/reader_panel_signals.json`（`novel-simulate` 产）,`score.py` 会自动读取并把其 `retention_prior` / `hook_strength` / `cliche_density_per_kchar`(字段名与 `simulate_panel.py` 输出一致)注入打分 prompt 的「模拟读者留存信号」段,作**完读留存潜力**维度先验;有效注入时 `score_report.reader_panel_path` 会记录来源:
-- **权重序**:真实投放战绩(1.5 节战绩库) > 模拟读者信号(本节,虚拟试读) > 公榜泛化。模拟信号是"发布前的虚拟试读",比公榜贴本书,但**不等于真实留存**,只作辅助先验,不可单独定生死。
+- **权重序**:真实读者反馈(1.6) > 真实投放战绩(1.5) > 模拟读者信号(本节,虚拟试读) > 公榜泛化。模拟信号是"发布前的虚拟试读",比公榜贴本书,但**不等于真实留存**,只作辅助先验,不可单独定生死。
 - `reader_panel_signals.json` 默认 `signal_only=true/qualitative_completed=false`，只能低权重参考；必须补完人格心声/弃书点后才算完整模拟读者面板。
 - 模拟 `retention_prior` 明显偏低且 `cliche_density_per_kchar` 高 → 留存维度下调并在短评点明"开篇疑似劝退/套路堆叠",建议先跑 `novel-simulate` 看弃书点再决定改哪。
 - 无该文件正常退化(纯公榜+战绩库);需要更细的人格弃书点时提示先跑 `novel-simulate`。
+
+### 1.8 参考分布百分位(选做 · 合规样本)
+若作品根有 `评分/reference_distribution*.json`，`score.py` 会读取最新一份，在生成评分任务时提示参考水位，并在最终报告写 `benchmark_percentile`（总分百分位 + 逐维百分位）。参考分布只能纳入 `public-domain/user-owned/user-declared/original/authorized/licensed` 样本；未知权利样本会跳过。
+
+构建入口：
+
+```bash
+python3 skills/novel-score/scripts/build_reference_distribution.py \
+  "<作品根>/评分/reference_distribution_<YYYY-MM-DD>.json" \
+  --sample "<某样本>/评分/score_report.json|original|自有样本|样本名"
+```
+
+这不是“抄参考作品”，只是 WebNovelBench 式相对水位：告诉你当前稿在自有/授权/公版参考样本里大概处于第几百分位。
 
 ### 2. 取样与评估
 - **自动化打分引擎**：
@@ -90,6 +118,8 @@ description: 给【已写好】的小说/章节做"市场 + 品质"综合评分�
   - `score_task_id / score_task_path / assessment_prompt_hash` 必须保留，用于追踪评分 JSON 绑定的 prompt。
   - `source_snapshot` 必须记录本次评分样本的 path/hash/aggregate hash；正文或 Take 文件改动后旧分数失效，QA gate 会提示重评。
   - `market_baseline` 必须带 `baseline_path`(人读 md)、`baseline_json_path`、`sources`、`expires_after_days` 和 freshness 状态。
+  - `reader_telemetry_path` / `reader_telemetry_summary` 存在时表示真实读者反馈已接入；`reader_panel_path` 存在时表示虚拟试读信号已接入。
+  - `benchmark_percentile` 存在时表示已接入合规参考分布百分位。
   - `waivers[]` 必须记录所有评分阶段显式豁免；baseline freshness 阻断被豁免时仍保留 `freshness.blocking=true`，且 waiver scope 必须绑定当次 `baseline_date` 与 `freshness_status`。
   - `production_decision` 必须包含 `decision/route/reason/score/verdict`，作为 demo 后 go/no-go 的机器判断。
   - `next_actions[]` 必须写清 `recommended_skill` 和应回流的 `return_to_stage`。

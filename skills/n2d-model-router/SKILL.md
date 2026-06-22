@@ -23,7 +23,7 @@ description: 横切模型适配层：在 n2d 出视频前，按镜头类型/专�
 ## 输入 / 输出 / 读写边界
 
 - **输入**：`_设置.md`、`storyboard.json`、`identity_registry.json`、视频模型/渠道能力档案、跨集路由基线。
-- **输出**：`出视频/第N集/prompt/video_model_routes.json` 和 `.md`，第 1 集打样后写 `设定库/model_routes_baseline.json`。第 2 集起凡含核心/角色身份或高风险镜头（打斗/追逐/多人/揭示/对质/关系转折等），`n2d-review gate` 会要求路由按该基线锚定；自然路由漂移需刷新基线或显式 `baseline_override_reason`。
+- **输出**：`出视频/第N集/prompt/video_model_routes.json` 和 `.md`，第 1 集打样后写 `设定库/model_routes_baseline.json`。第 2 集起凡含核心/角色身份或高风险镜头（打斗/追逐/多人/揭示/对质/关系转折等），`n2d-review gate` 会要求路由按该基线锚定；自然路由漂移需刷新基线或写结构化 `baseline_override`（`accepted/reviewer/reason/expires_at/affected_routes`）。
 - **读写边界**：只写路由表和基线；不生成视频、不改 `_进度.md`、不替 `n2d-video` 写最终 clip prompt。
 - **契约关系**：模型路由是 `skills/n2d/_lib/n2d_contract.py` 的横切工具（`CROSS_CUTTING_TOOLS`），不是进度 readiness 项；motion control / native AV / lipsync 判定必须复用契约常量。
 
@@ -46,6 +46,7 @@ description: 横切模型适配层：在 n2d 出视频前，按镜头类型/专�
   - **`配音先行 + 对口型 opt-in`（voice_conditioned_lipsync）**：`制作模式=配音先行` 且 `对口型≠关闭` 时，**说话镜（对话反打/说话特写/mouth_visible）路由 `mode=voice_conditioned_lipsync`、`native_audio_policy=lipsync_condition_only`**，primary 选支持音频参考口型的后端（Seedance 2.0 音素级 / 可灵 Omni，见 `LIPSYNC_AUDIO_REF_BACKENDS`），把本镜配音 `line_NN.wav` 当**口型条件**喂进去同帧出对口型画面。**关键：音轨仍是 voice-first 克隆音色（compose 用配音轨），模型音频只作口型条件、不接管声音**——既不双人声、又省一道后期 MuseTalk/Wav2Lip 对口型 pass。后端不支持音频参考口型 → 按 degrade_plan 回退「image2video 静音 + 后期对口型 pass」或分镜规避。这是 native_av 与「配音→后期对口型」之间的中间路线。
   - **`原生音画`（native AV·opt-in 整剧）**：`制作模式=原生音画` 时，**说话镜路由到原生同步音画后端**（Seedance 2.0 / Veo 3，见 `NATIVE_AV_BACKENDS`），`mode=native_av`、`native_audio_policy=native_speech`，一次出台词+口型+环境声，**绕过配音先行的时长清单**（台词文本/情绪/单镜时长来自脚本）。Sora legacy/manual-only，不进入 `NATIVE_AV_BACKENDS`。规避「配音→对口型」代差与占位返工；代价是少了逐句音色控制。原生口型/音质不达标 → 按 degrade_plan 本镜回退配音先行。**动作/空镜等非说话镜不变。** native_speech / lipsync 镜的真人音色克隆仍需授权（compliance gate）。
 - **身份优先级**：含主要角色且高风险角度/多人互动时，优先选择有 `Character ID / Face Lock / reference controls` 可用的后端；没有 registered/ready 状态时，在降级方案里写明首尾帧 + reference_group 或拆镜。
+- **逐镜角色绑定是机器字段**：含身份要求的 route 必须写 `clip_characters[]`，从 `storyboard.json` 的 `characters/character_ids/cast/subjects/character_refs` 或文本里的 `CHAR_xx/形态` 提取。gate 会用它把身份锁检查缩到本 Clip 实际角色；缺该字段的身份镜会被要求重跑 router。
 - **接力镜 → 双关键帧（seam_relay，2026 起一等公民）**：接力/无缝镜（`continuity.need_endframe=true` 或 transition∈接力/relay/seamless）路由会带 `seam_relay` 子表。`backend_supports_dual_keyframe`（首尾硬约束插值：即梦 multiframe / 可灵 O3 的 `first_last_frame|native_multiframe`）的后端做 primary → `seam_guaranteed=true`：把上一镜尾帧作本镜首帧**硬约束**插值，接缝结构保证、且**边界帧两镜复用省一次出图**；primary 不支持则从 fallback 挑一个支持的（`dual_keyframe_fallback`）并在 rationale 里提示改用它。注意这是**预防侧**——落档侧 `temporal_consistency` 接缝机检照常 block（双关键帧镜接缝仍漂=后端没真消费尾帧/被拆段，是真故障，不因「声明了」就放过）。
 - **QC 失败自动升锁（E4·闭环）**：`route_episode` 开跑先读 `生产数据/production_events.jsonl`，按 clip 聚合**本集 identity 失败次数**（redraw status=fail / qa_gate block 且原因命中脸/身份关键词）。某镜 ≥2 次 → `escalate_identity_for_failures` 自动升锁：`identity_requirement=native_identity_lock_required` + `risk_flag=identity_escalated`，primary 无原生身份锁(Character ID/Face Lock)时换成有的后端（**固定后端模式只收紧 requirement + 提示手动换厂/补 ref/拆镜，绝不擅自换厂**）。把"反复崩脸还路由到同一弱锁后端白烧"的静态盲点闭环。
 - **失败可回滚**：每条路由都写 fallback 和 degrade plan，让 n2d-batch 只重跑受影响 Clip。
@@ -113,7 +114,19 @@ python3 skills/n2d-model-router/scripts/router.py <作品根> 第2集 --write
 #   --no-anchor 可临时不锚定；后端能力升级想换基线时重跑首集 --write-baseline 刷新
 ```
 
-锚定时若本集某 clip 的自然路由与基线不符，会在 `video_model_routes.json.baseline_drift` 留痕，并由 video gate 出一条「后端跨集锁」WARN 提示复核（基线胜，原后端进 fallback）。
+锚定时若本集某 clip 的自然路由与基线不符，会在 `video_model_routes.json.baseline_drift` 留痕，并由 video gate 复核（基线胜，原后端进 fallback）。高风险/含角色镜头的漂移默认 BLOCK；只有结构化 `baseline_override` 覆盖当前 `clip_id` 且未过期时才降级为 WARN：
+
+```json
+{
+  "baseline_override": {
+    "accepted": true,
+    "reviewer": "producer_or_qa",
+    "reason": "本集动作镜为满足 Motion Control 临时换后端，已人工确认角色一致性",
+    "expires_at": "2099-01-01",
+    "affected_routes": ["Clip_01"]
+  }
+}
+```
 
 **③ 一角一后端亲和（核心硬钉）**：基线按 `shot_type` 锁后端，但同一**核心角色**若跨镜被不同 shot_type 路由到不同后端，脸质感会漂。router 读 `identity_registry`，对**已注册原生视频主体**（Character ID / face_lock，status registered/ready）的角色，逐镜对账"该角色原生主体后端 vs 本镜 primary"。核心/主演角色冲突时，router 会把本镜 `primary_backend` **硬钉**到该角色的原生主体后端，原 primary 降为 fallback，并在 rationale 留痕；若同镜多个原生主体无法同时满足，则保留 `character_backend_conflicts` + risk_flag `character_backend_conflict`，video gate 出「一角一后端」WARN，要求拆正反打/分区。没注册原生主体的角色零告警（避免噪音）。
 

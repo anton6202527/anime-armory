@@ -250,6 +250,9 @@ CHARACTER_FIELD_KEYS = (
     "character_refs",
 )
 NO_CHARACTER_VALUES = {"", "无", "none", "null", "[]", "无人物", "空镜", "no character", "empty shot"}
+CHARACTER_REF_RE = re.compile(r"\b(CHAR_[A-Za-z0-9_]+)(?:/([^\s，；、`,|]+))?\b")
+CHARACTER_ID_KEYS = ("id", "character_id", "characterId", "角色ID", "角色id", "角色编号")
+CHARACTER_FORM_KEYS = ("form", "形态", "状态", "costume_form", "variant")
 
 
 def _value_has_named_character(value: Any) -> bool:
@@ -277,6 +280,75 @@ def _value_has_named_character(value: Any) -> bool:
     if isinstance(value, Iterable) and not isinstance(value, (bytes, bytearray)):
         return any(_value_has_named_character(v) for v in value)
     return False
+
+
+def _collect_character_refs(value: Any, *, allow_raw: bool = True) -> List[Dict[str, str]]:
+    refs: List[Dict[str, str]] = []
+    if value is None:
+        return refs
+    if isinstance(value, str):
+        text = value.strip()
+        if not text or text.lower() in NO_CHARACTER_VALUES or text in NO_CHARACTER_VALUES:
+            return refs
+        for match in CHARACTER_REF_RE.finditer(text):
+            ref = {"character_id": match.group(1)}
+            if match.group(2):
+                ref["form"] = match.group(2).strip()
+            refs.append(ref)
+        if allow_raw and not refs and _value_has_named_character(text):
+            refs.append({"raw": text})
+        return refs
+    if isinstance(value, Mapping):
+        cid = ""
+        form = ""
+        for key in CHARACTER_ID_KEYS:
+            if str(value.get(key) or "").strip():
+                cid = str(value.get(key) or "").strip()
+                break
+        for key in CHARACTER_FORM_KEYS:
+            if str(value.get(key) or "").strip():
+                form = str(value.get(key) or "").strip()
+                break
+        if cid:
+            ref = {"character_id": cid}
+            if form:
+                ref["form"] = form
+            refs.append(ref)
+        for child in value.values():
+            refs.extend(_collect_character_refs(child, allow_raw=allow_raw))
+        return refs
+    if isinstance(value, Iterable) and not isinstance(value, (bytes, bytearray)):
+        for item in value:
+            refs.extend(_collect_character_refs(item, allow_raw=allow_raw))
+    return refs
+
+
+def clip_character_refs(clip: Mapping[str, Any]) -> List[Dict[str, str]]:
+    refs: List[Dict[str, str]] = []
+    for key in CHARACTER_FIELD_KEYS:
+        refs.extend(_collect_character_refs(clip.get(key)))
+    refs.extend(_collect_character_refs(_clip_text(clip), allow_raw=False))
+    out: List[Dict[str, str]] = []
+    seen: set[tuple[str, str, str]] = set()
+    for ref in refs:
+        cid = str(ref.get("character_id") or "").strip()
+        form = str(ref.get("form") or "").strip()
+        raw = str(ref.get("raw") or "").strip()
+        if not (cid or raw):
+            continue
+        key = (cid, form, raw)
+        if key in seen:
+            continue
+        seen.add(key)
+        item: Dict[str, str] = {}
+        if cid:
+            item["character_id"] = cid
+        if form:
+            item["form"] = form
+        if raw and not cid:
+            item["raw"] = raw
+        out.append(item)
+    return out
 
 
 def infer_shot_type(clip: Mapping[str, Any]) -> str:
@@ -1303,6 +1375,7 @@ def route_clip(
     seam_relay = seam_relay_plan(clip, primary, route["fallback_backends"])
     rationale = list(route["rationale"]) + pin_notes
     prompt_requirements = list(route["prompt_requirements"])
+    clip_characters = clip_character_refs(clip)
     if seam_relay.get("is_relay"):
         risk_flags = sorted(set(risk_flags) | {"seam_relay"})
         if seam_relay.get("seam_guaranteed"):
@@ -1324,6 +1397,7 @@ def route_clip(
         "mode": route["mode"],
         "native_audio_policy": route["native_audio_policy"],
         "identity_requirement": route["identity_requirement"],
+        "clip_characters": clip_characters,
         "max_clip_seconds": video_backend_max_seconds(primary),
         "clip_seconds": clip_duration_seconds(clip),
         "risk_flags": risk_flags,
@@ -1542,8 +1616,8 @@ def render_markdown(plan: Mapping[str, Any]) -> str:
         "",
         "## 本集模型路由表",
         "",
-        "| Clip | shot_type | primary | fallback | mode | 档 | 帧消费 | native_audio | identity | motion_control | 风险 | 降级 |",
-        "|---|---|---|---|---|---|---|---|---|---|---|---|",
+        "| Clip | characters | shot_type | primary | fallback | mode | 档 | 帧消费 | native_audio | identity | motion_control | 风险 | 降级 |",
+        "|---|---|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     for route in plan.get("routes", []):
         fallback = ", ".join(route.get("fallback_backends", []))
@@ -1552,9 +1626,14 @@ def render_markdown(plan: Mapping[str, Any]) -> str:
         motion_level = motion.get("level", "-") if isinstance(motion, Mapping) else "-"
         anchor_plan = route.get("anchor_consumption") or {}
         frame_mode = anchor_plan.get("consumption_mode", "-") if isinstance(anchor_plan, Mapping) else "-"
+        characters = ", ".join(
+            (str(c.get("character_id") or c.get("raw") or "") + (f"/{c.get('form')}" if c.get("form") else ""))
+            for c in route.get("clip_characters", []) if isinstance(c, Mapping)
+        ) or "-"
         lines.append(
-            "| {clip} | {shot} | {primary} | {fallback} | {mode} | {tier} | {frame_mode} | {audio} | {identity} | {motion} | {flags} | {degrade} |".format(
+            "| {clip} | {characters} | {shot} | {primary} | {fallback} | {mode} | {tier} | {frame_mode} | {audio} | {identity} | {motion} | {flags} | {degrade} |".format(
                 clip=route.get("clip_id", ""),
+                characters=characters.replace("|", "/"),
                 shot=route.get("shot_type", ""),
                 primary=route.get("primary_backend", ""),
                 fallback=fallback,
@@ -1578,6 +1657,12 @@ def render_markdown(plan: Mapping[str, Any]) -> str:
     lines.extend(["", "## 逐 Clip 路由理由", ""])
     for route in plan.get("routes", []):
         lines.append(f"### {route.get('clip_id')} — {route.get('shot_type')}")
+        chars = route.get("clip_characters") if isinstance(route.get("clip_characters"), list) else []
+        if chars:
+            lines.append("- characters: " + ", ".join(
+                str(c.get("character_id") or c.get("raw") or "") + (f"/{c.get('form')}" if c.get("form") else "")
+                for c in chars if isinstance(c, Mapping)
+            ))
         lines.append(f"- primary: {route.get('primary_backend')}")
         lines.append(f"- fallback: {', '.join(route.get('fallback_backends', []))}")
         lines.append(f"- mode: {route.get('mode')}")

@@ -89,6 +89,15 @@ WEIGHTS = {
 }
 
 SHORT_DRAMA_KEYWORDS = ("红果", "抖音", "漫剧", "短剧")
+REFERENCE_DISTRIBUTION_GLOB = os.path.join("评分", "reference_distribution*.json")
+REFERENCE_ALLOWED_RIGHTS = {
+    "public-domain",
+    "user-owned",
+    "user-declared",
+    "original",
+    "authorized",
+    "licensed",
+}
 
 
 def load_settings(root):
@@ -244,6 +253,91 @@ def baseline_file_snapshot(root, baseline):
         "baseline_date": baseline.get("baseline_date") if baseline else None,
         "files": entries,
         "aggregate_hash": aggregate.hexdigest(),
+    }
+
+
+def find_latest_reference_distribution(root):
+    files = glob(os.path.join(root, REFERENCE_DISTRIBUTION_GLOB))
+    if not files:
+        return None
+    files.sort(reverse=True)
+    try:
+        with open(files[0], encoding="utf-8") as f:
+            payload = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return None
+    if not isinstance(payload, dict) or payload.get("kind") != "novel_reference_score_distribution":
+        return None
+    payload["_json_path_abs"] = os.path.abspath(files[0])
+    return payload
+
+
+def _sample_score_map(sample):
+    scores = sample.get("scores") or {}
+    if isinstance(scores, dict):
+        return {str(k): float(v) for k, v in scores.items() if isinstance(v, (int, float))}
+    if isinstance(scores, list):
+        out = {}
+        for item in scores:
+            if isinstance(item, dict) and item.get("dimension") and isinstance(item.get("raw_score"), (int, float)):
+                out[str(item["dimension"])] = float(item["raw_score"])
+        return out
+    return {}
+
+
+def _percentile(value, population):
+    values = [float(v) for v in population if isinstance(v, (int, float))]
+    if value is None or not values:
+        return None
+    below_or_equal = sum(1 for v in values if v <= float(value))
+    return round(100.0 * below_or_equal / len(values), 1)
+
+
+def compute_benchmark_percentiles(root, total_score, processed_scores, distribution):
+    if not distribution:
+        return None
+    samples = []
+    skipped = []
+    for sample in distribution.get("samples") or []:
+        if not isinstance(sample, dict):
+            continue
+        rights = str(sample.get("rights_status") or "").strip()
+        if rights not in REFERENCE_ALLOWED_RIGHTS:
+            skipped.append({"title": sample.get("title"), "rights_status": rights or "missing"})
+            continue
+        if not isinstance(sample.get("total_score"), (int, float)):
+            skipped.append({"title": sample.get("title"), "reason": "missing total_score"})
+            continue
+        samples.append(sample)
+    if not samples:
+        return {
+            "status": "no_eligible_samples",
+            "sample_count": 0,
+            "skipped_samples": skipped,
+            "note": "参考分布没有合规且带分数的样本。",
+        }
+    dimension_scores = {item["dimension"]: item["raw_score"] for item in processed_scores}
+    by_dimension = {}
+    for dim, _label in DIMENSIONS:
+        population = []
+        for sample in samples:
+            value = _sample_score_map(sample).get(dim)
+            if value is not None:
+                population.append(value)
+        pct = _percentile(dimension_scores.get(dim), population)
+        if pct is not None:
+            by_dimension[dim] = {"percentile": pct, "sample_count": len(population)}
+    return {
+        "status": "ok",
+        "distribution_title": distribution.get("title") or distribution.get("name") or "reference_distribution",
+        "distribution_path": rel_path(root, distribution.get("_json_path_abs"))
+        if distribution.get("_json_path_abs") else None,
+        "sample_count": len(samples),
+        "declared_sample_count": distribution.get("sample_count"),
+        "skipped_samples": skipped,
+        "total_score_percentile": _percentile(total_score, [s.get("total_score") for s in samples]),
+        "by_dimension": by_dimension,
+        "rights_policy": "仅纳入 public-domain / user-owned / user-declared / original / authorized / licensed 参考样本。",
     }
 
 
@@ -435,6 +529,7 @@ def first_party_genre_text(summary):
 
 
 READER_PANEL_REL_PATH = os.path.join("评分", "reader_panel_signals.json")
+READER_TELEMETRY_REL_PATH = os.path.join("评分", "reader_telemetry_summary.json")
 
 
 def load_reader_panel_signals(root):
@@ -454,6 +549,72 @@ def load_reader_panel_signals(root):
     if not isinstance(data, dict) or "retention_prior" not in data:
         return None
     return data
+
+
+def load_reader_telemetry_summary(root):
+    """读 novel-feedback 产的真实读者反馈摘要。"""
+    path = os.path.join(root, READER_TELEMETRY_REL_PATH)
+    if not os.path.isfile(path):
+        return None
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return None
+    if not isinstance(data, dict) or data.get("kind") != "novel_reader_telemetry_summary":
+        return None
+    return data
+
+
+def reader_telemetry_text(summary):
+    if not summary:
+        return ("无（尚无真实读者反馈回灌；可用 novel-feedback 导入平台后台 CSV/JSONL，"
+                "真实完读/弃读/评论权重高于虚拟试读）")
+    agg = summary.get("aggregate") or {}
+    weakest = summary.get("weakest_chapters") or []
+    chapter_bits = []
+    by_chapter = {
+        item.get("chapter"): item
+        for item in summary.get("chapters") or []
+        if isinstance(item, dict)
+    }
+    for ch in weakest[:5]:
+        item = by_chapter.get(ch) or {}
+        chapter_bits.append(
+            f"第{int(ch):02d}章 完读{item.get('completion_rate')} 弃读{item.get('drop_rate')} "
+            f"flags={','.join(item.get('flags') or [])}"
+        )
+    weak_text = "；".join(chapter_bits) if chapter_bits else "无明显章节级掉点"
+    return (
+        f"真实读者反馈（novel-feedback，平台 {summary.get('platform')}，来源 {summary.get('latest_source_name')}）："
+        f"记录 {summary.get('records_ingested')} 条，总开读 {agg.get('total_starts')}，"
+        f"总完读率 {agg.get('completion_rate')}，总弃读率 {agg.get('drop_rate')}，"
+        f"评论 {agg.get('total_comments')} 条；优先复核：{weak_text}。"
+        "（权重序：真实读者反馈 > 自有投放战绩 > novel-simulate 虚拟试读 > 公榜泛化。"
+        "若真实反馈与模拟反馈冲突，retention 维度以真实反馈为准，并把模拟反馈只当原因假设。）"
+    )
+
+
+def reference_distribution_text(distribution):
+    if not distribution:
+        return ("无（尚无合规参考分布；可用自有/授权/公版作品的 score_report 构建 "
+                "评分/reference_distribution*.json，用于输出人类/参考样本百分位）")
+    eligible = 0
+    skipped = 0
+    for sample in distribution.get("samples") or []:
+        if not isinstance(sample, dict):
+            continue
+        rights = str(sample.get("rights_status") or "").strip()
+        if rights in REFERENCE_ALLOWED_RIGHTS and isinstance(sample.get("total_score"), (int, float)):
+            eligible += 1
+        else:
+            skipped += 1
+    return (
+        f"参考分布「{distribution.get('title') or distribution.get('name') or 'reference_distribution'}」："
+        f"声明样本 {distribution.get('sample_count') or len(distribution.get('samples') or [])}，"
+        f"合规可用样本 {eligible}，跳过 {skipped}。"
+        "评分时只把它作为相对水位参照；不得纳入无授权/未知权利样本。"
+    )
 
 
 def reader_panel_text(signals):
@@ -702,20 +863,37 @@ def get_tier_verdict(total_score):
         return "不及格", "弃稿重立", "low"
 
 
-def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_party=None, reader_panel=None, title_collision=None, task_id="__SCORE_TASK_ID__"):
+def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_party=None,
+                 reader_panel=None, reader_telemetry=None, reference_distribution=None, title_collision=None,
+                 task_id="__SCORE_TASK_ID__"):
     # This function generates a prompt for the LLM to perform the assessment
     # In a real automation, this would be sent to an LLM API.
 
     baseline_summary = "无（请先运行 collect_market_baseline.py）"
     if baseline:
-        sources = [f"- {s['platform']}: {', '.join(s.get('signals', [])[:10])}" for s in baseline.get("sources", [])]
+        sources = []
+        for s in baseline.get("sources", []):
+            q = s.get("source_quality") or {}
+            quality = f"；证据质量 {q.get('confidence')} {q.get('score')}" if q else ""
+            sources.append(f"- {s['platform']}: {', '.join(s.get('signals', [])[:10])}{quality}")
         manual = [
             f"- {ev['platform']}｜{ev['date']}｜{ev['source']}：{ev['summary']}"
+            + (
+                f"；证据质量 {ev.get('evidence_quality', {}).get('confidence')} {ev.get('evidence_quality', {}).get('score')}"
+                if ev.get("evidence_quality") else ""
+            )
             for ev in baseline.get("manual_evidence") or []
             if manual_evidence_valid(ev)
         ]
         warnings = [f"- 覆盖告警：{w}" for w in baseline.get("coverage_warnings") or []]
-        baseline_summary = "\n".join(sources + manual + warnings)
+        overall = []
+        if baseline.get("evidence_quality"):
+            q = baseline["evidence_quality"]
+            overall.append(
+                f"- 整体证据质量：{q.get('confidence')} ({q.get('score')})，"
+                f"有效证据 {q.get('effective_evidence_count')} 条。"
+            )
+        baseline_summary = "\n".join(overall + sources + manual + warnings)
 
     rubric_text = "（详见 novel-score/references/rubric.md）"
 
@@ -753,8 +931,14 @@ def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_
 ## 第一方题材战绩（自有投放回灌）
 {first_party_genre_text(first_party)}
 
+## 真实读者反馈（novel-feedback 回灌 · retention 维度最高优先级读端证据）
+{reader_telemetry_text(reader_telemetry)}
+
 ## 模拟读者留存信号（novel-simulate 虚拟试读 · retention 维度先验）
 {reader_panel_text(reader_panel)}
+
+## 参考分布（合规样本百分位 · WebNovelBench 式相对水位）
+{reference_distribution_text(reference_distribution)}
 
 {title_check_section}
 
@@ -812,6 +996,19 @@ def generate_markdown_report(root, meta, result, total_score, tier, verdict, roi
     if decision:
         lines.append(f"- **生产决策**：{decision.get('decision')} → {decision.get('route')}（{decision.get('reason')}）")
     lines.append(f"- **改写 ROI**：{roi}")
+    telemetry = result.get("reader_telemetry_summary")
+    if telemetry:
+        agg = telemetry.get("aggregate") or {}
+        lines.append(
+            f"- **真实读者反馈**：完读率 {agg.get('completion_rate')} / 弃读率 {agg.get('drop_rate')}；"
+            f"优先复核章节 {telemetry.get('weakest_chapters') or []}"
+        )
+    benchmark = result.get("benchmark_percentile")
+    if benchmark and benchmark.get("status") == "ok":
+        lines.append(
+            f"- **参考分布百分位**：总分 P{benchmark.get('total_score_percentile')} "
+            f"（样本 {benchmark.get('sample_count')}，{benchmark.get('distribution_title')}）"
+        )
     lines.append("")
 
     if result.get("waivers"):
@@ -909,7 +1106,9 @@ def main():
         pending_waiver = make_freshness_waiver(freshness)
     ledger_path = args.genre_ledger or default_ledger_path(root)
     first_party = summarize_first_party_genre(load_genre_ledger(ledger_path), meta.get("genre"))
+    reader_telemetry = load_reader_telemetry_summary(root)
     reader_panel = load_reader_panel_signals(root)
+    reference_distribution = find_latest_reference_distribution(root)
     book_title = project_title(meta)
     title_collision = load_title_collision(root, book_title)
 
@@ -961,7 +1160,10 @@ def main():
     )
     market_snapshot = baseline_file_snapshot(root, baseline)
     prompt = build_prompt(
-        root, meta, settings, baseline, samples, platform_mode, first_party, reader_panel,
+        root, meta, settings, baseline, samples, platform_mode, first_party,
+        reader_panel=reader_panel,
+        reader_telemetry=reader_telemetry,
+        reference_distribution=reference_distribution,
         title_collision=title_collision,
         task_id="__SCORE_TASK_ID__",
     )
@@ -1044,6 +1246,9 @@ def main():
     total_deductions = sum(d["points"] for d in deductions)
     final_score = max(0.0, total_weighted + total_deductions)
     tier, verdict, roi = get_tier_verdict(final_score)
+    benchmark_percentile = compute_benchmark_percentiles(
+        root, final_score, processed_scores, reference_distribution
+    )
 
     next_actions = build_next_actions(verdict, processed_scores)
     production_decision = build_production_decision(verdict, final_score, meta, settings)
@@ -1083,6 +1288,7 @@ def main():
             "baseline_json_path": f"评分/market_baseline_{baseline.get('baseline_date')}.json" if baseline else None,
             "sources": baseline.get("sources", []) if baseline else [],
             "manual_evidence": baseline.get("manual_evidence", []) if baseline else [],
+            "evidence_quality": baseline.get("evidence_quality") if baseline else None,
             "coverage_warnings": baseline.get("coverage_warnings", []) if baseline else [],
             "expires_after_days": baseline.get("expires_after_days") if baseline else None,
             "freshness": freshness,
@@ -1090,7 +1296,10 @@ def main():
         },
         "first_party_genre": first_party,
         "genre_ledger_path": ledger_path if os.path.isfile(ledger_path) else None,
+        "reader_telemetry_path": READER_TELEMETRY_REL_PATH if reader_telemetry else None,
+        "reader_telemetry_summary": reader_telemetry,
         "reader_panel_path": os.path.join(READER_PANEL_REL_PATH) if reader_panel else None,
+        "benchmark_percentile": benchmark_percentile,
         "scores": processed_scores,
         "title_check": title_check,
         "deductions": deductions,

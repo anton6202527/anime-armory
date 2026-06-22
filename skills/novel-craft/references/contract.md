@@ -148,7 +148,7 @@
 - 读取 `评分/score_report.json.market_baseline.freshness`：`blocking=true` → `SCORE-BASELINE` 阻断；只有 `score_report.waivers[]` 或 `审稿/waiver_log.jsonl` 存在同 `baseline_date + freshness_status` 作用域的 `score_baseline_freshness` 时降为 warning。
 - 缺 `score_report.json`：商业连载、漫剧源书、目标平台含红果/番茄/抖音/漫剧时在 export / go-no-go 节点阻断；`drafting` 阶段不阻断，因为还没有可评分正文样本。
 - `review` / `score` / `export` 阶段要求章节写后闭环：`审稿/state_delta_第NN章.json` 必须存在，并且已合并进 `审稿/state_ledger.json.chapter_deltas.chapter_NN`。
-- 商业/平台/出海导出时要求 `合规/ai_usage.json`；`AI-generated` / `AI-assisted` 文本必须填写 `human_contribution`，记录创意、人工改写、审稿取舍等人类贡献。
+- 商业/平台/出海导出时要求 `合规/ai_usage.json`；`AI-generated` / `AI-assisted` 文本必须填写 `human_contribution`，记录创意、人工改写、审稿取舍等人类贡献。新版披露建议同时填 `disclosure_detail.text_directness/human_steering/replaceability/direct_incorporation/review_steps`，以便按平台或读者要求解释 AI 介入直接程度、人工 steering、可替代性和复核链路。
 - 所有绕过 gate 的动作必须写 `审稿/waiver_log.jsonl`；报告自身也应带 `waivers[]`。waiver 必须写 `scope`，能绑定章节、报告、baseline 或具体 gate 时不能留空。
 - `scripts/progress.py` 会展示阻断和推荐回流 stage；`scripts/export.py` 默认阻断导出。
 
@@ -163,7 +163,15 @@
 
 ## AI 使用披露
 
-发布或交平台前跑 `scripts/ai_usage.py <作品根> --text-mode AI-generated|AI-assisted|未使用AI文本 --human-contribution "<人工贡献>"`，产出：
+发布或交平台前跑 `scripts/ai_usage.py <作品根> --text-mode AI-generated|AI-assisted|未使用AI文本 --human-contribution "<人工贡献>"`，并尽量补：
+
+- `--text-directness direct_generation|outline_to_draft|revision_only|brainstorming_only|none`
+- `--human-steering "<人工如何设定目标、蓝图、取舍和最终责任>"`
+- `--replaceability replaceable|assistive_non_replaceable|human_primary|unknown`
+- `--direct-incorporation none|minor_phrases|substantial_passages|full_draft`
+- `--review-step "<复核步骤>"`（可重复）
+
+产出：
 
 - `合规/ai_usage.json`
 - `合规/AI使用说明.md`

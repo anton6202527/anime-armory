@@ -552,12 +552,14 @@ def test_long_running_weak_backend_silent_on_persistent_subject_backend():
         assert gate.long_running_weak_backend_advice(canon, 50, 50) is False
 
 
-def _write_weak_backend_registry(tmp_path, *, locked=False):
+def _write_weak_backend_registry(tmp_path, *, locked=False, lora=None):
     shared = tmp_path / "出图" / "共享"
     shared.mkdir(parents=True, exist_ok=True)
     adapters = {"image": {}, "lora": {"status": "candidate"}}
     if locked:
         adapters = {"image": {"face_embedding": {"status": "ready"}}, "lora": {"status": "candidate"}}
+    if lora is not None:
+        adapters["lora"] = lora
     (shared / "identity_registry.json").write_text(json.dumps({
         "characters": [{
             "id": "CHAR_01",
@@ -580,6 +582,12 @@ def test_long_running_weak_backend_allows_core_with_face_embedding(tmp_path):
     root = _write_weak_backend_registry(tmp_path, locked=True)
     gate.check_long_running_weak_backend(root, "第3集")
     assert not any(f["dim"] == "生图AI一致性" for f in gate.findings)
+
+
+def test_long_running_weak_backend_blocks_lora_not_usable_on_current_backend(tmp_path):
+    root = _write_weak_backend_registry(tmp_path, lora={"status": "ready", "target_backends": ["sdxl"]})
+    gate.check_long_running_weak_backend(root, "第3集")
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "生图AI一致性" for f in gate.findings)
 
 
 def test_two_char_shot_with_registered_degradation_escapes_even_on_single_ref():
@@ -3311,6 +3319,7 @@ def _basic_route(**overrides):
         "mode": "image2video",
         "native_audio_policy": "none",
         "identity_requirement": "reference_group",
+        "clip_characters": [{"character_id": "CHAR_X", "form": "常态"}],
         "risk_flags": [],
         "max_clip_seconds": 8,
         "motion_control": {
@@ -3361,6 +3370,16 @@ def test_video_model_routes_fresh_backend_evidence_passes_refresh_gate(tmp_path)
     assert not any(f["sev"] == gate.BLOCK and f["dim"] == "生视频后端适配" for f in gate.findings)
 
 
+def test_video_model_routes_identity_route_requires_clip_characters(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_routes(root, _basic_route(clip_characters=[]))
+
+    gate.check_video_model_routes(str(root), "第1集", "## 本集模型路由表\n", "00_总览.md")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "模型路由" and "clip_characters" in str(f["msg"])
+               for f in gate.findings)
+
+
 def test_video_model_routes_ep2_requires_baseline_for_identity_route(tmp_path):
     root = tmp_path / "制漫剧" / "测试剧"
     _write_routes(root, _basic_route(primary_backend="veo", fallback_backends=[]), ep="第2集")
@@ -3395,7 +3414,7 @@ def test_video_model_routes_baseline_drift_blocks_for_high_risk(tmp_path):
 
     gate.check_video_model_routes(str(root), "第2集", "## 本集模型路由表\n", "00_总览.md")
 
-    assert any(f["sev"] == gate.BLOCK and f["dim"] == "后端跨集锁" and "baseline_override_reason" in str(f["msg"])
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "后端跨集锁" and "baseline_override" in str(f["msg"])
                for f in gate.findings)
 
 
@@ -3409,7 +3428,13 @@ def test_video_model_routes_baseline_override_downgrades_drift_to_warn(tmp_path)
         route,
         ep="第2集",
         baseline_anchored=True,
-        baseline_override_reason="本集换成动作专用后端，已人工确认角色一致性",
+        baseline_override={
+            "accepted": True,
+            "reviewer": "qa",
+            "reason": "本集换成动作专用后端，已人工确认角色一致性",
+            "expires_at": "2099-01-01",
+            "affected_routes": ["Clip_01"],
+        },
         baseline_drift=[{"clip_id": "Clip_01", "shot_type": "action_fight", "was": "seedance", "now": "dreamina"}],
     )
 
@@ -3419,12 +3444,32 @@ def test_video_model_routes_baseline_override_downgrades_drift_to_warn(tmp_path)
     assert any(f["sev"] == gate.WARN and f["dim"] == "后端跨集锁" for f in gate.findings)
 
 
+def test_video_model_routes_legacy_baseline_reason_no_longer_overrides(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    (root / "设定库").mkdir(parents=True)
+    (root / "设定库" / "model_routes_baseline.json").write_text("{}", encoding="utf-8")
+    route = _basic_route(clip_id="Clip_01", shot_type="action_fight", fallback_backends=[], risk_flags=["contact_motion"])
+    _write_routes(
+        root,
+        route,
+        ep="第2集",
+        baseline_anchored=True,
+        baseline_override_reason="旧式自由文本原因不应放行",
+        baseline_drift=[{"clip_id": "Clip_01", "shot_type": "action_fight", "was": "seedance", "now": "dreamina"}],
+    )
+
+    gate.check_video_model_routes(str(root), "第2集", "## 本集模型路由表\n", "00_总览.md")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "后端跨集锁" and "结构化 baseline_override" in str(f["msg"])
+               for f in gate.findings)
+
+
 def test_video_model_routes_blocks_fresh_evidence_without_required_capability(tmp_path):
     root = tmp_path / "制漫剧" / "测试剧"
     _record_video_backend_refresh(root, "veo")
     evidence = root / "生产数据" / "video_backend_capabilities" / "veo.json"
     data = json.loads(evidence.read_text(encoding="utf-8"))
-    data["capability_assertions"]["supports_last_frame"] = False
+    data["capability_assertions"]["supports_last_frame"]["value"] = False
     evidence.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
     route = _basic_route(
         primary_backend="veo",
@@ -3902,6 +3947,7 @@ def _write_routes_and_matrix(tmp_path, routes, forms):
 def _form(name, scope, bindings):
     # bindings: {backend: (binding, ready)}
     return {"character_name": name, "character_id": "CHAR_X", "scope": scope,
+            "form": "常态",
             "video_bindings": {b: {"binding": bd, "ready": rd} for b, (bd, rd) in bindings.items()}}
 
 
@@ -3967,6 +4013,21 @@ def test_route_identity_routed_to_native_backend_passes(tmp_path):
     gate.findings.clear()
     gate.check_route_identity_readiness(root, "第1集")
     assert not any(f["dim"] == "换后端丢锁" for f in gate.findings)
+
+
+def test_route_identity_scope_uses_clip_characters_only(tmp_path):
+    forms = [
+        _form("沈念", "核心", {"seedance": ("reference_group", True)}),
+        {"character_name": "柳娘子", "character_id": "CHAR_Y", "scope": "核心", "form": "常态",
+         "video_bindings": {"kling": {"binding": "character_id", "ready": True},
+                            "seedance": {"binding": "fallback_reference_group", "ready": True}}},
+    ]
+    routes = [{"clip_id": "Clip_01", "primary_backend": "seedance",
+               "clip_characters": [{"character_id": "CHAR_X", "form": "常态"}]}]
+    root = _write_routes_and_matrix(tmp_path, routes, forms)
+    gate.findings.clear()
+    gate.check_route_identity_readiness(root, "第1集")
+    assert not any(f["dim"] == "换后端丢锁" and "柳娘子" in str(f["msg"]) for f in gate.findings)
 
 
 # ── T5: 定妆库 ↔ identity_registry 双向对账 ──────────────────────────────────
@@ -5548,7 +5609,14 @@ def test_production_profile_advisory_signoff_keeps_warn(monkeypatch, tmp_path):
     prod = root / "生产数据"
     prod.mkdir(parents=True)
     (prod / "consistency_advisory_signoff_第1集.json").write_text(
-        json.dumps({"accepted": [{"dimension": "轴线视线(X1)", "message_contains": "关键对峙"}]}, ensure_ascii=False),
+        json.dumps({"accepted": [{
+            "accepted": True,
+            "dimension": "轴线视线(X1)",
+            "message_contains": "关键对峙",
+            "reviewer": "qa",
+            "reason": "导演有意越轴，已人工确认叙事动机",
+            "expires_at": "2099-01-01",
+        }]}, ensure_ascii=False),
         encoding="utf-8",
     )
     payload = {
@@ -5560,6 +5628,34 @@ def test_production_profile_advisory_signoff_keeps_warn(monkeypatch, tmp_path):
     gate.check_consistency_audit_gate(str(root), "第1集", stage="image")
     assert not any(f["sev"] == gate.BLOCK and f["dim"] == "轴线视线(X1)" for f in gate.findings)
     assert any(f["sev"] == gate.WARN and f["dim"] == "轴线视线(X1)" for f in gate.findings)
+
+
+def test_production_profile_weak_advisory_signoff_still_blocks(monkeypatch, tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "w"
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    (prod / "consistency_advisory_signoff_第1集.json").write_text(
+        json.dumps({"accepted": ["轴线视线(X1)", {"dimension": "轴线视线(X1)"}]}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    payload = {
+        "summary": {"precision_level": "full", "by_dim": {"轴线视线(X1)": {"warn": 2}}},
+        "findings": [{"severity": "warn", "dimension": "轴线视线(X1)", "message": "关键对峙镜视线越轴"}],
+    }
+    monkeypatch.setenv("N2D_CONSISTENCY_PROFILE", "production")
+    monkeypatch.setattr(gate.subprocess, "run", lambda *a, **k: _FakeProc(json.dumps(payload), 0))
+    gate.check_consistency_audit_gate(str(root), "第1集", stage="image")
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "轴线视线(X1)" and "finding_hash" in str(f["msg"])
+               for f in gate.findings)
+
+
+def test_delivery_stage_infers_production_profile_without_setting(tmp_path):
+    root = tmp_path / "w"
+    root.mkdir()
+    assert gate.consistency_release_profile(str(root), stage="review", ep="第1集") == "production"
+    (root / "_设置.md").write_text("- 一致性严格度: 宽松\n", encoding="utf-8")
+    assert gate.consistency_release_profile(str(root), stage="review", ep="第1集") == "demo"
 
 
 # ── M5 跨集对比跨过缺失的中间集 → WARN ──

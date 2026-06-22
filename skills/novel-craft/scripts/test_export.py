@@ -11,6 +11,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import hashlib
 
 from report_snapshot import snapshot_chapters
 
@@ -19,6 +20,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 EXPORT = os.path.join(HERE, "export.py")
 EXPAND_INIT = os.path.join(REPO, "skills", "novel-expand", "scripts", "init_project.py")
+
+
+def sha256_file(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
 
 
 def write_chapter(project_root):
@@ -44,17 +53,46 @@ def write_review_pass(project_root):
             "findings": [],
                 "next_actions": [],
         }, f, ensure_ascii=False)
-    with open(os.path.join(project_root, "审稿", "state_delta_第01章.json"), "w", encoding="utf-8") as f:
+    delta_path = os.path.join(project_root, "审稿", "state_delta_第01章.json")
+    with open(delta_path, "w", encoding="utf-8") as f:
         json.dump({
             "schema_version": 1,
             "kind": "novel_state_delta",
             "chapter": 1,
         }, f, ensure_ascii=False)
+    chapter_path = os.path.join(project_root, "章节", "第01章.md")
     with open(os.path.join(project_root, "审稿", "state_ledger.json"), "w", encoding="utf-8") as f:
         json.dump({
             "schema_version": 1,
             "kind": "novel_state_ledger",
-            "chapter_deltas": {"chapter_01": {"merged": True}},
+            "chapter_deltas": {"chapter_01": {
+                "merged": True,
+                "verification": {
+                    "chapter_file_hash": sha256_file(chapter_path),
+                    "delta_hash": sha256_file(delta_path),
+                },
+            }},
+        }, f, ensure_ascii=False)
+    os.makedirs(os.path.join(project_root, "合规"), exist_ok=True)
+    with open(os.path.join(project_root, "合规", "ai_usage.json"), "w", encoding="utf-8") as f:
+        json.dump({
+            "schema_version": 1,
+            "kind": "novel_ai_usage",
+            "generated_at": "2026-06-09",
+            "project_root": os.path.abspath(project_root),
+            "title": "源书",
+            "publish_target": "导出测试",
+            "human_contribution": "测试夹具模拟人工审稿与导出确认。",
+            "rights_status": "public-domain",
+            "text_mode": "AI-assisted",
+            "image_mode": "未使用AI图片",
+            "disclosure_detail": {
+                "text_directness": "revision_only",
+                "human_steering": "测试夹具固定输入，人工确认导出。",
+                "replaceability": "assistive_non_replaceable",
+                "direct_incorporation": "none",
+                "review_steps": ["review_report_passed", "state_ledger_verified"],
+            },
         }, f, ensure_ascii=False)
 
 

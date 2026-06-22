@@ -8,7 +8,8 @@
   发型 H1 · 服装/配色 N1 · 片内时序 N2 · 场景 O2 · 糊/低质 N4 · 手部/解剖 N5 ·
   身高比例 R1 · 轴线视线 X1 · 天气时辰 W1（含光位方向 W2 advisory）· 字幕安全区 L2 ·
   称谓口头禅 A1 · 风格 S1 · 字幕对齐 L1 · 音画同步 AV1（口型↔配音偏移·advisory）·
-  节奏密度 Rhythm（节奏/留存启发式 advisory）· 空间站位 B1（跨镜站位/遮挡）
+  节奏密度 Rhythm（节奏/留存启发式 advisory）· 空间站位 B1（跨镜站位/遮挡）·
+  生产一致性补强（物件常驻/持有账本/状态转场/交互图谱/成片探针/强配方/包装/语域/平面图/成本路由/人审校准/probe）
 
 每个子检测器各自缺库优雅跳过（见各脚本）；本编排只汇总、不重复实现。
 纯函数 `summarize` 无依赖、带 pytest。
@@ -57,6 +58,75 @@ import subtitle_align as sa
 import lipsync_consistency as lipc
 import scene_blocking_continuity as sbc
 import pacing_retention as pr
+import production_consistency as pc
+
+
+PRODUCTION_CONSISTENCY_META = {
+    "物件常驻(O3)": {
+        "stage": "image",
+        "artifacts": ("脚本/{ep}/storyboard.json", "出图/{ep}/prompt/01_分镜出图.md", "出图/共享/asset_registry.json"),
+    },
+    "持有账本(POS)": {
+        "stage": "script_stage2",
+        "artifacts": ("脚本/{ep}/storyboard.json", "生产数据/possession_ledger_{ep}.json"),
+    },
+    "视线状态回读(X2)": {
+        "stage": "image",
+        "artifacts": ("脚本/{ep}/storyboard.json", "出图/{ep}/prompt/01_分镜出图.md"),
+    },
+    "状态转场视频证据(ST1)": {
+        "stage": "video",
+        "artifacts": ("脚本/{ep}/storyboard.json", "生产数据/state_transition_manifest_{ep}.json"),
+    },
+    "交互接触(I1)": {
+        "stage": "script_stage2",
+        "artifacts": ("脚本/{ep}/storyboard.json", "出视频/{ep}/prompt/video_model_routes.json"),
+    },
+    "结构化交互图谱(I2)": {
+        "stage": "script_stage2",
+        "artifacts": ("脚本/{ep}/storyboard.json",),
+    },
+    "成片统一(C1)": {
+        "stage": "compose",
+        "artifacts": ("合成/{ep}", "出视频/{ep}/prompt/video_model_routes.json"),
+    },
+    "成片时间线探针(FT1)": {
+        "stage": "compose",
+        "artifacts": ("合成/{ep}/final_timeline_probe.json", "合成/{ep}"),
+    },
+    "生成配方(RCP)": {
+        "stage": "review",
+        "artifacts": ("生产数据/production_events.jsonl", "生产数据/generation_recipe_{ep}.json"),
+    },
+    "强配方Schema(RCP2)": {
+        "stage": "review",
+        "artifacts": ("生产数据/production_events.jsonl", "生产数据/generation_recipe_{ep}.json"),
+    },
+    "系列包装(PKG)": {
+        "stage": "compose",
+        "artifacts": ("设定库/series_packaging.json", "合成/交付"),
+    },
+    "台词语域(D1)": {
+        "stage": "script_stage1",
+        "artifacts": ("脚本/{ep}/voiceover.txt", "设定库/dialogue_register.json"),
+    },
+    "场景平面(FP1)": {
+        "stage": "script_stage2",
+        "artifacts": ("脚本/{ep}/storyboard.json", "设定库/scene_floorplan.json"),
+    },
+    "成本路由(K1)": {
+        "stage": "review",
+        "artifacts": ("生产数据/production_events.jsonl", "出视频/{ep}/prompt/video_model_routes.json"),
+    },
+    "人审校准集(CAL)": {
+        "stage": "review",
+        "artifacts": ("生产数据/consistency_calibration.jsonl", "生产数据/consistency_findings_{ep}.json"),
+    },
+    "一致性探针包(PROBE)": {
+        "stage": "review",
+        "artifacts": ("生产数据/consistency_probe_pack.json", "设定库/consistency_probe_pack.json"),
+    },
+}
 
 
 def _verdicts(rows: List[dict]) -> List[str]:
@@ -522,6 +592,26 @@ def run(root: str, ep: str) -> dict:
         "rerun_scope": default_scope("节奏密度(Rhythm)", "script_stage2"),
     }
 
+    # 生产一致性补强：纯标准库检查器，覆盖物件/持有/状态转场、交互因果/图谱、
+    # 成片统一/时间线探针、生成配方/强 schema、系列包装、语域、场景平面图、
+    # 成本/路由/重试口径、人审校准集与项目 probe pack。
+    prod = pc.analyze(root, ep)
+    for dim, raw in (prod.get("sections") or {}).items():
+        if not isinstance(raw, dict):
+            continue
+        meta = PRODUCTION_CONSISTENCY_META.get(dim, {})
+        stage = str(meta.get("stage") or "review")
+        artifacts = tuple(str(a).format(ep=ep) for a in meta.get("artifacts", ()))
+        sections[dim] = section_from_result(
+            dim=dim,
+            result=raw,
+            detail_key="findings",
+            skipped=not raw.get("available", False),
+            ep=ep,
+            stage=stage,
+            default_artifacts=artifacts,
+        )
+
     # 结构化段（P0/P1/P2）已有 details：直接取检出条目，避免双重归一
     for sec in sections.values():
         export_rows.extend(active_findings(sec.get("details", [])))
@@ -602,8 +692,19 @@ def export_findings(root: str, ep: str, res: dict) -> str:
         json.dump(findings_payload(res), fh, ensure_ascii=False, indent=2)
         fh.write("\n")
     _append_dashboard_event(root, ep, res, path)
+    _refresh_generation_recipe(root, ep)
     _refresh_consistency_ledger(root, ep)
     return path
+
+
+def _refresh_generation_recipe(root: str, ep: str) -> bool:
+    """Best-effort generation recipe hash ledger, derived from production_events."""
+    try:
+        pc.write_recipe_ledger(root, ep)
+        return True
+    except Exception as exc:
+        print(f"[consistency_audit][warn] generation_recipe 刷新失败（忽略）：{exc}", file=sys.stderr)
+        return False
 
 
 def _refresh_consistency_ledger(root: str, ep: str) -> bool:

@@ -44,6 +44,9 @@
   "mode": "frames2video",
   "native_audio_policy": "none",
   "identity_requirement": "character_id_or_reference_group",
+  "clip_characters": [
+    {"character_id": "CHAR_01", "form": "常态"}
+  ],
   "max_clip_seconds": 10,
   "risk_flags": ["contact_motion", "feature_melting_risk", "physical_interaction"],
   "motion_control": {
@@ -101,6 +104,7 @@
   - `character_id_or_reference_group`
   - `face_lock_or_reference_group`
   - `reference_controls_or_reference_group`
+- `clip_characters`: 本 Clip 实际出现的角色绑定，身份镜必填。元素至少含 `character_id`，可选 `form`。router 从 `storyboard.json` 的结构化角色字段或 `CHAR_xx/形态` 提取；普通自然语言人名只可作为人审信息，不能替代 `character_id`。`n2d-review gate` 用该字段把身份 adapter matrix 检查缩到本 Clip 角色；`identity_requirement != none` 且缺有效 `clip_characters[]` 会 BLOCK 并要求重跑 router/补 storyboard 角色 ID。
 - `max_clip_seconds`: 该 primary 后端建议单 Clip 上限。超出后回 `n2d-script` 拆 Clip 或换长单镜后端。
 - `risk_flags`: `multi_person`、`mouth_visible`、`native_audio_risk`、`native_speech`（原生音画说话镜，须查唇音同步）、`long_duration`、`contact_motion`、`identity_drift_risk`、`motion_reference_candidate`（可用视频运动参考）、`multishot_candidate`（属多镜单次生成候选组）等。
 - `quality_tier`: 质量档路由意图，`fast|high|n/a`。`high`=身份/物理吃重镜（脸/接触/多人/原生台词/已升锁），值后端 pro 档把脸与运动钉稳；`fast`=空镜/通用低风险镜，量产省成本；`n/a`=该 primary 无 fast/pro 档（如 veo）。**只表达路由意图，不写死 model_version**——落档侧出片脚本把 `high→pro`、`fast→fast` 解析成后端实际质量档；成本事件带 `quality_tier` 时 dashboard 的 `cost_by_provider` 会按 `provider@tier:unit` 拆出 fast/pro 花销。
@@ -176,8 +180,26 @@
 ```markdown
 ## 本集模型路由表
 
-| Clip | shot_type | primary | fallback | mode | native_audio | identity | motion_control | 风险 | 降级 |
-|---|---|---|---|---|---|---|---|---|---|
+| Clip | characters | shot_type | primary | fallback | mode | native_audio | identity | motion_control | 风险 | 降级 |
+|---|---|---|---|---|---|---|---|---|---|---|
 ```
 
 `n2d-video/prompt/00_总览.md` 必须复制或引用这张「本集模型路由表」。
+
+## baseline override
+
+第 2 集起，高风险/含角色 route 要按 `设定库/model_routes_baseline.json` 锚定。自然路由漂移会写 `baseline_drift`；高风险/含角色漂移在 gate 中默认 BLOCK。临时改后端必须写结构化 `baseline_override`，不能只写自由文本原因：
+
+```json
+{
+  "baseline_override": {
+    "accepted": true,
+    "reviewer": "qa",
+    "reason": "本集为满足动作控制临时换后端，已人工复核角色一致性",
+    "expires_at": "2099-01-01",
+    "affected_routes": ["Clip_01", "Clip_02"]
+  }
+}
+```
+
+要求：`accepted=true`、`reviewer`、`reason`、未过期 `expires_at`、非空 `affected_routes`；`affected_routes` 可用 `*`，否则必须覆盖当前 `clip_id`。

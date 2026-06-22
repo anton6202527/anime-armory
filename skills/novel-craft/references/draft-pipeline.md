@@ -9,6 +9,7 @@
 - `设定/读者契约.md` 已经写明核心题旨、读者承诺、好看机制、文学质感和禁偏清单。旧项目缺失时可先按 `references/reader-contract.md` 补一版，再继续批量写章。
 - `审稿/demo_gate.json.status == passed`。未通过时只能写 Demo 或准备包，不能批量写余章。
 - `_设置.md` 已落 `小说生成模式` 与 `章节生成粒度`；缺则按 `skills/novel-craft/references/选择点与偏好.md` 问一次或用全局默认预填。
+- `scale=long` / `target_chapters>=30` / 商业连载 / 系统流 / 修仙 / 群像 / 复杂世界观项目，批量写章前建议先跑 `python3 skills/novel-wiki/scripts/storyworld_pressure_test.py "<作品根>"`；若 `verdict=block_pre_draft`，先补角色目标、世界规则、地理势力、时间线、章纲压力或读者契约，不进入 draft。
 
 ## 四档小说生成模式
 

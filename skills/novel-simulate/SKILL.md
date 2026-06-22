@@ -1,6 +1,6 @@
 ---
 name: novel-simulate
-description: 多代理人"模拟读者"测试 — 在正式发布前进行虚拟试读会。通过构建不同人格偏好的 AI 读者(小白、逻辑党、嗑糖党等),提供多维度的定性反馈。帮助作者提前识别弃书点、验证爽点捕获率、评估受众兼容性。Use when asked to 模拟读者, 读者反馈, 试读, 测一下留存, 读者怎么看, 虚拟试读, simulate readers, reader feedback, mock audience. Triggers 模拟读者, 虚拟试读, 读者反馈, 弃书点, 爽点捕获, 留存测试, novel simulate, reader panel.
+description: 多代理人"模拟读者"测试 — 在正式发布前、尚无真实读者数据时进行虚拟试读会。通过构建不同人格偏好的 AI 读者(小白、逻辑党、嗑糖党等),提供多维度的定性反馈。帮助作者提前识别弃书点、验证爽点捕获率、评估受众兼容性；若已有平台后台/内测读者数据，应走 novel-feedback 导入真实反馈。Use when asked to 模拟读者, 读者反馈, 试读, 测一下留存, 读者怎么看, 虚拟试读, simulate readers, reader feedback, mock audience. Triggers 模拟读者, 虚拟试读, 读者反馈, 弃书点, 爽点捕获, 留存测试, novel simulate, reader panel.
 ---
 
 # novel-simulate — 多代理人“模拟读者”测试
@@ -38,6 +38,7 @@ python3 skills/novel-simulate/scripts/simulate_panel.py "<作品根>" [--scope o
 
 - **Demo Gate 之后**：在投入大量精力写全本前，先看看这组 Demo 章是否能抓住预期受众。
 - **重大转折章之后**：验证读者的反应是否如作者所愿（是被惊艳还是被劝退）。
+- **尚无真实数据时**：已有完读率、弃读、评论导出时先走 `novel-feedback`；真实反馈权重高于模拟试读。
 
 ## 详细参考
 - 人格库定义、信号 schema、retention_prior 公式、判读铁律：`references/reader-personas.md`

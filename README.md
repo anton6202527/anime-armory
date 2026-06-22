@@ -1,5 +1,11 @@
 # anime-armory
 
+**Language / 语言**：中文（默认） | [English](#en)
+
+<a id="zh-cn"></a>
+
+## 中文
+
 一套面向 AI 内容生产的本地流水线：把一个点子、一本书、一首歌或一份客户需求，推进成可交付的小说、AI 漫剧短视频、AI 音乐 MV 或 商业广告片。
 
 仓库的核心不是单个脚本，而是根目录 `skills/` 下的一组可复用 workflow skill。它们构成五条彼此独立、可单独分发的生产线：
@@ -12,7 +18,7 @@
 
 产物统一落在 `创作区/` 下：`创作区/写小说/`、`创作区/制漫剧/`、`创作区/写歌/`、`创作区/制MV/`、`创作区/拍广告/`（跨项目可复用资产在 `资产库/`）。每个作品一个子目录，通常都有 `_进度.md` 和 `_设置.md` 来记录状态与选择。
 
-> 给 AI agent 或人快速进仓库：先读 [AGENTS.md](AGENTS.md)。  
+> 给 AI agent 或人快速进仓库：先读 [AGENTS.md](AGENTS.md)。
 > skill 完整索引与职责边界：读 [skills/README.md](skills/README.md)。
 
 ## 下载安装
@@ -89,7 +95,7 @@ Windows 安装包**无法在 macOS 上交叉编译**，必须在 Windows 上构�
 
 ```bash
 # 推一个 desktop-v* tag 即触发云端构建 + 发布（mac .dmg / win .exe[NSIS] / .vsix）
-git tag desktop-v0.1.10 && git push origin desktop-v0.1.10
+git tag desktop-v0.1.12 && git push origin desktop-v0.1.12
 # 或在 Actions 页手动 workflow_dispatch（只产出 build artifact，不发 Release）
 ```
 
@@ -218,3 +224,222 @@ anime-armory/
 ## 维护边界
 
 根 README 只放快速开始和稳定约定。具体阶段、脚本参数、后端差异、验收标准放在对应 `skills/<name>/SKILL.md` 和 `references/` 里。这样可以避免 README 变成第二份过期索引。
+
+---
+
+<a id="en"></a>
+
+## English
+
+[中文（默认）](#zh-cn) | English
+
+`anime-armory` is a local production pipeline for AI-assisted content creation. It helps turn an idea, a book, a song, or a client brief into deliverable novels, AI comic-drama short videos, music videos, or commercial ads.
+
+The core of this repository is not a single script. It is a set of reusable workflow skills under `skills/`, organized into five independent production lines:
+
+- **Novel (`novel`)**: project setup -> chapter outline -> drafting -> review / scoring -> export
+- **Novel text -> AI comic-drama / short drama (`n2d`)**: episode splitting -> voice -> storyboard -> images -> videos -> final composition
+- **Song (`song`)**: lyrics -> composition / version selection -> cover / voice conversion -> song review
+- **Music video (`mv`)**: song ingest -> beatgrid -> visual blueprint -> clip plan -> images / videos -> karaoke subtitles -> composition
+- **Ads (`ad`)**: brief -> concept -> script / VO -> storyboard -> product / scene / character references -> images / videos -> deliverables
+
+Generated work lives under `创作区/`: `创作区/写小说/`, `创作区/制漫剧/`, `创作区/写歌/`, `创作区/制MV/`, and `创作区/拍广告/`. Reusable cross-project assets live in `资产库/`. Each project usually contains `_进度.md` for status and `_设置.md` for persistent choices.
+
+> For AI agents or humans entering the repo, read [AGENTS.md](AGENTS.md) first.
+> For the full skill index and responsibility boundaries, read [skills/README.md](skills/README.md).
+
+## Download And Install
+
+Ready-to-use packages are available from the latest release:
+
+| Package | Platform | Download |
+|---|---|---|
+| Desktop App | macOS, universal Intel / Apple Silicon | [**AnimeArsenal_macos.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_macos.dmg) |
+| Desktop App | Windows `.exe` installer | [**AnimeArsenal_windows.exe**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_windows.exe) |
+| VS Code Extension | Cross-platform `.vsix` | [**anime-armory.vsix**](https://github.com/anton6202527/anime-armory/releases/latest/download/anime-armory.vsix) |
+
+- **Desktop App**: install the `.dmg` on macOS or run the `.exe` installer on Windows. The app includes all current skills.
+- **VS Code Extension**: download the `.vsix`, then run `Extensions: Install from VSIX...` in the VS Code command palette.
+
+The links always point to the latest published `anime-armory` release. Historical versions and checksums are available on the [Releases page](https://github.com/anton6202527/anime-armory/releases).
+
+### Skills Are The Core Asset
+
+The reusable core is the workflow skill set under `skills/`. The app packages only provide a more convenient interface. You can skip the app and work directly with the skills:
+
+```bash
+git clone https://github.com/anton6202527/anime-armory
+cd anime-armory
+```
+
+Then open the folder with a local AI agent such as Claude Code or Codex. Read [AGENTS.md](AGENTS.md), then use the entry skills below. To modify prompts, backends, or workflow rules, edit `skills/<name>/SKILL.md` and its `references/`.
+
+## Demo
+
+The repository contains an end-to-end example project:
+
+| Type | Example | Notes |
+|---|---|---|
+| Comic-drama project | `创作区/制漫剧/本宫才是这皇宫最大的妖/` | Novel source, scripts, settings, references, images, compliance data, and production records |
+
+The demo is provided with author-owned, public-domain, or authorized materials. Use your own lawful source materials when producing new work.
+
+## Quick Start
+
+Open the repo in a local AI agent, then choose the entry skill for your target workflow. The entry skill reads the project `_进度.md` and routes the project to the next stage.
+
+Skill names are shown in cross-tool compatible form: use bare names like `n2d-image` or `n2d-progress`, without a leading slash. Some AI agents treat `/n2d-image` as an unsupported slash command.
+
+| Goal | Entry |
+|---|---|
+| Turn a novel into an AI comic-drama | `n2d <novel path or 创作区/制漫剧/project>` |
+| Write lyrics, compose, select versions, or review songs | `song <idea, lyrics, or 创作区/写歌/project>` |
+| Make an MV for a song | `mv <song or 创作区/制MV/project>` |
+| Produce an ad, TVC, product demo, or feed ad | `ad <brief or 创作区/拍广告/project>` |
+| Check project progress and next steps | `n2d-progress [project dir]` or ask “current progress” |
+| Modify or audit project settings | `n2d-settings set/audit/reset/sync-global [project dir] ...` |
+| Check pipeline updates and generate rebuild plans | `n2d-update check [project dir]`; selective media refresh uses `n2d-update media ...` |
+| Clean caches and temp files | `tools/shared-cleanup`, defaulting to `skills/`, with `--repo` for the whole repo |
+| Check independence of the five lines | `python3 tools/independence-audit/scripts/check_independence.py` |
+
+Common full workflows:
+
+```text
+Comic-drama: n2d -> n2d-script -> n2d-voice -> n2d-script(storyboard) -> n2d-image -> n2d-video -> n2d-compose
+Song: song -> song-lyrics -> song-score -> song-compose -> song-cover(optional) -> song-review
+MV: mv -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-sync -> mv-compose
+Ad: ad -> ad-concept -> ad-script -> ad-voice -> ad-script(storyboard) -> ad-image -> ad-video -> ad-compose
+```
+
+## Maintainer Packaging
+
+The packages listed above are built and uploaded to the `anime-armory` GitHub Release.
+
+**Desktop App / VS Code extension, cloud build recommended:**
+
+Windows installers cannot be cross-compiled from macOS. The repo includes [`.github/workflows/desktop-release.yml`](.github/workflows/desktop-release.yml), which builds on macOS and Windows via GitHub Actions and publishes stable filenames:
+
+```bash
+git tag desktop-v0.1.12 && git push origin desktop-v0.1.12
+```
+
+Prerequisite: configure the `ARMORY_RELEASE_TOKEN` secret in the `anime-arsenal` repo. It must be a PAT with `contents: write` permission for `anime-armory`. The workflow publishes:
+
+- `AnimeArsenal_macos.dmg`
+- `AnimeArsenal_windows.exe`
+- `anime-armory.vsix`
+
+Local manual packaging only builds the current platform:
+
+```bash
+cd desktop && npm install && npm run tauri build
+cd vscode-extension && npx @vscode/vsce package
+```
+
+**Lightweight starter package:**
+
+```bash
+bash scripts/package_release.sh 2026-06-10
+```
+
+The output is written to `dist/`:
+
+```text
+dist/anime-armory-starter-2026-06-10.zip
+dist/anime-armory-starter-2026-06-10.zip.sha256
+```
+
+For a full source archive from tracked files:
+
+```bash
+mkdir -p dist
+git archive --format=zip --prefix=anime-armory-full/ -o dist/anime-armory-full.zip HEAD
+shasum -a 256 dist/anime-armory-full.zip > dist/anime-armory-full.zip.sha256
+```
+
+`dist/` is ignored by git; release archives are distribution artifacts, not source files.
+
+## Production Line: Novel To AI Comic-Drama
+
+The entry skill is `n2d`. The recommended default is voice-first production: generate real voice timing first, then drive storyboard, images, videos, and composition from measured audio duration.
+
+Main stages:
+
+1. `n2d-script`: episode split, dialogue, BGM, character cards, scene cards, and visual style.
+2. `n2d-voice`: character voices, joined audio, and line-level duration manifest.
+3. `n2d-script` again: storyboard, asset list, and subtitles based on measured timing.
+4. `n2d-image`: shared character references and per-episode storyboard images.
+5. `n2d-video`: image-to-video clips, backend capability checks, model routing, and split relay.
+6. `n2d-compose`: final video composition with seamless segment handling and storyboard-aware transitions.
+
+Industrial support skills:
+
+- `n2d-compliance`: source rights, adaptation rights, likeness, voice cloning, platform review, and localization compliance.
+- `n2d-identity`, `n2d-lora`, `n2d-asset-market`: identity registry, LoRA lifecycle, and reusable asset packs.
+- `n2d-model-router`: per-shot video backend routing and fallback planning.
+- `n2d-dashboard`, `n2d-batch`, `n2d-score`, `n2d-review-ui`, `n2d-feedback`: cost tracking, batch execution, machine scoring, review UI, and audience feedback.
+- `n2d-progress`, `n2d-settings`, `n2d-update`: progress dashboard, settings management, and minimal rebuild planning.
+
+## Maintenance Tools
+
+| Entry | Purpose |
+|---|---|
+| `n2d-progress` | Read-only progress scan for comic-drama projects |
+| `n2d-settings` | Manage `_设置.md`, audit invalid values, and sync private defaults |
+| `tools/shared-cleanup` | Repo cleanup tool, defaulting to `skills/`, with `--repo` for the whole repo |
+| `tools/independence-audit` | Static audit that checks whether skill families accidentally depend on each other |
+
+Watermark and face-swap skills were removed in June 2026. AI labeling and disclosure are handled by external compliance workflows.
+
+Voice cloning and celebrity voice imitation are high-risk capabilities and require authorization. Unauthorized singer voice cloning must be refused.
+
+## Key Conventions
+
+- **Read `_进度.md` first**: it is the source of truth for project state and next steps.
+- **Persist choices in `_设置.md`**: platform, backend, resolution, voice, and production mode should be asked once and reused within the same project.
+- **Keep skills generic**: do not hardcode personal preferences, platform accounts, or one mandatory backend.
+- **Move compliance forward**: adaptation rights and voice authorization should be checked before final production.
+- **Sync the index when skill responsibilities change**: update [skills/README.md](skills/README.md).
+- **Keep production lines independent**: n2d, song, mv, and ad must not import each other’s implementation.
+- **Do not overwrite AGENTS.md**: it is the hand-maintained, tool-neutral entry point.
+
+## Local Environment
+
+The project targets a macOS local workflow, with heavier capabilities delegated to external tools or conda environments:
+
+- `ffmpeg`: often a reduced build without `libass` / `drawtext`; subtitles usually render through Pillow PNG overlays.
+- `cosyvoice` / `fish-speech`: voice, audio processing, and Whisper-related capabilities.
+- `acestep`: local song generation demo.
+- Image and video generation CLIs: configured through each skill’s backend choices, not hardcoded in this README.
+
+System Python may be affected by PEP 668. Heavy dependencies should live in the corresponding conda environment. Script-level details are in each skill’s `references/`.
+
+## Directory Layout
+
+```text
+anime-armory/
+├── README.md                 Quick entry
+├── AGENTS.md                 Tool-neutral entry for AI agents
+├── skills/                   All workflow skills
+│   ├── README.md             Skill index
+│   ├── n2d/ n2d-*            Comic-drama skills
+│   ├── song/ song-*          Songwriting, composition, cover, review
+│   ├── mv/ mv-*              MV planning, beat sync, subtitles, composition
+│   └── ad/ ad-*              Ad concept, production, and delivery
+├── tools/
+│   ├── shared-cleanup/       Repo cleanup dev tool
+│   └── independence-audit/   Static independence audit
+├── .claude/skills -> ../skills
+├── 创作区/
+│   ├── 写小说/<project>/          Novel projects and exports
+│   ├── 制漫剧/<project>/          Comic-drama projects and finished videos
+│   ├── 写歌/<project>/            Song projects and finished songs
+│   ├── 制MV/<project>/            MV projects and finished videos
+│   └── 拍广告/<project>/          Ad projects and deliverables
+├── 资产库/                    Cross-project reusable assets
+└── docs/images/              Documentation screenshots
+```
+
+## Maintenance Boundary
+
+The root README should stay focused on quick start and stable conventions. Stage details, script arguments, backend differences, and acceptance criteria belong in `skills/<name>/SKILL.md` and each skill’s `references/`. This keeps the README from becoming a second, stale skill index.

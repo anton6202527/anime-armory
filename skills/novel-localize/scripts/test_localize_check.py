@@ -100,6 +100,30 @@ def test_no_glossary_graceful():
     assert summary["glossary_terms"] == 0  # 无术语表不报错
 
 
+def test_diting_idiom_ambiguity_and_tense_review():
+    root = _mk_project(
+        {1: "她曾经以为大道无情只是传说，后来才知道这是杀鸡儆猴。"},
+        {1: "She thought the great way had no feeling, and later learned it was a warning to others."},
+        {"terms": []},
+    )
+    rows, summary = lc.check(root, "en")
+    dims = [item["dimension"] for item in rows[0]["narrative_fidelity_review"]]
+    assert "idiom_proverb" in dims
+    assert "lexical_ambiguity" in dims
+    assert summary["narrative_fidelity_review_counts"]["idiom_proverb"] == 1
+
+
+def test_diting_cultural_safety_review():
+    root = _mk_project(
+        {1: "殿中有人骂她是血统低贱的蛮夷。"},
+        {1: "Someone in the hall insulted her ancestry in harsh words."},
+    )
+    rows, summary = lc.check(root, "en")
+    dims = [item["dimension"] for item in rows[0]["narrative_fidelity_review"]]
+    assert "cultural_safety" in dims
+    assert summary["blocking"] == 0
+
+
 def test_main_writes_report():
     root = _mk_project({1: "沈念。"}, {1: "Shen Nian stood there quietly for a long while."})
     import sys
