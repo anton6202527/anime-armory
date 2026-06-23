@@ -512,6 +512,21 @@ def test_detect_face_swaps_empty_or_no_chars():
     assert fc.detect_face_swaps([[1.0, 0.0]], {})["assignments"] == []
 
 
+def test_swap_verdict_escalates_confident_swap_to_block():
+    import face_consistency as fc
+    # 一多一少（张冠李戴）= 确凿穿帮 → block（即便起评 ok）
+    swap_sus = {"duplicate_chars": ["沈念"], "missing_chars": ["柳娘子"], "swap_suspected": True}
+    assert fc.swap_verdict(swap_sus, "ok") == "block"
+    assert fc.swap_verdict(swap_sus, "warn") == "block"
+    # 仅 duplicate/missing 之一（弱信号）→ 至少 warn，不到 block
+    weak = {"duplicate_chars": ["沈念"], "missing_chars": [], "swap_suspected": False}
+    assert fc.swap_verdict(weak, "ok") == "warn"
+    # 无串脸信号 → 不动
+    assert fc.swap_verdict({"duplicate_chars": [], "missing_chars": [], "swap_suspected": False}, "ok") == "ok"
+    # 已是 block 不降级
+    assert fc.swap_verdict(weak, "block") == "block"
+
+
 def test_select_face_encoder_explicit_and_env(monkeypatch):
     monkeypatch.delenv("N2D_FACE_EMBEDDER", raising=False)
     assert fc.select_face_encoder("styleid") == "styleid"
@@ -563,3 +578,15 @@ def test_load_fidelity_mask_reads_shot_canonical(tmp_path):
         encoding="utf-8")
     mask = fc._load_fidelity_mask(str(tmp_path), "第1集")
     assert mask["镜头01.png"]["canonical_pass"] is False
+
+
+def test_face_unverifiable_threshold():
+    # 远景人小：最大脸短边占比低于阈值 → 身份不可辨。
+    assert fc.face_unverifiable(0.02) is True
+    assert fc.face_unverifiable(0.044) is True
+    # 脸够大（近景/中景）→ 可核验。
+    assert fc.face_unverifiable(0.05) is False
+    assert fc.face_unverifiable(0.20) is False
+    # 显式阈值可调（与 env N2D_FAR_SHOT_FACE_MIN_RATIO 同义）。
+    assert fc.face_unverifiable(0.08, min_ratio=0.10) is True
+    assert fc.face_unverifiable(0.12, min_ratio=0.10) is False

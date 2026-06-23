@@ -24,6 +24,9 @@ def test_init_manifest_uses_identity_registry_characters(tmp_path: Path) -> None
     path = compliance.write_manifest(root, "第1集")
     data = json.loads(path.read_text(encoding="utf-8"))
 
+    assert data["rights"]["source_text"]["status"] == "original"
+    assert data["rights"]["adaptation"]["status"] == "original"
+    assert "原著作者" in data["rights"]["source_text"]["evidence"]
     ids = [item["character_id"] for item in data["character_likeness"]["characters"]]
     assert ids == ["CHAR_A", "CHAR_B"]
 
@@ -53,7 +56,7 @@ def test_check_manifest_requires_rights_fields(tmp_path: Path) -> None:
     comp.mkdir(parents=True)
     data = compliance.default_manifest(root, "第1集")
     del data["rights"]["adaptation"]
-    data["rights"]["source_text"]["evidence"] = ""
+    data["rights"]["source_text"] = {"status": "user_declared", "evidence": ""}
     (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
 
     issues = compliance.check_manifest(root, "第1集")
@@ -153,8 +156,8 @@ def test_check_manifest_blocks_placeholder_values(tmp_path: Path) -> None:
 
     issues = compliance.check_manifest(root, "第1集")
 
-    assert any("rights.source_text" in item and "evidence" in item for item in issues)
-    assert any("rights.adaptation" in item and "evidence" in item for item in issues)
+    assert not any("rights.source_text" in item and "evidence" in item for item in issues)
+    assert not any("rights.adaptation" in item and "evidence" in item for item in issues)
     assert any("platform_review.targets[1]" in item and "platform" in item for item in issues)
     assert any("platform_review.targets[1]" in item and "policy_profile" in item for item in issues)
 
@@ -164,8 +167,6 @@ def test_check_manifest_blocks_invalid_platform_review_fields(tmp_path: Path) ->
     comp = root / "合规"
     comp.mkdir(parents=True)
     data = compliance.default_manifest(root, "第1集")
-    data["rights"]["source_text"]["evidence"] = "作者自有项目"
-    data["rights"]["adaptation"]["evidence"] = "同源改编"
     data["platform_review"]["targets"][0].update({
         "platform": "not_applicable",
         "region": "ready",
@@ -389,3 +390,56 @@ def test_ai_labeling_not_checked_at_image_stage(tmp_path: Path) -> None:
     _write(root, compliance.default_manifest(root, "第1集"))  # TODO 占位
     issues = compliance.check_manifest(root, "第1集", stage="image")
     assert not _ai_only(issues)  # 标识只在 compose/review 检
+
+
+def test_check_manifest_blocks_cameo_without_authorization_and_face_upload(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    reg = root / "出图" / "common"
+    comp = root / "合规"
+    reg.mkdir(parents=True)
+    comp.mkdir(parents=True)
+    (reg / "identity_registry.json").write_text(
+        json.dumps({"characters": [{"id": "CHAR_A"}]}, ensure_ascii=False), encoding="utf-8")
+    data = compliance.default_manifest(root, "第1集")
+    data["rights"]["source_text"] = {"status": "original", "evidence": "作者自有项目"}
+    data["rights"]["adaptation"] = {"status": "original", "evidence": "同源改编"}
+    data["character_likeness"]["characters"][0]["status"] = "synthetic_character"
+    # Sora2 cameo：未授权 + 喂了脸锚 → 两条 cameo block。
+    data["image_identity"]["uses_cameo"] = True
+    data["image_identity"]["authorization_status"] = "pending"
+    data["image_identity"]["feeds_face_references"] = True
+    data["platform_review"]["targets"][0].update({
+        "platform": "抖音", "region": "CN", "policy_profile": "douyin_policy_2026-06-08",
+        "profile_checked_at": "2026-06-08", "copyright_review": "ready", "content_rating_review": "ready",
+    })
+    (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    issues = compliance.check_manifest(root, "第1集")
+
+    assert any("cameo identity requires authorization_status=approved" in i for i in issues)
+    assert any("forbids uploading face reference images" in i for i in issues)
+
+
+def test_check_manifest_cameo_approved_no_face_upload_passes(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    reg = root / "出图" / "common"
+    comp = root / "合规"
+    reg.mkdir(parents=True)
+    comp.mkdir(parents=True)
+    (reg / "identity_registry.json").write_text(
+        json.dumps({"characters": [{"id": "CHAR_A"}]}, ensure_ascii=False), encoding="utf-8")
+    data = compliance.default_manifest(root, "第1集")
+    data["rights"]["source_text"] = {"status": "original", "evidence": "作者自有项目"}
+    data["rights"]["adaptation"] = {"status": "original", "evidence": "同源改编"}
+    data["character_likeness"]["characters"][0]["status"] = "synthetic_character"
+    data["image_identity"].update({"uses_cameo": True, "authorization_status": "approved",
+                                    "feeds_face_references": False, "evidence": "本人自录+opt-in 授权书 #123"})
+    data["platform_review"]["targets"][0].update({
+        "platform": "抖音", "region": "CN", "policy_profile": "douyin_policy_2026-06-08",
+        "profile_checked_at": "2026-06-08", "copyright_review": "ready", "content_rating_review": "ready",
+    })
+    (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    issues = compliance.check_manifest(root, "第1集")
+
+    assert not any("cameo identity requires" in i or "forbids uploading face reference" in i for i in issues)

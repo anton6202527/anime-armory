@@ -152,6 +152,13 @@ NOVEL_DEFAULTS = {
 
 # ── Scale Profiles ────────────────────────────────────────────────────────────
 SCALE_PROFILES = {
+    "microstory": {
+        "label": "短故事/超短篇",
+        "target_chapters": 1,
+        "words_per_chapter": [2000, 6000],
+        "min_max": [1500, 8000],
+        "demo": 1,
+    },
     "short": {
         "label": "短篇集",
         "target_chapters": 3,
@@ -192,6 +199,7 @@ SCALE_PROFILES = {
 WORDCOUNT_BANDS_BY_TARGET = {
     (1000, 1500): [800, 1800],
     (1500, 2500): [1200, 3000],
+    (2000, 6000): [1500, 8000],
     (3000, 5000): [2500, 6000],
     (5000, 8000): [4000, 10000],
     (6000, 10000): [5000, 15000],
@@ -203,6 +211,9 @@ SCALE_ALIASES = {
     "漫剧档": "漫剧",
     "短剧": "微短剧",
     "微短剧档": "微短剧",
+    "短故事": "microstory",
+    "超短篇": "microstory",
+    "短故事档": "microstory",
 }
 
 SCALE_CHOICES = tuple(SCALE_PROFILES) + tuple(SCALE_ALIASES)
@@ -380,12 +391,17 @@ def parse_regions(value):
     return out
 
 def derive_title(meta):
-    if meta.get("title"): return meta["title"]
-    src = meta.get("source_title") or meta.get("source") or "未命名"
-    kind = meta.get("kind", "")
-    KIND_MAP = {"rewrite": "改写", "expand": "扩写", "continue": "续写", "spinoff": "外传"}
-    suffix = KIND_MAP.get(kind, "")
-    return f"{src}-{suffix}" if suffix else src
+    # 统一后的富版（含 spinoff_character 特例 + KIND_SUFFIX）；与 export 实际取用版一致。
+    if meta.get("title"):
+        return meta["title"]
+    kind = meta.get("kind", "spinoff")
+    src = meta.get("source_title") or meta.get("source")
+    if kind == "spinoff" and meta.get("spinoff_character") and src:
+        return f"{src}-{meta['spinoff_character']}外传"
+    suffix = KIND_SUFFIX.get(kind)
+    if src and suffix:
+        return f"{src}-{suffix}"
+    return src or "未命名"
 
 ALLOWED_OUTPUT_FORMATS = ("txt", "docx", "outline")
 
@@ -592,3 +608,133 @@ def build_progress_markdown(title: str, kind: str, chapters: int) -> str:
 """
 
 import os
+
+
+# ─────────────────────────────────────────────────────────────────────────
+# 家族契约：阶段表 + 阶段清单型进度 markdown（原 novel-craft/scripts/contract.py 独有，
+# 2026-06 统一后并入本单一真值源；novel-craft/scripts/contract.py 已收敛为薄转发 shim）。
+# 注：build_progress_markdown 产「章节矩阵型」进度（init 实际产物）；下面 create/derived_stage_markdown
+# 产「同构阶段清单型」，由 novel-craft/scripts/progress.py 读取——两套并存见 references/contract.md。
+# ─────────────────────────────────────────────────────────────────────────
+CONTRACT_VERSION = 1
+
+KIND_SUFFIX = {
+    "rewrite": "改写",
+    "expand": "扩写",
+    "condense": "精简",
+    "continue": "续写",
+}
+
+KIND_SPEC_LABEL = {
+    "spinoff": "锚点/角色/世界观",
+    "rewrite": "改动spec / 新设定",
+    "expand": "事件骨架 / 章节映射",
+    "condense": "主线骨架 / 合章计划",
+    "continue": "末章状态 / 续写方向",
+}
+
+NO_TITLE_KINDS = {"continue", "expand", "condense"}
+
+CREATE_STAGE_TABLE = [
+    {"key": "setup", "label": "项目骨架",
+     "owner": "novel-create/scripts/init_project.py", "gate": "deterministic",
+     "on_fail": "重跑 init 或换 --out"},
+    {"key": "blueprint", "label": "创作蓝图", "owner": "novel-create",
+     "gate": "user-review", "on_fail": "回立项访谈补 premise/主角/爽点/冲突"},
+    {"key": "setting_bible", "label": "设定圣经 / 角色卡 / 世界观",
+     "owner": "novel-create + novel-craft/references/setting-bible.md",
+     "gate": "user-review", "on_fail": "回创作蓝图或重建设定约束"},
+    {"key": "title", "label": "书名", "owner": "novel-title",
+     "gate": "user-choice", "on_fail": "重跑 novel-title"},
+    {"key": "outline", "label": "章纲", "owner": "novel-craft/references/outline.md",
+     "gate": "user-review", "on_fail": "回创作蓝图/设定圣经调整主线"},
+    {"key": "demo", "label": "Demo gate", "owner": "novel-create",
+     "gate": "user-review + optional novel-score", "on_fail": "回蓝图/设定/章纲/风格卡，不批量写"},
+    {"key": "draft", "label": "批量写章节",
+     "owner": "novel-craft/scripts/draft_packets.py + novel-create/agent",
+     "gate": "demo_gate + packet + chapter review", "on_fail": "就地修章、重出任务包，或回 demo"},
+    {"key": "review", "label": "一致性回扫", "owner": "novel-review",
+     "gate": "mechanical + LLM review", "on_fail": "按报告回源头阶段"},
+    {"key": "export", "label": "导出", "owner": "novel-craft/scripts/export.py",
+     "gate": "deterministic", "on_fail": "修 _meta/章节文件后重跑 export"},
+]
+
+DERIVED_STAGE_TABLE = [
+    {"key": "setup", "label": "项目骨架", "owner": "init_project.py",
+     "gate": "deterministic", "on_fail": "重跑 init 或换 --out"},
+    {"key": "source_model", "label": "吸收原作 / 建变换骨架", "owner": "当前 skill 主流程",
+     "gate": "user-review", "on_fail": "回本阶段补设定/骨架"},
+    {"key": "direction_spec", "label": "变换 spec / 方向确认", "owner": "当前 skill 主流程",
+     "gate": "user-review", "on_fail": "回 source_model 或改变换目标"},
+    {"key": "title", "label": "书名", "owner": "novel-title",
+     "gate": "user-choice", "on_fail": "重跑 novel-title"},
+    {"key": "outline", "label": "章纲", "owner": "novel-craft/references/outline.md",
+     "gate": "user-review", "on_fail": "回 direction_spec 调整方向"},
+    {"key": "demo", "label": "Demo gate", "owner": "当前 skill 主流程",
+     "gate": "user-review + optional novel-score", "on_fail": "回设定/章纲/口吻卡，不批量写"},
+    {"key": "draft", "label": "批量写章节",
+     "owner": "novel-craft/scripts/draft_packets.py + 当前 skill/agent",
+     "gate": "demo_gate + packet + chapter review", "on_fail": "就地改章节、重出任务包，或回 demo"},
+    {"key": "review", "label": "一致性回扫", "owner": "novel-review",
+     "gate": "mechanical + LLM review", "on_fail": "按报告回源头阶段"},
+    {"key": "export", "label": "导出", "owner": "novel-craft/scripts/export.py",
+     "gate": "deterministic", "on_fail": "修 _meta/章节文件后重跑 export"},
+]
+
+
+def progress_header(kind):
+    return f"<!-- novel-progress-schema: {CONTRACT_VERSION}; kind: {kind} -->"
+
+
+def stage_table_for_kind(kind):
+    """Return the stable stage table for a project kind."""
+    return CREATE_STAGE_TABLE if kind == "create" else DERIVED_STAGE_TABLE
+
+
+def stage_label(key):
+    for table in (CREATE_STAGE_TABLE, DERIVED_STAGE_TABLE):
+        for stage in table:
+            if stage["key"] == key:
+                return stage["label"]
+    return key
+
+
+def stage_info(kind, key):
+    """Return machine-readable owner/gate/recovery info for a stage key."""
+    for stage in stage_table_for_kind(kind):
+        if stage["key"] == key:
+            return deepcopy(stage)
+    return None
+
+
+def create_stage_markdown():
+    """Stable machine-readable stage checklist for original novel projects."""
+    lines = [
+        progress_header("create"),
+        "",
+        "## 原创阶段（机器读）",
+        f"<!-- novel-create-stage-table: {CONTRACT_VERSION}; kind: create -->",
+    ]
+    for stage in CREATE_STAGE_TABLE:
+        mark = "x" if stage["key"] == "setup" else " "
+        lines.append(f"- [{mark}] {stage['label']} <!-- stage:{stage['key']} -->")
+    return "\n".join(lines)
+
+
+def derived_stage_markdown(kind):
+    """Stable machine-readable stage checklist for derived novel projects."""
+    lines = [
+        progress_header(kind),
+        "",
+        "## 同构阶段（机器读）",
+        f"<!-- novel-derived-stage-table: {CONTRACT_VERSION}; kind: {kind} -->",
+    ]
+    for stage in DERIVED_STAGE_TABLE:
+        if stage["key"] == "title" and kind in NO_TITLE_KINDS:
+            continue  # 续/扩/缩沿用原作书名，不发 title 阶段
+        mark = "x" if stage["key"] == "setup" else " "
+        label = stage["label"]
+        if stage["key"] == "source_model" and kind in KIND_SPEC_LABEL:
+            label = KIND_SPEC_LABEL[kind]
+        lines.append(f"- [{mark}] {label} <!-- stage:{stage['key']} -->")
+    return "\n".join(lines)

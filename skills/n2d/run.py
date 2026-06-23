@@ -43,6 +43,7 @@ PAID_STAGES = {"image", "video", "compose"}          # 进这些前必过合规�
 ROUTER_STAGES = {"video_prompt", "video"}            # 出视频前置：先写模型路由表
 IDENTITY_REFRESH_STAGES = {"image_prompt", "image", "video_prompt", "video", "compose", "review"}
 IMAGE_QC_STRICT_STAGES = {"video_prompt", "video", "compose", "review"}
+SCRIPT_TEXT_AUDIT_STAGES = {"image_prompt"}
 FIRST_RUN_CHOICES = ("制作模式", "基础视觉风格")
 # 各生成阶段"放行前必问"的选择点（菜单随动作卡一起给，不另起一次 needs_choice）
 STAGE_MENU = {
@@ -231,6 +232,8 @@ def _post_qc_bundle(root: str, ep: str, scope: str = "post_compose") -> Dict[str
         "scope": scope,
         "headline": "合成/交付前审查包",
         "commands": [
+            f"python3 skills/n2d-review/scripts/spectacle_video_qc.py {root} {ep} --write --write-sidecars",
+            f"python3 skills/n2d-review/scripts/motion_reference_library.py {root} {ep} --write",
             f"python3 skills/n2d-dashboard/scripts/dashboard.py gate {root} {ep} --stage review",
             f"python3 skills/n2d-score/scripts/score.py {root} {ep} --run-checks --threshold 85",
             f"python3 skills/n2d-review/scripts/consistency_ledger.py {root} {ep}",
@@ -257,6 +260,27 @@ def _parse_trailing_json(stdout: str) -> Dict[str, Any]:
             except Exception:
                 continue
     return {}
+
+
+def _parse_json_tail(stdout: str) -> Dict[str, Any]:
+    """Backward-compatible alias for older call sites."""
+    return _parse_trailing_json(stdout)
+
+
+def _finding_detail(stdout: str, stderr: str) -> str:
+    obj = _parse_trailing_json(stdout)
+    findings = obj.get("findings") if isinstance(obj, dict) else None
+    if isinstance(findings, list) and findings:
+        first = next((f for f in findings if isinstance(f, dict)), findings[0])
+        if isinstance(first, dict):
+            msg = first.get("message") or first.get("msg") or first.get("code")
+            if msg:
+                return str(msg)[:200]
+        return str(first)[:200]
+    text = (stderr or stdout or "").strip()
+    if not text:
+        return ""
+    return (text.splitlines()[-1] if text.splitlines() else text)[:200]
 
 
 def _image_qc_report_path(root: str, ep: str) -> str:
@@ -305,22 +329,62 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str) -> Probes:
 
     # boundary_audit：script stage1 前必须先确认粗胚边界没有把剧情闭环切断。
     if stage_key == "script_stage1":
+        midstart_pack = os.path.join(root, "设定库", "中段开工前情资产包.md")
+        midstart_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "midstart_context.py")
+        if os.path.exists(midstart_pack) and os.path.exists(midstart_script):
+            try:
+                r = _run([sys.executable, midstart_script, root, "check", "--json"])
+                report = _parse_json_tail(r.stdout)
+                verdict = str((report or {}).get("verdict") or "").strip().lower()
+                if r.returncode == 0 and verdict in ("pass", "warn"):
+                    p.prework.append({"step": "midstart_context", "status": verdict or "pass"})
+                else:
+                    findings = (report or {}).get("findings") or []
+                    detail = ""
+                    if findings:
+                        first = findings[0]
+                        detail = str(first.get("message") or first)[:160]
+                    else:
+                        detail = (r.stderr or r.stdout or "").strip()[:160]
+                    p.prework_block = (
+                        "中段开工前情资产包未通过；先补齐 "
+                        f"{midstart_pack}，再写 voiceover。"
+                    )
+                    p.prework.append({"step": "midstart_context", "status": "block", "detail": detail})
+            except Exception as e:  # pragma: no cover
+                detail = str(e)[:160]
+                p.prework_block = f"midstart_context 无法运行：{detail}"
+                p.prework.append({"step": "midstart_context", "status": "block", "detail": detail})
+
         script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "boundary_audit.py")
-        review_note = os.path.join(root, "脚本", "_拆集复核.md")
+        review_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "boundary_review.py")
+        review_json = os.path.join(root, "脚本", "boundary_review.json")
         if os.path.exists(script):
             try:
                 r = _run([sys.executable, script, root, "--strict"])
                 if r.returncode == 0:
                     p.prework.append({"step": "boundary_audit", "status": "pass"})
-                elif os.path.exists(review_note):
-                    detail = (r.stdout or r.stderr or "").strip().splitlines()[-1:] or [""]
-                    p.prework.append({"step": "boundary_audit", "status": "reviewed",
-                                      "detail": detail[0][:160]})
+                elif os.path.exists(review_script):
+                    rr = _run([sys.executable, review_script, "check", root, "--json"])
+                    if rr.returncode == 0:
+                        detail = (r.stdout or r.stderr or "").strip().splitlines()[-1:] or [""]
+                        p.prework.append({"step": "boundary_audit", "status": "reviewed",
+                                          "detail": (detail[0] if detail else "")[:160],
+                                          "review_path": review_json})
+                    else:
+                        detail = _finding_detail(rr.stdout, rr.stderr)
+                        p.prework_block = (
+                            "boundary_audit 标出高风险粗胚边界；先运行 "
+                            f"python3 skills/n2d-script/scripts/boundary_review.py draft {root} --write，"
+                            f"填写 {review_json} 的 decision/notes，再复跑 check。"
+                        )
+                        p.prework.append({"step": "boundary_audit", "status": "block",
+                                          "detail": detail[:160], "review_path": review_json})
                 else:
                     detail = (r.stdout or r.stderr or "").strip().splitlines()[-1:] or [""]
                     p.prework_block = (
                         "boundary_audit 标出高风险粗胚边界；先做 5-10 集窗口复核并写 "
-                        f"{review_note}，再写 voiceover。"
+                        f"{review_json}，再写 voiceover。"
                     )
                     p.prework.append({"step": "boundary_audit", "status": "block",
                                       "detail": (detail[0] if detail else "")[:160]})
@@ -328,6 +392,110 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str) -> Probes:
                 detail = str(e)[:160]
                 p.prework_block = f"boundary_audit 无法运行：{detail}"
                 p.prework.append({"step": "boundary_audit", "status": "block", "detail": detail})
+
+    # script text audits：分镜/台词一旦放进出图 prompt，后续全是贵工位；
+    # 在 image_prompt 前沿把源文覆盖和集内留存节拍收紧为固定前置。
+    if stage_key in SCRIPT_TEXT_AUDIT_STAGES and ep:
+        audits = [
+            (
+                "source_adaptation_audit",
+                os.path.join(SKILLS_DIR, "n2d-script", "scripts", "source_adaptation_audit.py"),
+                [root, ep, "--strict", "--json"],
+                "source_adaptation_audit 未通过；先回 n2d-script 补齐 raw→voiceover/storyboard 的关键动机/伏笔/反转覆盖。",
+            ),
+            (
+                "beat_audit",
+                os.path.join(SKILLS_DIR, "n2d-script", "scripts", "beat_audit.py"),
+                [root, ep, "--strict", "--json"],
+                "beat_audit 未通过；先回 n2d-script 补冷开场、钩子间隔、反转、集尾钩或信息回报。",
+            ),
+            (
+                "spectacle_contract_audit",
+                os.path.join(SKILLS_DIR, "n2d-script", "scripts", "spectacle_contract_audit.py"),
+                [root, ep, "--strict", "--json"],
+                "spectacle_contract_audit 未通过；先回 n2d-script 补打斗/追逐/腾云驾雾/大场景专项契约。",
+            ),
+        ]
+        for step, script_path, args, block_msg in audits:
+            if not os.path.exists(script_path):
+                continue
+            try:
+                r = _run([sys.executable, script_path, *args])
+                if r.returncode == 0:
+                    p.prework.append({"step": step, "status": "pass"})
+                else:
+                    detail = _finding_detail(r.stdout, r.stderr)
+                    if not p.prework_block:
+                        p.prework_block = block_msg
+                    p.prework.append({"step": step, "status": "block", "detail": detail})
+            except Exception as e:  # pragma: no cover
+                detail = str(e)[:160]
+                if not p.prework_block:
+                    p.prework_block = f"{step} 无法运行：{detail}"
+                p.prework.append({"step": step, "status": "block", "detail": detail})
+
+        risk_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "shot_risk_audit.py")
+        if os.path.exists(risk_script):
+            try:
+                r = _run([sys.executable, risk_script, root, ep, "--json"])
+                out = _parse_trailing_json(r.stdout)
+                summary = out.get("summary") if isinstance(out, dict) else {}
+                detail = ""
+                if isinstance(summary, dict):
+                    detail = f"max_score={summary.get('max_score', 0)} high_risk={summary.get('warn_or_higher', 0)}"
+                if r.returncode != 0:
+                    if not p.prework_block:
+                        p.prework_block = "shot_risk_audit 发现必须先处理的高风险镜头；先回 n2d-script 拆镜/补锚帧/降级同框。"
+                    p.prework.append({"step": "shot_risk_audit", "status": "block", "detail": _finding_detail(r.stdout, r.stderr)})
+                else:
+                    status = "warn" if isinstance(summary, dict) and int(summary.get("warn_or_higher") or 0) else "pass"
+                    p.prework.append({"step": "shot_risk_audit", "status": status, "detail": detail})
+            except Exception as e:  # pragma: no cover
+                detail = str(e)[:160]
+                p.prework.append({"step": "shot_risk_audit", "status": "skip", "detail": detail})
+
+        for step, script_name, args in (
+            ("spectacle_plan", "spectacle_plan.py", [root, ep, "--write", "--json"]),
+            ("spectacle_sequence_plan", "spectacle_sequence_plan.py", [root, ep, "--write", "--json"]),
+            ("scene_layer_pack", "scene_layer_pack.py", [root, ep, "--write"]),
+            ("spectacle_probe_pack", "spectacle_probe_pack.py", [root, ep, "--write", "--json"]),
+        ):
+            script_path = os.path.join(SKILLS_DIR, "n2d-script", "scripts", script_name)
+            if not os.path.exists(script_path):
+                continue
+            try:
+                r = _run([sys.executable, script_path, *args])
+                if r.returncode == 0:
+                    p.prework.append({"step": step, "status": "pass"})
+                else:
+                    detail = _finding_detail(r.stdout, r.stderr)
+                    if not p.prework_block:
+                        p.prework_block = f"{step} 无法生成；先修复 storyboard 或脚本错误后再继续。"
+                    p.prework.append({"step": step, "status": "block", "detail": detail})
+            except Exception as e:  # pragma: no cover
+                detail = str(e)[:160]
+                if not p.prework_block:
+                    p.prework_block = f"{step} 无法运行：{detail}"
+                p.prework.append({"step": step, "status": "block", "detail": detail})
+
+        # 奇观连续性留痕（best-effort·绝不阻断）：序列总账生成后把状态写回 _进度.md 可见列。
+        # ✅=有奇观镜且被序列覆盖；—=本集无奇观镜(N/A)。失败只记 skip，不影响 prework_block。
+        try:
+            seq_path = os.path.join(root, "生产数据", f"spectacle_sequence_plan_{ep}.json")
+            if os.path.isfile(seq_path):
+                with open(seq_path, encoding="utf-8") as fh:
+                    seq = json.load(fh)
+                summary = seq.get("summary") if isinstance(seq, dict) else {}
+                n_clips = int(summary.get("spectacle_clips") or 0) if isinstance(summary, dict) else 0
+                covered = bool(seq.get("sequences")) if isinstance(seq, dict) else False
+                mark = "✅" if (n_clips > 0 and covered) else "—"
+                prog = os.path.join(SKILLS_DIR, "n2d", "progress.py")
+                if os.path.exists(prog):
+                    _run([sys.executable, prog, "ensure-col", root, "奇观连续性", "—"])
+                    _run([sys.executable, prog, "set", root, ep, "奇观连续性", mark])
+                    p.prework.append({"step": "spectacle_continuity_mark", "status": "ok", "detail": mark})
+        except Exception as e:  # pragma: no cover - 留痕失败不影响主流程
+            p.prework.append({"step": "spectacle_continuity_mark", "status": "skip", "detail": str(e)[:120]})
 
     # model-router：出视频前置（写理论路由表），幂等
     if stage_key in ROUTER_STAGES:
@@ -345,6 +513,68 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str) -> Probes:
                 detail = str(e)[:160]
                 p.prework_block = f"model_router 无法运行：{detail}"
                 p.prework.append({"step": "model_router", "status": "block", "detail": detail})
+        spectacle_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "spectacle_plan.py")
+        if os.path.exists(spectacle_script):
+            try:
+                r = _run([sys.executable, spectacle_script, root, ep, "--write", "--write-manifests", "--json"])
+                if r.returncode == 0:
+                    p.prework.append({"step": "spectacle_motion_plan", "status": "pass"})
+                else:
+                    detail = _finding_detail(r.stdout, r.stderr)
+                    if not p.prework_block:
+                        p.prework_block = "spectacle_plan Motion Control 骨架生成失败；先修复 storyboard/控制契约。"
+                    p.prework.append({"step": "spectacle_motion_plan", "status": "block", "detail": detail})
+            except Exception as e:  # pragma: no cover
+                detail = str(e)[:160]
+                if not p.prework_block:
+                    p.prework_block = f"spectacle_motion_plan 无法运行：{detail}"
+                p.prework.append({"step": "spectacle_motion_plan", "status": "block", "detail": detail})
+
+        sequence_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "spectacle_sequence_plan.py")
+        if os.path.exists(sequence_script):
+            try:
+                r = _run([sys.executable, sequence_script, root, ep, "--write", "--json"])
+                if r.returncode == 0:
+                    p.prework.append({"step": "spectacle_sequence_plan", "status": "pass"})
+                else:
+                    detail = _finding_detail(r.stdout, r.stderr)
+                    if not p.prework_block:
+                        p.prework_block = "spectacle_sequence_plan 生成失败；先修复 storyboard 的高动态/大场景连续性契约。"
+                    p.prework.append({"step": "spectacle_sequence_plan", "status": "block", "detail": detail})
+            except Exception as e:  # pragma: no cover
+                detail = str(e)[:160]
+                if not p.prework_block:
+                    p.prework_block = f"spectacle_sequence_plan 无法运行：{detail}"
+                p.prework.append({"step": "spectacle_sequence_plan", "status": "block", "detail": detail})
+
+        controller_script = os.path.join(SKILLS_DIR, "n2d-model-router", "scripts", "trajectory_controller_plan.py")
+        if os.path.exists(controller_script):
+            try:
+                r = _run([sys.executable, controller_script, root, ep, "--write"])
+                if r.returncode == 0:
+                    p.prework.append({"step": "trajectory_controller_plan", "status": "pass"})
+                else:
+                    p.prework.append({"step": "trajectory_controller_plan", "status": "warn", "detail": _finding_detail(r.stdout, r.stderr)})
+            except Exception as e:  # pragma: no cover
+                p.prework.append({"step": "trajectory_controller_plan", "status": "skip", "detail": str(e)[:160]})
+
+    if stage_key == "compose" and ep:
+        script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "action_edit_cues.py")
+        if os.path.exists(script):
+            try:
+                r = _run([sys.executable, script, root, ep, "--write", "--json"])
+                if r.returncode == 0:
+                    p.prework.append({"step": "action_edit_cues", "status": "pass"})
+                else:
+                    detail = _finding_detail(r.stdout, r.stderr)
+                    if not p.prework_block:
+                        p.prework_block = "action_edit_cues 生成失败；先修复 storyboard 后再合成。"
+                    p.prework.append({"step": "action_edit_cues", "status": "block", "detail": detail})
+            except Exception as e:  # pragma: no cover
+                detail = str(e)[:160]
+                if not p.prework_block:
+                    p.prework_block = f"action_edit_cues 无法运行：{detail}"
+                p.prework.append({"step": "action_edit_cues", "status": "block", "detail": detail})
 
     # identity：把 identity_registry 展开成 adapter matrix，供后续 gate 按执行后端核验。
     # --skip-face 只刷新矩阵/漂移报告骨架，避免 run.py next 在日常路由时触发重视觉机检。
@@ -509,6 +739,59 @@ def enter_action(root: str, ep: Optional[str] = None, auto: bool = False) -> Dic
     return na
 
 
+def pilot_action(root: str, ep: Optional[str] = None) -> Dict[str, Any]:
+    """Return a first-episode pilot plan without triggering generation."""
+    ep = ep or "第1集"
+    if not str(ep).startswith("第"):
+        ep = f"第{ep}集"
+    risk_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "shot_risk_audit.py")
+    risk = {}
+    prework: List[Dict[str, Any]] = []
+    if os.path.exists(risk_script):
+        try:
+            r = _run([sys.executable, risk_script, root, ep, "--json"])
+            risk = _parse_trailing_json(r.stdout)
+            prework.append({"step": "shot_risk_audit", "status": "ok" if r.returncode == 0 else "block",
+                            "detail": _finding_detail(r.stdout, r.stderr)})
+        except Exception as exc:  # pragma: no cover
+            prework.append({"step": "shot_risk_audit", "status": "skip", "detail": str(exc)[:160]})
+    probe_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "spectacle_probe_pack.py")
+    if os.path.exists(probe_script):
+        try:
+            r = _run([sys.executable, probe_script, root, ep, "--write", "--json"])
+            prework.append({"step": "spectacle_probe_pack", "status": "ok" if r.returncode == 0 else "block",
+                            "detail": _finding_detail(r.stdout, r.stderr)})
+        except Exception as exc:  # pragma: no cover
+            prework.append({"step": "spectacle_probe_pack", "status": "skip", "detail": str(exc)[:160]})
+    candidates = []
+    if isinstance(risk, dict):
+        for item in risk.get("pilot_candidates") or []:
+            candidates.append({
+                "clip": item.get("id"),
+                "score": item.get("score"),
+                "tags": item.get("tags") or [],
+                "recommendations": item.get("recommendations") or [],
+            })
+    return {
+        "frontier": {"ep": ep, "stage_key": "pilot", "label": "首集打样", "owner": "n2d"},
+        "prework": prework,
+        "stop_reason": "needs_payment_confirm",
+        "action_card": {
+            "headline": f"{ep} 首集打样计划：先验证代表 Clip，不全量放量",
+            "to_user": "先用 2-3 个代表 Clip 验证画风、脸、口型、接缝和模型路由；通过后再批量推进。",
+            "pilot_clips": candidates,
+            "commands": [
+                f"python3 skills/n2d/run.py next {root} {ep}",
+                f"python3 skills/n2d-dashboard/scripts/dashboard.py gate {root} {ep} --stage image_prompt_preflight",
+                f"python3 skills/n2d-script/scripts/shot_risk_audit.py {root} {ep}",
+                f"python3 skills/n2d-script/scripts/spectacle_probe_pack.py {root} {ep} --write",
+            ],
+        },
+        "gate": None,
+        "auto_continue": False,
+    }
+
+
 # ── 输出 ──────────────────────────────────────────────────────────────────────
 def render_human(na: Dict[str, Any]) -> str:
     lines = []
@@ -519,7 +802,8 @@ def render_human(na: Dict[str, Any]) -> str:
     if f.get("ep"):
         lines.append(f"前沿：{f.get('ep')} · {f.get('label')}（{f.get('owner')}）")
     for pw in na.get("prework", []):
-        lines.append(f"  ✔ 前置 {pw.get('step')}: {pw.get('status')}" + (f" [{pw.get('stage')}]" if pw.get('stage') else ""))
+        detail = f" · {pw.get('detail')}" if pw.get("detail") else ""
+        lines.append(f"  ✔ 前置 {pw.get('step')}: {pw.get('status')}" + (f" [{pw.get('stage')}]" if pw.get('stage') else "") + detail)
     card = na.get("action_card") or {}
     lines.append("")
     lines.append(f"⏸ 停因：{na.get('stop_reason')}")
@@ -531,6 +815,12 @@ def render_human(na: Dict[str, Any]) -> str:
         lines.append(f"   选择点【{m['choice_point']}】：{opts}（上次：{m.get('default_preselect') or '未记录'}）")
     if card.get("exact_command"):
         lines.append(f"   命令：{card['exact_command']}")
+    for c in card.get("pilot_clips", []) or []:
+        lines.append(f"   打样 Clip：{c.get('clip')} score={c.get('score')} tags={','.join(c.get('tags') or [])}")
+        for rec in c.get("recommendations") or []:
+            lines.append(f"     - {rec}")
+    for command in card.get("commands", []) or []:
+        lines.append(f"   命令：{command}")
     if card.get("writeback_after"):
         lines.append(f"   完成后回写：{card['writeback_after']}")
     bundle = card.get("post_qc_bundle") or {}
@@ -542,8 +832,8 @@ def render_human(na: Dict[str, Any]) -> str:
 
 
 def main(argv: List[str]) -> int:
-    if not argv or argv[0] not in {"next", "enter"}:
-        print("用法: run.py next|enter <作品根> [第N集] [--json] [--auto]")
+    if not argv or argv[0] not in {"next", "enter", "pilot"}:
+        print("用法: run.py next|enter|pilot <作品根> [第N集] [--json] [--auto]")
         return 1
     command = argv[0]
     rest = argv[1:]
@@ -551,11 +841,16 @@ def main(argv: List[str]) -> int:
     auto = "--auto" in rest
     pos = [a for a in rest if not a.startswith("--")]
     if not pos:
-        print("用法: run.py next|enter <作品根> [第N集] [--json] [--auto]")
+        print("用法: run.py next|enter|pilot <作品根> [第N集] [--json] [--auto]")
         return 1
     root = pos[0].rstrip("/")
     ep = pos[1] if len(pos) > 1 else None
-    na = enter_action(root, ep, auto=auto) if command == "enter" else next_action(root, ep, auto=auto)
+    if command == "enter":
+        na = enter_action(root, ep, auto=auto)
+    elif command == "pilot":
+        na = pilot_action(root, ep)
+    else:
+        na = next_action(root, ep, auto=auto)
     print(json.dumps(na, ensure_ascii=False, indent=2) if as_json else render_human(na))
     return 0
 

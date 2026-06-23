@@ -86,6 +86,36 @@ def test_band_rows_drops_ok_keeps_warn_block_inconclusive():
     assert by_clip["Clip_04"]["verdict"] == "ok"
 
 
+# ---------- offset_remediation（G2·cheap-fix-first 路由） ----------
+
+def test_offset_remediation_only_for_real_offset():
+    # 没测到真偏移（ok/inconclusive）→ 不乱给修法
+    assert lc.offset_remediation("ok") is None
+    assert lc.offset_remediation("inconclusive") is None
+    # warn/block → cheap-fix-first 阶梯，路由到 video（lipsync_pass 所在 stage）
+    for m in ("warn", "block"):
+        rem = lc.offset_remediation(m)
+        assert rem["return_to_stage"] == "video"
+        assert "lipsync_pass" in rem["rerun_scope"]
+        assert rem["remediation"][0]["action"] == "lipsync_pass"
+        assert rem["remediation"][0]["cost"] == "cheap"
+        assert rem["remediation"][1]["action"] == "regenerate_clip"
+        assert rem["remediation"][1]["cost"] == "expensive"
+
+
+def test_band_rows_attach_remediation_to_offsets():
+    clips = [
+        {"clip": "Clip_02", "offset_frames": 3, "confidence": 5.0},   # warn → has remediation
+        {"clip": "Clip_04", "offset_frames": 9, "confidence": 0.5},   # inconclusive → no remediation
+    ]
+    rows = {r["clip"]: r for r in lc._band_rows(clips, 25, 80, 200, 2.0)}
+    assert rows["Clip_02"]["return_to_stage"] == "video"
+    assert rows["Clip_02"]["remediation"][0]["action"] == "lipsync_pass"
+    assert "lipsync_pass" in rows["Clip_02"]["message"]
+    assert "remediation" not in rows["Clip_04"]      # 低置信不乱给修法
+    assert "return_to_stage" not in rows["Clip_04"]
+
+
 # ---------- analyze 降级 + 外部报告消费 ----------
 
 def test_analyze_degrades_without_backend(tmp_path):

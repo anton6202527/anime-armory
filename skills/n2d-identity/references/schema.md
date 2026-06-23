@@ -50,6 +50,35 @@
     "sorrow": "低头垂眸，眼眶微红，神情落寞",
     "fear": "瞳孔微缩，呼吸略促，面部肌肉僵硬"
   },
+  "performance_signature": {
+    "micro_expressions": "先压住嘴角再抬眼，情绪外露前有半拍停顿",
+    "habitual_gestures": ["说谎时拇指摩挲袖口", "压迫对手时微微侧身"],
+    "posture": "肩背挺直，重心偏后，不抢步",
+    "eye_behavior": "先扫对方手部再对视",
+    "speech_rhythm": "短句、低音量、尾音收住"
+  },
+  "signature_equipment": ["WEAPON_01", "PROP_07"],
+  "identity_marks": [
+    {
+      "mark_id": "MARK_左腕旧疤",
+      "type": "疤痕",
+      "region": "左腕",
+      "side": "left",
+      "color": "淡",
+      "persistence": "permanent",
+      "plot_load": true,
+      "keywords": ["左腕旧疤", "左腕淡疤", "旧疤"]
+    },
+    {
+      "mark_id": "MARK_觉醒金瞳",
+      "type": "瞳色",
+      "region": "双眼",
+      "color": "金",
+      "persistence": {"acquired_at": "第3集"},
+      "plot_load": true,
+      "keywords": ["金瞳", "金色瞳孔"]
+    }
+  ],
   "weathering_profile": {
     "base_state": "new",
     "evolution": [
@@ -83,6 +112,12 @@
   "recommendations": []
 }
 ```
+
+`performance_signature` 是角色表演一致性层，记录微表情、惯用动作、站姿、眼神反应和说话节奏。production profile 下，核心/常驻角色缺该字段会被 `n2d-review` gate 阻断；临时配角可不填。
+
+`identity_marks` 是辨识标记层，登记疤痕/胎记/纹身/瞳色/痣/义体等**载剧情**辨识标记（认亲胎记、战损疤、血统异瞳、禁术印记），由 `n2d-review` 的 `辨识标记(MK1)` 机检（`marks_consistency.py`，归入 `character_consistency` 评分维度）。每条字段：`type`（类型）、`region`（部位）、`side`（left/right/center，可选）、`color`（可选）、`persistence`（`"permanent"` 永久标记，或 `{"acquired_at":"第N集"}` 获得型标记）、`plot_load`（是否载剧情）、`keywords`（机检在 storyboard/出图 prompt 里搜的词；不填则从 type+region 等派生）。机检语义：永久/已获得标记未在某镜文本出现 → 🟡warn（疑似漂移/丢失，或合理遮挡，人核对）；未获得标记在获得集之前出现 → 🔴block（时间线穿帮）。这是**文本/结构**机检（查标记有没有写进分镜/出图 prompt），像素/VLM 在场核验（OWLv2/外观判官）是后续增强档。无 `identity_marks` 登记则该机检优雅跳过，不假报。
+
+`signature_equipment` 是主角/核心动作角色的专属装备绑定层，引用 `asset_registry.json` 里的 `WEAPON_xx/PROP_xx/VFX_xx/OUTFIT_xx`。production profile 下，核心动作角色或显式 `combat_role/action_role/signature_equipment_expected=true` 的 form 缺该字段会被 `n2d-review` gate 阻断；`WEAPON_xx` 还必须在 `asset_registry` 中有 `weapon_profile`，用于锁武器审美、剪影尺度、材质色卡、携带方式、战斗用法和禁漂项。
 
 `summary` 关键字段：`forms`、`forms_with_reference_group_ready`、`forms_with_native_image_ready`、`forms_with_native_video_ready`、`forms_with_lora_ready`、`forms_with_gaps`、`characters_needing_lora_upgrade`。
 `characters_needing_lora_upgrade` 是该升档 LoRA 的 character_id 列表，与 drift report 的 `recommendations` **同一判定**（漂移显著 + lora status 不是 ready/training）；构建 matrix 时没有 drift 数据（如 `--skip-face` 或机检不可用）则为空列表。
@@ -123,7 +158,12 @@ LoRA ready 由 `n2d-lora` 生命周期写回。`model_path/base_model/trigger/mo
       },
       "first_bad_episode": "第2集",
       "total_warn": 3,
-      "total_block": 1
+      "total_block": 1,
+      "recurrence": {
+        "max_gap": 0,
+        "long_gap_reentries": [],
+        "high_risk": false
+      }
     }
   },
   "recommendations": [
@@ -145,6 +185,8 @@ LoRA ready 由 `n2d-lora` 生命周期写回。`model_path/base_model/trigger/mo
 ```
 
 `available=false` 表示缺 insightface/cv2，机器脸相似度跳过；报表仍会输出 registry adapter matrix，跨集漂移暂交人判。
+
+每个角色还带 `recurrence`（跨集复现间隔）：`max_gap`=相邻两次出场之间缺席的最大集数，`long_gap_reentries[]`=缺席 ≥ `RECURRENCE_GAP_THRESHOLD`（默认 2）集后再登场的 `{at, prev, gap}` 列表，`high_risk`=是否存在长间隔再登场。依据 EntityBench(2026) 实证「跨镜一致性随复现间隔急剧衰退」——长间隔再登场是跨镜崩脸主因。`recurrence` 是**出场排期**事实而非像素度量，`available=false`（无 insightface）时仍计算。`n2d-image/scripts/face_drift_risk.py` 在出图前据此对「本集长间隔再登场」的角色加风险分并置顶重锚建议（喂质心定妆图/最强参考，核心角考虑升原生主体或 LoRA）。
 
 `recommendations[]`（LoRA 升档自动建议）的产出条件——三条全满足才输出，否则空列表：
 

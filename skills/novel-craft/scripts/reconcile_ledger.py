@@ -10,6 +10,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import sys
 from datetime import date
 
@@ -64,7 +65,14 @@ def _verification_status(value):
     return text in {"ok", "passed", "pass", "verified", "true", "通过"}
 
 
-def load_verification(path, chapter, expected_hashes=None):
+def load_verification(path, chapter, expected_hashes=None, stamp_missing=False):
+    """校验 LLM 核对结论 JSON。
+
+    默认严格：结论必须自带与当前正文/delta 匹配的 hash（防止复用旧版本的 verification）。
+    `stamp_missing=True`（由 `--stamp-hashes` 触发，供写后即时对账用）时：结论**缺**某个 hash
+    则按当前文件自动盖章并标 `hash_source=script_stamped`，省去手抄 sha256；但结论里**已写**的
+    hash 仍照常严格比对，写错/写旧照样拦。完整性核心（LLM 必须出 status=ok 且章号绑定）不变。
+    """
     if not path:
         return False, None, "缺少 --verified <核对结论.json>；不能合并未经验证的状态增量。"
     if not os.path.exists(path):
@@ -88,12 +96,20 @@ def load_verification(path, chapter, expected_hashes=None):
     if not _verification_status(status):
         return False, payload, f"核对未通过：status/verdict/result={status!r}"
     expected_hashes = expected_hashes or {}
+    stamped = []
     for key, expected in expected_hashes.items():
         got = str(payload.get(key) or "").strip()
         if not got:
+            if stamp_missing:
+                payload[key] = expected
+                stamped.append(key)
+                continue
             return False, payload, f"核对结论缺少 {key}；不能复用未绑定正文/delta 的 verification。"
         if got != expected:
             return False, payload, f"核对结论 {key} 不匹配：verification={got}, current={expected}"
+    if stamped:
+        payload["hash_source"] = "script_stamped"
+        payload["stamped_hashes"] = stamped
     return True, payload, "核对通过"
 
 
@@ -215,20 +231,90 @@ def merge_delta_to_ledger(root, chapter, verification=None):
     return True, "合并完成"
 
 
+def _compact_delta_summary(summary):
+    """把一章 delta 大 blob 压成计数摘要（rollup 用）。"""
+    if not isinstance(summary, dict):
+        return {"rolled": True}
+    def _count(key):
+        v = summary.get(key)
+        return len(v) if isinstance(v, list) else 0
+    chars = sorted({cc["name"] for cc in (summary.get("character_changes") or [])
+                    if isinstance(cc, dict) and cc.get("name")})
+    return {
+        "rolled": True,
+        "new_facts": _count("new_facts"),
+        "character_changes": _count("character_changes"),
+        "characters_touched": chars,
+        "open_threads_added": _count("open_threads_added"),
+        "threads_resolved": _count("threads_resolved"),
+    }
+
+
+def rollup_ledger(root, before):
+    """把章号 < before 的 chapter_deltas 大 blob 压成计数摘要（canonical 状态——
+    characters/setting_facts/threads——一律不动），控制几百章后 state_ledger.json 线性膨胀。
+    幂等：已 rolled 的章跳过。返回 (rolled_count, msg)。"""
+    ledger_path = get_ledger_path(root)
+    with file_lock(get_ledger_lock_path(root)):
+        ledger = load_json(ledger_path)
+        if not ledger:
+            return 0, "无 state_ledger.json 可 rollup"
+        deltas = ledger.get("chapter_deltas") or {}
+        rolled = 0
+        for key, entry in deltas.items():
+            m = re.search(r"(\d+)", key)
+            if not m or int(m.group(1)) >= before:
+                continue
+            if not isinstance(entry, dict):
+                continue
+            summary = entry.get("summary")
+            if not isinstance(summary, dict) or summary.get("rolled"):
+                continue
+            entry["summary"] = _compact_delta_summary(summary)
+            v = entry.get("verification")
+            if isinstance(v, dict):
+                entry["verification"] = {"status": v.get("status")}
+            rolled += 1
+        if rolled:
+            ledger.setdefault("rollups", []).append(
+                {"before_chapter": before, "rolled": rolled, "at": date.today().isoformat()})
+            ledger["updated_at"] = date.today().isoformat()
+            write_json(ledger_path, ledger)
+        return rolled, f"已 rollup {rolled} 章逐章明细（canonical 状态保留）"
+
+
 def main():
     ap = argparse.ArgumentParser(description="对账并合并小说状态账本")
     ap.add_argument("project_root")
-    ap.add_argument("--chapter", type=int, required=True, help="章节号")
+    ap.add_argument("--chapter", type=int, help="章节号（audit/merge 必填）")
     ap.add_argument("--audit", action="store_true", help="输出对账 Prompt（需结合 LLM 使用）")
     ap.add_argument("--merge", action="store_true", help="将已验证 delta 合并入 master ledger")
     ap.add_argument("--verified", help="核对结论 JSON；需含 status/verdict/result=ok|passed|verified|通过")
+    ap.add_argument("--stamp-hashes", action="store_true",
+                    help="写后即时对账用：结论缺 hash 时按当前正文/delta 自动盖章合并，省去手抄 sha256（结论已写的 hash 仍严格比对）")
     ap.add_argument("--auto", action="store_true",
                     help="已废弃：只输出 audit prompt，不再自动合并未经验证的 delta")
+    ap.add_argument("--rollup", action="store_true",
+                    help="维护：压缩旧章逐章明细控制账本膨胀（canonical 状态不动），需配 --before")
+    ap.add_argument("--before", type=int, help="rollup：压缩章号 < 此值的逐章明细")
     args = ap.parse_args()
 
     root = os.path.abspath(args.project_root)
     if not os.path.isdir(root):
         print(f"[err] 找不到作品根：{root}", file=sys.stderr)
+        sys.exit(2)
+
+    # rollup 是账本维护操作，不针对单章，单独处理（不要求 --chapter / 章节文件存在）。
+    if args.rollup:
+        if args.before is None:
+            print("[err] --rollup 需配 --before <章号>：压缩章号 < 该值的逐章明细。", file=sys.stderr)
+            sys.exit(2)
+        rolled, msg = rollup_ledger(root, args.before)
+        print(f"[ok] {msg}")
+        return
+
+    if args.chapter is None:
+        print("[err] audit/merge 需 --chapter <章号>。", file=sys.stderr)
         sys.exit(2)
 
     chapter_file = os.path.join(root, "章节", f"第{args.chapter:02d}章.md")
@@ -256,7 +342,8 @@ def main():
         except FileNotFoundError as exc:
             print(f"[err] 计算核对 hash 失败：{exc}", file=sys.stderr)
             sys.exit(2)
-        verified, verification, msg = load_verification(args.verified, args.chapter, expected_hashes)
+        verified, verification, msg = load_verification(
+            args.verified, args.chapter, expected_hashes, stamp_missing=args.stamp_hashes)
         if not verified:
             print(f"[err] {msg}", file=sys.stderr)
             sys.exit(2)

@@ -32,6 +32,12 @@ def valid_assessment(score_task_id=None):
             "comment": "书名贴平台、有钩子",
             "needs_rename": False,
         },
+        "adaptation_check": {
+            "scores": {"visual_scene": 4, "hook_cinematic": 4, "conflict_intensity": 3,
+                       "episodic_beat": 3, "ip_freshness": 3},
+            "comment": "可视化场景多、冲突浓，适合短剧改编",
+            "low_potential": False,
+        },
     }
     if score_task_id:
         payload["score_task_id"] = score_task_id
@@ -120,6 +126,7 @@ class TestNovelScore(unittest.TestCase):
         with open(os.path.join(self.tmp, "_设置.md"), "w", encoding="utf-8") as f:
             f.write("# 设置\n- 目标平台：红果\n- 输出格式：txt,docx\n")
         task = self.generate_score_task()
+        self.assertIn("短剧改编潜力体检", task["assessment_prompt"])
         mock_path = os.path.join(self.tmp, "mock.json")
         with open(mock_path, "w", encoding="utf-8") as f:
             json.dump(valid_assessment(task["score_task_id"]), f, ensure_ascii=False)
@@ -133,6 +140,31 @@ class TestNovelScore(unittest.TestCase):
             report = json.load(f)
         self.assertEqual(report["production_decision"]["decision"], "go")
         self.assertNotIn("external-adaptation", [a["recommended_skill"] for a in report["next_actions"]])
+
+    def test_low_adaptation_potential_routes_to_condense(self):
+        with open(os.path.join(self.tmp, "_设置.md"), "w", encoding="utf-8") as f:
+            f.write("# 设置\n- 目标平台：红果\n- 输出格式：txt,docx\n")
+        task = self.generate_score_task()
+        mock = valid_assessment(task["score_task_id"])
+        mock["adaptation_check"]["scores"] = {k: 2 for k, _ in score.ADAPTATION_CHECK_DIMENSIONS}
+        mock["adaptation_check"]["low_potential"] = False
+        mock["adaptation_check"]["comment"] = "镜头钩子和单元节拍不足"
+        mock_path = os.path.join(self.tmp, "mock.json")
+        with open(mock_path, "w", encoding="utf-8") as f:
+            json.dump(mock, f, ensure_ascii=False)
+        old_argv = sys.argv
+        sys.argv = ["score.py", self.tmp, "--mock-assessment", mock_path]
+        try:
+            score.main()
+        finally:
+            sys.argv = old_argv
+        with open(os.path.join(self.score_dir, "score_report.json"), encoding="utf-8") as f:
+            report = json.load(f)
+        self.assertEqual(report["adaptation_check"]["total"], 10)
+        actions = [a for a in report["next_actions"] if a.get("dimension") == "adaptation_check"]
+        self.assertEqual(len(actions), 1)
+        self.assertEqual(actions[0]["priority"], "must")
+        self.assertEqual(actions[0]["recommended_skill"], "novel-condense")
 
     def test_reader_telemetry_is_injected_and_reported(self):
         telemetry = {
@@ -247,6 +279,35 @@ class TestNovelScore(unittest.TestCase):
         self.assertEqual(score.get_tier_verdict(75), ("合格偏上", "小改", "high"))
         self.assertEqual(score.get_tier_verdict(60), ("及格线下", "大改", "medium"))
         self.assertEqual(score.get_tier_verdict(40), ("不及格", "弃稿重立", "low"))
+
+    def test_adaptation_check_low_potential_threshold(self):
+        # 5 维各 2 分 = 10/25 < 15 → low_potential
+        low = score.build_adaptation_check({
+            "scores": {k: 2 for k, _ in score.ADAPTATION_CHECK_DIMENSIONS},
+            "comment": "场景偏静、冲突弱", "low_potential": False,
+        })
+        self.assertTrue(low["low_potential"])
+        self.assertEqual(low["total"], 10)
+        # 5 维各 4 分 = 20/25 ≥ 15 → 不低
+        ok = score.build_adaptation_check({
+            "scores": {k: 4 for k, _ in score.ADAPTATION_CHECK_DIMENSIONS},
+            "comment": "可改编", "low_potential": False,
+        })
+        self.assertFalse(ok["low_potential"])
+
+    def test_validate_requires_adaptation_when_short_drama(self):
+        assessment = valid_assessment("tid")
+        assessment.pop("adaptation_check")
+        errors = score.validate_assessment(assessment, expect_adaptation=True)
+        self.assertTrue(any("adaptation_check" in e for e in errors))
+        # 非短剧目标时不强制
+        errors2 = score.validate_assessment(assessment, expect_adaptation=False)
+        self.assertFalse(any("adaptation_check" in e for e in errors2))
+
+    def test_is_short_drama_target_reads_settings_and_meta(self):
+        self.assertTrue(score.is_short_drama_target({"目标平台": "红果"}, {}))
+        self.assertTrue(score.is_short_drama_target({}, {"target_platform": "抖音漫剧"}))
+        self.assertFalse(score.is_short_drama_target({"目标平台": "起点"}, {"genre": "Fantasy"}))
 
     def test_chapter_sort_uses_numeric_chapter_order(self):
         paths = [

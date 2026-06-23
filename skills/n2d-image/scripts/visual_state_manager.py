@@ -52,29 +52,28 @@ def init_ledger(root):
     return ledger
 
 
-def parse_novel_ledger(root):
-    """Attempt to read the novel pipeline's state_ledger.json and extract visual cues."""
-    # Assuming novel path might be parallel or passed, but for now we look in a standard location
-    # Or we can just prompt the LLM to do the extraction.
-    novel_ledger_path = os.path.join(root, "小说", "审稿", "state_ledger.json")
-    if not os.path.exists(novel_ledger_path):
-        # Fallback to local prompt-based injection
-        return None
-    return load_json(novel_ledger_path)
+def parse_source_analysis(root):
+    """Read n2d's own source analysis package when available."""
+    return load_json(os.path.join(root, "设定库", "source_analysis.json"))
 
 
-def generate_audit_prompt(ledger, novel_ledger):
-    novel_summary = "无关联的小说账本"
-    if novel_ledger:
-        novel_summary = json.dumps(novel_ledger.get("characters", {}), ensure_ascii=False, indent=2)[:1500]
+def generate_audit_prompt(ledger, source_analysis):
+    source_summary = "无源书分析包；请只根据当前视觉状态账本和本集脚本判断。"
+    if isinstance(source_analysis, dict):
+        summary = {
+            "characters": source_analysis.get("characters", [])[:12],
+            "visual_state_signals": source_analysis.get("visual_state_signals", [])[:12],
+            "power_system": source_analysis.get("power_system", {}),
+        }
+        source_summary = json.dumps(summary, ensure_ascii=False, indent=2)[:1800]
 
     return f"""# 视觉状态账本（Visual State Ledger）同步任务
 
 请根据最新的剧情状态（如文字版账本中的受伤、获得法宝、衣服破损等），更新角色的【视觉状态锁】。
 
-## 当前文字版剧情状态参考
+## n2d 源书分析参考
 ```json
-{novel_summary}
+{source_summary}
 ```
 
 ## 当前视觉状态账本
@@ -282,8 +281,8 @@ def main():
     ledger = init_ledger(root)
 
     if args.audit:
-        novel_ledger = parse_novel_ledger(root)
-        prompt = generate_audit_prompt(ledger, novel_ledger)
+        source_analysis = parse_source_analysis(root)
+        prompt = generate_audit_prompt(ledger, source_analysis)
         print("--- LLM VISUAL STATE SYNC PROMPT ---")
         print(prompt)
         print("--- END PROMPT ---")

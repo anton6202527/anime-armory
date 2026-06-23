@@ -92,6 +92,82 @@ CONSISTENCY_SECTION_MAP = {
         "problem": "力量体系/等级/战力 progression 存在一致性风险",
         "fix_hint": "回设定/power_system_registry.json 与相关章节，修正退档、未知境界、越级过快或面板字段漂移。",
     },
+    "research_fact_support": {
+        "dimension": "professional_research",
+        "recommended_skill": "novel-research",
+        "return_to_stage": "research",
+        "count_key": "alerts",
+        "problem": "专业/行业事实缺少可追溯资料包或资料包未通过证据校验",
+        "fix_hint": "回 `novel-research` 补 `资料/专业资料包_<主题>.md` 与 `research_sources.json`，每条事实绑定来源、日期、可信度、适用章节和禁用/不确定项。",
+    },
+    # 2026 新增检测器 + 伏笔超期：consistency_audit 早已串跑它们并写进 consistency_audit.json，
+    # 但 review_report 长期只认上面 5 个 section，导致这些机检产出到不了正式报告/QA gate/修订计划
+    # （静默失效）。这里补齐映射，每个 section key 必须与 consistency_audit.main 结果字典一致；
+    # 全部经 _run_detector，count_key 统一为 alerts（int 计数），blocking 由各检测器 阻断级 alert 决定。
+    "hook_endings": {
+        "dimension": "hook",
+        "recommended_skill": "novel-review",
+        "return_to_stage": "draft",
+        "count_key": "alerts",
+        "problem": "断章钩子缺失/章末钩力不足",
+        "fix_hint": "回章末按 `novel-craft/references/hooks.md` 补悬念/反转/承诺钩子，避免平钩收束。",
+    },
+    "voice_drift": {
+        "dimension": "voice_drift",
+        "recommended_skill": "novel-review",
+        "return_to_stage": "draft",
+        "count_key": "alerts",
+        "problem": "角色语感漂移（一人多腔/串腔）",
+        "fix_hint": "回 `设定/角色语感.json` 与对应章节，统一该角色口头禅、句式、语气与说话习惯。",
+    },
+    "tone_curve": {
+        "dimension": "tone_curve",
+        "recommended_skill": "novel-review",
+        "return_to_stage": "draft",
+        "count_key": "alerts",
+        "problem": "情绪/爽点曲线偏离设计（情绪点缺失或爽点回报平淡）",
+        "fix_hint": "回 `设定/tone_curve.json` 与 `情绪节奏.md`，在弱段补情绪点/爽点回报，校准情绪三拍。",
+    },
+    "thread_resolution": {
+        "dimension": "thread",
+        "recommended_skill": "novel-wiki",
+        "return_to_stage": "wiki",
+        "count_key": "alerts",
+        "problem": "支线/未收线程长期未收口",
+        "fix_hint": "回 `state_ledger` 的 open_threads 与章纲，安排回收或显式 drop，避免悬而不决。",
+    },
+    "antagonist_scaling": {
+        "dimension": "power_system",
+        "recommended_skill": "novel-wiki",
+        "return_to_stage": "draft",
+        "count_key": "alerts",
+        "problem": "反派战力/等级缩放与主角成长不匹配",
+        "fix_hint": "回 `设定/power_system_registry.json` 与反派设定，修正越级/战力崩坏/反派忽强忽弱。",
+    },
+    "timeline": {
+        "dimension": "logic",
+        "recommended_skill": "novel-wiki",
+        "return_to_stage": "wiki",
+        "count_key": "alerts",
+        "problem": "时间线/事件顺序存在矛盾候选",
+        "fix_hint": "回 `设定/timeline.json` 与对应章节核对事件先后、季节/年龄/时长推进的一致性。",
+    },
+    "minor_characters": {
+        "dimension": "logic",
+        "recommended_skill": "novel-wiki",
+        "return_to_stage": "wiki",
+        "count_key": "alerts",
+        "problem": "配角连续性（生死/特征/在场）冲突候选",
+        "fix_hint": "回动态百科与对应章节核对配角状态，确认后修正文或更新 state_ledger。",
+    },
+    "foreshadow": {
+        "dimension": "foreshadow",
+        "recommended_skill": "novel-wiki",
+        "return_to_stage": "wiki",
+        "count_key": "alerts",
+        "problem": "高价值伏笔越过预期回收窗口，疑似遗忘/烂尾",
+        "fix_hint": "回 `设定/foreshadowing_ledger.json` 与章纲，补回收或调整 expected_payoff_chapter；确认废弃则 drop。",
+    },
 }
 
 

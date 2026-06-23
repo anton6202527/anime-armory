@@ -67,15 +67,20 @@
 
 ## `_进度.md` Schema
 
-所有项目第一屏应包含：
+所有项目第一屏都带机器 schema marker：
 
 ```markdown
 <!-- novel-progress-schema: 1; kind: <kind> -->
 ```
 
-所有项目都应包含机器读阶段表；`progress.py` 优先读取 `stage:<key>`，人类可读的详细准备表、章节表、回扫表可以保留在后面。
+**有两种 `_进度.md` 物理布局，分别由两个 reader 负责（这是实现现状，别混用）：**
 
-原创 `create` 项目阶段表：
+1. **章节矩阵型（实际默认）** — `init_project.py`（create 与各派生 skill 都）调 `novel/_lib/novel_contract.py:build_progress_markdown` 生成：`## 状态总览` 下一张「章节 × 标题 × 字数 × 各 routing 阶段」矩阵表，逐章逐阶段打勾。**新建项目落地的就是这种**。它由 `skills/novel/progress.py` 逐章路由读写、`skills/novel/scripts/post_write.py` 写后更新。
+2. **同构阶段清单型** — 形如下面两段、用 `novel-create-stage-table` / `novel-derived-stage-table` marker + `<!-- stage:<key> -->` 逐项的阶段级清单，由 `skills/novel-craft/scripts/progress.py` 读取。**注意**：该 reader 遇到章节矩阵型会打印 `[redirect]` 指向 `novel/progress.py`（它只读阶段清单型）。
+
+> 即：阶段级查询走 `novel-craft/scripts/progress.py`（清单型）；逐章生产进度走 `novel/progress.py`（矩阵型，init 实际产物）。下面「原创阶段表 / 派生同构阶段表」是**流程语义**定义（每个 stage 的含义/负责人/回流），与上面哪种物理布局无关，两种 reader 都对齐同一套 stage key。
+
+阶段清单型样例 —— 原创 `create`：
 
 ```markdown
 ## 原创阶段（机器读）
@@ -91,7 +96,7 @@
 - [ ] 导出 <!-- stage:export -->
 ```
 
-派生类项目阶段表：
+阶段清单型样例 —— 派生类：
 
 ```markdown
 ## 同构阶段（机器读）

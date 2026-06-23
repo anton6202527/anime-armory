@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -23,6 +24,11 @@ NOVEL_FORBIDDEN = (
     "n2d-adapt",
     "N2D_GENRE_LEDGER",
     "n2d-feedback",
+    "drama_source_handoff",
+    "write_drama_handoff",
+    "formats handoff",
+    "改编源书交付包",
+    "下游改编结构化交付包",
 )
 
 N2D_FORBIDDEN = (
@@ -34,6 +40,14 @@ N2D_FORBIDDEN = (
     "novel-progress-schema",
     "_n2d_handoff",
     "novel→n2d",
+    "drama_source_handoff",
+    "_novel_handoff",
+    "check_novel_handoff",
+    "parse_novel_ledger",
+    "novel export",
+    "novel 交付包",
+    "novel 侧",
+    "source\": \"novel",
 )
 
 ROOT_FORBIDDEN = (
@@ -47,6 +61,10 @@ ROOT_FORBIDDEN = (
     "写小说导出",
     "n2d 源书",
     "n2d-feedback genre ledger read by novel-score",
+    "drama_source_handoff",
+    "_novel_handoff",
+    "formats handoff",
+    "改编源书交付包",
 )
 
 TEXT_SUFFIXES = {
@@ -90,6 +108,51 @@ def line_hits(path: Path, forbidden: tuple[str, ...]):
             yield lineno, hits, line.strip()
 
 
+_SYS_PATH_RE = re.compile(r"sys\.path\.(?:insert|append)\s*\(")
+
+
+def check_no_cross_line_coload(repo: Path) -> list[str]:
+    """Runtime-namespace guard: no single file may put BOTH the novel and the
+    n2d line on ``sys.path`` in one interpreter.
+
+    The two families deliberately vendor independent copies of same-named
+    helpers (``settings``/``score``/``progress``/``scan``/``self_audit``/
+    ``mechanical_check``/``consistency_audit``/``markdown_parser``/``text_utils``).
+    Each is bare-imported (``import settings``), so resolution depends on
+    ``sys.path[0]`` — safe under the one-process-per-skill invocation model.
+    The ONLY way they could cross-shadow (``sys.modules['settings']`` cached
+    from line A served to line B) is a single process that loads both lines.
+    Within either family that can't happen — the forbidden-token groups above
+    already ban a novel file from naming ``n2d`` and an n2d file from naming
+    ``skills/novel``. This locks the remaining vector: a *neutral* file (tools/
+    or a future top-level orchestrator) that sys.path-inserts both lines.
+    Today 0 files do this; the guard keeps it that way.
+    """
+    failures: list[str] = []
+    scan_roots = [repo / "skills", repo / "tools"]
+    audit_dir = SELF.parent.parent  # tools/independence-audit/ — the auditor names both lines as subjects
+    for path in iter_text_files(scan_roots):
+        if path.suffix != ".py" or path == SELF:
+            continue
+        if audit_dir in path.parents:  # skip the independence-audit tool's own scripts/tests/probes
+            continue
+        try:
+            text = path.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            continue
+        sys_path_lines = [ln for ln in text.splitlines() if _SYS_PATH_RE.search(ln)]
+        if not sys_path_lines:
+            continue
+        blob = "\n".join(sys_path_lines)
+        adds_n2d = bool(re.search(r"\bn2d\b|n2d[-_/]", blob))
+        adds_novel = bool(re.search(r"\bnovel\b|novel[-_/]", blob))
+        if adds_n2d and adds_novel:
+            failures.append(
+                f"cross-line co-load risk: {path.relative_to(repo)} puts both novel and "
+                f"n2d dirs on sys.path — same-named vendored modules can cross-shadow via sys.modules")
+    return failures
+
+
 def roots_for(prefix: str) -> list[Path]:
     roots: list[Path] = []
     skills = REPO / "skills"
@@ -121,6 +184,10 @@ def main() -> int:
             rel = path.relative_to(REPO)
             for lineno, hits, line in line_hits(path, forbidden):
                 failures.append(f"{label}: {rel}:{lineno}: {', '.join(hits)} :: {line}")
+
+    # Runtime-namespace guard: no neutral file may co-load both lines (shared
+    # vendored basenames would cross-shadow via sys.modules in one interpreter).
+    failures.extend(check_no_cross_line_coload(REPO))
 
     if failures:
         print("novel/n2d zero-coupling audit failed:", file=sys.stderr)

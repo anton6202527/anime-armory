@@ -13,6 +13,55 @@ from settings import normalize_setting_value
 from waivers import baseline_freshness_scope, make_waiver, append_waiver
 
 
+def _write_meta(root, **fields):
+    meta = {"schema_version": 1, "kind": "create", "rights_status": "original"}
+    meta.update(fields)
+    with open(os.path.join(root, "_meta.json"), "w", encoding="utf-8") as f:
+        json.dump(meta, f, ensure_ascii=False)
+
+
+def _write_arc_report(root, name, blocking):
+    os.makedirs(os.path.join(root, "审稿"), exist_ok=True)
+    with open(os.path.join(root, "审稿", name), "w", encoding="utf-8") as f:
+        json.dump({"schema_version": 1, "kind": "novel_arc_gate", "blocking": blocking,
+                   "status": "blocked" if blocking else "clean", "findings": []}, f, ensure_ascii=False)
+
+
+class ArcGateTest(unittest.TestCase):
+    def _ids(self, items):
+        return {i.get("id") for i in items}
+
+    def test_blocking_arc_report_blocks_export(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _write_meta(tmp, scale="medium", target_chapters=8)
+            _write_arc_report(tmp, "arc_gate_第01-05章.json", blocking=2)
+            status = qa_gate.collect_gate_status(tmp, export_formats=["txt"])
+            self.assertIn("ARC-BLOCK", self._ids(status["blockers"]))
+            self.assertTrue(status["blocking"])
+
+    def test_long_project_without_arc_report_warns(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _write_meta(tmp, scale="long", target_chapters=120)
+            status = qa_gate.collect_gate_status(tmp, export_formats=["txt"])
+            self.assertIn("ARC-MISSING", self._ids(status["warnings"]))
+            self.assertNotIn("ARC-BLOCK", self._ids(status["blockers"]))
+
+    def test_short_project_without_arc_report_is_silent(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _write_meta(tmp, scale="short", target_chapters=6)
+            status = qa_gate.collect_gate_status(tmp, export_formats=["txt"])
+            self.assertNotIn("ARC-MISSING", self._ids(status["warnings"]))
+            self.assertNotIn("ARC-BLOCK", self._ids(status["blockers"]))
+
+    def test_clean_arc_report_does_not_block(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _write_meta(tmp, scale="long", target_chapters=120)
+            _write_arc_report(tmp, "arc_gate_第01-05章.json", blocking=0)
+            status = qa_gate.collect_gate_status(tmp, export_formats=["txt"])
+            self.assertNotIn("ARC-BLOCK", self._ids(status["blockers"]))
+            self.assertNotIn("ARC-MISSING", self._ids(status["warnings"]))
+
+
 def write_chapter(root, text="# 第1章\n正文\n"):
     os.makedirs(os.path.join(root, "章节"), exist_ok=True)
     chapter = os.path.join(root, "章节", "第01章.md")
@@ -195,6 +244,64 @@ class QAGateTest(unittest.TestCase):
             self.assertFalse(status["blocking"])
             self.assertTrue(any(w["id"] == "REVIEW-MISSING" for w in status["warnings"]))
             self.assertTrue(any(w["id"] == "SCORE-MISSING" for w in status["warnings"]))
+
+    def test_stale_high_risk_research_pack_blocks_export_gate(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write_chapter(tmp, "# 第1章\n医生在医院急诊进行抢救和用药。\n")
+            os.makedirs(os.path.join(tmp, "资料"), exist_ok=True)
+            with open(os.path.join(tmp, "资料", "专业资料包_急诊抢救.md"), "w", encoding="utf-8") as f:
+                f.write("# 专业资料包：急诊抢救\n")
+            with open(os.path.join(tmp, "资料", "research_sources.json"), "w", encoding="utf-8") as f:
+                json.dump({
+                    "schema_version": 1,
+                    "kind": "novel_research_sources",
+                    "packs": [{
+                        "topic": "急诊抢救",
+                        "topic_slug": "急诊抢救",
+                        "domain": "medical",
+                        "risk_level": "high",
+                        "status": "ready",
+                        "pack_path": "资料/专业资料包_急诊抢救.md",
+                        "applicable_chapters": ["all"],
+                        "keywords": ["急诊", "抢救"],
+                        "updated_at": "2025-01-01",
+                        "freshness_days": 30,
+                        "sources": [{
+                            "id": "SRC-001",
+                            "title": "急诊指南",
+                            "published_date": "2025-01-01",
+                            "accessed_date": "2025-01-02",
+                            "reliability": "high",
+                        }],
+                        "claims": [{
+                            "id": "FACT-001",
+                            "claim": "急诊分诊先评估生命体征",
+                            "source_ids": ["SRC-001"],
+                            "confidence": "high",
+                            "applicable_chapters": ["all"],
+                        }],
+                    }],
+                }, f, ensure_ascii=False)
+
+            status = qa_gate.collect_gate_status(tmp, export_formats=["txt"])
+            self.assertTrue(status["blocking"])
+            self.assertTrue(any(b["id"] == "RESEARCH-PACK-STALE" for b in status["blockers"]))
+
+    def test_required_research_domain_blocks_export_gate(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with open(os.path.join(tmp, "_meta.json"), "w", encoding="utf-8") as f:
+                json.dump({"research_required_domains": ["legal"]}, f, ensure_ascii=False)
+            status = qa_gate.collect_gate_status(tmp, export_formats=["txt"])
+            self.assertTrue(any(b["id"] == "RESEARCH-MISSING-REQUIRED-RESEARCH-PACK" for b in status["blockers"]))
+
+    def test_simulate_signal_only_warns_but_does_not_block(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            os.makedirs(os.path.join(tmp, "评分"), exist_ok=True)
+            with open(os.path.join(tmp, "评分", "reader_panel_signals.json"), "w", encoding="utf-8") as f:
+                json.dump({"analysis_mode": "signal_only", "signal_only": True, "qualitative_completed": False}, f)
+            status = qa_gate.collect_gate_status(tmp)
+            self.assertFalse(status["blocking"])
+            self.assertTrue(any(w["id"] == "SIMULATE-SIGNAL-ONLY" for w in status["warnings"]))
 
     def test_missing_review_report_blocks_export_gate(self):
         with tempfile.TemporaryDirectory() as tmp:

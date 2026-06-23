@@ -147,5 +147,107 @@ class ReconcileLedgerSafetyTest(unittest.TestCase):
             self.assertEqual(ledger["chapter_deltas"]["chapter_01"]["verification"]["status"], "ok")
 
 
+class StampHashesTest(unittest.TestCase):
+    """--stamp-hashes：写后即时对账省去手抄 sha256，但不削弱完整性核心。"""
+
+    def test_stamp_hashes_merges_conclusion_without_hashes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            concl = os.path.join(tmp, "审稿", "state_verify_第01章.json")
+            with open(concl, "w", encoding="utf-8") as f:
+                json.dump({"chapter": 1, "status": "ok", "notes": "一致"}, f, ensure_ascii=False)
+            # 不带 --stamp-hashes：缺 hash 仍按严格路径拒绝（完整性默认不变）
+            got = subprocess.run(
+                [sys.executable, SCRIPT, tmp, "--chapter", "1", "--merge", "--verified", concl],
+                capture_output=True, text=True,
+            )
+            self.assertNotEqual(got.returncode, 0)
+            self.assertIn("chapter_file_hash", got.stderr)
+            # 带 --stamp-hashes：自动盖当前文件 hash 并合并
+            got = subprocess.run(
+                [sys.executable, SCRIPT, tmp, "--chapter", "1", "--merge", "--verified", concl, "--stamp-hashes"],
+                capture_output=True, text=True,
+            )
+            self.assertEqual(got.returncode, 0, got.stderr)
+            with open(os.path.join(tmp, "审稿", "state_ledger.json"), encoding="utf-8") as f:
+                ledger = json.load(f)
+            v = ledger["chapter_deltas"]["chapter_01"]["verification"]
+            self.assertEqual(v["status"], "ok")
+            self.assertEqual(v.get("hash_source"), "script_stamped")
+            self.assertEqual(set(v.get("stamped_hashes", [])), {"chapter_file_hash", "delta_hash"})
+
+    def test_stamp_hashes_still_rejects_explicit_wrong_hash(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            concl = os.path.join(tmp, "审稿", "state_verify_第01章.json")
+            with open(concl, "w", encoding="utf-8") as f:
+                # 显式写了一个错的 chapter_file_hash —— 即便 --stamp-hashes 也必须拦（防写后又改正文）
+                json.dump({"chapter": 1, "status": "ok", "chapter_file_hash": "deadbeef"}, f, ensure_ascii=False)
+            got = subprocess.run(
+                [sys.executable, SCRIPT, tmp, "--chapter", "1", "--merge", "--verified", concl, "--stamp-hashes"],
+                capture_output=True, text=True,
+            )
+            self.assertNotEqual(got.returncode, 0)
+            self.assertIn("不匹配", got.stderr)
+
+
+class RollupTest(unittest.TestCase):
+    def _write_ledger(self, root, ledger):
+        os.makedirs(os.path.join(root, "审稿"), exist_ok=True)
+        path = os.path.join(root, "审稿", "state_ledger.json")
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(ledger, f, ensure_ascii=False)
+        return path
+
+    def test_rollup_compacts_old_deltas_keeps_canonical(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self._write_ledger(tmp, {
+                "schema_version": 1, "kind": "novel_state_ledger",
+                "characters": {"林越": {"history": [{"chapter": 1}], "current_state": {}}},
+                "setting_facts": ["铜钱线索"],
+                "open_threads": [{"chapter": 1, "thread": "铜钱来历"}],
+                "resolved_threads": [],
+                "chapter_deltas": {
+                    "chapter_01": {"merged_at": "x", "summary": {
+                        "new_facts": ["a", "b"],
+                        "character_changes": [{"name": "林越", "change": "觉醒"}],
+                        "open_threads_added": ["铜钱来历"], "threads_resolved": []},
+                        "verification": {"status": "ok", "chapter_file_hash": "h",
+                                         "delta_hash": "d", "notes": "很长的核对说明" * 20}},
+                    "chapter_09": {"merged_at": "y", "summary": {"new_facts": ["z"]},
+                                   "verification": {"status": "ok"}},
+                },
+            })
+            got = subprocess.run([sys.executable, SCRIPT, tmp, "--rollup", "--before", "5"],
+                                 capture_output=True, text=True)
+            self.assertEqual(got.returncode, 0, got.stderr)
+            with open(path, encoding="utf-8") as f:
+                out = json.load(f)
+            # ch01 < 5 → 压缩成计数，verification 只留 status
+            c01 = out["chapter_deltas"]["chapter_01"]
+            self.assertTrue(c01["summary"]["rolled"])
+            self.assertEqual(c01["summary"]["new_facts"], 2)
+            self.assertEqual(c01["summary"]["characters_touched"], ["林越"])
+            self.assertEqual(c01["verification"], {"status": "ok"})
+            # ch09 >= 5 → 原样保留
+            self.assertNotIn("rolled", out["chapter_deltas"]["chapter_09"]["summary"])
+            # canonical 状态一律不动
+            self.assertEqual(out["setting_facts"], ["铜钱线索"])
+            self.assertIn("林越", out["characters"])
+            self.assertEqual(out["rollups"][0]["rolled"], 1)
+            # 幂等：再跑一次不再 rollup
+            got2 = subprocess.run([sys.executable, SCRIPT, tmp, "--rollup", "--before", "5"],
+                                  capture_output=True, text=True)
+            self.assertIn("rollup 0 章", got2.stdout)
+
+    def test_rollup_requires_before(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            os.makedirs(os.path.join(tmp, "审稿"), exist_ok=True)
+            got = subprocess.run([sys.executable, SCRIPT, tmp, "--rollup"],
+                                 capture_output=True, text=True)
+            self.assertNotEqual(got.returncode, 0)
+            self.assertIn("--before", got.stderr)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -51,6 +51,15 @@ TENSE_ASPECT_MARKERS = ("曾经", "当年", "后来", "正在", "忽然", "已�
 EN_TENSE_HINTS = ("had ", "was ", "were ", "would ", "used to", "suddenly", "already", "then", "later", "about to")
 ZERO_PRONOUN_VERBS = ("抬手", "转身", "皱眉", "冷笑", "推门", "走进", "看向", "开口", "拔剑", "跪下")
 CULTURAL_SAFETY_TERMS = ("蛮夷", "奴婢", "贱民", "丑八怪", "残废", "疯子", "种族", "血统低贱")
+REQUIRED_MANIFEST_FIELDS = (
+    "languages",
+    "target_platforms",
+    "target_regions",
+    "rights_status",
+    "ai_disclosure_profile",
+    "author_credit",
+    "translator_credit",
+)
 
 
 def _cjk_len(s):
@@ -97,6 +106,50 @@ def load_translated(project, lang):
             with open(p, encoding="utf-8") as f:
                 out[n] = f.read()
     return out
+
+
+def check_manifest(project, lang):
+    path = os.path.join(project, "出海", "manifest.json")
+    if not os.path.isfile(path):
+        return [{
+            "type": "missing_manifest",
+            "path": "出海/manifest.json",
+            "message": "缺少出海 manifest；需记录语言、平台、目标地区、权利、AI 披露和署名元数据。",
+        }]
+    try:
+        with open(path, encoding="utf-8") as f:
+            payload = json.load(f)
+    except (OSError, json.JSONDecodeError) as exc:
+        return [{
+            "type": "invalid_manifest",
+            "path": "出海/manifest.json",
+            "message": f"manifest 不是可读 JSON：{exc}",
+        }]
+    if not isinstance(payload, dict):
+        return [{
+            "type": "invalid_manifest",
+            "path": "出海/manifest.json",
+            "message": "manifest 必须是 JSON object。",
+        }]
+    warnings = []
+    missing = [field for field in REQUIRED_MANIFEST_FIELDS if field not in payload or payload.get(field) in ("", [], None)]
+    if missing:
+        warnings.append({
+            "type": "missing_manifest_fields",
+            "path": "出海/manifest.json",
+            "fields": missing,
+            "message": "manifest 缺少字段：" + "、".join(missing),
+        })
+    languages = payload.get("languages")
+    if isinstance(languages, str):
+        languages = [languages]
+    if isinstance(languages, list) and lang not in {str(item) for item in languages}:
+        warnings.append({
+            "type": "lang_not_declared",
+            "path": "出海/manifest.json",
+            "message": f"manifest.languages 未声明当前目标语 {lang}。",
+        })
+    return warnings
 
 
 def _glossary_sources(glossary):
@@ -161,6 +214,7 @@ def check(project, lang):
     residue_on = lang.lower() not in CJK_SCRIPT_LANGS
     glossary = load_glossary(project, lang)
     translated = load_translated(project, lang)
+    manifest_warnings = check_manifest(project, lang)
     rows = []
     missing = []
     for idx, _path, src_text in read_chapters(project, None):
@@ -214,6 +268,7 @@ def check(project, lang):
         "missing_chapters": missing,
         "flagged_chapters": [r["chapter"] for r in rows if r["flags"]],
         "narrative_fidelity_review_counts": fidelity_counts,
+        "manifest_warnings": manifest_warnings,
         "blocking": block,
     }
     return rows, summary
@@ -244,6 +299,8 @@ def main():
     if summary["flagged_chapters"]:
         head = "、".join(f"第{c}章" for c in summary["flagged_chapters"][:8])
         print(f"  待复核：{head}{' …' if len(summary['flagged_chapters']) > 8 else ''}（block {summary['blocking']}）")
+    if summary.get("manifest_warnings"):
+        print(f"  ⚠️ manifest 元数据提醒：{len(summary['manifest_warnings'])} 项")
     if not summary["missing_chapters"] and not summary["flagged_chapters"]:
         print("  ✅ 0 残留 / 术语全锁 / 覆盖完整")
     print(f"  机读报告 → {out}")

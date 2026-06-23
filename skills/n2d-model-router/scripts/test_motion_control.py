@@ -49,11 +49,14 @@ def test_routes_requiring_control_filters_required_only():
         {"clip_id": "Clip_02", "shot_type": "dialogue",
          "motion_control": {"level": "none"}},
         {"clip_id": "Clip_03", "shot_type": "chase",
-         "motion_control": {"level": "recommended", "required_inputs": ["pose_sequence"]}},
+         "motion_control": {"level": "required", "required_inputs": ["pose_sequence", "camera_path"]}},
     ]
     got = mc.routes_requiring_control(routes)
-    assert [t["clip_id"] for t in got] == ["Clip_01"]
+    assert [t["clip_id"] for t in got] == ["Clip_01", "Clip_03"]
     assert got[0]["required_inputs"] == ["pose_sequence", "depth_sequence"]
+    assert got[0]["contact_fields_required"] is True
+    assert got[1]["required_inputs"] == ["pose_sequence", "camera_path"]
+    assert got[1]["contact_fields_required"] is False
 
 
 def test_input_is_filled():
@@ -115,6 +118,23 @@ def test_readiness_ready_requires_inputs_and_contacts(tmp_path):
     for f in mc.CONTACT_FIELDS:
         man[f] = ["x"]
     assert mc.readiness(man, root, ["pose_sequence"])["gate_pass"] is True
+
+
+def test_readiness_for_chase_control_does_not_require_contact_fields(tmp_path):
+    root = str(tmp_path)
+    d = os.path.join(root, "出视频/第1集/control/Clip_03")
+    os.makedirs(d)
+    open(os.path.join(d, "openpose_001.png"), "w").close()
+    open(os.path.join(d, "camera_path.json"), "w").write("{}")
+    man = mc.build_skeleton("第1集", "Clip_03", ["pose_sequence", "camera_path"])
+    man["control_inputs"]["pose_sequence"]["status"] = "ready"
+    man["control_inputs"]["camera_path"]["status"] = "ready"
+    man["status"] = "ready"
+
+    result = mc.readiness(man, root, ["pose_sequence", "camera_path"], contact_fields_required=False)
+
+    assert result["gate_pass"] is True
+    assert result["missing_contacts"] == []
 
 
 # ---- 步内中间产物指纹缓存（G11）----

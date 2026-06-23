@@ -150,6 +150,14 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 **情境 A — 用户给了一个小说路径，作品根尚不存在**：
 → 推荐 `n2d-script <小说路径>`（Stage 1 首跑：拆集 + 精修第1集）。**首跑时先把上面「制作模式 · 首跑选择」菜单念给用户选一次**，再按 `n2d/references/visual_styles.md` 选择 `基础视觉风格`；生视频后端不在开局选择，除非用户主动固定某后端/账号硬约束，否则延后到 `n2d-video` 出视频前由 router/probe 决策。选后统一落 `_设置.md`。
 
+**情境 A2 — 用户明确要从中间章节/中间集开始制作**：
+→ 先让 `n2d-script` 创建并补齐中段开工前情资产包，再拆目标窗口；不要只截目标章节直接写词。
+```bash
+python3 skills/n2d-script/scripts/midstart_context.py <作品根> scaffold --target "第48章" --window "第45-52章"
+python3 skills/n2d-script/scripts/midstart_context.py <作品根> check
+```
+必补：主角常态/当前形态、形象生命周期、前情摘要、关键角色/场景/道具卡、目标章节前后窗口。`check` 通过后再跑 `split_novel.py` 或精修目标集；`run.py next` 在 `script_stage1` 前若发现该资产包未补齐会阻断。
+
 **情境 B — 用户给了一个已存在的作品根 或 `_进度.md` 路径**：
 → **先跑源新鲜度自检**（见下「源新鲜度自检」节）→ **再跑 skill 更新影响检查**（见下「skill 更新影响检查」节）→ 再走"读进度 → 路由"流程
 
@@ -215,7 +223,7 @@ python3 <skill>/source_check.py <作品根> --record # 记/更新指纹基线（
   - ① **确认源**：确保本剧 `小说/<剧>.txt` 已是当前要使用的源文本。
   - ② **评估/重切**：⚠️**重切属"不可逆/花钱"点，每次确认、绝不自动执行**。只 raw-only 受影响 → 推进到那些集前从新源重切该窗口 raw（按 `n2d-script` P0→P6 + 精修窗口铁律）；**别为几章重跑整本 split**（字数变动会重排集号、波及已生产集）。触及已生产集 → 逐集评估配音/出图/出视频是否返工。
   - ③ **忽略本次** / 接受现状 → 处理完后 `--record` 更新基线。
-- 受影响集可登记进 `脚本/_拆集复核.md` 的"待重切"区，推进到时再切（配合 `首切范围=部分先切`：下游已生产集少 → 改动波及面天然小）。
+- 受影响集可登记进 `脚本/boundary_review.json` 的待重切/边界签收记录，推进到时再切；该文件按 episode + raw 指纹校验，源片段变化后旧签收失效（配合 `首切范围=部分先切`：下游已生产集少 → 改动波及面天然小）。
 
 > **可选自动守望（agent hook）**：支持会话结束 hook 的 agent 可在自己的私有配置里让 Stop/after-response hook 跑 `source_watch.py`（例如 Claude Code 可放在 `.claude/settings.json`，其它工具按各自 hook 机制配置），扫所有有 `小说/_源指纹.json` 的漫剧，**仅在本剧源文本变动时打一行提醒**（含变动章是否触及已生产集），clean 时全静默。新漫剧首切后跑一次 `source_check.py <作品根> --record` 才纳入守望。
 
@@ -246,9 +254,11 @@ python3 skills/n2d-update/scripts/update_plan.py record <作品根> 第N集
 > python3 skills/n2d/run.py enter <作品根>         # 进入作品：先跑源新鲜度 + skill 更新影响检查，再给下一步动作卡
 > python3 skills/n2d/run.py next <作品根>          # 最小未完成集：自动跑前置，停在下一个 stop-point，给「下一步动作卡」
 > python3 skills/n2d/run.py next <作品根> 第N集    # 指定集
+> python3 skills/n2d/run.py pilot <作品根> 第1集   # 首集打样计划：按分镜风险挑 2-3 个代表 Clip，先验证画风/脸/口型/接缝/路由
 > python3 skills/n2d/run.py next <作品根> --json   # 机器可读 NextAction（代理消费 frontier/prework/stop_reason/action_card/gate）
 > ```
 > 它返回的 `stop_reason` ∈ `{needs_agent_gen, needs_payment_confirm, needs_choice, needs_compliance, blocked_by_gate, blocked_by_image_qc, env_missing, done}`——**代理据此只在"需要脑子/钱包/签字"处停下问人，其余前置已自动跑完**。`blocked_by_gate` 会透传 `return_to_stage`/`findings_path` 指向最小返工；`blocked_by_image_qc` 专指出图落档 QC 未过，先回 `n2d-image` 修复/确认受影响图，不当成后端环境缺失。设计契约见 `../../docs/n2d-编排器设计.md`。
+> 高动态/大场景前置也收进编排器：到 `image_prompt` 前会自动跑源文覆盖、留存节拍、`spectacle_contract_audit.py`、`shot_risk_audit.py`，并写 `生产数据/spectacle_plan_第N集.*`、`spectacle_probe_pack_第N集.*`、`spectacle_sequence_plan_第N集.json` 与 `scene_layer_pack_plan_第N集.*`；到 `video_prompt`/`video` 前会在 router 之后补写 Motion Control manifest 骨架与 `trajectory_controller_plan_第N集.*`（本机有 MotionCtrl/CameraCtrl/DragNUWA 环境时作为增强路线，否则只留计划）；到 `compose` 前会写 `生产数据/action_edit_cues_第N集.*`，到审查后会写 `spectacle_video_qc_第N集.json` 与 `motion_reference_library.json`，让打斗 hit-stop、追逐 speed-ramp、腾云风声、大场景 scale reveal、成片高动态证据和可复用动作小样都进入闭环。
 >
 > **底层/手查：确定性路由脚本 `progress.py`**（编排器内部即调它解析前沿；容错或只想看前沿表时直接用，别靠 LLM 推 16×N 大表）：
 > ```bash
@@ -267,7 +277,7 @@ python3 skills/n2d-update/scripts/update_plan.py record <作品根> 第N集
 > - 旧项目若曾把占位配音写成 `✅`，先跑 `python3 <skill>/progress.py audit-placeholders <作品根>` 检查；确认要修则加 `--fix`，把伪完成降级为 `⏳rough`。
 
 1. 定位 `<作品根>/_进度.md`，读进度表（老项目若仍在 `<作品根>/common/_进度.md`，路由脚本会兼容读取）
-2. 进度表头形如：`| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |`
+2. 进度表头形如：`| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |`（`奇观连续性` 是信息态留痕列：✅=本集打斗/追逐/腾云/大场景已被序列总账覆盖，—=本集无奇观镜/不适用，na 不挡 flow；由 image_prompt prework 自动回写，旧项目缺列跑 `progress.py ensure-col <作品根> 奇观连续性 —`）
 3. 对每一集逐列判断：
    - `剧本改编`/`bgm`/`封面` 任一 ⬜ → 还在 n2d-script 阶段1·剧本改编
    - 阶段1 齐、`配音` ⬜ → 该集等 n2d-voice 角色配音(统计台词时长)
@@ -277,7 +287,7 @@ python3 skills/n2d-update/scripts/update_plan.py record <作品根> 第N集
    - `出图` 满、`视频` 未满 → 先确认 `生产数据/image_qc/<ep>/image_qc_<ep>.json` 存在、`qc_environment.precision_level=full` 且 `summary.hard_blocks=0`，再跑 `python3 skills/n2d-model-router/scripts/router.py <作品根> 第N集 --write` → n2d-video。缺报告、低精度或 hard block 都回 `n2d-image` / image_qc setup，不允许直接进视频。
    - `视频` 满、`成片` ⬜ → n2d-compose（剪辑合成+BGM+字幕；问用户 BGM 选项）
    - **gate 前置（通用编排规则）**：路由到 image/video/compose 任一阶段时，正式生产入口统一跑 dashboard gate：正式生图前用 `--stage image_preflight`，正式出视频前用 `--stage video_preflight`，合成前用 `--stage compose`（它会调用 `n2d-review/scripts/gate.py --json`，退出码 1 即先补再做，并把 QA 阻断入账）。`gate.py --json` 只作底层/调试入口。结构化输出会带 `return_to_stage` / `affected_artifacts` / `rerun_scope`，用于按最小范围回退返工。image_preflight 还会拦「storyboard.json 缺 visual_contract 视觉契约种子 / style_contract 基础视觉风格种子 / 本集总览缺契约」，把跨镜一致性和所选基础风格挡在花钱出图之前；生成后落档回验仍用 `--stage image` / `--stage video`。旧 `cinematic_contract` 兼容但新产物不再使用该标题。dashboard 的 `generation_pass_rate` 只表示生产尝试效率；对外验收和告警看 `deliverable_pass_rate` / `final_pass_rate`，存在 QA block 时可交付通过率归零。
-   - **原生音画额外前置**：`制作模式=原生音画` 时，`出视频/第N集/prompt/00_总览.md` 必须写「原生音画物理一致性契约」，锁定声源归属、口型策略、材质/动作声、空间声学、字幕/后期策略；video_preflight 会缺字段即 BLOCK。该契约是视频后端一次生成台词+口型时的音画物理护栏，不替代成片后的 whisper/字幕对齐。
+   - **原生音画额外前置**：`制作模式=原生音画` 时，`出视频/第N集/prompt/00_总览.md` 必须写「原生音画物理一致性契约」，锁定声源归属、口型策略、材质/动作声、空间声学、字幕/后期策略；同时生成 `生产数据/native_av_physics_第N集.json`（kind=`n2d_native_av_physics`），逐 Clip 记录 `audio_intent`、`speaker_source`、`lip_sync`、`action_sounds[].visible_evidence/timing`、`spatial_acoustics`、`post_policy.compose_policy`。总览缺字段或 sidecar 缺机器字段都会 BLOCK。该契约是视频后端一次生成台词+口型时的音画物理护栏，不替代成片后的 whisper/字幕对齐。
 4. **推荐策略**：
    - 用户没指定集 → 找"最小未完成集编号" + 它所处的阶段，给出对应 skill 建议
    - 用户指定集 → 直接报该集所处阶段

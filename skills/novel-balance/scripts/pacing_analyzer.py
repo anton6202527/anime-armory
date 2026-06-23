@@ -170,10 +170,40 @@ def flag_rows(rows, profile="商业爽文向", female_oriented=False):
     return rows
 
 
+def _lateng_summary(foreshadow):
+    """把伏笔巡检压成烂尾预警摘要：回收率 + 超期高价值伏笔数。无数据返回 None。"""
+    if not foreshadow:
+        return None
+    rate = (foreshadow.get("payoff_rate") or {}).get("rate")
+    return {
+        "回收率": rate,
+        "超期伏笔数": foreshadow.get("overdue_count") or 0,
+        "烂尾级超期": foreshadow.get("blocking") or 0,
+        "through_chapter": foreshadow.get("through_chapter"),
+    }
+
+
+def load_foreshadow_report(project):
+    """读 novel-wiki 伏笔巡检产物 审稿/foreshadow_report.json（由 novel-review 的
+    consistency_audit 串跑 foreshadow_ledger 落盘）。缺失返回 None——烂尾预警优雅降级，
+    不臆造数据。这是 balance「烂尾预警」承诺的真实数据源。"""
+    path = os.path.join(project, "审稿", "foreshadow_report.json")
+    if not os.path.isfile(path):
+        return None
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return None
+    return data if isinstance(data, dict) else None
+
+
 def write_report(project, rows, reversal=None):
     date = datetime.now().strftime("%Y-%m-%d")
     rdir = os.path.join(project, "评分")
     os.makedirs(rdir, exist_ok=True)
+
+    foreshadow = load_foreshadow_report(project)
 
     sig_path = os.path.join(rdir, "pacing_signals.json")
     with open(sig_path, "w", encoding="utf-8") as f:
@@ -182,6 +212,7 @@ def write_report(project, rows, reversal=None):
             "kind": "novel_pacing_signals",
             "note": "确定性近似信号；语义校准（真注水/真高潮）待 LLM 代理读文本补全",
             "early_reversal": reversal,
+            "烂尾预警": _lateng_summary(foreshadow),
             "chapters": rows,
         }, f, ensure_ascii=False, indent=2)
 
@@ -210,6 +241,30 @@ def write_report(project, rows, reversal=None):
             lines.append(
                 "> 反转引子偏稀——前 30 章是付费/追更生死区，建议回章纲（`novel-craft/references/"
                 "outline.md` 节奏模板）补反转 beat。注：此为确定性候选，闪回/伏笔可能漏计，需 LLM 复核。")
+    if foreshadow is not None:
+        rate = (foreshadow.get("payoff_rate") or {}).get("rate")
+        rate_str = "—（无有效伏笔）" if rate is None else f"{rate:.0%}"
+        overdue = foreshadow.get("overdue") or []
+        lines += [
+            "",
+            "## 烂尾预警（伏笔回收）",
+            "",
+            f"- 伏笔回收率：**{rate_str}**（截至第 {foreshadow.get('through_chapter', '?')} 章）；"
+            f"超期伏笔 {foreshadow.get('overdue_count', 0)} 条，其中烂尾级 {foreshadow.get('blocking', 0)} 条。",
+            "- 数据源 `审稿/foreshadow_report.json`（novel-wiki 伏笔台账 → novel-review consistency_audit 巡检）。",
+        ]
+        for o in overdue[:10]:
+            lines.append(
+                f"  - [{o.get('severity', '建议级')}] {o.get('id')} 超期 {o.get('overdue_by', '?')} 章"
+                f" · {o.get('description', '')}")
+    else:
+        lines += [
+            "",
+            "## 烂尾预警（伏笔回收）",
+            "",
+            "- 暂无 `审稿/foreshadow_report.json`；跑 `novel-review/scripts/consistency_audit.py`"
+            "（或 `foreshadow_ledger.py scan`）后本节给出超期高价值伏笔与回收率。",
+        ]
     lines += [
         "",
         "> 「判定」为脚本按确定性阈值给出的初判；连续注水段 / 高潮过密 / 节奏脱节的"

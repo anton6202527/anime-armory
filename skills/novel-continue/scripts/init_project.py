@@ -41,6 +41,8 @@ def main():
     ap.add_argument("--mode", choices=["sequel", "continuation"], required=True,
                     help="sequel = 续编（原作已完结）；continuation = 接更（原作未完结）")
     ap.add_argument("--new-chapters", type=int, default=20, help="续写章数（5-30）")
+    ap.add_argument("--genre", default=None,
+                    help="原作题材；命中力量题材（穿越/系统流/修仙/玄幻…）时 seed power_system_registry 脚手架")
     ap.add_argument("--target-platform", default="跨平台")
     ap.add_argument("--purpose", default=None,
                     help="小说用途：传统小说/漫剧源书/微短剧源书/短读/短篇/出海译制底稿/自定义")
@@ -192,6 +194,10 @@ def main():
          "用上的伏笔、风险点。用户选定后回写 _meta.json.direction_chosen。\n"),
         ("设定/章纲.md", f"# 章纲 — 续写 {args.new_chapters} 章\n\n> 第 4 步由主对话填写。**未敲定不进 Demo。**\n"),
     ]
+    # 一致性注册表脚手架（B1）：派生作品也要有 character_guardrails / power_system_registry，
+    # 否则 novel-wiki 的护栏 / 力量体系机检在续写作品上静默 no-op。
+    from consistency_scaffold import consistency_registry_files
+    skeletons += consistency_registry_files(args.genre)
     for name, content in skeletons:
         path = os.path.join(out_root, name)
         os.makedirs(os.path.dirname(path), exist_ok=True)

@@ -819,9 +819,14 @@ def test_lint_shot_block_core_expression_block_integration():
 
 def _asset_index() -> dict:
     return {
-        "ids": {"LOC_01", "PROP_01", "VFX_01"},
-        "name_to_id": {"冷宫寝殿": "LOC_01", "斑驳铜镜": "PROP_01", "暗金妖力脉冲": "VFX_01"},
-        "prefix_of": {"LOC_01": "LOC_", "PROP_01": "PROP_", "VFX_01": "VFX_"},
+        "ids": {"LOC_01", "PROP_01", "WEAPON_01", "VFX_01"},
+        "name_to_id": {
+            "冷宫寝殿": "LOC_01",
+            "斑驳铜镜": "PROP_01",
+            "霜纹长剑": "WEAPON_01",
+            "暗金妖力脉冲": "VFX_01",
+        },
+        "prefix_of": {"LOC_01": "LOC_", "PROP_01": "PROP_", "WEAPON_01": "WEAPON_", "VFX_01": "VFX_"},
     }
 
 
@@ -833,17 +838,21 @@ def test_load_asset_index(tmp_path: Path) -> None:
          "reference_group": {"primary": "出图/共享/图片/定妆_冷宫寝殿.png"}},
         {"id": "PROP_01", "type": "prop", "name": "斑驳铜镜",
          "reference_group": {"primary": "出图/共享/图片/定妆_斑驳铜镜.png"}},
+        {"id": "WEAPON_01", "type": "weapon", "name": "霜纹长剑",
+         "reference_group": {"primary": "出图/共享/图片/定妆_霜纹长剑.png"}},
     ]}, ensure_ascii=False), encoding="utf-8")
     idx = image_qc.load_asset_index(tmp_path)
-    assert idx["ids"] == {"LOC_01", "PROP_01"}
+    assert idx["ids"] == {"LOC_01", "PROP_01", "WEAPON_01"}
     assert idx["name_to_id"]["冷宫寝殿"] == "LOC_01"
     assert idx["name_to_id"]["斑驳铜镜"] == "PROP_01"   # 由 name 与 reference_group stem 双路映射
+    assert idx["name_to_id"]["霜纹长剑"] == "WEAPON_01"
     assert idx["prefix_of"]["PROP_01"] == "PROP_"
+    assert idx["prefix_of"]["WEAPON_01"] == "WEAPON_"
     assert image_qc.load_asset_index(tmp_path / "nope") is None
 
 
 def test_lint_flags_unknown_asset_id() -> None:
-    blk = {"label": "Clip 05 道具", "body": "**资产引用注册层**：`PROP_99`；从 asset_registry 取参考。"}
+    blk = {"label": "Clip 05 道具", "body": "**资产引用注册层**：`WEAPON_99`；从 asset_registry 取参考。"}
     findings = image_qc.lint_shot_block(blk, None, None, _asset_index())
     codes = {f["code"]: f["level"] for f in findings}
     assert codes.get("unknown_asset_id") == "block"
@@ -858,7 +867,7 @@ def test_lint_warns_asset_ref_without_id() -> None:
 
 
 def test_lint_asset_binding_clean_when_id_present() -> None:
-    blk = {"label": "Clip 07", "body": "**参考图**：`定妆_斑驳铜镜.png`；资产引用注册层：`PROP_01`。"}
+    blk = {"label": "Clip 07", "body": "**参考图**：`定妆_霜纹长剑.png`；资产引用注册层：`WEAPON_01`。"}
     findings = image_qc.lint_shot_block(blk, None, None, _asset_index())
     assert not any(f["code"] in ("unknown_asset_id", "asset_ref_without_id") for f in findings)
 
@@ -1770,15 +1779,57 @@ def _state_ledger_work(tmp_path: Path, sb_state: str, prompt_text: str = "", wit
     return tmp_path
 
 
+def test_reference_layer_classifies_identity_vs_atmosphere() -> None:
+    rl = image_qc.reference_layer
+    assert rl({"path": "出图/共享/图片/定妆_沈念_脸部特写.png"}) == ""          # 中性命名 → 未知(默认按身份用)
+    assert rl({"path": "定妆_沈念_烛光氛围.png"}) == "atmosphere"             # 戏剧光命名
+    assert rl("定妆_暗调逆光.png") == "atmosphere"
+    assert rl({"layer": "atmosphere", "path": "x.png"}) == "atmosphere"     # 显式标签
+    assert rl({"lighting": "neutral", "path": "定妆_烛光.png"}) == "identity"  # 显式中性盖过命名
+
+
+def test_face_anchor_lighting_audit_flags_dramatic_anchor(tmp_path: Path) -> None:
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True)
+    (shared / "identity_registry.json").write_text(json.dumps({
+        "characters": [{
+            "id": "CHAR_01",
+            "forms": [{
+                "form": "冷宫废妃常态",
+                "reference_group": {"face_anchor_refs": [
+                    {"path": "出图/共享/图片/定妆_沈念_脸部特写.png", "status": "ready"},
+                    {"path": "出图/共享/图片/定妆_沈念_烛光氛围.png", "status": "ready"},
+                ]},
+            }],
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
+    res = image_qc.face_anchor_lighting_audit(tmp_path, "第1集")
+    assert res["available"] is True
+    flagged = {Path(f["path"]).name for f in res["flagged"]}
+    assert flagged == {"定妆_沈念_烛光氛围.png"}  # 只 flag 戏剧光板，中性脸锚不报
+
+
 def test_state_ledger_advises_when_cumulative_state_and_no_ledger(tmp_path: Path) -> None:
     r = image_qc.audit_state_ledger(_state_ledger_work(tmp_path, "镜6 被刺流血→镜7 包扎"), "第1集")
     assert r["advise"] is True
     assert "流血" in r["markers"] and "包扎" in r["markers"]
 
 
-def test_state_ledger_silent_when_ledger_present(tmp_path: Path) -> None:
-    r = image_qc.audit_state_ledger(_state_ledger_work(tmp_path, "镜6 被刺流血", with_ledger=True), "第1集")
+def test_state_ledger_silent_when_ledger_present_and_state_injected(tmp_path: Path) -> None:
+    # ledger 建了 AND 累积状态确实注入了出图 prompt → 真静默。
+    work = _state_ledger_work(tmp_path, "镜6 被刺流血",
+                              prompt_text="本镜沈念左臂流血、绷带可见", with_ledger=True)
+    r = image_qc.audit_state_ledger(work, "第1集")
     assert r["advise"] is False and r["ledger_present"] is True
+    assert r["not_injected_markers"] == []
+
+
+def test_state_ledger_advises_when_state_declared_but_not_injected(tmp_path: Path) -> None:
+    # A5b：状态演进声明了累积状态，但出图 prompt 没注入（runner 会照画干净衣服）——即便建了 ledger 也要 advise。
+    work = _state_ledger_work(tmp_path, "镜6 被刺流血", prompt_text="沈念立于窗前", with_ledger=True)
+    r = image_qc.audit_state_ledger(work, "第1集")
+    assert r["advise"] is True
+    assert "流血" in r["not_injected_markers"]
 
 
 def test_state_ledger_no_false_positive_on_emotion_words(tmp_path: Path) -> None:
@@ -2039,3 +2090,153 @@ def test_degraded_single_person_medium_shot_not_blocked(tmp_path: Path) -> None:
     assert image_qc._degraded_multi_person_face_shots(payload) == []
     # 单人中景在降级下不升 hard（不误杀），仍走 review/降级路径
     assert image_qc.summarize(payload)["by_check"].get("face_degraded_multi_person") is None
+
+
+# ── 辨识标记（MK1）出图前文本预检 ─────────────────────────────────────────────
+
+def _form_with_marks(marks):
+    return {"id": "CHAR_01", "key": "CHAR_01/常态", "display": "沈念_常态", "scope": "全篇",
+            "strong_aliases": {"CHAR_01", "CHAR_01/常态", "沈念_常态"},
+            "identity_marks": [image_qc._normalize_identity_mark(m) for m in marks]}
+
+
+_PERM_SCAR = {"mark_id": "MARK_左腕旧疤", "type": "疤痕", "region": "左腕",
+              "persistence": "permanent", "plot_load": True, "keywords": ["左腕旧疤"]}
+_ACQ_EYE = {"mark_id": "MARK_金瞳", "type": "瞳色", "region": "双眼",
+            "persistence": {"acquired_at": "第3集"}, "keywords": ["金瞳"]}
+
+
+def test_normalize_identity_mark_and_tokens():
+    perm = image_qc._normalize_identity_mark(_PERM_SCAR)
+    assert perm["persistence"] == "permanent" and perm["acquired_ep"] is None
+    toks = image_qc._mark_tokens(perm)
+    assert "左腕旧疤" in toks and "左腕疤痕" in toks and "疤痕" in toks
+    acq = image_qc._normalize_identity_mark(_ACQ_EYE)
+    assert acq["persistence"] == "acquired" and acq["acquired_ep"] == 3
+    assert image_qc._normalize_identity_mark({"side": "left"}) is None  # 无任何搜索词
+
+
+def test_lint_identity_marks_permanent_missing_warns():
+    valid = {"CHAR_01/常态"}
+    blk = _char_block("Clip 10")  # body 未提左腕旧疤
+    codes = {f["code"]: f["level"]
+             for f in image_qc.lint_shot_block(blk, valid, [_form_with_marks([_PERM_SCAR])], ep_num=1)}
+    assert codes.get("identity_mark_missing") == "warn"
+
+
+def test_lint_identity_marks_present_passes():
+    valid = {"CHAR_01/常态"}
+    blk = _char_block("Clip 11")
+    blk["body"] += "\n**资产身份注册层**补：锁凤眼薄唇、左腕旧疤。"
+    codes = {f["code"]
+             for f in image_qc.lint_shot_block(blk, valid, [_form_with_marks([_PERM_SCAR])], ep_num=1)}
+    assert "identity_mark_missing" not in codes
+
+
+def test_lint_identity_marks_acquired_anachronism_blocks_then_clears():
+    valid = {"CHAR_01/常态"}
+    blk = _char_block("Clip 12")
+    blk["body"] += "\n沈念睁开金瞳，金光乍现。"
+    # 第1集（获得集第3集之前）写了金瞳 → block 穿帮
+    codes1 = {f["code"]: f["level"]
+              for f in image_qc.lint_shot_block(blk, valid, [_form_with_marks([_ACQ_EYE])], ep_num=1)}
+    assert codes1.get("identity_mark_anachronism") == "block"
+    # 第4集（获得后）写了金瞳 → 既不穿帮也不缺失
+    codes4 = {f["code"]
+              for f in image_qc.lint_shot_block(blk, valid, [_form_with_marks([_ACQ_EYE])], ep_num=4)}
+    assert "identity_mark_anachronism" not in codes4 and "identity_mark_missing" not in codes4
+
+
+def test_lint_identity_marks_skips_absent_character():
+    valid = {"CHAR_01/常态", "CHAR_02/常态"}
+    blk = _char_block("Clip 13")  # 只在场 CHAR_01
+    other = {"id": "CHAR_02", "key": "CHAR_02/常态", "display": "柳娘子", "scope": "",
+             "strong_aliases": {"CHAR_02", "CHAR_02/常态"},
+             "identity_marks": [image_qc._normalize_identity_mark(_PERM_SCAR)]}
+    codes = {f["code"] for f in image_qc.lint_shot_block(blk, valid, [other], ep_num=1)}
+    assert "identity_mark_missing" not in codes  # CHAR_02 不在场，不查它的标记
+
+
+# ── 承载角色脸锚（registry 级·后端无关·治定妆脸漂真因） ───────────────────────────
+
+def _setup_carry(tmp_path: Path, asset: dict, character: dict, *, with_png: bool = False) -> Path:
+    reg = tmp_path / "出图" / "共享"
+    reg.mkdir(parents=True)
+    (reg / "asset_registry.json").write_text(
+        json.dumps({"assets": [asset]}, ensure_ascii=False), encoding="utf-8")
+    (reg / "identity_registry.json").write_text(
+        json.dumps({"characters": [character]} if character else {}, ensure_ascii=False),
+        encoding="utf-8")
+    if with_png:
+        img = reg / "图片"
+        img.mkdir(parents=True, exist_ok=True)
+        (img / "定妆_沈念.png").write_bytes(b"\x89PNG\r\n")  # 存在性检查只看 is_file()
+    return tmp_path
+
+
+def test_carried_identity_unanchored_blocks_when_no_ready_anchor(tmp_path: Path) -> None:
+    # VFX 板承载 CHAR_01 的脸，但 CHAR_01 形态无任何 ready 脸锚 → 必无锚渲染新脸 → block
+    tmp = _setup_carry(
+        tmp_path,
+        {"id": "VFX_血脉", "type": "vfx", "name": "万妖血脉觉醒",
+         "carries_identity": ["CHAR_01/常态"]},
+        {"id": "CHAR_01", "forms": [{"form": "常态", "reference_group": {}}]},
+    )
+    res = image_qc.audit_carried_identity_anchors(tmp)
+    codes = {f["code"]: f["level"] for f in res["findings"]}
+    assert codes.get("unanchored_identity_plate") == "block"
+
+
+def test_carried_identity_ok_when_ready_anchor_present(tmp_path: Path) -> None:
+    tmp = _setup_carry(
+        tmp_path,
+        {"id": "VFX_血脉", "type": "vfx", "name": "万妖血脉觉醒",
+         "carries_identity": ["CHAR_01/常态"]},
+        {"id": "CHAR_01", "forms": [{"form": "常态", "reference_group": {
+            "正面": {"path": "出图/共享/图片/定妆_沈念.png", "status": "ready"}}}]},
+        with_png=True,
+    )
+    res = image_qc.audit_carried_identity_anchors(tmp)
+    assert [f for f in res["findings"] if f["level"] == "block"] == []
+
+
+def test_carried_identity_unknown_character_blocks(tmp_path: Path) -> None:
+    tmp = _setup_carry(
+        tmp_path,
+        {"id": "VFX_血脉", "type": "vfx", "name": "关系图",
+         "carries_identity": ["CHAR_99/常态"]},
+        {"id": "CHAR_01", "forms": [{"form": "常态", "reference_group": {}}]},
+    )
+    res = image_qc.audit_carried_identity_anchors(tmp)
+    codes = {f["code"] for f in res["findings"]}
+    assert "carried_identity_unknown" in codes
+
+
+def test_carried_identity_pure_scene_asset_not_flagged(tmp_path: Path) -> None:
+    # 纯场景资产不承载角色脸 → 不推断、不报
+    tmp = _setup_carry(
+        tmp_path,
+        {"id": "LOC_01", "type": "location", "name": "冷宫庭院"},
+        {"id": "CHAR_01", "forms": [{"form": "常态", "reference_group": {}}]},
+    )
+    res = image_qc.audit_carried_identity_anchors(tmp)
+    assert res["findings"] == []
+
+
+def test_carried_identity_exempt_env_downgrades_to_warn(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("N2D_ALLOW_UNANCHORED_IDENTITY_PLATE", "1")
+    tmp = _setup_carry(
+        tmp_path,
+        {"id": "VFX_血脉", "type": "vfx", "name": "万妖血脉觉醒",
+         "carries_identity": ["CHAR_01/常态"]},
+        {"id": "CHAR_01", "forms": [{"form": "常态", "reference_group": {}}]},
+    )
+    res = image_qc.audit_carried_identity_anchors(tmp)
+    levels = {f["level"] for f in res["findings"]}
+    assert levels == {"warn"}  # 豁免后只 warn 留痕，不 block
+
+
+def test_carried_identity_block_codes_are_hard() -> None:
+    # 落档机检 → gate hard_blocks 的闭环依赖这两个码在 HARD_LINT_CODES
+    assert "unanchored_identity_plate" in image_qc.HARD_LINT_CODES
+    assert "carried_identity_unknown" in image_qc.HARD_LINT_CODES

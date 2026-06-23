@@ -119,6 +119,38 @@ def test_camera_trajectory_report_blocks_axis_flip(tmp_path: Path) -> None:
     assert any(row["verdict"] == "block" and "越轴" in row["message"] for row in res["findings"])
 
 
+def test_motion_quality_high_action_requires_posterior_curves(tmp_path: Path) -> None:
+    ep = "第1集"
+    _write_json(
+        tmp_path / "生产数据" / f"motion_quality_{ep}.json",
+        {"shots": [{"clip": "Clip_01", "shot_type": "fight_exchange", "expected_motion": "打斗命中"}]},
+    )
+    res = mot.analyze(str(tmp_path), ep)
+    assert any("高动作后验报告缺字段" in row["message"] and "speed_curve" in row["message"] for row in res["findings"])
+
+
+def test_motion_quality_high_action_posterior_curves_pass(tmp_path: Path) -> None:
+    ep = "第1集"
+    _write_json(
+        tmp_path / "生产数据" / f"motion_quality_{ep}.json",
+        {"shots": [{
+            "clip": "Clip_01",
+            "shot_type": "fight_exchange",
+            "expected_motion": "打斗命中",
+            "speed_curve": "起手0.2→命中0.8→收势0.3",
+            "spatial_path": "画左到画右半步",
+            "impact_frame": "00:00:02.100",
+            "motion_smoothness": 0.9,
+            "dynamic_degree": 0.4,
+            "freeze_ratio": 0.02,
+            "jerk_score": 0.1,
+            "action_completion": 0.9,
+        }]},
+    )
+    res = mot.analyze(str(tmp_path), ep)
+    assert not any("高动作后验报告缺字段" in row["message"] for row in res["findings"])
+
+
 def test_motion_quality_report_catches_freeze_and_low_smoothness(tmp_path: Path) -> None:
     ep = "第1集"
     _write_json(

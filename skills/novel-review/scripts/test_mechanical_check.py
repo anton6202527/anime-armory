@@ -252,6 +252,28 @@ def test_ai_tell_cliche_density_is_green_nudge():
     assert all(sev != "🔴" for sev, msg, ev in out)  # 容错铁律：绝不 🔴
 
 
+def test_burstiness_too_few_sentences_returns_none():
+    cv, n = mc.sentence_burstiness("他走了。她笑了。")
+    assert cv is None and n == 2
+
+
+def test_ai_tell_flags_uniform_sentence_length():
+    # 12 句、每句严格 8 字 → 句长方差为 0 → CV=0 → 🟡 burstiness 低
+    body = "。".join(["甲乙丙丁戊己庚辛"] * 12) + "。"
+    out = mc.ai_tell_scan(body)
+    assert any(sev == "🟡" and "burstiness" in msg for sev, msg, ev in out)
+    assert all(sev != "🔴" for sev, msg, ev in out)
+
+
+def test_ai_tell_varied_sentence_length_no_burstiness_flag():
+    # 长短句交错（人类叙事）→ CV 高 → 不报 burstiness
+    body = ("门开了。他站在那里，雪光从他背后斜斜地铺进来，把半张脸切成明暗两块，"
+            "谁也看不清他在想什么。她退了一步。又一步。再说话时声音已经发抖，"
+            "可她还是把那句憋了三年的话一个字一个字地砸了出来，仿佛要把整座宅子都掀翻。走。")
+    out = mc.ai_tell_scan(body)
+    assert not any("burstiness" in msg for sev, msg, ev in out)
+
+
 def test_ai_tell_wired_into_findings_and_toggle(tmp_path):
     chapters = {"第1章.md": "# 第 1 章 《题》\n<!-- meta: demo=false -->\n"
                 + "他停下脚步。综上所述，命运的齿轮已然转动。" * 30}

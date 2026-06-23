@@ -65,6 +65,11 @@ NOVEL_SKILLS = [
         "summary": "market and quality scoring",
     },
     {
+        "name": "novel-research",
+        "role": "research",
+        "summary": "professional evidence packets for specialist scenes",
+    },
+    {
         "name": "novel-style",
         "role": "qa",
         "summary": "style fingerprint and drift checks",

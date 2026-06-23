@@ -17,11 +17,10 @@ LIB = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "n2d", "_lib
 if LIB not in sys.path:
     sys.path.insert(0, LIB)
 
+from n2d_contract import TEMPLATE_BASE_FIELDS  # noqa: E402
 from n2d_const import STYLE_CONTRACT_FIELDS, VISUAL_CONTRACT_FIELDS  # noqa: E402
 from n2d_logic import special_template_keywords  # noqa: E402
 from n2d_platform_profiles import backend_supports_three_plus_frames  # noqa: E402
-
-TEMPLATE_BASE_FIELDS = ("template_id", "beats", "blocking", "camera_rule", "continuity_must", "negative")
 
 
 def storyboard_path(root: str, ep: str) -> str:

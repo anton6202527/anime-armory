@@ -297,6 +297,44 @@ class DraftPacketsTest(unittest.TestCase):
             self.assertIn("power_system_registry", text)
             self.assertIn("必须写入 `state_delta`", text)
 
+    def test_research_pack_is_injected_for_applicable_chapter(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            os.makedirs(os.path.join(tmp, "资料"), exist_ok=True)
+            research_index = {
+                "schema_version": 1,
+                "kind": "novel_research_sources",
+                "packs": [{
+                    "topic": "急诊抢救",
+                    "topic_slug": "急诊抢救",
+                    "domain": "medical",
+                    "risk_level": "high",
+                    "status": "ready",
+                    "pack_path": "资料/专业资料包_急诊抢救.md",
+                    "applicable_chapters": [3],
+                    "keywords": ["急诊"],
+                    "claims": [{"id": "FACT-001", "claim": "先评估生命体征", "source_ids": ["SRC-001"]}],
+                    "uncertain_items": ["不同地区急救流程可能不同"],
+                    "forbidden_items": ["不要写成无人分诊直接开刀"],
+                }],
+            }
+            with open(os.path.join(tmp, "资料", "research_sources.json"), "w", encoding="utf-8") as f:
+                json.dump(research_index, f, ensure_ascii=False)
+            with open(os.path.join(tmp, "资料", "专业资料包_急诊抢救.md"), "w", encoding="utf-8") as f:
+                f.write("# 专业资料包：急诊抢救\n")
+
+            subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3"],
+                capture_output=True, text=True, check=True,
+            )
+            packet = os.path.join(tmp, "写作任务", "第03章.md")
+            with open(packet, encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("`资料/专业资料包_急诊抢救.md`", text)
+            self.assertIn("专业资料包（自动命中）", text)
+            self.assertIn("急诊抢救", text)
+            self.assertIn("不要写成无人分诊直接开刀", text)
+
     def test_reveal_confrontation_relationship_checklists_are_injected(self):
         with tempfile.TemporaryDirectory() as tmp:
             make_project(tmp)
@@ -326,6 +364,146 @@ class DraftPacketsTest(unittest.TestCase):
             self.assertIn("和解/救赎/互相救场", text)
             self.assertIn("关系温度", text)
             self.assertIn("必须写入 `state_delta`", text)
+
+    def test_female_fiction_checklist_injected_for_romance_genre(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            meta_path = os.path.join(tmp, "_meta.json")
+            with open(meta_path, encoding="utf-8") as f:
+                meta = json.load(f)
+            meta["genre"] = "现代言情·先婚后爱"
+            with open(meta_path, "w", encoding="utf-8") as f:
+                json.dump(meta, f, ensure_ascii=False)
+            subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3"],
+                capture_output=True, text=True, check=True,
+            )
+            packet = os.path.join(tmp, "写作任务", "第03章.md")
+            with open(packet, encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("女频情感写作清单", text)
+            self.assertIn("`skills/novel-craft/references/女频情感.md`", text)
+            self.assertIn("情绪写颗粒度", text)
+            self.assertIn("CP 关系温度只进不退", text)
+
+    def test_female_fiction_checklist_gated_by_platform_setting(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n- 题材：豪门宫斗\n")
+            subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3"],
+                capture_output=True, text=True, check=True,
+            )
+            packet = os.path.join(tmp, "写作任务", "第03章.md")
+            with open(packet, encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("女频情感写作清单", text)
+
+    def test_female_fiction_checklist_absent_for_non_romance(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)  # default: 番茄 / 传统小说 / 无 genre
+            subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3"],
+                capture_output=True, text=True, check=True,
+            )
+            packet = os.path.join(tmp, "写作任务", "第03章.md")
+            with open(packet, encoding="utf-8") as f:
+                text = f.read()
+            self.assertNotIn("女频情感写作清单", text)
+            self.assertNotIn("`skills/novel-craft/references/女频情感.md`", text)
+
+    def test_cast_arc_injected_when_arc_file_present(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            with open(os.path.join(tmp, "设定", "章纲.md"), "a", encoding="utf-8") as f:
+                f.write("\n- 第 04 章 《林越的抉择》 — 林越被迫向同伴求助\n")
+            with open(os.path.join(tmp, "设定", "角色弧光.json"), "w", encoding="utf-8") as f:
+                json.dump({
+                    "schema_version": 1,
+                    "characters": {
+                        "林越": {
+                            "role": "protagonist",
+                            "function": "主角/复仇者",
+                            "want": "夺回家族",
+                            "need": "学会信任",
+                            "lie": "强者不需要任何人",
+                            "distinct_tag": "沉默，用刀不用话",
+                            "arc_stages": [
+                                {"by_chapter": 3, "stage": "固守谎言"},
+                                {"by_chapter": 25, "stage": "谎言动摇：被迫依赖同伴"},
+                            ],
+                        }
+                    },
+                }, f, ensure_ascii=False)
+            subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "4"],
+                capture_output=True, text=True, check=True,
+            )
+            with open(os.path.join(tmp, "写作任务", "第04章.md"), encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("在场角色弧光", text)
+            self.assertIn("林越", text)
+            self.assertIn("辨识度锚", text)
+            # 第4章已过 by_chapter=3，应落到下一阶段 by_chapter=25
+            self.assertIn("谎言动摇：被迫依赖同伴", text)
+            self.assertIn("`skills/novel-craft/references/群像与角色弧光.md`", text)
+
+    def test_cast_distinctiveness_reminder_when_three_plus_on_stage(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            with open(os.path.join(tmp, "设定", "章纲.md"), "a", encoding="utf-8") as f:
+                f.write("\n- 第 04 章 《三方会谈》 — 林越、苏晚、赵狞三人当面摊牌\n")
+            with open(os.path.join(tmp, "设定", "角色语感.json"), "w", encoding="utf-8") as f:
+                json.dump({
+                    "林越": {"syntax_profile": {}, "lexicon_anchor": []},
+                    "苏晚": {"syntax_profile": {}, "lexicon_anchor": []},
+                    "赵狞": {"syntax_profile": {}, "lexicon_anchor": []},
+                }, f, ensure_ascii=False)
+            subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "4"],
+                capture_output=True, text=True, check=True,
+            )
+            with open(os.path.join(tmp, "写作任务", "第04章.md"), encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("群像辨识度提醒", text)
+            self.assertIn("只有他会做的反应", text)
+
+    def test_cast_arc_absent_when_no_file_and_few_chars(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)  # 默认 第03章 beat="发现代价"，无角色名、无弧光文件
+            subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3"],
+                capture_output=True, text=True, check=True,
+            )
+            with open(os.path.join(tmp, "写作任务", "第03章.md"), encoding="utf-8") as f:
+                text = f.read()
+            self.assertNotIn("在场角色弧光", text)
+            self.assertNotIn("群像辨识度提醒", text)
+
+    def test_ledger_excerpt_is_canonical_focused(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            # 预置一个含逐章 blob 的账本：注入应给 canonical 状态、丢逐章大 blob
+            with open(os.path.join(tmp, "审稿", "state_ledger.json"), "w", encoding="utf-8") as f:
+                json.dump({
+                    "schema_version": 1, "kind": "novel_state_ledger",
+                    "characters": {}, "setting_facts": ["金手指有代价_铁律X"],
+                    "open_threads": [], "resolved_threads": [],
+                    "chapter_deltas": {
+                        "chapter_01": {"summary": {"notes": "逐章大blob唯一串_ZZZ"}},
+                        "chapter_02": {"summary": {"notes": "another"}},
+                    },
+                }, f, ensure_ascii=False)
+            subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3"],
+                capture_output=True, text=True, check=True,
+            )
+            with open(os.path.join(tmp, "写作任务", "第03章.md"), encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("金手指有代价_铁律X", text)      # canonical 设定事实保留
+            self.assertIn("chapter_deltas_count", text)     # 逐章只给计数
+            self.assertNotIn("逐章大blob唯一串_ZZZ", text)  # 不灌逐章 blob
 
     def test_blocks_without_demo_gate_by_default(self):
         with tempfile.TemporaryDirectory() as tmp:

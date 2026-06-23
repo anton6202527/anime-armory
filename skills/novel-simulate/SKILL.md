@@ -30,7 +30,7 @@ python3 skills/novel-simulate/scripts/simulate_panel.py "<作品根>" [--scope o
 ### 2. 产出报告（确定性信号 + LLM 定性骨架）
 脚本产两份：
 - `评分/读者试读反馈_<日期>.md`（人读）：每个人格一节，**确定性信号**（关注词密度/钩子强度/套路密度）已算好，**定性心声 / 弃书点**留「【AI 代理填写】」占位 → AI 代理按人格 prompt 读文本补全（同 `skills/novel-craft/references/选择点与偏好.md` 的交互节点约定）。
-- `评分/reader_panel_signals.json`（机读）：含各人格信号 + `retention_prior`（爽点密度·钩子·多样性·套路加权的留存近似），并明确 `analysis_mode=signal_only`、`signal_only=true`、`qualitative_completed=false`、`personas_completed=[]`。供 `novel-score` 作为低权重留存先验；只有报告里的「人格心声 / 弃书点」被 AI/人工补完并回写状态后，才算完整模拟读者面板。
+- `评分/reader_panel_signals.json`（机读）：含各人格信号 + `retention_prior`（爽点密度·钩子·多样性·套路加权的留存近似），并明确 `analysis_mode=signal_only`、`signal_only=true`、`qualitative_completed=false`、`personas_completed=[]`。供 `novel-score` 作为低权重留存先验；QA gate 会对 signal-only 写 `SIMULATE-SIGNAL-ONLY` warning；只有报告里的「人格心声 / 弃书点」被 AI/人工补完并回写状态后，才算完整模拟读者面板。
 
 报告含：总评(受众兼容度) / 爽点捕获图 / 弃书点预警 / 各人格针对性改法。
 

@@ -135,6 +135,8 @@ def main():
                     help="覆盖规模档默认章数")
     ap.add_argument("--branch-point", default=None, help="分叉模式必填，例：'第15章'")
     ap.add_argument("--person", default="third-limited", choices=["first", "third-limited"])
+    ap.add_argument("--genre", default=None,
+                    help="原作题材；命中力量题材（穿越/系统流/修仙/玄幻…）时 seed power_system_registry 脚手架")
     ap.add_argument("--out", default=None, help="输出根，缺省 创作区/写小说/<原作名>-<配角名>外传/")
     ap.add_argument("--outputs", default="txt,docx,outline",
                     help="逗号分隔，可含 txt,docx,outline")
@@ -276,6 +278,11 @@ def main():
     W("设定/角色卡.md", build_character_card_skeleton(args.character, source_title, args.mode))
     W("设定/世界观.md", build_worldview_skeleton(source_title))
     W("设定/章纲.md", build_outline_skeleton(meta))
+    # 一致性注册表脚手架（B1）：外传也要有 character_guardrails / power_system_registry，
+    # 否则 novel-wiki 的护栏 / 力量体系机检在外传作品上静默 no-op。
+    from consistency_scaffold import consistency_registry_files
+    for rel, content in consistency_registry_files(args.genre):
+        W(rel, content)
 
     # 锚点粗筛
     candidates = scan_candidates(novel_txt, args.character)

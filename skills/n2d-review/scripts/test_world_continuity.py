@@ -122,3 +122,62 @@ def test_episode_png_paths_reads_canonical_image_dir(tmp_path):
     names = [p.rsplit("/", 1)[-1] for p in wc.episode_png_paths(str(tmp_path), ep)]
 
     assert names == ["Clip_01.png", "legacy.png"]
+
+
+# ---------- W3 光照物理（俯仰 + 光位锚自洽·A3） ----------
+
+def test_light_elevation_bands():
+    assert wc.light_elevation(0.1) == "top"
+    assert wc.light_elevation(0.9) == "bottom"
+    assert wc.light_elevation(0.5) == "center"
+
+
+def test_light_elev_band_only_top_bottom_flip_warns():
+    assert wc.light_elev_band("top", "bottom") == "warn"
+    assert wc.light_elev_band("bottom", "top") == "warn"
+    assert wc.light_elev_band("top", "center") == "ok"
+    assert wc.light_elev_band("top", "top") == "ok"
+
+
+def test_declared_light_dir_parses_h_and_v():
+    assert wc.declared_light_dir("继承 LOC_01，画左破窗冷月主光") == {"h": "left", "v": None}
+    assert wc.declared_light_dir("右侧顶光，硬光") == {"h": "right", "v": "top"}
+    assert wc.declared_light_dir("自下而上的鬼影光") == {"h": None, "v": "bottom"}
+    assert wc.declared_light_dir("逆光剪影") == {"h": None, "v": None}   # 含糊词不判
+
+
+def test_anchor_contradiction_h_and_v():
+    assert wc.anchor_contradiction({"h": "left", "v": None}, "right", None)  # 声明左实测右
+    assert wc.anchor_contradiction({"h": "left", "v": None}, "left", None) is None
+    assert wc.anchor_contradiction({"h": None, "v": "top"}, None, "bottom")  # 声明顶实测底
+    # 同轴缺测/缺声明 → 不判矛盾
+    assert wc.anchor_contradiction({"h": "left", "v": None}, None, None) is None
+    assert wc.anchor_contradiction({"h": None, "v": None}, "right", "bottom") is None
+
+
+def test_analyze_emits_light_elevation_flip(tmp_path, monkeypatch):
+    try:
+        from PIL import Image
+    except Exception:
+        return
+    root = tmp_path / "剧"
+    imgdir = root / "出图" / "第1集"
+    imgdir.mkdir(parents=True)
+
+    def _save(name, lit_top):
+        im = Image.new("L", (48, 48), 20)  # 暗底
+        px = im.load()
+        ys = range(0, 12) if lit_top else range(36, 48)  # 顶亮 vs 底亮
+        for y in ys:
+            for x in range(48):
+                px[x, y] = 255
+        im.save(imgdir / name)
+
+    _save("EP01_CLIP01.png", lit_top=True)    # 顶光
+    _save("EP01_CLIP02.png", lit_top=False)   # 底光 → 与上镜俯仰翻转
+    monkeypatch.setattr(wc, "_scene_of_shot", lambda r, e: {
+        "EP01_CLIP01.png": "冷宫", "EP01_CLIP02.png": "冷宫"})
+    res = wc.analyze(str(root), "第1集")
+    assert res["available"] is True
+    elev = [s for s in res["shots"] if s.get("metric") == "light_elevation" and s["verdict"] == "warn"]
+    assert any(s["png"] == "EP01_CLIP02.png" for s in elev)

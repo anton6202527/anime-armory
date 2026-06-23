@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 """Shared QA gate reader for novel-* projects.
 
-Reads review_report.json and score_report.json without editing anything. The
-gate is intentionally small so progress.py and export.py can share the same
-blocking rules.
+Reads review_report.json, score_report.json, and research packet indexes
+without editing anything. The gate is intentionally small so progress.py and
+export.py can share the same blocking rules.
 """
+import glob
 import json
 import os
 import sys
@@ -19,9 +20,21 @@ if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from project_io import load_project_settings  # noqa: E402
 
+_RESEARCH = os.path.join(_SKILLS, "novel-research", "scripts")
+if _RESEARCH not in sys.path:
+    sys.path.insert(0, _RESEARCH)
+try:
+    import research_pack as _research_pack  # noqa: E402
+except Exception:  # pragma: no cover - gate degrades if optional script is broken
+    _research_pack = None
+
 from novel_contract import normalize_rights_status, parse_regions
 from report_snapshot import snapshot_chapters, validate_snapshot
 from waivers import baseline_freshness_scope, has_waiver, load_waivers
+try:
+    import compliance_profile as _compliance_profile  # noqa: E402
+except Exception:  # pragma: no cover - optional gate degrades defensively
+    _compliance_profile = None
 
 
 BLOCKING_SCORE_VERDICTS = {"大改", "弃稿重立"}
@@ -275,6 +288,159 @@ def _rights_gate(project_root, *, export_formats=None):
 
 def _warning(wid, stage, skill, reason):
     return {"id": wid, "stage": stage, "skill": skill, "reason": reason}
+
+
+def _research_alert_id(alert_type):
+    text = str(alert_type or "alert").upper().replace("_", "-")
+    return f"RESEARCH-{text}"
+
+
+def _research_gate(project_root):
+    path = os.path.join(project_root, "资料", "research_sources.json")
+    report = {
+        "kind": "research",
+        "path": path,
+        "exists": os.path.exists(path),
+        "blocking": False,
+        "blockers": [],
+        "warnings": [],
+        "next_actions": [],
+    }
+    if _research_pack is None:
+        report["warnings"].append(_warning(
+            "RESEARCH-UNAVAILABLE",
+            "research",
+            "novel-research",
+            "无法加载 novel-research/scripts/research_pack.py；专业资料包 freshness gate 暂未运行。",
+        ))
+        return report
+    try:
+        payload = _research_pack.check_project(project_root, write=False)
+    except Exception as exc:  # pragma: no cover - defensive gate for corrupt indexes
+        report["blockers"].append(_warning(
+            "RESEARCH-CHECK-FAILED",
+            "research",
+            "novel-research",
+            f"专业资料包检查失败：{exc}",
+        ))
+        report["blocking"] = True
+        return report
+    for alert in payload.get("alerts") or []:
+        reason = alert.get("message") or alert.get("type") or "专业资料包检查发现问题"
+        detail = []
+        if alert.get("domain"):
+            detail.append(f"domain={alert['domain']}")
+        if alert.get("evidence"):
+            detail.append(f"evidence={alert['evidence']}")
+        if detail:
+            reason = reason + "；" + " ".join(detail)
+        item = _warning(_research_alert_id(alert.get("type")), "research", "novel-research", reason)
+        stale_block = alert.get("type") in {
+            "pack_stale",
+            "pack_missing_updated_at",
+            "missing_required_research_pack",
+        }
+        if alert.get("severity") == "阻断级" and stale_block:
+            report["blockers"].append(item)
+        else:
+            report["warnings"].append(item)
+    if report["blockers"]:
+        report["next_actions"].append({
+            "priority": "P0",
+            "return_to_stage": "research",
+            "recommended_skill": "novel-research",
+            "action": "补齐或刷新专业资料包后，重跑 review/export gate。",
+        })
+    report["blocking"] = bool(report["blockers"])
+    return report
+
+
+def _compliance_gate(project_root, *, require=False):
+    path = os.path.join(project_root, "合规", "compliance_profile.json")
+    report = {
+        "kind": "compliance_profile",
+        "path": path,
+        "exists": os.path.exists(path),
+        "blocking": False,
+        "blockers": [],
+        "warnings": [],
+        "next_actions": [],
+    }
+    if _compliance_profile is None:
+        report["warnings"].append(_warning(
+            "COMPLIANCE-UNAVAILABLE",
+            "compliance",
+            "novel-craft",
+            "无法加载 compliance_profile.py；平台/辖区合规 profile 暂未运行。",
+        ))
+        return report
+    try:
+        profile = _compliance_profile.build_profile(project_root)
+    except Exception as exc:  # pragma: no cover - corrupt project metadata
+        item = _warning(
+            "COMPLIANCE-CHECK-FAILED",
+            "compliance",
+            "novel-craft",
+            f"合规 profile 检查失败：{exc}",
+        )
+        (report["blockers"] if require else report["warnings"]).append(item)
+        report["blocking"] = bool(report["blockers"])
+        return report
+    blockers, warnings = _compliance_profile.gate_items(profile)
+    for req in blockers:
+        report["blockers"].append(_warning(
+            "COMPLIANCE-" + str(req.get("id") or "unknown").upper().replace("_", "-"),
+            "compliance",
+            "novel-craft",
+            req.get("reason") or req.get("title") or "平台/辖区合规要求未满足",
+        ))
+    for req in warnings:
+        report["warnings"].append(_warning(
+            "COMPLIANCE-" + str(req.get("id") or "unknown").upper().replace("_", "-"),
+            "compliance",
+            "novel-craft",
+            req.get("reason") or req.get("title") or "平台/辖区合规提醒",
+        ))
+    if report["blockers"]:
+        report["next_actions"].append({
+            "priority": "P0",
+            "return_to_stage": "compliance",
+            "recommended_skill": "novel-craft",
+            "action": "跑 compliance_profile.py --write；在平台/交付侧完成披露/权利/标识后用 --confirm <requirement_id> 留痕。",
+        })
+    report["blocking"] = bool(report["blockers"])
+    return report
+
+
+def _reader_panel_gate(project_root):
+    path = os.path.join(project_root, "评分", "reader_panel_signals.json")
+    payload = _load_json(path)
+    report = {
+        "kind": "reader_panel",
+        "path": path,
+        "exists": payload is not None,
+        "blocking": False,
+        "blockers": [],
+        "warnings": [],
+        "next_actions": [],
+    }
+    if not isinstance(payload, dict):
+        return report
+    if payload.get("signal_only") is True or payload.get("analysis_mode") == "signal_only":
+        report["warnings"].append(_warning(
+            "SIMULATE-SIGNAL-ONLY",
+            "score",
+            "novel-simulate",
+            "reader_panel_signals.json 是 signal-only 机读留存先验，不能当完整读者试读证据；score/revision 只能低权重使用，优先真实反馈。",
+        ))
+    if payload.get("qualitative_completed") is False:
+        report["next_actions"].append({
+            "priority": "P2",
+            "return_to_stage": "simulate",
+            "recommended_skill": "novel-simulate",
+            "action": "补完人格心声/弃书点等定性面板，或导入 novel-feedback 的真实读者数据。",
+        })
+    return report
 
 
 def _chapter_number_from_name(path):
@@ -765,6 +931,60 @@ def _first_recommended_skill(payload):
     return None
 
 
+def _arc_long_project(project_root):
+    """长篇判定（与 draft_packets 三步迭代阈值同口径）：scale=long 或 target_chapters>=30。"""
+    meta = _load_json(os.path.join(project_root, "_meta.json")) or {}
+    scale = str(meta.get("scale") or "").lower()
+    try:
+        target = int(meta.get("target_chapters") or 0)
+    except (TypeError, ValueError):
+        target = 0
+    return scale in {"long", "长篇"} or target >= 30
+
+
+def _arc_gate(project_root, *, require=False):
+    """弧段（中段跑偏）gate：把 arc_gate.py 产出的 审稿/arc_gate_*.json 纳入导出闸门。
+
+    - 任何 arc_gate 报告仍含阻断（blocking>0）→ 阻断导出（堵住「跑了 arc_gate 看到阻断却照样导出」）。
+    - 长篇项目从未跑过 arc_gate → 警告（中段跑偏是长篇头号杀手，导出前提示先压力测试）。
+    清除办法：修正问题后重跑 `novel-review/scripts/arc_gate.py --arc A-B` 覆盖旧报告。
+    """
+    review_dir = os.path.join(project_root, "审稿")
+    report = {
+        "kind": "arc",
+        "path": review_dir,
+        "exists": False,
+        "blocking": False,
+        "blockers": [],
+        "warnings": [],
+        "next_actions": [],
+    }
+    paths = sorted(glob.glob(os.path.join(review_dir, "arc_gate_*.json")))
+    report["exists"] = bool(paths)
+    for path in paths:
+        payload = _load_json(path) or {}
+        try:
+            nblock = int(payload.get("blocking") or 0)
+        except (TypeError, ValueError):
+            nblock = 0
+        if nblock > 0:
+            report["blockers"].append({
+                "id": "ARC-BLOCK",
+                "stage": "review",
+                "skill": "novel-review",
+                "reason": (f"弧段 gate {os.path.basename(path)} 仍有 {nblock} 项阻断"
+                           f"（中段跑偏/连续不推进读者契约）；修正后重跑 arc_gate.py 覆盖旧报告再导出。"),
+            })
+    if not paths and require:
+        report["warnings"].append(_warning(
+            "ARC-MISSING", "review", "novel-review",
+            "长篇项目从未跑过弧段 gate（arc_gate）；中段跑偏是长篇头号杀手，导出前建议先跑 "
+            "novel-review/scripts/arc_gate.py --arc <起>-<止> 对各 arc 做压力测试。",
+        ))
+    report["blocking"] = bool(report["blockers"])
+    return report
+
+
 def collect_gate_status(project_root, *, require_review_report=False, require_score_report=None,
                         export_formats=None, require_state_closure=False,
                         state_chapter=None, require_ai_usage=None):
@@ -774,13 +994,17 @@ def collect_gate_status(project_root, *, require_review_report=False, require_sc
         require_ai_usage = _ai_usage_required(root, export_formats)
     reports = [
         _rights_gate(root, export_formats=export_formats),
+        _research_gate(root),
         _review_gate(root, require_report=require_review_report),
         _score_gate(root, require_report=require_score_report, global_waivers=global_waivers),
+        _arc_gate(root, require=_arc_long_project(root)),
+        _reader_panel_gate(root),
     ]
     if require_state_closure:
         reports.append(_state_closure_gate(root, chapter=state_chapter, require=True))
     if require_ai_usage or export_formats:
         reports.append(_ai_usage_gate(root, require=require_ai_usage))
+        reports.append(_compliance_gate(root, require=bool(export_formats)))
     blockers = []
     warnings = []
     next_actions = []

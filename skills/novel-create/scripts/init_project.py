@@ -10,9 +10,9 @@ init_project.py — 建【原创从零】小说项目骨架（无源文本·访�
 
 用法:
     python3 init_project.py --title "<书名或'待定'>" --genre "<题材类型>" \\
-        --premise "<一句话故事>" --scale short|medium|long|微短剧|漫剧 \\
+        --premise "<一句话故事>" --scale microstory|short|medium|long|微短剧|漫剧 \\
         [--purpose 传统小说|漫剧源书|自定义] \\
-        [--platform 起点|番茄|晋江|抖音漫剧|红果|历史向|跨平台] \\
+        [--platform 起点|番茄|七猫|晋江|抖音漫剧|红果|历史向|跨平台] \\
         [--person first|third-limited] [--target-chapters N] \\
         [--ingest <碎片路径>]...  [--out <根>] [--outputs txt,docx,outline]
         [--draft-mode 极速初稿|稳妥初稿|商业连载|漫剧源书]
@@ -156,11 +156,9 @@ def build_character_card(title):
 
 
 def build_character_guardrails():
-    return {
-        "schema_version": 1,
-        "kind": "novel_character_guardrails",
-        "characters": {}
-    }
+    # 单一真值源：与派生线共用同一份骨架（novel/_lib/consistency_scaffold.py），避免漂移。
+    from consistency_scaffold import character_guardrails_skeleton
+    return character_guardrails_skeleton()
 
 
 def build_worldview(title):

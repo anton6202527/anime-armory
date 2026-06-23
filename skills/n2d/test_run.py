@@ -8,6 +8,7 @@ import os
 import json
 import sys
 import tempfile
+import hashlib
 
 sys.path.insert(0, os.path.dirname(__file__))
 import run  # noqa: E402
@@ -52,6 +53,24 @@ def _write_clean_image_qc(root, ep="第1集"):
     path = os.path.join(out_dir, f"image_qc_{ep}.json")
     with open(path, "w", encoding="utf-8") as fh:
         json.dump({"qc_environment": {"precision_level": "full"}, "summary": {"hard_blocks": 0, "verdict": "ok"}}, fh)
+
+
+def _write_boundary_review(root, raw_text, decision="accept_risk", notes="已复核，保留短集并补强 voiceover。"):
+    os.makedirs(os.path.join(root, "脚本"), exist_ok=True)
+    path = os.path.join(root, "脚本", "boundary_review.json")
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump({
+            "kind": "n2d_boundary_review",
+            "version": 1,
+            "reviews": [{
+                "episode": "第1集",
+                "raw_rel": "脚本/第1集/raw.txt",
+                "raw_sha256": hashlib.sha256(raw_text.strip().encode("utf-8")).hexdigest(),
+                "risk_flags": ["弱钩待判"],
+                "decision": decision,
+                "notes": notes,
+            }],
+        }, fh, ensure_ascii=False)
 
 
 # ── 前沿解析 + stage key 反查（真实 fixture 文件）──────────────────────────────
@@ -229,7 +248,7 @@ def test_gather_probes_does_not_block_short_episode_with_strong_hook():
     assert any(pw["step"] == "boundary_audit" and pw["status"] == "pass" for pw in probes.prework)
 
 
-def test_gather_probes_allows_script_stage1_when_boundary_review_exists():
+def test_gather_probes_blocks_legacy_markdown_boundary_review():
     root = make_work(ALL_DONE_TO["script_stage1"], settings="- 制作模式: 原生音画\n- 基础视觉风格: 写实电影感\n")
     ep_dir = os.path.join(root, "脚本", "第1集")
     os.makedirs(ep_dir, exist_ok=True)
@@ -238,8 +257,161 @@ def test_gather_probes_allows_script_stage1_when_boundary_review_exists():
 
     probes = run.gather_probes(root, _route("script_stage1"), "script_stage1")
 
+    assert probes.prework_block and "boundary_review.py draft" in probes.prework_block
+    assert any(pw["step"] == "boundary_audit" and pw["status"] == "block" for pw in probes.prework)
+
+
+def test_gather_probes_allows_script_stage1_when_boundary_review_json_valid():
+    root = make_work(ALL_DONE_TO["script_stage1"], settings="- 制作模式: 原生音画\n- 基础视觉风格: 写实电影感\n")
+    ep_dir = os.path.join(root, "脚本", "第1集")
+    os.makedirs(ep_dir, exist_ok=True)
+    raw = "她走进屋里。\n然后坐下。\n"
+    open(os.path.join(ep_dir, "raw.txt"), "w", encoding="utf-8").write(raw)
+    _write_boundary_review(root, raw)
+
+    probes = run.gather_probes(root, _route("script_stage1"), "script_stage1")
+
     assert not probes.prework_block
     assert any(pw["step"] == "boundary_audit" and pw["status"] == "reviewed" for pw in probes.prework)
+
+
+def test_gather_probes_blocks_image_prompt_on_source_adaptation_audit(monkeypatch):
+    root = make_work(ALL_DONE_TO["image_prompt"])
+
+    def fake_run(cmd):
+        if cmd[1].endswith("source_adaptation_audit.py"):
+            return _CP(1, json.dumps({"findings": [{"severity": "warn", "message": "源文关键事件漏改"}]}, ensure_ascii=False), "")
+        return _CP(0, '{"findings_path": ""}', "")
+
+    monkeypatch.setattr(run, "_run", fake_run)
+    probes = run.gather_probes(root, _route("image_prompt"), "image_prompt")
+
+    assert probes.prework_block and "source_adaptation_audit" in probes.prework_block
+    assert any(pw["step"] == "source_adaptation_audit" and pw["status"] == "block" for pw in probes.prework)
+
+
+def test_gather_probes_blocks_image_prompt_on_beat_audit(monkeypatch):
+    root = make_work(ALL_DONE_TO["image_prompt"])
+
+    def fake_run(cmd):
+        if cmd[1].endswith("source_adaptation_audit.py"):
+            return _CP(0, json.dumps({"findings": []}), "")
+        if cmd[1].endswith("beat_audit.py"):
+            return _CP(1, json.dumps({"findings": [{"severity": "warn", "msg": "缺集尾钩"}]}, ensure_ascii=False), "")
+        return _CP(0, '{"findings_path": ""}', "")
+
+    monkeypatch.setattr(run, "_run", fake_run)
+    probes = run.gather_probes(root, _route("image_prompt"), "image_prompt")
+
+    assert probes.prework_block and "beat_audit" in probes.prework_block
+    assert any(pw["step"] == "beat_audit" and pw["status"] == "block" for pw in probes.prework)
+
+
+def test_gather_probes_blocks_image_prompt_on_spectacle_contract_audit(monkeypatch):
+    root = make_work(ALL_DONE_TO["image_prompt"])
+
+    def fake_run(cmd):
+        if cmd[1].endswith("source_adaptation_audit.py") or cmd[1].endswith("beat_audit.py"):
+            return _CP(0, json.dumps({"findings": []}), "")
+        if cmd[1].endswith("spectacle_contract_audit.py"):
+            return _CP(1, json.dumps({"findings": [{"severity": "must", "message": "缺 impact_frame"}]}, ensure_ascii=False), "")
+        return _CP(0, '{"findings_path": ""}', "")
+
+    monkeypatch.setattr(run, "_run", fake_run)
+    probes = run.gather_probes(root, _route("image_prompt"), "image_prompt")
+
+    assert probes.prework_block and "spectacle_contract_audit" in probes.prework_block
+    assert any(pw["step"] == "spectacle_contract_audit" and pw["status"] == "block" for pw in probes.prework)
+
+
+def test_gather_probes_records_shot_risk_warning_without_block(monkeypatch):
+    root = make_work(ALL_DONE_TO["image_prompt"])
+
+    def fake_run(cmd):
+        if cmd[1].endswith("source_adaptation_audit.py") or cmd[1].endswith("beat_audit.py"):
+            return _CP(0, json.dumps({"findings": []}), "")
+        if cmd[1].endswith("shot_risk_audit.py"):
+            return _CP(0, json.dumps({"summary": {"max_score": 8, "warn_or_higher": 1}}, ensure_ascii=False), "")
+        return _CP(0, '{"findings_path": ""}', "")
+
+    monkeypatch.setattr(run, "_run", fake_run)
+    probes = run.gather_probes(root, _route("image_prompt"), "image_prompt")
+
+    assert not probes.prework_block
+    assert any(pw["step"] == "shot_risk_audit" and pw["status"] == "warn" for pw in probes.prework)
+
+
+def test_gather_probes_image_prompt_writes_spectacle_plan_and_probe_pack(monkeypatch):
+    root = make_work(ALL_DONE_TO["image_prompt"])
+    scripts = []
+
+    def fake_run(cmd):
+        scripts.append(os.path.basename(cmd[1]))
+        return _CP(0, json.dumps({"findings": [], "summary": {"max_score": 0, "warn_or_higher": 0}}, ensure_ascii=False), "")
+
+    monkeypatch.setattr(run, "_run", fake_run)
+    probes = run.gather_probes(root, _route("image_prompt"), "image_prompt")
+
+    assert not probes.prework_block
+    assert "spectacle_plan.py" in scripts
+    assert "spectacle_probe_pack.py" in scripts
+
+
+def test_pilot_action_carries_risk_candidates(monkeypatch):
+    root = make_work(ALL_DONE_TO["image_prompt"])
+
+    def fake_run(cmd):
+        if cmd[1].endswith("shot_risk_audit.py"):
+            return _CP(0, json.dumps({
+                "pilot_candidates": [{
+                    "id": "EP01_CLIP03",
+                    "score": 9,
+                    "tags": ["high_motion", "long_clip_8s"],
+                    "recommendations": ["先补 `_mid`。"],
+                }]
+            }, ensure_ascii=False), "")
+        return _CP(0, "", "")
+
+    monkeypatch.setattr(run, "_run", fake_run)
+    na = run.pilot_action(root, "第1集")
+
+    assert na["frontier"]["stage_key"] == "pilot"
+    assert na["action_card"]["pilot_clips"][0]["clip"] == "EP01_CLIP03"
+    assert any("shot_risk_audit.py" in c for c in na["action_card"]["commands"])
+    assert any("spectacle_probe_pack.py" in c for c in na["action_card"]["commands"])
+
+
+def test_gather_probes_video_prompt_writes_spectacle_motion_plan(monkeypatch):
+    root = make_work(ALL_DONE_TO["video_prompt"])
+    _write_clean_image_qc(root)
+    scripts = []
+
+    def fake_run(cmd):
+        scripts.append(os.path.basename(cmd[1]))
+        return _CP(0, '{"findings_path": ""}', "")
+
+    monkeypatch.setattr(run, "_run", fake_run)
+    probes = run.gather_probes(root, _route("video_prompt"), "video_prompt")
+
+    assert not probes.prework_block
+    assert "router.py" in scripts
+    assert "spectacle_plan.py" in scripts
+
+
+def test_gather_probes_compose_writes_action_edit_cues(monkeypatch):
+    root = make_work(ALL_DONE_TO["compose"])
+    _write_clean_image_qc(root)
+    scripts = []
+
+    def fake_run(cmd):
+        scripts.append(os.path.basename(cmd[1]))
+        return _CP(0, '{"findings_path": ""}', "")
+
+    monkeypatch.setattr(run, "_run", fake_run)
+    probes = run.gather_probes(root, _route("compose"), "compose")
+
+    assert not probes.prework_block
+    assert "action_edit_cues.py" in scripts
 
 
 # ── --auto 不越过花钱点（loop 逻辑，注入探针避免 subprocess）───────────────────

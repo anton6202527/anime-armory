@@ -26,6 +26,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 LIB_DIR = SCRIPT_DIR / "_lib"
 if str(LIB_DIR) not in sys.path:
     sys.path.insert(0, str(LIB_DIR))
+from style_policy import face_encoder_policy  # noqa: E402
 
 
 # ---------- 纯逻辑（无 I/O · pytest 覆盖） ----------
@@ -75,6 +76,24 @@ def precision_lines(probes: Dict[str, Any]) -> List[str]:
         lines.append(f"{si} 生图后端「{img.get('name')}」：{img.get('status')}{tail}")
         if img.get("status") == "down":
             lines.append("   ↳ 出图是付费工位，不通就停——先修后端再开工，禁止静默兜底换后端（会引入跨镜后端混用漂移）。")
+
+    face_encoder = probes.get("face_encoder")
+    if face_encoder:
+        style = face_encoder.get("style") or "未设置"
+        encoder = face_encoder.get("encoder") or "arcface"
+        model_status = face_encoder.get("model_status") or "missing"
+        model_path = face_encoder.get("model_path") or ""
+        if face_encoder.get("status") == "ready":
+            lines.append(f"✅ 风格化脸机检：基础视觉风格={style}，脸一致性机检后端=styleid，N2D_STYLEID_MODEL 就绪（{model_path}）。")
+        elif face_encoder.get("stylized"):
+            if encoder == "styleid":
+                detail = "未配置" if model_status == "missing" else f"路径不存在：{model_path}"
+                lines.append(f"⚠️ 风格化脸机检：基础视觉风格={style} 已选择 styleid，但 N2D_STYLEID_MODEL {detail}；本项目脸一致性 KPI 按降级档处理，会回退 arcface_fallback。")
+            else:
+                lines.append(f"⚠️ 风格化脸机检：基础视觉风格={style}，当前脸一致性机检后端={encoder}；建议设 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL，否则一致性 KPI 按降级档处理。")
+        elif encoder == "styleid" and model_status != "ready":
+            detail = "未配置" if model_status == "missing" else f"路径不存在：{model_path}"
+            lines.append(f"⚠️ StyleID：已选择 styleid，但 N2D_STYLEID_MODEL {detail}；将回退 arcface_fallback。")
 
     vid = probes.get("video_backend")
     if vid:
@@ -141,6 +160,18 @@ def probe_video_backend(root: Optional[str]) -> Optional[Dict[str, Any]]:
             "max_frames": ctrl.get("max_timeline_frames", 1), "verified": ctrl.get("verified", "unknown")}
 
 
+def probe_face_encoder(root: Optional[str]) -> Optional[Dict[str, Any]]:
+    if not root:
+        return None
+    try:
+        from n2d_settings import get_setting
+    except Exception:
+        return None
+    style = get_setting(root, "基础视觉风格", "")
+    encoder = get_setting(root, "脸一致性机检后端", "arcface")
+    return face_encoder_policy(style, encoder)
+
+
 def collect(root: Optional[str]) -> Dict[str, Any]:
     return {
         "libs": probe_libs(),
@@ -148,6 +179,7 @@ def collect(root: Optional[str]) -> Dict[str, Any]:
         "voice": probe_voice(),
         "image_backend": probe_image_backend(root),
         "video_backend": probe_video_backend(root),
+        "face_encoder": probe_face_encoder(root),
     }
 
 

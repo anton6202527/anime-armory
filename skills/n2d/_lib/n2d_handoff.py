@@ -8,7 +8,7 @@
     真锁了身份（声明 + 具体锚点 CHAR_xx/定妆_/reference_group/character_id/face_lock/…），
     同时检查多锚帧 Clip 是否把首/中/尾锚到同一 registry/reference_group，跨情绪近景是否使用
     expressions +「锁脸不锁情」契约，否则 block（首帧脸→视频脸无契约锚，出视频必脸漂）；
-  - 物料约束交接（C）：出图逐镜绑定的 LOC/PROP/OUTFIT/VFX 资产，出视频对应镜不得丢失
+  - 物料约束交接（C）：出图逐镜绑定的 LOC/PROP/WEAPON/OUTFIT/VFX 资产，出视频对应镜不得丢失
     （整镜 prompt 缺失=block；仅 id 丢失=warn，交人确认是否有意松引用）。
 
 提到 `n2d/_lib` 作单一真值源，与 n2d_contract_diff 同因：让 n2d-review/gate.py 能在 common 层
@@ -51,8 +51,8 @@ CLOSEUP_MARKERS = (
     "CU", "ECU", "MCU", "BCU", "特写", "近景", "脸部", "面部",
     "反打", "正反打", "过肩", "OTS", "dialogue_shot_reverse", "dialogue_closeup",
 )
-# 逐镜资产 id（场景/道具/服装/特效）。
-ASSET_HANDOFF_ID_RE = re.compile(r"(?:LOC|PROP|OUTFIT|VFX)_[A-Za-z0-9]+")
+# 逐镜资产 id（场景/道具/武器/服装/特效）。
+ASSET_HANDOFF_ID_RE = re.compile(r"(?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9]+")
 
 
 def _clip_num(text: str):
@@ -324,13 +324,13 @@ def check_identity_handoff(root: str, ep: str) -> dict:
     return res
 
 
-# ── 物料约束交接（C：场景/道具/服装/特效的逐镜资产交接 Diff） ────────────────────────
+# ── 物料约束交接（C：场景/道具/武器/服装/特效的逐镜资产交接 Diff） ────────────────────────
 # 视觉契约五字段在 episode 级管场景光位锚/轴线（已 block），但**逐镜**绑定的具体资产
-# （LOC_xx 场景 / PROP_xx 道具 / OUTFIT_xx 服装 / VFX_xx 特效）有没有从出图诚实交接到出视频，
+# （LOC_xx 场景 / PROP_xx 道具 / WEAPON_xx 武器 / OUTFIT_xx 服装 / VFX_xx 特效）有没有从出图诚实交接到出视频，
 # 此前无机检。出图逐镜 `资产引用注册层` 绑了 PROP_01，出视频该镜若把它丢了 → 该道具在视频侧无
 # reference_group/constraints/drift_forbidden 锚 → 道具/特效跨镜漂移。本检查逐镜 Diff 资产 id 集合。
 def extract_asset_ids(text: str) -> set:
-    """逐镜块文本 → 资产 id 集合（LOC/PROP/OUTFIT/VFX_xx）。纯函数·可测。"""
+    """逐镜块文本 → 资产 id 集合（LOC/PROP/WEAPON/OUTFIT/VFX_xx）。纯函数·可测。"""
     return set(ASSET_HANDOFF_ID_RE.findall(str(text or "")))
 
 
@@ -394,6 +394,6 @@ def check_asset_handoff(root: str, ep: str) -> dict:
                 "clip_id": clip_id, "severity": "warn", "code": "asset_handoff_dropped",
                 "note": (f"{clip_id}：出图绑定的资产 {names} 在出视频逐镜 prompt 丢了 id"
                          "——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，"
-                         "补回 LOC/PROP/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/特效跨镜漂移）。"),
+                         "补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。"),
             })
     return res

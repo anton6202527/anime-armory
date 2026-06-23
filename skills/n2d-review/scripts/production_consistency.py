@@ -45,7 +45,7 @@ except Exception:  # pragma: no cover - standalone fallback
         return os.path.join(root, "生产数据")
 
 
-ASSET_RE = re.compile(r"\b(?:LOC|PROP|OUTFIT|VFX)_[\w\-\u4e00-\u9fff]+\b")
+ASSET_RE = re.compile(r"\b(?:LOC|PROP|WEAPON|OUTFIT|VFX)_[\w\-\u4e00-\u9fff]+\b")
 CHAR_RE = re.compile(r"\bCHAR_[\w\-\u4e00-\u9fff]+\b")
 CLIP_RE = re.compile(r"(?i)(?:Clip|镜头|镜)\s*[_ -]?0*([0-9]+)")
 CONTACT_WORDS = (
@@ -270,7 +270,7 @@ def _persistent_assets(root: str) -> Dict[str, dict]:
     out: Dict[str, dict] = {}
     for asset in _registry_assets(root):
         aid = str(asset.get("id") or asset.get("asset_id") or "").strip()
-        if not aid or not (aid.startswith("PROP_") or aid.startswith("VFX_") or aid.startswith("OUTFIT_")):
+        if not aid or not (aid.startswith("PROP_") or aid.startswith("WEAPON_") or aid.startswith("VFX_") or aid.startswith("OUTFIT_")):
             continue
         blob = _json_text(asset).lower()
         persistent = (
@@ -318,7 +318,7 @@ def check_object_permanence(root: str, ep: str) -> dict:
         label = _clip_label(clip, idx)
         text = _clip_text(clip, label, prompts)
         loc = _loc_of(clip, text)
-        ids = [aid for aid in _asset_ids(text) if aid.startswith(("PROP_", "OUTFIT_", "VFX_"))]
+        ids = [aid for aid in _asset_ids(text) if aid.startswith(("PROP_", "WEAPON_", "OUTFIT_", "VFX_"))]
         if ids:
             seen_any = True
         expected = expected_by_loc.get(loc, {}) if loc else {}
@@ -339,7 +339,7 @@ def check_object_permanence(root: str, ep: str) -> dict:
             for aid in ids:
                 expected_by_loc[loc].setdefault(aid, aid in persistent)
     if not seen_any and not persistent:
-        res["notes"].append("未检测到 PROP/OUTFIT/VFX 资产 ID；物件常驻只能做人审，建议给常驻道具补 asset_registry id。")
+        res["notes"].append("未检测到 PROP/WEAPON/OUTFIT/VFX 资产 ID；物件常驻只能做人审，建议给常驻道具/武器补 asset_registry id。")
     return res
 
 

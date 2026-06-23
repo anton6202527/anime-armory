@@ -148,11 +148,16 @@ def test_main_writes_dynamic_wiki_json():
     assert r.returncode == 0, r.stderr
 
     wiki_path = os.path.join(root, "设定", "动态百科.json")
+    snapshot_path = os.path.join(root, "设定", "动态百科.source_snapshot.json")
     assert os.path.exists(wiki_path)
+    assert os.path.exists(snapshot_path)
     with open(wiki_path, encoding="utf-8") as f:
         wiki = json.load(f)
+    with open(snapshot_path, encoding="utf-8") as f:
+        snapshot = json.load(f)
     # keyed by entity name with deterministic fields
     assert "李锦云" in wiki
+    assert snapshot["kind"] == "novel_text_snapshot"
     e = wiki["李锦云"]
     assert e["category"] == "character"
     assert e["status"] == "deceased"

@@ -273,6 +273,54 @@ MOTION_CONTROL_PROFILES: Dict[str, Dict[str, object]] = {
 }
 
 
+# ── 奇观镜「冷启动后端先验」（CATALOG_VERIFIED 戳记覆盖，同属 n2d-video-backends 快照）──────────
+# 背景：spectacle_backend_benchmark.json 是项目级 probe 实测回灌，没填则高动态镜按物理表现路由「名存实亡」。
+# 本表是 benchmark 为空时的默认排序先验——按动作类型把候选后端排个序，给冷启动项目一个有依据的起点。
+# ⚠️ 这是「选择点的候选快照」性质（C1/C2）：只在「自动路由 + 无 benchmark + 非 fixed_default」时生效；
+# benchmark 一旦填了就覆盖本表，_设置.md 锁了 fixed_default 也不动。不是把某家后端硬绑进主流程。
+# 依据（2026-06 横评，详见 n2d-model-router/references/）：
+#   physical_combat   打斗物理(拳脚/碰撞/重量感)：Kling 物理写实最强；Seedance 2.0 快速拳踢翻滚平滑次之。
+#   continuity_transition 连续追逐/无缝转场/多镜叙事：Seedance 原生多镜+稳定转场最强。
+#   identity_lock     身份吃紧近景：带 reference 的 Kling 3.0 element binding / Runway Gen-4 References。
+#   stylized          二次元/风格化动作(漫剧主力)：Seedance stylized 项 + 即梦中文语义/运镜调度。
+# 每个 spectacle_type 给一条按优先级排好的 auto-routable 后端序列；裸名以 VIDEO_BACKEND_ALIASES 归一后为准。
+SPECTACLE_BACKEND_PRIOR: Dict[str, Dict[str, Any]] = {
+    "fight_exchange": {
+        "ranking": ("kling", "seedance", "dreamina", "veo"),
+        "basis": "physical_combat: Kling 物理写实最强, Seedance 2.0 动作平滑次之",
+    },
+    "chase": {
+        "ranking": ("seedance", "kling", "dreamina", "veo"),
+        "basis": "continuity_transition: Seedance 原生多镜+稳定转场最适合连续追逐",
+    },
+    "flight": {
+        "ranking": ("veo", "seedance", "kling", "dreamina"),
+        "basis": "flight 兼顾物理(云海/坠落重量)与运镜语言: Veo 写实物理+运镜强, Seedance 多镜次之",
+    },
+    "large_establishing": {
+        "ranking": ("veo", "seedance", "kling", "dreamina"),
+        "basis": "large_establishing 吃运镜语言与尺度: Veo cinematography 强, Seedance 转场次之",
+    },
+}
+
+
+def spectacle_backend_prior_ranking(spectacle_type: Optional[str]) -> tuple:
+    """该奇观类型的冷启动后端先验排序（已按 auto_routable 过滤）。纯函数·可测。
+
+    返回归一化后、且 auto_routing 未关闭的后端键序列；类型不识别或全不可路由→空 tuple。
+    调用方应只把它当「无 benchmark 时的默认排序」，benchmark/fixed_default 优先级更高。
+    """
+    spec = SPECTACLE_BACKEND_PRIOR.get(str(spectacle_type or "").strip())
+    if not spec:
+        return ()
+    seen: list = []
+    for raw in spec.get("ranking", ()):  # type: ignore[union-attr]
+        key = normalize_video_backend(str(raw), default="")
+        if key and key not in seen and video_backend_auto_routable(key):
+            seen.append(key)
+    return tuple(seen)
+
+
 # ── 多镜单次生成 / 视频运动参考 / 质量档 能力派生（CATALOG_VERIFIED 戳记覆盖）──────────
 # 三者都从档案字段派生，集中在本档（不散落在 router）。判定走能力字段，不 hardcode 厂商名。
 MULTISHOT_NATIVE_BACKENDS = frozenset(

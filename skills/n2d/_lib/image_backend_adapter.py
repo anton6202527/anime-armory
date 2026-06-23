@@ -240,13 +240,17 @@ BACKEND_API_ADAPTERS: Dict[str, Dict[str, Any]] = {
         "reference_input": {"mode": "cameo", "max_total": None},
         "native_subject": True,
         "subject_registration": True,
+        # 2025-10 Sora 2 政策：从 opt-out 转 opt-in，禁止上传任何含人脸的参考图；锁脸只能走 cameo
+        # （自录视频 + 声纹 + 活体 opt-in 授权）。喂第三方脸锚 = 政策违规；cameo 身份需授权留痕。
+        "face_reference_policy": "forbid_third_party_face_upload",
+        "identity_authorization": "cameo_self_record_optin",
         "supports_edit": False,
         "supports_mask": False,
         "supports_high_fidelity_reference": True,
         "supports_text_rendering": "medium",
         "cost_tier": "manual",
         "best_for": ("legacy_manual_character",),
-        "limitations": ("manual_only", "refresh_before_use"),
+        "limitations": ("manual_only", "refresh_before_use", "no_face_image_upload", "cameo_authorization_required"),
         "evidence": {"verified_at": "manual_required", "source": "refresh before paid use"},
     },
 }
@@ -294,6 +298,52 @@ def adapter_catalog() -> Dict[str, Any]:
         "verified": CATALOG_VERIFIED,
         "backends": {k: backend_adapter(k) for k in BACKEND_API_ADAPTERS},
     }
+
+
+def forbids_face_reference_upload(adapter: Mapping[str, Any]) -> bool:
+    """后端是否禁止上传含脸参考图（如 Sora 2 cameo：锁脸只能自录+授权，不能喂第三方脸图）。"""
+    policy = str((adapter or {}).get("face_reference_policy") or "").strip().lower()
+    return policy.startswith("forbid")
+
+
+def requires_cameo_authorization(adapter: Mapping[str, Any]) -> bool:
+    """后端是否要求 cameo 自录+opt-in 授权链（真人 likeness，须授权留痕，每次再确认）。"""
+    return bool((adapter or {}).get("identity_authorization"))
+
+
+def reference_budget_for(adapter: Mapping[str, Any]) -> Dict[str, Any]:
+    """该后端的参考资产能力（总上限 + 角色/物体/风格子上限），供逐镜喂参考时自适应封顶。
+
+    各家差异极大（MJ≈1、Kling 主体库、Seedance/Nano Banana ≤14 且 Nano 角色≤5、Codex 24）；
+    `None` = 无显式硬上限（如主体库后端按 ID 引用）。返回字段统一，便于 reference_planner 据此封顶并留痕。"""
+    ri = (adapter or {}).get("reference_input") or {}
+    return {
+        "max_total": ri.get("max_total"),
+        "character_refs": ri.get("character_refs"),
+        "object_refs": ri.get("object_refs"),
+        "style_refs": ri.get("style_refs"),
+        "mode": ri.get("mode"),
+    }
+
+
+def cameo_policy_findings(adapter: Mapping[str, Any], *, feeds_face_references: bool,
+                          authorization_status: Optional[str]) -> List[Dict[str, str]]:
+    """cameo 类后端的发片前合规判定（纯函数·可测·每次再确认，不缓存放行）。
+
+    ① 禁脸图后端却喂了含脸参考图 → block（Sora 2 政策违规：锁脸须走 cameo 自录，不能上传第三方脸）。
+    ② 需 cameo 授权的后端 authorization_status≠approved → block（真人 likeness 授权链未留痕）。
+    其余返回空。普通可喂脸后端（codex/seedream/kling…）此函数恒空。"""
+    out: List[Dict[str, str]] = []
+    label = str((adapter or {}).get("label") or "该后端")
+    if forbids_face_reference_upload(adapter) and feeds_face_references:
+        out.append({"level": "block", "code": "cameo_face_upload_forbidden",
+                    "msg": f"{label} 禁止上传含人脸的参考图（2025 政策）；锁脸须走 cameo 自录+授权，"
+                           "不能把角色脸锚作为参考喂入。改用 cameo 流程或换可喂脸的官方后端。"})
+    if requires_cameo_authorization(adapter) and str(authorization_status or "").strip().lower() != "approved":
+        out.append({"level": "block", "code": "cameo_authorization_required",
+                    "msg": f"{label} 是 cameo 真人 likeness 后端：需自录+opt-in 授权链 approved 才能出片"
+                           f"（当前 authorization_status={authorization_status or '缺失'}）；与声纹克隆同级，每次再确认。"})
+    return out
 
 
 def _as_bool(value: Any) -> bool:

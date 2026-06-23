@@ -56,6 +56,12 @@ def main():
     p = argparse.ArgumentParser(description="novel 写后自动化 Hook")
     p.add_argument("root")
     p.add_argument("--chapter", required=True, help="刚刚写完的章号")
+    p.add_argument("--conclusion", default=None,
+                   help="LLM 对账结论 JSON（至少含 chapter/status=ok/notes）；给了就在哨兵通过后自动合并状态账本，"
+                        "再标进度 ✅——让「进度✅」与「账本已合并」同生共死，避免后续 review/export 报 STATE-LEDGER-MISSING。"
+                        "缺 hash 由脚本按当前正文自动盖章（--stamp-hashes）。")
+    p.add_argument("--no-merge", action="store_true",
+                   help="只跑哨兵+审计、不合并账本（仅在你确知要稍后手动合并时用）")
     args = p.parse_args()
 
     root = os.path.abspath(args.root)
@@ -123,14 +129,33 @@ def main():
     tl_script = os.path.join(_HERE, "..", "..", "novel-wiki", "scripts", "timeline_check.py")
     subprocess.run([sys.executable, tl_script, root], check=True)
 
-    # 6. 所有硬闸通过后再更新进度，避免检查失败时留下假阳性。
+    # 6. 状态账本合并：给了对账结论就在标进度前自动合并，让「进度✅」与「账本已合并」同生共死。
+    #     这是修掉「audit 完就标✅但忘了 merge → review/export 报 STATE-LEDGER-MISSING」的关键。
+    merged = False
+    if args.conclusion and not args.no_merge:
+        concl = os.path.abspath(args.conclusion)
+        if not os.path.exists(concl):
+            die(f"找不到对账结论文件：{concl}。请把上面审计 Prompt 的核对结论存成 JSON 再重跑。")
+        print(f"🔄 正在按对账结论合并状态账本：{concl}")
+        subprocess.run([
+            sys.executable, reconcile_script, root, "--chapter", str(ch_num),
+            "--merge", "--verified", concl, "--stamp-hashes",
+        ], check=True)
+        merged = True
+
+    # 7. 所有硬闸通过后再更新进度，避免检查失败时留下假阳性。
     print(f"🔄 正在更新进度：{ch_padded} 正文初稿 ✅")
     prog_script = os.path.join(_HERE, "..", "progress.py")
     subprocess.run([sys.executable, prog_script, "set", root, ch_padded, "正文初稿", "✅"], check=True)
 
-    print(f"\n✅ 任务完成！{ch_padded} 已准备好进入 Review 阶段。")
-    print(f"  [下一步] 请核对对账 Prompt，保存核对结论 JSON 后合并账本：")
-    print(f"  python3 skills/novel-craft/scripts/reconcile_ledger.py \"{root}\" --chapter {ch_num} --merge --verified <结论.json>")
+    if merged:
+        print(f"\n✅ 任务完成！{ch_padded} 状态账本已合并，已准备好进入 Review 阶段。")
+    else:
+        print(f"\n✅ {ch_padded} 哨兵已过、正文初稿 ✅；但状态账本【尚未合并】。")
+        print(f"  ⚠️ 未合并账本，后续 review/export 会报 STATE-LEDGER-MISSING 阻断。")
+        print(f"  [下一步] 把上面审计 Prompt 的核对结论存成 JSON（至少 {{\"chapter\":{ch_num},\"status\":\"ok\",\"notes\":\"...\"}}，hash 可不填），然后任选其一：")
+        print(f"    · 重跑本脚本带 --conclusion：python3 skills/novel/scripts/post_write.py \"{root}\" --chapter {ch} --conclusion <结论.json>")
+        print(f"    · 或直接合并：python3 skills/novel-craft/scripts/reconcile_ledger.py \"{root}\" --chapter {ch_num} --merge --verified <结论.json> --stamp-hashes")
 
 if __name__ == "__main__":
     main()

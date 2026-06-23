@@ -32,6 +32,41 @@ def test_fight_routes_to_kling_with_seedance_fallback(tmp_path):
     assert route["motion_control"]["manifest_required"] is True
     assert "pose_sequence" in route["motion_control"]["required_inputs"]
     assert route["motion_control"]["manifest_path"].endswith("出视频/第1集/control/Clip_01/motion_control_manifest.json")
+    assert route["action_choreography"]["required"] is True
+    assert "impact_frame" in route["action_choreography"]["required_fields"]
+    assert "action_choreography_required" in route["risk_flags"]
+    recipe = route["execution_recipe"]
+    assert recipe["execution_backend"] == route["primary_backend"]
+    assert recipe["frame_inputs"]["consumption_mode"] == "first_frame"
+    assert recipe["reference_inputs"]["motion_reference"]["library_path"] == "生产数据/motion_reference_library.json"
+    assert recipe["control_inputs"]["required"] is True
+    assert "pose_sequence" in recipe["control_inputs"]["required_inputs"]
+    assert recipe["control_inputs"]["manifest_path"].endswith("出视频/第1集/control/Clip_01/motion_control_manifest.json")
+    assert recipe["fallback"]["fallback_backends"] == route["fallback_backends"]
+
+
+def test_spectacle_backend_benchmark_can_override_auto_route(tmp_path):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{"id": "Clip 1", "template": "fight_exchange", "scene": "王敦挥剑命中追兵"}])
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    (prod / "spectacle_backend_benchmark.json").write_text(json.dumps({
+        "kind": "n2d_spectacle_backend_benchmark",
+        "version": 1,
+        "recommendations": {
+            "fight_exchange": {"primary_backend": "seedance", "score": 91, "evidence": "pilot probe"}
+        },
+    }, ensure_ascii=False), encoding="utf-8")
+
+    plan = router.route_episode(root, "第1集", generated_at="2026-06-08T00:00:00Z")
+    route = plan["routes"][0]
+
+    assert route["primary_backend"] == "seedance"
+    assert route["fallback_backends"][0] == "kling"
+    assert "spectacle_benchmark_routed" in route["risk_flags"]
+    assert plan["spectacle_backend_benchmark"]["applied"][0]["now"] == "seedance"
+    assert route["execution_recipe"]["execution_backend"] == "seedance"
+    assert route["execution_recipe"]["reference_inputs"]["motion_reference"]["allowed"] is True
 
 
 def test_execution_multiframe_channel_overrides_doomed_kling_primary(tmp_path):
@@ -61,6 +96,53 @@ def test_execution_multiframe_channel_overrides_doomed_kling_primary(tmp_path):
     assert any("执行渠道" in item and "多关键帧" in item for item in route["rationale"])
 
 
+def test_spectacle_prior_nudges_generic_fallthrough(tmp_path):
+    # 万人战场全景：infer_spectacle_type=large_establishing，但 shot_type=general_motion 落到 default(dreamina)。
+    # 冷启动 prior 应把它从 default 兜底改到 large_establishing 首选 veo，原 default 保留为 fallback。
+    root = _root(tmp_path)
+    _write_storyboard(root, [{"id": "Clip 5", "scene": "万人战场全景，千军列阵，宏大鸟瞰"}])
+
+    plan = router.route_episode(root, "第1集", generated_at="2026-06-08T00:00:00Z")
+    route = plan["routes"][0]
+
+    assert route["shot_type"] == "general_motion"
+    assert route["primary_backend"] == "veo"
+    assert "dreamina" in route["fallback_backends"]
+    assert "spectacle_prior_routed" in route["risk_flags"]
+    assert route["spectacle_prior"]["spectacle_type"] == "large_establishing"
+    assert plan["spectacle_backend_prior"]["applied"][0]["now"] == "veo"
+
+
+def test_spectacle_prior_skips_when_benchmark_covers_type(tmp_path):
+    # benchmark 覆盖了 large_establishing → prior 不再插手该类型（benchmark 权威）。
+    root = _root(tmp_path)
+    _write_storyboard(root, [{"id": "Clip 5", "scene": "万人战场全景，千军列阵，宏大鸟瞰"}])
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    (prod / "spectacle_backend_benchmark.json").write_text(json.dumps({
+        "kind": "n2d_spectacle_backend_benchmark",
+        "recommendations": {"large_establishing": {"primary_backend": "seedance"}},
+    }, ensure_ascii=False), encoding="utf-8")
+
+    plan = router.route_episode(root, "第1集", generated_at="2026-06-08T00:00:00Z")
+    route = plan["routes"][0]
+
+    assert route["primary_backend"] == "seedance"
+    assert "spectacle_prior_routed" not in route["risk_flags"]
+    assert "spectacle_backend_prior" not in plan
+
+
+def test_spectacle_prior_skipped_in_fixed_default_mode(tmp_path):
+    root = _root(tmp_path, settings="- 生视频AI: 即梦\n- 视频模型路由: 固定生视频模型\n")
+    _write_storyboard(root, [{"id": "Clip 5", "scene": "万人战场全景，千军列阵，宏大鸟瞰"}])
+
+    plan = router.route_episode(root, "第1集", generated_at="2026-06-08T00:00:00Z")
+    route = plan["routes"][0]
+
+    assert route["primary_backend"] == "dreamina"
+    assert "spectacle_prior_routed" not in route["risk_flags"]
+
+
 def test_flight_routes_to_seedance(tmp_path):
     root = _root(tmp_path)
     _write_storyboard(root, [{"id": "Clip 2", "template": "flight", "scene": "御剑飞行，云层向后高速流动"}])
@@ -71,6 +153,25 @@ def test_flight_routes_to_seedance(tmp_path):
     assert route["primary_backend"] == "seedance"
     assert route["identity_requirement"] in ("none", "face_lock_or_reference_group")
     assert route["max_clip_seconds"] == 15
+    assert route["motion_control"]["level"] == "required"
+    assert set(["camera_path", "parallax_layers"]).issubset(route["motion_control"]["required_inputs"])
+    assert route["action_choreography"]["required"] is True
+    assert "altitude_curve" in route["action_choreography"]["required_fields"]
+    assert "high_speed_motion" in route["risk_flags"]
+
+
+def test_chase_routes_require_motion_path_and_choreography(tmp_path):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{"id": "Clip 3", "template": "chase", "scene": "屋脊追逐，追兵沿画面左到右紧追"}])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["shot_type"] == "chase"
+    assert route["primary_backend"] == "seedance"
+    assert route["motion_control"]["level"] == "required"
+    assert set(["camera_path", "spatial_path"]).issubset(route["motion_control"]["required_inputs"])
+    assert route["action_choreography"]["required"] is True
+    assert "distance_curve" in route["action_choreography"]["required_fields"]
 
 
 def test_reveal_template_routes_to_identity_sensitive_speech_path(tmp_path):
@@ -358,6 +459,7 @@ def test_route_episode_anchors_to_existing_baseline(tmp_path):
                            "routes": [{"shot_type": st, "primary_backend": "seedance"}]}, root)
     anchored = router.route_episode(root, "第1集")  # 默认锚定
     assert anchored["routes"][0]["primary_backend"] == "seedance"
+    assert anchored["routes"][0]["execution_recipe"]["execution_backend"] == "seedance"
     assert anchored["baseline_anchored"] is True
     assert anchored["baseline_drift"] and anchored["baseline_drift"][0]["now"] == "seedance"
 
@@ -642,6 +744,51 @@ def test_multishot_group_for_kling_after_2026_06_registration():
     groups = router.annotate_multishot_groups(short_run)
     assert len(groups) == 1
     assert groups[0]["members"] == ["Clip_01", "Clip_02", "Clip_03"]
+
+
+def test_reroute_recommends_multishot_for_same_scene_run():
+    # dreamina（非多镜）primary 的同场景连续镜 → 建议改走多镜后端（roster 无多镜→标 roster_switch_required）。
+    routes = [
+        {"clip_id": "Clip_01", "primary_backend": "dreamina", "loc": "LOC_hall", "clip_characters": [], "risk_flags": []},
+        {"clip_id": "Clip_02", "primary_backend": "dreamina", "loc": "LOC_hall", "clip_characters": [], "risk_flags": []},
+    ]
+    recs = router.recommend_multishot_reroute(routes, ["dreamina"])
+    assert len(recs) == 1
+    assert recs[0]["members"] == ["Clip_01", "Clip_02"]
+    assert recs[0]["basis"] == "同场景"
+    assert recs[0]["roster_switch_required"] is True
+    assert routes[0]["multishot_reroute_suggestion"]["suggested_backend"] == "seedance"
+    assert "multishot_reroute_candidate" in routes[0]["risk_flags"]
+
+
+def test_reroute_prefers_roster_multishot_backend_without_switch():
+    # roster 内已有多镜后端（kling）→ 建议它且不要求换项目后端。
+    routes = [
+        {"clip_id": "Clip_01", "primary_backend": "dreamina", "loc": "", "clip_characters": [{"character_id": "CHAR_a"}], "risk_flags": []},
+        {"clip_id": "Clip_02", "primary_backend": "dreamina", "loc": "", "clip_characters": [{"character_id": "CHAR_a"}], "risk_flags": []},
+    ]
+    recs = router.recommend_multishot_reroute(routes, ["dreamina", "kling"])
+    assert recs and recs[0]["basis"] == "同角色集"
+    assert recs[0]["suggested_backend"] == "kling"
+    assert recs[0]["roster_switch_required"] is False
+
+
+def test_reroute_skips_when_primary_already_multishot():
+    # primary 已支持多镜由 annotate_multishot_groups 管，这里不重复建议。
+    routes = [
+        {"clip_id": "Clip_01", "primary_backend": "seedance", "loc": "LOC_hall", "clip_characters": [], "risk_flags": []},
+        {"clip_id": "Clip_02", "primary_backend": "seedance", "loc": "LOC_hall", "clip_characters": [], "risk_flags": []},
+    ]
+    assert router.recommend_multishot_reroute(routes, ["seedance"]) == []
+
+
+def test_reroute_needs_shared_scene_or_character():
+    # 既非同场景也非同角色集 → 不成组。
+    routes = [
+        {"clip_id": "Clip_01", "primary_backend": "dreamina", "loc": "LOC_a", "clip_characters": [{"character_id": "CHAR_a"}], "risk_flags": []},
+        {"clip_id": "Clip_02", "primary_backend": "dreamina", "loc": "LOC_b", "clip_characters": [{"character_id": "CHAR_b"}], "risk_flags": []},
+    ]
+    assert router.recommend_multishot_reroute(routes, ["dreamina"]) == []
 
 
 def test_urgency_tier_from_settings_default_realtime():

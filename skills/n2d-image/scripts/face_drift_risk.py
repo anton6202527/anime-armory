@@ -12,6 +12,8 @@
   - 极端角度   ：lens/desc 命中该角色 angle_policy.risky（俯仰/远景/逆光暗部）的镜；
   - 锁脸档位   ：默认后端的身份能力——Codex/OpenAI/Dreamina/Nano 只有多图参考/图生图、无持久主体 ID，
                  Seedream/可灵/Sora 可注册原生主体库更稳，LoRA 最稳。
+  - 复现间隔   ：本集是否为该角色「长间隔再登场」（identity_drift_report 里上次出场距本集缺席 ≥ 阈值）——
+                 EntityBench(2026) 实证一致性随复现间隔急剧衰退，长间隔再登场最易崩脸，出图前应重锚。
 
 输出 生产数据/face_drift_risk_<ep>.json + .md，按风险排序，对 high/medium 角色给出可执行建议
 （与 image_qc 的 no_expression_lib_ref gate、n2d-lora init 对齐）。预测档（high/medium）默认只提示不阻断；
@@ -62,8 +64,11 @@ CU_HEAVY_RATIO = 0.4
 WEIGHTS = {"base_reference_group": 28, "base_multi_reference": 22, "base_face_embedding": 14,
            "base_native_unregistered": 20, "base_native": 8, "base_lora": 0,
            "closeup": 30, "emotion_each": 8, "emotion_cap": 24,
-           "multi": 20, "angle_each": 6, "angle_cap": 24}
+           "multi": 20, "angle_each": 6, "angle_cap": 24,
+           "recurrence_base": 18, "recurrence_per": 4, "recurrence_cap": 30}
 BAND_HIGH, BAND_MEDIUM = 55, 30
+# 复现间隔阈值：上次出场距本集缺席 ≥ 这么多集 = 长间隔再登场（与 n2d-identity 同义，本 skill 自留一份不跨 import）。
+RECURRENCE_GAP_THRESHOLD = 2
 PROJECT_MEMORY_BACKENDS = {"codex", "openai", "dreamina", "nano_banana"}
 PROJECT_MEMORY_TOKENS = (
     "参考图入参清单", "资产身份注册层", "identity_registry", "reference_group",
@@ -280,6 +285,11 @@ def score_character(signals: Mapping[str, Any], tier: str) -> Dict[str, Any]:
     emo = min(int(signals.get("emotion", 0)) * WEIGHTS["emotion_each"], WEIGHTS["emotion_cap"])
     mp = round(multi_ratio * WEIGHTS["multi"], 1)
     ang = min(int(signals.get("angle", 0)) * WEIGHTS["angle_each"], WEIGHTS["angle_cap"])
+    rec_gap = max(int(signals.get("recurrence_gap", 0) or 0), 0)
+    recur = 0.0
+    if rec_gap >= RECURRENCE_GAP_THRESHOLD:
+        recur = min(WEIGHTS["recurrence_base"] + (rec_gap - RECURRENCE_GAP_THRESHOLD) * WEIGHTS["recurrence_per"],
+                    WEIGHTS["recurrence_cap"])
     if cu:
         drivers.append({"factor": f"近景占比 {signals.get('closeup',0)}/{appear}", "points": cu})
     if emo:
@@ -288,7 +298,9 @@ def score_character(signals: Mapping[str, Any], tier: str) -> Dict[str, Any]:
         drivers.append({"factor": f"多人同框 {signals.get('multi',0)}/{appear}", "points": mp})
     if ang:
         drivers.append({"factor": f"极端角度 {signals.get('angle',0)} 镜", "points": ang})
-    score = min(round(base + cu + emo + mp + ang, 1), 100.0)
+    if recur:
+        drivers.append({"factor": f"长间隔再登场(缺席{rec_gap}集)", "points": recur})
+    score = min(round(base + cu + emo + mp + ang + recur, 1), 100.0)
     band = "high" if score >= BAND_HIGH else ("medium" if score >= BAND_MEDIUM else "low")
     drivers.sort(key=lambda d: d["points"], reverse=True)
     return {"score": score, "band": band, "tier": tier, "drivers": drivers}
@@ -381,6 +393,46 @@ def measured_drift_block(drift_report: Optional[Mapping[str, Any]],
             "spans": "，".join(f"{e.get('episode_from')}→{e.get('episode_to')}(掉{e.get('drop')})"
                                for e in emb_high),
         }
+    return None
+
+
+def _episode_num(ep: str) -> Optional[int]:
+    """从 '第N集' 抽集号；抽不到 → None。本 skill 自留一份，不跨 import n2d-identity。纯函数·可测。"""
+    m = re.search(r"(\d+)", str(ep or ""))
+    return int(m.group(1)) if m else None
+
+
+def recurrence_reentry_risk(drift_report: Optional[Mapping[str, Any]],
+                            aliases: Set[str], name: str, current_ep: str) -> Optional[Dict[str, Any]]:
+    """本集是否为该角色「长间隔再登场」：identity_drift_report 里上次出场距本集缺席 ≥ 阈值
+    （EntityBench 2026：跨镜一致性随复现间隔急剧衰退，长间隔再登场最易崩脸）。
+
+    用 characters[char].episodes（已机检出场集）找本集之前最近一次出场，集号差 ≥ RECURRENCE_GAP_THRESHOLD
+    即判长间隔再登场。返回 {last_episode, gap, current_episode} 或 None。
+    复现是「出场排期」事实而非像素度量，故**不**要求 drift available（无 insightface 也能算）；
+    drift 缺失 / 无历史出场 / 集号不可解析 → None（不假报）。角色对号同 measured_drift_block。纯函数·可测。"""
+    if not isinstance(drift_report, Mapping):
+        return None
+    chars = drift_report.get("characters") if isinstance(drift_report.get("characters"), Mapping) else {}
+    cur_n = _episode_num(current_ep)
+    if cur_n is None or not chars:
+        return None
+    name = str(name or "").strip()
+    alias_set = set(aliases or set())
+    for drift_char, info in chars.items():
+        dc = str(drift_char).strip()
+        if not dc or (dc != name and dc not in alias_set) or not isinstance(info, Mapping):
+            continue
+        eps = info.get("episodes") if isinstance(info.get("episodes"), Mapping) else {}
+        prior = [n for e in eps for n in [_episode_num(e)] if n is not None and n < cur_n]
+        if not prior:
+            return None
+        last_n = max(prior)
+        gap = cur_n - last_n - 1
+        if gap >= RECURRENCE_GAP_THRESHOLD:
+            last_label = next((str(e) for e in eps if _episode_num(e) == last_n), f"第{last_n}集")
+            return {"last_episode": last_label, "gap": gap, "current_episode": str(current_ep)}
+        return None
     return None
 
 
@@ -544,8 +596,17 @@ def analyze(root: Path, ep: str) -> Dict[str, Any]:
         c = agg["char"]
         tier = lock_tier(default_backend, c.get("image_adapters") or {}, c.get("lora") or {})
         signals = {k: agg[k] for k in ("appear", "closeup", "emotion", "multi", "angle")}
+        # ③+ 复现间隔回灌：本集是否为该角色长间隔再登场（出场排期事实，不要求 insightface）。
+        reentry = recurrence_reentry_risk(prior_drift, c.get("aliases") or set(), c["name"], ep)
+        signals["recurrence_gap"] = reentry["gap"] if reentry else 0
         scored = score_character(signals, tier)
         sug = suggestions_for(c["name"], scored, signals, cid, c["form"], str(root), profile)
+        if reentry:
+            sug = [
+                f"↩️ 长间隔再登场：上次出场 {reentry['last_episode']}，缺席 {reentry['gap']} 集后本集重现——"
+                "EntityBench 2026 实证一致性随复现间隔急剧衰退，出图前务必重锚（喂该角色质心定妆图/最强参考，"
+                "核心角考虑升原生主体或 LoRA），别让模型「凭印象」重画。"
+            ] + sug
         reference_gaps: List[str] = []
         # ③ 基础包缺 ready 的 3/4 侧脸：45° 不再是近景重角增强项，而是所有人物/形态基础角。
         if missing_3q_baseline(signals["appear"], bool(c.get("tq_ready"))):
@@ -561,6 +622,8 @@ def analyze(root: Path, ep: str) -> Dict[str, Any]:
             "appears_in": agg["clips"], **scored, "suggestions": sug,
             "reference_gaps": reference_gaps,
         }
+        if reentry:
+            rec["recurrence_reentry"] = reentry
         if (
             rec["band"] == "high"
             and not bool(profile.get("persistent_subject"))
@@ -616,6 +679,7 @@ def analyze(root: Path, ep: str) -> Dict[str, Any]:
         "medium": sum(1 for r in results if r["band"] == "medium"),
         "missing_3q_baseline": sum(1 for r in results
                                    if "missing_3q_baseline" in r.get("reference_gaps", [])),
+        "recurrence_reentries": sum(1 for r in results if r.get("recurrence_reentry")),
         "blocking": any(r["band"] == "block" for r in results),
         "prior_drift_available": bool(prior_drift.get("available")),
         "characters": results, "notes": notes,
@@ -628,7 +692,8 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         "# 出图前·脸漂风险分（事前预测 + 实测漂移回灌）",
         "",
         f"- episode: {report.get('episode')} · 默认后端: {report.get('default_backend')}",
-        f"- ⛔ 阻断 {report.get('block', 0)} · 🔴 预测高危 {report.get('high', 0)} · 🟡 中危 {report.get('medium', 0)}",
+        f"- ⛔ 阻断 {report.get('block', 0)} · 🔴 预测高危 {report.get('high', 0)} · 🟡 中危 {report.get('medium', 0)}"
+        + (f" · ↩️ 长间隔再登场 {report.get('recurrence_reentries', 0)}" if report.get('recurrence_reentries') else ""),
         "",
         "| 角色 | 风险 | 分 | 锁脸档 | 主驱动 |",
         "|---|---|---|---|---|",

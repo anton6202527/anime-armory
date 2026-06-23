@@ -14,6 +14,7 @@ it flags episodes that need human/LLM boundary review before writing voiceover.
 完整方法论见 references/追更骨架.md。
 """
 import json
+import hashlib
 import os
 import re
 import statistics
@@ -79,6 +80,8 @@ def load_rows(root, strong_re, conflict_re, payoff_re):
             "chapter": bool(CHAPTER_HEAD.search(text)),
             "start": "".join(lines[:2])[:90] if lines else "",
             "end": "".join(lines[-3:])[-140:] if lines else "",
+            "raw_rel": str(raw.relative_to(Path(root))),
+            "raw_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
             "soft_end": soft_end,
             "strong_end": bool(strong_re.search(text[-160:])),
             "strength": end_strength(text, soft_end, strong_re),
@@ -88,6 +91,45 @@ def load_rows(root, strong_re, conflict_re, payoff_re):
     for r in rows:
         r["closed_loop"] = r["has_conflict"] and r["has_payoff"]
     return rows
+
+
+def enrich_episode_rows(rows):
+    """Attach deterministic per-episode risk flags/advice.
+
+    Shared by the CLI and boundary_review.py so the structured signoff tracks
+    exactly the same risk model as boundary_audit strict mode.
+    """
+    has_risk = False
+    per_ep = []
+    for r in rows:
+        flags_e, advice = [], []
+        risk = False
+        if r["chars"] < 650:
+            flags_e.append("短(提示)")
+            advice.append("可保留短集，核闭环完整")
+        if r["chars"] > 1100:
+            flags_e.append("长(提示)")
+            advice.append("可保留长集，核中段钩子密度")
+        if r["soft_end"]:
+            flags_e.append("软断")
+            advice.append("右边界后移到完整钩子")
+            risk = True
+        if not r["chapter"]:
+            flags_e.append("章内续切")
+            risk = True
+        if r["strength"] <= 0:
+            flags_e.append("弱钩待判")
+            advice.append("精修时补强集尾钩")
+            risk = True
+        if not r["closed_loop"]:
+            miss = "缺冲突" if not r["has_conflict"] else "缺爽点/反转"
+            flags_e.append(f"无闭环({miss})")
+            advice.append("复核并入相邻集或补闭环(P1)")
+            risk = True
+        if risk:
+            has_risk = True
+        per_ep.append({**r, "risk": risk, "flags": flags_e, "advice": advice})
+    return per_ep, has_risk
 
 
 def weak_clusters(rows, threshold=0):
@@ -200,36 +242,7 @@ def main():
         rows = [r for r in rows if a <= r["ep"] <= b]
 
     arc = series_arc(rows, monet)
-    has_risk = False
-    per_ep = []
-    for r in rows:
-        flags_e, advice = [], []
-        risk = False
-        if r["chars"] < 650:
-            flags_e.append("短(提示)")
-            advice.append("可保留短集，核闭环完整")
-        if r["chars"] > 1100:
-            flags_e.append("长(提示)")
-            advice.append("可保留长集，核中段钩子密度")
-        if r["soft_end"]:
-            flags_e.append("软断")
-            advice.append("右边界后移到完整钩子")
-            risk = True
-        if not r["chapter"]:
-            flags_e.append("章内续切")
-            risk = True
-        if r["strength"] <= 0:
-            flags_e.append("弱钩待判")
-            advice.append("精修时补强集尾钩")
-            risk = True
-        if not r["closed_loop"]:
-            miss = "缺冲突" if not r["has_conflict"] else "缺爽点/反转"
-            flags_e.append(f"无闭环({miss})")
-            advice.append("复核并入相邻集或补闭环(P1)")
-            risk = True
-        if risk:
-            has_risk = True
-        per_ep.append({**r, "flags": flags_e, "advice": advice})
+    per_ep, has_risk = enrich_episode_rows(rows)
 
     if as_json:
         print(json.dumps({"genre": genre, "buckets": buckets, "series_arc": arc,

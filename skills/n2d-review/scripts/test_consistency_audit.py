@@ -18,7 +18,8 @@ def test_all_consistency_audit_sections_are_score_mapped():
     # 新增检测器必须进入 n2d_schema audit_labels，否则 gate 能看见但 n2d-score 不会扣分。
     expected = {
         "语义谱系(P0)", "状态百科(P1)", "多模态(P2)", "契约继承", "锚点门(N3)", "脸(G1)",
-        "服装配色(N1)", "发型(H1)", "片内时序(N2)", "场景(O2)", "风格(S1)", "接缝接力",
+        "无脸崩坏(G1b)", "跨集脸漂(G5)",
+        "服装配色(N1)", "发型(H1)", "辨识标记(MK1)", "片内时序(N2)", "场景(O2)", "风格(S1)", "接缝接力",
         "称谓口头禅(A1)", "字幕对齐(L1)", "糊/低质(N4)", "手部/解剖(N5)", "身高比例(R1)",
         "轴线视线(X1)", "天气时辰(W1)", "字幕安全区(L2)", "音画同步(AV1)", "空间站位(B1)",
         "节奏密度(Rhythm)", "物件常驻(O3)", "持有账本(POS)", "视线状态回读(X2)",
@@ -27,6 +28,18 @@ def test_all_consistency_audit_sections_are_score_mapped():
         "台词语域(D1)", "场景平面(FP1)", "成本路由(K1)", "人审校准集(CAL)", "一致性探针包(PROBE)",
         "视频VLM判题(VLM1)", "视频语义一致(VSEM)", "多人对话音画(DAV)", "物理因果链(CG1)",
         "相机空间轨迹(CAM1)", "运动质量(MOT1)", "主体视频一致(S2V)",
+        "高动态成片证据(SPECV)",
+        # 2026-06 一致性加固第二批（extended_consistency）
+        "系统面板(UI1)", "音乐母题(LM1)", "系列调色(GRD)", "环境声(AMB)",
+        "跨集体型(R2)", "在场检测(O3V)", "外观判官(VAP)",
+        # 第三批：图中文字 OCR 校验 + 译名一致
+        "文字渲染(OCR1)", "译名一致(TX1)",
+        # 镜头光学：景深/虚化一致
+        "景深一致(DOF1)",
+        # 特效颜色窜色 + 色温调色
+        "特效窜色(VFXC)", "色温调色(GRADE1)",
+        # D 档音频白区：配音情绪弧 / 口音方言 / 音乐衔接
+        "配音情绪弧(VEA)", "口音方言(ACC)", "音乐衔接(BGM)",
     }
     mapped = {
         label
@@ -34,6 +47,44 @@ def test_all_consistency_audit_sections_are_score_mapped():
         for label in spec.get("audit_labels", ())
     }
     assert expected <= mapped
+
+
+def test_noface_violation_rows_recovers_expected_character_shots():
+    # A4：应在场具名角色却 noface → warn（不再静默丢弃）；合法无脸镜不报。
+    fr = {"available": True, "shots": [
+        {"png": "Clip_01.png", "verdict": "noface", "chars": ["沈念"]},
+        {"png": "Clip_02.png", "verdict": "noface", "chars": []},
+        {"png": "Clip_03.png", "verdict": "ok", "chars": ["沈念"]},
+    ]}
+    rows = ca.noface_violation_rows("第1集", fr)
+    assert [r["png"] for r in rows] == ["Clip_01.png"]
+    assert rows[0]["verdict"] == "warn"
+
+
+def test_cross_episode_face_rows_flags_systematic_decline(tmp_path):
+    import os
+    root = str(tmp_path)
+    os.makedirs(os.path.join(root, "生产数据"), exist_ok=True)
+    # A3：ep1 基线 0.80，ep2 掉到 0.60（掉幅 0.20 ≥ block 阈）→ block 行。
+    ca.cross_episode_face_rows(root, "第1集", {"available": True, "characters": {"沈念": {"ep_mean_score": 0.80}}})
+    rows = ca.cross_episode_face_rows(root, "第2集", {"available": True, "characters": {"沈念": {"ep_mean_score": 0.60}}})
+    assert any(r["verdict"] == "block" and "沈念" in r["shot"] for r in rows)
+    # 单集不报（只有一集历史）。
+    one = ca.cross_episode_face_rows(str(tmp_path / "solo"), "第1集",
+                                     {"available": True, "characters": {"沈念": {"ep_mean_score": 0.80}}})
+    assert one == []
+
+
+def test_probe_advanced_metrics_missing_does_not_flip_degraded(monkeypatch):
+    import importlib.util as ilu
+    present = {"insightface", "PIL"}  # 假装脸/像素依赖齐，torch 缺
+    monkeypatch.setattr(ilu, "find_spec", lambda name: object() if name in present else None)
+    caps = ca.probe_capabilities()
+    assert caps["pillow"] and caps["insightface"] and caps["torch"] is False
+    # torch(DINOv2) 缺只进 advisory notes，绝不把精度判定打成 degraded（否则误触 production BLOCK）。
+    assert caps["degraded"] is False
+    assert any("DINOv2" in n for n in caps["notes"])
+    assert caps.get("advanced_metrics_missing")
 
 
 def test_summarize_counts_and_total_block():

@@ -28,6 +28,8 @@ _COMMON = os.path.join(_SKILLS, "novel", "_lib")
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from project_io import parse_chapter_range, read_chapters  # noqa: E402
+from report_snapshot import snapshot_chapters, snapshot_files  # noqa: E402
+from consistency_scaffold import resolve_character_card  # noqa: E402  同认 角色卡.md / 人物.md
 
 DEATH_KEYWORDS = ["死了", "身亡", "阵亡", "殒命", "殒", "葬身", "气绝", "咽气",
                   "命丧", "战死", "殉", "毙命", "丧命", "已死", "死去"]
@@ -47,10 +49,10 @@ def _parse_range(chap_range):
 
 
 def parse_character_names(project):
-    """从 设定/角色卡.md 抽角色名；抽不到退回正文高频专名候选。"""
+    """从 设定/角色卡.md（或派生线的 人物.md）抽角色名；抽不到退回正文高频专名候选。"""
     names = set()
-    card = os.path.join(project, "设定", "角色卡.md")
-    if os.path.exists(card):
+    card = resolve_character_card(project)
+    if card:
         with open(card, "r", encoding="utf-8") as f:
             text = f.read()
         for ln in text.splitlines():
@@ -196,9 +198,19 @@ def main():
     os.makedirs(os.path.dirname(wiki_path), exist_ok=True)
     with open(wiki_path, "w", encoding="utf-8") as f:
         json.dump(wiki, f, ensure_ascii=False, indent=2)
+    snapshot_path = os.path.join(args.project_path, "设定", "动态百科.source_snapshot.json")
+    if args.chap_range or args.chapter:
+        scanned = [path for _idx, path, _text in list_chapters(args.project_path, args.chap_range, args.chapter)]
+        snapshot = snapshot_files(args.project_path, scanned, mode="wiki:partial")
+        snapshot["scope"] = {"range": args.chap_range, "chapter": args.chapter}
+    else:
+        snapshot = snapshot_chapters(args.project_path, mode="wiki:dynamic")
+    with open(snapshot_path, "w", encoding="utf-8") as f:
+        json.dump(snapshot, f, ensure_ascii=False, indent=2)
 
     n_dead = sum(1 for v in wiki.values() if v.get("status") == "deceased")
     print(f"动态百科 → {wiki_path}")
+    print(f"  source_snapshot → {snapshot_path}")
     print(f"  实体 {len(wiki)} 个，疑似阵亡 {n_dead} 个"
           + ("（带 auto 标志，需人/LLM 复核）" if n_dead else ""))
     if not parse_character_names(args.project_path):

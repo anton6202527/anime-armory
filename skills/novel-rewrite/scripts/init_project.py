@@ -204,6 +204,9 @@ def main():
     ap.add_argument("--scale", required=True, choices=list(SCALE_CHOICES))
     ap.add_argument("--target-chapters", type=int, default=None, help="覆盖规模档的章数")
     ap.add_argument("--person", default="third-limited", choices=["first", "third-limited"])
+    ap.add_argument("--genre", default=None,
+                    help="改写后题材；命中力量题材（穿越/系统流/修仙/玄幻…）时 seed power_system_registry 脚手架。"
+                         "缺省时回落 --rewrite-type 文本（魔改常在改动方向里点名机制）")
     ap.add_argument("--out", default=None, help="输出根，缺省 创作区/写小说/<原作名>-改写/")
     ap.add_argument("--outputs", default="txt,docx,outline")
     ap.add_argument("--target-platform", default="跨平台")
@@ -334,6 +337,11 @@ def main():
     W("设定/角色卡.md", build_character_card(source_title))
     W("设定/世界观.md", build_worldview(source_title))
     W("设定/章纲.md", build_outline(n, args.rewrite_type))
+    # 一致性注册表脚手架（B1）：改写作品（尤其换设定/加系统的魔改）也要有 character_guardrails /
+    # power_system_registry，否则 novel-wiki 的护栏 / 力量体系机检在改写作品上静默 no-op。
+    from consistency_scaffold import consistency_registry_files
+    for rel, content in consistency_registry_files(args.genre or args.rewrite_type):
+        W(rel, content)
     W("_进度.md", build_progress_markdown("<新书名待定>", "rewrite", n))
 
     print(f"[ok] 改写项目骨架 → {out_root}")

@@ -43,6 +43,7 @@ from n2d_contract_diff import diff_contracts  # noqa: E402  视觉契约继承 D
 import face_consistency as fc
 import outfit_consistency as oc
 import hair_consistency as hc
+import marks_consistency as mk
 import temporal_consistency as tcheck
 import quality_check as qc
 import hand_anatomy as hand
@@ -52,12 +53,16 @@ import world_continuity as wcont
 import subtitle_safearea as ssa
 import scene_consistency as sc
 import style_consistency as stc
+import dof_consistency as dof
+import vfx_color_consistency as vfxc
+import color_grade_consistency as cgc
 import semantic_continuity as semc
 import state_continuity as statec
 import address_consistency as addr
 import multimodal_consistency as mmc
 import subtitle_align as sa
 import lipsync_consistency as lipc
+import audio_continuity as audioc
 import scene_blocking_continuity as sbc
 import pacing_retention as pr
 import video_vlm_consistency as vvlm
@@ -67,7 +72,9 @@ import causal_event_consistency as cg
 import camera_trajectory_consistency as camt
 import motion_quality_consistency as motq
 import subject_video_consistency as s2vc
+import spectacle_video_qc as svqc
 import production_consistency as pc
+import extended_consistency as ec
 
 
 PRODUCTION_CONSISTENCY_META = {
@@ -360,6 +367,76 @@ def active_findings(details: Sequence[dict]) -> List[dict]:
     return out
 
 
+def _episode_num(ep: str) -> int:
+    m = re.search(r"(\d+)", str(ep))
+    return int(m.group(1)) if m else 0
+
+
+def cross_episode_face_rows(root: str, ep: str, face_result: dict) -> List[dict]:
+    """G5 跨集脸漂：累计每集每角色脸均值，再跑 fc.cross_episode_drift。
+
+    治"每集各自过 floor、角色却逐集系统性偏离锚点"——单集机检看不到的漂。把本集均值落进
+    `生产数据/face_ep_means.json` 自累积（审计本就会写 findings/ledger，侧车账本同源），按集序
+    对每角色查掉幅。high→block、medium→warn 行，交 collect_simple 外发。≥2 集才有结果。"""
+    means_path = os.path.join(production_dir(root), "face_ep_means.json")
+    try:
+        hist = json.load(open(means_path, encoding="utf-8")) if os.path.exists(means_path) else {}
+    except Exception:
+        hist = {}
+    if not isinstance(hist, dict):
+        hist = {}
+    cur: Dict[str, float] = {}
+    for char, rec in (face_result.get("characters") or {}).items():
+        m = rec.get("ep_mean_score") if isinstance(rec, dict) else None
+        if isinstance(m, (int, float)):
+            cur[char] = round(float(m), 4)
+    if cur:
+        hist[ep] = cur
+        try:
+            os.makedirs(production_dir(root), exist_ok=True)
+            with open(means_path, "w", encoding="utf-8") as fh:
+                json.dump(hist, fh, ensure_ascii=False, indent=2)
+        except Exception:
+            pass
+    eps_sorted = sorted(hist.keys(), key=_episode_num)
+    chars: set = set()
+    for e in eps_sorted:
+        chars |= set((hist.get(e) or {}).keys())
+    rows: List[dict] = []
+    for char in sorted(chars):
+        series = [(e, (hist.get(e) or {}).get(char)) for e in eps_sorted]
+        for d in fc.cross_episode_drift(series):
+            rows.append({
+                "verdict": "block" if d.get("severity") == "high" else "warn",
+                "shot": f"{char} {d['episode_from']}→{d['episode_to']}",
+                "msg": (f"{char} 跨集脸漂：{d['episode_from']}(均值{d['from_mean']})→"
+                        f"{d['episode_to']}(均值{d['to_mean']})，相对基线掉幅 {d['drop']}"
+                        + ("，且本集均值低于绝对下限——已系统性偏离定妆锚" if d.get("below_abs_low") else "")),
+                "char": char,
+            })
+    return rows
+
+
+def noface_violation_rows(ep: str, face_result: dict) -> List[dict]:
+    """G1b 无脸崩坏：该镜应有具名角色却检测不到脸（脸糊/被遮挡/崩脸）。
+
+    过去 noface 镜被显式过滤丢弃——最严重的崩脸结果反而 severity=0 消失。这里把"应在场具名
+    角色 + noface"的镜捞回成 warn（风格化脸 + 检测器误检可能，故不直接 block），不再静默放过。"""
+    rows: List[dict] = []
+    for s in face_result.get("shots", []) or []:
+        if not isinstance(s, dict) or s.get("verdict") != "noface":
+            continue
+        chars = [c for c in (s.get("chars") or []) if c]
+        if not chars:
+            continue  # 合法无脸镜（空镜/纯背身），不报
+        rows.append({
+            "verdict": "warn",
+            "png": s.get("png"),
+            "msg": f"{'/'.join(chars)} 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
+        })
+    return rows
+
+
 def probe_capabilities() -> Dict[str, Any]:
     """本机机检能力探针——把"哪些检查运行在降级精度"亮在台面上，避免"机检全绿"错觉。"""
     import importlib.util as _ilu
@@ -367,6 +444,10 @@ def probe_capabilities() -> Dict[str, Any]:
     caps: Dict[str, Any] = {
         "insightface": _ilu.find_spec("insightface") is not None,
         "pillow": _ilu.find_spec("PIL") is not None,
+        # 进阶数值化指标的依赖（业界 SOTA：序列级主体/世界一致 + 词级口型）。缺则相应数值未跑，
+        # 现有检退到 dHash/色相直方图/人脸余弦/SyncNet——把这层"未跑"亮在台面，避免"机检全绿"错觉。
+        "torch": _ilu.find_spec("torch") is not None,
+        "syncnet": os.path.isdir(os.path.expanduser("~/syncnet_python")),
     }
     notes: List[str] = []
     if not caps["pillow"]:
@@ -374,7 +455,18 @@ def probe_capabilities() -> Dict[str, Any]:
     elif not caps["insightface"]:
         notes.append("本机无 insightface——脸部/片内身份机检运行在 Pillow 降级精度，"
                      "机检通过≠脸部一致已验证；正式定稿前在装好 insightface 的环境复跑。")
-    caps["degraded"] = bool(notes)
+    # 进阶数值化指标缺位提示（不降级精度等级、不阻断；只让 SOTA 盲区可见、可追）。
+    advanced: List[str] = []
+    if not caps["torch"]:
+        advanced.append("DINOv2 跨帧主体一致 / CoTracker 背景塌陷（需 torch）——当前主体一致退到"
+                        "色相直方图+dHash+人脸余弦，未做序列级数值化")
+    if not caps["syncnet"]:
+        advanced.append("口型词级数值（SyncNet/LatentSync LSE-C·LMD·TREPA）——未装 ~/syncnet_python，口型仅启发式")
+    if advanced:
+        caps["advanced_metrics_missing"] = advanced
+        notes.append("进阶数值化一致性指标未运行：" + "；".join(advanced)
+                     + "。装好对应依赖可把这些维度从启发式升级为数值化（不影响现有 degraded 精度判定）。")
+    caps["degraded"] = not caps["pillow"] or not caps["insightface"]
     caps["notes"] = notes
     return caps
 
@@ -449,8 +541,12 @@ def run(root: str, ep: str) -> dict:
 
     # G1 脸（insightface 缺席时自动降级 Pillow 基础机检：mode=pillow_fallback，供 n2d-score 降权消费）
     f = fc.analyze(root, ep)
+    # noface 由 G1b 单列；unverifiable=远景人小身份不可辨，既非崩脸也非"已验证 ok"——排除出 G1，
+    # 否则会被当成通过镜拉高一致性通过率（"稳定地错"反被记成过）。统计另列 unverifiable_shots。
+    _g1_excluded = {"noface", "unverifiable"}
     sections["脸(G1)"] = {"skipped": not f.get("available", False),
-                         "verdicts": [s.get("verdict") for s in f.get("shots", []) if s.get("verdict") != "noface"],
+                         "verdicts": [s.get("verdict") for s in f.get("shots", []) if s.get("verdict") not in _g1_excluded],
+                         "unverifiable_shots": sum(1 for s in f.get("shots", []) if s.get("verdict") == "unverifiable"),
                          "mode": f.get("mode"),
                          "precision": f.get("precision"),
                          # G4 KPI 直读：每角色本集质心接近度 + 用了哪个 encoder + fidelity-gate 状态
@@ -459,8 +555,20 @@ def run(root: str, ep: str) -> dict:
                          "fidelity_gate": f.get("fidelity_gate"),
                          "characters": f.get("characters", {}),
                          "notes": f.get("notes", [])}
-    collect_simple("脸(G1)", [s for s in f.get("shots", []) if s.get("verdict") != "noface"],
+    collect_simple("脸(G1)", [s for s in f.get("shots", []) if s.get("verdict") not in _g1_excluded],
                    stage="image", default_artifacts=(f"出图/{ep}/图片",))
+
+    # G1b 无脸崩坏：应在场具名角色却 noface（过去被静默丢弃）→ 捞回成 warn
+    g1b_rows = noface_violation_rows(ep, f) if f.get("available", False) else []
+    sections["无脸崩坏(G1b)"] = {"skipped": not g1b_rows,
+                              "verdicts": [r["verdict"] for r in g1b_rows], "notes": []}
+    collect_simple("无脸崩坏(G1b)", g1b_rows, stage="image", default_artifacts=(f"出图/{ep}/图片",))
+
+    # G5 跨集脸漂：每集各自过 floor 但角色逐集系统性偏离锚点（单集机检看不到）。≥2 集才有结果。
+    g5_rows = cross_episode_face_rows(root, ep, f) if f.get("available", False) else []
+    sections["跨集脸漂(G5)"] = {"skipped": not g5_rows,
+                            "verdicts": [r["verdict"] for r in g5_rows], "notes": []}
+    collect_simple("跨集脸漂(G5)", g5_rows, stage="image", default_artifacts=("出图/共享/图片",))
 
     # N1 服装/配色
     o = oc.analyze(root, ep)
@@ -473,6 +581,12 @@ def run(root: str, ep: str) -> dict:
     sections["发型(H1)"] = {"skipped": not hr.get("available", False),
                           "verdicts": _verdicts(hr.get("shots", [])), "notes": hr.get("notes", [])}
     collect_simple("发型(H1)", hr.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
+
+    # MK1 辨识标记（疤痕/胎记/纹身/异瞳/痣/义体——载剧情，丢一次既崩脸又崩剧情；文本/结构机检，无 identity_marks 登记则跳过）
+    mks = mk.analyze(root, ep)
+    sections["辨识标记(MK1)"] = {"skipped": not mks.get("available", False),
+                              "verdicts": _verdicts(mks.get("shots", [])), "notes": mks.get("notes", [])}
+    collect_simple("辨识标记(MK1)", mks.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
 
     # N2 片内时序
     t = tcheck.analyze(root, ep)
@@ -498,6 +612,24 @@ def run(root: str, ep: str) -> dict:
     sections["风格(S1)"] = {"skipped": not st.get("available", False) or st.get("floor") is None,
                           "verdicts": _verdicts(st.get("shots", [])), "notes": st.get("notes", [])}
     collect_simple("风格(S1)", st.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
+
+    # DOF1 景深/虚化（镜头光学：同场景深焦↔浅景深横跳像换相机；shot_scale 只管景别不管景深；缺 Pillow 优雅跳过）
+    df = dof.analyze(root, ep)
+    sections["景深一致(DOF1)"] = {"skipped": not df.get("available", False),
+                               "verdicts": _verdicts(df.get("shots", [])), "notes": df.get("notes", [])}
+    collect_simple("景深一致(DOF1)", df.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
+
+    # VFXC 特效窜色：剑气/系统面板/妖纹光效跨镜变色（registry color_target 已声明却没人量）
+    vx = vfxc.analyze(root, ep)
+    sections["特效窜色(VFXC)"] = {"skipped": not vx.get("available", False) or not vx.get("shots"),
+                              "verdicts": _verdicts(vx.get("shots", [])), "notes": vx.get("notes", [])}
+    collect_simple("特效窜色(VFXC)", vx.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
+
+    # GRADE1 色温/调色：同场景跨镜暖冷/品绿横跳（光位锚有了、色温调色没成常量的盲区）
+    cgr = cgc.analyze(root, ep)
+    sections["色温调色(GRADE1)"] = {"skipped": not cgr.get("available", False) or not cgr.get("shots"),
+                                "verdicts": _verdicts(cgr.get("shots", [])), "notes": cgr.get("notes", [])}
+    collect_simple("色温调色(GRADE1)", cgr.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
 
     # 接缝 接力(尾帧 vs 下一首帧)——PNG 层，把"逐接缝人判"降成机检初筛
     sm = tcheck.seam_analyze(root, ep)
@@ -563,6 +695,16 @@ def run(root: str, ep: str) -> dict:
                               "verdicts": _verdicts(lip.get("shots", [])), "notes": lip.get("notes", []),
                               "mode": lip.get("mode"), "precision": lip.get("precision")}
     collect_simple("音画同步(AV1)", lip.get("shots", []), stage="compose", default_artifacts=(f"合成/{ep}",))
+
+    # D 档音频白区：配音情绪弧(VEA) + 口音方言(ACC) + 音乐衔接(BGM)——文本/结构机检，缺 voiceover.txt 优雅跳过。
+    ac = audioc.analyze(root, ep)
+    ac_skipped = not ac.get("available", False)
+    sections["配音情绪弧(VEA)"] = {"skipped": ac_skipped, "verdicts": _verdicts(ac.get("vea", [])), "notes": ac.get("notes", [])}
+    collect_simple("配音情绪弧(VEA)", ac.get("vea", []), stage="voice", default_artifacts=(f"脚本/{ep}/voiceover.txt",))
+    sections["口音方言(ACC)"] = {"skipped": ac_skipped, "verdicts": _verdicts(ac.get("acc", []))}
+    collect_simple("口音方言(ACC)", ac.get("acc", []), stage="voice", default_artifacts=("设定库/voicemap.json",))
+    sections["音乐衔接(BGM)"] = {"skipped": ac_skipped, "verdicts": _verdicts(ac.get("bgm", []))}
+    collect_simple("音乐衔接(BGM)", ac.get("bgm", []), stage="compose", default_artifacts=(f"脚本/{ep}/bgm.txt",))
 
     # Rhythm 节奏/留存启发式（advisory）：不声称是成片观感模型，但把 storyboard 时长曲线/钩子密度纳入审计链。
     pace = pr.analyze(root, ep)
@@ -646,6 +788,12 @@ def run(root: str, ep: str) -> dict:
             "video",
             (f"生产数据/subject_video_consistency_{ep}.json", f"出视频/{ep}"),
         ),
+        (
+            "高动态成片证据(SPECV)",
+            svqc.analyze(root, ep),
+            "video",
+            (f"生产数据/spectacle_video_qc_{ep}.json", f"出视频/{ep}"),
+        ),
     )
     for dim, raw, stage, artifacts in video_checks:
         sections[dim] = section_from_result(
@@ -667,6 +815,25 @@ def run(root: str, ep: str) -> dict:
             continue
         meta = PRODUCTION_CONSISTENCY_META.get(dim, {})
         stage = str(meta.get("stage") or "review")
+        artifacts = tuple(str(a).format(ep=ep) for a in meta.get("artifacts", ()))
+        sections[dim] = section_from_result(
+            dim=dim,
+            result=raw,
+            detail_key="findings",
+            skipped=not raw.get("available", False),
+            ep=ep,
+            stage=stage,
+            default_artifacts=artifacts,
+        )
+
+    # 扩展一致性补强（2026-06 第二批）：UI/系统面板、音乐母题、系列调色、环境声、
+    # 跨集体型，及可插拔 sidecar 的视觉在场检测/外观判官。纯标准库，缺契约/缺登记优雅 WARN。
+    ext = ec.analyze(root, ep)
+    for dim, raw in (ext.get("sections") or {}).items():
+        if not isinstance(raw, dict):
+            continue
+        meta = ec.SECTION_META.get(dim, {})
+        stage = str(meta.get("stage") or "image")
         artifacts = tuple(str(a).format(ep=ep) for a in meta.get("artifacts", ()))
         sections[dim] = section_from_result(
             dim=dim,

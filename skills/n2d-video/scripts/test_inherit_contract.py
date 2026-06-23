@@ -453,8 +453,8 @@ def _write_clip_prompts(tmp_path, img_clips=_IMG_CLIPS, vid_clips=_VID_CLIPS_OK)
 
 
 def test_extract_asset_ids():
-    ids = ic.extract_asset_ids("资产=LOC_01 冷宫 + PROP_01 铜镜；VFX_01 脉冲；OUTFIT_02 战袍")
-    assert ids == {"LOC_01", "PROP_01", "VFX_01", "OUTFIT_02"}
+    ids = ic.extract_asset_ids("资产=LOC_01 冷宫 + PROP_01 铜镜；WEAPON_01 霜纹长剑；VFX_01 脉冲；OUTFIT_02 战袍")
+    assert ids == {"LOC_01", "PROP_01", "WEAPON_01", "VFX_01", "OUTFIT_02"}
     assert ic.extract_asset_ids("无注册资产的空镜") == set()
 
 
@@ -492,3 +492,27 @@ def test_asset_handoff_skipped_when_clip_files_absent(tmp_path):
     root = _write_project(tmp_path, IMG_CONTRACT, VID_VERBATIM)
     assert ic.run(root, EP) == 0
     assert _report(root)["asset_handoff"]["available"] is False
+
+
+# ── 电影光学契约：镜头焦段 img→video 继承（A2·opt-in·warn-only） ──────────────
+
+def test_diff_cinematic_focal_mismatch_warns():
+    img = "## 本集真实电影感契约\n- 镜头焦段：85mm 长焦浅景深\n- 摄影基调：写实\n"
+    vid = "## 本集真实电影感契约\n- 镜头焦段：24mm 广角\n- 摄影基调：写实\n"
+    rows = ic.diff_cinematic_focal(img, vid)
+    assert len(rows) == 1 and rows[0]["field"] == "镜头焦段" and rows[0]["severity"] == "warn"
+
+
+def test_diff_cinematic_focal_match_passes_and_superset():
+    img = "## 本集真实电影感契约\n- 镜头焦段：85mm 长焦\n"
+    assert ic.diff_cinematic_focal(img, img)[0]["severity"] == "pass"
+    # 视频侧细化（含原文）→ pass 超集
+    vid = "## 本集真实电影感契约\n- 镜头焦段：85mm 长焦 浅景深奶油虚化\n"
+    assert ic.diff_cinematic_focal(img, vid)[0]["severity"] == "pass"
+
+
+def test_diff_cinematic_focal_absent_is_skipped():
+    # 任一侧无真实电影感契约/焦段字段 → 不报（焦段 opt-in 不强求）
+    img = "## 本集真实电影感契约\n- 镜头焦段：85mm\n"
+    assert ic.diff_cinematic_focal(img, "## 本集基础视觉风格契约\n- 风格名：国漫\n") == []
+    assert ic.diff_cinematic_focal("无契约文本", "无契约文本") == []

@@ -22,7 +22,7 @@ description: 横切模型适配层：在 n2d 出视频前，按镜头类型/专�
 
 ## 输入 / 输出 / 读写边界
 
-- **输入**：`_设置.md`、`storyboard.json`、`identity_registry.json`、视频模型/渠道能力档案、跨集路由基线。
+- **输入**：`_设置.md`、`storyboard.json`、`identity_registry.json`、视频模型/渠道能力档案、跨集路由基线；若存在 `生产数据/spectacle_backend_benchmark.json`，自动读取打斗/追逐/飞行/大场景 probe 结果作为自动路由加权。
 - **输出**：`出视频/第N集/prompt/video_model_routes.json` 和 `.md`，第 1 集打样后写 `设定库/model_routes_baseline.json`。第 2 集起凡含核心/角色身份或高风险镜头（打斗/追逐/多人/揭示/对质/关系转折等），`n2d-review gate` 会要求路由按该基线锚定；自然路由漂移需刷新基线或写结构化 `baseline_override`（`accepted/reviewer/reason/expires_at/affected_routes`）。
 - **读写边界**：只写路由表和基线；不生成视频、不改 `_进度.md`、不替 `n2d-video` 写最终 clip prompt。
 - **契约关系**：模型路由是 `skills/n2d/_lib/n2d_contract.py` 的横切工具（`CROSS_CUTTING_TOOLS`），不是进度 readiness 项；motion control / native AV / lipsync 判定必须复用契约常量。
@@ -33,7 +33,11 @@ description: 横切模型适配层：在 n2d 出视频前，按镜头类型/专�
 - **项目默认只做兜底**：`_设置.md` 的 `生视频模型` 是默认/兜底，不再固定所有 Clip；`生视频渠道` 只决定实际去哪调用。旧 `生视频AI` 兼容读取。除非 `视频模型路由=固定生视频模型`，否则按本层自动路由。
 - **固定模式最高优先**：`视频模型路由=固定生视频模型` 时，用户选定模型优先于 native AV / 对口型自动抢路由；需要原生音画时应关闭固定模式或显式改默认模型，不得悄悄切到其它 native_speech 后端。若本机只有一个可用 CLI/渠道，可在 `_设置.md` 写 `视频备用后端=无`，固定模式不得把不可执行后端写成 fallback。旧值 `固定生视频AI` 兼容。
 - **复杂镜不从零写**：若 `storyboard.json clips[].template` 已命中专项模板，路由必须继承模板，不靠 prompt 现场猜。
-- **物理交互不靠文本猜**：打斗命中、拥抱、抓腕、拉扯、近距离接触等 `physical_interaction` 镜头必须输出 `motion_control.level=required` 和 `manifest_path`。视频 gate 会要求该 manifest 为 `ready`（有 pose/depth/instance/contact 控制资产）或 `degrade_only`（明确拆成手部特写/反打/释放帧），缺 manifest 不进入付费出视频。`ready` 控制资产用本地 `path/glob` 时必须能匹配真实文件；用远端 `uri` 时必须是 `https/s3/gs`，并带 `verified_at=YYYY-MM-DD` + `sha256/checksum/etag` 之一，裸 URI 或 `file://` 不放行。
+- **高动作不靠文本猜**：打斗命中、追逐、飞行/腾云驾雾/御剑、拥抱、抓腕、拉扯、近距离接触等高动作/物理镜头必须输出 `motion_control.level=required` 和 `manifest_path`。视频 gate 会要求该 manifest 为 `ready`（有 pose/depth/instance/contact/camera_path/spatial_path/parallax_layers 控制资产）或 `degrade_only`（明确拆成手部特写/反打/释放帧/正反打追逐/起飞巡航机动抵达），缺 manifest 不进入付费出视频。`ready` 控制资产用本地 `path/glob` 时必须能匹配真实文件；用远端 `uri` 时必须是 `https/s3/gs`，并带 `verified_at=YYYY-MM-DD` + `sha256/checksum/etag` 之一，裸 URI 或 `file://` 不放行。
+- **动作编排契约（action_choreography）**：`fight_exchange/chase/flight` 路由必须额外输出 `action_choreography.required=true`，列出 beats、speed_curve、spatial_path、camera_path、readability_beats、degrade_plan 和模板专属字段。打斗锁 attack_path/impact_frame/contact_points/force_direction/recovery_beat；追逐锁 screen_direction/distance_curve/obstacle_beats/parallax_layers/overtake_or_escape_beat；飞行锁 flight_path/altitude_curve/pose_lock/parallax_layers/mount_or_cloud_lock。n2d-video prompt 缺「动作编排契约」会被 gate 阻断。
+- **执行配方不是说明文字**：每条 route 必须输出 `execution_recipe`，把 `primary_backend` 归一成调用层可消费的 `frame_inputs`、`reference_inputs`、`control_inputs`、`audio_inputs`、`fallback` 和 `capability_match`。video gate 会阻断缺 `execution_recipe` 或 Motion Control 需要但缺 `manifest_path` 的 route，避免后端能力只停留在路由文案里。
+- **probe 结果可回灌，但不覆盖固定模式**：`n2d-script/scripts/spectacle_probe_pack.py` 会产出小样矩阵和 `生产数据/spectacle_backend_benchmark.json` 填写 schema。自动路由模式下，router 读取该文件：若某类镜头的 probe 推荐了更稳 primary（如 fight_exchange 从 Kling 改 Seedance），会把推荐后端升为 primary、原 primary 保留为 fallback，并在 `spectacle_benchmark` 留痕；`视频模型路由=固定生视频模型` 时不擅自改厂。
+- **冷启动后端先验（benchmark 缺失兜底）**：没跑过 probe 的项目，对「关键词识别为打斗/追逐/腾云/大场景、但 shot_type 通用、路由落到 default」那批镜，自动按动作类型默认排序兜底（打斗→Kling、连续追逐→Seedance、飞行/大场景→Veo；单一真值源 `n2d_platform_profiles.SPECTACLE_BACKEND_PRIOR`），原 default 保留为 fallback，留痕 `spectacle_prior` + `risk_flag=spectacle_prior_routed`。仅自动路由生效；benchmark 一旦填写即覆盖先验，`固定生视频模型`/baseline 锚定不动。
 - **控制资产脚手架（补"只 gate 不生成"的摩擦）**：路由只声明、gate 只校验，中间用 `scripts/motion_control.py` 把骨架和清单补上，别让操作者照 schema 手搓 JSON：
   - `python3 scripts/motion_control.py <作品根> 第N集 scaffold [--clip Clip_03]` —— 读 `video_model_routes.json`，为每个 `level=required` 的 Clip 生成/合并一份**非 ready 骨架** manifest（`status=planned`、逐 input `status=missing`+规范路径，已填字段不回退），并打印"该 Clip 还要产出哪几个控制文件 + 接触语义字段"的精确清单。骨架仍被 gate 阻断（这是对的：还没就位）。
   - `python3 scripts/motion_control.py <作品根> 第N集 check` —— 对照磁盘：文件已就位的 input 客观翻 `ready`（**不**自动翻顶层 status——`contact_points/occlusion_order/body_part_ownership` 语义要人确认后手改 ready），报告 gate 会不会过。
@@ -54,6 +58,7 @@ description: 横切模型适配层：在 n2d 出视频前，按镜头类型/专�
 - **质量档路由（成本×质量轴·2026-06-19 流程自审落地）**：Seedance 家族有 fast/pro 档（fast≈$0.022/s 量产默认，pro 留吃重镜）。每条路由出 `quality_tier`：身份/物理吃重镜（脸/接触/多人/原生台词/已升锁）→ `high`（值 pro 把脸与运动钉稳），空镜/通用低风险镜 → `fast`（量产省成本），后端无档位能力 → `n/a`。**只表达路由意图，不写死 model_version**——落档侧出片脚本把 `high→pro`、`fast→fast` 解析成实际质量档；成本事件带 `quality_tier` 时 `n2d-dashboard` 的 `cost_by_provider` 按 `provider@tier:unit` 拆出同后端 fast vs pro 花销，让成本×质量轴可回看。判据走 shot_type + risk_flags，不 hardcode 厂商。
 - **时效档路由（成本轴·与质量档正交·2026-06-22 落地选择点 `投放时效`）**：2026 视频 API 首现「batch/隔夜半价」（Sora2 Batch 24h SLA -50%、Seedance flex -50% 预告）。`urgency_tier_from_settings` 读 `_设置.md` 的 `投放时效`（实时/隔夜批量）→ 项目级 `urgency_tier`（`realtime` 默认 / `batch_24h`），写进 plan 顶层 + 逐镜留痕。成本事件带 `urgency_tier=batch_24h` 时 `n2d-dashboard` 的 `cost_by_provider` 按 `provider#batch_24h:unit` 拆 realtime vs batch 花销，回看「隔夜批量省了多少」。**诚实边界**：本档只产**路由意图 + 成本拆账**；实际 async batch endpoint 由视频后端能力决定，属执行适配层 follow-up（后端 batch 通道接入后才真省）。默认 `实时`——绝不静默把赶投放的集延迟到隔夜。
 - **视频运动参考（reference_video_motion·跨镜运动连续性轴）**：长连续运动镜（追逐/飞行/打斗）且 primary 支持 `reference_video_motion`（Seedance/Kling）时，路由 `motion_reference.applicable=true` + `risk_flag=motion_reference_candidate`，提示把**同段前一条已通过 clip 作运动/风格视频参考**喂进后端，锁运镜节奏与运动风格（与图身份锁正交）。首条镜无前序参考自然跳过；这是预防侧指引，不强制。
+- **开源轨迹控制增强（P3·可选）**：router 写完后可跑 `python3 skills/n2d-model-router/scripts/trajectory_controller_plan.py <作品根> 第N集 --write`。它读取 `execution_recipe.control_inputs.required_inputs`，按 `camera_path/spatial_path` 选择 MotionCtrl / CameraCtrl / DragNUWA 候选，只有本机设置 `MOTIONCTRL_HOME` / `CAMERACTRL_HOME` / `DRAGNUWA_HOME` 时才标 `ready_to_run`；未准备环境只写 `planned_env_missing`，不下载、不强接、不阻断主流程。
 - **多镜单次生成候选组（multishot_groups·advisory）**：Seedance 2.0 等可一次出多镜头叙事且跨镜一致、无缝转场。primary 全部定稿后（route_episode 末尾），扫**连续 ≥2 条接力镜 + 同一支持多镜的 primary**（如直连 Seedance 的项目）→ 标 `multishot_candidate` + 进 `multishot_groups`。**这段最适合一次 co-generate 消缝、最稳跨镜一致，但只是提示**：不合并 Clip、不改 primary/mode，逐 Clip 仍是独立可追踪可重跑单元（模型矩阵立身原则），是否真合并由出片侧/用户按接缝风险与重跑需求决定。**组大小受物理约束封顶**——单次多镜总输出 ≤ 后端 `max_clip_seconds`（Seedance ~15s），按累计时长切组（缺时长退 ≤4 成员护栏），所以镜本身已近单镜上限时不会成组（甜点是多个短接力镜）。即梦渠道下执行后端是 dreamina（非多镜叙事核验渠道）→ 保守不标注。
 
 ## 工作流
@@ -87,8 +92,8 @@ python3 skills/n2d-model-router/scripts/router.py <作品根> 第N集 --write
 
 | 镜头类型 | primary | fallback | 适配理由 |
 |---|---|---|---|
-| 打斗 / 命中 / 多主体接触 | Kling | Seedance / Dreamina | 首尾帧、运动笔刷、Character ID、多主体互动更重要；`motion_control=required` |
-| 追逐 / 飞行 / 长连续运动 | Seedance | Kling | 长单镜、连续运镜、背景运动更重要 |
+| 打斗 / 命中 / 多主体接触 | Kling | Seedance / Dreamina | 首尾帧、运动笔刷、Character ID、多主体互动更重要；`motion_control=required`；`action_choreography=required` |
+| 追逐 / 飞行 / 长连续运动 | Seedance | Kling | 长单镜、连续运镜、背景运动更重要；`motion_control=required`；`action_choreography=required`；优先视频运动参考 |
 | 对话反打 / 说话近景 | Kling | Veo / Seedance | 口型/身份锁定/角色稳定优先；若海外或原生口型 opt-in 可切 Veo |
 | 对话反打 / 说话近景（`配音先行`+`对口型≠关闭`） | Seedance / 可灵 Omni | Kling / Veo | `mode=voice_conditioned_lipsync`：把配音 `line_NN.wav` 当口型条件喂进支持音频参考的后端，音轨仍走配音轨（不双人声、省后期对口型 pass） |
 | 真相揭示 / 身份曝光 | Kling | Veo / Seedance | 证据物稳定、反应链、脸部微表情和台词口型优先；通常走 high 档 |
@@ -135,7 +140,8 @@ python3 skills/n2d-model-router/scripts/router.py <作品根> 第2集 --write
 `n2d-video` 生成 `00_总览.md` 前先生成路由表；`00_总览.md` 必须包含「本集模型路由表」；每个 Clip prompt 必须包含：
 
 - `**模型路由**`：shot_type、primary、fallback、mode、rationale、degrade_plan。
-- `**Motion Control / 物理交互控制**`：高危接触镜必填，普通镜写“无”；写 `level`、`manifest_path`、`required_inputs`、`failure_modes`、`gate_policy`。
+- `**动作编排契约 / Action Choreography**`：打斗/追逐/飞行必填，普通镜写“无”；写 beats、speed_curve、spatial_path、camera_path、readability_beats、degrade_plan 和模板专属字段。
+- `**Motion Control / 物理交互控制**`：高危动作/物理镜必填，普通镜写“无”；写 `level`、`manifest_path`、`required_inputs`、`failure_modes`、`gate_policy`。
 - 中文 prompt 里的 `模型路由约束`：说明按哪个后端写平台参数，不能把 Kling/Seedance/Veo/Dreamina 的能力词混成一坨。
 - 中文 prompt 里的 `物理交互约束`：说明该镜使用 ready 控制资产，或按 `degrade_only` manifest 拆镜；不得只靠文本 prompt 生成全身复杂接触。
 - `平台参数`：primary_backend、fallback_backends、mode、duration、resolution、identity adapter、native_audio policy。
@@ -161,4 +167,5 @@ python3 skills/n2d-model-router/scripts/router.py <作品根> 第2集 --write
 | 不看 storyboard 就临场路由 | 复杂镜若在 `storyboard.json` 命中了专项模板，路由必须继承模板的指导 |
 | 固定单一后端包打天下 | `生视频模型` 的全局默认只做普通镜和兜底，除非用户明确要求“固定生视频模型”，否则应自动按能力打散 |
 | 把 `native_av` 混用于不兼容后端 | 原生音画需要支持台词生成的模型（如 Veo 3 / Seedance 2.0），乱选会导致无声或降级 |
-| 缺 Motion Control 时强行出视频 | 高危接触（打斗、拥抱等）如果没有 ready/degrade_only 的 manifest，会被 gate 直接拦截 |
+| 缺 Motion Control 时强行出视频 | 高危动作/物理镜（打斗、追逐、飞行、拥抱等）如果没有 ready/degrade_only 的 manifest，会被 gate 直接拦截 |
+| 动作 prompt 只写“精彩打斗/高速飞行” | 高动作镜必须写 `action_choreography` 对应的速度曲线、空间路径、镜头路径、可读性节拍和专属字段 |

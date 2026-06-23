@@ -50,6 +50,10 @@ try:
 except Exception:  # pragma: no cover
     antagonist_scaling = timeline_check = minor_characters = None
 try:
+    import foreshadow_ledger  # noqa: E401  (novel-wiki/scripts) — 伏笔超期/烂尾预警
+except Exception:  # pragma: no cover
+    foreshadow_ledger = None
+try:
     extract_style = load_style_tool()
 except Exception:  # pragma: no cover
     extract_style = None
@@ -57,6 +61,13 @@ try:
     power_system = load_power_system_tool() if load_power_system_tool else None
 except Exception:  # pragma: no cover
     power_system = None
+try:
+    _RESEARCH = os.path.join(_SKILLS, "novel-research", "scripts")
+    if _RESEARCH not in sys.path:
+        sys.path.insert(0, _RESEARCH)
+    import research_pack  # noqa: E402
+except Exception:  # pragma: no cover
+    research_pack = None
 try:
     from settings import get_setting
 except Exception:  # pragma: no cover
@@ -116,6 +127,7 @@ def _tool_fingerprint():
         "wiki_builder": getattr(wiki_builder, "__file__", "") if wiki_builder else "",
         "logic_sentry": getattr(logic_sentry, "__file__", "") if logic_sentry else "",
         "extract_style": getattr(extract_style, "__file__", "") if extract_style else "",
+        "research_pack": getattr(research_pack, "__file__", "") if research_pack else "",
     }
     out = {}
     for name, path in files.items():
@@ -153,7 +165,7 @@ def _snapshot(project):
 def _result_outputs_exist(result):
     if not isinstance(result, dict):
         return False
-    for key in ("mechanical", "reader_contract", "logic_sentry", "style_drift"):
+    for key in ("mechanical", "reader_contract", "logic_sentry", "style_drift", "research_fact_support"):
         section = result.get(key) or {}
         path = section.get("json")
         if section.get("ran") and path and not os.path.exists(path):
@@ -325,6 +337,22 @@ def run_reader_contract(project):
     return {"ran": True, "json": out, "alerts": len(findings), "blocking": blocking}
 
 
+def run_research_fact_support(project):
+    if research_pack is None:
+        return {"ran": False, "skipped": "novel-research/research_pack.py 不可导入"}
+    try:
+        res = research_pack.check_project(project, write=True)
+    except Exception as exc:  # pragma: no cover
+        return {"ran": False, "skipped": f"专业资料包检查失败: {exc}"}
+    return {
+        "ran": True,
+        "json": os.path.join(project, "审稿", "research_fact_support.json"),
+        "alerts": int(res.get("total") or 0),
+        "blocking": int(res.get("blocking") or 0),
+        "detected_domains": res.get("detected_domains") or {},
+    }
+
+
 def _run_detector(label, module, project, out_name):
     """统一 subrunner：缺模块/缺输入优雅跳过；否则 module.analyze(project) → 写 审稿/<out_name>，
     汇总 alerts/blocking（阻断级计数）。新检测器 analyze 均以 project 为首参、其余有默认值。"""
@@ -371,6 +399,7 @@ def main():
             "logic_sentry": run_logic(args.project_path),
             "style_drift": run_style(args.project_path, args.anchor, cache=cache),
             "power_system": run_power_system(args.project_path),
+            "research_fact_support": run_research_fact_support(args.project_path),
             # 2026 新增维度（断章钩子/角色语感/情绪曲线/支线收口/反派战力/时间线/配角连续性）
             "hook_endings": _run_detector("断章钩子", hook_endings, args.project_path, "hook_findings.json"),
             "voice_drift": _run_detector("角色语感", voice_drift, args.project_path, "voice_findings.json"),
@@ -379,6 +408,8 @@ def main():
             "antagonist_scaling": _run_detector("反派战力", antagonist_scaling, args.project_path, "antagonist_findings.json"),
             "timeline": _run_detector("时间线", timeline_check, args.project_path, "timeline_findings.json"),
             "minor_characters": _run_detector("配角连续性", minor_characters, args.project_path, "minor_character_findings.json"),
+            # 伏笔超期/烂尾预警：消费 novel-wiki 的伏笔台账，落 审稿/foreshadow_report.json（此前无人接）
+            "foreshadow": _run_detector("伏笔超期", foreshadow_ledger, args.project_path, "foreshadow_report.json"),
             "_cache": {"hit": False, "path": _cache_path(args.project_path)},
         }
         if snapshot:

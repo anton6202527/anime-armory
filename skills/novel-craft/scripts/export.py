@@ -322,7 +322,6 @@ def main():
         p = os.path.join(out_dir, "大纲.md")
         write_outline(p, project_root, meta, chapters)
         paths["outline"] = p
-
     print(f"[ok] 导出完成：{len(chapters)} 章, {total_chars(chapters)} 字")
     for k, v in paths.items():
         print(f"     {k:<8} → {v}")

@@ -693,7 +693,9 @@ def build_consistency_kpi(consistency: Optional[Dict[str, Any]],
         "release_line": line,
         "verdict": verdict,
         "characters_counted": len(intra_vals),
-        "benchmark_ref": "EntityBench/MSVBench 2026（与人判 Spearman 94.4%）；可投放线须随 encoder 重标定",
+        "benchmark_ref": ("EntityBench/MSVBench 2026（与人判 Spearman 94.4%）；风格化脸另参 Face Consistency "
+                          "Benchmark for GenAI Video（arXiv 2505.11425）；叙事级长视频参 NarrLV/DirectorBench；"
+                          "可投放线须随 encoder 重标定"),
         "note": "报告型 KPI·不参与扣分；与 severity 扣分维度正交",
     }
 

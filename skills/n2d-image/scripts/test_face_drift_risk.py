@@ -360,3 +360,57 @@ def test_analyze_no_drift_report_stays_predictive(tmp_path: Path) -> None:
     assert rep["block"] == 0 and rep["blocking"] is False
     assert rep["prior_drift_available"] is False
     assert {r["character_id"]: r for r in rep["characters"]}["CHAR_01"]["band"] == "high"
+
+
+# ── 复现间隔回灌（B4：长间隔再登场 = EntityBench 2026 跨镜崩脸主因，出图前重锚） ──
+
+def test_episode_num_parses_and_degrades() -> None:
+    assert fdr._episode_num("第12集") == 12
+    assert fdr._episode_num("序章") is None
+
+
+def test_score_character_recurrence_gap_adds_points_and_driver() -> None:
+    base = fdr.score_character({"appear": 3, "closeup": 0, "emotion": 0, "multi": 0, "angle": 0}, "multi_reference")
+    reentry = fdr.score_character(
+        {"appear": 3, "closeup": 0, "emotion": 0, "multi": 0, "angle": 0, "recurrence_gap": 3}, "multi_reference")
+    assert reentry["score"] > base["score"]
+    assert any("长间隔再登场" in d["factor"] for d in reentry["drivers"])
+    # 缺席仅1集（< 阈值2）不加分
+    short = fdr.score_character(
+        {"appear": 3, "closeup": 0, "emotion": 0, "multi": 0, "angle": 0, "recurrence_gap": 1}, "multi_reference")
+    assert short["score"] == base["score"]
+
+
+def test_recurrence_reentry_risk_matches_alias_and_gap() -> None:
+    drift = {"characters": {"沈念": {"episodes": {"第1集": {}, "第2集": {}}}}}
+    # 本集第5集，上次出场第2集 → 缺席2集，命中
+    hit = fdr.recurrence_reentry_risk(drift, {"沈念", "林婉儿"}, "林婉儿", "第5集")
+    assert hit == {"last_episode": "第2集", "gap": 2, "current_episode": "第5集"}
+    # 本集第3集，上次第2集 → 缺席0集，不命中
+    assert fdr.recurrence_reentry_risk(drift, {"沈念"}, "沈念", "第3集") is None
+    # 对不上号 → None
+    assert fdr.recurrence_reentry_risk(drift, {"柳娘子"}, "柳娘子", "第9集") is None
+    # 复现不依赖 insightface：available 缺省也能算
+    assert fdr.recurrence_reentry_risk({"characters": {}}, set(), "x", "第9集") is None
+
+
+def test_analyze_reentry_escalates_and_reanchors(tmp_path: Path) -> None:
+    root = _make_project(tmp_path)
+    # 第4集分镜：沈念单镜出场（无近景/表情/同框等其它高危信号，隔离复现因子）
+    sb = root / "脚本" / "第4集"
+    sb.mkdir(parents=True)
+    (sb / "storyboard.json").write_text(json.dumps({"clips": [
+        {"id": "EP04_CLIP01", "label": "沈念归来", "scene": "宫道",
+         "shots": [{"lens": "MS 中景", "desc": "沈念缓步而来"}]},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    # 已机检漂移报告：沈念仅在第1集出场 → 到第4集缺席2集
+    (root / "生产数据").mkdir(parents=True)
+    (root / "生产数据" / "identity_drift_report.json").write_text(json.dumps({
+        "available": True, "characters": {"沈念": {"episodes": {"第1集": {}}}},
+    }, ensure_ascii=False), encoding="utf-8")
+    rep = fdr.analyze(root, "第4集")
+    row = {r["character_id"]: r for r in rep["characters"]}["CHAR_01"]
+    assert row["recurrence_reentry"] == {"last_episode": "第1集", "gap": 2, "current_episode": "第4集"}
+    assert row["signals"]["recurrence_gap"] == 2
+    assert rep["recurrence_reentries"] == 1
+    assert "长间隔再登场" in row["suggestions"][0]  # 重锚建议置顶

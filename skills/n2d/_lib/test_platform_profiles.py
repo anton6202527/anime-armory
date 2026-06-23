@@ -62,3 +62,19 @@ def test_anchor_consumption_plan_distinguishes_native_and_split():
 def test_sora_is_legacy_not_auto_routed_or_native_av():
     assert profiles.video_backend_auto_routable("sora") is False
     assert "sora" not in profiles.NATIVE_AV_BACKENDS
+
+
+def test_spectacle_backend_prior_ranking_orders_by_action_type():
+    # 冷启动先验：打斗物理首选 kling，连续追逐首选 seedance，飞行/大场景首选 veo。
+    assert profiles.spectacle_backend_prior_ranking("fight_exchange")[0] == "kling"
+    assert profiles.spectacle_backend_prior_ranking("chase")[0] == "seedance"
+    assert profiles.spectacle_backend_prior_ranking("flight")[0] == "veo"
+    assert profiles.spectacle_backend_prior_ranking("large_establishing")[0] == "veo"
+    # 不识别的类型 → 空 tuple
+    assert profiles.spectacle_backend_prior_ranking("nope") == ()
+    assert profiles.spectacle_backend_prior_ranking(None) == ()
+    # 排序里只含 auto-routable 后端（sora 是 legacy，绝不出现在先验里）
+    for st in profiles.SPECTACLE_BACKEND_PRIOR:
+        ranking = profiles.spectacle_backend_prior_ranking(st)
+        assert "sora" not in ranking
+        assert all(profiles.video_backend_auto_routable(b) for b in ranking)

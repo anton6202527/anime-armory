@@ -19,7 +19,8 @@
   "default_backend": "dreamina",
   "generated_at": "2026-06-08T00:00:00Z",
   "routes": [],
-  "multishot_groups": []
+  "multishot_groups": [],
+  "multishot_reroute_recommendations": []
 }
 ```
 
@@ -31,6 +32,7 @@
 - `default_backend`: 从 `_设置.md 生视频模型` 归一化而来；旧项目 fallback 读取 `生视频AI`，再 fallback 到 `生视频渠道`。`Seedance 2.0` 归一为 `seedance`；`即梦/Dreamina` 归一为 `dreamina`；原生音画后端 `seedance|veo|sora`。
 - `routes`: 每条 Clip 一个对象。
 - `multishot_groups`: 多镜单次生成候选组清单 `[{group_id, members:[clip_id...], backend, approx_seconds}]`（**advisory**）。在 primary 全部定稿（含跨集 baseline 锚定）后，扫出**连续 ≥2 条接力镜 + 同一支持多镜的 primary**（如直连 Seedance 的项目）的镜组——这段最适合一次 co-generate 消灭接缝、最稳跨镜一致。**组大小受物理约束封顶**：单次多镜生成的总输出长度 ≤ 后端 `max_clip_seconds`（Seedance ~15s），按**累计时长**切组（缺时长时退到 ≤4 成员护栏），所以**镜本身已接近单镜上限时不会成组**（各自已是长单镜，归「更长单镜」覆盖）；多镜单次生成的甜点是**多个短接力镜**一次出。**只是提示，不合并 Clip、不改 primary/mode**：逐 Clip 仍是独立可追踪可重跑单元（模型矩阵立身原则），是否真的一次出由出片侧/用户按接缝风险与重跑需求决定。即梦渠道下执行后端是 dreamina（非多镜叙事核验渠道）→ 保守不标注。
+- `multishot_reroute_recommendations`: 同场景/同角色连续镜的**换后端建议**清单 `[{group_id, members, suggested_backend, basis, roster_switch_required, note}]`（**advisory**·2026-06 一致性加固）。`annotate_multishot_groups` 只在 primary **本身已支持多镜**时标候选；本字段补的是另一半：primary **不支持多镜**（如 dreamina）时，若存在一段「同场景(`同场景`)」或「同角色集(`同角色集`)」连续 ≥2 镜，建议这段改走原生多镜后端（Kling Element Binding / Director Memory 物体恒存、Seedance/Veo 多镜叙事），用单次多镜生成把跨镜身份/场景/对象持久性焊住，省 `inherit_contract` 硬拦。`suggested_backend` 优先取项目 roster（default+fallback）里已有的多镜后端；roster 内没有则给规范候选并置 `roster_switch_required=true`，提醒**换后端须整项目统一、勿混用**（anti-mixing 闸）。同样**不改 primary、不合并 Clip**，逐 Clip 仍可追踪可重跑，由出片侧/用户定夺。对应 route 上有 `multishot_reroute_suggestion` + risk_flag `multishot_reroute_candidate`。
 
 ## route 对象
 
@@ -62,6 +64,49 @@
     "gate_policy": "block_without_ready_manifest_or_degrade_only_manifest",
     "degrade_allowed": true,
     "notes": ["OpenPose/DWPose alone is not enough for weapon/body contact; add depth + instance masks where possible"]
+  },
+  "action_choreography": {
+    "required": true,
+    "shot_type": "fight_exchange",
+    "beat_model": "setup_attack_impact_reaction_recovery",
+    "required_fields": ["beats", "speed_curve", "spatial_path", "camera_path", "readability_beats", "degrade_plan", "attack_path", "impact_frame", "contact_points", "force_direction", "recovery_beat"],
+    "failure_modes": ["unclear_hit", "wrong_force_direction", "limb_fusion", "weapon_contact_drift"],
+    "gate_policy": "block_prompt_without_action_choreography_contract"
+  },
+  "execution_recipe": {
+    "backend": "kling",
+    "execution_backend": "kling",
+    "mode": "frames2video",
+    "quality_tier": "high",
+    "urgency_tier": "realtime",
+    "frame_inputs": {
+      "first_frame": true,
+      "last_frame": true,
+      "mid_anchors": 0,
+      "consumption_mode": "first_frame",
+      "native_timeline_frames": 2,
+      "requires_split_relay": false,
+      "reference_only": false
+    },
+    "reference_inputs": {
+      "characters": [{"character_id": "CHAR_01", "form": "常态", "binding": "character_id_or_reference_group"}],
+      "assets": ["WEAPON_01"],
+      "max_reference_images": 4,
+      "motion_reference": {
+        "allowed": true,
+        "library_path": "生产数据/motion_reference_library.json",
+        "policy": "use same sequence/shot_type approved reference when available"
+      }
+    },
+    "control_inputs": {
+      "manifest_path": "出视频/第1集/control/Clip_01/motion_control_manifest.json",
+      "required": true,
+      "required_inputs": ["pose_sequence", "depth_sequence", "instance_masks", "contact_map"],
+      "gate_policy": "block_without_ready_manifest_or_degrade_only_manifest"
+    },
+    "audio_inputs": {"native_audio_policy": "none", "speech_policy": "no_native_speech"},
+    "fallback": {"fallback_backends": ["seedance", "dreamina"], "degrade_plan": "Split into setup and impact clips."},
+    "capability_match": {"frame_contract_supported": true, "motion_reference_supported": true, "motion_control_level": "medium"}
   },
   "rationale": [
     "fight/contact motion benefits from first/last frame control and motion brush",
@@ -106,13 +151,20 @@
   - `reference_controls_or_reference_group`
 - `clip_characters`: 本 Clip 实际出现的角色绑定，身份镜必填。元素至少含 `character_id`，可选 `form`。router 从 `storyboard.json` 的结构化角色字段或 `CHAR_xx/形态` 提取；普通自然语言人名只可作为人审信息，不能替代 `character_id`。`n2d-review gate` 用该字段把身份 adapter matrix 检查缩到本 Clip 角色；`identity_requirement != none` 且缺有效 `clip_characters[]` 会 BLOCK 并要求重跑 router/补 storyboard 角色 ID。
 - `max_clip_seconds`: 该 primary 后端建议单 Clip 上限。超出后回 `n2d-script` 拆 Clip 或换长单镜后端。
-- `risk_flags`: `multi_person`、`mouth_visible`、`native_audio_risk`、`native_speech`（原生音画说话镜，须查唇音同步）、`long_duration`、`contact_motion`、`identity_drift_risk`、`motion_reference_candidate`（可用视频运动参考）、`multishot_candidate`（属多镜单次生成候选组）等。
+- `risk_flags`: `multi_person`、`mouth_visible`、`native_audio_risk`、`native_speech`（原生音画说话镜，须查唇音同步）、`long_duration`、`contact_motion`、`high_speed_motion`、`spatial_path_risk`、`action_choreography_required`、`identity_drift_risk`、`motion_reference_candidate`（可用视频运动参考）、`multishot_candidate`（属多镜单次生成候选组）等。
 - `quality_tier`: 质量档路由意图，`fast|high|n/a`。`high`=身份/物理吃重镜（脸/接触/多人/原生台词/已升锁），值后端 pro 档把脸与运动钉稳；`fast`=空镜/通用低风险镜，量产省成本；`n/a`=该 primary 无 fast/pro 档（如 veo）。**只表达路由意图，不写死 model_version**——落档侧出片脚本把 `high→pro`、`fast→fast` 解析成后端实际质量档；成本事件带 `quality_tier` 时 dashboard 的 `cost_by_provider` 会按 `provider@tier:unit` 拆出 fast/pro 花销。
 - `motion_reference`: `{applicable, use, note}`。长连续运动镜（追逐/飞行/打斗）且 primary 支持 `reference_video_motion`（Seedance/Kling）时 `applicable=true`，提示把**同段前一条已通过 clip 作运动/风格视频参考**喂进去锁运镜节奏（与图身份锁正交的跨镜运动连续性轴）；首条镜无前序参考自然跳过。
+- `execution_recipe`: 调用层配方，所有 route 必须有。它不是给人读的理由，而是把 route 归一为执行代码/人工跑后端时必须消费的输入：
+  - `frame_inputs`: 首帧/尾帧/中段锚帧、后端实际消费模式、native timeline 帧数、是否仅作 reference。
+  - `reference_inputs`: 本镜角色、资产、参考图上限、可用动作参考库路径（`生产数据/motion_reference_library.json`）。
+  - `control_inputs`: Motion Control manifest、required_inputs 和 gate policy；`required=true` 时缺 `manifest_path` 会被 video gate 阻断。
+  - `audio_inputs`: native audio / speech policy，供原生音画、配音先行、口型条件路线分流。
+  - `fallback`: fallback 后端和降级拆镜方案，供重试/批量回流消费。
+  - `capability_match`: 帧契约、运动参考、控制能力是否满足，供 gate 和执行层做最后兜底。
 - `multishot_candidate`: `{group_id, members, note}`，仅当本镜属一个多镜单次生成候选组时出现。见顶层 `multishot_groups`。
-- `motion_control`: 复杂物理交互控制契约，所有 route 都必须有；普通镜写 `level=none`。`fight_exchange`、`intimate_interaction`、`hug_or_pull` 或带 `physical_interaction/contact_motion/feature_melting_risk` 的镜头必须 `level=required`、`manifest_required=true`，并指向 `出视频/第N集/control/Clip_XX/motion_control_manifest.json`。
-  - `level`: `none|recommended|required`。`recommended` 用于多人站位/追逐/飞行等可选增强；`required` 用于打斗命中、拥抱、抓腕、拉扯、近距离接触。
-  - `required_inputs`: 该镜头需要的控制资产键。高危接触通常至少包含 `pose_sequence`、`depth_sequence`、`instance_masks`；武器/接触点再加 `contact_map`。
+- `motion_control`: 复杂动作/物理交互控制契约，所有 route 都必须有；普通镜写 `level=none`。`fight_exchange`、`chase`、`flight`、`intimate_interaction`、`hug_or_pull`、多人/群像调度，或带 `physical_interaction/contact_motion/high_speed_motion/spatial_path_risk` 的镜头必须 `level=required`、`manifest_required=true`，并指向 `出视频/第N集/control/Clip_XX/motion_control_manifest.json`。
+  - `level`: `none|recommended|required`。`required` 用于打斗命中、追逐、飞行、拥抱、抓腕、拉扯、近距离接触和复杂空间调度；普通低幅度镜头为 `none`。
+  - `required_inputs`: 该镜头需要的控制资产键。高危接触通常至少包含 `pose_sequence`、`depth_sequence`、`instance_masks`；武器/接触点再加 `contact_map`。追逐常见 `pose_sequence`、`depth_sequence`、`camera_path`、`spatial_path`；飞行常见 `pose_sequence`、`depth_sequence`、`camera_path`、`parallax_layers`。
   - `backend_control_level/backend_capabilities`: primary 后端的控制能力摘要，只用于 route/gate/prompt，不代表一定已经接入该能力。
   - `recommended_control_backends`: 后续接入顺序，优先 `comfyui_ltx` / `kling_motion_control` / `seedance_reference_video` 这类可控后端。
   - `failure_modes`: 审片重点，如 `feature_melting`、`limb_fusion`、`hand_fusion`、`body_interpenetration`、`weapon_contact_drift`。
@@ -120,10 +172,17 @@
 - `rationale`: 选择原因，供导演/制片快速审。
 - `prompt_requirements`: 该路由要求 prompt 必写的约束。
 - `degrade_plan`: 失败后的拆镜/换后端策略。
+- `action_choreography`: 高动作编排契约，普通镜可写 `{"required": false}`。
+  - `required`: `fight_exchange/chase/flight` 必须为 `true`。
+  - `required_fields`: n2d-video prompt 的「动作编排契约」必须逐项写出的字段。通用字段为 `beats/speed_curve/spatial_path/camera_path/readability_beats/degrade_plan`。
+  - `fight_exchange` 额外字段：`attack_path/impact_frame/contact_points/force_direction/recovery_beat`。
+  - `chase` 额外字段：`screen_direction/distance_curve/obstacle_beats/parallax_layers/overtake_or_escape_beat`。
+  - `flight` 额外字段：`flight_path/altitude_curve/pose_lock/parallax_layers/mount_or_cloud_lock`。
+  - `gate_policy`: `block_prompt_without_action_choreography_contract` 表示 video prompt 缺动作编排契约或字段不全会被 gate 阻断。
 
 ## motion_control_manifest.json
 
-高危物理接触镜头的 manifest 放在：
+高危动作/物理镜头的 manifest 放在：
 
 ```text
 出视频/第N集/control/Clip_XX/motion_control_manifest.json
@@ -151,7 +210,20 @@
 }
 ```
 
-没有 ready 控制资产但决定拆镜时，写 `status=degrade_only`，必须包含 `degrade_plan`。这表示不直接生成全身复杂接触，改走模板降级方案；gate 会放行拆镜执行，但不会把它当作已接入 Motion Control。`status=ready` 时，`control_inputs.*.path/glob` 必须能匹配到本地控制资产文件；只有字符串路径、没有实际文件会被 gate 阻断。
+追逐/飞行类 `ready` manifest 可以不写接触语义字段，但要提供动作路径控制输入，例如：
+
+```json
+{
+  "control_inputs": {
+    "pose_sequence": { "type": "openpose_or_dwpose", "status": "ready", "path": "出视频/第1集/control/Clip_03/openpose_%03d.png" },
+    "depth_sequence": { "type": "depth", "status": "ready", "path": "出视频/第1集/control/Clip_03/depth_%03d.png" },
+    "camera_path": { "type": "camera_path", "status": "ready", "path": "出视频/第1集/control/Clip_03/camera_path.json" },
+    "parallax_layers": { "type": "parallax_layers", "status": "ready", "path": "出视频/第1集/control/Clip_03/parallax_layers.json" }
+  }
+}
+```
+
+没有 ready 控制资产但决定拆镜时，写 `status=degrade_only`，必须包含 `degrade_plan`。这表示不直接生成全身复杂接触或长连续高速动作，改走模板降级方案；gate 会放行拆镜执行，但不会把它当作已接入 Motion Control。`status=ready` 时，`control_inputs.*.path/glob` 必须能匹配到本地控制资产文件；只有字符串路径、没有实际文件会被 gate 阻断。
 
 远端控制资产不能只写裸 URI。`control_inputs.*` 若使用 `uri`，必须是对象，并且同时满足：
 
@@ -180,8 +252,8 @@
 ```markdown
 ## 本集模型路由表
 
-| Clip | characters | shot_type | primary | fallback | mode | native_audio | identity | motion_control | 风险 | 降级 |
-|---|---|---|---|---|---|---|---|---|---|---|
+| Clip | characters | shot_type | primary | execution_recipe | fallback | mode | native_audio | identity | motion_control | 风险 | 降级 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
 ```
 
 `n2d-video/prompt/00_总览.md` 必须复制或引用这张「本集模型路由表」。

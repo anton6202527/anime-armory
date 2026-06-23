@@ -186,6 +186,26 @@ SCENE_GUIDES = (
     },
 )
 
+# 女频情感清单：题材门控注入（不靠章纲关键词，靠项目 genre/平台/用途判定）。
+# 女频/言情向项目里情感线是主产品，逐章都需要颗粒度/CP张力/糖度意识，故按题材整体注入，
+# 区别于 SCENE_GUIDES 的「章纲命中才注入」。
+FEMALE_FICTION_REFERENCE = "skills/novel-craft/references/女频情感.md"
+FEMALE_FICTION_KEYWORDS = (
+    "言情", "甜宠", "宠文", "古言", "现言", "女频", "大女主", "宫斗", "宅斗",
+    "先婚后爱", "破镜重圆", "虐恋", "虐文", "情感线", "婚后", "双洁", "暗恋",
+    "豪门", "婚恋", "be美学", "破镜", "总裁文", "霸总", "种田文",
+)
+FEMALE_FICTION_PLATFORMS = ("晋江",)
+FEMALE_FICTION_CHECKLIST = (
+    "情绪写颗粒度：心动/心痛拆成生理反应+微动作+念头三层，别只贴「心动/心碎」标签。",
+    "内心戏 ≤150 字一气且要有转折/矛盾，不做情绪复读；能用动作或潜台词演的别用独白说破。",
+    "CP 关系温度只进不退；误会靠信息差或性格、不靠降智维持；心动/确认/和解等里程碑由人物挣来。",
+    "甜虐有呼吸：撒糖前先给小障碍，避免匀速发糖（腻）或匀速虐（疲劳）；大甜压在里程碑。",
+    "对照本项目 `设定/读者契约.md` 的价值边界，避开已登记的女频雷点（男非洁/出轨/用强/BE 无预期/圣母女主/虐女主无底线/副 CP 抢主线）。",
+)
+
+RESEARCH_INDEX_REL = "资料/research_sources.json"
+
 COMMON_SOURCE_PATHS = (
     "设定/章纲.md",
     "设定/读者契约.md",
@@ -570,6 +590,222 @@ def action_scene_section(tags):
     return scene_guide_section(SCENE_GUIDES[0], tags)
 
 
+def female_fiction_signal_text(root, meta):
+    """Collect project-level genre/platform/purpose text used for 女频 gating."""
+    parts = [
+        str(meta.get("genre") or ""),
+        str(meta.get("target_platform") or ""),
+        str(purpose_from_settings(root, meta) or ""),
+        str(setting_value(root, "题材") or ""),
+        str(setting_value(root, "目标平台") or ""),
+    ]
+    return "\n".join(p for p in parts if p)
+
+
+def female_fiction_active(root, meta):
+    """Genre-gate: True when the project reads as 女频/言情向 (情感线 is the product)."""
+    text = female_fiction_signal_text(root, meta)
+    if any(keyword in text for keyword in FEMALE_FICTION_KEYWORDS):
+        return True
+    if any(platform in text for platform in FEMALE_FICTION_PLATFORMS):
+        return True
+    return False
+
+
+def female_fiction_section():
+    lines = [
+        "\n## 女频情感写作清单（题材命中）",
+        f"- 参考全文：`{FEMALE_FICTION_REFERENCE}`",
+        "- 本项目题材/平台判定为女频·言情向，情感线是主产品，逐章按下列清单写：",
+    ]
+    for item in FEMALE_FICTION_CHECKLIST:
+        lines.append(f"- {item}")
+    return "\n".join(lines) + "\n"
+
+
+def research_chapter_applies(value, chapter):
+    """Whether a research pack/fact applies to the current chapter.
+
+    Keep this local instead of importing novel-research so draft packet
+    generation remains tolerant when only novel-craft is distributed.
+    """
+    if value in (None, "", []):
+        return False
+    if isinstance(value, str):
+        values = [value]
+    else:
+        values = value if isinstance(value, list) else [value]
+    for item in values:
+        if item == "all":
+            return True
+        if isinstance(item, int) and item == chapter:
+            return True
+        text = str(item)
+        if text.isdigit() and int(text) == chapter:
+            return True
+        m = re.match(r"^0*(\d+)\s*[-~至]\s*0*(\d+)$", text)
+        if m and int(m.group(1)) <= chapter <= int(m.group(2)):
+            return True
+    return False
+
+
+def research_packs_for_chapter(root, chapter, outline_item):
+    """Return professional research packs applicable to a chapter."""
+    payload = load_json(os.path.join(root, RESEARCH_INDEX_REL), {}) or {}
+    packs = payload.get("packs") or []
+    if not isinstance(packs, list):
+        return []
+    match_text = scene_match_text(outline_item)
+    out = []
+    for pack in packs:
+        if not isinstance(pack, dict):
+            continue
+        applies = research_chapter_applies(pack.get("applicable_chapters"), chapter)
+        keywords = pack.get("keywords") or []
+        keyword_hit = bool(match_text and keywords and any(str(kw) in match_text for kw in keywords))
+        if applies or keyword_hit:
+            out.append(pack)
+    return out
+
+
+def research_pack_section(packs):
+    """Human-readable packet section for evidence-backed professional facts."""
+    if not packs:
+        return ""
+    lines = [
+        "\n## 专业资料包（自动命中）",
+        "- 本章涉及专业/行业事实时，只能把 ready 资料包中有来源的 facts 写成确定事实；不确定项和禁用项不得写成旁白定论。",
+        "- 若资料包不是 ready，本章只能写准备稿或先回 `novel-research` 补证据。",
+    ]
+    for pack in packs:
+        path = pack.get("pack_path") or "未写 pack_path"
+        claims = pack.get("claims") or []
+        forbidden = pack.get("forbidden_items") or []
+        uncertain = pack.get("uncertain_items") or []
+        lines.append(
+            f"- **{pack.get('topic') or pack.get('topic_slug') or '未命名'}** "
+            f"[{pack.get('domain', 'other')}/{pack.get('risk_level', 'medium')}/{pack.get('status', 'draft')}] "
+            f"`{path}`；facts={len(claims)}"
+        )
+        if uncertain:
+            lines.append(f"  - 不确定项：{'；'.join(str(x) for x in uncertain[:3])}")
+        if forbidden:
+            lines.append(f"  - 禁用项：{'；'.join(str(x) for x in forbidden[:3])}")
+    return "\n".join(lines) + "\n"
+
+
+def ledger_excerpt_for_packet(ledger, limit=2600):
+    """写章包注入的状态账本聚焦视图：只给长期记忆（角色 / 设定事实 / 未收与已收线程），
+    丢掉逐章 `chapter_deltas` 大 blob（写下一章用不到，且几百章后会撑爆注入预算），改用计数替代。
+    保证无论写到第几百章，注入的"记忆"都聚焦在 canonical 状态而非历史流水。"""
+    if not isinstance(ledger, dict):
+        return json.dumps(ledger, ensure_ascii=False, indent=2)[:limit]
+    view = {k: v for k, v in ledger.items() if k != "chapter_deltas"}
+    deltas = ledger.get("chapter_deltas")
+    if isinstance(deltas, dict):
+        view["chapter_deltas_count"] = len(deltas)
+    text = json.dumps(view, ensure_ascii=False, indent=2)
+    if len(text) <= limit:
+        return text
+    return text[:limit].rstrip() + "\n...（账本较大已截断；canonical 状态优先，逐章明细见 审稿/state_ledger.json）"
+
+
+def load_revision_plan(root):
+    """读 修订/revision_plan.json（revision_planner 汇流 review/score/balance/feedback/simulate）。
+    缺失返回 None——修订回流是可选增强，无计划时静默不注入。"""
+    path = os.path.join(root, "修订", "revision_plan.json")
+    data = load_json(path, None)
+    return data if isinstance(data, dict) else None
+
+
+def revision_section_for_chapter(root, chapter):
+    """把 revision_plan 中命中本章的修订任务注入写章包，让汇流后的修订计划真正回流到下一轮
+    drafting——否则 revision_plan.json 只是个没人读的报告。无章号的全书级 P0 也提示一次。"""
+    plan = load_revision_plan(root)
+    if not plan:
+        return ""
+    tasks = [t for t in (plan.get("tasks") or []) if isinstance(t, dict)]
+    rank = {"P0": 0, "P1": 1, "P2": 2, "P3": 3}
+    mine = sorted((t for t in tasks if t.get("chapter") == chapter),
+                  key=lambda t: rank.get(t.get("priority"), 9))
+    global_p0 = [t for t in tasks if t.get("chapter") is None and t.get("priority") == "P0"]
+    if not mine and not global_p0:
+        return ""
+    lines = ["\n## 本章待处理修订项（来自 `修订/revision_plan.json`）",
+             "> review/score/balance/feedback/simulate 汇流的统一修订计划——**本章重写/精修须先消化这些**："]
+    for t in mine:
+        reason = (t.get("reason") or "").strip()
+        lines.append(
+            f"- [{t.get('priority')}] {t.get('title')}"
+            f"（{t.get('recommended_skill')}·{t.get('return_to_stage')}）"
+            + (f" — {reason}" if reason else ""))
+    if global_p0:
+        lines.append(
+            f"- ⚠️ 另有 {len(global_p0)} 项全书级 P0 修订（评分结论/无章号阻断），"
+            "详见 `修订/修订计划.md`，安排到对应阶段处理。")
+    return "\n".join(lines) + "\n"
+
+
+CAST_ARC_REFERENCE = "skills/novel-craft/references/群像与角色弧光.md"
+
+
+def on_stage_names(names, title, beat_text):
+    """Names whose character appears in this chapter's title/outline text."""
+    return [n for n in names if n and (n in title or n in beat_text)]
+
+
+def current_arc_stage(stages, chapter):
+    """Pick the active弧光阶段：第一个 by_chapter >= 当前章的阶段；都过了取末阶段。"""
+    parsed = []
+    for s in stages or []:
+        try:
+            by = int(s.get("by_chapter"))
+        except (TypeError, ValueError):
+            continue
+        parsed.append((by, str(s.get("stage") or "")))
+    if not parsed:
+        return ""
+    parsed.sort()
+    for by, stage in parsed:
+        if chapter <= by:
+            return f"（目标 ≤第{by}章）{stage}"
+    return f"（已过末阶段）{parsed[-1][1]}"
+
+
+def cast_arc_section(root, chapter, title, beat_text, char_voices):
+    """注入在场角色的弧光阶段（来自可选 设定/角色弧光.json）+ ≥3 人同台的群像辨识度提醒。
+
+    无 角色弧光.json 也无 ≥3 同台时返回空串——纯增量、不强制建文件。
+    """
+    arc_data = load_json(os.path.join(root, "设定", "角色弧光.json"), {}) or {}
+    arc_chars = arc_data.get("characters", {}) if isinstance(arc_data, dict) else {}
+    on_stage_arc = on_stage_names(list(arc_chars.keys()), title, beat_text)
+    on_stage_all = set(on_stage_arc) | set(on_stage_names(list(char_voices.keys()), title, beat_text))
+    lines = []
+    if on_stage_arc:
+        lines.append("\n## 在场角色弧光（写时推进）")
+        for name in on_stage_arc:
+            c = arc_chars.get(name) or {}
+            bits = []
+            for key, label in (("function", "功能"), ("want", "want"), ("need", "need"), ("lie", "lie")):
+                if c.get(key):
+                    bits.append(f"{label}={c[key]}")
+            lines.append(f"- **{name}**：{'；'.join(bits) if bits else '（弧光字段未填）'}")
+            stage = current_arc_stage(c.get("arc_stages"), chapter)
+            if stage:
+                lines.append(f"  - 当前弧光阶段：{stage}")
+            if c.get("distinct_tag"):
+                lines.append(f"  - 辨识度锚：{c['distinct_tag']}")
+        lines.append(f"- 本章至少推进其中一人的弧光：用「与过去相反的选择」兑现，别作者口头宣布（见 `{CAST_ARC_REFERENCE}`）。")
+    if len(on_stage_all) >= 3:
+        lines.append("\n## 群像辨识度提醒（本章 ≥3 名角色同台）")
+        lines.append(f"- 同台有名角色：{'、'.join(sorted(on_stage_all))}")
+        lines.append(f"- 给每人「只有他会做的反应」，别让配角沦为应声虫/背景板；功能/声音/标记三维互不撞车（见 `{CAST_ARC_REFERENCE}`）。")
+    if not lines:
+        return ""
+    return "\n".join(lines) + "\n"
+
+
 def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reader_contract=False, step="full"):
     meta = load_json(os.path.join(root, "_meta.json"), {})
     if not meta:
@@ -661,6 +897,17 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
     for ref in scene_guide_references(scene_matches):
         if ref not in source_paths:
             source_paths.append(ref)
+    female_active = female_fiction_active(root, meta)
+    if female_active and FEMALE_FICTION_REFERENCE not in source_paths:
+        source_paths.append(FEMALE_FICTION_REFERENCE)
+    cast_section = cast_arc_section(root, chapter, title, beat_text, char_voices)
+    if cast_section and CAST_ARC_REFERENCE not in source_paths:
+        source_paths.append(CAST_ARC_REFERENCE)
+    research_packs = research_packs_for_chapter(root, chapter, outline_item)
+    for pack in research_packs:
+        rel = pack.get("pack_path")
+        if rel and rel not in source_paths:
+            source_paths.append(rel)
     # 在分支前先算好：editor 子任务的 step_note（下方）也要引用它，否则 editor 步会
     # 触发 "cannot access local variable 'delta_path'"。
     delta_path = f"审稿/state_delta_第{chapter:02d}章.json"
@@ -712,6 +959,8 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
 {clip(contract_text, 1600) if contract_text else "（缺 `设定/读者契约.md`；至少按 reader-contract.md 模板补齐题旨、读者承诺、文学质感和禁偏清单。）"}
 """
     special_scene_sections = scene_guide_sections(scene_matches)
+    female_section = female_fiction_section() if female_active else ""
+    research_section = research_pack_section(research_packs)
     waiver_section = ""
     if demo_waiver:
         waiver_section = f"""
@@ -719,6 +968,7 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
 - {demo_waiver['id']} [{demo_waiver['type']}] {demo_waiver['reason']}
 - 风险：缺少已通过 Demo gate 的文风锚点、读者承诺和禁止漂移项；本任务包只能作为准备包，不能替代正式批量写章 gate。
 """
+    revision_section = revision_section_for_chapter(root, chapter)
     loop_section = ""
     if pending_loops:
         loop_section = "\n## 剧情环提醒（伏笔/钩子）\n"
@@ -729,7 +979,20 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
     # 补"固定窗口够不着久远相关旧章"的长程依赖盲区（写第230章想得起第47章埋的伏笔）。
     retrieval_section = ""
     if relevant_chapters is not None and chapter > 4:
-        query = " ".join(str(x) for x in (outline_item.get("raw") or outline_item.get("beat") or "", title) if x)
+        # query 富化：除本章章纲外，并入未收线程/伏笔环/在场角色名，
+        # 让 BM25 能召回"久远但仍相关"的旧章（光靠章纲一行信号太弱，长程伏笔召不回）。
+        extra_terms = []
+        for L in pending_loops[:5]:
+            extra_terms.append(str(L.get("title") or ""))
+            extra_terms.append(str(L.get("description") or ""))
+        for ot in (ledger.get("open_threads") or [])[:8]:
+            extra_terms.append(str(ot.get("thread") or ""))
+        extra_terms.extend(name for name, _ in active_voices)
+        query = " ".join(
+            str(x) for x in
+            ([outline_item.get("raw") or outline_item.get("beat") or "", title] + extra_terms)
+            if x and str(x).strip()
+        )
         try:
             hits = relevant_chapters(root, chapter, query, k=3, window=3)
         except Exception:
@@ -740,16 +1003,22 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
             for h in hits:
                 retrieval_section += f"- **第{h['chapter']:02d}章**（相关度 {h['score']}）：{h['excerpt'][:140]}…\n"
 
+    concl_path = f"审稿/state_verify_第{chapter:02d}章.json"
     live_check_section = ""
     if live_check:
         live_check_section = f"""
 ## 边写边自检闭环（已选择）
-- 本章交付不只写正文：必须同步产出 `章节/第{chapter:02d}章.md` 和 `{delta_path}`。
-- 写完正文和状态增量后，立即执行：
-```bash
-python3 skills/novel/scripts/post_write.py "{root}" --chapter 第{chapter:02d}章
+- 本章交付不只写正文：必须同步产出 `章节/第{chapter:02d}章.md`、`{delta_path}`，以及对账结论 `{concl_path}`。
+- 对账结论是你对「正文与状态增量是否一致」的自检判断，最简形如（hash 不用填，脚本会按当前正文自动盖章）：
+```json
+{{"chapter": {chapter}, "status": "ok", "notes": "delta 与正文一致；若有差异写明"}}
 ```
-- `post_write.py` 会跑状态账本对账、百科更新、逻辑哨兵和力量体系自检；任一硬闸失败时先修正文或状态增量，再重跑，不要手动把进度标 ✅。
+- 写完三样后，一条命令跑完自检并合并账本：
+```bash
+python3 skills/novel/scripts/post_write.py "{root}" --chapter 第{chapter:02d}章 --conclusion "{root}/{concl_path}"
+```
+- `post_write.py` 会跑读者契约/账本对账/百科/逻辑哨兵/力量体系/时间线自检，全过后**自动合并状态账本再标进度 ✅**——「进度✅」与「账本已合并」同生共死，不会再在 review/export 阶段报 STATE-LEDGER-MISSING。任一硬闸失败时先修正文或状态增量再重跑，不要手动标 ✅。
+- 若不带 `--conclusion` 跑（不推荐），脚本只做自检不合并账本，会明确警告账本未合并，需另行合并后才能过 review/export。
 """
     batch_section = ""
     if live_check and batch_interval > 0:
@@ -793,7 +1062,7 @@ python3 skills/novel-review/scripts/mechanical_check.py "{root}" --range {start}
 
 ## 上一章承接
 {previous_chapter_excerpt(root, chapter)}
-{retrieval_section}{loop_section}{voice_section}
+{revision_section}{retrieval_section}{loop_section}{voice_section}{cast_section}
 ## Demo 风格锚点
 - 来源章节：{demo_anchor.get("source_chapter", "未指定")}
 - 风格要点：{demo_anchor.get("summary", "未填写；写前先从 Demo 章抽取")}
@@ -803,12 +1072,14 @@ python3 skills/novel-review/scripts/mechanical_check.py "{root}" --range {start}
 {waiver_section}
 {contract_section}
 {special_scene_sections}
+{female_section}
+{research_section}
 {live_check_section}
 {batch_section}
 
-## 当前状态账本摘录
+## 当前状态账本摘录（canonical 长期记忆；逐章明细见 state_ledger.json）
 ```json
-{json.dumps(ledger, ensure_ascii=False, indent=2)[:2400]}
+{ledger_excerpt_for_packet(ledger)}
 ```
 
 ## 写作要求

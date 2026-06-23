@@ -40,6 +40,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("source_novel")
     ap.add_argument("--ratio", type=float, default=5.0, help="扩写倍数（默认 5×）")
+    ap.add_argument("--genre", default=None,
+                    help="原作题材；命中力量题材（穿越/系统流/修仙/玄幻…）时 seed power_system_registry 脚手架")
     ap.add_argument("--target-platform", default="跨平台")
     ap.add_argument("--purpose", default=None,
                     help="小说用途：传统小说/漫剧源书/微短剧源书/短读/短篇/出海译制底稿/自定义")
@@ -165,6 +167,10 @@ def main():
          "- [ ] 划章 + 映射\n- [ ] 章纲（用户已确认）\n- [ ] 书名（如需）\n"
          "- [ ] Demo 前 2 章审过\n- [ ] 续扩剩余章节\n- [ ] 一致性回扫\n- [ ] 导出\n"),
     ]
+    # 一致性注册表脚手架（B1）：派生作品也要有 character_guardrails / power_system_registry，
+    # 否则 novel-wiki 的护栏 / 力量体系机检在扩写作品上静默 no-op。
+    from consistency_scaffold import consistency_registry_files
+    skeletons += consistency_registry_files(args.genre)
     for name, content in skeletons:
         path = os.path.join(out_root, name)
         os.makedirs(os.path.dirname(path), exist_ok=True)

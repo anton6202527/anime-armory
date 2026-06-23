@@ -56,6 +56,8 @@
 - [ ] **命名不要混**：多张可喂给图 AI 的参考 PNG 叫「定妆组」；单张合成总览才叫「三视图 / 设定表」
 - [ ] 短线配角 / 路人：仍按标准三视图建人物定妆；若只是人群剪影、无明确身份且不会复用，按场景元素处理，不建角色定妆
 
+**定妆库两层：中性锚（锁身份）/ 风格氛围（锁调性）（①·机检 `image_qc.face_anchor_lighting_audit`）**：业界做定妆的铁律是**平光、中性背景**——`face_anchor_refs` 这类**身份锚**必须是中性平光纯背景板，否则模型会**把光当身份烤进脸**（戏剧光/烛光/逆光的氛围板做脸锚，换个光就"换了个人"，正是定妆阶段脸漂的成因之一）。带戏剧光的好看图归**风格氛围层**：另存、用 `layer:"atmosphere"`（或 `lighting:"dramatic"`）标注，只用来锁画面调性 / 给导演看 mood，**绝不进 `face_anchor_refs`**。脸锚若误用氛围板，`image_qc` 名/标签启发命中（烛光/暗调/逆光/夜景…或显式 `layer:atmosphere`）记 warn，应换中性平光板。反过来，中性锚显式标 `lighting:"neutral"` / `layer:"identity"` 可盖过命名启发。
+
 **脸部锚信噪比门（①·机检 `image_qc.weak_face_anchor` / `weak_face_anchor_core`）**：`face_anchor_refs` / `表情_*` / `脸部特写`
 这类**应当紧裁**的脸锚，2026 锁脸教头一致要求 **≥1024px、脸占画面 30–50%**——脸太小=身份信号弱，喂给下游每镜
 都把脸漂带进去。`image_qc` 对已落档脸锚机检脸占比（<12%）+ 裁切短边（<768px），普通角色过弱记 warn；核心/长线角色过弱记 block，必须重出更紧的脸部
@@ -222,7 +224,7 @@
 ☐ 固定 seed pool 口径齐？  → 支持 seed 就传 registry 池内值；Codex/未暴露 seed 后端记 seed_effective=false，不宣称可复现（§二点五）
 ☐ 角色参考图数据库齐？     → `reference_atlas` 有基础视角/表情/动作状态；本镜只用 ready 图，planned 缺口写 reference_gap（§二）
 ☐ reference_plan 跑并落实？→ 核心/长线角色付费出图前必须跑 `reference_planner.py <作品根> 第N集`；把 recommended_references / distinct_anchors / shot_scheduling / controlnet / 升档建议落进逐镜 prompt，未落实会被 `参考规划落实` BLOCK
-☐ 关键非脸资产语义复核？→ 场景/道具/独立服装/VFX 已登记且进入 scene/multimodal QC 时，full QC 环境需跑 DINO/CLIP-I 语义漂移；缺嵌入后端会 block，需补环境重跑，人工复核记录只能辅助定位，不能替代 video/compose 前的 full QC gate
+☐ 关键非脸资产语义复核？→ 场景/道具/武器/独立服装/VFX 已登记且进入 scene/multimodal QC 时，full QC 环境需跑 DINO/CLIP-I 语义漂移；缺嵌入后端会 block，需补环境重跑，人工复核记录只能辅助定位，不能替代 video/compose 前的 full QC gate
 ☐ 参考图入参预算齐？       → 每镜写 selected/dropped、后端图数上限、控制图/遮罩/区域槽位；剔除低清、非 ready、水印/Logo/无关文字/NSFW 参考
 ☐ 跨集成长阶段齐？         → 长线角色升级走 `evolution_profile`，同一张脸不变，只升级衣服/法宝/气场/姿态；新阶段从上一阶段锚图派生
 ☐ 核心角色资产包齐？       → 长线/主角有 `设定库/character_assets/.../manifest.json`，reference/prompts/lora/voice/adapters/qc 与缺口可追溯

@@ -91,6 +91,35 @@ def advisory_verdict(measured: str) -> str:
     return measured
 
 
+def offset_remediation(measured: str) -> Optional[Dict[str, Any]]:
+    """口型偏移修复阶梯（cheap-fix-first）——补 AV1「测了偏移却不告诉怎么便宜修」的缺口。
+
+    2026 后期对口型（LatentSync 保身份最好 / MuseTalk 近实时 / Wav2Lip 同步稳）已成熟，
+    `n2d-video/scripts/lipsync_pass.py --apply` 能逐 clip 修口型而**不重出整 clip**——比回
+    video_prompt 重渲染便宜一个量级。故 AV1 检出偏移时，修复阶梯**先 pass 后重出**。
+
+    severity_measured ∈ {warn, block} → 返回 {return_to_stage, rerun_scope, remediation}；
+    ok/inconclusive（没测到真偏移）→ None（不乱给修法）。纯函数·可测。"""
+    if measured not in ("warn", "block"):
+        return None
+    return {
+        "return_to_stage": "video",
+        "rerun_scope": (
+            "口型↔配音偏移修复（cheap-fix-first）：①先跑 "
+            "python3 skills/n2d-video/scripts/lipsync_pass.py <作品根> <集> --apply "
+            "做后期对口型（LatentSync 优先·保漫剧脸身份，不重出整 clip，最省）；"
+            "②修复 pass 也救不回（无可用本地工具 / 嘴型已严重错）才回 n2d-video 用"
+            "首尾双帧 + 口型同步后端（Kling/Veo）重出该 clip（贵）。"
+        ),
+        "remediation": [
+            {"step": 1, "action": "lipsync_pass", "cost": "cheap",
+             "cmd": "python3 skills/n2d-video/scripts/lipsync_pass.py <作品根> <集> --apply"},
+            {"step": 2, "action": "regenerate_clip", "cost": "expensive",
+             "note": "首尾双帧 + 口型同步后端重出整 clip，仅当后期修复救不回"},
+        ],
+    }
+
+
 # ---------- 能力探针 ----------
 
 def _probe_ffmpeg() -> bool:
@@ -178,7 +207,8 @@ def _band_rows(clips: Sequence[dict], fps: float, warn_ms: float, block_ms: floa
         verdict = advisory_verdict(measured)
         if verdict == "ok" and measured == "ok":
             continue  # 同步良好，不入清单
-        rows.append({
+        rem = offset_remediation(measured)
+        row = {
             "clip": str(c.get("clip") or c.get("id") or "?"),
             "offset_frames": round(float(off), 2),
             "offset_ms": round(offset_ms(float(off), clip_fps), 1),
@@ -189,8 +219,12 @@ def _band_rows(clips: Sequence[dict], fps: float, warn_ms: float, block_ms: floa
                 f"口型↔配音偏移 {offset_ms(float(off), clip_fps):.0f}ms"
                 + ("（SyncNet 低置信·拿不准，交人判）" if measured == "inconclusive"
                    else "（疑似严重不同步）" if measured == "block" else "")
+                + ("　修复优先：先跑 lipsync_pass 后期对口型（省），救不回再重出 clip" if rem else "")
             ),
-        })
+        }
+        if rem:
+            row.update(rem)  # cheap-fix-first：return_to_stage=video + rerun_scope + remediation 阶梯
+        rows.append(row)
     return rows
 
 

@@ -121,8 +121,8 @@ python3 skills/novel-wiki/scripts/foreshadow_ledger.py "<作品根>" scan --thro
 ## 与家族其它 Skill 的联动
 
 - **novel-create / continue**：在写新章前，先跑一次 `logic_sentry` 确认前置状态；新章埋下/回收伏笔时用 `foreshadow_ledger.py plant|payoff` 记一笔。
-- **novel-balance**：它承诺的「烂尾预警」一直缺真实数据源——现在 `foreshadow_ledger.py scan` 产出的 `审稿/foreshadow_report.json`（超期高价值伏笔 + 回收率）就是这个数据源；balance 读它即可把"哪些大伏笔要烂尾了"落到具体 `id`。
-- **novel-review**：作为"机检"环节的深度增强，由 `novel-review/scripts/consistency_audit.py` 一键串跑（建百科 → 逐章哨兵 → 汇总 `审稿/logic_alerts_summary.json`）；哨兵候选带 `auto` 标志，最终由人/LLM 定夺。`consistency_audit.py` 是顺带串跑伏笔巡检（`foreshadow_ledger.py scan --through <进度章>`）的天然位置——把 `审稿/foreshadow_report.json` 并进汇总即可；该挂接留给 novel-review，本 skill 不越界改它。
+- **novel-balance**：它承诺的「烂尾预警」数据源就是 `foreshadow_ledger.py scan` 产出的 `审稿/foreshadow_report.json`（超期高价值伏笔 + 回收率）。`pacing_analyzer.py` 已读它，在 `情节热力图_<日期>.md` 出「烂尾预警（伏笔回收）」一节并写进 `pacing_signals.json.烂尾预警`，把"哪些大伏笔要烂尾了"落到具体 `id`。
+- **novel-review**：作为"机检"环节的深度增强，由 `novel-review/scripts/consistency_audit.py` 一键串跑（建百科 → 逐章哨兵 → 汇总 `审稿/logic_alerts_summary.json`）；哨兵候选带 `auto` 标志，最终由人/LLM 定夺。`consistency_audit.py` 已把伏笔巡检接成子检测器 `foreshadow`：跑 `foreshadow_ledger.analyze(project)`（自动取已写最大章号为 `through`），落 `审稿/foreshadow_report.json` 并并进 `审稿/consistency_audit.json` 汇总，超期高价值伏笔记为阻断级 alert。
 
 ## 详细参考
 - 百科 + 告警字段定义、死亡候选规则、四类硬冲突（死人复活/弃置道具复用/位置跳变/数值漂移）：`references/entity-schema.md`

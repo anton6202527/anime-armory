@@ -18,6 +18,7 @@ _COMMON = os.path.join(_SKILLS, "novel", "_lib")
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from project_io import chapter_label, find_chapter_file, read_text  # noqa: E402
+from consistency_scaffold import resolve_character_card  # noqa: E402  同认 角色卡.md / 人物.md
 from keyword_banks import (  # noqa: E402  单一定义源
     PROMO_CONFLICT_KW as CONFLICT_KW,
     PROMO_EMOTION_KW as EMOTION_KW,
@@ -153,8 +154,8 @@ def extract_quotes(text):
 
 def extract_characters(project, text):
     names = []
-    card = os.path.join(project, "设定", "角色卡.md")
-    if os.path.exists(card):
+    card = resolve_character_card(project)
+    if card:
         card_text = read_text(card)
         for line in card_text.splitlines():
             for pat in (r"^#{1,4}\s*([\u4e00-\u9fff·]{2,6})\s*$",

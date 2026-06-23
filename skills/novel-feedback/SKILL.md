@@ -25,7 +25,7 @@ python3 skills/novel-feedback/scripts/ingest_reader_events.py "<作品根>" \
 产物：
 
 - `评分/reader_telemetry.jsonl`：规范化后的逐条事件。
-- `评分/reader_telemetry_summary.json`：章节级聚合，含完读率、弃读率、评论情绪线索、风险旗标。
+- `评分/reader_telemetry_summary.json`：章节级聚合，含完读率、弃读率、评论情绪线索、风险旗标；若输入含 `ab_test_id` / `variant_id` / `take_id`，会生成 `experiments.groups` 与 `best_by_ab_test`。
 - `评分/真实读者反馈_<YYYY-MM-DD>.md`：给人读的掉点/优先修订清单。
 
 ## 字段兼容
@@ -40,12 +40,16 @@ python3 skills/novel-feedback/scripts/ingest_reader_events.py "<作品根>" \
 | 直接指标 | `starts` / `completes` / `drops` / `views` / `completion_rate` / `drop_rate` / `avg_read_seconds` |
 | 评论 | `comment` / `评论` / `text` |
 | 情绪 | `sentiment` / `情绪`，可填 `positive` / `negative` / `neutral` |
+| A/B 实验 | `ab_test_id` / `experiment_id` / `AB测试` |
+| 实验版本 | `variant_id` / `variant` / `版本` / `组别` |
+| 稿件/素材版本 | `take_id` / `take` / `稿件版本` / `素材版本` |
 
 ## 判读铁律
 
 - 权重序：真实读者反馈 > 自有投放战绩 > `novel-simulate` 虚拟试读 > 外部公榜泛化。
 - 单章低完读、弃读高、负面评论集中，只说明“这一章读端有伤口”，不自动证明设定或文学性错误；需要回 `novel-review` / `novel-balance` 定因。
 - 样本量低时报告会标 `low_sample`，不得把小样本波动当硬结论。
+- A/B 只在同一 `ab_test_id` 内比较；`take_id` 用来把结果归因到具体章节稿/开头版本/投放素材，不要混到全书评价里。
 
 ## 常见错误
 
@@ -54,3 +58,4 @@ python3 skills/novel-feedback/scripts/ingest_reader_events.py "<作品根>" \
 | 把评论情绪当最终审稿结论 | 评论只定位痛点，定因还要 review/balance |
 | 只看均值不看章节掉点 | 重点看 weakest_chapters 和 flags |
 | 真实反馈与模拟反馈冲突时平均处理 | 真实反馈优先；模拟只解释可能原因 |
+| A/B 版本没有 take_id | 补 `take_id`，否则无法追溯是哪次修订或素材导致数据变化 |

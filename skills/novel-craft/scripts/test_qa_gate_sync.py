@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""漂移护栏：novel/_lib/qa_gate.py 与 novel-craft/scripts/qa_gate.py 是同一份 gate 逻辑
-的两份 vendored 拷贝，**只允许 contract 的 import 行不同**（一个绑 novel_contract，
-一个绑 contract）。其余任何一行不一致即判失败，防止改一处忘另一处导致 gate 行为分叉。
+"""单一真值源护栏：gate 逻辑只允许有一份实现（novel/_lib/qa_gate.py）；
+novel-craft/scripts/qa_gate.py 必须是薄转发 shim，把 _lib 的公共符号原样再导出，
+不得自己再 fork 一份 gate 逻辑（历史上是 849 行 vendored 拷贝，已收敛）。
 
 从脚本自身目录跑：
     cd skills/novel-craft/scripts && python3 -m pytest test_qa_gate_sync.py
 """
+import importlib.util
 import os
 import unittest
 
@@ -15,27 +16,45 @@ REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 CRAFT = os.path.join(REPO, "skills", "novel-craft", "scripts", "qa_gate.py")
 LIB = os.path.join(REPO, "skills", "novel", "_lib", "qa_gate.py")
 
-# 允许差异的行：contract 模块来源（vendoring 必然不同）
-ALLOWED_DIFF = {
-    "from novel_contract import normalize_rights_status, parse_regions",
-    "from contract import normalize_rights_status, parse_regions",
-}
+# 消费方真正用到的公共 API；shim 必须把这些原样转发过来。
+PUBLIC_API = (
+    "collect_gate_status",
+    "format_gate_status",
+    "validate_review_report_schema",
+    "validate_score_report_schema",
+    "missing_score_report_scope",
+)
 
 
-class QaGateSyncTest(unittest.TestCase):
-    def test_two_copies_identical_except_contract_import(self):
-        craft = open(CRAFT, encoding="utf-8").read().splitlines()
-        lib = open(LIB, encoding="utf-8").read().splitlines()
-        self.assertEqual(len(craft), len(lib),
-                         "两份 qa_gate 行数不同——已发生结构性漂移，请同步")
-        for i, (a, b) in enumerate(zip(craft, lib), 1):
-            if a == b:
-                continue
-            self.assertTrue(
-                a.strip() in ALLOWED_DIFF and b.strip() in ALLOWED_DIFF,
-                f"qa_gate 第 {i} 行非法漂移：\n  craft: {a!r}\n  lib:   {b!r}\n"
-                f"两份拷贝只允许 contract import 行不同；其余必须逐字同步。",
-            )
+def _load(name, path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+class QaGateSingleSourceTest(unittest.TestCase):
+    def test_craft_is_thin_shim(self):
+        text = open(CRAFT, encoding="utf-8").read()
+        # 真正的 gate 逻辑（数百行）只能在 _lib；craft 侧必须是小转发文件。
+        self.assertLess(len(text.splitlines()), 60,
+                        "novel-craft/scripts/qa_gate.py 又变胖了——gate 逻辑应只在 _lib，这里只转发")
+        # 不得自己重新定义 gate 函数（应来自转发）。
+        self.assertNotIn("def collect_gate_status", text,
+                         "shim 不应自行定义 gate 逻辑；应从 novel/_lib/qa_gate.py 转发")
+
+    def test_lib_is_real_source(self):
+        lib_text = open(LIB, encoding="utf-8").read()
+        self.assertIn("def collect_gate_status", lib_text,
+                      "单一真值源 novel/_lib/qa_gate.py 必须含真正的 gate 实现")
+
+    def test_shim_reexports_public_api(self):
+        craft = _load("craft_qa_gate", CRAFT)
+        for name in PUBLIC_API:
+            self.assertTrue(hasattr(craft, name),
+                            f"shim 缺转发公共符号：{name}")
+            self.assertTrue(callable(getattr(craft, name)),
+                            f"转发的 {name} 不可调用")
 
 
 if __name__ == "__main__":

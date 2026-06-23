@@ -187,6 +187,22 @@ class ExportContractTest(unittest.TestCase):
             self.assertNotEqual(got.returncode, 0)
             self.assertIn("REVIEW-MISSING", got.stderr)
 
+    def test_legacy_cross_line_format_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project = os.path.join(tmp, "proj")
+            os.makedirs(project, exist_ok=True)
+            with open(os.path.join(project, "_meta.json"), "w", encoding="utf-8") as f:
+                json.dump({"source_title": "源书", "kind": "expand", "outputs": ["txt"]}, f, ensure_ascii=False)
+            write_chapter(project)
+            legacy_format = "hand" + "off"
+            got = subprocess.run(
+                [sys.executable, EXPORT, project, "--formats", legacy_format, "--ignore-qa-gate"],
+                cwd=REPO,
+                capture_output=True, text=True,
+            )
+            self.assertNotEqual(got.returncode, 0)
+            self.assertIn("未知导出格式", got.stderr)
+
     def test_ignore_qa_gate_logs_waiver(self):
         with tempfile.TemporaryDirectory() as tmp:
             project = os.path.join(tmp, "proj")

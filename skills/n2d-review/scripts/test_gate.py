@@ -194,6 +194,56 @@ def test_route_frame_capability_high_risk_endframe_blocks(tmp_path):
     assert any(f["dim"] == "首尾帧能力" and f["sev"] == "block" for f in gate.findings)
 
 
+def test_spectacle_sequence_plan_missing_blocks(tmp_path):
+    root = _write_storyboard_with_clips(
+        tmp_path,
+        [{"id": "Clip 1", "template": "fight_exchange", "scene": "沈念挥剑命中追兵"}],
+    )
+
+    gate.check_spectacle_sequence_plan(root, "第1集")
+
+    assert any(f["dim"] == "高动态序列总账" and f["sev"] == gate.BLOCK for f in gate.findings)
+
+
+def test_spectacle_sequence_plan_covering_clip_passes(tmp_path):
+    root = Path(_write_storyboard_with_clips(
+        tmp_path,
+        [{"id": "Clip 1", "template": "fight_exchange", "scene": "沈念挥剑命中追兵"}],
+    ))
+    prod = root / "生产数据"
+    prod.mkdir(parents=True, exist_ok=True)
+    (prod / "spectacle_sequence_plan_第1集.json").write_text(json.dumps({
+        "kind": "n2d_spectacle_sequence_plan",
+        "sequences": [{"sequence_id": "SEQ_001", "clip_order": ["Clip_01"]}],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_spectacle_sequence_plan(str(root), "第1集")
+
+    assert not any(f["dim"] == "高动态序列总账" for f in gate.findings)
+
+
+def test_route_execution_recipe_missing_blocks():
+    gate.check_route_execution_recipe({"clip_id": "Clip_01"}, "routes.json", 1)
+
+    assert any(f["dim"] == "执行配方" and f["sev"] == gate.BLOCK for f in gate.findings)
+
+
+def test_route_execution_recipe_complete_passes():
+    gate.check_route_execution_recipe({
+        "clip_id": "Clip_01",
+        "execution_recipe": {
+            "frame_inputs": {"first_frame": "a.png", "consumption_mode": "first_last", "native_timeline_frames": []},
+            "reference_inputs": {"characters": [], "assets": [], "max_reference_images": 0, "motion_reference": {}},
+            "control_inputs": {"required": True, "manifest_path": "出视频/第1集/control/Clip_01/motion_control_manifest.json"},
+            "audio_inputs": {},
+            "fallback": {},
+            "capability_match": {},
+        },
+    }, "routes.json", 1)
+
+    assert not gate.findings
+
+
 # ── 表情跨度结构化闸门（finding #1：跨情绪近景必须首尾双帧） ─────────────────────────
 def _clip(span=None, *, need_end=True, lens="CU 50mm", template="dialogue_closeup", desc="脸部特写"):
     cont = {"start_state": "a", "end_state": "b", "transition": "硬切", "need_endframe": need_end}
@@ -529,7 +579,7 @@ def test_native_subject_backend_with_slots_escapes_block():
     assert not any("同框" in str(f["msg"]) for f in gate.findings)
 
 
-# ── ① 长线剧 × 无持久主体后端 → 建议升原生主体/主体库（advisory·治跨集脸漂累积）──
+# ── ① 长线剧 × 无持久主体后端 → 核心/常驻角色强制身份锁（治跨集脸漂累积）──
 def test_long_running_weak_backend_advises_on_codex_ep3():
     # Codex(无持久主体) + 到第3集 → 建议升档
     assert gate.long_running_weak_backend_advice("codex", 3, 1) is True
@@ -588,6 +638,26 @@ def test_long_running_weak_backend_blocks_lora_not_usable_on_current_backend(tmp
     root = _write_weak_backend_registry(tmp_path, lora={"status": "ready", "target_backends": ["sdxl"]})
     gate.check_long_running_weak_backend(root, "第3集")
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "生图AI一致性" for f in gate.findings)
+
+
+def test_long_running_weak_backend_blocks_unmarked_core_registry(tmp_path):
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True, exist_ok=True)
+    (shared / "identity_registry.json").write_text(json.dumps({
+        "characters": [{
+            "id": "CHAR_01",
+            "name": "沈念",
+            "scope": "未标注",
+            "forms": [{"form": "常态", "identity_adapters": {"image": {}}}],
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_long_running_weak_backend(str(tmp_path), "第3集")
+
+    assert any(
+        f["sev"] == gate.BLOCK and f["dim"] == "生图AI一致性" and "未标出核心/常驻角色" in f["msg"]
+        for f in gate.findings
+    )
 
 
 def test_two_char_shot_with_registered_degradation_escapes_even_on_single_ref():
@@ -1419,6 +1489,24 @@ def test_compliance_manifest_requires_rights_fields(tmp_path):
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "合规前置" and "rights.music_bgm" in f["loc"] for f in gate.findings)
 
 
+def test_compliance_manifest_allows_original_source_and_adaptation_without_evidence(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_identity_registry(tmp_path)
+    _good_compliance(root, status_overrides={
+        "rights.source_text": {"status": "original", "evidence": ""},
+        "rights.adaptation": {"status": "original", "evidence": ""},
+    })
+
+    gate.check_compliance_manifest(str(root), "第1集", "image")
+
+    assert not any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "合规前置"
+        and ("rights.source_text" in f["loc"] or "rights.adaptation" in f["loc"])
+        for f in gate.findings
+    )
+
+
 def test_compliance_manifest_blocks_placeholder_evidence_and_platform(tmp_path):
     root = tmp_path / "制漫剧" / "测试剧"
     _write_identity_registry(tmp_path)
@@ -1872,6 +1960,71 @@ def test_identity_registry_full_contract_passes(tmp_path):
     assert not any(f["dim"] == "资产身份注册层" for f in gate.findings)
 
 
+def test_identity_registry_production_core_character_requires_performance_signature(tmp_path):
+    root = Path(_write_identity_registry(tmp_path, make_assets=True))
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+
+    gate.check_identity_registry(str(root), require_reference_assets=True)
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "角色表演一致性" for f in gate.findings)
+
+
+def test_identity_registry_production_performance_signature_passes(tmp_path):
+    data = _identity_registry()
+    data["characters"][0]["forms"][0]["performance_signature"] = {
+        "micro_expressions": "先压眼再冷笑",
+        "habitual_gestures": "指尖轻敲杯沿",
+        "posture": "肩背挺直但步幅克制",
+        "speech_rhythm": "短句停顿明确",
+        "eye_reaction": "先避开后直视",
+    }
+    root = Path(_write_identity_registry(tmp_path, data, make_assets=True))
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+
+    gate.check_identity_registry(str(root), require_reference_assets=True)
+
+    assert not any(f["dim"] == "角色表演一致性" for f in gate.findings)
+
+
+def test_identity_registry_production_action_lead_requires_signature_equipment(tmp_path):
+    data = _identity_registry()
+    form = data["characters"][0]["forms"][0]
+    form["combat_role"] = True
+    form["performance_signature"] = {
+        "micro_expressions": "先压眼再冷笑",
+        "habitual_gestures": "左手按住剑柄",
+        "posture": "重心压低",
+        "speech_rhythm": "短句停顿明确",
+        "eye_reaction": "先看对手手腕再对视",
+    }
+    root = Path(_write_identity_registry(tmp_path, data, make_assets=True))
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+
+    gate.check_identity_registry(str(root), require_reference_assets=True)
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "主角装备库" for f in gate.findings)
+
+
+def test_identity_registry_production_signature_equipment_passes(tmp_path):
+    data = _identity_registry()
+    form = data["characters"][0]["forms"][0]
+    form["combat_role"] = True
+    form["signature_equipment"] = ["WEAPON_01"]
+    form["performance_signature"] = {
+        "micro_expressions": "先压眼再冷笑",
+        "habitual_gestures": "左手按住剑柄",
+        "posture": "重心压低",
+        "speech_rhythm": "短句停顿明确",
+        "eye_reaction": "先看对手手腕再对视",
+    }
+    root = Path(_write_identity_registry(tmp_path, data, make_assets=True))
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+
+    gate.check_identity_registry(str(root), require_reference_assets=True)
+
+    assert not any(f["dim"] == "主角装备库" for f in gate.findings)
+
+
 def test_asset_reference_registry_missing_is_blocked(tmp_path):
     root = tmp_path / "制漫剧" / "测试剧"
     root.mkdir(parents=True)
@@ -1987,6 +2140,81 @@ def test_asset_reference_registry_full_contract_passes(tmp_path):
     root = _write_asset_registry(tmp_path, make_assets=True)
     gate.check_asset_reference_registry(root, require_reference_assets=True)
     assert not any(f["dim"] == "资产引用注册层" for f in gate.findings)
+
+
+def test_asset_reference_registry_weapon_requires_weapon_profile(tmp_path):
+    data = _asset_registry()
+    data["assets"].append({
+        "id": "WEAPON_01",
+        "type": "weapon",
+        "name": "霜纹长剑",
+        "scope": "沈念第3集起主武器",
+        "reference_group": {"primary": "出图/共享/图片/定妆_霜纹长剑.png"},
+        "constraints": {"structure": "一柄一刃，直剑，银白剑身，青色剑穗"},
+        "drift_forbidden": ["blade_shape", "hilt", "palette"],
+    })
+    root = _write_asset_registry(tmp_path, data)
+
+    gate.check_asset_reference_registry(root, require_reference_assets=False)
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "主角装备库" and "weapon_profile" in f["loc"] for f in gate.findings)
+
+
+def test_asset_reference_registry_weapon_profile_passes(tmp_path):
+    data = _asset_registry()
+    data["assets"].append({
+        "id": "WEAPON_01",
+        "type": "weapon",
+        "name": "霜纹长剑",
+        "scope": "沈念第3集起主武器",
+        "owner": "CHAR_SHEN",
+        "reference_group": {
+            "primary": "出图/共享/图片/定妆_霜纹长剑.png",
+            "scale_reference": "出图/共享/图片/定妆_霜纹长剑_握持比例.png",
+        },
+        "weapon_profile": {
+            "design_intent": "清冷大气、女性主角本命剑，线条利落不花哨",
+            "silhouette": "直剑，窄长银白剑身，短护手，青色剑穗",
+            "scale": "全长约角色肩到膝，握柄一手半",
+            "material": "冷银金属剑身，玉白护手，青丝剑穗",
+            "palette": {"blade": "#D8E3E7", "hilt": "#E8EFEF", "accent": "#5BAFA8"},
+            "ornament_motif": "细霜纹沿剑脊，不出现龙纹/火焰纹",
+            "carry_modes": ["手持", "背负", "悬浮御剑"],
+            "combat_usage": "快刺、横斩、御剑飞行时剑身水平承重",
+            "vfx_signature": "青白冷光细线拖尾，短拖尾不爆炸",
+            "forbidden_drift": ["宽刃大刀", "金色剑身", "双刃分叉", "多把复制"],
+        },
+        "constraints": {"structure": "一柄一刃，直剑，银白剑身，青色剑穗"},
+        "drift_forbidden": ["blade_shape", "hilt", "palette"],
+    })
+    root = _write_asset_registry(tmp_path, data)
+
+    gate.check_asset_reference_registry(root, require_reference_assets=False)
+
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "主角装备库" for f in gate.findings)
+
+
+def test_asset_reference_registry_production_core_loc_requires_spatial_rules(tmp_path):
+    root = Path(_write_asset_registry(tmp_path, make_assets=True))
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+
+    gate.check_asset_reference_registry(str(root), require_reference_assets=True)
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "空间/场面调度一致性" for f in gate.findings)
+
+
+def test_asset_reference_registry_production_core_loc_spatial_rules_pass(tmp_path):
+    data = _asset_registry()
+    data["assets"][0]["floor_plan"] = "scene_floorplan/LOC_01.png"
+    data["assets"][0]["doors_windows"] = "门在画右后，窗在画左后"
+    data["assets"][0]["axis_rules"] = "床榻到门口横轴，正反打不越轴"
+    data["assets"][0]["screen_direction_rules"] = "沈念默认画左，柳娘子默认画右"
+    root = Path(_write_asset_registry(tmp_path, data, make_assets=True))
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+
+    gate.check_asset_reference_registry(str(root), require_reference_assets=True)
+
+    assert not any(f["dim"] == "空间/场面调度一致性" for f in gate.findings)
 
 
 def test_outfit_asset_missing_outfit_profile_warns(tmp_path):
@@ -2154,6 +2382,71 @@ def test_storyboard_special_template_full_contract_passes(tmp_path):
         }],
     )
     gate.check_storyboard_special_templates(root, "第1集")
+    assert not any(f["dim"] == "专项镜头模板" for f in gate.findings)
+
+
+def test_storyboard_fight_template_requires_action_choreography_fields(tmp_path):
+    root = _write_storyboard_with_clips(
+        tmp_path,
+        [{
+            "id": "EP01_CLIP04",
+            "label": "剑掌交锋",
+            "template": "fight_exchange",
+            "template_contract": {
+                "template_id": "fight_exchange",
+                "beats": ["起手", "出剑", "命中", "收势"],
+                "blocking": "沈念画左前出掌，追兵画右后举剑格挡",
+                "camera_rule": "中景起手接命中特写，不越轴",
+                "continuity_must": ["沈念始终画左", "剑光颜色不变"],
+                "negative": ["不要多人混战", "不要新增连击"],
+                "attack_path": "左下到右上",
+                "impact_frame": "掌风与剑刃相撞",
+                "action_scope": "一招一击",
+                "spatial_path": "画左前景到画右中景",
+                "readability_beats": ["命中帧停半拍"],
+                "force_direction": "沈念掌风推向画右",
+                "recovery_beat": "追兵后退半步",
+            },
+        }],
+    )
+
+    gate.check_storyboard_special_templates(root, "第1集")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "专项镜头模板" and "speed_curve" in f["msg"] for f in gate.findings)
+
+
+def test_storyboard_flight_template_full_action_contract_passes(tmp_path):
+    root = _write_storyboard_with_clips(
+        tmp_path,
+        [{
+            "id": "EP01_CLIP05",
+            "label": "腾云驾雾",
+            "template": "flight",
+            "template_contract": {
+                "template_id": "flight",
+                "beats": ["入云", "巡航", "穿云", "抵达"],
+                "blocking": "沈念立于祥云中央，山河在后景向画左后掠",
+                "camera_rule": "侧向跟飞，不环绕翻滚",
+                "continuity_must": ["祥云形态不变", "沈念姿态不变", "飞行方向左→右"],
+                "negative": ["不要人物变形", "不要云团换形状"],
+                "pose_lock": "负手立云，身体只小幅前倾",
+                "background_motion": "云层和山河向后高速流动",
+                "altitude_path": "由云层上方穿入云缝再升出",
+                "speed_curve": "巡航匀速→穿云加速→抵达减速",
+                "flight_path": "画左入画，沿云海弧线到画右上",
+                "altitude_curve": "高→低穿云→高",
+                "camera_path": "侧跟飞并轻微下压",
+                "spatial_path": "祥云沿画面左下到右上的弧线穿越云海",
+                "parallax_layers": ["前景云雾快", "远山慢"],
+                "mount_or_cloud_lock": "脚下祥云颜色/形态/大小锁定",
+                "readability_beats": ["穿云前给半拍预备", "出云时定住方向"],
+                "degrade_plan": "拆成起飞/巡航/穿云/抵达四镜，锁姿态动背景",
+            },
+        }],
+    )
+
+    gate.check_storyboard_special_templates(root, "第1集")
+
     assert not any(f["dim"] == "专项镜头模板" for f in gate.findings)
 
 
@@ -3069,6 +3362,53 @@ def test_video_clip_physical_interaction_motion_control_field_passes():
     assert not any(f["sev"] == gate.BLOCK and f["dim"] == "Motion Control" for f in gate.findings)
 
 
+def test_video_clip_high_action_requires_action_choreography_contract():
+    clip = GOOD_VIDEO_CLIP.replace(
+        "**模型路由**：shot_type=dialogue_closeup；primary_backend=dreamina；fallback_backends=seedance,kling；mode=image2video；native_audio_policy=none；identity_requirement=reference_group；risk_flags=mouth_visible；rationale=普通近景先用项目默认后端，失败切身份/运动更强后端；degrade_plan=改侧脸或反应镜，必要时切 seedance/kling 重跑\n",
+        "**模型路由**：shot_type=flight；primary_backend=seedance；fallback_backends=kling,dreamina；mode=image2video；native_audio_policy=none；identity_requirement=face_lock_or_reference_group；risk_flags=high_speed_motion,spatial_path_risk,action_choreography_required；rationale=御剑飞行高动作；degrade_plan=拆起飞/巡航/机动/抵达\n"
+        "**Motion Control / 物理交互控制**：level=required；manifest_path=出视频/第1集/control/Clip_01/motion_control_manifest.json；required_inputs=pose_sequence,depth_sequence,camera_path,parallax_layers；failure_modes=pose_drift,altitude_curve_drift；gate_policy=block_without_ready_manifest_or_degrade_only_manifest\n",
+    ).replace(
+        "身份锁定约束：读取 identity_registry.json；dreamina 回退首帧+尾帧+reference_group；保持 drift_forbidden=face_shape/hairstyle/outfit_palette；\n",
+        "物理交互约束：读取 motion_control_manifest.json；ready 时使用 pose/depth/camera_path/parallax_layers 控制资产；degrade_only 时拆起飞/巡航/机动/抵达；禁止只靠文本 prompt 猜高速飞行路径；\n"
+        "身份锁定约束：读取 identity_registry.json；dreamina 回退首帧+尾帧+reference_group；保持 drift_forbidden=face_shape/hairstyle/outfit_palette；\n",
+    ).replace(
+        "- [ ] 人物运动自然\n",
+        "- [ ] 人物运动自然\n- [ ] Motion Control / FeatureMelting：检查姿态、路径、视差层和高度曲线，无特征融化\n",
+    )
+
+    gate.check_video_clip_prompt_section("01_clips.md", clip)
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "动作编排" and "动作编排契约" in f["msg"] for f in gate.findings)
+
+
+def test_video_clip_high_action_choreography_contract_passes():
+    clip = GOOD_VIDEO_CLIP.replace(
+        "**环境交互**：残烛光在眼下轻轻跳动，床幔阴影随呼吸微动，前景托盘保持不位移。\n",
+        "**环境交互**：云层被剑光切开，前景云雾快速掠过，远山慢速后移。\n"
+        "**动作编排契约**：beats=入云/巡航/穿云/抵达；speed_curve=巡航匀速→穿云加速→抵达减速；spatial_path=画左入画沿云海弧线到画右上；camera_path=侧跟飞并轻微下压；readability_beats=穿云前半拍预备/出云定方向；degrade_plan=拆起飞/巡航/机动/抵达；flight_path=画左到画右上；altitude_curve=高→低穿云→高；pose_lock=负手立剑只小幅前倾；parallax_layers=前景云快/远山慢；mount_or_cloud_lock=青锋剑形态与脚下云团锁定。\n",
+    ).replace(
+        "**模型路由**：shot_type=dialogue_closeup；primary_backend=dreamina；fallback_backends=seedance,kling；mode=image2video；native_audio_policy=none；identity_requirement=reference_group；risk_flags=mouth_visible；rationale=普通近景先用项目默认后端，失败切身份/运动更强后端；degrade_plan=改侧脸或反应镜，必要时切 seedance/kling 重跑\n",
+        "**模型路由**：shot_type=flight；primary_backend=seedance；fallback_backends=kling,dreamina；mode=image2video；native_audio_policy=none；identity_requirement=face_lock_or_reference_group；risk_flags=high_speed_motion,spatial_path_risk,action_choreography_required；rationale=御剑飞行高动作；degrade_plan=拆起飞/巡航/机动/抵达\n"
+        "**Motion Control / 物理交互控制**：level=required；manifest_path=出视频/第1集/control/Clip_01/motion_control_manifest.json；required_inputs=pose_sequence,depth_sequence,camera_path,parallax_layers；failure_modes=pose_drift,altitude_curve_drift；gate_policy=block_without_ready_manifest_or_degrade_only_manifest\n",
+    ).replace(
+        "环境交互约束：残烛光在眼下轻跳，床幔阴影随呼吸微动；\n",
+        "环境交互约束：云层被剑光切开，前景云雾快速掠过，远山慢速后移；\n"
+        "动作编排约束：按 beats 执行巡航到穿云，只允许 speed_curve 所写加速，spatial_path/camera_path/altitude_curve 不改，readability_beats 在穿云前和出云后各停半拍；\n",
+    ).replace(
+        "身份锁定约束：读取 identity_registry.json；dreamina 回退首帧+尾帧+reference_group；保持 drift_forbidden=face_shape/hairstyle/outfit_palette；\n",
+        "物理交互约束：读取 motion_control_manifest.json；ready 时使用 pose/depth/camera_path/parallax_layers 控制资产；degrade_only 时拆起飞/巡航/机动/抵达；禁止只靠文本 prompt 猜高速飞行路径；\n"
+        "身份锁定约束：读取 identity_registry.json；dreamina 回退首帧+尾帧+reference_group；保持 drift_forbidden=face_shape/hairstyle/outfit_palette；\n",
+    ).replace(
+        "- [ ] 人物运动自然\n",
+        "- [ ] 人物运动自然\n- [ ] 动作编排：检查 speed_curve/spatial_path/camera_path/readability_beats 与高度曲线\n- [ ] Motion Control / FeatureMelting：检查姿态、路径、视差层和高度曲线，无特征融化\n",
+    )
+
+    gate.check_video_clip_prompt_section("01_clips.md", clip)
+
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "动作编排" for f in gate.findings)
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "Motion Control" for f in gate.findings)
+
+
 def test_video_clip_native_audio_opt_in_requires_low_risk_no_speech():
     clip = GOOD_VIDEO_CLIP.replace(
         "**原生音画策略**：audio_intent=none；risk=low；mouth_visible=no；speech_policy=no_native_speech；compose_policy=丢弃；review=生成后确认无原生人声",
@@ -3218,6 +3558,244 @@ def test_native_av_physical_contract_passes_when_fields_present(tmp_path):
     assert not any(f["dim"] == "原生音画物理一致性" for f in gate.findings)
 
 
+def test_native_av_physical_contract_required_for_mixed_native_audio(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n- 制作模式: 配音先行\n- 视频原生音轨: 低音量混入环境声\n", encoding="utf-8")
+
+    gate.check_native_av_physical_contract(str(root), "第1集", "## 原生音画 opt-in 清单\naudio_intent=ambience", "00_总览.md")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "原生音画物理一致性" and "物理一致性契约" in f["msg"] for f in gate.findings)
+
+
+def test_native_av_physics_sidecar_required_when_contract_present(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 制作模式: 原生音画\n", encoding="utf-8")
+
+    gate.check_native_av_physics_sidecar(str(root), "第1集")
+
+    assert any(
+        f["sev"] == gate.BLOCK and f["dim"] == "原生音画物理一致性" and "sidecar" in f["msg"]
+        for f in gate.findings
+    )
+
+
+def test_native_av_physics_sidecar_required_for_mixed_ambience(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n- 制作模式: 配音先行\n- 视频原生音轨: 低音量混入环境声\n", encoding="utf-8")
+
+    gate.check_native_av_physics_sidecar(str(root), "第1集")
+
+    assert any("sidecar" in f["msg"] for f in gate.findings)
+
+
+def test_native_av_physics_sidecar_validates_ambience_source_and_reverb(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n- 制作模式: 配音先行\n- 视频原生音轨: 低音量混入环境声\n", encoding="utf-8")
+    (prod / "native_av_physics_第1集.json").write_text(json.dumps({
+        "kind": gate.NATIVE_AV_PHYSICS_KIND,
+        "clips": [{
+            "clip_id": "Clip_01",
+            "audio_intent": "ambience",
+            "sound_source": {"source": "雨打窗棂", "visible_evidence": "窗外雨丝可见"},
+            "spatial_acoustics": {"space_id": "LOC_01", "distance": "wide", "reverb_profile": "stone_room"},
+            "post_policy": {"compose_policy": "低音量混入环境声"},
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_native_av_physics_sidecar(str(root), "第1集")
+
+    assert not any(f["dim"] == "原生音画物理一致性" for f in gate.findings)
+
+
+def test_native_av_physics_sidecar_blocks_missing_speaker_evidence(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 制作模式: 原生音画\n", encoding="utf-8")
+    (prod / "native_av_physics_第1集.json").write_text(json.dumps({
+        "kind": gate.NATIVE_AV_PHYSICS_KIND,
+        "clips": [{
+            "clip_id": "Clip_01",
+            "audio_intent": "native_speech",
+            "speaker_source": {"character_id": "CHAR_01", "on_screen": True},
+            "lip_sync": {"policy": "match_dialogue"},
+            "spatial_acoustics": {"space_id": "LOC_01", "distance": "close", "reverb_profile": "small_room"},
+            "post_policy": {"compose_policy": "保留原片音轨"},
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_native_av_physics_sidecar(str(root), "第1集")
+
+    assert any("mouth_visible=true" in f["msg"] for f in gate.findings)
+    assert any("dialogue_ref" in f["msg"] for f in gate.findings)
+
+
+def test_native_av_physics_sidecar_passes_valid_native_speech(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 制作模式: 原生音画\n", encoding="utf-8")
+    (prod / "native_av_physics_第1集.json").write_text(json.dumps({
+        "kind": gate.NATIVE_AV_PHYSICS_KIND,
+        "clips": [{
+            "clip_id": "Clip_01",
+            "audio_intent": "native_speech",
+            "speaker_source": {
+                "character_id": "CHAR_01",
+                "on_screen": True,
+                "mouth_visible": True,
+                "dialogue_ref": "脚本/第1集/voiceover.txt#L10",
+            },
+            "lip_sync": {"policy": "native_dialogue_match"},
+            "action_sounds": [{
+                "action": "抬手碰杯",
+                "sound": "瓷杯轻响",
+                "visible_evidence": "杯子在画内接触桌面",
+                "timing": "2.1s",
+            }],
+            "spatial_acoustics": {"space_id": "LOC_01", "distance": "close", "reverb_profile": "small_room"},
+            "post_policy": {"compose_policy": "保留原片音轨"},
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_native_av_physics_sidecar(str(root), "第1集")
+
+    assert not any(f["dim"] == "原生音画物理一致性" for f in gate.findings)
+
+
+def test_generation_recipe_evidence_blocks_missing_release_fields(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    (prod / "production_events.jsonl").write_text(json.dumps({
+        "episode": "第1集",
+        "stage": "image",
+        "event": "generation",
+        "generation": {"asset": "出图/第1集/图片/Clip_01.png", "status": "pass"},
+        "meta": {"recipe_hash": "abc", "prompt_sha256": "def", "seed_effective": False, "seed_support": "unsupported"},
+    }, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    gate.check_generation_recipe_evidence(str(root), "第1集", "review")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "生成配方证据" and "backend_version" in f["msg"] for f in gate.findings)
+
+
+def test_generation_recipe_evidence_blocks_final_media_without_event(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    (root / "_设置.md").parent.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    png = root / "出图" / "第1集" / "图片" / "Clip_01.png"
+    mp4 = root / "出视频" / "第1集" / "视频" / "Clip_01.mp4"
+    png.parent.mkdir(parents=True)
+    mp4.parent.mkdir(parents=True)
+    png.write_bytes(b"\x89PNG\r\n\x1a\n")
+    mp4.write_bytes(b"mp4")
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    (prod / "production_events.jsonl").write_text(json.dumps({
+        "episode": "第1集",
+        "stage": "image",
+        "event": "generation",
+        "generation": {"asset": "出图/第1集/图片/Clip_01.png", "status": "pass"},
+        "meta": {
+            "recipe_hash": "abc",
+            "prompt_sha256": "def",
+            "reference_bundle_sha256": "ghi",
+            "backend_version": "codex-2026-06-22",
+            "quality_tier": "final",
+            "actual_image_inputs": ["出图/共享/图片/定妆_沈念.png"],
+            "seed_effective": False,
+            "seed_support": "unsupported",
+        },
+    }, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    gate.check_generation_recipe_evidence(str(root), "第1集", "review")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "生成配方证据" and "Clip_01.mp4" in f["msg"] for f in gate.findings)
+
+
+def test_generation_recipe_evidence_passes_complete_event(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    (prod / "production_events.jsonl").write_text(json.dumps({
+        "episode": "第1集",
+        "stage": "image",
+        "event": "generation",
+        "generation": {"asset": "出图/第1集/图片/Clip_01.png", "status": "pass"},
+        "meta": {
+            "recipe_hash": "abc",
+            "prompt_sha256": "def",
+            "reference_bundle_sha256": "ghi",
+            "backend_version": "codex-2026-06-22",
+            "quality_tier": "final",
+            "actual_image_inputs": ["出图/共享/图片/定妆_沈念.png"],
+            "seed_effective": False,
+            "seed_support": "unsupported",
+        },
+    }, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    gate.check_generation_recipe_evidence(str(root), "第1集", "review")
+
+    assert not any(f["dim"] == "生成配方证据" for f in gate.findings)
+
+
+def test_translation_glossary_release_gate_blocks_missing_file(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    sub = root / "脚本" / "第1集" / "字幕_英文.srt"
+    sub.parent.mkdir(parents=True)
+    sub.write_text("1\n00:00:00,000 --> 00:00:01,000\nHello\n", encoding="utf-8")
+
+    gate.check_translation_glossary_release_gate(str(root), "第1集", "review")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "译名发布闸门" for f in gate.findings)
+
+
+def test_translation_glossary_release_gate_requires_category_coverage(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    sub = root / "脚本" / "第1集" / "字幕_英文.srt"
+    glossary = root / "设定库" / "translation_glossary.json"
+    sub.parent.mkdir(parents=True)
+    glossary.parent.mkdir(parents=True)
+    sub.write_text("English subtitle", encoding="utf-8")
+    glossary.write_text(json.dumps({"terms": [{"cn": "沈念", "en": "Shen Nian", "category": "人名"}]}, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_translation_glossary_release_gate(str(root), "第1集", "review")
+
+    assert any("缺覆盖类目" in f["msg"] for f in gate.findings)
+
+
+def test_translation_glossary_release_gate_passes_with_coverage(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    sub = root / "脚本" / "第1集" / "字幕_英文.srt"
+    glossary = root / "设定库" / "translation_glossary.json"
+    sub.parent.mkdir(parents=True)
+    glossary.parent.mkdir(parents=True)
+    sub.write_text("English subtitle", encoding="utf-8")
+    glossary.write_text(json.dumps({
+        "terms": [{"cn": "沈念", "en": "Shen Nian", "category": "人名"}],
+        "coverage": {
+            "人名": "ready",
+            "称谓": "not_applicable",
+            "境界": "not_applicable",
+            "招式": "not_applicable",
+            "口头禅": "not_applicable",
+            "系统提示语": "not_applicable",
+        },
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_translation_glossary_release_gate(str(root), "第1集", "review")
+
+    assert not any(f["dim"] == "译名发布闸门" for f in gate.findings)
+
+
 def test_video_overview_requires_model_routes_json(tmp_path):
     root = tmp_path / "制漫剧" / "测试剧"
     prompt_dir = root / "出视频" / "第1集" / "prompt"
@@ -3337,6 +3915,36 @@ def _basic_route(**overrides):
     }
     route.update(overrides)
     return route
+
+
+def _flight_action_choreography():
+    return {
+        "required": True,
+        "shot_type": "flight",
+        "beat_model": "takeoff_cruise_maneuver_arrival",
+        "required_fields": [
+            "beats", "speed_curve", "spatial_path", "camera_path", "readability_beats", "degrade_plan",
+            "flight_path", "altitude_curve", "pose_lock", "parallax_layers", "mount_or_cloud_lock",
+        ],
+        "failure_modes": ["pose_drift", "altitude_curve_drift"],
+        "gate_policy": "block_prompt_without_action_choreography_contract",
+    }
+
+
+def test_action_choreography_route_required_for_high_action_route():
+    route = _basic_route(shot_type="flight", action_choreography=None)
+
+    gate.check_action_choreography_route(route, "routes.json", 1)
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "动作编排" and "action_choreography" in f["msg"] for f in gate.findings)
+
+
+def test_action_choreography_route_full_contract_passes():
+    route = _basic_route(shot_type="flight", action_choreography=_flight_action_choreography())
+
+    gate.check_action_choreography_route(route, "routes.json", 1)
+
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "动作编排" for f in gate.findings)
 
 
 def test_long_duration_route_blocks_before_paid_video(tmp_path):
@@ -3815,6 +4423,140 @@ def test_style_contract_name_mismatch_setting_warns(tmp_path):
                     "style_contract": sc, "clips": []}, ensure_ascii=False), encoding="utf-8")
     gate.check_storyboard_style_contract(str(root), "第1集")
     assert any(f["sev"] == gate.WARN and f["dim"] == "风格一致性" and "不一致" in f["msg"] for f in gate.findings)
+
+
+def test_stylized_face_encoder_policy_warns_without_styleid(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text(
+        "# _设置\n- 基础视觉风格: 二次元赛璐璐\n- 脸一致性机检后端: arcface\n",
+        encoding="utf-8",
+    )
+
+    gate.check_stylized_face_encoder_policy(str(root))
+
+    assert any(
+        f["sev"] == gate.WARN and f["dim"] == "风格化脸机检" and "降级档" in f["msg"]
+        for f in gate.findings
+    )
+
+
+def test_stylized_face_encoder_policy_blocks_release_without_styleid(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text(
+        "# _设置\n- 基础视觉风格: 国漫写实\n- 脸一致性机检后端: arcface\n- 一致性严格度: production\n",
+        encoding="utf-8",
+    )
+
+    gate.check_stylized_face_encoder_policy(str(root), "第1集", "image_preflight")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "风格化脸机检" for f in gate.findings)
+
+
+def test_stylized_face_encoder_policy_allows_structured_release_signoff(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    (root / "_设置.md").write_text(
+        "# _设置\n- 基础视觉风格: 水墨国风\n- 脸一致性机检后端: arcface\n- 一致性严格度: production\n",
+        encoding="utf-8",
+    )
+    (prod / "styleid_release_signoff_第1集.json").write_text(json.dumps({
+        "kind": "n2d_styleid_release_signoff",
+        "accepted": True,
+        "reviewer": "qa",
+        "reason": "本批只做内部交付，已加近景人审",
+        "expires_at": "2999-01-01",
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_stylized_face_encoder_policy(str(root), "第1集", "image_preflight")
+
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "风格化脸机检" for f in gate.findings)
+    assert any(f["sev"] == gate.WARN and f["dim"] == "风格化脸机检" for f in gate.findings)
+
+
+def test_stylized_face_encoder_policy_passes_with_styleid_model(tmp_path, monkeypatch):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    model = tmp_path / "styleid.ckpt"
+    model.write_text("stub", encoding="utf-8")
+    monkeypatch.setenv("N2D_STYLEID_MODEL", str(model))
+    (root / "_设置.md").write_text(
+        "# _设置\n- 基础视觉风格: 水墨国风\n- 脸一致性机检后端: styleid\n",
+        encoding="utf-8",
+    )
+
+    gate.check_stylized_face_encoder_policy(str(root))
+
+    assert not any(f["dim"] == "风格化脸机检" for f in gate.findings)
+
+
+def test_storyboard_possession_gate_warns_for_prop_holder_without_ledger(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    sb_dir = root / "脚本" / "第1集"
+    sb_dir.mkdir(parents=True)
+    (sb_dir / "storyboard.json").write_text(json.dumps({
+        "clips": [{
+            "id": "Clip_01",
+            "action": "CHAR_01 手持 PROP_团扇 走向床榻",
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_storyboard_possession_gate(str(root), "第1集")
+
+    assert any(f["sev"] == gate.WARN and f["dim"] == "持有账本(POS)" for f in gate.findings)
+
+
+def test_storyboard_possession_gate_blocks_prop_transfer_without_ledger(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    sb_dir = root / "脚本" / "第1集"
+    sb_dir.mkdir(parents=True)
+    (sb_dir / "storyboard.json").write_text(json.dumps({
+        "clips": [{
+            "id": "Clip_02",
+            "action": "CHAR_01 将 PROP_毒酒杯 递给 CHAR_02",
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_storyboard_possession_gate(str(root), "第1集")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "持有账本(POS)" for f in gate.findings)
+
+
+def test_storyboard_possession_gate_blocks_core_weapon_holder_without_ledger(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    sb_dir = root / "脚本" / "第1集"
+    sb_dir.mkdir(parents=True)
+    (sb_dir / "storyboard.json").write_text(json.dumps({
+        "clips": [{
+            "id": "Clip_03",
+            "action": "CHAR_01 手持 PROP_本命飞剑 在云端御剑飞行",
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_storyboard_possession_gate(str(root), "第1集")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "持有账本(POS)" for f in gate.findings)
+
+
+def test_storyboard_possession_gate_allows_existing_ledger(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    sb_dir = root / "脚本" / "第1集"
+    prod = root / "生产数据"
+    sb_dir.mkdir(parents=True)
+    prod.mkdir(parents=True)
+    (sb_dir / "storyboard.json").write_text(json.dumps({
+        "clips": [{
+            "id": "Clip_02",
+            "action": "CHAR_01 将 PROP_毒酒杯 递给 CHAR_02",
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
+    (prod / "possession_ledger_第1集.json").write_text('{"events":[]}\n', encoding="utf-8")
+
+    gate.check_storyboard_possession_gate(str(root), "第1集")
+
+    assert not any(f["dim"] == "持有账本(POS)" for f in gate.findings)
 
 
 def test_native_av_placeholder_not_blocked(tmp_path):
@@ -5658,6 +6400,24 @@ def test_delivery_stage_infers_production_profile_without_setting(tmp_path):
     assert gate.consistency_release_profile(str(root), stage="review", ep="第1集") == "demo"
 
 
+def test_av1_dialogue_closeup_single_warn_blocks_under_production(monkeypatch, tmp_path):
+    root = tmp_path / "w"
+    root.mkdir()
+    monkeypatch.setenv("N2D_CONSISTENCY_PROFILE", "production")
+    summary = {"by_dim": {"音画同步(AV1)": {"warn": 1}}}  # 孤例、非关键、image 阶段（非交付边界）
+    closeup = {"dimension": "音画同步(AV1)", "message": "Clip_07 近景口型↔配音偏移 90ms", "affected_shots": ["Clip_07"]}
+    block, reason = gate._strict_advisory_should_block(str(root), "第1集", "image", closeup, summary)
+    assert block is True and reason == "对白近景口型"
+    # 同样孤例但非近景（远景）→ 不升 block
+    wide = {"dimension": "音画同步(AV1)", "message": "Clip_08 远景口型偏移", "affected_shots": ["Clip_08"]}
+    block2, _ = gate._strict_advisory_should_block(str(root), "第1集", "image", wide, summary)
+    assert block2 is False
+    # demo 档位下对白近景也不升 block（只 production 收紧）
+    monkeypatch.setenv("N2D_CONSISTENCY_PROFILE", "demo")
+    block3, _ = gate._strict_advisory_should_block(str(root), "第1集", "image", closeup, summary)
+    assert block3 is False
+
+
 # ── M5 跨集对比跨过缺失的中间集 → WARN ──
 def test_cross_episode_skipped_intermediate_warns(tmp_path):
     gate.findings.clear()
@@ -5954,3 +6714,103 @@ def test_compliance_ai_labeling_applicable_false_needs_notes(tmp_path):
     })
     gate.check_compliance_manifest(str(root), "第1集", "compose")
     assert any(f["sev"] == gate.INFO and "ai_labeling" in f["loc"] and "applicable=false" in f["msg"] for f in gate.findings)
+
+
+def test_strict_advisory_upgrades_high_dynamic_dims_in_production(tmp_path):
+    # 高动态四维(MOT1/SPECV/CAM1/S2V)在 production 交付边界都应可升 BLOCK（CAM1/S2V 是本次补齐）。
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    summary = {"by_dim": {}}
+    for dim in ("运动质量(MOT1)", "高动态成片证据(SPECV)", "相机空间轨迹(CAM1)", "主体视频一致(S2V)"):
+        row = {"dimension": dim, "message": "缺成片证据", "verdict": "warn"}
+        should, reason = gate._strict_advisory_should_block(str(root), "第1集", "review", row, summary)
+        assert should is True, dim
+        assert reason == "交付边界"
+
+
+def test_strict_advisory_high_dynamic_dims_stay_warn_in_demo(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: demo\n", encoding="utf-8")
+    summary = {"by_dim": {}}
+    row = {"dimension": "相机空间轨迹(CAM1)", "message": "缺成片证据", "verdict": "warn"}
+    should, _ = gate._strict_advisory_should_block(str(root), "第1集", "review", row, summary)
+    assert should is False
+
+
+def test_action_beat_budget_blocks_full_exchange_in_one_clip(tmp_path):
+    gate.findings.clear()
+    # 一镜塞了 攻击+格挡+反击+命中 整段攻防回合 → 跨越 4 个节拍类别，应拦。
+    root = _write_storyboard_with_clips(tmp_path, [
+        {"id": "Clip 1", "template": "fight_exchange",
+         "scene": "CHAR_01 出拳，对方格挡后反击命中", "duration": 4},
+    ])
+    gate.check_action_beat_budget(root, "第1集", "video")
+    beat = [f for f in gate.findings if f["dim"] == "动作节拍预算"]
+    assert beat and any("节拍类别" in f["msg"] for f in beat)
+
+
+def test_action_beat_budget_production_upgrades_to_block(tmp_path):
+    gate.findings.clear()
+    root = _write_storyboard_with_clips(tmp_path, [
+        {"id": "Clip 1", "template": "fight_exchange",
+         "scene": "CHAR_01 出拳，对方格挡后反击命中", "duration": 4},
+    ])
+    (Path(root) / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    gate.check_action_beat_budget(root, "第1集", "video")
+    assert any(f["dim"] == "动作节拍预算" and f["sev"] == gate.BLOCK for f in gate.findings)
+
+
+def test_action_beat_budget_warns_when_beats_too_short(tmp_path):
+    gate.findings.clear()
+    # 两个节拍(攻击+命中)塞进 1.5s → 单拍 0.75s < 1.2s 下限，命中帧读不出 → WARN。
+    root = _write_storyboard_with_clips(tmp_path, [
+        {"id": "Clip 1", "template": "fight_exchange",
+         "scene": "CHAR_01 挥剑命中追兵", "duration": 1.5},
+    ])
+    gate.check_action_beat_budget(root, "第1集", "video")
+    beat = [f for f in gate.findings if f["dim"] == "动作节拍预算"]
+    assert beat and all(f["sev"] == gate.WARN for f in beat)
+    assert any("单拍" in f["msg"] for f in beat)
+
+
+def test_action_beat_budget_passes_single_clean_beat(tmp_path):
+    gate.findings.clear()
+    # 一镜一动作、时长充裕 → 不拦。
+    root = _write_storyboard_with_clips(tmp_path, [
+        {"id": "Clip 1", "template": "fight_exchange",
+         "scene": "CHAR_01 一记上勾拳命中追兵", "duration": 4},
+    ])
+    gate.check_action_beat_budget(root, "第1集", "video")
+    assert not any(f["dim"] == "动作节拍预算" for f in gate.findings)
+
+
+def test_storyboard_high_motion_requires_unexemptable_endframe(tmp_path):
+    gate.findings.clear()
+    # 末镜也是高速运动镜(fight_exchange)，给了 exempt 理由想豁免首尾帧 → 仍必须 need_endframe=true，BLOCK。
+    e = "出图/第1集/图片/镜头1_end.png"
+    f = "出图/第1集/图片/镜头1.png"
+    root = _write_storyboard_with_clips(tmp_path, [
+        {"template": "fight_exchange", "firstframe_png": f,
+         "continuity": {"start_state": "s", "end_state": "e", "transition": "硬切",
+                        "need_endframe": False, "endframe_exempt_reason": "末镜想省一张"}},
+    ])
+    gate.check_storyboard_contract(str(root), "第1集")
+    hm = [x for x in gate.findings if x["dim"] == "尾帧" and "高速运动镜" in x["msg"]]
+    assert hm and all(x["sev"] == gate.BLOCK for x in hm)
+
+
+def test_storyboard_high_motion_endframe_true_passes(tmp_path):
+    gate.findings.clear()
+    e = "出图/第1集/图片/镜头1_end.png"
+    f = "出图/第1集/图片/镜头1.png"
+    root = _write_storyboard_with_clips(tmp_path, [
+        {"template": "fight_exchange", "firstframe_png": f,
+         "continuity": {"start_state": "s", "end_state": "e", "transition": "硬切",
+                        "need_endframe": True, "endframe_png": e}},
+    ])
+    _touch_png(root, f)
+    _touch_png(root, e)
+    gate.check_storyboard_contract(str(root), "第1集")
+    assert not any(x["dim"] == "尾帧" and "高速运动镜" in x["msg"] for x in gate.findings)

@@ -91,11 +91,26 @@ def prompt_reference_paths(root: Path, target: base.Target, episode: str) -> Lis
     for raw in base.backticked(block):
         add(raw)
 
-    if not paths:
-        bundle = base.reference_bundle_for_target(root, episode, target)
-        for item in bundle.get("items") or []:
-            for rel in item.get("paths") or []:
-                add(str(rel))
+    # Always merge the registry-resolved bundle (not only when prose is empty):
+    # a hand-written 参考图 block listing any one placeholder image must NOT
+    # suppress the carried-identity face anchors — that was the Dreamina-side
+    # replica of the 定妆 face-drift bug. Character (carried-identity) face anchors
+    # are prepended so they survive the MAX_REFERENCES cap; everything else appends.
+    bundle = base.reference_bundle_for_target(root, episode, target)
+    face_first: List[Path] = []
+    for item in bundle.get("items") or []:
+        if str(item.get("kind")) != "character":
+            continue
+        for rel in item.get("paths") or []:
+            p = root / str(rel)
+            if p.is_file() and p not in seen and p not in face_first:
+                face_first.append(p)
+    paths = face_first + [p for p in paths if p not in face_first]
+    for item in bundle.get("items") or []:
+        if str(item.get("kind")) == "character":
+            continue
+        for rel in item.get("paths") or []:
+            add(str(rel))
 
     return paths[:MAX_REFERENCES]
 
@@ -359,6 +374,28 @@ def process_target(
     if not force and previous_status == "pass" and base.png_valid(final):
         print(f"[skip] {target.shot} already has Dreamina pass record for {task_id}: {target.rel_path}")
         return True
+
+    # Pre-spend interlock (same as the Codex backend): a plate that depicts a
+    # character must attach a real face anchor, else it renders a new drifting face.
+    bundle = base.reference_bundle_for_target(root, episode, target)
+    attached_rel: List[str] = []
+    for p in refs:
+        try:
+            attached_rel.append(str(p.relative_to(root)))
+        except ValueError:
+            attached_rel.append(str(p))
+    if (
+        base.carried_identity_unanchored(bundle, attached_rel)
+        and os.environ.get("N2D_ALLOW_UNANCHORED_IDENTITY_PLATE") != "1"
+    ):
+        carried = "、".join(str(c) for c in bundle.get("carried_identity") or [])
+        print(
+            f"[fail] {target.shot}: 本图声明承载角色身份（carries_identity={carried}），"
+            "但没有任何角色脸锚作为 Dreamina image2image 参考传入——会另画一张新脸（定妆脸漂成因）。"
+            "请把承载角色的脸部特写/正面参考置 ready，或设 N2D_ALLOW_UNANCHORED_IDENTITY_PLATE=1 显式豁免。",
+            file=sys.stderr,
+        )
+        return False
 
     started = time.monotonic()
     archive_path: Optional[Path] = None

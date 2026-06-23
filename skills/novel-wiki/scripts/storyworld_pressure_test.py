@@ -10,6 +10,11 @@ import re
 import sys
 from datetime import date
 
+_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "novel", "_lib"))
+if _COMMON not in sys.path:
+    sys.path.insert(0, _COMMON)
+from consistency_scaffold import resolve_character_card  # noqa: E402  同认 角色卡.md / 人物.md
+
 
 SETTING_FILES = {
     "characters": os.path.join("设定", "角色卡.md"),
@@ -68,6 +73,7 @@ def axis(name, status, evidence, recommendation):
 
 def pressure_test(root):
     paths = {key: os.path.join(root, rel) for key, rel in SETTING_FILES.items()}
+    paths["characters"] = resolve_character_card(root) or paths["characters"]  # 兼容派生线 人物.md
     characters = read_text(paths["characters"])
     world = read_text(paths["world"])
     outline = read_text(paths["outline"])

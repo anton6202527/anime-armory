@@ -1,6 +1,6 @@
 ---
 name: novel-title
-description: Brainstorm 5–8 book title candidates for a novel project, ranked by 5-dim scoring (hook / platform-fit / character identity / anti-collision / memorability). Supports major Chinese web/comic-drama platforms (起点 / 番茄 / 晋江 / 抖音漫剧 / 红果 / 历史向 / 跨平台). Use when asked to 起书名, 测书名, 取书名, 想几个书名, 给个好名字, brainstorm book titles. Can be invoked standalone or by other novel-* skills (novel-spinoff Step 3, novel-expand, novel-condense; novel-score 的「书名体检」判 needs_rename 时也会经 next_actions 路由到这里重出候选). Triggers 起书名, 测书名, 取书名, 改书名, 书名候选, 取个名字.
+description: Brainstorm 5–8 book title candidates for a novel project, ranked by 5-dim scoring (hook / platform-fit / character identity / anti-collision / memorability). Supports major Chinese web/comic-drama platforms (起点 / 番茄 / 七猫 / 晋江 / 抖音漫剧 / 红果 / 历史向 / 跨平台). Use when asked to 起书名, 测书名, 取书名, 想几个书名, 给个好名字, brainstorm book titles. Can be invoked standalone or by other novel-* skills (novel-spinoff Step 3, novel-expand, novel-condense; novel-score 的「书名体检」判 needs_rename 时也会经 next_actions 路由到这里重出候选). Triggers 起书名, 测书名, 取书名, 改书名, 书名候选, 取个名字.
 ---
 
 # novel-title — 书名候选 + 平台对位评分
@@ -18,7 +18,7 @@ description: Brainstorm 5–8 book title candidates for a novel project, ranked 
 ## 输入
 
 至少需要：
-- **目标平台**：起点 / 番茄 / 晋江 / 抖音漫剧 / 红果 / 历史向 / 跨平台
+- **目标平台**：起点 / 番茄 / 七猫 / 晋江 / 抖音漫剧 / 红果 / 历史向 / 跨平台
 - **主角 / 核心人物名**（如有）
 - **类型 / 钩子**（修真 / 都市 / 历史 / 同人外传 / 等）
 - **可选**：用户已有的**暂定名**（作为候选 #0 一并打分）

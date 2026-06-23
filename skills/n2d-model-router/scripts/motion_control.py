@@ -59,9 +59,13 @@ INPUT_SPEC: Dict[str, Tuple[str, str]] = {
     "depth_sequence": ("depth", "depth_%03d.png"),
     "instance_masks": ("instance_mask", "seg_%03d.png"),
     "contact_map": ("contact_map", "contact_map.json"),
+    "camera_path": ("camera_path", "camera_path.json"),
+    "spatial_path": ("spatial_path", "spatial_path.json"),
+    "parallax_layers": ("parallax_layers", "parallax_layers.json"),
 }
-# 接触语义字段（与 gate.MOTION_CONTROL_CONTACT_FIELDS 同步；ready 时 gate 必查）。
+# 接触语义字段（与 gate.MOTION_CONTROL_CONTACT_FIELDS 同步；接触镜 ready 时 gate 必查）。
 CONTACT_FIELDS = ("contact_points", "occlusion_order", "body_part_ownership")
+CONTACT_SHOT_TYPES = ("fight_exchange", "hug_or_pull", "intimate_interaction")
 READY_INPUT_STATUSES = ("ready", "not_needed")
 # generate 能自动产出的输入（pose/depth 可从单帧抽；instance/contact 需 SAM+人定，留人工）。
 GENERATABLE = ("pose_sequence", "depth_sequence")
@@ -136,6 +140,7 @@ def routes_requiring_control(routes: Sequence[Mapping[str, Any]]) -> List[Dict[s
             "shot_type": str(r.get("shot_type") or "").strip(),
             "required_inputs": req or ["pose_sequence", "depth_sequence", "instance_masks"],
             "failure_modes": mc.get("failure_modes"),
+            "contact_fields_required": str(r.get("shot_type") or "").strip() in CONTACT_SHOT_TYPES,
         })
     return out
 
@@ -174,13 +179,14 @@ def reconcile(manifest: Mapping[str, Any], root: str) -> Tuple[Dict[str, Any], L
     return out, changed
 
 
-def readiness(manifest: Mapping[str, Any], root: str, required_inputs: Sequence[str]) -> Dict[str, Any]:
+def readiness(manifest: Mapping[str, Any], root: str, required_inputs: Sequence[str], *,
+              contact_fields_required: bool = True) -> Dict[str, Any]:
     """gate 视角的就绪判定：缺哪些控制文件、接触语义填没填、status 是否 ready/degrade_only。纯函数。"""
     status = str(manifest.get("status") or "planned")
     inputs = manifest.get("control_inputs") if isinstance(manifest.get("control_inputs"), dict) else {}
     missing_inputs = [k for k in required_inputs
                       if not (_input_is_filled(inputs.get(k)) and _asset_present(root, inputs.get(k)))]
-    missing_contacts = [f for f in CONTACT_FIELDS if not manifest.get(f)]
+    missing_contacts = [f for f in CONTACT_FIELDS if contact_fields_required and not manifest.get(f)]
     if status == "degrade_only":
         gate_pass = bool(str(manifest.get("degrade_plan") or "").strip())
     elif status == "ready":
@@ -367,7 +373,12 @@ def cmd_scaffold(root: str, ep: str, only_clip: Optional[str]) -> int:
         existing = load_manifest(root, ep, clip)
         skel = build_skeleton(ep, clip, t["required_inputs"], existing, t.get("failure_modes"))
         rel = write_manifest(root, ep, clip, skel)
-        rd = readiness(reconcile(skel, root)[0], root, t["required_inputs"])
+        rd = readiness(
+            reconcile(skel, root)[0],
+            root,
+            t["required_inputs"],
+            contact_fields_required=bool(t.get("contact_fields_required")),
+        )
         flag = "✅ 就绪" if rd["gate_pass"] else "⏳ 待补"
         if not rd["gate_pass"]:
             not_ready += 1
@@ -375,11 +386,12 @@ def cmd_scaffold(root: str, ep: str, only_clip: Optional[str]) -> int:
         for key in t["required_inputs"]:
             fn = f"{control_dir_rel(ep, clip)}/{input_filename(key)}"
             mark = "✅" if key not in rd["missing_inputs"] else "▢"
-            note = "（DWPose/depth 可 generate）" if key in GENERATABLE else "（需 SAM/人定接触点）"
+            note = "（DWPose/depth 可 generate）" if key in GENERATABLE else "（需人工/上游规划文件）"
             print(f"   {mark} {key:<15} → {fn} {'' if key not in rd['missing_inputs'] else note}")
         if rd["missing_contacts"]:
             print(f"   ▢ 接触语义待填：{'、'.join(rd['missing_contacts'])}")
-        print(f"   → 补齐控制资产 + 接触语义后，把 manifest status 改 ready；或决定拆镜改 degrade_only")
+        suffix = " + 接触语义" if t.get("contact_fields_required") else ""
+        print(f"   → 补齐控制资产{suffix}后，把 manifest status 改 ready；或决定拆镜改 degrade_only")
     print(f"\n合计 {len(targets)} 个受控 Clip，{not_ready} 个待补（gate 会阻断 status≠ready/degrade_only）")
     return 1 if not_ready else 0
 
@@ -405,7 +417,12 @@ def cmd_check(root: str, ep: str) -> int:
         reconciled, changed = reconcile(man, root)
         if changed:
             write_manifest(root, ep, clip, reconciled)
-        rd = readiness(reconciled, root, t["required_inputs"])
+        rd = readiness(
+            reconciled,
+            root,
+            t["required_inputs"],
+            contact_fields_required=bool(t.get("contact_fields_required")),
+        )
         if rd["gate_pass"]:
             print(f"[{clip}] ✅ gate 将放行（status={rd['status']}）")
         else:

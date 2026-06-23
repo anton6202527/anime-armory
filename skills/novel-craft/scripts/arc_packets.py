@@ -120,6 +120,23 @@ def _arc_paths(root, start, end):
     )
 
 
+def _revision_tasks_in_window(root, start, end):
+    """汇流后的修订计划里落在本弧段章窗内（或全书级 P0 无章号）的任务，按优先级排序。
+    让 revision_plan.json 真正回流进弧段重写，而非躺成无人读的报告。"""
+    plan = _load_json(os.path.join(root, "修订", "revision_plan.json"), None)
+    if not isinstance(plan, dict):
+        return []
+    rank = {"P0": 0, "P1": 1, "P2": 2, "P3": 3}
+    picked = []
+    for t in plan.get("tasks") or []:
+        if not isinstance(t, dict):
+            continue
+        ch = t.get("chapter")
+        if (isinstance(ch, int) and start <= ch <= end) or (ch is None and t.get("priority") == "P0"):
+            picked.append(t)
+    return sorted(picked, key=lambda t: (rank.get(t.get("priority"), 9), t.get("chapter") or 0))
+
+
 def build(root, start, end):
     root = os.path.abspath(root)
     meta = _load_json(os.path.join(root, "_meta.json"), {}) or {}
@@ -153,6 +170,7 @@ def build(root, start, end):
         "required_contract": required_contract,
         "open_threads_snapshot": _open_threads(ledger),
         "outline": chapters,
+        "revision_tasks": _revision_tasks_in_window(root, start, end),
         "gate_after_write": f"python3 skills/novel-review/scripts/arc_gate.py \"{root}\" --arc {start}-{end}",
     }
     packet_lines = [
@@ -177,6 +195,18 @@ def build(root, start, end):
     for item in chapters:
         title = f"《{item['title']}》" if item["title"] else ""
         packet_lines.append(f"- 第{item['chapter']:02d}章 {title}：{item['beat']}")
+    revision_tasks = plan["revision_tasks"]
+    if revision_tasks:
+        packet_lines.extend(["", "## 本弧段待处理修订项（来自 `修订/revision_plan.json`）",
+                             "> review/score/balance/feedback/simulate 汇流——本弧段重写须先消化："])
+        for t in revision_tasks:
+            ch = t.get("chapter")
+            where = f"第{ch:02d}章" if isinstance(ch, int) else "全书级"
+            reason = (t.get("reason") or "").strip()
+            packet_lines.append(
+                f"- [{t.get('priority')}] {where} · {t.get('title')}"
+                f"（{t.get('recommended_skill')}·{t.get('return_to_stage')}）"
+                + (f" — {reason}" if reason else ""))
     threads = plan["open_threads_snapshot"]
     packet_lines.extend([
         "",

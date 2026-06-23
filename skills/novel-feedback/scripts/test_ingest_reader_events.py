@@ -62,6 +62,31 @@ def test_jsonl_rates_without_counts_are_preserved():
         assert summary["chapters"][0]["drop_rate"] == 0.12
 
 
+def test_experiment_and_take_attribution_are_summarized():
+    with tempfile.TemporaryDirectory() as tmp:
+        csv_path = os.path.join(tmp, "events.csv")
+        with open(csv_path, "w", encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=["chapter", "event", "count", "ab_test_id", "variant_id", "take_id"])
+            writer.writeheader()
+            writer.writerow({"chapter": "1", "event": "start", "count": "100", "ab_test_id": "hook", "variant_id": "A", "take_id": "take-a1"})
+            writer.writerow({"chapter": "1", "event": "complete", "count": "80", "ab_test_id": "hook", "variant_id": "A", "take_id": "take-a1"})
+            writer.writerow({"chapter": "1", "event": "start", "count": "100", "ab_test_id": "hook", "variant_id": "B", "take_id": "take-b1"})
+            writer.writerow({"chapter": "1", "event": "complete", "count": "55", "ab_test_id": "hook", "variant_id": "B", "take_id": "take-b1"})
+        records = ing.normalize_rows(ing.read_input(csv_path), input_path=csv_path, source_name="AB", platform="测试")
+        summary = ing.build_summary(
+            records,
+            platform="测试",
+            source_name="AB",
+            min_sample=20,
+            low_completion=0.55,
+            high_drop=0.35,
+        )
+        groups = summary["experiments"]["groups"]
+        assert len(groups) == 2
+        assert summary["experiments"]["best_by_ab_test"][0]["variant_id"] == "A"
+        assert summary["experiments"]["best_by_ab_test"][0]["take_ids"] == ["take-a1"]
+
+
 def test_main_writes_artifacts():
     with tempfile.TemporaryDirectory() as tmp:
         csv_path = os.path.join(tmp, "events.csv")

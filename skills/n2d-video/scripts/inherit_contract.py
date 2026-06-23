@@ -35,6 +35,7 @@ from n2d_contract_diff import (  # noqa: E402,F401
     BLOCK_ON_DRIFT,
     SECTION_TITLE,
     compare_field,
+    diff_cinematic_focal,
     diff_contracts,
     extract_section,
     parse_contract_fields,
@@ -123,8 +124,11 @@ def run(root: str, ep: str) -> int:
         print(f"⛔ 缺 {vid_path} —— 视频 prompt 总览未生成，先跑 n2d-video 阶段A 再校验契约继承。", file=sys.stderr)
         return 2
 
-    results = diff_contracts(open(img_path, encoding="utf-8").read(),
-                             open(vid_path, encoding="utf-8").read())
+    img_text = open(img_path, encoding="utf-8").read()
+    vid_text = open(vid_path, encoding="utf-8").read()
+    results = diff_contracts(img_text, vid_text)
+    # 电影光学契约（opt-in）：镜头焦段 img→video 继承，warn-only 追加（不入 block）。
+    results += diff_cinematic_focal(img_text, vid_text)
     summary = {sev: sum(1 for r in results if r["severity"] == sev) for sev in ("pass", "warn", "block")}
 
     # ② 身份交接：命名角色镜逐镜 video prompt 是否真锁了脸（脸的契约级 Diff）。
@@ -189,7 +193,7 @@ def run(root: str, ep: str) -> int:
         if identity_blocks:
             print("⛔ 有身份交接 block：先在 出视频/prompt/01_clips.md 给这些命名角色镜补『身份锁定+具体锚点』，再出视频。", file=sys.stderr)
         if asset_blocks:
-            print("⛔ 有物料交接 block：出图绑定的场景/道具/特效资产在出视频逐镜 prompt 丢了，补回 LOC/PROP/VFX_xx 再出视频。", file=sys.stderr)
+            print("⛔ 有物料交接 block：出图绑定的场景/道具/武器/特效资产在出视频逐镜 prompt 丢了，补回 LOC/PROP/WEAPON/VFX_xx 再出视频。", file=sys.stderr)
         return 1
     return 0
 

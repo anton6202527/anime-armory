@@ -145,6 +145,60 @@ def test_verdict_finding_carries_structured_png():
     assert fnd["png"] == "镜头01.png" and fnd["name"] == "沈念" and fnd["confidence"] == 0.9
 
 
+def test_vote_disagreement_formula():
+    # <3 票不算分歧
+    assert vv.vote_disagreement([{"match": True}, {"match": False}]) == 0.0
+    # 3 票全一致 → 0
+    assert vv.vote_disagreement([{"match": False}] * 3) == 0.0
+    # 3 票 2:1 → 1 - 2/3
+    assert abs(vv.vote_disagreement([{"match": False}, {"match": False}, {"match": True}]) - (1 - 2 / 3)) < 1e-9
+
+
+def test_aggregate_votes_majority_and_union():
+    # 单票原样返回（votes=1 零行为变化，无 vote_disagreement 键）
+    one = vv.aggregate_votes([{"match": False, "confidence": 0.8, "mismatches": ["a"], "reason": "r"}])
+    assert one["match"] is False and "vote_disagreement" not in one
+    # 全失败 → None
+    assert vv.aggregate_votes([None, None]) is None
+    # 多数 match=False，mismatches 取并集，分歧度留痕
+    agg = vv.aggregate_votes([
+        {"match": False, "confidence": 0.9, "mismatches": ["缺疤"], "reason": "x"},
+        {"match": False, "confidence": 0.7, "mismatches": ["发色"], "reason": ""},
+        {"match": True, "confidence": 0.5, "mismatches": []},
+    ])
+    assert agg["match"] is False
+    assert set(agg["mismatches"]) == {"缺疤", "发色"}
+    assert agg["n_votes"] == 3 and agg["vote_disagreement"] == round(1 - 2 / 3, 3)
+    assert abs(agg["confidence"] - 0.8) < 1e-9  # 仅多数侧(0.9,0.7)均值
+
+
+def test_judge_verdict_votes_aggregation():
+    calls = {"n": 0}
+
+    def flaky_judge(_a, _c, _k):
+        calls["n"] += 1
+        # 第1次判过，后两次判崩 → 多数 match=False
+        return {"match": True, "confidence": 0.6} if calls["n"] == 1 else {
+            "match": False, "confidence": 0.9, "mismatches": ["发色"]}
+
+    agg = vv.judge_verdict(flaky_judge, "/abs/x.png", "黑长直、红衣", "character", votes=3)
+    assert calls["n"] == 3 and agg["match"] is False and agg["n_votes"] == 3
+
+
+def test_verdict_finding_high_disagreement_downgrades_block_to_warn():
+    # 高置信本应 block，但投票分歧≥floor → 降级 warn 人判（不硬挡）
+    verdict = {"match": False, "confidence": 0.9, "mismatches": ["x"], "vote_disagreement": 0.5}
+    fnd = vv.verdict_finding("沈念", "character", "p.png", verdict, is_key=True,
+                             block_floor=0.6, vote_disagree_floor=0.34)
+    assert fnd["level"] == "warn" and fnd["code"] == "vlm_semantic_review"
+    assert fnd["vote_disagreement"] == 0.5 and "分歧" in fnd["msg"]
+    # 分歧低 → 仍 block
+    verdict2 = {"match": False, "confidence": 0.9, "mismatches": ["x"], "vote_disagreement": 0.0}
+    fnd2 = vv.verdict_finding("沈念", "character", "p.png", verdict2, is_key=True,
+                              block_floor=0.6, vote_disagree_floor=0.34)
+    assert fnd2["level"] == "block"
+
+
 def test_evaluate_pairs_emits_shot_canonical():
     canon = {"沈念": {"kind": "character", "canonical": "黑长直、红衣"}}
 

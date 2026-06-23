@@ -203,7 +203,7 @@ def load_shared_sections(root: Path) -> List[Target]:
             start = header.start()
             end = headers[index + 1].start() if index + 1 < len(headers) else len(text)
             body = text[start:end].strip()
-            target_match = re.search(r"^\*\*目标存档\*\*：([^\n]+)$", body, re.M)
+            target_match = re.search(r"\*\*目标存档\*\*：([^\n]+)", body)
             if not target_match:
                 continue
             first = first_backticked(target_match.group(1))
@@ -420,7 +420,7 @@ def shared_aliases(title: str, body: str, rel_path: str) -> set:
     # The section title owns the shared target identity.  Body text may mention
     # related assets, such as VFX_01 in a character form, but those references
     # must not become selectable aliases for this target.
-    ids = re.findall(r"`?((?:CHAR|LOC|PROP|OUTFIT|VFX)_[A-Za-z0-9_]+)`?", title)
+    ids = re.findall(r"`?((?:CHAR|LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_]+)`?", title)
     aliases.update(ids)
     if "CHAR_01" in aliases and "常态" in title:
         aliases.add("CHAR_01/常态")
@@ -434,7 +434,7 @@ def shared_aliases(title: str, body: str, rel_path: str) -> set:
 
 
 def preferred_shared_shot(title: str, aliases: set, rel_path: str) -> str:
-    title_ids = re.findall(r"`((?:CHAR|LOC|PROP|OUTFIT|VFX)_[A-Za-z0-9_]+)`", title)
+    title_ids = re.findall(r"`((?:CHAR|LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_]+)`", title)
     for ident in title_ids:
         form_alias = ""
         if ident == "CHAR_01" and "常态" in title:
@@ -449,7 +449,7 @@ def preferred_shared_shot(title: str, aliases: set, rel_path: str) -> str:
             return form_alias
         if ident in aliases:
             return ident
-    for prefix in ("CHAR_", "LOC_", "PROP_", "OUTFIT_", "VFX_"):
+    for prefix in ("CHAR_", "LOC_", "PROP_", "WEAPON_", "OUTFIT_", "VFX_"):
         candidates = sorted(a for a in aliases if isinstance(a, str) and a.startswith(prefix))
         if candidates:
             return candidates[0]
@@ -574,9 +574,80 @@ def _shot_character_refs(body: str) -> Set[str]:
 def _shot_asset_refs(body: str) -> Set[str]:
     text = _reference_relevant_text(body)
     refs: Set[str] = set()
-    for prefix in ("LOC", "PROP", "OUTFIT", "VFX"):
+    for prefix in ("LOC", "PROP", "WEAPON", "OUTFIT", "VFX"):
         refs |= set(re.findall(rf"{prefix}_[A-Za-z0-9_]+", text))
     return refs
+
+
+# Asset types whose plate renders a person, so a missing face anchor = a new face.
+_IDENTITY_BEARING_ASSET_TYPES = {
+    "vfx", "poster", "key_visual", "kv", "relation", "relationship",
+    "cover", "群像", "海报", "封面", "关系图",
+}
+
+_CHAR_REF_RE = re.compile(r"CHAR_[A-Za-z0-9_]+(?:/[A-Za-z0-9_一-鿿·.-]+)?")
+
+# Explicit "a person is in frame" signal, used to infer carried identity even when
+# the asset's `type` is blank/custom (so it falls outside _IDENTITY_BEARING_ASSET_TYPES).
+# Kept narrow: room/prop plates that merely name a character's belonging (e.g.
+# "CHAR_01 的寝宫，空镜") have no person keyword and must NOT pull a face in.
+_PERSON_CONTEXT_RE = re.compile(
+    r"脸|面容|面颊|五官|眉眼|眼底|发|妆|人物|角色|肖像|半身|全身|持|握|站立|端坐|怀抱"
+    r"|portrait|face|holds?|holding|standing|seated"
+)
+
+
+def _asset_carried_identities(asset: Dict[str, Any]) -> List[str]:
+    """CHAR ids/forms whose locked face this asset depicts and must inherit.
+
+    A 定妆/分镜 asset that renders a character's face (VFX on a body, a poster, a
+    relationship plate) is NOT identity-neutral: with no face anchor fed, the
+    backend invents a brand-new face and the asset drifts at the 定妆 stage — the
+    万妖血脉 VFX plate vs the 沈念 base pack was exactly this failure. The asset's
+    own ``reference_group`` only self-references its not-yet-existing output, so
+    the face has to come from the carried character.
+
+    ``carries_identity`` / ``subject_characters`` (str or list; bare ``CHAR_xx`` or
+    form-qualified ``CHAR_xx/形态``) is authoritative. When absent, fall back to
+    inferring CHAR ids from an identity-bearing asset's name/constraints/structure
+    text, so a legacy registry degrades safely instead of silently drifting.
+    """
+    out: List[str] = []
+    seen: Set[str] = set()
+
+    def add(value: Any) -> None:
+        text = str(value or "").strip().strip("`")
+        if _CHAR_REF_RE.fullmatch(text) and text not in seen:
+            seen.add(text)
+            out.append(text)
+
+    explicit = asset.get("carries_identity")
+    if explicit is None:
+        explicit = asset.get("subject_characters")
+    if isinstance(explicit, str):
+        explicit = [explicit]
+    for value in explicit or []:
+        add(value)
+    if out:
+        return out
+
+    blob = " ".join([
+        str(asset.get("name") or ""),
+        str(asset.get("scope") or ""),
+        json.dumps(asset.get("constraints") or {}, ensure_ascii=False),
+        json.dumps(asset.get("forms") or [], ensure_ascii=False),
+    ])
+    if not _CHAR_REF_RE.search(blob):
+        return out
+    # Fire inference when the type is a known person-bearing kind, OR a character is
+    # named alongside explicit person/face context — the latter catches plates whose
+    # `type` is blank/custom yet clearly render a face (the type-whitelist hole).
+    type_bearing = str(asset.get("type") or "").strip().lower() in _IDENTITY_BEARING_ASSET_TYPES
+    if not (type_bearing or _PERSON_CONTEXT_RE.search(blob)):
+        return out
+    for match in _CHAR_REF_RE.findall(blob):
+        add(match)
+    return out
 
 
 def _status_ready(node: Dict[str, Any], *, allow_pending_user_reference: bool = False) -> bool:
@@ -652,12 +723,29 @@ def reference_bundle_for_target(root: Path, episode: str, target: Target) -> Dic
             text = str(alias).strip()
             if re.fullmatch(r"CHAR_[A-Za-z0-9_]+(?:/[A-Za-z0-9_\u4e00-\u9fff·.-]+)?", text):
                 char_refs.add(text)
-            elif re.fullmatch(r"(?:LOC|PROP|OUTFIT|VFX)_[A-Za-z0-9_]+", text):
+            elif re.fullmatch(r"(?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_]+", text):
                 asset_refs.add(text)
     identity = load_json_file(root / "出图" / "共享" / "identity_registry.json")
     assets = load_json_file(root / "出图" / "共享" / "asset_registry.json")
     items: List[Dict[str, Any]] = []
     missing: List[str] = []
+
+    # An asset that depicts a character must inherit that character's locked face
+    # anchor; its own reference_group only self-references the not-yet-existing
+    # output. Fold the carried identity into char_refs so the character branch
+    # below resolves real face anchors — otherwise a full face renders unanchored
+    # and drifts at the 定妆 stage.
+    carried_identity: List[str] = []
+    for asset in assets.get("assets") or []:
+        if not isinstance(asset, dict):
+            continue
+        aid = str(asset.get("id") or "").strip()
+        if not aid or aid not in asset_refs:
+            continue
+        for ref in _asset_carried_identities(asset):
+            char_refs.add(ref)
+            if ref not in carried_identity:
+                carried_identity.append(ref)
 
     for ch in identity.get("characters") or []:
         if not isinstance(ch, dict):
@@ -714,6 +802,7 @@ def reference_bundle_for_target(root: Path, episode: str, target: Target) -> Dic
         "reference_input_mode": "codex_exec_image_flags",
         "persistent_subject_support": False,
         "items": items,
+        "carried_identity": carried_identity,
         "missing_ready_refs": missing,
     }
 
@@ -856,6 +945,36 @@ def codex_reference_inputs_for_target(
 
     inputs.sort(key=lambda item: (sort_int(item, "priority", 999), sort_int(item, "sequence", 0)))
     return inputs[:MAX_CODEX_REFERENCE_IMAGES]
+
+
+def bundle_identity_face_paths(bundle: Dict[str, Any]) -> Set[str]:
+    """Rel-paths of the carried/declared character face anchors in a bundle.
+
+    Backend-agnostic so every runner enforces the same face-anchor floor: a plate
+    that depicts a character (``carried_identity`` non-empty) must actually attach
+    one of these, or it renders an unanchored — drifting — new face.
+    """
+    return {
+        str(rel)
+        for item in bundle.get("items") or []
+        if str(item.get("kind")) == "character"
+        for rel in (item.get("paths") or [])
+    }
+
+
+def carried_identity_unanchored(bundle: Dict[str, Any], attached_paths: Iterable[str]) -> bool:
+    """True when the bundle declares carried identity but no character face anchor
+    is actually attached — the exact unanchored-face-plate drift condition.
+
+    Honored by both the Codex and Dreamina runners as a pre-spend interlock
+    (override: ``N2D_ALLOW_UNANCHORED_IDENTITY_PLATE=1``)."""
+    if not bundle.get("carried_identity"):
+        return False
+    face_paths = bundle_identity_face_paths(bundle)
+    if not face_paths:
+        return True
+    attached = {str(p) for p in attached_paths}
+    return not (face_paths & attached)
 
 
 def attach_reference_inputs(bundle: Dict[str, Any], inputs: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -1004,6 +1123,19 @@ def run_codex(
         check=False,
         timeout=timeout_sec,
     )
+
+
+def format_codex_failure(proc: subprocess.CompletedProcess[str]) -> str:
+    """Keep both stderr and JSONL stdout because Codex often puts API errors in stdout."""
+    parts: List[str] = []
+    stderr = (proc.stderr or "").strip()
+    stdout = (proc.stdout or "").strip()
+    if stderr:
+        parts.append(f"stderr={stderr[-2000:]}")
+    if stdout:
+        parts.append(f"stdout={stdout[-4000:]}")
+    detail = " | ".join(parts) if parts else "no stdout/stderr"
+    return f"codex exit {proc.returncode}: {detail}"
 
 
 def decode_image_event(stdout: str, out_path: Path) -> bool:
@@ -1488,6 +1620,22 @@ def process_target(
 
     reference_manifest = write_reference_bundle_manifest(root, episode, target, reference_bundle)
     if (
+        carried_identity_unanchored(
+            reference_bundle, [item.get("rel_path") for item in reference_inputs]
+        )
+        and os.environ.get("N2D_ALLOW_UNANCHORED_IDENTITY_PLATE") != "1"
+    ):
+        carried = "、".join(str(c) for c in reference_bundle.get("carried_identity") or [])
+        print(
+            "[fail] "
+            f"{target.shot}: 本图声明承载角色身份（carries_identity={carried}），"
+            "但没有任何角色脸锚作为 `codex exec --image` 附件传入——纯文生图会另画一张新脸，"
+            f"正是定妆阶段脸漂的成因。参考 manifest 已写入 {reference_manifest}；"
+            "请先把承载角色的脸部特写/正面参考置 ready，或设 N2D_ALLOW_UNANCHORED_IDENTITY_PLATE=1 显式豁免。",
+            file=sys.stderr,
+        )
+        return False
+    if (
         high_risk_text_only_character_shot(target)
         and (reference_bundle.get("items") or reference_bundle.get("missing_ready_refs"))
         and not reference_inputs
@@ -1509,7 +1657,7 @@ def process_target(
     try:
         proc = run_codex(repo_root(), prompt, timeout_sec, reference_inputs)
         if proc.returncode != 0:
-            error = f"codex exit {proc.returncode}: {proc.stderr or proc.stdout}"
+            error = format_codex_failure(proc)
         elif not png_valid(temp_path) and not decode_image_event(proc.stdout, temp_path):
             error = f"codex completed but no valid PNG file or image_generation_end payload was available for {temp_path}"
         else:

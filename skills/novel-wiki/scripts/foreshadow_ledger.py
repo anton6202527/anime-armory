@@ -197,6 +197,40 @@ def scan(data, through_chapter, grace=DEFAULT_GRACE):
     }
 
 
+def _max_written_chapter(project):
+    """从 章节/第NN章.md 推当前已写到第几章；无章节返回 0。"""
+    cdir = os.path.join(project, "章节")
+    if not os.path.isdir(cdir):
+        return 0
+    mx = 0
+    for name in os.listdir(cdir):
+        if not name.endswith(".md"):
+            continue
+        m = re.search(r"第0*(\d+)章", name)
+        if m:
+            mx = max(mx, int(m.group(1)))
+    return mx
+
+
+def analyze(project, through_chapter=None, grace=DEFAULT_GRACE):
+    """consistency_audit 子检测器契约：analyze(project) → {ran, alerts, ...}。
+
+    伏笔超期是 novel-review 该消费却长期没接的「烂尾预警」真实数据源。这里把 scan 适配成
+    统一 subrunner 形态：through_chapter 缺省取已写最大章号；无台账/无 seeds 优雅跳过；
+    overdue 直接当 alerts（每条自带 severity=阻断级/建议级，阻断级=高价值伏笔越窗）。"""
+    data = load_ledger(project)
+    seeds = data.get("seeds") or []
+    if not seeds:
+        return {"ran": False,
+                "skipped": "无伏笔台账或台账为空（先用 foreshadow_ledger.py plant 埋点）"}
+    if through_chapter is None:
+        through_chapter = _max_written_chapter(project)
+    report = scan(data, through_chapter, grace)
+    report["ran"] = True
+    report["alerts"] = report.get("overdue", [])
+    return report
+
+
 # ── CLI ──────────────────────────────────────────────────────────────────────
 def _split_entities(s):
     if not s:

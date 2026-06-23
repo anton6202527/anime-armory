@@ -100,6 +100,16 @@ def test_no_glossary_graceful():
     assert summary["glossary_terms"] == 0  # 无术语表不报错
 
 
+def test_manifest_contract_warns_missing_fields():
+    root = _mk_project({1: "内容。"}, {1: "Content, translated cleanly and at length."})
+    os.makedirs(os.path.join(root, "出海"), exist_ok=True)
+    with open(os.path.join(root, "出海", "manifest.json"), "w", encoding="utf-8") as f:
+        json.dump({"languages": ["en"], "target_platforms": ["KDP"]}, f, ensure_ascii=False)
+    rows, summary = lc.check(root, "en")
+    assert summary["manifest_warnings"]
+    assert summary["manifest_warnings"][0]["type"] == "missing_manifest_fields"
+
+
 def test_diting_idiom_ambiguity_and_tense_review():
     root = _mk_project(
         {1: "她曾经以为大道无情只是传说，后来才知道这是杀鸡儆猴。"},

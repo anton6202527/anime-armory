@@ -16,6 +16,7 @@
 
 | 平台 / 用途 | 单章建议篇幅 | 质检预警带宽 min-max | 默认项目章数 | `novel-create --scale` |
 |---|---|---|---|---|
+| **短故事** / **超短篇**（番茄短故事 · 短剧选品池） | **2000–6000**（整篇） | 1500–8000 | 1 | `microstory`（别名 `短故事`/`超短篇`） |
 | **抖音漫剧** / **红果短剧**源书短章 | **1000–1500** | 800–1800 | 90 | `漫剧` |
 | **微短剧**源书短章 | 1500–2500 | 1200–3000 | 50 | `微短剧` |
 | **网文中篇**（起点 / 番茄连载） | 3000–5000 | 2500–6000 | 20 | `medium` |
@@ -37,6 +38,8 @@
 > **机器配置**：`novel-craft/scripts/contract.py` 的 `SCALE_PROFILES` 与本表 1:1（`words_per_chapter` / `min_max` / 默认章数严格相等）。init 脚本会把 `target_words_per_chapter` 与 `target_wordcount_min_max` 写入 `_meta.json`；字段名因兼容旧项目仍保留 `target_*`，语义是“建议篇幅 + 预警带宽”，不是单章硬限制。`novel-review/scripts/mechanical_check.py` 默认读取这些字段，不再固定用漫剧带宽。改分档先改 `contract.py`，再同步本说明和测试。
 
 **判断口诀**：节拍 1-2 个 → 1000-2500 字；节拍 3-4 个 → 3000-8000 字。
+
+> **短故事档（`microstory`）注意**：这是**单篇成篇**（默认 1 章，2000–6000 字），不是连载，**不进 100k 估章表**。结构是「100 字内抛冲突+金手指 → 中段一次冲突升级 → 结尾强反转」的闭环 + 一句话简介，写法见 [`short-story.md`](short-story.md)。短故事是否优先进入当前选品池，以 `novel-score` market baseline 或 `novel-research` 平台资料包为准。需要拉成连载时再换 `medium`/`漫剧` 档。
 
 ## 软约束（target / max / min）
 

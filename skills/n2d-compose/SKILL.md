@@ -7,6 +7,8 @@ description: Stage 6 of n2d (剪映合成的脚本化替代) — assemble a fini
 
 把一集的 `视频/`(clips) + `配音/voice_*.wav`(可选) + BGM(可选) + 字幕 烧成 `成片_第N集_{mode}.mp4`。
 
+**跨集成片一致性登记（2026-06 加固·schema 见 `n2d-review/references/扩展一致性登记表.md`）**：成片阶段维护两张剧级表，让逐集观感不漂——① `设定库/series_grade.json` 剧级**调色锁**（LUT/白平衡/对比/饱和基线），每集套用后写 `合成/<集>/grade_applied.json` 留痕（`tone_light_contract` 只焊片内像素，这层管跨集色温/对比）；② `设定库/ambient_map.json` 每场景**环境声床**（LOC→ambient bed，`reverb_profile` 管混响、这层管底噪连续性）。n2d-review 的 `系列调色(GRD)`/`环境声(AMB)` 据此对账。
+
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
 本 skill 的可选项**不写死在源码里**。按 `../skills/n2d/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
@@ -34,6 +36,7 @@ description: Stage 6 of n2d (剪映合成的脚本化替代) — assemble a fini
   - `丢弃`（默认）：只在 compose 工作缓存/最终合成链路里剥掉 clip 原生音轨，**不改写 `出视频/第N集/视频/` 的 AI 原片**；音频全部由 配音+BGM+SFX 这条受控链路提供，避免双人声。
   - `低音量混入环境声`：仅当 n2d-video 的「原生音画 opt-in 清单」确认该 Clip 低风险、无口型、无原生人声时，将 clip 原生音轨按 `CLIP_AUDIO_GAIN`（默认 0.35）压低混入作环境底。
   - `保留原片音轨`：仅用于无配音/测试预览/明确要原片声时；有 n2d-voice 配音轨时必须先提醒双人声风险，compose gate 会把“保留原片音轨 + 存在配音轨 + clip 有音频流”视为阻断。
+  - **release gate**：只要策略不是 `丢弃`，就必须存在 `生产数据/native_av_physics_第N集.json`，逐 Clip 说明声源、可见动作证据、空间混响、后期处理策略；低风险 ambience/native_sfx 也不例外。缺 sidecar 时先回 `n2d-video` 补「原生音画物理一致性契约」，不要在 compose 阶段凭听感放行。
   - 命令覆盖：`VIDEO_NATIVE_AUDIO_POLICY=丢弃|低音量混入环境声|保留原片音轨`；旧 `KEEP_CLIP_AUDIO=1` 兼容为 `低音量混入环境声`。
   - **原生音画模式例外（自动覆盖）**：`制作模式=原生音画` 时台词在 clip 自带音轨里，丢弃会丢台词——compose 自动把策略转为 `保留原片音轨`（`compose.sh` 实现）。要强制别的策略须显式设 `VIDEO_NATIVE_AUDIO_POLICY_EXPLICIT=1` 一并指定 `VIDEO_NATIVE_AUDIO_POLICY`。
 - **合规与版权前置（P0）**：compose 不是“先出片再补救”的地方。正式合成前必须存在 `合规/compliance_manifest.json`，并已通过 `n2d-compliance` 填好：版权/改编权、角色授权、声音克隆授权、目标平台审核、出海本地化。`gate.py --stage compose` 会在合成前阻断缺合规包、投放平台未定、海外投放未声明字幕/本地化等硬项。**AI 生成合成内容标识（`ai_labeling`）只做 INFO 待办**；compose `[6/6]` 后 `ai_label.py` 可 best-effort 落显式角标 + 元数据并回写 manifest，失败不阻断主流程。
@@ -144,6 +147,7 @@ compose 混音前自动跑 `foley_agent.py`：分析 `storyboard.json` 识别视
      --duration-sec <合成耗时秒> --provider local-ffmpeg \
      --meta native_audio_policy=<丢弃|低音量混入环境声|保留原片音轨>
    ```
+   若本集用于海外投放或产出英文/双语字幕，compose/review gate 会要求 `设定库/translation_glossary.json` 覆盖人名、称谓、境界、招式、口头禅、系统提示语，并与字幕/OCR 检查一起过 gate。
 
 > **AI 标识/水印不阻断本阶段**：compose 出成片即主流程收尾；`ai_label.py` 只是 best-effort 发布待办辅助。若投放地区/平台需要 AI 标识、披露或数字水印，由使用方在发布工序或工具之外按当地法规自行处理。
 

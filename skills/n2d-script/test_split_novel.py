@@ -1,8 +1,42 @@
 #!/usr/bin/env python3
 """Tests for split_novel project scaffolding."""
+import json
 import os
 import subprocess
 import sys
+
+
+def test_split_novel_builds_local_source_analysis(tmp_path):
+    novel = tmp_path / "novel.txt"
+    novel.write_text(
+        "第一章\n"
+        "灵气复苏的现代都市里，林越说自己觉醒了系统面板。\n"
+        "林越来到青云宗大殿，发现神秘玉佩暗藏真相。\n"
+        "第二章\n"
+        "苏眠问林越为何受伤，林越低声说这是觉醒代价。\n",
+        encoding="utf-8",
+    )
+    out = tmp_path / "out"
+    script = os.path.join(os.path.dirname(__file__), "scripts", "split_novel.py")
+
+    subprocess.run(
+        [sys.executable, script, str(novel), "--out", str(out), "--limit", "1"],
+        text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True,
+    )
+
+    analysis_path = out / "设定库" / "source_analysis.json"
+    assert analysis_path.exists()
+    analysis = json.loads(analysis_path.read_text(encoding="utf-8"))
+    assert analysis["kind"] == "n2d_source_analysis"
+    assert analysis["source"] == "n2d_source_text"
+    assert "系统" in analysis["power_system"]["system_terms"]
+    assert any(c["name"] == "林越" for c in analysis["characters"])
+    assert any("神秘玉佩" in s["description"] for s in analysis["foreshadowing_candidates"])
+    roster = (out / "设定库" / "characters" / "_角色总表.md").read_text(encoding="utf-8")
+    assert "林越" in roster
+    assert "n2d 源书分析预填候选" in roster
+    legacy_cross_line_file = "_novel" + "_handoff.json"
+    assert not (out / "设定库" / legacy_cross_line_file).exists()
 
 
 def test_split_novel_scaffold_includes_base_visual_style_contract(tmp_path):
@@ -21,10 +55,10 @@ def test_split_novel_scaffold_includes_base_visual_style_contract(tmp_path):
 
     style = (out / "设定库" / "global_style.md").read_text(encoding="utf-8")
     assert "## 基础视觉风格" in style
-    assert "国漫写实角色审美 + 电影级布光与镜头语言" in style
+    assert "真实3D人物质感 + 电影叙事镜头感" in style
     assert "## 基础视觉风格契约（style_contract 源头）" in style
     assert "风格名" in style
-    assert "电影级动机光" in style
+    assert "电影叙事镜头感" in style
     assert "风格禁忌" in style
     assert (out / "小说" / "novel.txt").exists()
     assert not (out / "脚本" / "第1集" / "字幕_英文.srt").exists()

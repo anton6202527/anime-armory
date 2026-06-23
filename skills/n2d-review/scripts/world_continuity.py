@@ -23,6 +23,10 @@
 W2 光位方向（advisory）：从「最亮区域质心」估每镜主光方位（left/center/right），同场景相邻镜
 主光左右硬翻转（如上镜画左顺光、下镜画右逆光）→ warn 初筛，交人比对（光位比时辰更易合理变化，只 warn）。
 
+W3 光照物理（advisory·补 W2 只管左右的垂直盲区）：① 光照俯仰——从最亮区质心纵坐标估顶光/底光，
+同场景顶光↔底光(自下而上的鬼影光)硬翻转=物理可疑 warn；② 光位锚自洽——实测主光方位/俯仰 与
+出图 prompt 声明的「光位锚」方向矛盾（声明画左却实测右打光）→ warn，抓"光打反/锚写错"。
+
 依赖 Pillow（缺则优雅跳过，交人判）。纯数学部分（daypart/daypart_rank/continuity_band/light_azimuth/light_dir_band）无依赖、带 pytest。
 
 用法：python3 world_continuity.py <作品根> 第N集 [--night-luma 70] [--day-luma 140] [--dusk-warmth 0.06] [--json]
@@ -35,7 +39,7 @@ import json
 import os
 import re
 import sys
-from typing import Dict, List, Optional, Sequence
+from typing import Dict, List, Mapping, Optional, Sequence
 
 # 时辰分档默认阈值（self-calibrated 不到，故给文档化可调参数，画风偏暗/偏亮时可整体平移）：
 DEFAULT_NIGHT_LUMA = 70.0    # 平均明度 < 此 → 倾向「夜」
@@ -114,6 +118,57 @@ def light_dir_band(prev_az: str, cur_az: str) -> str:
     return "ok"
 
 
+# ---------- W3 光照俯仰（顶光↔底光/鬼影光）+ 光位锚自洽（实测 vs 声明方向） ----------
+# W2 只判左右（line: "只回 x；上下/顶光归 center"），明确不管**垂直**光向。本段补两块物理盲区：
+#   ① 光照俯仰：顶光↔底光(自下而上的鬼影光)横跳——底光是反常/惊悚打光，跨镜翻转=物理穿帮（W2 看不到）；
+#   ② 光位锚自洽：实测主光方位 与 出图 prompt 声明的「光位锚」方向矛盾（声明画左却实测右打光）。
+
+def light_elevation(cy: float, deadzone: float = DEFAULT_LIGHT_DEADZONE) -> str:
+    """最亮区域质心归一纵坐标 cy∈[0,1] → 光照俯仰 'top'|'center'|'bottom'。
+    cy 小=亮区偏上=顶光；cy 大=亮区偏下=底光/脚光（自下而上的鬼影光）。距中线不足 deadzone=居中。纯函数·可测。"""
+    if cy < 0.5 - deadzone:
+        return "top"
+    if cy > 0.5 + deadzone:
+        return "bottom"
+    return "center"
+
+
+def light_elev_band(prev_el: str, cur_el: str) -> str:
+    """同场景相邻镜光照俯仰连续性（advisory·只抓顶↔底硬翻转）：
+      top↔bottom 翻转 → 'warn'（顶光↔底光鬼影光物理可疑跳）；其余 → 'ok'。纯函数·可测。"""
+    if {prev_el, cur_el} == {"top", "bottom"}:
+        return "warn"
+    return "ok"
+
+
+def declared_light_dir(text: str) -> Dict[str, Optional[str]]:
+    """从「光位锚」文本解析声明的主光方向 → {'h': left|right|None, 'v': top|bottom|None}。
+    逆光/侧逆等含糊词不判 h/v（返回 None）。纯函数·可测。"""
+    t = str(text or "")
+    h: Optional[str] = None
+    v: Optional[str] = None
+    if re.search(r"画左|左侧|左方|左前|左[打主]|screen[\s-]*left", t, re.I):
+        h = "left"
+    elif re.search(r"画右|右侧|右方|右前|右[打主]|screen[\s-]*right", t, re.I):
+        h = "right"
+    if re.search(r"顶光|头顶光|顶[打部]|overhead|top[\s-]*light", t, re.I):
+        v = "top"
+    elif re.search(r"底光|脚光|下打光|自下而上|鬼影光|under[\s-]*lit|under[\s-]*light", t, re.I):
+        v = "bottom"
+    return {"h": h, "v": v}
+
+
+def anchor_contradiction(declared: Mapping[str, Optional[str]],
+                         measured_az: Optional[str], measured_elev: Optional[str]) -> Optional[str]:
+    """实测光向 与 声明光位锚 是否矛盾（advisory）。两侧同轴且相反 → 返回人读理由，否则 None。纯函数·可测。"""
+    dh, dv = declared.get("h"), declared.get("v")
+    if dh in ("left", "right") and measured_az in ("left", "right") and dh != measured_az:
+        return f"光位锚声明主光在「{dh}」，实测最亮区却偏「{measured_az}」"
+    if dv in ("top", "bottom") and measured_elev in ("top", "bottom") and dv != measured_elev:
+        return f"光位锚声明「{dv}」光，实测最亮区却偏「{measured_elev}」"
+    return None
+
+
 # ---------- 图像（需 Pillow） ----------
 
 def _probe_pillow() -> bool:
@@ -183,6 +238,48 @@ def _bright_centroid(path: str, size: int = 96, top_frac: float = 0.15) -> Optio
         return (sx / k) / max(1, w - 1)
     except Exception:
         return None
+
+
+def _bright_centroid_y(path: str, size: int = 96, top_frac: float = 0.15) -> Optional[float]:
+    """取图中最亮 top_frac 像素的质心归一纵坐标 cy∈[0,1]（光从上还是下来·W3 俯仰用）。读图失败/全黑→None。"""
+    try:
+        from PIL import Image  # type: ignore
+        im = Image.open(path).convert("L")
+        im.thumbnail((size, size))
+        w, h = im.size
+        if w == 0 or h == 0:
+            return None
+        px = list(im.getdata())
+        n = len(px)
+        order = sorted(range(n), key=lambda i: px[i], reverse=True)
+        k = max(1, int(n * top_frac))
+        sy = sum((i // w) for i in order[:k])
+        return (sy / k) / max(1, h - 1)
+    except Exception:
+        return None
+
+
+def _declared_light_of_shot(root: str, ep: str) -> Dict[str, str]:
+    """每镜 PNG → 该镜「光位锚」声明文本（取 01_分镜出图.md 每块的 光位锚 行）。无则空。"""
+    p = os.path.join(root, "出图", ep, "prompt", "01_分镜出图.md")
+    out: Dict[str, str] = {}
+    if not os.path.isfile(p):
+        return out
+    try:
+        text = open(p, encoding="utf-8").read()
+    except Exception:
+        return out
+    for blk in re.split(r"(?m)(?=^## )", text):
+        if not blk.strip().startswith("## "):
+            continue
+        mt = re.search(r"出图/[^/]+/([^`』\s]+\.png)", blk)
+        if not mt:
+            continue
+        png = os.path.basename(mt.group(1))
+        ml = re.search(r"(?m)^.*光位锚.*$", blk)
+        if ml:
+            out[png] = ml.group(0)
+    return out
 
 
 def _scene_of_shot(root: str, ep: str) -> Dict[str, str]:
@@ -259,6 +356,7 @@ def analyze(root: str, ep: str, night_luma: float = DEFAULT_NIGHT_LUMA,
         return res
     smap = _scene_of_shot(root, ep)
     locked = _locked_dayparts(root, ep)
+    declared = _declared_light_of_shot(root, ep)  # W3 光位锚自洽用
     if not smap:
         res["notes"].append("未取到逐镜场景标签——整集当一条时间线走（仅查相邻镜时辰硬跳）。")
 
@@ -272,12 +370,16 @@ def analyze(root: str, ep: str, night_luma: float = DEFAULT_NIGHT_LUMA,
         name = os.path.basename(p)
         scene = smap.get(name, "")
         cx = _bright_centroid(p)
+        cy = _bright_centroid_y(p)
         timeline.append({
             "png": name, "scene": scene,
             "luma": round(luma, 1), "warmth": round(warmth, 3),
             "daypart": daypart(luma, warmth, night_luma, day_luma, dusk_warmth),
             "light_cx": None if cx is None else round(cx, 3),
             "light_az": None if cx is None else light_azimuth(cx),
+            "light_cy": None if cy is None else round(cy, 3),
+            "light_elev": None if cy is None else light_elevation(cy),
+            "declared_light": declared.get(name, ""),
         })
     if not timeline:
         res["notes"].append("无法读图估时辰。")
@@ -295,6 +397,7 @@ def analyze(root: str, ep: str, night_luma: float = DEFAULT_NIGHT_LUMA,
             res["notes"].append(f"场景[{scene}] scene_dna 锁定时辰={lock}，违锁 2 级 → block。")
         prev = None
         prev_az = None
+        prev_elev = None
         for row in rows:
             cur = row["daypart"]
             if prev is None:
@@ -324,6 +427,31 @@ def analyze(root: str, ep: str, night_luma: float = DEFAULT_NIGHT_LUMA,
                     })
             if cur_az:
                 prev_az = cur_az
+            # W3 光照俯仰：同场景相邻镜顶光↔底光(鬼影光)硬翻转 → warn（物理可疑·W2 不管垂直）。
+            cur_elev = row.get("light_elev")
+            if prev_elev and cur_elev:
+                ev = light_elev_band(prev_elev, cur_elev)
+                if ev != "ok":
+                    res["shots"].append({
+                        "metric": "light_elevation",
+                        "png": row["png"], "scene": scene or "(全集)",
+                        "prev_light_elev": prev_elev, "light_elev": cur_elev,
+                        "verdict": ev,
+                        "message": f"光照俯仰 {prev_elev}→{cur_elev} 翻转（顶光↔底光鬼影光·物理可疑，人比对相邻镜）",
+                    })
+            if cur_elev:
+                prev_elev = cur_elev
+            # W3 光位锚自洽：实测主光方位/俯仰 与 出图 prompt 声明的「光位锚」矛盾 → warn。
+            reason = anchor_contradiction(declared_light_dir(row.get("declared_light", "")),
+                                          cur_az, cur_elev)
+            if reason:
+                res["shots"].append({
+                    "metric": "light_anchor",
+                    "png": row["png"], "scene": scene or "(全集)",
+                    "light_az": cur_az, "light_elev": cur_elev,
+                    "verdict": "warn",
+                    "message": f"{reason}——实测光向与声明光位锚矛盾，人核对是否光打反/写错锚。",
+                })
     return res
 
 

@@ -162,6 +162,22 @@ def test_run_power_system_disabled_by_setting():
     assert "关闭" in res.get("skipped", "")
 
 
+def test_run_research_fact_support_flags_unbacked_medical_scene():
+    root = tempfile.mkdtemp()
+    os.makedirs(os.path.join(root, "章节"))
+    with open(os.path.join(root, "章节", "第01章.md"), "w", encoding="utf-8") as f:
+        f.write("# 第1章 急诊\n医生在医院急诊抢救并决定用药。\n")
+
+    res = consistency_audit.run_research_fact_support(root)
+    assert res["ran"] is True
+    assert res["blocking"] >= 1
+    out = os.path.join(root, "审稿", "research_fact_support.json")
+    assert os.path.exists(out)
+    with open(out, encoding="utf-8") as f:
+        payload = json.load(f)
+    assert any(item["type"] == "missing_research_pack" for item in payload["alerts"])
+
+
 def test_chapters_helper_sorts_by_index():
     card = "## 李锦云\n"
     chapters = {

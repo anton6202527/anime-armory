@@ -41,6 +41,7 @@ from n2d_const import boundary_buckets, boundary_lexicon
 from n2d_contract import PROGRESS_COLUMNS
 from n2d_settings import DEFAULTS, get_setting
 from n2d_visual_styles import format_style_contract_markdown, style_options_text
+from source_analyze import render_character_roster, write_analysis
 
 
 def read_text(path):
@@ -286,7 +287,6 @@ def global_style_scaffold(title, root):
         "## 统一负面词\n（画风漂移、多余文字水印、多指错手、脸/妆造漂移；其余禁忌按「基础视觉风格」派生，例如未选Q版才禁低幼Q版，写实电影感才禁插画化）\n"
     )
 
-
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("novel")
@@ -370,6 +370,7 @@ def main():
     os.makedirs(os.path.join(settings, "characters"), exist_ok=True)
     os.makedirs(os.path.join(settings, "locations"), exist_ok=True)
     os.makedirs(os.path.join(root, "脚本"), exist_ok=True)
+    source_analysis = write_analysis(root, title, "\n".join(paras), episodes)
 
     write_if_absent(
         os.path.join(settings, "global_style.md"),
@@ -377,7 +378,7 @@ def main():
     )
     write_if_absent(
         os.path.join(settings, "characters", "_角色总表.md"),
-        f"# {title} — 角色卡总表\n\n> 全篇首次出现即建卡，后续所有镜头严格复用。格式见 references/formats.md。\n",
+        render_character_roster(title, source_analysis),
     )
     write_if_absent(
         os.path.join(settings, "locations", "_场景总表.md"),
@@ -422,6 +423,10 @@ def main():
             cells = [f"第{i}集", str(ln), "✅"] + ["⬜"] * (len(PROGRESS_COLUMNS) - 3)
             if "字幕英" in PROGRESS_COLUMNS and not wants_en:
                 cells[PROGRESS_COLUMNS.index("字幕英")] = "—"
+            # 奇观连续性默认 —（na·不挡 flow）：拆集时未知本集有无奇观镜，image_prompt prework
+            # 生成序列总账后回写 ✅（有奇观且覆盖）或保持 —（无奇观）。
+            if "奇观连续性" in PROGRESS_COLUMNS:
+                cells[PROGRESS_COLUMNS.index("奇观连续性")] = "—"
             fresh[i] = "| " + " | ".join(cells) + " |"
         rows = {**fresh, **existing_rows}  # 旧勾选优先，保留人工进度
         made = max(rows) if rows else n_make

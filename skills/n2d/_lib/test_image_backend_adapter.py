@@ -97,3 +97,32 @@ def test_refresh_evidence_status_lifecycle(tmp_path):
     stale = adapter.refresh_evidence_status(str(tmp_path), "Codex", today=dt.date(2026, 6, 21))
     assert fresh["status"] == "fresh"
     assert stale["status"] == "stale"
+
+
+def test_sora_cameo_forbids_face_upload_and_requires_authorization():
+    a = adapter.backend_adapter("sora")
+    assert adapter.forbids_face_reference_upload(a) is True
+    assert adapter.requires_cameo_authorization(a) is True
+    # 普通可喂脸后端不触发
+    codex = adapter.backend_adapter("codex")
+    assert adapter.forbids_face_reference_upload(codex) is False
+    assert adapter.requires_cameo_authorization(codex) is False
+
+
+def test_cameo_policy_findings_blocks_face_upload_and_missing_auth():
+    sora = adapter.backend_adapter("sora")
+    # 喂了脸锚 + 未授权 → 两条 block
+    f = adapter.cameo_policy_findings(sora, feeds_face_references=True, authorization_status=None)
+    codes = {x["code"] for x in f}
+    assert codes == {"cameo_face_upload_forbidden", "cameo_authorization_required"}
+    assert all(x["level"] == "block" for x in f)
+    # 不喂脸 + 已授权 → 放行（空）
+    assert adapter.cameo_policy_findings(sora, feeds_face_references=False, authorization_status="approved") == []
+    # 普通后端恒空，即便喂脸
+    codex = adapter.backend_adapter("codex")
+    assert adapter.cameo_policy_findings(codex, feeds_face_references=True, authorization_status=None) == []
+
+
+def test_reference_budget_for_reports_per_backend_caps():
+    assert adapter.reference_budget_for(adapter.backend_adapter("nano_banana"))["character_refs"] == 5
+    assert adapter.reference_budget_for(adapter.backend_adapter("seedream"))["max_total"] == 14

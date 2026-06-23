@@ -14,6 +14,14 @@ sys.modules[SPEC.name] = codex_image_runner
 SPEC.loader.exec_module(codex_image_runner)
 
 
+def test_format_codex_failure_keeps_stdout_and_stderr():
+    proc = subprocess.CompletedProcess(["codex"], 2, stdout="jsonl api error", stderr="stderr detail")
+    msg = codex_image_runner.format_codex_failure(proc)
+    assert "codex exit 2" in msg
+    assert "stderr=stderr detail" in msg
+    assert "stdout=jsonl api error" in msg
+
+
 def write_storyboard(root: Path) -> None:
     path = root / "脚本" / "第1集" / "storyboard.json"
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -303,6 +311,119 @@ def test_reference_bundle_resolves_ready_character_and_asset_refs(tmp_path: Path
     assert "--image" in cmd
     assert any(str(ref) in part for part in cmd)
     assert any(str(prop) in part for part in cmd)
+
+
+def _write_carried_identity_fixtures(tmp_path: Path, asset: dict) -> codex_image_runner.Target:
+    """Shared fixture: a locked 沈念 face anchor + a VFX asset that depicts her."""
+    face = tmp_path / "出图" / "共享" / "图片" / "定妆_沈念_脸部特写.png"
+    face.parent.mkdir(parents=True)
+    face.write_bytes(b"\x89PNG\r\n\x1a\n" + b"0" * 64)
+    shared = tmp_path / "出图" / "共享"
+    (shared / "identity_registry.json").write_text(
+        json.dumps({
+            "characters": [{
+                "id": "CHAR_01",
+                "forms": [{
+                    "form": "冷宫废妃常态",
+                    "reference_group": {
+                        "face_anchor_refs": [
+                            {"path": "出图/共享/图片/定妆_沈念_脸部特写.png", "status": "ready"}
+                        ]
+                    },
+                }],
+            }]
+        }, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    (shared / "asset_registry.json").write_text(
+        json.dumps({"assets": [asset]}, ensure_ascii=False), encoding="utf-8"
+    )
+    section = codex_image_runner.ClipSection(
+        clip="Clip_99",
+        title="## ① VFX_01 万妖血脉觉醒前兆",
+        body="**目标存档**：`出图/共享/图片/定妆_万妖血脉觉醒前兆.png`\nVFX 定妆图，左腕暗金细纹。",
+        target_line="`出图/共享/图片/定妆_万妖血脉觉醒前兆.png`",
+    )
+    target = codex_image_runner.Target(
+        shot="VFX_01::定妆_万妖血脉觉醒前兆",
+        clip="VFX_01",
+        mode="shared",
+        rel_path="出图/共享/图片/定妆_万妖血脉觉醒前兆.png",
+        section=section,
+    )
+    setattr(target, "aliases", {"VFX_01", "万妖血脉觉醒前兆"})
+    return target
+
+
+def test_vfx_asset_inherits_carried_character_face_via_explicit_field(tmp_path: Path) -> None:
+    target = _write_carried_identity_fixtures(tmp_path, {
+        "id": "VFX_01",
+        "type": "vfx",
+        "name": "万妖血脉觉醒前兆",
+        "carries_identity": ["CHAR_01/冷宫废妃常态"],
+        "reference_group": {"primary": "出图/共享/图片/定妆_万妖血脉觉醒前兆.png"},
+    })
+
+    bundle = codex_image_runner.reference_bundle_for_target(tmp_path, "第1集", target)
+
+    assert bundle["carried_identity"] == ["CHAR_01/冷宫废妃常态"]
+    assert any(item["kind"] == "character" and item["id"] == "CHAR_01" for item in bundle["items"])
+    assert any("定妆_沈念_脸部特写.png" in p for item in bundle["items"] for p in item["paths"])
+
+    inputs = codex_image_runner.codex_reference_inputs_for_target(tmp_path, "第1集", target, bundle)
+    assert any(str(i.get("role")) == "character" for i in inputs)
+
+
+def test_vfx_asset_infers_carried_identity_from_structure_when_field_absent(tmp_path: Path) -> None:
+    # Legacy registry: no carries_identity field, but the structure text names CHAR_01.
+    target = _write_carried_identity_fixtures(tmp_path, {
+        "id": "VFX_01",
+        "type": "vfx",
+        "name": "万妖血脉觉醒前兆",
+        "constraints": {"structure": "暗金细纹从 CHAR_01 左腕旧疤裂出"},
+        "reference_group": {"primary": "出图/共享/图片/定妆_万妖血脉觉醒前兆.png"},
+    })
+
+    bundle = codex_image_runner.reference_bundle_for_target(tmp_path, "第1集", target)
+
+    assert "CHAR_01" in bundle["carried_identity"]
+    assert any("定妆_沈念_脸部特写.png" in p for item in bundle["items"] for p in item["paths"])
+
+
+def test_non_whitelisted_type_person_plate_infers_carried_identity(tmp_path: Path) -> None:
+    # type-whitelist hole: a PROP whose type ('prop') is NOT identity-bearing, but
+    # whose plate clearly renders her face (a mirror reflection), must still inherit
+    # the face anchor via person-context inference.
+    target = _write_carried_identity_fixtures(tmp_path, {
+        "id": "PROP_09",
+        "type": "prop",
+        "name": "铜镜",
+        "constraints": {"structure": "铜镜映出 CHAR_01 的脸，面容清冷"},
+        "reference_group": {"primary": "出图/共享/图片/定妆_万妖血脉觉醒前兆.png"},
+    })
+    setattr(target, "aliases", {"PROP_09"})
+
+    bundle = codex_image_runner.reference_bundle_for_target(tmp_path, "第1集", target)
+
+    assert "CHAR_01" in bundle["carried_identity"]
+    assert any("定妆_沈念_脸部特写.png" in p for item in bundle["items"] for p in item["paths"])
+
+
+def test_non_identity_asset_does_not_infer_carried_identity(tmp_path: Path) -> None:
+    # A LOC plate that merely mentions a character must NOT pull a face into a room.
+    target = _write_carried_identity_fixtures(tmp_path, {
+        "id": "LOC_09",
+        "type": "location",
+        "name": "冷宫寝屋",
+        "constraints": {"structure": "CHAR_01 的寝宫，空镜"},
+        "reference_group": {"primary": "出图/共享/图片/定妆_万妖血脉觉醒前兆.png"},
+    })
+    setattr(target, "aliases", {"LOC_09", "冷宫寝屋"})
+
+    bundle = codex_image_runner.reference_bundle_for_target(tmp_path, "第1集", target)
+
+    assert bundle["carried_identity"] == []
+    assert all(item["kind"] != "character" for item in bundle["items"])
 
 
 def test_tailframe_reference_inputs_include_first_and_midframe_sources(tmp_path: Path) -> None:

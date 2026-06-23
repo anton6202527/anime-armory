@@ -162,8 +162,14 @@ def default_manifest(root: Path, episode: str | None = None) -> Dict[str, Any]:
         "distribution_intent": "publish_candidate",
         "scope": {"episodes": [episode] if episode else "all"},
         "rights": {
-            "source_text": {"status": "user_declared", "evidence": "TODO: 原创/公版/授权证明"},
-            "adaptation": {"status": "user_declared", "evidence": "TODO: 改编权说明"},
+            "source_text": {
+                "status": "original",
+                "evidence": "仓库默认：用户为原著作者，源文本作者自有",
+            },
+            "adaptation": {
+                "status": "original",
+                "evidence": "仓库默认：同一原著作者进行同源漫剧改编，改编权作者自有",
+            },
             "music_bgm": {"status": "not_applicable", "evidence": ""},
             "sfx": {"status": "not_applicable", "evidence": ""},
             "fonts": {"status": "not_applicable", "evidence": ""},
@@ -179,6 +185,13 @@ def default_manifest(root: Path, episode: str | None = None) -> Dict[str, Any]:
             "uses_voice_clone": False,
             "authorization_status": "not_applicable",
             "evidence": "未使用真人参考音；若使用参考音，改为 authorized_clone + approved + evidence",
+        },
+        "image_identity": {
+            # cameo 类生图/生视频后端（如 Sora 2）：禁止上传含脸参考图，锁脸只能自录+opt-in 授权。
+            "uses_cameo": False,
+            "authorization_status": "not_applicable",
+            "feeds_face_references": False,
+            "evidence": "未用 cameo；若用 Sora2 cameo，改 uses_cameo=true + approved + evidence，且不得喂第三方脸锚",
         },
         "platform_review": {
             "targets": [{
@@ -310,6 +323,15 @@ def check_manifest(root: Path, episode: str | None, stage: str = "compose") -> L
             issues.append(f"BLOCK {path}: voice clone requires authorization_status=approved")
         if not has_real_value(voice.get("evidence")):
             issues.append(f"BLOCK {path}: voice clone requires evidence/ref")
+    # cameo 真人 likeness 后端（如 Sora 2）：与声纹克隆同级，每次再确认，internal_only 也不豁免。
+    image_identity = data.get("image_identity") if isinstance(data.get("image_identity"), dict) else {}
+    if image_identity.get("uses_cameo") is True:
+        if str(image_identity.get("authorization_status") or "").strip().lower() != "approved":
+            issues.append(f"BLOCK {path}: cameo identity requires authorization_status=approved (自录+opt-in 授权链)")
+        if not has_real_value(image_identity.get("evidence")):
+            issues.append(f"BLOCK {path}: cameo identity requires evidence/ref")
+        if image_identity.get("feeds_face_references") is True:
+            issues.append(f"BLOCK {path}: cameo backend (Sora2 政策) forbids uploading face reference images; 锁脸走 cameo 自录授权")
     # platform_review / overseas_localization：internal_only 不再整体跳过，而是同样检查、
     # 把 BLOCK 降为 INFO（内部 demo 免检，转投放前需补）——与 n2d-review gate 同源行为。
     targets = ((data.get("platform_review") or {}).get("targets")) or []

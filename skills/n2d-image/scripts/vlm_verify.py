@@ -39,6 +39,19 @@ try:
 except (TypeError, ValueError):
     VLM_BLOCK_FLOOR = 0.6
 
+# 自一致投票（self-consistency）：默认 1 次（零行为变化）；≥3 次时取多数票定 match、留痕分歧度。
+# 2026 VLM-as-judge 最佳实践——单次判定不可靠，多次采样聚合提稳。视频侧 VLM1
+# (n2d-review/video_vlm_consistency._vote_disagreement) 早已消费 sidecar 投票元数据；
+# 这里把同口径补到图侧 ④VLM 语义判定（独立线·不跨 skill import，复制同公式）。
+try:
+    VLM_VOTES = max(1, int(os.environ.get("N2D_VLM_VOTES", "1")))
+except (TypeError, ValueError):
+    VLM_VOTES = 1
+try:
+    VLM_VOTE_DISAGREE_FLOOR = float(os.environ.get("N2D_VLM_VOTE_DISAGREE", "0.34"))
+except (TypeError, ValueError):
+    VLM_VOTE_DISAGREE_FLOOR = 0.34
+
 # judge: (abspath, canonical_text, kind) → verdict dict 或 None（判定失败/后端不可用单图）
 Judge = Callable[[str, str, str], Optional[Dict[str, Any]]]
 
@@ -93,26 +106,92 @@ def parse_verdict(raw: Any) -> Optional[Dict[str, Any]]:
     }
 
 
+def vote_disagreement(verdicts: Sequence[Mapping[str, Any]]) -> float:
+    """自一致投票分歧度 = 1 − 多数票占比（与视频侧 VLM1 `_vote_disagreement` 同口径）。
+    有效票 <3 → 0.0（样本太小不算分歧）。纯函数·可测。"""
+    matches = [bool(v.get("match")) for v in verdicts if isinstance(v, Mapping) and "match" in v]
+    if len(matches) < 3:
+        return 0.0
+    majority = max(matches.count(True), matches.count(False))
+    return 1.0 - majority / len(matches)
+
+
+def aggregate_votes(verdicts: Sequence[Optional[Mapping[str, Any]]]) -> Optional[Dict[str, Any]]:
+    """多次自一致采样的 verdict 列表 → 单条聚合 verdict（多数票定 match·分歧度留痕）。纯函数·可测。
+
+    - 判定失败(None)的票剔除；全失败 → None；
+    - 单票 → 原样返回（votes=1 时零行为变化，不带 vote_disagreement 键）；
+    - 平票偏向 match=True（保守不误伤）；confidence 取与多数一致票的均值；
+    - mismatches 取所有 match=False 票的并集（最全信息）；reason 取多数侧首条非空。"""
+    valid = [v for v in verdicts if isinstance(v, Mapping) and "match" in v]
+    if not valid:
+        return None
+    if len(valid) == 1:
+        return dict(valid[0])
+    matches = [bool(v.get("match")) for v in valid]
+    majority_match = matches.count(True) >= matches.count(False)
+    agree = [v for v in valid if bool(v.get("match")) == majority_match] or valid
+    confs = [float(v.get("confidence") or 0.0) for v in agree]
+    conf = max(0.0, min(1.0, sum(confs) / len(confs)))
+    mismatches: List[str] = []
+    for v in valid:
+        if not bool(v.get("match")):
+            for m in v.get("mismatches") or []:
+                if str(m) not in mismatches:
+                    mismatches.append(str(m))
+    reason = next((str(v.get("reason")) for v in agree if str(v.get("reason") or "").strip()), "")
+    return {
+        "match": majority_match,
+        "confidence": conf,
+        "mismatches": mismatches[:10],
+        "reason": reason,
+        "vote_disagreement": round(vote_disagreement(valid), 3),
+        "n_votes": len(valid),
+    }
+
+
+def judge_verdict(judge: Judge, abspath: str, canonical: str, kind: str,
+                  votes: int = VLM_VOTES) -> Optional[Dict[str, Any]]:
+    """调 VLM judge `votes` 次并聚合（votes=1 → 等价单次 parse_verdict·零行为变化）。best-effort I/O。"""
+    n = max(1, int(votes))
+    parsed: List[Optional[Dict[str, Any]]] = []
+    for _ in range(n):
+        try:
+            parsed.append(parse_verdict(judge(abspath, canonical, kind)))
+        except Exception:
+            parsed.append(None)
+    return aggregate_votes(parsed)
+
+
 def verdict_finding(name: str, kind: str, png: str, verdict: Optional[Mapping[str, Any]],
-                    is_key: bool, block_floor: float = VLM_BLOCK_FLOOR) -> Optional[Dict[str, str]]:
+                    is_key: bool, block_floor: float = VLM_BLOCK_FLOOR,
+                    vote_disagree_floor: float = VLM_VOTE_DISAGREE_FLOOR) -> Optional[Dict[str, str]]:
     """verdict × 是否关键资产 → finding（纯函数·可测）。
 
-    - 关键 × match=False × confidence≥floor → block `vlm_semantic_mismatch`；
-    - match=False 但（非关键 或 置信度不足） → warn `vlm_semantic_review`；
-    - match=True / verdict=None → None。"""
+    - 关键 × match=False × confidence≥floor × 投票分歧<floor → block `vlm_semantic_mismatch`；
+    - match=False 但（非关键 / 置信度不足 / **投票分歧高**） → warn `vlm_semantic_review`；
+    - match=True / verdict=None → None。
+
+    自一致投票分歧高（judge 自己都拿不准）时**绝不硬挡**，降级人判——与视频侧 VLM1 同纪律。"""
     if not verdict or verdict.get("match"):
         return None
     conf = float(verdict.get("confidence") or 0.0)
+    disagree = float(verdict.get("vote_disagreement") or 0.0)
     mis = "、".join(verdict.get("mismatches") or []) or (verdict.get("reason") or "未列明")
     kindlabel = "角色" if kind == "character" else "资产"
-    if is_key and conf >= block_floor:
-        return {"level": "block", "code": "vlm_semantic_mismatch",
-                "png": png, "name": name, "confidence": round(conf, 4),
+    base = {"png": png, "name": name, "confidence": round(conf, 4)}
+    if verdict.get("vote_disagreement") is not None:
+        base["vote_disagreement"] = round(disagree, 4)
+    if is_key and conf >= block_floor and disagree < vote_disagree_floor:
+        return {**base, "level": "block", "code": "vlm_semantic_mismatch",
                 "msg": (f"{kindlabel}「{name}」VLM 判定语义崩设定（conf={conf:.2f}≥{block_floor}）：{mis}。"
                         f"本镜 {png}——指纹/embedding 可能过但违反 canonical 设定，关键资产硬挡，重出。")}
-    return {"level": "warn", "code": "vlm_semantic_review",
-            "png": png, "name": name, "confidence": round(conf, 4),
-            "msg": (f"{kindlabel}「{name}」VLM 疑似不符（conf={conf:.2f}）：{mis}。本镜 {png}——人判是否真漂。")}
+    note = ""
+    if is_key and conf >= block_floor and disagree >= vote_disagree_floor:
+        note = (f"（VLM 自一致投票分歧 {disagree:.2f}≥{vote_disagree_floor}：judge 自身不稳，"
+                f"本可硬挡但降级人判，换 judge 或加采样复判）")
+    return {**base, "level": "warn", "code": "vlm_semantic_review",
+            "msg": (f"{kindlabel}「{name}」VLM 疑似不符（conf={conf:.2f}）：{mis}。本镜 {png}——人判是否真漂。{note}")}
 
 
 def _join_dna(dna: Mapping[str, Any]) -> str:
@@ -252,9 +331,11 @@ def merge_shot_canonical(mask: Dict[str, Dict[str, Any]], png: str, matched: boo
 
 def evaluate_pairs(pairs: Sequence[Mapping[str, Any]], canon_map: Mapping[str, Dict[str, str]],
                    judge: Judge, shot_abspath: Callable[[str], str],
-                   block_floor: float = VLM_BLOCK_FLOOR) -> Dict[str, Any]:
+                   block_floor: float = VLM_BLOCK_FLOOR, votes: int = VLM_VOTES,
+                   vote_disagree_floor: float = VLM_VOTE_DISAGREE_FLOOR) -> Dict[str, Any]:
     """逐对 (canonical ↔ 本镜) 调 VLM judge → findings（注入 stub 可测）。
-    同时产逐镜 canonical 通过表 shot_canonical（G3 fidelity-gate 用：face/语义一致性聚合前先剔崩设定镜）。"""
+    同时产逐镜 canonical 通过表 shot_canonical（G3 fidelity-gate 用：face/语义一致性聚合前先剔崩设定镜）。
+    votes≥3 时每对自一致采样多次取多数票，分歧高的判题降级人判（不硬挡）。"""
     findings: List[Dict[str, str]] = []
     shot_canonical: Dict[str, Dict[str, Any]] = {}
     judged = 0
@@ -267,10 +348,7 @@ def evaluate_pairs(pairs: Sequence[Mapping[str, Any]], canon_map: Mapping[str, D
         abspath = shot_abspath(str(png_rel))
         ckey = f"{abspath}::{entry['canonical']}"
         if ckey not in cache:
-            try:
-                cache[ckey] = parse_verdict(judge(abspath, entry["canonical"], entry["kind"]))
-            except Exception:
-                cache[ckey] = None
+            cache[ckey] = judge_verdict(judge, abspath, entry["canonical"], entry["kind"], votes)
         verdict = cache[ckey]
         if verdict is None:
             continue
@@ -278,11 +356,12 @@ def evaluate_pairs(pairs: Sequence[Mapping[str, Any]], canon_map: Mapping[str, D
         merge_shot_canonical(shot_canonical, str(png_rel),
                              bool(verdict.get("match")), float(verdict.get("confidence") or 0.0))
         fnd = verdict_finding(str(p.get("name")), entry["kind"], str(png_rel), verdict,
-                              is_key=True, block_floor=block_floor)
+                              is_key=True, block_floor=block_floor,
+                              vote_disagree_floor=vote_disagree_floor)
         if fnd:
             findings.append(fnd)
     block = sum(1 for f in findings if f["level"] == "block")
-    return {"available": True, "judged": judged, "block_floor": block_floor,
+    return {"available": True, "judged": judged, "block_floor": block_floor, "votes": int(votes),
             "block": block, "findings": findings, "shot_canonical": shot_canonical}
 
 
@@ -315,9 +394,11 @@ def load_judge() -> Optional[Judge]:
 
 
 def analyze(root: Path, ep: str, payload: Mapping[str, Any],
-            judge: Optional[Judge] = None, block_floor: float = VLM_BLOCK_FLOOR) -> Dict[str, Any]:
+            judge: Optional[Judge] = None, block_floor: float = VLM_BLOCK_FLOOR,
+            votes: int = VLM_VOTES, vote_disagree_floor: float = VLM_VOTE_DISAGREE_FLOOR) -> Dict[str, Any]:
     """image_qc 集成入口：抽 (canonical↔镜) 对跑 VLM 判定。judge=None → 尝试自动加载。
-    无 VLM 后端 → available=False（advisory 跳过，绝不阻断默认产线）。"""
+    无 VLM 后端 → available=False（advisory 跳过，绝不阻断默认产线）。
+    votes 由 `N2D_VLM_VOTES` 控（默认 1）：≥3 时每镜自一致采样多次取多数票、分歧高的降级人判。"""
     j = judge if judge is not None else load_judge()
     if j is None:
         return {"available": False, "judged": 0,
@@ -329,7 +410,7 @@ def analyze(root: Path, ep: str, payload: Mapping[str, Any],
                 "notes": ["identity_registry/asset_registry 无可判定的 canonical 设定。"], "findings": []}
     pairs = _pairs_from_payload(payload)
     shot_abspath = lambda rel: str(Path(root) / "出图" / ep / rel)  # noqa: E731
-    return evaluate_pairs(pairs, canon_map, j, shot_abspath, block_floor)
+    return evaluate_pairs(pairs, canon_map, j, shot_abspath, block_floor, votes, vote_disagree_floor)
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -362,7 +443,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         print("⏭ VLM 语义判定跳过：" + "；".join(res.get("notes", [])))
         return 0
     print(f"VLM 语义判定（{ns.episode}）：判 {res['judged']} 镜 · floor {res['block_floor']} · "
-          f"{res['block']} block / {len(res['findings'])} 条")
+          f"投票 {res.get('votes', 1)}× · {res['block']} block / {len(res['findings'])} 条")
     for f in res["findings"]:
         print(f"  [{f['level']}] {f['msg']}")
     return 2 if res.get("block") else 0

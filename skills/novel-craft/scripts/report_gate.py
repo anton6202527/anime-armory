@@ -14,6 +14,28 @@ from qa_gate import collect_gate_status, format_gate_status, missing_score_repor
 from waivers import append_waiver, make_waiver
 
 
+def _resolve_export_formats(root, override):
+    """复刻 export.py 解析导出格式的方式：显式 --formats 优先，否则读 _meta.json.outputs。
+
+    export 硬闸传 export_formats=<formats> + require_state_closure=True，会触发
+    ai_usage / compliance / 状态闭环三道闸；report_gate 的导出就绪自检若不传同样的
+    参数，就会静默跳过这三道，给出比真 export 更宽松的"通过"。"""
+    if override:
+        return [f.strip() for f in override.split(",") if f.strip()] or None
+    meta_path = os.path.join(root, "_meta.json")
+    if not os.path.exists(meta_path):
+        return None
+    try:
+        with open(meta_path, encoding="utf-8") as f:
+            meta = json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return None
+    outputs = meta.get("outputs") if isinstance(meta, dict) else None
+    if not isinstance(outputs, list):
+        return None
+    return [f.strip() for f in outputs if isinstance(f, str) and f.strip()] or None
+
+
 def main():
     ap = argparse.ArgumentParser(description="读取 novel review/score 机器报告，判断是否阻断 export")
     ap.add_argument("project_root")
@@ -25,6 +47,9 @@ def main():
                     help="显式豁免商业/漫剧项目缺 score_report；会写 审稿/waiver_log.jsonl")
     ap.add_argument("--reason", default="explicit --waive-missing-score during report gate",
                     help="配合 --waive-missing-score 写入 waiver reason")
+    ap.add_argument("--formats", default=None,
+                    help="导出就绪自检用的导出格式（逗号分隔）；缺省读 _meta.json.outputs，"
+                         "用于复刻 export.py 的 ai_usage/compliance/状态闭环三道闸")
     args = ap.parse_args()
 
     root = os.path.abspath(args.project_root)
@@ -32,7 +57,24 @@ def main():
         print(f"[err] 找不到作品根：{root}", file=sys.stderr)
         sys.exit(2)
 
-    status = collect_gate_status(root, require_review_report=not args.progress_mode)
+    # 续跑提示模式只做轻量检查；导出硬闸模式必须和 export.py 传一致的参数，
+    # 否则会静默漏掉 ai_usage / compliance / 状态闭环三道阻断。
+    if args.progress_mode:
+        export_formats = None
+        require_state_closure = False
+    else:
+        export_formats = _resolve_export_formats(root, args.formats)
+        require_state_closure = True
+
+    def _collect():
+        return collect_gate_status(
+            root,
+            require_review_report=not args.progress_mode,
+            export_formats=export_formats,
+            require_state_closure=require_state_closure,
+        )
+
+    status = _collect()
     if args.waive_missing_score:
         score_missing = [b for b in status.get("blockers") or [] if b.get("id") == "SCORE-MISSING"]
         if not score_missing:
@@ -50,7 +92,7 @@ def main():
         waiver["risk"] = "商业/漫剧项目缺少市场评分；本次只能证明人工决定跳过评分，不能证明作品具备市场通过性。"
         log_path = append_waiver(root, waiver)
         print(f"[warn] 已记录 missing_score_report 豁免：{log_path}", file=sys.stderr)
-        status = collect_gate_status(root, require_review_report=not args.progress_mode)
+        status = _collect()
     print(format_gate_status(status))
     if args.json_out:
         os.makedirs(os.path.dirname(os.path.abspath(args.json_out)), exist_ok=True)

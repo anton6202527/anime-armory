@@ -54,6 +54,12 @@ PILLOW_MIN_SHORT_SIDE = 512          # 分辨率达标线：短边像素
 PILLOW_SHARPNESS_FLOOR = 25.0        # 清晰度地板：降采样后 Laplacian 方差经验值
 PILLOW_PROBE_MAX_SIDE = 256          # 清晰度探测降采样上限（控制纯 Python 卷积成本）
 
+# 远景/群像「人小」身份不可辨阈：最大脸短边 / 图像短边 低于此，脸太小到 ArcFace/StyleID 不可靠，
+# 强行下崩脸 verdict 会对远景误判漂移。此时标 verdict="unverifiable"（既不漏报也不误杀），交近景镜
+# 或人判核身份——与 scene_layer_pack 的 identity_recognizable=false（远景不喂脸锚、用阵营色）同策略。
+# 0.045 短边占比 ≈ 1080 短边竖屏下约 49px 脸，正落在脸识别可靠性地板附近；env 可调。
+FAR_SHOT_FACE_MIN_RATIO = float(os.environ.get("N2D_FAR_SHOT_FACE_MIN_RATIO", "0.045") or 0.045)
+
 # 非角色类定妆名关键词（场景/道具/特效不参与脸相似度）——与 gate.py _section_has_character_refs 同源。
 _NON_CHARACTER = (
     "场景", "道具", "寝殿", "冷宫", "皇宫", "寝宫", "殿", "庭", "院", "山", "洞", "门", "廊", "道",
@@ -201,6 +207,11 @@ def detect_face_swaps(face_embs: Sequence[Sequence[float]],
         "missing_chars": missing_chars,       # 该在场角色没有脸像他
         "swap_suspected": bool(duplicate_chars and missing_chars),  # 一多一少 = 典型 A 画成 B
     }
+
+
+def face_unverifiable(largest_face_ratio: float, min_ratio: float = FAR_SHOT_FACE_MIN_RATIO) -> bool:
+    """最大脸太小（远景/群像人小）→ 身份不可辨，崩脸检应标 unverifiable 而非误判漂移。纯函数·可测。"""
+    return float(largest_face_ratio) < float(min_ratio)
 
 
 def band(score: float, floor: float, margin: float = DEFAULT_MARGIN) -> str:
@@ -465,16 +476,28 @@ def _embed(app, png: str) -> Optional[List[float]]:
 
 def _embed_all(app, png: str) -> List[List[float]]:
     """检出图中【所有】人脸的 embedding（按脸面积降序）——多人同框串脸检测用。"""
+    return _embed_all_boxes(app, png)[0]
+
+
+def _embed_all_boxes(app, png: str) -> Tuple[List[List[float]], List[float]]:
+    """检出所有人脸 embedding + 各自脸框短边/图像短边占比（按脸面积降序，两列表索引对齐）。
+
+    一次检测同时拿 embedding 和脸尺寸，供「远景人小→身份不可辨」判定，不重复跑检测器。
+    """
     try:
         import cv2  # type: ignore
         img = cv2.imread(png)
         if img is None:
-            return []
+            return [], []
+        h, w = img.shape[:2]
+        short = float(min(int(w), int(h))) or 1.0
         faces = app.get(img) or []
         faces.sort(key=lambda f: (f.bbox[2] - f.bbox[0]) * (f.bbox[3] - f.bbox[1]), reverse=True)
-        return [list(map(float, f.normed_embedding)) for f in faces]
+        embs = [list(map(float, f.normed_embedding)) for f in faces]
+        ratios = [min(float(f.bbox[2] - f.bbox[0]), float(f.bbox[3] - f.bbox[1])) / short for f in faces]
+        return embs, ratios
     except Exception:
-        return []
+        return [], []
 
 
 # ---------- 资产发现 ----------
@@ -920,9 +943,20 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN,
         if not os.path.exists(full):
             continue
         excluded = fidelity_excluded(png, canon_mask)  # 崩 canonical → 不进一致性均值
-        face_embs = _embed_all(app, full)
+        face_embs, face_ratios = _embed_all_boxes(app, full)
         if not face_embs:
             result["shots"].append({"png": png, "verdict": "noface", "chars": chars})
+            continue
+        largest_ratio = face_ratios[0] if face_ratios else 0.0
+        if face_unverifiable(largest_ratio):
+            # 远景/群像人小：最大脸短边占比过小，身份不可辨——不强行下崩脸 verdict（避免对远景误判漂移），
+            # 标 unverifiable 交近景镜/人判核身份；不进一致性均值。
+            result["shots"].append({
+                "png": png, "verdict": "unverifiable", "chars": chars,
+                "largest_face_ratio": round(float(largest_ratio), 4),
+                "reason": f"最大脸短边占比 {largest_ratio:.3f} < {FAR_SHOT_FACE_MIN_RATIO}（远景人小），脸部身份不可辨，"
+                          "改由近景镜或人判核身份；远景出图按 scene_layer_pack 用阵营色/剪影区分。",
+            })
             continue
         worst = None
         for c in chars:
@@ -960,8 +994,7 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN,
                     swap = detect_face_swaps(face_embs, present)
                     if swap["duplicate_chars"] or swap["missing_chars"]:
                         row["face_swap"] = swap
-                        if swap["swap_suspected"] and _sev(row["verdict"]) < _sev("warn"):
-                            row["verdict"] = "warn"  # 串脸至少 🟡，交人判
+                        row["verdict"] = swap_verdict(swap, row["verdict"])
             if excluded:
                 row["fidelity_gate_excluded"] = True  # 已剔出一致性均值；归"渲染错误"维度
                 result.setdefault("render_errors", []).append(
@@ -978,6 +1011,18 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN,
 
 def _sev(v: str) -> int:
     return {"block": 3, "warn": 2, "ok": 1, "noface": 0}.get(v, 0)
+
+
+def swap_verdict(swap: dict, base: str) -> str:
+    """多人同框串脸 → verdict 升级。纯函数·可测。
+
+    swap_suspected（一多一少：A 被画了两张脸、B 一张都不像 = 典型"A 画成 B"）是确凿身份穿帮，
+    升 **block**（过去只封顶到 warn，张冠李戴永不 block）；只命中 duplicate 或 missing 之一（信号较弱）
+    则至少 warn 交人判。已是更高严重度不降级。"""
+    if not (swap.get("duplicate_chars") or swap.get("missing_chars")):
+        return base
+    target = "block" if swap.get("swap_suspected") else "warn"
+    return target if _sev(base) < _sev(target) else base
 
 
 # ---------- N3：定妆主参考自身质量门（锚点不能脏） ----------
@@ -1059,7 +1104,8 @@ def main(argv: List[str]) -> int:
                 rows.append({"episode": ep, "skipped": True}); continue
             vs = [s.get("verdict") for s in r.get("shots", [])]
             rows.append({"episode": ep, "block": vs.count("block"), "warn": vs.count("warn"),
-                         "n": sum(1 for v in vs if v != "noface")})
+                         "unverifiable": vs.count("unverifiable"),
+                         "n": sum(1 for v in vs if v not in ("noface", "unverifiable"))})
         out = {"root": root, "cross_ep": rows}
         if ns.json:
             print(json.dumps(out, ensure_ascii=False, indent=2)); return 0
@@ -1099,18 +1145,22 @@ def main(argv: List[str]) -> int:
         return 0
     for c, info in res["characters"].items():
         print(f"  角色 {c}: floor={info['floor']}（定妆组内部对 {info['intra_pairs']}）")
-    icon = {"block": "⛔崩脸", "warn": "⚠️轻漂", "ok": "✅", "noface": "·无脸"}
+    icon = {"block": "⛔崩脸", "warn": "⚠️轻漂", "ok": "✅", "noface": "·无脸", "unverifiable": "·人小不可辨"}
     nblock = 0
+    nunverif = 0
     for s in res["shots"]:
         v = s.get("verdict", "noface")
         if v == "block":
             nblock += 1
+        if v == "unverifiable":
+            nunverif += 1
         if v in ("block", "warn"):
             if s.get("mode") == PILLOW_FALLBACK_MODE:
                 print(f"{icon[v]} {s['png']} · {'/'.join(s.get('chars') or ['?'])} {'；'.join(s.get('checks') or [])}")
             else:
                 print(f"{icon[v]} {s['png']} · {s.get('char','?')} score={s.get('score')} < floor={s.get('floor')}")
-    print(f"\n崩脸 🔴 {nblock} · 共评 {len(res['shots'])} 镜")
+    unverif_note = f" · 远景人小不可辨 {nunverif}（交近景/人判）" if nunverif else ""
+    print(f"\n崩脸 🔴 {nblock} · 共评 {len(res['shots'])} 镜{unverif_note}")
     return 1 if nblock else 0
 
 

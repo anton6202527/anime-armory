@@ -1,6 +1,6 @@
 ---
 name: novel
-description: Top-level dispatcher for the novel-* skill family — inspects an open-ended novel request (a bare idea / few words / book name / URL / dragged file path / spin-off character / expand·condense·rewrite / 审稿查硬伤 / 评分·能不能火 / 真实读者反馈) and routes to the right sub-skill, imports a dragged novel file/link into 创作区/写小说/<项目>/ when no action is specified, or resumes an in-progress 创作区/写小说/<项目>/ from its _进度.md. Use when the user gives a novel-related task without specifying which tool. Does not write novels itself — only routes/imports source material; the canonical sub-skill roster is the routing table in the body. Triggers 小说工坊, novel, 小说相关任务, 拖进一本小说, 导入小说, 帮我处理小说, 不知道用哪个小说 skill, 小说打分, 小说评分, 能不能火, 值不值得改, 审稿, 真实读者反馈, 完读率, 弃读, 力量体系, 等级一致性, 战力崩坏, 系统流升级, 系统面板, 小说进度, novel-progress.
+description: Top-level dispatcher for the novel-* skill family — inspects an open-ended novel request (a bare idea / few words / book name / URL / dragged file path / spin-off character / expand·condense·rewrite / 审稿查硬伤 / 评分·能不能火 / 专业资料包 / 真实读者反馈) and routes to the right sub-skill, imports a dragged novel file/link into 创作区/写小说/<项目>/ when no action is specified, or resumes an in-progress 创作区/写小说/<项目>/ from its _进度.md. Use when the user gives a novel-related task without specifying which tool. Does not write novels itself — only routes/imports source material; the canonical sub-skill roster is the routing table in the body. Triggers 小说工坊, novel, 小说相关任务, 拖进一本小说, 导入小说, 帮我处理小说, 不知道用哪个小说 skill, 小说打分, 小说评分, 能不能火, 值不值得改, 审稿, 专业资料包, 行业感, 别外行, 医疗法律刑侦金融军事历史宗教海外科技职业文, 真实读者反馈, 完读率, 弃读, 力量体系, 等级一致性, 战力崩坏, 系统流升级, 系统面板, 小说进度, novel-progress.
 ---
 
 # novel — 小说工坊调度入口
@@ -39,6 +39,7 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 | 已有在建项目，要**消除操作摩擦 / 找精准下一步指令 / 检查状态缺失** | `python3 skills/novel/scripts/flow.py "<作品根>"` |
 | 已写好若干章，要**质检 / 审稿 / 查问题**（人设崩 / 视角穿帮 / 设定矛盾 / 锚点漂移 / 题旨偏移 / 读者承诺违约 / 文学性变薄 / 节奏 / 原文照搬 / **五感缺失 / 伏笔逾期**） | `novel-review` |
 | 已写好若干章，要**打分 / 评分 / 市场体检**（题材够不够热、能不能火、值不值得继续写/改、要不要弃稿重立） | `novel-score` |
+| 要写或审**专业、真实、行业感、别外行**的场景（医疗/法律/刑侦/金融/军事/历史/宗教/海外/科技/职业文），或商业投稿/出海/改编前要事实证据层 | `novel-research`（产 `资料/专业资料包_<主题>.md` + `research_sources.json`；写章包自动引用，review 查证据缺口） |
 | **跑过 score、想据评分弱项直接开改写**（评分→改写串法） | `novel-rewrite --score-source 评分/score_report.json`（读 scores/verdict/deductions 预填 改动spec②，建议·待与用户要求对账） |
 | 已写好若干章，要**查逻辑硬伤 / 维护设定百科 / 角色生死状态 / 伏笔回收 / 关系温度** | `novel-wiki` |
 | 已写好若干章，要**模拟读者反馈 / 测留存 / 找弃书点** | `novel-simulate` |
@@ -67,7 +68,8 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 - **节奏热力图**（注水、断章、高潮密集度）→ `novel-balance`；其「烂尾预警」读 `novel-wiki` 的伏笔台账回收率。
 
 - 速记：问"能不能火/要不要继续写"=score；"哪里写崩了"=review；"读者爱不爱看"=simulate；"设定/伏笔有没有漏"=wiki；"节奏拖不拖"=balance。
-- 串用顺序：先 score 定方向 → review 抠硬伤（自动调 wiki 查一致性/伏笔）→ balance 收节奏 → simulate 验留存；已有真实读者数据时先跑 `novel-feedback`，score 会优先读真实反馈。
+- 串用顺序：先 score 定方向 → review 抠硬伤（自动调 wiki 查一致性/伏笔）→ balance 收节奏 → simulate 验留存；已有真实读者数据时先跑 `novel-feedback`，score 会优先读真实反馈。多份报告都跑过后，用 `novel-craft/scripts/revision_planner.py` 合并成统一修订计划 `修订/revision_plan.json`，避免各报告各自回流；该计划会被 `draft_packets.py`/`arc_packets.py` 读回，命中章/弧段的修订项自动注入下一轮写章包，闭环回流。
+- 专业事实串用：先 `novel-research` 建资料包 → `novel-craft` 写章任务包自动引用 → `novel-review` 检查专业事实是否有证据支持；证据缺口回 `novel-research`，不要靠 prompt 记忆硬写。
 - **score→rewrite 串法**：若 score 判 `小改/大改`（非 `弃稿重立`）且用户要据评分开改写，把报告喂给 `novel-rewrite --score-source 评分/score_report.json`——弱项/扣分雷点会预填进新项目 `设定/改动spec.md` 的②栏，作为**建议待对账**（与用户要求冲突时以用户要求为准）。评分判 `弃稿重立` 时改写未必合适，先确认是否走 `novel-create` 另起。改写后可回跑 score 做 before/after 对照。**写完一卷别只跑 review/score**：wiki（伏笔逾期）+ balance（节奏）+ simulate（留存）是常被漏掉的三项，建议一并提示用户。
 
 ⚠️ **"文风漂移"双触发仲裁**：提取/分析文风指纹、查笔力一致 → `novel-style`（文风是它的主责）；只有当诉求是"**作为质检项**报告某章偏离全书文风"且同时要查别的硬伤时，才并入 `novel-review`。单看文风一律走 style。
@@ -79,7 +81,7 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 0. **先看有没有在建项目**：用户指向（或当前正处于）某个 `创作区/写小说/<项目>/`，且其下有 `_进度.md` → **先读进度**：
    - **进度路由**：跑 `python3 skills/novel/progress.py "<作品根>"` 找第一条未完成项（基于章节矩阵表）；也可调 `novel-progress` 查看全线看板。
    - **操作指挥 (Flow)**：若对下一步命令有疑虑、或想检查状态对账/就绪度，跑 `python3 skills/novel/scripts/flow.py "<作品根>"` 获取精准下一步指令。
-   - **准入检查 (Gate)**：在进入 `drafting` (写正文)、`review`/`score` 或 `export` 前，跑 `python3 skills/novel/novel-gate.py <作品根> --stage <阶段>`；该入口统一调用 novel QA gate。`drafting` 只查写作前置物，不要求既有 `score_report`；`review`/`score` 要求本章 `state_delta` 已合并进 `state_ledger`；`export` 覆盖 rights/review/score/state closure，并在商业/平台/出海导出时要求 AI 使用披露。
+   - **准入检查 (Gate)**：在进入 `drafting` (写正文)、`review`/`score` 或 `export` 前，跑 `python3 skills/novel/novel-gate.py <作品根> --stage <阶段>`；该入口统一调用 novel QA gate。`drafting` 只查写作前置物，不要求既有 `score_report`；`review`/`score` 要求本章 `state_delta` 已合并进 `state_ledger`；`export` 覆盖 rights/research/review/score/state closure/AI usage/compliance profile，并在商业/平台/出海/KDP/中国公开发布等目标要求 AI 使用披露、专业资料包和平台/辖区清单闭环。
    - **写后自动化**：每写完一章，先填 `审稿/state_delta_第NN章.json`，再跑 `python3 skills/novel/scripts/post_write.py <作品根> --chapter 第N章`；该入口会先过状态对账/百科/逻辑/力量体系机检，全部硬闸通过后才自动勾选进度。若 `_设置.md` 选 `小说生成工作流：边写边自检`，`draft_packets.py` 会把这套闭环自动写进每章任务包，`flow.py` 也会把执行命令作为下一步提示；同时按 `小批回扫间隔`（默认 5 章，可改 3 章/关闭）保留 novel-review 的文风、节奏、钩子、人设、读者承诺集中修正。
    - **标准化旧项目**：若 `_进度.md` 格式陈旧，跑 `python3 skills/novel/scripts/standardize_progress.py <作品根>` 迁移到标准矩阵。
    - 仅当 `_进度.md` 显示已全部完成、或用户明确要开新动作时，才往下走 1-5。

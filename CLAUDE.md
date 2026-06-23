@@ -52,6 +52,7 @@ cd skills/n2d-review/scripts && python -m pytest test_gate.py
 Quick reminders of the highest-stakes clauses (full text + rationale in the constitution):
 - **Edit the skill set → update `skills/README.md` in the same change** (F1).
 - **Choice points are dated candidate snapshots, routed through the adapter layer, never hardcoded** (C1/C2); compliance/irreversible/costly points re-confirm every time.
+- **Main flow never hard-binds a backend or requires an install** (C4): heavy deps (model weights, conda envs, paid APIs, local CLIs) go through the line's adapter layer; missing/uninstalled deps must degrade gracefully (still emit a stable job pack + tell the user what to install via `references/`), never hard-fail the pipeline.
 - **Compliance is non-negotiable** (D1): voice-clone only on self/authorized voices (2026 opt-in); source novels default to public-domain/owned/licensed. (Note: forced AI-identification/watermark enforcement was **retired from the n2d pipeline 2026-06** — handled outside the tool now; see `n2d-compliance`.)
 
 Claude-Code-operational rules not in the constitution:

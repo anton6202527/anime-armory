@@ -17,7 +17,9 @@ import os
 import re
 import sys
 import glob
+import json
 import math
+import hashlib
 import argparse
 from collections import Counter
 
@@ -77,6 +79,47 @@ def bm25_score(query_tokens, doc_tokens, idf_map, avg_len, k1=1.5, b=0.75):
     return score
 
 
+def doc_freq_from_tf(tf_maps):
+    """[tf-dict,...] → {term: 出现该 term 的文档数}（tf 的键即该文档去重后的 term）。纯函数·可测。
+    与 doc_freq 等价：doc_freq 数 set(toks)，这里数 tf.keys()，二者相同。"""
+    df = Counter()
+    for tf in tf_maps:
+        for t in tf:
+            df[t] += 1
+    return df
+
+
+def bm25_score_tf(query_tokens, tf, dl, idf_map, avg_len, k1=1.5, b=0.75):
+    """基于预存 term-freq 的单文档 BM25（与 bm25_score 同公式，省去重新 tokenize）。纯函数·可测。"""
+    if not dl:
+        return 0.0
+    score = 0.0
+    for t in set(query_tokens):
+        f = tf.get(t, 0)
+        if not f:
+            continue
+        w = idf_map.get(t, 0.0)
+        score += w * (f * (k1 + 1)) / (f + k1 * (1 - b + b * dl / (avg_len or 1)))
+    return score
+
+
+def rank_from_index(query_text, chapters, k=TOPK_DEFAULT, min_score=0.0):
+    """query + chapters=[(id, tf-dict, dl)] → top-k [(id, score)]，结果与 rank() 对同一语料一致。纯函数·可测。"""
+    chapters = [(cid, tf, dl) for cid, tf, dl in chapters if dl]
+    if not chapters:
+        return []
+    df = doc_freq_from_tf([tf for _, tf, _ in chapters])
+    idf_map = idf(df, len(chapters))
+    avg = sum(dl for _, _, dl in chapters) / len(chapters)
+    q = cjk_bigrams(query_text)
+    if not q:
+        return []
+    scored = [(cid, bm25_score_tf(q, tf, dl, idf_map, avg)) for cid, tf, dl in chapters]
+    scored = [(c, round(s, 4)) for c, s in scored if s > min_score]
+    scored.sort(key=lambda x: (-x[1], x[0]))
+    return scored[:k]
+
+
 def rank(query_text, corpus, k=TOPK_DEFAULT, min_score=0.0):
     """query + corpus=[(id,text)] → 相关度 top-k [(id, score)]（降序，过滤 ≤min_score）。纯函数·可测。"""
     docs = [(cid, cjk_bigrams(text)) for cid, text in corpus]
@@ -110,6 +153,73 @@ def best_excerpt(query_text, text, span=180):
         if hits > best_hits:
             best_hits, best_pos = hits, start
     return text[best_pos:best_pos + span].strip()
+
+
+# ---------- 语义重排（可选适配器·默认关闭，遵循设计宪法 C4：主流程不硬绑 embedding） ----------
+
+def cosine(a, b):
+    """余弦相似度。纯函数·可测。"""
+    if not a or not b:
+        return 0.0
+    dot = sum(x * y for x, y in zip(a, b))
+    na = math.sqrt(sum(x * x for x in a))
+    nb = math.sqrt(sum(y * y for y in b))
+    if not na or not nb:
+        return 0.0
+    return dot / (na * nb)
+
+
+def semantic_rerank(query_text, candidates, embedder, k=TOPK_DEFAULT):
+    """对 BM25 宽召回的候选做语义重排。
+
+    candidates=[(cid, text)]；embedder(list[str])->list[vec]（一次性 embed query + 各候选）。
+    返回按 query 余弦相似降序的 [(cid, score)]；embedder 出错/形状不符 → []（调用方据此回退 BM25）。纯函数·可测。
+    """
+    if not candidates:
+        return []
+    texts = [t for _, t in candidates]
+    try:
+        vecs = embedder([query_text] + texts)
+    except Exception:
+        return []
+    if not vecs or len(vecs) != len(texts) + 1:
+        return []
+    qv = vecs[0]
+    scored = [(cid, round(cosine(qv, vecs[i + 1]), 6)) for i, (cid, _t) in enumerate(candidates)]
+    scored.sort(key=lambda x: (-x[1], x[0]))
+    return scored[:k]
+
+
+_EMBEDDER_CACHE = None
+
+
+def _load_embedder():
+    """best-effort 语义嵌入适配器：**默认 None → 纯 BM25**（与历史行为一致）。
+
+    仅当环境变量 `NOVEL_RETRIEVAL_EMBED` 置位（非空且非 0/off/false/no）且可选后端可用时，返回
+    embedder callable（list[str]->list[vec]）。遵循设计宪法 C4：主流程绝不硬绑 embedding——
+    未装/加载失败一律优雅降级回 BM25，不让缺依赖中断写作包生成。模型名可经 `NOVEL_RETRIEVAL_EMBED_MODEL` 覆盖。
+    """
+    global _EMBEDDER_CACHE
+    if _EMBEDDER_CACHE is not None:
+        return _EMBEDDER_CACHE or None
+    flag = os.environ.get("NOVEL_RETRIEVAL_EMBED", "").strip().lower()
+    if flag in {"", "0", "off", "false", "no"}:
+        _EMBEDDER_CACHE = False
+        return None
+    embedder = None
+    try:  # 可选后端：sentence-transformers；未安装/失败则降级 BM25。
+        from sentence_transformers import SentenceTransformer  # type: ignore
+        model_name = os.environ.get(
+            "NOVEL_RETRIEVAL_EMBED_MODEL", "paraphrase-multilingual-MiniLM-L12-v2")
+        _model = SentenceTransformer(model_name)
+
+        def embedder(texts):  # noqa: F811
+            return [list(map(float, v)) for v in _model.encode(texts)]
+    except Exception:
+        embedder = None
+    _EMBEDDER_CACHE = embedder or False
+    return embedder
 
 
 # ---------- IO ----------
@@ -154,8 +264,86 @@ def default_query(root, chapter):
     return ""
 
 
-def relevant_chapters(root, chapter, query, k=TOPK_DEFAULT, window=WINDOW_DEFAULT):
-    """窗口外旧章里召回与 query 最相关的 k 章 → [{chapter, score, excerpt}]。缺章/无信号 → []。"""
+# ---------- 持久增量索引（几百章规模避免每次出包全量重读重 tokenize） ----------
+
+INDEX_VERSION = 1
+
+
+def _index_path(root):
+    return os.path.join(root, "审稿", "_retrieval_index.json")
+
+
+def _sha1_text(text):
+    return hashlib.sha1((text or "").encode("utf-8")).hexdigest()
+
+
+def _load_index(root):
+    try:
+        with open(_index_path(root), encoding="utf-8") as f:
+            data = json.load(f)
+        if data.get("version") == INDEX_VERSION and isinstance(data.get("chapters"), dict):
+            return data
+    except Exception:
+        pass
+    return {"version": INDEX_VERSION, "chapters": {}}
+
+
+def _save_index(root, index):
+    path = _index_path(root)
+    try:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        tmp = f"{path}.tmp.{os.getpid()}"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(index, f, ensure_ascii=False)
+        os.replace(tmp, path)  # 原子替换，避免多 worker 写半截
+    except Exception:
+        pass
+
+
+def build_or_update_index(root):
+    """增量维护 章节/ 的 BM25 索引：内容 hash 不变的章复用缓存 tf，只对新增/改动章重新 tokenize。
+    返回 {version, chapters:{cid: {hash, len, tf}}}。任何单章读失败跳过，不致命。"""
+    index = _load_index(root)
+    chapters = index.get("chapters", {})
+    seen = set()
+    for path in sorted(glob.glob(os.path.join(root, "章节", "*.md"))):
+        cid = _chapter_num(path)
+        if cid is None or cid < 1:
+            continue
+        key = str(cid)
+        seen.add(key)
+        try:
+            with open(path, encoding="utf-8") as f:
+                text = f.read()
+        except Exception:
+            continue
+        h = _sha1_text(text)
+        entry = chapters.get(key)
+        if entry and entry.get("hash") == h and "tf" in entry:
+            continue  # 未变 → 复用缓存
+        toks = cjk_bigrams(text)
+        chapters[key] = {"hash": h, "len": len(toks), "tf": dict(Counter(toks))}
+    for key in list(chapters.keys()):  # 删除已不存在的章
+        if key not in seen:
+            del chapters[key]
+    index["chapters"] = chapters
+    _save_index(root, index)
+    return index
+
+
+def _read_chapter_text(root, cid):
+    for path in glob.glob(os.path.join(root, "章节", "*.md")):
+        if _chapter_num(path) == cid:
+            try:
+                with open(path, encoding="utf-8") as f:
+                    return f.read()
+            except Exception:
+                return ""
+    return ""
+
+
+def _relevant_chapters_scan(root, chapter, query, k=TOPK_DEFAULT, window=WINDOW_DEFAULT):
+    """全量扫描兜底实现（索引异常时回退）：读窗口外旧章正文，现算 BM25。"""
     corpus = load_prior_chapters(root, chapter, window)
     if not corpus:
         return []
@@ -165,6 +353,50 @@ def relevant_chapters(root, chapter, query, k=TOPK_DEFAULT, window=WINDOW_DEFAUL
         out.append({"chapter": cid, "score": score,
                     "excerpt": best_excerpt(query, by_id.get(cid, ""))})
     return out
+
+
+def relevant_chapters(root, chapter, query, k=TOPK_DEFAULT, window=WINDOW_DEFAULT, embedder=None):
+    """窗口外旧章里召回与 query 最相关的 k 章 → [{chapter, score, excerpt}]。缺章/无信号 → []。
+
+    走持久增量索引：排序只用缓存 tf（不重读全部旧章），仅对命中的章读正文做摘要。
+    **默认纯 BM25**（embedder=None 且未开 NOVEL_RETRIEVAL_EMBED 时，行为与历史一致）。
+    若可用语义 embedder（显式传入或环境开启）：BM25 宽召回 → 语义余弦重排到 k（解决词面召不回的语义近邻）；
+    语义任何环节失败 → 回退 BM25 top-k。索引任何异常 → 回退全量扫描，保证可用性。
+    """
+    try:
+        cutoff = chapter - window
+        index = build_or_update_index(root)
+        chapters = []
+        for key, entry in index.get("chapters", {}).items():
+            try:
+                cid = int(key)
+            except (TypeError, ValueError):
+                continue
+            if cid < 1 or cid >= cutoff:
+                continue
+            chapters.append((cid, entry.get("tf", {}) or {}, int(entry.get("len") or 0)))
+        if not chapters:
+            return []
+        if embedder is None:
+            embedder = _load_embedder()
+        if embedder is not None:
+            wide = max(k * 4, 12)  # BM25 宽召回，给语义重排留候选
+            wide_hits = rank_from_index(query, chapters, k=wide)
+            cand = [(cid, _read_chapter_text(root, cid)) for cid, _s in wide_hits]
+            reranked = semantic_rerank(query, cand, embedder, k=k)
+            if reranked:
+                texts = {cid: t for cid, t in cand}
+                return [{"chapter": cid, "score": score,
+                         "excerpt": best_excerpt(query, texts.get(cid, ""))}
+                        for cid, score in reranked]
+            # 语义失败 → 落回 BM25
+        out = []
+        for cid, score in rank_from_index(query, chapters, k=k):
+            out.append({"chapter": cid, "score": score,
+                        "excerpt": best_excerpt(query, _read_chapter_text(root, cid))})
+        return out
+    except Exception:
+        return _relevant_chapters_scan(root, chapter, query, k, window)
 
 
 def main(argv=None):

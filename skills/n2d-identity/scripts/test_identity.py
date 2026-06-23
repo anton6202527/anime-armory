@@ -155,6 +155,39 @@ def test_drift_summary_finds_first_bad_episode(tmp_path):
     assert report["characters"]["王敦"]["total_block"] == 1
 
 
+def test_compute_recurrence_flags_long_gap_reentry():
+    # 王敦出场 第1/第5/第6集：1→5 缺席3集(长间隔再登场)，5→6 缺席0集
+    r = identity.compute_recurrence(["第1集", "第5集", "第6集"], ["第1集", "第2集", "第3集", "第4集", "第5集", "第6集"])
+    assert r["max_gap"] == 3
+    assert r["high_risk"] is True
+    assert r["long_gap_reentries"] == [{"at": "第5集", "prev": "第1集", "gap": 3}]
+
+
+def test_compute_recurrence_consecutive_and_single_are_not_risky():
+    assert identity.compute_recurrence(["第1集", "第2集", "第3集"], ["第1集", "第2集", "第3集"]) == {
+        "max_gap": 0, "long_gap_reentries": [], "high_risk": False}
+    # 只出场1集 → 无再登场，不假报
+    assert identity.compute_recurrence(["第3集"], ["第1集", "第2集", "第3集"])["high_risk"] is False
+
+
+def test_compute_recurrence_unorderable_episodes_no_false_positive():
+    # 集号抽不到 → 退化为 all_eps 列表位差，且不得假报长间隔（位差至多1 < 阈值2）
+    r = identity.compute_recurrence(["序章", "尾声"], ["序章", "番外", "尾声"])
+    assert r["high_risk"] is False
+
+
+def test_summarize_attaches_recurrence_per_character(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    face_results = {
+        "第1集": {"available": True, "shots": [{"char": "王敦", "verdict": "ok", "score": 0.8, "floor": 0.7}]},
+        "第4集": {"available": True, "shots": [{"char": "王敦", "verdict": "ok", "score": 0.8, "floor": 0.7}]},
+    }
+    report = identity.summarize_face_results(root, ["第1集", "第2集", "第3集", "第4集"], face_results, generated_at="x")
+    rec = report["characters"]["王敦"]["recurrence"]
+    assert rec["max_gap"] == 2 and rec["high_risk"] is True
+    assert rec["long_gap_reentries"] == [{"at": "第4集", "prev": "第1集", "gap": 2}]
+
+
 def test_summarize_captures_per_episode_mean_score(tmp_path):
     root = tmp_path / "制漫剧" / "测试剧"
     # face_consistency.analyze 把每角色本集质心接近度放在 result["characters"][char]["ep_mean_score"]

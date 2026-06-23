@@ -22,7 +22,7 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 _COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if _COMMON not in sys.path:
@@ -68,6 +68,8 @@ KNOWN_STATUSES = IDENTITY_ADAPTER_KNOWN_STATUSES
 LORA_UPGRADE_EXEMPT_STATUSES = frozenset({"ready", "training"})
 # 主动升档阈值：核心长线角色跨 ≥ 这么多集 × 无原生主体锁 → 在烧穿多集积分前就建议升档（不等漂移坐实）
 PROACTIVE_EPISODE_THRESHOLD = 3
+# 复现间隔阈值：角色相邻两次出场之间缺席 ≥ 这么多集 = 长间隔再登场（EntityBench 2026：一致性随复现间隔急剧衰退）
+RECURRENCE_GAP_THRESHOLD = 2
 HANDLE_FIELDS = IDENTITY_HANDLE_FIELDS
 REFERENCE_FIELDS = IDENTITY_REFERENCE_KEYS
 
@@ -265,6 +267,38 @@ def _drift_char_significant(info: Mapping[str, Any]) -> Tuple[bool, List[str], s
     )
     first_bad = str(info.get("first_bad_episode") or "").strip()
     return (len(bad_episodes) >= 2 or bool(first_bad), bad_episodes, first_bad)
+
+
+def _episode_gap(prev: str, cur: str, all_eps: Sequence[str]) -> int:
+    """相邻两次出场之间「缺席的集数」。优先用集号差 num(cur)-num(prev)-1；
+    集号不可解析时退化为 all_eps 有序列表里的位差-1。纯函数·可测。"""
+    np_ = route_episode_number(prev)
+    nc = route_episode_number(cur)
+    if np_ is not None and nc is not None:
+        return max(nc - np_ - 1, 0)
+    ordered_all = sorted({str(e).strip() for e in all_eps if str(e).strip()}, key=episode_sort_key)
+    try:
+        return max(ordered_all.index(cur) - ordered_all.index(prev) - 1, 0)
+    except ValueError:
+        return 0
+
+
+def compute_recurrence(appearance_eps: Sequence[str], all_eps: Sequence[str]) -> Dict[str, Any]:
+    """角色跨集复现间隔分析（EntityBench 2026：跨镜一致性随复现间隔急剧衰退，长间隔再登场最易崩）。
+
+    appearance_eps：该角色实际出场的集；all_eps：本次机检的全部集（定序/退化基准）。
+    返回 {max_gap, long_gap_reentries:[{at, prev, gap}], high_risk}。
+    只 1 次出场 / 无可解析集 → max_gap=0、high_risk=False（不假报）。纯函数·可测。"""
+    ordered = sorted({str(e).strip() for e in appearance_eps if str(e).strip()}, key=episode_sort_key)
+    reentries: List[Dict[str, Any]] = []
+    max_gap = 0
+    for prev, cur in zip(ordered, ordered[1:]):
+        gap = _episode_gap(prev, cur, all_eps)
+        if gap > max_gap:
+            max_gap = gap
+        if gap >= RECURRENCE_GAP_THRESHOLD:
+            reentries.append({"at": cur, "prev": prev, "gap": gap})
+    return {"max_gap": max_gap, "long_gap_reentries": reentries, "high_risk": bool(reentries)}
 
 
 def _match_registry_character(registry: Mapping[str, Any], drift_char: str) -> Optional[Tuple[Mapping[str, Any], Mapping[str, Any]]]:
@@ -631,6 +665,9 @@ def summarize_face_results(root: Path, episodes: List[str], face_results: Mappin
             e = c["episodes"].setdefault(ep, {"ok": 0, "warn": 0, "block": 0, "noface": 0, "worst_score": None, "floor": None})
             e["mean_score"] = crec.get("ep_mean_score")
             e["n_shots"] = crec.get("ep_n_shots")
+    # 每角色复现间隔（EntityBench 2026：长间隔再登场是跨镜崩脸主因）——供 face_drift_risk 出图前重锚。
+    for crec in chars.values():
+        crec["recurrence"] = compute_recurrence(list(crec.get("episodes", {}).keys()), episodes)
     return {
         "kind": DRIFT_KIND,
         "version": VERSION,

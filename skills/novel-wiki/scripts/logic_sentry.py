@@ -23,6 +23,7 @@ import json
 import argparse
 
 from wiki_builder import FLASHBACK_HINTS, _context, list_chapters, _CJK
+from consistency_scaffold import resolve_character_card  # 同认 角色卡.md / 人物.md
 
 ITEM_USE_VERBS = ["用", "使", "催动", "祭出", "举起", "握", "拔", "挥", "取出", "拿出", "施展", "祭起"]
 DISCARDED_STATUS = {"discarded", "shattered", "lost", "丢弃", "损毁", "破碎", "遗失", "摧毁"}
@@ -294,8 +295,8 @@ def load_numeric_anchors(project_root):
     无角色卡 / 无年龄声明 → 返回空 dict（优雅跳过，不臆造）。
     """
     anchors = {}
-    card = os.path.join(project_root, "设定", "角色卡.md")
-    if not os.path.isfile(card):
+    card = resolve_character_card(project_root)
+    if not card:
         return anchors
     with open(card, "r", encoding="utf-8") as f:
         lines = f.read().splitlines()

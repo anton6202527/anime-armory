@@ -1,6 +1,6 @@
 ---
 name: n2d-script
-description: Stage 1+定稿 of n2d — 阶段1·剧本改编：split a novel into per-episode dramatic beats → voiceover台词 + bgm + 封面 + 角色/场景卡 + global_style（**不做分镜**）。阶段2·分镜设计（模式感知）：默认原生音画用脚本规划 Clip 时长；配音先行则配音后回跑，用真实配音时长设计 分镜剧本 + 故事板(Clip时长) + 素材清单 + 字幕SRT + 镜头时长。 阶段2 还检测题材与复现母题桥段（穿越/系统流的系统面板/升级/签到/抽奖），人确认后注入镜头/台词/出图（motif_detector）。 Use when given a novel path (first run = split + refine episode 1) or asked to refine a specific episode's materials, or to detect 题材/母题 and enhance 系统面板/升级 recurring scenes. Triggers 拆集, 分镜剧本, 故事板, 素材清单, 配音文案, BGM, 封面 prompt, 双语字幕, SRT, 角色卡, 场景卡, global_style, 题材检测, 母题, 系统面板, 升级场景, 穿越系统流增强.
+description: Stage 1+定稿 of n2d — 阶段1·剧本改编：split a novel into per-episode dramatic beats → voiceover台词 + bgm + 封面 + 角色/场景卡 + global_style（**不做分镜**）。支持从中间章节开工前先补「中段开工前情资产包」（主角身份基准/形象生命周期/前情摘要/关键卡/前后窗口）。阶段2·分镜设计（模式感知）：默认原生音画用脚本规划 Clip 时长；配音先行则配音后回跑，用真实配音时长设计 分镜剧本 + 故事板(Clip时长) + 素材清单 + 字幕SRT + 镜头时长。 阶段2 还检测题材与复现母题桥段（穿越/系统流的系统面板/升级/签到/抽奖），人确认后注入镜头/台词/出图（motif_detector）。 Use when given a novel path (first run = split + refine episode 1), asked to start from a middle chapter/window, asked to refine a specific episode's materials, or to detect 题材/母题 and enhance 系统面板/升级 recurring scenes. Triggers 拆集, 中段开工, 从中间章节开始, 前情资产包, 分镜剧本, 故事板, 素材清单, 配音文案, BGM, 封面 prompt, 双语字幕, SRT, 角色卡, 场景卡, global_style, 题材检测, 母题, 系统面板, 升级场景, 穿越系统流增强.
 ---
 
 # n2d-script — 阶段1 剧本改编 + 阶段2 分镜设计（模式感知）
@@ -11,7 +11,7 @@ description: Stage 1+定稿 of n2d — 阶段1·剧本改编：split a novel int
 
 本 skill 的可选项**不写死在源码里**。按 `../skills/n2d/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
-本 skill 涉及的选择点：`制作模式`（决定阶段2 是否等真实配音·见阶段2 触发）、`题材`/`母题增强`（弱选择点·检测预填可覆盖：motif_detector 识别题材与系统面板等复现母题桥段·见阶段2「题材母题检测」+ `references/题材母题框架.md`）、`基础视觉风格`（写入 global_style + style_contract·见第 2 步）、`视频模型路由`（默认自动按镜头路由；本阶段只记录用户主动固定约束，具体后端到 n2d-video 决定）、`生图AI`、`画幅`、`首切范围`（首次拆集是部分先切还是全篇粗切·见第 1 步）、`字幕语言`（中文/中英双语/仅英文·见阶段2）、`脚本批次`（量产时几集一停·见「脚本批次」段）、`中段锚帧默认`（**默认铁律·能力门控**=三帧契约：默认每镜至少 3 帧 首帧+中段锚帧+尾帧、gate 默认强制、**不管 cost**；唯一豁免=后端不支持≥3帧·由 adapter 按能力自动判定，不因 cost/风格关·见阶段2「中段锚帧自动规划」）、`目标平台`、`发行地区`、`合规用途`。源文本版权/改编权不是普通偏好，必须进入 `合规/compliance_manifest.json`。
+本 skill 涉及的选择点：`制作模式`（决定阶段2 是否等真实配音·见阶段2 触发）、`题材`/`母题增强`（弱选择点·检测预填可覆盖：motif_detector 识别题材与系统面板等复现母题桥段·见阶段2「题材母题检测」+ `references/题材母题框架.md`）、`基础视觉风格`（写入 global_style + style_contract·见第 2 步）、`视频模型路由`（默认自动按镜头路由；本阶段只记录用户主动固定约束，具体后端到 n2d-video 决定）、`生图AI`、`画幅`、`首切范围`（首次拆集是部分先切还是全篇粗切·见第 1 步）、`字幕语言`（中文/中英双语/仅英文·见阶段2）、`脚本批次`（量产时几集一停·见「脚本批次」段）、`中段锚帧默认`（**默认铁律·能力门控**=三帧契约：默认每镜至少 3 帧 首帧+中段锚帧+尾帧、gate 默认强制、**不管 cost**；唯一豁免=后端不支持≥3帧·由 adapter 按能力自动判定，不因 cost/风格关·见阶段2「中段锚帧自动规划」）、`目标平台`、`发行地区`、`合规用途`。源文本版权/改编权按设计宪法 D4 默认用户为原著作者并写入 `合规/compliance_manifest.json`；明确第三方来源时才要求授权 evidence/ref。
 
 `拆集节奏` 与 `变现模式` 都是内部软默认/高级覆盖项，不列入首跑询问。`拆集节奏` 默认 `前长后短`（旧 `_设置.md` 的 `单集时长` 继续兼容读取）；`变现模式`（`免费`默认 / `付费` / `海外`）决定**剧级追更骨架**的断点策略与付费/AD 卡点定位（见第 1 步「剧级追更骨架」+ `references/追更骨架.md`），只在用户明确变现模式或目标平台时落档。`题材` 弱选择点同时切换 `split_novel`/`boundary_audit` 的**边界词典**（古装爽文 vs 女频情感/悬疑/都市，治非爽文题材粗拆退化成无闭环）。
 
@@ -24,7 +24,7 @@ description: Stage 1+定稿 of n2d — 阶段1·剧本改编：split a novel int
 - **平台无关核心 + 平台档案**：分镜/卡片/节拍/字幕都平台无关；各平台档案见 `references/platforms.md`。本阶段不选择具体生视频后端；视频阶段默认 `视频模型路由=自动按镜头路由`，由 `n2d-video` 在出视频前通过 router/probe 决定目标视频模型/渠道，只有固定模式、账号/交付硬约束或无法自动执行时才询问并落档；旧 `生视频AI` 只作兼容 fallback。
 - **爽剧节奏 = 留存工程**：`拆集节奏` 只是内部节奏预设/容量软目标，不设硬上限或下限，也不在首跑打断用户选择。最终一集多长由剧情闭环、爽点释放、集尾钩子和配音/原生音画实测共同决定；短集和长集都可保留，前提是 **冲突→爽点/反转→钩子** 成立。**导演的第一任务是"让观众这一秒划不走"**——0-3秒冷开场、前15秒立钩子+矛盾、中段每15-20秒一个钩子/信息增量、≥1次反转、集尾 cliffhanger 硬断。详见 `n2d/references/导演节奏.md`，这是治"节奏平/中段划走/不追下集"的核心；若其中有 `n2d-feedback` 投放数据快照，下一批分镜优先吸收高留存开场、强追更 cliffhanger 和低跳出镜头密度。
 - **基础视觉风格前置**：风格是选择点，不是 skill 铁律。先按 `基础视觉风格` 写 `global_style.md`（菜单见 `n2d/references/visual_styles.md`），阶段2 写 `storyboard.json` 时必须同时写 `style_contract`（风格名 / 视觉基调 / 镜头与构图 / 光色策略 / 运动边界 / 风格禁忌）。下游出图/出视频继承这份契约，不靠末尾补 `cinematic/realistic/anime` 这类泛词。旧 `cinematic_contract` 仅兼容旧项目。
-- **合规与版权前置（P0 · 改编前先建包）**：首次拆集/改编前先跑 `python3 skills/n2d-compliance/scripts/compliance.py <作品根> --init`，至少填 `rights.source_text`、`rights.adaptation`、`distribution_intent`、`platform_review.targets` 的初始状态。脚本阶段可先用 `user_declared` 记录用户声明，但进入出图/出视频/合成前会由 `gate.py` 硬拦 unknown/pending/unlicensed；不要等成片后才追版权、平台审核或出海本地化。
+- **合规与版权前置（P0 · 改编前先建包）**：首次拆集/改编前先跑 `python3 skills/n2d-compliance/scripts/compliance.py <作品根> --init`，至少填 `rights.source_text`、`rights.adaptation`、`distribution_intent`、`platform_review.targets` 的初始状态。按设计宪法 D4，仓库创作源文本和同源漫剧改编默认 `original`，不得要求用户反复补原著/改编授权证据；只有明确第三方来源才改为 `licensed/user_declared/public_domain` 等路径并留 evidence/ref。进入出图/出视频/合成前仍会由 `gate.py` 硬拦 unknown/pending/unlicensed；不要等成片后才追平台审核、角色/声音授权或出海本地化。
 - **画风统一**：依项目 `global_style.md` 与 `style_contract`；禁止跑到未选择的风格（如未选 Q版却低幼化）或跨镜画风漂移。
 - **生产数据记账铁律（P0）**：阶段1 剧本改编、阶段2 分镜设计完成后，都要调用 `n2d-dashboard` 记录 `stage=script` 事件：耗时、使用的模型/agent/provider、产物路径、涉及集数；若边界重切、分镜返工或 validate_timings 失败，记录 `redraw_reason` 或 QA 事件。脚本文本便宜但会决定下游贵工位，成本和返工不能漏算。
 
@@ -34,10 +34,13 @@ description: Stage 1+定稿 of n2d — 阶段1·剧本改编：split a novel int
 执行"第 1 步 拆集 + 建骨架" → "第 2 步 全局" → "第 3 步 精修第1集"。**默认不一次性粗切整本**——按 `首切范围` 选择点（默认「部分先切」）只粗切前 N 集，精修第1集验证后再续切（见第 1 步）。完成后报告，让用户决定续切后续集、继续精修，或调 `n2d-image` 出图。
 > **首跑先定 `制作模式`（必给菜单，别静默默认）**：拆集前把出片顺序菜单 + 一句原因念给用户选一次——**A 原生音画（默认·推荐；native AV，说话镜一次出台词+口型+环境声，最快看到出图/出视频、无重同步返工，需原生音画后端，少逐句音色控制）/ B 配音先行（追求逐句配音表演、或后端 image2video-only 时选；真实配音时长驱动镜头，音画最准）/ C 先出视频后配音（快速 demo 或配音还没就绪；代价是后期补音对不准、可能重切重出）**，选后写 `_设置.md`。菜单原话与完整理由见 `n2d` SKILL「制作模式 · 首跑选择」段。用户已明确表态时按 `skills/n2d/references/选择点与偏好.md` 解析顺序第 0 条直接落档、不再问。
 > **生视频后端选择后移到 n2d-video**：拆集前只记录用户已明确给出的固定模型/渠道或账号硬约束；否则写/沿用 `视频模型路由=自动按镜头路由`，不展示 `生视频模型` + `生视频渠道` 菜单。真正的 primary/fallback、渠道、CLI/API 可用性和降级方案，由 `n2d-video` 出视频前按每个 Clip 的能力需求、router/probe 和适配层决定。
-> **首跑再定 `基础视觉风格`（必给菜单）**：写 `global_style.md` 前按 `n2d/references/visual_styles.md` 展示菜单（国漫写实角色审美 + 电影级布光与镜头语言（默认推荐） / 写实电影感 / 国漫写实 / 二次元赛璐璐 / 水墨国风 / 厚涂幻想 / 赛博霓虹 / Q版轻喜 / 自定义）。若用户本轮已指定或 `_设置.md` 已有则直接用；若只有全局默认，把它标为预选但仍展示菜单。选后写 `_设置.md`，同项目沉默沿用。
+> **首跑再定 `基础视觉风格`（必给菜单）**：写 `global_style.md` 前按 `n2d/references/visual_styles.md` 展示菜单（真实3D人物质感 + 电影叙事镜头感（默认推荐） / 写实电影感 / 国漫写实角色审美 + 电影级布光与镜头语言 / 国漫写实 / 二次元赛璐璐 / 水墨国风 / 厚涂幻想 / 赛博霓虹 / Q版轻喜 / 自定义）。若用户本轮已指定或 `_设置.md` 已有则直接用；若只有全局默认，把它标为预选但仍展示菜单。选后写 `_设置.md`，同项目沉默沿用。
 
 **情境 B — 精修某具体集**（作品根已存在）：
-跳到"第 3 步 精修该集"。先读 `_进度.md` 看该集物料列状态；再读 `脚本/_拆集复核.md`（若存在），按其中的边界决策取材，别机械照搬单个 `raw.txt`。
+跳到"第 3 步 精修该集"。先读 `_进度.md` 看该集物料列状态；再读 `脚本/boundary_review.json`（若存在），按其中已签收且 raw 指纹匹配的边界决策取材，别机械照搬单个 `raw.txt`。
+
+**情境 C — 从中间章节/中间集开始制作**：
+先做"第 -1 步 中段开工前情资产包"，再进入拆集/精修。不要只把目标章节切出来直接写 voiceover；否则主角常态定妆会被当前章节临时状态污染，人物关系/战力/道具/伏笔会断层，后续补前面章节时容易返工。
 
 ## 脚本批次（选择点 · 集级停审 + 报边界，量产时用）
 
@@ -47,11 +50,30 @@ description: Stage 1+定稿 of n2d — 阶段1·剧本改编：split a novel int
 
 - **逐集**（默认）：每改编/分镜 **1 集**就停，先报**该集边界决策**（切在哪、有没有并集/挪段、字数是否让位节拍）+ 本集物料清单，等用户确认或调整再下一集。
 - **小批**（默认 5 集）：每 **N 集**一停（N 默认 5，可改），附 5-10 集**边界复核窗口**（贴合下文「精修窗口铁律」），一批一审。
-- **整批一次过**：一口气改编/分镜用户指定的范围，最后统一报告（适合边界已在 `_拆集复核.md` 定稿、只是批量落词时）。
+- **整批一次过**：一口气改编/分镜用户指定的范围，最后统一报告（适合边界已在 `boundary_review.json` 结构化签收、只是批量落词时）。
 
 **逐集/小批循环**（每单位）：定边界 → 产物料 → **停下报「边界决策 + 物料清单」给用户** → 用户「继续 / 调边界 / 改词」→ 下一单位。第1集**永远单独逐集**（扛世界观+总钩，最该细审），无论选哪档。**`脚本批次` 只管"几集一停"，不改三层拆集与 P0→P6 边界铁律本身。**
 
 ## 工作流
+
+### 第 -1 步 — 中段开工前情资产包（从中间章节开始时必做）
+
+当用户说"从第 X 章开始做"、"先做中间爆点"、"不从第1章开始"、"拿第 N 集打样"时，先创建并补齐 `设定库/中段开工前情资产包.md`：
+
+```bash
+python3 skills/n2d-script/scripts/midstart_context.py <作品根> scaffold --target "第48章" --window "第45-52章"
+python3 skills/n2d-script/scripts/midstart_context.py <作品根> check
+```
+
+最少必须补齐五块：
+
+- **主角角色卡/身份基准**：常态外貌、当前章节形态、禁漂锚点、战力/境界、关系状态。常态定妆与当前形态分开，别把受伤、战损、觉醒、黑化等临时状态写进常态定妆。
+- **角色形象生命周期**：第几章/第几集发生换装、觉醒、受伤、变体、年龄跳；哪些变化要提前建新形态定妆，哪些只是集内状态。
+- **前情摘要**：到目标章节前的主角经历、关键选择、当前目标、主矛盾、未兑现伏笔/系统规则。
+- **关键角色/场景/道具卡**：目标窗口会出现的具名角色、主场景、武器/法宝/证物/系统面板/VFX，缺卡先补卡。
+- **目标章节前后窗口**：至少看目标章节前后几章或 5-10 集窗口，写清前一幕承接、0-3 秒冷开场、窗口末端钩子和边界决策。
+
+`midstart_context.py check` 通过后才能进入正式写词。`n2d/run.py next` 在 `script_stage1` 前若发现该文件，会自动检查；仍有待补字段时会 block。若确实没有某项，写"无"即可通过，不要留"待补"。
 
 ### 第 0 步 — 确认双轴
 
@@ -89,7 +111,7 @@ description: Stage 1+定稿 of n2d — 阶段1·剧本改编：split a novel int
 **再定首切范围**（`首切范围` 选择点，不写死）。**首次拿到小说默认不一次性粗切整本**——粗拆只是脚手架、边界后面还要按节拍重切，先把全本切成几十/几百个占位目录只是徒增返工。按 `../skills/n2d/references/选择点与偏好.md` 读 `<作品根>/_设置.md`→全局默认→**首次问一次**→写回 `_设置.md`→之后沉默沿用：
 
 - **部分先切**（默认·推荐）：只粗切**前 N 集**（默认 N=3，可改），先走完「全局 + 精修第1集」验证节拍/画风/角色卡立得稳，**满意后重跑 split 加大 `--limit` 续切**（已落地的集与 `_进度.md` 勾选都保留）。脚本仍按全本估总集数，只是延迟落地后续目录。
-- **全篇粗切**：一次粗切整本（适合短篇、或边界已在 `脚本/_拆集复核.md` 定稿、只差批量落词）。
+- **全篇粗切**：一次粗切整本（适合短篇、或边界已在 `脚本/boundary_review.json` 定稿、只差批量落词）。
 
 ```bash
 # 默认不传 --target；--target 只作报告/人工复核参考，不参与切点决策
@@ -104,6 +126,9 @@ python3 <skill>/scripts/split_novel.py "<小说路径>" --per-chapter --limit 3
 python3 <skill>/scripts/split_novel.py "<小说路径>" --by-chapter --limit 8
 # 首切范围=全篇粗切：省略 --limit，一次切到全本
 python3 <skill>/scripts/split_novel.py "<小说路径>" --by-chapter
+# 首切会自动从本剧源文本生成 n2d 本线源书分析包：
+# 设定库/source_analysis.json + source_analysis.md，并用角色候选预填 _角色总表.md
+python3 <skill>/scripts/split_novel.py "<小说路径>" --by-chapter
 ```
 
 **② 节拍重切（粗胚之后必做）**：split 出的是候选断点粗胚，**逐集按 `references/拆集法.md` 的 P0→P6 + 自查清单核对边界**——核心是 P0/P1：每集结尾是否落在强断点（危机悬置/真相半露/反转预告）上，且本集是否完成 **冲突→爽点/反转→钩子**。某集若结尾停在半场戏/平淡处，把边界往前或后挪到最近的反转/钩子（**宁可大幅偏离字数参考，也要保剧情连贯、剧情丰满和集尾硬断**）。`--by-chapter` 让边界贴章节，但**章界 ≠ 节拍界**，仍须人工核。
@@ -114,9 +139,13 @@ python3 <skill>/scripts/boundary_audit.py <作品根>          # 全剧 raw 边�
 python3 <skill>/scripts/boundary_audit.py <作品根> 2-10     # 精修窗口体检
 python3 <skill>/scripts/boundary_audit.py <作品根> --strict # 阶段1入口硬门：有风险且无复核记录则先停
 python3 <skill>/scripts/boundary_audit.py <作品根> --json   # 机器可读（series_arc 块）
+python3 <skill>/scripts/boundary_review.py draft <作品根> --write # 生成结构化签收草稿
+python3 <skill>/scripts/boundary_review.py check <作品根> --json   # 校验签收 episode + raw 指纹 + decision/notes
 ```
 `boundary_audit` 在逐集表之外还输出 **「剧级追更骨架」**（Gap1，方法论见 `references/追更骨架.md`）：跨集断点强度分布、**连续弱钩集群**（≥2 连弱钩=中段流失高风险，并入相邻强断点集或补强）、**疑似无闭环/纯铺垫集**（缺冲突或缺爽点/反转·P1）、**开篇集群钩子梯度**（前 3-4 集留存投资·P6/前十集定律）、按 `变现模式` 的**付费/AD 卡点集定位**（付费/海外校验卡点是否顶格断点；免费聚焦消灭连续弱钩集群）。词典按 `题材` 选择点切换（女频情感/悬疑/都市，Gap3）。**单集闭环对了不等于整部追得动——拆集时先看这层剧级骨架，再逐集下刀。**
-`n2d/run.py next` 进入 `script_stage1` 前会自动跑 strict 版；若发现章内续切、弱钩、半句、短/长但无闭环等风险，且没有 `脚本/_拆集复核.md`，会阻断正式写词。若项目有 `脚本/_拆集复核.md`，它是本项目边界决策记录；精修某集前先查该文件。高风险窗口先把决策写进 `_拆集复核.md`，再产 `voiceover.txt`。**不要为合并一两集贸然重编号全剧目录**；先在精修取材层合并/挪段，等一批集都定稿后再决定是否批量重排 `_进度.md`。
+
+**伏笔兑现账本脚手架（SP1·导出端·2026-06-22）**：拆集后跑 `python3 skills/n2d-script/scripts/setup_payoff_ledger.py <作品根> [--episodes 1-10] --write`，从各集 voiceover/故事板按显式悬念/钩子标记**捞候选伏笔**写成 `设定库/setup_payoff_ledger.json` 草稿（不自动判定哪句是伏笔·不覆盖已填 payoff·`payoff_ep` 留空交编剧填）。给每个坑填兑现集或标 `status=ongoing` 后，`n2d-review` 的 SP1 会校验坑没填/兑现早于种下/缺种下集——补「直接给小说文件、不经上游小说创作线时漫剧侧无叙事连续性兜底」。`P0/P1` 管语义/视觉状态跨集，SP1 管「叙事坑」跨集，正交。
+`n2d/run.py next` 进入 `script_stage1` 前会自动跑 strict 版；若发现章内续切、弱钩、半句、短/长但无闭环等风险，必须用 `boundary_review.py draft --write` 生成 `脚本/boundary_review.json`，并填写每个风险集的 `decision` + `notes`。`boundary_review.py check` 会校验 episode、当前 `raw.txt` 的 sha256 指纹和签收字段；raw 一变旧签收失效。没有结构化签收或签收过期会阻断正式写词。**不要为合并一两集贸然重编号全剧目录**；先在精修取材层合并/挪段，等一批集都定稿后再决定是否批量重排 `_进度.md`。
 
 **前长后短的落地**：粗胚默认按章/场景/强钩候选切；**第1集**在精修时主动加权，必要时并入更多开篇内容来立世界观、主角欲望和系列总钩。真正节奏靠**爽点/钩子重切(②) + 配音/原生音画实测(③)**校准；不要为了让第1集或后续集落到某个秒数而拆断完整闭环。脚本自动剥离开头简介/标签/看点等元数据（`--keep-frontmatter` 可保留）。
 
@@ -151,7 +180,7 @@ python3 <skill>/scripts/boundary_audit.py <作品根> --json   # 机器可读（
    - 顶部记 **视频模型路由策略** + **生视频后端延后决策说明** + **目标图AI**
    - 按 `基础视觉风格` 写「基础视觉风格」与「基础视觉风格契约（style_contract 源头）」；风格选项/派生词见 `n2d/references/visual_styles.md`
    - 画风词、世界观、统一负面词（负面词随基础视觉风格派生；不要把“插画感/游戏CG”等只适用于写实风格的禁忌套到所有风格）
-   - ⚙️仙侠玄幻可选：在 `global_style.md` 补**境界体系 / 主要势力 / 关键术语表**结构化小节（境界多、势力杂的题材，避免跨集漂）；法宝/特效等高频复现视觉资产到 `n2d-image` 立 `法宝定妆.md` / `特效定妆.md` 专类（见 `n2d-image/references/prompt_format.md §1`）
+   - ⚙️仙侠玄幻可选：在 `global_style.md` 补**境界体系 / 主要势力 / 关键术语表**结构化小节（境界多、势力杂的题材，避免跨集漂）；主角/核心反派长期使用的武器、法宝实体到 `n2d-image` 立 `WEAPON_xx` 武器库条目并写 `weapon_profile`，剑气/灵力/护体光等表现另立 `VFX_xx`；共享 prompt 放 `法宝定妆.md` / `特效定妆.md` 专类（见 `n2d-image/references/prompt_format.md §1`）
 2. **跨项目资产库提醒（不要让用户背 CLI）**：为主要角色/场景建卡前，AI 先提示一句：“我会先查 `资产库/` 有没有可复用的角色原型、场景定妆或路由模板；命中再问你是否导入，没命中再新建。”然后后台跑 `python3 skills/n2d-asset-market/scripts/market.py list`。若用户说“导入某模板为某角色”，用 `n2d-asset-market import-character` 导入并 fork 新身份，再跑 `python3 skills/n2d-identity/scripts/identity.py <作品根> --write`。用户只需做选择，不需要记命令。
 3. 为**主要角色/场景**建卡，存入 `设定库/characters/`、`设定库/locations/`。格式见 `references/formats.md §1 §2`：
    - 角色卡必含**妆造拆解**（发型/妆容/服装/配饰/色卡）、**服装选择评分卡**（身份/阶层信号、剪影、主色差异、竖屏可读性、AI可复现、动作视频友好、复用价值）和 `wardrobe_profile` 源头 + **① 定妆照 prompt 源头**（标准三视图：正面主参考 + 侧面 + 背面，另补半身/全身服装参考；核心/长线角色补领口/袖口/腰封/衣摆/纹样/材质色卡局部锚；干净背景、中英双版）+ **② 出镜 prompt**
@@ -164,7 +193,7 @@ python3 <skill>/scripts/boundary_audit.py <作品根> --json   # 机器可读（
 
 > 流程铁律：`剧本改编 → 角色配音 → 统计每句台词时长 → 分镜设计 → 出图 …`。**分镜在配音之后**——镜头怎么切、每镜多长由真实配音时长决定（节奏可控、后期省成本）。本步只做"可配音的剧本"。
 
-先按戏剧节拍确定本集边界（合并/拆分 `raw.txt`，一章 ≠ 一集）——边界决策按 `references/拆集法.md` P0→P6，过一遍其自查清单再写词。**实际取材优先级**：`脚本/_拆集复核.md` 的窗口决策（若有） > 当前集 `raw.txt` + 前后 2-4 集 raw 的人工重切 > 单集 raw。若复核清单标了“第9+10合并为一个精修单元”，写第9集 voiceover 时应同时消费第9/10集 raw；第10集则暂不单独推进，等窗口定稿后再回写进度。
+先按戏剧节拍确定本集边界（合并/拆分 `raw.txt`，一章 ≠ 一集）——边界决策按 `references/拆集法.md` P0→P6，过一遍其自查清单再写词。**实际取材优先级**：`脚本/boundary_review.json` 的窗口决策（若有且 raw 指纹匹配） > 当前集 `raw.txt` + 前后 2-4 集 raw 的人工重切 > 单集 raw。若签收标了“第9+10合并为一个精修单元”，写第9集 voiceover 时应同时消费第9/10集 raw；第10集则暂不单独推进，等窗口定稿后再回写进度。
 
 **写词前先设计留存曲线**（导演动作，不可跳过 —— 必读 `n2d/references/导演节奏.md`）：
 - **开场（0-3s）**：定一个冷开场或倒叙钩——本集最炸的画面/台词放最前，禁止 logo/慢空镜/长旁白起。
@@ -181,6 +210,7 @@ python3 <skill>/scripts/boundary_audit.py <作品根> --json   # 机器可读（
    - 关键反转词前用 `||` 标一拍停顿；句尾按留存曲线标 `⚡钩子` / `💥爽点` / `🪝集尾`。
    - 详见 `references/formats.md §6`。
 2. `bgm.txt` — 整体情绪 + BGM 风格 + 关键音效点（标爽点/反转的"重音"音效点，供后期卡点）
+   - **音乐母题登记（LM1·跨集一致）**：像 `voice_key` 一角一色那样，给主要角色/情绪主题登记**主题动机**到 `设定库/leitmotif_registry.json`（`{motifs:[{id, subject, desc}]}`，schema 见 `n2d-review/references/扩展一致性登记表.md`），让"主角出场旋律""反派低频动机"跨集可复现不串用；n2d-review 的 `音乐母题(LM1)` 据此对账。
 3. `封面.md` — 高点击率封面/首图 prompt
 （角色/场景卡见第 2 步。**本步不写 分镜剧本 / 故事板 / 素材清单 / 字幕** —— 它们的镜头切分与时长要由真实配音决定，属配音后的"阶段2 分镜设计"。）
 
@@ -225,6 +255,7 @@ python3 skills/n2d-dashboard/scripts/dashboard.py record <作品根> \
 
 
 1. **先定字幕语言**（`字幕语言` 选择点，不写死）：按 `../skills/n2d/references/选择点与偏好.md` 读 `<作品根>/_设置.md`→全局默认→首次问一次→写回。默认 **中文-only**（对齐 `skills/n2d/references/选择点与偏好.md` 与 finalize 默认；国内投放只产 `字幕_中文.srt`）；**翻译是投放选择**，项目显式选 **中英双语/仅英文**（海外投放 TikTok/ReelShort/YouTube/北美短剧）时才产 `字幕_英文.srt`——此时**先按 `references/formats.md §9` 把英文翻译写进 `脚本/第N集/字幕_英文.srt`**（任意时间码即可，finalize 会重定时），再跑桥接脚本。
+   - **海外/英文字幕发布闸**：项目选中英双语/仅英文、发行地区含海外，或合规用途写正式投放时，必须维护 `设定库/translation_glossary.json`：覆盖人名、称谓、境界、招式、口头禅、系统提示语。无该表或类别缺覆盖时，compose/review gate 会 BLOCK；确无某类术语要在 glossary `coverage` 中显式标 `not_applicable`。
    先跑桥接脚本，得到真实时间轴字幕 + 每镜时长：
    ```bash
    python3 <skill>/finalize_storyboard.py <作品根> 第N集            # 默认按已存在的字幕轨重定时(中文必出，英文若有则重定时)
@@ -235,9 +266,12 @@ python3 skills/n2d-dashboard/scripts/dashboard.py record <作品根> \
    > **占位闸门**：若该集配音仍是占位音色（`时长清单.json` 有 `占位:true`），本脚本**默认拒绝定稿**（exit 2）——占位时长是估算值，定稿后会锁进镜头时长/故事板 Clip 时长，出视频按错时长生成会大返工。先 `n2d-voice` 换真实配音重跑，再回跑本步；仅 rough preview 可 `FINALIZE_ALLOW_PLACEHOLDER=1` 放行（产物不可用于正式出视频）。
    > **定稿后自检（收尾必跑·闸门）**：`python3 <skill>/validate_timings.py <作品根> 第N集`。配音先行/先出视频后配音模式核对"**voiceover.txt 台词指纹 == 配音时记录的指纹**（抓配音后改词/插句/删句导致清单过期）"+"配音轨 ≈ 字幕末行 ≈ 镜头时长累计 ≈ ∑clip.duration"+"中英字幕句数一致"+"line_*.wav 齐"；原生音画模式核对 `storyboard.json ∑clip.duration ≈ 镜头时长.json`，字幕改到成片后用 whisperx 对齐。有硬不一致（默认容差 0.5s）退出码 1。指纹失配=台词改过但没重跑配音，必须先 `n2d-voice` 重配再回跑本步。**这是阶段2 收尾闸门，不是可选建议**：exit 0 才勾 `分镜设计` ✅、才放行出图。
    > **投放回灌先验注入（finalize 自动·向后兼容）**：定稿时若存在 `生产数据/creative_priors.json`（`n2d-feedback --write-priors` 写的机器可读第一方先验，kind `n2d_creative_priors`），`finalize_storyboard.py` 自动读它，把 A/B 胜出的开场/集尾断点/封面/标题 winner 作为**建议先验**——落 `脚本/第N集/applied_creative_priors.json` 证据 + 打印逐维度提示（winner / paired-lift / n）。**缺该文件则 no-op**（向后兼容，不影响定稿）；先验是建议非硬约束，样本不足的维度不出现、不必强套。设计本集/下一批开场与集尾断点时优先参考这些已被投放数据验证的胜出变体。
-   > **集内留存节拍体检（收尾建议·report-only·Gap4/5）**：`python3 <skill>/scripts/beat_audit.py <作品根> 第N集`。读 voiceover 钩子标记 + `镜头时长.json` 真实秒，机检 **开场冷启 / 钩子间隔（>20s 报）/ ≥1 反转 / 集尾 cliffhanger / 镜头时长曲线**，并判 **情绪回报 vs 信息回报**（爽点若全是情绪宣泄、零信息增量则报——2026 爆款要『信息回报+情绪回报』叠加）。跨集套路同质化跑 `beat_audit.py <作品根> --series`（桥段指纹雷同=观众疲劳）。**这是 `导演节奏.md` 的机检旁路，report-only、不替代 validate_timings 闸门**；--strict 时 must/warn 退 1，供量产抽检。
+   > **源文覆盖 + 集内留存节拍体检（出图前置·Gap4/5）**：`n2d/run.py next` 到 `image_prompt` 前会自动跑 `python3 <skill>/scripts/source_adaptation_audit.py <作品根> 第N集 --strict --json` 与 `python3 <skill>/scripts/beat_audit.py <作品根> 第N集 --strict --json`。前者核对 `raw.txt` 的系统/专名/关键事件没有从 voiceover/storyboard 中完全消失；后者读 voiceover 钩子标记 + `镜头时长.json` 真实秒，机检 **开场冷启 / 钩子间隔（>20s 报）/ ≥1 反转 / 集尾 cliffhanger / 镜头时长曲线**，并判 **情绪回报 vs 信息回报**（爽点若全是情绪宣泄、零信息增量则报）。任一 must/warn 都先回 n2d-script 修，不把文字问题带进出图 prompt。跨集套路同质化仍可手动跑 `beat_audit.py <作品根> --series`。
+   > **分镜可生成性/成本风险评分（出图前置·非生成）**：`n2d/run.py next` 到 `image_prompt` 前还会跑 `python3 <skill>/scripts/shot_risk_audit.py <作品根> 第N集 --json`，按长镜、高运动、说话近景、大表情、多人同框、VFX/道具等给每 Clip 打风险分。`must`（如清晰近景同框 ≥4 具名角色、大表情近景缺尾帧）阻断回 n2d-script；普通高风险以 warn 透出，建议拆镜、反打、补 `_mid/_aK`、换后端或先进 `n2d/run.py pilot <作品根> 第1集` 做代表 Clip 小样。
+   > **高动态/大场景专项契约（出图前置·硬闸门）**：`n2d/run.py next` 到 `image_prompt` 前还会跑 `python3 <skill>/scripts/spectacle_contract_audit.py <作品根> 第N集 --strict --json`。打斗、追逐、飞行/腾云驾雾必须写 `template` + `template_contract` 的动作编排字段（beats、speed_curve、spatial_path、camera_path、readability_beats、degrade_plan + attack/impact/contact、screen_direction/distance、flight/altitude/pose 等专属字段）；大场景/大场面必须写 `large_scene_contract` 或 `spectacle_contract`（geography_map、scale_reference、parallax_planes、landmark_anchor、camera_path、establishing_progression、reuse_asset_id）。缺字段先回本阶段补，不把“精彩打斗/宏大场面”这种散文 prompt 带进付费链路。
+   > **高动态制作计划 + sequence 总账 + probe pack（出图前置·非生成）**：同一前置会写 `生产数据/spectacle_plan_第N集.json/md`、`spectacle_sequence_plan_第N集.json/md`、`scene_layer_pack_plan_第N集.json/md` 与 `spectacle_probe_pack_第N集.json/md`。`spectacle_plan` 列出每个打斗/追逐/飞行/大场景 Clip 的缺契约字段、所需 Motion Control 输入、降级方案和剪辑 cues；`spectacle_sequence_plan` 把连续打斗/追逐/腾云/大场景合成 sequence 级总账，锁 clip_order、subject_slots、asset_persistence、path_lock、handoff_states 和 reference_clip_policy，video gate 缺它会 BLOCK；动作序列还带 **逐拍拆镜 `beat_decomposition`（起手/命中/反应一拍一镜）+ 负向身份锁词 `negative_identity_lock`（钉死脸/服装/配饰/年龄漂移）+ 多角色同框上限 `same_frame_policy`（>2 具名脸建议拆正反打）+ 运动强度档 `motion_intensity`(0–3) + 3–4 角度定妆建议**，供出图/出视频 prompt 注入；gate `动作节拍预算` 闸把「一镜塞完整攻防回合(跨≥3 节拍类别)」拦回拆镜（production 升 BLOCK），高速运动镜首尾双帧不可豁免；`scene_layer_pack` 为大场景/腾云场景脚手架 `设定库/scene_layers/<LOC>/scene_layer_pack.json`，锁 landmark_anchor、scale_reference、depth/parallax planes 和 reusable bg keyframes；`spectacle_probe_pack` 从本集各挑一个代表 Clip 做小样矩阵，并给出 `生产数据/spectacle_backend_benchmark.json` 的填写 schema。后续 `n2d-model-router` 会读取该 benchmark，把真实 probe 结果回灌到 primary/fallback。
 2. `分镜剧本.md` — 逐镜头视觉脚本（画面描述）。**镜头切分参考配音时长**：单镜台词过长可拆成多镜。**每镜按导演视角八维写画面意图**（`n2d/references/导演视角prompt.md`）——本阶段先定文字层的 ①镜头(景别+焦段) ②机位(角度/过肩，机位即态度) ④动作 ⑤场景 ⑥光影(动机光/调性，光替剧情说话) ⑦情绪+张力，外加 **与前后镜衔接方式（match cut / 首尾帧 / eyeline / 空镜）**；这是 n2d-image 把分镜图打成"剧照"而非"插画"的源头。多人/复杂打斗拆成单人正反打。**含打斗的集按 `references/打斗分镜.md` 拆**（五帧拆招 / 命中帧必出独立图 / 攻防正反打）；**含御剑飞行/追逐/渡劫突破/炼丹炼器/大阵/大场面 establish/斗法对轰/神魂(神识·元神出窍·夺舍) 等仙侠奇观的集按 `references/仙侠场面分镜.md` 拆**（飞行追逐锁姿态动背景 / 渡劫炼丹法阵对轰爆发帧(命中·撞点)单独出图 + 奇观元素入库 / 神魂元神=肉身半透明派生治"二我" / 大场面三镜由远及近）。**含打斗、追逐、对话反打、真相揭示/身份曝光、公开对质/审讯/谈判、法术爆发、飞行、亲密互动、拥抱/拉扯、关系转折、多人同框、群像站位的复杂镜头，先按 `references/专项镜头模板库.md` 选模板，再写具体镜头。**
-3. `故事板.md` + **`storyboard.json`** — Clip 表（相邻分镜合片段；人物运动 + 镜头运动 + 动态细节 + **衔接设计**）。`storyboard.json` 是必需的机器可读接力契约 **+ 视觉契约种子 + 基础视觉风格契约种子 + 专项镜头模板契约**；缺它或缺必填字段时下游 gate 会阻断。**必写 `visual_contract` 种子块（keystone）**：本集色调基线 + 每场景光位锚（主光方向/色温/动机光源）+ 每场景轴线·视线（站位/轴线/默认视线）+ 每角色状态演进（伤/泪/妆/服随镜号单调推进，不回退不提前泄露）+ 景别阶梯。**必写 `style_contract` 种子块**：风格名 + 视觉基调 + 镜头与构图 + 光色策略 + 运动边界 + 风格禁忌，来自 `_设置.md` 的 `基础视觉风格` 与 `global_style.md`，不要临场重发明。**复杂 Clip 必写 `template` + `template_contract`**：模板 ID、beats、blocking、camera_rule、continuity_must、negative 以及模板专属字段；打斗/追逐/反打/揭示反应链/公开对质/关系转折/法术/飞行/亲密互动/拥抱拉扯/多人同框/群像站位缺模板会被 gate 阻断。**这些是分镜设计阶段就该定死的导演决策，不是留给 n2d-image 凭空发明**——轴线/光位/状态/构图/光色一旦在出图烤进像素，出视频救不回；n2d-image 的「本集视觉一致性契约」和「本集基础视觉风格契约」继承本块（schema 见 `references/formats.md §4`）。`continuity` 块每 clip 另填 `eyeline`/`shot_size`（从 visual_contract 取真值）。**Clip 时长 = 所含镜头时长之和（来自 `镜头时长.json`，配音驱动）**；阶段2 只按剧情节奏设计 Clip，不因未选后端硬切；到 n2d-video 前再由 router 按所选/可用后端的单 Clip 上限检查，超上限才拆 Clip或换长镜后端，别一刀切 8s。**相邻 Clip 首尾帧构图对齐**（非最终 Clip 默认尾帧=下一首帧，用 frames2video 双帧引导更连贯）。
+3. `故事板.md` + **`storyboard.json`** — Clip 表（相邻分镜合片段；人物运动 + 镜头运动 + 动态细节 + **衔接设计**）。`storyboard.json` 是必需的机器可读接力契约 **+ 视觉契约种子 + 基础视觉风格契约种子 + 专项镜头模板契约**；缺它或缺必填字段时下游 gate 会阻断。**必写 `visual_contract` 种子块（keystone）**：本集色调基线 + 每场景光位锚（主光方向/色温/动机光源）+ 每场景轴线·视线（站位/轴线/默认视线）+ 每角色状态演进（伤/泪/妆/服随镜号单调推进，不回退不提前泄露）+ 景别阶梯。高频/主场景 `LOC_xx` 还要在 `asset_registry.json` 或场景卡补 `floor_plan`、`doors_windows`、`axis_rules`、`screen_direction_rules`，否则 production gate 会把“场景平面 FP1”升为 BLOCK。**必写 `style_contract` 种子块**：风格名 + 视觉基调 + 镜头与构图 + 光色策略 + 运动边界 + 风格禁忌，来自 `_设置.md` 的 `基础视觉风格` 与 `global_style.md`，不要临场重发明。**复杂 Clip 必写 `template` + `template_contract`**：模板 ID、beats、blocking、camera_rule、continuity_must、negative 以及模板专属字段；打斗/追逐/反打/揭示反应链/公开对质/关系转折/法术/飞行/亲密互动/拥抱拉扯/多人同框/群像站位缺模板会被 gate 阻断。核心道具、武器、证物、法宝一旦在 storyboard 中出现“持有/拿着/佩戴/背负/握住”等关系，必须同步维护 `production_consistency`/POS 持有账本或等价 `possession_ledger`，不再等到交接/丢失时才补。主角/核心反派长期使用的武器、法宝实体还必须在脚本阶段给出 `WEAPON_xx` 需求：名称、归属角色、审美方向、剪影尺度、携带方式、战斗用法、VFX 签名、禁漂项，并要求 n2d-image 写入 `asset_registry.weapon_profile` 与角色 `signature_equipment`；不能把主角武器留给出图临场“画一把好看的剑”。**这些是分镜设计阶段就该定死的导演决策，不是留给 n2d-image 凭空发明**——轴线/光位/状态/构图/光色/武器形态一旦在出图烤进像素，出视频救不回；n2d-image 的「本集视觉一致性契约」和「本集基础视觉风格契约」继承本块（schema 见 `references/formats.md §4`）。`continuity` 块每 clip 另填 `eyeline`/`shot_size`（从 visual_contract 取真值）。**Clip 时长 = 所含镜头时长之和（来自 `镜头时长.json`，配音驱动）**；阶段2 只按剧情节奏设计 Clip，不因未选后端硬切；到 n2d-video 前再由 router 按所选/可用后端的单 Clip 上限检查，超上限才拆 Clip或换长镜后端，别一刀切 8s。**相邻 Clip 首尾帧构图对齐**（非最终 Clip 默认尾帧=下一首帧，用 frames2video 双帧引导更连贯）。
    - **每 Clip 必写衔接设计（接力契约）**：入点 / 出点 / 转场方式 / 轴线与视线方向 / 是否需要空镜缓冲或声音先行(J-cut) / `需要尾帧?`。**铁律：本 Clip 的「出点」必须原样成为下一 Clip 的「入点」**（同一句描述，避免相邻镜各写各的、语义漂移）；并给接缝标 `转场类型`（match cut / eyeline / 动作切 / 空镜缓冲 / J-cut / 硬切）与 `需要尾帧?`。**默认：除最终 Clip 外全部 `需要尾帧?=是`；若某接缝因换场空镜/时间大跳/明确不连续而设为否，必须在 `storyboard.json` 写 `endframe_exempt_reason`。**这不是备注：n2d-image 据 `需要尾帧` 出尾帧 PNG，n2d-video 把契约转成 prompt 约束、读取上一镜出点作 start_state，n2d-compose 据 `转场类型` 决定接法与卡点。缺衔接设计的故事板只能 rough preview，不能正式出视频。
    - **每 Clip 标节奏注记**（`导演节奏.md §四/§五`）：`铺垫·长镜` / `加速·碎切` / `爽点·CU硬切` / `留白·定格` 四选，让镜头时长成"曲线"而非等长堆叠——铺垫拉长、临近爽点逐个变短、爽点后给 1-2s 留白。
    - **标爽点累计时间戳**（如 `💥爽点 @ 0:48`）：供 n2d-compose 把 BGM drop / 重音效卡在这一帧。
@@ -249,7 +283,7 @@ python3 skills/n2d-dashboard/scripts/dashboard.py record <作品根> \
    - **题材母题检测（storyboard.json 定稿后·检测+建议·人确认后注入）**：跑 `python3 skills/n2d-script/scripts/motif_detector.py <作品根> 第N集`（默认 dry-run）识别**题材**（系统流/穿越/修仙…）与**复现母题桥段**（系统面板出现/升级/系统刷新/签到/抽奖/爆装备）→ 出 `生产数据/motif_plan_第N集.{json,md}` 给增强建议（场景/道具/台词/成长档/overlay 文字层）。穿越/系统流爽文的"系统面板"是高频复现且带成长属性（面板进化、等级只增不减）的核心爽点，做好观众爱看。**人确认/微调题材与母题后** `--write` 注回：把 `template=system_panel`/`motif_id` 写进对应 Clip 的 `template_contract`、初始化/追加 `出图/共享/motif_registry.json`（成长 progression 骨架，等级/属性待人按剧情填）。题材落 `_设置.md` `题材`/`母题增强` 选择点（弱选择点·检测预填可覆盖）。**混合渲染**：AI 只出锁色锁形发光光幕底框（`VFX_系统面板`，禁烤文字数字），等级/属性数值由 n2d-compose 期 overlay 叠清晰文字层。完整契约见 `references/题材母题框架.md`；模板见 `references/专项镜头模板库.md` §0.2/§12。
 4. `素材清单.md` — 角色/场景/道具的 AI 图片 prompt（复用角色卡锚定，**中文+英文双版默认都写**）。中文 prompt 偶尔会触发平台安全规避或误判，英文版作为同义兜底；执行下游出图/出视频时默认建议中英都保留，由平台/CLI 选择更稳的一版。
 
-**完成后**：`_进度.md` 勾选 `分镜设计` / `素材清单` / `字幕中` ✅（默认中文-only 不勾 `字幕英`；项目显式选中英双语/仅英文且已产 `字幕_英文.srt` 时才同步勾 `字幕英`）。记录生产数据：
+**完成后**：`_进度.md` 勾选 `分镜设计` / `素材清单` / `字幕中` ✅（默认中文-only 不勾 `字幕英`；项目显式选中英双语/仅英文且已产 `字幕_英文.srt` 时才同步勾 `字幕英`）。`奇观连续性` 列**无需手勾**——出图前 image_prompt prework 生成序列总账后自动回写（✅=有奇观且覆盖，—=无奇观）。记录生产数据：
 
 ```bash
 python3 skills/n2d-dashboard/scripts/dashboard.py record <作品根> \
@@ -290,7 +324,7 @@ python3 <skill>/delete_shot.py <作品根> 第N集 镜头6 [镜头7 ...]
 - **`n2d/references/导演视角prompt.md`（画面意图·八维）**——把每镜 prompt 从画师视角("好看插画")升级成导演视角(镜头·机位·人物·动作·场景·光影·情绪·画质)。**阶段2 写分镜剧本时定其文字意图层**（①②④⑤⑥⑦），下游 n2d-image/n2d-video 据此装配实战 prompt。
 - **专项镜头模板库（复杂镜头·含打斗/追逐/对话反打/真相揭示/公开对质/关系转折/法术爆发/飞行/亲密互动/拥抱拉扯/多人同框/群像站位必读）：references/专项镜头模板库.md**——复杂镜头先选模板，再把 `template/template_contract` 写进 `storyboard.json`；gate 会阻断“只靠自由 prompt 写复杂动作/证据反应/关系转折”的 Clip。
 - **题材母题框架（穿越/系统流等复现桥段·系统面板/升级/签到/抽奖必读）：references/题材母题框架.md**——motif 一等概念总纲：检测器(`motif_detector.py`)→镜头模板(system_panel)→成长 VFX(`VFX_系统面板` lifecycle 只进不退)→overlay 数值层(n2d-compose) 全链，贯穿出图/出视频/合成。
-- **打斗分镜（仙侠武侠武打/法术场面·含打斗集必读）：references/打斗分镜.md**——五帧拆招（起手/发力/命中/受击/收势）/ 命中帧必出独立图 / 攻防正反打 / 特效武器进共享定妆库 / 打斗节奏曲线 + 全链示例。
+- **打斗分镜（仙侠武侠武打/法术场面·含打斗集必读）：references/打斗分镜.md**——五帧拆招（起手/发力/命中/受击/收势）/ 命中帧必出独立图 / 攻防正反打 / 主角武器进 `WEAPON_xx` 武器库、特效进 `VFX_xx` / 打斗节奏曲线 + 全链示例。
 - **仙侠场面分镜（御剑飞行/追逐/渡劫突破/炼丹炼器/大阵法阵/大场面 establish/斗法对轰/神魂(神识·元神出窍·夺舍)·含这些奇观的集必读）：references/仙侠场面分镜.md**——飞行追逐「锁姿态动背景」/ 渡劫炼丹法阵对轰「拆递增 + 爆发帧(命中·撞点)单独出图 + 奇观元素入库锁死」/ 神魂「元神=肉身半透明派生治"二我"、神识靠波纹给信息」/ 大场面「三镜由远及近 + 比例尺 + 地标复用」+ 各 stage 落地速查 + 全链示例。与打斗分镜同源（关键帧锁死、视频只受控运动、后期补"感"）。
 
 > 各管一层：**拆集法**定"切在哪（集间）"→ **导演节奏**定"每集怎么走（集内时间）"→ **分镜语法**定"每镜怎么切（空间）"→ **导演视角prompt**定"每镜怎么写成 prompt（画面意图八维）"→ **专项镜头模板库**定"复杂镜头怎么拆成可控契约"。
@@ -304,13 +338,14 @@ python3 <skill>/delete_shot.py <作品根> 第N集 镜头6 [镜头7 ...]
 | 错误 | 纠正 |
 |---|---|
 | 按字数/章数机械切集 | 先找结尾强断点定边界，字数让位节拍（`拆集法.md` P0/P4，章≠集）|
-| 只看单集 raw 就写 voiceover | 每次看 5-10 集窗口；先跑 `scripts/boundary_audit.py <作品根> 起-止`，再读 `脚本/_拆集复核.md` |
+| 只看单集 raw 就写 voiceover | 每次看 5-10 集窗口；先跑 `scripts/boundary_audit.py <作品根> 起-止`，风险窗口用 `scripts/boundary_review.py draft/check` 写入并校验 `脚本/boundary_review.json` |
 | 短集独立成集但无强钩 | 短集(<650字)必须复核：有强爆点可保留，否则并入前/后集 |
 | 为省时长删必要镜头/铺垫 | 不删剧情因果链；只压缩重复表达、合并边界或提高台词密度，必要删除必须写明"非剧情必要" |
 | 为合并一集立刻重编号全剧 | 不要贸然重排 300 集目录；先在精修取材层合并/挪段，批量定稿后再统一整理进度表 |
 | 切出"纯铺垫集"（整集无出口）| 每集装一个完整「憋—放」闭环，铺垫段并进有爽点的相邻集（P1/P3）|
 | 集尾停在半场戏/平淡处 | 边界 snap 到最近 cliffhanger（危机悬置/真相半露/反转预告），集尾硬断（P0）|
 | 切出"以过渡戏开头"的集 | 切点要让下集能 0-3s 冷开场，否则前/后挪边界（P2）|
+| 从中间章节直接写 voiceover | 先补 `设定库/中段开工前情资产包.md` 并跑 `midstart_context.py check`；常态定妆、当前形态、前情摘要、关键卡和前后窗口都要齐 |
 | 跳过建卡直接出镜头 | 必先建角色/场景卡，镜头里复用锚定句 |
 | 视频 prompt 只写画面不写运动 | 必含人物运动 + 镜头运动 + 动态细节 |
 | 设计超复杂打斗/人群 | 改为 AI 易生成的单人/双人动作、固定或简单运镜 |

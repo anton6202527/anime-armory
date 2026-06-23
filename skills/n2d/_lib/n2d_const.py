@@ -100,7 +100,11 @@ IDENTITY_ANCHOR_POINTS_FIELD = "identity_anchor_points"
 SHOT_TYPE_KEYWORDS = (
     ("fight_exchange", ("打斗", "搏斗", "交手", "格挡", "出拳", "挥剑", "命中", "受击", "撞击", "掌风", "刀光", "fight", "combat", "hit")),
     ("chase", ("追逐", "追赶", "追杀", "奔逃", "逃跑", "追上", "紧追", "chase", "running away")),
-    ("flight", ("御剑", "飞行", "凌空", "腾空", "掠空", "掠过云", "飞掠", "坠落", "飞檐", "云海穿行", "flight", "flying")),
+    ("flight", (
+        "御剑", "御剑飞行", "飞行", "凌空", "腾空", "腾云", "驾雾", "腾云驾雾", "掠空", "掠过云",
+        "飞掠", "坠落", "飞檐", "云海穿行", "空中追逐", "剑光飞行", "flight", "flying", "cloud riding",
+        "sword flight",
+    )),
     ("reveal_reaction_chain", ("真相揭示", "身份曝光", "身份揭露", "掉马", "马甲暴露", "真实身份", "当众揭穿", "揭穿", "揭露", "证据链", "血书", "遗诏", "密信", "内鬼", "身世", "认亲", "reveal", "identity reveal")),
     ("public_confrontation", ("公开对质", "当众对质", "公堂", "朝堂", "审讯", "逼问", "盘问", "质问", "谈判", "交易", "交涉", "智斗", "权谋", "当众打脸", "反将一军", "confrontation", "interrogation", "negotiation")),
     ("dialogue_shot_reverse", ("对话反打", "正反打", "反打", "过肩", "对视", "视线对位", "台词", "dialogue", "shot reverse", "ots", "eyeline")),
@@ -135,6 +139,50 @@ HIGH_MOTION_TEMPLATES = frozenset({
 # 带着重画的头号根因，必须走 frames2video 首尾双帧只插值或降级 MCU。
 EXPRESSION_SPAN_VALUES = ("微", "中", "大")
 EXPRESSION_SPAN_BIG = "大"
+
+# ── 运镜词典（中→英→[速度+方向+起止点] 槽位）──────────────────────────────────────────────
+# 把运镜从"只有关键词"升级成结构化：每条带 en（喂英文 prompt）+ slots（速度/方向/起止点该填什么）。
+# 动作镜 prompt 应从这里取词并填槽（Veo/即梦运镜段是传达情绪与速度感最强的工具），而非自由散文。
+CAMERA_MOVE_LEXICON = {
+    "推镜头": {"en": "dolly in", "slots": ("speed", "end_size")},
+    "拉镜头": {"en": "dolly out", "slots": ("speed", "end_size")},
+    "摇镜头": {"en": "pan", "slots": ("speed", "direction")},
+    "移镜头": {"en": "tracking", "slots": ("speed", "direction")},
+    "升降": {"en": "crane", "slots": ("speed", "direction", "end_height")},
+    "变焦": {"en": "zoom", "slots": ("speed", "end_size")},
+    "环绕": {"en": "orbit / circular (360°)", "slots": ("speed", "direction", "arc")},
+    "跟拍": {"en": "following / FPV", "slots": ("speed", "direction")},
+    "甩镜": {"en": "whip pan", "slots": ("direction",)},
+    "冲击变焦": {"en": "crash zoom", "slots": ("end_size",)},
+    "手持晃动": {"en": "handheld shake", "slots": ("strength",)},
+    "弧线运镜": {"en": "180-degree arc shot", "slots": ("direction", "start_subject", "end_subject")},
+    "无人机升起": {"en": "aerial drone ascend", "slots": ("speed", "end_height")},
+}
+# 速度词槽候选（填进 slots.speed），中→英。
+CAMERA_SPEED_WORDS = {
+    "缓慢": "slow", "匀速": "steady", "快速": "rapid", "急速冲击": "fast snap", "轻微": "gentle",
+}
+
+# ── 运动强度连续档（替代 HIGH_MOTION_TEMPLATES 二分的细粒度补充）──────────────────────────────
+# HIGH_MOTION_TEMPLATES 是「是否高风险」的二分闸；这里给 0–3 连续档，供 prompt 调 motion strength/
+# cfg 与下游采样密度参考（强动作降 cfg/motion strength 换脸稳是 2026 公认做法）。1=轻微局部动，
+# 2=明显全身/主体动，3=高速大幅动作(打斗/追逐/飞行峰值)。0=静帧/空镜。
+MOTION_INTENSITY_LEVELS = (0, 1, 2, 3)
+MOTION_INTENSITY_BY_TEMPLATE = {
+    "fight_exchange": 3, "chase": 3, "flight": 3, "magic_burst": 3,
+    "hug_or_pull": 2, "intimate_interaction": 2,
+    "dialogue_closeup": 1, "dialogue_shot_reverse": 1,
+    "empty_establishing": 0,
+}
+
+# ── 负向身份锁词表（动作镜默认注入的 negative prompt）──────────────────────────────────────
+# 高动态镜身份最常见崩法：脸/下巴漂移、服装变色、配饰消失、年龄漂移、背景闪烁。Kling 官方给的
+# 负向词把这些显式钉死。prompt 生成器对吃身份的镜默认拼上（单一真值源，避免各处各写一份）。
+IDENTITY_LOCK_NEGATIVE_TERMS = (
+    "de-aging", "morphing features", "shifting jawline", "changing face shape",
+    "changing clothes", "color shift", "disappearing accessories",
+    "extra limbs", "extra fingers", "flickering background", "identity drift",
+)
 
 # ── 题材母题(motif) ──────────────────────────────────────────────────────────
 # 穿越/系统流等爽文里高频复现的"母题场景"（系统面板出现/升级/签到/抽奖/爆装备）：相对固定的
@@ -320,6 +368,7 @@ ASSET_PACK_KIND = "n2d_asset_pack"
 ASSET_RERUN_PLAN_KIND = "n2d_asset_rerun_plan"
 MOTIF_REGISTRY_KIND = "n2d_motif_registry"          # 题材母题数据真值（出图/共享/motif_registry.json）
 MOTIF_PLAN_KIND = "n2d_motif_plan"                  # 母题检测建议（生产数据/motif_plan_第N集.{json,md}）
+COMBAT_REGISTRY_KIND = "n2d_combat_registry"        # 招式/打斗套路真值（出图/共享/combat_registry.json）
 BATCH_QUEUE_KIND = "n2d_batch_queue"
 DIFFERENTIATION_CANDIDATES_KIND = "n2d_differentiation_candidates"
 EPISODE_REVIEW_SCORE_KIND = "n2d_episode_review_score"

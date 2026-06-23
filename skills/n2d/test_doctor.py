@@ -61,6 +61,41 @@ def test_precision_lines_reports_deferred_video_backend():
     assert "后移到 n2d-video" in lines
 
 
+def test_precision_lines_flags_stylized_styleid_degraded():
+    probes = {
+        "libs": {"insightface": True, "onnxruntime": True, "PIL": True},
+        "cli": {"ffmpeg": True, "ffprobe": True},
+        "voice": {"say": True, "heavy_env": True},
+        "image_backend": None,
+        "video_backend": None,
+        "face_encoder": {
+            "style": "二次元赛璐璐",
+            "stylized": True,
+            "encoder": "arcface",
+            "status": "degraded",
+            "model_status": "missing",
+            "model_path": "",
+        },
+    }
+    lines = "\n".join(doctor.precision_lines(probes))
+    assert "N2D_STYLEID_MODEL" in lines
+    assert "降级档" in lines
+
+
+def test_probe_face_encoder_styleid_ready(tmp_path, monkeypatch):
+    model = tmp_path / "styleid.ckpt"
+    model.write_text("stub", encoding="utf-8")
+    monkeypatch.setenv("N2D_STYLEID_MODEL", str(model))
+    (tmp_path / "_设置.md").write_text(
+        "- 基础视觉风格: 水墨国风\n"
+        "- 脸一致性机检后端: styleid\n",
+        encoding="utf-8",
+    )
+    result = doctor.probe_face_encoder(str(tmp_path))
+    assert result and result["status"] == "ready"
+    assert result["stylized"] is True
+
+
 def test_probe_video_backend_defers_auto_route(tmp_path):
     (tmp_path / "_设置.md").write_text("- 视频模型路由: 自动按镜头路由\n", encoding="utf-8")
     result = doctor.probe_video_backend(str(tmp_path))

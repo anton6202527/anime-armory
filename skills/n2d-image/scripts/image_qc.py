@@ -153,11 +153,11 @@ def load_registry_ids(root: Path) -> Optional[Set[str]]:
 
 def load_asset_index(root: Path) -> Optional[Dict[str, Any]]:
     """asset_registry.json → {ids, name_to_id, prefix_of}，供逐镜资产 id lint（A·把 CHAR_xx 那套对称到
-    LOC/PROP/OUTFIT/VFX）。缺/损坏 → None（lint 跳过资产合法性，记 note，不误报）。
+    LOC/PROP/WEAPON/OUTFIT/VFX）。缺/损坏 → None（lint 跳过资产合法性，记 note，不误报）。
 
     name_to_id 把每个资产的 `name` 和 reference_group 文件名 stem（剥 `定妆_`/`_侧`等）映到其 id，
-    用来抓「用了 `定妆_<资产>` 却没绑 `PROP_xx/LOC_xx`」——执行端缺 id 就取不到 constraints/drift_forbidden。
-    asset_registry 只含非角色资产（场景/道具/服装/特效），角色在 identity_registry，二者不串。
+    用来抓「用了 `定妆_<资产>` 却没绑 `PROP_xx/LOC_xx/WEAPON_xx`」——执行端缺 id 就取不到 constraints/drift_forbidden。
+    asset_registry 只含非角色资产（场景/道具/武器/服装/特效），角色在 identity_registry，二者不串。
     """
     path = root / "出图" / "共享" / "asset_registry.json"
     try:
@@ -233,15 +233,15 @@ def _asset_must_not_have_terms(asset: Mapping[str, Any]) -> List[str]:
     return out
 
 
-# 资产 id 引用（场景/道具/服装/特效）+ 定妆资产名（用于抓"用了定妆却没绑 id"）。
-ASSET_ID_RE = re.compile(r"`?((?:LOC|PROP|OUTFIT|VFX)_[A-Za-z0-9_]+)`?")
+# 资产 id 引用（场景/道具/武器/服装/特效）+ 定妆资产名（用于抓"用了定妆却没绑 id"）。
+ASSET_ID_RE = re.compile(r"`?((?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_]+)`?")
 DEFINING_ASSET_RE = re.compile(r"定妆_([^\s`，。、）)/]+)")
 _ASSET_NAME_SUFFIX_RE = re.compile(r"_(侧|半身|全身|背|三视图|四视图|设定表|脸部特写|表情)$")
 
 
 def _lint_asset_binding(label: str, body: str, asset_index: Optional[Dict[str, Any]]) -> List[Dict[str, str]]:
     """资产 id lint（A，所有镜都跑，不限角色镜）：
-    - 写了 `LOC/PROP/OUTFIT/VFX_xx` 但 registry 没有 → block `unknown_asset_id`（对称 unknown_char_id）；
+    - 写了 `LOC/PROP/WEAPON/OUTFIT/VFX_xx` 但 registry 没有 → block `unknown_asset_id`（对称 unknown_char_id）；
     - 用了 `定妆_<已登记资产>` 却没绑对应 id → warn `asset_ref_without_id`（执行端取不到 constraints/drift_forbidden）。
     纯函数·可测。asset_index=None（registry 缺）→ 跳过。"""
     findings: List[Dict[str, str]] = []
@@ -256,7 +256,7 @@ def _lint_asset_binding(label: str, body: str, asset_index: Optional[Dict[str, A
     for rid in sorted(body_ids):
         if rid not in ids:
             findings.append({"level": "block", "code": "unknown_asset_id",
-                             "msg": f"{label}：资产引用 `{rid}` 在 asset_registry 不存在（场景/道具/服装/特效 id 写错或未登记）"})
+                             "msg": f"{label}：资产引用 `{rid}` 在 asset_registry 不存在（场景/道具/武器/服装/特效 id 写错或未登记）"})
             continue
         must_not = [t for t in (entries.get(rid) or {}).get("must_not_have", []) if t]
         missing_terms = [t for t in must_not if t not in text]
@@ -276,11 +276,96 @@ def _lint_asset_binding(label: str, body: str, asset_index: Optional[Dict[str, A
         aid = name_to_id.get(name) or name_to_id.get(stem) or name_to_id.get(raw)
         if aid and aid not in body_ids and aid not in flagged:
             flagged.add(aid)
-            kind = {"LOC_": "场景", "PROP_": "道具", "OUTFIT_": "服装", "VFX_": "特效"}.get(prefix_of.get(aid, ""), "资产")
+            kind = {"LOC_": "场景", "PROP_": "道具", "WEAPON_": "武器", "OUTFIT_": "服装", "VFX_": "特效"}.get(prefix_of.get(aid, ""), "资产")
             findings.append({"level": "warn", "code": "asset_ref_without_id",
                              "msg": f"{label}：用了 `定妆_{raw}`({kind}) 但未绑 `{aid}`；写上资产 id 执行端才会自动取 "
                                     "reference_group/constraints/drift_forbidden（防场景/道具/特效跨镜漂移）"})
     return findings
+
+
+def audit_carried_identity_anchors(root: Path) -> Dict[str, Any]:
+    """承载角色脸的资产（VFX/海报/关系图等画面里出具名角色脸）是否有 ready 脸锚——落档机检版。
+
+    `carries_identity`（治定妆脸漂的真因）此前只在 codex/dreamina runner 的出图前 spend 闸门
+    enforced；非 runner 路径（手工出图/其它后端/旧图）绕过即漏检。本函数把同一条铁律前移到
+    **后端无关的落档机检**：对 `asset_registry.json` 每个承载角色身份的资产，按 `identity_registry`
+    静态核验承载角色至少有 1 张 ready 脸锚可注入——0 张 ready 锚 = 该资产每镜必无锚渲染新脸
+    （万妖血脉 VFX vs 沈念基础包正是此坑）。
+
+    复用 runner 的 `_asset_carried_identities`（含显式字段 + 类型/上下文推断单一真值源）和
+    `_collect_ready_image_paths`（ready 状态语义同源），绝不另起一套 fork。runner 不可加载
+    （缺依赖/旧解释器）→ available=False 优雅跳过，不臆造 block。逃生口同 runner:
+    `N2D_ALLOW_UNANCHORED_IDENTITY_PLATE=1`（显式豁免，留痕自负）。
+    """
+    res: Dict[str, Any] = {"available": True, "findings": [], "notes": []}
+    base = _load_sibling("codex_image_runner")
+    if base is None or not hasattr(base, "_asset_carried_identities") \
+            or not hasattr(base, "_collect_ready_image_paths"):
+        res["available"] = False
+        res["notes"].append("codex_image_runner 不可用——承载角色脸锚机检跳过，交人判/runner 闸门。")
+        return res
+    try:
+        assets = json.loads((root / "出图" / "共享" / "asset_registry.json").read_text(encoding="utf-8"))
+    except Exception:
+        res["notes"].append("asset_registry.json 缺失/损坏——承载角色脸锚机检跳过。")
+        return res
+    try:
+        identity = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))
+    except Exception:
+        identity = {}
+    chars = {str(c.get("id") or "").strip(): c
+             for c in (identity.get("characters") or []) if isinstance(c, dict)}
+
+    def _ready_anchor_paths(ref: str) -> List[str]:
+        """ref=`CHAR_xx` 或 `CHAR_xx/形态` → 该（形态级更精准）承载角色可注入的 ready 脸锚路径。"""
+        cid = ref.split("/", 1)[0]
+        ch = chars.get(cid)
+        if not isinstance(ch, dict):
+            return []
+        paths: List[str] = []
+        seen: Set[str] = set()
+        base._collect_ready_image_paths(
+            ch.get("external_visual_references"), root, paths, seen,
+            allow_non_shared=True, allow_pending_user_reference=True)
+        bare = "/" not in ref  # 裸 CHAR_xx 命中全形态；形态级只命中该形态（同 runner 解析）
+        for form in ch.get("forms") or []:
+            if not isinstance(form, dict):
+                continue
+            fname = str(form.get("form") or "常态").strip()
+            if not (bare or f"{cid}/{fname}" == ref):
+                continue
+            base._collect_ready_image_paths(form.get("reference_group"), root, paths, seen)
+            base._collect_ready_image_paths(form.get("reference_atlas"), root, paths, seen)
+        return paths
+
+    exempt = os.environ.get("N2D_ALLOW_UNANCHORED_IDENTITY_PLATE") == "1"
+    for asset in assets.get("assets") or []:
+        if not isinstance(asset, dict):
+            continue
+        carried = base._asset_carried_identities(asset)
+        if not carried:
+            continue
+        aid = str(asset.get("id") or asset.get("name") or "?").strip()
+        anchorable = [ref for ref in carried if _ready_anchor_paths(ref)]
+        if anchorable:
+            continue
+        carried_txt = "、".join(str(c) for c in carried)
+        unknown = [ref for ref in carried if ref.split("/", 1)[0] not in chars]
+        if unknown and len(unknown) == len(carried):
+            code, why = "carried_identity_unknown", \
+                f"承载角色 {carried_txt} 在 identity_registry 不存在——无脸锚可注入"
+        else:
+            code, why = "unanchored_identity_plate", \
+                f"承载角色 {carried_txt} 在 identity_registry 无任何 ready 脸锚——出图会另画新脸"
+        if exempt:
+            res["findings"].append({"level": "warn", "code": code + "_exempted",
+                                    "msg": f"资产 {aid}：{why}（N2D_ALLOW_UNANCHORED_IDENTITY_PLATE=1 显式豁免·留痕）"})
+            continue
+        res["findings"].append({"level": "block", "code": code,
+                                "msg": f"资产 {aid}：{why}。先把承载角色脸部特写/正面参考置 ready"
+                                       "（形态级 `CHAR_xx/形态` 更精准），或显式豁免 "
+                                       "N2D_ALLOW_UNANCHORED_IDENTITY_PLATE=1。"})
+    return res
 
 
 def _registry_path() -> Path:
@@ -471,6 +556,10 @@ def load_registry_forms(root: Path) -> Optional[List[Dict[str, Any]]]:
                 "reference_stems": reference_stems,
                 "strong_aliases": strong_aliases,
                 "weak_aliases": weak_aliases,
+                # 辨识标记（MK1·疤痕/胎记/纹身/异瞳…）出图前文本预检；与 n2d-review marks_consistency 同义，
+                # 但本 skill 自留一份不跨 import（独立性铁律）。
+                "identity_marks": [m for m in (_normalize_identity_mark(r)
+                                               for r in (form.get("identity_marks") or [])) if m],
             })
     return forms
 
@@ -1037,6 +1126,107 @@ def _lint_semantic_conflict(label: str, body: str) -> List[Dict[str, str]]:
     return findings
 
 
+# ── 辨识标记（MK1）出图前文本预检 · vendored 纯函数（不跨 import n2d-review·独立性铁律） ──────
+
+def _mk_episode_num(ep: str) -> Optional[int]:
+    m = re.search(r"(\d+)", str(ep or ""))
+    return int(m.group(1)) if m else None
+
+
+def _normalize_identity_mark(raw: Any) -> Optional[Dict[str, Any]]:
+    """单条 identity_marks 归一：persistence → ('permanent',None) 或 ('acquired',集号)；
+    无任何可机检搜索词 → None。纯函数·可测。"""
+    if not isinstance(raw, Mapping):
+        return None
+    mark = {
+        "mark_id": str(raw.get("mark_id") or raw.get("id") or "").strip(),
+        "type": str(raw.get("type") or "").strip(),
+        "region": str(raw.get("region") or "").strip(),
+        "color": str(raw.get("color") or "").strip(),
+        "plot_load": bool(raw.get("plot_load", False)),
+        "keywords": [str(k).strip() for k in (raw.get("keywords") or []) if str(k).strip()],
+        "persistence": "permanent", "acquired_ep": None,
+    }
+    pers = raw.get("persistence", "permanent")
+    n = None
+    if isinstance(pers, Mapping):
+        n = _mk_episode_num(str(pers.get("acquired_at") or ""))
+        if n is None and isinstance(pers.get("acquired_at"), (int, float)):
+            n = int(pers["acquired_at"])
+    elif isinstance(pers, str) and pers.strip() and pers.strip() != "permanent":
+        n = _mk_episode_num(pers)
+    if n is not None:
+        mark["persistence"], mark["acquired_ep"] = "acquired", n
+    return mark if _mark_tokens(mark) else None
+
+
+def _mark_tokens(mark: Mapping[str, Any]) -> Set[str]:
+    """该标记的搜索词：keywords ∪ 部位+类型 ∪ 类型 ∪ 部位 ∪ 颜色 ∪ mark_id 去前缀（≥2 字）。纯函数·可测。"""
+    toks: Set[str] = set(k for k in (mark.get("keywords") or []) if len(str(k)) >= 2)
+    region, mtype, color = (str(mark.get(k) or "").strip() for k in ("region", "type", "color"))
+    if region and mtype:
+        toks.add(region + mtype)
+    for v in (mtype, region, color):
+        if len(v) >= 2:
+            toks.add(v)
+    mid = str(mark.get("mark_id") or "").strip()
+    if mid.upper().startswith("MARK_"):
+        mid = mid[5:]
+    for part in re.split(r"[_\-\s]+", mid):
+        if len(part) >= 2 and not part.isdigit():
+            toks.add(part)
+    return toks
+
+
+def _mark_desc(mark: Mapping[str, Any]) -> str:
+    label = "".join(str(mark.get(k) or "") for k in ("color", "region", "type")).strip()
+    return label or str(mark.get("mark_id") or "标记")
+
+
+def _lint_identity_marks(label: str, body: str, id_refs: Sequence[str],
+                         registry_forms: Optional[Sequence[Mapping[str, Any]]],
+                         ep_num: Optional[int]) -> List[Dict[str, str]]:
+    """出图前辨识标记预检（MK1 的 image_qc 侧·治"prompt 漏写标记锁→纯文生图丢标记"）。
+
+    本镜在场角色（id/key 命中 id_refs，或强别名命中 body）的每条标记：
+      - 永久 / 已获得标记未写进本镜 prompt → warn（疑似漂移/丢失或合理遮挡，人核对补回）；
+      - 未获得标记（本集 < acquired_at）却写进 prompt → block（时间线穿帮）。
+    纯函数·可测。"""
+    findings: List[Dict[str, str]] = []
+    if not registry_forms:
+        return findings
+    ref_set = {normalize_identity_ref(r) for r in (id_refs or [])}
+    base_set = {r.split("/", 1)[0] for r in ref_set}
+    for form in registry_forms:
+        marks = form.get("identity_marks") or []
+        if not marks:
+            continue
+        key = str(form.get("key") or "")
+        cid = str(form.get("id") or "")
+        present = (key in ref_set or cid in ref_set or cid in base_set
+                   or _matches_alias(body, set(form.get("strong_aliases") or set())))
+        if not present:
+            continue
+        for mark in marks:
+            desc = _mark_desc(mark)
+            acq = mark.get("acquired_ep")
+            not_yet = (mark.get("persistence") == "acquired" and ep_num is not None
+                       and acq is not None and ep_num < acq)
+            referenced = any(tok in body for tok in _mark_tokens(mark))
+            if not_yet:
+                if referenced:
+                    findings.append({"level": "block", "code": "identity_mark_anachronism",
+                                     "msg": f"{label}：{form.get('display') or cid} 的辨识标记『{desc}』"
+                                            f"在获得集第{acq}集之前就写进出图 prompt——时间线穿帮，删除或核对获得集。"})
+            elif not referenced:
+                load = "（载剧情）" if mark.get("plot_load") else ""
+                findings.append({"level": "warn", "code": "identity_mark_missing",
+                                 "msg": f"{label}：角色 {form.get('display') or cid} 的辨识标记『{desc}』{load}"
+                                        f"未写进本镜出图 prompt——纯文生图会丢，补进资产身份注册层的标记锁，"
+                                        f"或确认本镜该部位被遮挡/不入画。"})
+    return findings
+
+
 def lint_shot_block(
     block: Dict[str, str],
     valid_ids: Optional[Set[str]],
@@ -1044,6 +1234,7 @@ def lint_shot_block(
     asset_index: Optional[Dict[str, Any]] = None,
     form_ref_counts: Optional[Dict[str, int]] = None,
     persistent_subject: Optional[bool] = None,
+    ep_num: Optional[int] = None,
 ) -> List[Dict[str, str]]:
     """单镜块执行层 lint：返回 findings [{level, code, msg}]。纯函数·可测（不读盘）。
 
@@ -1089,6 +1280,7 @@ def lint_shot_block(
     if "身份锁定句" not in body:
         findings.append({"level": "warn", "code": "no_identity_lock_phrase",
                          "msg": f"{label}：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"})
+    findings.extend(_lint_identity_marks(label, body, id_refs, registry_forms, ep_num))
     findings.extend(_lint_tail_identity_handoff(label, body, registry_forms))
     findings.extend(_lint_tail_relay_method(label, body))
     findings.extend(_lint_closeup_expression_lib(label, body, id_refs, core_char_ids(registry_forms)))
@@ -1124,14 +1316,15 @@ def lint_prompts(root: Path, ep: str) -> Dict[str, Any]:
     persistent_subject = bool(profile.get("persistent_subject")) if profile else None
     asset_index = load_asset_index(root)
     if asset_index is None:
-        res["notes"].append("asset_registry.json 缺失/损坏——跳过 LOC/PROP/OUTFIT/VFX_xx 资产 id 合法性校验。")
+        res["notes"].append("asset_registry.json 缺失/损坏——跳过 LOC/PROP/WEAPON/OUTFIT/VFX_xx 资产 id 合法性校验。")
+    ep_num = _mk_episode_num(ep)  # 辨识标记获得型 anachronism 判定用
     blocks = split_shot_blocks(text)
     for blk in blocks:
         res["shots_linted"] += 1
         for manifest in character_shot_manifests(blk):
             res["character_shots"].append(manifest)
         res["findings"].extend(lint_shot_block(blk, valid_ids, registry_forms, asset_index,
-                                               form_ref_counts, persistent_subject))
+                                               form_ref_counts, persistent_subject, ep_num))
     return res
 
 
@@ -1250,6 +1443,8 @@ HARD_LINT_CODES = (
     "no_expression_lib_ref",  # ④ 所有人物近景大表情无表情库/脸部特写 = 脸漂高发，硬拦
     "closeup_core_no_expression_lib",  # 旧报告码兼容；新报告统一用 no_expression_lib_ref
     "weak_face_anchor_core",
+    "unanchored_identity_plate",  # 承载角色脸的资产无 ready 脸锚（定妆脸漂真因·后端无关落档版）
+    "carried_identity_unknown",   # 承载角色在 identity_registry 不存在——无锚可注入
 )
 VISUAL_CHECK_LABELS = {
     "face": "崩脸 G1",
@@ -1431,30 +1626,101 @@ def _ledger_present(root: Path) -> bool:
     return (Path(root) / "出图" / "共享" / "visual_state_ledger.json").exists()
 
 
+# ── B 定妆库两层：中性锚（锁身份·平光纯背景）/ 风格氛围（锁调性·戏剧光）。脸锚若用戏剧光板，
+#    会把光当身份烤进脸——业界做定妆铁律是平光中性背景。这里把它做成可机检的 advisory。 ──
+_DRAMATIC_LIGHT_TOKENS = (
+    "氛围", "暗调", "戏剧光", "烛光", "逆光", "侧逆", "夜景", "暗光", "低调光", "霓虹", "顶光",
+    "candle", "backlit", "backlight", "moody", "dramatic", "lowkey", "low_key", "rim",
+)
+
+
+def reference_layer(entry: Any) -> str:
+    """把一条参考登记归类为 'identity'(中性锚) / 'atmosphere'(风格氛围) / ''(未知)。
+
+    显式 `layer` / `lighting` 标签优先；否则按文件名里的戏剧光关键词启发。纯函数·可测。"""
+    path = ""
+    if isinstance(entry, Mapping):
+        lay = str(entry.get("layer") or "").strip().lower()
+        if lay in {"atmosphere", "style", "氛围", "风格"}:
+            return "atmosphere"
+        if lay in {"identity", "anchor", "identity_anchor", "中性", "锚", "中性锚"}:
+            return "identity"
+        lit = str(entry.get("lighting") or "").strip().lower()
+        if lit in {"dramatic", "moody", "low_key", "lowkey", "戏剧光", "暗调"}:
+            return "atmosphere"
+        if lit in {"neutral", "flat", "even", "中性", "平光"}:
+            return "identity"
+        path = str(entry.get("path") or "")
+    else:
+        path = str(entry or "")
+    name = Path(path).stem.lower()
+    if any(tok.lower() in name for tok in _DRAMATIC_LIGHT_TOKENS):
+        return "atmosphere"
+    return ""
+
+
+def face_anchor_lighting_audit(root: Path, ep: str) -> Dict[str, Any]:
+    """脸锚两层体检：identity_registry 各 form 的 face_anchor_refs 若是戏剧光/氛围板 → flag。
+
+    脸锚应是中性平光板（锁身份）；戏剧光板留作 atmosphere 层锁调性，不可当身份锚。advisory·纯路径。"""
+    res: Dict[str, Any] = {"available": False, "flagged": []}
+    try:
+        reg = json.loads((Path(root) / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))
+    except Exception:
+        return res
+    res["available"] = True
+    for ch in reg.get("characters") or []:
+        if not isinstance(ch, Mapping):
+            continue
+        cid = str(ch.get("id") or "")
+        for form in ch.get("forms") or []:
+            if not isinstance(form, Mapping):
+                continue
+            fname = str(form.get("form") or "")
+            rg = form.get("reference_group") or {}
+            atlas = form.get("reference_atlas") or {}
+            anchors = []
+            for src in (rg.get("face_anchor_refs"), atlas.get("face_anchor_refs")):
+                if isinstance(src, list):
+                    anchors.extend(src)
+            for entry in anchors:
+                if reference_layer(entry) == "atmosphere":
+                    p = entry.get("path") if isinstance(entry, Mapping) else entry
+                    res["flagged"].append({"char": cid, "form": fname, "path": str(p or "")})
+    return res
+
+
 def audit_state_ledger(root: Path, ep: str) -> Dict[str, Any]:
     """状态账本启发式（advisory）：扫 storyboard 角色状态演进 + 本集出图 prompt 找累积状态关键词；
     命中且无 visual_state_ledger.json → advise=True（建议跑 visual_state_manager --audit）。
     永不 block——只把「简单/复杂」的人脑豁免决策挪到机检提醒。读不到源 → available=False。纯函数·可测。"""
-    res: Dict[str, Any] = {"available": False, "markers": [], "ledger_present": False, "advise": False}
-    texts: List[str] = []
+    res: Dict[str, Any] = {"available": False, "markers": [], "ledger_present": False,
+                           "advise": False, "not_injected_markers": []}
+    sb_text = ""
+    prompt_text = ""
     try:
         sb = json.loads((Path(root) / "脚本" / ep / "storyboard.json").read_text(encoding="utf-8"))
         vc = sb.get("visual_contract") if isinstance(sb.get("visual_contract"), dict) else {}
-        texts.append(str(vc.get("角色状态演进", "")))
+        sb_text = str(vc.get("角色状态演进", ""))
         res["available"] = True
     except Exception:
         pass
     try:
-        texts.append((Path(root) / "出图" / ep / "prompt" / "01_分镜出图.md").read_text(encoding="utf-8"))
+        prompt_text = (Path(root) / "出图" / ep / "prompt" / "01_分镜出图.md").read_text(encoding="utf-8")
         res["available"] = True
     except Exception:
         pass
     if not res["available"]:
         return res
-    blob = "\n".join(texts)
+    blob = f"{sb_text}\n{prompt_text}"
     res["markers"] = sorted({m for m in CUMULATIVE_STATE_MARKERS if m in blob})
+    # 状态演进声明了累积状态，但本集出图 prompt 没注入 = 账本/演进写了却没进生成（runner 照画干净衣服）。
+    sb_markers = {m for m in CUMULATIVE_STATE_MARKERS if m in sb_text}
+    prompt_markers = {m for m in CUMULATIVE_STATE_MARKERS if m in prompt_text}
+    res["not_injected_markers"] = sorted(sb_markers - prompt_markers)
     res["ledger_present"] = _ledger_present(root)
-    res["advise"] = bool(res["markers"]) and not res["ledger_present"]
+    # advise：① 有累积状态却没建账本；② 状态演进声明了累积状态，但出图 prompt 没注入（视觉状态漏进生成）。
+    res["advise"] = (bool(res["markers"]) and not res["ledger_present"]) or bool(res["not_injected_markers"])
     return res
 
 
@@ -2645,6 +2911,11 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         level = str(f.get("level") or "warn")
         sev = "warn" if level == "warn" else "info"
         out.append(_qc_finding(sev, "style_consistency", None, f.get("msg", "")))
+    # 风格归属佐证（⑤·选定风格 vs 实际渲染）→ style_consistency（整集风格指纹偏离风格锚/未登记锚 → 回 n2d-image）。
+    for f in (payload.get("style_attribution") or {}).get("findings", []):
+        level = str(f.get("level") or "warn")
+        sev = "warn" if level == "warn" else ("block" if level == "block" else "info")
+        out.append(_qc_finding(sev, "style_consistency", None, f.get("msg", "")))
     # ④ VLM 语义判定（描述↔渲染图）：关键资产判崩设定=block，低置信/非关键=warn 人判。
     for f in (payload.get("vlm_consistency") or {}).get("findings", []):
         dim = "character_consistency" if f.get("code") == "vlm_semantic_mismatch" and "角色「" in str(f.get("msg")) else "multimodal_continuity"
@@ -2725,9 +2996,23 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         hard = f.get("level") == "block" and f.get("code") in HARD_LINT_CODES
         sev = "block" if hard else ("info" if f.get("level") == "info" else "warn")
         out.append(_qc_finding(sev, "image_prompt_lint", None, f.get("msg")))
-    # 状态账本启发式（advisory·info，永不翻 verdict）：累积状态出现却无 ledger → 提醒建账本
+    # B 定妆两层：脸锚用了戏剧光/氛围板 → warn（会把光当身份烤进脸，应换中性平光板锁身份）
+    for fl in (payload.get("face_anchor_lighting") or {}).get("flagged", []):
+        out.append(_qc_finding(
+            "warn", "character_consistency", fl.get("char"),
+            f"{fl.get('char')}/{fl.get('form')} 脸锚疑似戏剧光/氛围板（{Path(str(fl.get('path'))).name}）——"
+            "定妆脸锚应是中性平光纯背景板锁身份，戏剧光会把光当身份烤进脸；氛围图请归 atmosphere 层只锁调性。"))
+    # 状态账本启发式（advisory，永不翻 verdict）
     sl = payload.get("state_ledger") or {}
-    if sl.get("advise"):
+    not_injected = sl.get("not_injected_markers") or []
+    if not_injected:
+        # 状态演进声明了累积状态，但本集出图 prompt 没注入 → warn（比"没建账本"更实锤的漏注入）。
+        out.append(_qc_finding(
+            "warn", "state_continuity", None,
+            f"状态演进声明了累积状态（{'/'.join(not_injected)[:60]}）但本集出图 prompt 未注入——"
+            "runner 会照画干净/无伤状态，跨镜/跨集视觉状态漏进生成。"
+            "跑 `python3 skills/n2d-image/scripts/visual_state_manager.py <作品根> --inject` 注入后重出受影响镜。"))
+    elif sl.get("advise"):
         out.append(_qc_finding(
             "info", "state_continuity", None,
             f"本集出现累积状态关键词（{'/'.join(sl.get('markers', []))[:60]}）但无 visual_state_ledger.json——"
@@ -3161,6 +3446,15 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True, strict_pixel: bool = Fa
                     payload["shot_scale_contract"] = ssc.analyze(root, ep)
                 except Exception as exc:
                     payload["shot_scale_contract"] = {"available": False, "notes": [f"shot_scale_contract 失败：{exc}"], "findings": []}
+            # 风格归属佐证（⑤·选定风格 vs 实际渲染）：以 style_contract.style_anchor 为基准，量本集帧的风格指纹
+            # （饱和/对比/线条边缘）对照——补「风格名/风格禁忌只当存在性+负面词、出图后无正面归属机检」这道洞。
+            # 纯 Pillow·默认环境可跑·WARN 人判·未登记锚则降级人判清单。
+            sa = _load_sibling("style_attribution")
+            if sa is not None:
+                try:
+                    payload["style_attribution"] = sa.analyze(root, ep)
+                except Exception as exc:
+                    payload["style_attribution"] = {"available": False, "notes": [f"style_attribution 失败：{exc}"], "findings": []}
     payload["lint"] = lint_prompts(root, ep)
     # 高风险道具禁形/尺寸逐图复核：prompt/registry 只能约束未来生成，不能证明既有 PNG 没有禁形或尺寸漂移。
     # 这道门在 lint 之后跑，读取逐镜 PROP_xx 绑定和已落档 PNG；未确认则 summarize/to_findings 硬阻断。
@@ -3184,6 +3478,15 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True, strict_pixel: bool = Fa
         payload["lint"].setdefault("findings", []).append(
             {"level": f["level"], "code": f["code"], "msg": f["msg"]})
     payload["face_anchor_quality"] = fa
+    # 承载角色脸锚（registry 级·后端无关·治定妆脸漂真因）：含具名角色脸的 VFX/海报/关系图资产
+    # 必须有 ready 脸锚可注入，否则每镜无锚渲染新脸。runner spend 闸门只拦 codex/dreamina 出图路径，
+    # 此处把同一铁律前移到落档机检，覆盖手工/其它后端/旧图。block 码进 HARD_LINT_CODES → hard_blocks。
+    ci = audit_carried_identity_anchors(root)
+    for f in ci.get("findings", []):
+        if f.get("level") in ("block", "warn"):
+            payload["lint"].setdefault("findings", []).append(
+                {"level": f["level"], "code": f["code"], "msg": f["msg"]})
+    payload["carried_identity_anchors"] = ci
     # ④ VLM 语义判定（描述↔渲染图·opt-in）：关键注册角色/资产 VLM 判崩设定（剪裁/配饰/识别特征违反 canonical）
     #    → block；走专属 payload key（不塞 lint，避免被 lint_prompts 覆盖+不依赖 HARD_LINT_CODES），summarize/to_findings 直接读。
     #    无 N2D_VLM_CMD 后端 → available=False 整段跳过，绝不阻断默认无依赖产线。
@@ -3194,9 +3497,21 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True, strict_pixel: bool = Fa
         except Exception as exc:
             payload["vlm_consistency"] = {"available": False, "notes": [f"vlm_verify 失败：{exc}"],
                                           "block": 0, "findings": []}
+    # VLM 设定核验没真正跑（未配置 N2D_VLM_CMD / 加载失败）但有注册关键角色/资产进了 QC：
+    # 过去 available=False 整段静默空过——剪裁/配饰/识别特征(缺左腕疤、月白窄袖→交领)这类设定漂移没机检过。
+    # 升一条 advisory warn（不硬拦无依赖产线，守"不强制装依赖"原则；production 由 gate 据精度/profile 决定升级）。
+    _vlm = payload.get("vlm_consistency") or {}
+    if _vlm.get("available") is not True:
+        _checks = payload.get("checks") or {}
+        if any((_checks.get(k) or {}).get("shots") for k in ("face", "scene", "multimodal")):
+            payload.setdefault("lint", {}).setdefault("findings", []).append({
+                "level": "warn", "code": "vlm_setting_check_skipped",
+                "msg": "VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical "
+                       "设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。"})
     payload["face_reference_coverage"] = face_reference_coverage(payload, root, ep)
     payload["cross_episode_face_drift"] = cross_episode_face_drift(root, ep, payload)
     payload["prohibited_face_patch"] = prohibited_face_patch_outputs(root, ep)
+    payload["face_anchor_lighting"] = face_anchor_lighting_audit(root, ep)
     payload["state_ledger"] = audit_state_ledger(root, ep)
     payload["summary"] = summarize(payload, strict_pixel=strict_pixel)
     payload["qc_environment"] = qc_environment(payload, with_pixel=with_pixel)
@@ -3364,17 +3679,17 @@ def render_markdown(payload: Dict[str, Any]) -> str:
 def mark_finalized(root: Path, target: str, value: bool = True, auto_pin: bool = True) -> Dict[str, Any]:
     """把共享定妆/资产的机器可读 finalize 真值 `self_check_passed` 置位（补 `00_索引.md` 人读 ✅）。
 
-    target：角色 `CHAR_xx/形态` 或单形态时裸 `CHAR_xx`；资产 `LOC/PROP/OUTFIT/VFX_xx`。
+    target：角色 `CHAR_xx/形态` 或单形态时裸 `CHAR_xx`；资产 `LOC/PROP/WEAPON/OUTFIT/VFX_xx`。
     人工/AI 过落档自检后调用，让 `gate` 的 `check_referenced_assets_finalized` 能机检"引用必须 finalized"。
 
     `auto_pin=True`（默认）：对**角色 form** 落档自检时顺带把 front 主参考的 sha256 钉进 `anchor_sha`
     （等价于自动 `--pin-anchor`），治"锚点静默漂移"结构根因——过自检的脸即刻被锚点指纹保护，gate
     `check_anchor_fingerprints` 立即生效，不再依赖人手记得单独跑一遍 pin。front 锚点图缺失时优雅跳过
     （不阻断落档，回执提示补图后手动 pin）。`auto_pin=False`（`--no-auto-pin`）保留旧的纯 opt-in 行为。
-    资产（LOC/PROP/…）无锚点概念，不受 auto_pin 影响。"""
+    资产（LOC/PROP/WEAPON/…）无锚点概念，不受 auto_pin 影响。"""
     root = Path(root)
     t = str(target or "").strip()
-    if t.split("/")[0].startswith(("LOC_", "PROP_", "OUTFIT_", "VFX_")):
+    if t.split("/")[0].startswith(("LOC_", "PROP_", "WEAPON_", "OUTFIT_", "VFX_")):
         p = root / "出图" / "共享" / "asset_registry.json"
         try:
             reg = json.loads(p.read_text(encoding="utf-8"))
@@ -3555,7 +3870,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("root")
     ap.add_argument("episode", nargs="?")
     ap.add_argument("--mark-finalized", metavar="TARGET",
-                    help="把共享定妆/资产 `self_check_passed` 置 true（过落档自检后调用）：CHAR_xx/形态 或 LOC/PROP/OUTFIT/VFX_xx")
+                    help="把共享定妆/资产 `self_check_passed` 置 true（过落档自检后调用）：CHAR_xx/形态 或 LOC/PROP/WEAPON/OUTFIT/VFX_xx")
     ap.add_argument("--unfinalize", action="store_true",
                     help="与 --mark-finalized 连用：改置 false（标记脏定妆，gate 引用即 block）")
     ap.add_argument("--no-auto-pin", action="store_true",

@@ -69,7 +69,10 @@ BOUNDARY_PRODUCT_KINDS = {
     },
     VIDEO_MODEL_ROUTES_KIND: {
         "owner": "n2d-model-router",
-        "path": f"{PRODUCTION_DIR}/video_model_routes.json",
+        # 真实落点：router.py 写、inherit_contract/lipsync_pass/interp_pass 读，均为
+        # 出视频/<集>/prompt/。此前误标 生产数据/；该 path 字段不用于定位（仅 kind 字符串做校验），
+        # 属文档性陷阱，按实际路径校正。
+        "path": "出视频/{ep}/prompt/video_model_routes.json",
         "layer": "production_data",
         "boundary": "routing_decisions",
     },
@@ -204,13 +207,26 @@ BOUNDARY_PRODUCT_KINDS = {
         "layer": "production_data",
         "boundary": "motif_suggestion",
     },
+    COMBAT_REGISTRY_KIND: {
+        "owner": "n2d-asset-market",
+        "path": f"出图/{SHARED_ASSET_DIR}/combat_registry.json",
+        "layer": "shared_asset",
+        # 招式/打斗套路真值：每条 combat set 持有 SM_ 招式(五帧拆招模板 + action_choreography 契约骨架)、
+        # 节奏 preset、绑定的 WEAPON_/VFX_ 引用。与 asset_registry 互补：本表记【打斗套路结构】，
+        # asset_registry 记【武器实体/特效单资产】。跨剧 export/import-combat 复用结构、reskin 换皮、重出关键帧。
+        "boundary": "combat_definition",
+    },
 }
 
 PRODUCT_KINDS = BOUNDARY_PRODUCT_KINDS
 
+# 「奇观连续性」是信息态留痕列（非硬闸·硬闸是 gate.check_spectacle_sequence_plan）：
+# ✅=本集打斗/追逐/腾云/大场景已被 spectacle_sequence_plan 序列总账覆盖；—=本集无奇观镜(N/A)。
+# 默认 — 不挡 flow（na=已满足）；由 image_prompt prework 生成序列总账后回写，让"奇观连续性做没做"
+# 在状态机里可见，而非只埋在 prework 输出/gate 即时判定里。
 PROGRESS_COLUMNS = (
     "集", "字数", "raw", "剧本改编", "bgm", "封面", "配音", "分镜设计",
-    "素材清单", "字幕中", "字幕英", "出图prompt", "出图", "视频prompt", "视频", "成片",
+    "素材清单", "字幕中", "字幕英", "奇观连续性", "出图prompt", "出图", "视频prompt", "视频", "成片",
 )
 
 IDENTITY_FORK_HISTORY_FIELD = "fork_history"
@@ -234,9 +250,9 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "label": "角色 DNA/形体一致性（脸/发型/身形/手）",
         "weight": 20,
         "return_to_stage": "image",
-        "scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。",
-        "audit_labels": ("锚点门(N3)", "脸(G1)", "发型(H1)", "片内时序(N2)", "手部/解剖(N5)", "身高比例(R1)", "主体视频一致(S2V)"),
-        "keywords": ("角色", "角色DNA", "DNA", "脸", "发型", "身高", "体型", "手部", "解剖", "资产身份", "identity", "face", "锚点", "S2V", "主体视频"),
+        "scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+        "audit_labels": ("锚点门(N3)", "脸(G1)", "无脸崩坏(G1b)", "跨集脸漂(G5)", "发型(H1)", "辨识标记(MK1)", "片内时序(N2)", "手部/解剖(N5)", "身高比例(R1)", "跨集体型(R2)", "外观判官(VAP)", "主体视频一致(S2V)", "表情连续(EXP1)"),
+        "keywords": ("角色", "角色DNA", "DNA", "脸", "发型", "身高", "体型", "跨集体型", "手部", "解剖", "资产身份", "identity", "face", "锚点", "S2V", "主体视频", "外观判官", "VLM-Appearance", "表情", "情绪", "微表演", "expression", "辨识标记", "疤痕", "胎记", "纹身", "异瞳", "瞳色", "标记", "mark"),
     },
     "outfit_consistency": {
         "label": "角色 DNA 一致性（服装/配饰）",
@@ -251,16 +267,17 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "weight": 12,
         "return_to_stage": "image",
         "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-        "audit_labels": ("场景(O2)", "接缝接力", "轴线视线(X1)", "天气时辰(W1)", "光位方向(W2)", "字幕安全区(L2)", "空间站位(B1)", "物件常驻(O3)", "视线状态回读(X2)", "场景平面(FP1)", "相机空间轨迹(CAM1)", "运动质量(MOT1)"),
-        "keywords": ("场景", "接缝", "尾帧", "场景资产", "轴线", "视线", "站位", "遮挡", "前后景", "天气", "时辰", "字幕安全区", "字幕带", "构图", "物件常驻", "平面图", "相机轨迹", "运动质量", "motion", "camera"),
+        "audit_labels": ("场景(O2)", "接缝接力", "轴线视线(X1)", "天气时辰(W1)", "光位方向(W2)", "色温调色(GRADE1)", "字幕安全区(L2)", "空间站位(B1)", "物件常驻(O3)", "在场检测(O3V)", "视线状态回读(X2)", "场景平面(FP1)", "相机空间轨迹(CAM1)", "运动质量(MOT1)", "高动态成片证据(SPECV)"),
+        "keywords": ("场景", "接缝", "尾帧", "场景资产", "轴线", "视线", "站位", "遮挡", "前后景", "天气", "时辰", "字幕安全区", "字幕带", "构图", "物件常驻", "在场检测", "对象持久", "object permanence", "平面图", "相机轨迹", "运动质量", "motion", "camera"),
     },
     "subtitle_correctness": {
         "label": "字幕正确性",
         "weight": 16,
         "return_to_stage": "script_stage2",
-        "scope": "回 n2d-script 阶段2重跑 finalize_storyboard / 字幕重定时 / 修翻译层；必要时重出配音 manifest。",
-        "audit_labels": ("字幕对齐(L1)",),
-        "keywords": ("字幕", "srt", "cue", "对齐", "断句", "漏译", "阅读速度", "双语", "subtitle"),
+        "scope": "回 n2d-script 阶段2重跑 finalize_storyboard / 字幕重定时 / 修翻译层；必要时重出配音 manifest。译名漂移补/复用 translation_glossary 的专有名词/称谓 canonical 译法，跨集统一。",
+        "audit_labels": ("字幕对齐(L1)", "译名一致(TX1)"),
+        "keywords": ("字幕", "srt", "cue", "对齐", "断句", "漏译", "阅读速度", "双语", "subtitle",
+                     "译名", "术语", "专有名词", "glossary", "海外投放", "翻译一致", "translation"),
     },
     "audio_visual_sync": {
         "label": "音画同步",
@@ -274,9 +291,9 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "label": "音色一致性",
         "weight": 10,
         "return_to_stage": "voice",
-        "scope": "回 n2d-voice 按 voicemap 注册音色重配受影响角色台词；重配后复核时长清单与分镜时长。",
-        "audit_labels": ("音色声纹", "声纹一致性", "音色漂移"),
-        "keywords": ("音色", "声纹", "speaker", "voice print", "voice_key", "voicemap", "克隆音色"),
+        "scope": "回 n2d-voice 按 voicemap 注册音色重配受影响角色台词；重配后复核时长清单与分镜时长。配音情绪弧(VEA)失配回 n2d-script 改 voiceover.txt 情绪标注/回 n2d-voice 带情绪重配；口音方言(ACC)冲突回 voicemap 锁唯一口音。",
+        "audit_labels": ("音色声纹", "声纹一致性", "音色漂移", "配音情绪弧(VEA)", "口音方言(ACC)"),
+        "keywords": ("音色", "声纹", "speaker", "voice print", "voice_key", "voicemap", "克隆音色", "情绪弧", "情绪标注", "口音", "方言", "accent", "念白表演"),
     },
     "rhythm_density": {
         "label": "节奏密度",
@@ -290,17 +307,17 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "label": "风格一致性",
         "weight": 12,
         "return_to_stage": "image",
-        "scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。",
-        "audit_labels": ("风格(S1)", "糊/低质(N4)"),
-        "keywords": ("风格", "style", "画风", "基础视觉", "糊", "低质", "清晰度"),
+        "scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜。",
+        "audit_labels": ("风格(S1)", "糊/低质(N4)", "景深一致(DOF1)"),
+        "keywords": ("风格", "style", "画风", "基础视觉", "糊", "低质", "清晰度", "景深", "虚化", "焦段", "镜头光学", "bokeh", "DoF"),
     },
     "semantic_continuity": {
         "label": "语义继承",
         "weight": 8,
         "return_to_stage": "script_stage2",
-        "scope": "回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点、VLM 判题失败与称谓口头禅漂移。",
-        "audit_labels": ("语义谱系(P0)", "称谓口头禅(A1)", "台词语域(D1)", "视频VLM判题(VLM1)"),
-        "keywords": ("语义", "谱系", "继承", "称谓", "口头禅", "人设", "语域", "VLM", "LMM", "semantic", "voiceover", "storyboard"),
+        "scope": "回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点、VLM 判题失败与称谓口头禅漂移。伏笔兑现(SP1)：坑没填/兑现早于种下回 n2d-script 修 setup_payoff_ledger 与拆集边界。",
+        "audit_labels": ("语义谱系(P0)", "称谓口头禅(A1)", "台词语域(D1)", "视频VLM判题(VLM1)", "伏笔兑现(SP1)"),
+        "keywords": ("语义", "谱系", "继承", "称谓", "口头禅", "人设", "语域", "VLM", "LMM", "semantic", "voiceover", "storyboard", "伏笔", "兑现", "坑", "setup", "payoff", "foreshadow"),
     },
     "state_continuity": {
         "label": "状态百科",
@@ -315,7 +332,7 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "weight": 8,
         "return_to_stage": "image",
         "scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
-        "audit_labels": ("多模态(P2)", "视频语义一致(VSEM)"),
+        "audit_labels": ("多模态(P2)", "视频语义一致(VSEM)", "特效窜色(VFXC)"),
         "keywords": ("多模态", "道具", "法宝", "视觉语义", "embedding", "DINO", "CLIP", "DreamSim", "视频语义"),
     },
     "contract_inheritance": {
@@ -338,9 +355,9 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "label": "成片/包装一致性",
         "weight": 8,
         "return_to_stage": "compose",
-        "scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。",
-        "audit_labels": ("成片统一(C1)", "成片时间线探针(FT1)", "系列包装(PKG)"),
-        "keywords": ("成片统一", "包装", "片头", "片尾", "LUFS", "响度", "room tone", "BGM", "subtitle style", "final_timeline_probe"),
+        "scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
+        "audit_labels": ("成片统一(C1)", "成片时间线探针(FT1)", "系列包装(PKG)", "系列调色(GRD)", "环境声(AMB)"),
+        "keywords": ("成片统一", "包装", "片头", "片尾", "LUFS", "响度", "room tone", "BGM", "subtitle style", "final_timeline_probe", "系列调色", "调色", "LUT", "白平衡", "color grade", "环境声", "ambient", "底噪", "room tone"),
     },
     "production_ops_consistency": {
         "label": "生产操作一致性",
@@ -349,6 +366,37 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
         "audit_labels": ("生成配方(RCP)", "强配方Schema(RCP2)", "成本路由(K1)", "人审校准集(CAL)", "一致性探针包(PROBE)"),
         "keywords": ("生成配方", "recipe_hash", "prompt_sha256", "reference_bundle_sha256", "成本", "路由", "重试", "production_events", "provider", "seed", "校准集", "probe"),
+    },
+    "ui_hud_consistency": {
+        "label": "UI/系统面板/HUD 一致性",
+        "weight": 6,
+        "return_to_stage": "image",
+        "scope": "回 n2d-image 复用 ui_asset_registry 的面板定妆底图（边框/配色/字体/版式锁），只重出数值/文案区；"
+                 "系统面板/血条/等级框等 HUD 跨集应是同一套视觉，中文文字渲染漂移则回 n2d-image 重出或改用独立文字图层叠加。",
+        "audit_labels": ("系统面板(UI1)",),
+        "keywords": ("系统面板", "HUD", "UI", "面板", "血条", "等级框", "属性条", "状态栏", "签到", "抽奖",
+                     "system panel", "穿越系统流", "升级", "界面元素", "牌匾", "图中文字"),
+    },
+    "leitmotif_consistency": {
+        "label": "音乐母题/leitmotif 一致性",
+        "weight": 6,
+        "return_to_stage": "script_stage1",
+        "scope": "回 n2d-script 阶段1（bgm）或 n2d-compose 复用 leitmotif_registry 的角色/情绪主题动机；"
+                 "同一角色/主题跨集 BGM 母题应可复现且不串用，缺登记先补 leitmotif_registry。",
+        "audit_labels": ("音乐母题(LM1)", "音乐衔接(BGM)"),
+        "keywords": ("音乐母题", "主题动机", "leitmotif", "motif", "角色主题曲", "情绪主题", "BGM母题",
+                     "配乐一致", "主旋律", "theme", "音乐衔接", "调性", "速度", "tempo", "whiplash"),
+    },
+    "text_render_consistency": {
+        "label": "图中文字渲染一致性（OCR 校验）",
+        "weight": 8,
+        "return_to_stage": "image",
+        "scope": "回 n2d-image 重出图中文字渲染错的镜头：系统面板数值/属性、牌匾/匾额/招牌、卷轴书页等"
+                 "中文字若 OCR 实读与预期不符（错字/缺笔/乱码/数值不对），优先改用独立文字图层叠加而非让模型画；"
+                 "预期文字来自 ui_asset_registry.text_template 或 storyboard 声明，校验经 text_render sidecar。",
+        "audit_labels": ("文字渲染(OCR1)",),
+        "keywords": ("图中文字", "文字渲染", "OCR", "系统面板数值", "属性数值", "牌匾", "匾额", "招牌",
+                     "卷轴", "书页", "乱码", "错字", "缺笔", "glyph", "text render", "字形"),
     },
 }
 

@@ -67,6 +67,19 @@ TITLE_CHECK_DIMENSIONS = [
 # 总分低于此线（满分 25）或硬撞名 → needs_rename，next_actions 路由 novel-title
 TITLE_RENAME_THRESHOLD = 15
 
+# 短剧改编潜力体检（附加体检项 · 不计入百分制总分）：5 维各 1-5 分，满分 25。
+# 2026 网文第一变现路径是短剧改编（番茄年度改编 7000+、改编成功率 >40%）；本附检评估「这部本身
+# 可改编度」，仅在目标平台命中短剧/漫剧时强制，弱则路由 novel-condense（漫剧版）。详见 SKILL.md。
+ADAPTATION_CHECK_DIMENSIONS = [
+    ("visual_scene", "可视化场景密度"),
+    ("hook_cinematic", "强钩可镜头化"),
+    ("conflict_intensity", "人物关系冲突浓度"),
+    ("episodic_beat", "单元剧式节拍"),
+    ("ip_freshness", "题材/人设短剧新鲜度"),
+]
+# 总分低于此线（满分 25）→ low_potential，next_actions 提示先走 novel-condense 出漫剧版
+ADAPTATION_LOW_THRESHOLD = 15
+
 WEIGHTS = {
     "商业爽文向": {
         "topic_heat": 20,
@@ -697,6 +710,31 @@ def build_title_check(assessment_title_check, title, collision):
     }
 
 
+def is_short_drama_target(settings, meta):
+    """目标平台/用途是否命中短剧/漫剧（决定是否强制短剧改编潜力附检）。"""
+    hay = " ".join(str(x or "") for x in (
+        (settings or {}).get("目标平台"), (settings or {}).get("小说用途"),
+        (meta or {}).get("target_platform"), (meta or {}).get("purpose"), (meta or {}).get("scale"),
+    ))
+    return any(key in hay for key in SHORT_DRAMA_KEYWORDS)
+
+
+def build_adaptation_check(assessment_adaptation):
+    """汇总报告里的短剧改编潜力体检块；总分低于阈值 → low_potential（附加项·不计总分）。"""
+    if not assessment_adaptation:
+        return None
+    scores = assessment_adaptation.get("scores") or {}
+    total = sum(float(scores.get(key) or 0) for key, _ in ADAPTATION_CHECK_DIMENSIONS)
+    low_potential = bool(assessment_adaptation.get("low_potential")) or total < ADAPTATION_LOW_THRESHOLD
+    return {
+        "scores": scores,
+        "total": total,
+        "max_total": 5 * len(ADAPTATION_CHECK_DIMENSIONS),
+        "comment": str(assessment_adaptation.get("comment") or ""),
+        "low_potential": low_potential,
+    }
+
+
 ACTION_BY_DIMENSION = {
     "topic_heat": ("novel-create", "setup", "重做题材/平台定位，参考第一方战绩和公榜基准"),
     "opening_hook": ("novel-craft", "outline", "重修黄金三章钩子与首屏卖点"),
@@ -708,7 +746,7 @@ ACTION_BY_DIMENSION = {
 }
 
 
-def validate_assessment(assessment, expect_title_check=False):
+def validate_assessment(assessment, expect_title_check=False, expect_adaptation=False):
     errors = []
     if not isinstance(assessment, dict):
         return ["assessment 必须是 JSON object"]
@@ -777,6 +815,30 @@ def validate_assessment(assessment, expect_title_check=False):
                 errors.append("title_check.comment 不能为空")
             if not isinstance(title_check.get("needs_rename"), bool):
                 errors.append("title_check.needs_rename 必须是 bool")
+    adaptation = assessment.get("adaptation_check")
+    if expect_adaptation and adaptation is None:
+        errors.append("缺少 adaptation_check（目标平台命中短剧/漫剧，必须做短剧改编潜力体检）")
+    if adaptation is not None:
+        if not isinstance(adaptation, dict):
+            errors.append("adaptation_check 必须是 object")
+        else:
+            ad_scores = adaptation.get("scores")
+            if not isinstance(ad_scores, dict):
+                errors.append("adaptation_check.scores 必须是 object")
+                ad_scores = {}
+            expected_ad = {key for key, _ in ADAPTATION_CHECK_DIMENSIONS}
+            for key in sorted(expected_ad - set(ad_scores)):
+                errors.append(f"adaptation_check.scores 缺少维度：{key}")
+            for key in sorted(set(ad_scores) - expected_ad):
+                errors.append(f"adaptation_check.scores 未知维度：{key}")
+            for key in expected_ad & set(ad_scores):
+                value = ad_scores[key]
+                if not isinstance(value, (int, float)) or not (1 <= float(value) <= 5):
+                    errors.append(f"adaptation_check.scores.{key} 必须是 1-5 数字：{value!r}")
+            if not str(adaptation.get("comment") or "").strip():
+                errors.append("adaptation_check.comment 不能为空")
+            if not isinstance(adaptation.get("low_potential"), bool):
+                errors.append("adaptation_check.low_potential 必须是 bool")
     return errors
 
 
@@ -865,7 +927,7 @@ def get_tier_verdict(total_score):
 
 def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_party=None,
                  reader_panel=None, reader_telemetry=None, reference_distribution=None, title_collision=None,
-                 task_id="__SCORE_TASK_ID__"):
+                 task_id="__SCORE_TASK_ID__", expect_adaptation=False):
     # This function generates a prompt for the LLM to perform the assessment
     # In a real automation, this would be sent to an LLM API.
 
@@ -915,6 +977,22 @@ def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_
 书名未定——不输出 title_check 字段；评分后建议用 novel-title 起名。"""
         title_check_json = ""
 
+    if expect_adaptation:
+        ad_dim_list = " / ".join(f"{key}({label})" for key, label in ADAPTATION_CHECK_DIMENSIONS)
+        adaptation_section = f"""## 短剧改编潜力体检（附加体检项 · 不计入百分制总分）
+目标平台命中短剧/漫剧。请评估这部本身的**短剧改编潜力**，按 5 维各打 1-5 分：{ad_dim_list}。
+- 关注：可视化场景多不多、强钩能不能镜头化、人物关系冲突够不够浓、是否有单元剧式可切的节拍、题材/人设在短剧赛道是否新鲜（非已拍烂套路）。
+- 总分（满分 25）明显偏低时置 low_potential=true；改编门槛在结构与冲突，不在文笔。"""
+        adaptation_json = """,
+  "adaptation_check": {
+    "scores": {"visual_scene": 4, "hook_cinematic": 4, "conflict_intensity": 3, "episodic_beat": 3, "ip_freshness": 3},
+    "comment": "...",
+    "low_potential": false
+  }"""
+    else:
+        adaptation_section = ""
+        adaptation_json = ""
+
     prompt = f"""# 小说评分体检任务
 
 请作为专业的小说编辑和市场专家，对以下小说内容进行深度打分。
@@ -941,6 +1019,7 @@ def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_
 {reference_distribution_text(reference_distribution)}
 
 {title_check_section}
+{adaptation_section}
 
 ## 评估内容
 {chr(10).join(f"### 第{c['num']}章 {c['title']}\n{c['content'][:1000]}..." for c in chapters)}
@@ -968,7 +1047,7 @@ def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_
       "points": -5,
       "reason": "..."
     }}
-  ]{title_check_json}
+  ]{title_check_json}{adaptation_json}
 }}
 """
     return prompt
@@ -1049,6 +1128,19 @@ def generate_markdown_report(root, meta, result, total_score, tier, verdict, roi
                                   if tc["needs_rename"] else "书名可用"))
         lines.append("")
 
+    ac = result.get("adaptation_check")
+    if ac:
+        ad_labels = dict(ADAPTATION_CHECK_DIMENSIONS)
+        ad_dims = "、".join(
+            f"{ad_labels[key]} {ac['scores'].get(key)}/5" for key, _ in ADAPTATION_CHECK_DIMENSIONS
+        )
+        lines.append("## 短剧改编潜力体检（附加项 · 不计入总分）")
+        lines.append(f"- 改编潜力：**{ac['total']:.0f}/{ac['max_total']}**（{ad_dims}）")
+        lines.append(f"- 短评：{ac['comment']}")
+        lines.append("- 结论：" + ("**改编潜力偏低** → 走短剧前先用 `novel-condense` 出漫剧版精简骨架"
+                                  if ac["low_potential"] else "具备短剧改编潜力，可交后续漫剧转制流程推进"))
+        lines.append("")
+
     lines.append("## 4. 判定 & 下一步建议")
     lines.append(f"**能不能火**：{verdict_summary(total_score, verdict)}")
     lines.append("")
@@ -1111,6 +1203,7 @@ def main():
     reference_distribution = find_latest_reference_distribution(root)
     book_title = project_title(meta)
     title_collision = load_title_collision(root, book_title)
+    short_drama_target = is_short_drama_target(settings, meta)
 
     platform_mode = args.platform or settings.get("目标平台") or "商业爽文向"
     if "品质" in platform_mode:
@@ -1166,6 +1259,7 @@ def main():
         reference_distribution=reference_distribution,
         title_collision=title_collision,
         task_id="__SCORE_TASK_ID__",
+        expect_adaptation=short_drama_target,
     )
     expected_task = build_score_task(
         root,
@@ -1215,7 +1309,8 @@ def main():
             file=sys.stderr,
         )
         sys.exit(2)
-    errors = validate_assessment(assessment, expect_title_check=bool(book_title))
+    errors = validate_assessment(assessment, expect_title_check=bool(book_title),
+                                 expect_adaptation=short_drama_target)
     if errors:
         print("[err] mock assessment 不符合 novel-score schema：", file=sys.stderr)
         for error in errors:
@@ -1264,6 +1359,17 @@ def main():
                        "用 novel-title 重出候选并跑联网撞名检查"),
             "dimension": "title_check",
         })
+    adaptation_check = build_adaptation_check(assessment.get("adaptation_check"))
+    # 短剧改编潜力偏低且非弃稿：提示先出漫剧版精简骨架，别直接拿长篇硬改编。
+    if adaptation_check and adaptation_check["low_potential"] and verdict != "弃稿重立":
+        next_actions.append({
+            "priority": "must",
+            "recommended_skill": "novel-condense",
+            "return_to_stage": "setup",
+            "action": (f"短剧改编潜力偏低（{adaptation_check['total']:.0f}/{adaptation_check['max_total']}）："
+                       "若要走短剧/漫剧改编，先用 novel-condense 出漫剧版精简骨架"),
+            "dimension": "adaptation_check",
+        })
     waivers = []
     if pending_waiver:
         waivers.append(pending_waiver)
@@ -1302,6 +1408,7 @@ def main():
         "benchmark_percentile": benchmark_percentile,
         "scores": processed_scores,
         "title_check": title_check,
+        "adaptation_check": adaptation_check,
         "deductions": deductions,
         "total_deductions": total_deductions,
         "total_score": final_score,

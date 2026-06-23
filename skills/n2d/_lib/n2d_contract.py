@@ -16,12 +16,14 @@ try:
     from n2d_logic import *
     from n2d_registry import *
     from n2d_maintenance import *
+    from n2d_spectacle import *
 except ImportError:
     from .n2d_const import *
     from .n2d_schema import *
     from .n2d_logic import *
     from .n2d_registry import *
     from .n2d_maintenance import *
+    from .n2d_spectacle import *
 
 if __name__ == "__main__":
     import argparse

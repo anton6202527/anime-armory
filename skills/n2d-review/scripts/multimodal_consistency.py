@@ -225,7 +225,7 @@ def asset_registry_refs_from_block(block: Dict[str, str], entries: Dict[str, dic
         if asset_id in entries and asset_id not in out:
             out.append(asset_id)
 
-    for match in re.finditer(r"(?<![0-9A-Za-z])((?:LOC|PROP|OUTFIT|VFX)_[0-9A-Za-z_-]+)(?![0-9A-Za-z])", text):
+    for match in re.finditer(r"(?<![0-9A-Za-z])((?:LOC|PROP|WEAPON|OUTFIT|VFX)_[0-9A-Za-z_-]+)(?![0-9A-Za-z])", text):
         add(match.group(1))
 
     for asset_id, entry in entries.items():

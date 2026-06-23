@@ -14,8 +14,8 @@
   4. 章号连续性：与 章节/ 目录里其他章是否有缺号/重号；与 设定/章纲.md 标题是否一致
   5. 术语出现统计：自动从 设定/ 抽术语，也可用 --terms 追加（供人工看漂移）
   6. 原文照搬：24 字滑窗与 原作.txt 比对，命中即报（续写/外传用；--no-plagiarism 关闭）
-  7. AI 腔/同质化：议论文式连接词出现在叙事=🟡、万能金句套话密度=🟢（advisory·线索非定论，人判结合语境；
-     治 2026 平台 AI 双重质检·AI 检测率<60% 风险；--no-ai-tell 关闭）
+  7. AI 腔/同质化：议论文式连接词出现在叙事=🟡、万能金句套话密度=🟢、句长过于均匀(burstiness 低·CV<0.35)=🟡
+     （advisory·线索非定论，人判结合语境；治 2026 平台 AI 双重质检/perplexity·burst 检测·AI 检测率<60% 风险；--no-ai-tell 关闭）
 
 输出：人类可读清单 + 末尾机器可读 JSON（FINDINGS=[...]）。
 """
@@ -98,12 +98,37 @@ AI_CLICHE = ("命运的齿轮", "仿佛整个世界", "空气仿佛凝固", "时
              "也许这就是", "不为人知的秘密", "在这个瞬间", "心中五味杂陈", "心中百感交集")
 
 
-def ai_tell_scan(body, cliche_per_k=3.0):
+def sentence_lengths(text):
+    """按句末标点切句，返回每个非空句的 CJK 字数列表（纯函数·可测）。"""
+    parts = re.split(r"[。！？!?…\n]+", text or "")
+    return [n for n in (cjk_count(p) for p in parts) if n >= 2]
+
+
+def sentence_burstiness(text, min_sentences=8):
+    """句长突变度（burstiness）的可机检代理。返回 (cv, n)。
+
+    人类叙事长短句交错、句长方差大（burstiness 高）；AI 生成正文句长偏均匀、
+    方差小。2026 平台正用 perplexity + burst 分析识别 AI 正文，CV（变异系数=
+    句长标准差/均值）是其低成本机检代理。句数不足 `min_sentences` 时返回 (None, n)。"""
+    lens = sentence_lengths(text)
+    n = len(lens)
+    if n < min_sentences:
+        return None, n
+    mean = sum(lens) / n
+    if mean <= 0:
+        return None, n
+    var = sum((x - mean) ** 2 for x in lens) / n
+    return (var ** 0.5) / mean, n
+
+
+def ai_tell_scan(body, cliche_per_k=3.0, burstiness_cv_floor=0.35):
     """AI 腔/同质化启发式（纯函数·可测·advisory）。返回 [(severity, msg, evidence)]。
 
     ① 叙事正文出现议论文式连接词（综上所述/众所周知…）= 高信号 AI 腔 → 🟡；
-    ② 万能金句/套话按千字密度，超 `cliche_per_k` → 🟢（低优先 nudge）。
-    绝不 🔴（容错铁律）；线索非定论，仍需人判结合语境（金句在对白里可豁免）。"""
+    ② 万能金句/套话按千字密度，超 `cliche_per_k` → 🟢（低优先 nudge）；
+    ③ 句长过于均匀（burstiness 低·CV < `burstiness_cv_floor`）= 疑似 AI 生成正文 → 🟡。
+    绝不 🔴（容错铁律）；线索非定论，仍需人判结合语境（金句在对白里可豁免；
+    设定密集/清单式章节句长天然均匀，可豁免）。"""
     text = body or ""
     cc = max(1, cjk_count(text))
     out = []
@@ -117,6 +142,11 @@ def ai_tell_scan(body, cliche_per_k=3.0):
         top = sorted({w for w in AI_CLICHE if w in text}, key=lambda w: -text.count(w))[:5]
         ev = "、".join(top)
         out.append(("🟢", f"AI 套话/万能金句密度偏高（{density:.1f}/千字，疑似 AI 腔·平台 AI 检测率风险）：{ev}", ev))
+    cv, sent_n = sentence_burstiness(text)
+    if cv is not None and cv < burstiness_cv_floor:
+        ev = f"CV={cv:.2f}/{sent_n}句"
+        out.append(("🟡", f"句长过于均匀（burstiness 低·{ev}，平台 perplexity/burst 检测高风险）；"
+                          "建议长短句交错、插入碎句/短促对白破匀（见 novel-craft/references/去AI味.md）", ev))
     return out
 
 
@@ -134,7 +164,8 @@ def extract_terms_from_settings(root):
     """Best-effort canonical term extraction from setting-bible files."""
     terms = set()
     setting_dir = os.path.join(root, "设定")
-    md_files = ["设定圣经.md", "角色卡.md", "世界观.md", "作者口吻.md", "创作蓝图.md"]
+    # 人物.md 是派生线（continue/expand）的角色卡命名，与 角色卡.md 同义并列读取。
+    md_files = ["设定圣经.md", "角色卡.md", "人物.md", "世界观.md", "作者口吻.md", "创作蓝图.md"]
     for fname in md_files:
         path = os.path.join(setting_dir, fname)
         if not os.path.exists(path):

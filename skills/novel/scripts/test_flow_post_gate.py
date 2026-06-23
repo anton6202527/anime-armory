@@ -22,6 +22,7 @@ if NOVEL_LIB not in sys.path:
     sys.path.insert(0, NOVEL_LIB)
 
 import novel_route  # noqa: E402
+from report_snapshot import snapshot_chapters  # noqa: E402
 
 
 def load_module(name, path):
@@ -251,6 +252,35 @@ class NovelGateTest(unittest.TestCase):
 
             status = novel_gate.check_wiki_freshness(root)
             self.assertEqual(status["status"], "stale")
+
+    def test_wiki_freshness_prefers_source_snapshot_hash(self):
+        with tempfile.TemporaryDirectory() as root:
+            wiki = os.path.join(root, "设定", "动态百科.json")
+            chapter = os.path.join(root, "章节", "第01章.md")
+            write(chapter, "# 第1章\n旧正文\n")
+            write_json(wiki, {"角色": {}})
+            write_json(os.path.join(root, "设定", "动态百科.source_snapshot.json"),
+                       snapshot_chapters(root, mode="wiki:dynamic"))
+            status = novel_gate.check_wiki_freshness(root)
+            self.assertEqual(status["status"], "ok")
+
+            write(chapter, "# 第1章\n新正文\n")
+            status = novel_gate.check_wiki_freshness(root)
+            self.assertEqual(status["status"], "stale")
+            self.assertIn("source_snapshot", status["reason"])
+
+    def test_wiki_freshness_rejects_partial_snapshot(self):
+        with tempfile.TemporaryDirectory() as root:
+            wiki = os.path.join(root, "设定", "动态百科.json")
+            chapter = os.path.join(root, "章节", "第01章.md")
+            write(chapter, "# 第1章\n正文\n")
+            write_json(wiki, {"角色": {}})
+            snapshot = snapshot_chapters(root, mode="wiki:partial")
+            write_json(os.path.join(root, "设定", "动态百科.source_snapshot.json"), snapshot)
+
+            status = novel_gate.check_wiki_freshness(root)
+            self.assertEqual(status["status"], "stale")
+            self.assertIn("不是全量", status["reason"])
 
 
 if __name__ == "__main__":

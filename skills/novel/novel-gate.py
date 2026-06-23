@@ -26,6 +26,7 @@ from novel_contract import get_product_path, parse_regions
 from novel_route import parse_progress, cell_state, chapter_number as parse_chapter_number
 from project_io import list_chapter_files, load_project_settings, read_text
 from qa_gate import collect_gate_status
+from report_snapshot import validate_snapshot
 
 _STAGE_TABLE_MARKERS = ("novel-derived-stage-table", "novel-create-stage-table")
 
@@ -33,7 +34,17 @@ def check_wiki_freshness(root):
     wiki_path = get_product_path(root, "wiki")
     if not os.path.exists(wiki_path):
         return {"status": "missing", "reason": "动态百科.json 不存在"}
-    
+
+    snapshot_path = os.path.join(root, "设定", "动态百科.source_snapshot.json")
+    if os.path.exists(snapshot_path):
+        payload = _load_json(snapshot_path)
+        if payload.get("mode") != "wiki:dynamic":
+            return {"status": "stale", "reason": "动态百科 source_snapshot 不是全量 wiki:dynamic；请全量重建动态百科。"}
+        ok, reason = validate_snapshot(root, payload)
+        if ok:
+            return {"status": "ok", "reason": "source_snapshot fresh"}
+        return {"status": "stale", "reason": f"动态百科 source_snapshot 过期：{reason}"}
+
     wiki_mtime = os.path.getmtime(wiki_path)
     chapters = list_chapter_files(root, numbered_only=True)
     if chapters:

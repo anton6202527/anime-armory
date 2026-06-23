@@ -15,26 +15,34 @@ import re
 import sys
 from collections.abc import Iterable, Mapping
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Sequence
 
 _COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import (  # noqa: E402  与 gate 共用的单一真值源
-    MOTION_CONTROL_REQUIRED_SHOT_TYPES,  # 高危接触镜头集
+    ACTION_CHOREOGRAPHY_COMMON_FIELDS,
+    ACTION_CHOREOGRAPHY_SHOT_TYPES,
+    ACTION_CHOREOGRAPHY_SPECIFIC_FIELDS,
+    MOTION_CONTROL_REQUIRED_SHOT_TYPES,  # Motion Control required 镜头集
     PRODUCTION_MODE_DEFAULT,             # 制作模式默认值单一真值源
     SHOT_TYPE_KEYWORDS,                  # 镜头类型判定关键词（与 gate 专项模板检测同源）
+    SPECTACLE_BACKEND_BENCHMARK_KIND,
     VIDEO_MODEL_ROUTES_KIND,             # 路由产物 kind
+    infer_spectacle_type,
     is_native_av_mode,                   # 原生音画判定（与 n2d_settings/gate 同源）
+    motion_control_inputs_for_spectacle,
 )
 from n2d_platform_profiles import (  # noqa: E402  视频后端档案单一真值源
     LIPSYNC_AUDIO_REF_BACKENDS,
     MOTION_CONTROL_PROFILES,
     NATIVE_AV_BACKENDS,
+    SPECTACLE_BACKEND_PRIOR,
     VIDEO_BACKEND_LABELS,
     VIDEO_BACKEND_MAX_SECONDS,
     anchor_consumption_plan,
     normalize_video_backend,
+    spectacle_backend_prior_ranking,
     video_backend_auto_routable,
     video_backend_default_quality_tier,
     video_backend_frame_control,
@@ -82,11 +90,12 @@ COMPLEX_TEMPLATES = {
     "multi_person_blocking",
 }
 
-# 高危物理接触镜头集（接触/形变风险）——与 gate 的 Motion Control 硬闸判定同源，见 n2d_contract。
-CONTACT_SHOT_TYPES = set(MOTION_CONTROL_REQUIRED_SHOT_TYPES)
+# 高危物理接触镜头集（接触/形变风险）——只表示真实接触语义；Motion Control required 集合
+# 还包含追逐/飞行/多人调度等高动量或复杂空间镜，不能混成 "contact_motion"。
+CONTACT_SHOT_TYPES = {"fight_exchange", "hug_or_pull", "intimate_interaction"}
 
 PHYSICAL_INTERACTION_SHOT_TYPES = {
-    *CONTACT_SHOT_TYPES,
+    *MOTION_CONTROL_REQUIRED_SHOT_TYPES,
 }
 
 MULTI_PERSON_SHOT_TYPES = {
@@ -251,6 +260,7 @@ CHARACTER_FIELD_KEYS = (
 )
 NO_CHARACTER_VALUES = {"", "无", "none", "null", "[]", "无人物", "空镜", "no character", "empty shot"}
 CHARACTER_REF_RE = re.compile(r"\b(CHAR_[A-Za-z0-9_]+)(?:/([^\s，；、`,|]+))?\b")
+ASSET_REF_RE = re.compile(r"\b((?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_]+)\b")
 CHARACTER_ID_KEYS = ("id", "character_id", "characterId", "角色ID", "角色id", "角色编号")
 CHARACTER_FORM_KEYS = ("form", "形态", "状态", "costume_form", "variant")
 
@@ -351,6 +361,18 @@ def clip_character_refs(clip: Mapping[str, Any]) -> List[Dict[str, str]]:
     return out
 
 
+def clip_asset_refs(clip: Mapping[str, Any]) -> List[str]:
+    """Structured asset ids referenced by this clip, preserving deterministic order."""
+    seen: set[str] = set()
+    out: List[str] = []
+    for match in ASSET_REF_RE.finditer(_clip_text(clip)):
+        asset_id = match.group(1)
+        if asset_id not in seen:
+            seen.add(asset_id)
+            out.append(asset_id)
+    return out
+
+
 def infer_shot_type(clip: Mapping[str, Any]) -> str:
     template = str(clip.get("template") or "").strip()
     if template in COMPLEX_TEMPLATES:
@@ -362,6 +384,16 @@ def infer_shot_type(clip: Mapping[str, Any]) -> str:
         if _has_any(text, keywords):
             return shot_type
     return "general_motion"
+
+
+def clip_loc(clip: Mapping[str, Any]) -> str:
+    """镜头场景 LOC（同场景多镜单次生成分组用）。优先结构化字段，再回退 LOC_ token。"""
+    for key in ("loc", "location", "scene_id", "scene", "场景", "地点"):
+        raw = str(clip.get(key) or "").strip()
+        if raw:
+            return raw.split("/")[0].strip()
+    m = re.search(r"\bLOC_[\w\-一-鿿]+\b", _clip_text(clip))
+    return m.group(0) if m else ""
 
 
 def clip_duration_seconds(clip: Mapping[str, Any]) -> float:
@@ -632,13 +664,14 @@ def seam_relay_plan(clip: Mapping[str, Any], primary: str,
 # CLI 把 high→pro、fast→fast 解析成实际 model_version；后端无档位能力时本字段为 n/a（不浪费意图）。
 # 判据：身份吃重/高风险镜值 pro（脸/接触/多人/原生台词/已升锁）；空镜/无人物通用镜走 fast 省钱。
 HIGH_TIER_SHOT_TYPES = {
-    "fight_exchange", "hug_or_pull", "intimate_interaction", "dialogue_closeup",
+    "fight_exchange", "chase", "flight", "hug_or_pull", "intimate_interaction", "dialogue_closeup",
     "dialogue_shot_reverse", "reveal_reaction_chain", "public_confrontation", "relationship_turn",
     "multi_character_same_frame", "ensemble_blocking",
     "multi_person_blocking",
 }
 HIGH_TIER_RISK_FLAGS = {
     "identity_drift_risk", "contact_motion", "feature_melting_risk", "physical_interaction",
+    "high_speed_motion", "spatial_path_risk", "action_choreography_required",
     "multi_person", "native_speech", "identity_escalated", "character_backend_conflict",
 }
 
@@ -677,6 +710,122 @@ def motion_reference_plan(shot_type: str, primary: str) -> Dict[str, Any]:
             "运动/风格参考喂进去，锁运镜节奏与运动风格（与图身份锁正交的跨镜运动连续性轴）。"
         )
     return plan
+
+
+def execution_recipe_for_route(
+    entry: Mapping[str, Any],
+    clip: Mapping[str, Any],
+    *,
+    video_channel: str,
+) -> Dict[str, Any]:
+    """Normalize a route into concrete execution inputs for the video stage.
+
+    The route chooses a backend; this recipe tells the caller what to actually
+    provide to that backend: frames, reference images/videos, control manifests,
+    audio policy, and fallback/degrade contract.  It is intentionally capability
+    based so execution code does not parse backend prose.
+    """
+    backend = normalize_backend(str(entry.get("primary_backend") or ""), default="")
+    frame_control = entry.get("frame_control") if isinstance(entry.get("frame_control"), Mapping) else video_backend_frame_control(backend, video_channel)
+    anchor = entry.get("anchor_consumption") if isinstance(entry.get("anchor_consumption"), Mapping) else {}
+    motion = entry.get("motion_control") if isinstance(entry.get("motion_control"), Mapping) else {}
+    chars = entry.get("clip_characters") if isinstance(entry.get("clip_characters"), list) else []
+    character_refs = [
+        {
+            "character_id": str(c.get("character_id") or ""),
+            "form": str(c.get("form") or ""),
+            "binding": entry.get("identity_requirement") or "none",
+        }
+        for c in chars if isinstance(c, Mapping) and (c.get("character_id") or c.get("raw"))
+    ]
+    motion_ref = entry.get("motion_reference") if isinstance(entry.get("motion_reference"), Mapping) else {}
+    max_reference_images = int(frame_control.get("max_reference_images") or 0)
+    recipe = {
+        "backend": backend,
+        "execution_backend": anchor.get("execution_backend") or backend,
+        "mode": entry.get("mode"),
+        "quality_tier": entry.get("quality_tier"),
+        "urgency_tier": entry.get("urgency_tier"),
+        "frame_inputs": {
+            "first_frame": True,
+            "last_frame": bool(anchor.get("need_end") or frame_control.get("supports_last_frame")),
+            "mid_anchors": int(anchor.get("anchor_count") or 0),
+            "consumption_mode": anchor.get("consumption_mode") or "first_frame",
+            "native_timeline_frames": int(frame_control.get("max_timeline_frames") or 1),
+            "requires_split_relay": bool(anchor.get("requires_split_relay")),
+            "reference_only": bool(anchor.get("reference_only")),
+        },
+        "reference_inputs": {
+            "characters": character_refs,
+            "assets": clip_asset_refs(clip),
+            "max_reference_images": max_reference_images,
+            "motion_reference": {
+                "allowed": bool(motion_ref.get("applicable")),
+                "library_path": "生产数据/motion_reference_library.json",
+                "policy": "use same sequence/shot_type approved reference when available" if motion_ref.get("applicable") else "not_supported_or_not_needed",
+            },
+        },
+        "control_inputs": {
+            "manifest_path": motion.get("manifest_path") or "",
+            "required": bool(motion.get("required")),
+            "required_inputs": list(motion.get("required_inputs") or []),
+            "gate_policy": motion.get("gate_policy") or "not_required",
+        },
+        "audio_inputs": {
+            "native_audio_policy": entry.get("native_audio_policy"),
+            "speech_policy": "native_speech" if entry.get("native_audio_policy") == "native_speech" else "no_native_speech",
+        },
+        "fallback": {
+            "fallback_backends": list(entry.get("fallback_backends") or []),
+            "degrade_plan": entry.get("degrade_plan"),
+        },
+        "capability_match": {
+            "frame_contract_supported": "frame_contract_unsupported" not in set(entry.get("risk_flags") or []),
+            "motion_reference_supported": bool(motion_ref.get("applicable")),
+            "motion_control_level": motion.get("backend_control_level") or "unknown",
+        },
+    }
+    return recipe
+
+
+def action_choreography_contract(shot_type: str) -> Dict[str, Any]:
+    """高动量镜头的动作编排契约。纯函数·可测；普通镜返回 required=False。"""
+    if shot_type not in ACTION_CHOREOGRAPHY_SHOT_TYPES:
+        return {"required": False}
+
+    specific = ACTION_CHOREOGRAPHY_SPECIFIC_FIELDS[shot_type]
+    required_fields = ACTION_CHOREOGRAPHY_COMMON_FIELDS + specific
+    if shot_type == "fight_exchange":
+        notes = [
+            "one attack intention per clip; write setup -> attack -> impact -> reaction -> recovery",
+            "impact/contact must have contact point, force direction, readable hit frame, and recovery beat",
+        ]
+        failure_modes = ["unclear_hit", "wrong_force_direction", "limb_fusion", "weapon_contact_drift", "extra_unplanned_hits"]
+        beat_model = "setup_attack_impact_reaction_recovery"
+    elif shot_type == "chase":
+        notes = [
+            "keep one screen direction; distance curve may close OR open, not both in one clip",
+            "sell speed with parallax layers, foreground occluders, cloth, hair, and camera tracking",
+        ]
+        failure_modes = ["screen_direction_flip", "distance_curve_reset", "pose_drift", "background_stickiness", "teleporting"]
+        beat_model = "direction_distance_obstacle_result"
+    else:
+        notes = [
+            "lock rider/body pose and move cloud/mountain/parallax layers; only maneuver shots may change pose",
+            "write altitude curve and mount/cloud lock so sword/cloud shape does not morph",
+        ]
+        failure_modes = ["pose_drift", "altitude_curve_drift", "mount_shape_drift", "background_stickiness", "camera_float"]
+        beat_model = "takeoff_cruise_maneuver_arrival"
+
+    return {
+        "required": True,
+        "shot_type": shot_type,
+        "beat_model": beat_model,
+        "required_fields": required_fields,
+        "gate_policy": "block_prompt_without_action_choreography_contract",
+        "failure_modes": failure_modes,
+        "notes": notes,
+    }
 
 
 # ── QC 失败 → 路由自动升锁（E4·闭环）────────────────────────────────────────
@@ -1004,6 +1153,7 @@ def choose_route(
             "prompt_requirements": [
                 "write detailed action kinetics" if t2v_action else "write first frame and end frame as hard constraints",
                 "one contact action per clip; avoid multi-hit choreography",
+                "fill Action Choreography/动作编排契约: beats, speed_curve, spatial_path, camera_path, readability_beats, attack_path, impact_frame, contact_points, force_direction, recovery_beat",
             ],
             "degrade_plan": "Split into setup and impact clips; keep the hit frame as the end frame.",
         }
@@ -1022,6 +1172,7 @@ def choose_route(
             "prompt_requirements": [
                 "keep body pose stable; put speed into background, foreground occluders, cloth and camera tracking",
                 "avoid large limb changes unless there is an end frame",
+                "fill Action Choreography/动作编排契约: beats, speed_curve, spatial_path, camera_path, readability_beats, parallax_layers and route-specific chase/flight fields",
             ],
             "degrade_plan": "Cut to front/back reaction shots or split into approach, pass-by, and exit clips.",
         }
@@ -1202,8 +1353,14 @@ def risk_flags_for_clip(clip: Mapping[str, Any], shot_type: str, primary_backend
         flags.append("contact_motion")
         flags.append("feature_melting_risk")
         flags.append("physical_interaction")
+    if shot_type in ACTION_CHOREOGRAPHY_SHOT_TYPES:
+        flags.append("action_choreography_required")
+    if shot_type in {"chase", "flight"}:
+        flags.append("high_speed_motion")
+        flags.append("spatial_path_risk")
+        flags.append("pose_drift_risk")
     if clip_has_named_characters(clip) and shot_type in {
-        "fight_exchange", "flight", "reveal_reaction_chain", "public_confrontation", "relationship_turn",
+        "fight_exchange", "chase", "flight", "reveal_reaction_chain", "public_confrontation", "relationship_turn",
         *CONTACT_SHOT_TYPES, *MULTI_PERSON_SHOT_TYPES,
     }:
         flags.append("identity_drift_risk")
@@ -1247,7 +1404,7 @@ def motion_control_contract(
 
     if shot_type in PHYSICAL_INTERACTION_SHOT_TYPES:
         if shot_type == "fight_exchange":
-            required_inputs = ["pose_sequence", "depth_sequence", "instance_masks", "contact_map"]
+            required_inputs = list(motion_control_inputs_for_spectacle(shot_type))
             failure_modes = ["feature_melting", "limb_fusion", "weapon_contact_drift", "body_interpenetration"]
             control_notes = [
                 "impact/contact beats must be constrained by pose/depth/instance ownership or degraded into setup+impact cuts",
@@ -1260,12 +1417,26 @@ def motion_control_contract(
                 "hug/pull/grab shots need explicit contact point, occlusion order, and body-part ownership",
                 "without ready control assets, degrade to hand insert + OTS/reaction + release frame",
             ]
+        elif shot_type == "chase":
+            required_inputs = list(motion_control_inputs_for_spectacle(shot_type))
+            failure_modes = ["screen_direction_flip", "distance_curve_reset", "pose_drift", "background_stickiness"]
+            control_notes = [
+                "chase shots must lock screen direction, distance curve, and camera path; text-only prompts often flip direction or reset distance",
+                "if ready motion controls are not available, degrade to alternating pursuer/runner shots with a clear obstacle or turn beat",
+            ]
+        elif shot_type == "flight":
+            required_inputs = list(motion_control_inputs_for_spectacle(shot_type))
+            failure_modes = ["pose_drift", "altitude_curve_drift", "mount_shape_drift", "background_stickiness"]
+            control_notes = [
+                "flight/cloud-riding shots must lock rider pose, altitude curve, mount/cloud shape, and parallax layers",
+                "if ready controls are not available, keep a cruise pose and move background/cloud layers, or split takeoff/cruise/maneuver/arrival",
+            ]
         else:
             required_inputs = ["pose_sequence", "depth_sequence", "instance_masks"]
-            failure_modes = ["feature_melting", "hand_fusion", "face_occlusion_drift"]
+            failure_modes = ["slot_drift", "pose_drift", "identity_drift"]
             control_notes = [
-                "near contact needs pose/depth plus ownership constraints; text prompt is insufficient",
-                "without ready control assets, degrade to close-up contact/reaction/shot-reverse-shot",
+                "complex blocking needs pose/depth plus instance ownership; text prompt is insufficient for stable screen slots",
+                "without ready control assets, degrade to smaller groups, OTS pairs, or reaction inserts",
             ]
         return {
             "level": "required",
@@ -1282,7 +1453,7 @@ def motion_control_contract(
             "notes": control_notes,
         }
 
-    if shot_type in MULTI_PERSON_SHOT_TYPES or shot_type in {"flight", "chase"}:
+    if shot_type in MULTI_PERSON_SHOT_TYPES:
         return {
             "level": "recommended",
             "required": False,
@@ -1375,6 +1546,13 @@ def route_clip(
     seam_relay = seam_relay_plan(clip, primary, route["fallback_backends"])
     rationale = list(route["rationale"]) + pin_notes
     prompt_requirements = list(route["prompt_requirements"])
+    choreography = action_choreography_contract(shot_type)
+    if choreography.get("required"):
+        prompt_requirements.append(
+            "必须在单 Clip prompt 写 Action Choreography/动作编排契约，并逐项覆盖 "
+            + ", ".join(choreography.get("required_fields", []))
+            + "；缺字段先回 n2d-script/n2d-video 补，不进入付费出视频。"
+        )
     clip_characters = clip_character_refs(clip)
     if seam_relay.get("is_relay"):
         risk_flags = sorted(set(risk_flags) | {"seam_relay"})
@@ -1398,11 +1576,13 @@ def route_clip(
         "native_audio_policy": route["native_audio_policy"],
         "identity_requirement": route["identity_requirement"],
         "clip_characters": clip_characters,
+        "loc": clip_loc(clip),
         "max_clip_seconds": video_backend_max_seconds(primary),
         "clip_seconds": clip_duration_seconds(clip),
         "risk_flags": risk_flags,
         "seam_relay": seam_relay,
         "motion_control": motion_control_contract(clip, clip_id, shot_type, primary, episode),
+        "action_choreography": choreography,
         "rationale": rationale,
         "prompt_requirements": prompt_requirements,
         "degrade_plan": route["degrade_plan"],
@@ -1450,6 +1630,7 @@ def route_clip(
         entry["rationale"].append(mref["note"])
         entry["prompt_requirements"].append(
             "若有同段前序已通过 clip：把它作为视频运动/风格参考(reference_video_motion)喂给后端，锁运镜节奏；首条镜无前序参考则跳过。")
+    entry["execution_recipe"] = execution_recipe_for_route(entry, clip, video_channel=video_channel)
     return entry
 
 
@@ -1513,6 +1694,307 @@ def annotate_multishot_groups(routes: List[Dict[str, Any]]) -> List[Dict[str, An
         run.append(r)
     _flush()
     return groups
+
+
+def _route_char_set(route: Mapping[str, Any]) -> frozenset:
+    chars = route.get("clip_characters")
+    out = set()
+    if isinstance(chars, (list, tuple)):
+        for c in chars:
+            if isinstance(c, Mapping):
+                cid = str(c.get("character_id") or c.get("id") or "").strip()
+            else:
+                cid = str(c or "").strip()
+            if cid:
+                out.add(cid)
+    return frozenset(out)
+
+
+def recommend_multishot_reroute(
+    routes: List[Dict[str, Any]],
+    available_multishot_backends: Sequence[str],
+) -> List[Dict[str, Any]]:
+    """同场景/同角色连续镜 → 推荐改走原生多镜后端（2026-06 一致性加固·advisory）。纯函数·可测。
+
+    `annotate_multishot_groups` 只在 **primary 本身已支持多镜** 且为接力镜时标候选；它不会在
+    primary 不支持多镜时**主动建议换后端**。但 2026 的 SOTA（Kling 3.0 Element Binding / Director
+    Memory 物体恒存、Veo 3.1 ingredients、Seedance 多镜叙事）把一大块跨镜身份/场景/对象持久性塞进
+    **单次多镜生成**——对一段「同场景」或「同角色集」的连续镜，改走原生多镜后端能让 Element Binding
+    直接扛掉本来要靠 inherit_contract 硬拦的漂移。
+
+    本函数扫这种连续镜段：primary 不支持多镜时给出**换后端建议**（advisory，不改 primary、不合并
+    Clip——逐 Clip 仍可追踪可重跑）。优先建议项目 roster 内已有的多镜后端；roster 内没有时，给规范候选
+    并标 `roster_switch_required`，提醒换后端须**整项目统一、勿混用**（anti-mixing），由出片侧/用户定夺。"""
+    in_roster = next((b for b in available_multishot_backends if video_backend_supports_multishot(b)), "")
+    suggest = in_roster or "seedance"  # 规范多镜候选（保守默认；kling 亦可，按项目接口可用性复核）
+    roster_switch_required = not in_roster
+    recs: List[Dict[str, Any]] = []
+    run: List[Dict[str, Any]] = []
+
+    def _flush() -> None:
+        if len(run) >= 2:
+            gid = f"MRR_{len(recs)+1:02d}"
+            members = [r["clip_id"] for r in run]
+            same_loc = len({r.get("loc") or "" for r in run}) == 1 and (run[0].get("loc"))
+            basis = "同场景" if same_loc else "同角色集"
+            note = (
+                f"{basis}连续镜组 {members}：primary「{run[0].get('primary_backend')}」非原生多镜，"
+                f"建议这段改走多镜后端「{suggest}」一次 co-generate——Element Binding/Director Memory 直接稳跨镜"
+                f"身份/场景/对象持久性，省 inherit_contract 硬拦。advisory：不改 primary、不合并 Clip，"
+                f"换后端须整项目统一（勿混用），由出片侧/用户定夺。"
+            )
+            for r in run:
+                r["multishot_reroute_suggestion"] = {
+                    "group_id": gid, "members": members, "suggested_backend": suggest, "basis": basis,
+                    "roster_switch_required": roster_switch_required,
+                }
+                r["risk_flags"] = sorted(set(r.get("risk_flags", [])) | {"multishot_reroute_candidate"})
+            recs.append({"group_id": gid, "members": members, "suggested_backend": suggest,
+                         "basis": basis, "roster_switch_required": roster_switch_required, "note": note})
+        run.clear()
+
+    def _continuous(prev: Mapping[str, Any], cur: Mapping[str, Any]) -> bool:
+        # 已支持多镜的 primary 由 annotate_multishot_groups 管，这里只盯「漏网」的非多镜 primary。
+        if video_backend_supports_multishot(cur.get("primary_backend")):
+            return False
+        same_loc = bool(cur.get("loc")) and prev.get("loc") == cur.get("loc")
+        chars = _route_char_set(cur)
+        same_char = bool(chars) and _route_char_set(prev) == chars
+        return same_loc or same_char
+
+    for r in routes:
+        if video_backend_supports_multishot(r.get("primary_backend")):
+            _flush()
+            continue
+        if run and not _continuous(run[-1], r):
+            _flush()
+        run.append(r)
+    _flush()
+    return recs
+
+
+def spectacle_backend_benchmark_path(root: Path) -> Path:
+    return Path(root) / "生产数据" / "spectacle_backend_benchmark.json"
+
+
+def load_spectacle_backend_benchmark(root: Path) -> Dict[str, Any]:
+    """Read optional probe-backed backend recommendations.
+
+    Shape accepted:
+      {"kind": "n2d_spectacle_backend_benchmark",
+       "recommendations": {"fight_exchange": {"primary_backend": "seedance", ...}}}
+    """
+    path = spectacle_backend_benchmark_path(root)
+    if not path.is_file():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    if not isinstance(data, Mapping):
+        return {}
+    kind = str(data.get("kind") or "").strip()
+    if kind and kind != SPECTACLE_BACKEND_BENCHMARK_KIND:
+        return {}
+    recs = data.get("recommendations")
+    return dict(data) if isinstance(recs, Mapping) else {}
+
+
+def _benchmark_recommendation(benchmark: Mapping[str, Any], spectacle_type: str) -> Dict[str, Any]:
+    recs = benchmark.get("recommendations") if isinstance(benchmark.get("recommendations"), Mapping) else {}
+    raw = recs.get(spectacle_type) if isinstance(recs, Mapping) else {}
+    if isinstance(raw, str):
+        return {"primary_backend": raw}
+    return dict(raw) if isinstance(raw, Mapping) else {}
+
+
+def apply_spectacle_backend_benchmark(
+    routes: List[Dict[str, Any]],
+    clips: Sequence[Any],
+    *,
+    benchmark: Mapping[str, Any],
+    episode: str,
+    default_backend: str,
+    video_channel: str,
+    routing_mode: str,
+) -> List[Dict[str, Any]]:
+    """Apply optional probe-backed backend recommendations to high-dynamic routes.
+
+    Fixed-default mode is intentionally left untouched.  This is a production
+    feedback loop from small probe clips, not an authority to override a user
+    who explicitly locked the project to one backend.
+    """
+    if routing_mode == "fixed_default" or not benchmark:
+        return []
+    applied: List[Dict[str, Any]] = []
+    for idx, route in enumerate(routes):
+        clip = clips[idx] if idx < len(clips) and isinstance(clips[idx], Mapping) else {}
+        spectacle_type = infer_spectacle_type(clip) or str(route.get("shot_type") or "")
+        if spectacle_type not in {"fight_exchange", "chase", "flight", "large_establishing"}:
+            continue
+        rec = _benchmark_recommendation(benchmark, spectacle_type)
+        backend = normalize_backend(str(rec.get("primary_backend") or rec.get("backend") or ""), default="")
+        if not backend or not video_backend_auto_routable(backend):
+            continue
+        old = normalize_backend(str(route.get("primary_backend") or ""), default_backend)
+        if not old or backend == old:
+            continue
+        fallback = [old] + [normalize_backend(b, default="") for b in route.get("fallback_backends", [])]
+        route["primary_backend"] = backend
+        route["fallback_backends"] = [b for b in fallback if b and b != backend][:3]
+        route["max_clip_seconds"] = video_backend_max_seconds(backend)
+        route["motion_control"] = motion_control_contract(
+            clip,
+            str(route.get("clip_id") or make_clip_id(clip, idx + 1)),
+            str(route.get("shot_type") or ""),
+            backend,
+            episode,
+        )
+        frame_req = _timeline_frame_requirements(clip)
+        route["frame_control"] = video_backend_frame_control(backend, video_channel)
+        route["anchor_consumption"] = anchor_consumption_plan(
+            backend,
+            video_channel,
+            anchor_count=int(frame_req.get("anchor_count") or 0),
+            need_end=bool(frame_req.get("need_end")),
+        )
+        route["risk_flags"] = sorted(set(route.get("risk_flags", [])) | {"spectacle_benchmark_routed"})
+        route["quality_tier"] = quality_tier_for_clip(
+            str(route.get("shot_type") or ""),
+            route.get("risk_flags", []),
+            backend,
+        )
+        route.setdefault("rationale", []).append(
+            f"spectacle probe benchmark recommends {backend} for {spectacle_type}; "
+            f"primary changed from {old} and old primary kept as fallback."
+        )
+        route["spectacle_benchmark"] = {
+            "spectacle_type": spectacle_type,
+            "recommended_backend": backend,
+            "previous_primary": old,
+            "score": rec.get("score"),
+            "evidence": rec.get("evidence"),
+        }
+        applied.append({
+            "clip_id": route.get("clip_id"),
+            "spectacle_type": spectacle_type,
+            "was": old,
+            "now": backend,
+            "score": rec.get("score"),
+        })
+    return applied
+
+
+def apply_spectacle_backend_prior(
+    routes: List[Dict[str, Any]],
+    clips: Sequence[Any],
+    *,
+    benchmark: Mapping[str, Any],
+    default_backend: str,
+    routing_mode: str,
+) -> List[Dict[str, Any]]:
+    """冷启动后端先验：补「关键词识别为奇观、但 shot_type 通用、路由落到 default」那批镜。
+
+    这是 benchmark 为空/未覆盖时的兜底，让没跑过 probe 的项目也有按动作类型选后端的依据。
+    刻意只动「通用 default 兜底」的镜，不碰 route_clip 已显式给过 spectacle 后端的镜
+    (fight→kling / chase·flight→seedance)，也不碰 baseline 锚定、benchmark 已覆盖、fixed_default。
+    benchmark > prior：某 spectacle_type 已有 benchmark 推荐则本函数跳过该类型。
+    执行契约(frame/anchor/motion_control/quality)统一交给随后的 refresh_execution_contracts 重建。
+    """
+    if routing_mode == "fixed_default":
+        return []
+    default_norm = normalize_backend(default_backend, default_backend)
+    covered_types = set()
+    recs = benchmark.get("recommendations") if isinstance(benchmark, Mapping) else None
+    if isinstance(recs, Mapping):
+        covered_types = {str(k) for k in recs.keys()}
+    applied: List[Dict[str, Any]] = []
+    for idx, route in enumerate(routes):
+        clip = clips[idx] if idx < len(clips) and isinstance(clips[idx], Mapping) else {}
+        spectacle_type = infer_spectacle_type(clip)
+        if not spectacle_type or spectacle_type in covered_types:
+            continue
+        # route_clip 已显式 spectacle 路由的镜不动；baseline 锁定的镜不动（跨集一致优先）。
+        if str(route.get("shot_type") or "") in {"fight_exchange", "chase", "flight"}:
+            continue
+        if route.get("baseline_anchored") or route.get("locked_backend"):
+            continue
+        ranking = spectacle_backend_prior_ranking(spectacle_type)
+        if not ranking:
+            continue
+        target = ranking[0]
+        current = normalize_backend(str(route.get("primary_backend") or ""), default_backend)
+        # 只补「通用兜底落到 default」这一冷启动缺口；已是 target 或被别的逻辑选过非 default 的不动。
+        if current == target or current != default_norm:
+            continue
+        fallback = [current] + [normalize_backend(b, default="") for b in ranking[1:]]
+        route["primary_backend"] = target
+        route["fallback_backends"] = [b for b in fallback if b and b != target][:3]
+        route["risk_flags"] = sorted(set(route.get("risk_flags", [])) | {"spectacle_prior_routed"})
+        route.setdefault("rationale", []).append(
+            f"spectacle cold-start prior: {spectacle_type} 默认排序首选 {target}"
+            f"（{SPECTACLE_BACKEND_PRIOR.get(spectacle_type, {}).get('basis', '')}）；"
+            f"通用兜底 {current} 改为 prior 首选，原后端保留为 fallback。跑 probe 后由 benchmark 覆盖。"
+        )
+        route["spectacle_prior"] = {
+            "spectacle_type": spectacle_type,
+            "prior_backend": target,
+            "previous_primary": current,
+            "ranking": list(ranking),
+        }
+        applied.append({
+            "clip_id": route.get("clip_id"),
+            "spectacle_type": spectacle_type,
+            "was": current,
+            "now": target,
+        })
+    return applied
+
+
+def refresh_execution_contracts(
+    routes: List[Dict[str, Any]],
+    clips: Sequence[Any],
+    *,
+    episode: str,
+    video_channel: str,
+    urgency_tier: str,
+) -> None:
+    """Rebuild execution-facing route fields after final primary/fallback edits."""
+    for idx, route in enumerate(routes):
+        clip = clips[idx] if idx < len(clips) and isinstance(clips[idx], Mapping) else {}
+        primary = normalize_backend(str(route.get("primary_backend") or ""), default="")
+        clip_id = str(route.get("clip_id") or make_clip_id(clip, idx + 1))
+        shot_type = str(route.get("shot_type") or infer_shot_type(clip))
+        frame_req = _timeline_frame_requirements(clip)
+        route["max_clip_seconds"] = video_backend_max_seconds(primary)
+        route["frame_control"] = video_backend_frame_control(primary, video_channel)
+        route["anchor_consumption"] = anchor_consumption_plan(
+            primary,
+            video_channel,
+            anchor_count=int(frame_req.get("anchor_count") or 0),
+            need_end=bool(frame_req.get("need_end")),
+        )
+        route["motion_control"] = motion_control_contract(clip, clip_id, shot_type, primary, episode)
+        flags = set(route.get("risk_flags") or [])
+        route["quality_tier"] = quality_tier_for_clip(shot_type, flags, primary)
+        mref = motion_reference_plan(shot_type, primary)
+        route["motion_reference"] = mref
+        if mref.get("applicable"):
+            flags.add("motion_reference_candidate")
+            note = mref.get("note")
+            if note and note not in route.get("rationale", []):
+                route.setdefault("rationale", []).append(note)
+            req = (
+                "若有同段前序已通过 clip：把它作为视频运动/风格参考(reference_video_motion)喂给后端，"
+                "锁运镜节奏；首条镜无前序参考则跳过。"
+            )
+            if req not in route.get("prompt_requirements", []):
+                route.setdefault("prompt_requirements", []).append(req)
+        else:
+            flags.discard("motion_reference_candidate")
+        route["risk_flags"] = sorted(flags)
+        route["urgency_tier"] = urgency_tier
+        route["execution_recipe"] = execution_recipe_for_route(route, clip, video_channel=video_channel)
 
 
 def route_episode(
@@ -1590,6 +2072,9 @@ def route_episode(
     # G8 时效档：项目级意图逐镜留痕，供 dashboard 拆 realtime vs batch 成本账、执行侧消费 batch 通道。
     for _entry in plan["routes"]:
         _entry["urgency_tier"] = urgency_tier
+        recipe = _entry.get("execution_recipe")
+        if isinstance(recipe, dict):
+            recipe["urgency_tier"] = urgency_tier
     # 跨集后端锁：第1集打样落 设定库/model_routes_baseline.json，后续集按 shot_type 锚定同一后端，
     # 防"换集漂到别的后端→同角色跨集风格/质感漂移"。baseline=None 时不锚定（首集或显式跳过）。
     if baseline is None and anchor_baseline:
@@ -1597,8 +2082,44 @@ def route_episode(
     if baseline:
         plan["baseline_drift"] = apply_baseline(plan, baseline)
         plan["baseline_anchored"] = True
+    benchmark = load_spectacle_backend_benchmark(root)
+    applied_benchmark = apply_spectacle_backend_benchmark(
+        plan["routes"],
+        clips,
+        benchmark=benchmark,
+        episode=episode,
+        default_backend=default_backend,
+        video_channel=video_channel,
+        routing_mode=routing_mode,
+    )
+    if benchmark:
+        plan["spectacle_backend_benchmark"] = {
+            "path": str(spectacle_backend_benchmark_path(root)),
+            "applied": applied_benchmark,
+        }
+    # 冷启动后端先验：benchmark 未覆盖的奇观类型按动作物理默认排序兜底（仅自动路由·非 fixed_default）。
+    applied_prior = apply_spectacle_backend_prior(
+        plan["routes"],
+        clips,
+        benchmark=benchmark,
+        default_backend=default_backend,
+        routing_mode=routing_mode,
+    )
+    if applied_prior:
+        plan["spectacle_backend_prior"] = {"applied": applied_prior}
+    refresh_execution_contracts(
+        plan["routes"],
+        clips,
+        episode=episode,
+        video_channel=video_channel,
+        urgency_tier=urgency_tier,
+    )
     # 多镜单次生成候选组（advisory）：在 primary 全部定稿（含 baseline 锚定）后再扫连续接力镜组。
     plan["multishot_groups"] = annotate_multishot_groups(plan["routes"])
+    # 同场景/同角色连续镜 → 推荐改走原生多镜后端（advisory）。传项目 roster；roster 内无多镜后端时
+    # 仍给规范候选但标 roster_switch_required（换后端须整项目统一·勿混用，由用户定夺）。
+    roster = [default_backend, *(fixed_fallback_backends or [])]
+    plan["multishot_reroute_recommendations"] = recommend_multishot_reroute(plan["routes"], roster)
     if legacy_default_note:
         plan["routing_notes"] = [legacy_default_note]
     return plan
@@ -1686,6 +2207,24 @@ def render_markdown(plan: Mapping[str, Any]) -> str:
             lines.append(f"- motion_control: {motion.get('level')} (manifest={motion.get('manifest_path') or '-'})")
             if motion.get("required_inputs"):
                 lines.append(f"- motion_control_required_inputs: {', '.join(motion.get('required_inputs', []))}")
+        recipe = route.get("execution_recipe") or {}
+        if isinstance(recipe, Mapping):
+            frame_inputs = recipe.get("frame_inputs") if isinstance(recipe.get("frame_inputs"), Mapping) else {}
+            refs = recipe.get("reference_inputs") if isinstance(recipe.get("reference_inputs"), Mapping) else {}
+            controls = recipe.get("control_inputs") if isinstance(recipe.get("control_inputs"), Mapping) else {}
+            lines.append(
+                "- execution_recipe: "
+                f"execution={recipe.get('execution_backend')}; "
+                f"frames={frame_inputs.get('consumption_mode')} anchors={frame_inputs.get('mid_anchors')}; "
+                f"refs_max={refs.get('max_reference_images')}; "
+                f"control_manifest={controls.get('manifest_path') or '-'}"
+            )
+        choreography = route.get("action_choreography") or {}
+        if isinstance(choreography, Mapping) and choreography.get("required"):
+            lines.append(f"- action_choreography: {choreography.get('beat_model')} (gate={choreography.get('gate_policy')})")
+            fields = choreography.get("required_fields") or []
+            if fields:
+                lines.append(f"- action_choreography_required_fields: {', '.join(str(x) for x in fields)}")
         lines.append("- rationale:")
         for item in route.get("rationale", []):
             lines.append(f"  - {item}")

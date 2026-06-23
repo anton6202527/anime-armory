@@ -42,7 +42,14 @@ if _IDENTITY_SCRIPTS not in sys.path:
 
 from n2d_contract import (  # noqa: E402
     APPROVED_IMAGE_BACKENDS,
+    ACTION_BEAT_CATEGORY_SPLIT_THRESHOLD,
+    ACTION_CHOREOGRAPHY_COMMON_FIELDS,
+    ACTION_CHOREOGRAPHY_SHOT_TYPES,
+    ACTION_CHOREOGRAPHY_SPECIFIC_FIELDS,
     ASSET_REFERENCE_REGISTRY_KIND,
+    MIN_ACTION_BEAT_SECONDS,
+    action_beat_categories,
+    beat_decomposition,
     CINEMATIC_CONTRACT_FIELDS,
     CONSISTENCY_DIMENSIONS,
     COMPLIANCE_AI_LABEL_STATUSES,
@@ -78,7 +85,9 @@ from n2d_contract import (  # noqa: E402
     MOTION_CONTROL_MANIFEST_KIND,
     MOTION_CONTROL_REQUIRED_SHOT_TYPES,
     MOTION_CONTROL_RISK_FLAGS,
+    SPECTACLE_SEQUENCE_PLAN_KIND,
     STYLE_CONTRACT_FIELDS,
+    SPECTACLE_TEMPLATE_FIELDS,
     VIDEO_MODEL_ROUTES_KIND,
     VISUAL_CONTRACT_FIELDS,
     VOICE_KEY_FIELD,
@@ -86,6 +95,7 @@ from n2d_contract import (  # noqa: E402
     annotate_finding,
     asset_registry_path,
     classify_image_backend,
+    infer_spectacle_type,
     lora_gap_message,
     lora_registry_ready_blocks,
     motion_control_required,
@@ -102,6 +112,7 @@ from n2d_handoff import (  # noqa: E402  逐镜身份/资产交接 Diff（common
 import image_backends  # noqa: E402  出图后端连通性探活 adapter（选择点→探针）
 import image_backend_adapter  # noqa: E402  生图后端 API/能力适配层（选择点→能力/刷新证据/推荐）
 import video_backend_adapter  # noqa: E402  生视频后端 API/能力适配层（选择点→能力/刷新证据）
+from style_policy import face_encoder_policy  # noqa: E402
 from n2d_platform_profiles import (  # noqa: E402
     anchor_consumption_plan,
     backend_supports_three_plus_frames,
@@ -143,14 +154,7 @@ FALLBACK_OFF_VALUES = {"", "无", "不使用", "关闭", "否", "off", "no", "no
 
 
 SPECIAL_SHOT_TEMPLATE_FIELDS: Dict[str, Tuple[str, ...]] = {
-    "fight_exchange": (
-        "template_id", "beats", "blocking", "camera_rule", "continuity_must", "negative",
-        "attack_path", "impact_frame", "action_scope",
-    ),
-    "chase": (
-        "template_id", "beats", "blocking", "camera_rule", "continuity_must", "negative",
-        "screen_direction", "distance_curve", "obstacle_beats",
-    ),
+    **SPECTACLE_TEMPLATE_FIELDS,
     "dialogue_shot_reverse": (
         "template_id", "beats", "blocking", "camera_rule", "continuity_must", "negative",
         "axis", "eyeline", "shot_pairing",
@@ -166,10 +170,6 @@ SPECIAL_SHOT_TEMPLATE_FIELDS: Dict[str, Tuple[str, ...]] = {
     "magic_burst": (
         "template_id", "beats", "blocking", "camera_rule", "continuity_must", "negative",
         "charge_frame", "release_frame", "effect_asset",
-    ),
-    "flight": (
-        "template_id", "beats", "blocking", "camera_rule", "continuity_must", "negative",
-        "pose_lock", "background_motion", "altitude_path",
     ),
     "intimate_interaction": (
         "template_id", "beats", "blocking", "camera_rule", "continuity_must", "negative",
@@ -216,6 +216,7 @@ MOTION_CONTROL_ROUTE_FIELDS = (
 MOTION_CONTROL_READY_STATUSES = ("ready", "degrade_only")
 MOTION_CONTROL_READY_INPUT_STATUSES = ("ready", "not_needed")
 MOTION_CONTROL_CONTACT_FIELDS = ("contact_points", "occlusion_order", "body_part_ownership")
+MOTION_CONTROL_CONTACT_SHOT_TYPES = ("fight_exchange", "hug_or_pull", "intimate_interaction")
 
 # IDENTITY_REGISTRY_KIND / IDENTITY_ADAPTER_MATRIX_KIND / IDENTITY_REFERENCE_FIELDS /
 # IDENTITY_HANDLE_FIELDS 从 n2d_contract 导入（写方 lora/market/identity 同源）
@@ -282,6 +283,10 @@ ASSET_REFERENCE_TYPE_PREFIX = {
     "scene": "LOC_",
     "location": "LOC_",
     "prop": "PROP_",
+    "weapon": "WEAPON_",
+    "magic_weapon": "WEAPON_",
+    "equipment": "WEAPON_",
+    "armory": "WEAPON_",
     "outfit": "OUTFIT_",
     "costume": "OUTFIT_",
     "vfx": "VFX_",
@@ -289,7 +294,44 @@ ASSET_REFERENCE_TYPE_PREFIX = {
 }
 ASSET_REFERENCE_REQUIRED_FIELDS = ("id", "type", "name", "reference_group", "constraints", "drift_forbidden")
 ASSET_PROP_REQUIRED_FIELDS = ("owner", "current_state", "lifecycle")
+ASSET_WEAPON_TYPES = {"weapon", "magic_weapon", "equipment", "armory"}
+ASSET_WEAPON_PROFILE_FIELDS = (
+    "design_intent",
+    "silhouette",
+    "scale",
+    "material",
+    "palette",
+    "ornament_motif",
+    "carry_modes",
+    "combat_usage",
+    "vfx_signature",
+    "forbidden_drift",
+)
+ASSET_WEAPON_PROFILE_NAMES = ("weapon_profile", "armory_profile", "equipment_profile")
+WEAPON_LIKE_ASSET_TERMS = (
+    "武器", "兵器", "刀", "剑", "飞剑", "灵剑", "匕首", "长枪", "弓", "鞭", "锤", "戟",
+    "法宝", "法器", "灵器", "本命", "佩剑", "剑鞘", "weapon", "blade", "sword", "sabre",
+    "saber", "dagger", "spear", "bow", "artifact", "magic_weapon",
+)
+SIGNATURE_EQUIPMENT_FIELDS = (
+    "signature_equipment",
+    "signature_equipment_ids",
+    "signature_weapons",
+    "weapon_ids",
+    "equipment",
+)
+ACTION_EQUIPMENT_TERMS = (
+    "打斗", "战斗", "武打", "追逐", "御剑", "飞行", "腾云", "斗法", "施法", "法术", "招式",
+    "刀", "剑", "飞剑", "灵剑", "武器", "法宝", "兵器", "combat", "fight", "action_role",
+    "combat_role", "weapon", "sword", "flight",
+)
 ASSET_SCENE_REQUIRED_FIELDS = ("spatial_layout",)
+ASSET_SCENE_RELEASE_FIELD_GROUPS = (
+    ("floor_plan", "平面图", "scene_floorplan"),
+    ("doors_windows", "门窗", "门", "窗"),
+    ("axis_rules", "轴线", "180"),
+    ("screen_direction_rules", "左右站位", "screen_direction", "画左", "画右"),
+)
 SCENE_DNA_REQUIRED_FIELDS = (
     "belonging_anchor",
     "landmarks",
@@ -396,6 +438,55 @@ def consistency_release_profile(root: str, stage: str = "", ep: str = "") -> str
     return "demo"
 
 
+def _settings_values(root: str, keys: Sequence[str]) -> List[str]:
+    values: List[str] = []
+    for key in keys:
+        try:
+            values.append(get_setting(root, key, "").strip())
+        except Exception:
+            continue
+    return [v for v in values if v]
+
+
+def _project_has_english_subtitles(root: str, ep: str) -> bool:
+    for rel in (
+        os.path.join("脚本", ep, "字幕_英文.srt"),
+        os.path.join("脚本", ep, "字幕_双语.srt"),
+        os.path.join("脚本", ep, "subtitles_en.srt"),
+    ):
+        if os.path.isfile(os.path.join(root, rel)):
+            return True
+    lang_blob = " ".join(_settings_values(root, ("字幕语言", "subtitle_languages", "本地化语言"))).lower()
+    return any(token in lang_blob for token in ("en", "english", "英文", "中英", "双语"))
+
+
+def _project_has_overseas_release_target(root: str) -> bool:
+    data = load_json(compliance_manifest_path(root))
+    if isinstance(data, dict):
+        localization = data.get("localization") if isinstance(data.get("localization"), dict) else {}
+        if _status(localization.get("status")) in {"ready", "done"}:
+            languages = {str(x).lower() for x in _listify(localization.get("subtitle_languages"))}
+            if any(x and x not in {"zh", "cn", "chinese", "中文"} for x in languages):
+                return True
+        for target in _listify((data.get("platform_review") or {}).get("targets") if isinstance(data.get("platform_review"), dict) else []):
+            if not isinstance(target, dict):
+                continue
+            platform = _status(target.get("platform")).lower()
+            region = _status(target.get("region")).lower()
+            language = _status(target.get("language")).lower()
+            if (
+                target.get("requires_localization") is True
+                or platform in OVERSEAS_PLATFORMS
+                or (region and region not in DOMESTIC_REGIONS)
+                or (language and language not in {"zh", "cn", "chinese", "中文"})
+            ):
+                return True
+    blob = " ".join(_settings_values(root, ("目标平台", "发行地区", "合规用途", "变现模式", "distribution_intent"))).lower()
+    return any(token.lower() in blob for token in (
+        "海外", "出海", "国际", "北美", "global", "overseas", "tiktok", "youtube", "reelshort", "english", "英文"
+    ))
+
+
 def exists(path: str) -> bool:
     return os.path.exists(path)
 
@@ -408,7 +499,7 @@ def load_json(path: str):
 
 
 CHARACTER_ID_RE = re.compile(r"\bCHAR_\d{2,}\b")
-ASSET_ID_RE = re.compile(r"\b(?:LOC|PROP|OUTFIT|VFX)_\d{2,}\b")
+ASSET_ID_RE = re.compile(r"\b(?:LOC|PROP|WEAPON|OUTFIT|VFX)_\d{2,}\b")
 
 # 一致性机检的结构阈值（单一真值源·别再散成内联魔数）：改判据来这里，别埋进各 check 体里。
 ENDFRAME_EXEMPT_REASON_MIN_CHARS = 6   # 首尾双帧豁免理由的实质字数下限（< 此 = 占位/单字 → BLOCK）
@@ -648,6 +739,127 @@ def check_seed_event_records(root: str, ep: str) -> None:
         if effective in {"true", "1", "yes", "pass", "supported"} and not _seed_record_value(event, "effective_seed"):
             add(WARN, "固定 Seed", f"{path}:line {idx}",
                 "seed_effective=true 但缺 effective_seed；无法证明实际传入的是固定 seed pool。")
+
+
+RECIPE_EVIDENCE_STAGES = {"image", "video"}
+RECIPE_REQUIRED_FIELDS = (
+    "recipe_hash",
+    "prompt_sha256",
+    "reference_bundle_sha256",
+    "backend_version",
+    "quality_tier",
+    "actual_image_inputs",
+)
+
+
+def _event_value_any(event: Mapping[str, Any], *keys: str) -> Any:
+    generation = event.get("generation") if isinstance(event.get("generation"), Mapping) else {}
+    meta = event.get("meta") if isinstance(event.get("meta"), Mapping) else {}
+    cost = event.get("cost") if isinstance(event.get("cost"), Mapping) else {}
+    for key in keys:
+        for source in (event, generation, meta, cost):
+            value = source.get(key) if isinstance(source, Mapping) else None
+            if value not in (None, "", [], {}):
+                return value
+    return ""
+
+
+def _event_status_pass(event: Mapping[str, Any]) -> bool:
+    generation = event.get("generation") if isinstance(event.get("generation"), Mapping) else {}
+    status = str(generation.get("status") or event.get("status") or "").strip().lower()
+    return status in {"", "pass", "passed", "ok", "success", "succeeded", "done", "ready"}
+
+
+def _final_media_exists(root: str, ep: str, stages: Sequence[str] = ("image", "video")) -> bool:
+    return bool(_final_media_rels(root, ep, stages))
+
+
+def _final_media_rels(root: str, ep: str, stages: Sequence[str] = ("image", "video")) -> List[str]:
+    patterns: List[str] = []
+    if "image" in stages:
+        patterns.append(os.path.join(root, "出图", ep, "图片", "*.png"))
+    if "video" in stages:
+        patterns.append(os.path.join(root, "出视频", ep, "视频", "*.mp4"))
+    rels: List[str] = []
+    for pattern in patterns:
+        for path in glob.glob(pattern):
+            rels.append(_norm_rel_path(os.path.relpath(path, root)))
+    return sorted(set(rels))
+
+
+def _recipe_return_stage_for_asset(rel: str) -> str:
+    return "image" if rel.lower().endswith(".png") else "video"
+
+
+def _recipe_event_missing_fields(event: Mapping[str, Any]) -> List[str]:
+    missing = [key for key in RECIPE_REQUIRED_FIELDS if _event_value_any(event, key) in (None, "", [], {})]
+    seed_effective = _event_value_any(event, "seed_effective", "effective_seed")
+    if seed_effective in (None, "", [], {}):
+        missing.append("seed_effective/effective_seed=false")
+    else:
+        seed_text = str(seed_effective).strip().lower()
+        if seed_text in {"true", "1", "yes", "supported", "pass"} and _event_value_any(event, "effective_seed") in (None, "", [], {}):
+            missing.append("effective_seed")
+        if seed_text in {"false", "0", "no", "none", "unsupported", "unsupported_or_unknown"} and _event_value_any(event, "seed_support") in (None, "", [], {}):
+            missing.append("seed_support")
+    return missing
+
+
+def check_generation_recipe_evidence(root: str, ep: str, stage: str) -> None:
+    """Release-grade recipe evidence for each final AI-generated image/video media."""
+    production = consistency_release_profile(root, stage, ep) == "production"
+    sev = BLOCK if production else WARN
+    path = _production_events_path(root)
+    latest_by_asset: Dict[str, Tuple[int, Mapping[str, Any]]] = {}
+    for idx, event in enumerate(_load_production_events(root), start=1):
+        if str(event.get("episode") or "").strip() != ep:
+            continue
+        if str(event.get("stage") or "").strip() not in RECIPE_EVIDENCE_STAGES:
+            continue
+        if str(event.get("event") or "").strip() not in {"generation", "redraw"}:
+            continue
+        if not _event_status_pass(event):
+            continue
+        rel = _event_asset_rel(root, event)
+        if rel:
+            latest_by_asset[rel] = (idx, event)
+    final_rels = _final_media_rels(root, ep, RECIPE_EVIDENCE_STAGES)
+    targets = final_rels or sorted(latest_by_asset)
+    if not targets:
+        if _final_media_exists(root, ep, RECIPE_EVIDENCE_STAGES):
+            add(
+                sev,
+                "生成配方证据",
+                path,
+                "本集已有最终图片/视频媒体，但 production_events.jsonl 缺 image/video generation/redraw pass 记录；"
+                "无法追溯 recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+                return_to_stage="image",
+            )
+        return
+    for rel in targets:
+        if rel not in latest_by_asset:
+            add(
+                sev,
+                "生成配方证据",
+                path,
+                f"{rel} 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；"
+                "无法追溯 recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+                return_to_stage=_recipe_return_stage_for_asset(rel),
+            )
+            continue
+        idx, event = latest_by_asset[rel]
+        missing = _recipe_event_missing_fields(event)
+        if not missing:
+            continue
+        add(
+            sev,
+            "生成配方证据",
+            f"{path}:line {idx}",
+            f"{rel} 生成事件缺必填配方证据：{', '.join(missing)}。"
+            "每个最终媒体必须记录 recipe_hash/prompt_sha256/reference_bundle_sha256/backend_version/"
+            "quality_tier/actual_image_inputs，并在 seed 不生效时显式 seed_effective=false + seed_support。",
+            return_to_stage=_recipe_return_stage_for_asset(rel),
+        )
 
 
 def _midframe_self_check_value(event: Dict[str, Any]) -> str:
@@ -1647,7 +1859,7 @@ def check_contract_inheritance(root: str, ep: str) -> None:
 
 
 def check_asset_handoff_inheritance(root: str, ep: str) -> None:
-    """逐镜物料约束 出图→出视频 继承（LOC/PROP/OUTFIT/VFX）：出图绑定的资产在出视频对应镜
+    """逐镜物料约束 出图→出视频 继承（LOC/PROP/WEAPON/OUTFIT/VFX）：出图绑定的资产在出视频对应镜
     丢失=block/warn。视觉契约五字段管 episode 级光位/轴线，本检查补**逐镜**资产锚。
 
     此前只在 inherit_contract.py 裸命令里跑，游离在 gate 退出码之外——`dashboard.py gate --stage video`
@@ -2067,7 +2279,16 @@ def check_storyboard_contract(root: str, ep: str, require_frame_assets: bool = T
                 add(BLOCK, "表情一致性", loc,
                     f"continuity.expression_span={span!r} 非法；必须是 {'/'.join(EXPRESSION_SPAN_VALUES)} 之一。",
                     return_to_stage="script_stage2")
-        if i < len(clips) and cont.get("need_endframe") is not True:
+        is_high_motion = str(clip.get("template") or "") in HIGH_MOTION_TEMPLATES
+        # 高速运动镜首尾双帧不可豁免：快速运动靠首+尾两帧把两端钉死、模型只补中间，是控高动态一致性的
+        # 关键手段（与表情近景的 need_endframe 不同关注点——那是脸随表情漂，这是肢体大动作漂）。这类镜
+        # 不论是否末镜、都不接受 endframe_exempt_reason，是 i<len 默认闸 + 表情近景闸之外的第三条触发。
+        if is_high_motion and cont.get("need_endframe") is not True:
+            add(BLOCK, "尾帧", loc,
+                f"高速运动镜(template={clip.get('template')})必须 need_endframe=true，且不可用 endframe_exempt_reason 豁免——"
+                "快速运动靠首+尾帧钉住两端、模型只补中间是控一致性关键；末镜同样要求。",
+                return_to_stage="script_stage2")
+        elif i < len(clips) and cont.get("need_endframe") is not True:
             exempt = cont.get("endframe_exempt_reason")
             if not exempt:
                 add(BLOCK, "尾帧", loc, "非最终 Clip 默认必须 need_endframe=true；若豁免需填写 endframe_exempt_reason")
@@ -2201,7 +2422,121 @@ def check_storyboard_style_contract(root: str, ep: str) -> None:
                 f"style_contract.风格名「{name}」与 _设置.md 基础视觉风格「{chosen}」不一致——风格真值应同源；核对是否选错风格或契约写偏")
 
 
+STYLEID_CLOSEUP_MARKERS = ("CU", "MCU", "ECU", "近景", "特写", "大特写", "脸部", "面部", "反打", "过肩", "closeup", "close-up")
+STYLEID_CLOSEUP_RATIO = 0.4
+
+
+def _styleid_release_signoff_path(root: str, ep: str = "") -> str:
+    suffix = f"_{ep}" if ep else ""
+    return os.path.join(root, "生产数据", f"styleid_release_signoff{suffix}.json")
+
+
+def _styleid_structured_signoff_ok(root: str, ep: str = "") -> bool:
+    for path in (_styleid_release_signoff_path(root, ep), _styleid_release_signoff_path(root, "")):
+        data = load_json(path)
+        if not isinstance(data, dict):
+            continue
+        if data.get("kind") not in (None, "n2d_styleid_release_signoff"):
+            continue
+        if data.get("accepted") is not True:
+            continue
+        if not str(data.get("reviewer") or "").strip():
+            continue
+        if not str(data.get("reason") or "").strip():
+            continue
+        if not _override_expiry_ok(data.get("expires_at") or data.get("expires")):
+            continue
+        return True
+    return False
+
+
+def _storyboard_closeup_character_ratio(root: str, ep: str) -> Tuple[int, int]:
+    data = load_json(storyboard_path(root, ep))
+    if not isinstance(data, dict):
+        return 0, 0
+    clips = data.get("clips") or data.get("shots") or []
+    if not isinstance(clips, list):
+        return 0, 0
+    total = 0
+    closeups = 0
+    for clip in clips:
+        if not isinstance(clip, Mapping):
+            continue
+        text = json.dumps(clip, ensure_ascii=False)
+        if not CHARACTER_ID_RE.search(text):
+            continue
+        total += 1
+        if any(marker.lower() in text.lower() for marker in STYLEID_CLOSEUP_MARKERS):
+            closeups += 1
+    return closeups, total
+
+
+def _styleid_release_gate_required(root: str, ep: str = "", stage: str = "") -> Tuple[bool, str]:
+    if consistency_release_profile(root, stage, ep) == "production":
+        return True, "production/release profile"
+    if ep:
+        closeups, total = _storyboard_closeup_character_ratio(root, ep)
+        if total and closeups >= 2 and closeups / max(total, 1) >= STYLEID_CLOSEUP_RATIO:
+            return True, f"角色 CU/MCU 近景占比高（{closeups}/{total}）"
+    return False, ""
+
+
+def check_stylized_face_encoder_policy(root: str, ep: str = "", stage: str = "") -> None:
+    """风格化项目应把脸一致性机检切到 StyleID；缺权重时标降级 KPI。"""
+    style = get_setting(root, "基础视觉风格", "")
+    encoder = get_setting(root, "脸一致性机检后端", "arcface")
+    policy = face_encoder_policy(style, encoder)
+    if not (policy.get("stylized") or policy.get("requested_styleid")):
+        return
+    if policy.get("status") == "ready":
+        return
+    settings_loc = os.path.join(root, "_设置.md")
+    model_status = str(policy.get("model_status") or "missing")
+    model_path = str(policy.get("model_path") or "")
+    if policy.get("requested_styleid"):
+        detail = "未配置" if model_status == "missing" else f"路径不存在：{model_path}"
+        msg = (
+            f"基础视觉风格「{style}」已选择脸一致性机检后端=styleid，但 N2D_STYLEID_MODEL {detail}；"
+            "StyleID 不可用时会回退 arcface_fallback，本集 character_consistency_kpi 标为降级档。"
+        )
+    else:
+        msg = (
+            f"基础视觉风格「{style}」属于风格化/漫剧脸，当前脸一致性机检后端={policy.get('encoder') or encoder}；"
+            "建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，"
+            "角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。"
+        )
+    release_required, reason = _styleid_release_gate_required(root, ep, stage)
+    if release_required and not _styleid_structured_signoff_ok(root, ep):
+        signoff_rel = os.path.relpath(_styleid_release_signoff_path(root, ep), root)
+        add(
+            BLOCK,
+            "风格化脸机检",
+            settings_loc,
+            f"{msg} 当前已触发发布闸门（{reason}）：缺可用 N2D_STYLEID_MODEL 时不得进入正式投放/高近景角色镜。"
+            f"若确认接受降级，需写结构化 {signoff_rel}（kind=n2d_styleid_release_signoff, "
+            "accepted=true, reviewer, reason, expires_at）后复跑。",
+            return_to_stage="image",
+        )
+        return
+    if release_required:
+        msg += " 已检测到结构化 StyleID 降级签收；仍建议在投放前补 N2D_STYLEID_MODEL 并重跑 full QC。"
+    add(WARN, "风格化脸机检", settings_loc, msg, return_to_stage="review")
+
+
 _TONE_SPLIT_RE = re.compile(r"[；;。.，,\n]")
+PROP_ID_ANY_RE = re.compile(r"\bPROP_[\w\-\u4e00-\u9fff]+\b")
+POSSESSION_WORDS = (
+    "手持", "握", "拿", "抓", "举", "抱着", "持有", "佩戴", "戴着", "holds", "holding", "grabs",
+)
+POSSESSION_TRANSFER_WORDS = (
+    "递给", "交给", "接过", "夺过", "抢过", "掉落", "丢下", "放下", "松开",
+    "handoff", "transfer", "release", "drop", "pickup",
+)
+CORE_POSSESSION_ASSET_WORDS = (
+    "武器", "兵器", "剑", "刀", "匕首", "枪", "弓", "箭", "法宝", "灵宝", "神器", "法器",
+    "证物", "线索", "信物", "令牌", "钥匙", "圣旨", "密信", "血书", "契约", "玉佩", "玉簪",
+    "毒", "药瓶", "丹药", "符", "符箓", "卷轴", "灵珠", "戒指", "weapon", "evidence", "artifact", "relic",
+)
 
 
 def _tone_base(value) -> str:
@@ -2221,6 +2556,74 @@ def _earliest_storyboard_ep(root: str) -> Optional[str]:
         if digits:
             eps.append((int(digits), name))
     return min(eps)[1] if eps else None
+
+
+def _possession_ledger_path_candidates(root: str, ep: str) -> List[str]:
+    return [
+        os.path.join(root, "生产数据", f"possession_ledger_{ep}.json"),
+        os.path.join(root, "生产数据", f"asset_possession_{ep}.json"),
+        os.path.join(root, "脚本", ep, "possession_ledger.json"),
+        os.path.join(root, "设定库", "possession_ledger.json"),
+    ]
+
+
+def _possession_ledger_exists(root: str, ep: str) -> bool:
+    return any(os.path.isfile(p) for p in _possession_ledger_path_candidates(root, ep))
+
+
+def _possession_mentions_core_asset(text: str, props: Sequence[str]) -> bool:
+    blob = str(text or "")
+    if any(word.lower() in blob.lower() for word in CORE_POSSESSION_ASSET_WORDS):
+        return True
+    return any(any(word.lower() in prop.lower() for word in CORE_POSSESSION_ASSET_WORDS) for prop in props)
+
+
+def check_storyboard_possession_gate(root: str, ep: str) -> None:
+    """Storyboard 前置 POS：检测到关键道具持有/交接时，要求账本前移到分镜层。"""
+    data = load_json(storyboard_path(root, ep))
+    if not isinstance(data, dict):
+        return
+    clips = data.get("clips") or data.get("shots") or []
+    if not isinstance(clips, list):
+        return
+    mentions: List[str] = []
+    transfer_mentions: List[str] = []
+    for idx, clip in enumerate(clips, start=1):
+        if not isinstance(clip, Mapping):
+            continue
+        text = json.dumps(clip, ensure_ascii=False)
+        props = PROP_ID_ANY_RE.findall(text)
+        if not props:
+            continue
+        if any(w.lower() in text.lower() for w in POSSESSION_WORDS + POSSESSION_TRANSFER_WORDS):
+            label = str(clip.get("id") or clip.get("clip_id") or clip.get("label") or f"Clip_{idx:02d}")
+            shown = f"{label}:{'/'.join(sorted(set(props)))}"
+            mentions.append(shown)
+            if any(w.lower() in text.lower() for w in POSSESSION_TRANSFER_WORDS):
+                transfer_mentions.append(shown)
+            elif _possession_mentions_core_asset(text, props):
+                transfer_mentions.append(shown)
+    if not mentions or _possession_ledger_exists(root, ep):
+        return
+    target = os.path.join(root, "生产数据", f"possession_ledger_{ep}.json")
+    shown = "、".join((transfer_mentions or mentions)[:8]) + ("…" if len(transfer_mentions or mentions) > 8 else "")
+    if transfer_mentions:
+        add(
+            BLOCK,
+            "持有账本(POS)",
+            storyboard_path(root, ep),
+            f"storyboard 已出现核心道具/武器/证物/法宝的持有、交接、丢失或拾取（{shown}），但缺 possession_ledger；"
+            f"请先在 {target} 记录 clip、asset、holder、action，避免道具跨镜瞬移。",
+            return_to_stage="script_stage2",
+        )
+    else:
+        add(
+            WARN,
+            "持有账本(POS)",
+            storyboard_path(root, ep),
+            f"storyboard 已出现关键道具持有关系（{shown}），建议前置 possession_ledger 到分镜 gate；跨镜持有、破损、丢失别只靠 prompt 文本记忆。",
+            return_to_stage="script_stage2",
+        )
 
 
 LONG_RUNNING_EP_THRESHOLD = 3  # 到第3集起跨集脸漂累积已成真问题，长线剧用无持久主体后端该提示升档
@@ -2342,9 +2745,10 @@ def check_long_running_weak_backend(root: str, ep: str) -> None:
         )
         return
     if not has_core:
-        add(WARN, "生图AI一致性", f"生图AI={setting}",
+        add(BLOCK, "生图AI一致性", f"生图AI={setting}",
             f"长线剧（{ep}）仍用无持久主体后端（{canon or setting}）逐镜参考图派生，但 registry 未标出核心/常驻角色；"
-            "请确认核心角色 scope/tier 已写入 identity_registry，否则无法判断谁必须升 native subject / Face Lock / face_embedding / LoRA。",
+            "请先把核心/常驻角色 scope/tier 写入 identity_registry，并为这些角色注册 native subject / Face Lock / face_embedding / LoRA；"
+            "否则无法判断谁必须升档，长距离复现会把脸漂累积到后续集。",
             return_to_stage="image")
 
 
@@ -2582,6 +2986,152 @@ def check_storyboard_special_templates(root: str, ep: str) -> None:
                 add(BLOCK, "专项镜头模板", loc, f"template={template_id} 的 template_contract 缺字段：{key}")
 
 
+def _gate_make_clip_id(clip: Mapping[str, Any], idx: int) -> str:
+    raw = str(clip.get("clip_id") or clip.get("id") or clip.get("label") or "").strip()
+    m = re.search(r"(?:Clip[_\s-]?|CLIP)(\d+)", raw, re.I)
+    if m:
+        return f"Clip_{int(m.group(1)):02d}"
+    m = re.search(r"(\d+)", raw)
+    if m:
+        return f"Clip_{int(m.group(1)):02d}"
+    return f"Clip_{idx:02d}"
+
+
+def check_spectacle_sequence_plan(root: str, ep: str) -> None:
+    """Require a sequence-level continuity ledger for spectacle clips before video."""
+    data = load_json(storyboard_path(root, ep))
+    if not isinstance(data, dict):
+        return
+    clips = data.get("clips") or []
+    if not isinstance(clips, list):
+        return
+    required: Dict[str, str] = {}
+    for idx, clip in enumerate(clips, 1):
+        if not isinstance(clip, Mapping):
+            continue
+        kind = infer_spectacle_type(clip)
+        if kind:
+            required[_gate_make_clip_id(clip, idx)] = kind
+    if not required:
+        return
+
+    rel = os.path.join("生产数据", f"spectacle_sequence_plan_{ep}.json")
+    path = os.path.join(root, rel)
+    plan = load_json(path)
+    story_rel = os.path.relpath(storyboard_path(root, ep), root)
+    if not isinstance(plan, dict):
+        add(
+            BLOCK,
+            "高动态序列总账",
+            path,
+            f"storyboard 含高动态/大场景 Clip（{', '.join(required)}），但缺 {rel}；"
+            "先生成跨 Clip 动作/空间/资产连续性总账，再进视频付费链路。",
+            return_to_stage="script_stage2",
+            affected_shots=list(required),
+            affected_artifacts=[story_rel, rel],
+            rerun_scope="运行 python3 skills/n2d-script/scripts/spectacle_sequence_plan.py <作品根> <集> --write 后重跑 video gate。",
+        )
+        return
+    if str(plan.get("kind") or "") != SPECTACLE_SEQUENCE_PLAN_KIND:
+        add(
+            BLOCK,
+            "高动态序列总账",
+            path,
+            f"spectacle_sequence_plan kind 必须是 {SPECTACLE_SEQUENCE_PLAN_KIND}。",
+            return_to_stage="script_stage2",
+            affected_artifacts=[rel],
+        )
+        return
+    sequences = plan.get("sequences")
+    if not isinstance(sequences, list) or not sequences:
+        add(
+            BLOCK,
+            "高动态序列总账",
+            path,
+            "spectacle_sequence_plan 缺 sequences[]；不能用空总账放行高动态/大场景视频。",
+            return_to_stage="script_stage2",
+            affected_shots=list(required),
+            affected_artifacts=[rel],
+        )
+        return
+    covered = {
+        str(cid)
+        for seq in sequences if isinstance(seq, Mapping)
+        for cid in (seq.get("clip_order") or [])
+    }
+    missing = [cid for cid in required if cid not in covered]
+    if missing:
+        add(
+            BLOCK,
+            "高动态序列总账",
+            path,
+            f"spectacle_sequence_plan 未覆盖 storyboard 高动态 Clip：{', '.join(missing)}；"
+            "每条打斗/追逐/腾云/大场景都必须进入 sequence_id、handoff_state、path_lock 与引用策略。",
+            return_to_stage="script_stage2",
+            affected_shots=missing,
+            affected_artifacts=[rel, story_rel],
+            rerun_scope="重跑 spectacle_sequence_plan.py --write，并检查 clip_order 是否覆盖最新 storyboard。",
+        )
+
+
+def check_action_beat_budget(root: str, ep: str, stage: str = "video") -> None:
+    """一镜一主导动作 + 单拍可读时长（Veo「一 clip 一动作」+ 打斗拆 2–3 拍）。
+
+    高动态镜最常见崩法：把整段攻防(攻击+格挡+反击+命中)塞进一条 clip——物理引擎会乱、命中帧读不出。
+    按动作节拍类别数 + 单拍时长预算给拆镜信号，把它挡在最贵的出视频之前。
+    「单 Clip 时长超后端上限」已由 risk_flags long_duration 闸守，这里只补「节拍塞太满」这层。
+    """
+    data = load_json(storyboard_path(root, ep))
+    if not isinstance(data, dict):
+        return
+    clips = data.get("clips") or []
+    if not isinstance(clips, list):
+        return
+    story_rel = os.path.relpath(storyboard_path(root, ep), root)
+    production = consistency_release_profile(root, stage, ep) == "production"
+    for idx, clip in enumerate(clips, 1):
+        if not isinstance(clip, Mapping):
+            continue
+        kind = infer_spectacle_type(clip)
+        if kind not in ACTION_CHOREOGRAPHY_SHOT_TYPES:
+            continue
+        clip_id = _gate_make_clip_id(clip, idx)
+        cats = action_beat_categories(json.dumps(clip, ensure_ascii=False))
+        try:
+            dur = float(clip.get("duration") or 0)
+        except (TypeError, ValueError):
+            dur = 0.0
+        beats = beat_decomposition(kind)
+        beat_names = "/".join(b["beat"] for b in beats) or "起手/命中/反应"
+        # ① 一镜塞了完整攻防回合（跨越 ≥3 个互斥节拍类别）→ 必须拆 beat。production 升 BLOCK。
+        if len(cats) >= ACTION_BEAT_CATEGORY_SPLIT_THRESHOLD:
+            add(
+                BLOCK if production else WARN,
+                "动作节拍预算",
+                story_rel,
+                f"{clip_id}({kind}) 一镜跨越 {len(cats)} 个动作节拍类别（{', '.join(cats)}）——"
+                f"把完整攻防回合塞进一条 clip，模型物理易乱、命中帧读不出。按 beat 拆成 {beat_names} 各一镜"
+                "（一镜一主导动作，相机从简）。",
+                return_to_stage="script_stage2",
+                affected_shots=[clip_id],
+                affected_artifacts=[story_rel],
+                rerun_scope="按 spectacle_sequence_plan 的 beat_decomposition 拆镜，回 n2d-script 阶段2 重切 storyboard，再跑 video gate。",
+            )
+            continue
+        # ② 单拍时长不足：多个节拍挤进过短时长，命中帧/受力方向来不及读清（启发式·WARN）。
+        if dur > 0 and len(cats) >= 2 and dur / len(cats) < MIN_ACTION_BEAT_SECONDS:
+            add(
+                WARN,
+                "动作节拍预算",
+                story_rel,
+                f"{clip_id}({kind}) 时长 {dur:g}s 内塞了 {len(cats)} 个动作节拍（{', '.join(cats)}），"
+                f"单拍均不足 {MIN_ACTION_BEAT_SECONDS:g}s——命中帧/受力方向来不及读清。延长该镜或拆成 {beat_names}。",
+                return_to_stage="script_stage2",
+                affected_shots=[clip_id],
+                affected_artifacts=[story_rel],
+            )
+
+
 def identity_adapter_matrix_path(root: str) -> str:
     return os.path.join(root, "生产数据", "identity_adapter_matrix.json")
 
@@ -2730,6 +3280,91 @@ def _validate_character_dna(section: object, loc: str) -> None:
         if not isinstance(value, str) or not value.strip():
             add(BLOCK, "角色 DNA", f"{loc} character_dna.{key}",
                 "角色 DNA 五层必须非空；无配饰也要写“无”，避免下游临场补设定。")
+
+
+def _performance_signature_present(char: Mapping[str, Any], form: Mapping[str, Any]) -> bool:
+    sig = form.get("performance_signature") or char.get("performance_signature")
+    if isinstance(sig, Mapping):
+        return any(str(v or "").strip() for v in sig.values())
+    if isinstance(sig, list):
+        return any(str(v or "").strip() for v in sig)
+    return bool(str(sig or "").strip())
+
+
+def _signature_equipment_refs(char: Mapping[str, Any], form: Mapping[str, Any]) -> List[str]:
+    """Collect registered protagonist equipment ids from char/form fields."""
+    refs: List[str] = []
+
+    def collect(value: object) -> None:
+        if value is None:
+            return
+        if isinstance(value, str):
+            for token in re.split(r"[,，、/；;\s]+", value):
+                token = token.strip()
+                if token:
+                    refs.append(token)
+            return
+        if isinstance(value, Mapping):
+            for key in ("id", "asset_id", "weapon_id", "equipment_id", "primary", "ref"):
+                item = value.get(key)
+                if isinstance(item, str) and item.strip():
+                    refs.append(item.strip())
+            for key in ("ids", "assets", "weapons", "items"):
+                collect(value.get(key))
+            return
+        if isinstance(value, Sequence) and not isinstance(value, (str, bytes, bytearray)):
+            for item in value:
+                collect(item)
+
+    for source in (char, form):
+        for key in SIGNATURE_EQUIPMENT_FIELDS:
+            collect(source.get(key))
+    out: List[str] = []
+    seen = set()
+    for ref in refs:
+        if ref not in seen:
+            seen.add(ref)
+            out.append(ref)
+    return out
+
+
+def _core_action_character_needs_equipment(char: Mapping[str, Any], form: Mapping[str, Any]) -> bool:
+    """Production action leads should bind their recognisable weapon/prop kit."""
+    if char.get("signature_equipment_expected") is True or form.get("signature_equipment_expected") is True:
+        return True
+    if char.get("combat_role") is True or form.get("combat_role") is True:
+        return True
+    if char.get("action_role") is True or form.get("action_role") is True:
+        return True
+    blob = json.dumps({"character": char, "form": form}, ensure_ascii=False).lower()
+    core = _CORE_SCOPE_RE.search(f"{char.get('tier') or ''} {char.get('scope') or ''} {char.get('role') or ''} {char.get('name') or ''}")
+    return bool(core and any(term.lower() in blob for term in ACTION_EQUIPMENT_TERMS))
+
+
+def _validate_signature_equipment(char: Mapping[str, Any], form: Mapping[str, Any], floc: str) -> None:
+    if not _core_action_character_needs_equipment(char, form):
+        return
+    refs = _signature_equipment_refs(char, form)
+    if not refs:
+        add(
+            BLOCK,
+            "主角装备库",
+            f"{floc} signature_equipment",
+            "production 核心动作角色缺 signature_equipment；请把主角常用武器/法宝/标志性道具登记为 "
+            "WEAPON_xx/PROP_xx/VFX_xx，并在角色 form 上绑定，避免主角形象只锁脸不锁随身装备。",
+            return_to_stage="image",
+        )
+        return
+    invalid = [ref for ref in refs if not re.match(r"^(WEAPON|PROP|VFX|OUTFIT)_[A-Za-z0-9_:-]+$", ref)]
+    if invalid:
+        add(
+            BLOCK,
+            "主角装备库",
+            f"{floc} signature_equipment",
+            "signature_equipment 只能引用资产注册 ID（WEAPON_/PROP_/VFX_/OUTFIT_）："
+            + ", ".join(invalid[:8]),
+            return_to_stage="image",
+        )
 
 
 def _profile_has_any(section: Mapping[str, object], keys: Sequence[str]) -> bool:
@@ -3046,6 +3681,21 @@ def check_identity_registry(
                     add(BLOCK, "资产身份注册层", floc, f"form 缺字段：{key}")
 
             _validate_character_dna(form.get("character_dna"), floc)
+            if (
+                consistency_release_profile(root) == "production"
+                and _CORE_SCOPE_RE.search(f"{char.get('tier') or ''} {char.get('scope') or ''}")
+                and not _performance_signature_present(char, form)
+            ):
+                add(
+                    BLOCK,
+                    "角色表演一致性",
+                    f"{floc} performance_signature",
+                    "production 核心/长线角色缺 performance_signature；请登记微表情、惯用动作、站姿、说话节奏、眼神反应等表演指纹，"
+                    "否则脸像一致但角色表演会跨集漂。",
+                    return_to_stage="image",
+                )
+            if consistency_release_profile(root) == "production":
+                _validate_signature_equipment(char, form, floc)
             if "wardrobe_profile" in form:
                 _validate_wardrobe_profile(form.get("wardrobe_profile"), floc)
 
@@ -3296,6 +3946,99 @@ def _asset_must_not_have_terms(asset: Mapping[str, object]) -> List[str]:
     return out
 
 
+def _is_core_location_asset(asset: Mapping[str, object]) -> bool:
+    blob = json.dumps(asset, ensure_ascii=False).lower()
+    if asset.get("core") is True or asset.get("recurrent") is True or asset.get("persistent") is True:
+        return True
+    try:
+        if int(asset.get("frequency") or asset.get("reuse_count") or 0) >= 3:
+            return True
+    except (TypeError, ValueError):
+        pass
+    return any(token in blob for token in ("主场景", "核心场景", "高频", "反复", "复用", "recurrent", "core", "main_location"))
+
+
+def _asset_has_any(asset: Mapping[str, object], aliases: Sequence[str]) -> bool:
+    if any(alias in asset and not _field_is_missing(dict(asset), alias) for alias in aliases):
+        return True
+    constraints = asset.get("constraints") if isinstance(asset.get("constraints"), Mapping) else {}
+    scene_dna = asset.get("scene_dna") if isinstance(asset.get("scene_dna"), Mapping) else {}
+    for section in (constraints, scene_dna):
+        if any(alias in section and str(section.get(alias) or "").strip() for alias in aliases):
+            return True
+    blob = json.dumps(asset, ensure_ascii=False).lower()
+    return any(alias.lower() in blob for alias in aliases)
+
+
+def _weapon_profile(asset: Mapping[str, object]) -> Tuple[Mapping[str, object], str]:
+    for field in ASSET_WEAPON_PROFILE_NAMES:
+        value = asset.get(field)
+        if isinstance(value, Mapping):
+            return value, field
+    return {}, ASSET_WEAPON_PROFILE_NAMES[0]
+
+
+def _is_weapon_like_asset(asset: Mapping[str, object]) -> bool:
+    asset_type = str(asset.get("type") or "").strip().lower()
+    if asset_type in ASSET_WEAPON_TYPES:
+        return True
+    if str(asset.get("id") or "").strip().startswith("WEAPON_"):
+        return True
+    blob = json.dumps(asset, ensure_ascii=False).lower()
+    return any(term.lower() in blob for term in WEAPON_LIKE_ASSET_TERMS)
+
+
+def _asset_owner_present(asset: Mapping[str, object], profile: Mapping[str, object]) -> bool:
+    owner_fields = ("owner", "character_id", "owner_character_id", "bound_character", "signature_owner")
+    return any(
+        str(asset.get(key) or profile.get(key) or "").strip()
+        for key in owner_fields
+    )
+
+
+def _validate_weapon_profile(asset: Mapping[str, object], loc: str, *, required: bool = True) -> None:
+    profile, field_name = _weapon_profile(asset)
+    if not isinstance(profile, Mapping) or not profile:
+        sev = BLOCK if required else WARN
+        add(
+            sev,
+            "主角装备库",
+            f"{loc} {field_name}",
+            "武器/法宝实体缺结构化 weapon_profile；请锁设计意图、剪影、尺度、材质、色卡、纹样母题、携带方式、"
+            "战斗用法、VFX 签名和禁漂项，避免每镜重画成不同武器。",
+            return_to_stage="image",
+        )
+        return
+    missing = [key for key in ASSET_WEAPON_PROFILE_FIELDS if _field_is_missing(dict(profile), key)]
+    if missing:
+        add(
+            BLOCK if required else WARN,
+            "主角装备库",
+            f"{loc} {field_name}",
+            f"{field_name} 缺字段：" + ", ".join(missing) +
+            "；主角武器要像角色定妆一样能被索引和复现。",
+            return_to_stage="image",
+        )
+    if not _asset_owner_present(asset, profile):
+        add(
+            BLOCK if required else WARN,
+            "主角装备库",
+            f"{loc} {field_name}",
+            "武器/法宝资产缺 owner/character_id；请声明归属角色，方便出图时把主角与专属装备绑定。",
+            return_to_stage="image",
+        )
+    reference_group = asset.get("reference_group") if isinstance(asset.get("reference_group"), Mapping) else {}
+    view_keys = ("in_hand", "wield", "wielding", "scale_ref", "scale_reference", "sheathed", "active")
+    if isinstance(reference_group, Mapping) and not any(str(reference_group.get(key) or "").strip() for key in view_keys):
+        add(
+            WARN,
+            "主角装备库",
+            loc,
+            "建议为 WEAPON_ 增加握持/比例参考（in_hand、wielding、scale_reference 或 sheathed），"
+            "否则主角图容易出现武器尺寸和手持方式漂移。",
+        )
+
+
 def check_asset_reference_registry(
     root: str,
     require_reference_assets: bool = False,
@@ -3305,13 +4048,13 @@ def check_asset_reference_registry(
     p = asset_registry_path(root)
     data = load_json(p)
     if not isinstance(data, dict):
-        add(BLOCK, "资产引用注册层", p, "缺少或无法解析 asset_registry.json；关键场景/道具/服装/VFX 必须升级为 LOC_/PROP_/OUTFIT_/VFX_ 资产引用注册层")
+        add(BLOCK, "资产引用注册层", p, "缺少或无法解析 asset_registry.json；关键场景/道具/武器/服装/VFX 必须升级为 LOC_/PROP_/WEAPON_/OUTFIT_/VFX_ 资产引用注册层")
         return
     if data.get("kind") != ASSET_REFERENCE_REGISTRY_KIND:
         add(BLOCK, "资产引用注册层", p, f"kind 必须是 {ASSET_REFERENCE_REGISTRY_KIND}")
     assets = data.get("assets")
     if not isinstance(assets, list) or not assets:
-        add(BLOCK, "资产引用注册层", p, "assets[] 缺失或为空；关键场景/道具/服装/VFX 必须登记")
+        add(BLOCK, "资产引用注册层", p, "assets[] 缺失或为空；关键场景/道具/武器/服装/VFX 必须登记")
         return
 
     seen_ids = set()
@@ -3340,6 +4083,27 @@ def check_asset_reference_registry(
         if asset_type in {"outfit", "costume"}:
             _validate_wardrobe_profile(asset.get("outfit_profile"), loc, field_name="outfit_profile")
 
+        if asset_type in ASSET_WEAPON_TYPES:
+            _validate_weapon_profile(asset, loc, required=True)
+        elif asset_type == "prop" and _is_weapon_like_asset(asset):
+            _validate_weapon_profile(
+                asset,
+                loc,
+                required=consistency_release_profile(root) == "production",
+            )
+        elif asset_type in {"vfx", "effect"} and _is_weapon_like_asset(asset):
+            profile, _profile_name = _weapon_profile(asset)
+            if profile:
+                _validate_weapon_profile(asset, loc, required=False)
+            else:
+                add(
+                    WARN,
+                    "主角装备库",
+                    loc,
+                    "该 VFX/法术资产看起来承担武器/法宝识别功能；若它是实体武器或主角本命法宝，请拆成 "
+                    "WEAPON_xx 实体资产 + VFX_xx 光效表现，并在角色 signature_equipment 中绑定。",
+                )
+
         # 深度一致性检查：道具生命周期与所有权
         if asset_type == "prop":
             for key in ASSET_PROP_REQUIRED_FIELDS:
@@ -3352,6 +4116,17 @@ def check_asset_reference_registry(
                 if _field_is_missing(asset, key):
                     add(BLOCK, "资产引用注册层", loc, f"反复场景资产缺空间布局字段：{key}")
             _validate_scene_dna(asset, loc)
+            if consistency_release_profile(root) == "production" and _is_core_location_asset(asset):
+                missing = [aliases[0] for aliases in ASSET_SCENE_RELEASE_FIELD_GROUPS if not _asset_has_any(asset, aliases)]
+                if missing:
+                    add(
+                        BLOCK,
+                        "空间/场面调度一致性",
+                        loc,
+                        "production 核心/高频 LOC 缺空间发布字段：" + ", ".join(missing) +
+                        "；请补平面图、门窗方向、轴线规则和左右站位/screen_direction 规则，避免多集同场景门窗/站位/越轴漂移。",
+                        return_to_stage="script_stage2",
+                    )
 
         reference_group = asset.get("reference_group")
         if not isinstance(reference_group, dict):
@@ -3382,8 +4157,8 @@ def check_asset_reference_registry(
                 if "lighting_signature" not in constraints:
                     add(WARN, "资产引用注册层", loc, "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变")
 
-            if asset_type == "prop" and "structure" not in constraints:
-                add(BLOCK, "资产引用注册层", loc, "道具资产 constraints 必须锁 structure，避免壶嘴/刀刃/镜面等部件幻觉")
+            if asset_type in {"prop", *ASSET_WEAPON_TYPES} and "structure" not in constraints:
+                add(BLOCK, "资产引用注册层", loc, "道具/武器资产 constraints 必须锁 structure，避免壶嘴/刀刃/剑柄/剑鞘/镜面等部件幻觉")
             name_blob = f"{asset.get('name', '')}\n{json.dumps(constraints, ensure_ascii=False)}"
             if asset_type == "prop" and _has_any(name_blob, ("铜镜", "赐死", "托盘", "毒酒", "碎瓷", "匕首", "白绫")) and not _has_any(name_blob, (
                 "单镜面", "唯一", "数量", "件数", "短颈圆口", "无侧嘴", "无斜嘴", "无双口", "一柄一刃", "同一只",
@@ -3705,13 +4480,41 @@ def _section_requires_motion_control(section: str) -> bool:
         section,
         (
             "shot_type=fight_exchange",
+            "shot_type=chase",
+            "shot_type=flight",
             "shot_type=intimate_interaction",
             "shot_type=hug_or_pull",
             "contact_motion",
             "physical_interaction",
             "feature_melting_risk",
+            "high_speed_motion",
+            "spatial_path_risk",
         ),
     )
+
+
+def _route_requires_contact_fields(route: Dict[str, object]) -> bool:
+    shot_type = str(route.get("shot_type") or "").strip()
+    if shot_type in MOTION_CONTROL_CONTACT_SHOT_TYPES:
+        return True
+    if shot_type in {"chase", "flight"} or shot_type in {"multi_character_same_frame", "ensemble_blocking", "multi_person_blocking"}:
+        return False
+    flags = route.get("risk_flags")
+    flag_set = set(str(x) for x in flags) if isinstance(flags, list) else set()
+    return bool(flag_set & {"contact_motion", "physical_interaction", "feature_melting_risk"})
+
+
+def _section_shot_type(section: str, route: Optional[Dict[str, Any]] = None) -> str:
+    if route:
+        shot_type = str(route.get("shot_type") or "").strip()
+        if shot_type:
+            return shot_type
+    m = re.search(r"shot_type\s*=\s*([A-Za-z0-9_]+)", section)
+    return m.group(1) if m else ""
+
+
+def _action_choreography_required_fields(shot_type: str) -> Tuple[str, ...]:
+    return ACTION_CHOREOGRAPHY_COMMON_FIELDS + ACTION_CHOREOGRAPHY_SPECIFIC_FIELDS.get(shot_type, ())
 
 
 def _missing_contract_fields(text: str, fields: Iterable[str]) -> List[str]:
@@ -3742,11 +4545,23 @@ def _native_audio_contract_ok(text: str) -> bool:
 
 
 NATIVE_AV_PHYSICAL_FIELDS = ("声源归属", "口型策略", "材质/动作声", "空间声学", "字幕/后期策略")
+NATIVE_AV_PHYSICS_KIND = "n2d_native_av_physics"
 
 
 def is_native_av_production(root: str) -> bool:
     """`制作模式=原生音画`：视频后端有意一次生成同步音画（含台词）。"""
     return is_native_av(root)
+
+
+def native_av_physics_required(root: str, ep: str = "", overview_text: str = "") -> bool:
+    """Any retained/mixed native audio needs a physical sidecar, not only native_av mode."""
+    if is_native_av_production(root):
+        return True
+    if native_audio_policy_mode(native_audio_policy(root)) != NATIVE_AUDIO_DISCARD:
+        return True
+    if overview_text and _section_native_audio_opt_in(overview_text):
+        return True
+    return False
 
 
 def _native_audio_policy_line(section: str) -> str:
@@ -3775,16 +4590,151 @@ def check_native_audio_opt_in_overview(root: str, ep: str, overview_text: str, l
 
 
 def check_native_av_physical_contract(root: str, ep: str, overview_text: str, loc: str) -> None:
-    if not is_native_av_production(root):
+    if not native_av_physics_required(root, ep, overview_text):
         return
     title = "原生音画物理一致性契约"
     if title not in overview_text:
         add(BLOCK, "原生音画物理一致性", loc,
-            f"原生音画模式缺「{title}」；必须锁声源归属、口型策略、材质/动作声、空间声学、字幕/后期策略后才能进视频生成")
+            f"本集会保留/混入原生音轨或使用原生音画，但缺「{title}」；"
+            "必须锁声源归属、口型策略、材质/动作声、空间声学、字幕/后期策略后才能进视频生成/合成")
         return
     for key in NATIVE_AV_PHYSICAL_FIELDS:
         if key not in overview_text:
             add(BLOCK, "原生音画物理一致性", loc, f"{title} 缺字段：{key}")
+
+
+def native_av_physics_sidecar_path(root: str, ep: str) -> str:
+    return os.path.join(root, "生产数据", f"native_av_physics_{ep}.json")
+
+
+def _truthy(value: object) -> bool:
+    if isinstance(value, bool):
+        return value
+    text = str(value or "").strip().lower()
+    return text in {"1", "true", "yes", "y", "on", "可见", "是", "yes/true"}
+
+
+def _mapping(value: object) -> Dict[str, Any]:
+    return dict(value) if isinstance(value, Mapping) else {}
+
+
+def _clip_audio_intent(row: Mapping[str, Any]) -> str:
+    return str(row.get("audio_intent") or row.get("sound_intent") or row.get("声音意图") or "").strip().lower()
+
+
+def _clip_compose_policy(row: Mapping[str, Any]) -> str:
+    post = _mapping(row.get("post_policy") or row.get("后期策略"))
+    return str(row.get("compose_policy") or post.get("compose_policy") or post.get("音轨处理") or "").strip()
+
+
+def _sidecar_clip_id(row: Mapping[str, Any], idx: int) -> str:
+    return str(row.get("clip_id") or row.get("clip") or row.get("id") or f"Clip_{idx:02d}").strip()
+
+
+def _native_av_physics_clip_errors(row: Mapping[str, Any], idx: int) -> List[str]:
+    clip_id = _sidecar_clip_id(row, idx)
+    errors: List[str] = []
+    intent = _clip_audio_intent(row)
+    if not intent:
+        errors.append(f"{clip_id} 缺 audio_intent")
+    spatial = _mapping(row.get("spatial_acoustics") or row.get("space_acoustics") or row.get("空间声学"))
+    if not (spatial.get("space_id") or spatial.get("loc_id") or spatial.get("location") or spatial.get("LOC")):
+        errors.append(f"{clip_id} 缺 spatial_acoustics.space_id/LOC")
+    if not (spatial.get("distance") or spatial.get("shot_distance") or spatial.get("景别距离")):
+        errors.append(f"{clip_id} 缺 spatial_acoustics.distance")
+    if not (spatial.get("reverb_profile") or spatial.get("reverb") or spatial.get("acoustic_profile") or spatial.get("混响")):
+        errors.append(f"{clip_id} 缺 spatial_acoustics.reverb_profile")
+    compose_policy = _clip_compose_policy(row)
+    if not compose_policy:
+        errors.append(f"{clip_id} 缺 post_policy.compose_policy")
+
+    if intent in {"ambience", "ambient", "environment", "环境声", "native_sfx", "sfx", "action_sfx", "动作声"}:
+        source = _mapping(row.get("sound_source") or row.get("speaker_source") or row.get("声源归属"))
+        if not (
+            source.get("source")
+            or source.get("source_id")
+            or source.get("asset")
+            or source.get("loc_id")
+            or row.get("source")
+        ):
+            errors.append(f"{clip_id} {intent} 缺 sound_source.source/source_id")
+        if not (
+            source.get("visible_evidence")
+            or source.get("visible_action_evidence")
+            or row.get("visible_evidence")
+            or row.get("visible_action_evidence")
+            or row.get("action_sounds")
+        ):
+            errors.append(f"{clip_id} {intent} 缺 visible_evidence/visible_action_evidence")
+        if not any(token in compose_policy for token in ("低音量", "混入", "保留")) and not any(token in compose_policy.lower() for token in ("mix", "keep", "preserve")):
+            errors.append(f"{clip_id} {intent} compose_policy 必须说明低音量混入或保留策略")
+
+    if intent in {"native_speech", "speech", "dialogue", "对白", "台词"}:
+        speaker = _mapping(row.get("speaker_source") or row.get("sound_source") or row.get("声源归属"))
+        if not (speaker.get("character_id") or speaker.get("speaker_id") or speaker.get("subject_id") or speaker.get("voice_id")):
+            errors.append(f"{clip_id} native_speech 缺 speaker_source.character_id/speaker_id")
+        if not _truthy(speaker.get("on_screen") or speaker.get("visible") or speaker.get("画内")):
+            errors.append(f"{clip_id} native_speech 声源未声明画内可见")
+        mouth_visible = speaker.get("mouth_visible")
+        if mouth_visible is None:
+            mouth_visible = row.get("mouth_visible")
+        if not _truthy(mouth_visible):
+            errors.append(f"{clip_id} native_speech 缺 mouth_visible=true")
+        if not (speaker.get("dialogue_ref") or speaker.get("dialogue_text") or speaker.get("text") or row.get("dialogue_ref")):
+            errors.append(f"{clip_id} native_speech 缺 dialogue_ref/dialogue_text")
+        lipsync = _mapping(row.get("lip_sync") or row.get("口型策略"))
+        if not (lipsync.get("policy") or lipsync.get("expected") or lipsync.get("target")):
+            errors.append(f"{clip_id} native_speech 缺 lip_sync.policy")
+        if "保留" not in compose_policy and "keep" not in compose_policy.lower() and "preserve" not in compose_policy.lower():
+            errors.append(f"{clip_id} native_speech compose_policy 必须保留原片音轨")
+
+    action_sounds = row.get("action_sounds") or row.get("动作声") or []
+    if intent in {"native_sfx", "sfx", "action_sfx", "动作声"} and not isinstance(action_sounds, list):
+        errors.append(f"{clip_id} native_sfx action_sounds 必须是数组")
+    if intent in {"native_sfx", "sfx", "action_sfx", "动作声"} and isinstance(action_sounds, list) and not action_sounds:
+        errors.append(f"{clip_id} native_sfx action_sounds 不得为空")
+    if isinstance(action_sounds, list):
+        for j, item in enumerate(action_sounds, start=1):
+            if not isinstance(item, Mapping):
+                errors.append(f"{clip_id} action_sounds[{j}] 不是对象")
+                continue
+            if not (item.get("action") or item.get("sound")):
+                errors.append(f"{clip_id} action_sounds[{j}] 缺 action/sound")
+            if not item.get("visible_evidence"):
+                errors.append(f"{clip_id} action_sounds[{j}] 缺 visible_evidence")
+            if not (item.get("timing") or item.get("time") or item.get("at")):
+                errors.append(f"{clip_id} action_sounds[{j}] 缺 timing")
+    return errors
+
+
+def check_native_av_physics_sidecar(root: str, ep: str, required: Optional[bool] = None) -> None:
+    if required is None:
+        required = native_av_physics_required(root, ep)
+    if not required:
+        return
+    path = native_av_physics_sidecar_path(root, ep)
+    data = load_json(path)
+    if not isinstance(data, dict):
+        add(
+            BLOCK,
+            "原生音画物理一致性",
+            path,
+            "缺机器可读 sidecar：生产数据/native_av_physics_第N集.json；必须逐 Clip 写谁发声、动作声可见证据、空间混响/距离和后期保留策略，不能只靠总览人判。",
+            return_to_stage="video",
+        )
+        return
+    if data.get("kind") != NATIVE_AV_PHYSICS_KIND:
+        add(BLOCK, "原生音画物理一致性", path, f"native_av_physics sidecar kind 应为 {NATIVE_AV_PHYSICS_KIND}")
+    clips = data.get("clips")
+    if not isinstance(clips, list) or not clips:
+        add(BLOCK, "原生音画物理一致性", path, "native_av_physics sidecar 缺 clips[]；无法逐镜校验声源/动作声/空间声学。")
+        return
+    for idx, row in enumerate(clips, start=1):
+        if not isinstance(row, Mapping):
+            add(BLOCK, "原生音画物理一致性", path, f"clips[{idx}] 不是对象")
+            continue
+        for err in _native_av_physics_clip_errors(row, idx):
+            add(BLOCK, "原生音画物理一致性", path, err, return_to_stage="video")
 
 
 def check_markdown_style_contract(text: str, loc: str, layer: str) -> None:
@@ -3823,6 +4773,7 @@ def check_video_prompt_overview(root: str, ep: str) -> None:
     check_video_closeup_identity_overview(text, p)
     check_native_audio_opt_in_overview(root, ep, text, p)
     check_native_av_physical_contract(root, ep, text, p)
+    check_native_av_physics_sidecar(root, ep, native_av_physics_required(root, ep, text))
 
 
 def check_video_closeup_identity_overview(overview_text: str, overview_path: str) -> None:
@@ -4161,6 +5112,35 @@ def check_model_route_baseline_policy(root: str, ep: str, data: Mapping[str, obj
         )
 
 
+def check_route_execution_recipe(route: Mapping[str, Any], routes_path: str, idx: int) -> None:
+    clip_id = str(route.get("clip_id") or f"routes[{idx}]")
+    recipe = route.get("execution_recipe")
+    if not isinstance(recipe, Mapping):
+        add(
+            BLOCK,
+            "执行配方",
+            routes_path,
+            f"{clip_id} 缺 execution_recipe；请重跑 n2d-model-router，让逐 Clip 路由输出可执行输入配方。",
+            return_to_stage="video_prompt",
+        )
+        return
+    required_sections = ("frame_inputs", "reference_inputs", "control_inputs", "audio_inputs", "fallback", "capability_match")
+    for section in required_sections:
+        if not isinstance(recipe.get(section), Mapping):
+            add(BLOCK, "执行配方", routes_path, f"{clip_id} execution_recipe 缺结构块：{section}", return_to_stage="video_prompt")
+    frame = recipe.get("frame_inputs") if isinstance(recipe.get("frame_inputs"), Mapping) else {}
+    refs = recipe.get("reference_inputs") if isinstance(recipe.get("reference_inputs"), Mapping) else {}
+    controls = recipe.get("control_inputs") if isinstance(recipe.get("control_inputs"), Mapping) else {}
+    for key in ("first_frame", "consumption_mode", "native_timeline_frames"):
+        if key not in frame or frame.get(key) in (None, ""):
+            add(BLOCK, "执行配方", routes_path, f"{clip_id} execution_recipe.frame_inputs 缺字段：{key}", return_to_stage="video_prompt")
+    for key in ("characters", "assets", "max_reference_images", "motion_reference"):
+        if key not in refs:
+            add(BLOCK, "执行配方", routes_path, f"{clip_id} execution_recipe.reference_inputs 缺字段：{key}", return_to_stage="video_prompt")
+    if controls.get("required") is True and not controls.get("manifest_path"):
+        add(BLOCK, "执行配方", routes_path, f"{clip_id} 需要 Motion Control 但 execution_recipe.control_inputs 缺 manifest_path", return_to_stage="video_prompt")
+
+
 def check_video_model_routes(root: str, ep: str, overview_text: str, overview_path: str) -> None:
     if "本集模型路由表" not in overview_text:
         add(BLOCK, "模型路由", overview_path, "缺「本集模型路由表」；出视频必须先跑 n2d-model-router，不能固定一个视频模型或临场乱选后端")
@@ -4253,7 +5233,9 @@ def check_video_model_routes(root: str, ep: str, overview_text: str, overview_pa
                 ],
             )
         check_route_frame_capability(root, ep, route, p, idx, frame_requirements, video_channel)
+        check_route_execution_recipe(route, p, idx)
         check_motion_control_route(root, ep, route, p, idx)
+        check_action_choreography_route(route, p, idx)
         # ③ 一角一后端亲和：router 已尽力把核心角色硬钉到原生主体后端；剩余冲突多为同镜多个锁脸后端
         # 无法同时满足，需要拆镜/分区，核心冲突 BLOCK，非核心冲突 WARN。
         conflicts = route.get("character_backend_conflicts")
@@ -4449,9 +5431,10 @@ def check_motion_control_manifest(root: str, path: str, route: Dict[str, object]
     for key in required_inputs:
         if key not in inputs or not _input_ready(root, inputs.get(key)):
             add(BLOCK, "Motion Control", loc, f"ready manifest 缺可用控制输入或本地资产：control_inputs.{key}")
-    for key in MOTION_CONTROL_CONTACT_FIELDS:
-        if _field_is_missing(data, key):
-            add(BLOCK, "Motion Control", loc, f"高危物理接触 manifest 缺字段：{key}")
+    if _route_requires_contact_fields(route):
+        for key in MOTION_CONTROL_CONTACT_FIELDS:
+            if _field_is_missing(data, key):
+                add(BLOCK, "Motion Control", loc, f"高危物理接触 manifest 缺字段：{key}")
     if _field_is_missing(data, "failure_modes"):
         add(WARN, "Motion Control", loc, "建议写 failure_modes：feature_melting / limb_fusion / body_interpenetration 等，方便审片回流")
 
@@ -4470,10 +5453,10 @@ def check_motion_control_route(root: str, ep: str, route: Dict[str, object], rou
     if not requires_control:
         return
     if motion.get("level") != "required" or motion.get("required") is not True or motion.get("manifest_required") is not True:
-        add(BLOCK, "Motion Control", loc, "高危物理接触镜头必须 motion_control.level=required 且 manifest_required=true")
+        add(BLOCK, "Motion Control", loc, "高危动作/物理镜头必须 motion_control.level=required 且 manifest_required=true")
     manifest_path = str(motion.get("manifest_path") or "").strip()
     if not manifest_path:
-        add(BLOCK, "Motion Control", loc, "高危物理接触镜头缺 motion_control.manifest_path")
+        add(BLOCK, "Motion Control", loc, "高危动作/物理镜头缺 motion_control.manifest_path")
         return
     abs_manifest = _resolve_under_root(root, manifest_path)
     if not os.path.isfile(abs_manifest):
@@ -4481,6 +5464,30 @@ def check_motion_control_route(root: str, ep: str, route: Dict[str, object], rou
         return
     required_inputs = motion.get("required_inputs") if isinstance(motion.get("required_inputs"), list) else []
     check_motion_control_manifest(root, abs_manifest, route, [str(item) for item in required_inputs])
+
+
+def check_action_choreography_route(route: Dict[str, object], routes_path: str, idx: int) -> None:
+    shot_type = str(route.get("shot_type") or "").strip()
+    if shot_type not in ACTION_CHOREOGRAPHY_SHOT_TYPES:
+        return
+    loc = f"{routes_path} {route.get('clip_id', f'routes[{idx}]')}"
+    choreography = route.get("action_choreography")
+    if not isinstance(choreography, dict):
+        add(BLOCK, "动作编排", loc, "高动作镜头缺 action_choreography 对象；重跑 n2d-model-router 生成动作编排契约")
+        return
+    if choreography.get("required") is not True:
+        add(BLOCK, "动作编排", loc, "高动作镜头 action_choreography.required 必须为 true")
+    for key in ("required_fields", "failure_modes", "gate_policy", "degrade_plan"):
+        if key == "degrade_plan":
+            if _field_is_missing(route, "degrade_plan") and _field_is_missing(choreography, "degrade_plan"):
+                add(BLOCK, "动作编排", loc, "动作编排缺 degrade_plan；失败后必须有拆镜/降级路径")
+            continue
+        if _field_is_missing(choreography, key):
+            add(BLOCK, "动作编排", loc, f"action_choreography 缺字段：{key}")
+    declared = set(str(x) for x in choreography.get("required_fields", []) if str(x).strip()) if isinstance(choreography.get("required_fields"), list) else set()
+    missing = [field for field in _action_choreography_required_fields(shot_type) if field not in declared]
+    if missing:
+        add(BLOCK, "动作编排", loc, "action_choreography.required_fields 缺字段：" + ", ".join(missing))
 
 
 def check_image_prompt_overview(root: str, ep: str) -> None:
@@ -4581,9 +5588,26 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
             )
     if "模型路由约束" not in section:
         add(BLOCK, "模型路由", loc, "中文视频 prompt 缺模型路由约束；必须说明按 primary_backend 写平台参数，失败才切 fallback/degrade_plan")
+    shot_type = _section_shot_type(section, route)
+    if shot_type in ACTION_CHOREOGRAPHY_SHOT_TYPES:
+        if not (_has_field(section, "动作编排契约") or _has_field(section, "Action Choreography")):
+            add(
+                BLOCK,
+                "动作编排",
+                loc,
+                "打斗/追逐/飞行等高动作镜头缺「动作编排契约」；必须写 beats、speed_curve、spatial_path、camera_path、readability_beats 及该镜专属字段，不能只写“精彩打斗/高速飞行”。",
+            )
+        else:
+            missing = _missing_contract_fields(section, _action_choreography_required_fields(shot_type))
+            if missing:
+                add(BLOCK, "动作编排", loc, "动作编排契约缺字段：" + ", ".join(missing))
+        if "动作编排约束" not in section:
+            add(BLOCK, "动作编排", loc, "中文视频 prompt 缺动作编排约束；必须说明速度曲线、空间路径、镜头路径、可读性节拍和失败降级。")
+        if not _has_any(section, ("动作编排", "Action Choreography", "readability_beats")):
+            add(BLOCK, "动作编排", loc, "生成后自检必须包含动作编排/可读性检查项，确认动作方向、速度曲线、空间路径和命中/距离/高度落点。")
     if _section_requires_motion_control(section):
         if not (_has_field(section, "Motion Control") or _has_field(section, "物理交互控制")):
-            add(BLOCK, "Motion Control", loc, "高危物理接触镜头缺 Motion Control / 物理交互控制字段；必须继承 route.motion_control 和 manifest_path")
+            add(BLOCK, "Motion Control", loc, "高危动作/物理镜头缺 Motion Control / 物理交互控制字段；必须继承 route.motion_control 和 manifest_path")
         else:
             for key in ("level", "manifest_path", "required_inputs", "failure_modes"):
                 if key not in section:
@@ -5561,7 +6585,7 @@ def check_shared_image_index(root: str, ep: str) -> None:
 
 
 _FINALIZE_CHAR_RE = re.compile(r"CHAR_[A-Za-z0-9_]+(?:/[^\s`，；、*]+)?")
-_FINALIZE_ASSET_RE = re.compile(r"(?:LOC|PROP|OUTFIT|VFX)_[A-Za-z0-9_]+")
+_FINALIZE_ASSET_RE = re.compile(r"(?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_]+")
 
 
 def _finalize_evidence(root: str) -> Tuple[set, set, set]:
@@ -6270,6 +7294,8 @@ def check_native_audio_compose_policy(root: str, ep: str, audio_hits: List[str])
                 "原生音画：未显式设 视频原生音轨，compose 将自动「保留原片音轨」以免丢失原生台词（确需丢弃设 VIDEO_NATIVE_AUDIO_POLICY_EXPLICIT=1）")
         if overview_text:
             check_native_audio_opt_in_overview(root, ep, overview_text, overview)
+            check_native_av_physical_contract(root, ep, overview_text, overview)
+            check_native_av_physics_sidecar(root, ep, native_av_physics_required(root, ep, overview_text))
         else:
             add(WARN, "原生音画", overview, "缺出视频总览；建议声明 native_speech 路由（台词+口型由后端原生生成）")
         scope = voice_track_scope(root, ep)
@@ -6294,6 +7320,8 @@ def check_native_audio_compose_policy(root: str, ep: str, audio_hits: List[str])
         add(BLOCK, "原生音画", overview, f"`视频原生音轨={policy}` 且 clip 含音频流，但缺出视频总览；无法核验 opt-in 清单")
     else:
         check_native_audio_opt_in_overview(root, ep, overview_text, overview)
+        check_native_av_physical_contract(root, ep, overview_text, overview)
+        check_native_av_physics_sidecar(root, ep, native_av_physics_required(root, ep, overview_text))
 
     if mode == NATIVE_AUDIO_KEEP and voice_track_exists(root, ep):
         add(BLOCK, "原生音画", os.path.join(root, "合成", ep, "配音"), "`视频原生音轨=保留原片音轨` 且存在 n2d-voice 配音轨；正式合成会双人声，改为「低音量混入环境声」或「丢弃」")
@@ -6475,8 +7503,118 @@ def check_subtitle_alignment(root: str, ep: str) -> None:
     )
 
 
-STRICT_ADVISORY_DIMENSIONS = {"轴线视线(X1)", "音画同步(AV1)", "节奏密度", "节奏密度(Rhythm)"}
+TRANSLATION_GLOSSARY_CATEGORIES = ("人名", "称谓", "境界", "招式", "口头禅", "系统提示语")
+TRANSLATION_CATEGORY_ALIASES = {
+    "人名": ("人名", "角色", "character", "name"),
+    "称谓": ("称谓", "尊称", "honorific", "address"),
+    "境界": ("境界", "等级", "realm", "rank"),
+    "招式": ("招式", "功法", "技能", "spell", "move"),
+    "口头禅": ("口头禅", "语域", "catchphrase"),
+    "系统提示语": ("系统提示语", "系统", "system_prompt", "system"),
+}
+
+
+def translation_glossary_path(root: str) -> str:
+    return os.path.join(root, "设定库", "translation_glossary.json")
+
+
+def _translation_glossary_terms(data: object) -> List[Mapping[str, Any]]:
+    if isinstance(data, dict):
+        raw = data.get("terms")
+        if isinstance(raw, list):
+            return [x for x in raw if isinstance(x, Mapping)]
+        rows: List[Mapping[str, Any]] = []
+        for cn, en in data.items():
+            if cn in {"kind", "version", "coverage", "notes"}:
+                continue
+            if isinstance(en, str) and en.strip():
+                rows.append({"cn": cn, "en": en})
+        return rows
+    return []
+
+
+def _translation_term_has_pair(term: Mapping[str, Any]) -> bool:
+    source = term.get("cn") or term.get("zh") or term.get("source") or term.get("term") or term.get("name")
+    target = term.get("en") or term.get("target") or term.get("canonical") or term.get("translation")
+    return bool(str(source or "").strip() and str(target or "").strip())
+
+
+def _translation_category_covered(data: Mapping[str, Any], terms: Sequence[Mapping[str, Any]], category: str) -> bool:
+    coverage = data.get("coverage") if isinstance(data.get("coverage"), Mapping) else {}
+    for alias in TRANSLATION_CATEGORY_ALIASES[category]:
+        value = coverage.get(alias) if isinstance(coverage, Mapping) else None
+        if value in (True, "ready", "done", "not_applicable", "none", "无", "不适用"):
+            return True
+    for term in terms:
+        blob = json.dumps(term, ensure_ascii=False).lower()
+        if any(alias.lower() in blob for alias in TRANSLATION_CATEGORY_ALIASES[category]):
+            return True
+    return False
+
+
+def check_translation_glossary_release_gate(root: str, ep: str, stage: str) -> None:
+    if stage not in {"compose", "review"}:
+        return
+    required = _project_has_english_subtitles(root, ep) or _project_has_overseas_release_target(root)
+    if not required:
+        return
+    path = translation_glossary_path(root)
+    data = load_json(path)
+    if not isinstance(data, dict):
+        add(
+            BLOCK,
+            "译名发布闸门",
+            path,
+            "海外/英文字幕发布前缺 translation_glossary.json；必须锁人名、称谓、境界、招式、口头禅、系统提示语的 canonical 译名，"
+            "并让字幕生成与 OCR/字幕检查同用这份 glossary。",
+            return_to_stage="script_stage2",
+        )
+        return
+    terms = _translation_glossary_terms(data)
+    if not terms or not all(_translation_term_has_pair(term) for term in terms):
+        add(
+            BLOCK,
+            "译名发布闸门",
+            path,
+            "translation_glossary.json 必须包含非空 terms[]，且每条至少有 cn/source 与 en/canonical；不能只写空壳或说明文字。",
+            return_to_stage="script_stage2",
+        )
+        return
+    missing_categories = [cat for cat in TRANSLATION_GLOSSARY_CATEGORIES if not _translation_category_covered(data, terms, cat)]
+    if missing_categories:
+        add(
+            BLOCK,
+            "译名发布闸门",
+            path,
+            "translation_glossary.json 缺覆盖类目：" + "、".join(missing_categories) +
+            "；无该类内容也要在 coverage 标 not_applicable，避免海外字幕/称谓/招式名临场多译。",
+            return_to_stage="script_stage2",
+        )
+
+
+STRICT_ADVISORY_DIMENSIONS = {
+    "轴线视线(X1)",
+    "音画同步(AV1)",
+    "节奏密度",
+    "节奏密度(Rhythm)",
+    "持有账本(POS)",
+    "生成配方(RCP)",
+    "强配方Schema(RCP2)",
+    "场景平面(FP1)",
+    "人审校准集(CAL)",
+    "译名一致(TX1)",
+    "表情连续(EXP1)",
+    "音乐母题(LM1)",
+    "环境声(AMB)",
+    "运动质量(MOT1)",
+    "相机空间轨迹(CAM1)",
+    "主体视频一致(S2V)",
+    "高动态成片证据(SPECV)",
+}
 KEY_SCENE_MARKERS = ("关键", "钩子", "封面", "反转", "高潮", "爆点", "key", "hook", "climax")
+# 口型在「带对白的近景/特写」上最容易被观众抓——AV1 的对白近景 WARN 即便不重复/非关键/非交付边界，
+# production 下也升 BLOCK（口型对不上的脸部大特写是硬伤）。
+CLOSEUP_MARKERS = ("近景", "特写", "大特写", "脸部", "面部", "反打", "过肩", "cu", "mcu", "ecu", "close-up", "closeup")
 
 
 def _consistency_signoff_path(root: str, ep: str) -> str:
@@ -6486,6 +7624,12 @@ def _consistency_signoff_path(root: str, ep: str) -> str:
 def _row_is_key_scene(row: Mapping[str, Any]) -> bool:
     text = json.dumps(row, ensure_ascii=False).lower()
     return any(marker.lower() in text for marker in KEY_SCENE_MARKERS)
+
+
+def _row_is_dialogue_closeup(row: Mapping[str, Any]) -> bool:
+    """AV1 口型 finding 是否落在带对白的近景/特写（口型穿帮最刺眼处）。"""
+    text = json.dumps(row, ensure_ascii=False).lower()
+    return any(marker in text for marker in CLOSEUP_MARKERS)
 
 
 def _consistency_finding_hash(row: Mapping[str, Any]) -> str:
@@ -6552,11 +7696,14 @@ def _strict_advisory_should_block(root: str, ep: str, stage: str, row: Mapping[s
     repeated = int(stat.get("warn") or 0) >= 2
     key_scene = _row_is_key_scene(row)
     deliverable = stage in {"compose", "review"}
-    if not (repeated or key_scene or deliverable):
+    # AV1 专属：带对白的近景/特写口型偏移即便孤例也升 block（口型对不上的大特写是观众第一眼硬伤）。
+    dialogue_closeup = dim == "音画同步(AV1)" and _row_is_dialogue_closeup(row)
+    if not (repeated or key_scene or deliverable or dialogue_closeup):
         return False, ""
     if _advisory_row_signed_off(root, ep, row):
         return False, "已由 consistency_advisory_signoff 签收"
-    reason = "重复同维度" if repeated else ("关键场景" if key_scene else "交付边界")
+    reason = ("对白近景口型" if dialogue_closeup else "重复同维度" if repeated
+              else "关键场景" if key_scene else "交付边界")
     return True, reason
 
 
@@ -6607,14 +7754,18 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
     precision = str(summary.get("precision_level") or "full")
     if precision != "full":
         # compose/review 都是交付边界：降级精度=脸/像素一致性其实没机检过——不给绿灯，除非显式放行并留痕。
+        # image 出图后：demo 仍只 WARN（不硬拦无 insightface 产线，守"不强制装依赖"原则）；但 production
+        # profile 已显式选择严格 QC，则把降级精度也升为 BLOCK——把脸漂挡在最贵的出视频之前，而不是拖到 compose。
         allow_degraded = os.environ.get("N2D_ALLOW_DEGRADED_QC") == "1"
-        if stage in {"compose", "review"} and not allow_degraded:
+        strict_stage = stage in {"compose", "review"} or (stage == "image" and profile == "production")
+        if strict_stage and not allow_degraded:
+            boundary = "交付边界" if stage in {"compose", "review"} else "production 出图后闸门"
             add(
                 BLOCK,
                 "一致性总审",
                 loc,
                 f"一致性审计精度为 {precision}（insightface 等不可用，脸/像素一致性未真正验证）；"
-                "交付边界不放行——请在 full 环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 放行并自负其责。",
+                f"{boundary}不放行——请在 full 环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 放行并自负其责。",
                 return_to_stage="review",
             )
         else:
@@ -6710,8 +7861,10 @@ def run(root: str, ep: str, stage: str) -> None:
         check_drift_report_freshness(root, ep)  # measured-drift BLOCK 环的报告新鲜度闸（堵静默退化）
         check_cross_episode_character_definition(root, ep)
         check_storyboard_contract(root, ep, require_frame_assets=False)
+        check_storyboard_possession_gate(root, ep)
         check_storyboard_visual_contract(root, ep)
         check_storyboard_style_contract(root, ep)
+        check_stylized_face_encoder_policy(root, ep, stage)
         check_storyboard_special_templates(root, ep)
     elif check_stage == "image":
         check_compliance_manifest(root, ep, check_stage)
@@ -6735,11 +7888,13 @@ def run(root: str, ep: str, stage: str) -> None:
         check_cross_episode_character_definition(root, ep)  # 跨集角色文字定义漂移（重派生）信号
         if stage == "image_preflight":
             check_reference_plan_applied(root, ep)  # 逐镜参考规划落实对账（advisory·治跨集脸漂）
-            check_long_running_weak_backend(root, ep)  # 长线剧×弱后端→建议升原生主体/主体库（advisory·治跨集脸漂累积）
+            check_long_running_weak_backend(root, ep)  # 长线剧×弱后端→核心/常驻角色必须升原生主体/主体库或身份锁
+            check_stylized_face_encoder_policy(root, ep, stage)
         check_identity_registry(root, require_reference_assets=False)
         check_costume_registry_reconcile(root)
         check_asset_reference_registry(root, require_reference_assets=False)
         check_storyboard_contract(root, ep, require_frame_assets=False)
+        check_storyboard_possession_gate(root, ep)
         check_storyboard_visual_contract(root, ep)
         check_storyboard_style_contract(root, ep)
         check_cross_episode_style(root, ep)
@@ -6756,6 +7911,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_expression_anchors(root, ep)
         check_character_backend_pin(root, ep)
         check_seed_event_records(root, ep)
+        check_generation_recipe_evidence(root, ep, stage)
         check_common_image_prompts(root)
         check_cinematic_optical_continuity(root, ep)
         check_shot_scale_progression(root, ep)
@@ -6791,6 +7947,8 @@ def run(root: str, ep: str, stage: str) -> None:
         check_storyboard_contract(root, ep, require_frame_assets=True)
         check_storyboard_style_contract(root, ep)
         check_storyboard_special_templates(root, ep)
+        check_spectacle_sequence_plan(root, ep)
+        check_action_beat_budget(root, ep, check_stage)
         check_expression_span_frame_contract(root, ep)
         check_image_assets(root, ep)
         check_input_frame_qc(root, ep)
@@ -6815,6 +7973,8 @@ def run(root: str, ep: str, stage: str) -> None:
         check_storyboard_contract(root, ep, require_frame_assets=True)
         check_storyboard_style_contract(root, ep)
         check_storyboard_special_templates(root, ep)
+        check_spectacle_sequence_plan(root, ep)
+        check_action_beat_budget(root, ep, check_stage)
         check_expression_span_frame_contract(root, ep)
         check_image_assets(root, ep)
         check_input_frame_qc(root, ep)
@@ -6822,6 +7982,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_multimodal_continuity(root, ep)
         check_prompt_checklists(root, ep, "video")
         check_video_stage_raw_output_policy(root, ep)
+        check_generation_recipe_evidence(root, ep, stage)
         check_contract_inheritance(root, ep)
         check_cross_episode_contract(root, ep)
         check_identity_handoff_inheritance(root, ep)
@@ -6853,6 +8014,9 @@ def run(root: str, ep: str, stage: str) -> None:
         if sb:
             check_voice_conditioned_lipsync_policy(root, ep, sb)
         check_compose_inputs(root, ep)
+        check_stylized_face_encoder_policy(root, ep, stage)
+        check_translation_glossary_release_gate(root, ep, stage)
+        check_generation_recipe_evidence(root, ep, stage)
         check_consistency_audit_gate(root, ep, stage="compose")
     elif check_stage == "review":
         check_compliance_manifest(root, ep, check_stage)
@@ -6867,6 +8031,9 @@ def run(root: str, ep: str, stage: str) -> None:
         check_state_continuity(root, ep)
         check_multimodal_continuity(root, ep)
         check_subtitle_alignment(root, ep)
+        check_stylized_face_encoder_policy(root, ep, stage)
+        check_translation_glossary_release_gate(root, ep, stage)
+        check_generation_recipe_evidence(root, ep, stage)
         check_cross_episode_contract(root, ep)
         check_cross_episode_character_definition(root, ep)
         check_identity_handoff_inheritance(root, ep)

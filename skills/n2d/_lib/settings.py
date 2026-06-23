@@ -32,7 +32,7 @@ except Exception:  # pragma: no cover - keep generic settings usable outside n2d
 
 DEFAULTS = {
     "制作模式": _PRODUCTION_MODE_DEFAULT,
-    "基础视觉风格": "国漫写实角色审美 + 电影级布光与镜头语言",
+    "基础视觉风格": "真实3D人物质感 + 电影叙事镜头感",
     "拆集节奏": "前长后短",
     "生图AI": "Codex",
     "生视频模型": "Seedance 2.0",
@@ -143,7 +143,7 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("题材", ("n2d",), ("系统流", "穿越", "修仙", "都市", "宫斗", "赘婿", "战神", "自定义"), parameterized=True),
     # 母题增强：是否对检测到的复现母题桥段套用增强模板（默认建议待确认，注入下游前人确认）。
     SettingSpec("母题增强", ("n2d",), ("开启", "关闭", "仅建议")),
-    SettingSpec("基础视觉风格", ("n2d",), ("国漫写实角色审美 + 电影级布光与镜头语言", "写实电影感", "国漫写实", "二次元赛璐璐", "二次元", "水墨国风", "厚涂幻想", "赛博霓虹", "Q版轻喜", "CG质感", "定格动画", "国风写意", "自定义"), parameterized=True),
+    SettingSpec("基础视觉风格", ("n2d",), ("真实3D人物质感 + 电影叙事镜头感", "写实电影感", "国漫写实角色审美 + 电影级布光与镜头语言", "国漫写实", "二次元赛璐璐", "二次元", "水墨国风", "厚涂幻想", "赛博霓虹", "Q版轻喜", "CG质感", "定格动画", "国风写意", "自定义"), parameterized=True),
     SettingSpec("拆集节奏", ("n2d",), ("前长后短", "均衡", "快节奏", "长集", "自定义"),
                 key_aliases=("单集时长", "单集节奏偏好"), parameterized=True, syncable=False),
     # 变现模式：拆集结构的商业轴（软默认/高级覆盖，不列首跑必问）。免费(红果/番茄·完播率导向·

@@ -38,6 +38,9 @@ FIELD_ALIASES = {
     "comment": ("comment", "comments", "评论", "text", "正文"),
     "sentiment": ("sentiment", "情绪", "polarity"),
     "timestamp": ("timestamp", "time", "created_at", "时间"),
+    "ab_test_id": ("ab_test_id", "experiment_id", "实验ID", "AB测试", "ab"),
+    "variant_id": ("variant_id", "variant", "版本", "组别", "bucket"),
+    "take_id": ("take_id", "take", "稿件版本", "素材版本", "revision_id"),
 }
 
 EVENT_ALIASES = {
@@ -154,7 +157,7 @@ def normalize_rows(rows, *, input_path, source_name, platform):
             "event": event,
             "count": count,
         }
-        for key in ("reader_id", "timestamp"):
+        for key in ("reader_id", "timestamp", "ab_test_id", "variant_id", "take_id"):
             value = _lookup(row, key)
             if value not in (None, ""):
                 rec[key] = str(value)
@@ -294,8 +297,97 @@ def aggregate(records, *, min_sample=20, low_completion=0.55, high_drop=0.35):
     return chapters
 
 
+def aggregate_experiments(records, *, min_sample=20):
+    groups = {}
+    for rec in records:
+        ab_test_id = str(rec.get("ab_test_id") or "").strip()
+        variant_id = str(rec.get("variant_id") or "").strip()
+        if not ab_test_id or not variant_id:
+            continue
+        key = (ab_test_id, variant_id)
+        row = groups.setdefault(key, {
+            "ab_test_id": ab_test_id,
+            "variant_id": variant_id,
+            "take_ids": set(),
+            "chapters": set(),
+            "views": 0,
+            "starts": 0,
+            "completes": 0,
+            "drops": 0,
+            "likes": 0,
+            "follows": 0,
+            "comments": 0,
+        })
+        if rec.get("take_id"):
+            row["take_ids"].add(str(rec.get("take_id")))
+        if isinstance(rec.get("chapter"), int):
+            row["chapters"].add(rec["chapter"])
+        for field in ("views", "starts", "completes", "drops", "likes", "follows"):
+            row[field] += int(rec.get(field) or 0)
+        event = rec.get("event")
+        count = int(rec.get("count") or 1)
+        if event in {"view", "start", "complete", "drop", "like", "follow"}:
+            field = {
+                "view": "views",
+                "start": "starts",
+                "complete": "completes",
+                "drop": "drops",
+                "like": "likes",
+                "follow": "follows",
+            }[event]
+            if not rec.get(field):
+                row[field] += count
+        if rec.get("comment"):
+            row["comments"] += 1
+
+    out = []
+    for row in groups.values():
+        starts = row["starts"] or row["views"]
+        completion_rate = row["completes"] / starts if starts else None
+        drop_rate = row["drops"] / starts if starts else None
+        flags = []
+        if starts and starts < min_sample:
+            flags.append("low_sample")
+        out.append({
+            "ab_test_id": row["ab_test_id"],
+            "variant_id": row["variant_id"],
+            "take_ids": sorted(row["take_ids"]),
+            "chapters": sorted(row["chapters"]),
+            "views": row["views"],
+            "starts": row["starts"],
+            "completes": row["completes"],
+            "drops": row["drops"],
+            "likes": row["likes"],
+            "follows": row["follows"],
+            "comments": row["comments"],
+            "completion_rate": round(completion_rate, 4) if completion_rate is not None else None,
+            "drop_rate": round(drop_rate, 4) if drop_rate is not None else None,
+            "flags": flags,
+        })
+    out.sort(key=lambda item: (item["ab_test_id"], item["variant_id"]))
+    winners = []
+    for ab_id in sorted({item["ab_test_id"] for item in out}):
+        candidates = [item for item in out if item["ab_test_id"] == ab_id]
+        candidates.sort(key=lambda item: (
+            item["completion_rate"] if item["completion_rate"] is not None else -1.0,
+            -(item["drop_rate"] if item["drop_rate"] is not None else 1.0),
+            item["variant_id"],
+        ), reverse=True)
+        if candidates:
+            winners.append({
+                "ab_test_id": ab_id,
+                "variant_id": candidates[0]["variant_id"],
+                "completion_rate": candidates[0]["completion_rate"],
+                "drop_rate": candidates[0]["drop_rate"],
+                "take_ids": candidates[0]["take_ids"],
+                "caveat": "low_sample" if "low_sample" in candidates[0]["flags"] else "",
+            })
+    return {"groups": out, "best_by_ab_test": winners}
+
+
 def build_summary(records, *, platform, source_name, min_sample, low_completion, high_drop):
     chapters = aggregate(records, min_sample=min_sample, low_completion=low_completion, high_drop=high_drop)
+    experiments = aggregate_experiments(records, min_sample=min_sample)
     total_starts = sum((c["starts"] or c["views"]) for c in chapters)
     total_completes = sum(c["completes"] for c in chapters)
     total_drops = sum(c["drops"] for c in chapters)
@@ -333,6 +425,7 @@ def build_summary(records, *, platform, source_name, min_sample, low_completion,
         },
         "weakest_chapters": [c["chapter"] for c in priority[:8]],
         "chapters": chapters,
+        "experiments": experiments,
     }
 
 
@@ -362,6 +455,15 @@ def write_artifacts(root, records, summary):
                 f.write(
                     f"- 第{ch:02d}章：完读 {item['completion_rate']} / 弃读 {item['drop_rate']} / "
                     f"评论 {item['comment_count']} / flags={','.join(item['flags'])}\n"
+                )
+        if summary.get("experiments", {}).get("groups"):
+            f.write("\n## A/B 与版本归因\n\n")
+            f.write("| experiment | variant | take_ids | 开读 | 完读率 | 弃读率 | flags |\n")
+            f.write("|---|---|---|---:|---:|---:|---|\n")
+            for item in summary["experiments"]["groups"]:
+                f.write(
+                    f"| {item['ab_test_id']} | {item['variant_id']} | {', '.join(item['take_ids'])} | "
+                    f"{item['starts']} | {item['completion_rate']} | {item['drop_rate']} | {', '.join(item['flags'])} |\n"
                 )
         f.write("\n## 章节明细\n\n")
         f.write("| 章节 | 开读 | 完读 | 弃读 | 完读率 | 弃读率 | 负评 | flags |\n")

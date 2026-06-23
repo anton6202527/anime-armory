@@ -26,6 +26,7 @@ if _COMMON not in sys.path:
 from n2d_contract import (  # noqa: E402  身份注册单一真值源
     ASSET_REFERENCE_REGISTRY_KIND,
     ASSET_PACK_KIND,
+    COMBAT_REGISTRY_KIND,
     IDENTITY_ADAPTER_READY_STATUSES,
     IDENTITY_FORK_HISTORY_ENTRY_FIELDS,
     IDENTITY_FORK_HISTORY_FIELD,
@@ -56,6 +57,14 @@ ASSET_ID_PREFIX = {
     "scene": "LOC_",
     "location": "LOC_",
     "prop": "PROP_",
+    "weapon": "WEAPON_",
+    "magic_weapon": "WEAPON_",
+    "equipment": "WEAPON_",
+    "armory": "WEAPON_",
+    "outfit": "OUTFIT_",
+    "costume": "OUTFIT_",
+    "vfx": "VFX_",
+    "effect": "VFX_",
 }
 ROLE_SUFFIX = {
     "front": "",
@@ -237,10 +246,18 @@ def pack_dir(library: Path, asset_type: str, slug: str) -> Path:
         return library / "scenes" / slug
     if asset_type == "prop":
         return library / "props" / slug
+    if asset_type == "weapon":
+        return library / "weapons" / slug
+    if asset_type == "outfit":
+        return library / "outfits" / slug
+    if asset_type == "vfx":
+        return library / "vfx" / slug
     if asset_type == "route_template":
         return library / "templates" / "model_routes" / slug
     if asset_type == "motif":
         return library / "motifs" / slug
+    if asset_type == "combat":
+        return library / "combat" / slug
     return library / asset_type / slug
 
 
@@ -249,6 +266,12 @@ def _asset_type_aliases(asset_type: str) -> set[str]:
         return {"scene", "location"}
     if asset_type == "prop":
         return {"prop"}
+    if asset_type == "weapon":
+        return {"weapon", "magic_weapon", "equipment", "armory"}
+    if asset_type == "outfit":
+        return {"outfit", "costume"}
+    if asset_type == "vfx":
+        return {"vfx", "effect"}
     return {asset_type}
 
 
@@ -459,14 +482,17 @@ def cmd_hint(_: argparse.Namespace) -> int:
 
 你不需要记 CLI。遇到这些场景，直接对 agent 说自然语言即可：
 - 开新剧 / 建角色卡前：先说“查资产库有没有可复用模板”。
-- 出图新增角色、场景、道具前：先说“先查资产库，能导入就导入”。
+- 出图新增角色、场景、道具、武器、服装、VFX 前：先说“先查资产库，能导入就导入”。
 - 某类镜头路由反复失败后：说“把这套路由沉淀成模板”。
-- 新剧想复用原型：说“把冷宫废妃模板导入为沈念”。
+- 新剧想复用原型：说“把冷宫废妃模板导入为沈念 / 把霜纹长剑导入为雷纹长剑”。
 
 agent 内部会按需运行：
 - python3 skills/n2d-asset-market/scripts/market.py list
 - python3 skills/n2d-asset-market/scripts/market.py export-character <作品根> --character-id CHAR_XXX
 - python3 skills/n2d-asset-market/scripts/market.py import-character <作品根> <资产包> --as-id CHAR_YYY --as-name 新角色名
+- python3 skills/n2d-asset-market/scripts/market.py export-weapon|export-outfit|export-vfx <作品根> --asset-id WEAPON_/OUTFIT_/VFX_XXX
+- python3 skills/n2d-asset-market/scripts/market.py import-weapon|import-outfit|import-vfx <作品根> <资产包> --as-id ... --as-name ...
+- python3 skills/n2d-asset-market/scripts/market.py export-combat <作品根> --combat-id COMBAT_XXX
 
 导入角色资产后，下一步固定是：
 python3 skills/n2d-identity/scripts/identity.py <作品根> --write
@@ -724,9 +750,9 @@ def cmd_export_asset(args: argparse.Namespace) -> int:
         "asset_registry_fragment": {"kind": ASSET_REGISTRY_KIND, "version": 1, "assets": [asset]},
         "files": files,
         "reminders": [
-            "导入到新剧时必须按新项目命名/ID 合并，避免 LOC_/PROP_ 冲突。",
-            "场景/道具模板只复用结构、参考图和约束；新剧仍要按剧情校准 constraints/lifecycle。",
-            "导入后重跑 image/video gate，确认逐镜 prompt 已绑定对应 LOC_/PROP_。",
+            "导入到新剧时必须按新项目命名/ID 合并，避免 LOC_/PROP_/WEAPON_/OUTFIT_/VFX_ 冲突。",
+            "非角色资产模板只复用结构、参考图和约束；新剧仍要按剧情校准 constraints/lifecycle/profile。",
+            "导入后重跑 image/video gate，确认逐镜 prompt 已绑定对应资产 ID。",
         ],
     }
     write_json(out_dir / "asset_pack.json", pack)
@@ -760,7 +786,7 @@ def cmd_import_asset(args: argparse.Namespace) -> int:
     source_asset["source_asset_slug"] = pack.get("slug", "")
     if args.scope:
         source_asset["scope"] = args.scope
-    if args.owner and source_asset.get("type") == "prop":
+    if args.owner and str(source_asset.get("type", "")).strip() in (_asset_type_aliases("prop") | _asset_type_aliases("weapon")):
         source_asset["owner"] = args.owner
 
     ref = source_asset.get("reference_group") if isinstance(source_asset.get("reference_group"), Mapping) else {}
@@ -1004,6 +1030,219 @@ def cmd_import_motif(args: argparse.Namespace) -> int:
     return 0
 
 
+# ── 招式/打斗(combat) pack：跨剧复用一整套打斗套路 ─────────────────────────────
+#
+# 一套打斗 = 招式骨架(SM_ 五帧拆招 + action_choreography 契约) + 节奏 preset + 绑定的
+# WEAPON_/VFX_ 实体。跨剧复用的是【结构】，不是【同一把可识别武器/同一条数值】：导入即
+# reskin——保留五帧/力链/contact/速度曲线骨架，清掉项目专属的关键帧 PNG（须在新剧重出图、
+# 重过 image/video gate），并提示换皮（元素主色/武器剪影/角色）。与 import-character 重置
+# Character ID、import-motif 重置 progression 同构。
+
+def combat_registry_path(root: Path) -> Path:
+    return Path(shared_asset_path(str(root), "combat_registry.json", prefer_existing=False))
+
+
+def load_combat_registry(root: Path) -> Dict[str, Any]:
+    path = combat_registry_path(root)
+    if not path.is_file():
+        raise FileNotFoundError(f"combat_registry.json not found: {path}")
+    data = read_json(path)
+    if not isinstance(data, dict) or data.get("kind") != COMBAT_REGISTRY_KIND:
+        raise ValueError(f"invalid combat_registry.json: {path}")
+    return data
+
+
+def find_combat_set(registry: Mapping[str, Any], combat_id: str = "") -> Dict[str, Any]:
+    sets = [s for s in registry.get("combat_sets", []) or [] if isinstance(s, dict)]
+    if not sets:
+        raise KeyError("combat_registry has no combat_sets")
+    if not combat_id:
+        return copy.deepcopy(sets[0])
+    for s in sets:
+        if str(s.get("combat_id")) == combat_id:
+            return copy.deepcopy(s)
+    raise KeyError(f"combat set not found in combat_registry: {combat_id}")
+
+
+def bound_asset_ids(combat_set: Mapping[str, Any]) -> List[str]:
+    """绑定的武器+特效资产 id（去重保序）：先 WEAPON_ 后 VFX_。"""
+    ids: List[str] = []
+    for key in ("bound_weapons", "bound_vfx"):
+        for aid in combat_set.get(key, []) or []:
+            aid = str(aid).strip()
+            if aid and aid not in ids:
+                ids.append(aid)
+    return ids
+
+
+def land_asset_reference_files(root: Path, pack_root: Path, asset: Dict[str, Any]) -> None:
+    """把 pack 内某资产的相对参考图落到目标项目共享 图片/，并把 reference_group 改写成项目相对路径。"""
+    as_name = str(asset.get("name") or asset.get("id") or "asset")
+    ref = asset.get("reference_group") if isinstance(asset.get("reference_group"), Mapping) else {}
+    new_ref: Dict[str, str] = {}
+    for role, value in ref.items():
+        pack_rel = ref_value_to_path(value)
+        if not pack_rel:
+            new_ref[str(role)] = ""
+            continue
+        source = pack_root / pack_rel
+        target_rel = target_asset_reference_path(as_name, str(role), source.suffix or ".png")
+        target = root / target_rel
+        if source.is_file():
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, target)
+            new_ref[str(role)] = target_rel
+        else:
+            new_ref[str(role)] = ""
+    asset["reference_group"] = new_ref
+
+
+def reskin_reset_combat_set(combat_set: Dict[str, Any]) -> List[str]:
+    """导入时 reskin 重置：清掉每招项目专属的关键帧 PNG 引用（须新剧重出图），保留五帧/编排骨架。
+    返回被清掉的关键帧路径清单，写进导入日志，让导入者知道要重出哪些图。"""
+    cleared: List[str] = []
+    for move in combat_set.get("moves", []) or []:
+        if not isinstance(move, dict):
+            continue
+        kf = move.get("keyframe_refs")
+        if isinstance(kf, Mapping):
+            for slot, path in kf.items():
+                p = ref_value_to_path(path)
+                if p:
+                    cleared.append(f"{move.get('move_id') or move.get('name') or '招式'}/{slot}: {p}")
+        # 关键帧不迁移：和 .safetensors/Character ID 同理，是项目专属可执行产物，须新剧重出。
+        move["keyframe_refs"] = {}
+        move["needs_keyframe_regen"] = True
+    return cleared
+
+
+def cmd_export_combat(args: argparse.Namespace) -> int:
+    """导出一套打斗 pack：combat set(招式五帧+编排+节奏) + 绑定的 WEAPON_/VFX_ + 参考图。"""
+    root = Path(args.project_root)
+    combat_set = find_combat_set(load_combat_registry(root), args.combat_id or "")
+    title = args.title or str(combat_set.get("name") or combat_set.get("combat_id") or "combat")
+    slug = slugify(args.slug or title)
+    out_dir = pack_dir(Path(args.library), "combat", slug)
+    if out_dir.exists() and not args.force:
+        raise FileExistsError(f"combat pack already exists, use --force: {out_dir}")
+    if out_dir.exists():
+        shutil.rmtree(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    # 绑定的武器+特效实体（从 asset_registry 抽出 + 拷参考图），新剧 import 时一并落地。
+    bound_assets: List[Dict[str, Any]] = []
+    files: List[Dict[str, Any]] = []
+    missing: List[str] = []
+    bound_ids = bound_asset_ids(combat_set)
+    if bound_ids:
+        try:
+            asset_reg = load_asset_registry(root)
+        except (FileNotFoundError, ValueError):
+            asset_reg = empty_asset_registry()
+        for aid in bound_ids:
+            try:
+                asset = copy.deepcopy(find_asset(asset_reg, asset_id=aid))
+            except (KeyError, ValueError):
+                missing.append(aid)
+                continue
+            files.extend(copy_asset_reference_files(root, out_dir, asset))
+            bound_assets.append(asset)
+    if missing:
+        print(f"[warn] 绑定资产未在 asset_registry 找到，pack 只含招式结构: {', '.join(missing)}")
+
+    pack = {
+        "kind": PACK_KIND,
+        "version": PACK_VERSION,
+        "asset_type": "combat",
+        "slug": slug,
+        "title": title,
+        "source_project": str(root),
+        "source_project_name": project_name(root),
+        "exported_at": now_iso(),
+        "license": {"status": args.license_status, "reuse": args.reuse, "notes": args.license_notes or ""},
+        "style_tags": args.style_tag or [],
+        "tags": args.tag or [],
+        "combat_fragment": {"kind": COMBAT_REGISTRY_KIND, "version": 1, "combat_sets": [combat_set]},
+        "asset_registry_fragment": {"kind": ASSET_REGISTRY_KIND, "version": 1, "assets": bound_assets},
+        "files": files,
+        "reminders": [
+            "打斗 pack 只复用结构：五帧拆招/力链/contact/速度曲线/节奏 preset + 武器VFX定妆锁形，不复用同一把可识别武器或具体数值。",
+            "导入到新剧时关键帧 PNG 会被清空（reskin）：必须在新剧重出起手/命中关键帧，再过 image/video gate。",
+            "换皮提示：元素主色(如暗金→雷蓝)/武器剪影/角色按新剧改；五帧与 action_choreography 骨架原样继承。",
+        ],
+    }
+    write_json(out_dir / "asset_pack.json", pack)
+    print(f"[ok] exported combat pack: {out_dir}")
+    return 0
+
+
+@with_registry_lock
+def cmd_import_combat(args: argparse.Namespace) -> int:
+    """把打斗 pack 合并进目标 combat_registry + asset_registry，reskin 重置(清关键帧)。"""
+    root = Path(args.project_root)
+    pack_dir_path = Path(args.pack)
+    pack_path = pack_dir_path / "asset_pack.json" if pack_dir_path.is_dir() else pack_dir_path
+    pack_root = pack_path.parent
+    pack = read_json(pack_path)
+    if pack.get("kind") != PACK_KIND or pack.get("asset_type") != "combat":
+        raise ValueError(f"not a combat pack: {pack_path}")
+    sets = pack.get("combat_fragment", {}).get("combat_sets", [])
+    if not sets:
+        raise ValueError(f"combat pack has no combat fragment: {pack_path}")
+    combat_set = copy.deepcopy(sets[0])
+    if args.as_id:
+        combat_set["combat_id"] = args.as_id
+    combat_set["source_combat_pack"] = str(pack_path)
+    combat_set["source_combat_slug"] = pack.get("slug", "")
+    cleared = reskin_reset_combat_set(combat_set)
+
+    # 合并绑定 WEAPON_/VFX_ 进 asset_registry + 拷参考图（新剧路径）。
+    bound = pack.get("asset_registry_fragment", {}).get("assets", []) or []
+    landed_ids: List[str] = []
+    if bound:
+        asset_reg = ensure_asset_registry(root)
+        for raw in bound:
+            asset = copy.deepcopy(raw)
+            asset["source_asset_pack"] = str(pack_path)
+            asset["source_asset_slug"] = pack.get("slug", "")
+            land_asset_reference_files(root, pack_root, asset)
+            merge_asset(asset_reg, asset, replace=args.replace)
+            landed_ids.append(str(asset.get("id", "")).strip())
+        write_json(asset_ref_registry_path(root), asset_reg)
+
+    # 合并 combat set 进 combat_registry（去重 combat_id）。
+    cpath = combat_registry_path(root)
+    if cpath.is_file():
+        creg = read_json(cpath)
+        if not isinstance(creg, dict) or creg.get("kind") != COMBAT_REGISTRY_KIND:
+            creg = {"kind": COMBAT_REGISTRY_KIND, "version": 1, "combat_sets": []}
+    else:
+        creg = {"kind": COMBAT_REGISTRY_KIND, "version": 1, "combat_sets": []}
+    cid = str(combat_set.get("combat_id"))
+    existing = [s for s in creg.get("combat_sets", []) if isinstance(s, dict) and str(s.get("combat_id")) == cid]
+    if existing and not args.replace:
+        raise ValueError(f"combat id already exists: {cid} (use --replace)")
+    creg["combat_sets"] = [s for s in creg.get("combat_sets", []) if not (isinstance(s, dict) and str(s.get("combat_id")) == cid)]
+    creg["combat_sets"].append(combat_set)
+    write_json(cpath, creg)
+
+    cleared_md = "\n".join(f"  - {c}" for c in cleared) if cleared else "  - （无登记关键帧）"
+    append_import_log(
+        root,
+        f"""## {now_iso()} 导入招式/打斗(combat)
+
+- 来源：`{pack_path}`
+- 打斗套路：`{cid}`（已 reskin 重置：清空关键帧 PNG，保留五帧+编排骨架）
+- 绑定资产合并进 asset_registry：{', '.join(landed_ids) or '（无）'}
+- 待新剧重出的关键帧：
+{cleared_md}
+- 下一步：在新剧分镜按五帧拆招把该套路织进 `故事板.md`，换皮(元素主色/武器/角色)，重出起手/命中关键帧，再重跑 image/video gate。
+""",
+    )
+    print(f"[ok] imported combat {cid} into {cpath}（已 reskin 重置，需重出关键帧）")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="n2d cross-project asset pack market")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -1067,7 +1306,7 @@ def build_parser() -> argparse.ArgumentParser:
         p.add_argument("--as-id", required=True)
         p.add_argument("--as-name", required=True)
         p.add_argument("--scope", default="")
-        p.add_argument("--owner", default="", help="prop owner override, e.g. CHAR_SHEN")
+        p.add_argument("--owner", default="", help="prop/weapon owner override, e.g. CHAR_SHEN")
         p.add_argument("--replace", action="store_true")
         p.set_defaults(func=cmd_import_asset, asset_type=asset_type)
 
@@ -1075,6 +1314,12 @@ def build_parser() -> argparse.ArgumentParser:
     add_import_asset_parser("import-scene", "scene", "import a scene asset pack into target asset_registry")
     add_export_asset_parser("export-prop", "prop", "export one PROP_/prop asset as an asset pack")
     add_import_asset_parser("import-prop", "prop", "import a prop asset pack into target asset_registry")
+    add_export_asset_parser("export-weapon", "weapon", "export one WEAPON_/weapon asset as an asset pack")
+    add_import_asset_parser("import-weapon", "weapon", "import a weapon asset pack into target asset_registry")
+    add_export_asset_parser("export-outfit", "outfit", "export one OUTFIT_/outfit asset as an asset pack")
+    add_import_asset_parser("import-outfit", "outfit", "import an outfit asset pack into target asset_registry")
+    add_export_asset_parser("export-vfx", "vfx", "export one VFX_/effect asset as an asset pack")
+    add_import_asset_parser("import-vfx", "vfx", "import a VFX asset pack into target asset_registry")
 
     p = sub.add_parser("export-routes", help="export a video_model_routes.json as a route template pack")
     p.add_argument("project_root")
@@ -1113,6 +1358,27 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--as-id", default="", help="rename motif_id in target (default keep source id)")
     p.add_argument("--replace", action="store_true")
     p.set_defaults(func=cmd_import_motif)
+
+    p = sub.add_parser("export-combat", help="export a combat set (招式五帧+编排+绑定WEAPON_/VFX_) as a reusable pack")
+    p.add_argument("project_root")
+    p.add_argument("--combat-id", default="", help="combat_id（默认导出 combat_registry 第一条）")
+    p.add_argument("--title", default="")
+    p.add_argument("--slug", default="")
+    p.add_argument("--library", default=str(DEFAULT_LIBRARY))
+    p.add_argument("--force", action="store_true")
+    p.add_argument("--license-status", default="user_owned_or_synthetic")
+    p.add_argument("--reuse", default="template_only", choices=["template_only", "same_ip", "licensed_reuse"])
+    p.add_argument("--license-notes", default="")
+    p.add_argument("--style-tag", action="append")
+    p.add_argument("--tag", action="append")
+    p.set_defaults(func=cmd_export_combat)
+
+    p = sub.add_parser("import-combat", help="merge a combat pack into target combat_registry + asset_registry (reskin: keyframes cleared)")
+    p.add_argument("project_root")
+    p.add_argument("pack")
+    p.add_argument("--as-id", default="", help="rename combat_id in target (default keep source id)")
+    p.add_argument("--replace", action="store_true")
+    p.set_defaults(func=cmd_import_combat)
 
     return parser
 

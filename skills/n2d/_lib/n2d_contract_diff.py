@@ -143,6 +143,44 @@ def compare_field(field: str, img_val, vid_val) -> dict:
     return item
 
 
+CINEMATIC_SECTION_TITLE = "本集真实电影感契约"  # 电影光学契约（opt-in·含镜头焦段）
+
+
+def _extract_focal(text: str):
+    """从「本集真实电影感契约」节取 `镜头焦段` 原文值；无该节/字段 → None。"""
+    sec = extract_section(text, CINEMATIC_SECTION_TITLE)
+    if sec is None:
+        return None
+    for ln in sec.splitlines():
+        m = _BULLET_RE.match(ln)
+        if not m:
+            continue
+        parts = re.split(r"[：:]", m.group(1), maxsplit=1)
+        if len(parts) > 1 and _norm(parts[0]) == _norm("镜头焦段"):
+            return parts[1].strip()
+    return None
+
+
+def diff_cinematic_focal(img_text: str, vid_text: str) -> list:
+    """镜头焦段 img→video 继承（电影光学契约·opt-in·warn-only，不入 BLOCK_ON_DRIFT）。
+
+    `景别阶梯` 管景别(CU/LS)，不管**焦段压缩感**——同场景长焦↔广角畸变/压缩不同=换镜头感。
+    两侧都声明真实电影感契约的镜头焦段且不一致 → warn；任一侧无该契约/字段 → 跳过（焦段不强求）。
+    纯函数·可测。"""
+    img_f, vid_f = _extract_focal(img_text), _extract_focal(vid_text)
+    if not img_f or not vid_f:
+        return []
+    item = {"field": "镜头焦段", "image_text": img_f, "video_text": vid_f}
+    in_, vn = _norm(img_f), _norm(vid_f)
+    if in_ == vn or in_ in vn or vn in in_:
+        item.update(status="pass", severity="pass", note="焦段一致/超集")
+    else:
+        item.update(status="warn_drift", severity="warn",
+                    note="镜头焦段 img→video 漂移：长焦↔广角压缩感/畸变不同=换镜头感；"
+                         "确认是否有意改写，否则以出图侧焦段为准")
+    return [item]
+
+
 def diff_contracts(img_text: str, vid_text: str) -> list:
     """两份 00_总览 全文 → 逐字段比对结果列表（按 VISUAL_CONTRACT_FIELDS 顺序）。"""
     img_sec = extract_section(img_text)
