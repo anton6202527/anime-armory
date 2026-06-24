@@ -124,6 +124,58 @@ def accent_findings(voicemap: Optional[Mapping[str, Any]]) -> List[Dict[str, Any
     return rows
 
 
+def _norm_shot(v: Any) -> Optional[int]:
+    m = re.search(r"(\d+)", str(v if v is not None else ""))
+    return int(m.group(1)) if m else None
+
+
+def _strong_designed(emo: str, line: str) -> bool:
+    """设计态是否强情绪（高唤醒）：台词内容强 或 标注归 怒/惊/悲/喜。"""
+    return line_is_strong(line) or classify_emo(emo) in _STRONG_CLASSES or classify_emo(emo) == "happy"
+
+
+def emotion_audio_findings(lines: Sequence[Mapping[str, Any]],
+                           flow: Optional[Sequence[Mapping[str, Any]]]) -> List[Dict[str, Any]]:
+    """设计情绪 × 配音声学能量 reconcile（治"强情绪台词却配音念得平"）。
+
+    flow = `合成/{集}/配音/emotion_flow.json` 段列表 `[{shot, energy:{energy_score}, emotion_applied}]`。
+    判：设计为强情绪的镜，其配音声学能量落在本集**底四分位** → warn（情绪没演出来）。
+    诚实边界：energy 是 ffmpeg 音量代理(非语义)，故 ① 能量分布太平(占位/say)直接跳过不臆断；
+    ② 样本 <4 不判分位；③ 全 advisory(warn)，命中=可疑→人听辨。纯函数·可测。"""
+    rows: List[Dict[str, Any]] = []
+    if not isinstance(flow, (list, tuple)):
+        return rows
+    by_shot: Dict[int, float] = {}
+    energies: List[float] = []
+    for seg in flow:
+        if not isinstance(seg, Mapping):
+            continue
+        e = seg.get("energy")
+        score = e.get("energy_score") if isinstance(e, Mapping) else None
+        if not isinstance(score, (int, float)):
+            continue
+        energies.append(float(score))
+        sh = _norm_shot(seg.get("shot"))
+        if sh is not None:
+            by_shot[sh] = float(score)
+    if len(energies) < 4:
+        return rows
+    if max(energies) - min(energies) < 0.05:
+        return rows  # 能量几乎无起伏（占位/say 或恒响）——无法区分，不臆断
+    q1 = sorted(energies)[len(energies) // 4]
+    line_by_shot = {_norm_shot(ln.get("shot")): ln for ln in lines}
+    for sh, score in sorted(by_shot.items()):
+        ln = line_by_shot.get(sh)
+        if not ln:
+            continue
+        emo, text = str(ln.get("emotion") or ""), str(ln.get("line") or "")
+        if _strong_designed(emo, text) and score <= q1:
+            rows.append({"shot": f"镜头{sh}", "role": ln.get("role"), "verdict": "warn",
+                         "message": f"镜头{sh}·{ln.get('role')}：设计为强情绪（{emo or '台词强情绪'}）但配音声学能量垫底"
+                                    f"（energy {score:.2f} ≤ 本集 Q1 {q1:.2f}）——情绪没演出来，重配/调表演语速，或确认是克制反差。"})
+    return rows
+
+
 def _bgm_cue_lines(text: str) -> List[str]:
     """bgm.txt → 配乐段要点行（以 - 起的 bullet）。纯函数·可测。"""
     out: List[str] = []
@@ -180,6 +232,19 @@ def _load_voicemap(root: Path) -> Optional[dict]:
         return None
 
 
+def _load_emotion_flow(root: Path, ep: str) -> Optional[list]:
+    """读 n2d-voice 产的 emotion_flow.json（声学能量曲线）。缺则 None（优雅跳过）。"""
+    for cand in (root / "合成" / ep / "配音" / "emotion_flow.json",
+                 root / "配音" / ep / "emotion_flow.json"):
+        try:
+            data = json.loads(cand.read_text(encoding="utf-8"))
+            if isinstance(data, list):
+                return data
+        except Exception:
+            continue
+    return None
+
+
 def _voiceover_path(root: Path, ep: str) -> Path:
     for cand in (root / "脚本" / ep / "voiceover.txt", root / "配音" / ep / "voiceover.txt"):
         if cand.is_file():
@@ -198,12 +263,16 @@ def analyze(root: str, ep: str) -> Dict[str, Any]:
     acc = accent_findings(_load_voicemap(rootp))
     bgm_text = _read(rootp / "脚本" / ep / "bgm.txt") or _read(rootp / "脚本" / ep / f"bgm_{ep}.txt")
     bgm = bgm_findings(bgm_text)
+    flow = _load_emotion_flow(rootp, ep)
+    vea_audio = emotion_audio_findings(lines, flow)
     notes: List[str] = []
     if not _load_voicemap(rootp):
         notes.append("无 设定库/voicemap.json——口音方言(ACC)检跳过（可在 voicemap 角色加 accent 字段锁口音）。")
     if not bgm_text.strip():
         notes.append("无 bgm.txt——音乐衔接(BGM)检跳过。")
-    return {"available": True, "vea": vea, "acc": acc, "bgm": bgm, "notes": notes}
+    if flow is None:
+        notes.append("无 emotion_flow.json——设计情绪×配音能量 reconcile 跳过（先跑 n2d-voice 配音生成）。")
+    return {"available": True, "vea": vea, "vea_audio": vea_audio, "acc": acc, "bgm": bgm, "notes": notes}
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -221,8 +290,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         return 0
     def _warns(rows):
         return [r for r in rows if r.get("verdict") == "warn"]
-    print(f"# 音频连续性：情绪弧 {len(_warns(rep['vea']))} · 口音 {len(_warns(rep['acc']))} · 音乐衔接 {len(_warns(rep['bgm']))}")
-    for r in _warns(rep["vea"]) + _warns(rep["acc"]) + _warns(rep["bgm"]):
+    print(f"# 音频连续性：情绪弧 {len(_warns(rep['vea']))} · 情绪×能量 {len(_warns(rep.get('vea_audio', [])))} · "
+          f"口音 {len(_warns(rep['acc']))} · 音乐衔接 {len(_warns(rep['bgm']))}")
+    for r in _warns(rep["vea"]) + _warns(rep.get("vea_audio", [])) + _warns(rep["acc"]) + _warns(rep["bgm"]):
         print(f"🟡 {r.get('message')}")
     for n in rep.get("notes", []):
         print(f"· {n}")

@@ -62,6 +62,17 @@ def test_anchor_consumption_plan_distinguishes_native_and_split():
 def test_sora_is_legacy_not_auto_routed_or_native_av():
     assert profiles.video_backend_auto_routable("sora") is False
     assert "sora" not in profiles.NATIVE_AV_BACKENDS
+    info = profiles.video_backend_capability_confidence("sora")
+    assert info["confidence"] == "deprecated"
+    assert info["paid_routing_allowed"] is False
+
+
+def test_capability_confidence_uses_execution_backend_channel():
+    via_dreamina = profiles.video_backend_capability_confidence("Seedance 2.0", "即梦/Dreamina")
+    direct_seedance = profiles.video_backend_capability_confidence("Seedance 2.0")
+    assert via_dreamina["execution_backend"] == "dreamina"
+    assert via_dreamina["confidence"] == "evidence"
+    assert direct_seedance["confidence"] == "conservative"
 
 
 def test_spectacle_backend_prior_ranking_orders_by_action_type():
@@ -78,3 +89,15 @@ def test_spectacle_backend_prior_ranking_orders_by_action_type():
         ranking = profiles.spectacle_backend_prior_ranking(st)
         assert "sora" not in ranking
         assert all(profiles.video_backend_auto_routable(b) for b in ranking)
+
+
+def test_wan_registered_as_self_host_multishot_backend():
+    # G-V1：开源/自托管的原生多镜后端 Wan 入档，能力字段判定 → 被 multishot 识别（不 hardcode 厂商名）。
+    assert profiles.video_backend_supports_multishot("wan") is True
+    assert profiles.video_backend_supports_multishot("万相") is True   # 别名归一
+    assert profiles.normalize_video_backend("Wan 2.6", default="") == "wan"
+
+
+def test_native_multishot_set_includes_cloud_and_selfhost():
+    # 云端(可灵/Seedance) + 自托管(Wan) 都在多镜原生集里。
+    assert {"kling", "seedance", "wan"} <= set(profiles.MULTISHOT_NATIVE_BACKENDS)

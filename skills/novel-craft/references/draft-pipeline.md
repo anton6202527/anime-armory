@@ -7,6 +7,7 @@
 - `_meta.json` 存在，含 `kind/target_chapters/target_words_per_chapter/target_wordcount_min_max/demo_chapters`。`target_chapters` 必须由 init 脚本写入或用户显式改入元数据；不能只写在 `_设置.md` / `_进度.md` 的人类文案里。旧项目缺 `target_wordcount_min_max` 时，review 会按 scale/target_words 推导，但新项目必须显式写入。
 - `设定/章纲.md` 已经用户确认。
 - `设定/读者契约.md` 已经写明核心题旨、读者承诺、好看机制、文学质感和禁偏清单。旧项目缺失时可先按 `references/reader-contract.md` 补一版，再继续批量写章。
+- 高质量/商业项目建议先建 `设定/scene_cards.json`：`python3 skills/novel-craft/scripts/scene_cards.py scaffold "<作品根>" --range 1-5`，再由 AI/人工补 POV、目标、阻碍、冲突、转折和价值变化。缺场景卡不会阻断普通草稿，但会在商业/长篇导出 gate 里提示。
 - `审稿/demo_gate.json.status == passed`。未通过时只能写 Demo 或准备包，不能批量写余章。
 - `_设置.md` 已落 `小说生成模式` 与 `章节生成粒度`；缺则按 `skills/novel-craft/references/选择点与偏好.md` 问一次或用全局默认预填。
 - `scale=long` / `target_chapters>=30` / 商业连载 / 系统流 / 修仙 / 群像 / 复杂世界观项目，批量写章前建议先跑 `python3 skills/novel-wiki/scripts/storyworld_pressure_test.py "<作品根>"`；若 `verdict=block_pre_draft`，先补角色目标、世界规则、地理势力、时间线、章纲压力或读者契约，不进入 draft。
@@ -53,6 +54,14 @@ python3 skills/novel-review/scripts/arc_gate.py "<作品根>" --arc 1-5
 ```
 
 `arc_gate.py` 专门抓整段没有题旨对齐、连续 3 章不推进读者契约、长窗口只种不收等中段跑偏信号。它不替代逐章 `post_write.py`，而是长篇压力测试。
+
+弧段写完后再沉淀长期记忆，供后续章节写作包读取：
+
+```bash
+python3 skills/novel-craft/scripts/arc_memory.py scaffold "<作品根>" --arc 1-5 --title "初入局"
+```
+
+脚本只建骨架和证据片段；`plot_summary` / `character_changes` / `carry_forward` / 情绪债务由 AI/人工补完。后续 `draft_packets.py` 会把当前章命中的 arc 摘要注入任务包，补固定前文窗口够不着的长程记忆。
 
 `draft_queue.py` 同样会在这些项目里初始化 `workflow=trio`，按 pass 认领和标记：
 
@@ -110,6 +119,7 @@ python3 skills/novel-review/scripts/mechanical_check.py "<作品根>" --json-out
 - 本章输出文件、小说用途、建议篇幅、人称、目标平台、小说生成模式。
 - 必读源文件路径：蓝图、设定圣经、角色卡、世界观、章纲、Demo gate、状态账本。
 - 必读 `设定/读者契约.md`，并在任务包内展开 `reader_contract`：核心题旨、核心戏剧问题、读者承诺、文学质感、好看机制、禁偏清单。
+- 若存在 `设定/scene_cards.json`，展开当前章场景卡：每个场景的 POV、desire、obstacle、conflict、turn、value_shift、subtext、sensory_anchor。
 - 本章章纲原文。
 - 上一章结尾摘录。
 - Demo 风格锚点、读者承诺、设定硬约束、禁止漂移项。

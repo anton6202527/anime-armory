@@ -48,6 +48,7 @@ class AiUsageTest(unittest.TestCase):
             with open(json_path, encoding="utf-8") as f:
                 payload = json.load(f)
             self.assertEqual(payload["text_mode"], "AI-generated")
+            self.assertEqual(payload["text_authorship_mode"], "AI生成")
             self.assertEqual(payload["publish_target"], "KDP")
             self.assertEqual(payload["disclosure_detail"]["text_directness"], "outline_to_draft")
             self.assertEqual(payload["disclosure_detail"]["review_steps"], ["人工通读", "设定一致性审稿"])
@@ -55,6 +56,7 @@ class AiUsageTest(unittest.TestCase):
                 md = f.read()
             self.assertIn("AI 使用说明", md)
             self.assertIn("用户提供蓝图", md)
+            self.assertIn("正文主创模式", md)
             self.assertIn("人工 steering", md)
 
 

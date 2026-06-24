@@ -350,6 +350,9 @@ def run_process(command: str, *, shell: bool, timeout_sec: Optional[float], env:
 
 NEXT_PREFLIGHT_BLOCK_REASONS = {
     "env_missing",
+    "blocked_by_entry_check",
+    "capability_evidence_required",
+    "blocked_by_review_acceptance",
     "blocked_by_gate",
     "blocked_by_image_qc",
     "needs_compliance",

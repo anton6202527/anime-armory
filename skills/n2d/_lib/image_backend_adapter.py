@@ -46,6 +46,7 @@ CATALOG_VERIFIED = {
                 "official image generation is exposed through the Images API and Responses image-generation tool",
                 "GPT Image models include gpt-image-2; the model surface supports text+image inputs and image outputs",
                 "official image editing supports one or more source images and high-fidelity image inputs where the selected model allows it",
+                "GPT Image 2 supports high-fidelity image inputs, multimodal image reference/editing workflows, and flexible high-resolution outputs including 4K-class sizes. Current official docs do not evidence a registerable server-side persistent subject-id/handle; treat it as strong in-context multi-reference consistency, not native subject registration — see constitution B9.",
                 "current model names, sizes, quality parameters, and pricing must come from per-run official refresh evidence",
             ],
         },
@@ -69,7 +70,9 @@ CATALOG_VERIFIED = {
 
 BACKEND_API_ADAPTERS: Dict[str, Dict[str, Any]] = {
     "codex": {
-        "label": "Codex CLI image_generation",
+        "label": "Codex CLI (访问入口) · 模型 GPT Image 2",
+        "model": "GPT Image 2",  # C5: 生成者=具体模型；codex 只是访问入口/壳
+        "channel": "Codex CLI",
         "adapter_kind": "codex_cli",
         "official": True,
         "auto_runnable": True,
@@ -86,26 +89,29 @@ BACKEND_API_ADAPTERS: Dict[str, Dict[str, Any]] = {
             "object_refs": None,
             "style_refs": None,
         },
-        "native_subject": False,
+        "native_subject": False,  # B9: 无可注册服务端持久主体 ID/handle —— ≠ 不能做角色一致性
+        "in_context_consistency": "strong",  # GPT Image 2 高保真多参考/上下文一致性强，但无可注册持久主体 ID
         "subject_registration": False,
         "supports_edit": False,
         "supports_mask": False,
         "supports_high_fidelity_reference": True,
         "supports_text_rendering": "medium",
         "cost_tier": "project_default",
-        "best_for": ("default_n2d", "multi_reference", "agentic_prompt_repair"),
-        "limitations": ("no_persistent_subject_id", "reference_budget_local_policy"),
-        "evidence": {"verified_at": "2026-06-22", "source": "local codex CLI capability: codex exec --image"},
+        "best_for": ("default_n2d", "character_consistency", "multi_reference", "facial_expression_control", "agentic_prompt_repair"),
+        "limitations": ("no_registerable_subject_id", "reference_budget_local_policy"),
+        "evidence": {"verified_at": "2026-06-23", "source": "local codex CLI (codex exec --image) + OpenAI GPT Image 2 docs; high-fidelity references, no official subject-id evidence"},
     },
     "openai": {
-        "label": "OpenAI Images API / Responses image tool",
+        "label": "OpenAI Images API (访问入口) · 模型 GPT Image 2",
+        "model": "GPT Image 2",  # C5: 生成者=具体模型
+        "channel": "OpenAI Images API",
         "adapter_kind": "openai_images",
         "official": True,
         "auto_runnable": True,
         "env_keys": ("OPENAI_API_KEY",),
         "probe_backend": "openai",
         "api_surface": "/v1/images/generations + /v1/images/edits + Responses image_generation tool",
-        "model_hint": "use current official image model from per-run refresh evidence",
+        "model_hint": "default GPT Image 2; confirm exact model id from per-run refresh evidence",
         "transport": "multipart_or_sdk",
         "output": "b64_json",
         "generation_modes": ("text2image", "image_edit", "multi_turn_edit"),
@@ -116,19 +122,22 @@ BACKEND_API_ADAPTERS: Dict[str, Dict[str, Any]] = {
             "object_refs": None,
             "style_refs": None,
         },
-        "native_subject": False,
+        "native_subject": False,  # B9: 无可注册服务端持久主体 ID/handle
+        "in_context_consistency": "strong",  # GPT Image 2 高保真多参考/上下文一致性强，但无可注册持久主体 ID
         "subject_registration": False,
         "supports_edit": True,
         "supports_mask": True,
         "supports_high_fidelity_reference": True,
         "supports_text_rendering": "high",
         "cost_tier": "usage_tokens",
-        "best_for": ("high_fidelity_edit", "text_rendering", "prompt_iterate"),
-        "limitations": ("no_persistent_subject_id", "transparent_background_not_for_gpt_image_2"),
-        "evidence": {"verified_at": "2026-06-20", "source": CATALOG_VERIFIED["sources"][0]["url"]},
+        "best_for": ("character_consistency", "high_fidelity_edit", "text_rendering", "facial_expression_control", "prompt_iterate"),
+        "limitations": ("no_registerable_subject_id", "transparent_background_not_for_gpt_image_2"),
+        "evidence": {"verified_at": "2026-06-23", "source": CATALOG_VERIFIED["sources"][0]["url"]},
     },
     "dreamina": {
-        "label": "Dreamina/即梦官方 CLI",
+        "label": "Dreamina/即梦官方 CLI (访问入口)",
+        "model": "即梦图像模型 (Seedream 系·版本以 per-run 官方证据为准)",  # C5: 渠道≠模型
+        "channel": "Dreamina/即梦官方 CLI",
         "adapter_kind": "dreamina_official_cli",
         "official": True,
         "auto_runnable": True,
@@ -151,7 +160,9 @@ BACKEND_API_ADAPTERS: Dict[str, Dict[str, Any]] = {
         "evidence": {"verified_at": "manual_required", "source": "refresh before paid use"},
     },
     "seedream": {
-        "label": "Seedream Universal Reference",
+        "label": "Seedream Universal Reference (访问入口 Seedream 官方 API)",
+        "model": "Seedream 4.5 (Universal Reference·版本以 per-run 证据为准)",
+        "channel": "Seedream 官方 API",
         "adapter_kind": "seedream_api",
         "official": True,
         "auto_runnable": False,
@@ -174,7 +185,9 @@ BACKEND_API_ADAPTERS: Dict[str, Dict[str, Any]] = {
         "evidence": {"verified_at": "manual_required", "source": "refresh before paid use"},
     },
     "kling": {
-        "label": "Kling subject library",
+        "label": "Kling subject library (访问入口 可灵/Kling)",
+        "model": "Kling 主体库图像模型 (版本以 per-run 证据为准)",
+        "channel": "可灵/Kling",
         "adapter_kind": "kling_subject_library",
         "official": True,
         "auto_runnable": False,
@@ -197,7 +210,9 @@ BACKEND_API_ADAPTERS: Dict[str, Dict[str, Any]] = {
         "evidence": {"verified_at": "manual_required", "source": "refresh before paid use"},
     },
     "nano_banana": {
-        "label": "Gemini / Nano Banana image generation",
+        "label": "Nano Banana Pro = Gemini 3 Pro Image (访问入口 Gemini API)",
+        "model": "Nano Banana Pro (Gemini 3 Pro Image·版本以 per-run 证据为准)",
+        "channel": "Gemini API",
         "adapter_kind": "gemini_generate_content",
         "official": True,
         "auto_runnable": True,
@@ -227,7 +242,9 @@ BACKEND_API_ADAPTERS: Dict[str, Dict[str, Any]] = {
         "evidence": {"verified_at": "2026-06-20", "source": CATALOG_VERIFIED["sources"][1]["url"]},
     },
     "sora": {
-        "label": "Sora Character Cameo",
+        "label": "Sora Character Cameo (legacy/manual)",
+        "model": "Sora (Character Cameo)",
+        "channel": "Sora",
         "adapter_kind": "sora_cameo_manual",
         "official": True,
         "auto_runnable": False,
@@ -289,6 +306,9 @@ def backend_adapter(raw: Optional[str]) -> Dict[str, Any]:
     adapter["identity_profile"] = identity
     adapter["persistent_subject"] = bool(identity.get("persistent_subject") or adapter.get("native_subject"))
     adapter["multi_reference"] = bool(identity.get("multi_reference") or adapter.get("reference_input", {}).get("max_total"))
+    # C5: 生成者必须指认到具体模型；canonical(渠道壳) 仅作访问入口。缺登记时退回渠道名占位并标待补。
+    adapter.setdefault("model", "未登记具体模型（C5：需指认到模型名，不能用渠道壳）")
+    adapter.setdefault("channel", adapter.get("label") or (canonical or key))
     return adapter
 
 

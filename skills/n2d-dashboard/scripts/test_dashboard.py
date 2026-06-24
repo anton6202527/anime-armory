@@ -104,6 +104,7 @@ def test_dashboard_passively_reads_consistency_ledger(tmp_path: Path) -> None:
     path.write_text(json.dumps({
         "kind": "n2d_consistency_ledger",
         "counts": {"block": 1, "high": 0, "medium": 1},
+        "delivery_surface": {"status": "blocked"},
         "rows": [
             {"id": "CHAR_01", "name": "沈念", "kind": "character", "overall": "block"},
             {"id": "PROP_01", "name": "铜镜", "kind": "prop", "overall": "medium"},
@@ -115,8 +116,9 @@ def test_dashboard_passively_reads_consistency_ledger(tmp_path: Path) -> None:
     markdown = dashboard.render_markdown(data)
 
     assert ep1["consistency_ledger"]["counts"]["block"] == 1
+    assert ep1["consistency_ledger"]["delivery_surface"]["status"] == "blocked"
     assert data["totals"]["consistency_ledger_counts"]["medium"] == 1
-    assert "## 一致性总账" in markdown
+    assert "## 验收总账" in markdown
     assert "沈念(block)" in markdown
 
 

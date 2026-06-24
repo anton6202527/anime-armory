@@ -144,8 +144,12 @@ def do_ensure_col(root, col, default='⬜'):
         if col in header:
             print(f"✅ 列已存在：{col}"); return
         preferred_before = {'视频prompt': '视频', '出图prompt': '出图'}
-        before = preferred_before.get(col, '成片')
-        insert_at = header.index(before) if before in header else (header.index('成片') if '成片' in header else len(header))
+        preferred_after = {'验收': '成片'}
+        if col in preferred_after and preferred_after[col] in header:
+            insert_at = header.index(preferred_after[col]) + 1
+        else:
+            before = preferred_before.get(col, '成片')
+            insert_at = header.index(before) if before in header else (header.index('成片') if '成片' in header else len(header))
 
         out = []
         for ln in lines:
@@ -290,7 +294,7 @@ def main():
             print(f"  ⚠️ {first['note']}")
     else: print("🎉 全部成片完成")
     if bottleneck:
-        order = [s[1] for s in STAGES] + ['补真实配音', '✅已成片']
+        order = [s[1] for s in STAGES] + ['补真实配音', '✅已验收']
         items = sorted(bottleneck.items(), key=lambda kv: order.index(kv[0]) if kv[0] in order else 99)
         print("各阶段卡集数: " + " · ".join(f"{k}={v}" for k, v in items))
 

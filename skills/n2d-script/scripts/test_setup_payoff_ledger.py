@@ -66,3 +66,57 @@ def test_parse_range():
     assert sp._parse_range("1-3", avail) == ["第1集", "第2集", "第3集"]
     assert sp._parse_range("2,5", avail) == ["第2集", "第5集"]
     assert sp._parse_range("", avail) == avail
+
+
+def test_detect_auto_candidates_unmarked_foreshadow():
+    # 无显式标记、但句式像挖坑 → candidate（待编剧确认）
+    text = "他望着那道背影，那个黑衣人到底是谁？\n窗外阳光正好。\n她总觉得这件事不对劲。"
+    auto = sp.detect_auto_candidates(text, "第1集")
+    descs = " ".join(a["desc"] for a in auto)
+    assert all(a["status"] == "candidate" and a["auto"] for a in auto)
+    assert "到底是谁" in descs and "不对劲" in descs
+
+
+def test_detect_auto_skips_explicit_marker_lines():
+    # 已被显式标记捞走的句子不重复进 auto
+    text = "他到底是谁，埋下伏笔。"
+    assert sp.detect_auto_candidates(text, "第1集") == []
+    assert len(sp.detect_setups(text, "第1集")) == 1
+
+
+def test_gate_blocks_unfilled_payoff(tmp_path):
+    ep_dir = os.path.join(str(tmp_path), "脚本", "第3集")
+    os.makedirs(ep_dir, exist_ok=True)
+    open(os.path.join(ep_dir, "voiceover.txt"), "w", encoding="utf-8").write("他留下一句意味深长的话，埋下伏笔。")
+    # 没有账本 → setup_unlogged block
+    g = sp.gate(str(tmp_path), "第3集")
+    assert not g["ok"] and g["findings"][0]["code"] == "setup_unlogged"
+    # 建账但 payoff 空 → payoff_unfilled block
+    sp.main([str(tmp_path), "--write"])
+    g2 = sp.gate(str(tmp_path), "第3集")
+    assert not g2["ok"] and any(f["code"] == "payoff_unfilled" for f in g2["findings"])
+
+
+def test_gate_passes_when_payoff_filled(tmp_path):
+    ep_dir = os.path.join(str(tmp_path), "脚本", "第3集")
+    os.makedirs(ep_dir, exist_ok=True)
+    open(os.path.join(ep_dir, "voiceover.txt"), "w", encoding="utf-8").write("他留下一句意味深长的话，埋下伏笔。")
+    detected = sp.detect_setups("他留下一句意味深长的话，埋下伏笔。", "第3集")
+    ledger = sp.build_ledger([{**detected[0], "payoff_ep": "第8集", "status": "open"}])
+    os.makedirs(os.path.join(str(tmp_path), "设定库"), exist_ok=True)
+    json.dump(ledger, open(os.path.join(str(tmp_path), sp.LEDGER_REL), "w", encoding="utf-8"), ensure_ascii=False)
+    g = sp.gate(str(tmp_path), "第3集")
+    assert g["ok"] and g["detected"] == 1
+    # CLI --gate 退出码
+    assert sp.main([str(tmp_path), "--gate", "第3集", "--json"]) == 0
+
+
+def test_gate_ongoing_status_not_blocked(tmp_path):
+    ep_dir = os.path.join(str(tmp_path), "脚本", "第3集")
+    os.makedirs(ep_dir, exist_ok=True)
+    open(os.path.join(ep_dir, "voiceover.txt"), "w", encoding="utf-8").write("他留下一句意味深长的话，埋下伏笔。")
+    detected = sp.detect_setups("他留下一句意味深长的话，埋下伏笔。", "第3集")
+    ledger = sp.build_ledger([{**detected[0], "payoff_ep": "", "status": "ongoing"}])
+    os.makedirs(os.path.join(str(tmp_path), "设定库"), exist_ok=True)
+    json.dump(ledger, open(os.path.join(str(tmp_path), sp.LEDGER_REL), "w", encoding="utf-8"), ensure_ascii=False)
+    assert sp.gate(str(tmp_path), "第3集")["ok"]

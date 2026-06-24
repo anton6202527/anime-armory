@@ -7,7 +7,7 @@
 `<作品根>/_进度.md` 是全作品进度 single source of truth。当前标准列：
 
 ```markdown
-| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |
+| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |
 ```
 
 机器语义：
@@ -37,7 +37,7 @@
 | `video_prompt` | 视频prompt | `n2d-video` | `视频prompt` | `video_preflight` | `video_prompt` |
 | `video` | 图生视频 | `n2d-video` | `视频` | `video` | `video` |
 | `compose` | 合成成片 | `n2d-compose` | `成片` | `compose` | `compose` |
-| `review` | 审查验收 | `n2d-review` | - | `review` | `review` |
+| `review` | 审查验收 | `n2d-review` | `验收` | `review` | `review` |
 
 `skills/n2d/_lib/n2d_route.py` 从这张表派生旧的 `STAGES` 路由元组，供 `n2d/progress.py` 和 `n2d-progress/scan.py` 复用。不要再在别处手写另一张阶段表。
 
@@ -151,7 +151,7 @@ markdown 层新产物继承标题固定为「本集基础视觉风格契约」�
 
 - **每个契约项分两类**：`invariant`（已定不变量，可硬化进 BLOCK gate / "必须"措辞）vs `contested`（待决原则，**只能进 choice point，不得新增 BLOCK / "只能·不可选"措辞**）。
 - **真值源**：`skills/n2d/_lib/n2d_contract.py` 的 `CONTESTED`（当前标注，**零消费·零行为变化**）+ `INVARIANT_NOTE`。
-- **当前 contested 三项**：① 生图后端垄断（"图必须 Codex"）② 占位驱动付费生成（"先出视频后配音"）③ 基础视觉风格（默认预选为 `真实3D人物质感 + 电影叙事镜头感`，但风格必须 derive from `基础视觉风格` + `global_style.md`，不写成 skill 铁律）。其中③已落地为选择点 + `style_contract`；旧 `cinematic_contract` 兼容。
+- **当前 contested 三项**：① 生图后端垄断（"图必须 Codex"）② 占位驱动付费生成（"先出视频后配音"）③ 基础视觉风格（默认预选为 `冷灰写实3D国风漫剧`，但风格必须 derive from `基础视觉风格` + `global_style.md`，不写成 skill 铁律）。其中③已落地为选择点 + `style_contract`；旧 `cinematic_contract` 兼容。
 
 ## 8. 版本治理：bump 必带迁移
 

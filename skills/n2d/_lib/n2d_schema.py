@@ -214,6 +214,10 @@ BOUNDARY_PRODUCT_KINDS = {
         # 招式/打斗套路真值：每条 combat set 持有 SM_ 招式(五帧拆招模板 + action_choreography 契约骨架)、
         # 节奏 preset、绑定的 WEAPON_/VFX_ 引用。与 asset_registry 互补：本表记【打斗套路结构】，
         # asset_registry 记【武器实体/特效单资产】。跨剧 export/import-combat 复用结构、reskin 换皮、重出关键帧。
+        # ⚠️ **仅跨项目复用层，不进逐集流水线**：本文件只由 n2d-asset-market 的 export/import-combat 读写，
+        # script→image→video→gate 逐集管线既不读也不写它（无自动沉淀产者——靠 import-combat 或手工编入填充）。
+        # 逐集打斗真值在 storyboard `template_contract` + `spectacle_sequence_plan`(gate BLOCK)，不在本表；
+        # 别在逐集 gate 里加读 combat_registry 的检查（会与 spectacle_sequence_plan 重复、并造一条假边）。
         "boundary": "combat_definition",
     },
 }
@@ -226,7 +230,7 @@ PRODUCT_KINDS = BOUNDARY_PRODUCT_KINDS
 # 在状态机里可见，而非只埋在 prework 输出/gate 即时判定里。
 PROGRESS_COLUMNS = (
     "集", "字数", "raw", "剧本改编", "bgm", "封面", "配音", "分镜设计",
-    "素材清单", "字幕中", "字幕英", "奇观连续性", "出图prompt", "出图", "视频prompt", "视频", "成片",
+    "素材清单", "字幕中", "字幕英", "奇观连续性", "出图prompt", "出图", "视频prompt", "视频", "成片", "验收",
 )
 
 IDENTITY_FORK_HISTORY_FIELD = "fork_history"
@@ -332,8 +336,8 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "weight": 8,
         "return_to_stage": "image",
         "scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
-        "audit_labels": ("多模态(P2)", "视频语义一致(VSEM)", "特效窜色(VFXC)"),
-        "keywords": ("多模态", "道具", "法宝", "视觉语义", "embedding", "DINO", "CLIP", "DreamSim", "视频语义"),
+        "audit_labels": ("多模态(P2)", "视频语义一致(VSEM)", "特效窜色(VFXC)", "实体记忆(EMB)"),
+        "keywords": ("多模态", "道具", "法宝", "视觉语义", "embedding", "DINO", "CLIP", "DreamSim", "视频语义", "实体记忆", "entity_memory", "entity schedule"),
     },
     "contract_inheritance": {
         "label": "视觉契约继承",
@@ -348,8 +352,8 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "weight": 8,
         "return_to_stage": "script_stage2",
         "scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-        "audit_labels": ("交互接触(I1)", "持有账本(POS)", "结构化交互图谱(I2)", "物理因果链(CG1)"),
-        "keywords": ("交互", "接触", "持有", "持有账本", "递给", "抓握", "因果链", "物理", "motion_control", "interaction", "contact", "possession"),
+        "audit_labels": ("交互接触(I1)", "持有账本(POS)", "结构化交互图谱(I2)", "物理因果链(CG1)", "物理事件图(PHY)"),
+        "keywords": ("交互", "接触", "持有", "持有账本", "递给", "抓握", "因果链", "物理", "物理事件图", "physical_event", "motion_control", "interaction", "contact", "possession"),
     },
     "delivery_packaging_consistency": {
         "label": "成片/包装一致性",
@@ -364,8 +368,8 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "weight": 6,
         "return_to_stage": "review",
         "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-        "audit_labels": ("生成配方(RCP)", "强配方Schema(RCP2)", "成本路由(K1)", "人审校准集(CAL)", "一致性探针包(PROBE)"),
-        "keywords": ("生成配方", "recipe_hash", "prompt_sha256", "reference_bundle_sha256", "成本", "路由", "重试", "production_events", "provider", "seed", "校准集", "probe"),
+        "audit_labels": ("生成配方(RCP)", "强配方Schema(RCP2)", "成本路由(K1)", "人审校准集(CAL)", "一致性探针包(PROBE)", "视频证据完整性(EVID)"),
+        "keywords": ("生成配方", "recipe_hash", "prompt_sha256", "reference_bundle_sha256", "成本", "路由", "重试", "production_events", "provider", "seed", "校准集", "probe", "证据完整性", "video_eval_manifest", "sidecar"),
     },
     "ui_hud_consistency": {
         "label": "UI/系统面板/HUD 一致性",
@@ -588,16 +592,26 @@ STAGE_GRAPH: List[Dict[str, Any]] = [
         "key": "review",
         "label": "审查验收",
         "owner": "n2d-review",
-        "progress_columns": (),
+        "progress_columns": ("验收",),
         "command": "n2d-review {root} {ep}",
-        "routes": False,
+        "routes": True,
         "gate_stage": "review",
         "requires": ("成片",),
         "outputs": (
+            "生产数据/score_{ep}.json",
+            "生产数据/consistency_ledger_{ep}.json",
+            "生产数据/review_ui_{ep}.json",
+            "生产数据/review_ui_findings_{ep}.json",
             "合成/{ep}/成片_{ep}_zh.mp4",
             "合成/{ep}/成片_{ep}_bilingual.mp4",
         ),
         "output_contract": {
+            "required": (
+                "生产数据/score_{ep}.json",
+                "生产数据/consistency_ledger_{ep}.json",
+                "生产数据/review_ui_{ep}.json",
+                "生产数据/review_ui_findings_{ep}.json",
+            ),
             "any_of": (
                 {"label": "中文字幕成片", "all_of": ("合成/{ep}/成片_{ep}_zh.mp4",)},
                 {"label": "双语成片", "all_of": ("合成/{ep}/成片_{ep}_bilingual.mp4",)},
@@ -854,6 +868,11 @@ IMAGE_BACKEND_ALIASES = {
     "即梦": "dreamina_official",
     "dreamina": "dreamina_official",
     "codex": "codex",
+    # C5 模型名（生图模型）→ 默认访问渠道。GPT Image 2 默认走 Codex CLI；显式写 openai 走 Images API。
+    "gpt image 2": "codex",
+    "gpt-image-2": "codex",
+    "gpt image2": "codex",
+    "image2": "codex",
     "openai": "openai",
     "gpt-image": "openai",
     "dall-e": "openai",
@@ -877,8 +896,16 @@ FORBIDDEN_IMAGE_BACKEND_KEYWORDS = ("同视频ai", "同视频AI", "第三方", "
 # 避免把 Dreamina 这类“多参考但无持久主体 ID”的后端误当成 Seedream/可灵主体库。
 # 采集日期同 APPROVED_IMAGE_BACKENDS：2026-06-14；易变事实需走 freshness/refresh 流程刷新。
 IMAGE_IDENTITY_PROFILES: Dict[str, Dict[str, Any]] = {
+    # C5 铁律（贯通到执行真值表）：每条 profile 必须指认到具体**模型名**（model）；
+    # 渠道/访问入口单列（channel），label 以模型主导、渠道附注，禁止用纯渠道壳名（Codex/即梦）。
+    # in_context_consistency = 模型「同次生成/同会话内」多参考/上下文身份一致性强度（strong/moderate/standard）：
+    #   GPT Image 2 高保真多参考/上下文一致性=strong（≠弱后端），face_drift_risk 据此在集内 base 适度记功；
+    #   跨集仍按 multi_reference 不放水（见 face_drift_risk.score_character 注释）。
     "codex": {
-        "label": "Codex",
+        "label": "GPT Image 2（渠道 Codex CLI）",
+        "model": "GPT Image 2",
+        "channel": "Codex CLI",
+        "in_context_consistency": "strong",
         "persistent_subject": False,
         "multi_reference": True,
         "strategy": "multi_reference",
@@ -886,10 +913,13 @@ IMAGE_IDENTITY_PROFILES: Dict[str, Dict[str, Any]] = {
         "ingests_video": False,
         "recommended_diverse_reference_min": None,
         "native_modes": (),
-        "notes": "无公开服务端持久角色 ID；每镜走项目记忆 reference_group + 真实图片入参 + 锚点句 + full QC。",
+        "notes": "生成者=GPT Image 2（第一梯队·高保真多参考/编辑·强上下文一致性·4K级尺寸·非弱后端）；Codex 仅访问入口。无公开服务端持久角色 ID；当前官方文档未证实可注册 subject-id/handle，每镜走项目记忆 reference_group + 真实图片入参 + 锚点句 + full QC。",
     },
     "openai": {
-        "label": "官方 OpenAI gpt-image / DALL·E",
+        "label": "GPT Image 2（渠道 OpenAI Images API）",
+        "model": "GPT Image 2",
+        "channel": "OpenAI Images API",
+        "in_context_consistency": "strong",
         "persistent_subject": False,
         "multi_reference": True,
         "strategy": "multi_reference",
@@ -897,10 +927,13 @@ IMAGE_IDENTITY_PROFILES: Dict[str, Dict[str, Any]] = {
         "ingests_video": False,
         "recommended_diverse_reference_min": None,
         "native_modes": (),
-        "notes": "支持图片输入/编辑/高保真参考，但无 n2d 持久主体 ID；按项目记忆 reference_group 与 image edit 兜底。",
+        "notes": "生成者=GPT Image 2（经官方 OpenAI Images API）；支持图片输入/编辑/高保真参考，但无 n2d 持久主体 ID；按项目记忆 reference_group 与 image edit 兜底。",
     },
     "dreamina": {
-        "label": "Dreamina/即梦官方 CLI",
+        "label": "即梦图像模型 Seedream 系（渠道 Dreamina/即梦官方 CLI）",
+        "model": "即梦图像模型（Seedream 系·版本以 per-run 官方证据为准）",
+        "channel": "Dreamina/即梦官方 CLI",
+        "in_context_consistency": "moderate",
         "persistent_subject": False,
         "multi_reference": True,
         "strategy": "multi_reference_sticky_reference",
@@ -908,10 +941,13 @@ IMAGE_IDENTITY_PROFILES: Dict[str, Dict[str, Any]] = {
         "ingests_video": False,
         "recommended_diverse_reference_min": None,
         "native_modes": (),
-        "notes": "官方 CLI 可多参考/图生图；按无持久角色 ID 处理，切角色前必须清空参考框。",
+        "notes": "生成者=Seedream 系图像模型（即梦是 ByteDance 消费端渠道壳，≠模型本身）。官方 CLI 可多参考/图生图；按无持久角色 ID 处理，切角色前必须清空参考框。",
     },
     "nano_banana": {
-        "label": "Nano Banana / Gemini 多参考",
+        "label": "Nano Banana Pro = Gemini 3 Pro Image（渠道 Gemini API）",
+        "model": "Nano Banana Pro（Gemini 3 Pro Image·版本以 per-run 证据为准）",
+        "channel": "Gemini API",
+        "in_context_consistency": "moderate",
         "persistent_subject": False,
         "multi_reference": True,
         "strategy": "multi_reference",
@@ -923,14 +959,17 @@ IMAGE_IDENTITY_PROFILES: Dict[str, Dict[str, Any]] = {
         "recommended_diverse_reference_min": None,
         "native_modes": (),
         "notes": (
-            "Google Gemini/Nano Banana 多图参考后端；无持久角色 ID，不等同 Seedream Universal Reference，"
+            "生成者=Nano Banana Pro（即 Google Gemini 3 Pro Image，DeepMind）；无持久角色 ID，不等同 Seedream Universal Reference，"
             "不写入 seedream adapter。按官方 2026-06 文档：Gemini 3 Pro Image 高保真人物参考最多 5 张、"
             "总输入最多 14 张；Gemini 3.1 Flash Image 支持至多 4 个角色相似与 10 个对象保真。"
             "reference_planner 应在容量内优先选当前镜角色 face_anchor/expression/服装/场景参考，禁止全量喂图。"
         ),
     },
     "seedream": {
-        "label": "Seedream Universal Reference",
+        "label": "Seedream（Universal Reference·渠道 Seedream 官方 API）",
+        "model": "Seedream 4.5（Universal Reference·版本以 per-run 证据为准）",
+        "channel": "Seedream 官方 API",
+        "in_context_consistency": "strong",
         "persistent_subject": True,
         "multi_reference": True,
         "strategy": "universal_reference",
@@ -938,10 +977,13 @@ IMAGE_IDENTITY_PROFILES: Dict[str, Dict[str, Any]] = {
         "ingests_video": False,
         "recommended_diverse_reference_min": 8,
         "native_modes": ("universal_reference",),
-        "notes": "支持原生主体/通用参考能力；注册或 ready 后按 ID/handle/reference 跨镜复用。注册时喂多样参考集（多角度+多表情+多光）比单 sheet 稳。",
+        "notes": "生成者=Seedream 4.5（ByteDance）；支持原生主体/通用参考能力；注册或 ready 后按 ID/handle/reference 跨镜复用。注册时喂多样参考集（多角度+多表情+多光）比单 sheet 稳。",
     },
     "kling": {
-        "label": "可灵 Kling 主体库",
+        "label": "可灵 Kling 主体库图像模型（渠道 可灵/Kling）",
+        "model": "Kling 主体库图像模型（版本以 per-run 证据为准）",
+        "channel": "可灵/Kling",
+        "in_context_consistency": "strong",
         "persistent_subject": True,
         "multi_reference": True,
         "strategy": "subject_library",
@@ -949,10 +991,13 @@ IMAGE_IDENTITY_PROFILES: Dict[str, Dict[str, Any]] = {
         "ingests_video": True,
         "recommended_diverse_reference_min": 10,
         "native_modes": ("character_id", "subject_library", "custom_model", "element_library"),
-        "notes": "支持主体库/角色 ID 类能力；高危多人同框与接触镜优先注册。Custom Model 可吃 10–30 段视频/多帧拿最丰富身份，是治板式的首选。",
+        "notes": "生成者=可灵 Kling 主体库图像模型（快手）；支持主体库/角色 ID 类能力；高危多人同框与接触镜优先注册。Custom Model 可吃 10–30 段视频/多帧拿最丰富身份，是治板式的首选。",
     },
     "sora": {
-        "label": "Sora Character Cameo",
+        "label": "Sora（Character Cameo·渠道 Sora）",
+        "model": "Sora（Character Cameo）",
+        "channel": "Sora",
+        "in_context_consistency": "strong",
         "persistent_subject": True,
         "multi_reference": True,
         "strategy": "character_cameo",
@@ -960,7 +1005,7 @@ IMAGE_IDENTITY_PROFILES: Dict[str, Dict[str, Any]] = {
         "ingests_video": True,
         "recommended_diverse_reference_min": 8,
         "native_modes": ("character_cameo",),
-        "notes": "支持可复用角色 Cameo；以官方当前能力为准，执行前刷新候选。",
+        "notes": "生成者=Sora（OpenAI·Character Cameo）；支持可复用角色 Cameo；以官方当前能力为准，执行前刷新候选。",
     },
 }
 
@@ -971,14 +1016,14 @@ READINESS_TRACKED_SKILLS: List[Dict[str, Any]] = [
         "label": "合规治理",
         "skill": "n2d-compliance",
         "artifact": "合规/compliance_manifest.json",
-        "required_before": ("image", "video", "compose"),
+        "required_before": ("image", "video", "compose", "review"),
     },
     {
         "key": "identity",
         "label": "身份一致性",
         "skill": "n2d-identity",
         "artifact": f"出图/{SHARED_ASSET_DIR}/identity_registry.json",
-        "required_before": ("image", "video"),
+        "required_before": ("image", "video", "review"),
     },
     {
         "key": "motion-control",
@@ -1015,4 +1060,5 @@ COSTLY_HINTS = {
     "出图": "会真出图·消耗额度 → 开跑前确认生图后端 + 重抽预算档位",
     "视频": "会真出视频·消耗额度 → 开跑前确认生视频后端",
     "成片": "合成成片（混音+烧字幕），相对便宜但耗时",
+    "验收": "不生产新媒体，但会刷新 review gate、评分、总账和审片 UI；通过后仍需人工签收",
 }

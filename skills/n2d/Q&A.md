@@ -619,13 +619,14 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 
 **起因**：第1集成片时发现「配音迁就预设字幕窗口被迫压速、不同步」。深挖根因——**当时产线把配音放在最后，镜头时长按平台默认估**（故事板写死 6-8s、字幕时间轴从估值推），与主流工作室「先配音、配音时长决定镜头时长」**正好相反**。
 
-**修正后的六阶段产线**（已合入 main）：
+**修正后的主状态机**（已合入 main）：
 ```
 小说 → n2d-script阶段1·剧本改编(voiceover台词 + bgm + 封面，**不做分镜**)
      → n2d-voice(角色配音 + 统计每句台词时长·时长清单.json)
      → n2d-script阶段2·分镜设计(时长驱动 → 分镜剧本 + 故事板Clip时长 + 素材清单 + 字幕SRT + 镜头时长.json)
      → n2d-image(出图) → n2d-video(图生视频·clip落 出视频/第N集/视频/)
      → n2d-compose(剪辑合成 + 背景音乐 + 字幕 → 成片_第N集_{mode}.mp4)
+     → n2d-review(review gate + score + 验收总账 + review-ui → 人工签收 验收=✅)
 ```
 
 **关键新增**：

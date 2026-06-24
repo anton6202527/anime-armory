@@ -294,6 +294,65 @@ def test_expression_span_big_non_closeup_warns(tmp_path):
     assert not any(f["sev"] == "block" for f in gate.findings)
 
 
+# ── 表情库覆盖闸（把表情锚提到与脸锚同级：大表情近景 + 核心角色必须建表情库·BLOCK） ──────
+def _big_expr_clip(char_id="CHAR_01"):
+    # 跨情绪大表情近景镜，scene 文本里引用某角色 id（供回连定位）。
+    return {"id": "Clip_01", "label": "决裂", "duration": 5.0, "template": "dialogue_closeup",
+            "scene": f"{char_id} 由隐忍转暴怒，泪崩", "firstframe_png": "出图/第1集/图片/镜头1.png",
+            "shots": [{"t": "0-5s", "lens": "CU 50mm", "desc": "脸部特写"}],
+            "continuity": {"start_state": "隐忍", "end_state": "暴怒", "transition": "硬切",
+                           "need_endframe": True, "expression_span": "大"}}
+
+
+def _reg(characters):
+    return {"kind": "n2d_identity_registry", "characters": characters}
+
+
+def test_core_expression_coverage_blocks_when_core_char_lacks_expression_lib(tmp_path):
+    root = _write_storyboard_with_clips(tmp_path, [_big_expr_clip("CHAR_01")])
+    _write_identity_registry(tmp_path, _reg([
+        {"id": "CHAR_01", "name": "沈念", "scope": "贯穿全篇主角",
+         "forms": [{"form": "真身", "reference_group": {"front": "a.png"}}]}]))  # 无 expression_anchors
+
+    gate.check_core_expression_anchor_coverage(root, "第1集")
+
+    assert any(f["dim"] == "表情一致性" and f["sev"] == "block"
+               and "未建表情库" in f["msg"] for f in gate.findings)
+
+
+def test_core_expression_coverage_passes_when_anchors_exist(tmp_path):
+    root = _write_storyboard_with_clips(tmp_path, [_big_expr_clip("CHAR_01")])
+    _write_identity_registry(tmp_path, _reg([
+        {"id": "CHAR_01", "name": "沈念", "scope": "贯穿全篇主角",
+         "forms": [{"form": "真身", "expression_anchors": [{"emotion": "暴怒", "path": "怒.png"}]}]}]))
+
+    gate.check_core_expression_anchor_coverage(root, "第1集")
+
+    assert not gate.findings
+
+
+def test_core_expression_coverage_skipped_without_big_expression(tmp_path):
+    # 本集无 expression_span=大 镜 → opt-in 未启用追踪，即便核心角色没表情库也跳过。
+    root = _write_storyboard_with_clips(tmp_path, [_clip(span="微", need_end=False)])
+    _write_identity_registry(tmp_path, _reg([
+        {"id": "CHAR_01", "name": "沈念", "scope": "贯穿全篇主角", "forms": [{"form": "真身"}]}]))
+
+    gate.check_core_expression_anchor_coverage(root, "第1集")
+
+    assert not gate.findings
+
+
+def test_core_expression_coverage_ignores_non_core_char(tmp_path):
+    # 大表情近景但只引用一次性配角（非核心长线）→ 不前置 BLOCK（ROI 驱动）。
+    root = _write_storyboard_with_clips(tmp_path, [_big_expr_clip("CHAR_07")])
+    _write_identity_registry(tmp_path, _reg([
+        {"id": "CHAR_07", "name": "路人甲", "scope": "单元配角", "forms": [{"form": "default"}]}]))
+
+    gate.check_core_expression_anchor_coverage(root, "第1集")
+
+    assert not gate.findings
+
+
 # ── 首/尾帧路径相等校验（finding #3：两侧各查存在，还须是同一张） ───────────────────
 def _write_video_clip_prompt(root, body):
     p = Path(root) / "出视频" / "第1集" / "prompt"
@@ -511,6 +570,15 @@ MULTI_SUBJECT_SLOT_FIELDS = (
     "**区分锚点**：沈念=乌黑半披+月白粗布；柳娘子=高髻+绛红裙；两两发色/服装主色互斥不撞色。\n"
 )
 
+REGIONAL_MULTI_SUBJECT_FIELDS = (
+    "**多人同框身份槽位**：LEFT_SLOT=`CHAR_SHEN/常态*`（primary，画左前景，视线画右，参考=沈念 front+脸部特写/expressions）；"
+    "RIGHT_SLOT=`CHAR_LIU/常服`（secondary，画右后景，视线画左，参考=柳娘子 front+半身）。\n"
+    "**多人同框执行策略**：regional_construct_required；split_composite_required；"
+    "empty_plate=`出图/第1集/区域构建/Clip_01/empty_plate.png`；region masks=`masks.json`；"
+    "官方 inpaint / regional-prompt 分区构建，统一 relighting/color match；这是硬执行，不是条件式兜底。\n"
+    "**区分锚点**：沈念=乌黑半披+月白粗布；柳娘子=高髻+绛红裙；两两发色/服装主色互斥不撞色。\n"
+)
+
 
 def test_two_char_shot_on_single_ref_backend_is_blocked():
     # 单图参考后端(Codex 类，无原生主体锁) + 双人同框 + 未声明多主体策略 → BLOCK
@@ -566,6 +634,16 @@ def test_multi_person_closeup_escapes_when_split_declared():
         "**专项镜头模板**：dialogue_shot_reverse；native_subject_slots；\n" + MULTI_SUBJECT_SLOT_FIELDS,
     )
     gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot, single_ref_backend=False)
+    assert not any(f["dim"] == "构图景别" and "近景" in str(f["msg"]) for f in gate.findings)
+
+
+def test_multi_person_closeup_escapes_when_regional_construct_declared():
+    shot = TWO_CHAR_SHOT.replace(
+        "**专项镜头模板**：dialogue_shot_reverse；",
+        "**专项镜头模板**：dialogue_shot_reverse；\n" + REGIONAL_MULTI_SUBJECT_FIELDS,
+    )
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot, single_ref_backend=True)
+    assert not any(f["dim"] == "角色一致性" and "同框" in str(f["msg"]) for f in gate.findings)
     assert not any(f["dim"] == "构图景别" and "近景" in str(f["msg"]) for f in gate.findings)
 
 
@@ -966,6 +1044,22 @@ def test_shot_missing_light_anchor_is_blocked():
     )
     gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot)
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "光影一致性" and "光位锚" in f["msg"] for f in gate.findings)
+
+
+def test_shot_color_temperature_contradiction_warns():
+    # 光线落地：单一色温值与暖/冷描述自相矛盾（3000K 偏暖却写"冷调"）→ 光影一致性 WARN
+    shot = GOOD_SHOT.replace(
+        "**光位锚**：继承本场光位锚（主光：画左前烛光顶侧光 / 3000K 暖 / 动机=残烛），本镜不改光",
+        "**光位锚**：继承本场光位锚（主光：画左前 / 3000K 冷调主光），本镜不改光",
+    )
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot)
+    assert any(f["sev"] == gate.WARN and f["dim"] == "光影一致性" and "自相矛盾" in str(f["msg"])
+               for f in gate.findings)
+
+
+def test_good_shot_color_temperature_no_warn():
+    gate.check_image_shot_prompt_section("01_分镜出图.md", 1, GOOD_SHOT)
+    assert not any(f["dim"] == "光影一致性" and "色温" in str(f["msg"]) for f in gate.findings)
 
 
 def test_shot_missing_motion_room_is_blocked():
@@ -3248,6 +3342,28 @@ def test_video_clip_suspect_camera_move_warns():
 def test_good_video_clip_has_no_camera_move_warn():
     gate.check_video_clip_prompt_section("01_clips.md", GOOD_VIDEO_CLIP)
     assert not any(f["dim"] == "运动一致性" for f in gate.findings)
+
+
+def test_video_clip_freeform_camera_move_warns_unstructured():
+    # ⑤ 运镜结构化：自由散文运镜（无结构化词）→ 运动一致性 WARN（提示用 CAMERA_MOVE_LEXICON）
+    clip = GOOD_VIDEO_CLIP.replace(
+        "镜头运动：略俯 MCU 缓慢推近 0.5x，结尾稳定停住；",
+        "镜头运动：镜头慢慢靠近她的脸然后停下；",
+    )
+    gate.check_video_clip_prompt_section("01_clips.md", clip)
+    assert any(f["sev"] == gate.WARN and f["dim"] == "运动一致性" and "结构化运镜词" in str(f["msg"])
+               for f in gate.findings)
+
+
+def test_video_clip_camera_move_missing_speed_warns():
+    # ⑤ 运镜结构化：识别到运镜词但缺速度档 → 运动一致性 WARN（补速度词）
+    clip = GOOD_VIDEO_CLIP.replace(
+        "镜头运动：略俯 MCU 缓慢推近 0.5x，结尾稳定停住；",
+        "镜头运动：环绕拍摄主角；",
+    )
+    gate.check_video_clip_prompt_section("01_clips.md", clip)
+    assert any(f["sev"] == gate.WARN and f["dim"] == "运动一致性" and "缺速度档" in str(f["msg"])
+               for f in gate.findings)
 
 
 def test_video_clip_missing_identity_lock_is_blocked():
@@ -6814,3 +6930,57 @@ def test_storyboard_high_motion_endframe_true_passes(tmp_path):
     _touch_png(root, e)
     gate.check_storyboard_contract(str(root), "第1集")
     assert not any(x["dim"] == "尾帧" and "高速运动镜" in x["msg"] for x in gate.findings)
+
+
+def test_scene_atlas_missing_blocks_production_core_loc(tmp_path):
+    # G-I2：production 核心 LOC 缺 scene_atlas（场景四视图）→ BLOCK
+    gate.findings.clear()
+    root = Path(_write_asset_registry(tmp_path, make_assets=True))
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    gate.check_asset_reference_registry(str(root), require_reference_assets=True)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "场景多机位锁(G-I2)" for f in gate.findings)
+
+
+def test_scene_atlas_front_plus_alt_passes(tmp_path):
+    gate.findings.clear()
+    data = _asset_registry()
+    data["assets"][0]["scene_atlas"] = {
+        "base_views": {
+            "front": "出图/共享/图片/定妆_冷宫寝殿_正机位.png",
+            "back": "出图/共享/图片/定妆_冷宫寝殿_反打.png",
+        }
+    }
+    root = Path(_write_asset_registry(tmp_path, data, make_assets=True))
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    gate.check_asset_reference_registry(str(root), require_reference_assets=True)
+    assert not any(f["dim"] == "场景多机位锁(G-I2)" for f in gate.findings)
+
+
+def test_scene_atlas_single_angle_exempt(tmp_path):
+    gate.findings.clear()
+    data = _asset_registry()
+    data["assets"][0]["scene_atlas"] = {"single_angle": True}
+    root = Path(_write_asset_registry(tmp_path, data, make_assets=True))
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    gate.check_asset_reference_registry(str(root), require_reference_assets=True)
+    assert not any(f["dim"] == "场景多机位锁(G-I2)" for f in gate.findings)
+
+
+def test_scene_atlas_only_front_blocks(tmp_path):
+    gate.findings.clear()
+    data = _asset_registry()
+    data["assets"][0]["scene_atlas"] = {
+        "base_views": {"front": "出图/共享/图片/定妆_冷宫寝殿_正机位.png"}
+    }
+    root = Path(_write_asset_registry(tmp_path, data, make_assets=True))
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    gate.check_asset_reference_registry(str(root), require_reference_assets=True)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "场景多机位锁(G-I2)" for f in gate.findings)
+
+
+def test_scene_atlas_not_required_in_demo_profile(tmp_path):
+    # 非 production（demo/宽松）不强制场景多机位锁——窄作用域，不惊扰 demo
+    gate.findings.clear()
+    root = Path(_write_asset_registry(tmp_path, make_assets=True))
+    gate.check_asset_reference_registry(str(root), require_reference_assets=True)
+    assert not any(f["dim"] == "场景多机位锁(G-I2)" for f in gate.findings)

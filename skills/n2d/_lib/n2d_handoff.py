@@ -51,6 +51,17 @@ CLOSEUP_MARKERS = (
     "CU", "ECU", "MCU", "BCU", "特写", "近景", "脸部", "面部",
     "反打", "正反打", "过肩", "OTS", "dialogue_shot_reverse", "dialogue_closeup",
 )
+# 高动作/落地/命中 beat 标记（G-V2·2026-06-24）：动作镜「首帧蓄势+尾帧落点」是仅次于身份锁的
+# 第二强一致性杠杆，缺尾帧硬约束时后端易『假动/静态合理化』或动作不完成（2026 物理合规<30%）。
+ACTION_BEAT_MARKERS = (
+    "打斗", "交手", "对打", "厮杀", "格挡", "出拳", "挥拳", "挥剑", "挥刀", "拔剑", "劈", "斩",
+    "砍", "刺", "踢", "腾空", "跃起", "飞身", "翻滚", "翻身", "纵身", "坠落", "跌落", "摔落",
+    "坠地", "砸", "撞击", "冲撞", "扑向", "扑倒", "接住", "击中", "命中", "重击", "追逐", "追击",
+    "疾驰", "奔袭", "爆炸", "炸开", "冲击波", "落地", "着地", "降落", "腾云", "驾雾", "御剑",
+    "impact", "punch", "kick", "slash", "leap", "crash",
+)
+# 显式高动作强度声明（storyboard continuity 字段）。
+HIGH_MOTION_VALUES = {"高", "大", "high", "violent", "large", "intense"}
 # 逐镜资产 id（场景/道具/武器/服装/特效）。
 ASSET_HANDOFF_ID_RE = re.compile(r"(?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9]+")
 
@@ -173,8 +184,18 @@ def _storyboard_clip_meta(root: str, ep: str) -> dict:
             "expression_span": str(cont.get("expression_span") or "").strip(),
             "need_endframe": cont.get("need_endframe") is True,
             "closeup": any(m in blob for m in CLOSEUP_MARKERS),
+            "action_beat": _is_action_beat_blob(blob, cont),
         }
     return out
+
+
+def _is_action_beat_blob(blob: str, cont: dict) -> bool:
+    """从镜头描述 blob + continuity 判是否高动作/落地/命中 beat。纯函数·可测。"""
+    if any(m in str(blob or "") for m in ACTION_BEAT_MARKERS):
+        return True
+    if cont.get("spectacle") is True or cont.get("action_beat") is True:
+        return True
+    return str(cont.get("motion_intensity") or "").strip().lower() in HIGH_MOTION_VALUES
 
 
 def _check_multiframe_identity_contract(res: dict, clip_id: str, block: str, image_block: str = "") -> None:
@@ -267,6 +288,33 @@ def _check_big_expression_contract(res: dict, clip_id: str, block: str, meta: di
         })
 
 
+def _is_action_beat(meta: dict) -> bool:
+    """该镜是否被 storyboard 判为高动作/落地/命中 beat。纯函数·可测。"""
+    return bool(meta) and bool(meta.get("action_beat"))
+
+
+def _check_action_beat_contract(res: dict, clip_id: str, block: str, meta: dict) -> None:
+    """高动作/落地/命中 beat：首=蓄势、尾=落点的首尾帧硬约束是动作镜第二强一致性杠杆。
+
+    缺尾帧时动作镜易『假动/静态合理化』或动作不完成（2026 物理合规<30%、可灵默认把激烈动作降慢动作、
+    clip 末段易掉帧）。动作 beat 由关键词/强度启发式检出（比 expression_span 显式字段误报率高），
+    故缺尾帧只 warn 交人判，不像大表情近景那样 block。大表情近景已强制尾帧，这里不重复报。
+    """
+    if not _is_action_beat(meta):
+        return
+    if meta.get("expression_span") in BIG_EXPRESSION_VALUES and meta.get("closeup"):
+        return
+    if not _frame_refs(block)["end"]:
+        res["findings"].append({
+            "clip_id": clip_id,
+            "severity": "warn",
+            "code": "action_beat_endframe_missing",
+            "note": (f"{clip_id}：storyboard 标记高动作/落地/命中 beat，但视频 prompt 没有 `**尾帧**`。"
+                     "动作镜易『假动/静态合理化』或动作不完成——建议补尾帧作落点（首=蓄势、尾=命中/落地/收招），"
+                     "让支持首尾帧硬约束的后端插值出完整动作弧线，而非靠首帧自由外推。"),
+        })
+
+
 def check_identity_handoff(root: str, ep: str) -> dict:
     """对每个命名角色镜核验逐镜 video prompt 写了身份锁定 + 具体锚点（②）。
 
@@ -321,6 +369,7 @@ def check_identity_handoff(root: str, ep: str) -> dict:
             img_blocks.get(nr["clip_num"], ""),
         )
         _check_big_expression_contract(res, nr["clip_id"], blk, clip_meta.get(nr["clip_num"], {}))
+        _check_action_beat_contract(res, nr["clip_id"], blk, clip_meta.get(nr["clip_num"], {}))
     return res
 
 

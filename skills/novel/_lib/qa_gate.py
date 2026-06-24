@@ -46,6 +46,10 @@ AI_USAGE_REQUIRED_TARGETS = (
     "红果", "番茄", "抖音", "漫剧", "短剧", "微短剧", "商业连载",
     "出海", "海外", "KDP", "Kindle", "Amazon", "YouTube", "TikTok",
 )
+STRICT_AI_TEXT_TARGETS = (
+    "晋江", "起点", "番茄", "红果", "七猫", "纵横", "抖音", "中文网文平台",
+)
+TEXT_AUTHORSHIP_MODES = {"人类主创", "AI辅助", "AI生成"}
 
 REVIEW_REQUIRED_FIELDS = (
     "schema_version",
@@ -669,6 +673,124 @@ def _ai_usage_gate(project_root, *, require=False):
     return report
 
 
+def _target_text(project_root):
+    meta = _load_meta(project_root)
+    settings = _load_settings(project_root)
+    target_parts = [
+        meta.get("draft_mode"),
+        meta.get("purpose"),
+        meta.get("target_platform"),
+        meta.get("target"),
+        ",".join(meta.get("outputs") or []),
+        settings.get("小说用途"),
+        settings.get("目标平台"),
+        settings.get("出海目标平台"),
+        settings.get("目标语言"),
+    ]
+    return " ".join(str(part or "") for part in target_parts)
+
+
+def _normalize_text_authorship(value):
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    lowered = text.lower()
+    if text in TEXT_AUTHORSHIP_MODES:
+        return text
+    if lowered in {"human", "human-primary", "human_primary", "人写", "人工主创"}:
+        return "人类主创"
+    if lowered in {"ai-assisted", "ai assisted", "assist", "辅助", "ai辅助"}:
+        return "AI辅助"
+    if lowered in {"ai-generated", "ai generated", "generated", "ai生成", "ai起草"}:
+        return "AI生成"
+    return text
+
+
+def _text_authorship_from_ai_usage(payload):
+    if not isinstance(payload, dict):
+        return ""
+    mode = _normalize_text_authorship(payload.get("text_authorship_mode"))
+    if mode:
+        return mode
+    text_mode = payload.get("text_mode")
+    if text_mode == "AI-generated":
+        return "AI生成"
+    if text_mode == "AI-assisted":
+        return "AI辅助"
+    if text_mode == "未使用AI文本":
+        return "人类主创"
+    return ""
+
+
+def _platform_ai_gate(project_root):
+    """Gate platform-submission risk separately from generic disclosure.
+
+    AI usage disclosure answers "what must be recorded"; this gate answers
+    "is this authorship mode compatible with the target platform workflow".
+    """
+    settings = _load_settings(project_root)
+    payload = _load_json(os.path.join(project_root, "合规", "ai_usage.json"))
+    setting_mode = _normalize_text_authorship(settings.get("文本主创模式"))
+    usage_mode = _text_authorship_from_ai_usage(payload)
+    mode = setting_mode or usage_mode or ""
+    target = _target_text(project_root)
+    strict_target = any(key in target for key in STRICT_AI_TEXT_TARGETS)
+    report = {
+        "kind": "platform_ai_text",
+        "path": os.path.join(project_root, "_设置.md"),
+        "exists": bool(setting_mode or usage_mode),
+        "blocking": False,
+        "blockers": [],
+        "warnings": [],
+        "next_actions": [],
+    }
+    if mode and mode not in TEXT_AUTHORSHIP_MODES:
+        report["warnings"].append(_warning(
+            "AI-AUTHORSHIP-UNKNOWN",
+            "compliance",
+            "novel-craft",
+            f"文本主创模式无法归一：{mode}；请在 _设置.md 写 人类主创 / AI辅助 / AI生成。",
+        ))
+        return report
+    if setting_mode and usage_mode and setting_mode != usage_mode:
+        report["blockers"].append(_warning(
+            "AI-AUTHORSHIP-CONFLICT",
+            "compliance",
+            "novel-craft",
+            f"_设置.md 文本主创模式={setting_mode}，但 合规/ai_usage.json 推断为 {usage_mode}；发布/投稿前需统一。",
+        ))
+    if strict_target and not mode:
+        report["warnings"].append(_warning(
+            "AI-AUTHORSHIP-MISSING",
+            "compliance",
+            "novel-craft",
+            "目标平台属于中文网文/短剧投稿高风险场景，但缺少 文本主创模式；建议在 _设置.md 明确 人类主创 或 AI辅助。",
+        ))
+    elif strict_target and mode == "AI生成":
+        report["blockers"].append(_warning(
+            "AI-GENERATED-TEXT-PLATFORM-RISK",
+            "compliance",
+            "novel-craft",
+            "目标平台属于中文网文/短剧投稿高风险场景，当前为 AI生成 正文；请改走 人类主创/AI辅助 流程，或补目标平台当日接受 AI 正文投稿的正式证据与豁免留痕。",
+        ))
+    elif strict_target and mode == "AI辅助":
+        report["warnings"].append(_warning(
+            "AI-ASSISTED-TEXT-PLATFORM-REVIEW",
+            "compliance",
+            "novel-craft",
+            "目标平台属于中文网文/短剧投稿高风险场景，AI辅助 应限制在大纲、检查、润色、资料整理等工具性环节；最终正文需人工主创并在 ai_usage 中记录 human_steering/review_steps。",
+        ))
+    if report["blockers"]:
+        report["next_actions"].append({
+            "priority": "P0",
+            "return_to_stage": "draft",
+            "recommended_skill": "novel-craft",
+            "action": "把 _设置.md 的 文本主创模式 改为 人类主创/AI辅助，并按 novel-edit/novel-review 完成人工主创与编辑留痕；或补平台接受 AI 正文的证据和 waiver。",
+        })
+    report["blocking"] = bool(report["blockers"])
+    return report
+
+
 def _missing_fields(payload, fields):
     return [field for field in fields if field not in payload]
 
@@ -985,6 +1107,64 @@ def _arc_gate(project_root, *, require=False):
     return report
 
 
+def _scene_cards_gate(project_root):
+    path = os.path.join(project_root, "设定", "scene_cards.json")
+    payload = _load_json(path)
+    report = {
+        "kind": "scene_cards",
+        "path": path,
+        "exists": isinstance(payload, dict),
+        "blocking": False,
+        "blockers": [],
+        "warnings": [],
+        "next_actions": [],
+    }
+    required_fields = ("pov", "desire", "obstacle", "conflict", "turn", "value_shift")
+    if not isinstance(payload, dict):
+        if _score_required(project_root) or _arc_long_project(project_root):
+            report["warnings"].append(_warning(
+                "SCENE-CARDS-MISSING",
+                "outline",
+                "novel-craft",
+                "商业/长篇项目建议建立 设定/scene_cards.json，把章节拆到 POV/目标/阻碍/冲突/转折/价值变化的场景级打磨单位。",
+            ))
+            report["next_actions"].append({
+                "priority": "P1",
+                "return_to_stage": "outline",
+                "recommended_skill": "novel-craft",
+                "action": "运行 scene_cards.py scaffold 后补齐场景卡，再重出 draft packets。",
+            })
+        return report
+    if payload.get("kind") != "novel_scene_cards":
+        report["warnings"].append(_warning(
+            "SCENE-CARDS-SCHEMA",
+            "outline",
+            "novel-craft",
+            "scene_cards.json kind 不是 novel_scene_cards；请用 scene_cards.py scaffold/check 重建或迁移。",
+        ))
+        return report
+    for scene in payload.get("scenes") or []:
+        if not isinstance(scene, dict):
+            continue
+        missing = [field for field in required_fields if not str(scene.get(field) or "").strip()]
+        if missing:
+            report["blockers"].append(_warning(
+                "SCENE-CARD-MISSING-FIELDS",
+                "outline",
+                "novel-craft",
+                f"{scene.get('id') or 'scene'} 缺关键字段：{'、'.join(missing)}；没有目标/阻碍/转折/价值变化的场景不能进入高质量定稿。",
+            ))
+    if report["blockers"]:
+        report["next_actions"].append({
+            "priority": "P1",
+            "return_to_stage": "outline",
+            "recommended_skill": "novel-craft",
+            "action": "补齐 scene_cards.json 后重跑 scene_cards.py check，并重新生成对应章节任务包。",
+        })
+    report["blocking"] = bool(report["blockers"])
+    return report
+
+
 def collect_gate_status(project_root, *, require_review_report=False, require_score_report=None,
                         export_formats=None, require_state_closure=False,
                         state_chapter=None, require_ai_usage=None):
@@ -999,6 +1179,8 @@ def collect_gate_status(project_root, *, require_review_report=False, require_sc
         _score_gate(root, require_report=require_score_report, global_waivers=global_waivers),
         _arc_gate(root, require=_arc_long_project(root)),
         _reader_panel_gate(root),
+        _platform_ai_gate(root),
+        _scene_cards_gate(root),
     ]
     if require_state_closure:
         reports.append(_state_closure_gate(root, chapter=state_chapter, require=True))

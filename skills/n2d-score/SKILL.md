@@ -75,7 +75,7 @@ python3 skills/n2d-score/scripts/score.py <作品根> 第1集 --run-checks
 生产数据/score_第1集.md
 ```
 
-`第N集_identity.json` 由 `n2d-identity`（窗口=本集+前两集）产出的 `drift` 报告：单集评分本来对**跨集**角色漂移是盲的（片内每镜对定妆库都过，但相对前几集已经换了脸也看不出）。评分只采纳其中的**跨集回归**信号（某角色早集 ok、本集开始 block/临界），按 warn 级并进角色 DNA 一致性——片内崩脸的 block 已由 `脸(G1)` 计，不在此重复扣分。`identity_registry.json` 缺失或 insightface/cv2 没装时该输入缺席，角色 DNA 一致性按 `insufficient_data` 显式标注，不臆造通过。
+`第N集_identity.json` 由 `n2d-identity`（窗口=第1集..本集）产出的 `drift` 报告：单集评分本来对**跨集**角色漂移是盲的（片内每镜对定妆库都过，但相对前几集已经换了脸也看不出）。评分只采纳其中的**跨集回归**信号（某角色早集 ok、本集开始 block/临界）和**长间隔再登场** recurrence 风险，按 warn 级并进角色 DNA 一致性——片内崩脸的 block 已由 `脸(G1)` 计，不在此重复扣分。`identity_registry.json` 缺失或 insightface/cv2 没装时该输入缺席，角色 DNA 一致性按 `insufficient_data` 显式标注，不臆造通过。
 
 `第N集_visual.json` 由 `scripts/visual_checks.py` 生成，包含：
 
@@ -100,11 +100,13 @@ python3 skills/n2d-score/scripts/score.py <作品根> 第1集
 ```bash
 python3 skills/n2d-score/scripts/score.py <作品根> 第1集 \
   --run-checks \
-  --threshold 85 \
+  --profile production \
   --enqueue-low \
   --max-concurrency 1 \
   --max-retries 1
 ```
+
+`--profile` 可取 `demo / standard / production / overseas`，决定默认评分阈值和叙事 KPI 参考线；显式传 `--threshold` 时覆盖 profile 默认线。未传 profile 时按环境变量或 `_设置.md` 里的投放/打样/海外信号推断，推断不到用 `standard`。
 
 低分时会调用 `n2d-batch` 安全合并写入 `生产数据/batch_queue.json`，把每个低分维度聚合到对应 `return_to_stage`。例如语义继承/字幕/节奏低分 → `script_stage2` rerun；状态百科/多模态/角色 DNA/风格低分 → `image` rerun；音画同步低分 → `compose` rerun。证据里出现 `Clip 2`、`Clip_02`、`EP01_CLIP02`、`镜头2` 或 `出图/出视频/合成/脚本/...` 路径时，会落到 `affected_shots` / `affected_artifacts`，让 batch 优先按最小范围返工。若只有缺数据，`--enqueue-low` 不会写 batch 队列。
 
@@ -119,6 +121,7 @@ python3 skills/n2d-review-ui/scripts/review_ui.py <作品根> 第1集 --write --
 ## 与其他横切层的关系
 
 - `n2d-review` 负责产生确定性机检和 gate finding。
+- `narrative_continuity_kpi` 是报告型叙事健康度，不参与扣分；当前聚合伏笔已回收率、伏笔已规划率、冷开场链、跨集反套路、情绪起伏、叙事原子密度和 `entity_schedule` 覆盖率，并按 profile 调整权重/参考线。
 - `n2d-dashboard` 负责沉淀真实成本、耗时、重抽、QA 阻断、通过率；n2d-score 会读取 dashboard 的 episode 汇总作为辅助信号。**通过率下限与 dashboard 同源**：n2d-score 不再硬编码 0.75，按 `--pass-rate-floor` 或 `生产数据/alert_thresholds.json` 的 `final_pass_rate_floor`（与 dashboard 同一阈值）判定低通过率告警；都没配则不告警，避免 score 说有风险而 dashboard 没红灯的口径打架。
 - `n2d-review-ui` 负责消费 score JSON/inputs，生成可视化人审画布，让人直接核首帧、尾帧、clip、接缝、定妆参考、QA flag 和机器分。
 - `n2d-batch` 负责按 score 的 `auto_return_tasks` 排返工队列；缺数据只看 `data_collection_tasks`，不入 batch。

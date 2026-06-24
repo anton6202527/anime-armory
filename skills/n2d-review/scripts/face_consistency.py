@@ -420,6 +420,74 @@ def _load_pillow():
         return None
 
 
+# ── DreamSim 仲裁（G-I4·2026-06-24 流程自审落地） ──────────────────────────────────
+# 脸 embedder（ArcFace/StyleID）给的是脸-crop 余弦，落 🟡 边界带时谁也说不准是不是同一人。
+# 2026 共识：CLIP-I/DINO 与人眼偏好相关性差，**只有 DreamSim 稳定贴合人类判断**（arXiv DreamSim）。
+# 故对 🟡 边界镜引入 DreamSim 作整图感知仲裁：与该角色定妆 bank（多视图）比，sim≥bank 自标定地板
+# →判同人(ok)；sim<地板−margin→判异人(block)；带内维持 warn 交人判。默认关闭（需 N2D_DREAMSIM_ARBITER=1
+# + 装 dreamsim/torch），缺则行为完全不变、绝不臆造分。block/ok 只在 DreamSim 与 embedder 都有数据时下。
+DREAMSIM_MARGIN = 0.06
+
+
+def _env_truthy(val: Optional[str]) -> bool:
+    return str(val or "").strip().lower() in ("1", "true", "yes", "on")
+
+
+def arbiter_resolve(band_verdict: str, ds_sim: Optional[float], ds_floor: Optional[float],
+                    margin: float = DREAMSIM_MARGIN) -> str:
+    """🟡 边界带用 DreamSim 破平。只对 warn 生效；数据缺失原样返回。纯函数·可测。"""
+    if band_verdict != "warn" or ds_sim is None or ds_floor is None:
+        return band_verdict
+    if ds_sim >= ds_floor:
+        return "ok"
+    if ds_sim < ds_floor - margin:
+        return "block"
+    return "warn"
+
+
+def _load_dreamsim():  # pragma: no cover - 需 torch/GPU，CI 无；opt-in
+    if not _env_truthy(os.environ.get("N2D_DREAMSIM_ARBITER")):
+        return None
+    try:
+        from dreamsim import dreamsim as _ds  # type: ignore
+        import torch  # type: ignore  # noqa: F401
+        model, preprocess = _ds(pretrained=True)
+        return {"model": model, "preprocess": preprocess}
+    except Exception:
+        return None
+
+
+def _dreamsim_sim(bundle, a_path: str, b_path: str) -> Optional[float]:  # pragma: no cover - 需模型
+    try:
+        from PIL import Image  # type: ignore
+        import torch  # type: ignore
+        model, pre = bundle["model"], bundle["preprocess"]
+        a = pre(Image.open(a_path).convert("RGB"))
+        b = pre(Image.open(b_path).convert("RGB"))
+        with torch.no_grad():
+            dist = float(model(a, b))
+        return 1.0 - dist   # DreamSim 距离 → 相似度
+    except Exception:
+        return None
+
+
+def dreamsim_bank_floor(bundle, ref_paths: Sequence[str]) -> Optional[float]:  # pragma: no cover - 需模型
+    """定妆 bank 内多视图两两 DreamSim 相似度 → calibrate_floor（同人下限）。<2 张返回 None。"""
+    sims = []
+    for i in range(len(ref_paths)):
+        for j in range(i + 1, len(ref_paths)):
+            s = _dreamsim_sim(bundle, ref_paths[i], ref_paths[j])
+            if s is not None:
+                sims.append(s)
+    return calibrate_floor(sims) if len(sims) >= 1 else None
+
+
+def dreamsim_shot_sim(bundle, shot_path: str, ref_paths: Sequence[str]) -> Optional[float]:  # pragma: no cover
+    """该镜 vs 角色 bank 的最大 DreamSim 相似度（对任一视图够像即同人）。"""
+    sims = [s for p in ref_paths if (s := _dreamsim_sim(bundle, shot_path, p)) is not None]
+    return max(sims) if sims else None
+
+
 def cv2_face_boxes(png: str) -> Optional[List[Tuple[int, int, int, int]]]:
     """OpenCV Haar 正脸检测 → 人脸框 [(x,y,w,h)]；无 cv2/级联/读图失败 → None（区别于 []=检测到 0 脸）。
 
@@ -907,6 +975,12 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN,
             "脸部相似度度量已跳过（未装 insightface/cv2，且无 Pillow 可降级）——崩脸暂由人判清单(references/checklist.md)并排读图覆盖。")
         return result
 
+    # DreamSim 仲裁（opt-in）：默认 None，行为不变；启用时按角色 bank 建 DreamSim 同人地板。
+    dreamsim_model = _load_dreamsim()
+    result["arbiter"] = "dreamsim" if dreamsim_model is not None else None
+    ref_paths: Dict[str, List[str]] = {}
+    ds_floor: Dict[str, Optional[float]] = {}
+
     # 1) 每角色定妆组自标定 floor
     char_floor: Dict[str, float] = {}
     char_calibrated: Dict[str, bool] = {}
@@ -928,6 +1002,10 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN,
         result["characters"][char] = {"floor": round(floor, 4), "intra_pairs": len(intra),
                                       "has_main": main is not None,
                                       "floor_calibrated": char_calibrated[char]}
+        if dreamsim_model is not None:  # pragma: no cover - 需模型
+            paths = [p for p in variants.values() if p and os.path.exists(p)]
+            ref_paths[char] = paths
+            ds_floor[char] = dreamsim_bank_floor(dreamsim_model, paths)
 
     # 2) 每镜 vs 其角色主参考
     smap = shot_character_map(root, ep)
@@ -986,6 +1064,18 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN,
                 if worst is None or _sev(v) > _sev(worst["verdict"]):
                     worst = row
         if worst:
+            # DreamSim 仲裁 🟡 边界镜（opt-in）：embedder 拿不准时用人眼一致的整图感知破平。
+            if dreamsim_model is not None and worst["verdict"] == "warn":  # pragma: no cover - 需模型
+                ch = worst["char"]
+                if ref_paths.get(ch) and ds_floor.get(ch) is not None:
+                    ds = dreamsim_shot_sim(dreamsim_model, full, ref_paths[ch])
+                    resolved = arbiter_resolve("warn", ds, ds_floor[ch])
+                    if resolved != "warn":
+                        worst["band_before_arbiter"] = "warn"
+                        worst["arbiter"] = "dreamsim"
+                        worst["arbiter_sim"] = round(ds, 4) if ds is not None else None
+                        worst["arbiter_floor"] = round(ds_floor[ch], 4)
+                        worst["verdict"] = resolved
             row = {"png": png, **worst}
             # 多人同框：对所有脸做分配匹配，抓"张冠李戴"串脸（单脸 worst-of 测不出）
             present = {c: char_main_emb[c] for c in chars if c in char_main_emb}

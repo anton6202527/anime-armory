@@ -57,7 +57,8 @@ python3 skills/n2d-batch/scripts/queue.py claim <作品根> --limit 2
     "voice": "python3 skills/n2d-voice/render_voice.py \"{root}\" \"{ep}\" zh",
     "image": "bash skills/n2d-batch/scripts/run_n2d_image.sh \"{root}\" \"{ep}\"",
     "video": "N2D_VIDEO_RANGE=06-10 bash skills/n2d-batch/scripts/run_n2d_video.sh \"{root}\" \"{ep}\"",
-    "compose": "bash skills/n2d-batch/scripts/run_n2d_compose.sh \"{root}\" \"{ep}\" zh"
+    "compose": "bash skills/n2d-batch/scripts/run_n2d_compose.sh \"{root}\" \"{ep}\" zh",
+    "review": "bash skills/n2d-batch/scripts/run_n2d_review.sh \"{root}\" \"{ep}\""
   },
   "env": {
     "NO_PROXY": "127.0.0.1,localhost",
@@ -107,6 +108,7 @@ runner 行为：
 - `skills/n2d-batch/scripts/run_n2d_image.sh`：先跑 image_preflight gate；实际生图命令必须由 `N2D_IMAGE_COMMAND` 显式配置，避免 wrapper 猜后端或误花钱。
 - `skills/n2d-batch/scripts/run_n2d_video.sh`：先跑 identity/router/video_preflight gate，再调用 `n2d-video/scripts/video_runner.py prepare` 生成稳定 manifest；必须显式设置 `N2D_VIDEO_RANGE=06-10`，避免自动猜付费批次。真正提交视频需再显式设置 `N2D_VIDEO_SUBMIT_ONE=Clip_06` 或 `N2D_VIDEO_AUTO_SUBMIT=1`，否则不会消耗视频积分；`video_runner.py submit` 本身也默认再跑一次 `video_preflight`，防止绕过 wrapper 直接扣费。
 - `skills/n2d-batch/scripts/run_n2d_compose.sh`：先跑 compose gate，再调用 `n2d-compose/compose.sh`。
+- `skills/n2d-batch/scripts/run_n2d_review.sh`：刷新高动态成片证据、motion reference、review gate、score、consistency ledger 和 review-ui；通过后仍只生成验收证据，不自动回写 `验收=✅`。
 
 示例配置可直接复制为项目级文件后再按后端补 env：
 

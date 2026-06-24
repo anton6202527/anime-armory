@@ -23,12 +23,12 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 
 | 系列 | 统计范围 | Skill 数 | SKILL.md 总行数 | 目录文本总行数 |
 |---|---|---:|---:|---:|
-| n2d | `n2d` + `n2d-*` | 20 | 3930 | 120921 |
-| novel | `novel` + `novel-*` | 21 | 2268 | — |
+| n2d | `n2d` + `n2d-*` | 20 | 3962 | 120921 |
+| novel | `novel` + `novel-*` | 22 | 2356 | — |
 | song | `song` + `song-*` | 7 | 414 | — |
 | mv | `mv` + `mv-*` | 11 | 874 | — |
 | ad | `ad` + `ad-*` | 10 | 701 | — |
-| **合计** | `skills/*/SKILL.md` | **69** | 8187 | — |
+| **合计** | `skills/*/SKILL.md` | **70** | 8307 | — |
 
 > 仓库级清理工具 `tools/shared-cleanup` 已移出 `skills/`，不计入 skill 统计。
 
@@ -56,7 +56,7 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 | LoRA 生命周期（横切） | `n2d-lora` | P2/P1 一致性重武器：只给核心长线角色管理 LoRA 数据集、训练任务、验证报告和 registry ready 回写；默认不联网训练，先把 `.safetensors` 从散文件变成可审计资产；`suggest` 子命令读 identity 漂移报表打印升档建议（升档触发已工程化） |
 | 合规与版权前置（横切） | `n2d-compliance` | P0 合规包：生成/检查 `合规/compliance_manifest.json`，把源文本/改编权、角色肖像授权、声音克隆授权、平台审核、出海本地化和广电备案前置到 gate；`distribution_intent=internal_only` 时平台投放/出海/备案域降 INFO 免检（授权照常 BLOCK）。AI 标识/披露/水印只做非阻断发布待办，compose 可 best-effort 辅助 |
 | 6 合成 | `n2d-compose` | 拼 视频 clips + 配音 + BGM + 烧双语字幕 → 成片；**支持子段无缝拼接与 storyboard 转场感知**。`tension_mix.py` 按 storyboard 每 Clip `rhythm` 出张力感知 BGM 增益包络（爽点抬/细节压，喂 `BGM_GAIN_EXPR`，不传则原固定行为） |
-| 质检·自审（横切） | `n2d-review` | 双模 QA：①作品质检（崩脸/字幕错位/音画/节奏/合规，机检+人判，出定位报告）②流程自审（先 `scripts/self_audit.py` 做本地静态治理检查，再联网对标→审 skills+Q&A→出优化建议）。非必经阶段，任意闸门或成片后可跑。机检含片内时序+接缝（接缝阈值=绝对值+**本集分布自标定离群收紧**）、**跨集画风基线**（`style_consistency.py --cross`，集级指纹 vs 基线集）、动态百科含**角色/道具状态演进机检**（PROP lifecycle 默认结构化，状态泄露/数据质量问题进 gate，自由文本含演进语义标待升级）、**景别阶梯镜序列机检**（连续 ≥3 镜同景别且非反打=景别单调·缺远近/机位变化，warn）；`consistency_audit` 头部亮出本机**机检能力横幅**（无 insightface 时明示降级精度，防机检全绿错觉）。接缝意图以 **storyboard 为唯一真值源**（`_end.png` 存在 but 未声明 need_end_frame → 报真值源矛盾、dHash 降 info）；高动态成片证据 `spectacle_video_qc.py` 接入 SPECV，并可把证据侧写回 MOT1/CAM1/S2V sidecar；`motion_reference_library.py` 只沉淀已实测通过的小样作为后续动作参考；gate 新增**多角色同框绑定歧义** warn（>1 个 CHAR_ 未星标 primary）；机检降级统一**契约三档 precision_level**（full/degraded/none，`n2d_contract.normalize_precision`）；**场景一致性机检支持资产注册层约束（registered_id/constraints）关联**；**一致性总账 `consistency_ledger.py`** 把事前(drift_risk)/落档(image_qc)/契约(handoff)按角色×资产滚成单页三态表，agent/review-ui 只读一份。 |
+| 质检·自审（横切） | `n2d-review` | 双模 QA：①作品质检（崩脸/字幕错位/音画/节奏/合规，机检+人判，出定位报告）②流程自审（先 `scripts/self_audit.py` 做本地静态治理检查，再联网对标→审 skills+Q&A→出优化建议）。非必经阶段，任意闸门或成片后可跑。机检含片内时序+接缝（接缝阈值=绝对值+**本集分布自标定离群收紧**）、**跨集画风基线**（`style_consistency.py --cross`，集级指纹 vs 基线集）、动态百科含**角色/道具状态演进机检**（PROP lifecycle 默认结构化，状态泄露/数据质量问题进 gate，自由文本含演进语义标待升级）、**景别阶梯镜序列机检**（连续 ≥3 镜同景别且非反打=景别单调·缺远近/机位变化，warn）；`consistency_audit` 头部亮出本机**机检能力横幅**（无 insightface 时明示降级精度，防机检全绿错觉）。接缝意图以 **storyboard 为唯一真值源**（`_end.png` 存在 but 未声明 need_end_frame → 报真值源矛盾、dHash 降 info）；高动态成片证据 `spectacle_video_qc.py` 接入 SPECV，并可把证据侧写回 MOT1/CAM1/S2V sidecar；`motion_reference_library.py` 只沉淀已实测通过的小样作为后续动作参考；gate 新增**多角色同框绑定歧义** warn（>1 个 CHAR_ 未星标 primary）；机检降级统一**契约三档 precision_level**（full/degraded/none，`n2d_contract.normalize_precision`）；**场景一致性机检支持资产注册层约束（registered_id/constraints）关联**；**验收总账 `consistency_ledger.py`** 把剧情/角色/资产/镜头/音频/字幕/合规/score/review-ui/gate findings 收成唯一交付面，`counts.block/high` 未清零不得签收 `验收=✅`。 |
 | 进度·下一步（横切·只读）| `n2d-progress` | 扫 `创作区/制漫剧/<剧名>/_进度.md` 逐集矩阵 → 压缩出每部剧完成度 + 生产前沿（下一步该跑哪个 n2d skill）+ 可并行事项 + 次要缺口，按 `制作模式` 解释 `配音=⏳rough` 与原生音画跳过配音硬依赖；出图/视频/成片/配音等花钱·不可逆·合规步骤先提醒确认。**只读·不改文件**。脚本 `scan.py` 纯标准库。触发词：进度 / 当前进度 / 下一步 / 还差什么 / progress / check |
 | 项目设置（横切·设置） | `n2d-settings` | `_设置.md` 选择点的唯一 CLI 入口：`audit` 审计非法/过期值，`set` 包住 `set_project_setting` 写入并记录，`reset` 包住 `reset_project_setting` 删除项目覆盖，`sync-global` 包住 `sync_global_settings` 同步私有全局默认；读写/校验仍以 `skills/n2d/_lib/settings.py` 为单一实现，旧别名（如 `保图刷新`）写入时归一到当前值 |
 | skill 更新重制（横切·计划） | `n2d-update` | 检测 n2d 相关 `skills/` 文件相对上次快照是否变化，读 `_进度.md` 判断每集当前阶段，生成“从最早受影响阶段回放、最多只重制到当前阶段”的最小重制计划（`生产数据/skill_update_plan_第N集.{json,md}`）；用户说 更新/重制update/rebuild 某作品某集时触发。只生成计划和建议命令，不直接烧图/视频/配音；确认后交 `n2d-batch` 或对应 stage skill 执行。**重制策略选择点 `更新重制策略`**（`--regen-mode` / `_设置.md`）：`最小`（默认）/ `严审刷新`——后者按最新 skill 刷新文字阶段与出图 prompt，再用最新 prompt/QC/review 标准严审旧图，block/warn/降级或人工判定不符合预期的镜都应舍弃重出；旧名 `保图刷新` 仅作兼容 alias，不再表示“尽量保住图片”。**`media` 子命令**（原 `update` 分发器并入）：`update_plan.py media <作品根> 第N集 --image/--video/--target` 为指定集的少量图片/视频生成证据驱动的选择性刷新计划（写 `生产数据/media_refresh_plan_第N集.{json,md}` + `skill_update_runs.jsonl`），只生成计划、不审片，保留/重制结论必须来自已有 gate/QC/review findings 或显式人工输入 |
@@ -128,6 +128,7 @@ novel 负责从点子/源书/派生需求生产可审计文本资产，产物落
 | 改写 | `novel-rewrite` | 改主线、换设定、重构派生作品 |
 | 外传/视角 | `novel-spinoff` | 锁定原事件，换角色 POV 或写配角外传 |
 | 质检 | `novel-review` | OOC、视角、设定、节奏、伏笔、文风漂移、逐章读者契约与弧段 gate、流程自审 |
+| 专业编辑 | `novel-edit` | 发展性编辑、行文编辑、拷贝编辑、校样四层编辑计划；把 review/score/balance/feedback/scene cards 汇总成投稿前修订轮次 |
 | 市场评分 | `novel-score` | 当前市场基准 + 证据质量 + 第一方投放战绩 + 真实读者反馈 + 模拟读者信号 + 参考分布百分位，输出 go/revise/kill 决策 |
 | 专业资料包 | `novel-research` | 医疗/法律/刑侦/金融/军事/历史/宗教/海外/科技/职业文等专业场景的证据层：产 `资料/专业资料包_<主题>.md` + `research_sources.json`，支持 `research_required_domains` 必需领域，刷新审计产 `research_refresh_plan.md`，写章包自动引用，review/export 阻断缺失或过期高风险资料包 |
 | 文风 | `novel-style` | 文风指纹、样本授权、漂移检查 |
@@ -139,7 +140,7 @@ novel 负责从点子/源书/派生需求生产可审计文本资产，产物落
 | 出海/本地化 | `novel-localize` | 术语锁（专名跨章 canonical 译名）+ 文化适配逐章翻译 + 未译残留/术语/覆盖/manifest 元数据机检；翻译后端选择点；源书权利/目标辖区/AI 标识三连合规 |
 | 进度·下一步（只读）| `novel-progress` | 扫 `创作区/写小说/<项目>/_进度.md` 章节矩阵 → 汇总完成度 + 创作前沿（下一步该跑哪个 novel skill）+ 可并行事项；只读不改文件 |
 
-**默认产品路径**：`novel-create` / 派生 skill 产文本 → 必要时 `novel-research` 补专业资料包 → `novel-score` 给生产决策 → `novel-review` 回扫 → `novel-craft` 用 `revision_planner.py` 合并修订任务并导出 txt/docx/outline。novel 没有独立设置 skill；项目设置只是 `_设置.md` 数据文件，由各 novel 脚本读写。`小说生成工作流` 选择点支持 `默认单步` / `三步迭代` / `边写边自检`；长篇/商业连载/漫剧源书默认三步迭代，除非项目显式写 `默认单步`。`边写边自检` 会把每章正文 + state_delta + `post_write.py` 自检闭环写进任务包和 flow 下一步提示，写后可先用 `propose_state_delta.py` 生成 delta 草案，`post_write.py` 先过读者契约 sentry，再过账本/百科/逻辑/力量体系自检；每 3-5 章可用 `arc_packets.py` + `arc_gate.py` 做长篇弧段压力测试；发布/出海/KDP/中国公开发布等目标用 `compliance_profile.py` 生成平台/辖区合规清单，QA gate 统一读取。
+**默认产品路径**：`novel-create` / 派生 skill 产文本 → 必要时 `novel-research` 补专业资料包 → `novel-score` 给生产决策 → `novel-review` 回扫 → `novel-edit` 生成分层编辑计划 → `novel-craft` 用 `revision_planner.py` 合并修订任务并导出 txt/docx/outline。novel 没有独立设置 skill；项目设置只是 `_设置.md` 数据文件，由各 novel 脚本读写。`小说生成工作流` 选择点支持 `默认单步` / `三步迭代` / `边写边自检`；长篇/商业连载/漫剧源书默认三步迭代，除非项目显式写 `默认单步`。`边写边自检` 会把每章正文 + state_delta + `post_write.py` 自检闭环写进任务包和 flow 下一步提示，写后可先用 `propose_state_delta.py` 生成 delta 草案，`post_write.py` 先过读者契约 sentry，再过账本/百科/逻辑/力量体系自检；每 3-5 章可用 `arc_packets.py` + `arc_gate.py` 做长篇弧段压力测试；发布/出海/KDP/中国公开发布等目标用 `compliance_profile.py` 生成平台/辖区合规清单，QA gate 统一读取。
 
 > **力量体系自检（穿越/系统流/修仙·等级·成长值·战力严丝合缝·实时监控）**：网文力量体系是命门——等级跳变、战力前后矛盾、属性突变、升级节奏崩（数值膨胀/越级无代价）是高发穿帮，人脑记不住几百章。落地：① `novel-create` 立项按题材自动脚手架 `设定/power_system_registry.json`（研究落地的等级体系模板 + 系统面板字段[属性≤7] + 升级节奏[每章小奖/每5章中奖/每20章大奖] + 逐章成长 progression），见 `novel-craft/references/力量体系设计.md`；② 引擎 `novel-wiki/scripts/power_system.py` 确定性机检：等级/境界/战力**只增不减**（退档=阻断·除非标跌境/废修豁免）、未知境界=阻断、越级过快/面板属性超7/系统流久无升级桥段=建议；③ **实时监控**：`novel/scripts/post_write.py` 每章写后自动跑（受 `力量体系自检` 选择点控制），`context_loader` 写章前把"主角现状(Lv/境界/属性/战力)"喂给上下文让 AI 按现状推进；④ 审稿 `novel-review/consistency_audit.py` 含 `power_system` 子runner。真值/默认在 `novel/_lib/power_system_defs.py`。
 

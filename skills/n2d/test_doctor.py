@@ -82,6 +82,13 @@ def test_precision_lines_flags_stylized_styleid_degraded():
     assert "降级档" in lines
 
 
+def test_face_encoder_policy_new_styles():
+    assert doctor.face_encoder_policy("冷灰写实3D国风漫剧", "arcface")["stylized"] is True
+    assert doctor.face_encoder_policy("韩漫精致清透", "arcface")["stylized"] is True
+    assert doctor.face_encoder_policy("纸片剪影 / 定格动画", "arcface")["stylized"] is True
+    assert doctor.face_encoder_policy("暗黑悬疑写实", "arcface")["stylized"] is False
+
+
 def test_probe_face_encoder_styleid_ready(tmp_path, monkeypatch):
     model = tmp_path / "styleid.ckpt"
     model.write_text("stub", encoding="utf-8")

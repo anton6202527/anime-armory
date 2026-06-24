@@ -151,18 +151,18 @@ compose 混音前自动跑 `foley_agent.py`：分析 `storyboard.json` 识别视
 
 > **AI 标识/水印不阻断本阶段**：compose 出成片即主流程收尾；`ai_label.py` 只是 best-effort 发布待办辅助。若投放地区/平台需要 AI 标识、披露或数字水印，由使用方在发布工序或工具之外按当地法规自行处理。
 
-## 完成后 · 详列下一步（收尾必做 · 本集成片=主流程终点）
+## 完成后 · 详列下一步（收尾必做 · 本集成片后还要验收）
 
-回写「成片」列后，**跑 `python3 skills/n2d/progress.py <作品根>` 看整部前沿**，并把下一步念给用户——本集到此出片完成，下一步是「验收 → 投放回灌 → 推进下一集」：
+回写「成片」列后，**跑 `python3 skills/n2d/progress.py <作品根>` 看整部前沿**，并把下一步念给用户——本集只是出片完成，主流程下一步是「验收」。验收通过并人工签收后，才回写 `_进度.md`「验收」列：
 
 ```
 第K集 成片完成：合成/第K集/成片_第K集_{mode}.mp4
 - _进度.md「成片」列已勾 ✅
 下一步建议：
-- 质检验收（建议先做）：
-    n2d-review <作品根> 第K集      穿帮/崩脸/字幕错位/音画同步/双人声 体检
-    n2d-score  <作品根> 第K集 --run-checks --threshold 85   机器分（低分自动回流 batch）
-    n2d-review-ui <作品根> 第K集 --write   生成人审无限画布（首尾帧/clip/接缝/QA flag/机器分）
+- 质检验收（必做）：
+    python3 skills/n2d/run.py next <作品根> 第K集
+    # 自动刷新 review gate / score / consistency_ledger / review-ui；
+    # 通过后停在 needs_acceptance_signoff，再显式回写「验收」列 ✅
 - 上线后投放回灌：n2d-feedback <作品根> --metrics <平台指标.csv>   留存/追更/跳出反哺导演节奏；
     再 n2d-dashboard build <作品根> --markdown 看成本/ROI/通过率
 - 推进下一集：n2d <作品根>（调度器按前沿路由）或直接 n2d-script <作品根> 第K+1集

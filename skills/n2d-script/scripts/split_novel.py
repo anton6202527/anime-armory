@@ -10,6 +10,7 @@ split_novel.py — 把长篇小说自动拆分成粗胚分块，并搭好 AI漫�
 常用选项:
     --by-chapter       按「第X章」+ 强钩候选切（更贴戏剧节拍）
     --per-chapter      每章独立成一集（最贴节拍；长章保持整章，精修时再拆）
+    --start-chapter N  从第N章开始粗切（可写 48 / 第48章 / 第四十八章；中段开工仍需先补前情资产包）
     --keep-frontmatter 保留开头简介/标签/看点（默认自动剥离）
     --out 目录          作品根（默认=小说同级；小说在 …/小说/ 下时自动取其父）
     --target 高级参数：粗胚字数参考（仅用于报告/人工复核，不参与默认切点决策）
@@ -75,7 +76,12 @@ def normalize_paragraphs(text):
     return [p for p in paras if p]
 
 
-CHAPTER_RE = re.compile(r"^\s*第\s*[0-9零一二三四五六七八九十百千两]+\s*[章回节卷]")
+CHAPTER_RE = re.compile(r"^\s*第\s*([0-9零〇一二三四五六七八九十百千万两]+)\s*[章回节卷]")
+CHINESE_DIGITS = {
+    "零": 0, "〇": 0, "一": 1, "二": 2, "两": 2, "三": 3, "四": 4,
+    "五": 5, "六": 6, "七": 7, "八": 8, "九": 9,
+}
+CHINESE_UNITS = {"十": 10, "百": 100, "千": 1000}
 
 # 开头常见的"非正文"元数据行（简介/标签/看点等），自动剥离
 META_PREFIX = ("【", "✅", "☑", "★", "#", "—")
@@ -112,6 +118,72 @@ def strip_frontmatter(paras):
         else:
             break
     return paras[start:] or paras
+
+
+def parse_chapter_number(value):
+    """Parse Arabic or common Chinese chapter numbers."""
+    if value is None:
+        return None
+    text = str(value).strip()
+    if not text:
+        return None
+    m = re.search(r"第\s*([0-9零〇一二三四五六七八九十百千万两]+)\s*[章回节卷]", text)
+    token = m.group(1) if m else text
+    token = re.sub(r"^第", "", token)
+    token = re.sub(r"[章回节卷]$", "", token)
+    token = re.sub(r"[\s,，_、.-]", "", token)
+    if token.isdigit():
+        return int(token)
+    if not token or any(ch not in CHINESE_DIGITS and ch not in CHINESE_UNITS and ch != "万" for ch in token):
+        return None
+
+    total = 0
+    section = 0
+    number = 0
+    for ch in token:
+        if ch in CHINESE_DIGITS:
+            number = CHINESE_DIGITS[ch]
+        elif ch in CHINESE_UNITS:
+            unit = CHINESE_UNITS[ch]
+            section += (number or 1) * unit
+            number = 0
+        elif ch == "万":
+            section_value = section + number
+            total += (section_value or 1) * 10000
+            section = 0
+            number = 0
+    return total + section + number
+
+
+def chapter_number_from_heading(para):
+    m = CHAPTER_RE.match(para or "")
+    if not m:
+        return None
+    return parse_chapter_number(m.group(1))
+
+
+def trim_before_chapter(paras, chapter_spec):
+    """Return paragraphs starting at the first chapter >= requested chapter."""
+    target = parse_chapter_number(chapter_spec)
+    if target is None or target < 1:
+        raise ValueError(f"无法解析起始章节: {chapter_spec}")
+
+    seen_chapter = False
+    for i, para in enumerate(paras):
+        chapter = chapter_number_from_heading(para)
+        if chapter is None:
+            continue
+        seen_chapter = True
+        if chapter >= target:
+            return paras[i:], {
+                "requested": target,
+                "matched": chapter,
+                "skipped_paras": i,
+                "exact": chapter == target,
+            }
+    if not seen_chapter:
+        raise ValueError("未识别到「第X章」章节标题，无法使用 --start-chapter")
+    raise ValueError(f"未找到第{target}章或之后的章节标题")
 
 
 def split_sentences(para):
@@ -300,6 +372,8 @@ def main():
                     help="优先按「第X章」+ 强钩候选切集（更贴戏剧节拍）；无章节标题时自动退回强钩候选切")
     ap.add_argument("--per-chapter", action="store_true",
                     help="每章独立成一集（最贴戏剧节拍，一章=一集；长章保持整章，精修时按上/下集再拆）；无章节标题时自动退回强钩候选切")
+    ap.add_argument("--start-chapter", default=None,
+                    help="从第N章开始粗切（可写 48 / 第48章 / 第四十八章）。仅裁本次 raw 脚手架；中段开工仍需先补 设定库/中段开工前情资产包.md")
     ap.add_argument("--keep-frontmatter", action="store_true",
                     help="保留开头的简介/标签/看点等元数据（默认自动剥离）")
     ap.add_argument("--limit", type=int, default=None,
@@ -351,6 +425,13 @@ def main():
         before = len(paras)
         paras = strip_frontmatter(paras)
         dropped = before - len(paras)
+
+    start_info = None
+    if args.start_chapter:
+        try:
+            paras, start_info = trim_before_chapter(paras, args.start_chapter)
+        except ValueError as exc:
+            sys.exit(str(exc))
 
     # 题材感知边界词典：读 _设置.md `题材`（弱选择点；未设则 base ∪ 古装动作=历史默认）→
     # 重建模块级强钩/冲突/爽点正则，治女频情感/悬疑/都市粗切退化成无闭环。
@@ -430,9 +511,13 @@ def main():
             fresh[i] = "| " + " | ".join(cells) + " |"
         rows = {**fresh, **existing_rows}  # 旧勾选优先，保留人工进度
         made = max(rows) if rows else n_make
+        start_header = ""
+        if start_info:
+            start_header = f"（从第{start_info['matched']}章起）"
+        est_scope = "本窗口" if start_info else "全本"
         header = (f"# {title} — 生产进度\n",
-                  f"已粗切 **{made}** 集"
-                  + (f"（全本约估 {total_est} 集；部分先切，精修验证后重跑 split 加大 --limit 续切）。\n"
+                  f"已粗切 **{made}** 集{start_header}"
+                  + (f"（{est_scope}约估 {total_est} 集；部分先切，精修验证后重跑 split 加大 --limit 续切）。\n"
                      if partial else f"。\n"))
         prog_lines = [*header,
             "| " + " | ".join(PROGRESS_COLUMNS) + " |",
@@ -446,12 +531,17 @@ def main():
     target_note = f"；字数参考 {args.target}（仅报告，不参与切点）" if args.target else "；未设置字数参考"
     genre_note = f"{genre}→{'/'.join(buckets)}" if genre else f"未设题材→{'/'.join(buckets)}(默认)"
     print(f"切分方式：{mode}；边界词典题材：{genre_note}；剥离开头元数据 {dropped} 段。")
+    if start_info:
+        approx_note = "" if start_info["exact"] else f"（未找到精确章号，使用之后最近的第{start_info['matched']}章）"
+        print(f"起始章节：请求第{start_info['requested']}章，实际从第{start_info['matched']}章开始，跳过 {start_info['skipped_paras']} 段{approx_note}。")
     if partial:
-        print(f"部分先切：已落地前 {n_make} 集（全本按候选断点约估 {total_est} 集）。"
+        est_scope = "本窗口" if start_info else "全本"
+        print(f"部分先切：已落地前 {n_make} 集（{est_scope}按候选断点约估 {total_est} 集）。"
               f"字数范围 {min(lengths)}~{max(lengths)}{target_note}；无硬上下限")
         print(f"下一步：精修第1集验证节拍/画风/角色卡；满意后重跑 split 加大 --limit 续切（旧集与进度勾选保留）。")
     else:
-        print(f"共 {n_make} 集，字数范围 {min(lengths)}~{max(lengths)}{target_note}；无硬上下限")
+        scope_note = "本窗口共" if start_info else "共"
+        print(f"{scope_note} {n_make} 集，字数范围 {min(lengths)}~{max(lengths)}{target_note}；无硬上下限")
         print("目录骨架已生成。下一步：精修每集素材。")
     hints = [f"第{i}集 {length_hint(n)}" for i, n in enumerate(lengths, 1) if length_hint(n)]
     if hints:

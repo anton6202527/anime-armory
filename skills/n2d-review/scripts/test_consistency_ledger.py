@@ -50,6 +50,39 @@ def test_build_ledger_overall_is_worst_of_three():
     # 综合排序：high 排在前
     assert led["rows"][0]["id"] == "CHAR_01"
     assert led["counts"]["high"] == 1
+    assert "domains" in led
+    assert led["delivery_surface"]["status"] == "blocked"
+
+
+def test_delivery_domains_are_single_acceptance_surface():
+    domains = cl.build_delivery_domains([
+        {
+            "sev": "block",
+            "source": "gate:review",
+            "dim_key": "subtitle_correctness",
+            "dimension": "字幕正确性",
+            "text": "英文字幕漏译",
+        },
+        {
+            "sev": "high",
+            "source": "score",
+            "dim_key": "semantic_continuity",
+            "dimension": "语义继承",
+            "text": "score below threshold",
+        },
+        {
+            "sev": "block",
+            "source": "compliance",
+            "dimension": "合规",
+            "text": "缺 compliance_manifest",
+        },
+    ])
+
+    by_key = {d["key"]: d for d in domains}
+    assert by_key["subtitle"]["overall"] == "block"
+    assert by_key["story"]["overall"] == "high"
+    assert by_key["compliance"]["overall"] == "block"
+    assert by_key["subtitle"]["findings"][0]["source"] == "gate:review"
 
 
 def test_collect_findings_uses_full_image_qc_findings(tmp_path):

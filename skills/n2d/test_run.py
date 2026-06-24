@@ -14,12 +14,12 @@ sys.path.insert(0, os.path.dirname(__file__))
 import run  # noqa: E402
 
 HEADER = ("| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 "
-          "| 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |")
-SEP = "|" + "---|" * 16
+          "| 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |")
+SEP = "|" + "---|" * 17
 
 
 def make_work(cells, settings=None):
-    """造一个临时作品根，cells = 第1集 的 14 个物料列（raw 起到 成片）。"""
+    """造一个临时作品根，cells = 第1集 的物料列（raw 起到 验收）。"""
     d = tempfile.mkdtemp()
     row = "| 第1集 | 1000 | " + " | ".join(cells) + " |"
     open(os.path.join(d, "_进度.md"), "w", encoding="utf-8").write(
@@ -29,14 +29,15 @@ def make_work(cells, settings=None):
     return d
 
 
-# 14 个物料列：raw 剧本改编 bgm 封面 配音 分镜设计 素材清单 字幕中 字幕英 出图prompt 出图 视频prompt 视频 成片
+# 15 个物料列：raw 剧本改编 bgm 封面 配音 分镜设计 素材清单 字幕中 字幕英 出图prompt 出图 视频prompt 视频 成片 验收
 ALL_DONE_TO = {
-    "script_stage1": ["✅", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜"],
-    "voice":         ["✅", "✅", "✅", "✅", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜"],
-    "image_prompt":  ["✅", "✅", "✅", "✅", "⬜", "✅", "✅", "✅", "✅", "⬜", "⬜", "⬜", "⬜", "⬜"],
-    "image":         ["✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "0/10", "⬜", "⬜", "⬜"],
-    "video_prompt":  ["✅", "✅", "✅", "✅", "⬜", "✅", "✅", "✅", "✅", "✅", "✅", "⬜", "⬜", "⬜"],
-    "compose":       ["✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "⬜"],
+    "script_stage1": ["✅", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜"],
+    "voice":         ["✅", "✅", "✅", "✅", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜"],
+    "image_prompt":  ["✅", "✅", "✅", "✅", "⬜", "✅", "✅", "✅", "✅", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜"],
+    "image":         ["✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "0/10", "⬜", "⬜", "⬜", "⬜"],
+    "video_prompt":  ["✅", "✅", "✅", "✅", "⬜", "✅", "✅", "✅", "✅", "✅", "✅", "⬜", "⬜", "⬜", "⬜"],
+    "compose":       ["✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "⬜", "⬜"],
+    "review":        ["✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "⬜"],
 }
 
 
@@ -107,17 +108,37 @@ def test_decide_uses_mode_aware_route_command():
 
 
 def test_resolve_frontier_done():
-    cells = ["✅"] * 14
+    cells = ["✅"] * 15
     root = make_work(cells)
     assert run.resolve_frontier(root) is None
 
 
-def test_next_action_done_carries_post_qc_bundle():
-    cells = ["✅"] * 14
+def test_resolve_frontier_review_after_compose():
+    root = make_work(ALL_DONE_TO["review"])
+    route = run.resolve_frontier(root)
+    assert route["col"] == "验收"
+    assert run.stage_key_of(route) == "review"
+
+
+def test_old_progress_without_review_column_routes_to_review():
+    d = tempfile.mkdtemp()
+    old_header = ("| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 "
+                  "| 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |")
+    old_sep = "|" + "---|" * 16
+    row = "| 第1集 | 1000 | " + " | ".join(["✅"] * 14) + " |"
+    open(os.path.join(d, "_进度.md"), "w", encoding="utf-8").write(
+        "# 进度\n\n" + old_header + "\n" + old_sep + "\n" + row + "\n")
+    route = run.resolve_frontier(d)
+    assert route["col"] == "验收"
+    assert route["missing_progress_column"] == "验收"
+
+
+def test_next_action_done_after_review_signoff():
+    cells = ["✅"] * 15
     root = make_work(cells)
     na = run.next_action(root, "第1集")
     assert na["stop_reason"] == "done"
-    assert any("score.py" in cmd for cmd in na["action_card"]["post_qc_bundle"]["commands"])
+    assert "已完成验收" in na["action_card"]["headline"]
 
 
 def test_production_mode_menu_defaults_to_shortest_path():
@@ -125,6 +146,20 @@ def test_production_mode_menu_defaults_to_shortest_path():
     menu = run._menu(root, "制作模式")
     assert menu["options"][:3] == ["原生音画", "配音先行", "先出视频后配音"]
     assert menu["default_preselect"] == "原生音画"
+
+
+def test_base_visual_style_menu_includes_reference_media_intake():
+    root = make_work(ALL_DONE_TO["script_stage1"])
+    menu = run._menu(root, "基础视觉风格")
+    assert menu["options"][0] == "冷灰写实3D国风漫剧"
+    assert menu["default_preselect"] == "冷灰写实3D国风漫剧"
+    assert "真实3D人物质感 + 电影叙事镜头感" in menu["options"]
+    assert "韩漫精致清透" in menu["options"]
+    assert "纸片剪影 / 定格动画" in menu["options"]
+    assert "参考图片/视频自动识别" in menu["options"]
+    assert menu["transient_options"] == ["参考图片/视频自动识别"]
+    assert menu["options"].index("参考图片/视频自动识别") < menu["options"].index("自定义")
+    assert "不要把该临时入口本身写入 _设置.md" in menu["follow_up"]
 
 
 def test_stage_key_of_voice_redirect():
@@ -170,10 +205,31 @@ def test_decide_compose_payment_menu_is_bgm():
     assert any("review_ui.py" in cmd and "--export-findings" in cmd for cmd in bundle["commands"])
 
 
+def test_decide_review_requires_signoff_after_evidence_passes():
+    root = make_work(ALL_DONE_TO["review"])
+    na = run.decide(root, _route("review"), "review", run.Probes())
+    assert na["stop_reason"] == "needs_acceptance_signoff"
+    assert "验收" in na["action_card"]["exact_command"]
+
+
 def test_decide_compliance_blocks_paid_stage():
     root = make_work(ALL_DONE_TO["image"])
     na = run.decide(root, _route("image"), "image", run.Probes(compliance_gap=True))
     assert na["stop_reason"] == "needs_compliance"
+
+
+def test_decide_entry_check_blocks_before_generation():
+    root = make_work(ALL_DONE_TO["image"])
+    p = run.Probes(entry_check_block="源文本已漂移")
+    na = run.decide(root, _route("image"), "image", p)
+    assert na["stop_reason"] == "blocked_by_entry_check"
+
+
+def test_decide_capability_evidence_blocks_before_video():
+    root = make_work(ALL_DONE_TO["video_prompt"])
+    p = run.Probes(capability_block="conservative 能力档")
+    na = run.decide(root, _route("video"), "video", p)
+    assert na["stop_reason"] == "capability_evidence_required"
 
 
 def test_decide_gate_block_passes_through_recovery():

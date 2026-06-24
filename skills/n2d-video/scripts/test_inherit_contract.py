@@ -353,6 +353,45 @@ def test_multiframe_identity_contract_blocks_character_mismatch(tmp_path):
     assert "identity_anchor_character_mismatch" in codes
 
 
+def _write_action_storyboard(root):
+    d = os.path.join(root, "脚本", EP)
+    os.makedirs(d, exist_ok=True)
+    with open(os.path.join(d, "storyboard.json"), "w", encoding="utf-8") as f:
+        json.dump({"clips": [{
+            "template": "spectacle_fight",
+            "label": "MS 打斗 落地",
+            "shots": [{"lens": "MS", "desc": "沈念腾空跃起劈砍后落地"}],
+            "continuity": {"expression_span": "中", "need_endframe": False},
+        }]}, f, ensure_ascii=False)
+
+
+_CLIP_ACTION_NO_END = """## Clip 01（时长 5.6s · 镜头 EP01_CLIP01）
+**首帧**：`出图/第1集/图片/Clip_01.png`
+**角色身份注册层**：CHAR_01/常态；参考组=出图/共享/图片/定妆_沈念_常态.png；reference_group=ready。
+"""
+
+
+def test_action_beat_without_endframe_warns_not_blocks(tmp_path):
+    root = _write_with_video_prompts(tmp_path, routes=_ROUTES_ONE, clips=_CLIP_ACTION_NO_END)
+    _write_action_storyboard(root)
+    assert ic.run(root, EP) == 0   # warn 不阻断
+    rep = _report(root)
+    codes = {f["code"] for f in rep["identity_handoff"]["findings"]}
+    assert "action_beat_endframe_missing" in codes
+
+
+def test_action_beat_with_endframe_no_finding(tmp_path):
+    clips = _CLIP_ACTION_NO_END.replace(
+        "**首帧**：`出图/第1集/图片/Clip_01.png`",
+        "**尾帧**：`出图/第1集/图片/Clip_01_end.png`")
+    root = _write_with_video_prompts(tmp_path, routes=_ROUTES_ONE, clips=clips)
+    _write_action_storyboard(root)
+    assert ic.run(root, EP) == 0
+    rep = _report(root)
+    codes = {f["code"] for f in rep["identity_handoff"]["findings"]}
+    assert "action_beat_endframe_missing" not in codes
+
+
 def test_big_expression_closeup_requires_expressions_and_expression_fields(tmp_path):
     clips = _MULTI_ANCHOR_OK.replace(
         "**表情锚**（起→止）：中性→怒目，引用 expressions/定妆_沈念_表情_怒目.png。\n"

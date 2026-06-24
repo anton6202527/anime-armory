@@ -27,6 +27,16 @@ REPORT_RELS = (
 )
 
 
+# G-V4·2026-06-24 流程自审落地：VLM/LMM 判题只作 triage/解释，绝不单独 auto-reject。
+# Artifact-Bench（2026-05）：最强模型细粒度穿帮识别 <10%。崩脸/穿帮/音画的终判须由确定性层
+# （ArcFace/StyleID/光流/SyncNet）下，或经 gate 在 compose/review 交付边界把「重复/关键场景」WARN
+# 升 block。故本读取器把 VLM 自报的 block 钉死降为 advisory warn，并保留 `vlm_raw_verdict` 供溯源。
+def triage_severity(raw_verdict: str) -> str:
+    """VLM 判题严重度封顶（block→warn）。纯函数·可测。"""
+    v = str(raw_verdict).strip().lower()
+    return "warn" if v == "block" else v
+
+
 def _confidence(row: dict) -> float:
     for key in ("confidence", "score", "mismatch_confidence"):
         try:
@@ -119,14 +129,15 @@ def analyze(root: str, ep: str) -> dict:
     rows = rows_from(data, ("findings", "judgements", "judgments", "checks", "items", "results"))
     findings.extend(_schema_findings(data, rel, rows))
     for row in rows:
-        verdict = verdict_from(row)
-        if not verdict and boolish_false(row.get("match")):
-            verdict = "block" if _confidence(row) >= 0.75 else "warn"
-        if not verdict and boolish_false(row.get("passes")):
-            verdict = "warn"
-        if verdict in {"block", "warn"}:
+        raw = verdict_from(row)
+        if not raw and boolish_false(row.get("match")):
+            raw = "block" if _confidence(row) >= 0.75 else "warn"
+        if not raw and boolish_false(row.get("passes")):
+            raw = "warn"
+        if raw in {"block", "warn"}:
+            # VLM 单独不可 auto-reject：block 钉死为 advisory warn，原判定留 vlm_raw_verdict 溯源。
             findings.append(finding(
-                verdict,
+                triage_severity(raw),
                 _message(row),
                 shot=row.get("clip") or row.get("shot") or row.get("clip_id"),
                 stage=str(row.get("return_to_stage") or row.get("stage") or "video"),
@@ -135,10 +146,13 @@ def analyze(root: str, ep: str) -> dict:
                 expected=row.get("expected"),
                 observed=row.get("observed"),
                 confidence=row.get("confidence"),
+                vlm_raw_verdict=raw,
             ))
 
     if isinstance(data, dict) and data.get("overall_verdict") in {"block", "warn"} and not findings:
-        findings.append(finding(str(data.get("overall_verdict")), str(data.get("summary") or "视频 VLM 总判定未通过"), artifacts=(rel,)))
+        raw = str(data.get("overall_verdict"))
+        findings.append(finding(triage_severity(raw), str(data.get("summary") or "视频 VLM 总判定未通过"),
+                                artifacts=(rel,), vlm_raw_verdict=raw))
 
     return {"available": True, "findings": findings, "notes": []}
 

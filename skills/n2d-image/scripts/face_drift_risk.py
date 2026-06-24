@@ -65,7 +65,11 @@ WEIGHTS = {"base_reference_group": 28, "base_multi_reference": 22, "base_face_em
            "base_native_unregistered": 20, "base_native": 8, "base_lora": 0,
            "closeup": 30, "emotion_each": 8, "emotion_cap": 24,
            "multi": 20, "angle_each": 6, "angle_cap": 24,
-           "recurrence_base": 18, "recurrence_per": 4, "recurrence_cap": 30}
+           "recurrence_base": 18, "recurrence_per": 4, "recurrence_cap": 30,
+           # in-context 记功：strong-in-context 模型（如 GPT Image 2 高保真多参考/上下文一致性）在集内同源出图
+           # （scene_batch 默认开，连续同场景多镜可同源 batch 出）比泛多参考后端更稳，给集内 base 适度减分。
+           # 下限锁在 base_face_embedding（14），永不低于真脸嵌入锁；只抵 base，不碰 recurrence 跨集项 → 跨集不放水。
+           "in_context_strong_credit": 6}
 BAND_HIGH, BAND_MEDIUM = 55, 30
 # 复现间隔阈值：上次出场距本集缺席 ≥ 这么多集 = 长间隔再登场（与 n2d-identity 同义，本 skill 自留一份不跨 import）。
 RECURRENCE_GAP_THRESHOLD = 2
@@ -263,10 +267,14 @@ def lock_tier(default_backend: str, image_adapters: Mapping[str, Any], lora: Map
     return "multi_reference"
 
 
-def score_character(signals: Mapping[str, Any], tier: str) -> Dict[str, Any]:
+def score_character(signals: Mapping[str, Any], tier: str, in_context: str = "") -> Dict[str, Any]:
     """风险分 + 档位 + 驱动因子（纯函数·可测）。
 
     signals: {appear, closeup, emotion, multi, angle}（计数）。score 0–100，band high/medium/low。
+    in_context: 模型「同次/同会话内」多参考/上下文身份一致性强度（来自 IMAGE_IDENTITY_PROFILES.in_context_consistency）。
+      仅当 tier=='multi_reference' 且 in_context=='strong'（=GPT Image 2 等强上下文一致性模型）时，
+      给集内 base 减一笔 in-context 记功（封顶不低于 face_embedding base=14，永不超过真脸嵌入锁），
+      且**只抵 base，不碰 recurrence_gap 跨集项**——跨集复现仍按 multi_reference 不放水。
     """
     appear = max(int(signals.get("appear", 0)), 0)
     base = {
@@ -279,6 +287,12 @@ def score_character(signals: Mapping[str, Any], tier: str) -> Dict[str, Any]:
         "lora": WEIGHTS["base_lora"],
     }.get(tier, WEIGHTS["base_reference_group"])
     drivers: List[Dict[str, Any]] = [{"factor": f"锁脸档位={tier}", "points": base}]
+    if tier == "multi_reference" and str(in_context or "").strip().lower() == "strong":
+        eff_base = max(base - WEIGHTS["in_context_strong_credit"], WEIGHTS["base_face_embedding"])
+        credit = round(eff_base - base, 1)  # 负值
+        if credit < 0:
+            drivers.append({"factor": "同源场景 in-context 记功(strong·如 GPT Image 2)", "points": credit})
+            base = eff_base
     closeup_ratio = (signals.get("closeup", 0) / appear) if appear else 0.0
     multi_ratio = (signals.get("multi", 0) / appear) if appear else 0.0
     cu = round(closeup_ratio * WEIGHTS["closeup"], 1)
@@ -599,7 +613,7 @@ def analyze(root: Path, ep: str) -> Dict[str, Any]:
         # ③+ 复现间隔回灌：本集是否为该角色长间隔再登场（出场排期事实，不要求 insightface）。
         reentry = recurrence_reentry_risk(prior_drift, c.get("aliases") or set(), c["name"], ep)
         signals["recurrence_gap"] = reentry["gap"] if reentry else 0
-        scored = score_character(signals, tier)
+        scored = score_character(signals, tier, str((profile or {}).get("in_context_consistency") or ""))
         sug = suggestions_for(c["name"], scored, signals, cid, c["form"], str(root), profile)
         if reentry:
             sug = [

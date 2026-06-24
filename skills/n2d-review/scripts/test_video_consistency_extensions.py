@@ -16,7 +16,8 @@ def _write_json(path: Path, data: dict) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
-def test_video_vlm_report_blocks_failed_judgement(tmp_path: Path) -> None:
+def test_video_vlm_failed_judgement_is_advisory_not_autoreject(tmp_path: Path) -> None:
+    # G-V4：VLM 自报失配（哪怕高置信）只作 advisory warn——单独不可 auto-reject；终判走确定性层/交付 gate。
     ep = "第1集"
     _write_json(
         tmp_path / "生产数据" / f"video_vlm_consistency_{ep}.json",
@@ -24,7 +25,16 @@ def test_video_vlm_report_blocks_failed_judgement(tmp_path: Path) -> None:
     )
     res = vvlm.analyze(str(tmp_path), ep)
     assert res["available"] is True
-    assert any(row["verdict"] == "block" and row.get("affected_shots") == ["Clip_03"] for row in res["findings"])
+    row = next(r for r in res["findings"] if r.get("affected_shots") == ["Clip_03"])
+    assert row["verdict"] == "warn"            # block 被钉死为 advisory
+    assert row["vlm_raw_verdict"] == "block"   # 原判定保留供溯源/gate 升级
+    assert not any(r["verdict"] == "block" for r in res["findings"])
+
+
+def test_video_vlm_triage_severity_caps_block() -> None:
+    assert vvlm.triage_severity("block") == "warn"
+    assert vvlm.triage_severity("warn") == "warn"
+    assert vvlm.triage_severity("info") == "info"
 
 
 def test_video_vlm_schema_warns_missing_judge_metadata(tmp_path: Path) -> None:
@@ -185,3 +195,4 @@ def test_video_eval_runner_builds_manifest_with_risk_questions(tmp_path: Path) -
     kinds = set(manifest["tasks"][0]["risk_kinds"])
     assert {"subject", "scene", "action", "physics", "dialogue", "camera"} <= kinds
     assert manifest["sidecar_targets"]["motion"].endswith(f"motion_quality_{ep}.json")
+    assert manifest["sidecar_targets"]["physical_event"].endswith(f"physical_event_graph_{ep}.json")

@@ -368,6 +368,20 @@ def test_identity_drift_single_episode_window_is_noop():
     assert dims["character_consistency"]["skipped"] is True  # 未被任何信号翻成 not-skipped
 
 
+def test_identity_drift_flags_long_gap_reentry():
+    dims = {k: score.empty_dimension(k) for k in score.DIMENSIONS}
+    drift = _drift({
+        "沈念": {
+            "episodes": {"第1集": {"ok": 4, "block": 0, "warn": 0}, "第5集": {"ok": 3, "block": 0, "warn": 0}},
+            "recurrence": {"long_gap_reentries": [{"prev": "第1集", "at": "第5集", "gap": 3}]},
+        }
+    }, episodes=("第1集", "第2集", "第3集", "第4集", "第5集"))
+    score.apply_identity_drift(dims, drift, "第5集")
+    cc = dims["character_consistency"]
+    assert cc["warnings"] == 1
+    assert any("长间隔再登场风险" in ev for ev in cc["evidence"])
+
+
 def test_pass_rate_floor_none_no_warning():
     dims = {k: score.empty_dimension(k) for k in score.DIMENSIONS}
     score.apply_dashboard(dims, {"final_pass_rate": 0.5}, None)  # floor=None → 不告警(对齐 dashboard 默认)
@@ -436,3 +450,19 @@ def test_score_episode_includes_kpi():
     out = score.score_episode("/x", "第1集", consistency=cons)
     assert "character_consistency_kpi" in out
     assert out["character_consistency_kpi"]["intra_episode"] == 0.83
+
+
+def test_score_episode_records_review_profile():
+    out = score.score_episode("/x", "第1集", threshold=90, review_profile="production",
+                              narrative={"payoff_completed_rate": 0.8})
+    assert out["review_profile"] == "production"
+    assert out["threshold"] == 90
+    assert out["narrative_continuity_kpi"]["profile"] == "production"
+
+
+def test_profile_threshold_resolution(tmp_path: Path):
+    (tmp_path / "_设置.md").write_text("投放时效: 付费上线", encoding="utf-8")
+    profile = score.resolve_score_profile(str(tmp_path))
+    assert profile == "production"
+    assert score.threshold_for_profile(profile) == 90
+    assert score.resolve_score_profile(str(tmp_path), "demo") == "demo"

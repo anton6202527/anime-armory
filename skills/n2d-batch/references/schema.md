@@ -115,6 +115,7 @@ Shape:
     "image": "bash skills/n2d-batch/scripts/run_n2d_image.sh \"{root}\" \"{episode}\"",
     "video": "N2D_VIDEO_RANGE=06-10 bash skills/n2d-batch/scripts/run_n2d_video.sh \"{root}\" \"{episode}\"",
     "compose": "bash skills/n2d-batch/scripts/run_n2d_compose.sh \"{root}\" \"{episode}\" zh",
+    "review": "bash skills/n2d-batch/scripts/run_n2d_review.sh \"{root}\" \"{episode}\"",
     "*": "bash scripts/run_stage.sh \"{stage_key}\" \"{root}\" \"{episode}\""
   },
   "env": {
@@ -140,6 +141,7 @@ The repository-provided wrappers live under `skills/n2d-batch/scripts/`:
 - `run_n2d_image.sh`: runs image_preflight gate, then executes explicit `N2D_IMAGE_COMMAND`.
 - `run_n2d_video.sh`: runs identity/router/video_preflight gate, prepares video jobs, and only submits when `N2D_VIDEO_SUBMIT_ONE` or `N2D_VIDEO_AUTO_SUBMIT=1` is set. `video_runner.py submit` also runs video_preflight by default.
 - `run_n2d_compose.sh`: runs compose gate, then calls `n2d-compose/compose.sh`.
+- `run_n2d_review.sh`: refreshes spectacle video evidence, motion references, review gate, score, consistency ledger, and review-ui. It never writes `验收=✅`; human signoff remains explicit.
 
 Do not hard-code this preflight inside `runner.py`; stage rules belong to the wrapper/stage skill, and runner only executes configured commands.
 

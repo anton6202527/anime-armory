@@ -126,7 +126,9 @@
 
 ## combat pack（招式/打斗套路）
 
-打斗包把**一整套打斗套路**沉淀成可跨剧复用的结构包。真值源是项目内 `出图/共享/combat_registry.json`（kind `n2d_combat_registry`）：
+打斗包把**一整套打斗套路**沉淀成可跨剧复用的结构包。导出/导入的真值源是项目内 `出图/共享/combat_registry.json`（kind `n2d_combat_registry`）。
+
+> **范围：仅跨项目复用层，不进逐集流水线。** `combat_registry.json` 只由本 skill 的 `export-combat`/`import-combat` 读写——`script→image→video→gate` 逐集管线既不读也不写它，且没有「把本剧编好的打斗自动沉淀进来」的产者（要导出得先 `import-combat` 过、或手工写好这张表）。**逐集打斗真值**在 `storyboard.template_contract` + `spectacle_sequence_plan`（gate BLOCK 闸）+ `spectacle_contract_audit`，不在本表。import-combat 只是把套路结构搬进新剧供 `n2d-script` 按 `打斗分镜.md` 五帧拆招**手工编入故事板**，不会自己出现在成片里。
 
 ```json
 {

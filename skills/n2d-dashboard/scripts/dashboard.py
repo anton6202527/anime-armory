@@ -1003,10 +1003,10 @@ def render_markdown(dashboard: Dict[str, Any]) -> str:
     if ledger_rows:
         lines.extend([
             "",
-            "## 一致性总账",
+            "## 验收总账",
             "",
-            "| 集 | 实体数 | block | high | medium | 重点实体 |",
-            "|---|---:|---:|---:|---:|---|",
+            "| 集 | 状态 | 实体数 | block | high | medium | 重点实体 |",
+            "|---|---|---:|---:|---:|---:|---|",
         ])
         for item in ledger_rows:
             ledger = item.get("consistency_ledger") or {}
@@ -1016,8 +1016,9 @@ def render_markdown(dashboard: Dict[str, Any]) -> str:
                 f"{row.get('name') or row.get('id')}({row.get('overall')})"
                 for row in severe[:3]
             ) or "—"
+            surface = ledger.get("delivery_surface") or {}
             lines.append(
-                f"| {item['episode']} | {ledger.get('row_count', 0)} | "
+                f"| {item['episode']} | {surface.get('status') or '—'} | {ledger.get('row_count', 0)} | "
                 f"{counts.get('block', 0)} | {counts.get('high', 0)} | {counts.get('medium', 0)} | {focus} |"
             )
 
@@ -1054,6 +1055,7 @@ def apply_passive_consistency_ledger_signals(root: str, episodes: Dict[str, Dict
         if ep not in episodes:
             episodes[ep] = blank_episode(ep)
         counts = data.get("counts") if isinstance(data.get("counts"), dict) else {}
+        surface = data.get("delivery_surface") if isinstance(data.get("delivery_surface"), dict) else {}
         rows = [row for row in (data.get("rows") or []) if isinstance(row, dict)]
         severe = [
             {
@@ -1071,6 +1073,7 @@ def apply_passive_consistency_ledger_signals(root: str, episodes: Dict[str, Dict
         episodes[ep]["consistency_ledger"] = {
             "path": os.path.relpath(path, root),
             "counts": {k: int(counts.get(k) or 0) for k in ("block", "high", "medium")},
+            "delivery_surface": surface,
             "severe_rows": severe[:8],
             "row_count": len(rows),
         }

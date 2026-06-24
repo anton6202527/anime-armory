@@ -26,6 +26,8 @@ def test_alias_normalizes_to_execution_profile():
     data = adapter.backend_adapter("Seedance 2.0", "即梦/Dreamina")
     assert data["canonical"] == "seedance"
     assert data["execution_backend"] == "dreamina"
+    assert data["capability_confidence"]["confidence"] == "evidence"
+    assert data["paid_routing_allowed"] is True
     assert data["anchor_consumption_sample"]["consumption_mode"] == "native_multiframe"
 
 

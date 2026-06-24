@@ -36,6 +36,18 @@ STOP_BIGRAMS = {
     "但是", "如果", "时候", "眼前", "身后", "声音", "众人", "所有", "开始", "继续",
 }
 
+SCENE_FUNCTIONS: List[Tuple[str, str, re.Pattern[str], str]] = [
+    ("motivation", "角色动机", re.compile(r"(为了|想要|必须|誓要|不能让|保护|复仇|活下去|查清|证明)"), "warn"),
+    ("conflict_cause", "冲突原因", re.compile(r"(因为|逼|威胁|陷害|背叛|下毒|抢|杀|封锁|通缉)"), "warn"),
+    ("setup", "伏笔/线索", re.compile(r"(伏笔|悬念|线索|秘密|信物|玉佩|令牌|印记|不对劲|另有隐情)"), "info"),
+    ("payoff", "兑现/爽点", re.compile(r"(反击|打脸|夺回|突破|升级|赢|救出|揭穿|真相|兑现)"), "warn"),
+    ("reversal", "反转", re.compile(r"(原来|竟然|没想到|反而|却|逆转|翻盘)"), "warn"),
+    ("relationship_shift", "关系变化", re.compile(r"(信任|背叛|心动|误会|和解|决裂|告白|退婚|结盟|仇人)"), "warn"),
+    ("world_rule", "世界/系统规则", re.compile(r"(系统|面板|规则|等级|境界|任务|奖励|代价|禁忌)"), "info"),
+    ("choice", "角色选择", re.compile(r"(决定|选择|答应|拒绝|放弃|留下|离开|救|杀|公开|隐瞒)"), "warn"),
+    ("consequence", "后果/代价", re.compile(r"(因此|于是|代价|后果|失去|得到|暴露|触发|受伤|被抓|关系破裂)"), "warn"),
+]
+
 
 def ep_label(value: str) -> str:
     return value if value.startswith("第") else f"第{value}集"
@@ -117,6 +129,28 @@ def key_event_sentences(raw: str, limit: int = 10) -> List[str]:
     return sorted(candidates, key=score, reverse=True)[:limit]
 
 
+def scene_function_sentences(raw: str, limit: int = 12) -> List[Dict[str, Any]]:
+    candidates: List[Dict[str, Any]] = []
+    for sentence in split_sentences(raw):
+        hits = [(code, label, severity) for code, label, rx, severity in SCENE_FUNCTIONS if rx.search(sentence)]
+        if not hits:
+            continue
+        marker = 1 if (BRACKET_RE.search(sentence) or TITLE_RE.search(sentence)) else 0
+        candidates.append({
+            "sentence": sentence,
+            "functions": [h[0] for h in hits],
+            "labels": [h[1] for h in hits],
+            "severity": "warn" if any(h[2] == "warn" for h in hits) else "info",
+            "score": len(hits) + len(EVENT_RE.findall(sentence)) + marker,
+        })
+    return sorted(candidates, key=lambda row: (row["score"], min(len(row["sentence"]), 160)), reverse=True)[:limit]
+
+
+def function_marker_present(functions: Sequence[str], adapted: str) -> bool:
+    by_code = {code: rx for code, _label, rx, _severity in SCENE_FUNCTIONS}
+    return any(by_code[code].search(adapted) for code in functions if code in by_code)
+
+
 def sentence_coverage(sentence: str, adapted: str) -> float:
     grams = cjk_bigrams(sentence)
     if not grams:
@@ -178,6 +212,27 @@ def audit(root: str, ep: str) -> Dict[str, Any]:
             "源文关键事件在改编稿中覆盖率极低；确认没有漏掉动机/伏笔/反转。",
             item)
 
+    function_items = scene_function_sentences(raw)
+    lost_functions = []
+    for item in function_items:
+        sentence = str(item["sentence"])
+        required = local_required_terms(sentence)
+        cov = sentence_coverage(sentence, adapted)
+        has_required_term = bool(required and any(present(t, adapted) for t in required))
+        has_same_function = function_marker_present(item["functions"], adapted)
+        if cov < 0.10 and not has_required_term and not has_same_function:
+            lost_functions.append({
+                "sentence": sentence[:120],
+                "functions": item["labels"],
+                "coverage": round(cov, 3),
+            })
+    for item in lost_functions[:8]:
+        sev = "warn" if any(label in {"角色动机", "冲突原因", "兑现/爽点", "反转", "关系变化", "角色选择", "后果/代价"}
+                            for label in item["functions"]) else "info"
+        add(findings, sev, "scene_function_maybe_lost",
+            "源文场景功能在改编稿中覆盖很低；确认压缩没有删掉剧情功能。",
+            item)
+
     raw_event_count = len(event_sentences)
     adapted_event_count = len(EVENT_RE.findall(adapted))
     if raw_event_count >= 2 and adapted_event_count == 0:
@@ -193,6 +248,8 @@ def audit(root: str, ep: str) -> Dict[str, Any]:
         "missing_terms": len(missing_terms),
         "key_event_sentences": raw_event_count,
         "omitted_event_sentences": len(omitted_events),
+        "scene_function_sentences": len(function_items),
+        "lost_scene_functions": len(lost_functions),
     }
     ok = not any(f["severity"] in {"must", "warn"} for f in findings)
     return {"episode": ep, "ok": ok, "stats": stats, "findings": findings}
@@ -203,7 +260,8 @@ def print_human(result: Dict[str, Any]) -> None:
     print(f"# 源文改编覆盖校验 — {result.get('episode')}")
     print(
         f"raw={stats.get('raw_chars', 0)} chars  adapted={stats.get('adaptation_chars', 0)} chars  "
-        f"terms_missing={stats.get('missing_terms', 0)}  events_omitted={stats.get('omitted_event_sentences', 0)}"
+        f"terms_missing={stats.get('missing_terms', 0)}  events_omitted={stats.get('omitted_event_sentences', 0)}  "
+        f"scene_functions_lost={stats.get('lost_scene_functions', 0)}"
     )
     findings = result.get("findings") or []
     if not findings:

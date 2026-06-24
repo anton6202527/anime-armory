@@ -80,6 +80,18 @@ def test_key_event_omission_is_warned():
     assert "source_event_maybe_omitted" in codes(result)
 
 
+def test_scene_function_loss_is_warned():
+    root = _mk_ep(
+        "沈念为了保护妹妹决定公开证据，因此暴露身份，被全城通缉。",
+        "[镜头1·旁白·平静·慢] 天色渐晚，院中很安静。\n",
+    )
+
+    result = SA.audit(root, "第1集")
+
+    assert not result["ok"]
+    assert "scene_function_maybe_lost" in codes(result)
+
+
 if __name__ == "__main__":
     import pytest
     raise SystemExit(pytest.main([__file__, "-q"]))

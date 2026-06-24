@@ -15,6 +15,28 @@ description: Ingest real reader telemetry and comments for an in-progress novel 
 
 ## 工作流
 
+### 0. 先做读者测试计划（推荐）
+
+在拿真实反馈前，先明确测试目标、版本、样本量和决策阈值：
+
+```bash
+python3 skills/novel-feedback/scripts/reader_test_plan.py "<作品根>" \
+  --platform "红果测试投放" \
+  --source-name "开篇A/B小样本" \
+  --scope "opening:1-3" \
+  --target-reader "红果爽文读者" \
+  --take "opening-v1" --take "opening-v2"
+```
+
+产物：
+
+- `评分/reader_test_plan.json`
+- `评分/读者测试计划.md`
+
+计划只规定怎么测，不替代真实数据。后续 CSV/JSONL 导入时尽量带 `ab_test_id`、`variant_id`、`take_id`，才能把结果归因到具体稿件版本。
+
+### 1. 导入真实反馈
+
 ```bash
 python3 skills/novel-feedback/scripts/ingest_reader_events.py "<作品根>" \
   --input "<反馈导出.csv或.jsonl>" \
@@ -46,6 +68,7 @@ python3 skills/novel-feedback/scripts/ingest_reader_events.py "<作品根>" \
 
 ## 判读铁律
 
+- 先有测试计划，再导入反馈；没有计划时也能导入，但报告只能做事后解释，A/B 归因可信度更低。
 - 权重序：真实读者反馈 > 自有投放战绩 > `novel-simulate` 虚拟试读 > 外部公榜泛化。
 - 单章低完读、弃读高、负面评论集中，只说明“这一章读端有伤口”，不自动证明设定或文学性错误；需要回 `novel-review` / `novel-balance` 定因。
 - 样本量低时报告会标 `low_sample`，不得把小样本波动当硬结论。

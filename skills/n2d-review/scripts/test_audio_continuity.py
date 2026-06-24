@@ -86,3 +86,48 @@ def test_analyze_end_to_end(tmp_path: Path):
     assert any(r["verdict"] == "warn" for r in rep["vea"])   # 镜头1 强台词×平淡
     assert any(r["verdict"] == "warn" for r in rep["acc"])   # voice_key A 口音冲突
     assert any(r["verdict"] == "warn" for r in rep["bgm"])   # 速度whiplash
+
+
+def test_emotion_audio_reconcile_flags_strong_but_quiet():
+    lines = [
+        {"shot": 1, "role": "沈念", "emotion": "愤怒", "line": "我恨你们，血债血偿！"},
+        {"shot": 2, "role": "沈念", "emotion": "平静", "line": "走吧。"},
+        {"shot": 3, "role": "旁白", "emotion": "低沉", "line": "夜色渐深。"},
+        {"shot": 4, "role": "沈念", "emotion": "平静", "line": "嗯。"},
+    ]
+    flow = [
+        {"shot": 1, "energy": {"energy_score": 0.10}, "emotion_applied": "angry"},  # 强情绪却垫底
+        {"shot": 2, "energy": {"energy_score": 0.50}},
+        {"shot": 3, "energy": {"energy_score": 0.60}},
+        {"shot": 4, "energy": {"energy_score": 0.70}},
+    ]
+    rows = a.emotion_audio_findings(lines, flow)
+    assert any(r["verdict"] == "warn" and "镜头1" in r["shot"] for r in rows)
+
+
+def test_emotion_audio_reconcile_skips_flat_energy():
+    lines = [{"shot": i, "role": "沈念", "emotion": "愤怒", "line": "我恨你们！"} for i in range(1, 5)]
+    flow = [{"shot": i, "energy": {"energy_score": 0.30}} for i in range(1, 5)]  # 无起伏（占位/say）
+    assert a.emotion_audio_findings(lines, flow) == []
+
+
+def test_emotion_audio_reconcile_strong_loud_ok():
+    lines = [
+        {"shot": 1, "role": "沈念", "emotion": "愤怒", "line": "我恨你们！"},
+        {"shot": 2, "role": "沈念", "emotion": "平静", "line": "走吧。"},
+        {"shot": 3, "role": "旁白", "emotion": "低沉", "line": "夜色。"},
+        {"shot": 4, "role": "沈念", "emotion": "平静", "line": "嗯。"},
+    ]
+    flow = [
+        {"shot": 1, "energy": {"energy_score": 0.90}},  # 强情绪且响 → 不报
+        {"shot": 2, "energy": {"energy_score": 0.10}},
+        {"shot": 3, "energy": {"energy_score": 0.20}},
+        {"shot": 4, "energy": {"energy_score": 0.30}},
+    ]
+    assert a.emotion_audio_findings(lines, flow) == []
+
+
+def test_emotion_audio_reconcile_too_few_segments():
+    lines = [{"shot": 1, "role": "沈念", "emotion": "愤怒", "line": "恨！"}]
+    flow = [{"shot": 1, "energy": {"energy_score": 0.0}}]
+    assert a.emotion_audio_findings(lines, flow) == []

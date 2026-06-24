@@ -374,6 +374,43 @@ class QAGateTest(unittest.TestCase):
             status = qa_gate.collect_gate_status(tmp, export_formats=["txt"])
             self.assertFalse(any(b["id"].startswith("AI-USAGE") for b in status["blockers"]))
 
+    def test_ai_generated_text_blocks_strict_chinese_platform(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _write_meta(tmp, target_platform="晋江")
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n\n- **目标平台**：晋江\n- **文本主创模式**：AI生成\n")
+            status = qa_gate.collect_gate_status(tmp)
+            self.assertTrue(status["blocking"])
+            self.assertTrue(any(b["id"] == "AI-GENERATED-TEXT-PLATFORM-RISK" for b in status["blockers"]))
+
+    def test_ai_assisted_text_warns_for_strict_chinese_platform(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _write_meta(tmp, target_platform="晋江")
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n\n- **目标平台**：晋江\n- **文本主创模式**：AI辅助\n")
+            status = qa_gate.collect_gate_status(tmp)
+            self.assertFalse(any(b["id"].startswith("AI-") for b in status["blockers"]))
+            self.assertTrue(any(w["id"] == "AI-ASSISTED-TEXT-PLATFORM-REVIEW" for w in status["warnings"]))
+
+    def test_scene_card_missing_key_fields_blocks(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _write_meta(tmp)
+            os.makedirs(os.path.join(tmp, "设定"), exist_ok=True)
+            with open(os.path.join(tmp, "设定", "scene_cards.json"), "w", encoding="utf-8") as f:
+                json.dump({
+                    "schema_version": 1,
+                    "kind": "novel_scene_cards",
+                    "scenes": [{"id": "SC001-01", "chapter": 1, "scene_no": 1, "pov": "林越"}],
+                }, f, ensure_ascii=False)
+            status = qa_gate.collect_gate_status(tmp)
+            self.assertTrue(any(b["id"] == "SCENE-CARD-MISSING-FIELDS" for b in status["blockers"]))
+
+    def test_missing_scene_cards_warn_for_long_project(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _write_meta(tmp, scale="long", target_chapters=80)
+            status = qa_gate.collect_gate_status(tmp)
+            self.assertTrue(any(w["id"] == "SCENE-CARDS-MISSING" for w in status["warnings"]))
+
     def test_score_baseline_freshness_blocks_unless_waived(self):
         with tempfile.TemporaryDirectory() as tmp:
             os.makedirs(os.path.join(tmp, "评分"), exist_ok=True)

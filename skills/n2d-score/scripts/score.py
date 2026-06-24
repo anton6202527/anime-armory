@@ -24,6 +24,9 @@ REPO_SKILLS = os.path.abspath(os.path.join(SKILL_DIR, ".."))
 COMMON = os.path.join(REPO_SKILLS, "n2d", "_lib")
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
+if SCRIPT_DIR not in sys.path:
+    sys.path.insert(0, os.path.abspath(SCRIPT_DIR))
+from narrative_kpi import build_narrative_kpi, collect_narrative_signals  # noqa: E402  长篇叙事 KPI（报告型）
 from n2d_contract import (  # noqa: E402  生产数据目录 / kind / 一致性维度单一真值源
     EPISODE_REVIEW_SCORE_KIND,
     PRODUCTION_DIR,
@@ -35,6 +38,7 @@ from n2d_thresholds import load_thresholds  # noqa: E402  告警阈值单一真�
 INPUT_DIR = "score_inputs"
 SCORE_KIND = EPISODE_REVIEW_SCORE_KIND
 VERSION = 1
+SCORE_PROFILE_THRESHOLDS = {"demo": 75, "standard": 85, "production": 90, "overseas": 88}
 
 DIMENSIONS: Dict[str, Dict[str, Any]] = consistency_dimensions()
 
@@ -106,14 +110,15 @@ def run_json_safe(cmd: Sequence[str]) -> Any:
 
 
 def run_identity_drift(root: str, ep: str) -> Optional[Dict[str, Any]]:
-    """跨集角色漂移：对截至本集的小窗口跑 n2d-identity，取其 drift 报告。
+    """跨集角色漂移：对截至本集的长窗口跑 n2d-identity，取其 drift 报告。
 
-    窗口 = 本集 + 前两集（给跨集趋势又把面部机检成本压住）。registry 缺失 / insightface 不可用 /
-    无早集 → 返回 None 或 available=false 的报告，评分侧按"缺数据"处理，不崩、不臆造。
+    窗口 = 第1集..本集。此前只跑本集+前两集，长间隔再登场（隔很多集回归的角色/物件）
+    容易被短窗口漏掉；n2d-identity 已有 recurrence 统计，评分侧必须给它完整历史。
+    registry 缺失 / insightface 不可用 / 无早集 → 返回 None 或 available=false 的报告，评分侧按"缺数据"处理，不崩、不臆造。
     这里只拿来识别**跨集回归**（早集稳、本集崩），片内崩脸已由 consistency_audit 脸(G1) 计分，避免双重扣分。"""
     identity_py = os.path.join(REPO_SKILLS, "n2d-identity", "scripts", "identity.py")
     n = episode_number(ep)
-    eps_arg = f"{max(1, n - 2)}-{n}" if n is not None else ep
+    eps_arg = f"1-{n}" if n is not None else ep
     combined = run_json_safe([sys.executable, identity_py, root, "--episodes", eps_arg, "--json"])
     if not isinstance(combined, dict):
         return None
@@ -147,6 +152,33 @@ def load_dashboard_episode(root: str, ep: str) -> Optional[Dict[str, Any]]:
         if isinstance(item, dict) and item.get("episode") == ep:
             return item
     return None
+
+
+def resolve_score_profile(root: str, explicit: Optional[str] = None) -> str:
+    raw = str(explicit or os.environ.get("N2D_SCORE_PROFILE") or os.environ.get("N2D_NARRATIVE_PROFILE") or "").strip().lower()
+    if raw in SCORE_PROFILE_THRESHOLDS:
+        return raw
+    if raw in {"prod", "release", "paid", "投放", "上线", "production_release"}:
+        return "production"
+    if raw in {"test", "sample", "pilot", "打样", "测试"}:
+        return "demo"
+    if raw in {"intl", "international", "global", "english", "海外", "出海"}:
+        return "overseas"
+    try:
+        text = open(os.path.join(root, "_设置.md"), encoding="utf-8").read().lower()
+    except Exception:
+        return "standard"
+    if any(x in text for x in ("production", "付费", "投放", "上线", "发行", "douyin", "抖音")):
+        return "production"
+    if any(x in text for x in ("demo", "打样", "测试", "internal_only", "内部")):
+        return "demo"
+    if any(x in text for x in ("overseas", "english", "海外", "出海")):
+        return "overseas"
+    return "standard"
+
+
+def threshold_for_profile(profile: str) -> int:
+    return SCORE_PROFILE_THRESHOLDS.get(profile, SCORE_PROFILE_THRESHOLDS["standard"])
 
 
 def empty_dimension(key: str) -> Dict[str, Any]:
@@ -317,6 +349,20 @@ def apply_identity_drift(dims: Dict[str, Dict[str, Any]], drift: Optional[Dict[s
             add_signal(
                 dims, "character_consistency", warnings=1, skipped=False,
                 evidence=f"跨集漂移预警：{name} 在 {ep} 有 {warn} 个临界镜头、早集稳→ 关注该角色是否开始漂",
+            )
+        recurrence = info.get("recurrence") if isinstance(info.get("recurrence"), dict) else {}
+        reentries = recurrence.get("long_gap_reentries") if isinstance(recurrence.get("long_gap_reentries"), list) else []
+        for entry in reentries:
+            if not isinstance(entry, dict):
+                continue
+            if str(entry.get("at") or "") != ep:
+                continue
+            add_signal(
+                dims, "character_consistency", warnings=1, skipped=False,
+                evidence=(
+                    f"长间隔再登场风险：{name} 从 {entry.get('prev')} 到 {ep} 缺席 {entry.get('gap')} 集；"
+                    "本集应使用 canonical + 最近同形态/同表情/同视角实体记忆重锚"
+                ),
             )
 
 
@@ -617,7 +663,7 @@ def build_data_collection_tasks(dims: Dict[str, Dict[str, Any]]) -> List[Dict[st
         "action": "run_checks",
         "dimensions": [item["label"] for item in missing],
         "scope": "缺机器信号，先采集 consistency/mechanical/visual checks；不要在缺证据时直接返工。",
-        "command": "python3 skills/n2d-score/scripts/score.py <作品根> <集> --run-checks --threshold <阈值>",
+        "command": "python3 skills/n2d-score/scripts/score.py <作品根> <集> --run-checks --profile <demo|standard|production|overseas>",
     }]
 
 
@@ -710,8 +756,10 @@ def score_episode(
     identity: Optional[Dict[str, Any]] = None,
     voice_print: Optional[Dict[str, Any]] = None,
     dashboard_ep: Optional[Dict[str, Any]] = None,
+    narrative: Optional[Dict[str, Any]] = None,
     threshold: int = 85,
     pass_rate_floor: Optional[float] = None,
+    review_profile: str = "standard",
 ) -> Dict[str, Any]:
     ep = normalize_episode(ep)
     dims = {key: empty_dimension(key) for key in DIMENSIONS}
@@ -733,16 +781,20 @@ def score_episode(
         status = "warn"  # 有未归类的 block 证据时，绝不给 pass；交人判分诊
     if insufficient and status == "pass":
         status = "warn"
+    narrative_signals = dict(narrative or {})
+    narrative_signals.setdefault("profile", review_profile)
     return {
         "kind": SCORE_KIND,
         "version": VERSION,
         "root": root,
         "episode": ep,
+        "review_profile": review_profile,
         "generated_at": now_iso(),
         "threshold": threshold,
         "total_score": total,
         "status": status,
         "character_consistency_kpi": build_consistency_kpi(consistency, identity),
+        "narrative_continuity_kpi": build_narrative_kpi(narrative_signals),
         "score_inputs": {
             "consistency": cached_path(root, ep, "consistency"),
             "mechanical": cached_path(root, ep, "mechanical"),
@@ -766,6 +818,7 @@ def render_markdown(score: Dict[str, Any]) -> str:
         "# n2d 自动审片评分",
         "",
         f"- 集：{score['episode']}",
+        f"- Profile：{score.get('review_profile', 'standard')}",
         f"- 总分：{score['total_score']} / 100",
         f"- 阈值：{score['threshold']}",
         f"- 状态：{format_status(score['status'])}",
@@ -784,6 +837,23 @@ def render_markdown(score: Dict[str, Any]) -> str:
             + f" · 可投放线：{kpi['release_line']} → **{verdict_zh}**",
             f"- encoder：{kpi.get('encoder')} · fidelity-gate：{kpi.get('fidelity_gate')} · 计入角色数：{kpi.get('characters_counted')}",
             f"- 基准：{kpi.get('benchmark_ref')}",
+            "",
+        ])
+    nkpi = score.get("narrative_continuity_kpi")
+    if isinstance(nkpi, dict) and nkpi.get("narrative_continuity") is not None:
+        nverdict = {"above": "达标", "below": "低于参考线"}.get(nkpi.get("verdict"), "—")
+        subs = nkpi.get("subscores", {})
+        lines.extend([
+            "## 长篇叙事一致性 KPI（报告型·非扣分·NarrLV/DirectorBench 轴）",
+            "",
+            f"- 叙事连续性：{nkpi['narrative_continuity']} · profile {nkpi.get('profile')} · 参考线 {nkpi.get('release_line')} → **{nverdict}**"
+            + f"（集数 {nkpi.get('episodes_counted')}）",
+            f"- 子分：伏笔已回收 {subs.get('payoff_completed')} · 伏笔已规划 {subs.get('payoff_planned')} · "
+            f"冷开场链 {subs.get('cold_open_chain')} · 反套路 {subs.get('anti_trope')} · "
+            f"情绪起伏 {subs.get('emotion_variation')} · 叙事原子 {subs.get('narrative_atom_density')} · "
+            f"实体排程 {subs.get('entity_schedule')}"
+            + (f" · 未填伏笔 {nkpi.get('open_setups')}" if nkpi.get("open_setups") else ""),
+            f"- 基准：{nkpi.get('benchmark_ref')}",
             "",
         ])
     lines += [
@@ -866,6 +936,8 @@ def enqueue_low(score: Dict[str, Any], *, max_concurrency: int, max_retries: int
 def cmd_score(ns: argparse.Namespace) -> int:
     root = ns.root.rstrip("/")
     ep = normalize_episode(ns.episode)
+    profile = resolve_score_profile(root, ns.profile)
+    threshold = ns.threshold if ns.threshold is not None else threshold_for_profile(profile)
     inputs: Dict[str, Any] = {}
     if ns.run_checks:
         inputs.update(run_checks(root, ep))
@@ -876,6 +948,12 @@ def cmd_score(ns: argparse.Namespace) -> int:
         inputs["identity"] = load_json(cached_path(root, ep, "identity"))
         inputs["voice_print"] = load_json(cached_path(root, ep, "voice_print"))
     inputs["dashboard_ep"] = load_dashboard_episode(root, ep)
+    try:
+        inputs["narrative"] = collect_narrative_signals(root)  # 跨集报告型 KPI·best-effort
+        if isinstance(inputs["narrative"], dict):
+            inputs["narrative"]["profile"] = profile
+    except Exception:
+        inputs["narrative"] = {"profile": profile}
     score = score_episode(
         root,
         ep,
@@ -885,8 +963,10 @@ def cmd_score(ns: argparse.Namespace) -> int:
         identity=inputs.get("identity"),
         voice_print=inputs.get("voice_print"),
         dashboard_ep=inputs.get("dashboard_ep"),
-        threshold=ns.threshold,
+        narrative=inputs.get("narrative"),
+        threshold=threshold,
         pass_rate_floor=resolve_pass_rate_floor(root, ns.pass_rate_floor),
+        review_profile=profile,
     )
     queue = None
     if ns.enqueue_low and score["status"] != "pass":
@@ -909,7 +989,10 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("root")
     ap.add_argument("episode")
     ap.add_argument("--run-checks", action="store_true", help="run consistency/mechanical/visual checks and cache their JSON")
-    ap.add_argument("--threshold", type=int, default=85)
+    ap.add_argument("--profile", choices=sorted(SCORE_PROFILE_THRESHOLDS),
+                    help="review profile: demo/standard/production/overseas; sets default threshold and narrative KPI line")
+    ap.add_argument("--threshold", type=int, default=None,
+                    help="override score threshold; default comes from --profile or project settings")
     ap.add_argument("--pass-rate-floor", type=float, default=None,
                     help="通过率下限告警阈值；缺省读 生产数据/alert_thresholds.json 的 final_pass_rate_floor（与 n2d-dashboard 同源），都没有则不告警")
     ap.add_argument("--no-write", action="store_true")

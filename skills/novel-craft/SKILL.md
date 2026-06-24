@@ -22,6 +22,8 @@ description: Shared writing-primitives and deterministic production helpers for 
 | **统一修订计划** | `scripts/revision_planner.py` | review/score/balance/feedback/simulate 都跑过后，合并成 `修订/revision_plan.json` + `修订/修订计划.md` |
 | **三段式精品写章** | `references/trio-pipeline.md` | 长篇 / `商业连载` / `漫剧源书` / `小说生成工作流=三步迭代`；每章拆成 Architect → Ghostwriter → Senior Editor 三个任务包 |
 | **弧段任务包 / 长篇压力测试** | `scripts/arc_packets.py` + `novel-review/scripts/arc_gate.py` | 每 3-5 章或自然 arc 前后；写前物化弧段目标，写后抓连续不推进读者契约、整段无题旨对齐等中段跑偏 |
+| **弧段记忆摘要** | `references/arc-memory.md` + `scripts/arc_memory.py` | 每 3-5 章压缩剧情/人物/情绪/未收钩子，写后形成 `arc_summaries.json` / `emotional_progression.json`，写章包自动读取当前弧段摘要 |
+| **场景卡（scene cards）** | `references/scene-cards.md` + `scripts/scene_cards.py` | 章纲定稿后，把章节拆成 POV/目标/阻碍/冲突/转折/价值变化的场景卡；`draft_packets.py` 自动注入当前章场景卡 |
 | **边写边自检闭环** | `references/draft-pipeline.md` | `小说生成工作流=边写边自检`；任务包自动写入正文 + state_delta + `novel/scripts/post_write.py` 自检闭环，并按 `小批回扫间隔` 保留 3-5 章一次的 `novel-review` 集中修正 |
 | **派生流水线后半段（rewrite/continue/expand/condense/spinoff 共用）** | `references/derive-pipeline.md` | 任一派生 skill 的阶段表 / demo_gate / draft / export / ai_usage 通用机制——各 skill 只写自己的 source_model/direction_spec 映射，通用部分引此 |
 | 拆分标准（章 / 集 边界 + 字数分档） | `references/split.md` | 章纲编织**之前**先定总章数与字数分档 |
@@ -61,6 +63,8 @@ description: Shared writing-primitives and deterministic production helpers for 
 | `scripts/draft_queue.py` | 批量写章队列：初始化待写章节、claim 租约认领、done/fail/todo 标记，避免小批/多代理重复写同一章 | `draft` 阶段，尤其小批/全书草稿 |
 | `scripts/draft_packets.py` | 生成 `写作任务/第NN章.md` 或三段式 `第NN章_{architect,ghostwriter,editor}.md` + 初始化 `审稿/state_ledger.json`；默认要求 Demo gate passed；章纲命中打斗/追逐/逃亡/突破/升级、真相揭示/掉马、公开对质/审讯/谈判、告白/决裂/和解时自动注入专项清单；项目题材/平台为女频·言情向时按题材门控自动注入女频情感清单；有 `资料/research_sources.json` 时自动注入当前章节适用的专业资料包；有 `设定/角色弧光.json` 时注入在场角色弧光阶段、本章 ≥3 名角色同台时注入群像辨识度提醒；不调用 AI | 所有 `draft` 阶段，先包上下文再写章；长篇/商业连载/漫剧源书默认三段式 |
 | `scripts/arc_packets.py` | 生成 `写作任务/弧段_第AA-BB章.md` + `审稿/arc_plan_第AA-BB章.json`，把一小段章节的章纲、读者契约、未收线程和 gate 命令物化 | 长篇每 3-5 章或一个自然 arc 的写前计划 |
+| `scripts/arc_memory.py` | 生成/检查 `设定/arc_summaries.json` 与 `设定/emotional_progression.json`；把旧章窗口压成可注入的弧段级长期记忆 | 每 3-5 章或自然 arc 写完后 |
+| `scripts/scene_cards.py` | 生成/检查 `设定/scene_cards.json`；每个场景记录 POV、目标、阻碍、冲突、转折、价值变化、潜台词与五感锚点 | 章纲定稿后、Demo/批量写章前；`draft_packets.py` 注入当前章场景卡 |
 | `scripts/reconcile_ledger.py` | 输出正文/Delta 核对 prompt；仅在提供已通过核对的 `--verified` JSON 后合并入 `state_ledger.json`（`--stamp-hashes` 免手抄 sha256，供写后即时对账）；`--rollup --before N` 压缩旧章逐章明细控制账本膨胀（canonical 状态不动） | 所有 `draft` 阶段，写章后同步状态；长篇定期 rollup |
 | `scripts/propose_state_delta.py` | 为单章生成 `审稿/state_delta_第NN章.suggested.json` 草案，含章节 hash、候选实体和待填槽位；确认后再另存正式 delta 并 merge | 写完章节后，减少从空白 JSON 开始写 state_delta 的摩擦 |
 | `scripts/ai_usage.py` | 写 `合规/ai_usage.json` + `合规/AI使用说明.md`，记录 AI-generated / AI-assisted / 未使用 AI 文本、人工贡献、AI 介入直接程度、人类 steering、可替代性、直接纳入程度与复核步骤 | 发布、导出、交平台前 |
@@ -118,6 +122,7 @@ python3 skills/novel-craft/scripts/revision_planner.py "<作品根>"
 ```bash
 python3 skills/novel-craft/scripts/ai_usage.py "<作品根>" \
   --text-mode AI-generated \
+  --text-authorship-mode AI生成 \
   --publish-target KDP \
   --human-contribution "用户提供蓝图、设定并人工审稿" \
   --text-directness outline_to_draft \

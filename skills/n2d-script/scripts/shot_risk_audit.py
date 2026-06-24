@@ -154,7 +154,9 @@ def score_clip(clip: Dict[str, Any], idx: int) -> Dict[str, Any]:
 
     if chars >= 4 and (CLOSE_RE.search(shot_size) or CLOSE_RE.search(blob)):
         findings.append({"severity": "must", "code": "too_many_clear_closeup_characters",
-                         "message": "清晰近景同框具名角色 >=4，默认不可控；先拆镜/反打/群像远景。"})
+                         "message": "清晰近景同框具名角色 ≥4：单帧 co-gen 难压脸，但这是『要分区合成做对』不是『删戏/砍人数』"
+                                    "（设计宪法 C6 剧情优先）。剧情需要就照出——登记 split_composite/分别出图+合成把每张脸分别做好再合成，"
+                                    "或拆 establish+反打把整场拍全；出图 gate 凭执行策略放行。"})
     if expression == "大" and (CLOSE_RE.search(shot_size) or CLOSE_RE.search(blob)) and not cont.get("need_endframe"):
         findings.append({"severity": "must", "code": "large_expression_without_endframe",
                          "message": "大表情近景缺 need_endframe=true，脸会被表情重画。"})

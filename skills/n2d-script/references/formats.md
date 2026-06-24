@@ -67,6 +67,16 @@ python3 skills/n2d-script/scripts/midstart_context.py <作品根> check
 
 这份资产包不替代角色卡、生命周期表、场景卡和道具卡；它是中段开工时的最小上下文索引。正式出图前仍要由 `n2d-image` 生成共享定妆与 `identity_registry.json`。
 
+机器侧另有一个轻量范围声明：`脚本/episode_scope.json`。当项目保留了早期样例集，但本轮实际从中段窗口开工，必须声明窗口，避免 `antecedent_audit.py --strict` 把有意跳过误判成删集事故。
+
+```json
+{
+  "window_start": "第5集",
+  "intentional_gaps": ["第3集", "第4集"],
+  "reason": "第1-2集为样例验证，本轮投放窗口从第5集开始"
+}
+```
+
 ---
 
 ## 1. 角色卡（设定库/characters/角色名.md，全篇唯一，首次出现即建卡）
@@ -212,7 +222,11 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 
 **`template` + `template_contract` 是复杂镜头的上游真值源**：凡 Clip 涉及打斗、追逐、对话反打、真相揭示/身份曝光、公开对质/审讯/谈判、法术爆发、飞行、亲密互动、拥抱拉扯、关系转折、多人同框、群像站位，必须按 `专项镜头模板库.md` 选模板并写契约。允许的模板 ID：`fight_exchange`、`chase`、`dialogue_shot_reverse`、`reveal_reaction_chain`、`public_confrontation`、`magic_burst`、`flight`、`intimate_interaction`、`hug_or_pull`、`relationship_turn`、`multi_character_same_frame`、`ensemble_blocking`、`multi_person_blocking`（legacy）。普通空镜/单人静态反应可省略；复杂镜头缺模板或字段不全时 gate 阻断。
 
-每个 clip 带 `continuity` 块，`start_state` 应等于上一 clip 的 `end_state`：
+每个 clip 带 `continuity` 块，`start_state` 应等于上一 clip 的 `end_state`。
+
+**跨集 hook 桥接（`hook_bridge`）**：若上一集集尾钩抛出 A 线，本集冷开场有意先切 B 线、延迟回收或从另一个角度回答，必须在本集顶层或前两个 clip 写 `hook_bridge`。否则 `beat_audit.py --strict` 会按实体零重合报 `cross_ep_hook_break`。字段最少写 `from_episode` + `thread_id` + `bridge_text`，若直接回答上一集悬念写 `answers_prev_hook:true`，若延迟回收写 `delayed_payoff_ep`。
+
+**逐镜头实体排程（`entity_schedule`）**：每个 clip 或 `shots[]` 子镜都应写角色、物件、地点、知识状态和必须出现项；shot 级覆盖 clip 级。`entity_schedule_audit.py` 会统计覆盖率，并对 clip/shot 字段中已出现但排程漏登的角色/物件/地点给 warn。该字段是 EntityBench 风格 per-shot schedule 的 n2d 真值层，供后续出图、视频、审片和叙事 KPI 共用。
 
 ```json
 { "episode": 1, "title": "本宫才是这皇宫最大的妖·第1集", "source": "原著章节1-2",
@@ -249,6 +263,22 @@ character design / reference sheet: {name}, minimum reference set with front-fac
   "clips": [
     { "id": "EP01_CLIP01", "label": "冷开场", "duration": 7, "scene": "冷宫寝殿/夜/内",
       "rhythm": "铺垫·长镜",                         // 与 故事板.md 节奏注记一致（铺垫·长镜|加速·碎切|爽点·CU硬切|留白·定格）
+      "character_ids": ["CHAR_01", "CHAR_02"],
+      "object_ids": ["PROP_玉佩"],
+      "location_id": "LOC_冷宫寝殿",
+      "hook_bridge": {
+        "from_episode": "第0集",
+        "thread_id": "cold_palace_assassin",
+        "answers_prev_hook": true,
+        "bridge_text": "冷开场直接回答上一集门外黑影是谁，并把玉佩线索推进到本集。"
+      },
+      "entity_schedule": {
+        "characters": ["CHAR_01/常态", "CHAR_02/常态"],
+        "objects": ["PROP_玉佩"],
+        "locations": ["LOC_冷宫寝殿"],
+        "knowledge_state": { "CHAR_01": ["不知道玉佩为假"], "CHAR_02": ["知道玉佩为假"] },
+        "required_presence": ["CHAR_01", "PROP_玉佩"]
+      },
       "template": "dialogue_shot_reverse",            // 复杂镜头才填；普通空镜/单人反应可省略
       "template_contract": {                          // 复杂镜头模板契约；字段见 专项镜头模板库.md
         "template_id": "dialogue_shot_reverse",
@@ -271,6 +301,9 @@ character design / reference sheet: {name}, minimum reference set with front-fac
         "expression_span": "大",                         // ← opt-in·近景表情跨度 微|中|大；本镜脸的情绪从起到止跨几档（平静→爆哭=大）。缺=不追踪。
                                                         //    `大`+近景/特写/反打 → gate 强制 need_endframe=true 走首尾双帧只插值（首=起表情/尾=止表情同源定妆），
                                                         //    否则单首帧硬扛跨情绪表情=脸型/五官随表情漂移（脸被表情带着重画的头号根因）。同情绪小变化用 微/中。
+        "微表情节拍": "起：AU4 眉头紧锁+AU7 眼睑收紧+AU24 抿唇（隐忍）→ 止：AU1+AU4 眉头拧起+AU15 嘴角下压+welling tears（将哭）；屏息、下颌微颤",
+                                                        // ← 近景/特写人物镜必填·FACS/AU 级微表情线索（眉/眼/鼻唇/嘴/呼吸微动）。expression_span=大 时首帧=起 AU 组、尾帧=止 AU 组。
+                                                        //    单一真值源 n2d_const.MICRO_EXPRESSION_FIELD / FACS_AU_REGIONS；AU 术语优先英文，中文给口语化等义。详见 n2d-image「近景微表情深化铁律」。
         "transition": "match_cut",                      // match_cut|eyeline|action_cut|empty_buffer|j_cut|hard_cut
         "need_endframe": true,                          // 默认 true；非最终 Clip 若 false 必填 endframe_exempt_reason
         "endframe_png": "出图/第1集/图片/镜头02_end.png",     // need_endframe 时由 n2d-image 落档后回填
@@ -288,7 +321,8 @@ character design / reference sheet: {name}, minimum reference set with front-fac
         ],
         "midframe_exempt_reason": "极短镜 <3s，中帧与首尾几乎重合（三帧契约豁免）"  // 仅 policy.midframe_default=true 且本镜无锚帧时必填
       },
-      "shots": [ { "t": "0-4s", "lens": "全景·推镜", "desc": "...", "video_prompt": "..." } ] }
+      "shots": [ { "t": "0-4s", "lens": "全景·推镜", "desc": "...", "video_prompt": "...",
+                   "entity_schedule": { "characters": ["CHAR_01/常态"], "objects": ["PROP_玉佩"], "locations": ["LOC_冷宫寝殿"] } } ] }
   ]}
 ```
 

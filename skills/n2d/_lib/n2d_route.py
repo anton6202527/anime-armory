@@ -287,8 +287,26 @@ def stage_of(root: str, row: Dict[str, str], header: List[str]) -> Dict[str, Opt
         # 原生音画：不把 配音 当硬路由步骤（避免误推 n2d-voice 卡住分镜/出图）
         if native_av and skill == "n2d-voice":
             continue
-        cols = [c for c in spec.get("progress_columns", ()) if c in header]
-        if not cols or all(satisfied(c) for c in cols):
+        declared_cols = [str(c) for c in spec.get("progress_columns", ())]
+        cols = [c for c in declared_cols if c in header]
+        if not cols:
+            if spec.get("key") == "review" and declared_cols:
+                # 旧项目没有「验收」列时不能把「成片✅」误判为交付完成。
+                # 在成片列已满足后暴露一个虚拟验收前沿，action card 再提示 ensure-col。
+                if any(r in header and not satisfied(r) for r in stage_requires_for_mode(spec, production_mode)):
+                    continue
+                label, cmd = str(spec["label"]), str(spec["command"])
+                return {
+                    "ep": ep,
+                    "col": declared_cols[0],
+                    "label": label,
+                    "skill": skill,
+                    "cmd": cmd,
+                    "note": "旧项目缺「验收」列；先用 progress.py ensure-col 追加，再完成审查签收。",
+                    "missing_progress_column": declared_cols[0],
+                }
+            continue
+        if all(satisfied(c) for c in cols):
             continue
         # 命中未完成阶段：其 requires（跨列硬依赖）须先满足，否则真正的前沿在更早的缺口——
         # 让外层循环按 STAGE_GRAPH 顺序先命中那个缺口阶段。
@@ -312,7 +330,7 @@ def stage_of(root: str, row: Dict[str, str], header: List[str]) -> Dict[str, Opt
                 "note": "先出视频后配音模式：当前真实配音未确认（缺清单或仍是占位），合成前必须先补真实配音。",
             }
         return {"ep": ep, "col": col, "label": label, "skill": skill, "cmd": cmd, "note": note}
-    return {"ep": ep, "col": None, "label": "✅已成片", "skill": None, "cmd": None, "note": ""}
+    return {"ep": ep, "col": None, "label": "✅已验收", "skill": None, "cmd": None, "note": ""}
 
 
 def format_route(root: str, route: Dict[str, Optional[str]]) -> str:

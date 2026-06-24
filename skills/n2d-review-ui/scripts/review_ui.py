@@ -202,10 +202,13 @@ def load_consistency_ledger(root: Path, ep: str) -> Dict[str, Any]:
     if not isinstance(data, dict):
         return {"available": False, "path": rel_to_root(root, path)}
     rows = [dict(row) for row in data.get("rows", []) if isinstance(row, dict)]
+    domains = [dict(row) for row in data.get("domains", []) if isinstance(row, dict)]
     return {
         "available": True,
         "path": rel_to_root(root, path),
         "counts": data.get("counts", {}),
+        "delivery_surface": data.get("delivery_surface", {}),
+        "domains": domains,
         "rows": rows,
         "unattributed": data.get("unattributed", []),
     }
@@ -787,13 +790,20 @@ function renderRefs() {{
 function renderLedger() {{
   const l = data.consistency_ledger || {{}};
   const counts = l.counts || {{}};
+  const domains = (l.domains || []).slice(0, 8);
   const rows = (l.rows || []).slice(0, 5);
-  const worst = rows.some(r => r.overall === 'block') ? 'block' : rows.some(r => r.overall === 'high' || r.overall === 'warn' || r.overall === 'medium') ? 'warn' : 'pass';
+  const surface = l.delivery_surface || {{}};
+  const worst = surface.status === 'blocked' || domains.some(r => r.overall === 'block') || rows.some(r => r.overall === 'block')
+    ? 'block'
+    : domains.some(r => r.overall === 'high' || r.overall === 'warn' || r.overall === 'medium') || rows.some(r => r.overall === 'high' || r.overall === 'warn' || r.overall === 'medium')
+      ? 'warn'
+      : 'pass';
   const body = l.available
     ? `<div class="meta">⛔ ${{esc(counts.block || 0)}} · high ${{esc(counts.high || 0)}} · medium ${{esc(counts.medium || 0)}}<br>${{esc(l.path || '')}}</div>
+       <div class="score-dims">${{domains.map(d => `<div class="dimrow"><span>${{esc(d.label || d.key)}} · ${{esc((d.sources || []).join(','))}}</span><strong>${{esc(d.overall || 'ok')}}</strong></div>`).join('')}}</div>
        <div class="score-dims">${{rows.map(r => `<div class="dimrow"><span>${{esc(r.name || r.id)}} · ${{esc(r.kind || '')}}</span><strong>${{esc(r.overall || 'ok')}}</strong></div>`).join('')}}</div>`
     : '<div class="empty">未生成 consistency_ledger；先跑 n2d-review consistency_audit</div>';
-  return `<section class="card" data-kind="ledger" style="${{cardStyle(40, 330)}}"><div class="card-head"><div class="card-title">一致性总账</div><span class="badge ${{worst}}">${{l.available ? rows.length : 'missing'}}</span></div>${{body}}</section>`;
+  return `<section class="card" data-kind="ledger" style="${{cardStyle(40, 330)}}"><div class="card-head"><div class="card-title">验收总账</div><span class="badge ${{worst}}">${{l.available ? (surface.status || rows.length) : 'missing'}}</span></div>${{body}}</section>`;
 }}
 function renderClip(clip, idx) {{
   const x = 380 + idx * 360;

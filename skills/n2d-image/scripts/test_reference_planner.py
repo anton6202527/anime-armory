@@ -181,8 +181,10 @@ def test_multi_subject_strategy_requires_split_for_codex_like_backend() -> None:
     ]
     strategy = rp.plan_multi_subject_strategy(chars, _MULTI_REF)
     assert strategy
-    assert strategy["mode"] == "split_composite_required"
+    assert strategy["mode"] == "regional_construct_required"
     assert "多人同框身份槽位" in strategy["required_prompt_fields"]
+    assert "空场景底板 empty_plate" in strategy["required_prompt_fields"]
+    assert "区域遮罩/region masks" in strategy["required_prompt_fields"]
     assert "硬执行" in strategy["execution"]
     assert [s["slot"] for s in strategy["slots"]] == ["LEFT_SLOT", "RIGHT_SLOT"]
 
@@ -347,7 +349,7 @@ def test_build_plan_emits_multi_subject_actions(tmp_path: Path) -> None:
     plan = rp.build_plan(root, "第1集")
 
     actions = plan["summary"]["multi_subject_actions"]
-    assert actions and actions[0]["mode"] == "split_composite_required"
+    assert actions and actions[0]["mode"] == "regional_construct_required"
     assert "多人同框策略" in rp.render_md(plan)
     assert "CHAR_01/常态" in actions[0]["chars"]
     assert "CHAR_02/常服" in actions[0]["chars"]

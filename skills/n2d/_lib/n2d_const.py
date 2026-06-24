@@ -140,28 +140,48 @@ HIGH_MOTION_TEMPLATES = frozenset({
 EXPRESSION_SPAN_VALUES = ("微", "中", "大")
 EXPRESSION_SPAN_BIG = "大"
 
-# ── 运镜词典（中→英→[速度+方向+起止点] 槽位）──────────────────────────────────────────────
-# 把运镜从"只有关键词"升级成结构化：每条带 en（喂英文 prompt）+ slots（速度/方向/起止点该填什么）。
-# 动作镜 prompt 应从这里取词并填槽（Veo/即梦运镜段是传达情绪与速度感最强的工具），而非自由散文。
-CAMERA_MOVE_LEXICON = {
-    "推镜头": {"en": "dolly in", "slots": ("speed", "end_size")},
-    "拉镜头": {"en": "dolly out", "slots": ("speed", "end_size")},
-    "摇镜头": {"en": "pan", "slots": ("speed", "direction")},
-    "移镜头": {"en": "tracking", "slots": ("speed", "direction")},
-    "升降": {"en": "crane", "slots": ("speed", "direction", "end_height")},
-    "变焦": {"en": "zoom", "slots": ("speed", "end_size")},
-    "环绕": {"en": "orbit / circular (360°)", "slots": ("speed", "direction", "arc")},
-    "跟拍": {"en": "following / FPV", "slots": ("speed", "direction")},
-    "甩镜": {"en": "whip pan", "slots": ("direction",)},
-    "冲击变焦": {"en": "crash zoom", "slots": ("end_size",)},
-    "手持晃动": {"en": "handheld shake", "slots": ("strength",)},
-    "弧线运镜": {"en": "180-degree arc shot", "slots": ("direction", "start_subject", "end_subject")},
-    "无人机升起": {"en": "aerial drone ascend", "slots": ("speed", "end_height")},
+# 近景微表情节拍（FACS/AU 级）。`expression_span` 锁情绪跨度，但近景观众看的是肌肉级微表情——
+# 只写"愤怒/隐忍"会出空洞脸或被模型重画。近景/特写人物镜应在 prompt 写一条 `微表情节拍`，用
+# FACS Action Unit 级可见线索描述本镜表情的起→止（与峰值），`expression_span=大` 时首帧=起 AU 组、
+# 尾帧=止 AU 组，走首尾双帧只插值（锁脸不锁情）。表情库可用 GPT Image 2 原生 expression-sheet
+# 以正面脸锚为母图一次性派生同源多情绪。AU 术语优先英文（FACS 最稳），中文给口语化等义。
+MICRO_EXPRESSION_FIELD = "微表情节拍"  # storyboard.continuity / 逐镜 prompt 的字段名（单一真值源）
+FACS_AU_REGIONS = {
+    "brow": ("AU1 inner-brow raise", "AU2 outer-brow raise", "AU4 brow lower/furrow"),
+    "eye": ("AU5 upper-lid raise", "AU6 cheek raise", "AU7 lid tighten", "gaze focus", "welling tears"),
+    "nose_cheek": ("AU9 nose wrinkle", "AU11 nasolabial deepen"),
+    "mouth": ("AU12 lip-corner pull", "AU14 dimpler", "AU15 lip-corner depress",
+              "AU17 chin raise", "AU23 lip tighten", "AU24 lip press"),
+    "micro_motion": ("held breath", "nostril flare", "throat swallow", "jaw micro-tremor"),
 }
-# 速度词槽候选（填进 slots.speed），中→英。
+
+# ── 运镜词典（中→英→[速度+方向+起止点] 槽位 + 自由文本触发词）──────────────────────────────
+# 把运镜从"只有关键词"升级成结构化：每条带 en（喂英文 prompt）+ slots（速度/方向/起止点该填什么）
+# + triggers（自由文本里的同义触发子串，让分镜散文「推近/拉远/横摇」也能归一到本词典）。
+# 动作镜 prompt 应从这里取词并填槽（Veo/即梦运镜段是传达情绪与速度感最强的工具），而非自由散文。
+# 消费方：n2d_logic.normalize_camera_move() → gate.check_video_clip_prompt_section ⑤运镜结构化（WARN）。
+CAMERA_MOVE_LEXICON = {
+    "推镜头": {"en": "dolly in", "slots": ("speed", "end_size"), "triggers": ("推镜", "推近", "前推", "推进", "dolly in", "push in")},
+    "拉镜头": {"en": "dolly out", "slots": ("speed", "end_size"), "triggers": ("拉镜", "拉远", "后拉", "dolly out", "pull back")},
+    "摇镜头": {"en": "pan", "slots": ("speed", "direction"), "triggers": ("摇镜", "横摇", "上摇", "下摇", "左摇", "右摇", "pan", "tilt")},
+    "移镜头": {"en": "tracking", "slots": ("speed", "direction"), "triggers": ("移镜", "平移", "横移", "侧移", "tracking", "truck")},
+    "升降": {"en": "crane", "slots": ("speed", "direction", "end_height"), "triggers": ("升降", "升镜", "降镜", "crane", "pedestal", "jib")},
+    "变焦": {"en": "zoom", "slots": ("speed", "end_size"), "triggers": ("变焦", "zoom")},
+    "环绕": {"en": "orbit / circular (360°)", "slots": ("speed", "direction", "arc"), "triggers": ("环绕", "绕拍", "360", "orbit", "circular")},
+    "跟拍": {"en": "following / FPV", "slots": ("speed", "direction"), "triggers": ("跟拍", "跟随", "跟移", "following", "fpv")},
+    "甩镜": {"en": "whip pan", "slots": ("direction",), "triggers": ("甩镜", "甩动", "whip")},
+    "冲击变焦": {"en": "crash zoom", "slots": ("end_size",), "triggers": ("冲击变焦", "急推急拉", "滑动变焦", "crash zoom", "dolly zoom")},
+    "手持晃动": {"en": "handheld shake", "slots": ("strength",), "triggers": ("手持", "晃动", "晃镜", "handheld", "shaky")},
+    "弧线运镜": {"en": "180-degree arc shot", "slots": ("direction", "start_subject", "end_subject"), "triggers": ("弧线", "弧形", "arc shot", "arc move")},
+    "无人机升起": {"en": "aerial drone ascend", "slots": ("speed", "end_height"), "triggers": ("无人机", "航拍", "drone", "aerial")},
+}
+# 速度词槽候选（填进 slots.speed），中→英；含口语别名（normalize_camera_move 按子串匹配）。
 CAMERA_SPEED_WORDS = {
     "缓慢": "slow", "匀速": "steady", "快速": "rapid", "急速冲击": "fast snap", "轻微": "gentle",
+    "急速": "fast snap", "急": "fast snap", "慢": "slow", "微": "gentle",
 }
+# 静止机位词（不属运动，但属合法的"已声明运镜"，不该被判"未用结构化运镜"）。
+STATIC_CAMERA_WORDS = ("固定", "静止", "不动", "锁定机位", "定镜", "无运镜", "static", "fixed", "locked")
 
 # ── 运动强度连续档（替代 HIGH_MOTION_TEMPLATES 二分的细粒度补充）──────────────────────────────
 # HIGH_MOTION_TEMPLATES 是「是否高风险」的二分闸；这里给 0–3 连续档，供 prompt 调 motion strength/

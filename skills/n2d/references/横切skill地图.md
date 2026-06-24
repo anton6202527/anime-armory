@@ -1,6 +1,6 @@
 # n2d 横切 skill 地图（P0/P1/P2 · 非必经）
 
-> 主干六阶段（`n2d-script`→`n2d-voice`→`n2d-image`→`n2d-video`→`n2d-compose`）之外的横切能力全文档。
+> 主状态机（`n2d-script`→`n2d-voice`/原生音画旁白层→`n2d-image`→`n2d-video`→`n2d-compose`→`n2d-review`）之外的横切能力全文档。
 > SKILL.md 只留一行触发表，全文与产物在这里。**编排器 `skills/n2d/run.py next` 已把其中的确定性前置
 > （gate / model-router / 身份矩阵刷新 / 合规检查）自动跑进每个 stage 的 prework**——下面这些条目用于
 > 用户**显式**点名某能力时路由，或理解某横切层的完整职责。

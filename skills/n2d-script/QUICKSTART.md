@@ -9,6 +9,8 @@ Prerequisites:
 Command:
 ```bash
 python3 skills/n2d-script/scripts/split_novel.py "<小说路径>" --by-chapter --limit 3
+# 中段开工：先补 `设定库/中段开工前情资产包.md`；用户只给模糊剧情点时，先读章节/关键词定位章号再传参
+python3 skills/n2d-script/scripts/split_novel.py "<小说路径>" --by-chapter --start-chapter 48 --limit 3
 # 边界词典按 _设置.md `题材` 自动切换（古装爽文/女频情感/悬疑/都市）
 # 拆集骨架体检（逐集边界 + 剧级追更骨架：弱钩集群/无闭环/卡点定位，按 `变现模式`）：
 python3 skills/n2d-script/scripts/boundary_audit.py <作品根>

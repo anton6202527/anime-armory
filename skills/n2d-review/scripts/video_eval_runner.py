@@ -32,6 +32,7 @@ SIDECARS = {
     "video_semantic": "生产数据/video_semantic_consistency_{ep}.json",
     "dialogue_av": "生产数据/dialogue_av_alignment_{ep}.json",
     "causal_event": "生产数据/causal_event_graph_{ep}.json",
+    "physical_event": "生产数据/physical_event_graph_{ep}.json",
     "camera": "生产数据/camera_trajectory_probe_{ep}.json",
     "motion": "生产数据/motion_quality_{ep}.json",
     "subject_video": "生产数据/subject_video_consistency_{ep}.json",

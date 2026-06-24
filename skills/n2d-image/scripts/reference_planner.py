@@ -458,10 +458,11 @@ def plan_multi_subject_strategy(
     needs_registration = persistent and any(tiers.get(cid) == "native_unregistered" for cid in unique_ids)
 
     if not persistent:
-        mode = "split_composite_required"
+        mode = "regional_construct_required"
         execution = (
-            "无持久角色 ID 后端：每个角色单独以自己的 reference_group / expressions 做 image2image 出图，"
-            "再按同一构图槽位合成同框；这是硬执行，不是条件式兜底。"
+            "无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；"
+            "每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。"
+            "本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。"
         )
     elif all_native_ready:
         mode = "native_subject_slots"
@@ -473,7 +474,7 @@ def plan_multi_subject_strategy(
         mode = "register_subjects_or_split"
         execution = (
             "当前后端支持持久主体但至少一个角色未 registered/ready：核心角色先注册主体；"
-            "来不及注册时本镜按 split_composite_required 登记降级。"
+            "来不及注册时本镜按 regional_construct_required / split_composite_required 登记降级。"
         )
 
     slots: List[Dict[str, Any]] = []
@@ -500,24 +501,31 @@ def plan_multi_subject_strategy(
         "primary 星标 CHAR_xx*",
         "区分锚点（互斥发色/服装主色/配饰）",
     ]
-    if mode != "split_composite_required":
+    if mode not in {"split_composite_required", "regional_construct_required"}:
         required_prompt_fields.append("区域绑定/pose-depth（后端支持时）")
+    if mode == "regional_construct_required":
+        required_prompt_fields += [
+            "空场景底板 empty_plate",
+            "区域遮罩/region masks",
+            "统一 relighting/color match",
+        ]
 
     distinct = plan_distinct_anchors(dna_by_id or {}, unique_ids, confusable_pairs=confusable_pairs)
 
-    # ① 分镜调度：默认避开多人近景同框。≥4 清晰同框=任何后端都压不住（实测 ≤3 上限）。
+    # ① 分镜调度（C6 剧情优先）：多人同框由剧情决定，不为迁就后端删戏；≥4 清晰脸单帧 co-gen 难压（≤3 更稳），
+    #    但走分区合成（分别出图+合成）就能把每张脸做对——所以这里给的是"把它做对的执行路径"，不是"避开/删人"。
     n = len(unique_ids)
     if n >= 4:
         shot_scheduling = {
-            "verdict": "over_cap",
-            "default": "拆镜：清晰同框 ≤3 具名角色，其余推背景/虚焦/背身/过肩或拆成反打/分镜",
-            "note": f"{n} 个具名角色清晰同框超出 ≤3 上限——单帧里 4+ 张清晰脸必崩，确属远景群像请标 `远景/群像` 豁免。",
+            "verdict": "over_cap",  # 仍标 over_cap：提示要分区合成；不等于该删戏（下游 gate 凭执行策略放行）
+            "default": "登记 regional_construct/split_composite（empty_plate + 每主体身份槽位 + region masks）把每张脸分别做好再统一融光，或拆 establish+反打把整场拍全",
+            "note": f"{n} 个具名角色清晰同框：单帧 co-gen 4+ 张清晰脸所有后端都难压（≤3 更稳），但这是『要分区构建做对』不是『删戏/砍人数』（C6 剧情优先）——剧情需要就照出，登记执行策略后放行；确属远景群像请标 `远景/群像`。",
         }
     elif closeup:
         shot_scheduling = {
             "verdict": "downgrade_recommended",
-            "default": "优先拆「单人CU + 反打」或降到中景/全景做景别分层（清晰主角1人，余者推后景/虚焦）",
-            "note": "多人近景同框是脸漂/串脸最高发档；保留同框近景须显式登记 split_composite/分层合成。",
+            "default": "优先拆「单人CU + 反打」或降到中景/全景做景别分层（清晰主角1人，余者推后景/虚焦）；坚持同框近景则登记 regional_construct/split_composite 把每张脸分区分层做",
+            "note": "多人近景同框是脸漂/串脸最高发档；保留同框近景须显式登记 regional_construct/分区构建/分层合成把每张脸分开做（不删戏）。",
         }
     else:
         shot_scheduling = {

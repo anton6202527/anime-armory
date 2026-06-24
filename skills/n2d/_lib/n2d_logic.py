@@ -66,6 +66,79 @@ def classify_image_backend(text: str) -> Tuple[str, str]:
             return (APPROVED_IMAGE_BACKENDS[canonical_key]["canonical"], "approved")
     return ("", "unknown")
 
+
+def normalize_camera_move(text: str) -> Dict[str, Any]:
+    """把自由文本的「镜头运动」归一到 CAMERA_MOVE_LEXICON（让运镜词典成为活引用·非死代码）。
+
+    返回 {moves:[{zh,en,slots}], speeds:[zh...], is_static:bool, recognized:bool}。
+    `recognized` = 命中任一结构化运镜词或静止机位词；供 gate ⑤运镜结构化按它判"是否还在写自由散文"。
+    匹配按子串（中文触发词 + en 主词），只作用于短的「镜头运动」字段文本，误匹配风险低。"""
+    t = str(text or "")
+    low = t.lower()
+    moves: List[Dict[str, Any]] = []
+    for zh, spec in CAMERA_MOVE_LEXICON.items():
+        triggers = tuple(spec.get("triggers") or ()) or (zh,)
+        if any((trg in t) or (trg.lower() in low) for trg in triggers):
+            moves.append({"zh": zh, "en": str(spec.get("en", "")), "slots": tuple(spec.get("slots") or ())})
+    speeds = [zh for zh, en in CAMERA_SPEED_WORDS.items()
+              if (zh in t) or (str(en).lower() in low)]
+    is_static = any((w in t) or (w.lower() in low) for w in STATIC_CAMERA_WORDS)
+    return {
+        "moves": moves,
+        "speeds": speeds,
+        "is_static": is_static,
+        "recognized": bool(moves) or is_static,
+    }
+
+_KELVIN_RE = re.compile(r"(\d{3,6})\s*[kK]\b")
+_WARM_TONE_WORDS = ("暖", "warm", "暖色", "暖调", "钨丝", "烛", "夕阳", "金色", "橙")
+_COOL_TONE_WORDS = ("冷", "cool", "冷色", "冷调", "冷月", "月光", "日光", "阴天", "荧光", "青")
+
+
+def parse_kelvin_values(text: str) -> List[int]:
+    """从光位锚/色温自由文本里抽出所有 Kelvin 数值（如 '3000K 暖 / 5600K 冷月' → [3000, 5600]）。
+
+    只认带 K 后缀的 3–6 位数，避免误抓分辨率(4K=1位)、强度(0.5x)等。"""
+    return [int(m) for m in _KELVIN_RE.findall(str(text or ""))]
+
+
+def kelvin_warmth(k: int) -> str:
+    """Kelvin → warm|neutral|cool（摄影常识：低色温偏暖、高色温偏冷）。"""
+    if k <= 4000:
+        return "warm"
+    if k >= 5500:
+        return "cool"
+    return "neutral"
+
+
+def color_temperature_findings(text: str) -> List[Dict[str, str]]:
+    """对一段光位锚/色温文本做确定性体检（纯文本·无图·可测）。
+
+    返回 [{code,msg}]：
+    - `kelvin_implausible`：色温数值离谱（常见区间 1000–20000K）。
+    - `kelvin_warmcool_contradiction`：**单一**色温值与暖/冷描述自相矛盾（如 3000K 却写"冷调"）；
+      多色温（混合布光：主光冷+轮廓暖）刻意不判，避免误杀。
+    供 gate 在 `光位锚` 字段消费（WARN）。"""
+    t = str(text or "")
+    out: List[Dict[str, str]] = []
+    kelvins = parse_kelvin_values(t)
+    bad = [k for k in kelvins if k < 1000 or k > 20000]
+    if bad:
+        out.append({"code": "kelvin_implausible",
+                    "msg": f"色温值 {('/'.join(str(k) for k in bad))}K 不在常见区间（约 1000–20000K），疑笔误。"})
+    if len(kelvins) == 1:
+        w = kelvin_warmth(kelvins[0])
+        has_warm = any(x in t for x in _WARM_TONE_WORDS)
+        has_cool = any(x in t for x in _COOL_TONE_WORDS)
+        if w == "warm" and has_cool and not has_warm:
+            out.append({"code": "kelvin_warmcool_contradiction",
+                        "msg": f"色温 {kelvins[0]}K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。"})
+        elif w == "cool" and has_warm and not has_cool:
+            out.append({"code": "kelvin_warmcool_contradiction",
+                        "msg": f"色温 {kelvins[0]}K 偏冷，却写了暖调描述——自相矛盾；统一暖/冷口径。"})
+    return out
+
+
 def image_identity_profile(backend: str) -> Dict[str, Any]:
     """Return image identity capability profile for a backend canonical/raw value."""
     canonical, kind = classify_image_backend(backend)

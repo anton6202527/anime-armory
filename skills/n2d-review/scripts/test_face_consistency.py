@@ -590,3 +590,24 @@ def test_face_unverifiable_threshold():
     # 显式阈值可调（与 env N2D_FAR_SHOT_FACE_MIN_RATIO 同义）。
     assert fc.face_unverifiable(0.08, min_ratio=0.10) is True
     assert fc.face_unverifiable(0.12, min_ratio=0.10) is False
+
+
+def test_arbiter_resolve_breaks_warn_band():
+    # 🟡 边界带：DreamSim sim≥地板 → 判同人(ok)
+    assert fc.arbiter_resolve("warn", 0.90, 0.80) == "ok"
+    # sim < 地板−margin → 判异人(block)
+    assert fc.arbiter_resolve("warn", 0.50, 0.80, margin=0.06) == "block"
+    # 带内（地板−margin ≤ sim < 地板）→ 维持 warn 交人判
+    assert fc.arbiter_resolve("warn", 0.78, 0.80, margin=0.06) == "warn"
+
+
+def test_arbiter_resolve_only_acts_on_warn_and_needs_data():
+    assert fc.arbiter_resolve("block", 0.99, 0.80) == "block"   # 不动 block
+    assert fc.arbiter_resolve("ok", 0.10, 0.80) == "ok"         # 不动 ok
+    assert fc.arbiter_resolve("warn", None, 0.80) == "warn"     # 缺 sim → 原样
+    assert fc.arbiter_resolve("warn", 0.9, None) == "warn"      # 缺地板 → 原样
+
+
+def test_dreamsim_arbiter_off_by_default(monkeypatch):
+    monkeypatch.delenv("N2D_DREAMSIM_ARBITER", raising=False)
+    assert fc._load_dreamsim() is None

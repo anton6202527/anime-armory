@@ -24,6 +24,7 @@ try:
         anchor_consumption_plan,
         effective_frame_backend,
         normalize_video_backend,
+        video_backend_capability_confidence,
         video_backend_frame_control,
         video_backend_max_seconds,
         video_backend_motion_control,
@@ -36,6 +37,7 @@ except Exception:  # pragma: no cover
         anchor_consumption_plan,
         effective_frame_backend,
         normalize_video_backend,
+        video_backend_capability_confidence,
         video_backend_frame_control,
         video_backend_max_seconds,
         video_backend_motion_control,
@@ -88,6 +90,7 @@ def backend_adapter(raw: Optional[str], channel: Optional[str] = None) -> Dict[s
     profile = video_backend_profile(canonical) or {}
     frame_control = video_backend_frame_control(canonical, channel_key)
     motion_control = video_backend_motion_control(canonical)
+    confidence = video_backend_capability_confidence(canonical, channel_key)
     return {
         "kind": "n2d_video_backend_adapter",
         "canonical": canonical,
@@ -104,6 +107,8 @@ def backend_adapter(raw: Optional[str], channel: Optional[str] = None) -> Dict[s
         "identity_mechanism": profile.get("identity_mechanism") or "",
         "frame_control": frame_control,
         "motion_control": motion_control,
+        "capability_confidence": confidence,
+        "paid_routing_allowed": bool(confidence.get("paid_routing_allowed")),
         "anchor_consumption_sample": anchor_consumption_plan(
             canonical,
             channel_key,

@@ -32,6 +32,14 @@ FORESHADOW_MARKERS = (
     "意味深长", "别有深意", "暗藏", "似乎另有", "不为人知", "cliffhanger", "钩子",
 )
 
+# 无显式标记、但句式本身就是「挖坑」的弱信号——交编剧确认后才算坑（status=candidate，不进 gate）。
+# 治「作者漏标记 → 真伏笔永不进账」：身世/凶手/神秘信物/未解之谜的疑问句与悬置物。
+AUTO_FORESHADOW_RE = re.compile(
+    r"(到底是谁|究竟是谁|会是谁|是谁.{0,4}[？?]|为什么.{0,12}[？?]|为何.{0,12}[？?]|"
+    r"不知道.{0,10}(是|为|会)|不明白|想不通|另有.{0,4}隐情|另有.{0,4}图谋|身世|来历|真实身份|"
+    r"神秘的?(信物|令牌|玉佩|盒子|信|纸条|声音|人影)|古怪的|蹊跷|反常|不对劲|总觉得.{0,8}不|"
+    r"那个.{0,6}(到底|究竟)|留作后用|日后必有用)")
+
 
 # ── 纯函数（无依赖·可测） ─────────────────────────────────────────────────────
 
@@ -60,6 +68,37 @@ def detect_setups(text: str, ep: str) -> List[dict]:
             "desc": desc,
             "status": "open",          # open=待规划兑现；ongoing=长线进行中；done=已兑现
         })
+    return out
+
+
+def detect_auto_candidates(text: str, ep: str) -> List[dict]:
+    """无显式标记、但句式像挖坑的弱信号候选（status=candidate，交编剧确认/删除）。纯函数·可测。
+
+    与 detect_setups 互补：那个认显式标记（→open坑·进 gate），这个认句式（→candidate·只提示不拦）。
+    避免误把每句疑问都当伏笔——只命中身世/凶手/神秘信物/未解之谜类强句式，且去重限量。"""
+    out: List[dict] = []
+    seen: set = set()
+    for raw_line in re.split(r"[\n。！？!?]", text or ""):
+        line = raw_line.strip()
+        if not line or len(line) < 4 or not AUTO_FORESHADOW_RE.search(line):
+            continue
+        # 已被显式标记捞走的句子不重复
+        if any(m in line for m in FORESHADOW_MARKERS):
+            continue
+        desc = line[:40]
+        if desc in seen:
+            continue
+        seen.add(desc)
+        out.append({
+            "id": f"{ep}-候选{len(out) + 1}",
+            "setup_ep": ep,
+            "payoff_ep": "",
+            "desc": desc,
+            "status": "candidate",   # 待编剧确认：升为 open(确为伏笔) 或删除(非伏笔)
+            "auto": True,
+        })
+        if len(out) >= 8:            # 限量：弱信号宁缺毋滥
+            break
     return out
 
 
@@ -134,12 +173,48 @@ def load_existing(root: str) -> List[dict]:
         return []
 
 
-def scaffold(root: str, episodes: Sequence[str]) -> dict:
+def scaffold(root: str, episodes: Sequence[str], auto: bool = True) -> dict:
     candidates: List[dict] = []
+    auto_candidates: List[dict] = []
     for ep in episodes:
-        candidates.extend(detect_setups(_episode_text(root, ep), ep))
-    merged = merge_candidates(load_existing(root), candidates)
-    return {"ledger": build_ledger(merged), "new_candidates": candidates, "existing": load_existing(root)}
+        text = _episode_text(root, ep)
+        candidates.extend(detect_setups(text, ep))
+        if auto:
+            auto_candidates.extend(detect_auto_candidates(text, ep))
+    merged = merge_candidates(load_existing(root), list(candidates) + list(auto_candidates))
+    return {"ledger": build_ledger(merged), "new_candidates": candidates,
+            "auto_candidates": auto_candidates, "existing": load_existing(root)}
+
+
+def _unfilled(p: dict) -> bool:
+    """这条坑是否「显式伏笔但兑现集没填」（candidate 弱信号不计入 gate）。"""
+    if p.get("status") in ("ongoing", "done", "candidate", "进行中"):
+        return False
+    return not str(p.get("payoff_ep") or "").strip()
+
+
+def gate(root: str, ep: str) -> dict:
+    """script_stage2 收尾闸：本集检出显式悬念钩，但台账缺/未填其兑现集 → block。
+
+    只认显式标记的坑（避免弱信号误拦）；本集每条显式伏笔都须在账本里有匹配条目且 payoff_ep 已填
+    或 status=ongoing。任一未填 → ok=False（run.py strict 下阻断出图）。纯标准库。"""
+    detected = detect_setups(_episode_text(root, ep), ep)
+    existing = load_existing(root)
+    by_desc = {str(p.get("desc") or p.get("id")): p for p in existing if isinstance(p, dict)}
+    findings: List[dict] = []
+    for d in detected:
+        match = by_desc.get(d["desc"])
+        if match is None:
+            findings.append({"severity": "block", "code": "setup_unlogged",
+                             "desc": d["desc"],
+                             "message": f"本集检出伏笔/悬念钩「{d['desc']}」但 setup_payoff_ledger 未登记——"
+                                        "跑 setup_payoff_ledger.py --write 建账并填兑现集。"})
+        elif _unfilled(match):
+            findings.append({"severity": "block", "code": "payoff_unfilled",
+                             "desc": d["desc"],
+                             "message": f"伏笔「{d['desc']}」在账本里但没填兑现集（payoff_ep 空）——"
+                                        "补 payoff_ep（哪集兑现）或标 status=ongoing。"})
+    return {"episode": ep, "ok": not findings, "detected": len(detected), "findings": findings}
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -147,11 +222,27 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("root")
     ap.add_argument("--episodes", default="", help="如 1-10 或 3,5,7；默认全部已拆集")
     ap.add_argument("--write", action="store_true", help="落盘 设定库/setup_payoff_ledger.json（不覆盖已填 payoff）")
+    ap.add_argument("--gate", metavar="第N集", help="script_stage2 收尾闸：本集显式伏笔未填兑现集则 exit 1")
+    ap.add_argument("--no-auto", action="store_true", help="不捞无标记的弱信号候选（只认显式标记）")
     ap.add_argument("--json", action="store_true")
     ns = ap.parse_args(argv)
     root = ns.root.rstrip("/")
+
+    if ns.gate:
+        ep = ns.gate if str(ns.gate).startswith("第") else f"第{ns.gate}集"
+        g = gate(root, ep)
+        if ns.json:
+            print(json.dumps(g, ensure_ascii=False, indent=2))
+        else:
+            print(f"# 伏笔台账闸 — {ep}　检出显式伏笔 {g['detected']} 条　{'PASS' if g['ok'] else 'BLOCK'}")
+            for f in g["findings"]:
+                print(f"- BLOCK [{f['code']}] {f['message']}")
+            if g["ok"]:
+                print("- ✅ 本集显式伏笔均已在账本登记并填了兑现集（或标 ongoing）")
+        return 0 if g["ok"] else 1
+
     eps = _parse_range(ns.episodes, discover_episodes(root))
-    res = scaffold(root, eps)
+    res = scaffold(root, eps, auto=not ns.no_auto)
     if ns.write:
         path = os.path.join(root, LEDGER_REL)
         os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -162,11 +253,17 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         print(json.dumps(res, ensure_ascii=False, indent=2))
         return 0
     n_new = len(res["new_candidates"])
+    n_auto = len(res.get("auto_candidates") or [])
     n_total = len(res["ledger"]["pairs"])
-    print(f"扫描 {len(eps)} 集 · 新捞候选伏笔 {n_new} 条 · 账本共 {n_total} 条"
+    print(f"扫描 {len(eps)} 集 · 显式伏笔 {n_new} 条 · 弱信号候选 {n_auto} 条（待确认）· 账本共 {n_total} 条"
           + ("（已写盘）" if ns.write else "（未写盘，加 --write 落档）"))
     for p in res["ledger"]["pairs"]:
-        flag = "⚠待填兑现集" if not p.get("payoff_ep") and p.get("status") not in ("ongoing", "done") else ""
+        if p.get("status") == "candidate":
+            flag = "🔍弱信号·确认是否伏笔"
+        elif not p.get("payoff_ep") and p.get("status") not in ("ongoing", "done"):
+            flag = "⚠待填兑现集"
+        else:
+            flag = ""
         print(f"  [{p.get('setup_ep')}→{p.get('payoff_ep') or '?'}] {p.get('desc')} {flag}")
     if any(not p.get("payoff_ep") and p.get("status") not in ("ongoing", "done") for p in res["ledger"]["pairs"]):
         print("\n下一步：给每个伏笔填 payoff_ep（哪一集兑现）或标 status=ongoing；"

@@ -11,7 +11,7 @@
   节奏密度 Rhythm（节奏/留存启发式 advisory）· 空间站位 B1（跨镜站位/遮挡）·
   视频 VLM 判题 VLM1 · 视频语义一致 VSEM · 多人对话音画 DAV · 物理因果链 CG1 ·
   相机空间轨迹 CAM1 · 运动质量 MOT1 · 主体视频一致 S2V ·
-  生产一致性补强（物件常驻/持有账本/状态转场/交互图谱/成片探针/强配方/包装/语域/平面图/成本路由/人审校准/probe）
+  生产一致性补强（实体记忆/物件常驻/持有账本/物理事件图/视频证据完整性/状态转场/交互图谱/成片探针/强配方/包装/语域/平面图/成本路由/人审校准/probe）
 
 每个子检测器各自缺库优雅跳过（见各脚本）；本编排只汇总、不重复实现。
 纯函数 `summarize` 无依赖、带 pytest。
@@ -78,6 +78,10 @@ import extended_consistency as ec
 
 
 PRODUCTION_CONSISTENCY_META = {
+    "实体记忆(EMB)": {
+        "stage": "image",
+        "artifacts": ("生产数据/entity_memory_bank.json", "出图/共享/entity_memory_bank.json", "出图/共享/identity_registry.json", "脚本/{ep}/storyboard.json"),
+    },
     "物件常驻(O3)": {
         "stage": "image",
         "artifacts": ("脚本/{ep}/storyboard.json", "出图/{ep}/prompt/01_分镜出图.md", "出图/共享/asset_registry.json"),
@@ -101,6 +105,14 @@ PRODUCTION_CONSISTENCY_META = {
     "结构化交互图谱(I2)": {
         "stage": "script_stage2",
         "artifacts": ("脚本/{ep}/storyboard.json",),
+    },
+    "物理事件图(PHY)": {
+        "stage": "review",
+        "artifacts": ("生产数据/physical_event_graph_{ep}.json", "生产数据/causal_event_graph_{ep}.json", "出视频/{ep}"),
+    },
+    "视频证据完整性(EVID)": {
+        "stage": "review",
+        "artifacts": ("生产数据/video_eval_manifest_{ep}.json", "生产数据/*_{ep}.json", "出视频/{ep}", "合成/{ep}"),
     },
     "成片统一(C1)": {
         "stage": "compose",
@@ -699,8 +711,11 @@ def run(root: str, ep: str) -> dict:
     # D 档音频白区：配音情绪弧(VEA) + 口音方言(ACC) + 音乐衔接(BGM)——文本/结构机检，缺 voiceover.txt 优雅跳过。
     ac = audioc.analyze(root, ep)
     ac_skipped = not ac.get("available", False)
-    sections["配音情绪弧(VEA)"] = {"skipped": ac_skipped, "verdicts": _verdicts(ac.get("vea", [])), "notes": ac.get("notes", [])}
-    collect_simple("配音情绪弧(VEA)", ac.get("vea", []), stage="voice", default_artifacts=(f"脚本/{ep}/voiceover.txt",))
+    # VEA 含两路：设计态(台词强情绪×标注平淡) + 设计情绪×配音声学能量 reconcile(强情绪却念得平)。同轴合并，不新增 label。
+    ac_vea = list(ac.get("vea", [])) + list(ac.get("vea_audio", []))
+    sections["配音情绪弧(VEA)"] = {"skipped": ac_skipped, "verdicts": _verdicts(ac_vea), "notes": ac.get("notes", [])}
+    collect_simple("配音情绪弧(VEA)", ac_vea, stage="voice",
+                   default_artifacts=(f"脚本/{ep}/voiceover.txt", f"合成/{ep}/配音/emotion_flow.json"))
     sections["口音方言(ACC)"] = {"skipped": ac_skipped, "verdicts": _verdicts(ac.get("acc", []))}
     collect_simple("口音方言(ACC)", ac.get("acc", []), stage="voice", default_artifacts=("设定库/voicemap.json",))
     sections["音乐衔接(BGM)"] = {"skipped": ac_skipped, "verdicts": _verdicts(ac.get("bgm", []))}
@@ -806,9 +821,9 @@ def run(root: str, ep: str) -> dict:
             default_artifacts=artifacts,
         )
 
-    # 生产一致性补强：纯标准库检查器，覆盖物件/持有/状态转场、交互因果/图谱、
-    # 成片统一/时间线探针、生成配方/强 schema、系列包装、语域、场景平面图、
-    # 成本/路由/重试口径、人审校准集与项目 probe pack。
+    # 生产一致性补强：纯标准库检查器，覆盖实体记忆、物件/持有/状态转场、交互因果/图谱、
+    # 可归因物理事件图、视频证据完整性、成片统一/时间线探针、生成配方/强 schema、
+    # 系列包装、语域、场景平面图、成本/路由/重试口径、人审校准集与项目 probe pack。
     prod = pc.analyze(root, ep)
     for dim, raw in (prod.get("sections") or {}).items():
         if not isinstance(raw, dict):

@@ -33,6 +33,7 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         # （probe_cli.py 抓取/校验）。native_av 仍保守置 False：本线 voice-first，默认不开原生人声，
         # 即梦默认 image2video/multiframe 路径也不生成台词；要原生音轨须显式走 multimodal2video。
         "label": "Dreamina/即梦",
+        "capability_confidence": "evidence",
         "aliases": ("即梦", "dreamina", "即梦/Dreamina", "Dreamina/即梦", "jimeng"),
         "max_clip_seconds": 15,
         "default_mode": "image2video",
@@ -64,6 +65,7 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
     },
     "kling": {
         "label": "Kling/可灵",
+        "capability_confidence": "conservative",
         "aliases": ("可灵", "kling", "可灵/Kling", "Kling/可灵", "Kling 3.0", "kling3.0", "kling 3.0"),
         "max_clip_seconds": 10,
         "default_mode": "frames2video",
@@ -87,7 +89,12 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
     },
     "seedance": {
         "label": "Seedance",
-        "aliases": ("seedance", "Seedance 2.0", "seedance2.0", "seedance 2.0"),
+        "capability_confidence": "conservative",
+        "aliases": ("seedance", "Seedance 2.0", "seedance2.0", "seedance 2.0",
+                    "Seedance 2.5", "seedance2.5", "seedance 2.5"),
+        # 2026 新鲜度：Seedance 2.5（~2026-07 预告）扩到更多全模态参考（@素材槽）+ 更长单次生成；
+        # 能力仍按 multishot_native + 当前 max_clip_seconds 保守登记，具体上限以 cli_snapshots 复核为准，
+        # 不在档里写死未验证的「50 参考 / 30s」数字（防过期）。
         "max_clip_seconds": 15,
         "default_mode": "image2video",
         "identity_mechanism": "face_lock",
@@ -110,6 +117,7 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
     },
     "veo": {
         "label": "Veo",
+        "capability_confidence": "evidence",
         "aliases": ("veo", "Veo 3.1", "veo3.1", "veo 3.1", "Veo 3"),
         "max_clip_seconds": 8,
         "default_mode": "image2video",
@@ -128,6 +136,7 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
     },
     "sora": {
         "label": "Sora",
+        "capability_confidence": "deprecated",
         "aliases": ("sora",),
         "max_clip_seconds": 20,
         "default_mode": "image2video",
@@ -154,6 +163,7 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
     },
     "luma": {
         "label": "Luma/Ray",
+        "capability_confidence": "evidence",
         "aliases": ("luma", "Luma", "Luma Ray", "Luma Ray3.2", "Ray", "Ray 2", "ray-2"),
         "max_clip_seconds": 5,
         "default_mode": "frames2video",
@@ -171,6 +181,7 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
     },
     "runway": {
         "label": "Runway",
+        "capability_confidence": "conservative",
         "aliases": ("runway", "Runway", "Runway Gen-4", "Gen-4", "gen4"),
         "max_clip_seconds": 10,
         "default_mode": "image2video",
@@ -188,6 +199,7 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
     },
     "pika": {
         "label": "Pika",
+        "capability_confidence": "conservative",
         "aliases": ("pika", "Pika", "Pika 2.5"),
         "max_clip_seconds": 10,
         "default_mode": "image2video",
@@ -201,6 +213,30 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
             "supports_native_mid_anchors": False,
             "fallback": "Treat as first-frame guided unless current Pika API documents first+last or multi-keyframe control; use split relay/manual workflow for anchors.",
             "verified": "conservative n2d profile; official API not verified in this audit",
+        },
+    },
+    "wan": {
+        "label": "Wan/万相",
+        "capability_confidence": "conservative",
+        "aliases": ("wan", "Wan", "万相", "通义万相", "Wan 2.2", "wan2.2", "Wan 2.6", "wan2.6",
+                    "Wan 2.7", "wan2.7", "WanX"),
+        "max_clip_seconds": 10,
+        "default_mode": "image2video",
+        "identity_mechanism": "first_last_frame_or_reference",
+        "native_av": False,
+        # 开源/可自托管的「多镜单次生成」后端（Wan 2.6/2.7）：native-multishot 里唯一不绑付费云 API、
+        # 可在本地 ComfyUI/自建管线跑的选项——契合「主流程不硬绑后端、缺依赖优雅降级」（设计宪法 C4）。
+        # 能力走字段判定，由 MULTISHOT_NATIVE_BACKENDS 自动收录；开源权重无官方 SLA，批量前按 verified
+        # 复核当前本地 checkpoint 版本与多镜接口。
+        "multishot_native": True,
+        "frame_control": {
+            "mode": "first_last",
+            "max_timeline_frames": 2,
+            "supports_first_frame": True,
+            "supports_last_frame": True,
+            "supports_native_mid_anchors": False,
+            "fallback": "Use first+last frame control on the self-hosted Wan pipeline; extra mid anchors require split relay/concat. Open weights: no managed API SLA, re-verify the local checkpoint version before batch.",
+            "verified": "conservative n2d profile (open-source self-host); re-verify local Wan checkpoint before batch",
         },
     },
 }
@@ -393,6 +429,38 @@ def video_backend_profile(backend: str) -> Optional[Dict[str, object]]:
         return None
     spec = VIDEO_BACKEND_PROFILES.get(key)
     return dict(spec) if spec else None
+
+
+def video_backend_capability_confidence(backend: Optional[str], channel: Optional[str] = None) -> Dict[str, object]:
+    """Return evidence-quality metadata for paid backend routing.
+
+    Freshness answers "when was this catalog checked"; confidence answers whether
+    the checked facts are strong enough for automated paid routing.
+    """
+    execution = effective_frame_backend(backend, channel)
+    profile = VIDEO_BACKEND_PROFILES.get(execution)
+    if not profile:
+        return {
+            "backend": normalize_video_backend(backend or "", default="") or (backend or ""),
+            "channel": normalize_video_backend(channel or "", default="") or (channel or ""),
+            "execution_backend": execution,
+            "confidence": "manual_required",
+            "paid_routing_allowed": False,
+            "reason": "unknown backend profile",
+        }
+    confidence = str(profile.get("capability_confidence") or "conservative")
+    availability = profile.get("availability") if isinstance(profile.get("availability"), dict) else {}
+    if availability.get("status") in {"legacy_manual_only", "deprecated", "shutdown"}:
+        confidence = "deprecated"
+    paid_allowed = confidence == "evidence"
+    return {
+        "backend": normalize_video_backend(backend or "", default="") or (backend or ""),
+        "channel": normalize_video_backend(channel or "", default="") or (channel or ""),
+        "execution_backend": execution,
+        "confidence": confidence,
+        "paid_routing_allowed": paid_allowed,
+        "reason": availability.get("status") or profile.get("frame_control", {}).get("verified") or "",
+    }
 
 
 def video_backend_auto_routable(backend: Optional[str]) -> bool:

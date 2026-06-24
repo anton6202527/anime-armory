@@ -19,6 +19,9 @@
 * RCP2 强配方 schema
 * CAL 人审校准集
 * PROBE 项目一致性探针包
+* EMB 实体视觉记忆库（accepted-shot entity memory）
+* EVID 视频证据完整性（manifest → sidecar 闭环）
+* PHY 可归因物理事件图
 
 原则：纯标准库；有显式契约时硬验，缺契约先 WARN；能从 production_events 推导的
 生成配方会落 `生产数据/generation_recipe_<集>.json`，作为后续复跑/审计的稳定证据。
@@ -77,6 +80,22 @@ PROBE_SCENARIOS = (
     "state_transition",
     "native_av_dialogue",
 )
+PHYSICAL_LAWS = {
+    "object_permanence",
+    "identity_conservation",
+    "mass_conservation",
+    "size_conservation",
+    "gravity_support",
+    "impenetrability",
+    "momentum_conservation",
+    "collision",
+    "gravity_drop",
+    "fracture",
+    "combustion",
+    "liquid",
+    "contact_continuity",
+    "state_conservation",
+}
 ASSET_TAIL_ACTIONS = (
     "逼近", "走来", "走近", "转身", "冲向", "看向", "递给", "交给", "刺向", "砍向", "挥向",
     "靠近", "离开", "退到", "退后", "藏到", "藏入", "站起", "坐下", "跪下", "倒下", "落地", "入画", "出画",
@@ -266,6 +285,19 @@ def _registry_assets(root: str) -> List[dict]:
     return [a for a in raw if isinstance(a, dict)]
 
 
+def _registry_characters(root: str) -> List[dict]:
+    data = _load_json(os.path.join(root, "出图", "共享", "identity_registry.json"))
+    if isinstance(data, dict):
+        raw = data.get("characters") or data.get("identities") or []
+        if isinstance(raw, dict):
+            raw = [{**(v if isinstance(v, dict) else {}), "id": k} for k, v in raw.items()]
+    elif isinstance(data, list):
+        raw = data
+    else:
+        raw = []
+    return [c for c in raw if isinstance(c, dict)]
+
+
 def _persistent_assets(root: str) -> Dict[str, dict]:
     out: Dict[str, dict] = {}
     for asset in _registry_assets(root):
@@ -282,6 +314,243 @@ def _persistent_assets(root: str) -> Dict[str, dict]:
         if persistent:
             out[aid] = asset
     return out
+
+
+def _schedule_values(schedule: Any, *keys: str) -> List[str]:
+    if not isinstance(schedule, Mapping):
+        return []
+    vals: List[str] = []
+    for key in keys:
+        vals.extend(str(x).strip() for x in _as_list(schedule.get(key)) if str(x).strip())
+    return _unique(vals)
+
+
+def _entity_appearances(root: str, ep: str) -> Dict[str, dict]:
+    """Collect per-episode entity appearances from entity_schedule and storyboard text."""
+    _sb, clips = _storyboard(root, ep)
+    prompts = _prompt_sections(root, ep)
+    out: Dict[str, dict] = {}
+    for idx, clip in enumerate(clips, 1):
+        label = _clip_label(clip, idx)
+        text = _clip_text(clip, label, prompts)
+        schedule = clip.get("entity_schedule") or clip.get("实体排程")
+        chars = _unique(_schedule_values(schedule, "characters", "character_ids", "角色") + _char_ids(text))
+        objects = _unique(
+            _schedule_values(schedule, "objects", "object_ids", "props", "weapons", "道具", "物件")
+            + [aid for aid in _asset_ids(text) if aid.startswith(("PROP_", "WEAPON_", "OUTFIT_", "VFX_"))]
+        )
+        locs = _unique(_schedule_values(schedule, "locations", "location_ids", "scene_id", "场景", "地点"))
+        loc = _loc_of(clip, text)
+        if loc:
+            locs = _unique(locs + [loc])
+        for kind, values in (("character", chars), ("object", objects), ("location", locs)):
+            for entity_id in values:
+                row = out.setdefault(entity_id, {"entity_id": entity_id, "kind": kind, "clips": []})
+                row["clips"].append(label)
+                if kind == "character":
+                    row["kind"] = "character"
+                elif row.get("kind") not in {"character", "object"}:
+                    row["kind"] = kind
+    for row in out.values():
+        row["clips"] = _unique(row.get("clips") or [])
+    return out
+
+
+def _entity_memory_bank(root: str) -> Tuple[Optional[Any], str]:
+    return _load_first_json(root, (
+        os.path.join("生产数据", "entity_memory_bank.json"),
+        os.path.join("出图", "共享", "entity_memory_bank.json"),
+        os.path.join("设定库", "entity_memory_bank.json"),
+    ))
+
+
+def _entity_memory_entries(data: Any) -> List[dict]:
+    if isinstance(data, dict):
+        raw = data.get("entries") or data.get("memory") or data.get("items") or data.get("entities") or []
+        if isinstance(raw, dict):
+            rows = []
+            for key, value in raw.items():
+                if isinstance(value, list):
+                    rows.extend({**(item if isinstance(item, dict) else {}), "entity_id": key} for item in value)
+                elif isinstance(value, dict):
+                    rows.append({"entity_id": key, **value})
+                else:
+                    rows.append({"entity_id": key, "value": value})
+            raw = rows
+    else:
+        raw = data
+    return [x for x in _as_list(raw) if isinstance(x, dict)]
+
+
+def _entry_entity(row: Mapping[str, Any]) -> str:
+    return str(row.get("entity_id") or row.get("id") or row.get("character_id") or row.get("asset_id") or row.get("location_id") or "").strip()
+
+
+def _entry_media(row: Mapping[str, Any]) -> str:
+    return str(row.get("crop_path") or row.get("media_path") or row.get("reference_path") or row.get("image") or row.get("frame") or "").strip()
+
+
+def _core_character_ids(root: str) -> List[str]:
+    out: List[str] = []
+    for char in _registry_characters(root):
+        cid = str(char.get("id") or char.get("character_id") or char.get("name") or "").strip()
+        blob = _json_text(char)
+        core = (
+            bool(char.get("core"))
+            or bool(char.get("long_line"))
+            or str(char.get("scope") or "").strip() in {"全篇", "长线", "核心", "core", "long_line"}
+            or any(token in blob for token in ("核心", "长线", "常驻", "core", "long_line", "recurring"))
+        )
+        if cid and core:
+            out.append(cid)
+    return _unique(out)
+
+
+def _character_forms(char: Mapping[str, Any]) -> List[Mapping[str, Any]]:
+    forms = char.get("forms")
+    if isinstance(forms, list) and forms:
+        return [f for f in forms if isinstance(f, Mapping)]
+    return [char]
+
+
+def _expression_anchor_count(form: Mapping[str, Any]) -> int:
+    raw = form.get("expression_anchors") or form.get("expressions") or form.get("表情锚")
+    if isinstance(raw, Mapping):
+        return len(raw)
+    if isinstance(raw, list):
+        return len([x for x in raw if x])
+    return 0
+
+
+def _has_performance_signature(form: Mapping[str, Any]) -> bool:
+    return bool(
+        form.get("performance_signature")
+        or form.get("表演签名")
+        or form.get("gesture_signature")
+        or form.get("stance")
+        or form.get("gaze")
+    )
+
+
+def check_entity_memory_bank(root: str, ep: str) -> dict:
+    """Long-range entity memory closure.
+
+    The bank is a quality-gated memory of accepted shots/crops, keyed by entity.
+    It lets later episodes retrieve canonical/supplementary references by entity,
+    view, expression, location, and reliability rather than relying only on a
+    static launch-day reference group.
+    """
+    sb, clips = _storyboard(root, ep)
+    res = {"available": sb is not None, "findings": [], "notes": []}
+    if not clips:
+        res["notes"].append("缺 storyboard clips[]，实体记忆库检查跳过。")
+        return res
+    appearances = _entity_appearances(root, ep)
+    recurrent = {
+        eid: row for eid, row in appearances.items()
+        if len(row.get("clips") or []) >= 2 or eid in _core_character_ids(root)
+    }
+    if not recurrent:
+        res["notes"].append("本集没有重复出现实体或核心角色，EMB 不强制。")
+    data, rel = _entity_memory_bank(root)
+    if data is None:
+        if recurrent:
+            sample = ", ".join(sorted(recurrent)[:6])
+            res["findings"].append(_row(
+                "warn",
+                f"本集有重复/核心实体（{sample}）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。",
+                stage="image",
+                artifacts=("生产数据/entity_memory_bank.json", "出图/共享/entity_memory_bank.json", f"脚本/{ep}/storyboard.json"),
+            ))
+        return res
+
+    entries = _entity_memory_entries(data)
+    by_entity: Dict[str, List[dict]] = defaultdict(list)
+    for entry in entries:
+        eid = _entry_entity(entry)
+        if eid:
+            by_entity[eid].append(entry)
+        missing = []
+        if not eid:
+            missing.append("entity_id")
+        if not (entry.get("source_shot") or entry.get("source_clip") or entry.get("source_episode")):
+            missing.append("source_shot/source_episode")
+        media = _entry_media(entry)
+        if not media:
+            missing.append("crop_path/media_path")
+        if entry.get("reliability") in (None, "") and entry.get("quality_score") in (None, ""):
+            missing.append("reliability/quality_score")
+        if not (entry.get("qc_verdict") or entry.get("verdict") or entry.get("accepted")):
+            missing.append("qc_verdict/accepted")
+        if missing:
+            res["findings"].append(_row(
+                "warn",
+                f"entity_memory_bank 条目缺字段：{', '.join(missing)}。",
+                stage="image",
+                artifacts=(rel,),
+                entity_id=eid,
+            ))
+        if media and not _artifact_exists(root, media):
+            res["findings"].append(_row(
+                "warn",
+                f"实体记忆条目引用的媒体不存在：{media}。",
+                stage="image",
+                artifacts=(rel,),
+                entity_id=eid,
+            ))
+        verdict = str(entry.get("qc_verdict") or entry.get("verdict") or "").lower()
+        accepted = entry.get("accepted")
+        quality = _num(entry.get("reliability") if entry.get("reliability") not in (None, "") else entry.get("quality_score"))
+        if verdict in {"block", "fail", "failed", "reject", "rejected"} or accepted is False:
+            res["findings"].append(_row(
+                "block",
+                f"{eid or '(unknown)'} 的实体记忆条目标记为未通过/未接受，不能作为后续参考源。",
+                stage="image",
+                artifacts=(rel,),
+                entity_id=eid,
+            ))
+        elif quality is not None and quality < 0.70:
+            res["findings"].append(_row(
+                "warn",
+                f"{eid or '(unknown)'} 的实体记忆 reliability={quality:.2f} 偏低；不要把低置信截图当长线参考。",
+                stage="image",
+                artifacts=(rel,),
+                entity_id=eid,
+            ))
+    for eid, row in recurrent.items():
+        if not by_entity.get(eid):
+            res["findings"].append(_row(
+                "warn",
+                f"重复/核心实体 {eid} 出现于 {len(row.get('clips') or [])} 镜，但 entity_memory_bank 没有已验收记忆条目。",
+                stage="image",
+                artifacts=(rel, f"脚本/{ep}/storyboard.json"),
+                entity_id=eid,
+            ))
+
+    for char in _registry_characters(root):
+        cid = str(char.get("id") or char.get("character_id") or char.get("name") or "").strip()
+        if cid not in _core_character_ids(root):
+            continue
+        for form in _character_forms(char):
+            form_name = str(form.get("form") or "常态")
+            if _expression_anchor_count(form) < 3:
+                res["findings"].append(_row(
+                    "warn",
+                    f"核心/长线角色 {cid}/{form_name} 表情锚点少于 3 个；情绪近景长期复用时容易表演漂移。",
+                    stage="image",
+                    artifacts=("出图/共享/identity_registry.json",),
+                    entity_id=cid,
+                ))
+            if not _has_performance_signature(form):
+                res["findings"].append(_row(
+                    "warn",
+                    f"核心/长线角色 {cid}/{form_name} 缺 performance_signature（站姿/眼神/惯用手势）；脸像但演法漂时难复核。",
+                    stage="image",
+                    artifacts=("出图/共享/identity_registry.json",),
+                    entity_id=cid,
+                ))
+    res["notes"].append(f"entity_memory_bank 条目 {len(entries)}，本集实体 {len(appearances)}，重复/核心实体 {len(recurrent)}。")
+    return res
 
 
 def _row(verdict: str, message: str, *, shot: str = "", stage: str = "image",
@@ -1009,6 +1278,249 @@ def check_final_timeline_probe(root: str, ep: str) -> dict:
     return res
 
 
+def _video_eval_manifest(root: str, ep: str) -> Tuple[Optional[Any], str]:
+    return _load_first_json(root, (
+        os.path.join("生产数据", f"video_eval_manifest_{ep}.json"),
+        os.path.join("出视频", ep, "video_eval_manifest.json"),
+    ))
+
+
+def _manifest_risk_kinds(data: Any) -> set:
+    kinds = set()
+    if not isinstance(data, Mapping):
+        return kinds
+    for task in _as_list(data.get("tasks")):
+        if not isinstance(task, Mapping):
+            continue
+        kinds.update(str(k).strip() for k in _as_list(task.get("risk_kinds")) if str(k).strip())
+    return kinds
+
+
+def _target_required_by_risk(key: str, kinds: set) -> bool:
+    if key in {"video_vlm", "video_semantic", "subject_video"}:
+        return bool(kinds)
+    return {
+        "dialogue_av": "dialogue",
+        "causal_event": "physics",
+        "physical_event": "physics",
+        "camera": "camera",
+        "motion": "action",
+    }.get(key) in kinds
+
+
+def _sidecar_has_rows(data: Any) -> bool:
+    if isinstance(data, list):
+        return bool(data)
+    if not isinstance(data, Mapping):
+        return False
+    for key in ("findings", "checks", "shots", "segments", "events", "turns", "subjects", "judgements", "rows", "items"):
+        if _as_list(data.get(key)):
+            return True
+    return any(k in data for k in ("summary", "judge_model", "frame_sample_manifest"))
+
+
+def check_video_evidence_completeness(root: str, ep: str) -> dict:
+    """Ensure video_eval_runner manifest has been followed by evidence sidecars."""
+    media = _existing_media(root, ep) + [os.path.relpath(p, root) for p in _final_cuts(root, ep)]
+    res = {"available": bool(media), "findings": [], "notes": []}
+    if not media:
+        res["notes"].append("未检测到本集媒体，视频证据完整性等待 image/video/compose 阶段。")
+        return res
+    data, rel = _video_eval_manifest(root, ep)
+    if data is None:
+        res["findings"].append(_row(
+            "warn",
+            "本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。",
+            stage="review",
+            artifacts=(f"生产数据/video_eval_manifest_{ep}.json", f"出视频/{ep}", f"合成/{ep}"),
+        ))
+        return res
+    targets = data.get("sidecar_targets") if isinstance(data, Mapping) else {}
+    if not isinstance(targets, Mapping) or not targets:
+        res["findings"].append(_row(
+            "warn",
+            "video_eval_manifest 缺 sidecar_targets；重模型/人工 runner 无法知道标准报告写回位置。",
+            stage="review",
+            artifacts=(rel,),
+        ))
+        return res
+    kinds = _manifest_risk_kinds(data)
+    missing: List[str] = []
+    empty: List[str] = []
+    for key, target in sorted(targets.items()):
+        if not _target_required_by_risk(str(key), kinds):
+            continue
+        path = str(target or "")
+        if not path:
+            missing.append(str(key))
+            continue
+        full = path if os.path.isabs(path) else os.path.join(root, path)
+        payload = _load_json(full)
+        if payload is None:
+            missing.append(f"{key}:{path}")
+        elif not _sidecar_has_rows(payload):
+            empty.append(f"{key}:{path}")
+    if missing:
+        res["findings"].append(_row(
+            "warn",
+            "video_eval_manifest 已建立，但这些风险 sidecar 尚未写回：" + "；".join(missing[:8]),
+            stage="review",
+            artifacts=(rel,),
+        ))
+    if empty:
+        res["findings"].append(_row(
+            "warn",
+            "这些视频证据 sidecar 存在但缺明细/判题结果：" + "；".join(empty[:8]),
+            stage="review",
+            artifacts=(rel,),
+        ))
+    total_required = sum(1 for key in targets if _target_required_by_risk(str(key), kinds))
+    present = total_required - len(missing)
+    res["notes"].append(f"视频证据 sidecar 完整度：{present}/{total_required}（按 manifest risk_kinds 计算）。")
+    return res
+
+
+def _physical_event_graph(root: str, ep: str) -> Tuple[Optional[Any], str]:
+    return _load_first_json(root, (
+        os.path.join("生产数据", f"physical_event_graph_{ep}.json"),
+        os.path.join("生产数据", f"causal_event_graph_{ep}.json"),
+        os.path.join("出视频", ep, "physical_event_graph.json"),
+        os.path.join("脚本", ep, "physical_event_graph.json"),
+    ))
+
+
+def _physical_rows(data: Any) -> List[dict]:
+    if isinstance(data, Mapping):
+        raw = data.get("events") or data.get("physical_events") or data.get("checks") or data.get("findings") or data.get("items") or []
+    else:
+        raw = data
+    return [x for x in _as_list(raw) if isinstance(x, dict)]
+
+
+def _physical_laws(row: Mapping[str, Any]) -> List[str]:
+    raw = row.get("law") or row.get("physical_law") or row.get("physical_rule") or row.get("rules")
+    if isinstance(raw, list):
+        return [str(x).strip() for x in raw if str(x).strip()]
+    if raw:
+        return [str(raw).strip()]
+    return []
+
+
+def _physical_objects(row: Mapping[str, Any]) -> List[str]:
+    raw = row.get("object_ids") or row.get("objects") or row.get("entities") or row.get("affected_objects")
+    return _unique(str(x).strip() for x in _as_list(raw) if str(x).strip())
+
+
+def _physical_frames(row: Mapping[str, Any]) -> List[Any]:
+    frames: List[Any] = []
+    for key in ("frame_range", "evidence_frame_range", "frames", "evidence_frames", "frame_span"):
+        frames.extend(_as_list(row.get(key)))
+    for key in ("cause_frame", "effect_frame", "start_frame", "end_frame"):
+        if row.get(key):
+            frames.append(row.get(key))
+    return [f for f in frames if f not in (None, "", [], {})]
+
+
+def _has_physics_risk(root: str, ep: str) -> bool:
+    _sb, clips = _storyboard(root, ep)
+    prompts = _prompt_sections(root, ep)
+    tokens = (
+        "击中", "命中", "刺中", "砍中", "撞", "摔", "掉落", "落地", "破裂", "碎裂", "燃起", "熄灭",
+        "爆炸", "流血", "推倒", "抓", "拉", "递", "collision", "fall", "physics", "shatter", "explode",
+    )
+    for idx, clip in enumerate(clips, 1):
+        text = _clip_text(clip, _clip_label(clip, idx), prompts)
+        if any(t.lower() in text.lower() for t in tokens):
+            return True
+    return False
+
+
+def check_physical_event_graph(root: str, ep: str) -> dict:
+    """Attributable physical consistency: law + object + frame + violation type."""
+    media = _existing_media(root, ep) + [os.path.relpath(p, root) for p in _final_cuts(root, ep)]
+    res = {"available": bool(media) or _has_physics_risk(root, ep), "findings": [], "notes": []}
+    data, rel = _physical_event_graph(root, ep)
+    if data is None:
+        if _has_physics_risk(root, ep) and media:
+            res["findings"].append(_row(
+                "warn",
+                "本集存在物理/因果动作且已有媒体，但缺 physical_event_graph；无法归因到具体 law/object/frame/violation。",
+                stage="review",
+                artifacts=(f"生产数据/physical_event_graph_{ep}.json", f"脚本/{ep}/storyboard.json", f"出视频/{ep}"),
+            ))
+        else:
+            res["notes"].append("无明显物理风险或尚无媒体，PHY 不强制。")
+        return res
+    rows = _physical_rows(data)
+    if not rows:
+        res["findings"].append(_row(
+            "warn",
+            "physical_event_graph 存在但缺 events/checks 明细；只有总览无法定位物理违例。",
+            stage="review",
+            artifacts=(rel,),
+        ))
+        return res
+    for idx, row in enumerate(rows, 1):
+        eid = str(row.get("event_id") or row.get("id") or f"event_{idx}").strip()
+        shot = str(row.get("clip") or row.get("clip_id") or row.get("shot") or "")
+        laws = _physical_laws(row)
+        objects = _physical_objects(row)
+        frames = _physical_frames(row)
+        missing = []
+        if not eid:
+            missing.append("event_id")
+        if not laws:
+            missing.append("law")
+        if not objects:
+            missing.append("object_ids")
+        if not frames:
+            missing.append("frame_range/evidence_frames")
+        if not (row.get("expected_state_delta") or row.get("expected_delta") or row.get("expected_after")):
+            missing.append("expected_state_delta")
+        if missing:
+            res["findings"].append(_row(
+                "warn",
+                f"物理事件 {eid} 缺可归因字段：{', '.join(missing)}。",
+                shot=shot,
+                stage="review",
+                artifacts=(rel,),
+                event_id=eid,
+            ))
+        unknown = [law for law in laws if law not in PHYSICAL_LAWS]
+        if unknown:
+            res["findings"].append(_row(
+                "warn",
+                f"物理事件 {eid} 使用未登记 law：{', '.join(unknown)}；请归一到物理法则表或补扩展说明。",
+                shot=shot,
+                stage="script_stage2",
+                artifacts=(rel,),
+                event_id=eid,
+            ))
+        verdict = str(row.get("verdict") or row.get("severity") or row.get("status") or "").lower()
+        pass_value = row.get("rule_pass") if "rule_pass" in row else row.get("physics_pass")
+        failed = verdict in {"block", "fail", "failed", "red"} or str(pass_value).lower() in {"false", "0", "no", "fail", "failed"}
+        if failed:
+            vtype = str(row.get("violation_type") or row.get("violation") or "").strip()
+            if not vtype:
+                res["findings"].append(_row(
+                    "warn",
+                    f"物理事件 {eid} 判失败但缺 violation_type；修复方无法区分穿模/重力/质量守恒/动量问题。",
+                    shot=shot,
+                    stage="review",
+                    artifacts=(rel,),
+                    event_id=eid,
+                ))
+            res["findings"].append(_row(
+                "block",
+                f"物理事件 {eid} 违例：law={','.join(laws) or '(unknown)'} objects={','.join(objects) or '(unknown)'} frames={frames[:3]} violation={vtype or '(unspecified)'}。",
+                shot=shot,
+                stage="video",
+                artifacts=(rel,),
+                event_id=eid,
+            ))
+    return res
+
+
 def _load_events(root: str) -> List[dict]:
     path = os.path.join(production_dir(root), "production_events.jsonl")
     out: List[dict] = []
@@ -1102,11 +1614,16 @@ def build_recipe_ledger(root: str, ep: str) -> dict:
             "status": (event.get("generation") or {}).get("status") if isinstance(event.get("generation"), Mapping) else "",
             "recipe_hash": str(meta.get("recipe_hash") or recipe_fingerprint(event)),
             "declared_recipe_hash": bool(meta.get("recipe_hash")),
+            "backend": _event_value(event, "backend", "primary_backend", "provider"),
+            "backend_version": _event_value(event, "backend_version", "backend_rev", "backend_release", "api_version"),
+            "model_version": _event_value(event, "model_version", "model_id", "model", "model_name"),
             "seed": meta.get("logical_seed") or meta.get("requested_seed") or meta.get("effective_seed") or "",
             "seed_effective": _event_value(event, "seed_effective", "effective_seed"),
             "seed_support": _event_value(event, "seed_support", "seed_capability"),
             "seed_strategy": _event_value(event, "seed_strategy", "seed_policy", "seed_degrade"),
             "mode": meta.get("mode") or "",
+            "retry_attempt": _event_value(event, "retry_attempt", "attempt", "attempt_no"),
+            "redraw_reason": _event_value(event, "redraw_reason", "retry_reason", "failure_reason"),
             "reference_manifest": meta.get("reference_manifest") or meta.get("reference_bundle") or "",
             "reference_bundle_sha256": _event_value(event, "reference_bundle_sha256", "reference_sha256", "reference_digest"),
             "prompt_sha256": _event_value(event, "prompt_sha256", "prompt_hash", "prompt_digest"),
@@ -1160,8 +1677,12 @@ def check_generation_recipe(root: str, ep: str) -> dict:
             missing.append("mode")
         if not row.get("seed"):
             missing.append("seed/seed_degrade")
+        if not (row.get("backend_version") or row.get("model_version")):
+            missing.append("backend_version/model_version")
         if not row.get("declared_recipe_hash"):
             missing.append("declared_recipe_hash")
+        if row.get("event") == "redraw" and not (row.get("redraw_reason") or row.get("retry_attempt")):
+            missing.append("redraw_reason/retry_attempt")
         if missing:
             res["findings"].append(_row(
                 "warn",
@@ -1196,6 +1717,8 @@ def check_recipe_schema(root: str, ep: str) -> dict:
             missing.append("adapter_version")
         if not row.get("qc_version"):
             missing.append("qc_version")
+        if not (row.get("backend_version") or row.get("model_version")):
+            missing.append("backend_version/model_version")
         if not (row.get("seed") or row.get("seed_effective") or row.get("seed_support") in {"unsupported", "none", "not_supported"}):
             missing.append("seed_effective_or_unsupported")
         if missing:
@@ -1228,6 +1751,9 @@ def check_series_packaging(root: str, ep: str) -> dict:
         "title_treatment": ("title_treatment", "标题字", "title"),
         "subtitle_style": ("subtitle_style", "subtitle_font", "字幕字体", "font"),
         "cover": ("cover", "封面", "thumbnail"),
+        "episode_card": ("episode_card", "分集封面", "episode_thumbnail", "title_card"),
+        "platform_specs": ("platform_specs", "平台规格", "delivery_matrix", "aspect_ratio_matrix"),
+        "brand_visual": ("brand_visual", "品牌视觉", "series_brand", "logo_lockup"),
         "intro": ("intro", "片头"),
         "outro": ("outro", "片尾"),
         "transition_sfx": ("transition_sfx", "转场音效", "sfx"),
@@ -1257,6 +1783,55 @@ def _voice_lines(root: str, ep: str) -> List[Tuple[str, str]]:
     return rows
 
 
+# 语域统计漂移（G-S2·2026-06-24 流程自审落地）：脸/服装/发型/称谓锁住后，台词「语域」漂移
+# 是 AI 改写最隐蔽的塌人设，且全行业无机检（红果「台词须符身份/杜绝水台词」仍是 craft 级，无 checker）。
+# A1(称谓) 只查称呼/口头禅在场，D1 此前只查 forbidden/must_use token 在场——都不看「文白/正式度/句长」这条
+# 真正的语域轴。这里补三类纯文本统计型 first-pass（启发式·全部 warn·交人判，绝不臆造 block）：
+#   ① 文白横跳——同角色同集既用文言/书面标记又用市井口语标记（非自称词，补 REGISTER_WORDS 盲区）；
+#   ② 正式度冲突——spec 声明 formality=formal 却出现口语标记（或声明 colloquial 却满口文言）；
+#   ③ 句长失稳——超 spec.sentence_len_max 软上限（惜字如金的角色突然长篇大论=口吻漂）。
+# 文言/书面标记取多字·辨识度高的词（避开「之/也/者」单字高频词的误报）。
+FORMAL_MARKERS = (
+    "岂能", "岂敢", "焉能", "怎敢", "莫非", "何故", "何须", "休得", "且慢", "在下", "鄙人",
+    "阁下", "失礼", "告辞", "承蒙", "甚是", "倒也", "无妨", "此乃", "实乃", "之事", "不才",
+    "敢问", "见谅", "恕我", "未尝", "断不可", "切莫",
+)
+COLLOQUIAL_MARKERS = (
+    "啥", "咋", "呗", "嘛", "咯", "整啥", "搞啥", "玩意", "牛逼", "扯淡", "没辙", "咋整",
+    "干啥", "这事儿", "得了吧", "拉倒", "够呛", "瞎", "唠", "麻溜", "费劲", "墨迹",
+)
+
+
+def register_marker_hits(lines: Sequence[str]) -> Tuple[List[str], List[str]]:
+    """同角色台词命中的文言/书面标记、市井口语标记（去重排序）。纯函数·可测。"""
+    blob = "".join(lines)
+    formal = sorted({m for m in FORMAL_MARKERS if m in blob})
+    colloq = sorted({m for m in COLLOQUIAL_MARKERS if m in blob})
+    return formal, colloq
+
+
+def register_mix_flagged(formal_hits: Sequence[str], colloquial_hits: Sequence[str]) -> bool:
+    """文白横跳：同时出现文言/书面与市井口语标记。纯函数·可测。"""
+    return bool(formal_hits) and bool(colloquial_hits)
+
+
+def overlong_lines(lines: Sequence[str], cap: int) -> List[str]:
+    """超句长软上限的台词（cap≤0 视为未设上限，返回空）。纯函数·可测。"""
+    if not cap or cap <= 0:
+        return []
+    return [ln for ln in lines if len(ln) > cap]
+
+
+def _declared_formality(spec: Mapping[str, Any]) -> str:
+    """归一 spec 的正式度声明 → 'formal' | 'colloquial' | ''。纯函数·可测。"""
+    raw = str(spec.get("formality") or spec.get("正式度") or spec.get("vocab_tier") or spec.get("语域") or "").strip().lower()
+    if raw in ("formal", "文言", "书面", "尊", "雅", "正式"):
+        return "formal"
+    if raw in ("colloquial", "口语", "市井", "俗", "casual", "vulgar", "粗"):
+        return "colloquial"
+    return ""
+
+
 def check_dialogue_register(root: str, ep: str) -> dict:
     rows = _voice_lines(root, ep)
     paths = [
@@ -1272,6 +1847,19 @@ def check_dialogue_register(root: str, ep: str) -> dict:
     by_role: Dict[str, List[str]] = defaultdict(list)
     for role, text in rows:
         by_role[role].append(text)
+    arts = (f"脚本/{ep}/voiceover.txt", "设定库/dialogue_register.json")
+
+    # ① 文白横跳——dictionary-less，对所有角色恒跑（脸锁住后语域漂移无人看守的盲区）。
+    for role, lines in by_role.items():
+        formal, colloq = register_marker_hits(lines)
+        if register_mix_flagged(formal, colloq):
+            res["findings"].append(_row(
+                "warn",
+                f"角色「{role}」疑似文白/语域横跳：同集既用文言/书面词 {formal[:3]} 又用市井口语 {colloq[:3]}，"
+                "若非有意（装腔/穿越者吐槽）请核对是否塌人设。",
+                stage="script_stage1", artifacts=arts,
+            ))
+
     if data is None:
         for role, lines in by_role.items():
             used = sorted({w for w in REGISTER_WORDS if any(w in line for line in lines)})
@@ -1279,17 +1867,17 @@ def check_dialogue_register(root: str, ep: str) -> dict:
                 res["findings"].append(_row(
                     "warn",
                     f"角色「{role}」自称/语气词混用 {', '.join(used)}，但缺语域表判定是否合理。",
-                    stage="script_stage1",
-                    artifacts=(f"脚本/{ep}/voiceover.txt", "设定库/dialogue_register.json"),
+                    stage="script_stage1", artifacts=arts,
                 ))
         if not res["findings"]:
             res["findings"].append(_row(
                 "warn",
-                "缺 dialogue_register/语域表；目前只能查称谓，无法约束角色句式、尊卑语气和禁用词。",
-                stage="script_stage1",
-                artifacts=("设定库/dialogue_register.json",),
+                "缺 dialogue_register/语域表；目前只能查称谓 + 文白横跳启发式，"
+                "无法约束角色正式度、句长上限和禁用词。建议补 formality/sentence_len_max/forbidden/口癖。",
+                stage="script_stage1", artifacts=("设定库/dialogue_register.json",),
             ))
         return res
+
     for role, lines in by_role.items():
         spec = data.get(role) or data.get(str(role).strip()) or {}
         if not isinstance(spec, dict):
@@ -1301,8 +1889,7 @@ def check_dialogue_register(root: str, ep: str) -> dict:
                 res["findings"].append(_row(
                     "warn",
                     f"角色「{role}」台词出现语域禁用词「{token}」。",
-                    stage="script_stage1",
-                    artifacts=(f"脚本/{ep}/voiceover.txt", "设定库/dialogue_register.json"),
+                    stage="script_stage1", artifacts=arts,
                 ))
         if must:
             tokens = must if isinstance(must, list) else [must]
@@ -1310,9 +1897,36 @@ def check_dialogue_register(root: str, ep: str) -> dict:
                 res["findings"].append(_row(
                     "warn",
                     f"角色「{role}」本集没有回读语域锚点 {tokens[:3]}；若本集戏份较多，可能口吻漂移。",
-                    stage="script_stage1",
-                    artifacts=(f"脚本/{ep}/voiceover.txt", "设定库/dialogue_register.json"),
+                    stage="script_stage1", artifacts=arts,
                 ))
+        # ② 正式度冲突——声明正式度与实际市井/文言标记打架。
+        declared = _declared_formality(spec)
+        formal, colloq = register_marker_hits(lines)
+        if declared == "formal" and colloq:
+            res["findings"].append(_row(
+                "warn",
+                f"角色「{role}」声明 formality=formal（文言/书面），台词却出现市井口语 {colloq[:3]}——正式度漂移。",
+                stage="script_stage1", artifacts=arts,
+            ))
+        elif declared == "colloquial" and formal:
+            res["findings"].append(_row(
+                "warn",
+                f"角色「{role}」声明 formality=colloquial（口语/市井），台词却满口文言/书面 {formal[:3]}——正式度漂移。",
+                stage="script_stage1", artifacts=arts,
+            ))
+        # ③ 句长失稳——超声明的软上限（惜字如金的角色突然长篇大论）。
+        try:
+            cap = int(spec.get("sentence_len_max") or spec.get("句长上限") or 0)
+        except (TypeError, ValueError):
+            cap = 0
+        over = overlong_lines(lines, cap)
+        if over:
+            res["findings"].append(_row(
+                "warn",
+                f"角色「{role}」有 {len(over)} 句超句长上限 {cap} 字（如「{over[0][:18]}…」）；"
+                "话风从短促变长篇可能口吻漂移，核对是否符合人设。",
+                stage="script_stage1", artifacts=arts,
+            ))
     return res
 
 
@@ -1321,6 +1935,19 @@ def _floorplan_data(root: str) -> Optional[dict]:
         os.path.join("设定库", "scene_floorplan.json"),
         os.path.join("设定库", "场景平面图.json"),
         os.path.join("出图", "共享", "scene_floorplan.json"),
+    ):
+        data = _load_json(os.path.join(root, rel))
+        if isinstance(data, dict):
+            return data
+    return None
+
+
+def _spatial_memory_data(root: str) -> Optional[dict]:
+    for rel in (
+        os.path.join("设定库", "location_spatial_memory.json"),
+        os.path.join("设定库", "scene_spatial_memory.json"),
+        os.path.join("出图", "共享", "location_spatial_memory.json"),
+        os.path.join("设定库", "scene_floorplan.json"),
     ):
         data = _load_json(os.path.join(root, rel))
         if isinstance(data, dict):
@@ -1355,7 +1982,9 @@ def check_floorplan(root: str, ep: str) -> dict:
                     artifacts=(f"脚本/{ep}/storyboard.json", "设定库/scene_floorplan.json"),
                 ))
         return res
+    spatial = _spatial_memory_data(root)
     scenes = fp.get("scenes") if isinstance(fp.get("scenes"), dict) else fp
+    spatial_scenes = spatial.get("scenes") if isinstance(spatial, dict) and isinstance(spatial.get("scenes"), dict) else spatial
     for label, loc, text in clip_texts:
         spec = scenes.get(loc) if isinstance(scenes, dict) else None
         if not isinstance(spec, dict):
@@ -1373,6 +2002,33 @@ def check_floorplan(root: str, ep: str) -> dict:
                     stage="script_stage2",
                     artifacts=(f"脚本/{ep}/storyboard.json", "设定库/scene_floorplan.json"),
                 ))
+    for loc, n in counts.items():
+        if n < 2:
+            continue
+        spec = spatial_scenes.get(loc) if isinstance(spatial_scenes, dict) else None
+        if not isinstance(spec, dict):
+            res["findings"].append(_row(
+                "warn",
+                f"场景 {loc} 本集复用 {n} 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。",
+                stage="script_stage2",
+                artifacts=("设定库/location_spatial_memory.json", "设定库/scene_floorplan.json"),
+            ))
+            continue
+        required = {
+            "fixed_objects": ("fixed_objects", "default_objects", "常驻物", "固定物", "anchors"),
+            "entrances": ("entrances", "doors", "windows", "门", "窗", "出入口"),
+            "light_sources": ("light_sources", "光源", "主光", "practical_lights"),
+            "camera_arcs": ("camera_arcs", "legal_camera_arcs", "机位弧线", "axis"),
+        }
+        blob = _json_text(spec)
+        missing = [name for name, aliases in required.items() if not any(alias in spec or alias in blob for alias in aliases)]
+        if missing:
+            res["findings"].append(_row(
+                "warn",
+                f"场景 {loc} 的空间记忆缺字段：{', '.join(missing)}；同一地点跨镜容易出现门窗/光源/机位漂移。",
+                stage="script_stage2",
+                artifacts=("设定库/location_spatial_memory.json", "设定库/scene_floorplan.json"),
+            ))
     return res
 
 
@@ -1850,12 +2506,15 @@ def check_cost_route(root: str, ep: str) -> dict:
 
 def analyze(root: str, ep: str) -> dict:
     sections = {
+        "实体记忆(EMB)": check_entity_memory_bank(root, ep),
         "物件常驻(O3)": check_object_permanence(root, ep),
         "持有账本(POS)": check_possession_ledger(root, ep),
         "视线状态回读(X2)": check_axis_state_readback(root, ep),
         "状态转场视频证据(ST1)": check_state_transition_verification(root, ep),
         "交互接触(I1)": check_interaction_graph(root, ep),
         "结构化交互图谱(I2)": check_interaction_schema(root, ep),
+        "物理事件图(PHY)": check_physical_event_graph(root, ep),
+        "视频证据完整性(EVID)": check_video_evidence_completeness(root, ep),
         "成片统一(C1)": check_final_composite(root, ep),
         "成片时间线探针(FT1)": check_final_timeline_probe(root, ep),
         "生成配方(RCP)": check_generation_recipe(root, ep),

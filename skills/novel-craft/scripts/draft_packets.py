@@ -205,6 +205,11 @@ FEMALE_FICTION_CHECKLIST = (
 )
 
 RESEARCH_INDEX_REL = "资料/research_sources.json"
+SCENE_CARDS_REL = "设定/scene_cards.json"
+SCENE_CARDS_REFERENCE = "skills/novel-craft/references/scene-cards.md"
+ARC_SUMMARIES_REL = "设定/arc_summaries.json"
+EMOTIONAL_PROGRESS_REL = "设定/emotional_progression.json"
+ARC_MEMORY_REFERENCE = "skills/novel-craft/references/arc-memory.md"
 
 COMMON_SOURCE_PATHS = (
     "设定/章纲.md",
@@ -426,6 +431,14 @@ def draft_workflow_from_settings(root, meta):
     if value:
         return value
     return meta.get("draft_workflow") or meta.get("writing_workflow") or ""
+
+
+def text_authorship_mode_from_settings(root, meta):
+    return (
+        setting_value(root, "文本主创模式")
+        or meta.get("text_authorship_mode")
+        or ("AI辅助" if meta.get("target_platform") else "")
+    )
 
 
 def live_check_workflow_from_settings(root, meta):
@@ -694,6 +707,118 @@ def research_pack_section(packs):
     return "\n".join(lines) + "\n"
 
 
+def scene_cards_for_chapter(root, chapter):
+    """Return scene cards for this chapter if the project has scene_cards.json."""
+    payload = load_json(os.path.join(root, SCENE_CARDS_REL), {}) or {}
+    scenes = payload.get("scenes") if isinstance(payload, dict) else []
+    if not isinstance(scenes, list):
+        return []
+    out = []
+    for scene in scenes:
+        if not isinstance(scene, dict):
+            continue
+        try:
+            ch = int(scene.get("chapter") or 0)
+        except (TypeError, ValueError):
+            ch = 0
+        if ch == chapter:
+            out.append(scene)
+    out.sort(key=lambda s: (int(s.get("scene_no") or 0), s.get("id") or ""))
+    return out
+
+
+def scene_cards_section(cards):
+    if not cards:
+        return ""
+    lines = [
+        "\n## 场景卡（Scene Cards · 写时逐场兑现）",
+        f"- 参考全文：`{SCENE_CARDS_REFERENCE}`",
+        "- 每个场景必须有目标、阻碍、冲突、转折和价值变化；没有转折的场景要合并、删除或重写。",
+    ]
+    for card in cards:
+        lines.append(f"\n### {card.get('id') or 'SCENE'} · 第{card.get('scene_no') or '?'}场")
+        for key, label in (
+            ("pov", "POV"),
+            ("location", "地点"),
+            ("time", "时间"),
+            ("desire", "目标"),
+            ("obstacle", "阻碍"),
+            ("conflict", "冲突"),
+            ("turn", "转折"),
+            ("value_shift", "价值变化"),
+            ("reveal_or_payoff", "揭示/兑现"),
+            ("subtext", "潜台词"),
+            ("sensory_anchor", "五感锚点"),
+        ):
+            value = str(card.get(key) or "").strip()
+            lines.append(f"- {label}：{value or '（待补；写前先补 scene card）'}")
+    return "\n".join(lines) + "\n"
+
+
+def parse_chapter_range(value):
+    m = re.fullmatch(r"\s*0*(\d+)\s*[-~至]\s*0*(\d+)\s*", str(value or ""))
+    if not m:
+        return None
+    start, end = int(m.group(1)), int(m.group(2))
+    if start > end:
+        start, end = end, start
+    return start, end
+
+
+def arc_memory_for_chapter(root, chapter):
+    payload = load_json(os.path.join(root, ARC_SUMMARIES_REL), {}) or {}
+    arcs = payload.get("arcs") if isinstance(payload, dict) else []
+    out = []
+    if isinstance(arcs, list):
+        for arc in arcs:
+            if not isinstance(arc, dict):
+                continue
+            rng = parse_chapter_range(arc.get("range"))
+            if rng and rng[0] <= chapter <= rng[1]:
+                out.append(arc)
+    emo = load_json(os.path.join(root, EMOTIONAL_PROGRESS_REL), {}) or {}
+    emotions = []
+    if isinstance(emo, dict):
+        for item in emo.get("chapters") or []:
+            if not isinstance(item, dict):
+                continue
+            try:
+                ch = int(item.get("chapter") or 0)
+            except (TypeError, ValueError):
+                ch = 0
+            if ch == chapter:
+                emotions.append(item)
+    return out, emotions
+
+
+def arc_memory_section(arcs, emotions):
+    if not arcs and not emotions:
+        return ""
+    lines = [
+        "\n## 弧段记忆（Arc Memory · 长程上下文）",
+        f"- 参考全文：`{ARC_MEMORY_REFERENCE}`",
+        "- 这些是跨 3 章窗口之外的弧段级记忆；写本章时必须承接 carry_forward、未收线程和情绪债务。",
+    ]
+    for arc in arcs:
+        lines.append(f"\n### {arc.get('id') or 'ARC'} · {arc.get('title') or arc.get('range')}")
+        for key, label in (
+            ("plot_summary", "剧情摘要"),
+            ("character_changes", "人物变化"),
+            ("open_threads", "未收线程"),
+            ("payoffs", "已兑现"),
+            ("carry_forward", "后续必须承接"),
+        ):
+            value = arc.get(key)
+            lines.append(f"- {label}：{fmt_list(value)}")
+    for item in emotions:
+        lines.append("\n### 本章情绪进度")
+        lines.append(f"- 主导情绪：{item.get('dominant_emotion') or '未填写'}")
+        lines.append(f"- 张力分：{item.get('tension_score') if item.get('tension_score') is not None else '未填写'}")
+        lines.append(f"- 读者承诺推进：{item.get('reader_promise_progress') or '未填写'}")
+        lines.append(f"- 下一步情绪债务：{item.get('next_emotional_debt') or '未填写'}")
+    return "\n".join(lines) + "\n"
+
+
 def ledger_excerpt_for_packet(ledger, limit=2600):
     """写章包注入的状态账本聚焦视图：只给长期记忆（角色 / 设定事实 / 未收与已收线程），
     丢掉逐章 `chapter_deltas` 大 blob（写下一章用不到，且几百章后会撑爆注入预算），改用计数替代。
@@ -859,6 +984,7 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
             voice_section += f"- **{name}**: 句均长 {sp.get('avg_sentence_length')} 字，短句比 {sp.get('short_sentence_ratio')}，长句比 {sp.get('long_sentence_ratio')}。词频特征: {', '.join(x['term'] for x in fp.get('lexicon_anchor', [])[:5])}\n"
     
     draft_mode = draft_mode_from_settings(root, meta)
+    authorship_mode = text_authorship_mode_from_settings(root, meta)
     workflow_setting = draft_workflow_from_settings(root, meta)
     draft_workflow = workflow_setting or ("三步迭代（长篇/商业自动）" if use_trio_pipeline(root, meta) else "默认单步")
     live_check = live_check_workflow_from_settings(root, meta)
@@ -894,6 +1020,16 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
         except Exception: pass
 
     source_paths = source_paths_for_kind(meta.get("kind"))
+    scene_cards = scene_cards_for_chapter(root, chapter)
+    if scene_cards:
+        for rel in (SCENE_CARDS_REL, SCENE_CARDS_REFERENCE):
+            if rel not in source_paths:
+                source_paths.append(rel)
+    arc_memories, emotional_progress = arc_memory_for_chapter(root, chapter)
+    if arc_memories or emotional_progress:
+        for rel in (ARC_SUMMARIES_REL, EMOTIONAL_PROGRESS_REL, ARC_MEMORY_REFERENCE):
+            if rel not in source_paths:
+                source_paths.append(rel)
     for ref in scene_guide_references(scene_matches):
         if ref not in source_paths:
             source_paths.append(ref)
@@ -959,6 +1095,8 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
 {clip(contract_text, 1600) if contract_text else "（缺 `设定/读者契约.md`；至少按 reader-contract.md 模板补齐题旨、读者承诺、文学质感和禁偏清单。）"}
 """
     special_scene_sections = scene_guide_sections(scene_matches)
+    scene_card_section = scene_cards_section(scene_cards)
+    arc_mem_section = arc_memory_section(arc_memories, emotional_progress)
     female_section = female_fiction_section() if female_active else ""
     research_section = research_pack_section(research_packs)
     waiver_section = ""
@@ -1052,6 +1190,7 @@ python3 skills/novel-review/scripts/mechanical_check.py "{root}" --range {start}
 - 人称视角：{meta.get("person", "未指定")}
 - 目标平台：{meta.get("target_platform", "未指定")}
 - 小说生成模式：{draft_mode}
+- 文本主创模式：{authorship_mode or "未指定"}（人类主创=AI 只给任务/审稿/局部辅助；AI辅助=正文需人工最终取舍；AI生成=投稿/发布高风险）
 - 小说生成工作流：{draft_workflow}{step_note}
 
 ## 必读源文件
@@ -1063,6 +1202,7 @@ python3 skills/novel-review/scripts/mechanical_check.py "{root}" --range {start}
 ## 上一章承接
 {previous_chapter_excerpt(root, chapter)}
 {revision_section}{retrieval_section}{loop_section}{voice_section}{cast_section}
+{arc_mem_section}
 ## Demo 风格锚点
 - 来源章节：{demo_anchor.get("source_chapter", "未指定")}
 - 风格要点：{demo_anchor.get("summary", "未填写；写前先从 Demo 章抽取")}
@@ -1071,6 +1211,7 @@ python3 skills/novel-review/scripts/mechanical_check.py "{root}" --range {start}
 - 禁止漂移：{", ".join(banned) if banned else "未填写"}
 {waiver_section}
 {contract_section}
+{scene_card_section}
 {special_scene_sections}
 {female_section}
 {research_section}
@@ -1083,9 +1224,10 @@ python3 skills/novel-review/scripts/mechanical_check.py "{root}" --range {start}
 ```
 
 ## 写作要求
-- 只输出一章正文，第一行必须是 `# 第{chapter}章 {title or "<标题>"}`。
+- 默认输出一章正文，第一行必须是 `# 第{chapter}章 {title or "<标题>"}`；若文本主创模式为 `人类主创`，则输出本章写作/编辑指导和关键段落建议，不直接生成可投稿正文。
 - 第二行写 meta 注释：`<!-- meta: demo=false; packet=写作任务/第{chapter:02d}章.md; step={step} -->`。
 - 本章必须兑现章纲里的戏剧节拍，至少保留一个钩子或承诺。
+- 若文本主创模式为 `人类主创`，最终正文由人类作者改写和定稿，AI 只做结构、检查、局部建议和非替代性辅助。
 - 本章必须推进 `读者契约` 中的至少一项：核心题旨、读者承诺、关系弧光、秘密揭示、能力代价或文学质感；不能只刷事件。
 - 不新增会推翻必读设定/骨架文件的能力、关系、地点规则；新增设定必须写入章末状态增量。
 - 写完后填写 `{delta_path}`，再跑 `python3 skills/novel-review/scripts/mechanical_check.py "{root}"`（字数带宽会自动读取 `_meta.target_wordcount_min_max`，不要手填旧默认）；若已选择 `边写边自检`，继续跑 `python3 skills/novel/scripts/post_write.py "{root}" --chapter 第{chapter:02d}章`。

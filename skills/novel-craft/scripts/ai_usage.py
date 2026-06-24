@@ -39,6 +39,7 @@ DIRECT_INCORPORATION_MODES = (
 )
 
 NOTES = [
+    "- `text_authorship_mode` 记录正文主创责任：人类主创 / AI辅助 / AI生成。它比 text_mode 更贴近投稿风险判断。",
     "- 若文本由 AI 直接生成，即便之后做过大量人工编辑，面向需要披露的平台通常仍按 AI-generated 处理。",
     "- 若文本由人写，AI 只用于润色、纠错、头脑风暴或检查，可记录为 AI-assisted。",
     "- disclosure_detail 记录 AI 介入的直接程度、人类 steering、可替代性、直接纳入程度与复核步骤，便于按平台/读者要求生成更细披露。",
@@ -54,6 +55,14 @@ def default_directness(text_mode):
     return "none"
 
 
+def default_authorship_mode(text_mode):
+    if text_mode == "AI-generated":
+        return "AI生成"
+    if text_mode == "AI-assisted":
+        return "AI辅助"
+    return "人类主创"
+
+
 def main():
     ap = argparse.ArgumentParser(description="写入 novel 项目的 AI 使用披露元数据")
     ap.add_argument("project_root")
@@ -61,6 +70,8 @@ def main():
     ap.add_argument("--image-mode", default="未使用AI图片",
                     choices=("AI-generated", "AI-assisted", "未使用AI图片"))
     ap.add_argument("--publish-target", default="未定")
+    ap.add_argument("--text-authorship-mode", choices=("人类主创", "AI辅助", "AI生成"),
+                    help="正文主创责任模式；缺省按 --text-mode 推断")
     ap.add_argument("--human-contribution", default="")
     ap.add_argument("--text-directness", choices=TEXT_DIRECTNESS_MODES,
                     help="AI 介入文本成品的直接程度；缺省按 text-mode 推断")
@@ -85,6 +96,7 @@ def main():
     payload.update({
         "rights_status": meta.get("rights_status", "unknown"),
         "text_mode": args.text_mode,
+        "text_authorship_mode": args.text_authorship_mode or default_authorship_mode(args.text_mode),
         "image_mode": args.image_mode,
         "disclosure_detail": {
             "text_directness": args.text_directness or default_directness(args.text_mode),
@@ -96,6 +108,7 @@ def main():
     })
     field_lines = [
         f"- 文本使用类型：{payload['text_mode']}",
+        f"- 正文主创模式：{payload['text_authorship_mode']}",
         f"- 图片/封面使用类型：{payload['image_mode']}",
         f"- 发布平台/用途：{payload['publish_target']}",
         f"- 权利来源：{payload['rights_status']}",

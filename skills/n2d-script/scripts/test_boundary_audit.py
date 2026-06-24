@@ -89,5 +89,18 @@ def test_free_mode_sets_no_payment_wall():
     assert data["series_arc"]["cliffhanger_targets"] == []
 
 
+def test_two_sided_boundary_pair_flags_slow_next_opening():
+    eps = [
+        "第一章\n沈念发现真相，拔剑反击柳娘子！",
+        "第二章\n翌日，她坐在窗边回忆往事，慢慢喝茶，风声很轻。",
+    ]
+    root = _mk_work(eps, "题材: 宫斗\n变现模式: 免费\n")
+    data = _run_json(root)
+    pairs = data["series_arc"]["boundary_pairs"]
+    assert pairs[0]["from"] == 1 and pairs[0]["to"] == 2
+    assert pairs[0]["risk"]
+    assert "下集开场弱" in pairs[0]["weakness"]
+
+
 if __name__ == "__main__":
     sys.exit(subprocess.call([sys.executable, "-m", "pytest", __file__, "-q"]))

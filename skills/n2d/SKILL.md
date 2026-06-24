@@ -1,17 +1,17 @@
 ---
 name: n2d
-description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked anything about turning a novel into AI comic-drama / short-drama materials for 即梦AI / 可灵Kling / Seedance / Veo. Inspects the 作品 root, reads `_进度.md`, and routes the user to the right stage skill — `n2d-script` (阶段1 剧本改编 / 阶段2 分镜设计), `n2d-voice` (配音先行的配音+时长清单 / 原生音画的可选旁白层), `n2d-image` (出图), `n2d-video` (出视频), or `n2d-compose` (合成成片). Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 分镜, 配音, 出图, 出视频, 合成, 成片, 即梦, 可灵, 双语字幕, 海外投放, 题材, 母题, 系统面板, 穿越系统流, 升级场景增强, n2d.
+description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked anything about turning a novel into AI comic-drama / short-drama materials for 即梦AI / 可灵Kling / Seedance / Veo. Inspects the 作品 root, reads `_进度.md`, and routes the user to the right stage skill — `n2d-script` (阶段1 剧本改编 / 阶段2 分镜设计), `n2d-voice` (配音先行的配音+时长清单 / 原生音画的可选旁白层), `n2d-image` (出图), `n2d-video` (出视频), `n2d-compose` (合成成片), or `n2d-review` (审查验收). Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 分镜, 配音, 出图, 出视频, 合成, 成片, 验收, 即梦, 可灵, 双语字幕, 海外投放, 题材, 母题, 系统面板, 穿越系统流, 升级场景增强, n2d.
 ---
 
-# n2d — 六阶段流水线 调度器
+# n2d — 主状态机调度器
 
-> **n2d 系列**（本调度 + `n2d-script`/`n2d-voice`/`n2d-image`/`n2d-video`/`n2d-compose`）专管"小说→AI 漫剧/短剧"，**产物统一落 `创作区/制漫剧/<剧名>/`**。
+> **n2d 系列**（本调度 + `n2d-script`/`n2d-voice`/`n2d-image`/`n2d-video`/`n2d-compose`/`n2d-review`）专管"小说→AI 漫剧/短剧"，**产物统一落 `创作区/制漫剧/<剧名>/`**。
 
 你是 **AI 漫剧制作总调度**。这个 skill 本身不做生产工作，它的职责是：
 
 1. **定位作品根**（创作区/制漫剧/<剧名>/）
 2. **读 `_进度.md`** 判断当前作品处于哪一阶段
-3. **推荐下一步该调哪个子 skill**（n2d-script 阶段1/2 · n2d-voice · n2d-image · n2d-video · n2d-compose）
+3. **推荐下一步该调哪个子 skill**（n2d-script 阶段1/2 · n2d-voice · n2d-image · n2d-video · n2d-compose · n2d-review）
 4. **解释流水线整体结构** 给第一次使用的用户
 
 详细架构与目录约定见 `references/architecture.md`。机器契约见 `references/contract.md`（脚本真值源：`skills/n2d/_lib/n2d_contract.py`，定义阶段图、`_进度.md` schema、manifest、gate 回滚字段）。实战 Q&A 见 `Q&A.md`（全阶段共用，沉淀的翻车修正都在那）。
@@ -24,7 +24,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 > 作为生产线入口：开新作品（`创作区/制漫剧/<剧名>/`）时先给首跑选择包（至少 `制作模式` + `基础视觉风格`；有明确账号/预算/后端约束时可先问 `生图AI`），选后初始化 `<作品根>/_设置.md`。真正进 `n2d-image` 付费生图前会重新扫描当前可用生图后端：多个可自动落 PNG 的官方/已登录后端则让用户选一个并写 `生图AI`，一个都没有则停下提示准备可用生图后端。拆集不再让用户选择单集时长；内部用 `拆集节奏=前长后短` 的节奏倾向，旧项目 `_设置.md` 的 `单集时长` 仅作兼容读取。粗拆默认按章/场景/强钩候选，不锚字数；剧情连贯和剧情丰满优先于时长，不能为省秒数删掉必要镜头、铺垫、动机或承接。**生视频后端选择不在开局出现**：开局只记录用户主动指定的固定后端/单账号/交付硬约束；默认写/沿用 `视频模型路由=自动按镜头路由`，具体 `生视频模型` / `生视频渠道` 到 `n2d-video` 出视频前由 router/probe + 适配层决定，无法自动执行或需要人工取舍时再问。若 `_设置.md` 已存在，直接沿用其中值；若用户本轮已明说某项，按其话覆盖落档。旧项目的 `生视频AI` 只作兼容 fallback，新项目不要再写这个合并字段。
 
-## 六阶段全景（模式感知·同一套进度表）
+## 主状态机全景（模式感知·同一套进度表）
 
 ```
 小说.txt/.docx
@@ -37,6 +37,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
    ↓ n2d-image                  出图 prompt + PNG
    ↓ n2d-video                  图生视频；说话镜是否原生台词由 route.native_audio_policy 决定
    ↓ n2d-compose                剪辑合成 + 背景音乐 + 字幕；原生音画模式保留 clip 原片音轨
+   ↓ n2d-review                 review gate + score + 验收总账 + review-ui；人工显式签收后才算完成
 ```
 
 每个阶段都按 **集** 为单位推进；进度统一写进 `<作品根>/_进度.md`。
@@ -53,7 +54,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 ### 横切 skill 速查（非必经 · 全文见 [`references/横切skill地图.md`](references/横切skill地图.md)）
 
-主干六阶段之外的横切能力，按用户意图点名触发即调。**其中的确定性前置（gate / model-router / 身份矩阵刷新 / 合规检查）已由编排器 `run.py next` 自动跑进每个 stage 的 prework**（见下「读进度 → 路由」），这里只在用户**显式**要某能力、或要理解其完整职责时用：
+主状态机之外的横切能力，按用户意图点名触发即调。**其中的确定性前置（gate / model-router / 身份矩阵刷新 / 合规检查）已由编排器 `run.py next` 自动跑进每个 stage 的 prework**（见下「读进度 → 路由」），这里只在用户**显式**要某能力、或要理解其完整职责时用：
 
 | 触发意图 | 调 | 一句话 |
 |---|---|---|
@@ -75,7 +76,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 三种制作模式，**默认 `原生音画`**（2026-06-16 起：初学者/快速预览优先——说话镜一次出同步音画，不卡在前期配音、最快看到出图/出视频，且原生音轨即成片音轨无重同步返工）。**对逐句配音表演有强控需求、或后端是 image2video-only 时改 `配音先行`**。选择点记入 `_设置.md` 的 `制作模式`（见 `skills/n2d/references/选择点与偏好.md`）。机器真值源是 `skills/n2d/_lib/n2d_const.py::PRODUCTION_MODE_DEFAULT`；本文、`references/contract.md` 和 `references/architecture.md` 只复述同一契约。
 
-**① `配音先行`（强配音控制时推荐）** — 上面的六阶段全景就是这条：
+**① `配音先行`（强配音控制时推荐）** — 上面的主状态机全景就是这条：
 ```
 剧本改编 → 真实配音(测每句时长) → 分镜设计(时长驱动) → 出图 → 出视频 → 合成
 ```
@@ -162,7 +163,7 @@ python3 skills/n2d-script/scripts/midstart_context.py <作品根> check
 → **先跑源新鲜度自检**（见下「源新鲜度自检」节）→ **再跑 skill 更新影响检查**（见下「skill 更新影响检查」节）→ 再走"读进度 → 路由"流程
 
 **情境 C — 用户问"怎么开始 / 流程是什么"**：
-→ 简述上面的六阶段全景 + 让用户给小说路径
+→ 简述上面的主状态机全景 + 让用户给小说路径
 
 **情境 D — 用户要批量推进多集 / 并发 / 失败重试 / 预算上限 / 只重跑受影响镜头**：
 → 推荐 `n2d-batch`，先生成队列而不是直接开跑：
@@ -257,8 +258,8 @@ python3 skills/n2d-update/scripts/update_plan.py record <作品根> 第N集
 > python3 skills/n2d/run.py pilot <作品根> 第1集   # 首集打样计划：按分镜风险挑 2-3 个代表 Clip，先验证画风/脸/口型/接缝/路由
 > python3 skills/n2d/run.py next <作品根> --json   # 机器可读 NextAction（代理消费 frontier/prework/stop_reason/action_card/gate）
 > ```
-> 它返回的 `stop_reason` ∈ `{needs_agent_gen, needs_payment_confirm, needs_choice, needs_compliance, blocked_by_gate, blocked_by_image_qc, env_missing, done}`——**代理据此只在"需要脑子/钱包/签字"处停下问人，其余前置已自动跑完**。`blocked_by_gate` 会透传 `return_to_stage`/`findings_path` 指向最小返工；`blocked_by_image_qc` 专指出图落档 QC 未过，先回 `n2d-image` 修复/确认受影响图，不当成后端环境缺失。设计契约见 `../../docs/n2d-编排器设计.md`。
-> 高动态/大场景前置也收进编排器：到 `image_prompt` 前会自动跑源文覆盖、留存节拍、`spectacle_contract_audit.py`、`shot_risk_audit.py`，并写 `生产数据/spectacle_plan_第N集.*`、`spectacle_probe_pack_第N集.*`、`spectacle_sequence_plan_第N集.json` 与 `scene_layer_pack_plan_第N集.*`；到 `video_prompt`/`video` 前会在 router 之后补写 Motion Control manifest 骨架与 `trajectory_controller_plan_第N集.*`（本机有 MotionCtrl/CameraCtrl/DragNUWA 环境时作为增强路线，否则只留计划）；到 `compose` 前会写 `生产数据/action_edit_cues_第N集.*`，到审查后会写 `spectacle_video_qc_第N集.json` 与 `motion_reference_library.json`，让打斗 hit-stop、追逐 speed-ramp、腾云风声、大场景 scale reveal、成片高动态证据和可复用动作小样都进入闭环。
+> 它返回的 `stop_reason` ∈ `{needs_agent_gen, needs_payment_confirm, needs_choice, needs_compliance, needs_acceptance_signoff, blocked_by_entry_check, capability_evidence_required, blocked_by_gate, blocked_by_image_qc, blocked_by_review_acceptance, env_missing, done}`——**代理据此只在"需要脑子/钱包/签字"处停下问人，其余前置已自动跑完**。`blocked_by_entry_check` 表示源文本漂移或 skill 更新重制计划未处理；`capability_evidence_required` 表示当前视频后端只有 conservative/manual/deprecated 能力证据，付费前必须刷新证据或换后端；`blocked_by_gate` 会透传 `return_to_stage`/`findings_path` 指向最小返工；`blocked_by_image_qc` 专指出图落档 QC 未过，先回 `n2d-image` 修复/确认受影响图，不当成后端环境缺失。设计契约见 `../../docs/n2d-编排器设计.md`。
+> 高动态/大场景前置也收进编排器：到 `image_prompt` 前会自动跑源文覆盖、留存节拍、剧情完整性体检（选择→后果、动机向量、A/B/C 线程、前几集契约、假 cliffhanger、对白推进；写 `设定库/story_integrity_ledger.json`、`thread_scheduler.json`、`pilot_arc_contract.json`）、`spectacle_contract_audit.py`、`shot_risk_audit.py`，并写 `生产数据/spectacle_plan_第N集.*`、`spectacle_probe_pack_第N集.*`、`spectacle_sequence_plan_第N集.json` 与 `scene_layer_pack_plan_第N集.*`；到 `video_prompt`/`video` 前会在 router 之后补写 Motion Control manifest 骨架与 `trajectory_controller_plan_第N集.*`（本机有 MotionCtrl/CameraCtrl/DragNUWA 环境时作为增强路线，否则只留计划）；到 `compose` 前会写 `生产数据/action_edit_cues_第N集.*`；到 `review/验收` 前会写 `spectacle_video_qc_第N集.json`、`motion_reference_library.json`、`score_第N集.json`、`consistency_ledger_第N集.json` 与 `review_ui_第N集.*`，让打斗 hit-stop、追逐 speed-ramp、腾云风声、大场景 scale reveal、成片高动态证据和可复用动作小样都进入闭环。`验收` 列只有这些证据通过并经人工显式签收后才回写 `✅`。
 >
 > **底层/手查：确定性路由脚本 `progress.py`**（编排器内部即调它解析前沿；容错或只想看前沿表时直接用，别靠 LLM 推 16×N 大表）：
 > ```bash
@@ -277,7 +278,7 @@ python3 skills/n2d-update/scripts/update_plan.py record <作品根> 第N集
 > - 旧项目若曾把占位配音写成 `✅`，先跑 `python3 <skill>/progress.py audit-placeholders <作品根>` 检查；确认要修则加 `--fix`，把伪完成降级为 `⏳rough`。
 
 1. 定位 `<作品根>/_进度.md`，读进度表（老项目若仍在 `<作品根>/common/_进度.md`，路由脚本会兼容读取）
-2. 进度表头形如：`| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |`（`奇观连续性` 是信息态留痕列：✅=本集打斗/追逐/腾云/大场景已被序列总账覆盖，—=本集无奇观镜/不适用，na 不挡 flow；由 image_prompt prework 自动回写，旧项目缺列跑 `progress.py ensure-col <作品根> 奇观连续性 —`）
+2. 进度表头形如：`| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |`（`奇观连续性` 是信息态留痕列：✅=本集打斗/追逐/腾云/大场景已被序列总账覆盖，—=本集无奇观镜/不适用，na 不挡 flow；由 image_prompt prework 自动回写，旧项目缺列跑 `progress.py ensure-col <作品根> 奇观连续性 —`。旧项目缺 `验收` 列时，`run.py next` 会在 `成片✅` 后暴露审查验收前沿，先跑 `progress.py ensure-col <作品根> 验收 ⬜` 再签收。）
 3. 对每一集逐列判断：
    - `剧本改编`/`bgm`/`封面` 任一 ⬜ → 还在 n2d-script 阶段1·剧本改编
    - 阶段1 齐、`配音` ⬜ → 该集等 n2d-voice 角色配音(统计台词时长)
@@ -286,6 +287,7 @@ python3 skills/n2d-update/scripts/update_plan.py record <作品根> 第N集
    - `分镜设计` ✅、`出图prompt`/`出图` 未满 → n2d-image
    - `出图` 满、`视频` 未满 → 先确认 `生产数据/image_qc/<ep>/image_qc_<ep>.json` 存在、`qc_environment.precision_level=full` 且 `summary.hard_blocks=0`，再跑 `python3 skills/n2d-model-router/scripts/router.py <作品根> 第N集 --write` → n2d-video。缺报告、低精度或 hard block 都回 `n2d-image` / image_qc setup，不允许直接进视频。
    - `视频` 满、`成片` ⬜ → n2d-compose（剪辑合成+BGM+字幕；问用户 BGM 选项）
+   - `成片` ✅、`验收` ⬜ → n2d-review 验收包（review gate + score + consistency ledger + review-ui）；证据通过后停在 `needs_acceptance_signoff`，人工确认后回写 `验收=✅`
    - **gate 前置（通用编排规则）**：路由到 image/video/compose 任一阶段时，正式生产入口统一跑 dashboard gate：正式生图前用 `--stage image_preflight`，正式出视频前用 `--stage video_preflight`，合成前用 `--stage compose`（它会调用 `n2d-review/scripts/gate.py --json`，退出码 1 即先补再做，并把 QA 阻断入账）。`gate.py --json` 只作底层/调试入口。结构化输出会带 `return_to_stage` / `affected_artifacts` / `rerun_scope`，用于按最小范围回退返工。image_preflight 还会拦「storyboard.json 缺 visual_contract 视觉契约种子 / style_contract 基础视觉风格种子 / 本集总览缺契约」，把跨镜一致性和所选基础风格挡在花钱出图之前；生成后落档回验仍用 `--stage image` / `--stage video`。旧 `cinematic_contract` 兼容但新产物不再使用该标题。dashboard 的 `generation_pass_rate` 只表示生产尝试效率；对外验收和告警看 `deliverable_pass_rate` / `final_pass_rate`，存在 QA block 时可交付通过率归零。
    - **原生音画额外前置**：`制作模式=原生音画` 时，`出视频/第N集/prompt/00_总览.md` 必须写「原生音画物理一致性契约」，锁定声源归属、口型策略、材质/动作声、空间声学、字幕/后期策略；同时生成 `生产数据/native_av_physics_第N集.json`（kind=`n2d_native_av_physics`），逐 Clip 记录 `audio_intent`、`speaker_source`、`lip_sync`、`action_sounds[].visible_evidence/timing`、`spatial_acoustics`、`post_policy.compose_policy`。总览缺字段或 sidecar 缺机器字段都会 BLOCK。该契约是视频后端一次生成台词+口型时的音画物理护栏，不替代成片后的 whisper/字幕对齐。
 4. **推荐策略**：

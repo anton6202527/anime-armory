@@ -27,9 +27,9 @@ def write_progress(root: Path) -> None:
     (root / "_进度.md").write_text(
         "\n".join(
             [
-                "| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |",
-                "|---|---:|---|---|---|---|---|---|---|---|---|---|---|---|---|---|",
-                "| 第1集 | 800 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ | 1/3 | ⬜ | ⬜ | ⬜ |",
+                "| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |",
+                "|---|---:|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|",
+                "| 第1集 | 800 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | ✅ | 1/3 | ⬜ | ⬜ | ⬜ | ⬜ |",
             ]
         ),
         encoding="utf-8",
@@ -63,15 +63,16 @@ def write_config(root: Path, command: str) -> Path:
 
 
 def test_standard_batch_wrappers_and_example_config_exist() -> None:
-    for name in ("run_n2d_image.sh", "run_n2d_video.sh", "run_n2d_compose.sh"):
+    for name in ("run_n2d_image.sh", "run_n2d_video.sh", "run_n2d_compose.sh", "run_n2d_review.sh"):
         assert (SKILL_ROOT / "scripts" / name).is_file()
     example = SKILL_ROOT / "references" / "batch_runner.example.json"
     data = json.loads(example.read_text(encoding="utf-8"))
-    assert {"voice", "image", "video", "compose"} <= set(data["commands"])
+    assert {"voice", "image", "video", "compose", "review"} <= set(data["commands"])
     assert "run_n2d_image.sh" in data["commands"]["image"]
     assert "run_n2d_video.sh" in data["commands"]["video"]
     assert "N2D_VIDEO_RANGE=" in data["commands"]["video"]
     assert "run_n2d_compose.sh" in data["commands"]["compose"]
+    assert "run_n2d_review.sh" in data["commands"]["review"]
 
 
 def test_runner_claims_executes_marks_done_and_records_dashboard(tmp_path: Path) -> None:

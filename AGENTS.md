@@ -20,7 +20,7 @@
 
 | 用户想做 | 入口 skill（总调度，会再分诊到子 skill） |
 |---|---|
-| 写小说、导入源书、扩写/改写/续写/评分/审稿、穿越/系统流的力量体系·等级·成长值一致性自检 | **`novel`**（分诊到 novel-create/fetch/rewrite/review/score/wiki 等） |
+| 写小说、导入源书、扩写/改写/续写/评分/审稿/专业编辑、穿越/系统流的力量体系·等级·成长值一致性自检 | **`novel`**（分诊到 novel-create/fetch/rewrite/review/edit/score/wiki 等） |
 | 把小说做成 AI 漫剧/短剧（分镜/配音/出图/出视频/合成） | **`n2d`**（分诊到 n2d-script/voice/image/video/compose） |
 | 写歌、改词、作曲、多版挑版、翻唱/换声、审歌 | **`song`**（分诊到 song-lyrics/compose/cover/review 等） |
 | 给歌曲做 MV、卡点、出图出视频、卡拉 OK 字幕、合成 | **`mv`**（分诊到 mv-script/beat/plan/image/video/compose 等） |

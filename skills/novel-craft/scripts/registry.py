@@ -60,6 +60,11 @@ NOVEL_SKILLS = [
         "summary": "quality review and process self-audit",
     },
     {
+        "name": "novel-edit",
+        "role": "edit",
+        "summary": "layered editorial assessment and revision planning",
+    },
+    {
         "name": "novel-score",
         "role": "qa",
         "summary": "market and quality scoring",

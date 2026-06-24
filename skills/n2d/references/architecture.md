@@ -1,4 +1,4 @@
-# 六阶段流水线 — 架构与目录约定（模式感知：原生音画 / 配音先行 / 后配音）
+# n2d 主状态机 — 架构与目录约定（模式感知：原生音画 / 配音先行 / 后配音）
 
 本文档是调度器 `n2d` 的扩展参考。说清楚整个 pipeline 是怎么组织的，子 skill 如何协作，目录铁律，以及 first-time 的标准首跑示范。
 
@@ -148,16 +148,16 @@
 
 机器契约真值源在 `skills/n2d/_lib/n2d_contract.py`，人读版见 `references/contract.md`。阶段图、列名、gate stage、manifest 路径、回退目标都从这里派生；`n2d/_lib/n2d_route.py`、`n2d/progress.py`、`n2d-progress/scan.py`、`n2d-review/scripts/gate.py` 不应各自维护一张阶段表。
 
-进度表是六阶段所有 skill 的 **single source of truth**。**表头由 `skills/n2d/_lib/n2d_contract.py` 定义，`n2d-script/scripts/split_novel.py` 生成时读取它**——本文与调度器 SKILL 只复述、不另立一套。当前 16 列格式：
+进度表是主状态机所有 skill 的 **single source of truth**。**表头由 `skills/n2d/_lib/n2d_contract.py` 定义，`n2d-script/scripts/split_novel.py` 生成时读取它**——本文与调度器 SKILL 只复述、不另立一套。当前 18 列格式：
 
 ```markdown
 # <剧名> — 生产进度
 
 共拆分 **N** 集。
 
-| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 第1集 | 2388 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 4/19 | ✅ | 0/12 | ⬜ |
+| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 第1集 | 2388 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ | 4/19 | ✅ | 0/12 | ⬜ | ⬜ |
 ```
 
 > **回写一律走脚本**：`python3 <skill>/progress.py set <作品根> 第N集 <列名> <值>`；旧项目缺新列先 `progress.py ensure-col`。别手工编辑表格（避免列错位）。
@@ -175,6 +175,7 @@
 | 出图 | n2d-image | `已完成 PNG / 本集需要的总数`（分子含共享复用 + 本集分镜） |
 | 视频prompt / 视频 | n2d-video | prompt 写完 ✅；`视频` = `已完成 MP4 / 本集 Clip 总数` |
 | 成片 | n2d-compose | 剪辑合成 + BGM + 烧字幕 → 成片完成 |
+| 验收 | n2d-review | review gate + score + consistency ledger + review-ui 全部通过，并经人工显式签收 |
 
 **调度规则**：任一列为 ⬜ 时，对应 skill 可以接手该集；列已 ✅ 时，下游 skill 才能继续。完整逐列路由判断见调度器 `SKILL.md`。
 
@@ -289,4 +290,4 @@ def dispatch(work_root):
 
 ## 七、配音 / 分镜 / 合成阶段（均已实现）
 
-六阶段已全部落地：制作模式决定是否先跑配音；`配音先行` 是 `n2d-voice` 前移到分镜与出图之前，`原生音画` 是脚本时长驱动分镜并由视频后端生成台词+口型；最终都进入 `n2d-compose` 脚本化合成+BGM+烧字幕。`成片` 列已在 split_novel.py 生成的表头里（最右一列），调度规则即 §六 伪代码。完整逐列路由见调度器 SKILL.md。
+主状态机已全部落地：制作模式决定是否先跑配音；`配音先行` 是 `n2d-voice` 前移到分镜与出图之前，`原生音画` 是脚本时长驱动分镜并由视频后端生成台词+口型；成片后必须进入 `n2d-review` 刷新 review gate、score、验收总账和 review-ui，人工显式签收 `验收` 列后才算交付完成。完整逐列路由见调度器 SKILL.md。

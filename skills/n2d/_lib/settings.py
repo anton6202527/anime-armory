@@ -32,8 +32,10 @@ except Exception:  # pragma: no cover - keep generic settings usable outside n2d
 
 DEFAULTS = {
     "制作模式": _PRODUCTION_MODE_DEFAULT,
-    "基础视觉风格": "真实3D人物质感 + 电影叙事镜头感",
+    "基础视觉风格": "冷灰写实3D国风漫剧",
     "拆集节奏": "前长后短",
+    # 生成轴=具体模型（设计宪法 C5：指代必须落到模型，不写 agent/渠道）。`生图AI` 退化为访问入口/渠道。
+    "生图模型": "GPT Image 2",
     "生图AI": "Codex",
     "生视频模型": "Seedance 2.0",
     "生视频渠道": "即梦/Dreamina",
@@ -135,6 +137,35 @@ VIDEO_CHANNEL_CHOICES = (
     "manual",
 )
 
+BASE_VISUAL_STYLE_CHOICES = (
+    "冷灰写实3D国风漫剧",
+    "真实3D人物质感 + 电影叙事镜头感",
+    "写实电影感",
+    "国漫写实角色审美 + 电影级布光与镜头语言",
+    "国漫写实",
+    "二次元赛璐璐",
+    "二次元",
+    "水墨国风",
+    "厚涂幻想",
+    "赛博霓虹",
+    "Q版轻喜",
+    "韩漫精致清透",
+    "日漫剧场版光影",
+    "3D卡通电影感",
+    "动态漫画条漫风",
+    "暗黑悬疑写实",
+    "古风乙女清雅",
+    "热血少年战斗番",
+    "美漫硬线阴影",
+    "低多边形玩具感",
+    "纸片剪影 / 定格动画",
+    "纸片剪影",
+    "定格动画",
+    "CG质感",
+    "国风写意",
+    "自定义",
+)
+
 
 SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("制作模式", ("n2d",), _PRODUCTION_MODE_KEYS, sensitive=True),
@@ -143,7 +174,7 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("题材", ("n2d",), ("系统流", "穿越", "修仙", "都市", "宫斗", "赘婿", "战神", "自定义"), parameterized=True),
     # 母题增强：是否对检测到的复现母题桥段套用增强模板（默认建议待确认，注入下游前人确认）。
     SettingSpec("母题增强", ("n2d",), ("开启", "关闭", "仅建议")),
-    SettingSpec("基础视觉风格", ("n2d",), ("真实3D人物质感 + 电影叙事镜头感", "写实电影感", "国漫写实角色审美 + 电影级布光与镜头语言", "国漫写实", "二次元赛璐璐", "二次元", "水墨国风", "厚涂幻想", "赛博霓虹", "Q版轻喜", "CG质感", "定格动画", "国风写意", "自定义"), parameterized=True),
+    SettingSpec("基础视觉风格", ("n2d",), BASE_VISUAL_STYLE_CHOICES, parameterized=True),
     SettingSpec("拆集节奏", ("n2d",), ("前长后短", "均衡", "快节奏", "长集", "自定义"),
                 key_aliases=("单集时长", "单集节奏偏好"), parameterized=True, syncable=False),
     # 变现模式：拆集结构的商业轴（软默认/高级覆盖，不列首跑必问）。免费(红果/番茄·完播率导向·
@@ -153,7 +184,9 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("首切范围", ("n2d",), ("部分先切", "全篇粗切"), parameterized=True),
     SettingSpec("脚本批次", ("n2d",), ("逐集", "小批", "整批"), parameterized=True),
     SettingSpec("中段锚帧默认", ("n2d",), ("开启", "关闭")),
-    SettingSpec("生图AI", ("n2d",), ("Codex", "OpenAI", "Dreamina/即梦官方 CLI", "Dreamina", "即梦", "Seedream", "可灵主体库", "Nano Banana", "Sora Cameo", "自定义官方后端", "自定义"), parameterized=True),
+    # C5 生成轴=具体模型（默认 GPT Image 2）。`生图AI` 保留为访问入口/渠道（壳）。
+    SettingSpec("生图模型", ("n2d",), ("GPT Image 2", "Seedream 5.0", "Seedream 4.5", "Nano Banana Pro", "Gemini 3 Pro Image", "Flux 2 Pro", "可灵主体库模型", "自定义"), key_aliases=("生图model", "image_model"), parameterized=True),
+    SettingSpec("生图AI", ("n2d",), ("Codex", "OpenAI", "Dreamina/即梦官方 CLI", "Dreamina", "即梦", "Seedream", "可灵主体库", "Nano Banana", "Sora Cameo", "自定义官方后端", "自定义"), key_aliases=("生图渠道", "生图入口"), parameterized=True),
     SettingSpec("生视频模型", ("n2d",), VIDEO_MODEL_CHOICES, key_aliases=("视频模型", "目标视频模型"), parameterized=True),
     SettingSpec("生视频渠道", ("n2d",), VIDEO_CHANNEL_CHOICES, key_aliases=("视频渠道", "目标视频渠道"), parameterized=True),
     # Legacy combined key kept for existing projects and old CLI flags.
@@ -171,6 +204,8 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("生成粒度", ("n2d",), ("逐个", "小批", "按场景分批", "整集", "自定义"), parameterized=True, composite=True),
     SettingSpec("生成优先序", ("n2d",), ("关键镜优先", "分镜顺序", "先易后难")),
     SettingSpec("一致性增强", ("n2d",), ("锚点+参考图", "指定参考图", "+LoRA"), key_aliases=("一致性增强(LoRA)",), parameterized=True),
+    SettingSpec("一致性严格度", ("n2d",), ("demo", "standard", "production", "production_no_cost_image"),
+                key_aliases=("一致性发布档", "一致性落地档", "一致性验收档", "制作质量档")),
     SettingSpec("重抽预算策略", ("n2d",), ("预算充足", "预算一般")),
     SettingSpec("脸一致性机检后端", ("n2d",), ("arcface", "styleid", "自动按画风"), key_aliases=("脸encoder", "face_encoder")),
     SettingSpec("更新重制策略", ("n2d",), ("最小", "严审刷新")),
@@ -288,24 +323,60 @@ def _settings_region_lines(text: str) -> List[str]:
 SETTING_LINE_RE = re.compile(
     r"^\s*(?:[-*]\s*)?(?:\*\*)?([^\n:：#]+?)(?:\*\*)?\s*[:：]\s*(.+?)\s*$"
 )
+SETTING_SOURCE_RE = re.compile(r"(?:^|\s)source=([A-Za-z0-9_-]+)\b")
+
+
+def _split_value_comment(raw: str) -> Tuple[str, str]:
+    """Split a setting value from a trailing markdown comment."""
+    value, sep, comment = str(raw or "").partition("#")
+    return value.strip(), (comment.strip() if sep else "")
+
+
+def _setting_source_from_comment(comment: str) -> str:
+    m = SETTING_SOURCE_RE.search(comment or "")
+    return m.group(1).strip() if m else ""
+
+
+def _format_setting_value(value: str, source: Optional[str]) -> str:
+    value = str(value or "").strip()
+    source = str(source or "").strip()
+    return f"{value}  # source={source}" if source else value
 
 
 def load_settings(work_root: str) -> Dict[str, str]:
     """Parse `<作品根>/_设置.md` into `{key: value}` without global defaults."""
+    return {key: meta["value"] for key, meta in load_settings_meta(work_root).items()}
+
+
+def load_settings_meta(work_root: str) -> Dict[str, Dict[str, str]]:
+    """Parse project settings with lightweight provenance metadata.
+
+    Provenance is encoded as a trailing markdown comment, e.g.
+    `- 制作模式：原生音画  # source=explicit_user`.
+    Older lines without a source remain valid and get `source=""`.
+    """
     text = _read_text(os.path.join(work_root.rstrip("/"), "_设置.md"))
-    out: Dict[str, str] = {}
+    out: Dict[str, Dict[str, str]] = {}
     for line in _settings_region_lines(text):
         m = SETTING_LINE_RE.match(line)
         if not m:
             continue
         key = m.group(1).strip()
-        val = re.split(r"\s+#", m.group(2), maxsplit=1)[0].strip()
+        val, comment = _split_value_comment(m.group(2))
         if key and key not in out:
-            out[key] = val
+            out[key] = {"value": val, "source": _setting_source_from_comment(comment), "line": line}
     return out
 
 
-def write_settings(work_root: str, fields: Dict[str, str], *, note: Optional[str] = None, bold_keys: bool = False):
+def write_settings(
+    work_root: str,
+    fields: Dict[str, str],
+    *,
+    note: Optional[str] = None,
+    bold_keys: bool = False,
+    source: str = "global_default",
+    sources: Optional[Dict[str, str]] = None,
+):
     """Write `<作品根>/_设置.md` for per-work private choices."""
     lines = ["# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）", ""]
     if note:
@@ -314,7 +385,7 @@ def write_settings(work_root: str, fields: Dict[str, str], *, note: Optional[str
     for k, v in fields.items():
         shown = v if v not in (None, "", []) else "（未定）"
         key_str = f"**{k}**" if bold_keys else k
-        lines.append(f"- {key_str}：{shown}")
+        lines.append(f"- {key_str}：{_format_setting_value(str(shown), (sources or {}).get(k, source))}")
 
     lines += [
         "",
@@ -397,6 +468,7 @@ def set_project_setting(
     record: bool = True,
     message: Optional[str] = None,
     validate: bool = True,
+    source: str = "explicit_user",
 ) -> Tuple[Optional[str], str]:
     """Patch one setting line in place, preserving notes and records."""
     work_root = work_root.rstrip("/")
@@ -422,14 +494,14 @@ def set_project_setting(
         m = _setting_line_match(lines[i], key, family) or _setting_line_match(lines[i], canonical, family)
         if not m:
             continue
-        old_val = re.split(r"\s+#", m.group(2), maxsplit=1)[0].strip()
-        lines[i] = f"{m.group(1)}{value}{m.group(3)}"
+        old_val, _comment = _split_value_comment(m.group(2))
+        lines[i] = f"{m.group(1)}{_format_setting_value(value, source)}{m.group(3)}"
         updated = True
         break
 
     if not updated:
         insert_after = _last_setting_line_index(lines)
-        new_line = f"- {canonical}：{value}"
+        new_line = f"- {canonical}：{_format_setting_value(value, source)}"
         if insert_after is None:
             insert_at = 2 if len(lines) >= 2 else len(lines)
             lines.insert(insert_at, new_line)
@@ -439,7 +511,7 @@ def set_project_setting(
     with open(path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines).rstrip() + "\n")
     if record:
-        append_record(work_root, message or f"设置 {canonical} = {value} (原值: {old_val})")
+        append_record(work_root, message or f"设置 {canonical} = {value} (source={source}, 原值: {old_val})")
     return old_val, value
 
 
@@ -461,7 +533,7 @@ def reset_project_setting(work_root: str, key: str, *, record: bool = True) -> O
         if i < scan_end:
             m = _setting_line_match(line, key, family) or _setting_line_match(line, canonical, family)
             if m:
-                old_val = re.split(r"\s+#", m.group(2), maxsplit=1)[0].strip()
+                old_val, _comment = _split_value_comment(m.group(2))
                 removed = True
                 continue
         kept.append(line)
@@ -672,6 +744,20 @@ def get_setting(work_root: str, key: str, default: Optional[str] = None) -> str:
     if default is not None:
         return normalize_setting_value(canonical, default)
     return normalize_setting_value(canonical, DEFAULTS.get(canonical, DEFAULTS.get(key, "")))
+
+
+def project_setting_source(work_root: str, key: str, family: Optional[str] = None) -> str:
+    """Return project-local provenance for a setting key; global defaults are not considered."""
+    family = family or detect_family(work_root)
+    spec = get_setting_spec(key, family)
+    lookup_keys = _setting_lookup_keys(key, family)
+    meta = load_settings_meta(work_root)
+    for lookup_key in lookup_keys:
+        if lookup_key in meta:
+            return meta[lookup_key].get("source", "")
+    if spec and spec.key in meta:
+        return meta[spec.key].get("source", "")
+    return ""
 
 
 def production_mode(work_root: str) -> str:

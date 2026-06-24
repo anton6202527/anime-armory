@@ -97,7 +97,8 @@ def suggestions_for(atype: str, scored: Mapping[str, Any], signals: Mapping[str,
         out.append(f"{label}跨集反复复用——必进共享定妆库一次出、跨集都引用它当参考，别每集重画（背景漂移和脸漂一样穿帮）。")
     if atype in ("scene", "location"):
         if int(signals.get("appear", 0)) >= 3:
-            out.append("本集高频场景：补场景四视图/不同机位参考，锁 layout/axis/light_anchor，反打不越轴。")
+            out.append("本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），"
+                       "锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。")
     if signals.get("has_structure"):
         out.append("结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。")
     if signals.get("has_color"):

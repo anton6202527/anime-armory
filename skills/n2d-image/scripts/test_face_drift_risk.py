@@ -381,6 +381,44 @@ def test_score_character_recurrence_gap_adds_points_and_driver() -> None:
     assert short["score"] == base["score"]
 
 
+def test_in_context_strong_credits_multi_reference_base_only() -> None:
+    # C5/记功：strong-in-context 模型（GPT Image 2）在 multi_reference 档集内 base 减分（22→16）。
+    plain = fdr.score_character({"appear": 3, "closeup": 0, "emotion": 0, "multi": 0, "angle": 0}, "multi_reference")
+    strong = fdr.score_character(
+        {"appear": 3, "closeup": 0, "emotion": 0, "multi": 0, "angle": 0}, "multi_reference", "strong")
+    assert strong["score"] == plain["score"] - fdr.WEIGHTS["in_context_strong_credit"]
+    assert any("in-context 记功" in d["factor"] and d["points"] < 0 for d in strong["drivers"])
+    # 下限：记功后 base 永不低于 face_embedding(14) → 仍严格高于真脸嵌入锁档
+    assert strong["score"] - 0 >= fdr.WEIGHTS["base_face_embedding"]
+    # moderate / 空 → 不记功（dreamina/nano 等保守，旧行为不变）
+    assert fdr.score_character(
+        {"appear": 3, "closeup": 0, "emotion": 0, "multi": 0, "angle": 0}, "multi_reference", "moderate"
+    )["score"] == plain["score"]
+
+
+def test_in_context_credit_does_not_touch_cross_episode_or_other_tiers() -> None:
+    # 跨集不放水：recurrence_gap 跨集项不受 in-context 记功影响（记功只抵 base）。
+    re_plain = fdr.score_character(
+        {"appear": 3, "closeup": 0, "emotion": 0, "multi": 0, "angle": 0, "recurrence_gap": 3}, "multi_reference")
+    re_strong = fdr.score_character(
+        {"appear": 3, "closeup": 0, "emotion": 0, "multi": 0, "angle": 0, "recurrence_gap": 3}, "multi_reference", "strong")
+    assert re_plain["score"] - re_strong["score"] == fdr.WEIGHTS["in_context_strong_credit"]
+    # 非 multi_reference 档（如 reference_group）即便 strong 也不记功——记功只针对无持久主体的多参考档
+    rg_plain = fdr.score_character({"appear": 3, "closeup": 0, "emotion": 0, "multi": 0, "angle": 0}, "reference_group")
+    rg_strong = fdr.score_character(
+        {"appear": 3, "closeup": 0, "emotion": 0, "multi": 0, "angle": 0}, "reference_group", "strong")
+    assert rg_strong["score"] == rg_plain["score"]
+
+
+def test_codex_profile_is_model_led_not_channel_shell() -> None:
+    # C5 贯通：执行真值表 IMAGE_IDENTITY_PROFILES 必须指认到模型名，不再用纯渠道壳。
+    prof = fdr.backend_profile("codex")
+    assert prof.get("model") == "GPT Image 2"
+    assert prof.get("channel") == "Codex CLI"
+    assert prof.get("in_context_consistency") == "strong"
+    assert "GPT Image 2" in str(prof.get("label"))
+
+
 def test_recurrence_reentry_risk_matches_alias_and_gap() -> None:
     drift = {"characters": {"沈念": {"episodes": {"第1集": {}, "第2集": {}}}}}
     # 本集第5集，上次出场第2集 → 缺席2集，命中

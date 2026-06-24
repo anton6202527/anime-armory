@@ -71,6 +71,7 @@ DEFAULT_COST_ESTIMATES = {
     "video_prompt": {"amount": 0.2, "unit": "work_units"},
     "video": {"amount": 12.0, "unit": "work_units"},
     "compose": {"amount": 0.5, "unit": "work_units"},
+    "review": {"amount": 0.5, "unit": "work_units"},
 }
 
 ACTIVE_STATUSES = {"queued", "running", "retry_queued"}

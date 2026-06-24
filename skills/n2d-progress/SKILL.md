@@ -40,7 +40,7 @@ python3 skills/n2d-update/scripts/update_plan.py check <剧根> 第N集 --write-
 ## 怎么读脚本输出
 
 进度表 = 逐集流程矩阵（行=集，列含 `raw` + 流程列）。脚本对每部剧给：
-- `各阶段完成: 剧本改编 X/N | 配音 X/N | … | 成片 X/N`
+- `各阶段完成: 剧本改编 X/N | 配音 X/N | … | 成片 X/N | 验收 X/N`
 - `横切就绪: 合规(n2d-compliance) ⚠️缺 | 身份(n2d-identity) ○未跑 | 仪表盘 ✅ | …`（按 `n2d_contract.CROSS_CUTTING` 注册表查各横切 skill 的就绪标志：✅在位 / ⚠️缺=付费硬前置缺失[只有合规] / ○未跑=按需未跑不算错）
 - `前沿: 第M集 → 下一步列「X」(当前值) → skill`
 - `可并行: 第M+1集「剧本改编」 → n2d-script（低成本前期，可和当前阶段并行）`（如果存在安全的跨集/次要缺口可做；没有则省略）
@@ -50,7 +50,7 @@ python3 skills/n2d-update/scripts/update_plan.py check <剧根> 第N集 --write-
 
 转述这些输出时，skill 名只写 `n2d-image` 这类裸名，不加 `/`，避免部分 AI agent 把它解析成不支持的斜杠命令。
 
-> 横切 skill（合规/身份/LoRA/资产库/仪表盘/评分/审片UI/投放回灌）**不在 `_进度.md` 流程表里**——它们登记在 `skills/n2d/_lib/n2d_contract.py` 的 `CROSS_CUTTING` 注册表（单一真值源），本 skill 据此扫各自的就绪标志并提示；合规缺失会提醒 image 起的付费 gate 会阻断。
+> 横切 skill（合规/身份/LoRA/资产库/仪表盘/投放回灌）**不在 `_进度.md` 流程表里**——它们登记在 `skills/n2d/_lib/n2d_contract.py` 的 `CROSS_CUTTING` 注册表（单一真值源），本 skill 据此扫各自的就绪标志并提示；合规缺失会提醒 image 起的付费 gate 会阻断。评分、consistency ledger 和审片 UI 已收口进 `验收` 阶段的交付证据，不再把 `成片✅` 当最终完成。
 
 单元格语义：`✅`=完成；`N/M`=按比例(N=M 才算完成)；`⬜`=未开工；`⏳rough`=已生成占位/粗时长但不是最终产物。`raw`=源文本，展示但**不计入**流程完成判定。
 
@@ -65,8 +65,9 @@ python3 skills/n2d-update/scripts/update_plan.py check <剧根> 第N集 --write-
 | 出图prompt / 出图 | `n2d-image` |
 | 视频prompt / 视频 | `n2d-video` |
 | 成片 | `n2d-compose` |
+| 验收 | `n2d-review` |
 
-n2d 阶段顺序（模式感知，记牢）：`n2d-script(改编)` → 按 `制作模式` 决定是否先跑 `n2d-voice` → `n2d-script(分镜设计)` → `n2d-image(出图)` → `n2d-video(出视频)` → `n2d-compose(成片)`；默认 `原生音画` 会跳过配音硬依赖，强配音控制的 `配音先行` 会先配音再分镜，`先出视频后配音` 允许 `配音=⏳rough` 先推进画面。
+n2d 阶段顺序（模式感知，记牢）：`n2d-script(改编)` → 按 `制作模式` 决定是否先跑 `n2d-voice` → `n2d-script(分镜设计)` → `n2d-image(出图)` → `n2d-video(出视频)` → `n2d-compose(成片)` → `n2d-review(验收)`；默认 `原生音画` 会跳过配音硬依赖，强配音控制的 `配音先行` 会先配音再分镜，`先出视频后配音` 允许 `配音=⏳rough` 先推进画面。
 
 ### 制作模式（`先出视频后配音` / `原生音画` 时下一步会变）
 
@@ -80,9 +81,10 @@ n2d 阶段顺序（模式感知，记牢）：`n2d-script(改编)` → 按 `制�
 
 ## 给建议时的闸门提醒（必带）
 
-下一步若落在这些列，转述时**务必带上提醒**（脚本对 出图/视频/成片/配音 已自动加 ⚠️）：
+下一步若落在这些列，转述时**务必带上提醒**（脚本对 出图/视频/成片/配音/验收 已自动加 ⚠️）：
 - **出图**：先过「共享先行硬闸门」——分镜 PNG 前 `出图/共享/图片/` 的定妆库必须全部 ✅（看 `出图/共享/prompt/00_索引.md`）。并建议先跑 `python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage image_preflight`（正式生图前入口，底层调 `n2d-review/scripts/gate.py --json` 并记 QA 遥测）：它会拦「storyboard.json 缺 visual_contract 视觉契约种子 / 本集总览缺契约（色调·光位·轴线·状态·景别）」——跨镜一致性的源头，缺了花钱出图也会漂。会真出图·消耗额度 → 开跑前确认生图后端 + 重抽预算档位。
 - **出视频 / 成片**：消耗额度 / 耗时 → 开跑前确认后端（正式出视频前先跑 `dashboard.py gate <作品根> 第N集 --stage video_preflight`；合成前跑 `--stage compose`。video_preflight 查导演一致性契约、模型路由、尾帧/PNG、动作控制；compose 查时长对账）。
+- **验收**：不生产新内容，但会刷新 review gate、score、consistency ledger、review-ui。`needs_acceptance_signoff` 只表示机器证据已通过，仍需人工确认后回写 `_进度.md`「验收」列。
 - **配音**：合规闸门（音色授权），每次都要确认，绝不绕过。
 
 这些是**花钱/不可逆/合规**点，按 `skills/n2d/references/选择点与偏好.md` 属于「每次都重新确认」类——即便 `_设置.md` 记过也要再确认一次。

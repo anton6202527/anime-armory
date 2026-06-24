@@ -39,7 +39,7 @@ description: "P1 batch task queue and worker runner for n2d. Build/manage a queu
 
 n2d-batch 的价值不是“把所有集一口气跑完”，而是把多集生产变成**可控试产 → 小批量 → 放量**：
 
-1. **先打样**：第 1 集必须完整跑通 `script → voice/native_av → image → video → compose → review/score`，并把 dashboard、score、review-ui 产物都落档。
+1. **先打样**：第 1 集必须完整跑通 `script → voice/native_av → image → video → compose → review/score → 验收签收`，并把 dashboard、score、consistency ledger、review-ui 产物都落档。
 2. **再小批量**：先跑 2-10 集，观察 `n2d-dashboard` 的每分钟成本、每集耗时、一次通过率、重抽率、QA 阻断 Top、投放净回收/生产成本。
 3. **按瓶颈扩量**：若脸漂/服装漂高，先修 identity/定妆/后端主体绑定；若视频重抽高，先修 model routing / motion control / 拆镜模板；若成本高，先调后端与 Clip 长度；若留存差，回 `n2d-feedback` 修开场/集尾/镜头密度。
 4. **只排下一步和最小返工**：常规 plan 只排每集当前下一步；返工必须带 `--rerun-from`、`--scope`、`--affected-shot` 或 `--affected-artifact`，避免整集重跑吞成本。
@@ -61,7 +61,7 @@ python3 skills/n2d-batch/scripts/queue.py mark <作品根> <task_id> --status pa
 # 3) Worker 自动执行（命令配在 生产数据/batch_runner.json；--verify-outputs 用契约产物兜底 exit 0）
 python3 skills/n2d-batch/scripts/runner.py <作品根> --until-empty --limit 1 --verify-outputs
 
-# 3.1) 执行前消费 run.py next 动作卡；遇 gate/image_qc/合规/环境/选择点阻断就不跑命令
+# 3.1) 执行前消费 run.py next 动作卡；遇 source/update/gate/image_qc/能力证据/合规/环境/选择点/验收证据阻断就不跑命令
 python3 skills/n2d-batch/scripts/runner.py <作品根> --until-empty --limit 1 --next-preflight
 
 # 4) 单机多 worker 安全：稳定 worker id + 租约 + 断点恢复（多机/私有算力池需换协调后端，非本锁）
@@ -93,7 +93,7 @@ python3 skills/n2d-batch/scripts/runner.py <作品根> --until-empty --recheck  
 | 错误 | 纠正 |
 |---|---|
 | 让 runner 直接重写阶段逻辑 | 不做。runner 只调配置好的阶段命令；阶段规则仍归对应 n2d skill |
-| batch 跑过单集编排器的硬阻断 | 开 `--next-preflight` 或在 `batch_runner.json` 写 `"next_preflight": true`，让 runner 执行前消费 `run.py next` 的 stop_reason |
+| batch 跑过单集编排器的硬阻断 | 开 `--next-preflight` 或在 `batch_runner.json` 写 `"next_preflight": true`，让 runner 执行前消费 `run.py next` 的 stop_reason；`blocked_by_entry_check`、`capability_evidence_required`、`blocked_by_review_acceptance` 同样会阻断 |
 | 直接跑队列里的 `n2d-image` slash command | slash command 不是 shell 命令；在 `batch_runner.json` 配真实 shell 命令 |
 | 多个 agent 口头分任务 | 统一 `claim`（已上 flock 原子认领），否则并发槽和状态会乱 |
 | 多 worker 不给 `--worker` id | 给稳定 id；否则 `--resume` 无法回收"自己"上次残留的 running |

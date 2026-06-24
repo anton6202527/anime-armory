@@ -129,6 +129,7 @@ from n2d_route import (  # noqa: E402
     voiceover_fingerprint,
 )
 from n2d_settings import get_setting, is_native_av, is_video_first  # noqa: E402
+from n2d_logic import normalize_camera_move, color_temperature_findings  # noqa: E402  运镜词典归一 + 色温数值化体检
 from n2d_cross_episode import (  # noqa: E402  跨集视觉契约方向反转（同地点光位/轴线翻）核心
     cross_episode_diff as _cross_episode_diff,
     overview_rel as _ce_overview_rel,
@@ -332,6 +333,11 @@ ASSET_SCENE_RELEASE_FIELD_GROUPS = (
     ("axis_rules", "轴线", "180"),
     ("screen_direction_rules", "左右站位", "screen_direction", "画左", "画右"),
 )
+# G-I2·2026-06-24：场景多机位锁（场景"四视图"）。角色有 reference_atlas.base_views 渲染多视图，
+# 场景此前只有单张空板 + 文字 scene_dna + floorplan 坐标，反打同一空间时门窗/纵深/陈设易漂。
+# 这里要求 production 核心/高频 LOC 登记 scene_atlas.base_views：front + 至少一个反打/侧机位 ready 板；
+# 确实只从单一机位拍的场景显式标 single_angle=true 豁免。
+SCENE_ATLAS_ALT_ANGLES = ("back", "left", "right")
 SCENE_DNA_REQUIRED_FIELDS = (
     "belonging_anchor",
     "landmarks",
@@ -373,7 +379,9 @@ def add(sev: str, dim: str, loc: str, msg: str, **extra: object) -> None:
 
 PRODUCTION_CONSISTENCY_VALUES = {
     "production", "prod", "release", "strict", "final", "publish", "published",
+    "production_no_cost_image", "no_cost_image",
     "投放", "上线", "正式", "发布", "严格", "生产", "可投放", "交付",
+    "无成本图片", "无成本生图",
 }
 DEMO_CONSISTENCY_VALUES = {"demo", "draft", "internal", "relaxed", "测试", "草稿", "内部", "宽松"}
 
@@ -2717,6 +2725,17 @@ def core_forms_without_image_identity_lock(root: str, image_backend: str = "") -
     return missing, has_core
 
 
+# G-I1·2026-06-24 流程自审落地：长线剧的默认起点应是「可注册主体 ID」（②·先于 LoRA），不是死扛
+# 无持久主体的 GPT Image 2。设计宪法 C4 不许私自写死后端——故不做静默 auto-flip，而是给确定性推荐文案，
+# 由 gate BLOCK 携带，让用户在 n2d-image 选择点带 ② 推荐升档并摆「换后端=整集重做定妆的一致性税」知情权衡。
+IMAGE_IDENTITY_LOCK_RECOMMENDATION = (
+    "【G-I1 推荐升档】长线默认起点应为可注册主体 ID（②·先于 LoRA）：可灵主体库 / 即梦角色库 / "
+    "Seedream Universal Reference（注册一次按 ID 跨镜跨集引用）；或对核心角色训 LoRA。"
+    "hero/反复崩脸角色可叠 max-lock 栈：主体 ID + PuLID(脸保真) + 低强度角色 LoRA(~0.6) + ControlNet。"
+    "在 n2d-image 选择点 `生图模型` 带此推荐向用户摆「换后端=整集重做定妆的一致性税」知情权衡，不私自写死后端。"
+)
+
+
 def check_long_running_weak_backend(root: str, ep: str) -> None:
     """image_preflight：长线剧用「无持久主体」后端逐镜参考图派生时，核心/常驻角色必须有身份锁。
 
@@ -2740,7 +2759,8 @@ def check_long_running_weak_backend(root: str, ep: str) -> None:
             "生图AI一致性",
             f"生图AI={setting}",
             f"长线剧（{ep}）仍用无持久主体后端（{canon or setting}）逐镜参考图派生，且核心/常驻角色缺 native subject / Face Lock / face_embedding / LoRA：{shown}。"
-            "第3集起这不是建议项，会跨集累积脸漂；请先注册原生主体、启用 face_embedding，或对核心角色完成 LoRA 后再付费出图。",
+            "第3集起这不是建议项，会跨集累积脸漂；请先注册原生主体、启用 face_embedding，或对核心角色完成 LoRA 后再付费出图。"
+            + IMAGE_IDENTITY_LOCK_RECOMMENDATION,
             return_to_stage="image",
         )
         return
@@ -2748,7 +2768,8 @@ def check_long_running_weak_backend(root: str, ep: str) -> None:
         add(BLOCK, "生图AI一致性", f"生图AI={setting}",
             f"长线剧（{ep}）仍用无持久主体后端（{canon or setting}）逐镜参考图派生，但 registry 未标出核心/常驻角色；"
             "请先把核心/常驻角色 scope/tier 写入 identity_registry，并为这些角色注册 native subject / Face Lock / face_embedding / LoRA；"
-            "否则无法判断谁必须升档，长距离复现会把脸漂累积到后续集。",
+            "否则无法判断谁必须升档，长距离复现会把脸漂累积到后续集。"
+            + IMAGE_IDENTITY_LOCK_RECOMMENDATION,
             return_to_stage="image")
 
 
@@ -3946,6 +3967,37 @@ def _asset_must_not_have_terms(asset: Mapping[str, object]) -> List[str]:
     return out
 
 
+def _validate_scene_atlas(asset: dict, loc: str) -> None:
+    """G-I2：核心/高频 LOC 的场景多机位锁（场景四视图）。production 档对核心 LOC 强制，
+
+    与角色 reference_atlas.base_views 同构：要求 scene_atlas.base_views 至少 front + 一个反打/侧机位
+    (back/left/right) ready 板，锁住反打同一空间时的门窗/纵深/陈设，防 AI 在反打镜里随机增减结构。
+    确实只从单一机位拍的场景显式标 scene_atlas.single_angle=true 豁免。dim 独立，不与「空间/场面调度一致性」混。
+    """
+    atlas = asset.get("scene_atlas")
+    if not isinstance(atlas, dict):
+        add(BLOCK, "场景多机位锁(G-I2)", loc,
+            "production 核心/高频 LOC 缺 scene_atlas（场景多机位锁）：补 base_views 的 front + 至少一个反打/侧机位"
+            "(back/left/right) ready 板，防镜头反打同一空间时门窗/纵深/陈设漂移；只从单一机位拍则显式标 "
+            "scene_atlas.single_angle=true。", return_to_stage="image")
+        return
+    if atlas.get("single_angle") is True:
+        return
+    base_views = atlas.get("base_views")
+    if not isinstance(base_views, dict):
+        add(BLOCK, "场景多机位锁(G-I2)", loc,
+            "scene_atlas.base_views 必须是对象，登记 front + 反打/侧机位(back/left/right)的 ready 状态。",
+            return_to_stage="image")
+        return
+    front_ready = _identity_reference_item_ready(base_views.get("front"))
+    alts = [k for k in SCENE_ATLAS_ALT_ANGLES if _identity_reference_item_ready(base_views.get(k))]
+    if not front_ready or not alts:
+        add(BLOCK, "场景多机位锁(G-I2)", loc,
+            "scene_atlas.base_views 需 front + 至少一个反打/侧机位(back/left/right) ready：当前 front="
+            + ("ready" if front_ready else "缺") + "、备选机位=" + ("、".join(alts) or "无")
+            + "；补多机位板锁住反打空间，或显式标 single_angle=true。", return_to_stage="image")
+
+
 def _is_core_location_asset(asset: Mapping[str, object]) -> bool:
     blob = json.dumps(asset, ensure_ascii=False).lower()
     if asset.get("core") is True or asset.get("recurrent") is True or asset.get("persistent") is True:
@@ -4127,6 +4179,7 @@ def check_asset_reference_registry(
                         "；请补平面图、门窗方向、轴线规则和左右站位/screen_direction 规则，避免多集同场景门窗/站位/越轴漂移。",
                         return_to_stage="script_stage2",
                     )
+                _validate_scene_atlas(asset, loc)
 
         reference_group = asset.get("reference_group")
         if not isinstance(reference_group, dict):
@@ -5664,6 +5717,20 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
         add(WARN, "运动一致性", loc,
             f"镜头运动含「{'/'.join(hit)}」，疑越本集运动边界——核对 `本集基础视觉风格契约/导演一致性契约` 的运动边界禁忌；如确需该运镜须有明确剧情理由（爽点/高光），否则换克制运镜")
 
+    # ⑤ 运镜结构化（消费 CAMERA_MOVE_LEXICON·治"运镜全是自由散文、丢速度/方向"）：
+    #    运镜是 2026 一等控制项（Seedance 参考视频运动 / Kling motion-control 端点）。WARN-only，不硬挡。
+    if m_cam and cam.strip():
+        cm = normalize_camera_move(cam)
+        if not cm["recognized"]:
+            add(WARN, "运动一致性", loc,
+                "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏"
+                "最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/"
+                "高光=环绕/压迫=固定），并填速度+方向 slot。")
+        elif cm["moves"] and not cm["speeds"] and not cm["is_static"]:
+            add(WARN, "运动一致性", loc,
+                f"镜头运动「{'/'.join(m['zh'] for m in cm['moves'])}」缺速度档（缓慢/匀速/快速/轻微/急速冲击）："
+                "运镜速度直接决定情绪与节奏感，请补速度词（CAMERA_SPEED_WORDS）。")
+
     if "检查清单（视频三件套自查" not in section:
         add(BLOCK, "prompt", loc, "缺提交前检查清单")
     if "自检（生成后逐条过" not in section:
@@ -5874,10 +5941,20 @@ CODEX_FACE_VISIBILITY_GUARDS = (
 )
 
 CODEX_SPLIT_COMPOSITE_MARKERS = (
+    "split_composite_required",
+    "split_composite",
+    "regional_construct_required",
+    "regional_construct",
     "分别出图+合成",
     "分别出图 + 合成",
     "分角色出图+合成",
     "分角色出图 + 合成",
+    "分区构建",
+    "分区逐次构建",
+    "区域构建",
+    "regional-prompt",
+    "region masks",
+    "empty_plate",
     "拆成单人镜",
     "拆单人镜",
     "单人分层出图",
@@ -5940,6 +6017,7 @@ MULTI_SUBJECT_EXECUTION_STRATEGY_MARKERS = (
     "多人同框执行策略",
     "multi_subject_strategy",
     "native_subject_slots",
+    "regional_construct_required",
     "split_composite_required",
     "register_subjects_or_split",
     "shot_reverse_shot",
@@ -6225,6 +6303,11 @@ def check_image_shot_prompt_section(path: str, idx: int, section: str,
 
     if not _has_field(section, "光位锚"):
         add(BLOCK, "光影一致性", loc, "缺光位锚字段；同场跨镜主光方向/色温/动机光源会飘，剪起来闪——须继承 00_总览 本场光位锚")
+    else:
+        # 色温数值化体检（消费 n2d_logic.color_temperature_findings·治"Kelvin 是自由文本从不校验"）：
+        m_light = re.search(r"光位锚[^\n]*?[：:]([^\n]*)", section)
+        for f in color_temperature_findings(m_light.group(1) if m_light else ""):
+            add(WARN, "光影一致性", loc, f["msg"])
     if not _has_field(section, "运动余量"):
         add(BLOCK, "首帧起幅", loc, "缺起幅·运动余量字段；clip 首帧须是起幅而非动作顶点，并按计划运镜预留构图余量")
 
@@ -6349,18 +6432,23 @@ def check_image_shot_prompt_section(path: str, idx: int, section: str,
         if "_侧" not in refs and "_半身" not in refs and "_全身" not in refs and "主体库" not in section and "角色ID" not in section:
             add(WARN, "角色一致性", loc, "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂")
         chars = _character_names_in_refs(refs)
-        # 多人同框分镜调度（① 默认避开同框 CU·硬上限 ≤3）+ 锚点去重（④）。
+        # 多人同框（C6 剧情优先：≥4 张清晰脸该出就出，必须登记分区合成把它做对，不删戏/不砍人数）+ 锚点去重（④）。
         _wide_crowd = _has_any(section, ("远景", "大全景", "群像", "人海", "crowd", "wide shot", "extreme long", "ELS"))
         _multi_closeup = _has_any(section, ("ECU", "BCU", "CU", "MCU", "近景", "特写", "面部", "脸部", "反应镜", "表情镜")) \
             and not _has_any(section, ("远景", "全景", "中景"))
-        if len(chars) >= 4 and not _wide_crowd:
+        # 把 ≥4 同框「做对」的执行策略（分区合成 / 原生主体策略）——登记了就放行该镜，由下面 ≥2 层继续校验槽位等细节。
+        _has_multi_exec_strategy = (
+            _has_codex_split_composite_strategy(section) or _has_native_multi_subject_strategy(section)
+        )
+        if len(chars) >= 4 and not _wide_crowd and not _has_multi_exec_strategy:
             add(
                 BLOCK,
                 "构图景别",
                 loc,
-                f"单镜清晰同框 ≥4 具名角色（{'/'.join(sorted(chars))}）：任何后端在单帧里都压不住 4+ 张清晰脸（实测 ≤3 是上限）。"
-                "按 n2d-script 默认分镜调度铁律拆镜——清晰同框 ≤3 具名角色，其余推背景/虚焦/背身/过肩或拆成反打/分镜；"
-                "确属远景群像（脸不解析）请在本镜显式标 `远景/群像`。",
+                f"单镜清晰同框 ≥4 具名角色（{'/'.join(sorted(chars))}）未登记分区合成执行策略：单帧 co-gen 4+ 张清晰脸"
+                "所有后端都难压（实测 ≤3 更稳）——但这是「要分区合成做对」，不是「删到 ≤3 / 砍同框戏」（设计宪法 C6 剧情优先）。"
+                "剧情需要这场 ≥4 人同框就照出：登记 split_composite/分别出图+合成（每主体身份槽位）把每张脸分别做好再合成，"
+                "或拆 establish+反打把整场戏拍全；确属远景群像（脸不解析）请在本镜显式标 `远景/群像`。",
                 return_to_stage="image",
             )
         if len(chars) >= 2:
@@ -6368,7 +6456,8 @@ def check_image_shot_prompt_section(path: str, idx: int, section: str,
             # 那些常作为视线对位/身份锁定的样板话出现在每个对话镜里（一次生成多张脸的同框近景也会写），
             # 认它就等于永不触发。真·反打是拆成单人镜（每帧 1 张脸），本就不该是「多人同框」，故同框近景的
             # 放行只认 分别出图/分层合成/单人分层/景别分层 这类落地执行策略。
-            _CLOSEUP_SPLIT_TOKENS = ("shot_reverse_shot", "split_composite", "分别出图", "分角色出图",
+            _CLOSEUP_SPLIT_TOKENS = ("shot_reverse_shot", "split_composite", "regional_construct",
+                                     "分区构建", "区域构建", "分别出图", "分角色出图",
                                      "拆成单人镜", "拆单人镜", "单人分层", "分层合成", "景别分层")
             if _multi_closeup and not _has_any(section, _CLOSEUP_SPLIT_TOKENS):
                 # 多人近景同框是 cross-attention 串脸最高发档（2026 SOTA：单帧多主体身份必相互渗透，
@@ -6959,6 +7048,108 @@ def check_expression_span_frame_contract(root: str, ep: str) -> None:
                 "缺尾帧=单首帧硬扛跨情绪表情=脸型/五官比例随表情漂移。补 endframe_png（止表情定妆，"
                 "如 `镜头N_expr_end.png` 或 reference_group.expressions 对应情绪图）或降级 MCU/OTS/侧脸后下调跨度档。",
                 return_to_stage="image")
+
+
+def _episode_big_expression_closeup_clips(root: str, ep: str) -> List[Tuple[int, Dict[str, Any]]]:
+    """本集所有「跨情绪大表情近景」镜：continuity.expression_span=大 且景别为近景/特写/反打。
+
+    返回 [(clip 序号, clip dict)]。storyboard 缺失/损坏返回空（由 check_storyboard_contract 负责）。
+    纯函数·可测——`check_core_expression_anchor_coverage` 与 `check_expression_span_frame_contract`
+    共用同一镜头集合判据（expression_span=大 + `_clip_is_closeup`），避免两闸口径漂。"""
+    data = load_json(storyboard_path(root, ep))
+    out: List[Tuple[int, Dict[str, Any]]] = []
+    if not isinstance(data, dict) or not isinstance(data.get("clips"), list):
+        return out
+    for i, clip in enumerate(data["clips"], 1):
+        if not isinstance(clip, dict):
+            continue
+        cont = clip.get("continuity")
+        if not isinstance(cont, dict) or cont.get("expression_span") != EXPRESSION_SPAN_BIG:
+            continue
+        if _clip_is_closeup(clip):
+            out.append((i, clip))
+    return out
+
+
+def _clip_character_ids(clip: Dict[str, Any]) -> set:
+    """从一条 clip 的文本（template/label/scene/desc + shots + continuity 主体字段）扫出引用的
+    CHAR_xx id 集合。用于把「大表情近景」镜回连到具体角色，定位该回连哪个角色的表情库。"""
+    blob = " ".join(str(clip.get(k) or "") for k in
+                    ("template", "label", "scene", "description", "desc", "subject"))
+    for shot in clip.get("shots") or []:
+        if isinstance(shot, dict):
+            blob += " " + " ".join(str(shot.get(k) or "") for k in ("lens", "desc", "scene"))
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), dict) else {}
+    for k in ("subject", "characters", "carries_identity", "subject_characters"):
+        v = cont.get(k)
+        if isinstance(v, (list, tuple)):
+            blob += " " + " ".join(str(x) for x in v)
+        elif v:
+            blob += " " + str(v)
+    return set(CHARACTER_ID_RE.findall(blob))
+
+
+def check_core_expression_anchor_coverage(root: str, ep: str) -> None:
+    """表情库覆盖闸（把表情锚提到与脸锚同级·付费出视频前强制回连表情库）。
+
+    脸锚有两层防线：`check_anchor_fingerprints`（登记后校漂·BLOCK）+ `check_core_anchor_pinning`
+    （核心长线角色「该钉没钉」前置提醒·WARN）。表情锚此前只有前者（`check_expression_anchors`
+    登记后校漂），缺「该建没建」的前置闸——于是「第2集的怒和第5集的怒各画各的」只能靠人自觉建库。
+    本检查补齐缺失的那层，并在「大表情近景 + 核心长线角色 + 即将付费出视频」这一**确定跨集情绪漂移**
+    场景把档位从 WARN 升到 BLOCK（对齐 carries_identity 的 spend 闸思路）：
+
+      · 本集存在跨情绪大表情近景镜（expression_span=大 + 近景/特写/反打），且这些镜引用了某**核心
+        长线角色**（_CORE_SCOPE_RE 命中 tier/scope），而该角色在 identity_registry 的所有 form 的
+        `expression_anchors` 皆空（=没建表情库）→ BLOCK：必须先建表情库并把镜头尾帧回连到表情锚。
+
+    纯 opt-in：本集没有任何 expression_span=大 的镜（现有 demo/未标镜）= 项目未启用表情跨度追踪 → 跳过，
+    与 `check_expression_span_frame_contract`、anchor_sha 全家门控一致。非核心/单元角色不前置 BLOCK
+    （对齐 n2d-image「ROI 驱动」，避免误伤一次性配角）。登记后表情锚是否被悄改/未过自检由
+    `check_expression_anchors` 负责，本检查只补「核心角色大表情近景但表情库为空」这一覆盖缺口，不重复报。"""
+    big_clips = _episode_big_expression_closeup_clips(root, ep)
+    if not big_clips:
+        return  # opt-in：本集无大表情近景=未启用追踪
+    reg = load_json(identity_registry_path(root))
+    if not isinstance(reg, dict):
+        return
+    chars = reg.get("characters")
+    if isinstance(chars, dict):
+        chars = list(chars.values())
+    if not isinstance(chars, list):
+        return
+    core_info: Dict[str, Dict[str, Any]] = {}  # cid -> {name, has_expr}
+    for c in chars:
+        if not isinstance(c, dict):
+            continue
+        cid = str(c.get("id") or "").strip()
+        if not cid or not _CORE_SCOPE_RE.search(f"{c.get('tier') or ''} {c.get('scope') or ''}"):
+            continue  # 仅核心长线角色前置高档
+        has_expr = any(
+            isinstance(fm, dict) and isinstance(fm.get("expression_anchors"), list) and fm.get("expression_anchors")
+            for fm in (c.get("forms") or [])
+        )
+        names = [n.strip() for n in str(c.get("name") or "").replace("／", "/").split("/") if n.strip()]
+        core_info[cid] = {"name": names[0] if names else cid, "has_expr": has_expr}
+    if not core_info:
+        return
+    missing: Dict[str, List[int]] = {}  # cid -> [clip 序号]
+    for idx, clip in big_clips:
+        for cid in _clip_character_ids(clip):
+            info = core_info.get(cid)
+            if info and not info["has_expr"]:
+                missing.setdefault(cid, []).append(idx)
+    reg_path = identity_registry_path(root)
+    for cid, clip_idxs in sorted(missing.items()):
+        info = core_info[cid]
+        shown = "、".join(f"clip#{n}" for n in clip_idxs[:8])
+        add(BLOCK, "表情一致性", reg_path,
+            f"核心长线角色 `{info['name']}({cid})` 出现在本集跨情绪大表情近景镜（{shown}）但未建表情库"
+            "（identity_registry 该角色所有 form 的 expression_anchors 皆空）——跨集同情绪近景将各画各的、"
+            "情绪一致性崩（脸随表情重画的最贵漂移）。先为该情绪出脸部特写定妆并 "
+            "`python3 skills/n2d-image/scripts/image_qc.py <作品根> --finalize-expr CHAR_xx/形态/情绪` "
+            "落档钉锚，再把这些镜的止表情尾帧回连到表情锚（reference_group.expressions/expression_anchors 同源派生），"
+            "让所有集同情绪近景从同一锚 image2image 派生后再付费出视频。",
+            return_to_stage="image")
 
 
 _VID_CLIP_HEAD_RE = re.compile(r"^##\s*Clip[_\s]*(\d+)", re.M)
@@ -7950,6 +8141,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_spectacle_sequence_plan(root, ep)
         check_action_beat_budget(root, ep, check_stage)
         check_expression_span_frame_contract(root, ep)
+        check_core_expression_anchor_coverage(root, ep)
         check_image_assets(root, ep)
         check_input_frame_qc(root, ep)
         check_multimodal_continuity(root, ep)
@@ -7976,6 +8168,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_spectacle_sequence_plan(root, ep)
         check_action_beat_budget(root, ep, check_stage)
         check_expression_span_frame_contract(root, ep)
+        check_core_expression_anchor_coverage(root, ep)
         check_image_assets(root, ep)
         check_input_frame_qc(root, ep)
         check_video_prompt_frames(root, ep)

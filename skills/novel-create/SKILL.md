@@ -13,7 +13,7 @@ description: Cold-start ORIGINAL novel creation from scratch — when the user h
 
 本 skill 的可选项**不写死在源码里**，按 `../skills/novel-craft/references/选择点与偏好.md`（家族统一的偏好读写机制 + 全部选择点目录与缺省）解析：`<作品根>/_设置.md` → 全局默认 `创作偏好-默认.md` 预填并告知一句 → 缺则**首次问一次**→写回 `_设置.md`→**沉默沿用**（合规/不可逆/花钱点每次仍确认）。
 
-本 skill 涉及的选择点：`小说用途`、`目标平台`、`权利来源`、`输出格式`、`篇幅档`、`小说生成模式`、`章节生成粒度`、`AI使用披露`。
+本 skill 涉及的选择点：`小说用途`、`目标平台`、`权利来源`、`输出格式`、`篇幅档`、`小说生成模式`、`小说生成工作流`、`小批回扫间隔`、`章节生成粒度`、`文本主创模式`、`AI使用披露`。
 
 ## 核心原则
 
@@ -27,6 +27,7 @@ description: Cold-start ORIGINAL novel creation from scratch — when the user h
 - **用途先于平台**：先确认小说最终用途（传统小说 / 漫剧源书 / 微短剧源书 / **短故事·超短篇** / 短篇试写等），再按目标平台（起点/番茄/七猫/晋江/抖音漫剧/红果/历史向）调读者口味、爽点节奏和开篇钩；起名委托 `novel-title`。
 - **短故事是一等创作目标**：用户要写「短故事 / 超短篇 / 番茄短故事 / 短剧选品池底稿」时，选 `--scale microstory`（别名 `短故事`/`超短篇`），**走单篇闭环结构而非连载章纲**：100 字内抛冲突+金手指 → 一次升级 → 强反转 + 一句话简介，工艺见 `novel-craft/references/short-story.md`。短故事/短中篇是否是当前最快验证形态，必须以 `novel-score` 的 market baseline 或 `novel-research` 平台资料包为准。
 - **Demo gate 最重要**：前 1-3 章定文风/爽点密度/钩子/设定自洽，用户审过才批量写。
+- **文本主创模式先定**：投稿/出版目标，尤其晋江/起点/番茄/红果等中文网文平台，默认推荐 `人类主创` 或 `AI辅助`；`AI生成` 正文会在 QA gate 被标为高风险并阻断投稿导出，除非用户提供平台接受 AI 正文的当日证据和豁免。
 - **批量写章先出任务包**：Demo 过审后先跑 `novel-craft/scripts/draft_packets.py`，每章带蓝图/设定/章纲/Demo 风格锚点/状态账本，再写正文。`商业连载` / `漫剧源书` 默认自动走 Architect → Ghostwriter → Senior Editor 三段式任务包；写完填 `审稿/state_delta_第NN章.json`，避免长篇越写越漂。
 - **原创=用户自有，天然合法**：无版权筛查（区别于 spinoff/rewrite/expand/condense 的合法性铁律）。
 
@@ -127,6 +128,7 @@ python3 skills/novel-review/scripts/mechanical_check.py "<作品根>" --json-out
 ```bash
 python3 skills/novel-craft/scripts/ai_usage.py "<作品根>" \
   --text-mode AI-generated \
+  --text-authorship-mode AI生成 \
   --publish-target "<平台>" \
   --human-contribution "<人工蓝图/设定/审稿贡献>" \
   --text-directness outline_to_draft \

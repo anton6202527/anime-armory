@@ -47,7 +47,7 @@ CANDIDATE_SOURCES: List[Dict[str, object]] = [
     {
         "id": "n2d-model-matrix",
         "path": "skills/n2d/references/模型矩阵.md",
-        "choice_points": ["生图AI", "生视频模型", "生视频渠道", "配音后端", "对口型"],
+        "choice_points": ["生图模型", "生图AI", "生视频模型", "生视频渠道", "配音后端", "对口型"],
         "max_age_days": 30,
         "note": "n2d 各轴 SOTA vs 默认 vs 升级触发；由 n2d-review 模式②刷新。",
     },

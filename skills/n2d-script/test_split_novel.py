@@ -55,10 +55,11 @@ def test_split_novel_scaffold_includes_base_visual_style_contract(tmp_path):
 
     style = (out / "设定库" / "global_style.md").read_text(encoding="utf-8")
     assert "## 基础视觉风格" in style
-    assert "真实3D人物质感 + 电影叙事镜头感" in style
+    assert "冷灰写实3D国风漫剧" in style
     assert "## 基础视觉风格契约（style_contract 源头）" in style
     assert "风格名" in style
-    assert "电影叙事镜头感" in style
+    assert "冷灰写实 3D 国风漫剧质感" in style
+    assert "真实3D人物质感 + 电影叙事镜头感" in style
     assert "风格禁忌" in style
     assert (out / "小说" / "novel.txt").exists()
     assert not (out / "脚本" / "第1集" / "字幕_英文.srt").exists()
@@ -89,6 +90,29 @@ def test_split_novel_scaffold_uses_project_base_visual_style(tmp_path):
     assert "二次元赛璐璐" in style
     assert "风格名：二次元赛璐璐" in style
     assert "赛璐璐块面上色" in style
+
+
+def test_split_novel_scaffold_uses_new_visual_style_preset(tmp_path):
+    novel = tmp_path / "novel.txt"
+    novel.write_text("第一章\n她推门而入。\n第二章\n风声忽起。\n", encoding="utf-8")
+    out = tmp_path / "out"
+    out.mkdir()
+    (out / "_设置.md").write_text("- 基础视觉风格: 韩漫精致清透\n", encoding="utf-8")
+    script = os.path.join(os.path.dirname(__file__), "scripts", "split_novel.py")
+
+    subprocess.run(
+        [sys.executable, script, str(novel), "--out", str(out), "--limit", "1"],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=True,
+    )
+
+    style = (out / "设定库" / "global_style.md").read_text(encoding="utf-8")
+    assert "韩漫精致清透" in style
+    assert "风格名：韩漫精致清透" in style
+    assert "韩漫条漫式精致清透" in style
+    assert "风格禁忌" in style
 
 
 def test_split_novel_keeps_english_subtitle_column_open_when_requested(tmp_path):
@@ -219,3 +243,53 @@ def test_split_novel_default_uses_scene_break_as_closed_loop_candidate(tmp_path)
     raw2 = (out / "脚本" / "第2集" / "raw.txt").read_text(encoding="utf-8")
     assert "柳娘子逼她交出凤印" in raw1 and "【内殿】" not in raw1
     assert "【内殿】" in raw2
+
+
+def test_split_novel_start_chapter_filters_window_and_keeps_source_snapshot(tmp_path):
+    novel = tmp_path / "novel.txt"
+    novel.write_text(
+        "第一章\n"
+        "柳娘子逼她交出凤印。\n"
+        "沈念反手夺回凤印，众人当场跪倒！\n"
+        "第二章\n"
+        "太监拔刀逼近小禾。\n"
+        "沈念冷笑抬头，殿门突然被撞开！\n"
+        "第三章\n"
+        "黑衣人逼她交出玉佩。\n"
+        "沈念反手亮出真相，众人当场跪倒！\n"
+        "第四章\n"
+        "长老拔刀逼近沈念。\n"
+        "她冷笑抬头，殿门突然被撞开！\n",
+        encoding="utf-8",
+    )
+    out = tmp_path / "out"
+    script = os.path.join(os.path.dirname(__file__), "scripts", "split_novel.py")
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            script,
+            str(novel),
+            "--out",
+            str(out),
+            "--by-chapter",
+            "--start-chapter",
+            "第三章",
+            "--limit",
+            "2",
+        ],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=True,
+    )
+
+    raw1 = (out / "脚本" / "第1集" / "raw.txt").read_text(encoding="utf-8")
+    raw2 = (out / "脚本" / "第2集" / "raw.txt").read_text(encoding="utf-8")
+    source = (out / "小说" / "novel.txt").read_text(encoding="utf-8")
+    progress = (out / "_进度.md").read_text(encoding="utf-8")
+    assert "第三章" in raw1 and "第一章" not in raw1 and "第二章" not in raw1
+    assert "第四章" in raw2
+    assert "第一章" in source
+    assert "起始章节：请求第3章，实际从第3章开始" in result.stdout
+    assert "已粗切 **2** 集（从第3章起）" in progress

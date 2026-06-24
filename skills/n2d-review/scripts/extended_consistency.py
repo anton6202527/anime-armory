@@ -33,6 +33,7 @@
 from __future__ import annotations
 
 import argparse
+import glob
 import json
 import os
 import re
@@ -98,6 +99,82 @@ def _clip_iter(root: str, ep: str):
 
 
 # ── UI1 系统面板/HUD ──────────────────────────────────────────────────────────
+def _system_state_ledger(root: str, ep: str) -> Tuple[Optional[dict], str]:
+    for rel in (
+        os.path.join("生产数据", f"system_state_ledger_{ep}.json"),
+        os.path.join("设定库", "system_state_ledger.json"),
+        os.path.join("设定库", "system_progression.json"),
+    ):
+        data = _load_json(os.path.join(root, rel))
+        if isinstance(data, dict):
+            return data, rel
+    return None, os.path.join("设定库", "system_state_ledger.json")
+
+
+def _system_state_rows(data: Any) -> List[dict]:
+    if isinstance(data, dict):
+        raw = data.get("states") or data.get("rows") or data.get("items") or data.get("metrics") or []
+        if isinstance(raw, dict):
+            rows = []
+            for key, value in raw.items():
+                if isinstance(value, list):
+                    rows.extend({**(item if isinstance(item, dict) else {}), "metric": key} for item in value)
+                elif isinstance(value, dict):
+                    rows.append({"metric": key, **value})
+            raw = rows
+    else:
+        raw = data
+    return [x for x in pc._as_list(raw) if isinstance(x, dict)]
+
+
+def _state_metric(row: Mapping[str, Any]) -> str:
+    return str(row.get("metric") or row.get("key") or row.get("name") or row.get("stat") or row.get("属性") or "").strip()
+
+
+def _state_value(row: Mapping[str, Any]) -> Optional[float]:
+    for key in ("value", "number", "level", "rank", "score", "数值", "等级"):
+        try:
+            value = row.get(key)
+            if value not in (None, ""):
+                return float(value)
+        except Exception:
+            continue
+    return None
+
+
+def _state_order(row: Mapping[str, Any]) -> Tuple[int, int, str]:
+    ep_n = _ep_num(str(row.get("episode") or row.get("ep") or "")) or 10**9
+    clip_n = pc._clip_index(str(row.get("clip") or row.get("clip_id") or row.get("shot") or ""))
+    return ep_n, clip_n, str(row.get("timecode") or "")
+
+
+def _system_state_findings(data: Mapping[str, Any], rel: str) -> List[dict]:
+    findings: List[dict] = []
+    rows = _system_state_rows(data)
+    by_metric: Dict[str, List[dict]] = {}
+    for row in rows:
+        metric = _state_metric(row)
+        if metric:
+            by_metric.setdefault(metric, []).append(row)
+    for metric, metric_rows in by_metric.items():
+        prev: Optional[dict] = None
+        for row in sorted(metric_rows, key=_state_order):
+            cur = _state_value(row)
+            prv = _state_value(prev) if prev else None
+            if cur is not None and prv is not None and cur < prv and not (
+                row.get("rollback_reason") or row.get("decrease_reason") or row.get("剧情降级原因")
+            ):
+                findings.append(pc._row(
+                    "warn",
+                    f"系统数值 {metric} 从 {prv:g} 降到 {cur:g}，但缺 rollback_reason/decrease_reason；成长值/等级显示疑似回退。",
+                    stage="script_stage2",
+                    shot=str(row.get("clip") or row.get("shot") or ""),
+                    artifacts=[rel],
+                ))
+            prev = row
+    return findings
+
+
 def check_ui_hud(root: str, ep: str) -> dict:
     sb, clips = pc._storyboard(root, ep)
     res = {"available": sb is not None, "findings": [], "notes": []}
@@ -125,6 +202,21 @@ def check_ui_hud(root: str, ep: str) -> dict:
     if not panel_shots:
         res["notes"].append("本集未检出系统面板/HUD/图中文字镜头，UI 一致性无可评项。")
         return res
+
+    numeric_panel = [
+        label for label, _kind in panel_shots
+        if re.search(r"(等级|经验|成长值|属性|战力|积分|余额|血量|HP|MP|level|exp|score)", next((t for _c, lb, t in _clip_iter(root, ep) if lb == label), ""), re.I)
+    ]
+    ledger, ledger_rel = _system_state_ledger(root, ep)
+    if numeric_panel and ledger is None:
+        res["findings"].append(pc._row(
+            "warn",
+            f"检出 {len(numeric_panel)} 个系统数值/HUD 镜头，但缺 system_state_ledger；等级/经验/成长值单调性无法复核。",
+            stage="script_stage2",
+            artifacts=[ledger_rel, f"脚本/{ep}/storyboard.json"],
+        ))
+    elif isinstance(ledger, dict):
+        res["findings"].extend(_system_state_findings(ledger, ledger_rel))
 
     res["notes"].append(f"检出 {len(panel_shots)} 个 UI/HUD/图中文字镜头。")
     if not reg_assets:
@@ -224,6 +316,33 @@ def check_leitmotif(root: str, ep: str) -> dict:
 
     # 注册表存在：检 cue 引用的 motif 是否与登记一致（同一 subject 不应在本集映射到 ≠ 登记的 motif）
     motif_id_re = re.compile(r"\b(?:MOTIF|LM)_[\w\-一-鿿]+\b")
+    motifs = reg.get("motifs") or reg.get("leitmotifs") or []
+    for motif in motifs:
+        if not isinstance(motif, dict):
+            continue
+        mid = str(motif.get("id") or motif.get("motif_id") or "").strip()
+        media = str(motif.get("file") or motif.get("audio") or motif.get("clip") or motif.get("path") or "").strip()
+        if not media:
+            res["findings"].append(pc._row(
+                "warn",
+                f"音乐母题 {mid or '(unknown)'} 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。",
+                stage="script_stage1",
+                artifacts=["设定库/leitmotif_registry.json"],
+            ))
+        elif not pc._artifact_exists(root, media):
+            res["findings"].append(pc._row(
+                "warn",
+                f"音乐母题 {mid or '(unknown)'} 引用音频不存在：{media}。",
+                stage="compose",
+                artifacts=["设定库/leitmotif_registry.json", media],
+            ))
+        if not (motif.get("audio_sha256") or motif.get("hash") or motif.get("cue") or motif.get("start_time")):
+            res["findings"].append(pc._row(
+                "warn",
+                f"音乐母题 {mid or '(unknown)'} 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。",
+                stage="compose",
+                artifacts=["设定库/leitmotif_registry.json"],
+            ))
     for label, cue in cues:
         ids_in_cue = motif_id_re.findall(cue)
         subjects_in_cue = pc._char_ids(cue)
@@ -562,21 +681,25 @@ def _read_text(root: str, *rels: str) -> str:
 
 
 def check_translation_terms(root: str, ep: str) -> dict:
-    """TX1：专有名词/称谓的 EN 译名跨集一致（海外投放）。读 设定库/translation_glossary.json
-    （`{terms:[{cn,en}]}` 或 `{cn:en}`），核对本集 EN 字幕对每个出现的 cn 是否用了约定 en 译法。
-    glossary 缺失但有 EN 字幕 + 已知专有名词 → WARN 建库。纯标准库。"""
+    """TX1：专有名词/称谓/技能等级的中文 canonical 与 EN 译名跨集一致。
+
+    读 `translation_glossary.json` / `terminology_glossary.json`：
+    - `{terms:[{cn,en,aliases,forbidden}]}` 或 `{cn: en}`；
+    - 中文 voiceover/SRT 出现 forbidden/alias 而 canonical 缺席 → WARN；
+    - 英文字幕未用 canonical en → WARN。
+    """
     res = {"available": False, "findings": [], "notes": []}
     cn_text = _read_text(root, os.path.join("脚本", ep, "voiceover.txt"),
-                         os.path.join("脚本", ep, "字幕_中文.srt"))
+                         os.path.join("脚本", ep, "字幕_中文.srt"),
+                         os.path.join("脚本", ep, "subtitles_zh.srt"))
     en_text = _read_text(root, os.path.join("脚本", ep, "字幕_英文.srt"),
                          os.path.join("脚本", ep, "字幕_双语.srt"),
                          os.path.join("脚本", ep, "subtitles_en.srt"))
-    if not en_text:
-        res["notes"].append("本集无 EN 字幕，译名一致检查跳过（仅海外投放/双语项目适用）。")
-        return res
-    res["available"] = True
-    glossary = _registry(root, os.path.join("设定库", "translation_glossary.json"))
+    glossary = _registry(root, os.path.join("设定库", "translation_glossary.json"),
+                         os.path.join("设定库", "terminology_glossary.json"),
+                         os.path.join("设定库", "term_glossary.json"))
     pairs: List[Tuple[str, str]] = []
+    term_rows: List[dict] = []
     seen_cn: Dict[str, set] = {}
     if isinstance(glossary, dict):
         raw = glossary.get("terms")
@@ -584,17 +707,26 @@ def check_translation_terms(root: str, ep: str) -> dict:
             for t in raw:
                 if isinstance(t, dict) and t.get("cn") and t.get("en"):
                     pairs.append((str(t["cn"]), str(t["en"])))
+                    term_rows.append(t)
+                elif isinstance(t, dict) and (t.get("cn") or t.get("canonical") or t.get("canonical_cn")):
+                    term_rows.append(t)
         else:
             for cn, en in glossary.items():
                 if cn not in ("kind", "version") and isinstance(en, str):
                     pairs.append((str(cn), en))
-    if not pairs:
+                    term_rows.append({"cn": str(cn), "en": en})
+    if not term_rows and not pairs:
+        if not en_text:
+            res["notes"].append("本集无 EN 字幕且无术语表，译名/术语一致检查跳过。")
+            return res
+        res["available"] = True
         res["findings"].append(pc._row(
             "warn",
-            "有 EN 字幕但缺 设定库/translation_glossary.json——专有名词/称谓（人名/门派/功法/称呼）跨集易出"
-            "多种译法（红果/海外投放硬伤）；从角色卡/称谓表种一份 canonical 译名表锁死。",
+            "有 EN 字幕但缺 translation_glossary/terminology_glossary——专有名词/称谓/技能/等级跨集易出多种写法；"
+            "从角色卡/称谓表种一份 canonical 术语表锁死中英文写法。",
             stage="script_stage2", artifacts=["设定库/translation_glossary.json", f"脚本/{ep}/字幕_英文.srt"]))
         return res
+    res["available"] = True
     # glossary 自身一个 cn 映射到多个 en → 冲突
     for cn, en in pairs:
         seen_cn.setdefault(cn, set()).add(en)
@@ -603,16 +735,41 @@ def check_translation_terms(root: str, ep: str) -> dict:
             res["findings"].append(pc._row(
                 "warn", f"glossary 自身冲突：「{cn}」登记了多个译名 {sorted(ens)}——收敛成唯一 canonical。",
                 stage="script_stage2", artifacts=["设定库/translation_glossary.json"]))
+    # 中文 canonical / forbidden / alias 检查
+    for row in term_rows:
+        canonical = str(row.get("cn") or row.get("canonical_cn") or row.get("canonical") or row.get("term") or "").strip()
+        aliases = [str(x).strip() for x in pc._as_list(row.get("aliases") or row.get("alias") or row.get("variants")) if str(x).strip()]
+        forbidden = [str(x).strip() for x in pc._as_list(row.get("forbidden") or row.get("forbidden_cn") or row.get("禁用")) if str(x).strip()]
+        for token in forbidden:
+            if token and token in cn_text:
+                res["findings"].append(pc._row(
+                    "warn",
+                    f"本集中文文本出现术语禁用写法「{token}」，应统一为「{canonical or '(canonical missing)'}」。",
+                    stage="script_stage2",
+                    artifacts=["设定库/translation_glossary.json", f"脚本/{ep}/voiceover.txt"],
+                ))
+        for alias in aliases:
+            if alias and canonical and alias in cn_text and canonical not in cn_text:
+                res["findings"].append(pc._row(
+                    "warn",
+                    f"本集使用术语别名「{alias}」但未使用 canonical「{canonical}」；人名/技能名/等级名跨集写法可能漂移。",
+                    stage="script_stage2",
+                    artifacts=["设定库/translation_glossary.json", f"脚本/{ep}/voiceover.txt"],
+                ))
     # 本集 cn 出现但 EN 字幕未用约定译名
     en_low = en_text.lower()
-    for cn, en in pairs:
-        if cn and cn in cn_text and en and en.lower() not in en_low:
-            res["findings"].append(pc._row(
-                "warn",
-                f"本集台词出现「{cn}」但 EN 字幕未见约定译名「{en}」——译名漂移，统一为 glossary canonical。",
-                stage="script_stage2", shot="",
-                artifacts=[f"脚本/{ep}/字幕_英文.srt", "设定库/translation_glossary.json"]))
-    res["notes"].append(f"translation_glossary 登记 {len(pairs)} 条；本集 EN 字幕已核对。")
+    if en_text:
+        for cn, en in pairs:
+            if cn and cn in cn_text and en and en.lower() not in en_low:
+                res["findings"].append(pc._row(
+                    "warn",
+                    f"本集台词出现「{cn}」但 EN 字幕未见约定译名「{en}」——译名漂移，统一为 glossary canonical。",
+                    stage="script_stage2", shot="",
+                    artifacts=[f"脚本/{ep}/字幕_英文.srt", "设定库/translation_glossary.json"]))
+    else:
+        if pairs:
+            res["notes"].append("glossary 已登记 EN canonical，但本集无 EN 字幕；仅完成中文术语 canonical 检查。")
+    res["notes"].append(f"glossary 登记术语 {len(term_rows) or len(pairs)} 条；中文 canonical 与 EN 译名已按可用文本核对。")
     return res
 
 
@@ -778,6 +935,90 @@ def check_setup_payoff(root: str, ep: str) -> dict:
     return res
 
 
+_NS_LINE_RE = re.compile(r"^\[镜头(\d+)·([^·\]]+)·([^·\]]+?)(?:·([^·\]]+))?\]\s*(.*)$")
+_NS_MOVE_RE = re.compile(r"(前往|赶往|出发|动身|启程|赶赴|回到|来到|抵达|进了|赶回|奔向|赶去|离开|踏上)")
+
+
+def _ns_lines(text: str) -> List[Tuple[str, str]]:
+    rows: List[Tuple[str, str]] = []
+    for raw in (text or "").splitlines():
+        line = raw.strip()
+        if not line:
+            continue
+        m = _NS_LINE_RE.match(line)
+        rows.append((m.group(2).strip(), (m.group(5) or "").strip()) if m else ("", line))
+    return rows
+
+
+def check_narrative_state(root: str, ep: str) -> dict:
+    """NS1：叙事状态（知识/位置/关系）跨集一致性——补「视觉 state_ledger 不管知识/位置/关系」的洞。
+
+    读 `设定库/narrative_state_ledger.json`（n2d-script narrative_state_audit.py 产），对**已声明填全**的
+    条目做确定性校验：① 知识倒流（声明第K集才知道，但更早集该角色已提及该 keyword）；② 位置瞬移
+    （同角色相邻有声明的集换了地点、两集都无转场词）。缺账但本集有知识/位置标记 → WARN 建账。
+    独立线·复制不 import（与 n2d-script 同口径）。纯标准库。"""
+    res: dict = {"available": False, "findings": [], "notes": []}
+    ledger = _registry(root, os.path.join("设定库", "narrative_state_ledger.json"))
+    # 收集全剧各集 voiceover（跨集校验需要）
+    ep_texts: Dict[int, str] = {}
+    for path in glob.glob(os.path.join(root, "脚本", "第*集", "voiceover.txt")):
+        n = _ep_num(os.path.basename(os.path.dirname(path)))
+        if n is not None:
+            ep_texts[n] = _read_text(root, os.path.relpath(path, root))
+    if not isinstance(ledger, dict):
+        cur_txt = _read_text(root, os.path.join("脚本", ep, "voiceover.txt"))
+        if re.search(r"(知道了|得知|才知道|这才明白|原来|发现|前往|赶往|抵达|回到)", cur_txt):
+            res["available"] = True
+            res["findings"].append(pc._row(
+                "warn",
+                "本集有知识/位置叙事但缺 设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』"
+                "硬伤。跑 n2d-script 的 narrative_state_audit.py --write 建账，填 character/keyword/known_from_ep。",
+                stage="script_stage1", artifacts=["设定库/narrative_state_ledger.json", f"脚本/{ep}/voiceover.txt"]))
+        else:
+            res["notes"].append("缺 narrative_state_ledger.json 且本集无明显知识/位置标记，叙事状态检查跳过。")
+        return res
+    res["available"] = True
+    # ① 知识倒流
+    for k in ledger.get("knowledge") or []:
+        if not isinstance(k, dict):
+            continue
+        char, kw = str(k.get("character") or "").strip(), str(k.get("keyword") or "").strip()
+        kn = _ep_num(str(k.get("known_from_ep") or ""))
+        if not (char and kw and kn is not None):
+            continue
+        for n, txt in ep_texts.items():
+            if n >= kn:
+                continue
+            if any(kw in body and (role == char or char in body) for role, body in _ns_lines(txt)):
+                res["findings"].append(pc._row(
+                    "warn", f"知识倒流：「{k.get('fact') or kw}」声明第{kn}集才知道，但第{n}集 {char} 已提及「{kw}」"
+                            "——核对谁在第几集知道什么。",
+                    stage="script_stage1", artifacts=["设定库/narrative_state_ledger.json"]))
+                break
+    # ② 位置瞬移
+    by_char: Dict[str, List[dict]] = {}
+    for loc in ledger.get("locations") or []:
+        if isinstance(loc, dict) and str(loc.get("character") or "").strip() \
+                and _ep_num(str(loc.get("ep") or "")) is not None and loc.get("place"):
+            by_char.setdefault(str(loc["character"]).strip(), []).append(loc)
+    for char, locs in by_char.items():
+        locs = sorted(locs, key=lambda x: _ep_num(str(x["ep"])))
+        for a, b in zip(locs, locs[1:]):
+            if a["place"] == b["place"]:
+                continue
+            txt_a = ep_texts.get(_ep_num(str(a["ep"])), "")
+            txt_b = ep_texts.get(_ep_num(str(b["ep"])), "")
+            if _NS_MOVE_RE.search(txt_a) or _NS_MOVE_RE.search(txt_b):
+                continue
+            res["findings"].append(pc._row(
+                "warn", f"位置瞬移：{char} {a['ep']}在「{a['place']}」、{b['ep']}在「{b['place']}」，两集都无转场"
+                        "——补过场或确认是否漏写。",
+                stage="script_stage1", artifacts=["设定库/narrative_state_ledger.json"]))
+    res["notes"].append(f"narrative_state_ledger 登记 知识 {len(ledger.get('knowledge') or [])}/"
+                        f"位置 {len(ledger.get('locations') or [])}/关系 {len(ledger.get('relationships') or [])} 条；已校验。")
+    return res
+
+
 SECTION_BUILDERS = (
     ("系统面板(UI1)", check_ui_hud),
     ("音乐母题(LM1)", check_leitmotif),
@@ -790,6 +1031,7 @@ SECTION_BUILDERS = (
     ("译名一致(TX1)", check_translation_terms),
     ("表情连续(EXP1)", check_expression_continuity),
     ("伏笔兑现(SP1)", check_setup_payoff),
+    ("叙事状态(NS1)", check_narrative_state),
 )
 
 # 每段的回流 stage + 定位产物（供 consistency_audit 归一 affected_artifacts）
@@ -805,6 +1047,7 @@ SECTION_META: Dict[str, dict] = {
     "译名一致(TX1)": {"stage": "script_stage2", "artifacts": ("设定库/translation_glossary.json", "脚本/{ep}/字幕_英文.srt")},
     "表情连续(EXP1)": {"stage": "image", "artifacts": ("生产数据/expression_{ep}.json", "脚本/{ep}/storyboard.json", "出图/{ep}/prompt/01_分镜出图.md")},
     "伏笔兑现(SP1)": {"stage": "script_stage2", "artifacts": ("设定库/setup_payoff_ledger.json", "脚本/{ep}/voiceover.txt")},
+    "叙事状态(NS1)": {"stage": "script_stage1", "artifacts": ("设定库/narrative_state_ledger.json", "脚本/{ep}/voiceover.txt")},
 }
 
 
@@ -819,7 +1062,7 @@ def analyze(root: str, ep: str) -> dict:
 
 
 def main(argv: List[str]) -> int:
-    ap = argparse.ArgumentParser(description="扩展一致性检查器（UI/leitmotif/调色/环境声/跨集体型/在场/外观/表情/伏笔兑现）")
+    ap = argparse.ArgumentParser(description="扩展一致性检查器（UI/leitmotif/调色/环境声/跨集体型/在场/外观/表情/伏笔兑现/叙事状态）")
     ap.add_argument("root")
     ap.add_argument("episode")
     ap.add_argument("--json", action="store_true")

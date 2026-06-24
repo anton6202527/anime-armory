@@ -31,6 +31,11 @@ from n2d_settings import get_setting  # noqa: E402
 CHAPTER_HEAD = re.compile(r"^第[一二三四五六七八九十百千万0-9]+章")
 # 悬念收尾标点（强断点的"硬断"信号，与词钩叠加判强度）。
 SUSPENSE_PUNCT = ("？", "！", "…", "——", "?", "!")
+COLD_OPEN_RE = re.compile(
+    r"(突然|不好了|出事|杀|逃|追|血|门外|推门|系统提示|提示|真相|原来|竟|"
+    r"不可能|为什么|是谁|危险|危机|反击|打脸|逆袭)"
+)
+SLOW_OPEN_RE = re.compile(r"^\s*(?:第[一二三四五六七八九十百千万0-9]+章\s*)?(翌日|次日|三日后|与此同时|另一边|话说|回忆|从前)")
 
 
 def build_res(genre_text):
@@ -61,7 +66,18 @@ def end_strength(text, soft_end, strong_re):
     return 2 if (punct and word) else (1 if (punct or word) else 0)
 
 
+def start_strength(text, conflict_re, payoff_re):
+    """集首承接强度：下集开场也要能接住上集断点，避免强尾后慢启动。"""
+    head = text[:180]
+    word = bool(COLD_OPEN_RE.search(head) or conflict_re.search(head) or payoff_re.search(head))
+    slow = bool(SLOW_OPEN_RE.search(head))
+    if word and not slow:
+        return 2
+    return 1 if word else 0
+
+
 STRENGTH_LABEL = {2: "强", 1: "中", 0: "弱"}
+PAIR_STRENGTH_LABEL = {4: "强", 3: "强", 2: "中", 1: "弱", 0: "弱"}
 
 
 def load_rows(root, strong_re, conflict_re, payoff_re):
@@ -85,6 +101,7 @@ def load_rows(root, strong_re, conflict_re, payoff_re):
             "soft_end": soft_end,
             "strong_end": bool(strong_re.search(text[-160:])),
             "strength": end_strength(text, soft_end, strong_re),
+            "start_strength": start_strength(text, conflict_re, payoff_re),
             "has_conflict": bool(conflict_re.search(text)),
             "has_payoff": bool(payoff_re.search(text)),
         })
@@ -164,6 +181,29 @@ def cliffhanger_positions(rows, monet):
     return sorted(set(walls))
 
 
+def boundary_pairs(rows):
+    """相邻两集双侧边界评分：上集收尾强度 + 下集开场承接力。"""
+    pairs = []
+    for prev, nxt in zip(rows, rows[1:]):
+        weakness = []
+        if prev["strength"] <= 0:
+            weakness.append("上集收口弱")
+        if nxt["start_strength"] <= 0:
+            weakness.append("下集开场弱")
+        score = prev["strength"] + nxt["start_strength"]
+        pairs.append({
+            "from": prev["ep"],
+            "to": nxt["ep"],
+            "end_strength": prev["strength"],
+            "next_start_strength": nxt["start_strength"],
+            "score": score,
+            "label": PAIR_STRENGTH_LABEL.get(score, "弱"),
+            "risk": bool(weakness),
+            "weakness": weakness,
+        })
+    return pairs
+
+
 def series_arc(rows, monet):
     """剧级追更骨架体检（Gap1）。返回结构化 dict + 人读建议行。"""
     out = {"monetization": monet, "issues": [], "notes": []}
@@ -173,6 +213,18 @@ def series_arc(rows, monet):
     for r in rows:
         dist[r["strength"]] += 1
     out["strength_dist"] = {STRENGTH_LABEL[k]: v for k, v in dist.items()}
+
+    pairs = boundary_pairs(rows)
+    out["boundary_pairs"] = pairs
+    risky_pairs = [p for p in pairs if p["risk"]]
+    if risky_pairs:
+        brief = "；".join(
+            f"第{p['from']}→{p['to']}集({'+'.join(p['weakness'])})" for p in risky_pairs[:8]
+        )
+        out["issues"].append(
+            f"双侧边界偏弱：{brief}{'…' if len(risky_pairs) > 8 else ''}。"
+            "拆集不只看上集结尾，也要看下集 0-3 秒能否接住同一根戏剧线。"
+        )
 
     # 连续弱钩集群（断点流失高风险）
     clusters = weak_clusters(rows)
@@ -266,6 +318,12 @@ def main():
     print("## 剧级追更骨架（Gap1·跨集留存体检）")
     d = arc["strength_dist"]
     print(f"- 断点强度分布：强 {d['强']} / 中 {d['中']} / 弱 {d['弱']}")
+    pairs = arc.get("boundary_pairs") or []
+    if pairs:
+        pd = {"强": 0, "中": 0, "弱": 0}
+        for p in pairs:
+            pd[p.get("label", "弱")] = pd.get(p.get("label", "弱"), 0) + 1
+        print(f"- 双侧边界评分：强 {pd['强']} / 中 {pd['中']} / 弱 {pd['弱']}（上集收尾 + 下集开场）")
     if arc["issues"]:
         for it in arc["issues"]:
             print(f"- ⚠️ {it}")

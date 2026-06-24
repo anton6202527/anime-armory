@@ -27,6 +27,21 @@ def test_ui_hud_warns_when_panel_shot_but_no_registry(tmp_path):
     assert any(f["verdict"] == "warn" and "ui_asset_registry" in f["message"] for f in res["findings"])
 
 
+def test_ui_hud_checks_system_state_monotonicity(tmp_path):
+    _storyboard(tmp_path, "第2集", [
+        {"id": "Clip_01", "desc": "系统面板 UI_LEVEL 显示等级与经验"},
+    ])
+    _write(os.path.join(str(tmp_path), "设定库", "ui_asset_registry.json"),
+           {"assets": [{"id": "UI_LEVEL", "frame": "金框", "palette": "蓝金", "font": "Noto", "layout": "左上"}]})
+    _write(os.path.join(str(tmp_path), "设定库", "system_state_ledger.json"),
+           {"states": [
+               {"episode": "第1集", "clip": "Clip_01", "metric": "level", "value": 5},
+               {"episode": "第2集", "clip": "Clip_01", "metric": "level", "value": 4},
+           ]})
+    res = ec.check_ui_hud(str(tmp_path), "第2集")
+    assert any("从 5 降到 4" in f["message"] for f in res["findings"])
+
+
 def test_ui_hud_noop_without_panel_shots(tmp_path):
     _storyboard(tmp_path, "第1集", [{"id": "Clip_01", "desc": "宫墙下对话"}])
     res = ec.check_ui_hud(str(tmp_path), "第1集")
@@ -51,6 +66,18 @@ def test_leitmotif_detects_motif_cross_use(tmp_path):
                        {"id": "MOTIF_villain", "subject": "CHAR_liu"}]})
     res = ec.check_leitmotif(str(tmp_path), "第1集")
     assert any("母题串用" in f["message"] for f in res["findings"])
+
+
+def test_leitmotif_requires_reusable_audio_asset(tmp_path):
+    _storyboard(tmp_path, "第1集", [
+        {"id": "Clip_01", "desc": "CHAR_shen 登场", "bgm": "CHAR_shen 配 MOTIF_hero"},
+    ])
+    _write(os.path.join(str(tmp_path), "设定库", "leitmotif_registry.json"),
+           {"motifs": [{"id": "MOTIF_hero", "subject": "CHAR_shen"}]})
+    res = ec.check_leitmotif(str(tmp_path), "第1集")
+    msgs = " ".join(f["message"] for f in res["findings"])
+    assert "缺 file/audio/clip" in msgs
+    assert "缺 audio_sha256" in msgs
 
 
 def test_body_proportion_flags_missing_lock_for_long_line(tmp_path):
@@ -129,6 +156,16 @@ def test_translation_terms_flags_drifted_name(tmp_path):
     res = ec.check_translation_terms(str(tmp_path), "第1集")
     assert res["available"] is True
     assert any("译名漂移" in f["message"] for f in res["findings"])
+
+
+def test_translation_terms_flags_chinese_canonical_variant(tmp_path):
+    os.makedirs(os.path.join(str(tmp_path), "脚本", "第1集"), exist_ok=True)
+    open(os.path.join(str(tmp_path), "脚本", "第1集", "voiceover.txt"), "w", encoding="utf-8").write("她发动青云剑法第一式。")
+    _write(os.path.join(str(tmp_path), "设定库", "terminology_glossary.json"),
+           {"terms": [{"cn": "青云剑诀", "aliases": ["青云剑法"], "forbidden": ["青云剑术"]}]})
+    res = ec.check_translation_terms(str(tmp_path), "第1集")
+    assert res["available"] is True
+    assert any("术语别名" in f["message"] for f in res["findings"])
 
 
 def test_translation_terms_warns_without_glossary(tmp_path):
@@ -220,3 +257,48 @@ def test_setup_payoff_skips_when_no_ledger_no_hook(tmp_path):
          encoding="utf-8").write("平静的一天，没什么特别。")
     res = ec.check_setup_payoff(str(tmp_path), "第1集")
     assert res["available"] is False and res["findings"] == []
+
+
+def _vo(tmp_path, ep, text):
+    p = os.path.join(str(tmp_path), "脚本", ep, "voiceover.txt")
+    os.makedirs(os.path.dirname(p), exist_ok=True)
+    open(p, "w", encoding="utf-8").write(text)
+
+
+def test_narrative_state_warns_without_ledger(tmp_path):
+    _vo(tmp_path, "第1集", "[镜头1·沈念·震惊·快] 她这才知道真相。")
+    res = ec.check_narrative_state(str(tmp_path), "第1集")
+    assert res["available"] and any(r["verdict"] == "warn" for r in res["findings"])
+
+
+def test_narrative_state_knowledge_premature(tmp_path):
+    _vo(tmp_path, "第3集", "[镜头1·沈念·冷冽·快] 我早晚揪出真凶。")
+    _vo(tmp_path, "第5集", "[镜头1·沈念·震惊·快] 原来真凶是他。")
+    _write(os.path.join(str(tmp_path), "设定库", "narrative_state_ledger.json"),
+           {"kind": "n2d_narrative_state_ledger", "knowledge": [
+               {"character": "沈念", "keyword": "真凶", "known_from_ep": "第5集", "fact": "真凶身份"}],
+            "locations": [], "relationships": []})
+    res = ec.check_narrative_state(str(tmp_path), "第5集")
+    assert any("知识倒流" in r["message"] for r in res["findings"])
+
+
+def test_narrative_state_location_jump(tmp_path):
+    _vo(tmp_path, "第3集", "[镜头1·沈念·平静·慢] 在京城闲坐。")
+    _vo(tmp_path, "第4集", "[镜头1·沈念·平静·慢] 身处南山。")
+    _write(os.path.join(str(tmp_path), "设定库", "narrative_state_ledger.json"),
+           {"kind": "n2d_narrative_state_ledger", "knowledge": [],
+            "locations": [{"character": "沈念", "ep": "第3集", "place": "京城"},
+                          {"character": "沈念", "ep": "第4集", "place": "南山"}], "relationships": []})
+    res = ec.check_narrative_state(str(tmp_path), "第4集")
+    assert any("位置瞬移" in r["message"] for r in res["findings"])
+
+
+def test_narrative_state_clean_when_consistent(tmp_path):
+    _vo(tmp_path, "第3集", "[镜头1·沈念·平静·慢] 在京城。她决定前往南山。")
+    _vo(tmp_path, "第4集", "[镜头1·沈念·平静·慢] 身处南山。")
+    _write(os.path.join(str(tmp_path), "设定库", "narrative_state_ledger.json"),
+           {"kind": "n2d_narrative_state_ledger", "knowledge": [],
+            "locations": [{"character": "沈念", "ep": "第3集", "place": "京城"},
+                          {"character": "沈念", "ep": "第4集", "place": "南山"}], "relationships": []})
+    res = ec.check_narrative_state(str(tmp_path), "第4集")
+    assert not any(r["verdict"] == "warn" for r in res["findings"])

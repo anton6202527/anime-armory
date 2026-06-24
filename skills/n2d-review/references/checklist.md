@@ -1,6 +1,8 @@
 # 作品质检 —— 两层维度全清单（看什么 · 怎么判 · 定级）
 
 > 对照行业"AI审片系统"约 12 类问题，落到 n2d 产线。**机** = `mechanical_check.py` 确定性查；**判** = LLM 语义判（含并排读图）。容错铁律：只记真问题。
+>
+> **VLM 判官只作 triage（G-V4·钉死）**：VLM1/VAP/视频 VLM 判题（含 `video_vlm_consistency`）只作投票/解释，**绝不单独 auto-reject**。崩脸/穿帮/音画的**终判**必须由确定性层下（脸 ArcFace/StyleID、光流、SyncNet），或经 gate 在 compose/review 交付边界把「重复/关键场景」WARN 升 block。依据：Artifact-Bench(2026-05) 最强模型细粒度穿帮识别 <10%。读取器已把 VLM 自报 block 钉死为 advisory warn（原判定留 `vlm_raw_verdict`）。
 
 ## A. 一致性（头号死因，67% 创作者的首难点）
 
@@ -8,7 +10,7 @@
 
 | 维度 | 机/判 | 怎么查 | 定级 |
 |---|---|---|---|
-| 角色 DNA 断层 | 判（+机选） | 先读 `设定库/角色圣经.md` + `identity_registry.json`，每集 `镜头*.png` 与 `定妆_<角色>.png` / 半身 / 侧背 / 表情参考并排比五层：脸、发型、服装、配饰、质感；装库则跑 `scripts/face_consistency.py` 自标定 flag-band（脸层），低于 地板−margin=🔴/地板带=🟡，不写死阈值 | 任一层漂到识别不出 🔴 / 轻漂 🟡 |
+| 角色 DNA 断层 | 判（+机选） | 先读 `设定库/角色圣经.md` + `identity_registry.json`，每集 `镜头*.png` 与 `定妆_<角色>.png` / 半身 / 侧背 / 表情参考并排比五层：脸、发型、服装、配饰、质感；装库则跑 `scripts/face_consistency.py` 自标定 flag-band（脸层），低于 地板−margin=🔴/地板带=🟡，不写死阈值。**🟡 边界镜可上 DreamSim 仲裁（G-I4·opt-in `N2D_DREAMSIM_ARBITER=1`）**：embedder 拿不准时用人眼一致的整图感知 vs 角色 bank 破平（sim≥bank 地板→ok，<地板−margin→block），默认关、缺库行为不变 | 任一层漂到识别不出 🔴 / 轻漂 🟡 |
 | 发型/发色漂移（DNA 第2层） | 判（+机选） | 脸锁住≠发型锁住。装 Pillow 跑 `scripts/hair_consistency.py`：头部区域发色 + 发型轮廓复合指纹 vs 定妆组，自标定 flag-band；人判看披发/盘发/发色/发饰是否漂 | 发型识别不出 🔴 / 轻漂 🟡 |
 | 服装/配色漂移（DNA 第3层）| 判（+机选）| 脸锁住≠服装锁住（"夹克色第4镜就漂"）。装 Pillow 跑 `scripts/outfit_consistency.py`：人物镜加权色相直方图 vs 定妆组(优先半身)，自标定 flag-band | 服色/剪影识别不出 🔴 / 轻漂 🟡 |
 | 片内时序（单 clip 内）| 判（+机选）| 首帧+接缝之外的盲区：clip 内"几秒后脸渐变/发际线闪"。装 ffmpeg(+insightface) 跑 `scripts/temporal_consistency.py`：帧间人脸余弦最小值(身份漂移)+帧间亮度差(flicker/TCI) | 片内身份漂/强闪 🔴 / 轻闪 🟡 |
@@ -16,6 +18,7 @@
 | 糊 / 低质（无参考）| 机+判 | 跑 `scripts/quality_check.py`：Laplacian 方差自标定本集中位数，显著偏低=相对糊（关键镜更严）| 明显糊 🔴 / 偏糊 🟡 |
 | 形态变体串味 | 判 | 觉醒态/银牌态是否以常态定妆为参考、特征延续 | 🟡 |
 | 场景 DNA / 环境归属漂移 | 机+判 | 同一场景跨镜是否引用同一 `定妆_<场景>.png` 和同一 `LOC_xx`；读 `asset_registry.json.assets[].scene_dna` 并比七项：归属锚、地标/识别物、空间布局/轴线、建筑材质/主色、光色/天气/气候、常驻物件/植被/水体、禁漂项。装 Pillow 跑 `scripts/scene_consistency.py`（同场景多镜 dHash 结构离群·自标定）抓背景画歪的离群镜 | 地标/布局/时代世界观换掉 🔴 / 轻漂 🟡 |
+| 场景多机位锁 / 场景四视图（G-I2） | 机 | 核心/高频 LOC 是否登记 `asset_registry.assets[].scene_atlas.base_views`（front + 反打/侧机位 ready 板）——角色 `reference_atlas` 的场景类比，锁反打同一空间时门窗/纵深/陈设不漂。`gate.py` 在 `一致性严格度=production` 对核心 LOC 缺则 BLOCK（dim=`场景多机位锁(G-I2)`）；只单机位拍标 `single_angle=true` 豁免 | production 核心 LOC 缺多机位板 🔴 |
 | 跨镜空间站位 / 遮挡序（B1·四维坐标） | 机+判 | 同一场景换机位后，主演/群演/道具的**站位（画左·画右·居中）、前后景遮挡序**是否仍守 `visual_contract.场景轴线视线.<LOC>.站位` 注册布局——不是只查单帧内防串脸(image_qc C3)、也不是只查越轴角度(X1)，而是**整组同 LOC 镜的站位声明跨机位连续性**。跑 `scripts/scene_blocking_continuity.py`（纯文本，读 storyboard 逐镜 blocking/continuity_must 对注册站位）。反打/正反打镜的左右翻转合法、自动抑制 | 违注册站位锁·无反打却换左右/前后景 🔴 / 无锁仅与首镜冲突 🟡 |
 | 配饰漂移（DNA 第4层） | 判 | 发簪、腰牌、护甲、钥匙、标志挂件等是否与角色卡 / `character_dna.accessories` 一致；多/少配饰若改变身份识别，按断层处理 | 🔴/🟡 |
 | 气质/动作习惯偏离（表演层） | 判 | 对照 `设定库/角色圣经.md` 的气质/动作习惯：清冷角色是否忽然媚笑、低眉宫女是否变成威压主角姿态、帝王是否丢掉叩案/沉默压迫等；表演层偏离不改 `character_dna`，但会造成“不是这个角色在演”的观感 | 🟡 |
@@ -45,6 +48,7 @@
 | 景别节奏 | 有进有出，非连续同景别堆叠 | 🟡 |
 | 轴线 180° / 30° / 视线方向 | 相邻同主体机位差 >30°、不跳轴、eyeline 对 | 🟡 |
 | 衔接 | match cut / 首尾帧 / 空镜过渡；非硬怼无衔接（爽点才硬切） | 🟡 |
+| 动作 beat 首尾帧（G-V2） | 高动作/落地/命中 beat 是否「首=蓄势、尾=落点」双帧（`inherit_contract` 身份交接段已机检 `action_beat_endframe_missing`·warn）；缺尾帧动作镜易『假动/静态合理化』或动作不完成（2026 物理合规<30%） | 缺尾帧 🟡 |
 | 视频导演调度 | 每条 Clip 有清楚导演意图、起幅、落幅、场面调度、表演节拍；生成结果完成该镜剧情功能，不只是随机小动作 | 🟡 |
 | 本集导演一致性契约 | `00_总览.md` 的主色调/镜头语法/轴线/剧情状态锁/场景状态被整集遵守；无爽点提前泄露、灯位雨雾乱跳、人物左右站位反复跳轴 | 🟡 |
 | 本集基础视觉风格契约 | `_设置.md` 的 `基础视觉风格` → `global_style.md` → `storyboard.json.style_contract` → 出图总览 → 出视频总览三层同源；风格名、视觉基调、镜头与构图、光色策略、运动边界、风格禁忌被逐镜遵守。画面稳定符合用户选择的风格，而不是被强拉到某一种默认审美 | 🟡 |
