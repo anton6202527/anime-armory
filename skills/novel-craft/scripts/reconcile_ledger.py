@@ -225,6 +225,27 @@ def merge_delta_to_ledger(root, chapter, verification=None):
             "summary": delta,
             "verification": verification or {},
         }
+
+        # 非线性改写检测：如果本次合并的章节号 < 已存在的最大章节号，
+        # 说明这是一次回溯改写——标记所有下游章节的 delta 为 stale，
+        # 提示需要重新对账（下游 delta 是基于旧版本上游状态合并的）。
+        existing_keys = [k for k in ledger.get("chapter_deltas", {}) if k != c_key]
+        downstream = sorted(
+            int(m.group(1)) for key in existing_keys
+            if (m := re.match(r"chapter_(\d+)", key)) and int(m.group(1)) > chapter
+        )
+        if downstream:
+            for ds_ch in downstream:
+                ds_key = f"chapter_{ds_ch:02d}"
+                entry = ledger["chapter_deltas"].get(ds_key)
+                if isinstance(entry, dict):
+                    entry["stale"] = True
+                    stale_sources = entry.setdefault("stale_sources", [])
+                    if chapter not in stale_sources:
+                        stale_sources.append(chapter)
+            print(f"[info] 第{chapter}章非线性改写：已标记下游 "
+                  f"第{downstream[0]}章–第{downstream[-1]}章 为 stale，建议重新对账。")
+
         ledger["updated_at"] = date.today().isoformat()
 
         write_json(ledger_path, ledger)
@@ -273,7 +294,23 @@ def rollup_ledger(root, before):
             entry["summary"] = _compact_delta_summary(summary)
             v = entry.get("verification")
             if isinstance(v, dict):
-                entry["verification"] = {"status": v.get("status")}
+                # Keep hash bindings: qa_gate uses them to prove rolled chapters still
+                # match the current chapter/delta files. Dropping them creates false
+                # STATE-LEDGER-UNVERIFIED blockers after maintenance rollup.
+                keep = {}
+                for key in (
+                    "chapter",
+                    "status",
+                    "verdict",
+                    "result",
+                    "chapter_file_hash",
+                    "delta_hash",
+                    "hash_source",
+                    "stamped_hashes",
+                ):
+                    if key in v:
+                        keep[key] = v[key]
+                entry["verification"] = keep
             rolled += 1
         if rolled:
             ledger.setdefault("rollups", []).append(

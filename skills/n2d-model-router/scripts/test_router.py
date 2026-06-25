@@ -45,6 +45,46 @@ def test_fight_routes_to_kling_with_seedance_fallback(tmp_path):
     assert recipe["fallback"]["fallback_backends"] == route["fallback_backends"]
 
 
+def test_t2v_experimental_fight_without_named_character_skips_timeline_frames(tmp_path):
+    root = _root(
+        tmp_path,
+        "- 生视频AI: 即梦\n"
+        "- 视频模型路由: 自动按镜头路由\n"
+        "- T2V动作通道: 实验开启\n",
+    )
+    _write_storyboard(root, [{"id": "Clip 1", "template": "fight_exchange", "scene": "无人物，剑刃与火星高速碰撞"}])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["mode"] == "text2video"
+    assert route["experimental_t2v"] is True
+    assert route["identity_requirement"] == "none"
+    assert route["execution_recipe"]["frame_inputs"]["first_frame"] is False
+    assert route["execution_recipe"]["frame_inputs"]["consumption_mode"] == "text_prompt_with_references"
+
+
+def test_t2v_experimental_named_character_without_plan_falls_back(tmp_path):
+    root = _root(
+        tmp_path,
+        "- 生视频AI: 即梦\n"
+        "- 视频模型路由: 自动按镜头路由\n"
+        "- T2V动作通道: 实验开启\n",
+    )
+    _write_storyboard(root, [{
+        "id": "Clip 1",
+        "template": "fight_exchange",
+        "character_ids": ["CHAR_SHEN"],
+        "scene": "沈念挥剑命中追兵",
+    }])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["mode"] == "frames2video"
+    assert "experimental_t2v" not in route
+    assert any("缺 t2v_identity_reference_plan" in item for item in route["rationale"])
+    assert route["execution_recipe"]["frame_inputs"]["first_frame"] is True
+
+
 def test_spectacle_backend_benchmark_can_override_auto_route(tmp_path):
     root = _root(tmp_path)
     _write_storyboard(root, [{"id": "Clip 1", "template": "fight_exchange", "scene": "王敦挥剑命中追兵"}])
@@ -403,6 +443,9 @@ def test_fixed_mode_overrides_native_av_speech_reroute(tmp_path):
     assert route["primary_backend"] == "kling"
     assert route["mode"] == "image2video"
     assert route["native_audio_policy"] == "none"
+    assert route["requires_voice_fallback"] is True
+    assert route["fallback_production_mode"] == "voice_first"
+    assert route["execution_recipe"]["audio_inputs"]["requires_voice_track"] is True
     assert "native_speech" not in route["risk_flags"]
 
 

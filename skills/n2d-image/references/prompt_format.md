@@ -1,6 +1,6 @@
 # 出图 prompt 两层架构 — 标准格式
 
-把要出的图展开成**开箱即用**的 prompt 块——出图阶段可喂给 `生图AI` 所选官方/已登录图后端（默认 Codex，可选 Dreamina/即梦官方 CLI / Seedream / 可灵主体库 / Nano Banana / Sora Cameo 等）。**分两层**：复用资产（定妆 = 角色/场景/反复入镜道具）放共享，单次资产（分镜）放本集。
+把要出的图展开成**开箱即用**的 prompt 块——出图阶段可喂给 `生图模型 + 生图AI/生图渠道` 所选官方/已登录图后端（默认 OpenAI GPT Image 系列 via Codex，可选 Dreamina/即梦官方 CLI / Seedream / 可灵主体库 / Nano Banana / Sora Cameo 等）。**分两层**：复用资产（定妆 = 角色/场景/反复入镜道具）放共享，单次资产（分镜）放本集。
 
 ---
 
@@ -68,7 +68,7 @@
 - **角色 DNA 一致性定档表（P0 · 出图前必产，付费出图前输出给用户并落此表）**：逐角色/形态一行——`角色/形态 ｜ 体量 ｜ 当前档 ｜ 目标档 ｜ 表情库 ｜ LoRA ｜ 升档触发条件`。档①=参考图派生+锚点句（默认全员）/ 档②=后端原生主体 ID·主体库（参考图压不住·无 GPU）/ 档③=LoRA（几十集核心角+前两档压不住）；附加=完整情绪库 / 动作参考（情绪戏、动作戏多的角色 opt-in）。**ROI 驱动、默认最小化只用于主体库、LoRA、完整情绪库、动作参考，不用于基础包**：所有人物都必须先有标准正/45°/侧/背、半身或全身服装参考、脸部特写或至少一个同源表情参考、asset_bundle 和 reference_atlas；升档只在触发条件命中时发生。逐角色分档方法见 `lora_consistency.md「出图前角色 DNA 定档框架」`
 - **视频兼容锚定句速查**（固定生视频模型锚定句 + 通用视频兼容锚定句）
 - **全集统一负面词**
-- **图 AI 统一参数**（Codex/官方 OpenAI/Dreamina/Seedream 等模型 / 比例 / 精细度 / 数量 / 参考强度档位）
+- **生图模型/渠道统一参数**（具体生图模型 + Codex/官方 OpenAI/Dreamina/Seedream 等访问渠道 / 比例 / 精细度 / 数量 / 参考强度档位）
 - **工作流约定**（新角色/场景/道具/法宝/特效如何加入共享库）
 
 ### 1.2 `角色|场景|道具定妆.md` — 定妆 prompt 块标准格式
@@ -104,7 +104,7 @@
 - **动作参考项**：`图片/定妆_<角色>_动作_<动作>.png`（持剑 / 御剑 / 施法 / 奔跑等；只给核心/动作重角色按需补）。动作参考仍必须继承角色 DNA 五层，不得为一个动作新抽成新脸、新发型或新衣服。
 - **近景脸部锚点**：`图片/定妆_<角色>_脸部特写.png`（从已通过的正面主参考或半身服装参考裁切放大而来，用于 CU/ECU、正反打、过肩反应、表情特写；不得重新抽新脸）。脸部特写登记到 `identity_registry.reference_group.face_anchor_refs[]`；完整情绪表情图再登记到 `identity_registry.reference_group.expressions[]`。
 - 形态变体（觉醒态 / 银牌态…）各自至少出标准三视图 + 拼版，均以常态主参考做参考图（强度 0.75-0.85）
-- **命名约定**：多张可喂给图 AI 的拆分 PNG 叫「定妆组」；单张合成总览才叫「三视图」或「设定表」。不要把多张散图标成“三视图已完成”。
+- **命名约定**：多张可喂给生图模型的拆分 PNG 叫「定妆组」；单张合成总览才叫「三视图」或「设定表」。不要把多张散图标成“三视图已完成”。
 
 > **标准三视图生产铁律（定妆＝对齐档案，不是三张好看图）**：定妆“不标准”几乎都不是出得少，而是**没对齐 + 不中性**。闭源平台（即梦/可灵）文生图天生给「三张分别好看的角度图」——身高/比例/视平线/光各漂——拼起来当然不像设定稿。判定「标准」靠两组硬条件，自检必过：
 > - **中性档案三铁律**：① **同源**——定妆组全用同一模型、同一基底 prompt，只替换「正面 / 侧面 / 背面 / 半身 / 全身」那一截，背景·妆造·光照全锁死；② **中性**——纯浅灰底 + 柔和均匀光 + 无表情无戏无戏剧光（带戏会污染下游参考图）、双手可见、9:16、≥1024px；③ **对齐**——正 / 侧 / 背**同身高、同比例、水平视平线对齐、同景别距离**。第③条是「标准三视图」与「三张好看图」的分界线。
@@ -127,8 +127,8 @@
 > - **数值去哪**：等级/属性/标题等数值是 **n2d-compose 期 Pillow overlay 文字层**（读 `motif_registry.json` 的 `growth_state_machine.progression` + `overlay_spec`），不进出图——AI 渲染不准清晰文字数字，overlay 才能保证数字清晰且随成长精确变化。
 > - 多图参考派生：面板镜=`VFX_系统面板` 参考图 + 主角定妆（主观镜可清空人物参考、只留面板 VFX 锚）。完整链路见 `n2d-script/references/题材母题框架.md`。
 
-### 图 AI 设置
-- 模型 / 比例 / 参考图 / 参考强度 / 数量
+### 生图模型/渠道设置
+- 生图模型 / 生图渠道 / 比例 / 参考图 / 参考强度 / 数量
 - **参考图使用范围**：外部人物参考图只取脸型 / 五官 / 眼睛神态 / 体态比例 / 身材气质；发型、发饰、服装、配饰、妆容和剧情状态一律按小说原文、角色圣经、当前形态变体与本集剧情决定。prompt 必须写明“不继承参考图服装/发型/配饰”，除非角色卡明确要求同款。
 
 ### 正向 prompt（中文）
@@ -249,15 +249,15 @@
 **起幅·运动余量**（出图为视频铺路 · clip 首帧=起幅，非动作顶点）：本镜为 Clip K **首帧=起幅**（动作顶点交尾帧 `镜头N_end.png`，封面/定格图才抓顶点）；按 `故事板.md` 本镜节奏/张力反推的运镜（推近/环绕/跟摇）**预留构图余量**——推近→框略宽、环绕→主体周围留空、跟摇→运动方向留 lead room
 **专项镜头模板**（复杂镜必填 · 普通镜写“无”）：若所属 Clip 有 `template/template_contract`，这里誊抄模板 ID + 本镜要落实的 `beats/blocking/camera_rule/continuity_must/negative` + 模板专属字段（如 `impact_frame`、`screen_direction`、`axis`、`effect_asset`、`contact_points`、`screen_positions`）。本镜构图必须服务模板契约：例如反打锁轴线、飞行锁姿态动背景、亲密互动锁接触点、多人数锁主次站位。
 **多人同框身份槽位**（同框 ≥2 个 `CHAR_` 必填；否则写“无”）：从 `reference_plan_第N集.md` / `storyboard.json.template_contract.character_slots` 誊抄逐主体槽位，格式固定为 `LEFT_SLOT: CHAR_xx/形态*（primary；画左/前景/视线画右；参考=该角色 front+face_anchor_refs；强情绪再加 expressions）`、`RIGHT_SLOT: CHAR_yy/形态（secondary；画右/后景/视线画左；参考=该角色 front+服装锚）`。三人以上继续用 `FOREGROUND_SLOT` / `BACKGROUND_SLOT` / `EXTRA_SLOT_N`。每个槽位必须同时写：`CHAR_xx/形态`、屏幕位置、前后景/遮挡关系、视线方向、脸部优先级、对应参考图组；不得只写“参考图①/②”或只写中文角色名。
-**多人同框执行策略**（同框 ≥2 个 `CHAR_` 必填；否则写“无”）：按所选后端能力写一个确定模式，不写条件式兜底。无持久角色 ID 后端（Codex/OpenAI/Dreamina/Nano/Gemini）默认写 `regional_construct_required`（兼容 token `split_composite_required`）：空场景底板 `empty_plate` → 官方 inpaint / regional-prompt 按 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位逐区域喂该角色 reference_group / face_anchor_refs（强情绪再加 expressions）→ 统一 relighting/color match；这是本镜硬执行。持久主体后端且所有角色已 registered/ready 写 `native_subject_slots`：逐槽位绑定原生主体/角色 ID + 区域/站位；若有角色未注册，先写 `register_subjects_or_split` 并明确“先注册主体”或“本镜登记降级为 `regional_construct_required`/`split_composite_required`”。若导演上允许拆镜，写 `shot_reverse_shot` 并回到 storyboard/prompt 拆成正反打，不硬塞同框。
-**多人同框分镜调度**（同框 ≥2 个 `CHAR_` 必填）：誊抄 `reference_plan_第N集.md` 的 `shot_scheduling`。① **默认做对**：剧情需要的同框不删戏；多人同框默认中景/全景 + 景别分层（清晰主角 1 人，其余推背景/虚焦/背身/过肩），双人/多人 CU 优先拆「单人 CU + 反打」。② **≥4 具名角色清晰同框**：`shot_scheduling.verdict=over_cap` 表示必须登记 `regional_construct_required`/`split_composite_required`、每主体身份槽位、empty_plate、region masks 和统一融光；gate 拦的是“没登记怎么做对”，不是要求删到 ≤3。确属远景群像（脸不解析）在本镜显式标 `远景/群像` 豁免。③ `downgrade_recommended`（多人近景）须写明本镜为何保留同框近景，且必须配 `regional_construct_required`/分区构建/分层合成。
+**多人同框执行策略**（同框 ≥2 个 `CHAR_` 必填；否则写“无”）：按所选后端能力写一个确定模式，不写条件式兜底。无持久角色 ID 后端（Codex/OpenAI/Dreamina/Nano/Gemini）默认写 `regional_construct_required`（兼容 token `split_composite_required`）：空场景底板 `empty_plate` → 官方 inpaint / regional-prompt 按 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位逐区域喂该角色 reference_group / face_anchor_refs（强情绪再加 expressions）→ 统一 relighting/color match；这是本镜硬执行。持久主体后端且所有角色已 registered/ready 写 `native_subject_slots`：逐槽位绑定原生主体/角色 ID + 区域/站位；若有角色未注册，先写 `register_subjects_or_split` 并明确“先注册主体”或“本镜登记回退到 `regional_construct_required`/`split_composite_required`”。若导演上允许拆镜，写 `shot_reverse_shot` 并回到 storyboard/prompt 拆成正反打，不硬塞同框。
+**多人同框分镜调度**（同框 ≥2 个 `CHAR_` 必填）：誊抄 `reference_plan_第N集.md` 的 `shot_scheduling`。① **默认做对**：剧情需要的同框不删戏；多人同框默认中景/全景 + 景别分层（清晰主角领镜，其余推背景/虚焦/背身/过肩），双人/多人 CU 优先拆「单人 CU + 反打」。② **≥2 具名角色清晰同框**：必须登记 `多人同框身份槽位` + `多人同框执行策略`，策略写 `native_subject_slots` / `regional_construct_required` / `split_composite_required` / `shot_reverse_shot` 之一；gate 拦的是“没登记怎么做对”，不是删戏或降人数。③ **≥4 清晰脸、多人近景、强交互/遮挡**：`shot_scheduling.verdict` 应提示拆组、景别分层、反打或分区构建；确属远景群像（脸不解析）在本镜显式标 `远景/群像` 豁免。
 **区分锚点**（同框 ≥2 个 `CHAR_` 必填，治④串脸）：誊抄 `reference_plan_第N集.md` 的 `distinct_anchors`，逐主体写 **5–7 个互斥锚点**（各自唯一发色 / 发型 / 服装主色 HEX / 标志配饰），并显式声明两两**不撞色**（发色 + 服装主色至少一层拉开）；规划器标 `collision=true` 的撞色对，改其中一方服装主色或加唯一配饰再落档。缺本字段 gate 对 Codex 多人镜记 WARN。
 **Codex/GPT Image 分区构建实现**（`regional_construct_required` / `split_composite_required` 时必须写）：实现路径 = 空场景底板 →（官方后端）inpaint / regional-prompt 逐区域各喂该角色自己的 `reference_group` 把人一个个画进对应槽位区域 → 统一 relighting/color match → Adetailer / IP-Adapter Face 脸部二次精修。这是合法的「分区逐次构建」（模型重绘整张脸并自然融光），**不是**禁用的「对成片抠脸贴回」（见 SKILL.md「本地贴脸修复禁用铁律」边界澄清）。inpaint 多主体时 prompt 须保留人数标识、删掉单主体关键词，避免 inpaint 把主体擦除而非替换。
 **角色圣经引用**（含角色镜必填）：`设定库/角色圣经.md` → `CHAR_xx/形态`；本镜人物描述先继承圣经里的锚点句、五层角色 DNA 和气质/动作习惯，再写本镜状态。普通无人物镜写“无”。
 **人物审美基线**（含角色镜必填；普通无人物镜写“无”）：继承共享层该角色「人物审美基线」。除非本镜有特殊说明（伤病、战损、恐怖、丑化、喜剧、粗粝写实、非主流造型等），人物默认按主流可播审美和镜头友好处理：五官比例协调、脸部清晰有辨识度、发型妆造服装精致耐看、光影让脸好看；同时保持角色年龄、身份阶层、状态演进和角色 DNA，不临场换脸、不统一成网红脸。
 **角色资产包引用**（所有人物角色镜必填；普通/短线角色也不得写“无”）：`设定库/character_assets/<CHAR_ID>__<slug>/manifest.json`；本镜若调用 LoRA、voice、后端主体 ID 或迁移过来的参考图，必须能在 manifest 或其 truth_sources 中追溯。
 **跨集成长阶段**（长线角色必填；普通角色写“无”）：`evolution_profile.stage_id=<...>`；本镜属于哪个境界/权势/气场阶段，锁 `identity_invariants`，只允许 `allowed_evolution_axes` 中的服装/法宝/气场/VFX/姿态气质变化。若本镜是新阶段首现，写“从上一阶段 <stage_id/form> 的正脸/脸部特写派生”。
-**资产身份注册层**（含角色镜必填）：`CHAR_xx/形态`；从 `出图/共享/identity_registry.json` 读取本镜角色/形态的 `character_dna`（脸 / 发型 / 服装 / 配饰 / 质感）、`reference_group`、`reference_atlas`、可用后端角色 ID/主体库、`angle_policy` 和 `drift_forbidden`；执行时按该 ID 自动传入对应定妆组/atlas ready 参考图做 image2image / 多图参考派生，不得纯文生图。普通无人物镜写“无”。若命中高危角度（极端俯仰/深暗部/人物过小/多人接触）或大表情/全身动作，必须补对应参考或登记降级方案。
+**资产身份注册层**（含角色镜必填）：`CHAR_xx/形态`；从 `出图/共享/identity_registry.json` 读取本镜角色/形态的 `character_dna`（脸 / 发型 / 服装 / 配饰 / 质感）、`reference_group`、`reference_atlas`、可用后端角色 ID/主体库、`angle_policy` 和 `drift_forbidden`；执行时按该 ID 自动传入对应定妆组/atlas ready 参考图做 image2image / 多图参考派生，不得纯文生图。普通无人物镜写“无”。若命中高危角度（极端俯仰/深暗部/人物过小/多人接触）或大表情/全身动作，必须补对应参考或登记回退/保真实现方案。
 **固定 seed 策略**（含角色镜必填；普通无人物镜写“无”）：从 `identity_registry.json` 当前 `CHAR_xx/形态.generation_control` 读取 `seed_strategy=fixed_pool` 和本镜用途 seed；生成事件必须记录 `requested_seed / effective_seed / seed_effective / seed_support / seed_strategy`。后端不支持或未暴露 seed 时写 `seed_effective=false`，不得把本镜标为 seed 可复现。
 **资产引用注册层**（含关键场景/道具/武器/独立服装/VFX 必填）：`LOC_xx` / `PROP_xx` / `WEAPON_xx` / `OUTFIT_xx` / `VFX_xx`；从 `出图/共享/asset_registry.json` 读取本镜非人物关键资产的 `reference_group`、场景 `scene_dna`、武器 `weapon_profile`、`constraints` 和 `drift_forbidden`；执行时按该 ID 自动传入对应场景/道具/武器/服装/VFX 参考图并继承地标、材质、光色、常驻物件、武器剪影尺度、结构、光位、件数、时代风格等约束。普通无关键非人物资产镜写“无”。用了场景定妆/道具锚/武器法宝定妆却没写资产 ID，gate 阻断。
 **近景/反打身份锁定**（CU/ECU、正反打、过肩反应、表情特写必填；普通镜可写“无”）：引用 `reference_group.face_anchor_refs[]` / `定妆_<角色>_脸部特写.png`；若是强情绪镜，再引用 `reference_group.expressions[]` / `定妆_<角色>_表情.png`。逐项锁角色 DNA 五层：`脸型 / 五官比例 / 发型发髻 / 服装配色 / 标志配饰`，并继承角色圣经的气质/动作习惯。接力帧相邻的反应镜要写“若角色 DNA 五层不一致即返工”。registry 若缺脸部/表情参考，先回共享层从已通过定妆裁切脸部特写并登记到 `reference_group.face_anchor_refs[]`，不得在逐镜里重新抽新脸。
@@ -315,7 +315,7 @@
 10. ✅ 角色镜已继承 `identity_registry.json`：本镜写了具体 `CHAR_xx/形态`，reference_group / reference_atlas / angle_policy / drift_forbidden 已写进本镜约束，执行时按 ID 自动取定妆组和 atlas ready 图做图生图/多图参考
 11. ✅ 固定 seed 策略已记录：支持 seed 的后端传入池内 seed；不支持/未暴露 seed 的后端在 dashboard 记 no-op 降级，不宣称可复现
 12. ✅ 跨集成长阶段已写：若角色有 `evolution_profile`，本镜锁同一张脸和身份不变量，只允许服装/法宝/气场/VFX/姿态气质按阶段升级
-13. ✅ 参考图选择策略已写：实际传入的角色参考图来自 `reference_atlas` ready 路径；45° 与脸部特写基础锚已 ready；若表情/动作参考缺失，已写 `reference_gap` 和降级方案
+13. ✅ 参考图选择策略已写：实际传入的角色参考图来自 `reference_atlas` ready 路径；45° 与脸部特写基础锚已 ready；若表情/动作参考缺失，已写 `reference_gap` 和回退/保真实现方案
 14. ✅ 参考图入参清单与预算已写：列出 selected/dropped、后端图数上限、控制图/遮罩/区域槽位和不合格参考剔除原因，不把 planned 或脏参考传给后端
 15. ✅ 关键场景/道具/武器镜已继承 `asset_registry.json`：本镜写了具体 `LOC_xx` / `PROP_xx` / `WEAPON_xx` / `OUTFIT_xx` / `VFX_xx`，reference_group / scene_dna（场景）/ weapon_profile（武器）/ constraints / drift_forbidden 已写进本镜约束，执行时按 ID 自动取参考图、场景 DNA、武器画像和结构/光位约束
 16. ✅ CU/ECU、正反打、过肩反应、表情特写已写 `近景/反打身份锁定`，并引用脸部特写/表情参考锁脸型、发髻和配饰
@@ -344,7 +344,7 @@
 - **关键镜**（爽点/反转/觉醒/威压/封面候选）在标题加 `🔑关键镜` 标记；`预算一般` 下只有这类关键图片严格自检到满意。
 
 ### 备注
-（特殊处理、降级方案等；如"本镜运动复杂可改为静帧 + 后期添加动态模糊"）
+（特殊处理、回退/保真实现方案等；如"本镜运动复杂可改为静帧 + 后期添加动态模糊"）
 ```
 
 ---
@@ -359,9 +359,9 @@
 ② 出图/共享/identity_registry.json 追加该角色/形态（reference_group / identity_adapters / angle_policy / drift_forbidden）；若新增的是场景/道具/武器/独立服装/VFX，则追加到 `出图/共享/asset_registry.json`（LOC_/PROP_/WEAPON_/OUTFIT_/VFX_ + reference_group / weapon_profile（武器）/ constraints / drift_forbidden）
   ↓
 ③ 出图/共享/prompt/角色定妆.md 追加完整 prompt 块（本文 §1.2 格式）
-   （来源 = characters/X.md 的 ① 定妆 prompt + Stage 4 的实战包装：图 AI 设置 + 检查清单）
+   （来源 = characters/X.md 的 ① 定妆 prompt + Stage 4 的实战包装：生图模型/渠道设置 + 检查清单）
   ↓
-④ 按 `cli_registry.md` 重新扫描后只用 `生图AI` 所选官方/已登录后端；Dreamina/即梦官方 CLI 可用于图片生成，第三方逆向/web 自动化禁用 → 挑图 → PNG 落到 出图/共享/图片/
+④ 按 `cli_registry.md` 重新扫描后只用 `生图模型 + 生图AI/生图渠道` 所选官方/已登录后端；Dreamina/即梦官方 CLI 可用于图片生成，第三方逆向/web 自动化禁用 → 挑图 → PNG 落到 出图/共享/图片/
   ↓
 ⑤ 索引状态改 ✅，填 PNG 路径；registry 的 reference_group 路径也必须指向实际 PNG
   ↓

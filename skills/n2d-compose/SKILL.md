@@ -35,13 +35,15 @@ description: Stage 6 of n2d (剪映合成的脚本化替代) — assemble a fini
 - **clip 原生音频处理（P1 原生音画 / 配音先行分流）**：Veo / Seedance / Kling 出的 clip 可能**自带原生音轨**（环境音甚至台词）。n2d-video 阶段保留平台原片，不提前去音轨；本 skill 是唯一处理原生音轨的地方。默认 `原生音画` 会保留原片音轨承接台词；`配音先行` 默认丢弃 clip 原生音轨，不让原生台词接管角色声音。选择点 `视频原生音轨`：
   - `丢弃`（默认）：只在 compose 工作缓存/最终合成链路里剥掉 clip 原生音轨，**不改写 `出视频/第N集/视频/` 的 AI 原片**；音频全部由 配音+BGM+SFX 这条受控链路提供，避免双人声。
   - `低音量混入环境声`：仅当 n2d-video 的「原生音画 opt-in 清单」确认该 Clip 低风险、无口型、无原生人声时，将 clip 原生音轨按 `CLIP_AUDIO_GAIN`（默认 0.35）压低混入作环境底。
-  - `保留原片音轨`：仅用于无配音/测试预览/明确要原片声时；有 n2d-voice 配音轨时必须先提醒双人声风险，compose gate 会把“保留原片音轨 + 存在配音轨 + clip 有音频流”视为阻断。
+  - `保留原片音轨`：仅用于无配音/测试预览/明确要原片声时；有 n2d-voice 配音轨时 `compose.sh` 会直接阻断，compose gate 也会把“保留原片音轨 + 存在配音轨 + clip 有音频流”视为阻断。原生音画项目若配音轨确认为旁白/系统层，先过 gate/sidecar，再显式 `ALLOW_NATIVE_AV_VOICEOVER=1`；仅内部预览才可 `ALLOW_DOUBLE_VOICE=1` 自担风险。
   - **release gate**：只要策略不是 `丢弃`，就必须存在 `生产数据/native_av_physics_第N集.json`，逐 Clip 说明声源、可见动作证据、空间混响、后期处理策略；低风险 ambience/native_sfx 也不例外。缺 sidecar 时先回 `n2d-video` 补「原生音画物理一致性契约」，不要在 compose 阶段凭听感放行。
   - 命令覆盖：`VIDEO_NATIVE_AUDIO_POLICY=丢弃|低音量混入环境声|保留原片音轨`；旧 `KEEP_CLIP_AUDIO=1` 兼容为 `低音量混入环境声`。
   - **原生音画模式例外（自动覆盖）**：`制作模式=原生音画` 时台词在 clip 自带音轨里，丢弃会丢台词——compose 自动把策略转为 `保留原片音轨`（`compose.sh` 实现）。要强制别的策略须显式设 `VIDEO_NATIVE_AUDIO_POLICY_EXPLICIT=1` 一并指定 `VIDEO_NATIVE_AUDIO_POLICY`。
 - **合规与版权前置（P0）**：compose 不是“先出片再补救”的地方。正式合成前必须存在 `合规/compliance_manifest.json`，并已通过 `n2d-compliance` 填好：版权/改编权、角色授权、声音克隆授权、目标平台审核、出海本地化。`gate.py --stage compose` 会在合成前阻断缺合规包、投放平台未定、海外投放未声明字幕/本地化等硬项。**AI 生成合成内容标识（`ai_labeling`）只做 INFO 待办**；compose `[6/6]` 后 `ai_label.py` 可 best-effort 落显式角标 + 元数据并回写 manifest，失败不阻断主流程。
 - **生产数据记账铁律（P0）**：合成完成或失败后必须调用 `n2d-dashboard` 记录 `stage=compose` 事件，至少包含输出文件、耗时、原生音轨策略；若 gate 阻断或合成失败，用 QA/manual 事件记录原因。否则无法统计每集成片耗时、音轨策略风险和最终通过率。
+- **付费/续看闭环字段**：成片进入投放、解锁或追更平台时，发布侧的 `platform_metrics.*` 不只写留存和收入；必须带 `paywall_position_sec`、`paywall_after_promise_id`、`unlock_friction`、`continue_path`。这些字段由 `n2d-feedback` 分析“卡点是否落在已打开承诺之后、哪条续看路径追更最高”，下一批再回灌到分镜和交付策略；compose 不直接改平台数据，但交付说明必须提醒运营/发布工序落这些列。
 - **字幕烧录**：本机 Homebrew ffmpeg **无 libass**（无 subtitles/drawtext 滤镜）→ 用 Pillow 把 SRT 渲染成透明 PNG 再 overlay 烧录（render_subs.py）。
+- **原生音画字幕闭环**：`制作模式=原生音画` 时，compose 可在缺 `字幕_中文.srt` 的情况下先出 draft（脚本会跳过字幕并给 warning），但这不是可交付成片。成片后必须用 whisperx 或等效词级对齐从原生音轨生成中文字幕，落 `脚本/第N集/字幕_中文.srt`，并写 `生产数据/native_av_subtitle_alignment_第N集.json`（`kind=n2d_native_av_subtitle_alignment`、`status=pass|aligned`、`alignment_tool/source`、`word_level=true`、`subtitle_path`、可选逐 Clip 状态）。`n2d-review` 的 review gate 与 `paid_distribution` compose gate 会 BLOCK 缺 sidecar 或 sidecar 不完整。
 - **占位 BGM 为主**：默认程序化占位；可选真实文件覆盖。
 - **占位配音不许成片**：`compose.sh` 进门先查 `配音/时长清单.json`——若仍含占位句且未用 `VOICEFILE` 指定别的轨，**拒绝合成**（占位时长≠真实时长，烧进成片必音画错位）。仅 rough preview 可 `ALLOW_PLACEHOLDER_COMPOSE=1` 放行。
 
@@ -99,7 +101,7 @@ python3 skills/n2d-compose/deliver.py <作品根> 第N集 --run --aspects 9:16,1
 ## 输入前置
 - `出视频/第N集/视频/` 有 clip MP4（n2d-video 产物，必须是 AI 平台原片，不应出现 `.noaudio.mp4`、`*_noaudio.mp4` 或 `_raw_with_audio/` 这类提前剥音轨中间件）。否则报错建议先 n2d-video。
 - `合成/第N集/配音/voice_{zh,en}.wav`（n2d-voice 产物，可选；无则纯 BGM+字幕）。
-- `脚本/第N集/字幕_{中文,英文}.srt`。
+- `脚本/第N集/字幕_{中文,英文}.srt`。`原生音画` draft 可临时缺中文字幕，但 review/付费投放前必须补 whisperx/词级对齐字幕和 `native_av_subtitle_alignment` sidecar。
 - 正式合成前必须先跑确定性 gate 并入账：`python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage compose`（内部调用 `n2d-review/scripts/gate.py --json`；检查视频列、`storyboard.json`、clip 音轨/时长、原生音画 opt-in 清单、占位配音、字幕、`合规/compliance_manifest.json` 的平台/本地化计划）。缺合规包时先跑 `python3 skills/n2d-compliance/scripts/compliance.py <作品根> 第N集 --init`，人工补齐后再 `--check`。
 
 ## 常见错误
@@ -164,6 +166,7 @@ compose 混音前自动跑 `foley_agent.py`：分析 `storyboard.json` 识别视
     # 自动刷新 review gate / score / consistency_ledger / review-ui；
     # 通过后停在 needs_acceptance_signoff，再显式回写「验收」列 ✅
 - 上线后投放回灌：n2d-feedback <作品根> --metrics <平台指标.csv>   留存/追更/跳出反哺导演节奏；
+    # 付费/追更平台的 platform_metrics 需带 paywall_position_sec / paywall_after_promise_id / unlock_friction / continue_path
     再 n2d-dashboard build <作品根> --markdown 看成本/ROI/通过率
 - 推进下一集：n2d <作品根>（调度器按前沿路由）或直接 n2d-script <作品根> 第K+1集
 - 整部进度总览 + 下一步：n2d-progress <作品根>

@@ -25,8 +25,8 @@ description: P2 platform performance feedback loop for n2d. Ingest platform metr
 
 需要两类数据 join：
 
-1. **platform metrics**：平台侧指标，如 `retention_3s`、`retention_15s`、`completion_rate`、`follow_next_rate`、`bounce_3s`、`plays`。A/B 时每个变体一行，建议带 `ab_test_id`、`variant_id`、`ctr`。
-2. **creative features**：导演标签，如 `opening_type`、`cliffhanger_type`、`shot_density_per_min`、`hook_interval_sec`。A/B 时补 `opening_variant`、`cover_variant`、`cliffhanger_cut_variant`、`title_variant`。默认从 `脚本/第N集/storyboard.json` 自动抽取基础标签；已有手工 `creative_features.*` 或显式 `--features` 时优先手工。
+1. **platform metrics**：平台侧指标，如 `retention_3s`、`retention_6s`、`retention_15s`、`retention_25_pct`、`retention_50_pct`、`retention_75_pct`、`completion_rate`、`follow_next_rate`、`avg_episodes_per_user`、`episodes_per_session`、`unlock_or_subscribe_rate`、`bounce_3s`、`plays`。付费/追剧闭环必须补 `paywall_position_sec`、`paywall_after_promise_id`、`unlock_friction`、`continue_path`，用于分析“卡点是否落在承诺之后、解锁摩擦是否伤留存、哪条续看路径追更最高”。A/B 时每个变体一行，建议带 `ab_test_id`、`variant_id`、`ctr`。App/剧集包级可带 `d1_retention/d7_retention/d14_retention`。
+2. **creative features**：导演标签，如 `opening_type`、`cliffhanger_type`、`shot_density_per_min`、`hook_interval_sec`、`first_3s_visual_hook`、`onscreen_text_hook`、`muted_safe_proof`、`retention_promise_ids`。A/B 时补 `opening_variant`、`cover_variant`、`cliffhanger_cut_variant`、`title_variant`。默认从 `脚本/第N集/storyboard.json` 自动抽取基础标签；已有手工 `creative_features.*` 或显式 `--features` 时优先手工。
 
 默认读取：
 
@@ -56,8 +56,8 @@ python3 skills/n2d-feedback/scripts/feedback.py <作品根> \
 同一集可以上多个变体，不再只复盘单版本。最小做法：
 
 1. 为同一集生成 2-4 个变体：开场顺序、封面/首图、集尾断点、标题文案一次只重点改 1-2 个变量，避免归因混乱。
-2. `platform_metrics` 每个变体一行，写 `episode + platform + ab_test_id + variant_id + plays + retention_3s + retention_15s + completion_rate + follow_next_rate`；平台能导出点击率时加 `ctr`。
-3. `creative_features` 每个变体一行，写 `opening_variant / cover_variant / cliffhanger_cut_variant / title_variant`。如果只改标题或封面，基础 `opening_type/cliffhanger_type` 可继承自动抽取。
+2. `platform_metrics` 每个变体一行，写 `episode + platform + ab_test_id + variant_id + plays + retention_3s + retention_6s + retention_15s + retention_25_pct + retention_50_pct + retention_75_pct + completion_rate + follow_next_rate`；平台能导出点击率时加 `ctr`，付费/追剧平台加 `unlock_or_subscribe_rate`、`avg_episodes_per_user`。
+3. `creative_features` 每个变体一行，写 `opening_variant / cover_variant / cliffhanger_cut_variant / title_variant`，并补首屏与承诺字段：`first_3s_visual_hook / onscreen_text_hook / muted_safe_proof / retention_promise_ids`。付费平台再补 `paywall_after_promise_id / unlock_friction / continue_path`，确认解锁卡点接在已登记承诺之后。如果只改标题或封面，基础 `opening_type/cliffhanger_type` 可继承自动抽取。
 4. 运行 feedback 后看新增四张表：`A/B 开场留存`、`A/B 封面留存`、`A/B 集尾断点追更`、`A/B 标题文案留存`。这些表使用同一 `episode/platform/ab_test_id` 内的 paired lift，优先级高于跨集泛分组。
 
 推荐字段示例：

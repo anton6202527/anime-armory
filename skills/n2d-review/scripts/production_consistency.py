@@ -96,6 +96,35 @@ PHYSICAL_LAWS = {
     "contact_continuity",
     "state_conservation",
 }
+TRUTH_MAP_REQUIRED = {
+    "character_identity": {
+        "source": "出图/共享/identity_registry.json",
+        "wins_over": ("角色圣经/自然语言描述", "generation_recipe"),
+        "purpose": "角色 DNA、形态、身份锚和后端主体绑定的最高真值源",
+    },
+    "visual_state": {
+        "source": "storyboard.visual_contract + 出图/共享/visual_state_ledger.json",
+        "wins_over": ("逐镜 prompt", "generation_recipe"),
+        "purpose": "伤/泪/觉醒/服装破损等视觉状态区间与转场",
+    },
+    "scene_space": {
+        "source": "设定库/scene_floorplan.json + location_spatial_memory.json",
+        "wins_over": ("逐镜背景自由描述",),
+        "purpose": "门窗、固定物、光源、合法机位和区域关系",
+    },
+    "generation_recipe": {
+        "source": "生产数据/generation_recipe_第N集.json",
+        "evidence_only": True,
+        "purpose": "复现和归因证据，不覆盖身份/状态/空间设定",
+    },
+    "intentional_exception": {
+        "source": "生产数据/consistency_advisory_signoff_第N集.json",
+        "expires_required": True,
+        "purpose": "导演有意越轴/风格变化/状态重置等例外的有期限签收",
+    },
+}
+MULTIVIEW_BUCKETS = ("front", "three_quarter", "profile_or_side", "back", "expression")
+WORLD_SCORE_COMPONENTS = ("object_permanence", "relation_stability", "causal_compliance", "flicker_penalty")
 ASSET_TAIL_ACTIONS = (
     "逼近", "走来", "走近", "转身", "冲向", "看向", "递给", "交给", "刺向", "砍向", "挥向",
     "靠近", "离开", "退到", "退后", "藏到", "藏入", "站起", "坐下", "跪下", "倒下", "落地", "入画", "出画",
@@ -260,6 +289,35 @@ def _artifact_exists(root: str, value: Any) -> bool:
     return os.path.exists(path)
 
 
+def _has_any_field(value: Mapping[str, Any], *keys: str) -> bool:
+    return any(value.get(key) not in (None, "", [], {}) for key in keys)
+
+
+def _normalise_bucket(value: Any) -> str:
+    text = str(value or "").strip().lower().replace("-", "_").replace(" ", "_")
+    aliases = {
+        "side": "profile_or_side",
+        "profile": "profile_or_side",
+        "left_profile": "profile_or_side",
+        "right_profile": "profile_or_side",
+        "45": "three_quarter",
+        "three_quarters": "three_quarter",
+        "3_4": "three_quarter",
+        "emotion": "expression",
+        "expressions": "expression",
+    }
+    return aliases.get(text, text)
+
+
+def _setting_text(root: str) -> str:
+    return _read(os.path.join(root, "_设置.md"))
+
+
+def _native_av_project(root: str) -> bool:
+    text = _setting_text(root)
+    return bool(re.search(r"制作模式\s*[:：]\s*原生音画", text)) or "native_av" in text.lower()
+
+
 def _finding_hash(row: Mapping[str, Any]) -> str:
     stable = {
         "dimension": row.get("dimension") or row.get("dim") or "",
@@ -390,6 +448,16 @@ def _entry_media(row: Mapping[str, Any]) -> str:
     return str(row.get("crop_path") or row.get("media_path") or row.get("reference_path") or row.get("image") or row.get("frame") or "").strip()
 
 
+def _entry_used_for_generation(row: Mapping[str, Any]) -> bool:
+    return bool(
+        row.get("used_for_generation") is True
+        or row.get("retrieved_for")
+        or row.get("retrieval_log")
+        or row.get("last_retrieved_at")
+        or row.get("reference_plan")
+    )
+
+
 def _core_character_ids(root: str) -> List[str]:
     out: List[str] = []
     for char in _registry_characters(root):
@@ -404,6 +472,103 @@ def _core_character_ids(root: str) -> List[str]:
         if cid and core:
             out.append(cid)
     return _unique(out)
+
+
+def _truth_map(root: str) -> Tuple[Optional[Any], str]:
+    return _load_first_json(root, (
+        os.path.join("设定库", "consistency_truth_map.json"),
+        os.path.join("生产数据", "consistency_truth_map.json"),
+        os.path.join("设定库", "truth_source_rank.json"),
+    ))
+
+
+def _project_has_multiple_truth_sources(root: str, ep: str) -> bool:
+    candidates = (
+        os.path.join(root, "出图", "共享", "identity_registry.json"),
+        os.path.join(root, "出图", "共享", "asset_registry.json"),
+        os.path.join(root, "脚本", ep, "storyboard.json"),
+        os.path.join(root, "出图", "共享", "visual_state_ledger.json"),
+        os.path.join(root, "设定库", "scene_floorplan.json"),
+        os.path.join(production_dir(root), f"generation_recipe_{ep}.json"),
+    )
+    return sum(1 for path in candidates if os.path.exists(path)) >= 3
+
+
+def _truth_entries(data: Any) -> Dict[str, Mapping[str, Any]]:
+    if isinstance(data, Mapping):
+        raw = data.get("truth_sources") or data.get("sources") or data.get("precedence") or data
+    else:
+        raw = data
+    out: Dict[str, Mapping[str, Any]] = {}
+    if isinstance(raw, Mapping):
+        for key, value in raw.items():
+            if isinstance(value, Mapping):
+                out[str(key)] = value
+            else:
+                out[str(key)] = {"source": value}
+    elif isinstance(raw, list):
+        for item in raw:
+            if isinstance(item, Mapping):
+                key = str(item.get("key") or item.get("name") or item.get("domain") or "").strip()
+                if key:
+                    out[key] = item
+    return out
+
+
+def check_consistency_truth_map(root: str, ep: str) -> dict:
+    """Precedence map for conflicting identity/state/scene/recipe truth sources."""
+    res = {"available": True, "findings": [], "notes": []}
+    data, rel = _truth_map(root)
+    if data is None:
+        if _project_has_multiple_truth_sources(root, ep):
+            res["findings"].append(_row(
+                "warn",
+                "项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，"
+                "但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。",
+                stage="review",
+                artifacts=("设定库/consistency_truth_map.json",),
+                evidence_family="text_contract",
+            ))
+        else:
+            res["notes"].append("真值源尚少，TRUTH 暂不强制。")
+        return res
+    entries = _truth_entries(data)
+    for key, spec in TRUTH_MAP_REQUIRED.items():
+        if key not in entries:
+            res["findings"].append(_row(
+                "warn",
+                f"consistency_truth_map 缺 {key}；建议 source={spec['source']}。",
+                stage="review",
+                artifacts=(rel,),
+                evidence_family="text_contract",
+            ))
+            continue
+        row = entries[key]
+        if not _has_any_field(row, "source", "canonical_source", "path"):
+            res["findings"].append(_row(
+                "warn",
+                f"truth source {key} 缺 source/canonical_source/path。",
+                stage="review",
+                artifacts=(rel,),
+                evidence_family="text_contract",
+            ))
+        if key == "generation_recipe" and row.get("evidence_only") is not True:
+            res["findings"].append(_row(
+                "warn",
+                "generation_recipe 应标 evidence_only=true；它只能证明生成过程，不能覆盖角色/状态/空间设定。",
+                stage="review",
+                artifacts=(rel,),
+                evidence_family="text_contract",
+            ))
+        if key == "intentional_exception" and row.get("expires_required") is not True:
+            res["findings"].append(_row(
+                "warn",
+                "intentional_exception 应标 expires_required=true；例外签收不能无限期吞掉后续集一致性问题。",
+                stage="review",
+                artifacts=(rel,),
+                evidence_family="text_contract",
+            ))
+    return res
 
 
 def _character_forms(char: Mapping[str, Any]) -> List[Mapping[str, Any]]:
@@ -430,6 +595,111 @@ def _has_performance_signature(form: Mapping[str, Any]) -> bool:
         or form.get("stance")
         or form.get("gaze")
     )
+
+
+def _identity_eval_pack(root: str) -> Tuple[Optional[Any], str]:
+    return _load_first_json(root, (
+        os.path.join("生产数据", "identity_eval_pack.json"),
+        os.path.join("设定库", "identity_eval_pack.json"),
+        os.path.join("生产数据", "multiview_identity_pack.json"),
+        os.path.join("设定库", "multiview_identity_pack.json"),
+    ))
+
+
+def _identity_eval_rows(data: Any) -> List[dict]:
+    if isinstance(data, Mapping):
+        raw = data.get("characters") or data.get("rows") or data.get("items") or data.get("tests") or []
+        if isinstance(raw, Mapping):
+            rows = []
+            for key, value in raw.items():
+                if isinstance(value, Mapping):
+                    rows.append({"character_id": key, **value})
+                else:
+                    rows.append({"character_id": key, "value": value})
+            raw = rows
+    else:
+        raw = data
+    return [x for x in _as_list(raw) if isinstance(x, dict)]
+
+
+def _eval_row_buckets(row: Mapping[str, Any]) -> set:
+    raw = row.get("buckets") or row.get("views") or row.get("tests") or row.get("yaw_buckets") or []
+    buckets = set()
+    if isinstance(raw, Mapping):
+        for key, value in raw.items():
+            if value in (None, "", [], {}) or (isinstance(value, Mapping) and str(value.get("status") or "").lower() in {"missing", "planned"}):
+                continue
+            buckets.add(_normalise_bucket(key))
+    else:
+        for item in _as_list(raw):
+            if isinstance(item, Mapping):
+                buckets.add(_normalise_bucket(item.get("bucket") or item.get("view") or item.get("name") or item.get("type")))
+            else:
+                buckets.add(_normalise_bucket(item))
+    return {b for b in buckets if b}
+
+
+def _eval_row_character(row: Mapping[str, Any]) -> str:
+    return str(row.get("character_id") or row.get("id") or row.get("entity_id") or row.get("char") or "").strip()
+
+
+def check_multiview_identity_pack(root: str, ep: str) -> dict:
+    """Core-character identity should be tested across yaw/expression buckets."""
+    res = {"available": True, "findings": [], "notes": []}
+    core = _core_character_ids(root)
+    if not core:
+        res["notes"].append("无核心/长线角色登记，MVIEW 暂不强制。")
+        return res
+    data, rel = _identity_eval_pack(root)
+    if data is None:
+        res["findings"].append(_row(
+            "warn",
+            f"核心/长线角色 {', '.join(core[:6])} 缺 identity_eval_pack / multiview_identity_pack；"
+            "后端或画风升级前缺正脸/45度/侧脸/背影/表情桶的固定身份哨兵。",
+            stage="image",
+            artifacts=("设定库/identity_eval_pack.json", "生产数据/identity_eval_pack.json"),
+            evidence_family="text_contract",
+        ))
+        return res
+    rows = _identity_eval_rows(data)
+    by_char: Dict[str, Mapping[str, Any]] = {}
+    for row in rows:
+        cid = _eval_row_character(row)
+        if cid:
+            by_char[cid] = row
+        verdict = str(row.get("verdict") or row.get("status") or row.get("result") or "").lower()
+        if verdict in {"block", "fail", "failed", "red"}:
+            res["findings"].append(_row(
+                "block",
+                f"多视角身份测试未通过：{cid or '(unknown)'} verdict={verdict}。",
+                stage="image",
+                artifacts=(rel,),
+                entity_id=cid,
+                evidence_family="face_embedding",
+            ))
+    for cid in core:
+        row = by_char.get(cid)
+        if not row:
+            res["findings"].append(_row(
+                "warn",
+                f"identity_eval_pack 缺核心角色 {cid} 的测试行。",
+                stage="image",
+                artifacts=(rel,),
+                entity_id=cid,
+                evidence_family="text_contract",
+            ))
+            continue
+        missing = [bucket for bucket in MULTIVIEW_BUCKETS if bucket not in _eval_row_buckets(row)]
+        if missing:
+            res["findings"].append(_row(
+                "warn",
+                f"{cid} 多视角身份测试桶缺失：{', '.join(missing)}；建议覆盖正脸/45度/侧脸/背影/表情，避免只在正脸上看起来一致。",
+                stage="image",
+                artifacts=(rel,),
+                entity_id=cid,
+                evidence_family="face_embedding",
+            ))
+    return res
 
 
 def check_entity_memory_bank(root: str, ep: str) -> dict:
@@ -525,6 +795,16 @@ def check_entity_memory_bank(root: str, ep: str) -> dict:
                 stage="image",
                 artifacts=(rel, f"脚本/{ep}/storyboard.json"),
                 entity_id=eid,
+            ))
+        elif not any(_entry_used_for_generation(entry) for entry in by_entity.get(eid, [])):
+            res["findings"].append(_row(
+                "warn",
+                f"重复/核心实体 {eid} 有实体记忆，但缺 retrieved_for/used_for_generation/reference_plan；"
+                "记忆库若只在审计后沉淀、未在生成前检索，长程身份证据不会真正影响本集出图/出视频。",
+                stage="image",
+                artifacts=(rel, f"脚本/{ep}/storyboard.json"),
+                entity_id=eid,
+                evidence_family="text_contract",
             ))
 
     for char in _registry_characters(root):
@@ -673,6 +953,7 @@ def check_axis_state_readback(root: str, ep: str) -> dict:
 
 def _state_transition_manifest(root: str, ep: str) -> Tuple[Optional[Any], str]:
     return _load_first_json(root, (
+        os.path.join("生产数据", f"state_transition_event_{ep}.json"),
         os.path.join("生产数据", f"state_transition_manifest_{ep}.json"),
         os.path.join("生产数据", f"state_transition_{ep}.json"),
         os.path.join("脚本", ep, "state_transition_manifest.json"),
@@ -768,6 +1049,10 @@ def check_state_transition_verification(root: str, ep: str) -> dict:
             missing.append("from_state")
         if not (entry.get("to_state") or entry.get("after") or entry.get("target_state")):
             missing.append("to_state")
+        if not (entry.get("cause") or entry.get("trigger") or entry.get("reason")):
+            missing.append("cause/trigger")
+        if not (entry.get("visual_evidence_due") or entry.get("evidence_due_stage") or entry.get("evidence_due")):
+            missing.append("visual_evidence_due")
         if missing:
             res["findings"].append(_row(
                 "warn",
@@ -775,6 +1060,27 @@ def check_state_transition_verification(root: str, ep: str) -> dict:
                 shot=label,
                 stage="script_stage2",
                 artifacts=(manifest_rel,),
+            ))
+        if entry.get("legal_reset") is True and not (entry.get("reset_reason") or entry.get("cause") or entry.get("trigger")):
+            res["findings"].append(_row(
+                "warn",
+                "状态转场标 legal_reset=true 但缺 reset_reason/cause；无法区分有意治愈/伪装解除/时间跳跃与非法状态回退。",
+                shot=label,
+                stage="script_stage2",
+                artifacts=(manifest_rel,),
+                evidence_family="text_contract",
+            ))
+        elif entry.get("legal_reset") is None and any(
+            token in _json_text(entry)
+            for token in ("愈合", "消失", "复原", "解除", "重置", "梦境", "time skip", "reset", "heal")
+        ):
+            res["findings"].append(_row(
+                "warn",
+                "本状态转场看起来像合法重置/复原，但缺 legal_reset=true/false；gate 只能按普通状态变化处理，容易误判非法自愈或提前泄露。",
+                shot=label,
+                stage="script_stage2",
+                artifacts=(manifest_rel,),
+                evidence_family="text_contract",
             ))
         frames = _entry_frames(entry)
         if len(frames) < 2:
@@ -1202,6 +1508,99 @@ def check_final_composite(root: str, ep: str) -> dict:
     return res
 
 
+def _native_av_physics(root: str, ep: str) -> Tuple[Optional[Any], str]:
+    return _load_first_json(root, (
+        os.path.join("生产数据", f"native_av_physics_{ep}.json"),
+        os.path.join("出视频", ep, "native_av_physics.json"),
+    ))
+
+
+def _acoustic_space(root: str, ep: str) -> Tuple[Optional[Any], str]:
+    return _load_first_json(root, (
+        os.path.join("生产数据", f"acoustic_space_{ep}.json"),
+        os.path.join("生产数据", f"room_tone_{ep}.json"),
+        os.path.join("设定库", "ambient_map.json"),
+        os.path.join("合成", ep, "room_tone.json"),
+    ))
+
+
+def _acoustic_rows(data: Any) -> List[dict]:
+    if isinstance(data, Mapping):
+        raw = data.get("clips") or data.get("locations") or data.get("rooms") or data.get("rows") or data.get("items") or []
+        if isinstance(raw, Mapping):
+            rows = []
+            for key, value in raw.items():
+                if isinstance(value, Mapping):
+                    rows.append({"location": key, **value})
+                else:
+                    rows.append({"location": key, "value": value})
+            raw = rows
+    else:
+        raw = data
+    return [x for x in _as_list(raw) if isinstance(x, dict)]
+
+
+def check_acoustic_space(root: str, ep: str) -> dict:
+    """Room tone / ambience / reverb continuity for native AV and composed audio."""
+    final_media = bool(_final_cuts(root, ep))
+    nav, nav_rel = _native_av_physics(root, ep)
+    data, rel = _acoustic_space(root, ep)
+    needed = _native_av_project(root) or nav is not None or final_media or data is not None
+    res = {"available": needed, "findings": [], "notes": []}
+    if not needed:
+        res["notes"].append("非原生音画且未检测到成片，声音空间暂不强制。")
+        return res
+    if data is None:
+        res["findings"].append(_row(
+            "warn",
+            "缺 acoustic_space/room_tone/ambient_map；同一场景的 room tone、混响、远近感和环境声床无法跨 clip 复核。",
+            stage="compose",
+            artifacts=(f"生产数据/acoustic_space_{ep}.json", f"生产数据/room_tone_{ep}.json", "设定库/ambient_map.json", nav_rel),
+            evidence_family="audio_sync",
+        ))
+        return res
+    rows = _acoustic_rows(data)
+    if not rows and isinstance(data, Mapping):
+        rows = [data]
+    for idx, row in enumerate(rows, 1):
+        label = str(row.get("clip") or row.get("clip_id") or row.get("location") or f"row_{idx}")
+        missing = []
+        if not _has_any_field(row, "location", "scene", "loc"):
+            missing.append("location")
+        if not _has_any_field(row, "room_tone", "ambient_bed", "ambience", "noise_floor"):
+            missing.append("room_tone/ambient_bed")
+        if not _has_any_field(row, "reverb_profile", "room_size", "decay", "space_type"):
+            missing.append("reverb_profile")
+        if not _has_any_field(row, "distance_perspective", "occlusion_policy", "spatial_perspective", "perspective_policy"):
+            missing.append("distance_perspective/occlusion_policy")
+        if missing:
+            res["findings"].append(_row(
+                "warn",
+                f"声音空间条目 {label} 缺字段：{', '.join(missing)}。",
+                stage="compose",
+                artifacts=(rel,),
+                evidence_family="audio_sync",
+            ))
+        verdict = str(row.get("verdict") or row.get("status") or "").lower()
+        if verdict in {"block", "fail", "failed", "red"}:
+            res["findings"].append(_row(
+                "block",
+                f"声音空间检查未通过：{label} verdict={verdict}。",
+                stage="compose",
+                artifacts=(rel,),
+                evidence_family="audio_sync",
+            ))
+    if nav is not None and isinstance(nav, Mapping) and not any("native" in str(row).lower() or row.get("source") for row in rows):
+        res["findings"].append(_row(
+            "warn",
+            "原生音画物理契约存在，但 acoustic_space 未标 native clip/声源映射；原生声、配音、BGM 混合后难查错声源/错混响。",
+            stage="compose",
+            artifacts=(rel, nav_rel),
+            evidence_family="audio_sync",
+        ))
+    return res
+
+
 def _final_timeline_probe(root: str, ep: str) -> Tuple[Optional[Any], str]:
     return _load_first_json(root, (
         os.path.join("生产数据", f"final_timeline_probe_{ep}.json"),
@@ -1521,6 +1920,91 @@ def check_physical_event_graph(root: str, ep: str) -> dict:
     return res
 
 
+def _world_consistency_score(root: str, ep: str) -> Tuple[Optional[Any], str]:
+    return _load_first_json(root, (
+        os.path.join("生产数据", f"world_consistency_score_{ep}.json"),
+        os.path.join("生产数据", f"world_consistency_{ep}.json"),
+        os.path.join("生产数据", f"wcs_{ep}.json"),
+    ))
+
+
+def _has_world_sidecars(root: str, ep: str) -> bool:
+    rels = (
+        os.path.join("生产数据", f"scene_world_ledger_{ep}.json"),
+        os.path.join("生产数据", f"object_presence_{ep}.json"),
+        os.path.join("生产数据", f"physical_event_graph_{ep}.json"),
+        os.path.join("生产数据", f"causal_event_graph_{ep}.json"),
+        os.path.join("生产数据", f"temporal_consistency_{ep}.json"),
+        os.path.join("生产数据", f"motion_quality_{ep}.json"),
+    )
+    return any(os.path.exists(os.path.join(root, rel)) for rel in rels)
+
+
+def _score_value(data: Any) -> Optional[float]:
+    if not isinstance(data, Mapping):
+        return None
+    for key in ("world_consistency_score", "wcs", "score", "overall", "overall_score"):
+        num = _num(data.get(key))
+        if num is not None:
+            return num
+    summary = data.get("summary") if isinstance(data.get("summary"), Mapping) else {}
+    for key in ("world_consistency_score", "wcs", "score", "overall"):
+        num = _num(summary.get(key))
+        if num is not None:
+            return num
+    return None
+
+
+def check_world_consistency_score(root: str, ep: str) -> dict:
+    """WCS-style episode rollup: object permanence + relations + causal + flicker."""
+    media = _existing_media(root, ep) + [os.path.relpath(p, root) for p in _final_cuts(root, ep)]
+    res = {"available": bool(media) or _has_world_sidecars(root, ep), "findings": [], "notes": []}
+    data, rel = _world_consistency_score(root, ep)
+    if data is None:
+        if media or _has_world_sidecars(root, ep):
+            res["findings"].append(_row(
+                "warn",
+                "已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；"
+                "对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。",
+                stage="review",
+                artifacts=(f"生产数据/world_consistency_score_{ep}.json",),
+                evidence_family="motion_physics",
+            ))
+        else:
+            res["notes"].append("尚无媒体/世界 sidecar，WCS 暂不强制。")
+        return res
+    score = _score_value(data)
+    if score is None:
+        res["findings"].append(_row(
+            "warn",
+            "world_consistency_score 缺 overall/world_consistency_score 数值。",
+            stage="review",
+            artifacts=(rel,),
+            evidence_family="motion_physics",
+        ))
+    else:
+        sev = "block" if score < 0.72 else "warn" if score < 0.82 else ""
+        if sev:
+            res["findings"].append(_row(
+                sev,
+                f"世界一致性总分偏低：{score:.3f}（block<0.72, warn<0.82）；优先看 object permanence / relation stability / causal compliance / flicker 分项。",
+                stage="video" if sev == "block" else "review",
+                artifacts=(rel,),
+                evidence_family="motion_physics",
+            ))
+    components = data.get("components") if isinstance(data, Mapping) and isinstance(data.get("components"), Mapping) else data if isinstance(data, Mapping) else {}
+    missing = [key for key in WORLD_SCORE_COMPONENTS if key not in components]
+    if missing:
+        res["findings"].append(_row(
+            "warn",
+            f"world_consistency_score 缺分项：{', '.join(missing)}；总分无法解释到对象/关系/因果/flicker 根因。",
+            stage="review",
+            artifacts=(rel,),
+            evidence_family="motion_physics",
+        ))
+    return res
+
+
 def _load_events(root: str) -> List[dict]:
     path = os.path.join(production_dir(root), "production_events.jsonl")
     out: List[dict] = []
@@ -1628,6 +2112,11 @@ def build_recipe_ledger(root: str, ep: str) -> dict:
             "reference_bundle_sha256": _event_value(event, "reference_bundle_sha256", "reference_sha256", "reference_digest"),
             "prompt_sha256": _event_value(event, "prompt_sha256", "prompt_hash", "prompt_digest"),
             "route_hash": _event_value(event, "route_hash"),
+            "input_fingerprint": _event_value(event, "input_fingerprint", "pre_submit_fingerprint", "recipe_input_hash"),
+            "settings_sha256": _event_value(event, "settings_sha256", "settings_hash"),
+            "identity_registry_sha256": _event_value(event, "identity_registry_sha256", "identity_registry_hash"),
+            "asset_registry_sha256": _event_value(event, "asset_registry_sha256", "asset_registry_hash"),
+            "artifact_sha256": _event_value(event, "artifact_sha256", "output_sha256", "media_sha256"),
             "adapter_version": _event_value(event, "adapter_version", "adapter_commit", "adapter_rev"),
             "qc_version": _event_value(event, "qc_version", "qc_schema_version", "review_schema_version"),
         })
@@ -1713,6 +2202,16 @@ def check_recipe_schema(root: str, ep: str) -> dict:
             missing.append("reference_bundle_sha256/reference_manifest")
         if str(row.get("stage") or "") == "video" and not row.get("route_hash"):
             missing.append("route_hash")
+        if not row.get("input_fingerprint"):
+            missing.append("input_fingerprint")
+        if not row.get("settings_sha256"):
+            missing.append("settings_sha256")
+        if str(row.get("stage") or "") in {"image", "video"} and not row.get("identity_registry_sha256"):
+            missing.append("identity_registry_sha256")
+        if str(row.get("stage") or "") in {"image", "video"} and not row.get("asset_registry_sha256"):
+            missing.append("asset_registry_sha256")
+        if not row.get("artifact_sha256"):
+            missing.append("artifact_sha256")
         if not row.get("adapter_version"):
             missing.append("adapter_version")
         if not row.get("qc_version"):
@@ -2086,6 +2585,8 @@ def _calibration_path(root: str) -> str:
 
 def _threshold_path(root: str) -> str:
     for rel in (
+        os.path.join("生产数据", "consistency_threshold_registry.json"),
+        os.path.join("设定库", "consistency_threshold_registry.json"),
         os.path.join("生产数据", "consistency_threshold_recommendations.json"),
         os.path.join("设定库", "consistency_threshold_recommendations.json"),
         os.path.join("生产数据", "consistency_thresholds.json"),
@@ -2506,6 +3007,8 @@ def check_cost_route(root: str, ep: str) -> dict:
 
 def analyze(root: str, ep: str) -> dict:
     sections = {
+        "真值源(TRUTH)": check_consistency_truth_map(root, ep),
+        "多视角身份包(MVIEW)": check_multiview_identity_pack(root, ep),
         "实体记忆(EMB)": check_entity_memory_bank(root, ep),
         "物件常驻(O3)": check_object_permanence(root, ep),
         "持有账本(POS)": check_possession_ledger(root, ep),
@@ -2514,8 +3017,10 @@ def analyze(root: str, ep: str) -> dict:
         "交互接触(I1)": check_interaction_graph(root, ep),
         "结构化交互图谱(I2)": check_interaction_schema(root, ep),
         "物理事件图(PHY)": check_physical_event_graph(root, ep),
+        "世界一致性(WCS)": check_world_consistency_score(root, ep),
         "视频证据完整性(EVID)": check_video_evidence_completeness(root, ep),
         "成片统一(C1)": check_final_composite(root, ep),
+        "声音空间(ASP)": check_acoustic_space(root, ep),
         "成片时间线探针(FT1)": check_final_timeline_probe(root, ep),
         "生成配方(RCP)": check_generation_recipe(root, ep),
         "强配方Schema(RCP2)": check_recipe_schema(root, ep),

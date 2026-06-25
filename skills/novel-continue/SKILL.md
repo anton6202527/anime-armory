@@ -79,7 +79,13 @@ python3 <skill>/scripts/init_project.py "<原作>" \
 - `设定/末章状态.md` —— 人物在哪 / 做什么 / **未回收的伏笔 / 悬念 / 钩子**（这是续写最珍贵的资产）
 - `设定/作者口吻.md` —— 原作的句长 / 词汇密度 / 标志性短句 / 节奏特征（续写文风的锚定）
 
-**未回收伏笔表**是续写章纲的输入；列得越完整，续写越像同一本书。
+**未回收伏笔表**是续写章纲的输入；列得越完整，续写越像同一本书。把每条原作未回收伏笔登记进伏笔台账（init 已 seed 空台账 `设定/foreshadowing_ledger.json`）：
+
+```
+python3 ../../novel-wiki/scripts/foreshadow_ledger.py <作品根> plant --desc "断剑认主线索" --at <原作埋设章> --by <预期回收章> --importance high
+```
+
+否则台账无 seeds，`foreshadow_ledger.analyze()` 永远 `ran:False`，"续写是否兑现 ≥50% 未回收伏笔"无从机检——这恰是续写最该守的一致性。续写章回收后用 `payoff --id SEED_xxx` 销账。
 
 ### 第 3 步 — 续写方向（最重要 gate）
 

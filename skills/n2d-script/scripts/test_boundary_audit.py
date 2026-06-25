@@ -102,5 +102,35 @@ def test_two_sided_boundary_pair_flags_slow_next_opening():
     assert "下集开场弱" in pairs[0]["weakness"]
 
 
+# ── 视觉奇观放置初筛（report-only·北极星看点④）──────────────────
+def test_spectacle_split_boundary_detected():
+    eps = [
+        "第一章\n沈念催动法诀，天劫雷云压顶，第一道天雷轰然劈下，渡劫开始！",  # 尾含奇观
+        "第二章\n天劫继续，九道神雷接连轰落，她浴雷而立，终于渡劫成功飞升！",  # 头含奇观
+    ]
+    root = _mk_work(eps, "题材: 修仙\n变现模式: 免费\n")
+    sp = _run_json(root)["series_arc"]["spectacle"]
+    assert [1, 2] in sp["split_boundary"]
+    assert any("劈成两半" in i for i in sp["issues"])
+
+
+def test_spectacle_weak_anchor_flagged_on_soft_end():
+    eps = [
+        "第一章\n万人观礼，大军压境决战在即，她一剑斩敌震慑全场，原来早有埋伏！",  # 强尾·奇观集
+        "第二章\n登基大典之上众臣朝拜，她缓缓走向龙椅，回望群臣，端起酒杯，",        # 软断弱钩·奇观集
+    ]
+    root = _mk_work(eps, "题材: 修仙\n变现模式: 免费\n")
+    sp = _run_json(root)["series_arc"]["spectacle"]
+    assert 2 in sp["weak_anchor"] and 1 not in sp["weak_anchor"]
+    assert any("断点偏弱" in i for i in sp["issues"])
+
+
+def test_no_spectacle_no_issue():
+    eps = ["第%d章\n她冷笑反击，逼问对方，对方哑口无言，原来如此！" % i for i in range(1, 4)]
+    root = _mk_work(eps, "变现模式: 免费\n")
+    sp = _run_json(root)["series_arc"]["spectacle"]
+    assert sp["spectacle_eps"] == [] and sp["issues"] == []
+
+
 if __name__ == "__main__":
     sys.exit(subprocess.call([sys.executable, "-m", "pytest", __file__, "-q"]))

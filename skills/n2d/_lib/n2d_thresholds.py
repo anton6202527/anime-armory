@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import json
 import os
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 try:
     from n2d_contract import production_dir
@@ -74,6 +74,33 @@ BENCHMARK_SETTINGS_MAP = {
     "基准重抽率": "redraw_rate",
 }
 
+RETENTION_BENCHMARK_REQUIRED_PROVENANCE = (
+    "source_ids",
+    "definition",
+    "checked_at",
+    "expires_at",
+    "confidence",
+)
+
+RETENTION_BENCHMARK_REQUIRED_PATHS = (
+    "creative_attention.first_3s_proposition_required",
+    "creative_attention.first_6s_hook_required",
+    "creative_attention.caption_words_per_sec_band",
+    "proxy_thresholds.hook_window_sec",
+    "proxy_thresholds.retention_hook_floor",
+    "episode_kpi_targets.required_metrics",
+    "app_retention_reference.global_short_drama_apps.d1_retention",
+    "app_retention_reference.global_short_drama_apps.d7_retention",
+    "app_retention_reference.global_short_drama_apps.d14_retention",
+    "app_retention_reference.china_short_drama_apps.d1_retention",
+    "app_retention_reference.china_short_drama_apps.d7_retention",
+    "app_retention_reference.china_short_drama_apps.d14_retention",
+)
+
+BENCHMARK_SCHEMA_ERRORS_KEY = "_retention_benchmark_schema_errors"
+BENCHMARK_SCHEMA_VALID_KEY = "_retention_benchmark_schema_valid"
+BENCHMARK_RETENTION_SOURCE_KEY = "_retention_benchmark_source"
+
 
 def load_reference_benchmark() -> Dict[str, Any]:
     cfg: Dict[str, Any] = json.loads(json.dumps(FALLBACK_INDUSTRY_BENCHMARK))
@@ -86,9 +113,73 @@ def load_reference_benchmark() -> Dict[str, Any]:
     return cfg
 
 
+def validate_retention_benchmark_schema(data: Dict[str, Any]) -> List[str]:
+    """Validate benchmark provenance schema without changing runtime compatibility.
+
+    The dashboard and pacing scripts still read the numeric leaves directly. The
+    strict schema lives in `retention_benchmarks.provenance` so a benchmark can be
+    refreshed and audited without forcing every consumer to understand source
+    metadata.
+    """
+    errors: List[str] = []
+    rb = data.get("retention_benchmarks") if isinstance(data, dict) else None
+    if not isinstance(rb, dict):
+        return ["retention_benchmarks missing or not an object"]
+    if rb.get("kind") != "n2d_retention_benchmarks":
+        errors.append("retention_benchmarks.kind must be n2d_retention_benchmarks")
+    try:
+        schema_version = int(rb.get("schema_version") or 0)
+    except (TypeError, ValueError):
+        schema_version = 0
+    if schema_version < 2:
+        errors.append("retention_benchmarks.schema_version must be >= 2")
+    for key in ("collected", "checked_at", "valid_until"):
+        if not str(rb.get(key) or "").strip():
+            errors.append(f"retention_benchmarks.{key} is required")
+    sources = rb.get("sources")
+    if not isinstance(sources, dict) or not sources:
+        errors.append("retention_benchmarks.sources must be a non-empty object")
+        sources = {}
+    for source_id, source in sources.items():
+        if not isinstance(source, dict):
+            errors.append(f"sources.{source_id} must be an object")
+            continue
+        for key in ("title", "publisher", "url", "checked_at", "expires_at", "confidence", "definition"):
+            if not str(source.get(key) or "").strip():
+                errors.append(f"sources.{source_id}.{key} is required")
+    provenance = rb.get("provenance")
+    if not isinstance(provenance, dict):
+        errors.append("retention_benchmarks.provenance must be an object")
+        provenance = {}
+    for path in RETENTION_BENCHMARK_REQUIRED_PATHS:
+        meta = provenance.get(path)
+        if not isinstance(meta, dict):
+            errors.append(f"provenance.{path} is required")
+            continue
+        for key in RETENTION_BENCHMARK_REQUIRED_PROVENANCE:
+            if key == "source_ids":
+                ids = meta.get(key)
+                if not isinstance(ids, list) or not ids or not all(str(i).strip() for i in ids):
+                    errors.append(f"provenance.{path}.source_ids must be a non-empty list")
+                    continue
+                missing = [sid for sid in ids if sid not in sources]
+                if missing:
+                    errors.append(f"provenance.{path}.source_ids unknown: {', '.join(missing)}")
+            elif not str(meta.get(key) or "").strip():
+                errors.append(f"provenance.{path}.{key} is required")
+    return errors
+
+
 def load_benchmark(root: str) -> Dict[str, Any]:
-    """行业基准参照：默认 ← _设置.md ← industry_benchmark.json。**只读，不参与告警/阻断。**"""
+    """行业基准参照：默认 ← _设置.md ← industry_benchmark.json。**只读，不参与告警/阻断。**
+
+    项目级 `生产数据/industry_benchmark.json` 允许覆盖成本/ROI 等本作口径；但一旦覆盖
+    `retention_benchmarks`，必须通过 v2 provenance schema。否则保留仓库参考留存基准，
+    并把错误挂到 `_retention_benchmark_schema_errors`，避免陈旧/半截留存线静默污染下游。
+    """
     cfg: Dict[str, Any] = load_reference_benchmark()
+    cfg[BENCHMARK_SCHEMA_VALID_KEY] = True
+    cfg[BENCHMARK_RETENTION_SOURCE_KEY] = "reference"
     for label, key in BENCHMARK_SETTINGS_MAP.items():
         val = get_setting(root, label, "")
         ratio = parse_ratio(val)
@@ -99,7 +190,22 @@ def load_benchmark(root: str) -> Dict[str, Any]:
         try:
             data = json.load(open(path, encoding="utf-8"))
             if isinstance(data, dict):
-                cfg.update(data)
+                retention = data.get("retention_benchmarks")
+                if retention is not None:
+                    errors = validate_retention_benchmark_schema(data)
+                    if errors:
+                        clean = dict(data)
+                        clean.pop("retention_benchmarks", None)
+                        cfg.update(clean)
+                        cfg[BENCHMARK_SCHEMA_VALID_KEY] = False
+                        cfg[BENCHMARK_SCHEMA_ERRORS_KEY] = errors
+                        cfg[BENCHMARK_RETENTION_SOURCE_KEY] = "reference_after_invalid_project_override"
+                    else:
+                        cfg.update(data)
+                        cfg[BENCHMARK_SCHEMA_VALID_KEY] = True
+                        cfg[BENCHMARK_RETENTION_SOURCE_KEY] = "project"
+                else:
+                    cfg.update(data)
         except (ValueError, OSError):
             pass
     return cfg

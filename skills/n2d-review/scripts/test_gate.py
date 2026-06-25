@@ -85,7 +85,7 @@ GOOD_VIDEO_CLIP = """## Clip 1（时长 5.0s · 镜头1） **节奏**：铺垫·
 **环境交互**：残烛光在眼下轻轻跳动，床幔阴影随呼吸微动，前景托盘保持不位移。
 **模型路由**：shot_type=dialogue_closeup；primary_backend=dreamina；fallback_backends=seedance,kling；mode=image2video；native_audio_policy=none；identity_requirement=reference_group；risk_flags=mouth_visible；rationale=普通近景先用项目默认后端，失败切身份/运动更强后端；degrade_plan=改侧脸或反应镜，必要时切 seedance/kling 重跑
 **角色身份注册层**：`CHAR_SHEN/常态`；目标后端 dreamina=fallback_reference_group；fallback reference_group=出图/共享/图片/定妆_沈念.png + 侧面/半身参考；高危角度=deep_shadow；禁漂项=face_shape/hairstyle/outfit_palette
-**近景/反打身份锁定**：本镜是说话近景；优先引用 expressions/脸部特写，缺脸部特写时用正脸 front + 侧面 + 半身 reference_group；锁脸型、五官比例、发型发髻、标志配饰、服装配色；只允许眼神和嘴角小幅变化，脸漂则降级 MCU/侧脸/反应镜。
+**近景/反打身份锁定**：本镜是说话近景；优先引用 expressions/脸部特写，缺脸部特写时用正脸 front + 侧面 + 半身 reference_group；锁脸型、五官比例、发型发髻、标志配饰、服装配色；只允许眼神和嘴角小幅变化，脸漂则用 MCU/侧脸/反应镜保真实现。
 **原生音画策略**：audio_intent=none；risk=low；mouth_visible=no；speech_policy=no_native_speech；compose_policy=丢弃；review=生成后确认无原生人声
 **衔接设计**：
 - 入点：承接上一 Clip 的动作和视线方向
@@ -112,7 +112,7 @@ continuity:
 环境交互约束：残烛光在眼下轻跳，床幔阴影随呼吸微动；
 模型路由约束：读取 video_model_routes.json；本镜 primary_backend=dreamina，fallback=seedance,kling，mode=image2video，native_audio_policy=none，identity_requirement=reference_group；prompt 只使用 dreamina 支持的 image2video 能力；失败按 degrade_plan 改侧脸或切 fallback 重跑；
 身份锁定约束：读取 identity_registry.json；dreamina 回退首帧+尾帧+reference_group；保持 drift_forbidden=face_shape/hairstyle/outfit_palette；
-近景身份锁定约束：近景优先脸部特写/表情参考；缺 reference_controls 时只做低幅度眼神和嘴角变化，不大幅转头，不重绘五官，配角近景不稳则降级 MCU/OTS/侧脸；
+近景身份锁定约束：近景优先脸部特写/表情参考；缺 reference_controls 时只做低幅度眼神和嘴角变化，不大幅转头，不重绘五官，配角近景不稳则用 MCU/OTS/侧脸保真实现；
 原生音画约束：默认禁止原生人声，不生成对白/旁白/哼唱；本镜 compose_policy=丢弃；
 人物运动：沈念急促呼吸后缓慢抬眼，表情从惊惧压成克制；
 镜头运动：略俯 MCU 缓慢推近 0.5x，结尾稳定停住；
@@ -540,6 +540,7 @@ def test_video_gate_runs_multimodal_p2_before_video_prompt(monkeypatch, tmp_path
         "check_video_stage_raw_output_policy",
         "check_semantic_lineage",
         "check_state_continuity",
+        "check_consistency_audit_gate",
     ]:
         monkeypatch.setattr(gate, name, mark(name))
 
@@ -549,6 +550,7 @@ def test_video_gate_runs_multimodal_p2_before_video_prompt(monkeypatch, tmp_path
     assert calls.index("check_image_assets") < calls.index("check_multimodal_continuity")
     assert calls.index("check_multimodal_continuity") < calls.index("check_prompt_checklists")
     assert calls.index("check_prompt_checklists") < calls.index("check_video_stage_raw_output_policy")
+    assert calls.index("check_state_continuity") < calls.index("check_consistency_audit_gate")
 
 
 def test_good_character_shot_prompt_passes_strict_structure():
@@ -1148,7 +1150,7 @@ def test_image_overview_requires_episode_visual_contract(tmp_path):
 
     gate.check_image_prompt_overview(str(root), "第1集")
 
-    assert any(f["sev"] == gate.BLOCK and f["dim"] == "视觉契约" and "本集视觉一致性契约" in f["msg"] for f in gate.findings)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "契约继承" and "本集视觉一致性契约" in f["msg"] for f in gate.findings)
 
 
 def test_image_overview_contract_missing_field_is_blocked(tmp_path):
@@ -1164,7 +1166,7 @@ def test_image_overview_contract_missing_field_is_blocked(tmp_path):
 
     gate.check_image_prompt_overview(str(root), "第1集")
 
-    assert any(f["sev"] == gate.BLOCK and f["dim"] == "视觉契约" and "景别阶梯" in f["msg"] for f in gate.findings)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "契约继承" and "景别阶梯" in f["msg"] for f in gate.findings)
 
 
 def _write_storyboard(tmp_path, vc):
@@ -1673,6 +1675,55 @@ def test_compliance_manifest_requires_overseas_localization(tmp_path):
 
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "合规前置" and "出海本地化" in f["msg"] for f in gate.findings)
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "合规前置" and "目标语言 en" in f["msg"] for f in gate.findings)
+
+
+def test_compliance_manifest_publish_candidate_release_fields_are_info_at_image(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_identity_registry(tmp_path)
+    _good_compliance(root, status_overrides={
+        "platform_review.targets.0.platform": "YouTube",
+        "platform_review.targets.0.region": "US",
+        "platform_review.targets.0.language": "en",
+        "platform_review.targets.0.requires_localization": True,
+        "localization.status": "draft",
+        "localization.subtitle_languages": ["zh"],
+        "regulatory_filing.pre_broadcast_review": "pending",
+        "regulatory_filing.release_filing_no": "TODO: 上线备案号",
+    })
+
+    gate.check_compliance_manifest(str(root), "第1集", "image")
+
+    release = [
+        f for f in gate.findings
+        if f["dim"] == "合规前置"
+        and (
+            "platform_review" in f["loc"]
+            or "localization" in f["loc"]
+            or "regulatory_filing" in f["loc"]
+        )
+    ]
+    assert release and all(f["sev"] == gate.INFO for f in release), release
+    assert not any(f["sev"] == gate.BLOCK for f in release)
+
+
+def test_compliance_manifest_paid_distribution_release_fields_block_at_image(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_identity_registry(tmp_path)
+    _good_compliance(root, status_overrides={
+        "distribution_intent": "paid_distribution",
+        "platform_review.targets.0.platform": "TODO",
+        "platform_review.targets.0.policy_profile": "TODO_profile_2026-06-08",
+        "regulatory_filing.pre_broadcast_review": "pending",
+        "regulatory_filing.release_filing_no": "TODO: 上线备案号",
+    })
+
+    gate.check_compliance_manifest(str(root), "第1集", "image")
+
+    assert any(f["sev"] == gate.BLOCK and "平台审核缺字段：platform" in f["msg"] for f in gate.findings)
+    assert any(f["sev"] == gate.BLOCK and "regulatory_filing" in f["loc"] and "pre_broadcast_review" in f["msg"] for f in gate.findings)
+    assert any(f["sev"] == gate.BLOCK and "regulatory_filing" in f["loc"] and "release_filing_no" in f["msg"] for f in gate.findings)
 
 
 def test_identity_registry_missing_is_blocked(tmp_path):
@@ -2369,20 +2420,20 @@ def test_identity_adapter_matrix_minimal_contract_passes(tmp_path):
 def test_storyboard_missing_visual_contract_is_blocked(tmp_path):
     root = _write_storyboard(tmp_path, None)
     gate.check_storyboard_visual_contract(root, "第1集")
-    assert any(f["sev"] == gate.BLOCK and f["dim"] == "视觉契约" and "visual_contract 种子块" in f["msg"] for f in gate.findings)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "契约继承" and "visual_contract 种子块" in f["msg"] for f in gate.findings)
 
 
 def test_storyboard_visual_contract_missing_field_is_blocked(tmp_path):
     # 有 visual_contract 但缺「景别阶梯」
     root = _write_storyboard(tmp_path, {"色调基线": "冷青", "场景光位锚": {}, "场景轴线视线": {}, "角色状态演进": {}})
     gate.check_storyboard_visual_contract(root, "第1集")
-    assert any(f["sev"] == gate.BLOCK and f["dim"] == "视觉契约" and "景别阶梯" in f["msg"] for f in gate.findings)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "契约继承" and "景别阶梯" in f["msg"] for f in gate.findings)
 
 
 def test_storyboard_full_visual_contract_passes(tmp_path):
     root = _write_storyboard(tmp_path, {"色调基线": "x", "场景光位锚": {}, "场景轴线视线": {}, "角色状态演进": {}, "景别阶梯": "y"})
     gate.check_storyboard_visual_contract(root, "第1集")
-    assert not any(f["dim"] == "视觉契约" for f in gate.findings)
+    assert not any(f["dim"] == "契约继承" for f in gate.findings)
 
 
 def test_storyboard_missing_style_contract_is_blocked(tmp_path):
@@ -2742,6 +2793,45 @@ def test_native_av_default_uses_contract_default(tmp_path):
     assert gate.is_native_av_production(str(root)) is True
 
 
+def test_native_voice_identity_missing_blocks_native_av_review(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("- 制作模式: 原生音画\n", encoding="utf-8")
+
+    gate.check_native_voice_identity(str(root), "第1集", "review")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "原生音画声线一致性" for f in gate.findings)
+
+
+def test_native_voice_identity_degraded_backend_blocks_then_warns_with_escape(tmp_path, monkeypatch):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    audio = root / "出视频" / "第1集" / "audio"
+    prod = root / "生产数据"
+    audio.mkdir(parents=True)
+    prod.mkdir(parents=True)
+    (root / "_设置.md").write_text("- 制作模式: 原生音画\n", encoding="utf-8")
+    (audio / "Clip_01_speech.wav").write_bytes(b"RIFF")
+    (audio / "Clip_02_speech.wav").write_bytes(b"RIFF")
+    (prod / "native_voice_identity_第1集.json").write_text(json.dumps({
+        "kind": gate.NATIVE_VOICE_IDENTITY_SEGMENTS_KIND,
+        "segments": [
+            {"character_id": "CHAR_01", "speaker_key": "NATIVE", "wav": "出视频/第1集/audio/Clip_01_speech.wav"},
+            {"character_id": "CHAR_01", "speaker_key": "NATIVE", "wav": "出视频/第1集/audio/Clip_02_speech.wav"},
+        ],
+    }, ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setattr(gate.vprint, "load_speaker_encoder", lambda: (None, None))
+
+    gate.check_native_voice_identity(str(root), "第1集", "review")
+    assert any(f["sev"] == gate.BLOCK and "声纹后端不可用" in f["msg"] for f in gate.findings)
+
+    gate.findings.clear()
+    monkeypatch.setenv("N2D_ALLOW_DEGRADED_QC", "1")
+    gate.check_native_voice_identity(str(root), "第1集", "review")
+    assert any(f["sev"] == gate.WARN and "N2D_ALLOW_DEGRADED_QC" in f["msg"] for f in gate.findings)
+
+
 def _patch_image_prompt_preflight_dependencies(monkeypatch):
     for name in (
         "check_compliance_manifest", "require_progress", "check_progress_artifact_signoff",
@@ -2763,6 +2853,7 @@ def _patch_video_prompt_preflight_dependencies(monkeypatch):
         "check_storyboard_style_contract", "check_storyboard_special_templates",
         "check_expression_span_frame_contract", "check_image_assets", "check_input_frame_qc",
         "check_multimodal_continuity", "check_semantic_lineage", "check_state_continuity",
+        "check_video_backend_reachable",
     ):
         monkeypatch.setattr(gate, name, lambda *a, **k: None)
     monkeypatch.setattr(gate, "episode_registry_reference_ids", lambda *a, **k: (set(), set()))
@@ -2826,6 +2917,64 @@ def test_compose_gate_native_av_missing_srt_is_warn_not_block(tmp_path):
     gate.check_compose_inputs(str(root), "第1集")
     assert not any(f["sev"] == gate.BLOCK and f["dim"] == "字幕" for f in gate.findings)
     assert any(f["sev"] == gate.WARN and f["dim"] == "字幕" and "whisperx" in f["msg"] for f in gate.findings)
+
+
+def test_native_av_subtitle_alignment_compose_warns_when_missing(tmp_path):
+    root = tmp_path / "制漫剧" / "av"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("- 制作模式: 原生音画\n", encoding="utf-8")
+
+    gate.check_native_av_subtitle_alignment(str(root), "第1集", "compose")
+
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "原生音画字幕对齐" for f in gate.findings)
+    assert any(f["sev"] == gate.WARN and f["dim"] == "原生音画字幕对齐" for f in gate.findings)
+
+
+def test_native_av_subtitle_alignment_review_blocks_when_missing(tmp_path):
+    root = tmp_path / "制漫剧" / "av"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("- 制作模式: 原生音画\n", encoding="utf-8")
+
+    gate.check_native_av_subtitle_alignment(str(root), "第1集", "review")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "原生音画字幕对齐" for f in gate.findings)
+
+
+def test_native_av_paid_distribution_compose_blocks_missing_subtitle_alignment(tmp_path):
+    root = tmp_path / "制漫剧" / "av"
+    (root / "合规").mkdir(parents=True)
+    (root / "_设置.md").write_text("- 制作模式: 原生音画\n", encoding="utf-8")
+    (root / "合规" / "compliance_manifest.json").write_text(json.dumps({
+        "kind": gate.COMPLIANCE_KIND,
+        "distribution_intent": "paid_distribution",
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_native_av_subtitle_alignment(str(root), "第1集", "compose")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "原生音画字幕对齐" for f in gate.findings)
+
+
+def test_native_av_subtitle_alignment_valid_sidecar_passes_review(tmp_path):
+    root = tmp_path / "制漫剧" / "av"
+    (root / "脚本" / "第1集").mkdir(parents=True)
+    (root / "生产数据").mkdir(parents=True)
+    (root / "_设置.md").write_text("- 制作模式: 原生音画\n", encoding="utf-8")
+    (root / "脚本" / "第1集" / "字幕_中文.srt").write_text(
+        "1\n00:00:00,000 --> 00:00:02,000\n你好。\n",
+        encoding="utf-8",
+    )
+    (root / "生产数据" / "native_av_subtitle_alignment_第1集.json").write_text(json.dumps({
+        "kind": "n2d_native_av_subtitle_alignment",
+        "status": "pass",
+        "alignment_tool": "whisperx",
+        "word_level": True,
+        "subtitle_path": "脚本/第1集/字幕_中文.srt",
+        "clips": [{"clip_id": "Clip_01", "status": "aligned"}],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_native_av_subtitle_alignment(str(root), "第1集", "review")
+
+    assert not any(f["dim"] == "原生音画字幕对齐" for f in gate.findings)
 
 
 def test_image_ai_setting_dreamina_official_cli_passes(tmp_path):
@@ -3392,10 +3541,10 @@ def test_video_clip_missing_motion_refinement_is_blocked():
 
 def test_video_clip_closeup_missing_fine_identity_lock_is_blocked():
     clip = GOOD_VIDEO_CLIP.replace(
-        "**近景/反打身份锁定**：本镜是说话近景；优先引用 expressions/脸部特写，缺脸部特写时用正脸 front + 侧面 + 半身 reference_group；锁脸型、五官比例、发型发髻、标志配饰、服装配色；只允许眼神和嘴角小幅变化，脸漂则降级 MCU/侧脸/反应镜。\n",
+        "**近景/反打身份锁定**：本镜是说话近景；优先引用 expressions/脸部特写，缺脸部特写时用正脸 front + 侧面 + 半身 reference_group；锁脸型、五官比例、发型发髻、标志配饰、服装配色；只允许眼神和嘴角小幅变化，脸漂则用 MCU/侧脸/反应镜保真实现。\n",
         "",
     ).replace(
-        "近景身份锁定约束：近景优先脸部特写/表情参考；缺 reference_controls 时只做低幅度眼神和嘴角变化，不大幅转头，不重绘五官，配角近景不稳则降级 MCU/OTS/侧脸；\n",
+        "近景身份锁定约束：近景优先脸部特写/表情参考；缺 reference_controls 时只做低幅度眼神和嘴角变化，不大幅转头，不重绘五官，配角近景不稳则用 MCU/OTS/侧脸保真实现；\n",
         "",
     )
     gate.check_video_clip_prompt_section("01_clips.md", clip)
@@ -3946,7 +4095,7 @@ def test_video_overview_closeup_identity_risk_table_passes():
 ## 本集近景身份风险表
 | 角色/形态 | 近景风险 Clip | 可用脸部/表情参考 | 风险 | 执行策略 |
 |---|---|---|---|---|
-| CHAR_02/惊慌护主 小禾 | Clip06 | 无脸部特写，只有 reference_group | 高风险 | 降级 MCU/OTS/侧脸/手部/物件反应镜 |
+| CHAR_02/惊慌护主 小禾 | Clip06 | 无脸部特写，只有 reference_group | 高风险 | MCU/OTS/侧脸/手部/物件反应镜保真实现 |
 """
 
     gate.check_video_closeup_identity_overview(overview, "00_总览.md")
@@ -4104,6 +4253,83 @@ def test_video_model_routes_identity_route_requires_clip_characters(tmp_path):
                for f in gate.findings)
 
 
+def test_native_av_speech_route_without_native_or_voice_fallback_blocks(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    _settings(root, "原生音画")
+    _write_routes(root, _basic_route(shot_type="dialogue_closeup", risk_flags=["mouth_visible"]))
+
+    gate.findings.clear()
+    gate.check_video_model_routes(str(root), "第1集", "## 本集模型路由表\n", "00_总览.md")
+
+    assert any(
+        f["sev"] == gate.BLOCK and f["dim"] == "原生音画降级" and "requires_voice_fallback" in f["msg"]
+        for f in gate.findings
+    )
+
+
+def test_native_av_voice_fallback_requires_real_voice_manifest(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    _settings(root, "原生音画")
+    _write_routes(
+        root,
+        _basic_route(
+            shot_type="dialogue_closeup",
+            risk_flags=["mouth_visible"],
+            requires_voice_fallback=True,
+            fallback_production_mode="voice_first",
+        ),
+    )
+
+    gate.findings.clear()
+    gate.check_video_model_routes(str(root), "第1集", "## 本集模型路由表\n", "00_总览.md")
+
+    assert any(
+        f["sev"] == gate.BLOCK and f["dim"] == "原生音画降级" and f["return_to_stage"] == "voice"
+        for f in gate.findings
+    )
+
+    _voice_manifest(root, placeholder=False)
+    gate.findings.clear()
+    gate.check_video_model_routes(str(root), "第1集", "## 本集模型路由表\n", "00_总览.md")
+
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "原生音画降级" for f in gate.findings)
+
+
+def test_speech_route_requires_mouth_visible_audit_sidecar(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_routes(root, _basic_route(shot_type="dialogue_closeup", risk_flags=["mouth_visible"]))
+
+    gate.findings.clear()
+    gate.check_video_model_routes(str(root), "第1集", "## 本集模型路由表\n", "00_总览.md")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "mouth_visible证据" for f in gate.findings)
+
+
+def test_mouth_visible_audit_warn_blocks_paid_video(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_routes(root, _basic_route(shot_type="dialogue_closeup", risk_flags=["mouth_visible"]))
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    (prod / "mouth_visible_audit_第1集.json").write_text(
+        json.dumps({
+            "kind": "n2d_mouth_visible_audit",
+            "episode": "第1集",
+            "rows": [{"clip_id": "Clip_01", "verdict": "warn", "message": "图上嘴可见=yes 但 prompt=no"}],
+        }, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+    gate.findings.clear()
+    gate.check_video_model_routes(str(root), "第1集", "## 本集模型路由表\n", "00_总览.md")
+
+    assert any(
+        f["sev"] == gate.BLOCK and f["dim"] == "mouth_visible证据" and "Clip_01" in f["msg"]
+        for f in gate.findings
+    )
+
+
 def test_video_model_routes_ep2_requires_baseline_for_identity_route(tmp_path):
     root = tmp_path / "制漫剧" / "测试剧"
     _write_routes(root, _basic_route(primary_backend="veo", fallback_backends=[]), ep="第2集")
@@ -4166,6 +4392,59 @@ def test_video_model_routes_baseline_override_downgrades_drift_to_warn(tmp_path)
 
     assert not any(f["sev"] == gate.BLOCK and f["dim"] == "后端跨集锁" for f in gate.findings)
     assert any(f["sev"] == gate.WARN and f["dim"] == "后端跨集锁" for f in gate.findings)
+
+
+def test_video_model_routes_missing_backend_scope_blocks_mixed_primary_backends(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    prompt_dir = root / "出视频" / "第1集" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    routes = [
+        _basic_route(clip_id="Clip_01", primary_backend="dreamina"),
+        _basic_route(clip_id="Clip_02", primary_backend="kling"),
+    ]
+    (prompt_dir / "video_model_routes.json").write_text(
+        json.dumps({"kind": "n2d_video_model_routes", "routes": routes}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+    gate.findings.clear()
+    gate.check_video_model_routes(str(root), "第1集", "## 本集模型路由表\n", "00_总览.md")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "后端一致性作用域(BSCOPE)" for f in gate.findings)
+
+
+def test_video_model_routes_accepts_backend_scope_and_requires_action_identity_plan(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    route = _basic_route(
+        shot_type="action_fight",
+        risk_flags=["contact_motion"],
+        motion_control={
+            "level": "required",
+            "required": True,
+            "manifest_required": True,
+            "manifest_path": "生产数据/motion_control/Clip_01.json",
+            "required_inputs": ["pose_sequence"],
+            "backend_control_level": "medium",
+            "failure_modes": ["feature_melting"],
+            "gate_policy": "block_without_ready_manifest_or_degrade_only_manifest",
+            "degrade_allowed": True,
+        },
+    )
+    _write_routes(
+        root,
+        route,
+        backend_consistency_scope={
+            "image_generation": "single_model_channel_per_project",
+            "video_generation": "per_clip_allowed_with_baseline",
+            "required_guards": ["model_routes_baseline", "identity_handoff", "execution_recipe", "post_video_qc"],
+        },
+    )
+
+    gate.findings.clear()
+    gate.check_video_model_routes(str(root), "第1集", "## 本集模型路由表\n", "00_总览.md")
+
+    assert not any(f["dim"] == "后端一致性作用域(BSCOPE)" for f in gate.findings)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "动作身份优先级" for f in gate.findings)
 
 
 def test_video_model_routes_legacy_baseline_reason_no_longer_overrides(tmp_path):
@@ -5921,6 +6200,106 @@ def test_backend_reachable_ok_silent(tmp_path, monkeypatch):
     assert gate.findings == []
 
 
+# ── 出视频后端连通性预检（镜像图侧 check_backend_reachable，付费出视频前）──────────────────
+def test_video_backend_reachable_down_blocks(tmp_path, monkeypatch):
+    monkeypatch.setattr(gate, "get_setting", lambda *a, **k: "即梦/Dreamina")
+    monkeypatch.setattr(gate.video_backend_adapter, "probe_video_backend",
+                        lambda *a, **k: ("down", "HTTP 502"))
+    gate.findings.clear()
+    gate.check_video_backend_reachable(str(tmp_path), "第1集")
+    b = [f for f in gate.findings if f["sev"] == gate.BLOCK and f["dim"] == "生视频后端连通性"]
+    assert b and b[0]["return_to_stage"] == "video_prompt"
+    assert "502" in b[0]["msg"] and "兜底" in b[0]["msg"]
+
+
+def test_video_backend_reachable_unknown_warns_only(tmp_path, monkeypatch):
+    monkeypatch.setattr(gate, "get_setting", lambda *a, **k: "即梦/Dreamina")
+    monkeypatch.setattr(gate.video_backend_adapter, "probe_video_backend",
+                        lambda *a, **k: ("unknown", "无自动探针"))
+    gate.findings.clear()
+    gate.check_video_backend_reachable(str(tmp_path), "第1集")
+    assert not any(f["sev"] == gate.BLOCK for f in gate.findings)
+    assert any(f["sev"] == gate.WARN and f["dim"] == "生视频后端连通性" for f in gate.findings)
+
+
+def test_video_backend_reachable_ok_silent(tmp_path, monkeypatch):
+    monkeypatch.setattr(gate, "get_setting", lambda *a, **k: "即梦/Dreamina")
+    monkeypatch.setattr(gate.video_backend_adapter, "probe_video_backend",
+                        lambda *a, **k: ("ok", ""))
+    gate.findings.clear()
+    gate.check_video_backend_reachable(str(tmp_path), "第1集")
+    assert gate.findings == []
+
+
+def test_video_backend_reachable_skip_probe_leaves_trace(tmp_path, monkeypatch):
+    monkeypatch.setattr(gate, "get_setting", lambda *a, **k: "即梦/Dreamina")
+    monkeypatch.setenv("N2D_SKIP_BACKEND_PROBE", "1")
+    gate.findings.clear()
+    gate.check_video_backend_reachable(str(tmp_path), "第1集")
+    assert any(f["dim"] == "生视频后端连通性" and "N2D_SKIP_BACKEND_PROBE 已设置" in str(f["msg"])
+               for f in gate.findings)
+
+
+# ── 付费前预算硬挂钩（堵 budget_cap 只在事后 rebuild 才告警的松动洞）──────────────────────
+def test_evaluate_budget_gate_no_cap_is_empty():
+    assert gate.evaluate_budget_gate({"CNY": 999}, {}, None, 5) == []
+    assert gate.evaluate_budget_gate({"CNY": 999}, {}, 0, 5) == []
+
+
+def test_evaluate_budget_gate_over_cap_blocks():
+    r = gate.evaluate_budget_gate({"CNY": 120.0}, {}, 100, 0)
+    assert r and r[0][0] == "block" and r[0][1] == "CNY" and "120" in r[0][4]
+
+
+def test_evaluate_budget_gate_forecast_pushes_over_blocks():
+    # 已花 80 + 本集预测(2/min × 15min = 30) = 110 > 100 → block（开跑前就拦，防超支）
+    r = gate.evaluate_budget_gate({"CNY": 80.0}, {"CNY": 2.0}, 100, 15)
+    assert r and r[0][0] == "block" and "将超上限" in r[0][4]
+
+
+def test_evaluate_budget_gate_near_cap_warns():
+    r = gate.evaluate_budget_gate({"CNY": 85.0}, {}, 100, 0, warn_ratio=0.8)
+    assert r and r[0][0] == "warn"
+
+
+def test_evaluate_budget_gate_under_cap_silent():
+    assert gate.evaluate_budget_gate({"CNY": 50.0}, {}, 100, 0) == []
+
+
+def test_evaluate_budget_gate_first_episode_forecast_alone_over():
+    # 还没花过钱（cost_totals 空），但本集历史单价×计划时长就超 → 仍 block
+    r = gate.evaluate_budget_gate({}, {"USD": 10.0}, 100, 12)
+    assert r and r[0][0] == "block" and r[0][1] == "USD"
+
+
+def test_episode_planned_minutes_total_then_clips(tmp_path):
+    sb = tmp_path / "脚本" / "第1集"; sb.mkdir(parents=True)
+    (sb / "storyboard.json").write_text(json.dumps({"total_duration": 120}), encoding="utf-8")
+    assert gate._episode_planned_minutes(str(tmp_path), "第1集") == 2.0
+    (sb / "storyboard.json").write_text(json.dumps({"clips": [{"duration": 30}, {"duration": 30}]}), encoding="utf-8")
+    assert gate._episode_planned_minutes(str(tmp_path), "第1集") == 1.0
+    (sb / "storyboard.json").write_text(json.dumps({}), encoding="utf-8")
+    assert gate._episode_planned_minutes(str(tmp_path), "第1集") == 0.0
+
+
+def test_check_budget_cap_blocks_pre_spend(tmp_path, monkeypatch):
+    monkeypatch.setattr(gate, "load_thresholds", lambda root: {"budget_cap": 100, "budget_warn_ratio": 0.8})
+    monkeypatch.setattr(gate, "load_json",
+                        lambda p: {"totals": {"cost_totals": {"CNY": 150.0}, "cost_per_finished_min": {}}}
+                        if "dashboard" in str(p) else {})
+    gate.findings.clear()
+    gate.check_budget_cap(str(tmp_path), "第1集")
+    b = [f for f in gate.findings if f["sev"] == gate.BLOCK and f["dim"] == "预算"]
+    assert b and "150" in b[0]["msg"] and "停止付费生成" in b[0]["msg"]
+
+
+def test_check_budget_cap_noop_without_cap(tmp_path, monkeypatch):
+    monkeypatch.setattr(gate, "load_thresholds", lambda root: {"budget_cap": None})
+    gate.findings.clear()
+    gate.check_budget_cap(str(tmp_path), "第1集")
+    assert gate.findings == []
+
+
 def test_image_backend_api_refresh_missing_blocks(tmp_path, monkeypatch):
     monkeypatch.setattr(gate, "get_setting", lambda *a, **k: "Codex")
     gate.findings.clear()
@@ -6409,6 +6788,13 @@ def test_degraded_precision_compose_waived_by_env(monkeypatch, tmp_path):
     assert any(f["sev"] == "warn" and "放行" in str(f["msg"]) for f in fs)
 
 
+def test_degraded_precision_blocks_at_video_under_production(monkeypatch, tmp_path):
+    fs = _run_consistency(monkeypatch, tmp_path,
+                          {"summary": {"precision_level": "degraded"}, "findings": []}, "video",
+                          env={"N2D_CONSISTENCY_PROFILE": "production"})
+    assert any(f["dim"] == "一致性总审" and f["sev"] == "block" and "出视频后闸门" in str(f["msg"]) for f in fs)
+
+
 # ── 一致性总审前移到出图后 image 闸门：确定性 🔴 维度挡在出视频前 ──
 
 def test_consistency_block_dim_blocks_at_image(monkeypatch, tmp_path):
@@ -6532,6 +6918,24 @@ def test_av1_dialogue_closeup_single_warn_blocks_under_production(monkeypatch, t
     monkeypatch.setenv("N2D_CONSISTENCY_PROFILE", "demo")
     block3, _ = gate._strict_advisory_should_block(str(root), "第1集", "image", closeup, summary)
     assert block3 is False
+
+
+def test_video_required_evidence_missing_blocks_under_production(monkeypatch, tmp_path):
+    root = tmp_path / "w"
+    root.mkdir()
+    monkeypatch.setenv("N2D_CONSISTENCY_PROFILE", "production")
+    summary = {"by_dim": {"运动质量(MOT1)": {"warn": 1}}}
+    row = {
+        "dimension": "运动质量(MOT1)",
+        "message": "视频含明确动作/运动镜，但缺 motion_quality 报告",
+        "evidence_missing": True,
+    }
+    block, reason = gate._strict_advisory_should_block(str(root), "第1集", "video", row, summary)
+    assert block is True and reason == "视频后验证据缺失"
+
+    monkeypatch.setenv("N2D_CONSISTENCY_PROFILE", "demo")
+    block2, _ = gate._strict_advisory_should_block(str(root), "第1集", "video", row, summary)
+    assert block2 is False
 
 
 # ── M5 跨集对比跨过缺失的中间集 → WARN ──
@@ -6984,3 +7388,61 @@ def test_scene_atlas_not_required_in_demo_profile(tmp_path):
     root = Path(_write_asset_registry(tmp_path, make_assets=True))
     gate.check_asset_reference_registry(str(root), require_reference_assets=True)
     assert not any(f["dim"] == "场景多机位锁(G-I2)" for f in gate.findings)
+
+
+# ── ③ 系列留存闸 check_series_retention_gate（流程自审 2026-06-25 落地）──
+
+_SERIES_DUP_VO = """[镜头1·沈念·愤怒·快] 她当众打脸，真相大白。  ⚡钩子
+[镜头2·旁白·低沉] 没想到竟是逆袭报仇。  💥爽点
+[镜头3·沈念·痛快·快] 这一局翻盘了。  🪝集尾
+"""
+
+_SERIES_DIFF_VO = """[镜头1·林川·茫然·慢] 清晨的码头很安静。
+[镜头2·林川·平静·慢] 他慢慢收起渔网。
+[镜头3·旁白·低沉] 海风吹过。
+"""
+
+
+def _mk_series(root: Path, mapping: dict) -> None:
+    for ep, vo in mapping.items():
+        d = root / "脚本" / ep
+        d.mkdir(parents=True, exist_ok=True)
+        (d / "voiceover.txt").write_text(vo, encoding="utf-8")
+
+
+def test_series_retention_gate_under_3_eps_silent(tmp_path):
+    gate.findings.clear()
+    _mk_series(tmp_path, {"第1集": _SERIES_DUP_VO, "第2集": _SERIES_DUP_VO})
+    gate.check_series_retention_gate(str(tmp_path), "第1集", "compose")
+    assert not any(f["dim"] == gate.SERIES_RETENTION_DIM for f in gate.findings)  # <3 集无系列
+
+
+def test_series_retention_gate_production_dup_blocks_implicated_ep(tmp_path):
+    # 第1集↔第2集 桥段指纹雷同 + production + compose 交付边界 → 牵涉的当前集升 BLOCK
+    gate.findings.clear()
+    _mk_series(tmp_path, {"第1集": _SERIES_DUP_VO, "第2集": _SERIES_DUP_VO, "第3集": _SERIES_DIFF_VO})
+    (tmp_path / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    gate.check_series_retention_gate(str(tmp_path), "第1集", "compose")
+    hits = [f for f in gate.findings if f["dim"] == gate.SERIES_RETENTION_DIM]
+    assert any(f["sev"] == gate.BLOCK and "重合" in f["msg"] for f in hits)
+
+
+def test_series_retention_gate_demo_dup_only_warns(tmp_path):
+    # 同样雷同，但显式 demo/宽松 档 → 只 WARN 不 BLOCK（窄作用域，不惊扰非交付/demo）。
+    # 注：compose 是交付边界，无显式档会被自动推断为 production，故这里必须显式写 demo。
+    gate.findings.clear()
+    _mk_series(tmp_path, {"第1集": _SERIES_DUP_VO, "第2集": _SERIES_DUP_VO, "第3集": _SERIES_DIFF_VO})
+    (tmp_path / "_设置.md").write_text("# _设置\n- 一致性严格度: demo\n", encoding="utf-8")
+    gate.check_series_retention_gate(str(tmp_path), "第1集", "compose")
+    hits = [f for f in gate.findings if f["dim"] == gate.SERIES_RETENTION_DIM]
+    assert hits and not any(f["sev"] == gate.BLOCK for f in hits)
+
+
+def test_series_retention_gate_non_implicated_ep_info_not_block(tmp_path):
+    # 第3集不在任何 dup 里 → 系列 dup finding 对它只 INFO（可见不拦本集），即便 production
+    gate.findings.clear()
+    _mk_series(tmp_path, {"第1集": _SERIES_DUP_VO, "第2集": _SERIES_DUP_VO, "第3集": _SERIES_DIFF_VO})
+    (tmp_path / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    gate.check_series_retention_gate(str(tmp_path), "第3集", "compose")
+    dup_hits = [f for f in gate.findings if f["dim"] == gate.SERIES_RETENTION_DIM and "重合" in f["msg"]]
+    assert dup_hits and all(f["sev"] == gate.INFO for f in dup_hits)

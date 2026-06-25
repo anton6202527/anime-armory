@@ -43,9 +43,9 @@ description: 给【已写好】的小说/章节做"市场 + 品质"综合评分�
 题材热度会变,**每次评分前现拉**,不靠记忆:
 - 同步跑共享采集器落盘，避免 score/self-audit 各拉一份：
   `python3 skills/novel-score/scripts/collect_market_baseline.py "<作品根>/评分" --target-platform "<目标平台>" --allow-fetch-errors`。
-- 红果/抖音/漫剧等 app 内榜无公开网页时，用结构化人工证据补齐：`--manual-evidence "红果短剧|YYYY-MM-DD|第三方榜单|结论|URL"`；`--note` 只做人读备注，不计入有效证据。
+- 红果/抖音/漫剧等 app 内榜无公开网页时，用结构化且未过期的人工证据补齐：`--manual-evidence "红果短剧|YYYY-MM-DD|第三方榜单|结论|URL"`；`--note` 只做人读备注，不计入有效证据。若缺口存在，采集器会额外写 `评分/market_evidence_tasks.json` 和 `评分/市场证据待补.md`，交给 `novel-research` 补平台市场资料包后再回跑采集器。
 - 采集器会给每个来源写 `source_quality`，给整份基准写 `evidence_quality`；评分 prompt 会显示 high/medium/low 置信度。低质量证据不是不能看，但不能与官方/结构化/信号充足来源等权处理。
-- `score.py` 会检查 `market_baseline_*.json` 的 `expires_after_days`、人读 md 文件、有效证据和短剧/漫剧覆盖缺口。缺失/过期/缺 md/无证据/coverage_gap 会失败并提示重拉。有效证据指至少一个 `status=ok` 且 `signals` 非空的来源，或 `manual_evidence[]` 有结构化人工核验补充；全是 `fetch_error` 或自由文本 `notes` 不算基准。只有离线测试或人工明确豁免时才加 `--allow-stale-baseline`；此时 `score_report.waivers[]` 与 `审稿/waiver_log.jsonl` 会记录 `score_baseline_freshness`，且 QA gate 只降为 warning，不会伪装成 fresh。
+- `score.py` 会检查 `market_baseline_*.json` 的 `expires_after_days`、人读 md 文件、有效证据和短剧/漫剧覆盖缺口。缺失/过期/缺 md/无证据/coverage_gap 会失败并提示重拉。有效证据指至少一个 `status=ok` 且 `signals` 非空且未过期的来源，或 `manual_evidence[]` 有结构化且未过期的人工核验补充；全是 `fetch_error`、过期人工证据或自由文本 `notes` 不算基准。只有离线测试或人工明确豁免时才加 `--allow-stale-baseline`；此时 `score_report.waivers[]` 与 `审稿/waiver_log.jsonl` 会记录 `score_baseline_freshness`，且 QA gate 只降为 warning，不会伪装成 fresh。
 
 ### 1.5 读「自有题材战绩库」做第一方先验(闭环 · 选题反哺)
 公榜热度谁都能爬;真正的护城河是**自有投放战绩**。`score.py` 会自动读跨项目战绩库(`$NOVEL_GENRE_LEDGER` 或 `<repo>/生产战绩/genre_ledger.jsonl`，`--genre-ledger` 可改;该文件由**外部投放侧回灌**),按本书 `genre` 聚合出「题材自有 3秒留存/15秒留存/完播/追更/ROI」,注入打分 prompt 的市场基准。
@@ -98,6 +98,8 @@ python3 skills/novel-score/scripts/build_reference_distribution.py \
 七维,每维 1-10 分 → 按权重档换算加权;每维**给分 + 证据引文 + 一句短评**。
 题材热度匹配维度**必须对照第 1 步热榜**(不是泛泛而谈)。
 剧情结构、文学性、留存三维必须同时对照 `设定/读者契约.md`（若存在）：核心题旨是否被推进、读者承诺是否递进/兑现、文学质感是否匹配目标平台。缺契约时在报告里提示先按 `novel-craft/references/reader-contract.md` 补齐。
+先判断主类型，再套 `rubric.md` 的类型专项评分尺：悬疑看公平谜面和证据链，硬科幻看假设与约束，文学/现实主义看观察精度和语言辨识度，历史看 register 与制度可信，恐怖看未知感和规则，言情看关系推进和情绪兑现，群像看多线弧光。不得把“爽点密度低”机械扣到所有类型上。
+若存在 `设定/aesthetic_bank.json`，品质向/文学向/历史/悬疑项目在文学性、结构、人物维度引用 1-3 条 `novel-aesthetic` 正向样本作为辅助标尺；只迁移机制，不复制样本文字。
 另设**雷点扣分项**(开篇慢热 / 套路过时退潮 / 主角降智圣母 / 注水拖沓 / 三观雷 / AI味同质化 / 烂尾断更感)——命中按 `rubric.md` 单独减分。
 
 ### 3.5 书名体检(附加项 · 不计入总分)

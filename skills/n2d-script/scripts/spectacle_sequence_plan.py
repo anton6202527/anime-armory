@@ -244,11 +244,11 @@ def _build_sequence(items: Sequence[Mapping[str, Any]], index: int) -> Dict[str,
         "split_degrade_plan": _split_degrade_plan(seq_type),
         # 动作镜 prompt 注入项（prompt 生成器消费）：负向身份锁词钉死脸/服装/配饰/年龄漂移 + 背景闪烁。
         "negative_identity_lock": list(IDENTITY_LOCK_NEGATIVE_TERMS),
-        # 多角色同框上限：>2 具名脸的镜建议拆正反打/分组（各家对多主体串脸基本不解决）。
+        # 多角色同框：≥2 具名脸必须有槽位+执行策略；>2 具名脸建议拆正反打/分组。
         "same_frame_policy": {
             "cap": SAME_FRAME_CHARACTER_CAP,
             "over_cap_clips": [str(item["clip_id"]) for item in items if item.get("same_frame_over_cap")],
-            "advice": "同框具名脸 >2 的镜拆成正反打/分组逐一绑定主体，或压低优先级脸为侧/背/虚焦。",
+            "advice": "同框具名脸 ≥2 必须登记身份槽位+执行策略；>2 的镜建议拆成正反打/分组逐一绑定主体，或压低优先级脸为侧/背/虚焦。",
         },
         # 吃身份的动作角色定妆库建议 3–4 角度参考图建 Visual DNA（正/侧/3⁄4），强动作下脸更稳。
         "identity_reference_advice": "为本序列吃身份的核心角色准备 3–4 角度定妆参考（正/侧/3⁄4），强动作镜降 motion strength/cfg 换脸稳。",

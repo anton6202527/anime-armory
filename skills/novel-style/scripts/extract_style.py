@@ -20,6 +20,7 @@ import os
 import re
 import json
 import argparse
+import sys
 from collections import Counter
 
 SCHEMA_VERSION = 1
@@ -152,7 +153,8 @@ def _extract_character_text(text, name):
 
 
 def fingerprint(text, source="<inline>", character=None, *, source_rights="project-demo",
-                style_source_name="", style_source_author="", authorization_note=""):
+                style_source_name="", style_source_author="", authorization_note="",
+                semantic_profile=None):
     if character:
         text = _extract_character_text(text, character)
         if not text.strip():
@@ -209,6 +211,15 @@ def fingerprint(text, source="<inline>", character=None, *, source_rights="proje
         },
         "lexicon_anchor": _lexicon(raw),
         "rhythm": {"pace_tag": pace},
+        "semantic_profile": semantic_profile or {
+            "narrative_distance": "",
+            "pov_filter": "",
+            "metaphor_source": "",
+            "silence_habit": "",
+            "emotion_delivery": "",
+            "dialogue_attack_mode": "",
+            "note": "语义风格由 AI/人工填写；脚本只保存字段，不凭统计臆测。",
+        },
     }
 
 
@@ -295,6 +306,12 @@ def main():
     p.add_argument("--style-source-name", default="", help="样本作品名；若填写，必须明确 source-rights")
     p.add_argument("--style-source-author", default="", help="样本作者名；若填写，必须明确 source-rights")
     p.add_argument("--authorization-note", default="", help="授权/公版依据简述")
+    p.add_argument("--narrative-distance", default="", help="语义风格：叙述距离，如 deep-pov / close-third / narrator-forward")
+    p.add_argument("--pov-filter", default="", help="语义风格：角色会注意什么、忽略什么")
+    p.add_argument("--metaphor-source", default="", help="语义风格：比喻/意象来源，如 商业/兵器/病理/自然")
+    p.add_argument("--silence-habit", default="", help="语义风格：留白/沉默/不说破的习惯")
+    p.add_argument("--emotion-delivery", default="", help="语义风格：情绪通过动作/对白/景物/内心哪种方式送达")
+    p.add_argument("--dialogue-attack-mode", default="", help="语义风格：对白攻击/回避方式")
     p.add_argument("--compare", nargs=2, metavar=("ANCHOR", "CANDIDATE"),
                    help="比对两份（指纹.json 或 文本）算漂移分")
     p.add_argument("--json-out", help="比对结果落盘路径")
@@ -327,6 +344,15 @@ def main():
         style_source_name=args.style_source_name,
         style_source_author=args.style_source_author,
         authorization_note=args.authorization_note,
+        semantic_profile={
+            "narrative_distance": args.narrative_distance,
+            "pov_filter": args.pov_filter,
+            "metaphor_source": args.metaphor_source,
+            "silence_habit": args.silence_habit,
+            "emotion_delivery": args.emotion_delivery,
+            "dialogue_attack_mode": args.dialogue_attack_mode,
+            "note": "语义风格字段由 AI/人工填写；用于保持独特叙述人格，不用于未授权作者复刻。",
+        },
     )
     if "error" in fp:
         print(f"[err] {fp['error']}")

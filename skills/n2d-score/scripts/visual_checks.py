@@ -402,19 +402,55 @@ def load_manifest(root: str, ep: str) -> List[Dict[str, Any]]:
     return []
 
 
+def _fold_pacing_advisory(sec: Dict[str, Any], root: str, ep: str) -> bool:
+    """把 pacing_retention.py 写的 storyboard 态富 advisory 折进成片节奏维。
+
+    背景：`pacing_retention.py` 已算 hook_strength/retention_proxy/risk_shots 并写
+    `生产数据/pacing_retention_<集>.json`（consistency_audit 也消费它喂 Rhythm 维），但
+    本 check 此前自算一遍更薄的成片密度、完全没读这份富报告（脚本文末 NOTE 标的 follow-up）。
+    两套节奏分会打架。这里**合并**而非覆盖：成片侧（密度/manifest hook_interval>30s=block）
+    是 post-compose 实测、保留为硬闸；pacing 侧是 storyboard 态 advisory（封顶 warn，永不 block），
+    叠加为补充证据。advisory 的 blocks 恒 0，故不会污染成片硬闸的退出口径。"""
+    rep = load_existing_report(root, ep, ("pacing_retention", "pacing"))
+    if not rep:
+        return False
+    b, w, i, ev = report_counts(rep)
+    metrics = rep.get("metrics") if isinstance(rep.get("metrics"), dict) else {}
+    # advisory 永不硬阻断：只采 warn/info，block 一律降为 warn（防口径越权）。
+    sec["warnings"] += w + b
+    sec["infos"] += i if not (w + b) else 0
+    sec.setdefault("metrics", {})["pacing_advisory"] = {
+        "verdict": metrics.get("verdict"), "score": metrics.get("score"),
+        "hook_score": metrics.get("hook_score"), "pacing_score": metrics.get("pacing_score"),
+        "retention_score": metrics.get("retention_score"),
+        "risk_shot_count": metrics.get("risk_shot_count"),
+    }
+    for line in ev[:8]:
+        sec["evidence"].append(f"[storyboard态·pacing_retention] {line}")
+    return True
+
+
 def check_final_rhythm_density(root: str, ep: str) -> Dict[str, Any]:
     sec = section("final_rhythm_density")
+    # 先折进 storyboard 态 pacing 富 advisory（hook_strength/留存代理/风险镜）——
+    # 即便此刻没成片也能浮现节奏信号，不再让这份已算好的报告烂在死胡同里。
+    has_pacing = _fold_pacing_advisory(sec, root, ep)
     sb = load_storyboard(root, ep)
     clips = [c for c in (sb or {}).get("clips", []) if isinstance(c, dict)] if sb else []
     final = final_video_candidates(root, ep)
     final_dur = ffprobe_duration(final[0]) if final else storyboard_duration(sb)
     if not final_dur or final_dur <= 0 or not clips:
+        if has_pacing:
+            # 成片侧没法算，但 storyboard 态 advisory 在——保留 advisory，仅标成片密度跳过。
+            sec["evidence"].append("（成片/故事板时长或 clips[] 缺，成片侧密度跳过，仅保留 pacing 态 advisory）")
+            sec["metrics"]["final_density_available"] = False
+            return sec
         return mark_skip(sec, "缺成片/故事板时长或 clips[]，成片节奏密度跳过")
     density = len(clips) / final_dur * 60.0
     manifest = load_manifest(root, ep)
     hooks = [m for m in manifest if str(m.get("钩子") or "").strip()]
     hook_interval = final_dur / len(hooks) if hooks else None
-    sec["metrics"] = {"clip_count": len(clips), "final_sec": round(final_dur, 3), "shot_density_per_min": round(density, 3), "hook_count": len(hooks), "hook_interval_sec": None if hook_interval is None else round(hook_interval, 3)}
+    sec["metrics"].update({"clip_count": len(clips), "final_sec": round(final_dur, 3), "shot_density_per_min": round(density, 3), "hook_count": len(hooks), "hook_interval_sec": None if hook_interval is None else round(hook_interval, 3)})
     if density < 10:
         sec["warnings"] += 1
         sec["evidence"].append(f"成片镜头密度 {density:.1f}/min 偏慢，可能前段留不住")

@@ -94,7 +94,7 @@ const WORK_LINES = [
 const DOCS = [
   { rel: 'README.md', desc: '使用说明 · 工作流与批量生产' },
 ];
-const FIRST_OPEN_TERMINAL_MESSAGE = '进入你的AI，输入‘/创作区/创作区/制漫剧/本宫才是这皇宫最大的妖 拆脚本’，开始制作漫剧吧！';
+const FIRST_OPEN_TERMINAL_MESSAGE = '进入你的AI，输入‘/创作区/创作区/创作区/创作区/制漫剧/本宫才是这皇宫最大的妖 拆脚本’，开始制作漫剧吧！';
 
 // 作品区 source: prefer the extension's own bundled work root, then an explicitly
 // configured external root, then the open workspace.

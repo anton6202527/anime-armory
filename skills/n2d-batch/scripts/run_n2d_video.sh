@@ -30,6 +30,8 @@ fi
 
 python3 "$REPO_DIR/skills/n2d-identity/scripts/identity.py" "$ROOT" --write
 python3 "$REPO_DIR/skills/n2d-model-router/scripts/router.py" "$ROOT" "$EP" --write
+python3 "$REPO_DIR/skills/n2d-model-router/scripts/mouth_detect.py" "$ROOT" "$EP" --write --json >/dev/null || true
+python3 "$REPO_DIR/skills/n2d-video/scripts/materialize_shared_clips.py" "$ROOT" "$EP"
 python3 "$REPO_DIR/skills/n2d-dashboard/scripts/dashboard.py" gate "$ROOT" "$EP" --stage video_preflight
 
 MANIFEST="$(

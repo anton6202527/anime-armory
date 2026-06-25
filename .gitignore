@@ -24,6 +24,7 @@ node_modules/
 .pnpm-store/
 .cache/
 *.tmp
+*.lock
 
 # 出图/出视频 暂存与抓图日志（候选挑图前的 scratch，不入库）
 **/_候选/

@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 import calibrate_thresholds
+import consistency_threshold_registry
 import production_consistency as pc
 import probe_route_recommend
 
@@ -45,6 +46,31 @@ def test_entity_memory_bank_warns_missing_recurrent_entity(tmp_path: Path) -> No
     assert any("entity_memory_bank" in row["message"] for row in res["findings"])
 
 
+def test_entity_memory_bank_requires_generation_retrieval_log(tmp_path: Path) -> None:
+    root = tmp_path
+    ep = "第1集"
+    _write_json(
+        root / "脚本" / ep / "storyboard.json",
+        {"clips": [
+            {"id": "Clip_01", "entity_schedule": {"characters": ["CHAR_SHEN"]}},
+            {"id": "Clip_02", "entity_schedule": {"characters": ["CHAR_SHEN"]}},
+        ]},
+    )
+    _write_json(
+        root / "生产数据" / "entity_memory_bank.json",
+        {"entries": [{
+            "entity_id": "CHAR_SHEN",
+            "source_episode": "第1集",
+            "source_shot": "Clip_01",
+            "crop_path": "出图/第1集/图片/Clip_01.png",
+            "accepted": True,
+            "reliability": 0.91,
+        }]},
+    )
+    res = pc.check_entity_memory_bank(str(root), ep)
+    assert any("生成前检索" in row["message"] or "used_for_generation" in row["message"] for row in res["findings"])
+
+
 def test_entity_memory_bank_blocks_rejected_memory_and_requires_core_expression_pack(tmp_path: Path) -> None:
     root = tmp_path
     ep = "第1集"
@@ -65,6 +91,49 @@ def test_entity_memory_bank_blocks_rejected_memory_and_requires_core_expression_
     assert any(row["verdict"] == "block" and "未通过" in row["message"] for row in res["findings"])
     assert "表情锚点少于 3" in messages
     assert "performance_signature" in messages
+
+
+def test_truth_map_warns_when_multiple_sources_have_no_precedence(tmp_path: Path) -> None:
+    root = tmp_path
+    ep = "第1集"
+    _write_json(root / "脚本" / ep / "storyboard.json", {"clips": []})
+    _write_json(root / "出图" / "共享" / "identity_registry.json", {"characters": []})
+    _write_json(root / "出图" / "共享" / "asset_registry.json", {"assets": []})
+    res = pc.check_consistency_truth_map(str(root), ep)
+    assert any("consistency_truth_map" in row["message"] for row in res["findings"])
+
+
+def test_truth_map_requires_recipe_as_evidence_only(tmp_path: Path) -> None:
+    root = tmp_path
+    ep = "第1集"
+    _write_json(
+        root / "设定库" / "consistency_truth_map.json",
+        {
+            "truth_sources": {
+                "character_identity": {"source": "出图/共享/identity_registry.json"},
+                "visual_state": {"source": "storyboard"},
+                "scene_space": {"source": "scene_floorplan"},
+                "generation_recipe": {"source": "生产数据/generation_recipe_第1集.json"},
+                "intentional_exception": {"source": "生产数据/consistency_advisory_signoff_第1集.json", "expires_required": False},
+            }
+        },
+    )
+    res = pc.check_consistency_truth_map(str(root), ep)
+    messages = "\n".join(row["message"] for row in res["findings"])
+    assert "evidence_only=true" in messages
+    assert "expires_required=true" in messages
+
+
+def test_multiview_identity_pack_requires_core_buckets(tmp_path: Path) -> None:
+    root = tmp_path
+    ep = "第1集"
+    _write_json(root / "出图" / "共享" / "identity_registry.json", {"characters": [{"id": "CHAR_SHEN", "core": True}]})
+    _write_json(
+        root / "设定库" / "identity_eval_pack.json",
+        {"characters": {"CHAR_SHEN": {"buckets": {"front": {"status": "pass"}, "side": {"status": "pass"}}}}},
+    )
+    res = pc.check_multiview_identity_pack(str(root), ep)
+    assert any("多视角身份测试桶缺失" in row["message"] for row in res["findings"])
 
 
 def test_interaction_graph_warns_missing_contact_graph_and_blocks_holder_jump(tmp_path: Path) -> None:
@@ -135,6 +204,30 @@ def test_state_transition_requires_video_evidence_manifest(tmp_path: Path) -> No
     )
     res = pc.check_state_transition_verification(str(root), ep)
     assert any("state_transition_manifest" in row["message"] for row in res["findings"])
+
+
+def test_state_transition_event_requires_cause_and_legal_reset(tmp_path: Path) -> None:
+    root = tmp_path
+    ep = "第1集"
+    _write_json(
+        root / "脚本" / ep / "storyboard.json",
+        {"clips": [{"id": "Clip_01", "action": "沈念伤口愈合，血迹消失"}]},
+    )
+    _write_json(
+        root / "生产数据" / f"state_transition_event_{ep}.json",
+        {"transitions": [{
+            "clip_id": "Clip_01",
+            "subject": "CHAR_SHEN",
+            "from_state": "血迹明显",
+            "to_state": "血迹消失",
+            "legal_reset": True,
+        }]},
+    )
+    res = pc.check_state_transition_verification(str(root), ep)
+    messages = "\n".join(row["message"] for row in res["findings"])
+    assert "cause/trigger" in messages
+    assert "visual_evidence_due" in messages
+    assert "legal_reset=true" in messages
 
 
 def test_possession_ledger_blocks_cross_scene_holder_jump_without_transfer(tmp_path: Path) -> None:
@@ -222,6 +315,7 @@ def test_recipe_schema_requires_backend_or_model_version(tmp_path: Path) -> None
     (prod / "production_events.jsonl").write_text(json.dumps(event, ensure_ascii=False) + "\n", encoding="utf-8")
     res = pc.check_recipe_schema(str(root), ep)
     assert any("backend_version/model_version" in row["message"] for row in res["findings"])
+    assert any("input_fingerprint" in row["message"] for row in res["findings"])
 
 
 def test_final_timeline_probe_required_after_final_cut(tmp_path: Path) -> None:
@@ -232,6 +326,34 @@ def test_final_timeline_probe_required_after_final_cut(tmp_path: Path) -> None:
     cut.write_bytes(b"")
     res = pc.check_final_timeline_probe(str(root), ep)
     assert any("final_timeline_probe" in row["message"] for row in res["findings"])
+
+
+def test_world_consistency_score_blocks_low_score_and_requires_components(tmp_path: Path) -> None:
+    root = tmp_path
+    ep = "第1集"
+    _write_json(root / "生产数据" / f"world_consistency_score_{ep}.json", {"world_consistency_score": 0.61, "components": {"object_permanence": 0.8}})
+    res = pc.check_world_consistency_score(str(root), ep)
+    messages = "\n".join(row["message"] for row in res["findings"])
+    assert any(row["verdict"] == "block" for row in res["findings"])
+    assert "缺分项" in messages
+
+
+def test_acoustic_space_required_for_native_av_project(tmp_path: Path) -> None:
+    root = tmp_path
+    ep = "第1集"
+    (root / "_设置.md").write_text("- 制作模式: 原生音画\n", encoding="utf-8")
+    res = pc.check_acoustic_space(str(root), ep)
+    assert any("acoustic_space" in row["message"] for row in res["findings"])
+
+
+def test_acoustic_space_rows_require_reverb_and_perspective(tmp_path: Path) -> None:
+    root = tmp_path
+    ep = "第1集"
+    _write_json(root / "生产数据" / f"acoustic_space_{ep}.json", {"locations": {"LOC_01": {"room_tone": "low wind"}}})
+    res = pc.check_acoustic_space(str(root), ep)
+    messages = "\n".join(row["message"] for row in res["findings"])
+    assert "reverb_profile" in messages
+    assert "distance_perspective" in messages
 
 
 def test_review_calibration_required_when_signoff_exists(tmp_path: Path) -> None:
@@ -259,6 +381,26 @@ def test_review_calibration_requires_threshold_learning_for_repeated_fp(tmp_path
     )
     res = pc.check_review_calibration(str(root), ep)
     assert any("阈值/规则没有形成可复跑学习闭环" in row["message"] for row in res["findings"])
+
+
+def test_review_calibration_accepts_threshold_registry(tmp_path: Path) -> None:
+    root = tmp_path
+    ep = "第1集"
+    prod = root / "生产数据"
+    prod.mkdir()
+    _write_json(prod / f"human_review_signoff_{ep}.json", {"episode": ep, "reviewer": "qa"})
+    rows = [
+        {"label": "false_positive", "dimension": "脸(G1)", "reviewer": "qa", "reason": "遮挡误报", "finding_hash": "a"},
+        {"label": "false_positive", "dimension": "脸(G1)", "reviewer": "qa", "reason": "侧脸误报", "finding_hash": "b"},
+    ]
+    (prod / "consistency_calibration.jsonl").write_text(
+        "\n".join(json.dumps(row, ensure_ascii=False) for row in rows) + "\n",
+        encoding="utf-8",
+    )
+    consistency_threshold_registry.write_registry(str(root))
+
+    res = pc.check_review_calibration(str(root), ep)
+    assert not any("阈值/规则没有形成可复跑学习闭环" in row["message"] for row in res["findings"])
 
 
 def test_calibrate_thresholds_writes_recommendations(tmp_path: Path) -> None:

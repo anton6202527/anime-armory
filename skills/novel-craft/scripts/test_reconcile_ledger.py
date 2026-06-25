@@ -223,12 +223,16 @@ class RollupTest(unittest.TestCase):
             self.assertEqual(got.returncode, 0, got.stderr)
             with open(path, encoding="utf-8") as f:
                 out = json.load(f)
-            # ch01 < 5 → 压缩成计数，verification 只留 status
+            # ch01 < 5 → 压缩成计数，但 verification hash 必须保留，避免 qa_gate
+            # 在 rollup 后误报 STATE-LEDGER-UNVERIFIED。
             c01 = out["chapter_deltas"]["chapter_01"]
             self.assertTrue(c01["summary"]["rolled"])
             self.assertEqual(c01["summary"]["new_facts"], 2)
             self.assertEqual(c01["summary"]["characters_touched"], ["林越"])
-            self.assertEqual(c01["verification"], {"status": "ok"})
+            self.assertEqual(c01["verification"]["status"], "ok")
+            self.assertEqual(c01["verification"]["chapter_file_hash"], "h")
+            self.assertEqual(c01["verification"]["delta_hash"], "d")
+            self.assertNotIn("notes", c01["verification"])
             # ch09 >= 5 → 原样保留
             self.assertNotIn("rolled", out["chapter_deltas"]["chapter_09"]["summary"])
             # canonical 状态一律不动
@@ -247,6 +251,113 @@ class RollupTest(unittest.TestCase):
                                  capture_output=True, text=True)
             self.assertNotEqual(got.returncode, 0)
             self.assertIn("--before", got.stderr)
+
+
+class StaleMarkingTest(unittest.TestCase):
+    """非线性改写：上游章节改写后应标记下游 delta 为 stale。"""
+
+    def _make_chapter(self, root, ch, text=None):
+        os.makedirs(os.path.join(root, "章节"), exist_ok=True)
+        os.makedirs(os.path.join(root, "审稿"), exist_ok=True)
+        chapter_path = os.path.join(root, "章节", f"第{ch:02d}章.md")
+        with open(chapter_path, "w", encoding="utf-8") as f:
+            f.write(text or f"# 第{ch}章\n正文\n")
+        delta_path = os.path.join(root, "审稿", f"state_delta_第{ch:02d}章.json")
+        with open(delta_path, "w", encoding="utf-8") as f:
+            json.dump({"schema_version": 1, "kind": "novel_state_delta", "chapter": ch,
+                        "new_facts": [f"事实{ch}"], "character_changes": [],
+                        "open_threads_added": [], "threads_resolved": []}, f, ensure_ascii=False)
+        return chapter_path, delta_path
+
+    def _make_verification(self, root, ch):
+        chapter_path = os.path.join(root, "章节", f"第{ch:02d}章.md")
+        delta_path = os.path.join(root, "审稿", f"state_delta_第{ch:02d}章.json")
+        return {
+            "chapter": ch,
+            "status": "ok",
+            "chapter_file_hash": sha256_file(chapter_path),
+            "delta_hash": sha256_file(delta_path),
+        }
+
+    def _merge_chapter(self, root, ch):
+        v = self._make_verification(root, ch)
+        vp = os.path.join(root, "审稿", f"state_verify_第{ch:02d}章.json")
+        with open(vp, "w", encoding="utf-8") as f:
+            json.dump(v, f, ensure_ascii=False)
+        result = subprocess.run(
+            [sys.executable, SCRIPT, root, "--chapter", str(ch), "--merge", "--verified", vp],
+            capture_output=True, text=True,
+        )
+        return result
+
+    def test_linear_merge_no_stale(self):
+        """顺序合并（1→2→3）不应产生 stale 标记。"""
+        with tempfile.TemporaryDirectory() as tmp:
+            for ch in range(1, 4):
+                self._make_chapter(tmp, ch)
+            for ch in range(1, 4):
+                r = self._merge_chapter(tmp, ch)
+                self.assertEqual(r.returncode, 0, r.stderr)
+            with open(os.path.join(tmp, "审稿", "state_ledger.json"), encoding="utf-8") as f:
+                ledger = json.load(f)
+            for ch in range(1, 4):
+                entry = ledger["chapter_deltas"].get(f"chapter_{ch:02d}")
+                self.assertIsNotNone(entry, f"chapter_{ch:02d} 应在账本中")
+                self.assertNotIn("stale", entry, f"第{ch}章不应标记 stale（顺序合并）")
+
+    def test_nonlinear_rewrite_marks_downstream_stale(self):
+        """先合 1→2→3，再改写 2：下游第 3 章应标 stale。"""
+        with tempfile.TemporaryDirectory() as tmp:
+            for ch in range(1, 4):
+                self._make_chapter(tmp, ch)
+            for ch in range(1, 4):
+                r = self._merge_chapter(tmp, ch)
+                self.assertEqual(r.returncode, 0, r.stderr)
+            # 非线性改写第 2 章：修改正文和 delta 后重新合并
+            chapter_path, delta_path = self._make_chapter(tmp, 2, "# 第2章\n改写后的正文\n")
+            with open(delta_path, "w", encoding="utf-8") as f:
+                json.dump({"schema_version": 1, "kind": "novel_state_delta", "chapter": 2,
+                            "new_facts": ["改写后新事实"], "character_changes": [],
+                            "open_threads_added": [], "threads_resolved": []}, f, ensure_ascii=False)
+            r = self._merge_chapter(tmp, 2)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertIn("stale", r.stdout)
+
+            with open(os.path.join(tmp, "审稿", "state_ledger.json"), encoding="utf-8") as f:
+                ledger = json.load(f)
+            # 第 1 章不应 stale
+            c01 = ledger["chapter_deltas"]["chapter_01"]
+            self.assertNotIn("stale", c01)
+            # 第 2 章不应 stale（是改写源头）
+            c02 = ledger["chapter_deltas"]["chapter_02"]
+            self.assertNotIn("stale", c02)
+            # 第 3 章应标 stale
+            c03 = ledger["chapter_deltas"]["chapter_03"]
+            self.assertTrue(c03.get("stale"), "下游章应标记 stale")
+            self.assertIn(2, c03.get("stale_sources", []), "应记录改写源头章号")
+
+    def test_nonlinear_rewrite_merges_stale_sources(self):
+        """多次回溯改写同一章不应产生重复 stale_sources。"""
+        with tempfile.TemporaryDirectory() as tmp:
+            for ch in range(1, 5):
+                self._make_chapter(tmp, ch)
+            for ch in range(1, 5):
+                self._merge_chapter(tmp, ch)
+            # 改写第 2 章
+            self._make_chapter(tmp, 2, "# 第2章\n改写 v1\n")
+            r = self._merge_chapter(tmp, 2)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            # 再次改写第 2 章
+            self._make_chapter(tmp, 2, "# 第2章\n改写 v2\n")
+            r = self._merge_chapter(tmp, 2)
+            self.assertEqual(r.returncode, 0, r.stderr)
+
+            with open(os.path.join(tmp, "审稿", "state_ledger.json"), encoding="utf-8") as f:
+                ledger = json.load(f)
+            c04 = ledger["chapter_deltas"]["chapter_04"]
+            self.assertTrue(c04.get("stale"))
+            # stale_sources 中 2 只应出现一次
+            self.assertEqual(c04["stale_sources"].count(2), 1, "重复改写同一章不应重复记录 stale_sources")
 
 
 if __name__ == "__main__":

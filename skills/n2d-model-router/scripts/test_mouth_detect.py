@@ -4,6 +4,7 @@
 """
 import os
 import sys
+import json
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mouth_detect as md  # noqa: E402
@@ -55,3 +56,19 @@ def test_yn_helper():
 def test_detect_mouth_returns_none_without_lib():
     # 系统无 insightface（PEP 668）→ 优雅 None，绝不臆造
     assert md.detect_mouth_in_image("/nonexistent.png") is None
+
+
+def test_write_audit_sidecar(tmp_path):
+    payload = {
+        "kind": md.KIND,
+        "episode": "第1集",
+        "available": True,
+        "rows": [{"clip_id": "Clip_01", "verdict": "ok"}],
+        "summary": {"total": 1, "warn": 0, "image_unknown": 1},
+    }
+
+    path = md.write_audit(str(tmp_path), "第1集", payload)
+    data = json.loads(open(path, encoding="utf-8").read())
+
+    assert data["kind"] == md.KIND
+    assert data["rows"][0]["clip_id"] == "Clip_01"

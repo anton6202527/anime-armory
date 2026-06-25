@@ -28,7 +28,7 @@ try:
 except Exception:  # pragma: no cover - gate degrades if optional script is broken
     _research_pack = None
 
-from novel_contract import normalize_rights_status, parse_regions
+from novel_contract import is_long_arc_project, normalize_rights_status, parse_regions
 from report_snapshot import snapshot_chapters, validate_snapshot
 from waivers import baseline_freshness_scope, has_waiver, load_waivers
 try:
@@ -50,6 +50,8 @@ STRICT_AI_TEXT_TARGETS = (
     "晋江", "起点", "番茄", "红果", "七猫", "纵横", "抖音", "中文网文平台",
 )
 TEXT_AUTHORSHIP_MODES = {"人类主创", "AI辅助", "AI生成"}
+PLATFORM_AI_EVIDENCE_REL = os.path.join("合规", "platform_ai_evidence.json")
+PLATFORM_AI_EXCEPTION_WAIVER = "ai_generated_text_platform_exception"
 
 REVIEW_REQUIRED_FIELDS = (
     "schema_version",
@@ -117,21 +119,54 @@ def _load_source_manifest(project_root, meta):
     return {}
 
 
-def _score_required(project_root):
+# 中文（无需出海披露）的语言标记；其余非空语言视为出海译制（需 AI 文本披露）。
+_DOMESTIC_LANGUAGE_MARKS = ("中文", "简体", "繁体", "汉语", "国语", "zh", "chinese")
+
+
+def _scope_signal_text(project_root):
+    """"投放范围"声明字段拼成的检索文本——_score_required / _ai_usage_required /
+    严格AI（_platform_ai_gate）三处共用的**单一真值源**。
+
+    此前三处各自拼一份 blob、字段集还不一致（一处含 draft_mode、一处含 目标语言…），
+    是重复又易漂的脆弱模式。现收敛到这里，并**剔除 目标语言**——那是语言而非投放范围，
+    被顺手拼进 blob 后，语言串里的子串（如"海外英文版"含"海外"）会把 score/AI披露/严格AI
+    误触发成硬阻断。出海与否改由 _targets_overseas 按字段显式判定，不再靠子串。
+    保留 目标用途（半结构化，用户在此写"红果漫剧"等，且有测试锁定其参与判定）。
+    """
     meta = _load_meta(project_root)
     settings = _load_settings(project_root)
-    mode = str(meta.get("draft_mode") or settings.get("小说生成模式") or "").strip()
-    target_parts = [
+    parts = [
+        meta.get("draft_mode"),
         meta.get("purpose"),
         meta.get("target_platform"),
         meta.get("target"),
         ",".join(meta.get("outputs") or []),
+        settings.get("小说生成模式"),
         settings.get("小说用途"),
         settings.get("目标平台"),
         settings.get("目标用途"),
         settings.get("输出格式"),
+        settings.get("出海目标平台"),
     ]
-    target = " ".join(str(part or "") for part in target_parts)
+    return " ".join(str(part or "") for part in parts)
+
+
+def _targets_overseas(project_root):
+    """出海判定（替代把 目标语言 拼进关键词 blob 的子串近似）：声明了出海目标平台，
+    或目标语言是非中文。"""
+    meta = _load_meta(project_root)
+    settings = _load_settings(project_root)
+    if str(settings.get("出海目标平台") or "").strip():
+        return True
+    lang = str(settings.get("目标语言") or meta.get("target_language") or "").strip().lower()
+    return bool(lang) and not any(mark in lang for mark in _DOMESTIC_LANGUAGE_MARKS)
+
+
+def _score_required(project_root):
+    meta = _load_meta(project_root)
+    settings = _load_settings(project_root)
+    mode = str(meta.get("draft_mode") or settings.get("小说生成模式") or "").strip()
+    target = _scope_signal_text(project_root)
     return mode in COMMERCIAL_SCORE_MODES or any(key in target for key in COMMERCIAL_SCORE_TARGETS)
 
 
@@ -170,21 +205,9 @@ def _ai_usage_required(project_root, export_formats):
         return False
     if _score_required(project_root):
         return True
-    meta = _load_meta(project_root)
-    settings = _load_settings(project_root)
-    target_parts = [
-        meta.get("draft_mode"),
-        meta.get("purpose"),
-        meta.get("target_platform"),
-        meta.get("target"),
-        ",".join(meta.get("outputs") or []),
-        settings.get("小说用途"),
-        settings.get("目标平台"),
-        settings.get("目标用途"),
-        settings.get("出海目标平台"),
-        settings.get("目标语言"),
-    ]
-    target = " ".join(str(part or "") for part in target_parts)
+    if _targets_overseas(project_root):  # 出海译制需 AI 文本披露（替代 目标语言 子串近似）
+        return True
+    target = _scope_signal_text(project_root)
     return any(key in target for key in AI_USAGE_REQUIRED_TARGETS)
 
 
@@ -674,20 +697,8 @@ def _ai_usage_gate(project_root, *, require=False):
 
 
 def _target_text(project_root):
-    meta = _load_meta(project_root)
-    settings = _load_settings(project_root)
-    target_parts = [
-        meta.get("draft_mode"),
-        meta.get("purpose"),
-        meta.get("target_platform"),
-        meta.get("target"),
-        ",".join(meta.get("outputs") or []),
-        settings.get("小说用途"),
-        settings.get("目标平台"),
-        settings.get("出海目标平台"),
-        settings.get("目标语言"),
-    ]
-    return " ".join(str(part or "") for part in target_parts)
+    # 收敛到单一真值源 _scope_signal_text（不再各拼一份、不再含 目标语言）。
+    return _scope_signal_text(project_root)
 
 
 def _normalize_text_authorship(value):
@@ -722,12 +733,76 @@ def _text_authorship_from_ai_usage(payload):
     return ""
 
 
-def _platform_ai_gate(project_root):
+def _strict_platform_hits(target):
+    return sorted({key for key in STRICT_AI_TEXT_TARGETS if key in str(target or "")})
+
+
+def _platform_ai_evidence_path(project_root):
+    return os.path.join(project_root, PLATFORM_AI_EVIDENCE_REL)
+
+
+def platform_ai_exception_scope(project_root, target=None, mode=None):
+    """Scope for waiving AI-generated text on otherwise strict platforms.
+
+    The waiver binds to the concrete evidence file hash. Updating platform
+    evidence requires a fresh waiver, so stale/manual waivers cannot silently
+    carry across rule changes.
+    """
+    path = _platform_ai_evidence_path(project_root)
+    evidence_hash = _sha256_file(path) if os.path.exists(path) else ""
+    hits = _strict_platform_hits(target if target is not None else _target_text(project_root))
+    return {
+        "target_platforms": ",".join(hits),
+        "text_authorship_mode": str(mode or ""),
+        "evidence_hash": evidence_hash,
+    }
+
+
+def _platform_ai_exception(project_root, target, mode, global_waivers):
+    path = _platform_ai_evidence_path(project_root)
+    payload = _load_json(path)
+    if not isinstance(payload, dict):
+        return False, [f"缺少 {PLATFORM_AI_EVIDENCE_REL}；需补目标平台接受 AI 正文的当日正式证据。"]
+    issues = []
+    if payload.get("schema_version") != 1:
+        issues.append("schema_version 必须为 1")
+    if payload.get("kind") != "novel_platform_ai_evidence":
+        issues.append("kind 必须为 novel_platform_ai_evidence")
+    evidence_date = str(payload.get("evidence_date") or payload.get("checked_at") or "").strip()
+    if evidence_date != date.today().isoformat():
+        issues.append(f"evidence_date 必须是当日 {date.today().isoformat()}（当前 {evidence_date or '未写'}）")
+    source_url = str(payload.get("source_url") or payload.get("url") or "").strip()
+    if not source_url.startswith(("https://", "http://")):
+        issues.append("source_url/url 必须是可追溯网页链接")
+    if not str(payload.get("summary") or "").strip():
+        issues.append("summary 必须说明平台规则与适用边界")
+    accepted = payload.get("accepted_text_authorship_modes")
+    if isinstance(accepted, str):
+        accepted = [accepted]
+    if not isinstance(accepted, list) or mode not in [str(x).strip() for x in accepted]:
+        issues.append(f"accepted_text_authorship_modes 必须包含 {mode}")
+    evidence_target = " ".join(str(payload.get(field) or "") for field in ("target_platform", "platform", "scope"))
+    hits = _strict_platform_hits(target)
+    if hits and not any(hit in evidence_target for hit in hits):
+        issues.append(f"证据 target_platform/platform/scope 未覆盖当前严格平台：{','.join(hits)}")
+    if issues:
+        return False, issues
+    scope = platform_ai_exception_scope(project_root, target, mode)
+    if not has_waiver(global_waivers, PLATFORM_AI_EXCEPTION_WAIVER, scope):
+        return False, [
+            "已有平台证据但缺少 scoped waiver；请用 "
+            f"type={PLATFORM_AI_EXCEPTION_WAIVER}、scope={scope} 写入 审稿/waiver_log.jsonl。"
+        ]
+    return True, [f"已用 {PLATFORM_AI_EVIDENCE_REL} + scoped waiver 放行 AI生成 正文平台例外。"]
+
+
+def _platform_ai_gate(project_root, *, global_waivers=None):
     """Gate platform-submission risk separately from generic disclosure.
 
     AI usage disclosure answers "what must be recorded"; this gate answers
     "is this authorship mode compatible with the target platform workflow".
     """
+    global_waivers = global_waivers or []
     settings = _load_settings(project_root)
     payload = _load_json(os.path.join(project_root, "合规", "ai_usage.json"))
     setting_mode = _normalize_text_authorship(settings.get("文本主创模式"))
@@ -767,12 +842,23 @@ def _platform_ai_gate(project_root):
             "目标平台属于中文网文/短剧投稿高风险场景，但缺少 文本主创模式；建议在 _设置.md 明确 人类主创 或 AI辅助。",
         ))
     elif strict_target and mode == "AI生成":
-        report["blockers"].append(_warning(
-            "AI-GENERATED-TEXT-PLATFORM-RISK",
-            "compliance",
-            "novel-craft",
-            "目标平台属于中文网文/短剧投稿高风险场景，当前为 AI生成 正文；请改走 人类主创/AI辅助 流程，或补目标平台当日接受 AI 正文投稿的正式证据与豁免留痕。",
-        ))
+        exception_ok, exception_notes = _platform_ai_exception(project_root, target, mode, global_waivers)
+        if exception_ok:
+            report["warnings"].append(_warning(
+                "AI-GENERATED-TEXT-PLATFORM-WAIVED",
+                "compliance",
+                "novel-craft",
+                "；".join(exception_notes),
+            ))
+        else:
+            report["blockers"].append(_warning(
+                "AI-GENERATED-TEXT-PLATFORM-RISK",
+                "compliance",
+                "novel-craft",
+                "目标平台属于中文网文/短剧投稿高风险场景，当前为 AI生成 正文；请改走 人类主创/AI辅助 流程，"
+                "或补目标平台当日接受 AI 正文投稿的正式证据与 scoped waiver 留痕。"
+                " 例外缺口：" + "；".join(exception_notes[:4]),
+            ))
     elif strict_target and mode == "AI辅助":
         report["warnings"].append(_warning(
             "AI-ASSISTED-TEXT-PLATFORM-REVIEW",
@@ -1054,14 +1140,14 @@ def _first_recommended_skill(payload):
 
 
 def _arc_long_project(project_root):
-    """长篇判定（与 draft_packets 三步迭代阈值同口径）：scale=long 或 target_chapters>=30。"""
-    meta = _load_json(os.path.join(project_root, "_meta.json")) or {}
-    scale = str(meta.get("scale") or "").lower()
-    try:
-        target = int(meta.get("target_chapters") or 0)
-    except (TypeError, ValueError):
-        target = 0
-    return scale in {"long", "长篇"} or target >= 30
+    """长弧/长篇判定——单一真值源 novel_contract.is_long_arc_project（与 flow 共用）。
+
+    含 scale/target>=30 **以及** 商业连载/漫剧·微短剧源书 模式·用途——它们即便章数 <30
+    也按长弧处理。此前本函数漏了 mode/purpose，与 flow.long_arc_mode 漂移，导致商业连载
+    短项目在导出闸收不到 ARC-MISSING / scene_cards 提醒。"""
+    meta = _load_meta(project_root)
+    settings = _load_settings(project_root)
+    return is_long_arc_project(meta, settings)
 
 
 def _arc_gate(project_root, *, require=False):
@@ -1102,6 +1188,64 @@ def _arc_gate(project_root, *, require=False):
             "ARC-MISSING", "review", "novel-review",
             "长篇项目从未跑过弧段 gate（arc_gate）；中段跑偏是长篇头号杀手，导出前建议先跑 "
             "novel-review/scripts/arc_gate.py --arc <起>-<止> 对各 arc 做压力测试。",
+        ))
+    report["blocking"] = bool(report["blockers"])
+    return report
+
+
+def _demo_gate(project_root):
+    """Demo gate 导出侧复检：demo_gate 在 draft_packets 是**写入期**硬闸（Demo 过审前
+    不批量写章），但导出/QA gate 此前完全不读它——若有人走旁路写章、或当初取了
+    `--allow-missing-demo` 的 waiver，就能在 Demo 从未过审的情况下一路导出。
+
+    - `demo_chapters>0` 且已写到 demo 之后的章（批量生产已发生）且 demo_gate 未 passed
+      （缺失或 status≠passed）→ 阻断导出。
+    - 仍在 demo 阶段（写的章数 ≤ demo_chapters）但未过审 → 仅提醒。
+    - `demo_chapters=0`（无 Demo 概念，如短篇/部分派生）→ 不产出任何条目。
+    """
+    meta = _load_meta(project_root)
+    report = {
+        "kind": "demo_gate",
+        "path": os.path.join(project_root, "审稿", "demo_gate.json"),
+        "exists": False,
+        "blocking": False,
+        "blockers": [],
+        "warnings": [],
+        "next_actions": [],
+    }
+    try:
+        demo_count = int(meta.get("demo_chapters") or 0)
+    except (TypeError, ValueError):
+        demo_count = 0
+    if demo_count <= 0:
+        return report
+    payload = _load_json(report["path"]) or {}
+    report["exists"] = bool(payload)
+    status = payload.get("status")
+    chapters_written = len(_chapter_files(project_root))
+    passed = status == "passed"
+    if passed:
+        return report
+    if chapters_written > demo_count:
+        report["blockers"].append({
+            "id": "DEMO-GATE-NOT-PASSED",
+            "stage": "review",
+            "skill": "novel-review",
+            "reason": (f"已写到第 {chapters_written} 章（超过 demo_chapters={demo_count}），"
+                       f"但 审稿/demo_gate.json status={status!r}（未通过/缺失）；批量生产前 Demo "
+                       f"必须过审。补审前 {demo_count} 章并用 novel-review 生成 demo_gate.json（status=passed）"
+                       f"后再导出，或显式记 waiver。"),
+        })
+        report["next_actions"].append({
+            "priority": "P0",
+            "return_to_stage": "review",
+            "recommended_skill": "novel-review",
+            "action": f"审阅前 {demo_count} 章，写 审稿/demo_gate.json（status=passed）后重跑 QA gate。",
+        })
+    else:
+        report["warnings"].append(_warning(
+            "DEMO-GATE-PENDING", "review", "novel-review",
+            f"Demo 阶段（已写 {chapters_written}/{demo_count} 章）尚未过审；批量生产前先过 Demo gate。",
         ))
     report["blocking"] = bool(report["blockers"])
     return report
@@ -1166,7 +1310,7 @@ def _scene_cards_gate(project_root):
 
 
 def collect_gate_status(project_root, *, require_review_report=False, require_score_report=None,
-                        export_formats=None, require_state_closure=False,
+                        export_formats=None, require_state_closure=True,
                         state_chapter=None, require_ai_usage=None):
     root = os.path.abspath(project_root)
     global_waivers = load_waivers(root)
@@ -1179,11 +1323,25 @@ def collect_gate_status(project_root, *, require_review_report=False, require_sc
         _score_gate(root, require_report=require_score_report, global_waivers=global_waivers),
         _arc_gate(root, require=_arc_long_project(root)),
         _reader_panel_gate(root),
-        _platform_ai_gate(root),
+        _platform_ai_gate(root, global_waivers=global_waivers),
         _scene_cards_gate(root),
+        _demo_gate(root),
     ]
     if require_state_closure:
-        reports.append(_state_closure_gate(root, chapter=state_chapter, require=True))
+        # 短篇自动豁免：<5 章的短故事不需要完整 state_ledger，仅出 advisory 级别提醒。
+        # 但豁免**只针对全项目闭环完整性扫描**（state_chapter=None）；当调用方显式指定
+        # state_chapter（novel-gate review/score --chapter 的逐章准入），该章的 state_delta
+        # 与合并是这一章的硬作业，与项目总章数无关——否则 <5 章短篇在 review 闸永远收不到
+        # STATE-DELTA-MISSING 阻断，整条逐章 review 闸对短篇空转。
+        chapters = _chapter_files(root)
+        effective_require = (state_chapter is not None) or (len(chapters) >= 5)
+        state_report = _state_closure_gate(root, chapter=state_chapter, require=effective_require)
+        if not effective_require and state_report.get("warnings"):
+            state_report.setdefault("warnings", []).insert(0, _warning(
+                "STATE-SHORT-WAIVER", "state_closure", "novel",
+                "短篇项目（<5 章）：state_closure 仅作提醒，不阻断。长篇小说（>=5 章）会自动升为阻断级检查。",
+            ))
+        reports.append(state_report)
     if require_ai_usage or export_formats:
         reports.append(_ai_usage_gate(root, require=require_ai_usage))
         reports.append(_compliance_gate(root, require=bool(export_formats)))

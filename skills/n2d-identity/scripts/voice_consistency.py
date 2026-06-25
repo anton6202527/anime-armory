@@ -97,12 +97,22 @@ def episode_sort_key(ep: str) -> Tuple[int, str]:
 
 
 def manifest_path(root: Path, ep: str) -> Path:
+    """时长清单.json 落 合成/<ep>/配音/（2026 出视频↔合成分家）；出视频/<ep>/配音/ 为已废弃历史路径，
+    保留防御性兜底探测（与 n2d_route.manifest_path 同口径）——两处都探，返回第一个存在的，否则默认 合成。"""
+    for base in ("合成", "出视频"):
+        p = root / base / ep / MANIFEST_RELPATH
+        if p.is_file():
+            return p
     return root / "合成" / ep / MANIFEST_RELPATH
 
 
 def discover_episodes(root: Path) -> List[str]:
-    """有配音时长清单的集（按集序排）。"""
-    eps = {Path(p).parent.parent.name for p in glob.glob(str(Path(root) / "合成" / "第*集" / MANIFEST_RELPATH))}
+    """有配音时长清单的集（按集序排）；合成/ 新路径 + 出视频/ 已废弃路径都扫，兼容 legacy 项目
+    （否则 时长清单 仍在旧 出视频/<ep>/配音/ 的集会被静默漏出跨集音色漂移报告）。"""
+    eps = set()
+    for base in ("合成", "出视频"):
+        eps |= {Path(p).parent.parent.name
+                for p in glob.glob(str(Path(root) / base / "第*集" / MANIFEST_RELPATH))}
     return sorted(eps, key=episode_sort_key)
 
 

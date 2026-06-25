@@ -15,12 +15,12 @@ from typing import Any, Dict, Optional
 # 这是「生视频模型/渠道」选择点的能力档快照；max_clip_seconds/native_av/frame_control、以及
 # 下方 MOTION_CONTROL_PROFILES（运镜/运动控制能力）和 lipsync_audio_ref（音频参考口型）都随后端迭代变，
 # 同属本快照、同一个戳记覆盖（freshness 注册 id=n2d-video-backends）。
-# 采集日期：2026-06-19  来源：各后端官方文档 + cli_snapshots/（待逐条复核）
+# 采集日期：2026-06-25  来源：各后端官方文档 + cli_snapshots/（待逐条复核）
 CATALOG_VERIFIED = {
-    "date": "2026-06-19",
+    "date": "2026-06-25",
     "source": (
-        "Dreamina CLI snapshots + Google Veo docs + Luma Ray docs + OpenAI Sora discontinuation notice; "
-        "other entries are conservative fallbacks"
+        "Dreamina CLI snapshots + Google Veo 3.1 docs/pricing/deprecation notes + Luma Ray docs + "
+        "OpenAI Sora discontinuation notice; other entries are conservative fallbacks"
     ),
 }
 
@@ -71,6 +71,7 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "default_mode": "frames2video",
         "identity_mechanism": "character_id",
         "native_av": False,
+        "consistency_face_floor_delta": 0.05,  # multishot + character_id → tighter identity floor
         "lipsync_audio_ref": True,  # 可灵 Omni 原生口型：可吃音频参考做口型驱动
         # Kling 3.0（2026 市场报告）：单次生成可出**最多 6 个连续镜头 + 共享音轨时间线**的多镜叙事，
         # 字符一致性显著增强——同 Seedance 一样属「多镜单次生成」能力，对连续接力镜组可一次 co-generate
@@ -123,6 +124,14 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "default_mode": "image2video",
         "identity_mechanism": "reference_controls",
         "native_av": True,
+        "availability": {
+            "status": "preview",
+            "current_model": "Veo 3.1",
+            "legacy_models_shutdown_at": "2026-06-30",
+            "legacy_models": ("Veo 3", "Veo 2"),
+            "source": "Google Vertex AI / Gemini API Veo 3.1 docs and model lifecycle notes",
+            "note": "route only to current Veo 3.1 capability; do not treat older Veo 3/Veo 2 pricing or limits as current.",
+        },
         "frame_control": {
             "mode": "first_last_plus_references",
             "max_timeline_frames": 2,
@@ -131,7 +140,7 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
             "supports_last_frame": True,
             "supports_native_mid_anchors": False,
             "fallback": "Use first+last frames and up to 3 reference images; extra timeline anchors require split relay/extend, not one native multi-keyframe request.",
-            "verified": "2026-06-13 Google Gemini API Veo 3.1 docs",
+            "verified": "2026-06-25 Google Gemini API / Vertex AI Veo 3.1 docs",
         },
     },
     "sora": {
@@ -141,7 +150,7 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "max_clip_seconds": 20,
         "default_mode": "image2video",
         "identity_mechanism": "reference_media",
-        # 2026-06：Sora Web/App 已公告停服，API 也处于终止窗口。保留档案只为读旧项目/人工补单；
+        # 2026-06-25：Sora Web/App 已停服，API 处于明确日落窗口。保留档案只为读旧项目/人工补单；
         # 自动路由、原生音画候选、批量付费提交不得再把 Sora 当 primary/fallback。
         "native_av": False,
         "auto_routing": False,
@@ -224,6 +233,7 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "default_mode": "image2video",
         "identity_mechanism": "first_last_frame_or_reference",
         "native_av": False,
+        "consistency_face_floor_delta": -0.03,  # open-source self-host; identity less stable than cloud APIs
         # 开源/可自托管的「多镜单次生成」后端（Wan 2.6/2.7）：native-multishot 里唯一不绑付费云 API、
         # 可在本地 ComfyUI/自建管线跑的选项——契合「主流程不硬绑后端、缺依赖优雅降级」（设计宪法 C4）。
         # 能力走字段判定，由 MULTISHOT_NATIVE_BACKENDS 自动收录；开源权重无官方 SLA，批量前按 verified
@@ -250,6 +260,20 @@ def video_backend_aliases() -> Dict[str, str]:
             aliases[str(alias)] = key
             aliases[str(alias).lower()] = key
     return aliases
+
+
+def backend_face_floor_delta(backend_key: str) -> float:
+    """Per-backend identity floor adjustment for consistency_audit face scoring.
+
+    Backends with native multishot + strong identity mechanisms (Kling character_id,
+    Seedance reference_group) get a tighter floor (positive delta → harder to pass);
+    open-source / single-shot backends get a looser floor (negative delta → easier to
+    pass, acknowledging inherent identity instability).
+
+    Returns 0.0 for unknown backends (no adjustment).
+    """
+    spec = VIDEO_BACKEND_PROFILES.get(backend_key, {})
+    return float(spec.get("consistency_face_floor_delta", 0.0))
 
 
 VIDEO_BACKEND_ALIASES = video_backend_aliases()

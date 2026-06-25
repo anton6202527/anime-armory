@@ -11,7 +11,8 @@ description: 文风指纹提取与漂移检测 — 对项目 Demo、自有/授�
 
 ## 核心机制（确定性，纯标准库，不调 LLM）
 
-1. **指纹提取 (Fingerprint Extractor)**：`extract_style.py` 对样本做**可复现的文本统计**——句长分布(均长/中位/短句比/长句比)、对白占比(引号字符比)、虚词密度(的地得/标点/破折省略)、词频锚点(无分词环境下 2-4 字 n-gram 计数滤停用词)、节奏标签。**语义层**（"像不像名家的气口"）由 LLM 结合指纹人判，本脚本只给确定性骨架。
+1. **指纹提取 (Fingerprint Extractor)**：`extract_style.py` 对样本做**可复现的文本统计**——句长分布(均长/中位/短句比/长句比)、对白占比(引号字符比)、虚词密度(的地得/标点/破折省略)、词频锚点(无分词环境下 2-4 字 n-gram 计数滤停用词)、节奏标签。
+2. **语义风格档案 (Semantic Profile)**：统计之外，指纹还可保存 `narrative_distance`、`pov_filter`、`metaphor_source`、`silence_habit`、`emotion_delivery`、`dialogue_attack_mode`。这些字段由 AI/人工填写，用来形成独特叙述人格，而不是未授权复刻某作者。
 2. **指纹用途**：① 写作时把指纹摘要注入 `novel-create`/`novel-continue` 的 prompt；② `--compare` 算两份指纹（锚点 vs 候选章）的**漂移分**，供 `novel-review` 当"文风漂移"机检（见 `novel-review/scripts/consistency_audit.py`）。
 
 ## 工作流
@@ -23,6 +24,16 @@ python3 skills/novel-style/scripts/extract_style.py --source "<锚点章/样本�
 - 支持 `.txt`, `.md`, 目录（目录按章号自然序拼接）。
 - 产出字段：`style_source_rights` / `syntax_profile` / `dialogue_ratio` / `descriptive_habits` / `lexicon_anchor` / `rhythm`（schema 见 `references/fingerprint-schema.md`）。
 - 若填写 `--style-source-name` 或 `--style-source-author`，必须同时声明 `--source-rights project-demo|user-owned|licensed|public-domain`；`unknown` 会被拒绝。
+- 可补语义风格字段，例如：
+
+```bash
+python3 skills/novel-style/scripts/extract_style.py \
+  --source "<锚点章>" --output "<作品根>/设定/风格指纹.json" \
+  --source-rights project-demo \
+  --narrative-distance "深三限，贴近主角感官" \
+  --metaphor-source "账本、旧物、雨水、金属" \
+  --emotion-delivery "动作先于解释，关键处留半句"
+```
 
 ### 2. 漂移比对（给 review 做机检）
 ```bash
@@ -45,7 +56,15 @@ python3 skills/novel-style/scripts/extract_style.py --compare "<作品根>/设�
   "descriptive_habits": {"de_particle_density": 3.1, "punctuation_density": 21.4,
                          "ellipsis_dash_per_kchar": 1.8, "comma_to_period_ratio": 1.6},
   "lexicon_anchor": [{"term": "暗金", "count": 12}, {"term": "蛰伏", "count": 7}],
-  "rhythm": {"pace_tag": "fast_pulse"}
+  "rhythm": {"pace_tag": "fast_pulse"},
+  "semantic_profile": {
+    "narrative_distance": "深三限",
+    "pov_filter": "主角优先注意账目、手部动作和门口退路",
+    "metaphor_source": "商业账本、旧物、雨水",
+    "silence_habit": "高情绪处不解释完整因果",
+    "emotion_delivery": "动作和物件先于心理命名",
+    "dialogue_attack_mode": "客气话里藏试探"
+  }
 }
 ```
 
@@ -63,3 +82,4 @@ python3 skills/novel-style/scripts/extract_style.py --compare "<作品根>/设�
 | 盲目堆砌词汇 | 指纹的核心是“节奏”和“句式”，不仅仅是几个词 |
 | 跨题材套用 | 仙侠指纹不适用于职场文，需按项目提取 |
 | 让文本“像某某作者本人” | 拒绝未授权姓名式复刻；改为抽象特征描述或使用自有/授权样本 |
+| 只看统计指纹 | 补 `semantic_profile`，否则只能防漂移，不能形成稳定叙述人格 |

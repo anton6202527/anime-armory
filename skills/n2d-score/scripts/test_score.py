@@ -414,6 +414,8 @@ def test_build_consistency_kpi_below_line(monkeypatch):
     assert kpi["cross_episode"] == 0.79
     assert kpi["encoder"] == "arcface_buffalo_l" and kpi["fidelity_gate"] == "active"
     assert kpi["characters_counted"] == 2
+    assert "94.4" not in kpi["benchmark_ref"]
+    assert "重标定" in kpi["benchmark_ref"]
 
 
 def test_build_consistency_kpi_above_line(monkeypatch):

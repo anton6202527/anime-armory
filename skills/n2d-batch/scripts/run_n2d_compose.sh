@@ -12,5 +12,7 @@ LANG="${3:-${N2D_COMPOSE_LANG:-zh}}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 
+python3 "$REPO_DIR/skills/n2d-model-router/scripts/mouth_detect.py" "$ROOT" "$EP" --write --json >/dev/null || true
+python3 "$REPO_DIR/skills/n2d-video/scripts/materialize_shared_clips.py" "$ROOT" "$EP"
 python3 "$REPO_DIR/skills/n2d-dashboard/scripts/dashboard.py" gate "$ROOT" "$EP" --stage compose
 bash "$REPO_DIR/skills/n2d-compose/compose.sh" "$ROOT" "$EP" "$LANG"

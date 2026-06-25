@@ -30,6 +30,16 @@ NOVEL_SKILLS = [
         "summary": "shared contracts, gates, drafting helpers",
     },
     {
+        "name": "novel-observe",
+        "role": "material",
+        "summary": "living-material observation bank and field notes",
+    },
+    {
+        "name": "novel-aesthetic",
+        "role": "craft",
+        "summary": "positive craft samples and aesthetic judgement bank",
+    },
+    {
         "name": "novel-expand",
         "role": "transform",
         "summary": "expand short text into fuller chapters",

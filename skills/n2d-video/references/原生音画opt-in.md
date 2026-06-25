@@ -4,9 +4,9 @@
 
 ## 1. 默认策略
 
-- `_设置.md` 的 `视频原生音轨` 默认是 `丢弃`。
+- `视频原生音轨` 是模式感知默认：`配音先行` / `先出视频后配音` 默认 `丢弃`；`制作模式=原生音画` 且 route.native_audio_policy=`native_speech` 时，compose 的有效策略自动转为 `保留原片音轨`，避免把原生台词剥掉。
 - n2d-video 阶段拿回平台原片，保留 MP4 原生音轨，不提前 `-an` 覆盖。
-- n2d-compose 是唯一处理原生音轨的阶段：默认丢弃；opt-in 后才低音量混入环境声或保留原片音轨。
+- n2d-compose 是唯一处理原生音轨的阶段：非原生音画默认丢弃；低风险 opt-in 后才低音量混入环境声或保留原片音轨；原生音画说话镜按 native_speech 保留原片音轨。
 
 ## 2. 允许 opt-in 的镜头
 
@@ -39,9 +39,9 @@
 
 - 默认：`audio_intent=none; risk=low; mouth_visible=no; speech_policy=no_native_speech; compose_policy=丢弃`
 - 环境声 opt-in：`audio_intent=ambience; risk=low; mouth_visible=no; speech_policy=no_native_speech; compose_policy=低音量混入环境声; review=确认仅雨声/风声/火声`
-- 原片音轨保留：仅用于无配音预览或纯环境片段，`compose_policy=保留原片音轨`；有 n2d-voice 配音轨时 gate 会阻断或要求改回低音量混入。
+- 原片音轨保留：仅用于无配音预览或纯环境片段，`compose_policy=保留原片音轨`；有 n2d-voice 配音轨时 gate 与 `compose.sh` 都会阻断，除非显式证明配音轨仅为旁白/系统层并用 `ALLOW_NATIVE_AV_VOICEOVER=1` 放行。
 
-> **`mouth_visible` 的真值在哪：就是上面这个 prompt 字段。** `mouth_detect.py` 是**只读顾问、不写任何文件**——它读 storyboard 文本启发式（`router.clip_has_mouth_visible`）、首帧 PNG（装 insightface 时）、以及 prompt 里已填的值，三方复核后**打印/JSON 给出建议并在冲突时 warn（退出码 1）**。"以图为准"= 由你照建议**改 prompt 里的 `mouth_visible`**，脚本不会替你回写。下游消费这个 prompt 字段的是：`router.py`（原生音画 opt-in / 口型路由）、`gate.py --stage video_preflight`（缺 `原生音画策略` 即 BLOCK）、`n2d-score`（风险标记统计）。
+> **`mouth_visible` 的真值在哪：就是上面这个 prompt 字段，但必须有 sidecar 证据。** `mouth_detect.py --write` 会读 storyboard 文本启发式（`router.clip_has_mouth_visible`）、首帧 PNG（装 insightface 时）、以及 prompt 里已填的值，三方复核后写 `生产数据/mouth_visible_audit_第N集.json`。冲突时退出码 1，但标准 wrapper 会继续进入 gate，由 gate 结构化阻断。"以图为准"= 由你照 sidecar 建议**改 prompt 里的 `mouth_visible`**，脚本不会替你回写 prompt。下游消费这个 prompt 字段和 sidecar 的是：`router.py`（原生音画 opt-in / 口型路由）、`gate.py --stage video_preflight`（缺 sidecar 或冲突即 BLOCK）、`n2d-score`（风险标记统计）。
 
 ## 5. compose 处理
 
@@ -58,6 +58,7 @@
 ## 6. gate 规则
 
 - video prompt 缺 `原生音画策略` 字段即阻断。
+- 说话/口型镜、`native_speech`、`lipsync_condition_only`、或任何原生环境声/音效 opt-in 镜，必须有 `生产数据/mouth_visible_audit_第N集.json`；sidecar 里有 warn 时，按建议修 prompt 后重跑。
 - `audio_intent=ambience|native_sfx` 或 `compose_policy=低音量混入环境声|保留原片音轨` 时，必须同时满足 `risk=low`、`mouth_visible=no`、`speech_policy=no_native_speech`。
 - `_设置.md` 选择 `低音量混入环境声` 或 `保留原片音轨` 时，`出视频/第N集/prompt/00_总览.md` 必须有「原生音画 opt-in 清单」，逐 Clip 说明为什么低风险。
 - compose 阶段若发现 clip 有音频流且策略为 `保留原片音轨`，同时存在 n2d-voice 配音轨，则阻断，避免双人声。

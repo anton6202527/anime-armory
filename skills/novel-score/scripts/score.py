@@ -101,6 +101,44 @@ WEIGHTS = {
     }
 }
 
+# 平台 → 评分模式映射：品质导向平台用品质权重（prose 18/topic_heat 12），
+# 商业爽文平台用商业权重（topic_heat 20/prose 8）。不在此表的平台按子串匹配兜底。
+PLATFORM_WEIGHT_MODE = {
+    "晋江": "品质向",
+    "起点": "品质向",
+    "起点中文网": "品质向",
+    "起点国际": "品质向",
+    "纵横": "品质向",
+    "豆瓣阅读": "品质向",
+    "番茄": "商业爽文向",
+    "红果": "商业爽文向",
+    "七猫": "商业爽文向",
+    "抖音": "商业爽文向",
+    "快手": "商业爽文向",
+    "书旗": "商业爽文向",
+    "飞卢": "商业爽文向",
+    "掌阅": "商业爽文向",
+    "鲁迅文学院": "品质向",
+}
+
+
+def _resolve_platform_mode(raw):
+    """从平台名/设置字符串解析评分模式。
+
+    优先级：1) PLATFORM_WEIGHT_MODE 精确匹配 2) 子串含'品质'→品质向 3) 子串匹配映射表键
+    4) 默认商业爽文向。"""
+    if not raw or raw in {"商业爽文向", "品质向"}:
+        return raw or "商业爽文向"
+    raw_lower = raw.lower()
+    # 精确匹配优先
+    for key, mode in PLATFORM_WEIGHT_MODE.items():
+        if key in raw:
+            return mode
+    if "品质" in raw:
+        return "品质向"
+    return "商业爽文向"
+
+
 SHORT_DRAMA_KEYWORDS = ("红果", "抖音", "漫剧", "短剧")
 REFERENCE_DISTRIBUTION_GLOB = os.path.join("评分", "reference_distribution*.json")
 REFERENCE_ALLOWED_RIGHTS = {
@@ -166,20 +204,66 @@ def manual_evidence_valid(item):
     return bool(re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(item.get("date") or "")))
 
 
-def baseline_has_short_drama_coverage(baseline):
+def _parse_evidence_date(value):
+    text = str(value or "").strip()
+    if not text:
+        return None
+    try:
+        return date.fromisoformat(text[:10])
+    except ValueError:
+        return None
+
+
+def _evidence_is_fresh(raw_date, expires_after):
+    evidence_date = _parse_evidence_date(raw_date)
+    if evidence_date is None:
+        return False
+    if evidence_date > date.today():
+        return False
+    return date.today() <= evidence_date + timedelta(days=expires_after)
+
+
+def _source_has_effective_signals(source):
+    status = str(source.get("status") or "").strip().lower()
+    signals = source.get("signals") or []
+    return status == "ok" and any(str(signal).strip() for signal in signals)
+
+
+def _source_evidence_date(source, fallback_date=None):
+    return source.get("collected_at") or fallback_date
+
+
+def baseline_has_fresh_effective_evidence(baseline, expires_after):
+    baseline_date = (baseline or {}).get("baseline_date")
+    for item in (baseline or {}).get("manual_evidence") or []:
+        if manual_evidence_valid(item) and _evidence_is_fresh(item.get("date"), expires_after):
+            return True
+    for source in (baseline or {}).get("sources") or []:
+        if isinstance(source, dict) and _source_has_effective_signals(source):
+            if _evidence_is_fresh(_source_evidence_date(source, baseline_date), expires_after):
+                return True
+    return False
+
+
+def baseline_has_short_drama_coverage(baseline, *, require_fresh=False, expires_after=21):
     target = str((baseline or {}).get("target_platform") or "")
     if not any(key in target for key in SHORT_DRAMA_KEYWORDS):
         return True
+    baseline_date = (baseline or {}).get("baseline_date")
     for source in (baseline or {}).get("sources") or []:
         if not isinstance(source, dict):
             continue
         platform = str(source.get("platform") or "")
         if any(key in platform for key in SHORT_DRAMA_KEYWORDS):
-            if str(source.get("status") or "").lower() == "ok" and any(str(s).strip() for s in source.get("signals") or []):
+            if _source_has_effective_signals(source) and (
+                not require_fresh or _evidence_is_fresh(_source_evidence_date(source, baseline_date), expires_after)
+            ):
                 return True
     for item in (baseline or {}).get("manual_evidence") or []:
         haystack = " ".join(str(item.get(field, "")) for field in ("platform", "source", "summary"))
         if manual_evidence_valid(item) and any(key in haystack for key in SHORT_DRAMA_KEYWORDS):
+            if require_fresh and not _evidence_is_fresh(item.get("date"), expires_after):
+                continue
             return True
     return False
 
@@ -214,6 +298,15 @@ def baseline_freshness(baseline):
             "expires_on": expires_on.isoformat(),
             "reason": f"market baseline 缺少人读热榜文件：{md_path}",
         }
+    if expired:
+        return {
+            "status": "expired",
+            "blocking": True,
+            "baseline_date": raw_date,
+            "expires_after_days": expires_after,
+            "expires_on": expires_on.isoformat(),
+            "reason": f"market baseline 已过期：{raw_date} + {expires_after} 天 < {date.today().isoformat()}",
+        }
     if not baseline_has_effective_evidence(baseline):
         return {
             "status": "no_evidence",
@@ -223,22 +316,31 @@ def baseline_freshness(baseline):
             "expires_on": expires_on.isoformat(),
             "reason": "market baseline 没有有效证据：至少需要一个 status=ok 且 signals 非空的来源，或结构化 manual_evidence。",
         }
-    if not baseline_has_short_drama_coverage(baseline):
+    if not baseline_has_fresh_effective_evidence(baseline, expires_after):
+        return {
+            "status": "evidence_stale",
+            "blocking": True,
+            "baseline_date": raw_date,
+            "expires_after_days": expires_after,
+            "expires_on": expires_on.isoformat(),
+            "reason": "market baseline 的有效证据自身已过期或缺少证据日期；请重新抓取来源或补当天/近期 manual_evidence。",
+        }
+    if not baseline_has_short_drama_coverage(baseline, require_fresh=True, expires_after=expires_after):
         return {
             "status": "coverage_gap",
             "blocking": True,
             "baseline_date": raw_date,
             "expires_after_days": expires_after,
             "expires_on": expires_on.isoformat(),
-            "reason": "target_platform 命中 红果/抖音/漫剧/短剧，但缺这些平台的 ok 来源或结构化 manual_evidence。",
+            "reason": "target_platform 命中 红果/抖音/漫剧/短剧，但缺这些平台的新鲜 ok 来源或结构化 manual_evidence。",
         }
     return {
-        "status": "expired" if expired else "fresh",
-        "blocking": expired,
+        "status": "fresh",
+        "blocking": False,
         "baseline_date": raw_date,
         "expires_after_days": expires_after,
         "expires_on": expires_on.isoformat(),
-        "reason": f"market baseline 已过期：{raw_date} + {expires_after} 天 < {date.today().isoformat()}" if expired else "",
+        "reason": "",
     }
 
 
@@ -1205,11 +1307,8 @@ def main():
     title_collision = load_title_collision(root, book_title)
     short_drama_target = is_short_drama_target(settings, meta)
 
-    platform_mode = args.platform or settings.get("目标平台") or "商业爽文向"
-    if "品质" in platform_mode:
-        platform_mode = "品质向"
-    else:
-        platform_mode = "商业爽文向"
+    raw_platform = args.platform or settings.get("目标平台") or ""
+    platform_mode = _resolve_platform_mode(raw_platform)
 
     weights = WEIGHTS.get(platform_mode, WEIGHTS["商业爽文向"])
 
@@ -1339,6 +1438,9 @@ def main():
 
     deductions = assessment.get("deductions", [])
     total_deductions = sum(d["points"] for d in deductions)
+    # 扣分上限 -30：防止雷点扣分淹没基本面（加权 90 扣到 40 vs 加权 40 无扣分，
+    # 总分相同但改续决策完全不同——上限让 deductions 保持尖锐信号但不让基本面不可比）
+    total_deductions = max(-30, total_deductions)
     final_score = max(0.0, total_weighted + total_deductions)
     tier, verdict, roi = get_tier_verdict(final_score)
     benchmark_percentile = compute_benchmark_percentiles(

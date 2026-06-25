@@ -109,6 +109,7 @@ from n2d_handoff import (  # noqa: E402  逐镜身份/资产交接 Diff（common
     check_asset_handoff,
     check_identity_handoff,
 )
+from n2d_thresholds import load_thresholds  # noqa: E402  告警阈值单一真值源（budget_cap 等，与 dashboard/score 共用）
 import image_backends  # noqa: E402  出图后端连通性探活 adapter（选择点→探针）
 import image_backend_adapter  # noqa: E402  生图后端 API/能力适配层（选择点→能力/刷新证据/推荐）
 import video_backend_adapter  # noqa: E402  生视频后端 API/能力适配层（选择点→能力/刷新证据）
@@ -152,6 +153,90 @@ except Exception:  # pragma: no cover - degraded local env
 BLOCK, WARN, INFO = "block", "warn", "info"
 findings: List[Dict[str, object]] = []
 FALLBACK_OFF_VALUES = {"", "无", "不使用", "关闭", "否", "off", "no", "none", "disable", "disabled"}
+
+# ── WARN risk_score tiering ──────────────────────────────────────────────
+# Every WARN finding carries a risk_score (0.0–1.0) so the gate output can
+# distinguish high-severity warns (likely real issues needing attention) from
+# minor/advisory ones (cosmetic / constructional suggestions).  Detection logic
+# is unchanged — this is a display/priority layer only.
+#
+# Tiers:  >=0.7  warn_hi   ❗ high — likely real issue, prioritise
+#         0.4-0.7 warn_mod  ⚠️  moderate — needs human judgment
+#         <0.4    warn_minor ℹ️  minor — cosmetic / advisory / constructional
+WARN_HI, WARN_MOD_CUT, WARN_MINOR_CUT = 0.7, 0.4, 0.0
+
+# Default risk_score per dimension family (substring match, case-insensitive).
+# The mapping is checked in order — first match wins.  Explicit risk_score=
+# kwarg on add() always takes precedence over the auto-derived default.
+_RISK_DEFAULTS: List[Tuple[str, float]] = [
+    # face / identity — highest risk: drift here is the most audience-visible
+    ("脸", 0.8), ("face", 0.8), ("identity", 0.8), ("角色一致", 0.8),
+    ("identity", 0.8), ("锚点", 0.8), ("fidelity", 0.8),
+    # cross-episode / voice identity — hard to fix later
+    ("跨集", 0.7), ("voice", 0.7), ("声纹", 0.7), ("音色", 0.7),
+    ("契约", 0.7), ("contract", 0.7),
+    # scene / outfit / blocking — moderate
+    ("场景", 0.5), ("服装", 0.5), ("outfit", 0.5), ("scene", 0.5),
+    ("hair", 0.5), ("发型", 0.5),
+    # scale / spatial / physical
+    ("景别", 0.5), ("构图", 0.5), ("物理", 0.5), ("scale", 0.5),
+    # style / tone / color — lower: can be intentional creative choice
+    ("风格", 0.3), ("style", 0.3), ("色调", 0.3), ("光影", 0.3),
+    ("电影光学", 0.3),
+    # operational / advisory — lowest
+    ("prompt", 0.2), ("seed", 0.2), ("预算", 0.2), ("budget", 0.2),
+    ("配音", 0.2), ("合规", 0.2), ("尾帧", 0.3), ("中段锚帧", 0.3),
+    ("原生", 0.3),
+]
+
+
+def _default_risk_score(dim: str) -> float:
+    """Auto-derived risk_score from the dimension name.  Returns 0.5 (moderate)
+    for unrecognised dims — conservative, neither under- nor over-alarming."""
+    dim_lower = dim.lower()
+    for pattern, score in _RISK_DEFAULTS:
+        if pattern in dim_lower:
+            return score
+    return 0.5  # unrecognised → moderate (conservative)
+
+
+def _warn_tier(risk_score: Optional[float]) -> str:
+    """Map risk_score to a display tier label."""
+    if risk_score is None:
+        return "warn_mod"
+    if risk_score >= WARN_HI:
+        return "warn_hi"
+    if risk_score >= WARN_MOD_CUT:
+        return "warn_mod"
+    return "warn_minor"
+
+
+def _warn_icon(tier: str) -> str:
+    return {"warn_hi": "❗", "warn_mod": "⚠️", "warn_minor": "ℹ️"}.get(tier, "⚠️")
+
+
+def _default_evidence_family(dim: str, msg: str = "", loc: str = "") -> str:
+    """Coarse evidence provenance used by correlation upgrades.
+
+    Correlation should not turn three copies of the same weak signal into a hard
+    blocker.  A best-effort family is enough here: detector rows can override it
+    with explicit `evidence_family`, while older findings remain usable.
+    """
+    hay = " ".join((dim or "", msg or "", loc or "")).lower()
+    rules = (
+        ("face_embedding", ("脸", "face", "identity", "arcface", "styleid", "主体视频", "s2v")),
+        ("text_contract", ("语义", "契约", "contract", "storyboard", "prompt", "状态百科", "state")),
+        ("pixel_hash", ("接缝", "dhash", "flicker", "temporal", "片内时序", "闪烁")),
+        ("appearance_embedding", ("多模态", "clip", "dino", "dreamsim", "外观判官", "服装", "配色")),
+        ("scene_geometry", ("场景", "轴线", "视线", "平面", "相机", "camera", "blocking")),
+        ("motion_physics", ("运动", "物理", "因果", "motion", "physics", "高动态", "specv")),
+        ("audio_sync", ("音画", "口型", "声纹", "音色", "audio", "voice", "lipsync", "环境声")),
+        ("human_signoff", ("人审", "signoff", "calibration", "校准")),
+    )
+    for family, tokens in rules:
+        if any(token in hay for token in tokens):
+            return family
+    return "unknown"
 
 
 SPECIAL_SHOT_TEMPLATE_FIELDS: Dict[str, Tuple[str, ...]] = {
@@ -371,9 +456,15 @@ def gate_family(stage: str) -> str:
     }.get(stage, stage)
 
 
-def add(sev: str, dim: str, loc: str, msg: str, **extra: object) -> None:
+def add(sev: str, dim: str, loc: str, msg: str, risk_score: Optional[float] = None, **extra: object) -> None:
     item: Dict[str, object] = {"sev": sev, "dim": dim, "loc": loc, "msg": msg}
+    if sev == WARN:
+        # Auto-derive risk_score from dim if not explicitly provided; explicit
+        # kwarg always wins.  Non-WARN findings don't carry risk_score.
+        item["risk_score"] = risk_score if risk_score is not None else _default_risk_score(dim)
     item.update(extra)
+    if item.get("evidence_family") in (None, "", [], {}):
+        item["evidence_family"] = _default_evidence_family(dim, msg, loc)
     findings.append(item)
 
 
@@ -1063,15 +1154,17 @@ def _check_compliance_voice(data: dict, loc: str) -> None:
 
 
 def _check_platform_targets(data: dict, loc: str, stage: str) -> None:
-    if stage not in ("compose", "review"):
-        return
     internal = _is_internal_distribution(data)
+    release_strict = stage in ("compose", "review", "release") or _status(data.get("distribution_intent")) == "paid_distribution"
 
     def flag(floc: str, msg: str) -> None:
-        # platform_review / overseas_localization ∈ COMPLIANCE_INTERNAL_SKIPPABLE_SECTIONS：
-        # internal_only 时降 BLOCK → INFO；其余（角色/声音授权）不走本函数、照常 BLOCK。
+        # platform_review / overseas_localization 是发布边界域：
+        # internal_only 始终降 INFO；publish_candidate 在 image/video 阶段先列 INFO 待办；
+        # paid_distribution 或 compose/review/release 边界才 BLOCK。
         if internal:
             add(INFO, "合规前置", floc, f"{msg}{INTERNAL_SKIP_NOTE}")
+        elif not release_strict:
+            add(INFO, "合规前置", floc, f"{msg}（发布/合成前需补；当前 {stage} 阶段不阻断）")
         else:
             _compliance_block(floc, msg)
 
@@ -1119,13 +1212,14 @@ def _check_platform_targets(data: dict, loc: str, stage: str) -> None:
 def _check_regulatory_filing(data: dict, loc: str, stage: str) -> None:
     """广电总局 网络微短剧 备案/分级/播前审核（2026 新规：AIGC 全面纳入分级+播前审核）。
     与 platform_review 同列内部 demo 免检域：internal_only 时 BLOCK 降 INFO。"""
-    if stage not in ("compose", "review"):
-        return
     internal = _is_internal_distribution(data)
+    release_strict = stage in ("compose", "review", "release") or _status(data.get("distribution_intent")) == "paid_distribution"
 
     def flag(floc: str, msg: str) -> None:
         if internal:
             add(INFO, "合规前置", floc, f"{msg}{INTERNAL_SKIP_NOTE}")
+        elif not release_strict:
+            add(INFO, "合规前置", floc, f"{msg}（发布/合成前需补；当前 {stage} 阶段不阻断）")
         else:
             _compliance_block(floc, msg)
 
@@ -1477,6 +1571,131 @@ def check_backend_reachable(root: str, ep: str) -> None:
             "（如 curl 内网健康端点 / 确认即梦官方 CLI 已登录·会员有效 / 确认 API 额度），不通即停，勿静默兜底换后端。")
 
 
+def check_video_backend_reachable(root: str, ep: str) -> None:
+    """付费出视频前确认所选生视频后端「可达·能出片」（与图侧 check_backend_reachable 同口径）。
+
+    出视频是付费工位；后端不通（内网 502 / 官方 CLI 未登录 / 缺凭据·会员·额度）时照样进工位 = 白花钱碰壁，
+    或静默兜底换后端致跨镜后端混用漂移（C2 禁的「偷偷换路」，也会按错后端记错账）。探针走
+    video_backend_adapter（canonical_backend + 健康端点 env），gate 不 hardcode 任何内网地址/CLI 细节：
+      · down（探针确证不可达，如内网 502）→ BLOCK，且明确禁止静默兜底换后端；
+      · unknown（无自动探针 / 渠道=人工 / 已设 N2D_SKIP_BACKEND_PROBE）→ WARN，提示人工确认；
+      · ok → 放行。
+    与既有 check_video_backend_api_refresh（只看「能力刷新证据」）互补：那条管「能力声明是否新」，
+    这条管「后端此刻是否连得上」——付费前两道都要过。"""
+    settings_loc = os.path.join(root, "_设置.md")
+    channel = get_setting(root, "生视频渠道", "即梦/Dreamina").strip()
+    status, detail = video_backend_adapter.probe_video_backend(channel)
+    if status == "down":
+        add(BLOCK, "生视频后端连通性", settings_loc,
+            f"生视频后端「{channel}」探活不通：{detail}。出视频是付费工位，不通就停——"
+            "先修后端（验内网健康端点 / 重登官方 CLI / 补 API key·会员·额度）再出视频；"
+            "禁止静默兜底换别的后端（会引入跨镜后端混用漂移、记错账）。",
+            return_to_stage="video_prompt")
+    elif status == "unknown":
+        bypass = "（注意：N2D_SKIP_BACKEND_PROBE 已设置，探活被显式跳过）" \
+            if os.environ.get("N2D_SKIP_BACKEND_PROBE") else ""
+        add(WARN, "生视频后端连通性", settings_loc,
+            f"生视频后端「{channel}」无法自动探活：{detail}{bypass}。出视频前请人工确认它能出片"
+            "（官方 CLI 已登录·会员有效 / API 额度可用 / 一次 dry-run），不通即停，勿静默兜底换后端。")
+
+
+def evaluate_budget_gate(cost_totals, cost_per_min, budget_cap, planned_min, *, warn_ratio=0.8):
+    """付费前预算闸门判定（纯函数·可测）。返回 [(sev, currency, spent, forecast, reason), ...]。
+
+    budget_cap 为 None/<=0 → []（无配置上限，graceful skip，不强加预算）。逐币种：
+      · 已花 spent ≥ cap → block（已达/超累计上限，硬停）；
+      · 已花 + 本集预测 forecast > cap → block（本集预测将冲破上限，别开跑）；
+      · 已花 ≥ cap×warn_ratio → warn（接近上限）。
+    forecast = cost_per_min[cur] × planned_min（缺历史单价/计划时长 → forecast=0，只按已花判，不臆造）。
+    口径与 dashboard.evaluate_alerts 的 budget_cap 一致——区别只是这条跑在「付费前」、那条跑在「事后 rebuild」。"""
+    out = []
+    try:
+        cap = float(budget_cap) if budget_cap is not None else None
+    except (TypeError, ValueError):
+        cap = None
+    if not cap or cap <= 0:
+        return out
+    try:
+        pmin = float(planned_min or 0.0)
+    except (TypeError, ValueError):
+        pmin = 0.0
+    currencies = set(cost_totals or {}) | set(cost_per_min or {})
+    for cur in sorted(currencies):
+        try:
+            spent = float((cost_totals or {}).get(cur, 0.0) or 0.0)
+        except (TypeError, ValueError):
+            spent = 0.0
+        try:
+            per_min = float((cost_per_min or {}).get(cur, 0.0) or 0.0)
+        except (TypeError, ValueError):
+            per_min = 0.0
+        forecast = round(per_min * pmin, 2) if (per_min > 0 and pmin > 0) else 0.0
+        if spent >= cap:
+            out.append(("block", cur, spent, forecast,
+                        f"累计成本 {cur} {spent:.2f} 已达/超上限 {cap:.2f}"))
+        elif forecast > 0 and (spent + forecast) > cap:
+            out.append(("block", cur, spent, forecast,
+                        f"已花 {cur} {spent:.2f} + 本集预测 {forecast:.2f} = {spent + forecast:.2f} 将超上限 {cap:.2f}"))
+        elif spent >= cap * warn_ratio:
+            out.append(("warn", cur, spent, forecast,
+                        f"累计成本 {cur} {spent:.2f} 已达上限 {cap:.2f} 的 {warn_ratio * 100:.0f}%"))
+    return out
+
+
+def _episode_planned_minutes(root: str, ep: str) -> float:
+    """本集计划输出分钟（预算 forecast 用）：storyboard total_duration 优先，否则 ∑clips[].duration；缺→0。"""
+    data = load_json(storyboard_path(root, ep))
+    if not isinstance(data, dict):
+        return 0.0
+    try:
+        sec = float(data.get("total_duration") or 0.0)
+    except (TypeError, ValueError):
+        sec = 0.0
+    if sec <= 0:
+        clips = data.get("clips") if isinstance(data.get("clips"), list) else []
+        s = 0.0
+        for c in clips:
+            if isinstance(c, dict):
+                try:
+                    s += float(c.get("duration", 0) or 0)
+                except (TypeError, ValueError):
+                    pass
+        sec = s
+    return round(sec / 60.0, 4) if sec > 0 else 0.0
+
+
+def check_budget_cap(root: str, ep: str) -> None:
+    """付费生成前的预算硬挂钩（堵「只在事后 rebuild 才告警」的执行时松动洞）。
+
+    此前 budget_cap 只在 dashboard build 后由 evaluate_alerts **事后**告警（cmd_record append 成本事件之后），
+    用户能一路花超才被发现。这里把同一上限挪到**付费前** gate：累计已花 ≥ 上限、或本集历史单价×计划时长
+    预测会冲破上限 → BLOCK；接近上限 → WARN。上限来源同 dashboard（alert_thresholds.json budget_cap /
+    设置「告警预算上限」/ env N2D_ALERT_BUDGET_CAP）。未配 budget_cap → 不挡（graceful，不强加预算）。
+    累计成本读已落盘的 生产数据/dashboard.json totals（aggregate 的产物，不在 gate 里重算）；
+    逃生口：调高 budget_cap、换免费/降档后端、或拆少本集产出后重跑。"""
+    thresholds = load_thresholds(root)
+    cap = thresholds.get("budget_cap")
+    if cap in (None, "", 0):
+        return
+    warn_ratio = thresholds.get("budget_warn_ratio") or 0.8
+    dash = load_json(os.path.join(root, "生产数据", "dashboard.json"))
+    totals = (dash.get("totals") if isinstance(dash, dict) else None) or {}
+    cost_totals = totals.get("cost_totals") if isinstance(totals.get("cost_totals"), dict) else {}
+    cost_per_min = totals.get("cost_per_finished_min") if isinstance(totals.get("cost_per_finished_min"), dict) else {}
+    planned_min = _episode_planned_minutes(root, ep)
+    loc = os.path.join(root, "生产数据", "dashboard.json")
+    for sev, _cur, _spent, _forecast, reason in evaluate_budget_gate(
+            cost_totals, cost_per_min, cap, planned_min, warn_ratio=float(warn_ratio)):
+        if sev == "block":
+            add(BLOCK, "预算", loc,
+                f"付费生成前预算闸门：{reason}。停止付费生成——调高预算上限"
+                "（生产数据/alert_thresholds.json budget_cap / 设置「告警预算上限」/ env N2D_ALERT_BUDGET_CAP）、"
+                "换免费/降档后端，或拆少本集产出后再跑；别一路花超才在事后 dashboard 才发现。")
+        else:
+            add(WARN, "预算", loc,
+                f"付费生成前预算预警：{reason}。已接近上限，留意后续几集别冲破；必要时降档/换后端或调预算。")
+
+
 def _image_backend_gate_workload(root: str, ep: str) -> Dict[str, Any]:
     """把当前集粗略归一成适配层 workload，用于后端升档建议。"""
     try:
@@ -1513,7 +1732,8 @@ def check_image_backend_api_refresh(root: str, ep: str) -> None:
             f"生图后端「{setting}」缺少本次官方 API/CLI 刷新证据：{status.get('message')}。"
             "正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，"
             "再记录刷新证据：`python3 skills/n2d/_lib/image_backend_adapter.py record-refresh <作品根> --backend "
-            f"\"{setting}\" --source \"<官方文档或CLI/API证据>\" --note \"<本次能力结论>\"`。"
+            f"\"{setting}\" --source \"<官方文档或CLI/API证据>\" --source-url \"<链接或留空>\" "
+            "--evidence-kind official_docs --note \"<本次能力结论>\"`。"
             f"证据文件：{status.get('path')}。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
             return_to_stage="image",
             affected_artifacts=[str(status.get("path") or "")],
@@ -1528,7 +1748,7 @@ def check_image_backend_api_refresh(root: str, ep: str) -> None:
             settings_loc,
             f"所选生图后端「{setting}」无法满足统一出图能力标准："
             f"{', '.join(standard_plan.get('blocked_standards') or [])}。"
-            "标准层不随后端降级；请换官方可审计后端，或先补适配层能力与弥补措施。",
+            "标准层不随后端短板下调；请换官方可审计后端，或先补适配层能力与弥补措施。",
             return_to_stage="image",
         )
     elif standard_plan.get("status") == "mitigations_required":
@@ -1553,7 +1773,7 @@ def check_image_backend_api_refresh(root: str, ep: str) -> None:
             f"适配层评分建议升档：当前「{setting}」score={cur.get('score')}，"
             f"推荐「{best.get('label') or best.get('backend')}」score={best.get('score')}。"
             f"理由：推荐后端能力={','.join(best.get('strengths') or []) or adapter.get('adapter_kind')}；"
-            "若确认切换，先统一 `_设置.md` 与全部 prompt 的生图后端，并按新后端重做/刷新本集定妆、参考包和身份注册，禁止半集混用。",
+            "若确认切换，先统一 `_设置.md` 与全部 prompt 的生图模型/渠道，并按新模型/渠道重做/刷新本集定妆、参考包和身份注册，禁止半集混用。",
             return_to_stage="image",
         )
 
@@ -1951,10 +2171,10 @@ def _image_event_provider(event: Dict[str, Any]) -> str:
 
 
 def check_image_ai_policy(root: str, ep: str) -> None:
-    """阶段2：`生图AI` 是选择点（默认 Codex），放行官方/已登录多参考后端，只拦混用 + 未授权出图。
+    """阶段2：`生图模型` 是生成轴，`生图AI/生图渠道` 是访问入口，只拦混用 + 未授权出图。
 
-    跨镜一致性真正的杀手是【同项目混用多个生图后端】，不是"用了非 Codex"。本检查：
-      - 官方白名单后端（Codex/OpenAI/Dreamina/即梦官方 CLI/Seedream/可灵主体库/Nano Banana/Sora Cameo）：放行；
+    跨镜一致性真正的杀手是【同项目混用多个生图模型/渠道】，不是"用了非 Codex"。本检查：
+      - 官方白名单后端（Codex/OpenAI/Dreamina/即梦官方 CLI/Seedream/可灵主体库/Nano Banana；Sora Cameo 仅 legacy/manual）：放行；
       - 未授权出图路径（同视频AI 含糊口径、第三方逆向 CLI/web 自动化）：BLOCK（安全 invariant）；
       - 未知后端：WARN（提示先确认是官方 API）；
       - 同项目/同集出现 ≥2 个不同官方后端：BLOCK（混用）。
@@ -1971,7 +2191,7 @@ def check_image_ai_policy(root: str, ep: str) -> None:
             "生图AI一致性",
             settings_loc,
             f"生图AI「{setting}」是未授权/含糊出图路径（同视频AI、第三方逆向 CLI 或 web 自动化），违反安全闸门，永不放行。"
-            "请显式改用官方后端：Codex/OpenAI、Dreamina/即梦官方 CLI、Seedream（官方 API）、可灵主体库、Nano Banana、Sora Cameo。",
+            "请显式改用官方生图模型/渠道：Codex/OpenAI、Dreamina/即梦官方 CLI、Seedream（官方 API）、可灵主体库、Nano Banana。Sora Cameo 仅旧项目/manual。",
         )
     elif kind == "unknown":
         add(
@@ -2014,9 +2234,9 @@ def check_image_ai_policy(root: str, ep: str) -> None:
             if pk == "forbidden":
                 add(
                     BLOCK,
-                    "生图AI一致性",
-                    path,
-                    f"prompt 标注未授权/含糊出图后端「{m.group(1).strip()}」；请改用官方后端（Codex/OpenAI/Dreamina/Seedream/可灵/Nano Banana/Sora）。",
+                "生图AI一致性",
+                path,
+                f"prompt 标注未授权/含糊出图后端「{m.group(1).strip()}」；请改用官方生图模型/渠道（Codex/OpenAI/Dreamina/Seedream/可灵/Nano Banana；Sora 仅旧项目/manual）。",
                 )
             elif pk == "approved":
                 used.add(pc)
@@ -2086,11 +2306,11 @@ def check_image_ai_policy(root: str, ep: str) -> None:
             BLOCK,
             "生图AI一致性",
             settings_loc,
-            f"同项目/同集混用多个生图后端（{'、'.join(sorted(used))}）；混用会让同角色脸型/服装/画风跨镜漂移。"
-            "请把 _设置.md 与所有 prompt 统一到同一个生图后端后再出图。",
+            f"同项目/同集混用多个生图模型/渠道（{'、'.join(sorted(used))}）；混用会让同角色脸型/服装/画风跨镜漂移。"
+            "请把 _设置.md 与所有 prompt 统一到同一组生图模型/渠道后再出图。",
         )
 
-    # 主体库硬闸（一致性梯子第②档）：所选后端**支持原生角色主体/Character ID**（seedream/可灵/sora 等）
+    # 主体库硬闸（一致性梯子第②档）：所选后端**支持原生角色主体/Character ID**（seedream/可灵等）
     # 而核心长线角色还停在 unregistered 时，付费出图前 BLOCK。注册一次按 ID 跨镜跨集引用，比每张重喂
     # 参考图更稳更省，是压住跨集脸漂的省钱前置。Codex/OpenAI 等无持久主体的后端不触发
     # （default_status=fallback_reference_group → 自动回退参考图派生，不打扰短线/弱后端路线）。"不靠想起来"：
@@ -2229,6 +2449,17 @@ def load_storyboard(root: str, ep: str) -> Optional[dict]:
     return data
 
 
+def _route_allows_no_firstframe(route: Mapping[str, Any]) -> bool:
+    """Only empty/ambience T2V, or explicit experimental T2V, may skip firstframe_png."""
+    mode = str(route.get("mode") or "").strip().lower()
+    if mode not in {"text2video", "t2v"}:
+        return False
+    identity = str(route.get("identity_requirement") or "").strip().lower()
+    if identity in {"", "none", "not_needed"}:
+        return True
+    return route.get("experimental_t2v") is True
+
+
 def check_storyboard_contract(root: str, ep: str, require_frame_assets: bool = True) -> Optional[dict]:
     data = load_storyboard(root, ep)
     if not data:
@@ -2245,18 +2476,23 @@ def check_storyboard_contract(root: str, ep: str, require_frame_assets: bool = T
             with open(routes_file, encoding="utf-8") as f:
                 r_data = json.load(f)
                 if isinstance(r_data.get("routes"), list):
-                    routes_map = {item.get("id"): item for item in r_data["routes"]}
+                    for item in r_data["routes"]:
+                        if not isinstance(item, Mapping):
+                            continue
+                        for key in (item.get("id"), item.get("clip_id")):
+                            if key:
+                                routes_map[str(key)] = item
         except Exception:
             pass
 
     for i, clip in enumerate(clips, 1):
         loc = f"{storyboard_path(root, ep)} clip#{i}"
         cid = clip.get("id", f"EP{data.get('episode', '01')}_CLIP{i:02d}")
-        route = routes_map.get(cid) or {}
-        is_t2v = (route.get("mode") == "text2video")
+        route = routes_map.get(str(cid)) or routes_map.get(f"Clip_{i:02d}") or {}
+        allows_no_firstframe = _route_allows_no_firstframe(route)
 
         first_png = clip.get("firstframe_png")
-        if not first_png and not is_t2v:
+        if not first_png and not allows_no_firstframe:
             add(BLOCK, "首帧", loc, "缺 firstframe_png")
         elif first_png and require_frame_assets:
             first_full = first_png if os.path.isabs(first_png) else os.path.join(root, first_png)
@@ -2389,11 +2625,11 @@ def check_storyboard_visual_contract(root: str, ep: str) -> None:
         return  # storyboard 缺失/损坏由 check_storyboard_contract 报，避免重复
     vc = data.get("visual_contract")
     if not isinstance(vc, dict):
-        add(BLOCK, "视觉契约", p, "storyboard.json 缺 visual_contract 种子块；轴线/光位/状态/景别是分镜设计阶段的导演决策，须在此写死供出图继承（回 n2d-script 补 visual_contract）")
+        add(BLOCK, "契约继承", p, "storyboard.json 缺 visual_contract 种子块；轴线/光位/状态/景别是分镜设计阶段的导演决策，须在此写死供出图继承（回 n2d-script 补 visual_contract）")
         return
     for key in VISUAL_CONTRACT_FIELDS:
         if key not in vc:
-            add(BLOCK, "视觉契约", p, f"storyboard.json visual_contract 缺字段：{key}")
+            add(BLOCK, "契约继承", p, f"storyboard.json visual_contract 缺字段：{key}")
 
 
 def check_storyboard_style_contract(root: str, ep: str) -> None:
@@ -4599,6 +4835,8 @@ def _native_audio_contract_ok(text: str) -> bool:
 
 NATIVE_AV_PHYSICAL_FIELDS = ("声源归属", "口型策略", "材质/动作声", "空间声学", "字幕/后期策略")
 NATIVE_AV_PHYSICS_KIND = "n2d_native_av_physics"
+NATIVE_AV_SUBTITLE_ALIGNMENT_KIND = "n2d_native_av_subtitle_alignment"
+NATIVE_VOICE_IDENTITY_SEGMENTS_KIND = "n2d_native_voice_identity_segments"
 
 
 def is_native_av_production(root: str) -> bool:
@@ -4658,6 +4896,25 @@ def check_native_av_physical_contract(root: str, ep: str, overview_text: str, lo
 
 def native_av_physics_sidecar_path(root: str, ep: str) -> str:
     return os.path.join(root, "生产数据", f"native_av_physics_{ep}.json")
+
+
+def native_av_subtitle_alignment_path(root: str, ep: str) -> str:
+    return os.path.join(root, "生产数据", f"native_av_subtitle_alignment_{ep}.json")
+
+
+def native_voice_identity_path(root: str, ep: str) -> str:
+    return os.path.join(root, "生产数据", f"native_voice_identity_{ep}.json")
+
+
+def native_voice_print_report_path(root: str, ep: str) -> str:
+    return os.path.join(root, "生产数据", f"identity_voice_print_{ep}.json")
+
+
+def _distribution_intent(root: str) -> str:
+    data = load_json(compliance_manifest_path(root))
+    if isinstance(data, dict):
+        return _status(data.get("distribution_intent"))
+    return _status(get_setting(root, "合规用途", ""))
 
 
 def _truthy(value: object) -> bool:
@@ -4847,18 +5104,20 @@ def check_video_closeup_identity_overview(overview_text: str, overview_path: str
             BLOCK,
             "资产身份注册层",
             overview_path,
-            "缺「本集近景身份风险表」；CU/MCU/反打/说话镜必须在总览列明脸部特写/表情参考、当前后端身份锁能力、风险等级和降级方案",
+            "缺「本集近景身份风险表」；CU/MCU/反打/说话镜必须在总览列明脸部特写/表情参考、当前后端身份锁能力、风险等级和回退/保真实现方案",
         )
         return
-    for key in ("脸部", "表情", "风险", "降级"):
+    for key in ("脸部", "表情", "风险"):
         if key not in overview_text:
             add(BLOCK, "资产身份注册层", overview_path, f"本集近景身份风险表缺字段/关键词：{key}")
+    if not _has_any(overview_text, ("回退", "保真实现", "MCU", "OTS", "侧脸")):
+        add(BLOCK, "资产身份注册层", overview_path, "本集近景身份风险表缺回退/保真实现路径")
     if _has_any(overview_text, ("CHAR_02", "配角", "小禾", "柳娘子")) and not _has_any(overview_text, ("MCU", "OTS", "侧脸", "手部", "物件反应")):
         add(
             WARN,
             "资产身份注册层",
             overview_path,
-            "本集近景身份风险表未写配角近景降级路径；建议明确 MCU/OTS/侧脸/手部/物件反应镜",
+            "本集近景身份风险表未写配角近景回退/保真实现路径；建议明确 MCU/OTS/侧脸/手部/物件反应镜",
         )
 
 
@@ -5011,6 +5270,138 @@ MODEL_ROUTE_BASELINE_HIGH_RISK_FLAGS = {
     "frame_consumption_degraded",
     "missing_last_frame_capability",
 }
+MODEL_ROUTE_SPEECH_SHOT_TYPES = {
+    "dialogue_closeup",
+    "dialogue_shot_reverse",
+    "reveal_reaction_chain",
+    "public_confrontation",
+    "relationship_turn",
+}
+
+
+def _route_is_speech_like(route: Mapping[str, object]) -> bool:
+    st = str(route.get("shot_type") or "").strip()
+    flags = route.get("risk_flags")
+    flag_set = {str(x) for x in flags} if isinstance(flags, list) else set()
+    if st in MODEL_ROUTE_SPEECH_SHOT_TYPES:
+        return True
+    return "mouth_visible" in flag_set
+
+
+def check_native_av_voice_fallback_route(root: str, ep: str, route: Mapping[str, object], routes_path: str, idx: int) -> None:
+    """Native AV speech shots must either be native_speech or explicitly reopen voice-first."""
+    if not is_native_av_production(root):
+        return
+    if not _route_is_speech_like(route):
+        return
+    clip_id = str(route.get("clip_id") or f"routes[{idx}]")
+    native_policy = str(route.get("native_audio_policy") or "").strip()
+    mode = str(route.get("mode") or "").strip()
+    if native_policy == "native_speech" or mode == "native_av":
+        return
+    if route.get("requires_voice_fallback") is not True:
+        add(
+            BLOCK,
+            "原生音画降级",
+            routes_path,
+            f"{clip_id} 位于制作模式=原生音画，但说话/口型镜既不是 native_speech，也未声明 requires_voice_fallback=true。"
+            "这会制造无声对白镜；请重跑 n2d-model-router，或关闭固定模型/改配音先行。",
+            return_to_stage="video_prompt",
+        )
+        return
+    if str(route.get("fallback_production_mode") or "").strip() != "voice_first":
+        add(
+            BLOCK,
+            "原生音画降级",
+            routes_path,
+            f"{clip_id} requires_voice_fallback=true 但 fallback_production_mode 不是 voice_first；"
+            "无法确认本镜由 n2d-voice 接管台词。",
+            return_to_stage="video_prompt",
+        )
+    ph = voice_is_placeholder(root, ep)
+    if ph is None:
+        add(
+            BLOCK,
+            "原生音画降级",
+            os.path.join(root, "合成", ep, "配音"),
+            f"{clip_id} 已回退 voice-first，但缺可判定的 `时长清单.json`；先跑 n2d-voice 生成真实配音/时长清单。",
+            return_to_stage="voice",
+        )
+    elif ph:
+        add(
+            BLOCK,
+            "原生音画降级",
+            os.path.join(root, "合成", ep, "配音"),
+            f"{clip_id} 已回退 voice-first，但配音仍为占位；先换真实配音并重定时后再出视频。",
+            return_to_stage="voice",
+        )
+
+
+def _route_needs_mouth_visible_audit(route: Mapping[str, object]) -> bool:
+    native_policy = str(route.get("native_audio_policy") or "").strip()
+    mode = str(route.get("mode") or "").strip()
+    if native_policy in {"ambience", "native_sfx", "native_speech", "lipsync_condition_only"}:
+        return True
+    if mode in {"native_av", "voice_conditioned_lipsync"}:
+        return True
+    return _route_is_speech_like(route)
+
+
+def check_mouth_visible_audit(root: str, ep: str, routes: Sequence[Mapping[str, object]], routes_path: str) -> None:
+    needed = [r for r in routes if isinstance(r, Mapping) and _route_needs_mouth_visible_audit(r)]
+    if not needed:
+        return
+    path = os.path.join(root, "生产数据", f"mouth_visible_audit_{ep}.json")
+    if not os.path.isfile(path):
+        add(
+            BLOCK,
+            "mouth_visible证据",
+            path,
+            "说话/口型镜或原生音频策略镜必须先跑 `python3 skills/n2d-model-router/scripts/mouth_detect.py <作品根> "
+            f"{ep} --write`，把 mouth_visible 图像/文本/prompt 复核落成 sidecar，再进入付费出视频。",
+            return_to_stage="video_prompt",
+        )
+        return
+    data = load_json(path)
+    if not isinstance(data, dict) or data.get("kind") != "n2d_mouth_visible_audit":
+        add(BLOCK, "mouth_visible证据", path, "mouth_visible_audit kind 不正确；请重跑 mouth_detect.py --write", return_to_stage="video_prompt")
+        return
+    rows = data.get("rows")
+    if not isinstance(rows, list):
+        add(BLOCK, "mouth_visible证据", path, "mouth_visible_audit 缺 rows[]；请重跑 mouth_detect.py --write", return_to_stage="video_prompt")
+        return
+    row_ids = {str(r.get("clip_id") or "") for r in rows if isinstance(r, Mapping)}
+    missing = [
+        str(r.get("clip_id") or f"routes[{idx}]")
+        for idx, r in enumerate(needed, 1)
+        if str(r.get("clip_id") or f"routes[{idx}]") not in row_ids
+    ]
+    if missing:
+        add(
+            BLOCK,
+            "mouth_visible证据",
+            path,
+            "mouth_visible_audit 未覆盖需要证据的 clip："
+            + "、".join(missing[:8])
+            + "。请用当前 storyboard/prompt 重跑 mouth_detect.py --write。",
+            return_to_stage="video_prompt",
+        )
+    warned = [r for r in rows if isinstance(r, Mapping) and r.get("verdict") == "warn"]
+    if warned:
+        allow = os.environ.get("N2D_ALLOW_MOUTH_VISIBLE_WARN") == "1"
+        sev = WARN if allow else BLOCK
+        sample = "；".join(
+            f"{r.get('clip_id')}: {r.get('message') or 'mouth_visible 冲突'}"
+            for r in warned[:3]
+        )
+        add(
+            sev,
+            "mouth_visible证据",
+            path,
+            f"{len(warned)} 个 clip 的 mouth_visible 图像/文本/prompt 复核冲突：{sample}"
+            + ("（已显式 N2D_ALLOW_MOUTH_VISIBLE_WARN 放行）" if allow else "。按 sidecar 建议修 prompt 后重跑。"),
+            return_to_stage="video_prompt",
+        )
 
 
 def _route_needs_model_baseline(route: Mapping[str, object]) -> bool:
@@ -5165,6 +5556,61 @@ def check_model_route_baseline_policy(root: str, ep: str, data: Mapping[str, obj
         )
 
 
+def check_backend_consistency_scope(data: Mapping[str, object], routes: Sequence[Mapping[str, Any]], path: str) -> None:
+    """Make image-vs-video backend consistency scopes explicit.
+
+    n2d intentionally keeps image generation on one project model/channel while
+    allowing video to route per clip.  Without an explicit scope declaration,
+    future maintainers can accidentally apply the image rule to video or loosen
+    image consistency because video is per-clip.
+    """
+    scope = data.get("backend_consistency_scope")
+    primary_backends = {
+        str(route.get("primary_backend") or "").strip()
+        for route in routes
+        if isinstance(route, Mapping) and str(route.get("primary_backend") or "").strip()
+    }
+    mixed_video = len(primary_backends) >= 2
+    if not isinstance(scope, Mapping):
+        add(
+            WARN if not mixed_video else BLOCK,
+            "后端一致性作用域(BSCOPE)",
+            path,
+            "video_model_routes.json 缺 backend_consistency_scope；需显式声明 image_generation=single_model_channel_per_project、"
+            "video_generation=per_clip_allowed_with_baseline，并列出 baseline/identity_handoff/execution_recipe/post_video_qc 护栏。"
+            + ("当前本集混用多个 video primary 后端，未声明作用域时容易把逐镜路由误当作随意换后端。" if mixed_video else ""),
+            return_to_stage="video_prompt",
+            risk_score=0.75 if mixed_video else 0.55,
+            affected_artifacts=[path],
+            evidence_family="text_contract",
+        )
+        return
+    image_policy = str(scope.get("image_generation") or scope.get("image_policy") or "").strip()
+    video_policy = str(scope.get("video_generation") or scope.get("video_policy") or "").strip()
+    required_guards = {
+        "model_routes_baseline",
+        "identity_handoff",
+        "execution_recipe",
+        "post_video_qc",
+    }
+    guards = {str(x).strip() for x in _listify(scope.get("required_guards") or scope.get("guards")) if str(x).strip()}
+    missing = sorted(required_guards - guards)
+    if image_policy != "single_model_channel_per_project":
+        add(WARN, "后端一致性作用域(BSCOPE)", path,
+            "backend_consistency_scope.image_generation 应为 single_model_channel_per_project；出图侧不要因视频逐镜路由而放松统一后端口径。",
+            return_to_stage="video_prompt", affected_artifacts=[path], evidence_family="text_contract")
+    if video_policy != "per_clip_allowed_with_baseline":
+        sev = BLOCK if mixed_video else WARN
+        add(sev, "后端一致性作用域(BSCOPE)", path,
+            "backend_consistency_scope.video_generation 应为 per_clip_allowed_with_baseline；逐镜路由必须通过 baseline/身份交接/配方/回验约束。",
+            return_to_stage="video_prompt", risk_score=0.75 if sev == BLOCK else 0.55,
+            affected_artifacts=[path], evidence_family="text_contract")
+    if missing:
+        add(WARN, "后端一致性作用域(BSCOPE)", path,
+            f"backend_consistency_scope.required_guards 缺 {', '.join(missing)}；逐镜换视频后端的护栏不完整。",
+            return_to_stage="video_prompt", affected_artifacts=[path], evidence_family="text_contract")
+
+
 def check_route_execution_recipe(route: Mapping[str, Any], routes_path: str, idx: int) -> None:
     clip_id = str(route.get("clip_id") or f"routes[{idx}]")
     recipe = route.get("execution_recipe")
@@ -5194,6 +5640,49 @@ def check_route_execution_recipe(route: Mapping[str, Any], routes_path: str, idx
         add(BLOCK, "执行配方", routes_path, f"{clip_id} 需要 Motion Control 但 execution_recipe.control_inputs 缺 manifest_path", return_to_stage="video_prompt")
 
 
+def _route_is_high_action(route: Mapping[str, Any]) -> bool:
+    shot_type = str(route.get("shot_type") or "").strip()
+    flags = {str(x).strip() for x in _listify(route.get("risk_flags")) if str(x).strip()}
+    return (
+        shot_type in ACTION_CHOREOGRAPHY_SHOT_TYPES
+        or shot_type in MOTION_CONTROL_REQUIRED_SHOT_TYPES
+        or bool(flags & set(MOTION_CONTROL_RISK_FLAGS))
+        or bool(flags & {"high_action", "spectacle", "contact_motion", "fast_motion", "physics"})
+    )
+
+
+def check_motion_identity_priority(route: Mapping[str, Any], routes_path: str, idx: int) -> None:
+    """High-action clips must state how motion freedom and identity lock are reconciled."""
+    if not _route_is_high_action(route):
+        return
+    identity = str(route.get("identity_requirement") or "").strip().lower()
+    if identity in {"", "none", "not_needed"}:
+        return
+    clip_id = str(route.get("clip_id") or f"routes[{idx}]")
+    plan = route.get("identity_preservation_plan") or route.get("motion_identity_priority")
+    recipe = route.get("execution_recipe") if isinstance(route.get("execution_recipe"), Mapping) else {}
+    refs = recipe.get("reference_inputs") if isinstance(recipe.get("reference_inputs"), Mapping) else {}
+    recipe_plan = refs.get("identity_preservation_plan") if isinstance(refs, Mapping) else None
+    if isinstance(plan, Mapping) and plan:
+        return
+    if isinstance(recipe_plan, Mapping) and recipe_plan:
+        return
+    motion = route.get("motion_control") if isinstance(route.get("motion_control"), Mapping) else {}
+    sev = BLOCK if motion.get("required") is True else WARN
+    add(
+        sev,
+        "动作身份优先级",
+        routes_path,
+        f"{clip_id} 是高动作/接触/奇观镜且 identity_requirement={route.get('identity_requirement')}，但缺 identity_preservation_plan；"
+        "请声明何时允许减少静态锚点以保物理/动作、如何保留角色身份、以及失败时拆近景身份镜/动作远景的方案。",
+        return_to_stage="video_prompt",
+        risk_score=0.75 if sev == BLOCK else 0.6,
+        affected_shots=[clip_id],
+        affected_artifacts=[routes_path],
+        evidence_family="text_contract",
+    )
+
+
 def check_video_model_routes(root: str, ep: str, overview_text: str, overview_path: str) -> None:
     if "本集模型路由表" not in overview_text:
         add(BLOCK, "模型路由", overview_path, "缺「本集模型路由表」；出视频必须先跑 n2d-model-router，不能固定一个视频模型或临场乱选后端")
@@ -5212,6 +5701,7 @@ def check_video_model_routes(root: str, ep: str, overview_text: str, overview_pa
     if not isinstance(routes, list) or not routes:
         add(BLOCK, "模型路由", p, "video_model_routes.json routes 为空；逐 Clip 必须有 primary/fallback/mode")
         return
+    check_backend_consistency_scope(data, [r for r in routes if isinstance(r, Mapping)], p)
     check_model_route_baseline_policy(root, ep, data, routes, p)
     drift = data.get("baseline_drift")
     if isinstance(drift, list) and drift:
@@ -5248,6 +5738,7 @@ def check_video_model_routes(root: str, ep: str, overview_text: str, overview_pa
     frame_requirements = _storyboard_frame_requirements(root, ep)
     video_channel = get_setting(root, "生视频渠道", "").strip()
     check_video_backend_api_refresh(root, ep, routes, video_channel, p, allow_empty_fallback)
+    check_mouth_visible_audit(root, ep, [r for r in routes if isinstance(r, Mapping)], p)
     for idx, route in enumerate(routes, 1):
         if not isinstance(route, dict):
             add(BLOCK, "模型路由", p, f"routes[{idx}] 不是对象")
@@ -5257,6 +5748,32 @@ def check_video_model_routes(root: str, ep: str, overview_text: str, overview_pa
                 continue
             if key not in route or route.get(key) in (None, "", []):
                 add(BLOCK, "模型路由", p, f"{route.get('clip_id', f'routes[{idx}]')} 缺字段：{key}")
+        mode = str(route.get("mode") or "").strip().lower()
+        identity = str(route.get("identity_requirement") or "").strip().lower()
+        check_native_av_voice_fallback_route(root, ep, route, p, idx)
+        if mode in {"text2video", "t2v"} and identity not in {"", "none", "not_needed"}:
+            clip_id = str(route.get("clip_id") or f"routes[{idx}]")
+            if route.get("experimental_t2v") is not True:
+                add(
+                    BLOCK,
+                    "T2V动作通道",
+                    p,
+                    f"{clip_id} 含身份要求(identity_requirement={route.get('identity_requirement')})却 mode=text2video，"
+                    "必须由 n2d-model-router 明确标 experimental_t2v=true；否则回退 image2video/frames2video，"
+                    "不可让文生视频绕过首帧、身份参考和风格链。",
+                    return_to_stage="video_prompt",
+                )
+            plan = route.get("t2v_identity_reference_plan")
+            if route.get("experimental_t2v") is True and (not isinstance(plan, Mapping) or not plan):
+                add(
+                    BLOCK,
+                    "T2V动作通道",
+                    p,
+                    f"{clip_id} experimental_t2v=true 但缺 t2v_identity_reference_plan；"
+                    "请在 storyboard/template_contract 写 reference_inputs、identity anchors、degrade_plan 后重跑路由，"
+                    "或回退 image2video/frames2video。",
+                    return_to_stage="script_stage2",
+                )
         if _identity_route_requires_character_refs(route) and not _route_clip_character_refs(route):
             clip_id = str(route.get("clip_id") or f"routes[{idx}]")
             add(
@@ -5287,6 +5804,7 @@ def check_video_model_routes(root: str, ep: str, overview_text: str, overview_pa
             )
         check_route_frame_capability(root, ep, route, p, idx, frame_requirements, video_channel)
         check_route_execution_recipe(route, p, idx)
+        check_motion_identity_priority(route, p, idx)
         check_motion_control_route(root, ep, route, p, idx)
         check_action_choreography_route(route, p, idx)
         # ③ 一角一后端亲和：router 已尽力把核心角色硬钉到原生主体后端；剩余冲突多为同镜多个锁脸后端
@@ -5558,11 +6076,11 @@ def check_image_prompt_overview(root: str, ep: str) -> None:
         return
     text = open(p, encoding="utf-8").read()
     if "本集视觉一致性契约" not in text:
-        add(BLOCK, "视觉契约", p, "缺「本集视觉一致性契约」；像素层导演决策（色调/光位/轴线/状态/景别）必须在出图总览先锁，不能下推到出视频")
+        add(BLOCK, "契约继承", p, "缺「本集视觉一致性契约」；像素层导演决策（色调/光位/轴线/状态/景别）必须在出图总览先锁，不能下推到出视频")
         return
     for key in ("色调基线", "光位锚", "轴线", "状态演进", "景别阶梯"):
         if key not in text:
-            add(BLOCK, "视觉契约", p, f"本集视觉一致性契约缺字段：{key}")
+            add(BLOCK, "契约继承", p, f"本集视觉一致性契约缺字段：{key}")
     check_markdown_style_contract(text, p, "出图总览")
 
 
@@ -5613,10 +6131,10 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
                 BLOCK,
                 "资产身份注册层",
                 loc,
-                "近景/反打/说话镜缺细粒度身份锁定；必须写脸型、五官比例、发型发髻、标志配饰、服装配色和脸部特写/表情参考或降级方案",
+                "近景/反打/说话镜缺细粒度身份锁定；必须写脸型、五官比例、发型发髻、标志配饰、服装配色和脸部特写/表情参考或回退/保真实现方案",
             )
         if "近景身份锁定约束" not in section:
-            add(BLOCK, "资产身份注册层", loc, "中文视频 prompt 缺近景身份锁定约束；配角近景需限制低幅度表情/转头，必要时降级 MCU/OTS/侧脸")
+            add(BLOCK, "资产身份注册层", loc, "中文视频 prompt 缺近景身份锁定约束；配角近景需限制低幅度表情/转头，必要时用 MCU/OTS/侧脸保真实现")
         if not _has_any(section, ("脸型", "五官", "发型", "发髻")):
             add(BLOCK, "资产身份注册层", loc, "近景身份锁定未写脸型/五官/发型发髻等不可漂项")
         if not _has_any(section, ("脸部特写", "表情参考", "expressions", "正脸", "front", "reference_group")):
@@ -7046,7 +7564,7 @@ def check_expression_span_frame_contract(root: str, ep: str) -> None:
                 "expression_span=大 的近景/特写/反打镜必须 need_endframe=true 走「首尾双帧只插值」"
                 "（首=起表情、尾=止表情同源定妆，mode=frames2video，让模型只插值表情肌肉、不自由重画脸）；"
                 "缺尾帧=单首帧硬扛跨情绪表情=脸型/五官比例随表情漂移。补 endframe_png（止表情定妆，"
-                "如 `镜头N_expr_end.png` 或 reference_group.expressions 对应情绪图）或降级 MCU/OTS/侧脸后下调跨度档。",
+                "如 `镜头N_expr_end.png` 或 reference_group.expressions 对应情绪图）或用 MCU/OTS/侧脸保真实现后下调跨度档。",
                 return_to_stage="image")
 
 
@@ -7482,7 +8000,8 @@ def check_native_audio_compose_policy(root: str, ep: str, audio_hits: List[str])
             return
         if mode == NATIVE_AUDIO_DISCARD:
             add(WARN, "原生音画", os.path.join(root, "_设置.md"),
-                "原生音画：未显式设 视频原生音轨，compose 将自动「保留原片音轨」以免丢失原生台词（确需丢弃设 VIDEO_NATIVE_AUDIO_POLICY_EXPLICIT=1）")
+                f"原生音画：当前 视频原生音轨={policy}，但 native_speech 台词在 clip 原片音轨里；"
+                "compose 将按有效策略自动「保留原片音轨」以免丢失原生台词（确需强制丢弃须设 VIDEO_NATIVE_AUDIO_POLICY_EXPLICIT=1）")
         if overview_text:
             check_native_audio_opt_in_overview(root, ep, overview_text, overview)
             check_native_av_physical_contract(root, ep, overview_text, overview)
@@ -7559,11 +8078,214 @@ def check_compose_inputs(root: str, ep: str) -> None:
     zh = os.path.join(root, "脚本", ep, "字幕_中文.srt")
     if not os.path.isfile(zh):
         # 原生音画：说话镜台词由视频后端原生生成、不跑逐句配音，finalize 也不产 SRT
-        # （字幕走成片后 whisperx 词级对齐，见 n2d SKILL）——此处只提醒、不硬闸。
+        # （字幕走成片后 whisperx 词级对齐，见 n2d SKILL）——compose 草稿只提醒，review/release 由
+        # native_av_subtitle_alignment sidecar 硬闸兜住。
         if is_native_av_production(root):
-            add(WARN, "字幕", zh, "原生音画：暂无中文字幕；成片后请用 whisperx 对原生台词做词级对齐再补字幕")
+            add(WARN, "字幕", zh,
+                "原生音画：暂无中文字幕；compose 可先出 draft，但 review/付费投放前必须用 whisperx 或等效词级对齐"
+                "生成字幕，并写 `生产数据/native_av_subtitle_alignment_第N集.json`")
         else:
             add(BLOCK, "字幕", zh, "缺中文字幕")
+
+
+def native_av_subtitle_alignment_required(root: str, stage: str) -> bool:
+    if not is_native_av_production(root):
+        return False
+    if stage in {"review", "release"}:
+        return True
+    return _status(_distribution_intent(root)).lower() == "paid_distribution"
+
+
+def _native_av_subtitle_status_ok(value: Any) -> bool:
+    return str(value or "").strip().lower() in {"pass", "passed", "ok", "ready", "aligned", "done"}
+
+
+def _native_av_subtitle_word_level(data: Mapping[str, Any]) -> bool:
+    summary = data.get("summary") if isinstance(data.get("summary"), Mapping) else {}
+    for container in (data, summary):
+        for key in ("word_level", "word_level_alignment", "词级对齐"):
+            if container.get(key) is True:
+                return True
+        granularity = str(container.get("alignment_granularity") or container.get("granularity") or "").lower()
+        if "word" in granularity or "词" in granularity:
+            return True
+    return False
+
+
+def _native_av_subtitle_errors(root: str, ep: str, data: Mapping[str, Any]) -> List[str]:
+    errors: List[str] = []
+    if data.get("kind") != NATIVE_AV_SUBTITLE_ALIGNMENT_KIND:
+        errors.append(f"kind 应为 {NATIVE_AV_SUBTITLE_ALIGNMENT_KIND}")
+    summary = data.get("summary") if isinstance(data.get("summary"), Mapping) else {}
+    status = data.get("status") or summary.get("status") or data.get("verdict") or summary.get("verdict")
+    if not _native_av_subtitle_status_ok(status):
+        errors.append("status/verdict 必须为 pass/aligned/ready/done，不能把未对齐字幕当发布证据")
+    tool = str(data.get("alignment_tool") or data.get("source") or data.get("aligner") or summary.get("alignment_tool") or "")
+    if not tool.strip():
+        errors.append("缺 alignment_tool/source；需记录 whisperx 或等效词级对齐工具")
+    if not _native_av_subtitle_word_level(data):
+        errors.append("缺词级对齐证据（word_level=true 或 alignment_granularity=word）")
+    rel = str(data.get("subtitle_path") or summary.get("subtitle_path") or os.path.join("脚本", ep, "字幕_中文.srt"))
+    sub_path = rel if os.path.isabs(rel) else os.path.join(root, rel)
+    if not os.path.isfile(sub_path):
+        errors.append(f"字幕文件不存在：{rel}")
+    clips = data.get("clips")
+    if clips is not None:
+        if not isinstance(clips, list):
+            errors.append("clips 必须是数组")
+        else:
+            bad = [
+                str((row or {}).get("clip_id") or idx)
+                for idx, row in enumerate(clips, start=1)
+                if isinstance(row, Mapping)
+                and not _native_av_subtitle_status_ok(row.get("status") or row.get("verdict") or "pass")
+            ]
+            if bad:
+                errors.append("存在未通过字幕对齐的 Clip：" + "、".join(bad[:8]))
+    return errors
+
+
+def check_native_av_subtitle_alignment(root: str, ep: str, stage: str) -> None:
+    if not is_native_av_production(root):
+        return
+    required = native_av_subtitle_alignment_required(root, stage)
+    path = native_av_subtitle_alignment_path(root, ep)
+    data = load_json(path)
+    if not isinstance(data, dict):
+        sev = BLOCK if required else WARN
+        add(
+            sev,
+            "原生音画字幕对齐",
+            path,
+            "缺 native AV 字幕对齐 sidecar：原生音画说话镜不走前期配音 SRT，成片后必须用 whisperx 或等效词级对齐"
+            "生成中文字幕并写 `kind=n2d_native_av_subtitle_alignment`、status、word_level、subtitle_path。"
+            + (" review/付费投放前不放行。" if required else " compose 可先出 draft，但 review 会阻断。"),
+            return_to_stage="compose" if required else "review",
+        )
+        return
+    errors = _native_av_subtitle_errors(root, ep, data)
+    if errors:
+        sev = BLOCK if required else WARN
+        add(
+            sev,
+            "原生音画字幕对齐",
+            path,
+            "native AV 字幕对齐 sidecar 不完整：" + "；".join(errors),
+            return_to_stage="compose" if required else "review",
+        )
+
+
+def native_voice_identity_required(root: str, ep: str, stage: str) -> bool:
+    if not is_native_av_production(root):
+        return False
+    if stage in {"review", "release"}:
+        return True
+    if _status(_distribution_intent(root)).lower() == "paid_distribution":
+        return True
+    return consistency_release_profile(root, stage, ep) == "production"
+
+
+def _native_voice_segments_errors(root: str, ep: str, data: Mapping[str, Any]) -> List[str]:
+    errors: List[str] = []
+    if data.get("kind") != NATIVE_VOICE_IDENTITY_SEGMENTS_KIND:
+        errors.append(f"kind 应为 {NATIVE_VOICE_IDENTITY_SEGMENTS_KIND}")
+    segments = data.get("segments")
+    if not isinstance(segments, list) or not segments:
+        errors.append("segments 必须是非空数组")
+        return errors
+    usable = 0
+    for idx, row in enumerate(segments, start=1):
+        if not isinstance(row, Mapping):
+            errors.append(f"segment#{idx} 必须是对象")
+            continue
+        char = str(row.get("character_id") or row.get("character") or row.get("speaker") or "").strip()
+        key = str(row.get("speaker_key") or row.get("voice_key") or row.get("native_voice_key") or "").strip()
+        wav = str(row.get("wav") or row.get("line_wav") or row.get("segment_wav") or row.get("audio_path") or "").strip()
+        if not char:
+            errors.append(f"segment#{idx} 缺 character_id/character")
+        if not key:
+            errors.append(f"segment#{idx} 缺 speaker_key/voice_key")
+        if not wav:
+            errors.append(f"segment#{idx} 缺 wav/audio_path")
+            continue
+        wav_path = wav if os.path.isabs(wav) else os.path.join(root, wav)
+        if not os.path.isfile(wav_path):
+            errors.append(f"segment#{idx} wav 不存在：{wav}")
+        else:
+            usable += 1
+    if usable == 0:
+        errors.append("没有可用 wav 片段")
+    return errors[:12]
+
+
+def check_native_voice_identity(root: str, ep: str, stage: str) -> None:
+    if not is_native_av_production(root):
+        return
+    required = native_voice_identity_required(root, ep, stage)
+    segments_path = native_voice_identity_path(root, ep)
+    data = load_json(segments_path)
+    if not isinstance(data, dict):
+        sev = BLOCK if required else WARN
+        add(
+            sev,
+            "原生音画声线一致性",
+            segments_path,
+            "缺 native voice identity 片段清单：原生音画说话镜的角色声线不走 n2d-voice 时长清单，"
+            "需要从 clip 原生音轨切出逐角色台词 wav，写 `kind=n2d_native_voice_identity_segments`、"
+            "segments[].character_id/speaker_key/wav，然后跑 "
+            "`python3 skills/n2d-identity/scripts/voice_print_consistency.py <作品根> 第N集`。"
+            + (" review/付费交付前不放行。" if required else " draft 可先继续，但 review 会阻断。"),
+            return_to_stage="compose" if required else "review",
+        )
+        return
+    errors = _native_voice_segments_errors(root, ep, data)
+    if errors:
+        add(
+            BLOCK if required else WARN,
+            "原生音画声线一致性",
+            segments_path,
+            "native voice identity 片段清单不完整：" + "；".join(errors),
+            return_to_stage="compose" if required else "review",
+        )
+        return
+    try:
+        report = vprint.analyze(root, ep)
+    except Exception as exc:
+        add(BLOCK if required else WARN, "原生音画声线一致性", native_voice_print_report_path(root, ep),
+            f"声纹分析失败：{type(exc).__name__}: {str(exc)[:120]}", return_to_stage="compose")
+        return
+    native_meta = report.get("native_voice_identity") if isinstance(report, Mapping) else {}
+    if not isinstance(native_meta, Mapping) or native_meta.get("status") != "ok":
+        add(
+            BLOCK if required else WARN,
+            "原生音画声线一致性",
+            segments_path,
+            f"native voice identity 未进入声纹分析：status={native_meta.get('status') if isinstance(native_meta, Mapping) else 'missing'}",
+            return_to_stage="compose" if required else "review",
+        )
+        return
+    if not report.get("available"):
+        allow_degraded = os.environ.get("N2D_ALLOW_DEGRADED_QC") == "1"
+        sev = WARN if allow_degraded else (BLOCK if required else WARN)
+        add(
+            sev,
+            "原生音画声线一致性",
+            native_voice_print_report_path(root, ep),
+            f"native voice identity 片段已登记，但声纹后端不可用：mode={report.get('mode')} precision={report.get('precision')}。"
+            + (" 已用 N2D_ALLOW_DEGRADED_QC 放行，需人审声线。" if allow_degraded else " 安装 resemblyzer/speechbrain 后重跑，或显式 N2D_ALLOW_DEGRADED_QC=1 留痕放行。"),
+            return_to_stage="compose" if required else "review",
+        )
+        return
+    for label, group in sorted((report.get("groups") or {}).items()):
+        if not isinstance(group, Mapping) or "|native:" not in str(label):
+            continue
+        sev = vprint._severity_for_group(group)
+        if sev not in {"block", "warn"}:
+            continue
+        add(WARN, "原生音画声线一致性", f"native_voice:{label}",
+            f"原生音画声纹机检「{label}」出现漂移信号（severity={sev}, floor={group.get('floor')}）。"
+            "核对同一角色跨镜/跨集是否换声；必要时回 video 重新生成 native_speech 或改配音先行。",
+            return_to_stage="video")
 
 
 def check_voice_conditioned_lipsync_policy(root: str, ep: str, storyboard: Dict[str, object]) -> None:
@@ -7800,6 +8522,14 @@ STRICT_ADVISORY_DIMENSIONS = {
     "运动质量(MOT1)",
     "相机空间轨迹(CAM1)",
     "主体视频一致(S2V)",
+    "视频语义一致(VSEM)",
+    "高动态成片证据(SPECV)",
+}
+REQUIRED_VIDEO_EVIDENCE_DIMENSIONS = {
+    "运动质量(MOT1)",
+    "相机空间轨迹(CAM1)",
+    "主体视频一致(S2V)",
+    "视频语义一致(VSEM)",
     "高动态成片证据(SPECV)",
 }
 KEY_SCENE_MARKERS = ("关键", "钩子", "封面", "反转", "高潮", "爆点", "key", "hook", "climax")
@@ -7887,15 +8617,234 @@ def _strict_advisory_should_block(root: str, ep: str, stage: str, row: Mapping[s
     repeated = int(stat.get("warn") or 0) >= 2
     key_scene = _row_is_key_scene(row)
     deliverable = stage in {"compose", "review"}
+    video_evidence_missing = (
+        stage == "video"
+        and dim in REQUIRED_VIDEO_EVIDENCE_DIMENSIONS
+        and bool(row.get("evidence_missing") or row.get("required_evidence_missing"))
+    )
     # AV1 专属：带对白的近景/特写口型偏移即便孤例也升 block（口型对不上的大特写是观众第一眼硬伤）。
     dialogue_closeup = dim == "音画同步(AV1)" and _row_is_dialogue_closeup(row)
-    if not (repeated or key_scene or deliverable or dialogue_closeup):
+    if not (repeated or key_scene or deliverable or dialogue_closeup or video_evidence_missing):
         return False, ""
     if _advisory_row_signed_off(root, ep, row):
         return False, "已由 consistency_advisory_signoff 签收"
     reason = ("对白近景口型" if dialogue_closeup else "重复同维度" if repeated
-              else "关键场景" if key_scene else "交付边界")
+              else "关键场景" if key_scene else "视频后验证据缺失" if video_evidence_missing else "交付边界")
     return True, reason
+
+
+def _check_fidelity_gate_active(root: str, ep: str, stage: str, profile: str) -> None:
+    """Ensure fidelity-gate (vlm_verify --write canonical pass table) is active.
+
+    Follows the check_drift_report_freshness pattern: absent with prior episodes
+    judged = stale (BLOCK), absent in production boundary = BLOCK, absent in image
+    stage = advisory only (don't block pipelines without VLM backend).
+
+    compose/review + production → BLOCK (risk 0.9): delivery boundary requires
+    canonical verification that face scores aren't gamed by stable-but-wrong renders.
+    video + production → WARN (risk 0.7): pre-warning before compose block.
+    image → WARN (risk 0.5): don't block image gen for pipelines without VLM backend.
+    """
+    canonical_path = os.path.join(root, "生产数据", f"vlm_canonical_{ep}.json")
+    has_canonical = os.path.isfile(canonical_path)
+    if has_canonical:
+        return
+    # Check if any prior episode has canonical data (stale detection)
+    prior_canonical = False
+    try:
+        prod_dir = os.path.join(root, "生产数据")
+        if os.path.isdir(prod_dir):
+            for fn in os.listdir(prod_dir):
+                if fn.startswith("vlm_canonical_") and fn.endswith(".json") and fn != f"vlm_canonical_{ep}.json":
+                    prior_canonical = True
+                    break
+    except Exception:
+        pass
+    return_to = "image"
+    scope = "回 n2d-image 重出 canonical 不通过的镜"
+    allow_degraded = os.environ.get("N2D_ALLOW_DEGRADED_QC") == "1"
+    if profile == "production" and stage in {"compose", "review"}:
+        if allow_degraded:
+            add(WARN, "fidelity-gate", canonical_path,
+                "production 终验 fidelity-gate 未激活但 N2D_ALLOW_DEGRADED_QC=1 放行（自负其责）；"
+                "脸一致分数未经 VLM canonical 验证，mechanical pass 不构成角色设定完整验证。",
+                risk_score=0.8)
+            return
+        msg = (
+            "production 终验须 fidelity-gate 激活——跑 vlm_verify --write 落 canonical 通过表。"
+            "缺 VLM 语义判定时，脸(G1)的机械通过不构成角色设定完整验证。"
+        )
+        if prior_canonical:
+            msg = f"前集已有 canonical 表，本集 stale（未重跑 vlm_verify --write）——{msg}"
+        add(BLOCK, "fidelity-gate", canonical_path, msg,
+            risk_score=0.9,
+            return_to_stage=return_to,
+            rerun_scope=scope,
+            affected_artifacts=[canonical_path])
+    elif profile == "production" and stage == "video":
+        add(WARN, "fidelity-gate", canonical_path,
+            "production 出视频后建议跑 vlm_verify --write 落 canonical 通过表，否则 compose/review gate 会 BLOCK。",
+            risk_score=0.7)
+    else:
+        add(WARN, "fidelity-gate", canonical_path,
+            "fidelity-gate 未激活；vlm_verify --write 可在出图后跑 canonical 通过表。image 阶段不硬拦（允许无 VLM 后端的产线），但 compose/review production 会 BLOCK。",
+            risk_score=0.5)
+
+
+def correlate_findings(gate_findings: List[Dict[str, object]]) -> List[Dict[str, object]]:
+    """Auto-upgrade to BLOCK when multiple WARN_HI findings cluster on same clip.
+
+    Groups findings by affected_artifacts / affected_shots. When the same clip has
+    >=3 WARNs across >=3 different dimensions, >=2 independent evidence families,
+    AND all are WARN_HI (risk_score >= 0.7), auto-upgrade the cluster to a BLOCK
+    with a note about possible backend mismatch.
+
+    Returns list of new BLOCK findings (to be added to gate output).
+    Pure logic, no model/IO dependency.
+    """
+    CORRELATE_MIN_WARNS = 3
+    CORRELATE_MIN_DIMS = 3
+    CORRELATE_MIN_EVIDENCE_FAMILIES = 2
+
+    groups: Dict[str, List[Dict[str, object]]] = {}
+    for f in gate_findings:
+        if f.get("sev") != WARN:
+            continue
+        rs = f.get("risk_score")
+        try:
+            rs = float(rs) if rs is not None else 0.0
+        except (TypeError, ValueError):
+            rs = 0.0
+        if rs < 0.7:
+            continue
+        shots = f.get("affected_shots") or []
+        artifacts = f.get("affected_artifacts") or []
+        keys = [str(s) for s in shots] + [str(a) for a in artifacts]
+        for key in keys:
+            if key:
+                groups.setdefault(key, []).append(f)
+
+    upgrades: List[Dict[str, object]] = []
+    for key, cluster in groups.items():
+        unique = {(f.get("dim"), f.get("msg")): f for f in cluster}.values()
+        if len(unique) < CORRELATE_MIN_WARNS:
+            continue
+        dims = {str(f.get("dim") or "") for f in unique} - {""}
+        if len(dims) < CORRELATE_MIN_DIMS:
+            continue
+        families = {
+            str(f.get("evidence_family") or _default_evidence_family(
+                str(f.get("dim") or ""),
+                str(f.get("msg") or ""),
+                str(f.get("loc") or ""),
+            ))
+            for f in unique
+        } - {""}
+        if len(families) < CORRELATE_MIN_EVIDENCE_FAMILIES:
+            continue
+        affected_shots = list({s for f in unique for s in (f.get("affected_shots") or []) if s})
+        msg = (
+            f"多维度同时漂移——{len(dims)} 个维度({', '.join(sorted(dims)[:5])})"
+            f"同时对 {key} 报 WARN_HI（{len(unique)} 条，证据族 {', '.join(sorted(families)[:4])}）。"
+            "可能后端不适配此镜头类型，建议切后端或重出。"
+        )
+        upgrades.append({
+            "sev": BLOCK,
+            "dim": "一致性总审",
+            "loc": key,
+            "msg": msg,
+            "risk_score": 0.9,
+            "return_to_stage": "image",
+            "rerun_scope": "建议切后端或重出受影响镜头。",
+            "affected_shots": affected_shots,
+            "affected_artifacts": [key],
+            "correlation_note": "由跨检测器相关性升级自动生成",
+        })
+    return upgrades
+
+
+SERIES_RETENTION_DIM = "系列留存(SERIES)"
+
+
+def _series_ep_int(ep: str) -> Optional[int]:
+    m = re.search(r"\d+", str(ep or ""))
+    return int(m.group()) if m else None
+
+
+def check_series_retention_gate(root: str, ep: str, stage: str) -> None:
+    """交付边界(compose/review)的**系列级**留存闸。
+
+    背景：`beat_audit --series`（跨集套路同质化 + 跨集冷开场链 + 看点高潮位）和 series_balance
+    的全剧钩子/反转曲线此前**只进 score KPI、从不 gate**——run.py 只逐集跑 beat_audit。结果
+    "全剧钩子曲线塌、套路复印、集内虎头蛇尾"在交付时不可见。系列信号要全集齐了才算，不适合逐集
+    硬闸，但适合在 compose/review 交付边界做一道闸（同 production advisory 升级逻辑）。
+
+    per-episode 语义（gate 是按单集调用的）：只对**牵涉当前集**的系列 finding 给 WARN，
+    production + 交付边界(compose/review) 升 BLOCK（可经 consistency_advisory_signoff 签收）；
+    不牵涉当前集的 → INFO（可见但不拦本集，避免用 ep2↔ep3 的雷同去拦 ep5 的 compose）。
+    需 ≥3 集才有"系列"可言，否则静默。beat_audit 跑不起来只 WARN，不硬拦产线（系列检是软基建）。
+    """
+    script = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+                          "n2d-script", "scripts", "beat_audit.py")
+    sdir = os.path.join(root, "脚本")
+    if not os.path.exists(script):
+        return
+    try:
+        eps = [d for d in os.listdir(sdir)
+               if re.match(r"第\d+集$", d) and os.path.isfile(os.path.join(sdir, d, "voiceover.txt"))]
+    except Exception:
+        eps = []
+    if len(eps) < 3:
+        return  # <3 集无"系列"可言
+    try:
+        proc = subprocess.run([sys.executable, script, root, "--series", "--json"],
+                              text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                              check=False, timeout=300)
+        res = json.loads(proc.stdout or "{}")
+    except Exception as exc:
+        add(WARN, SERIES_RETENTION_DIM, sdir,
+            f"beat_audit --series 跑不起来（{type(exc).__name__}），系列留存未审；"
+            "可手动跑 beat_audit.py <作品根> --series", risk_score=0.4)
+        return
+    if not isinstance(res, dict):
+        return
+
+    profile = consistency_release_profile(root, stage, ep)
+    deliverable = stage in {"compose", "review"}
+    cur = _series_ep_int(ep)
+    cur_label = f"第{cur}集" if cur is not None else (ep or "")
+
+    def emit(loc: str, msg: str, implicated: bool, return_to: str, scope: str) -> None:
+        if not implicated:
+            add(INFO, SERIES_RETENTION_DIM, loc, msg, risk_score=0.3)
+            return
+        row = {"dimension": SERIES_RETENTION_DIM, "message": msg, "affected_artifacts": [loc]}
+        if profile == "production" and deliverable and not _advisory_row_signed_off(root, ep, row):
+            add(BLOCK, SERIES_RETENTION_DIM, loc,
+                msg + "（production 交付边界升 BLOCK；确属有意则写 consistency_advisory_signoff_第N集.json 签收）",
+                risk_score=0.7, return_to_stage=return_to, rerun_scope=scope, affected_artifacts=[loc])
+        else:
+            add(WARN, SERIES_RETENTION_DIM, loc, msg, risk_score=0.55,
+                return_to_stage=return_to, rerun_scope=scope)
+
+    # ① 跨集套路同质化（Gap4·桥段指纹 Jaccard≥0.8）
+    for pair in res.get("duplicates") or []:
+        if not (isinstance(pair, (list, tuple)) and len(pair) >= 3):
+            continue
+        ea, eb, j = str(pair[0]), str(pair[1]), pair[2]
+        emit(sdir, f"{ea}↔{eb} 桥段指纹重合 {j}（套路雷同→观众疲劳）：换爽点类型/信息角度/情绪曲线",
+             cur_label in (ea, eb), "script_stage1",
+             "回 n2d-script 阶段1 给雷同集换爽点/反转类型，反同质化")
+    # ② 跨集冷开场链（P2·上集硬断→下集 0-3s 冷开场接住同一根线）
+    for f in res.get("cold_open_chain_findings") or []:
+        msg = str(f.get("msg") or "")
+        emit(sdir, f"[冷开场链] {msg}", bool(cur_label) and cur_label in msg, "script_stage1",
+             "回 n2d-script 阶段1/2 调切点：上集集尾硬断、下集 0-3s 冷开场接住同一根线")
+    # ③ 看点高潮位（北极星看点④·虎头蛇尾/平庸无看点集·需真实镜头时长）
+    for f in res.get("highlight_climax_findings") or []:
+        msg = str(f.get("msg") or "")
+        emit(sdir, f"[看点位] {msg}", bool(cur_label) and cur_label in msg, "script_stage2",
+             "回 n2d-script 阶段2 后移看点到 60-85% 高潮位 / 补核心看点")
 
 
 def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> None:
@@ -7907,9 +8856,9 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
 
     `stage` gates how 降级精度 is treated: compose/review are deliverable boundaries,
     so non-full precision (insightface 缺失→脸/像素一致性其实没验证) is a BLOCK there
-    unless explicitly waived via `N2D_ALLOW_DEGRADED_QC=1`. At the image 出图后闸门
-    降级精度只降为 WARN（不硬拦无依赖产线）——确定性 🔴 维度（手部/天气/身高/称谓/动作）
-    照常 BLOCK，把它们挡在最贵的出视频之前。
+    unless explicitly waived via `N2D_ALLOW_DEGRADED_QC=1`. At image/video artifact gates,
+    demo profile only WARNs, while production profile BLOCKs degraded precision at the
+    closest artifact boundary.
     """
     script = os.path.join(SCRIPT_DIR, "consistency_audit.py")
     loc = os.path.join(root, "生产数据", f"consistency_findings_{ep}.json")
@@ -7945,12 +8894,16 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
     precision = str(summary.get("precision_level") or "full")
     if precision != "full":
         # compose/review 都是交付边界：降级精度=脸/像素一致性其实没机检过——不给绿灯，除非显式放行并留痕。
-        # image 出图后：demo 仍只 WARN（不硬拦无 insightface 产线，守"不强制装依赖"原则）；但 production
-        # profile 已显式选择严格 QC，则把降级精度也升为 BLOCK——把脸漂挡在最贵的出视频之前，而不是拖到 compose。
+        # image/video 落档后：demo 仍只 WARN（不硬拦无 insightface 产线，守"不强制装依赖"原则）；但
+        # production profile 已选择严格 QC，则把降级精度也升为 BLOCK——把脸漂/像素盲区挡在最近的产物闸门。
         allow_degraded = os.environ.get("N2D_ALLOW_DEGRADED_QC") == "1"
-        strict_stage = stage in {"compose", "review"} or (stage == "image" and profile == "production")
+        strict_stage = stage in {"compose", "review"} or (stage in {"image", "video"} and profile == "production")
         if strict_stage and not allow_degraded:
-            boundary = "交付边界" if stage in {"compose", "review"} else "production 出图后闸门"
+            boundary = (
+                "交付边界" if stage in {"compose", "review"}
+                else "production 出视频后闸门" if stage == "video"
+                else "production 出图后闸门"
+            )
             add(
                 BLOCK,
                 "一致性总审",
@@ -7972,7 +8925,17 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
     block_count = 0
     mapped_warns = 0
     skipped_warns = 0
-    for row in res.get("findings", []) or []:
+    # Sort WARN findings by risk_score descending so high-priority warns are
+    # never skipped in favour of low-priority ones under the 12-warn cap.
+    raw_rows = res.get("findings", []) or []
+    warn_rows = [
+        r for r in raw_rows
+        if isinstance(r, dict) and str(r.get("severity") or r.get("verdict") or "").lower() == WARN
+    ]
+    warn_rows.sort(key=lambda r: -(float(r.get("risk_score", 0.5) or 0.5)))
+    non_warn_rows = [r for r in raw_rows if r not in warn_rows or not isinstance(r, dict)]
+    sorted_rows = non_warn_rows + warn_rows
+    for row in sorted_rows:
         if not isinstance(row, dict):
             continue
         sev = str(row.get("severity") or row.get("verdict") or "").lower()
@@ -7999,16 +8962,44 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
             )
         artifacts = row.get("affected_artifacts") if isinstance(row.get("affected_artifacts"), list) else []
         shots = row.get("affected_shots") if isinstance(row.get("affected_shots"), list) else []
+        # Pass through risk_score from audit row (consistency_audit.py sets per-dimension
+        # risk_score on export rows; carried forward into gate finding for display tiering).
+        rs = row.get("risk_score")
+        try:
+            rs = float(rs) if rs is not None else None
+        except (TypeError, ValueError):
+            rs = None
         add(
             sev,
             dim,
             str(artifacts[0] if artifacts else loc),
             msg,
+            risk_score=rs,
             return_to_stage=row.get("return_to_stage") or ("image" if sev == BLOCK else "review"),
             rerun_scope=row.get("rerun_scope") or "按 consistency_findings 报告回源头修复对应一致性维度。",
             affected_shots=shots,
             affected_artifacts=artifacts or [os.path.relpath(loc, root)],
         )
+
+    # Cross-detector correlation: when >=3 WARN_HI cluster on same clip across
+    # >=3 different dimensions, auto-upgrade to BLOCK (likely backend mismatch).
+    correlation_upgrades = correlate_findings(findings)
+    for upgrade in correlation_upgrades:
+        add(
+            str(upgrade.get("sev", BLOCK)),
+            str(upgrade.get("dim", "一致性总审")),
+            str(upgrade.get("loc", loc)),
+            str(upgrade.get("msg", "")),
+            risk_score=float(upgrade.get("risk_score", 0.9)),
+            return_to_stage=str(upgrade.get("return_to_stage", "image")),
+            rerun_scope=str(upgrade.get("rerun_scope", "")),
+            affected_shots=list(upgrade.get("affected_shots", [])),
+            affected_artifacts=list(upgrade.get("affected_artifacts", [loc])),
+        )
+
+    # Fidelity-gate liveness: ensure vlm_verify --write has been run for production
+    # compose/review stages (following check_drift_report_freshness pattern).
+    _check_fidelity_gate_active(root, ep, stage, profile)
 
     if skipped_warns:
         add(
@@ -8070,6 +9061,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_voice_cross_episode(root, ep)
         check_image_ai_policy(root, ep)
         check_backend_reachable(root, ep)
+        check_budget_cap(root, ep)
         if stage == "image_preflight":
             check_image_backend_api_refresh(root, ep)
         # 已测得的跨集脸/资产漂移 BLOCK 不分预检/出图后——整个 image family 都跑，避免直接 `--stage image`
@@ -8147,6 +9139,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_multimodal_continuity(root, ep)
         check_semantic_lineage(root, ep)
         check_state_continuity(root, ep)
+        check_video_backend_reachable(root, ep)
     elif check_stage == "video":
         check_compliance_manifest(root, ep, check_stage)
         video_prereq = ("分镜设计", "出图prompt") if av_native else ("配音", "分镜设计", "出图prompt")
@@ -8172,6 +9165,8 @@ def run(root: str, ep: str, stage: str) -> None:
         check_image_assets(root, ep)
         check_input_frame_qc(root, ep)
         check_video_prompt_frames(root, ep)
+        check_video_backend_reachable(root, ep)
+        check_budget_cap(root, ep)
         check_multimodal_continuity(root, ep)
         check_prompt_checklists(root, ep, "video")
         check_video_stage_raw_output_policy(root, ep)
@@ -8182,6 +9177,9 @@ def run(root: str, ep: str, stage: str) -> None:
         check_asset_handoff_inheritance(root, ep)
         check_semantic_lineage(root, ep)
         check_state_continuity(root, ep)
+        if stage == "video":
+            # 视频落档后立即跑总审：重型 sidecar 缺证据、主体串换、相机/动作问题不要拖到 compose 才回流。
+            check_consistency_audit_gate(root, ep, stage="video")
     elif check_stage == "compose":
         check_compliance_manifest(root, ep, check_stage)
         require_progress(root, ep, ("视频",))
@@ -8207,9 +9205,12 @@ def run(root: str, ep: str, stage: str) -> None:
         if sb:
             check_voice_conditioned_lipsync_policy(root, ep, sb)
         check_compose_inputs(root, ep)
+        check_native_av_subtitle_alignment(root, ep, stage)
+        check_native_voice_identity(root, ep, stage)
         check_stylized_face_encoder_policy(root, ep, stage)
         check_translation_glossary_release_gate(root, ep, stage)
         check_generation_recipe_evidence(root, ep, stage)
+        check_series_retention_gate(root, ep, stage)
         check_consistency_audit_gate(root, ep, stage="compose")
     elif check_stage == "review":
         check_compliance_manifest(root, ep, check_stage)
@@ -8224,6 +9225,8 @@ def run(root: str, ep: str, stage: str) -> None:
         check_state_continuity(root, ep)
         check_multimodal_continuity(root, ep)
         check_subtitle_alignment(root, ep)
+        check_native_av_subtitle_alignment(root, ep, stage)
+        check_native_voice_identity(root, ep, stage)
         check_stylized_face_encoder_policy(root, ep, stage)
         check_translation_glossary_release_gate(root, ep, stage)
         check_generation_recipe_evidence(root, ep, stage)
@@ -8231,9 +9234,24 @@ def run(root: str, ep: str, stage: str) -> None:
         check_cross_episode_character_definition(root, ep)
         check_identity_handoff_inheritance(root, ep)
         check_asset_handoff_inheritance(root, ep)
+        check_series_retention_gate(root, ep, stage)
         check_consistency_audit_gate(root, ep, stage="review")
     else:
         add(BLOCK, "参数", stage, "未知 stage")
+
+
+def _finding_sort_key(f: dict) -> tuple:
+    """Sort key for gate findings: BLOCK → WARN (by risk_score desc) → INFO.
+    Pure, testable, module-level so warn grading tests can call it."""
+    order = {BLOCK: 0, WARN: 1, INFO: 2}
+    sev_order = order.get(f.get("sev", INFO), 99)
+    if f.get("sev") == WARN:
+        rs = f.get("risk_score")
+        # Negate so higher risk sorts earlier.  Ungraded warns default to 0.5
+        # (moderate) which is also negated for correct interleaving.
+        effective = float(rs) if rs is not None else 0.5
+        return (sev_order, -effective)
+    return (sev_order, 0.0)
 
 
 def main(argv: List[str]) -> int:
@@ -8253,9 +9271,9 @@ def main(argv: List[str]) -> int:
         infos = sum(1 for f in structured if f["sev"] == INFO)
         print(f"=== n2d gate: {ns.root} {ns.episode} stage={ns.stage} ===")
         print(f"block {blocks} · warn {warns} · info {infos}\n")
-        order = {BLOCK: 0, WARN: 1, INFO: 2}
-        for f in sorted(structured, key=lambda x: order[x["sev"]]):
-            icon = {"block": "⛔", "warn": "⚠️", "info": "ℹ️"}[f["sev"]]
+        for f in sorted(structured, key=_finding_sort_key):
+            icon = {"block": "⛔", "warn": _warn_icon(_warn_tier(f.get("risk_score"))), "info": "ℹ️"}[f["sev"]]
+            icon = {"block": "⛔", "warn": _warn_icon(_warn_tier(f.get("risk_score"))), "info": "ℹ️"}[f["sev"]]
             print(f"{icon} [{f['dim']}] {f['loc']}: {f['msg']}")
             if f.get("return_to_stage") and f["sev"] == BLOCK:
                 print(f"   ↳ 回退: {f['return_to_stage']} · {f.get('rerun_scope', '')}")

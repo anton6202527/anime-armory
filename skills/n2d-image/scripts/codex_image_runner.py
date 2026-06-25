@@ -1034,6 +1034,68 @@ def reference_bundle_prompt_text(root: Path, bundle: Dict[str, Any], manifest_pa
     return "\n".join(lines)
 
 
+def aspect_ratio(root: Path) -> str:
+    """画幅 选择点（绝不写死，对齐 skills/n2d/references/选择点与偏好.md「画幅」与 compose.sh）：
+    env N2D_ASPECT/ASPECT(9:16|16:9) > _设置.md「画幅」> 默认 9:16 竖屏。缺 _lib 时降级正则扫 _设置.md。"""
+    env = (os.environ.get("N2D_ASPECT") or os.environ.get("ASPECT") or "").strip()
+    if env in {"9:16", "16:9"}:
+        return env
+    try:
+        lib = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
+        if lib not in sys.path:
+            sys.path.insert(0, lib)
+        import settings as _settings  # type: ignore
+        val = (_settings.get_setting(str(root), "画幅", "") or "").replace(" ", "")
+        if "16:9" in val:
+            return "16:9"
+        if "9:16" in val:
+            return "9:16"
+    except Exception:
+        pass
+    try:
+        p = root / "_设置.md"
+        text = p.read_text(encoding="utf-8") if p.is_file() else ""
+    except Exception:
+        text = ""
+    if re.search(r"画幅\s*[:：]\s*16\s*[:：]?\s*9", text):
+        return "16:9"
+    return "9:16"
+
+
+def aspect_phrase(ratio: str) -> str:
+    """画幅短语：喂进生图 prompt 输出规格行的横/竖屏中文措辞。"""
+    return "16:9 横版宽银幕" if str(ratio) == "16:9" else "9:16 竖版"
+
+
+def style_contract_phrase(root: Path, episode: str) -> str:
+    """从 storyboard.json 的 style_contract 提取本剧风格意图（风格名/视觉基调/光色策略/镜头构图 + 风格禁忌），
+    供生图后端继承——绝不写死某一种风格（宪法 C4「标准不绑后端」）。读不到 → 空串。"""
+    try:
+        p = root / "脚本" / episode / "storyboard.json"
+        sc = json.loads(p.read_text(encoding="utf-8")).get("style_contract") if p.is_file() else None
+    except Exception:
+        sc = None
+    if not isinstance(sc, dict):
+        return ""
+
+    def _val(*keys: str) -> str:
+        for k in keys:
+            v = sc.get(k)
+            if isinstance(v, (list, tuple)):
+                v = "、".join(str(x).strip() for x in v if str(x).strip())
+            v = str(v or "").strip()
+            if v:
+                return v
+        return ""
+
+    pos = [_val("风格名", "style_name"), _val("视觉基调"), _val("光色策略"), _val("镜头与构图")]
+    line = "，".join(p for p in pos if p)
+    taboo = _val("风格禁忌", "taboos")
+    if taboo:
+        line = (line + "。风格禁忌：" + taboo) if line else ("风格禁忌：" + taboo)
+    return line
+
+
 def build_codex_prompt(
     root: Path,
     episode: str,
@@ -1043,6 +1105,7 @@ def build_codex_prompt(
     reference_bundle: Optional[Dict[str, Any]] = None,
     reference_manifest: Optional[Path] = None,
 ) -> str:
+    aspect = aspect_phrase(aspect_ratio(root))
     overview = brief_context(root / "出图" / episode / "prompt" / "00_总览.md")
     registry = root / "出图" / "共享" / "identity_registry.json"
     assets = root / "出图" / "共享" / "asset_registry.json"
@@ -1055,7 +1118,7 @@ def build_codex_prompt(
     return f"""你正在为 N2D 项目生成正式分镜 PNG。必须使用内置 AI 生图能力（imagegen/image_generation），不要用 Python/SVG/canvas/纯色图/占位图伪造。
 
 输出要求：
-- 只生成 1 张 9:16 竖版电影感 PNG。
+- 只生成 1 张 {aspect} 电影感 PNG。
 - 使用内置 image_generation/image_gen 生成真实位图；不要自己写本地文件，外层 runner 会从事件流解码图片并落到：{temp_path}
 - 禁止水印、字幕、logo、文字、漫画分格、UI 边框。
 

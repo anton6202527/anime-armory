@@ -86,7 +86,7 @@ EMOTION_FLOW_FIELD = "emotion_flow"
 # 2026-06-16 默认由「配音先行」改为「原生音画」：初学者/快速预览优先——说话镜由原生音画
 # 后端一次出台词+口型+环境声，不卡在前期配音、最快看到出图/出视频；且原生音轨即成片音轨，
 # 没有「后期补真音→重定时→溢出重出视频」的最贵返工。需强 voice-acting 控制、或后端是
-# image2video-only（说话镜会降级）时，首跑菜单可改回「配音先行」。仍是首跑必给菜单的预选项。
+# image2video-only（说话镜需回退/保真实现）时，首跑菜单可改回「配音先行」。仍是首跑必给菜单的预选项。
 PRODUCTION_MODE_DEFAULT = "原生音画"
 
 # ── 视觉风格 ──────────────────────────────────────────────────────────────
@@ -136,7 +136,7 @@ HIGH_MOTION_TEMPLATES = frozenset({
 
 # 近景表情跨度档（角色脸的情绪从起到止跨几档）。单一真值源：storyboard.continuity.expression_span
 # 与 gate 的「大表情近景必须首尾双帧」闸门共用。`大`=跨情绪（平静→爆哭/隐忍→暴怒），是脸被表情
-# 带着重画的头号根因，必须走 frames2video 首尾双帧只插值或降级 MCU。
+# 带着重画的头号根因，必须走 frames2video 首尾双帧只插值或 MCU 保真实现。
 EXPRESSION_SPAN_VALUES = ("微", "中", "大")
 EXPRESSION_SPAN_BIG = "大"
 
@@ -377,6 +377,9 @@ CONSISTENCY_FINDINGS_KIND = "n2d_consistency_findings"
 IMAGE_QC_REPORT_KIND = "n2d_image_qc"
 GATE_FINDINGS_KIND = "n2d_gate_findings"
 CONSISTENCY_LEDGER_KIND = "n2d_consistency_ledger"
+CONSISTENCY_POLICY_LATTICE_KIND = "n2d_consistency_policy_lattice"
+CONSISTENCY_DEPENDENCY_GRAPH_KIND = "n2d_consistency_dependency_graph"
+INTENTIONAL_DISCONTINUITY_MANIFEST_KIND = "n2d_intentional_discontinuity_manifest"
 CONTRACT_INHERITANCE_KIND = "n2d_contract_inheritance"
 IDENTITY_DRIFT_REPORT_KIND = "n2d_identity_drift_report"
 IDENTITY_VOICE_DRIFT_REPORT_KIND = "n2d_identity_voice_drift_report"
@@ -397,6 +400,7 @@ GENRE_PERFORMANCE_RECORD_KIND = "genre_performance_record"
 LORA_CARD_KIND = "n2d_lora_card"
 LORA_DATASET_MANIFEST_KIND = "n2d_lora_dataset_manifest"
 LORA_TRAIN_JOB_KIND = "n2d_lora_train_job"
+LORA_EXCEPTION_SCOPE_KIND = "n2d_lora_exception_scope"
 PLATFORM_FEEDBACK_KIND = "n2d_platform_feedback"
 REVIEW_UI_KIND = "n2d_review_ui"
 SCORE_VISUAL_CHECKS_KIND = "n2d_score_visual_checks"

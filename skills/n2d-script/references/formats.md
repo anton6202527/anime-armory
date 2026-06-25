@@ -2,7 +2,7 @@
 
 所有每集脚本素材按本文档模板填写。**提示词一律中文为主 + 英文备用**。
 
-> 下文 prompt 示例以**图 AI = `生图AI` 所选官方/已登录后端（默认 Codex，可选 Dreamina/即梦官方 CLI 等），生视频模型/渠道后移到 n2d-video 出视频前由 router/probe 决定** 的写法为准。若用户已固定生视频模型，image prompt 末尾拼对应模型的图像风格锚定句；未固定时拼通用视频兼容锚定（核心分镜/卡片不变）。
+> 下文 prompt 示例以**生图模型 = `生图模型` 所选具体模型（默认 GPT Image 2），经 `生图AI/生图渠道` 所选官方/已登录入口访问（默认 Codex CLI，可选 Dreamina/即梦官方 CLI 等），生视频模型/渠道后移到 n2d-video 出视频前由 router/probe 决定** 的写法为准。若用户已固定生视频模型，image prompt 末尾拼对应模型的图像风格锚定句；未固定时拼通用视频兼容锚定（核心分镜/卡片不变）。
 
 > **视频兼容锚定规则**：出图阶段不强迫用户先选生视频后端。已固定模型时拼目标生视频模型的"图像风格锚定句"；未固定时拼通用视频兼容锚定并记录 `video_backend_decision=deferred`，由 n2d-video 选择能消化现有首帧的后端（见 `platforms.md` 各档案）。
 
@@ -120,7 +120,7 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 （同上英文）
 ```
 
-> 流程：先用 ① 定妆照锁定角色 → 在所选 `生图AI` 中用定妆组做参考派生 → 之后每个分镜与视频首帧都基于它生成，保证脸和妆造不漂移。**实际生成定妆照在 Stage 2（`n2d-image`）做**，本 skill 只准备 prompt。
+> 流程：先用 ① 定妆照锁定角色 → 用所选 `生图模型` 经 `生图AI/生图渠道` 访问入口，以定妆组做参考派生 → 之后每个分镜与视频首帧都基于它生成，保证脸和妆造不漂移。**实际生成定妆照在 Stage 2（`n2d-image`）做**，本 skill 只准备 prompt。
 > 后续所有镜头严格复用角色卡，禁止外貌/发型/服装/年龄漂移，除非剧情明确要求并在卡上记录"变体"。
 
 ---
@@ -224,6 +224,46 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 
 每个 clip 带 `continuity` 块，`start_state` 应等于上一 clip 的 `end_state`。
 
+**首屏留存契约（`first_3s_visual_hook`）**：顶层必须写 0-3 秒静音可读钩子。字段是硬 schema，缺任一项都会被 `beat_audit.py --strict` 阻断：
+
+```json
+"first_3s_visual_hook": {
+  "visual_conflict": "沈念脸部大特写，门外刀影压进画面，危机不用声音也能看懂",
+  "content_proposition": "本集要回答：是谁要害沈念",
+  "onscreen_text": "谁在门外？",
+  "muted_safe_proof": "关声仍能从刀影+惊恐表情+标题卡理解悬念",
+  "expected_metric": { "primary": "retention_3s", "target": 0.78 }
+}
+```
+
+也可放在首个 clip 的 `retention.first_3s_visual_hook`，但顶层优先。缺该契约或无法证明 `muted_safe` 时，`beat_audit.py --strict` 会在正式出图 prompt 前阻断。
+
+**钩子承诺-兑现账本（`retention_promise_ledger`）**：每个开场钩、集尾钩和中段强信息钩都要有 `hook_id / promise_type / opened_at / promise / payoff_due`。本集兑现必须写 `payoff_status=paid|resolved` + `payoff_clip/payoff_evidence/paid_by_episode` 之一；跨集兑现写 `delayed_payoff_ep`。该账本用于避免假悬念、爽点不兑现和尾钩断线。
+
+```json
+"retention_promise_ledger": [
+  {
+    "hook_id": "OPEN_01",
+    "promise_type": "opening_hook",
+    "opened_at": "Clip_01 / 镜头1",
+    "promise": "门外刀影是谁",
+    "payoff_due": "Clip_04 / 镜头6",
+    "payoff_status": "paid",
+    "payoff_clip": "Clip_04",
+    "payoff_evidence": "Clip_04 揭示门外刀影来自亲妹妹派来的黑衣人",
+    "bait_risk": "low"
+  },
+  {
+    "hook_id": "TAIL_01",
+    "promise_type": "cliffhanger",
+    "opened_at": "Clip_08 / 集尾",
+    "promise": "黑衣人真正主使只露半句",
+    "delayed_payoff_ep": "第2集",
+    "bait_risk": "medium"
+  }
+]
+```
+
 **跨集 hook 桥接（`hook_bridge`）**：若上一集集尾钩抛出 A 线，本集冷开场有意先切 B 线、延迟回收或从另一个角度回答，必须在本集顶层或前两个 clip 写 `hook_bridge`。否则 `beat_audit.py --strict` 会按实体零重合报 `cross_ep_hook_break`。字段最少写 `from_episode` + `thread_id` + `bridge_text`，若直接回答上一集悬念写 `answers_prev_hook:true`，若延迟回收写 `delayed_payoff_ep`。
 
 **逐镜头实体排程（`entity_schedule`）**：每个 clip 或 `shots[]` 子镜都应写角色、物件、地点、知识状态和必须出现项；shot 级覆盖 clip 级。`entity_schedule_audit.py` 会统计覆盖率，并对 clip/shot 字段中已出现但排程漏登的角色/物件/地点给 warn。该字段是 EntityBench 风格 per-shot schedule 的 n2d 真值层，供后续出图、视频、审片和叙事 KPI 共用。
@@ -232,6 +272,18 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 { "episode": 1, "title": "本宫才是这皇宫最大的妖·第1集", "source": "原著章节1-2",
   "total_duration": 86.5,
   "policy": { "tailframe_default": true, "midframe_default": true },   // tailframe gate 要求 =true；midframe_default=true 时每镜须有中锚声明或豁免（anchor_planner --write 写入）
+
+  "first_3s_visual_hook": {
+    "visual_conflict": "沈念惊醒特写，门外刀影压进画面",
+    "content_proposition": "谁在门外，为什么要杀她",
+    "onscreen_text": "谁在门外？",
+    "muted_safe_proof": "关声也能从刀影+惊恐表情+标题卡理解危机",
+    "expected_metric": { "primary": "retention_3s", "target": 0.78 }
+  },
+  "retention_promise_ledger": [
+    { "hook_id": "OPEN_01", "promise_type": "opening_hook", "opened_at": "Clip_01", "promise": "门外是谁", "payoff_due": "Clip_04", "payoff_status": "paid", "payoff_clip": "Clip_04", "payoff_evidence": "黑衣人身份线索露出", "bait_risk": "low" },
+    { "hook_id": "TAIL_01", "promise_type": "cliffhanger", "opened_at": "Clip_08", "promise": "真正主使半露", "delayed_payoff_ep": "第2集", "bait_risk": "medium" }
+  ],
 
   "visual_contract": {                            // ← 视觉契约种子（keystone）；n2d-image 继承，勿留空
     "色调基线": "冷青压暗红；金瞳/妖气只在镜7爽点后出现，之前不得泄露",

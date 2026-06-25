@@ -78,9 +78,47 @@ def character_count(clip: Dict[str, Any], blob: str) -> int:
     for key in ("character_ids", "characters", "角色"):
         value = clip.get(key)
         if isinstance(value, list):
-            return len({str(v) for v in value if str(v).strip()})
-    ids = set(re.findall(r"CHAR_\d+", blob))
+            ids = set()
+            for item in value:
+                if isinstance(item, dict):
+                    raw = item.get("character_id") or item.get("id") or item.get("char_id") or item.get("name")
+                else:
+                    raw = item
+                if str(raw or "").strip():
+                    ids.add(str(raw).strip())
+            return len(ids)
+    ids = set(re.findall(r"\bCHAR_[A-Za-z0-9_]+", blob))
     return len(ids)
+
+
+def has_multi_subject_slots(blob: str) -> bool:
+    return any(token in blob for token in ("多人同框身份槽位", "character_slots", "subject_slots", "screen_positions", "face_priority")) \
+        and bool(re.search(r"\bCHAR_[A-Za-z0-9_]+", blob)) and any(
+        token in blob for token in ("LEFT_SLOT", "RIGHT_SLOT", "FOREGROUND_SLOT", "BACKGROUND_SLOT", "画左", "画右", "前景", "后景")
+    )
+
+
+def has_multi_subject_strategy(blob: str) -> bool:
+    return any(token in blob for token in (
+        "多人同框执行策略",
+        "native_subject_slots",
+        "regional_construct_required",
+        "split_composite_required",
+        "register_subjects_or_split",
+        "shot_reverse_shot",
+        "same_frame_policy",
+        "regional_construct",
+        "split_composite",
+        "单人分层出图",
+        "分别出图",
+        "分层合成",
+        "景别分层",
+    ))
+
+
+def is_wide_crowd(blob: str, shot_size: str) -> bool:
+    text = f"{shot_size}\n{blob}"
+    return bool(re.search(r"(远景|大全景|群像|人海|crowd|wide shot|extreme long|ELS)", text, re.I))
 
 
 def has_mid_anchor(cont: Dict[str, Any]) -> bool:
@@ -122,9 +160,9 @@ def score_clip(clip: Dict[str, Any], idx: int) -> Dict[str, Any]:
     if expression == "大":
         add_score(3, "large_expression_span", "大表情近景必须首尾双帧或降级为 MCU。")
     if chars >= 4:
-        add_score(5, "many_named_characters", "清晰同框具名角色过多：拆成反打/群像远景/分层合成。")
+        add_score(5, "many_named_characters", "高人数同框要写身份槽位+执行策略，优先拆组/反打/群像远景/分层合成。")
     elif chars >= 2:
-        add_score(2, "multi_character", "多人同框要写身份槽位、站位和区分锚点。")
+        add_score(2, "multi_character", "多人同框要写身份槽位、执行策略、站位和区分锚点。")
     if VFX_RE.search(blob):
         add_score(2, "vfx_or_asset", "系统/法术/武器/道具要注册 LOC/PROP/WEAPON/VFX id，文字层后期 overlay。")
     if spectacle_type:
@@ -152,11 +190,17 @@ def score_clip(clip: Dict[str, Any], idx: int) -> Dict[str, Any]:
                 "message": f"{spectacle_type} 缺专项契约字段：{', '.join(missing[:8])}；进入出图 prompt 前会被 spectacle_contract_audit 阻断。",
             })
 
-    if chars >= 4 and (CLOSE_RE.search(shot_size) or CLOSE_RE.search(blob)):
-        findings.append({"severity": "must", "code": "too_many_clear_closeup_characters",
-                         "message": "清晰近景同框具名角色 ≥4：单帧 co-gen 难压脸，但这是『要分区合成做对』不是『删戏/砍人数』"
-                                    "（设计宪法 C6 剧情优先）。剧情需要就照出——登记 split_composite/分别出图+合成把每张脸分别做好再合成，"
-                                    "或拆 establish+反打把整场拍全；出图 gate 凭执行策略放行。"})
+    wide_crowd = is_wide_crowd(blob, shot_size)
+    if chars >= 2 and not wide_crowd and not (has_multi_subject_slots(blob) and has_multi_subject_strategy(blob)):
+        findings.append({"severity": "must", "code": "multi_subject_missing_slots_or_strategy",
+                         "message": "清晰同框具名角色 ≥2 但缺 `多人同框身份槽位` 或 `多人同框执行策略`："
+                                    "2-3 张清晰脸只是相对省钱/稳定的构图区，不是免登记区。剧情需要就照出，但必须登记 "
+                                    "native_subject_slots / regional_construct_required / split_composite_required / shot_reverse_shot 等执行路径；"
+                                    "远景群像请显式标 `远景/群像`。"})
+    if chars >= 4 and not wide_crowd:
+        findings.append({"severity": "warn", "code": "large_same_frame_strategy_recommended",
+                         "message": "清晰同框具名角色 ≥4：人数高，优先拆组/反打/景别分层或分区构建；"
+                                    "这是要求把同框做对，不是删戏/砍人数。"})
     if expression == "大" and (CLOSE_RE.search(shot_size) or CLOSE_RE.search(blob)) and not cont.get("need_endframe"):
         findings.append({"severity": "must", "code": "large_expression_without_endframe",
                          "message": "大表情近景缺 need_endframe=true，脸会被表情重画。"})

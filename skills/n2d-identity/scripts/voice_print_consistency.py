@@ -38,6 +38,7 @@ from n2d_contract import (  # noqa: E402
 )
 
 VOICE_PRINT_REPORT_KIND = IDENTITY_VOICE_PRINT_REPORT_KIND
+NATIVE_VOICE_IDENTITY_SEGMENTS_KIND = "n2d_native_voice_identity_segments"
 VOICE_DIM_KEY = "voice_consistency"
 
 # resemblyzer d-vector 同说话人余弦经验下限 ~0.75（不同说话人通常 <0.6）；样本不足时的保守回退地板。
@@ -127,6 +128,40 @@ def analyze_groups(groups: Mapping[str, Sequence[Sequence[float]]], margin: floa
     return {"groups": out, "total_drift": total_drift}
 
 
+# ── 句内（intra-utterance）音色漂 ──────────────────────────────────────────────
+# 逐句声纹只取整句一个 embedding：一句从 A 嗓开头、句中滑成 B 嗓，整句均值仍可能压过组地板→漏检。
+# 这里在单句内切滑窗、逐窗 vs 开头窗余弦：speaker d-vector 对韵律/响度近似不变，句内本应 ≈0.85+，
+# 骤降即后端句内音色滑移（零样本克隆长句尾的典型失败，2604.06327）。advisory·人听辨。
+INTRA_LINE_FLOOR = 0.70        # 非开头窗 vs 开头窗余弦下限（句内应远高于句间）
+INTRA_LINE_MIN_WINDOWS = 3     # 窗不足看不出趋势 → 不判
+INTRA_LINE_MIN_BAD = 2         # ≥2 个窗骤降才判（单窗骤降可能是静音/喷麦/换气噪声）
+
+
+def analyze_intra_line(window_embeddings: Sequence[Sequence[float]],
+                       floor: float = INTRA_LINE_FLOOR,
+                       min_windows: int = INTRA_LINE_MIN_WINDOWS,
+                       min_bad: int = INTRA_LINE_MIN_BAD) -> Dict[str, Any]:
+    """单句逐窗 speaker embedding vs 开头窗余弦：≥min_bad 个非开头窗 <floor = 句内音色漂。
+
+    speaker d-vector 对韵律/情绪/响度近似不变，故句内骤降反映的是音色（嗓子）滑移而非表演变化。
+    窗 <min_windows（句太短）不判。纯函数·可测——句内/句间共用同一 cosine。"""
+    vecs = [v for v in window_embeddings if v]
+    if len(vecs) < min_windows:
+        return {"drift": False, "windows": [], "note": "窗不足，句内漂移不判"}
+    opening = vecs[0]
+    windows: List[Dict[str, Any]] = []
+    bad = 0
+    min_score = 1.0
+    for idx, v in enumerate(vecs):
+        sc = cosine(v, opening)
+        min_score = min(min_score, sc)
+        is_bad = idx > 0 and sc < floor
+        if is_bad:
+            bad += 1
+        windows.append({"idx": idx, "score": round(sc, 4), "bad": is_bad})
+    return {"drift": bad >= min_bad, "bad_windows": bad, "min_score": round(min_score, 4), "windows": windows}
+
+
 # ── 音频后端（可选，缺则优雅跳过） ────────────────────────────────────────────
 def load_speaker_encoder() -> Tuple[Optional[str], Any]:
     """返回 (backend_name, encoder)；都不可用返回 (None, None)，调用方据此优雅降级。"""
@@ -159,6 +194,47 @@ def embed_wav(path: str, backend: str, encoder: Any) -> Optional[List[float]]:
     return None
 
 
+# 句内滑窗参数（句内音色漂用）：1s 窗 / 0.5s 步；句 <2s 不切窗（窗不足）。
+INTRA_WIN_SEC = 1.0
+INTRA_HOP_SEC = 0.5
+INTRA_MIN_DURATION_SEC = 2.0
+
+
+def embed_wav_windows(path: str, backend: str, encoder: Any,
+                      win_sec: float = INTRA_WIN_SEC, hop_sec: float = INTRA_HOP_SEC) -> List[List[float]]:
+    """单句 wav 切滑窗、逐窗 speaker embedding（句内音色漂检测用）。缺后端/音频太短/失败→[]。
+    best-effort（与 embed_wav 同：依赖音频后端，不在无后端环境单测；纯判定逻辑见 analyze_intra_line）。"""
+    try:
+        if backend == "resemblyzer":
+            from resemblyzer import preprocess_wav  # type: ignore
+            sr = 16000
+            wav = preprocess_wav(path)  # 16kHz float numpy
+            win, hop = int(win_sec * sr), int(hop_sec * sr)
+            if len(wav) < int(INTRA_MIN_DURATION_SEC * sr) or win <= 0 or hop <= 0:
+                return []
+            out: List[List[float]] = []
+            for start in range(0, len(wav) - win + 1, hop):
+                out.append(list(map(float, encoder.embed_utterance(wav[start:start + win]))))
+            return out
+        if backend == "speechbrain_ecapa":
+            import torchaudio  # type: ignore
+            sig, sr = torchaudio.load(path)
+            if sig.dim() > 1:
+                sig = sig.mean(dim=0, keepdim=True)
+            total = sig.shape[-1]
+            win, hop = int(win_sec * sr), int(hop_sec * sr)
+            if total < int(INTRA_MIN_DURATION_SEC * sr) or win <= 0 or hop <= 0:
+                return []
+            out = []
+            for start in range(0, total - win + 1, hop):
+                emb = encoder.encode_batch(sig[..., start:start + win]).squeeze().tolist()
+                out.append(list(map(float, emb)))
+            return out
+    except Exception:
+        return []
+    return []
+
+
 # ── 读时长清单 → 逐角色逐句 wav，跑分析 ──────────────────────────────────────
 def _entry_voice_key(entry: Mapping[str, Any]) -> str:
     return str(entry.get("voice_key") or entry.get("音色键") or "").strip()
@@ -170,6 +246,10 @@ def _manifest_paths(root: str, ep: str) -> Optional[str]:
         if os.path.isfile(p):
             return p
     return None
+
+
+def native_voice_identity_path(root: str, ep: str) -> str:
+    return os.path.join(root, "生产数据", f"native_voice_identity_{ep}.json")
 
 
 def collect_wav_groups(root: str, ep: str) -> Tuple[Dict[str, List[str]], Dict[str, str]]:
@@ -203,16 +283,84 @@ def collect_wav_groups(root: str, ep: str) -> Tuple[Dict[str, List[str]], Dict[s
     return groups, meta
 
 
+def collect_native_voice_groups(root: str, ep: str) -> Tuple[Dict[str, List[str]], Dict[str, Any]]:
+    """Read native-AV speech segment sidecar into voice-print groups.
+
+    Schema is intentionally small and tool-neutral:
+      生产数据/native_voice_identity_第N集.json
+      {
+        "kind": "n2d_native_voice_identity_segments",
+        "segments": [
+          {"character_id": "CHAR_01", "speaker_key": "SHEN", "wav": "出视频/第N集/audio/Clip_01_speech.wav"}
+        ]
+      }
+
+    Segment wav paths are relative to the project root unless absolute. Missing wavs are
+    ignored but counted in meta so gates can distinguish "no sidecar" from "bad sidecar".
+    """
+    path = native_voice_identity_path(root, ep)
+    meta: Dict[str, Any] = {"path": path, "episode": ep, "status": "missing", "segments": 0, "usable_segments": 0}
+    if not os.path.isfile(path):
+        return {}, meta
+    try:
+        data = json.load(open(path, encoding="utf-8"))
+    except Exception as exc:
+        meta["status"] = f"invalid:{exc}"
+        return {}, meta
+    if not isinstance(data, Mapping):
+        meta["status"] = "invalid:not_object"
+        return {}, meta
+    if data.get("kind") != NATIVE_VOICE_IDENTITY_SEGMENTS_KIND:
+        meta["status"] = f"bad_kind:{data.get('kind')}"
+        return {}, meta
+    segments = data.get("segments") or data.get("clips") or []
+    if not isinstance(segments, list):
+        meta["status"] = "invalid:segments_not_list"
+        return {}, meta
+    groups: Dict[str, List[str]] = {}
+    meta["segments"] = len(segments)
+    for item in segments:
+        if not isinstance(item, Mapping):
+            continue
+        status = str(item.get("status") or item.get("verdict") or "ready").lower()
+        if status in {"skip", "skipped", "rejected", "failed", "bad"}:
+            continue
+        char = str(item.get("character") or item.get("character_id") or item.get("speaker") or "").strip()
+        key = str(item.get("speaker_key") or item.get("voice_key") or item.get("native_voice_key") or char).strip()
+        wav = str(item.get("wav") or item.get("line_wav") or item.get("segment_wav") or item.get("audio_path") or "").strip()
+        if not (char and wav):
+            continue
+        wav_path = wav if os.path.isabs(wav) else os.path.join(root, wav)
+        if not os.path.isfile(wav_path):
+            continue
+        groups.setdefault(f"{char}|native:{key}", []).append(wav_path)
+    meta["usable_segments"] = sum(len(v) for v in groups.values())
+    meta["status"] = "ok" if groups else "no_usable_segments"
+    return groups, meta
+
+
+def _merge_groups(*items: Mapping[str, Sequence[str]]) -> Dict[str, List[str]]:
+    out: Dict[str, List[str]] = {}
+    for groups in items:
+        for key, paths in groups.items():
+            out.setdefault(key, []).extend(list(paths))
+    return out
+
+
 def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN) -> Dict[str, Any]:
     """一集声纹一致性分析报告（available/mode/precision + 逐角色漂移）。"""
     wav_groups, meta = collect_wav_groups(root, ep)
+    native_groups, native_meta = collect_native_voice_groups(root, ep)
+    wav_groups = _merge_groups(wav_groups, native_groups)
     report: Dict[str, Any] = {
         "kind": VOICE_PRINT_REPORT_KIND, "episode": ep, "manifest": meta.get("manifest", ""),
+        "native_voice_identity": native_meta,
         "margin": margin,
     }
     if not wav_groups:
         report.update(available=False, mode="no_audio", precision=INSUFFICIENT_PRECISION,
-                      note=f"无可用逐句 wav（{meta.get('status')}）——交还人判，不报假漂移", groups={}, total_drift=0)
+                      note=f"无可用逐句/native wav（voice={meta.get('status')}; native={native_meta.get('status')}）——交还人判，不报假漂移",
+                      groups={}, total_drift=0)
         report["precision_level"] = normalize_precision(report)
         return report
     backend, encoder = load_speaker_encoder()
@@ -223,12 +371,27 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN) -> Dict[str, Any
         report["precision_level"] = normalize_precision(report)
         return report
     emb_groups: Dict[str, List[List[float]]] = {}
+    intra: Dict[str, Dict[str, Any]] = {}  # 句内音色漂：label → {drift_count, lines:[...]}
     for label, paths in wav_groups.items():
-        embs = [e for e in (embed_wav(p, backend, encoder) for p in paths) if e]
+        embs: List[List[float]] = []
+        intra_hits: List[Dict[str, Any]] = []
+        for p in paths:
+            e = embed_wav(p, backend, encoder)
+            if e:
+                embs.append(e)
+            il = analyze_intra_line(embed_wav_windows(p, backend, encoder))
+            if il.get("drift"):
+                intra_hits.append({"wav": os.path.basename(p), "min_score": il.get("min_score"),
+                                   "bad_windows": il.get("bad_windows"), "windows": len(il.get("windows", []))})
         if embs:
             emb_groups[label] = embs
+        if intra_hits:
+            intra[label] = {"drift_count": len(intra_hits), "lines": intra_hits}
     analysis = analyze_groups(emb_groups, margin)
     report.update(available=True, mode=backend, precision="ok", **analysis)
+    if intra:
+        report["intra_line"] = intra
+        report["intra_line_drift_total"] = sum(g["drift_count"] for g in intra.values())
     report["precision_level"] = normalize_precision(report)
     return report
 
@@ -272,6 +435,26 @@ def findings_payload(root: str, ep: str, report: Mapping[str, Any]) -> Dict[str,
                 "episode": ep,
                 "return_to_stage": spec.get("return_to_stage", "voice"),
                 "rerun_scope": spec.get("scope", "回 n2d-voice 重配受影响角色台词。"),
+                "affected_shots": [],
+                "affected_artifacts": [str(report.get("manifest") or "")] if report.get("manifest") else [],
+                "source": "n2d-identity/voice_print",
+            })
+        # 句内音色漂（intra-utterance）：整句均值漏掉的句内滑移 → warn（音频噪声大·一律人听辨）
+        for label, g in sorted((report.get("intra_line") or {}).items()):
+            if not isinstance(g, Mapping) or not g.get("drift_count"):
+                continue
+            findings.append({
+                "severity": "warn",
+                "dimension": spec.get("label", "音色一致性"),
+                "dim_key": VOICE_DIM_KEY,
+                "message": (
+                    f"句内音色漂：「{label}」{g.get('drift_count')} 句开头音色与句中/句尾不一致"
+                    f"（整句声纹均值可能漏检的句内滑移），人听辨是否后端长句尾音色滑移"
+                ),
+                "loc": f"voice_print_intra:{label}",
+                "episode": ep,
+                "return_to_stage": spec.get("return_to_stage", "voice"),
+                "rerun_scope": spec.get("scope", "回 n2d-voice 重配受影响角色台词（句太长可拆句重配）。"),
                 "affected_shots": [],
                 "affected_artifacts": [str(report.get("manifest") or "")] if report.get("manifest") else [],
                 "source": "n2d-identity/voice_print",

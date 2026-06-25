@@ -77,6 +77,50 @@ class ArcGateTest(unittest.TestCase):
             self.assertNotEqual(got.returncode, 0)
             self.assertIn("arc_without_theme_alignment", got.stdout)
 
+    def test_local_resolution_signal_warns_without_blocking_core_arc(self):
+        with tempfile.TemporaryDirectory() as root:
+            make_project(root)
+            write_json(os.path.join(root, "_meta.json"), {"target_chapters": 100})
+            write(os.path.join(root, "设定", "读者契约.md"),
+                  "核心戏剧问题：主角能否夺回王座？\n- 终局必须回答：他是否成为新王？\n")
+            delta_path = os.path.join(root, "审稿", "state_delta_第02章.json")
+            with open(delta_path, encoding="utf-8") as f:
+                delta = json.load(f)
+            delta["reader_contract_progress"] = ["局部旧案真相大白，支线谜底揭晓。"]
+            delta["theme_alignment"] = "局部支线收口，但主线仍推进。"
+            write_json(delta_path, delta)
+
+            got = subprocess.run(
+                [sys.executable, ARC_GATE, root, "--arc", "1-3"],
+                capture_output=True, text=True,
+            )
+            self.assertEqual(got.returncode, 0, got.stderr)
+            report_path = os.path.join(root, "审稿", "arc_gate_第01-03章.json")
+            with open(report_path, encoding="utf-8") as f:
+                report = json.load(f)
+            self.assertEqual(report["blocking"], 0)
+            self.assertTrue(any(f["type"] == "resolution_signal_needs_review" for f in report["findings"]))
+
+    def test_core_resolution_signal_still_blocks_before_finale(self):
+        with tempfile.TemporaryDirectory() as root:
+            make_project(root)
+            write_json(os.path.join(root, "_meta.json"), {"target_chapters": 100})
+            write(os.path.join(root, "设定", "读者契约.md"),
+                  "核心戏剧问题：主角能否夺回王座？\n- 终局必须回答：他是否成为新王？\n")
+            delta_path = os.path.join(root, "审稿", "state_delta_第02章.json")
+            with open(delta_path, encoding="utf-8") as f:
+                delta = json.load(f)
+            delta["reader_contract_progress"] = ["主线完结：他是否成为新王？答案已经揭晓。"]
+            delta["theme_alignment"] = "核心问题解决。"
+            write_json(delta_path, delta)
+
+            got = subprocess.run(
+                [sys.executable, ARC_GATE, root, "--arc", "1-3"],
+                capture_output=True, text=True,
+            )
+            self.assertNotEqual(got.returncode, 0)
+            self.assertIn("premature_resolution", got.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

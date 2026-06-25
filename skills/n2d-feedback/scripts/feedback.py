@@ -369,11 +369,26 @@ def write_creative_features(path: str, rows: List[Dict[str, Any]]) -> None:
 # 列名只要落在下表别名内即可被摄取，无需手工改列。详见 references/schema.md「投放摄取适配器」。
 METRIC_ALIASES: Dict[str, Tuple[str, ...]] = {
     "retention_3s": ("retention_3s", "3s_retention", "ret3s", "3秒留存", "3秒留存率", "三秒留存"),
+    "retention_5s": ("retention_5s", "5s_retention", "ret5s", "5秒留存", "5秒留存率"),
+    "retention_6s": ("retention_6s", "6s_retention", "ret6s", "6秒留存", "6秒留存率", "六秒留存"),
     "retention_15s": ("retention_15s", "15s_retention", "ret15s", "15秒留存", "15秒留存率"),
+    "retention_25_pct": ("retention_25_pct", "retention_25", "25s_pct", "ret25", "quartile_25", "q25", "25%留存", "25%播放", "播放到25%"),
+    "retention_50_pct": ("retention_50_pct", "retention_50", "50s_pct", "ret50", "quartile_50", "q50", "50%留存", "50%播放", "播放到50%"),
+    "retention_75_pct": ("retention_75_pct", "retention_75", "75s_pct", "ret75", "quartile_75", "q75", "75%留存", "75%播放", "播放到75%"),
     "completion_rate": ("completion_rate", "completion", "complete_rate", "完播率", "完播", "看完率"),
     "follow_next_rate": ("follow_next_rate", "follow_rate", "next_follow_rate", "追更率", "追更", "下集点击率"),
     "plays": ("plays", "play_count", "views", "view_count", "exposure", "播放", "播放量", "曝光"),
     "ctr": ("ctr", "click_through_rate", "点击率", "封面点击率", "封面ctr"),
+    "avg_watch_sec": ("avg_watch_sec", "average_watch_sec", "avg_view_sec", "平均观看秒数", "平均播放时长"),
+    "avg_watch_pct": ("avg_watch_pct", "average_watch_pct", "avg_view_pct", "平均观看比例", "平均播放比例"),
+    "avg_episodes_per_user": ("avg_episodes_per_user", "avg_eps_per_user", "average_episodes_watched", "用户平均观看集数", "人均观看集数"),
+    "episodes_per_session": ("episodes_per_session", "eps_per_session", "session_episode_depth", "单次会话观看集数"),
+    "time_to_next_episode_sec": ("time_to_next_episode_sec", "next_episode_delay_sec", "time_to_next_sec", "下集点击间隔秒"),
+    "unlock_or_subscribe_rate": ("unlock_or_subscribe_rate", "unlock_rate", "subscribe_rate", "series_subscribe_rate", "付费解锁率", "订阅率", "追剧按钮转化率"),
+    "paywall_position_sec": ("paywall_position_sec", "paywall_sec", "paywall_at_sec", "unlock_gate_sec", "付费点秒", "付费卡点秒", "解锁卡点秒"),
+    "d1_retention": ("d1_retention", "day1_retention", "D1留存", "次日留存"),
+    "d7_retention": ("d7_retention", "day7_retention", "D7留存", "7日留存"),
+    "d14_retention": ("d14_retention", "day14_retention", "D14留存", "14日留存"),
 }
 
 
@@ -492,6 +507,18 @@ def fmt_pct(value: Optional[float]) -> str:
     return f"{value * 100:.1f}%"
 
 
+def fmt_metric(key: str, value: Optional[float]) -> str:
+    if value is None:
+        return "—"
+    if key in {"avg_episodes_per_user", "episodes_per_session", "story_roi"}:
+        return f"{value:.2f}"
+    if key == "time_to_next_episode_sec":
+        return f"{value:.1f}s"
+    if key == "avg_watch_sec":
+        return f"{value:.1f}s"
+    return fmt_pct(value)
+
+
 def lift(value: Optional[float], baseline: Optional[float]) -> Optional[float]:
     if value is None or baseline is None:
         return None
@@ -534,10 +561,49 @@ def hook_bucket(value: Optional[float]) -> str:
     return ">30s 过稀"
 
 
+def paywall_bucket(value: Optional[float]) -> str:
+    if value is None:
+        return "unknown"
+    if value < 0:
+        return "no_paywall"
+    if value <= 15:
+        return "<=15s 过早卡点"
+    if value <= 45:
+        return "16-45s 前中段卡点"
+    if value <= 90:
+        return "46-90s 中后段卡点"
+    return ">90s 后段卡点"
+
+
 def add_derived_features(rows: List[Dict[str, Any]]) -> None:
     for row in rows:
         row["shot_density_bucket"] = density_bucket(density_value(row))
         row["hook_interval_bucket"] = hook_bucket(numeric_feature(row, "hook_interval_sec"))
+        row["paywall_position_bucket"] = paywall_bucket(metric(row, "paywall_position_sec"))
+        row["paywall_after_promise_id"] = first_text(
+            row,
+            "paywall_after_promise_id",
+            "after_promise_id",
+            "paywall_promise_id",
+            "付费点承诺ID",
+        ) or UNKNOWN
+        row["unlock_friction"] = first_text(
+            row,
+            "unlock_friction",
+            "paywall_friction",
+            "friction_level",
+            "解锁摩擦",
+            "付费摩擦",
+        ) or UNKNOWN
+        row["continue_path"] = first_text(
+            row,
+            "continue_path",
+            "next_episode_path",
+            "continue_cta",
+            "next_cta",
+            "追更路径",
+            "续看路径",
+        ) or UNKNOWN
         row["ab_test_id"] = first_text(row, "ab_test_id", "experiment_id", "test_id", "campaign_id") or "default"
         row["variant_id"] = normalize_variant_id(first_text(row, "variant_id", "variant", "ab_variant", "publish_variant"))
         row["opening_variant"] = first_text(row, "opening_variant", "opening_version", "opening_ab", "first_3s_variant", "first_3s_asset") or str(row.get("opening_type") or UNKNOWN)
@@ -751,6 +817,18 @@ def build_recommendations(analyses: Dict[str, Dict[str, Any]], min_lift: float) 
         recs.append(
             f"A/B 标题文案优先 `{ab_title['name']}`：同集内 3秒留存 lift {fmt_pct(ab_title.get('paired_lift'))}。"
         )
+    paywall = analyses.get("paywall_unlock", {}).get("best")
+    if paywall and paywall.get("name") != UNKNOWN and (paywall.get("lift") or 0) >= min_lift:
+        recs.append(
+            f"付费/解锁卡点优先 `{paywall['name']}`：解锁/订阅率 {fmt_pct(paywall.get('unlock_or_subscribe_rate'))}，"
+            f"较总体 {fmt_pct(paywall.get('lift'))}；确认卡点必须落在已登记承诺之后。"
+        )
+    continue_path = analyses.get("continue_path_follow", {}).get("best")
+    if continue_path and continue_path.get("name") != UNKNOWN and (continue_path.get("lift") or 0) >= min_lift:
+        recs.append(
+            f"追更路径优先 `{continue_path['name']}`：追更率 {fmt_pct(continue_path.get('follow_next_rate'))}，"
+            f"较总体 {fmt_pct(continue_path.get('lift'))}。"
+        )
     if not recs:
         recs.append("样本或 lift 暂不足，先继续收集平台数据，不把偶然结果写成铁律。")
     return recs
@@ -922,7 +1000,7 @@ def analyze_feedback(root: str, metrics_path: str, features_path: Optional[str] 
             name="开场留存",
             group_field="opening_type",
             primary_metric="retention_3s",
-            metrics=("retention_3s", "retention_15s", "completion_rate", "bounce_3s"),
+            metrics=("retention_3s", "retention_6s", "retention_15s", "retention_25_pct", "retention_50_pct", "completion_rate", "bounce_3s"),
             min_samples=min_samples,
             higher_is_better=True,
         ),
@@ -931,7 +1009,7 @@ def analyze_feedback(root: str, metrics_path: str, features_path: Optional[str] 
             name="集尾追更",
             group_field="cliffhanger_type",
             primary_metric="follow_next_rate",
-            metrics=("follow_next_rate", "completion_rate", "retention_15s"),
+            metrics=("follow_next_rate", "unlock_or_subscribe_rate", "avg_episodes_per_user", "completion_rate", "retention_15s"),
             min_samples=min_samples,
             higher_is_better=True,
         ),
@@ -940,7 +1018,7 @@ def analyze_feedback(root: str, metrics_path: str, features_path: Optional[str] 
             name="镜头密度跳出",
             group_field="shot_density_bucket",
             primary_metric="bounce_3s",
-            metrics=("bounce_3s", "retention_3s", "retention_15s", "completion_rate"),
+            metrics=("bounce_3s", "retention_3s", "retention_6s", "retention_15s", "retention_25_pct", "completion_rate"),
             min_samples=min_samples,
             higher_is_better=False,
         ),
@@ -949,7 +1027,7 @@ def analyze_feedback(root: str, metrics_path: str, features_path: Optional[str] 
             name="钩子间隔留存",
             group_field="hook_interval_bucket",
             primary_metric="retention_15s",
-            metrics=("retention_15s", "completion_rate", "follow_next_rate"),
+            metrics=("retention_15s", "retention_25_pct", "retention_50_pct", "completion_rate", "follow_next_rate"),
             min_samples=min_samples,
             higher_is_better=True,
         ),
@@ -958,7 +1036,7 @@ def analyze_feedback(root: str, metrics_path: str, features_path: Optional[str] 
             name="A/B 开场留存",
             group_field="opening_variant",
             primary_metric="retention_3s",
-            metrics=("retention_3s", "retention_15s", "completion_rate", "follow_next_rate"),
+            metrics=("retention_3s", "retention_6s", "retention_15s", "retention_25_pct", "completion_rate", "follow_next_rate"),
             min_samples=min_samples,
             higher_is_better=True,
         ),
@@ -967,7 +1045,7 @@ def analyze_feedback(root: str, metrics_path: str, features_path: Optional[str] 
             name="A/B 封面留存",
             group_field="cover_variant",
             primary_metric="retention_3s",
-            metrics=("retention_3s", "retention_15s", "completion_rate", "follow_next_rate", "ctr"),
+            metrics=("retention_3s", "retention_6s", "retention_15s", "completion_rate", "follow_next_rate", "ctr"),
             min_samples=min_samples,
             higher_is_better=True,
         ),
@@ -976,7 +1054,7 @@ def analyze_feedback(root: str, metrics_path: str, features_path: Optional[str] 
             name="A/B 集尾断点追更",
             group_field="cliffhanger_cut_variant",
             primary_metric="follow_next_rate",
-            metrics=("follow_next_rate", "completion_rate", "retention_15s"),
+            metrics=("follow_next_rate", "unlock_or_subscribe_rate", "avg_episodes_per_user", "completion_rate", "retention_15s"),
             min_samples=min_samples,
             higher_is_better=True,
         ),
@@ -985,7 +1063,25 @@ def analyze_feedback(root: str, metrics_path: str, features_path: Optional[str] 
             name="A/B 标题文案留存",
             group_field="title_variant",
             primary_metric="retention_3s",
-            metrics=("retention_3s", "retention_15s", "completion_rate", "follow_next_rate", "ctr"),
+            metrics=("retention_3s", "retention_6s", "retention_15s", "completion_rate", "follow_next_rate", "ctr"),
+            min_samples=min_samples,
+            higher_is_better=True,
+        ),
+        "paywall_unlock": analyze_group(
+            rows,
+            name="付费/解锁卡点",
+            group_field="paywall_position_bucket",
+            primary_metric="unlock_or_subscribe_rate",
+            metrics=("unlock_or_subscribe_rate", "follow_next_rate", "completion_rate", "retention_50_pct", "avg_episodes_per_user"),
+            min_samples=min_samples,
+            higher_is_better=True,
+        ),
+        "continue_path_follow": analyze_group(
+            rows,
+            name="追更路径",
+            group_field="continue_path",
+            primary_metric="follow_next_rate",
+            metrics=("follow_next_rate", "avg_episodes_per_user", "episodes_per_session", "completion_rate", "unlock_or_subscribe_rate"),
             min_samples=min_samples,
             higher_is_better=True,
         ),
@@ -1009,7 +1105,7 @@ def analyze_feedback(root: str, metrics_path: str, features_path: Optional[str] 
 def render_groups(groups: List[Dict[str, Any]], metric_keys: Sequence[str]) -> List[str]:
     lines = ["| 分组 | n | plays | " + " | ".join(metric_keys) + " | lift |", "|---|---:|---:|" + "---:|" * (len(metric_keys) + 1)]
     for item in groups:
-        values = " | ".join(fmt_pct(item.get(key)) for key in metric_keys)
+        values = " | ".join(fmt_metric(key, item.get(key)) for key in metric_keys)
         lines.append(f"| {item['name']} | {item['n']} | {item['plays']} | {values} | {fmt_pct(item.get('lift'))} |")
     return lines
 
@@ -1030,17 +1126,21 @@ def render_markdown(feedback: Dict[str, Any]) -> str:
     for rec in feedback["recommendations"]:
         lines.append(f"- {rec}")
     sections = [
-        ("opening_retention", ("retention_3s", "retention_15s", "completion_rate", "bounce_3s")),
-        ("cliffhanger_follow", ("follow_next_rate", "completion_rate", "retention_15s")),
-        ("shot_density_bounce", ("bounce_3s", "retention_3s", "retention_15s", "completion_rate")),
-        ("hook_interval_retention", ("retention_15s", "completion_rate", "follow_next_rate")),
-        ("ab_opening_retention", ("retention_3s", "retention_15s", "completion_rate", "follow_next_rate")),
-        ("ab_cover_retention", ("retention_3s", "retention_15s", "completion_rate", "follow_next_rate", "ctr")),
-        ("ab_cliffhanger_follow", ("follow_next_rate", "completion_rate", "retention_15s")),
-        ("ab_title_retention", ("retention_3s", "retention_15s", "completion_rate", "follow_next_rate", "ctr")),
+        ("opening_retention", ("retention_3s", "retention_6s", "retention_15s", "retention_25_pct", "retention_50_pct", "completion_rate", "bounce_3s")),
+        ("cliffhanger_follow", ("follow_next_rate", "unlock_or_subscribe_rate", "avg_episodes_per_user", "completion_rate", "retention_15s")),
+        ("shot_density_bounce", ("bounce_3s", "retention_3s", "retention_6s", "retention_15s", "retention_25_pct", "completion_rate")),
+        ("hook_interval_retention", ("retention_15s", "retention_25_pct", "retention_50_pct", "completion_rate", "follow_next_rate")),
+        ("ab_opening_retention", ("retention_3s", "retention_6s", "retention_15s", "retention_25_pct", "completion_rate", "follow_next_rate")),
+        ("ab_cover_retention", ("retention_3s", "retention_6s", "retention_15s", "completion_rate", "follow_next_rate", "ctr")),
+        ("ab_cliffhanger_follow", ("follow_next_rate", "unlock_or_subscribe_rate", "avg_episodes_per_user", "completion_rate", "retention_15s")),
+        ("ab_title_retention", ("retention_3s", "retention_6s", "retention_15s", "completion_rate", "follow_next_rate", "ctr")),
+        ("paywall_unlock", ("unlock_or_subscribe_rate", "follow_next_rate", "completion_rate", "retention_50_pct", "avg_episodes_per_user")),
+        ("continue_path_follow", ("follow_next_rate", "avg_episodes_per_user", "episodes_per_session", "completion_rate", "unlock_or_subscribe_rate")),
     ]
     for key, metrics in sections:
-        analysis = feedback["analyses"][key]
+        analysis = (feedback.get("analyses") or {}).get(key)
+        if not analysis:
+            continue
         lines.extend(["", f"## {analysis['name']}", ""])
         lines.extend(render_groups(analysis["groups"], metrics))
     consistency = feedback.get("consistency")
@@ -1110,6 +1210,8 @@ def guide_snapshot(feedback: Dict[str, Any]) -> str:
         best_line(feedback, "ab_cover_retention", "retention_3s", "A/B 封面同集内最优"),
         best_line(feedback, "ab_cliffhanger_follow", "follow_next_rate", "A/B 集尾断点同集内最优"),
         best_line(feedback, "ab_title_retention", "retention_3s", "A/B 标题文案同集内最优"),
+        best_line(feedback, "paywall_unlock", "unlock_or_subscribe_rate", "付费/解锁卡点最优"),
+        best_line(feedback, "continue_path_follow", "follow_next_rate", "追更路径最优"),
         "",
         "下一批执行建议：",
     ]

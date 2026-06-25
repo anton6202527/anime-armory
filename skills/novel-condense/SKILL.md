@@ -61,6 +61,16 @@ python3 <skill>/scripts/init_project.py "<原作>" \
 - 关键人物首次出场
 - 大高潮的情绪段
 
+同步把原作主角 + 主要配角登记进 `设定/人物.md`（姓名 / 身份 / 关系 / 关键设定）。精简会做合章重写，没有这份卡，`novel-wiki` 的角色护栏与 `logic_sentry` 的死人复活机检拿不到实体、静默放行，合章时最易写出 OOC / 复活穿帮。
+
+同时把原作里"种下后必须回收"的关键伏笔登记进伏笔台账（init 已 seed 空台账 `设定/foreshadowing_ledger.json`）：
+
+```
+python3 ../../novel-wiki/scripts/foreshadow_ledger.py <作品根> plant --desc "..." --at <埋设章> --by <预期回收章> --importance high
+```
+
+砍支线 / 合章最容易把某条伏笔的"收"删掉只留"种"。登记后，精简完用 `scan --through <末章>` 巡检，`foreshadow_ledger.analyze()` 才能把被砍出的孤儿伏笔揪出来——否则台账无 seeds，超期机检永远 `ran:False` 空转。
+
 ### 第 3 步 — 划章 / 合章
 
 按 `_meta.json.target_chapters` 与目标压缩比决定新章数。相邻同主题章合并；纯支线章砍掉或缩成一句话。映射写入 `设定/章节映射.md`。

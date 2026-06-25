@@ -197,7 +197,7 @@ def render_markdown(plan: Mapping[str, Any]) -> str:
         f"- episode: {plan.get('episode')}",
         f"- spectacle_clips: {(plan.get('summary') or {}).get('spectacle_clips', 0)}",
         "",
-        "| Clip | 类型 | 缺契约字段 | 控制输入 | 降级方案 |",
+        "| Clip | 类型 | 缺契约字段 | 控制输入 | 回退/保真实现方案 |",
         "|---|---|---|---|---|",
     ]
     for row in plan.get("clips") or []:

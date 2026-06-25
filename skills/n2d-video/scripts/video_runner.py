@@ -41,6 +41,7 @@ except Exception:  # pragma: no cover
     parse_progress = None  # type: ignore[assignment]
 
 from n2d_handoff import check_identity_handoff
+import native_av_sidecar
 import video_qc
 
 try:
@@ -48,6 +49,31 @@ try:
 except ImportError:
     anchor_consumption_plan = lambda m, c, **kw: {}  # type: ignore
     video_backend_frame_control = lambda m, c: {}  # type: ignore
+
+
+def aspect_ratio(root: Path) -> str:
+    """画幅 选择点（绝不写死，对齐 选择点与偏好.md「画幅」与 compose.sh / 图侧 runner）：
+    env N2D_ASPECT/ASPECT(9:16|16:9) > _设置.md「画幅」> 默认 9:16 竖屏。缺 _lib 时降级正则扫 _设置.md。"""
+    env = (os.environ.get("N2D_ASPECT") or os.environ.get("ASPECT") or "").strip()
+    if env in {"9:16", "16:9"}:
+        return env
+    try:
+        import settings as _settings  # type: ignore
+        val = (_settings.get_setting(str(root), "画幅", "") or "").replace(" ", "")
+        if "16:9" in val:
+            return "16:9"
+        if "9:16" in val:
+            return "9:16"
+    except Exception:
+        pass
+    try:
+        p = root / "_设置.md"
+        text = p.read_text(encoding="utf-8") if p.is_file() else ""
+    except Exception:
+        text = ""
+    if re.search(r"画幅\s*[:：]\s*16\s*[:：]?\s*9", text):
+        return "16:9"
+    return "9:16"
 
 CLIP_HEADING_RE = re.compile(r"^##\s*Clip[_\s]*(\d+)(?:（([^）]+)）)?", re.MULTILINE)
 FIRST_FRAME_RE = re.compile(r"\*\*首帧\*\*[^`]*`([^`]+\.png)`")
@@ -328,6 +354,7 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
         "backend": backend,
         "model_version": model_version,
         "video_resolution": resolution,
+        "ratio": aspect_ratio(root),
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
         "items": items,
     }
@@ -528,7 +555,7 @@ def _dreamina_args(item: Dict[str, Any], manifest: Dict[str, Any]) -> List[str]:
             "--image", item["end_image"],
             "--prompt", prompt,
             "--duration", str(item["submit_duration"]),
-            "--ratio", "9:16",
+            "--ratio", manifest.get("ratio") or "9:16",
             "--video_resolution", manifest.get("video_resolution") or "720p",
             "--model_version", manifest.get("model_version") or "3.0",
         ]
@@ -898,6 +925,10 @@ def accept_clip(root: Path, manifest_file: Path, clip: str, *, no_record: bool =
     item["qc_json"] = qc.get("json_path")
     item["qc_markdown"] = qc.get("markdown_path")
     item["accepted_at"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")
+    try:
+        item["native_av_sidecar"] = native_av_sidecar.update_sidecars(root, episode, item, target, qc_clip)
+    except Exception as exc:
+        item["native_av_sidecar"] = {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
     update_manifest(manifest_file, manifest)
     if not no_record:
         if overridden:

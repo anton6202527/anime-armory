@@ -13,7 +13,7 @@ mouth_visible；但渲染出的首帧可能与文本不符——反应镜文本�
 
 纯函数（prompt 字段解析 / 文本×图像×prompt 三方复核）无依赖、带 pytest。
 
-用法：python3 mouth_detect.py <作品根> 第N集 [--json]
+用法：python3 mouth_detect.py <作品根> 第N集 [--json] [--write]
 退出码：有任一图↔文本/图↔prompt 冲突(warn) → 1，否则 0。
 """
 from __future__ import annotations
@@ -29,6 +29,7 @@ from typing import Any, Dict, List, Mapping, Optional
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import router  # noqa: E402  复用 load_storyboard / clip_has_mouth_visible / make_clip_id / _clip_text
 
+KIND = "n2d_mouth_visible_audit"
 _PROMPT_MV = re.compile(r"mouth_visible\s*[=:：]\s*(yes|no|是|否|y|n)", re.I)
 
 
@@ -177,7 +178,32 @@ def analyze(root: str, ep: str) -> Dict[str, Any]:
         r.update({"clip_id": clip_id, "heading": clip_id, "loc": f"出视频/{ep}/{clip_id}",
                   "png": os.path.relpath(png, root) if png else None})
         rows.append(r)
-    return {"available": True, "rows": rows, "notes": notes}
+    return {
+        "kind": KIND,
+        "episode": ep,
+        "available": True,
+        "rows": rows,
+        "notes": notes,
+        "summary": {
+            "total": len(rows),
+            "warn": sum(1 for r in rows if r.get("verdict") == "warn"),
+            "image_unknown": sum(1 for r in rows if r.get("image_says") is None),
+        },
+    }
+
+
+def write_audit(root: str, ep: str, payload: Mapping[str, Any]) -> str:
+    path = os.path.join(root, "生产数据", f"mouth_visible_audit_{ep}.json")
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    tmp = f"{path}.tmp.{os.getpid()}"
+    data = dict(payload)
+    data.setdefault("kind", KIND)
+    data.setdefault("episode", ep)
+    with open(tmp, "w", encoding="utf-8") as fh:
+        json.dump(data, fh, ensure_ascii=False, indent=2, sort_keys=True)
+        fh.write("\n")
+    os.replace(tmp, path)
+    return path
 
 
 def main(argv: List[str]) -> int:
@@ -185,8 +211,11 @@ def main(argv: List[str]) -> int:
     ap.add_argument("root")
     ap.add_argument("episode")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--write", action="store_true", help="write 生产数据/mouth_visible_audit_第N集.json sidecar")
     ns = ap.parse_args(argv)
     res = analyze(ns.root.rstrip("/"), ns.episode)
+    if ns.write:
+        res["path"] = write_audit(ns.root.rstrip("/"), ns.episode, res)
     if ns.json:
         print(json.dumps(res, ensure_ascii=False, indent=2))
         return 1 if any(r["verdict"] == "warn" for r in res["rows"]) else 0

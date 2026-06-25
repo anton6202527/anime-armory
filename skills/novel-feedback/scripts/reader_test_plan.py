@@ -29,14 +29,20 @@ def build_plan(args):
     metrics = [
         {"name": "completion_rate", "target": args.min_completion, "direction": "higher_is_better"},
         {"name": "drop_rate", "target": args.max_drop, "direction": "lower_is_better"},
+        {"name": "completion_rate_delta", "target": args.min_completion_delta, "direction": "higher_is_better"},
         {"name": "comment_negative_rate", "target": 0.25, "direction": "lower_is_better"},
     ]
     variants = []
     for idx, take in enumerate(args.take or ["take-a"], 1):
+        hypothesis = (
+            args.hypothesis[idx - 1]
+            if args.hypothesis and idx - 1 < len(args.hypothesis)
+            else "待填写：这个版本要验证什么"
+        )
         variants.append({
             "variant_id": chr(ord("A") + idx - 1),
             "take_id": take,
-            "hypothesis": "待填写：这个版本要验证什么",
+            "hypothesis": hypothesis,
         })
     return {
         "schema_version": 1,
@@ -51,8 +57,15 @@ def build_plan(args):
         "variants": variants,
         "metrics": metrics,
         "questions": args.question or default_questions(),
+        "retest_policy": {
+            "required_after_revision": True,
+            "same_scope_required": True,
+            "min_completion_delta": args.min_completion_delta,
+            "note": "改稿后必须用同一 scope 或明确可比的新 scope 复测；否则只能做方向性解释。",
+        },
         "decision_rules": [
             f"样本量低于 {args.min_sample} 时只作方向性参考，不做 kill/go 决策。",
+            f"A/B 完读率差异低于 {args.min_completion_delta} 时不判胜负，只记为 inconclusive。",
             "真实反馈优先于模拟读者；若与 novel-simulate 冲突，以真实完读/弃读为准。",
             "A/B 只在同一 ab_test_id 内比较，必须带 take_id 才能归因到具体稿件版本。",
         ],
@@ -75,6 +88,9 @@ def write_markdown(path, plan):
     lines.extend(["", "## 指标"])
     for item in plan["metrics"]:
         lines.append(f"- {item['name']}：目标 {item['target']} ({item['direction']})")
+    lines.extend(["", "## 假设"])
+    for item in plan["variants"]:
+        lines.append(f"- {item['variant_id']} / {item['take_id']}：{item['hypothesis']}")
     lines.extend(["", "## 问题"])
     for q in plan["questions"]:
         lines.append(f"- {q}")
@@ -96,7 +112,9 @@ def main():
     ap.add_argument("--min-sample", type=int, default=30)
     ap.add_argument("--min-completion", type=float, default=0.65)
     ap.add_argument("--max-drop", type=float, default=0.25)
+    ap.add_argument("--min-completion-delta", type=float, default=0.05)
     ap.add_argument("--take", action="append", help="测试版本 take_id，可重复")
+    ap.add_argument("--hypothesis", action="append", help="与 --take 顺序对应的测试假设，可重复")
     ap.add_argument("--question", action="append", help="追加/覆盖测试问题，可重复")
     args = ap.parse_args()
     plan = build_plan(args)

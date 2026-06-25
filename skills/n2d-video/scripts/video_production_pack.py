@@ -56,7 +56,22 @@ def storyboard(root: Path, ep: str) -> List[dict]:
 
 
 def clip_id(clip: Mapping[str, Any], idx: int) -> str:
-    return str(clip.get("id") or clip.get("clip_id") or clip.get("label") or f"Clip_{idx:02d}")
+    """归一化 Clip 标识为 `Clip_NN`，与 n2d-model-router.make_clip_id 及 image runner 落盘命名同口径。
+
+    storyboard 的 clip `id` 常是作者自定写法（`镜头3` / `clip#5` / `Clip 3`）；而 router 出的
+    video_model_routes.json 的 `clip_id` 与 image runner 落盘的 `Clip_NN.png` 都已归一化成 `Clip_NN`。
+    若此处返回原始 id，route_by_clip 的键(`Clip_03`)与本侧查键(`镜头3`)对不上 → 高动镜静默丢后端
+    路由/运动参考、anchor_chain 首帧路径也指错。跨 skill 无共享层，各处各自维护副本——改这里需同步
+    router.make_clip_id 与 image runner 的落盘命名规则。"""
+    raw = clip.get("clip_id") or clip.get("id") or clip.get("label") or ""
+    text = str(raw).strip()
+    m = re.search(r"(?:Clip[_\s-]?|CLIP)(\d+)", text, re.I)
+    if m:
+        return f"Clip_{int(m.group(1)):02d}"
+    m = re.search(r"(\d+)", text)
+    if m:
+        return f"Clip_{int(m.group(1)):02d}"
+    return f"Clip_{idx:02d}"
 
 
 def routes(root: Path, ep: str) -> List[dict]:

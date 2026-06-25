@@ -69,6 +69,8 @@ def test_coverage_warning_when_short_drama_platform_uncovered():
     result = cmb.collect(_args(source=[], note=[], defaults=False))
     assert result["coverage_warnings"], "expected non-empty coverage_warnings"
     assert "红果" in result["coverage_warnings"][0]
+    assert result["evidence_tasks"]
+    assert result["evidence_tasks"][0]["recommended_skill"] == "novel-research"
 
 
 def test_note_does_not_suppress_short_drama_warning():
@@ -81,8 +83,27 @@ def test_manual_evidence_covering_short_drama_suppresses_warning():
         manual_evidence=["红果短剧|2026-01-01|第三方榜单|复仇逆袭题材占多数|https://example.com/rank"]
     ))
     assert result["coverage_warnings"] == []
+    assert result["evidence_tasks"] == []
     assert result["manual_evidence"][0]["evidence_quality"]["score"] > 0
     assert result["evidence_quality"]["effective_evidence_count"] == 1
+
+
+def test_stale_manual_evidence_does_not_suppress_short_drama_warning():
+    result = cmb.collect(_args(
+        date="2026-06-25",
+        manual_evidence=["红果短剧|2024-01-01|第三方榜单|旧榜单结论|https://example.com/old"]
+    ))
+    assert result["coverage_warnings"], "stale manual evidence must not close short-drama coverage"
+    assert result["evidence_tasks"]
+
+
+def test_future_manual_evidence_does_not_suppress_short_drama_warning():
+    result = cmb.collect(_args(
+        date="2026-01-01",
+        manual_evidence=["红果短剧|2026-02-01|第三方榜单|未来日期不能提前算有效覆盖|https://example.com/future"]
+    ))
+    assert result["coverage_warnings"], "future manual evidence must not close short-drama coverage"
+    assert result["evidence_tasks"]
 
 
 def test_no_warning_when_platform_not_short_drama():
@@ -148,6 +169,9 @@ def test_write_artifacts_writes_both_files_and_md_warning_section():
         md = f.read()
     assert "覆盖告警" in md
     assert "证据质量汇总" in md
+    assert "待补市场证据任务" in md
+    assert os.path.exists(os.path.join(out_dir, "market_evidence_tasks.json"))
+    assert os.path.exists(os.path.join(out_dir, "市场证据待补.md"))
 
 
 def test_write_artifacts_no_warning_section_when_clean():
@@ -158,6 +182,18 @@ def test_write_artifacts_no_warning_section_when_clean():
     with open(md_path, encoding="utf-8") as f:
         md = f.read()
     assert "覆盖告警" not in md
+
+
+def test_write_artifacts_removes_stale_market_evidence_tasks_when_clean():
+    out_dir = tempfile.mkdtemp()
+    open(os.path.join(out_dir, "market_evidence_tasks.json"), "w", encoding="utf-8").write("{}")
+    open(os.path.join(out_dir, "市场证据待补.md"), "w", encoding="utf-8").write("stale")
+
+    result = cmb.collect(_args(target_platform="番茄网文向"))
+    cmb.write_artifacts(result, out_dir)
+
+    assert not os.path.exists(os.path.join(out_dir, "market_evidence_tasks.json"))
+    assert not os.path.exists(os.path.join(out_dir, "市场证据待补.md"))
 
 
 def test_source_quality_marks_ok_signal_source():

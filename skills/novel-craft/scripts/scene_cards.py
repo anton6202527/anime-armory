@@ -15,6 +15,16 @@ from datetime import date
 
 REQUIRED_FIELDS = ("pov", "desire", "obstacle", "conflict", "turn", "value_shift")
 OPTIONAL_FIELDS = ("location", "time", "reveal_or_payoff", "subtext", "sensory_anchor")
+CHARACTER_ENGINE_FIELDS = (
+    "want",
+    "need",
+    "misbelief",
+    "wound",
+    "fear",
+    "tactic",
+    "moral_boundary",
+    "choice_cost",
+)
 CHAPTER_RE = re.compile(r"第\s*0*(\d+)\s*章\s*(?:[《<]([^》>]+)[》>])?\s*(?:[—-]\s*(.*))?")
 
 
@@ -85,6 +95,14 @@ def empty_card(chapter, scene_no, outline_item):
         "reveal_or_payoff": "",
         "subtext": "",
         "sensory_anchor": "",
+        "want": "",
+        "need": "",
+        "misbelief": "",
+        "wound": "",
+        "fear": "",
+        "tactic": "",
+        "moral_boundary": "",
+        "choice_cost": "",
     }
 
 
@@ -163,6 +181,15 @@ def check(root, chapter=None):
                 "chapter": scene.get("chapter"),
                 "scene_id": scene.get("id"),
                 "reason": "建议补字段：" + "、".join(weak),
+            })
+        character_missing = [field for field in CHARACTER_ENGINE_FIELDS if not str(scene.get(field) or "").strip()]
+        if character_missing:
+            findings.append({
+                "id": "SCENE-CARD-CHARACTER-ENGINE-MISSING",
+                "severity": "warning",
+                "chapter": scene.get("chapter"),
+                "scene_id": scene.get("id"),
+                "reason": "人物内驱字段建议补齐：" + "、".join(character_missing),
             })
     return {
         "schema_version": 1,

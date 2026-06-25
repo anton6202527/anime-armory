@@ -9,7 +9,7 @@ from __future__ import annotations
 import os
 from typing import List, Optional
 
-from video_consistency_common import finding, load_first_json, rows_from, verdict_from
+from video_consistency_common import existing_media, finding, load_first_json, rows_from, story_text, verdict_from
 
 
 REPORT_RELS = (
@@ -42,6 +42,19 @@ def _floor(data: object, key: str, default: float) -> float:
 def analyze(root: str, ep: str) -> dict:
     data, rel = load_first_json(root, tuple(r.format(ep=ep) for r in REPORT_RELS))
     if data is None:
+        if existing_media(root, ep) and story_text(root, ep).strip():
+            return {
+                "available": True,
+                "findings": [finding(
+                    "warn",
+                    "本集已有视频产物和脚本/视频契约，但缺 video_semantic_consistency；无法核验视频侧主体/背景语义是否随视频生成漂移。",
+                    stage="video",
+                    artifacts=("生产数据/video_semantic_consistency_{ep}.json".format(ep=ep),),
+                    evidence_missing=True,
+                    required_evidence="video_semantic_consistency",
+                )],
+                "notes": [],
+            }
         return {
             "available": False,
             "findings": [],

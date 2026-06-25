@@ -232,11 +232,23 @@ def run_logic(project):
 
     # 传 project_root + 年龄锚点：让账本类检查（伏笔逾期/世界规则/关系温度计/张力账本）在 review 汇总也跑，
     # 不再只在 post_write 单章路径出现（此前 review 漏了这些 ledger 维度）。
+    # 伏笔超期由 foreshadow_ledger.analyze() 作为单一真值源（先于 logic_sentry 运行），
+    # 产出 foreshadow_report.json；sentry 消费它而不是自己重新实现超期判定。
     anchors = logic_sentry.load_numeric_anchors(project) if hasattr(logic_sentry, "load_numeric_anchors") else None
+    foreshadow_report = None
+    fr_path = os.path.join(project, "审稿", "foreshadow_report.json")
+    if os.path.exists(fr_path):
+        try:
+            with open(fr_path, encoding="utf-8") as f:
+                foreshadow_report = json.load(f)
+        except Exception:
+            pass
     all_alerts = []
     for idx, path in _chapters(project):
         text = read_text(path) if read_text else open(path, encoding="utf-8").read()
-        all_alerts += logic_sentry.scan_chapter(wiki, text, idx, project_root=project, numeric_anchors=anchors)
+        all_alerts += logic_sentry.scan_chapter(
+            wiki, text, idx, project_root=project, numeric_anchors=anchors,
+            foreshadow_report=foreshadow_report)
     summary = os.path.join(project, "审稿", "logic_alerts_summary.json")
     os.makedirs(os.path.dirname(summary), exist_ok=True)
     blocking = sum(1 for a in all_alerts if a["severity"] == "阻断级")
@@ -396,6 +408,9 @@ def main():
         result = {
             "mechanical": run_mechanical(args.project_path, args.pov, args.min, args.max),
             "reader_contract": run_reader_contract(args.project_path),
+            # 伏笔超期先于 logic_sentry：analyze() 是单一真值源，产出 foreshadow_report.json，
+            # logic_sentry 消费它而不是自己重新实现超期判定，消除两套实现的漂移。
+            "foreshadow": _run_detector("伏笔超期", foreshadow_ledger, args.project_path, "foreshadow_report.json"),
             "logic_sentry": run_logic(args.project_path),
             "style_drift": run_style(args.project_path, args.anchor, cache=cache),
             "power_system": run_power_system(args.project_path),
@@ -408,8 +423,6 @@ def main():
             "antagonist_scaling": _run_detector("反派战力", antagonist_scaling, args.project_path, "antagonist_findings.json"),
             "timeline": _run_detector("时间线", timeline_check, args.project_path, "timeline_findings.json"),
             "minor_characters": _run_detector("配角连续性", minor_characters, args.project_path, "minor_character_findings.json"),
-            # 伏笔超期/烂尾预警：消费 novel-wiki 的伏笔台账，落 审稿/foreshadow_report.json（此前无人接）
-            "foreshadow": _run_detector("伏笔超期", foreshadow_ledger, args.project_path, "foreshadow_report.json"),
             "_cache": {"hit": False, "path": _cache_path(args.project_path)},
         }
         if snapshot:

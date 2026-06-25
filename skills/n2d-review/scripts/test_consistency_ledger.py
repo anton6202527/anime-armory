@@ -85,6 +85,33 @@ def test_delivery_domains_are_single_acceptance_surface():
     assert by_key["subtitle"]["findings"][0]["source"] == "gate:review"
 
 
+def test_root_causes_group_multiple_symptoms_by_entity_anchor():
+    causes = cl.build_root_causes([
+        {
+            "sev": "block",
+            "source": "image_qc",
+            "dim_key": "character_consistency",
+            "dimension": "脸(G1)",
+            "loc": "出图/第1集/图片/Clip_01.png",
+            "text": "CHAR_01 首帧脸漂",
+            "return_to_stage": "image",
+        },
+        {
+            "sev": "warn",
+            "source": "video_vlm",
+            "dim_key": "multimodal_continuity",
+            "dimension": "视频VLM判题(VLM1)",
+            "loc": "出视频/第1集/视频/Clip_01.mp4",
+            "text": "CHAR_01 看起来像另一个人",
+        },
+    ])
+
+    assert len(causes) == 1
+    assert causes[0]["anchor"] == "CHAR_01"
+    assert causes[0]["severity"] == "block"
+    assert set(causes[0]["dimensions"]) == {"脸(G1)", "视频VLM判题(VLM1)"}
+
+
 def test_collect_findings_uses_full_image_qc_findings(tmp_path):
     ep = "第1集"
     report = tmp_path / "生产数据" / "image_qc" / ep / f"image_qc_{ep}.json"

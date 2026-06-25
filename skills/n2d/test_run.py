@@ -363,6 +363,50 @@ def test_gather_probes_blocks_image_prompt_on_beat_audit(monkeypatch):
     assert any(pw["step"] == "beat_audit" and pw["status"] == "block" for pw in probes.prework)
 
 
+def test_gather_probes_blocks_image_prompt_on_series_retention_gate(monkeypatch):
+    root = make_work(ALL_DONE_TO["image_prompt"])
+    for i in range(1, 4):
+        ep_dir = os.path.join(root, "脚本", f"第{i}集")
+        os.makedirs(ep_dir, exist_ok=True)
+        open(os.path.join(ep_dir, "voiceover.txt"), "w", encoding="utf-8").write(
+            f"[镜头1·沈念·惊恐·快] 第{i}集危机来了！ ⚡钩子\n"
+            f"[镜头2·沈念·痛快·快] 原来竟是真相。 💥爽点\n"
+            f"[镜头3·沈念·阴狠·慢] 下一局才开始。 🪝集尾\n"
+        )
+
+    def fake_run(cmd):
+        if cmd[1].endswith("beat_audit.py") and "--series" in cmd:
+            return _CP(0, json.dumps({
+                "duplicates": [["第1集", "第2集", 0.88]],
+                "cold_open_chain_findings": [],
+                "highlight_climax_findings": [],
+            }, ensure_ascii=False), "")
+        return _CP(0, json.dumps({"findings": []}, ensure_ascii=False), "")
+
+    monkeypatch.setattr(run, "_run", fake_run)
+    probes = run.gather_probes(root, _route("image_prompt"), "image_prompt")
+
+    assert probes.prework_block and "series_retention_gate" in probes.prework_block
+    assert any(pw["step"] == "series_retention_gate" and pw["status"] == "block" for pw in probes.prework)
+
+
+def test_gather_probes_blocks_image_prompt_on_pilot_arc_gate_before_three_eps(monkeypatch):
+    root = make_work(ALL_DONE_TO["image_prompt"])
+
+    def fake_run(cmd):
+        if cmd[1].endswith("story_integrity_audit.py") and "--strict" in cmd:
+            return _CP(1, json.dumps({
+                "findings": [{"severity": "warn", "message": "pilot_arc_contract 字段未填全"}],
+            }, ensure_ascii=False), "")
+        return _CP(0, json.dumps({"findings": []}, ensure_ascii=False), "")
+
+    monkeypatch.setattr(run, "_run", fake_run)
+    probes = run.gather_probes(root, _route("image_prompt"), "image_prompt")
+
+    assert probes.prework_block and "pilot_arc_contract" in probes.prework_block
+    assert any(pw["step"] == "pilot_arc_contract_gate" and pw["status"] == "block" for pw in probes.prework)
+
+
 def test_gather_probes_blocks_image_prompt_on_spectacle_contract_audit(monkeypatch):
     root = make_work(ALL_DONE_TO["image_prompt"])
 

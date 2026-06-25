@@ -149,9 +149,12 @@ def get_cascade_impacts(root: str, ep: str, image_targets: List[str]) -> Dict[st
 
 
 def _identity_registry_path(root: str) -> str:
-    """`出图/共享/identity_registry.json`（新）→ 旧 `出图/_shared/` 兜底。自包含解析，不引 n2d/_lib。"""
+    """`出图/共享/identity_registry.json`（新）→ 旧 `出图/common/` 兜底。自包含解析，不引 n2d/_lib。
+
+    旧目录名以 n2d_const.LEGACY_SHARED_ASSET_DIR='common' 为准（此前误写 `_shared`，是无人产出的幻影名，
+    会让真·legacy `common/` 项目读不到 registry、anchor 影响被静默漏报）。"""
     cur = os.path.join(root, "出图", "共享", "identity_registry.json")
-    legacy = os.path.join(root, "出图", "_shared", "identity_registry.json")
+    legacy = os.path.join(root, "出图", "common", "identity_registry.json")
     return legacy if (not os.path.exists(cur) and os.path.exists(legacy)) else cur
 
 

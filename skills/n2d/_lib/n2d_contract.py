@@ -17,6 +17,7 @@ try:
     from n2d_registry import *
     from n2d_maintenance import *
     from n2d_spectacle import *
+    from n2d_policy import *
 except ImportError:
     from .n2d_const import *
     from .n2d_schema import *
@@ -24,6 +25,7 @@ except ImportError:
     from .n2d_registry import *
     from .n2d_maintenance import *
     from .n2d_spectacle import *
+    from .n2d_policy import *
 
 if __name__ == "__main__":
     import argparse

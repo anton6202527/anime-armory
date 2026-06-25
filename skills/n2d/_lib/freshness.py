@@ -47,7 +47,7 @@ CANDIDATE_SOURCES: List[Dict[str, object]] = [
     {
         "id": "n2d-model-matrix",
         "path": "skills/n2d/references/模型矩阵.md",
-        "choice_points": ["生图模型", "生图AI", "生视频模型", "生视频渠道", "配音后端", "对口型"],
+        "choice_points": ["生图模型", "生图AI", "生图渠道", "生视频模型", "生视频渠道", "配音后端", "对口型"],
         "max_age_days": 30,
         "note": "n2d 各轴 SOTA vs 默认 vs 升级触发；由 n2d-review 模式②刷新。",
     },
@@ -68,7 +68,7 @@ CANDIDATE_SOURCES: List[Dict[str, object]] = [
     {
         "id": "n2d-image-backends",
         "path": "skills/n2d/_lib/n2d_schema.py",
-        "choice_points": ["生图AI"],
+        "choice_points": ["生图模型", "生图AI", "生图渠道"],
         "max_age_days": 45,
         "note": "APPROVED_IMAGE_BACKENDS 生图后端白名单（n2d 线策略）；定义在 n2d_schema.py，n2d_contract.py 仅 facade 转出。",
     },
@@ -82,14 +82,14 @@ CANDIDATE_SOURCES: List[Dict[str, object]] = [
     {
         "id": "image-backend-probes",
         "path": "skills/n2d/_lib/image_backends.py",
-        "choice_points": ["生图AI"],
+        "choice_points": ["生图AI", "生图渠道"],
         "max_age_days": 45,
         "note": "IMAGE_BACKEND_PROBES 出图后端连通性探针口径（CLI/HTTP/env，gate image_preflight 用）。",
     },
     {
         "id": "n2d-image-backend-adapter",
         "path": "skills/n2d/_lib/image_backend_adapter.py",
-        "choice_points": ["生图AI"],
+        "choice_points": ["生图模型", "生图AI", "生图渠道"],
         "max_age_days": 7,
         "note": "IMAGE_BACKEND_ADAPTERS 官方 API/能力适配层（生成/编辑/多参考/主体库/掩码/输出 schema）；付费出图前还需落本次 per-run 刷新证据。",
     },

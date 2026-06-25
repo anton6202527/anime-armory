@@ -132,6 +132,7 @@ def creative_priors_evidence(data):
     """先验 → 可落盘的 applied_creative_priors 证据字段（建议先验·非硬约束）。"""
     priors = data.get('priors') or {}
     applied = {}
+    decisions = {}
     for field, p in priors.items():
         if not isinstance(p, dict):
             continue
@@ -141,10 +142,16 @@ def creative_priors_evidence(data):
             'primary_metric': p.get('primary_metric'),
             'n': p.get('n'),
         }
+        decisions[field] = {
+            'status': 'applied',
+            'winner': p.get('winner'),
+            'reason': 'first_party_ab_prior_available',
+        }
     return {
         'source': CREATIVE_PRIORS_FILENAME,
         'priors_generated_at': data.get('generated_at'),
         'applied_creative_priors': applied,
+        'decisions': decisions,
     }
 
 def creative_priors_hint(data):

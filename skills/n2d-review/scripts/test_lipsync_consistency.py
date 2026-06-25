@@ -175,3 +175,42 @@ def test_write_score_report_roundtrips(tmp_path):
     path = lc.write_score_report(str(tmp_path), "第1集", res)
     data = json.load(open(path, encoding="utf-8"))
     assert data["infos"] == 1   # 可用且无问题 → 通过证据
+
+
+# ── 过同步上界 advisory（'higher Sync-C = better' 陷阱）──────────────────────────
+def test_oversync_band_pure():
+    assert lc.oversync_band(9.5) == "over_sync"          # 高于 GT 带 → 过同步
+    assert lc.oversync_band(9.0) == "over_sync"          # 含等于上界
+    assert lc.oversync_band(7.5) == "ok"                 # 真人 GT 带内 → 正常
+    assert lc.oversync_band(1.0) == "ok"                 # 低置信不算过同步
+    assert lc.oversync_band(12.0, ceiling=13.0) == "ok"  # 上界可调
+    assert lc.oversync_band("x") == "ok"                 # 脏输入不炸
+
+
+def test_band_rows_flags_oversync_even_when_offset_fine():
+    # offset≈0（同步好）但置信爆表 11 → 旧逻辑判 ok 漏掉；现升 advisory warn 并标 oversync
+    rows = lc._band_rows([{"clip": "Clip_03", "offset_frames": 0, "confidence": 11.0}],
+                         fps=25.0, warn_ms=80.0, block_ms=200.0, conf_floor=2.0)
+    assert len(rows) == 1
+    r = rows[0]
+    assert r["verdict"] == "warn" and r["oversync"] is True
+    assert r["severity_measured"] == "ok"   # 偏移轴仍 ok（过同步与 offset 正交，不污染机器分严重档）
+    assert "过同步" in r["message"]
+
+
+def test_band_rows_no_oversync_when_inconclusive():
+    # 低置信(inconclusive) 时置信不可信 → 不谈过同步（即便数值高也不报）
+    rows = lc._band_rows([{"clip": "Clip_04", "offset_frames": 0, "confidence": 1.0}],
+                         fps=25.0, warn_ms=80.0, block_ms=200.0, conf_floor=2.0)
+    assert len(rows) == 1
+    assert rows[0]["severity_measured"] == "inconclusive" and rows[0]["verdict"] == "ok"
+    assert "oversync" not in rows[0]   # 低置信不标过同步
+
+
+def test_to_score_report_counts_oversync():
+    res = {"available": True, "mode": "external_syncnet", "precision": "full", "shots": [
+        {"clip": "Clip_03", "severity_measured": "ok", "verdict": "warn", "oversync": True, "message": "x"},
+    ]}
+    rep = lc.to_score_report(res)
+    assert rep["metrics"]["oversync"] == 1
+    assert rep["blocks"] == 0 and rep["warnings"] == 0   # 过同步是 advisory，不进机器分严重档

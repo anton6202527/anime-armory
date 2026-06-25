@@ -25,7 +25,8 @@ python3 skills/novel-feedback/scripts/reader_test_plan.py "<作品根>" \
   --source-name "开篇A/B小样本" \
   --scope "opening:1-3" \
   --target-reader "红果爽文读者" \
-  --take "opening-v1" --take "opening-v2"
+  --take "opening-v1" --hypothesis "第1章前300字提前抛羞辱冲突，预期提升完读" \
+  --take "opening-v2" --hypothesis "保留原开头但加强章末钩子，检验追读欲"
 ```
 
 产物：
@@ -33,7 +34,7 @@ python3 skills/novel-feedback/scripts/reader_test_plan.py "<作品根>" \
 - `评分/reader_test_plan.json`
 - `评分/读者测试计划.md`
 
-计划只规定怎么测，不替代真实数据。后续 CSV/JSONL 导入时尽量带 `ab_test_id`、`variant_id`、`take_id`，才能把结果归因到具体稿件版本。
+计划只规定怎么测，不替代真实数据。每个版本必须写清假设、最小样本量和最小效果差；后续 CSV/JSONL 导入时尽量带 `ab_test_id`、`variant_id`、`take_id`，才能把结果归因到具体稿件版本。改稿后必须同范围复测或说明不可比，否则只做方向性解释。
 
 ### 1. 导入真实反馈
 
@@ -73,6 +74,8 @@ python3 skills/novel-feedback/scripts/ingest_reader_events.py "<作品根>" \
 - 单章低完读、弃读高、负面评论集中，只说明“这一章读端有伤口”，不自动证明设定或文学性错误；需要回 `novel-review` / `novel-balance` 定因。
 - 样本量低时报告会标 `low_sample`，不得把小样本波动当硬结论。
 - A/B 只在同一 `ab_test_id` 内比较；`take_id` 用来把结果归因到具体章节稿/开头版本/投放素材，不要混到全书评价里。
+- A/B 完读率差异低于测试计划里的 `completion_rate_delta` 时，不判胜负，记为 `inconclusive`。
+- 改稿后要复测；未复测的“修好了”只能当编辑假设，不能当读者事实。
 
 ## 常见错误
 

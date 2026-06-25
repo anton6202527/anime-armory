@@ -4,10 +4,10 @@
 执行以下操作：
 1. 校验章节正文与状态增量文件都已落盘。
 2. 运行状态账本对账、百科更新、逻辑哨兵、力量体系机检。
-3. 全部硬闸通过后，才更新 _进度.md：将该章的“正文初稿”标记为 ✅。
+3. 全部硬闸通过且状态账本合并后，才更新 _进度.md：将该章的“正文初稿”标记为 ✅。
 
 用法：
-  python3 post_write.py <作品根> --chapter <章号>
+  python3 post_write.py <作品根> --chapter <章号> --conclusion <审稿/state_verify_第NN章.json>
 """
 import os
 import sys
@@ -143,19 +143,22 @@ def main():
         ], check=True)
         merged = True
 
-    # 7. 所有硬闸通过后再更新进度，避免检查失败时留下假阳性。
+    if not merged:
+        print(f"\n✅ {ch_padded} 哨兵已过；但状态账本【尚未合并】，本次不会标记正文初稿 ✅。")
+        if args.no_merge:
+            print("  [mode] --no-merge：仅做自检/审计，按约定不更新 _进度.md。")
+            return
+        print(f"  ⚠️ 未合并账本，后续 review/export 会报 STATE-LEDGER-MISSING 阻断。")
+        print(f"  [下一步] 把上面审计 Prompt 的核对结论存成 JSON（至少 {{\"chapter\":{ch_num},\"status\":\"ok\",\"notes\":\"...\"}}，hash 可不填），然后重跑：")
+        print(f"    python3 skills/novel/scripts/post_write.py \"{root}\" --chapter {ch} --conclusion <结论.json>")
+        sys.exit(2)
+
+    # 7. 所有硬闸通过且账本合并后再更新进度，避免检查失败或未合并账本时留下假阳性。
     print(f"🔄 正在更新进度：{ch_padded} 正文初稿 ✅")
     prog_script = os.path.join(_HERE, "..", "progress.py")
     subprocess.run([sys.executable, prog_script, "set", root, ch_padded, "正文初稿", "✅"], check=True)
 
-    if merged:
-        print(f"\n✅ 任务完成！{ch_padded} 状态账本已合并，已准备好进入 Review 阶段。")
-    else:
-        print(f"\n✅ {ch_padded} 哨兵已过、正文初稿 ✅；但状态账本【尚未合并】。")
-        print(f"  ⚠️ 未合并账本，后续 review/export 会报 STATE-LEDGER-MISSING 阻断。")
-        print(f"  [下一步] 把上面审计 Prompt 的核对结论存成 JSON（至少 {{\"chapter\":{ch_num},\"status\":\"ok\",\"notes\":\"...\"}}，hash 可不填），然后任选其一：")
-        print(f"    · 重跑本脚本带 --conclusion：python3 skills/novel/scripts/post_write.py \"{root}\" --chapter {ch} --conclusion <结论.json>")
-        print(f"    · 或直接合并：python3 skills/novel-craft/scripts/reconcile_ledger.py \"{root}\" --chapter {ch_num} --merge --verified <结论.json> --stamp-hashes")
+    print(f"\n✅ 任务完成！{ch_padded} 状态账本已合并，已准备好进入 Review 阶段。")
 
 if __name__ == "__main__":
     main()

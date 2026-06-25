@@ -676,6 +676,33 @@ def test_top_redraw_leak_pure():
     assert dashboard.top_redraw_leak({}) == []
 
 
+def test_anchor_plan_budget_reads_sidecar(tmp_path: Path) -> None:
+    prod = tmp_path / "生产数据"
+    prod.mkdir()
+    (prod / "anchor_plan_第2集.json").write_text(json.dumps({
+        "kind": "n2d_anchor_plan",
+        "episode": "第2集",
+        "summary": {
+            "clips_planned": 7,
+            "total_anchors": 9,
+            "added_images": 9,
+            "added_video_segments": 3,
+        },
+    }, ensure_ascii=False), encoding="utf-8")
+
+    out = dashboard.anchor_plan_budget(str(tmp_path), "第2集")
+
+    assert out["available"] is True
+    assert out["added_images"] == 9
+    assert out["added_video_segments"] == 3
+
+
+def test_anchor_plan_budget_missing_warns(tmp_path: Path) -> None:
+    out = dashboard.anchor_plan_budget(str(tmp_path), "第2集")
+    assert out["available"] is False
+    assert "缺 anchor_plan" in out["note"]
+
+
 def test_cmd_forecast_end_to_end(tmp_path, capsys):
     root = str(tmp_path)
     # 历史：第1集 已完成 1 分钟、花 12 CNY → ¥12/min；外加一次崩脸重抽
@@ -699,6 +726,7 @@ def test_cmd_forecast_end_to_end(tmp_path, capsys):
     assert out["planned_min"] == 2.0
     assert out["cost_per_finished_min"] == {"CNY": 12.0}
     assert out["forecast_cost"] == {"CNY": 24.0}            # 12 ¥/min × 2 min
+    assert out["anchor_plan"]["available"] is False
     assert out["budget"]["over_budget"] is False
     assert out["budget"]["more_episodes_affordable"] == 4   # 100 // 24
     assert any(x["category"] for x in out["redraw_leak_top"])  # 重抽漏点滚出来了

@@ -62,6 +62,21 @@ description: 小说质检 + 流程自审（novel-* 家族的 QA 环节，不写�
 
 > **修法回哪个 skill**：每条阻断/建议级修法都指明回源头重跑——OOC/设定矛盾→回 `novel-rewrite`/`novel-create` 改设定圣经再回扫；锚点漂移→对 `novel-spinoff` 锚点表；节奏塌/钩子弱→回写章纲（`novel-craft/references/outline.md`）；原文照搬→回对应派生 skill 重写该章。审已写章节、**未到的阶段不当问题报**（先读 `_进度.md`）。
 
+### 审稿模型分离（2026-06-25 P2-⑪）
+
+**为什么要分离**：行业最佳实践（autonovel/Novel-OS）一致指出同一模型既写作又审稿会产生"self-congratulation bias"——AI 对自己生成的文本更宽容，漏报率显著高于不同模型交叉验证。
+
+**推荐配置**：
+- **写作（生成）**：Claude Opus / Sonnet（主模型）
+- **审稿（判断）**：DeepSeek（独立 reviewer）——已有接入 `claude-ds` / `claude-ds-think`，Key 在 keychain；DeepSeek `/anthropic` 是原生协议无需额外 router。详见 `CLAUDE.md` → [[deepseek-fallback-claude-code]]。
+- **模拟试读（novel-simulate）**：DeepSeek（与写作模型不同，提供真实的"他者视角"）
+- **评分（novel-score 维度判断）**：建议也走 DeepSeek，尤其是 `prose` 维度（AI 对自己写的 prose 最容易给高分）
+- **机检（确定性）**：不涉及 LLM，无需分离（`mechanical_check.py` / `consistency_audit.py` / `arc_gate.py` 等纯脚本）
+
+**使用方式**：审稿时用 `/model claude-ds` 切换到 DeepSeek，再跑 review 的人判部分。或把 review 的人判 prompt 发到 DeepSeek 线程。理想流程：机检（本地脚本）→ 人判（DeepSeek）→ 汇总（本地 `build_review_report.py`）→ 修正（切成 Claude 写）。
+
+如果只有一个模型可用：至少用高 temperature（0.7-0.9）跑 review、低 temperature（0.2-0.4）跑写作——温差本身能提供部分交叉验证效果。
+
 ---
 
 # 模式②：流程自审（让写小说产线自我优化）

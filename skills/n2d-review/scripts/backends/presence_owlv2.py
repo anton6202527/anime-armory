@@ -17,7 +17,7 @@ from __future__ import annotations
 import json
 import os
 import sys
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 MODEL = os.environ.get("N2D_OWLV2_MODEL", "google/owlv2-base-patch16-ensemble")
 THRESHOLD = float(os.environ.get("N2D_OWLV2_THRESHOLD", "0.10"))
@@ -44,6 +44,33 @@ def _max_scores(proc, model, device, torch, image, phrases: List[str]) -> Dict[s
         if score > best[p]:
             best[p] = float(score)
     return best
+
+
+def asset_verdict(asset: Dict[str, Any], conf: float, threshold: float) -> Dict[str, Any]:
+    """单个 expected_asset 的判定 → finding 或 None。纯函数·可测。
+
+    向后兼容：默认 `expect="present"`（旧 manifest 无此字段 → 行为不变）：在场分 < 阈值 = 缺席 block。
+    新增 `expect="absent"`（状态像素契约用）：在场分 ≥ 阈值 = 此处不该出现却出现 = warn（提前泄露疑似）。
+    可选透传字段 char/state/kind（域内消费端用），通用 object/marks manifest 不带 → 不影响。"""
+    expect = str(asset.get("expect") or "present")
+    phrase = str(asset.get("phrase") or asset.get("asset"))
+    present = conf >= threshold
+    f: Optional[Dict[str, Any]] = None
+    if expect == "absent":
+        if present:
+            f = {"asset": asset.get("asset"), "expected": False, "present": True,
+                 "severity": "warn", "confidence": conf,
+                 "message": f"OWLv2 在帧中检出「{phrase}」(max={conf} ≥ {threshold})，但此处不应出现"}
+    else:
+        if not present:
+            f = {"asset": asset.get("asset"), "expected": True, "present": False,
+                 "severity": "block", "confidence": conf,
+                 "message": f"OWLv2 未在帧中检出「{phrase}」(max={conf} < {threshold})"}
+    if f is not None:
+        for k in ("char", "state", "kind"):
+            if asset.get(k) is not None:
+                f[k] = asset[k]
+    return f
 
 
 def main(argv: List[str]) -> int:
@@ -86,13 +113,10 @@ def main(argv: List[str]) -> int:
         for a in assets:
             phrase = str(a.get("phrase") or a.get("asset"))
             conf = round(scores.get(phrase, 0.0), 4)
-            if conf < THRESHOLD:
-                findings.append({
-                    "shot": probe.get("shot"), "asset": a.get("asset"),
-                    "expected": True, "present": False, "severity": "block",
-                    "confidence": conf,
-                    "message": f"OWLv2 未在帧中检出「{phrase}」(max={conf} < {THRESHOLD})",
-                })
+            f = asset_verdict(a, conf, THRESHOLD)
+            if f is not None:
+                f["shot"] = probe.get("shot")
+                findings.append(f)
     manifest["findings"] = findings
     manifest["detector"] = f"owlv2:{MODEL}"
     manifest["detector_threshold"] = THRESHOLD

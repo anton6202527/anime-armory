@@ -288,6 +288,7 @@ N2D_LIB_FILE_STAGE_HINTS: Tuple[Tuple[str, Tuple[str, ...]], ...] = (
         "script_stage2",
         (
             "_lib/n2d_platform_profiles.py",
+            "_lib/n2d_spectacle.py",
         ),
     ),
     (
@@ -322,6 +323,8 @@ N2D_LIB_OBSERVE_ONLY_TOKENS: Tuple[str, ...] = (
     "_lib/freshness.py",
     "_lib/refresh.py",
     "_lib/n2d_contract_diff.py",
+    "_lib/n2d_color.py",
+    "_lib/style_policy.py",
     # 跨集视觉契约一致性是 warn-only 审计（建于 n2d_contract_diff 之上），不产物料：
     # 改了只需重跑 gate/review 刷新告警，不触发任何阶段重制。
     "_lib/n2d_cross_episode.py",

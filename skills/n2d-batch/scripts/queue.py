@@ -14,6 +14,7 @@ import datetime as dt
 import glob
 import json
 import os
+import re
 import socket
 import sys
 import time
@@ -36,6 +37,7 @@ from n2d_contract import (  # noqa: E402  生产数据目录 / kind 单一真值
     ASSET_RERUN_PLAN_KIND,
     BATCH_QUEUE_KIND,
     CONSISTENCY_FINDINGS_KIND,
+    CONSISTENCY_LEDGER_KIND,
     PRODUCTION_DIR,
     finding_dim_key,
     finding_fingerprint,
@@ -454,6 +456,9 @@ def _fallback_shots_from_finding(finding: Dict[str, Any]) -> List[str]:
     loc = str(finding.get("loc") or "").strip()
     if loc.startswith(("Clip_", "Clip ", "镜头")):
         return [loc]
+    m = re.search(r"(?:Clip|clip|镜头)[_\s-]?(\d+)", loc)
+    if m:
+        return [f"Clip_{int(m.group(1)):02d}"]
     return []
 
 
@@ -578,6 +583,158 @@ def tasks_from_consistency_findings(
     return dedupe_task_ids(tasks)
 
 
+LEDGER_TASK_SEVERITIES = {"block", "high"}
+
+
+def _ledger_root_severity(cause: Dict[str, Any]) -> str:
+    return str(cause.get("severity") or cause.get("overall") or cause.get("sev") or "").strip().lower()
+
+
+def _ledger_root_stage(cause: Dict[str, Any]) -> str:
+    for key in ("suggested_return_to_stage", "return_to_stage", "rerun_from"):
+        value = str(cause.get(key) or "").strip()
+        if value:
+            return value
+    for symptom in cause.get("symptoms") or []:
+        if isinstance(symptom, dict):
+            value = str(symptom.get("return_to_stage") or symptom.get("rerun_from") or "").strip()
+            if value:
+                return value
+    return "image"
+
+
+def _ledger_root_dimensions(cause: Dict[str, Any]) -> List[str]:
+    dims = _string_list(cause.get("dimensions"))
+    if not dims:
+        dims = _string_list(cause.get("dim_keys"))
+    if not dims:
+        dim = str(cause.get("dimension") or cause.get("dim") or "").strip()
+        if dim:
+            dims = [dim]
+    for symptom in cause.get("symptoms") or []:
+        if not isinstance(symptom, dict):
+            continue
+        dim = finding_dim_key(symptom)
+        if dim:
+            dims.append(dim)
+    return _unique(dims or ["一致性"])
+
+
+def _ledger_root_shots(cause: Dict[str, Any]) -> List[str]:
+    shots = _string_list(cause.get("affected_shots"))
+    for symptom in cause.get("symptoms") or []:
+        if isinstance(symptom, dict):
+            shots.extend(_fallback_shots_from_finding(symptom))
+    return _unique(shots)
+
+
+def _ledger_root_artifacts(cause: Dict[str, Any]) -> List[str]:
+    artifacts = _string_list(cause.get("affected_artifacts"))
+    artifacts.extend(_string_list(cause.get("sources")))
+    for symptom in cause.get("symptoms") or []:
+        if not isinstance(symptom, dict):
+            continue
+        artifacts.extend(_string_list(symptom.get("affected_artifacts")))
+        loc = str(symptom.get("loc") or "").strip()
+        if "/" in loc or "." in loc:
+            artifacts.append(loc)
+        source = symptom.get("source")
+        if isinstance(source, str) and source.strip():
+            artifacts.append(source)
+    return _unique(artifacts)
+
+
+def _ledger_root_scope(cause: Dict[str, Any], dims: Sequence[str], shots: Sequence[str]) -> str:
+    parts: List[str] = []
+    anchor = str(cause.get("anchor") or cause.get("entity") or "").strip()
+    if anchor:
+        parts.append(f"根因锚点：{anchor}")
+    if dims:
+        parts.append("维度：" + "、".join(_unique(dims)))
+    message = str(cause.get("message") or cause.get("summary") or "").strip()
+    if message:
+        parts.append(message)
+    for symptom in cause.get("symptoms") or []:
+        if not isinstance(symptom, dict):
+            continue
+        msg = str(symptom.get("text") or symptom.get("message") or symptom.get("msg") or "").strip()
+        if msg:
+            parts.append(msg)
+    if shots:
+        parts.append("定位镜头：" + "、".join(shots))
+    return "；".join(_unique(parts))
+
+
+def _ledger_fingerprints(ep: str, stage: str, dims: Sequence[str], cause: Dict[str, Any],
+                         *, coarse: bool = False) -> List[str]:
+    anchor = str(cause.get("anchor") or cause.get("entity") or "").strip()
+    shots = _ledger_root_shots(cause)
+    raw_scope = {"affected_shots": shots, "loc": anchor}
+    out: List[str] = []
+    for dim in dims:
+        if coarse:
+            out.append(finding_fingerprint(ep, stage, dim))
+        else:
+            out.extend(finding_fingerprints(ep, stage, dim, raw_scope))
+    return _unique(out)
+
+
+def tasks_from_consistency_ledger(
+    root: str,
+    ledger: Dict[str, Any],
+    *,
+    cost_estimates: Dict[str, Dict[str, Any]],
+    max_retries: int,
+    episodes: Optional[Set[str]] = None,
+) -> List[Dict[str, Any]]:
+    """读 consistency_ledger root_causes → 返工队列任务。
+
+    ledger 是验收唯一交付面；这里消费根因而非零散 symptoms，避免同一角色/资产根因被拆成多条
+    互相冲突的返工。只把 block/high 根因入队；warn 仍留作人工/后续观察。
+    """
+    if not isinstance(ledger, dict) or ledger.get("kind") != CONSISTENCY_LEDGER_KIND:
+        raise ValueError(f"not a consistency ledger (expect kind={CONSISTENCY_LEDGER_KIND})")
+    default_episode = str(ledger.get("episode") or "").strip()
+    tasks: List[Dict[str, Any]] = []
+    for cause in ledger.get("root_causes") or []:
+        if not isinstance(cause, dict):
+            continue
+        if _ledger_root_severity(cause) not in LEDGER_TASK_SEVERITIES:
+            continue
+        ep_pair = _episode_from_item(cause, default_episode)
+        if ep_pair is None:
+            continue
+        ep_raw, ep = ep_pair
+        if not _episode_selected(ep_raw, ep, episodes):
+            continue
+        stage = _ledger_root_stage(cause)
+        try:
+            spec = find_stage(stage)
+        except ValueError:
+            stage = "image"
+            spec = find_stage(stage)
+        dims = _ledger_root_dimensions(cause)
+        shots = _ledger_root_shots(cause)
+        artifacts = _ledger_root_artifacts(cause)
+        tasks.append(
+            task_from_spec(
+                root,
+                ep,
+                spec,
+                reason="rerun",
+                priority=len(tasks) + 1,
+                cost_estimates=cost_estimates,
+                max_retries=max_retries,
+                rerun_scope=_ledger_root_scope(cause, dims, shots),
+                affected_artifacts=artifacts,
+                affected_shots=shots,
+                fingerprints=_ledger_fingerprints(ep, stage, dims, cause),
+                coarse_fingerprints=_ledger_fingerprints(ep, stage, dims, cause, coarse=True),
+            )
+        )
+    return dedupe_task_ids(tasks)
+
+
 def report_active_fingerprints(report: Dict[str, Any], *, coarse: bool = False) -> Set[str]:
     """一份 consistency_findings 报告 → 当前仍存在的指纹集合。
 
@@ -625,6 +782,25 @@ def report_active_fingerprints(report: Dict[str, Any], *, coarse: bool = False) 
             out.add(finding_fingerprint(ep_pair[1], stage, dim))
         else:
             out.update(finding_fingerprints(ep_pair[1], stage, dim, finding))
+    return out
+
+
+def ledger_active_fingerprints(ledger: Dict[str, Any], *, coarse: bool = False) -> Set[str]:
+    if not isinstance(ledger, dict):
+        return set()
+    ep_default = str(ledger.get("episode") or "").strip()
+    out: Set[str] = set()
+    for cause in ledger.get("root_causes") or []:
+        if not isinstance(cause, dict):
+            continue
+        if _ledger_root_severity(cause) not in LEDGER_TASK_SEVERITIES:
+            continue
+        ep_pair = _episode_from_item(cause, ep_default)
+        if ep_pair is None:
+            continue
+        stage = _ledger_root_stage(cause)
+        dims = _ledger_root_dimensions(cause)
+        out.update(_ledger_fingerprints(ep_pair[1], stage, dims, cause, coarse=coarse))
     return out
 
 
@@ -690,7 +866,7 @@ def collect_active_fingerprints(
     当前仍存在的一致性问题指纹集合。复检的"现状"输入。coarse=True 产 (集×阶段×维度) 粗指纹。"""
     out: Set[str] = set()
     pdir = production_dir(root)
-    for pattern in ("consistency_findings_*.json", "review_ui_findings_*.json", "gate_findings_*.json"):
+    for pattern in ("consistency_findings_*.json", "review_ui_findings_*.json", "gate_findings_*.json", "consistency_ledger_*.json"):
         for path in glob.glob(os.path.join(pdir, pattern)):
             try:
                 data = json.load(open(path, encoding="utf-8"))
@@ -700,7 +876,10 @@ def collect_active_fingerprints(
                 continue
             if episodes and str(data.get("episode") or "").strip() not in episodes:
                 continue
-            out |= report_active_fingerprints(data, coarse=coarse)
+            if data.get("kind") == CONSISTENCY_LEDGER_KIND:
+                out |= ledger_active_fingerprints(data, coarse=coarse)
+            else:
+                out |= report_active_fingerprints(data, coarse=coarse)
     return out
 
 
@@ -1224,6 +1403,16 @@ def cmd_plan(ns: argparse.Namespace) -> int:
             max_retries=ns.max_retries,
             episodes=selected,
         )
+    elif ns.from_consistency_ledger:
+        with open(ns.from_consistency_ledger, encoding="utf-8") as fh:
+            ledger_report = json.load(fh)
+        tasks = tasks_from_consistency_ledger(
+            root,
+            ledger_report,
+            cost_estimates=estimates,
+            max_retries=ns.max_retries,
+            episodes=selected,
+        )
     elif ns.rerun_from:
         if not selected:
             raise SystemExit("--rerun-from requires --episodes")
@@ -1333,6 +1522,8 @@ def parser() -> argparse.ArgumentParser:
                       help="读 n2d-image asset_impact.py --output-batch-tasks 的 JSON（kind=n2d_asset_rerun_plan），直接建受影响重跑任务")
     plan.add_argument("--from-consistency-findings",
                       help="读 n2d-review consistency_findings_*.json（kind=n2d_consistency_findings），直接建审查返工任务")
+    plan.add_argument("--from-consistency-ledger",
+                      help="读 n2d-review consistency_ledger_*.json（kind=n2d_consistency_ledger），按 root_causes 直接建审查返工任务")
     plan.add_argument("--scope", help="human-readable rerun scope")
     plan.add_argument("--affected-artifact", action="append", default=[])
     plan.add_argument("--affected-shot", action="append", default=[])

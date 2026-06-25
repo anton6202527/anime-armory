@@ -45,6 +45,34 @@ def _write_project(root: Path) -> None:
     }, ensure_ascii=False), encoding="utf-8")
 
 
+def test_clip_id_normalizes_author_ids_to_clip_nn():
+    # 作者自定 id 全部归一化成 Clip_NN（与 router.make_clip_id / image runner 落盘命名同口径）
+    assert vpp.clip_id({"id": "镜头3"}, 0) == "Clip_03"
+    assert vpp.clip_id({"id": "clip#5"}, 0) == "Clip_05"
+    assert vpp.clip_id({"id": "Clip 7"}, 0) == "Clip_07"
+    assert vpp.clip_id({"clip_id": "Clip_02"}, 0) == "Clip_02"
+    assert vpp.clip_id({"label": "无数字"}, 4) == "Clip_04"  # 无数字 → 退回序号
+
+
+def test_motion_plan_joins_route_when_storyboard_id_is_raw(tmp_path: Path) -> None:
+    # 真凶回归：storyboard 用原始 id「镜头1」，router 路由键已归一化「Clip_01」——
+    # 归一化后 join 命中，高动镜拿到 backend/shot_type（修复前 route={} 静默丢路由）。
+    ep = tmp_path / "脚本" / "第1集"; ep.mkdir(parents=True)
+    (ep / "storyboard.json").write_text(json.dumps({
+        "clips": [{"id": "镜头1", "description": "CHAR_01 打斗冲刺", "character_ids": ["CHAR_01"]}]
+    }, ensure_ascii=False), encoding="utf-8")
+    rd = tmp_path / "出视频" / "第1集" / "prompt"; rd.mkdir(parents=True)
+    (rd / "video_model_routes.json").write_text(json.dumps({
+        "routes": [{"clip_id": "Clip_01", "primary_backend": "kling",
+                    "shot_type": "fight_exchange", "risk_flags": ["contact_motion"]}]
+    }, ensure_ascii=False), encoding="utf-8")
+    clips = vpp.storyboard(tmp_path, "第1集")
+    rows = vpp.routes(tmp_path, "第1集")
+    plan = vpp.motion_sample_plan(tmp_path, "第1集", clips, rows)
+    assert plan and plan[0]["clip"] == "Clip_01"
+    assert plan[0]["route_backend"] == "kling" and plan[0]["shot_type"] == "fight_exchange"
+
+
 def test_video_production_pack_builds_anchor_motion_and_route_scores(tmp_path: Path) -> None:
     _write_project(tmp_path)
 

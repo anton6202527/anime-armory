@@ -129,3 +129,48 @@ def test_parse_capability_overrides_coerces_values():
     assert out["supports_last_frame"] is False
     assert out["max_clip_seconds"] == 12
     assert out["motion_control_capabilities"] == ["pose", "depth"]
+
+
+# ── 付费出视频前后端连通性探针（与 image_backends.probe_backend 同状态语义）──
+def test_probe_video_unknown_when_no_health_url():
+    # 默认无健康端点 url → unknown（gate 降级 WARN，graceful，不假 BLOCK）
+    status, _ = adapter.probe_video_backend("即梦/Dreamina", env={})
+    assert status == "unknown"
+
+
+def test_probe_video_skip_flag_is_unknown():
+    status, detail = adapter.probe_video_backend("即梦/Dreamina", env={"N2D_SKIP_BACKEND_PROBE": "1"})
+    assert status == "unknown" and "N2D_SKIP_BACKEND_PROBE" in detail
+
+
+def test_probe_video_manual_or_off_is_unknown():
+    assert adapter.probe_video_backend("人工", env={})[0] == "unknown"
+    assert adapter.probe_video_backend("", env={})[0] == "unknown"
+
+
+def test_probe_video_unrecognized_channel_is_unknown_not_down():
+    # 不认识的渠道=探不了≠不可达：必须 unknown，不能假 BLOCK
+    assert adapter.probe_video_backend("某不存在后端", env={})[0] == "unknown"
+
+
+def test_probe_video_health_url_502_is_down():
+    # 导出健康端点 + 探针返回 502 → down（gate BLOCK）
+    status, detail = adapter.probe_video_backend(
+        "即梦/Dreamina",
+        env={"N2D_VIDEO_BACKEND_BASE_URL": "http://10.0.0.1:9"},
+        http_runner=lambda url, timeout: ("down", "HTTP 502"))
+    assert status == "down" and "502" in detail
+
+
+def test_probe_video_per_backend_url_overrides_generic():
+    # 后端专属 *_BASE_URL 优先于通用 N2D_VIDEO_BACKEND_BASE_URL
+    seen = {}
+    def runner(url, timeout):
+        seen["url"] = url
+        return ("ok", "")
+    status, _ = adapter.probe_video_backend(
+        "kling",
+        env={"N2D_VIDEO_KLING_BASE_URL": "http://kling.internal",
+             "N2D_VIDEO_BACKEND_BASE_URL": "http://generic.internal"},
+        http_runner=runner)
+    assert status == "ok" and seen["url"].startswith("http://kling.internal")

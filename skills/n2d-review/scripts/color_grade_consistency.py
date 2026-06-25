@@ -25,10 +25,18 @@ import argparse
 import json
 import math
 import os
+import re
 import sys
+from collections import Counter
 from typing import Dict, List, Optional, Sequence, Tuple
 
 import scene_consistency as scn  # 复用 _scene_of_shot（镜头→场景映射）+ _probe_pillow
+import av_emotion_consistency as _ave  # 复用 voiceover 逐镜情绪解析（纯文本·不引 insightface）
+
+_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
+if _COMMON not in sys.path:
+    sys.path.insert(0, _COMMON)
+from n2d_color import grade_proxy  # noqa: E402  暖冷/品绿度量单一真值源（与 image tone_light 共用同一公式）
 
 KIND = "n2d_color_grade_consistency"
 VERSION = 1
@@ -39,13 +47,40 @@ MIN_GROUP = 3
 
 
 # ---------- 纯数学（无依赖 · pytest 覆盖） ----------
+# grade_proxy（暖冷 log(R/B)、品绿 log(G/sqrt(R·B))）现由 n2d_color 单一真值源提供（见上 import）——
+# 与 image 侧 tone_light_contract 共用同一公式，避免「同一个『暖冷』两套不可比度量」。
 
-def grade_proxy(mean_r: float, mean_g: float, mean_b: float) -> Tuple[float, float]:
-    """通道均值 → (暖冷 log(R/B), 品绿 log(G/sqrt(R·B)))。+1 平滑避免 log(0)。纯函数·可测。"""
-    r, g, b = mean_r + 1.0, mean_g + 1.0, mean_b + 1.0
-    warmth = math.log(r / b)
-    tint = math.log(g / math.sqrt(r * b))
-    return warmth, tint
+
+_CLIP_RE = re.compile(r"(?:Clip|镜头?|片段|shot)\s*[_\- ]?\s*0*([0-9]+)", re.I)
+
+
+def _png_clip_num(value: object) -> Optional[int]:
+    # 只认 Clip/镜/shot 前缀编号（voiceover 情绪键固定 "Clip N"）；非 Clip 命名的 png 不强行抽数字，
+    # 避免 "S1_01" 被误读成 clip 1 → 错配情绪。解析不出→None→不豁免（保守）。
+    m = _CLIP_RE.search(str(value or ""))
+    return int(m.group(1)) if m else None
+
+
+def _modal_emotion(emotions: Sequence[Optional[str]]) -> Optional[str]:
+    c = Counter(e for e in emotions if e)
+    return c.most_common(1)[0][0] if c else None
+
+
+def motivated_grade_shift(shot_emotion: Optional[str], scene_modal_emotion: Optional[str]) -> bool:
+    """本镜情绪 beat ≠ 场景主情绪 → 调色偏离属「随情绪有意调色」(warm=亲密/cold=紧张)，非穿帮。
+    两者皆有且不等才算（缺标注→不豁免，保守）。纯函数·可测——根治 GRADE1 误报压平戏剧调色。"""
+    a = str(shot_emotion or "").strip().lower()
+    b = str(scene_modal_emotion or "").strip().lower()
+    return bool(a and b and a != b)
+
+
+def _clip_emotions(root: str, ep: str) -> Dict[int, str]:
+    out: Dict[int, str] = {}
+    for k, v in (_ave._parse_voiceover_emotions(root, ep) or {}).items():
+        n = _png_clip_num(k)
+        if n is not None and v:
+            out[n] = str(v).strip().lower()
+    return out
 
 
 def median(xs: Sequence[float]) -> float:
@@ -90,6 +125,7 @@ def analyze(root: str, ep: str, *, warmth_margin: float = DEFAULT_WARMTH_MARGIN,
         res["notes"].append("色温/调色一致性机检已跳过（未装 Pillow）——调色横跳暂由人判并排读图。")
         return res
     smap = scn._scene_of_shot(root, ep)
+    clip_emotions = _clip_emotions(root, ep)  # 逐镜情绪 beat（voiceover 标注）；空→不豁免（保守=现状）
     groups: Dict[str, List[str]] = {}
     for png, scene in smap.items():
         if os.path.exists(os.path.join(root, "出图", ep, png)):
@@ -102,8 +138,10 @@ def analyze(root: str, ep: str, *, warmth_margin: float = DEFAULT_WARMTH_MARGIN,
             continue
         warmth_med = median([v[0] for v in proxies.values()])
         tint_med = median([v[1] for v in proxies.values()])
+        scene_modal = _modal_emotion([clip_emotions.get(_png_clip_num(p)) for p in proxies])
         res["groups"][scene] = {"shots": len(proxies),
-                                "warmth_median": round(warmth_med, 3), "tint_median": round(tint_med, 3)}
+                                "warmth_median": round(warmth_med, 3), "tint_median": round(tint_med, 3),
+                                "modal_emotion": scene_modal}
         for p, (w, t) in sorted(proxies.items()):
             wdev, tdev = abs(w - warmth_med), abs(t - tint_med)
             verdict = "warn" if (wdev > warmth_margin or tdev > tint_margin) else "ok"
@@ -115,9 +153,20 @@ def analyze(root: str, ep: str, *, warmth_margin: float = DEFAULT_WARMTH_MARGIN,
                     bits.append("偏暖(琥珀)" if w > warmth_med else "偏冷(蓝)")
                 if tdev > tint_margin:
                     bits.append("偏绿" if t > tint_med else "偏品红")
-                shot["message"] = (f"{p}：色温/调色与同场景其它镜不一致——本镜{'、'.join(bits)}"
-                                   f"（暖冷 {round(w,3)} vs 场景中位 {round(warmth_med,3)}）；"
-                                   f"同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。")
+                emo = clip_emotions.get(_png_clip_num(p))
+                if motivated_grade_shift(emo, scene_modal):
+                    # 本镜情绪 beat ≠ 场景主情绪：调色随情绪变属预期，warn 降 ok（留痕，不再压平戏剧调色）
+                    shot["abs_verdict"] = "warn"
+                    shot["grade_shift_motivated"] = emo
+                    shot["message"] = (f"{p}：色温/调色偏离同场景中位（{'、'.join(bits)}），但本镜情绪『{emo}』"
+                                       f"≠场景主情绪『{scene_modal}』——调色随情绪 beat 变化属预期(暖=亲密/冷=紧张)，"
+                                       f"已降为 info(ok)，人核对是否过度。")
+                    verdict = "ok"
+                    shot["verdict"] = "ok"
+                else:
+                    shot["message"] = (f"{p}：色温/调色与同场景其它镜不一致——本镜{'、'.join(bits)}"
+                                       f"（暖冷 {round(w,3)} vs 场景中位 {round(warmth_med,3)}）；"
+                                       f"同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。")
             res["shots"].append(shot)
             res["verdicts"].append(verdict)
     if not res["shots"]:

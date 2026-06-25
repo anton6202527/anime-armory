@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import datetime as dt
 import importlib.util
+import json
 import sys
 from pathlib import Path
 
@@ -89,6 +90,8 @@ def test_refresh_evidence_status_lifecycle(tmp_path):
         str(tmp_path),
         "Codex",
         sources=["https://platform.openai.com/docs/guides/image-generation"],
+        source_urls=["https://platform.openai.com/docs/guides/image-generation"],
+        evidence_kind="official_docs",
         note="checked official guide and local CLI help",
         today="2026-06-20",
     )
@@ -96,7 +99,42 @@ def test_refresh_evidence_status_lifecycle(tmp_path):
     fresh = adapter.refresh_evidence_status(str(tmp_path), "Codex", today=dt.date(2026, 6, 20))
     stale = adapter.refresh_evidence_status(str(tmp_path), "Codex", today=dt.date(2026, 6, 21))
     assert fresh["status"] == "fresh"
+    assert fresh["capability_assertions"]["supports_image_reference"]["value"] is True
+    assert fresh["capability_assertions"]["supports_image_reference"]["evidence_kind"] == "official_docs"
     assert stale["status"] == "stale"
+
+
+def test_refresh_evidence_requires_structured_capability_assertions(tmp_path):
+    path = adapter.refresh_evidence_path(str(tmp_path), "Codex")
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps({
+        "kind": "n2d_image_backend_refresh_evidence",
+        "backend": "codex",
+        "verified_at": "2026-06-20",
+        "sources": ["official docs"],
+        "note": "old freeform evidence only",
+    }, ensure_ascii=False), encoding="utf-8")
+
+    status = adapter.refresh_evidence_status(str(tmp_path), "Codex", today=dt.date(2026, 6, 20))
+
+    assert status["status"] == "missing_capability_assertions"
+
+
+def test_refresh_evidence_rejects_bare_capability_values(tmp_path):
+    path = adapter.refresh_evidence_path(str(tmp_path), "Codex")
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps({
+        "kind": "n2d_image_backend_refresh_evidence",
+        "backend": "codex",
+        "verified_at": "2026-06-20",
+        "sources": ["official docs"],
+        "capability_assertions": {"supports_image_reference": True},
+        "note": "old bare capability values",
+    }, ensure_ascii=False), encoding="utf-8")
+
+    status = adapter.refresh_evidence_status(str(tmp_path), "Codex", today=dt.date(2026, 6, 20))
+
+    assert status["status"] == "missing_capability_evidence"
 
 
 def test_sora_cameo_forbids_face_upload_and_requires_authorization():

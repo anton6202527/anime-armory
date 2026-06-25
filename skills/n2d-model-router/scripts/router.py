@@ -32,6 +32,8 @@ from n2d_contract import (  # noqa: E402  与 gate 共用的单一真值源
     infer_spectacle_type,
     is_native_av_mode,                   # 原生音画判定（与 n2d_settings/gate 同源）
     motion_control_inputs_for_spectacle,
+    policy_lattice_document,
+    route_policy_resolution,
 )
 from n2d_platform_profiles import (  # noqa: E402  视频后端档案单一真值源
     LIPSYNC_AUDIO_REF_BACKENDS,
@@ -507,6 +509,32 @@ def clip_has_named_characters(clip: Mapping[str, Any]) -> bool:
     return _has_any(text, ("角色", "人物", "主角", "脸", "发型", "服装", "character", "face"))
 
 
+def t2v_action_experimental_enabled(raw: object) -> bool:
+    """T2V action channel is an experimental opt-in, not the old broad `开启` switch."""
+    value = str(raw or "").strip().lower()
+    return value in {"实验开启", "experimental", "experiment", "experimental_on", "t2v_experimental"}
+
+
+def clip_t2v_identity_reference_plan(clip: Mapping[str, Any]) -> Optional[Mapping[str, Any]]:
+    """Return the explicit reference/identity fallback plan for named-character T2V."""
+    for key in ("t2v_identity_reference_plan", "t2v_reference_plan"):
+        plan = clip.get(key)
+        if isinstance(plan, Mapping) and plan:
+            return plan
+    tc = clip.get("template_contract")
+    if isinstance(tc, Mapping):
+        for key in ("t2v_identity_reference_plan", "t2v_reference_plan"):
+            plan = tc.get(key)
+            if isinstance(plan, Mapping) and plan:
+                return plan
+    return None
+
+
+def clip_has_t2v_identity_reference_plan(clip: Mapping[str, Any]) -> bool:
+    """A named-character T2V clip needs an explicit reference/identity fallback plan."""
+    return clip_t2v_identity_reference_plan(clip) is not None
+
+
 def clip_has_mouth_visible(clip: Mapping[str, Any]) -> bool:
     text = _clip_text(clip)
     return _has_any(text, ("口型", "嘴", "说话", "台词", "正脸", "mouth", "lip-sync", "speaking", "dialogue"))
@@ -740,6 +768,8 @@ def execution_recipe_for_route(
     ]
     motion_ref = entry.get("motion_reference") if isinstance(entry.get("motion_reference"), Mapping) else {}
     max_reference_images = int(frame_control.get("max_reference_images") or 0)
+    mode = str(entry.get("mode") or "").strip().lower()
+    consumes_timeline_frames = mode not in {"text2video", "t2v"}
     recipe = {
         "backend": backend,
         "execution_backend": anchor.get("execution_backend") or backend,
@@ -747,10 +777,10 @@ def execution_recipe_for_route(
         "quality_tier": entry.get("quality_tier"),
         "urgency_tier": entry.get("urgency_tier"),
         "frame_inputs": {
-            "first_frame": True,
-            "last_frame": bool(anchor.get("need_end") or frame_control.get("supports_last_frame")),
-            "mid_anchors": int(anchor.get("anchor_count") or 0),
-            "consumption_mode": anchor.get("consumption_mode") or "first_frame",
+            "first_frame": bool(consumes_timeline_frames),
+            "last_frame": bool(consumes_timeline_frames and (anchor.get("need_end") or frame_control.get("supports_last_frame"))),
+            "mid_anchors": int(anchor.get("anchor_count") or 0) if consumes_timeline_frames else 0,
+            "consumption_mode": (anchor.get("consumption_mode") or "first_frame") if consumes_timeline_frames else "text_prompt_with_references",
             "native_timeline_frames": int(frame_control.get("max_timeline_frames") or 1),
             "requires_split_relay": bool(anchor.get("requires_split_relay")),
             "reference_only": bool(anchor.get("reference_only")),
@@ -774,6 +804,8 @@ def execution_recipe_for_route(
         "audio_inputs": {
             "native_audio_policy": entry.get("native_audio_policy"),
             "speech_policy": "native_speech" if entry.get("native_audio_policy") == "native_speech" else "no_native_speech",
+            "requires_voice_track": bool(entry.get("requires_voice_fallback")),
+            "fallback_production_mode": entry.get("fallback_production_mode") or "",
         },
         "fallback": {
             "fallback_backends": list(entry.get("fallback_backends") or []),
@@ -1008,7 +1040,7 @@ def _route_voice_conditioned_lipsync(
 def _route_native_av_speech(clip: Mapping[str, Any], shot_type: str, default_backend: str) -> Dict[str, Any]:
     """原生音画模式下的说话镜路由：一次出同步音画（台词+口型+环境声），绕过配音先行。
 
-    用原生音画能力最强的后端做 primary（Seedance 2.0 / Veo 3 / Sora），台词文本与情绪由
+    用原生音画能力最强的当前后端做 primary（Seedance 2.0 / Veo 3.1；Sora 仅旧项目/manual），台词文本与情绪由
     脚本提供、镜头时长由脚本规划驱动（不读配音先行的时长清单）。失败回退配音先行链路。
     """
     native_primary = default_backend if default_backend in NATIVE_AV_BACKENDS else "seedance"
@@ -1070,8 +1102,10 @@ def _route_narrative_state_scene(
     ]
     if av_mode == "native_av":
         rationale.append("制作模式=原生音画，但本专项模板优先锁身份/表情/反应链；若必须原生人声，拆成说话特写或手动改用 native AV fallback。")
+        rationale.append("本镜未声明 native_speech 时必须补 voice-first 配音轨；不能让原生音画项目出现无声对白/反应链。")
         prompt_requirements.append("native_av_project_note=visual_consistency_first_for_narrative_state_scene")
-    return {
+        prompt_requirements.append("requires_voice_fallback=true；若本镜有台词/画内说话，先补 n2d-voice，再以 no_native_speech 出视频")
+    out = {
         "primary_backend": primary,
         "fallback_backends": [b for b in fallback if b != primary],
         "mode": "image2video",
@@ -1081,6 +1115,15 @@ def _route_narrative_state_scene(
         "prompt_requirements": prompt_requirements,
         "degrade_plan": template_notes[2],
     }
+    if av_mode == "native_av":
+        out["requires_voice_fallback"] = True
+        out["fallback_production_mode"] = "voice_first"
+        out["native_av_override_reason"] = "narrative_state_identity_priority"
+        out["degrade_plan"] = (
+            template_notes[2]
+            + "；若本镜含对白/画内发声，必须走 voice-first 配音补偿链路，或拆出 native_speech 说话特写后重跑路由。"
+        )
+    return out
 
 
 def choose_route(
@@ -1099,7 +1142,16 @@ def choose_route(
         route = _route_fixed(clip, shot_type, default_backend, fixed_fallback_backends)
         if av_mode == "native_av" and _is_speech_shot(clip, shot_type):
             route["rationale"].append("制作模式=原生音画，但视频模型路由=固定生视频模型；固定选择优先，不自动切 native_speech 后端")
-            route["prompt_requirements"].append("speech_policy=no_native_speech unless the fixed backend is explicitly configured downstream for native AV")
+            route["rationale"].append("本镜已降级为配音先行补偿链路：必须先补 n2d-voice 真配音，再生成静音/无原生人声视频，避免无声对白镜。")
+            route["prompt_requirements"].append("speech_policy=no_native_speech；requires_voice_fallback=true；先补本镜 voice-first 配音轨，再出视频")
+            route["requires_voice_fallback"] = True
+            route["fallback_production_mode"] = "voice_first"
+            route["native_av_override_reason"] = "fixed_default_backend_without_native_speech"
+            route["degrade_plan"] = (
+                "制作模式=原生音画但固定后端未走 native_speech：本镜必须回退配音先行，"
+                "先由 n2d-voice 产出真实配音/时长清单，再以 no_native_speech 生成视频；"
+                "若要保持原生音画，请关闭固定模式或改用支持 native_speech 的固定后端。"
+            )
         return route
 
     if shot_type in NARRATIVE_STATE_SHOT_TYPES:
@@ -1138,35 +1190,38 @@ def choose_route(
                 fallbacks.append(backend)
         route["fallback_backends"] = fallbacks[:3]
         return route
+    t2v_plan = clip_t2v_identity_reference_plan(clip)
+    has_named_characters = clip_has_named_characters(clip)
+    t2v_allowed = bool(t2v_action and (not has_named_characters or t2v_plan))
     if shot_type == "fight_exchange":
-        mode = "text2video" if t2v_action else "frames2video"
+        mode = "text2video" if t2v_allowed else "frames2video"
         route = {
             "primary_backend": "kling",
             "fallback_backends": ["seedance", default_backend],
             "mode": mode,
             "native_audio_policy": "none",
-            "identity_requirement": "character_id_or_reference_group",
+            "identity_requirement": "character_id_or_reference_group" if has_named_characters else "none",
             "rationale": [
-                f"fight/contact motion benefits from {'T2V physics engine' if t2v_action else 'first/last frame control'}",
+                f"fight/contact motion benefits from {'experimental T2V physics engine' if t2v_allowed else 'first/last frame control'}",
                 "impact beats need short controllable motion rather than free choreography",
             ],
             "prompt_requirements": [
-                "write detailed action kinetics" if t2v_action else "write first frame and end frame as hard constraints",
+                "write detailed action kinetics with reference_inputs and identity anchors" if t2v_allowed else "write first frame and end frame as hard constraints",
                 "one contact action per clip; avoid multi-hit choreography",
                 "fill Action Choreography/动作编排契约: beats, speed_curve, spatial_path, camera_path, readability_beats, attack_path, impact_frame, contact_points, force_direction, recovery_beat",
             ],
             "degrade_plan": "Split into setup and impact clips; keep the hit frame as the end frame.",
         }
     elif shot_type in ("chase", "flight"):
-        mode = "text2video" if t2v_action else "image2video"
+        mode = "text2video" if t2v_allowed else "image2video"
         route = {
             "primary_backend": "seedance",
             "fallback_backends": ["kling", default_backend],
             "mode": mode,
             "native_audio_policy": "none",
-            "identity_requirement": "face_lock_or_reference_group" if clip_has_named_characters(clip) else "none",
+            "identity_requirement": "face_lock_or_reference_group" if has_named_characters else "none",
             "rationale": [
-                f"long continuous motion and moving backgrounds benefit from {'T2V unconstrained physics' if t2v_action else 'longer single-shot generation'}",
+                f"long continuous motion and moving backgrounds benefit from {'experimental T2V unconstrained physics' if t2v_allowed else 'longer single-shot generation'}",
                 "flight/chase should lock character pose and move background layers",
             ],
             "prompt_requirements": [
@@ -1317,6 +1372,25 @@ def choose_route(
             "prompt_requirements": ["keep character/camera/dynamic detail three-part prompt explicit"],
             "degrade_plan": "If action or identity fails twice, reroute to the nearest specialized shot type.",
         }
+
+    if shot_type in {"fight_exchange", "chase", "flight"} and t2v_action and not t2v_allowed:
+        route["rationale"].append(
+            "T2V动作通道=实验开启，但本镜含具名角色且缺 t2v_identity_reference_plan；按主线回退到首帧/首尾帧路径，避免文生视频绕过身份链。"
+        )
+        route["prompt_requirements"].append(
+            "若确需 T2V 实验，先在 storyboard/template_contract 写 t2v_identity_reference_plan(reference_inputs, identity anchors, degrade_plan)。"
+        )
+    if shot_type in {"fight_exchange", "chase", "flight"} and t2v_allowed and route.get("mode") == "text2video":
+        route["experimental_t2v"] = True
+        if t2v_plan:
+            route["t2v_identity_reference_plan"] = dict(t2v_plan)
+        route["degrade_plan"] = (
+            str(route.get("degrade_plan") or "")
+            + " If experimental T2V loses identity, immediately reroute to image2video_or_frames2video with first/end frames."
+        ).strip()
+        route["prompt_requirements"].append(
+            "T2V实验镜必须保留 reference_inputs / identity anchors / motion contract，并在失败时回退 image2video_or_frames2video。"
+        )
 
     # Avoid duplicate fallbacks and make sure default is available as last resort.
     fallbacks: List[str] = []
@@ -1588,6 +1662,15 @@ def route_clip(
         "degrade_plan": route["degrade_plan"],
         "character_backend_conflicts": backend_conflicts,
     }
+    for key in (
+        "experimental_t2v",
+        "t2v_identity_reference_plan",
+        "requires_voice_fallback",
+        "fallback_production_mode",
+        "native_av_override_reason",
+    ):
+        if key in route:
+            entry[key] = route[key]
     frame_req = _timeline_frame_requirements(clip)
     frame_control = video_backend_frame_control(primary, video_channel)
     anchor_plan = anchor_consumption_plan(
@@ -1839,6 +1922,34 @@ def apply_spectacle_backend_benchmark(
         old = normalize_backend(str(route.get("primary_backend") or ""), default_backend)
         if not old or backend == old:
             continue
+        if route.get("locked_backend") and not bool(rec.get("override_identity_lock")):
+            route["spectacle_benchmark_deferred"] = {
+                "spectacle_type": spectacle_type,
+                "recommended_backend": backend,
+                "current_primary": old,
+                "reason": "identity_affinity_locked_backend",
+                "evidence": rec.get("evidence"),
+            }
+            route["risk_flags"] = sorted(set(route.get("risk_flags", [])) | {"spectacle_benchmark_deferred_by_identity"})
+            route.setdefault("rationale", []).append(
+                f"spectacle benchmark recommends {backend} for {spectacle_type}, but identity backend lock keeps {old}; "
+                "set override_identity_lock=true in benchmark only after identity QC signoff."
+            )
+            continue
+        if route.get("baseline_anchored") and not bool(rec.get("override_baseline")):
+            route["spectacle_benchmark_deferred"] = {
+                "spectacle_type": spectacle_type,
+                "recommended_backend": backend,
+                "current_primary": old,
+                "reason": "cross_episode_baseline",
+                "evidence": rec.get("evidence"),
+            }
+            route["risk_flags"] = sorted(set(route.get("risk_flags", [])) | {"spectacle_benchmark_deferred_by_baseline"})
+            route.setdefault("rationale", []).append(
+                f"spectacle benchmark recommends {backend} for {spectacle_type}, but cross-episode baseline keeps {old}; "
+                "set override_baseline=true only after series-style QC signoff."
+            )
+            continue
         fallback = [old] + [normalize_backend(b, default="") for b in route.get("fallback_backends", [])]
         route["primary_backend"] = backend
         route["fallback_backends"] = [b for b in fallback if b and b != backend][:3]
@@ -2022,7 +2133,7 @@ def route_episode(
     lip_sync_setting = settings.get("对口型", "关闭")
     video_channel = settings.get("生视频渠道", "")
     fixed_fallback_backends = fixed_fallback_backends_from_settings(settings, default_backend)
-    t2v_action = settings.get("T2V动作通道", "关闭") == "开启"
+    t2v_action = t2v_action_experimental_enabled(settings.get("T2V动作通道", "关闭"))
     storyboard = load_storyboard(root, episode, storyboard_path)
     clips = storyboard.get("clips") or []
     if not isinstance(clips, list):
@@ -2081,7 +2192,7 @@ def route_episode(
         baseline = load_baseline(root)
     if baseline:
         plan["baseline_drift"] = apply_baseline(plan, baseline)
-        plan["baseline_anchored"] = True
+        plan["baseline_anchored"] = any(bool(r.get("baseline_anchored")) for r in plan["routes"])
     benchmark = load_spectacle_backend_benchmark(root)
     applied_benchmark = apply_spectacle_backend_benchmark(
         plan["routes"],
@@ -2120,6 +2231,16 @@ def route_episode(
     # 仍给规范候选但标 roster_switch_required（换后端须整项目统一·勿混用，由用户定夺）。
     roster = [default_backend, *(fixed_fallback_backends or [])]
     plan["multishot_reroute_recommendations"] = recommend_multishot_reroute(plan["routes"], roster)
+    plan["policy_lattice"] = policy_lattice_document()
+    for _entry in plan["routes"]:
+        _entry["policy_resolution"] = route_policy_resolution(
+            _entry,
+            {
+                "routing_mode": routing_mode,
+                "av_mode": av_mode,
+                "urgency_tier": urgency_tier,
+            },
+        )
     if legacy_default_note:
         plan["routing_notes"] = [legacy_default_note]
     return plan
@@ -2137,8 +2258,8 @@ def render_markdown(plan: Mapping[str, Any]) -> str:
         "",
         "## 本集模型路由表",
         "",
-        "| Clip | characters | shot_type | primary | fallback | mode | 档 | 帧消费 | native_audio | identity | motion_control | 风险 | 降级 |",
-        "|---|---|---|---|---|---|---|---|---|---|---|---|---|",
+        "| Clip | characters | shot_type | primary | fallback | mode | 档 | 帧消费 | native_audio | identity | motion_control | policy | 风险 | 降级 |",
+        "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     for route in plan.get("routes", []):
         fallback = ", ".join(route.get("fallback_backends", []))
@@ -2151,8 +2272,9 @@ def render_markdown(plan: Mapping[str, Any]) -> str:
             (str(c.get("character_id") or c.get("raw") or "") + (f"/{c.get('form')}" if c.get("form") else ""))
             for c in route.get("clip_characters", []) if isinstance(c, Mapping)
         ) or "-"
+        policy = route.get("policy_resolution") if isinstance(route.get("policy_resolution"), Mapping) else {}
         lines.append(
-            "| {clip} | {characters} | {shot} | {primary} | {fallback} | {mode} | {tier} | {frame_mode} | {audio} | {identity} | {motion} | {flags} | {degrade} |".format(
+            "| {clip} | {characters} | {shot} | {primary} | {fallback} | {mode} | {tier} | {frame_mode} | {audio} | {identity} | {motion} | {policy} | {flags} | {degrade} |".format(
                 clip=route.get("clip_id", ""),
                 characters=characters.replace("|", "/"),
                 shot=route.get("shot_type", ""),
@@ -2164,6 +2286,7 @@ def render_markdown(plan: Mapping[str, Any]) -> str:
                 audio=route.get("native_audio_policy", ""),
                 identity=route.get("identity_requirement", ""),
                 motion=motion_level,
+                policy=policy.get("winner", "-"),
                 flags=flags,
                 degrade=str(route.get("degrade_plan", "")).replace("|", "/"),
             )
@@ -2225,6 +2348,15 @@ def render_markdown(plan: Mapping[str, Any]) -> str:
             fields = choreography.get("required_fields") or []
             if fields:
                 lines.append(f"- action_choreography_required_fields: {', '.join(str(x) for x in fields)}")
+        policy = route.get("policy_resolution") if isinstance(route.get("policy_resolution"), Mapping) else {}
+        if policy:
+            lines.append(f"- policy_resolution: winner={policy.get('winner')} signoff_required={policy.get('signoff_required')}")
+            for conflict in policy.get("conflicts") or []:
+                if isinstance(conflict, Mapping):
+                    lines.append(
+                        f"  - conflict {conflict.get('surface')}: "
+                        f"{', '.join(str(x) for x in conflict.get('policies') or [])} -> {conflict.get('winner')}"
+                    )
         lines.append("- rationale:")
         for item in route.get("rationale", []):
             lines.append(f"  - {item}")
@@ -2269,13 +2401,41 @@ def build_baseline(plan: Mapping[str, Any]) -> Dict[str, str]:
 
 
 def apply_baseline(plan: Dict[str, Any], baseline: Mapping[str, str]) -> List[Dict[str, Any]]:
-    """按基线锚定每条 route 的 primary（baseline 胜，原 primary 降为 fallback 首项保留）；返回漂移清单。"""
+    """按跨集基线锚定 primary；更高优先级锁定只记录 deferred，不覆盖。"""
     drift: List[Dict[str, Any]] = []
     for route in plan.get("routes", []) or []:
         st = str(route.get("shot_type") or "")
         want = baseline.get(st)
         cur = str(route.get("primary_backend") or "")
         if not want or want == cur:
+            continue
+        if plan.get("routing_mode") == "fixed_default":
+            route["baseline_deferred"] = {
+                "wanted_backend": want,
+                "current_primary": cur,
+                "reason": "fixed_default",
+            }
+            route["risk_flags"] = sorted(set(route.get("risk_flags", [])) | {"baseline_deferred_by_fixed_mode"})
+            route.setdefault("rationale", []).append(
+                f"跨集基线要求「{want}」，但项目为固定生视频模型，保持用户固定后端「{cur}」。"
+            )
+            drift.append({"clip_id": route.get("clip_id"), "shot_type": st, "was": cur, "now": cur,
+                          "skipped": want, "reason": "fixed_default"})
+            continue
+        locked = normalize_backend(str(route.get("locked_backend") or ""), default="")
+        if locked and normalize_backend(str(want), default="") != locked:
+            route["baseline_deferred"] = {
+                "wanted_backend": want,
+                "current_primary": cur,
+                "locked_backend": locked,
+                "reason": "identity_affinity_locked_backend",
+            }
+            route["risk_flags"] = sorted(set(route.get("risk_flags", [])) | {"baseline_deferred_by_locked_backend"})
+            route.setdefault("rationale", []).append(
+                f"跨集基线要求「{want}」，但角色后端亲和已锁「{locked}」；保持身份一致，基线不覆盖。"
+            )
+            drift.append({"clip_id": route.get("clip_id"), "shot_type": st, "was": cur, "now": cur,
+                          "skipped": want, "reason": "identity_affinity_locked_backend"})
             continue
         if not video_backend_auto_routable(want):
             route["baseline_legacy_skipped"] = True
@@ -2321,9 +2481,12 @@ def write_plan(plan: Mapping[str, Any], root: Path, episode: str) -> Dict[str, P
     out_dir.mkdir(parents=True, exist_ok=True)
     json_path = out_dir / "video_model_routes.json"
     md_path = out_dir / "video_model_routes.md"
+    policy_path = root / "生产数据" / "consistency_policy_lattice.json"
+    policy_path.parent.mkdir(parents=True, exist_ok=True)
     json_path.write_text(json.dumps(plan, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     md_path.write_text(render_markdown(plan) + "\n", encoding="utf-8")
-    return {"json": json_path, "markdown": md_path}
+    policy_path.write_text(json.dumps(plan.get("policy_lattice") or policy_lattice_document(), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return {"json": json_path, "markdown": md_path, "policy_lattice": policy_path}
 
 
 def main() -> int:
@@ -2349,13 +2512,15 @@ def main() -> int:
         print(f"wrote baseline {bp}")
     drift = plan.get("baseline_drift") or []
     if drift:
-        print(f"⚠️ 后端跨集漂移：{len(drift)} 个 clip 的 shot_type 自然路由与基线不符，已按基线锚定（原后端降为 fallback）", file=sys.stderr)
+        print(f"⚠️ 后端跨集漂移/延后裁决：{len(drift)} 个 clip 的 shot_type 自然路由与基线不符", file=sys.stderr)
         for d in drift[:8]:
-            print(f"  - {d['clip_id']}({d['shot_type']}): {d['was']} → {d['now']}", file=sys.stderr)
+            note = f" skipped={d.get('skipped')} reason={d.get('reason')}" if d.get("skipped") else ""
+            print(f"  - {d['clip_id']}({d['shot_type']}): {d['was']} → {d['now']}{note}", file=sys.stderr)
     if ns.write:
         paths = write_plan(plan, root, ns.episode)
         print(f"wrote {paths['json']}")
         print(f"wrote {paths['markdown']}")
+        print(f"wrote {paths['policy_lattice']}")
     else:
         if ns.markdown:
             print(render_markdown(plan))

@@ -263,11 +263,17 @@ def check_manifest(root: Path, episode: str | None, stage: str = "compose") -> L
     if not isinstance(data, dict):
         return [f"BLOCK {path}: missing or invalid JSON"]
     internal = is_internal_distribution(data)
+    intent = str(data.get("distribution_intent") or "").strip().lower()
+    release_strict = stage in {"compose", "review", "release"} or intent == "paid_distribution"
 
     def flag_skippable(msg: str) -> None:
-        # 免检域（platform_review / overseas_localization→localization）：internal_only 时降 INFO 并加注。
+        # 免检/发布边界域（platform_review / localization / regulatory_filing）：
+        # internal_only 始终降 INFO；publish_candidate 在 image/video 阶段先列 INFO 待办；
+        # paid_distribution 或 compose/review/release 边界才 BLOCK。授权域不走本函数，照常 BLOCK。
         if internal:
             issues.append(f"INFO {path}: {msg}{INTERNAL_SKIP_NOTE}")
+        elif not release_strict:
+            issues.append(f"INFO {path}: {msg}（发布/合成前需补；当前 {stage} 阶段不阻断）")
         else:
             issues.append(f"BLOCK {path}: {msg}")
 
@@ -332,8 +338,8 @@ def check_manifest(root: Path, episode: str | None, stage: str = "compose") -> L
             issues.append(f"BLOCK {path}: cameo identity requires evidence/ref")
         if image_identity.get("feeds_face_references") is True:
             issues.append(f"BLOCK {path}: cameo backend (Sora2 政策) forbids uploading face reference images; 锁脸走 cameo 自录授权")
-    # platform_review / overseas_localization：internal_only 不再整体跳过，而是同样检查、
-    # 把 BLOCK 降为 INFO（内部 demo 免检，转投放前需补）——与 n2d-review gate 同源行为。
+    # platform_review / overseas_localization：发布边界域。internal_only 降 INFO；
+    # publish_candidate 的 image/video 只列待办；paid_distribution 或 compose/review/release 才 BLOCK。
     targets = ((data.get("platform_review") or {}).get("targets")) or []
     if not targets:
         flag_skippable("publish candidate requires platform_review.targets")
@@ -367,7 +373,7 @@ def check_manifest(root: Path, episode: str | None, stage: str = "compose") -> L
             required = str(target.get("language") or "").strip().lower()
             if required and required not in languages:
                 flag_skippable(f"localization.subtitle_languages must include target language {required}")
-    # 广电备案/分级/播前审核（2026 新规）：境内投放候选必检；internal_only 降 INFO（flag_skippable）。
+    # 广电备案/分级/播前审核（2026 新规）：与平台审核同属发布边界域（flag_skippable）。
     reg = data.get("regulatory_filing") if isinstance(data.get("regulatory_filing"), dict) else {}
     if reg:
         applicable = reg.get("applicable")

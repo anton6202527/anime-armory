@@ -6,16 +6,17 @@ This module records per-run evidence for the video backend that will execute a
 paid batch. Static profiles live in `n2d_platform_profiles.py`; this file adds
 the "checked today against official docs / CLI help / API capability" layer.
 
-采集日期：2026-06-21
+采集日期：2026-06-25
 """
 from __future__ import annotations
 
 import argparse
 import datetime as dt
 import json
+import os
 import re
 from pathlib import Path
-from typing import Any, Dict, Mapping, Optional, Sequence, Tuple
+from typing import Any, Callable, Dict, Mapping, Optional, Sequence, Tuple
 
 try:
     from n2d_platform_profiles import (
@@ -46,8 +47,8 @@ except Exception:  # pragma: no cover
 
 
 CATALOG_VERIFIED = {
-    "date": "2026-06-21",
-    "source": "n2d_platform_profiles static catalog + per-run official docs / CLI / API evidence",
+    "date": "2026-06-25",
+    "source": "n2d_platform_profiles static catalog + Veo/Sora lifecycle refresh + per-run official docs / CLI / API evidence",
     "profile_catalog": PROFILE_VERIFIED,
 }
 
@@ -81,6 +82,81 @@ def canonical_backend(raw: Optional[str]) -> Tuple[str, str]:
     if canonical:
         return canonical, "known"
     return text.lower(), "unknown"
+
+
+# ── 付费出视频前的后端连通性探针（与 image_backends.probe_backend 同状态语义）────────────────
+# status: ok=可达；down=确证不可达（gate 可据此 BLOCK）；unknown=无法自动探活（gate 只 WARN）。
+# 保守原则（同图侧 dreamina/kling 都标 none）：不臆造各官方后端的 argv/凭据变量名——错的会假 BLOCK；
+# 默认走「人工确认」(unknown→WARN)，但若导出该后端的健康端点 base url（内网/自定义供应商场景，
+# 见 codex 内网 192.168.x 502 先例）→ 真 HTTP 探活，502/超时=down→BLOCK。逃生舱 N2D_SKIP_BACKEND_PROBE。
+ProbeStatus = str  # "ok" | "down" | "unknown"
+
+# 每后端可选的 HTTP 健康端点环境变量（导出即启用真探活）；都没有则回退通用 N2D_VIDEO_BACKEND_BASE_URL。
+VIDEO_BACKEND_HEALTH_URL_ENVS: Dict[str, Tuple[str, ...]] = {
+    "dreamina": ("N2D_VIDEO_DREAMINA_BASE_URL", "DREAMINA_VIDEO_BASE_URL"),
+    "kling":    ("N2D_VIDEO_KLING_BASE_URL",),
+    "veo":      ("N2D_VIDEO_VEO_BASE_URL",),
+    "seedance": ("N2D_VIDEO_SEEDANCE_BASE_URL",),
+    "sora":     ("N2D_VIDEO_SORA_BASE_URL",),
+    "luma":     ("N2D_VIDEO_LUMA_BASE_URL",),
+    "runway":   ("N2D_VIDEO_RUNWAY_BASE_URL",),
+    "pika":     ("N2D_VIDEO_PIKA_BASE_URL",),
+    "wan":      ("N2D_VIDEO_WAN_BASE_URL",),
+}
+_GENERIC_VIDEO_HEALTH_URL_ENV = "N2D_VIDEO_BACKEND_BASE_URL"
+
+
+def _resolve_video_health_url(canonical: str, env: Mapping[str, str]) -> str:
+    """本后端的健康端点 url：优先各自 *_BASE_URL，回退通用 N2D_VIDEO_BACKEND_BASE_URL；都没有→空。"""
+    for var in VIDEO_BACKEND_HEALTH_URL_ENVS.get(canonical, ()):
+        v = str(env.get(var) or "").strip()
+        if v:
+            return v
+    return str(env.get(_GENERIC_VIDEO_HEALTH_URL_ENV) or "").strip()
+
+
+def _video_http_runner(url: str, timeout: int) -> Tuple[ProbeStatus, str]:
+    """GET 健康端点：2xx/3xx=ok；5xx（含内网 502）/4xx/超时/连接失败=down。纯标准库。"""
+    import urllib.error
+    import urllib.request
+    try:
+        with urllib.request.urlopen(urllib.request.Request(url, method="GET"), timeout=timeout) as resp:
+            code = getattr(resp, "status", 200) or 200
+            return ("ok", "") if 200 <= code < 400 else ("down", f"HTTP {code}")
+    except urllib.error.HTTPError as exc:
+        return ("down", f"HTTP {exc.code}")
+    except Exception as exc:
+        return ("down", f"{type(exc).__name__}: {str(exc)[:120]}")
+
+
+def probe_video_backend(
+    raw: Optional[str],
+    *,
+    env: Optional[Mapping[str, str]] = None,
+    http_runner: Optional[Callable[..., Tuple[ProbeStatus, str]]] = None,
+    timeout: int = 8,
+) -> Tuple[ProbeStatus, str]:
+    """探所选生视频后端是否可达（付费出视频前）。返回 (status, detail)，语义同 image_backends.probe_backend。
+
+    走 adapter（canonical_backend + 健康端点 env），gate 不 hardcode 内网地址/CLI 细节。runner 可注入（测试）。
+    `N2D_SKIP_BACKEND_PROBE=1` → unknown（逃生舱）。导出后端健康 base url → 真 HTTP 探活；否则 unknown
+    （不臆造各官方 CLI argv/凭据名，避免假 BLOCK），由 gate 降级为 WARN 提示人工确认。"""
+    env = dict(os.environ) if env is None else env
+    if str(env.get("N2D_SKIP_BACKEND_PROBE") or "") in ("1", "true", "True"):
+        return ("unknown", "N2D_SKIP_BACKEND_PROBE 已设——跳过 live 探活")
+    canonical, kind = canonical_backend(raw)
+    if kind == "manual_or_off":
+        return ("unknown", "渠道=人工/关闭——无自动出视频后端可探，按人工出视频流程（accept 登记）")
+    if kind == "unknown" or canonical not in VIDEO_BACKEND_PROFILES:
+        return ("unknown", f"未识别的生视频渠道 `{raw}`——无探针，需人工确认后端可用")
+    url = _resolve_video_health_url(canonical, env)
+    if url:
+        runner = http_runner or _video_http_runner
+        return runner(url.rstrip("/") + "/", timeout)
+    return ("unknown",
+            f"`{canonical}` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认："
+            "官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 "
+            f"{_GENERIC_VIDEO_HEALTH_URL_ENV} 或对应 *_BASE_URL 启用自动探活。")
 
 
 def backend_adapter(raw: Optional[str], channel: Optional[str] = None) -> Dict[str, Any]:

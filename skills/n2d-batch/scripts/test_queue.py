@@ -552,6 +552,77 @@ def test_collect_active_fingerprints_from_disk(tmp_path):
     assert finding_fingerprint("第1集", "image", "character_consistency", "Clip_03") in fps
 
 
+def test_consistency_ledger_root_causes_become_minimal_tasks(tmp_path):
+    ledger = {
+        "kind": q.CONSISTENCY_LEDGER_KIND,
+        "episode": "第1集",
+        "root_causes": [
+            {
+                "anchor": "CHAR_01",
+                "severity": "block",
+                "dimensions": ["character_consistency"],
+                "suggested_return_to_stage": "image",
+                "symptoms": [
+                    {
+                        "sev": "block",
+                        "dim_key": "character_consistency",
+                        "loc": "出图/第1集/图片/Clip_03.png",
+                        "text": "CHAR_01 首帧脸漂",
+                    },
+                    {
+                        "sev": "high",
+                        "dim_key": "character_consistency",
+                        "loc": "出视频/第1集/视频/Clip_03.mp4",
+                        "text": "视频中像另一个人",
+                    },
+                ],
+            },
+            {
+                "anchor": "PROP_01",
+                "severity": "warn",
+                "dimensions": ["multimodal_continuity"],
+                "symptoms": [{"loc": "Clip_04", "text": "道具疑似变形"}],
+            },
+        ],
+    }
+
+    tasks = q.tasks_from_consistency_ledger(str(tmp_path), ledger, cost_estimates={}, max_retries=1)
+
+    assert len(tasks) == 1
+    task = tasks[0]
+    assert task["stage_key"] == "image"
+    assert task["affected_shots"] == ["Clip_03"]
+    assert "--shots Clip_03" in task["command"]
+    assert "根因锚点：CHAR_01" in task["rerun_scope"]
+    assert finding_fingerprint("第1集", "image", "character_consistency", "Clip_03") in task["finding_fingerprints"]
+
+
+def test_collect_active_fingerprints_includes_consistency_ledger(tmp_path):
+    pdir = tmp_path / "生产数据"
+    pdir.mkdir()
+    (pdir / "consistency_ledger_第1集.json").write_text(
+        json.dumps(
+            {
+                "kind": q.CONSISTENCY_LEDGER_KIND,
+                "episode": "第1集",
+                "root_causes": [
+                    {
+                        "anchor": "CHAR_02",
+                        "severity": "high",
+                        "dimensions": ["character_consistency"],
+                        "return_to_stage": "image",
+                        "affected_shots": ["Clip_05"],
+                    }
+                ],
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    fps = q.collect_active_fingerprints(str(tmp_path))
+    assert finding_fingerprint("第1集", "image", "character_consistency", "Clip_05") in fps
+
+
 def test_consistency_fingerprints_are_scoped_per_affected_shot(tmp_path):
     rep = {"kind": q.CONSISTENCY_FINDINGS_KIND, "episode": "第1集",
            "auto_return_tasks": [{

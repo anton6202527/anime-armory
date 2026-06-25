@@ -218,7 +218,7 @@ def test_multi_subject_strategy_adds_distinct_anchor_field_and_scheduling() -> N
     strategy = rp.plan_multi_subject_strategy(chars, _MULTI_REF, dna_by_id=dna, closeup=True)
     assert "区分锚点（互斥发色/服装主色/配饰）" in strategy["required_prompt_fields"]
     assert strategy["distinct_anchors"]["collision"] is True
-    assert strategy["shot_scheduling"]["verdict"] == "downgrade_recommended"
+    assert strategy["shot_scheduling"]["verdict"] == "split_or_layer_required"
 
 
 def test_distinct_anchors_embedding_confusable_overrides_distinct_palette() -> None:
@@ -251,10 +251,10 @@ def test_compute_confusable_pairs_unavailable_without_insightface(tmp_path) -> N
     assert out["pairs"] == set()
 
 
-def test_multi_subject_strategy_over_cap_when_four_named() -> None:
+def test_multi_subject_strategy_large_same_frame_when_four_named() -> None:
     chars = [{"char_id": f"CHAR_0{i}", "form": "常态", "tier": "multi_reference"} for i in range(1, 5)]
     strategy = rp.plan_multi_subject_strategy(chars, _MULTI_REF, closeup=False)
-    assert strategy["shot_scheduling"]["verdict"] == "over_cap"
+    assert strategy["shot_scheduling"]["verdict"] == "large_same_frame_requires_strategy"
 
 
 def test_multi_subject_strategy_native_subject_slots_when_registered() -> None:

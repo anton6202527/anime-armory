@@ -13,11 +13,13 @@ description: Professional research packet layer for novel-* projects. Use when a
 - `资料/research_sources.json`：机器索引。每条来源、事实、适用章节、可信度、不确定项、禁用项都结构化。
 - `资料/research_refresh_plan.md`：定期刷新审计计划。列出过期包、临期包和高风险“需实时深搜”任务。
 - `审稿/research_fact_support.json`：审稿阶段的证据覆盖检查结果。
+- `评分/market_evidence_tasks.json` / `评分/市场证据待补.md`：`novel-score` 发现红果/抖音/漫剧市场基准缺口时生成的待补任务，由本 skill 接手补平台市场资料包。
 
 ## 触发
 
 - 医疗、法律、刑侦、金融、军事、历史、宗教、海外、科技、职业文。
 - 商业连载、平台投稿、出海、本地化、影视/短剧/漫剧改编前的事实、规则、行业细节。
+- `novel-score/scripts/collect_market_baseline.py` 生成 `market_evidence_tasks.json`，要求补红果/抖音/漫剧/短剧的结构化榜单、投放、选品或平台趋势证据。
 - 用户说“专业、真实、行业感、别外行、不要瞎编、符合流程/法规/行业常识”。
 - `novel-review` 或 `draft_packets.py` 发现章节含高风险专业关键词但没有资料包。
 - 用户要求“刷新知识库、检查资料是否过时、最新行业动态、前沿知识、定期联网复查”。
@@ -37,6 +39,7 @@ description: Professional research packet layer for novel-* projects. Use when a
 1. **判定是否需要资料包**
    - 读 `_meta.json`、`_设置.md`、`设定/章纲.md` 和目标章节。
    - 命中高风险专业域时，先建资料包；商业/平台/出海项目至少建平台规则/目标地区/题材专业域资料包。
+   - 若 `评分/market_evidence_tasks.json` 存在且有 `status=open`，优先补“平台市场”资料包；补完后回跑 `collect_market_baseline.py --manual-evidence ...`，让 score 使用同一份证据。
    - 可在 `_meta.json` 写 `"research_required_domains": ["medical", "legal"]`，或在 `资料/research_requirements.json` 写 `{"required_domains":["platform","overseas"]}`，强制这些领域必须有 ready 资料包。
 
 2. **实时深搜并落证据**

@@ -397,7 +397,7 @@ def execute_task(
     dry_run: bool,
     no_dashboard: bool,
     verify_outputs: bool,
-    next_preflight: bool = False,
+    next_preflight: bool = True,
     build_dashboard: bool = True,
 ) -> Dict[str, Any]:
     started = time.monotonic()
@@ -510,7 +510,7 @@ def run_claimed(
     no_dashboard: bool,
     verify_outputs: bool,
     stop_on_fail: bool,
-    next_preflight: bool = False,
+    next_preflight: bool = True,
     auto_gate: bool = True,
 ) -> List[Dict[str, Any]]:
     results: List[Dict[str, Any]] = []
@@ -611,14 +611,15 @@ def run_once(
     stop_on_fail: bool = False,
     worker: Optional[str] = None,
     lease_seconds: int = queue_mod.DEFAULT_LEASE_SECONDS,
-    next_preflight: bool = False,
+    next_preflight: Optional[bool] = None,
     auto_gate: bool = True,
 ) -> Dict[str, Any]:
     config = load_config(root, config_path)
     worker = worker or queue_mod.default_worker()
     # 配置可关：batch_runner.json 里 "auto_gate": false → 关掉返工后自动重跑门禁（CLI --no-gate 同效）。
     effective_auto_gate = auto_gate and bool(config.get("auto_gate", True))
-    effective_next_preflight = next_preflight or bool(config.get("next_preflight", False))
+    # 安全默认：批处理默认也消费单集编排器的硬阻断，只有项目配置或 CLI 显式关闭才绕过。
+    effective_next_preflight = bool(config.get("next_preflight", True)) if next_preflight is None else bool(next_preflight)
     # claim() 锁内：先回收过期租约（自动断点恢复）再认领，并打 worker+lease。
     claimed = queue_mod.claim(root, limit=limit, worker=worker, lease_seconds=lease_seconds)
     results = run_claimed(
@@ -662,7 +663,7 @@ def run_until_empty(
     stop_on_fail: bool,
     worker: Optional[str] = None,
     lease_seconds: int = queue_mod.DEFAULT_LEASE_SECONDS,
-    next_preflight: bool = False,
+    next_preflight: Optional[bool] = None,
     auto_gate: bool = True,
 ) -> Dict[str, Any]:
     all_results: List[Dict[str, Any]] = []
@@ -720,7 +721,9 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--no-gate", action="store_true",
                     help="关掉返工 pass 后自动重跑该 stage 门禁（默认开）；自动重跑让 --recheck 对的是返工后的现状")
     ap.add_argument("--next-preflight", action="store_true",
-                    help="执行任务前先消费 n2d/run.py next 动作卡；遇 gate/image_qc/合规/环境/选择点阻断则不跑命令")
+                    help="显式开启执行前 n2d/run.py next 动作卡（默认已开启，保留该参数用于兼容/强调）")
+    ap.add_argument("--no-next-preflight", action="store_true",
+                    help="显式关闭执行前 n2d/run.py next 动作卡；仅用于已确认 wrapper 自带等价 gate 的场景")
     ap.add_argument("--recheck", action="store_true",
                     help="跑完后用 生产数据/ 最新审查产物的指纹复检：问题消失的返工任务标 resolved、复发的 reopen"
                          "（闭环复检；返工后门禁已自动刷新，--recheck 即对现状判定）")
@@ -734,6 +737,13 @@ def main(argv: Sequence[str]) -> int:
     ns = parser().parse_args(argv)
     root = ns.root.rstrip("/")
     worker = ns.worker or queue_mod.default_worker()
+    cli_next_preflight: Optional[bool]
+    if ns.no_next_preflight:
+        cli_next_preflight = False
+    elif ns.next_preflight:
+        cli_next_preflight = True
+    else:
+        cli_next_preflight = None
     if ns.resume:
         reclaimed = queue_mod.reclaim(root, worker=worker, force_worker=True)
         if reclaimed:
@@ -754,7 +764,7 @@ def main(argv: Sequence[str]) -> int:
             stop_on_fail=ns.stop_on_fail,
             worker=worker,
             lease_seconds=ns.lease_seconds,
-            next_preflight=ns.next_preflight,
+            next_preflight=cli_next_preflight,
             auto_gate=not ns.no_gate,
         )
     else:
@@ -771,7 +781,7 @@ def main(argv: Sequence[str]) -> int:
             stop_on_fail=ns.stop_on_fail,
             worker=worker,
             lease_seconds=ns.lease_seconds,
-            next_preflight=ns.next_preflight,
+            next_preflight=cli_next_preflight,
             auto_gate=not ns.no_gate,
         )
     if ns.recheck:

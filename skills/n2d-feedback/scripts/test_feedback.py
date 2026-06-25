@@ -191,10 +191,57 @@ def test_update_guide_replaces_marker_block(tmp_path: Path) -> None:
 
 def test_metric_alias_resolution_ingests_chinese_export_columns(tmp_path):
     # 实时投放 API 导出的中文列名也能被摄取（投放适配器契约）。
-    row = {"episode": "第1集", "3秒留存率": "0.62", "追更率": "0.33", "播放量": "500000"}
+    row = {
+        "episode": "第1集",
+        "3秒留存率": "0.62",
+        "6秒留存率": "0.54",
+        "播放到50%": "0.31",
+        "人均观看集数": "1.8",
+        "付费解锁率": "0.08",
+        "付费点秒": "38",
+        "D7留存": "0.11",
+        "追更率": "0.33",
+        "播放量": "500000",
+    }
     assert abs(feedback.metric(row, "retention_3s") - 0.62) < 1e-6
+    assert abs(feedback.metric(row, "retention_6s") - 0.54) < 1e-6
+    assert abs(feedback.metric(row, "retention_50_pct") - 0.31) < 1e-6
+    assert abs(feedback.metric(row, "avg_episodes_per_user") - 1.8) < 1e-6
+    assert abs(feedback.metric(row, "unlock_or_subscribe_rate") - 0.08) < 1e-6
+    assert abs(feedback.metric(row, "paywall_position_sec") - 38.0) < 1e-6
+    assert abs(feedback.metric(row, "d7_retention") - 0.11) < 1e-6
     assert abs(feedback.metric(row, "follow_next_rate") - 0.33) < 1e-6
     assert feedback.row_weight(row) == 500000.0
+
+
+def test_feedback_analyzes_paywall_and_continue_path(tmp_path: Path) -> None:
+    metrics = tmp_path / "生产数据" / "platform_metrics.csv"
+    features = tmp_path / "生产数据" / "creative_features.csv"
+    write_csv(
+        metrics,
+        [
+            {"episode": "第1集", "plays": 1000, "retention_3s": 0.80, "retention_15s": 0.55, "completion_rate": 0.34, "follow_next_rate": 0.22, "unlock_or_subscribe_rate": 0.18, "paywall_position_sec": 38, "continue_path": "next_button_sticky"},
+            {"episode": "第2集", "plays": 1000, "retention_3s": 0.78, "retention_15s": 0.53, "completion_rate": 0.33, "follow_next_rate": 0.20, "unlock_or_subscribe_rate": 0.16, "paywall_position_sec": 41, "continue_path": "next_button_sticky"},
+            {"episode": "第3集", "plays": 1000, "retention_3s": 0.63, "retention_15s": 0.40, "completion_rate": 0.24, "follow_next_rate": 0.09, "unlock_or_subscribe_rate": 0.05, "paywall_position_sec": 8, "continue_path": "end_card_only"},
+            {"episode": "第4集", "plays": 1000, "retention_3s": 0.64, "retention_15s": 0.42, "completion_rate": 0.25, "follow_next_rate": 0.10, "unlock_or_subscribe_rate": 0.06, "paywall_position_sec": 10, "continue_path": "end_card_only"},
+        ],
+    )
+    write_csv(
+        features,
+        [
+            {"episode": "第1集", "opening_type": "cold_conflict", "cliffhanger_type": "crisis_suspend", "shot_density_per_min": 24, "hook_interval_sec": 15},
+            {"episode": "第2集", "opening_type": "cold_conflict", "cliffhanger_type": "crisis_suspend", "shot_density_per_min": 26, "hook_interval_sec": 16},
+            {"episode": "第3集", "opening_type": "system_hook", "cliffhanger_type": "truth_half_reveal", "shot_density_per_min": 24, "hook_interval_sec": 15},
+            {"episode": "第4集", "opening_type": "system_hook", "cliffhanger_type": "truth_half_reveal", "shot_density_per_min": 24, "hook_interval_sec": 15},
+        ],
+    )
+
+    result = feedback.analyze_feedback(str(tmp_path), str(metrics), str(features), min_samples=2, min_lift=0.05)
+
+    assert result["analyses"]["paywall_unlock"]["best"]["name"] == "16-45s 前中段卡点"
+    assert result["analyses"]["continue_path_follow"]["best"]["name"] == "next_button_sticky"
+    assert any("付费/解锁卡点" in item for item in result["recommendations"])
+    assert any("追更路径" in item for item in result["recommendations"])
 
 
 def test_consistency_findings_ingestion(tmp_path):

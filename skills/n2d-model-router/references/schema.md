@@ -17,6 +17,11 @@
   "production_mode": "配音先行",
   "av_mode": "voice_first",
   "default_backend": "dreamina",
+  "backend_consistency_scope": {
+    "image_generation": "single_model_channel_per_project",
+    "video_generation": "per_clip_allowed_with_baseline",
+    "required_guards": ["model_routes_baseline", "identity_handoff", "execution_recipe", "post_video_qc"]
+  },
   "generated_at": "2026-06-08T00:00:00Z",
   "routes": [],
   "multishot_groups": [],
@@ -30,6 +35,7 @@
 - `production_mode`: 从 `_设置.md 制作模式` 读取（`配音先行`|`先出视频后配音`|`原生音画`）。
 - `av_mode`: 音画路线，`voice_first`（默认，配音链路控制台词）或 `native_av`（`制作模式=原生音画`：说话镜一次出同步音画）。
 - `default_backend`: 从 `_设置.md 生视频模型` 归一化而来；旧项目 fallback 读取 `生视频AI`，再 fallback 到 `生视频渠道`。`Seedance 2.0` 归一为 `seedance`；`即梦/Dreamina` 归一为 `dreamina`；原生音画后端 `seedance|veo|sora`。
+- `backend_consistency_scope`: 后端一致性作用域声明。生图侧必须是 `single_model_channel_per_project`（同项目/同集统一生图模型+渠道）；视频侧允许 `per_clip_allowed_with_baseline`（逐镜按能力路由），但必须同时有 `model_routes_baseline`、`identity_handoff`、`execution_recipe`、`post_video_qc` 四类 guard。若 route 表实际混用多个 `primary_backend` 而缺本字段，`video_preflight` 会 BLOCK；这是把“出图统一”和“视频逐镜能力路由”拆成不同作用域，避免互相误伤。
 - `routes`: 每条 Clip 一个对象。
 - `multishot_groups`: 多镜单次生成候选组清单 `[{group_id, members:[clip_id...], backend, approx_seconds}]`（**advisory**）。在 primary 全部定稿（含跨集 baseline 锚定）后，扫出**连续 ≥2 条接力镜 + 同一支持多镜的 primary**（如直连 Seedance 的项目）的镜组——这段最适合一次 co-generate 消灭接缝、最稳跨镜一致。**组大小受物理约束封顶**：单次多镜生成的总输出长度 ≤ 后端 `max_clip_seconds`（Seedance ~15s），按**累计时长**切组（缺时长时退到 ≤4 成员护栏），所以**镜本身已接近单镜上限时不会成组**（各自已是长单镜，归「更长单镜」覆盖）；多镜单次生成的甜点是**多个短接力镜**一次出。**只是提示，不合并 Clip、不改 primary/mode**：逐 Clip 仍是独立可追踪可重跑单元（模型矩阵立身原则），是否真的一次出由出片侧/用户按接缝风险与重跑需求决定。即梦渠道下执行后端是 dreamina（非多镜叙事核验渠道）→ 保守不标注。
 - `multishot_reroute_recommendations`: 同场景/同角色连续镜的**换后端建议**清单 `[{group_id, members, suggested_backend, basis, roster_switch_required, note}]`（**advisory**·2026-06 一致性加固）。`annotate_multishot_groups` 只在 primary **本身已支持多镜**时标候选；本字段补的是另一半：primary **不支持多镜**（如 dreamina）时，若存在一段「同场景(`同场景`)」或「同角色集(`同角色集`)」连续 ≥2 镜，建议这段改走原生多镜后端（Kling Element Binding / Director Memory 物体恒存、Seedance/Veo 多镜叙事），用单次多镜生成把跨镜身份/场景/对象持久性焊住，省 `inherit_contract` 硬拦。`suggested_backend` 优先取项目 roster（default+fallback）里已有的多镜后端；roster 内没有则给规范候选并置 `roster_switch_required=true`，提醒**换后端须整项目统一、勿混用**（anti-mixing 闸）。同样**不改 primary、不合并 Clip**，逐 Clip 仍可追踪可重跑，由出片侧/用户定夺。对应 route 上有 `multishot_reroute_suggestion` + risk_flag `multishot_reroute_candidate`。
@@ -46,6 +52,12 @@
   "mode": "frames2video",
   "native_audio_policy": "none",
   "identity_requirement": "character_id_or_reference_group",
+  "identity_preservation_plan": {
+    "priority": "motion_may_reduce_static_anchor_density_but_not_identity_contract",
+    "must_keep": ["CHAR_01 face_shape/hairstyle/outfit_palette", "reference_group or native subject binding"],
+    "allowed_motion_overrides": ["use wider shot", "reduce closeup face deformation checks during impact frames"],
+    "fallback": "split identity closeup + action wide shot"
+  },
   "clip_characters": [
     {"character_id": "CHAR_01", "form": "常态"}
   ],
@@ -140,8 +152,9 @@
 - `template`: 来自 `storyboard.json clips[].template`；没有写 `none`。
 - `primary_backend`: 首选后端，归一化为 `dreamina|kling|seedance|veo|sora`。
 - `fallback_backends`: 备用后端，按优先级排序。
-- `mode`: `image2video|frames2video|text2video|multi_shot|native_av|voice_conditioned_lipsync`。注：`multi_shot` 是保留值——多镜单次生成走 **advisory** 的 `multishot_groups` 候选组（见顶层），router **不会**把逐镜 mode 自动改成 `multi_shot`（保逐 Clip 可重跑粒度），需要真合并时由出片侧/用户显式决定。`native_av`=原生音画模式说话镜，一次出同步音画（后端自生成台词，绕过配音先行）；`voice_conditioned_lipsync`=`voice_first`+`对口型` opt-in 的说话镜，把克隆配音 `line_NN.wav` 当口型条件喂进支持音频参考的后端（Seedance 2.0 音素级 / 可灵 Omni）同帧出对口型画面，**音轨仍是配音轨、模型音频不接管声音**——区别于 native_av 的根本点。
+- `mode`: `image2video|frames2video|text2video|multi_shot|native_av|voice_conditioned_lipsync`。注：`multi_shot` 是保留值——多镜单次生成走 **advisory** 的 `multishot_groups` 候选组（见顶层），router **不会**把逐镜 mode 自动改成 `multi_shot`（保逐 Clip 可重跑粒度），需要真合并时由出片侧/用户显式决定。`text2video` 只默认用于 `identity_requirement=none` 的空镜/氛围镜；含具名角色的动作 T2V 只能作为实验特例，必须同时写 `experimental_t2v=true`、`t2v_identity_reference_plan`、reference_inputs/identity anchors 和可执行 `degrade_plan`，否则 gate 阻断。`native_av`=原生音画模式说话镜，一次出同步音画（后端自生成台词，绕过配音先行）；`voice_conditioned_lipsync`=`voice_first`+`对口型` opt-in 的说话镜，把克隆配音 `line_NN.wav` 当口型条件喂进支持音频参考的后端（Seedance 2.0 音素级 / 可灵 Omni）同帧出对口型画面，**音轨仍是配音轨、模型音频不接管声音**——区别于 native_av 的根本点。
 - `native_audio_policy`: `none|ambience|native_sfx|native_speech|lipsync_condition_only`，只表达生成意图；compose 是否混入仍由 `视频原生音轨`/`制作模式` 决定。`native_speech`（台词+口型由后端原生生成）只在 `av_mode=native_av` 的说话镜出现；`lipsync_condition_only`（配音仅作口型条件、不进音轨）只在 `voice_conditioned_lipsync` 镜出现，compose 必须用 voice-first 配音轨、丢弃模型这条音频。
+- `requires_voice_fallback`: 可选布尔。仅用于 `av_mode=native_av` 但本 Clip 因固定后端/身份优先模板不能走 `native_speech` 的说话/口型镜。为 `true` 时必须同时写 `fallback_production_mode=voice_first`，表示本镜重新打开 n2d-voice 真实配音链路；video/compose gate 会阻断缺配音或占位配音，防止无声对白镜。
 - `identity_requirement`: 身份层要求：
   - `none`
   - `first_frame_only`
@@ -149,6 +162,7 @@
   - `character_id_or_reference_group`
   - `face_lock_or_reference_group`
   - `reference_controls_or_reference_group`
+- `identity_preservation_plan`: 高动作/接触/大场面镜且有身份要求时必填。它声明“运动优先时哪些身份契约仍不可牺牲”：必须保留的脸型/发型/服饰锚、实际可消费的 reference/native subject/Face Lock 绑定、允许为物理运动让步的项（例如改远景而不是近景硬打）、失败时拆成身份近景 + 动作远景的 fallback。若该镜 `motion_control.required=true` 且缺本字段，video gate 会 BLOCK。
 - `clip_characters`: 本 Clip 实际出现的角色绑定，身份镜必填。元素至少含 `character_id`，可选 `form`。router 从 `storyboard.json` 的结构化角色字段或 `CHAR_xx/形态` 提取；普通自然语言人名只可作为人审信息，不能替代 `character_id`。`n2d-review gate` 用该字段把身份 adapter matrix 检查缩到本 Clip 角色；`identity_requirement != none` 且缺有效 `clip_characters[]` 会 BLOCK 并要求重跑 router/补 storyboard 角色 ID。
 - `max_clip_seconds`: 该 primary 后端建议单 Clip 上限。超出后回 `n2d-script` 拆 Clip 或换长单镜后端。
 - `risk_flags`: `multi_person`、`mouth_visible`、`native_audio_risk`、`native_speech`（原生音画说话镜，须查唇音同步）、`long_duration`、`contact_motion`、`high_speed_motion`、`spatial_path_risk`、`action_choreography_required`、`identity_drift_risk`、`motion_reference_candidate`（可用视频运动参考）、`multishot_candidate`（属多镜单次生成候选组）等。
@@ -223,7 +237,7 @@
 }
 ```
 
-没有 ready 控制资产但决定拆镜时，写 `status=degrade_only`，必须包含 `degrade_plan`。这表示不直接生成全身复杂接触或长连续高速动作，改走模板降级方案；gate 会放行拆镜执行，但不会把它当作已接入 Motion Control。`status=ready` 时，`control_inputs.*.path/glob` 必须能匹配到本地控制资产文件；只有字符串路径、没有实际文件会被 gate 阻断。
+没有 ready 控制资产但决定拆镜时，写 `status=degrade_only`，必须包含 `degrade_plan`。这表示不直接生成全身复杂接触或长连续高速动作，改走模板保真实现分解方案；gate 会放行拆镜执行，但不会把它当作已接入 Motion Control。`status=ready` 时，`control_inputs.*.path/glob` 必须能匹配到本地控制资产文件；只有字符串路径、没有实际文件会被 gate 阻断。
 
 远端控制资产不能只写裸 URI。`control_inputs.*` 若使用 `uri`，必须是对象，并且同时满足：
 

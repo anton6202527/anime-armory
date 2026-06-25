@@ -78,7 +78,41 @@ def make_matrix_project(root):
 
 
 class PostWriteTest(unittest.TestCase):
-    def test_marks_progress_only_after_hard_checks(self):
+    def test_marks_progress_only_after_hard_checks_and_ledger_merge(self):
+        with tempfile.TemporaryDirectory() as root:
+            make_matrix_project(root)
+            write(os.path.join(root, "章节", "第03章.md"), "# 第3章\n正文\n")
+            write_json(os.path.join(root, "审稿", "state_delta_第03章.json"), {
+                "schema_version": 1,
+                "kind": "novel_state_delta",
+                "chapter": 3,
+            })
+            conclusion = os.path.join(root, "审稿", "state_verify_第03章.json")
+            write_json(conclusion, {"chapter": 3, "status": "ok", "notes": "一致"})
+            calls = []
+
+            def fake_run(cmd, check=False, **_kwargs):
+                calls.append(cmd)
+                return subprocess.CompletedProcess(cmd, 0)
+
+            with mock.patch.object(post_write.subprocess, "run", side_effect=fake_run):
+                with mock.patch.object(sys, "argv", ["post_write.py", root, "--chapter", "第03章", "--conclusion", conclusion]):
+                    post_write.main()
+
+            script_names = [os.path.basename(cmd[1]) for cmd in calls]
+            self.assertEqual(script_names, [
+                "reader_contract_sentry.py",
+                "reconcile_ledger.py",
+                "wiki_builder.py",
+                "logic_sentry.py",
+                "power_system.py",
+                "antagonist_scaling.py",  # 反派战力 scaling 自检（advisory）
+                "timeline_check.py",       # 时间线/事件顺序（建议级倒流 + 台账乱序阻断级）
+                "reconcile_ledger.py",
+                "progress.py",
+            ])
+
+    def test_does_not_mark_progress_without_conclusion(self):
         with tempfile.TemporaryDirectory() as root:
             make_matrix_project(root)
             write(os.path.join(root, "章节", "第03章.md"), "# 第3章\n正文\n")
@@ -95,19 +129,12 @@ class PostWriteTest(unittest.TestCase):
 
             with mock.patch.object(post_write.subprocess, "run", side_effect=fake_run):
                 with mock.patch.object(sys, "argv", ["post_write.py", root, "--chapter", "第03章"]):
-                    post_write.main()
+                    with self.assertRaises(SystemExit) as raised:
+                        post_write.main()
 
+            self.assertEqual(raised.exception.code, 2)
             script_names = [os.path.basename(cmd[1]) for cmd in calls]
-            self.assertEqual(script_names, [
-                "reader_contract_sentry.py",
-                "reconcile_ledger.py",
-                "wiki_builder.py",
-                "logic_sentry.py",
-                "power_system.py",
-                "antagonist_scaling.py",  # 反派战力 scaling 自检（advisory）
-                "timeline_check.py",       # 时间线/事件顺序（建议级倒流 + 台账乱序阻断级）
-                "progress.py",
-            ])
+            self.assertNotIn("progress.py", script_names)
 
     def test_missing_state_delta_exits_before_side_effects(self):
         with tempfile.TemporaryDirectory() as root:
@@ -161,6 +188,8 @@ class FlowSchemaTest(unittest.TestCase):
             self.assertEqual(got.returncode, 0, got.stderr)
             self.assertIn("小说生成工作流：边写边自检", got.stdout)
             self.assertIn("post_write.py", got.stdout)
+            self.assertIn("--conclusion", got.stdout)
+            self.assertIn("state_verify_第03章.json", got.stdout)
             self.assertIn("小批回扫", got.stdout)
             self.assertIn("--range 1-3", got.stdout)
 
@@ -178,6 +207,19 @@ class NovelRouteProgressCellTest(unittest.TestCase):
             self.assertNotIn("error", summary)
             self.assertEqual(summary["first"]["label"], "改写")
             self.assertEqual(summary["bottleneck"], {"改写": 1})
+            # 🟡 不回炉路由（仍是改写在前），但不能被静默吞进 done——必须单列出来。
+            flagged = summary["flagged"]
+            self.assertEqual(len(flagged), 1)
+            self.assertEqual(flagged[0]["col"], "审稿")
+            self.assertEqual(flagged[0]["value"], "🟡偏长")
+            self.assertTrue(flagged[0]["ch"].startswith("第01章"))
+
+    def test_yellow_cell_is_flagged_state_but_counts_as_done_for_routing(self):
+        # cell_state 单元语义：🟡 → flagged；is_done 仍 True（路由不回炉）。
+        self.assertEqual(novel_route.cell_state("🟡偏长"), "flagged")
+        self.assertTrue(novel_route.is_done("🟡偏长"))
+        self.assertEqual(novel_route.cell_state("✅"), "done")
+        self.assertEqual(novel_route.cell_state("⬜"), "todo")
 
 
 class NovelGateTest(unittest.TestCase):

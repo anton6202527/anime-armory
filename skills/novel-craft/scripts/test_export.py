@@ -223,7 +223,7 @@ class ExportContractTest(unittest.TestCase):
             self.assertEqual(waiver["type"], "ignore_qa_gate")
             self.assertEqual(waiver["scope"]["chapter_count"], 1)
             self.assertIn("source_aggregate_hash", waiver["scope"])
-            self.assertEqual(waiver["scope"]["blocker_ids"], ["REVIEW-MISSING", "STATE-DELTA-MISSING"])
+            self.assertEqual(waiver["scope"]["blocker_ids"], ["REVIEW-MISSING"])
             self.assertTrue(os.path.exists(os.path.join(project, "导出", "源书-扩写.txt")))
 
 

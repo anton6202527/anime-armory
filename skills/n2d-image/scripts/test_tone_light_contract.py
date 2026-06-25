@@ -35,8 +35,10 @@ def test_parse_intent_none_when_no_signal():
 # ── 纯函数：度量 + 中位数 ─────────────────────────────────────────────────────
 
 def test_frame_metrics_warmth_and_luma():
+    import math
     m = tl.frame_metrics(200, 100, 50)
-    assert m["warmth"] == 150.0                       # R−B
+    assert round(m["warmth"], 4) == round(math.log(201 / 51), 4)   # log((R+1)/(B+1))·与 review 共用
+    assert m["warmth"] > 0                                          # R>B → 暖
     assert round(m["luma"], 1) == round(0.299 * 200 + 0.587 * 100 + 0.114 * 50, 1)
 
 
@@ -50,7 +52,8 @@ def test_median():
 
 def test_tone_findings_cool_contract_warm_render_flags():
     intent = {"warmth": "cool", "brightness": None, "evidence": "冷青灰"}
-    out = tl.tone_findings(intent, warmth_median=40.0, luma_median=120.0, n_frames=8)
+    # 暖冷 log(R/B) 中位数 +0.5（明显偏暖）≥ 0.10 边距 → 与「冷」契约矛盾
+    out = tl.tone_findings(intent, warmth_median=0.5, luma_median=120.0, n_frames=8)
     assert len(out) == 1 and out[0]["code"] == "tone_warmth_contradiction" and out[0]["level"] == "warn"
 
 
@@ -61,11 +64,11 @@ def test_tone_findings_dark_contract_bright_render_flags():
 
 
 def test_tone_findings_silent_when_consistent_or_neutral():
-    # 契约冷、渲染也冷（R−B 很负）→ 不报
+    # 契约冷、渲染也冷（log(R/B) 很负）→ 不报
     intent = {"warmth": "cool", "brightness": "dark", "evidence": "冷青灰压暗"}
-    assert tl.tone_findings(intent, warmth_median=-30.0, luma_median=60.0, n_frames=8) == []
-    # 中性（|R−B| 在边距内）→ 不报（宁可漏不可误杀）
-    assert tl.tone_findings(intent, warmth_median=-5.0, luma_median=92.0, n_frames=8) == []
+    assert tl.tone_findings(intent, warmth_median=-0.5, luma_median=60.0, n_frames=8) == []
+    # 中性（|log(R/B)| 在边距内）→ 不报（宁可漏不可误杀）
+    assert tl.tone_findings(intent, warmth_median=-0.05, luma_median=92.0, n_frames=8) == []
 
 
 def test_tone_findings_empty_when_no_frames_or_no_median():

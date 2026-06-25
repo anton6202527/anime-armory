@@ -12,7 +12,7 @@ import json
 import os
 import re
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from html.parser import HTMLParser
 from urllib.error import URLError
 from urllib.request import Request, urlopen
@@ -103,6 +103,17 @@ def parse_manual_evidence(value):
         "url": url,
         "status": "manual_ok",
     }
+
+
+def manual_evidence_fresh(item, baseline_date, expires_after_days):
+    try:
+        evidence_date = datetime.strptime(str(item.get("date") or ""), "%Y-%m-%d").date()
+        base_date = datetime.strptime(str(baseline_date or ""), "%Y-%m-%d").date()
+    except (TypeError, ValueError):
+        return False
+    if evidence_date > base_date:
+        return False
+    return base_date <= evidence_date + timedelta(days=int(expires_after_days or 21))
 
 
 def _quality_band(score):
@@ -200,6 +211,30 @@ def attach_evidence_quality(result):
     return result
 
 
+def build_evidence_tasks(result):
+    tasks = []
+    for idx, warning in enumerate(result.get("coverage_warnings") or [], 1):
+        tasks.append({
+            "id": f"MARKET-EVIDENCE-{idx:03d}",
+            "status": "open",
+            "priority": "P1",
+            "title": "补齐目标平台市场证据",
+            "reason": warning,
+            "target_platform": result.get("target_platform"),
+            "recommended_skill": "novel-research",
+            "return_to_stage": "market_baseline",
+            "required_evidence": [
+                "至少一条覆盖红果/抖音/漫剧/短剧的结构化人工证据：平台|日期|来源|结论|URL",
+                "若用于商业蓝图，把差异化缺口和拥挤度写入 novel-research 平台市场资料包",
+            ],
+            "suggested_commands": [
+                "python3 skills/novel-score/scripts/collect_market_baseline.py \"<作品根>/评分\" --target-platform \"<目标平台>\" --allow-fetch-errors --manual-evidence \"红果短剧|YYYY-MM-DD|第三方榜单|结论|URL\"",
+                "python3 skills/novel-research/scripts/research_pack.py scaffold \"<作品根>\" --topic \"平台市场\" --domain platform --risk high --keyword \"红果\" --keyword \"抖音\"",
+            ],
+        })
+    return tasks
+
+
 def collect(args):
     sources = list(DEFAULT_SOURCES) if args.defaults else []
     sources.extend(parse_source(v) for v in args.source)
@@ -263,6 +298,7 @@ def collect(args):
         covered_by_manual = any(
             any(k in " ".join(str(ev.get(field, "")) for field in ("platform", "source", "summary"))
                 for k in SHORT_DRAMA_KEYWORDS)
+            and manual_evidence_fresh(ev, result["baseline_date"], result["expires_after_days"])
             for ev in result["manual_evidence"]
         )
         if not covered_by_source and not covered_by_manual:
@@ -272,6 +308,7 @@ def collect(args):
                 "请补 --manual-evidence '红果短剧|YYYY-MM-DD|第三方榜单|结论|URL' "
                 "或 --source '红果短剧|<第三方报告URL>'。"
             )
+    result["evidence_tasks"] = build_evidence_tasks(result)
     attach_evidence_quality(result)
     return result
 
@@ -325,6 +362,42 @@ def write_artifacts(result, out_dir):
             f.write("\n## ⚠️ 覆盖告警\n\n")
             for w in result["coverage_warnings"]:
                 f.write(f"- {w}\n")
+        if result.get("evidence_tasks"):
+            f.write("\n## 待补市场证据任务\n\n")
+            for task in result["evidence_tasks"]:
+                f.write(f"- [{task['priority']}] {task['id']} {task['title']} → {task['recommended_skill']}\n")
+                f.write(f"  - 原因：{task['reason']}\n")
+                for command in task.get("suggested_commands") or []:
+                    f.write(f"  - 命令：`{command}`\n")
+    tasks_json = os.path.join(out_dir, "market_evidence_tasks.json")
+    tasks_md = os.path.join(out_dir, "市场证据待补.md")
+    if result.get("evidence_tasks"):
+        with open(tasks_json, "w", encoding="utf-8") as f:
+            json.dump({
+                "schema_version": 1,
+                "kind": "novel_market_evidence_tasks",
+                "baseline_date": date_s,
+                "target_platform": result["target_platform"],
+                "tasks": result["evidence_tasks"],
+            }, f, ensure_ascii=False, indent=2)
+        with open(tasks_md, "w", encoding="utf-8") as f:
+            f.write(f"# 市场证据待补 — {date_s}\n\n")
+            for task in result["evidence_tasks"]:
+                f.write(f"## {task['id']} {task['title']}\n\n")
+                f.write(f"- 优先级：{task['priority']}\n")
+                f.write(f"- 推荐 skill：{task['recommended_skill']}\n")
+                f.write(f"- 原因：{task['reason']}\n")
+                f.write("- 需要证据：\n")
+                for item in task.get("required_evidence") or []:
+                    f.write(f"  - {item}\n")
+                f.write("- 建议命令：\n")
+                for command in task.get("suggested_commands") or []:
+                    f.write(f"  - `{command}`\n")
+                f.write("\n")
+    else:
+        for stale in (tasks_json, tasks_md):
+            if os.path.exists(stale):
+                os.remove(stale)
     return json_path, md_path
 
 

@@ -65,6 +65,9 @@ fi
 PXW=${GEO% *}; PXH=${GEO#* }
 # clips 是「出视频」的唯一产物，仍读 出视频/；配音/成片/中间件都在「合成」文件夹下。
 VID="$ROOT/出视频/$EP/视频"
+if [ -f "$SKILL_DIR/../n2d-video/scripts/materialize_shared_clips.py" ]; then
+  python3 "$SKILL_DIR/../n2d-video/scripts/materialize_shared_clips.py" "$ROOT" "$EP"
+fi
 # 默认用 n2d-voice 产的整轨；`制作模式=先出视频后配音` 时先跑 fit_voice_to_clips.py
 # 把后期补录的真音拟合到已成片镜头长，再用 VOICEFILE 指向 voice_<lang>_fitted.wav。
 VOICE="${VOICEFILE:-$ROOT/合成/$EP/配音/voice_${VLANG}.wav}"
@@ -236,7 +239,14 @@ fi
 
 if [ "$NATIVE_AUDIO_MODE" != "discard" ]; then
   if [ "$NATIVE_AUDIO_MODE" = "keep" ] && [ -f "$VOICE" ]; then
-    echo "⚠️ clip 原生音频策略=保留原片音轨，且检测到配音轨 $VOICE；若原片含人声会双人声。正式成片建议改为 低音量混入环境声 或 丢弃。"
+    if [ "${ALLOW_DOUBLE_VOICE:-0}" != "1" ] && [ "${ALLOW_NATIVE_AV_VOICEOVER:-0}" != "1" ]; then
+      echo "⛔ clip 原生音频策略=保留原片音轨，且检测到配音轨 $VOICE；正式合成会有双人声风险，已阻断。"
+      echo "   · 配音先行：把 视频原生音轨 改为「丢弃」或「低音量混入环境声」。"
+      echo "   · 原生音画 + 旁白层：先通过 compose gate/sidecar 确认配音轨仅为旁白，再显式 ALLOW_NATIVE_AV_VOICEOVER=1 重跑。"
+      echo "   · 仅内部预览且自担风险：ALLOW_DOUBLE_VOICE=1 重跑。"
+      exit 1
+    fi
+    echo "⚠️ 已显式允许保留原片音轨 + 配音轨（ALLOW_DOUBLE_VOICE/ALLOW_NATIVE_AV_VOICEOVER）；确认不会形成角色双人声。"
   fi
   echo "clip 原生音频：策略=${VIDEO_NATIVE_AUDIO_POLICY}（gain=${CLIP_AUDIO_GAIN}）"
   : > "$W/alist.txt"; i=0

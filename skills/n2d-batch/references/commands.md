@@ -85,6 +85,8 @@ python3 skills/n2d-batch/scripts/runner.py <作品根> --limit 1
 python3 skills/n2d-batch/scripts/runner.py <作品根> --until-empty --limit 1 --timeout-sec 3600
 ```
 
+runner 默认会在执行前消费 `n2d/run.py next` 的硬阻断；只有确认命令本身已走标准 wrapper/gate，才在配置里写 `"next_preflight": false` 或命令行加 `--no-next-preflight` 显式关闭。
+
 需要把“命令 exit 0”再用契约产物 + `_进度.md` 后置条件兜住时，加：
 
 ```bash
@@ -106,8 +108,8 @@ runner 行为：
 仓库已提供标准 wrapper：
 
 - `skills/n2d-batch/scripts/run_n2d_image.sh`：先跑 image_preflight gate；实际生图命令必须由 `N2D_IMAGE_COMMAND` 显式配置，避免 wrapper 猜后端或误花钱。
-- `skills/n2d-batch/scripts/run_n2d_video.sh`：先跑 identity/router/video_preflight gate，再调用 `n2d-video/scripts/video_runner.py prepare` 生成稳定 manifest；必须显式设置 `N2D_VIDEO_RANGE=06-10`，避免自动猜付费批次。真正提交视频需再显式设置 `N2D_VIDEO_SUBMIT_ONE=Clip_06` 或 `N2D_VIDEO_AUTO_SUBMIT=1`，否则不会消耗视频积分；`video_runner.py submit` 本身也默认再跑一次 `video_preflight`，防止绕过 wrapper 直接扣费。
-- `skills/n2d-batch/scripts/run_n2d_compose.sh`：先跑 compose gate，再调用 `n2d-compose/compose.sh`。
+- `skills/n2d-batch/scripts/run_n2d_video.sh`：先跑 identity/router、`mouth_detect.py --write`、共享视频物化、video_preflight gate，再调用 `n2d-video/scripts/video_runner.py prepare` 生成稳定 manifest；必须显式设置 `N2D_VIDEO_RANGE=06-10`，避免自动猜付费批次。真正提交视频需再显式设置 `N2D_VIDEO_SUBMIT_ONE=Clip_06` 或 `N2D_VIDEO_AUTO_SUBMIT=1`，否则不会消耗视频积分；`video_runner.py submit` 本身也默认再跑一次 `video_preflight`，防止绕过 wrapper 直接扣费。
+- `skills/n2d-batch/scripts/run_n2d_compose.sh`：先刷新 `mouth_visible` sidecar、物化共享视频，再跑 compose gate，最后调用 `n2d-compose/compose.sh`。
 - `skills/n2d-batch/scripts/run_n2d_review.sh`：刷新高动态成片证据、motion reference、review gate、score、consistency ledger 和 review-ui；通过后仍只生成验收证据，不自动回写 `验收=✅`。
 
 示例配置可直接复制为项目级文件后再按后端补 env：

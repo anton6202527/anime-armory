@@ -224,6 +224,135 @@ def test_first_episode_no_incoming_link_check():
     assert "cross_ep_hook_break" not in codes(findings)
 
 
+def test_storyboard_missing_first_screen_contract_flags():
+    root = _mk_ep(GOOD)
+    sb = Path(root) / "脚本" / "第1集" / "storyboard.json"
+    sb.write_text(json.dumps({"clips": [{"id": "C1", "rhythm": "冷开场", "duration": 3}]}, ensure_ascii=False), encoding="utf-8")
+    findings, _ = B.audit_episode(root, "第1集")
+    c = codes(findings)
+    assert "missing_first_3s_visual_hook" in c
+    assert "missing_retention_promise_ledger" in c
+
+
+def test_storyboard_first_screen_and_promise_ledger_pass():
+    root = _mk_ep(GOOD)
+    sb = Path(root) / "脚本" / "第1集" / "storyboard.json"
+    sb.write_text(json.dumps({
+        "first_3s_visual_hook": {
+            "visual_conflict": "沈念脸部大特写，门外刀影压进画面",
+            "content_proposition": "门外杀机逼近，观众要知道谁来害她",
+            "onscreen_text": "谁在门外？",
+            "muted_safe_proof": "刀影、惊恐特写和烧屏字幕同屏，关声也能读懂危机",
+            "expected_metric": {"primary": "retention_3s", "target": 0.78},
+            "muted_safe": True,
+        },
+        "retention_promise_ledger": [
+            {"hook_id": "OPEN_01", "promise_type": "opening_hook", "opened_at": "镜头1", "promise": "门外是谁", "payoff_due": "镜头3", "payoff_status": "paid", "payoff_clip": "镜头3", "payoff_evidence": "镜头3揭示亲妹妹"},
+            {"hook_id": "TAIL_01", "promise_type": "cliffhanger", "opened_at": "镜头4", "promise": "这局才刚开始", "delayed_payoff_ep": "第2集"},
+        ],
+        "clips": [{"id": "C1", "rhythm": "冷开场", "duration": 3}],
+    }, ensure_ascii=False), encoding="utf-8")
+    findings, _ = B.audit_episode(root, "第1集")
+    c = codes(findings)
+    assert "missing_first_3s_visual_hook" not in c
+    assert "first_3s_not_muted_safe" not in c
+    assert "missing_retention_promise_ledger" not in c
+    assert "incomplete_retention_promise" not in c
+    assert "missing_tail_promise" not in c
+
+
+def test_incomplete_retention_promise_flags():
+    root = _mk_ep(GOOD)
+    sb = Path(root) / "脚本" / "第1集" / "storyboard.json"
+    sb.write_text(json.dumps({
+        "first_3s_visual_hook": {
+            "visual_conflict": "冷开场大特写",
+            "content_proposition": "门外危机",
+            "onscreen_text": "门外是谁？",
+            "muted_safe_proof": "大特写+字卡",
+            "expected_metric": "retention_3s",
+            "muted_safe": True,
+        },
+        "retention_promise_ledger": [{"hook_id": "OPEN_01"}],
+        "clips": [{"id": "C1", "rhythm": "冷开场", "duration": 3}],
+    }, ensure_ascii=False), encoding="utf-8")
+    findings, _ = B.audit_episode(root, "第1集")
+    c = codes(findings)
+    assert "incomplete_retention_promise" in c
+    assert "missing_tail_promise" in c
+
+
+def test_weak_first_screen_schema_is_must():
+    root = _mk_ep(GOOD)
+    sb = Path(root) / "脚本" / "第1集" / "storyboard.json"
+    sb.write_text(json.dumps({
+        "first_3s_visual_hook": {"visual_hook": "旧字段冷开场大特写", "muted_safe": True},
+        "retention_promise_ledger": [
+            {"hook_id": "OPEN_01", "promise_type": "opening_hook", "opened_at": "镜头1", "promise": "门外是谁", "payoff_due": "第2集"},
+            {"hook_id": "TAIL_01", "promise_type": "cliffhanger", "opened_at": "镜头4", "promise": "主使是谁", "delayed_payoff_ep": "第2集"},
+        ],
+        "clips": [{"id": "C1", "rhythm": "冷开场", "duration": 3}],
+    }, ensure_ascii=False), encoding="utf-8")
+    findings, _ = B.audit_episode(root, "第1集")
+    assert any(sev == "must" and code == "incomplete_first_3s_visual_hook" for sev, code, _ in findings)
+
+
+def test_due_promise_requires_payoff_evidence():
+    root = _mk_ep(GOOD)
+    sb = Path(root) / "脚本" / "第1集" / "storyboard.json"
+    sb.write_text(json.dumps({
+        "first_3s_visual_hook": {
+            "visual_conflict": "冷开场大特写",
+            "content_proposition": "门外危机",
+            "onscreen_text": "门外是谁？",
+            "muted_safe_proof": "大特写+字卡",
+            "expected_metric": "retention_3s",
+            "muted_safe": True,
+        },
+        "retention_promise_ledger": [
+            {"hook_id": "OPEN_01", "promise_type": "opening_hook", "opened_at": "镜头1", "promise": "门外是谁", "payoff_due": "第1集"},
+            {"hook_id": "TAIL_01", "promise_type": "cliffhanger", "opened_at": "镜头4", "promise": "主使是谁", "delayed_payoff_ep": "第2集"},
+        ],
+        "clips": [{"id": "C1", "rhythm": "冷开场", "duration": 3}],
+    }, ensure_ascii=False), encoding="utf-8")
+    findings, _ = B.audit_episode(root, "第1集")
+    assert "due_promise_without_payoff_evidence" in codes(findings)
+
+
+def test_creative_priors_must_be_acknowledged():
+    root = _mk_ep(GOOD)
+    prod = Path(root) / "生产数据"
+    prod.mkdir()
+    (prod / "creative_priors.json").write_text(json.dumps({
+        "kind": "n2d_creative_priors",
+        "priors": {"opening_variant": {"winner": "cold_open_first", "paired_lift": 0.1}},
+    }, ensure_ascii=False), encoding="utf-8")
+    sb = Path(root) / "脚本" / "第1集" / "storyboard.json"
+    sb.write_text(json.dumps({
+        "first_3s_visual_hook": {
+            "visual_conflict": "冷开场大特写",
+            "content_proposition": "门外危机",
+            "onscreen_text": "门外是谁？",
+            "muted_safe_proof": "大特写+字卡",
+            "expected_metric": "retention_3s",
+            "muted_safe": True,
+        },
+        "retention_promise_ledger": [
+            {"hook_id": "OPEN_01", "promise_type": "opening_hook", "opened_at": "镜头1", "promise": "门外是谁", "payoff_due": "第2集"},
+            {"hook_id": "TAIL_01", "promise_type": "cliffhanger", "opened_at": "镜头4", "promise": "主使是谁", "delayed_payoff_ep": "第2集"},
+        ],
+        "clips": [{"id": "C1", "rhythm": "冷开场", "duration": 3}],
+    }, ensure_ascii=False), encoding="utf-8")
+    findings, _ = B.audit_episode(root, "第1集")
+    assert "creative_prior_not_acknowledged" in codes(findings)
+
+    (Path(root) / "脚本" / "第1集" / "applied_creative_priors.json").write_text(json.dumps({
+        "applied_creative_priors": {"opening_variant": {"winner": "cold_open_first"}},
+    }, ensure_ascii=False), encoding="utf-8")
+    findings, _ = B.audit_episode(root, "第1集")
+    assert "creative_prior_not_acknowledged" not in codes(findings)
+
+
 def test_series_homogenization_detects_dupes():
     d = tempfile.mkdtemp()
     same = """[镜头1·沈念·愤怒·快] 反击打脸！  ⚡钩子
@@ -282,3 +411,103 @@ def test_narrative_risk_profile_prioritizes_mid_high_entropy(tmp_path):
     flagged = {f[2].split("：")[0] for f in findings}
     assert "第3集" in flagged or "第4集" in flagged       # 中段高熵集被标优先
     assert all(f[0] == "info" for f in findings)          # report-only
+
+
+# ── 看点高潮位复核（北极星看点④·阶段2·需真实镜头时长）──────────────
+def test_highlight_silent_without_timings():
+    # 拆集层无 镜头时长.json → 静默跳过，不产任何行/finding
+    root = _mk_ep(GOOD)
+    rows, findings = B.highlight_climax_profile(root)
+    assert rows == [] and findings == []
+
+
+def test_highlight_healthy_with_endhook_tail():
+    # 💥在镜3(44%)、镜4 是 🪝集尾钩撑张力 → 不报 too_early
+    root = _mk_ep(GOOD, {"镜头1": 3, "镜头2": 4, "镜头3": 4, "镜头4": 5})
+    rows, findings = B.highlight_climax_profile(root)
+    assert rows[0]["has_highlight"] is True
+    assert "highlight_too_early" not in codes(findings)
+    assert "no_highlight_beat" not in codes(findings)
+
+
+def test_highlight_too_early_flagged():
+    vo = """[镜头1·沈念·惊恐·快] 门开了！  ⚡钩子
+[镜头2·沈念·痛快·快] 一拳打飞了他！  💥爽点
+[镜头3·旁白·平静] 夜色渐深。
+[镜头4·旁白·平静] 她坐在窗边。
+[镜头5·旁白·平静] 茶水凉了。
+[镜头6·旁白·平静] 风停了。
+"""
+    secs = {f"镜头{i}": 5 for i in range(1, 7)}
+    root = _mk_ep(vo, secs)
+    rows, findings = B.highlight_climax_profile(root)
+    assert "highlight_too_early" in codes(findings)
+    assert rows[0]["climax_pos"] < 0.45 and rows[0]["tail_has_hook"] is False
+
+
+def test_highlight_no_beat_flagged():
+    vo = """[镜头1·旁白·平静] 清晨到了。
+[镜头2·旁白·平静] 她起床洗漱。
+[镜头3·旁白·平静] 吃了早饭出门。
+"""
+    root = _mk_ep(vo, {"镜头1": 5, "镜头2": 5, "镜头3": 5})
+    rows, findings = B.highlight_climax_profile(root)
+    assert "no_highlight_beat" in codes(findings)
+    assert rows[0]["has_highlight"] is False
+
+
+# ── A1 多层节奏间距栅格（爆点≤30s / 情绪峰≤180s）─────────────────────────────
+def test_worst_cadence_gap_pure():
+    beats = [{"shot": 1, "hooks": {B.HOOK_PAYOFF}, "text": "赢了", "emotion": "痛快"},
+             {"shot": 5, "hooks": {B.HOOK_PAYOFF}, "text": "翻盘", "emotion": "痛快"}]
+    starts = {1: 0.0, 5: 36.0}
+    w = B.worst_cadence_gap(beats, starts, B._is_blast, 30.0)
+    assert w == (0.0, 36.0, 36.0)
+    # <2 拍 → None（间距无意义）
+    assert B.worst_cadence_gap(beats[:1], starts, B._is_blast, 30.0) is None
+    # 间距未超阈 → None
+    assert B.worst_cadence_gap(beats, {1: 0.0, 5: 20.0}, B._is_blast, 30.0) is None
+
+
+def test_cadence_blast_flags_far_apart_detonations():
+    # 钩子每<20s（hook 层过），但两次💥相隔 36s → cadence_blast warn
+    vo = """[镜头1·沈念·痛快·快] 反击赢了！  💥爽点
+[镜头2·沈念·惊恐·快] 危机又来了！  ⚡钩子
+[镜头3·沈念·愤怒·快] 还有埋伏！  ⚡钩子
+[镜头4·沈念·痛快·快] 终于翻盘！  💥爽点
+[镜头5·沈念·阴狠·慢] 没完。  🪝集尾
+"""
+    root = _mk_ep(vo, {"镜头1": 6, "镜头2": 15, "镜头3": 15, "镜头4": 8, "镜头5": 5})
+    findings, _ = B.audit_episode(root, "第1集")
+    c = codes(findings)
+    assert "cadence_blast" in c       # 💥@0 → 💥@36，间距 36>30
+    assert "hook_gap" not in c        # 钩子层（⚡∪💥）间距都 ≤20，不误报
+
+
+def test_cadence_blast_not_flagged_when_dense():
+    # GOOD：💥/反转拍密集（<30s）→ 不报 cadence_blast
+    root = _mk_ep(GOOD, {"镜头1": 3, "镜头2": 4, "镜头3": 4, "镜头4": 5})
+    findings, _ = B.audit_episode(root, "第1集")
+    assert "cadence_blast" not in codes(findings)
+
+
+def test_cadence_blast_silent_without_real_seconds():
+    # 无 镜头时长.json → 多层栅格不激活（拆集层不臆造秒）
+    vo = """[镜头1·沈念·痛快·快] 赢了！  💥爽点
+[镜头2·沈念·痛快·快] 又赢！  💥爽点
+"""
+    root = _mk_ep(vo)
+    findings, _ = B.audit_episode(root, "第1集")
+    assert "cadence_blast" not in codes(findings)
+
+
+def test_cadence_peak_flags_long_gap_between_peaks_longform():
+    # 长剪：两个峰值情绪相隔 >180s → cadence_peak info（漫剧短集天然不触发）
+    vo = """[镜头1·沈念·愤怒·快] 怒火中烧！  ⚡钩子
+[镜头2·旁白·平静·慢] 漫长的平稳叙事。
+[镜头3·沈念·震惊·快] 真相震撼！  💥爽点
+"""
+    root = _mk_ep(vo, {"镜头1": 5, "镜头2": 200, "镜头3": 5})
+    findings, _ = B.audit_episode(root, "第1集")
+    c = codes(findings)
+    assert "cadence_peak" in c        # 愤怒@0 → 震惊@205，间距 205>180

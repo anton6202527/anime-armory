@@ -65,8 +65,10 @@ def cell_state(v: str) -> str:
     if v == PROGRESS_DONE or v.startswith(f"{PROGRESS_DONE}("):
         return "done"
     if v.startswith("🟡"):
-        # 旧项目常用“🟡偏长”等记录已审出的建议级问题；它不是未跑该阶段。
-        return "done"
+        # 🟡 = 该阶段已跑、但记录了一条**未消除的建议级问题**（如“🟡偏长”）。
+        # 它独立于 done：路由上不当未跑（不重复回炉），但也不能像 ✅ 那样静默吞掉——
+        # 否则“已审出问题但没改”与“干净通过”无法区分。summarize 会把它单列出来提醒。
+        return "flagged"
     if v.startswith(PROGRESS_ROUGH_PREFIX):
         return "rough"
     if v in ("—", "-", "N/A", "n/a", "无"):
@@ -76,7 +78,8 @@ def cell_state(v: str) -> str:
     return "todo"
 
 def is_done(v: str) -> bool:
-    return cell_state(v) in ("done", "na")
+    # flagged 仍算"该阶段已跑"（不回炉重路由），但通过 summarize 的 flagged 列表显式提醒。
+    return cell_state(v) in ("done", "na", "flagged")
 
 def progress_path(root: str) -> str:
     return os.path.join(root, "_进度.md")
@@ -142,12 +145,30 @@ def format_route(root: str, route: Dict[str, Optional[str]]) -> str:
     cmd = route.get("cmd")
     return f"{ch}: {label}" if not cmd else f"{ch}: {label}  → {cmd.format(root=root, ch=ch)}"
 
+def flagged_cells(header: List[str], rows: Iterable[Dict[str, str]]) -> List[Dict[str, str]]:
+    """收集所有 🟡（flagged）单元格——已跑但有未消除的建议级问题。
+
+    路由把 flagged 当"已跑"以免回炉，但这些单元格代表**已审出却没改**的问题；
+    若不单列出来就会被并进 done、彻底失声。返回 [{ch, col, value}]。"""
+    out: List[Dict[str, str]] = []
+    stage_labels = [s["label"] for s in stage_specs()]
+    for r in sorted(rows, key=lambda x: x.get("_num") or 0):
+        ch = r.get("_ch") or r.get("章节") or r.get("章") or ""
+        for label in stage_labels:
+            if label not in header:
+                continue
+            val = (r.get(label, "") or "").strip()
+            if cell_state(val) == "flagged":
+                out.append({"ch": ch, "col": label, "value": val})
+    return out
+
+
 def summarize(root: str) -> Dict[str, object]:
     try:
         header, rows = parse_progress(root)
     except Exception as e:
         return {"error": str(e)}
-        
+
     routes = [stage_of(root, r, header) for r in sorted(rows, key=lambda x: x["_num"])]
     first = next((r for r in routes if r.get("cmd")), None)
     done = sum(1 for r in routes if not r.get("cmd"))
@@ -156,4 +177,6 @@ def summarize(root: str) -> Dict[str, object]:
         if r.get("cmd"):
             label = str(r["label"])
             bottleneck[label] = bottleneck.get(label, 0) + 1
-    return {"header": header, "rows": rows, "routes": routes, "first": first, "done": done, "bottleneck": bottleneck}
+    flagged = flagged_cells(header, rows)
+    return {"header": header, "rows": rows, "routes": routes, "first": first,
+            "done": done, "bottleneck": bottleneck, "flagged": flagged}

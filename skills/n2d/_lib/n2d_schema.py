@@ -67,6 +67,24 @@ BOUNDARY_PRODUCT_KINDS = {
         "layer": "production_data",
         "boundary": "consistency_ledger",
     },
+    CONSISTENCY_POLICY_LATTICE_KIND: {
+        "owner": "n2d-model-router",
+        "path": f"{PRODUCTION_DIR}/consistency_policy_lattice.json",
+        "layer": "production_data",
+        "boundary": "policy_priority_lattice",
+    },
+    CONSISTENCY_DEPENDENCY_GRAPH_KIND: {
+        "owner": "n2d-review",
+        "path": f"{PRODUCTION_DIR}/consistency_dependency_graph_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "transitive_impact_graph",
+    },
+    INTENTIONAL_DISCONTINUITY_MANIFEST_KIND: {
+        "owner": "n2d-review",
+        "path": f"{PRODUCTION_DIR}/intentional_discontinuity_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "signed_off_discontinuity_exceptions",
+    },
     VIDEO_MODEL_ROUTES_KIND: {
         "owner": "n2d-model-router",
         # 真实落点：router.py 写、inherit_contract/lipsync_pass/interp_pass 读，均为
@@ -186,6 +204,12 @@ BOUNDARY_PRODUCT_KINDS = {
         "layer": "training_asset",
         "boundary": "lora_train_job",
     },
+    LORA_EXCEPTION_SCOPE_KIND: {
+        "owner": "n2d-lora",
+        "path": f"{PRODUCTION_DIR}/lora_exception_scope_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "lora_exception_scope",
+    },
     ASSET_PACK_KIND: {
         "owner": "n2d-asset-market",
         "path": "资产库/{slug}/asset_pack.json",
@@ -255,8 +279,8 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "weight": 20,
         "return_to_stage": "image",
         "scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-        "audit_labels": ("锚点门(N3)", "脸(G1)", "无脸崩坏(G1b)", "跨集脸漂(G5)", "发型(H1)", "辨识标记(MK1)", "片内时序(N2)", "手部/解剖(N5)", "身高比例(R1)", "跨集体型(R2)", "外观判官(VAP)", "主体视频一致(S2V)", "表情连续(EXP1)"),
-        "keywords": ("角色", "角色DNA", "DNA", "脸", "发型", "身高", "体型", "跨集体型", "手部", "解剖", "资产身份", "identity", "face", "锚点", "S2V", "主体视频", "外观判官", "VLM-Appearance", "表情", "情绪", "微表演", "expression", "辨识标记", "疤痕", "胎记", "纹身", "异瞳", "瞳色", "标记", "mark"),
+        "audit_labels": ("锚点门(N3)", "脸(G1)", "无脸崩坏(G1b)", "跨集脸漂(G5)", "发型(H1)", "辨识标记(MK1)", "片内时序(N2)", "手部/解剖(N5)", "身高比例(R1)", "跨集体型(R2)", "外观判官(VAP)", "主体视频一致(S2V)", "表情连续(EXP1)", "状态化表情(EXP2)", "多视角身份包(MVIEW)"),
+        "keywords": ("角色", "角色DNA", "DNA", "脸", "发型", "身高", "体型", "跨集体型", "手部", "解剖", "资产身份", "identity", "face", "锚点", "S2V", "主体视频", "外观判官", "VLM-Appearance", "表情", "情绪", "微表演", "状态化表情", "allowed_state_delta", "expression", "辨识标记", "疤痕", "胎记", "纹身", "异瞳", "瞳色", "标记", "mark"),
     },
     "outfit_consistency": {
         "label": "角色 DNA 一致性（服装/配饰）",
@@ -271,8 +295,8 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "weight": 12,
         "return_to_stage": "image",
         "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-        "audit_labels": ("场景(O2)", "接缝接力", "轴线视线(X1)", "天气时辰(W1)", "光位方向(W2)", "色温调色(GRADE1)", "字幕安全区(L2)", "空间站位(B1)", "物件常驻(O3)", "在场检测(O3V)", "视线状态回读(X2)", "场景平面(FP1)", "相机空间轨迹(CAM1)", "运动质量(MOT1)", "高动态成片证据(SPECV)"),
-        "keywords": ("场景", "接缝", "尾帧", "场景资产", "轴线", "视线", "站位", "遮挡", "前后景", "天气", "时辰", "字幕安全区", "字幕带", "构图", "物件常驻", "在场检测", "对象持久", "object permanence", "平面图", "相机轨迹", "运动质量", "motion", "camera"),
+        "audit_labels": ("场景(O2)", "接缝接力", "轴线视线(X1)", "天气时辰(W1)", "光位方向(W2)", "色温调色(GRADE1)", "字幕安全区(L2)", "空间站位(B1)", "物件常驻(O3)", "在场检测(O3V)", "视线状态回读(X2)", "场景平面(FP1)", "相机空间轨迹(CAM1)", "运动质量(MOT1)", "运动语法(MG1)", "合法不连续(DIS1)", "高动态成片证据(SPECV)", "世界一致性(WCS)"),
+        "keywords": ("场景", "接缝", "尾帧", "场景资产", "轴线", "视线", "站位", "遮挡", "前后景", "天气", "时辰", "字幕安全区", "字幕带", "构图", "物件常驻", "在场检测", "对象持久", "object permanence", "平面图", "相机轨迹", "运动质量", "运动语法", "合法不连续", "intentional discontinuity", "motion", "camera"),
     },
     "subtitle_correctness": {
         "label": "字幕正确性",
@@ -295,9 +319,9 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "label": "音色一致性",
         "weight": 10,
         "return_to_stage": "voice",
-        "scope": "回 n2d-voice 按 voicemap 注册音色重配受影响角色台词；重配后复核时长清单与分镜时长。配音情绪弧(VEA)失配回 n2d-script 改 voiceover.txt 情绪标注/回 n2d-voice 带情绪重配；口音方言(ACC)冲突回 voicemap 锁唯一口音。",
-        "audit_labels": ("音色声纹", "声纹一致性", "音色漂移", "配音情绪弧(VEA)", "口音方言(ACC)"),
-        "keywords": ("音色", "声纹", "speaker", "voice print", "voice_key", "voicemap", "克隆音色", "情绪弧", "情绪标注", "口音", "方言", "accent", "念白表演"),
+        "scope": "回 n2d-voice 按 voicemap 注册音色重配受影响角色台词；重配后复核时长清单与分镜时长。配音情绪弧(VEA)失配回 n2d-script 改 voiceover.txt 情绪标注/回 n2d-voice 带情绪重配；口音方言(ACC)冲突回 voicemap 锁唯一口音；原生音画说话镜缺 native_voice_identity 证据时回 video/router 改 voice-first 或补可审计声纹 sidecar。",
+        "audit_labels": ("音色声纹", "声纹一致性", "音色漂移", "配音情绪弧(VEA)", "口音方言(ACC)", "原生声纹(NV1)"),
+        "keywords": ("音色", "声纹", "speaker", "voice print", "voice_key", "voicemap", "克隆音色", "原生声纹", "native_voice_identity", "情绪弧", "情绪标注", "口音", "方言", "accent", "念白表演"),
     },
     "rhythm_density": {
         "label": "节奏密度",
@@ -311,9 +335,9 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "label": "风格一致性",
         "weight": 12,
         "return_to_stage": "image",
-        "scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜。",
-        "audit_labels": ("风格(S1)", "糊/低质(N4)", "景深一致(DOF1)"),
-        "keywords": ("风格", "style", "画风", "基础视觉", "糊", "低质", "清晰度", "景深", "虚化", "焦段", "镜头光学", "bokeh", "DoF"),
+        "scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。",
+        "audit_labels": ("风格(S1)", "糊/低质(N4)", "景深一致(DOF1)", "调色层级(COLORH)"),
+        "keywords": ("风格", "style", "画风", "基础视觉", "糊", "低质", "清晰度", "景深", "虚化", "焦段", "镜头光学", "bokeh", "DoF", "调色层级", "series_grade", "LUT", "故事光"),
     },
     "semantic_continuity": {
         "label": "语义继承",
@@ -328,7 +352,7 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "weight": 8,
         "return_to_stage": "image",
         "scope": "回 n2d-image 修 visual_state_ledger / 出图分镜状态锁；必要时回 storyboard 修角色状态演进。",
-        "audit_labels": ("状态百科(P1)", "状态转场视频证据(ST1)"),
+        "audit_labels": ("状态百科(P1)", "状态转场视频证据(ST1)", "合法状态转场(STE)"),
         "keywords": ("状态", "动态百科", "visual_state_ledger", "state", "状态转场", "state_transition"),
     },
     "multimodal_continuity": {
@@ -360,7 +384,7 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "weight": 8,
         "return_to_stage": "compose",
         "scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
-        "audit_labels": ("成片统一(C1)", "成片时间线探针(FT1)", "系列包装(PKG)", "系列调色(GRD)", "环境声(AMB)"),
+        "audit_labels": ("成片统一(C1)", "成片时间线探针(FT1)", "系列包装(PKG)", "系列调色(GRD)", "环境声(AMB)", "声音空间(ASP)"),
         "keywords": ("成片统一", "包装", "片头", "片尾", "LUFS", "响度", "room tone", "BGM", "subtitle style", "final_timeline_probe", "系列调色", "调色", "LUT", "白平衡", "color grade", "环境声", "ambient", "底噪", "room tone"),
     },
     "production_ops_consistency": {
@@ -368,8 +392,8 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "weight": 6,
         "return_to_stage": "review",
         "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-        "audit_labels": ("生成配方(RCP)", "强配方Schema(RCP2)", "成本路由(K1)", "人审校准集(CAL)", "一致性探针包(PROBE)", "视频证据完整性(EVID)"),
-        "keywords": ("生成配方", "recipe_hash", "prompt_sha256", "reference_bundle_sha256", "成本", "路由", "重试", "production_events", "provider", "seed", "校准集", "probe", "证据完整性", "video_eval_manifest", "sidecar"),
+        "audit_labels": ("生成配方(RCP)", "强配方Schema(RCP2)", "配方可复现(RCP3)", "成本路由(K1)", "策略裁决(POL)", "依赖图(DEP)", "例外签收(DIS)", "人审校准集(CAL)", "阈值校准(CAL2)", "一致性探针包(PROBE)", "视频证据完整性(EVID)", "真值源(TRUTH)", "后端一致性作用域(BSCOPE)"),
+        "keywords": ("生成配方", "recipe_hash", "prompt_sha256", "reference_bundle_sha256", "成本", "路由", "策略裁决", "policy_lattice", "依赖图", "dependency_graph", "例外签收", "intentional_discontinuity", "重试", "production_events", "provider", "seed", "校准集", "阈值校准", "probe", "证据完整性", "video_eval_manifest", "sidecar"),
     },
     "ui_hud_consistency": {
         "label": "UI/系统面板/HUD 一致性",
@@ -410,7 +434,7 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
 # 注 1：voice_consistency 的声纹机检走 n2d-identity 的 identity.py --write 旁路（非 consistency_audit），
 #       故其 audit_labels 非空但不在本表——它有机检，只是不在主审计套件内。
 # 注 2：audio_visual_sync 已于 2026-06 接入 consistency_audit 的 音画同步(AV1) advisory runner
-#       （lipsync_consistency.py·口型↔配音偏移，SyncNet/LatentSync/外部偏移报告，缺则优雅降级，
+#       （lipsync_consistency.py·口型↔配音偏移，SyncNet/LatentSync/外部偏移报告，缺则优雅回退，
 #       block 封顶到 warn 不硬阻断 gate；实测严重档喂 n2d-score）——故已移出本缺口表。
 # 注 3：rhythm_density 已接入 consistency_audit 的 节奏密度(Rhythm) advisory runner（pacing_retention.py）。
 #       它仍不是成片观感模型，常规 profile 不硬阻断；production profile 可按 gate 策略对重复/关键场景
@@ -889,9 +913,9 @@ IMAGE_BACKEND_ALIASES = {
 
 FORBIDDEN_IMAGE_BACKEND_KEYWORDS = ("同视频ai", "同视频AI", "第三方", "逆向", "web自动化", "web 自动化")
 
-# 图后端身份一致性能力档（出图侧）。
+# 生图模型/渠道身份一致性能力档（出图侧）。
 #
-# `APPROVED_IMAGE_BACKENDS` 只回答「这个出图后端是否可用/官方」；
+# `APPROVED_IMAGE_BACKENDS` 只回答「这个生图渠道是否可用/官方」；
 # 本表回答「它能把角色身份锁到哪一级」。`face_drift_risk.py`、gate 和后续路由建议应读这里，
 # 避免把 Dreamina 这类“多参考但无持久主体 ID”的后端误当成 Seedream/可灵主体库。
 # 采集日期同 APPROVED_IMAGE_BACKENDS：2026-06-14；易变事实需走 freshness/refresh 流程刷新。

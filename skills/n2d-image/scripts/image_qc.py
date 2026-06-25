@@ -933,6 +933,15 @@ SPATIAL_POSITION_MARKERS = ("画左", "画右", "画中", "靠左", "靠右", "�
                             "前景", "后景", "背景", "中景", "近端", "远端", "左", "右",
                             "left", "right", "center", "foreground", "background")
 BLOCKING_FIELD_MARKERS = ("blocking", "站位", "走位", "机位站位")
+# 多人同框分层合成/原生主体执行策略标记——与 n2d-review gate.py 的 split_composite/native 策略放行口径对齐，
+# 使本 lint 的 block ⊆ review 的同框 block（登记了这些策略 review 放行的镜，这里也放行，不误挡）。
+# 注：gate.py / shot_risk_audit.py 各自维护同类副本（跨线独立，无共享层）——改这里需同步那两处的 *_MARKERS。
+MULTI_SUBJECT_STRATEGY_MARKERS = (
+    "split_composite", "regional_construct", "分别出图+合成", "分别出图 + 合成",
+    "分角色出图", "分区构建", "区域构建", "单人分层出图", "分层合成", "景别分层",
+    "拆成单人镜", "拆单人镜", "empty_plate", "多人同框执行策略", "native_subject_slots",
+    "原生主体", "多主体", "区域绑定", "shot_reverse_shot",
+)
 
 
 def _distinct_char_bases(id_refs: Sequence[str]) -> Set[str]:
@@ -1048,11 +1057,15 @@ def _lint_outfit_form_binding(label: str, body: str, id_refs: Sequence[str],
 
 def _lint_multi_subject_spatial_binding(label: str, body: str,
                                         id_refs: Sequence[str]) -> List[Dict[str, str]]:
-    """多人同框防串脸（C3·生成端预防）：≥2 具名角色同框却没声明逐角色空间站位时 warn。
+    """多人同框防串脸（C3·生成端预防）：≥2 具名角色同框却没声明逐角色空间站位/分层合成执行策略时 block。
 
     2026 研究：多主体身份混淆随参考数上升（DreamO/UMO）。Seedream4.5 / Nano Banana2 已支持多主体
     空间区域绑定——把每个角色绑到画面位置（画左/画右/前景）可在生成端按位锁主体、显著降串脸。
-    这里只在出图前 lint「多人同框是否声明了空间站位」，缺则 warn（不阻断，交人补 blocking）。纯函数·可测。"""
+    2026-06 起空间绑定对所有后端 **block**，与 n2d-review gate 的 ≥2 同框 block、n2d-script shot_risk
+    的 multi_subject must 同口径（不再「降级为建议」——那是已退役的执行时松动）。逃生口与 review 对齐：
+    声明 blocking/站位、≥2 空间位置标记（画左/画右/前后景，LEFT/RIGHT/FOREGROUND/BACKGROUND_SLOT 子串亦计）、
+    或登记 分别出图+合成/原生主体执行策略 任一即放行——使本 block ⊆ review 同框 block，不误挡 review 会放行的镜。
+    纯函数·可测。"""
     if len(_distinct_char_bases(id_refs)) < 2:
         return []
     low = str(body or "").lower()
@@ -1060,9 +1073,12 @@ def _lint_multi_subject_spatial_binding(label: str, body: str,
         return []
     if sum(1 for m in SPATIAL_POSITION_MARKERS if m.lower() in low) >= 2:
         return []
-    return [{"level": "warn", "code": "multi_person_no_spatial_binding",
+    if any(m.lower() in low for m in MULTI_SUBJECT_STRATEGY_MARKERS):
+        return []
+    return [{"level": "block", "code": "multi_person_no_spatial_binding",
              "msg": f"{label}：多人同框但未声明逐角色空间站位（blocking / 画左·画右 / 前后景）"
-                    "——多主体易串脸，给每角色绑画面位置喂多主体后端可在生成端按位锁主体防串脸"}]
+                    "或分层合成/原生主体执行策略——多主体单帧 co-gen 必相互渗透串脸，2026-06 起对所有后端 block"
+                    "（与 review 同框 gate、script 分镜 must 同口径）：补逐角色画面位置，或登记 分别出图+合成 / 原生主体策略。"}]
 
 
 def _lint_native_multiref_coverage(label: str, body: str, id_refs: Sequence[str],

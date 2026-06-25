@@ -21,7 +21,7 @@
 
 ## 合规与版权前置（P0 横切）— `n2d-compliance`
 
-用户要"合规前置 / 版权前置 / 角色授权 / 声音克隆授权 / 平台审核 / 出海本地化"时，调 `n2d-compliance`。它生成/检查 `合规/compliance_manifest.json`，作为 `n2d-review gate` 的硬输入；image 前阻断源文本/改编权/角色肖像授权缺口，video 前阻断声音克隆缺口，compose/review 前阻断平台审核和出海本地化缺口。合规不可沉默沿用，规则 profile 必须带检查日期。**AI 标识/AI 披露/水印只做 INFO 发布待办；compose 可 best-effort 辅助，但不得阻断主流程。**
+用户要"合规前置 / 版权前置 / 角色授权 / 声音克隆授权 / 平台审核 / 出海本地化"时，调 `n2d-compliance`。它生成/检查 `合规/compliance_manifest.json`，作为 `n2d-review gate` 的硬输入；image 前阻断源文本/改编权/角色肖像授权缺口，video 前阻断声音克隆缺口。`platform_review` / `localization` / `regulatory_filing` 是发布边界域：`publish_candidate` 在 image/video 只报 INFO 待办，compose/review/release 前转 BLOCK；`paid_distribution` 从任意阶段开始都 BLOCK；`internal_only` 降 INFO 但不得直接投放。合规不可沉默沿用，规则 profile 必须带检查日期。**AI 标识/AI 披露/水印只做 INFO 发布待办；compose 可 best-effort 辅助，但不得阻断主流程。**
 
 ## 批量任务队列（P1 横切）— `n2d-batch`
 

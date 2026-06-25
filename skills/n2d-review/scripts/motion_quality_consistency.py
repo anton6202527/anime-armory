@@ -63,6 +63,8 @@ def analyze(root: str, ep: str) -> dict:
                     "视频含明确动作/运动镜，但缺 motion_quality 报告；无法核验冻结、抽搐、速度突变和动作完成度。",
                     stage="video",
                     artifacts=("生产数据/motion_quality_{ep}.json".format(ep=ep),),
+                    evidence_missing=True,
+                    required_evidence="motion_quality",
                 )],
                 "notes": [],
             }

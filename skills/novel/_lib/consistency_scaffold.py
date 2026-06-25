@@ -63,6 +63,20 @@ def character_guardrails_skeleton() -> dict:
     }
 
 
+def foreshadow_ledger_skeleton() -> dict:
+    """空的伏笔台账骨架（与 novel-wiki/wiki_builder.py 的 seed 同 schema）。
+
+    派生线（continue/condense 等）开局不跑 wiki_builder，于是从无伏笔台账，
+    `foreshadow_ledger.analyze()` 永远 `ran:False` 静默跳过——烂尾/超期机检在最需要
+    它的续写/精简上空转。这里把空台账摆出来作为单一脚手架；真正的价值在 SKILL.md 指示
+    把原作未回收伏笔用 `foreshadow_ledger.py plant` 登记成 seeds 后，analyze() 才有据可查。"""
+    return {
+        "schema_version": 1,
+        "kind": "novel_foreshadowing_ledger",
+        "seeds": [],
+    }
+
+
 def power_system_starter(genre: Optional[str]) -> Optional[dict]:
     """题材需要力量体系自检时返回 starter registry，否则 None（不 seed）。"""
     if not genre or not genre_needs_power_check(genre):
@@ -80,7 +94,11 @@ def consistency_registry_files(genre: Optional[str] = None) -> List[Tuple[str, s
         (
             "设定/character_guardrails.json",
             json.dumps(character_guardrails_skeleton(), ensure_ascii=False, indent=2),
-        )
+        ),
+        (
+            "设定/foreshadowing_ledger.json",
+            json.dumps(foreshadow_ledger_skeleton(), ensure_ascii=False, indent=2),
+        ),
     ]
     registry = power_system_starter(genre)
     if registry is not None:

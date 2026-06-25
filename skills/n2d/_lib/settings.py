@@ -8,6 +8,7 @@ questions or infer preferences.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+import glob
 import os
 import re
 import time
@@ -181,6 +182,7 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     # 全剧延续性·断点平均强)/付费(小程序剧·前十集卡点峰值+付费墙集)/海外(ReelShort/TikTok·更碎更狠)。
     # 驱动 boundary_audit 的剧级追更骨架与卡点定位。取值与 n2d-script/references/追更骨架.md 对齐。
     SettingSpec("变现模式", ("n2d",), ("免费", "付费", "海外"), parameterized=True, syncable=False),
+    SettingSpec("项目规模", ("n2d",), ("短 demo", "单集", "多集长线", "长篇量产", "自定义"), parameterized=True, syncable=False),
     SettingSpec("首切范围", ("n2d",), ("部分先切", "全篇粗切"), parameterized=True),
     SettingSpec("脚本批次", ("n2d",), ("逐集", "小批", "整批"), parameterized=True),
     SettingSpec("中段锚帧默认", ("n2d",), ("开启", "关闭")),
@@ -606,7 +608,13 @@ def validate_setting(key: str, value: str, *, family: Optional[str] = None) -> D
         return {"level": "info", "key": key, "canonical_key": spec.key, "value": value, "message": "project metadata"}
     if spec.key == "生视频AI":
         if _validate_video_backend_list(value, spec):
-            return {"level": "ok", "key": key, "canonical_key": spec.key, "value": value, "message": "ok"}
+            return {
+                "level": "warn",
+                "key": key,
+                "canonical_key": spec.key,
+                "value": value,
+                "message": "legacy combined field; prefer 生视频模型 + 生视频渠道, and use this only for old-project fallback",
+            }
         return {"level": "error", "key": key, "canonical_key": spec.key, "value": value, "message": "invalid video backend"}
     if spec.key == "视频备用后端":
         if _validate_video_backend_list(value, spec):
@@ -635,10 +643,85 @@ def validate_setting(key: str, value: str, *, family: Optional[str] = None) -> D
     return {"level": "ok", "key": key, "canonical_key": spec.key, "value": value, "message": "ok"}
 
 
+IMAGE_MODEL_TOKENS = (
+    "gpt image", "gpt-image", "seedream", "nano banana", "gemini", "flux", "可灵主体库模型",
+)
+IMAGE_CHANNEL_TOKENS = (
+    "codex", "openai", "dreamina", "即梦", "seedream", "可灵", "kling", "nano banana", "sora", "cli", "api",
+)
+IMAGE_NATIVE_SUBJECT_CHANNEL_TOKENS = ("seedream", "可灵", "kling", "主体库", "character id", "face lock", "sora cameo")
+IMAGE_NO_NATIVE_SUBJECT_CHANNEL_TOKENS = ("codex", "openai", "dreamina", "即梦", "nano banana")
+LONG_PROJECT_MARKERS = ("多集", "长线", "长篇", "量产", "series", "long")
+
+
+def _n2d_episode_count(work_root: str) -> int:
+    try:
+        pattern = os.path.join(work_root.rstrip("/"), "脚本", "*", "storyboard.json")
+        return len({os.path.basename(os.path.dirname(p)) for p in glob.glob(pattern)})
+    except Exception:
+        return 0
+
+
+def _contains_any(value: str, tokens: Iterable[str]) -> bool:
+    norm = _norm(value)
+    return any(_norm(token) in norm for token in tokens)
+
+
+def _audit_n2d_cross_settings(work_root: str, settings: Dict[str, str]) -> List[Dict[str, Any]]:
+    rows: List[Dict[str, Any]] = []
+    image_model = settings.get("生图模型", "")
+    image_channel = settings.get("生图AI") or settings.get("生图渠道") or ""
+    if image_model and _contains_any(image_model, IMAGE_CHANNEL_TOKENS) and not _contains_any(image_model, IMAGE_MODEL_TOKENS):
+        rows.append({
+            "level": "warn",
+            "key": "生图模型",
+            "canonical_key": "生图模型",
+            "value": image_model,
+            "message": "looks like a channel/access path; 生图模型 must name the generator model, while 生图AI/生图渠道 names the channel",
+        })
+    if image_channel and _contains_any(image_channel, ("gpt image", "gpt-image", "gemini 3 pro image", "flux 2 pro")):
+        rows.append({
+            "level": "warn",
+            "key": "生图AI",
+            "canonical_key": "生图AI",
+            "value": image_channel,
+            "message": "looks like a model name; 生图AI is the channel/access path. Put concrete model names in 生图模型",
+        })
+    if "生视频AI" in settings and ("生视频模型" not in settings or "生视频渠道" not in settings):
+        rows.append({
+            "level": "warn",
+            "key": "生视频AI",
+            "canonical_key": "生视频AI",
+            "value": settings.get("生视频AI", ""),
+            "message": "legacy field is present without the split 生视频模型 + 生视频渠道 pair; split it before new production",
+        })
+    scale = settings.get("项目规模", "")
+    long_project = _contains_any(scale, LONG_PROJECT_MARKERS) or _n2d_episode_count(work_root) >= 3
+    if long_project and image_channel and _contains_any(image_channel, IMAGE_NO_NATIVE_SUBJECT_CHANNEL_TOKENS) and not _contains_any(image_channel, IMAGE_NATIVE_SUBJECT_CHANNEL_TOKENS):
+        rows.append({
+            "level": "warn",
+            "key": "生图AI",
+            "canonical_key": "生图AI",
+            "value": image_channel,
+            "message": "long-running n2d project is using an image channel without persistent subject/character-id evidence; prefer a native subject backend or register face_embedding/LoRA before batch production",
+        })
+    if long_project and not scale:
+        rows.append({
+            "level": "warn",
+            "key": "项目规模",
+            "canonical_key": "项目规模",
+            "value": "",
+            "message": "multiple storyboards imply a long-running project; record 项目规模=多集长线 or 长篇量产 so first-run backend choices match consistency risk",
+        })
+    return rows
+
+
 def audit_settings(work_root: str) -> Dict[str, Any]:
     family = detect_family(work_root)
     settings = load_settings(work_root)
     rows = [validate_setting(k, v, family=family) for k, v in settings.items()]
+    if family == "n2d":
+        rows.extend(_audit_n2d_cross_settings(work_root, settings))
     return {
         "family": family,
         "settings": settings,

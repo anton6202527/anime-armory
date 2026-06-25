@@ -36,10 +36,14 @@ def _field(body: str, label: str) -> str:
     return m.group(1).strip() if m else ""
 
 
-def build_dreamina_prompt(target: base.Target) -> str:
+def build_dreamina_prompt(root: Path, episode: str, target: base.Target) -> str:
     body = target.section.body
+    # 画幅与风格都不写死：画幅走 _设置.md「画幅」选择点；风格继承 storyboard.json 的 style_contract，
+    # 与 Codex 后端同一真值源——避免「同一部剧换渠道就换画风」（宪法 C4「标准不绑后端」）。
+    style = base.style_contract_phrase(root, episode)
     parts = [
-        "竖版9:16，国风写实漫剧风格，电影级光影，暗黑宫廷氛围，中国古代东方面孔。",
+        f"{base.aspect_phrase(base.aspect_ratio(root))}，电影级光影。",
+        style,
         _field(body, "正向 prompt（中文）"),
         _field(body, "锚点句"),
         _field(body, "状态锁"),
@@ -167,7 +171,8 @@ def run_dreamina(
     refs = prompt_reference_paths(root, target, episode)
     if not refs:
         return False, "", "no ready reference images resolved for Dreamina image2image", refs
-    prompt = build_dreamina_prompt(target)
+    prompt = build_dreamina_prompt(root, episode, target)
+    ratio = base.aspect_ratio(root)
     download_dir = temp_path.parent / f"{temp_path.stem}_download"
     if download_dir.exists():
         shutil.rmtree(download_dir)
@@ -180,7 +185,7 @@ def run_dreamina(
         "--prompt",
         prompt,
         "--ratio",
-        "9:16",
+        ratio,
         "--poll",
         str(max(0, min(poll_sec, int(timeout_sec or poll_sec)))),
     ]

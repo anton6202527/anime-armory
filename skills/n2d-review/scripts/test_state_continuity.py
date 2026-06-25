@@ -200,3 +200,93 @@ def test_prop_state_premature_leak_flagged(tmp_path):
     leaks = [a for a in res["alerts"] if a["kind"] == "prop_state_premature_leak"]
     assert any(a["shot"] == 10 for a in leaks)        # 镜10 提前泄露
     assert not any(a["shot"] == 16 for a in leaks)    # 镜16 在转换镜后，正常
+
+
+# ── 剧情指定换装/染血区间 → 服装锁 block 降 warn（COST/N1 消费，根治硬误伤剧情）──
+def test_appearance_change_intervals_filters_costume_states(tmp_path):
+    root = tmp_path / "制漫剧" / "换装剧"
+    ep = "第1集"
+    sb_dir = root / "脚本" / ep
+    sb_dir.mkdir(parents=True)
+    (sb_dir / "storyboard.json").write_text(json.dumps({
+        "visual_contract": {"角色状态演进": {
+            "沈念": [
+                {"自": "Clip5", "状态": "脱下外套披在肩上", "保持": "至集尾"},  # 服装变 → 收
+                {"自": "Clip2", "状态": "眼神逐渐坚定", "保持": "至集尾"},       # 非外观 → 不收
+            ],
+            "萧澈": [{"自": "Clip8", "状态": "右臂染血绷带", "保持": "至 Clip12"}],  # 服装/外观变 → 收
+        }},
+        "clips": [],
+    }, ensure_ascii=False), encoding="utf-8")
+    iv = st.appearance_change_intervals(str(root), ep)
+    assert "沈念" in iv and len(iv["沈念"]) == 1            # 只收「脱外套」，滤掉「眼神坚定」
+    assert iv["沈念"][0][0] == 5 and iv["沈念"][0][1] is None
+    assert "萧澈" in iv and iv["萧澈"][0] == (8, 12, "右臂染血绷带")
+
+
+def test_appearance_change_at_interval_membership():
+    iv = {"沈念": [(5, None, "脱外套"), ], "萧澈": [(8, 12, "染血")]}
+    assert st.appearance_change_at(iv, "沈念", 5) == "脱外套"      # 起点含
+    assert st.appearance_change_at(iv, "沈念", 99) == "脱外套"     # 无 end → 一直持续
+    assert st.appearance_change_at(iv, "沈念", 4) is None          # 起点前
+    assert st.appearance_change_at(iv, "萧澈", 12) == "染血"       # 终点含
+    assert st.appearance_change_at(iv, "萧澈", 13) is None         # 终点后（换回常态）
+    assert st.appearance_change_at(iv, "萧澈", None) is None       # 解析不出镜号→不豁免
+    assert st.appearance_change_at(iv, "无关角色", 5) is None
+
+
+def test_downgrade_costume_block_only_drops_block():
+    iv = {"沈念": [(5, None, "脱外套")]}
+    # block 落区间内 → 降 warn，留痕 abs_verdict + 原因
+    r = st.downgrade_costume_block({"char": "沈念", "verdict": "block"}, iv, "沈念", 6)
+    assert r["verdict"] == "warn" and r["abs_verdict"] == "block"
+    assert r["costume_change_expected"] == "脱外套"
+    # warn 不改判，但仍标注原因（供人判）
+    r2 = st.downgrade_costume_block({"char": "沈念", "verdict": "warn"}, iv, "沈念", 6)
+    assert r2["verdict"] == "warn" and "abs_verdict" not in r2
+    assert r2["costume_change_expected"] == "脱外套"
+    # 区间外 block 不动
+    r3 = st.downgrade_costume_block({"char": "沈念", "verdict": "block"}, iv, "沈念", 3)
+    assert r3["verdict"] == "block" and "costume_change_expected" not in r3
+
+
+# ── SP1-V 状态像素 sidecar 合并（像素证据一律 warn，文本档仍是 BLOCK 权威）──
+def test_state_pixel_sidecar_alerts_premature_leak_is_warn():
+    sidecar = {"findings": [
+        {"shot": "Clip_03", "kind": "state_pixel_premature_leak", "char": "沈念",
+         "state": "金瞳觉醒态", "expected": False, "present": True, "confidence": 0.9}]}
+    rows = st.state_pixel_sidecar_alerts(sidecar)
+    assert len(rows) == 1 and rows[0]["verdict"] == "warn"
+    assert rows[0]["kind"] == "state_pixel_premature_leak" and rows[0]["shot"] == "Clip_03"
+
+
+def test_state_pixel_sidecar_alerts_missing_is_warn():
+    sidecar = {"findings": [
+        {"shot": "Clip_08", "kind": "state_pixel_missing", "char": "沈念",
+         "state": "金瞳觉醒态", "expected": True, "present": False, "confidence": 0.02}]}
+    rows = st.state_pixel_sidecar_alerts(sidecar)
+    assert len(rows) == 1 and rows[0]["verdict"] == "warn" and rows[0]["kind"] == "state_pixel_missing"
+
+
+def test_state_pixel_sidecar_alerts_empty_and_robust():
+    assert st.state_pixel_sidecar_alerts(None) == []
+    assert st.state_pixel_sidecar_alerts({"findings": []}) == []
+    # 缺 kind 也能按 expected/present 推断（来自 presence_owlv2 批量后端）
+    rows = st.state_pixel_sidecar_alerts({"findings": [
+        {"shot": "c", "asset": "MARK_x", "expected": False, "present": True}]})
+    assert rows and rows[0]["kind"] == "state_pixel_premature_leak"
+
+
+def test_state_continuity_merges_pixel_sidecar_into_alerts(tmp_path):
+    root = tmp_path / "制漫剧" / "像素合并"
+    (root / "脚本" / "第1集").mkdir(parents=True)
+    (root / "脚本" / "第1集" / "storyboard.json").write_text(json.dumps({
+        "visual_contract": {"角色状态演进": {"沈念": [{"自": "Clip7", "状态": "金瞳觉醒态", "保持": "至集尾"}]}},
+        "clips": [{"id": "Clip_03", "shots": [{"desc": "沈念立"}]}]}), encoding="utf-8")
+    (root / "生产数据").mkdir(parents=True)
+    (root / "生产数据" / "state_pixel_第1集.json").write_text(json.dumps({"findings": [
+        {"shot": "Clip_03", "kind": "state_pixel_premature_leak", "char": "沈念",
+         "state": "金瞳觉醒态", "expected": False, "present": True, "confidence": 0.88}]}), encoding="utf-8")
+    out = st.analyze(str(root), "第1集")
+    pixel = [a for a in out["alerts"] if str(a.get("kind", "")).startswith("state_pixel")]
+    assert pixel and all(a["verdict"] == "warn" for a in pixel)

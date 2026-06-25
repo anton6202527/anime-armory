@@ -429,6 +429,49 @@ def build_summary(records, *, platform, source_name, min_sample, low_completion,
     }
 
 
+def apply_reader_test_plan(root, summary):
+    plan_path = os.path.join(root, "评分", "reader_test_plan.json")
+    if not os.path.isfile(plan_path):
+        summary["reader_test_plan"] = {
+            "present": False,
+            "warning": "未找到 reader_test_plan.json；本批反馈只能做事后解释，A/B 归因可信度较低。",
+        }
+        return summary
+    with open(plan_path, encoding="utf-8") as f:
+        plan = json.load(f)
+    variants = plan.get("variants") or []
+    by_variant = {str(v.get("variant_id")): v for v in variants}
+    by_take = {str(v.get("take_id")): v for v in variants if v.get("take_id")}
+    min_delta = float((plan.get("retest_policy") or {}).get("min_completion_delta") or 0.05)
+    for group in summary.get("experiments", {}).get("groups") or []:
+        match = by_variant.get(str(group.get("variant_id")))
+        if not match:
+            for take in group.get("take_ids") or []:
+                match = by_take.get(str(take))
+                if match:
+                    break
+        if match:
+            group["planned_hypothesis"] = match.get("hypothesis") or ""
+    for winner in summary.get("experiments", {}).get("best_by_ab_test") or []:
+        groups = [g for g in summary["experiments"]["groups"] if g["ab_test_id"] == winner["ab_test_id"]]
+        rates = sorted([g.get("completion_rate") for g in groups if g.get("completion_rate") is not None], reverse=True)
+        if len(rates) >= 2 and rates[0] - rates[1] < min_delta:
+            winner["interpretation"] = "inconclusive_delta_too_small"
+        elif winner.get("caveat") == "low_sample":
+            winner["interpretation"] = "directional_low_sample"
+        else:
+            winner["interpretation"] = "provisional_winner"
+    summary["reader_test_plan"] = {
+        "present": True,
+        "path": plan_path,
+        "scope": plan.get("scope"),
+        "min_sample": plan.get("min_sample"),
+        "min_completion_delta": min_delta,
+        "retest_required_after_revision": (plan.get("retest_policy") or {}).get("required_after_revision", True),
+    }
+    return summary
+
+
 def write_artifacts(root, records, summary):
     score_dir = os.path.join(root, "评分")
     os.makedirs(score_dir, exist_ok=True)
@@ -458,13 +501,21 @@ def write_artifacts(root, records, summary):
                 )
         if summary.get("experiments", {}).get("groups"):
             f.write("\n## A/B 与版本归因\n\n")
-            f.write("| experiment | variant | take_ids | 开读 | 完读率 | 弃读率 | flags |\n")
-            f.write("|---|---|---|---:|---:|---:|---|\n")
+            f.write("| experiment | variant | take_ids | 假设 | 开读 | 完读率 | 弃读率 | flags |\n")
+            f.write("|---|---|---|---|---:|---:|---:|---|\n")
             for item in summary["experiments"]["groups"]:
                 f.write(
                     f"| {item['ab_test_id']} | {item['variant_id']} | {', '.join(item['take_ids'])} | "
-                    f"{item['starts']} | {item['completion_rate']} | {item['drop_rate']} | {', '.join(item['flags'])} |\n"
+                    f"{item.get('planned_hypothesis', '')} | {item['starts']} | {item['completion_rate']} | "
+                    f"{item['drop_rate']} | {', '.join(item['flags'])} |\n"
                 )
+            if summary["experiments"].get("best_by_ab_test"):
+                f.write("\n### 判读\n\n")
+                for item in summary["experiments"]["best_by_ab_test"]:
+                    f.write(
+                        f"- {item['ab_test_id']}：暂定 {item['variant_id']}，interpretation="
+                        f"{item.get('interpretation', 'provisional_winner')}，caveat={item.get('caveat', '')}\n"
+                    )
         f.write("\n## 章节明细\n\n")
         f.write("| 章节 | 开读 | 完读 | 弃读 | 完读率 | 弃读率 | 负评 | flags |\n")
         f.write("|---|---:|---:|---:|---:|---:|---:|---|\n")
@@ -514,6 +565,7 @@ def main():
         low_completion=args.low_completion,
         high_drop=args.high_drop,
     )
+    summary = apply_reader_test_plan(root, summary)
     raw_path, summary_path, md_path = write_artifacts(root, records, summary)
     print(f"[ok] 新导入 {imported} 条，累计 {len(records)} 条")
     print(f"[ok] telemetry JSONL → {raw_path}")

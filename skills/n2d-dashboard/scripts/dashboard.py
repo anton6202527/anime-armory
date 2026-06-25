@@ -879,6 +879,14 @@ def _benchmark_rows(dashboard: Dict[str, Any]) -> List[str]:
         "| 指标 | 本作实测 | 行业基准 | 对照 |",
         "|---|---:|---:|:---:|",
     ]
+    schema_errors = bench.get("_retention_benchmark_schema_errors") or []
+    if schema_errors:
+        rows.extend([
+            "> ⚠️ 项目级 `生产数据/industry_benchmark.json` 的 `retention_benchmarks` 未通过 provenance schema，"
+            "本次留存基准已回退到仓库参考值。先跑 `python3 skills/n2d-dashboard/scripts/validate_benchmark_schema.py <path>` 修正。",
+            f"> 首个错误：{schema_errors[0]}",
+            "",
+        ])
 
     def mark(actual: Optional[float], target: Optional[float], higher_better: bool) -> str:
         if actual is None or target is None:
@@ -911,6 +919,39 @@ def _benchmark_rows(dashboard: Dict[str, Any]) -> List[str]:
         f"| 跨集角色一致性 | 见 n2d-score 视觉分 | {format_rate(bench.get('cross_ep_consistency'))} | "
         "— |"
     )
+    retention = (bench.get("retention_benchmarks") or {}) if isinstance(bench.get("retention_benchmarks"), dict) else {}
+    app_ref = retention.get("app_retention_reference") or {}
+    global_ref = app_ref.get("global_short_drama_apps") or {}
+    china_ref = app_ref.get("china_short_drama_apps") or {}
+    if global_ref or china_ref:
+        rows.extend([
+            "",
+            "### 留存基准（只读）",
+            "",
+            "| 指标 | 全球短剧App参考 | 中国短剧App参考 | 说明 |",
+            "|---|---:|---:|---|",
+            (
+                f"| D1 留存 | {format_rate(global_ref.get('d1_retention'))} | "
+                f"{format_rate(china_ref.get('d1_retention'))} | App/剧集包级，不替代单集 retention_3s/15s |"
+            ),
+            (
+                f"| D7 留存 | {format_rate(global_ref.get('d7_retention'))} | "
+                f"{format_rate(china_ref.get('d7_retention'))} | 用于判断剧集包/账号复访能力 |"
+            ),
+            (
+                f"| D14 留存 | {format_rate(global_ref.get('d14_retention'))} | "
+                f"{format_rate(china_ref.get('d14_retention'))} | 长线追更和订阅复访参考 |"
+            ),
+        ])
+    creative = retention.get("creative_attention") or {}
+    if creative:
+        rows.extend([
+            "",
+            f"> 首屏创意参考：前3秒交代内容主张={creative.get('first_3s_proposition_required', True)}；"
+            f"前6秒强钩={creative.get('first_6s_hook_required', True)}；"
+            f"字幕/烧屏文字 {creative.get('caption_words_per_sec_band', ['—', '—'])[0]}-"
+            f"{creative.get('caption_words_per_sec_band', ['—', '—'])[1]} words/sec。",
+        ])
     return rows
 
 
@@ -1933,6 +1974,41 @@ def top_redraw_leak(redraw_categories: Dict[str, Any], top: int = 3) -> List[Tup
     return sorted(((k, c) for k, c in counts.items() if c > 0), key=lambda kv: kv[1], reverse=True)[:top]
 
 
+def anchor_plan_budget(root: str, ep: str) -> Dict[str, Any]:
+    """Read anchor planner sidecar so video forecast does not hide mid-frame costs."""
+    rel = os.path.join(PRODUCTION_DIR, f"anchor_plan_{normalize_episode(ep)}.json")
+    path = os.path.join(root, rel)
+    out: Dict[str, Any] = {
+        "available": False,
+        "path": rel,
+        "clips_planned": 0,
+        "total_anchors": 0,
+        "added_images": 0,
+        "added_video_segments": 0,
+    }
+    if not os.path.isfile(path):
+        out["note"] = "缺 anchor_plan；当前 forecast 只覆盖历史每分钟成本和视频规格，不含 `_mid/_aK` 新增图片或 split relay 拆段成本。"
+        return out
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except Exception as exc:
+        out["note"] = f"anchor_plan 读取失败：{type(exc).__name__}: {exc}"
+        return out
+    if not isinstance(data, dict) or data.get("kind") != "n2d_anchor_plan":
+        out["note"] = "anchor_plan kind 非 n2d_anchor_plan；忽略，避免误报成本。"
+        return out
+    summary = data.get("summary") if isinstance(data.get("summary"), dict) else {}
+    out.update({
+        "available": True,
+        "clips_planned": int(as_float(summary.get("clips_planned")) or 0),
+        "total_anchors": int(as_float(summary.get("total_anchors")) or 0),
+        "added_images": int(as_float(summary.get("added_images")) or 0),
+        "added_video_segments": int(as_float(summary.get("added_video_segments")) or 0),
+    })
+    return out
+
+
 def cmd_forecast(ns: argparse.Namespace) -> int:
     root, ep = ns.root, normalize_episode(ns.episode)
     agg = aggregate_events(root, load_events(root))
@@ -1941,15 +2017,19 @@ def cmd_forecast(ns: argparse.Namespace) -> int:
     finished_min = round(float(totals.get("runtime_sec") or 0.0) / 60.0, 2)
     planned_sec, src = storyboard_duration(root, ep)
     planned_min = round((planned_sec or 0.0) / 60.0, 2)
+    anchor_budget = anchor_plan_budget(root, ep)
 
     out: Dict[str, Any] = {
         "kind": "n2d_cost_forecast", "episode": ep,
         "history_finished_min": finished_min, "cost_per_finished_min": cpm,
         "planned_min": planned_min, "planned_source": src,
         "forecast_cost": {}, "notes": [],
+        "anchor_plan": anchor_budget,
         "redraw_leak_top": [{"category": c, "count": n} for c, n in top_redraw_leak(totals.get("redraw_categories", {}))],
         "show_redraw_rate": totals.get("redraw_rate"),
     }
+    if anchor_budget.get("note"):
+        out["notes"].append(str(anchor_budget["note"]))
     if not cpm:
         out["notes"].append("无历史成本（cost_per_finished_min 为空）——先用 `record` 记几集真实成本再预检；本次只能给 redraw 漏点。")
     if not planned_min:
@@ -1971,6 +2051,13 @@ def cmd_forecast(ns: argparse.Namespace) -> int:
     print(f"本集计划 {planned_min} 分钟（{src or '缺 storyboard'}）")
     if out["forecast_cost"]:
         print(f"→ 预测成本：{format_cost(out['forecast_cost'])}")
+    if anchor_budget.get("available"):
+        print(
+            "→ 三帧锚帧计划："
+            f"新增锚帧图 {anchor_budget['added_images']} 张；"
+            f"命中 Clip {anchor_budget['clips_planned']} 个；"
+            f"frames2video/split relay 预计额外视频段 {anchor_budget['added_video_segments']} 段。"
+        )
     b = out.get("budget")
     if b:
         warn = "⚠️ 超预算" if b["over_budget"] else "✅ 在预算内"

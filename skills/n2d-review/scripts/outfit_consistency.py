@@ -28,6 +28,7 @@ import sys
 from typing import Dict, List, Optional, Sequence
 
 import face_consistency as fc  # 复用 cosine / calibrate_floor / band / 资产发现
+import state_continuity as stc  # 剧情指定换装/染血/破损区间 → block 降 warn（不硬误伤剧情）
 
 DEFAULT_MARGIN = 0.10
 DEFAULT_BINS = 24
@@ -170,6 +171,12 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN, bins: int = DEFA
         if new_v != s["verdict"]:
             s["abs_verdict"] = s["verdict"]   # 留痕绝对判定，便于审计/调参
             s["verdict"] = new_v
+
+    # 剧情指定换装/染血/破损/变身区间内：服装配色偏离单一定妆是「该变」而非漂移 → block 降 warn（surface·不硬阻断）。
+    intervals = stc.appearance_change_intervals(root, ep)
+    if intervals:
+        for s in res["shots"]:
+            stc.downgrade_costume_block(s, intervals, s.get("char", ""), stc.shot_num(s.get("png", "")))
     return res
 
 

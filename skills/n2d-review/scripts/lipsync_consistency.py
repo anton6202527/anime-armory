@@ -46,6 +46,10 @@ DEFAULT_FPS = 25.0
 DEFAULT_WARN_MS = 80.0     # |偏移| ≥ 80ms（≈2帧@25fps）→ 可感不同步，warn
 DEFAULT_BLOCK_MS = 200.0   # |偏移| ≥ 200ms（≈5帧@25fps）→ 严重不同步，severity_measured=block
 DEFAULT_CONF_FLOOR = 2.0   # SyncNet AV 置信 < 此 → inconclusive（检测器拿不准，不罚分）
+# 「过同步」上界：真人成片 SyncNet AV 置信(LSE-C 同族)约 7-8（LatentSync≈8.9 已是上限）。
+# 显著高于此 = 嘴被驱动得比真人还狠(over-driven)，观感生硬(uncanny mouth)。"higher Sync-C = better"
+# 是 2026 已证伪的陷阱——offset≈0 但置信爆表的镜，旧逻辑判 ok 漏掉。advisory·人听辨·绝不阻断。
+DEFAULT_OVERSYNC_CEIL = 9.0
 
 # 说话镜关键词（与 n2d_const dialogue_closeup / mouth_detect 同源口径，尽力而为筛说话镜）：
 SPEAKING_MARKERS = (
@@ -79,6 +83,15 @@ def sync_band(offset_frames: float, confidence: float, fps: float = DEFAULT_FPS,
     if ms >= warn_ms:
         return "warn"
     return "ok"
+
+
+def oversync_band(confidence: float, ceiling: float = DEFAULT_OVERSYNC_CEIL) -> str:
+    """口型「过同步」上界检测：SyncNet/LSE-C 置信显著高于真人 GT 带(~7-8) → 嘴动得比人狠 → uncanny。
+    与 |offset| 严重档正交（偏移可为 0 却过同步）。返回 'over_sync'（≥ceiling）/'ok'。advisory·纯函数·可测。"""
+    try:
+        return "over_sync" if float(confidence) >= ceiling else "ok"
+    except (TypeError, ValueError):
+        return "ok"
 
 
 def advisory_verdict(measured: str) -> str:
@@ -192,8 +205,8 @@ def is_speaking_clip(text: str) -> bool:
 # ---------- 编排 ----------
 
 def _band_rows(clips: Sequence[dict], fps: float, warn_ms: float, block_ms: float,
-               conf_floor: float) -> List[dict]:
-    """实测偏移 clips → 逐镜定档行（advisory verdict + severity_measured）。"""
+               conf_floor: float, oversync_ceiling: float = DEFAULT_OVERSYNC_CEIL) -> List[dict]:
+    """实测偏移 clips → 逐镜定档行（advisory verdict + severity_measured + 过同步上界 advisory）。"""
     rows: List[dict] = []
     for c in clips:
         if not isinstance(c, dict):
@@ -205,9 +218,13 @@ def _band_rows(clips: Sequence[dict], fps: float, warn_ms: float, block_ms: floa
         clip_fps = float(c.get("fps") or fps)
         measured = sync_band(float(off), float(conf), clip_fps, warn_ms, block_ms, conf_floor)
         verdict = advisory_verdict(measured)
-        if verdict == "ok" and measured == "ok":
-            continue  # 同步良好，不入清单
+        # 过同步上界与 offset 严重档正交：低置信(inconclusive)时不谈过同步（置信本就不可信）
+        over = oversync_band(float(conf), oversync_ceiling) if measured != "inconclusive" else "ok"
+        if verdict == "ok" and measured == "ok" and over == "ok":
+            continue  # 同步良好且未过同步，不入清单
         rem = offset_remediation(measured)
+        if over == "over_sync" and verdict == "ok":
+            verdict = "warn"  # 偏移没问题但过同步 → 升为 advisory warn 让其进清单
         row = {
             "clip": str(c.get("clip") or c.get("id") or "?"),
             "offset_frames": round(float(off), 2),
@@ -219,9 +236,14 @@ def _band_rows(clips: Sequence[dict], fps: float, warn_ms: float, block_ms: floa
                 f"口型↔配音偏移 {offset_ms(float(off), clip_fps):.0f}ms"
                 + ("（SyncNet 低置信·拿不准，交人判）" if measured == "inconclusive"
                    else "（疑似严重不同步）" if measured == "block" else "")
+                + (f"；口型『过同步』(置信 {float(conf):.1f} ≥ {oversync_ceiling:.0f}，高于真人GT带~7-8)"
+                   "——嘴可能被驱动得比真人还狠(uncanny)，人听辨是否生硬，必要时换不那么激进的口型后端/降低同步强度"
+                   if over == "over_sync" else "")
                 + ("　修复优先：先跑 lipsync_pass 后期对口型（省），救不回再重出 clip" if rem else "")
             ),
         }
+        if over == "over_sync":
+            row["oversync"] = True
         if rem:
             row.update(rem)  # cheap-fix-first：return_to_stage=video + rerun_scope + remediation 阶梯
         rows.append(row)
@@ -229,14 +251,16 @@ def _band_rows(clips: Sequence[dict], fps: float, warn_ms: float, block_ms: floa
 
 
 def analyze(root: str, ep: str, fps: float = DEFAULT_FPS, warn_ms: float = DEFAULT_WARN_MS,
-            block_ms: float = DEFAULT_BLOCK_MS, conf_floor: float = DEFAULT_CONF_FLOOR) -> dict:
+            block_ms: float = DEFAULT_BLOCK_MS, conf_floor: float = DEFAULT_CONF_FLOOR,
+            oversync_ceiling: float = DEFAULT_OVERSYNC_CEIL) -> dict:
     res: dict = {"available": False, "mode": None, "precision": "none",
                  "shots": [], "notes": []}
 
     external = load_external_offsets(root, ep)
     if external:
         rows = _band_rows(external.get("clips", []),
-                          float(external.get("fps") or fps), warn_ms, block_ms, conf_floor)
+                          float(external.get("fps") or fps), warn_ms, block_ms, conf_floor,
+                          oversync_ceiling)
         res.update(available=True, mode="external_syncnet", precision="full", shots=rows)
         res["notes"].append("消费外部 SyncNet 偏移报告（实测）。")
         return res
@@ -272,6 +296,7 @@ def to_score_report(res: dict) -> dict:
     blocks = sum(1 for s in shots if s.get("severity_measured") == "block")
     warns = sum(1 for s in shots if s.get("severity_measured") == "warn")
     inconcl = sum(1 for s in shots if s.get("severity_measured") == "inconclusive")
+    oversync = sum(1 for s in shots if s.get("oversync"))
     evidence: List[str] = []
     if not res.get("available"):
         evidence.extend(res.get("notes", []))
@@ -291,6 +316,7 @@ def to_score_report(res: dict) -> dict:
             "measured_block": blocks,
             "measured_warn": warns,
             "inconclusive": inconcl,
+            "oversync": oversync,
             "checked_clips": len(shots),
         },
     }
@@ -315,11 +341,14 @@ def main(argv: List[str]) -> int:
     ap.add_argument("--warn-ms", type=float, default=DEFAULT_WARN_MS)
     ap.add_argument("--block-ms", type=float, default=DEFAULT_BLOCK_MS)
     ap.add_argument("--conf-floor", type=float, default=DEFAULT_CONF_FLOOR)
+    ap.add_argument("--oversync-ceiling", type=float, default=DEFAULT_OVERSYNC_CEIL,
+                    help="SyncNet 置信『过同步』上界（高于真人GT带~7-8 = 嘴动得比人狠·uncanny·advisory）")
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--no-write-report", action="store_true",
                     help="不写 生产数据/lipsync_<集>.json（默认会写，供 n2d-score 消费）")
     ns = ap.parse_args(argv)
-    res = analyze(ns.root.rstrip("/"), ns.episode, ns.fps, ns.warn_ms, ns.block_ms, ns.conf_floor)
+    res = analyze(ns.root.rstrip("/"), ns.episode, ns.fps, ns.warn_ms, ns.block_ms, ns.conf_floor,
+                  ns.oversync_ceiling)
     if not ns.no_write_report and os.path.isdir(ns.root):
         write_score_report(ns.root.rstrip("/"), ns.episode, res)
     if ns.json:

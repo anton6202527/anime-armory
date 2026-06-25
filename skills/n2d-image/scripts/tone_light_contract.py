@@ -5,15 +5,19 @@
 契约校验（`n2d_contract_diff`）只在**文本层誊抄 Diff**——出图侧写「冷青灰压暗」、视频侧誊抄对了就 pass，
 **从不核对像素里到底是冷是暖、是明是暗**。这是审计点名的最大「松动」：声称焊像素、实则零像素核对。
 
-本模块补上这一刀：解析契约里的暖/冷 + 明/暗意图，量本集出图帧的**全局暖冷(R−B)与亮度(luma)中位数**，
+本模块补上这一刀：解析契约里的暖/冷 + 明/暗意图，量本集出图帧的**全局暖冷(log(R/B))与亮度(luma)中位数**，
 当像素**明确矛盾**于契约声明时出 advisory。设计上**保守**：
   - 默认 **WARN·人判**（色调本身模糊——冷场景里一盏暖烛特写也可能偏暖，宁可漏报不可误杀）；
   - 用**整集中位数**（不是逐帧）做主信号——单帧暖特写不会把冷基调误判成漂移，整集中位数翻向才坐实；
   - 暖/冷、明/暗都用**宽裕阈值**，只抓清楚矛盾。
 纯 Pillow（与 image_qc 像素机检同栈），**默认无依赖产线也能跑**（不像 semantic_drift 需 torch）。
 
-阈值采集口径（0–255 标度，可经 env 覆盖，应在真实渲染集按后端/风格标定）：
-  N2D_TONE_WARM_MARGIN（暖冷判定边距，默认 12）· N2D_TONE_BRIGHT_LUMA（亮，默认 165）· N2D_TONE_DARK_LUMA（暗，默认 95）。
+暖冷度量与 review 侧 color_grade_consistency **共用同一公式**（`n2d/_lib/n2d_color.warmth_log_ratio`，
+log(R/B)·亮度无关），避免「同一个『暖冷』两套不可比度量」：本模块比的是**整集中位数 vs 契约意图**
+（绝对·暖/冷/中性），review 比的是**每镜 vs 同场景中位**（相对·横跳）——口径一致、阈值语义不同。
+
+阈值口径（可经 env 覆盖，应在真实渲染集按后端/风格标定）：
+  N2D_TONE_WARM_MARGIN（暖冷 log(R/B) 中性区半宽，默认 0.10≈R/B 偏离 1.1×）· N2D_TONE_BRIGHT_LUMA（亮·0–255，默认 165）· N2D_TONE_DARK_LUMA（暗，默认 95）。
 
 用法：python3 tone_light_contract.py <作品根> <第N集> [--json]
 """
@@ -26,6 +30,11 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
+_LIB = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
+if _LIB not in sys.path:
+    sys.path.insert(0, _LIB)
+from n2d_color import warmth_log_ratio  # noqa: E402  暖冷度量单一真值源（与 review color_grade 共用）
+
 
 def _envf(name: str, default: float) -> float:
     try:
@@ -34,7 +43,7 @@ def _envf(name: str, default: float) -> float:
         return default
 
 
-WARM_COOL_MARGIN = _envf("N2D_TONE_WARM_MARGIN", 12.0)   # |R−B| 超此值才判暖/冷（否则中性，不构成矛盾）
+WARM_COOL_MARGIN = _envf("N2D_TONE_WARM_MARGIN", 0.10)   # |log(R/B)| 超此值才判暖/冷（否则中性，不构成矛盾）
 BRIGHT_LUMA = _envf("N2D_TONE_BRIGHT_LUMA", 165.0)        # luma 中位数高于此=亮
 DARK_LUMA = _envf("N2D_TONE_DARK_LUMA", 95.0)            # luma 中位数低于此=暗
 
@@ -100,8 +109,8 @@ def parse_tone_intent(tone_text: str, light_text: str = "") -> Dict[str, Any]:
 
 
 def frame_metrics(r: float, g: float, b: float) -> Dict[str, float]:
-    """一帧的 (R,G,B) 通道均值 → {warmth: R−B(正=暖), luma: 0.299R+0.587G+0.114B}。纯函数·可测。"""
-    return {"warmth": float(r) - float(b), "luma": 0.299 * float(r) + 0.587 * float(g) + 0.114 * float(b)}
+    """一帧的 (R,G,B) 通道均值 → {warmth: log((R+1)/(B+1))(正=暖·与 review 共用 n2d_color), luma: 0.299R+0.587G+0.114B}。纯函数·可测。"""
+    return {"warmth": warmth_log_ratio(r, g, b), "luma": 0.299 * float(r) + 0.587 * float(g) + 0.114 * float(b)}
 
 
 def _median(xs: Sequence[float]) -> Optional[float]:
@@ -126,12 +135,12 @@ def tone_findings(intent: Mapping[str, Any], warmth_median: Optional[float], lum
     if w_intent == "warm" and warmth_median <= -warm_margin:
         out.append({"level": "warn", "code": "tone_warmth_contradiction",
                     "msg": f"色调像素兜底：契约基调=暖（{ev}），但本集 {n_frames} 帧实测整体偏冷"
-                           f"（R−B 中位数 {warmth_median:.0f} ≤ −{warm_margin:.0f}）——渲染与契约暖冷相反，"
+                           f"（暖冷 log(R/B) 中位数 {warmth_median:.2f} ≤ −{warm_margin:.2f}）——渲染与契约暖冷相反，"
                            "人判是否整集走错色温/白平衡或契约写错。"})
     elif w_intent == "cool" and warmth_median >= warm_margin:
         out.append({"level": "warn", "code": "tone_warmth_contradiction",
                     "msg": f"色调像素兜底：契约基调=冷（{ev}），但本集 {n_frames} 帧实测整体偏暖"
-                           f"（R−B 中位数 +{warmth_median:.0f} ≥ {warm_margin:.0f}）——渲染与契约暖冷相反，人判。"})
+                           f"（暖冷 log(R/B) 中位数 +{warmth_median:.2f} ≥ {warm_margin:.2f}）——渲染与契约暖冷相反，人判。"})
     if b_intent == "dark" and luma_median >= bright_luma:
         out.append({"level": "warn", "code": "tone_brightness_contradiction",
                     "msg": f"光位像素兜底：契约要求压暗/低调（{ev}），但本集 {n_frames} 帧实测整体偏亮"

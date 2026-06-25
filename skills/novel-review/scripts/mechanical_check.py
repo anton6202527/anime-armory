@@ -92,10 +92,24 @@ def body_of(md):
 # ── AI 腔 / 同质化启发式（advisory·治"平台 AI 双重质检·AI检测率<60%"风险，2026）──
 # 议论文式连接词出现在叙事正文里基本是 AI 腔/出戏；万能金句套话按密度。绝不 🔴（容错铁律）。
 # 写时由 trio-pipeline 的 Senior Editor「去AI味」滤网兜，这里是 QA 侧确定性兜底，把主观项降成可机检线索。
+# 2026-06-25 扩展至 15 类检测（P2-⑩），对标 ProseForge ANTI-SLOP / autonovel 行业基准。
 AI_EXPOSITORY = ("综上所述", "总而言之", "总的来说", "归根结底", "众所周知", "不可否认",
                  "值得一提的是", "值得注意的是", "由此可见", "显而易见", "换言之", "不仅如此")
 AI_CLICHE = ("命运的齿轮", "仿佛整个世界", "空气仿佛凝固", "时间仿佛静止", "或许这就是",
              "也许这就是", "不为人知的秘密", "在这个瞬间", "心中五味杂陈", "心中百感交集")
+# 新增 2026-06-25：15 类扩展
+AI_WEAK_ADVERBS = ("微微", "淡淡", "缓缓", "轻轻", "默默", "悄悄", "渐渐", "慢慢", "深深", "浅浅")
+AI_X_NOT_X = ("不是", "而是")  # "不是X而是Y" 双关键词共现
+AI_EMDASH = "——"              # 破折号滥用：每千字 > 5 个
+AI_SENSORY_TRICOLON = ("视觉", "听觉", "触觉", "嗅觉", "味觉")  # 感官三连：一段内 3+ 感官
+AI_FILTER_WORDS = ("看到", "听到", "感到", "注意到", "发现", "觉得", "意识到", "察觉到")
+AI_BUJIN = ("不禁", "仿佛", "映入眼帘", "嘴角微扬", "心中一动", "不由得", "忍不住", "下意识地")
+AI_INFLATION = ("意义深远", "前所未有", "史无前例", "震撼人心", "永恒的", "不朽的", "流传千古")
+AI_CONCLUSION = ("未来可期", "充满希望", "一切才刚刚开始", "这才只是开始", "更好的明天", "新的篇章")
+AI_FORMAL_INVASION = ("于是乎", "与此同时", "从而", "故而", "是以", "故此", "因而", "由此可见")
+AI_PARALLEL_TRIAD = 3  # 段落内连续 3 个 "、/，" 分隔的三连以上排比
+AI_SUMMARY_ENDING = ("总之", "总的来说", "综上所述", "归根到底", "简而言之", "一言以蔽之")
+AI_IN_THAT_MOMENT = ("在那一刻", "在这一刻", "在这一瞬间", "就在此时", "此时此刻")
 
 
 def sentence_lengths(text):
@@ -121,32 +135,120 @@ def sentence_burstiness(text, min_sentences=8):
     return (var ** 0.5) / mean, n
 
 
+def _count_cjk_words(text, words):
+    """统计一组词在文本中的总出现次数。"""
+    return sum(text.count(w) for w in words)
+
+
+def _per_k(count, cjk_chars):
+    """每千 CJK 字的密度。"""
+    return count / max(1, cjk_chars) * 1000.0
+
+
 def ai_tell_scan(body, cliche_per_k=3.0, burstiness_cv_floor=0.35):
     """AI 腔/同质化启发式（纯函数·可测·advisory）。返回 [(severity, msg, evidence)]。
 
-    ① 叙事正文出现议论文式连接词（综上所述/众所周知…）= 高信号 AI 腔 → 🟡；
-    ② 万能金句/套话按千字密度，超 `cliche_per_k` → 🟢（低优先 nudge）；
-    ③ 句长过于均匀（burstiness 低·CV < `burstiness_cv_floor`）= 疑似 AI 生成正文 → 🟡。
-    绝不 🔴（容错铁律）；线索非定论，仍需人判结合语境（金句在对白里可豁免；
-    设定密集/清单式章节句长天然均匀，可豁免）。"""
+    扩展至 15 类检测（2026-06-25 P2-⑩）：
+    ① 议论文式连接词 → 🟡  ② 万能金句/套话密度 → 🟢
+    ③ 句长 burstiness 低 → 🟡  ④ 弱化副词泛滥 → 🟢
+    ⑤ "不是X而是Y" 句式 → 🟡  ⑥ 破折号滥用 → 🟢
+    ⑦ 感官三连 → 🟢          ⑧ 过滤词密度 → 🟡
+    ⑨ "不禁/仿佛" 类高频 → 🟡  ⑩ 意义膨胀套话 → 🟢
+    ⑪ 通用结论套话 → 🟢        ⑫ 正式语体入侵 → 🟡
+    ⑬ 排比三连过多 → 🟢        ⑭ 总结式收尾 → 🟡
+    ⑮ "在那一刻" 模式 → 🟡
+    绝不 🔴（容错铁律）；线索非定论，仍需人判结合语境。"""
     text = body or ""
     cc = max(1, cjk_count(text))
     out = []
+
+    # ① 议论文式连接词
     expo = [w for w in AI_EXPOSITORY if w in text]
     if expo:
-        ev = "、".join(expo[:5])
-        out.append(("🟡", f"叙事中出现议论文式连接词（AI 腔高发，建议改口语化叙述）：{ev}", ev))
-    n = sum(text.count(w) for w in AI_CLICHE)
-    density = n / cc * 1000.0
-    if density >= cliche_per_k:
+        out.append(("🟡", f"叙事中出现议论文式连接词（AI 腔高发）：{'、'.join(expo[:5])}", "、".join(expo[:5])))
+
+    # ② 万能金句/套话密度
+    n = _count_cjk_words(text, AI_CLICHE)
+    if _per_k(n, cc) >= cliche_per_k:
         top = sorted({w for w in AI_CLICHE if w in text}, key=lambda w: -text.count(w))[:5]
-        ev = "、".join(top)
-        out.append(("🟢", f"AI 套话/万能金句密度偏高（{density:.1f}/千字，疑似 AI 腔·平台 AI 检测率风险）：{ev}", ev))
+        out.append(("🟢", f"AI 套话/万能金句密度偏高（{_per_k(n, cc):.1f}/千字）：{'、'.join(top)}", "、".join(top)))
+
+    # ③ Burstiness
     cv, sent_n = sentence_burstiness(text)
     if cv is not None and cv < burstiness_cv_floor:
-        ev = f"CV={cv:.2f}/{sent_n}句"
-        out.append(("🟡", f"句长过于均匀（burstiness 低·{ev}，平台 perplexity/burst 检测高风险）；"
-                          "建议长短句交错、插入碎句/短促对白破匀（见 novel-craft/references/去AI味.md）", ev))
+        out.append(("🟡", f"句长过于均匀（burstiness 低·CV={cv:.2f}/{sent_n}句）；建议长短句交错、插入碎句/短促对白破匀", f"CV={cv:.2f}"))
+
+    # ④ 弱化副词泛滥（每千字 > 8 个）
+    weak_n = _count_cjk_words(text, AI_WEAK_ADVERBS)
+    if _per_k(weak_n, cc) > 8:
+        top = sorted({w for w in AI_WEAK_ADVERBS if w in text}, key=lambda w: -text.count(w))[:5]
+        out.append(("🟢", f"弱化副词过多（{_per_k(weak_n, cc):.1f}/千字，平台 AI 感强）：{'、'.join(top)}。建议用具体动作替代副词修饰", "、".join(top)))
+
+    # ⑤ "不是X而是Y" 句式（高信号 AI 腔——AI 习惯性二元对比）
+    if AI_X_NOT_X[0] in text and AI_X_NOT_X[1] in text:
+        count = min(text.count(AI_X_NOT_X[0]), text.count(AI_X_NOT_X[1]))
+        if _per_k(count, cc) > 1.5:
+            out.append(("🟡", f"「不是…而是…」二元对比句式偏多（{count} 处），AI 习惯性对比结构——替换为单侧重/并置/动作展开", f"{count}处"))
+
+    # ⑥ 破折号滥用（每千字 > 5 个）
+    em_count = text.count(AI_EMDASH)
+    if _per_k(em_count, cc) > 5:
+        out.append(("🟢", f"破折号「——」过多（{_per_k(em_count, cc):.1f}/千字），AI 习惯用破折号代替逗号/句号——每段限 1-2 个", f"{em_count}个"))
+
+    # ⑦ 感官三连（一段内出现 3+ 感官词密集堆砌）
+    para_sensory = 0
+    for para in text.split("\n"):
+        if sum(1 for s in AI_SENSORY_TRICOLON if s in para) >= 3:
+            para_sensory += 1
+    if para_sensory > 0:
+        out.append(("🟢", f"感官堆砌三连——段落内同时出现 3+ 感官词（视觉/听觉/触觉/嗅觉/味觉），AI 习惯性「多感官描写」套路（{para_sensory} 段）", f"{para_sensory}段"))
+
+    # ⑧ 过滤词密度（每千字 > 5 个）—— AI 习惯用"看到/听到/感到"代替直接描写
+    filter_n = _count_cjk_words(text, AI_FILTER_WORDS)
+    if _per_k(filter_n, cc) > 5:
+        top = sorted({w for w in AI_FILTER_WORDS if w in text}, key=lambda w: -text.count(w))[:5]
+        out.append(("🟡", f"过滤词密度偏高（{_per_k(filter_n, cc):.1f}/千字）：{'、'.join(top)}。AI 习惯用感知动词代替直接描写——删掉过滤词，把感知结果直接写出", "、".join(top)))
+
+    # ⑨ "不禁/仿佛/映入眼帘" 类——高信号 AI 腔
+    bujin_hits = [w for w in AI_BUJIN if w in text]
+    if _per_k(len(bujin_hits), cc) > 2:
+        out.append(("🟡", f"「不禁/仿佛/映入眼帘」类 AI 高频腔（{len(bujin_hits)} 种词）：{'、'.join(bujin_hits[:5])}。替换为身体微反应/环境映衬", "、".join(bujin_hits[:5])))
+
+    # ⑩ 意义膨胀套话——强行拔高（每千字 > 1）
+    infl_hits = [w for w in AI_INFLATION if w in text]
+    if infl_hits:
+        out.append(("🟢", f"意义膨胀套话：{'、'.join(infl_hits[:4])}。删除标签式拔高，用具体影响替代", "、".join(infl_hits[:4])))
+
+    # ⑪ 通用结论套话——AI 偏爱积极收束
+    concl_hits = [w for w in AI_CONCLUSION if w in text]
+    if concl_hits:
+        out.append(("🟢", f"通用结论套话：{'、'.join(concl_hits[:4])}。用具体悬念/未解决的冲突结尾", "、".join(concl_hits[:4])))
+
+    # ⑫ 正式语体入侵——AI 在叙事中误用议论文/公文体连接词
+    formal_hits = [w for w in AI_FORMAL_INVASION if w in text]
+    if formal_hits:
+        out.append(("🟡", f"正式语体入侵——叙事中出现公文/论文连接词：{'、'.join(formal_hits[:4])}。改为口语化/行动化表达", "、".join(formal_hits[:4])))
+
+    # ⑬ 排比三连过多（> 3 段出现连续 3+ "、" 分隔的短语）
+    triad_paras = 0
+    for para in text.split("\n"):
+        if para.count("、") >= 2 and len(para) > 30:
+            # 简单代理：一段内顿号 ≥ 2 + 段落足够长 → 疑似三连排比
+            triad_paras += 1
+    if triad_paras > 3:
+        out.append(("🟢", f"排比三连段落偏多（{triad_paras} 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比", f"{triad_paras}段"))
+
+    # ⑭ 总结式收尾——章节末段出现 AI 总结口吻
+    last_para = text.split("\n")[-1] if text else ""
+    summary_hits = [w for w in AI_SUMMARY_ENDING if w in last_para]
+    if summary_hits:
+        out.append(("🟡", f"章节末段总结式收尾：{'、'.join(summary_hits)}。AI 习惯章节结束时总结——改为行动/钩子/情绪余韵收尾", "、".join(summary_hits)))
+
+    # ⑮ "在那一刻/此时此刻" 模式——AI 情绪高点万能模板
+    moment_hits = [w for w in AI_IN_THAT_MOMENT if w in text]
+    if moment_hits:
+        out.append(("🟡", f"「在那一刻」模式——AI 情绪高潮万能模板（{len(moment_hits)} 处）。替换为角色微动作/环境异常/具体感受", "、".join(moment_hits[:3])))
+
     return out
 
 

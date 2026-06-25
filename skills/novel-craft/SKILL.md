@@ -17,13 +17,15 @@ description: Shared writing-primitives and deterministic production helpers for 
 | **读者契约 / 题旨契约** | `references/reader-contract.md` | 蓝图/spec/章纲通过后固化 `设定/读者契约.md`；Demo gate 同步 `reader_contract`；每章任务包用它防止偏题、承诺遗忘和文学质感变薄 |
 | **设定圣经 schema（统一·单一真值源）** | `references/setting-bible.md` | 建设定/角色卡/世界观时——create 从零建、spinoff/rewrite/continue 从原作抽改，**都用这一套字段**（含金手指必有代价 + 首现章/复用范围一致性三列） |
 | **批量写章闭环** | `references/draft-pipeline.md` | Demo 过审后进入 draft；需要任务包、状态增量、章节生成粒度、写章回扫时 |
+| **生活观察素材库** | `novel-observe` + `素材/观察札记.jsonl` | 人物悬浮、场景缺生活感、职业/地域/日常质感不足时；写章包可由 agent 选取观察条目注入 |
+| **正向审美样本库** | `novel-aesthetic` + `设定/aesthetic_bank.json` | Demo 高光、授权/公版样本、项目审美标尺；line edit 和 score 可引用“为什么有效”的转写规则 |
 | **专业资料包注入** | `novel-research` + `资料/research_sources.json` | 医疗/法律/刑侦/金融/军事/历史/宗教/海外/科技/职业文等专业场景；`draft_packets.py` 自动把适用章节的 `资料/专业资料包_<主题>.md` 加进必读源文件 |
 | **合规 profile / 平台辖区清单** | `scripts/compliance_profile.py` | KDP/中国公开发布/欧盟/出海/微短剧等目标命中时，生成 `合规/compliance_profile.json` 并在 QA gate 中提示/阻断 |
 | **统一修订计划** | `scripts/revision_planner.py` | review/score/balance/feedback/simulate 都跑过后，合并成 `修订/revision_plan.json` + `修订/修订计划.md` |
 | **三段式精品写章** | `references/trio-pipeline.md` | 长篇 / `商业连载` / `漫剧源书` / `小说生成工作流=三步迭代`；每章拆成 Architect → Ghostwriter → Senior Editor 三个任务包 |
 | **弧段任务包 / 长篇压力测试** | `scripts/arc_packets.py` + `novel-review/scripts/arc_gate.py` | 每 3-5 章或自然 arc 前后；写前物化弧段目标，写后抓连续不推进读者契约、整段无题旨对齐等中段跑偏 |
 | **弧段记忆摘要** | `references/arc-memory.md` + `scripts/arc_memory.py` | 每 3-5 章压缩剧情/人物/情绪/未收钩子，写后形成 `arc_summaries.json` / `emotional_progression.json`，写章包自动读取当前弧段摘要 |
-| **场景卡（scene cards）** | `references/scene-cards.md` + `scripts/scene_cards.py` | 章纲定稿后，把章节拆成 POV/目标/阻碍/冲突/转折/价值变化的场景卡；`draft_packets.py` 自动注入当前章场景卡 |
+| **场景卡（scene cards）** | `references/scene-cards.md` + `scripts/scene_cards.py` | 章纲定稿后，把章节拆成 POV/目标/阻碍/冲突/转折/价值变化的场景卡，并补 want/need/misbelief/fear/tactic/choice_cost 人物内驱字段；`draft_packets.py` 自动注入当前章场景卡 |
 | **边写边自检闭环** | `references/draft-pipeline.md` | `小说生成工作流=边写边自检`；任务包自动写入正文 + state_delta + `novel/scripts/post_write.py` 自检闭环，并按 `小批回扫间隔` 保留 3-5 章一次的 `novel-review` 集中修正 |
 | **派生流水线后半段（rewrite/continue/expand/condense/spinoff 共用）** | `references/derive-pipeline.md` | 任一派生 skill 的阶段表 / demo_gate / draft / export / ai_usage 通用机制——各 skill 只写自己的 source_model/direction_spec 映射，通用部分引此 |
 | 拆分标准（章 / 集 边界 + 字数分档） | `references/split.md` | 章纲编织**之前**先定总章数与字数分档 |

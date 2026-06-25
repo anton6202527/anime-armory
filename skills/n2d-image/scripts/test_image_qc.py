@@ -1643,16 +1643,20 @@ def test_coverage_ignores_noface_and_degraded(tmp_path: Path) -> None:
 
 
 # ── C3 多主体空间绑定 ──────────────────────────────────────────────────────
-def test_multi_subject_spatial_binding_warns_without_blocking():
+def test_multi_subject_spatial_binding_blocks_without_binding_or_strategy():
+    # 2026-06：无空间绑定/无执行策略 → block（与 review 同框 gate、script must 同口径）
     body = "**资产身份注册层**：`CHAR_01/常态` 与 `CHAR_03/常态` 同框对峙。"
     out = image_qc._lint_multi_subject_spatial_binding("镜头5", body, ["CHAR_01/常态", "CHAR_03/常态"])
-    assert len(out) == 1 and out[0]["code"] == "multi_person_no_spatial_binding" and out[0]["level"] == "warn"
+    assert len(out) == 1 and out[0]["code"] == "multi_person_no_spatial_binding" and out[0]["level"] == "block"
 
 
 def test_multi_subject_spatial_binding_ok_with_blocking_or_positions():
     refs = ["CHAR_01", "CHAR_03"]
     assert image_qc._lint_multi_subject_spatial_binding("镜头5", "blocking=沈念画左，柳娘子画右", refs) == []
     assert image_qc._lint_multi_subject_spatial_binding("镜头5", "沈念在画左，柳娘子在画右对峙", refs) == []
+    # 登记分层合成/原生主体执行策略也放行（block ⊆ review 同框 block，不误挡 review 会放行的镜）
+    assert image_qc._lint_multi_subject_spatial_binding("镜头5", "本镜登记 分别出图+合成，逐主体单人分层出图后合成", refs) == []
+    assert image_qc._lint_multi_subject_spatial_binding("镜头5", "shot_reverse_shot 拆成单人镜反打", refs) == []
     # 单人镜不触发
     assert image_qc._lint_multi_subject_spatial_binding("镜头1", "CHAR_01 独自", ["CHAR_01/常态"]) == []
 

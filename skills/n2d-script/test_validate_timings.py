@@ -125,6 +125,42 @@ def test_native_av_missing_shots_file_fails(tmp_path):
     assert rc == 1
 
 
+# ── per_shot_overflow（逐镜头真音超槽预检，与 compose 拟合同 max_stretch 口径）──
+def test_per_shot_overflow_flags_single_shot_over_stretch():
+    # 镜头1 真音 5.0 > 槽位 3.0×1.25=3.75 → overflow；镜头2 在容忍内
+    man = [{"镜头": "镜头1", "时长": 5.0, "gap_after": 0.0},
+           {"镜头": "镜头2", "时长": 2.0, "gap_after": 0.0}]
+    shots = {"镜头1": 3.0, "镜头2": 2.0}
+    ov = V.per_shot_overflow(man, shots, 1.25)
+    assert [o[0] for o in ov] == ["镜头1"]
+    assert ov[0][1] == 5.0 and ov[0][2] == 3.0
+
+
+def test_per_shot_overflow_total_cancels_but_single_overflows():
+    # ∑真音 = ∑槽位 = 8.0（总长校验会通过），但镜头1 单镜溢出 → 仍被逐镜抓出
+    man = [{"镜头": "镜头1", "时长": 5.0}, {"镜头": "镜头2", "时长": 3.0}]
+    shots = {"镜头1": 3.0, "镜头2": 5.0}
+    assert sum(r["时长"] for r in man) == sum(shots.values())  # 总长相等
+    ov = V.per_shot_overflow(man, shots, 1.25)
+    assert [o[0] for o in ov] == ["镜头1"]
+
+
+def test_per_shot_overflow_aggregates_multi_line_shot_with_gap():
+    # 单镜多句：聚合 ∑(时长+gap) = 2+0.5+2 = 4.5 > 3.0×1.25 → overflow
+    man = [{"镜头": "镜头1", "时长": 2.0, "gap_after": 0.5},
+           {"镜头": "镜头1", "时长": 2.0, "gap_after": 0.0}]
+    shots = {"镜头1": 3.0}
+    ov = V.per_shot_overflow(man, shots, 1.25)
+    assert ov and ov[0][0] == "镜头1" and ov[0][1] == 4.5
+
+
+def test_per_shot_overflow_within_stretch_is_clean():
+    # 真音 3.5 ≤ 3.0×1.25=3.75 → 不报（与 compose stretch 档一致，不是 overflow）
+    man = [{"镜头": "镜头1", "时长": 3.5}]
+    shots = {"镜头1": 3.0}
+    assert V.per_shot_overflow(man, shots, 1.25) == []
+
+
 # ── target-duration deviation WARN (Fix 2) ──
 def test_target_deviation_warn_none_without_target():
     # 不给 target → 无新行为（向后兼容）

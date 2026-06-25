@@ -20,6 +20,7 @@ import glob
 import importlib.util
 import json
 import os
+import re
 import sys
 from typing import Any, Dict, List, Optional, Sequence
 
@@ -247,6 +248,84 @@ def build_delivery_domains(signals: Sequence[Dict[str, Any]]) -> List[Dict[str, 
     return list(domains.values())
 
 
+ENTITY_ID_RE = re.compile(r"\b(?:CHAR|LOC|PROP|WEAPON|OUTFIT|VFX)_\d{2,}\b")
+ENTITY_DOMAIN = {
+    "CHAR": "character",
+    "LOC": "shot",
+    "PROP": "asset",
+    "WEAPON": "asset",
+    "OUTFIT": "character",
+    "VFX": "asset",
+}
+
+
+def _root_cause_anchor(signal: Dict[str, Any]) -> str:
+    text = " ".join(str(signal.get(k, "")) for k in ("loc", "text", "message", "msg", "dimension", "dim"))
+    m = ENTITY_ID_RE.search(text)
+    if m:
+        return m.group(0)
+    loc = str(signal.get("loc") or "").strip()
+    if loc:
+        base = os.path.basename(loc)
+        return base or loc
+    return _domain_for_signal(signal)
+
+
+def _domain_for_root_cause(signal: Dict[str, Any], anchor: str) -> str:
+    prefix = str(anchor or "").split("_", 1)[0]
+    if prefix in ENTITY_DOMAIN:
+        return ENTITY_DOMAIN[prefix]
+    return _domain_for_signal(signal)
+
+
+def build_root_causes(signals: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Group noisy multi-dimension findings into likely root-cause buckets.
+
+    This does not suppress any raw finding. It adds an acceptance view so one bad
+    first frame does not appear as unrelated face/style/VLM/seam repair requests.
+    """
+    buckets: Dict[tuple, Dict[str, Any]] = {}
+    for signal in signals:
+        if not isinstance(signal, dict):
+            continue
+        sev = normalize_sev(signal.get("sev") or signal.get("severity") or signal.get("status"))
+        if SEV_RANK.get(sev, 0) < 2:
+            continue
+        anchor = _root_cause_anchor(signal)
+        domain = _domain_for_root_cause(signal, anchor)
+        key = (domain, anchor)
+        bucket = buckets.setdefault(key, {
+            "domain": domain,
+            "anchor": anchor,
+            "severity": "ok",
+            "dimensions": [],
+            "sources": [],
+            "symptoms": [],
+            "suggested_return_to_stage": signal.get("return_to_stage") or "",
+        })
+        bucket["severity"] = worse(str(bucket["severity"]), sev)
+        dim = str(signal.get("dimension") or signal.get("dim") or signal.get("dim_key") or "").strip()
+        if dim and dim not in bucket["dimensions"]:
+            bucket["dimensions"].append(dim)
+        src = str(signal.get("source") or "unknown").strip() or "unknown"
+        if src not in bucket["sources"]:
+            bucket["sources"].append(src)
+        if not bucket.get("suggested_return_to_stage") and signal.get("return_to_stage"):
+            bucket["suggested_return_to_stage"] = signal.get("return_to_stage")
+        if len(bucket["symptoms"]) < 8:
+            msg = str(signal.get("text") or signal.get("message") or signal.get("msg") or "")
+            bucket["symptoms"].append({
+                "severity": sev,
+                "dimension": dim,
+                "loc": signal.get("loc", ""),
+                "message": msg[:180],
+                "source": src,
+            })
+    out = list(buckets.values())
+    out.sort(key=lambda row: (-SEV_RANK.get(normalize_sev(row.get("severity")), 0), str(row.get("domain")), str(row.get("anchor"))))
+    return out
+
+
 def build_ledger(*, characters: List[Dict[str, Any]], assets: List[Dict[str, Any]],
                  face_drift: Dict[str, str], asset_drift: Dict[str, str],
                  findings: Sequence[Dict[str, Any]],
@@ -278,13 +357,14 @@ def build_ledger(*, characters: List[Dict[str, Any]], assets: List[Dict[str, Any
         })
     out_rows.sort(key=lambda x: -SEV_RANK.get(x["overall"], 0))
     domains = build_delivery_domains(delivery_signals if delivery_signals is not None else findings)
+    root_causes = build_root_causes(delivery_signals if delivery_signals is not None else findings)
     entity_counts = severity_counts(out_rows)
     domain_counts = severity_counts(domains)
     counts = merge_counts(entity_counts, domain_counts)
     delivery_status = "blocked" if counts.get("block", 0) or counts.get("high", 0) else "pass"
     return {
         "kind": CONSISTENCY_LEDGER_KIND, "version": 1,
-        "rows": out_rows, "domains": domains, "counts": counts,
+        "rows": out_rows, "domains": domains, "root_causes": root_causes, "counts": counts,
         "entity_counts": entity_counts,
         "domain_counts": domain_counts,
         "delivery_surface": {
@@ -326,6 +406,15 @@ def render_markdown(ledger: Dict[str, Any], ep: str) -> str:
         for f in findings:
             loc = f" @ {f.get('loc')}" if f.get("loc") else ""
             lines.append(f"- {f.get('severity')} [{f.get('source')}] {f.get('dimension')}{loc}: {f.get('message')}")
+    if ledger.get("root_causes"):
+        lines.extend(["", "## 根因聚合", ""])
+        for row in ledger["root_causes"][:12]:
+            dims = " / ".join(row.get("dimensions") or []) or "未标维度"
+            ret = f" → 回 {row.get('suggested_return_to_stage')}" if row.get("suggested_return_to_stage") else ""
+            lines.append(f"- {normalize_sev(row.get('severity'))} · {row.get('domain')}:{row.get('anchor')} · {dims}{ret}")
+            for symptom in (row.get("symptoms") or [])[:3]:
+                loc = f" @ {symptom.get('loc')}" if symptom.get("loc") else ""
+                lines.append(f"  - {symptom.get('severity')} [{symptom.get('source')}] {symptom.get('dimension')}{loc}: {symptom.get('message')}")
     lines.extend([
         "",
         "## 角色/资产一致性画像",

@@ -30,13 +30,13 @@ python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --chapter 4 --
 
 若项目只需要旧式单包，显式传 `--step full` 或在 `_设置.md` 明确写 `小说生成工作流：默认单步`。只补某一段可传 `--step architect|ghostwriter|editor`。
 
-`_设置.md` 写 `小说生成工作流：边写边自检` 时，`draft_packets.py` 会把每章的自检闭环写进任务包：正文落 `章节/第NN章.md`，状态增量落 `审稿/state_delta_第NN章.json`，然后执行：
+`_设置.md` 写 `小说生成工作流：边写边自检` 时，`draft_packets.py` 会把每章的自检闭环写进任务包：正文落 `章节/第NN章.md`，状态增量落 `审稿/state_delta_第NN章.json`，对账结论落 `审稿/state_verify_第NN章.json`，然后执行：
 
 ```bash
-python3 skills/novel/scripts/post_write.py "<作品根>" --chapter 第NN章
+python3 skills/novel/scripts/post_write.py "<作品根>" --chapter 第NN章 --conclusion "<作品根>/审稿/state_verify_第NN章.json"
 ```
 
-该 hook 会先跑 `reader_contract_sentry.py`，阻断缺少 `reader_contract_progress` / `theme_alignment` 的章节，再跑状态账本对账、百科更新、逻辑哨兵和力量体系自检；硬闸失败时先修正文或状态增量，再重跑。这个选项不改变单步/三步的写作拆分，只把“写完即自检”的程序化闭环变成用户可选择的工作流。
+该 hook 会先跑 `reader_contract_sentry.py`，阻断缺少 `reader_contract_progress` / `theme_alignment` 的章节，再跑状态账本对账、百科更新、逻辑哨兵和力量体系自检；硬闸失败时先修正文或状态增量，再重跑。只有 `--conclusion` 对应的核对结论存在且账本合并成功后，脚本才会更新 `_进度.md`。这个选项不改变单步/三步的写作拆分，只把“写完即自检”的程序化闭环变成用户可选择的工作流。
 
 `小批回扫间隔` 默认 `5章`，可改 `3章` 或 `关闭`。到达回扫点时，任务包和 `flow.py` 会提示：
 

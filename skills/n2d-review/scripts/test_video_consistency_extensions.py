@@ -59,6 +59,19 @@ def test_video_semantic_report_bands_subject_similarity(tmp_path: Path) -> None:
     assert any(row["verdict"] == "block" and row["subject_similarity"] == 0.41 for row in res["findings"])
 
 
+def test_video_semantic_missing_sidecar_marks_required_evidence(tmp_path: Path) -> None:
+    ep = "第1集"
+    _write_json(tmp_path / "脚本" / ep / "storyboard.json", {"clips": [{"id": "Clip_01", "action": "沈念入殿"}]})
+    video = tmp_path / "出视频" / ep / "视频" / "Clip_01.mp4"
+    video.parent.mkdir(parents=True)
+    video.write_bytes(b"")
+    res = vsem.analyze(str(tmp_path), ep)
+    assert res["available"] is True
+    row = res["findings"][0]
+    assert row["evidence_missing"] is True
+    assert row["required_evidence"] == "video_semantic_consistency"
+
+
 def test_dialogue_av_requires_report_for_native_multi_speaker_final(tmp_path: Path) -> None:
     ep = "第1集"
     voice = tmp_path / "脚本" / ep / "voiceover.txt"
@@ -129,6 +142,18 @@ def test_camera_trajectory_report_blocks_axis_flip(tmp_path: Path) -> None:
     assert any(row["verdict"] == "block" and "越轴" in row["message"] for row in res["findings"])
 
 
+def test_camera_trajectory_missing_sidecar_marks_required_evidence(tmp_path: Path) -> None:
+    ep = "第1集"
+    _write_json(tmp_path / "脚本" / ep / "storyboard.json", {"clips": [{"id": "Clip_01", "camera": "推镜跟拍"}]})
+    video = tmp_path / "出视频" / ep / "视频" / "Clip_01.mp4"
+    video.parent.mkdir(parents=True)
+    video.write_bytes(b"")
+    res = cam.analyze(str(tmp_path), ep)
+    row = res["findings"][0]
+    assert row["evidence_missing"] is True
+    assert row["required_evidence"] == "camera_trajectory_probe"
+
+
 def test_motion_quality_high_action_requires_posterior_curves(tmp_path: Path) -> None:
     ep = "第1集"
     _write_json(
@@ -137,6 +162,18 @@ def test_motion_quality_high_action_requires_posterior_curves(tmp_path: Path) ->
     )
     res = mot.analyze(str(tmp_path), ep)
     assert any("高动作后验报告缺字段" in row["message"] and "speed_curve" in row["message"] for row in res["findings"])
+
+
+def test_motion_quality_missing_sidecar_marks_required_evidence(tmp_path: Path) -> None:
+    ep = "第1集"
+    _write_json(tmp_path / "脚本" / ep / "storyboard.json", {"clips": [{"id": "Clip_01", "action": "沈念挥剑命中"}]})
+    video = tmp_path / "出视频" / ep / "视频" / "Clip_01.mp4"
+    video.parent.mkdir(parents=True)
+    video.write_bytes(b"")
+    res = mot.analyze(str(tmp_path), ep)
+    row = res["findings"][0]
+    assert row["evidence_missing"] is True
+    assert row["required_evidence"] == "motion_quality"
 
 
 def test_motion_quality_high_action_posterior_curves_pass(tmp_path: Path) -> None:
@@ -182,6 +219,18 @@ def test_subject_video_report_blocks_multi_subject_swap(tmp_path: Path) -> None:
     assert any(row["verdict"] == "block" and "串换" in row["message"] for row in res["findings"])
 
 
+def test_subject_video_missing_sidecar_marks_required_evidence(tmp_path: Path) -> None:
+    ep = "第1集"
+    _write_json(tmp_path / "出图" / "共享" / "identity_registry.json", {"characters": [{"id": "CHAR_A"}]})
+    video = tmp_path / "出视频" / ep / "视频" / "Clip_01.mp4"
+    video.parent.mkdir(parents=True)
+    video.write_bytes(b"")
+    res = s2v.analyze(str(tmp_path), ep)
+    row = res["findings"][0]
+    assert row["evidence_missing"] is True
+    assert row["required_evidence"] == "subject_video_consistency"
+
+
 def test_video_eval_runner_builds_manifest_with_risk_questions(tmp_path: Path) -> None:
     ep = "第1集"
     _write_json(
@@ -196,3 +245,55 @@ def test_video_eval_runner_builds_manifest_with_risk_questions(tmp_path: Path) -
     assert {"subject", "scene", "action", "physics", "dialogue", "camera"} <= kinds
     assert manifest["sidecar_targets"]["motion"].endswith(f"motion_quality_{ep}.json")
     assert manifest["sidecar_targets"]["physical_event"].endswith(f"physical_event_graph_{ep}.json")
+
+
+# ── #4 动作 beat 豁免：高动态镜主体形变属预期 → subject_fidelity 硬 block 降 warn ──
+def test_relax_action_fidelity_pure() -> None:
+    assert s2v.relax_action_fidelity("block", True) == "warn"   # 动作镜 → 降
+    assert s2v.relax_action_fidelity("block", False) == "block" # 静态镜 → 保持
+    assert s2v.relax_action_fidelity("warn", True) == "warn"    # 非 block 不动
+
+
+def test_is_action_row_signals() -> None:
+    assert s2v._is_action_row({"high_motion": True}) is True
+    assert s2v._is_action_row({"action_beat": "yes"}) is True
+    assert s2v._is_action_row({"motion_intensity": 0.8}) is True
+    assert s2v._is_action_row({"motion_intensity": 0.2}) is False
+    assert s2v._is_action_row({"subject_fidelity": 0.4}) is False
+
+
+def test_high_motion_clips_from_storyboard(tmp_path: Path) -> None:
+    ep = "第1集"
+    _write_json(
+        tmp_path / "脚本" / ep / "storyboard.json",
+        {"clips": [
+            {"id": "Clip_01", "shot_description": "沈念静坐窗前喝茶"},                 # 无动作
+            {"id": "Clip_06", "shot_description": "沈念挥剑劈砍，剑气命中铜镜爆裂"},   # 攻击+命中 → 动作 beat
+        ]},
+    )
+    hm = s2v._high_motion_clips(str(tmp_path), ep)
+    assert 6 in hm and 1 not in hm
+
+
+def test_subject_fidelity_block_relaxed_on_action_clip(tmp_path: Path) -> None:
+    ep = "第1集"
+    _write_json(
+        tmp_path / "脚本" / ep / "storyboard.json",
+        {"clips": [
+            {"id": "Clip_06", "shot_description": "沈念挥剑劈砍命中铜镜爆裂"},  # 动作 beat
+            {"id": "Clip_07", "shot_description": "沈念静立"},                  # 静态
+        ]},
+    )
+    # 两镜同样低 subject_fidelity=0.40（<0.45 硬 block 线）
+    _write_json(
+        tmp_path / "生产数据" / f"subject_video_consistency_{ep}.json",
+        {"subjects": [
+            {"clip": "Clip_06", "subject": "CHAR_沈念", "subject_fidelity": 0.40},
+            {"clip": "Clip_07", "subject": "CHAR_沈念", "subject_fidelity": 0.40},
+        ]},
+    )
+    res = s2v.analyze(str(tmp_path), ep)
+    by_shot = {r.get("shot"): r for r in res["findings"] if "subject_fidelity" in r}
+    assert by_shot["Clip_06"]["verdict"] == "warn"                       # 动作镜降 warn
+    assert by_shot["Clip_06"].get("action_beat_relaxed") is True
+    assert by_shot["Clip_07"]["verdict"] == "block"                      # 静态镜仍 block（真崩主体）

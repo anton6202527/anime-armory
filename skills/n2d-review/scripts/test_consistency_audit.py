@@ -222,3 +222,43 @@ def test_contract_inheritance_result_becomes_video_prompt_task(tmp_path):
     assert any(v == "block" for v in sec["verdicts"])
     assert tasks[0]["return_to_stage"] == "video_prompt"
     assert "出视频/第1集/prompt/00_总览.md" in tasks[0]["affected_artifacts"]
+
+
+# ── G1↔EXP1 调和：像素确认大表情形变 → G1 脸 block 降 warn（破除「奖励面瘫」掣肘）──
+def test_clip_num_parsing():
+    assert ca._clip_num("图片/Clip_05_face.png") == 5
+    assert ca._clip_num("Clip5") == 5
+    assert ca._clip_num("镜12") == 12
+    assert ca._clip_num("8") == 8
+    assert ca._clip_num("") is None
+    assert ca._clip_num(None) is None
+
+
+def test_expression_confirmed_clips_only_real_motion():
+    expr = {"findings": [
+        {"shot": "Clip_03", "verdict": "ok", "mouth_change": 0.45, "eye_change": 2.0},   # 嘴大动 → 收
+        {"shot": "Clip_04", "verdict": "ok", "mouth_change": 0.05, "eye_change": 0.10},  # 两者皆低于阈值 → 不收
+        {"shot": "Clip_05", "verdict": "warn", "mouth_change": 0.02, "eye_change": 0.1},  # 声称大却没动 → 绝不收
+        {"shot": "Clip_06", "verdict": "ok", "note": "无尾帧"},                            # 占位无形变 → 不收
+        {"shot": "Clip_07", "verdict": "ok", "mouth_change": 0.10, "eye_change": 0.40},   # 眼睑大动 → 收
+    ]}
+    got = ca.expression_confirmed_clips(expr)
+    assert got == {3, 7}
+
+
+def test_reconcile_face_with_expression_downgrades_only_confirmed_blocks():
+    face = {"shots": [
+        {"png": "图片/Clip_03_a.png", "verdict": "block"},   # 在确认集 → 降 warn
+        {"png": "图片/Clip_09_a.png", "verdict": "block"},   # 不在确认集 → 保持 block（真崩脸）
+        {"png": "图片/Clip_03_b.png", "verdict": "ok"},      # 非 block → 不动
+    ]}
+    n = ca.reconcile_face_with_expression(face, {3})
+    assert n == 1
+    s0 = face["shots"][0]
+    assert s0["verdict"] == "warn" and s0["abs_verdict"] == "block" and s0["expression_span_expected"] is True
+    assert face["shots"][1]["verdict"] == "block"   # 未确认的崩脸不放过
+    assert face["shots"][2]["verdict"] == "ok"
+    # 空确认集（无 insightface）→ 完全不动
+    face2 = {"shots": [{"png": "图片/Clip_03_a.png", "verdict": "block"}]}
+    assert ca.reconcile_face_with_expression(face2, set()) == 0
+    assert face2["shots"][0]["verdict"] == "block"

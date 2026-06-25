@@ -33,7 +33,7 @@ Match user intent against the table below (and each `SKILL.md`'s Triggers). Reco
 
 | User wants to | Entry skill (dispatcher → routes to sub-skills) |
 |---|---|
-| Write a novel, import a source book, expand/rewrite/continue/score/review, power-system / level / growth-number consistency self-check for 穿越/系统流 | **`novel`** (→ novel-create/fetch/rewrite/review/score/wiki …) |
+| Write a novel, import a source book, build living-material observation notes or positive aesthetic samples, expand/rewrite/continue/score/review/professional edit, power-system / level / growth-number consistency self-check for 穿越/系统流 | **`novel`** (→ novel-create/observe/aesthetic/fetch/rewrite/review/edit/score/wiki …) |
 | Turn a novel into an AI comic-drama / short-drama (storyboard/voice/image/video/compose) | **`n2d`** (→ n2d-script/voice/image/video/compose) |
 | Write a song, edit lyrics, compose, pick takes, cover/voice-swap, review | **`song`** (→ song-lyrics/compose/cover/review …) |
 | Make an MV for a song, beat-sync, image/video, karaoke subtitles, compose | **`mv`** (→ mv-script/beat/plan/image/video/compose …) |

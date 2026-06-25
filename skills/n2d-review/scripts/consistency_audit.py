@@ -39,6 +39,13 @@ from n2d_contract import (  # noqa: E402  findings kind / 生产数据目录 / �
     production_dir,
 )
 from n2d_contract_diff import diff_contracts  # noqa: E402  视觉契约继承 Diff 核心（common 层单一真值源）
+# Seam conditioning hints (writes advisory JSON for next-episode prompt generation)
+import importlib.util as _imu
+_seam_cond_spec = _imu.find_spec("seam_conditioning")
+if _seam_cond_spec is not None:
+    import seam_conditioning as seam_cond  # noqa: E402
+else:
+    seam_cond = None  # type: ignore[assignment]
 
 import face_consistency as fc
 import outfit_consistency as oc
@@ -75,6 +82,10 @@ import subject_video_consistency as s2vc
 import spectacle_video_qc as svqc
 import production_consistency as pc
 import extended_consistency as ec
+import costume_consistency as cstc
+import expression_verification as expv
+import state_pixel_verify as spv
+import av_emotion_consistency as avec
 
 
 PRODUCTION_CONSISTENCY_META = {
@@ -264,6 +275,58 @@ def contract_inheritance_result(root: str, ep: str) -> dict:
     return {"available": True, "fields": fields, "notes": []}
 
 
+# Per-dimension risk_score defaults for WARN tiering (consumed by gate.py display).
+# Pattern: substring match against the dimension label, first match wins.
+# High (0.7+): face, identity, cross-episode — audience-visible drift
+# Moderate (0.4-0.7): scene, outfit, hair, scale — noticeable but not fatal
+# Low (<0.4): style, tone, advisory — may be intentional creative choice
+_DIM_RISK_MAP: List[Tuple[str, float]] = [
+    ("脸(G1)", 0.85), ("无脸崩坏", 0.80), ("锚点门(N3)", 0.80),
+    ("跨集脸漂(G5)", 0.75), ("语义谱系(P0)", 0.80), ("状态百科(P1)", 0.75),
+    ("多模态(P2)", 0.70), ("称谓口头禅(A1)", 0.60),
+    ("片内时序(N2)", 0.70), ("服装配色(N1)", 0.55), ("发型(H1)", 0.55),
+    ("辨识标记(MK1)", 0.60), ("场景(O2)", 0.55), ("字幕对齐(L1)", 0.60),
+    ("字幕安全区(L2)", 0.50), ("身高比例(R1)", 0.50), ("风格(S1)", 0.30),
+    ("景深一致(DOF1)", 0.25), ("特效窜色(VFXC)", 0.30),
+    ("色温调色(GRADE1)", 0.25), ("天气时辰(W1)", 0.50),
+    ("光位方向(W2)", 0.55), ("轴线视线(X1)", 0.55),
+    ("空间站位(B1)", 0.50), ("接缝接力", 0.65), ("视频VLM判题(VLM1)", 0.60),
+    ("视频语义一致(VSEM)", 0.65), ("多人对话音画(DAV)", 0.55),
+    ("物理因果链(CG1)", 0.50), ("相机空间轨迹(CAM1)", 0.45),
+    ("运动质量(MOT1)", 0.45), ("主体视频一致(S2V)", 0.65),
+    ("高动态成片证据(SPECV)", 0.55),
+    ("音画同步(AV1)", 0.55), ("配音情绪弧(VEA)", 0.45),
+    ("口音方言(ACC)", 0.40), ("音乐衔接(BGM)", 0.30),
+    ("节奏密度(Rhythm)", 0.25), ("糊/低质(N4)", 0.50),
+    ("手部/解剖(N5)", 0.45), ("实体记忆(EMB)", 0.50),
+    ("物件常驻(O3)", 0.50), ("持有账本(POS)", 0.50),
+    ("视线状态回读(X2)", 0.45), ("状态转场视频证据(ST1)", 0.40),
+    ("交互接触(I1)", 0.50), ("结构化交互图谱(I2)", 0.45),
+    ("物理事件图(PHY)", 0.45), ("视频证据完整性(EVID)", 0.40),
+    ("成片统一(C1)", 0.35), ("成片时间线探针(FT1)", 0.30),
+    ("生成配方(RCP)", 0.30), ("强配方Schema(RCP2)", 0.35),
+    ("系列包装(PKG)", 0.20), ("台词语域(D1)", 0.35),
+    ("场景平面(FP1)", 0.25), ("成本路由(K1)", 0.20),
+    ("人审校准集(CAL)", 0.20), ("一致性探针包(PROBE)", 0.20),
+    ("系统面板(UI1)", 0.30), ("音乐母题(LM1)", 0.20),
+    ("系列调色(GRD)", 0.25), ("环境声(AMB)", 0.20),
+    ("跨集体型(R2)", 0.45), ("在场检测(O3V)", 0.45),
+    ("外观判官(VAP)", 0.55), ("表情连续(EXP1)", 0.70),
+    ("伏笔兑现(SP1)", 0.30), ("文字渲染(OCR1)", 0.35),
+    ("服装独立(COST)", 0.50), ("状态像素验证(SP1V)", 0.75),
+    ("音画情绪一致(AVE)", 0.50),
+]
+
+
+def _dim_risk_score(dim: str) -> float:
+    """Auto-derived risk_score from consistency dimension label.
+    Falls back to 0.5 (moderate) for unrecognised dims."""
+    for pattern, score in _DIM_RISK_MAP:
+        if pattern in dim:
+            return score
+    return 0.5  # unrecognised → moderate (conservative)
+
+
 def normalize_details(rows: Sequence[dict], *, dim: str, ep: str, stage: str,
                       default_artifacts: Sequence[str], limit: int = 40) -> List[dict]:
     details: List[dict] = []
@@ -281,6 +344,11 @@ def normalize_details(rows: Sequence[dict], *, dim: str, ep: str, stage: str,
         row.setdefault("dimension", dim)
         row.setdefault("return_to_stage", stage)
         row.setdefault("rerun_scope", default_scope(dim, stage))
+        # risk_score for WARN tiering (carried through to gate.py display).
+        # Detectors can override by setting risk_score on individual rows;
+        # this default is per-dimension based on the detector's real-world impact.
+        if "risk_score" not in row:
+            row["risk_score"] = _dim_risk_score(dim)
         row["affected_shots"] = unique([*row.get("affected_shots", []), *shots])
         row["affected_artifacts"] = unique([*row.get("affected_artifacts", []), *artifacts])
         details.append(row)
@@ -429,6 +497,61 @@ def cross_episode_face_rows(root: str, ep: str, face_result: dict) -> List[dict]
     return rows
 
 
+def _clip_num(value: Any) -> int | None:
+    """从 png 名 / clip_id 解析 Clip 号（Clip_05 / 镜5 / shot5 / 裸数字回退）。"""
+    s = str(value or "")
+    m = re.search(r"(?:Clip|片段|镜头?|shot)\s*[_\- ]?\s*0*([0-9]+)", s, re.I)
+    if not m:
+        m = re.search(r"0*([0-9]+)", s)
+    return int(m.group(1)) if m else None
+
+
+def expression_confirmed_clips(expr_result: dict,
+                               mouth_threshold: float = expv.DEFAULT_MOUTH_THRESHOLD,
+                               eye_threshold: float = expv.DEFAULT_EYE_THRESHOLD) -> set:
+    """EXP1 像素已确认「表情确实大幅形变」的 Clip 号集合（用于 G1↔EXP1 调和）。
+
+    只认 verdict==ok 且 mouth/eye 形变越过阈值的镜——这些近景的脸-身份余弦掉到 floor 下，
+    极可能是表情形变（哭/吼/瞪）所致而非崩脸（"Motion by Queries"：身份与表情共用同组特征）。
+    EXP1 的 warn=声称大却没动，恰恰相反（脸该动没动），绝不放行。纯函数·可测。"""
+    out: set = set()
+    for f in (expr_result.get("findings") or []):
+        if not isinstance(f, dict) or f.get("verdict") != "ok":
+            continue
+        mc, ec = f.get("mouth_change"), f.get("eye_change")
+        if mc is None and ec is None:
+            continue  # 跳过/无脸的占位 finding，非确认形变
+        moved = (isinstance(mc, (int, float)) and mc >= mouth_threshold) or \
+                (isinstance(ec, (int, float)) and ec >= eye_threshold)
+        if moved:
+            num = _clip_num(f.get("shot"))
+            if num is not None:
+                out.add(num)
+    return out
+
+
+def reconcile_face_with_expression(face_result: dict, confirmed_clips: set) -> int:
+    """G1 脸 block ∩ EXP1 像素确认大表情形变 → 降 warn（surface·不硬阻断）。
+
+    根治掣肘：G1 floor 基于中性定妆自标定、无表情豁免；EXP1 又要求大情绪近景首尾帧表情大幅变化。
+    两者共用同一镜时结构性互掐——清 G1 硬 block 最省力的路是把脸做平（只换一个软 EXP1 warn）。
+    这里让「像素已证明表情真的大幅动了」的镜把 G1 block 降 warn，不再奖励面瘫。原地改 shots，返回降级数。
+    无 EXP1 能力（insightface 缺）→ confirmed_clips 空 → 不动（保守=现状）。"""
+    if not confirmed_clips:
+        return 0
+    n = 0
+    for s in face_result.get("shots", []) or []:
+        if not isinstance(s, dict) or s.get("verdict") != "block":
+            continue
+        num = _clip_num(s.get("png") or s.get("shot"))
+        if num is not None and num in confirmed_clips:
+            s["abs_verdict"] = "block"
+            s["verdict"] = "warn"
+            s["expression_span_expected"] = True
+            n += 1
+    return n
+
+
 def noface_violation_rows(ep: str, face_result: dict) -> List[dict]:
     """G1b 无脸崩坏：该镜应有具名角色却检测不到脸（脸糊/被遮挡/崩脸）。
 
@@ -531,6 +654,12 @@ def run(root: str, ep: str) -> dict:
         default_artifacts=(f"出图/{ep}/prompt/01_分镜出图.md", f"出图/{ep}/图片"),
     )
 
+    # SP1V 状态像素验证（VLM-based：角色状态变化是否真的呈现在像素中）
+    state_pix = spv.analyze(root, ep)
+    sections["状态像素验证(SP1V)"] = {"skipped": not state_pix.get("available", False),
+                                    "verdicts": _verdicts(state_pix.get("findings", [])), "notes": state_pix.get("notes", [])}
+    collect_simple("状态像素验证(SP1V)", state_pix.get("findings", []), stage="image", default_artifacts=(f"出图/{ep}/图片", "生产数据/state_ledger_{ep}.json"))
+
     # 出图 → 出视频 视觉契约继承 Diff（光位锚/轴线漂移是视频前硬风险）
     contract_dim = "契约继承"
     contract_spec = consistency_dim_spec("contract_inheritance") or {}
@@ -553,6 +682,10 @@ def run(root: str, ep: str) -> dict:
 
     # G1 脸（insightface 缺席时自动降级 Pillow 基础机检：mode=pillow_fallback，供 n2d-score 降权消费）
     f = fc.analyze(root, ep)
+    # EXP1 先算（G1 section 之前）：用「像素已确认大表情形变」的镜调和 G1——把因表情(非崩脸)掉到
+    # floor 下的近景 block 降 warn，破除「闸门结构性奖励面瘫」。无 insightface→空集→不动（保守）。
+    expr = expv.analyze(root, ep)
+    _exp_downgraded = reconcile_face_with_expression(f, expression_confirmed_clips(expr)) if f.get("available", False) else 0
     # noface 由 G1b 单列；unverifiable=远景人小身份不可辨，既非崩脸也非"已验证 ok"——排除出 G1，
     # 否则会被当成通过镜拉高一致性通过率（"稳定地错"反被记成过）。统计另列 unverifiable_shots。
     _g1_excluded = {"noface", "unverifiable"}
@@ -582,11 +715,24 @@ def run(root: str, ep: str) -> dict:
                             "verdicts": [r["verdict"] for r in g5_rows], "notes": []}
     collect_simple("跨集脸漂(G5)", g5_rows, stage="image", default_artifacts=("出图/共享/图片",))
 
+    # EXP1 表情像素验证（expression_span=大 近景→首尾帧 landmark 对比）——结果已在 G1 前算并用于调和
+    notes_exp = list(expr.get("notes", []))
+    if _exp_downgraded:
+        notes_exp.append(f"已据 EXP1 像素确认的大表情形变，将 {_exp_downgraded} 处 G1 脸 block 降为 warn（避免奖励面瘫）。")
+    sections["表情连续(EXP1)"] = {"skipped": not expr.get("available", False),
+                                "verdicts": _verdicts(expr.get("findings", [])), "notes": notes_exp}
+    collect_simple("表情连续(EXP1)", expr.get("findings", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
+
     # N1 服装/配色
     o = oc.analyze(root, ep)
     sections["服装配色(N1)"] = {"skipped": not o.get("available", False),
                               "verdicts": _verdicts(o.get("shots", [])), "notes": o.get("notes", [])}
     collect_simple("服装配色(N1)", o.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
+    # COST 服装独立维度（CLIP-I embedding，与 N1 配色互补）
+    costume = cstc.analyze(root, ep)
+    sections["服装独立(COST)"] = {"skipped": not costume.get("available", False),
+                                "verdicts": _verdicts(costume.get("shots", [])), "notes": costume.get("notes", [])}
+    collect_simple("服装独立(COST)", costume.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
 
     # H1 发型/发色（脸、服装之外的第三类漂移；缺 Pillow 优雅跳过）
     hr = hc.analyze(root, ep)
@@ -648,6 +794,13 @@ def run(root: str, ep: str) -> dict:
     sections["接缝接力"] = {"skipped": bool(sm.get("notes")) and not sm.get("seams"),
                          "verdicts": _verdicts(sm.get("seams", [])), "notes": sm.get("notes", [])}
     collect_simple("接缝接力", sm.get("seams", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
+    # Write seam conditioning hints for next-episode prompt generation
+    if seam_cond is not None and sm.get("seams"):
+        try:
+            hints = seam_cond.build_hints(sm["seams"], ep)
+            seam_cond.write_hints(root, ep, hints)
+        except Exception:
+            pass  # advisory only; never block the audit
 
     # 称谓/口头禅(A1)——剧本层人设漂移（称呼/自称/口头禅忽 A 忽 B；缺词典优雅跳过）
     ad = addr.analyze(root, ep)
@@ -690,6 +843,10 @@ def run(root: str, ep: str) -> dict:
     # W1 天气/时辰推进连续性（同场景相邻镜时辰硬跳 day↔night + scene_dna 光色天气违锁；缺 Pillow 优雅跳过）
     #    + W2 光位方向连续性（同场景相邻镜主光左右硬翻转 advisory·随 W1 同段产出 metric=light_dir）
     wco = wcont.analyze(root, ep)
+    try:
+        wcont.write_scene_world_ledger(root, ep, wco)
+    except Exception as exc:
+        wco.setdefault("notes", []).append(f"scene_world_ledger 写入失败：{type(exc).__name__}: {str(exc)[:120]}")
     sections["天气时辰(W1)"] = {"skipped": not wco.get("available", False),
                              "verdicts": _verdicts(wco.get("shots", [])), "notes": wco.get("notes", [])}
     collect_simple("天气时辰(W1)", wco.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
@@ -720,6 +877,11 @@ def run(root: str, ep: str) -> dict:
     collect_simple("口音方言(ACC)", ac.get("acc", []), stage="voice", default_artifacts=("设定库/voicemap.json",))
     sections["音乐衔接(BGM)"] = {"skipped": ac_skipped, "verdicts": _verdicts(ac.get("bgm", []))}
     collect_simple("音乐衔接(BGM)", ac.get("bgm", []), stage="compose", default_artifacts=(f"脚本/{ep}/bgm.txt",))
+    # AVE 音画情绪一致性（cross-modal: voiceover emotion vs visual expression）
+    av_emo = avec.analyze(root, ep)
+    sections["音画情绪一致(AVE)"] = {"skipped": not av_emo.get("available", False),
+                                   "verdicts": _verdicts(av_emo.get("findings", [])), "notes": av_emo.get("notes", [])}
+    collect_simple("音画情绪一致(AVE)", av_emo.get("findings", []), stage="compose", default_artifacts=(f"出图/{ep}/图片",))
 
     # Rhythm 节奏/留存启发式（advisory）：不声称是成片观感模型，但把 storyboard 时长曲线/钩子密度纳入审计链。
     pace = pr.analyze(root, ep)

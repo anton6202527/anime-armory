@@ -37,6 +37,108 @@ from waivers import append_waiver, make_waiver
 
 CHAPTER_RE = re.compile(r"第\s*0*(\d+)\s*章\s*(?:[《<]([^》>]+)[》>])?\s*(?:[—-]\s*(.*))?")
 TRIO_STEPS = ("architect", "ghostwriter", "editor")
+# ── 事件类型冷却（P2-⑦：防止模式化流水账） ────────────────────────────────
+# 每种事件类型有冷却期（刚用过的类型在冷却期内不得作为主 Beat）和最低出现频次（每 N 章至少一次）。
+# 检测基于章纲关键词（与场景检测共用同一 outline beat 文本）。
+EVENT_COOLDOWN_PATH = os.path.join("设定", "event_cooldown.json")
+EVENT_TYPE_KEYWORDS = {
+    "conflict_payoff": ("打脸", "碾压", "秒杀", "虐菜", "打斗", "战斗", "决斗", "反杀", "复仇", "清算", "算账", "爆锤", "横扫"),
+    "character_bond": ("羁绊", "交心", "共情", "互诉", "并肩", "守护", "牺牲", "托付", "约定", "和解", "原谅", "心疼", "默契"),
+    "faction_management": ("势力", "门派", "联盟", "收编", "整合", "立威", "夺权", "谈判", "博弈", "布局", "暗棋", "站队"),
+    "world_flavor": ("风土", "市井", "坊间", "茶楼", "酒楼", "集市", "秘境", "遗迹", "奇观", "古地", "异象", "传说", "歌谣"),
+    "crisis_escalation": ("危机", "死局", "绝境", "坑杀", "围杀", "陷阱", "计中计", "反转", "惊变", "曝出", "风暴", "天灾", "兽潮"),
+}
+EVENT_TYPE_LABELS = {
+    "conflict_payoff": "冲突爽点",
+    "character_bond": "人物羁绊",
+    "faction_management": "势力经营",
+    "world_flavor": "风土人情",
+    "crisis_escalation": "危机升级",
+}
+# 冷却规则：(冷却章数, 最低出现间隔章数)。冷却章数=同类事件再次作为主 Beat 的间隔；
+# 最低间隔=超此章数未出现则触发提醒（羁绊/风土在爽文里容易被长期跳过）。
+EVENT_RULES = {
+    "conflict_payoff": {"cooldown": 2, "remind_every": 99},   # 爽文核心无限刷，不需提醒
+    "character_bond": {"cooldown": 1, "remind_every": 5},     # 每 5 章至少一次羁绊
+    "faction_management": {"cooldown": 1, "remind_every": 99},
+    "world_flavor": {"cooldown": 1, "remind_every": 5},       # 每 5 章至少一次风土
+    "crisis_escalation": {"cooldown": 3, "remind_every": 99}, # 危级冷却最严
+}
+
+
+def detect_event_types(outline_text):
+    """从章纲/beat 文本中检测事件类型。返回 {event_key: bool}。"""
+    if not outline_text:
+        return {}
+    hits = {}
+    for ekey, keywords in EVENT_TYPE_KEYWORDS.items():
+        if any(kw in outline_text for kw in keywords):
+            hits[ekey] = True
+    return hits
+
+
+def event_cooldown_section(root, chapter, outline_text):
+    """事件冷却检查：读 event_cooldown.json，检测本章事件类型，输出冷却违规/提醒。
+
+    返回 (section_text, updated_tracker) — 调用方把 updated_tracker 写回 JSON。"""
+    tracker_path = os.path.join(root, EVENT_COOLDOWN_PATH)
+    tracker = load_json(tracker_path) if os.path.exists(tracker_path) else None
+    if not isinstance(tracker, dict) or tracker.get("kind") != "novel_event_cooldown":
+        tracker = {"kind": "novel_event_cooldown", "events": [], "last_seen": {}}
+
+    events = tracker.setdefault("events", [])
+    last_seen = tracker.setdefault("last_seen", {})
+
+    hit_types = detect_event_types(outline_text)
+    warnings = []
+    reminders = []
+
+    # 冷却违规检测
+    for ekey, active in hit_types.items():
+        if not active:
+            continue
+        last = last_seen.get(ekey)
+        if last is not None:
+            gap = chapter - last
+            cd = EVENT_RULES[ekey]["cooldown"]
+            if gap <= cd:
+                warnings.append(
+                    f"⚠️ {EVENT_TYPE_LABELS[ekey]} 距上次仅 {gap} 章（冷却 {cd} 章）——"
+                    f"若本章以此为副 Beat 可忽略；若为主 Beat，建议换类型避免模式化。"
+                )
+
+    # 最低出现提醒
+    for ekey, remind in {k: v["remind_every"] for k, v in EVENT_RULES.items() if v["remind_every"] < 99}.items():
+        last = last_seen.get(ekey, 0)
+        gap = chapter - last if last else chapter
+        if gap >= remind and ekey not in hit_types:
+            reminders.append(
+                f"💡 {EVENT_TYPE_LABELS[ekey]} 已 {gap} 章未出现——建议在不迟于第 "
+                f"{chapter + max(1, remind - gap)} 章安排一次{EVENT_TYPE_LABELS[ekey]}桥段。"
+            )
+
+    # 记录本章事件到 tracker
+    for ekey in hit_types:
+        last_seen[ekey] = chapter
+        events.append({"type": ekey, "chapter": chapter, "label": EVENT_TYPE_LABELS[ekey]})
+    # 清理旧记录（保留最近 100 章）
+    if len(events) > 200:
+        tracker["events"] = [e for e in events if e["chapter"] > chapter - 100]
+
+    if not warnings and not reminders:
+        return "", tracker
+
+    lines = ["\n## 事件类型冷却检查"]
+    if warnings:
+        lines.append("### 冷却违规")
+        lines.extend(warnings)
+    if reminders:
+        lines.append("### 缺失提醒")
+        lines.extend(reminders)
+    lines.append("> 冷却规则见 `EVENT_TYPE_KEYWORDS`/`EVENT_RULES`；这只是提醒，不阻止写作。")
+    return "\n".join(lines) + "\n", tracker
+
+
 ACTION_SCENE_REFERENCE = "skills/novel-craft/references/action-scenes.md"
 ACTION_SCENE_KEYWORDS = {
     "combat": ("打斗", "战斗", "大战", "交手", "厮杀", "搏杀", "拼杀", "对战", "围攻", "反杀", "决斗", "斗法", "巷战"),
@@ -256,6 +358,7 @@ SOURCE_PATHS_BY_KIND = {
     ),
     "condense": (
         "原作.txt",
+        "设定/人物.md",
         "设定/主线骨架.json",
         "设定/章节映射.md",
     ),
@@ -822,17 +925,40 @@ def arc_memory_section(arcs, emotions):
 def ledger_excerpt_for_packet(ledger, limit=2600):
     """写章包注入的状态账本聚焦视图：只给长期记忆（角色 / 设定事实 / 未收与已收线程），
     丢掉逐章 `chapter_deltas` 大 blob（写下一章用不到，且几百章后会撑爆注入预算），改用计数替代。
-    保证无论写到第几百章，注入的"记忆"都聚焦在 canonical 状态而非历史流水。"""
+    保证无论写到第几百章，注入的"记忆"都聚焦在 canonical 状态而非历史流水。
+
+    新增：检测 chapter_deltas 中的 stale 标记（上游改写导致的非线性失效），
+    在注入文本中追加醒目警告，提醒写作者下游章节的状态可能已过期。"""
     if not isinstance(ledger, dict):
         return json.dumps(ledger, ensure_ascii=False, indent=2)[:limit]
-    view = {k: v for k, v in ledger.items() if k != "chapter_deltas"}
+    # 提取 stale 章节信息后再移除 chapter_deltas
     deltas = ledger.get("chapter_deltas")
+    stale_info = ""
+    if isinstance(deltas, dict):
+        stale_chapters = []
+        for key, entry in deltas.items():
+            if isinstance(entry, dict) and entry.get("stale"):
+                m = re.match(r"chapter_(\d+)", key)
+                if m:
+                    sources = entry.get("stale_sources", [])
+                    stale_chapters.append((int(m.group(1)), sources))
+        if stale_chapters:
+            stale_chapters.sort()
+            lines = ["\n## ⚠️ 状态账本过期警告（上游改写）",
+                     "> 以下章节的 state_delta 是在**上游章节改写前**合并的，其角色状态/设定事实可能已过期。",
+                     "> 建议在写入本章前，先对这些章节重新跑 `reconcile_ledger --merge --verified`。"]
+            for ch, sources in stale_chapters:
+                src_str = "、".join(f"第{s}章" for s in sources)
+                lines.append(f"- 第{ch:02d}章：因 {src_str} 改写而标记为 stale")
+            stale_info = "\n".join(lines) + "\n"
+    view = {k: v for k, v in ledger.items() if k != "chapter_deltas"}
     if isinstance(deltas, dict):
         view["chapter_deltas_count"] = len(deltas)
     text = json.dumps(view, ensure_ascii=False, indent=2)
-    if len(text) <= limit:
-        return text
-    return text[:limit].rstrip() + "\n...（账本较大已截断；canonical 状态优先，逐章明细见 审稿/state_ledger.json）"
+    if len(text) + len(stale_info) <= limit:
+        return stale_info + text
+    # stale 信息优先保留，截断 JSON 部分
+    return stale_info + text[:max(0, limit - len(stale_info))].rstrip() + "\n...（账本较大已截断；canonical 状态优先，逐章明细见 审稿/state_ledger.json）"
 
 
 def load_revision_plan(root):
@@ -970,7 +1096,17 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
     title = outline_item.get("title") or ""
     beat_text = outline_item.get("beat") or ""
     scene_matches = scene_guide_matches(outline_item)
-    
+    event_cooling_section, event_tracker = event_cooldown_section(root, chapter, beat_text)
+    # 保存事件冷却追踪器（只在追踪器有实质性更新时写盘）
+    if event_tracker.get("events"):
+        os.makedirs(os.path.join(root, "设定"), exist_ok=True)
+        # 用 file_lock 保护并发写盘
+        tracker_path = os.path.join(root, EVENT_COOLDOWN_PATH)
+        try:
+            atomic_write_json(tracker_path, event_tracker)
+        except Exception:
+            pass  # 冷却追踪写失败不影响主流程
+
     active_voices = []
     for char_name, vfp in char_voices.items():
         if char_name in title or char_name in beat_text:
@@ -1081,8 +1217,39 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
     contract_text = read_text(contract_path)
     contract_promises = reader_contract.get("reader_promises") or promises
     contract_banned = reader_contract.get("banned_drift") or banned
+    # Demo gate bypass 降级 (P3-⑬)：当 demo gate 未通过时，gate 中 reader_contract 为空，
+    # 导致所有字段显示"未填写"。此时从 读者契约.md 原文中提取关键信息的近似值作为降级默认约束，
+    # 保证写作任务包至少带有基本的题旨方向，不至于在无约束状态下跑偏。
+    downgraded = ""
+    if (demo_waiver or not gate or not reader_contract) and contract_text:
+        downgraded = "\n\n> ⚠️ **Demo gate 未通过/降级模式**：以下约束从 `设定/读者契约.md` 降级提取，" \
+                     "仅作最低限度方向指引——**正式批量写章前请先通过 Demo gate**。\n"
+        # 降级提取：从契约原文中抽取题旨和戏剧问题的近似行
+        if not reader_contract.get("theme"):
+            for line in contract_text.split("\n"):
+                if "题旨" in line or "theme" in line.lower():
+                    reader_contract["theme"] = line.split("：", 1)[-1].split(":", 1)[-1].strip() or reader_contract.get("theme")
+                    break
+        if not reader_contract.get("dramatic_question"):
+            for line in contract_text.split("\n"):
+                if "核心戏剧问题" in line or "dramatic_question" in line.lower():
+                    reader_contract["dramatic_question"] = line.split("：", 1)[-1].split(":", 1)[-1].strip() or reader_contract.get("dramatic_question")
+                    break
+        if not contract_promises:
+            for line in contract_text.split("\n"):
+                stripped = line.strip()
+                if stripped.startswith("- ") and ("承诺" in stripped or "promise" in stripped.lower() or "保证" in stripped):
+                    contract_promises = list(contract_promises or []) + [stripped.lstrip("- ")]
+        if not contract_banned:
+            for line in contract_text.split("\n"):
+                stripped = line.strip()
+                if stripped.startswith("- ") and ("禁止" in stripped or "漂移" in stripped or "banned" in stripped.lower()):
+                    contract_banned = list(contract_banned or []) + [stripped.lstrip("- ")]
+        # 降级模式下至少填入"（降级提取）"标记以区别于正式 gate
+        reader_contract.setdefault("theme", "（降级提取）")
+        reader_contract.setdefault("dramatic_question", "（降级提取）")
     contract_section = f"""
-## 题旨与读者契约
+## 题旨与读者契约{downgraded}
 - 核心题旨：{reader_contract.get("theme") or "未填写；写前先补 `设定/读者契约.md`"}
 - 核心戏剧问题：{reader_contract.get("dramatic_question") or "未填写"}
 - 终局必须回答：{fmt_list(reader_contract.get("must_answer"))}
@@ -1205,14 +1372,15 @@ python3 skills/novel-review/scripts/mechanical_check.py "{root}" --range {start}
 {arc_mem_section}
 ## Demo 风格锚点
 - 来源章节：{demo_anchor.get("source_chapter", "未指定")}
-- 风格要点：{demo_anchor.get("summary", "未填写；写前先从 Demo 章抽取")}
-- 读者承诺：{", ".join(promises) if promises else "未填写"}
+- 风格要点：{demo_anchor.get("summary") or ("（降级）从 `设定/读者契约.md` 推断；正式写章前请通过 Demo gate" if contract_text else "未填写；写前先从 Demo 章抽取")}
+- 读者承诺：{", ".join(promises) if promises else (", ".join(contract_promises) if contract_promises else "未填写")}
 - 设定硬约束：{", ".join(constraints) if constraints else "未填写"}
-- 禁止漂移：{", ".join(banned) if banned else "未填写"}
+- 禁止漂移：{", ".join(banned) if banned else (", ".join(contract_banned) if contract_banned else "未填写")}
 {waiver_section}
 {contract_section}
 {scene_card_section}
 {special_scene_sections}
+{event_cooling_section}
 {female_section}
 {research_section}
 {live_check_section}
@@ -1230,7 +1398,7 @@ python3 skills/novel-review/scripts/mechanical_check.py "{root}" --range {start}
 - 若文本主创模式为 `人类主创`，最终正文由人类作者改写和定稿，AI 只做结构、检查、局部建议和非替代性辅助。
 - 本章必须推进 `读者契约` 中的至少一项：核心题旨、读者承诺、关系弧光、秘密揭示、能力代价或文学质感；不能只刷事件。
 - 不新增会推翻必读设定/骨架文件的能力、关系、地点规则；新增设定必须写入章末状态增量。
-- 写完后填写 `{delta_path}`，再跑 `python3 skills/novel-review/scripts/mechanical_check.py "{root}"`（字数带宽会自动读取 `_meta.target_wordcount_min_max`，不要手填旧默认）；若已选择 `边写边自检`，继续跑 `python3 skills/novel/scripts/post_write.py "{root}" --chapter 第{chapter:02d}章`。
+- 写完后填写 `{delta_path}`，再跑 `python3 skills/novel-review/scripts/mechanical_check.py "{root}"`（字数带宽会自动读取 `_meta.target_wordcount_min_max`，不要手填旧默认）；若已选择 `边写边自检`，同步填写 `{concl_path}`，继续跑 `python3 skills/novel/scripts/post_write.py "{root}" --chapter 第{chapter:02d}章 --conclusion "{root}/{concl_path}"`。
 
 ## 状态增量模板
 ```json

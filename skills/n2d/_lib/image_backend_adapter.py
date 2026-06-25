@@ -37,16 +37,16 @@ except Exception:  # pragma: no cover
 
 
 CATALOG_VERIFIED = {
-    "date": "2026-06-22",
+    "date": "2026-06-25",
     "sources": [
         {
-            "name": "OpenAI image generation guide + GPT Image 2 docs",
+            "name": "OpenAI GPT Image / ChatGPT Images official docs",
             "url": "https://developers.openai.com/api/docs/guides/image-generation",
             "facts": [
                 "official image generation is exposed through the Images API and Responses image-generation tool",
-                "GPT Image models include gpt-image-2; the model surface supports text+image inputs and image outputs",
+                "public product/docs wording currently includes GPT Image API and ChatGPT Images 2.0; exact API model id must be captured from per-run official refresh evidence",
                 "official image editing supports one or more source images and high-fidelity image inputs where the selected model allows it",
-                "GPT Image 2 supports high-fidelity image inputs, multimodal image reference/editing workflows, and flexible high-resolution outputs including 4K-class sizes. Current official docs do not evidence a registerable server-side persistent subject-id/handle; treat it as strong in-context multi-reference consistency, not native subject registration — see constitution B9.",
+                "Current official docs do not evidence a registerable server-side persistent subject-id/handle for OpenAI image generation; treat it as strong in-context multi-reference consistency, not native subject registration — see constitution B9.",
                 "current model names, sizes, quality parameters, and pricing must come from per-run official refresh evidence",
             ],
         },
@@ -99,7 +99,7 @@ BACKEND_API_ADAPTERS: Dict[str, Dict[str, Any]] = {
         "cost_tier": "project_default",
         "best_for": ("default_n2d", "character_consistency", "multi_reference", "facial_expression_control", "agentic_prompt_repair"),
         "limitations": ("no_registerable_subject_id", "reference_budget_local_policy"),
-        "evidence": {"verified_at": "2026-06-23", "source": "local codex CLI (codex exec --image) + OpenAI GPT Image 2 docs; high-fidelity references, no official subject-id evidence"},
+        "evidence": {"verified_at": "2026-06-25", "source": "local codex CLI (codex exec --image) + OpenAI GPT Image/ChatGPT Images official docs; exact model id requires per-run evidence; no official subject-id evidence"},
     },
     "openai": {
         "label": "OpenAI Images API (访问入口) · 模型 GPT Image 2",
@@ -529,6 +529,76 @@ def refresh_evidence_path(root: str, backend: Optional[str]) -> Path:
     return Path(root) / "生产数据" / "image_backend_capabilities" / f"{key}.json"
 
 
+def default_capability_assertions(raw: Optional[str]) -> Dict[str, Any]:
+    adapter = backend_adapter(raw)
+    refs = adapter.get("reference_input") if isinstance(adapter.get("reference_input"), dict) else {}
+    modes = adapter.get("generation_modes") or ()
+    return {
+        "model": adapter.get("model") or "",
+        "channel": adapter.get("channel") or "",
+        "official": bool(adapter.get("official")),
+        "auto_runnable": bool(adapter.get("auto_runnable")),
+        "supports_text2image": "text2image" in modes,
+        "supports_image_reference": "image_reference" in modes or bool(adapter.get("supports_high_fidelity_reference")),
+        "supports_edit": bool(adapter.get("supports_edit")),
+        "supports_mask": bool(adapter.get("supports_mask")),
+        "supports_high_fidelity_reference": bool(adapter.get("supports_high_fidelity_reference")),
+        "persistent_subject": bool(adapter.get("native_subject") or adapter.get("subject_registration")),
+        "reference_mode": refs.get("mode") or "",
+        "max_reference_images": refs.get("max_total"),
+        "output": adapter.get("output") or "",
+    }
+
+
+def _capability_evidence_source(
+    *,
+    sources: Sequence[str],
+    source_urls: Sequence[str],
+    evidence_kind: str,
+    note: str,
+) -> Dict[str, str]:
+    return {
+        "source": str(sources[0]).strip() if sources else "",
+        "source_url": str(source_urls[0]).strip() if source_urls else "",
+        "evidence_kind": str(evidence_kind or "").strip(),
+        "observed_text": str(note or "").strip(),
+    }
+
+
+def structured_capability_assertions(
+    values: Mapping[str, Any],
+    *,
+    sources: Sequence[str],
+    source_urls: Sequence[str] = (),
+    evidence_kind: str = "",
+    note: str = "",
+) -> Dict[str, Dict[str, Any]]:
+    evidence = _capability_evidence_source(
+        sources=sources,
+        source_urls=source_urls,
+        evidence_kind=evidence_kind,
+        note=note,
+    )
+    return {str(key): {"value": value, **evidence} for key, value in values.items()}
+
+
+def _capability_assertion_evidence_gaps(assertions: Mapping[str, Any]) -> Dict[str, str]:
+    gaps: Dict[str, str] = {}
+    for key, item in assertions.items():
+        if not isinstance(item, Mapping) or "value" not in item:
+            gaps[str(key)] = "missing structured value"
+            continue
+        source = str(item.get("source") or "").strip()
+        source_url = str(item.get("source_url") or "").strip()
+        observed = str(item.get("observed_text") or item.get("note") or "").strip()
+        kind = str(item.get("evidence_kind") or "").strip()
+        if not source:
+            gaps[str(key)] = "missing source"
+        elif not (source_url or observed or kind):
+            gaps[str(key)] = "missing source_url/observed_text/evidence_kind"
+    return gaps
+
+
 def load_refresh_evidence(root: str, backend: Optional[str]) -> Optional[Dict[str, Any]]:
     path = refresh_evidence_path(root, backend)
     try:
@@ -550,11 +620,33 @@ def refresh_evidence_status(root: str, backend: Optional[str], today: Optional[d
     except ValueError:
         return {"status": "bad_date", "path": str(path), "message": f"invalid verified_at: {raw_date}"}
     age = max(0, (today - verified).days)
+    assertions = evidence.get("capability_assertions")
+    if not isinstance(assertions, dict) or not assertions:
+        return {
+            "status": "missing_capability_assertions",
+            "path": str(path),
+            "verified_at": verified.isoformat(),
+            "age_days": age,
+            "message": "freshness evidence lacks structured capability_assertions",
+        }
+    evidence_gaps = _capability_assertion_evidence_gaps(assertions)
+    if evidence_gaps:
+        sample = "; ".join(f"{key}: {reason}" for key, reason in list(evidence_gaps.items())[:8])
+        return {
+            "status": "missing_capability_evidence",
+            "path": str(path),
+            "verified_at": verified.isoformat(),
+            "age_days": age,
+            "capability_assertions": assertions,
+            "capability_evidence_gaps": evidence_gaps,
+            "message": f"capability_assertions lack per-capability evidence ({sample})",
+        }
     return {
         "status": "fresh" if age == 0 else "stale",
         "path": str(path),
         "verified_at": verified.isoformat(),
         "age_days": age,
+        "capability_assertions": assertions,
         "message": "fresh for this run" if age == 0 else f"refresh evidence is {age} day(s) old",
     }
 
@@ -564,17 +656,29 @@ def write_refresh_evidence(
     backend: Optional[str],
     *,
     sources: Sequence[str],
+    source_urls: Sequence[str] = (),
     note: str = "",
+    evidence_kind: str = "",
     today: Optional[str] = None,
 ) -> Path:
     path = refresh_evidence_path(root, backend)
     path.parent.mkdir(parents=True, exist_ok=True)
     date_s = today or dt.date.today().isoformat()
+    assertions = structured_capability_assertions(
+        default_capability_assertions(backend),
+        sources=sources,
+        source_urls=source_urls,
+        evidence_kind=evidence_kind,
+        note=note,
+    )
     payload = {
         "kind": "n2d_image_backend_refresh_evidence",
         "backend": backend_adapter(backend).get("canonical"),
         "verified_at": date_s,
         "sources": list(sources),
+        "source_urls": list(source_urls),
+        "evidence_kind": evidence_kind,
+        "capability_assertions": assertions,
         "note": note,
         "adapter": backend_adapter(backend),
     }
@@ -636,6 +740,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     p.add_argument("root")
     p.add_argument("--backend", default="Codex")
     p.add_argument("--source", action="append", required=True)
+    p.add_argument("--source-url", action="append", default=[])
+    p.add_argument("--evidence-kind", default="")
     p.add_argument("--note", default="")
     p.add_argument("--date", default=None)
 
@@ -658,7 +764,15 @@ def main(argv: Optional[List[str]] = None) -> int:
         today = dt.date.fromisoformat(ns.today) if ns.today else None
         payload = refresh_evidence_status(ns.root, ns.backend, today)
     elif ns.cmd == "record-refresh":
-        path = write_refresh_evidence(ns.root, ns.backend, sources=ns.source, note=ns.note, today=ns.date)
+        path = write_refresh_evidence(
+            ns.root,
+            ns.backend,
+            sources=ns.source,
+            source_urls=ns.source_url,
+            evidence_kind=ns.evidence_kind,
+            note=ns.note,
+            today=ns.date,
+        )
         payload = {"path": str(path), "status": "written"}
     else:  # pragma: no cover
         raise AssertionError(ns.cmd)

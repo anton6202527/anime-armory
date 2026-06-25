@@ -35,7 +35,7 @@ def test_low_risk_clip_passes():
     assert result["summary"]["max_score"] < 6
 
 
-def test_many_closeup_characters_is_must():
+def test_multi_subject_without_slots_or_strategy_is_must():
     root = _mk_storyboard([{
         "id": "EP01_CLIP09",
         "duration": 6,
@@ -47,7 +47,7 @@ def test_many_closeup_characters_is_must():
     result = SRA.audit(root, "第1集")
 
     assert not result["ok"]
-    assert any(f["code"] == "too_many_clear_closeup_characters" for f in result["findings"])
+    assert any(f["code"] == "multi_subject_missing_slots_or_strategy" for f in result["findings"])
 
 
 def test_high_motion_long_clip_without_anchor_warns():

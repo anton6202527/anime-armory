@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import json
+import os
 
 import pacing_retention as pr
 
@@ -20,6 +21,22 @@ def test_shot_durations_filters_nonpositive_and_bad():
 def test_shot_density_per_min():
     assert pr.shot_density_per_min(10, 60) == 10.0
     assert pr.shot_density_per_min(5, 0) == 0.0      # 不除零
+
+
+def test_benchmark_threshold_loader_uses_json(tmp_path, monkeypatch):
+    bench = tmp_path / "industry_benchmark.json"
+    bench.write_text(json.dumps({
+        "retention_benchmarks": {
+            "proxy_thresholds": {"retention_hook_floor": 0.77, "density_fast_per_min": 41}
+        }
+    }), encoding="utf-8")
+    monkeypatch.setenv("N2D_PACE_BENCHMARK_JSON", str(bench))
+    pr._BENCHMARK_CACHE = None
+    assert pr._bench_value("retention_hook_floor", 0.8) == 0.77
+    assert pr._bench_value("density_fast_per_min", 45) == 41.0
+    assert pr._bench_value("missing", 12.0) == 12.0
+    pr._BENCHMARK_CACHE = None
+    os.environ.pop("N2D_PACE_BENCHMARK_JSON", None)
 
 
 # ---------- hook 关键词 ----------
@@ -53,6 +70,47 @@ def test_hook_strength_slow_non_hook_open_penalized():
 def test_hook_strength_empty_is_none_not_fabricated():
     h = pr.hook_strength([])
     assert h["score"] is None        # 无 clips 不臆造分
+    assert h["muted_safe"] is None
+
+
+# ---------- is_muted_safe_hook / 静音首屏 ----------
+
+def test_is_muted_safe_hook_visual_text_structural():
+    assert pr.is_muted_safe_hook("特写·一巴掌扇过去") is True      # 视觉冲突
+    assert pr.is_muted_safe_hook("烧屏标题卡·三年后") is True       # 烧屏文字
+    assert pr.is_muted_safe_hook("冷开场·倒叙") is True            # 结构视觉钩
+    assert pr.is_muted_safe_hook("悬念·旁白独白抛问") is False      # 只靠声音/旁白
+    assert pr.is_muted_safe_hook("") is False
+
+
+def test_hook_strength_structural_visual_open_stays_full():
+    # 冷开场=结构视觉钩 → 静音安全，不扣静音分（守住既有 100 分契约）
+    h = pr.hook_strength([{"rhythm": "冷开场·钩子", "duration": 3}])
+    assert h["score"] == 100.0
+    assert h["muted_safe"] is True
+
+
+def test_hook_strength_audio_only_hook_muted_penalized():
+    # 是钩子(悬念)但只靠旁白声音、无画面/字幕 → 扣 15 静音分，不叠加非钩子的 -45
+    h = pr.hook_strength([{"rhythm": "悬念", "note": "旁白独白抛出身世之谜", "duration": 3}])
+    assert h["open_is_hook"] is True
+    assert h["muted_safe"] is False
+    assert h["score"] == 85.0
+    assert any("静音" in r for r in h["reasons"])
+
+
+def test_analyze_surfaces_muted_first_screen_risk(tmp_path):
+    # 首屏是钩子、分没塌（>60），静音风险也要单列成 risk_shot（不被均分掩盖）
+    ep_dir = tmp_path / "脚本" / "第1集"
+    ep_dir.mkdir(parents=True)
+    clips = [{"id": "C1", "rhythm": "悬念", "note": "旁白独白抛身世", "duration": 3}]
+    clips += [{"id": f"C{i}", "rhythm": "对话", "duration": d}
+              for i, d in zip(range(2, 8), [2, 3, 1, 4, 2, 3])]
+    (ep_dir / "storyboard.json").write_text(json.dumps({"clips": clips}), encoding="utf-8")
+    res = pr.analyze(str(tmp_path), "第1集")
+    kinds = {r["kind"] for r in res["risk_shots"]}
+    assert "muted_first_screen" in kinds
+    assert res["verdict"] in ("ok", "warn")     # advisory，永不 block
 
 
 # ---------- pacing_score ----------

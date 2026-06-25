@@ -7,7 +7,7 @@ import json
 import shutil
 import sys
 import tempfile
-from datetime import date
+from datetime import date, timedelta
 
 import score
 
@@ -386,6 +386,51 @@ class TestNovelScore(unittest.TestCase):
         freshness = score.baseline_freshness(baseline)
         self.assertFalse(freshness["blocking"])
         self.assertEqual(freshness["status"], "fresh")
+
+    def test_stale_manual_evidence_blocks_even_with_fresh_baseline_date(self):
+        baseline = score.find_latest_baseline(self.tmp)
+        baseline["baseline_date"] = date.today().isoformat()
+        baseline["sources"] = [{"platform": "test", "status": "fetch_error", "signals": []}]
+        baseline["manual_evidence"] = [{
+            "platform": "红果短剧",
+            "date": "2024-01-01",
+            "source": "第三方榜单",
+            "summary": "旧榜单显示某题材热。",
+            "url": "https://example.com/old",
+        }]
+        freshness = score.baseline_freshness(baseline)
+        self.assertTrue(freshness["blocking"])
+        self.assertEqual(freshness["status"], "evidence_stale")
+
+    def test_future_manual_evidence_does_not_count_as_fresh(self):
+        baseline = score.find_latest_baseline(self.tmp)
+        baseline["baseline_date"] = date.today().isoformat()
+        baseline["sources"] = [{"platform": "test", "status": "fetch_error", "signals": []}]
+        baseline["manual_evidence"] = [{
+            "platform": "红果短剧",
+            "date": (date.today() + timedelta(days=1)).isoformat(),
+            "source": "第三方榜单",
+            "summary": "未来日期不应提前算作新鲜证据。",
+            "url": "https://example.com/future",
+        }]
+        freshness = score.baseline_freshness(baseline)
+        self.assertTrue(freshness["blocking"])
+        self.assertEqual(freshness["status"], "evidence_stale")
+
+    def test_short_drama_target_requires_fresh_short_drama_coverage(self):
+        baseline = score.find_latest_baseline(self.tmp)
+        baseline["baseline_date"] = date.today().isoformat()
+        baseline["sources"] = [{"platform": "番茄小说", "status": "ok", "signals": ["网文榜新鲜"]}]
+        baseline["manual_evidence"] = [{
+            "platform": "红果短剧",
+            "date": "2024-01-01",
+            "source": "第三方榜单",
+            "summary": "旧榜单显示红果短剧题材热。",
+            "url": "https://example.com/old",
+        }]
+        freshness = score.baseline_freshness(baseline)
+        self.assertTrue(freshness["blocking"])
+        self.assertEqual(freshness["status"], "coverage_gap")
 
     def test_missing_baseline_markdown_blocks_scoring(self):
         md_path = os.path.join(self.score_dir, f"题材热榜_{date.today().isoformat()}.md")

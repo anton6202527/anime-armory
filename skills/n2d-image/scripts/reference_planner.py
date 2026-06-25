@@ -512,26 +512,26 @@ def plan_multi_subject_strategy(
 
     distinct = plan_distinct_anchors(dna_by_id or {}, unique_ids, confusable_pairs=confusable_pairs)
 
-    # ① 分镜调度（C6 剧情优先）：多人同框由剧情决定，不为迁就后端删戏；≥4 清晰脸单帧 co-gen 难压（≤3 更稳），
-    #    但走分区合成（分别出图+合成）就能把每张脸做对——所以这里给的是"把它做对的执行路径"，不是"避开/删人"。
+    # ① 分镜调度（C6 剧情优先）：多人同框由剧情决定，不为迁就后端删戏。
+    #    任一 ≥2 清晰具名同框都必须登记槽位+执行策略；≥4/近景/遮挡只是更高风险档。
     n = len(unique_ids)
-    if n >= 4:
+    if closeup:
         shot_scheduling = {
-            "verdict": "over_cap",  # 仍标 over_cap：提示要分区合成；不等于该删戏（下游 gate 凭执行策略放行）
-            "default": "登记 regional_construct/split_composite（empty_plate + 每主体身份槽位 + region masks）把每张脸分别做好再统一融光，或拆 establish+反打把整场拍全",
-            "note": f"{n} 个具名角色清晰同框：单帧 co-gen 4+ 张清晰脸所有后端都难压（≤3 更稳），但这是『要分区构建做对』不是『删戏/砍人数』（C6 剧情优先）——剧情需要就照出，登记执行策略后放行；确属远景群像请标 `远景/群像`。",
+            "verdict": "split_or_layer_required",
+            "default": "优先拆「单人CU + 反打」或降到中景/全景做景别分层；坚持同框近景则登记 regional_construct/split_composite，把每张脸分开生成再合成",
+            "note": f"{n} 个具名角色近景同框：近景是串脸最高发档，必须有 `多人同框身份槽位` + `多人同框执行策略`，且策略应是反打、景别分层或分别出图+合成；不是删戏。",
         }
-    elif closeup:
+    elif n >= 4:
         shot_scheduling = {
-            "verdict": "downgrade_recommended",
-            "default": "优先拆「单人CU + 反打」或降到中景/全景做景别分层（清晰主角1人，余者推后景/虚焦）；坚持同框近景则登记 regional_construct/split_composite 把每张脸分区分层做",
-            "note": "多人近景同框是脸漂/串脸最高发档；保留同框近景须显式登记 regional_construct/分区构建/分层合成把每张脸分开做（不删戏）。",
+            "verdict": "large_same_frame_requires_strategy",
+            "default": "登记 regional_construct/split_composite（empty_plate + 每主体身份槽位 + region masks）把每张脸分别做好再统一融光，或拆 establish+反打把整场拍全",
+            "note": f"{n} 个具名角色清晰同框：人数高，优先拆组/反打/分区构建；剧情需要就照出，但必须登记槽位+执行策略后放行；确属远景群像请标 `远景/群像`。",
         }
     else:
         shot_scheduling = {
-            "verdict": "ok",
-            "default": "中景/全景同框可行；按身份槽位 + 区分锚点出图",
-            "note": "",
+            "verdict": "slots_required",
+            "default": "2-3 人中景/全景同框可行；仍必须按身份槽位 + 执行策略 + 区分锚点出图",
+            "note": "2-3 张清晰脸只是相对省钱/稳定的构图区，不是免登记区；gate 仍要求槽位+策略。",
         }
 
     return {
@@ -794,7 +794,8 @@ def render_md(plan: Mapping[str, Any]) -> str:
     multi_actions = s.get("multi_subject_actions") or []
     if multi_actions:
         lines += ["## 多人同框策略", "",
-                  "> ① 分镜调度优先：`over_cap`=拆镜(≥4清晰同框)、`downgrade_recommended`=多人近景建议拆反打/降景别；"
+                  "> ① 分镜调度优先：`slots_required`=≥2 清晰具名同框必须登记槽位+策略；"
+                  "`large_same_frame_requires_strategy`=高人数同框建议拆组/分区；`split_or_layer_required`=多人近景必须反打/分层/分别出图；"
                   "④ 锚点撞色=同框角色发色/服装主色雷同，逐主体补互斥 `区分锚点`。",
                   "",
                   "| 镜头 | 模式 | 角色槽位 | 分镜调度 | 撞色 | prompt 必填 | 执行 |",

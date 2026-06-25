@@ -11,6 +11,8 @@ it flags episodes that need human/LLM boundary review before writing voiceover.
   ① 逐集体检表（粗胚右边界风险：软断/章内续切/弱钩/无闭环）。
   ② 剧级追更骨架（Gap1）：跨集断点强度分布 + 连续弱钩集群 + 开篇集群钩子梯度 +
      按 `变现模式`(免费/付费/海外) 的付费/AD 卡点集定位。题材词典按 `题材` 选择点切换(Gap3)。
+     另含**视觉奇观放置初筛**（report-only·北极星看点④）：奇观被切点劈半 / 奇观集断点弱
+     （疑埋中段未当锚点）。纯报告，不进 strict 闸。
 完整方法论见 references/追更骨架.md。
 """
 import json
@@ -36,6 +38,13 @@ COLD_OPEN_RE = re.compile(
     r"不可能|为什么|是谁|危险|危机|反击|打脸|逆袭)"
 )
 SLOW_OPEN_RE = re.compile(r"^\s*(?:第[一二三四五六七八九十百千万0-9]+章\s*)?(翌日|次日|三日后|与此同时|另一边|话说|回忆|从前)")
+# 视觉奇观词面（report-only·北极星看点④）：只有 AI 能低成本突破实景的画面高潮。
+# 用于初筛"奇观被切点劈半 / 奇观集断点弱（疑埋中段未当锚点）"，不进 strict 闸。
+SPECTACLE_RE = re.compile(
+    r"(渡劫|天劫|雷劫|境界突破|突破到|晋升|觉醒|法宝出世|出世|飞升|御剑|腾空而起|"
+    r"大阵|法阵|阵法|对轰|斗法|万人|千军|大军|决战|大战|血战|异象|天地异象|天地变色|"
+    r"末日|海啸|崩塌|陨落|巨龙|神兽|封印|结界|祭天|登基大典|血月|爆发)"
+)
 
 
 def build_res(genre_text):
@@ -104,6 +113,9 @@ def load_rows(root, strong_re, conflict_re, payoff_re):
             "start_strength": start_strength(text, conflict_re, payoff_re),
             "has_conflict": bool(conflict_re.search(text)),
             "has_payoff": bool(payoff_re.search(text)),
+            "spectacle": bool(SPECTACLE_RE.search(text)),
+            "spectacle_head": bool(SPECTACLE_RE.search(text[:180])),
+            "spectacle_tail": bool(SPECTACLE_RE.search(text[-160:])),
         })
     for r in rows:
         r["closed_loop"] = r["has_conflict"] and r["has_payoff"]
@@ -204,11 +216,40 @@ def boundary_pairs(rows):
     return pairs
 
 
+def spectacle_placement(rows):
+    """视觉奇观放置初筛（report-only·北极星看点④）。
+
+    只 flag 两种确定性模式，不替代人判、不进 strict 闸：
+      ① 奇观跨集劈半——上集尾 + 下集头同含奇观词（同一场面横跨切点）。
+      ② 奇观集断点弱——含奇观但集尾断点强度 < 强（奇观没收在集尾高潮位，疑埋中段未当锚点）。
+    仅"含奇观词"本身不报（避免噪声）；只有出现上述放置问题才提示。
+    """
+    out = {"spectacle_eps": [], "split_boundary": [], "weak_anchor": [], "issues": []}
+    out["spectacle_eps"] = [r["ep"] for r in rows if r["spectacle"]]
+    for prev, nxt in zip(rows, rows[1:]):
+        if prev["spectacle_tail"] and nxt["spectacle_head"]:
+            out["split_boundary"].append((prev["ep"], nxt["ep"]))
+    out["weak_anchor"] = [r["ep"] for r in rows if r["spectacle"] and r["strength"] < 2]
+    if out["split_boundary"]:
+        brief = "、".join(f"第{a}→{b}集" for a, b in out["split_boundary"][:8])
+        out["issues"].append(
+            f"视觉奇观疑似被切点劈成两半：{brief}。确认是否有意跨集（上集'憋'+下集'放'）；"
+            "若非有意，把整场奇观收进一集或切在奇观前/后，别把一个高潮场面劈散（P1）")
+    if out["weak_anchor"]:
+        eps = "、".join(f"第{e}集" for e in out["weak_anchor"][:12])
+        out["issues"].append(
+            f"奇观集断点偏弱：{eps}{'…' if len(out['weak_anchor']) > 12 else ''}。"
+            "含大战/渡劫/觉醒/万人场等视觉高潮却没收在集尾高潮位——奇观是 AI 漫剧差异点，"
+            "建议放到集尾当整集锚点、别埋在中段（北极星看点④）")
+    return out
+
+
 def series_arc(rows, monet):
     """剧级追更骨架体检（Gap1）。返回结构化 dict + 人读建议行。"""
     out = {"monetization": monet, "issues": [], "notes": []}
     if not rows:
         return out
+    out["spectacle"] = spectacle_placement(rows)  # report-only·北极星看点④
     dist = {2: 0, 1: 0, 0: 0}
     for r in rows:
         dist[r["strength"]] += 1
@@ -329,6 +370,13 @@ def main():
             print(f"- ⚠️ {it}")
     else:
         print("- ✅ 未发现连续弱钩集群 / 无闭环集 / 卡点偏弱")
+    sp = arc.get("spectacle") or {}
+    if sp.get("issues"):
+        for it in sp["issues"]:
+            print(f"- 🎬 {it}")
+    elif sp.get("spectacle_eps"):
+        print(f"- 🎬 视觉奇观集：第{'、'.join(map(str, sp['spectacle_eps']))}集"
+              "（已作集锚点，未见劈半/弱锚点 · 北极星看点④）")
     for note in arc["notes"]:
         print(f"- ℹ️ {note}")
     print("> 方法论见 references/追更骨架.md；逐集集内留存见 n2d/references/导演节奏.md。")

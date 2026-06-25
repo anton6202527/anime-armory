@@ -18,7 +18,7 @@ import json
 import os
 import re
 import sys
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Mapping, Optional, Sequence
 
 COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if COMMON not in sys.path:
@@ -184,6 +184,70 @@ def states_from_visual_ledger(root: str, ep: str) -> List[Dict[str, Any]]:
     return states
 
 
+# 会被剧情改变全身/服装外观的状态词典——区分「该锁的常态外观」与「剧情指定的外观演进」。
+# COST(服装独立)/N1(服装配色) 据此对落在演进区间内的镜把 block 降 warn：根治「剧情指定换装/染血/
+# 破损/变身被服装锁当漂移硬 block、强制回源头重出」的掣肘（服装锁此前盲比单一定妆、不读状态计划）。
+COSTUME_AFFECTING_RE = re.compile(
+    r"(换装|换衣|换上|穿上|披上|换回|脱(?:下|去|掉)?|外套|大衣|风衣|披风|斗篷|铠甲|盔甲|战甲|战袍|"
+    r"礼服|婚纱|嫁衣|喜服|制服|长袍|戎装|便装|睡衣|泳装|戏服|盛装|"
+    r"染血|沾血|血迹|浴血|血污|湿透|浸湿|淋湿|落水|溅泥|"
+    r"破损|破碎|撕裂|褴褛|残破|脏污|弄脏|尘土|烧毁|焦黑|烧灼|衣衫不整|"
+    r"变身|觉醒|化形|化身|易容|变装|乔装|改扮|蒙面|戴(?:上)?面具|摘(?:下)?面具|"
+    r"受伤|负伤|绷带|包扎|伤痕|断臂|断肢)")
+
+
+def appearance_change_intervals(root: str, ep: str) -> Dict[str, List["tuple"]]:
+    """剧情指定的「角色服装/全身外观会变」区间：{char: [(start_shot, end_shot|None, desc), ...]}。
+
+    源同 P1 状态哨兵（storyboard 角色状态演进 + visual_state_ledger active modifiers），但只保留会改变
+    服装/全身外观的状态（换装/染血/破损/变身/受伤…）。供 COST/N1 把落区间内的镜 block 降 warn——
+    surface 而非硬阻断。纯读取·无副作用；缺 storyboard/ledger → {}。"""
+    sb = load_json(storyboard_path(root, ep)) or {}
+    states = states_from_storyboard(sb) + states_from_visual_ledger(root, ep)
+    intervals: Dict[str, List[tuple]] = {}
+    for st in states:
+        desc = str(st.get("description") or "")
+        if not COSTUME_AFFECTING_RE.search(desc):
+            continue
+        char = str(st.get("character") or "").strip()
+        if not char:
+            continue
+        start = int(st.get("start_shot") or 1)
+        end = st.get("end_shot")
+        end = int(end) if isinstance(end, int) else None
+        intervals.setdefault(char, []).append((start, end, desc))
+    return intervals
+
+
+def appearance_change_at(intervals: Mapping[str, List["tuple"]], char: str,
+                         shot_no: Optional[int]) -> Optional[str]:
+    """该角色在该镜是否处于剧情指定的外观演进区间；是则返回演进描述，否则 None。
+    shot_no 缺失（PNG 名解析不出 Clip 号）→ None：保守不豁免。纯函数·可测。"""
+    if shot_no is None or not isinstance(intervals, Mapping):
+        return None
+    hit: Optional[str] = None
+    for c, rows in intervals.items():
+        if not (c == char or str(c).startswith(char) or char.startswith(str(c))):
+            continue
+        for start, end, desc in rows:
+            if shot_no >= start and (end is None or shot_no <= end):
+                hit = desc
+    return hit
+
+
+def downgrade_costume_block(row: Dict[str, Any], intervals: Mapping[str, List["tuple"]],
+                            char: str, shot_no: Optional[int]) -> Dict[str, Any]:
+    """剧情指定外观演进区间内：标注 costume_change_expected，并把 block 降 warn（surface·不硬阻断）。
+    warn/ok 不改判，仅 block 因「剧情就该变」降一档，留痕 abs_verdict。原地改 row 并返回。"""
+    desc = appearance_change_at(intervals, char, shot_no)
+    if desc:
+        row["costume_change_expected"] = desc
+        if row.get("verdict") == "block":
+            row.setdefault("abs_verdict", "block")
+            row["verdict"] = "warn"
+    return row
+
+
 def _prop_label(pid: str, p: Dict[str, Any]) -> str:
     name = p.get("name")
     return f"{name}（{pid}）" if name and str(name) != str(pid) else str(pid)
@@ -274,6 +338,42 @@ def has_any_term(text: str, terms: Sequence[str]) -> bool:
     return any(sem.normalize_text(t) in nt for t in terms if sem.normalize_text(t))
 
 
+def state_pixel_sidecar_alerts(sidecar: Optional[Mapping[str, Any]]) -> List[Dict[str, Any]]:
+    """state_pixel_<集>.json（SP1-V 像素契约）的 findings → 状态哨兵 alert 行（verdict=warn）。
+
+    像素证据（OWLv2 等）对小标记/侧脸/遮挡噪声大，**一律 warn**（不硬 block，文本档仍是 BLOCK 权威），
+    与本文本档互补：文本查「状态锁写没写进 prompt」，像素查「图里到底有没有该状态」——
+    两个最危险的洞由像素兜：① 区间内像素缺该状态；② 区间起点前像素已提前泄露该状态（文本对、图错）。
+    无 sidecar / 无 findings → []。纯函数·可测。"""
+    if not isinstance(sidecar, Mapping):
+        return []
+    out: List[Dict[str, Any]] = []
+    for f in sidecar.get("findings") or []:
+        if not isinstance(f, Mapping):
+            continue
+        kind = str(f.get("kind") or "")
+        shot = f.get("shot")
+        state = f.get("state") or f.get("asset") or "状态"
+        char = f.get("char")
+        conf = f.get("confidence")
+        ctx = f"（置信 {conf}）" if conf is not None else ""
+        if kind == "state_pixel_premature_leak" or (f.get("expected") is False and f.get("present")):
+            out.append({
+                "verdict": "warn", "kind": "state_pixel_premature_leak", "character": char,
+                "shot": shot, "state": state,
+                "message": f"{shot}：状态『{state}』像素在该帧已检出，但该镜在状态起点之前——"
+                           f"图可能提前泄露未到点的觉醒/伤/变身{ctx}（也可能误检/遮挡）。文本档若同时 block 以文本为准，人核对该帧。",
+            })
+        elif kind == "state_pixel_missing" or (f.get("expected") and not f.get("present")):
+            out.append({
+                "verdict": "warn", "kind": "state_pixel_missing", "character": char,
+                "shot": shot, "state": state,
+                "message": f"{shot}：区间内应保持状态『{state}』，像素在场检测未在该帧检出{ctx}——"
+                           f"图里可能真没渲染该状态（也可能被遮挡/侧脸/标记过小漏检），人核对该帧。",
+            })
+    return out
+
+
 def analyze(root: str, ep: str) -> Dict[str, Any]:
     root = root.rstrip("/")
     sb = load_json(storyboard_path(root, ep))
@@ -341,6 +441,14 @@ def analyze(root: str, ep: str) -> Dict[str, Any]:
                 })
 
     alerts.extend(prop_alerts_from_ledger(root, ep, blocks))
+
+    # 可选：状态像素 sidecar（state_pixel_contract 产；无则纯文本档，不假报）。像素证据一律 warn，
+    # 文本档仍是 BLOCK 权威——兜「文本对、图里状态错」（提前泄露/区间内缺失）这两个像素层的洞。
+    pixel_sidecar = load_json(os.path.join(root, "生产数据", f"state_pixel_{ep}.json"))
+    pixel_alerts = state_pixel_sidecar_alerts(pixel_sidecar)
+    if pixel_alerts:
+        alerts.extend(pixel_alerts)
+        notes.append(f"已合并状态像素 sidecar：{len(pixel_alerts)} 处（warn·人核对；像素噪声大不硬 block）。")
 
     verdicts = [a["verdict"] for a in alerts]
     return {

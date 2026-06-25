@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import subprocess
 import sys
 from dataclasses import dataclass, field
@@ -520,6 +521,110 @@ def _run_report_only_prework(p: Probes, commands: List[tuple]) -> None:
             p.prework.append({"step": step, "status": "skip", "detail": str(exc)[:160]})
 
 
+def _script_episode_labels(root: str) -> List[str]:
+    sdir = os.path.join(root, "脚本")
+    try:
+        eps = [
+            d for d in os.listdir(sdir)
+            if d.startswith("第") and d.endswith("集") and os.path.isfile(os.path.join(sdir, d, "voiceover.txt"))
+        ]
+    except Exception:
+        return []
+    def key(label: str) -> int:
+        m = re.search(r"\d+", label)
+        return int(m.group()) if m else 10**9
+    return sorted(eps, key=key)
+
+
+def _series_msg_implicates_ep(msg: str, ep: str) -> bool:
+    if not ep:
+        return False
+    return ep in str(msg or "")
+
+
+def _run_series_retention_prework(p: Probes, root: str, ep: str) -> None:
+    """Run series-level retention gates before image prompt production.
+
+    compose/review gate still performs the deliverable-boundary check. This prework
+    catches obvious cross-episode retention damage before expensive image/video work.
+    """
+    eps = _script_episode_labels(root)
+    if len(eps) < 3:
+        story_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "story_integrity_audit.py")
+        if os.path.exists(story_script) and ep:
+            try:
+                r = _run([sys.executable, story_script, root, ep, "--write", "--strict", "--json"])
+                out = _parse_trailing_json(r.stdout)
+                findings = out.get("findings") if isinstance(out, dict) else []
+                warn_n = sum(1 for f in findings if isinstance(f, dict) and f.get("severity") == "warn")
+                if r.returncode != 0:
+                    if not p.prework_block:
+                        p.prework_block = (
+                            "pilot_arc_contract 未通过；第1-2集也必须先锁系列承诺、主角欲望、首个兑现/阻碍/反转，"
+                            "再进入出图 prompt。"
+                        )
+                    p.prework.append({
+                        "step": "pilot_arc_contract_gate",
+                        "status": "block",
+                        "detail": _finding_detail(r.stdout, r.stderr) or f"episodes={len(eps)} warn={warn_n}",
+                    })
+                else:
+                    p.prework.append({"step": "pilot_arc_contract_gate", "status": "pass", "detail": f"episodes={len(eps)} warn={warn_n}"})
+            except Exception as exc:  # pragma: no cover
+                p.prework.append({"step": "pilot_arc_contract_gate", "status": "skip", "detail": str(exc)[:160]})
+        else:
+            p.prework.append({"step": "pilot_arc_contract_gate", "status": "skip", "detail": f"episodes={len(eps)} < 3"})
+        return
+
+    beat_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "beat_audit.py")
+    if os.path.exists(beat_script):
+        try:
+            r = _run([sys.executable, beat_script, root, "--series", "--json"])
+            out = _parse_trailing_json(r.stdout)
+            blockers: List[str] = []
+            for pair in out.get("duplicates") or []:
+                if isinstance(pair, (list, tuple)) and len(pair) >= 3 and ep in {str(pair[0]), str(pair[1])}:
+                    blockers.append(f"{pair[0]}↔{pair[1]} 桥段指纹重合 {pair[2]}")
+            for key in ("cold_open_chain_findings", "highlight_climax_findings"):
+                for item in out.get(key) or []:
+                    if not isinstance(item, dict):
+                        continue
+                    msg = str(item.get("msg") or item.get("message") or "")
+                    sev = str(item.get("severity") or "")
+                    if sev in {"warn", "must", "block"} and _series_msg_implicates_ep(msg, ep):
+                        blockers.append(msg)
+            if blockers:
+                detail = blockers[0][:200]
+                if not p.prework_block:
+                    p.prework_block = (
+                        "series_retention_gate 未通过；先回 n2d-script 调整跨集冷开场链、雷同桥段或看点高潮位，"
+                        "再进入出图 prompt。"
+                    )
+                p.prework.append({"step": "series_retention_gate", "status": "block", "detail": detail})
+            else:
+                other_n = sum(len(out.get(k) or []) for k in ("cold_open_chain_findings", "highlight_climax_findings")) + len(out.get("duplicates") or [])
+                p.prework.append({"step": "series_retention_gate", "status": "pass", "detail": f"episodes={len(eps)} other_findings={other_n}"})
+        except Exception as exc:  # pragma: no cover
+            p.prework.append({"step": "series_retention_gate", "status": "skip", "detail": str(exc)[:160]})
+
+    balance_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "series_balance.py")
+    if os.path.exists(balance_script):
+        try:
+            r = _run([sys.executable, balance_script, root, "--strict", "--json"])
+            out = _parse_trailing_json(r.stdout)
+            findings = out.get("findings") if isinstance(out, dict) else []
+            detail = _finding_detail(r.stdout, r.stderr)
+            if r.returncode != 0:
+                if not p.prework_block:
+                    p.prework_block = "series_balance 未通过；全剧后段钩子/反转曲线塌陷，先回 n2d-script 重排高能桥段。"
+                p.prework.append({"step": "series_balance", "status": "block", "detail": detail})
+            else:
+                warn_n = sum(1 for f in findings if isinstance(f, dict) and f.get("severity") == "warn")
+                p.prework.append({"step": "series_balance", "status": "warn" if warn_n else "pass", "detail": detail or f"warn={warn_n}"})
+        except Exception as exc:  # pragma: no cover
+            p.prework.append({"step": "series_balance", "status": "skip", "detail": str(exc)[:160]})
+
+
 def _image_qc_report_path(root: str, ep: str) -> str:
     return os.path.join(root, "生产数据", "image_qc", ep, f"image_qc_{ep}.json")
 
@@ -687,6 +792,8 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str) -> Probes:
                 if not p.prework_block:
                     p.prework_block = f"{step} 无法运行：{detail}"
                 p.prework.append({"step": step, "status": "block", "detail": detail})
+
+        _run_series_retention_prework(p, root, ep)
 
         story_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "story_integrity_audit.py")
         if os.path.exists(story_script):
@@ -862,6 +969,17 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str) -> Probes:
                 detail = str(e)[:160]
                 p.prework_block = f"model_router 无法运行：{detail}"
                 p.prework.append({"step": "model_router", "status": "block", "detail": detail})
+        mouth_script = os.path.join(SKILLS_DIR, "n2d-model-router", "scripts", "mouth_detect.py")
+        if os.path.exists(mouth_script):
+            try:
+                r = _run([sys.executable, mouth_script, root, ep, "--write", "--json"])
+                p.prework.append({
+                    "step": "mouth_visible_audit",
+                    "status": "pass" if r.returncode == 0 else "warn",
+                    "detail": _finding_detail(r.stdout, r.stderr),
+                })
+            except Exception as e:  # pragma: no cover
+                p.prework.append({"step": "mouth_visible_audit", "status": "skip", "detail": str(e)[:160]})
         spectacle_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "spectacle_plan.py")
         if os.path.exists(spectacle_script):
             try:
@@ -914,6 +1032,33 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str) -> Probes:
                 [root, ep, "--write", "--json"],
             ),
         ])
+
+    if stage_key in {"video", "compose"} and ep:
+        if stage_key == "compose":
+            mouth_script = os.path.join(SKILLS_DIR, "n2d-model-router", "scripts", "mouth_detect.py")
+            if os.path.exists(mouth_script):
+                try:
+                    r = _run([sys.executable, mouth_script, root, ep, "--write", "--json"])
+                    p.prework.append({
+                        "step": "mouth_visible_audit",
+                        "status": "pass" if r.returncode == 0 else "warn",
+                        "detail": _finding_detail(r.stdout, r.stderr),
+                    })
+                except Exception as e:  # pragma: no cover
+                    p.prework.append({"step": "mouth_visible_audit", "status": "skip", "detail": str(e)[:160]})
+        materialize_script = os.path.join(SKILLS_DIR, "n2d-video", "scripts", "materialize_shared_clips.py")
+        if os.path.exists(materialize_script):
+            try:
+                r = _run([sys.executable, materialize_script, root, ep, "--json"])
+                p.prework.append({
+                    "step": "shared_video_materialize",
+                    "status": "pass" if r.returncode == 0 else "block",
+                    "detail": _finding_detail(r.stdout, r.stderr),
+                })
+                if r.returncode != 0 and not p.prework_block:
+                    p.prework_block = "共享视频物化失败；先修复 storyboard 的 shared_video/source 或共享视频文件。"
+            except Exception as e:  # pragma: no cover
+                p.prework.append({"step": "shared_video_materialize", "status": "skip", "detail": str(e)[:160]})
 
     if stage_key == "compose" and ep:
         script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "action_edit_cues.py")

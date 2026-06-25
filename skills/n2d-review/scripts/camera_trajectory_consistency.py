@@ -49,6 +49,8 @@ def analyze(root: str, ep: str) -> dict:
                     "视频含明确镜头运动/空间轨迹，但缺 camera_trajectory_probe；无法核验运动方向、深度、越轴和抖动连续性。",
                     stage="video",
                     artifacts=("生产数据/camera_trajectory_probe_{ep}.json".format(ep=ep),),
+                    evidence_missing=True,
+                    required_evidence="camera_trajectory_probe",
                 )],
                 "notes": [],
             }

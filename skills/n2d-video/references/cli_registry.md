@@ -26,7 +26,7 @@ done
 | Runway API | Runway Gen-4 | `runway` API 包装 | 手动 Runway web |
 | manual | 用户指定 | 手动登记 | `video_jobs.py --register` 类登记脚本 |
 
-图后端与视频后端的风格兼容不在本表 — 那是 Stage 4 出图锚定句（固定模型锚定/通用视频兼容锚定）的事；Stage 5 同时看 `生视频模型`（prompt/能力）和 `生视频渠道`（执行入口）。
+生图模型/渠道与视频模型/渠道的风格兼容不在本表 — 那是 Stage 4 出图锚定句（固定模型锚定/通用视频兼容锚定）的事；Stage 5 同时看 `生视频模型`（prompt/能力）和 `生视频渠道`（执行入口）。
 
 ---
 

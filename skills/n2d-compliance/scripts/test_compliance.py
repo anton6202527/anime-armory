@@ -221,6 +221,72 @@ def test_internal_only_downgrades_platform_fields_but_keeps_authorization_blocks
     assert voice_issues and all(i.startswith("BLOCK ") for i in voice_issues), "声音授权 internal_only 不豁免"
 
 
+def test_publish_candidate_image_stage_reports_release_fields_as_info(tmp_path: Path) -> None:
+    """publish_candidate 的 image/video 阶段只提示发布域缺口，不阻断付费前图像链路。"""
+    root = tmp_path / "制漫剧" / "测试剧"
+    comp = root / "合规"
+    comp.mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    data["distribution_intent"] = "publish_candidate"
+    data["rights"]["source_text"] = {"status": "original", "evidence": "作者自有项目"}
+    data["rights"]["adaptation"] = {"status": "original", "evidence": "同源改编"}
+    data["platform_review"]["targets"][0].update({
+        "platform": "YouTube",
+        "region": "US",
+        "language": "en",
+        "policy_profile": "youtube_ai_disclosure_2026-06-08",
+        "profile_checked_at": "2026-06-08",
+        "copyright_review": "ready",
+        "ai_disclosure_upload": "ready",
+        "content_rating_review": "ready",
+        "requires_localization": True,
+    })
+    data["localization"]["status"] = "not_applicable"
+    data["localization"]["subtitle_languages"] = ["zh"]
+    data["regulatory_filing"]["pre_broadcast_review"] = "pending"
+    data["regulatory_filing"]["release_filing_no"] = "TODO: 上线备案号"
+    (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    issues = compliance.check_manifest(root, "第1集", stage="image")
+
+    release_issues = [
+        i for i in issues
+        if "platform_review" in i or "localization" in i or "regulatory_filing" in i
+    ]
+    assert release_issues
+    assert all(i.startswith("INFO ") for i in release_issues), release_issues
+    assert not any(
+        i.startswith("BLOCK ") and (
+            "platform_review" in i or "localization" in i or "regulatory_filing" in i
+        )
+        for i in issues
+    )
+
+
+def test_paid_distribution_image_stage_blocks_release_fields(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    comp = root / "合规"
+    comp.mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    data["distribution_intent"] = "paid_distribution"
+    data["rights"]["source_text"] = {"status": "original", "evidence": "作者自有项目"}
+    data["rights"]["adaptation"] = {"status": "original", "evidence": "同源改编"}
+    data["regulatory_filing"]["pre_broadcast_review"] = "pending"
+    data["regulatory_filing"]["release_filing_no"] = "TODO: 上线备案号"
+    (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    issues = compliance.check_manifest(root, "第1集", stage="image")
+
+    assert any(
+        i.startswith("BLOCK ") and "regulatory_filing.pre_broadcast_review" in i
+        for i in issues
+    )
+    assert any(
+        i.startswith("BLOCK ") and "regulatory_filing.release_filing_no" in i
+        for i in issues
+    )
+
+
 def _msgs(issues):
     """只取 '<sev> <path>.json: <message>' 的消息体，避开 pytest 临时目录名里的 regulatory_filing 干扰。"""
     return [(i.split(".json: ", 1)[-1], i.split(" ", 1)[0]) for i in issues]

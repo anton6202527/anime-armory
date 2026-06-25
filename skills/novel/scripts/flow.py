@@ -18,6 +18,7 @@ if _LIB not in sys.path:
     sys.path.insert(0, _LIB)
 
 from novel_route import summarize
+from novel_contract import is_long_arc_project
 from project_io import load_project_settings
 
 _STAGE_TABLE_MARKERS = ("novel-derived-stage-table", "novel-create-stage-table")
@@ -69,19 +70,8 @@ def arc_window_for_chapter(ch_num, interval, meta):
 
 
 def long_arc_mode(settings, meta):
-    scale = str(meta.get("scale") or "").lower()
-    try:
-        target = int(meta.get("target_chapters") or 0)
-    except (TypeError, ValueError):
-        target = 0
-    mode = str(settings.get("小说生成模式") or meta.get("draft_mode") or "")
-    purpose = str(settings.get("小说用途") or meta.get("purpose") or "")
-    return (
-        scale in {"long", "长篇"}
-        or target >= 30
-        or mode in {"商业连载", "漫剧源书"}
-        or purpose in {"漫剧源书", "微短剧源书"}
-    )
+    # 单一真值源在 novel_contract.is_long_arc_project（flow 与 qa_gate 共用）。
+    return is_long_arc_project(meta, settings)
 
 
 def is_stage_checklist(root):
@@ -176,9 +166,10 @@ def main():
         else:
             advice.append(f"检测到现有任务包：{', '.join(packets)}。请按任务包要求完成写作。")
             if live_check:
+                conclusion_path = os.path.join(root, "审稿", f"state_verify_{ch_text}.json")
                 advice.append(
-                    f"边写边自检：正文与 审稿/state_delta_{ch_text}.json 落盘后，执行 "
-                    f"python3 skills/novel/scripts/post_write.py \"{root}\" --chapter {ch_text}"
+                    f"边写边自检：正文、审稿/state_delta_{ch_text}.json 与对账结论 {conclusion_path} 落盘后，执行 "
+                    f"python3 skills/novel/scripts/post_write.py \"{root}\" --chapter {ch_text} --conclusion \"{conclusion_path}\""
                 )
                 window = batch_review_window(ch_num, review_interval, meta)
                 if window and window[0] is not None:
@@ -207,6 +198,13 @@ def main():
         print("\n🚧 阻断项：")
         for b in blockers:
             print(f"  {b}")
+
+    # 已审出但未消除的建议级问题（🟡）——路由不回炉，但不能静默吞掉。
+    flagged = res.get("flagged") or []
+    if flagged:
+        print("\n🟡 已记录、未消除的建议级问题（不阻断，但请确认是已接受还是待修）：")
+        for f in flagged:
+            print(f"  - {f['ch']}「{f['col']}」：{f['value']}")
             
     print("\n💡 建议行动：")
     if advice:
@@ -217,9 +215,9 @@ def main():
         print(f"  - 按照进度建议执行：{cmd}")
 
     if live_check:
-        print(f"\n[提示] 当前已选择 边写边自检；post_write 是每章写完后的必经闭环。")
+        print(f"\n[提示] 当前已选择 边写边自检；post_write 必须带 --conclusion 才会合并账本并标记进度。")
     else:
-        print(f"\n[提示] 运行 post_write 脚本可自动勾选进度并触发百科/哨兵/力量体系检查；也可在 `_设置.md` 选择 `小说生成工作流：边写边自检`。")
+        print(f"\n[提示] 运行 post_write 脚本并带 --conclusion，可在合并账本后自动勾选进度并触发百科/哨兵/力量体系检查；也可在 `_设置.md` 选择 `小说生成工作流：边写边自检`。")
 
 if __name__ == "__main__":
     main()

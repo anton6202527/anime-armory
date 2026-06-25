@@ -439,6 +439,48 @@ def build_report(root, mechanical_path=None, human_path=None, consistency_path=N
         "waiver_count": len(waivers),
         "verdict": "blocked" if any(f.get("blocking") for f in findings) else ("needs_revision" if findings else "pass"),
     }
+
+    # ── 连续条件通过熔断 (P2-⑨) ────────────────────────────────────────────
+    # "有条件通过"（needs_revision）连续 3 次 → 强制阻断，防止项目在"每次都有小问题
+    # 但都不阻塞"的状态下漂移 30 章才发现跑偏。阻断后需人工确认方向再继续。
+    streak_path = os.path.join(root, "审稿", "review_streak.json")
+    streak_data = load_json(streak_path, {}) if os.path.exists(streak_path) else {}
+    if not isinstance(streak_data, dict):
+        streak_data = {}
+    streak = streak_data.get("needs_revision_streak", 0)
+    if summary["verdict"] == "needs_revision":
+        streak += 1
+    else:
+        streak = 0
+    if streak >= 3:
+        findings.insert(0, {
+            "id": f"FUSE-{len(findings)+1:03d}",
+            "severity": "blocking",
+            "blocking": True,
+            "dimension": "流程熔断",
+            "problem": f"连续 {streak} 次审稿均为「有条件通过」(needs_revision)——项目可能在\"每次都有小问题但都不阻塞\"的状态下持续漂移。",
+            "location": "审稿/review_report.json (本次)",
+            "fix_hint": (
+                "人工确认方向：1) 回看最近 5-10 章的 revision_plan/审稿报告，判断小问题是否已聚合成系统性跑偏；"
+                "2) 若是方向性问题，回流到 novel-rewrite 或 novel-create 的方向设定阶段；"
+                "3) 若确认只是零散问题，跑 review 加 --advisory 重置 streak。"
+            ),
+            "recommended_skill": "novel-review",
+            "return_to_stage": "review",
+            "affected_files": [f"审稿/review_report_{src['generated_at']}.json" if isinstance(src := streak_data.get("last_report", {}), dict) and src.get("generated_at") else "审稿/review_report.json"],
+            "chapter": None,
+            "evidence": f"审稿/review_streak.json → needs_revision_streak={streak}",
+        })
+        summary["verdict"] = "blocked"
+        summary["blocking_count"] += 1
+        summary["fuse_triggered"] = True
+    # 持久化 streak
+    streak_data["needs_revision_streak"] = streak
+    streak_data["last_report"] = {"generated_at": date.today().isoformat(), "verdict": summary["verdict"]}
+    os.makedirs(os.path.join(root, "审稿"), exist_ok=True)
+    with open(streak_path, "w", encoding="utf-8") as f:
+        json.dump(streak_data, f, ensure_ascii=False, indent=2)
+    summary["needs_revision_streak"] = streak
     return {
         "schema_version": 1,
         "kind": "novel_review_report",

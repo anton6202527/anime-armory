@@ -30,7 +30,7 @@ description: 横切角色身份闭环层：把 n2d 的 identity_registry.json �
 
 ## 核心规则
 
-- **一份 registry，多端消费**：n2d-image 取 `reference_group` / 图后端角色 ID；n2d-video 取 `Character ID / Face Lock / reference controls`；n2d-review 取 `drift_forbidden` 和跨集漂移报表。不要在 prompt 现场手写临时 ID。
+- **一份 registry，多端消费**：n2d-image 取 `reference_group` / 生图模型原生角色 ID；n2d-video 取 `Character ID / Face Lock / reference controls`；n2d-review 取 `drift_forbidden` 和跨集漂移报表。不要在 prompt 现场手写临时 ID。
 - **reference group 永远是兜底**：任何后端未注册、无权限、生成失败时，都退回 front/side/back/outfit/turnaround + 锚点句 + 首尾帧。
 - **ready 不能空登记**：`registered/ready` 必须写真实 `id/handle/reference/model_path`；LoRA `ready` 必须写 `base_model/model_path/trigger/model_hash/validation_report`，且验证报告必须 `verdict=pass`。若报告含 `dataset_has_warnings`，只能在 `manual_review.allow_dataset_warnings=true` 且 `manual_review.notes` 写明原因时放行。
 - **后端 mode 要匹配能力**：Kling video 用 `character_id`，Seedance 用 `face_lock`，Veo 用 `reference_controls`，Dreamina 用 `first_last_frame` 或 `reference_group`；错 mode 由 gate 阻断。
@@ -57,6 +57,9 @@ python3 skills/n2d-identity/scripts/identity.py <作品根> --write
   `生产数据/identity_voice_print_第N集.json`，并外发
   `生产数据/consistency_findings_voice_print_第N集.json`
   （kind=`n2d_consistency_findings`，维度 `voice_consistency`，可直接交给 `n2d-batch --from-consistency-findings`）。
+- `制作模式=原生音画` 时，声纹机检还会读取 `生产数据/native_voice_identity_第N集.json`
+  （kind=`n2d_native_voice_identity_segments`），把后端原生台词片段按 `character_id + speaker_key`
+  合并进同一份 `identity_voice_print_第N集.json`。
 
 字段见 `references/schema.md`。
 
@@ -92,13 +95,31 @@ python3 skills/n2d-identity/scripts/voice_consistency.py <作品根> --preflight
 `available=false / insufficient_precision`，交还人判，不输出假相似度。发现漂移时外发
 `consistency_findings_voice_print_第N集.json`，统一进入 score/batch/feedback 的一致性通道。
 
+**原生音画 voice identity sidecar**：原生 AV 没有 n2d-voice 的逐句配音 manifest，也不能因此跳过“一角一声”。出视频/compose 后写
+`生产数据/native_voice_identity_第N集.json`：
+
+```json
+{
+  "kind": "n2d_native_voice_identity_segments",
+  "segments": [
+    {
+      "character_id": "CHAR_01",
+      "speaker_key": "CHAR_01_native",
+      "wav": "出视频/第N集/audio/Clip_01_speech.wav"
+    }
+  ]
+}
+```
+
+`voice_print_consistency.py` 会把这些片段与常规配音 manifest 一起量声纹；`n2d-review gate` 在原生音画的 review/release/付费分发阶段要求该 sidecar 与报表存在，否则回 `compose/video` 补抽音频和对齐证据。
+
 ### 2. 出图阶段怎么用
 
 - 生成/补共享定妆时，由 **n2d-image（唯一写方）** 同步更新 `出图/共享/identity_registry.json`；n2d-identity 只读校验、写报表，不写 registry 本体（owner 见 `n2d_contract.PRODUCT_KINDS`：n2d-image 写 / n2d-identity·n2d-review 读校）。
 - 分镜 prompt 只从 registry 取 reference group 和 drift_forbidden，不临场猜参考图。
 - **逐镜参考规划（事前处方·与 drift_report 互补）**：出图前可先跑 `python3 skills/n2d-image/scripts/reference_planner.py <作品根> 第N集`，按每镜变化量（服装/表情/景别/角度）× 后端能力给出"该喂哪些参考 + 控制网 + 升档"的 `reference_plan_第N集.{json,md}`。drift_report 是**事后**（生成后量漂移），reference_plan 是**事前**（治"定妆照只是板式、单图 i2i 在新条件下重画脸"的根因）。两者升档口径同源。
-- **图后端原生主体（阶段1 起一等公民）**：`生图AI` 解除 Codex 垄断后，图侧也能走第②档——`identity_adapters.image` 支持 `seedream→universal_reference`、`kling→subject_library/character_id`、`sora→character_cameo`。注册一次按 ID 引用，`identity_adapter_matrix` 的 `image native ready` 列与 `summary.forms_with_native_image_ready` 会统计它。Codex/OpenAI 无持久主体，自动回退 reference_group 兜底。
-- 若多角色同框或核心角色跨集漂，优先补图/视频后端原生角色 ID / 主体库；仍不稳才提 LoRA。注意：图后端整集统一一个，混用会被 image gate 拦。
+- **生图模型原生主体（阶段1 起一等公民）**：`生图模型` 与 `生图渠道/生图AI` 分列后，图侧也能走第②档——`identity_adapters.image` 支持 `seedream→universal_reference`、`kling→subject_library/character_id`。Sora Cameo 仅旧项目/manual 兼容，不作新项目自动路由。注册一次按 ID 引用，`identity_adapter_matrix` 的 `image native ready` 列与 `summary.forms_with_native_image_ready` 会统计它。Codex/OpenAI 无持久主体，自动回退 reference_group 兜底。
+- 若多角色同框或核心角色跨集漂，优先补生图/视频模型原生角色 ID / 主体库；仍不稳才提 LoRA。注意：生图模型+渠道整集统一一组，混用会被 image gate 拦。
 
 ### 3. 出视频阶段怎么用
 

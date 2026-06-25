@@ -161,6 +161,10 @@ def test_registry_scaffold_gated_by_genre():
     nonpower = dict(cs.consistency_registry_files("现代言情"))
     assert "设定/character_guardrails.json" in nonpower  # 始终 seed
     assert "设定/power_system_registry.json" not in nonpower  # 非力量题材不 seed
+    # 伏笔台账始终 seed（与题材无关）：派生线开局不跑 wiki_builder，没有它
+    # foreshadow_ledger.analyze() 永远 ran:False，烂尾/超期机检在续写/精简上空转。
+    assert "设定/foreshadowing_ledger.json" in nonpower
+    assert "设定/foreshadowing_ledger.json" in power
 
 
 # ── B2：角色卡命名兜底（角色卡.md / 人物.md）───────────────────────────────────

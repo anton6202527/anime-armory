@@ -389,7 +389,7 @@ def _resolve_chapter(project, chapter):
     return idx, ""
 
 
-def scan_chapter(wiki, text, chapter_index, project_root=None, numeric_anchors=None):
+def scan_chapter(wiki, text, chapter_index, project_root=None, numeric_anchors=None, foreshadow_report=None):
     """确定性扫描，返回 alerts 列表。纯函数，便于单测。
 
     numeric_anchors：{角色名: 年龄} 锚点；普通模式由 main 从角色卡加载，单测可直接传。
@@ -473,27 +473,28 @@ def scan_chapter(wiki, text, chapter_index, project_root=None, numeric_anchors=N
     # 数值/事实漂移（年龄）：角色卡声明锚点 vs 本章年龄表达
     alerts.extend(scan_numeric_drift(numeric_anchors, text, chapter_index))
 
-    # 新增：伏笔回收对账 (Foreshadowing Audit)
-    if project_root:
-        ledger_path = os.path.join(project_root, "设定", "foreshadowing_ledger.json")
-        if os.path.exists(ledger_path):
-            try:
-                with open(ledger_path, "r", encoding="utf-8") as f:
-                    ledger = json.load(f)
-                for seed in ledger.get("seeds", []):
-                    if seed.get("status") == "pending" and seed.get("expected_payoff_chapter"):
-                        if chapter_index > seed["expected_payoff_chapter"] + 5: # 宽容 5 章
-                            alerts.append({
-                                "type": "foreshadowing_overdue",
-                                "entity": seed["id"],
-                                "severity": "建议级",
-                                "chapter": chapter_index,
-                                "expected_at": seed["expected_payoff_chapter"],
-                                "evidence": seed["description"],
-                                "auto": True,
-                                "note": "高价值伏笔已超过预期的回收窗口，请检查是否遗忘或需调整章纲"
-                            })
-            except Exception: pass
+    # 伏笔回收对账：委托 foreshadow_ledger.analyze() 为单一真值源。
+    # logic_sentry 不再独立实现超期判定；analyze() 是 consistency_audit 子检测器，
+    # 其 overdue 告警按 importance 自动分级（high/critical = 阻断级，low/medium = 建议级）。
+    # sentry 通过 --foreshadow-report 接受预计算的 scan 报告，避免在逐章 sentry 循环
+    # 内重复计算（perf/freshness 成本；analyze 是对整体进度的单次快照）。
+    if project_root and foreshadow_report:
+        try:
+            fr = json.loads(foreshadow_report) if isinstance(foreshadow_report, str) else foreshadow_report
+        except Exception:
+            fr = None
+        if isinstance(fr, dict) and fr.get("kind") == "foreshadow_report":
+            for o in fr.get("overdue") or []:
+                alerts.append({
+                    "type": "foreshadowing_overdue",
+                    "entity": o.get("id", ""),
+                    "severity": "阻断级" if o.get("severity") == "阻断级" else "建议级",
+                    "chapter": fr.get("through_chapter") or chapter_index,
+                    "expected_at": o.get("expected_payoff_chapter"),
+                    "evidence": o.get("description", ""),
+                    "auto": True,
+                    "note": o.get("note", "高价值伏笔已超过预期的回收窗口"),
+                })
 
     # 世界规则违背（阻断级）：违反 world_state_ledger 已确立/未确立的演进事实
     if project_root:

@@ -181,3 +181,29 @@ def test_analyze_emits_light_elevation_flip(tmp_path, monkeypatch):
     assert res["available"] is True
     elev = [s for s in res["shots"] if s.get("metric") == "light_elevation" and s["verdict"] == "warn"]
     assert any(s["png"] == "EP01_CLIP02.png" for s in elev)
+
+
+def test_scene_world_ledger_groups_timeline_and_findings(tmp_path):
+    report = {
+        "available": True,
+        "timeline": [
+            {"png": "Clip_01.png", "scene": "冷宫", "daypart": "day", "light_az": "left", "light_elev": "top"},
+            {"png": "Clip_02.png", "scene": "冷宫", "daypart": "night", "light_az": "right", "light_elev": "bottom"},
+        ],
+        "shots": [
+            {"metric": "daypart", "png": "Clip_02.png", "scene": "冷宫", "verdict": "block", "message": "day→night"}
+        ],
+    }
+
+    ledger = wc.build_scene_world_ledger(str(tmp_path), "第1集", report)
+
+    assert ledger["kind"] == wc.SCENE_WORLD_LEDGER_KIND
+    assert ledger["summary"]["scene_count"] == 1
+    assert ledger["summary"]["block_count"] == 1
+    assert ledger["scenes"]["冷宫"]["dayparts"] == {"day": 1, "night": 1}
+
+
+def test_write_scene_world_ledger(tmp_path):
+    path = wc.write_scene_world_ledger(str(tmp_path), "第1集", {"available": False, "timeline": [], "shots": []})
+
+    assert path.endswith("生产数据/scene_world_ledger_第1集.json")

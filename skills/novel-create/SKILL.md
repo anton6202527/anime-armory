@@ -20,14 +20,16 @@ description: Cold-start ORIGINAL novel creation from scratch — when the user h
 - **访谈先行，别替用户决定故事**：从"几个字"问出 logline / 主角 / 金手指 / 爽点 / 冲突，**一次问一组、给默认建议让用户确认**，不一次性轰炸。详见 `references/interview.md`。
 - **创作蓝图 = 这部书的宪法**：`设定/创作蓝图.md` 写死 logline/题材/平台/主角+金手指/核心爽点/主线冲突/风格卡。后续每章都受它约束。蓝图没敲定不进设定、不进章纲。
 - **读者契约 = 不偏题 + 好看 + 文学性的执行锚**：蓝图通过后补 `设定/读者契约.md`（模板见 `novel-craft/references/reader-contract.md`），锁定核心题旨、读者承诺、好看机制、文学质感和禁偏清单；Demo 通过后同步到 `审稿/demo_gate.json.reader_contract`，后续每章任务包都必须携带。
-- **市场基准先于商业蓝图**：`商业连载` / `漫剧源书` / 红果/抖音/番茄等平台项目，在填蓝图前先跑 `novel-score/scripts/collect_market_baseline.py` 或补结构化人工证据；没有日期和来源的“热门套路”只能记为假设，不能当蓝图依据。
+- **市场基准先于商业蓝图**：`商业连载` / `漫剧源书` / 红果/抖音/番茄等平台项目，在填蓝图前先跑 `novel-score/scripts/collect_market_baseline.py` 或补结构化且未过期的人工证据；没有日期和来源的“热门套路”只能记为假设，不能当蓝图依据。
 - **专业资料包先于行业场景**：医疗/法律/刑侦/金融/军事/历史/宗教/海外/科技/职业文，或用户要求“专业、真实、行业感、别外行”时，先用 `novel-research` 建 `资料/专业资料包_<主题>.md` + `资料/research_sources.json`；没有 ready 资料包的事实不能写成确定事实。
+- **生活观察先于生活感**：用户要求烟火气、现实质感、人物像活人、职业/地域/日常细节时，先用 `novel-observe` 建 `素材/观察札记.jsonl`；写章时只转化行为、五感和戏剧用途，不照搬真实隐私。
+- **审美样本先于精品化**：品质向、文学向、历史、悬疑、Demo 精修或投稿级项目，Demo 过审后用 `novel-aesthetic` 登记项目高光和授权/公版正向样本，后续 line edit 按“为什么有效”的规则改，而不是只按扣分表修。
 - **吃下碎片**：用户给的风格样本 / 零散笔记 / 半成品片段 → `--ingest` 收进 `素材/`，解析成风格卡 + 已知设定，**缺口逐项问**，不丢用户已有的东西。
 - **设定圣经做一致性追踪**：原创最大翻车点是设定前后矛盾、金手指无代价。`设定/设定圣经.md` 逐条登记 + 回扫核对。
 - **用途先于平台**：先确认小说最终用途（传统小说 / 漫剧源书 / 微短剧源书 / **短故事·超短篇** / 短篇试写等），再按目标平台（起点/番茄/七猫/晋江/抖音漫剧/红果/历史向）调读者口味、爽点节奏和开篇钩；起名委托 `novel-title`。
 - **短故事是一等创作目标**：用户要写「短故事 / 超短篇 / 番茄短故事 / 短剧选品池底稿」时，选 `--scale microstory`（别名 `短故事`/`超短篇`），**走单篇闭环结构而非连载章纲**：100 字内抛冲突+金手指 → 一次升级 → 强反转 + 一句话简介，工艺见 `novel-craft/references/short-story.md`。短故事/短中篇是否是当前最快验证形态，必须以 `novel-score` 的 market baseline 或 `novel-research` 平台资料包为准。
 - **Demo gate 最重要**：前 1-3 章定文风/爽点密度/钩子/设定自洽，用户审过才批量写。
-- **文本主创模式先定**：投稿/出版目标，尤其晋江/起点/番茄/红果等中文网文平台，默认推荐 `人类主创` 或 `AI辅助`；`AI生成` 正文会在 QA gate 被标为高风险并阻断投稿导出，除非用户提供平台接受 AI 正文的当日证据和豁免。
+- **文本主创模式先定**：投稿/出版目标，尤其晋江/起点/番茄/红果等中文网文平台，默认推荐 `人类主创` 或 `AI辅助`；`AI生成` 正文会在 QA gate 被标为高风险并阻断投稿导出，除非用户提供平台接受 AI 正文的当日证据，并写入作用域匹配的 `ai_generated_text_platform_exception` 豁免。
 - **批量写章先出任务包**：Demo 过审后先跑 `novel-craft/scripts/draft_packets.py`，每章带蓝图/设定/章纲/Demo 风格锚点/状态账本，再写正文。`商业连载` / `漫剧源书` 默认自动走 Architect → Ghostwriter → Senior Editor 三段式任务包；写完填 `审稿/state_delta_第NN章.json`，避免长篇越写越漂。
 - **原创=用户自有，天然合法**：无版权筛查（区别于 spinoff/rewrite/expand/condense 的合法性铁律）。
 
@@ -43,6 +45,7 @@ python3 skills/novel-score/scripts/collect_market_baseline.py "<作品根>/评�
 ```
 红果/抖音榜单无公开网页时，用 `--manual-evidence "红果短剧|YYYY-MM-DD|第三方榜单|结论|URL"` 补证据。把基准结论写入 `设定/创作蓝图.md` 的“市场假设/差异化”小节；采集失败则明确标“未核验”，不要凭旧印象决定题材。
 > **专业场景资料包**：若访谈/素材/章纲已命中医疗、法律、刑侦、金融、军事、历史、宗教、海外、科技、职业行业细节，同步建 `novel-research` 资料包；写蓝图时只把已核验事实写成“可用事实”，把未证实内容放进“不确定项/禁用项”。
+> **生活观察素材库**：若题材依赖现实质感（县城、医院、学校、打工、家庭、职场、行业日常等），同步跑 `novel-observe` 初始化素材库；没有现成观察时先列“需观察/需采访”任务，不用空泛形容词硬写真实感。
 
 从用户的只言片语 + 碎片，问清这几组（一次一组、带默认建议）：
 - **题材类型 + 小说用途 + 目标平台**（决定交付形态/篇幅档/爽点节奏）
@@ -86,6 +89,7 @@ python3 skills/novel-wiki/scripts/storyworld_pressure_test.py "<作品根>"
 
 ### 6. Demo（前 1-3 章）+ 用户审【最重要 gate】
 逐章写（每章一个戏剧节拍 + ≥1 钩子，用 `novel-craft/references/chapter.md` 的单章守则 + 子代理 prompt 模板）。验：文风对不对 / 爽点够不够 / 钩子留没留 / 设定自洽。**每章独立审**。文风定了回填 `创作蓝图.md` 风格卡。
+Demo 里真正有效的高光（开篇动作、对白潜台词、场景质感、人物选择、句式节奏）要登记进 `novel-aesthetic`，作为后续全书的正向审美标尺；不是为了仿写原句，而是让后续章节知道“这本书好看的机制是什么”。
 > **市场体检（批量前最便宜的 go/no-go）**：Demo 过审后，对 `商业连载` 必跑一次 `novel-score`（题材够不够热、黄金三章钩子、能不能火）。`score_report.json.production_decision` 只允许三类：`go` / `revise` / `kill`；`revise` 先回蓝图/章纲/开篇修，`kill` 停止批量写。普通稳妥初稿可由用户选择是否评分。
 > **机器留痕（必做）**：Demo 审完必须写 `审稿/demo_gate.json`（schema 见 `novel-craft/references/demo-gate.md`）。`status != passed` 不批量写；`style_anchor`、`reader_promises`、`setting_constraints`、`reader_contract` 必须喂给后续逐章子任务和 `novel-review`。
 
@@ -118,6 +122,7 @@ python3 skills/novel-review/scripts/arc_gate.py "<作品根>" --arc 4-8
 ```
 连续 3 章不推进读者契约、整段没有题旨对齐、长窗口只种不收会被拦下或提示回修。
 - **逐章写**：按 `写作任务/第NN章.md` 写到 `章节/第NN章.md`。不要跳过任务包直接凭记忆写长篇。
+- **素材与审美注入**：生活感薄的章节先从 `novel-observe` 选 3-5 条观察素材；投稿级/品质向章节先从 `novel-aesthetic` 选 1-3 条正向样本规则。素材服务场景，样本服务判断，不照搬原句。
 - **状态增量**：每章写完填 `审稿/state_delta_第NN章.json`；涉及人物/能力/伏笔/关系变化时合并回 `审稿/state_ledger.json`，必要时同步 `设定/设定圣经.md` / `设定/角色卡.md`。
 - **队列回写**：该章 review/对账通过后跑 `python3 skills/novel-craft/scripts/draft_queue.py "<作品根>" done NN --agent "<名字>"`；返工则 `fail NN --reason "<原因>"` 或 `todo NN`。
 - **回扫**：用 `novel-review` 分批扫——重点**设定圣经一致性**（金手指代价没破、设定没前后矛盾）、人设不崩、钩子回收、文风不漂。至少跑一次机检：

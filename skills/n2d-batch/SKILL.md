@@ -14,7 +14,7 @@ description: "P1 batch task queue and worker runner for n2d. Build/manage a queu
 
 ## 输入 / 输出 / 读写边界
 
-- **输入**：`_进度.md`、stage contract、gate/review/score/identity findings、可选 `batch_runner.json` 命令配置。
+- **输入**：`_进度.md`、stage contract、gate/review/score/identity findings、`consistency_ledger` root causes、可选 `batch_runner.json` 命令配置。
 - **输出**：`生产数据/batch_queue.json/md`、worker claim/lease/mark 状态、runner telemetry。
 - **读写边界**：队列层只排任务和调用已配置命令；不内置 stage 业务逻辑、不擅自整集重跑、不绕过对应 skill 的 gate。
 - **契约关系**：stage key、owner、输出验收、finding 回流字段来自 `skills/n2d/_lib/n2d_contract.py`；无稳定 readiness，所以登记为 `CROSS_CUTTING_TOOLS` 而不是进度横切就绪项。
@@ -31,7 +31,7 @@ description: "P1 batch task queue and worker runner for n2d. Build/manage a queu
 - **失败按重试上限回队列**：`mark --status fail` 后，未超过 `max_retries` 变 `retry_queued`；超过后变 `failed`，需要人工处理。
 - **预算按合并后账本裁剪**：`--budget` 会在默认合并既有队列后，对整个 ledger 重新计算预算；历史 `running/done/retry_queued` 任务占用预算，新的未开始任务超限时标 `blocked_budget`，不进入可 claim 批次。真实成本仍由 `n2d-dashboard` 在阶段完成后记录。
 - **批量扩张看 ROI，不看“能跑完”**：runner 跑完一批后必须 `python3 skills/n2d-dashboard/scripts/dashboard.py build <作品根> --markdown`。继续扩量前看每分钟成本、每集耗时、一次通过率、重抽率、投放净回收/生产成本；若 ROI 不达标，先排返工/模板/路由优化任务，不盲目追加集数。
-- **只重跑受影响范围**：定妆变更、gate finding、审片问题、asset impact 输出、`n2d-identity` 跨集漂移报表都应转成 `--rerun-from` + `--affected-shot/--affected-artifact/--scope`，只排受影响镜头或 Clip，不整集无脑重跑。
+- **只重跑受影响范围**：定妆变更、gate finding、审片问题、asset impact 输出、验收总账 root cause、`n2d-identity` 跨集漂移报表都应转成 `--rerun-from` + `--affected-shot/--affected-artifact/--scope`，只排受影响镜头或 Clip，不整集无脑重跑。
 - **自动审片评分可直接入队**：`n2d-score --enqueue-low` 会把低分维度聚合成 `auto_return_tasks`，再写入本队列；batch 只负责承接和执行状态，不重新解释评分逻辑。
 - **slash skill 不是 shell 命令**：队列里的 `n2d-image <root> 第1集` 是人/agent 可读建议。runner 要真正执行，必须在 `生产数据/batch_runner.json` 里给该 stage 配 shell 命令，或用 `--command` 临时覆盖。
 
@@ -73,8 +73,9 @@ python3 skills/n2d-batch/scripts/queue.py reclaim <作品根>                   
 python3 skills/n2d-batch/scripts/queue.py plan <作品根> --episodes 2 --rerun-from image \
   --affected-shot Clip_03 --affected-artifact 出图/第2集/图片/Clip_03.png --scope "定妆_王敦更新"
 
-# 6) findings / 低分回流 + 闭环复检（修复→resolved / 复发→reopen）
+# 6) findings / ledger / 低分回流 + 闭环复检（修复→resolved / 复发→reopen）
 python3 skills/n2d-batch/scripts/queue.py plan <作品根> --from-consistency-findings <findings.json>
+python3 skills/n2d-batch/scripts/queue.py plan <作品根> --from-consistency-ledger <作品根>/生产数据/consistency_ledger_第1集.json
 python3 skills/n2d-score/scripts/score.py <作品根> 第1集 --run-checks --threshold 85 --enqueue-low
 python3 skills/n2d-batch/scripts/runner.py <作品根> --until-empty --recheck   # pass 后自动刷门禁再判现状
 ```
@@ -93,7 +94,7 @@ python3 skills/n2d-batch/scripts/runner.py <作品根> --until-empty --recheck  
 | 错误 | 纠正 |
 |---|---|
 | 让 runner 直接重写阶段逻辑 | 不做。runner 只调配置好的阶段命令；阶段规则仍归对应 n2d skill |
-| batch 跑过单集编排器的硬阻断 | 开 `--next-preflight` 或在 `batch_runner.json` 写 `"next_preflight": true`，让 runner 执行前消费 `run.py next` 的 stop_reason；`blocked_by_entry_check`、`capability_evidence_required`、`blocked_by_review_acceptance` 同样会阻断 |
+| batch 跑过单集编排器的硬阻断 | runner 默认会在执行前消费 `run.py next` 的 stop_reason；只有确认阶段 wrapper 已自带等价 gate 时，才可在 `batch_runner.json` 写 `"next_preflight": false` 或用 `--no-next-preflight` 显式关闭。`blocked_by_entry_check`、`capability_evidence_required`、`blocked_by_review_acceptance` 同样会阻断 |
 | 直接跑队列里的 `n2d-image` slash command | slash command 不是 shell 命令；在 `batch_runner.json` 配真实 shell 命令 |
 | 多个 agent 口头分任务 | 统一 `claim`（已上 flock 原子认领），否则并发槽和状态会乱 |
 | 多 worker 不给 `--worker` id | 给稳定 id；否则 `--resume` 无法回收"自己"上次残留的 running |

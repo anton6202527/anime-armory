@@ -89,3 +89,42 @@ def test_sync_global_all_writes_repo_default(tmp_path: Path, capsys) -> None:
     text = global_path.read_text(encoding="utf-8")
     assert "- 制作模式: 配音先行" in text
     assert "- 更新重制策略: 最小" in text
+
+
+def test_audit_warns_legacy_video_ai_and_model_channel_confusion(tmp_path: Path, capsys) -> None:
+    root = make_project(tmp_path)
+    (root / "_设置.md").write_text(
+        "\n".join([
+            "- 项目规模: 多集长线",
+            "- 生图模型: Codex",
+            "- 生图AI: GPT Image 2",
+            "- 生视频AI: 即梦",
+        ]) + "\n",
+        encoding="utf-8",
+    )
+
+    rc = cli.main(["audit", str(root), "--json"])
+
+    assert rc == 1
+    out = json.loads(capsys.readouterr().out)
+    messages = "\n".join(row["message"] for row in out["rows"])
+    assert "生图模型 must name the generator model" in messages
+    assert "生图AI is the channel/access path" in messages
+    assert "legacy field is present without the split 生视频模型 + 生视频渠道 pair" in messages
+
+
+def test_audit_warns_long_running_without_native_subject_backend(tmp_path: Path, capsys) -> None:
+    root = make_project(tmp_path)
+    for ep in ("第1集", "第2集", "第3集"):
+        d = root / "脚本" / ep
+        d.mkdir(parents=True)
+        (d / "storyboard.json").write_text("{}", encoding="utf-8")
+    (root / "_设置.md").write_text("- 生图AI: Codex\n", encoding="utf-8")
+
+    rc = cli.main(["audit", str(root), "--json"])
+
+    assert rc == 0
+    out = json.loads(capsys.readouterr().out)
+    messages = "\n".join(row["message"] for row in out["rows"])
+    assert "persistent subject/character-id evidence" in messages
+    assert "record 项目规模=多集长线" in messages

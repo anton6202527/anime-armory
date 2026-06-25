@@ -47,6 +47,43 @@ def _parse_arc(value):
     return start, end
 
 
+def _after_colon(text):
+    parts = re.split(r"[:：]", text, maxsplit=1)
+    return parts[1].strip() if len(parts) == 2 else ""
+
+
+def _extract_core_contract_questions(contract_text):
+    dramatic_question = ""
+    must_answer = []
+    for line in contract_text.split("\n"):
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if "核心戏剧问题" in stripped or "dramatic_question" in stripped.lower():
+            dramatic_question = _after_colon(stripped) or stripped
+        if "终局必须回答" in stripped or "must_answer" in stripped.lower():
+            tail = _after_colon(stripped)
+            if tail:
+                must_answer.append(tail)
+            continue
+        if stripped.startswith("- ") and ("？" in stripped or "?" in stripped):
+            must_answer.append(stripped.lstrip("- ").strip())
+    seen = set()
+    must_answer = [item for item in must_answer if item and not (item in seen or seen.add(item))]
+    return dramatic_question, must_answer
+
+
+def _core_resolution_hit(combined, dramatic_question, must_answer):
+    strong_kw = (
+        "核心问题解决", "主线完结", "主线核心冲突", "终局必须回答",
+        "最终答案", "终局答案", "终极答案", "最终揭秘",
+    )
+    if any(kw in combined for kw in strong_kw):
+        return True, []
+    answered = [item for item in [dramatic_question] + must_answer if item and item in combined]
+    return bool(answered), answered
+
+
 def _chapter_file(root, chapter):
     chdir = os.path.join(root, "章节")
     if not os.path.isdir(chdir):
@@ -203,6 +240,48 @@ def analyze(root, start, end):
             "type": "state_ledger_missing",
             "message": "缺少 state_ledger.json；弧段 gate 只能看 state_delta，无法做更完整的跨章状态压力测试。",
         })
+
+    # ── 反向刹车：非终局禁解主线核心冲突 (P2-⑧) ──────────────────────────
+    # 行业最佳实践：AI 倾向于过早"收束"冲突（稳定偏差），必须检测主线戏剧问题
+    # 是否在终局前被意外回答。分辨率阈值：当前进度 < 总章数 80% 且弧段包含
+    # 对核心戏剧问题的"解决"信号 → 阻断。
+    meta = _load_json(os.path.join(root, "_meta.json"), {}) or {}
+    target_chapters = int(meta.get("target_chapters") or 0)
+    if target_chapters > 0:
+        threshold = max(int(target_chapters * 0.8), target_chapters - 3)
+        if end < threshold:
+            contract_path = os.path.join(root, "设定", "读者契约.md")
+            contract_text = _read_text(contract_path) if os.path.exists(contract_path) else ""
+            dramatic_question, must_answer = _extract_core_contract_questions(contract_text)
+
+            # 检测弧段内对核心问题的"过早回答"
+            resolution_kw = ("回答", "最终答案", "真相大白", "谜底揭晓", "终极答案",
+                            "核心问题解决", "主线完结", "最终揭秘", "水落石出", "尘埃落定",
+                            "不复存在", "不再重要", "被颠覆", "失去意义")
+            for rpt in chapter_reports:
+                ch = rpt["chapter"]
+                delta = _load_json(_delta_path(root, ch), {}) or {}
+                progress = _as_list(delta.get("reader_contract_progress"))
+                theme = str(delta.get("theme_alignment") or "")
+                combined = " ".join(progress) + " " + theme
+                if any(kw in combined for kw in resolution_kw):
+                    is_core, answered = _core_resolution_hit(combined, dramatic_question, must_answer)
+                    item = {
+                        "severity": "阻断级" if is_core else "建议级",
+                        "type": "premature_resolution" if is_core else "resolution_signal_needs_review",
+                        "chapter": ch,
+                        "message": (
+                            f"反向刹车：第{ch:02d}章出现收束信号（进度 {end}/{target_chapters}，"
+                            f"{end*100//target_chapters}%）。核心问题：「{dramatic_question or '见读者契约'}」"
+                            + (f"；疑似已回答：{'、'.join(answered)}" if answered else "")
+                            + ("。非终局章节禁止解决主线核心冲突，请推迟到终局。"
+                               if is_core else "。未命中核心问题/终局必须回答项，按局部支线回收候选提醒人审。")
+                        ),
+                    }
+                    if is_core:
+                        blocks.append(item)
+                        break
+                    warnings.append(item)
 
     return {
         "schema_version": 1,

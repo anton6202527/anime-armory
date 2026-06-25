@@ -26,7 +26,7 @@ description: "P0 横切 skill for novel2drama/n2d production metrics, ROI dashbo
 - **投放回收从平台数据或 release 事件来**：dashboard 会自动读取 `生产数据/platform_metrics.csv|jsonl|json` 的 `revenue/distribution_spend/plays` 等字段；也可手动 `record --event release|revenue`。投放数据不再只进 `n2d-feedback`，必须进入 ROI 仪表盘。
 - **默认覆盖同一 gate 结果**：同一集同一 stage 重跑 `dashboard.py gate` 时，默认替换旧 gate 事件，避免 QA 阻断重复累计；要保留历史用 `--append`。
 - **工业级判断看 ROI 趋势**：单集 dashboard 是局部事实；批量后看 `每分钟成本`、`每集耗时`、`一次通过率`、`重抽率`、`投放净回收/生产成本`、`QA阻断Top`，再决定优先优化哪个 stage。
-- **行业基准只作参照线，不作闸门**：`dashboard.md` 的「行业基准对照」段把一次通过率/重抽率/每分钟成本/跨集一致性并排到行业宣传基准（默认读 `references/industry_benchmark.json`，采集 2026-06），给一条「你 X% vs 行业 Y%」的达标/差距参照。**这是只读参照、不参与告警/阻断**（厂商口径不一、会过期）。覆盖：`_设置.md` 写 `基准一次通过率 / 基准重抽率`，或 `生产数据/industry_benchmark.json`；基准本身以一次 `n2d-review` 流程自审复核为准，刷新基准只改 JSON，不改 Python。
+- **行业基准只作参照线，不作闸门**：`dashboard.md` 的「行业基准对照」段把一次通过率/重抽率/每分钟成本/跨集一致性并排到行业宣传基准（默认读 `references/industry_benchmark.json`，采集 2026-06），给一条「你 X% vs 行业 Y%」的达标/差距参照。**这是只读参照、不参与告警/阻断**（厂商口径不一、会过期）。覆盖：`_设置.md` 写 `基准一次通过率 / 基准重抽率`，或 `生产数据/industry_benchmark.json`；基准本身以一次 `n2d-review` 流程自审复核为准，刷新基准只改 JSON，不改 Python。留存基准必须通过 `python3 skills/n2d-dashboard/scripts/validate_benchmark_schema.py`：每条首屏/留存/App D1-D14 信号都要有 `source_ids / definition / checked_at / expires_at / confidence`，否则不能合入。
 - **外部 API 成本只作校准线**：按 2026-06 官方公开资料，Veo 3.1 已按生成秒计价（Lite/Fast/Standard/4K 档位不同），Kling/Runway/Luma 也都以 credits/秒/任务形式收费。dashboard 不硬编码外部价格；每个项目要记录真实 `provider/cost/currency/unit`，再由 `cost_per_finished_min` 和重抽率判断“这条路线是否值得放量”。
 - **工业级门槛不是单项指标**：只有同时满足“成本可控、通过率稳定、QA 阻断可收敛、投放回收能覆盖生产成本、跨集一致性没有持续恶化”，才算该项目进入可放量状态。任一项红灯，先回 router/identity/template/feedback 修产线，不盲目加集数。
 
@@ -108,7 +108,7 @@ python3 skills/n2d-dashboard/scripts/dashboard.py build <作品根> --markdown
 
 ### 3.5 成本预检（开跑前估这集要花多少）
 
-dashboard 默认**事后**记账；`forecast` 用历史 `cost_per_finished_min`（已有 ROI 指标）× 本集 `storyboard.json` 计划时长，给一个**开跑前**的成本预测，并把已有的 `redraw_categories` 滚成「过去钱漏在哪」的 Top 漏点（先治这些最省钱）。可选 `--budget` 判超支 + 还能撑几集：
+dashboard 默认**事后**记账；`forecast` 用历史 `cost_per_finished_min`（已有 ROI 指标）× 本集 `storyboard.json` 计划时长，给一个**开跑前**的成本预测，并把已有的 `redraw_categories` 滚成「过去钱漏在哪」的 Top 漏点（先治这些最省钱）。同时读取 `生产数据/anchor_plan_第N集.json`，把三帧锚帧带来的新增图片数与 split relay 预计新增视频段数并入输出；缺 anchor plan 会明确提示“当前 forecast 只覆盖视频规格，不含 `_mid/_aK` 新增图片或拆段成本”。可选 `--budget` 判超支 + 还能撑几集：
 
 ```bash
 python3 skills/n2d-dashboard/scripts/dashboard.py forecast <作品根> 第2集 --budget 100 --unit CNY
@@ -158,6 +158,8 @@ python3 skills/n2d-dashboard/scripts/dashboard.py record <作品根> \
 ```
 
 也可在 `<作品根>/_设置.md` 写 `- 告警通过率下限: 80%` / `- 告警预算上限: 500` 等（键：`告警预算上限/告警预算预警比例/告警通过率下限/告警重抽率上限/告警QA阻断上限/告警每分钟成本上限/告警回收比下限`）。
+
+> **`budget_cap` 是双闸**：除上面**事后** rebuild 的 `evaluate_alerts` 告警外，同一上限还作**付费前硬挂钩**——`n2d-review` gate 的 `check_budget_cap` 接进 `image_preflight`/`video_preflight`（出图/出视频 runner 花钱前必跑）：累计已花（读 `生产数据/dashboard.json` 的 `totals.cost_totals`）≥ 上限、或「已花 + 本集历史单价×计划时长预测」会冲破上限 → **BLOCK**，接近 `warn_ratio` → WARN。这样不必等花超才在下次 rebuild 发现。未配 `budget_cap` → 不挡（不强加预算）；撞闸的逃生口=调高上限 / 换免费·降档后端 / 拆少本集产出后重跑。
 
 **② 告警送达三层**（后两层可选 opt-in）：
 - **默认**：写 `生产数据/alerts.json` + `alerts.md`（当前状态快照，幂等覆盖非追加）+ stderr 打印；`build --fail-on-critical` 有 critical 时退出码 3，供 batch/cron/CI 停线。

@@ -15,7 +15,7 @@
 - [Q10：反派（柳娘子）怎么避免被画得像主角？](#q10)
 - [Q12：场景图要避免哪些坑？](#q12)
 - [Q16：换 AI 工具（即梦↔可灵↔DALL-E 等）时怎么权衡画风一致性？](#q16)
-- [Q18：图 AI、生视频模型和生视频渠道是什么关系？image prompt 该按谁写？](#q18)
+- [Q18：生图模型/渠道、生视频模型和生视频渠道是什么关系？image prompt 该按谁写？](#q18)
 - [Q19：定妆图能跨集复用吗？目录怎么组织？](#q19)
 - [Q20：下一集出料时怎么自动复用前几集的定妆？SOP 是什么？](#q20)
 - [Q23：用 gemini 出图行不行？为什么免费号和免费 API key 都出不了图？](#q23)
@@ -312,25 +312,26 @@ Step 4 合成（配音 + BGM + 字幕 + 剪辑）
 ### 16.4 备选策略：双工具栈
 
 国风短剧推荐配置：
-- **主**：`生图AI` 所选官方图后端（默认 Codex）+ 通用视频兼容锚定；出视频前由 `n2d-video` router/probe 选择兼容后端
+- **主**：`生图模型 + 生图AI/生图渠道` 所选官方组合（默认 OpenAI GPT Image 系列 via Codex）+ 通用视频兼容锚定；出视频前由 `n2d-video` router/probe 选择兼容后端
 - **备**：视频后端可切可灵 Kling / Veo / Seedance；图片后端也可切官方多参考后端，但必须整集/整项目统一切，不做单镜兜底
 - 切视频后端时只改锚定句和视频 prompt；若图片已按通用兼容锚定生成，`n2d-video` 必须优先选能消化现有首帧的后端。若用户临时固定不兼容后端，先停下确认重出图/重拼锚定或改路由；若切出图后端，先统一设置并重做受影响定妆/分镜，否则一致性税最大
 
-禁止用第三方逆向即梦/Dreamina 或 web 自动化当图片后端；Dreamina/即梦官方 CLI 只能作为 `生图AI` 显式选项并整集统一。默认一致性吃紧时优先补定妆参考、角色 ID 资料或 LoRA，不做单镜兜底换图后端。
+禁止用第三方逆向即梦/Dreamina 或 web 自动化当图片后端；Dreamina/即梦官方 CLI 只能作为 `生图AI/生图渠道` 显式选项并整集统一。默认一致性吃紧时优先补定妆参考、角色 ID 资料或 LoRA，不做单镜兜底换生图模型/渠道。
 
 ---
 
-## Q18：图 AI、生视频模型和生视频渠道是什么关系？image prompt 该按谁写？<a id="q18"></a>
+## Q18：生图模型/渠道、生视频模型和生视频渠道是什么关系？image prompt 该按谁写？<a id="q18"></a>
 
 ### 18.1 三项架构
 
 ```
-图 AI（出图工具）→ 图片 → 生视频模型（运动估计/风格基线） → 生视频渠道（调用入口）
-       ↑                          ↑                         ↑
-   决定 prompt 写法        决定图片要能被谁消化        决定 CLI/API/网页
+生图模型（生成者）+ 生图渠道（调用入口）→ 图片 → 生视频模型（运动估计/风格基线） → 生视频渠道（调用入口）
+        ↑                    ↑                    ↑                         ↑
+   决定图片能力/一致性     决定 CLI/API/网页     决定图片要能被谁消化        决定 CLI/API/网页
 ```
 
-- **图 AI** = 出图工具选择；当前正式产线默认 Codex，可选 Dreamina/即梦官方 CLI 和官方多参考后端；禁止第三方逆向、`同视频AI` / `同视频模型` 含糊口径和 web 自动化
+- **生图模型** = 真正生成图片的模型（默认 OpenAI GPT Image/GPT Image 2 归一名；执行前以官方 model id 证据为准）
+- **生图渠道/生图AI** = 访问入口；当前正式产线默认 Codex，可选 OpenAI Images API、Dreamina/即梦官方 CLI 和官方多参考后端；禁止第三方逆向、`同视频AI` / `同视频模型` 含糊口径和 web 自动化
 - **生视频模型** = 风格基线与运动估计分布（决定图片必须长成什么样子，因为它的 image2video 只熟悉自家训练分布）
 - **生视频渠道** = 调用入口（例如即梦/Dreamina、豆包、海螺AI、可灵/Kling、Google Gemini API、Runway API）
 
@@ -342,16 +343,16 @@ Step 4 合成（配音 + BGM + 字幕 + 剪辑）
 
 如果首帧不在生视频模型训练分布里（比如 Seedance/Kling/Veo 拿到完全不匹配的图像风格），运动推断会崩——人脸抖、转场怪、丝绸飘动不自然。
 
-所以 image prompt 的画风层必须让首帧**能被最终视频后端消化**，而不是完全放任图 AI 自己的默认审美。已固定生视频模型时拼该模型锚定句；未固定时先用通用视频兼容锚定，并把具体后端选择后移到 `n2d-video`。
+所以 image prompt 的画风层必须让首帧**能被最终视频后端消化**，而不是完全放任生图模型自己的默认审美。已固定生视频模型时拼该模型锚定句；未固定时先用通用视频兼容锚定，并把具体后端选择后移到 `n2d-video`。
 
-### 18.3 同 AI vs 跨 AI 决策表
+### 18.3 同分布 vs 跨模型决策表
 
 | 组合 | 锚定句 | 备注 |
 |---|---|---|
-| 所选官方图后端 + 未固定视频后端 | ✅ 使用通用视频兼容锚定 | 默认正式链路；`n2d-video` 出视频前按 router/probe 选择兼容后端 |
-| 所选官方图后端 + Seedance 2.0 via 即梦/Dreamina | ✅ **必须拼** Seedance/即梦分布的图像风格锚定句 | 默认正式链路 |
-| 所选官方图后端 + Veo 3.1 via Gemini API | ✅ 必须拼 Veo 的英文锚定句 | 海外短剧 |
-| Dreamina/即梦官方 CLI + Seedance 2.0 via 即梦/Dreamina | ✅ 可用 | 需显式 `生图AI: Dreamina/即梦`，同集不混后端 |
+| 所选官方生图模型/渠道 + 未固定视频后端 | ✅ 使用通用视频兼容锚定 | 默认正式链路；`n2d-video` 出视频前按 router/probe 选择兼容后端 |
+| 所选官方生图模型/渠道 + Seedance 2.0 via 即梦/Dreamina | ✅ **必须拼** Seedance/即梦分布的图像风格锚定句 | 默认正式链路 |
+| 所选官方生图模型/渠道 + Veo 3.1 via Gemini API | ✅ 必须拼 Veo 的英文锚定句 | 海外短剧 |
+| Dreamina/即梦官方 CLI + Seedance 2.0 via 即梦/Dreamina | ✅ 可用 | 需显式 `生图AI/生图渠道: Dreamina/即梦`，同集不混后端 |
 
 ### 18.4 锚定句拼接位置
 
@@ -371,7 +372,7 @@ image prompt = 主体 + 外貌锚定 + 动作 + 环境 + 景别 + 画风词 + [�
 
 ### 18.6 在 skill 里怎么落地？
 
-- `global_style.md` 顶部记三项（"视频模型路由" + "生视频后端决策" + "目标图AI"）
+- `global_style.md` 顶部记三项（"视频模型路由" + "生视频后端决策" + "目标生图模型/渠道"）
 - 角色卡的 ① 定妆照 prompt 默认按 `基础视觉风格` + 通用视频兼容锚定写；只有用户已固定生视频模型时才按该模型风格锚定
 - 已固定生视频模型时，所有 image prompt 末尾追加该模型锚定句；未固定时追加通用视频兼容锚定并记录 `video_backend_decision=deferred`（见 `references/platforms.md`）
 - 已建好的角色卡末尾要有"视频兼容锚定用法"区块（含固定模型中英双版锚定句和通用兼容锚定句），方便手动拼接
@@ -449,7 +450,7 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 1. 第N集 出料发现新角色/场景/道具
 2. 出图/共享/prompt/00_索引.md 追加 ⬜ 行
 3. 出图/共享/prompt/角色|场景|道具定妆.md 追加完整 prompt 块
-4. 跑 `生图AI` 所选官方/已登录后端生图 → 挑图 → PNG 落 出图/共享/图片/；Dreamina/即梦官方 CLI 可用，第三方逆向/web 自动化禁用
+4. 跑 `生图模型 + 生图AI/生图渠道` 所选官方/已登录入口生图 → 挑图 → PNG 落 出图/共享/图片/；Dreamina/即梦官方 CLI 可用，第三方逆向/web 自动化禁用
 5. 索引状态改 ✅
 6. 出图/第N集/prompt/00_总览.md 引用共享层
 7. 后续集自动复用，不再重做
@@ -558,7 +559,7 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 ## Q23：用 gemini 出图行不行？为什么免费号和免费 API key 都出不了图？<a id="q23"></a>
 
 ### 23.1 一句话结论
-**图像生成是付费能力**——无论 gemini CLI 免费个人号、还是免费档 API key，都给不了图。判断任何"图 AI 能不能用"，先验**权限 + 配额**，别只看模型"可见"。
+**图像生成是付费能力**——无论 gemini CLI 免费个人号、还是免费档 API key，都给不了图。判断任何"生图模型/渠道能不能用"，先验**权限 + 配额**，别只看模型"可见"。
 
 ### 23.2 gemini CLI（免费 oauth-personal 个人号）
 - headless 本身通（`-p` 非交互 + `-y` YOLO 自动批准工具，连得上 API，鉴权走文件 `~/.gemini/oauth_creds.json` 无钥匙串问题）。
@@ -570,7 +571,7 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 
 ### 23.4 解法
 - **① 给 key 开 billing**（ai.dev/projects 升付费）后，REST 直调最稳：`POST .../models/gemini-2.5-flash-image:generateContent`，body `generationConfig.responseModalities=["IMAGE"]`（+可选 `imageConfig.aspectRatio`），从 `candidates[].content.parts[].inlineData.data` 取 base64 存 PNG。脚本见 `出图/_gen_gemini.py`（支持参考图走 inlineData、aspectRatio 回退、~$0.039/张 nano banana）。key 存 `~/.gemini/.apikey`、用 `$(cat …)` 读、**不进对话/不打印**。
-- **② 图片阶段不再用即梦额度兜底**：即梦 dreamina 额度仅保留给视频阶段；正式出图按 `生图AI` 选择的官方后端执行，项目内统一。
+- **② 图片阶段不再用即梦额度兜底**：即梦 dreamina 额度仅保留给视频阶段；正式出图按 `生图模型 + 生图AI/生图渠道` 选择的官方组合执行，项目内统一。
 - nano banana 默认偏西方脸 → image prompt 末尾拼"中国古代东方面孔"等锚定句（见 Q18 + 共享 `00_索引.md`）。
 
 ---
@@ -581,7 +582,7 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 **即梦 / 可灵 / Gemini 都是闭源，不接受你自训的 LoRA**；自训模型只能在**开源生态（SD / Flux / ComfyUI）**出图。所以这是个绑定平台的决策。
 
 ### 24.2 三档一致性方法（由轻到重）
-1. **无训练 · 参考图法**（主流，你现在的路线）：定妆照 → 在 `生图AI` 所选官方后端中作为多图参考反复复用（正面主参考 + 侧面 + 背面 + 半身/全身服装参考 + 场景参考）。零训练、最少迁移成本；一致性"够用但非完美"，复杂角度/光照偶漂。
+1. **无训练 · 参考图法**（主流，你现在的路线）：定妆照 → 在 `生图模型 + 生图AI/生图渠道` 所选官方组合中作为多图参考反复复用（正面主参考 + 侧面 + 背面 + 半身/全身服装参考 + 场景参考）。零训练、最少迁移成本；一致性"够用但非完美"，复杂角度/光照偶漂。
 2. **平台内置"建角色/形象"**：上传 N 张图建一个可复用角色 ID，平台内、无需 GPU，比纯参考图稳。**强烈建议用上**。
 3. **真 LoRA / DreamBooth**（仅开源生态）：开源底模 + 该角色 15–30 张多角度图训一个 LoRA，云/本地训练，ComfyUI + LoRA + ControlNet/IPAdapter 出图。一致性最强、可控性最高；代价是离开即梦/可灵、要 GPU/云训练。
 
@@ -802,7 +803,7 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 
 ## Q46：一个 Clip 生视频到底锚定几帧？跟 Q42/Q43 声明的 3 帧是一回事吗？<a id="q46"></a>
 
-**结论**：**「几帧」由两层决定，Q42/Q43 只是第一层（声明侧），实际锚几帧还看第二层（后端执行侧），可能降级。**
+**结论**：**「几帧」由两层决定，Q42/Q43 只是第一层（声明侧），实际锚几帧还看第二层（后端执行侧），可能回退。**
 
 1. **声明侧（storyboard 帧契约）**：每个 Clip 在 `storyboard.json.continuity` 里声明要几帧——`midframe`/`anchors` 给中锚、`need_endframe` 给尾帧。默认三帧契约 = 首+中锚×1+尾（豁免见 Q42，多中锚见 Q43）。
 2. **执行侧（后端/渠道能力，真正决定能锚几帧）**：能不能把声明的帧原生吃下，看的是**生视频渠道**而非模型名。判定走 `n2d_platform_profiles.frame_control` + 路由产物的 `anchor_consumption`，**别按模型名猜**：

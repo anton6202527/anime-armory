@@ -694,7 +694,7 @@ def build_triage_tasks(unmapped: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
 
 def build_consistency_kpi(consistency: Optional[Dict[str, Any]],
                           identity: Optional[Dict[str, Any]]) -> Dict[str, Any]:
-    """角色一致性 **报告型 KPI**（对标 EntityBench/MSVBench 2026·与人判 Spearman 94.4%）——
+    """角色一致性 **报告型 KPI**（参考 EntityBench/MSVBench 风格的主体一致性评测轴）——
     纯函数·可测。与 severity_counts_to_score 的"扣分式"正交：扣分回答"扣几分"，KPI 回答
     "本集一致性 0.82、跨集 0.79、离可投放线 0.85 差多少"，供 n2d-review 模式② 横向对标。
 
@@ -730,20 +730,32 @@ def build_consistency_kpi(consistency: Optional[Dict[str, Any]],
         line = float(os.environ.get("N2D_CONSISTENCY_RELEASE_LINE", "0.85"))
     except ValueError:
         line = 0.85
-    verdict = None if intra is None else ("above" if intra >= line else "below")
-    return {
+    fidelity_status = face.get("fidelity_gate")
+    if fidelity_status is None or fidelity_status == "absent":
+        # fidelity-gate 未激活 → intra scores may be inflated by stable-but-wrong renders;
+        # refuse to give a misleading above/below verdict.
+        verdict = "insufficient_data" if intra is not None else None
+    else:
+        verdict = None if intra is None else ("above" if intra >= line else "below")
+    result = {
         "intra_episode": intra,
         "cross_episode": cross,
         "encoder": face.get("encoder"),
-        "fidelity_gate": face.get("fidelity_gate"),
+        "fidelity_gate": fidelity_status,
         "release_line": line,
         "verdict": verdict,
         "characters_counted": len(intra_vals),
-        "benchmark_ref": ("EntityBench/MSVBench 2026（与人判 Spearman 94.4%）；风格化脸另参 Face Consistency "
-                          "Benchmark for GenAI Video（arXiv 2505.11425）；叙事级长视频参 NarrLV/DirectorBench；"
-                          "可投放线须随 encoder 重标定"),
+        "benchmark_ref": ("EntityBench/MSVBench 风格的主体/实体一致性评测轴；风格化脸另参 Face Consistency "
+                          "Benchmark for GenAI Video；叙事级长视频参 NarrLV/DirectorBench；"
+                          "具体 release line 必须用本项目 encoder 与人审校准集重标定"),
         "note": "报告型 KPI·不参与扣分；与 severity 扣分维度正交",
     }
+    if fidelity_status is None or fidelity_status == "absent":
+        result["warnings"] = [
+            "⚠️ fidelity-gate 未激活（vlm_verify --write 未跑），脸一致分数未经 VLM canonical 验证，"
+            "above/below 判定不可靠（已标为 insufficient_data）。请跑 vlm_verify --write 落 canonical 通过表后重算。"
+        ]
+    return result
 
 
 def score_episode(

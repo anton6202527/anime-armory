@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import importlib.util
 import json
 import os
 from collections import defaultdict
@@ -217,11 +218,24 @@ def write_recommendations(root: str) -> str:
     return path
 
 
+def write_registry_if_available(root: str) -> Optional[str]:
+    path = os.path.join(os.path.dirname(__file__), "consistency_threshold_registry.py")
+    if not os.path.isfile(path):
+        return None
+    spec = importlib.util.spec_from_file_location("consistency_threshold_registry", path)
+    if spec is None or spec.loader is None:
+        return None
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod.write_registry(root)
+
+
 def main(argv: List[str]) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("root")
     ap.add_argument("--write", action="store_true")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--registry", action="store_true", help="写 calibration/recommendations 后同步刷新 threshold registry")
     ap.add_argument("--calibrate", action="store_true",
                     help="从金标集反推 per-(维度,后端,风格) floor（FCB 多识别器投票），而非人审方向建议")
     ns = ap.parse_args(argv)
@@ -229,8 +243,11 @@ def main(argv: List[str]) -> int:
     if ns.calibrate:
         if ns.write:
             path = write_calibration(root)
+            registry = write_registry_if_available(root) if ns.registry else None
             if not ns.json:
                 print(path)
+                if registry:
+                    print(registry)
                 return 0
         payload = build_calibration(root)
         if ns.json:
@@ -244,8 +261,11 @@ def main(argv: List[str]) -> int:
         return 0
     if ns.write:
         path = write_recommendations(root)
+        registry = write_registry_if_available(root) if ns.registry else None
         if not ns.json:
             print(path)
+            if registry:
+                print(registry)
             return 0
     payload = build_recommendations(root)
     if ns.json:

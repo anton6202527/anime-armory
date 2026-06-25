@@ -109,6 +109,45 @@ def target_deviation_warn(shots_total, target_seconds, tol=TARGET_DEVIATION_TOL)
                 f"（>{tol*100:.0f}% 容忍·偏{sign}）→ 仅作节奏 WARN；优先复核冲突→爽点→钩子闭环，必要时调台词篇幅或节奏目标")
     return None
 
+def _fit_max_stretch():
+    """逐镜头真音超槽容忍倍数：与 n2d-compose fit_voice_to_clips 共用同一环境变量/默认值
+    （FIT_MAX_STRETCH，默认 1.25），保证「分镜阶段预检」与「合成阶段拟合」判定口径一致。"""
+    try:
+        return float(os.environ.get("FIT_MAX_STRETCH", "1.25"))
+    except ValueError:
+        return 1.25
+
+
+def per_shot_overflow(man, shots, max_stretch=1.25):
+    """逐镜头真音 vs 锁定槽位×max_stretch 预检（复刻 n2d-compose fit_voice_to_clips.plan 的 overflow 判定）。
+
+    man:   时长清单.json 列表（逐句 dict，含 镜头/时长/gap_after）。
+    shots: 镜头时长.json {镜头键: 锁定槽位秒}。
+    返回 [(镜头, 真音秒, 槽位秒), ...]：真音(按镜头聚合 ∑(时长+gap)) > 槽位×max_stretch 的镜头。
+    合计校验(∑clip≈∑镜头)会让单镜 +Δ 与另一镜 -Δ 相互抵消而漏过，这里逐镜兜住。纯函数·可测。"""
+    real = {}
+    for r in man:
+        if not isinstance(r, dict):
+            continue
+        sh = r.get('镜头')
+        if not sh:
+            continue
+        real[sh] = real.get(sh, 0.0) + float(r.get('时长', 0) or 0) + float(r.get('gap_after', 0) or 0)
+    out = []
+    for sh, slot in shots.items():
+        try:
+            slot = float(slot)
+        except (TypeError, ValueError):
+            continue
+        r = real.get(sh)
+        if r is None or slot <= 0:
+            continue
+        if r > slot * max_stretch:
+            out.append((sh, round(r, 3), round(slot, 3)))
+    out.sort(key=lambda x: str(x[0]))
+    return out
+
+
 def _validate_native_av(root, ep, shots_p, tol, target=None):
     """原生音画对账：无配音清单，改核 storyboard ∑clip.duration ≈ ∑镜头时长（finalize 从脚本推的）。
     返回退出码（0=过 / 1=硬不一致或缺件）。字幕走成片后 whisperx 词级对齐，本步不校验。"""
@@ -259,6 +298,21 @@ def main():
                 fails.append(f"storyboard.json ∑clip.duration {cd:.2f}s ≠ 镜头时长累计 {st:.2f}s → Clip 时长手填臆造/未随配音更新，按 ∑所含镜头时长 回填 duration")
             else:
                 oks.append(f"∑clip.duration {cd:.2f}s ≈ 镜头时长累计 {st:.2f}s")
+
+    # 3.6) 逐镜头真音超槽（与 n2d-compose fit_voice_to_clips 同 max_stretch 口径）——治"总长对得上但单镜溢出"：
+    #      3)/3.5) 仅核 ∑，A 镜 +Δ 与 B 镜 -Δ 能相互抵消而通过，却会在 compose 拟合阶段 A 镜判 overflow(exit 2)返工。
+    #      在分镜阶段就逐镜预检，超限即 FAIL（与 compose 同等拦截力度），让用户在出图/出视频前调台词或镜头时长。
+    #      占位轨不预检：compose 拟合也只对真音；占位下槽位由占位时长推出，不会真溢出（避免对占位噪报）。
+    if not ph and st is not None and os.path.exists(shots_p):
+        ms = _fit_max_stretch()
+        ov = per_shot_overflow(man, shots, ms)
+        if ov:
+            head = "；".join(f"{sh} 真音{real:.2f}s>槽位{slot:.2f}s×{ms:g}" for sh, real, slot in ov[:5])
+            more = f"（共 {len(ov)} 镜，余略）" if len(ov) > 5 else ""
+            fails.append(f"逐镜头真音超槽 {len(ov)} 处：{head}{more} → compose 拟合会判 overflow(exit 2)返工；"
+                         f"分镜阶段先调这些镜台词篇幅或 镜头时长.json 槽位（与 compose 同 max_stretch={ms:g} 口径）")
+        else:
+            oks.append(f"逐镜头真音均未超槽位×{ms:g}（与 compose 拟合同口径）")
 
     # 4) manifest 句数 == 英文字幕块数（delete_shot 未同步删 EN 会错位）
     enb = srt_blocks(en_srt)

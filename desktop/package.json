@@ -1,7 +1,7 @@
 {
   "name": "anime-arsenal-desktop",
   "private": true,
-  "version": "0.1.16",
+  "version": "0.1.18",
   "type": "module",
   "description": "Tauri + React desktop shell for the anime-arsenal creation factory (left infinite canvas / right native terminal).",
   "scripts": {

@@ -10,7 +10,7 @@
 
 仓库的核心不是单个脚本，而是根目录 `skills/` 下的一组可复用 workflow skill。它们构成五条彼此独立、可单独分发的生产线：
 
-- **小说（novel）**：立项 -> 章纲 -> 写作 -> 审稿 / 评分 -> 导出
+- **小说（novel）**：立项 / 观察素材 / 审美样本 -> 章纲 -> 写作 -> 审稿 / 评分 / 专业编辑 -> 导出
 - **小说文本 -> AI 漫剧 / 短剧（n2d）**：拆集 -> 配音 -> 分镜 -> 出图 -> 出视频 -> 合成
 - **歌曲（song）**：作词 -> 作曲 / 多版挑版 -> 翻唱 / 换声 -> 审歌
 - **音乐 MV（mv）**：歌曲入库 -> beatgrid -> 视觉蓝图 -> clip 规划 -> 出图 / 出视频 -> 卡拉 OK 字幕 -> 合成
@@ -66,6 +66,7 @@ skill 名称按跨工具兼容写法展示：直接写 `n2d-image`、`n2d-progre
 
 | 你想做什么 | 入口 |
 |---|---|
+| 写小说 / 导入源书 / 观察素材 / 审美样本 / 审稿评分 | `novel <想法、源书或 创作区/写小说/项目>` |
 | 把小说做成 AI 漫剧 | `n2d <小说路径或 创作区/制漫剧/项目>` |
 | 写歌 / 改词 / 作曲 / 多版挑版 / 审歌 | `song <想法、歌词或 创作区/写歌/项目>` |
 | 给歌曲做 MV / 卡点 / 出 MV 成片 | `mv <歌曲或 创作区/制MV/项目>` |
@@ -95,7 +96,7 @@ Windows 安装包**无法在 macOS 上交叉编译**，必须在 Windows 上构�
 
 ```bash
 # 推一个 desktop-v* tag 即触发云端构建 + 发布（mac .dmg / win .exe[NSIS] / .vsix）
-git tag desktop-v0.1.17 && git push origin desktop-v0.1.17
+git tag desktop-v0.1.18 && git push origin desktop-v0.1.18
 # 或在 Actions 页手动 workflow_dispatch（只产出 build artifact，不发 Release）
 ```
 
@@ -237,7 +238,7 @@ anime-armory/
 
 The core of this repository is not a single script. It is a set of reusable workflow skills under `skills/`, organized into five independent production lines:
 
-- **Novel (`novel`)**: project setup -> chapter outline -> drafting -> review / scoring -> export
+- **Novel (`novel`)**: project setup / observation notes / aesthetic samples -> chapter outline -> drafting -> review / scoring / professional editing -> export
 - **Novel text -> AI comic-drama / short drama (`n2d`)**: episode splitting -> voice -> storyboard -> images -> videos -> final composition
 - **Song (`song`)**: lyrics -> composition / version selection -> cover / voice conversion -> song review
 - **Music video (`mv`)**: song ingest -> beatgrid -> visual blueprint -> clip plan -> images / videos -> karaoke subtitles -> composition
@@ -292,6 +293,7 @@ Skill names are shown in cross-tool compatible form: use bare names like `n2d-im
 
 | Goal | Entry |
 |---|---|
+| Write a novel, import a source book, build observation notes or aesthetic samples, review/score | `novel <idea, source book, or 创作区/写小说/project>` |
 | Turn a novel into an AI comic-drama | `n2d <novel path or 创作区/制漫剧/project>` |
 | Write lyrics, compose, select versions, or review songs | `song <idea, lyrics, or 创作区/写歌/project>` |
 | Make an MV for a song | `mv <song or 创作区/制MV/project>` |
@@ -320,7 +322,7 @@ The packages listed above are built and uploaded to the `anime-armory` GitHub Re
 Windows installers cannot be cross-compiled from macOS. The repo includes [`.github/workflows/desktop-release.yml`](.github/workflows/desktop-release.yml), which builds on macOS and Windows via GitHub Actions and publishes stable filenames:
 
 ```bash
-git tag desktop-v0.1.17 && git push origin desktop-v0.1.17
+git tag desktop-v0.1.18 && git push origin desktop-v0.1.18
 ```
 
 Prerequisite: configure the `ARMORY_RELEASE_TOKEN` secret in the `anime-arsenal` repo. It must be a PAT with `contents: write` permission for `anime-armory`. The workflow publishes:

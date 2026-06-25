@@ -32,6 +32,18 @@ python3 skills/novel-promote/scripts/promo_gen.py "<作品根>" --chapter <章�
 ### 2. 生成短视频 brief
 - 同步产出 `导出/宣发/第NN章_video_brief.md`：把高光片段整理成短视频预告骨架（场景/角色/动作/字幕/时长建议）。
 
+### 3. 投放战绩回灌（闭环写端）
+作品发布、拿到真实投放数据后，把它回灌进仓库级「自有题材战绩库」，供 **novel-score** 下次评同题材作品时作第一方题材热度先验（权重高于公榜）：
+
+```bash
+python3 skills/novel-promote/scripts/record_performance.py "<作品根>" \
+    --plays 120000 --roi 1.8 --retention-3s 0.62 --retention-15s 0.41 \
+    --completion-rate 0.33 --follow-next-rate 0.28 [--subgenres 战神,赘婿] [--release-id 2026Q2-douyin]
+```
+- 题材/书名缺省读 `_meta.json`，可 `--genre`/`--title` 覆盖；百分比按 0–1 小数填。
+- 追加写 `生产战绩/genre_ledger.jsonl`（仓库根；或环境变量 `NOVEL_GENRE_LEDGER`），`kind=genre_performance_record`，与 `novel-score` 的 `load_genre_ledger` 读端逐字对齐。
+- **这是"选题→投放→反哺选题"闭环此前缺失的生产者**：在此之前 score 有消费者、无生产者，第一方战绩永远读空。回灌后 score 的"第一方实测权重高于公榜"才真正生效。
+
 ## 脚本示例
 > **【抖音高燃向】**
 > - **00:00-00:03**：[视觉] 暗金色的液体顺着沈念指缝滴落，地面冒烟腐蚀。[字幕] “这皇宫，本宫说了算。”

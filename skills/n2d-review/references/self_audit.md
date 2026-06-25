@@ -5,7 +5,7 @@
 ## 何时跑
 - 用户主动要（"n2d 还能优化啥""过一遍流程"）。
 - 每产出一批集后的阶段复盘。
-- **接了新模型/能力时**（新生视频模型/渠道、新图 AI、新配音后端、平台出了新一致性/口型/音画特性）——这是最高价值触发点。
+- **接了新模型/能力时**（新生图模型/渠道、新生视频模型/渠道、新配音后端、平台出了新一致性/口型/音画特性）——这是最高价值触发点。
 
 ## 本地静态自审（先跑）
 联网前先确认产线自身没有明显治理漂移：
@@ -21,7 +21,7 @@ python3 skills/n2d-review/scripts/self_audit.py --json
 
 | 轴 | 搜什么 | 映射到 n2d 的 |
 |---|---|---|
-| **一致性** | 定妆/参考/相似度 KPI、多视图、IP-Adapter/LoRA、多镜故事板、self-storyboard、同一生图后端贯穿 | n2d-image / n2d-script 角色场景卡 / n2d-review gate |
+| **一致性** | 定妆/参考/相似度 KPI、多视图、IP-Adapter/LoRA、多镜故事板、self-storyboard、同一生图模型/渠道贯穿 | n2d-image / n2d-script 角色场景卡 / n2d-review gate |
 | **效率** | 单分钟成本、周期、批量自动化、CLI 直调 | 全线（重抽预算/voice-first/批量并发任务） |
 | **可控性** | 口型 lip-sync、原生音频、音画同步、运镜控制、节奏工具 | n2d-video / n2d-voice / n2d-compose |
 | **模型演进**（横切） | 各 stage 当前最强模型（图/视频/配音）及其新语法 | 各 stage 的 platforms.md / backends.md |

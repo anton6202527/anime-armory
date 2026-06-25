@@ -173,3 +173,40 @@ def test_qc_override_payload_marks_false_positive_sample():
     assert p["qa"]["seam_blocks"] == 1 and p["qa"]["seam_warns"] == 2
     assert p["meta"]["clip"] == "Clip_02"
     assert video_runner.qc_override_payload("x", {})["qa"]["seam_blocks"] == 0
+
+
+def test_accept_clip_updates_native_av_sidecar(monkeypatch, tmp_path: Path) -> None:
+    video = tmp_path / "出视频" / "第1集" / "视频" / "Clip_01.mp4"
+    video.parent.mkdir(parents=True)
+    video.write_bytes(b"mp4")
+    manifest_file = tmp_path / "manifest.json"
+    video_runner.atomic_write_json(
+        manifest_file,
+        {
+            "episode": "第1集",
+            "items": [{"clip": "Clip_01", "target": "Clip_01.mp4", "status": "downloaded"}],
+        },
+    )
+    calls = []
+
+    def fake_run_qc(root, episode, clips, qc_range):
+        return {
+            "clips": [{"has_audio": True}],
+            "machine_summary": {"seam_blocks": 0, "intra_blocks": 0, "anchor_blocks": 0},
+            "json_path": "qc.json",
+            "markdown_path": "qc.md",
+        }
+
+    def fake_sidecar(root, episode, item, target, qc_clip):
+        calls.append((root, episode, item["clip"], target, qc_clip))
+        return {"status": "updated", "physics_path": "生产数据/native_av_physics_第1集.json"}
+
+    monkeypatch.setattr(video_runner.video_qc, "run_qc", fake_run_qc)
+    monkeypatch.setattr(video_runner.native_av_sidecar, "update_sidecars", fake_sidecar)
+
+    item = video_runner.accept_clip(tmp_path, manifest_file, "Clip_01", no_record=True, no_progress=True)
+
+    assert calls and calls[0][1:4] == ("第1集", "Clip_01", video)
+    assert item["native_av_sidecar"]["status"] == "updated"
+    saved = video_runner.load_json(manifest_file)
+    assert saved["items"][0]["native_av_sidecar"]["physics_path"].endswith("native_av_physics_第1集.json")

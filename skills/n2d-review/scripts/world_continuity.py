@@ -45,6 +45,7 @@ from typing import Dict, List, Mapping, Optional, Sequence
 DEFAULT_NIGHT_LUMA = 70.0    # 平均明度 < 此 → 倾向「夜」
 DEFAULT_DAY_LUMA = 140.0     # 平均明度 ≥ 此 → 倾向「白天」
 DEFAULT_DUSK_WARMTH = 0.06   # 介于夜/白天之间且 暖度 ≥ 此 → 「黄昏」（暖色压顶），否则归白天
+SCENE_WORLD_LEDGER_KIND = "n2d_scene_world_ledger"
 
 
 # ---------- 纯数学（无依赖 · pytest 覆盖） ----------
@@ -346,7 +347,7 @@ def _locked_dayparts(root: str, ep: str) -> Dict[str, str]:
 
 def analyze(root: str, ep: str, night_luma: float = DEFAULT_NIGHT_LUMA,
             day_luma: float = DEFAULT_DAY_LUMA, dusk_warmth: float = DEFAULT_DUSK_WARMTH) -> dict:
-    res: dict = {"available": _probe_pillow(), "shots": [], "notes": []}
+    res: dict = {"available": _probe_pillow(), "shots": [], "notes": [], "timeline": []}
     if not res["available"]:
         res["notes"].append("天气/时辰连续性机检已跳过（未装 Pillow）——时辰/天气硬跳暂由人比对相邻镜。")
         return res
@@ -384,6 +385,7 @@ def analyze(root: str, ep: str, night_luma: float = DEFAULT_NIGHT_LUMA,
     if not timeline:
         res["notes"].append("无法读图估时辰。")
         return res
+    res["timeline"] = timeline
 
     # 按场景分组（场景标签相同视作同一时间线），组内按文件顺序走相邻连续性。
     from collections import defaultdict, OrderedDict
@@ -455,6 +457,65 @@ def analyze(root: str, ep: str, night_luma: float = DEFAULT_NIGHT_LUMA,
     return res
 
 
+def build_scene_world_ledger(root: str, ep: str, report: Mapping[str, object]) -> dict:
+    """Build a persistent scene/world ledger from world_continuity output.
+
+    The ledger is intentionally evidence-oriented: it records the per-shot light/daypart
+    observations and groups continuity findings by scene, so later episodes can compare
+    against a stable world-state surface instead of re-parsing one-off audit output.
+    """
+    timeline = [row for row in report.get("timeline", []) if isinstance(row, Mapping)] if isinstance(report, Mapping) else []
+    shots = [row for row in report.get("shots", []) if isinstance(row, Mapping)] if isinstance(report, Mapping) else []
+    scenes: Dict[str, Dict[str, object]] = {}
+    for row in timeline:
+        scene = str(row.get("scene") or "(全集)")
+        entry = scenes.setdefault(scene, {"shots": [], "dayparts": {}, "light_azimuths": {}, "light_elevations": {}, "findings": []})
+        entry["shots"].append(str(row.get("png") or ""))
+        for field, bucket in (("daypart", "dayparts"), ("light_az", "light_azimuths"), ("light_elev", "light_elevations")):
+            value = str(row.get(field) or "")
+            if value:
+                counts = entry[bucket]
+                counts[value] = counts.get(value, 0) + 1
+    for item in shots:
+        scene = str(item.get("scene") or "(全集)")
+        scenes.setdefault(scene, {"shots": [], "dayparts": {}, "light_azimuths": {}, "light_elevations": {}, "findings": []})
+        scenes[scene]["findings"].append({
+            "metric": item.get("metric"),
+            "png": item.get("png"),
+            "verdict": item.get("verdict"),
+            "message": item.get("message", ""),
+        })
+    return {
+        "kind": SCENE_WORLD_LEDGER_KIND,
+        "episode": ep,
+        "available": bool(report.get("available")) if isinstance(report, Mapping) else False,
+        "timeline": timeline,
+        "scenes": scenes,
+        "summary": {
+            "scene_count": len(scenes),
+            "finding_count": len(shots),
+            "block_count": sum(1 for item in shots if item.get("verdict") == "block"),
+            "warn_count": sum(1 for item in shots if item.get("verdict") == "warn"),
+        },
+        "source": "n2d-review/world_continuity",
+    }
+
+
+def scene_world_ledger_path(root: str, ep: str) -> str:
+    return os.path.join(root, "生产数据", f"scene_world_ledger_{ep}.json")
+
+
+def write_scene_world_ledger(root: str, ep: str, report: Optional[Mapping[str, object]] = None) -> str:
+    report = report or analyze(root, ep)
+    payload = build_scene_world_ledger(root, ep, report)
+    path = scene_world_ledger_path(root, ep)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(payload, fh, ensure_ascii=False, indent=2)
+        fh.write("\n")
+    return path
+
+
 def main(argv: List[str]) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("root")
@@ -463,8 +524,12 @@ def main(argv: List[str]) -> int:
     ap.add_argument("--day-luma", type=float, default=DEFAULT_DAY_LUMA)
     ap.add_argument("--dusk-warmth", type=float, default=DEFAULT_DUSK_WARMTH)
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--write", action="store_true", help="write 生产数据/scene_world_ledger_第N集.json")
     ns = ap.parse_args(argv)
     res = analyze(ns.root.rstrip("/"), ns.episode, ns.night_luma, ns.day_luma, ns.dusk_warmth)
+    if ns.write:
+        path = write_scene_world_ledger(ns.root.rstrip("/"), ns.episode, res)
+        res["ledger_path"] = path
     if ns.json:
         print(json.dumps(res, ensure_ascii=False, indent=2)); return 0
     print(f"=== 天气/时辰推进连续性机检（W1·同场景相邻镜时辰硬跳）：{ns.root} {ns.episode} ===")

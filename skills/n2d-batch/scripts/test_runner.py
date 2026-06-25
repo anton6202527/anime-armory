@@ -58,7 +58,7 @@ def write_image_queue(root: Path, *, max_retries: int = 1) -> None:
 def write_config(root: Path, command: str) -> Path:
     path = root / "生产数据" / "batch_runner.json"
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps({"commands": {"image": command}}, ensure_ascii=False), encoding="utf-8")
+    path.write_text(json.dumps({"commands": {"image": command}, "next_preflight": False}, ensure_ascii=False), encoding="utf-8")
     return path
 
 
@@ -142,6 +142,31 @@ def test_runner_next_preflight_blocks_before_command(tmp_path: Path, monkeypatch
     assert result["results"][0]["runner_status"] == "fail"
     assert "next_preflight blocked" in result["results"][0]["note"]
     assert loaded["tasks"][0]["status"] == "retry_queued"
+    assert not out_file.exists()
+
+
+def test_runner_defaults_next_preflight_on_when_config_omits_setting(tmp_path: Path, monkeypatch) -> None:
+    write_image_queue(tmp_path, max_retries=1)
+    out_file = tmp_path / "should_not_exist.txt"
+    config = tmp_path / "生产数据" / "batch_runner.json"
+    config.write_text(
+        json.dumps({
+            "commands": {
+                "image": "python3 -c \"import os, pathlib; pathlib.Path(os.environ['N2D_ROOT']).joinpath('should_not_exist.txt').write_text('ran')\""
+            }
+        }, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        runner,
+        "next_preflight_issue",
+        lambda root, task: {"stop_reason": "blocked_by_gate", "headline": "gate 未放行"},
+    )
+
+    result = runner.run_once(str(tmp_path), limit=1, config_path=str(config), no_dashboard=True)
+
+    assert result["results"][0]["runner_status"] == "fail"
+    assert "next_preflight blocked" in result["results"][0]["note"]
     assert not out_file.exists()
 
 

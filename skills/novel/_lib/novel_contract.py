@@ -270,6 +270,37 @@ def scale_profile(scale):
     return deepcopy(SCALE_PROFILES[key])
 
 
+# 触发"长弧/长篇"待遇（弧段 gate + 场景卡 + 三步弧段包建议）的模式/用途。
+# 商业连载与漫剧/微短剧源书即便章数 <30 也按长弧处理——它们靠中段不跑偏续命。
+LONG_ARC_MODES = {"商业连载", "漫剧源书"}
+LONG_ARC_PURPOSES = {"漫剧源书", "微短剧源书"}
+
+
+def is_long_arc_project(meta, settings=None):
+    """长弧/长篇判定的**单一真值源**——flow（写作引导）与 qa_gate（导出闸 arc /
+    scene_cards）共用，杜绝两套阈值漂移。
+
+    历史 bug：flow.long_arc_mode 含 mode/purpose，qa_gate._arc_long_project 只看
+    scale/target → 一部 20 章「商业连载」在 flow 收到弧段包建议，却在导出闸收不到
+    ARC-MISSING / scene_cards 提醒，docstring 还自称"同口径"。现收敛到这里。
+    """
+    meta = meta or {}
+    settings = settings or {}
+    scale = str(meta.get("scale") or "").lower()
+    try:
+        target = int(meta.get("target_chapters") or 0)
+    except (TypeError, ValueError):
+        target = 0
+    mode = str(settings.get("小说生成模式") or meta.get("draft_mode") or "")
+    purpose = str(settings.get("小说用途") or meta.get("purpose") or "")
+    return (
+        scale in {"long", "长篇"}
+        or target >= 30
+        or mode in LONG_ARC_MODES
+        or purpose in LONG_ARC_PURPOSES
+    )
+
+
 def normalize_novel_purpose(value):
     text = str(value or "").strip()
     if not text:

@@ -24,16 +24,25 @@ description: Professional editing workflow for completed or in-progress novel dr
 
 ## 工作流
 
-1. 先跑已有证据层：`novel-review`、必要时 `novel-score`、`novel-balance`、`novel-feedback`。
-2. 若已有 `设定/scene_cards.json`，优先按场景诊断；缺场景卡时先用 `novel-craft/scripts/scene_cards.py scaffold` 生成骨架。
-3. 生成分层编辑计划：
+1. 先跑已有证据层：`novel-review`、必要时 `novel-score`、`novel-balance`、`novel-simulate`、`novel-feedback`；多份报告已齐时先用 `novel-craft/scripts/revision_planner.py` 汇成 `修订/revision_plan.json`。
+2. `edit_plan.py` 会优先读取 `修订/revision_plan.json`，并兜底读取 `评分/pacing_signals.json`、`评分/reader_panel_signals.json`、真实反馈、score/review 和 scene cards，避免节奏/留存信号停在各自报告里。
+3. 若已有 `设定/scene_cards.json`，优先按场景诊断；缺场景卡时先用 `novel-craft/scripts/scene_cards.py scaffold` 生成骨架。
+4. 生成分层编辑计划：
 
 ```bash
 python3 skills/novel-edit/scripts/edit_plan.py "<作品根>"
 ```
 
-4. 按 `修订/编辑计划.md` 从上到下处理。结构级任务先于行文级任务；结构没定稿前不要花大量精力润句子。
-5. 结构改完回跑 `novel-review` / `novel-score`；行文改完回跑 `mechanical_check.py` 和文风漂移检查；终稿前再跑 export gate。
+5. 对进入行文精修的章节生成执行包：
+
+```bash
+python3 skills/novel-edit/scripts/edit_plan.py "<作品根>" --line-packet 4
+```
+
+`第NN章_line_edit_packet.md` 会汇总本章编辑任务、scene cards、人物内驱字段、`novel-observe` 观察素材和 `novel-aesthetic` 正向审美样本。改稿时在包内记录 before/after 与改动理由，避免“润色了一遍但不知道提升了什么”。
+
+6. 按 `修订/编辑计划.md` 从上到下处理。结构级任务先于行文级任务；结构没定稿前不要花大量精力润句子。
+7. 结构改完回跑 `novel-review` / `novel-score`；行文改完回跑 `mechanical_check.py`、文风漂移检查和必要的读者反馈复测；终稿前再跑 export gate。
 
 ## 人类主创模式
 
