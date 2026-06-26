@@ -140,8 +140,10 @@ python3 skills/n2d-image/scripts/reference_planner.py <作品根> 第N集
 产 `生产数据/reference_plan_第N集.{json,md}`（建议侧车）。逐镜逐角色：
 - **近景/大表情** → 先引用基础脸锚 `face_anchor_refs`，强情绪高频角色再加表情库 `expressions`（缺真情绪表情库只剩中性特写时**标补拍**，与 image_qc 的 `no_expression_lib_ref` 互补：规划器 pre-gen 选、image_qc post-gen 验）；
 - **极端角度 / `angle_policy.requires_extra_reference`** → 补侧/背/全身参考，或改分镜避开；
+- **跨集记忆锚（G2·memory-sink）** → 若 n2d-identity 跑过 `memory_anchor.py` 产了 `生产数据/memory_anchor_plan_第N集.json`，规划器自动消费（文件契约·不互 import）：对**长间隔再登场 / 晚集 / 已测漂移**的角色，把其**最早集定妆记忆锚**作为最高优先锚（`role=memory_anchor`）前置注入、参与后端参考预算封顶——治"逐镜重注入仍随复现间隔衰减"（EntityBench 2026 Gap-Decay）。缺该 plan = 现状（无记忆锚）；不阻断；`summary.memory_anchor_reinjected_clips` 可见命中镜数；
 - **多人同框** → clip 级输出 `multi_subject_strategy`：无持久主体后端写 `regional_construct_required` + 身份槽位 + `empty_plate`/`region masks`/统一融光，并保留 `split_composite_required` 兼容 token；持久主体后端写 `native_subject_slots`；站位复杂且后端支持时叠加 pose/depth 锁站位；
 - **无成本图片增强档** → 出图前跑 `reference_pack.py` 与 `keyshot_candidates.py`：把核心角色多角度/表情/动作姿态、场景 empty plate、道具/VFX sheet、多候选关键镜和选优 manifest 变成可审侧车，再进入付费生成；
+- **best-of-N 自动选片（治批量抽卡人工瓶颈·2026-06-26）** → 一个可用镜常生 N 张候选靠人挑（行业实测 20-30 张/镜），批量产线最大人工触点之一。`python3 candidate_select.py <作品根> 第N集 [--clip 镜头X] [--apply]` 对 `出图/<集>/候选/<镜>/*.png` **自动排序选最优 + 判是否全废需 reroll**，写 `生产数据/candidate_selection_第N集.json`（`--apply` 才拷选中图到落档路径·不可逆=显式）。三层（缺则降级·绝不臆造）：① 硬伤确定性淘汰（崩脸/纯文生图/接缝断=`qc_hard_fail`，对齐**筛选宽容铁律**的三类硬伤）② **VLM ranker**（配厂商无关 `N2D_VLM_COMPARE_CMD`·占位 `{image_a}{image_b}{prompt}`·回 `{"winner":"a|b|tie"}`）在合格者间单淘汰选冠军——**关键：VLM 当成对 ranker 用、绝不当绝对打分器**（arXiv 2604.25235「VLM 能排序不能打分」，绝对分不可校准）③ 无 VLM 时按 face 余弦→QC→清晰度 确定性排序。最优者 face 余弦仍 < `N2D_CANDIDATE_IDENTITY_FLOOR`(默认 0.45) → 标 reroll（最好的也崩脸·别落档）；reroll 只出决策不自动执行（生成由后端命令做）；
 - **按后端能力路由**（`IMAGE_IDENTITY_PROFILES`）：multi_reference 后端（Codex/OpenAI/Dreamina/Nano）组**逐镜多样参考包**（受 `max_reference_images` 约束）；persistent_subject 后端（Seedream/可灵；Sora 旧项目人工路径）未注册→**提示注册时喂多样集（多角度+多表情+多光）而非单 sheet**（Kling 优先 Custom Model 吃多帧/视频），已注册→按 ID 引用 + 参考双保险；
 - **参考预算与入参清洁铁律**：出图前必须按后端容量选参考，不全量喂图；预算内优先级为**当前镜角色脸锚/表情 → 侧背/全身/服装体态 → 场景/道具 → 风格参考**。每镜落地 `参考图入参清单与预算`，列出 `backend_limit / selected / dropped / role_priority / input_files`，让执行者知道实际传了哪几张、放弃了哪几张、为什么。Gemini/Nano 类后端按官方口径最多约 14 张总参考、人物高保真参考约 5 张；超限时 `reference_plan` 标 `参考预算溢出`，人审应拆镜、升档或重选参考包。传入图只用本项目 ready 资产或已授权用户参考，并按所选官方后端要求做入参清洁：格式受支持、画面清楚、无水印/Logo/无关文字/NSFW；不合格先裁切、重出或剔除，再付费生图。
 - **弱后端 × 核心长线角 × 大变化镜** → 给升档建议（注册原生主体 / `n2d-lora init`），与 `face_drift_risk` / identity 漂移报表同口径。
@@ -169,7 +171,7 @@ python3 skills/n2d-image/scripts/reference_planner.py <作品根> 第N集
 > 入口在哪：阶段 B 末尾「生图前确认」已就**主要人物的 LoRA / 指定参考图**问过用户一次——用户在那答「有 LoRA」时即进入本节流程；答「有参考图」走图生图派生、答「没有」走默认方案，都不进本节。本节是那个确认点的展开，不是另一道独立提问。
 
 - **何时把它作为选项提出来**：某个**贯穿几十集的核心角色**（如女主）拼了锚点句、调高参考图强度后**脸/妆造仍反复漂移**，或用户主动问"要不要训练/LoRA/提高一致性"。提的时候说清三点：① 这是可选增强，不启用也能继续出图；② 只对核心长线角色划算，一次性角色不值；③ LoRA 是开源支线（Flux/ComfyUI），即梦/可灵不接受自训 LoRA，是**混合产线非替换**。
-- **用户选择启用后**：路由到 `n2d-lora`，用 `skills/n2d-lora/scripts/lora.py` 管理 `lora_card/dataset_manifest/train_job/validation_report/register`。训练仍按 `references/lora_consistency.md` 的 Stage 0-5 引导，但所有产物必须落到 `设定库/lora/<CHAR_ID>/<形态>/`；验证报告未 `pass` 前不得把 registry lora 标成 `ready`。
+- **用户选择启用后**：路由到 `n2d-lora`，用 `skills/n2d-lora/scripts/lora.py` 管理 `lora_card/dataset_manifest/train_job/validation_report/register`。训练仍按 `references/lora_consistency.md` 的 Stage 0-5 引导，但所有产物必须落到 `设定库/lora/<CHAR_ID>/<形态>/`；验证报告未 `pass` 前不得把 registry lora 标成 `ready`。若 LoRA 只用于少量 hero 镜且底模/链路不同于本剧主生图模型，必须先用 `lora.py exception-scope` 写 `生产数据/lora_exception_scope_第N集.json`，声明 `clips/reason/project_image_model/lora_base_model/style_bridge/qc_required/not_a_project_model_switch=true`；否则按“生图模型混用”处理，回主生图链路或补范围。
 - **用户不选**：继续默认参考图 + 锚点句出图，不要强推。
 
 ## 可选增强：多镜一次性故事板（opt-in · 连贯分镜批量出）

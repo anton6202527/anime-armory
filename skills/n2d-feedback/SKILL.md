@@ -25,7 +25,7 @@ description: P2 platform performance feedback loop for n2d. Ingest platform metr
 
 需要两类数据 join：
 
-1. **platform metrics**：平台侧指标，如 `retention_3s`、`retention_6s`、`retention_15s`、`retention_25_pct`、`retention_50_pct`、`retention_75_pct`、`completion_rate`、`follow_next_rate`、`avg_episodes_per_user`、`episodes_per_session`、`unlock_or_subscribe_rate`、`bounce_3s`、`plays`。付费/追剧闭环必须补 `paywall_position_sec`、`paywall_after_promise_id`、`unlock_friction`、`continue_path`，用于分析“卡点是否落在承诺之后、解锁摩擦是否伤留存、哪条续看路径追更最高”。A/B 时每个变体一行，建议带 `ab_test_id`、`variant_id`、`ctr`。App/剧集包级可带 `d1_retention/d7_retention/d14_retention`。
+1. **platform metrics**：平台侧指标，如 `retention_3s`、`retention_6s`、`retention_15s`、`retention_25_pct`、`retention_50_pct`、`retention_75_pct`、`completion_rate`、`follow_next_rate`、`avg_watch_sec`、`avg_episodes_per_user`、`episodes_per_session`、`unlock_or_subscribe_rate`、`story_roi`、`bounce_3s`、`plays`。这些字段来自 `n2d-dashboard/references/industry_benchmark.json` 的 `episode_kpi_targets.required_metrics`；缺失会进入 `input_audit`，不能当成“平台没给就无事发生”。付费/追剧闭环必须补 `paywall_position_sec`、`paywall_after_promise_id`、`unlock_friction`、`continue_path`，用于分析“卡点是否落在承诺之后、解锁摩擦是否伤留存、哪条续看路径追更最高”。A/B 时每个变体一行，建议带 `ab_test_id`、`variant_id`、`ctr`。App/剧集包级可带 `d1_retention/d7_retention/d14_retention`。
 2. **creative features**：导演标签，如 `opening_type`、`cliffhanger_type`、`shot_density_per_min`、`hook_interval_sec`、`first_3s_visual_hook`、`onscreen_text_hook`、`muted_safe_proof`、`retention_promise_ids`。A/B 时补 `opening_variant`、`cover_variant`、`cliffhanger_cut_variant`、`title_variant`。默认从 `脚本/第N集/storyboard.json` 自动抽取基础标签；已有手工 `creative_features.*` 或显式 `--features` 时优先手工。
 
 默认读取：
@@ -82,7 +82,9 @@ python3 skills/n2d-feedback/scripts/feedback.py <作品根> \
 
 ## 写回机器可读先验（投放→生成输入闭环）
 
-`--update-guide` 写的是给人看的导演节奏规则；`--write-priors` 写的是给机器读的**第一方先验**——把 A/B paired-lift 胜出的开场/集尾断点/封面/标题变体凝成 `生产数据/creative_priors.json`（kind `n2d_creative_priors`），`n2d-script` 阶段2 finalize 读它作开场/断点设计的**建议先验**。
+`--update-guide` 写的是给人看的导演节奏规则；`--write-priors` 写的是给机器读的**第一方先验**——把 A/B paired-lift 胜出的开场/集尾断点/封面/标题变体，以及分组 lift 胜出的付费卡点位置、续看路径，凝成 `生产数据/creative_priors.json`（kind `n2d_creative_priors`），`n2d-script` 阶段2 finalize 读它作开场/断点/卡点/追更设计的**建议先验**。
+
+**闭环修真（F2·2026-06-26·破橡皮图章）**：此前 finalize 对每条先验**无条件**盖 `status='applied'`，让 `beat_audit --strict` 的 `creative_prior_not_acknowledged` 形同虚设——跑一下 finalize 就「已确认」，第一方投放胜出信号被橡皮图章吞掉。现 finalize 按 storyboard 的 `creative_variants_used`（{字段:{variant:采用的变体, reason?:不采胜出时的理由}}）**真验证采纳**：采用胜出变体=`applied`；采用他变体+写理由=`rejected`(可解释)；采用他变体无理由 / 未声明=`pending`（beat_audit --strict 会拦，交分析师真决策）。证据元数据键改名 `prior_metrics`（原 `applied_creative_priors`），避免 beat_audit legacy 路径误把元数据当 applied 自动盖章。**不自动改写内容**——尊重 analyst-in-loop（2026 SOTA：全自动闭环尚不成立，结构化人审在环才是前沿；本闭环只「自动 ingest 先验 + 强制人对每条胜出信号真决策」，不替分析师改剧本）。
 
 ```bash
 python3 skills/n2d-feedback/scripts/feedback.py <作品根> \
@@ -92,7 +94,7 @@ python3 skills/n2d-feedback/scripts/feedback.py <作品根> \
 
 每个维度只在「同集内 `paired_lift ≥ --min-lift` 且 paired context 数 `≥ --min-samples`」时才写先验，缺省维度直接不写（**不臆造**）；无任一维度达标时落空 `priors:{}`，下游 no-op。每条先验带 `winner / paired_lift / primary_metric / metric_value / n / plays / episodes`，并写入 `generated_at` 采集时间供下游判先验新鲜度。`--no-write` 同时抑制 priors 写出。
 
-读端在 `n2d-script` 阶段2 finalize：存在 `creative_priors.json` 才读（缺则 no-op·向后兼容），把胜出先验作为开场/断点设计的建议注入——落 `脚本/第N集/applied_creative_priors.json` 证据 + 打印人可见提示（逐维度点名 winner / lift / n），不静默吞。先验是建议非硬约束，样本不足的维度不出现、不必强套。
+读端在 `n2d-script` 阶段2 finalize：存在 `creative_priors.json` 才读（缺则 no-op·向后兼容），把胜出先验作为开场/断点/付费卡点/追更路径设计的建议注入——落 `脚本/第N集/applied_creative_priors.json` 证据 + 打印人可见提示（逐维度点名 winner / lift / n），不静默吞。先验是建议非硬约束，样本不足的维度不出现、不必强套；但已有先验必须被 `beat_audit --strict` 看见 applied 或 rejected + reason。
 
 ## 投放摄取适配器（实时投放 API → 标准文件）
 

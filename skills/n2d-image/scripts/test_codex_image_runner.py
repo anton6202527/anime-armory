@@ -313,6 +313,104 @@ def test_reference_bundle_resolves_ready_character_and_asset_refs(tmp_path: Path
     assert any(str(prop) in part for part in cmd)
 
 
+def test_reference_bundle_does_not_attach_non_ready_path_metadata(tmp_path: Path) -> None:
+    active = tmp_path / "出图" / "共享" / "图片" / "定妆_沈念_常态.png"
+    active.parent.mkdir(parents=True)
+    active.write_bytes(b"\x89PNG\r\n\x1a\n" + b"0" * 64)
+    lineage = tmp_path / "设定库" / "reference_images" / "user_ref.jpg"
+    lineage.parent.mkdir(parents=True)
+    lineage.write_bytes(b"\xff\xd8\xff" + b"0" * 64)
+    shared = tmp_path / "出图" / "共享"
+    (shared / "identity_registry.json").write_text(
+        json.dumps({
+            "characters": [{
+                "id": "CHAR_01",
+                "external_visual_references": [{
+                    "path": "设定库/reference_images/user_ref.jpg",
+                    "status": "lineage_only_after_shared_front_generation",
+                }],
+                "forms": [{
+                    "form": "常态",
+                    "reference_group": {
+                        "front": {
+                            "path": "出图/共享/图片/定妆_沈念_常态.png",
+                            "status": "ready",
+                            "source_refs": ["设定库/reference_images/user_ref.jpg"],
+                        },
+                        "side": {
+                            "path": "出图/共享/图片/定妆_沈念_常态_侧.png",
+                            "status": "planned",
+                            "source_image": "出图/共享/图片/定妆_沈念_常态.png",
+                        },
+                    },
+                }],
+            }]
+        }, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    (shared / "asset_registry.json").write_text('{"assets":[]}', encoding="utf-8")
+    section = codex_image_runner.ClipSection(
+        clip="CHAR_01",
+        title="## CHAR_01 沈念",
+        body="**目标存档**：`出图/共享/图片/定妆_沈念_常态_侧.png`",
+        target_line="`出图/共享/图片/定妆_沈念_常态_侧.png`",
+    )
+    target = codex_image_runner.Target(
+        shot="CHAR_01::定妆_沈念_常态_侧",
+        clip="CHAR_01",
+        mode="shared",
+        rel_path="出图/共享/图片/定妆_沈念_常态_侧.png",
+        section=section,
+    )
+    setattr(target, "aliases", {"CHAR_01", "CHAR_01/常态"})
+
+    bundle = codex_image_runner.reference_bundle_for_target(tmp_path, "第1集", target)
+    inputs = codex_image_runner.codex_reference_inputs_for_target(tmp_path, "第1集", target, bundle)
+
+    assert [item["rel_path"] for item in inputs] == ["出图/共享/图片/定妆_沈念_常态.png"]
+
+
+def test_reference_bundle_resolves_chinese_asset_id_from_prompt_contract(tmp_path: Path) -> None:
+    prop = tmp_path / "出图" / "共享" / "图片" / "定妆_急报卷轴.png"
+    prop.parent.mkdir(parents=True)
+    prop.write_bytes(b"\x89PNG\r\n\x1a\n" + b"1" * 64)
+    shared = tmp_path / "出图" / "共享"
+    (shared / "identity_registry.json").write_text('{"characters":[]}', encoding="utf-8")
+    (shared / "asset_registry.json").write_text(
+        json.dumps({
+            "assets": [{
+                "id": "PROP_急报卷轴",
+                "type": "prop",
+                "reference_group": {"primary": {"path": "出图/共享/图片/定妆_急报卷轴.png", "status": "ready"}},
+            }]
+        }, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    section = codex_image_runner.ClipSection(
+        clip="Clip_05",
+        title="## Clip 05",
+        body=(
+            "- 参考图入参清单：selected `出图/共享/图片/定妆_急报卷轴.png`。\n"
+            "- 资产引用注册层：`PROP_急报卷轴`。\n"
+            "急报卷轴压在案几上。\n"
+        ),
+        target_line="`出图/第1集/图片/Clip_05.png`",
+    )
+    target = codex_image_runner.Target(
+        shot="Clip_05",
+        clip="Clip_05",
+        mode="firstframe",
+        rel_path="出图/第1集/图片/Clip_05.png",
+        section=section,
+    )
+
+    bundle = codex_image_runner.reference_bundle_for_target(tmp_path, "第1集", target)
+    inputs = codex_image_runner.codex_reference_inputs_for_target(tmp_path, "第1集", target, bundle)
+
+    assert bundle["items"][0]["id"] == "PROP_急报卷轴"
+    assert inputs[0]["rel_path"] == "出图/共享/图片/定妆_急报卷轴.png"
+
+
 def _write_carried_identity_fixtures(tmp_path: Path, asset: dict) -> codex_image_runner.Target:
     """Shared fixture: a locked 沈念 face anchor + a VFX asset that depicts her."""
     face = tmp_path / "出图" / "共享" / "图片" / "定妆_沈念_脸部特写.png"

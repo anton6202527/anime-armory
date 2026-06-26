@@ -416,6 +416,10 @@ def blank_episode(ep: str, progress: Optional[Dict[str, Any]] = None) -> Dict[st
         "missing_deliverables": [],
         "image_qc_passive": {},
         "consistency_ledger": {},
+        "retention_3s": None,
+        "retention_15s": None,
+        "completion_rate": None,
+        "follow_next_rate": None,
     }
 
 
@@ -510,6 +514,11 @@ def apply_release_row(summary: Dict[str, Any], row: Dict[str, Any], source: str)
     unit = str(first_present(row, CURRENCY_FIELDS) or "CNY")
     add_release_amounts(summary, unit=unit, revenue=release_amount(row), spend=spend_amount(row))
     set_runtime(summary, first_float(row, RUNTIME_FIELDS), source)
+    # 留存信号：取最新行覆盖（同集多次投放取最新）
+    for key in ("retention_3s", "retention_15s", "completion_rate", "follow_next_rate", "bounce_3s"):
+        val = first_float(row, (key, f"{key}_rate", f"{key}%", key.replace("_", "")))
+        if val is not None:
+            summary[key] = val
 
 
 def resolvable_asset_path(root: str, raw: Any) -> Optional[str]:
@@ -827,6 +836,33 @@ def aggregate_events(root: str, events: List[Dict[str, Any]]) -> Dict[str, Any]:
         for key in ("block", "high", "medium")
     }
 
+    retention_trend = {}
+    eps_with_ret3 = [
+        (ep.get("episode", ""), ep.get("retention_3s"))
+        for ep in ordered
+        if ep.get("retention_3s") is not None
+    ]
+    if len(eps_with_ret3) >= 2:
+        values = [v for _, v in eps_with_ret3]
+        names = [n for n, _ in eps_with_ret3]
+        n = len(values)
+        x_mean = (n - 1) / 2.0
+        y_mean = sum(values) / n
+        num = sum((i - x_mean) * (v - y_mean) for i, v in enumerate(values))
+        den = sum((i - x_mean) ** 2 for i in range(n))
+        slope = num / den if den else 0.0
+        delta = values[-1] - values[0]
+        retention_trend = {
+            "episodes_tracked": n,
+            "first_episode": names[0],
+            "last_episode": names[-1],
+            "first_retention_3s": round(values[0], 4),
+            "last_retention_3s": round(values[-1], 4),
+            "slope_per_episode": round(slope, 6),
+            "total_delta": round(delta, 4),
+            "trend_direction": "declining" if slope < -0.01 else ("improving" if slope > 0.01 else "stable"),
+        }
+
     return {
         "kind": DASHBOARD_KIND,
         "version": 1,
@@ -837,6 +873,7 @@ def aggregate_events(root: str, events: List[Dict[str, Any]]) -> Dict[str, Any]:
         "industry_benchmark": load_benchmark(root),
         "totals": totals,
         "episodes": ordered,
+        "retention_trend": retention_trend,
     }
 
 
@@ -990,18 +1027,23 @@ def render_markdown(dashboard: Dict[str, Any]) -> str:
         "",
         "## 逐集",
         "",
-        "| 集 | 当前前沿 | 成本 | 每分钟成本 | 耗时 | 一次通过率 | 重抽率 | 重抽原因Top3 | QA阻断 | 净回收 | 回收/成本 |",
-        "|---|---|---|---|---:|---:|---:|---|---:|---|---:|",
+        "| 集 | 当前前沿 | 成本 | 每分钟成本 | 耗时 | 一次通过率 | 重抽率 | 重抽原因Top3 | QA阻断 | 净回收 | 回收/成本 | 3s留存 | 15s留存 | 完播率 | 追更率 |",
+        "|---|---|---|---|---:|---:|---:|---|---:|---|---:|---:|---:|---:|---:|",
     ]
     for item in dashboard["episodes"]:
         reasons = Counter(item["redraw_reasons"]).most_common(3)
         reason_text = "；".join(f"{k}×{v}" for k, v in reasons) if reasons else "—"
+        ret3 = format_rate(item.get("retention_3s"))
+        ret15 = format_rate(item.get("retention_15s"))
+        comp = format_rate(item.get("completion_rate"))
+        follow = format_rate(item.get("follow_next_rate"))
         lines.append(
             f"| {item['episode']} | {item.get('progress_next_stage') or '—'} | "
             f"{format_cost(item['cost_totals'])} | {format_per_min(item.get('cost_per_finished_min', {}))} | "
             f"{item['duration_hms']} | {format_rate(item.get('one_pass_rate'))} | "
             f"{format_rate(item.get('redraw_rate'))} | {reason_text} | "
-            f"{item['qa_blockers']} | {format_cost(item.get('release_net_totals', {}))} | {format_ratio(item.get('recoup_ratio', {}))} |"
+            f"{item['qa_blockers']} | {format_cost(item.get('release_net_totals', {}))} | {format_ratio(item.get('recoup_ratio', {}))} | "
+            f"{ret3} | {ret15} | {comp} | {follow} |"
         )
 
     # 重抽原因分维度统计：一致性相关类小计单列，"一致性是不是最大成本杀手"一眼可见
@@ -1195,7 +1237,26 @@ def evaluate_alerts(dashboard: Dict[str, Any], thresholds: Dict[str, Any]) -> Li
                                      f"回收比 {cur} {float(ratio):.2f}x 低于下限 {rf:.2f}x（投放 ROI 预警）",
                                      value=float(ratio), threshold=rf, currency=cur))
 
-    # 逐集定位：通过率下限 / QA 阻断（让告警指到具体集）
+    # 逐集定位：通过率下限 / QA 阻断 / 留存信号
+    project_genre = ""
+    try:
+        _settings_path = os.path.join(root, "_设置.md")
+        if os.path.isfile(_settings_path):
+            with open(_settings_path, encoding="utf-8") as _sf:
+                for _line in _sf:
+                    if _line.strip().startswith("- 题材:") or _line.strip().startswith("- 题材："):
+                        project_genre = _line.split(":", 1)[-1].strip().split("：", 1)[-1].strip()
+                        break
+    except Exception:
+        pass
+    genre_adjustments = {}
+    try:
+        _bench_path = os.path.join(os.path.dirname(__file__), "..", "references", "industry_benchmark.json")
+        with open(_bench_path, encoding="utf-8") as _bf:
+            _bench = json.load(_bf)
+        genre_adjustments = _bench.get("genre_retention_adjustments", {})
+    except Exception:
+        pass
     for ep in dashboard.get("episodes", []) or []:
         name = ep.get("episode", "?")
         if floor is not None and ep.get("final_pass_rate") is not None and ep["final_pass_rate"] < floor:
@@ -1206,6 +1267,62 @@ def evaluate_alerts(dashboard: Dict[str, Any], thresholds: Dict[str, Any]) -> Li
             alerts.append(_alert("warn", "qa_blockers", name,
                                  f"{name} QA 阻断 {ep['qa_blockers']} 项",
                                  value=int(ep["qa_blockers"]), threshold=cap, episode=name))
+        # 留存信号：3s 留存低于地板 → critical（首帧钩失效，用户秒退）
+        ret3_floor = thresholds.get("retention_3s_floor")
+        if ret3_floor is not None and project_genre and genre_adjustments:
+            _genre_key = project_genre if project_genre in genre_adjustments else "default"
+            _multiplier = genre_adjustments.get(_genre_key, {}).get("retention_3s_multiplier", 1.0)
+            ret3_floor = ret3_floor * _multiplier
+        ret3 = ep.get("retention_3s")
+        if ret3_floor is not None and ret3 is not None and ret3 < ret3_floor:
+            alerts.append(_alert("critical", "retention_3s", name,
+                                 f"{name} 3s 留存 {ret3*100:.1f}% 低于地板 {ret3_floor*100:.1f}%（首帧钩失效）",
+                                 value=ret3, threshold=ret3_floor, episode=name))
+        # 跳出率上限：3s 跳出过高 = 开场留不住人
+        bounce_cap = thresholds.get("bounce_3s_ceiling")
+        bounce = ep.get("bounce_3s")
+        if bounce_cap is not None and bounce is not None and bounce > bounce_cap:
+            alerts.append(_alert("warn", "bounce_3s", name,
+                                 f"{name} 3s 跳出率 {bounce*100:.1f}% 超过上限 {bounce_cap*100:.1f}%",
+                                 value=bounce, threshold=bounce_cap, episode=name))
+        # 追更率地板：低于地板 = 集尾钩失效，观众不追下一集
+        follow_floor = thresholds.get("follow_next_rate_floor")
+        follow = ep.get("follow_next_rate")
+        if follow_floor is not None and follow is not None and follow < follow_floor:
+            alerts.append(_alert("warn", "follow_next_rate", name,
+                                 f"{name} 追更率 {follow*100:.1f}% 低于地板 {follow_floor*100:.1f}%（集尾钩失效）",
+                                 value=follow, threshold=follow_floor, episode=name))
+        bdv_ceiling = thresholds.get("beat_density_variance_ceiling")
+        if bdv_ceiling is not None:
+            pacing_path = os.path.join(production_dir(root), f"pacing_retention_{normalize_episode(name)}.json")
+            if os.path.isfile(pacing_path):
+                try:
+                    with open(pacing_path, encoding="utf-8") as pf:
+                        pacing_data = json.load(pf)
+                    bdv = pacing_data.get("beat_density_variance")
+                    if bdv is not None and bdv > bdv_ceiling:
+                        alerts.append(_alert("warn", "beat_density_variance", name,
+                                             f"{name} 节拍密度方差 {bdv:.3f} 超过上限 {bdv_ceiling:.3f}（节奏紊乱·留存杀手）",
+                                             value=bdv, threshold=bdv_ceiling, episode=name))
+                except Exception:
+                    pass
+        if project_genre and genre_adjustments and ret3 is not None:
+            _gk = project_genre if project_genre in genre_adjustments else "default"
+            _gn = genre_adjustments.get(_gk, {}).get("note", "")
+            if _gn:
+                try:
+                    _hf = 0.8
+                    _bp = os.path.join(os.path.dirname(__file__), "..", "references", "industry_benchmark.json")
+                    with open(_bp, encoding="utf-8") as _bf2:
+                        _bd2 = json.load(_bf2)
+                    _hf = _bd2.get("retention_benchmarks", {}).get("proxy_thresholds", {}).get("retention_hook_floor", 0.8)
+                except Exception:
+                    _hf = 0.8
+                _genre_bench = _hf * genre_adjustments.get(_gk, {}).get("retention_3s_multiplier", 1.0)
+                if ret3 < _genre_bench * 0.8:
+                    alerts.append(_alert("info", "retention_3s_genre_benchmark", name,
+                                         f"{name} 3s 留存 {ret3*100:.1f}% 显著低于 {project_genre}题材基准 {_genre_bench*100:.1f}%——{_gn}",
+                                         value=ret3, threshold=_genre_bench, episode=name))
     return alerts
 
 
@@ -1297,7 +1414,11 @@ def render_html(dashboard: Dict[str, Any], alerts: List[Dict[str, Any]], *, refr
             f"<tr><td>{ep.get('episode','')}</td><td>{format_cost(ep.get('cost_totals',{}))}</td>"
             f"<td>{format_rate(ep.get('generation_pass_rate'))}</td><td>{format_rate(ep.get('final_pass_rate'))}</td>"
             f"<td>{format_rate(ep.get('redraw_rate'))}</td>"
-            f"<td>{ep.get('qa_blockers',0)}</td><td>{ep.get('qa_warnings',0)}</td></tr>"
+            f"<td>{ep.get('qa_blockers',0)}</td><td>{ep.get('qa_warnings',0)}</td>"
+            f"<td>{format_rate(ep.get('retention_3s'))}</td>"
+            f"<td>{format_rate(ep.get('retention_15s'))}</td>"
+            f"<td>{format_rate(ep.get('completion_rate'))}</td>"
+            f"<td>{format_rate(ep.get('follow_next_rate'))}</td></tr>"
         )
     alert_rows = "".join(
         f'<li class="{a.get("level")}">{"🔴" if a.get("level")=="critical" else "🟡"} '
@@ -1320,7 +1441,7 @@ td,th{{border:1px solid #333;padding:6px 10px;text-align:left}} th{{background:#
 <h2>告警（{_count_level(alerts,'critical')} critical / {_count_level(alerts,'warn')} warn）</h2>
 <ul>{alert_rows}</ul>
 <h2>逐集</h2>
-<table><tr><th>集</th><th>成本</th><th>生成通过率</th><th>可交付通过率</th><th>重抽率</th><th>QA阻断</th><th>QA警告</th></tr>
+<table><tr><th>集</th><th>成本</th><th>生成通过率</th><th>可交付通过率</th><th>重抽率</th><th>QA阻断</th><th>QA警告</th><th>3s留存</th><th>15s留存</th><th>完播率</th><th>追更率</th></tr>
 {''.join(rows) or '<tr><td colspan=7>暂无数据</td></tr>'}</table>
 <p style="color:#888">{"自动刷新 "+str(refresh)+"s" if refresh else "静态快照"} ｜ 纯本地生成，无外部依赖</p>
 </body></html>"""

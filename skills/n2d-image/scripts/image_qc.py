@@ -234,7 +234,7 @@ def _asset_must_not_have_terms(asset: Mapping[str, Any]) -> List[str]:
 
 
 # 资产 id 引用（场景/道具/武器/服装/特效）+ 定妆资产名（用于抓"用了定妆却没绑 id"）。
-ASSET_ID_RE = re.compile(r"`?((?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_]+)`?")
+ASSET_ID_RE = re.compile(r"`?((?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\u4e00-\u9fff]+)`?")
 DEFINING_ASSET_RE = re.compile(r"定妆_([^\s`，。、）)/]+)")
 _ASSET_NAME_SUFFIX_RE = re.compile(r"_(侧|半身|全身|背|三视图|四视图|设定表|脸部特写|表情)$")
 

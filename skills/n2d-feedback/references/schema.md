@@ -23,27 +23,27 @@
 | `distribution_spend` | ROI 建议 | 投流/买量/分发成本；也兼容 `promotion_spend/ad_spend/traffic_cost/platform_spend` |
 | `currency` | ROI 建议 | 收入和投放成本币种，默认 CNY；dashboard 只做同币种回收比，不跨币种换算 |
 | `ctr` | 否 | 点击率/封面标题点击率，0-1；平台能导出时用于封面/标题复核 |
-| `retention_3s` | 建议 | 3 秒留存，0-1 |
+| `retention_3s` | 必需 | 3 秒留存，0-1 |
 | `retention_5s` | 否 | 5 秒留存，0-1 |
-| `retention_6s` | 建议 | 6 秒留存，0-1；对齐信息流首 6 秒钩子复核 |
-| `retention_15s` | 建议 | 15 秒留存，0-1 |
-| `retention_25_pct` | 建议 | 播放到 25% 的留存，0-1；也兼容 `retention_25` / `quartile_25` |
-| `retention_50_pct` | 建议 | 播放到 50% 的留存，0-1 |
-| `retention_75_pct` | 建议 | 播放到 75% 的留存，0-1 |
-| `completion_rate` | 建议 | 完播率，0-1 |
-| `follow_next_rate` | 建议 | 追更/下一集点击率，0-1 |
+| `retention_6s` | 必需 | 6 秒留存，0-1；对齐信息流首 6 秒钩子复核 |
+| `retention_15s` | 必需 | 15 秒留存，0-1 |
+| `retention_25_pct` | 必需 | 播放到 25% 的留存，0-1；也兼容 `retention_25` / `quartile_25` |
+| `retention_50_pct` | 必需 | 播放到 50% 的留存，0-1 |
+| `retention_75_pct` | 必需 | 播放到 75% 的留存，0-1 |
+| `completion_rate` | 必需 | 完播率，0-1 |
+| `follow_next_rate` | 必需 | 追更/下一集点击率，0-1 |
 | `bounce_3s` | 建议 | 3 秒跳出率，0-1；缺失时用 `1-retention_3s` 估算 |
-| `avg_watch_sec` | 否 | 平均观看秒数 |
 | `avg_watch_pct` | 否 | 平均观看比例，0-1；平台只给平均时长时可由 `avg_watch_sec/duration_sec` 计算 |
-| `avg_episodes_per_user` | 建议 | 用户平均观看集数；Deloitte 建议的短剧核心 KPI |
-| `episodes_per_session` | 建议 | 单次会话平均观看集数 |
+| `avg_watch_sec` | 必需 | 平均观看秒数 |
+| `avg_episodes_per_user` | 必需 | 用户平均观看集数；Deloitte 建议的短剧核心 KPI |
+| `episodes_per_session` | 必需 | 单次会话平均观看集数 |
 | `time_to_next_episode_sec` | 否 | 从本集结束/曝光到下一集点击的平均秒数；越短追更越强 |
-| `unlock_or_subscribe_rate` | 建议 | 付费解锁/订阅/追剧按钮转化率，0-1 |
-| `paywall_position_sec` | 付费建议 | 本集付费/解锁卡点落在第几秒；无付费点可填 `-1` 或留空 |
-| `paywall_after_promise_id` | 付费建议 | 该卡点承接的 `retention_promise_ledger.hook_id`，用于验证“承诺已打开再卡点” |
+| `unlock_or_subscribe_rate` | 必需 | 付费解锁/订阅/追剧按钮转化率，0-1 |
+| `paywall_position_sec` | 付费必需 | 本集付费/解锁卡点落在第几秒；无付费点可填 `-1` 或留空 |
+| `paywall_after_promise_id` | 付费必需 | 该卡点承接的 `retention_promise_ledger.hook_id`，用于验证“承诺已打开再卡点” |
 | `unlock_friction` | 付费建议 | 解锁摩擦，如 `one_tap` / `coin_pack` / `ad_reward` / `subscribe_only` |
-| `continue_path` | 追更建议 | 续看路径，如 `next_button_sticky` / `end_card_only` / `auto_next` / `profile_follow` |
-| `story_roi` | ROI 建议 | 单故事 ROI 或平台定义的故事级回收比；可由 dashboard 与收入/投流字段并排展示 |
+| `continue_path` | 付费/追更必需 | 续看路径，如 `next_button_sticky` / `end_card_only` / `auto_next` / `profile_follow` |
+| `story_roi` | 必需 | 单故事 ROI 或平台定义的故事级回收比；可由 dashboard 与收入/投流字段并排展示 |
 | `d1_retention` | App 建议 | App/剧集包 D1 留存，0-1；用于短剧 app 级闭环，不替代单集留存 |
 | `d7_retention` | App 建议 | App/剧集包 D7 留存，0-1 |
 | `d14_retention` | App 建议 | App/剧集包 D14 留存，0-1 |
@@ -94,7 +94,7 @@ episode,platform,ab_test_id,variant_id,plays,revenue,distribution_spend,currency
 | `muted_safe_proof` | 建议 | 证明关声也能理解钩子的画面/字幕/动作证据 |
 | `final_hook_asset` | 否 | 集尾钩子镜头或台词标识 |
 | `retention_promise_ids` | 建议 | 本变体使用的 `retention_promise_ledger` 钩子 ID 列表，多个用 `;` 分隔 |
-| `paywall_after_promise_id` | 付费建议 | 付费卡点承接的承诺 ID；若平台指标里已有，可不重复 |
+| `paywall_after_promise_id` | 付费必需 | 付费卡点承接的承诺 ID；若平台指标里已有，可不重复 |
 | `unlock_friction` | 付费建议 | 解锁摩擦标签；若平台指标里已有，可不重复 |
 | `continue_path` | 追更建议 | 续看路径标签；若平台指标里已有，可不重复 |
 | `opening_confidence` | 自动 | 自动推断置信度，0-1 |
@@ -181,6 +181,7 @@ A/B 分析说明：
 | `ab_title_retention` | `title_variant` | `retention_3s` | 同一集不同标题文案的 3 秒留存；有 `ctr` 时同时展示点击率 |
 | `paywall_unlock` | `paywall_position_bucket` | `unlock_or_subscribe_rate` | 付费/解锁卡点位置与解锁转化、追更的关系 |
 | `continue_path_follow` | `continue_path` | `follow_next_rate` | 续看路径与追更率、观看集深的关系 |
+| `paywall_promise_alignment` | `paywall_after_promise_id` ↔ `retention_promise_ledger.hook_id` | `unlock_or_subscribe_rate` | 验证付费卡点是否承接已登记承诺，缺 ID 或账本未命中会进 `input_audit` |
 
 `n` 表示有可比较 paired context 的数量；context = `episode/platform/ab_test_id`。单版本或同一 context 里只有一个变体时，不会生成强建议。
 

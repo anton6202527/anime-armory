@@ -7410,11 +7410,34 @@ def _mk_series(root: Path, mapping: dict) -> None:
         (d / "voiceover.txt").write_text(vo, encoding="utf-8")
 
 
-def test_series_retention_gate_under_3_eps_silent(tmp_path):
+def test_series_retention_gate_under_3_eps_requires_pilot_contract(tmp_path):
     gate.findings.clear()
     _mk_series(tmp_path, {"第1集": _SERIES_DUP_VO, "第2集": _SERIES_DUP_VO})
     gate.check_series_retention_gate(str(tmp_path), "第1集", "compose")
-    assert not any(f["dim"] == gate.SERIES_RETENTION_DIM for f in gate.findings)  # <3 集无系列
+    assert any(
+        f["sev"] == gate.BLOCK and f.get("code") == "pilot_arc_contract_missing"
+        for f in gate.findings
+    )
+
+
+def test_series_retention_gate_under_3_eps_complete_pilot_contract_passes(tmp_path):
+    gate.findings.clear()
+    _mk_series(tmp_path, {"第1集": _SERIES_DUP_VO, "第2集": _SERIES_DUP_VO})
+    pilot = tmp_path / "设定库" / "pilot_arc_contract.json"
+    pilot.parent.mkdir(parents=True, exist_ok=True)
+    pilot.write_text(json.dumps({
+        "series_promise": "重生女主查出赐死真凶并翻盘",
+        "protagonist_desire": "活下来并夺回身份",
+        "repeatable_pleasure_loop": "被压迫-发现线索-反击打脸-抛新真相",
+        "long_question": "幕后主使是谁",
+        "first_payoff_ep": "第1集",
+        "first_complication_ep": "第2集",
+        "first_reversal_ep": "第2集",
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_series_retention_gate(str(tmp_path), "第1集", "compose")
+
+    assert not any(f["dim"] == gate.SERIES_RETENTION_DIM for f in gate.findings)
 
 
 def test_series_retention_gate_production_dup_blocks_implicated_ep(tmp_path):
@@ -7446,3 +7469,188 @@ def test_series_retention_gate_non_implicated_ep_info_not_block(tmp_path):
     gate.check_series_retention_gate(str(tmp_path), "第3集", "compose")
     dup_hits = [f for f in gate.findings if f["dim"] == gate.SERIES_RETENTION_DIM and "重合" in f["msg"]]
     assert dup_hits and all(f["sev"] == gate.INFO for f in dup_hits)
+
+
+# --- C1/C2: 有意不连续签收降级 native 一致性 BLOCK 接到 gate ------------------
+
+class _FakeProc:
+    def __init__(self, stdout, returncode=0, stderr=""):
+        self.stdout = stdout
+        self.returncode = returncode
+        self.stderr = stderr
+
+
+def _audit_json(dim, *, sev="block", shots=("Clip_03",), warn=0, block=1):
+    return json.dumps({
+        "summary": {
+            "total_block": block,
+            "precision_level": "full",
+            "by_dim": {dim: {"block": block, "warn": warn, "ok": 0, "n": block + warn}},
+        },
+        "findings": [{
+            "severity": sev,
+            "dimension": dim,
+            "message": "白天↔黑夜 2 级跳（时辰硬不连续）",
+            "affected_shots": list(shots),
+            "affected_artifacts": ["出图/第1集/图片/clip3.png"],
+            "return_to_stage": "image",
+            "risk_score": 0.50,
+        }],
+    }, ensure_ascii=False)
+
+
+def _patch_audit(monkeypatch, payload, returncode=1):
+    monkeypatch.setattr(gate.subprocess, "run",
+                        lambda *a, **k: _FakeProc(payload, returncode=returncode))
+
+
+def _write_intentional(root, ep, dim, *, clip="Clip_03", expires="2099-01-01",
+                       reason="主角回忆闪回，刻意把夜景切成白日逆光"):
+    prod = root / "生产数据"
+    prod.mkdir(parents=True, exist_ok=True)
+    (prod / f"intentional_discontinuity_{ep}.json").write_text(json.dumps({
+        "kind": "n2d_intentional_discontinuity_manifest",
+        "accepted": [{
+            "clip_id": clip, "dimension": dim, "reason": reason,
+            "signoff": "导演A", "expires_at": expires,
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+
+def test_intentional_signoff_downgrades_native_w1_block(tmp_path, monkeypatch):
+    gate.findings.clear()
+    _intentional_module_reset()
+    _write_intentional(tmp_path, "第1集", "天气时辰(W1)")
+    _patch_audit(monkeypatch, _audit_json("天气时辰(W1)"))
+    gate.check_consistency_audit_gate(str(tmp_path), "第1集", stage="image")
+    w1 = [f for f in gate.findings if f["dim"] == "天气时辰(W1)"]
+    assert w1 and all(f["sev"] == gate.WARN for f in w1)
+    assert any("有意不连续已签收" in f["msg"] for f in w1)
+    # 不得因 audit 退出码非 0 误补 generic block
+    assert not any(f["dim"] == "一致性总审" and f["sev"] == gate.BLOCK
+                   and "退出码" in f["msg"] for f in gate.findings)
+
+
+def test_native_w1_block_without_manifest_stays_block(tmp_path, monkeypatch):
+    gate.findings.clear()
+    _intentional_module_reset()
+    _patch_audit(monkeypatch, _audit_json("天气时辰(W1)"))
+    gate.check_consistency_audit_gate(str(tmp_path), "第1集", stage="image")
+    assert any(f["dim"] == "天气时辰(W1)" and f["sev"] == gate.BLOCK for f in gate.findings)
+
+
+def test_intentional_signoff_ignored_for_ineligible_face_dim(tmp_path, monkeypatch):
+    gate.findings.clear()
+    _intentional_module_reset()
+    # 即便写了 manifest，脸(G1) 不在可签收维度 → 仍 BLOCK
+    _write_intentional(tmp_path, "第1集", "脸(G1)")
+    _patch_audit(monkeypatch, _audit_json("脸(G1)"))
+    gate.check_consistency_audit_gate(str(tmp_path), "第1集", stage="image")
+    assert any(f["dim"] == "脸(G1)" and f["sev"] == gate.BLOCK for f in gate.findings)
+
+
+def test_intentional_signoff_expired_does_not_downgrade(tmp_path, monkeypatch):
+    gate.findings.clear()
+    _intentional_module_reset()
+    _write_intentional(tmp_path, "第1集", "天气时辰(W1)", expires="2000-01-01")
+    _patch_audit(monkeypatch, _audit_json("天气时辰(W1)"))
+    gate.check_consistency_audit_gate(str(tmp_path), "第1集", stage="image")
+    assert any(f["dim"] == "天气时辰(W1)" and f["sev"] == gate.BLOCK for f in gate.findings)
+
+
+def test_intentional_signoff_short_reason_rejected(tmp_path, monkeypatch):
+    gate.findings.clear()
+    _intentional_module_reset()
+    _write_intentional(tmp_path, "第1集", "天气时辰(W1)", reason="短")  # <8 chars
+    _patch_audit(monkeypatch, _audit_json("天气时辰(W1)"))
+    gate.check_consistency_audit_gate(str(tmp_path), "第1集", stage="image")
+    assert any(f["dim"] == "天气时辰(W1)" and f["sev"] == gate.BLOCK for f in gate.findings)
+
+
+def _intentional_module_reset():
+    # 清掉模块级缓存，避免跨 test 复用（importlib 缓存本身无状态，但保持显式）
+    gate._intentional_discontinuity_module.__dict__.pop("mod", None)
+
+
+# --- P1: 预算前叙事/留存地板接到批量 gate(image_preflight) 路径 ----------------
+
+class _BeatProc:
+    def __init__(self, stdout, returncode=0, stderr=""):
+        self.stdout = stdout; self.returncode = returncode; self.stderr = stderr
+
+
+def _patch_beat(monkeypatch, ep_json=None, series_json=None):
+    def fake_run(cmd, *a, **k):
+        argv = " ".join(str(c) for c in cmd)
+        if "--series" in argv:
+            return _BeatProc(json.dumps(series_json or {}, ensure_ascii=False))
+        return _BeatProc(json.dumps(ep_json or {}, ensure_ascii=False))
+    monkeypatch.setattr(gate.subprocess, "run", fake_run)
+
+
+def _mk_ep_script(root, ep="第1集"):
+    (root / "脚本" / ep).mkdir(parents=True, exist_ok=True)
+    (root / "脚本" / ep / "voiceover.txt").write_text("台词", encoding="utf-8")
+
+
+_MUST_HOOK = {"findings": [
+    {"severity": "must", "code": "missing_first_3s_visual_hook", "msg": "storyboard.json 缺 first_3s_visual_hook"},
+    {"severity": "warn", "code": "x", "msg": "次要"},
+]}
+
+
+def test_episode_narrative_floor_production_blocks_must(tmp_path, monkeypatch):
+    gate.findings.clear()
+    _mk_ep_script(tmp_path)
+    (tmp_path / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    _patch_beat(monkeypatch, ep_json=_MUST_HOOK)
+    gate.check_episode_narrative_floor(str(tmp_path), "第1集", "image_preflight")
+    hits = [f for f in gate.findings if f["dim"] == gate.SERIES_RETENTION_DIM and f["sev"] == gate.BLOCK]
+    assert hits and "预算前留存地板" in hits[0]["msg"]
+    # warn 级 finding 不升 block
+    assert not any("次要" in f["msg"] for f in gate.findings if f["sev"] == gate.BLOCK)
+
+
+def test_episode_narrative_floor_demo_warns_not_blocks(tmp_path, monkeypatch):
+    gate.findings.clear()
+    _mk_ep_script(tmp_path)  # 无 _设置=demo
+    _patch_beat(monkeypatch, ep_json=_MUST_HOOK)
+    gate.check_episode_narrative_floor(str(tmp_path), "第1集", "image_preflight")
+    assert any(f["dim"] == gate.SERIES_RETENTION_DIM and f["sev"] == gate.WARN for f in gate.findings)
+    assert not any(f["sev"] == gate.BLOCK for f in gate.findings)
+
+
+def test_episode_narrative_floor_signoff_downgrades(tmp_path, monkeypatch):
+    gate.findings.clear()
+    _mk_ep_script(tmp_path)
+    (tmp_path / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    (tmp_path / "生产数据").mkdir(exist_ok=True)
+    (tmp_path / "生产数据" / "consistency_advisory_signoff_第1集.json").write_text(json.dumps({
+        "accepted": [{"accepted": True, "reviewer": "导演", "reason": "刻意慢热开场",
+                      "expires_at": "2099-01-01", "dimension": gate.SERIES_RETENTION_DIM,
+                      "message_contains": "first_3s_visual_hook"}]}), encoding="utf-8")
+    _patch_beat(monkeypatch, ep_json=_MUST_HOOK)
+    gate.check_episode_narrative_floor(str(tmp_path), "第1集", "image_preflight")
+    assert not any(f["sev"] == gate.BLOCK for f in gate.findings)
+
+
+def test_episode_narrative_floor_skips_non_preflight(tmp_path, monkeypatch):
+    gate.findings.clear()
+    _mk_ep_script(tmp_path)
+    _patch_beat(monkeypatch, ep_json=_MUST_HOOK)
+    gate.check_episode_narrative_floor(str(tmp_path), "第1集", "image")  # 非 image_preflight
+    assert not gate.findings
+
+
+def test_cold_open_chain_blocks_at_image_preflight_production(tmp_path, monkeypatch):
+    gate.findings.clear()
+    for i in (1, 2, 3):
+        _mk_ep_script(tmp_path, f"第{i}集")
+    (tmp_path / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    series = {"duplicates": [], "highlight_climax_findings": [],
+              "cold_open_chain_findings": [{"severity": "warn", "code": "p2_slow_next_open",
+                                            "msg": "第3集 开场未接住第2集硬断"}]}
+    _patch_beat(monkeypatch, series_json=series)
+    gate.check_series_retention_gate(str(tmp_path), "第3集", "image_preflight")
+    assert any(f["dim"] == gate.SERIES_RETENTION_DIM and f["sev"] == gate.BLOCK
+               and "冷开场" in f["msg"] for f in gate.findings)

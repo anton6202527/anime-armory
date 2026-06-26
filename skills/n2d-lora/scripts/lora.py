@@ -29,6 +29,7 @@ from n2d_contract import (  # noqa: E402  身份/LoRA 判定的单一真值源�
     IDENTITY_REGISTRY_KIND,
     LORA_CARD_KIND,
     LORA_DATASET_MANIFEST_KIND,
+    LORA_EXCEPTION_SCOPE_KIND,
     LORA_TRAIN_JOB_KIND,
     LORA_VALIDATION_REPORT_KIND,
     identity_registry_path,
@@ -43,6 +44,7 @@ DATASET_KIND = LORA_DATASET_MANIFEST_KIND
 TRAIN_KIND = LORA_TRAIN_JOB_KIND
 VALIDATION_KIND = LORA_VALIDATION_REPORT_KIND
 CARD_KIND = LORA_CARD_KIND
+EXCEPTION_SCOPE_KIND = LORA_EXCEPTION_SCOPE_KIND
 VERSION = 1
 REFERENCE_KEYS = IDENTITY_REFERENCE_KEYS
 IMAGE_EXTS = {".png", ".jpg", ".jpeg", ".webp"}
@@ -641,6 +643,76 @@ def cmd_suggest(args: argparse.Namespace) -> int:
     return 0
 
 
+def exception_scope_path(root: Path, episode: str) -> Path:
+    return root / "生产数据" / f"lora_exception_scope_{episode}.json"
+
+
+def build_exception_scope(args: argparse.Namespace) -> Dict[str, Any]:
+    clips = [c.strip() for raw in args.clip for c in str(raw).split(",") if c.strip()]
+    if not clips:
+        raise ValueError("at least one --clip is required")
+    if not args.reason.strip():
+        raise ValueError("--reason is required")
+    return {
+        "kind": EXCEPTION_SCOPE_KIND,
+        "version": VERSION,
+        "episode": args.episode,
+        "character_id": args.character_id,
+        "form": args.form,
+        "scope": "hero_shots_only",
+        "clips": clips,
+        "reason": args.reason.strip(),
+        "project_image_model": args.project_image_model.strip(),
+        "lora_base_model": args.lora_base_model.strip(),
+        "style_bridge": args.style_bridge.strip(),
+        "qc_required": [
+            "full image_qc face_reference_coverage",
+            "style_consistency",
+            "local_face_patch_guard",
+            "human hero-shot signoff",
+        ],
+        "not_a_project_model_switch": True,
+        "created_at": now_iso(),
+    }
+
+
+def validate_exception_scope(scope: Mapping[str, Any]) -> List[str]:
+    blocks: List[str] = []
+    if scope.get("kind") != EXCEPTION_SCOPE_KIND:
+        blocks.append(f"kind must be {EXCEPTION_SCOPE_KIND}")
+    for key in ("episode", "character_id", "clips", "reason", "project_image_model", "lora_base_model", "style_bridge"):
+        value = scope.get(key)
+        if value in (None, "", [], {}):
+            blocks.append(f"missing {key}")
+    if scope.get("scope") != "hero_shots_only":
+        blocks.append("scope must be hero_shots_only")
+    if scope.get("not_a_project_model_switch") is not True:
+        blocks.append("not_a_project_model_switch must be true")
+    return blocks
+
+
+def cmd_exception_scope(args: argparse.Namespace) -> int:
+    root = Path(args.project_root)
+    path = exception_scope_path(root, args.episode)
+    if args.check:
+        if not path.is_file():
+            print(f"[error] missing LoRA exception scope: {path}", file=sys.stderr)
+            return 1
+        scope = read_json(path)
+    else:
+        scope = build_exception_scope(args)
+        write_json(path, scope)
+        print(f"[ok] wrote {path}")
+    blocks = validate_exception_scope(scope if isinstance(scope, Mapping) else {})
+    if blocks:
+        print("[block] invalid LoRA exception scope:", file=sys.stderr)
+        for item in blocks:
+            print(f"  - {item}", file=sys.stderr)
+        return 1
+    print("[ok] LoRA exception scope is valid")
+    return 0
+
+
 def cmd_status(args: argparse.Namespace) -> int:
     root = Path(args.project_root)
     registry = load_registry(root)
@@ -726,6 +798,19 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser("suggest", help="读 生产数据/identity_drift_report.json 打印 LoRA 升档建议")
     p.add_argument("project_root")
     p.set_defaults(func=cmd_suggest)
+
+    p = sub.add_parser("exception-scope", help="写/校验本集 LoRA hero 镜例外范围 manifest")
+    p.add_argument("project_root")
+    p.add_argument("episode")
+    p.add_argument("--character-id", default="")
+    p.add_argument("--form", default="")
+    p.add_argument("--clip", action="append", default=[], help="Clip id; may be repeated or comma-separated")
+    p.add_argument("--reason", default="")
+    p.add_argument("--project-image-model", default="")
+    p.add_argument("--lora-base-model", default="")
+    p.add_argument("--style-bridge", default="")
+    p.add_argument("--check", action="store_true")
+    p.set_defaults(func=cmd_exception_scope)
 
     return parser
 

@@ -91,12 +91,21 @@ VISUAL_HOOK_RE = re.compile(r"(画面|视觉|特写|近景|大特写|冲突|动�
                             r"系统面板|光幕|标题卡|字幕|烧屏|大字|caption|title|text|cold open|冷开场|倒叙)")
 PROMISE_DUE_KEYS = ("payoff_due", "payoff_episode", "payoff_ep", "payoff_clip", "payoff_at",
                     "delayed_payoff_ep", "due_episode", "due_clip")
+# GAP-2：首屏钩子内容字段从「只认 visual_conflict」泛化为 `visual_hook`——导演节奏 §二有五类钩
+# （悬念/欲望/反差/信息/危机），2026 市场更在反套路、去掉"冲突shock开场"独尊。硬门只要求"有一个
+# 静音可读的视觉钩"，不强迫每个开场都填"冲突"。`visual_conflict` 保留为向后兼容别名（老项目不报错）。
 FIRST_SCREEN_REQUIRED_FIELDS = {
-    "visual_conflict": ("visual_conflict",),
+    "visual_hook": ("visual_hook", "visual_conflict"),
     "content_proposition": ("content_proposition",),
     "onscreen_text": ("onscreen_text",),
     "muted_safe_proof": ("muted_safe_proof",),
     "expected_metric": ("expected_metric",),
+}
+# 钩子类型分类（导演节奏 §二的五类 + 情绪冲突；中英双写）。可选字段 `hook_type`：写了就校验是否在表内，
+# 不写不罚——目的是让"悬念/欲望/情绪型冷开场"光明正大成立，而非被迫硬填一个"conflict"。
+FIRST_SCREEN_HOOK_TYPES = {
+    "悬念", "欲望", "反差", "信息", "信息增量", "危机", "情绪", "情绪冲突", "冲突",
+    "suspense", "desire", "contrast", "info", "information", "crisis", "emotion", "conflict",
 }
 PROMISE_PAYOFF_STATUS_PAID = {
     "paid", "paid_off", "resolved", "closed", "done", "fulfilled", "payoff",
@@ -185,6 +194,72 @@ def _contract_field(contract, field):
     return None
 
 
+def _retention_benchmark(root):
+    if load_benchmark is None:
+        return {}
+    try:
+        data = load_benchmark(root)
+    except Exception:
+        return {}
+    rb = data.get("retention_benchmarks") if isinstance(data, dict) else None
+    return rb if isinstance(rb, dict) else {}
+
+
+def _first_screen_thresholds(root):
+    rb = _retention_benchmark(root)
+    creative = rb.get("creative_attention") if isinstance(rb, dict) else {}
+    proxy = rb.get("proxy_thresholds") if isinstance(rb, dict) else {}
+    try:
+        floor = float(proxy.get("retention_hook_floor"))
+    except Exception:
+        floor = DEFAULT_RETENTION_HOOK_FLOOR
+    band = creative.get("caption_words_per_sec_band") if isinstance(creative, dict) else None
+    if not (isinstance(band, list) and len(band) >= 2):
+        band = DEFAULT_CAPTION_WORDS_PER_SEC_BAND
+    try:
+        caption_band = (float(band[0]), float(band[1]))
+    except Exception:
+        caption_band = DEFAULT_CAPTION_WORDS_PER_SEC_BAND
+    first_6s_required = bool(creative.get("first_6s_hook_required", DEFAULT_FIRST_6S_HOOK_REQUIRED)) if isinstance(creative, dict) else DEFAULT_FIRST_6S_HOOK_REQUIRED
+    return {
+        "retention_hook_floor": floor,
+        "caption_words_per_sec_band": caption_band,
+        "first_6s_hook_required": first_6s_required,
+    }
+
+
+def _parse_expected_metric(value):
+    if not isinstance(value, dict):
+        return None, None, "expected_metric 必须是 {primary,target} 对象"
+    primary = str(value.get("primary") or value.get("metric") or "").strip()
+    target_raw = value.get("target")
+    try:
+        target = float(target_raw)
+    except (TypeError, ValueError):
+        return primary, None, "expected_metric.target 必须是 0-1 数值"
+    return primary, target, ""
+
+
+def _caption_units(text: str) -> int:
+    text = str(text or "")
+    cjk = len(CJK_RE.findall(text))
+    latin = len(LATIN_WORD_RE.findall(text))
+    return cjk + latin
+
+
+def _caption_duration(contract) -> float:
+    if not isinstance(contract, dict):
+        return DEFAULT_FIRST_SCREEN_WINDOW_SEC
+    for key in ("onscreen_text_duration_sec", "caption_duration_sec", "window_sec", "duration_sec"):
+        try:
+            value = float(contract.get(key))
+            if value > 0:
+                return value
+        except (TypeError, ValueError):
+            continue
+    return DEFAULT_FIRST_SCREEN_WINDOW_SEC
+
+
 def _first_screen_schema_missing(contract):
     if not isinstance(contract, dict):
         return list(FIRST_SCREEN_REQUIRED_FIELDS)
@@ -198,7 +273,8 @@ def _contract_muted_safe(contract) -> bool:
             return True
         if isinstance(explicit, str) and explicit.strip().lower() in {"true", "yes", "y", "1", "是", "已证明", "安全"}:
             return True
-        if _nonempty(contract.get("muted_safe_proof")) or _nonempty(contract.get("onscreen_text")):
+        proof_text = " ".join(str(contract.get(k) or "") for k in ("muted_safe_proof", "visual_hook", "visual_conflict", "onscreen_text"))
+        if _nonempty(contract.get("muted_safe_proof")) and VISUAL_HOOK_RE.search(proof_text):
             return True
     return bool(VISUAL_HOOK_RE.search(_contract_text(contract)))
 
@@ -209,24 +285,73 @@ def audit_first_screen_contract(root, ep, beats):
     if sb is None:
         return []
     findings = []
+    thresholds = _first_screen_thresholds(root)
     contracts = _candidate_first_screen_contracts(sb)
     if not contracts:
         findings.append(("must", "missing_first_3s_visual_hook",
-                         "storyboard.json 缺 first_3s_visual_hook：正式出图前必须写结构化首屏契约 visual_conflict/content_proposition/onscreen_text/muted_safe_proof/expected_metric，不能只靠旁白抓人"))
+                         "storyboard.json 缺 first_3s_visual_hook：正式出图前必须写结构化首屏契约 visual_hook(或兼容 visual_conflict)/content_proposition/onscreen_text/muted_safe_proof/expected_metric，不能只靠旁白抓人"))
         return findings
     missing_sets = [_first_screen_schema_missing(c) for c in contracts]
     if not any(not missing for missing in missing_sets):
         best_missing = min(missing_sets, key=len)
         findings.append(("must", "incomplete_first_3s_visual_hook",
-                         "first_3s_visual_hook 不是严格结构：缺 %s；正式出图前必须把首屏视觉冲突、内容承诺、烧屏文字、静音证明和目标指标写成可审计字段" %
+                         "first_3s_visual_hook 不是严格结构：缺 %s；正式出图前必须把首屏视觉钩(visual_hook，冲突/悬念/欲望/反差/信息/危机皆可)、内容承诺、烧屏文字、静音证明和目标指标写成可审计字段" %
                          ",".join(best_missing)))
+    # GAP-2：可选 hook_type 校验（写了才查；不写不罚）——让悬念/欲望/情绪型开场名正言顺，不被迫填"冲突"。
+    for contract in contracts:
+        if not isinstance(contract, dict):
+            continue
+        ht = str(contract.get("hook_type") or "").strip()
+        if ht and not all(part.strip() in FIRST_SCREEN_HOOK_TYPES for part in re.split(r"[、,/|]+", ht) if part.strip()):
+            findings.append(("warn", "first_3s_unknown_hook_type",
+                             f"first_3s_visual_hook.hook_type=『{ht}』不在钩子类型表（悬念/欲望/反差/信息/危机/情绪冲突）：确认是有意自定义还是误填；hook_type 仅约束分类、不要求一定是冲突型"))
+            break
+    valid_metric = False
+    metric_errors = []
+    floor = float(thresholds["retention_hook_floor"])
+    for contract in contracts:
+        if not isinstance(contract, dict):
+            metric_errors.append("expected_metric 缺结构化对象")
+            continue
+        primary, target, error = _parse_expected_metric(_contract_field(contract, "expected_metric"))
+        if error:
+            metric_errors.append(error)
+            continue
+        if primary not in ALLOWED_FIRST_SCREEN_METRICS:
+            metric_errors.append(f"expected_metric.primary={primary or 'missing'} 不在 retention_3s/retention_6s")
+            continue
+        if target is None or target < floor:
+            metric_errors.append(f"expected_metric.target={target if target is not None else 'missing'} 低于留存钩子目标线 {floor:.0%}")
+            continue
+        valid_metric = True
+        break
+    if not valid_metric:
+        detail = metric_errors[0] if metric_errors else "expected_metric 无法校验"
+        findings.append(("must", "invalid_first_3s_expected_metric",
+                         f"first_3s_visual_hook 目标指标不可审计：{detail}；必须写 primary=retention_3s/retention_6s 且 target ≥ 当前 retention_hook_floor"))
     if not any(_contract_muted_safe(c) for c in contracts):
         findings.append(("must", "first_3s_not_muted_safe",
                          "首屏钩子没有证明静音可读：补 visual_hook / onscreen_text_hook / muted_safe_proof，确保关声也能理解危机或悬念"))
+    caption_min, caption_max = thresholds["caption_words_per_sec_band"]
+    for contract in contracts:
+        text = _contract_field(contract, "onscreen_text")
+        if not _nonempty(text):
+            continue
+        units = _caption_units(str(text))
+        duration = _caption_duration(contract)
+        density = units / duration if duration > 0 else 0.0
+        if density > caption_max:
+            findings.append(("must", "first_3s_caption_too_dense",
+                             f"首屏烧屏文字过载：{units} units/{duration:.1f}s = {density:.1f}/s，高于基准 {caption_min:g}-{caption_max:g}/s；短剧首屏文字要可读"))
+        elif density < caption_min:
+            findings.append(("warn", "first_3s_caption_too_sparse",
+                             f"首屏烧屏文字偏少：{units} units/{duration:.1f}s = {density:.1f}/s，低于参考 {caption_min:g}-{caption_max:g}/s；确认画面钩足够强"))
+        break
     head = beats[:2]
     if head and not any(_inferred_hook(b) for b in head):
-        findings.append(("warn", "first_3s_contract_without_beat_hook",
-                         "storyboard 写了首屏契约，但 voiceover 前2拍没有钩子信号：让台词/画面节拍与 first_3s_visual_hook 对齐"))
+        severity = "must" if thresholds["first_6s_hook_required"] else "warn"
+        findings.append((severity, "missing_first_6s_beat_hook",
+                         "storyboard 写了首屏契约，但 voiceover 前2拍/约前6秒没有钩子信号：让台词/画面节拍与 first_3s_visual_hook 对齐"))
     return findings
 
 
@@ -323,6 +448,42 @@ def audit_retention_promise_ledger(root, ep, beats):
         if not tail_promises:
             findings.append(("must", "missing_tail_promise",
                              "集尾有 cliffhanger，但 retention_promise_ledger 没有集尾/追更承诺条目：补 promise_type=cliffhanger/tail_hook 与 payoff_due/delayed_payoff_ep"))
+    return findings
+
+
+HOOK_TYPE_MONOTONE_RUN = 3  # 连续同类型钩子 ≥ 此 → 单调（钩子类型该像波浪轮换）
+
+
+def _hook_type_token(promise):
+    """钩子类型 token：优先显式 hook_type，退回 promise_type；空→''（断开 run，不计单调）。"""
+    for k in ("hook_type", "promise_type"):
+        v = str(promise.get(k) or "").strip().lower()
+        if v:
+            return v
+    return ""
+
+
+def audit_hook_type_rotation(root, ep, beats):
+    """GAP-4：集内相邻钩子类型轮换——同一 hook_type/promise_type 连续 ≥N 个 = 单调，观众疲劳。
+    advisory(warn)，不阻断；ledger 不足或类型缺失优雅跳过（绝不臆造）。"""
+    sb = load_storyboard(root, ep)
+    if sb is None:
+        return []
+    seq = [_hook_type_token(p) for p in _retention_ledger(sb)]
+    findings = []
+    run_type, run_len = None, 0
+    worst = None
+    for token in seq:
+        if token and token == run_type:
+            run_len += 1
+        else:
+            run_type, run_len = token, (1 if token else 0)
+        if token and run_len >= HOOK_TYPE_MONOTONE_RUN and (worst is None or run_len > worst[1]):
+            worst = (run_type, run_len)
+    if worst:
+        findings.append(("warn", "monotone_hook_type",
+                         f"retention_promise_ledger 连续 {worst[1]} 个钩子同类型『{worst[0]}』：钩子类型要像波浪轮换"
+                         "（悬念/欲望/反差/信息/危机交替），同型连甩=观众疲劳——换一两个钩的角度或类型"))
     return findings
 
 
@@ -624,6 +785,9 @@ def audit_episode(root, ep):
     # ①d 投放回灌先验：有第一方 A/B 胜出先验时，必须明确应用或带理由拒绝。
     findings.extend(audit_creative_priors_application(root, ep))
 
+    # ①e 钩子类型轮换（GAP-4）：集内同型钩子连甩 = 观众疲劳，advisory 提示换角度。
+    findings.extend(audit_hook_type_rotation(root, ep, beats))
+
     # ② 钩子间隔（导演节奏 §二）·用 marker∪content 钩子算间隔（漏标记不再误判 hook_gap）
     if shot_secs:
         starts, total = cumulative_starts(shot_secs)
@@ -836,6 +1000,35 @@ def _episode_open_close(root, ep):
     return {"opens_cold": opens_cold, "ends_cliff": ends_cliff, "beats": len(beats)}
 
 
+def cold_open_quality_score(root, ep):
+    vpath = Path(root) / "脚本" / ep / "voiceover.txt"
+    if not vpath.exists():
+        return {"score": 0.0, "layers": {}, "depth": "unknown", "note": "voiceover.txt 不存在"}
+    beats = parse_voiceover(vpath)
+    if not beats:
+        return {"score": 0.0, "layers": {}, "depth": "unknown", "note": "无节拍数据"}
+    head = beats[:2]
+    head_text = " ".join(b["text"] for b in head)
+    conflict_re = re.compile(r"(冲突|矛盾|对抗|危机|危险|威胁|追杀|逃|战|敌|恨|怒|杀|死|仇|争|斗)")
+    conflict_layer = 1.0 if conflict_re.search(head_text) else 0.0
+    suspense_re = re.compile(r"(谁|什么|为什么|怎么|哪里|何时|秘密|真相|隐瞒|神秘|未知|谜|疑|奇怪|不对劲)")
+    suspense_layer = 1.0 if suspense_re.search(head_text) else 0.0
+    reversal_layer = 1.0 if any(REVERSAL_RE.search(b["text"]) for b in head) else 0.0
+    info_re = re.compile(r"(发现|揭露|原来|其实|真相|证据|线索|秘密|第一次|首次|竟然|没想到)")
+    info_layer = 1.0 if info_re.search(head_text) else 0.0
+    score = (conflict_layer * 0.3 + suspense_layer * 0.3 +
+             reversal_layer * 0.25 + info_layer * 0.15)
+    layers = {"conflict": conflict_layer, "suspense": suspense_layer,
+              "reversal": reversal_layer, "info": info_layer}
+    if score >= 0.6:
+        depth = "deep"
+    elif score >= 0.3:
+        depth = "moderate"
+    else:
+        depth = "shallow"
+    return {"score": round(score, 3), "layers": layers, "depth": depth}
+
+
 def cold_open_chain(root):
     """P2 跨集冷开场链：切点要让**下一集**能 0-3s 冷开场（拆集法 P2）。
 
@@ -962,13 +1155,29 @@ def main():
     if "--series" in flags:
         eps, dups = audit_series(root)
         _eps2, _states, chain_findings, chain_rate = cold_open_chain(root)
+        co_quality_rows = []
+        co_quality_findings = []
+        for ep in _eps2:
+            q = cold_open_quality_score(root, ep)
+            co_quality_rows.append({"episode": ep, **q})
+            if q["depth"] == "shallow" and q["score"] < 0.15:
+                co_quality_findings.append(("warn", "shallow_cold_open",
+                                             f"{ep} 冷开场质量极浅（score={q['score']:.2f}，depth={q['depth']}）——"
+                                             "前 2 拍缺冲突/悬念/反转信号，观众 3s 内无理由留步；补至少 2 层钩子信号"))
+            elif q["depth"] == "shallow":
+                co_quality_findings.append(("info", "weak_cold_open",
+                                             f"{ep} 冷开场偏浅（score={q['score']:.2f}，depth={q['depth']}）——"
+                                             "建议补冲突/悬念/反转中的至少一层"))
         _eps3, risk_ranked, risk_findings = narrative_risk_profile(root)
         hl_rows, hl_findings = highlight_climax_profile(root)
         if "--json" in flags:
             print(json.dumps({"episodes": eps, "duplicates": dups,
                               "cold_open_chain_rate": chain_rate,
                               "cold_open_chain_findings": [{"severity": s, "code": c, "msg": m}
-                                                          for s, c, m in chain_findings],
+                                                           for s, c, m in chain_findings],
+                              "cold_open_quality_profile": co_quality_rows,
+                              "cold_open_quality_findings": [{"severity": s, "code": c, "msg": m}
+                                                             for s, c, m in co_quality_findings],
                               "narrative_risk_profile": risk_ranked,
                               "narrative_audit_priority": [{"severity": s, "code": c, "msg": m}
                                                            for s, c, m in risk_findings],
@@ -989,6 +1198,19 @@ def main():
         else:
             for _s, c, m in chain_findings:
                 print(f"- ⚠️ [{c}] {m}")
+        print(f"\n## 冷开场质量深度（G2·{len(co_quality_rows)} 集）")
+        if not co_quality_findings:
+            scored_q = [r for r in co_quality_rows if r.get("depth") != "unknown"]
+            if scored_q:
+                avg_score = sum(r["score"] for r in scored_q) / len(scored_q)
+                print(f"- ✅ 各集冷开场质量深度健康（平均 score={avg_score:.2f}）")
+            else:
+                print("- ℹ️ 无可用冷开场数据")
+        else:
+            order = {"must": 0, "warn": 1, "info": 2}
+            icon = {"must": "⛔", "warn": "⚠️", "info": "ℹ️"}
+            for s, c, m in sorted(co_quality_findings, key=lambda f: order[f[0]]):
+                print(f"- {icon[s]} [{c}] {m}")
         print(f"\n## 叙事一致性审计优先级（G-S1·中段×高熵·ConStory·report-only·{len(risk_ranked)} 集）")
         if not risk_findings:
             print("- ℹ️ 集数太少或风险均匀，无优先建议（≥4 集才给）")

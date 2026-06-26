@@ -128,34 +128,60 @@ def load_creative_priors(root):
         return None  # 文件在但无胜出维度（样本不足）→ 等同无先验
     return data
 
-def creative_priors_evidence(data):
-    """先验 → 可落盘的 applied_creative_priors 证据字段（建议先验·非硬约束）。"""
+def _adopted_variant(sb, field):
+    """从 storyboard 读 阶段2 声明的本维度采用变体 + 理由。无声明→(None,'')。纯函数·可测。
+
+    约定字段 `creative_variants_used`（兼容 `creative_variants`）：{field: {variant, reason?}} 或 {field: "变体名"}。"""
+    cv = (sb or {}).get('creative_variants_used') or (sb or {}).get('creative_variants') or {}
+    rec = cv.get(field) if isinstance(cv, dict) else None
+    if isinstance(rec, dict):
+        return (str(rec.get('variant') or rec.get('used') or rec.get('value') or '').strip(),
+                str(rec.get('reason') or rec.get('why') or '').strip())
+    if isinstance(rec, str):
+        return rec.strip(), ''
+    return None, ''
+
+def creative_priors_evidence(data, sb=None):
+    """先验 → applied_creative_priors 证据，**按 storyboard 真验证采纳**（非无脑盖章）。纯函数·可测。
+
+    F2（2026-06-26 修真闭环）：此前每个维度无条件 status='applied'，让 beat_audit --strict 的
+    creative_prior_not_acknowledged 形同虚设——跑一下 finalize 就「已确认」，第一方投放信号被橡皮图章吞掉。
+    现按 storyboard 声明的 `creative_variants_used[field]` 真验证：采用胜出变体=applied；采用他变体+写理由
+    =rejected(可解释)；采用他变体无理由 / 未声明=pending（beat_audit --strict 会拦，交分析师真决策）。
+    **不自动改写内容**——尊重 analyst-in-loop（2026 SOTA：自动闭环尚不成立，结构化人审在环才是前沿）。"""
     priors = data.get('priors') or {}
-    applied = {}
+    metrics = {}
     decisions = {}
     for field, p in priors.items():
         if not isinstance(p, dict):
             continue
-        applied[field] = {
-            'winner': p.get('winner'),
-            'paired_lift': p.get('paired_lift'),
-            'primary_metric': p.get('primary_metric'),
-            'n': p.get('n'),
-        }
-        decisions[field] = {
-            'status': 'applied',
-            'winner': p.get('winner'),
-            'reason': 'first_party_ab_prior_available',
-        }
+        winner = str(p.get('winner') or '').strip()
+        adopted, reason = _adopted_variant(sb, field)
+        metrics[field] = {'winner': winner, 'paired_lift': p.get('paired_lift'),
+                          'primary_metric': p.get('primary_metric'), 'n': p.get('n')}
+        if adopted and winner and adopted == winner:
+            decisions[field] = {'status': 'applied', 'winner': winner, 'adopted_variant': adopted,
+                                'reason': 'storyboard 采用了 A/B 胜出变体', 'verified': True}
+        elif adopted and winner and adopted != winner and reason:
+            decisions[field] = {'status': 'rejected', 'winner': winner, 'adopted_variant': adopted,
+                                'rejected_reason': reason, 'verified': True}
+        elif adopted and winner and adopted != winner:
+            decisions[field] = {'status': 'pending', 'winner': winner, 'adopted_variant': adopted,
+                                'reason': '采用了非胜出变体但未写理由——采用胜出变体，或在 creative_variants_used 写 reason',
+                                'verified': False}
+        else:
+            decisions[field] = {'status': 'pending', 'winner': winner,
+                                'reason': 'storyboard 未在 creative_variants_used 声明本维度采用哪个变体——采用胜出变体或写拒绝理由',
+                                'verified': False}
     return {
         'source': CREATIVE_PRIORS_FILENAME,
         'priors_generated_at': data.get('generated_at'),
-        'applied_creative_priors': applied,
+        'prior_metrics': metrics,  # 改名（原 applied_creative_priors）：避免 beat_audit legacy 路径把元数据当 applied 自动盖章
         'decisions': decisions,
     }
 
-def creative_priors_hint(data):
-    """人可见提示：胜出先验逐条点名，提醒阶段2 开场/断点设计参考（不静默吞）。"""
+def creative_priors_hint(data, ev=None):
+    """人可见提示：胜出先验逐条点名 + 本集真验证的采纳状态（applied/rejected/⏳待决策），不静默吞。"""
     _LABEL = {
         'opening_variant': '开场',
         'cliffhanger_cut_variant': '集尾断点',
@@ -163,15 +189,26 @@ def creative_priors_hint(data):
         'title_variant': '标题文案',
     }
     priors = data.get('priors') or {}
+    decisions = (ev or {}).get('decisions') or {}
     lines = [f"投放回灌先验（{data.get('generated_at') or '?'} 采集，A/B paired-lift 胜出·建议先验）："]
+    pending = []
     for field, p in priors.items():
         if not isinstance(p, dict):
             continue
         label = _LABEL.get(field, field)
         lift = p.get('paired_lift')
         lift_s = f"+{lift*100:.1f}%" if isinstance(lift, (int, float)) else '—'
-        lines.append(f"  - {label}优先复用 `{p.get('winner')}`：同集 paired-lift {lift_s}（{p.get('primary_metric')}，n={p.get('n')}）")
-    lines.append("  → 阶段2 开场/断点设计参考上表；样本不足的维度不在此列，不必强套。")
+        st = (decisions.get(field) or {}).get('status', 'pending')
+        mark = {'applied': '✅采用', 'rejected': '↩拒绝(有理由)', 'pending': '⏳待决策'}.get(st, st)
+        lines.append(f"  - {label}优先复用 `{p.get('winner')}`：同集 paired-lift {lift_s}（{p.get('primary_metric')}，n={p.get('n')}）[{mark}]")
+        if st == 'pending':
+            pending.append(label)
+    if pending:
+        lines.append(f"  ⚠️ 未决策维度：{('、'.join(pending))}——在 storyboard.json 写 `creative_variants_used`:"
+                     " {字段:{variant:采用的变体, reason?:不采用胜出时的理由}}，否则 beat_audit --strict 会拦"
+                     "（投放胜出信号不能被橡皮图章吞掉）。")
+    else:
+        lines.append("  → 各维度均已真验证采纳/拒绝；设计下一批开场与集尾断点优先参考已被投放数据验证的胜出变体。")
     return "\n".join(lines)
 
 def _is_placeholder_en_texts(texts):
@@ -201,10 +238,16 @@ def main():
     def _apply_priors():
         if not priors:
             return
-        ev = creative_priors_evidence(priors)
+        # F2：读 storyboard 真验证采纳（非无脑盖章）。缺 storyboard → 全维 pending（交分析师决策）。
+        sb = None
+        try:
+            sb = json.load(open(os.path.join(root,'脚本',ep,'storyboard.json'),encoding='utf-8'))
+        except (OSError, ValueError):
+            sb = None
+        ev = creative_priors_evidence(priors, sb)
         json.dump(ev, open(os.path.join(root,'脚本',ep,'applied_creative_priors.json'),'w',encoding='utf-8'),
                   ensure_ascii=False, indent=2)
-        print(creative_priors_hint(priors))
+        print(creative_priors_hint(priors, ev))
     # 时长清单一律落 合成/（render_voice 与制作模式无关；出视频/ 为已废弃历史路径的兜底）——走 n2d_route 单一真值源
     man_p = manifest_path(root, ep)
     native_av = is_native_av(root)

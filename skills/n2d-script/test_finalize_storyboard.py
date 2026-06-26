@@ -184,11 +184,13 @@ def test_creative_priors_evidence_shape(tmp_path):
     data = {"kind": "n2d_creative_priors", "generated_at": "2026-06-22T00:00:00+00:00",
             "priors": {"opening_variant": {"winner": "cold_open_first", "paired_lift": 0.18,
                                            "primary_metric": "retention_3s", "n": 2}}}
-    ev = F.creative_priors_evidence(data)
+    sb = {"creative_variants_used": {"opening_variant": {"variant": "cold_open_first"}}}
+    ev = F.creative_priors_evidence(data, sb)
     assert ev["source"] == "creative_priors.json"
     assert ev["priors_generated_at"] == "2026-06-22T00:00:00+00:00"
-    assert ev["applied_creative_priors"]["opening_variant"]["winner"] == "cold_open_first"
-    hint = F.creative_priors_hint(data)
+    assert ev["prior_metrics"]["opening_variant"]["winner"] == "cold_open_first"  # 元数据改名
+    assert ev["decisions"]["opening_variant"]["status"] == "applied"  # storyboard 采用胜出→真 applied
+    hint = F.creative_priors_hint(data, ev)
     assert "开场优先复用" in hint and "cold_open_first" in hint
 
 
@@ -211,7 +213,10 @@ def test_finalize_emits_priors_evidence_native_av(tmp_path):
     ev_path = os.path.join(root, "脚本", ep, "applied_creative_priors.json")
     assert os.path.exists(ev_path)
     ev = json.load(open(ev_path, encoding="utf-8"))
-    assert ev["applied_creative_priors"]["opening_variant"]["winner"] == "cold_open_first"
+    assert ev["prior_metrics"]["opening_variant"]["winner"] == "cold_open_first"
+    # storyboard 未声明 creative_variants_used → pending（不再无脑 applied·F2 修真闭环）
+    assert ev["decisions"]["opening_variant"]["status"] == "pending"
+    assert "待决策" in r.stdout
 
 
 def test_finalize_noop_without_priors_native_av(tmp_path):
@@ -228,3 +233,48 @@ def test_finalize_noop_without_priors_native_av(tmp_path):
     assert r.returncode == 0, r.stdout + r.stderr
     assert "投放回灌先验" not in r.stdout
     assert not os.path.exists(os.path.join(root, "脚本", ep, "applied_creative_priors.json"))
+
+
+# --- F2: creative priors 真验证采纳（非橡皮图章·2026-06-26）---
+
+def _priors(winner="cold_open_first"):
+    return {"kind": "n2d_creative_priors", "generated_at": "2026-06-20",
+            "priors": {"opening_variant": {"winner": winner, "paired_lift": 0.12,
+                                           "primary_metric": "retention_3s", "n": 6}}}
+
+
+def test_evidence_applied_when_storyboard_adopts_winner():
+    sb = {"creative_variants_used": {"opening_variant": {"variant": "cold_open_first"}}}
+    ev = F.creative_priors_evidence(_priors(), sb)
+    d = ev["decisions"]["opening_variant"]
+    assert d["status"] == "applied" and d["verified"] is True
+    assert "applied_creative_priors" not in ev  # 元数据已改名 prior_metrics，不再触发 legacy 自动盖章
+    assert "prior_metrics" in ev
+
+
+def test_evidence_rejected_when_other_variant_with_reason():
+    sb = {"creative_variants_used": {"opening_variant": {"variant": "in_media_res", "reason": "本集走悬疑冷场更贴题材"}}}
+    ev = F.creative_priors_evidence(_priors(), sb)
+    d = ev["decisions"]["opening_variant"]
+    assert d["status"] == "rejected" and d["rejected_reason"].startswith("本集走悬疑")
+
+
+def test_evidence_pending_when_other_variant_without_reason():
+    sb = {"creative_variants_used": {"opening_variant": {"variant": "in_media_res"}}}
+    ev = F.creative_priors_evidence(_priors(), sb)
+    assert ev["decisions"]["opening_variant"]["status"] == "pending"
+
+
+def test_evidence_pending_when_no_declaration_not_rubber_stamped():
+    # 核心：未声明 → pending（不再无脑 applied）→ beat_audit --strict 会拦
+    ev = F.creative_priors_evidence(_priors(), sb=None)
+    d = ev["decisions"]["opening_variant"]
+    assert d["status"] == "pending" and d["verified"] is False
+
+
+def test_adopted_variant_parsing():
+    sb = {"creative_variants_used": {"a": {"variant": "x", "reason": "r"}, "b": "y"}}
+    assert F._adopted_variant(sb, "a") == ("x", "r")
+    assert F._adopted_variant(sb, "b") == ("y", "")
+    assert F._adopted_variant(sb, "missing") == (None, "")
+    assert F._adopted_variant(None, "a") == (None, "")

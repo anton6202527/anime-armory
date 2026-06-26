@@ -34,6 +34,7 @@ _LIB = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d"
 if _LIB not in sys.path:
     sys.path.insert(0, _LIB)
 from n2d_color import warmth_log_ratio  # noqa: E402  暖冷度量单一真值源（与 review color_grade 共用）
+from n2d_logic import kelvin_warmth as _canonical_kelvin_warmth  # noqa: E402  Kelvin→暖冷分档单一真值源（与 review gate 同切点）
 
 
 def _envf(name: str, default: float) -> float:
@@ -68,19 +69,17 @@ def _first_hit(text: str, tokens: Sequence[str]) -> int:
 
 
 def _kelvin_warmth(text: str) -> Optional[str]:
-    """从 `3000K`/`5600K` 这类色温推暖冷：<4000=暖，>5000=冷，之间/无 → None。纯函数。"""
+    """从 `3000K`/`5600K` 这类色温推暖冷。暖冷**分档委托** `n2d_logic.kelvin_warmth` 单一真值源
+    （<=4000 暖 / >=5500 冷 / 之间中性→None），避免与 review gate 各持一套切点——曾 image 侧 >5000=冷、
+    review 侧 >=5500=冷，对同一 5200K 一个判冷一个判中性。合理区间也对齐 n2d_logic 的 1000–20000K。纯函数。"""
     import re
     hits = re.findall(r"(\d{3,5})\s*[kK]", text or "")
     temps = [int(h) for h in hits if h.isdigit()]
-    temps = [t for t in temps if 1500 <= t <= 12000]
+    temps = [t for t in temps if 1000 <= t <= 20000]
     if not temps:
         return None
-    avg = sum(temps) / len(temps)
-    if avg < 4000:
-        return "warm"
-    if avg > 5000:
-        return "cool"
-    return None
+    band = _canonical_kelvin_warmth(int(round(sum(temps) / len(temps))))
+    return None if band == "neutral" else band
 
 
 def parse_tone_intent(tone_text: str, light_text: str = "") -> Dict[str, Any]:

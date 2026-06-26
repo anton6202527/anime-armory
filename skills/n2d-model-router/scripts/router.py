@@ -2407,7 +2407,11 @@ def apply_baseline(plan: Dict[str, Any], baseline: Mapping[str, str]) -> List[Di
         st = str(route.get("shot_type") or "")
         want = baseline.get(st)
         cur = str(route.get("primary_backend") or "")
-        if not want or want == cur:
+        if not want:
+            continue
+        if want == cur:
+            if plan.get("routing_mode") != "fixed_default":
+                route["baseline_anchored"] = True
             continue
         if plan.get("routing_mode") == "fixed_default":
             route["baseline_deferred"] = {

@@ -513,9 +513,11 @@ def effective_frame_backend(backend: Optional[str], channel: Optional[str] = Non
 
 
 def backend_supports_three_plus_frames(backend: Optional[str], channel: Optional[str] = None) -> bool:
-    """三帧契约能力门控：路由视频后端能否表达 ≥3 个关键帧（首+中+尾）。
+    """Whether the route can express 3+ timeline anchors (first + mid + last).
 
-    True = 必须走三帧契约（默认强制·不因 cost/风格豁免）。判定（向前看·宁强制勿放过）：
+    True means high-risk anchors can be executed and ordinary D0 midframes may be enabled by policy.
+    It no longer overrides the project-level ROI/speed choice for low-risk ordinary clips.
+    判定（向前看·宁强制勿放过）：
       · 后端不在档案里（未知/新后端）→ True（默认假定支持；后端在普遍支持化）。
       · 原生多帧（supports_native_mid_anchors，如即梦 multiframe2video）→ True。
       · max_timeline_frames ≥ 3 → True。

@@ -58,6 +58,40 @@ def write_storyboard(root: Path, episode: str, *, first: str, tail: str, duratio
     path.write_text(json.dumps({"episode": int(episode), "total_duration": duration, "clips": clips}, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+def _audit_codes(result: dict) -> set[str]:
+    return {f.get("code") for f in (result.get("input_audit") or {}).get("findings") or []}
+
+
+def test_first_episode_completion_below_floor_flagged(tmp_path: Path) -> None:
+    # GAP-3：第1集完播低于 benchmark first_episode_completion_floor(0.75) → 单独报 warn。
+    metrics = tmp_path / "生产数据" / "platform_metrics.csv"
+    write_csv(metrics, [
+        {"episode": "第1集", "plays": 1000, "retention_3s": 0.80, "completion_rate": 0.34, "follow_next_rate": 0.18},
+        {"episode": "第2集", "plays": 1000, "retention_3s": 0.78, "completion_rate": 0.33, "follow_next_rate": 0.17},
+    ])
+    write_storyboard(tmp_path, "1", first="柳娘子端着赐死托盘压近，沈念惊醒。", tail="黑衣人举刀冲入门口。")
+    write_storyboard(tmp_path, "2", first="太监拖走小禾，沈念眼神骤冷。", tail="追杀者拔剑逼近。")
+    result = feedback.analyze_feedback(str(tmp_path), str(metrics), None, min_samples=2, min_lift=0.05)
+    findings = (result.get("input_audit") or {}).get("findings") or []
+    ep1 = [f for f in findings if f.get("code") == "first_episode_completion_below_floor"]
+    assert ep1 and ep1[0]["episode"] == "第1集"
+    # 第2集低完播不该触发首集地板（只判 ep1）。
+    assert all(f.get("episode") != "第2集" for f in ep1)
+
+
+def test_first_episode_completion_above_floor_not_flagged(tmp_path: Path) -> None:
+    # GAP-3：第1集完播达标 → 不报。
+    metrics = tmp_path / "生产数据" / "platform_metrics.csv"
+    write_csv(metrics, [
+        {"episode": "第1集", "plays": 1000, "retention_3s": 0.86, "completion_rate": 0.80, "follow_next_rate": 0.30},
+        {"episode": "第2集", "plays": 1000, "retention_3s": 0.78, "completion_rate": 0.33, "follow_next_rate": 0.17},
+    ])
+    write_storyboard(tmp_path, "1", first="柳娘子端着赐死托盘压近，沈念惊醒。", tail="黑衣人举刀冲入门口。")
+    write_storyboard(tmp_path, "2", first="太监拖走小禾，沈念眼神骤冷。", tail="追杀者拔剑逼近。")
+    result = feedback.analyze_feedback(str(tmp_path), str(metrics), None, min_samples=2, min_lift=0.05)
+    assert "first_episode_completion_below_floor" not in _audit_codes(result)
+
+
 def test_feedback_finds_opening_and_cliffhanger_winners(tmp_path: Path) -> None:
     metrics = tmp_path / "生产数据" / "platform_metrics.csv"
     features = tmp_path / "生产数据" / "creative_features.csv"
@@ -244,6 +278,58 @@ def test_feedback_analyzes_paywall_and_continue_path(tmp_path: Path) -> None:
     assert any("追更路径" in item for item in result["recommendations"])
 
 
+def test_paywall_promise_alignment_validates_ledger_ids(tmp_path: Path) -> None:
+    metrics = tmp_path / "生产数据" / "platform_metrics.csv"
+    write_csv(
+        metrics,
+        [
+            {"episode": "第1集", "plays": 1000, "retention_3s": 0.80, "retention_6s": 0.70, "retention_15s": 0.55, "completion_rate": 0.34, "follow_next_rate": 0.22, "unlock_or_subscribe_rate": 0.18, "paywall_position_sec": 38, "paywall_after_promise_id": "OPEN_01", "continue_path": "next_button_sticky"},
+            {"episode": "第2集", "plays": 1000, "retention_3s": 0.60, "retention_6s": 0.50, "retention_15s": 0.36, "completion_rate": 0.20, "follow_next_rate": 0.08, "unlock_or_subscribe_rate": 0.04, "paywall_position_sec": 12, "paywall_after_promise_id": "MISSING_01", "continue_path": "end_card_only"},
+        ],
+    )
+    for ep, hook in (("1", "OPEN_01"), ("2", "OPEN_02")):
+        write_storyboard(tmp_path, ep, first="门外刀影压进画面，沈念惊醒。", tail="黑衣人举刀冲入门口。")
+        path = tmp_path / "脚本" / f"第{ep}集" / "storyboard.json"
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["retention_promise_ledger"] = [
+            {
+                "hook_id": hook,
+                "promise_type": "opening_hook",
+                "opened_at": "Clip_01",
+                "promise": "门外是谁",
+                "payoff_due": "Clip_03",
+                "payoff_status": "paid",
+                "payoff_clip": "Clip_03",
+                "payoff_evidence": "Clip_03 揭示刺客身份",
+            }
+        ]
+        path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    result = feedback.analyze_feedback(str(tmp_path), str(metrics), None, min_samples=1, min_lift=0.01)
+    alignment = result["analyses"]["paywall_promise_alignment"]
+
+    assert any(group["name"] == "aligned" and group["n"] == 1 for group in alignment["groups"])
+    assert any(item["code"] == "paywall_unknown_promise_id" for item in alignment["findings"])
+    assert any(item["code"] == "paywall_unknown_promise_id" for item in result["input_audit"]["findings"])
+
+
+def test_input_audit_reports_missing_required_and_paid_fields(tmp_path: Path) -> None:
+    metrics = tmp_path / "生产数据" / "platform_metrics.csv"
+    write_csv(
+        metrics,
+        [
+            {"episode": "第1集", "plays": 1000, "retention_3s": 0.80, "unlock_or_subscribe_rate": 0.12, "paywall_position_sec": 30},
+        ],
+    )
+    write_storyboard(tmp_path, "1", first="门外刀影压进画面，沈念惊醒。", tail="黑衣人举刀冲入门口。")
+
+    result = feedback.analyze_feedback(str(tmp_path), str(metrics), None, min_samples=1, min_lift=0.01)
+    findings = result["input_audit"]["findings"]
+
+    assert any(item["code"] == "missing_required_metric" and item.get("metric") == "retention_6s" for item in findings)
+    assert any(item["code"] == "missing_paid_retention_field" and item.get("field") == "paywall_after_promise_id" for item in findings)
+
+
 def test_consistency_findings_ingestion(tmp_path):
     """一致性回灌：读 consistency_findings_*.json 出维度计数/最严重集，并排留存指标；无文件优雅跳过。"""
     root = tmp_path
@@ -335,6 +421,27 @@ def test_build_creative_priors_picks_significant_winners():
     assert p["cliffhanger_cut_variant"]["winner"] == "hard_cut_before_reveal"
     assert "cover_variant" not in p
     assert "title_variant" not in p
+
+
+def test_build_creative_priors_includes_paywall_and_continue_path():
+    analyses = {
+        "paywall_unlock": {
+            "best": {"name": "16-45s 前中段卡点", "lift": 0.08, "n": 3, "plays": 3000,
+                     "unlock_or_subscribe_rate": 0.18, "episodes": ["第1集", "第2集", "第3集"]},
+        },
+        "continue_path_follow": {
+            "best": {"name": "next_button_sticky", "lift": 0.06, "n": 3, "plays": 3000,
+                     "follow_next_rate": 0.22, "episodes": ["第1集", "第2集", "第3集"]},
+        },
+    }
+
+    priors = feedback.build_creative_priors(analyses, min_lift=0.05, min_samples=2)
+    p = priors["priors"]
+
+    assert p["paywall_position_bucket"]["winner"] == "16-45s 前中段卡点"
+    assert p["paywall_position_bucket"]["lift"] == 0.08
+    assert p["continue_path"]["winner"] == "next_button_sticky"
+    assert p["continue_path"]["primary_metric"] == "follow_next_rate"
 
 
 def test_build_creative_priors_skips_when_samples_insufficient():

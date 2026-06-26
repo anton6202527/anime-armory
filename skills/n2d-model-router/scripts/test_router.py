@@ -107,6 +107,30 @@ def test_spectacle_backend_benchmark_can_override_auto_route(tmp_path):
     assert plan["spectacle_backend_benchmark"]["applied"][0]["now"] == "seedance"
     assert route["execution_recipe"]["execution_backend"] == "seedance"
     assert route["execution_recipe"]["reference_inputs"]["motion_reference"]["allowed"] is True
+    assert route["policy_resolution"]["winner"] == "motion_control_required"
+
+
+def test_spectacle_backend_benchmark_defers_to_cross_episode_baseline(tmp_path):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{"id": "Clip 1", "template": "fight_exchange", "scene": "王敦挥剑命中追兵"}])
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    (prod / "spectacle_backend_benchmark.json").write_text(json.dumps({
+        "kind": "n2d_spectacle_backend_benchmark",
+        "version": 1,
+        "recommendations": {
+            "fight_exchange": {"primary_backend": "seedance", "score": 91, "evidence": "pilot probe"}
+        },
+    }, ensure_ascii=False), encoding="utf-8")
+
+    plan = router.route_episode(root, "第1集", baseline={"fight_exchange": "kling"})
+    route = plan["routes"][0]
+
+    assert route["primary_backend"] == "kling"
+    assert "spectacle_benchmark_deferred_by_baseline" in route["risk_flags"]
+    assert route["spectacle_benchmark_deferred"]["recommended_backend"] == "seedance"
+    assert route["policy_resolution"]["winner"] == "motion_control_required"
+    assert any(c["surface"] == "backend_choice" for c in route["policy_resolution"]["conflicts"])
 
 
 def test_execution_multiframe_channel_overrides_doomed_kling_primary(tmp_path):
@@ -354,6 +378,7 @@ def test_fixed_mode_uses_default_backend(tmp_path):
     assert plan["default_backend"] == "kling"
     assert route["primary_backend"] == "kling"
     assert route["shot_type"] == "fight_exchange"
+    assert route["policy_resolution"]["winner"] == "fixed_mode"
 
 
 def test_split_video_model_setting_drives_fixed_default(tmp_path):
@@ -458,7 +483,9 @@ def test_write_plan_outputs_json_and_markdown(tmp_path):
 
     assert paths["json"].is_file()
     assert paths["markdown"].is_file()
+    assert paths["policy_lattice"].is_file()
     assert "本集模型路由表" in paths["markdown"].read_text(encoding="utf-8")
+    assert json.loads(paths["policy_lattice"].read_text(encoding="utf-8"))["kind"] == "n2d_consistency_policy_lattice"
 
 
 # ── T7: 视频后端跨集锁（model_routes_baseline）────────────────────────────────
@@ -481,6 +508,28 @@ def test_apply_baseline_anchors_primary_and_records_drift():
     assert r["fallback_backends"][0] == "seedance"        # 原 primary 降为 fallback 首项（不丢）
     assert r["baseline_anchored"] is True
     assert drift == [{"clip_id": "C1", "shot_type": "dialogue_shot", "was": "seedance", "now": "kling"}]
+
+
+def test_apply_baseline_defers_to_locked_backend():
+    plan = {"routes": [{"clip_id": "C1", "shot_type": "dialogue_shot",
+                        "primary_backend": "kling", "locked_backend": "kling",
+                        "fallback_backends": ["seedance"]}]}
+    drift = router.apply_baseline(plan, {"dialogue_shot": "seedance"})
+    r = plan["routes"][0]
+    assert r["primary_backend"] == "kling"
+    assert "baseline_deferred_by_locked_backend" in r["risk_flags"]
+    assert drift[0]["reason"] == "identity_affinity_locked_backend"
+
+
+def test_apply_baseline_defers_in_fixed_mode():
+    plan = {"routing_mode": "fixed_default",
+            "routes": [{"clip_id": "C1", "shot_type": "dialogue_shot",
+                        "primary_backend": "dreamina", "fallback_backends": ["seedance"]}]}
+    drift = router.apply_baseline(plan, {"dialogue_shot": "kling"})
+    r = plan["routes"][0]
+    assert r["primary_backend"] == "dreamina"
+    assert "baseline_deferred_by_fixed_mode" in r["risk_flags"]
+    assert drift[0]["reason"] == "fixed_default"
 
 
 def test_write_then_load_baseline_roundtrip(tmp_path):

@@ -225,3 +225,52 @@ def test_lora_register_rejects_dataset_warning_override_without_notes(tmp_path):
     )
 
     assert lora.main(["register", str(root), "--character-id", "CHAR_SHEN", "--form", "常态"]) == 2
+
+
+def test_lora_exception_scope_writes_and_checks_manifest(tmp_path):
+    root = _root(tmp_path)
+
+    assert lora.main([
+        "exception-scope",
+        str(root),
+        "第1集",
+        "--character-id",
+        "CHAR_SHEN",
+        "--form",
+        "常态",
+        "--clip",
+        "Clip_03,Clip_08",
+        "--reason",
+        "hero shot needs the approved LoRA for one close-up",
+        "--project-image-model",
+        "GPT Image 2",
+        "--lora-base-model",
+        "flux-dev",
+        "--style-bridge",
+        "match series_grade and run full image_qc before video",
+    ]) == 0
+
+    path = root / "生产数据" / "lora_exception_scope_第1集.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    assert data["kind"] == "n2d_lora_exception_scope"
+    assert data["clips"] == ["Clip_03", "Clip_08"]
+    assert data["not_a_project_model_switch"] is True
+    assert lora.main(["exception-scope", str(root), "第1集", "--check"]) == 0
+
+
+def test_lora_exception_scope_validator_rejects_project_switch_shape():
+    blocks = lora.validate_exception_scope({
+        "kind": "n2d_lora_exception_scope",
+        "episode": "第1集",
+        "character_id": "CHAR_SHEN",
+        "clips": ["Clip_03"],
+        "reason": "hero",
+        "project_image_model": "GPT Image 2",
+        "lora_base_model": "flux-dev",
+        "style_bridge": "grade bridge",
+        "scope": "whole_episode",
+        "not_a_project_model_switch": False,
+    })
+
+    assert "scope must be hero_shots_only" in blocks
+    assert "not_a_project_model_switch must be true" in blocks

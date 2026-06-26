@@ -243,7 +243,7 @@ def test_storyboard_first_screen_and_promise_ledger_pass():
             "content_proposition": "门外杀机逼近，观众要知道谁来害她",
             "onscreen_text": "谁在门外？",
             "muted_safe_proof": "刀影、惊恐特写和烧屏字幕同屏，关声也能读懂危机",
-            "expected_metric": {"primary": "retention_3s", "target": 0.78},
+            "expected_metric": {"primary": "retention_3s", "target": 0.80},
             "muted_safe": True,
         },
         "retention_promise_ledger": [
@@ -282,6 +282,90 @@ def test_incomplete_retention_promise_flags():
     assert "missing_tail_promise" in c
 
 
+def test_emotion_visual_hook_without_conflict_passes():
+    # GAP-2：悬念/情绪型冷开场用 visual_hook 描述，不含"冲突"，且 hook_type 在表内——不应报缺失/未知类型。
+    root = _mk_ep(GOOD)
+    sb = Path(root) / "脚本" / "第1集" / "storyboard.json"
+    sb.write_text(json.dumps({
+        "first_3s_visual_hook": {
+            "visual_hook": "沈念含泪望向空荡的房间，一封未拆的信在桌上特写",
+            "hook_type": "悬念",
+            "content_proposition": "这封信会揭开她的身世",
+            "onscreen_text": "这封信，藏着她不敢看的真相",
+            "muted_safe_proof": "含泪表情+信件特写+标题卡，关声也读得懂悬念",
+            "expected_metric": {"primary": "retention_3s", "target": 0.82},
+            "muted_safe": True,
+        },
+        "retention_promise_ledger": [
+            {"hook_id": "OPEN_01", "promise_type": "opening_hook", "opened_at": "镜头1", "promise": "信里是什么", "payoff_due": "镜头3", "payoff_status": "paid", "payoff_clip": "镜头3", "payoff_evidence": "镜头3拆信揭身世"},
+            {"hook_id": "TAIL_01", "promise_type": "cliffhanger", "opened_at": "镜头4", "promise": "寄信人未露面", "delayed_payoff_ep": "第2集"},
+        ],
+        "clips": [{"id": "C1", "rhythm": "冷开场", "duration": 3}],
+    }, ensure_ascii=False), encoding="utf-8")
+    findings, _ = B.audit_episode(root, "第1集")
+    c = codes(findings)
+    assert "missing_first_3s_visual_hook" not in c
+    assert "incomplete_first_3s_visual_hook" not in c
+    assert "first_3s_not_muted_safe" not in c
+    assert "first_3s_unknown_hook_type" not in c
+
+
+def test_unknown_hook_type_warns():
+    # GAP-2：hook_type 写了但不在分类表 → advisory warn（不阻断）。
+    root = _mk_ep(GOOD)
+    sb = Path(root) / "脚本" / "第1集" / "storyboard.json"
+    sb.write_text(json.dumps({
+        "first_3s_visual_hook": {
+            "visual_hook": "沈念脸部大特写，门外刀影压进画面",
+            "hook_type": "随便乱填的类型",
+            "content_proposition": "门外杀机逼近",
+            "onscreen_text": "谁在门外？",
+            "muted_safe_proof": "刀影+惊恐特写+字幕，关声也读得懂",
+            "expected_metric": {"primary": "retention_3s", "target": 0.80},
+            "muted_safe": True,
+        },
+        "retention_promise_ledger": [
+            {"hook_id": "OPEN_01", "promise_type": "opening_hook", "opened_at": "镜头1", "promise": "门外是谁", "payoff_due": "镜头3", "payoff_status": "paid", "payoff_clip": "镜头3", "payoff_evidence": "镜头3揭示"},
+            {"hook_id": "TAIL_01", "promise_type": "cliffhanger", "opened_at": "镜头4", "promise": "主使未露", "delayed_payoff_ep": "第2集"},
+        ],
+        "clips": [{"id": "C1", "rhythm": "冷开场", "duration": 3}],
+    }, ensure_ascii=False), encoding="utf-8")
+    findings, _ = B.audit_episode(root, "第1集")
+    assert any(sev == "warn" and code == "first_3s_unknown_hook_type" for sev, code, _ in findings)
+
+
+def test_monotone_hook_type_warns():
+    # GAP-4：连续 ≥3 个同类型钩子（这里 hook_type 都为"危机"）→ advisory warn，不阻断。
+    root = _mk_ep(GOOD)
+    sb = Path(root) / "脚本" / "第1集" / "storyboard.json"
+    sb.write_text(json.dumps({
+        "retention_promise_ledger": [
+            {"hook_id": "H1", "promise_type": "mid_hook", "hook_type": "危机", "opened_at": "镜头1", "promise": "p1", "payoff_due": "镜头2"},
+            {"hook_id": "H2", "promise_type": "mid_hook", "hook_type": "危机", "opened_at": "镜头2", "promise": "p2", "payoff_due": "镜头3"},
+            {"hook_id": "H3", "promise_type": "mid_hook", "hook_type": "危机", "opened_at": "镜头3", "promise": "p3", "payoff_due": "镜头4"},
+        ],
+        "clips": [{"id": "C1", "rhythm": "冷开场", "duration": 3}],
+    }, ensure_ascii=False), encoding="utf-8")
+    findings, _ = B.audit_episode(root, "第1集")
+    assert any(sev == "warn" and code == "monotone_hook_type" for sev, code, _ in findings)
+
+
+def test_rotated_hook_types_no_monotone_warn():
+    # GAP-4：钩子类型轮换（危机→悬念→信息）不应报单调。
+    root = _mk_ep(GOOD)
+    sb = Path(root) / "脚本" / "第1集" / "storyboard.json"
+    sb.write_text(json.dumps({
+        "retention_promise_ledger": [
+            {"hook_id": "H1", "promise_type": "mid_hook", "hook_type": "危机", "opened_at": "镜头1", "promise": "p1", "payoff_due": "镜头2"},
+            {"hook_id": "H2", "promise_type": "mid_hook", "hook_type": "悬念", "opened_at": "镜头2", "promise": "p2", "payoff_due": "镜头3"},
+            {"hook_id": "H3", "promise_type": "mid_hook", "hook_type": "信息", "opened_at": "镜头3", "promise": "p3", "payoff_due": "镜头4"},
+        ],
+        "clips": [{"id": "C1", "rhythm": "冷开场", "duration": 3}],
+    }, ensure_ascii=False), encoding="utf-8")
+    findings, _ = B.audit_episode(root, "第1集")
+    assert not any(code == "monotone_hook_type" for _, code, _ in findings)
+
+
 def test_weak_first_screen_schema_is_must():
     root = _mk_ep(GOOD)
     sb = Path(root) / "脚本" / "第1集" / "storyboard.json"
@@ -295,6 +379,77 @@ def test_weak_first_screen_schema_is_must():
     }, ensure_ascii=False), encoding="utf-8")
     findings, _ = B.audit_episode(root, "第1集")
     assert any(sev == "must" and code == "incomplete_first_3s_visual_hook" for sev, code, _ in findings)
+
+
+def test_first_screen_expected_metric_target_is_hard_audited():
+    root = _mk_ep(GOOD)
+    sb = Path(root) / "脚本" / "第1集" / "storyboard.json"
+    sb.write_text(json.dumps({
+        "first_3s_visual_hook": {
+            "visual_conflict": "沈念脸部大特写，门外刀影压进画面",
+            "content_proposition": "门外杀机逼近，观众要知道谁来害她",
+            "onscreen_text": "谁在门外？",
+            "muted_safe_proof": "刀影、惊恐特写和烧屏字幕同屏，关声也能读懂危机",
+            "expected_metric": {"primary": "retention_3s", "target": 0.60},
+            "muted_safe": True,
+        },
+        "retention_promise_ledger": [
+            {"hook_id": "OPEN_01", "promise_type": "opening_hook", "opened_at": "镜头1", "promise": "门外是谁", "payoff_due": "第2集"},
+            {"hook_id": "TAIL_01", "promise_type": "cliffhanger", "opened_at": "镜头4", "promise": "主使是谁", "delayed_payoff_ep": "第2集"},
+        ],
+        "clips": [{"id": "C1", "rhythm": "冷开场", "duration": 3}],
+    }, ensure_ascii=False), encoding="utf-8")
+    findings, _ = B.audit_episode(root, "第1集")
+    assert "invalid_first_3s_expected_metric" in codes(findings)
+
+
+def test_first_screen_caption_overload_is_must():
+    root = _mk_ep(GOOD)
+    sb = Path(root) / "脚本" / "第1集" / "storyboard.json"
+    sb.write_text(json.dumps({
+        "first_3s_visual_hook": {
+            "visual_conflict": "沈念脸部大特写，门外刀影压进画面",
+            "content_proposition": "门外杀机逼近，观众要知道谁来害她",
+            "onscreen_text": "谁在门外谁在门外谁在门外谁在门外谁在门外谁在门外谁在门外谁在门外谁在门外谁在门外",
+            "muted_safe_proof": "刀影、惊恐特写和烧屏字幕同屏，关声也能读懂危机",
+            "expected_metric": {"primary": "retention_3s", "target": 0.80},
+            "muted_safe": True,
+        },
+        "retention_promise_ledger": [
+            {"hook_id": "OPEN_01", "promise_type": "opening_hook", "opened_at": "镜头1", "promise": "门外是谁", "payoff_due": "第2集"},
+            {"hook_id": "TAIL_01", "promise_type": "cliffhanger", "opened_at": "镜头4", "promise": "主使是谁", "delayed_payoff_ep": "第2集"},
+        ],
+        "clips": [{"id": "C1", "rhythm": "冷开场", "duration": 3}],
+    }, ensure_ascii=False), encoding="utf-8")
+    findings, _ = B.audit_episode(root, "第1集")
+    assert "first_3s_caption_too_dense" in codes(findings)
+
+
+def test_first_six_seconds_without_beat_hook_is_must():
+    vo = """[镜头1·沈念·平静·慢] 她慢慢走进屋里。
+[镜头2·旁白·低沉] 屋里很安静。
+[镜头3·沈念·惊恐·快] 门外刀影压近，危机来了！  ⚡钩子
+[镜头4·沈念·阴狠·慢] 这局，才刚开始。  🪝集尾
+"""
+    root = _mk_ep(vo)
+    sb = Path(root) / "脚本" / "第1集" / "storyboard.json"
+    sb.write_text(json.dumps({
+        "first_3s_visual_hook": {
+            "visual_conflict": "沈念脸部大特写，门外刀影压进画面",
+            "content_proposition": "门外杀机逼近，观众要知道谁来害她",
+            "onscreen_text": "谁在门外？",
+            "muted_safe_proof": "刀影、惊恐特写和烧屏字幕同屏，关声也能读懂危机",
+            "expected_metric": {"primary": "retention_3s", "target": 0.80},
+            "muted_safe": True,
+        },
+        "retention_promise_ledger": [
+            {"hook_id": "OPEN_01", "promise_type": "opening_hook", "opened_at": "镜头3", "promise": "门外是谁", "payoff_due": "第2集"},
+            {"hook_id": "TAIL_01", "promise_type": "cliffhanger", "opened_at": "镜头4", "promise": "主使是谁", "delayed_payoff_ep": "第2集"},
+        ],
+        "clips": [{"id": "C1", "rhythm": "慢开场", "duration": 3}],
+    }, ensure_ascii=False), encoding="utf-8")
+    findings, _ = B.audit_episode(root, "第1集")
+    assert "missing_first_6s_beat_hook" in codes(findings)
 
 
 def test_due_promise_requires_payoff_evidence():

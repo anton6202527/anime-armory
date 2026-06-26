@@ -7,6 +7,7 @@ import sys, os, re, subprocess, json, base64, uuid, hashlib, urllib.request, shu
 _COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'n2d', '_lib'))
 if _COMMON not in sys.path: sys.path.insert(0, _COMMON)
 from n2d_settings import load_settings, get_setting  # noqa: E402
+from n2d_const import PRODUCTION_MODE_DEFAULT  # noqa: E402  制作模式默认单一真值源（2026-06-16 起=原生音画，勿硬编旧默认）
 from n2d_text_utils import clean_punctuation  # noqa: E402
 from n2d_route import voiceover_fingerprint, manifest_is_placeholder  # noqa: E402  配音源指纹 + 占位判定单一真值源（治"配音后改 voiceover 导致清单过期" / 占位口径不一致）
 from n2d_telemetry import record_event, Timer  # noqa: E402
@@ -26,7 +27,7 @@ FF = shutil.which('ffmpeg') or '/opt/homebrew/bin/ffmpeg'; FP = shutil.which('ff
 CACHE = os.path.join(ROOT, '合成', EP, '_voicecache', LANG); os.makedirs(CACHE, exist_ok=True)
 
 SETTINGS = load_settings(ROOT)
-PROD_MODE = get_setting(ROOT, "制作模式", "配音先行")
+PROD_MODE = get_setting(ROOT, "制作模式", PRODUCTION_MODE_DEFAULT)
 # 制作模式=原生音画：说话镜的台词由视频后端原生生成。
 NATIVE_AV = ("原生音画" in PROD_MODE or "native_av" in PROD_MODE.lower())
 

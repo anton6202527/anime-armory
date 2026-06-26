@@ -31,7 +31,7 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
   - **接入 compose 的方式**：storyboard Clip 写 `shared_video` / `shared_video_path` / `reuse_video` / 指向 `出视频/共享/视频/` 的 `video_out` 后，标准 wrapper 与 `compose.sh` 会先跑 `python3 skills/n2d-video/scripts/materialize_shared_clips.py <作品根> 第N集`，把共享 clip 软链/复制进 `出视频/<集>/视频/` 并写 `生产数据/shared_video_materialized_第N集.json`。缺源文件或 hash 不符会阻断，不再靠人工搬运。
 - **产物归集铁律**：所有 prompt md 进 `出视频/第N集/prompt/`；**生成的 clip MP4 全部落 `出视频/第N集/视频/`**（供 n2d-compose 归集合成）。废片去 `废料/出视频/第N集/`。
 - **视觉锚点闭环**：脚本会自动从 `出视频/第N集/prompt/01_clips.md` 提取 `**尾帧**` PNG。若存在尾帧，生成时会切换至 `multimodal2video` 模式，将首帧与尾帧同时作为参考，强制 AI 在指定时长内完成从起点到终点的演变，极大提升了 Clip 间的接缝平滑度。付费前 `gate.py --stage video_preflight` 会**核验 `01_clips.md` 实际引用的首帧/尾帧 PNG**（runner 真正喂后端的那条路径，与 `storyboard.firstframe_png` 分开誊抄、可能漂）：**首帧缺失 = BLOCK**（image2video 必失败、白扣一次）；**声明了尾帧但 PNG 缺失、或 storyboard 标 `need_endframe=true` 而 prompt 漏写尾帧 = WARN**（双帧接力回退为单首帧，大表情近景有脸重画风险）。
-- **中段锚帧（默认铁律·三帧契约·能力门控）**：首尾双帧只锁两端，**长 Clip 中段**模型仍自由发挥；**默认每镜至少 3 帧、不管 cost**，gate 默认强制每镜有 `_mid` 声明或豁免（读 `policy.video_backend` 判能力，缺/未知=强制）。**唯一豁免=后端不支持 ≥3 帧**（由 adapter `backend_supports_three_plus_frames` 自动判定：即梦原生多帧、可灵/Veo/Luma 首尾档可拆段凑≥3帧 都强制；仅 seedance 直连/runway/pika 这类 first-frame-only 豁免；Sora legacy/manual-only 不作为自动能力豁免口径），不因 cost/风格关。打斗/追逐/≥8s 多拍长镜/R3 漂移重抽镜可规划 `_a1.._aN` 多锚。`storyboard.json` 声明 `continuity.midframe` 或 `continuity.anchors` 后，执行分三档：① **原生多帧（首选·即梦 `multiframe2video`）**——[首帧, 锚帧1..K, 尾帧] 一次生成连续视频（2–20 帧、每段 0.5–8s、总≥2s），无 concat，不按 K+1 倍烧视频；② **首尾帧后端（Veo/Luma/可灵等档案）**——首尾两帧作为时间轴约束，中段锚帧只能改为拆段接力、extend/interpolate 或作为 QC/参考图，gate 会 WARN；③ **首帧/参考图后端**——退回单首帧 + 强 end_state 文字，或直接 reroute 到 Dreamina/native multiframe。两路/三路对 compose/进度/配音时长都仍是同一个 Clip，不重编号、不动 `镜头时长.json`。Clip 块头在 `**首帧**`/`**尾帧**` 后逐锚加 `**中段锚帧**`/`**锚帧K**` 行；storyboard 声明数 > prompt 引用数、引用 PNG 缺失、或后端不能消费声明帧 = `video_preflight` WARN。详见 `references/prompt_format.md`「中段锚帧 Clip」和 `references/platforms.md`「关键帧/多帧能力」。
+- **中段锚帧（风险分层三帧契约·能力门控）**：首尾双帧只锁两端，**长 Clip 中段**模型仍自由发挥；但不再把“每镜至少 3 帧”写成无条件成本铁律。`anchor_planner.py` 分两层：① **强制层**：打斗/追逐/飞行/亲密接触/大表情、≥8s 多拍长镜、R3 漂移重抽镜按 R1/R2/R3 规划 `_a1.._aN` 多锚，不受 ROI/速度设置关闭影响；② **普通 D0 层**：未命中高风险规则的普通镜，只有 `_设置.md` 的 `中段锚帧默认=开启` 且后端可表达 ≥3 帧时才补 `_mid`，`关闭` 时低风险短镜可豁免并在 storyboard policy 留痕。`storyboard.json` 声明 `continuity.midframe` 或 `continuity.anchors` 后，执行分三档：① **原生多帧（首选·即梦 `multiframe2video`）**——[首帧, 锚帧1..K, 尾帧] 一次生成连续视频（2–20 帧、每段 0.5–8s、总≥2s），无 concat，不按 K+1 倍烧视频；② **首尾帧后端（Veo/Luma/可灵等档案）**——首尾两帧作为时间轴约束，中段锚帧只能改为拆段接力、extend/interpolate 或作为 QC/参考图，gate 会 WARN；③ **首帧/参考图后端**——退回单首帧 + 强 end_state 文字，或直接 reroute 到 Dreamina/native multiframe。两路/三路对 compose/进度/配音时长都仍是同一个 Clip，不重编号、不动 `镜头时长.json`。Clip 块头在 `**首帧**`/`**尾帧**` 后逐锚加 `**中段锚帧**`/`**锚帧K**` 行；storyboard 声明数 > prompt 引用数、引用 PNG 缺失、或后端不能消费声明帧 = `video_preflight` WARN。详见 `references/prompt_format.md`「中段锚帧 Clip」和 `references/platforms.md`「关键帧/多帧能力」。
 - **首/中/尾身份同源铁律（P0·不可缺失·不可弱化·不可删除）**：同一角色 Clip 只要引用 2 张以上关键帧（首帧/中段锚帧/锚帧K/尾帧），这些锚图必须来自同一个 `identity_registry` 角色/形态的同一套 `reference_group`，不得把不同脸型、眼距、鼻梁、下颌、发髻或标志配饰的图混成一条视频。逐镜 prompt 必须显式写 `CHAR_xx/形态`、可执行的 `reference_group=<同源组>` 绑定，以及脸型/五官比例/眼距/鼻梁/下颌、发型/发髻、标志配饰、服装配色等身份不变量；大表情近景必须使用同源 `reference_group.expressions` 或表情定妆作首尾双帧，写清 `表情锚`、`表情幅度`、`锁脸不锁情`。若后端支持 Character ID / Face Lock / reference controls / LoRA，必须同时喂角色 ID；不支持时走保真实现分解：降低运动幅度、缩小景别、侧脸/手部/反应镜、拆 Clip 等，但剧情 beat、人物目标和情绪功能不能删改。**机器保护**：`n2d_handoff.check_identity_handoff`、`dashboard.py gate --stage video_preflight|video|review` 和 `video_runner.py submit` 付费前 guard 都会阻断缺项；未来改 skill 不得删除、绕过或弱化此规则，只能用更严格的确定性机检 + 回归测试替换。
 - **运动 + 运镜 + 动态细节三件套必写**：只写画面不写运动 → AI 会随机推断，常翻车。
 - **导演调度七字段硬要求**：每个 Clip 必须先写 `导演意图`、`起幅`、`落幅`、`场面调度`、`表演节拍`、`运动精修`、`环境交互`，再写人物运动/镜头运动/动态细节。目标不是把 prompt 写长，而是让它回答"这一镜为什么这样拍、从哪里接、停到哪里、空间关系怎么守、物理层如何稳、环境如何动"。缺任一字段不得提交视频生成，`dashboard.py gate --stage video`（生产入口，底层调 `n2d-review/scripts/gate.py --json`）会阻断。
@@ -64,7 +64,7 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 
 ## 出视频规格（选择点 `出视频规格` · 三档预算 · 每次调 AI 前告知）
 
-和出图阶段的预算提示同一套思路：**真正调生视频模型/渠道前，把本次的生成规格告知用户**，避免默默用了贵档或抠档。规格不是单点，而是打包成三档预算，每档预设四件事——**分辨率 · 帧率 · 每个 Clip 跑几条挑稳 · 平台质量/模型档**。注意：这四件事只描述**视频调用规格**，不覆盖三帧锚帧铁律；首/中/尾锚帧带来的新增图片数、native multiframe 是否仍 1 次/Clip、split relay 预计新增视频段数必须从 `生产数据/anchor_plan_第N集.json/md` 读出后一并告知。
+和出图阶段的预算提示同一套思路：**真正调生视频模型/渠道前，把本次的生成规格告知用户**，避免默默用了贵档或抠档。规格不是单点，而是打包成三档预算，每档预设四件事——**分辨率 · 帧率 · 每个 Clip 跑几条挑稳 · 平台质量/模型档**。注意：这四件事只描述**视频调用规格**，不覆盖风险分层锚帧策略；首/中/尾锚帧带来的新增图片数、native multiframe 是否仍 1 次/Clip、split relay 预计新增视频段数必须从 `生产数据/anchor_plan_第N集.json/md` 读出后一并告知。
 
 | 规格档 | 分辨率 | 帧率 | 每 Clip 跑几条挑稳 | 平台质量/模型档 |
 |---|---|---|---|---|
@@ -194,7 +194,7 @@ python3 skills/n2d-video/scripts/inherit_contract.py <作品根> 第N集
 **运动精修**：{幅度 / 能量 / 身体守卫（重心、锁定部位、不穿模约束）}
 **环境交互**：{描述动作对光影、粒子、背景物体的物理影响}
 **专项镜头模板**（复杂镜必填，普通镜写“无”）：{template_id + beats + blocking + camera_rule + continuity_must + negative + 专属字段；来自 storyboard.json template_contract，不临场重写}
-**模型路由**（每 Clip 必填，来自 `video_model_routes.json`）：{shot_type；clip_characters；primary_backend；fallback_backends；mode=image2video|frames2video|text2video|multi_shot；native_audio_policy；identity_requirement；risk_flags；rationale；degrade_plan}
+**模型路由**（每 Clip 必填，来自 `video_model_routes.json`）：{shot_type；clip_characters；primary_backend；fallback_backends；mode=image2video|frames2video|text2video|multi_shot；native_audio_policy；identity_requirement；risk_flags；policy_resolution.winner/conflicts；rationale；degrade_plan}
 **角色身份注册层**（含角色镜必填，普通镜写“无”）：{读取 `identity_adapter_matrix.json` + `identity_registry.json`；角色/形态 registry id；目标视频后端可用的 Character ID / Face Lock / reference controls / LoRA binding；fallback reference_group；高危角度/禁漂项}
 **近景/反打身份锁定**（CU/MCU/说话镜/反应镜必填，普通远景/空镜写“无”）：{主焦点角色；脸部特写/表情参考/expressions 路径；无原生 Character ID/Face Lock/reference controls 时的 fallback reference_group；锁脸型/五官比例/发型发髻/标志配饰/服装配色；配角近景低幅表情和小角度转头；不稳则改用 MCU/OTS/侧脸/手部/物件反应镜等保真拍法｜**表情锚** 起→止（各引 expressions 情绪图）｜**表情幅度** 微/中/大（CU≤中、配角CU≤微）｜**锁脸不锁情**（表情只动面部肌肉、脸型五官比例不变）｜表情幅度=大走首尾双帧或 MCU 保真实现}
 **原生音画策略**（每 Clip 必填，按 route 分支）：{voice-first/普通镜：audio_intent=none|ambience|native_sfx；risk=low|medium|high；mouth_visible=yes|no；speech_policy=no_native_speech；compose_policy=丢弃|低音量混入环境声；review=生成后确认无原生人声｜native_av 说话镜：audio_intent=native_speech；risk=medium|high；mouth_visible=yes；speech_policy=native_speech；compose_policy=保留原片音轨；review=确认台词/口型/声源同步}
@@ -227,7 +227,7 @@ continuity:
 运动精修约束：{幅度 / 能量 / 身体守卫};
 环境交互约束：{光影 / 粒子 / 物理反馈};
 专项模板约束：{若有 template_contract，写明本 Clip 必须遵守的模板动作/站位/运镜/负向；普通镜写“无”};
-模型路由约束：{读取 video_model_routes.json；本镜 primary_backend=...，fallback=...，mode=...；prompt 只使用 primary 后端真实支持的能力，不能混用其它后端专属能力；若失败按 degrade_plan 切 fallback 或执行实现分解/拆镜};
+模型路由约束：{读取 video_model_routes.json；本镜 primary_backend=...，fallback=...，mode=...；policy_resolution.winner=...；若存在 conflicts，按 policy_lattice 的 winner 执行而不是临场改路由；prompt 只使用 primary 后端真实支持的能力，不能混用其它后端专属能力；若失败按 degrade_plan 切 fallback 或执行实现分解/拆镜};
 身份锁定约束：{读取 identity_adapter_matrix.json + identity_registry.json；若目标后端 binding ready，写入 Character ID / Face Lock / reference controls / LoRA trigger 等平台参数；否则回退首帧+尾帧+reference_group，保持 drift_forbidden};
 近景身份锁定约束：{CU/MCU/反打/说话镜优先脸部特写/表情参考/expressions；表情按 表情锚 起→止、幅度不超本镜封顶；锁脸不锁情——表情只动面部肌肉，脸型/五官比例/眼距/鼻梁/下颌/痣疤不变；无原生锁时限制低幅表情、小角度转头和低强度运镜，锁脸型/五官比例/发型发髻/标志配饰/服装配色；表情跨情绪（大）走首尾双帧或 MCU 保真实现；配角近景不稳则改用 MCU/OTS/侧脸/手部/物件反应镜};
 原生音画约束：{若 route.native_audio_policy=native_speech：台词+口型由原生音画后端生成，声源归属=画内说话主体，compose_policy=保留原片音轨；否则默认禁止原生人声，audio_intent=ambience/native_sfx 只允许环境声/动作音效，禁止台词/旁白/哼唱，生成后确认无原生人声};
@@ -267,7 +267,7 @@ continuity constraint: begin from continuity.start_state, perform only continuit
 6. ✅ 动态细节 & 环境交互：烛火/雨丝/衣袂/雾气/灵光等 ≥1 条，且包含动作对光影/粒子/道具/背景的反馈，不改首帧设定
 7. ✅ ⑦张力：运镜与"节奏/张力"一致（铺垫缓慢、爽点短促、留白定格）
 8. ✅ continuity：start_state/action/end_state/constraints/negative 五字段齐全，且已读取上一/下一 Clip 的衔接信息
-9. ✅ 模型路由：已读取 `video_model_routes.json`，本镜有 primary/fallback/mode/rationale/degrade_plan，且平台参数只写目标后端支持的能力
+9. ✅ 模型路由：已读取 `video_model_routes.json`，本镜有 primary/fallback/mode/policy_resolution/rationale/degrade_plan，且平台参数只写目标后端支持的能力
 10. ✅ 原生音画策略：已填 audio_intent/risk/mouth_visible/speech_policy/compose_policy；route=native_speech 的说话镜写 native_speech + 保留原片音轨，非 native_speech 镜默认丢弃，只有低风险无口型无台词镜头才 opt-in 环境声/音效；凡保留原片音轨、低音量混入环境声、native_sfx 或 native_speech，都必须同步写 `生产数据/native_av_physics_第N集.json`，逐 Clip 结构化记录声源、口型、动作声可见证据、空间声学和后期保留策略
 11. ✅ 复杂镜头：已继承 `专项镜头模板`，且人物运动/镜头运动/衔接约束未违反 template_contract
 12. ✅ 角色身份注册层：含角色 Clip 已读取 `identity_adapter_matrix.json` + `identity_registry.json`，明确 Character ID/Face Lock/reference controls/LoRA 或 fallback reference_group，且未违反高危角度/禁漂项

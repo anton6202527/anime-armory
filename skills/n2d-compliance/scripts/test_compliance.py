@@ -302,6 +302,7 @@ def _full_manifest(compliance, root):
     reg["release_filing_no"] = "网微剧上字(2026)第001号"
     reg["pre_broadcast_review"] = "done"
     reg["filed_at"] = "2026-06-01"
+    reg["platform_human_review"] = "done"  # 红果强制每集人审（2026）
     return data
 
 
@@ -393,6 +394,7 @@ def _ready_for_compose(root: Path) -> dict:
     data = compliance.default_manifest(root, "第1集")
     data["ai_labeling"]["implicit_metadata"]["service_provider_code"] = "SP-12345"
     data["ai_labeling"]["implicit_metadata"]["content_id"] = "C-2026-001"
+    data["ai_labeling"]["explicit_label"]["prominent_label_spec"] = "前5s出现/≥3s持续/居中/经裁剪存活 已确认"
     return data
 
 
@@ -509,3 +511,36 @@ def test_check_manifest_cameo_approved_no_face_upload_passes(tmp_path: Path) -> 
     issues = compliance.check_manifest(root, "第1集")
 
     assert not any("cameo identity requires" in i or "forbids uploading face reference" in i for i in issues)
+
+
+# --- P3: 2026 监管 preflight 强化（红果每集人审 + 广电显著标识规格·均 INFO 非阻断）---
+
+def test_platform_human_review_pending_reports_info(tmp_path: Path) -> None:
+    # 注意：用 _msgs 取消息体过滤，避开 pytest tmp 目录名含 "platform_human_review" 的干扰（同本文件 _msgs 注释）。
+    root = tmp_path / "制漫剧" / "测试剧"
+    data = _full_manifest(compliance, root)
+    data["regulatory_filing"]["platform_human_review"] = "pending"
+    _write(root, data)
+    hits = [(m, sev) for m, sev in _msgs(compliance.check_manifest(root, "第1集", stage="review"))
+            if "platform_human_review" in m]
+    assert hits and all(sev == "INFO" for _m, sev in hits)  # 非阻断
+    assert any("人工终审" in m for m, _sev in hits)
+
+
+def test_platform_human_review_done_no_flag(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    data = _full_manifest(compliance, root)
+    data["regulatory_filing"]["platform_human_review"] = "done"
+    _write(root, data)
+    msgs = _msgs(compliance.check_manifest(root, "第1集", stage="review"))
+    assert not any("platform_human_review" in m for m, _sev in msgs)
+
+
+def test_prominent_label_spec_missing_reports_info(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    data = _ready_for_compose(root)
+    data["ai_labeling"]["explicit_label"].pop("prominent_label_spec", None)
+    _write(root, data)
+    hits = [(m, sev) for m, sev in _msgs(compliance.check_manifest(root, "第1集", stage="compose"))
+            if "prominent_label_spec" in m]
+    assert hits and all(sev == "INFO" for _m, sev in hits)  # 非阻断

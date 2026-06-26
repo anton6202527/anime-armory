@@ -50,6 +50,7 @@ python3 skills/n2d-identity/scripts/identity.py <作品根> --write
 - `生产数据/identity_adapter_matrix.md`
 - `生产数据/identity_drift_report.json`（`recommendations[]` 为 LoRA 升档自动建议，带 character_id/理由/下一步命令）
 - `生产数据/identity_drift_report.md`
+- **G2 跨集记忆锚（memory-sink）**：`python3 skills/n2d-identity/scripts/memory_anchor.py <作品根> 第N集` 读 drift report + registry，产 `生产数据/memory_anchor_plan_第N集.json`（report-only）——为**长间隔再登场 / 晚集 / 已测漂移**的角色规划「把最早集定妆记忆锚重注入本集出图参考」。2026 SOTA（StoryMem/EntityMem/Context Forcing）实证跨镜一致性随复现间隔衰减（EntityBench Gap-Decay），故顶尖流水线不止逐镜从定妆库重注入、还把早期关键帧钉成全局锚。n2d-image/reference_planner 出图前自动消费此 plan，把记忆锚作为最高优先锚前置注入（文件契约·跨 skill 不互 import）。与 B4 复现距离加权同向、互补：B4 加风险分提示，G2 落地参考前置。
 - 若存在配音时长清单（`合成/第N集/配音/时长清单.json`），`--write` 还会顺带跑音色对账，输出
   `生产数据/identity_voice_drift_report.json` + `.md`（也可单独跑：
   `python3 skills/n2d-identity/scripts/voice_consistency.py <作品根> --write`）。

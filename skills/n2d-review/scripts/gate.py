@@ -8633,6 +8633,103 @@ def _strict_advisory_should_block(root: str, ep: str, stage: str, row: Mapping[s
     return True, reason
 
 
+# 可被「有意不连续」签收为 WARN 的 native BLOCK 维度——只限世界/光线/轴线/调色/景深/状态转场
+# 这类「创作者确可有意改变」的连续性轴（昼夜转场、越轴反打、戏剧性重打光、调色风格切换…）。
+# 脸(G1)/辨识标记时序(MK1)/纯文生图/资产生命周期回退/契约继承不在此列：那些是真穿帮，
+# 不接受「有意」签收，必须回源头修复。
+INTENTIONAL_DISCONTINUITY_ELIGIBLE_DIMENSIONS = {
+    "天气时辰(W1)",
+    "光位方向(W2)",
+    "轴线视线(X1)",
+    "色温调色(GRADE1)",
+    "景深一致(DOF1)",
+    "合法不连续(DIS1)",
+    "合法状态转场(STE)",
+}
+
+
+def _intentional_discontinuity_module():
+    """Lazy-import sibling intentional_discontinuity.py as the single source of truth
+    for signoff matching, so the gate doesn't fork a private copy of the match logic
+    (independence rule: cross-skill copies drift). Returns the module or None."""
+    cache = _intentional_discontinuity_module.__dict__
+    if "mod" in cache:
+        return cache["mod"]
+    mod = None
+    try:
+        import importlib.util
+        path = os.path.join(SCRIPT_DIR, "intentional_discontinuity.py")
+        spec = importlib.util.spec_from_file_location("n2d_intentional_discontinuity", path)
+        if spec and spec.loader:
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+    except Exception:
+        mod = None
+    cache["mod"] = mod
+    return mod
+
+
+def _sanitized_intentional_manifest(root: str, ep: str) -> Optional[Dict[str, Any]]:
+    """Load 生产数据/intentional_discontinuity_<ep>.json and keep only well-formed,
+    NON-EXPIRED entries (clip_id + dimension + concrete reason + valid expires_at).
+    `finding_is_signed_off` itself does not enforce expiry, so we filter here — an
+    expired/incomplete exception can never sign anything off (forces re-confirmation,
+    matching the advisory_signoff and compliance-gate re-confirm discipline)."""
+    path = os.path.join(root, "生产数据", f"intentional_discontinuity_{ep}.json")
+    data = load_json(path)
+    if not isinstance(data, dict):
+        return None
+    entries = data.get("accepted") or data.get("exceptions") or data.get("signed_off") or []
+    valid: List[Dict[str, Any]] = []
+    for entry in entries:
+        if not isinstance(entry, dict):
+            continue
+        clip = str(entry.get("clip_id") or entry.get("clip") or "").strip()
+        dim = str(entry.get("dimension") or entry.get("dim") or "").strip()
+        reason = str(entry.get("reason") or "").strip()
+        if not clip or not dim or len(reason) < 8:
+            continue
+        if not _override_expiry_ok(entry.get("expires_at") or entry.get("expires")):
+            continue
+        valid.append(entry)
+    return {"accepted": valid} if valid else None
+
+
+def _native_block_intentional_signoff(root: str, ep: str, row: Mapping[str, Any]) -> Tuple[bool, str]:
+    """Whether a native consistency BLOCK row is a *signed-off intended discontinuity*
+    and may be downgraded to WARN at the delivery gate. Only eligible continuity
+    dimensions qualify (lighting/world/axis/grade/dof/state-transition); face/marks-
+    timeline/纯文生图/lifecycle are never sign-off-able here.
+
+    Honors BOTH escape-hatch files so they finally both reach the gate (C1/C2):
+      · intentional_discontinuity_<ep>.json — the creative "I intend this discontinuity"
+        manifest (clip_id+dimension+reason), previously honored ONLY in the ledger/report;
+      · consistency_advisory_signoff_<ep>.json — the production risk-acceptance signoff.
+    """
+    dim = str(row.get("dimension") or row.get("dim") or "")
+    if dim not in INTENTIONAL_DISCONTINUITY_ELIGIBLE_DIMENSIONS:
+        return False, ""
+    manifest = _sanitized_intentional_manifest(root, ep)
+    mod = _intentional_discontinuity_module()
+    if manifest and mod is not None:
+        shots = row.get("affected_shots") if isinstance(row.get("affected_shots"), list) else []
+        arts = row.get("affected_artifacts") if isinstance(row.get("affected_artifacts"), list) else []
+        haystack = [str(x) for x in (list(shots) + list(arts) + [row.get("loc") or row.get("path") or ""]) if x]
+        match_row = {
+            "dimension": dim,
+            "message": str(row.get("message") or row.get("msg") or ""),
+            "text": " ".join(haystack),
+        }
+        try:
+            if mod.finding_is_signed_off(match_row, manifest):
+                return True, "intentional_discontinuity"
+        except Exception:
+            pass
+    if _advisory_row_signed_off(root, ep, row):
+        return True, "consistency_advisory_signoff"
+    return False, ""
+
+
 def _check_fidelity_gate_active(root: str, ep: str, stage: str, profile: str) -> None:
     """Ensure fidelity-gate (vlm_verify --write canonical pass table) is active.
 
@@ -8771,6 +8868,50 @@ def _series_ep_int(ep: str) -> Optional[int]:
     return int(m.group()) if m else None
 
 
+PILOT_ARC_CONTRACT_REL = os.path.join("设定库", "pilot_arc_contract.json")
+PILOT_ARC_REQUIRED_FIELDS = (
+    "series_promise",
+    "protagonist_desire",
+    "repeatable_pleasure_loop",
+    "long_question",
+    "first_payoff_ep",
+    "first_complication_ep",
+    "first_reversal_ep",
+)
+
+
+def check_pilot_arc_contract_gate(root: str, ep: str, stage: str) -> None:
+    """第1-2集也要有 onboarding 小弧，不等到 ≥3 集才看系列留存。"""
+    ep_n = _series_ep_int(ep)
+    if ep_n is None or ep_n > 2:
+        return
+    loc = os.path.join(root, PILOT_ARC_CONTRACT_REL)
+    production = consistency_release_profile(root, stage, ep) == "production"
+    sev = BLOCK if production else WARN
+    data = load_json(loc)
+    if not isinstance(data, dict) or not data:
+        add(
+            sev,
+            SERIES_RETENTION_DIM,
+            loc,
+            "第1-2集缺 pilot_arc_contract：必须先锁系列承诺、主角欲望、可重复爽感、长问题、首个兑现/阻碍/反转，再进入交付边界。",
+            risk_score=0.82,
+            code="pilot_arc_contract_missing",
+        )
+        return
+    missing = [field for field in PILOT_ARC_REQUIRED_FIELDS if not str(data.get(field) or "").strip()]
+    if missing:
+        add(
+            sev,
+            SERIES_RETENTION_DIM,
+            loc,
+            "pilot_arc_contract 字段未填全：%s；前两集不能只按单集爽点推进，必须能证明追更小弧成立。" % "、".join(missing),
+            risk_score=0.82,
+            code="pilot_arc_contract_incomplete",
+            missing=missing,
+        )
+
+
 def check_series_retention_gate(root: str, ep: str, stage: str) -> None:
     """交付边界(compose/review)的**系列级**留存闸。
 
@@ -8795,7 +8936,8 @@ def check_series_retention_gate(root: str, ep: str, stage: str) -> None:
     except Exception:
         eps = []
     if len(eps) < 3:
-        return  # <3 集无"系列"可言
+        check_pilot_arc_contract_gate(root, ep, stage)
+        return
     try:
         proc = subprocess.run([sys.executable, script, root, "--series", "--json"],
                               text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -8836,15 +8978,82 @@ def check_series_retention_gate(root: str, ep: str, stage: str) -> None:
              cur_label in (ea, eb), "script_stage1",
              "回 n2d-script 阶段1 给雷同集换爽点/反转类型，反同质化")
     # ② 跨集冷开场链（P2·上集硬断→下集 0-3s 冷开场接住同一根线）
+    # P1（2026-06-26 接线）：image_preflight 也是付费前闸——首屏 3s 钩失效=30%+ 留存塌，必须在烧钱出图前拦。
+    # 此前这条 image_preflight 分支是 dead code（check_series_retention_gate 只在 compose/review dispatch 被调），
+    # 现已在 image dispatch 的 image_preflight 子条件接上。profile-aware（与全仓一致）：production 升 BLOCK（可签收），demo WARN。
+    scope2 = "回 n2d-script 阶段1/2 调切点：上集集尾硬断、下集 0-3s 冷开场接住同一根线"
     for f in res.get("cold_open_chain_findings") or []:
         msg = str(f.get("msg") or "")
-        emit(sdir, f"[冷开场链] {msg}", bool(cur_label) and cur_label in msg, "script_stage1",
-             "回 n2d-script 阶段1/2 调切点：上集集尾硬断、下集 0-3s 冷开场接住同一根线")
+        if not (bool(cur_label) and cur_label in msg):
+            add(INFO, SERIES_RETENTION_DIM, sdir, f"[冷开场链] {msg}", risk_score=0.3)
+            continue
+        cold_msg = f"[冷开场链] {msg}"
+        if stage == "image_preflight":
+            row = {"dimension": SERIES_RETENTION_DIM, "message": cold_msg, "affected_artifacts": [sdir]}
+            if profile == "production" and not _advisory_row_signed_off(root, ep, row):
+                add(BLOCK, SERIES_RETENTION_DIM, sdir,
+                    cold_msg + "（预算前：0-3s 冷开场未接住上集硬断 → 3s 留存塌，别烧钱渲染；"
+                    "确属有意写 consistency_advisory_signoff_第N集.json 签收）",
+                    risk_score=0.8, return_to_stage="script_stage1", rerun_scope=scope2)
+            else:
+                add(WARN, SERIES_RETENTION_DIM, sdir, cold_msg + "（预算前留存地板·首屏冷开场）",
+                    risk_score=0.55, return_to_stage="script_stage1", rerun_scope=scope2)
+        else:
+            emit(sdir, cold_msg, True, "script_stage1", scope2)
     # ③ 看点高潮位（北极星看点④·虎头蛇尾/平庸无看点集·需真实镜头时长）
     for f in res.get("highlight_climax_findings") or []:
         msg = str(f.get("msg") or "")
         emit(sdir, f"[看点位] {msg}", bool(cur_label) and cur_label in msg, "script_stage2",
              "回 n2d-script 阶段2 后移看点到 60-85% 高潮位 / 补核心看点")
+    # ④ 冷开场质量深度（G2·4 层钩子信号：冲突/悬念/反转/信息揭示）
+    for f in res.get("cold_open_quality_findings") or []:
+        msg = str(f.get("msg") or "")
+        sev = str(f.get("severity") or "")
+        emit(sdir, f"[冷开场质量] {msg}", bool(cur_label) and cur_label in msg, "script_stage1",
+             "回 n2d-script 阶段1 补冷开场冲突/悬念/反转层（至少 2 层钩子信号）")
+    # ⑤ 叙事风险优先级（G-S1·ConStory report-only）(root: str, ep: str, stage: str) -> None:
+    """逐集**预算前**留存地板（首屏 3s 视觉钩 / 留存承诺账本）——批量 gate 路径的叙事地板。
+
+    背景（2026-06-26·P1）：`run.py next` 在付费前用 `beat_audit --strict` 逐集硬挡「无首屏视觉钩 /
+    无留存承诺账本」的平庸集；但**批量生产**时 runner 经 `dashboard.py gate ... --stage image_preflight`
+    直接跑 gate（不走 run.py），这道地板就漏了——平庸集照样烧钱出图（红果 2026-05 下架约 2.1 万剧、其中
+    ~95% 是漫剧、广电备案过审<30%，平庸=白烧+被下架）。这里把同一道 beat_audit 逐集 `must` 地板接进
+    image_preflight：production 升 BLOCK（可经 consistency_advisory_signoff 签收），demo 只 WARN。
+    单一真值源=`n2d-script/beat_audit.py`（gate 只消费其 must findings，不重写判据）。仅 image_preflight 跑。"""
+    if stage != "image_preflight":
+        return
+    script = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+                          "n2d-script", "scripts", "beat_audit.py")
+    sdir = os.path.join(root, "脚本", ep)
+    if not os.path.exists(script) or not os.path.isdir(sdir):
+        return
+    try:
+        proc = subprocess.run([sys.executable, script, root, ep, "--json"],
+                              text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                              check=False, timeout=120)
+        res = json.loads(proc.stdout or "{}")
+    except Exception as exc:
+        add(WARN, SERIES_RETENTION_DIM, sdir,
+            f"beat_audit 逐集留存地板跑不起来（{type(exc).__name__}），首屏钩/留存承诺未审；"
+            "可手动跑 beat_audit.py <作品根> 第N集", risk_score=0.4)
+        return
+    if not isinstance(res, dict):
+        return
+    production = consistency_release_profile(root, stage, ep) == "production"
+    scope = "回 n2d-script 阶段1/2 补首屏视觉钩(visual_hook/内容承诺/静音可读证明/目标指标)与留存承诺账本，再付费出图"
+    for f in res.get("findings") or []:
+        if not isinstance(f, dict) or str(f.get("severity")) != "must":
+            continue
+        code, msg = str(f.get("code") or ""), str(f.get("msg") or "")
+        row = {"dimension": SERIES_RETENTION_DIM, "message": msg, "affected_artifacts": [sdir], "code": code}
+        if production and not _advisory_row_signed_off(root, ep, row):
+            add(BLOCK, SERIES_RETENTION_DIM, sdir,
+                f"[预算前留存地板] {msg}（production 升 BLOCK：别烧钱渲染无钩/无承诺的平庸集；"
+                "确属有意写 consistency_advisory_signoff_第N集.json 签收）",
+                risk_score=0.8, return_to_stage="script_stage2", code=code, rerun_scope=scope)
+        else:
+            add(WARN, SERIES_RETENTION_DIM, sdir, f"[预算前留存地板] {msg}", risk_score=0.55,
+                return_to_stage="script_stage2", code=code, rerun_scope=scope)
 
 
 def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> None:
@@ -8925,6 +9134,7 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
     block_count = 0
     mapped_warns = 0
     skipped_warns = 0
+    intentional_downgrades = 0
     # Sort WARN findings by risk_score descending so high-priority warns are
     # never skipped in favour of low-priority ones under the 12-warn cap.
     raw_rows = res.get("findings", []) or []
@@ -8941,8 +9151,23 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
         sev = str(row.get("severity") or row.get("verdict") or "").lower()
         if sev not in {BLOCK, WARN}:
             continue
+        # C1/C2: a native consistency BLOCK on an eligible continuity axis (昼夜/越轴/
+        # 重打光/调色…) that the creator has signed off as an *intended* discontinuity
+        # is downgraded to WARN here — so the intentional_discontinuity manifest finally
+        # bites at the exit-code gate, not just in the report. Kept as a traceable WARN
+        # (never silently dropped). `intentional_signed` also blocks strict-advisory from
+        # re-escalating the same row back to BLOCK below.
+        intentional_note = ""
+        intentional_signed = False
+        if sev == BLOCK:
+            signed, signoff_src = _native_block_intentional_signoff(root, ep, row)
+            if signed:
+                sev = WARN
+                intentional_signed = True
+                intentional_downgrades += 1
+                intentional_note = f"[有意不连续已签收·{signoff_src}] "
         strict_block, strict_reason = _strict_advisory_should_block(root, ep, stage, row, summary)
-        if sev == WARN and strict_block:
+        if sev == WARN and strict_block and not intentional_signed:
             sev = BLOCK
         if sev == WARN:
             if mapped_warns >= 12:
@@ -8953,6 +9178,8 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
             block_count += 1
         dim = str(row.get("dimension") or row.get("dim") or "一致性总审")
         msg = str(row.get("message") or row.get("msg") or row.get("reason") or "一致性审计发现问题")
+        if intentional_note:
+            msg = intentional_note + msg
         if strict_block:
             msg = (
                 f"[production一致性升级:{strict_reason}] {msg}。如确认为可接受，写入 "
@@ -9011,7 +9238,10 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
             return_to_stage="review",
         )
 
-    if proc.returncode != 0 and not block_count:
+    # 非 0 退出码兜底：若 audit 报了 block(exit≠0) 但 gate 没surface任何 block，补一条以防漏判。
+    # 例外：本轮把 native block 作为「已签收的有意不连续」降级成 WARN（intentional_downgrades>0）
+    # 时，非 0 退出码已被这些降级解释，gate 也已把它们以 WARN 留痕——不再误补 generic block。
+    if proc.returncode != 0 and not block_count and not intentional_downgrades:
         add(
             BLOCK,
             "一致性总审",
@@ -9073,6 +9303,10 @@ def run(root: str, ep: str, stage: str) -> None:
             check_reference_plan_applied(root, ep)  # 逐镜参考规划落实对账（advisory·治跨集脸漂）
             check_long_running_weak_backend(root, ep)  # 长线剧×弱后端→核心/常驻角色必须升原生主体/主体库或身份锁
             check_stylized_face_encoder_policy(root, ep, stage)
+            # P1（2026-06-26）：付费出图前的**叙事/留存地板**——批量 runner 经 dashboard 直接跑 image_preflight
+            # gate（不走 run.py --strict），这道地板此前只在 run.py 生效、批量路径漏掉，平庸集照样烧钱出图。
+            check_series_retention_gate(root, ep, stage)    # 系列冷开场链 / pilot 弧（激活原 dead-code 的 image_preflight 分支）
+            check_episode_narrative_floor(root, ep, stage)  # 逐集首屏 3s 钩 / 留存承诺账本（must→production BLOCK·可签收）
         check_identity_registry(root, require_reference_assets=False)
         check_costume_registry_reconcile(root)
         check_asset_reference_registry(root, require_reference_assets=False)

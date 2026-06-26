@@ -24,6 +24,7 @@ from n2d_contract import (  # noqa: E402  生产数据目录 / kind 单一真值
     production_dir,
 )
 from n2d_settings import load_settings  # noqa: E402  _设置.md 解析单一真值源
+from n2d_thresholds import load_benchmark  # noqa: E402  留存 required_metrics / 阈值 provenance 单一读口
 
 VERSION = 1
 KIND = PLATFORM_FEEDBACK_KIND
@@ -47,6 +48,31 @@ CREATIVE_PRIOR_DIMENSIONS: Tuple[Tuple[str, str, str], ...] = (
     ("cliffhanger_cut_variant", "ab_cliffhanger_follow", "follow_next_rate"),
     ("cover_variant", "ab_cover_retention", "retention_3s"),
     ("title_variant", "ab_title_retention", "retention_3s"),
+)
+RETENTION_PRIOR_DIMENSIONS: Tuple[Tuple[str, str, str], ...] = (
+    ("paywall_position_bucket", "paywall_unlock", "unlock_or_subscribe_rate"),
+    ("continue_path", "continue_path_follow", "follow_next_rate"),
+)
+DEFAULT_REQUIRED_METRICS: Tuple[str, ...] = (
+    "retention_3s",
+    "retention_6s",
+    "retention_15s",
+    "retention_25_pct",
+    "retention_50_pct",
+    "retention_75_pct",
+    "completion_rate",
+    "follow_next_rate",
+    "avg_watch_sec",
+    "avg_episodes_per_user",
+    "episodes_per_session",
+    "unlock_or_subscribe_rate",
+    "story_roi",
+)
+PAID_ROW_REQUIRED_FIELDS: Tuple[str, ...] = (
+    "unlock_or_subscribe_rate",
+    "paywall_position_sec",
+    "paywall_after_promise_id",
+    "continue_path",
 )
 
 CONFLICT_WORDS = (
@@ -386,6 +412,7 @@ METRIC_ALIASES: Dict[str, Tuple[str, ...]] = {
     "time_to_next_episode_sec": ("time_to_next_episode_sec", "next_episode_delay_sec", "time_to_next_sec", "下集点击间隔秒"),
     "unlock_or_subscribe_rate": ("unlock_or_subscribe_rate", "unlock_rate", "subscribe_rate", "series_subscribe_rate", "付费解锁率", "订阅率", "追剧按钮转化率"),
     "paywall_position_sec": ("paywall_position_sec", "paywall_sec", "paywall_at_sec", "unlock_gate_sec", "付费点秒", "付费卡点秒", "解锁卡点秒"),
+    "story_roi": ("story_roi", "story_recoup_ratio", "series_roi", "故事ROI", "单故事ROI", "剧集包ROI"),
     "d1_retention": ("d1_retention", "day1_retention", "D1留存", "次日留存"),
     "d7_retention": ("d7_retention", "day7_retention", "D7留存", "7日留存"),
     "d14_retention": ("d14_retention", "day14_retention", "D14留存", "14日留存"),
@@ -617,6 +644,221 @@ def add_derived_features(rows: List[Dict[str, Any]]) -> None:
             "final_hook_asset",
         ) or str(row.get("cliffhanger_type") or UNKNOWN)
         row["title_variant"] = first_text(row, "title_variant", "title_copy", "headline_variant", "caption_variant") or UNKNOWN
+
+
+def benchmark_required_metrics(root: str) -> Tuple[str, ...]:
+    try:
+        bench = load_benchmark(root)
+        rb = bench.get("retention_benchmarks") if isinstance(bench, dict) else None
+        kpis = rb.get("episode_kpi_targets") if isinstance(rb, dict) else None
+        metrics = kpis.get("required_metrics") if isinstance(kpis, dict) else None
+        if isinstance(metrics, list):
+            out = tuple(str(m).strip() for m in metrics if str(m).strip())
+            if out:
+                return out
+    except Exception:
+        pass
+    return DEFAULT_REQUIRED_METRICS
+
+
+def benchmark_first_episode_completion_floor(root: str) -> Optional[float]:
+    """首集完播 QC 地板（GAP-3）：来自 benchmark episode_kpi_targets.first_episode_completion_floor。
+    缺/坏 → None（不强加默认，避免在没基准时误报）。"""
+    try:
+        bench = load_benchmark(root)
+        rb = bench.get("retention_benchmarks") if isinstance(bench, dict) else None
+        kpis = rb.get("episode_kpi_targets") if isinstance(rb, dict) else None
+        floor = kpis.get("first_episode_completion_floor") if isinstance(kpis, dict) else None
+        floor = float(floor)
+        if 0 < floor <= 1:
+            return floor
+    except Exception:
+        pass
+    return None
+
+
+def audit_first_episode_completion_floor(root: str, rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """GAP-3：首集（第1集）完播率单独对照 QC 地板——首集是 make-or-break，不混进通用 completion_rate。
+    只在有 benchmark 地板 + ep1 行有实测完播时判；缺数据优雅跳过（绝不臆造）。"""
+    floor = benchmark_first_episode_completion_floor(root)
+    if floor is None:
+        return []
+    findings: List[Dict[str, Any]] = []
+    for row in rows:
+        if episode_sort_key(row.get("episode"))[0] != 1:
+            continue
+        completion = metric(row, "completion_rate")
+        if completion is None:
+            continue
+        if completion < floor:
+            findings.append({
+                "severity": "warn",
+                "code": "first_episode_completion_below_floor",
+                "episode": normalize_episode(row.get("episode")),
+                "completion_rate": round(completion, 4),
+                "floor": floor,
+                "message": f"第1集完播 {completion:.0%} < QC 地板 {floor:.0%}：首集是 make-or-break，开场钩/前15s 立钩/镜头密度优先返工（回 n2d-script 阶段2 + 导演节奏 §一）。",
+            })
+    return findings
+
+
+def is_paid_row(row: Dict[str, Any]) -> bool:
+    paywall_sec = metric(row, "paywall_position_sec")
+    if paywall_sec is not None and paywall_sec >= 0:
+        return True
+    if metric(row, "unlock_or_subscribe_rate") is not None:
+        return True
+    return text_value(row.get("paywall_after_promise_id")) not in {"", UNKNOWN}
+
+
+def _row_has_metric(row: Dict[str, Any], key: str) -> bool:
+    return metric(row, key) is not None
+
+
+def _row_has_text(row: Dict[str, Any], key: str) -> bool:
+    value = text_value(row.get(key))
+    return bool(value and value != UNKNOWN)
+
+
+def audit_metric_completeness(root: str, rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    findings: List[Dict[str, Any]] = []
+    required = benchmark_required_metrics(root)
+    total = len(rows)
+    for key in required:
+        missing_eps = [row["episode"] for row in rows if not _row_has_metric(row, key)]
+        if missing_eps:
+            findings.append({
+                "severity": "warn",
+                "code": "missing_required_metric",
+                "metric": key,
+                "missing_rows": len(missing_eps),
+                "total_rows": total,
+                "episodes": sorted(set(missing_eps), key=episode_sort_key),
+                "message": f"{key} 缺 {len(missing_eps)}/{total} 行；required_metrics 不完整会让留存回灌失真。",
+            })
+    paid_rows = [row for row in rows if is_paid_row(row)]
+    for key in PAID_ROW_REQUIRED_FIELDS:
+        missing_eps = []
+        for row in paid_rows:
+            present = _row_has_text(row, key) if key in {"paywall_after_promise_id", "continue_path"} else _row_has_metric(row, key)
+            if not present:
+                missing_eps.append(row["episode"])
+        if missing_eps:
+            findings.append({
+                "severity": "must",
+                "code": "missing_paid_retention_field",
+                "field": key,
+                "missing_rows": len(missing_eps),
+                "total_paid_rows": len(paid_rows),
+                "episodes": sorted(set(missing_eps), key=episode_sort_key),
+                "message": f"付费/解锁行缺 {key}：无法判断卡点、摩擦或追更路径是否伤留存。",
+            })
+    return findings
+
+
+def _storyboard_retention_ledger(storyboard: Optional[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    if not isinstance(storyboard, dict):
+        return []
+    for key in ("retention_promise_ledger", "retention_promises", "hook_promise_ledger"):
+        value = storyboard.get(key)
+        if isinstance(value, list):
+            return [item for item in value if isinstance(item, dict)]
+        if isinstance(value, dict):
+            items = value.get("promises") or value.get("items") or value.get("ledger")
+            if isinstance(items, list):
+                return [item for item in items if isinstance(item, dict)]
+            return [dict({"hook_id": hook_id}, **item) for hook_id, item in value.items() if isinstance(item, dict)]
+    out: List[Dict[str, Any]] = []
+    for clip in storyboard.get("clips") or []:
+        if not isinstance(clip, dict):
+            continue
+        ret = clip.get("retention") or {}
+        if isinstance(ret, dict):
+            promise = ret.get("promise") or ret.get("retention_promise")
+            if isinstance(promise, dict):
+                out.append(promise)
+            promises = ret.get("promises")
+            if isinstance(promises, list):
+                out.extend(item for item in promises if isinstance(item, dict))
+    return out
+
+
+def load_promise_ledgers(root: str, episodes: Sequence[str]) -> Dict[str, Dict[str, Dict[str, Any]]]:
+    ledgers: Dict[str, Dict[str, Dict[str, Any]]] = {}
+    for ep in sorted({normalize_episode(ep) for ep in episodes if normalize_episode(ep)}, key=episode_sort_key):
+        sb = load_storyboard(root, ep)
+        hooks: Dict[str, Dict[str, Any]] = {}
+        for item in _storyboard_retention_ledger(sb):
+            hook_id = text_value(item.get("hook_id"))
+            if hook_id:
+                hooks[hook_id] = item
+        ledgers[ep] = hooks
+    return ledgers
+
+
+def analyze_paywall_promise_alignment(root: str, rows: List[Dict[str, Any]]) -> Dict[str, Any]:
+    ledgers = load_promise_ledgers(root, [row.get("episode") for row in rows])
+    groups: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+    findings: List[Dict[str, Any]] = []
+    for row in rows:
+        if not is_paid_row(row):
+            groups["no_paywall"].append(row)
+            continue
+        ep = normalize_episode(row.get("episode"))
+        promise_id = text_value(row.get("paywall_after_promise_id"))
+        if not promise_id or promise_id == UNKNOWN:
+            groups["missing_promise_id"].append(row)
+            findings.append({
+                "severity": "must",
+                "code": "paywall_missing_promise_id",
+                "episode": ep,
+                "message": "付费/解锁卡点缺 paywall_after_promise_id，无法证明卡点承接已打开承诺。",
+            })
+            continue
+        hook = (ledgers.get(ep) or {}).get(promise_id)
+        if hook is None:
+            groups["unknown_promise_id"].append(row)
+            findings.append({
+                "severity": "must",
+                "code": "paywall_unknown_promise_id",
+                "episode": ep,
+                "promise_id": promise_id,
+                "message": f"paywall_after_promise_id={promise_id} 不在本集 retention_promise_ledger 中；卡点和承诺账本未闭合。",
+            })
+            continue
+        status = str(hook.get("payoff_status") or hook.get("status") or "").strip().lower()
+        if status in {"", "open", "pending", "planned", "ongoing", "待兑现", "未兑现", "延迟"} and not any(text_value(hook.get(k)) for k in ("payoff_evidence", "payoff_clip", "paid_by_episode")):
+            groups["open_promise_without_payoff_evidence"].append(row)
+            findings.append({
+                "severity": "warn",
+                "code": "paywall_after_open_promise_without_value",
+                "episode": ep,
+                "promise_id": promise_id,
+                "message": f"卡点承接 {promise_id}，但该承诺仍是 open/pending 且缺 payoff_evidence；确认不是未给价值就收费。",
+            })
+            continue
+        groups["aligned"].append(row)
+    rendered_groups = []
+    for name, items in sorted(groups.items()):
+        rendered_groups.append({
+            "name": name,
+            "n": len(items),
+            "plays": int(sum(row_weight(row) for row in items)),
+            "unlock_or_subscribe_rate": weighted_mean(items, "unlock_or_subscribe_rate"),
+            "follow_next_rate": weighted_mean(items, "follow_next_rate"),
+            "completion_rate": weighted_mean(items, "completion_rate"),
+        })
+    return {
+        "name": "付费卡点承诺对齐",
+        "group_field": "paywall_promise_alignment",
+        "primary_metric": "unlock_or_subscribe_rate",
+        "groups": rendered_groups,
+        "findings": findings,
+        "summary": {
+            "paid_rows": sum(1 for row in rows if is_paid_row(row)),
+            "finding_count": len(findings),
+        },
+    }
 
 
 def group_stats(rows: List[Dict[str, Any]], group_field: str, metrics: Sequence[str], *, sort_metric: str, reverse: bool = True) -> List[Dict[str, Any]]:
@@ -867,6 +1109,24 @@ def build_creative_priors(
             "plays": int(best.get("plays") or 0),
             "episodes": list(best.get("episodes") or []),
         }
+    for field, analysis_key, primary_metric in RETENTION_PRIOR_DIMENSIONS:
+        analysis = analyses.get(analysis_key) or {}
+        best = analysis.get("best")
+        if not isinstance(best, dict):
+            continue
+        value_lift = best.get("lift")
+        n = int(best.get("n") or 0)
+        if value_lift is None or value_lift < min_lift or n < min_samples:
+            continue
+        priors[field] = {
+            "winner": best.get("name"),
+            "lift": round(float(value_lift), 4),
+            "primary_metric": primary_metric,
+            "metric_value": best.get(primary_metric),
+            "n": n,
+            "plays": int(best.get("plays") or 0),
+            "episodes": list(best.get("episodes") or []),
+        }
     return {
         "kind": CREATIVE_PRIORS_KIND,
         "version": CREATIVE_PRIORS_VERSION,
@@ -989,6 +1249,108 @@ def analyze_consistency(reports: List[Dict[str, Any]], rows: List[Dict[str, Any]
     }
 
 
+def map_clip_dropoffs(rows: List[Dict[str, Any]], root: str) -> Dict[str, Any]:
+    """G3: 片段级掉点映射——把平台的逐秒/分段留存曲线映射到 storyboard.json 的 Clip 时间轴。
+
+    需要平台指标含 retention_curve（逐秒留存数组）或 segment_retention（分段留存字典），
+    结合 storyboard.json 的 clip_start_sec/clip_end_sec 把掉点定位到具体 Clip。
+    无逐秒数据时退化为集级汇总，不阻断。
+    """
+    clip_drops: List[Dict[str, Any]] = []
+    episodes_touched: set = set()
+    for row in rows:
+        ep = normalize_episode(row.get("episode"))
+        if not ep:
+            continue
+        episodes_touched.add(ep)
+        curve = row.get("retention_curve") or row.get("segment_retention")
+        if not curve:
+            continue
+        sb = load_storyboard(root, ep)
+        if not sb:
+            continue
+        clips = sb.get("clips") or []
+        if not clips:
+            continue
+        for ci, clip in enumerate(clips):
+            start = float(clip.get("start_sec") or clip.get("clip_start_sec") or 0)
+            end = float(clip.get("end_sec") or clip.get("clip_end_sec") or 0)
+            if end <= start:
+                continue
+            drop = _compute_clip_drop(curve, start, end)
+            if drop is not None and drop > 0.05:
+                clip_drops.append({
+                    "episode": ep,
+                    "clip_index": ci,
+                    "clip_name": clip.get("name") or clip.get("clip_id") or f"Clip_{ci+1:02d}",
+                    "start_sec": start,
+                    "end_sec": end,
+                    "drop_pct": round(drop, 4),
+                    "severity": "high" if drop > 0.15 else "medium",
+                })
+    clip_drops.sort(key=lambda x: -x["drop_pct"])
+    return {
+        "clip_drop_count": len(clip_drops),
+        "episodes_covered": sorted(episodes_touched),
+        "drops": clip_drops[:50],
+    }
+
+
+def _compute_clip_drop(curve: Any, start: float, end: float) -> Optional[float]:
+    if isinstance(curve, dict):
+        vals = []
+        for k in sorted(curve.keys(), key=lambda x: float(x) if x.replace(".", "").isdigit() else 0):
+            v = curve[k]
+            if v is not None:
+                try:
+                    vals.append((float(k), float(v)))
+                except (TypeError, ValueError):
+                    continue
+        if not vals:
+            return None
+        before = [v for t, v in vals if t < start]
+        after = [v for t, v in vals if t >= end]
+        if before and after:
+            return max(0.0, before[-1] - after[0])
+        return None
+    if isinstance(curve, list) and len(curve) > 1:
+        step = 1.0
+        si = max(0, int(start / step))
+        ei = min(len(curve) - 1, int(end / step))
+        if si < len(curve) and ei < len(curve) and curve[si] is not None and curve[ei] is not None:
+            return max(0.0, float(curve[si]) - float(curve[ei]))
+    return None
+
+
+def analyze_genre_retention(rows: List[Dict[str, Any]], root: str) -> Dict[str, Any]:
+    """G5: 按题材分组的留存档案——读 _设置.md 的「题材」字段，把投放数据按题材分组统计留存。
+
+    需要至少 2 集同题材数据才有统计意义。无题材信息时静默跳过，不阻断。
+    """
+    genre_rows: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        ep = normalize_episode(row.get("episode"))
+        if not ep:
+            continue
+        settings = load_settings(root)
+        genre = settings.get("题材") or settings.get("类型") or "未分类"
+        genre_rows[genre].append(row)
+    profiles: List[Dict[str, Any]] = []
+    metrics = ("retention_3s", "retention_6s", "retention_15s", "completion_rate", "bounce_3s", "follow_next_rate")
+    for genre, items in genre_rows.items():
+        if len(items) < 2:
+            continue
+        profile: Dict[str, Any] = {"genre": genre, "n": len(items), "episodes": sorted({r.get("episode") for r in items if r.get("episode")})}
+        for m in metrics:
+            profile[m] = weighted_mean(items, m)
+        profiles.append(profile)
+    profiles.sort(key=lambda x: -(x.get("retention_15s") or 0))
+    return {
+        "genre_count": len(profiles),
+        "profiles": profiles,
+    }
+
+
 def analyze_feedback(root: str, metrics_path: str, features_path: Optional[str] = None, *, min_samples: int = 2, min_lift: float = 0.05, auto_features: bool = True) -> Dict[str, Any]:
     metrics_rows = read_records(metrics_path)
     feature_rows, feature_source, feature_meta = resolve_feature_rows(root, metrics_rows, features_path, auto_features=auto_features)
@@ -1086,6 +1448,9 @@ def analyze_feedback(root: str, metrics_path: str, features_path: Optional[str] 
             higher_is_better=True,
         ),
     }
+    analyses["paywall_promise_alignment"] = analyze_paywall_promise_alignment(root, rows)
+    analyses["clip_dropoffs"] = map_clip_dropoffs(rows, root)
+    analyses["genre_retention"] = analyze_genre_retention(rows, root)
     return {
         "kind": KIND,
         "version": VERSION,
@@ -1097,6 +1462,10 @@ def analyze_feedback(root: str, metrics_path: str, features_path: Optional[str] 
         "min_samples": min_samples,
         "min_lift": min_lift,
         "analyses": analyses,
+        "input_audit": {
+            "required_metrics": list(benchmark_required_metrics(root)),
+            "findings": audit_metric_completeness(root, rows) + audit_first_episode_completion_floor(root, rows) + analyses["paywall_promise_alignment"].get("findings", []),
+        },
         "consistency": analyze_consistency(load_consistency_reports(root), rows),
         "recommendations": build_recommendations(analyses, min_lift),
     }
@@ -1125,6 +1494,15 @@ def render_markdown(feedback: Dict[str, Any]) -> str:
     ]
     for rec in feedback["recommendations"]:
         lines.append(f"- {rec}")
+    audit_findings = ((feedback.get("input_audit") or {}).get("findings") or [])
+    if audit_findings:
+        lines.extend(["", "## 输入信号审计", "", "| 级别 | code | 位置 | 说明 |", "|---|---|---|---|"])
+        for item in audit_findings[:30]:
+            loc = item.get("metric") or item.get("field") or item.get("episode") or item.get("promise_id") or "—"
+            lines.append(
+                f"| {item.get('severity', 'warn')} | {item.get('code', 'unknown')} | {loc} | "
+                f"{item.get('message', '')} |"
+            )
     sections = [
         ("opening_retention", ("retention_3s", "retention_6s", "retention_15s", "retention_25_pct", "retention_50_pct", "completion_rate", "bounce_3s")),
         ("cliffhanger_follow", ("follow_next_rate", "unlock_or_subscribe_rate", "avg_episodes_per_user", "completion_rate", "retention_15s")),
@@ -1136,6 +1514,7 @@ def render_markdown(feedback: Dict[str, Any]) -> str:
         ("ab_title_retention", ("retention_3s", "retention_6s", "retention_15s", "completion_rate", "follow_next_rate", "ctr")),
         ("paywall_unlock", ("unlock_or_subscribe_rate", "follow_next_rate", "completion_rate", "retention_50_pct", "avg_episodes_per_user")),
         ("continue_path_follow", ("follow_next_rate", "avg_episodes_per_user", "episodes_per_session", "completion_rate", "unlock_or_subscribe_rate")),
+        ("paywall_promise_alignment", ("unlock_or_subscribe_rate", "follow_next_rate", "completion_rate")),
     ]
     for key, metrics in sections:
         analysis = (feedback.get("analyses") or {}).get(key)
@@ -1161,6 +1540,28 @@ def render_markdown(feedback: Dict[str, Any]) -> str:
                     f"| {e['episode']} | {e['block']} | {e['warn']} | {e['top_dim'] or '—'} | "
                     f"{fmt_pct(e.get('retention_15s'))} | {fmt_pct(e.get('bounce_3s'))} |"
                 )
+    # G3: 片段级掉点映射
+    clip_drops = (feedback.get("analyses") or {}).get("clip_dropoffs") or {}
+    if clip_drops.get("drops"):
+        lines.extend(["", "## 片段级掉点映射", ""])
+        lines.append(f"- 定位到 {clip_drops['clip_drop_count']} 个高掉点片段（覆盖 {len(clip_drops.get('episodes_covered') or [])} 集）")
+        lines += ["", "| 集 | Clip | 区间 | 掉点 | 严重度 |", "|---|---|---|---:|---|"]
+        for d in clip_drops["drops"][:20]:
+            lines.append(
+                f"| {d['episode']} | {d['clip_name']} | {d['start_sec']:.1f}-{d['end_sec']:.1f}s | "
+                f"{d['drop_pct']*100:.1f}% | {d['severity']} |"
+            )
+    # G5: 题材留存档案
+    genre_ret = (feedback.get("analyses") or {}).get("genre_retention") or {}
+    if genre_ret.get("profiles"):
+        lines.extend(["", "## 题材留存档案", ""])
+        lines += ["| 题材 | 样本 | 3s留存 | 15s留存 | 完播率 | 跳出率 |", "|---|---:|---:|---:|---:|---:|"]
+        for p in genre_ret["profiles"]:
+            lines.append(
+                f"| {p['genre']} | {p['n']} | {fmt_pct(p.get('retention_3s'))} | "
+                f"{fmt_pct(p.get('retention_15s'))} | {fmt_pct(p.get('completion_rate'))} | "
+                f"{fmt_pct(p.get('bounce_3s'))} |"
+            )
     lines.append("")
     return "\n".join(lines)
 

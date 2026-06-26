@@ -44,7 +44,10 @@ if [ "$KEEP_CLIP_AUDIO" = "1" ] && [ "$VIDEO_NATIVE_AUDIO_POLICY" = "丢弃" ]; 
 fi
 
 # 制作模式=原生音画：说话镜的台词由视频后端原生生成、就在 clip 自带音轨里——绝不能丢弃，否则台词没了。
-PROD_MODE=$(eval $_GET_SETTING "\"$ROOT\" \"制作模式\" \"配音先行\"")
+# 默认从单一真值源 n2d_const.PRODUCTION_MODE_DEFAULT 取（2026-06-16 起=原生音画）——别在此硬编旧默认
+# 「配音先行」：未写「制作模式」的原生音画项目会被误判成配音先行→跳过下面的保留台词轨守卫→台词丢失。
+PROD_MODE_DEFAULT=$(PYTHONPATH="$SKILL_DIR/../n2d/_lib" python3 -c "from n2d_const import PRODUCTION_MODE_DEFAULT; print(PRODUCTION_MODE_DEFAULT)" 2>/dev/null || echo "原生音画")
+PROD_MODE=$(eval $_GET_SETTING "\"$ROOT\" \"制作模式\" \"$PROD_MODE_DEFAULT\"")
 NATIVE_AV_MODE=$(python3 -c "m='$PROD_MODE'; print('1' if ('原生音画' in m or 'native_av' in m.lower()) else '0')")
 if [ "$NATIVE_AV_MODE" = "1" ] && [ -z "${VIDEO_NATIVE_AUDIO_POLICY_EXPLICIT:-}" ] && [ "$VIDEO_NATIVE_AUDIO_POLICY" = "丢弃" ]; then
   echo "⚠️ 制作模式=原生音画：clip 自带原生人声台词，自动改 视频原生音轨=保留原片音轨（避免丢台词）。如确需丢弃请设 VIDEO_NATIVE_AUDIO_POLICY_EXPLICIT=1。"

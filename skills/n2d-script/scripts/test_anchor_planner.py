@@ -15,6 +15,10 @@ def test_default_midframe_defaults_on_per_choice_point():
     assert ap.resolve_default_midframe(False, False, "开启") is True
     # 项目设为关闭 → 关
     assert ap.resolve_default_midframe(False, False, "关闭") is False
+    # 后端支持只表示可做，不能覆盖 ROI/速度优先的关闭选择；高风险 R1/R2/R3 另行强制。
+    assert ap.resolve_default_midframe(False, False, "关闭", backend_capable=True) is False
+    # 后端明确不支持三帧时，普通 D0 中锚关闭。
+    assert ap.resolve_default_midframe(False, False, "开启", backend_capable=False) is False
 
 
 def test_default_midframe_cli_flags_override_setting():

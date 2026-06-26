@@ -126,10 +126,19 @@ def resolve_path(root: Path, rel: str) -> Path:
     return p if p.is_absolute() else root / p
 
 
+def reference_item_path(item: Any) -> str:
+    """Return a reference path from legacy string or structured {path, status} item."""
+    if isinstance(item, str):
+        return item.strip()
+    if isinstance(item, Mapping):
+        return str(item.get("path", "")).strip()
+    return ""
+
+
 def reference_group_status(root: Path, reference_group: Mapping[str, Any]) -> Dict[str, Dict[str, Any]]:
     out: Dict[str, Dict[str, Any]] = {}
     for key in REFERENCE_FIELDS:
-        rel = str(reference_group.get(key, "")).strip()
+        rel = reference_item_path(reference_group.get(key, ""))
         out[key] = {"path": rel, "exists": path_exists(root, rel)}
     extras = {k: v for k, v in reference_group.items() if k not in REFERENCE_FIELDS}
     if extras:

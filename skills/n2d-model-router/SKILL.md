@@ -23,7 +23,7 @@ description: 横切模型适配层：在 n2d 出视频前，按镜头类型/专�
 ## 输入 / 输出 / 读写边界
 
 - **输入**：`_设置.md`、`storyboard.json`、`identity_registry.json`、视频模型/渠道能力档案、跨集路由基线；若存在 `生产数据/spectacle_backend_benchmark.json`，自动读取打斗/追逐/飞行/大场景 probe 结果作为自动路由加权。
-- **输出**：`出视频/第N集/prompt/video_model_routes.json` 和 `.md`，第 1 集打样后写 `设定库/model_routes_baseline.json`。第 2 集起凡含核心/角色身份或高风险镜头（打斗/追逐/多人/揭示/对质/关系转折等），`n2d-review gate` 会要求路由按该基线锚定；自然路由漂移需刷新基线或写结构化 `baseline_override`（`accepted/reviewer/reason/expires_at/affected_routes`）。
+- **输出**：`出视频/第N集/prompt/video_model_routes.json` 和 `.md`，同步写 `生产数据/consistency_policy_lattice.json`；第 1 集打样后写 `设定库/model_routes_baseline.json`。第 2 集起凡含核心/角色身份或高风险镜头（打斗/追逐/多人/揭示/对质/关系转折等），`n2d-review gate` 会要求路由按该基线锚定；自然路由漂移需刷新基线或写结构化 `baseline_override`（`accepted/reviewer/reason/expires_at/affected_routes`）。
 - **读写边界**：只写路由表和基线；不生成视频、不改 `_进度.md`、不替 `n2d-video` 写最终 clip prompt。
 - **契约关系**：模型路由是 `skills/n2d/_lib/n2d_contract.py` 的横切工具（`CROSS_CUTTING_TOOLS`），不是进度 readiness 项；motion control / native AV / lipsync 判定必须复用契约常量。
 
@@ -34,13 +34,14 @@ description: 横切模型适配层：在 n2d 出视频前，按镜头类型/专�
 - **剧情/质量优先（设计宪法 C6）**：路由表里的"拆 OTS/反打 / 拆 establish+反打"是**把难镜拍全的手段**，不是删戏——镜头该不该存在由剧情决定，路由只决定**用哪个模型 + 要不要拆/合成**把它做到位。
 - **项目默认只做兜底**：`_设置.md` 的 `生视频模型` 是默认/兜底，不再固定所有 Clip；`生视频渠道` 只决定实际去哪调用。旧 `生视频AI` 兼容读取。除非 `视频模型路由=固定生视频模型`，否则按本层自动路由。
 - **后端一致性按作用域，不混成一条规则**：生图阶段的硬规则是 `single_model_channel_per_project`（同项目/同集统一生图模型+渠道，防脸和画风漂）；视频阶段默认是 `per_clip_allowed_with_baseline`（逐镜按能力路由），但 route 表顶层必须写 `backend_consistency_scope`，并配齐 `model_routes_baseline`、`identity_handoff`、`execution_recipe`、`post_video_qc` guard。也就是说：视频可以因打斗/对话/原生音画换 primary，但必须有基线、身份交接、执行配方和成片回验；不能把“生图不混用”误用成“视频所有镜头必须同一后端”，也不能把视频逐镜路由当作无约束混厂。
+- **一致性策略优先级是机器契约**：所有 route 最终都写 `policy_resolution`，顶层写 `policy_lattice`，并把同一表落到 `生产数据/consistency_policy_lattice.json`。同一 surface 冲突时按优先级裁决：`fixed_mode` > 合规/硬能力证据 > `native_voice_fallback` > `identity_affinity`/失败升锁 > `motion_control_required`/帧锚契约 > `cross_episode_baseline` > `spectacle_benchmark` > `spectacle_prior` > 成本/质量档 > motion reference / multishot advisory。低优先级 pass 只能记录 deferred 或显式 override 证据，不能静默覆盖高优先级。
 - **固定模式最高优先**：`视频模型路由=固定生视频模型` 时，用户选定模型优先于 native AV / 对口型自动抢路由；需要原生音画时应关闭固定模式或显式改默认模型，不得悄悄切到其它 native_speech 后端。若本机只有一个可用 CLI/渠道，可在 `_设置.md` 写 `视频备用后端=无`，固定模式不得把不可执行后端写成 fallback。旧值 `固定生视频AI` 兼容。
 - **复杂镜不从零写**：若 `storyboard.json clips[].template` 已命中专项模板，路由必须继承模板，不靠 prompt 现场猜。
 - **高动作不靠文本猜**：打斗命中、追逐、飞行/腾云驾雾/御剑、拥抱、抓腕、拉扯、近距离接触等高动作/物理镜头必须输出 `motion_control.level=required` 和 `manifest_path`。视频 gate 会要求该 manifest 为 `ready`（有 pose/depth/instance/contact/camera_path/spatial_path/parallax_layers 控制资产）或 `degrade_only`（实现分解方案：手部特写/反打/释放帧/正反打追逐/起飞巡航机动抵达，保留剧情 beat 与动作目标），缺 manifest 不进入付费出视频。`ready` 控制资产用本地 `path/glob` 时必须能匹配真实文件；用远端 `uri` 时必须是 `https/s3/gs`，并带 `verified_at=YYYY-MM-DD` + `sha256/checksum/etag` 之一，裸 URI 或 `file://` 不放行。
 - **动作编排契约（action_choreography）**：`fight_exchange/chase/flight` 路由必须额外输出 `action_choreography.required=true`，列出 beats、speed_curve、spatial_path、camera_path、readability_beats、degrade_plan 和模板专属字段。打斗锁 attack_path/impact_frame/contact_points/force_direction/recovery_beat；追逐锁 screen_direction/distance_curve/obstacle_beats/parallax_layers/overtake_or_escape_beat；飞行锁 flight_path/altitude_curve/pose_lock/parallax_layers/mount_or_cloud_lock。n2d-video prompt 缺「动作编排契约」会被 gate 阻断。
 - **高动作身份优先级必须明写**：打斗、追逐、飞行、拥抱拉扯、多人接触、大场面等镜头若 `identity_requirement != none`，route 必须写 `identity_preservation_plan`。它要列明必须保留的身份锚（脸型/发型/服饰/主体绑定）、允许为运动可读性让步的范围（如改远景、减少近景变形检查窗口）、以及失败 fallback（身份近景 + 动作远景/反打拆镜）。`motion_control.required=true` 且缺该计划时，video gate 会 BLOCK，避免“为了物理运动把人拍成另一个人”。
 - **执行配方不是说明文字**：每条 route 必须输出 `execution_recipe`，把 `primary_backend` 归一成调用层可消费的 `frame_inputs`、`reference_inputs`、`control_inputs`、`audio_inputs`、`fallback` 和 `capability_match`。video gate 会阻断缺 `execution_recipe` 或 Motion Control 需要但缺 `manifest_path` 的 route，避免后端能力只停留在路由文案里。
-- **probe 结果可回灌，但不覆盖固定模式**：`n2d-script/scripts/spectacle_probe_pack.py` 会产出小样矩阵和 `生产数据/spectacle_backend_benchmark.json` 填写 schema。自动路由模式下，router 读取该文件：若某类镜头的 probe 推荐了更稳 primary（如 fight_exchange 从 Kling 改 Seedance），会把推荐后端升为 primary、原 primary 保留为 fallback，并在 `spectacle_benchmark` 留痕；`视频模型路由=固定生视频模型` 时不擅自改厂。
+- **probe 结果可回灌，但不覆盖高优先级锁定**：`n2d-script/scripts/spectacle_probe_pack.py` 会产出小样矩阵和 `生产数据/spectacle_backend_benchmark.json` 填写 schema。自动路由模式下，router 读取该文件：若某类镜头的 probe 推荐了更稳 primary（如 fight_exchange 从 Kling 改 Seedance），会把推荐后端升为 primary、原 primary 保留为 fallback，并在 `spectacle_benchmark` 留痕；但它不得覆盖固定模式、角色后端锁或跨集基线。确需覆盖基线/身份锁，benchmark 记录必须显式写 `override_baseline=true` / `override_identity_lock=true`，并在 QC 签收后执行。
 - **冷启动后端先验（benchmark 缺失兜底）**：没跑过 probe 的项目，对「关键词识别为打斗/追逐/腾云/大场景、但 shot_type 通用、路由落到 default」那批镜，自动按动作类型默认排序兜底（打斗→Kling、连续追逐→Seedance、飞行/大场景→Veo；单一真值源 `n2d_platform_profiles.SPECTACLE_BACKEND_PRIOR`），原 default 保留为 fallback，留痕 `spectacle_prior` + `risk_flag=spectacle_prior_routed`。仅自动路由生效；benchmark 一旦填写即覆盖先验，`固定生视频模型`/baseline 锚定不动。
 - **控制资产脚手架（补"只 gate 不生成"的摩擦）**：路由只声明、gate 只校验，中间用 `scripts/motion_control.py` 把骨架和清单补上，别让操作者照 schema 手搓 JSON：
   - `python3 scripts/motion_control.py <作品根> 第N集 scaffold [--clip Clip_03]` —— 读 `video_model_routes.json`，为每个 `level=required` 的 Clip 生成/合并一份**非 ready 骨架** manifest（`status=planned`、逐 input `status=missing`+规范路径，已填字段不回退），并打印"该 Clip 还要产出哪几个控制文件 + 接触语义字段"的精确清单。骨架仍被 gate 阻断（这是对的：还没就位）。
@@ -61,6 +62,7 @@ description: 横切模型适配层：在 n2d 出视频前，按镜头类型/专�
 - **空间复杂镜 → 评估世界模型类后端（spatial-heavy·新兴能力·防过期）**：同场景多镜需 **3D 空间一致 + 道具恒存**的镜——长连续运镜、绕物/环绕运镜、可探索环境、镜头穿越空间——纯 2D 视频后端易出空间漂移与道具凭空增减。命中这类镜时，在 fallback/rationale 里**提示评估世界模型类能力后端**（采集 2026-06-19：Kling 3.0 原生多镜+主体锁、Genie 3 类、NVIDIA Cosmos、Marble，原生维护 4D 空间与 object permanence）。**这类后端仍新兴、未必接入 n2d 渠道**：先作 primary 候选**评估**、不擅自硬切，落地前以 `n2d-video/references/platforms.md` 官方能力档案复核（与模型矩阵「二、视频」同源）。判定走能力档案，不 hardcode 厂商名。
 - **质量档路由（成本×质量轴·2026-06-19 流程自审落地）**：Seedance 家族有 fast/pro 档（fast≈$0.022/s 量产默认，pro 留吃重镜）。每条路由出 `quality_tier`：身份/物理吃重镜（脸/接触/多人/原生台词/已升锁）→ `high`（值 pro 把脸与运动钉稳），空镜/通用低风险镜 → `fast`（量产省成本），后端无档位能力 → `n/a`。**只表达路由意图，不写死 model_version**——落档侧出片脚本把 `high→pro`、`fast→fast` 解析成实际质量档；成本事件带 `quality_tier` 时 `n2d-dashboard` 的 `cost_by_provider` 按 `provider@tier:unit` 拆出同后端 fast vs pro 花销，让成本×质量轴可回看。判据走 shot_type + risk_flags，不 hardcode 厂商。
 - **时效档路由（成本轴·与质量档正交·2026-06-22 落地选择点 `投放时效`）**：2026 视频 API 首现「batch/隔夜半价」（Sora2 Batch 24h SLA -50%、Seedance flex -50% 预告）。`urgency_tier_from_settings` 读 `_设置.md` 的 `投放时效`（实时/隔夜批量）→ 项目级 `urgency_tier`（`realtime` 默认 / `batch_24h`），写进 plan 顶层 + 逐镜留痕。成本事件带 `urgency_tier=batch_24h` 时 `n2d-dashboard` 的 `cost_by_provider` 按 `provider#batch_24h:unit` 拆 realtime vs batch 花销，回看「隔夜批量省了多少」。**诚实边界**：本档只产**路由意图 + 成本拆账**；实际 async batch endpoint 由视频后端能力决定，属执行适配层 follow-up（后端 batch 通道接入后才真省）。默认 `实时`——绝不静默把赶投放的集延迟到隔夜。
+- **batch 提交清单 + 折扣投影（F4·2026-06-26）**：`python3 batch_plan.py <作品根> 第N集 [--rate 每秒成本] [--unit 单位]` 读 `video_model_routes.json` 收 `urgency_tier=batch_24h` 的 clip，产 `生产数据/batch_submission_plan_第N集.json`——① 后端接入 batch endpoint 时消费的**提交清单**（哪些 clip 走 batch 异步提交·文件契约 seam）② **折扣投影**（`N2D_BATCH_DISCOUNT` 默认 0.5=-50%）。**诚实**：不调用任何后端 API、**不臆造各家单价**（2026 多源价格互相打架）——要 ¥ 估算请 `--rate` 按当前官方价填，不传则只报「可走 batch 的镜数/总秒数/折扣率」。与 dashboard 按 urgency_tier 拆 realtime vs batch 的**实际**成本账互补（一个事前投影、一个事后对账）。
 - **视频运动参考（reference_video_motion·跨镜运动连续性轴）**：长连续运动镜（追逐/飞行/打斗）且 primary 支持 `reference_video_motion`（Seedance/Kling）时，路由 `motion_reference.applicable=true` + `risk_flag=motion_reference_candidate`，提示把**同段前一条已通过 clip 作运动/风格视频参考**喂进后端，锁运镜节奏与运动风格（与图身份锁正交）。首条镜无前序参考自然跳过；这是预防侧指引，不强制。
 - **开源轨迹控制增强（P3·可选）**：router 写完后可跑 `python3 skills/n2d-model-router/scripts/trajectory_controller_plan.py <作品根> 第N集 --write`。它读取 `execution_recipe.control_inputs.required_inputs`，按 `camera_path/spatial_path` 选择 MotionCtrl / CameraCtrl / DragNUWA 候选，只有本机设置 `MOTIONCTRL_HOME` / `CAMERACTRL_HOME` / `DRAGNUWA_HOME` 时才标 `ready_to_run`；未准备环境只写 `planned_env_missing`，不下载、不强接、不阻断主流程。
 - **多镜单次生成候选组（multishot_groups·advisory）**：Seedance 2.0 等可一次出多镜头叙事且跨镜一致、无缝转场。primary 全部定稿后（route_episode 末尾），扫**连续 ≥2 条接力镜 + 同一支持多镜的 primary**（如直连 Seedance 的项目）→ 标 `multishot_candidate` + 进 `multishot_groups`。**这段最适合一次 co-generate 消缝、最稳跨镜一致，但只是提示**：不合并 Clip、不改 primary/mode，逐 Clip 仍是独立可追踪可重跑单元（模型矩阵立身原则），是否真合并由出片侧/用户按接缝风险与重跑需求决定。**组大小受物理约束封顶**——单次多镜总输出 ≤ 后端 `max_clip_seconds`（Seedance ~15s），按累计时长切组（缺时长退 ≤4 成员护栏），所以镜本身已近单镜上限时不会成组（甜点是多个短接力镜）。即梦渠道下执行后端是 dreamina（非多镜叙事核验渠道）→ 保守不标注。
@@ -123,7 +125,7 @@ python3 skills/n2d-model-router/scripts/router.py <作品根> 第2集 --write
 #   --no-anchor 可临时不锚定；后端能力升级想换基线时重跑首集 --write-baseline 刷新
 ```
 
-锚定时若本集某 clip 的自然路由与基线不符，会在 `video_model_routes.json.baseline_drift` 留痕，并由 video gate 复核（基线胜，原后端进 fallback）。高风险/含角色镜头的漂移默认 BLOCK；只有结构化 `baseline_override` 覆盖当前 `clip_id` 且未过期时才降级为 WARN：
+锚定时若本集某 clip 的自然路由与基线不符，会在 `video_model_routes.json.baseline_drift` 留痕，并由 video gate 复核。baseline 的优先级低于固定模式和一角一后端亲和：固定模式或 `locked_backend` 冲突时只写 `baseline_deferred` + risk flag，不改 primary；普通自动路由才按基线锚定，原后端进 fallback。高风险/含角色镜头的漂移默认 BLOCK；只有结构化 `baseline_override` 覆盖当前 `clip_id` 且未过期时才降级为 WARN：
 
 ```json
 {
@@ -137,7 +139,7 @@ python3 skills/n2d-model-router/scripts/router.py <作品根> 第2集 --write
 }
 ```
 
-**③ 一角一后端亲和（核心硬钉）**：基线按 `shot_type` 锁后端，但同一**核心角色**若跨镜被不同 shot_type 路由到不同后端，脸质感会漂。router 读 `identity_registry`，对**已注册原生视频主体**（Character ID / face_lock，status registered/ready）的角色，逐镜对账"该角色原生主体后端 vs 本镜 primary"。核心/主演角色冲突时，router 会把本镜 `primary_backend` **硬钉**到该角色的原生主体后端，原 primary 降为 fallback，并在 rationale 留痕；若同镜多个原生主体无法同时满足，则保留 `character_backend_conflicts` + risk_flag `character_backend_conflict`，video gate 出「一角一后端」WARN，要求拆正反打/分区。没注册原生主体的角色零告警（避免噪音）。
+**③ 一角一后端亲和（核心硬钉）**：基线按 `shot_type` 锁后端，但同一**核心角色**若跨镜被不同 shot_type 路由到不同后端，脸质感会漂。router 读 `identity_registry`，对**已注册原生视频主体**（Character ID / face_lock，status registered/ready）的角色，逐镜对账"该角色原生主体后端 vs 本镜 primary"。核心/主演角色冲突时，router 会把本镜 `primary_backend` **硬钉**到该角色的原生主体后端，原 primary 降为 fallback，并在 rationale 留痕；若 baseline 或 benchmark 想改走别的后端，只能写 deferred/override，不得静默覆盖这个锁。若同镜多个原生主体无法同时满足，则保留 `character_backend_conflicts` + risk_flag `character_backend_conflict`，video gate 出「一角一后端」WARN，要求拆正反打/分区。没注册原生主体的角色零告警（避免噪音）。
 
 ### 4. 接入 n2d-video
 

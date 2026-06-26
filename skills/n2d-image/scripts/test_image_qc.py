@@ -89,6 +89,34 @@ def test_asset_must_not_have_must_be_propagated_to_prompt(tmp_path: Path) -> Non
     )
 
 
+def test_chinese_asset_id_binding_counts_as_bound(tmp_path: Path) -> None:
+    reg = tmp_path / "出图" / "共享"
+    reg.mkdir(parents=True)
+    (reg / "asset_registry.json").write_text(json.dumps({
+        "kind": "n2d_asset_reference_registry",
+        "assets": [{
+            "id": "PROP_急报卷轴",
+            "type": "prop",
+            "name": "急报卷轴",
+            "reference_group": {"primary": "出图/共享/图片/定妆_急报卷轴.png"},
+            "constraints": {"must_not_have": ["二维码"]},
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+    asset_index = image_qc.load_asset_index(tmp_path)
+    block = {
+        "label": "Clip 05 急报压堂",
+        "body": (
+            "**参考图入参清单**：`出图/共享/图片/定妆_急报卷轴.png`\n"
+            "**资产引用注册层**：`PROP_急报卷轴`；禁形：二维码。\n"
+        ),
+    }
+
+    codes = {f["code"] for f in image_qc.lint_shot_block(block, None, asset_index=asset_index)}
+
+    assert "asset_ref_without_id" not in codes
+    assert "asset_must_not_have_not_propagated" not in codes
+
+
 def test_prop_shape_review_targets_unconfirmed_high_risk_prop_png(tmp_path: Path) -> None:
     reg = tmp_path / "出图" / "共享"
     reg.mkdir(parents=True)

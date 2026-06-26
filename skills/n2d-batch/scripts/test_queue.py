@@ -666,3 +666,66 @@ def test_task_command_no_shots_suffix_when_none():
                          "return_to_stage": "image", "msg": "风格漂"}]}
     tasks = q.tasks_from_consistency_findings(str("/x"), rep, cost_estimates={}, max_retries=1)
     assert tasks and "--shots" not in tasks[0]["command"]
+
+
+# --- F3: 多机锁策略（atomic O_EXCL + 陈旧锁接管·2026-06-26）---
+
+def test_queue_lock_mode_selection(monkeypatch):
+    monkeypatch.setenv("N2D_QUEUE_LOCK", "atomic")
+    assert queue._queue_lock_mode() == "atomic"
+    monkeypatch.setenv("N2D_QUEUE_LOCK", "flock")
+    # flock 模式：有 fcntl 时为 flock，否则降 atomic
+    assert queue._queue_lock_mode() in {"flock", "atomic"}
+    monkeypatch.setenv("N2D_QUEUE_LOCK", "garbage")
+    assert queue._queue_lock_mode() in {"flock", "atomic"}  # 非法→auto
+
+
+def test_atomic_lock_mutual_exclusion(tmp_path, monkeypatch):
+    monkeypatch.setenv("N2D_QUEUE_LOCK", "atomic")
+    root = str(tmp_path)
+    import contextlib
+    with queue.queue_lock(root, timeout=1.0):
+        # 持锁期间再取（短超时）→ TimeoutError（互斥）
+        with contextlib.suppress(Exception):
+            import pytest as _pt
+        try:
+            with queue.queue_lock(root, timeout=0.3, poll=0.05):
+                assert False, "应互斥，不该拿到第二把锁"
+        except TimeoutError:
+            pass
+    # 释放后可再取
+    with queue.queue_lock(root, timeout=1.0):
+        pass
+
+
+def test_atomic_lock_breaks_stale_lock(tmp_path, monkeypatch):
+    import os, time
+    monkeypatch.setenv("N2D_QUEUE_LOCK", "atomic")
+    monkeypatch.setattr(queue, "QUEUE_LOCK_TTL", 0.2)  # 0.2s 即陈旧（spec-loaded 模块不能 reload，直接 setattr）
+    root = str(tmp_path)
+    os.makedirs(queue.production_dir(root), exist_ok=True)
+    # 造一把陈旧锁（持锁机器假装已死·mtime 很旧）
+    lp = queue.lock_path(root)
+    open(lp, "w").write("deadhost:9999:0")
+    old = time.time() - 100
+    os.utime(lp, (old, old))
+    # 应能接管陈旧锁，不死锁
+    with queue.queue_lock(root, timeout=2.0, poll=0.05):
+        pass
+
+
+def test_atomic_lock_protects_queue_rmw(tmp_path, monkeypatch):
+    # atomic 模式下完整 route→make_queue→claim 链路正常（认领不丢/不重复·互斥有效）
+    monkeypatch.setenv("N2D_QUEUE_LOCK", "atomic")
+    write_progress(tmp_path)
+    root = str(tmp_path)
+    tasks = queue.route_tasks(root, episodes=None, stage_filters={"image"},
+                              cost_estimates=queue.load_cost_estimates(root), max_retries=1)
+    budget = queue.apply_budget(tasks, 9999.0, "work_units")
+    planned = queue.make_queue(root, tasks, max_concurrency=2, max_retries=1, budget=budget)
+    queue.save_queue(root, planned)
+    claimed = queue.claim(root, limit=5, worker="m1:1")
+    assert len(claimed) >= 1
+    # 已认领的任务不会被第二个 worker 重复认领（atomic 锁互斥有效）
+    again = queue.claim(root, limit=5, worker="m2:2")
+    assert not (set(t["id"] for t in claimed) & set(t["id"] for t in again))

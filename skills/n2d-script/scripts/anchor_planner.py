@@ -19,7 +19,7 @@
 视频从 1 段变 K+1 段），给人确认。--write 才把 continuity.anchors 注回
 storyboard.json；已手动声明 midframe/anchors 的 Clip 一律跳过（人工优先）。
 
---default-midframe（三帧契约铁律·选择点「中段锚帧默认」=开启时用）：
+--default-midframe（风险分层三帧契约·选择点「中段锚帧默认」=开启时用）：
 未命中 R1/R2/R3 的普通镜也默认规划一张中段锚帧（命名=首帧名+`_mid`，内容=表演节拍
 中间拍），按时长分级用法 `use`：
   · split（duration ≥ 2×min_segment）——拆两段 frames2video 接力（真锚定）
@@ -272,9 +272,9 @@ def plan_episode(root: str, ep: str, *, min_seg: float = 4.0, target_seg: float 
     #    （目前只接了即梦/Dreamina multiframe2video=Seedance，段下限 0.5s）。将来接可灵/Veo 等后端时，
     #    必须复核它们的多关键帧 API 段下限/最大帧数，按后端调 multiframe_seg_min（理想是按 _设置.md
     #    生视频渠道 的 capability profile 取，而非硬编码）。frames2video-only 后端应传 multiframe_seg_min=4.0。
-    # 长镜盲区（#5·已被三帧契约默认覆盖）：≥8s 但 <3 拍且非打斗的镜不命中 R1/R2/R3；当
-    #    `中段锚帧默认=开启`（现为全局默认）时这类镜走 D0 仍稳拿 1 个 _mid（3 帧），盲区闭合；
-    #    只有显式 `关闭` 三帧契约时才回到"长简单镜只 2 帧"，那是 opt-in 用户的自觉选择。
+    # 长镜盲区：≥8s 但 <3 拍且非打斗的镜不命中 R1/R2/R3；当 `中段锚帧默认=开启`
+    # 时这类镜走 D0 拿 1 个 _mid（3 帧），`关闭` 时回到 2 帧以服务 ROI/速度优先。
+    # 高动作/长镜多拍/漂移实证/R1-R3 不受 D0 开关影响。
     sb = load_json(storyboard_path(root, ep))
     if not isinstance(sb, dict) or not isinstance(sb.get("clips"), list):
         raise SystemExit(f"[err] 缺少或损坏：{storyboard_path(root, ep)}")
@@ -388,8 +388,7 @@ def write_back(root: str, ep: str, plan: Dict[str, Any]) -> int:
     if default_mode:
         sb.setdefault("policy", {})["midframe_default"] = True
     else:
-        # 三帧契约默认铁律下，gate 缺 policy=按强制；选择点「中段锚帧默认=关闭」是逃生舱，
-        # 必须把 false 显式写进 storyboard，否则只规划了 R1/R2/R3 锚的镜外其余镜会被 gate 拦。
+        # 普通 D0 中锚关闭时写 false，gate 据此只要求 R1/R2/R3 已规划锚/豁免，不再拦低风险镜。
         sb.setdefault("policy", {})["midframe_default"] = False
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
@@ -440,18 +439,22 @@ def render_md(plan: Dict[str, Any]) -> str:
 
 def resolve_default_midframe(force_on: bool, force_off: bool, setting_value: Optional[str],
                              backend_capable: Optional[bool] = None) -> bool:
-    """三帧契约默认开关解析（能力门控铁律）。优先级：
+    """普通镜 D0 中段锚帧默认开关解析（风险分层）。
+
+    R1/R2/R3 高风险锚帧不走这个开关，始终按规则规划。这里仅决定未命中高风险规则的普通镜
+    是否补 `_mid`，让 ROI/速度优先项目可以关闭 D0 而不影响动作/长镜/漂移镜。
+
+    优先级：
       1. CLI --default-midframe → True；--no-default-midframe → False（dev/临时覆盖）。
-      2. 路由后端支持 ≥3 帧（backend_capable=True）→ True：能力门控铁律，不因 cost/风格关闭，
-         覆盖项目设置「中段锚帧默认=关闭」。
-      3. 否则（后端不支持 ≥3 帧 / 未传能力）→ 按 `_设置.md` 值，缺省=开启。
+      2. 后端明确不支持 ≥3 帧（backend_capable=False）→ False，普通镜不做低收益中锚。
+      3. 其余按 `_设置.md` 值，缺省=开启；后端支持只表示“可做”，不覆盖项目的 ROI/速度选择。
     纯函数·可测。"""
     if force_on:
         return True
     if force_off:
         return False
-    if backend_capable:
-        return True
+    if backend_capable is False:
+        return False
     return "关闭" not in str("开启" if setting_value is None else setting_value)
 
 
@@ -493,7 +496,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     args = ap.parse_args(argv)
 
     root = os.path.abspath(args.project_root)
-    # 三帧契约能力门控：路由视频后端支持 ≥3 帧时强制开（覆盖设置关闭，不因 cost）；CLI 标志最高优先。
+    # 风险分层三帧契约：R1/R2/R3 强制规划；普通镜 D0 尊重「中段锚帧默认」和后端能力。
     backend_selection = video_backend_selection(root)
     backend_capable = bool(backend_selection["supports_three_plus_frames"])
     default_mid = resolve_default_midframe(

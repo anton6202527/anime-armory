@@ -98,6 +98,21 @@ def test_adapter_matrix_links_reference_group_native_video_and_lora(tmp_path):
     assert matrix["summary"]["forms_with_native_video_ready"] == 1
 
 
+def test_adapter_matrix_accepts_structured_reference_group_items(tmp_path):
+    root = _root(tmp_path)
+    data = _registry()
+    form = data["characters"][0]["forms"][0]
+    for key, rel in list(form["reference_group"].items()):
+        form["reference_group"][key] = {"path": rel, "status": "ready"}
+
+    matrix = identity.build_adapter_matrix(root, data, generated_at="2026-06-08T00:00:00Z")
+
+    form_out = matrix["forms"][0]
+    assert form_out["reference_group_ready"] is True
+    assert form_out["reference_group"]["front"]["path"] == "出图/共享/图片/定妆_王敦.png"
+    assert form_out["gaps"] == []
+
+
 def test_lora_ready_dataset_warning_override_requires_notes(tmp_path):
     root = _root(tmp_path)
     report_path = root / "models" / "wang_validation_report.json"

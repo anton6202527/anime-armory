@@ -144,7 +144,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 > - 渠道：即梦/Dreamina / 豆包 / 海螺AI / 可灵Kling / Google Gemini API / Runway API / 本地开源 / manual
 > 选后写 `_设置.md`；若后续某类镜头能力不足，router 只写回退/保真实现方案或暂停询问，不偷偷切走。
 
-> **长镜/故事版多图走后端能力档，别拆段硬接**：`生视频渠道=即梦` 时，长镜或"一段多镜"用即梦官方 CLI 的 **`multiframe2video` 智能多帧**（2–20 张关键帧 → 一条连续视频，每段 0.5–8s，原生消除拼接"刹车感"）——这就是中段锚帧链的原生执行路径，**不需要为长镜/故事版另换模型或换厂**（旧文档曾误导"即梦 8s 装不下多镜、要换 Seedance/可灵"，已更正：即梦底层即 Seedance）。但这不是所有渠道的统一能力：Veo/Luma/可灵等先按首尾帧能力处理，Runway/Pika/Sora 未核验多帧时按首帧/参考图保守处理；`video_preflight` 会对不能消费 `_mid/_aK` 的路由给「多帧能力」WARN，并要求首尾 fallback、拆段接力或 reroute。各渠道 CLI 的真实命令/参数以 `n2d-video/references/cli_snapshots/` 的 `--help` 快照为准，由 `n2d-video/scripts/probe_cli.py` 抓取并可定期校验漂移。
+> **长镜/故事版多图走后端能力档，别拆段硬接**：`生视频渠道=即梦` 时，长镜或"一段多镜"用即梦官方 CLI 的 **`multiframe2video` 智能多帧**（2–20 张关键帧 → 一条连续视频，每段 0.5–8s，原生消除拼接"刹车感"）——这就是中段锚帧链的原生执行路径，**不需要为长镜/故事版另换模型或换厂**（旧文档曾误导"即梦 8s 装不下多镜、要换 Seedance/可灵"，已更正：即梦底层即 Seedance）。但这不是所有渠道的统一能力：Veo/Luma/可灵等先按首尾帧能力处理，Runway/Pika/Sora 未核验多帧时按首帧/参考图保守处理；高动作/长镜多拍/大表情/R3 漂移重抽镜的 `_aK` 锚帧是强制风险控制，普通低风险镜的 `_mid` 则尊重 `中段锚帧默认`，可为 ROI/速度关闭并留痕；`video_preflight` 会对不能消费 `_mid/_aK` 的路由给「多帧能力」WARN，并要求首尾 fallback、拆段接力或 reroute。各渠道 CLI 的真实命令/参数以 `n2d-video/references/cli_snapshots/` 的 `--help` 快照为准，由 `n2d-video/scripts/probe_cli.py` 抓取并可定期校验漂移。
 
 ## 调度工作流
 

@@ -420,7 +420,7 @@ def shared_aliases(title: str, body: str, rel_path: str) -> set:
     # The section title owns the shared target identity.  Body text may mention
     # related assets, such as VFX_01 in a character form, but those references
     # must not become selectable aliases for this target.
-    ids = re.findall(r"`?((?:CHAR|LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_]+)`?", title)
+    ids = re.findall(r"`?((?:CHAR|LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\u4e00-\u9fff]+)`?", title)
     aliases.update(ids)
     if "CHAR_01" in aliases and "常态" in title:
         aliases.add("CHAR_01/常态")
@@ -434,7 +434,7 @@ def shared_aliases(title: str, body: str, rel_path: str) -> set:
 
 
 def preferred_shared_shot(title: str, aliases: set, rel_path: str) -> str:
-    title_ids = re.findall(r"`((?:CHAR|LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_]+)`", title)
+    title_ids = re.findall(r"`((?:CHAR|LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\u4e00-\u9fff]+)`", title)
     for ident in title_ids:
         form_alias = ""
         if ident == "CHAR_01" and "常态" in title:
@@ -550,7 +550,7 @@ def _reference_relevant_text(body: str) -> str:
     in_reference_block = False
     for line in str(body or "").splitlines():
         stripped = line.strip()
-        if stripped.startswith("**参考图**"):
+        if stripped.startswith("**参考图**") or "参考图入参清单" in stripped:
             in_reference_block = True
             lines.append(line)
             continue
@@ -559,7 +559,7 @@ def _reference_relevant_text(body: str) -> str:
         if in_reference_block:
             lines.append(line)
             continue
-        if any(marker in line for marker in ("资产身份注册层", "身份注册层", "生成方式")):
+        if any(marker in line for marker in ("资产身份注册层", "身份注册层", "资产引用注册层", "生成方式")):
             lines.append(line)
     return "\n".join(lines)
 
@@ -575,7 +575,7 @@ def _shot_asset_refs(body: str) -> Set[str]:
     text = _reference_relevant_text(body)
     refs: Set[str] = set()
     for prefix in ("LOC", "PROP", "WEAPON", "OUTFIT", "VFX"):
-        refs |= set(re.findall(rf"{prefix}_[A-Za-z0-9_]+", text))
+        refs |= set(re.findall(rf"{prefix}_[A-Za-z0-9_\u4e00-\u9fff]+", text))
     return refs
 
 
@@ -675,7 +675,7 @@ def _collect_ready_image_paths(
         if isinstance(path, str) and _status_ready(node, allow_pending_user_reference=allow_pending_user_reference):
             _add_ready_image_path(path, root, out, seen, allow_non_shared=allow_non_shared)
         for key, value in node.items():
-            if key in {"source", "source_image"}:
+            if key in {"path", "source", "source_image", "source_refs"}:
                 continue
             _collect_ready_image_paths(
                 value,
@@ -723,7 +723,7 @@ def reference_bundle_for_target(root: Path, episode: str, target: Target) -> Dic
             text = str(alias).strip()
             if re.fullmatch(r"CHAR_[A-Za-z0-9_]+(?:/[A-Za-z0-9_\u4e00-\u9fff·.-]+)?", text):
                 char_refs.add(text)
-            elif re.fullmatch(r"(?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_]+", text):
+            elif re.fullmatch(r"(?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\u4e00-\u9fff]+", text):
                 asset_refs.add(text)
     identity = load_json_file(root / "出图" / "共享" / "identity_registry.json")
     assets = load_json_file(root / "出图" / "共享" / "asset_registry.json")

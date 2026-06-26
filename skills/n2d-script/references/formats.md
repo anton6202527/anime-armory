@@ -228,15 +228,18 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 
 ```json
 "first_3s_visual_hook": {
-  "visual_conflict": "沈念脸部大特写，门外刀影压进画面，危机不用声音也能看懂",
+  "visual_hook": "沈念脸部大特写，门外刀影压进画面，危机不用声音也能看懂",
+  "hook_type": "危机",
   "content_proposition": "本集要回答：是谁要害沈念",
   "onscreen_text": "谁在门外？",
   "muted_safe_proof": "关声仍能从刀影+惊恐表情+标题卡理解悬念",
-  "expected_metric": { "primary": "retention_3s", "target": 0.78 }
+  "expected_metric": { "primary": "retention_3s", "target": 0.80 }
 }
 ```
 
-也可放在首个 clip 的 `retention.first_3s_visual_hook`，但顶层优先。缺该契约或无法证明 `muted_safe` 时，`beat_audit.py --strict` 会在正式出图 prompt 前阻断。
+> **`visual_hook` 不只收"冲突"（GAP-2）**：硬门只要求"有一个静音可读的视觉钩"。钩子类型按导演节奏 §二的五类——**悬念/欲望/反差/信息/危机**（+情绪冲突）皆可，悬念/欲望/情绪型冷开场不必硬填一个"冲突"。可选 `hook_type` 字段写明属哪类（写了才校验是否在表内，不写不罚）。旧项目写的 `visual_conflict` 仍被当作 `visual_hook` 的**向后兼容别名**，不会报错。
+
+也可放在首个 clip 的 `retention.first_3s_visual_hook`，但顶层优先。缺该契约、`expected_metric.primary` 不是 `retention_3s/retention_6s`、`target` 低于当前 `retention_hook_floor`、烧屏文字过载，或无法证明 `muted_safe` 时，`beat_audit.py --strict` 会在正式出图 prompt 前阻断。voiceover 前约 6 秒也必须有钩子信号，不能 storyboard 写钩、台词节拍慢起。
 
 **钩子承诺-兑现账本（`retention_promise_ledger`）**：每个开场钩、集尾钩和中段强信息钩都要有 `hook_id / promise_type / opened_at / promise / payoff_due`。本集兑现必须写 `payoff_status=paid|resolved` + `payoff_clip/payoff_evidence/paid_by_episode` 之一；跨集兑现写 `delayed_payoff_ep`。该账本用于避免假悬念、爽点不兑现和尾钩断线。
 
@@ -274,11 +277,12 @@ character design / reference sheet: {name}, minimum reference set with front-fac
   "policy": { "tailframe_default": true, "midframe_default": true },   // tailframe gate 要求 =true；midframe_default=true 时每镜须有中锚声明或豁免（anchor_planner --write 写入）
 
   "first_3s_visual_hook": {
-    "visual_conflict": "沈念惊醒特写，门外刀影压进画面",
+    "visual_hook": "沈念惊醒特写，门外刀影压进画面",
+    "hook_type": "危机",
     "content_proposition": "谁在门外，为什么要杀她",
     "onscreen_text": "谁在门外？",
     "muted_safe_proof": "关声也能从刀影+惊恐表情+标题卡理解危机",
-    "expected_metric": { "primary": "retention_3s", "target": 0.78 }
+    "expected_metric": { "primary": "retention_3s", "target": 0.80 }
   },
   "retention_promise_ledger": [
     { "hook_id": "OPEN_01", "promise_type": "opening_hook", "opened_at": "Clip_01", "promise": "门外是谁", "payoff_due": "Clip_04", "payoff_status": "paid", "payoff_clip": "Clip_04", "payoff_evidence": "黑衣人身份线索露出", "bait_risk": "low" },

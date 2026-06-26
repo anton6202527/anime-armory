@@ -98,49 +98,100 @@ def lock_path(root: str) -> str:
     return os.path.join(production_dir(root), QUEUE_LOCK)
 
 
-@contextlib.contextmanager
-def queue_lock(root: str, *, timeout: float = 30.0, poll: float = 0.1):
-    """单机多 worker 互斥：所有"读队列→改→写"必须在此锁内做，避免双认领/互相覆盖。
+# 锁策略（F3 多机·2026-06-26）：
+#   auto（默认）= 有 fcntl 用 flock（本地 FS 可靠、零行为变化）；无 fcntl 退 atomic。
+#   atomic      = 强制 O_EXCL 锁文件 + 陈旧锁自动接管——**共享 FS 多机渲染农场**用这个（O_EXCL create
+#                 在 NFSv3+ 原子，比 flock 跨 NFS 可靠）。env `N2D_QUEUE_LOCK=atomic` 开启。
+#   诚实边界：这把锁只护「读队列→改→写」的临界区；真正的多机安全网是**每任务 lease + reclaim_expired +
+#   heartbeat**（已有·一台机器死了它的任务自动回收）。高并发/强一致仍建议接 Redis/DB 协调后端（见 SKILL）。
+QUEUE_LOCK_TTL = float(os.environ.get("N2D_QUEUE_LOCK_TTL", "120") or "120")
 
-    主用 POSIX `fcntl.flock`（本地 FS 可靠）；无 fcntl 时退回 O_EXCL 锁文件自旋。
-    注意：flock 跨 NFS 不可靠——多机请用真正的协调后端，不要靠本锁。
-    """
-    os.makedirs(production_dir(root), exist_ok=True)
-    path = lock_path(root)
-    if fcntl is not None:
-        fd = os.open(path, os.O_CREAT | os.O_RDWR, 0o644)
-        try:
-            deadline = time.time() + timeout
-            while True:
-                try:
-                    fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                    break
-                except OSError:
-                    if time.time() >= deadline:
-                        raise TimeoutError(f"queue lock timeout ({timeout}s): {path}")
-                    time.sleep(poll)
-            yield
-        finally:
-            try:
-                fcntl.flock(fd, fcntl.LOCK_UN)
-            finally:
-                os.close(fd)
-    else:  # pragma: no cover - non-POSIX fallback
+
+def _queue_lock_mode() -> str:
+    mode = os.environ.get("N2D_QUEUE_LOCK", "auto").strip().lower()
+    if mode not in {"auto", "flock", "atomic"}:
+        mode = "auto"
+    if mode == "auto":
+        return "flock" if fcntl is not None else "atomic"
+    if mode == "flock" and fcntl is None:
+        return "atomic"
+    return mode
+
+
+@contextlib.contextmanager
+def _flock_lock(path: str, timeout: float, poll: float):
+    fd = os.open(path, os.O_CREAT | os.O_RDWR, 0o644)
+    try:
         deadline = time.time() + timeout
         while True:
             try:
-                fd = os.open(path, os.O_CREAT | os.O_EXCL | os.O_RDWR, 0o644)
+                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
                 break
-            except FileExistsError:
+            except OSError:
                 if time.time() >= deadline:
                     raise TimeoutError(f"queue lock timeout ({timeout}s): {path}")
                 time.sleep(poll)
+        yield
+    finally:
         try:
-            yield
+            fcntl.flock(fd, fcntl.LOCK_UN)
         finally:
             os.close(fd)
+
+
+@contextlib.contextmanager
+def _atomic_file_lock(path: str, timeout: float, poll: float, ttl: float):
+    """O_EXCL 锁文件 + 陈旧锁自动接管（治原 fallback 的「持锁机器死了→永久死锁」缺陷）。
+
+    持锁者把 `hostname:pid:ts` 写进锁文件；竞争者发现锁文件 mtime 超 ttl（持锁者多半已死）就用
+    os.rename 原子抢占（rename 同一源只有一个赢，输者重试 O_EXCL create）。O_EXCL create 在 NFSv3+
+    原子 → 比 flock 跨 NFS 可靠，适合共享 FS 多机。"""
+    deadline = time.time() + timeout
+    holder = f"{default_worker()}:{int(now_ts())}"
+    while True:
+        try:
+            fd = os.open(path, os.O_CREAT | os.O_EXCL | os.O_RDWR, 0o644)
             with contextlib.suppress(OSError):
-                os.unlink(path)
+                os.write(fd, holder.encode("utf-8"))
+            break
+        except FileExistsError:
+            stolen = False
+            try:
+                if time.time() - os.path.getmtime(path) > ttl:
+                    stale = f"{path}.stale.{os.getpid()}.{int(time.time()*1000)}"
+                    os.rename(path, stale)            # 原子抢占：同源只有一个 rename 成功
+                    with contextlib.suppress(OSError):
+                        os.unlink(stale)
+                    stolen = True
+            except OSError:
+                pass                                  # 别人已抢/已删 → 继续自旋重试 create
+            if not stolen and time.time() >= deadline:
+                raise TimeoutError(f"queue lock timeout ({timeout}s): {path}")
+            if not stolen:
+                time.sleep(poll)
+    try:
+        yield
+    finally:
+        os.close(fd)
+        with contextlib.suppress(OSError):
+            os.unlink(path)
+
+
+@contextlib.contextmanager
+def queue_lock(root: str, *, timeout: float = 30.0, poll: float = 0.1):
+    """单机多 worker / 多机互斥：所有"读队列→改→写"必须在此锁内做，避免双认领/互相覆盖。
+
+    锁策略见 `_queue_lock_mode`（默认 flock·零行为变化；`N2D_QUEUE_LOCK=atomic` 走共享 FS 多机安全的
+    O_EXCL+陈旧锁接管）。真正的多机断点恢复靠每任务 lease + reclaim_expired（已有）。
+    """
+    os.makedirs(production_dir(root), exist_ok=True)
+    path = lock_path(root)
+    if _queue_lock_mode() == "flock":
+        with _flock_lock(path, timeout, poll):
+            yield
+    else:
+        with _atomic_file_lock(path, timeout, poll, QUEUE_LOCK_TTL):
+            yield
 
 
 def queue_path(root: str) -> str:

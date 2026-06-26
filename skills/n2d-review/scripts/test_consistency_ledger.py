@@ -41,6 +41,9 @@ def test_build_ledger_overall_is_worst_of_three():
         face_drift={"CHAR_01": "high"},
         asset_drift={"PROP_01": "low"},
         findings=[{"sev": "warn", "source": "contract", "text": "PROP_01 铜镜 dropped"}],
+        dependency_graph={"kind": "n2d_consistency_dependency_graph", "summary": {"nodes": 2, "edges": 1}},
+        discontinuity_audit={"kind": "n2d_intentional_discontinuity_audit", "status": "pass", "counts": {"accepted": 1}},
+        supplemental_reports={"motion_grammar_consistency": {"kind": "x", "status": "pass", "counts": {"warn": 0}}},
     )
     by_id = {r["id"]: r for r in led["rows"]}
     # 角色：事前 high → overall high
@@ -52,6 +55,9 @@ def test_build_ledger_overall_is_worst_of_three():
     assert led["counts"]["high"] == 1
     assert "domains" in led
     assert led["delivery_surface"]["status"] == "blocked"
+    assert led["dependency_graph"]["summary"]["nodes"] == 2
+    assert led["intentional_discontinuity"]["counts"]["accepted"] == 1
+    assert "motion_grammar_consistency" in led["supplemental_reports"]
 
 
 def test_delivery_domains_are_single_acceptance_surface():

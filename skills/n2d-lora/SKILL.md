@@ -29,6 +29,7 @@ description: LoRA 训练/部署生命周期管理：为 n2d 核心长线角色�
 - **商用许可先记账**：商用项目必须在 `train_job.json` 留底模许可风险；许可未明不能当“可商用 ready”。
 - **验证不过不注册 ready**：没有 `validation_report.json` 或 verdict 不是 `pass`，不得把 registry lora 标成 `ready`。`register --force` 只允许记录人工覆盖为 `candidate` + `manual_override.reasons`，不能绕过验证制造 ready。
 - **LoRA 只跑 hero 镜**：不要整集切到开源链路，避免画风跳变和成本失控。
+- **LoRA hero 镜必须写例外范围**：LoRA 用在非项目主生图模型/渠道时，不得把它解释成“整集换生图模型”或绕过 `single_model_channel_per_project`。本集只允许在明确 hero shot 范围内使用，并写 `生产数据/lora_exception_scope_第N集.json`（kind=`n2d_lora_exception_scope`）：`clips`、`character_id/form`、`reason`、`project_image_model`、`lora_base_model`、`style_bridge`、`qc_required`、`not_a_project_model_switch=true`。缺 manifest 时，回 `n2d-image` 主链路或补例外范围，不能混用。
 
 ## 用户不用记 CLI
 
@@ -50,6 +51,7 @@ python3 skills/n2d-lora/scripts/lora.py dataset <作品根> --character-id CHAR_
 python3 skills/n2d-lora/scripts/lora.py train-job <作品根> --character-id CHAR_XXX --form 常态 --provider manual
 python3 skills/n2d-lora/scripts/lora.py validate <作品根> --character-id CHAR_XXX --form 常态 --model-path <模型.safetensors> --approved  # 数据集无 warning 时
 python3 skills/n2d-lora/scripts/lora.py register <作品根> --character-id CHAR_XXX --form 常态
+python3 skills/n2d-lora/scripts/lora.py exception-scope <作品根> 第N集 --character-id CHAR_XXX --form 常态 --clip Clip_03 --reason "<为什么只有这几个 hero 镜用 LoRA>" --project-image-model "<本剧主生图模型>" --lora-base-model "<LoRA底模>" --style-bridge "<如何贴回本剧风格/LUT/QC>"
 python3 skills/n2d-identity/scripts/identity.py <作品根> --write
 ```
 

@@ -33,6 +33,10 @@ DEFAULT_THRESHOLDS: Dict[str, Any] = {
     "qa_blockers_ceiling": 0,       # QA 阻断数 > 此 → critical
     "cost_per_min_ceiling": None,   # 每分钟成本上限（单币种）→ warn
     "recoup_floor": None,           # 回收比低于 → warn（仅有投放数据时）
+    "retention_3s_floor": None,     # 3s 留存低于 → critical（首帧钩失效）
+    "bounce_3s_ceiling": None,      # 3s 跳出高于 → warn（开场留不住人）
+    "follow_next_rate_floor": None, # 追更率低于 → warn（集尾钩失效）
+    "beat_density_variance_ceiling": None,  # 节拍密度方差高于 → warn（节奏紊乱）
 }
 
 # _设置.md 标签 → 阈值键
@@ -44,6 +48,10 @@ SETTINGS_MAP = {
     "告警QA阻断上限": "qa_blockers_ceiling",
     "告警每分钟成本上限": "cost_per_min_ceiling",
     "告警回收比下限": "recoup_floor",
+    "告警3s留存下限": "retention_3s_floor",
+    "告警3s跳出上限": "bounce_3s_ceiling",
+    "告警追更率下限": "follow_next_rate_floor",
+    "告警节拍密度方差上限": "beat_density_variance_ceiling",
 }
 
 # 阈值键 → 环境变量覆盖
@@ -88,7 +96,13 @@ RETENTION_BENCHMARK_REQUIRED_PATHS = (
     "creative_attention.caption_words_per_sec_band",
     "proxy_thresholds.hook_window_sec",
     "proxy_thresholds.retention_hook_floor",
+    # 镜/分钟密度带：实搜确认无可辩护公开 CPM 来源，强制带 internal-heuristic provenance，
+    # 杜绝"无来源阈值假装有市场背书"（GAP-1·provenance 整合）。
+    "proxy_thresholds.density_slow_per_min",
+    "proxy_thresholds.density_fast_per_min",
     "episode_kpi_targets.required_metrics",
+    # 首集专属完播地板（GAP-3·E1≥75% QC 地板，与通用 completion_rate 分开审）。
+    "episode_kpi_targets.first_episode_completion_floor",
     "app_retention_reference.global_short_drama_apps.d1_retention",
     "app_retention_reference.global_short_drama_apps.d7_retention",
     "app_retention_reference.global_short_drama_apps.d14_retention",

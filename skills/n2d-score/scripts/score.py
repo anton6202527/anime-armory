@@ -34,6 +34,10 @@ from n2d_contract import (  # noqa: E402  生产数据目录 / kind / 一致性�
     production_dir,
 )
 from n2d_thresholds import load_thresholds  # noqa: E402  告警阈值单一真值源（与 n2d-dashboard 共用）
+from n2d_settings import get_setting  # noqa: E402  读 canonical 一致性严格度 key（与 review gate 同源，避免门槛口径背离）
+
+# 一致性严格度 canonical key + gate 同款别名（与 n2d-review/gate.py _profile_values 对齐）。
+CONSISTENCY_PROFILE_KEYS = ("一致性严格度", "一致性发布档", "一致性落地档", "一致性验收档", "制作质量档")
 
 INPUT_DIR = "score_inputs"
 SCORE_KIND = EPISODE_REVIEW_SCORE_KIND
@@ -164,6 +168,24 @@ def resolve_score_profile(root: str, explicit: Optional[str] = None) -> str:
         return "demo"
     if raw in {"intl", "international", "global", "english", "海外", "出海"}:
         return "overseas"
+    # canonical 一致性严格度 key 优先（与 review gate 同源）：显式写了严格度就照它判，
+    # 不再被 目标平台:抖音 / 投放时效:付费上线 这类**非严格度**字段的子串误升档（治 gate=demo 而 score=production 的背离）。
+    for key in CONSISTENCY_PROFILE_KEYS:
+        try:
+            val = str(get_setting(root, key, "") or "").strip().lower()
+        except Exception:
+            val = ""
+        if not val:
+            continue
+        if val in SCORE_PROFILE_THRESHOLDS:
+            return val
+        if val in {"production_no_cost_image", "prod", "release", "paid", "投放", "上线", "production_release"}:
+            return "production"
+        if val in {"test", "sample", "pilot", "打样", "测试"}:
+            return "demo"
+        if val in {"intl", "international", "global", "english", "海外", "出海"}:
+            return "overseas"
+        break  # 严格度 key 写了但值无法识别 → 落到下方旧启发式，不静默吞
     try:
         text = open(os.path.join(root, "_设置.md"), encoding="utf-8").read().lower()
     except Exception:

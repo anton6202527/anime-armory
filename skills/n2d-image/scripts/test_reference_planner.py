@@ -353,3 +353,43 @@ def test_build_plan_emits_multi_subject_actions(tmp_path: Path) -> None:
     assert "多人同框策略" in rp.render_md(plan)
     assert "CHAR_01/常态" in actions[0]["chars"]
     assert "CHAR_02/常服" in actions[0]["chars"]
+
+
+# ── G2 跨集记忆锚（memory-sink）注入 ───────────────────────────────────────────
+
+def _mem_char():
+    return {"id": "CHAR_01", "name": "沈念", "form": "常态",
+            "reference_group": {"front": "f.png", "three_quarter": "tq.png", "outfit": "o.png"},
+            "reference_atlas": {}, "angle_policy": {}}
+
+
+def _mem_profile():
+    return {"label": "X", "canonical": "x", "max_reference_images": 3, "multi_reference": True}
+
+
+def test_memory_anchor_prepended_as_top_priority_and_survives_cap():
+    p = rp.plan_character_in_clip(_mem_char(), ["closeup"], False, _mem_profile(),
+                                  "multi_reference", True,
+                                  memory_refs=["出图/共享/图片/定妆_沈念_front_ep1.png"])
+    roles = [r["role"] for r in p["recommended_references"]]
+    assert roles[0] == "memory_anchor"  # 最高优先，封顶时最先保留
+    assert p["memory_anchor_reinjected"] is True
+
+
+def test_memory_anchor_dedups_existing_path():
+    p = rp.plan_character_in_clip(_mem_char(), [], False, _mem_profile(),
+                                  "multi_reference", False, memory_refs=["f.png"])
+    assert sum(1 for r in p["recommended_references"] if r["path"] == "f.png") == 1
+
+
+def test_no_memory_refs_is_status_quo():
+    p = rp.plan_character_in_clip(_mem_char(), [], False, _mem_profile(),
+                                  "multi_reference", False)
+    assert p["memory_anchor_reinjected"] is False
+    assert not any(r["role"] == "memory_anchor" for r in p["recommended_references"])
+
+
+def test_memory_refs_matcher_flexible_keys():
+    assert rp._memory_refs_for({"CHAR_01/常态": ["m1.png"]}, "CHAR_01", "沈念", "CHAR_01/常态") == ["m1.png"]
+    assert rp._memory_refs_for({"沈念": ["m2.png"]}, "CHAR_01", "沈念", "") == ["m2.png"]
+    assert rp._memory_refs_for({"CHAR_99": ["x"]}, "CHAR_01", "沈念", "") == []

@@ -221,6 +221,9 @@ def default_manifest(root: Path, episode: str | None = None) -> Dict[str, Any]:
             "release_filing_no": "TODO: 上线备案号",
             "pre_broadcast_review": "pending",
             "filed_at": "",
+            # 2026-04 起未备案动画微短剧强制下架、备案过审率<30%、约 65% 收整改单（Apr-Jun 下架 7 万+）；
+            # 红果 2026-05 下架约 2.1 万剧（~95% 为漫剧）并**明令禁止「全自动零审核」、要求每集 AI 成片人工终审**。
+            "platform_human_review": "pending",  # 红果等平台强制：每集 AI 成片人工终审过后置 done（零审核已被平台禁）
             "notes": "境内付费投放须先备案后上线；纯海外/内部预览可 applicable=false 并写理由",
         },
         # AI 生成合成内容标识：保留 manifest 和 compose best-effort 后处理，但不得阻断 n2d 主流程。
@@ -231,6 +234,9 @@ def default_manifest(root: Path, episode: str | None = None) -> Dict[str, Any]:
                 "status": "pending",  # pending → compose 落标后置 done；not_applicable 须 notes
                 "text": COMPLIANCE_AI_LABEL_DEFAULT_TEXT,
                 "position": "bottom-right",
+                # 2026 广电显著标识规格（投放前自查项·非阻断）：成片**前 5 秒内出现**、**持续≥3 秒**、
+                # 居中或显著位、且**经切条/二创/出海裁剪后仍存活**，否则整片可能被下架。
+                "prominent_label_spec": "TODO: 确认显著标识满足 前5s出现/≥3s持续/显著位/经裁剪存活（2026广电规格）",
             },
             "implicit_metadata": {
                 "spec": COMPLIANCE_AI_LABEL_SPEC,
@@ -395,6 +401,13 @@ def check_manifest(root: Path, episode: str | None, stage: str = "compose") -> L
             paid = str(data.get("distribution_intent") or "").strip().lower() == "paid_distribution"
             if (paid or stage == "review") and not has_real_value(release_no):
                 flag_skippable("regulatory_filing.release_filing_no（上线备案号）付费投放/review 前必填，不能留 TODO 占位")
+            # 红果等平台 2026-05 起强制：每集 AI 成片人工终审（「全自动零审核」已被平台明令禁止·下架约 2.1 万剧）。
+            # 这是平台流程义务（人审在工具外做），故出 INFO 提醒不阻断主流程；review 阶段未 attest 尤应补。
+            phr = str(reg.get("platform_human_review") or "").strip()
+            if phr not in COMPLIANCE_DONE:
+                issues.append(
+                    f"INFO {path}: regulatory_filing.platform_human_review 未确认（红果等平台 2026 强制"
+                    "每集 AI 成片人工终审、禁「全自动零审核」）；批量产线发布前须逐集人工终审并置 done")
             if has_real_value(reg.get("filed_at")) and not valid_iso_date(reg.get("filed_at")):
                 flag_skippable("regulatory_filing.filed_at 须为 YYYY-MM-DD")
 
@@ -420,6 +433,9 @@ def check_manifest(root: Path, episode: str | None, stage: str = "compose") -> L
             for key in ("service_provider_code", "content_id"):
                 if not has_real_value(meta.get(key)):
                     flag_ai_label(f"ai_labeling.implicit_metadata.{key} 缺；无法自动写入完整元数据隐式标识")
+            if not has_real_value(label.get("prominent_label_spec")):
+                flag_ai_label("ai_labeling.explicit_label.prominent_label_spec 未确认满足 2026 广电显著标识规格"
+                              "（前5s出现/≥3s持续/显著位/经切条二创出海裁剪后仍存活，否则整片可能被下架）")
             if stage == "review":
                 if lstatus != "done":
                     flag_ai_label("ai_labeling.explicit_label.status 尚非 done；成片未确认已落显式标签")

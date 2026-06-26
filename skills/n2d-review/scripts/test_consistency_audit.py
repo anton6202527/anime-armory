@@ -41,6 +41,8 @@ def test_all_consistency_audit_sections_are_score_mapped():
         "特效窜色(VFXC)", "色温调色(GRADE1)",
         # D 档音频白区：配音情绪弧 / 口音方言 / 音乐衔接
         "配音情绪弧(VEA)", "口音方言(ACC)", "音乐衔接(BGM)",
+        # 表情过锁 / copy-paste 冻脸（report-only·IPRO 减害）
+        "表情过锁(EXP3)",
     }
     mapped = {
         label
@@ -262,3 +264,72 @@ def test_reconcile_face_with_expression_downgrades_only_confirmed_blocks():
     face2 = {"shots": [{"png": "图片/Clip_03_a.png", "verdict": "block"}]}
     assert ca.reconcile_face_with_expression(face2, set()) == 0
     assert face2["shots"][0]["verdict"] == "block"
+
+
+# ── EXP3 表情过锁 / copy-paste 冻脸（report-only·IPRO 减害）──────────────────────
+
+def test_overlock_signal_a_systemic_flat_warns():
+    # ≥2 个「声称大但像素零形变」镜 → 系统性过锁 WARN（带实测 Δ 才算）
+    expr = {"available": True, "findings": [
+        {"shot": "Clip_01", "verdict": "warn", "mouth_change": 0.01, "eye_change": 0.2},
+        {"shot": "Clip_03", "verdict": "warn", "mouth_change": 0.00, "eye_change": 0.1},
+        {"shot": "Clip_05", "verdict": "ok", "mouth_change": 0.40, "eye_change": 2.0},
+        {"shot": "Clip_07", "verdict": "warn", "note": "无尾帧"},  # 无实测 Δ → 不计
+    ]}
+    rows = ca.expression_overlock_findings(expr, {"available": False}, {})
+    warns = [r for r in rows if r["verdict"] == "warn"]
+    assert len(warns) == 1
+    assert "系统性" in warns[0]["message"] and "Clip_01" in warns[0]["message"]
+
+
+def test_overlock_signal_a_single_flat_no_warn():
+    expr = {"available": True, "findings": [
+        {"shot": "Clip_01", "verdict": "warn", "mouth_change": 0.01, "eye_change": 0.2},
+    ]}
+    rows = ca.expression_overlock_findings(expr, {"available": False}, {})
+    assert not [r for r in rows if r["verdict"] == "warn"]  # 单镜归 EXP1，不重复
+
+
+def test_overlock_signal_b_copypaste_fingerprint_info():
+    # 宽情绪角色脸跨镜余弦近乎恒定 → INFO copy-paste 指纹
+    face = {"available": True, "shots": [
+        {"char": "CHAR_01", "score": 0.991, "verdict": "ok"},
+        {"char": "CHAR_01", "score": 0.992, "verdict": "ok"},
+        {"char": "CHAR_01", "score": 0.990, "verdict": "ok"},
+    ]}
+    char_emo = {"CHAR_01": {"emotions": {"悲", "怒", "喜"}, "closeups": 3}}
+    rows = ca.expression_overlock_findings({"available": True, "findings": []}, face, char_emo)
+    infos = [r for r in rows if r["verdict"] == "info"]
+    assert len(infos) == 1 and "copy-paste" in infos[0]["message"]
+
+
+def test_overlock_signal_b_natural_variation_no_flag():
+    # 有自然散度的脸（spread≥阈值）→ 不判过锁
+    face = {"available": True, "shots": [
+        {"char": "CHAR_01", "score": 0.99, "verdict": "ok"},
+        {"char": "CHAR_01", "score": 0.95, "verdict": "ok"},
+        {"char": "CHAR_01", "score": 0.93, "verdict": "ok"},
+    ]}
+    char_emo = {"CHAR_01": {"emotions": {"悲", "怒", "喜"}, "closeups": 3}}
+    rows = ca.expression_overlock_findings({"available": True, "findings": []}, face, char_emo)
+    assert not [r for r in rows if r["verdict"] == "info"]
+
+
+def test_overlock_signal_c_text_fallback_info():
+    # 无像素也无脸数据 → 宽情绪角色文本兜底 INFO
+    char_emo = {"CHAR_01": {"emotions": {"悲", "怒", "喜", "惊"}, "closeups": 4}}
+    rows = ca.expression_overlock_findings({"available": False}, {"available": False}, char_emo)
+    infos = [r for r in rows if r["verdict"] == "info"]
+    assert len(infos) == 1 and "过锁风险" in infos[0]["message"]
+
+
+def test_overlock_never_blocks():
+    # 任何信号都不得产出 block（report-only 铁律）
+    expr = {"available": True, "findings": [
+        {"shot": f"Clip_{i}", "verdict": "warn", "mouth_change": 0.0, "eye_change": 0.0}
+        for i in range(5)]}
+    face = {"available": True, "shots": [
+        {"char": "CHAR_01", "score": 0.99, "verdict": "ok"} for _ in range(4)]}
+    char_emo = {"CHAR_01": {"emotions": {"悲", "怒", "喜"}, "closeups": 4}}
+    rows = ca.expression_overlock_findings(expr, face, char_emo)
+    assert rows and not any(r["verdict"] == "block" for r in rows)

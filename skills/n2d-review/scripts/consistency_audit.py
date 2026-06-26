@@ -311,7 +311,7 @@ _DIM_RISK_MAP: List[Tuple[str, float]] = [
     ("系统面板(UI1)", 0.30), ("音乐母题(LM1)", 0.20),
     ("系列调色(GRD)", 0.25), ("环境声(AMB)", 0.20),
     ("跨集体型(R2)", 0.45), ("在场检测(O3V)", 0.45),
-    ("外观判官(VAP)", 0.55), ("表情连续(EXP1)", 0.70),
+    ("外观判官(VAP)", 0.55), ("表情连续(EXP1)", 0.70), ("表情过锁(EXP3)", 0.20),
     ("伏笔兑现(SP1)", 0.30), ("文字渲染(OCR1)", 0.35),
     ("服装独立(COST)", 0.50), ("状态像素验证(SP1V)", 0.75),
     ("音画情绪一致(AVE)", 0.50),
@@ -552,6 +552,106 @@ def reconcile_face_with_expression(face_result: dict, confirmed_clips: set) -> i
     return n
 
 
+# ── EXP3 表情过锁 / copy-paste 冻脸（report-only·IPRO/PixelSmile 减害）──────────────
+# 与上面的 G1↔EXP1 调和互补、方向相反：那个被动防「把脸做平骗过 G1」（已 block 才降级）；
+# 这个**主动**检出「脸该随情绪动却纹丝不动」的系统性过锁——高 face-cosine 恰恰可能是 copy-paste
+# 冻脸的假高分（IPRO 2510.14255 实证：身份分越高、表演越差；WithAnyone/PixelSmile 同结论）。
+# 永不 block（不进 STRICT_ADVISORY_DIMENSIONS），全 WARN/INFO：过锁是创作权衡提示，不是穿帮。
+OVERLOCK_MIN_FLAT = int(os.environ.get("N2D_OVERLOCK_MIN_FLAT", "2") or "2")
+OVERLOCK_COS_MEAN = float(os.environ.get("N2D_OVERLOCK_COS_MEAN", "0.97") or "0.97")
+OVERLOCK_COS_SPREAD = float(os.environ.get("N2D_OVERLOCK_COS_SPREAD", "0.012") or "0.012")
+OVERLOCK_MIN_CLOSEUPS = int(os.environ.get("N2D_OVERLOCK_MIN_CLOSEUPS", "3") or "3")
+
+
+def char_closeup_emotions(root: str, ep: str) -> Dict[str, Dict[str, Any]]:
+    """每角色在近景镜里脚本命中的情绪桶集合 + 近景镜数（驱动 EXP3 过锁判断）。复用 ec/pc 读取层。"""
+    out: Dict[str, Dict[str, Any]] = {}
+    try:
+        it = ec._clip_iter(root, ep)
+    except Exception:
+        return out
+    for _clip, _label, text in it:
+        if not any(m.lower() in text.lower() for m in ec.CLOSEUP_MARKERS):
+            continue
+        emos = ec._emotions_in(text)
+        for cid in pc._char_ids(text):
+            rec = out.setdefault(cid, {"emotions": set(), "closeups": 0})
+            rec["closeups"] += 1
+            rec["emotions"] |= emos
+    return out
+
+
+def expression_overlock_findings(expr_result: dict, face_result: dict,
+                                 char_emotions: Dict[str, Dict[str, Any]],
+                                 *, min_flat: int = OVERLOCK_MIN_FLAT,
+                                 cos_mean: float = OVERLOCK_COS_MEAN,
+                                 cos_spread: float = OVERLOCK_COS_SPREAD,
+                                 min_closeups: int = OVERLOCK_MIN_CLOSEUPS) -> List[dict]:
+    """EXP3：表情过锁 / copy-paste 冻脸（report-only）。纯函数·可测。复用已算的 expr(形变)+face(余弦)。
+
+    A 像素·系统性：≥min_flat 个「声称大表情但首尾帧零形变」镜（EXP1 verdict==warn 且有实测 Δ）→ WARN。
+      与 EXP1 逐镜 warn 互补——这是聚合诊断：系统性过锁 ≠ 单镜偶发，给 IPRO 整体重制建议而非单镜重抽。
+    B 统计·copy-paste 指纹：宽情绪角色（≥2 情绪桶·≥min_closeups 近景）脸跨镜最佳锚余弦均值≥cos_mean
+      且 散度<cos_spread（近乎恒定）→ INFO（高身份×零表情=IPRO 过锁区）。
+    C 文本兜底：无像素也无脸数据时，宽情绪角色（≥3 桶·≥min_closeups 近景）→ INFO 过锁风险提醒。"""
+    rows: List[dict] = []
+    # Signal A —— 系统性像素零形变
+    flat: List[str] = []
+    for f in (expr_result.get("findings") or []):
+        if not isinstance(f, dict) or f.get("verdict") != "warn":
+            continue
+        if f.get("mouth_change") is None and f.get("eye_change") is None:
+            continue  # skip/无脸占位 finding，非实测形变
+        sh = str(f.get("shot") or "")
+        if sh:
+            flat.append(sh)
+    if len(flat) >= min_flat:
+        shown = "、".join(flat[:6]) + ("…" if len(flat) > 6 else "")
+        rows.append(pc._row(
+            "warn",
+            f"本集 {len(flat)} 个大情绪近景像素零形变（{shown}）·系统性疑似过锁/copy-paste 冻脸——按 "
+            "IPRO/PixelSmile：高 face-cosine 假高分是身份锁过紧的征兆，别只重抽单镜；解耦表情（加 AU/FACS "
+            "表情控件 / expressions 表情参考）或下调身份参考权重，再整体重出情绪镜。",
+            stage="image", artifacts=["出图/共享/图片", "identity_registry.json"]))
+    # Signal B —— 跨镜余弦近乎恒定的 copy-paste 指纹
+    face_avail = bool(face_result.get("available")) and bool(face_result.get("shots"))
+    if face_avail:
+        scores_by_char: Dict[str, List[float]] = {}
+        for s in face_result.get("shots", []) or []:
+            if not isinstance(s, dict):
+                continue
+            c = str(s.get("char") or "")
+            sc = s.get("score")
+            if c and isinstance(sc, (int, float)):
+                scores_by_char.setdefault(c, []).append(float(sc))
+        for c, info in (char_emotions or {}).items():
+            if len(info.get("emotions") or ()) < 2 or int(info.get("closeups") or 0) < min_closeups:
+                continue
+            scs = scores_by_char.get(c) or []
+            if len(scs) < min_closeups:
+                continue
+            mean = sum(scs) / len(scs)
+            spread = max(scs) - min(scs)
+            if mean >= cos_mean and spread < cos_spread:
+                rows.append(pc._row(
+                    "info",
+                    f"角色 {c} 跨 {len(scs)} 个情绪近景脸-身份余弦近乎恒定（均值 {mean:.3f}·散度 {spread:.3f}），"
+                    f"但脚本跨 {len(info['emotions'])} 种情绪——疑似高身份×零表情的 copy-paste 冻脸（IPRO）。"
+                    "确认表情真在动；必要时解耦表情控件或下调身份权重。",
+                    stage="image", artifacts=["出图/共享/图片"]))
+    # Signal C —— 文本兜底（无像素也无脸数据）
+    elif not expr_result.get("available"):
+        for c, info in (char_emotions or {}).items():
+            if len(info.get("emotions") or ()) >= 3 and int(info.get("closeups") or 0) >= min_closeups:
+                rows.append(pc._row(
+                    "info",
+                    f"角色 {c} 脚本跨 {len(info['emotions'])} 种情绪共 {info['closeups']} 个近景、身份锁强——IPRO "
+                    "过锁风险区：确认表情真随情绪变化（别让脸纹丝不动），必要时加 AU/FACS 表情控件。"
+                    "（缺像素/脸数据，跑表情判官或 insightface 可实判）",
+                    stage="image", artifacts=["identity_registry.json"]))
+    return rows
+
+
 def noface_violation_rows(ep: str, face_result: dict) -> List[dict]:
     """G1b 无脸崩坏：该镜应有具名角色却检测不到脸（脸糊/被遮挡/崩脸）。
 
@@ -722,6 +822,12 @@ def run(root: str, ep: str) -> dict:
     sections["表情连续(EXP1)"] = {"skipped": not expr.get("available", False),
                                 "verdicts": _verdicts(expr.get("findings", [])), "notes": notes_exp}
     collect_simple("表情连续(EXP1)", expr.get("findings", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
+
+    # EXP3 表情过锁 / copy-paste 冻脸（report-only·IPRO 减害）——复用上面已算的 f(脸余弦)+expr(形变)，零新增推理
+    overlock_rows = expression_overlock_findings(expr, f, char_closeup_emotions(root, ep))
+    sections["表情过锁(EXP3)"] = {"skipped": not overlock_rows,
+                              "verdicts": _verdicts(overlock_rows), "notes": []}
+    collect_simple("表情过锁(EXP3)", overlock_rows, stage="image", default_artifacts=("出图/共享/图片",))
 
     # N1 服装/配色
     o = oc.analyze(root, ep)

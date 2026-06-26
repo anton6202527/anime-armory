@@ -468,3 +468,15 @@ def test_profile_threshold_resolution(tmp_path: Path):
     assert profile == "production"
     assert score.threshold_for_profile(profile) == 90
     assert score.resolve_score_profile(str(tmp_path), "demo") == "demo"
+
+
+def test_canonical_strictness_key_overrides_platform_substring(tmp_path: Path):
+    # 跨skill一致：显式 一致性严格度 应被尊重，不被 目标平台:抖音 这类非严格度字段子串误升档
+    # （治 review gate=demo 而 score=production 的背离）。
+    (tmp_path / "_设置.md").write_text("一致性严格度: demo\n目标平台: 抖音\n", encoding="utf-8")
+    assert score.resolve_score_profile(str(tmp_path)) == "demo"
+
+
+def test_canonical_strictness_key_production(tmp_path: Path):
+    (tmp_path / "_设置.md").write_text("一致性严格度: production\n", encoding="utf-8")
+    assert score.resolve_score_profile(str(tmp_path)) == "production"

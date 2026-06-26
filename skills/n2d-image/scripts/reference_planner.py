@@ -54,6 +54,8 @@ _CORE_SCOPE_RE = re.compile(r"全篇|全程|长线|核心|主角|女主|男主|�
 STRENGTH = {
     "front": 0.8, "expression": 0.6, "side": 0.55, "back": 0.5,
     "three_quarter": 0.65, "face_anchor": 0.7, "outfit": 0.5, "turnaround": 0.5, "scene_light": 0.45,
+    # G2 跨集记忆锚（memory-sink）：最早定妆锚，最高优先（抗 EntityBench 复现间隔衰减）。
+    "memory_anchor": 0.78,
 }
 
 
@@ -143,11 +145,14 @@ def plan_character_in_clip(
     profile: Mapping[str, Any],
     tier: str,
     scope_is_core: bool,
+    memory_refs: Sequence[str] = (),
 ) -> Dict[str, Any]:
     """逐镜逐角色处方：推荐参考集 + 控制网 + 原生主体动作 + 升档 + 补拍缺口。纯函数·可测。
 
     char: {id, name, form, reference_group(dict), angle_policy(dict)}。
     tier: image_lock_tier → reference_group|multi_reference|face_embedding|native_unregistered|native_subject|lora。
+    memory_refs: G2 跨集记忆锚路径（n2d-identity memory_anchor_plan 标 reinject 时），作为最高优先锚前置、
+        参与后端参考预算封顶（抗 EntityBench 复现间隔衰减）。
     """
     rg = char.get("reference_group") or {}
     atlas = char.get("reference_atlas") or {}
@@ -178,6 +183,18 @@ def plan_character_in_clip(
     for p in face_anchor_paths[:1]:
         refs.append({"role": "face_anchor", "path": p, "strength_hint": STRENGTH["face_anchor"]})
     add_ref("outfit")
+    # G2 跨集记忆锚（memory-sink）：长间隔再登场/晚集/已漂移角色，把最早定妆记忆锚前置为最高优先锚，
+    # 抗 EntityBench 复现间隔衰减。前置=后端预算封顶时最先保留；去重已在 refs 里的同路径。
+    memory_injected: List[Dict[str, Any]] = []
+    _have = {r["path"] for r in refs}
+    for _mp in memory_refs:
+        mp = str(_mp or "").strip()
+        if mp and mp not in _have:
+            memory_injected.append({"role": "memory_anchor", "path": mp,
+                                    "strength_hint": STRENGTH["memory_anchor"]})
+            _have.add(mp)
+    if memory_injected:
+        refs = memory_injected + refs
     if not _base_view_path(atlas, "three_quarter") and not str(rg.get("three_quarter") or "").strip():
         missing.append("45°/three_quarter 基础角度参考（所有角色/形态强制 ready）")
     if not face_anchor_paths:
@@ -268,6 +285,7 @@ def plan_character_in_clip(
         "native_subject_action": native_action,
         "escalation": escalation,
         "needs_action": needs_action,
+        "memory_anchor_reinjected": bool(memory_injected),
     }
 
 
@@ -647,9 +665,41 @@ def _pick_form(char: Mapping[str, Any], clip_text: str) -> Dict[str, Any]:
     return forms[0]
 
 
+def _load_memory_anchor_map(root: Path, ep: str) -> Dict[str, List[str]]:
+    """读 n2d-identity 的 memory_anchor_plan_<集>.json（文件契约·跨 skill 不 import），
+    返回 {drift_char_key: 记忆锚参考路径} 仅含标 reinject 的角色。缺文件→{}（无记忆锚=现状）。"""
+    path = root / "生产数据" / f"memory_anchor_plan_{ep}.json"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    out: Dict[str, List[str]] = {}
+    for r in (data.get("rows") or []) if isinstance(data, Mapping) else []:
+        if isinstance(r, Mapping) and r.get("reinject"):
+            key = str(r.get("char", "")).strip()
+            if key:
+                out[key] = [str(p).strip() for p in (r.get("memory_anchor_refs") or []) if str(p).strip()]
+    return out
+
+
+def _memory_refs_for(mem_map: Mapping[str, List[str]], cid: str, name: str, asset_key: str) -> List[str]:
+    """把 clip 角色（id/name/form asset_key）对到 memory_anchor_plan 的 drift key。宽松匹配：
+    精确命中 id/name/asset_key，或 drift key 以 'id/' 形态前缀（asset_key 'CHAR_X/形态'）含 id/name。"""
+    cid, name, asset_key = str(cid or ""), str(name or ""), str(asset_key or "")
+    for key, refs in mem_map.items():
+        if key in {cid, name, asset_key}:
+            return refs
+        if cid and (key.startswith(cid + "/") or cid in key):
+            return refs
+        if name and name in key:
+            return refs
+    return []
+
+
 def build_plan(root: Path, ep: str) -> Dict[str, Any]:
     chars = load_character_forms(root)
     clips = fdr.load_clips(root, ep)
+    memory_map = _load_memory_anchor_map(root, ep)
     backend = fdr.project_default_backend(root)
     profile = fdr.backend_profile(backend)
     notes: List[str] = []
@@ -664,6 +714,7 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
     need_lora: set = set()
     multi_subject_actions: List[Dict[str, Any]] = []
     weak_big_delta_clips = 0
+    multi_person_clips = 0  # G3：多人同框镜计数（驱动项目级 reference-library 后端建议）
 
     # C: 预扫所有多人镜涉及的角色，一次性算"参考脸 embedding 易混对"（embedder 只加载一次、每角色只嵌入一次）。
     multiframe_ids: set = set()
@@ -682,6 +733,8 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
         text, lens = parsed["text"], parsed["lens"]
         present = clip_present(parsed, chars)
         multi = len({c["id"] for c in present}) >= 2
+        if multi:
+            multi_person_clips += 1
         clip_id = str(clip.get("id") or clip.get("label") or "")
         char_plans: List[Dict[str, Any]] = []
         clip_has_weak_big = False
@@ -697,7 +750,8 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
                   "reference_group": form.get("reference_group") or {},
                   "reference_atlas": form.get("reference_atlas") or {},
                   "angle_policy": form.get("angle_policy") or {}}
-            p = plan_character_in_clip(cf, deltas, multi, profile, tier, scope_is_core)
+            mem_refs = _memory_refs_for(memory_map, c["id"], c["name"], str(form.get("asset_key", "")))
+            p = plan_character_in_clip(cf, deltas, multi, profile, tier, scope_is_core, memory_refs=mem_refs)
             char_plans.append(p)
             if p["needs_action"]:
                 action_required.append({"clip": clip_id, "char_id": p["char_id"],
@@ -746,6 +800,21 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
             multi_subject_actions.append(action)
         clip_plans.append(clip_plan)
 
+    # G3 项目级建议：多人同框是 2026 仍未解的崩脸/串脸高发区（attention leakage·swap/blend）。
+    # 默认 GPT Image 2 等 multi_reference 后端在 2026 多角色一致性 benchmark 无专门优势；reference-library /
+    # 持久主体后端（Seedream Universal Reference / 可灵主体库 / Sora Character Cameo）锁多人更稳。
+    # 只在项目选择点层面建议整项目统一切换——**勿逐镜切**（项目内模型混用会被 gate 拦）。report-only。
+    if multi_person_clips and not bool(profile.get("persistent_subject")):
+        ratio = multi_person_clips / max(len(clip_plans), 1)
+        notes.append(
+            f"G3 多人同框：本集 {multi_person_clips}/{len(clip_plans)} 镜多人同框，当前生图模型 "
+            f"{profile.get('label') or backend}（非持久主体/reference-library 后端）。多人同框是 2026 崩脸/串脸"
+            "高发区，若本剧群像/对手戏重，建议在选择点 `生图模型` 把**整项目**统一切到 reference-library 后端"
+            "（Seedream Universal Reference / 可灵主体库 / Sora Character Cameo·官方多参考后端按官方口径最多约 14 张/"
+            "保 5 人）。注意：勿逐镜换后端（=项目内模型混用，gate 会拦）；切则整项目切并重置后端主体/Face Lock 状态。"
+            + ("（本集多人镜占比高，优先评估）" if ratio >= 0.4 else "")
+        )
+
     return {
         "kind": PLAN_KIND,
         "version": 1,
@@ -762,8 +831,16 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
             "chars_need_lora": sorted(need_lora),
             "multi_subject_actions": multi_subject_actions,
             "action_required": action_required,
+            "multi_person_clips": multi_person_clips,
+            "memory_anchor_reinjected_clips": sum(
+                1 for cp in clip_plans
+                if any(p.get("memory_anchor_reinjected") for p in cp.get("characters") or [])
+            ),
         },
-        "notes": notes,
+        "notes": notes + ([
+            f"G2 跨集记忆锚：{len(memory_map)} 个角色按 memory_anchor_plan_{ep}.json 标记重注入最早定妆记忆锚"
+            "（抗 EntityBench 复现间隔衰减·已作为最高优先锚参与参考预算）。"
+        ] if memory_map else []),
     }
 
 

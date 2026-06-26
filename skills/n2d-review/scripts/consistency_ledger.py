@@ -22,7 +22,7 @@ import json
 import os
 import re
 import sys
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Mapping, Optional, Sequence
 
 COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if COMMON not in sys.path:
@@ -81,6 +81,7 @@ DIMENSION_DOMAIN = {
     "audio_visual_sync": "audio",
     "leitmotif_consistency": "audio",
     "production_ops_consistency": "ops",
+    "retention_trend": "story",
 }
 
 DOMAIN_HINTS = (
@@ -90,7 +91,7 @@ DOMAIN_HINTS = (
     ("character", ("角色", "脸", "发型", "服装", "音色", "身份", "character", "face", "outfit", "identity")),
     ("asset", ("资产", "道具", "物件", "持有", "系统面板", "hud", "ui", "prop", "asset", "contract")),
     ("shot", ("镜头", "场景", "构图", "运动", "相机", "成片", "包装", "motion", "camera", "scene", "video")),
-    ("story", ("剧情", "语义", "状态", "节奏", "伏笔", "story", "semantic", "state", "rhythm")),
+    ("story", ("剧情", "语义", "状态", "节奏", "伏笔", "story", "semantic", "state", "rhythm", "留存趋势", "retention_trend")),
 )
 
 
@@ -138,6 +139,32 @@ def severity_counts(items: Sequence[Dict[str, Any]], key: str = "overall") -> Di
 
 def merge_counts(*parts: Dict[str, int]) -> Dict[str, int]:
     return {k: sum(int(part.get(k, 0)) for part in parts) for k in ("block", "high", "medium")}
+
+
+def _compact_report(report: Optional[Mapping[str, Any]]) -> Dict[str, Any]:
+    if not isinstance(report, Mapping):
+        return {"available": False}
+    counts = report.get("counts") if isinstance(report.get("counts"), Mapping) else {}
+    return {
+        "available": True,
+        "kind": report.get("kind"),
+        "status": report.get("status") or "pass",
+        "counts": dict(counts),
+        "path": report.get("path") or report.get("manifest_path") or "",
+    }
+
+
+def _compact_graph(graph: Optional[Mapping[str, Any]]) -> Dict[str, Any]:
+    if not isinstance(graph, Mapping):
+        return {"available": False}
+    summary = graph.get("summary") if isinstance(graph.get("summary"), Mapping) else {}
+    return {
+        "available": True,
+        "kind": graph.get("kind"),
+        "path": graph.get("path") or "",
+        "summary": dict(summary),
+        "impact_plan": graph.get("impact_plan") or {},
+    }
 
 
 def name_tokens(name: str) -> List[str]:
@@ -329,7 +356,10 @@ def build_root_causes(signals: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]
 def build_ledger(*, characters: List[Dict[str, Any]], assets: List[Dict[str, Any]],
                  face_drift: Dict[str, str], asset_drift: Dict[str, str],
                  findings: Sequence[Dict[str, Any]],
-                 delivery_signals: Optional[Sequence[Dict[str, Any]]] = None) -> Dict[str, Any]:
+                 delivery_signals: Optional[Sequence[Dict[str, Any]]] = None,
+                 dependency_graph: Optional[Mapping[str, Any]] = None,
+                 discontinuity_audit: Optional[Mapping[str, Any]] = None,
+                 supplemental_reports: Optional[Mapping[str, Mapping[str, Any]]] = None) -> Dict[str, Any]:
     """三态总账（纯函数·可测）。每行：prevent(drift) / detect(落档) / contract(契约) / overall(最差)。"""
     rows: List[Dict[str, Any]] = []
     for c in characters:
@@ -371,6 +401,11 @@ def build_ledger(*, characters: List[Dict[str, Any]], assets: List[Dict[str, Any
             "status": delivery_status,
             "blocking_counts": {"block": counts.get("block", 0), "high": counts.get("high", 0)},
             "required_domains": [label for _, label in DELIVERY_DOMAINS],
+        },
+        "dependency_graph": _compact_graph(dependency_graph),
+        "intentional_discontinuity": _compact_report(discontinuity_audit),
+        "supplemental_reports": {
+            str(k): _compact_report(v) for k, v in (supplemental_reports or {}).items()
         },
         "unattributed": attr.get("_unattributed", []),
     }
@@ -415,6 +450,35 @@ def render_markdown(ledger: Dict[str, Any], ep: str) -> str:
             for symptom in (row.get("symptoms") or [])[:3]:
                 loc = f" @ {symptom.get('loc')}" if symptom.get("loc") else ""
                 lines.append(f"  - {symptom.get('severity')} [{symptom.get('source')}] {symptom.get('dimension')}{loc}: {symptom.get('message')}")
+    graph = ledger.get("dependency_graph") if isinstance(ledger.get("dependency_graph"), dict) else {}
+    if graph.get("available"):
+        summary = graph.get("summary") or {}
+        lines.extend([
+            "",
+            "## 依赖传播",
+            "",
+            f"- nodes={summary.get('nodes', 0)} · edges={summary.get('edges', 0)} · clips={summary.get('clips', 0)} · images={summary.get('images', 0)} · videos={summary.get('videos', 0)}",
+        ])
+        if graph.get("path"):
+            lines.append(f"- graph: `{graph.get('path')}`")
+    dis = ledger.get("intentional_discontinuity") if isinstance(ledger.get("intentional_discontinuity"), dict) else {}
+    if dis.get("available"):
+        counts = dis.get("counts") or {}
+        lines.extend([
+            "",
+            "## 合法不连续签收",
+            "",
+            f"- status={dis.get('status')} · accepted={counts.get('accepted', 0)} · block={counts.get('block', 0)} · warn={counts.get('warn', 0)}",
+        ])
+    supplemental = ledger.get("supplemental_reports") if isinstance(ledger.get("supplemental_reports"), dict) else {}
+    if supplemental:
+        lines.extend(["", "## 补充一致性合约", ""])
+        for name, report in supplemental.items():
+            counts = report.get("counts") or {}
+            lines.append(
+                f"- {name}: status={report.get('status')} · "
+                f"block={counts.get('block', 0)} · warn={counts.get('warn', counts.get('medium', 0))}"
+            )
     lines.extend([
         "",
         "## 角色/资产一致性画像",
@@ -655,6 +719,88 @@ def collect_delivery_signals(root: str, ep: str, base_findings: Sequence[Dict[st
     return out
 
 
+def _local_script_module(name: str) -> Optional[Any]:
+    path = os.path.join(os.path.dirname(__file__), f"{name}.py")
+    try:
+        spec = importlib.util.spec_from_file_location(f"n2d_review_{name}", path)
+        if spec is None or spec.loader is None:
+            return None
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+    except Exception:
+        return None
+
+
+def _signals_from_report(report: Mapping[str, Any], source: str) -> List[Dict[str, Any]]:
+    out: List[Dict[str, Any]] = []
+    for finding in report.get("findings") or []:
+        if not isinstance(finding, Mapping):
+            continue
+        sev = str(finding.get("severity") or finding.get("sev") or "warn")
+        dim = finding.get("dimension") or finding.get("dim") or "production_ops_consistency"
+        msg = str(finding.get("message") or finding.get("msg") or finding.get("text") or "")
+        out.append({
+            "sev": sev,
+            "severity": sev,
+            "source": source,
+            "dim_key": finding.get("dim_key") or "production_ops_consistency",
+            "dimension": dim,
+            "loc": finding.get("loc"),
+            "text": " ".join(str(x or "") for x in (dim, msg)).strip(),
+            "message": msg,
+        })
+    return out
+
+
+def _write_dependency_graph(root: str, ep: str) -> Optional[Dict[str, Any]]:
+    module = _local_script_module("consistency_dependency_graph")
+    if module is None:
+        return None
+    try:
+        graph = module.build_graph(root, ep)
+        path = module.write_graph(graph, root, ep)
+        graph["path"] = str(path)
+        return graph
+    except Exception:
+        return None
+
+
+def _run_intentional_discontinuity(root: str, ep: str, findings: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
+    module = _local_script_module("intentional_discontinuity")
+    if module is None:
+        return {"kind": "n2d_intentional_discontinuity_audit", "status": "pass", "counts": {"block": 0, "warn": 0, "accepted": 0}, "findings": []}
+    try:
+        return module.run(root, ep, findings, write=True)
+    except Exception as exc:
+        return {
+            "kind": "n2d_intentional_discontinuity_audit",
+            "status": "blocked",
+            "counts": {"block": 1, "warn": 0, "accepted": 0},
+            "findings": [{"severity": "block", "message": f"intentional discontinuity audit failed: {exc}"}],
+        }
+
+
+def _run_supplemental_reports(root: str, ep: str) -> Dict[str, Dict[str, Any]]:
+    reports: Dict[str, Dict[str, Any]] = {}
+    for name in ("motion_grammar_consistency", "audio_space_consistency", "expression_state_consistency"):
+        module = _local_script_module(name)
+        if module is None:
+            continue
+        try:
+            report = module.run(root, ep, write=True)
+            if isinstance(report, dict):
+                reports[name] = report
+        except Exception as exc:
+            reports[name] = {
+                "kind": name,
+                "status": "blocked",
+                "counts": {"block": 1, "warn": 0},
+                "findings": [{"severity": "block", "message": f"{name} failed: {exc}"}],
+            }
+    return reports
+
+
 def _image_qc_to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
     script = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d-image", "scripts", "image_qc.py"))
     try:
@@ -680,10 +826,22 @@ def run(root: str, ep: str) -> Dict[str, Any]:
     face_drift = _drift_band_map(_load(os.path.join(root, "生产数据", f"face_drift_risk_{ep}.json")), "characters")
     asset_drift = _drift_band_map(_load(os.path.join(root, "生产数据", f"asset_drift_risk_{ep}.json")), "assets")
     findings = collect_findings(root, ep)
+    discontinuity_audit = _run_intentional_discontinuity(root, ep, findings)
+    annotated = discontinuity_audit.get("annotated_findings") if isinstance(discontinuity_audit, Mapping) else None
+    if isinstance(annotated, list):
+        findings = [dict(f) for f in annotated if isinstance(f, Mapping)]
     delivery_signals = collect_delivery_signals(root, ep, findings)
+    supplemental_reports = _run_supplemental_reports(root, ep)
+    for name, report in supplemental_reports.items():
+        delivery_signals.extend(_signals_from_report(report, name))
+    delivery_signals.extend(_signals_from_report(discontinuity_audit, "intentional-discontinuity"))
+    dependency_graph = _write_dependency_graph(root, ep)
     ledger = build_ledger(characters=chars, assets=assets, face_drift=face_drift,
                           asset_drift=asset_drift, findings=findings,
-                          delivery_signals=delivery_signals)
+                          delivery_signals=delivery_signals,
+                          dependency_graph=dependency_graph,
+                          discontinuity_audit=discontinuity_audit,
+                          supplemental_reports=supplemental_reports)
     out_dir = os.path.join(root, "生产数据")
     os.makedirs(out_dir, exist_ok=True)
     json_path = os.path.join(out_dir, f"consistency_ledger_{ep}.json")

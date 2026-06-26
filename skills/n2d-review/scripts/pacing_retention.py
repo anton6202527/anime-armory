@@ -18,6 +18,12 @@
   （2026-06-25 采集），再由环境变量覆盖；缺文件时退回本仓 `n2d/references/导演节奏.md`
   的镜头时长曲线（铺垫 3-5s/镜、爽点碎切 1-2s/镜、钩子间隔 15-20s、0-3s 立冷开场钩）。
   基准会随平台变，别当死律。
+  **provenance 诚实（GAP-1·2026-06-25 流程自审实搜）**：其中 `density_slow_per_min`(10) /
+  `density_fast_per_min`(45) 的「镜/分钟」带、以及 beat_audit 的「每 15-20s 一钩」间隔，
+  都是**内部启发式**——短剧 CPM/SPM 与「每 N 秒一钩」**无可辩护的公开基准**（实搜确认）。
+  benchmark JSON 已用 `n2d_internal_pacing_heuristic_2026` 源把这两项标为 confidence=low 的
+  internal-heuristic（非市场背书），本脚本只作 advisory 旁路，绝不据此 gate；真值须由
+  n2d-feedback 第一方留存数据校准。
 
 落地产物：main() 写 `生产数据/pacing_retention_第N集.json`（blocks/warnings/infos/evidence/metrics），
 参照 lipsync_consistency.py 写 `生产数据/lipsync_第N集.json` 的既有模式，供 n2d-score 旁路消费。

@@ -278,8 +278,8 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "label": "角色 DNA/形体一致性（脸/发型/身形/手）",
         "weight": 20,
         "return_to_stage": "image",
-        "scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-        "audit_labels": ("锚点门(N3)", "脸(G1)", "无脸崩坏(G1b)", "跨集脸漂(G5)", "发型(H1)", "辨识标记(MK1)", "片内时序(N2)", "手部/解剖(N5)", "身高比例(R1)", "跨集体型(R2)", "外观判官(VAP)", "主体视频一致(S2V)", "表情连续(EXP1)", "状态化表情(EXP2)", "多视角身份包(MVIEW)"),
+        "scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+        "audit_labels": ("锚点门(N3)", "脸(G1)", "无脸崩坏(G1b)", "跨集脸漂(G5)", "发型(H1)", "辨识标记(MK1)", "片内时序(N2)", "手部/解剖(N5)", "身高比例(R1)", "跨集体型(R2)", "外观判官(VAP)", "主体视频一致(S2V)", "表情连续(EXP1)", "表情过锁(EXP3)", "状态化表情(EXP2)", "多视角身份包(MVIEW)"),
         "keywords": ("角色", "角色DNA", "DNA", "脸", "发型", "身高", "体型", "跨集体型", "手部", "解剖", "资产身份", "identity", "face", "锚点", "S2V", "主体视频", "外观判官", "VLM-Appearance", "表情", "情绪", "微表演", "状态化表情", "allowed_state_delta", "expression", "辨识标记", "疤痕", "胎记", "纹身", "异瞳", "瞳色", "标记", "mark"),
     },
     "outfit_consistency": {
