@@ -78,6 +78,10 @@ try:
 except Exception:  # pragma: no cover
     rel_path = sha256_file = snapshot_chapters = None
 try:
+    import narrative_risk_weight  # novel/_lib — ConStory 中段/高熵/高churn advisory 优先级加权
+except Exception:  # pragma: no cover
+    narrative_risk_weight = None
+try:
     from project_io import list_chapter_files, read_text
 except Exception:  # pragma: no cover
     list_chapter_files = read_text = None
@@ -244,18 +248,67 @@ def run_logic(project):
         except Exception:
             pass
     all_alerts = []
+    chapter_texts = {}
     for idx, path in _chapters(project):
         text = read_text(path) if read_text else open(path, encoding="utf-8").read()
+        chapter_texts[idx] = text
         all_alerts += logic_sentry.scan_chapter(
             wiki, text, idx, project_root=project, numeric_anchors=anchors,
             foreshadow_report=foreshadow_report)
+    # 动态关系图（跨章·可阻断）：从 state_delta 增量构图，检「关系突变无铺垫」。
+    # 比 scan_chapter 里逐章的 relationship_flip 建议级更强——满级反转/正负翻面无铺垫升阻断。
+    if hasattr(logic_sentry, "build_relationship_graph"):
+        rel_graph = logic_sentry.build_relationship_graph(project)
+        if rel_graph.get("matrix"):
+            graph_path = os.path.join(project, "审稿", "relationship_graph.json")
+            with open(graph_path, "w", encoding="utf-8") as f:
+                json.dump(rel_graph, f, ensure_ascii=False, indent=2)
+            all_alerts += logic_sentry.detect_relationship_breaks(
+                rel_graph, chapter_texts=chapter_texts)
+    # A1/A2·结构化原子事实确定性闸（跨章·可硬阻断）：生命周期(state_ledger) + 世界事实有效区间(world_state_ledger)。
+    # 只比台账枚举/章号/区间·不扫正文，故确定性·与 post_write 口径一致地真硬阻断（非关键词 advisory）。
+    if hasattr(logic_sentry, "scan_structured_ledgers"):
+        all_alerts += logic_sentry.scan_structured_ledgers(project)  # chapter_index=None → A1 全量 + A2 世界事实区间
+    # B10 单一收口：scan_chapter 已对其产物 enforce；这里对合并后的全集（含 detect_relationship_breaks
+    # 这种正文桥接关键词扫描的脆弱启发式）再跑一次（幂等），保证 review 汇总的 blocking 与 post_write 口径一致。
+    logic_sentry.enforce(all_alerts)
+    # 降级账数全集计数（含 scan_chapter 内已降级的），用 downgraded_from 标记统计，不漏 boundary。
+    downgraded = sum(1 for a in all_alerts if a.get("downgraded_from"))
     summary = os.path.join(project, "审稿", "logic_alerts_summary.json")
     os.makedirs(os.path.dirname(summary), exist_ok=True)
-    blocking = sum(1 for a in all_alerts if a["severity"] == "阻断级")
+    blocking = logic_sentry.count_blocking(all_alerts)
+
+    # ConStory(arXiv 2603.05890)实证：一致性错误集中在中段40-60%+高熵+高churn章。给 advisory 排序：
+    # 把语义复审火力先投到最可能藏 bug 的章。**只排序/加 priority，绝不改 severity/blocking**（B10）。
+    review_focus = []
+    if narrative_risk_weight is not None:
+        total_chapters = len(chapter_texts) or len(_chapters(project))
+        entropy_map = {idx: narrative_risk_weight.lexical_entropy(t) for idx, t in chapter_texts.items()}
+        try:
+            with open(os.path.join(project, "审稿", "state_ledger.json"), encoding="utf-8") as _f:
+                sl = json.load(_f)
+        except Exception:
+            sl = {}
+        wl_path = os.path.join(project, "设定", "world_state_ledger.json")
+        try:
+            with open(wl_path, encoding="utf-8") as _f:
+                wl = json.load(_f)
+        except Exception:
+            wl = {}
+        churn_map = narrative_risk_weight.build_churn_map(sl, wl)
+        all_alerts = narrative_risk_weight.prioritize_alerts(all_alerts, total_chapters,
+                                                             churn_map=churn_map, entropy_map=entropy_map)
+        review_focus = narrative_risk_weight.risk_hotspots(total_chapters, churn_map=churn_map,
+                                                           entropy_map=entropy_map, top_k=12)
+
     with open(summary, "w", encoding="utf-8") as f:
-        json.dump({"blocking": blocking, "total": len(all_alerts), "alerts": all_alerts},
+        json.dump({"blocking": blocking, "total": len(all_alerts),
+                   "heuristic_downgraded": downgraded,
+                   "review_focus_chapters": review_focus, "alerts": all_alerts},
                   f, ensure_ascii=False, indent=2)
-    return {"ran": True, "json": summary, "alerts": len(all_alerts), "blocking": blocking}
+    return {"ran": True, "json": summary, "alerts": len(all_alerts),
+            "blocking": blocking, "heuristic_downgraded": downgraded,
+            "review_focus_chapters": len(review_focus)}
 
 
 def run_style(project, anchor, cache=None):
@@ -387,6 +440,44 @@ def _run_detector(label, module, project, out_name):
     return {"ran": True, "json": out, "alerts": len(alerts), "blocking": blocking}
 
 
+# ── ConStory 五类一致性 taxonomy 覆盖体检（低成本「我到底漏检哪类」自审）──────────
+# 对标 2026 ConStory-Bench 的长篇一致性错误五分类：把本 runner 的确定性检测器映射到五类，
+# 报告哪类**无在跑检测器**（缺口）或**全降级**（mapped 但都 skipped）。这是覆盖体检、非内容闸——
+# 让「加了一堆检测器却不知道整体盖没盖全」变成一张可读的覆盖表。一个检测器可同属多类。
+CONSTORY_TAXONOMY = {
+    "时间线与情节逻辑": ["timeline", "logic_sentry", "thread_resolution", "foreshadow",
+                  "reader_contract", "hook_endings"],
+    "人物刻画一致性": ["logic_sentry", "voice_drift", "minor_characters",
+                 "antagonist_scaling", "power_system"],
+    "世界观与设定": ["logic_sentry", "power_system"],
+    "事实与细节一致性": ["logic_sentry", "research_fact_support", "mechanical"],
+    "叙事与文风": ["style_drift", "tone_curve", "mechanical"],
+}
+
+
+def taxonomy_coverage(result):
+    """把 audit result（{detector: {ran, ...}}）按 ConStory 五类汇总覆盖度。
+
+    每类状态：covered=有≥1个在跑检测器；degraded=映射了检测器但全 skipped；gap=无映射检测器。
+    返回 {category: {status, detectors:[{name,ran}], ran_count}}，供报告与守护测试用。"""
+    coverage = {}
+    for category, detectors in CONSTORY_TAXONOMY.items():
+        present = [d for d in detectors if d in result]
+        ran = [d for d in present if isinstance(result.get(d), dict) and result[d].get("ran")]
+        if not present:
+            status = "gap"
+        elif ran:
+            status = "covered"
+        else:
+            status = "degraded"
+        coverage[category] = {
+            "status": status,
+            "ran_count": len(ran),
+            "detectors": [{"name": d, "ran": d in ran} for d in present],
+        }
+    return coverage
+
+
 def main():
     p = argparse.ArgumentParser(description="novel-review 一键一致性机检 runner")
     p.add_argument("project_path")
@@ -430,6 +521,8 @@ def main():
             cache["options"] = options
             cache["result"] = result
             _write_cache(args.project_path, cache)
+    # ConStory 五类覆盖体检（每次都算，便于发现「某类一致性根本没在跑」）。
+    result["taxonomy_coverage"] = taxonomy_coverage(result)
     out = os.path.join(args.project_path, "审稿", "consistency_audit.json")
     os.makedirs(os.path.dirname(out), exist_ok=True)
     with open(out, "w", encoding="utf-8") as f:
@@ -439,13 +532,18 @@ def main():
     if result.get("_cache", {}).get("hit"):
         print(f"  ♻️  命中缓存：{result['_cache']['path']}")
     for name, r in result.items():
-        if name.startswith("_"):
+        if name.startswith("_") or name == "taxonomy_coverage":
             continue
         if r.get("ran"):
             extra = {k: v for k, v in r.items() if k in ("alerts", "blocking", "drifted", "returncode", "cache_hits", "cache_misses")}
             print(f"  ✅ {name}: {extra or 'done'}")
         else:
             print(f"  ⏭️  {name} 跳过: {r.get('skipped')}")
+    print("  ConStory 五类覆盖体检：")
+    _icon = {"covered": "✅", "degraded": "⚠️", "gap": "❌"}
+    for cat, cov in result["taxonomy_coverage"].items():
+        ran = [d["name"] for d in cov["detectors"] if d["ran"]]
+        print(f"    {_icon.get(cov['status'], '?')} {cat}（{cov['status']}）: {('/'.join(ran)) or '无在跑检测器——该类一致性当前未机检'}")
     print("  （语义项 OOC/节奏/锚点语义不在机检内，仍需 LLM 人判——见 SKILL 模式①）")
 
 

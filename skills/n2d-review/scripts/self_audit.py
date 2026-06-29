@@ -268,7 +268,126 @@ def check_large_docs(root: Path, findings: List[Finding]) -> None:
         add(findings, sev, "文档体量", rel(root, path), msg, suggestion)
 
 
-def audit(root: Path) -> Dict[str, Any]:
+def load_friction_module(root: Path):
+    """加载 n2d_friction（纯 stdlib，无 `from n2d_const import *`，可直接按文件 spec 导入，
+    无需 load_contract 的 sys.path 隔离舞蹈）。失败返回 (None, 原因)。"""
+    path = root / "skills" / "n2d" / "_lib" / "n2d_friction.py"
+    if not path.is_file():
+        return None, "n2d_friction.py 不存在"
+    try:
+        spec = importlib.util.spec_from_file_location("_n2d_self_audit_friction", str(path))
+        if spec is None or spec.loader is None:
+            return None, "无法加载 n2d_friction.py"
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod, None
+    except Exception as exc:  # pragma: no cover - defensive
+        return None, str(exc)
+
+
+def load_charter_module(root: Path):
+    """加载 consistency_charter（同目录·纯 stdlib，clean import）。失败返回 (None, 原因)。"""
+    path = root / "skills" / "n2d-review" / "scripts" / "consistency_charter.py"
+    if not path.is_file():
+        return None, "consistency_charter.py 不存在"
+    try:
+        spec = importlib.util.spec_from_file_location("_n2d_self_audit_charter", str(path))
+        if spec is None or spec.loader is None:
+            return None, "无法加载 consistency_charter.py"
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod, None
+    except Exception as exc:  # pragma: no cover - defensive
+        return None, str(exc)
+
+
+def check_consistency_charter(root: Path, findings: List[Finding]) -> None:
+    """对照一致性不变量 charter 审 gate.py 源码：locked 闸被悄悄 profile 门控=block；
+    被未披露降级的 disputed 闸 + opt-in 默认关项报出来等裁决（治"硬闸被时间维度弱化")。"""
+    mod, error = load_charter_module(root)
+    gate_py = root / "skills" / "n2d-review" / "scripts" / "gate.py"
+    if error:
+        add(findings, "info", "一致性charter", "skills/n2d-review/scripts/consistency_charter.py",
+            f"charter 模块加载失败，跳过强制力审计：{error}", "")
+        return
+    if not gate_py.is_file():
+        add(findings, "info", "一致性charter", rel(root, gate_py), "gate.py 不存在，跳过。", "")
+        return
+    # 多文件源码全集：gate.py + gates/*.py（按证据族拆分后 locked 闸可能迁出 gate.py，必须看全集）。
+    gate_src = mod.gate_source_text(gate_py.parent)
+    violations = mod.audit_source(gate_src)
+    locked = mod.locked_gates()
+    for v in violations:
+        sev = "block" if v["kind"] in ("profile_gated", "missing_gate") else "warn"
+        add(findings, sev, "一致性charter", f"gate.py:{v['gate']}", v["problem"],
+            "修回无条件 BLOCK；若确为有意降级，先改 consistency_charter.py 该闸为 disputed 并留痕（别直接改 gate.py）。")
+    disputed = mod.disputed_entries()
+    for name, e in disputed.items():
+        tag = "被未披露降级·待裁决" if e.get("review_status") == "disputed_downgrade" else "opt-in 默认关·候选升默认"
+        add(findings, "warn", "一致性charter", f"gate.py:{name}",
+            f"[{tag}] {e.get('dim')}：{e.get('rationale')}",
+            "人裁决：要么把 may_be_profile_gated/may_be_opt_in 翻 False 并重新硬化 gate.py，要么确认保持现状并填 decided 日期。")
+    if not violations:
+        add(findings, "info", "一致性charter", "skills/n2d-review/scripts/consistency_charter.py",
+            f"{len(locked)} 个 locked 一致性硬闸源码核对通过（无被悄悄 profile 门控），{len(disputed)} 项 disputed/opt-in 待裁决。", "")
+
+
+def check_friction_backlog(root: Path, work_root: Path, findings: List[Finding]) -> None:
+    """流程自审消费端：读某作品 `生产数据/优化信号.jsonl`，把现场摩擦信号逐簇并进差距清单。
+
+    只读不写——保住 mode② "不归档自审报告" 立场（信号是 per-work 生产数据，不是自审报告）。
+    每个 (skill, 信号种类) 簇产一行：loc=该改哪个 skill 哪段，suggestion=现场给的改法。
+    """
+    mod, error = load_friction_module(root)
+    if error:
+        add(findings, "info", "现场摩擦信号", "skills/n2d/_lib/n2d_friction.py",
+            f"采集模块加载失败，跳过现场信号扫描：{error}", "")
+        return
+    records = mod.read_friction(str(work_root))
+    if not records:
+        add(findings, "info", "现场摩擦信号", rel(root, work_root / mod.PRODUCTION_DIRNAME),
+            f"本作 `{work_root.name}` 暂无积压现场摩擦信号（生产时各 skill 未上报 `该改` 信号）。", "")
+        return
+    summary = mod.summarize_friction(records)
+    sev_map = {"info": "info", "warn": "warn", "block": "block"}
+    for c in summary["clusters"]:
+        skill = c["skill"]
+        loc = f"{skill}" + (f"（{c['latest_ts'][:10]}）" if c.get("latest_ts") else "")
+        ev = "；证据 " + ", ".join(c["evidence"][:3]) if c.get("evidence") else ""
+        msg = (f"生产现场上报 {c['count']} 条「{c['signal_kind']}」信号：{c['latest_what']}{ev}")
+        suggestion = c.get("latest_proposed") or "对照证据定位到该 skill 对应阶段，过 run_all_checks 后改源头。"
+        add(findings, sev_map.get(c["severity"], "warn"), "现场摩擦信号", loc, msg, suggestion)
+
+
+def check_detector_inventory(root: Path, findings: List[Finding]) -> None:
+    """一致性 detector 治理：跑 detector_inventory，孤儿 detector 报 warn，否则报健康 info。"""
+    scripts_dir = root / "skills" / "n2d-review" / "scripts"
+    loc = "skills/n2d-review/scripts/detector_inventory.py"
+    inv_path = scripts_dir / "detector_inventory.py"
+    if not inv_path.is_file():
+        return
+    try:
+        spec = importlib.util.spec_from_file_location("_detector_inventory", str(inv_path))
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)  # type: ignore[union-attr]
+        inv = mod.build_inventory(str(scripts_dir))
+    except Exception as exc:  # pragma: no cover - defensive
+        add(findings, "info", "detector 治理", loc, f"detector 清单跑不动：{exc}", "")
+        return
+    orphans = inv.get("orphans") or []
+    if orphans:
+        add(findings, "warn", "detector 治理", loc,
+            f"{len(orphans)} 个孤儿 detector（无编排/gate/dashboard/总账/advisory/disabled/peer 治理路径）：{'、'.join(orphans)}",
+            "跑 detector_inventory.py 核实，按证据判退役/合并或补接线；别让死 detector 拖维护。")
+    else:
+        c = inv.get("counts", {})
+        add(findings, "info", "detector 治理", loc,
+            f"detector 套件 {inv.get('total')} 个全部有治理路径（0 孤儿；编排 {c.get('wired', 0)}/"
+            f"gate {c.get('gate', 0)}/dashboard {c.get('dashboard', 0)}/总账 {c.get('ledger', 0)}/"
+            f"advisory {c.get('advisory', 0)}/disabled {c.get('disabled', 0)}/子检测 {c.get('peer', 0)}）。", "")
+
+
+def audit(root: Path, work_root: Path | None = None) -> Dict[str, Any]:
     root = root.resolve()
     findings: List[Finding] = []
     check_progress_lock(root, findings)
@@ -277,11 +396,16 @@ def audit(root: Path) -> Dict[str, Any]:
     check_benchmark_external(root, findings)
     check_image_backend_docs(root, findings)
     check_large_docs(root, findings)
+    check_detector_inventory(root, findings)
+    check_consistency_charter(root, findings)
+    if work_root is not None:
+        check_friction_backlog(root, work_root.resolve(), findings)
     counts = {sev: sum(1 for item in findings if item["sev"] == sev) for sev in ("block", "warn", "info")}
     return {
         "kind": "n2d_self_audit",
         "generated_at": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
         "root": str(root),
+        "work_root": str(work_root.resolve()) if work_root is not None else "",
         "counts": counts,
         "findings": findings,
     }
@@ -293,6 +417,10 @@ def render_markdown(report: Dict[str, Any]) -> str:
         "",
         f"- 生成时间：{report['generated_at']}",
         f"- 仓库：`{report['root']}`",
+    ]
+    if report.get("work_root"):
+        lines.append(f"- 作品：`{report['work_root']}`（已并入现场摩擦信号）")
+    lines += [
         f"- 统计：block {report['counts']['block']} · warn {report['counts']['warn']} · info {report['counts']['info']}",
         "",
         "| sev | 维度 | 位置 | 问题 | 建议 |",
@@ -314,13 +442,15 @@ def render_markdown(report: Dict[str, Any]) -> str:
 def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description="Report-only local self-audit for n2d skills")
     ap.add_argument("--root", default=str(repo_root_from_here()), help="repo root")
+    ap.add_argument("--work", default="", help="作品根（创作区/制漫剧/<剧名>/）；给定时扫描其现场摩擦信号并入差距清单")
     ap.add_argument("--json", action="store_true", help="print JSON report")
     return ap
 
 
 def main(argv: Sequence[str]) -> int:
     ns = parser().parse_args(argv)
-    report = audit(Path(ns.root))
+    work_root = Path(ns.work) if ns.work else None
+    report = audit(Path(ns.root), work_root)
     if ns.json:
         print(json.dumps(report, ensure_ascii=False, indent=2))
     else:

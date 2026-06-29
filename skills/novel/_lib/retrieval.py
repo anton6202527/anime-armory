@@ -138,6 +138,41 @@ def rank(query_text, corpus, k=TOPK_DEFAULT, min_score=0.0):
     return scored[:k]
 
 
+def score_golden_cases(cases, ranker, top_k=5):
+    """通用 recall@k / MRR 评分循环——生产引擎 retrieval.rank 与旁路 VectorStore 共用一份度量算术
+    （此前两处各抄一遍，易漂移）。`ranker(query, k) -> result_ids:list`，expected 取
+    case.expected_ids / expected_id。返回 {case_count,hit_count,recall_at_k,mrr,failures,cases}。纯函数·可测。"""
+    evaluated, hits, reciprocal_sum = [], 0, 0.0
+    for case in cases:
+        query = str(case.get("query") or "")
+        exp = case.get("expected_ids")
+        if exp is None:
+            exp = case.get("expected_id")
+        if exp is None:
+            exp = []
+        if isinstance(exp, str):
+            exp = [exp]
+        expected = {str(x) for x in exp}
+        k = int(case.get("top_k") or top_k)
+        result_ids = [str(r) for r in ranker(query, k)]
+        rank_pos = next((i + 1 for i, cid in enumerate(result_ids) if cid in expected), 0)
+        hit = rank_pos > 0
+        if hit:
+            hits += 1
+            reciprocal_sum += 1.0 / rank_pos
+        evaluated.append({"query": query, "expected_ids": sorted(expected),
+                          "result_ids": result_ids, "hit": hit, "rank": rank_pos})
+    total = len(evaluated)
+    return {
+        "case_count": total,
+        "hit_count": hits,
+        "recall_at_k": hits / total if total else 0.0,
+        "mrr": reciprocal_sum / total if total else 0.0,
+        "failures": [c for c in evaluated if not c["hit"]],
+        "cases": evaluated,
+    }
+
+
 def best_excerpt(query_text, text, span=180):
     """在 text 里定位与 query bigram 命中最密的位置，截一段 ~span 字摘要。纯函数·可测。"""
     if not text:

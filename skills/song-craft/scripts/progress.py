@@ -110,7 +110,7 @@ def report(root, limit):
 
     print()
     if frontier is None:
-    print("[done] 写歌阶段未发现阻断项。下一步：song-review 质检；如需视频制作，交付最终音频成品即可。")
+        print("[done] 写歌阶段未发现阻断项。下一步：song-review 质检；如需视频制作，交付最终音频成品即可。")
         return 0
 
     row, state = frontier

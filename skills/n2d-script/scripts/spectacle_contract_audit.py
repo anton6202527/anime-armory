@@ -22,9 +22,16 @@ from n2d_contract import (  # noqa: E402
     field_missing,
     infer_spectacle_type,
     missing_fields,
+    spectacle_advisory_fields,
     spectacle_recommendations,
     spectacle_required_fields,
 )
+
+try:  # 武器/武技对撞检测（单一真值源·与出图 runner 注入同口径）
+    from n2d_const import is_weapon_clash_shot
+except Exception:  # pragma: no cover - 异常布局兜底
+    def is_weapon_clash_shot(text):  # type: ignore
+        return False
 
 
 def ep_label(value: str) -> str:
@@ -125,11 +132,45 @@ def audit_clip(clip: Mapping[str, Any], idx: int) -> Dict[str, Any]:
             field=field,
         ))
 
+    # 战斗视觉盛宴·建议字段（advisory·WARN）：表情/二级运动/apex 光效——四轴在命中帧汇聚。缺则提示补，不阻断。
+    advisory = list(spectacle_advisory_fields(kind))
+    missing_advisory = missing_fields(contract, advisory) if contract else advisory
+    for field in missing_advisory:
+        findings.append(_finding(
+            cid,
+            "warn",
+            "missing_spectacle_polish_field",
+            f"{kind} 缺战斗精修字段「{field}」（建议·非阻断）：补上让动作/表情/光线在命中帧同时撞点=视觉盛宴。",
+            field=field,
+        ))
+
+    # 兵器/武技对撞撞点帧（advisory·WARN）：治"打斗被拆成单人正反打/单向命中、很少出现双方兵器硬碰硬相交"。
+    # 本镜文本含 clash 词（相交/格挡/对撞/较力/迸火…）却没写 clash_frame(melee)/collision_or_apex_frame(法术)
+    # → 提示单独出一帧撞点（接触点为焦点·face-safe·双主体同框）。magic_burst 的撞点已在必填集，这里主要
+    # 补 fight_exchange 的 melee 兵器相交盲区。缺则提示补，不阻断。
+    clash_missing = False
+    if kind in ("fight_exchange", "magic_burst") and is_weapon_clash_shot(clip_blob(clip)):
+        has_clash = bool(str(contract.get("clash_frame") or "").strip()
+                         or str(contract.get("collision_or_apex_frame") or "").strip())
+        if not has_clash:
+            clash_missing = True
+            findings.append(_finding(
+                cid,
+                "info",
+                "missing_weapon_clash_frame",
+                f"{kind} 本镜含兵器/武技相交（格挡/对撞/较力/迸火…）却没写 clash_frame / "
+                "collision_or_apex_frame 撞点帧——建议单独出一帧『双方兵器在接触点硬碰硬相交·迸火星·力对冲』"
+                "（接触点为焦点·face-safe·双主体同框，不是单人正反打），别让相交瞬间被拆成单向命中。",
+                field="clash_frame",
+            ))
+
     return {
         "clip": cid,
         "spectacle_type": kind,
         "required_fields": required,
         "missing_fields": missing,
+        "missing_polish_fields": missing_advisory,
+        "clash_frame_missing": clash_missing,
         "recommendations": spectacle_recommendations(kind),
         "degrade_plan": str(contract.get("degrade_plan") or default_degrade_plan(kind)),
         "findings": findings,
@@ -166,20 +207,23 @@ def audit(root: str, ep: str) -> Dict[str, Any]:
         findings.extend(row.get("findings") or [])
     must = sum(1 for f in findings if f.get("severity") == "must")
     warn = sum(1 for f in findings if f.get("severity") == "warn")
+    clash_missing = sum(1 for r in spectacle if r.get("clash_frame_missing"))
     return {
         "kind": SPECTACLE_PLAN_KIND,
         "episode": ep,
         "ok": must == 0,
         "clips": spectacle,
         "findings": findings,
-        "summary": {"spectacle_clips": len(spectacle), "must": must, "warn": warn},
+        "summary": {"spectacle_clips": len(spectacle), "must": must, "warn": warn,
+                    "weapon_clash_frame_missing": clash_missing},
     }
 
 
 def print_human(result: Mapping[str, Any]) -> None:
     summary = result.get("summary") if isinstance(result.get("summary"), Mapping) else {}
     print(f"# 高动态/大场景契约审计 — {result.get('episode')}")
-    print(f"spectacle_clips={summary.get('spectacle_clips', 0)} must={summary.get('must', 0)} warn={summary.get('warn', 0)}")
+    print(f"spectacle_clips={summary.get('spectacle_clips', 0)} must={summary.get('must', 0)} warn={summary.get('warn', 0)}"
+          f" 兵器相交撞点帧缺={summary.get('weapon_clash_frame_missing', 0)}")
     if not result.get("findings"):
         print("- PASS：高动态/大场景镜头结构契约已就位。")
         return

@@ -100,6 +100,10 @@ RETENTION_BENCHMARK_REQUIRED_PATHS = (
     # 杜绝"无来源阈值假装有市场背书"（GAP-1·provenance 整合）。
     "proxy_thresholds.density_slow_per_min",
     "proxy_thresholds.density_fast_per_min",
+    # 打斗剪辑节奏（P2·combat_rhythm_audit·advisory-only）：与密度带同源——无可辩护公开打斗
+    # 切点/秒基准，强制带 internal-heuristic provenance（杜绝"无来源阈值假装市场背书"）。
+    "proxy_thresholds.combat_cut_interval_slow_sec",
+    "proxy_thresholds.overseas_combat_cut_interval_slow_sec",
     "episode_kpi_targets.required_metrics",
     # 首集专属完播地板（GAP-3·E1≥75% QC 地板，与通用 completion_rate 分开审）。
     "episode_kpi_targets.first_episode_completion_floor",

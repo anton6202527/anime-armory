@@ -12,6 +12,7 @@ split-brain。settings 允许额外携带便捷别名（如 Seedance↔Seedance 
     cd skills/mv-craft/scripts && python3 -m pytest test_contract_sync.py
 """
 import os
+import importlib.util
 import sys
 import unittest
 
@@ -21,8 +22,17 @@ MV_LIB = os.path.join(REPO, "skills", "mv", "_lib")
 sys.path.insert(0, HERE)
 sys.path.insert(0, MV_LIB)
 
-import contract  # mv-craft/scripts/contract.py
-import settings as mv_settings  # mv/_lib/settings.py
+
+def load_module(name, path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+contract = load_module("_mv_craft_contract_for_test", os.path.join(HERE, "contract.py"))
+mv_settings = load_module("_mv_lib_settings_for_test", os.path.join(MV_LIB, "settings.py"))
 
 
 class ContractSettingsSyncTest(unittest.TestCase):

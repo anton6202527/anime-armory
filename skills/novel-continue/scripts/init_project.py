@@ -196,8 +196,16 @@ def main():
     ]
     # 一致性注册表脚手架（B1）：派生作品也要有 character_guardrails / power_system_registry，
     # 否则 novel-wiki 的护栏 / 力量体系机检在续写作品上静默 no-op。
-    from consistency_scaffold import consistency_registry_files
-    skeletons += consistency_registry_files(args.genre)
+    from consistency_scaffold import (consistency_registry_files,
+                                      split_source_chapters, extract_foreshadow_candidates)
+    # 伏笔台账自动播种：从原作启发式抽「待确认伏笔候选」预播，让 foreshadow_ledger.analyze()
+    # 一开局就 ran:True（续写最吃未回收伏笔，否则机检空转）。候选永不升阻断，由第 2 步人工 confirm/drop。
+    try:
+        src_text = open(novel_txt, encoding="utf-8").read()
+        fs_seeds = extract_foreshadow_candidates(split_source_chapters(src_text, CHAPTER_RE))
+    except OSError:
+        fs_seeds = []
+    skeletons += consistency_registry_files(args.genre, foreshadow_seeds=fs_seeds)
     for name, content in skeletons:
         path = os.path.join(out_root, name)
         os.makedirs(os.path.dirname(path), exist_ok=True)

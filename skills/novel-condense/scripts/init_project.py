@@ -15,15 +15,19 @@ init_project.py — 建精简项目骨架；docx → txt 抽取。
 import argparse, json, math, os, shutil, sys
 from datetime import date
 
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_SKILLS = os.path.abspath(os.path.join(_HERE, "..", ".."))
+for _path in (os.path.join(_SKILLS, "novel", "_lib"), os.path.join(_SKILLS, "novel-craft", "scripts")):
+    if _path not in sys.path:
+        sys.path.insert(0, _path)
+
 # 共享工具（docx→txt / 版权判定 / 落 _设置.md）上移至 novel-craft，避免各 init 各写一份
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                "..", "..", "novel-craft", "scripts"))
-from contract import (AI_TEXT_USAGE_MODES, CHAPTER_GRANULARITY, NOVEL_DRAFT_MODES,
-                      DRAFT_WORKFLOWS, base_meta, demo_chapters_for,
-                      derived_stage_markdown, parse_outputs,
-                      wordcount_band_for_words_per_chapter,
-                      infer_novel_purpose, normalize_novel_purpose,
-                      resolve_novel_draft_mode, resolve_novel_draft_workflow)
+from novel_contract import (AI_TEXT_USAGE_MODES, CHAPTER_GRANULARITY, NOVEL_DRAFT_MODES,
+                            DRAFT_WORKFLOWS, base_meta, demo_chapters_for,
+                            derived_stage_markdown, parse_outputs,
+                            wordcount_band_for_words_per_chapter,
+                            infer_novel_purpose, normalize_novel_purpose,
+                            resolve_novel_draft_mode, resolve_novel_draft_workflow)
 from derive_common import build_rights_metadata, docx_to_txt, detect_rights_status, write_settings
 
 
@@ -186,8 +190,17 @@ def main():
     ]
     # 一致性注册表脚手架（B1）：派生作品也要有 character_guardrails / power_system_registry，
     # 否则 novel-wiki 的护栏 / 力量体系机检在精简作品上静默 no-op。
-    from consistency_scaffold import consistency_registry_files
-    skeletons += consistency_registry_files(args.genre)
+    from consistency_scaffold import (consistency_registry_files,
+                                      split_source_chapters, extract_foreshadow_candidates)
+    from novel_contract import CHAPTER_RE
+    # 伏笔台账自动播种：精简最易砍支线留下孤儿埋点，从原作抽「待确认伏笔候选」预播，
+    # 让 foreshadow_ledger.analyze() 一开局就 ran:True。候选永不升阻断，由人工 confirm/drop。
+    try:
+        src_text = open(novel_txt, encoding="utf-8").read()
+        fs_seeds = extract_foreshadow_candidates(split_source_chapters(src_text, CHAPTER_RE))
+    except OSError:
+        fs_seeds = []
+    skeletons += consistency_registry_files(args.genre, foreshadow_seeds=fs_seeds)
     for name, content in skeletons:
         path = os.path.join(out_root, name)
         os.makedirs(os.path.dirname(path), exist_ok=True)

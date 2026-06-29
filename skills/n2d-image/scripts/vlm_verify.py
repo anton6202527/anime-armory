@@ -367,13 +367,42 @@ def evaluate_pairs(pairs: Sequence[Mapping[str, Any]], canon_map: Mapping[str, D
 
 # ── VLM 后端（best-effort·opt-in·不 hardcode 厂商） ───────────────────────────
 
+def _n2dvlm_env_exists() -> bool:
+    """本机是否有 n2dvlm conda 环境（直接探 envs/n2dvlm 目录，不跑 conda 以免慢/副作用）。"""
+    bases = []
+    cp = os.environ.get("CONDA_PREFIX")
+    if cp:
+        bases += [cp, os.path.dirname(os.path.dirname(cp))]
+    bases += ["/opt/homebrew/Caskroom/miniforge/base",
+              os.path.expanduser("~/miniforge3"), os.path.expanduser("~/miniconda3"),
+              os.path.expanduser("~/anaconda3")]
+    return any(b and os.path.isdir(os.path.join(b, "envs", "n2dvlm")) for b in bases)
+
+
+def _auto_vlm_cmd() -> str:
+    """N2D_VLM_CMD 未设时的本机默认：仓库 bundle 的 mlxvlm 单图后端 + n2dvlm 环境都在 → 自动接上。
+
+    缺适配器/环境 → 返回 ""（load_judge 退回 None，优雅降级，CI/裸机零影响）。仍可被显式
+    N2D_VLM_CMD 覆盖、或 N2D_VLM_CMD=off 关闭。详见 n2d-review/references/vlm_backend.md。"""
+    adapter = os.path.abspath(os.path.join(
+        os.path.dirname(__file__), "..", "..", "n2d-review", "scripts", "backends", "vlm_cmd_mlxvlm.py"))
+    if os.path.isfile(adapter) and _n2dvlm_env_exists():
+        return f"conda run -n n2dvlm python {shlex.quote(adapter)} --image {{image}} --prompt {{prompt}}"
+    return ""
+
+
 def load_judge() -> Optional[Judge]:
-    """从 `N2D_VLM_CMD` 命令模板构造 judge；未配置 → None（整段跳过，不阻断默认产线）。
+    """构造 VLM judge：显式 `N2D_VLM_CMD` 命令模板优先；未设时自动接本机 bundle 的 mlxvlm 后端
+    （`_auto_vlm_cmd`，n2dvlm 环境在才接）；都没有 → None（整段跳过，不阻断默认产线）。
 
     命令模板用 {image} {prompt} 占位（prompt 经 shell-quote 注入），stdout 应回判定 JSON。
     例：export N2D_VLM_CMD='python3 ~/bin/vlm_judge.py --image {image} --prompt {prompt}'
-    厂商无关：包装 Claude/OpenAI 视觉 API、本地 Qwen-VL/InternVL CLI 均可。"""
+    厂商无关：包装 Claude/OpenAI 视觉 API、本地 Qwen-VL/InternVL CLI 均可。`N2D_VLM_CMD=off` 强制关。"""
     tmpl = os.environ.get("N2D_VLM_CMD", "").strip()
+    if tmpl.lower() in ("off", "none", "disabled", "0"):
+        return None
+    if not tmpl:
+        tmpl = _auto_vlm_cmd()
     if not tmpl or "{image}" not in tmpl:
         return None
 
@@ -429,11 +458,24 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if ns.write:
         out = root / "生产数据" / f"vlm_canonical_{ns.episode}.json"
         out.parent.mkdir(parents=True, exist_ok=True)
+        shot_canonical = res.get("shot_canonical", {})
+        # 盖输入指纹：canonical 通过表必须证明「对应当前这批图」。fidelity-gate 据此判 stale——
+        # 若 vlm_verify 后图片又重出，旧 canonical 不能再用脸分数糊弄终验（present-but-stale=BLOCK）。
+        inputs_fingerprint = None
+        try:
+            _lib = str(Path(__file__).resolve().parent.parent.parent / "n2d" / "_lib")
+            if _lib not in sys.path:
+                sys.path.insert(0, _lib)
+            from skill_snapshot import artifact_fingerprint  # n2d/_lib（gate 同源）
+            inputs_fingerprint = artifact_fingerprint(str(root), list(shot_canonical.keys()))
+        except Exception:
+            inputs_fingerprint = None
         out.write_text(json.dumps({
             "kind": "n2d_vlm_canonical",
             "episode": ns.episode,
             "available": bool(res.get("available")),
-            "shot_canonical": res.get("shot_canonical", {}),
+            "shot_canonical": shot_canonical,
+            "inputs_fingerprint": inputs_fingerprint,
         }, ensure_ascii=False, indent=2), encoding="utf-8")
         print(f"✓ canonical 通过表已落档：{out}")
     if ns.json:

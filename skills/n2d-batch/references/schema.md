@@ -56,6 +56,7 @@ Shape:
   "owner": "n2d-image",
   "command": "n2d-image 创作区/制漫剧/剧名 第2集",
   "gate_stage": "image",
+  "idempotency_key": "n2d:...",
   "status": "queued",
   "attempts": 0,
   "max_retries": 1,
@@ -70,12 +71,18 @@ Shape:
   "affected_shots": [],
   "finding_fingerprints": [],
   "coarse_fingerprints": [],
+  "last_error_class": "",
+  "dead_letter": false,
+  "dead_letter_at": "",
   "history": []
 }
 ```
 
 - `finding_fingerprints`：`(集×阶段×维度×最小定位)` 精确指纹（定位串过 `canonical_scope_key` 归一，同镜头不同写法/帧位/产物路径同指纹）；复检判 resolved/reopen + 防复审堆叠。
 - `coarse_fingerprints`：`(集×阶段×维度)` 粗指纹；`recheck --coarse` 回退匹配用——精确指纹对不上但该桶仍有问题时不误判 resolved。
+- `idempotency_key`：按作品根、集、stage、reason、rerun scope、affected shots/artifacts 生成的稳定键；runner 注入 `N2D_IDEMPOTENCY_KEY` 并写入 dashboard trace。
+- `last_error_class`：失败分类，取值建议为 `preflight_block / capability / budget / timeout / output_contract / configuration / command_failed / unknown`。
+- `dead_letter` / `dead_letter_at`：超过 `max_retries` 或最终 failed 后写入；由 `governance.py dead-letter` 汇总给人工处理。
 
 ## Status values
 
@@ -171,6 +178,7 @@ N2D_REASON
 N2D_RERUN_SCOPE
 N2D_AFFECTED_SHOTS
 N2D_AFFECTED_ARTIFACTS
+N2D_IDEMPOTENCY_KEY
 ```
 
 ## Runner telemetry
@@ -188,9 +196,30 @@ N2D_AFFECTED_ARTIFACTS
     "runner_status": "pass",
     "exit_code": 0,
     "command": "bash scripts/run_n2d_image.sh \"创作区/制漫剧/剧名\" \"第1集\"",
-    "attempt": 1
+    "attempt": 1,
+    "idempotency_key": "n2d:...",
+    "trace_id": "n2d:...",
+    "error_class": ""
   }
 }
 ```
 
 This telemetry records worker execution time and exit code only. Real generation cost, redraw reason, and QA findings still belong to the corresponding stage skill and `n2d-dashboard record/gate`.
+
+## Governance outputs
+
+`governance.py` writes:
+
+| File | Meaning |
+|---|---|
+| `production_slo.json` | Queue/stage SLO, created by `governance.py init-slo` |
+| `batch_governance.json/md` | retry rate, dead-letter count, duration/attempt violations |
+| `dead_letter_queue.json/md` | failed/dead-letter tasks with `error_class`, `note`, and `idempotency_key` |
+
+Commands:
+
+```bash
+python3 skills/n2d-batch/scripts/governance.py init-slo <作品根>
+python3 skills/n2d-batch/scripts/governance.py check <作品根> --write
+python3 skills/n2d-batch/scripts/governance.py dead-letter <作品根> --write
+```

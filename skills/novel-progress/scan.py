@@ -4,6 +4,7 @@
 默认扫描 `创作区/写小说/`，并兼容旧 `写小说/`。
 """
 import os
+import re
 import sys
 from concurrent.futures import ThreadPoolExecutor
 
@@ -27,6 +28,8 @@ except Exception:  # qa_gate 缺失时优雅降级
 
 CREATION_ROOT_DIR = "创作区"
 LINE_DIR = "写小说"
+STAGE_TABLE_MARKERS = ("novel-derived-stage-table", "novel-create-stage-table", "novel-import-stage-table")
+STAGE_ITEM_RE = re.compile(r"^\s*-\s*\[([ xX])\]\s*(.*?)\s*<!--\s*stage:([a-z_]+)\s*-->")
 
 def find_repo_root(start):
     d = os.path.abspath(start)
@@ -45,9 +48,44 @@ def line_root_candidates(repo_root):
     ]
 
 
+def report_stage_checklist(root, out):
+    path = os.path.join(root, "_进度.md")
+    try:
+        text = open(path, encoding="utf-8").read()
+    except OSError as exc:
+        out.append(f"（无可解析的进度表: {exc}）")
+        return True
+    if not any(marker in text for marker in STAGE_TABLE_MARKERS):
+        return False
+    stages = []
+    for line in text.splitlines():
+        match = STAGE_ITEM_RE.match(line)
+        if not match:
+            continue
+        done = match.group(1).lower() == "x"
+        label = re.sub(r"\s+", " ", match.group(2)).strip()
+        stages.append({"done": done, "label": label, "stage": match.group(3)})
+    if not stages:
+        out.append("（阶段清单型进度，但未找到 stage 项）")
+        return True
+    done = sum(1 for item in stages if item["done"])
+    out.append(f"阶段数: {len(stages)} | 完成: {done}/{len(stages)}")
+    out.append("各阶段完成: " + " | ".join(
+        f"{item['label']} {'✅' if item['done'] else '⬜'}" for item in stages
+    ))
+    first = next((item for item in stages if not item["done"]), None)
+    if first:
+        out.append(f"前沿: {first['label']} [{first['stage']}]")
+    else:
+        out.append("✅ 全部完成。")
+    return True
+
+
 def report(root, out):
     res = novel_summarize(root)
     if "error" in res:
+        if report_stage_checklist(root, out):
+            return
         out.append(f"（无可解析的进度表: {res['error']}）")
         return
 

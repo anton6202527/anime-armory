@@ -94,6 +94,7 @@
 - [ ] 批量写章节 <!-- stage:draft -->
 - [ ] 一致性回扫 <!-- stage:review -->
 - [ ] 导出 <!-- stage:export -->
+- [ ] 发布版本清单 <!-- stage:release_manifest -->
 ```
 
 阶段清单型样例 —— 派生类：
@@ -110,6 +111,7 @@
 - [ ] 批量写章节 <!-- stage:draft -->
 - [ ] 一致性回扫 <!-- stage:review -->
 - [ ] 导出 <!-- stage:export -->
+- [ ] 发布版本清单 <!-- stage:release_manifest -->
 ```
 
 ## 原创阶段表
@@ -125,6 +127,7 @@
 | `draft` | 批量写余下章节：先出章节任务包，再由 agent/子代理逐章写，写完填状态增量 | `novel-craft/scripts/draft_packets.py` + `novel-create/agent` | 就地修章、重出任务包，或回 `demo` |
 | `review` | 机检 + 人判一致性回扫 | `novel-review` | 按报告回源头阶段 |
 | `export` | QA gate 通过后导出 txt/docx/outline | `novel-craft/scripts/export.py` | 先清 `review_report/score_report` 阻断；再修 `_meta/章节` |
+| `release_manifest` | 固化导出物、章节、审稿、评分、AI 使用、资料包和豁免 hash | `novel-craft/scripts/release_manifest.py` | 重跑导出或补缺失证据后重建 manifest |
 
 ## 派生同构阶段表
 
@@ -139,6 +142,7 @@
 | `draft` | 批量写余下章节：先出章节任务包，再由 agent/子代理逐章写，写完填状态增量 | `novel-craft/scripts/draft_packets.py` + 当前派生 skill/agent | 就地修章、重出任务包，或回 `demo` |
 | `review` | 机检 + 人判一致性回扫 | `novel-review` | 按报告回源头阶段 |
 | `export` | QA gate 通过后导出 txt/docx/outline | `novel-craft/scripts/export.py` | 先清 `review_report/score_report` 阻断；再修 `_meta/章节` |
+| `release_manifest` | 固化导出物、章节、审稿、评分、AI 使用、资料包和豁免 hash | `novel-craft/scripts/release_manifest.py` | 重跑导出或补缺失证据后重建 manifest |
 
 ## QA gate
 

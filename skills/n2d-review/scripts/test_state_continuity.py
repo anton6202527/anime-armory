@@ -290,3 +290,82 @@ def test_state_continuity_merges_pixel_sidecar_into_alerts(tmp_path):
     out = st.analyze(str(root), "第1集")
     pixel = [a for a in out["alerts"] if str(a.get("kind", "")).startswith("state_pixel")]
     assert pixel and all(a["verdict"] == "warn" for a in pixel)
+
+
+# ── 全字段演进白名单（face/hair 各管各·2026-06-26） ──────────────────────────────
+def test_appearance_intervals_are_field_typed(tmp_path):
+    # 各维度各管各：纯换装的角色不豁免脸/发锁；易容/黑化的角色才豁免对应锁。
+    root = tmp_path / "制漫剧" / "剧"
+    ep = "第1集"
+    sb = root / "脚本" / ep
+    sb.mkdir(parents=True)
+    (sb / "storyboard.json").write_text(json.dumps({
+        "visual_contract": {"角色状态演进": {
+            "沈念": [{"自": "Clip3", "状态": "易容改扮潜入敌营", "保持": "至集尾"}],
+            "苏璃": [{"自": "Clip3", "状态": "黑化换发披散", "保持": "至集尾"}],
+            "王五": [{"自": "Clip3", "状态": "换上铠甲战袍", "保持": "至集尾"}],
+        }}, "clips": [],
+    }, ensure_ascii=False), encoding="utf-8")
+    face = st.appearance_change_intervals(str(root), ep, kind="face")
+    hair = st.appearance_change_intervals(str(root), ep, kind="hair")
+    costume = st.appearance_change_intervals(str(root), ep)  # 默认 costume（向后兼容）
+
+    # 脸锁：只有易容的沈念豁免；纯换装的王五、纯换发的苏璃不豁免脸锁
+    assert "易容" in (st.appearance_change_at(face, "沈念", 5) or "")
+    assert st.appearance_change_at(face, "王五", 5) is None
+    assert st.appearance_change_at(face, "苏璃", 5) is None
+    # 发锁：只有黑化换发的苏璃豁免；纯换装的王五不豁免发锁
+    assert st.appearance_change_at(hair, "苏璃", 5)
+    assert st.appearance_change_at(hair, "王五", 5) is None
+    # 服装锁：换铠甲的王五豁免（向后兼容默认 kind）
+    assert st.appearance_change_at(costume, "王五", 5)
+    # 未知维度 → {}
+    assert st.appearance_change_intervals(str(root), ep, kind="bogus") == {}
+
+
+def test_downgrade_appearance_block_is_generic():
+    intervals = {"沈念": [(3, None, "易容改扮")]}
+    # 区间内 block → warn + 自定义 expected_key + abs_verdict 留痕
+    row = st.downgrade_appearance_block({"verdict": "block", "char": "沈念"}, intervals,
+                                        "沈念", 4, expected_key="face_change_expected")
+    assert row["verdict"] == "warn" and row["abs_verdict"] == "block"
+    assert "易容" in row["face_change_expected"]
+    # 区间外不降
+    row2 = st.downgrade_appearance_block({"verdict": "block"}, intervals, "沈念", 1,
+                                         expected_key="face_change_expected")
+    assert row2["verdict"] == "block" and "face_change_expected" not in row2
+    # warn/ok 不动
+    row3 = st.downgrade_appearance_block({"verdict": "warn", "char": "沈念"}, intervals,
+                                         "沈念", 4, expected_key="face_change_expected")
+    assert row3["verdict"] == "warn"
+    # 向后兼容包装：downgrade_costume_block 等价 expected_key=costume_change_expected
+    row4 = st.downgrade_costume_block({"verdict": "block", "char": "沈念"}, intervals, "沈念", 4)
+    assert row4["verdict"] == "warn" and "costume_change_expected" in row4
+
+
+def test_appearance_intervals_union_blackboard_author_declaration(tmp_path):
+    # 逐镜意图黑板的作者 field-tag 声明应被 face 锁消费（补回关键词漏检的"无痕易容"）。
+    import sys, os as _os
+    sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "..", "n2d", "_lib"))
+    import n2d_intent as ni
+    root = tmp_path / "制漫剧" / "剧"
+    ep = "第1集"
+    sb = root / "脚本" / ep
+    sb.mkdir(parents=True)
+    # storyboard 无任何脸演进关键词 → 关键词派生为空
+    (sb / "storyboard.json").write_text(json.dumps({"visual_contract": {}, "clips": []},
+                                                   ensure_ascii=False), encoding="utf-8")
+    assert st.appearance_change_intervals(str(root), ep, kind="face") == {}
+    # 作者在黑板里 field-tag 声明 沈念 Clip5-9 无痕易容
+    ni.write_shot_intent(str(root), ep)
+    path = ni.shot_intent_path(str(root), ep)
+    obj = ni.load_shot_intent(str(root), ep)
+    obj["allowed_evolution"] = [
+        {"character": "沈念", "from_shot": 5, "to_shot": 9, "field": "face", "desc": "无痕易容", "source": "author"}]
+    path_obj = __import__("pathlib").Path(path)
+    path_obj.write_text(json.dumps(obj, ensure_ascii=False), encoding="utf-8")
+    # 现在 face 锁应在 Clip5-9 豁免
+    face = st.appearance_change_intervals(str(root), ep, kind="face")
+    assert st.appearance_change_at(face, "沈念", 6) == "无痕易容"
+    assert st.appearance_change_at(face, "沈念", 12) is None      # 区间外
+    assert st.appearance_change_intervals(str(root), ep, kind="hair") == {}  # 只声明了 face

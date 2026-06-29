@@ -43,6 +43,7 @@ def test_benchmark_threshold_loader_uses_json(tmp_path, monkeypatch):
 
 def test_is_hook_text_and_is_slow_text():
     assert pr.is_hook_text("冷开场·铜镜陌生脸") is True
+    assert pr.is_hook_text("冷开·危机 青烟锁云翎") is True
     assert pr.is_hook_text("cold open hook") is True
     assert pr.is_hook_text("日常·吃饭闲聊") is False
     assert pr.is_slow_text("铺垫·长镜") is True
@@ -87,6 +88,12 @@ def test_hook_strength_structural_visual_open_stays_full():
     # 冷开场=结构视觉钩 → 静音安全，不扣静音分（守住既有 100 分契约）
     h = pr.hook_strength([{"rhythm": "冷开场·钩子", "duration": 3}])
     assert h["score"] == 100.0
+    assert h["muted_safe"] is True
+
+
+def test_hook_strength_short_cold_open_alias_is_muted_safe():
+    h = pr.hook_strength([{"rhythm": "冷开·危机", "label": "青烟锁云翎", "duration": 3}])
+    assert h["open_is_hook"] is True
     assert h["muted_safe"] is True
 
 
@@ -268,11 +275,23 @@ def test_to_score_report_never_blocks():
     assert rep["metrics"]["verdict"] == "warn"
 
 
+def test_to_score_report_emits_beat_density_variance_top_level():
+    # 锁 G3 生产者↔消费者契约：n2d-dashboard 读 pacing_retention_<集>.json 的「顶层」
+    # beat_density_variance（非 metrics 内），此前从不写出 → 告警永不触发。值取 retention.cv。
+    res = {"available": True, "verdict": "ok", "score": 88.0,
+           "hook": {"score": 90.0}, "pacing": {"score": 80.0, "density_per_min": 14.0},
+           "retention": {"score": 85.0, "cv": 0.746}, "risk_shots": [], "notes": []}
+    rep = pr.to_score_report(res)
+    assert rep["beat_density_variance"] == 0.746      # 顶层键，dashboard 直接 .get 得到
+    assert "beat_density_variance" not in rep["metrics"]
+
+
 def test_to_score_report_skip_when_unavailable():
     res = {"available": False, "verdict": "inconclusive", "score": None,
            "risk_shots": [], "notes": ["缺 storyboard"]}
     rep = pr.to_score_report(res)
     assert rep["blocks"] == 0 and rep["warnings"] == 0
+    assert rep["beat_density_variance"] is None       # 不可用时显式 None，dashboard 守 None 跳过
     assert rep["evidence"] == ["缺 storyboard"]
     assert rep["metrics"]["available"] is False
 
@@ -286,3 +305,75 @@ def test_write_score_report_roundtrips(tmp_path):
     assert data["blocks"] == 0
     assert data["infos"] == 1           # 通过且无风险镜
     assert data["metrics"]["score"] == 92.0
+
+
+# ---------- 第一方留存校准（load_pacing_profile / _profile_threshold / analyze 采用） ----------
+
+def _write_profile(root, obj):
+    d = os.path.join(root, "生产数据")
+    os.makedirs(d, exist_ok=True)
+    with open(os.path.join(d, "pacing_profiles.json"), "w", encoding="utf-8") as fh:
+        json.dump(obj, fh, ensure_ascii=False)
+
+
+def _write_storyboard(root, ep, clips):
+    d = os.path.join(root, "脚本", ep)
+    os.makedirs(d, exist_ok=True)
+    with open(os.path.join(d, "storyboard.json"), "w", encoding="utf-8") as fh:
+        json.dump({"clips": clips}, fh, ensure_ascii=False)
+
+
+def test_profile_threshold_precedence(monkeypatch):
+    monkeypatch.delenv("N2D_PACE_DENSITY_SLOW", raising=False)
+    # profile 用于 env 缺席时
+    assert pr._profile_threshold({"density_slow_per_min": 14}, "density_slow_per_min", "N2D_PACE_DENSITY_SLOW", 10.0) == 14.0
+    # profile 空 → 退回 default
+    assert pr._profile_threshold({}, "density_slow_per_min", "N2D_PACE_DENSITY_SLOW", 10.0) == 10.0
+    # 坏值 → 退回 default
+    assert pr._profile_threshold({"density_slow_per_min": "x"}, "density_slow_per_min", "N2D_PACE_DENSITY_SLOW", 10.0) == 10.0
+    # env 永远最高，盖过 profile
+    monkeypatch.setenv("N2D_PACE_DENSITY_SLOW", "9")
+    assert pr._profile_threshold({"density_slow_per_min": 14}, "density_slow_per_min", "N2D_PACE_DENSITY_SLOW", 10.0) == 9.0
+
+
+def test_load_pacing_profile_gating(tmp_path):
+    root = str(tmp_path)
+    assert pr.load_pacing_profile(root) == {}                 # 缺文件
+    _write_profile(root, {"kind": "wrong", "evidence_status": "calibrated",
+                          "thresholds": {"density_slow_per_min": 12}})
+    assert pr.load_pacing_profile(root) == {}                 # kind 不对
+    _write_profile(root, {"kind": "n2d_pacing_profiles", "evidence_status": "insufficient_samples",
+                          "thresholds": {}})
+    assert pr.load_pacing_profile(root) == {}                 # 未校准
+    _write_profile(root, {"kind": "n2d_pacing_profiles", "evidence_status": "calibrated",
+                          "thresholds": {"density_slow_per_min": 12.0, "density_fast_per_min": 30.0},
+                          "genre": "甜宠", "sample_n": 9})
+    out = pr.load_pacing_profile(root)
+    assert out["thresholds"]["density_fast_per_min"] == 30.0
+    assert out["genre"] == "甜宠" and out["sample_n"] == 9
+
+
+def test_analyze_prefers_calibrated_band(tmp_path, monkeypatch):
+    monkeypatch.delenv("N2D_PACE_DENSITY_SLOW", raising=False)
+    monkeypatch.delenv("N2D_PACE_DENSITY_FAST", raising=False)
+    root = str(tmp_path)
+    # 7 镜 × 1.7s → 密度 ≈ 35.3/min：默认带 [10,45) 内（满分）；校准带 [12,30) 外（扣分）。
+    clips = [{"id": f"C{i}", "duration": 1.7, "rhythm": "冷开场 特写"} for i in range(7)]
+    _write_storyboard(root, "第1集", clips)
+
+    base = pr.analyze(root, "第1集")
+    assert base["pacing_thresholds"]["source"] == "benchmark_or_default"
+    assert base["pacing"]["score"] == 100.0
+
+    _write_profile(root, {"kind": "n2d_pacing_profiles", "evidence_status": "calibrated",
+                          "thresholds": {"density_slow_per_min": 12.0, "density_fast_per_min": 30.0},
+                          "genre": "甜宠", "sample_n": 9})
+    cal = pr.analyze(root, "第1集")
+    assert cal["pacing_thresholds"]["source"].startswith("calibrated")
+    assert cal["pacing"]["score"] < 100.0          # 校准带把"过密"判出来了
+    assert cal["verdict"] in {"ok", "warn"}        # 仍 advisory，绝不 block
+
+    rep = pr.to_score_report(cal)
+    assert rep["blocks"] == 0                       # advisory 契约不变
+    assert rep["metrics"]["pacing_threshold_source"].startswith("calibrated")
+    assert rep["metrics"]["density_fast_per_min"] == 30.0

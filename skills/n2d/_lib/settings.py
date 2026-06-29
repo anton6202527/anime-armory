@@ -8,11 +8,18 @@ questions or infer preferences.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+import contextlib
 import glob
 import os
 import re
+import threading
 import time
 from typing import Any, Dict, Iterable, List, Optional, Tuple
+
+try:
+    import fcntl
+except ImportError:  # pragma: no cover - non-POSIX fallback
+    fcntl = None
 
 try:  # Optional here; most n2d scripts have common/ on sys.path already.
     from n2d_platform_profiles import VIDEO_BACKEND_ALIASES, normalize_video_backend
@@ -197,9 +204,12 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("投放时效", ("n2d",), ("实时", "隔夜批量"), key_aliases=("时效档", "urgency")),
     SettingSpec("视频备用后端", ("n2d",), ("无", "即梦", "dreamina", "可灵", "kling", "Seedance", "Veo", "Sora", "Runway", "manual"), aliases=VIDEO_BACKEND_SETTING_ALIASES, parameterized=True),
     SettingSpec("出视频规格", ("n2d",), ("预算充足", "预算一般", "预算不够")),
+    # 跨后端英雄镜多版（costly·默认关闭·花钱前确认）：开启后英雄镜（名场面/开场钩/高潮）同时跑
+    # primary+secondary 两个后端各出一版、pooled 进候选 video_qc 选优。
+    SettingSpec("英雄镜多版", ("n2d",), ("关闭", "开启")),
     SettingSpec("视频分辨率", ("n2d",), ("720p", "1080p", "4K")),
     SettingSpec("画幅", ("n2d",), ("9:16", "16:9"), key_aliases=("漫剧画幅",)),
-    SettingSpec("对口型", ("n2d",), ("关闭", "配音对齐", "后期pass", "平台原生")),
+    SettingSpec("对口型", ("n2d",), ("对话近景", "关闭", "配音对齐", "后期pass", "平台原生")),
     SettingSpec("配音后端", ("n2d",), ("CosyVoice", "GPT-SoVITS", "MiniMax", "火山", "say占位", "自定义"), parameterized=True),
     SettingSpec("字幕语言", ("n2d",), ("中文", "中英双语", "仅英文", "无字幕")),
     SettingSpec("视频原生音轨", ("n2d",), ("丢弃", "低音量混入环境声", "保留原片音轨")),
@@ -370,6 +380,84 @@ def load_settings_meta(work_root: str) -> Dict[str, Dict[str, str]]:
     return out
 
 
+# ── _设置.md 并发安全：flock + 原子写（与 progress.py 对称；并行 batch agent 抢写不再撕裂）──
+_settings_lock_state = threading.local()
+
+
+@contextlib.contextmanager
+def _settings_lock(lock_root: str, *, lockname: str = "_设置.lock",
+                   timeout: float = 30.0, poll: float = 0.1):
+    """串行化 `_设置.md` 的 read-modify-write（单机多 worker / 并行 batch）。
+
+    按 lock-path **可重入**：同线程已持同一把锁时嵌套获取是 no-op（set_project_setting 内部还会
+    调 append_record，二者同锁；work_root 与 global 是不同文件、不同锁，互不误共享）。"""
+    lock_root = str(lock_root).rstrip("/") or "."
+    os.makedirs(lock_root, exist_ok=True)
+    path = os.path.join(lock_root, lockname)
+    held = getattr(_settings_lock_state, "held", None)
+    if held is None:
+        held = {}
+        _settings_lock_state.held = held
+    if held.get(path, 0) > 0:  # 本线程已持该锁 → 可重入 no-op
+        held[path] += 1
+        try:
+            yield path
+        finally:
+            held[path] -= 1
+        return
+    start = time.time()
+    if fcntl is not None:
+        fd = os.open(path, os.O_CREAT | os.O_RDWR, 0o644)
+        try:
+            while True:
+                try:
+                    fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    break
+                except BlockingIOError:
+                    if time.time() - start > timeout:
+                        raise TimeoutError(f"settings lock timeout ({timeout}s): {path}")
+                    time.sleep(poll)
+            held[path] = 1
+            try:
+                yield path
+            finally:
+                held[path] = 0
+                fcntl.flock(fd, fcntl.LOCK_UN)
+        finally:
+            os.close(fd)
+    else:  # pragma: no cover - non-POSIX 目录锁兜底
+        lock_dir = path + ".d"
+        acquired = False
+        try:
+            while True:
+                try:
+                    os.mkdir(lock_dir)
+                    acquired = True
+                    break
+                except FileExistsError:
+                    if time.time() - start > timeout:
+                        raise TimeoutError(f"settings lock timeout ({timeout}s): {path}")
+                    time.sleep(poll)
+            held[path] = 1
+            try:
+                yield path
+            finally:
+                held[path] = 0
+        finally:
+            if acquired:
+                with contextlib.suppress(OSError):
+                    os.rmdir(lock_dir)
+
+
+def _atomic_write_text(path: str, text: str) -> None:
+    """同目录 temp + os.replace；读者永不见半写状态。"""
+    directory = os.path.dirname(path) or "."
+    tmp = os.path.join(directory, f".{os.path.basename(path)}.tmp.{os.getpid()}")
+    with open(tmp, "w", encoding="utf-8") as f:
+        f.write(text)
+    os.replace(tmp, path)
+
+
 def write_settings(
     work_root: str,
     fields: Dict[str, str],
@@ -396,11 +484,10 @@ def write_settings(
     ]
 
     path = os.path.join(work_root.rstrip("/"), "_设置.md")
-    with open(path, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines) + "\n")
-    
-    # Automatically log initialization
-    append_record(work_root, "项目设置初始化（继承自 CLI/全局默认）")
+    with _settings_lock(work_root):
+        _atomic_write_text(path, "\n".join(lines) + "\n")
+        # Automatically log initialization
+        append_record(work_root, "项目设置初始化（继承自 CLI/全局默认）")
 
 
 def _setting_line_match(line: str, key: str, family: Optional[str] = None) -> Optional[re.Match[str]]:
@@ -433,20 +520,20 @@ def _last_setting_line_index(lines: List[str]) -> Optional[int]:
 
 def append_record(work_root: str, message: str, *, date: Optional[str] = None) -> None:
     path = os.path.join(work_root.rstrip("/"), "_设置.md")
-    content = _read_text(path)
-    if not content:
-        content = "# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）\n"
-    lines = content.splitlines()
-    entry = f"- {date or time.strftime('%Y-%m-%d')} {message}"
-    idx = _record_index(lines)
-    if idx is None:
-        if lines and lines[-1].strip():
-            lines.append("")
-        lines.extend(["## 记录", entry])
-    else:
-        lines.insert(idx + 1, entry)
-    with open(path, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines).rstrip() + "\n")
+    with _settings_lock(work_root):
+        content = _read_text(path)
+        if not content:
+            content = "# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）\n"
+        lines = content.splitlines()
+        entry = f"- {date or time.strftime('%Y-%m-%d')} {message}"
+        idx = _record_index(lines)
+        if idx is None:
+            if lines and lines[-1].strip():
+                lines.append("")
+            lines.extend(["## 记录", entry])
+        else:
+            lines.insert(idx + 1, entry)
+        _atomic_write_text(path, "\n".join(lines).rstrip() + "\n")
 
 
 def _format_validation_error(result: Dict[str, Any]) -> str:
@@ -482,38 +569,38 @@ def set_project_setting(
         value = str(check.get("value", value))
     canonical = canonical_setting_key(key, family)
     path = os.path.join(work_root, "_设置.md")
-    content = _read_text(path)
-    if not content:
-        content = "# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）\n\n"
-    lines = content.splitlines()
-    old_val: Optional[str] = None
-    stop = _record_index(lines)
-    scan_end = len(lines) if stop is None else stop
-    updated = False
-    for i in range(scan_end):
-        if _looks_like_record_line(lines[i]):
-            continue
-        m = _setting_line_match(lines[i], key, family) or _setting_line_match(lines[i], canonical, family)
-        if not m:
-            continue
-        old_val, _comment = _split_value_comment(m.group(2))
-        lines[i] = f"{m.group(1)}{_format_setting_value(value, source)}{m.group(3)}"
-        updated = True
-        break
+    with _settings_lock(work_root):
+        content = _read_text(path)
+        if not content:
+            content = "# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）\n\n"
+        lines = content.splitlines()
+        old_val: Optional[str] = None
+        stop = _record_index(lines)
+        scan_end = len(lines) if stop is None else stop
+        updated = False
+        for i in range(scan_end):
+            if _looks_like_record_line(lines[i]):
+                continue
+            m = _setting_line_match(lines[i], key, family) or _setting_line_match(lines[i], canonical, family)
+            if not m:
+                continue
+            old_val, _comment = _split_value_comment(m.group(2))
+            lines[i] = f"{m.group(1)}{_format_setting_value(value, source)}{m.group(3)}"
+            updated = True
+            break
 
-    if not updated:
-        insert_after = _last_setting_line_index(lines)
-        new_line = f"- {canonical}：{_format_setting_value(value, source)}"
-        if insert_after is None:
-            insert_at = 2 if len(lines) >= 2 else len(lines)
-            lines.insert(insert_at, new_line)
-        else:
-            lines.insert(insert_after + 1, new_line)
+        if not updated:
+            insert_after = _last_setting_line_index(lines)
+            new_line = f"- {canonical}：{_format_setting_value(value, source)}"
+            if insert_after is None:
+                insert_at = 2 if len(lines) >= 2 else len(lines)
+                lines.insert(insert_at, new_line)
+            else:
+                lines.insert(insert_after + 1, new_line)
 
-    with open(path, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines).rstrip() + "\n")
-    if record:
-        append_record(work_root, message or f"设置 {canonical} = {value} (source={source}, 原值: {old_val})")
+        _atomic_write_text(path, "\n".join(lines).rstrip() + "\n")
+        if record:
+            append_record(work_root, message or f"设置 {canonical} = {value} (source={source}, 原值: {old_val})")
     return old_val, value
 
 
@@ -522,49 +609,49 @@ def reset_project_setting(work_root: str, key: str, *, record: bool = True) -> O
     family = detect_family(work_root)
     canonical = canonical_setting_key(key, family)
     path = os.path.join(work_root, "_设置.md")
-    content = _read_text(path)
-    if not content:
-        return None
-    lines = content.splitlines()
-    stop = _record_index(lines)
-    scan_end = len(lines) if stop is None else stop
-    old_val = None
-    kept: List[str] = []
-    removed = False
-    for i, line in enumerate(lines):
-        if i < scan_end:
-            m = _setting_line_match(line, key, family) or _setting_line_match(line, canonical, family)
-            if m:
-                old_val, _comment = _split_value_comment(m.group(2))
-                removed = True
-                continue
-        kept.append(line)
-    if not removed:
-        return None
-    with open(path, "w", encoding="utf-8") as f:
-        f.write("\n".join(kept).rstrip() + "\n")
-    if record:
-        append_record(work_root, f"重置选项 {canonical} (原值: {old_val})")
+    with _settings_lock(work_root):
+        content = _read_text(path)
+        if not content:
+            return None
+        lines = content.splitlines()
+        stop = _record_index(lines)
+        scan_end = len(lines) if stop is None else stop
+        old_val = None
+        kept: List[str] = []
+        removed = False
+        for i, line in enumerate(lines):
+            if i < scan_end:
+                m = _setting_line_match(line, key, family) or _setting_line_match(line, canonical, family)
+                if m:
+                    old_val, _comment = _split_value_comment(m.group(2))
+                    removed = True
+                    continue
+            kept.append(line)
+        if not removed:
+            return None
+        _atomic_write_text(path, "\n".join(kept).rstrip() + "\n")
+        if record:
+            append_record(work_root, f"重置选项 {canonical} (原值: {old_val})")
     return old_val
 
 
 def reset_all_project_settings(work_root: str, *, record: bool = True) -> List[str]:
     work_root = work_root.rstrip("/")
-    settings = load_settings(work_root)
     path = os.path.join(work_root, "_设置.md")
-    content = _read_text(path)
-    lines = content.splitlines()
-    stop = _record_index(lines)
-    scan_end = len(lines) if stop is None else stop
-    kept: List[str] = []
-    for i, line in enumerate(lines):
-        if i < scan_end and not _looks_like_record_line(line) and SETTING_LINE_RE.match(line):
-            continue
-        kept.append(line)
-    with open(path, "w", encoding="utf-8") as f:
-        f.write("\n".join(kept).rstrip() + "\n")
-    if record:
-        append_record(work_root, f"重置所有选项 (原含: {', '.join(settings.keys())})")
+    with _settings_lock(work_root):
+        settings = load_settings(work_root)
+        content = _read_text(path)
+        lines = content.splitlines()
+        stop = _record_index(lines)
+        scan_end = len(lines) if stop is None else stop
+        kept: List[str] = []
+        for i, line in enumerate(lines):
+            if i < scan_end and not _looks_like_record_line(line) and SETTING_LINE_RE.match(line):
+                continue
+            kept.append(line)
+        _atomic_write_text(path, "\n".join(kept).rstrip() + "\n")
+        if record:
+            append_record(work_root, f"重置所有选项 (原含: {', '.join(settings.keys())})")
     return list(settings.keys())
 
 
@@ -746,24 +833,26 @@ def syncable_project_settings(work_root: str) -> Dict[str, str]:
 def sync_global_settings(work_root: str, fields: Dict[str, str]) -> str:
     repo_root = repo_root_from(work_root)
     global_path = global_settings_path(repo_root)
-    os.makedirs(os.path.dirname(global_path) or ".", exist_ok=True)
-    content = _read_text(global_path)
-    lines = content.splitlines()
-    for key, value in fields.items():
-        pattern = re.compile(rf"^(\s*[-*]\s*(?:\*\*)?{re.escape(key)}(?:\*\*)?\s*[:：]\s*)(.+)$")
-        replaced = False
-        for i, line in enumerate(lines):
-            m = pattern.match(line)
-            if m:
-                lines[i] = f"{m.group(1)}{value}"
-                replaced = True
-                break
-        if not replaced:
-            if lines and lines[-1].strip():
-                lines.append("")
-            lines.append(f"- {key}: {value}")
-    with open(global_path, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines).rstrip() + "\n")
+    global_dir = os.path.dirname(global_path) or "."
+    os.makedirs(global_dir, exist_ok=True)
+    # 全局默认文件可被不同项目的并行 batch agent 同时写 → 独立锁（按 global 文件所在目录）+ 原子写。
+    with _settings_lock(global_dir, lockname="_global设置.lock"):
+        content = _read_text(global_path)
+        lines = content.splitlines()
+        for key, value in fields.items():
+            pattern = re.compile(rf"^(\s*[-*]\s*(?:\*\*)?{re.escape(key)}(?:\*\*)?\s*[:：]\s*)(.+)$")
+            replaced = False
+            for i, line in enumerate(lines):
+                m = pattern.match(line)
+                if m:
+                    lines[i] = f"{m.group(1)}{value}"
+                    replaced = True
+                    break
+            if not replaced:
+                if lines and lines[-1].strip():
+                    lines.append("")
+                lines.append(f"- {key}: {value}")
+        _atomic_write_text(global_path, "\n".join(lines).rstrip() + "\n")
     return global_path
 
 

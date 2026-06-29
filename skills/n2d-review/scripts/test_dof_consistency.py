@@ -75,3 +75,47 @@ def test_analyze_flags_intra_scene_dof_outlier(tmp_path: Path, monkeypatch):
     assert res["available"] is True
     warns = [s for s in res["shots"] if s["verdict"] == "warn"]
     assert any(s["png"] == "EP01_CLIP03.png" for s in warns)   # 浅景深镜被标横跳
+
+
+# ── dof_profile 景深锁（DOFL·#7）：实测景深比 vs 注册 depth_intent ──
+# 运行：cd skills/n2d-review/scripts && python -m pytest test_dof_consistency.py -k dof_profile
+def test_norm_dof_intent():
+    assert dof._norm_dof_intent("shallow") == "shallow"
+    assert dof._norm_dof_intent("浅景深") == "shallow"
+    assert dof._norm_dof_intent("深焦") == "deep"
+    assert dof._norm_dof_intent("medium") == "medium"
+    assert dof._norm_dof_intent("blurry") == ""  # 无法识别
+
+
+def test_dof_intent_violation():
+    assert dof.dof_intent_violation(0.95, "shallow") is not None  # 登记浅景深·实测背景偏清=矛盾
+    assert dof.dof_intent_violation(0.4, "shallow") is None       # 浅景深·背景虚=一致
+    assert dof.dof_intent_violation(0.3, "deep") is not None      # 登记深焦·实测背景糊=矛盾
+    assert dof.dof_intent_violation(0.9, "deep") is None
+    assert dof.dof_intent_violation(0.95, "medium") is None       # medium 不强判
+    assert dof.dof_intent_violation(0.95, "blurry") is None       # 无法识别→不判
+
+
+def _patch_dofl(monkeypatch, registry, smap, ratio):
+    monkeypatch.setattr(dof.scn, "_probe_pillow", lambda: True)
+    monkeypatch.setattr(dof.scn, "_load_asset_registry", lambda root: registry)
+    monkeypatch.setattr(dof.scn, "_scene_of_shot", lambda root, ep: smap)
+    monkeypatch.setattr(dof, "_dof_proxy", lambda path: ratio)
+
+
+def test_dof_profile_rows_flags_contradiction(monkeypatch):
+    reg = {"LOC_01": {"id": "LOC_01", "name": "大殿", "scene_dna": {"dof_profile": {"depth_intent": "shallow"}}}}
+    _patch_dofl(monkeypatch, reg, {"a.png": "大殿"}, 0.95)  # 登记浅景深·实测背景偏清
+    rows = dof.dof_profile_rows("r", "第1集")
+    assert len(rows) == 1 and rows[0]["verdict"] == "warn" and rows[0]["intent"] == "shallow"
+
+
+def test_dof_profile_rows_pass_when_consistent(monkeypatch):
+    reg = {"LOC_01": {"id": "LOC_01", "name": "大殿", "constraints": {"dof_profile": {"depth_intent": "deep"}}}}
+    _patch_dofl(monkeypatch, reg, {"a.png": "大殿"}, 0.9)  # 深焦·背景清=一致；也验 constraints 下也认
+    assert dof.dof_profile_rows("r", "第1集") == []
+
+
+def test_dof_profile_rows_skips_unregistered(monkeypatch):
+    _patch_dofl(monkeypatch, {}, {"a.png": "无名"}, 0.95)
+    assert dof.dof_profile_rows("r", "第1集") == []

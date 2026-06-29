@@ -1,6 +1,8 @@
 # novel-score 评分细则(维度 / 权重档 / 档位 / 判定)
 
-> 百分制。每维先打 **1-10 原始分**,再 ×(权重/10) 汇成百分。题材热度维度必须对标当次联网拉取的 `评分/题材热榜_<date>.md`,不是泛评。
+> 百分制。每维先打 **1-10 原始分**,再 ×(权重/10) 汇成百分。题材热度维度必须对标当次联网拉取的 `评分/market_baseline_*.json`、`评分/题材热榜_<date>.md` 和必要的 `资料/research_sources.json`,不是泛评。
+
+> **多判官去偏（用 ≥2 个 LLM 判官给同一稿打分 / 成对比稿时必接）**：LLM 判官有 position bias + 单模型偏（LitBench arXiv 2507.00769 / dual-judge）。量规分按判官内 z 归一去宽严偏再聚合、判官间高方差准则降信；成对比稿要 position-swap（两序判同一赢家才算）+ dual-judge 一致才采纳。确定性执行层已就绪：`skills/novel/_lib/judge_protocol.py`（`aggregate_rubric` / `debias_verdict`），见 `novel-supervisor/references/critic-loop.md` 判官去偏协议。单判官单序直接采信的分数视为 low_confidence。
 
 ## 七维定义 + 看什么(1-10 锚点)
 

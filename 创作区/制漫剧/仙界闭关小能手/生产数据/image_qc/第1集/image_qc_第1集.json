@@ -1,0 +1,570 @@
+{
+  "asset_face_policy": {
+    "available": true,
+    "findings": [],
+    "notes": [
+      "资产 LOC_HOUSHAN_QIANTAN：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_HEI_TAO_PEN：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_SHUI_TONG：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_TIE_WAN：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_KEY_LOCK：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。"
+    ]
+  },
+  "asset_human_review": [],
+  "asset_lifecycle": {
+    "available": true,
+    "checked": 8,
+    "findings": [],
+    "notes": [],
+    "structured": 0
+  },
+  "carried_identity_anchors": {
+    "available": true,
+    "findings": [],
+    "notes": []
+  },
+  "checks": {
+    "anchors": {
+      "anchors": [],
+      "available": true,
+      "notes": []
+    },
+    "face": {
+      "arbiter": null,
+      "available": true,
+      "characters": {},
+      "encoder": "arcface_buffalo_l",
+      "fidelity_gate": "absent",
+      "margin": 0.08,
+      "mode": "insightface",
+      "notes": [
+        "无 fidelity-gate（未跑 vlm_verify --write）——一致性均值可能被'稳定地错'的镜抬高；如需剔除崩 canonical 的镜，先跑 vlm_verify --write 落 canonical 通过表再复审。"
+      ],
+      "shots": []
+    },
+    "hair": {
+      "available": true,
+      "characters": {},
+      "margin": 0.08,
+      "min_group": 3,
+      "notes": [],
+      "rel_margin": 0.15,
+      "shots": []
+    },
+    "multimodal": {
+      "asset_ref_source": "asset_registry",
+      "asset_registry_assets": [
+        {
+          "id": "LOC_HOUSHAN_QIANTAN",
+          "name": "后山山泉浅潭",
+          "type": "location"
+        },
+        {
+          "id": "LOC_WAIMEN_JIUYUAN",
+          "name": "太虚门外门旧院/秀竹峰山门回忆场",
+          "type": "location"
+        },
+        {
+          "id": "LOC_ZAYI_DADIAN",
+          "name": "秀竹峰杂役大殿",
+          "type": "location"
+        },
+        {
+          "id": "LOC_ZAYI_YUAN",
+          "name": "秀竹峰杂役院与空房",
+          "type": "location"
+        },
+        {
+          "id": "PROP_HEI_TAO_PEN",
+          "name": "黑陶破盆",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_KEY_LOCK",
+          "name": "旧钥匙与生锈铁锁",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_SHUI_TONG",
+          "name": "水桶与扁担",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_TIE_WAN",
+          "name": "铁碗/钥匙铁锁",
+          "type": "prop"
+        }
+      ],
+      "available": true,
+      "character_asset_source": "identity_registry",
+      "character_assets": [
+        "贺平生",
+        "CHAR_HE_PINGSHENG",
+        "贺平生_脸部特写.png', 'status': 'planned'}]",
+        "贺平生_幼年",
+        "贺平生_幼年_脸部特写.png', 'status': 'planned'}]",
+        "张老大",
+        "CHAR_ZHANG_LAODA",
+        "张老大_脸部特写.png', 'status': 'planned'}]",
+        "韩老三",
+        "CHAR_HAN_LAOSAN",
+        "韩老三_脸部特写.png', 'status': 'planned'}]",
+        "江剑",
+        "CHAR_JIANG_JIAN",
+        "江剑_背影",
+        "江剑_侧背.png', 'status': 'planned'}]",
+        "太虚门长老",
+        "CHAR_TAIXUMEN_ZHANGLAO",
+        "太虚门长老_回忆背影",
+        "太虚门长老_背影",
+        "太虚门长老_侧背.png', 'status': 'planned'}]",
+        "贺三杰",
+        "CHAR_HE_SANJIE",
+        "贺三杰_回忆影",
+        "贺三杰_侧影.png', 'status': 'planned'}]",
+        "群杂役",
+        "CROWD_ZAYI",
+        "群杂役_虚化",
+        "群杂役_群像sheet.png', 'status': 'planned'}]",
+        "太虚门远景修士剪影",
+        "CROWD_TAIXU_CULTIVATOR",
+        "远景修士剪影",
+        "远景修士剪影_sheet.png', 'status': 'planned'}]"
+      ],
+      "embedding_backend": "rgb_hist+dhash",
+      "episode": "第1集",
+      "groups": {},
+      "kind": "n2d_multimodal_consistency_report",
+      "notes": [],
+      "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+      "shots": [],
+      "verdicts": [],
+      "version": 1
+    },
+    "outfit": {
+      "available": true,
+      "characters": {},
+      "margin": 0.1,
+      "min_group": 3,
+      "notes": [],
+      "rel_margin": 0.15,
+      "shots": []
+    },
+    "scene": {
+      "available": true,
+      "groups": {},
+      "impact_physics": [],
+      "notes": [],
+      "shots": []
+    },
+    "seam": {
+      "available": false,
+      "contradictions": [],
+      "notes": [],
+      "seams": []
+    }
+  },
+  "cross_episode_face_drift": {
+    "available": true,
+    "entries": [],
+    "history_chars": 0,
+    "notes": [
+      "无跨集历史（首集或降级精度未累积均值）"
+    ]
+  },
+  "episode": "第1集",
+  "face_anchor_lighting": {
+    "available": true,
+    "flagged": []
+  },
+  "face_anchor_quality": {
+    "available": true,
+    "checked": 0,
+    "findings": [],
+    "notes": []
+  },
+  "face_human_review": [],
+  "face_reference_coverage": {
+    "available": true,
+    "covered": 0,
+    "face_mode": "insightface",
+    "missing": [],
+    "notes": [],
+    "pending": [],
+    "precision_level": "full",
+    "required": 0,
+    "unclassified": [],
+    "verdict": "ok"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "出图/共享/asset_registry.json": "dac564d71bdf5a9e6f0a806e1db73c04afbe02364b27ee52612db9d6c3b088bc",
+      "出图/共享/identity_registry.json": "f6541c4233e4641e3da10154dcdbea5eecd0415b42029845e642771f14703617",
+      "出图/第1集/prompt/00_总览.md": "29c4df582a437e1b0d75a1ea1c7128074041962ae39ccc141f19af351d706f5a",
+      "出图/第1集/prompt/01_分镜出图.md": "2d346f58cdbcdde5dd698cdcba180038a8be3f752980b842dfd9e43b866d3e14",
+      "图片/Clip04_两缸水和空屋.png": null,
+      "图片/Clip05_夜挑五趟.png": null,
+      "图片/Clip06_水底破盆.png": null,
+      "图片/Clip07_盆底微光.png": null,
+      "生产数据/image_qc/第1集/prop_shape_confirmations.json": null
+    },
+    "sha": "0e00ffab0fc65f21dbda8bfbaea1f0f59a8a06a37fa5508bad19002c7d3c8821"
+  },
+  "kind": "n2d_image_qc",
+  "lint": {
+    "available": true,
+    "character_shots": [],
+    "findings": [
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "Clip_01 黑殿审问 🔑前3秒冲突：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "camera_gaze_portrait_bias",
+        "level": "warn",
+        "msg": "Clip_01 黑殿审问 🔑前3秒冲突：本镜含清晰正脸肖像倾向却无视线防呆句——除非是 POV/对观众特写，角色不应正对镜头摆拍/对视；改可辨侧脸/过肩/三分之二，视线锁场内目标（对手/对话对象/所视之物）。"
+      },
+      {
+        "code": "asset_must_not_have_not_propagated",
+        "level": "block",
+        "msg": "Clip_04 两缸水和空屋：资产 `PROP_KEY_LOCK` 在 asset_registry 登记了 must_not_have=['现代防盗锁', '金色宝物', '法器符文', '巨大链锁', '多套重复']，但本镜 prompt 未继承禁项 ['现代防盗锁', '金色宝物', '法器符文', '巨大链锁', '多套重复']；关键道具禁形必须写进负向/结构约束。"
+      },
+      {
+        "code": "asset_must_not_have_not_propagated",
+        "level": "block",
+        "msg": "Clip_04 两缸水和空屋：资产 `PROP_TIE_WAN` 在 asset_registry 登记了 must_not_have=['现代锁具', '金色宝物', '瓷碗', '多套重复']，但本镜 prompt 未继承禁项 ['现代锁具', '金色宝物', '瓷碗', '多套重复']；关键道具禁形必须写进负向/结构约束。"
+      },
+      {
+        "code": "asset_must_not_have_not_propagated",
+        "level": "block",
+        "msg": "Clip_05 夜挑五趟：资产 `PROP_SHUI_TONG` 在 asset_registry 登记了 must_not_have=['现代塑料桶', '金属水桶', '单只桶漂移', '华丽法器化']，但本镜 prompt 未继承禁项 ['现代塑料桶', '金属水桶', '单只桶漂移', '华丽法器化']；关键道具禁形必须写进负向/结构约束。"
+      },
+      {
+        "code": "asset_must_not_have_not_propagated",
+        "level": "block",
+        "msg": "Clip_06 水底破盆 🔑核心机缘：资产 `PROP_HEI_TAO_PEN` 在 asset_registry 登记了 must_not_have=['强光柱', '金边', '符文文字', '玉石质感', '现代塑料盆', '多盆重复']，但本镜 prompt 未继承禁项 ['强光柱', '符文文字', '玉石质感', '现代塑料盆', '多盆重复']；关键道具禁形必须写进负向/结构约束。"
+      },
+      {
+        "code": "asset_must_not_have_not_propagated",
+        "level": "block",
+        "msg": "Clip_06 水底破盆 🔑核心机缘：资产 `PROP_SHUI_TONG` 在 asset_registry 登记了 must_not_have=['现代塑料桶', '金属水桶', '单只桶漂移', '华丽法器化']，但本镜 prompt 未继承禁项 ['现代塑料桶', '金属水桶', '单只桶漂移', '华丽法器化']；关键道具禁形必须写进负向/结构约束。"
+      },
+      {
+        "code": "asset_must_not_have_not_propagated",
+        "level": "block",
+        "msg": "Clip_07 盆底微光 🔑集尾硬断：资产 `PROP_HEI_TAO_PEN` 在 asset_registry 登记了 must_not_have=['强光柱', '金边', '符文文字', '玉石质感', '现代塑料盆', '多盆重复']，但本镜 prompt 未继承禁项 ['玉石质感', '多盆重复']；关键道具禁形必须写进负向/结构约束。"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "Clip_07 盆底微光 🔑集尾硬断：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "camera_gaze_portrait_bias",
+        "level": "warn",
+        "msg": "Clip_07 盆底微光 🔑集尾硬断：本镜含清晰正脸肖像倾向却无视线防呆句——除非是 POV/对观众特写，角色不应正对镜头摆拍/对视；改可辨侧脸/过肩/三分之二，视线锁场内目标（对手/对话对象/所视之物）。"
+      }
+    ],
+    "notes": [],
+    "shots_linted": 8
+  },
+  "prohibited_face_patch": {
+    "available": true,
+    "notes": [
+      "未发现最新落档事件来自本地贴脸修复。"
+    ],
+    "outputs": [],
+    "verdict": "ok"
+  },
+  "prop_shape_review": {
+    "available": true,
+    "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+    "confirmed": 0,
+    "pending": 6,
+    "targets": [
+      {
+        "asset": "PROP_KEY_LOCK",
+        "asset_name": "旧钥匙与生锈铁锁",
+        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "Clip_04 两缸水和空屋",
+        "must_not_have": [
+          "现代防盗锁",
+          "金色宝物",
+          "法器符文",
+          "巨大链锁",
+          "多套重复"
+        ],
+        "png": "图片/Clip04_两缸水和空屋.png",
+        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_旧钥匙与生锈铁锁.png",
+        "scale": "少年单手可握，锁体小，适合低矮旧房木门。",
+        "shot": "Clip_04",
+        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_KEY_LOCK_Clip_04_Clip04_两缸水和空屋_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_TIE_WAN",
+        "asset_name": "铁碗/钥匙铁锁",
+        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "Clip_04 两缸水和空屋",
+        "must_not_have": [
+          "现代锁具",
+          "金色宝物",
+          "瓷碗",
+          "多套重复"
+        ],
+        "png": "图片/Clip04_两缸水和空屋.png",
+        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_铁碗钥匙铁锁.png",
+        "scale": "铁碗可手持，钥匙铁锁为小型杂役房门物件。",
+        "shot": "Clip_04",
+        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_TIE_WAN_Clip_04_Clip04_两缸水和空屋_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_SHUI_TONG",
+        "asset_name": "水桶与扁担",
+        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "Clip_05 夜挑五趟",
+        "must_not_have": [
+          "现代塑料桶",
+          "金属水桶",
+          "单只桶漂移",
+          "华丽法器化"
+        ],
+        "png": "图片/Clip05_夜挑五趟.png",
+        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_夜挑五趟.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_水桶与扁担.png",
+        "scale": "少年挑水工具，桶身到少年膝上附近。",
+        "shot": "Clip_05",
+        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_05_Clip05_夜挑五趟_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_HEI_TAO_PEN",
+        "asset_name": "黑陶破盆",
+        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "Clip_06 水底破盆 🔑核心机缘",
+        "must_not_have": [
+          "强光柱",
+          "金边",
+          "符文文字",
+          "玉石质感",
+          "现代塑料盆",
+          "多盆重复"
+        ],
+        "png": "图片/Clip06_水底破盆.png",
+        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_黑陶破盆.png",
+        "scale": "普通脸盆大小，可被十四岁少年夹在臂弯。",
+        "shot": "Clip_06",
+        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_06_Clip06_水底破盆_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_SHUI_TONG",
+        "asset_name": "水桶与扁担",
+        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "Clip_06 水底破盆 🔑核心机缘",
+        "must_not_have": [
+          "现代塑料桶",
+          "金属水桶",
+          "单只桶漂移",
+          "华丽法器化"
+        ],
+        "png": "图片/Clip06_水底破盆.png",
+        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_水桶与扁担.png",
+        "scale": "少年挑水工具，桶身到少年膝上附近。",
+        "shot": "Clip_06",
+        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_06_Clip06_水底破盆_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_HEI_TAO_PEN",
+        "asset_name": "黑陶破盆",
+        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "Clip_07 盆底微光 🔑集尾硬断",
+        "must_not_have": [
+          "强光柱",
+          "金边",
+          "符文文字",
+          "玉石质感",
+          "现代塑料盆",
+          "多盆重复"
+        ],
+        "png": "图片/Clip07_盆底微光.png",
+        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip07_盆底微光.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_黑陶破盆.png",
+        "scale": "普通脸盆大小，可被十四岁少年夹在臂弯。",
+        "shot": "Clip_07",
+        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_07_Clip07_盆底微光_compare.png",
+        "stitched": true
+      }
+    ],
+    "total": 6
+  },
+  "qc_environment": {
+    "face_mode": "insightface",
+    "jump_reason": "视觉质检为降级结果，正式进 video 前需补依赖重跑到 full 精度",
+    "jump_to_stage": "image",
+    "missing_or_degraded": [
+      "接缝接力"
+    ],
+    "precision_level": "degraded",
+    "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
+    "recommended_install": "优先用 facefusion conda env：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。若无该 env，用 Python 3.10-3.12 conda env；系统 Python 3.14 不作为重视觉依赖首选。",
+    "user_notice": "图片质检环境：degraded；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：优先用 facefusion conda env：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。若无该 env，用 Python 3.10-3.12 conda env；系统 Python 3.14 不作为重视觉依赖首选。；当前应停在/回退：image；原因：视觉质检为降级结果，正式进 video 前需补依赖重跑到 full 精度"
+  },
+  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+  "semantic_drift": {
+    "available": true,
+    "compared": 0,
+    "findings": [],
+    "floor": 0.55
+  },
+  "shot_scale_contract": {
+    "available": true,
+    "checked": 0,
+    "findings": []
+  },
+  "state_ledger": {
+    "advise": false,
+    "available": true,
+    "ledger_present": false,
+    "markers": [],
+    "not_injected_markers": []
+  },
+  "style_attribution": {
+    "anchor_status": "missing",
+    "available": true,
+    "checked": 0,
+    "findings": [
+      {
+        "code": "style_anchor_missing",
+        "level": "warn",
+        "msg": "风格归属无法机检：style_contract 未登记风格锚（style_anchor）。请在定妆阶段出 1–2 张「国漫写实」风格锚图、登记进 style_contract.style_anchor，后续每集出图帧才能对锚做风格归属佐证。当前降级为人判：逐图核对是否踩 风格禁忌：低幼Q版、欧美卡通脸、照片级毛孔、塑料3D、游戏CG感、跨镜线条粗细跳变、破盆强光神器化。"
+      }
+    ],
+    "intent": {
+      "anchors": [],
+      "style_name": "国漫写实",
+      "taboos": [
+        "低幼Q版",
+        "欧美卡通脸",
+        "照片级毛孔",
+        "塑料3D",
+        "游戏CG感",
+        "跨镜线条粗细跳变",
+        "破盆强光神器化"
+      ]
+    }
+  },
+  "summary": {
+    "advisory": 4,
+    "by_check": {
+      "anchors": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "face": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "hair": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "lint": {
+        "block": 6,
+        "noface": 0,
+        "ok": 0,
+        "warn": 4
+      },
+      "multimodal": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "outfit": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "prohibited_face_patch": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "prop_shape_review": {
+        "block": 6,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "scene": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "seam": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      }
+    },
+    "degraded": true,
+    "hard_blocks": 12,
+    "unavailable_visual_checks": [
+      "seam"
+    ],
+    "verdict": "block"
+  },
+  "tone_light_contract": {
+    "available": false,
+    "checked": 0,
+    "findings": [],
+    "intent": {
+      "brightness": null,
+      "evidence": "杂役大殿和空屋灰褐冷调；后山夜潭冷蓝月光；破盆只给极弱微光，不给神器光柱。",
+      "warmth": "cool"
+    },
+    "notes": [
+      "本集无可测出图帧（或 Pillow 不可用）——色调/光位像素兜底跳过。"
+    ]
+  },
+  "version": 1,
+  "vlm_consistency": {
+    "available": true,
+    "block": 0,
+    "block_floor": 0.6,
+    "findings": [],
+    "judged": 0,
+    "shot_canonical": {},
+    "votes": 1
+  }
+}

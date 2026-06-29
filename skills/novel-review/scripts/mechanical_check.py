@@ -274,7 +274,9 @@ def extract_terms_from_settings(root):
             continue
         text = read(path)
         for m in re.finditer(r"[《「『`“]([^》」』`”]{2,24})[》」』`”]", text):
-            terms.add(m.group(1).strip())
+            cand = _strip_md(m.group(1).strip())
+            if _term_like(cand):  # 「」里多是对白/口吻样本，过 _term_like 滤掉句子片段
+                terms.add(cand)
         for line in text.splitlines():
             raw = line.strip()
             if not raw or raw.startswith(("---", "|---")):
@@ -282,11 +284,11 @@ def extract_terms_from_settings(root):
             if raw.startswith("|"):
                 cols = [c.strip() for c in raw.strip("|").split("|")]
                 if cols and cols[0] not in ("字段", "项目", "术语", "名称", "角色", "锚点 ID"):
-                    maybe = re.sub(r"\s+", "", cols[0])
+                    maybe = _strip_md(re.sub(r"\s+", "", cols[0]))
                     if _term_like(maybe):
                         terms.add(maybe)
             elif raw.startswith(("- ", "* ")):
-                head = re.split(r"[:：—-]", raw[2:].strip(), 1)[0].strip()
+                head = _strip_md(re.split(r"[:：—-]", raw[2:].strip(), maxsplit=1)[0].strip())
                 if _term_like(head):
                     terms.add(head)
     anchor_path = os.path.join(setting_dir, "锚点表.json")
@@ -299,18 +301,42 @@ def extract_terms_from_settings(root):
     return sorted(terms, key=lambda x: (len(x), x))
 
 
+def _strip_md(value):
+    """剥掉 markdown 强调标记与首部清单/编号/复选框记号，露出可能的术语本体。
+
+    设定文件常把术语写成 `- **烈阳花**：…` 或 `- [ ] 2. 家世…`；不剥这些前缀，
+    抽出来的就是 `**烈阳花**` / `[ ] 2. 家世…` 这类带标记的脏串（术语表噪声根因）。
+    """
+    value = (value or "").strip()
+    value = re.sub(r"^[-*+]\s*", "", value)        # 列表符
+    value = re.sub(r"^\[[ xX]?\]\s*", "", value)   # 复选框 [ ] [x]
+    value = re.sub(r"^\d+\s*[.、)]\s*", "", value)  # 编号 1. 2、 3)
+    return value.strip("`*_~ ").strip()
+
+
+# 术语本体里出现这些字符 → 句子片段/带标记标题/短语标签，不是规范术语
+_NON_TERM_CHARS = re.compile(r"[\s*`_~\[\](){}（）【】《》「」：:；;，,。.！!？?、…—#|/\\\"'“”·•]")
+# 含这些功能词 → 描述性短语而非名词术语（如 “气运即金手指即催命符”）
+_PHRASE_WORDS = re.compile(r"[的即是和与或把被让之者]")
+
+
 def _term_like(value):
     if not (2 <= len(value) <= 18):
         return False
     if value in {"首现章", "复用范围", "代价或约束", "说明", "状态", "标题"}:
+        return False
+    if _NON_TERM_CHARS.search(value) or _PHRASE_WORDS.search(value):
         return False
     return bool(re.search(r"[\u4e00-\u9fffA-Za-z0-9]", value))
 
 
 def _collect_json_terms(value, terms):
     if isinstance(value, dict):
+        # 只从「实体/在场人」类字段抽术语（多是人名/地名列表）；event/known/time 等是散文，
+        # 拆出来全是句子片段，污染术语表——这些字段的字符串值不当术语，仅在其为 dict/list 时递归。
+        entity_keys = {"present_with", "在场人", "在场", "characters", "角色", "named", "names"}
         for key, val in value.items():
-            if key in {"event", "事件", "time", "时间", "present_with", "在场人", "known", "已知情报"}:
+            if key in entity_keys:
                 _collect_json_terms(val, terms)
             elif isinstance(val, (dict, list)):
                 _collect_json_terms(val, terms)
@@ -327,6 +353,28 @@ def _collect_json_terms(value, terms):
 def build_shingles(text, n=24):
     text = re.sub(r"\s+", "", text)
     return {text[i:i + n] for i in range(0, max(0, len(text) - n + 1))}
+
+
+def plagiarism_check_policy(root):
+    """Return (enabled, reason) for source-copy checks.
+
+    `原作.txt` is an external-source plagiarism baseline for derivative projects,
+    but an imported/canonical manuscript may also be split into `章节/`. In that
+    case every chapter naturally matches the canonical source, so the project
+    must opt out explicitly via metadata.
+    """
+    meta = load_json(os.path.join(root, "_meta.json"), {}) or {}
+    review = meta.get("review") if isinstance(meta.get("review"), dict) else {}
+    mode = str(
+        review.get("plagiarism_check")
+        or meta.get("plagiarism_check")
+        or ""
+    ).strip().lower()
+    if mode in {"skip_canonical_source", "canonical_source", "off", "disabled"}:
+        return False, f"_meta.review.plagiarism_check={mode}"
+    if str(meta.get("kind") or "").strip().lower() == "import":
+        return False, "_meta.kind=import（章节为规范源拆分稿）"
+    return True, "enabled"
 
 
 def chapter_number_from_path(path):
@@ -403,9 +451,12 @@ def main():
 
     # 原文照搬：预载原作滑窗集
     src_shingles = None
+    plagiarism_enabled, plagiarism_reason = plagiarism_check_policy(args.root)
     src_path = os.path.join(args.root, "原作.txt")
-    if not args.no_plagiarism and os.path.exists(src_path):
+    if not args.no_plagiarism and plagiarism_enabled and os.path.exists(src_path):
         src_shingles = build_shingles(read(src_path), 24)
+    elif args.no_plagiarism:
+        plagiarism_reason = "cli --no-plagiarism"
 
     findings = []
     pov_density = {}
@@ -485,6 +536,8 @@ def main():
         print(f"范围：第{rng[0]}-{rng[1]}章")
     print(f"章节数：{len(files)}（{min(nums) if nums else '-'}–{max(nums) if nums else '-'}）"
           f" | POV：{args.pov or '未指定'} | 原文照搬检查：{'开' if src_shingles is not None else '关'}")
+    if src_shingles is None and os.path.exists(src_path):
+        print(f"原文照搬检查关闭原因：{plagiarism_reason}")
     print(f"字数带宽：{min_words}-{max_words}（{wordcount_source}）")
     order = {"🔴": 0, "🟡": 1, "🟢": 2}
     findings.sort(key=lambda x: (order.get(x["severity"], 9), x["chapter"]))
@@ -518,6 +571,11 @@ def main():
         "wordcount_band_source": wordcount_source,
         "findings": findings,
         "counts": counts,
+        "plagiarism_check": {
+            "enabled": src_shingles is not None,
+            "reason": plagiarism_reason,
+            "source_path": "原作.txt" if os.path.exists(src_path) else "",
+        },
         "pov_density": pov_density,
         "term_matrix": term_matrix,
         "terms_source": {

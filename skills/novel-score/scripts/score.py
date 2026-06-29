@@ -31,10 +31,14 @@ from report_snapshot import (  # noqa: E402  章号/哈希纯函数走 _lib，�
 )
 
 try:
-    import contract
+    import novel_contract as contract
 except ImportError:
     # Fallback if contract is not reachable via path
     contract = None
+try:
+    import semantic_job
+except ImportError:  # pragma: no cover - optional orchestration helper
+    semantic_job = None
 try:
     from report_snapshot import snapshot_files, validate_snapshot
     from waivers import append_waiver, baseline_freshness_scope, make_waiver
@@ -44,6 +48,11 @@ except ImportError:
     make_waiver = None
     snapshot_files = None
     validate_snapshot = None
+
+try:
+    from friction_log import log_friction  # noqa: E402  novel/_lib 单一真值源
+except ImportError:
+    log_friction = None
 
 DIMENSIONS = [
     ("topic_heat", "题材热度匹配"),
@@ -68,8 +77,9 @@ TITLE_CHECK_DIMENSIONS = [
 TITLE_RENAME_THRESHOLD = 15
 
 # 短剧改编潜力体检（附加体检项 · 不计入百分制总分）：5 维各 1-5 分，满分 25。
-# 2026 网文第一变现路径是短剧改编（番茄年度改编 7000+、改编成功率 >40%）；本附检评估「这部本身
-# 可改编度」，仅在目标平台命中短剧/漫剧时强制，弱则路由 novel-condense（漫剧版）。详见 SKILL.md。
+# 短剧/漫剧改编是否是当前目标平台的高优先级变现路径，必须以 `评分/market_baseline_*.json`
+# 和 `资料/research_sources.json` 为准；本附检只评估「这部本身可改编度」，仅在目标平台命中
+# 短剧/漫剧时强制，弱则路由 novel-condense（漫剧版）。详见 SKILL.md。
 ADAPTATION_CHECK_DIMENSIONS = [
     ("visual_scene", "可视化场景密度"),
     ("hook_cinematic", "强钩可镜头化"),
@@ -140,6 +150,22 @@ def _resolve_platform_mode(raw):
 
 
 SHORT_DRAMA_KEYWORDS = ("红果", "抖音", "漫剧", "短剧")
+
+# 短剧/漫剧「平台覆盖」证据保质期：与日榜（expires_after_days，默认 21）解耦。
+# 红果/抖音漫剧无公开日榜网页，平台覆盖只能靠 MAU/题材趋势/审核新规等按月·季发布的
+# 行业报告——用 21 天日榜窗口卡覆盖闸会让它「永远满足不了」，逼每次评分都 stale-waiver。
+# 见 collect_market_baseline.coverage_window（两处刻意分包 fork，保持一致）。
+COVERAGE_EVIDENCE_MAX_AGE_DAYS = 90
+
+
+def coverage_window(expires_after):
+    try:
+        base = int(expires_after or 0)
+    except (TypeError, ValueError):
+        base = 0
+    return max(base, COVERAGE_EVIDENCE_MAX_AGE_DAYS)
+
+
 REFERENCE_DISTRIBUTION_GLOB = os.path.join("评分", "reference_distribution*.json")
 REFERENCE_ALLOWED_RIGHTS = {
     "public-domain",
@@ -325,7 +351,9 @@ def baseline_freshness(baseline):
             "expires_on": expires_on.isoformat(),
             "reason": "market baseline 的有效证据自身已过期或缺少证据日期；请重新抓取来源或补当天/近期 manual_evidence。",
         }
-    if not baseline_has_short_drama_coverage(baseline, require_fresh=True, expires_after=expires_after):
+    if not baseline_has_short_drama_coverage(
+        baseline, require_fresh=True, expires_after=coverage_window(expires_after)
+    ):
         return {
             "status": "coverage_gap",
             "blocking": True,
@@ -645,6 +673,7 @@ def first_party_genre_text(summary):
 
 READER_PANEL_REL_PATH = os.path.join("评分", "reader_panel_signals.json")
 READER_TELEMETRY_REL_PATH = os.path.join("评分", "reader_telemetry_summary.json")
+AB_TAKE_RESULTS_REL_PATH = os.path.join("评分", "ab_take_results.json")
 
 
 def load_reader_panel_signals(root):
@@ -679,6 +708,123 @@ def load_reader_telemetry_summary(root):
     if not isinstance(data, dict) or data.get("kind") != "novel_reader_telemetry_summary":
         return None
     return data
+
+
+def load_ab_take_results(root):
+    path = os.path.join(root, AB_TAKE_RESULTS_REL_PATH)
+    if not os.path.isfile(path):
+        return None
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return None
+    return data if isinstance(data, (dict, list)) else None
+
+
+def _num(value, default=None):
+    if isinstance(value, (int, float)):
+        return float(value)
+    try:
+        if value not in (None, ""):
+            return float(value)
+    except (TypeError, ValueError):
+        pass
+    return default
+
+
+def summarize_ab_take_results(results):
+    if not results:
+        return None
+    payload = results[-1] if isinstance(results, list) and results else results
+    if not isinstance(payload, dict):
+        return None
+    uplift = _num(
+        payload.get("completion_uplift")
+        or payload.get("uplift_completion_rate")
+        or payload.get("winner_uplift")
+        or payload.get("uplift")
+    )
+    return {
+        "kind": payload.get("kind") or "novel_ab_take_results",
+        "winner": payload.get("winner") or payload.get("winning_variant") or "",
+        "metric": payload.get("metric") or payload.get("primary_metric") or "completion_rate",
+        "uplift": uplift,
+        "confidence": payload.get("confidence") or payload.get("significance") or "",
+        "sample_size": payload.get("sample_size") or payload.get("n") or "",
+    }
+
+
+def compute_reader_feedback_adjustment(reader_telemetry=None, reader_panel=None, ab_take_results=None):
+    components = []
+    reasons = []
+    sources = []
+
+    def add(points, reason, source):
+        if not points:
+            return
+        components.append({"points": points, "reason": reason, "source": source})
+        reasons.append(reason)
+        if source not in sources:
+            sources.append(source)
+
+    if reader_telemetry:
+        agg = reader_telemetry.get("aggregate") or {}
+        completion = _num(agg.get("completion_rate"))
+        drop = _num(agg.get("drop_rate"))
+        if completion is not None:
+            if completion >= 0.75:
+                add(4, f"真实完读率 {completion:.2f} 高于强留存线", READER_TELEMETRY_REL_PATH)
+            elif completion >= 0.60:
+                add(2, f"真实完读率 {completion:.2f} 达到可放量线", READER_TELEMETRY_REL_PATH)
+            elif completion <= 0.35:
+                add(-5, f"真实完读率 {completion:.2f} 低于硬伤线", READER_TELEMETRY_REL_PATH)
+            elif completion <= 0.50:
+                add(-3, f"真实完读率 {completion:.2f} 偏低", READER_TELEMETRY_REL_PATH)
+        if drop is not None:
+            if drop >= 0.45:
+                add(-4, f"真实弃读率 {drop:.2f} 过高", READER_TELEMETRY_REL_PATH)
+            elif drop <= 0.15:
+                add(2, f"真实弃读率 {drop:.2f} 较低", READER_TELEMETRY_REL_PATH)
+
+    if reader_panel:
+        retention = _num(reader_panel.get("retention_prior"))
+        cliche = _num(reader_panel.get("cliche_density_per_kchar"))
+        if retention is not None:
+            if retention >= 0.70:
+                add(2, f"模拟读者 retention_prior {retention:.2f} 偏强", READER_PANEL_REL_PATH)
+            elif retention <= 0.40:
+                add(-2, f"模拟读者 retention_prior {retention:.2f} 偏弱", READER_PANEL_REL_PATH)
+        if cliche is not None:
+            if cliche >= 4.0:
+                add(-2, f"模拟读者套路密度 {cliche:.2f}/千字过高", READER_PANEL_REL_PATH)
+            elif cliche >= 2.5:
+                add(-1, f"模拟读者套路密度 {cliche:.2f}/千字偏高", READER_PANEL_REL_PATH)
+
+    ab_summary = summarize_ab_take_results(ab_take_results)
+    if ab_summary and ab_summary.get("uplift") is not None:
+        uplift = float(ab_summary["uplift"])
+        metric = ab_summary.get("metric") or "completion_rate"
+        if uplift >= 0.08:
+            add(2, f"A/B take {metric} uplift {uplift:.2f} 明显为正", AB_TAKE_RESULTS_REL_PATH)
+        elif uplift >= 0.03:
+            add(1, f"A/B take {metric} uplift {uplift:.2f} 小幅为正", AB_TAKE_RESULTS_REL_PATH)
+        elif uplift <= -0.08:
+            add(-2, f"A/B take {metric} uplift {uplift:.2f} 明显为负", AB_TAKE_RESULTS_REL_PATH)
+        elif uplift <= -0.03:
+            add(-1, f"A/B take {metric} uplift {uplift:.2f} 小幅为负", AB_TAKE_RESULTS_REL_PATH)
+
+    raw_points = sum(float(item["points"]) for item in components)
+    capped = max(-8.0, min(8.0, raw_points))
+    return {
+        "points": capped,
+        "raw_points": raw_points,
+        "cap": 8,
+        "sources": sources,
+        "reasons": reasons,
+        "components": components,
+        "ab_take_results_summary": ab_summary,
+    }
 
 
 def reader_telemetry_text(summary):
@@ -748,6 +894,20 @@ def reader_panel_text(signals):
         "（权重序：真实投放战绩 > 本模拟信号 > 公榜泛化；仅作 retention 维度先验，不单独定生死。"
         "signal-only 状态只能低权重参考，不能等同完整读者面板。"
         "若 retention_prior 明显偏低且套路密度高，retention 维度下调并点明开篇疑似劝退/套路堆叠。）"
+    )
+
+
+def ab_take_results_text(results):
+    summary = summarize_ab_take_results(results)
+    if not summary:
+        return "无（尚无 A/B take 或小流量分流结果；可由 novel-feedback 回灌 评分/ab_take_results.json）"
+    uplift = summary.get("uplift")
+    uplift_s = "—" if uplift is None else f"{float(uplift):.3f}"
+    return (
+        f"A/B take 结果：winner={summary.get('winner') or '未定'}，metric={summary.get('metric')}，"
+        f"uplift={uplift_s}，confidence={summary.get('confidence') or '未填'}，"
+        f"sample_size={summary.get('sample_size') or '未填'}。"
+        "（只作为读端反馈调整的低权重补充；真实完读/弃读优先。）"
     )
 
 
@@ -845,6 +1005,16 @@ ACTION_BY_DIMENSION = {
     "plot_structure": ("novel-rewrite", "outline", "重构主线张力、反转点和中段压力线"),
     "prose": ("novel-review", "draft", "回到章节层做文风与表达修订"),
     "retention": ("novel-craft", "outline", "重排章末钩子、悬念间隔和完读节奏"),
+}
+
+MINOR_ACTION_BY_DIMENSION = {
+    "topic_heat": ("novel-promote", "positioning", "强化差异化卖点和投流标题，不重开题材"),
+    "opening_hook": ("novel-craft", "opening", "微调首章前 800 字钩子和首屏文案"),
+    "payoff_density": ("novel-craft", "outline", "补强低密度段落的承诺兑现点"),
+    "character_power": ("novel-wiki", "power_system", "复核金手指边界、代价和升级台账"),
+    "plot_structure": ("novel-review", "outline", "压缩支线并标出 12-24 集漫剧版主节点"),
+    "prose": ("novel-review", "draft", "做章节级表达打磨，减少解释性旁白"),
+    "retention": ("novel-review", "retention", "抽查章末钩子与中后段掉速风险"),
 }
 
 
@@ -954,17 +1124,16 @@ def build_next_actions(verdict, processed_scores):
         }]
 
     weak_sorted = sorted(processed_scores, key=lambda s: (s["raw_score"], -s["weight"]))
-    threshold = 7.5 if verdict == "大改" else (8.2 if verdict == "小改" else 7.0)
+    threshold = 7.5 if verdict == "大改" else (8.0 if verdict == "小改" else 7.0)
     actions = []
     for score_item in weak_sorted:
         if score_item["raw_score"] > threshold:
             continue
-        skill, stage, action = ACTION_BY_DIMENSION.get(
-            score_item["dimension"],
-            ("novel-review", "review", "按低分维度做专项修订"),
-        )
+        action_map = MINOR_ACTION_BY_DIMENSION if verdict == "小改" else ACTION_BY_DIMENSION
+        skill, stage, action = action_map.get(score_item["dimension"],
+                                              ("novel-review", "review", "按低分维度做专项修订"))
         actions.append({
-            "priority": "must" if verdict in {"大改", "小改"} else "could",
+            "priority": "must" if verdict == "大改" else ("should" if verdict == "小改" else "could"),
             "recommended_skill": skill,
             "return_to_stage": stage,
             "action": action,
@@ -1029,7 +1198,7 @@ def get_tier_verdict(total_score):
 
 def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_party=None,
                  reader_panel=None, reader_telemetry=None, reference_distribution=None, title_collision=None,
-                 task_id="__SCORE_TASK_ID__", expect_adaptation=False):
+                 ab_take_results=None, task_id="__SCORE_TASK_ID__", expect_adaptation=False):
     # This function generates a prompt for the LLM to perform the assessment
     # In a real automation, this would be sent to an LLM API.
 
@@ -1117,6 +1286,9 @@ def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_
 ## 模拟读者留存信号（novel-simulate 虚拟试读 · retention 维度先验）
 {reader_panel_text(reader_panel)}
 
+## A/B take 结果（小流量分流 · 读端反馈低权重补充）
+{ab_take_results_text(ab_take_results)}
+
 ## 参考分布（合规样本百分位 · WebNovelBench 式相对水位）
 {reference_distribution_text(reference_distribution)}
 
@@ -1169,8 +1341,15 @@ def generate_markdown_report(root, meta, result, total_score, tier, verdict, roi
         lines.append(f"| {s['dimension_label']} | {s['raw_score']} | {s['weight']} | {s['weighted_score']:.1f} |")
     
     lines.append(f"| **雷点扣分** | - | - | **{result['total_deductions']}** |")
+    adjustment = result.get("reader_feedback_adjustment") or {}
+    if adjustment:
+        lines.append(f"| **读者反馈调整** | - | - | **{float(adjustment.get('points') or 0):+.1f}** |")
     lines.append(f"| **总分** | - | - | **{total_score:.1f}** |")
     lines.append("")
+    if result.get("pre_reader_feedback_score") is not None:
+        lines.append(f"- **调整前基础分**：{float(result.get('pre_reader_feedback_score') or 0):.1f}")
+    if adjustment and adjustment.get("reasons"):
+        lines.append(f"- **读者反馈调分依据**：{'; '.join(adjustment.get('reasons') or [])}")
     lines.append(f"- **档位**：{tier}")
     lines.append(f"- **判定**：{verdict}")
     decision = result.get("production_decision") or {}
@@ -1302,6 +1481,7 @@ def main():
     first_party = summarize_first_party_genre(load_genre_ledger(ledger_path), meta.get("genre"))
     reader_telemetry = load_reader_telemetry_summary(root)
     reader_panel = load_reader_panel_signals(root)
+    ab_take_results = load_ab_take_results(root)
     reference_distribution = find_latest_reference_distribution(root)
     book_title = project_title(meta)
     title_collision = load_title_collision(root, book_title)
@@ -1357,6 +1537,7 @@ def main():
         reader_telemetry=reader_telemetry,
         reference_distribution=reference_distribution,
         title_collision=title_collision,
+        ab_take_results=ab_take_results,
         task_id="__SCORE_TASK_ID__",
         expect_adaptation=short_drama_target,
     )
@@ -1374,11 +1555,45 @@ def main():
 
     if not args.mock_assessment:
         write_score_task(root, task_path, expected_task)
+        job = None
+        if semantic_job is not None:
+            response_rel = os.path.join("评分", f"score_assessment_{expected_task['score_task_id']}.json")
+            command = [
+                "python3", "skills/novel-score/scripts/score.py", f'"{root}"',
+                "--scope", args.scope,
+                "--task", f'"{task_path}"',
+                "--mock-assessment", f'"{os.path.join(root, response_rel)}"',
+            ]
+            if args.file:
+                command.extend(["--file", f'"{os.path.abspath(args.file)}"'])
+            if args.chapter:
+                command.extend(["--chapter", str(args.chapter)])
+            if args.platform:
+                command.extend(["--platform", f'"{args.platform}"'])
+            job = semantic_job.create_job(
+                root,
+                semantic_kind="score_assessment",
+                prompt=expected_task["assessment_prompt"],
+                response_out=response_rel,
+                required_fields=["score_task_id", "scores", "deductions"],
+                schema_ref="score_assessment",
+                source_snapshot=expected_task.get("source_snapshot") or {},
+                complete_command=" ".join(command),
+                metadata={
+                    "score_task_id": expected_task["score_task_id"],
+                    "score_task_path": rel_path(root, task_path),
+                    "assessment_prompt_hash": expected_task["assessment_prompt_hash"],
+                    "scope": args.scope,
+                },
+            )
         print("--- LLM SCORING PROMPT ---")
         print(expected_task["assessment_prompt"])
         print("--- END PROMPT ---")
         print(f"\n[info] score_task 已写入：{task_path}")
-        print("[info] 请根据上述 prompt 获取 LLM 评估 JSON，并使用 --mock-assessment 注入结果。")
+        if job:
+            print(f"[info] 语义任务已写入：{job['job_path']}")
+            print(f"[info] 让 AI 代理读取 {os.path.join(root, job['prompt_path'])}，写回 {os.path.join(root, job['response_out'])} 后执行 job 内 complete_command。")
+        print("[info] 推荐由 AI 代理处理语义任务并写回评估 JSON；兼容入口仍是 --mock-assessment 注入结果。")
         return
 
     if not os.path.exists(task_path):
@@ -1441,7 +1656,13 @@ def main():
     # 扣分上限 -30：防止雷点扣分淹没基本面（加权 90 扣到 40 vs 加权 40 无扣分，
     # 总分相同但改续决策完全不同——上限让 deductions 保持尖锐信号但不让基本面不可比）
     total_deductions = max(-30, total_deductions)
-    final_score = max(0.0, total_weighted + total_deductions)
+    pre_reader_feedback_score = max(0.0, total_weighted + total_deductions)
+    reader_feedback_adjustment = compute_reader_feedback_adjustment(
+        reader_telemetry=reader_telemetry,
+        reader_panel=reader_panel,
+        ab_take_results=ab_take_results,
+    )
+    final_score = max(0.0, min(100.0, pre_reader_feedback_score + reader_feedback_adjustment["points"]))
     tier, verdict, roi = get_tier_verdict(final_score)
     benchmark_percentile = compute_benchmark_percentiles(
         root, final_score, processed_scores, reference_distribution
@@ -1507,12 +1728,17 @@ def main():
         "reader_telemetry_path": READER_TELEMETRY_REL_PATH if reader_telemetry else None,
         "reader_telemetry_summary": reader_telemetry,
         "reader_panel_path": os.path.join(READER_PANEL_REL_PATH) if reader_panel else None,
+        "reader_panel_signals": reader_panel,
+        "ab_take_results_path": AB_TAKE_RESULTS_REL_PATH if ab_take_results else None,
+        "ab_take_results_summary": summarize_ab_take_results(ab_take_results),
         "benchmark_percentile": benchmark_percentile,
         "scores": processed_scores,
         "title_check": title_check,
         "adaptation_check": adaptation_check,
         "deductions": deductions,
         "total_deductions": total_deductions,
+        "pre_reader_feedback_score": pre_reader_feedback_score,
+        "reader_feedback_adjustment": reader_feedback_adjustment,
         "total_score": final_score,
         "tier": tier,
         "verdict": verdict,
@@ -1538,9 +1764,86 @@ def main():
     if args.chapter and args.file:
         sync_to_take_manifest(root, args.chapter, args.file, final_score, verdict)
 
+    # 埋点：把本次评分遇到的流程摩擦上报为优化信号，novel-review 模式②（self_audit）
+    # 下次自审时摄入，无需用户重述即可继续触发自我优化。
+    emit_optimization_signals(
+        root,
+        freshness=freshness,
+        baseline=baseline,
+        verdict=verdict,
+        title_check=title_check,
+        adaptation_check=adaptation_check,
+        used_waiver=bool(pending_waiver),
+    )
+
     print(f"[ok] 评分报告 JSON → {os.path.join(score_dir, 'score_report.json')}")
     print(f"[ok] 评分报告 MD   → {md_path}")
     print(f"     总分：{final_score:.1f} | 档位：{tier} | 判定：{verdict}")
+
+
+def emit_optimization_signals(root, *, freshness, baseline, verdict,
+                              title_check, adaptation_check, used_waiver):
+    """Report production-time friction from this scoring run into
+    生产数据/优化信号.jsonl (novel/_lib/friction_log). No-op if the logger is
+    unavailable. Each signal is idempotent per signature, so re-runs don't bloat
+    the log."""
+    if log_friction is None:
+        return
+    baseline_date = str((freshness or {}).get("baseline_date") or "")
+    # 1) 不得不豁免 baseline 新鲜度闸 → 流程层硬摩擦，最该被自审看见。
+    if used_waiver:
+        log_friction(
+            root, "score_baseline_waiver", skill="novel-score", severity="block",
+            title="评分时豁免了 market baseline 新鲜度闸",
+            detail=(f"baseline {baseline_date} freshness={(freshness or {}).get('status')}，"
+                    "用 --allow-stale-baseline 跑分。说明真实市场证据缺位或采集链路有缺口。"),
+            suggested_fix=("查 collect_market_baseline.py 采集/覆盖逻辑或补 --manual-evidence；"
+                           "若是某类证据被过紧的新鲜度窗口误杀，复核 score.py 的 freshness 闸。"),
+            evidence={"freshness": freshness},
+            key=f"{(freshness or {}).get('status')}|{baseline_date}",
+        )
+    # 2) 短剧/漫剧目标却仍带 coverage_warnings（覆盖只是被豁免而非真满足）。
+    coverage_warnings = (baseline or {}).get("coverage_warnings") or []
+    if coverage_warnings:
+        log_friction(
+            root, "score_coverage_gap", skill="novel-score", severity="warn",
+            title="market baseline 仍存在短剧/漫剧平台覆盖缺口",
+            detail="；".join(str(w) for w in coverage_warnings)[:500],
+            suggested_fix=("补红果/抖音漫剧第三方榜单/行业证据为结构化 --manual-evidence；"
+                           "若证据存在却被判缺口，复核 collect_market_baseline.coverage_window。"),
+            evidence={"coverage_warnings": coverage_warnings},
+            key=baseline_date,
+        )
+    # 3) 判定大改/弃稿重立 → 产线层面（题材/结构）值得自审复盘，不只是单稿改。
+    if verdict in ("大改", "弃稿重立"):
+        log_friction(
+            root, "score_low_verdict", skill="novel-score", severity="advice",
+            title=f"评分判定为「{verdict}」",
+            detail=f"本稿判定 {verdict}；若同题材反复落到此判定，可能是选题/工艺层面问题。",
+            suggested_fix="对照 novel-review 模式②差距清单核查题材热度与开篇工艺，再决定改稿还是改流程。",
+            evidence={"verdict": verdict},
+            key=verdict,
+        )
+    # 4) 书名体检不过关。
+    if title_check and title_check.get("needs_rename"):
+        log_friction(
+            root, "score_needs_rename", skill="novel-score", severity="advice",
+            title="书名体检不过关（needs_rename）",
+            detail=f"书名分 {title_check.get('total')}/{title_check.get('max_total')}，建议 novel-title 重出候选。",
+            suggested_fix="走 novel-title 重出候选并联网撞名；若反复不过关，复核 novel-title 平台命名标尺。",
+            evidence={"title_check_total": title_check.get("total")},
+            key=str(title_check.get("total")),
+        )
+    # 5) 短剧改编潜力偏低。
+    if adaptation_check and adaptation_check.get("low_potential"):
+        log_friction(
+            root, "score_low_adaptation", skill="novel-score", severity="advice",
+            title="短剧改编潜力偏低（low_potential）",
+            detail=f"改编潜力分 {adaptation_check.get('total')}/{adaptation_check.get('max_total')}。",
+            suggested_fix="走 novel-condense 出漫剧版精简骨架；改编门槛在结构与冲突，不在文笔。",
+            evidence={"adaptation_total": adaptation_check.get("total")},
+            key=str(adaptation_check.get("total")),
+        )
 
 
 def sync_to_take_manifest(root, chapter, file_path, score, verdict):

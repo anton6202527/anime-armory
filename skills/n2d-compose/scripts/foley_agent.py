@@ -46,7 +46,12 @@ SFX_RULES = (
     ("fire", "ambience", ("火", "篝火", "燃烧", "火焰", "炉火")),
 )
 
-DEFAULT_ACTION_FRACTION = 0.5  # impact 类无显式时刻时，落在 clip 中点（估计）
+DEFAULT_ACTION_FRACTION = 0.5  # impact 类无任何拍点数据时，落在 clip 中点（最后兜底·估计）
+
+# 命中/撞点秒抽取（治"打斗 SFX 落 clip 中点估计、对不上画面命中帧"）——与
+# anchor_planner.apex_anchor_seconds 同口径（vendored 保 n2d-compose 自包含·跨 skill 不 import）。
+_HIT_SEC_RE = re.compile(r"(\d+(?:\.\d+)?)\s*s")
+_HIT_CUE_RE = re.compile(r"命中|impact|peak|撞点|撞击|爆发|apex|hit|collision|砸落|斩落|交击", re.I)
 
 
 def clip_body(clip: Mapping[str, Any]) -> str:
@@ -56,7 +61,7 @@ def clip_body(clip: Mapping[str, Any]) -> str:
 
 
 def _action_offset(clip: Mapping[str, Any], duration: float) -> Optional[float]:
-    """读 clip 显式动作时刻（秒偏移）；缺则 None（调用方用估计中点）。纯函数。"""
+    """读 clip 显式动作时刻（秒偏移）；缺则 None（调用方再退 apex / 估计中点）。纯函数。"""
     for key in ("动作时刻", "action_at", "impact_at", "sfx_at"):
         v = clip.get(key)
         if isinstance(v, (int, float)) and 0 <= float(v) <= max(0.0, duration):
@@ -64,10 +69,59 @@ def _action_offset(clip: Mapping[str, Any], duration: float) -> Optional[float]:
     return None
 
 
+def impact_seconds_from_clip(clip: Mapping[str, Any], duration: float) -> List[float]:
+    """从 storyboard clip 抽**命中/撞点秒**（打斗 SFX 该踩的真实拍点）。纯函数·可测。
+
+    治"SFX 落 clip 中点估计、对不上画面命中"——命中秒其实早被上游算好(anchor_planner apex-aware /
+    combat_cue_apex)，只是从没交给 foley。源（与 anchor_planner.apex_anchor_seconds 同口径）：
+      · template_contract.{impact_frame, collision_or_apex_frame}：字段本身即命中帧·直接取 `<秒>s`；
+      · template_contract.{post_cue_points, keyframe_plan}：含命中类关键词且带 `<秒>s` 的 cue；
+      · continuity.anchors 里 use==keyframe 的 at_sec（apex-aware 注回的真关键帧）。
+    返回 (0,duration) 内升序去重。无任何命中秒 → []（调用方退显式字段/估计中点）。"""
+    if not isinstance(duration, (int, float)) or duration <= 0:
+        return []
+    secs: set = set()
+
+    def _add(raw: Any) -> None:
+        try:
+            s = round(float(raw), 2)
+        except (TypeError, ValueError):
+            return
+        if 0.0 < s < float(duration):
+            secs.add(s)
+
+    tc = clip.get("template_contract") if isinstance(clip.get("template_contract"), dict) else {}
+    for key in ("impact_frame", "collision_or_apex_frame"):
+        v = tc.get(key)
+        if isinstance(v, str):
+            m = _HIT_SEC_RE.search(v)
+            if m:
+                _add(m.group(1))
+    items: List[str] = []
+    cues = tc.get("post_cue_points")
+    items += [str(x) for x in cues] if isinstance(cues, list) else ([str(cues)] if cues else [])
+    kp = tc.get("keyframe_plan")
+    if isinstance(kp, dict):
+        items += [str(x) for x in kp.values()]
+    elif isinstance(kp, str):
+        items.append(kp)
+    for it in items:
+        if _HIT_CUE_RE.search(it):
+            m = _HIT_SEC_RE.search(it)
+            if m:
+                _add(m.group(1))
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), dict) else {}
+    for a in cont.get("anchors") or []:
+        if isinstance(a, dict) and str(a.get("use") or "") == "keyframe":
+            _add(a.get("at_sec"))
+    return sorted(secs)
+
+
 def extract_sfx_events(clip: Mapping[str, Any], clip_start: float) -> List[Dict[str, Any]]:
     """单 clip → SFX 事件列表（带绝对时间戳）。纯函数·可测。
     - ambience：start=clip 起点，span=整 clip（铺底）。
-    - impact：start=clip 起点 + 动作时刻（显式秒偏移，否则估计中点），aligned=explicit/estimated。"""
+    - impact：踩拍优先级 = **storyboard 命中/撞点秒（每个命中各一击·aligned=apex）** > 显式 `动作时刻/sfx_at`
+      字段（aligned=explicit）> clip 中点估计（aligned=estimated）。治打斗 SFX 对不上命中帧。"""
     body = clip_body(clip)
     if not body.strip():
         return []
@@ -76,6 +130,7 @@ def extract_sfx_events(clip: Mapping[str, Any], clip_start: float) -> List[Dict[
     except (TypeError, ValueError):
         duration = 0.0
     explicit = _action_offset(clip, duration)
+    apex_secs = impact_seconds_from_clip(clip, duration)
     events: List[Dict[str, Any]] = []
     seen = set()
     for tag, kind, words in SFX_RULES:
@@ -86,6 +141,12 @@ def extract_sfx_events(clip: Mapping[str, Any], clip_start: float) -> List[Dict[
             events.append({"clip_id": clip.get("id"), "tag": tag, "kind": kind,
                            "start": round(clip_start, 3), "duration": round(duration, 3),
                            "aligned": "span"})
+        elif apex_secs:
+            # 多回合打斗：命中各一击，SFX 踩在真命中帧（而非 clip 中点）。
+            for sec in apex_secs:
+                events.append({"clip_id": clip.get("id"), "tag": tag, "kind": kind,
+                               "start": round(clip_start + sec, 3), "duration": 0.0,
+                               "aligned": "apex"})
         else:
             off = explicit if explicit is not None else round(duration * DEFAULT_ACTION_FRACTION, 3)
             events.append({"clip_id": clip.get("id"), "tag": tag, "kind": kind,

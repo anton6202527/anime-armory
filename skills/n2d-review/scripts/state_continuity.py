@@ -194,20 +194,44 @@ COSTUME_AFFECTING_RE = re.compile(
     r"破损|破碎|撕裂|褴褛|残破|脏污|弄脏|尘土|烧毁|焦黑|烧灼|衣衫不整|"
     r"变身|觉醒|化形|化身|易容|变装|乔装|改扮|蒙面|戴(?:上)?面具|摘(?:下)?面具|"
     r"受伤|负伤|绷带|包扎|伤痕|断臂|断肢)")
+# 会被剧情改变「脸/五官」外观的状态词典——供 face 锁（G1）据此把落演进区间的镜 block 降 warn，
+# 治「剧情指定易容/变身/毁容被脸锁当崩脸硬 block、强制回源头重出」。只含**脸面**改变（不含纯换装/染血），
+# 与 COSTUME 各管各：换装区间不豁免脸锁、易容区间不豁免服装锁，互不越界。
+FACE_AFFECTING_RE = re.compile(
+    r"(易容|变装|乔装|改扮|蒙面|戴(?:上)?面具|摘(?:下)?面具|面具|换脸|易了容|"
+    r"变身|化形|化身|觉醒|妖化|魔化|兽化|龙化|现出原形|现出真容|露出真容|揭下伪装|"
+    r"毁容|破相|划伤脸|脸上.{0,4}(?:伤|疤|血)|面部.{0,4}(?:伤|疤|血)|刺青上脸|脸覆纹路|瞳色变|异瞳|"
+    r"返老还童|老去|苍老|年迈|白发苍苍|变老|变年轻|易颜)")
+# 会被剧情改变「发型/发色」的状态词典——供 hair 锁据此把落演进区间的镜 block 降 warn，
+# 治「剧情指定黑化换发/染发/断发被发锁当漂移硬 block」。
+HAIR_AFFECTING_RE = re.compile(
+    r"(黑化|换发|改发|发型变|束发|散发|披发|挽发|盘发|结发|断发|剪发|削发|落发|"
+    r"染发|白发|白头|华发|银发|霜染|戴(?:上)?发冠|摘(?:下)?发冠|束冠|戴冠|摘冠|加冠|"
+    r"觉醒.{0,4}发|发色变|变身.{0,4}发)")
+# 演进维度 → 词典：face/hair 锁各读各的区间；costume 默认（向后兼容旧无 kind 调用）。
+_APPEARANCE_AFFECTING_RES = {
+    "costume": COSTUME_AFFECTING_RE,
+    "face": FACE_AFFECTING_RE,
+    "hair": HAIR_AFFECTING_RE,
+}
 
 
-def appearance_change_intervals(root: str, ep: str) -> Dict[str, List["tuple"]]:
-    """剧情指定的「角色服装/全身外观会变」区间：{char: [(start_shot, end_shot|None, desc), ...]}。
+def appearance_change_intervals(root: str, ep: str, kind: str = "costume") -> Dict[str, List["tuple"]]:
+    """剧情指定的「角色某维度外观会变」区间：{char: [(start_shot, end_shot|None, desc), ...]}。
 
-    源同 P1 状态哨兵（storyboard 角色状态演进 + visual_state_ledger active modifiers），但只保留会改变
-    服装/全身外观的状态（换装/染血/破损/变身/受伤…）。供 COST/N1 把落区间内的镜 block 降 warn——
-    surface 而非硬阻断。纯读取·无副作用；缺 storyboard/ledger → {}。"""
+    源同 P1 状态哨兵（storyboard 角色状态演进 + visual_state_ledger active modifiers）。kind 选维度词典：
+    costume（默认·换装/染血/破损/变身）/ face（易容/变身/毁容）/ hair（黑化换发/染发/断发），各维度
+    各管各——换装区间不豁免脸锁、易容区间不豁免服装锁。供对应锁把落区间内的镜 block 降 warn——surface
+    而非硬阻断。纯读取·无副作用；缺 storyboard/ledger 或未知 kind → {}。"""
+    affecting = _APPEARANCE_AFFECTING_RES.get(kind)
+    if affecting is None:
+        return {}
     sb = load_json(storyboard_path(root, ep)) or {}
     states = states_from_storyboard(sb) + states_from_visual_ledger(root, ep)
     intervals: Dict[str, List[tuple]] = {}
     for st in states:
         desc = str(st.get("description") or "")
-        if not COSTUME_AFFECTING_RE.search(desc):
+        if not affecting.search(desc):
             continue
         char = str(st.get("character") or "").strip()
         if not char:
@@ -216,6 +240,14 @@ def appearance_change_intervals(root: str, ep: str) -> Dict[str, List["tuple"]]:
         end = st.get("end_shot")
         end = int(end) if isinstance(end, int) else None
         intervals.setdefault(char, []).append((start, end, desc))
+    # 与逐镜意图黑板的作者显式声明取并集：补回关键词漏检的有意改动（作者在 shot_intent.json 里 field-tag）。
+    # 黑板缺/无对应声明时静默跳过，行为与未引入黑板时一致（非破坏性）。
+    try:
+        import n2d_intent  # _lib 已在 sys.path（见文件顶 COMMON）
+        for char, rows in n2d_intent.explicit_evolution_for(root, ep, kind).items():
+            intervals.setdefault(char, []).extend(rows)
+    except Exception:
+        pass
     return intervals
 
 
@@ -235,17 +267,25 @@ def appearance_change_at(intervals: Mapping[str, List["tuple"]], char: str,
     return hit
 
 
-def downgrade_costume_block(row: Dict[str, Any], intervals: Mapping[str, List["tuple"]],
-                            char: str, shot_no: Optional[int]) -> Dict[str, Any]:
-    """剧情指定外观演进区间内：标注 costume_change_expected，并把 block 降 warn（surface·不硬阻断）。
-    warn/ok 不改判，仅 block 因「剧情就该变」降一档，留痕 abs_verdict。原地改 row 并返回。"""
+def downgrade_appearance_block(row: Dict[str, Any], intervals: Mapping[str, List["tuple"]],
+                               char: str, shot_no: Optional[int],
+                               expected_key: str = "costume_change_expected") -> Dict[str, Any]:
+    """剧情指定外观演进区间内：标注 <expected_key>=演进描述，并把 block 降 warn（surface·不硬阻断）。
+    warn/ok 不改判，仅 block 因「剧情就该变」降一档，留痕 abs_verdict。维度无关的通用版——costume/face/hair
+    各传自己的 intervals（appearance_change_intervals(kind=…)）与 expected_key。原地改 row 并返回。纯函数·可测。"""
     desc = appearance_change_at(intervals, char, shot_no)
     if desc:
-        row["costume_change_expected"] = desc
+        row[expected_key] = desc
         if row.get("verdict") == "block":
             row.setdefault("abs_verdict", "block")
             row["verdict"] = "warn"
     return row
+
+
+def downgrade_costume_block(row: Dict[str, Any], intervals: Mapping[str, List["tuple"]],
+                            char: str, shot_no: Optional[int]) -> Dict[str, Any]:
+    """COST/N1 服装锁专用包装（向后兼容）：等价 downgrade_appearance_block(..., 'costume_change_expected')。"""
+    return downgrade_appearance_block(row, intervals, char, shot_no, expected_key="costume_change_expected")
 
 
 def _prop_label(pid: str, p: Dict[str, Any]) -> str:

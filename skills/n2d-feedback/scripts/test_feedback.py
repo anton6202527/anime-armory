@@ -487,3 +487,68 @@ def test_consistency_no_signal_when_retention_ok():
     rows = [{"episode": "第1集", "retention_15s": 0.80}]   # 留存好 → 不触发
     res = fb.analyze_consistency(reports, rows)
     assert res["priority_signals"] == []
+
+
+# ---------- pacing 密度带第一方留存校准（build_pacing_profiles） ----------
+
+def test_density_bucket_bounds_keys_match_density_bucket():
+    # 锁 DENSITY_BUCKET_BOUNDS 的键与 density_bucket() 实际输出严格一致（改一个忘改另一个=静默漂移）。
+    produced = {feedback.density_bucket(v) for v in (5, 15, 25, 35, 50)}
+    assert produced == set(feedback.DENSITY_BUCKET_BOUNDS)
+
+
+def test_build_pacing_profiles_calibrated(tmp_path):
+    analyses = {"shot_density_bounce": {
+        "baseline": 0.30,  # 全剧 bounce_3s 均值
+        "groups": [
+            {"name": "12-20/m 舒展", "n": 4, "bounce_3s": 0.20, "episodes": ["第1集", "第2集"]},
+            {"name": "20-30/m 标准快节奏", "n": 5, "bounce_3s": 0.25, "episodes": ["第3集"]},
+            {"name": ">=40/m 过密", "n": 4, "bounce_3s": 0.45, "episodes": ["第4集"]},   # >baseline → 排除
+            {"name": "<12/m 过慢", "n": 1, "bounce_3s": 0.10, "episodes": ["第5集"]},     # n<min → 排除
+        ],
+    }}
+    prof = feedback.build_pacing_profiles(analyses, str(tmp_path), min_samples=3,
+                                          generated_at="2026-06-27T00:00:00Z")
+    assert prof["kind"] == "n2d_pacing_profiles"
+    assert prof["evidence_status"] == "calibrated"
+    assert prof["thresholds"] == {"density_slow_per_min": 12.0, "density_fast_per_min": 30.0}
+    assert prof["generated_at"] == "2026-06-27T00:00:00Z"
+    assert sorted(prof["qualifying_buckets"]) == ["12-20/m 舒展", "20-30/m 标准快节奏"]
+    assert prof["sample_n"] == 9
+
+
+def test_build_pacing_profiles_open_top_bucket(tmp_path):
+    analyses = {"shot_density_bounce": {"baseline": 0.40, "groups": [
+        {"name": ">=40/m 过密", "n": 4, "bounce_3s": 0.20, "episodes": ["第1集"]},
+    ]}}
+    prof = feedback.build_pacing_profiles(analyses, str(tmp_path), min_samples=3)
+    assert prof["evidence_status"] == "calibrated"
+    assert prof["thresholds"]["density_slow_per_min"] == 40.0
+    assert prof["thresholds"]["density_fast_per_min"] == 60.0   # 开口顶档 → 宽松上界
+
+
+def test_build_pacing_profiles_insufficient_samples(tmp_path):
+    analyses = {"shot_density_bounce": {"baseline": 0.30, "groups": [
+        {"name": "12-20/m 舒展", "n": 2, "bounce_3s": 0.20, "episodes": ["第1集"]},
+    ]}}
+    prof = feedback.build_pacing_profiles(analyses, str(tmp_path), min_samples=3)
+    assert prof["evidence_status"] == "insufficient_samples"
+    assert prof["thresholds"] == {}
+
+
+def test_build_pacing_profiles_no_signal_when_all_above_baseline(tmp_path):
+    analyses = {"shot_density_bounce": {"baseline": 0.10, "groups": [
+        {"name": "12-20/m 舒展", "n": 5, "bounce_3s": 0.30, "episodes": ["第1集"]},  # >baseline
+    ]}}
+    prof = feedback.build_pacing_profiles(analyses, str(tmp_path), min_samples=3)
+    assert prof["evidence_status"] == "insufficient_samples"
+    assert prof["thresholds"] == {}
+
+
+def test_write_pacing_profiles_roundtrip(tmp_path):
+    prof = {"kind": "n2d_pacing_profiles", "evidence_status": "calibrated",
+            "thresholds": {"density_slow_per_min": 12.0}}
+    path = feedback.write_pacing_profiles(str(tmp_path), prof)
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    assert data["kind"] == "n2d_pacing_profiles"
+    assert data["thresholds"]["density_slow_per_min"] == 12.0

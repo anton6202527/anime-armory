@@ -1,0 +1,9 @@
+{
+  "kind": "n2d_golden_project_expected",
+  "version": 1,
+  "case": "urban_dialogue",
+  "expected_stage_key": "compose",
+  "expected_owner": "n2d-compose",
+  "expected_release_readiness_after_enrichment": "pass",
+  "notes": "都市对白样例视频完成后应进入合成，不应回退到视觉奇观阶段。"
+}

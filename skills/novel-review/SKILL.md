@@ -18,12 +18,12 @@ description: 小说质检 + 流程自审（novel-* 家族的 QA 环节，不写�
 
 - **机检（确定性，先跑）**：一键串跑用 `scripts/consistency_audit.py <作品根> [--pov 角色名] [--anchor 设定/风格指纹.json]`，它把家族里三个确定性检测器一次跑完并汇总到 `审稿/consistency_audit.json`：
   - `scripts/mechanical_check.py` —— 格式/字数带宽（默认读 `_meta.target_wordcount_min_max` / scale / target_words_per_chapter，可用 `--min/--max` 覆盖）/章号与章纲对齐/视角"我"密度提示/称谓·术语漂移/**原文照搬（n-gram vs 原作.txt）**/**AI腔·同质化启发式**（叙事中议论文式连接词=🟡·万能金句套话密度=🟢·advisory·线索非定论，`--no-ai-tell` 关闭；平台 AI 质检阈值属于易变信息，具体要求以 `novel-research` 平台资料包/`market_baseline` 为准；写作链路全程 AI 起草时，此项仍应作为过审风险前置自检）。术语默认从 `设定/设定圣经.md`、`角色卡.md`、`世界观.md`、`锚点表.json` 自动抽取，也可用 `--terms` 追加。
-  - `novel-wiki/logic_sentry.py`（先 `wiki_builder.py` 建《动态百科》）—— **死人复活 / 弃置道具复用 / 位置跳变 / 数值漂移（年龄锚点跨章不一致）**等硬冲突候选 → `审稿/logic_alerts_*.json`。这是把"设定自相矛盾/锚点漂移"从纯人判下沉到机检的深度增强（无角色卡/无年龄锚点则优雅跳过并记原因）。
+  - `novel-wiki/logic_sentry.py`（先 `wiki_builder.py` 建《动态百科》）—— **死人复活 / 弃置道具复用 / 位置跳变 / 数值漂移（年龄锚点跨章不一致）**等硬冲突候选 → `审稿/logic_alerts_*.json`。这是把"设定自相矛盾/锚点漂移"从纯人判下沉到机检的深度增强（无角色卡/无年龄锚点则优雅跳过并记原因）。**审查重点章排序（ConStory arXiv 2603.05890）**：`logic_alerts_summary.json` 里 alerts 按 `priority` 降序（中段40-60% + 高 churn + 高字符熵章加权·`priority_factors` 标命中代理），并给 `review_focus_chapters` 热点表——把人工语义复审火力先投到最可能藏 bug 的章。**只排序不改 severity/blocking**（B10）。
   - `novel-style/extract_style.py --compare` —— 每章文风指纹 vs **锚点章指纹**算漂移分，超带宽即记"文风漂移"候选 → `审稿/style_drift_summary.json`（无锚点指纹则跳过，提示先提取）。
   - **2026 新增 9 个子检测器（一键串跑或按需跑，各自缺输入优雅跳过）**：① **断章钩子**(`hook_endings.py`)逐章末尾打钩子分、黄金三章更严(建议级)；② **角色语感**(`voice_drift.py`)口头禅消失/句长漂(读 `设定/角色语感.json`·建议级)；③ **情绪曲线**(`tone_check.py`)实测每章主导情绪 vs `设定/tone_curve.json` 目标弧(建议级)；④ **支线收口**(`thread_resolution.py`)open_threads 超期(建议级)、`--finale` 卷末/书末未收支线=阻断级烂尾防线；⑤ **反派战力**(`antagonist_scaling.py`)反向战力崩坏(建议级·需 registry 标 role/阵营)；⑥ **时间线**(`timeline_check.py`)年份倒流(建议级)+ `设定/timeline.json` 事件乱序(阻断级)；⑦ **配角连续性**(`minor_characters.py`)反复出场却未建卡(建议级)；⑧ **逐章读者契约**(`reader_contract_sentry.py`)阻断缺 `reader_contract_progress` / `theme_alignment` 的章节；⑨ **弧段 gate**(`arc_gate.py`)检查连续 3 章不推进契约、整段无题旨对齐、长窗口只种不收。另：`logic_sentry` 已通电的 **world_rule_violation(阻断级)/relationship_flip/钩子过期/承诺违约(阻断级)/张力疲劳/character_guardrails** 也随 `run_logic` 在 review 汇总（已传 project_root）。
   - **微短剧/漫剧源书平台合规预检**（小说侧）：当 `_设置.md` / `_meta.json` 命中 `微短剧/短剧/漫剧/红果/抖音`，先跑
     `python3 skills/novel-review/scripts/platform_compliance.py <作品根>`。
-    它按最新广电公开要求做标题/正文关键词预检与上线前许可证/备案待办提示：片名不得恶俗恶趣味或渲染极端复仇暴戾焦虑；文本中色情低俗、血腥暴力、未成年人敏感、政治安全等明显风险可阻断。产物 `审稿/platform_compliance.json` 只是小说侧预检，不替代平台审核、法律意见或成片报审。
+    它按最新广电公开要求做标题/正文关键词预检与上线前许可证/备案待办提示：片名不得恶俗恶趣味或渲染极端复仇暴戾焦虑；文本中色情低俗、血腥暴力、未成年人敏感、政治安全等明显风险可阻断。**经典 IP 复核**（广电2026-04新规）：`rights_status=public-domain` 或 `_meta.classic_ip_adaptation=true` 的源书在漫剧/微短剧目标下会 warn `classic_ip_alteration_review`——提示改编环节须复核「不得颠覆性魔改经典作品/英雄/历史人物形象、真人肖像须授权、按投资额三级备案、AI 内容片头标识」（judgment call·人判不硬阻断；该标记由 novel-rewrite/novel-spinoff init 写入 `_meta`，随交付契约传给改编环节）。产物 `审稿/platform_compliance.json` 只是小说侧预检，不替代平台审核、法律意见或成片报审。
   - **专业事实证据支持**：`consistency_audit.py` 会调用 `novel-research/scripts/research_pack.py check`，检测医疗/法律/刑侦/金融/军事/历史/宗教/海外/科技/职业文等高风险关键词是否有适用 `ready` 资料包；来源缺日期/可信度、事实未绑定来源、资料过期都会写入 `审稿/research_fact_support.json`，并在汇总报告里回流到 `novel-research`。`novel-craft` QA gate 会在 review/export 前读取同一索引，高风险资料包过期或缺 `updated_at` 会直接 blocking；全库刷新用 `research_pack.py refresh-audit "创作区/写小说"` 生成 `资料/research_refresh_plan.md`。
   缺输入的检测器一律**跳过并落原因**，不静默略过冒充全覆盖。
 - **人判（LLM 判断题）**：机检覆盖不了的——视角穿帮、OOC、情节漏洞、锚点语义对齐、**题旨契约 / 读者承诺兑现**、节奏（爽点/钩子/反转）、伏笔回收、留白、文风漂移、文学质感、show-don't-tell、过度直白。维度逐条见 `references/checklist.md`。机检产出的 `logic_alerts`/`style_drift` 候选是**线索不是定论**（带 `auto` 标志），仍需人判结合语境确认（容错铁律：宁缺毋滥，闪回/伏笔可豁免）。
@@ -83,7 +83,7 @@ description: 小说质检 + 流程自审（novel-* 家族的 QA 环节，不写�
 
 把"人工复盘整条 novel 线"固化成可复跑流程。**节律**：用户主动要 / 写完一批书后 / 接了新写作工艺·新平台套路时跑一次。详细步骤见 `references/self_audit.md`，要点：
 
-1. **先跑本地静态治理检查**：`python3 skills/novel-review/scripts/self_audit.py [--project-root "<作品根>"]`。它不联网、不改文件，检查 registry/README/author 路由同步、`_进度.md` 写入口、`state_ledger` 原子写、批量写章队列、市场基准新鲜度。
+1. **先跑本地静态治理检查**：`python3 skills/novel-review/scripts/self_audit.py [--project-root "<作品根>"]`。它不联网、不改文件，检查 registry/README/author 路由同步、`_进度.md` 写入口、`state_ledger` 原子写、批量写章队列、市场基准新鲜度，并**摄入生产线埋点**——`<作品根>/生产数据/优化信号.jsonl`（`novel/_lib/friction_log.py`，由 `novel-score` 等阶段在遇到豁免/覆盖缺口/低判定等摩擦时写入）里所有 open 信号翻成 `FRICTION-*` finding，让"生产时遇到的摩擦"自动进自审差距清单，无需用户重述就能持续触发自我优化。处理掉一条后用 `friction_log.resolve_signals` 标 resolved 即不再复现。
 2. **拉基准**：联网搜当前（带年月）网文/小说主流做法，分三轴取证——**题材/市场契合**（红果/番茄/晋江/抖音当下热题材与套路，复用 `novel-score/scripts/collect_market_baseline.py` 的热榜拉取）、**写作工艺**（黄金三章钩子、爽点密度、章纲编织、单章守则 vs `novel-craft/references/*`）、**一致性/合规来源**（设定圣经/锚点一致性方法、公版/授权来源边界 vs fetch/spinoff/rewrite 的合规闸门）+ 各能力演进。
 3. **对照**：逐 skill 把基准 vs `novel-*/SKILL.md` + `novel-craft` + `novel/Q&A.md` 比，找**真差距**（已做的别重复立项，标"✅ 已覆盖"一行带过）。
 4. **差距清单**：每条 = 差距 + 证据（带来源链接·日期）+ 落到哪个 skill 哪段 + 优先级（must/optional）+ 是否可脚本化（是→能进 `mechanical_check.py`）。
@@ -96,7 +96,7 @@ description: 小说质检 + 流程自审（novel-* 家族的 QA 环节，不写�
 
 ## 详细参考
 - 一键机检 runner：`scripts/consistency_audit.py`（串跑 mechanical + `novel-wiki/logic_sentry` + `novel-style` 漂移）
-- 流程自审本地治理检查：`scripts/self_audit.py`（registry / 进度写入 / 账本原子写 / draft queue / market baseline freshness）
+- 流程自审本地治理检查：`scripts/self_audit.py`（registry / 进度写入 / 账本原子写 / draft queue / market baseline freshness / 生产摩擦埋点摄入 `生产数据/优化信号.jsonl`）
 - 逻辑硬冲突机检：`novel-wiki`（动态百科 + 哨兵）；文风漂移机检：`novel-style`（指纹 + `--compare`）
 - 两层质检维度全清单（看什么 + ✅/❌ + 定级）：`references/checklist.md`
 - 正向标准（单章该长啥样）：`novel-craft/references/chapter.md`

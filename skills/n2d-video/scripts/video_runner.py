@@ -637,6 +637,23 @@ def run_preflight_gate(root: Path, episode: str, stage: str = "video_preflight")
         raise RuntimeError(f"{stage} gate blocked video backend submission.\n{detail}")
 
 
+def record_waiver(root: Path, episode: str, stage: str, waiver: str, reason: str) -> None:
+    """H2：把跳过付费前闸记成 dashboard waiver 事件（执行时松动留痕，与 n2d-image 对齐）。
+
+    此前 video 的 `--skip-preflight` 静默旁路 video_preflight 一致性闸、无任何留痕（image runner 会
+    record_waiver，video 不会，是不对称的无痕旁路）。best-effort：留痕失败绝不中断生成——点在于
+    "松一道闸"在 dashboard 可审计、不静默，而非给 bookkeeping 一票否决生成的权力。"""
+    cmd = [
+        sys.executable, str(DASHBOARD_PY), "waiver", str(root),
+        "--episode", episode, "--stage", stage, "--waiver", waiver,
+        "--reason", reason, "--source", "n2d-video/scripts/video_runner.py", "--no-build",
+    ]
+    try:
+        subprocess.run(cmd, check=False, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except Exception:
+        pass
+
+
 def run_identity_handoff_guard(root: Path, episode: str) -> None:
     """Hard guard for paid submits: same-character keyframes must share identity anchors.
 
@@ -686,6 +703,11 @@ def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = F
     run_identity_handoff_guard(root, episode)
     if not skip_preflight:
         run_preflight_gate(root, episode)
+    else:
+        # H2：--skip-preflight 不再静默旁路付费前 video_preflight 一致性闸——记 dashboard waiver 留痕欠债
+        # （face-lock guard 上面已硬跑不可跳；此处仅放行更广的 preflight，且让这次松动可审计）。
+        record_waiver(root, episode, "video_preflight", "skip-preflight",
+                      "submit_clip --skip-preflight bypassed video_preflight consistency gate")
     item.update({"status": "submitting", "submitted_at": time.strftime("%Y-%m-%dT%H:%M:%S%z")})
     item.pop("fail_reason", None)
     update_manifest(manifest_file, manifest)

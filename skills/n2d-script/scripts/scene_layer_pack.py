@@ -110,7 +110,7 @@ def build_pack(root: Path, ep: str, loc_id: str, clips: List[Mapping[str, Any]])
             f"设定库/scene_layers/{loc_id}/keyframes/detail.png",
         ],
         "consistency_rules": [
-            "reuse this pack for all large_establishing/flight/chase shots in the same LOC",
+            "reuse this pack for all large_establishing/flight/chase/mount_ride/vehicle_ride/vessel_flight shots in the same LOC",
             "do not change landmark_anchor or scale_reference without forking a new loc_id",
             "video prompts should move parallax/depth layers instead of regenerating the whole place",
         ],

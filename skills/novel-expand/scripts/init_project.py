@@ -15,16 +15,20 @@ init_project.py — 建扩写项目骨架；docx → txt 抽取。
 import argparse, json, math, os, shutil, sys
 from datetime import date
 
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_SKILLS = os.path.abspath(os.path.join(_HERE, "..", ".."))
+for _path in (os.path.join(_SKILLS, "novel", "_lib"), os.path.join(_SKILLS, "novel-craft", "scripts")):
+    if _path not in sys.path:
+        sys.path.insert(0, _path)
+
 # 共享工具（docx→txt / 版权判定 / 落 _设置.md）上移至 novel-craft，避免各 init 各写一份
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                "..", "..", "novel-craft", "scripts"))
-from contract import (AI_TEXT_USAGE_MODES, CHAPTER_GRANULARITY, NOVEL_DRAFT_MODES,
-                      DRAFT_WORKFLOWS, base_meta, demo_chapters_for,
-                      derived_stage_markdown, parse_outputs,
-                      wordcount_band_for_words_per_chapter,
-                      infer_novel_purpose, normalize_novel_purpose,
-                      resolve_novel_draft_mode, resolve_novel_draft_workflow,
-                      words_per_chapter_for_context)
+from novel_contract import (AI_TEXT_USAGE_MODES, CHAPTER_GRANULARITY, NOVEL_DRAFT_MODES,
+                            DRAFT_WORKFLOWS, base_meta, demo_chapters_for,
+                            derived_stage_markdown, parse_outputs,
+                            wordcount_band_for_words_per_chapter,
+                            infer_novel_purpose, normalize_novel_purpose,
+                            resolve_novel_draft_mode, resolve_novel_draft_workflow,
+                            words_per_chapter_for_context)
 from derive_common import build_rights_metadata, docx_to_txt, detect_rights_status, write_settings
 
 

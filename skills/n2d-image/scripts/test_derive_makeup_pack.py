@@ -119,6 +119,7 @@ def test_derive_project_splits_turnaround_and_front_crops(tmp_path: Path) -> Non
     assert rg["side"]["derivation"]["source_path"] == "出图/共享/图片/CHAR_TEST_常态_三视图.png"
     assert rg["half_body"]["derivation"]["method"] == "front_crop"
     assert rg["face_anchor_refs"][0]["derivation"]["method"] == "front_crop"
+    assert rg["face_anchor_refs"][0]["derivation"]["crop_box"] == [304, 132, 456, 372]
     assert form["reference_atlas"]["base_views"]["back"]["derivation"]["source_sha256"]
     for rel in (
         rg["three_quarter"]["path"],
@@ -130,3 +131,40 @@ def test_derive_project_splits_turnaround_and_front_crops(tmp_path: Path) -> Non
         out = root / rel
         assert out.exists()
         assert Image.open(out).size == (800, 1200)
+
+
+def test_derive_project_can_filter_by_asset_key(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    image_dir = root / "出图" / "共享" / "图片"
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    registry_path.parent.mkdir(parents=True, exist_ok=True)
+
+    forms = []
+    for asset_key in ("CHAR_KEEP", "CHAR_SKIP"):
+        front = image_dir / f"{asset_key}.png"
+        turn = image_dir / f"{asset_key}_三视图.png"
+        _png(front, (120, 60, 30))
+        turn.parent.mkdir(parents=True, exist_ok=True)
+        Image.new("RGB", (800, 1200), (30, 60, 120)).save(turn)
+        forms.append({
+            "form": asset_key,
+            "asset_key": asset_key,
+            "reference_group": {
+                "front": {"path": f"出图/共享/图片/{asset_key}.png", "status": "ready"},
+                "turnaround": {"path": f"出图/共享/图片/{asset_key}_三视图.png", "status": "ready"},
+                "three_quarter": {"path": f"出图/共享/图片/{asset_key}_45度.png", "status": "planned"},
+                "side": {"path": f"出图/共享/图片/{asset_key}_侧.png", "status": "planned"},
+                "back": {"path": f"出图/共享/图片/{asset_key}_背.png", "status": "planned"},
+                "half_body": {"path": f"出图/共享/图片/{asset_key}_半身.png", "status": "planned"},
+                "face_anchor_refs": [{"path": f"出图/共享/图片/{asset_key}_脸部特写.png", "status": "planned"}],
+            },
+        })
+
+    registry_path.write_text(json.dumps({"characters": [{"id": "CHAR_01", "forms": forms}]}, ensure_ascii=False),
+                             encoding="utf-8")
+
+    summary = derive_makeup_pack.derive_project(root, write=True, force=True, asset_keys={"CHAR_KEEP"})
+
+    assert {item["form"] for item in summary["derived"]} == {"CHAR_01/CHAR_KEEP"}
+    assert (image_dir / "CHAR_KEEP_45度.png").exists()
+    assert not (image_dir / "CHAR_SKIP_45度.png").exists()

@@ -2628,6 +2628,18 @@ def _calibration_threshold_needs(rows: Sequence[Mapping[str, Any]]) -> List[Tupl
 def check_review_calibration(root: str, ep: str) -> dict:
     """把一次性人审签收沉淀为全局校准集，供后续误报/漏报回归使用。"""
     res = {"available": True, "findings": [], "notes": []}
+    # P4：阈值注册表此前只判存在性、从不读内容（掣肘四）。后端 floor 无标定背书地放松（低于
+    # 全局 floor）会静默削弱该后端闸门——读 registry 的 coherence_issues，block 级不连贯→warn finding。
+    reg_path = os.path.join(root, "生产数据", "consistency_threshold_registry.json")
+    reg_data = _load_json(reg_path) or {}
+    for issue in reg_data.get("coherence_issues", []):
+        if isinstance(issue, dict) and issue.get("severity") == "block":
+            res["findings"].append(_row(
+                "warn",
+                f"阈值注册表不连贯：{issue.get('message')}",
+                stage="review",
+                artifacts=(os.path.relpath(reg_path, root),),
+            ))
     finding_rows: List[dict] = []
     for path in _finding_files(root, ep):
         finding_rows.extend(_active_finding_rows(_load_json(path)))

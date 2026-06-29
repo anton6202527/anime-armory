@@ -37,6 +37,45 @@ def test_content_hard_risk_blocks():
         assert any(item["code"] == "bloody_violence" for item in report["findings"])
 
 
+def test_public_domain_microdrama_flags_classic_ip_review():
+    # 公版改写 + 漫剧目标 → 触发广电2026-04 经典IP魔改复核(warn·非block)
+    with tempfile.TemporaryDirectory() as root:
+        _write(os.path.join(root, "_meta.json"), json.dumps({
+            "title": "王敦传新编",
+            "purpose": "漫剧源书",
+            "rights_status": "public-domain",
+        }, ensure_ascii=False))
+        report = pc.check(root)
+        codes = [item["code"] for item in report["findings"]]
+        assert "classic_ip_alteration_review" in codes
+        assert report["verdict"] == "review"  # warn 级，不硬阻断
+        # 新规来源已登记
+        assert any(s["date"] == "2026-04-01" for s in report["regulatory_sources"])
+
+
+def test_explicit_classic_ip_flag_flags_even_when_rights_owned():
+    with tempfile.TemporaryDirectory() as root:
+        _write(os.path.join(root, "_meta.json"), json.dumps({
+            "title": "经典重制",
+            "purpose": "漫剧源书",
+            "rights_status": "user-declared",
+            "classic_ip_adaptation": True,
+        }, ensure_ascii=False))
+        report = pc.check(root)
+        assert any(i["code"] == "classic_ip_alteration_review" for i in report["findings"])
+
+
+def test_public_domain_general_novel_does_not_flag_classic_ip():
+    # 纯小说(非漫剧目标)不触发漫剧专属新规
+    with tempfile.TemporaryDirectory() as root:
+        _write(os.path.join(root, "_meta.json"), json.dumps({
+            "title": "春山来信", "rights_status": "public-domain",
+        }, ensure_ascii=False))
+        _write(os.path.join(root, "章节", "第01章.md"), "# 第1章\n她收到一封旧信。")
+        report = pc.check(root)
+        assert all(i["code"] != "classic_ip_alteration_review" for i in report["findings"])
+
+
 def test_general_clean_project_passes_and_writes():
     with tempfile.TemporaryDirectory() as root:
         _write(os.path.join(root, "_meta.json"), json.dumps({"title": "春山来信", "rights_status": "original"}, ensure_ascii=False))

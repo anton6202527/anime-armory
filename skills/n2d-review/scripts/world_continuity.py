@@ -142,6 +142,88 @@ def light_elev_band(prev_el: str, cur_el: str) -> str:
     return "ok"
 
 
+# ---------- W4 天气/季节 + 时间转场（声明驱动·确定性·非像素估） ----------
+# daypart(W1) 已用像素估昼夜并硬挡 2 级跳；但**天气**(晴↔雨/雪)与**季节**(春↔冬)像素估不可靠，
+# 且本就是作者在分镜文本/scene_dna「光色天气」里**声明**的事实——这里按声明 token 做确定性连续性，
+# 同场景相邻镜/违锁出现互斥天气或换季 → 不连续。合法的时间跳跃（"三天后"/转场）由 cue 豁免。
+# 这些是声明对账（不扫像素），缺声明优雅跳过（宁缺毋滥）。与 daypart 互补：W1 管昼夜亮度，W4 管天气/季节文本事实。
+
+# 检测顺序：先长/强词（暴风雨、雷暴）再短词（雨），避免「雷雨」被先判成 rain。
+_WEATHER_KW = [
+    ("storm", ("暴风雨", "雷暴", "风暴", "狂风暴雨", "雷雨", "暴风雪")),
+    ("snow", ("暴雪", "飞雪", "风雪", "雪花", "大雪", "下雪", "雪")),
+    ("rain", ("暴雨", "细雨", "雨幕", "小雨", "大雨", "阵雨", "下雨", "雨")),
+    ("fog", ("浓雾", "薄雾", "雾霭", "雾气", "雾")),
+    ("overcast", ("阴沉", "阴天", "乌云", "密布", "阴云", "阴")),
+    ("clear", ("万里无云", "晴朗", "艳阳", "碧空", "阳光", "晴")),
+]
+_PRECIP = {"rain", "snow", "storm"}
+
+_SEASON_KW = [
+    ("spring", ("初春", "暮春", "阳春", "春日", "春")),
+    ("summer", ("盛夏", "酷暑", "炎夏", "夏日", "盛暑", "夏")),
+    ("autumn", ("深秋", "金秋", "秋日", "秋风", "晚秋", "秋")),
+    ("winter", ("寒冬", "隆冬", "严冬", "冬日", "数九", "冬")),
+]
+
+# 合法时间跳跃/转场 cue：命中则豁免天气/季节硬跳（不豁免 daypart W1·不松动既有硬闸）。
+_TIME_TRANSITION_MARKERS = (
+    "三天后", "次日", "翌日", "数日后", "数日之后", "几天后", "半月后", "一月后", "一年后", "十年后",
+    "多年后", "数年后", "数月后", "转眼", "时光流转", "时光荏苒", "时间跳跃", "时间跳转", "时过境迁",
+    "季节更替", "入冬", "入夏", "入春", "入秋", "转瞬", "光阴", "岁月", "转场", "时移",
+)
+
+
+def _category_of(text: str, table) -> Optional[str]:
+    t = str(text or "")
+    for cat, words in table:
+        if any(w in t for w in words):
+            return cat
+    return None
+
+
+def weather_of_text(text: str) -> Optional[str]:
+    """声明文本 → 天气类别 clear/overcast/fog/rain/snow/storm（无 → None）。纯函数·可测。"""
+    return _category_of(text, _WEATHER_KW)
+
+
+def season_of_text(text: str) -> Optional[str]:
+    """声明文本 → 季节 spring/summer/autumn/winter（无 → None）。纯函数·可测。"""
+    return _category_of(text, _SEASON_KW)
+
+
+def has_time_transition(text: str) -> bool:
+    """文本是否含合法时间跳跃/转场 cue（命中则天气/季节硬跳视为有意推进·豁免）。纯函数·可测。"""
+    t = str(text or "")
+    return any(m in t for m in _TIME_TRANSITION_MARKERS)
+
+
+def weather_band(prev_w: Optional[str], cur_w: Optional[str]) -> str:
+    """同场景相邻镜/违锁天气连续性：
+      同类 / 任一缺声明 → 'ok'；晴↔降水(雨/雪/暴风) 或 降水互跳(雨↔雪) → 'block'（突变无转场=穿帮）；
+      其余软漂移(阴↔雾/阴↔晴/阴↔雨) → 'warn'。纯函数·可测。"""
+    if not prev_w or not cur_w or prev_w == cur_w:
+        return "ok"
+    if (prev_w == "clear" and cur_w in _PRECIP) or (cur_w == "clear" and prev_w in _PRECIP):
+        return "block"
+    if prev_w in _PRECIP and cur_w in _PRECIP:
+        return "block"
+    return "warn"
+
+
+def season_band(prev_s: Optional[str], cur_s: Optional[str]) -> str:
+    """同场景相邻镜/违锁季节连续性：不同季节 → 'block'（同场景内不应换季，除非时间跳转 cue 豁免）；
+    任一缺声明 / 同季 → 'ok'。纯函数·可测。"""
+    if not prev_s or not cur_s or prev_s == cur_s:
+        return "ok"
+    return "block"
+
+
+def _worst_band(*bands: str) -> str:
+    order = {"ok": 0, "warn": 1, "block": 2}
+    return max(bands, key=lambda b: order.get(b, 0)) if bands else "ok"
+
+
 def declared_light_dir(text: str) -> Dict[str, Optional[str]]:
     """从「光位锚」文本解析声明的主光方向 → {'h': left|right|None, 'v': top|bottom|None}。
     逆光/侧逆等含糊词不判 h/v（返回 None）。纯函数·可测。"""
@@ -283,6 +365,66 @@ def _declared_light_of_shot(root: str, ep: str) -> Dict[str, str]:
     return out
 
 
+def _declared_env_of_shot(root: str, ep: str) -> Dict[str, str]:
+    """每镜 PNG → 该镜整块文本（用于 W4 解析声明的天气/季节/时间转场 cue）。无则空。
+
+    与 _declared_light_of_shot 同源(01_分镜出图.md 的 `## ` 分块)，但返回整块文本——天气/季节
+    可能写在 时间/天气/光线 行、场景行、台词或转场标注里，取整块更稳。缺文件优雅跳过。"""
+    p = os.path.join(root, "出图", ep, "prompt", "01_分镜出图.md")
+    out: Dict[str, str] = {}
+    if not os.path.isfile(p):
+        return out
+    try:
+        text = open(p, encoding="utf-8").read()
+    except Exception:
+        return out
+    for blk in re.split(r"(?m)(?=^## )", text):
+        if not blk.strip().startswith("## "):
+            continue
+        mt = re.search(r"出图/[^/]+/([^`』\s]+\.png)", blk)
+        if not mt:
+            continue
+        out[os.path.basename(mt.group(1))] = blk
+    return out
+
+
+def _locked_env(root: str, ep: str) -> Dict[str, dict]:
+    """每场景 → {weather, season}（从 scene_dna 的「光色天气」/「季节」字段解析的锁定环境）。
+
+    与 _locked_dayparts 同源(scene_dna.json)。给 W4 一个场景级 canonical 基准：某镜声明的天气/季节
+    与场景锁定值互斥 → 违锁。读不到 → 空（不启用违锁校验，只走相邻镜）。"""
+    out: Dict[str, dict] = {}
+    candidates = [
+        os.path.join(root, "出图", "共享", "scene_dna.json"),
+        os.path.join(root, "出图", ep, "scene_dna.json"),
+    ]
+    for path in candidates:
+        if not os.path.isfile(path):
+            continue
+        try:
+            data = json.load(open(path, encoding="utf-8"))
+        except Exception:
+            continue
+        scenes = data.get("scenes") if isinstance(data, dict) else None
+        if not isinstance(scenes, dict):
+            continue
+        for name, info in scenes.items():
+            if not isinstance(info, dict):
+                continue
+            lit = str(info.get("光色天气") or info.get("光色") or info.get("天气") or "")
+            season_src = str(info.get("季节") or info.get("season") or "") + lit
+            env = {}
+            w = weather_of_text(lit)
+            s = season_of_text(season_src)
+            if w:
+                env["weather"] = w
+            if s:
+                env["season"] = s
+            if env:
+                out[name] = env
+    return out
+
+
 def _scene_of_shot(root: str, ep: str) -> Dict[str, str]:
     """每镜 PNG → 它引用的场景定妆名（取 01_分镜出图.md 参考图行里的 定妆_<X>）。
     取不到则空字典，上层把整集当一条时间线（场景标签 ""）。与 scene_consistency 同源解析。"""
@@ -307,6 +449,62 @@ def _scene_of_shot(root: str, ep: str) -> Dict[str, str]:
         if scenes:
             out[png] = scenes[0]
     return out
+
+
+def registered_light_dir(loc_asset: Mapping[str, object]) -> Dict[str, Optional[str]]:
+    """从 LOC 资产 `constraints.lighting_signature.key_light_direction`（或 `constraints.light_anchor`）
+    解析**登记的**主光方向 → {h, v}（纯函数·可测）。这是场景的 canonical 光向，此前只被 LSIG 当死字段
+    跳过（LSIG 只量色相/饱和度）；现在给它一个像素核对靶。受控枚举（left_front/top/底光…），按子串判。"""
+    if not isinstance(loc_asset, Mapping):
+        return {"h": None, "v": None}
+    cons = loc_asset.get("constraints") if isinstance(loc_asset.get("constraints"), Mapping) else {}
+    sig = cons.get("lighting_signature") if isinstance(cons.get("lighting_signature"), Mapping) else {}
+    raw = str(sig.get("key_light_direction") or cons.get("light_anchor") or "").lower()
+    h: Optional[str] = None
+    v: Optional[str] = None
+    if any(k in raw for k in ("left", "画左", "左")):
+        h = "left"
+    elif any(k in raw for k in ("right", "画右", "右")):
+        h = "right"
+    if any(k in raw for k in ("top", "overhead", "顶")):
+        v = "top"
+    elif any(k in raw for k in ("bottom", "under", "底", "脚")):
+        v = "bottom"
+    return {"h": h, "v": v}
+
+
+def _registered_light_of_scene(root: str) -> List[tuple]:
+    """[(匹配键, {h,v})] 从 asset_registry 各 LOC 的登记主光方向。匹配键= LOC name + id 末段，
+    供逐镜场景 token 子串匹配。缺登记/解析不到方向→不收。"""
+    try:
+        from n2d_contract import asset_registry_path  # n2d/_lib
+        path = asset_registry_path(root)
+    except Exception:
+        path = os.path.join(root, "出图", "共享", "asset_registry.json")
+    out: List[tuple] = []
+    if not os.path.isfile(path):
+        return out
+    try:
+        data = json.load(open(path, encoding="utf-8"))
+    except Exception:
+        return out
+    for asset in (data.get("assets") or []) if isinstance(data, dict) else []:
+        aid = str(asset.get("id") or "") if isinstance(asset, dict) else ""
+        if not aid.startswith("LOC_"):
+            continue
+        rd = registered_light_dir(asset)
+        if rd["h"] or rd["v"]:
+            for key in (str(asset.get("name") or ""), aid):
+                if key:
+                    out.append((key, rd))
+    return out
+
+
+def _match_registered_light(scene: str, registered: List[tuple]) -> Optional[Dict[str, Optional[str]]]:
+    for key, rd in registered:
+        if scene and (scene in key or key in scene):
+            return rd
+    return None
 
 
 def _locked_dayparts(root: str, ep: str) -> Dict[str, str]:
@@ -357,7 +555,10 @@ def analyze(root: str, ep: str, night_luma: float = DEFAULT_NIGHT_LUMA,
         return res
     smap = _scene_of_shot(root, ep)
     locked = _locked_dayparts(root, ep)
-    declared = _declared_light_of_shot(root, ep)  # W3 光位锚自洽用
+    declared = _declared_light_of_shot(root, ep)  # W3 光位锚自洽用（per-shot prompt 文本）
+    registered_light = _registered_light_of_scene(root)  # W3b 注册 key_light_direction 像素核对（#6）
+    env_text = _declared_env_of_shot(root, ep)    # W4 天气/季节/转场 cue（per-shot 整块文本·声明驱动）
+    locked_env = _locked_env(root, ep)            # W4 场景级锁定天气/季节（scene_dna）
     if not smap:
         res["notes"].append("未取到逐镜场景标签——整集当一条时间线走（仅查相邻镜时辰硬跳）。")
 
@@ -381,6 +582,9 @@ def analyze(root: str, ep: str, night_luma: float = DEFAULT_NIGHT_LUMA,
             "light_cy": None if cy is None else round(cy, 3),
             "light_elev": None if cy is None else light_elevation(cy),
             "declared_light": declared.get(name, ""),
+            "weather": weather_of_text(env_text.get(name, "")),     # W4 声明天气（无→None）
+            "season": season_of_text(env_text.get(name, "")),       # W4 声明季节（无→None）
+            "time_transition": has_time_transition(env_text.get(name, "")),  # 合法转场 cue（豁免天气/季节硬跳）
         })
     if not timeline:
         res["notes"].append("无法读图估时辰。")
@@ -395,11 +599,14 @@ def analyze(root: str, ep: str, night_luma: float = DEFAULT_NIGHT_LUMA,
 
     for scene, rows in groups.items():
         lock = locked.get(scene) if scene else None
+        lenv = locked_env.get(scene, {}) if scene else {}
         if lock:
             res["notes"].append(f"场景[{scene}] scene_dna 锁定时辰={lock}，违锁 2 级 → block。")
         prev = None
         prev_az = None
         prev_elev = None
+        prev_w = None
+        prev_s = None
         for row in rows:
             cur = row["daypart"]
             if prev is None:
@@ -454,6 +661,49 @@ def analyze(root: str, ep: str, night_luma: float = DEFAULT_NIGHT_LUMA,
                     "verdict": "warn",
                     "message": f"{reason}——实测光向与声明光位锚矛盾，人核对是否光打反/写错锚。",
                 })
+            # W3b（#6）：实测光向 与 注册 key_light_direction 矛盾 → warn。给场景 canonical 主光方向
+            # 一个像素核对靶（此前只被 LSIG 当死字段）。prompt 文本若没写也兜得住；已被上面 prompt 锚命中则不重报。
+            reg_dir = _match_registered_light(scene, registered_light) if scene else None
+            if reg_dir and not reason:
+                reg_reason = anchor_contradiction(reg_dir, cur_az, cur_elev)
+                if reg_reason:
+                    res["shots"].append({
+                        "metric": "light_anchor_registered",
+                        "png": row["png"], "scene": scene or "(全集)",
+                        "light_az": cur_az, "light_elev": cur_elev,
+                        "verdict": "warn",
+                        "message": f"{reg_reason}（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。",
+                    })
+            # W4 天气连续性：同场景相邻镜/违锁出现互斥天气（晴↔雨雪）且无转场 cue → block（声明驱动·确定性）。
+            cur_w = row.get("weather")
+            if cur_w:
+                wv = _worst_band(weather_band(prev_w, cur_w),
+                                 weather_band(lenv.get("weather"), cur_w))
+                if wv != "ok" and not row.get("time_transition"):
+                    res["shots"].append({
+                        "metric": "weather",
+                        "png": row["png"], "scene": scene or "(全集)",
+                        "prev_weather": prev_w, "weather": cur_w,
+                        "locked": lenv.get("weather"), "verdict": wv,
+                        "message": (f"天气 {prev_w or lenv.get('weather')}→{cur_w} 同场景内突变且无时间转场 cue"
+                                    f"（晴↔雨雪等不连续；确属时间跳跃请在分镜写'三天后'等转场，或登记 intentional_discontinuity）"),
+                    })
+                prev_w = cur_w
+            # W4 季节连续性：同场景内换季（春↔冬）且无转场 cue → block。
+            cur_s = row.get("season")
+            if cur_s:
+                sv = _worst_band(season_band(prev_s, cur_s),
+                                 season_band(lenv.get("season"), cur_s))
+                if sv != "ok" and not row.get("time_transition"):
+                    res["shots"].append({
+                        "metric": "season",
+                        "png": row["png"], "scene": scene or "(全集)",
+                        "prev_season": prev_s, "season": cur_s,
+                        "locked": lenv.get("season"), "verdict": sv,
+                        "message": (f"季节 {prev_s or lenv.get('season')}→{cur_s} 同场景内换季且无时间转场 cue"
+                                    f"（同场景不应换季；确属时间跳跃请写转场 cue 或登记 intentional_discontinuity）"),
+                    })
+                prev_s = cur_s
     return res
 
 
@@ -469,16 +719,17 @@ def build_scene_world_ledger(root: str, ep: str, report: Mapping[str, object]) -
     scenes: Dict[str, Dict[str, object]] = {}
     for row in timeline:
         scene = str(row.get("scene") or "(全集)")
-        entry = scenes.setdefault(scene, {"shots": [], "dayparts": {}, "light_azimuths": {}, "light_elevations": {}, "findings": []})
+        entry = scenes.setdefault(scene, {"shots": [], "dayparts": {}, "light_azimuths": {}, "light_elevations": {}, "weathers": {}, "seasons": {}, "findings": []})
         entry["shots"].append(str(row.get("png") or ""))
-        for field, bucket in (("daypart", "dayparts"), ("light_az", "light_azimuths"), ("light_elev", "light_elevations")):
+        for field, bucket in (("daypart", "dayparts"), ("light_az", "light_azimuths"),
+                              ("light_elev", "light_elevations"), ("weather", "weathers"), ("season", "seasons")):
             value = str(row.get(field) or "")
             if value:
                 counts = entry[bucket]
                 counts[value] = counts.get(value, 0) + 1
     for item in shots:
         scene = str(item.get("scene") or "(全集)")
-        scenes.setdefault(scene, {"shots": [], "dayparts": {}, "light_azimuths": {}, "light_elevations": {}, "findings": []})
+        scenes.setdefault(scene, {"shots": [], "dayparts": {}, "light_azimuths": {}, "light_elevations": {}, "weathers": {}, "seasons": {}, "findings": []})
         scenes[scene]["findings"].append({
             "metric": item.get("metric"),
             "png": item.get("png"),

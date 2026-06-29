@@ -88,6 +88,9 @@ python3 skills/n2d-script/scripts/midstart_context.py <作品根> check
 - 身份：
 - 性格关键词：（3~5个）
 - 固定外貌：发型、发色、脸型、肤色、特征（疤/痣等）
+- 固定体态：（可视化+相对的定性词，如「精瘦运动型 / 宽肩高挑 / 娇小纤细」；避免「壮/大/丰满」这类量级模糊词，图像模型读不动）
+- 相对身量（如有第二角色作标尺）：（以某主角为标尺写相对关系，如「比沈念高半个头 / 三人中最高、肩最宽」；多人同框出图据此锁谁比谁高/壮，写入 `identity_registry.forms[].physical_scale.relative_scale`）
+- 绝对身高/体重（选填·仅写作元数据）：（如 178cm / 体型偏胖；**只供编剧连续性与推导上面的相对词，不进出图 prompt**——绝对数字 175cm/60kg 对图像模型基本是装饰、占 token 却 steer 不动像素）
 - 固定服装：款式、颜色、材质、配饰
 - 固定配色：（主色+辅色，便于一致性）
 - 固定表情风格 / 动作习惯：
@@ -211,7 +214,7 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 （本集出现但未建卡的关键道具，列出并补 prompt；无则写"无遗漏"）
 ```
 
-> 视频 prompt 必须显式描述**人物运动 + 镜头运动 + 动态细节**。**含打斗按 `打斗分镜.md`：五帧拆招（起手/发力/命中/受击/收势）、命中帧必出独立图、攻防用正反打；仍避免一镜内多人混战、超复杂同框动作。** **含御剑飞行/追逐/渡劫/炼丹炼器/大阵/大场面 establish/斗法对轰/神魂 按 `仙侠场面分镜.md`：飞行追逐「锁姿态、动背景与镜头」、渡劫炼丹法阵对轰「爆发帧(命中·撞点)单独出图 + 奇观元素入库」、神魂「元神=肉身半透明派生治"二我"」、大场面「三镜由远及近 + 比例尺」。** 大量人群、高频切换等 AI 难生成动作仍从简。
+> 视频 prompt 必须显式描述**人物运动 + 镜头运动 + 动态细节**。**含打斗按 `打斗分镜.md`：五帧拆招（起手/发力/命中/受击/收势）、命中帧必出独立图、攻防用正反打；仍避免一镜内多人混战、超复杂同框动作。** **含接吻/近吻/拥抱/抓腕/牵手/搀扶按 `亲密动作精修标准.md`：锁年龄语境、同意/非露骨边界、脸部角度、接触点、遮挡顺序、身体部位归属、释放/停住帧。** **含御剑飞行/御兽坐骑/马车载具/飞舟御物/追逐/渡劫/打坐静修/炼丹炼器/大阵/大场面 establish/斗法对轰/神魂 按 `仙侠场面分镜.md`：飞行/御兽/马车/飞舟/追逐「锁主体形态，速度交给背景、视差、步态循环、轮转和镜头」、渡劫炼丹法阵对轰「爆发帧(命中·撞点)单独出图 + 奇观元素入库」、静修「锁坐姿、呼吸周天、灵气路径和内在结果」、神魂「元神=肉身半透明派生治"二我"」、大场面「三镜由远及近 + 比例尺」。** **含穿越/系统流/测灵觉醒/契约召唤/秘境入口/阵法/炼制/静修/双修/神魂按 `玄幻穿越场面分镜.md` 与 `静修炼制双修精修标准.md`：入口与落点锁定，系统/测灵文字走 overlay，契约兽/丹炉/阵法/元神入库，每镜只给一个结果；双修只做成年人、自愿、非露骨的能量循环/疗伤表达。** **含现代车辆/车流、手机/电脑/监控屏幕、搜证/物证发现、尾随/潜入/暗走廊按 `现代都市悬疑场面分镜.md`：车辆锁车体/车道/轮转/车流，屏幕文字走 overlay，物证锁 reveal_frame/证据链，尾随锁遮挡层/光影/距离曲线。** 大量人群、高频切换等 AI 难生成动作仍从简。
 > 空镜缓冲不是补丁位，而是故事板阶段就要设计的正式 Clip：换场、跳时空、强情绪转折、AI 难接的姿态变化，都优先插 1-2s 空镜/物件镜（门帘、烛火、雨滴、符纸、手部）承接。下游 compose 只负责保留它的呼吸，不在成片上硬塞未知空镜。
 
 必须同步输出机器可读 `storyboard.json`（**接力契约 + 视觉契约 + 基础视觉风格契约的机器可读载体**——下游结构化消费衔接、视觉一致性与所选风格；缺它或缺必填字段时 `dashboard.py gate --stage image_preflight|video_preflight|image|video|compose`（生产入口，底层调 `n2d-review/scripts/gate.py --json`）会阻断）。
@@ -220,7 +223,7 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 
 **`style_contract` 是基础视觉风格的上游真值源**：风格来自选择点 `基础视觉风格` 与 `global_style.md`。不要只在 prompt 末尾加 `cinematic/realistic/anime`；必须在分镜设计阶段定死风格名、视觉基调、镜头与构图、光色策略、运动边界和风格禁忌。n2d-image 的「本集基础视觉风格契约」继承本块，把所选风格烤进首帧；n2d-video 再继承同一契约，只做与风格相容的运动。缺字段时 gate 阻断。旧 `cinematic_contract` 仅作历史兼容。
 
-**`template` + `template_contract` 是复杂镜头的上游真值源**：凡 Clip 涉及打斗、追逐、对话反打、真相揭示/身份曝光、公开对质/审讯/谈判、法术爆发、飞行、亲密互动、拥抱拉扯、关系转折、多人同框、群像站位，必须按 `专项镜头模板库.md` 选模板并写契约。允许的模板 ID：`fight_exchange`、`chase`、`dialogue_shot_reverse`、`reveal_reaction_chain`、`public_confrontation`、`magic_burst`、`flight`、`intimate_interaction`、`hug_or_pull`、`relationship_turn`、`multi_character_same_frame`、`ensemble_blocking`、`multi_person_blocking`（legacy）。普通空镜/单人静态反应可省略；复杂镜头缺模板或字段不全时 gate 阻断。
+**`template` + `template_contract` 是复杂镜头的上游真值源**：凡 Clip 涉及打斗、追逐、对话反打、真相揭示/身份曝光、公开对质/审讯/谈判、法术爆发、飞行、御兽/坐骑、马车/载具行进、飞舟/御物飞行、现代车辆/车流、手机/电脑/监控屏幕、搜证/物证发现、尾随/潜入/暗走廊、渡劫突破、打坐静修、炼丹炼器、阵法仪式、神魂显化、穿越/传送/秘境入口、契约召唤、测灵/天赋觉醒、双修合修、接吻近吻、亲密互动、拥抱拉扯、关系转折、多人同框、群像站位，必须按 `专项镜头模板库.md` 选模板并写契约。仙侠高频场面参考 `仙侠场面分镜.md`；静修/炼制/双修参考 `静修炼制双修精修标准.md`；接吻/拥抱等亲密动作参考 `亲密动作精修标准.md`；玄幻/穿越高频场面参考 `玄幻穿越场面分镜.md`；都市/悬疑高频场面参考 `现代都市悬疑场面分镜.md`。允许的模板 ID：`fight_exchange`、`chase`、`dialogue_shot_reverse`、`reveal_reaction_chain`、`public_confrontation`、`magic_burst`、`flight`、`mount_ride`、`vehicle_ride`、`vessel_flight`、`road_vehicle`、`screen_insert`、`evidence_search`、`stealth_stalk`、`tribulation_breakthrough`、`meditation_cultivation`、`alchemy_forging`、`dual_cultivation`、`kiss_or_near_kiss`、`array_ritual`、`soul_manifestation`、`realm_portal`、`contract_summon`、`talent_test`、`intimate_interaction`、`hug_or_pull`、`relationship_turn`、`multi_character_same_frame`、`ensemble_blocking`、`multi_person_blocking`（legacy）。普通空镜/单人静态反应可省略；复杂镜头缺模板或字段不全时 gate 阻断。
 
 每个 clip 带 `continuity` 块，`start_state` 应等于上一 clip 的 `end_state`。
 

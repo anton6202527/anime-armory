@@ -5,6 +5,7 @@ Run from this directory:
     cd skills/novel-wiki/scripts && python3 -m pytest test_logic_sentry.py
 """
 import os
+import json
 import wiki_builder
 import logic_sentry
 
@@ -60,11 +61,13 @@ def test_neighbor_death_not_misattributed(tmp_path):
 def test_deceased_reactivation_alert(tmp_path):
     proj = _mk_project(tmp_path)
     wiki = wiki_builder.build_wiki(str(proj))
-    # 第3章李慕白又活动 → 阻断级告警
+    # 第3章李慕白又活动 → 仍被检出，但 B10：关键词扫正文=脆弱启发式，降为建议级·不硬阻断。
     alerts = logic_sentry.scan_chapter(wiki, "李慕白冷笑着挥剑反击。", 3)
-    types = [a["type"] for a in alerts]
-    assert "deceased_reactivation" in types
-    assert any(a["severity"] == "阻断级" for a in alerts)
+    hit = [a for a in alerts if a["type"] == "deceased_reactivation"]
+    assert hit, "复活仍应被检出为候选"
+    assert hit[0]["severity"] == "建议级"
+    assert hit[0]["confidence"] == "heuristic"
+    assert hit[0]["downgraded_from"] == "阻断级"
 
 
 def test_reactivation_suppressed_by_flashback(tmp_path):
@@ -85,7 +88,9 @@ def test_no_alert_before_death_chapter(tmp_path):
 def test_discarded_item_reuse():
     wiki = {"清月剑": {"category": "item", "status": "shattered", "last_update": 5}}
     alerts = logic_sentry.scan_chapter(wiki, "他举起清月剑，再次催动剑气。", 8)
-    assert any(a["type"] == "discarded_item_reuse" and a["severity"] == "阻断级" for a in alerts)
+    # B10：动词邻近扫正文=脆弱启发式，检出但降为建议级（不再硬阻断 post_write）。
+    hit = [a for a in alerts if a["type"] == "discarded_item_reuse"]
+    assert hit and hit[0]["severity"] == "建议级" and hit[0]["confidence"] == "heuristic"
     # 仅提及不使用 → 不报
     alerts2 = logic_sentry.scan_chapter(wiki, "清月剑的碎片散落一地。", 8)
     assert not any(a["type"] == "discarded_item_reuse" for a in alerts2)
@@ -225,6 +230,69 @@ def test_relationship_flip_no_history_skips():
     assert logic_sentry.scan_relationship_flips({"matrix": {"a|b": {"temperature": 10}}}, "x", 5) == []
 
 
+# ── N2b 动态关系图（从 state_delta 增量构图 + 突变无铺垫·可阻断）──
+
+def _graph(pair, hist):
+    return {"matrix": {pair: {"history": hist, "labels": []}}}
+
+
+def test_normalize_pair_order_invariant():
+    assert logic_sentry._normalize_pair("乙↔甲") == logic_sentry._normalize_pair("甲↔乙")
+    assert logic_sentry._normalize_pair({"a": "甲", "b": "乙"}) == ("乙", "甲")
+
+
+def test_build_relationship_graph_from_state_delta(tmp_path):
+    d = tmp_path / "审稿"
+    d.mkdir()
+    (d / "state_delta_第03章.json").write_text(json.dumps(
+        {"relationship_changes": [{"pair": "甲↔乙", "temperature": 60, "label": "并肩"}]}),
+        encoding="utf-8")
+    (d / "state_delta_第07章.json").write_text(json.dumps(
+        {"relationship_changes": [{"pair": "乙↔甲", "temperature": -50}]}), encoding="utf-8")
+    g = logic_sentry.build_relationship_graph(str(tmp_path))
+    key = "↔".join(logic_sentry._normalize_pair("甲↔乙"))
+    hist = g["matrix"][key]["history"]
+    assert [h["chapter"] for h in hist] == [3, 7]  # 跨章累积、对序归一合并
+    assert hist[1]["temperature"] == -50
+
+
+def test_break_blocking_on_sign_flip_without_setup():
+    g = _graph("甲↔乙", [{"chapter": 3, "temperature": 60},
+                         {"chapter": 7, "temperature": -60}])
+    alerts = logic_sentry.detect_relationship_breaks(g, chapter_texts={7: "两人照常吃饭。"},
+                                                     total_chapters=20)
+    assert any(a["type"] == "relationship_break" and a["severity"] == "阻断级" for a in alerts)
+
+
+def test_break_setup_in_bridge_chapter_exempts():
+    g = _graph("甲↔乙", [{"chapter": 3, "temperature": 60},
+                         {"chapter": 7, "temperature": -60}])
+    # 铺垫落在桥接的第 5 章正文，而非跳变章 → 豁免（图驱动比逐章强在这里）
+    alerts = logic_sentry.detect_relationship_breaks(
+        g, chapter_texts={5: "那一夜的背叛埋下祸根。", 7: "照常。"}, total_chapters=20)
+    assert alerts == []
+
+
+def test_break_label_on_change_exempts():
+    g = _graph("甲↔乙", [{"chapter": 3, "temperature": 60},
+                         {"chapter": 7, "temperature": -60, "label": "决裂收场"}])
+    assert logic_sentry.detect_relationship_breaks(g, total_chapters=20) == []
+
+
+def test_break_final_chapter_downgrades_to_advisory():
+    g = _graph("甲↔乙", [{"chapter": 18, "temperature": 60},
+                         {"chapter": 20, "temperature": -60}])
+    alerts = logic_sentry.detect_relationship_breaks(g, chapter_texts={20: "照常。"},
+                                                     total_chapters=20)
+    assert alerts and all(a["severity"] == "建议级" for a in alerts)  # 终章高潮豁免阻断
+
+
+def test_break_small_swing_ignored():
+    g = _graph("甲↔乙", [{"chapter": 3, "temperature": 50},
+                         {"chapter": 7, "temperature": 25}])
+    assert logic_sentry.detect_relationship_breaks(g, total_chapters=20) == []
+
+
 # ── N3 张力账本 ──
 
 def test_hook_stale_high_urgency_overdue():
@@ -303,4 +371,84 @@ def test_character_guardrail_via_scan_chapter(tmp_path):
     wiki = {"沈念": {"category": "character", "status": "active"}}
     alerts = logic_sentry.scan_chapter(
         wiki, "沈念亲手伤害无辜，殿内忽然安静。", 18, project_root=str(proj))
-    assert any(a["type"] == "character_hard_limit_violation" for a in alerts)
+    hit = [a for a in alerts if a["type"] == "character_hard_limit_violation"]
+    # B10：角色护栏=正文短语+名字邻近=脆弱启发式，检出但降为建议级。
+    assert hit and hit[0]["severity"] == "建议级"
+
+
+# ── B10 收口：确定性证据闸（伏笔台账整数比较）经 scan_chapter 仍保留阻断 ──
+
+def test_foreshadow_overdue_stays_blocking_through_scan_chapter():
+    # 确定性 finding（DETERMINISTIC_TYPES）不被降级——伏笔超期是台账整数比较·不扫正文。
+    fr = {"kind": "foreshadow_report", "through_chapter": 60, "overdue": [
+        {"id": "f1", "severity": "阻断级", "expected_payoff_chapter": 40,
+         "description": "神秘玉佩来历", "note": "高价值伏笔已超回收窗口"}]}
+    wiki = {"王敦": {"category": "character", "status": "active"}}
+    alerts = logic_sentry.scan_chapter(
+        wiki, "王敦继续赶路。", 60, project_root="/nonexistent", foreshadow_report=fr)
+    hit = [a for a in alerts if a["type"] == "foreshadowing_overdue"]
+    assert hit and hit[0]["severity"] == "阻断级"
+    assert hit[0]["confidence"] == "deterministic"
+
+
+def test_clean_chapter_still_clean_after_enforce():
+    wiki = {"王敦": {"category": "character", "status": "active"}}
+    assert logic_sentry.scan_chapter(wiki, "王敦继续赶路。", 10) == []
+
+
+# ── A1/A2 经 logic_sentry.scan_structured_ledgers 进入真硬阻断闸 ──
+from heuristic_gate import enforce, count_blocking
+
+
+def _write_state_ledger(proj, deltas):
+    (proj / "审稿").mkdir(parents=True, exist_ok=True)
+    (proj / "审稿" / "state_ledger.json").write_text(
+        json.dumps({"chapter_deltas": deltas}, ensure_ascii=False), encoding="utf-8")
+
+
+def test_structured_lifecycle_conflict_counts_as_blocking(tmp_path):
+    proj = tmp_path / "书"
+    proj.mkdir()
+    _write_state_ledger(proj, {
+        "第2章": {"character_changes": [{"name": "王五", "event": "death"}]},
+        "第6章": {"character_changes": [{"name": "王五", "event": "fights"}]},
+    })
+    alerts = logic_sentry.scan_structured_ledgers(str(proj))
+    enforce(alerts)  # 幂等：确定性 alert 不被 B10 降级
+    assert count_blocking(alerts) == 1
+    assert alerts[0]["type"] == "deceased_ledger_reactivation"
+
+
+def test_chapter_scoped_lifecycle_only_current_chapter(tmp_path):
+    proj = tmp_path / "书"
+    proj.mkdir()
+    _write_state_ledger(proj, {
+        "第2章": {"character_changes": [{"name": "王五", "event": "death"}]},
+        "第6章": {"character_changes": [{"name": "王五", "event": "fights"}]},
+    })
+    assert len(logic_sentry.scan_structured_ledgers(str(proj), chapter_index=6)) == 1
+    assert logic_sentry.scan_structured_ledgers(str(proj), chapter_index=3) == []
+
+
+def test_world_fact_interval_conflict_blocks_in_full_pass(tmp_path):
+    proj = tmp_path / "书"
+    (proj / "设定").mkdir(parents=True)
+    (proj / "设定" / "world_state_ledger.json").write_text(json.dumps({"major_changes": [
+        {"key": "皇帝", "value": "周帝", "established_at": 1, "invalidated_at": 20},
+        {"key": "皇帝", "value": "秦帝", "established_at": 10},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    alerts = logic_sentry.scan_structured_ledgers(str(proj))   # chapter_index=None → 含世界事实
+    enforce(alerts)
+    assert count_blocking(alerts) == 1
+    assert alerts[0]["type"] == "world_fact_interval_conflict"
+
+
+def test_world_fact_skipped_in_single_chapter_pass(tmp_path):
+    # 世界事实区间冲突是全局项；单章 post_write（chapter_index 给定）默认不刷
+    proj = tmp_path / "书"
+    (proj / "设定").mkdir(parents=True)
+    (proj / "设定" / "world_state_ledger.json").write_text(json.dumps({"major_changes": [
+        {"key": "皇帝", "value": "周帝", "established_at": 1, "invalidated_at": 20},
+        {"key": "皇帝", "value": "秦帝", "established_at": 10},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    assert logic_sentry.scan_structured_ledgers(str(proj), chapter_index=5) == []

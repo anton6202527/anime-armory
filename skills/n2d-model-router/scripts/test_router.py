@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+import pytest
+
 import router
 
 
@@ -34,6 +36,7 @@ def test_fight_routes_to_kling_with_seedance_fallback(tmp_path):
     assert route["motion_control"]["manifest_path"].endswith("出视频/第1集/control/Clip_01/motion_control_manifest.json")
     assert route["action_choreography"]["required"] is True
     assert "impact_frame" in route["action_choreography"]["required_fields"]
+    assert "keyframe_plan" in route["action_choreography"]["required_fields"]
     assert "action_choreography_required" in route["risk_flags"]
     recipe = route["execution_recipe"]
     assert recipe["execution_backend"] == route["primary_backend"]
@@ -238,6 +241,146 @@ def test_chase_routes_require_motion_path_and_choreography(tmp_path):
     assert "distance_curve" in route["action_choreography"]["required_fields"]
 
 
+def test_magic_burst_routes_as_premium_action_spectacle(tmp_path):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{"id": "Clip 8", "template": "magic_burst", "scene": "沈念挥出青色剑气，撞上黑色护盾后破防"}])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["shot_type"] == "magic_burst"
+    assert route["primary_backend"] == "seedance"
+    assert route["motion_control"]["level"] == "required"
+    assert "vfx_layers" in route["motion_control"]["required_inputs"]
+    assert route["action_choreography"]["required"] is True
+    assert "collision_or_apex_frame" in route["action_choreography"]["required_fields"]
+    assert "keyframe_plan" in route["action_choreography"]["required_fields"]
+    assert "action_choreography_required" in route["risk_flags"]
+    assert "vfx_consistency_risk" in route["risk_flags"]
+    assert route["motion_reference"]["applicable"] is True
+
+
+@pytest.mark.parametrize(
+    ("template", "scene", "specific_field"),
+    [
+        ("mount_ride", "主角骑灵狼穿林奔跑，鞍具与缰绳清楚", "mount_contact"),
+        ("vehicle_ride", "马车沿山路左到右疾行，车轮扬尘", "wheel_rotation"),
+        ("vessel_flight", "飞舟穿云抵达山门，云海高速后掠", "vehicle_lock"),
+        ("road_vehicle", "出租车沿高架左到右疾行，车流后掠，司机紧握方向盘", "lane_lock"),
+        ("stealth_stalk", "黑衣人尾随女主穿过暗走廊，门缝遮挡，手电光扫过", "occlusion_layers"),
+    ],
+)
+def test_continuous_motion_routes_require_choreography(tmp_path, template, scene, specific_field):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{"id": "Clip 4", "template": template, "scene": scene}])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["shot_type"] == template
+    assert route["primary_backend"] == "seedance"
+    assert route["motion_control"]["level"] == "required"
+    assert set(["camera_path", "spatial_path", "parallax_layers"]).issubset(route["motion_control"]["required_inputs"])
+    assert route["action_choreography"]["required"] is True
+    assert specific_field in route["action_choreography"]["required_fields"]
+    assert "screen_direction" in route["action_choreography"]["required_fields"]
+    assert "high_speed_motion" in route["risk_flags"]
+
+
+def test_screen_insert_routes_to_overlay_sensitive_path(tmp_path):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{
+        "id": "Clip 6",
+        "template": "screen_insert",
+        "scene": "手机屏幕出现聊天记录和定位时间码，手指轻点来电弹窗",
+    }])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["shot_type"] == "screen_insert"
+    assert route["primary_backend"] == "kling"
+    assert route["motion_control"]["level"] == "none"
+    assert "text_overlay_required" in route["risk_flags"]
+    assert any("overlay" in req for req in route["prompt_requirements"])
+
+
+def test_evidence_search_routes_to_object_continuity_path(tmp_path):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{
+        "id": "Clip 7",
+        "template": "evidence_search",
+        "scene": "侦探翻找抽屉，露出沾血票据，证物袋入画",
+    }])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["shot_type"] == "evidence_search"
+    assert route["primary_backend"] == "kling"
+    assert route["motion_control"]["level"] == "none"
+    assert "object_continuity_risk" in route["risk_flags"]
+    assert any("clue_object" in req for req in route["prompt_requirements"])
+
+
+@pytest.mark.parametrize(
+    ("template", "scene", "field_hint"),
+    [
+        ("tribulation_breakthrough", "雷劫劈落，主角护体光抵挡后突破光柱冲天", "lightning"),
+        ("array_ritual", "宗门大阵起势，阵眼依次点亮，结界封住魔兽", "VFX"),
+        ("realm_portal", "现代青年被时空裂缝卷入秘境入口，落到异界山门前", "portal"),
+        ("contract_summon", "少女以血契召唤灵兽，契约印记落在手背", "summon"),
+    ],
+)
+def test_genre_vfx_spectacles_route_to_asset_locked_path(tmp_path, template, scene, field_hint):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{"id": "Clip 9", "template": template, "scene": scene}])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["shot_type"] == template
+    assert route["primary_backend"] == "seedance"
+    assert route["motion_control"]["level"] == "none"
+    assert route["action_choreography"]["required"] is False
+    assert "vfx_consistency_risk" in route["risk_flags"]
+    assert any(field_hint.lower() in req.lower() for req in route["prompt_requirements"])
+
+
+def test_soul_manifestation_routes_to_identity_sensitive_frames_path(tmp_path):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{
+        "id": "Clip 10",
+        "template": "soul_manifestation",
+        "scene": "CHAR_01 盘坐，半透明元神从天灵升起并进入识海探查",
+        "characters": ["CHAR_01/常态"],
+    }])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["shot_type"] == "soul_manifestation"
+    assert route["primary_backend"] == "kling"
+    assert route["mode"] == "frames2video"
+    assert route["identity_requirement"] == "character_id_or_reference_group"
+    assert "body_soul_consistency_risk" in route["risk_flags"]
+    assert any("body_soul_identity_lock" in req for req in route["prompt_requirements"])
+
+
+@pytest.mark.parametrize(
+    ("template", "scene", "risk_flag"),
+    [
+        ("alchemy_forging", "丹炉开炉，三味药材入炉后凝成金色丹药", "object_continuity_risk"),
+        ("talent_test", "测灵石光柱暴涨，天赋等级文字由后期叠加，众人震惊", "text_overlay_required"),
+    ],
+)
+def test_craft_and_talent_routes_to_readability_path(tmp_path, template, scene, risk_flag):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{"id": "Clip 11", "template": template, "scene": scene}])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["shot_type"] == template
+    assert route["primary_backend"] == "kling"
+    assert route["motion_control"]["level"] == "none"
+    assert risk_flag in route["risk_flags"]
+    assert any("overlay" in req or "lock" in req for req in route["prompt_requirements"])
+
+
 def test_reveal_template_routes_to_identity_sensitive_speech_path(tmp_path):
     root = _root(tmp_path)
     _write_storyboard(root, [{
@@ -356,15 +499,39 @@ def test_native_av_mode_leaves_action_shots_unchanged(tmp_path):
     assert route["native_audio_policy"] == "none"
 
 
-def test_voice_first_mode_keeps_dialogue_no_native_speech(tmp_path):
-    # 显式配音先行：对话镜仍不让视频后端生成台词。
+def test_voice_first_dialogue_closeup_defaults_to_lipsync(tmp_path):
+    # 新默认（对话近景，2026-06-26）：配音先行下对话近景说话镜默认走配音对齐口型。
+    # native_audio_policy=lipsync_condition_only —— 后端只把克隆配音当口型条件、不生成台词（无双人声，
+    # 仍满足旧测试意图「对话镜不让视频后端生成台词」）。
     root = _root(tmp_path, "- 生视频AI: 即梦\n- 视频模型路由: 自动按镜头路由\n- 制作模式: 配音先行\n")
     _write_storyboard(root, [{"id": "Clip 1", "template": "dialogue_shot_reverse", "scene": "对话反打台词"}])
 
     route = router.route_episode(root, "第1集")["routes"][0]
 
-    assert route["mode"] != "native_av"
+    assert route["mode"] == "voice_conditioned_lipsync"
+    assert route["native_audio_policy"] == "lipsync_condition_only"
+    assert route["native_audio_policy"] != "native_speech"
+
+
+def test_voice_first_dialogue_lipsync_off_when_disabled(tmp_path):
+    # 显式 对口型=关闭：对话镜不进口型路由（回到无口型 dialogue 路由）。
+    root = _root(tmp_path, "- 生视频AI: 即梦\n- 视频模型路由: 自动按镜头路由\n- 制作模式: 配音先行\n- 对口型: 关闭\n")
+    _write_storyboard(root, [{"id": "Clip 1", "template": "dialogue_shot_reverse", "scene": "对话反打台词"}])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["mode"] != "voice_conditioned_lipsync"
     assert route["native_audio_policy"] == "none"
+
+
+def test_voice_first_non_closeup_speech_no_default_lipsync(tmp_path):
+    # 对话近景默认档：非对话近景的说话镜（public_confrontation）默认不进口型路由——成本有界。
+    root = _root(tmp_path, "- 生视频AI: 即梦\n- 视频模型路由: 自动按镜头路由\n- 制作模式: 配音先行\n")
+    _write_storyboard(root, [{"id": "Clip 1", "template": "public_confrontation", "scene": "当众对质"}])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["mode"] != "voice_conditioned_lipsync"
 
 
 def test_fixed_mode_uses_default_backend(tmp_path):
@@ -771,6 +938,86 @@ def test_motion_reference_applicable_for_flight_on_seedance(tmp_path):
     assert "motion_reference_candidate" in route["risk_flags"]
 
 
+def test_meditation_cultivation_routes_to_controlled_low_motion(tmp_path):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{
+        "id": "Clip 1",
+        "template": "meditation_cultivation",
+        "scene": "沈念打坐吐纳，灵气入体，丹田光纹微亮",
+        "characters": ["CHAR_01/常态"],
+    }])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["shot_type"] == "meditation_cultivation"
+    assert route["primary_backend"] == "kling"
+    assert route["mode"] == "image2video"
+    assert "micro_motion_readability_risk" in route["risk_flags"]
+    assert route["motion_control"]["required"] is False
+    assert any("posture_lock" in req for req in route["prompt_requirements"])
+
+
+def test_dual_cultivation_requires_motion_control_and_non_explicit_boundary(tmp_path):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{
+        "id": "Clip 1",
+        "template": "dual_cultivation",
+        "scene": "两名成年角色掌心相抵疗伤合修，蓝金灵力循环",
+        "characters": ["CHAR_01/常态", "CHAR_02/常态"],
+    }])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["shot_type"] == "dual_cultivation"
+    assert route["primary_backend"] == "kling"
+    assert route["mode"] == "frames2video"
+    assert route["motion_control"]["required"] is True
+    assert "contact_map" in route["motion_control"]["required_inputs"]
+    assert "vfx_layers" in route["motion_control"]["required_inputs"]
+    assert "consent_non_explicit_required" in route["risk_flags"]
+    assert "energy_circulation_required" in route["risk_flags"]
+    assert any("non-explicit" in req or "adult" in req for req in route["prompt_requirements"])
+
+
+def test_kiss_or_near_kiss_requires_face_contact_controls(tmp_path):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{
+        "id": "Clip 1",
+        "template": "kiss_or_near_kiss",
+        "scene": "告白后两人近吻停顿，唇边差点接触",
+        "characters": ["CHAR_01/常态", "CHAR_02/常态"],
+    }])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["shot_type"] == "kiss_or_near_kiss"
+    assert route["primary_backend"] == "kling"
+    assert route["mode"] == "frames2video"
+    assert route["motion_control"]["required"] is True
+    assert "contact_map" in route["motion_control"]["required_inputs"]
+    assert "face_contact_risk" in route["risk_flags"]
+    assert "micro_expression_required" in route["risk_flags"]
+    assert any("age_context_lock" in req for req in route["prompt_requirements"])
+
+
+def test_alchemy_route_requires_process_ladder_prompt(tmp_path):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{
+        "id": "Clip 1",
+        "template": "alchemy_forging",
+        "scene": "炼丹开炉，三颗金纹丹丸成形",
+        "characters": ["CHAR_01/常态"],
+    }])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["shot_type"] == "alchemy_forging"
+    assert route["primary_backend"] == "kling"
+    assert "object_continuity_risk" in route["risk_flags"]
+    assert "vfx_consistency_risk" in route["risk_flags"]
+    assert any("process_stage_ladder" in req and "heat_curve" in req for req in route["prompt_requirements"])
+
+
 def test_motion_reference_not_applicable_for_dialogue():
     plan = router.motion_reference_plan("dialogue_closeup", "kling")
     assert plan["applicable"] is False
@@ -893,3 +1140,85 @@ def test_urgency_tier_from_settings_batch_aliases():
     import router as r
     for v in ("隔夜批量", "批量", "batch", "batch_24h", "flex", "非紧急"):
         assert r.urgency_tier_from_settings({"投放时效": v}) == "batch_24h", v
+
+
+# ── 跨后端英雄镜多版（2026-06-26） ──────────────────────────────────────────────
+def test_hero_multi_version_off_by_default(tmp_path):
+    # costly 选择点默认关闭：英雄镜也不标 hero_multi_version。
+    root = _root(tmp_path)
+    _write_storyboard(root, [{"id": "Clip 1", "template": "fight_exchange", "scene": "当众打脸宿敌全场震惊"}])
+
+    plan = router.route_episode(root, "第1集", generated_at="2026-06-08T00:00:00Z")
+
+    assert plan["hero_multi_version"]["enabled"] is False
+    assert "hero_multi_version" not in plan["routes"][0]
+
+
+def test_hero_multi_version_marks_hero_shot_when_on(tmp_path):
+    # 开启后名场面镜跨后端多版：secondary 取异于 primary 的 fallback。
+    root = _root(tmp_path, "- 生视频AI: 即梦\n- 视频模型路由: 自动按镜头路由\n- 英雄镜多版: 开启\n")
+    _write_storyboard(root, [{"id": "Clip 1", "template": "fight_exchange", "scene": "当众打脸宿敌全场震惊"}])
+
+    plan = router.route_episode(root, "第1集", generated_at="2026-06-08T00:00:00Z")
+    route = plan["routes"][0]
+
+    assert plan["hero_multi_version"]["enabled"] is True
+    hv = route["hero_multi_version"]
+    assert hv["enabled"] is True
+    assert hv["secondary_backend"] and hv["secondary_backend"] != hv["primary_backend"]
+    assert route["clip_id"] in plan["hero_multi_version"]["hero_clips"] or "Clip" in str(hv["candidate_pool"])
+
+
+def test_hero_multi_version_skips_non_hero_shot(tmp_path):
+    # 普通过场镜不加版（成本有界）。
+    root = _root(tmp_path, "- 生视频AI: 即梦\n- 视频模型路由: 自动按镜头路由\n- 英雄镜多版: 开启\n")
+    _write_storyboard(root, [
+        {"id": "Clip 1", "template": "empty_establishing", "scene": "城门空镜"},
+        {"id": "Clip 2", "template": "empty_establishing", "scene": "街道平淡过场"},
+    ])
+
+    plan = router.route_episode(root, "第1集", generated_at="2026-06-08T00:00:00Z")
+
+    # 第1镜=开场钩算英雄镜；第2镜普通过场不加版。
+    assert "hero_multi_version" not in plan["routes"][1]
+
+
+def test_is_overseas_target_detection():
+    assert router.is_overseas_target({"发行地区": "北美"}) is True
+    assert router.is_overseas_target({"发行地区": "全球"}) is True
+    assert router.is_overseas_target({"变现模式": "海外"}) is True
+    assert router.is_overseas_target({"字幕语言": "仅英文"}) is True
+    assert router.is_overseas_target({"发行地区": "中国大陆"}) is False
+    assert router.is_overseas_target({"发行地区": "港澳台", "字幕语言": "中英双语"}) is False
+
+
+def test_native_av_overseas_prefers_multilingual_lipsync_backend():
+    clip = {"character_ids": ["CHAR_01"], "description": "她说话", "continuity": {}}
+    # 默认 veo（原生音画但非多语言唇同步）：境内保持 veo，出海抢占 seedance（多语言唇同步最强）。
+    domestic = router._route_native_av_speech(clip, "dialogue_closeup", "veo", overseas=False)
+    overseas = router._route_native_av_speech(clip, "dialogue_closeup", "veo", overseas=True)
+    assert domestic["primary_backend"] == "veo"
+    assert overseas["primary_backend"] == "seedance"
+    assert any("出海" in r for r in overseas["rationale"])
+
+
+def test_native_av_overseas_keeps_already_multilingual_default():
+    clip = {"character_ids": ["CHAR_01"], "description": "她说话", "continuity": {}}
+    # 默认已是多语言唇同步后端（seedance）→ 出海不改 primary、不加无谓 rationale。
+    overseas = router._route_native_av_speech(clip, "dialogue_closeup", "seedance", overseas=True)
+    assert overseas["primary_backend"] == "seedance"
+    assert not any("出海" in r for r in overseas["rationale"])
+
+
+def test_route_episode_overseas_threads_to_speech_clips(tmp_path):
+    root = _root(tmp_path, settings=(
+        "- 生视频模型: Veo 3.1\n- 视频模型路由: 自动按镜头路由\n"
+        "- 制作模式: 原生音画\n- 发行地区: 北美\n"))
+    _write_storyboard(root, [
+        {"id": "Clip_01", "character_ids": ["CHAR_01"], "description": "她开口说话",
+         "continuity": {"shot_size": "近景"}, "shots": [{"lens": "近景", "desc": "说话特写"}]},
+    ])
+    plan = router.route_episode(root, "第1集")
+    speech = plan["routes"][0]
+    # 出海 + 原生音画说话镜 → primary 切到多语言唇同步后端（非默认 veo）。
+    assert speech["primary_backend"] == "seedance"

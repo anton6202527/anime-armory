@@ -15,7 +15,7 @@ if _COMMON not in sys.path:
 from io_utils import load_json  # noqa: E402  本线 _lib 单一真值源
 from project_io import list_chapter_files, load_project_settings  # noqa: E402
 
-from contract import normalize_novel_purpose, resolve_novel_draft_mode
+from novel_contract import normalize_novel_purpose, resolve_novel_draft_mode
 from store import atomic_write_json, file_lock
 
 

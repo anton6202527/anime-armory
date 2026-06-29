@@ -51,7 +51,19 @@ def parse_hit(value):
     }
 
 
-def assess(candidates, sources, hits, timeout):
+def parse_checked(value):
+    parts = value.split("|", 3)
+    if len(parts) < 2:
+        raise argparse.ArgumentTypeError("--checked 格式：候选|查询说明[|URL|平台]")
+    return {
+        "candidate": parts[0].strip(),
+        "query": parts[1].strip(),
+        "url": parts[2].strip() if len(parts) >= 3 else "",
+        "platform": parts[3].strip() if len(parts) >= 4 else "manual_search",
+    }
+
+
+def assess(candidates, sources, hits, timeout, checked=None):
     reports = []
     fetched = []
     for source in sources:
@@ -64,12 +76,15 @@ def assess(candidates, sources, hits, timeout):
         fetched.append(item)
 
     manual_hits = [parse_hit(v) for v in hits]
-    # 是否真的查了：至少一个来源抓取成功，或给了人工命中。否则 collisions 为空 ≠ 不撞名，
+    manual_checks = [parse_checked(v) for v in (checked or [])]
+    # 是否真的查了：至少一个来源抓取成功、给了人工命中，或记录了某候选的无命中搜索。
+    # 否则 collisions 为空 ≠ 不撞名，
     # 而是「没查」——必须区分，免得零输入时把候选误报成 clear，给假的"书名不撞"信心。
-    checked = any(s["status"] == "ok" for s in fetched) or bool(manual_hits)
+    globally_checked = any(s["status"] == "ok" for s in fetched) or bool(manual_hits)
     for candidate in candidates:
         norm = normalize(candidate)
         collisions = []
+        checks = [c for c in manual_checks if c["candidate"] == candidate]
         for hit in manual_hits:
             if hit["candidate"] == candidate or normalize(hit["title"]) == norm:
                 collisions.append({
@@ -98,7 +113,7 @@ def assess(candidates, sources, hits, timeout):
             status = "hard_collision"
         elif collisions:
             status = "soft_collision"
-        elif checked:
+        elif globally_checked or checks:
             status = "clear"
         else:
             status = "unchecked"  # 没做任何有效查重——不可视为不撞名
@@ -106,6 +121,7 @@ def assess(candidates, sources, hits, timeout):
             "candidate": candidate,
             "status": status,
             "collisions": collisions,
+            "checks": checks,
         })
     return reports, fetched
 
@@ -115,12 +131,14 @@ def main():
     ap.add_argument("--candidate", action="append", required=True, help="候选书名，可重复")
     ap.add_argument("--source", action="append", default=[], help="要抓取检查的榜单/搜索页 URL")
     ap.add_argument("--hit", action="append", default=[], help="候选|命中标题[|URL|平台]，可重复")
+    ap.add_argument("--checked", action="append", default=[],
+                    help="候选|查询说明[|URL|平台]，用于记录已搜索但未发现明确撞名")
     ap.add_argument("--out-dir", default=".")
     ap.add_argument("--date", default=date.today().isoformat())
     ap.add_argument("--timeout", type=float, default=8.0)
     args = ap.parse_args()
 
-    reports, fetched = assess(args.candidate, args.source, args.hit, args.timeout)
+    reports, fetched = assess(args.candidate, args.source, args.hit, args.timeout, args.checked)
     payload = {
         "schema_version": 1,
         "kind": "novel_title_collision_check",
@@ -142,6 +160,13 @@ def main():
                 continue
             if not item["collisions"]:
                 f.write("- 未发现明确撞名。\n\n")
+                checks = item.get("checks") or []
+                if checks:
+                    f.write("无命中搜索记录：\n")
+                    for c in checks:
+                        link = f" {c.get('url')}" if c.get("url") else ""
+                        f.write(f"- {c.get('platform')}: {c.get('query')}{link}\n")
+                    f.write("\n")
                 continue
             for c in item["collisions"]:
                 f.write(f"- {c['strength']} / {c['platform']}：{c['match']} {c.get('url','')}\n")

@@ -19,6 +19,38 @@ if COMMON not in sys.path:
 from n2d_contract import contract_version_report, write_episode_manifest
 from n2d_route import STAGES, cell_state, format_route, is_episode_row, parse_progress, progress_path, stage_of, summarize, voice_is_placeholder
 
+# H1 fail-closed 兜底常量（2026-06-28）：gate_receipt 模块若导入失败仍需识别受闸列 + 写同一 waiver 账本。
+# 与 gate_receipt.ENFORCED_COLUMN_GATE_STAGE / ALLOW_ENV / WAIVER_LEDGER 同源复刻，
+# test_progress_receipt_failclosed 守护其与 gate_receipt 不漂移。
+_GATED_COLUMN_STAGE_FALLBACK = {"出图": "image", "视频": "video", "成片": "compose", "验收": "review"}
+_GATED_COLUMNS_FALLBACK = frozenset(_GATED_COLUMN_STAGE_FALLBACK)
+_PROGRESS_ALLOW_ENV = "N2D_PROGRESS_ALLOW_UNVERIFIED"
+_UNVERIFIED_WAIVER_LEDGER = "progress_unverified_waivers.jsonl"
+
+
+def _append_unverified_waiver_fallback(root, ep, col, val, reason):
+    """gate_receipt 不可加载时的最小留痕：往同一 waiver 账本 append 一行（schema 兼容 gate_receipt
+    的 unresolved_waivers：带 episode + gate_stage，使日后模块恢复跑闸能自动销账）。"""
+    import json as _json
+    from datetime import datetime, timezone
+    d = os.path.join(root, "生产数据")
+    os.makedirs(d, exist_ok=True)
+    path = os.path.join(d, _UNVERIFIED_WAIVER_LEDGER)
+    rec = {
+        "kind": "n2d_progress_unverified_waiver",
+        "ts": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "episode": ep,
+        "column": col,
+        "gate_stage": _GATED_COLUMN_STAGE_FALLBACK.get(col, ""),
+        "code": "gate_receipt_unavailable",
+        "reason": reason,
+        "message": f"gate_receipt 模块不可加载，{_PROGRESS_ALLOW_ENV}=1 强行回写「{col}」={val}（欠债）。",
+    }
+    with open(path, "a", encoding="utf-8") as fh:
+        fh.write(_json.dumps(rec, ensure_ascii=False) + "\n")
+    return path
+
+
 def prog_path(root):
     return progress_path(root)
 
@@ -85,7 +117,47 @@ def parse(root):
     except ValueError as e:
         print(str(e)); sys.exit(1)
 
+def _verify_gate_receipt(root, ep, col, val):
+    """凭据耦合：受闸列写 ✅ 前必须有「真跑过 + 真绿 + 指纹新鲜」的闸门凭据。
+
+    fail-closed——缺/陈旧/无指纹凭据都拒绝回写；唯一逃生口 N2D_PROGRESS_ALLOW_UNVERIFIED=1
+    会留痕 waiver（不静默放行）。consistency 只收紧不松动。
+    """
+    try:
+        from gate_receipt import allow_override, check_advance, record_waiver
+    except Exception as e:  # 凭据模块缺失不应静默放行受闸列，但也不能误伤非受闸列
+        # H1 fail-closed（2026-06-28）：此前这里直接 return，等于凭据模块一坏整条受闸耦合静默失效
+        # ——"闸在但不响"。改成：受闸列(出图/视频/成片/验收)的完成态(✅)写入必须拒绝；非受闸列/非完成态
+        # 照常放行不误伤。唯一逃生口仍是 N2D_PROGRESS_ALLOW_UNVERIFIED=1（留痕欠债，验收 reconcile 会再抓）。
+        gated_done = col in _GATED_COLUMNS_FALLBACK and cell_state(val) == "done"
+        if not gated_done:
+            return
+        if os.environ.get(_PROGRESS_ALLOW_ENV) == "1":
+            wpath = _append_unverified_waiver_fallback(root, ep, col, val, f"gate_receipt 不可加载（{e}）")
+            print(f"⚠️ gate_receipt 不可加载，但 {_PROGRESS_ALLOW_ENV}=1 强行回写「{col}」✅；"
+                  f"已留痕欠债 → {os.path.relpath(wpath, root)}（验收 reconcile 会复核）。")
+            return
+        print(f"⛔ 拒绝回写 {ep}「{col}」= {val}：gate_receipt 凭据模块不可加载（{e}）；"
+              f"受闸列不静默放行（H1 fail-closed·一致性只收紧不松动）。")
+        print(f"   修复模块后重试；确属离线兜底可设 {_PROGRESS_ALLOW_ENV}=1 强行回写并留痕。")
+        sys.exit(2)
+    verdict = check_advance(root, ep, col, val)
+    if verdict.ok:
+        if verdict.code == "verified":
+            print(f"  🔒 {verdict.message}")
+        return
+    if allow_override():
+        path = record_waiver(root, ep, col, verdict)
+        print(f"⚠️ 未验证强行回写「{col}」✅（{verdict.code}）：{verdict.message}")
+        print(f"   已留痕 waiver → {os.path.relpath(path, root)}（这是欠下的一致性债，验收会汇总）。")
+        return
+    print(f"⛔ 拒绝回写 {ep}「{col}」= {val}：{verdict.message}")
+    print("   （确属误判/离线兜底可设 N2D_PROGRESS_ALLOW_UNVERIFIED=1 强行回写并留痕，但默认不松动一致性。）")
+    sys.exit(2)
+
+
 def do_set(root, ep, col, val):
+    _verify_gate_receipt(root, ep, col, val)
     p = prog_path(root)
     with progress_lock(root):
         lines = open(p, encoding='utf-8').read().split('\n')

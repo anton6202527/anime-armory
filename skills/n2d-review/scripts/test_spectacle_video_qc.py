@@ -107,6 +107,8 @@ def test_qc_dimensions_unverified_without_external_reports(tmp_path: Path) -> No
     assert set(row["qc_dimensions"].values()) == {"unverified"}
     assert "optical_flow_direction" in report["summary"]["qc_dimensions"]
     assert "limb_artifact" in row["qc_dimensions"]
+    assert "keyframe_coverage" in report["summary"]["qc_dimensions"]
+    assert "impact_apex_readability" in row["qc_dimensions"]
     # 有成片但动作关键新维未测 → 提示去跑动作-artifact runner。
     assert any("动作关键维未实测" in f["message"] for f in report["findings"])
     # 采样计划带高光流加密策略。
@@ -122,6 +124,9 @@ def test_qc_dimensions_verified_when_artifact_sidecar_present(tmp_path: Path) ->
             "optical_flow_direction": "matches camera_path",
             "limb_artifact_score": 0.02,
             "motion_blur_plausibility": 0.91,
+            "keyframe_plan_coverage": "start/mid/impact/end present",
+            "impact_frame_readable": True,
+            "edit_sfx_sync": "hit_stop aligned",
         }],
     })
     report = spectacle_video_qc.build_report(root, "第1集")
@@ -129,5 +134,8 @@ def test_qc_dimensions_verified_when_artifact_sidecar_present(tmp_path: Path) ->
     assert qc["optical_flow_direction"] == "verified"
     assert qc["limb_artifact"] == "verified"
     assert qc["motion_blur_plausibility"] == "verified"
+    assert qc["keyframe_coverage"] == "verified"
+    assert qc["impact_apex_readability"] == "verified"
+    assert qc["edit_sfx_sync"] == "verified"
     # 这三维已测 → 不再提示动作关键维未实测。
     assert not any("动作关键维未实测" in f["message"] for f in report["findings"])

@@ -45,6 +45,15 @@ except Exception:  # 退化兜底（独立跑/测试桩）
     def genre_needs_power_check(genre):  # type: ignore
         return any(g in str(genre or "") for g in POWER_GENRES)
 
+# B10 单一收口：阻断权要经 heuristic_gate（只有登记进 DETERMINISTIC_TYPES 的确定性 type 能硬阻断）。
+# 退档/未知境界 4 个 type 已登记（纯 progression 快照枚举/数值/章号比较·不扫正文），经 enforce 后仍保留阻断级；
+# 任何未登记的 阻断级 type（含未来误标的散文派生检查）会被自动降级，绝不让脆弱启发式蒙混硬挡发布。
+try:
+    from heuristic_gate import enforce as _hg_enforce, count_blocking as _hg_count_blocking
+except Exception:  # 退化兜底：缺 _lib（独立跑/测试桩）时不收口，保持原始严重度（绝不假装收口）
+    _hg_enforce = None
+    _hg_count_blocking = None
+
 # 越级/突破的"代价/机缘"词：单章大跳但命中这些=有理由，不判越级过快（宁缺毋滥）。
 LEAP_JUSTIFY_KEYWORDS = ("天材地宝", "丹药", "服下", "机缘", "传承", "血脉觉醒", "顿悟", "奇遇",
                          "突破", "代价", "反噬", "透支", "秘境", "灌顶", "渡劫", "因祸得福", "爆种")
@@ -299,9 +308,17 @@ def run(project, *, advisory_only=False, window=10):
     alerts += check_pacing(progression, tiers, reg.get("pacing") or {}, chapter_texts_map)
     if str(reg.get("system_type") or "").find("系统") >= 0 and chapters:
         alerts += check_scene_presence(chapters, window=window)
-    blocking = sum(1 for a in alerts if a["severity"] == "阻断级")
+    # B10 收口：经 heuristic_gate.enforce 让 severity = 策略生效后的最终值（确定性退档/未知境界保留阻断，
+    # 其余一律不得硬阻断）。缺 _lib 时优雅退化为原始严重度。
+    downgrades = []
+    if _hg_enforce is not None:
+        alerts, downgrades = _hg_enforce(alerts)
+        blocking = _hg_count_blocking(alerts)
+    else:
+        blocking = sum(1 for a in alerts if a["severity"] == "阻断级")
     return {"ran": True, "system_type": reg.get("system_type"),
-            "alerts": alerts, "total": len(alerts), "blocking": blocking}
+            "alerts": alerts, "total": len(alerts), "blocking": blocking,
+            "downgrades": downgrades}
 
 
 def main(argv=None):

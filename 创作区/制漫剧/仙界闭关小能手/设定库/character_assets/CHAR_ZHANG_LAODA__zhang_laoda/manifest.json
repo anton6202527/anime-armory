@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_ZHANG_LAODA",
+  "character_name": "张老大",
+  "form": "常态",
+  "truth_sources": {
+    "character_card": "设定库/characters/张老大.md",
+    "character_bible": "设定库/角色圣经.md",
+    "identity_registry": "出图/共享/identity_registry.json"
+  },
+  "directories": {
+    "reference": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/reference",
+    "prompts": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/prompts",
+    "lora": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/lora",
+    "voice": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/voice",
+    "adapters": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/adapters",
+    "qc": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/qc"
+  },
+  "status": "planned"
+}

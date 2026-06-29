@@ -26,9 +26,17 @@ ANALYSIS_MD_REL = os.path.join("设定库", "source_analysis.md")
 CHAPTER_RE = re.compile(r"^\s*第\s*([0-9零一二三四五六七八九十百千两]+)\s*[章回节卷]")
 SENT_SPLIT_RE = re.compile(r"(?<=[。！？!?；;])")
 SPEECH_VERB_RE = re.compile(
-    r"([一-龥]{2,4})(?:[，,、]?\s*)"
+    r"([一-龥]{2,4}?)(?:[，,、]?\s*)"
     r"(?:低声|沉声|冷声|淡淡|忽然|立刻|缓缓|咬牙|皱眉|抬头|转身|一笑|冷笑|苦笑|"
-    r"问道|说道|喝道|喊道|怒道|笑道|问|说|道|喊|喝|叫|答|看着|望着|盯着|推门|拔剑|跪下|起身)"
+    r"轻声|柔声|漠然|平静|连忙|大声|高声|沙哑)?"
+    r"(?:问道|说道|喝道|喊道|怒道|笑道|答道|道|说|问|喊|喝|叫|答)\s*(?:[:：]|[“\"])"
+)
+SPEECH_TAIL_RE = re.compile(
+    r"(?:低声|沉声|冷声|淡淡|忽然|立刻|缓缓|咬牙|皱眉|抬头|转身|一笑|冷笑|苦笑|"
+    r"轻声|柔声|漠然|平静|连忙|大声|高声|沙哑|拱手|缓缓开口|忽然开口|开口|"
+    r"语重心长|没好气|解释|厉声|摇了摇头|硬着头皮|讥讽|压低嗓音|皮笑肉不笑|"
+    r"接着|面无表情|抱拳)?"
+    r"(?:问道|说道|喝道|喊道|怒道|笑道|答道|道|说|问|喊|喝|叫|答)\s*$"
 )
 TITLE_NAME_RE = re.compile(r"(?:我是|本座|老夫|贫道|臣|妾身|在下)([一-龥]{2,4})")
 
@@ -36,8 +44,30 @@ STOP_NAMES = {
     "第一", "第二", "第三", "这一", "那一", "所有", "众人", "他们", "她们", "你们", "我们", "自己",
     "这个", "那个", "什么", "怎么", "只是", "已经", "突然", "这里", "那里", "眼前", "身后",
     "时候", "声音", "男人", "女人", "少年", "少女", "老人", "系统", "面板", "灵气", "众弟子",
+    "获得", "当前", "死死", "不知", "我知", "谁知", "无数", "一道", "开口", "话未", "消耗",
+    "九大", "二十五脉", "化作一", "六尊天品", "你爹", "亲爹",
+    # Speech/action modifiers often appear immediately before “道/说/问”.
+    # The lightweight regex can otherwise misread “轻声道” as a character named “轻声”.
+    "继续", "轻声", "低声", "沉声", "冷声", "淡淡", "忽然", "立刻", "缓缓", "咬牙", "皱眉",
+    "抬头", "转身", "一笑", "冷笑", "苦笑", "漠然", "随后", "按理", "还是", "随口", "连忙",
+    "这番话", "能眼睁睁", "凄厉的惨", "侧过头", "面色放缓", "思索片刻",
 }
 STOP_ENDINGS = ("时候", "声音", "眼神", "脸色", "身影", "心中", "门口", "台下", "众人", "所有")
+NON_PERSON_PREFIXES = ("获得", "当前", "消耗", "化作", "无数", "一道")
+BAD_NAME_FRAGMENTS = (
+    "开口", "拱手", "解释", "厉声", "摇了摇头", "硬着头皮", "讥讽", "压低嗓音",
+    "皮笑肉不", "接着", "面无表情", "忽然", "缓缓", "没好气", "语重心长",
+    "是否", "消耗", "要知", "世道", "没有", "高临下", "思索", "声音", "侧过头",
+    "面色", "闻言", "继续", "顿了顿", "摇头", "抱拳", "无奈", "疑惑", "试探",
+    "意味深长", "躬身", "忽而", "森然", "说着", "平淡", "喃喃", "神神秘秘",
+    "下意识", "正色", "咬牙切齿",
+)
+SPEAKER_ACTION_MARKERS = (
+    "侧过头", "面色", "声音", "叹了口气", "闻言", "思索", "摇了摇头", "抬起头",
+    "皱眉", "微微", "缓缓", "漠然", "冷笑", "苦笑", "柔声", "轻声", "低声",
+    "沉声", "冷声", "厉声", "拱手", "咬牙", "转身", "看着", "望着", "盯着",
+    "整理", "直起身", "眼中", "脸上", "神色", "心中", "嘴角", "眉头",
+)
 
 LOCATION_SUFFIXES = (
     "殿", "宫", "楼", "阁", "城", "山", "峰", "谷", "院", "府", "堂", "厅", "门", "宗", "派",
@@ -102,25 +132,77 @@ def clean_name(name: str) -> str:
 def valid_name(name: str) -> bool:
     if len(name) < 2 or len(name) > 4:
         return False
+    if name[0] in {"他", "她", "它", "这", "那", "着"}:
+        return False
     if name in STOP_NAMES:
+        return False
+    if name.startswith(NON_PERSON_PREFIXES):
+        return False
+    if any(fragment in name for fragment in BAD_NAME_FRAGMENTS):
+        return False
+    if re.search(r"[0-9零〇一二三四五六七八九十百千万两]", name):
         return False
     if any(name.endswith(s) for s in STOP_ENDINGS):
         return False
     return True
 
 
+def speaker_name_from_left_context(left: str) -> str | None:
+    """Infer a speaker from the text immediately before a quote/colon.
+
+    This remains intentionally conservative: it only accepts clauses that end in
+    a speech tail like “轻声道/拱手道/问道”. The subject is taken from the start
+    of that clause, before common action markers, so “姜月初侧过头，轻声道”
+    yields “姜月初” instead of the modifier “轻声”.
+    """
+    left = re.sub(r"\s+", "", left or "").strip("，,、：:“”\"' ")
+    if not left or not SPEECH_TAIL_RE.search(left):
+        return None
+    stem = SPEECH_TAIL_RE.sub("", left).strip("，,、：:“”\"' ")
+    if not stem:
+        return None
+    segment = re.split(r"[，,、]", stem)[0].strip()
+    if not segment:
+        return None
+    cut = len(segment)
+    for marker in SPEAKER_ACTION_MARKERS:
+        idx = segment.find(marker)
+        if idx >= 2:
+            cut = min(cut, idx)
+    candidate = clean_name(segment[:cut])
+    if valid_name(candidate):
+        return candidate
+    if 2 <= len(segment) <= 4 and valid_name(segment):
+        return segment
+    return None
+
+
+def extract_dialogue_speaker_names(sentence: str) -> list[str]:
+    names: list[str] = []
+    for m in re.finditer(r"[:：“\"]", sentence or ""):
+        left = sentence[:m.start()]
+        left = re.split(r"[。！？!?；;\n“”\"]", left)[-1]
+        name = speaker_name_from_left_context(left)
+        if name and name not in names:
+            names.append(name)
+    return names
+
+
 def extract_characters(text: str, limit: int = 16) -> list[dict]:
     counts: Counter[str] = Counter()
     evidence: dict[str, list[str]] = defaultdict(list)
     for sentence in split_sentences(text):
+        raw_names = []
+        raw_names.extend(extract_dialogue_speaker_names(sentence))
         for rx in (SPEECH_VERB_RE, TITLE_NAME_RE):
-            for raw in rx.findall(sentence):
-                name = clean_name(raw)
-                if not valid_name(name):
-                    continue
-                counts[name] += 1
-                if len(evidence[name]) < 3:
-                    evidence[name].append(sentence[:80])
+            raw_names.extend(rx.findall(sentence))
+        for raw in raw_names:
+            name = clean_name(raw)
+            if not valid_name(name):
+                continue
+            counts[name] += 1
+            if len(evidence[name]) < 3:
+                evidence[name].append(sentence[:80])
     return [
         {"name": name, "mentions": count, "evidence": evidence[name]}
         for name, count in counts.most_common(limit)

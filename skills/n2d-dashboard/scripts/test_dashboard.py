@@ -75,23 +75,77 @@ def test_gate_findings_payload_is_batch_compatible(tmp_path: Path) -> None:
     assert payload["auto_return_tasks"][0]["affected_shots"] == ["Clip_03"]
 
 
+def test_make_event_promotes_trace_context_from_meta() -> None:
+    event = dashboard.make_event(
+        "第1集",
+        "image",
+        "manual",
+        meta={"task_id": "001-image-progress", "idempotency_key": "idem-1"},
+    )
+
+    assert event["trace"]["trace_id"] == "idem-1"
+    assert event["trace"]["task_id"] == "001-image-progress"
+    assert event["trace"]["idempotency_key"] == "idem-1"
+
+
+def test_gate_noise_and_false_positive_recovery_rollup(tmp_path: Path) -> None:
+    root = tmp_path
+    write_storyboard(root)
+    events = [
+        dashboard.make_event("第1集", "image", "generation", generation={"status": "pass"}),
+        dashboard.make_event("第1集", "video", "generation", generation={"status": "fail"}),
+        dashboard.make_event("第1集", "image", "qa", qa={"severity": "warn", "dim": "角色", "msg": "轻微漂移"}),
+        dashboard.make_event("第1集", "video", "qa", qa={"severity": "block", "dim": "口型", "msg": "不同步"}),
+        dashboard.make_event("第1集", "video", "waiver", meta={"waiver": "false_positive", "reason": "误报"}),
+    ]
+
+    data = dashboard.aggregate_events(str(root), events)
+    ep1 = next(item for item in data["episodes"] if item["episode"] == "第1集")
+    totals = data["totals"]
+    md = dashboard.render_markdown(data)
+
+    assert ep1["warnings_per_attempt"] == 0.5
+    assert ep1["blockers_per_attempt"] == 0.5
+    assert ep1["false_positive_recoveries"] == 1
+    assert ep1["false_positive_recovery_rate"] == 0.5
+    assert totals["warnings_per_attempt"] == 0.5
+    assert totals["blockers_per_attempt"] == 0.5
+    assert totals["false_positive_recovery_rate"] == 0.5
+    assert "Gate 噪声" in md and "误报回收率" in md
+
+
 def test_image_preflight_gate_events_merge_image_qc(monkeypatch, tmp_path: Path) -> None:
     class Proc:
         returncode = 0
         stdout = "[]"
         stderr = ""
 
+    class ImageQc:
+        Path = Path
+        HARD_LINT_CODES = ("unknown_char_id",)
+        PROHIBITED_FACE_PATCH_LABEL = "本地贴脸修复产物禁用"
+
+        @staticmethod
+        def lint_prompts(root: Path, episode: str) -> dict:
+            return {"findings": [{"level": "block", "code": "unknown_char_id", "msg": "bad CHAR_id"}]}
+
+        @staticmethod
+        def prohibited_face_patch_outputs(root: Path, episode: str) -> dict:
+            return {"outputs": []}
+
     monkeypatch.setattr(dashboard.subprocess, "run", lambda *args, **kwargs: Proc())
-    monkeypatch.setattr(
-        dashboard,
-        "image_qc_findings",
-        lambda root, episode: [{"sev": "block", "dim": "prompt lint", "loc": "Clip_01", "msg": "bad CHAR_id"}],
-    )
+    monkeypatch.setattr(dashboard, "load_image_qc_module", lambda: ImageQc)
 
     events, code, findings = dashboard.gate_events(str(tmp_path), "第1集", "image_preflight")
 
     assert code == 1
-    assert findings == [{"sev": "block", "dim": "prompt lint", "loc": "Clip_01", "msg": "bad CHAR_id"}]
+    assert findings == [{
+        "sev": "block",
+        "dim": "image_prompt_lint",
+        "loc": None,
+        "msg": "bad CHAR_id",
+        "return_to_stage": "image",
+    }]
     assert events[0]["stage"] == "image_preflight"
     assert events[0]["qa_gate"]["blocks"] == 1
 
@@ -209,18 +263,35 @@ def test_image_qc_findings_reruns_report_missing_prop_confirmation_dependency(mo
     assert findings == []
 
 
-def test_image_preflight_filters_prop_shape_pixel_confirmation(monkeypatch, tmp_path: Path) -> None:
-    monkeypatch.setattr(
-        dashboard,
-        "image_qc_findings",
-        lambda root, episode: [
-            {"sev": "block", "dim": "multimodal_continuity", "loc": "图片/Clip_01.png",
-             "msg": "高风险道具禁形/尺寸未逐图确认：Clip 01 的 `PROP_01`"},
-            {"sev": "block", "dim": "prompt lint", "loc": "Clip_02", "msg": "bad CHAR_id"},
-        ],
-    )
+def test_image_preflight_uses_lint_only_not_pixel_qc(monkeypatch, tmp_path: Path) -> None:
+    class ImageQc:
+        Path = Path
+        HARD_LINT_CODES = ("unknown_char_id",)
+        PROHIBITED_FACE_PATCH_LABEL = "本地贴脸修复产物禁用"
+
+        @staticmethod
+        def lint_prompts(root: Path, episode: str) -> dict:
+            return {"findings": [{"level": "block", "code": "unknown_char_id", "msg": "bad CHAR_id"}]}
+
+        @staticmethod
+        def prohibited_face_patch_outputs(root: Path, episode: str) -> dict:
+            return {"outputs": []}
+
+    def fail_if_full_qc_runs(*args, **kwargs):
+        raise AssertionError("image_preflight must not run side-effectful full image_qc")
+
+    monkeypatch.setattr(dashboard, "load_image_qc_module", lambda: ImageQc)
+    monkeypatch.setattr(dashboard, "image_qc_findings", fail_if_full_qc_runs)
+    monkeypatch.setattr(dashboard, "run_image_qc_findings", fail_if_full_qc_runs)
+
     findings = dashboard.image_preflight_qc_findings(str(tmp_path), "第1集")
-    assert findings == [{"sev": "block", "dim": "prompt lint", "loc": "Clip_02", "msg": "bad CHAR_id"}]
+    assert findings == [{
+        "sev": "block",
+        "dim": "image_prompt_lint",
+        "loc": None,
+        "msg": "bad CHAR_id",
+        "return_to_stage": "image",
+    }]
 
 
 def test_aggregate_generation_cost_redraw_and_qa(tmp_path: Path) -> None:

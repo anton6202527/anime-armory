@@ -55,16 +55,21 @@ def divide_cost(cost: Dict[str, float], denom: float) -> Dict[str, float]:
 
 
 def _parse_ts(ts: Optional[str]) -> Optional[dt.datetime]:
+    """解析事件 ts → **UTC 归一**的 aware datetime。
+
+    归一是关键：混合时区(+08:00 vs Z)的字符串**字典序**比较会排错（同一瞬间排成先后不同），
+    且 aware 与 naive 相减会 TypeError。统一转 UTC 后比较/相减才正确——修跨机/跨时区舰队的吞吐错算。"""
     raw = str(ts or "").strip()
     if not raw:
         return None
     try:
-        return dt.datetime.fromisoformat(raw.replace("Z", "+00:00"))
+        d = dt.datetime.fromisoformat(raw.replace("Z", "+00:00"))
     except Exception:
         try:
-            return dt.datetime.fromisoformat(raw[:19])
+            d = dt.datetime.fromisoformat(raw[:19])
         except Exception:
             return None
+    return d.replace(tzinfo=dt.timezone.utc) if d.tzinfo is None else d.astimezone(dt.timezone.utc)
 
 
 def span_days(first_ts: Optional[str], last_ts: Optional[str]) -> Optional[float]:
@@ -93,8 +98,15 @@ def aggregate_portfolio(works: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
     tot_redraw = 0
     tot_plays = 0
     tot_episodes = 0
+    tot_qa_blockers = 0
+    tot_qa_warnings = 0
+    tot_consistency_blockers = 0
+    tot_consistency_warnings = 0
     earliest: Optional[str] = None
     latest: Optional[str] = None
+    earliest_dt: Optional[dt.datetime] = None
+    latest_dt: Optional[dt.datetime] = None
+    active_dates_union: set = set()  # 全作品有事件的不同日历日(UTC)并集 → backfill 稳健吞吐分母
 
     for w in works:
         t = w.get("totals") or {}
@@ -103,6 +115,10 @@ def aggregate_portfolio(works: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
         attempts = int(t.get("generation_attempts") or 0)
         one_pass = int(t.get("one_pass_count") or 0)
         redraw = int(t.get("redraw_count") or 0)
+        qa_blockers = int(t.get("qa_blockers") or 0)
+        qa_warnings = int(t.get("qa_warnings") or 0)
+        consistency_blockers = int(t.get("consistency_blockers") or 0)
+        consistency_warnings = int(t.get("consistency_warnings") or 0)
         wcost = t.get("cost_totals") or {}
         add_cost(cost_total, wcost)
         add_cost(revenue_total, t.get("release_revenue_totals") or {})
@@ -114,11 +130,18 @@ def aggregate_portfolio(works: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
         tot_redraw += redraw
         tot_plays += int(t.get("release_plays") or 0)
         tot_episodes += int(t.get("episode_count") or 0)
+        tot_qa_blockers += qa_blockers
+        tot_qa_warnings += qa_warnings
+        tot_consistency_blockers += consistency_blockers
+        tot_consistency_warnings += consistency_warnings
         first_ts, last_ts = w.get("first_ts"), w.get("last_ts")
-        if first_ts and (earliest is None or first_ts < earliest):
-            earliest = first_ts
-        if last_ts and (latest is None or last_ts > latest):
-            latest = last_ts
+        # 按 UTC 归一时间比较选首/末事件（非字典序，避免混时区排错）。
+        ft, lt = _parse_ts(first_ts), _parse_ts(last_ts)
+        if ft is not None and (earliest_dt is None or ft < earliest_dt):
+            earliest_dt, earliest = ft, first_ts
+        if lt is not None and (latest_dt is None or lt > latest_dt):
+            latest_dt, latest = lt, last_ts
+        active_dates_union.update(w.get("active_dates") or [])
         sd = span_days(first_ts, last_ts)
         rows.append({
             "work": w.get("name") or "",
@@ -129,8 +152,15 @@ def aggregate_portfolio(works: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
             "cost_per_finished_min": divide_cost(wcost, fin_min) if fin_min else {},
             "one_pass_rate": round(one_pass / attempts, 4) if attempts else None,
             "redraw_rate": round(redraw / attempts, 4) if attempts else None,
+            "qa_blockers": qa_blockers,
+            "qa_warnings": qa_warnings,
+            "warnings_per_attempt": round(qa_warnings / attempts, 4) if attempts else None,
+            "blockers_per_attempt": round(qa_blockers / attempts, 4) if attempts else None,
+            "consistency_blockers": consistency_blockers,
+            "consistency_warnings": consistency_warnings,
             "release_plays": int(t.get("release_plays") or 0),
             "recoup_ratio": t.get("recoup_ratio") or {},
+            "release_net_totals": dict(t.get("release_net_totals") or {}),
             "span_days": round(sd, 2) if sd is not None else None,
             "episodes_per_day": round(fin_ep / sd, 2) if (sd and fin_ep) else None,
         })
@@ -148,6 +178,15 @@ def aggregate_portfolio(works: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
         "cost_per_finished_min": divide_cost(cost_total, tot_finished_min) if tot_finished_min else {},
         "one_pass_rate": round(tot_one_pass / tot_attempts, 4) if tot_attempts else None,
         "redraw_rate": round(tot_redraw / tot_attempts, 4) if tot_attempts else None,
+        "qa_blockers_total": tot_qa_blockers,
+        "qa_warnings_total": tot_qa_warnings,
+        "consistency_blockers_total": tot_consistency_blockers,
+        "consistency_warnings_total": tot_consistency_warnings,
+        "gate_noise": {
+            "warnings_per_attempt": round(tot_qa_warnings / tot_attempts, 4) if tot_attempts else None,
+            "blockers_per_attempt": round(tot_qa_blockers / tot_attempts, 4) if tot_attempts else None,
+            "warning_to_blocker_ratio": round(tot_qa_warnings / tot_qa_blockers, 4) if tot_qa_blockers else None,
+        },
         "release_plays": tot_plays,
         "release_revenue_totals": revenue_total,
         "release_net_totals": net_total,
@@ -158,9 +197,63 @@ def aggregate_portfolio(works: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
             "last_event": latest,
             "episodes_per_day": round(tot_finished_ep / portfolio_span, 3) if (portfolio_span and tot_finished_ep) else None,
             "finished_min_per_day": round(tot_finished_min / portfolio_span, 3) if (portfolio_span and tot_finished_min) else None,
+            # active_days=有生产事件的不同日历日数：同会话 backfill（全压一天）下 span_days 塌到 1 小时地板会把
+            # 集/天虚高 ~24×，active_days 用「真正干活的天数」当分母更稳健。两个口径都给，由看板取舍。
+            "active_days": len(active_dates_union) or None,
+            "episodes_per_active_day": round(tot_finished_ep / len(active_dates_union), 3) if (active_dates_union and tot_finished_ep) else None,
         },
+        "rankings": _portfolio_rankings(rows),
         "works": rows,
     }
+
+
+def _portfolio_rankings(rows: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
+    """管理层"先动哪部"三问：通过率最低先救、阻断最多先停、净回收为负在亏钱。
+
+    dashboard/portfolio 此前只算成本/吞吐/通过率聚合，没把"哪部该优先处理"显式排出来——
+    这是舰队层缺的决策口（不重算，只对已聚合的 works 行排序/筛选）。
+    """
+    rated = [r for r in rows if r.get("one_pass_rate") is not None]
+    worst_one_pass = sorted(rated, key=lambda r: r["one_pass_rate"])[:5]
+    most_blockers = sorted(
+        rows,
+        key=lambda r: (int(r.get("qa_blockers") or 0) + int(r.get("consistency_blockers") or 0)),
+        reverse=True,
+    )
+    most_blockers = [r for r in most_blockers
+                     if (int(r.get("qa_blockers") or 0) + int(r.get("consistency_blockers") or 0)) > 0][:5]
+    noisy = [r for r in rows if r.get("warnings_per_attempt") is not None and int(r.get("qa_warnings") or 0) > 0]
+    highest_gate_noise = sorted(
+        noisy,
+        key=lambda r: (float(r.get("warnings_per_attempt") or 0.0), int(r.get("qa_warnings") or 0)),
+        reverse=True,
+    )[:5]
+    losing_money = [
+        {"work": r["work"], "release_net_totals": r.get("release_net_totals") or {}}
+        for r in rows
+        if any((_num(v) or 0) < 0 for v in (r.get("release_net_totals") or {}).values())
+    ]
+    return {
+        "worst_one_pass": [{"work": r["work"], "one_pass_rate": r["one_pass_rate"]} for r in worst_one_pass],
+        "most_blockers": [
+            {"work": r["work"], "qa_blockers": int(r.get("qa_blockers") or 0),
+             "consistency_blockers": int(r.get("consistency_blockers") or 0)}
+            for r in most_blockers
+        ],
+        "highest_gate_noise": [
+            {"work": r["work"], "qa_warnings": int(r.get("qa_warnings") or 0),
+             "warnings_per_attempt": r.get("warnings_per_attempt")}
+            for r in highest_gate_noise
+        ],
+        "losing_money": losing_money,
+    }
+
+
+def _num(v: Any) -> Optional[float]:
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return None
 
 
 def _ratio(net: Dict[str, float], cost: Dict[str, float]) -> Dict[str, float]:
@@ -215,15 +308,20 @@ def summarize_work(dash, root: str) -> Optional[Dict[str, Any]]:
     eps = db.get("episodes") or []
     finished_episodes = sum(1 for e in eps if float(e.get("runtime_sec") or 0) > 0)
     finished_min = round(float(totals.get("runtime_sec") or 0) / 60.0, 4)
-    ts_list = sorted(str(ev.get("ts")) for ev in events if ev.get("ts"))
+    # 按 UTC 归一时间排序选首尾（非字典序，避免混时区排错）；active_dates=有事件的不同日历日(UTC)。
+    parsed = [(_parse_ts(ev.get("ts")), str(ev.get("ts"))) for ev in events if ev.get("ts")]
+    parsed = [p for p in parsed if p[0] is not None]
+    parsed.sort(key=lambda x: x[0])
+    active_dates = sorted({p[0].date().isoformat() for p in parsed})
     return {
         "name": os.path.basename(os.path.normpath(root)),
         "root": root,
         "totals": totals,
         "finished_episodes": finished_episodes,
         "finished_min": finished_min,
-        "first_ts": ts_list[0] if ts_list else None,
-        "last_ts": ts_list[-1] if ts_list else None,
+        "first_ts": parsed[0][1] if parsed else None,
+        "last_ts": parsed[-1][1] if parsed else None,
+        "active_dates": active_dates,
     }
 
 
@@ -233,21 +331,44 @@ def _fmt_cost(cost: Dict[str, Any]) -> str:
 
 def render_md(p: Dict[str, Any]) -> str:
     th = p.get("throughput") or {}
+    gn = p.get("gate_noise") or {}
     lines = [
         "# 跨作品 Portfolio Rollup", "",
         f"- 作品数: {p['work_count']}　总集数: {p['total_episodes']}　完成集: {p['total_finished_episodes']}　完成分钟: {p['total_finished_min']}",
         f"- 组合成本: {_fmt_cost(p['cost_totals'])}　单完成分钟成本: {_fmt_cost(p['cost_per_finished_min'])}",
         f"- 一次通过率: {p['one_pass_rate']}　重抽率: {p['redraw_rate']}　总播放: {p['release_plays']}　回收比: {_fmt_cost(p['recoup_ratio'])}",
-        f"- **吞吐率**: 跨度 {th.get('span_days')} 天　完成集/天 {th.get('episodes_per_day')}　完成分钟/天 {th.get('finished_min_per_day')}",
+        f"- **吞吐率**: 跨度 {th.get('span_days')} 天　完成集/天 {th.get('episodes_per_day')}　完成分钟/天 {th.get('finished_min_per_day')}"
+        f"　｜ 活跃天 {th.get('active_days')}　完成集/活跃天 {th.get('episodes_per_active_day')}（backfill 稳健口径）",
+        f"- **QA 债**: QA 阻断合计 {p.get('qa_blockers_total', 0)} / warn {p.get('qa_warnings_total', 0)}"
+        f"　一致性阻断合计 {p.get('consistency_blockers_total', 0)} / warn {p.get('consistency_warnings_total', 0)}",
+        f"- **Gate 噪声**: warn/生成 {gn.get('warnings_per_attempt')}　block/生成 {gn.get('blockers_per_attempt')}"
+        f"　warn:block {gn.get('warning_to_blocker_ratio')}",
         "", "## 逐部",
-        "| 作品 | 集数 | 完成 | 完成分钟 | 成本 | 单完成分钟成本 | 一次过 | 集/天 | 播放 |",
-        "|---|---|---|---|---|---|---|---|---|",
+        "| 作品 | 集数 | 完成 | 完成分钟 | 成本 | 单完成分钟成本 | 一次过 | QA阻断 | QAwarn | warn/生成 | 一致性阻断 | 集/天 | 播放 |",
+        "|---|---|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     for r in p.get("works", []):
         lines.append(
             f"| {r['work']} | {r['episodes']} | {r['finished_episodes']} | {r['finished_min']} | "
             f"{_fmt_cost(r['cost_totals'])} | {_fmt_cost(r['cost_per_finished_min'])} | "
-            f"{r['one_pass_rate']} | {r['episodes_per_day']} | {r['release_plays']} |")
+            f"{r['one_pass_rate']} | {r.get('qa_blockers', 0)} | {r.get('qa_warnings', 0)} | "
+            f"{r.get('warnings_per_attempt')} | {r.get('consistency_blockers', 0)} | "
+            f"{r['episodes_per_day']} | {r['release_plays']} |")
+
+    rk = p.get("rankings") or {}
+    if rk.get("losing_money"):
+        lines += ["", "## ⚠️ 在亏钱的剧（净回收为负·优先复盘止损）"]
+        for r in rk["losing_money"]:
+            lines.append(f"- {r['work']}：净 {_fmt_cost(r['release_net_totals'])}")
+    if rk.get("worst_one_pass"):
+        w = rk["worst_one_pass"][0]
+        lines += ["", f"## 先动哪部：一次通过率最低 = {w['work']}（{w['one_pass_rate']}）"]
+    if rk.get("most_blockers"):
+        b = rk["most_blockers"][0]
+        lines.append(f"## QA 债最重 = {b['work']}（QA {b['qa_blockers']} · 一致性 {b['consistency_blockers']}）")
+    if rk.get("highest_gate_noise"):
+        n = rk["highest_gate_noise"][0]
+        lines.append(f"## Gate 噪声最高 = {n['work']}（warn/生成 {n['warnings_per_attempt']} · warn {n['qa_warnings']}）")
     return "\n".join(lines) + "\n"
 
 

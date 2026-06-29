@@ -1,9 +1,9 @@
-# 动作镜成片 QC 八维 + 高光流帧采样（out-of-repo 重模型桥接）
+# 动作镜成片 QC 八维 + 高级制作三项 + 高光流帧采样（out-of-repo 重模型桥接）
 
 `spectacle_video_qc.py` 是**纯标准库证据聚合器**——它只组织证据、判 `verified/unverified`，不自己跑光流/姿态/VLM。
 真正的像素级机检在 out-of-repo conda 环境（同 `lipsync_measure.py` 模式）。本文件是这层的契约。
 
-## 八维（单一真值源：`n2d_spectacle.SPECTACLE_QC_DIMENSIONS`）
+## 八维 + 高级制作三项（单一真值源：`n2d_spectacle.SPECTACLE_QC_DIMENSIONS`）
 
 | 维度 | 证据来源 runner | 已有/新增 | 关键实测字段(evidence_keys) |
 |---|---|---|---|
@@ -15,6 +15,9 @@
 | 跨镜动作连续+180°轴线 | `camera_trajectory_consistency.py`(CAM1) | 已有 | `trajectory_error` / `axis_consistency` / `crossing_line` |
 | 主体身份保持 | `subject_video_consistency.py`(S2V) | 已有 | `subject_fidelity` / `identity_drift` / `subject_swap` |
 | 时序闪烁 | `temporal_consistency.py` | 已有 | `temporal_flicker` / `tci` / `flicker_score` |
+| 关键帧覆盖 | `video_preflight` / anchor runner | **新增** | `keyframe_plan_coverage` / `start_mid_impact_end_coverage` / `keyframes_present` / `anchor_coverage` |
+| 命中/峰值帧可读 | `video_qc` / 人工签收 | **新增** | `impact_frame_readable` / `apex_frame_readable` / `collision_point_visibility` / `readability_hold_score` |
+| 剪辑/音效同步 | compose QC / 人工签收 | **新增** | `edit_sfx_sync` / `hit_stop_sync` / `speed_ramp_sync` / `sfx_peak_alignment` |
 
 任一 evidence_key 在该镜 sidecar 行里非空 → 该维记 `verified`，否则 `unverified`。
 `production` 一致性严格度下，SPECV/MOT1/CAM1/S2V 的未实测会在 compose/review 交付边界由 gate 升 BLOCK。
@@ -64,5 +67,5 @@ conda run -n facefusion python skills/n2d-review/scripts/spectacle_motion_measur
 - 肢体畸变：HADM 或 pose 检测器在 `sampling_plan.peak_density` 帧上数肢体/手数异常。
 - 运动模糊：高光流段该糊（合理）、低光流段不该糊（崩坏）→ 边缘锐度 vs 光流幅度相关性。
 
-写好后 `spectacle_video_qc.py --write` 会自动把这三维并入八维核验状态；缺该 sidecar 时
-三维保持 `unverified` 并由 SPECV warn 提示（production 交付边界升 BLOCK）。绝不臆造分。
+写好后 `spectacle_video_qc.py --write` 会自动把动作-artifact 三维并入 QC 核验状态；缺该 sidecar 时
+对应维度保持 `unverified` 并由 SPECV warn 提示（production 交付边界升 BLOCK）。绝不臆造分。

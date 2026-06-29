@@ -61,6 +61,53 @@ def _report(root):
     return json.load(open(p, encoding="utf-8"))
 
 
+def _write_image_qc(root, findings, fresh=True):
+    """落一份 image_qc 报告（含 tone_light_contract 像素实测），供 #5 像素佐证消费。"""
+    d = os.path.join(root, "生产数据", "image_qc", EP)
+    os.makedirs(d, exist_ok=True)
+    if fresh:
+        fp = ic.artifact_fingerprint(root, [])  # 空文件集真指纹 = 永远 fresh
+    else:
+        fp = {"files": {"出图/第1集/图片/x.png": "deadbeef"}, "sha": "stale-sha-never-matches"}
+    payload = {"kind": "n2d_image_qc", "inputs_fingerprint": fp,
+               "tone_light_contract": {"findings": findings}}
+    with open(os.path.join(d, f"image_qc_{EP}.json"), "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False)
+
+
+def test_pixel_contradiction_escalates_text_pass_to_warn(tmp_path):
+    # #5：文本两侧全 pass，但 image_qc 实测首帧像素与申报色调矛盾 → 升档 warn（不再被文本 pass 掩盖）。
+    root = _write_project(tmp_path, IMG_CONTRACT, VID_VERBATIM)
+    _write_image_qc(root, [{"level": "warn", "code": "tone_warmth_contradiction",
+                            "msg": "像素偏冷与暖契约相反"}])
+    rc = ic.run(root, EP)
+    rep = _report(root)
+    assert rc == 0  # warn 不改退出码
+    assert rep["verdict"] == "warn"
+    assert rep["pixel_contract"]["fresh"] is True
+    assert rep["pixel_contract"]["findings"]
+
+
+def test_stale_image_qc_pixel_evidence_not_trusted(tmp_path):
+    # #5 新鲜度护栏：image_qc 报告陈旧（出图后又重出）则不采纳旧像素证据，verdict 不被误升。
+    root = _write_project(tmp_path, IMG_CONTRACT, VID_VERBATIM)
+    _write_image_qc(root, [{"level": "warn", "code": "tone_warmth_contradiction", "msg": "x"}], fresh=False)
+    ic.run(root, EP)
+    rep = _report(root)
+    assert rep["verdict"] == "pass"
+    assert rep["pixel_contract"]["fresh"] is False
+    assert not rep["pixel_contract"]["findings"]
+
+
+def test_no_image_qc_report_is_clean_skip(tmp_path):
+    # 无 image_qc 报告：像素佐证优雅跳过，不影响文本判定（pass 仍 pass）。
+    root = _write_project(tmp_path, IMG_CONTRACT, VID_VERBATIM)
+    assert ic.run(root, EP) == 0
+    rep = _report(root)
+    assert rep["verdict"] == "pass"
+    assert rep["pixel_contract"]["available"] is False
+
+
 def test_identical_contract_passes(tmp_path):
     # 逐字一致（标点/箭头/标签长短写差异归一化后不算漂移）→ exit 0 全 pass
     root = _write_project(tmp_path, IMG_CONTRACT, VID_VERBATIM)

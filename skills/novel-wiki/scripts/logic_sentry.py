@@ -24,6 +24,12 @@ import argparse
 
 from wiki_builder import FLASHBACK_HINTS, _context, list_chapters, _CJK
 from consistency_scaffold import resolve_character_card  # 同认 角色卡.md / 人物.md
+from heuristic_gate import enforce, count_blocking  # B10：脆弱启发式不得硬阻断（单一收口）
+try:
+    # A1/A2·结构化原子事实确定性检测（同目录 graph_sentry）：只比台账枚举/章号/区间·可硬阻断。
+    from graph_sentry import detect_lifecycle_conflicts, detect_fact_interval_conflicts, resolved_alias_map
+except Exception:  # pragma: no cover - 部分 checkout 仍可用（结构化闸优雅缺席）
+    detect_lifecycle_conflicts = detect_fact_interval_conflicts = resolved_alias_map = None
 
 ITEM_USE_VERBS = ["用", "使", "催动", "祭出", "举起", "握", "拔", "挥", "取出", "拿出", "施展", "祭起"]
 DISCARDED_STATUS = {"discarded", "shattered", "lost", "丢弃", "损毁", "破碎", "遗失", "摧毁"}
@@ -145,6 +151,113 @@ def scan_relationship_flips(matrix_data, text, chapter_index):
                 "evidence": "；".join(_as_list(info.get("labels")))[:60],
                 "auto": True,
                 "note": f"{pair} 关系温度单章从 {b:g} 跳到 {a:g}（Δ{delta:g}>{REL_FLIP_THRESHOLD}）且本章无重大转折语境——疑突变/人设崩（请人判：是否缺铺垫）",
+            })
+    return alerts
+
+
+# ── 动态关系图：从 state_delta 增量累积，检「关系突变无铺垫」（可阻断） ──────────────
+def _normalize_pair(pair):
+    """把关系对归一成有序元组键，使 A↔B == B↔A。接受 "A↔B"/"A-B"/"A,B" 或 {a,b}/[a,b]。"""
+    if isinstance(pair, dict):
+        a, b = pair.get("a") or pair.get("from"), pair.get("b") or pair.get("to")
+        names = [a, b]
+    elif isinstance(pair, (list, tuple)):
+        names = list(pair)[:2]
+    else:
+        names = re.split(r"[↔<>~\-—–,，、和与&/|]+", str(pair))
+    names = [str(n).strip() for n in names if n and str(n).strip()]
+    if len(names) < 2:
+        return None
+    return tuple(sorted(names[:2]))
+
+
+def build_relationship_graph(project_root):
+    """从 `审稿/state_delta_第NN章.json` 的 `relationship_changes` 增量构建关系图。
+
+    根治「关系矩阵全靠人工维护、实际没人填→机检空转」：关系温度本就和人物状态/伏笔同走
+    state_delta 纪律，这里把它真正聚合成 `{pair: {history:[{chapter,temperature,label,turning_point}]}}`，
+    作为派生单一真值源（落 `审稿/relationship_graph.json`）。每条 relationship_changes 形如
+    `{"pair":"甲↔乙","temperature":-60,"label":"…","turning_point":true?}`。无数据返回空图。"""
+    deltas_dir = os.path.join(project_root, "审稿")
+    matrix = {}
+    if not os.path.isdir(deltas_dir):
+        return {"kind": "relationship_graph", "derived_from": "state_delta", "matrix": matrix}
+    files = []
+    for name in os.listdir(deltas_dir):
+        m = re.match(r"state_delta_第0*(\d+)章\.json$", name)
+        if m:
+            files.append((int(m.group(1)), os.path.join(deltas_dir, name)))
+    for chap, path in sorted(files):
+        try:
+            with open(path, encoding="utf-8") as f:
+                delta = json.load(f)
+        except Exception:
+            continue
+        for ch in delta.get("relationship_changes") or []:
+            if not isinstance(ch, dict):
+                continue
+            key = _normalize_pair(ch.get("pair") or ch.get("entities") or ch.get("between"))
+            temp = _num(ch.get("temperature"))
+            if key is None or temp is None:
+                continue
+            label = str(ch.get("label") or ch.get("note") or "").strip()
+            entry = matrix.setdefault("↔".join(key), {"history": [], "labels": []})
+            entry["history"].append({
+                "chapter": chap, "temperature": temp, "label": label,
+                "turning_point": bool(ch.get("turning_point")),
+            })
+            if label:
+                entry["labels"].append(label)
+    return {"kind": "relationship_graph", "derived_from": "state_delta", "matrix": matrix}
+
+
+def detect_relationship_breaks(graph, chapter_texts=None, total_chapters=None):
+    """图驱动「关系突变无铺垫」检测——比 scan_relationship_flips 跨章、可升阻断。纯函数·可测。
+
+    对每对关系按章排序，逐相邻两笔看温度跳变 |Δ|>阈值：在 (前章,后章] 的桥接窗口正文里找
+    重大转折语境（铺垫可落在中间任一章，不止跳变章），或该笔自带 turning_point/label 即视为有铺垫。
+    无铺垫 → 报警：
+      - 阻断级：满级反转（|Δ|≥2×阈值）或正负翻面（朋友↔敌人）且非终章——这种突变无铺垫几乎必是人设崩。
+      - 建议级：一般跳变，或落在终章（高潮揭示允许陡转，降级提示人复核）。
+    chapter_texts={章号:正文}；total_chapters 缺省取图中最大章号（用于终章豁免）。"""
+    alerts = []
+    matrix = (graph or {}).get("matrix", {}) or {}
+    texts = chapter_texts or {}
+    if total_chapters is None:
+        all_ch = [h.get("chapter", 0) for info in matrix.values()
+                  for h in info.get("history", []) if isinstance(h, dict)]
+        total_chapters = max(all_ch) if all_ch else 0
+    for pair, info in matrix.items():
+        hist = sorted([h for h in info.get("history", []) if isinstance(h, dict)],
+                      key=lambda h: h.get("chapter", 0))
+        for prev, cur in zip(hist, hist[1:]):
+            a, b = _num(cur.get("temperature")), _num(prev.get("temperature"))
+            cp, cc = prev.get("chapter", 0), cur.get("chapter", 0)
+            if a is None or b is None:
+                continue
+            delta = abs(a - b)
+            if delta <= REL_FLIP_THRESHOLD:
+                continue
+            # 铺垫：本笔自带转折标记，或桥接窗口任一章正文含重大转折语境。
+            bridge = "".join(texts.get(i, "") for i in range(cp + 1, cc + 1))
+            has_setup = (cur.get("turning_point") or bool(cur.get("label"))
+                         or any(k in bridge for k in RELATIONSHIP_TURNING_POINTS))
+            if has_setup:
+                continue
+            sign_flip = (a * b < 0)
+            is_final = total_chapters and cc >= total_chapters
+            if (delta >= 2 * REL_FLIP_THRESHOLD or sign_flip) and not is_final:
+                severity = "阻断级"
+            else:
+                severity = "建议级"
+            alerts.append({
+                "type": "relationship_break", "entity": pair, "severity": severity,
+                "chapter": cc, "from_chapter": cp, "delta": round(delta, 1),
+                "from_temp": b, "to_temp": a, "auto": True,
+                "evidence": "；".join(info.get("labels", []))[:60],
+                "note": (f"{pair} 关系温度第{cp}→{cc}章从 {b:g} 跳到 {a:g}（Δ{delta:g}"
+                         f"{'·正负翻面' if sign_flip else ''}），桥接章无重大转折语境/铺垫"
+                         f"{'（终章高潮，降级复核）' if is_final else '——疑突变无铺垫/人设崩'}"),
             })
     return alerts
 
@@ -520,6 +633,10 @@ def scan_chapter(wiki, text, chapter_index, project_root=None, numeric_anchors=N
         if guardrails is not None:
             alerts.extend(scan_character_guardrails(guardrails, text, chapter_index))
 
+    # B10 单一收口：标 confidence + 把脆弱启发式（关键词/子串/邻近扫正文）的 阻断级 降为 建议级。
+    # 只有 DETERMINISTIC_TYPES（结构化台账整数比较·不扫正文，如 foreshadowing_overdue）保留硬阻断。
+    # 在库函数边界生效 → 所有消费端（main / consistency_audit / 测试）看到的都是策略后的最终 severity。
+    enforce(alerts)
     return alerts
 
 
@@ -535,52 +652,41 @@ def _load_setting_json(project_root, filename):
         return None
 
 
-def generate_red_team_task(project_path):
-    out_dir = os.path.join(project_path, "审稿")
-    os.makedirs(out_dir, exist_ok=True)
-    task_path = os.path.join(out_dir, "red_team_task.json")
-    
-    context = {}
-    for filename in ["设定圣经.md", "创作蓝图.md", "世界观.md", "角色卡.md"]:
-        filepath = os.path.join(project_path, "设定", filename)
-        if os.path.exists(filepath):
-            with open(filepath, "r", encoding="utf-8") as f:
-                context[filename] = f.read()
-                
-    if not context:
-        print("❌ Red-Team Failed: No setting documents found in '设定/' directory. Establish the Bible and Blueprint first.")
-        return
-        
-    task = {
-        "mission": "Red-Teaming (Devil's Advocate)",
-        "attack_vectors": [
-            "Resource Exploit (资源滥用)",
-            "Logic Bypass (逻辑短路)",
-            "Consequence Evasion (金手指零代价)"
-        ],
-        "context": context,
-        "instructions": "Act as a ruthless red-teaming agent. Read the provided settings and find the easiest, most pragmatic ways for the protagonist or antagonist to achieve their goals, completely bypassing the intended plot constraints. If there are no counter-measures, log it as a vulnerability."
-    }
-    
-    with open(task_path, "w", encoding="utf-8") as f:
-        json.dump(task, f, ensure_ascii=False, indent=2)
-        
-    print(f"✅ Red-Team Task Generated -> {task_path}")
-    print("  Use this payload to instruct an LLM to attack the world-building logic before drafting the outline.")
+def scan_structured_ledgers(project_root, chapter_index=None, include_world=None):
+    """A1/A2·结构化原子事实确定性闸：state_ledger 生命周期(A1) + world_state_ledger 有效区间(A2)。
+
+    只比作者 curated 台账的枚举/章号/区间（不扫正文）→ confidence=deterministic、可硬阻断（见 heuristic_gate
+    DETERMINISTIC_TYPES）。缺台账/缺 graph_sentry → 返回 []（优雅缺席·不臆造·不误拦）。
+    chapter_index 给定时 A1 只返回复现章==该章的冲突（post_write 单章闸）；世界事实区间冲突是全局台账健康项，
+    默认只在全量/review 路径（chapter_index=None）跑，单章 post_write 不重复刷屏（include_world 可显式覆盖）。"""
+    if detect_lifecycle_conflicts is None:
+        return []
+    if include_world is None:
+        include_world = chapter_index is None
+    out = []
+    sl_path = os.path.join(project_root, "审稿", "state_ledger.json")
+    if os.path.exists(sl_path):
+        try:
+            with open(sl_path, "r", encoding="utf-8") as f:
+                ledger = json.load(f)
+        except Exception:
+            ledger = None
+        if isinstance(ledger, dict):
+            # 实体消解：合并 state_ledger 内联别名 + 设定/角色别名.json 已确认 curated 别名（人确认才入硬闸）。
+            alias_map = resolved_alias_map(project_root, ledger) if resolved_alias_map else None
+            out += detect_lifecycle_conflicts(ledger, chapter_index=chapter_index, alias_map=alias_map)
+    if include_world:
+        world = _load_setting_json(project_root, "world_state_ledger.json")
+        if isinstance(world, dict):
+            out += detect_fact_interval_conflicts(world)
+    return out
+
 
 def main():
-    p = argparse.ArgumentParser(description="逻辑哨兵：确定性扫硬冲突 & 事前红蓝对抗")
+    p = argparse.ArgumentParser(description="逻辑哨兵：确定性扫硬冲突候选")
     p.add_argument("project_path")
-    p.add_argument("--chapter", help="章节号或文件路径（普通模式必填）")
-    p.add_argument("--red-team", action="store_true", help="启动事前红蓝对抗（剧情漏洞爆破手）模式")
+    p.add_argument("--chapter", required=True, help="章节号或文件路径")
     args = p.parse_args()
-
-    if args.red_team:
-        generate_red_team_task(args.project_path)
-        return
-
-    if not args.chapter:
-        p.error("the following arguments are required: --chapter (unless --red-team is used)")
 
     wiki_path = os.path.join(args.project_path, "设定", "动态百科.json")
     if not os.path.exists(wiki_path):
@@ -591,27 +697,35 @@ def main():
 
     idx, text = _resolve_chapter(args.project_path, args.chapter)
     anchors = load_numeric_anchors(args.project_path)
+    # scan_chapter 已在库边界跑过 B10 enforce（标 confidence + 降级脆弱启发式）。
     alerts = scan_chapter(wiki, text, idx, project_root=args.project_path, numeric_anchors=anchors)
+    # A1·结构化生命周期确定性闸（本章复现）：已故/退场角色在 state_ledger 里更晚章节有非复活结构化事件 → 真硬阻断。
+    alerts += scan_structured_ledgers(args.project_path, chapter_index=idx)
+    enforce(alerts)  # 幂等：确定性 alerts 保留阻断级、关键词 alerts 已在 scan_chapter 降级
+    downgraded = sum(1 for a in alerts if a.get("downgraded_from"))
 
     out_dir = os.path.join(args.project_path, "审稿")
     os.makedirs(out_dir, exist_ok=True)
     out_path = os.path.join(out_dir, f"logic_alerts_{idx}.json")
-    blocking = sum(1 for a in alerts if a["severity"] == "阻断级")
+    blocking = count_blocking(alerts)
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump({
             "status": "clean" if not alerts else "conflicts",
             "chapter": idx,
             "blocking": blocking,
+            "heuristic_downgraded": downgraded,  # B10 降级账：脆弱启发式候选数（已转建议级·不阻断）
             "alerts": alerts,
         }, f, ensure_ascii=False, indent=2)
     if alerts:
-        print(f"⚠️ 第{idx}章：{len(alerts)} 条逻辑冲突候选（阻断 {blocking}）→ {out_path}")
+        tail = f"，其中 {downgraded} 条脆弱启发式按 B10 降为建议级" if downgraded else ""
+        print(f"⚠️ 第{idx}章：{len(alerts)} 条逻辑冲突候选（阻断 {blocking}{tail}）→ {out_path}")
         for a in alerts:
             print(f"  [{a['severity']}] {a['type']} · {a['entity']} · {a['evidence']}")
     else:
         print(f"✅ 第{idx}章：0 硬冲突 → {out_path}")
-    # 阻断级=硬矛盾必改：非零退出，让 post_write 的 check=True 真正硬挡（与 power_system 同约定）。
-    # 此前 main 恒 0 → 死人复活/弃置道具复用等阻断级写进报告却不拦 post_write，是潜在缺口，一并补上。
+    # 阻断级=硬矛盾必改：非零退出，让 post_write 的 check=True 真正硬挡。
+    # B10（2026-06）后只有确定性证据闸（如 foreshadowing_overdue·伏笔台账整数比较）能留在阻断级；
+    # 死人复活/弃置道具复用/世界规则等关键词扫正文的脆弱启发式已统一降为建议级，不再硬挡 post_write。
     if blocking:
         sys.exit(1)
 

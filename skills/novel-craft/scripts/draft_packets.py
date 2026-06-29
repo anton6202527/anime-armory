@@ -30,7 +30,7 @@ try:
 except Exception:  # pragma: no cover
     relevant_chapters = None
 
-from contract import normalize_novel_purpose, resolve_novel_draft_mode, scale_profile
+from novel_contract import normalize_novel_purpose, resolve_novel_draft_mode, scale_profile
 from store import atomic_write_json, atomic_write_text, file_lock
 from waivers import append_waiver, make_waiver
 
@@ -922,7 +922,7 @@ def arc_memory_section(arcs, emotions):
     return "\n".join(lines) + "\n"
 
 
-def ledger_excerpt_for_packet(ledger, limit=2600):
+def ledger_excerpt_for_packet(ledger, limit=2600, extract_static=False):
     """写章包注入的状态账本聚焦视图：只给长期记忆（角色 / 设定事实 / 未收与已收线程），
     丢掉逐章 `chapter_deltas` 大 blob（写下一章用不到，且几百章后会撑爆注入预算），改用计数替代。
     保证无论写到第几百章，注入的"记忆"都聚焦在 canonical 状态而非历史流水。
@@ -1156,6 +1156,10 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
         except Exception: pass
 
     source_paths = source_paths_for_kind(meta.get("kind"))
+    # 整部不变的圣经基底（kind 决定，跨章/跨 step 一致）——进 static_context 缓存前缀；
+    # 后续按本章/本 step 追加的引用（场景卡/弧光/研究包/cast/beats/draft）会逐章变化，
+    # 渲染时拆到 dynamic_context，避免污染缓存前缀（见下方 dynamic_source_paths）。
+    static_source_paths = list(source_paths)
     scene_cards = scene_cards_for_chapter(root, chapter)
     if scene_cards:
         for rel in (SCENE_CARDS_REL, SCENE_CARDS_REFERENCE):
@@ -1172,6 +1176,7 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
     female_active = female_fiction_active(root, meta)
     if female_active and FEMALE_FICTION_REFERENCE not in source_paths:
         source_paths.append(FEMALE_FICTION_REFERENCE)
+        static_source_paths.append(FEMALE_FICTION_REFERENCE)  # 题材级常量，跨章一致 → 留在静态基底
     cast_section = cast_arc_section(root, chapter, title, beat_text, char_voices)
     if cast_section and CAST_ARC_REFERENCE not in source_paths:
         source_paths.append(CAST_ARC_REFERENCE)
@@ -1347,22 +1352,52 @@ python3 skills/novel-review/scripts/mechanical_check.py "{root}" --range {start}
 - 当前未到回扫点；下一次预计在第 {window["next_due"]:02d} 章写后触发。
 """
 
-    return f"""# 第 {chapter:02d} 章写作任务包 ({step if step != "full" else "完整稿"})
+    # Prompt Caching：static_context 是缓存前缀。缓存按字节前缀匹配（render 顺序 tools→system→messages），
+    # 任何位置一处字节变化都会让其后所有断点失效。所以这里把「整部小说不变、且跨 architect/ghostwriter/editor
+    # 三步也不变」的稳定上下文（必读源文件、基本盘、Demo 风格锚点、读者契约、女频清单）全部放进 static_context，
+    # 只把逐章/逐 step 变化的内容（本章任务、章纲、承接、场景卡、研究包、账本摘录…）留在 dynamic_context。
+    # 稳定块必须物理在前 + 跨章字节一致，否则缓存读取静默为 0。
+    # 校验：prompt_cache_metrics.py 的 shared_static_prefix（跨包 static 块 hash 是否一致）。
+    # 逐章/逐 step 追加的引用拆出来，单独放进 dynamic_context，保证 static 前缀字节一致。
+    static_set = set(static_source_paths)
+    dynamic_source_paths = [p for p in source_paths if p not in static_set]
+    dynamic_source_section = ""
+    if dynamic_source_paths:
+        dynamic_source_section = "## 本章附加必读（逐章/逐 step）\n" + \
+            "\n".join(f"- `{p}`" for p in dynamic_source_paths) + "\n"
 
-## 任务
-- 输出文件：`{out_file}`
-- 标题：{title or "按章纲拟一个短标题"}
+    static_context = f"""<static_context cache_control="ephemeral">
+## 必读源文件 (Cached)
+{chr(10).join(f"- `{p}`" for p in static_source_paths)}
+
+## 小说基本盘（整部不变）
 - 小说用途：{purpose_from_settings(root, meta) or "未指定"}
-- 建议篇幅：{words[0]}-{words[1]} 字（仅作容量参考和质检预警，节拍闭环优先）
 - 人称视角：{meta.get("person", "未指定")}
 - 目标平台：{meta.get("target_platform", "未指定")}
 - 小说生成模式：{draft_mode}
 - 文本主创模式：{authorship_mode or "未指定"}（人类主创=AI 只给任务/审稿/局部辅助；AI辅助=正文需人工最终取舍；AI生成=投稿/发布高风险）
-- 小说生成工作流：{draft_workflow}{step_note}
+- 小说生成工作流：{draft_workflow}
 
-## 必读源文件
-{chr(10).join(f"- `{p}`" for p in source_paths)}
+## Demo 风格锚点
+- 来源章节：{demo_anchor.get("source_chapter", "未指定")}
+- 风格要点：{demo_anchor.get("summary") or ("（降级）从 `设定/读者契约.md` 推断；正式写章前请通过 Demo gate" if contract_text else "未填写；写前先从 Demo 章抽取")}
+- 读者承诺：{", ".join(promises) if promises else (", ".join(contract_promises) if contract_promises else "未填写")}
+- 设定硬约束：{", ".join(constraints) if constraints else "未填写"}
+- 禁止漂移：{", ".join(banned) if banned else (", ".join(contract_banned) if contract_banned else "未填写")}
+{contract_section}
+{female_section}
+</static_context>
+"""
 
+    return static_context + f"""<dynamic_context>
+# 第 {chapter:02d} 章写作任务包 ({step if step != "full" else "完整稿"})
+
+## 本章任务
+- 输出文件：`{out_file}`
+- 标题：{title or "按章纲拟一个短标题"}
+- 建议篇幅：{words[0]}-{words[1]} 字（仅作容量参考和质检预警，节拍闭环优先）{step_note}
+
+{dynamic_source_section}{waiver_section}
 ## 本章章纲
 {outline_item.get("raw") or outline_item.get("beat")}
 
@@ -1370,18 +1405,9 @@ python3 skills/novel-review/scripts/mechanical_check.py "{root}" --range {start}
 {previous_chapter_excerpt(root, chapter)}
 {revision_section}{retrieval_section}{loop_section}{voice_section}{cast_section}
 {arc_mem_section}
-## Demo 风格锚点
-- 来源章节：{demo_anchor.get("source_chapter", "未指定")}
-- 风格要点：{demo_anchor.get("summary") or ("（降级）从 `设定/读者契约.md` 推断；正式写章前请通过 Demo gate" if contract_text else "未填写；写前先从 Demo 章抽取")}
-- 读者承诺：{", ".join(promises) if promises else (", ".join(contract_promises) if contract_promises else "未填写")}
-- 设定硬约束：{", ".join(constraints) if constraints else "未填写"}
-- 禁止漂移：{", ".join(banned) if banned else (", ".join(contract_banned) if contract_banned else "未填写")}
-{waiver_section}
-{contract_section}
 {scene_card_section}
 {special_scene_sections}
 {event_cooling_section}
-{female_section}
 {research_section}
 {live_check_section}
 {batch_section}
@@ -1418,6 +1444,7 @@ python3 skills/novel-review/scripts/mechanical_check.py "{root}" --range {start}
   "next_chapter_carry": []
 }}
 ```
+</dynamic_context>
 """
 
 

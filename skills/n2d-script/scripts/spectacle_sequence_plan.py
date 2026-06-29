@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build sequence-level continuity plans for n2d spectacle scenes.
 
-Per-clip spectacle contracts keep individual fight/chase/flight/large shots
+Per-clip spectacle contracts keep individual fight/chase/flight/mount/vehicle/large shots
 from becoming free-form prompt prose.  This script adds the missing layer above
 them: a contiguous action/large-scene ledger that locks handoff state, screen
 direction, path curves, persistent subjects/assets, and reference policy across
@@ -22,6 +22,7 @@ if LIB not in sys.path:
     sys.path.insert(0, LIB)
 
 from n2d_contract import (  # noqa: E402
+    ACTION_CHOREOGRAPHY_SHOT_TYPES,
     IDENTITY_LOCK_NEGATIVE_TERMS,
     MOTION_INTENSITY_BY_TEMPLATE,
     SPECTACLE_SEQUENCE_PLAN_KIND,
@@ -30,14 +31,15 @@ from n2d_contract import (  # noqa: E402
     default_degrade_plan,
     infer_spectacle_type,
     motion_control_inputs_for_spectacle,
+    premium_spectacle_passes,
 )
 
 # 多角色同框上限：各家图生视频对多主体串脸基本不正面解决——同框具名脸 >2 显著抬升串脸风险，建议拆镜。
 SAME_FRAME_CHARACTER_CAP = 2
 
 
-ACTION_KINDS = {"fight_exchange", "chase", "flight"}
-ASSET_RE = re.compile(r"\b(?:CHAR|LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_]+\b")
+ACTION_KINDS = set(ACTION_CHOREOGRAPHY_SHOT_TYPES)
+ASSET_RE = re.compile(r"\b(?:CHAR|LOC|PROP|WEAPON|OUTFIT|VFX|BEAST|MOUNT|VEHICLE)_[A-Za-z0-9_]+\b")
 CHAR_RE = re.compile(r"\bCHAR_[A-Za-z0-9_]+\b")
 LOC_RE = re.compile(r"\bLOC_[A-Za-z0-9_]+\b")
 
@@ -209,6 +211,11 @@ def _build_sequence(items: Sequence[Mapping[str, Any]], index: int) -> Dict[str,
     characters = sorted(set(x for item in items for x in item.get("characters", [])))
     assets = sorted(set(x for item in items for x in item.get("assets", [])))
     locs = sorted(set(str(item.get("loc") or "") for item in items if item.get("loc")))
+    premium_qc = sorted(set(
+        dim
+        for item in items
+        for dim in ((item.get("premium_passes") or {}).get("qc_dimensions") or [])
+    ))
     return {
         "sequence_id": _sequence_id(seq_type, index),
         "sequence_type": seq_type,
@@ -241,6 +248,15 @@ def _build_sequence(items: Sequence[Mapping[str, Any]], index: int) -> Dict[str,
         ],
         "required_controls": controls,
         "reference_clip_policy": _reference_policy(seq_type),
+        "premium_coverage_policy": {
+            "required": bool(premium_qc),
+            "qc_dimensions": premium_qc,
+            "keyframe_rule": "每条高光动作/奇观 clip 必须有 start→intent_mid→impact/apex→result/end 的关键帧或拆段锚。",
+            "post_rule": "action_edit_cues 中的 hit-stop/速度坡/闪白/震屏/SFX 峰值必须和 impact/apex 对齐"
+                         "（由 combat_cue_apex_audit.py 机检兑现：impact_frame 须带 `<秒>s` → anchor_planner "
+                         "把该秒落成 keyframe 锚 → 剪辑峰值钉同秒；缺一即 warn，核心打斗镜可升 BLOCK）。",
+            "review_rule": "SPECV 未覆盖 keyframe_coverage、impact_apex_readability、edit_sfx_sync 时，production 交付边界不可静默签收。",
+        },
         "split_degrade_plan": _split_degrade_plan(seq_type),
         # 动作镜 prompt 注入项（prompt 生成器消费）：负向身份锁词钉死脸/服装/配饰/年龄漂移 + 背景闪烁。
         "negative_identity_lock": list(IDENTITY_LOCK_NEGATIVE_TERMS),
@@ -293,6 +309,7 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
             "out_state": first_text(continuity, ("out", "exit", "end_state", "出点")),
             "continuity_text": _flatten_text(continuity),
             "control_inputs_required": list(motion_control_inputs_for_spectacle(kind)),
+            "premium_passes": premium_spectacle_passes(kind),
         })
 
     sequences_raw: List[List[Dict[str, Any]]] = []

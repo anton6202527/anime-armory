@@ -17,19 +17,25 @@ export.py — novel-* 家族通用导出器（单一真值源）。
 依赖: python-docx（仅 --formats 含 docx 时）
 """
 import argparse
+import hashlib
 import json
 import os
 import re
 import sys
 from datetime import date
 
-from contract import ALLOWED_OUTPUT_FORMATS, derive_title
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_LIB = os.path.abspath(os.path.join(_HERE, "..", "..", "novel", "_lib"))
+if _LIB not in sys.path:
+    sys.path.insert(0, _LIB)
+
+from novel_contract import ALLOWED_OUTPUT_FORMATS, derive_title
 from qa_gate import collect_gate_status, format_gate_status
 from report_snapshot import sha256_file, snapshot_chapters
 from waivers import append_waiver, make_waiver
 
 CHAPTER_FILE_RE = re.compile(r"^第0*(\d+)章(?:[_ ].*)?\.md$")  # 第N章.md 或 第N章_标题.md
-META_LINE_RE = re.compile(r"^<!--\s*meta:.*-->\s*$")
+META_LINE_RE = re.compile(r"^<!--.*-->\s*$")
 # 章号接受阿拉伯/全角/中文数字；标题可带《》或裸标题
 H1_RE = re.compile(r"^#\s+第\s*[0-9０-９一二三四五六七八九十百千零〇两]+\s*章\s*[《<]?([^》>]*)[》>]?\s*$")
 ORIG_CHAP_RE = re.compile(r"^\s*第\s*[0-9零一二三四五六七八九十百千两]+\s*[章回节卷]")
@@ -211,16 +217,44 @@ def _rel(project_root, path):
     return os.path.relpath(os.path.abspath(path), project_root).replace(os.sep, "/")
 
 
+def _path_fingerprint(path):
+    """Return a stable fingerprint for a gate evidence path.
+
+    Some QA gate reports point at a directory, for example the review directory
+    used by arc reports. Forced export waivers still need a bounded scope, so
+    directories are represented by an aggregate hash of contained files.
+    """
+    if os.path.isfile(path):
+        return {"type": "file", "sha256": sha256_file(path)}
+    if os.path.isdir(path):
+        entries = []
+        for base, dirs, files in os.walk(path):
+            dirs.sort()
+            for name in sorted(files):
+                abs_path = os.path.join(base, name)
+                rel = os.path.relpath(abs_path, path).replace(os.sep, "/")
+                entries.append({"path": rel, "sha256": sha256_file(abs_path)})
+        aggregate = hashlib.sha256()
+        for item in entries:
+            aggregate.update(item["path"].encode("utf-8"))
+            aggregate.update(b"\0")
+            aggregate.update(item["sha256"].encode("ascii"))
+            aggregate.update(b"\n")
+        return {"type": "directory", "sha256": aggregate.hexdigest(), "files": len(entries)}
+    return {"type": "missing", "sha256": ""}
+
+
 def export_waiver_scope(project_root, gate_status, formats, *, combine=False):
     chapter_snapshot = snapshot_chapters(project_root, mode="export")
     reports = []
     for report in gate_status.get("reports") or []:
         path = report.get("path")
         if path and os.path.exists(path):
+            fingerprint = _path_fingerprint(path)
             reports.append({
                 "kind": report.get("kind"),
                 "path": _rel(project_root, path),
-                "sha256": sha256_file(path),
+                **fingerprint,
             })
     return {
         "output_mode": "combine" if combine else "export",

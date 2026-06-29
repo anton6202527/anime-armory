@@ -69,6 +69,30 @@ def test_revision_plan_consumes_pacing_signals_schema():
         assert by_id["PACING-ENDRISK-SUMMARY"]["chapter"] == 9
 
 
+def test_revision_plan_consumes_market_evidence_tasks_and_jobs():
+    with tempfile.TemporaryDirectory() as root:
+        os.makedirs(os.path.join(root, "评分"), exist_ok=True)
+        with open(os.path.join(root, "评分", "market_evidence_tasks.json"), "w", encoding="utf-8") as f:
+            json.dump({
+                "kind": "novel_market_evidence_tasks",
+                "tasks": [{
+                    "priority": "P1",
+                    "title": "补齐红果证据",
+                    "recommended_skill": "novel-research",
+                    "return_to_stage": "market_baseline",
+                    "reason": "coverage gap",
+                }],
+            }, f, ensure_ascii=False)
+        with open(os.path.join(root, "评分", "market_evidence_jobs.json"), "w", encoding="utf-8") as f:
+            json.dump({"kind": "novel_market_evidence_jobs", "jobs": [{"id": "MARKET-SEARCH-001"}]}, f)
+
+        plan = rp.build_plan(root)
+        ids = {task["id"] for task in plan["tasks"]}
+        assert {"MARKET-EVIDENCE-001", "MARKET-EVIDENCE-JOBS"} <= ids
+        assert plan["inputs"]["market_evidence_tasks"] is True
+        assert plan["inputs"]["market_evidence_jobs"] is True
+
+
 def test_kill_verdict_demotes_non_score_p0():
     """评分结论为「弃稿重立」时，非评分来源的 P0 应降为 P2。"""
     with tempfile.TemporaryDirectory() as root:
@@ -96,9 +120,14 @@ def test_kill_verdict_demotes_non_score_p0():
         # review P0 应降级
         assert by_id["REV-001"]["priority"] == "P2", "非评分 P0 应降为 P2"
         assert "[已降级" in by_id["REV-001"]["title"]
+        assert by_id["REV-001"]["resolution"]["type"] == "score_kill_demotes_non_score_p0"
         # score P0 不变
         assert by_id["SCORE-VERDICT"]["priority"] == "P0", "评分 P0 不应降级"
         assert plan["kill_verdict_demotions"] >= 1
+        assert any(
+            item["resolution"]["type"] == "score_kill_demotes_non_score_p0"
+            for item in plan["conflict_summary"]
+        )
 
 
 def test_kill_verdict_does_not_demote_non_p0():
@@ -152,6 +181,12 @@ def test_conflict_detection_review_vs_balance():
         assert rev.get("conflict"), "review 任务应标记冲突"
         assert bal.get("conflict"), "balance 任务应标记冲突"
         assert bal["id"] in rev.get("conflict_with", []), "应交叉引用对方 ID"
+        assert rev["conflict_resolution"]["decision"] == "hold_for_editor_arbitration"
+        assert any(
+            item["resolution"]["type"] == "cross_source_stage_conflict"
+            and item["task_id"] == "REV-001"
+            for item in plan["conflict_summary"]
+        )
 
 
 def test_conflict_detection_review_vs_pacing():
@@ -181,3 +216,4 @@ def test_conflict_detection_review_vs_pacing():
         assert rev.get("conflict"), "review 任务应与 pacing 标记冲突"
         assert pacing.get("conflict"), "pacing 任务应标记冲突"
         assert pacing["id"] in rev.get("conflict_with", []), "应交叉引用 pacing 任务 ID"
+        assert pacing["conflict_resolution"]["winner"] == "manual_editor_review"

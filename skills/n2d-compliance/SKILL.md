@@ -11,12 +11,13 @@ description: P0 compliance and rights preflight for n2d. Create and validate 合
 
 ```text
 创作区/制漫剧/<剧名>/合规/compliance_manifest.json
+创作区/制漫剧/<剧名>/合规/release_manifest_第N集.json
 ```
 
 ## 输入 / 输出 / 读写边界
 
 - **输入**：源文本/改编权信息、identity registry 角色、声音克隆/素材授权、平台审核策略、目标地区。
-- **输出**：`合规/compliance_manifest.json` 和 `--check` 结果；dashboard gate 会把阻断写入生产数据。
+- **输出**：`合规/compliance_manifest.json` 和 `--check` 结果；发布前由 `n2d-compose/release_manifest.py` 汇总 `release_manifest_第N集.json/md`；dashboard gate 会把阻断写入生产数据。
 - **读写边界**：只建立/校验合规包；不替代法律意见、不生成媒体、不改生产阶段。
 - **契约关系**：internal_only 免检范围、必填域和 gate 阶段阻断口径与 `skills/n2d/_lib/n2d_contract.py` 保持同源。
 
@@ -36,6 +37,16 @@ python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第1集 --sta
 ```
 
 `dashboard.py gate` 是生产硬闸门入口（内部调用 `gate.py --json` 并把 QA 入账）；`compliance.py --check` 用于提前看缺口。
+
+发布前归档：
+
+```bash
+python3 skills/n2d-dashboard/scripts/event_ledger.py doctor <作品根>
+python3 skills/n2d-compose/release_manifest.py build <作品根> 第1集 --stage review --write
+python3 skills/n2d-compose/release_manifest.py check <作品根> 第1集
+```
+
+`release_manifest` 汇总母带 SHA256、合规 issue、gate findings、机器分、人审签收、AI 标识/水印/C2PA 待办和事件账本审计路径。它不是新的合规判定引擎，只是发布边界的证据包；`readiness.status=blocked` 时不能进入投放交付。
 
 ## 必填面
 

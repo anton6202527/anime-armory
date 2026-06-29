@@ -24,6 +24,7 @@
 - [Q6：主角 vs 配角怎么甄别？](#q6)
 - [Q7：用户已给暂定书名时怎么处理？](#q7)
 - [Q8：这套"持续改进"机制本身怎么用？](#q8)
+- [Q9：agent 可以是 skill 形式吗？supervisor skill 和 runner 状态机怎么分？](#q9)
 
 ---
 
@@ -155,3 +156,39 @@
 **来源**：用户在王敦外传 Demo 后明确请求—"如果发现有一些好的点可以写进 skill 里，这项能力也要写进 novel 里，并记录个 Q&A.md"。
 
 **适用范围**：novel 自身 + 所有 novel-* skill 在跑流水线时的副产品累积。
+
+---
+
+## Q9：agent 可以是 skill 形式吗？supervisor skill 和 runner 状态机怎么分？<a id="q9"></a>
+
+**A**：可以。**agent 可以用 skill 的形式承载**，但 skill 和 agent 不是同一层概念。
+
+- **Skill 是包装 / 分发 / 路由形式**：`SKILL.md + scripts + references`，描述遇到某类任务时怎么做。
+- **Agent 是运行时角色 / 行为模式**：是否有目标、是否能自主选择下一步、循环调用工具、handoff、处理开放判断。
+- **Runner / 状态机是确定性流程真值**：维护 run_id、stage status、retry、lock、resume、artifact graph、gate、provenance。
+
+所以类似 `*-supervisor` 这种写法并不矛盾：它是**用 skill 形式表达的 supervisor agent 指令包**。它可以说自己是 agent，因为它要求当前执行者扮演上层编排角色；但它不应替代生产状态机，除非它自己维护一套明确的 run state / stage status / artifact lineage。
+
+novel 若新增 `novel-supervisor`，定位应写成：
+
+> `novel-supervisor` 是 novel 的上层 agent 编排 skill，不替代 `novel_pipeline.py` / `pipeline_runner.py`，不拥有生产状态真值；它读取 plan/run/job/provenance，选择下一步、创建或领取 semantic job，必要时 handoff 给 specialist agent。
+
+边界铁律：
+- 不自己维护另一套 `_进度` 或 pipeline 状态。
+- 不绕过 runner / gate。
+- 不直接把“我认为完成了”写成完成；完成必须有声明产物、schema 校验或 runner 阶段更新。
+- 不替代 `semantic_job.py` 的 schema 校验。
+- 不把所有子 skill 变成 agent。
+
+最稳的层次是：
+
+```text
+skill 作为载体
+agent 作为运行角色
+runner/state machine 作为确定性流程真值
+artifact/provenance 作为可审计状态
+```
+
+**来源**：用户询问某条生产线的 supervisor skill 是上层 agent 编排层、仍保留 skill 作为领域知识/工具/契约，但它说自己是 agent 是否矛盾。
+
+**适用范围**：`novel` / 未来可能的 `novel-supervisor` / `novel-craft` workflow runner / 所有 specialist handoff 设计。

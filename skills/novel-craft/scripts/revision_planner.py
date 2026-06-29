@@ -158,6 +158,37 @@ def tasks_from_simulate(root: str) -> list[dict[str, Any]]:
     return []
 
 
+def tasks_from_market_evidence(root: str) -> list[dict[str, Any]]:
+    payload = load_json(os.path.join(root, "评分", "market_evidence_tasks.json"), {}) or {}
+    if not isinstance(payload, dict):
+        return []
+    tasks = []
+    for idx, item in enumerate(payload.get("tasks") or [], 1):
+        if not isinstance(item, dict):
+            continue
+        tasks.append(_task(
+            f"MARKET-EVIDENCE-{idx:03d}",
+            "market_evidence_tasks",
+            item.get("title") or "补齐目标平台市场证据",
+            priority=item.get("priority") or "P1",
+            skill=item.get("recommended_skill") or "novel-research",
+            stage=item.get("return_to_stage") or "market_baseline",
+            reason=item.get("reason") or "",
+        ))
+    jobs = load_json(os.path.join(root, "评分", "market_evidence_jobs.json"), {}) or {}
+    if isinstance(jobs, dict) and jobs.get("jobs"):
+        tasks.append(_task(
+            "MARKET-EVIDENCE-JOBS",
+            "market_evidence_jobs",
+            "执行市场证据深搜 job 并回灌 manual_evidence",
+            priority="P1",
+            skill="novel-score",
+            stage="market_baseline",
+            reason="评分目录存在 market_evidence_jobs.json；需完成搜索、结构化证据和重新采集。",
+        ))
+    return tasks
+
+
 def tasks_from_balance(root: str) -> list[dict[str, Any]]:
     tasks = []
     for path in sorted(glob.glob(os.path.join(root, "审稿", "*balance*.json")) + glob.glob(os.path.join(root, "评分", "*heatmap*.json"))):
@@ -264,13 +295,16 @@ def _resolve_conflicts(tasks: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 t["reason"] = (t.get("reason") or "") + (
                     "；评分结论为「弃稿重立」，方向设定变更后此问题需在新框架下重新评估"
                 )
+                t["resolution"] = {
+                    "type": "score_kill_demotes_non_score_p0",
+                    "winner": "score_report",
+                    "loser": t.get("source"),
+                    "decision": "demote_to_P2",
+                    "explanation": "评分结论为「弃稿重立」时，方向规格已失效；非评分 P0 不再作为当前稿紧急修补项，而是等待新方向确定后重新评估。",
+                    "next_gate": "direction_spec",
+                }
 
     # 跨源对立检测：review 和 balance 对同一章的建议是否指向相反方向
-    stage_conflict_pairs = [
-        # (stage_a, stage_b, label) — 当两个来源把同一章路由到相反阶段时触发
-        ({"review", "rewrite"}, {"balance"}, "节奏/审核方向交叉"),
-        ({"review"}, {"direction_spec"}, "修改 vs 重设方向冲突"),
-    ]
     review_tasks = [t for t in tasks if t.get("source") == "review_report"]
     # balance 侧任务靠 stage/技能识别，而非 source 子串——pacing 任务 source 为
     # "pacing_signals"（不含 "balance"），是 balance 侧的主力信号，旧的子串匹配
@@ -291,14 +325,60 @@ def _resolve_conflicts(tasks: list[dict[str, Any]]) -> list[dict[str, Any]]:
             # 同一章 + 路由到不同阶段 → 标记
             if rt.get("return_to_stage") != bt.get("return_to_stage"):
                 conflict_label = f"跨源冲突：review→{rt.get('return_to_stage')} vs balance→{bt.get('return_to_stage')}"
+                resolution = {
+                    "type": "cross_source_stage_conflict",
+                    "winner": "manual_editor_review",
+                    "decision": "hold_for_editor_arbitration",
+                    "explanation": "同一章的审稿信号与节奏/结构信号要求回到不同阶段；不能自动串行执行，否则可能互相覆盖。需先人工裁决主问题，再执行获胜路径。",
+                    "candidates": [
+                        {
+                            "task_id": rt["id"],
+                            "source": rt.get("source"),
+                            "stage": rt.get("return_to_stage"),
+                            "skill": rt.get("recommended_skill"),
+                        },
+                        {
+                            "task_id": bt["id"],
+                            "source": bt.get("source"),
+                            "stage": bt.get("return_to_stage"),
+                            "skill": bt.get("recommended_skill"),
+                        },
+                    ],
+                }
                 rt["conflict"] = True
                 rt.setdefault("conflict_with", []).append(bt["id"])
                 rt["conflict_note"] = conflict_label
+                rt["conflict_resolution"] = resolution
                 bt["conflict"] = True
                 bt.setdefault("conflict_with", []).append(rt["id"])
                 bt["conflict_note"] = conflict_label
+                bt["conflict_resolution"] = resolution
 
     return tasks
+
+
+def conflict_summary(tasks: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Return compact, explicit conflict/resolution records for plan consumers."""
+    out: list[dict[str, Any]] = []
+    seen: set[tuple[str, str]] = set()
+    for task in tasks:
+        resolution = task.get("conflict_resolution") or task.get("resolution")
+        if not isinstance(resolution, dict):
+            continue
+        key = (str(task.get("id") or ""), str(resolution.get("type") or ""))
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append({
+            "task_id": task.get("id"),
+            "chapter": task.get("chapter"),
+            "source": task.get("source"),
+            "priority": task.get("priority"),
+            "title": task.get("title"),
+            "note": task.get("conflict_note") or task.get("reason") or "",
+            "resolution": resolution,
+        })
+    return out
 
 
 def render_markdown(plan: dict[str, Any]) -> str:
@@ -315,6 +395,8 @@ def render_markdown(plan: dict[str, Any]) -> str:
     conflicts = [t for t in plan["tasks"] if t.get("conflict")]
     if conflicts:
         lines.append(f"- ⚠️ 跨源冲突：{len(conflicts)} 项任务存在 review/balance 方向矛盾，已标记 `conflict: true`")
+    if plan.get("conflict_summary"):
+        lines.append(f"- 冲突/裁决解释：{len(plan['conflict_summary'])} 条")
     lines.extend([
         "",
         "| priority | chapter | skill | stage | title | reason |",
@@ -328,6 +410,20 @@ def render_markdown(plan: dict[str, Any]) -> str:
         )
     if not plan["tasks"]:
         lines.append("| - |  | - | - | 暂无可合并修订任务 |  |")
+    if plan.get("conflict_summary"):
+        lines.extend(["", "## 冲突与裁决解释", ""])
+        for item in plan["conflict_summary"]:
+            resolution = item.get("resolution") or {}
+            candidates = resolution.get("candidates") or []
+            candidate_text = ""
+            if candidates:
+                candidate_text = "；候选：" + " / ".join(
+                    f"{c.get('task_id')}→{c.get('stage')}({c.get('skill')})" for c in candidates
+                )
+            lines.append(
+                f"- {item.get('task_id')}：{resolution.get('type')}；"
+                f"decision={resolution.get('decision')}；{resolution.get('explanation')}{candidate_text}"
+            )
     return "\n".join(lines) + "\n"
 
 
@@ -339,6 +435,7 @@ def build_plan(root: str) -> dict[str, Any]:
     tasks.extend(tasks_from_balance(root))
     tasks.extend(tasks_from_feedback(root))
     tasks.extend(tasks_from_simulate(root))
+    tasks.extend(tasks_from_market_evidence(root))
 
     # 跨来源冲突处理（先于 dedupe，因为降级可能影响去重键）
     kill_count = sum(
@@ -347,6 +444,7 @@ def build_plan(root: str) -> dict[str, Any]:
         and "弃稿重立" in str(t.get("title", ""))
     )
     _resolve_conflicts(tasks)
+    planned_tasks = dedupe(tasks)
 
     return {
         "schema_version": 1,
@@ -359,9 +457,12 @@ def build_plan(root: str) -> dict[str, Any]:
             "pacing_signals": os.path.exists(os.path.join(root, "评分", "pacing_signals.json")),
             "reader_telemetry_summary": os.path.exists(os.path.join(root, "评分", "reader_telemetry_summary.json")),
             "reader_panel_signals": os.path.exists(os.path.join(root, "评分", "reader_panel_signals.json")),
+            "market_evidence_tasks": os.path.exists(os.path.join(root, "评分", "market_evidence_tasks.json")),
+            "market_evidence_jobs": os.path.exists(os.path.join(root, "评分", "market_evidence_jobs.json")),
         },
-        "tasks": dedupe(tasks),
-        "kill_verdict_demotions": demoted_count(tasks) if kill_count else 0,
+        "tasks": planned_tasks,
+        "kill_verdict_demotions": demoted_count(planned_tasks) if kill_count else 0,
+        "conflict_summary": conflict_summary(planned_tasks),
     }
 
 

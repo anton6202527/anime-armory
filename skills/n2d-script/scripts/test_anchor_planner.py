@@ -10,15 +10,13 @@ import anchor_planner as ap
 # ── resolve_default_midframe（选择点解析·纯函数）──
 
 def test_default_midframe_defaults_on_per_choice_point():
-    # 缺设置 / 设置开启 → 开（三帧契约全局默认）
+    # 缺设置 / 设置开启 / 旧项目写关闭 → 都开（三帧图片契约全局默认）
     assert ap.resolve_default_midframe(False, False, None) is True
     assert ap.resolve_default_midframe(False, False, "开启") is True
-    # 项目设为关闭 → 关
-    assert ap.resolve_default_midframe(False, False, "关闭") is False
-    # 后端支持只表示可做，不能覆盖 ROI/速度优先的关闭选择；高风险 R1/R2/R3 另行强制。
-    assert ap.resolve_default_midframe(False, False, "关闭", backend_capable=True) is False
-    # 后端明确不支持三帧时，普通 D0 中锚关闭。
-    assert ap.resolve_default_midframe(False, False, "开启", backend_capable=False) is False
+    assert ap.resolve_default_midframe(False, False, "关闭") is True
+    # 后端能力只决定视频消费方式，不决定图片阶段是否产出 _mid。
+    assert ap.resolve_default_midframe(False, False, "关闭", backend_capable=True) is True
+    assert ap.resolve_default_midframe(False, False, "开启", backend_capable=False) is True
 
 
 def test_default_midframe_cli_flags_override_setting():
@@ -282,3 +280,46 @@ def test_rule_hit_takes_precedence_over_default(tmp_path):
     assert len(plan["planned"]) == 1
     assert plan["planned"][0]["rule"].startswith("R1")
     assert plan["planned"][0]["anchors"][0]["anchor_png"].endswith("_a1.png")
+
+
+# ── apex-aware 锚帧：命中/爆发帧强制落成真关键帧（动作轴·四轴撞点） ──
+def test_apex_anchor_seconds_extracts_impact_cue():
+    clip = {"template": "fight_exchange", "duration": 6.0, "template_contract": {
+        "post_cue_points": ["0.4s 起手", "3.2s 命中巨响", "5.0s 收势"], "impact_frame": "戟没入"}}
+    assert _ap().apex_anchor_seconds(clip, 6.0) == [3.2]
+
+
+def test_apex_anchor_seconds_magic_collision_and_no_impact():
+    m = {"template": "magic_burst", "duration": 5.5, "template_contract": {
+        "post_cue_points": ["0.6s 蓄力", "4.6s 砸落全频低频轰鸣"]}}
+    assert _ap().apex_anchor_seconds(m, 5.5) == [4.6]
+    none = {"template": "fight_exchange", "duration": 4.0, "template_contract": {
+        "post_cue_points": ["1.0s 起手", "2.0s 收势"]}}
+    assert _ap().apex_anchor_seconds(none, 4.0) == []        # 无命中关键词 → 不抽
+    assert _ap().apex_anchor_seconds({"template": "fight_exchange", "duration": 3.0,
+        "template_contract": {"post_cue_points": ["9.0s 命中"]}}, 3.0) == []  # 超时长 → 丢弃
+
+
+def _ap():
+    import importlib.util, os
+    spec = importlib.util.spec_from_file_location(
+        "anchor_planner", os.path.join(os.path.dirname(__file__), "anchor_planner.py"))
+    m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+    return m
+
+
+def test_plan_episode_places_apex_keyframe(tmp_path):
+    import json
+    ap = _ap()
+    sb = {"clips": [{"id": "Clip_01", "template": "fight_exchange", "duration": 10.0,
+        "shots": [{"t": "0-10s", "desc": "x"}],
+        "template_contract": {"template_id": "fight_exchange",
+            "beats": ["起手", "命中", "收势"],
+            "post_cue_points": ["0.5s 起手", "4.0s 命中巨响", "8.0s 收势"]}}]}
+    (tmp_path / "脚本" / "第1集").mkdir(parents=True)
+    (tmp_path / "脚本" / "第1集" / "storyboard.json").write_text(
+        json.dumps(sb, ensure_ascii=False), encoding="utf-8")
+    res = ap.plan_episode(str(tmp_path), "第1集")
+    anchors = res["planned"][0]["anchors"]
+    apex = [a for a in anchors if a.get("use") == "keyframe"]
+    assert apex and any(abs(a["at_sec"] - 4.0) <= 0.4 for a in apex)   # 命中帧落成 keyframe

@@ -191,6 +191,17 @@ def _expected_asset_refs(asset: Mapping[str, Any], used: bool) -> List[Dict[str,
             add(slot, bool(_ref_path(rg.get(slot)) or _ref_path(rg.get("primary"))),
                 _ref_path(rg.get(slot)) or _ref_path(rg.get("primary")),
                 "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。")
+        # 布局图 spatial_map + scene_atlas 多视角 base_views（此前声明却喂给零代码的死字段）——纳入参考清单，
+        # 锁门窗朝向/floor_plan 几何 + 同一空间换机位一致（生成侧场景锚定·详见 scene_reference_planner.py）。
+        if _ref_path(rg.get("spatial_map")):
+            add("spatial_map", True, _ref_path(rg.get("spatial_map")),
+                "布局图：锁门窗位置/floor_plan 几何，治反打把房间拍成另一个房间。")
+        atlas = asset.get("scene_atlas") if isinstance(asset.get("scene_atlas"), Mapping) else {}
+        base_views = atlas.get("base_views") if isinstance(atlas.get("base_views"), Mapping) else {}
+        for bv_key in ("reverse", "side"):
+            bv = _ref_path(base_views.get(bv_key))
+            if bv:
+                add(f"base_view_{bv_key}", True, bv, f"scene_atlas {bv_key} 视角：锁同一空间换机位的一致性。")
     elif aid.startswith(("PROP_", "WEAPON_", "VFX_", "OUTFIT_")):
         for slot in ("primary", "scale_reference", "detail_closeup"):
             add(slot, bool(_ref_path(rg.get(slot)) or _ref_path(rg.get("primary"))),

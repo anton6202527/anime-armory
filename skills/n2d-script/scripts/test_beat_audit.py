@@ -58,6 +58,17 @@ def test_pure_emotion_flags_no_info_payoff():
     assert "no_info_payoff" in codes(findings)
 
 
+def test_system_reward_terms_count_as_info_payoff():
+    vo = """[镜头1·沈念·惊恐·快] 门被推开了！  ⚡钩子
+[镜头2·旁白·低沉] 系统接入，血脉权限开启。  💥信息爽点
+[镜头3·系统音·冰冷] 得到：伪人皮，潜行。  💥信息爽点
+[镜头4·沈念·阴狠·慢] 这局，才刚开始。  🪝集尾
+"""
+    root = _mk_ep(vo)
+    findings, _ = B.audit_episode(root, "第1集")
+    assert "no_info_payoff" not in codes(findings)
+
+
 def test_missing_ending_and_reversal_flagged():
     vo = """[镜头1·沈念·平静·慢] 今天天气不错。
 [镜头2·沈念·平静·慢] 我们去散步吧。
@@ -78,6 +89,26 @@ def test_hook_gap_uses_real_seconds():
     root = _mk_ep(vo, {"镜头1": 3, "镜头2": 30, "镜头3": 4, "镜头4": 5})
     findings, _ = B.audit_episode(root, "第1集")
     assert "hook_gap" in codes(findings)
+
+
+def test_native_storyboard_voiceover_indices_drive_timing_map():
+    vo = """[镜头1·沈念·惊恐·快] 危机来了！  ⚡钩子
+[镜头2·旁白·低沉] 旧疤忽然烧了起来。
+[镜头3·沈念·冷冽·快] 真相揭开。  💥爽点
+[镜头4·沈念·阴狠·慢] 结束了？  🪝集尾
+"""
+    root = _mk_ep(vo, {"EP01_CLIP01": 4, "EP01_CLIP02": 6})
+    epd = Path(root) / "脚本" / "第1集"
+    (epd / "storyboard.json").write_text(json.dumps({
+        "clips": [
+            {"id": "EP01_CLIP01", "duration": 4, "voiceover_indices": [1, 2]},
+            {"id": "EP01_CLIP02", "duration": 6, "voiceover_indices": [3, 4]},
+        ]
+    }, ensure_ascii=False), encoding="utf-8")
+
+    secs = B.load_shot_seconds(root, "第1集")
+
+    assert secs == {1: 2.0, 2: 2.0, 3: 3.0, 4: 3.0}
 
 
 def test_unmarked_ending_cliffhanger_downgraded_not_false_warn():
@@ -111,6 +142,49 @@ def test_varied_emotion_arc_not_flagged():
     c = codes(findings)
     assert "flat_emotion_arc" not in c
     assert "no_emotion_peak" not in c
+
+
+# ---------- D2 语速呼吸（此前 (语速) 只解析不消费） ----------
+
+def test_norm_speed_aliases():
+    assert B._norm_speed("慢") == "slow" and B._norm_speed("缓") == "slow"
+    assert B._norm_speed("快") == "fast" and B._norm_speed("加快") == "fast"
+    assert B._norm_speed("常速") == "normal"
+    assert B._norm_speed("") == "" and B._norm_speed(None) == ""   # 未标 → 空，不臆造
+
+
+def test_flat_speed_flagged_when_all_annotated_same():
+    # ≥6 镜全标同一速档（情绪有起伏，单独验语速轴）→ flat_speed info
+    emos = ["惊恐", "低沉", "冷冽", "痛快", "阴狠", "决绝"]
+    vo = "".join(f"[镜头{i+1}·沈念·{e}·快] 第{i+1}拍，原来竟是真相。\n" for i, e in enumerate(emos))
+    findings, _ = B.audit_episode(_mk_ep(vo), "第1集")
+    assert "flat_speed" in codes(findings)
+
+
+def test_flat_speed_skipped_when_speed_varies():
+    vo = ("[镜头1·沈念·惊恐·快] 门被推开！原来竟是真相。\n"
+          "[镜头2·旁白·低沉·慢] 漫长铺垫。\n"
+          "[镜头3·沈念·痛快·快] 反击赢了！\n"
+          "[镜头4·沈念·冷冽·常速] 真相揭开。\n"
+          "[镜头5·沈念·决绝·快] 我要赢。\n"
+          "[镜头6·沈念·阴狠·慢] 才刚开始。\n")
+    assert "flat_speed" not in codes(B.audit_episode(_mk_ep(vo), "第1集")[0])
+
+
+def test_flat_speed_skipped_when_annotation_too_sparse():
+    # 标注样本 < SPEED_MIN_ANNOTATED → 信号不足，优雅跳过（不臆造）
+    vo = ("[镜头1·沈念·惊恐] 门开了。原来竟是真相。\n"
+          "[镜头2·旁白·低沉] 铺垫。\n"
+          "[镜头3·沈念·痛快·快] 反击！\n"
+          "[镜头4·沈念·决绝·快] 赢了。\n")
+    assert "flat_speed" not in codes(B.audit_episode(_mk_ep(vo), "第1集")[0])
+
+
+def test_slow_cold_open_speed_flagged():
+    vo = ("[镜头1·沈念·平静·慢] 今天天气不错，慢慢说起往事。\n"
+          "[镜头2·沈念·冷冽·快] 真相揭开，原来竟是亲妹。\n"
+          "[镜头3·沈念·阴狠·快] 才刚开始。  🪝集尾\n")
+    assert "slow_cold_open_speed" in codes(B.audit_episode(_mk_ep(vo), "第1集")[0])
 
 
 def _mk_series(eps_text):
@@ -666,3 +740,97 @@ def test_cadence_peak_flags_long_gap_between_peaks_longform():
     findings, _ = B.audit_episode(root, "第1集")
     c = codes(findings)
     assert "cadence_peak" in c        # 愤怒@0 → 震惊@205，间距 205>180
+
+
+# ── G1·开场拉力（独立留存杠杆）+ G2·区域感知钩子间隔 ──
+
+def _set(root, text):
+    (Path(root) / "_设置.md").write_text(text, encoding="utf-8")
+
+
+def test_cold_open_pull_layers_pure_scoring():
+    # 单条强层(冲突)=0.3；两条强层(冲突+悬念)=0.6；零层=0
+    s1, _ = B.cold_open_pull_layers([{"text": "他举刀杀来！", "hooks": set()}])
+    s2, _ = B.cold_open_pull_layers([{"text": "他举刀杀来，到底是谁？", "hooks": set()}])
+    s0, _ = B.cold_open_pull_layers([{"text": "今天天气不错。", "hooks": set()}])
+    assert s1 == 0.3 and s2 == 0.6 and s0 == 0.0
+
+
+def test_cold_open_pull_weak_flags_flat_opening():
+    # 开场零强层（纯平铺）→ cold_open_pull_weak（warn·--strict 升 block）
+    vo = """[镜头1·沈念·平静·慢] 今天天气不错。
+[镜头2·沈念·平静·慢] 我们去散步吧。  🪝集尾
+"""
+    findings, _ = B.audit_episode(_mk_ep(vo), "第1集")
+    assert "cold_open_pull_weak" in codes(findings)
+
+
+def test_cold_open_pull_deep_opening_no_finding():
+    # 开场两条强层（冲突+悬念）=0.6 deep → 无任何 pull 提示
+    vo = """[镜头1·沈念·惊恐·快] 他举刀杀来，到底是谁？  ⚡钩子
+[镜头2·旁白·低沉] 原来害她的是亲妹妹。
+[镜头3·沈念·冷冽·快] 真相揭开。  💥爽点
+[镜头4·沈念·阴狠·慢] 这局才刚开始。  🪝集尾
+"""
+    c = codes(B.audit_episode(_mk_ep(vo), "第1集")[0])
+    assert "cold_open_pull_weak" not in c and "cold_open_pull_thin" not in c
+
+
+def test_cold_open_pull_thin_single_layer_info():
+    # 开场仅单条强层（冲突）=0.3：达地板但偏薄 → info 提示加深（不阻断）
+    vo = """[镜头1·沈念·惊恐·快] 他举刀杀来！  ⚡钩子
+[镜头2·沈念·冷冽·快] 我不退。  💥爽点
+[镜头3·沈念·阴狠·慢] 走着瞧。  🪝集尾
+"""
+    findings, _ = B.audit_episode(_mk_ep(vo), "第1集")
+    c = codes(findings)
+    assert "cold_open_pull_thin" in c and "cold_open_pull_weak" not in c
+
+
+def test_cold_open_quality_score_shares_pull_layers():
+    # cold_open_quality_score 与 cold_open_pull_layers 同源（单一真值，不漂离）
+    vo = "[镜头1·沈念·惊恐·快] 他举刀杀来，到底是谁？\n[镜头2·旁白·低沉] 没什么。\n"
+    root = _mk_ep(vo)
+    q = B.cold_open_quality_score(root, "第1集")
+    s, layers = B.cold_open_pull_layers(B.parse_voiceover(Path(root) / "脚本" / "第1集" / "voiceover.txt")[:2])
+    assert q["score"] == s and q["layers"] == layers and q["depth"] == "deep"
+
+
+# G2·区域感知：同一中段间隔(15s)国内(≤20s)放行、海外(≤10s)收紧报 hook_gap
+_GAP15_VO = """[镜头1·沈念·惊恐·快] 危机来了！  ⚡钩子
+[镜头2·旁白·低沉] 漫长的回忆与铺垫。
+[镜头3·沈念·冷冽·快] 真相揭开。  💥爽点
+[镜头4·沈念·阴狠·慢] 结束了？  🪝集尾
+"""
+_GAP15_SECS = {"镜头1": 3, "镜头2": 12, "镜头3": 4, "镜头4": 5}
+
+
+def test_domestic_default_hook_gap_unchanged():
+    # 无 _设置.md → domestic 档，间隔 15s ≤ 20s 不报（回归保护：旧默认不变）
+    root = _mk_ep(_GAP15_VO, _GAP15_SECS)
+    assert B.effective_hook_gap_sec(root) == 20.0
+    assert "hook_gap" not in codes(B.audit_episode(root, "第1集")[0])
+
+
+def test_overseas_monetisation_tightens_hook_gap():
+    # 变现模式=海外 → overseas 档(10s)，同样 15s 间隔触发 hook_gap
+    root = _mk_ep(_GAP15_VO, _GAP15_SECS)
+    _set(root, "- 变现模式: 海外\n")
+    assert B.pacing_region(root) == "overseas" and B.effective_hook_gap_sec(root) == 10.0
+    assert "hook_gap" in codes(B.audit_episode(root, "第1集")[0])
+
+
+def test_overseas_region_tightens_hook_gap():
+    # 发行地区=北美 → overseas 档，同样收紧
+    root = _mk_ep(_GAP15_VO, _GAP15_SECS)
+    _set(root, "- 发行地区: 北美\n")
+    assert B.pacing_region(root) == "overseas"
+    assert "hook_gap" in codes(B.audit_episode(root, "第1集")[0])
+
+
+def test_domestic_region_stays_loose():
+    # 发行地区=中国大陆 → domestic，15s 不报
+    root = _mk_ep(_GAP15_VO, _GAP15_SECS)
+    _set(root, "- 发行地区: 中国大陆\n")
+    assert B.pacing_region(root) == "domestic"
+    assert "hook_gap" not in codes(B.audit_episode(root, "第1集")[0])

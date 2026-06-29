@@ -12,6 +12,15 @@ import hashlib
 
 sys.path.insert(0, os.path.dirname(__file__))
 import run  # noqa: E402
+from skill_snapshot import artifact_fingerprint  # noqa: E402  (run.py 已把 _lib 入 sys.path)
+
+
+def _fresh_fp(root, files=()):
+    """A real inputs_fingerprint that recomputes fresh (empty file set never drifts).
+
+    image_qc/gate 报告必须带 inputs_fingerprint，下游护栏据此证「报告对应当前产物」；
+    测试夹具用空文件集的真指纹保持 fresh，模拟一份新鲜报告。"""
+    return artifact_fingerprint(root, list(files))
 
 HEADER = ("| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 "
           "| 字幕中 | 字幕英 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |")
@@ -53,7 +62,8 @@ def _write_clean_image_qc(root, ep="第1集"):
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, f"image_qc_{ep}.json")
     with open(path, "w", encoding="utf-8") as fh:
-        json.dump({"qc_environment": {"precision_level": "full"}, "summary": {"hard_blocks": 0, "verdict": "ok"}}, fh)
+        json.dump({"qc_environment": {"precision_level": "full"}, "summary": {"hard_blocks": 0, "verdict": "ok"},
+                   "inputs_fingerprint": _fresh_fp(root)}, fh)
 
 
 def _write_boundary_review(root, raw_text, decision="accept_risk", notes="已复核，保留短集并补强 voiceover。"):
@@ -179,6 +189,16 @@ def test_decide_agent_gen():
     na = run.decide(root, _route("script_stage2"), "script_stage2", run.Probes())
     assert na["stop_reason"] == "needs_agent_gen"
     assert na["auto_continue"] is False
+
+
+def test_decide_action_card_carries_supervisor_metadata():
+    root = make_work(ALL_DONE_TO["voice"])
+    na = run.decide(root, _route("video_prompt"), "video_prompt", run.Probes())
+    assert na["action_contract"]["stage_key"] == "video_prompt"
+    assert na["trace"]["trace_id"].startswith("tr_")
+    assert na["action_card"]["specialist"]["name"] == "n2d-visual-agent"
+    assert na["action_card"]["context_pack"]["relpath"].endswith("context_pack_第1集_video_prompt.json")
+    assert na["action_card"]["creative_loop"]["relpath"].endswith("creative_loop_第1集_video_prompt.json")
 
 
 def test_decide_payment_confirm_image_carries_granularity_menu():
@@ -571,6 +591,38 @@ def test_model_router_failure_is_prework_block(monkeypatch):
     assert na["stop_reason"] == "prework_failed"
 
 
+def test_image_prompt_allows_identity_planned_reference_gaps(monkeypatch):
+    root = make_work(ALL_DONE_TO["image_prompt"])
+
+    def fake_run(cmd):
+        if cmd[1].endswith("identity.py"):
+            prod = os.path.join(root, "生产数据")
+            os.makedirs(prod, exist_ok=True)
+            with open(os.path.join(prod, "identity_adapter_matrix.json"), "w", encoding="utf-8") as fh:
+                json.dump({
+                    "kind": "n2d_identity_adapter_matrix",
+                    "forms": [{
+                        "character_id": "CHAR_A",
+                        "form": "常态",
+                        "gaps": [
+                            "image.codex:reference_group_assets_missing",
+                            "video.dreamina:reference_group_assets_missing",
+                            "missing_reference:front",
+                        ],
+                    }],
+                }, fh)
+            return _CP(1, "wrote identity matrix", "")
+        if cmd[1].endswith("dashboard.py"):
+            return _CP(0, '{"findings_path": ""}', "")
+        return _CP(0, "", "")
+
+    monkeypatch.setattr(run, "_run", fake_run)
+    probes = run.gather_probes(root, _route("image_prompt"), "image_prompt")
+    assert probes.prework_block is None
+    identity_step = next(item for item in probes.prework if item["step"] == "identity")
+    assert identity_step["status"] == "warn"
+
+
 def test_gate_exception_is_fail_closed(monkeypatch):
     root = make_work(ALL_DONE_TO["image"])
 
@@ -584,6 +636,29 @@ def test_gate_exception_is_fail_closed(monkeypatch):
     assert probes.gate and probes.gate["blocked"] is True
     na = run.decide(root, _route("image"), "image", probes)
     assert na["stop_reason"] == "blocked_by_gate"
+
+
+def test_missing_dashboard_script_is_fail_closed(monkeypatch):
+    # 缺 dashboard.py（损坏安装）≠ 可优雅降级依赖；受闸阶段绝不静默放行。
+    root = make_work(ALL_DONE_TO["image"])
+    real_exists = os.path.exists
+    monkeypatch.setattr(run.os.path, "exists",
+                        lambda p: False if str(p).endswith("dashboard.py") else real_exists(p))
+    monkeypatch.setattr(run, "_run", lambda cmd: _CP(0, "", ""))
+    probes = run.gather_probes(root, _route("image"), "image")
+    assert probes.gate and probes.gate["blocked"] is True
+    assert any(s["step"] == "gate" and s["status"] == "block" for s in probes.prework)
+
+
+def test_missing_compliance_script_is_fail_closed(monkeypatch):
+    # 合规是不可协商前置；compliance.py 缺失 → compliance_gap 记缺，付费档不放行。
+    root = make_work(ALL_DONE_TO["image"])
+    real_exists = os.path.exists
+    monkeypatch.setattr(run.os.path, "exists",
+                        lambda p: False if str(p).endswith("compliance.py") else real_exists(p))
+    monkeypatch.setattr(run, "_run", lambda cmd: _CP(0, '{"findings_path": ""}', ""))
+    probes = run.gather_probes(root, _route("image"), "image")
+    assert probes.compliance_gap is True
 
 
 def test_decide_is_pure_no_mutation():
@@ -607,7 +682,8 @@ def test_image_qc_gate_issue_blocks_non_full_precision():
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, "image_qc_第1集.json")
     with open(path, "w", encoding="utf-8") as fh:
-        json.dump({"qc_environment": {"precision_level": "none"}, "summary": {"hard_blocks": 0}}, fh)
+        json.dump({"qc_environment": {"precision_level": "none"}, "summary": {"hard_blocks": 0},
+                   "inputs_fingerprint": _fresh_fp(root)}, fh)
 
     issue = run._image_qc_gate_issue(root, "第1集")
     assert issue and "精度为 none" in issue
@@ -619,9 +695,42 @@ def test_image_qc_gate_issue_passes_full_clean_report():
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, "image_qc_第1集.json")
     with open(path, "w", encoding="utf-8") as fh:
-        json.dump({"qc_environment": {"precision_level": "full"}, "summary": {"hard_blocks": 0, "verdict": "ok"}}, fh)
+        json.dump({"qc_environment": {"precision_level": "full"}, "summary": {"hard_blocks": 0, "verdict": "ok"},
+                   "inputs_fingerprint": _fresh_fp(root)}, fh)
 
     assert run._image_qc_gate_issue(root, "第1集") is None
+
+
+def test_image_qc_gate_issue_blocks_report_without_fingerprint():
+    # 无 inputs_fingerprint 的旧报告不能证明对应当前像素 → fail-closed（镜像 dashboard 口径）。
+    root = make_work(ALL_DONE_TO["image"])
+    out_dir = os.path.join(root, "生产数据", "image_qc", "第1集")
+    os.makedirs(out_dir, exist_ok=True)
+    with open(os.path.join(out_dir, "image_qc_第1集.json"), "w", encoding="utf-8") as fh:
+        json.dump({"qc_environment": {"precision_level": "full"}, "summary": {"hard_blocks": 0, "verdict": "ok"}}, fh)
+    issue = run._image_qc_gate_issue(root, "第1集")
+    assert issue and "新鲜度=unknown" in issue
+
+
+def test_image_qc_gate_issue_blocks_stale_report():
+    # QC 后产物又变（指纹失配）→ 旧绿不算数。
+    root = make_work(ALL_DONE_TO["image"])
+    out_dir = os.path.join(root, "生产数据", "image_qc", "第1集")
+    os.makedirs(out_dir, exist_ok=True)
+    tracked = "出图/第1集/图片/01.png"
+    abs_png = os.path.join(root, tracked)
+    os.makedirs(os.path.dirname(abs_png), exist_ok=True)
+    with open(abs_png, "wb") as fh:
+        fh.write(b"PNG-A")
+    fp = _fresh_fp(root, [tracked])
+    with open(os.path.join(out_dir, "image_qc_第1集.json"), "w", encoding="utf-8") as fh:
+        json.dump({"qc_environment": {"precision_level": "full"}, "summary": {"hard_blocks": 0, "verdict": "ok"},
+                   "inputs_fingerprint": fp}, fh)
+    # Redraw the PNG → fingerprint no longer matches.
+    with open(abs_png, "wb") as fh:
+        fh.write(b"PNG-B-REDRAWN")
+    issue = run._image_qc_gate_issue(root, "第1集")
+    assert issue and "新鲜度=stale" in issue
 
 
 def test_enter_action_includes_entry_checks(monkeypatch):
@@ -631,6 +740,46 @@ def test_enter_action_includes_entry_checks(monkeypatch):
     na = run.enter_action(root, "第1集")
     assert na["entry_checks"][0]["step"] == "source_check"
     assert na["stop_reason"] == "needs_payment_confirm"
+
+
+# ── prework 并行化（P0-2）：_run_report_only_prework 顺序保持 + skip 行为不变 ──────
+def _write_script(d, name, exit_code):
+    path = os.path.join(d, name)
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write(f"import sys\nprint('ran {name}')\nsys.exit({exit_code})\n")
+    return path
+
+
+def test_report_only_prework_preserves_order_and_skip():
+    d = tempfile.mkdtemp()
+    ok = _write_script(d, "ok.py", 0)
+    warn = _write_script(d, "warn.py", 1)
+    missing = os.path.join(d, "does_not_exist.py")
+    commands = [
+        ("step_ok", ok, []),
+        ("step_missing", missing, []),
+        ("step_warn", warn, []),
+    ]
+    p = run.Probes()
+    run._run_report_only_prework(p, commands)
+    # 顺序与 commands 一致（并行执行但按声明序回填）
+    assert [e["step"] for e in p.prework] == ["step_ok", "step_missing", "step_warn"]
+    by_step = {e["step"]: e for e in p.prework}
+    assert by_step["step_ok"]["status"] == "pass"
+    assert by_step["step_missing"]["status"] == "skip"
+    assert by_step["step_warn"]["status"] == "warn"
+    # report-only：从不阻断
+    assert p.prework_block is None
+
+
+def test_report_only_prework_runs_serially_without_cache_module(monkeypatch):
+    # 缓存模块不可用时 _prework_run 退化为顺序串行，结果仍正确
+    monkeypatch.setattr(run, "_run_cached_parallel", None)
+    d = tempfile.mkdtemp()
+    ok = _write_script(d, "ok.py", 0)
+    p = run.Probes()
+    run._run_report_only_prework(p, [("only", ok, [])])
+    assert p.prework[0]["status"] == "pass"
 
 
 if __name__ == "__main__":

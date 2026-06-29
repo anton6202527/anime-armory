@@ -120,6 +120,20 @@ def test_progression_skips_unparseable_values():
     assert r["ok"] is True
 
 
+def test_clip_text_ignores_continuity_bridge_state():
+    clip = {
+        "id": "EP01_CLIP09",
+        "label": "小禾信任沈念",
+        "continuity": {
+            "start_state": "系统空光幕收起，沈念看向小禾",
+            "end_state": "小禾靠近沈念半步",
+        },
+        "shots": [{"desc": "小禾颤抖却选择留下。"}],
+    }
+
+    assert md.classify_motif(clip) is None
+
+
 # ── write-back（端到端·临时目录）──
 
 def test_inject_and_upsert_registry(tmp_path):
@@ -141,6 +155,9 @@ def test_inject_and_upsert_registry(tmp_path):
     sb = json.loads((sb_dir / "storyboard.json").read_text(encoding="utf-8"))
     clip2 = sb["clips"][1]
     assert clip2["template"] == md.SYSTEM_PANEL_TEMPLATE_ID
+    assert clip2["template_contract"]["template_id"] == md.SYSTEM_PANEL_TEMPLATE_ID
+    assert clip2["template_contract"]["beats"]
+    assert clip2["template_contract"]["negative"]
     assert clip2["template_contract"]["motif_id"] == md.SYSTEM_PANEL_MOTIF_ID
     assert clip2["template_contract"]["text_layer"] == "overlay"
 

@@ -19,11 +19,11 @@
 视频从 1 段变 K+1 段），给人确认。--write 才把 continuity.anchors 注回
 storyboard.json；已手动声明 midframe/anchors 的 Clip 一律跳过（人工优先）。
 
---default-midframe（风险分层三帧契约·选择点「中段锚帧默认」=开启时用）：
+--default-midframe（三帧图片契约·选择点「中段锚帧默认」=开启时用）：
 未命中 R1/R2/R3 的普通镜也默认规划一张中段锚帧（命名=首帧名+`_mid`，内容=表演节拍
 中间拍），按时长分级用法 `use`：
   · split（duration ≥ 2×min_segment）——拆两段 frames2video 接力（真锚定）
-  · qc（更短镜）——不拆段；中帧作出视频验收的中段一致性基准 + 后端多参考输入
+  · qc（更短镜或视频后端不原生吃中帧）——不拆段；中帧作出视频验收的中段一致性基准 + 后端多参考输入
   · duration < --midframe-exempt-below（默认 3s）——豁免（中帧与首尾几乎重合），
     write 时写 continuity.midframe_exempt_reason；同时把 policy.midframe_default=true
     写进 storyboard.json，gate 据此强制每镜有 midframe/anchors 或豁免原因。
@@ -178,6 +178,44 @@ def load_events(root: str) -> List[Dict[str, Any]]:
     return events
 
 
+_APEX_CUE_RE = re.compile(r"命中|impact|peak|撞点|撞击|爆发|apex|砸落|hit\b|collision", re.IGNORECASE)
+_APEX_SEC_RE = re.compile(r"(\d+(?:\.\d+)?)\s*s")
+
+
+def apex_anchor_seconds(clip: Dict[str, Any], duration: float) -> List[float]:
+    """从契约的命中/爆发节拍抽 apex 秒数（post_cue_points / keyframe_plan / impact_frame / collision_or_apex_frame）。
+
+    高速动作的**命中帧必须落成一张真关键帧**，不能只靠均分锚帧——否则 impact_frame 只是声明字符串、
+    韦尔德链里没有离散命中帧（脸/运镜/光/表情四轴无处撞点）。只抽含命中类关键词且带 `<秒>s` 的 cue。纯函数·可测。"""
+    c = clip.get("template_contract") if isinstance(clip.get("template_contract"), dict) else {}
+    if not c or not isinstance(duration, (int, float)) or duration <= 0:
+        return []
+    items: List[str] = []
+    cues = c.get("post_cue_points")
+    items += [str(x) for x in cues] if isinstance(cues, list) else ([str(cues)] if cues else [])
+    for key in ("keyframe_plan", "impact_frame", "collision_or_apex_frame"):
+        v = c.get(key)
+        if isinstance(v, str):
+            items.append(v)
+        elif isinstance(v, dict):
+            items += [str(x) for x in v.values()]
+    secs = set()
+    for it in items:
+        s = str(it or "")
+        if not _APEX_CUE_RE.search(s):
+            continue
+        m = _APEX_SEC_RE.search(s)
+        if not m:
+            continue
+        try:
+            sec = float(m.group(1))
+        except ValueError:
+            continue
+        if 0.0 < sec < float(duration):
+            secs.add(round(sec, 2))
+    return sorted(secs)
+
+
 def plan_anchor_times(duration: float, boundaries: List[float],
                       target_seg: float, min_seg: float,
                       snap_tolerance: float = 1.5) -> List[float]:
@@ -272,8 +310,9 @@ def plan_episode(root: str, ep: str, *, min_seg: float = 4.0, target_seg: float 
     #    （目前只接了即梦/Dreamina multiframe2video=Seedance，段下限 0.5s）。将来接可灵/Veo 等后端时，
     #    必须复核它们的多关键帧 API 段下限/最大帧数，按后端调 multiframe_seg_min（理想是按 _设置.md
     #    生视频渠道 的 capability profile 取，而非硬编码）。frames2video-only 后端应传 multiframe_seg_min=4.0。
-    # 长镜盲区：≥8s 但 <3 拍且非打斗的镜不命中 R1/R2/R3；当 `中段锚帧默认=开启`
-    # 时这类镜走 D0 拿 1 个 _mid（3 帧），`关闭` 时回到 2 帧以服务 ROI/速度优先。
+    # 长镜盲区：≥8s 但 <3 拍且非打斗的镜不命中 R1/R2/R3；默认仍走 D0 拿 1 个 _mid
+    # （3 帧图片契约）。视频后端若不能原生消费中帧，后续在 consumption_plan 里降为 QC/参考/改路由；
+    # 不再因为 first-frame-only 或 ROI/速度选择而少产中帧图片。
     # 高动作/长镜多拍/漂移实证/R1-R3 不受 D0 开关影响。
     sb = load_json(storyboard_path(root, ep))
     if not isinstance(sb, dict) or not isinstance(sb.get("clips"), list):
@@ -300,13 +339,25 @@ def plan_episode(root: str, ep: str, *, min_seg: float = 4.0, target_seg: float 
             # 让 10s 打斗出 2 锚(4帧)、15s 出 3 锚(5帧)，而非被 4s relay 地板卡成 1 锚。
             times = plan_anchor_times(float(duration), parse_shot_boundaries(clip),
                                       seg, multiframe_seg_min, snap_tolerance)
-            if times:
+            # apex-aware：高速动作镜把契约声明的命中/爆发帧强制落成一张真关键帧（治 impact_frame 只是字符串、
+            # 韦尔德链无离散命中帧）。命中帧 = 动作(hit-stop)/运镜(推镜震屏)/光(闪光轮廓)/表情(狰狞峰) 四轴撞点。
+            apexes = apex_anchor_seconds(clip, float(duration))
+            merged = list(times)
+            for a in apexes:
+                if not any(abs(a - t) <= 0.4 for t in merged):
+                    merged.append(a)
+            merged = sorted({round(x, 2) for x in merged})
+
+            def _is_apex(t: float) -> bool:
+                return any(abs(t - a) <= 0.4 for a in apexes)
+            if merged:
                 anchors = [{
                     "anchor_png": anchor_png_name(clip, ep, i, k),
                     "at_sec": t,
-                    "use": "split",
-                    "reason": f"auto: {rule}",
-                } for k, t in enumerate(times, 1)]
+                    "use": "keyframe" if _is_apex(t) else "split",
+                    "reason": ("apex: 命中/爆发帧（强制关键帧·动作/运镜/光/表情四轴撞点）"
+                               if _is_apex(t) else f"auto: {rule}"),
+                } for k, t in enumerate(merged, 1)]
                 planned.append({
                     "clip_index": i, "clip_id": cid, "duration": duration,
                     "rule": rule, "anchors": anchors,
@@ -363,8 +414,8 @@ def plan_episode(root: str, ep: str, *, min_seg: float = 4.0, target_seg: float 
 def write_back(root: str, ep: str, plan: Dict[str, Any]) -> int:
     """把 plan 注回 storyboard.json 的 continuity.anchors（原子写）；返回写入 Clip 数。
     default_midframe 模式下同时写 policy.midframe_default=true 和豁免镜的
-    continuity.midframe_exempt_reason（gate 据此强制三帧契约）；关闭模式写
-    policy.midframe_default=false 作为逃生舱（gate 默认铁律据此跳过本剧的三帧强制）。"""
+    continuity.midframe_exempt_reason（gate 据此强制三帧契约）；关闭模式仅保留为
+    dev/迁移逃生口，正常 n2d 流程不应使用。"""
     path = storyboard_path(root, ep)
     sb = load_json(path)
     if not isinstance(sb, dict):
@@ -388,7 +439,7 @@ def write_back(root: str, ep: str, plan: Dict[str, Any]) -> int:
     if default_mode:
         sb.setdefault("policy", {})["midframe_default"] = True
     else:
-        # 普通 D0 中锚关闭时写 false，gate 据此只要求 R1/R2/R3 已规划锚/豁免，不再拦低风险镜。
+        # 仅用于 dev/迁移逃生口；正常流程保持 default_mode=true，图片资产仍至少首/中/尾三帧。
         sb.setdefault("policy", {})["midframe_default"] = False
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
@@ -439,23 +490,22 @@ def render_md(plan: Dict[str, Any]) -> str:
 
 def resolve_default_midframe(force_on: bool, force_off: bool, setting_value: Optional[str],
                              backend_capable: Optional[bool] = None) -> bool:
-    """普通镜 D0 中段锚帧默认开关解析（风险分层）。
+    """普通镜 D0 中段锚帧默认开关解析（三帧图片契约）。
 
     R1/R2/R3 高风险锚帧不走这个开关，始终按规则规划。这里仅决定未命中高风险规则的普通镜
-    是否补 `_mid`，让 ROI/速度优先项目可以关闭 D0 而不影响动作/长镜/漂移镜。
+    是否补 `_mid`。正常 n2d 流程一律开启；视频后端能力只决定这些锚帧后续是 native
+    keyframe、split relay、reference/QC，还是需要改路由，不决定图片阶段是否产出。
 
     优先级：
       1. CLI --default-midframe → True；--no-default-midframe → False（dev/临时覆盖）。
-      2. 后端明确不支持 ≥3 帧（backend_capable=False）→ False，普通镜不做低收益中锚。
-      3. 其余按 `_设置.md` 值，缺省=开启；后端支持只表示“可做”，不覆盖项目的 ROI/速度选择。
+      2. 其余正常流程均 True。`setting_value` 与 `backend_capable` 只留给旧项目/报告兼容；
+         不再用「后端不支持」或「关闭」跳过中段图片。
     纯函数·可测。"""
     if force_on:
         return True
     if force_off:
         return False
-    if backend_capable is False:
-        return False
-    return "关闭" not in str("开启" if setting_value is None else setting_value)
+    return True
 
 
 def video_backend_selection(root: str) -> Dict[str, Any]:
@@ -496,7 +546,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     args = ap.parse_args(argv)
 
     root = os.path.abspath(args.project_root)
-    # 风险分层三帧契约：R1/R2/R3 强制规划；普通镜 D0 尊重「中段锚帧默认」和后端能力。
+    # 三帧图片契约：R1/R2/R3 强制多锚；普通镜 D0 默认补 _mid。视频后端能力只影响消费计划。
     backend_selection = video_backend_selection(root)
     backend_capable = bool(backend_selection["supports_three_plus_frames"])
     default_mid = resolve_default_midframe(

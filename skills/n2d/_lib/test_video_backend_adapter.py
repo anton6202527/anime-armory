@@ -75,6 +75,22 @@ def test_refresh_evidence_status_lifecycle(tmp_path):
     assert stale["status"] == "stale"
 
 
+def test_dreamina_refresh_evidence_includes_cli_snapshot(tmp_path):
+    path = adapter.write_refresh_evidence(
+        str(tmp_path),
+        "Seedance 2.0",
+        channel="即梦/Dreamina",
+        sources=["n2d static profile"],
+        evidence_kind="cli_snapshot",
+        today="2026-06-26",
+    )
+    data = json.loads(path.read_text(encoding="utf-8"))
+
+    assert data["cli_snapshot_evidence"]
+    assert data["cli_snapshot_evidence"][0]["cli"] == "dreamina"
+    assert any(str(src).startswith("cli_snapshot:dreamina@") for src in data["sources"])
+
+
 def test_refresh_evidence_requires_structured_capability_assertions(tmp_path):
     path = adapter.refresh_evidence_path(str(tmp_path), "Veo 3.1", "Google Gemini API")
     path.parent.mkdir(parents=True)

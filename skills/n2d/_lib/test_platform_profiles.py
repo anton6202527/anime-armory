@@ -43,20 +43,21 @@ def test_backend_supports_three_plus_frames_capability_gate():
     assert p.backend_supports_three_plus_frames("kling") is True
     assert p.backend_supports_three_plus_frames("veo") is True
     assert p.backend_supports_three_plus_frames("luma") is True
-    # first-frame-only：唯一豁免
+    # first-frame-only：视频消费能力不足；不代表图片阶段可省中段锚帧。
     assert p.backend_supports_three_plus_frames("seedance") is False
     assert p.backend_supports_three_plus_frames("sora") is False
     assert p.backend_supports_three_plus_frames("runway") is False
     assert p.backend_supports_three_plus_frames("pika") is False
-    # 未知/缺省 → 向前看默认假定支持（强制）
-    assert p.backend_supports_three_plus_frames(None) is True
-    assert p.backend_supports_three_plus_frames("某新后端2027") is True
+    # 未知/缺省 → 需要刷新/探活/人工确认，不默认假定支持三帧
+    assert p.backend_supports_three_plus_frames(None) is False
+    assert p.backend_supports_three_plus_frames("某新后端2027") is False
 
 
 def test_anchor_consumption_plan_distinguishes_native_and_split():
     assert profiles.anchor_consumption_plan("dreamina", anchor_count=1, need_end=True)["consumption_mode"] == "native_multiframe"
     assert profiles.anchor_consumption_plan("kling", anchor_count=1, need_end=True)["consumption_mode"] == "split_relay"
     assert profiles.anchor_consumption_plan("seedance", anchor_count=1, need_end=True)["consumption_mode"] == "unsupported_mid_anchor"
+    assert profiles.anchor_consumption_plan("某新后端2027", anchor_count=1, need_end=True)["consumption_mode"] == "unknown_manual_confirm"
 
 
 def test_sora_is_legacy_not_auto_routed_or_native_av():

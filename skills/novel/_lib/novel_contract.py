@@ -688,6 +688,20 @@ CREATE_STAGE_TABLE = [
      "gate": "mechanical + LLM review", "on_fail": "按报告回源头阶段"},
     {"key": "export", "label": "导出", "owner": "novel-craft/scripts/export.py",
      "gate": "deterministic", "on_fail": "修 _meta/章节文件后重跑 export"},
+    {"key": "release_manifest", "label": "发布版本清单",
+     "owner": "novel-craft/scripts/release_manifest.py",
+     "gate": "hash snapshot", "on_fail": "重跑导出或补证据后重建 release manifest"},
+]
+
+IMPORT_STAGE_TABLE = [
+    {"key": "setup", "label": "项目骨架", "owner": "novel/scripts/import_novel.py",
+     "gate": "deterministic", "on_fail": "重跑 import_novel.py 或换 --out-root"},
+    {"key": "source_import", "label": "原作导入", "owner": "novel/scripts/import_novel.py",
+     "gate": "deterministic", "on_fail": "检查 原作.txt 与 小说/source_manifest.json 后重导入"},
+    {"key": "rights_review", "label": "权利复核", "owner": "novel + novel-craft QA gate",
+     "gate": "rights", "on_fail": "补 rights_status/rights_declared/发行地区，或改用公版/自有文本"},
+    {"key": "next_action", "label": "选择下一步", "owner": "novel dispatcher",
+     "gate": "user-choice", "on_fail": "选择评分/审稿/改写/精简/续写/转制就绪检查等下一步"},
 ]
 
 DERIVED_STAGE_TABLE = [
@@ -710,6 +724,9 @@ DERIVED_STAGE_TABLE = [
      "gate": "mechanical + LLM review", "on_fail": "按报告回源头阶段"},
     {"key": "export", "label": "导出", "owner": "novel-craft/scripts/export.py",
      "gate": "deterministic", "on_fail": "修 _meta/章节文件后重跑 export"},
+    {"key": "release_manifest", "label": "发布版本清单",
+     "owner": "novel-craft/scripts/release_manifest.py",
+     "gate": "hash snapshot", "on_fail": "重跑导出或补证据后重建 release manifest"},
 ]
 
 
@@ -719,11 +736,15 @@ def progress_header(kind):
 
 def stage_table_for_kind(kind):
     """Return the stable stage table for a project kind."""
-    return CREATE_STAGE_TABLE if kind == "create" else DERIVED_STAGE_TABLE
+    if kind == "create":
+        return CREATE_STAGE_TABLE
+    if kind == "import":
+        return IMPORT_STAGE_TABLE
+    return DERIVED_STAGE_TABLE
 
 
 def stage_label(key):
-    for table in (CREATE_STAGE_TABLE, DERIVED_STAGE_TABLE):
+    for table in (CREATE_STAGE_TABLE, IMPORT_STAGE_TABLE, DERIVED_STAGE_TABLE):
         for stage in table:
             if stage["key"] == key:
                 return stage["label"]
@@ -749,6 +770,29 @@ def create_stage_markdown():
     for stage in CREATE_STAGE_TABLE:
         mark = "x" if stage["key"] == "setup" else " "
         lines.append(f"- [{mark}] {stage['label']} <!-- stage:{stage['key']} -->")
+    return "\n".join(lines)
+
+
+def import_stage_markdown(rights_status="unknown"):
+    """Stable machine-readable stage checklist for imported source projects."""
+    rights_ok = normalize_rights_status(rights_status) not in {"unknown", ""}
+    lines = [
+        progress_header("import"),
+        "",
+        "## 源书纳管阶段（机器读）",
+        f"<!-- novel-import-stage-table: {CONTRACT_VERSION}; kind: import -->",
+    ]
+    done_keys = {"setup", "source_import"}
+    if rights_ok:
+        done_keys.add("rights_review")
+    for stage in IMPORT_STAGE_TABLE:
+        mark = "x" if stage["key"] in done_keys else " "
+        label = stage["label"]
+        if stage["key"] == "rights_review":
+            label = f"{label}（当前：{rights_status or 'unknown'}）"
+        elif stage["key"] == "next_action":
+            label = "选择下一步：评分 / 审稿 / 改写 / 精简 / 续写 / 转制就绪检查"
+        lines.append(f"- [{mark}] {label} <!-- stage:{stage['key']} -->")
     return "\n".join(lines)
 
 

@@ -19,17 +19,22 @@ if LIB not in sys.path:
     sys.path.insert(0, LIB)
 
 from n2d_contract import (  # noqa: E402
+    ACTION_CHOREOGRAPHY_SHOT_TYPES,
     default_degrade_plan,
+    HIGH_MOTION_TEMPLATES,
     infer_spectacle_type,
     missing_fields,
     spectacle_recommendations,
     spectacle_required_fields,
 )
+# 多主体「已登记执行策略」放行集单一真值源（n2d_const）：与 gate/image_qc/face_drift 同源，
+# 使 multi_subject_missing_slots_or_strategy 的 must ⊆ review 同框 block，不再靠人手同步词表。
+from n2d_const import MULTI_SUBJECT_ACCEPTING_MARKERS  # noqa: E402
 
-HIGH_MOTION_TEMPLATES = {"fight_exchange", "chase", "flight", "magic_burst"}
-MOTION_RE = re.compile(r"(打斗|追逐|疾驰|翻滚|俯冲|爆炸|法术|对轰|飞行|快摇|甩镜|冲刺|撞击|受击|命中)")
+ACTION_KINDS = set(ACTION_CHOREOGRAPHY_SHOT_TYPES)
+MOTION_RE = re.compile(r"(打斗|追逐|追车|疾驰|翻滚|俯冲|爆炸|法术|对轰|飞行|御兽|坐骑|骑兽|马车|车轮|载具|汽车|摩托|车流|变道|刹车|高架|飞舟|御物|尾随|跟踪|潜入|潜行|暗走廊|手电|渡劫|雷劫|突破|传送|穿越|召唤|元神|神魂|夺舍|快摇|甩镜|冲刺|撞击|受击|命中)")
 MOUTH_RE = re.compile(r"(说话|开口|台词|对白|质问|喊|怒吼|mouth_visible|native_speech|dialogue)")
-VFX_RE = re.compile(r"(系统面板|升级|法阵|雷劫|妖气|灵力|爆炸|光幕|特效|VFX_|WEAPON_|PROP_)")
+VFX_RE = re.compile(r"(系统面板|手机屏幕|电脑屏幕|监控画面|聊天记录|升级|法阵|阵法|阵图|结界|封印|传送门|时空裂缝|秘境入口|雷劫|天劫|突破光柱|炼丹|炼器|丹炉|测灵石|血脉觉醒|妖气|灵力|爆炸|光幕|特效|VFX_|WEAPON_|PROP_|EVIDENCE_)")
 CLOSE_RE = re.compile(r"(CU|ECU|MCU|特写|近景|大特写|反打|正反打)")
 
 
@@ -99,21 +104,8 @@ def has_multi_subject_slots(blob: str) -> bool:
 
 
 def has_multi_subject_strategy(blob: str) -> bool:
-    return any(token in blob for token in (
-        "多人同框执行策略",
-        "native_subject_slots",
-        "regional_construct_required",
-        "split_composite_required",
-        "register_subjects_or_split",
-        "shot_reverse_shot",
-        "same_frame_policy",
-        "regional_construct",
-        "split_composite",
-        "单人分层出图",
-        "分别出图",
-        "分层合成",
-        "景别分层",
-    ))
+    # 词表上提 n2d_const.MULTI_SUBJECT_ACCEPTING_MARKERS 单一真值源（含分层/原生/执行策略三类）。
+    return any(token in blob for token in MULTI_SUBJECT_ACCEPTING_MARKERS)
 
 
 def is_wide_crowd(blob: str, shot_size: str) -> bool:
@@ -167,7 +159,7 @@ def score_clip(clip: Dict[str, Any], idx: int) -> Dict[str, Any]:
         add_score(2, "vfx_or_asset", "系统/法术/武器/道具要注册 LOC/PROP/WEAPON/VFX id，文字层后期 overlay。")
     if spectacle_type:
         tag = f"spectacle_{spectacle_type}"
-        extra = 4 if spectacle_type in {"fight_exchange", "chase", "flight"} else 3
+        extra = 4 if spectacle_type in ACTION_KINDS else 3
         add_score(extra, tag, default_degrade_plan(spectacle_type))
         for rec in spectacle_recommendations(spectacle_type):
             if rec not in recommendations:

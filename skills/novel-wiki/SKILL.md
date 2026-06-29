@@ -12,10 +12,13 @@ description: 长篇小说逻辑一致性守护者 — 自动提取并维护《�
 ## 核心机制（确定性骨架 + LLM 补语义）
 
 1. **增量提取 (Wiki Builder)**：`wiki_builder.py` 从 `设定/角色卡.md` 播种实体、扫章节算 `last_seen_chapter`、用死亡关键词做**疑似阵亡候选**（带 `auto` 标志 + 证据章，非闪回语境才记）。伤势细节、道具归属精确变更等语义状态由 LLM 在交互节点补全——脚本给确定性底座，让哨兵有真实可比对的状态。
-2. **交叉验证 (Logic Sentry)**：`logic_sentry.py` 确定性扫**硬冲突候选**（死人复活/弃置道具复用/位置跳变/**数值漂移**——角色卡声明的年龄锚点被本章写成不同年龄且非时间跳跃语境），只报硬冲突，软性突变交 `novel-review`。**2026 通电**：原 `pass` 空桩已实现——**world_rule_violation**(阻断级·违 `world_state_ledger` 已确立/未确立演进事实，靠 `forbidden_before/after` 关键词确定性判)、**relationship_flip**(建议级·`relationship_matrix` 温度单章跳变>40 且无重大转折)、**张力账本三规则**(钩子过期=建议级/承诺违约=阻断级/张力疲劳=建议级，读 `设定/tension_ledger.json`)。且 `main` 现在**阻断级→非零退出**（与 power_system 同约定，让 post_write 的 `check=True` 真正硬挡死人复活等阻断级——此前恒 0 是潜在缺口，已补）。
-   - **新增同线检测器**：`antagonist_scaling.py`(反派/威胁战力反向崩坏·建议级)、`timeline_check.py`(时间线倒流=建议级 / `设定/timeline.json` 事件乱序=阻断级)、`minor_characters.py`(反复出场却未建卡的配角候选·建议级)。前两者已接 `post_write`（timeline 阻断级硬挡），三者都进 `novel-review/consistency_audit` 汇总。
+2. **交叉验证 (Logic Sentry)**：`logic_sentry.py` 确定性扫**硬冲突候选**（死人复活/弃置道具复用/位置跳变/**数值漂移**——角色卡声明的年龄锚点被本章写成不同年龄且非时间跳跃语境），只报硬冲突，软性突变交 `novel-review`。**2026 通电**：原 `pass` 空桩已实现——**world_rule_violation**(违 `world_state_ledger` 已确立/未确立演进事实，靠 `forbidden_before/after` 关键词判)、**relationship_flip**(`relationship_matrix` 温度单章跳变>40 且无重大转折)、**张力账本三规则**(钩子过期/承诺违约/张力疲劳，读 `设定/tension_ledger.json`)。
+   - **B10 收口（脆弱启发式不得硬阻断）**：上述检测器**几乎都是关键词/子串/邻近扫正文**，属跨线宪法 [`docs/skill-design-principles.md` B10](../../docs/skill-design-principles.md) 定义的**脆弱启发式**——只能 ≤建议级、**不硬挡 post_write**。落地走 novel 线单一收口 `novel/_lib/heuristic_gate.py`（实现 B10 的降级守卫）：`scan_chapter()`/`analyze()` 在库边界给每条 finding 标 `confidence`，把 `heuristic` 的 `阻断级` 自动降为 `建议级`（记 `downgraded_from` + `heuristic_downgraded` 计数·可见不静默）。**唯一保留阻断级的是确定性证据闸**——只比较 curated 台账的结构化整数、不扫正文：白名单 `foreshadowing_overdue`（伏笔台账 `expected_payoff` vs `through_chapter`）、`timeline_event_disorder`（`timeline.json` 的 `order` vs 成章序）。死人复活/弃置道具/世界规则/关系突变/角色护栏等正文关键词类**检出仍在、但只作建议级候选交人/LLM 定夺**。
+   - **新增同线检测器**：`antagonist_scaling.py`(反派/威胁战力反向崩坏·建议级)、`timeline_check.py`(时间线倒流=建议级 / `设定/timeline.json` 事件乱序=阻断级·确定性台账序)、`minor_characters.py`(反复出场却未建卡的配角候选·建议级)。三者都进 `novel-review/consistency_audit` 汇总；唯 `timeline_event_disorder` 这类确定性台账闸仍硬挡 `post_write`。
    - **检索增强**：`novel/_lib/retrieval.py`（CJK-bigram BM25·纯标准库）给 `draft_packets` 写作包注入"跨 3 章窗口之外的相关旧章回溯"，补长程依赖盲区（写第230章想得起第47章埋的伏笔）。
 3. **伏笔台账 (Foreshadow Ledger)**：`foreshadow_ledger.py` 维护 `设定/foreshadowing_ledger.json`，把「埋了哪些伏笔、该在哪一章收、收没收」记成账。**伏笔的识别（哪段算埋、哪段算收）是 LLM/人工的活，脚本不做正则式"自动伏笔检测"**（中文长篇里那只会制造噪声）；脚本负责的确定性部分是：超期(overdue)判定、回收率计算、状态机合法迁移与 JSON 完整性——和 logic_sentry 的"只报硬冲突候选"同一条诚实边界。
+
+4. **角色别名脚手架 (Alias Scaffold)**：`alias_scaffold.py <作品根>` 从 角色卡/动态百科 抽**候选**别名（本名↔封号↔化名）写 `设定/角色别名.json`（status=`draft`）。**人工核对后把 status 改 `confirmed`**，`graph_sentry` 生命周期硬闸才会用它做实体消解——治"死亡记在本名、复现记在封号→硬闸漏判"（实体消解是确定性一致性闸的强制前置）。draft 期不影响判定；自动抽取可能误并同名角色，故必须人确认才入硬闸。
 
 ## 工作流
 

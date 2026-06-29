@@ -17,7 +17,7 @@ description: P2 platform performance feedback loop for n2d. Ingest platform metr
 ## 输入 / 输出 / 读写边界
 
 - **输入**：`platform_metrics.*`、`creative_features.*`、`storyboard.json` 自动导演标签、consistency/review-ui findings。
-- **输出**：`生产数据/platform_feedback.json/md`、可选 `导演节奏.md` 快照块。
+- **输出**：`生产数据/platform_feedback.json/md`、可选 `导演节奏.md` 快照块、`creative_experiments.json`、`creative_experiment_audit.json/md`。
 - **读写边界**：只做投放归因和节奏反哺；不审片、不重剪已上线集、不直接改生产产物。
 - **契约关系**：一致性 findings 使用统一 kind；ROI 指标与 `n2d-dashboard` 共享数据边界但不重复记账。
 
@@ -70,6 +70,27 @@ episode,platform,ab_test_id,variant_id,opening_variant,cover_variant,cliffhanger
 
 > A/B 结论只在每组至少 `--min-samples` 个 paired context 后给强建议。单集单平台只有一次 A/B 时，报告会展示表格，但仍按“观察中”处理。
 
+### 实验登记（避免事后归因）
+
+A/B 开跑前先登记实验定义，投放数据回来后审计 `platform_metrics` 是否都有对应定义、变体是否齐、样本是否够：
+
+```bash
+python3 skills/n2d-feedback/scripts/experiments.py upsert <作品根> \
+  --id EP01_launch \
+  --episode 第1集 \
+  --hypothesis "前3秒先露危机比先露系统面板留存更高" \
+  --variant A=cold_open_first \
+  --variant B=system_panel_first \
+  --primary-metric retention_3s \
+  --min-samples 1000 \
+  --write
+
+python3 skills/n2d-feedback/scripts/experiments.py audit <作品根> \
+  --metrics <平台指标.csv> --write
+```
+
+输出 `生产数据/creative_experiments.json` 与 `creative_experiment_audit.json/md`。`audit.status=fail` 表示 metrics 里有 `ab_test_id` 没有实验定义；`observe` 表示变体或样本不足，只能观察，不能写成导演铁律。
+
 ## 写回导演节奏
 
 ```bash
@@ -95,6 +116,18 @@ python3 skills/n2d-feedback/scripts/feedback.py <作品根> \
 每个维度只在「同集内 `paired_lift ≥ --min-lift` 且 paired context 数 `≥ --min-samples`」时才写先验，缺省维度直接不写（**不臆造**）；无任一维度达标时落空 `priors:{}`，下游 no-op。每条先验带 `winner / paired_lift / primary_metric / metric_value / n / plays / episodes`，并写入 `generated_at` 采集时间供下游判先验新鲜度。`--no-write` 同时抑制 priors 写出。
 
 读端在 `n2d-script` 阶段2 finalize：存在 `creative_priors.json` 才读（缺则 no-op·向后兼容），把胜出先验作为开场/断点/付费卡点/追更路径设计的建议注入——落 `脚本/第N集/applied_creative_priors.json` 证据 + 打印人可见提示（逐维度点名 winner / lift / n），不静默吞。先验是建议非硬约束，样本不足的维度不出现、不必强套；但已有先验必须被 `beat_audit --strict` 看见 applied 或 rejected + reason。
+
+## 写回 pacing 密度带校准（第一方留存 → 节奏阈值）
+
+`density_slow/fast_per_min`（节奏机检"健康镜/分钟带"）原是 `confidence=low` 的内部启发式——`industry_benchmark.json` 明写「短剧 CPM/SPM 无可辩护的公开基准，真值须由 n2d-feedback 第一方留存数据校准」。`--write-pacing-profiles` 即该校准的**写端**：据已算好的 `shot_density_bounce`（按 `shot_density_bucket` 看 `bounce_3s`，越低留存越好），把「跳出率 ≤ 全剧均值且样本 ≥ `max(--min-samples,3)`」的密度档并成健康带 `[slow,fast)`，写 `生产数据/pacing_profiles.json`（kind `n2d_pacing_profiles`）。
+
+```bash
+python3 skills/n2d-feedback/scripts/feedback.py <作品根> \
+  --metrics <平台指标.csv> \
+  --write-pacing-profiles
+```
+
+诚实边界：无合格档 / 样本不足 / 退化成窄带 → `evidence_status='insufficient_samples'` 且 `thresholds={}`（**不臆造**），消费端只认 `calibrated`，否则静默退回 benchmark/默认。读端是 `n2d-review/scripts/pacing_retention.py`：阈值优先级 **env 覆盖 > 第一方校准 profile > benchmark JSON > 写死默认**；采用校准时在报告 `metrics.pacing_threshold_source` 标 `calibrated(genre,n)` 留痕。**advisory 契约不变**——校准只调"健康密度带"，`verdict` 仍封顶到 `warn`，绝不创造 block。
 
 ## 投放摄取适配器（实时投放 API → 标准文件）
 

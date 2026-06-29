@@ -286,3 +286,35 @@ def test_action_match_verdict_bands():
 def test_action_match_verdict_custom_thresholds():
     assert tc.action_match_verdict(0.1, warn=0.05, block=0.2) == "warn"
     assert tc.action_match_verdict(0.25, warn=0.05, block=0.2) == "block"
+
+
+# ── 掣肘二：高动作/大表情跨度镜的片内时序 BLOCK 降级（度量偏好静止的反制）──
+
+def test_relax_temporal_verdict_downgrades_block_only():
+    assert tc.relax_temporal_verdict("block", True) == "warn"   # 高动作镜：block→warn
+    assert tc.relax_temporal_verdict("block", False) == "block" # 普通镜：不放松
+    assert tc.relax_temporal_verdict("warn", True) == "warn"    # warn 不动
+    assert tc.relax_temporal_verdict("ok", True) == "ok"        # ok 不动
+
+
+def test_is_large_expression_span():
+    assert tc._is_large_expression_span({"continuity": {"expression_span": "大"}})
+    assert tc._is_large_expression_span({"expression_span": "large"})
+    assert not tc._is_large_expression_span({"expression_span": "小"})
+    assert not tc._is_large_expression_span({})
+
+
+def test_motion_relax_map_from_storyboard(tmp_path):
+    import json, os
+    sb = {"clips": [
+        {"id": "Clip_01", "continuity": {"expression_span": "大"}, "shots": []},
+        {"id": "Clip_02", "shots": [{"desc": "他挥拳猛击对手面门"}]},
+        {"id": "Clip_03", "shots": [{"desc": "两人静静对视"}]},
+    ]}
+    d = tmp_path / "脚本" / "第1集"
+    d.mkdir(parents=True)
+    (d / "storyboard.json").write_text(json.dumps(sb, ensure_ascii=False), encoding="utf-8")
+    m = tc.motion_relax_map(str(tmp_path), "第1集")
+    assert 1 in m and "大表情跨度" in m[1]
+    # Clip_02 命中动作 beat（需 _spec 可用）；静态 Clip_03 不应放松
+    assert 3 not in m

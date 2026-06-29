@@ -125,6 +125,28 @@ def test_native_av_builds_shots_from_storyboard_without_manifest(tmp_path):
     assert shots == {"EP01_CLIP01": 7.0, "EP01_CLIP02": 5.5}  # 时长来自 storyboard 脚本规划
 
 
+def test_native_av_finalize_writes_planned_zh_srt_from_storyboard(tmp_path):
+    root, ep = str(tmp_path), "第1集"
+    os.makedirs(os.path.join(root, "脚本", ep), exist_ok=True)
+    open(os.path.join(root, "_设置.md"), "w", encoding="utf-8").write("# _设置\n## 选择\n- 制作模式: 原生音画\n")
+    json.dump({
+        "clips": [
+            {"id": "EP01_CLIP01", "duration": 4, "subtitle_lines": ["毒酒已经送到唇边。", "这不是我的脸。"]},
+            {"id": "EP01_CLIP02", "duration": 3, "voiceover_lines": ["我偏要活下去。"]},
+        ]
+    }, open(os.path.join(root, "脚本", ep, "storyboard.json"), "w", encoding="utf-8"), ensure_ascii=False)
+
+    r = subprocess.run([sys.executable, os.path.join(_HERE, "finalize_storyboard.py"), root, ep],
+                       capture_output=True, text=True)
+
+    assert r.returncode == 0, r.stdout + r.stderr
+    srt = open(os.path.join(root, "脚本", ep, "字幕_中文.srt"), encoding="utf-8").read()
+    assert "00:00:00,000 --> 00:00:02,000" in srt
+    assert "毒酒已经送到唇边。" in srt
+    assert "00:00:04,000 --> 00:00:07,000" in srt
+    assert "我偏要活下去。" in srt
+
+
 def test_build_from_storyboard_raises_on_missing_duration():
     # 缺 duration 的 clip 不静默丢成 0 长镜头——直接报错点名 clip（治"无时间预算出视频"）
     import pytest

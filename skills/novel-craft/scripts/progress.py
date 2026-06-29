@@ -22,7 +22,7 @@ if COMMON_DIR not in sys.path:
 
 from markdown_parser import file_lock, atomic_write_text, update_checklist_stage
 
-from contract import stage_info
+from novel_contract import stage_info
 from qa_gate import collect_gate_status, format_gate_status
 
 
@@ -36,7 +36,7 @@ COMMENT_RE = re.compile(r"\s*<!--.*?-->\s*")
 # 章节矩阵型（build_progress_markdown，仅带 novel-progress-schema + 章节表）由
 # skills/novel/progress.py 负责；两种 schema 都带 novel-progress-schema，故必须用
 # 阶段表专属标记区分，否则会把满是 ⬜ 的矩阵误判成「无未完成项」。
-STAGE_TABLE_MARKERS = ("novel-derived-stage-table", "novel-create-stage-table")
+STAGE_TABLE_MARKERS = ("novel-derived-stage-table", "novel-create-stage-table", "novel-import-stage-table")
 
 
 class ChapterMatrixSchema(Exception):

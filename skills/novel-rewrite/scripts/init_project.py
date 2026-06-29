@@ -34,6 +34,7 @@ from novel_contract import (base_meta, build_progress_markdown, routing_stages,
                             DRAFT_WORKFLOWS, AI_TEXT_USAGE_MODES,
                             infer_novel_purpose, normalize_novel_purpose,
                             resolve_novel_draft_mode, resolve_novel_draft_workflow)
+from source_language import classify_register, scaffold as source_scaffold
 
 SCALE_PROFILE = SCALE_PROFILES  # scale-band 契约：test_scale_contract 校验其与规模档一致
 
@@ -262,6 +263,33 @@ def main():
               "自有/已授权重跑加 --i-have-rights。", file=sys.stderr)
         shutil.rmtree(out_root); sys.exit(2)
 
+    # 源语言/文体体检：默认假设原作是现代中文白话文；真遇文言文/外文要先建源理解层再改写成白话文。
+    try:
+        with open(novel_txt, encoding="utf-8") as _f:
+            _lang = classify_register(_f.read())
+    except Exception:
+        _lang = {"register": "modern_zh", "signals": []}
+    source_register = _lang.get("register", "modern_zh")
+    source_comprehension_status = "not_required"
+    if source_register != "modern_zh":
+        source_comprehension_status = "draft"
+        try:
+            source_scaffold(out_root)  # 写 设定/source_comprehension.{md,json}(status=draft)
+        except Exception as _e:  # pragma: no cover - defensive
+            print(f"[warn] 源理解层脚手架生成失败：{_e}", file=sys.stderr)
+        _label = "文言文/古文" if source_register == "classical_zh" else "外文"
+        print("", file=sys.stderr)
+        print(f"⚠️ 原作疑似 **{_label}**（{source_register}）。默认假设原作是现代中文白话文，",
+              file=sys.stderr)
+        print("   按白话直接改写会理解错术语/典故/称谓。已生成源理解层脚手架 设定/source_comprehension.md：",
+              file=sys.stderr)
+        for _s in _lang.get("signals", [])[:2]:
+            print(f"     - {_s}", file=sys.stderr)
+        print("   ▶ 先补全理解层（现代白话理解 + 古今词/术语对照 + 文化注释 + 改写边界），", file=sys.stderr)
+        print("     把 设定/source_comprehension.json 的 status 置 confirmed，再改写成白话文。", file=sys.stderr)
+        print("     （未确认前 qa_gate / 导出会阻断；下游从理解层改写，保留 curated 古语/术语。）", file=sys.stderr)
+        print("", file=sys.stderr)
+
     score_report = load_score_report(os.path.abspath(args.score_source)) if args.score_source else None
     diagnosis = build_score_diagnosis(score_report) if score_report else ""
 
@@ -292,6 +320,11 @@ def main():
     meta.update({
         "source_novel": source_path,
         "source_title": source_title,
+        "source_register": source_register,
+        "source_comprehension_status": source_comprehension_status,
+        # 桥接标记：公版/经典 IP 改写 → 一旦下游改编成漫剧/微短剧，须按广电2026-04新规复核
+        # （禁颠覆性魔改经典/英雄/历史人物·真人肖像授权·三级备案）。结构化字段，供改编环节合规接力。
+        "classic_ip_adaptation": rights in ("public-domain", "public_domain"),
         "rewrite_type": args.rewrite_type,
         "scale": scale,
         "purpose": purpose,

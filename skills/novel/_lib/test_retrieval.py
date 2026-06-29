@@ -165,3 +165,18 @@ def test_cli_default_query_uses_chapter_outline(tmp_path, capsys):
     assert r.main([root, "--chapter", "5", "--k", "1"]) == 0
     out = capsys.readouterr().out
     assert "第01章" in out
+
+
+def test_score_golden_cases_recall_mrr():
+    import retrieval
+    # ranker 返回固定 result_ids，验证 recall@k / MRR 算术
+    cases = [
+        {"query": "a", "expected_ids": ["2"]},   # 命中在第2位 → rr=1/2
+        {"query": "b", "expected_id": "9"},       # 不命中
+    ]
+    ranker = lambda q, k: ["1", "2", "3"]
+    out = retrieval.score_golden_cases(cases, ranker, top_k=3)
+    assert out["case_count"] == 2 and out["hit_count"] == 1
+    assert out["recall_at_k"] == 0.5
+    assert abs(out["mrr"] - 0.25) < 1e-9   # (0.5 + 0)/2
+    assert len(out["failures"]) == 1

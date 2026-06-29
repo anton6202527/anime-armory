@@ -56,6 +56,7 @@ fetch_novel = load_script_module(
 )
 
 base_meta = _contract.base_meta
+import_stage_markdown = _contract.import_stage_markdown
 parse_outputs = _contract.parse_outputs
 rights_metadata = _contract.rights_metadata
 write_settings = _derive_common.write_settings
@@ -563,14 +564,11 @@ def build_manifest(title, payload, rights_status, *, rights_declared,
 
 
 def build_progress(title, payload, rights_status):
-    rights_mark = "x" if rights_status in {"public-domain", "user-declared", "original"} else " "
+    machine = import_stage_markdown(rights_status)
     return f"""# 进度 — 《{title}》（导入源书）
 
 ## 当前状态
-- [x] 项目骨架
-- [x] 原作导入（`原作.txt` + `小说/source_manifest.json`）
-- [{rights_mark}] 权利复核（当前：{rights_status}）
-- [ ] 选择下一步：评分 / 审稿 / 改写 / 精简 / 续写 / 漫剧改编
+{machine}
 
 ## 导入记录
 - 来源：{payload.get('source_display', '')}

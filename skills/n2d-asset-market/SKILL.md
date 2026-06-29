@@ -17,7 +17,7 @@ description: 跨项目 n2d 资产库/模板市场：把角色原型、identity_r
 ## 输入 / 输出 / 读写边界
 
 - **输入**：源项目 `identity_registry.json`、`asset_registry.json`、定妆/reference files、视频模型路由表、目标项目角色/资产命名和授权说明。
-- **输出**：`资产库/.../asset_pack.json`、导入后的目标项目 registry fragment、`fork_history`、路由模板包。
+- **输出**：`资产库/.../asset_pack.json`、导入后的目标项目 registry fragment、`fork_history`、路由模板包；项目内内容账本 `生产数据/asset_registry.jsonl`、`asset_registry_summary.json/md`。
 - **读写边界**：导入默认 fork 新身份并重置后端 adapter；不复用旧项目 Character ID/Face Lock/LoRA ready，不生成新图/视频。
 - **契约关系**：registry kind、fork_history 字段、adapter status 和 LoRA 清理规则来自 `skills/n2d/_lib/n2d_contract.py`。
 
@@ -59,6 +59,23 @@ description: 跨项目 n2d 资产库/模板市场：把角色原型、identity_r
 | 打斗动作/招式套路 | `combat/<slug>/asset_pack.json` | 复用五帧拆招、动作编排和节奏；导入会清关键帧，必须新剧重出 |
 
 后续可做自动候选机制：每集出图/QC 后生成“建议沉淀资产清单”，只列候选，不自动 export；用户确认后再导出。
+
+## 项目内内容账本（发布追溯 · `asset_registry.py`）
+
+本 skill 还提供一个**项目内内容哈希账本**，和跨项目模板市场不是同一件事：
+
+- `出图/共享/asset_registry.json`：生产执行真值，登记场景/道具/武器/服装/VFX 的引用和禁漂约束。
+- `生产数据/asset_registry.jsonl`：发布追溯账本，扫描已经落地的脚本、图片、视频、成片、合规文件，记录路径、SHA256、大小、stage，并把 `production_events.jsonl` 里的生成事件挂回资产。
+- `资产库/.../asset_pack.json`：跨项目可复用模板，必须人工判断授权和质量后主动 export。
+
+常用命令：
+
+```bash
+python3 skills/n2d-asset-market/scripts/asset_registry.py scan <作品根> --write
+python3 skills/n2d-asset-market/scripts/asset_registry.py verify <作品根>
+```
+
+发布 manifest 前建议先 `scan --write`；`verify.status=fail` 表示资产缺失或 hash 被改，不能把旧 manifest 当作可发布证据。
 
 ## 给用户的提示方式
 

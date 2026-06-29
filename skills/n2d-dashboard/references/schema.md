@@ -35,6 +35,11 @@ Each line is one JSON object.
   "meta": {
     "native_audio": "no"
   },
+  "trace": {
+    "task_id": "001-image-progress",
+    "trace_id": "idem-001",
+    "idempotency_key": "n2d:..."
+  },
   "release": {
     "plays": 12000,
     "revenue": 86.5,
@@ -56,6 +61,10 @@ Each line is one JSON object.
 | `stage` | `script` / `voice` / `image` / `video` / `compose` / `review` / custom |
 | `event` | `generation` / `redraw` / `qa_gate` / `qa_gate_run` / `cost` / `duration` / `manual` / `release` / `revenue` |
 | `source` | `manual`, script path, or backend |
+
+## Trace fields
+
+`dashboard.py record` 会把 `meta.task_id`、`meta.trace_id`、`meta.idempotency_key` 或环境变量 `N2D_TASK_ID` / `N2D_TRACE_ID` / `N2D_IDEMPOTENCY_KEY` 提升到顶层 `trace`。批量 runner 默认注入这些变量；外部 wrapper 也应传入，便于从 dashboard、batch 死信、发布 manifest、资产账本回查同一次生产尝试。
 
 ## Metric rules
 
@@ -149,3 +158,20 @@ By default, a new gate run replaces previous gate events for the same episode an
 ```
 
 `kind` ∈ `qa_blockers / final_pass_rate / redraw_rate / budget / cost_per_min / recoup`；`level` ∈ `critical / warn`；`scope` = `totals` 或具体 `第N集`。`dashboard.json` 也内嵌 `alerts` + `alert_counts`。`dashboard.html` = 自动刷新看板（`watch --serve`，本机 http.server）。
+
+## production_events audit / replay
+
+`event_ledger.py audit|doctor|replay` 生成：
+
+| 文件 | 含义 |
+|---|---|
+| `production_events_audit.json/md` | JSONL 解析、必填字段、trace/provider 等可追溯性审计 |
+| `production_events_chain.jsonl` | 按事件顺序生成的 hash chain，不改历史事件行 |
+| `dashboard_replay.json` | 只从事件日志重放得到的 dashboard 聚合；若已有 `dashboard.json`，会写 `matches_current_dashboard` |
+
+发布或停线前建议：
+
+```bash
+python3 skills/n2d-dashboard/scripts/event_ledger.py doctor <作品根>
+python3 skills/n2d-dashboard/scripts/event_ledger.py replay <作品根> --write
+```

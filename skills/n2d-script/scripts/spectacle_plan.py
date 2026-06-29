@@ -15,6 +15,7 @@ if LIB not in sys.path:
     sys.path.insert(0, LIB)
 
 from n2d_contract import (  # noqa: E402
+    ACTION_CHOREOGRAPHY_SHOT_TYPES,
     MOTION_CONTROL_MANIFEST_KIND,
     SPECTACLE_PLAN_KIND,
     default_degrade_plan,
@@ -22,6 +23,7 @@ from n2d_contract import (  # noqa: E402
     infer_spectacle_type,
     missing_fields,
     motion_control_inputs_for_spectacle,
+    premium_spectacle_passes,
     spectacle_recommendations,
     spectacle_required_fields,
 )
@@ -91,7 +93,9 @@ INPUT_SPEC: Dict[str, Tuple[str, str]] = {
     "camera_path": ("camera_path", "camera_path.json"),
     "spatial_path": ("spatial_path", "spatial_path.json"),
     "parallax_layers": ("parallax_layers", "parallax_layers.json"),
+    "vfx_layers": ("vfx_layers", "vfx_layers.json"),
 }
+HIGH_ACTION_KINDS = set(ACTION_CHOREOGRAPHY_SHOT_TYPES)
 
 
 def input_entry(ep: str, clip_id: str, key: str) -> Dict[str, str]:
@@ -158,6 +162,7 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
         required = list(spectacle_required_fields(kind))
         missing = missing_fields(contract, required) if contract else required
         controls = list(motion_control_inputs_for_spectacle(kind))
+        premium = premium_spectacle_passes(kind)
         rows.append({
             "clip_id": clip_id,
             "source_id": str(clip.get("id") or clip.get("clip_id") or clip.get("label") or clip_id),
@@ -168,11 +173,13 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
             "control_inputs_required": controls,
             "keyframes_required": {
                 "start_frame": True,
-                "end_frame": kind in {"fight_exchange", "chase", "flight"},
-                "mid_anchors": kind in {"fight_exchange", "chase", "flight"},
+                "end_frame": kind in HIGH_ACTION_KINDS or bool(premium),
+                "mid_anchors": kind in HIGH_ACTION_KINDS or bool(premium),
+                "premium_policy": premium.get("keyframe_policy") if premium else {},
             },
             "edit_cue_profile": kind,
             "edit_cues": edit_cues_for_spectacle(kind, contract),
+            "premium_passes": premium,
             "degrade_plan": str(contract.get("degrade_plan") or default_degrade_plan(kind)),
             "recommendations": spectacle_recommendations(kind),
         })

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a small probe pack for fight/chase/flight/large-scene backend tests."""
+"""Build a small probe pack for high-action/large-scene backend tests."""
 from __future__ import annotations
 
 import argparse
@@ -18,6 +18,7 @@ if LIB not in sys.path:
 
 import shot_risk_audit  # noqa: E402
 from n2d_contract import (  # noqa: E402
+    ACTION_CHOREOGRAPHY_SHOT_TYPES,
     SPECTACLE_BACKEND_BENCHMARK_KIND,
     SPECTACLE_PROBE_PACK_KIND,
     default_degrade_plan,
@@ -25,11 +26,17 @@ from n2d_contract import (  # noqa: E402
     spectacle_recommendations,
 )
 
-TARGET_TYPES = ("fight_exchange", "chase", "flight", "large_establishing")
+TARGET_TYPES = tuple(ACTION_CHOREOGRAPHY_SHOT_TYPES) + ("large_establishing",)
 BACKEND_MATRIX: Dict[str, List[str]] = {
     "fight_exchange": ["kling", "seedance", "dreamina"],
     "chase": ["seedance", "kling", "dreamina"],
+    "magic_burst": ["dreamina", "seedance", "veo"],
     "flight": ["seedance", "kling", "veo"],
+    "mount_ride": ["seedance", "kling", "dreamina"],
+    "vehicle_ride": ["seedance", "kling", "dreamina"],
+    "vessel_flight": ["seedance", "veo", "kling"],
+    "road_vehicle": ["seedance", "kling", "dreamina"],
+    "stealth_stalk": ["seedance", "kling", "veo"],
     "large_establishing": ["veo", "seedance", "dreamina"],
 }
 

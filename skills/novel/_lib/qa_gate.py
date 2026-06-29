@@ -32,6 +32,10 @@ from novel_contract import is_long_arc_project, normalize_rights_status, parse_r
 from report_snapshot import snapshot_chapters, validate_snapshot
 from waivers import baseline_freshness_scope, has_waiver, load_waivers
 try:
+    import source_language as _source_language  # 源语言/文体闸（同 _lib）
+except Exception:  # pragma: no cover - defensive
+    _source_language = None
+try:
     import compliance_profile as _compliance_profile  # noqa: E402
 except Exception:  # pragma: no cover - optional gate degrades defensively
     _compliance_profile = None
@@ -124,29 +128,32 @@ _DOMESTIC_LANGUAGE_MARKS = ("中文", "简体", "繁体", "汉语", "国语", "z
 
 
 def _scope_signal_text(project_root):
-    """"投放范围"声明字段拼成的检索文本——_score_required / _ai_usage_required /
+    """**平台/用途声明字段**拼成的检索文本——_score_required / _ai_usage_required /
     严格AI（_platform_ai_gate）三处共用的**单一真值源**。
 
-    此前三处各自拼一份 blob、字段集还不一致（一处含 draft_mode、一处含 目标语言…），
-    是重复又易漂的脆弱模式。现收敛到这里，并**剔除 目标语言**——那是语言而非投放范围，
-    被顺手拼进 blob 后，语言串里的子串（如"海外英文版"含"海外"）会把 score/AI披露/严格AI
-    误触发成硬阻断。出海与否改由 _targets_overseas 按字段显式判定，不再靠子串。
-    保留 目标用途（半结构化，用户在此写"红果漫剧"等，且有测试锁定其参与判定）。
+    脆弱性收敛历程：
+    1. 此前三处各自拼一份 blob、字段集还不一致——收敛到这里。
+    2. **剔除 目标语言**——那是语言而非投放范围，子串（"海外英文版"含"海外"）会把
+       score/AI披露/严格AI 误触发成硬阻断；出海与否改由 _targets_overseas 按字段显式判定。
+    3. **只读平台/用途声明字段，不再读格式/模式字段**：`输出格式`/`outputs` 是交付格式、
+       `draft_mode`/`小说生成模式` 是生成模式，都不是「投到哪个平台」的声明，混进 blob 后
+       它们里的平台子串会误触发。生成模式对 score 的影响已由 _score_required 的
+       `mode in COMMERCIAL_SCORE_MODES` 精确集合判定覆盖，无需再靠子串。
+    平台声明的权威字段是结构化的 `目标平台`/`target_platform`/`出海目标平台`；半结构化的
+    `目标用途`/`小说用途`/`purpose` 用户常在此写"红果漫剧"，亦为声明，保留（有测试锁定）。
     """
     meta = _load_meta(project_root)
     settings = _load_settings(project_root)
     parts = [
-        meta.get("draft_mode"),
-        meta.get("purpose"),
+        # 结构化平台声明（权威）
         meta.get("target_platform"),
-        meta.get("target"),
-        ",".join(meta.get("outputs") or []),
-        settings.get("小说生成模式"),
-        settings.get("小说用途"),
         settings.get("目标平台"),
-        settings.get("目标用途"),
-        settings.get("输出格式"),
         settings.get("出海目标平台"),
+        # 半结构化用途/平台意图声明
+        meta.get("purpose"),
+        meta.get("target"),
+        settings.get("小说用途"),
+        settings.get("目标用途"),
     ]
     return " ".join(str(part or "") for part in parts)
 
@@ -1309,6 +1316,36 @@ def _scene_cards_gate(project_root):
     return report
 
 
+def _source_language_gate(project_root):
+    """源语言/文体闸：原作.txt 若是文言文/外文且未建 confirmed 源理解层 → 阻断（先建理解层再改写成白话文）。
+
+    现代白话 / 无原作（原创从零）→ clean。纯结构化判定（不调模型），与 source_language.check 单一真值源。"""
+    report = {"kind": "source_language", "blocking": False,
+              "blockers": [], "warnings": [], "next_actions": []}
+    if _source_language is None:
+        return report
+    try:
+        res = _source_language.check(project_root)
+    except Exception:  # pragma: no cover - defensive
+        return report
+    if res.get("verdict") == "needs_comprehension":
+        reg = res.get("register")
+        label = "文言文/古文" if reg == "classical_zh" else "外文"
+        report["blockers"].append(_warning(
+            "SOURCE-LANG-COMPREHENSION", "source_language", "novel-rewrite",
+            f"原作疑似{label}（{reg}）：默认假设原作是现代中文白话文，按白话直接改写会错术语/典故/称谓。"
+            "先 `python3 skills/novel/_lib/source_language.py <项目根> --scaffold` 建 设定/source_comprehension.md "
+            "源理解层并补全，把 source_comprehension.json 的 status 置 confirmed 后再改写。"))
+        report["blocking"] = True
+        report["next_actions"].append({
+            "priority": "P0",
+            "return_to_stage": "source_language",
+            "recommended_skill": "novel-rewrite",
+            "action": "建并确认源理解层（现代白话理解 + 古今词/术语对照 + 文化注释 + 改写边界），再改写成白话文。",
+        })
+    return report
+
+
 def collect_gate_status(project_root, *, require_review_report=False, require_score_report=None,
                         export_formats=None, require_state_closure=True,
                         state_chapter=None, require_ai_usage=None):
@@ -1317,6 +1354,7 @@ def collect_gate_status(project_root, *, require_review_report=False, require_sc
     if require_ai_usage is None:
         require_ai_usage = _ai_usage_required(root, export_formats)
     reports = [
+        _source_language_gate(root),
         _rights_gate(root, export_formats=export_formats),
         _research_gate(root),
         _review_gate(root, require_report=require_review_report),

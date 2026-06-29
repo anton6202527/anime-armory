@@ -207,3 +207,98 @@ def test_write_scene_world_ledger(tmp_path):
     path = wc.write_scene_world_ledger(str(tmp_path), "第1集", {"available": False, "timeline": [], "shots": []})
 
     assert path.endswith("生产数据/scene_world_ledger_第1集.json")
+
+
+# ── #6：注册 key_light_direction 像素核对（W3b）──────────────────────────────────
+def test_registered_light_dir_parses_enums():
+    assert wc.registered_light_dir({"constraints": {"lighting_signature": {"key_light_direction": "left_front"}}}) == {"h": "left", "v": None}
+    assert wc.registered_light_dir({"constraints": {"lighting_signature": {"key_light_direction": "right_back"}}}) == {"h": "right", "v": None}
+    assert wc.registered_light_dir({"constraints": {"lighting_signature": {"key_light_direction": "top"}}}) == {"h": None, "v": "top"}
+
+
+def test_registered_light_dir_chinese_and_light_anchor_fallback():
+    assert wc.registered_light_dir({"constraints": {"light_anchor": "画右底光"}}) == {"h": "right", "v": "bottom"}
+    assert wc.registered_light_dir({}) == {"h": None, "v": None}
+    assert wc.registered_light_dir({"constraints": {"lighting_signature": {}}}) == {"h": None, "v": None}
+
+
+def test_registered_light_contradiction_via_anchor_contradiction():
+    # 注册主光在左，实测最亮区偏右 → 矛盾
+    assert wc.anchor_contradiction({"h": "left", "v": None}, "right", None) is not None
+    assert wc.anchor_contradiction({"h": "left", "v": None}, "left", None) is None
+
+
+def test_match_registered_light_substring():
+    reg = [("LOC_沈府大殿", {"h": "left", "v": None}), ("LOC_冷宫", {"h": "right", "v": None})]
+    assert wc._match_registered_light("沈府大殿", reg) == {"h": "left", "v": None}
+    assert wc._match_registered_light("无名地", reg) is None
+
+
+# ---------- W4 天气/季节/转场（声明驱动·确定性） ----------
+
+def test_weather_of_text_categories():
+    assert wc.weather_of_text("晴朗的午后") == "clear"
+    assert wc.weather_of_text("暴雨倾盆") == "rain"
+    assert wc.weather_of_text("漫天飞雪") == "snow"
+    assert wc.weather_of_text("雷暴将至") == "storm"     # storm 先于 rain（雷雨不误判 rain）
+    assert wc.weather_of_text("无关文本") is None
+
+
+def test_weather_band_hard_and_soft():
+    assert wc.weather_band("clear", "rain") == "block"    # 晴↔雨 硬不连续
+    assert wc.weather_band("rain", "snow") == "block"     # 降水互跳 硬
+    assert wc.weather_band("clear", "overcast") == "warn"  # 软漂移
+    assert wc.weather_band("clear", "clear") == "ok"
+    assert wc.weather_band(None, "rain") == "ok"           # 缺声明 → 不判
+
+
+def test_season_band_change_is_block():
+    assert wc.season_band("summer", "winter") == "block"
+    assert wc.season_band("spring", "spring") == "ok"
+    assert wc.season_band(None, "winter") == "ok"
+
+
+def test_has_time_transition_cue():
+    assert wc.has_time_transition("三天后，雪停了")
+    assert wc.has_time_transition("入冬，庭院落雪")
+    assert not wc.has_time_transition("她推门而入")
+
+
+def _mk_two_shots(tmp_path):
+    from PIL import Image
+    root = tmp_path / "剧"
+    imgdir = root / "出图" / "第1集"
+    imgdir.mkdir(parents=True)
+    for name in ("EP01_CLIP01.png", "EP01_CLIP02.png"):
+        Image.new("L", (32, 32), 160).save(imgdir / name)  # 中高明度·两镜同光，单独不触发 daypart
+    return root
+
+
+def test_analyze_emits_weather_block(tmp_path, monkeypatch):
+    try:
+        import PIL  # noqa: F401
+    except Exception:
+        return
+    root = _mk_two_shots(tmp_path)
+    monkeypatch.setattr(wc, "_scene_of_shot", lambda r, e: {
+        "EP01_CLIP01.png": "庭院", "EP01_CLIP02.png": "庭院"})
+    monkeypatch.setattr(wc, "_declared_env_of_shot", lambda r, e: {
+        "EP01_CLIP01.png": "晴朗的庭院，阳光洒落", "EP01_CLIP02.png": "庭院里暴雨倾盆"})
+    res = wc.analyze(str(root), "第1集")
+    wblocks = [s for s in res["shots"] if s.get("metric") == "weather" and s["verdict"] == "block"]
+    assert any(s["png"] == "EP01_CLIP02.png" for s in wblocks)  # 晴→暴雨 同场景突变=block
+
+
+def test_analyze_weather_exempt_by_transition(tmp_path, monkeypatch):
+    try:
+        import PIL  # noqa: F401
+    except Exception:
+        return
+    root = _mk_two_shots(tmp_path)
+    monkeypatch.setattr(wc, "_scene_of_shot", lambda r, e: {
+        "EP01_CLIP01.png": "庭院", "EP01_CLIP02.png": "庭院"})
+    monkeypatch.setattr(wc, "_declared_env_of_shot", lambda r, e: {
+        "EP01_CLIP01.png": "晴朗的庭院", "EP01_CLIP02.png": "三天后，庭院里暴雨倾盆"})  # 带转场 cue
+    res = wc.analyze(str(root), "第1集")
+    wblocks = [s for s in res["shots"] if s.get("metric") == "weather"]
+    assert not wblocks  # 有'三天后'转场 cue → 合法时间跳跃，豁免

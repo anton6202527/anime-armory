@@ -85,6 +85,14 @@ def find_seed(seeds, seed_id):
     return None
 
 
+def is_confirmed(seed):
+    """seed 是否为「已确认伏笔」。手动 plant / 历史 seed 无此字段 → 默认 True；
+    `extract_foreshadow_candidates` 抽的待确认候选显式 `confirmed=False`。
+    未确认候选只是给人的工作清单，**永不升阻断、不进回收率分母**——既保住「不做正则式
+    自动识别免得制造噪声」的原则，又让 analyze() 不再对派生线空转。"""
+    return bool(seed.get("confirmed", True))
+
+
 # ── 登记动作（plant / payoff / drop） ────────────────────────────────────────
 def plant(data, description, planted_chapter, expected_payoff_chapter,
           seed_id=None, importance="medium", linked_entities=None):
@@ -105,8 +113,28 @@ def plant(data, description, planted_chapter, expected_payoff_chapter,
         "importance": importance,
         "linked_entities": list(linked_entities or []),
         "evidence": None,
+        "auto_extracted": False,
+        "confirmed": True,
     }
     seeds.append(seed)
+    return seed
+
+
+def confirm(data, seed_id, expected_payoff_chapter=None, importance=None):
+    """把一条自动抽取的「伏笔候选」确认为正式伏笔（confirmed=True）。
+
+    确认后才进超期机检 / 回收率分母。可顺手补预期回收章（机检超期的前提）和重要度。
+    不存在的 id 抛 KeyError。"""
+    seed = find_seed(data["seeds"], seed_id)
+    if not seed:
+        raise KeyError(f"找不到伏笔 id: {seed_id}")
+    seed["confirmed"] = True
+    if expected_payoff_chapter is not None:
+        seed["expected_payoff_chapter"] = int(expected_payoff_chapter)
+    if importance is not None:
+        if importance not in IMPORTANCE:
+            raise ValueError(f"importance 须为 {sorted(IMPORTANCE)}，得到 {importance}")
+        seed["importance"] = importance
     return seed
 
 
@@ -138,6 +166,8 @@ def is_overdue(seed, through_chapter, grace=DEFAULT_GRACE):
 
     没有 expected_payoff_chapter 的伏笔无法机检超期（脚本不臆测截止章），返回 False。
     """
+    if not is_confirmed(seed):
+        return False  # 未确认候选不是已承诺的伏笔，谈不上「烂尾」
     if seed.get("status") not in ("pending", "partially_resolved"):
         return False
     expected = seed.get("expected_payoff_chapter")
@@ -150,23 +180,37 @@ def payoff_rate(seeds):
     """回收率 = resolved / (有效伏笔)；有效伏笔 = 全部 - dropped（作废不进分母）。
 
     无有效伏笔时回收率为 None（避免 0/0 谎报）。partially_resolved 记为半收（0.5）。
+    未确认候选（auto_extracted 待 confirm）不是已承诺伏笔，**不计入分母**，单列 candidates。
     """
-    effective = [s for s in seeds if s.get("status") != "dropped"]
+    candidates = sum(1 for s in seeds if not is_confirmed(s))
+    confirmed = [s for s in seeds if is_confirmed(s)]
+    effective = [s for s in confirmed if s.get("status") != "dropped"]
     if not effective:
         return {"rate": None, "resolved": 0, "partial": 0, "pending": 0,
-                "effective_total": 0, "dropped": len(seeds) - len(effective)}
+                "effective_total": 0, "dropped": len(confirmed) - len(effective),
+                "candidates": candidates}
     resolved = sum(1 for s in effective if s.get("status") == "resolved")
     partial = sum(1 for s in effective if s.get("status") == "partially_resolved")
     pending = sum(1 for s in effective if s.get("status") == "pending")
     rate = (resolved + 0.5 * partial) / len(effective)
     return {"rate": round(rate, 4), "resolved": resolved, "partial": partial,
             "pending": pending, "effective_total": len(effective),
-            "dropped": len(seeds) - len(effective)}
+            "dropped": len(confirmed) - len(effective), "candidates": candidates}
 
 
 def scan(data, through_chapter, grace=DEFAULT_GRACE):
     """巡检：揪超期伏笔（烂尾预警的真实数据源）+ 算回收率。纯函数，便于单测。"""
     seeds = data.get("seeds", [])
+    candidates = [
+        {
+            "id": s["id"],
+            "description": s.get("description", ""),
+            "planted_chapter": s.get("planted_chapter"),
+            "anchor": s.get("anchor"),
+            "note": "自动抽取的伏笔候选——请人工 confirm（设预期回收章）或 drop",
+        }
+        for s in seeds if not is_confirmed(s)
+    ]
     overdue = []
     for s in seeds:
         if is_overdue(s, through_chapter, grace):
@@ -194,6 +238,8 @@ def scan(data, through_chapter, grace=DEFAULT_GRACE):
         "overdue_count": len(overdue),
         "blocking": blocking,
         "overdue": overdue,
+        "candidate_count": len(candidates),
+        "candidates": candidates,
     }
 
 
@@ -227,7 +273,13 @@ def analyze(project, through_chapter=None, grace=DEFAULT_GRACE):
         through_chapter = _max_written_chapter(project)
     report = scan(data, through_chapter, grace)
     report["ran"] = True
-    report["alerts"] = report.get("overdue", [])
+    # alerts = 已确认伏笔的超期（可阻断）+ 待确认候选（建议级，提示人 confirm/drop，永不阻断）。
+    # 派生线一开局就有候选 → analyze 不再 ran:False 空转，但噪声候选挡不住导出。
+    alerts = list(report.get("overdue", []))
+    for c in report.get("candidates", []):
+        alerts.append({**c, "severity": "建议级", "auto": True,
+                       "kind": "foreshadow_candidate"})
+    report["alerts"] = alerts
     return report
 
 
@@ -257,7 +309,12 @@ def main():
     so.add_argument("--evidence", default=None, help="回收证据/落点")
     so.add_argument("--partial", action="store_true", help="只部分回收（partially_resolved）")
 
-    sd = sub.add_parser("drop", help="作废伏笔（从回收率分母剔除）")
+    sc = sub.add_parser("confirm", help="把自动抽取的伏笔候选确认为正式伏笔")
+    sc.add_argument("--id", required=True)
+    sc.add_argument("--by", type=int, default=None, help="预期回收章 expected_payoff_chapter（机检超期前提）")
+    sc.add_argument("--importance", default=None, help="low|medium|high|critical")
+
+    sd = sub.add_parser("drop", help="作废伏笔/否决候选（从回收率分母剔除）")
     sd.add_argument("--id", required=True)
     sd.add_argument("--reason", default=None)
 
@@ -279,6 +336,12 @@ def main():
         save_ledger(args.project_path, data)
         print(f"✅ 回收 {seed['id']}（{seed['status']}{('，第%d章' % seed['actual_payoff_chapter']) if seed.get('actual_payoff_chapter') else ''}）")
 
+    elif args.cmd == "confirm":
+        seed = confirm(data, args.id, args.by, args.importance)
+        save_ledger(args.project_path, data)
+        exp = seed.get("expected_payoff_chapter")
+        print(f"✔️  确认伏笔 {seed['id']}（confirmed{('，预期第%d章收' % exp) if exp else '，未设回收章'}）")
+
     elif args.cmd == "drop":
         seed = drop(data, args.id, args.reason)
         save_ledger(args.project_path, data)
@@ -294,9 +357,12 @@ def main():
         rate = report["payoff_rate"]["rate"]
         rate_str = "—（无有效伏笔）" if rate is None else f"{rate*100:.1f}%"
         print(f"伏笔台账巡检（对账至第{args.through}章）→ {out}")
-        print(f"  伏笔 {report['total_seeds']} 条 · 回收率 {rate_str} · 超期 {report['overdue_count']} 条（阻断 {report['blocking']}）")
+        cand = report.get("candidate_count", 0)
+        print(f"  伏笔 {report['total_seeds']} 条 · 回收率 {rate_str} · 超期 {report['overdue_count']} 条（阻断 {report['blocking']}）· 待确认候选 {cand} 条")
         for o in report["overdue"]:
             print(f"  [{o['severity']}] {o['id']} 超期{o['overdue_by']}章 · {o['description']}")
+        for c in report.get("candidates", []):
+            print(f"  [候选] {c['id']} 第{c['planted_chapter']}章「{c.get('anchor','')}」· {c['description']} → confirm/drop")
 
 
 if __name__ == "__main__":

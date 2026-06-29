@@ -1,0 +1,20 @@
+{
+  "kind": "n2d_thread_scheduler",
+  "version": 1,
+  "generated_at": "2026-06-29",
+  "threads": [
+    {
+      "id": "THREAD_001",
+      "thread_id": "T001",
+      "status": "candidate",
+      "opened_ep": "第1集",
+      "last_touched_ep": "第1集",
+      "next_due_ep": "第2集",
+      "payoff_ep": "",
+      "open_question": "不过也能用。拿回去洗脸洗衣服，正好。 他没有看见，陶盆离开水面的一瞬间，盆底那点微光，又亮了一下。🪝",
+      "touch_keywords": [
+        "贺平生"
+      ]
+    }
+  ]
+}

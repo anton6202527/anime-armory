@@ -14,6 +14,8 @@ Orientation order: `AGENTS.md` (tool-neutral entry, has the intent→skill routi
 
 **`skills/` is flat, grouped by name prefix** (`n2d-*`). A SKILL.md's frontmatter `description` + the `Triggers`/`Use when` lines **are the routing logic** — match user intent against them. `.claude/skills → ../skills` is a symlink so Claude Code auto-discovers them.
 
+**n2d-supervisor is the agentic layer, not a replacement state machine.** It consumes `skills/n2d/run.py next --json`, uses context packs / creative loops / action contracts, and dispatches a few specialists; it must not bypass `_进度.md`, gates, batch, dashboard, or stage skills.
+
 **n2d is the flagship pipeline** and has two non-obvious ordering decisions worth knowing before touching `n2d-*`:
 - **Voice-first**: `n2d-voice` runs *before* storyboard. It produces a per-line **measured-duration list** (`时长清单`) that then drives shot durations — so `n2d-script` is run twice (script pass, then storyboard pass after voice).
 - **Two-layer image gen**: `n2d-image` first builds a shared 定妆库 (locked character faces / scenes / style) and only then per-shot frames, to keep characters consistent across shots. Stage order: `n2d-script`(改编) → `n2d-voice` → `n2d-script`(分镜) → `n2d-image` → `n2d-video` → `n2d-compose`.
@@ -27,7 +29,7 @@ Orientation order: `AGENTS.md` (tool-neutral entry, has the intent→skill routi
 
 ## Commands & environment
 
-There is **no build, no lint, no package manager, no central test runner.** Skill scripts are plain Python/bash invoked individually.
+There is **no build, no lint, no package manager.** Skill scripts are plain Python/bash invoked individually. There is now one **optional aggregate regression gate** — `bash tools/run_all_checks.sh` (full `pytest skills/`/`tools/` + governance checks in a single exit code; see Hard conventions). It does not replace running an individual skill's own pytest from its directory; it's the "did I break anything repo-wide" gate used by CI and the pre-commit hook.
 
 **Heavy AI steps need out-of-repo conda envs** (model weights live in `~/CosyVoice`, `~/ACE-Step`, `~/facefusion`, etc.):
 - `cosyvoice` (also has librosa/whisper), `acestep`, `fish-speech`, `facefusion`.
@@ -48,6 +50,7 @@ cd skills/n2d-review/scripts && python -m pytest test_gate.py
 **Design law has one authoritative home: [`docs/skill-design-principles.md`](docs/skill-design-principles.md)** — the cross-line "how to *build* a skill" constitution (independence, generic-skill/private-choice, choice-point-as-adapter, compliance gates, VCS-free delivery, README-sync). Read it before adding/changing a skill. **Don't restate it here or per-skill** — point to it. Machine-checkable clauses are enforced:
 - `python3 tools/validate_skills.py` — E1 VCS-free (no git state checks in skills), B2 bare skill names, B7 character makeup base pack, B9 persistent-subject-vs-project-memory split, F1 `skills/README.md` index sync, F3 entry-doc sync.
 - `python3 tools/independence-audit/scripts/check_independence.py` — A1/F2 line independence (no `skills/common`, no cross-line import).
+- `bash tools/run_all_checks.sh` — **repo-level regression gate**: runs the two governance checks above + full `pytest skills/`/`tools/` in one exit code. CI (`.github/workflows/ci.yml`) runs it on every push/PR; install the local pre-commit fast subset with `git config core.hooksPath .githooks`. Use `--fast`/`--changed` for the pre-commit subset. This is the one place to run "did my change break anything"; heavy-conda-dep tests skip gracefully so it stays green without model weights.
 
 Quick reminders of the highest-stakes clauses (full text + rationale in the constitution):
 - **Edit the skill set → update `skills/README.md` in the same change** (F1).

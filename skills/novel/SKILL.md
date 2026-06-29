@@ -39,6 +39,11 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 | 要建**正向审美样本库 / 拆解为什么这段好 / 高光场景标尺 / 精品化审美对照** | `novel-aesthetic` |
 | 已有在建项目，要看**当前进度 / 全线看板 / 下一步该跑哪个 skill** | `novel-progress` |
 | 已有在建项目，要**消除操作摩擦 / 找精准下一步指令 / 检查状态缺失** | `python3 skills/novel/scripts/flow.py "<作品根>"` |
+| 已有在建项目，要**按 registry 做 workflow dry-run / 生成 runner 计划 / 判断 optional specialist agent 该接哪一步** | `python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --write-plan`；长流程执行态用 `--start-run` / `--claim-stage` / `--complete-stage` |
+| 要把生产线跑成**无人值守的全自动代理闭环 / 自愈修稿（QA gate findings 自动回流重写）/ 派发 writer·reviewer·researcher specialist** | `novel-supervisor`（上层 agent 编排，消费 pipeline_runner 计划，不绕过蓝图/设定圣经等人工审批） |
+| 已有在建项目，要看**生产控制台 / gate blockers / 修订任务 / 语义任务 / 队列状态 / release readiness** | `novel-dashboard`（只读聚合面板，写 `生产数据/novel_dashboard.*`，不改正文/进度） |
+| 要把**多章节审稿、评分、dashboard 刷新、修订任务**排队给多个 worker 并发处理 | `novel-batch`（本地 flock 队列，claim/lease/reclaim/dead-letter，不直接执行模型） |
+| 已有成品或准成品小说，准备交给视觉生产线前要**检查文本、权利、审稿、评分、AI 披露、改编潜力是否齐** | `python3 skills/novel-craft/scripts/screen_adaptation_ready.py "<作品根>"` |
 | 已写好若干章，要**质检 / 审稿 / 查问题**（人设崩 / 视角穿帮 / 设定矛盾 / 锚点漂移 / 题旨偏移 / 读者承诺违约 / 文学性变薄 / 节奏 / 原文照搬 / **五感缺失 / 伏笔逾期**） | `novel-review` |
 | 已有审稿/评分/读者反馈后，要做**专业编辑 / 发展性编辑 / 行文编辑 / 拷贝编辑 / 校样 / 主编轮次 / 投稿前精修计划** | `novel-edit`（分层编辑计划：editorial assessment → developmental edit → line edit → copyedit/proofread） |
 | 已写好若干章，要**打分 / 评分 / 市场体检**（题材够不够热、能不能火、值不值得继续写/改、要不要弃稿重立） | `novel-score` |
@@ -87,6 +92,10 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 0. **先看有没有在建项目**：用户指向（或当前正处于）某个 `创作区/写小说/<项目>/`，且其下有 `_进度.md` → **先读进度**：
    - **进度路由**：跑 `python3 skills/novel/progress.py "<作品根>"` 找第一条未完成项（基于章节矩阵表）；也可调 `novel-progress` 查看全线看板。
    - **操作指挥 (Flow)**：若对下一步命令有疑虑、或想检查状态对账/就绪度，跑 `python3 skills/novel/scripts/flow.py "<作品根>"` 获取精准下一步指令。
+   - **生产控制台 (Dashboard)**：若想汇总 pipeline/gate/语义任务/修订/队列/release 状态，跑 `python3 skills/novel-dashboard/scripts/dashboard.py "<作品根>" --write --html`。
+   - **确定性 Workflow runner**：若要让薄 agent 编排长流程，先跑 `python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --write-plan`。它只读 registry、查输入/输出/gate、写 `生产数据/novel_pipeline_plan.{json,md}` 和 provenance；不写正文、不调用模型。需要恢复/追踪执行态时用 `--start-run` 创建 `生产数据/pipeline_runs/<run_id>.json`，再用 `--claim-stage` / `--complete-stage` / `--fail-stage` / `--block-stage` 更新阶段。agent 只应依据该 plan/run 选择下一步，并把开放判断交给 `语义任务/` 或 specialist agent；handoff 前可跑 `--handoff <stage>` 生成边界契约。
+   - **批量队列 (Batch)**：若要多 worker 并发处理多章节 review/score 等任务，先用 `python3 skills/novel-batch/scripts/queue.py plan "<作品根>" --kind review --chapters 1-10`，worker 再 `claim`，失败用 `reclaim`/`dead-letter` 处理。
+   - **转制就绪**：若用户表示要继续做视觉生产/短剧/漫剧成片，先跑 `python3 skills/novel-craft/scripts/screen_adaptation_ready.py "<作品根>"`；只检查小说侧条件，不替视觉生产线生成资产或镜头结构。
    - **准入检查 (Gate)**：在进入 `drafting` (写正文)、`review`/`score` 或 `export` 前，跑 `python3 skills/novel/novel-gate.py <作品根> --stage <阶段>`；该入口统一调用 novel QA gate。`drafting` 只查写作前置物，不要求既有 `score_report`；`review`/`score` 要求本章 `state_delta` 已合并进 `state_ledger`；`export` 覆盖 rights/research/review/score/state closure/AI usage/compliance profile，并在商业/平台/出海/KDP/中国公开发布等目标要求 AI 使用披露、专业资料包和平台/辖区清单闭环。
    - **文本主创模式**：投稿/发布前 gate 会读取 `_设置.md` 的 `文本主创模式` 与 `合规/ai_usage.json`。晋江/起点/番茄/红果等中文网文平台目标下，`AI生成` 正文会阻断，除非补 `合规/platform_ai_evidence.json`（当日平台规则证据）并写入作用域匹配的 `ai_generated_text_platform_exception` 豁免；推荐走 `人类主创` 或 `AI辅助`。
    - **写后自动化**：每写完一章，先填 `审稿/state_delta_第NN章.json` 和对账结论 `审稿/state_verify_第NN章.json`，再跑 `python3 skills/novel/scripts/post_write.py <作品根> --chapter 第NN章 --conclusion <作品根>/审稿/state_verify_第NN章.json`；该入口会先过状态对账/百科/逻辑/力量体系机检，全部硬闸通过并合并状态账本后才自动勾选进度。若 `_设置.md` 选 `小说生成工作流：边写边自检`，`draft_packets.py` 会把这套闭环自动写进每章任务包，`flow.py` 也会把执行命令作为下一步提示；同时按 `小批回扫间隔`（默认 5 章，可改 3 章/关闭）保留 novel-review 的文风、节奏、钩子、人设、读者承诺集中修正。
@@ -109,6 +118,7 @@ python3 skills/novel/scripts/import_novel.py "<路径或URL>"
 脚本行为：
 - 自动从文件名、URL、HTML title 或正文首行推断书名，落到 `创作区/写小说/<书名>/`。
 - 写入 `原作.txt`、`小说/<书名>.txt`、可用时写 `小说/<书名>.docx`、`小说/source_manifest.json`、`_meta.json`、`_设置.md`、`_进度.md`。
+- `_进度.md` 使用 import 阶段表，`novel-progress` 与 `flow.py` 能直接读出下一步，不再把导入项目误判为普通章节矩阵。
 - 本地 `.txt/.md/.docx` 可直接纳管；通用 URL 必须加 `--i-have-rights`，Project Gutenberg / Wikisource 自动记为 `public-domain`，但只写入来源侧公版依据和辖区提示；跨地区发行或商用前必须补 `--distribution-regions`/权利复核；已知付费墙站拒抓。
 - 如果目标作品已存在，交互环境会提示 `新建版本 / 覆盖 / 使用现有 / 取消`。非交互环境不会自动覆盖，必须显式传：
 

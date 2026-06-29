@@ -7,6 +7,11 @@ import subprocess
 import time
 from typing import Any, Dict, Optional
 
+try:
+    from n2d_trace import enrich_meta, new_trace_context
+except ImportError:  # pragma: no cover - package import fallback
+    from .n2d_trace import enrich_meta, new_trace_context
+
 # 必须与 dashboard.py `record --event` 的 choices 白名单保持一致（单一真值）。
 VALID_EVENTS = (
     "generation", "redraw", "qa", "cost", "duration", "manual", "release", "revenue",
@@ -49,6 +54,8 @@ def record_event(
     if event not in VALID_EVENTS:
         raise ValueError(f"record_event: 非法 event={event!r}；合法值 {VALID_EVENTS}")
     try:
+        trace = new_trace_context(work_root, episode, stage, action=event)
+        meta = enrich_meta(meta, trace)
         cmd = [
             "python3", _dashboard_script(),
             "record", work_root,

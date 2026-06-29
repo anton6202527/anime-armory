@@ -96,7 +96,7 @@ Windows 安装包**无法在 macOS 上交叉编译**，必须在 Windows 上构�
 
 ```bash
 # 推一个 desktop-v* tag 即触发云端构建 + 发布（mac .dmg / win .exe[NSIS] / .vsix）
-git tag desktop-v0.1.18 && git push origin desktop-v0.1.18
+git tag desktop-v0.1.19 && git push origin desktop-v0.1.19
 # 或在 Actions 页手动 workflow_dispatch（只产出 build artifact，不发 Release）
 ```
 
@@ -322,7 +322,7 @@ The packages listed above are built and uploaded to the `anime-armory` GitHub Re
 Windows installers cannot be cross-compiled from macOS. The repo includes [`.github/workflows/desktop-release.yml`](.github/workflows/desktop-release.yml), which builds on macOS and Windows via GitHub Actions and publishes stable filenames:
 
 ```bash
-git tag desktop-v0.1.18 && git push origin desktop-v0.1.18
+git tag desktop-v0.1.19 && git push origin desktop-v0.1.19
 ```
 
 Prerequisite: configure the `ARMORY_RELEASE_TOKEN` secret in the `anime-arsenal` repo. It must be a PAT with `contents: write` permission for `anime-armory`. The workflow publishes:

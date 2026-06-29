@@ -57,6 +57,22 @@
 
 > 视频阶段**不重定**①镜头/③人物外貌/⑤场景/⑥光影/⑧画风——那些在出图阶段已用首帧锁死（"先在图阶段把视觉变量锁死，视频只调动作/运镜"）。视频里改了这些 = 与首帧打架 = 闪烁漂移。
 
+## 三-A、导演运镜审查 sidecar（从故事到 prompt）
+
+阶段2 `storyboard.json` 定稿后先跑：
+
+```bash
+python3 skills/n2d-script/scripts/director_camera_plan.py <作品根> 第N集 --write
+```
+
+它会生成 `生产数据/director_camera_plan_第N集.json/md`，逐 Clip 输出三类内容：
+
+- `findings`：检查缺运镜、自由散文运镜、缺速度档、近景大表情却写旋转/飞行/急速等高风险运镜。
+- `image_prompt_injection`：给 `01_分镜出图.md` 的 `镜头/机位`、`起幅·运动余量`、`构图防呆`，确保首帧有推近/跟拍/拉远所需的 lead room。
+- `video_prompt_injection`：给 `01_clips.md` 的 `导演意图`、`起幅`、`落幅`、`镜头运动`、`运动精修`、`动态细节`，且 `镜头运动` 默认使用 `CAMERA_MOVE_LEXICON` 结构化词和速度档。
+
+这份 sidecar 不替代导演判断。若它和剧情状态、轴线或模板契约冲突，以 `storyboard.json` 为真值，人工改写；但改写后的 `镜头运动` 仍必须是结构化运镜词 + 速度/方向/起止点。
+
 ## 四、各阶段取哪几维
 
 | 阶段 | 文件 | 用到的维度 |

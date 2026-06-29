@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_HE_SANJIE",
+  "character_name": "贺三杰",
+  "form": "回忆影",
+  "truth_sources": {
+    "character_card": "设定库/characters/贺三杰.md",
+    "character_bible": "设定库/角色圣经.md",
+    "identity_registry": "出图/共享/identity_registry.json"
+  },
+  "directories": {
+    "reference": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/reference",
+    "prompts": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/prompts",
+    "lora": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/lora",
+    "voice": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/voice",
+    "adapters": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/adapters",
+    "qc": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/qc"
+  },
+  "status": "planned"
+}

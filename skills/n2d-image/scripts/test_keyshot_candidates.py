@@ -42,6 +42,27 @@ def test_keyshot_candidates_plans_multiple_options(tmp_path: Path) -> None:
     assert by_clip["Clip_01"]["existing_scores"][0]["candidate"] == "candidate_01"
 
 
+def test_signature_scene_is_top_tier(tmp_path: Path) -> None:
+    # 原著名场面/爽点兑现镜 → signature_scene 标签 + 封面级 6 候选 + 跨后端多版兜底建议。
+    ep = tmp_path / "脚本" / "第1集"
+    ep.mkdir(parents=True)
+    (ep / "storyboard.json").write_text(json.dumps({
+        "clips": [
+            {"id": "Clip_01", "description": "当众打脸宿敌，全场震惊，主角逆袭翻盘。"},
+            {"id": "Clip_02", "description": "主角走在街上，平淡的过场镜。"},
+        ]
+    }, ensure_ascii=False), encoding="utf-8")
+
+    plan = kc.build_plan(tmp_path, "第1集")
+    by_clip = {k["clip"]: k for k in plan["keyshots"]}
+
+    assert "signature_scene" in by_clip["Clip_01"]["tags"]
+    assert by_clip["Clip_01"]["candidate_count"] == 6
+    assert any("名场面" in c for c in by_clip["Clip_01"]["selection_criteria"])
+    # 平淡过场不应被误升为 signature
+    assert "Clip_02" not in by_clip or "signature_scene" not in by_clip["Clip_02"]["tags"]
+
+
 def test_keyshot_candidates_writes_outputs(tmp_path: Path) -> None:
     _write_storyboard(tmp_path)
     plan = kc.build_plan(tmp_path, "第1集")

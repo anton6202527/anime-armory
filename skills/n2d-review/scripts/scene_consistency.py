@@ -18,7 +18,7 @@ import json
 import os
 import re
 import sys
-from typing import Dict, List, Optional, Sequence, Any
+from typing import Dict, List, Optional, Sequence, Tuple, Any
 
 import face_consistency as fc  # 复用 cosine（光色指纹相似度）
 from n2d_contract import asset_registry_path # 导入契约路径
@@ -62,6 +62,88 @@ def is_outlier(value: float, group_median: float, factor: float = DEFAULT_FACTOR
                floor: float = DEFAULT_FLOOR) -> bool:
     """离群 = 同时 超组中位*factor 且 超绝对 floor。"""
     return value > group_median * factor and value > floor
+
+
+def majority_bits(bitlists: Sequence[Sequence[int]]) -> List[int]:
+    """多条等长 dHash 位串 → 逐位多数票原型（纯函数·可测）。
+
+    把一个场景所有镜的结构 dHash 压成一个「该场景的结构原型」，供**跨集**结构漂移比对：
+    SCNX 的色调直方图只看颜色——同色调但家具挪位/构图朝向变了它看不出；结构原型补这一刀。
+    空输入→[]；位长不一时以首条长度为准（容错截断）。"""
+    lists = [list(b) for b in bitlists if b]
+    if not lists:
+        return []
+    n = len(lists[0])
+    half = len(lists) / 2.0
+    return [1 if sum(1 for b in lists if i < len(b) and b[i]) > half else 0 for i in range(n)]
+
+
+def scene_struct_prototypes(root: str, ep: str) -> Dict[str, List[int]]:
+    """本集每个场景的结构原型 dHash（该场景所有镜 dHash 的逐位多数票）。
+
+    供跨集结构漂移累积（生产数据/scene_struct_ep_means.json）——治"同房间隔几集被重新布置/朝向画反/
+    构图大改"这类**色调没动、结构变了**的漂移（SCNX 色调直方图看不出）。缺 Pillow/无场景镜 → 空 dict。"""
+    if not _probe_pillow():
+        return {}
+    smap = _scene_of_shot(root, ep)
+    groups: Dict[str, List[List[int]]] = {}
+    for png, scene in smap.items():
+        h = _dhash_image(os.path.join(root, "出图", ep, png))
+        if h:
+            groups.setdefault(scene, []).append(h)
+    return {scene: majority_bits(hs) for scene, hs in groups.items() if hs}
+
+# --- 新增: 击中帧物理光影突变验证 ---
+def verify_impact_frames(root: str, ep: str) -> List[Dict[str, Any]]:
+    """扫描拥有 impact_frame_sync 契约的击中帧，验证其亮度和饱和度是否产生爆发式离群。"""
+    if not _probe_pillow():
+        return []
+    import json
+    from PIL import Image
+    import os
+    
+    findings = []
+    storyboard_path = os.path.join(root, "脚本", ep, "storyboard.json")
+    if not os.path.exists(storyboard_path):
+        return []
+        
+    try:
+        with open(storyboard_path, 'r', encoding='utf-8') as f:
+            sb = json.load(f)
+    except Exception:
+        return []
+        
+    for i, clip in enumerate(sb.get("clips", [])):
+        contract = clip.get("template_contract", {})
+        if contract.get("impact_frame_sync"):
+            clip_id = clip.get("id", f"Clip_{i+1:02d}")
+            # Locate mid_impact frame
+            mid_frame_path = os.path.join(root, "出视频", ep, "图片", f"{clip_id}_mid.png")
+            first_frame_path = os.path.join(root, "出视频", ep, "图片", f"{clip_id}.png")
+            
+            if os.path.exists(mid_frame_path) and os.path.exists(first_frame_path):
+                try:
+                    # Luma extraction for primitive brightness surge detection
+                    mid_img = Image.open(mid_frame_path).convert("L")
+                    first_img = Image.open(first_frame_path).convert("L")
+                    
+                    mid_stat = sum(list(mid_img.getdata())) / (mid_img.width * mid_img.height)
+                    first_stat = sum(list(first_img.getdata())) / (first_img.width * first_img.height)
+                    
+                    # Impact requires > 15% brightness surge representing spell/flash impact
+                    if mid_stat < first_stat * 1.15:
+                        findings.append({
+                            "type": "impact_physics_failure",
+                            "clip": clip_id,
+                            "severity": "warn",
+                            "message": f"击中帧(mid-frame)缺少物理光效反馈。检测到光照激增低于 15%，打击感软弱，请重绘爆发光影。",
+                            "expected_surge": "> 15%",
+                            "actual_surge": f"{(mid_stat/first_stat - 1)*100:.1f}%"
+                        })
+                except Exception:
+                    pass
+    return findings
+# ----------------------------------
 
 
 # ---------- 资产注册层集成 (Q28·结构唯一性) ----------
@@ -163,11 +245,115 @@ def _scene_of_shot(root: str, ep: str) -> Dict[str, str]:
     return out
 
 
+def scene_tone_means(root: str, ep: str) -> Dict[str, List[float]]:
+    """本集每个场景的平均光位/色调指纹（_tone_fp 在该场景所有镜上的逐维均值）。
+
+    供**跨集**场景漂移累积（生产数据/scene_ep_means.json）——治"每集内部一致、却跨集慢慢变样"的
+    场景漂：脸有 G5 跨集漂移机检，场景轴此前完全没有（intra-episode dHash 只看集内）。色调均值比
+    structural dhash 更稳（场景镜有前景人物，色调对前景没那么敏感）。缺 Pillow/无场景镜 → 空 dict。纯读盘。"""
+    if not _probe_pillow():
+        return {}
+    smap = _scene_of_shot(root, ep)
+    groups: Dict[str, List[List[float]]] = {}
+    for png, scene in smap.items():
+        fp = _tone_fp(os.path.join(root, "出图", ep, png))
+        if fp:
+            groups.setdefault(scene, []).append(fp)
+    out: Dict[str, List[float]] = {}
+    for scene, fps in groups.items():
+        n = len(fps)
+        dim = len(fps[0])
+        out[scene] = [round(sum(f[i] for f in fps) / n, 6) for i in range(dim)]
+    return out
+
+
+def _mean_hue_sat(path: str) -> Optional[Tuple[float, float]]:
+    """图像饱和度加权平均色相(0-360°·圆周均值) + 平均饱和度(0-1)。供 lighting_signature 数值核对。
+    暗/灰像素色相不可靠 → 色相用 sat*val 加权圆周均值；饱和度用全图均值（对齐 saturation_range
+    "整体低饱和"语义）。全灰 → 色相返回 0（无意义，调用方据饱和判定）。需 Pillow。"""
+    try:
+        from PIL import Image  # type: ignore
+        im = Image.open(path).convert("RGB"); im.thumbnail((96, 96))
+        px = list(im.convert("HSV").getdata())
+    except Exception:
+        return None
+    if not px:
+        return None
+    import math
+    sx = sy = wsum = ssum = 0.0
+    for h, s, v in px:
+        sat = s / 255.0
+        ssum += sat
+        w = sat * (v / 255.0)
+        if w > 0:
+            ang = (h / 255.0) * 2 * math.pi
+            sx += w * math.cos(ang); sy += w * math.sin(ang); wsum += w
+    mean_sat = ssum / len(px)
+    if wsum <= 0:
+        return (0.0, round(mean_sat, 4))
+    hue_deg = (math.degrees(math.atan2(sy, sx)) + 360.0) % 360.0
+    return (round(hue_deg, 1), round(mean_sat, 4))
+
+
+def hue_circular_dist(a: float, b: float) -> float:
+    """两色相角(0-360°)的圆周距离(0-180)。纯函数·可测。"""
+    d = abs(float(a) - float(b)) % 360.0
+    return round(min(d, 360.0 - d), 1)
+
+
+def lighting_signature_rows(root: str, ep: str, hue_tol: float = 40.0, sat_margin: float = 0.08) -> List[dict]:
+    """场景 constraints.lighting_signature 数值强制（接活死 schema）：逐镜实测色相/饱和度 vs 注册值。
+
+    此前 mean_hue/saturation_range/key_light_direction 是写了没人读的死字段（_tone_fp 自比组内中位，
+    从不对注册数值核对）。这里逐镜测：色相圆周偏离注册 mean_hue > hue_tol，或平均饱和度落在
+    saturation_range±margin 外 → warn（色温/调色与登记的场景光照签名矛盾）。只对**登记了 lighting_signature**
+    的场景生效。前景人物会带色相噪声 → tol 取宽 + warn 级（不硬阻断·数值化但不沙化）。需 Pillow。"""
+    if not _probe_pillow():
+        return []
+    registry = _load_asset_registry(root)
+    smap = _scene_of_shot(root, ep)
+    rows: List[dict] = []
+    for png, scene in sorted(smap.items()):
+        aid = _match_asset_id(scene, registry)
+        asset = registry.get(aid) if aid else None
+        sig = ((asset or {}).get("constraints") or {}).get("lighting_signature") if isinstance(asset, dict) else None
+        if not isinstance(sig, dict):
+            continue
+        meas = _mean_hue_sat(os.path.join(root, "出图", ep, png))
+        if meas is None:
+            continue
+        hue, sat = meas
+        bad: List[str] = []
+        tgt_hue = sig.get("mean_hue")
+        if isinstance(tgt_hue, (int, float)):
+            dist = hue_circular_dist(hue, float(tgt_hue))
+            if dist > hue_tol:
+                bad.append(f"色相 {hue}° 偏离登记 mean_hue {tgt_hue}°（差 {dist}°>容差 {hue_tol}°）")
+        rng = sig.get("saturation_range")
+        if isinstance(rng, (list, tuple)) and len(rng) == 2:
+            try:
+                lo, hi = float(rng[0]), float(rng[1])
+                if sat < lo - sat_margin or sat > hi + sat_margin:
+                    bad.append(f"饱和度 {sat} 出登记区间 [{lo},{hi}]±{sat_margin}")
+            except (TypeError, ValueError):
+                pass
+        if bad:
+            rows.append({"png": png, "scene": scene, "verdict": "warn",
+                         "msg": (f"场景[{scene}] 光照签名数值矛盾：" + "；".join(bad)
+                                 + "——对齐场景定妆光色，或确认是否 allowed_variations 内的合理变化。"),
+                         "measured_hue": hue, "measured_sat": sat})
+    return rows
+
+
 def analyze(root: str, ep: str, factor: float = DEFAULT_FACTOR, floor: float = DEFAULT_FLOOR) -> dict:
-    res: dict = {"available": _probe_pillow(), "groups": {}, "shots": [], "notes": []}
+    res: dict = {"available": _probe_pillow(), "groups": {}, "shots": [], "notes": [], "impact_physics": []}
     if not res["available"]:
         res["notes"].append("场景一致性机检已跳过（未装 Pillow）——背景漂移暂由人判并排读图。")
         return res
+        
+    # --- 新增: 触发击中帧光影验证 ---
+    res["impact_physics"] = verify_impact_frames(root, ep)
+    
     smap = _scene_of_shot(root, ep)
     registry = _load_asset_registry(root)
     # 按场景分组

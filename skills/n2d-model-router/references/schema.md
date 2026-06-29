@@ -142,6 +142,23 @@
   - `dialogue_closeup`
   - `magic_burst`
   - `flight`
+  - `mount_ride`
+  - `vehicle_ride`
+  - `vessel_flight`
+  - `road_vehicle`
+  - `screen_insert`
+  - `evidence_search`
+  - `stealth_stalk`
+  - `tribulation_breakthrough`
+  - `meditation_cultivation`
+  - `alchemy_forging`
+  - `dual_cultivation`
+  - `kiss_or_near_kiss`
+  - `array_ritual`
+  - `soul_manifestation`
+  - `realm_portal`
+  - `contract_summon`
+  - `talent_test`
   - `empty_establishing`
   - `intimate_interaction`
   - `hug_or_pull`
@@ -167,7 +184,7 @@
 - `max_clip_seconds`: 该 primary 后端建议单 Clip 上限。超出后回 `n2d-script` 拆 Clip 或换长单镜后端。
 - `risk_flags`: `multi_person`、`mouth_visible`、`native_audio_risk`、`native_speech`（原生音画说话镜，须查唇音同步）、`long_duration`、`contact_motion`、`high_speed_motion`、`spatial_path_risk`、`action_choreography_required`、`identity_drift_risk`、`motion_reference_candidate`（可用视频运动参考）、`multishot_candidate`（属多镜单次生成候选组）等。
 - `quality_tier`: 质量档路由意图，`fast|high|n/a`。`high`=身份/物理吃重镜（脸/接触/多人/原生台词/已升锁），值后端 pro 档把脸与运动钉稳；`fast`=空镜/通用低风险镜，量产省成本；`n/a`=该 primary 无 fast/pro 档（如 veo）。**只表达路由意图，不写死 model_version**——落档侧出片脚本把 `high→pro`、`fast→fast` 解析成后端实际质量档；成本事件带 `quality_tier` 时 dashboard 的 `cost_by_provider` 会按 `provider@tier:unit` 拆出 fast/pro 花销。
-- `motion_reference`: `{applicable, use, note}`。长连续运动镜（追逐/飞行/打斗）且 primary 支持 `reference_video_motion`（Seedance/Kling）时 `applicable=true`，提示把**同段前一条已通过 clip 作运动/风格视频参考**喂进去锁运镜节奏（与图身份锁正交的跨镜运动连续性轴）；首条镜无前序参考自然跳过。
+- `motion_reference`: `{applicable, use, note}`。长连续运动镜（追逐/飞行/御兽/马车/飞舟/现代车辆/尾随潜入/打斗）且 primary 支持 `reference_video_motion`（Seedance/Kling）时 `applicable=true`，提示把**同段前一条已通过 clip 作运动/风格视频参考**喂进去锁运镜节奏（与图身份锁正交的跨镜运动连续性轴）；首条镜无前序参考自然跳过。
 - `execution_recipe`: 调用层配方，所有 route 必须有。它不是给人读的理由，而是把 route 归一为执行代码/人工跑后端时必须消费的输入：
   - `frame_inputs`: 首帧/尾帧/中段锚帧、后端实际消费模式、native timeline 帧数、是否仅作 reference。
   - `reference_inputs`: 本镜角色、资产、参考图上限、可用动作参考库路径（`生产数据/motion_reference_library.json`）。
@@ -176,9 +193,9 @@
   - `fallback`: fallback 后端和降级拆镜方案，供重试/批量回流消费。
   - `capability_match`: 帧契约、运动参考、控制能力是否满足，供 gate 和执行层做最后兜底。
 - `multishot_candidate`: `{group_id, members, note}`，仅当本镜属一个多镜单次生成候选组时出现。见顶层 `multishot_groups`。
-- `motion_control`: 复杂动作/物理交互控制契约，所有 route 都必须有；普通镜写 `level=none`。`fight_exchange`、`chase`、`flight`、`intimate_interaction`、`hug_or_pull`、多人/群像调度，或带 `physical_interaction/contact_motion/high_speed_motion/spatial_path_risk` 的镜头必须 `level=required`、`manifest_required=true`，并指向 `出视频/第N集/control/Clip_XX/motion_control_manifest.json`。
-  - `level`: `none|recommended|required`。`required` 用于打斗命中、追逐、飞行、拥抱、抓腕、拉扯、近距离接触和复杂空间调度；普通低幅度镜头为 `none`。
-  - `required_inputs`: 该镜头需要的控制资产键。高危接触通常至少包含 `pose_sequence`、`depth_sequence`、`instance_masks`；武器/接触点再加 `contact_map`。追逐常见 `pose_sequence`、`depth_sequence`、`camera_path`、`spatial_path`；飞行常见 `pose_sequence`、`depth_sequence`、`camera_path`、`parallax_layers`。
+- `motion_control`: 复杂动作/物理交互控制契约，所有 route 都必须有；普通镜写 `level=none`。`fight_exchange`、`chase`、`flight`、`mount_ride`、`vehicle_ride`、`vessel_flight`、`road_vehicle`、`stealth_stalk`、`intimate_interaction`、`hug_or_pull`、多人/群像调度，或带 `physical_interaction/contact_motion/high_speed_motion/spatial_path_risk` 的镜头必须 `level=required`、`manifest_required=true`，并指向 `出视频/第N集/control/Clip_XX/motion_control_manifest.json`。
+  - `level`: `none|recommended|required`。`required` 用于打斗命中、追逐、飞行、御兽/坐骑、马车/载具、飞舟/御物、现代车辆/车流、尾随/潜入、拥抱、抓腕、拉扯、近距离接触和复杂空间调度；普通低幅度镜头为 `none`。
+  - `required_inputs`: 该镜头需要的控制资产键。高危接触通常至少包含 `pose_sequence`、`depth_sequence`、`instance_masks`；武器/接触点再加 `contact_map`。追逐常见 `pose_sequence`、`depth_sequence`、`camera_path`、`spatial_path`；飞行常见 `pose_sequence`、`depth_sequence`、`camera_path`、`parallax_layers`；御兽常见 `pose_sequence`、`depth_sequence`、`instance_masks`、`contact_map`、`camera_path`、`spatial_path`、`parallax_layers`；马车/飞舟/现代车辆常见 `depth_sequence`、`camera_path`、`spatial_path`、`parallax_layers`；尾随潜入常见 `pose_sequence`、`depth_sequence`、`camera_path`、`spatial_path`、`parallax_layers`。
   - `backend_control_level/backend_capabilities`: primary 后端的控制能力摘要，只用于 route/gate/prompt，不代表一定已经接入该能力。
   - `recommended_control_backends`: 后续接入顺序，优先 `comfyui_ltx` / `kling_motion_control` / `seedance_reference_video` 这类可控后端。
   - `failure_modes`: 审片重点，如 `feature_melting`、`limb_fusion`、`hand_fusion`、`body_interpenetration`、`weapon_contact_drift`。
@@ -187,11 +204,17 @@
 - `prompt_requirements`: 该路由要求 prompt 必写的约束。
 - `degrade_plan`: 失败后的拆镜/换后端策略。
 - `action_choreography`: 高动作编排契约，普通镜可写 `{"required": false}`。
-  - `required`: `fight_exchange/chase/flight` 必须为 `true`。
-  - `required_fields`: n2d-video prompt 的「动作编排契约」必须逐项写出的字段。通用字段为 `beats/speed_curve/spatial_path/camera_path/readability_beats/degrade_plan`。
+  - `required`: `fight_exchange/chase/magic_burst/flight/mount_ride/vehicle_ride/vessel_flight/road_vehicle/stealth_stalk` 必须为 `true`。
+  - `required_fields`: n2d-video prompt 的「动作编排契约」必须逐项写出的字段。通用字段为 `beats/speed_curve/spatial_path/camera_path/readability_beats/degrade_plan/keyframe_plan/post_cue_points/physics_guard`。
   - `fight_exchange` 额外字段：`attack_path/impact_frame/contact_points/force_direction/recovery_beat`。
+  - `magic_burst` 额外字段：`charge_frame/release_frame/effect_asset/energy_path/collision_or_apex_frame/power_shift`。
   - `chase` 额外字段：`screen_direction/distance_curve/obstacle_beats/parallax_layers/overtake_or_escape_beat`。
   - `flight` 额外字段：`flight_path/altitude_curve/pose_lock/parallax_layers/mount_or_cloud_lock`。
+  - `mount_ride` 额外字段：`mount_contact/gait_cycle/screen_direction/parallax_layers/harness_lock`。
+  - `vehicle_ride` 额外字段：`vehicle_lock/wheel_rotation/harness_lock/screen_direction/parallax_layers`。
+  - `vessel_flight` 额外字段：`vehicle_lock/flight_path/altitude_curve/screen_direction/parallax_layers`。
+  - `road_vehicle` 额外字段：`vehicle_lock/wheel_rotation/driver_control_lock/lane_lock/traffic_flow/screen_direction/parallax_layers`。
+  - `stealth_stalk` 额外字段：`screen_direction/distance_curve/occlusion_layers/light_shadow_lock/reveal_or_hide_beat/parallax_layers`。
   - `gate_policy`: `block_prompt_without_action_choreography_contract` 表示 video prompt 缺动作编排契约或字段不全会被 gate 阻断。
 
 ## motion_control_manifest.json
@@ -224,7 +247,7 @@
 }
 ```
 
-追逐/飞行类 `ready` manifest 可以不写接触语义字段，但要提供动作路径控制输入，例如：
+追逐/飞行/御兽/马车/飞舟/现代车辆/尾随潜入类 `ready` manifest 可以不写刀剑命中语义字段，但要提供动作路径、接触/牵引、车道/遮挡或视差控制输入，例如：
 
 ```json
 {

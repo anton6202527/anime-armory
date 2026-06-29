@@ -21,9 +21,17 @@ import re
 import subprocess
 import sys
 import tempfile
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Mapping, Optional, Sequence
 
 import face_consistency as fc  # 复用 cosine
+
+_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
+if _COMMON not in sys.path:
+    sys.path.insert(0, _COMMON)
+try:
+    import n2d_spectacle as _spec  # 动作 beat 单一真值源（与 subject_video/script/gate 共用 ACTION_BEAT_LEXICON）
+except Exception:  # pragma: no cover - _lib 不可用时优雅退化（仅失去 storyboard 派生的运动豁免信号）
+    _spec = None  # type: ignore[assignment]
 
 DEFAULT_FRAMES = 6          # 采样下限（floor）——短镜/无时长信息时的兜底帧数
 SAMPLE_PER_SEC = 1.0        # 自适应基准：约 1 帧/秒（长镜抽更多，抓片中段渐变脸漂）
@@ -205,6 +213,57 @@ def _max(a: str, b: str) -> str:
     return a if order[a] >= order[b] else b
 
 
+def relax_temporal_verdict(verdict_str: str, relaxed: bool) -> str:
+    """高动作 / 大表情跨度镜：相邻帧人脸余弦本就该掉、亮度本就该跳（转头/情绪切换/VFX 闪光是镜头
+    的意图，不是穿帮）——把片内时序 BLOCK 降一档为 WARN（仍 surface·人核对，不静默放行）。
+    根治「一致性度量偏好静止→闸门压向静帧/PPT」（与 subject_video.relax_action_fidelity 同义；
+    Survey 2504.16081）。只降 block→warn，warn/ok 不动；不打 expression_span/动作标记则不放松。纯函数·可测。"""
+    if relaxed and verdict_str == "block":
+        return "warn"
+    return verdict_str
+
+
+def _is_large_expression_span(clip: Mapping[str, Any]) -> bool:
+    """该 clip 是否声明大表情跨度（continuity.expression_span 或 clip.expression_span ∈ 大/large/high）。
+    与 expression_verification/expression_state_consistency 读同一字段。纯函数·可测。"""
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    span = str(cont.get("expression_span") or clip.get("expression_span") or "").strip().lower()
+    return span in {"大", "large", "high", "宽"}
+
+
+def _clip_action_text(clip: Mapping[str, Any]) -> str:
+    parts = [str(clip.get(k) or "") for k in ("shot_description", "description", "action", "动作", "镜头描述", "label", "scene")]
+    for s in (clip.get("shots") or []):
+        if isinstance(s, Mapping):
+            parts.append(str(s.get("desc") or ""))
+    return " ".join(parts)
+
+
+def motion_relax_map(root: str, ep: str) -> Dict[int, str]:
+    """storyboard → {镜号: 放松原因}：高动作 beat（attack/block/counter/impact…）或大表情跨度的镜，
+    其片内时序 BLOCK 应降 WARN。源同 closeup_map（storyboard 唯一真值源）；缺 storyboard / 缺 _spec
+    时退化为只认 expression_span（不臆造）。纯读取·无副作用。"""
+    out: Dict[int, str] = {}
+    sb = _load_json(os.path.join(root, "脚本", ep, "storyboard.json"))
+    if not isinstance(sb, dict):
+        return out
+    for idx, clip in enumerate(sb.get("clips") or sb.get("shots") or [], start=1):
+        if not isinstance(clip, dict):
+            continue
+        num = _shot_num(str(clip.get("id") or clip.get("clip") or clip.get("shot") or "")) or idx
+        reasons: List[str] = []
+        if _is_large_expression_span(clip):
+            reasons.append("大表情跨度")
+        if _spec is not None and _spec.action_beat_categories(_clip_action_text(clip)):
+            reasons.append("高动作beat")
+        meta = clip.get("meta") if isinstance(clip.get("meta"), dict) else {}
+        if str(meta.get("动态") or meta.get("motion") or "").strip() in {"高", "high"}:
+            reasons.append("高动态")
+        if reasons:
+            out[num] = "/".join(dict.fromkeys(reasons))
+    return out
+
+
 def adaptive_frame_count(duration_sec: Optional[float], *, closeup: bool = False,
                          floor: int = DEFAULT_FRAMES, per_sec: float = SAMPLE_PER_SEC,
                          cap: int = SAMPLE_CAP) -> int:
@@ -341,10 +400,12 @@ def analyze(root: str, ep: str, frames: int = DEFAULT_FRAMES,
     if app is None:
         res["notes"].append("未装 insightface——仅测 flicker/TCI，身份漂移交人判。")
     closeup_map = _load_closeup_map(root, ep)  # 镜号→近景：近景镜采样加密
+    relax_map = motion_relax_map(root, ep)     # 镜号→放松原因：高动作/大表情跨度镜 BLOCK 降 WARN
     for mp4 in vids:
         num = _shot_num(os.path.basename(mp4))
         dur = fc_duration(mp4)
         closeup = bool(closeup_map.get(num)) if num is not None else False
+        relax_reason = relax_map.get(num) if num is not None else None
         k = adaptive_frame_count(dur, closeup=closeup, floor=frames)
         with tempfile.TemporaryDirectory() as td:
             fpaths = _sample_frames(mp4, k, td)
@@ -352,14 +413,20 @@ def analyze(root: str, ep: str, frames: int = DEFAULT_FRAMES,
             embs = [e for e in (_face_emb(app, p) for p in fpaths) if e is not None] if app else []
             fl = flicker_index(lumas)
             mid = min_consecutive_cosine(embs) if len(embs) >= 2 else None
-            v = verdict(mid, fl, id_floor, flicker_max)
-            res["clips"].append({
+            raw_v = verdict(mid, fl, id_floor, flicker_max)
+            v = relax_temporal_verdict(raw_v, bool(relax_reason))
+            row = {
                 "clip": os.path.basename(mp4), "frames": len(fpaths),
                 "sampled_target": k, "duration": round(dur, 2) if dur else None, "closeup": closeup,
                 "min_id_cos": round(mid, 4) if mid is not None else None,
                 "flicker": round(fl, 4), "tci": round(temporal_consistency_index(lumas), 4),
                 "verdict": v,
-            })
+            }
+            if relax_reason and raw_v == "block":
+                # 留痕：本镜 BLOCK 因「该镜本就该动/该变情绪」降为 WARN，绝不静默放行（abs_verdict 可回溯）。
+                row["abs_verdict"] = "block"
+                row["motion_relaxed"] = relax_reason
+            res["clips"].append(row)
     return res
 
 

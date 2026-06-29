@@ -7,6 +7,7 @@ missing brief compliance, upstream blockers, and final-compose hazards before
 money or irreversible production work starts.
 """
 import argparse
+import importlib.util
 import json
 import os
 import sys
@@ -28,6 +29,14 @@ except Exception:  # pragma: no cover - settings helper optional
 STAGES = contract.GATE_STAGES
 
 _PENDING_TOKENS = {"", "未记录", "待补", "待填写", "tbd", "未填", "未定"}
+
+
+def _load_sibling_module(name):
+    path = os.path.join(_HERE, f"{name}.py")
+    spec = importlib.util.spec_from_file_location(f"_ad_craft_{name}", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def load_json(path, default=None):
@@ -277,7 +286,7 @@ def _write_progress_state(root, stage, payload):
     只动该阶段行，不触碰已 ✅/⬜ 的正常状态（避免覆盖阶段 skill 写的真实进度）。
     """
     try:
-        import progress_set  # 同目录 sibling
+        progress_set = _load_sibling_module("progress_set")
         path, text = progress_set.read_progress(root)
     except (ImportError, FileNotFoundError):
         return

@@ -35,6 +35,7 @@ from typing import Dict, List, Optional, Sequence
 
 import face_consistency as fc      # cosine / calibrate_floor / band / _sev / 资产发现 / 镜头映射
 import outfit_consistency as oc    # weighted_hue_hist / relative_calibrate / _median / _probe_pillow
+import state_continuity as stc     # 剧情指定黑化换发/染发/断发区间 → 发漂 block 降 warn（不误伤剧情）
 
 DEFAULT_MARGIN = 0.08              # 发型指纹比配色更易随角度波动 → margin 略小，配合相对校准减噪
 DEFAULT_BINS = 24                  # 发色色相直方图分箱（与 outfit 对齐）
@@ -144,6 +145,8 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN, bins: int = DEFA
         res["characters"][char] = {"floor": round(char_floor[char], 4), "intra_pairs": len(intra)}
 
     smap = fc.shot_character_map(root, ep)
+    # 剧情指定黑化换发/染发/断发区间：落区间内的镜，发型偏离单一定妆是「该变」而非漂移 → block 降 warn。
+    hair_intervals = stc.appearance_change_intervals(root, ep, kind="hair")
     for png, chars in sorted(smap.items()):
         full = os.path.join(root, "出图", ep, png)
         if not os.path.exists(full):
@@ -161,7 +164,10 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN, bins: int = DEFA
                 if worst is None or fc._sev(v) > fc._sev(worst["verdict"]):
                     worst = row
         if worst:
-            res["shots"].append({"png": png, **worst})
+            row = {"png": png, **worst}
+            stc.downgrade_appearance_block(row, hair_intervals, row.get("char"),
+                                           stc.shot_num(png), expected_key="hair_change_expected")
+            res["shots"].append(row)
 
     # 二次相对校准：抑制"整组被景别/构图/布光拉低"的假漂移（复用 outfit 同款）。
     from collections import defaultdict

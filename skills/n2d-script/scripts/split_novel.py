@@ -38,11 +38,21 @@ COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 
-from n2d_const import boundary_buckets, boundary_lexicon
+from n2d_const import GENRE_MIN_HITS, boundary_buckets, boundary_lexicon
 from n2d_contract import PROGRESS_COLUMNS
-from n2d_settings import DEFAULTS, get_setting
-from n2d_visual_styles import format_style_contract_markdown, style_options_text
+from n2d_settings import DEFAULTS, get_setting, project_setting_source
+from n2d_visual_styles import (
+    format_style_contract_markdown,
+    format_style_recommendation_markdown,
+    recommend_style,
+    style_options_text,
+)
 from source_analyze import render_character_roster, write_analysis
+
+try:
+    from motif_detector import detect_genre
+except Exception:  # 题材检测不可用时不拖垮拆集；推荐器自动退化到通用默认。
+    detect_genre = None  # type: ignore
 
 
 def read_text(path):
@@ -230,25 +240,46 @@ def has_payoff_or_reversal(text):
     return bool(PAYOFF_OR_REVERSAL_RE.search(text or ""))
 
 
-def natural_scene_break(next_para):
-    return bool(next_para and (CHAPTER_RE.match(next_para) or SCENE_BREAK_RE.match(next_para)))
+def natural_scene_break(next_para, chapter_only=False):
+    """下一段是否构成自然幕界。
+
+    chapter_only=True（章节感知粗切·--by-chapter）：只认「第X章」章界，
+    不把章内的场景分隔（---、【…】、翌日…）当幕界——否则系统流爽文里满屏的
+    系统面板行 `【妖化：虎山神】` 会被误判成集边界，粗切成上千个百字微集。
+    """
+    if not next_para:
+        return False
+    if CHAPTER_RE.match(next_para):
+        return True
+    return not chapter_only and bool(SCENE_BREAK_RE.match(next_para))
 
 
-def boundary_candidate(end_para, next_para=None):
-    return strong_episode_end(end_para) or natural_scene_break(next_para)
+def boundary_candidate(end_para, next_para=None, chapter_only=False):
+    # 章节感知模式：章是原子粗胚单元，只在章界落点；不让章内的强钩句把一章劈碎
+    # （古装动作的强钩词典很宽，否则一章会被切成多个百字微集）。
+    if chapter_only:
+        return natural_scene_break(next_para, chapter_only=True)
+    return strong_episode_end(end_para) or natural_scene_break(next_para, chapter_only)
 
 
-def loop_ready(text, end_para, next_para=None):
+def loop_ready(text, end_para, next_para=None, chapter_only=False):
     """粗胚闭环启发式：有冲突、有释放/反转，并落在章节/场景/强钩候选处。"""
-    return boundary_candidate(end_para, next_para) and has_conflict(text) and has_payoff_or_reversal(text)
+    return (
+        boundary_candidate(end_para, next_para, chapter_only)
+        and has_conflict(text)
+        and has_payoff_or_reversal(text)
+    )
 
 
-def chunk_text(paras, target=None, hi=None, lo=None):
+def chunk_text(paras, target=None, hi=None, lo=None, chapter_aware=False):
     """连续性优先粗切：默认不锚字数，target/hi/lo 为旧参数兼容与报告参考。
 
     不再因为超过 max 或低于 min 硬切/硬并，也不再等到 target 才允许切。
     只有当前窗口出现「冲突→释放/反转→章节/场景/强钩候选」，才落一个粗胚分块；
     否则继续并入后文，交给精修阶段按 P0→P6 重切。
+
+    chapter_aware=True（--by-chapter）：只在章界/强钩处落粗胚，忽略章内场景分隔，
+    避免系统流满屏 `【…】` 系统行被当幕界而过度切碎。
     """
     episodes = []
     buf = []
@@ -263,7 +294,7 @@ def chunk_text(paras, target=None, hi=None, lo=None):
         buf.append(para)
         text = "\n".join(buf)
         next_para = paras[i + 1] if i + 1 < len(paras) else None
-        if loop_ready(text, para, next_para):
+        if loop_ready(text, para, next_para, chapter_only=chapter_aware):
             flush()
     flush()
     return episodes
@@ -277,6 +308,8 @@ def split_by_chapter(paras, target=None, hi=None, lo=None):
     - 未形成闭环时继续并入下一章/场景。
     无章节标题时退回强钩候选切分。
     """
+    if any(CHAPTER_RE.match(p) for p in paras):
+        return chunk_text(paras, target, hi, lo, chapter_aware=True)
     return chunk_text(paras, target, hi, lo)
 
 
@@ -344,20 +377,53 @@ def write_source_snapshot(root, title, source_text):
     return path
 
 
-def global_style_scaffold(title, root):
-    base_style = get_setting(root, "基础视觉风格", DEFAULTS["基础视觉风格"])
-    style_note = f"{base_style}（来自 _设置.md 或全局默认；可选 {style_options_text()}）"
+def global_style_scaffold(title, root, recommendation=None):
+    # 私有选择优先：_设置.md/全局默认里任何「非裸默认」的明确选择都尊重，不被推荐覆盖。
+    # 只有「没人选过」（解析值 == 裸默认 且项目无 source）时，才用题材感知推荐填这个预选。
+    resolved = get_setting(root, "基础视觉风格", DEFAULTS["基础视觉风格"])
+    explicit = bool(project_setting_source(root, "基础视觉风格")) or resolved != DEFAULTS["基础视觉风格"]
+    if explicit:
+        base_style, origin = resolved, "来自 _设置.md/全局默认"
+    elif recommendation and recommendation.get("recommended"):
+        base_style, origin = recommendation["recommended"], "题材感知推荐（预选·可改）"
+    else:
+        base_style, origin = resolved, "全局默认"
+    style_note = f"{base_style}（{origin}；可选 {style_options_text()}）"
+    rec_block = ""
+    if recommendation:
+        rec_block = (
+            "## 风格推荐依据\n"
+            f"{format_style_recommendation_markdown(recommendation)}\n\n"
+        )
     return (
         f"# {title} — 全局画风与世界观\n\n"
         "## 视频模型路由\n自动按镜头路由（首跑不选择具体生视频后端；n2d-video 阶段按 `video_model_routes.json` + CLI/API 探测决定 primary/fallback）\n\n"
         "## 生视频后端决策\n延后到 n2d-video 出视频前；若用户明确固定后端或账号/交付只能单后端，再写 `_设置.md` 的 `视频模型路由/生视频模型/生视频渠道`。\n\n"
         f"## 基础视觉风格\n{style_note}\n\n"
+        f"{rec_block}"
         "## 画风\n高质量AI漫剧风格，统一色调，高细节；具体提示词随「基础视觉风格」派生。\n\n"
         "## 基础视觉风格契约（style_contract 源头）\n"
         f"{format_style_contract_markdown(base_style)}\n\n"
         "## 世界观\n（待精修）\n\n"
         "## 统一负面词\n（画风漂移、多余文字水印、多指错手、脸/妆造漂移；其余禁忌按「基础视觉风格」派生，例如未选Q版才禁低幼Q版，写实电影感才禁插画化）\n"
     )
+
+
+def build_style_recommendation(paras, title, genre_setting):
+    """题材感知风格推荐：detect_genre(正文) + 书名/题材自由文本 → 一个预选默认。
+
+    纯产物用于 global_style_scaffold；检测器缺失时退化到通用默认（不阻断拆集）。
+    """
+    body = "\n".join(paras)
+    genres = []
+    if detect_genre is not None:
+        try:
+            gd = detect_genre(body)
+            genres = [r["genre"] for r in gd.get("by_genre", []) if r.get("hits", 0) >= GENRE_MIN_HITS]
+        except Exception:
+            genres = []
+    genre_text = " ".join([title or "", genre_setting or "", body[:20000]])
+    return recommend_style(genres, genre_text)
 
 def main():
     ap = argparse.ArgumentParser()
@@ -393,24 +459,26 @@ def main():
         if os.path.basename(novel_dir) == "小说":
             root = os.path.dirname(novel_dir)
         else:
-            # n2d 产物应落 创作区/制漫剧/<剧名>/：向上找仓库根，
-            # 避免把作品根误建在输入文件同级。
-            d, repo = novel_dir, None
+            # n2d 产物应落 创作区/制漫剧/<剧名>/：向上找最近的归属锚，
+            # 避免把作品根误建在输入文件同级。区分两类锚，别把 创作区/ 当仓库根再拼一层：
+            #   - d 含 创作区/制漫剧 或 skills → d 是仓库根 → root = d/创作区/制漫剧/title
+            #   - d 直接含 制漫剧（即 d 本身就是 创作区/ 目录）→ root = d/制漫剧/title
+            d, root = novel_dir, None
             while True:
                 if (
                     os.path.isdir(os.path.join(d, "创作区", "制漫剧"))
-                    or os.path.isdir(os.path.join(d, "制漫剧"))
                     or os.path.isdir(os.path.join(d, "skills"))
                 ):
-                    repo = d
+                    root = os.path.join(d, "创作区", "制漫剧", title)
+                    break
+                if os.path.isdir(os.path.join(d, "制漫剧")):
+                    root = os.path.join(d, "制漫剧", title)
                     break
                 parent = os.path.dirname(d)
                 if parent == d:
                     break
                 d = parent
-            if repo:
-                root = os.path.join(repo, "创作区", "制漫剧", title)
-            else:
+            if root is None:
                 root = novel_dir
                 print(f"[warn] 未找到含『创作区/制漫剧/』的仓库根，作品根回退到小说同级：{root}"
                       f"（建议用 --out 指定 创作区/制漫剧/<剧名>/）", file=sys.stderr)
@@ -453,9 +521,10 @@ def main():
     os.makedirs(os.path.join(root, "脚本"), exist_ok=True)
     source_analysis = write_analysis(root, title, "\n".join(paras), episodes)
 
+    style_rec = build_style_recommendation(paras, title, genre)
     write_if_absent(
         os.path.join(settings, "global_style.md"),
-        global_style_scaffold(title, root),
+        global_style_scaffold(title, root, recommendation=style_rec),
     )
     write_if_absent(
         os.path.join(settings, "characters", "_角色总表.md"),

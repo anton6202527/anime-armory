@@ -19,7 +19,7 @@ except Exception:  # qa_gate 缺失时优雅降级，不挡进度查询
     collect_gate_status = None
     format_gate_status = None
 
-_STAGE_TABLE_MARKERS = ("novel-derived-stage-table", "novel-create-stage-table")
+_STAGE_TABLE_MARKERS = ("novel-derived-stage-table", "novel-create-stage-table", "novel-import-stage-table")
 
 
 def _is_stage_checklist(root):

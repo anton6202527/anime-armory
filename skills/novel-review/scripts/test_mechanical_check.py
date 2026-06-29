@@ -202,6 +202,33 @@ def test_plagiarism_hit_and_toggle():
         assert ("🔴", "原文照搬") not in sev_dims(f2), f2
 
 
+def test_plagiarism_skips_import_or_canonical_source_projects():
+    src = "从前有座山山里有座庙庙里有个老和尚讲故事天黑了大家都睡了第二天太阳升起"
+    body = src[:30] + "，后面是同源拆章正文。"
+    ch = f"# 第 1 章 《同源》\n<!-- m -->\n{body}\n"
+    with tempfile.TemporaryDirectory() as t:
+        root = make_proj(t, {"第1章.md": ch}, source=src, meta={"kind": "import"})
+        f = run(root, "--min", "2", "--max", "500")
+        assert ("🔴", "原文照搬") not in sev_dims(f), f
+    with tempfile.TemporaryDirectory() as t:
+        root = make_proj(t, {"第1章.md": ch}, source=src, meta={
+            "kind": "rewrite",
+            "review": {"plagiarism_check": "skip_canonical_source"},
+        })
+        f = run(root, "--min", "2", "--max", "500")
+        assert ("🔴", "原文照搬") not in sev_dims(f), f
+
+
+def test_plagiarism_still_runs_for_derivative_projects_by_default():
+    src = "从前有座山山里有座庙庙里有个老和尚讲故事天黑了大家都睡了第二天太阳升起"
+    body = src[:30] + "，后面是原创内容继续写。"
+    ch = f"# 第 1 章 《抄》\n<!-- m -->\n{body}\n"
+    with tempfile.TemporaryDirectory() as t:
+        root = make_proj(t, {"第1章.md": ch}, source=src, meta={"kind": "rewrite"})
+        f = run(root, "--min", "2", "--max", "500")
+        assert ("🔴", "原文照搬") in sev_dims(f), f
+
+
 def test_json_out_writes_machine_payload():
     with tempfile.TemporaryDirectory() as t:
         root = make_proj(t, {"第1章_开端.md": CLEAN})
@@ -292,3 +319,47 @@ def test_ai_tell_wired_into_findings_and_toggle(tmp_path):
 if __name__ == "__main__":
     import pytest
     raise SystemExit(pytest.main([__file__]))
+
+
+# ── 术语抽取卫生：剥 markdown / 拒句子片段（防术语表噪声回归）─────────────────
+def test_term_like_rejects_markup_and_fragments():
+    # 干净名词术语 → 收
+    for ok in ("烈阳花", "枯木真人", "人族双璧", "九龙", "王敦密码"):
+        assert mc._term_like(ok), ok
+    # 带 markdown / 复选框 / 标点 / 句子片段 / 短语 → 拒
+    for bad in ("**护短第一**", "[ ] 2. 家世父母师承", "九龙气运/九九天劫",
+                "好男不跟女斗，我闭嘴", "得逞后现身；互赠功德",
+                "心结一·枯木真人", "气运即金手指即催命符"):
+        assert not mc._term_like(bad), bad
+
+
+def test_strip_md_unwraps_term_body():
+    assert mc._strip_md("- **烈阳花**") == "烈阳花"
+    assert mc._strip_md("[ ] 2. 家世") == "家世"
+    assert mc._strip_md("3、枯木真人") == "枯木真人"
+
+
+def test_extract_terms_skips_setting_noise(tmp_path):
+    root = tmp_path / "proj"
+    (root / "设定").mkdir(parents=True)
+    (root / "设定" / "角色卡.md").write_text(
+        "# 角色卡 — 王敦\n"
+        "## 性格底色\n"
+        "- **护短第一**：见师弟被踩就插手\n"
+        "## 留白清单\n"
+        "- [ ] 1. 灵药谷之前的人生：怎么沦落的\n"
+        "## 说话习惯\n"
+        "- 「好男不跟女斗，我闭嘴，我闭嘴……」(412章)\n"
+        "## 关系\n"
+        "- 贺平生：火灵力极纯的师弟\n",
+        encoding="utf-8")
+    (root / "设定" / "世界观.md").write_text(
+        "# 世界观\n## 术语表\n| 规范词 | 说明 |\n|---|---|\n| 烈阳花 | 二品火灵药 |\n",
+        encoding="utf-8")
+    terms = set(mc.extract_terms_from_settings(str(root)))
+    assert "烈阳花" in terms          # 真术语保留
+    assert "贺平生" in terms          # 名词术语保留
+    # 噪声全部剔除
+    for junk in ("好男不跟女斗，我闭嘴，我闭嘴……", "[ ] 1. 灵药谷之前的人生",
+                 "**护短第一**", "灵药谷之前的人生"):
+        assert junk not in terms, junk

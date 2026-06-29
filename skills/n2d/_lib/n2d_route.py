@@ -138,11 +138,9 @@ def is_flow_complete(root: str, row: Dict[str, str], flow: Iterable[str]) -> boo
 
 
 def progress_path(root: str) -> str:
-    root = root.rstrip("/")
-    primary = os.path.join(root, "_进度.md")
-    if os.path.exists(primary):
-        return primary
-    return os.path.join(root, "common", "_进度.md")
+    # 2026-06：旧 common/_进度.md 兜底已退役（仓内 0 使用、无测试守护的死代码）——状态机统一认作品根
+    # 下的 _进度.md。残留 common/ 旧布局由 tools/validate_state_files.py 报 deprecation 引导迁移。
+    return os.path.join(root.rstrip("/"), "_进度.md")
 
 
 def parse_progress(root: str) -> Tuple[List[str], List[Dict[str, str]]]:

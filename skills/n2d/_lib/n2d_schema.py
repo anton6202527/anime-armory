@@ -150,6 +150,42 @@ BOUNDARY_PRODUCT_KINDS = {
         "layer": "production_data",
         "boundary": "work_queue",
     },
+    ARTIFACT_LINEAGE_MANIFEST_KIND: {
+        "owner": "n2d",
+        "path": f"{PRODUCTION_DIR}/artifact_lineage_{{ep}}.json",
+        "layer": "release_evidence",
+        "boundary": "artifact_lineage",
+    },
+    PRODUCTION_READINESS_KIND: {
+        "owner": "n2d",
+        "path": f"{PRODUCTION_DIR}/production_readiness_{{ep}}.json",
+        "layer": "release_evidence",
+        "boundary": "production_readiness_gate",
+    },
+    GATE_POLICY_COVERAGE_KIND: {
+        "owner": "n2d",
+        "path": f"{PRODUCTION_DIR}/gate_policy_coverage_{{ep}}.json",
+        "layer": "release_evidence",
+        "boundary": "gate_policy_coverage",
+    },
+    GENERATION_RECIPE_MANIFEST_KIND: {
+        "owner": "n2d",
+        "path": f"{PRODUCTION_DIR}/generation_recipe_manifest_{{ep}}.json",
+        "layer": "release_evidence",
+        "boundary": "generation_recipe_provenance",
+    },
+    GENRE_PACK_KIND: {
+        "owner": "n2d",
+        "path": "skills/n2d/references/genre_packs/{genre}.json",
+        "layer": "reference_contract",
+        "boundary": "genre_specific_scene_contract",
+    },
+    GENRE_PACK_CONTEXT_KIND: {
+        "owner": "n2d",
+        "path": f"{PRODUCTION_DIR}/genre_pack_context_{{ep}}_{{stage}}.json",
+        "layer": "production_data",
+        "boundary": "genre_specific_stage_context",
+    },
     EPISODE_REVIEW_SCORE_KIND: {
         "owner": "n2d-score",
         "path": f"{PRODUCTION_DIR}/score_{{ep}}.json",
@@ -295,8 +331,8 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
         "weight": 12,
         "return_to_stage": "image",
         "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-        "audit_labels": ("场景(O2)", "接缝接力", "轴线视线(X1)", "天气时辰(W1)", "光位方向(W2)", "色温调色(GRADE1)", "字幕安全区(L2)", "空间站位(B1)", "物件常驻(O3)", "在场检测(O3V)", "视线状态回读(X2)", "场景平面(FP1)", "相机空间轨迹(CAM1)", "运动质量(MOT1)", "运动语法(MG1)", "合法不连续(DIS1)", "高动态成片证据(SPECV)", "世界一致性(WCS)"),
-        "keywords": ("场景", "接缝", "尾帧", "场景资产", "轴线", "视线", "站位", "遮挡", "前后景", "天气", "时辰", "字幕安全区", "字幕带", "构图", "物件常驻", "在场检测", "对象持久", "object permanence", "平面图", "相机轨迹", "运动质量", "运动语法", "合法不连续", "intentional discontinuity", "motion", "camera"),
+        "audit_labels": ("场景(O2)", "接缝接力", "轴线视线(X1)", "天气时辰(W1)", "光位方向(W2)", "色温调色(GRADE1)", "字幕安全区(L2)", "空间站位(B1)", "物件常驻(O3)", "物件状态(OST)", "在场检测(O3V)", "视线状态回读(X2)", "场景平面(FP1)", "相机空间轨迹(CAM1)", "运动质量(MOT1)", "运动语法(MG1)", "合法不连续(DIS1)", "高动态成片证据(SPECV)", "世界一致性(WCS)"),
+        "keywords": ("场景", "接缝", "尾帧", "场景资产", "轴线", "视线", "站位", "遮挡", "前后景", "天气", "时辰", "字幕安全区", "字幕带", "构图", "物件常驻", "物件状态", "道具状态", "在场检测", "对象持久", "object permanence", "平面图", "相机轨迹", "运动质量", "运动语法", "合法不连续", "intentional discontinuity", "motion", "camera"),
     },
     "subtitle_correctness": {
         "label": "字幕正确性",
@@ -431,8 +467,10 @@ CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
 # 显式声明：以下维度**有意**不接 consistency_audit / gate 机检 runner（audit_labels 为空）。
 # 当前没有空 audit_labels 维度；仍保留 allowlist 断言，让未来新增维度不会因漏配 audit_labels 而
 # **静默**失去机检（要么接 runner，要么显式登记进这里）。
-# 注 1：voice_consistency 的声纹机检走 n2d-identity 的 identity.py --write 旁路（非 consistency_audit），
-#       故其 audit_labels 非空但不在本表——它有机检，只是不在主审计套件内。
+# 注 1：voice_consistency 的「音色声纹」+ 跨集 voice_key 漂移已于 2026-06 接入 consistency_audit 主审计
+#       的『音色声纹』advisory runner（voice_consistency.preflight 纯 stdlib 跨集换声 + voice_print
+#       speaker-embedding 量真实音色相似度，缺后端/音频优雅降级；block 封顶 warn 不硬阻断视觉 gate）。
+#       n2d-identity 的 identity.py --write 仍另出跨集音色总账，二者同源 findings 通道，不再是旁路独占。
 # 注 2：audio_visual_sync 已于 2026-06 接入 consistency_audit 的 音画同步(AV1) advisory runner
 #       （lipsync_consistency.py·口型↔配音偏移，SyncNet/LatentSync/外部偏移报告，缺则优雅回退，
 #       block 封顶到 warn 不硬阻断 gate；实测严重档喂 n2d-score）——故已移出本缺口表。
@@ -809,9 +847,17 @@ IDENTITY_VIDEO_ADAPTERS: Dict[str, Dict[str, Any]] = {
 MOTION_CONTROL_REQUIRED_SHOT_TYPES = (
     "fight_exchange",
     "chase",
+    "magic_burst",
     "flight",
+    "mount_ride",
+    "vehicle_ride",
+    "vessel_flight",
+    "road_vehicle",
+    "stealth_stalk",
+    "kiss_or_near_kiss",
     "hug_or_pull",
     "intimate_interaction",
+    "dual_cultivation",
     "multi_character_same_frame",
     "ensemble_blocking",
     "multi_person_blocking",

@@ -12,7 +12,10 @@
   集级算**直白率**（命中行/对白行）作说教代理，超阈提示整体偏直白。
 
 诚实边界（写死）：这是 **ImpScore（需训练模型）的词汇启发式代理**，只 flag **候选**交人判，不计算真隐含度、
-不臆造分；全部 warn/info（report-only），`--strict` 有 warn 即退 1。纯 stdlib·纯函数可测。
+不臆造分；全部 warn/info（report-only·advisory），`--strict` 有 warn 即退 1。**本检是「审」不是「门」**
+（设计宪法 B10：脆弱关键词启发式不得硬阻断发布）；它是 craft 的自检回路，不是扣分闸。
+教↔审闭环：命中类别回 `references/对白与活人感.md` 对应条改写——
+①自陈情绪→§2①、②情绪概括→§2②、③动机过度解释→§2③、④信息直给→§2④、集级直白率偏高→§1+§2 整体过。
 用法：python3 subtext_audit.py <作品根> 第N集 [--strict] [--json]
 """
 from __future__ import annotations

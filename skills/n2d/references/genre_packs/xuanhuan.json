@@ -1,0 +1,41 @@
+{
+  "aliases": ["玄幻", "东方玄幻", "异世大陆"],
+  "degrade_plans": [
+    "巨兽/巨像镜用 establishing shot + 人物反应 + 局部特写表达尺度",
+    "复杂境界突破拆成体内能量、环境异象、结果状态三段",
+    "多种族同框优先拆分身份参考组，避免一次生成混种"
+  ],
+  "genre_key": "xuanhuan",
+  "kind": "n2d_genre_pack",
+  "label": "玄幻",
+  "motion_contract_fields": ["mount_contact", "harness_lock", "screen_direction", "parallax_layers", "degrade_plan"],
+  "qc_focus": ["等级/状态视觉递进", "巨物尺度", "种族特征稳定", "武器/异火/魂环等资产连续"],
+  "scene_archetypes": [
+    {
+      "id": "power_breakthrough",
+      "label": "突破/晋级",
+      "production_risks": ["能量层级不递进", "角色状态无前后差", "HUD/数值文字错"],
+      "required_contract_fields": ["screen_direction", "degrade_plan"],
+      "style_binding": "突破前后服饰/伤势/发光纹理必须写 allowed_state_delta"
+    },
+    {
+      "id": "colossal_creature",
+      "label": "巨兽/巨像压迫",
+      "production_risks": ["尺度不稳", "主体被背景吞没", "镜头空间缺参照"],
+      "required_contract_fields": ["parallax_layers", "screen_direction", "degrade_plan"],
+      "style_binding": "巨物轮廓、色彩和标记先登记为 VFX/PROP 资产"
+    },
+    {
+      "id": "weapon_skill_combo",
+      "label": "武技/兵器连招",
+      "production_risks": ["武器换形", "动作轴线断", "特效遮挡手部"],
+      "required_contract_fields": ["harness_lock", "screen_direction", "degrade_plan"],
+      "style_binding": "武器、特效、命中结果各自有资产 id，不用自由文本临时描述"
+    }
+  ],
+  "style_binding_policy": {
+    "bind_to_visual_style": true,
+    "notes": "玄幻允许更强特效，但角色 DNA、武器资产和境界状态仍须受项目风格约束。"
+  },
+  "version": 1
+}

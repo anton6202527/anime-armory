@@ -98,11 +98,30 @@ python3 skills/n2d-compose/deliver.py <作品根> 第N集 --run --aspects 9:16,1
 - **响度复用既有 `loudness_conform.py`**（不重造）：交付矩阵按目标平台取响度目标（抖音/快手/TikTok≈-14、B站/YouTube -14、广电 -23、其余 -16 LUFS·候选快照）写进 `delivery_matrix.json`；逐件响度归一仍走 compose 末段 `loudness_conform` 巡检。
 - **独立性**：`cutdown.py`/`reframe.py`/`deliver.py` 是参照同仓另一条创作线成熟交付实现的 **vendored fork**（复制+改写进本目录，词表/路径/schema 全改适配 n2d 漫剧），**不跨线 import 任何模块**，也不依赖 `n2d/_lib` 共享常量（`deliver.py` 用最小本地 `_设置.md` 解析）。纯逻辑（选镜优先级/时长裁剪计划、reframe 几何、规格派生矩阵）有 `test_delivery_matrix.py` 覆盖。
 
+## 发布 Manifest（可发布边界 · `release_manifest.py`）
+
+合成结束不等于可发布。正式交给投放/运营前，必须把母带、合规包、review gate、机器分、人审签收、AI 标识待办和事件账本审计汇总成发布 manifest：
+
+```bash
+python3 skills/n2d-compose/release_manifest.py build <作品根> 第N集 --stage review --write
+python3 skills/n2d-compose/release_manifest.py check <作品根> 第N集
+```
+
+输出：
+
+```text
+合规/release_manifest_第N集.json
+合规/release_manifest_第N集.md
+```
+
+`readiness.status=ready` 的最小条件：母带存在且 SHA256 可验、`compliance.py --check` 无 BLOCK、gate findings 无 block、存在人审签收。AI 标识/水印/C2PA 仍按本线铁律只进发布待办，不阻断 compose；但 release manifest 会把这些待办集中列出来，避免“主流程已合成”被误当成“可以投放”。
+
 ## 输入前置
 - `出视频/第N集/视频/` 有 clip MP4（n2d-video 产物，必须是 AI 平台原片，不应出现 `.noaudio.mp4`、`*_noaudio.mp4` 或 `_raw_with_audio/` 这类提前剥音轨中间件）。否则报错建议先 n2d-video。
 - `合成/第N集/配音/voice_{zh,en}.wav`（n2d-voice 产物，可选；无则纯 BGM+字幕）。
 - `脚本/第N集/字幕_{中文,英文}.srt`。`原生音画` draft 可临时缺中文字幕，但 review/付费投放前必须补 whisperx/词级对齐字幕和 `native_av_subtitle_alignment` sidecar。
 - 正式合成前必须先跑确定性 gate 并入账：`python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage compose`（内部调用 `n2d-review/scripts/gate.py --json`；检查视频列、`storyboard.json`、clip 音轨/时长、原生音画 opt-in 清单、占位配音、字幕、`合规/compliance_manifest.json` 的平台/本地化计划）。缺合规包时先跑 `python3 skills/n2d-compliance/scripts/compliance.py <作品根> 第N集 --init`，人工补齐后再 `--check`。
+- 发布前建议先跑 `python3 skills/n2d-dashboard/scripts/event_ledger.py doctor <作品根>`，再跑 `release_manifest.py build --write`；manifest 只汇总证据，不替代人审签收。
 
 ## 常见错误
 
@@ -127,7 +146,10 @@ python3 skills/n2d-compose/deliver.py <作品根> 第N集 --run --aspects 9:16,1
 clip 已带即梦原生音效。额外「2~5 个转场音效」做成可选：用户给 SFX 文件就在 clip 边界铺，不给跳过。
 
 ## 视觉拟音 SFX（V2A·可插拔后端·`scripts/foley_agent.py`）
-compose 混音前自动跑 `foley_agent.py`：分析 `storyboard.json` 识别视觉动因（拔剑/脚步/雨/门/爆炸…）→ 产**带绝对时间戳的拟音计划**（`_work/foley_plan.json`：环境/天气类铺满整 clip·冲击/动作类落 clip 内动作时刻），再交拟音后端合成 SFX 轨（`_work/foley_mix.wav`，作 compose ducking 混音的 `[foley]` 输入）。**拟音后端是选择点**：默认产**静音占位轨**（诚实·不假装真音效，向后兼容）；接真 V2A 后端设环境变量 `N2D_FOLEY_CMD` 命令模板（与 `N2D_VLM_CMD` 同套路·厂商无关·`{plan}{out}{duration}` 占位，可包装 Sony Woosh 本地/Mirelo·WaveSpeed 云）。对齐粒度：冲击类默认落 clip 中点估计（标 `aligned=estimated`），clip 写 `动作时刻/action_at` 秒偏移可踩准（标 `explicit`）。打斗/动作题材爽感吃重时配真后端最值。详见 `n2d/references/模型矩阵.md` 横切 § 「SFX 拟音 V2A」。
+compose 混音前自动跑 `foley_agent.py`：分析 `storyboard.json` 识别视觉动因（拔剑/脚步/雨/门/爆炸…）→ 产**带绝对时间戳的拟音计划**（`_work/foley_plan.json`：环境/天气类铺满整 clip·冲击/动作类落 clip 内动作时刻），再交拟音后端合成 SFX 轨（`_work/foley_mix.wav`，作 compose ducking 混音的 `[foley]` 输入）。**拟音后端是选择点**：默认产**静音占位轨**（诚实·不假装真音效，向后兼容）；接真 V2A 后端设环境变量 `N2D_FOLEY_CMD` 命令模板（与 `N2D_VLM_CMD` 同套路·厂商无关·`{plan}{out}{duration}` 占位，可包装 Sony Woosh 本地/Mirelo·WaveSpeed 云）。**对齐粒度（2026-06-29 修真·治"打斗 SFX 对不上画面命中"）**：冲击类踩拍优先级 = **storyboard 命中/撞点秒（`impact_seconds_from_clip` 读 impact_frame/collision_or_apex_frame/post_cue_points/anchors keyframe·与 `anchor_planner.apex_anchor_seconds` 同源·多回合命中各一击·标 `aligned=apex`）** > 显式 `动作时刻/sfx_at`（`explicit`）> clip 中点估计（`estimated` 兜底）。即上游 apex-aware 算好的命中帧现在真的交给 foley 踩点，而非落镜头中间。打斗/动作题材爽感吃重时配真后端最值。详见 `n2d/references/模型矩阵.md` 横切 § 「SFX 拟音 V2A」。
+
+## 打斗命中帧微震屏（P2·`scripts/combat_punch.py`·让规划好的撞点有物理冲击）
+`[1/6]` 逐 clip 规格化重编码时，对 `fight_exchange/magic_burst` 且有命中秒的镜，把一段**保时长**的 ffmpeg `-vf` 微震屏拼进既有 `-vf` 链尾（**零额外重编码**）：命中秒 ±0.09s 窗口内做低幅 crop 抖动（screen-shake）再 scale 回 `PXWxPXH`，让命中帧有冲击力。**保时长是硬约束**——hit-stop（冻帧）会改时长、和配音对轨错位，故**刻意只做抖动不做冻帧**（白闪因本机 ffmpeg 的 eq 表达式解析器不稳也暂不做）。抖幅按可用 headroom 自适应（恒 ≤ headroom·永不越界）；命中秒来自 `foley_agent.impact_seconds_from_clip`（与拟音同源）。拆段子文件保守跳过。`combat_punch.py <root> <ep> <PXW> <PXH> --json` 可看每个打斗镜的命中秒+震屏片段。
 
 ## 行业参考（决定音频时展示给用户）
 > 对于 90 秒左右的一集漫剧，很多工作室会准备：
@@ -170,6 +192,9 @@ compose 混音前自动跑 `foley_agent.py`：分析 `storyboard.json` 识别视
     再 n2d-dashboard build <作品根> --markdown 看成本/ROI/通过率
 - 推进下一集：n2d <作品根>（调度器按前沿路由）或直接 n2d-script <作品根> 第K+1集
 - 整部进度总览 + 下一步：n2d-progress <作品根>
+- 发布前归档：
+    python3 skills/n2d-dashboard/scripts/event_ledger.py doctor <作品根>
+    python3 skills/n2d-compose/release_manifest.py build <作品根> 第K集 --stage review --write
 ```
 
 > 量产时优先 `n2d-batch` 排队推进多集，`n2d-dashboard` 盯成本/通过率/重抽率，红灯先回产线修。

@@ -85,6 +85,18 @@ clip 原生音频：
 ## AI 标识/水印（非阻断发布待办）
 compose 出成片即主流程收尾；`ai_label.py` 可做 best-effort 显式角标和元数据写入，但失败不阻断进度、dashboard 或后续集。若投放地区/平台需要 AI 标识、披露或水印，由使用方在发布工序或工具之外按当地法规自行处理。
 
+## 发布前 manifest
+发布/交给运营前，先跑事件账本审计，再生成发布证据包：
+
+```bash
+python3 skills/n2d-dashboard/scripts/event_ledger.py doctor <作品根>
+python3 skills/n2d-dashboard/scripts/event_ledger.py replay <作品根> --write
+python3 skills/n2d-compose/release_manifest.py build <作品根> 第N集 --stage review --write
+python3 skills/n2d-compose/release_manifest.py check <作品根> 第N集
+```
+
+输出 `合规/release_manifest_第N集.json/md`，汇总母带 SHA256、合规 issue、gate findings、机器分、人审签收和发布待办。`readiness.status=blocked` 时不进入投放。
+
 ## 进度回写
 完成后回写「成片」列：`python3 <n2d skill>/progress.py set <作品根> 第N集 成片 ✅`。
 

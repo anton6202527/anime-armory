@@ -66,3 +66,40 @@ def test_write_registry_outputs_machine_readable_file(tmp_path: Path) -> None:
     data = json.loads(Path(path).read_text(encoding="utf-8"))
     assert data["kind"] == reg.KIND
     assert data["rows"]
+
+
+# ── P4：后端 floor 单调性/连贯校验（掣肘四：缺单调校验，放松无人察觉）──
+
+def test_coherence_flags_unbacked_backend_loosening():
+    import consistency_threshold_registry as r
+    rows = [
+        {"dimension": "character_consistency", "stage": "image", "backend": "any",
+         "threshold_floor": 0.60, "evidence_status": "default_policy_only"},
+        {"dimension": "character_consistency", "stage": "image", "backend": "seedance",
+         "threshold_floor": 0.40, "evidence_status": "recommendation_only"},
+    ]
+    issues = r.coherence_issues(rows)
+    assert any(i["backend"] == "seedance" and i["severity"] == "block" for i in issues)
+
+
+def test_coherence_allows_calibrated_loosening_as_warn():
+    import consistency_threshold_registry as r
+    rows = [
+        {"dimension": "outfit_consistency", "stage": "image", "backend": "any",
+         "threshold_floor": 0.60, "evidence_status": "default_policy_only"},
+        {"dimension": "outfit_consistency", "stage": "image", "backend": "kling",
+         "threshold_floor": 0.50, "evidence_status": "calibrated"},
+    ]
+    issues = r.coherence_issues(rows)
+    assert any(i["backend"] == "kling" and i["severity"] == "warn" for i in issues)
+
+
+def test_coherence_clean_when_backend_tighter_or_equal():
+    import consistency_threshold_registry as r
+    rows = [
+        {"dimension": "style_consistency", "stage": "image", "backend": "any",
+         "threshold_floor": 0.50, "evidence_status": "default_policy_only"},
+        {"dimension": "style_consistency", "stage": "image", "backend": "veo",
+         "threshold_floor": 0.55, "evidence_status": "recommendation_only"},
+    ]
+    assert r.coherence_issues(rows) == []

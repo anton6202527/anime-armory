@@ -16,8 +16,7 @@ _COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from settings import write_settings as _write_settings  # noqa: E402  vendored 进 novel/_lib
-
-from contract import rights_metadata  # noqa: E402
+from novel_contract import rights_metadata  # noqa: E402  避免全量测试时被其它线同名 contract.py 污染
 
 
 def docx_to_txt(docx_path, out_txt_path):

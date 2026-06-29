@@ -53,3 +53,5 @@ def test_write_profile_outputs_json_and_markdown():
         assert os.path.exists(md_path)
         payload = json.load(open(json_path, encoding="utf-8"))
         assert payload["kind"] == "novel_compliance_profile"
+        assert payload["input_fingerprint"]
+        assert "input_fingerprint_components" in payload

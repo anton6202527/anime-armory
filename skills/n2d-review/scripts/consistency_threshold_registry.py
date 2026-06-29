@@ -202,6 +202,7 @@ def build_registry(root: str) -> Dict[str, Any]:
             if rows[key].get("evidence_status") == "default_policy_only":
                 rows[key]["evidence_status"] = "recommendation_pending_calibration"
 
+    row_list = sorted(rows.values(), key=lambda r: _row_key(r))
     return {
         "kind": KIND,
         "version": VERSION,
@@ -211,8 +212,55 @@ def build_registry(root: str) -> Dict[str, Any]:
             "calibration": _source_rel(root_path, cal_path) if cal_path.is_file() else "",
             "recommendations": _source_rel(root_path, rec_path) if rec_path.is_file() else "",
         },
-        "rows": sorted(rows.values(), key=lambda r: _row_key(r)),
+        "rows": row_list,
+        "coherence_issues": coherence_issues(row_list),
     }
+
+
+def coherence_issues(rows: Sequence[Mapping[str, Any]]) -> List[Dict[str, Any]]:
+    """Cross-row sanity on the assembled floors. A per-backend floor that is LOOSER
+    (numerically lower) than the global `backend="any"` floor for the same
+    (dimension, stage) is only legitimate when backed by golden-set calibration —
+    otherwise it silently weakens the gate for that backend (掣肘四：缺单调校验，
+    seedance=0.40 与 any=0.60 共存却无人察觉). Returns a list of issue dicts; empty = coherent.
+
+    Pure function over assembled rows (no IO)."""
+    issues: List[Dict[str, Any]] = []
+    # Global floor per (dimension, stage) from the backend="any" rows.
+    global_floor: Dict[Tuple[str, str], float] = {}
+    for row in rows:
+        if str(row.get("backend") or "any") != "any":
+            continue
+        fl = row.get("threshold_floor")
+        if isinstance(fl, (int, float)):
+            global_floor[(str(row.get("dimension")), str(row.get("stage") or "any"))] = float(fl)
+    for row in rows:
+        backend = str(row.get("backend") or "any")
+        if backend == "any":
+            continue
+        fl = row.get("threshold_floor")
+        if not isinstance(fl, (int, float)):
+            continue
+        gkey = (str(row.get("dimension")), str(row.get("stage") or "any"))
+        gfloor = global_floor.get(gkey)
+        if gfloor is None or float(fl) >= gfloor:
+            continue
+        calibrated = str(row.get("evidence_status") or "") == "calibrated"
+        issues.append({
+            "dimension": row.get("dimension"),
+            "stage": row.get("stage"),
+            "backend": backend,
+            "backend_floor": float(fl),
+            "global_floor": gfloor,
+            "severity": "warn" if calibrated else "block",
+            "evidence_status": row.get("evidence_status"),
+            "message": (
+                f"{backend} 后端 floor {float(fl):.3f} 低于全局 {gfloor:.3f}"
+                + ("（有 golden-set 标定背书，记录即可）" if calibrated
+                   else "——无标定背书的放松会静默削弱该后端的闸门，需补标定或对齐全局。")
+            ),
+        })
+    return issues
 
 
 def write_registry(root: str) -> str:
@@ -230,7 +278,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     path = write_registry(args.root)
     payload = _load_json(Path(path))
     print(path)
+    blocking = [i for i in payload.get("coherence_issues", []) if i.get("severity") == "block"]
+    for issue in blocking:
+        print(f"  [不连贯] {issue.get('message')}")
     if args.check:
+        if blocking:
+            return 2  # 无标定背书的后端 floor 放松：闸门被静默削弱，须修
         useful = [
             row for row in payload.get("rows", [])
             if row.get("evidence_status") not in {"default_policy_only"}

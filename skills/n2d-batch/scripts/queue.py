@@ -12,14 +12,16 @@ import argparse
 import contextlib
 import datetime as dt
 import glob
+import hashlib
 import json
 import os
 import re
 import socket
+import sqlite3
 import sys
 import time
 from copy import deepcopy
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple
+from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Protocol, Sequence, Set, Tuple, runtime_checkable
 
 try:
     import fcntl  # POSIX 文件锁（mac/Linux）
@@ -62,7 +64,15 @@ VERSION = 1
 QUEUE_JSON = "batch_queue.json"
 QUEUE_MD = "batch_queue.md"
 QUEUE_LOCK = "batch_queue.lock"
+COORDINATION_JSON = "coordination_backend.json"
+JOB_RECEIPTS_JSONL = "job_receipts.jsonl"
+JOB_RECONCILE_JSON = "job_reconcile.json"
+JOB_RECONCILE_MD = "job_reconcile.md"
+SQLITE_DOCTOR_JSON = "sqlite_doctor.json"
+SQLITE_DOCTOR_MD = "sqlite_doctor.md"
+DEAD_LETTER_JSON = "dead_letter_queue.json"
 DEFAULT_LEASE_SECONDS = 1800  # 认领后租约时长；超时未 mark/续租 → 可被回收（断点恢复）
+SQLITE_SCHEMA_VERSION = 1
 
 DEFAULT_COST_ESTIMATES = {
     "script_stage1": {"amount": 0.2, "unit": "work_units"},
@@ -80,6 +90,96 @@ ACTIVE_STATUSES = {"queued", "running", "retry_queued"}
 REPLACEABLE_MERGE_STATUSES = {"queued", "blocked_budget"}
 BUDGET_FLEXIBLE_STATUSES = {"queued", "blocked_budget"}
 BUDGET_IGNORED_STATUSES = {"cancelled"}
+COORDINATION_BACKENDS = {"local_file", "shared_fs", "sqlite", "redis", "db", "object_store"}
+# 网络文件系统：SQLite WAL 在其上锁不可靠 → 多机并发指向 NFS 上的 DB 会静默损坏。
+NETWORK_FS_TYPES = {"nfs", "nfs4", "cifs", "smbfs", "smb", "smb2", "afpfs", "ncpfs", "9p",
+                    "lustre", "ceph", "gpfs", "glusterfs", "fuse.glusterfs", "fuse.sshfs", "fuse.cephfs"}
+
+
+def _network_fs_type(path: str) -> str:
+    """best-effort 判 path 所在挂载点是否网络文件系统，返回类型名（非网络/判不定→""）。
+
+    仅 Linux /proc/mounts 可判（生产 farm 多是 Linux）；macOS 等无 /proc/mounts → 返回 ""（不误报），
+    由调用方附「本机无法判定 FS 类型」提示。纯只读。"""
+    try:
+        target = os.path.realpath(path)
+        best_mp, best_type = "", ""
+        with open("/proc/mounts", encoding="utf-8") as fh:
+            for line in fh:
+                parts = line.split()
+                if len(parts) < 3:
+                    continue
+                mp, fstype = parts[1], parts[2]
+                if (target == mp or target.startswith(mp.rstrip("/") + "/")) and len(mp) >= len(best_mp):
+                    best_mp, best_type = mp, fstype
+        return best_type if best_type.lower() in NETWORK_FS_TYPES else ""
+    except Exception:
+        return ""
+
+
+# ── 协调后端 adapter 接口 + 注册表（P2-1）────────────────────────────────────────
+# 诚实边界（见 coordination_backend_status）：本机 queue.py 内置 local/shared-FS 文件锁 + lease
+# + SQLite 事务后端。真·多机/私有算力池要靠外部协调后端（Redis/DB/对象存储）接管 claim/mark。
+# 此前 redis/db/object_store 只能"声明但不激活"（declared_not_active）——是个死路。
+# 这里把"一个协调后端要实现什么"收成一个**正式接口 + 注册表**，让外部后端从死路变成可插拔：
+#   ops 侧实现下面 6 个方法的类，import queue 后 `queue.register_coordination_backend("redis", RedisBackend)`，
+#   再设 `N2D_COORDINATION_BACKEND=redis`，claim/mark/reclaim/renew/load/sync 就会真走它，
+#   coordination_backend_status 也会报 active 而非 declared_not_active。sqlite 是内置参考实现。
+@runtime_checkable
+class CoordinationBackend(Protocol):
+    """队列协调后端契约：任何实现这 6 个方法的类都能被注册成 drop-in 多机协调后端。
+
+    语义须与内置 SQLiteQueueBackend 一致：claim 原子认领并下租约；mark 写终态/重排；
+    reclaim 回收过期租约的 running 任务；renew 心跳续租；load_queue/sync_from_queue 与 JSON
+    可移植镜像对账（JSON 始终是可移植真值镜像，外部后端是协调真值）。
+    """
+
+    def load_queue(self) -> Dict[str, Any]: ...
+    def sync_from_queue(self, queue: Dict[str, Any]) -> None: ...
+    def claim(self, *, limit: Optional[int], worker: Optional[str], lease_seconds: int) -> List[Dict[str, Any]]: ...
+    def mark(self, task_id_value: str, status: str, note: str = "", **kwargs: Any) -> Dict[str, Any]: ...
+    def reclaim(self, *, worker: Optional[str] = None, force_worker: bool = False) -> List[Dict[str, Any]]: ...
+    def renew(self, task_ids: Iterable[str], lease_seconds: int, worker: Optional[str] = None) -> int: ...
+
+
+# backend 名 → 工厂 callable(root)->CoordinationBackend。sqlite 在类定义后注册（见下方）。
+_COORDINATION_FACTORIES: Dict[str, "Callable[[str], CoordinationBackend]"] = {}
+
+
+def register_coordination_backend(name: str, factory: "Callable[[str], CoordinationBackend]") -> None:
+    """登记一个外部协调后端工厂，使其成为可激活的 drop-in（不改 queue.py 主体）。
+
+    name 会并入 COORDINATION_BACKENDS（合法 backend 集），factory(root) 须返回符合
+    CoordinationBackend 协议的实例。重复登记以最后一次为准（便于 ops 覆盖内置）。
+    """
+    key = str(name).strip().lower()
+    if not key:
+        raise ValueError("coordination backend name must be non-empty")
+    COORDINATION_BACKENDS.add(key)
+    _COORDINATION_FACTORIES[key] = factory
+
+
+def coordination_backend_name(root: str) -> str:
+    """解析当前生效的协调后端名（env > 配置 > 默认 local_file），非法值回落 local_file。"""
+    cfg = load_coordination_config(root)
+    backend = os.environ.get("N2D_COORDINATION_BACKEND", "").strip().lower()
+    backend = backend or str(cfg.get("backend") or "").strip().lower() or "local_file"
+    return backend if backend in COORDINATION_BACKENDS else "local_file"
+
+
+def active_coordination_backend(root: str) -> "Optional[CoordinationBackend]":
+    """返回当前生效协调后端的实例；文件型（local_file/shared_fs）或未注册工厂时返回 None。
+
+    这是 claim/mark/reclaim/renew/load_queue/sync 的统一分发口：注册了工厂的后端（sqlite 内置、
+    或 ops 注册的 redis/db）走外部协调，否则回退文件锁路径（None）。
+    """
+    factory = _COORDINATION_FACTORIES.get(coordination_backend_name(root))
+    return factory(root) if factory is not None else None
+
+
+def stable_hash(value: Any, *, length: int = 16) -> str:
+    text = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()[:length]
 
 
 def now_iso() -> str:
@@ -98,6 +198,33 @@ def lock_path(root: str) -> str:
     return os.path.join(production_dir(root), QUEUE_LOCK)
 
 
+def coordination_config_path(root: str) -> str:
+    return os.path.join(production_dir(root), COORDINATION_JSON)
+
+
+def job_receipts_path(root: str) -> str:
+    return os.path.join(production_dir(root), JOB_RECEIPTS_JSONL)
+
+
+def job_reconcile_path(root: str) -> str:
+    return os.path.join(production_dir(root), JOB_RECONCILE_JSON)
+
+
+def sqlite_doctor_path(root: str) -> str:
+    return os.path.join(production_dir(root), SQLITE_DOCTOR_JSON)
+
+
+def sqlite_db_path(root: str) -> str:
+    cfg = load_coordination_config(root)
+    dsn = os.environ.get("N2D_COORDINATION_DSN") or str(cfg.get("dsn") or "")
+    if dsn.startswith("sqlite:///"):
+        raw = dsn[len("sqlite:///"):]
+        return raw if raw.startswith("/") else os.path.join(root, raw)
+    if dsn and "://" not in dsn:
+        return dsn if os.path.isabs(dsn) else os.path.join(root, dsn)
+    return os.path.join(production_dir(root), "batch_queue.sqlite3")
+
+
 # 锁策略（F3 多机·2026-06-26）：
 #   auto（默认）= 有 fcntl 用 flock（本地 FS 可靠、零行为变化）；无 fcntl 退 atomic。
 #   atomic      = 强制 O_EXCL 锁文件 + 陈旧锁自动接管——**共享 FS 多机渲染农场**用这个（O_EXCL create
@@ -105,6 +232,17 @@ def lock_path(root: str) -> str:
 #   诚实边界：这把锁只护「读队列→改→写」的临界区；真正的多机安全网是**每任务 lease + reclaim_expired +
 #   heartbeat**（已有·一台机器死了它的任务自动回收）。高并发/强一致仍建议接 Redis/DB 协调后端（见 SKILL）。
 QUEUE_LOCK_TTL = float(os.environ.get("N2D_QUEUE_LOCK_TTL", "120") or "120")
+
+
+def load_coordination_config(root: str) -> Dict[str, Any]:
+    path = coordination_config_path(root)
+    if not os.path.isfile(path):
+        return {}
+    try:
+        data = json.load(open(path, encoding="utf-8"))
+        return data if isinstance(data, dict) else {"backend": "local_file", "config_error": "config must be object"}
+    except Exception as exc:
+        return {"backend": "local_file", "config_error": str(exc)}
 
 
 def _queue_lock_mode() -> str:
@@ -116,6 +254,74 @@ def _queue_lock_mode() -> str:
     if mode == "flock" and fcntl is None:
         return "atomic"
     return mode
+
+
+def coordination_backend_status(root: str) -> Dict[str, Any]:
+    """Describe the queue coordination backend honestly.
+
+    queue.py implements local/shared-filesystem locking.  External backends can
+    be declared for an ops wrapper, but are reported as declared_not_active
+    until an actual adapter owns claim/mark semantics.
+    """
+    cfg = load_coordination_config(root)
+    backend = os.environ.get("N2D_COORDINATION_BACKEND", "").strip().lower()
+    backend = backend or str(cfg.get("backend") or "").strip().lower() or "local_file"
+    if backend not in COORDINATION_BACKENDS:
+        backend = "local_file"
+    lock_mode = _queue_lock_mode()
+    dsn = os.environ.get("N2D_COORDINATION_DSN") or str(cfg.get("dsn") or "")
+    status: Dict[str, Any] = {
+        "backend": backend,
+        "status": "ok",
+        "lock_mode": lock_mode,
+        "lock_ttl_sec": QUEUE_LOCK_TTL,
+        "config_path": coordination_config_path(root),
+        "external_adapter": False,
+        "note": "local queue coordination; leases and reclaim provide crash recovery",
+    }
+    if backend == "shared_fs":
+        status["note"] = "shared filesystem coordination; use N2D_QUEUE_LOCK=atomic for multi-machine workers"
+        if lock_mode != "atomic":
+            status["status"] = "warn"
+            status["warning"] = "shared_fs should set N2D_QUEUE_LOCK=atomic"
+    elif backend == "sqlite":
+        db = sqlite_db_path(root)
+        netfs = _network_fs_type(db)
+        st = "ok"
+        note = ("SQLite coordination active for claim/mark/reclaim/heartbeat; JSON ledger remains the portable mirror。"
+                "SQLite 是单机/本地盘参考实现（claim 走全队列 load-rewrite，O(N)/次）；多机 farm/大队列请用 redis/db 后端。")
+        if netfs:
+            st = "warn"
+            note = (f"⚠ SQLite DB 在网络文件系统({netfs})上：WAL 锁在 NFS/CIFS 上不可靠 → 多机并发会**静默损坏**。"
+                    "把 DB 放本地盘，或多机改用 redis/db 后端。") + note
+        else:
+            note += "（本机无法判定 DB 所在 FS 类型；若在 NFS/CIFS 上，WAL 锁不可靠，勿多机共用。）"
+        status.update({
+            "status": st,
+            "db_path": db,
+            "network_fs": netfs or None,
+            "external_adapter": True,
+            "note": note,
+        })
+    elif backend in {"redis", "db", "object_store"}:
+        if backend in _COORDINATION_FACTORIES:
+            # ops 已通过 register_coordination_backend 注册了 drop-in adapter → 真激活。
+            status.update({
+                "status": "ok",
+                "dsn_present": bool(dsn),
+                "external_adapter": True,
+                "note": f"{backend} coordination adapter registered and active for claim/mark/reclaim/renew; JSON ledger remains the portable mirror.",
+            })
+        else:
+            status.update({
+                "status": "declared_not_active",
+                "dsn_present": bool(dsn),
+                "note": f"{backend} coordination declared, but no adapter registered; call queue.register_coordination_backend('{backend}', Factory) implementing the CoordinationBackend protocol, or use shared_fs atomic mode.",
+            })
+    if cfg.get("config_error"):
+        status["status"] = "warn"
+        status["warning"] = f"invalid coordination config: {cfg['config_error']}"
+    return status
 
 
 @contextlib.contextmanager
@@ -283,6 +489,27 @@ def task_id(ep: str, stage_key: str, reason: str, index: int = 0) -> str:
     return base if index == 0 else f"{base}-{index}"
 
 
+def task_idempotency_key(
+    ep: str,
+    stage_key: str,
+    reason: str,
+    *,
+    rerun_scope: Optional[str] = None,
+    affected_artifacts: Optional[Sequence[str]] = None,
+    affected_shots: Optional[Sequence[str]] = None,
+    fingerprints: Optional[Sequence[str]] = None,
+) -> str:
+    return stable_hash({
+        "episode": normalize_episode(ep),
+        "stage_key": stage_key,
+        "reason": reason,
+        "rerun_scope": rerun_scope or "",
+        "affected_artifacts": sorted(str(item) for item in (affected_artifacts or [])),
+        "affected_shots": sorted(str(item) for item in (affected_shots or [])),
+        "finding_fingerprints": sorted(str(item) for item in (fingerprints or [])),
+    })
+
+
 def task_from_spec(
     root: str,
     ep: str,
@@ -305,8 +532,18 @@ def task_from_spec(
     shots = [s for s in (affected_shots or []) if str(s).strip()]
     if shots and "--shots" not in command:
         command = f"{command} --shots {','.join(shots)}"
+    idempotency_key = task_idempotency_key(
+        ep,
+        stage_key,
+        reason,
+        rerun_scope=rerun_scope,
+        affected_artifacts=affected_artifacts,
+        affected_shots=affected_shots,
+        fingerprints=fingerprints,
+    )
     return {
         "id": task_id(ep, stage_key, reason),
+        "idempotency_key": idempotency_key,
         "episode": ep,
         "stage_key": stage_key,
         "stage_label": spec.get("label", ""),
@@ -1068,6 +1305,7 @@ def make_queue(
         "max_concurrency": max_concurrency,
         "max_retries": max_retries,
         "budget": budget,
+        "coordination": coordination_backend_status(root),
         "summary": summarize_tasks(tasks),
         "batches": make_batches(tasks, max_concurrency),
         "tasks": tasks,
@@ -1202,6 +1440,17 @@ def summarize_tasks(tasks: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
 
 
 def load_queue(root: str) -> Dict[str, Any]:
+    backend = active_coordination_backend(root)
+    if backend is not None:
+        return backend.load_queue()
+    return _load_queue_file(root)
+
+
+def sqlite_backend_active(root: str) -> bool:
+    return coordination_backend_status(root).get("backend") == "sqlite"
+
+
+def _load_queue_file(root: str) -> Dict[str, Any]:
     path = queue_path(root)
     if not os.path.isfile(path):
         raise FileNotFoundError(path)
@@ -1211,9 +1460,10 @@ def load_queue(root: str) -> Dict[str, Any]:
     return data
 
 
-def save_queue(root: str, queue: Dict[str, Any]) -> None:
+def _save_queue_file(root: str, queue: Dict[str, Any]) -> None:
     os.makedirs(production_dir(root), exist_ok=True)
     queue["updated_at"] = now_iso()
+    queue.setdefault("coordination", coordination_backend_status(root))
     queue["summary"] = summarize_tasks(queue.get("tasks", []))
     queue["batches"] = make_batches(queue.get("tasks", []), int(queue.get("max_concurrency") or 1))
     # 原子写：temp + os.replace，读者永远看不到半截文件（同盘原子）。
@@ -1227,9 +1477,397 @@ def save_queue(root: str, queue: Dict[str, Any]) -> None:
         fh.write(render_markdown(queue))
 
 
+class SQLiteQueueBackend:
+    """SQLite-backed coordination for queue claim/mark/reclaim/heartbeat.
+
+    JSON remains the portable mirror.  SQLite is the transactional coordination
+    backend when `N2D_COORDINATION_BACKEND=sqlite` or coordination_backend.json
+    declares `{"backend":"sqlite"}`.
+    """
+
+    def __init__(self, root: str):
+        self.root = root
+        self.db_path = sqlite_db_path(root)
+
+    def connect(self) -> sqlite3.Connection:
+        os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
+        conn = sqlite3.connect(self.db_path, timeout=30)
+        conn.row_factory = sqlite3.Row
+        conn.execute("PRAGMA busy_timeout=30000")
+        conn.execute("PRAGMA journal_mode=WAL")
+        self.ensure_schema(conn)
+        return conn
+
+    @staticmethod
+    def ensure_schema(conn: sqlite3.Connection) -> None:
+        conn.execute(
+            "CREATE TABLE IF NOT EXISTS metadata (key TEXT PRIMARY KEY, value TEXT NOT NULL)"
+        )
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS tasks (
+              id TEXT PRIMARY KEY,
+              status TEXT NOT NULL,
+              priority INTEGER NOT NULL,
+              episode TEXT,
+              stage_key TEXT,
+              worker TEXT,
+              lease_until REAL,
+              attempts INTEGER NOT NULL DEFAULT 0,
+              idempotency_key TEXT,
+              dead_letter INTEGER NOT NULL DEFAULT 0,
+              updated_at TEXT,
+              task_json TEXT NOT NULL
+            )
+            """
+        )
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_tasks_claim ON tasks(status, priority)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_tasks_lease ON tasks(status, lease_until)")
+        conn.execute(
+            "INSERT INTO metadata(key, value) VALUES('schema_version', ?) "
+            "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+            (str(SQLITE_SCHEMA_VERSION),),
+        )
+
+    def _sync_from_queue_in_conn(self, conn: sqlite3.Connection, queue: Dict[str, Any]) -> None:
+        meta = {k: v for k, v in queue.items() if k != "tasks"}
+        conn.execute(
+            "INSERT INTO metadata(key, value) VALUES('queue', ?) "
+            "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+            (json.dumps(meta, ensure_ascii=False, sort_keys=True),),
+        )
+        ids = [str(task.get("id") or "") for task in queue.get("tasks", []) if task.get("id")]
+        if ids:
+            placeholders = ",".join("?" for _ in ids)
+            conn.execute(f"DELETE FROM tasks WHERE id NOT IN ({placeholders})", ids)
+        else:
+            conn.execute("DELETE FROM tasks")
+        for task in queue.get("tasks", []):
+            tid = str(task.get("id") or "")
+            if not tid:
+                continue
+            conn.execute(
+                """
+                INSERT INTO tasks(id,status,priority,episode,stage_key,worker,lease_until,attempts,
+                                  idempotency_key,dead_letter,updated_at,task_json)
+                VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
+                ON CONFLICT(id) DO UPDATE SET
+                  status=excluded.status,
+                  priority=excluded.priority,
+                  episode=excluded.episode,
+                  stage_key=excluded.stage_key,
+                  worker=excluded.worker,
+                  lease_until=excluded.lease_until,
+                  attempts=excluded.attempts,
+                  idempotency_key=excluded.idempotency_key,
+                  dead_letter=excluded.dead_letter,
+                  updated_at=excluded.updated_at,
+                  task_json=excluded.task_json
+                """,
+                (
+                    tid,
+                    str(task.get("status") or "queued"),
+                    int(task.get("priority") or 999999),
+                    str(task.get("episode") or ""),
+                    str(task.get("stage_key") or ""),
+                    str(task.get("worker") or ""),
+                    task.get("lease_until"),
+                    int(task.get("attempts") or 0),
+                    str(task.get("idempotency_key") or ""),
+                    1 if task.get("dead_letter") else 0,
+                    str(task.get("updated_at") or ""),
+                    json.dumps(task, ensure_ascii=False, sort_keys=True),
+                ),
+            )
+
+    def sync_from_queue(self, queue: Dict[str, Any]) -> None:
+        with self.connect() as conn:
+            with conn:
+                self._sync_from_queue_in_conn(conn, queue)
+
+    def _load_from_conn(self, conn: sqlite3.Connection) -> Dict[str, Any]:
+        meta_row = conn.execute("SELECT value FROM metadata WHERE key='queue'").fetchone()
+        rows = conn.execute("SELECT task_json FROM tasks ORDER BY priority, id").fetchall()
+        if not rows:
+            queue = _load_queue_file(self.root)
+            self._sync_from_queue_in_conn(conn, queue)
+            return queue
+        meta = json.loads(meta_row["value"]) if meta_row else {}
+        tasks = [json.loads(row["task_json"]) for row in rows]
+        queue = dict(meta)
+        queue["tasks"] = tasks
+        queue["coordination"] = coordination_backend_status(self.root)
+        queue["summary"] = summarize_tasks(tasks)
+        queue["batches"] = make_batches(tasks, int(queue.get("max_concurrency") or 1))
+        return queue
+
+    def load_queue(self) -> Dict[str, Any]:
+        if not os.path.isfile(self.db_path):
+            queue = _load_queue_file(self.root)
+            self.sync_from_queue(queue)
+            return queue
+        with self.connect() as conn:
+            return self._load_from_conn(conn)
+
+    def _transaction(self):
+        conn = self.connect()
+        conn.isolation_level = None
+        conn.execute("BEGIN IMMEDIATE")
+        return conn
+
+    def _commit_and_mirror(self, conn: sqlite3.Connection, queue: Dict[str, Any]) -> None:
+        self._sync_from_queue_in_conn(conn, queue)
+        conn.execute("COMMIT")
+        _save_queue_file(self.root, queue)
+
+    def claim(self, *, limit: Optional[int], worker: Optional[str], lease_seconds: int) -> List[Dict[str, Any]]:
+        conn = self._transaction()
+        committed = False
+        try:
+            queue = self._load_from_conn(conn)
+            reclaim_expired(queue)
+            claimed = claim_tasks(queue, limit, worker=worker, lease_seconds=lease_seconds)
+            self._commit_and_mirror(conn, queue)
+            committed = True
+            return [dict(task) for task in claimed]
+        except Exception:
+            if not committed:
+                conn.execute("ROLLBACK")
+            raise
+        finally:
+            conn.close()
+
+    def mark(self, task_id_value: str, status: str, note: str = "",
+             *, runner: Optional[Dict[str, Any]] = None,
+             expected_worker: Optional[str] = None,
+             expected_attempt: Optional[int] = None) -> Dict[str, Any]:
+        conn = self._transaction()
+        committed = False
+        try:
+            queue = self._load_from_conn(conn)
+            task = mark_task(
+                queue,
+                task_id_value,
+                status,
+                note,
+                expected_worker=expected_worker,
+                expected_attempt=expected_attempt,
+                runner=runner,
+            )
+            if runner is not None:
+                task["last_runner"] = runner
+            self._commit_and_mirror(conn, queue)
+            committed = True
+            return dict(task)
+        except Exception:
+            if not committed:
+                conn.execute("ROLLBACK")
+            raise
+        finally:
+            conn.close()
+
+    def reclaim(self, *, worker: Optional[str] = None, force_worker: bool = False) -> List[Dict[str, Any]]:
+        conn = self._transaction()
+        committed = False
+        try:
+            queue = self._load_from_conn(conn)
+            reclaimed = reclaim_expired(queue, worker=worker, force_worker=force_worker)
+            self._commit_and_mirror(conn, queue)
+            committed = True
+            return [dict(task) for task in reclaimed]
+        except Exception:
+            if not committed:
+                conn.execute("ROLLBACK")
+            raise
+        finally:
+            conn.close()
+
+    def renew(self, task_ids: Iterable[str], lease_seconds: int, worker: Optional[str] = None) -> int:
+        conn = self._transaction()
+        committed = False
+        try:
+            queue = self._load_from_conn(conn)
+            n = renew_lease(queue, task_ids, lease_seconds, worker)
+            self._commit_and_mirror(conn, queue)
+            committed = True
+            return n
+        except Exception:
+            if not committed:
+                conn.execute("ROLLBACK")
+            raise
+        finally:
+            conn.close()
+
+
+# 内置参考实现：SQLite 事务协调后端登记进注册表，使其与未来 redis/db 走同一分发口。
+register_coordination_backend("sqlite", SQLiteQueueBackend)
+
+
+def save_queue(root: str, queue: Dict[str, Any]) -> None:
+    _save_queue_file(root, queue)
+    backend = active_coordination_backend(root)
+    if backend is not None:
+        backend.sync_from_queue(queue)
+
+
+def _sqlite_rows(conn: sqlite3.Connection) -> Dict[str, Dict[str, Any]]:
+    rows = conn.execute("SELECT id,status,worker,lease_until,attempts,dead_letter,task_json FROM tasks ORDER BY id").fetchall()
+    out: Dict[str, Dict[str, Any]] = {}
+    for row in rows:
+        try:
+            task = json.loads(row["task_json"])
+        except Exception:
+            task = {}
+        out[str(row["id"])] = {
+            "id": str(row["id"]),
+            "status": str(row["status"]),
+            "worker": str(row["worker"] or ""),
+            "lease_until": row["lease_until"],
+            "attempts": int(row["attempts"] or 0),
+            "dead_letter": bool(row["dead_letter"]),
+            "task_json": task,
+        }
+    return out
+
+
+def _task_compare(task: Mapping[str, Any]) -> Dict[str, Any]:
+    return {
+        "status": str(task.get("status") or ""),
+        "worker": str(task.get("worker") or ""),
+        "attempts": int(task.get("attempts") or 0),
+        "dead_letter": bool(task.get("dead_letter")),
+        "lease_until": task.get("lease_until"),
+    }
+
+
+def sqlite_doctor(root: str, *, write: bool = False) -> Dict[str, Any]:
+    root = root.rstrip("/")
+    coord = coordination_backend_status(root)
+    if coord.get("backend") != "sqlite":
+        payload = {
+            "kind": "n2d_sqlite_queue_doctor",
+            "version": 1,
+            "root": root,
+            "backend": coord,
+            "status": "skip",
+            "issues": [],
+            "summary": {"reason": "sqlite backend not active"},
+            "generated_at": now_iso(),
+        }
+        if write:
+            write_sqlite_doctor(root, payload)
+        return payload
+
+    issues: List[Dict[str, Any]] = []
+    db_path = sqlite_db_path(root)
+    mirror_path = queue_path(root)
+    mirror: Dict[str, Any] = {}
+    mirror_tasks: Dict[str, Dict[str, Any]] = {}
+    if not os.path.isfile(mirror_path):
+        issues.append({"severity": "block", "message": f"missing JSON mirror: {mirror_path}"})
+    else:
+        try:
+            mirror = _load_queue_file(root)
+            mirror_tasks = {str(task.get("id")): task for task in mirror.get("tasks", []) if task.get("id")}
+        except Exception as exc:
+            issues.append({"severity": "block", "message": f"invalid JSON mirror: {exc}"})
+
+    db_tasks: Dict[str, Dict[str, Any]] = {}
+    schema_version = ""
+    if not os.path.isfile(db_path):
+        issues.append({"severity": "block", "message": f"missing SQLite DB: {db_path}"})
+    else:
+        try:
+            backend = SQLiteQueueBackend(root)
+            with backend.connect() as conn:
+                row = conn.execute("SELECT value FROM metadata WHERE key='schema_version'").fetchone()
+                schema_version = str(row["value"]) if row else ""
+                if schema_version != str(SQLITE_SCHEMA_VERSION):
+                    issues.append({"severity": "block", "message": f"schema_version {schema_version or 'missing'} != {SQLITE_SCHEMA_VERSION}"})
+                db_tasks = _sqlite_rows(conn)
+                integrity = conn.execute("PRAGMA integrity_check").fetchone()
+                if integrity and str(integrity[0]).lower() != "ok":
+                    issues.append({"severity": "block", "message": f"sqlite integrity_check={integrity[0]}"})
+        except Exception as exc:
+            issues.append({"severity": "block", "message": f"cannot inspect SQLite DB: {exc}"})
+
+    mirror_ids = set(mirror_tasks)
+    db_ids = set(db_tasks)
+    for tid in sorted(db_ids - mirror_ids):
+        issues.append({"severity": "block", "task_id": tid, "message": "task exists in SQLite but not JSON mirror"})
+    for tid in sorted(mirror_ids - db_ids):
+        issues.append({"severity": "block", "task_id": tid, "message": "task exists in JSON mirror but not SQLite"})
+    for tid in sorted(db_ids & mirror_ids):
+        db_task = _task_compare(db_tasks[tid]["task_json"])
+        # Columns are the transactional truth; make the comparison robust to stale task_json inside DB rows.
+        db_task.update({k: v for k, v in _task_compare(db_tasks[tid]).items() if v not in ("", None)})
+        mirror_task = _task_compare(mirror_tasks[tid])
+        if db_task != mirror_task:
+            issues.append({
+                "severity": "block",
+                "task_id": tid,
+                "message": "SQLite/JSON mirror task state diverged",
+                "sqlite": db_task,
+                "json": mirror_task,
+            })
+
+    payload = {
+        "kind": "n2d_sqlite_queue_doctor",
+        "version": 1,
+        "root": root,
+        "backend": coord,
+        "db_path": db_path,
+        "mirror_path": mirror_path,
+        "schema_version": schema_version,
+        "wal": {
+            "exists": os.path.isfile(f"{db_path}-wal"),
+            "path": f"{db_path}-wal",
+        },
+        "summary": {
+            "sqlite_tasks": len(db_tasks),
+            "json_tasks": len(mirror_tasks),
+            "issues": len(issues),
+        },
+        "issues": issues,
+        "status": "fail" if any(item.get("severity") == "block" for item in issues) else "pass",
+        "generated_at": now_iso(),
+    }
+    if write:
+        write_sqlite_doctor(root, payload)
+    return payload
+
+
+def render_sqlite_doctor(payload: Dict[str, Any]) -> str:
+    lines = [
+        "# n2d SQLite Queue Doctor",
+        "",
+        f"- 状态：{payload.get('status')}",
+        f"- DB：`{payload.get('db_path') or '—'}`",
+        f"- JSON mirror：`{payload.get('mirror_path') or '—'}`",
+        f"- summary：{payload.get('summary')}",
+        "",
+        "## Issues",
+        "",
+    ]
+    issues = payload.get("issues") or []
+    lines.extend([f"- {item.get('severity')}: {item.get('message')}" for item in issues] or ["- 无"])
+    lines.append("")
+    return "\n".join(lines)
+
+
+def write_sqlite_doctor(root: str, payload: Dict[str, Any]) -> None:
+    os.makedirs(production_dir(root), exist_ok=True)
+    with open(sqlite_doctor_path(root), "w", encoding="utf-8") as fh:
+        json.dump(payload, fh, ensure_ascii=False, indent=2, sort_keys=True)
+        fh.write("\n")
+    with open(os.path.join(production_dir(root), SQLITE_DOCTOR_MD), "w", encoding="utf-8") as fh:
+        fh.write(render_sqlite_doctor(payload))
+
+
 def render_markdown(queue: Dict[str, Any]) -> str:
     summary = queue.get("summary", {})
     budget = queue.get("budget", {})
+    coordination = queue.get("coordination") if isinstance(queue.get("coordination"), dict) else {}
     lines = [
         "# n2d 批量任务队列",
         "",
@@ -1238,12 +1876,20 @@ def render_markdown(queue: Dict[str, Any]) -> str:
         f"- 重试上限：{queue.get('max_retries')}",
         f"- 预算：{budget.get('accepted_total', 0)} / {budget.get('limit', '—')} {budget.get('unit', '')}",
         f"- 任务数：{summary.get('total', 0)}",
+    ]
+    if coordination:
+        lines.append(
+            f"- 协调后端：{coordination.get('backend')} / lock={coordination.get('lock_mode')} / status={coordination.get('status')}"
+        )
+        if coordination.get("warning"):
+            lines.append(f"- 协调提醒：{coordination.get('warning')}")
+    lines.extend([
         "",
         "## 状态",
         "",
         "| 状态 | 数量 |",
         "|---|---:|",
-    ]
+    ])
     for status, count in sorted(summary.get("by_status", {}).items()):
         lines.append(f"| {status} | {count} |")
     lines.extend([
@@ -1352,6 +1998,9 @@ def renew_lease(queue: Dict[str, Any], task_ids: Iterable[str], lease_seconds: i
 
 def claim(root: str, *, limit: Optional[int] = None, worker: Optional[str] = None,
           lease_seconds: int = DEFAULT_LEASE_SECONDS) -> List[Dict[str, Any]]:
+    backend = active_coordination_backend(root)
+    if backend is not None:
+        return backend.claim(limit=limit, worker=worker, lease_seconds=lease_seconds)
     with queue_lock(root):
         queue = load_queue(root)
         reclaim_expired(queue)  # 每次认领前先回收过期租约（自动断点恢复）
@@ -1364,6 +2013,16 @@ def mark(root: str, task_id_value: str, status: str, note: str = "",
          *, runner: Optional[Dict[str, Any]] = None,
          expected_worker: Optional[str] = None,
          expected_attempt: Optional[int] = None) -> Dict[str, Any]:
+    backend = active_coordination_backend(root)
+    if backend is not None:
+        return backend.mark(
+            task_id_value,
+            status,
+            note,
+            runner=runner,
+            expected_worker=expected_worker,
+            expected_attempt=expected_attempt,
+        )
     with queue_lock(root):
         queue = load_queue(root)
         task = mark_task(
@@ -1373,6 +2032,7 @@ def mark(root: str, task_id_value: str, status: str, note: str = "",
             note,
             expected_worker=expected_worker,
             expected_attempt=expected_attempt,
+            runner=runner,
         )
         if runner is not None:
             task["last_runner"] = runner
@@ -1381,6 +2041,9 @@ def mark(root: str, task_id_value: str, status: str, note: str = "",
 
 
 def reclaim(root: str, *, worker: Optional[str] = None, force_worker: bool = False) -> List[Dict[str, Any]]:
+    backend = active_coordination_backend(root)
+    if backend is not None:
+        return backend.reclaim(worker=worker, force_worker=force_worker)
     with queue_lock(root):
         queue = load_queue(root)
         reclaimed = reclaim_expired(queue, worker=worker, force_worker=force_worker)
@@ -1389,6 +2052,9 @@ def reclaim(root: str, *, worker: Optional[str] = None, force_worker: bool = Fal
 
 
 def renew(root: str, task_ids: Iterable[str], lease_seconds: int, worker: Optional[str] = None) -> int:
+    backend = active_coordination_backend(root)
+    if backend is not None:
+        return backend.renew(task_ids, lease_seconds, worker)
     with queue_lock(root):
         queue = load_queue(root)
         n = renew_lease(queue, task_ids, lease_seconds, worker)
@@ -1397,9 +2063,40 @@ def renew(root: str, task_ids: Iterable[str], lease_seconds: int, worker: Option
         return n
 
 
+def classify_error(note: str = "", runner: Optional[Mapping[str, Any]] = None) -> str:
+    runner = runner or {}
+    text = " ".join(
+        str(part or "")
+        for part in (
+            note,
+            runner.get("note"),
+            runner.get("error"),
+            runner.get("stderr"),
+            runner.get("stdout"),
+        )
+    ).lower()
+    exit_code = runner.get("exit_code")
+    if "next_preflight blocked" in text or "blocked_by_" in text:
+        return "preflight_block"
+    if "capability" in text or "evidence" in text or "backend" in text:
+        return "capability"
+    if "budget" in text or "blocked_budget" in text:
+        return "budget"
+    if "timeout" in text or exit_code in (124, 137):
+        return "timeout"
+    if "verification failed" in text or "missing output" in text or "progress not done" in text:
+        return "output_contract"
+    if "slash command" in text or "task has no command" in text:
+        return "configuration"
+    if isinstance(exit_code, int) and exit_code != 0:
+        return "command_failed"
+    return "unknown"
+
+
 def mark_task(queue: Dict[str, Any], task_id_value: str, status: str, note: str = "",
               *, expected_worker: Optional[str] = None,
-              expected_attempt: Optional[int] = None) -> Dict[str, Any]:
+              expected_attempt: Optional[int] = None,
+              runner: Optional[Mapping[str, Any]] = None) -> Dict[str, Any]:
     task = next((item for item in queue.get("tasks", []) if item.get("id") == task_id_value), None)
     if task is None:
         raise KeyError(task_id_value)
@@ -1416,7 +2113,11 @@ def mark_task(queue: Dict[str, Any], task_id_value: str, status: str, note: str 
     elif status == "fail":
         attempts = int(task.get("attempts") or 0)
         max_retries = int(task.get("max_retries") or queue.get("max_retries") or 0)
+        task["last_error_class"] = classify_error(note, runner)
         task["status"] = "retry_queued" if attempts <= max_retries else "failed"
+        if task["status"] == "failed":
+            task["dead_letter"] = True
+            task["dead_letter_at"] = now_iso()
     elif status in {"queued", "running", "blocked_budget", "cancelled"}:
         task["status"] = status
     else:
@@ -1534,10 +2235,214 @@ def cmd_reclaim(ns: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_heartbeat(ns: argparse.Namespace) -> int:
+    n = renew(
+        ns.root.rstrip("/"),
+        ns.task_id,
+        ns.lease_seconds,
+        ns.worker or None,
+    )
+    print(json.dumps({"renewed": n, "task_ids": ns.task_id}, ensure_ascii=False, indent=2))
+    return 0 if n else 1
+
+
 def cmd_status(ns: argparse.Namespace) -> int:
     queue = load_queue(ns.root.rstrip("/"))
     print(render_markdown(queue) if ns.markdown else json.dumps(queue.get("summary", {}), ensure_ascii=False, indent=2))
     return 0
+
+
+def cmd_coordination_status(ns: argparse.Namespace) -> int:
+    status = coordination_backend_status(ns.root.rstrip("/"))
+    print(json.dumps(status, ensure_ascii=False, indent=2, sort_keys=True))
+    return 0 if status.get("status") in {"ok", "warn"} else 1
+
+
+def cmd_sqlite_doctor(ns: argparse.Namespace) -> int:
+    payload = sqlite_doctor(ns.root.rstrip("/"), write=ns.write)
+    print(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) if ns.json else render_sqlite_doctor(payload))
+    return 1 if payload.get("status") == "fail" else 0
+
+
+def normalize_job_status(value: str) -> str:
+    status = str(value or "").strip().lower()
+    aliases = {
+        "success": "succeeded",
+        "done": "succeeded",
+        "pass": "succeeded",
+        "ok": "succeeded",
+        "error": "failed",
+        "fail": "failed",
+        "cancel": "cancelled",
+        "canceled": "cancelled",
+    }
+    return aliases.get(status, status or "unknown")
+
+
+def append_job_receipt(root: str, receipt: Dict[str, Any]) -> Dict[str, Any]:
+    os.makedirs(production_dir(root), exist_ok=True)
+    row = dict(receipt)
+    row.setdefault("kind", "n2d_external_job_receipt")
+    row.setdefault("version", 1)
+    row.setdefault("updated_at", now_iso())
+    row["status"] = normalize_job_status(str(row.get("status") or "unknown"))
+    with open(job_receipts_path(root), "a", encoding="utf-8") as fh:
+        fh.write(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n")
+    return row
+
+
+def load_job_receipts(root: str) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    path = job_receipts_path(root)
+    receipts: List[Dict[str, Any]] = []
+    errors: List[Dict[str, Any]] = []
+    if not os.path.isfile(path):
+        return receipts, errors
+    with open(path, encoding="utf-8") as fh:
+        for lineno, raw in enumerate(fh, 1):
+            line = raw.strip()
+            if not line:
+                continue
+            try:
+                item = json.loads(line)
+            except Exception as exc:
+                errors.append({"line": lineno, "error": str(exc)})
+                continue
+            if not isinstance(item, dict):
+                errors.append({"line": lineno, "error": "receipt line is not an object"})
+                continue
+            item["_line"] = lineno
+            item["status"] = normalize_job_status(str(item.get("status") or "unknown"))
+            receipts.append(item)
+    return receipts, errors
+
+
+def _receipt_matches(task: Dict[str, Any], receipt: Dict[str, Any]) -> bool:
+    tid = str(task.get("id") or "")
+    idem = str(task.get("idempotency_key") or "")
+    return bool(
+        (receipt.get("task_id") and str(receipt.get("task_id")) == tid)
+        or (receipt.get("idempotency_key") and str(receipt.get("idempotency_key")) == idem)
+    )
+
+
+def latest_matching_receipt(task: Dict[str, Any], receipts: Sequence[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    matches = [item for item in receipts if _receipt_matches(task, item)]
+    if not matches:
+        return None
+    return sorted(matches, key=lambda item: (str(item.get("updated_at") or ""), int(item.get("_line") or 0)))[-1]
+
+
+def reconcile_jobs(root: str, *, apply: bool = False) -> Dict[str, Any]:
+    receipts, errors = load_job_receipts(root)
+    with queue_lock(root):
+        queue = load_queue(root)
+        matches: List[Dict[str, Any]] = []
+        actions: List[Dict[str, Any]] = []
+        for task in queue.get("tasks", []):
+            receipt = latest_matching_receipt(task, receipts)
+            if not receipt:
+                if task.get("status") == "running" and task.get("external_job_id"):
+                    actions.append({
+                        "task_id": task.get("id"),
+                        "action": "warn",
+                        "reason": "running task has external_job_id but no receipt",
+                    })
+                continue
+            status = str(receipt.get("status") or "unknown")
+            match = {
+                "task_id": task.get("id"),
+                "idempotency_key": task.get("idempotency_key"),
+                "task_status": task.get("status"),
+                "receipt_status": status,
+                "external_job_id": receipt.get("external_job_id") or receipt.get("job_id") or "",
+                "receipt_line": receipt.get("_line"),
+            }
+            if status == "succeeded" and task.get("status") in {"queued", "retry_queued", "running"}:
+                match["proposed_mark"] = "pass"
+                if apply:
+                    mark_task(queue, str(task["id"]), "pass", "job_reconcile: external job succeeded", runner={"job_receipt": receipt})
+            elif status in {"failed", "cancelled"} and task.get("status") in {"queued", "retry_queued", "running"}:
+                match["proposed_mark"] = "fail"
+                if apply:
+                    mark_task(queue, str(task["id"]), "fail", f"job_reconcile: external job {status}", runner={"job_receipt": receipt})
+            elif status in {"submitted", "running"} and task.get("status") != "running":
+                match["proposed_mark"] = "none"
+                match["warning"] = "external job still active but queue task is not running"
+            matches.append(match)
+        payload = {
+            "kind": "n2d_job_reconcile",
+            "version": 1,
+            "root": root,
+            "applied": apply,
+            "receipt_count": len(receipts),
+            "receipt_errors": errors,
+            "matches": matches,
+            "actions": actions,
+            "summary": {
+                "matched": len(matches),
+                "proposed_pass": sum(1 for item in matches if item.get("proposed_mark") == "pass"),
+                "proposed_fail": sum(1 for item in matches if item.get("proposed_mark") == "fail"),
+                "warnings": len(actions) + sum(1 for item in matches if item.get("warning")),
+            },
+            "status": "fail" if errors else "warn" if actions or any(item.get("warning") for item in matches) else "pass",
+            "generated_at": now_iso(),
+        }
+        if apply:
+            save_queue(root, queue)
+        write_job_reconcile(root, payload)
+        return payload
+
+
+def render_job_reconcile(payload: Dict[str, Any]) -> str:
+    lines = [
+        "# n2d Job Reconcile",
+        "",
+        f"- 状态：{payload.get('status')}",
+        f"- applied：{payload.get('applied')}",
+        f"- receipts：{payload.get('receipt_count')}",
+        f"- matched：{(payload.get('summary') or {}).get('matched', 0)}",
+        "",
+        "## Matches",
+        "",
+        "| task | queue | receipt | proposed | external job |",
+        "|---|---|---|---|---|",
+    ]
+    for item in payload.get("matches") or []:
+        lines.append(
+            f"| {item.get('task_id')} | {item.get('task_status')} | {item.get('receipt_status')} | "
+            f"{item.get('proposed_mark', '—')} | {item.get('external_job_id') or '—'} |"
+        )
+    lines.append("")
+    return "\n".join(lines)
+
+
+def write_job_reconcile(root: str, payload: Dict[str, Any]) -> None:
+    os.makedirs(production_dir(root), exist_ok=True)
+    with open(job_reconcile_path(root), "w", encoding="utf-8") as fh:
+        json.dump(payload, fh, ensure_ascii=False, indent=2, sort_keys=True)
+        fh.write("\n")
+    with open(os.path.join(production_dir(root), JOB_RECONCILE_MD), "w", encoding="utf-8") as fh:
+        fh.write(render_job_reconcile(payload))
+
+
+def cmd_job_receipt(ns: argparse.Namespace) -> int:
+    receipt = append_job_receipt(ns.root.rstrip("/"), {
+        "task_id": ns.task_id or "",
+        "idempotency_key": ns.idempotency_key or "",
+        "external_job_id": ns.external_job_id or "",
+        "stage_key": ns.stage_key or "",
+        "episode": ns.episode or "",
+        "status": ns.status,
+        "note": ns.note or "",
+    })
+    print(json.dumps(receipt, ensure_ascii=False, indent=2, sort_keys=True))
+    return 0
+
+
+def cmd_reconcile_jobs(ns: argparse.Namespace) -> int:
+    payload = reconcile_jobs(ns.root.rstrip("/"), apply=ns.apply)
+    print(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) if ns.json else render_job_reconcile(payload))
+    return 1 if payload.get("status") == "fail" else 0
 
 
 def cmd_recheck(ns: argparse.Namespace) -> int:
@@ -1607,10 +2512,44 @@ def parser() -> argparse.ArgumentParser:
     reclaim_cmd.add_argument("--force-worker", action="store_true", help="强制回收 --worker 的 running（不等租约过期；本 worker 重启自愈用）")
     reclaim_cmd.set_defaults(func=cmd_reclaim)
 
+    heartbeat = sub.add_parser("heartbeat", help="续租 running 任务 lease（长任务 worker 心跳）")
+    heartbeat.add_argument("root")
+    heartbeat.add_argument("task_id", nargs="+")
+    heartbeat.add_argument("--worker", help="optional expected worker guard")
+    heartbeat.add_argument("--lease-seconds", type=int, default=DEFAULT_LEASE_SECONDS)
+    heartbeat.set_defaults(func=cmd_heartbeat)
+
     status = sub.add_parser("status", help="print queue status")
     status.add_argument("root")
     status.add_argument("--markdown", action="store_true")
     status.set_defaults(func=cmd_status)
+
+    coord = sub.add_parser("coordination-status", help="print queue coordination backend/lock mode")
+    coord.add_argument("root")
+    coord.set_defaults(func=cmd_coordination_status)
+
+    sqlite_doc = sub.add_parser("sqlite-doctor", help="check SQLite coordination DB and JSON mirror consistency")
+    sqlite_doc.add_argument("root")
+    sqlite_doc.add_argument("--write", action="store_true")
+    sqlite_doc.add_argument("--json", action="store_true")
+    sqlite_doc.set_defaults(func=cmd_sqlite_doctor)
+
+    receipt = sub.add_parser("job-receipt", help="append an external generation job receipt for later reconcile")
+    receipt.add_argument("root")
+    receipt.add_argument("--task-id")
+    receipt.add_argument("--idempotency-key")
+    receipt.add_argument("--external-job-id")
+    receipt.add_argument("--stage-key")
+    receipt.add_argument("--episode")
+    receipt.add_argument("--status", required=True, choices=["submitted", "running", "succeeded", "failed", "cancelled", "success", "done", "pass", "fail", "error"])
+    receipt.add_argument("--note")
+    receipt.set_defaults(func=cmd_job_receipt)
+
+    rec_jobs = sub.add_parser("reconcile-jobs", help="reconcile batch queue tasks from external job receipts")
+    rec_jobs.add_argument("root")
+    rec_jobs.add_argument("--apply", action="store_true", help="apply pass/fail marks to matched tasks")
+    rec_jobs.add_argument("--json", action="store_true")
+    rec_jobs.set_defaults(func=cmd_reconcile_jobs)
 
     recheck = sub.add_parser("recheck", help="复检：用最新审查产物的指纹，把已修复的返工任务标 resolved / 复发的 reopen")
     recheck.add_argument("root")

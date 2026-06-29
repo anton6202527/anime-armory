@@ -117,6 +117,24 @@ def test_chinese_asset_id_binding_counts_as_bound(tmp_path: Path) -> None:
     assert "asset_must_not_have_not_propagated" not in codes
 
 
+def test_asset_primary_map_accepts_legacy_list_reference_group(tmp_path: Path) -> None:
+    reg = tmp_path / "出图" / "共享"
+    reg.mkdir(parents=True)
+    (reg / "asset_registry.json").write_text(json.dumps({
+        "assets": [{
+            "id": "LOC_01",
+            "type": "location",
+            "name": "长街废墟",
+            "reference_group": [
+                {"path": "出图/共享/图片/LOC_01_主参考.png", "status": "ready"}
+            ],
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+    pm = image_qc._asset_primary_map(tmp_path)
+    assert pm["LOC_01"] == "出图/共享/图片/LOC_01_主参考.png"
+    assert pm["长街废墟"] == "出图/共享/图片/LOC_01_主参考.png"
+
+
 def test_prop_shape_review_targets_unconfirmed_high_risk_prop_png(tmp_path: Path) -> None:
     reg = tmp_path / "出图" / "共享"
     reg.mkdir(parents=True)
@@ -470,6 +488,41 @@ def test_lint_warns_missing_fields() -> None:
     assert codes.get("no_eyeline") == "warn"
     assert codes.get("no_anchor_phrase") == "warn"
     assert codes.get("no_identity_lock_phrase") == "warn"
+
+
+def test_lint_blocks_action_shot_looking_at_camera() -> None:
+    valid = {"CHAR_01", "CHAR_01/常态"}
+    blk = _char_block("Clip 07 破虚斜劈")
+    blk["body"] += (
+        "\n**专项镜头模板**：fight_exchange；attack_path=爆冲斜劈。"
+        "\n**正向 prompt（英文）**：action keyframe, Jiang slashes forward while looking at viewer, clear frontal face."
+    )
+    codes = {f["code"]: f["level"] for f in image_qc.lint_shot_block(blk, valid)}
+    assert codes.get("combat_camera_eye_contact") == "block"
+    assert codes.get("combat_frontal_portrait_bias") == "block"
+    assert "combat_camera_eye_contact" in image_qc.HARD_LINT_CODES
+
+
+def test_lint_warns_action_shot_missing_camera_observer_guard() -> None:
+    valid = {"CHAR_01", "CHAR_01/常态"}
+    blk = _char_block("Clip 08 命中帧", eyeline=False)
+    blk["body"] += (
+        "\n**视线方向**：保持轴线。"
+        "\n**专项镜头模板**：fight_exchange；impact_frame=肩甲命中。"
+        "\n**正向 prompt（中文）**：动作命中帧，长枪刺入肩甲，火星飞溅。"
+    )
+    codes = {f["code"]: f["level"] for f in image_qc.lint_shot_block(blk, valid)}
+    assert codes.get("combat_eyeline_guard_missing") == "warn"
+
+
+def test_lint_accepts_action_shot_with_opponent_eyeline_guard() -> None:
+    valid = {"CHAR_01", "CHAR_01/常态"}
+    blk = _char_block("Clip 08 命中帧")
+    blk["body"] += (
+        "\n**专项镜头模板**：fight_exchange；impact_frame=肩甲命中。"
+        "\n**正向 prompt（中文）**：动作命中帧，镜头是旁观者，角色不看镜头，视线锁定右后对手和枪线命中点。"
+    )
+    assert not any(f["code"].startswith("combat_") for f in image_qc.lint_shot_block(blk, valid))
 
 
 def test_lint_skips_non_character_shot() -> None:
@@ -1932,6 +1985,18 @@ def _registry_with_anchor(tmp_path: Path) -> Path:
     return tmp_path
 
 
+def _registry_with_anchor_object(tmp_path: Path) -> Path:
+    root = _registry_with_anchor(tmp_path)
+    p = root / "出图" / "共享" / "identity_registry.json"
+    reg = json.loads(p.read_text(encoding="utf-8"))
+    reg["characters"][0]["forms"][0]["reference_group"]["front"] = {
+        "path": "出图/共享/图片/定妆_沈念_常态.png",
+        "status": "ready",
+    }
+    p.write_text(json.dumps(reg, ensure_ascii=False), encoding="utf-8")
+    return root
+
+
 def test_pin_anchor_writes_sha(tmp_path: Path) -> None:
     root = _registry_with_anchor(tmp_path)
     r = image_qc.pin_anchor(root, "CHAR_01/常态")
@@ -1963,6 +2028,14 @@ def test_mark_finalized_auto_pins_anchor(tmp_path: Path) -> None:
     fm = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))["characters"][0]["forms"][0]
     assert fm["self_check_passed"] is True
     # 自动钉死的 sha 必须等于手动 pin 的结果（同一母图同一指纹）
+    assert fm["anchor_sha"] == image_qc._sha256_file(root / "出图" / "共享" / "图片" / "定妆_沈念_常态.png")
+
+
+def test_mark_finalized_auto_pins_anchor_from_front_object(tmp_path: Path) -> None:
+    root = _registry_with_anchor_object(tmp_path)
+    r = image_qc.mark_finalized(root, "CHAR_01/常态")
+    assert r["ok"] is True and r["auto_pinned"] is True
+    fm = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))["characters"][0]["forms"][0]
     assert fm["anchor_sha"] == image_qc._sha256_file(root / "出图" / "共享" / "图片" / "定妆_沈念_常态.png")
 
 
@@ -2272,3 +2345,107 @@ def test_carried_identity_block_codes_are_hard() -> None:
     # 落档机检 → gate hard_blocks 的闭环依赖这两个码在 HARD_LINT_CODES
     assert "unanchored_identity_plate" in image_qc.HARD_LINT_CODES
     assert "carried_identity_unknown" in image_qc.HARD_LINT_CODES
+
+
+# ── 人物脸一致性铁律：audit_asset_face_policy ──
+def test_audit_asset_face_policy_blocks_and_skips(tmp_path):
+    import image_qc, json
+    from pathlib import Path
+    root = Path(tmp_path); (root / "出图" / "共享").mkdir(parents=True)
+    reg = {"assets": [
+        {"id": "WEAPON_HALBERD", "type": "weapon", "owner": "CHAR_J", "name": "戟",
+         "reference_group": {"scale_reference": "图片/定妆_握持比例.png"}},
+        {"id": "POSTER_BAD", "type": "poster", "name": "群像海报 人物 站立"},
+        {"id": "POSTER_OK", "type": "poster", "owner": "CHAR_J", "name": "海报 人物"},
+        {"id": "WEAPON_PLAIN", "type": "weapon", "name": "纯武器美术"},
+    ]}
+    (root / "出图" / "共享" / "asset_registry.json").write_text(json.dumps(reg, ensure_ascii=False), encoding="utf-8")
+    res = image_qc.audit_asset_face_policy(root)
+    assert res["available"] is True
+    codes = {(f["level"], f["code"]) for f in res["findings"]}
+    assert ("block", "asset_face_locked_no_owner") in codes
+    assert all(f["code"] != "asset_faceless_face_detected" for f in res["findings"])
+    assert any("WEAPON_HALBERD" in n for n in res["notes"])
+    assert "asset_faceless_face_detected" in image_qc.HARD_LINT_CODES
+    assert "asset_face_locked_no_owner" in image_qc.HARD_LINT_CODES
+
+
+# ── faceless 持久机器证据：producer 写回 + consumer 信任新鲜证据（#5） ──
+def _png(path, color=(180, 180, 180)):
+    from PIL import Image
+    Image.new("RGB", (128, 128), color).save(path)
+
+
+def test_faceless_fresh_record_helper(tmp_path):
+    import image_qc
+    asset = {"face_consistency": {"source": "machine_pixel", "records": [
+        {"png": "图片/x.png", "png_sha256": "abc", "verdict": "ok"}]}}
+    assert image_qc._faceless_fresh_record(asset, "图片/x.png", "abc")["verdict"] == "ok"
+    assert image_qc._faceless_fresh_record(asset, "图片/x.png", "STALE") is None      # sha 不匹配→陈旧
+    hand = {"face_consistency": {"verdict": "pass_no_clear_face"}}                     # 手写·无 machine 源
+    assert image_qc._faceless_fresh_record(hand, "图片/x.png", "abc") is None
+
+
+def test_gate_trusts_fresh_machine_block_record(tmp_path):
+    import image_qc, json
+    from pathlib import Path
+    root = Path(tmp_path); img = root / "出图" / "共享" / "图片"; img.mkdir(parents=True)
+    _png(img / "握持比例.png")
+    sha = image_qc._sha256_file(img / "握持比例.png")
+    reg = {"assets": [{"id": "WEAPON_H", "type": "weapon", "owner": "CHAR_J", "name": "戟",
+        "reference_group": {"scale_reference": "图片/握持比例.png"},
+        "face_consistency": {"source": "machine_pixel", "records": [
+            {"png": "图片/握持比例.png", "png_sha256": sha, "verdict": "block", "clear_faces": 1}]}}]}
+    (root / "出图" / "共享" / "asset_registry.json").write_text(json.dumps(reg, ensure_ascii=False), encoding="utf-8")
+    res = image_qc.audit_asset_face_policy(root)   # 信任登记的 block 机器证据·不必跑 insightface
+    assert any(f["code"] == "asset_faceless_face_detected" for f in res["findings"])
+
+
+def test_record_faceless_evidence_roundtrip(tmp_path):
+    import image_qc, json
+    from pathlib import Path
+    root = Path(tmp_path); img = root / "出图" / "共享" / "图片"; img.mkdir(parents=True)
+    _png(img / "握持比例.png")
+    reg = {"assets": [{"id": "WEAPON_H", "type": "weapon", "owner": "CHAR_J", "name": "戟",
+        "reference_group": {"scale_reference": "图片/握持比例.png"}}]}
+    (root / "出图" / "共享" / "asset_registry.json").write_text(json.dumps(reg, ensure_ascii=False), encoding="utf-8")
+    r = image_qc.record_faceless_evidence(root)
+    if not r.get("available"):
+        return  # 无 insightface 环境优雅跳过
+    reg2 = json.loads((root / "出图" / "共享" / "asset_registry.json").read_text(encoding="utf-8"))
+    fcrec = reg2["assets"][0].get("face_consistency")
+    assert fcrec and fcrec["source"] == "machine_pixel" and fcrec["records"][0]["png_sha256"]
+
+
+# ── 镜头不是对视对象铁律·全场景版（_lint_camera_gaze_general） ──
+def test_camera_gaze_general_warns_nonaction_look_at_camera():
+    import image_qc
+    f = image_qc._lint_camera_gaze_general("Clip_X", "正向：少女站在窗前，看向镜头，清晰正脸。负向：水印")
+    assert any(x["code"] == "camera_gaze_portrait_bias" and x["level"] == "warn" for x in f)
+
+
+def test_camera_gaze_general_pov_exempt():
+    import image_qc
+    f = image_qc._lint_camera_gaze_general("Clip_Y", "正向：主观镜头·镜头=对手，少女直视镜头，对观众压迫感特写")
+    assert f == []   # POV/对观众特写 豁免
+
+
+def test_camera_gaze_general_clean_with_eyeline_guard():
+    import image_qc
+    # 有反向防呆句（不与镜头对视/视线锁定）→ 不报
+    f = image_qc._lint_camera_gaze_general("Clip_Z", "正向：少女侧身，视线锁定门口，不看镜头，三分之二侧脸。")
+    assert f == []
+
+
+def test_camera_gaze_general_skips_action_shots():
+    import image_qc
+    # 动作镜交给 _lint_action_eyeline(block 路径)，general 不重复报
+    assert image_qc._lint_camera_gaze_general("Clip_A", "正向：打斗拆招，看向镜头，清晰正脸") == []
+
+
+def test_n2d_const_camera_gaze_single_source():
+    import sys; sys.path.insert(0, "../../n2d/_lib")
+    import n2d_const
+    assert "selfie" in n2d_const.CAMERA_GAZE_NEGATIVES
+    assert n2d_const.is_camera_gaze_pov_exempt("本镜 opponent pov 直视镜头") is True
+    assert n2d_const.is_camera_gaze_pov_exempt("少女站在窗前") is False

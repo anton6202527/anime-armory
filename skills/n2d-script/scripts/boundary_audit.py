@@ -11,6 +11,8 @@ it flags episodes that need human/LLM boundary review before writing voiceover.
   ① 逐集体检表（粗胚右边界风险：软断/章内续切/弱钩/无闭环）。
   ② 剧级追更骨架（Gap1）：跨集断点强度分布 + 连续弱钩集群 + 开篇集群钩子梯度 +
      按 `变现模式`(免费/付费/海外) 的付费/AD 卡点集定位。题材词典按 `题材` 选择点切换(Gap3)。
+     **G3·付费墙强度入闸**：付费/海外档下，付费墙/续费卡点集断点不够强(strength<2)进 strict 闸
+     (series_arc.weak_paywalls 非空 → exit 1)；免费档恒不触发(不设硬付费墙)，逐集弱钩仍由逐集 risk 兜底。
      另含**视觉奇观放置初筛**（report-only·北极星看点④）：奇观被切点劈半 / 奇观集断点弱
      （疑埋中段未当锚点）。纯报告，不进 strict 闸。
 完整方法论见 references/追更骨架.md。
@@ -45,6 +47,26 @@ SPECTACLE_RE = re.compile(
     r"大阵|法阵|阵法|对轰|斗法|万人|千军|大军|决战|大战|血战|异象|天地异象|天地变色|"
     r"末日|海啸|崩塌|陨落|巨龙|神兽|封印|结界|祭天|登基大典|血月|爆发)"
 )
+MAIN_NODE_SOURCE_KINDS = {"main_nodes_txt", "main_nodes", "novel_review_main_nodes"}
+
+
+def source_kind(root):
+    """Return n2d source kind from 小说/_源指纹.json, if present."""
+    path = Path(root) / "小说" / "_源指纹.json"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return ""
+    return str(data.get("source_kind") or "").strip()
+
+
+def is_main_node_project(root):
+    return source_kind(root) in MAIN_NODE_SOURCE_KINDS
+
+
+def _field_value(text, label):
+    match = re.search(rf"^{re.escape(label)}\s*[:：]\s*(.+)$", text, re.MULTILINE)
+    return match.group(1).strip() if match else ""
 
 
 def build_res(genre_text):
@@ -91,6 +113,7 @@ PAIR_STRENGTH_LABEL = {4: "强", 3: "强", 2: "中", 1: "弱", 0: "弱"}
 
 def load_rows(root, strong_re, conflict_re, payoff_re):
     script_root = Path(root) / "脚本"
+    main_node = is_main_node_project(root)
     rows = []
     for d in sorted(script_root.glob("第*集"), key=ep_num):
         raw = d / "raw.txt"
@@ -98,24 +121,32 @@ def load_rows(root, strong_re, conflict_re, payoff_re):
             continue
         text = raw.read_text(encoding="utf-8").strip()
         lines = [line.strip() for line in text.splitlines() if line.strip()]
+        hook_text = _field_value(text, "结尾钩子")
+        beats_text = _field_value(text, "必保节点")
         soft_end = bool(text and text[-1] in "，、；：")
+        tail_for_strength = hook_text or text[-160:]
+        explicit_hook = main_node and bool(hook_text)
+        structured_main_node = main_node and bool(beats_text and hook_text)
         rows.append({
             "ep": ep_num(d),
             "chars": cjk_len(text),
-            "chapter": bool(CHAPTER_HEAD.search(text)),
+            "chapter": bool(CHAPTER_HEAD.search(text)) or structured_main_node,
             "start": "".join(lines[:2])[:90] if lines else "",
             "end": "".join(lines[-3:])[-140:] if lines else "",
             "raw_rel": str(raw.relative_to(Path(root))),
             "raw_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
-            "soft_end": soft_end,
-            "strong_end": bool(strong_re.search(text[-160:])),
-            "strength": end_strength(text, soft_end, strong_re),
+            "soft_end": soft_end and not explicit_hook,
+            "strong_end": explicit_hook or bool(strong_re.search(tail_for_strength)),
+            "strength": 2 if explicit_hook else end_strength(text, soft_end, strong_re),
             "start_strength": start_strength(text, conflict_re, payoff_re),
-            "has_conflict": bool(conflict_re.search(text)),
-            "has_payoff": bool(payoff_re.search(text)),
+            "has_conflict": structured_main_node or bool(conflict_re.search(text)),
+            "has_payoff": structured_main_node or bool(payoff_re.search(text)),
             "spectacle": bool(SPECTACLE_RE.search(text)),
             "spectacle_head": bool(SPECTACLE_RE.search(text[:180])),
-            "spectacle_tail": bool(SPECTACLE_RE.search(text[-160:])),
+            "spectacle_tail": bool(SPECTACLE_RE.search(tail_for_strength)),
+            "source_kind": source_kind(root) if main_node else "",
+            "structured_main_node": structured_main_node,
+            "explicit_hook": explicit_hook,
         })
     for r in rows:
         r["closed_loop"] = r["has_conflict"] and r["has_payoff"]
@@ -191,6 +222,18 @@ def cliffhanger_positions(rows, monet):
         walls.append(n)
         n += 10
     return sorted(set(walls))
+
+
+def weak_paywalls(rows, monet):
+    """G3·付费/海外变现下「断点不够强」的付费墙/续费卡点集号（strength<2）。
+
+    免费档恒空（不设硬卡点，靠全程延续性）。付费/海外档里这些集是 ROI 生死位——付费墙集必须是
+    全剧最强 cliffhanger，否则用户正好在掏钱那一刻没有非看不可的张力，转化崩。此前只 report-only
+    （series_arc.issues 里印一句），从不进 strict 闸；G3 把它升格为「仅付费/海外档」的硬阻断信号。"""
+    if monet == "免费":
+        return []
+    by_ep = {r["ep"]: r for r in rows}
+    return [w for w in cliffhanger_positions(rows, monet) if w in by_ep and by_ep[w]["strength"] < 2]
 
 
 def boundary_pairs(rows):
@@ -295,11 +338,11 @@ def series_arc(rows, monet):
     # 变现模式卡点定位
     walls = cliffhanger_positions(rows, monet)
     out["cliffhanger_targets"] = walls
-    by_ep = {r["ep"]: r for r in rows}
+    weak_walls = weak_paywalls(rows, monet)
+    out["weak_paywalls"] = weak_walls  # G3·付费/海外档进 strict 闸（免费档恒空）
     if monet == "免费":
         out["notes"].append("变现=免费：完播率导向，要全剧延续性、断点平均强；不设单点付费墙，重点消灭连续弱钩集群")
     else:
-        weak_walls = [w for w in walls if w in by_ep and by_ep[w]["strength"] < 2]
         if weak_walls:
             out["issues"].append(
                 f"变现={monet} 卡点集第{'、'.join(map(str, weak_walls))}集断点不够强（付费墙/续费点应是最强 cliffhanger）")
@@ -336,12 +379,16 @@ def main():
 
     arc = series_arc(rows, monet)
     per_ep, has_risk = enrich_episode_rows(rows)
+    # G3·付费/海外档：付费墙集断点不够强 → 进 strict 闸（免费档 weak_pw 恒空，不触发）。
+    weak_pw = arc.get("weak_paywalls") or []
+    strict_block = has_risk or bool(weak_pw)
 
     if as_json:
         print(json.dumps({"genre": genre, "buckets": buckets, "series_arc": arc,
-                          "episodes": per_ep, "has_risk": has_risk},
+                          "episodes": per_ep, "has_risk": has_risk,
+                          "weak_paywalls": weak_pw, "strict_block": strict_block},
                          ensure_ascii=False, indent=2))
-        sys.exit(1 if (strict and has_risk) else 0)
+        sys.exit(1 if (strict and strict_block) else 0)
 
     chars = [r["chars"] for r in rows]
     print(f"题材词典：{(genre or '未设')}→{'/'.join(buckets)}　变现模式：{monet}")
@@ -381,8 +428,12 @@ def main():
         print(f"- ℹ️ {note}")
     print("> 方法论见 references/追更骨架.md；逐集集内留存见 n2d/references/导演节奏.md。")
 
-    if strict and has_risk:
-        print("\n⛔ boundary_audit strict: 存在高风险粗胚边界；先做 5-10 集窗口复核并写 脚本/_拆集复核.md。")
+    if strict and strict_block:
+        if weak_pw:
+            print(f"\n⛔ boundary_audit strict: 变现={monet} 付费墙/续费卡点集第{'、'.join(map(str, weak_pw))}集断点不够强"
+                  "（付费墙须全剧最强 cliffhanger）；精修这些集的集尾断点（危机悬置/反转预告）再继续。")
+        if has_risk:
+            print("\n⛔ boundary_audit strict: 存在高风险粗胚边界；先做 5-10 集窗口复核并写 脚本/_拆集复核.md。")
         sys.exit(1)
 
 

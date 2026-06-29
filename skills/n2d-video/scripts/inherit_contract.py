@@ -23,12 +23,13 @@ import json
 import os
 import sys
 import time
+from typing import Dict
 
 _COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import CONTRACT_INHERITANCE_KIND, VISUAL_CONTRACT_FIELDS, production_dir  # noqa: E402
-from skill_snapshot import artifact_fingerprint  # noqa: E402
+from skill_snapshot import artifact_fingerprint, fingerprint_is_fresh  # noqa: E402
 # 比对核心已上移到 n2d/_lib/n2d_contract_diff.py（单一真值源），让 gate.py 也能在 common 层调用，
 # 而非 n2d-review 反向 import n2d-video。此处 re-export 以保持本模块/测试的既有 API。
 from n2d_contract_diff import (  # noqa: E402,F401
@@ -112,6 +113,29 @@ def _render_md(ep: str, results: list, img_rel: str, vid_rel: str, verdict: str)
     return "\n".join(lines)
 
 
+def pixel_contract_contradictions(root: str, ep: str) -> Dict[str, object]:
+    """桥接 claim→reality（#5·2026-06-28）：契约五字段里色调/光位是焊进首帧像素的，两侧 prompt
+    文本一致≠像素就对。这里**复用 image_qc 已落档的逐帧像素实测**（tone_light_contract），
+    若像素与申报色调/光位意图矛盾，就把它带到契约继承边界——文本 pass 不再掩盖像素背离。
+
+    返回 {available, fresh, findings, note}；只信新鲜的 image_qc 报告（stale 则提示重跑，不当真）。"""
+    path = os.path.join(root, "生产数据", "image_qc", ep, f"image_qc_{ep}.json")
+    if not os.path.isfile(path):
+        return {"available": False, "findings": [], "note": "无 image_qc 报告，跳过像素佐证（出图阶段未落 tone_light_contract）。"}
+    try:
+        payload = json.load(open(path, encoding="utf-8"))
+    except Exception as exc:
+        return {"available": False, "findings": [], "note": f"image_qc 报告不可读：{exc}"}
+    fresh = fingerprint_is_fresh(payload.get("inputs_fingerprint"), root)
+    if fresh is not True:
+        state = "stale（出图后又重出）" if fresh is False else "unknown（报告无 inputs_fingerprint）"
+        return {"available": True, "fresh": False, "findings": [],
+                "note": f"image_qc 像素佐证新鲜度={state}，不采纳旧像素证据；先对当前图重跑 image_qc 再校验契约。"}
+    findings = (payload.get("tone_light_contract") or {}).get("findings") or []
+    return {"available": True, "fresh": True, "findings": list(findings),
+            "note": "" if not findings else "image_qc 实测首帧像素与申报色调/光位意图矛盾（pixel 非 text）。"}
+
+
 def run(root: str, ep: str) -> int:
     img_rel = os.path.join("出图", ep, "prompt", "00_总览.md")
     vid_rel = os.path.join("出视频", ep, "prompt", "00_总览.md")
@@ -140,8 +164,12 @@ def run(root: str, ep: str) -> int:
     asset_blocks = [f for f in asset.get("findings", []) if f.get("severity") == "block"]
     asset_warns = [f for f in asset.get("findings", []) if f.get("severity") == "warn"]
 
+    # #5 像素佐证：复用 image_qc 实测，文本两侧一致但像素与申报色调/光位矛盾时升档（pass→warn）。
+    pixel = pixel_contract_contradictions(root, ep)
+    pixel_findings = pixel.get("findings") or []
+
     verdict = ("block" if (summary["block"] or identity_blocks or asset_blocks)
-               else ("warn" if (summary["warn"] or asset_warns) else "pass"))
+               else ("warn" if (summary["warn"] or asset_warns or pixel_findings) else "pass"))
 
     out_dir = production_dir(root)
     os.makedirs(out_dir, exist_ok=True)
@@ -154,6 +182,7 @@ def run(root: str, ep: str) -> int:
         "summary": summary,
         "identity_handoff": identity,
         "asset_handoff": asset,
+        "pixel_contract": pixel,
         "verdict": verdict,
         "rule": "视频侧契约可有意收紧/细化（归一化后包含出图侧原文即 pass）；只拦改写/丢失；光位锚+轴线视线漂移=block；命名角色镜逐镜 prompt 未锁身份=block；出图绑定资产在出视频丢失=block",
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
@@ -187,6 +216,10 @@ def run(root: str, ep: str) -> int:
         print(f"  - [block] 身份交接 {f.get('clip_id')}: {f.get('code')} — {f.get('note')}")
     for f in asset_blocks:
         print(f"  - [block] 物料交接 {f.get('clip_id')}: {f.get('code')} — {f.get('note')}")
+    for f in pixel_findings:
+        print(f"  - [warn] 像素佐证 {f.get('code')}: {f.get('msg')}")
+    if pixel.get("note") and not pixel_findings:
+        print(f"  · 像素佐证：{pixel.get('note')}")
     if verdict == "block":
         if summary["block"]:
             print("⛔ 有契约 block：先按出图侧原文修 出视频/prompt/00_总览.md 的视觉契约，再出视频。", file=sys.stderr)

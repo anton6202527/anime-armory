@@ -38,6 +38,7 @@ COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 from n2d_contract import shared_asset_path  # noqa: E402  共享定妆目录单一真值源
+import state_continuity as stc  # noqa: E402  剧情指定易容/变身/毁容区间 → 脸漂 block 降 warn（不误伤剧情）
 
 DEFAULT_MARGIN = 0.08
 IDENTITY_REF_RE = re.compile(
@@ -670,6 +671,46 @@ def discover_costume_sets_from_registry(root: str) -> Dict[str, Dict[str, str]]:
     return out
 
 
+NON_HUMAN_ANCHOR_POLICY_TYPES = {
+    "non_human_creature",
+    "non_human_visual_anchor",
+    "non_human_no_face",
+}
+
+
+def registry_anchor_policies(root: str) -> Dict[str, Dict[str, object]]:
+    """identity_registry.json → {asset_key: anchor_policy}.
+
+    Human/humanoid forms must still pass the normal single-clear-face anchor
+    gate. Non-human creature forms can explicitly opt into a visual-anchor
+    policy so a bird/dragon true form is not falsely blocked by a human face
+    detector.
+    """
+    path = os.path.join(root, "出图", "共享", "identity_registry.json")
+    try:
+        data = json.load(open(path, encoding="utf-8"))
+    except Exception:
+        return {}
+    out: Dict[str, Dict[str, object]] = {}
+    for ch in data.get("characters") or []:
+        for form in ch.get("forms") or []:
+            if not isinstance(form, dict):
+                continue
+            asset = str(form.get("asset_key") or "").strip()
+            if not asset:
+                continue
+            raw = form.get("anchor_policy") or form.get("face_anchor_policy")
+            if isinstance(raw, dict):
+                out[asset] = dict(raw)
+    return out
+
+
+def is_non_human_anchor_policy(policy: Mapping[str, object] | None) -> bool:
+    if not isinstance(policy, Mapping):
+        return False
+    return str(policy.get("type") or "").strip() in NON_HUMAN_ANCHOR_POLICY_TYPES
+
+
 def registry_variant_paths(form: Mapping[str, object]) -> Dict[str, str]:
     """Extract canonical face anchor paths from a character form registry entry."""
     out: Dict[str, str] = {}
@@ -1016,6 +1057,9 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN,
             "无 fidelity-gate（未跑 vlm_verify --write）——一致性均值可能被'稳定地错'的镜抬高；"
             "如需剔除崩 canonical 的镜，先跑 vlm_verify --write 落 canonical 通过表再复审。")
     char_ep_scores: Dict[str, List[float]] = {}  # 跨集 embedding 漂移用：本集每角色全镜「vs 共享定妆主参考」余弦
+    # 剧情指定的易容/变身/毁容区间：落区间内的镜，脸偏离单一定妆是「该变」而非漂移 → block 降 warn。
+    # 与服装锁同源同机制（state_continuity），但读 face 维度词典——换装区间不豁免脸锁、易容区间才豁免。
+    face_intervals = stc.appearance_change_intervals(root, ep, kind="face")
     for png, chars in sorted(smap.items()):
         full = os.path.join(root, "出图", ep, png)
         if not os.path.exists(full):
@@ -1085,6 +1129,11 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN,
                     if swap["duplicate_chars"] or swap["missing_chars"]:
                         row["face_swap"] = swap
                         row["verdict"] = swap_verdict(swap, row["verdict"])
+            # 剧情指定易容/变身/毁容区间：同一角色脸「该变」而非漂移 → block 降 warn（留痕 abs_verdict）。
+            # 串脸(face_swap)是「换错人」不是「有意改脸」，绝不豁免。
+            if not row.get("face_swap"):
+                stc.downgrade_appearance_block(row, face_intervals, row.get("char"),
+                                               stc.shot_num(png), expected_key="face_change_expected")
             if excluded:
                 row["fidelity_gate_excluded"] = True  # 已剔出一致性均值；归"渲染错误"维度
                 result.setdefault("render_errors", []).append(
@@ -1135,6 +1184,7 @@ def anchor_verdict(face_count: int, box_ratio: float, min_ratio: float = 0.06) -
 def audit_anchors(root: str, min_ratio: float = 0.06) -> dict:
     """审 出图/共享/图片/定妆_<角色>.png 主参考：恰好 1 张清晰、够大的正脸。"""
     sets = discover_costume_sets(root)
+    anchor_policies = registry_anchor_policies(root)
     app, _ = _load_embedder()  # 锚点质量只需检测器（单张清晰正脸），encoder 选择无关
     out: dict = {"available": app is not None, "anchors": [], "notes": []}
     if app is None:
@@ -1147,6 +1197,17 @@ def audit_anchors(root: str, min_ratio: float = 0.06) -> dict:
         out["notes"].append("锚点质量门已跳过（未装 cv2）。")
         return out
     for char, variants in sorted(sets.items()):
+        policy = anchor_policies.get(char)
+        if is_non_human_anchor_policy(policy):
+            out["anchors"].append({
+                "char": char,
+                "faces": 0,
+                "box_ratio": 0.0,
+                "verdict": "ok",
+                "reason": "non_human_anchor_policy",
+                "anchor_policy": str(policy.get("type") or ""),
+            })
+            continue
         main = variants.get("主")
         if not main:
             continue
@@ -1168,6 +1229,44 @@ def audit_anchors(root: str, min_ratio: float = 0.06) -> dict:
         except Exception as e:
             out["anchors"].append({"char": char, "verdict": "warn", "reason": f"检测异常 {e}"})
     return out
+
+
+def verify_faceless(png_path: str, min_ratio: float = 0.02) -> dict:
+    """像素核验一张图是否「无清晰人脸」（faceless 脸策略资产用·治含人资产镜脸漂）。
+
+    返回 {available, clear_faces, max_ratio, verdict}：
+      - verdict=ok      检测到 0 张达阈值清晰脸（合格的握持比例/尺度参考·人只作背身/裁脸尺度尺）；
+      - verdict=block   ≥1 张清晰脸（faceless 资产却画出可辨识人脸=脸漂高发·硬拦）；
+      - verdict=unavailable 未装 insightface/cv2 或读不到图（交人审·不臆造通过）。
+    min_ratio：脸框占画面比 ≥ 此值才算"清晰脸"（极小尺度尺人形不触发）。"""
+    app, _ = _load_embedder()
+    if app is None:
+        return {"available": False, "clear_faces": 0, "max_ratio": 0.0, "verdict": "unavailable",
+                "reason": "未装 insightface/cv2——faceless 像素核验跳过，交人审"}
+    try:
+        import cv2  # type: ignore
+    except Exception:
+        return {"available": False, "clear_faces": 0, "max_ratio": 0.0, "verdict": "unavailable",
+                "reason": "未装 cv2"}
+    try:
+        img = cv2.imread(png_path)
+        if img is None:
+            return {"available": True, "clear_faces": 0, "max_ratio": 0.0, "verdict": "unavailable",
+                    "reason": f"读不到 PNG：{png_path}"}
+        h, w = img.shape[:2]
+        faces = app.get(img) or []
+        clear = 0
+        max_ratio = 0.0
+        for f in faces:
+            ratio = float(((f.bbox[2]-f.bbox[0])*(f.bbox[3]-f.bbox[1])) / float(max(1, w*h)))
+            max_ratio = max(max_ratio, ratio)
+            if ratio >= min_ratio:
+                clear += 1
+        return {"available": True, "clear_faces": clear, "max_ratio": round(max_ratio, 4),
+                "verdict": "block" if clear else "ok"}
+    except Exception as e:  # pragma: no cover - defensive
+        return {"available": True, "clear_faces": 0, "max_ratio": 0.0, "verdict": "unavailable",
+                "reason": f"检测异常 {e}"}
 
 
 def main(argv: List[str]) -> int:

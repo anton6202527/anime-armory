@@ -3,6 +3,7 @@ cd skills/n2d-review/scripts && python -m pytest test_face_consistency.py
 """
 import math
 import os
+import json
 
 import face_consistency as fc
 
@@ -258,6 +259,24 @@ def test_anchor_verdict():
     assert fc.anchor_verdict(1, 0.02, min_ratio=0.06) == "warn"  # 脸太小
     assert fc.anchor_verdict(1, 0.20, min_ratio=0.06) == "ok"    # 单张够大正脸
     assert fc.anchor_verdict(1, 0.06, min_ratio=0.06) == "ok"    # 等于下限放行
+
+
+def test_registry_anchor_policy_marks_non_human_creature(tmp_path):
+    reg_dir = tmp_path / "出图" / "共享"
+    reg_dir.mkdir(parents=True)
+    (reg_dir / "identity_registry.json").write_text(json.dumps({
+        "characters": [{
+            "id": "CHAR_YUNLING",
+            "forms": [{
+                "form": "金翅大鹏真身",
+                "asset_key": "CHAR_YUNLING_GOLDEN_ROC",
+                "anchor_policy": {"type": "non_human_creature"},
+            }],
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+    policies = fc.registry_anchor_policies(str(tmp_path))
+    assert fc.is_non_human_anchor_policy(policies["CHAR_YUNLING_GOLDEN_ROC"])
+    assert not fc.is_non_human_anchor_policy({"type": "humanoid_face"})
 
 
 def test_pillow_fallback_when_no_insightface(tmp_path):
@@ -611,3 +630,12 @@ def test_arbiter_resolve_only_acts_on_warn_and_needs_data():
 def test_dreamsim_arbiter_off_by_default(monkeypatch):
     monkeypatch.delenv("N2D_DREAMSIM_ARBITER", raising=False)
     assert fc._load_dreamsim() is None
+
+
+# ── faceless 像素核验器 verify_faceless（无 insightface 时优雅降级） ──
+def test_verify_faceless_unavailable_or_structure(tmp_path):
+    import face_consistency as fc
+    # 不存在的图：available 取决于是否装 insightface；verdict 必为 unavailable（读不到/无检测器），绝不臆造 ok/block
+    res = fc.verify_faceless(str(tmp_path / "nope.png"))
+    assert res["verdict"] in ("unavailable",)
+    assert set(("available", "clear_faces", "max_ratio", "verdict")) <= set(res)

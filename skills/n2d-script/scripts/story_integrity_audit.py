@@ -292,13 +292,58 @@ def thread_candidates(root: str, eps: Sequence[str]) -> List[Dict[str, Any]]:
     return out
 
 
+def thread_merge_key(thread: Dict[str, Any]) -> Tuple[str, ...]:
+    thread_id = str(thread.get("thread_id") or thread.get("id") or "").strip()
+    if thread_id:
+        return ("thread_id", thread_id)
+    opened = str(thread.get("opened_ep") or "").strip()
+    due = str(thread.get("next_due_ep") or "").strip()
+    if opened and due:
+        return ("episode_slot", opened, due)
+    return ("open_question", str(thread.get("open_question") or "").strip())
+
+
+def merge_thread_rows(old: Dict[str, Any], new: Dict[str, Any]) -> Dict[str, Any]:
+    preserved = {
+        k: old.get(k)
+        for k in ("status", "payoff_ep")
+        if str(old.get(k) or "").strip()
+    }
+    return {**old, **new, **preserved}
+
+
+def dedupe_threads(threads: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    merged: List[Dict[str, Any]] = []
+    positions: Dict[Tuple[str, ...], int] = {}
+    for thread in threads:
+        if not isinstance(thread, dict):
+            continue
+        row = dict(thread)
+        key = thread_merge_key(row)
+        if key in positions:
+            idx = positions[key]
+            merged[idx] = merge_thread_rows(merged[idx], row)
+        else:
+            positions[key] = len(merged)
+            merged.append(row)
+    return merged
+
+
 def merge_threads(existing: Sequence[Dict[str, Any]], candidates: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    merged = [dict(t) for t in existing if isinstance(t, dict)]
+    merged = dedupe_threads(existing)
+    positions = {thread_merge_key(t): idx for idx, t in enumerate(merged)}
     have = {str(t.get("open_question") or t.get("thread_id") or t.get("id")) for t in merged}
     for cand in candidates:
+        cand_key = thread_merge_key(cand)
         key = str(cand.get("open_question") or cand.get("thread_id"))
+        if cand_key in positions:
+            idx = positions[cand_key]
+            merged[idx] = merge_thread_rows(merged[idx], cand)
+            have.add(key)
+            continue
         if key not in have:
             merged.append(dict(cand))
+            positions[cand_key] = len(merged) - 1
             have.add(key)
     return merged
 

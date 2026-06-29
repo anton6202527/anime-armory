@@ -156,6 +156,20 @@ def test_appearance_write_uses_batch_backend(tmp_path, monkeypatch):
     assert payload["findings"][0]["character"] == "CHAR_shen"
 
 
+def test_appearance_auto_mlxvlm_batch_template(monkeypatch):
+    monkeypatch.delenv("N2D_APPEARANCE_BATCH_CMD", raising=False)
+    monkeypatch.setattr(ajr, "_n2dvlm_env_exists", lambda: True)
+    cmd = ajr._appearance_batch_cmd()
+    assert "appearance_mlxvlm.py" in cmd
+    assert "conda run -n n2dvlm" in cmd
+
+
+def test_appearance_auto_batch_can_disable(monkeypatch):
+    monkeypatch.setenv("N2D_APPEARANCE_BATCH_CMD", "off")
+    monkeypatch.setattr(ajr, "_n2dvlm_env_exists", lambda: True)
+    assert ajr._appearance_batch_cmd() == ""
+
+
 def test_appearance_mlxvlm_backend_no_pairs_writes_manifest(tmp_path):
     backend_path = os.path.join(os.path.dirname(__file__), "backends", "appearance_mlxvlm.py")
     spec = importlib.util.spec_from_file_location("appearance_mlxvlm_backend", backend_path)

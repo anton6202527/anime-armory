@@ -35,6 +35,58 @@ def test_variation_deltas_structured_fields() -> None:
     assert "strong_emotion" not in rp.variation_deltas("", "", {}, shot_size="中景", expression_span="中")
 
 
+def test_is_action_eyeline_shot() -> None:
+    assert rp.is_action_eyeline_shot("fight_exchange 拆招")
+    assert rp.is_action_eyeline_shot("姜月初挥戟斩向对手·命中")
+    assert rp.is_action_eyeline_shot("magic_burst 法术爆发")
+    assert not rp.is_action_eyeline_shot("两人静坐对话，中景")
+
+
+def test_variation_deltas_action_eyeline_lock() -> None:
+    # 动作镜 → action_eyeline_lock；显式 POV/破第四墙镜豁免（允许直视镜头）。
+    assert "action_eyeline_lock" in rp.variation_deltas("", "打斗·斜劈·命中", {})
+    assert "action_eyeline_lock" in rp.variation_deltas("fight_exchange", "拆招", {})
+    assert "action_eyeline_lock" not in rp.variation_deltas("", "两人对坐品茶", {})
+    # opponent POV / 破第四墙 → 豁免（即便有打斗词）
+    assert "action_eyeline_lock" not in rp.variation_deltas("", "打斗·命中·opponent POV", {})
+    assert "action_eyeline_lock" not in rp.variation_deltas("", "拆招·破第四墙直视镜头=导演意图", {})
+
+
+def test_action_eyeline_lock_promotes_threequarter_and_emits_directive() -> None:
+    # 动作镜：¾ 提为主身份锚（strength≥0.78、排在 front 前）、front 降权、开视线指令。
+    p = rp.plan_character_in_clip(
+        _char(), deltas=["action_eyeline_lock"], multi=False,
+        profile=_MULTI_REF, tier="multi_reference", scope_is_core=True,
+    )
+    refs = p["recommended_references"]
+    roles = [r["role"] for r in refs]
+    tq = next(r for r in refs if r["role"] == "three_quarter")
+    fr = next(r for r in refs if r["role"] == "front")
+    assert tq["strength_hint"] >= 0.78 and fr["strength_hint"] <= 0.55
+    assert roles.index("three_quarter") < roles.index("front")  # ¾ 排在 front 之前
+    assert p["pose_gaze_directive"] and "不直视镜头" in p["pose_gaze_directive"]
+    assert any("视线锁定" in s for s in p["prompt_required"])
+
+
+def test_action_eyeline_lock_flags_missing_threequarter() -> None:
+    rg = dict(_RG)
+    rg.pop("three_quarter", None)
+    p = rp.plan_character_in_clip(
+        _char(rg=rg), deltas=["action_eyeline_lock"], multi=False,
+        profile=_MULTI_REF, tier="multi_reference", scope_is_core=False,
+    )
+    assert any("¾" in m or "three_quarter" in m for m in p["missing_references"])
+    assert p["pose_gaze_directive"]  # 仍开指令（缺 ¾ 时更要补拍）
+
+
+def test_non_action_shot_no_directive() -> None:
+    p = rp.plan_character_in_clip(
+        _char(), deltas=["closeup"], multi=False,
+        profile=_MULTI_REF, tier="multi_reference", scope_is_core=True,
+    )
+    assert p["pose_gaze_directive"] is None and p["prompt_required"] == []
+
+
 def test_parse_clip_new_schema() -> None:
     clip = {
         "id": "Clip_02", "description": "枯枝指阴狠开口威胁",
@@ -48,6 +100,47 @@ def test_parse_clip_new_schema() -> None:
     assert parsed["character_ids"] == ["CHAR_08", "CHAR_06"]
     assert parsed["shot_size"] == "枯枝指中近景" and parsed["expression_span"] == "大"
     assert "枯枝指" in parsed["text"] and "略仰机位" in parsed["text"]
+
+
+def test_parse_clip_template_contract_string() -> None:
+    clip = {
+        "id": "Clip_02",
+        "description": "姜月初挥戟斩向李乾元",
+        "character_ids": ["CHAR_JIANG_YUECHU", "CHAR_LI_QIANYUAN"],
+        "template_contract": "fight_exchange",
+        "continuity": {"shot_size": "中景", "expression_span": "中"},
+    }
+    parsed = rp.parse_clip(clip)
+    assert parsed["character_ids"] == ["CHAR_JIANG_YUECHU", "CHAR_LI_QIANYUAN"]
+    assert "fight_exchange" in parsed["text"]
+    assert "姜月初" in parsed["text"]
+
+
+def test_parse_clip_project_schema_characters_and_clip_id_text() -> None:
+    clip = {
+        "clip": "Clip_11",
+        "scene": "益州上空",
+        "characters": ["CHAR_JIANG_YUECHU/燃灯双灯态", "CHAR_YUNLING_DASHENG"],
+        "action": "姜月初双心灯燃起，云翎大圣跪伏。",
+        "camera": "low angle closeup",
+        "template_contract": "breakthrough_reveal",
+    }
+    parsed = rp.parse_clip(clip)
+    assert parsed["character_ids"] == ["CHAR_JIANG_YUECHU", "CHAR_YUNLING_DASHENG"]
+    assert "Clip_11" in parsed["text"]
+    assert "燃灯双灯态" in parsed["text"]
+    assert "breakthrough_reveal" in parsed["text"]
+
+
+def test_pick_form_prefers_form_name_in_clip_text() -> None:
+    char = {
+        "forms": [
+            {"form": "玄衣战斗态", "asset_key": ""},
+            {"form": "燃灯双灯态", "asset_key": ""},
+        ]
+    }
+    picked = rp._pick_form(char, "CHAR_JIANG_YUECHU/燃灯双灯态 双心灯燃起")
+    assert picked["form"] == "燃灯双灯态"
 
 
 def test_clip_present_prefers_character_ids() -> None:
@@ -219,6 +312,47 @@ def test_multi_subject_strategy_adds_distinct_anchor_field_and_scheduling() -> N
     assert "区分锚点（互斥发色/服装主色/配饰）" in strategy["required_prompt_fields"]
     assert strategy["distinct_anchors"]["collision"] is True
     assert strategy["shot_scheduling"]["verdict"] == "split_or_layer_required"
+
+
+def test_multi_subject_strategy_injects_relative_scale_when_declared() -> None:
+    # registry 声明的 relative_scale 经 dna_by_id 注入多人同框策略，并加 required_prompt_field；
+    # 绝对身高数字不进策略（只 relative_scale）。
+    chars = [
+        {"char_id": "CHAR_01", "form": "常态", "tier": "multi_reference"},
+        {"char_id": "CHAR_02", "form": "常服", "tier": "multi_reference"},
+    ]
+    dna = {"CHAR_01": {"hair": "乌黑", "outfit": "月白", "relative_scale": ""},
+           "CHAR_02": {"hair": "金发", "outfit": "玄黑", "relative_scale": "比沈念高半个头"}}
+    strategy = rp.plan_multi_subject_strategy(chars, _MULTI_REF, dna_by_id=dna)
+    assert strategy["relative_scale"] == {"CHAR_02": "比沈念高半个头"}
+    assert "相对身量/身高比例（relative_scale）" in strategy["required_prompt_fields"]
+
+
+def test_multi_subject_strategy_no_relative_scale_field_when_absent() -> None:
+    chars = [
+        {"char_id": "CHAR_01", "form": "常态", "tier": "multi_reference"},
+        {"char_id": "CHAR_02", "form": "常服", "tier": "multi_reference"},
+    ]
+    strategy = rp.plan_multi_subject_strategy(chars, _MULTI_REF)
+    assert strategy["relative_scale"] == {}
+    assert "相对身量/身高比例（relative_scale）" not in strategy["required_prompt_fields"]
+
+
+def test_load_character_forms_carries_physical_scale(tmp_path) -> None:
+    # registry 的 physical_scale 透传进 norm_forms，供下游 dna_by_id/策略读取
+    root = tmp_path
+    (root / "出图" / "共享").mkdir(parents=True)
+    registry = {"characters": [{
+        "id": "CHAR_01", "name": "王敦",
+        "forms": [{"form": "常态", "asset_key": "王敦",
+                   "character_dna": {"face": "圆脸"},
+                   "physical_scale": {"height_cm": 178, "body_type": "微胖",
+                                      "relative_scale": "比沈念高半个头"}}],
+    }]}
+    (root / "出图" / "共享" / "identity_registry.json").write_text(
+        json.dumps(registry, ensure_ascii=False), encoding="utf-8")
+    forms = rp.load_character_forms(root)
+    assert forms[0]["forms"][0]["physical_scale"]["relative_scale"] == "比沈念高半个头"
 
 
 def test_distinct_anchors_embedding_confusable_overrides_distinct_palette() -> None:
@@ -393,3 +527,118 @@ def test_memory_refs_matcher_flexible_keys():
     assert rp._memory_refs_for({"CHAR_01/常态": ["m1.png"]}, "CHAR_01", "沈念", "CHAR_01/常态") == ["m1.png"]
     assert rp._memory_refs_for({"沈念": ["m2.png"]}, "CHAR_01", "沈念", "") == ["m2.png"]
     assert rp._memory_refs_for({"CHAR_99": ["x"]}, "CHAR_01", "沈念", "") == []
+
+
+def test_build_plan_ignores_blackboard_expression_span_edits(tmp_path):
+    import sys, os as _os
+    sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "..", "n2d", "_lib"))
+    import n2d_intent as ni
+    root = _setup_work(tmp_path)
+    # C1 改成中性描述 + expression_span=微（storyboard 不触发大表情大变化）
+    sbp = root / "脚本" / "第1集" / "storyboard.json"
+    sb = json.loads(sbp.read_text(encoding="utf-8"))
+    sb["clips"][0]["shots"] = [{"lens": "CU 85mm", "desc": "沈念静静站着"}]
+    sb["clips"][0]["continuity"] = {"expression_span": "微", "start_state": "", "end_state": ""}
+    sb["clips"][0]["character_ids"] = ["CHAR_01"]
+    sbp.write_text(json.dumps(sb, ensure_ascii=False), encoding="utf-8")
+    # storyboard 中性 + expression_span=微 → 不触发 strong_emotion variation_delta
+    base = json.dumps(rp.build_plan(root, "第1集"), ensure_ascii=False).count("strong_emotion")
+    assert base == 0
+    # 手改黑板把 C1 升「大表情」：应无效，出图侧继续以 storyboard 为真值源。
+    ni.write_shot_intent(str(root), "第1集")
+    obj = ni.load_shot_intent(str(root), "第1集")
+    obj["shots"][0]["expression_span"] = "大"
+    (root / "脚本" / "第1集" / "shot_intent.json").write_text(json.dumps(obj, ensure_ascii=False), encoding="utf-8")
+    after = json.dumps(rp.build_plan(root, "第1集"), ensure_ascii=False).count("strong_emotion")
+    assert after == 0
+
+
+def test_reference_feed_tagged_multi_image_for_multi_reference_backend() -> None:
+    # 多参考后端 + ≥2 张参考 → 分图分标，给出 @ImageN 标签，明确不要拼 sheet。
+    p = rp.plan_character_in_clip(
+        _char(), deltas=["closeup"], multi=False,
+        profile=_MULTI_REF, tier="multi_reference", scope_is_core=True,
+    )
+    feed = p["reference_feed"]
+    assert feed["mode"] == "tagged_multi_image"
+    assert feed["tagged_inputs"] and feed["tagged_inputs"][0].startswith("@Image1")
+    assert "sheet" in feed["guidance"]
+
+
+def test_reference_feed_single_reference_for_non_multi_backend() -> None:
+    profile = {"label": "单参考后端", "canonical": "x", "multi_reference": False, "max_reference_images": None}
+    p = rp.plan_character_in_clip(
+        _char(), deltas=["closeup"], multi=False,
+        profile=profile, tier="reference_group", scope_is_core=False,
+    )
+    feed = p["reference_feed"]
+    assert feed["mode"] == "sequential_single_reference"
+    assert feed["tagged_inputs"] == []
+
+
+def test_reference_feed_video_hint_when_backend_ingests_video() -> None:
+    profile = {"label": "可灵Elements", "canonical": "kling", "multi_reference": True,
+               "max_reference_images": None, "ingests_video": True}
+    p = rp.plan_character_in_clip(
+        _char(), deltas=["strong_emotion"], multi=False,
+        profile=profile, tier="native_unregistered", scope_is_core=True,
+    )
+    feed = p["reference_feed"]
+    assert feed["video_reference_supported"] is True
+    assert "视频" in feed["video_reference_hint"]
+
+
+def test_reference_feed_no_video_hint_when_backend_lacks_video() -> None:
+    p = rp.plan_character_in_clip(
+        _char(), deltas=["strong_emotion"], multi=False,
+        profile=_MULTI_REF, tier="native_unregistered", scope_is_core=True,
+    )
+    assert p["reference_feed"]["video_reference_supported"] is False
+    assert p["reference_feed"]["video_reference_hint"] == ""
+
+
+# ── 共享资产脸策略规划（治含人资产镜规划侧脸漂盲区·#7） ──
+def _mk_assets(tmp_path, assets):
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True, exist_ok=True)
+    (shared / "asset_registry.json").write_text(
+        json.dumps({"assets": assets}, ensure_ascii=False), encoding="utf-8")
+    return tmp_path
+
+
+def test_plan_shared_assets_faceless_and_none(tmp_path):
+    root = _mk_assets(tmp_path, [
+        {"id": "WEAPON_H", "type": "weapon", "owner": "CHAR_J", "name": "戟",
+         "reference_group": {"scale_reference": "图片/定妆_握持比例.png"}},   # faceless
+        {"id": "WEAPON_PLAIN", "type": "weapon", "name": "纯武器美术"},        # none → 跳过
+    ])
+    sa = rp.plan_shared_assets(root, [])
+    assert sa["available"] is True
+    ids = {a["asset_id"]: a for a in sa["assets"]}
+    assert ids["WEAPON_H"]["face_policy"] == "faceless" and ids["WEAPON_H"]["face_refs"] == []
+    assert "WEAPON_PLAIN" not in ids                # none 不进规划
+    assert sa["summary"]["faceless"] == 1 and sa["actions"] == []
+
+
+def test_plan_shared_assets_face_locked_no_owner_actions(tmp_path):
+    root = _mk_assets(tmp_path, [
+        {"id": "POSTER_BAD", "type": "poster", "name": "群像海报 人物"},       # face_locked·无 owner
+    ])
+    sa = rp.plan_shared_assets(root, [])
+    a = [x for x in sa["assets"] if x["asset_id"] == "POSTER_BAD"][0]
+    assert a["face_policy"] == "face_locked" and a["issue"] == "face_locked_no_owner"
+    assert any(ac["issue"] == "face_locked_no_owner" for ac in sa["actions"])
+
+
+def test_plan_shared_assets_face_locked_folds_owner_anchor(tmp_path):
+    root = _mk_assets(tmp_path, [
+        {"id": "WEAPON_ACT", "type": "weapon", "owner": "CHAR_J", "name": "持械动作参考",
+         "reference_group": {"primary": "图片/定妆_WEAPON_ACT_动作_持.png"}},   # face_locked + owner
+    ])
+    chars = [{"id": "CHAR_J", "forms": [{"form": "常态",
+              "reference_group": {"face": "出图/共享/图片/定妆_CHAR_J_脸.png"}}]}]
+    sa = rp.plan_shared_assets(root, chars)
+    a = [x for x in sa["assets"] if x["asset_id"] == "WEAPON_ACT"][0]
+    assert a["face_policy"] == "face_locked" and a["carried_identities"] == ["CHAR_J"]
+    assert a["face_refs"] and a["face_refs"][0]["role"] == "face_anchor" and "CHAR_J" in a["face_refs"][0]["carried"]
+    assert a.get("issue") is None and sa["actions"] == []

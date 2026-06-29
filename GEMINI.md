@@ -35,6 +35,7 @@ Match user intent against the table below (and each `SKILL.md`'s Triggers). Reco
 |---|---|
 | Write a novel, import a source book, build living-material observation notes or positive aesthetic samples, expand/rewrite/continue/score/review/professional edit, power-system / level / growth-number consistency self-check for 穿越/系统流 | **`novel`** (→ novel-create/observe/aesthetic/fetch/rewrite/review/edit/score/wiki …) |
 | Turn a novel into an AI comic-drama / short-drama (storyboard/voice/image/video/compose) | **`n2d`** (→ n2d-script/voice/image/video/compose) |
+| Coordinate n2d as an agentic workflow, run deterministic prework, build context packs / creative loops, dispatch a few specialists | **`n2d-supervisor`** (consumes `n2d/run.py next --json`; does not replace the n2d state machine/gates/skills) |
 | Write a song, edit lyrics, compose, pick takes, cover/voice-swap, review | **`song`** (→ song-lyrics/compose/cover/review …) |
 | Make an MV for a song, beat-sync, image/video, karaoke subtitles, compose | **`mv`** (→ mv-script/beat/plan/image/video/compose …) |
 | Make an ad / TVC / feed ad / product demo / promo video / pre-spend ad scoring | **`ad`** (→ ad-concept/script/voice/image/video/compose/score/review) |

@@ -210,3 +210,35 @@ def test_accept_clip_updates_native_av_sidecar(monkeypatch, tmp_path: Path) -> N
     assert item["native_av_sidecar"]["status"] == "updated"
     saved = video_runner.load_json(manifest_file)
     assert saved["items"][0]["native_av_sidecar"]["physics_path"].endswith("native_av_physics_第1集.json")
+
+
+def test_submit_clip_skip_preflight_records_waiver(monkeypatch, tmp_path: Path) -> None:
+    # H2：--skip-preflight 不再静默旁路 video_preflight——必须记 dashboard waiver 留痕。
+    prompt = tmp_path / "prompt.txt"
+    prompt.write_text("人物运动：抬眼；\n镜头运动：慢推；", encoding="utf-8")
+    manifest_file = tmp_path / "manifest.json"
+    video_runner.atomic_write_json(manifest_file, {
+        "episode": "第1集",
+        "items": [{"clip": "Clip_01", "target": "Clip_01.mp4", "image": str(tmp_path / "first.png"),
+                   "prompt_file": str(prompt), "submit_duration": 4, "status": "prepared"}],
+    })
+
+    class Proc:
+        returncode = 0
+        stdout = '{"submit_id":"abc123","gen_status":"processing"}'
+        stderr = ""
+
+    preflight_calls = []
+    waiver_calls = []
+    monkeypatch.setattr(video_runner, "run_preflight_gate",
+                        lambda *a, **k: preflight_calls.append(a))
+    monkeypatch.setattr(video_runner, "run_identity_handoff_guard", lambda *a, **k: None)
+    monkeypatch.setattr(video_runner, "verify_cli_contract", lambda *a, **k: None)
+    monkeypatch.setattr(video_runner, "record_waiver",
+                        lambda root, ep, stage, waiver, reason: waiver_calls.append((ep, stage, waiver)))
+    monkeypatch.setattr(video_runner.subprocess, "run", lambda *a, **k: Proc())
+
+    video_runner.submit_clip(tmp_path, manifest_file, "Clip_01", skip_preflight=True)
+
+    assert preflight_calls == []                                  # preflight 确实被跳过
+    assert waiver_calls == [("第1集", "video_preflight", "skip-preflight")]  # 但留了痕

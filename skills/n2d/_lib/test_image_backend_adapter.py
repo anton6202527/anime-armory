@@ -104,6 +104,20 @@ def test_refresh_evidence_status_lifecycle(tmp_path):
     assert stale["status"] == "stale"
 
 
+def test_image_backend_baseline_detects_project_switch(tmp_path):
+    (tmp_path / "_设置.md").write_text("- 生图AI: Codex\n- 生图模型: GPT Image 2\n", encoding="utf-8")
+    path = adapter.write_image_backend_baseline(str(tmp_path))
+    assert path.exists()
+    assert adapter.image_backend_baseline_status(str(tmp_path))["status"] == "matched"
+
+    (tmp_path / "_设置.md").write_text("- 生图AI: Seedream\n- 生图模型: Seedream 4.5\n", encoding="utf-8")
+    status = adapter.image_backend_baseline_status(str(tmp_path))
+    assert status["status"] == "changed"
+    assert "backend" in status["changed_fields"]
+    assert status["baseline"]["backend"] == "codex"
+    assert status["current"]["backend"] == "seedream"
+
+
 def test_refresh_evidence_requires_structured_capability_assertions(tmp_path):
     path = adapter.refresh_evidence_path(str(tmp_path), "Codex")
     path.parent.mkdir(parents=True)

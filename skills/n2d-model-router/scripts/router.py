@@ -38,6 +38,7 @@ from n2d_contract import (  # noqa: E402  与 gate 共用的单一真值源
 from n2d_platform_profiles import (  # noqa: E402  视频后端档案单一真值源
     LIPSYNC_AUDIO_REF_BACKENDS,
     MOTION_CONTROL_PROFILES,
+    MULTILINGUAL_LIPSYNC_BACKENDS,
     NATIVE_AV_BACKENDS,
     SPECTACLE_BACKEND_PRIOR,
     VIDEO_BACKEND_LABELS,
@@ -50,8 +51,10 @@ from n2d_platform_profiles import (  # noqa: E402  视频后端档案单一真�
     video_backend_frame_control,
     video_backend_max_seconds,
     video_backend_supports_motion_reference,
+    video_backend_supports_multilingual_lipsync,
     video_backend_supports_multishot,
     video_backend_supports_quality_tier,
+    preferred_multilingual_lipsync_backend,
 )
 from n2d_settings import load_settings as _load_settings_md  # noqa: E402  _设置.md 解析单一真值源
 try:  # ③ 一角一后端亲和（advisory）：读 identity_registry 找已注册原生视频主体的角色
@@ -74,11 +77,49 @@ NARRATIVE_STATE_SHOT_TYPES = {"reveal_reaction_chain", "public_confrontation", "
 
 # 关闭对口型的 _设置.md 值；其余值（开启/配音对齐/原生口型/on…）视为 opt-in。
 LIPSYNC_OFF_VALUES = {"", "关闭", "否", "off", "no", "none", "disable", "disabled"}
+# 「对话近景」=新默认（2026-06-26）：仅对话近景说话镜默认走配音对齐口型，其余说话镜不进口型路由，
+# 成本有界。显式「配音对齐/后期pass/开启」仍对所有说话镜生效（旧 opt-in 行为）。
+LIPSYNC_DIALOGUE_CLOSEUP_DEFAULT_VALUES = {
+    v.lower() for v in ("对话近景", "对话近景默认", "dialogue_closeup", "dialogue_closeup_default")
+}
 FALLBACK_OFF_VALUES = {"", "无", "不使用", "关闭", "否", "off", "no", "none", "disable", "disabled"}
+
+# 跨后端英雄镜多版（2026-06-26）：英雄镜=名场面/开场钩/高潮（IP 改编初始流量来源）。开启后这些镜
+# 同时跑 primary + secondary 两个后端各出一版，pooled 进候选，video_qc 选优，避免单后端在高价值镜翻车。
+# costly 选择点：默认关闭、花钱前确认（见 选择点与偏好.md「英雄镜多版」）。
+HERO_MULTI_OFF_VALUES = {"", "关闭", "否", "off", "no", "none", "disable", "disabled"}
+# 英雄镜高潮/关系转折/真相揭示/对质 shot_type（复用 NARRATIVE_STATE_SHOT_TYPES + 动作/奇观高潮）。
+HERO_SHOT_TYPES = NARRATIVE_STATE_SHOT_TYPES | {
+    "fight_exchange", "magic_burst", "tribulation_breakthrough",
+    "alchemy_forging", "dual_cultivation", "kiss_or_near_kiss",
+}
+# 名场面/爽点兑现词表（与 n2d-image keyshot_candidates 的 signature_scene 同义；两线各自持有、不跨线 import）。
+HERO_SIGNATURE_RE = re.compile(
+    r"(名场面|高光时刻|打脸|逆袭|反杀|反败为胜|翻盘|绝地反击|封神|破境|突破境界|觉醒时刻|"
+    r"重逢|相认|认亲|告白|表白|复仇|报仇|雪耻|揭穿|揭露身份|真相大白|身世揭晓|夺权|登基|加冕|"
+    r"碾压|力压全场|扮猪吃虎|一鸣惊人|决战|对决|决斗|生死决|诀别|牺牲|英雄救美|全场震惊|众人震惊|"
+    r"当众打脸|封印|救场|封面|首图|系列总钩)")
 
 COMPLEX_TEMPLATES = {
     "fight_exchange",
     "chase",
+    "mount_ride",
+    "vehicle_ride",
+    "vessel_flight",
+    "road_vehicle",
+    "stealth_stalk",
+    "screen_insert",
+    "evidence_search",
+    "tribulation_breakthrough",
+    "meditation_cultivation",
+    "alchemy_forging",
+    "dual_cultivation",
+    "kiss_or_near_kiss",
+    "array_ritual",
+    "soul_manifestation",
+    "realm_portal",
+    "contract_summon",
+    "talent_test",
     "dialogue_shot_reverse",
     "reveal_reaction_chain",
     "public_confrontation",
@@ -94,7 +135,7 @@ COMPLEX_TEMPLATES = {
 
 # 高危物理接触镜头集（接触/形变风险）——只表示真实接触语义；Motion Control required 集合
 # 还包含追逐/飞行/多人调度等高动量或复杂空间镜，不能混成 "contact_motion"。
-CONTACT_SHOT_TYPES = {"fight_exchange", "hug_or_pull", "intimate_interaction"}
+CONTACT_SHOT_TYPES = {"fight_exchange", "kiss_or_near_kiss", "hug_or_pull", "intimate_interaction", "dual_cultivation"}
 
 PHYSICAL_INTERACTION_SHOT_TYPES = {
     *MOTION_CONTROL_REQUIRED_SHOT_TYPES,
@@ -167,6 +208,26 @@ def fixed_fallback_backends_from_settings(settings: Mapping[str, str], default_b
         if backend and backend != default_backend and backend not in out:
             out.append(backend)
     return out
+
+
+_OVERSEAS_REGIONS = {"北美", "东南亚", "全球", "north_america", "southeast_asia", "global", "overseas"}
+
+
+def is_overseas_target(settings: Mapping[str, str]) -> bool:
+    """出海(目标说话语言≠中文)判定：发行地区/变现模式/字幕语言任一指向海外非中文台词。纯函数·可测。
+
+    用于说话镜路由：出海时优先多语言唇同步最强后端，避免非中文台词口型/口音错配。
+    港澳台/中英双语仍以中文为主语音，不算（唇同步对的是被说出来的那种语言）。"""
+    region = str(settings.get("发行地区", "") or "").strip().lower()
+    monet = str(settings.get("变现模式", "") or "").strip()
+    subs = str(settings.get("字幕语言", "") or "").strip()
+    if region in _OVERSEAS_REGIONS:
+        return True
+    if "海外" in monet or "overseas" in monet.lower():
+        return True
+    if subs in {"仅英文", "english_only", "en"}:
+        return True
+    return False
 
 
 def av_mode_from_settings(settings: Mapping[str, str]) -> str:
@@ -692,7 +753,12 @@ def seam_relay_plan(clip: Mapping[str, Any], primary: str,
 # CLI 把 high→pro、fast→fast 解析成实际 model_version；后端无档位能力时本字段为 n/a（不浪费意图）。
 # 判据：身份吃重/高风险镜值 pro（脸/接触/多人/原生台词/已升锁）；空镜/无人物通用镜走 fast 省钱。
 HIGH_TIER_SHOT_TYPES = {
-    "fight_exchange", "chase", "flight", "hug_or_pull", "intimate_interaction", "dialogue_closeup",
+    "fight_exchange", "chase", "flight", "mount_ride", "vehicle_ride", "vessel_flight",
+    "road_vehicle", "stealth_stalk", "screen_insert", "evidence_search",
+    "tribulation_breakthrough", "meditation_cultivation", "alchemy_forging", "dual_cultivation", "kiss_or_near_kiss", "array_ritual", "soul_manifestation",
+    "realm_portal", "contract_summon", "talent_test",
+    "magic_burst",
+    "hug_or_pull", "intimate_interaction", "dialogue_closeup",
     "dialogue_shot_reverse", "reveal_reaction_chain", "public_confrontation", "relationship_turn",
     "multi_character_same_frame", "ensemble_blocking",
     "multi_person_blocking",
@@ -719,9 +785,12 @@ def quality_tier_for_clip(shot_type: str, risk_flags: Iterable[str], primary: st
 
 # ── 视频运动参考（把已通过 clip 当运动/风格参考·reference_video_motion）─────────────
 # Seedance/Kling 等可吃「视频片段参考」锁运动节奏/风格——与图身份锁正交的**跨镜运动连续性**轴。
-# 对长连续运动镜（追逐/飞行/打斗），把前一条已通过的同段 clip 作 motion/style ref 喂进去，运镜节奏
+# 对长连续运动镜（追逐/飞行/御兽/马车/飞舟/现代车辆/尾随潜入/打斗），把前一条已通过的同段 clip 作 motion/style ref 喂进去，运镜节奏
 # 更连贯。只做预防侧指引（prompt_requirement + hint），不强制——首条镜无前序参考时自然跳过。
-MOTION_REFERENCE_SHOT_TYPES = {"chase", "flight", "fight_exchange"}
+MOTION_REFERENCE_SHOT_TYPES = {
+    "chase", "flight", "mount_ride", "vehicle_ride", "vessel_flight",
+    "road_vehicle", "stealth_stalk", "fight_exchange", "magic_burst",
+}
 
 
 def motion_reference_plan(shot_type: str, primary: str) -> Dict[str, Any]:
@@ -831,9 +900,18 @@ def action_choreography_contract(shot_type: str) -> Dict[str, Any]:
         notes = [
             "one attack intention per clip; write setup -> attack -> impact -> reaction -> recovery",
             "impact/contact must have contact point, force direction, readable hit frame, and recovery beat",
+            "premium fields keyframe_plan/post_cue_points/physics_guard must map hit-stop, SFX peak, and limb/weapon ownership",
         ]
         failure_modes = ["unclear_hit", "wrong_force_direction", "limb_fusion", "weapon_contact_drift", "extra_unplanned_hits"]
         beat_model = "setup_attack_impact_reaction_recovery"
+    elif shot_type == "magic_burst":
+        notes = [
+            "lock effect_asset/vfx_asset shape, color, source point, energy_path, and collision/apex frame",
+            "write charge -> release -> collision/apex -> aftermath; one power result per clip",
+            "premium fields keyframe_plan/post_cue_points/physics_guard must map flash, impact boom, aftershock, and VFX shape guard",
+        ]
+        failure_modes = ["vfx_shape_drift", "energy_path_flip", "collision_point_lost", "unreadable_apex", "new_unplanned_spell"]
+        beat_model = "charge_release_collision_aftermath"
     elif shot_type == "chase":
         notes = [
             "keep one screen direction; distance curve may close OR open, not both in one clip",
@@ -841,13 +919,52 @@ def action_choreography_contract(shot_type: str) -> Dict[str, Any]:
         ]
         failure_modes = ["screen_direction_flip", "distance_curve_reset", "pose_drift", "background_stickiness", "teleporting"]
         beat_model = "direction_distance_obstacle_result"
-    else:
+    elif shot_type == "flight":
         notes = [
             "lock rider/body pose and move cloud/mountain/parallax layers; only maneuver shots may change pose",
             "write altitude curve and mount/cloud lock so sword/cloud shape does not morph",
         ]
         failure_modes = ["pose_drift", "altitude_curve_drift", "mount_shape_drift", "background_stickiness", "camera_float"]
         beat_model = "takeoff_cruise_maneuver_arrival"
+    elif shot_type == "mount_ride":
+        notes = [
+            "lock rider/mount contact points, saddle or harness shape, and one gait cycle",
+            "sell speed with dust, grass, mane, cloth, foreground occlusion, and side-tracking camera",
+        ]
+        failure_modes = ["rider_mount_contact_drift", "gait_cycle_reset", "pose_drift", "harness_morph", "background_stickiness"]
+        beat_model = "mount_establish_gait_turn_arrival"
+    elif shot_type == "vehicle_ride":
+        notes = [
+            "lock carriage or vehicle silhouette, wheel count/position, and harness connection",
+            "sell motion with wheel rotation, hoof/road feedback, dust, curtains, and parallax layers",
+        ]
+        failure_modes = ["vehicle_shape_drift", "wheel_count_or_rotation_error", "harness_morph", "direction_flip", "background_stickiness"]
+        beat_model = "vehicle_establish_rolling_stop"
+    elif shot_type == "vessel_flight":
+        notes = [
+            "lock flying vessel silhouette, flight path, altitude curve, and screen direction",
+            "keep vessel pose stable; use clouds, mountains, light trails, and parallax layers for speed",
+        ]
+        failure_modes = ["vessel_shape_drift", "altitude_curve_drift", "direction_flip", "scale_jump", "background_stickiness"]
+        beat_model = "vessel_enter_cruise_maneuver_arrival"
+    elif shot_type == "road_vehicle":
+        notes = [
+            "lock car/bus/motorcycle shape, wheel rotation, driver controls, lane position, and traffic flow",
+            "sell speed with road markings, street lights, traffic parallax, tire motion, and restrained camera tracking",
+        ]
+        failure_modes = ["vehicle_shape_drift", "wheel_rotation_error", "lane_drift", "traffic_flow_reset", "direction_flip"]
+        beat_model = "vehicle_establish_traffic_brake"
+    elif shot_type == "stealth_stalk":
+        notes = [
+            "lock screen direction, distance curve, occlusion layers, light/shadow source, and a single reveal-or-hide beat",
+            "suspense comes from controlled partial visibility; avoid turning stealth into a freeform chase inside one clip",
+        ]
+        failure_modes = ["screen_direction_flip", "distance_curve_reset", "occlusion_layer_jump", "light_shadow_flicker", "target_teleport"]
+        beat_model = "hide_establish_shadow_approach_reveal_or_hide"
+    else:
+        notes = ["write beats, path, camera movement, readability holds, and a concrete degrade plan"]
+        failure_modes = ["path_drift", "pose_drift", "readability_loss"]
+        beat_model = "structured_action_beats"
 
     return {
         "required": True,
@@ -1008,8 +1125,32 @@ def _lipsync_enabled(lip_sync_setting: str) -> bool:
     return str(lip_sync_setting).strip().lower() not in LIPSYNC_OFF_VALUES
 
 
+def _lipsync_dialogue_closeup_default(lip_sync_setting: str) -> bool:
+    """是否为「对话近景」默认档（仅对话近景说话镜启用口型）。"""
+    return str(lip_sync_setting or "").strip().lower() in LIPSYNC_DIALOGUE_CLOSEUP_DEFAULT_VALUES
+
+
+def _is_dialogue_closeup(clip: Mapping[str, Any], shot_type: str) -> bool:
+    """对话近景说话镜：对话反打/说话特写 shot_type，或 mouth_visible（口型可见）。
+    比 _is_speech_shot 窄——不含 reveal_reaction_chain/public_confrontation/relationship_turn 等
+    非近景说话镜，使「对话近景」默认档的口型成本有界。"""
+    return shot_type in ("dialogue_shot_reverse", "dialogue_closeup") or clip_has_mouth_visible(clip)
+
+
+def _lipsync_active(lip_sync_setting: str, clip: Mapping[str, Any], shot_type: str) -> bool:
+    """该镜是否启用「配音对齐」口型路由（统一三档语义，供 voice_conditioned 路由闸用）：
+    - 显式关闭/空 → 否。
+    - 对话近景默认（新默认）→ 仅对话近景说话镜启用，其余说话镜不进口型路由。
+    - 显式开启（配音对齐/后期pass/平台原生…）→ 所有说话镜启用（旧 opt-in 行为）。"""
+    if str(lip_sync_setting or "").strip().lower() in LIPSYNC_OFF_VALUES:
+        return False
+    if _lipsync_dialogue_closeup_default(lip_sync_setting):
+        return _is_dialogue_closeup(clip, shot_type)
+    return _is_speech_shot(clip, shot_type)
+
+
 def _route_voice_conditioned_lipsync(
-    clip: Mapping[str, Any], shot_type: str, default_backend: str
+    clip: Mapping[str, Any], shot_type: str, default_backend: str, *, overseas: bool = False
 ) -> Dict[str, Any]:
     """voice_first + 对口型 opt-in 的说话镜路由：把克隆配音 line_NN.wav 当口型条件喂进
     支持音频参考的后端（Seedance 2.0 音素级 / 可灵 Omni），同帧出对口型画面。
@@ -1018,6 +1159,16 @@ def _route_voice_conditioned_lipsync(
     只作 lip 条件、不接管声音——既不双人声，又省一道后期 MuseTalk/Wav2Lip 对口型 pass。
     """
     primary = default_backend if default_backend in LIPSYNC_AUDIO_REF_BACKENDS else "seedance"
+    rationale = [
+        "voice_first + 对口型 opt-in：把克隆配音 line_NN.wav 当口型条件喂进支持音频参考的后端，同帧出对口型画面",
+        "音轨仍是 voice-first 克隆音色，模型音频仅作口型条件不接管声音——避免双人声，且省一道后期 MuseTalk/Wav2Lip pass",
+    ]
+    if overseas and not video_backend_supports_multilingual_lipsync(primary):
+        ml = preferred_multilingual_lipsync_backend()
+        if ml:
+            primary = ml
+            rationale.append(
+                "出海(目标语言≠中文)：抢占多语言唇同步最强后端做对口型，避免非中文台词口型/口音错配（2026 出海增量）")
     fallback = [b for b in ("kling", "seedance", "veo") if b != primary]
     return {
         "primary_backend": primary,
@@ -1025,10 +1176,7 @@ def _route_voice_conditioned_lipsync(
         "mode": "voice_conditioned_lipsync",
         "native_audio_policy": "lipsync_condition_only",
         "identity_requirement": "character_id_or_reference_group",
-        "rationale": [
-            "voice_first + 对口型 opt-in：把克隆配音 line_NN.wav 当口型条件喂进支持音频参考的后端，同帧出对口型画面",
-            "音轨仍是 voice-first 克隆音色，模型音频仅作口型条件不接管声音——避免双人声，且省一道后期 MuseTalk/Wav2Lip pass",
-        ],
+        "rationale": rationale,
         "prompt_requirements": [
             "把本镜配音 line_NN.wav 作为音频参考/口型驱动输入喂给后端；不要让后端另生成台词或环境人声",
             "speech_policy=no_native_speech（声音由 voice-first 克隆轨提供，模型音频仅口型条件，compose 用配音轨）",
@@ -1037,13 +1185,24 @@ def _route_voice_conditioned_lipsync(
     }
 
 
-def _route_native_av_speech(clip: Mapping[str, Any], shot_type: str, default_backend: str) -> Dict[str, Any]:
+def _route_native_av_speech(clip: Mapping[str, Any], shot_type: str, default_backend: str,
+                            *, overseas: bool = False) -> Dict[str, Any]:
     """原生音画模式下的说话镜路由：一次出同步音画（台词+口型+环境声），绕过配音先行。
 
     用原生音画能力最强的当前后端做 primary（Seedance 2.0 / Veo 3.1；Sora 仅旧项目/manual），台词文本与情绪由
     脚本提供、镜头时长由脚本规划驱动（不读配音先行的时长清单）。失败回退配音先行链路。
     """
     native_primary = default_backend if default_backend in NATIVE_AV_BACKENDS else "seedance"
+    rationale = [
+        "制作模式=原生音画：让原生同步音画后端一次生成台词+口型+环境声，规避「配音→对口型」代差与占位返工",
+        "台词文本/情绪/单镜时长来自脚本，不读配音先行的时长清单；本镜不再走 n2d-voice 逐句配音",
+    ]
+    # 出海(目标语言≠中文)：原生说话镜须由多语言唇同步最强后端出非中文台词，否则口型/口音错配。
+    if overseas and not video_backend_supports_multilingual_lipsync(native_primary):
+        ml = preferred_multilingual_lipsync_backend()
+        if ml and ml in NATIVE_AV_BACKENDS:
+            native_primary = ml
+            rationale.append("出海(目标语言≠中文)：抢占多语言原生唇同步最强后端出非中文台词（2026 出海增量）")
     fallback = [b for b in ("veo", "seedance") if b != native_primary]
     return {
         "primary_backend": native_primary,
@@ -1051,10 +1210,7 @@ def _route_native_av_speech(clip: Mapping[str, Any], shot_type: str, default_bac
         "mode": "native_av",
         "native_audio_policy": "native_speech",
         "identity_requirement": "character_id_or_reference_group" if clip_has_named_characters(clip) else "none",
-        "rationale": [
-            "制作模式=原生音画：让原生同步音画后端一次生成台词+口型+环境声，规避「配音→对口型」代差与占位返工",
-            "台词文本/情绪/单镜时长来自脚本，不读配音先行的时长清单；本镜不再走 n2d-voice 逐句配音",
-        ],
+        "rationale": rationale,
         "prompt_requirements": [
             "提供本镜台词文本 + 情绪 + 时长，要求后端做唇音同步的原生人声",
             "speech_policy=native_speech；声音须为合成音色，真人音色克隆仍需授权（见 compliance）",
@@ -1137,6 +1293,7 @@ def choose_route(
     av_mode: str = "voice_first",
     fixed_fallback_backends: Optional[List[str]] = None,
     t2v_action: bool = False,
+    overseas: bool = False,
 ) -> Dict[str, Any]:
     if routing_mode == "fixed_default":
         route = _route_fixed(clip, shot_type, default_backend, fixed_fallback_backends)
@@ -1166,7 +1323,7 @@ def choose_route(
 
     # 原生音画模式：说话镜优先走原生同步音画路由（绕过配音先行）。其余镜头走常规路由。
     if av_mode == "native_av" and _is_speech_shot(clip, shot_type):
-        route = _route_native_av_speech(clip, shot_type, default_backend)
+        route = _route_native_av_speech(clip, shot_type, default_backend, overseas=overseas)
         fallbacks: List[str] = []
         for backend in route["fallback_backends"] + [default_backend]:
             backend = normalize_backend(backend)
@@ -1179,10 +1336,9 @@ def choose_route(
     if (
         av_mode == "voice_first"
         and routing_mode != "fixed_default"
-        and _is_speech_shot(clip, shot_type)
-        and _lipsync_enabled(lip_sync_setting)
+        and _lipsync_active(lip_sync_setting, clip, shot_type)
     ):
-        route = _route_voice_conditioned_lipsync(clip, shot_type, default_backend)
+        route = _route_voice_conditioned_lipsync(clip, shot_type, default_backend, overseas=overseas)
         fallbacks = []
         for backend in route["fallback_backends"] + [default_backend]:
             backend = normalize_backend(backend)
@@ -1212,7 +1368,7 @@ def choose_route(
             ],
             "degrade_plan": "Split into setup and impact clips; keep the hit frame as the end frame.",
         }
-    elif shot_type in ("chase", "flight"):
+    elif shot_type in ("chase", "flight", "mount_ride", "vehicle_ride", "vessel_flight", "road_vehicle", "stealth_stalk"):
         mode = "text2video" if t2v_allowed else "image2video"
         route = {
             "primary_backend": "seedance",
@@ -1222,14 +1378,120 @@ def choose_route(
             "identity_requirement": "face_lock_or_reference_group" if has_named_characters else "none",
             "rationale": [
                 f"long continuous motion and moving backgrounds benefit from {'experimental T2V unconstrained physics' if t2v_allowed else 'longer single-shot generation'}",
-                "flight/chase should lock character pose and move background layers",
+                "flight/chase/mount/vehicle/vessel/road/stealth shots should lock subject shape and put speed or suspense into background, parallax, gait, wheels, traffic, light, or occlusion layers",
             ],
             "prompt_requirements": [
                 "keep body pose stable; put speed into background, foreground occluders, cloth and camera tracking",
                 "avoid large limb changes unless there is an end frame",
-                "fill Action Choreography/动作编排契约: beats, speed_curve, spatial_path, camera_path, readability_beats, parallax_layers and route-specific chase/flight fields",
+                "fill Action Choreography/动作编排契约: beats, speed_curve, spatial_path, camera_path, readability_beats, parallax_layers and route-specific chase/flight/mount/vehicle/vessel/road/stealth fields",
             ],
             "degrade_plan": "Cut to front/back reaction shots or split into approach, pass-by, and exit clips.",
+        }
+    elif shot_type == "screen_insert":
+        route = {
+            "primary_backend": "kling",
+            "fallback_backends": ["seedance", default_backend],
+            "mode": "image2video",
+            "native_audio_policy": "none",
+            "identity_requirement": "reference_group" if has_named_characters else "none",
+            "rationale": [
+                "screen inserts are text/readability sensitive; keep device and hand motion low and move readable content to overlay",
+                "image2video preserves a designed phone/computer/CCTV plate better than free text generation",
+            ],
+            "prompt_requirements": [
+                "use text_layer=overlay; video model must not render readable UI text, numbers, chat logs, codes, or timestamps",
+                "lock device_lock, screen_content_ref, reflection_policy, and hand_pose_lock; only allow small finger, glare, notification, or camera drift",
+            ],
+            "degrade_plan": "Use a static screen keyframe plus compose overlay; cut to hand/reaction if device motion or text legibility fails.",
+        }
+    elif shot_type == "evidence_search":
+        route = {
+            "primary_backend": "kling",
+            "fallback_backends": ["seedance", default_backend],
+            "mode": "image2video",
+            "native_audio_policy": "none",
+            "identity_requirement": "face_lock_or_reference_group" if has_named_characters else "none",
+            "rationale": [
+                "evidence search is object-continuity sensitive and benefits from first/end frame constraints",
+                "one clue reveal per clip keeps the evidence chain readable and prevents the model inventing new props",
+            ],
+            "prompt_requirements": [
+                "lock clue_object, search_path, reveal_frame, evidence_chain, hand_pose_lock, occlusion_order, and contamination_guard",
+                "one clue reveal per clip; avoid combining search, reveal, chase, and fight in the same generation",
+            ],
+            "degrade_plan": "Split into search hand insert, clue reveal close-up, and evidence-chain reaction or bagging shot.",
+        }
+    elif shot_type in ("tribulation_breakthrough", "array_ritual", "realm_portal", "contract_summon"):
+        route = {
+            "primary_backend": "seedance",
+            "fallback_backends": ["kling", "veo", default_backend],
+            "mode": "image2video",
+            "native_audio_policy": "native_sfx" if "低音量" in native_audio_setting else "none",
+            "identity_requirement": "face_lock_or_reference_group" if has_named_characters else "none",
+            "rationale": [
+                "high-energy genre spectacle needs stable VFX/asset locks and controlled progression rather than freeform effects",
+                "image2video preserves the keyed lightning/array/portal/summon plate while letting light, particles, and camera move",
+            ],
+            "prompt_requirements": [
+                "lock all VFX/asset ids from template_contract; do not invent new lightning, array geometry, portal shape, summon silhouette, or contract mark",
+                "one spectacle result per clip; split omen/setup, activation/entry, and reveal/result if the beat chain is longer than three steps",
+                "write readability_beats and degrade_plan from the template_contract; text/numbers/talent labels go to overlay when present",
+            ],
+            "degrade_plan": "Split into setup plate, activation/impact insert, and result/reaction; keep VFX shape from shared assets or overlay geometry.",
+        }
+    elif shot_type == "meditation_cultivation":
+        route = {
+            "primary_backend": "kling",
+            "fallback_backends": ["seedance", default_backend],
+            "mode": "image2video",
+            "native_audio_policy": "native_sfx" if "低音量" in native_audio_setting else "none",
+            "identity_requirement": "face_lock_or_reference_group" if has_named_characters else "reference_group",
+            "rationale": [
+                "meditation/cultivation shots are low-motion but detail-sensitive: posture, breath rhythm, aura path, and inner-state cue must stay readable",
+                "image2video preserves the designed seated pose while allowing controlled aura particles, cloth, hair, dust, and environment response",
+            ],
+            "prompt_requirements": [
+                "lock posture_lock, breath_cycle, energy_flow, aura_vfx_lock, environment_stillness, and micro_motion from template_contract",
+                "one inner result per clip: inner vision, dantian/meridian pulse, heart-demon pressure, cultivation breakthrough hint, or calm return",
+                "avoid sudden standing, martial movement, new hand seals, or uncontrolled camera rotation; make stillness feel expensive through layered VFX and sound cues",
+            ],
+            "degrade_plan": "Use a static seated keyframe plus aura/VFX overlay; split posture, breath-energy cycle, inner-state response, and return/hold if the body or hand seal drifts.",
+        }
+    elif shot_type in ("alchemy_forging", "talent_test"):
+        route = {
+            "primary_backend": "kling",
+            "fallback_backends": ["seedance", default_backend],
+            "mode": "image2video",
+            "native_audio_policy": "native_sfx" if "低音量" in native_audio_setting else "none",
+            "identity_requirement": "reference_group" if has_named_characters else "none",
+            "rationale": [
+                "craft/test shots are object-readability sensitive: the furnace, artifact, material sequence, and result must not morph",
+                "first-frame preservation plus low-to-medium process motion keeps product/talent result legible",
+            ],
+            "prompt_requirements": [
+                "lock furnace_or_forge/test_artifact, material/result sequence, process_stage_ladder, heat_curve, material_state_ladder, hand pose, flame/light color, and product/result state",
+                "use overlay_policy for numbers, rankings, talent names, attribute text, or panel-like readouts",
+                "one result reveal per clip; split preparation, process stage, state transformation, and result if needed",
+            ],
+            "degrade_plan": "Use static product/test-result keyframe plus flame/light overlay; cut to hand/detail/reaction if the object morphs or the process stage jumps.",
+        }
+    elif shot_type == "soul_manifestation":
+        route = {
+            "primary_backend": "kling",
+            "fallback_backends": ["seedance", "veo", default_backend],
+            "mode": "frames2video",
+            "native_audio_policy": "native_sfx" if "低音量" in native_audio_setting else "none",
+            "identity_requirement": "character_id_or_reference_group" if has_named_characters else "reference_group",
+            "rationale": [
+                "soul/spirit shots are identity-sensitive: body and soul must read as the same character or the scene becomes confusing",
+                "first/end frame control is safer for body-anchor to soul-emergence transitions",
+            ],
+            "prompt_requirements": [
+                "lock body_soul_identity_lock, soul_form_lock, host_body_lock, opacity_curve, and emergence_path",
+                "body remains anchored; only translucent soul opacity, glow, and air flow move unless end frame says otherwise",
+                "avoid freeform two-soul wrestling; split possession/probe/conflict into clear result frames",
+            ],
+            "degrade_plan": "Split into body anchor, translucent soul emergence, and probe/conflict result; derive soul form from the character reference.",
         }
     elif shot_type in ("dialogue_shot_reverse", "dialogue_closeup"):
         primary = "kling"
@@ -1263,9 +1525,46 @@ def choose_route(
             ],
             "prompt_requirements": [
                 "lock effect color/shape from template_contract",
-                "describe charge, release, and aftermath beats; no new spell colors",
+                "describe charge, release, collision/apex, and aftermath beats; no new spell colors",
+                "fill Action Choreography/动作编排契约: beats, speed_curve, spatial_path, camera_path, readability_beats, keyframe_plan, post_cue_points, physics_guard, charge_frame, release_frame, effect_asset, energy_path, collision_or_apex_frame, power_shift",
             ],
-            "degrade_plan": "Split into charge frame, release frame, and aftermath; use VFX overlays in compose if needed.",
+            "degrade_plan": "Split into charge frame, release frame, collision/apex frame, and aftermath; use VFX overlays in compose if needed.",
+        }
+    elif shot_type == "dual_cultivation":
+        route = {
+            "primary_backend": "kling",
+            "fallback_backends": ["seedance", default_backend],
+            "mode": "frames2video",
+            "native_audio_policy": "none",
+            "identity_requirement": "character_id_or_reference_group",
+            "rationale": [
+                "dual cultivation is a consent-bound two-person energy scene: contact, distance, identity, and non-explicit boundaries must be constrained",
+                "first/end frames reduce hand/body overlap collapse while letting aura circulation carry the spectacle",
+            ],
+            "prompt_requirements": [
+                "adult characters only; write adult_consent_lock and non_explicit_boundary explicitly; no nudity, no sexual action, no underage implication",
+                "lock paired_posture_lock, distance_boundary, contact_points, breath_sync, energy_circulation, aura_vfx_lock, and relationship_state",
+                "keep physical motion restrained; use hands/back-to-back silhouettes, meridian light, aura loops, reaction inserts, or fade-to-light for the result",
+            ],
+            "degrade_plan": "If contact or boundary drifts, replace with hand seal close-up, back-view energy loop, reaction reverse shot, light-fog fade, or split consent/posture, breath sync, energy circulation, and result hold.",
+        }
+    elif shot_type == "kiss_or_near_kiss":
+        route = {
+            "primary_backend": "kling",
+            "fallback_backends": ["seedance", default_backend],
+            "mode": "frames2video",
+            "native_audio_policy": "none",
+            "identity_requirement": "character_id_or_reference_group",
+            "rationale": [
+                "kiss/near-kiss shots are face-angle and contact sensitive: identity, consent, micro-expression, hand placement, and body overlap need first/end frame control",
+                "frames2video is safer than free motion for close faces and hands because it constrains the approach and the contact/near-contact frame",
+            ],
+            "prompt_requirements": [
+                "write age_context_lock, consent_lock, and non_explicit_boundary; no nudity, no sexual action, no explicit tongue detail, no underage sexualization",
+                "lock approach_path, face_angle_lock, contact_or_near_contact_frame, hand_position_lock, body_overlap_limit, breath_pause, and micro_expression_beats",
+                "prefer closed-mouth gentle kiss, forehead/cheek kiss, near-kiss pause, OTS, hand insert, or reaction close-up when the boundary or face contact is unstable",
+            ],
+            "degrade_plan": "If faces merge, hands drift, or boundary is unclear, split into approach, eye/breath pause, hand/forehead/cheek insert, and separate/reaction clips; use near-kiss or cutaway instead of forcing mouth contact.",
         }
     elif shot_type in ("intimate_interaction", "hug_or_pull"):
         if shot_type == "hug_or_pull":
@@ -1373,14 +1672,14 @@ def choose_route(
             "degrade_plan": "If action or identity fails twice, reroute to the nearest specialized shot type.",
         }
 
-    if shot_type in {"fight_exchange", "chase", "flight"} and t2v_action and not t2v_allowed:
+    if shot_type in ACTION_CHOREOGRAPHY_SHOT_TYPES and t2v_action and not t2v_allowed:
         route["rationale"].append(
             "T2V动作通道=实验开启，但本镜含具名角色且缺 t2v_identity_reference_plan；按主线回退到首帧/首尾帧路径，避免文生视频绕过身份链。"
         )
         route["prompt_requirements"].append(
             "若确需 T2V 实验，先在 storyboard/template_contract 写 t2v_identity_reference_plan(reference_inputs, identity anchors, degrade_plan)。"
         )
-    if shot_type in {"fight_exchange", "chase", "flight"} and t2v_allowed and route.get("mode") == "text2video":
+    if shot_type in ACTION_CHOREOGRAPHY_SHOT_TYPES and t2v_allowed and route.get("mode") == "text2video":
         route["experimental_t2v"] = True
         if t2v_plan:
             route["t2v_identity_reference_plan"] = dict(t2v_plan)
@@ -1429,12 +1728,55 @@ def risk_flags_for_clip(clip: Mapping[str, Any], shot_type: str, primary_backend
         flags.append("physical_interaction")
     if shot_type in ACTION_CHOREOGRAPHY_SHOT_TYPES:
         flags.append("action_choreography_required")
-    if shot_type in {"chase", "flight"}:
+    if shot_type in {"chase", "flight", "mount_ride", "vehicle_ride", "vessel_flight", "road_vehicle", "stealth_stalk"}:
         flags.append("high_speed_motion")
         flags.append("spatial_path_risk")
         flags.append("pose_drift_risk")
+    if shot_type == "screen_insert":
+        flags.append("text_overlay_required")
+        flags.append("screen_readability_risk")
+    if shot_type == "evidence_search":
+        flags.append("object_continuity_risk")
+        flags.append("evidence_chain_required")
+    if shot_type in {"tribulation_breakthrough", "array_ritual", "realm_portal", "contract_summon"}:
+        flags.append("vfx_consistency_risk")
+        flags.append("readability_hold_required")
+    if shot_type == "meditation_cultivation":
+        flags.append("vfx_consistency_risk")
+        flags.append("readability_hold_required")
+        flags.append("micro_motion_readability_risk")
+    if shot_type == "magic_burst":
+        flags.append("vfx_consistency_risk")
+        flags.append("readability_hold_required")
+        flags.append("high_speed_motion")
+        flags.append("spatial_path_risk")
+    if shot_type == "dual_cultivation":
+        flags.append("consent_non_explicit_required")
+        flags.append("energy_circulation_required")
+        flags.append("readability_hold_required")
+        flags.append("vfx_consistency_risk")
+    if shot_type == "kiss_or_near_kiss":
+        flags.append("consent_non_explicit_required")
+        flags.append("face_contact_risk")
+        flags.append("micro_expression_required")
+        flags.append("readability_hold_required")
+    if shot_type in {"alchemy_forging", "talent_test"}:
+        flags.append("object_continuity_risk")
+        flags.append("readability_hold_required")
+    if shot_type == "alchemy_forging":
+        flags.append("vfx_consistency_risk")
+    if shot_type == "talent_test":
+        flags.append("text_overlay_required")
+    if shot_type == "soul_manifestation":
+        flags.append("identity_drift_risk")
+        flags.append("body_soul_consistency_risk")
+        flags.append("readability_hold_required")
     if clip_has_named_characters(clip) and shot_type in {
-        "fight_exchange", "chase", "flight", "reveal_reaction_chain", "public_confrontation", "relationship_turn",
+        "fight_exchange", "chase", "flight", "mount_ride", "vehicle_ride", "vessel_flight",
+        "road_vehicle", "stealth_stalk", "screen_insert", "evidence_search",
+        "tribulation_breakthrough", "meditation_cultivation", "alchemy_forging", "array_ritual", "soul_manifestation",
+        "realm_portal", "contract_summon", "talent_test", "magic_burst",
+        "reveal_reaction_chain", "public_confrontation", "relationship_turn",
         *CONTACT_SHOT_TYPES, *MULTI_PERSON_SHOT_TYPES,
     }:
         flags.append("identity_drift_risk")
@@ -1491,6 +1833,35 @@ def motion_control_contract(
                 "hug/pull/grab shots need explicit contact point, occlusion order, and body-part ownership",
                 "without ready control assets, degrade to hand insert + OTS/reaction + release frame",
             ]
+        elif shot_type == "kiss_or_near_kiss":
+            required_inputs = list(motion_control_inputs_for_spectacle(shot_type))
+            failure_modes = [
+                "face_melting",
+                "mouth_contact_drift",
+                "hand_fusion",
+                "body_overlap_collapse",
+                "identity_drift",
+                "consent_boundary_violation",
+                "explicit_content_drift",
+            ]
+            control_notes = [
+                "kiss/near-kiss shots need age context, consent, face angle, contact-or-near-contact frame, hand placement, and body overlap locked",
+                "without ready control assets, degrade to near-kiss pause, forehead/cheek kiss, hand insert, OTS/reaction, or separate/hold clips",
+            ]
+        elif shot_type == "dual_cultivation":
+            required_inputs = list(motion_control_inputs_for_spectacle(shot_type))
+            failure_modes = [
+                "body_overlap_collapse",
+                "hand_fusion",
+                "limb_ownership_swap",
+                "consent_boundary_violation",
+                "explicit_content_drift",
+                "energy_path_drift",
+            ]
+            control_notes = [
+                "dual-cultivation shots need adult consent, non-explicit boundary, paired posture, distance boundary, contact points, and energy circulation locked before generation",
+                "without ready control assets, degrade to hand seal close-up, back-view aura loop, reaction reverse shot, or fade-to-light result hold",
+            ]
         elif shot_type == "chase":
             required_inputs = list(motion_control_inputs_for_spectacle(shot_type))
             failure_modes = ["screen_direction_flip", "distance_curve_reset", "pose_drift", "background_stickiness"]
@@ -1504,6 +1875,48 @@ def motion_control_contract(
             control_notes = [
                 "flight/cloud-riding shots must lock rider pose, altitude curve, mount/cloud shape, and parallax layers",
                 "if ready controls are not available, keep a cruise pose and move background/cloud layers, or split takeoff/cruise/maneuver/arrival",
+            ]
+        elif shot_type == "magic_burst":
+            required_inputs = list(motion_control_inputs_for_spectacle(shot_type))
+            failure_modes = ["vfx_shape_drift", "energy_path_flip", "collision_point_lost", "unreadable_apex", "new_unplanned_spell"]
+            control_notes = [
+                "magic/martial-skill bursts must lock effect asset, energy path, collision/apex frame, and aftershock layers",
+                "if ready controls are not available, split charge/release/collision/aftermath or move the VFX into compose overlay layers",
+            ]
+        elif shot_type == "mount_ride":
+            required_inputs = list(motion_control_inputs_for_spectacle(shot_type))
+            failure_modes = ["rider_mount_contact_drift", "gait_cycle_reset", "pose_drift", "harness_morph", "background_stickiness"]
+            control_notes = [
+                "mount-riding shots must lock rider saddle/contact points, gait cycle, screen direction, and parallax layers",
+                "if ready controls are not available, degrade to beast detail, rider reaction, side-run, and stop/arrival inserts",
+            ]
+        elif shot_type == "vehicle_ride":
+            required_inputs = list(motion_control_inputs_for_spectacle(shot_type))
+            failure_modes = ["vehicle_shape_drift", "wheel_count_or_rotation_error", "harness_morph", "direction_flip", "background_stickiness"]
+            control_notes = [
+                "vehicle shots must lock carriage/vehicle shape, wheel count and rotation, harness connection, screen direction, and parallax layers",
+                "if ready controls are not available, degrade to wheel/hoof/driver hand/interior reaction inserts plus short side-tracking shots",
+            ]
+        elif shot_type == "vessel_flight":
+            required_inputs = list(motion_control_inputs_for_spectacle(shot_type))
+            failure_modes = ["vessel_shape_drift", "altitude_curve_drift", "direction_flip", "scale_jump", "background_stickiness"]
+            control_notes = [
+                "flying-vessel shots must lock vehicle silhouette, flight path, altitude curve, screen direction, and parallax layers",
+                "if ready controls are not available, keep the vessel pose stable and split launch/cruise/maneuver/arrival",
+            ]
+        elif shot_type == "road_vehicle":
+            required_inputs = list(motion_control_inputs_for_spectacle(shot_type))
+            failure_modes = ["vehicle_shape_drift", "wheel_rotation_error", "lane_drift", "traffic_flow_reset", "direction_flip"]
+            control_notes = [
+                "road-vehicle shots must lock vehicle shape, wheel rotation, driver controls, lane position, traffic flow, screen direction, and parallax layers",
+                "if ready controls are not available, degrade to tire/side-mirror/driver-hand/interior reaction inserts plus short side-tracking or braking shots",
+            ]
+        elif shot_type == "stealth_stalk":
+            required_inputs = list(motion_control_inputs_for_spectacle(shot_type))
+            failure_modes = ["screen_direction_flip", "distance_curve_reset", "occlusion_layer_jump", "light_shadow_flicker", "target_teleport"]
+            control_notes = [
+                "stealth/stalking shots must lock screen direction, distance curve, occlusion layers, light/shadow source, and the single reveal-or-hide beat",
+                "if ready controls are not available, degrade to peephole/doorframe/footstep/reaction inserts with one controlled reveal",
             ]
         else:
             required_inputs = ["pose_sequence", "depth_sequence", "instance_masks"]
@@ -1574,6 +1987,7 @@ def route_clip(
     failure_counts: Optional[Dict[str, int]] = None,
     backend_affinity: Optional[List[Dict[str, Any]]] = None,
     t2v_action: bool = False,
+    overseas: bool = False,
 ) -> Dict[str, Any]:
     shot_type = infer_shot_type(clip)
     route = choose_route(
@@ -1586,6 +2000,7 @@ def route_clip(
         av_mode=av_mode,
         fixed_fallback_backends=fixed_fallback_backends,
         t2v_action=t2v_action,
+        overseas=overseas,
     )
     route = prefer_execution_multiframe_backend(
         clip,
@@ -1860,6 +2275,66 @@ def spectacle_backend_benchmark_path(root: Path) -> Path:
     return Path(root) / "生产数据" / "spectacle_backend_benchmark.json"
 
 
+# ── 跨后端英雄镜多版（hero shot cross-backend multi-version） ──────────────────────────
+def _hero_multi_enabled(setting: Any) -> bool:
+    """`英雄镜多版` 是否开启（非「关闭」即视为开启）。costly 选择点，默认关闭。"""
+    return str(setting or "").strip().lower() not in HERO_MULTI_OFF_VALUES
+
+
+def is_hero_shot(clip: Mapping[str, Any], shot_type: str, idx: int) -> bool:
+    """是否英雄镜（名场面/开场钩/高潮）——高价值、值得跨后端多版兜底的镜。纯函数·可测。"""
+    if shot_type in HERO_SHOT_TYPES:
+        return True
+    if idx == 1:                                  # 第1镜=开场钩
+        return True
+    return bool(HERO_SIGNATURE_RE.search(_clip_text(clip)))
+
+
+def _hero_secondary_backend(route: Mapping[str, Any]) -> Optional[str]:
+    """选一个与 primary 不同的次后端做多版兜底：取 fallback_backends 里第一个异于 primary 的后端。"""
+    primary = normalize_backend(route.get("primary_backend") or "")
+    for backend in route.get("fallback_backends") or []:
+        nb = normalize_backend(backend)
+        if nb and nb != primary:
+            return nb
+    return None
+
+
+def apply_hero_multi_version(routes: Sequence[Dict[str, Any]], clips: Sequence[Mapping[str, Any]],
+                             *, setting: Any, episode: str, routing_mode: str = "") -> Dict[str, Any]:
+    """英雄镜跨后端多版规划（post-pass，原地标注 route['hero_multi_version']）。
+
+    开启时：对每个英雄镜，若能选出异于 primary 的 secondary 后端，就写 hero_multi_version 契约，
+    指示执行端 primary + secondary 各出一版、pooled 进候选、video_qc 选优。固定后端模式不抢
+    （routing_mode=fixed_default 时整条线只用单后端，不做跨后端多版）。纯函数·可测。"""
+    summary: Dict[str, Any] = {"enabled": _hero_multi_enabled(setting), "hero_clips": [], "skipped_no_secondary": []}
+    if not summary["enabled"] or routing_mode == "fixed_default":
+        summary["enabled"] = summary["enabled"] and routing_mode != "fixed_default"
+        return summary
+    for idx, (route, clip) in enumerate(zip(routes, clips), 1):
+        if not isinstance(route, dict):
+            continue
+        shot_type = str(route.get("shot_type") or "")
+        if not is_hero_shot(clip, shot_type, idx):
+            continue
+        clip_id = str(route.get("clip_id") or route.get("id") or f"Clip_{idx:02d}")
+        secondary = _hero_secondary_backend(route)
+        if not secondary:
+            summary["skipped_no_secondary"].append(clip_id)
+            continue
+        route["hero_multi_version"] = {
+            "enabled": True,
+            "primary_backend": normalize_backend(route.get("primary_backend") or ""),
+            "secondary_backend": secondary,
+            "candidate_pool": f"出视频/{episode}/候选/{clip_id}/",
+            "select_by": "video_qc",
+            "reason": ("英雄镜（名场面/开场钩/高潮）跨后端多版兜底：primary+secondary 各出一版 pooled 进候选，"
+                       "video_qc 选优；高价值镜不赌单后端发挥，初始流量都冲这些高光而来。"),
+        }
+        summary["hero_clips"].append(clip_id)
+    return summary
+
+
 def load_spectacle_backend_benchmark(root: Path) -> Dict[str, Any]:
     """Read optional probe-backed backend recommendations.
 
@@ -1913,7 +2388,7 @@ def apply_spectacle_backend_benchmark(
     for idx, route in enumerate(routes):
         clip = clips[idx] if idx < len(clips) and isinstance(clips[idx], Mapping) else {}
         spectacle_type = infer_spectacle_type(clip) or str(route.get("shot_type") or "")
-        if spectacle_type not in {"fight_exchange", "chase", "flight", "large_establishing"}:
+        if spectacle_type not in set(ACTION_CHOREOGRAPHY_SHOT_TYPES) | {"large_establishing"}:
             continue
         rec = _benchmark_recommendation(benchmark, spectacle_type)
         backend = normalize_backend(str(rec.get("primary_backend") or rec.get("backend") or ""), default="")
@@ -2026,7 +2501,7 @@ def apply_spectacle_backend_prior(
         if not spectacle_type or spectacle_type in covered_types:
             continue
         # route_clip 已显式 spectacle 路由的镜不动；baseline 锁定的镜不动（跨集一致优先）。
-        if str(route.get("shot_type") or "") in {"fight_exchange", "chase", "flight"}:
+        if str(route.get("shot_type") or "") in set(ACTION_CHOREOGRAPHY_SHOT_TYPES):
             continue
         if route.get("baseline_anchored") or route.get("locked_backend"):
             continue
@@ -2129,8 +2604,9 @@ def route_episode(
             f"auto routing uses {default_backend} instead"
         )
     av_mode = av_mode_from_settings(settings)
+    overseas = is_overseas_target(settings)
     native_audio_setting = settings.get("视频原生音轨", "丢弃")
-    lip_sync_setting = settings.get("对口型", "关闭")
+    lip_sync_setting = settings.get("对口型", "对话近景")
     video_channel = settings.get("生视频渠道", "")
     fixed_fallback_backends = fixed_fallback_backends_from_settings(settings, default_backend)
     t2v_action = t2v_action_experimental_enabled(settings.get("T2V动作通道", "关闭"))
@@ -2176,6 +2652,7 @@ def route_episode(
                 failure_counts=failure_counts,
                 backend_affinity=backend_affinity,
                 t2v_action=t2v_action,
+                overseas=overseas,
             )
             for i, clip in enumerate(clips, 1)
         ],
@@ -2224,6 +2701,11 @@ def route_episode(
         episode=episode,
         video_channel=video_channel,
         urgency_tier=urgency_tier,
+    )
+    # 跨后端英雄镜多版：primary/fallback 全部定稿后再标英雄镜（名场面/开场钩/高潮），costly 选择点默认关闭。
+    plan["hero_multi_version"] = apply_hero_multi_version(
+        plan["routes"], clips,
+        setting=settings.get("英雄镜多版", "关闭"), episode=episode, routing_mode=routing_mode,
     )
     # 多镜单次生成候选组（advisory）：在 primary 全部定稿（含 baseline 锚定）后再扫连续接力镜组。
     plan["multishot_groups"] = annotate_multishot_groups(plan["routes"])

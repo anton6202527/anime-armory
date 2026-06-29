@@ -12,6 +12,10 @@ Covers:
 """
 from __future__ import annotations
 
+import importlib.util
+import os
+import sys
+
 import pytest
 from typing import Optional
 
@@ -136,7 +140,11 @@ class TestSortKey:
 class TestDimRiskScore:
     """Verify per-dimension risk_score defaults in consistency_audit."""
     def setup_method(self):
-        import consistency_audit as ca
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "consistency_audit.py")
+        spec = importlib.util.spec_from_file_location("_n2d_review_consistency_audit_for_test", path)
+        ca = importlib.util.module_from_spec(spec)
+        sys.modules["_n2d_review_consistency_audit_for_test"] = ca
+        spec.loader.exec_module(ca)
         self.ca = ca
 
     def test_known_face_dim(self):

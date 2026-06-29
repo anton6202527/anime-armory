@@ -48,6 +48,7 @@ def test_route_plan_and_budget_cap(tmp_path: Path) -> None:
     assert [task["status"] for task in planned["tasks"]] == ["queued", "queued", "blocked_budget"]
     assert planned["budget"]["accepted_total"] == 4.0
     assert planned["batches"] == [[planned["tasks"][0]["id"], planned["tasks"][1]["id"]]]
+    assert planned["coordination"]["backend"] == "local_file"
 
 
 def test_stage_filter_and_episode_selector(tmp_path: Path) -> None:
@@ -145,6 +146,127 @@ def test_targeted_rerun_and_claim_retry(tmp_path: Path) -> None:
     failed_again = queue.mark_task(loaded, claimed[0]["id"], "fail", "仍脸漂移")
     assert failed_again["status"] == "failed"
     assert failed_again["affected_shots"] == ["Clip_03"]
+    assert failed_again["dead_letter"] is True
+    assert failed_again["last_error_class"] in {"command_failed", "unknown"}
+
+
+def test_task_idempotency_key_is_stable_for_same_scope(tmp_path: Path) -> None:
+    estimates = queue.load_cost_estimates(str(tmp_path))
+    a = queue.task_from_spec(
+        str(tmp_path),
+        "第1集",
+        queue.find_stage("image"),
+        reason="rerun",
+        priority=1,
+        cost_estimates=estimates,
+        max_retries=1,
+        rerun_scope="修脸",
+        affected_shots=["Clip_03"],
+        affected_artifacts=["出图/第1集/图片/Clip_03.png"],
+    )
+    b = queue.task_from_spec(
+        str(tmp_path),
+        "第1集",
+        queue.find_stage("image"),
+        reason="rerun",
+        priority=2,
+        cost_estimates=estimates,
+        max_retries=1,
+        rerun_scope="修脸",
+        affected_artifacts=["出图/第1集/图片/Clip_03.png"],
+        affected_shots=["Clip_03"],
+    )
+
+    assert a["idempotency_key"] == b["idempotency_key"]
+
+
+def test_coordination_status_warns_shared_fs_without_atomic(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("N2D_COORDINATION_BACKEND", "shared_fs")
+    monkeypatch.setenv("N2D_QUEUE_LOCK", "flock")
+    status = queue.coordination_backend_status(str(tmp_path))
+    assert status["backend"] == "shared_fs"
+    assert status["status"] == "warn"
+    assert "atomic" in status["warning"]
+
+
+def test_coordination_status_external_backend_is_declared_not_active(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("N2D_COORDINATION_BACKEND", "redis")
+    monkeypatch.setenv("N2D_COORDINATION_DSN", "redis://localhost:6379/0")
+    status = queue.coordination_backend_status(str(tmp_path))
+    assert status["backend"] == "redis"
+    assert status["status"] == "declared_not_active"
+    assert status["dsn_present"] is True
+
+
+def test_sqlite_coordination_claim_mark_heartbeat(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("N2D_COORDINATION_BACKEND", "sqlite")
+    _saved_queue(tmp_path, max_concurrency=1)
+
+    status = queue.coordination_backend_status(str(tmp_path))
+    assert status["backend"] == "sqlite"
+    assert status["status"] == "ok"
+    assert status["db_path"].endswith("batch_queue.sqlite3")
+
+    claimed = queue.claim(str(tmp_path), limit=1, worker="sqlite-worker", lease_seconds=10)
+    assert len(claimed) == 1
+    tid = claimed[0]["id"]
+    old_lease = claimed[0]["lease_until"]
+    assert (tmp_path / "生产数据" / "batch_queue.sqlite3").is_file()
+
+    assert queue.renew(str(tmp_path), [tid], 600, "sqlite-worker") == 1
+    loaded = queue.load_queue(str(tmp_path))
+    task = next(t for t in loaded["tasks"] if t["id"] == tid)
+    assert task["lease_until"] > old_lease
+
+    marked = queue.mark(str(tmp_path), tid, "pass", expected_worker="sqlite-worker", expected_attempt=1)
+    assert marked["status"] == "done"
+    mirrored = json.loads((tmp_path / "生产数据" / "batch_queue.json").read_text(encoding="utf-8"))
+    assert next(t for t in mirrored["tasks"] if t["id"] == tid)["status"] == "done"
+
+
+def test_sqlite_coordination_dead_letter(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("N2D_COORDINATION_BACKEND", "sqlite")
+    _saved_queue(tmp_path, max_concurrency=1)
+    claimed = queue.claim(str(tmp_path), limit=1, worker="w", lease_seconds=10)
+    tid = claimed[0]["id"]
+
+    queue.mark(str(tmp_path), tid, "fail", expected_worker="w", expected_attempt=1)
+    retry = queue.claim(str(tmp_path), limit=1, worker="w", lease_seconds=10)
+    assert retry[0]["id"] == tid
+    failed = queue.mark(str(tmp_path), tid, "fail", expected_worker="w", expected_attempt=2)
+
+    assert failed["status"] == "retry_queued"  # max_retries=2 from _saved_queue; final fail happens after attempt 3
+    third = queue.claim(str(tmp_path), limit=1, worker="w", lease_seconds=10)
+    assert third[0]["id"] == tid
+    dead = queue.mark(str(tmp_path), tid, "fail", expected_worker="w", expected_attempt=3)
+    assert dead["status"] == "failed"
+    assert dead["dead_letter"] is True
+
+
+def test_sqlite_doctor_passes_and_detects_mirror_divergence(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("N2D_COORDINATION_BACKEND", "sqlite")
+    _saved_queue(tmp_path, max_concurrency=1)
+    claimed = queue.claim(str(tmp_path), limit=1, worker="doctor-worker", lease_seconds=10)
+    assert claimed
+
+    ok = queue.sqlite_doctor(str(tmp_path), write=True)
+    assert ok["status"] == "pass"
+    assert (tmp_path / "生产数据" / "sqlite_doctor.json").is_file()
+
+    mirror_path = tmp_path / "生产数据" / "batch_queue.json"
+    mirror = json.loads(mirror_path.read_text(encoding="utf-8"))
+    mirror["tasks"][0]["status"] = "queued"
+    mirror_path.write_text(json.dumps(mirror, ensure_ascii=False), encoding="utf-8")
+
+    bad = queue.sqlite_doctor(str(tmp_path))
+    assert bad["status"] == "fail"
+    assert any("diverged" in item["message"] for item in bad["issues"])
+
+
+def test_classify_error_treats_timeout_exit_codes_as_timeout() -> None:
+    assert queue.classify_error("", {"exit_code": 124}) == "timeout"
+    assert queue.classify_error("", {"exit_code": 137}) == "timeout"
+    assert queue.classify_error("verification failed: missing output") == "output_contract"
 
 
 def _saved_queue(tmp_path: Path, max_concurrency: int = 2):
@@ -729,3 +851,142 @@ def test_atomic_lock_protects_queue_rmw(tmp_path, monkeypatch):
     # 已认领的任务不会被第二个 worker 重复认领（atomic 锁互斥有效）
     again = queue.claim(root, limit=5, worker="m2:2")
     assert not (set(t["id"] for t in claimed) & set(t["id"] for t in again))
+
+
+def test_job_receipt_reconcile_marks_external_success(tmp_path: Path) -> None:
+    write_progress(tmp_path)
+    tasks = queue.route_tasks(
+        str(tmp_path),
+        episodes=queue.parse_episode_selector("1"),
+        stage_filters={"voice"},
+        cost_estimates=queue.load_cost_estimates(str(tmp_path)),
+        max_retries=1,
+    )
+    ledger = queue.make_queue(
+        str(tmp_path),
+        tasks,
+        max_concurrency=1,
+        max_retries=1,
+        budget=queue.apply_budget(tasks, None, None),
+    )
+    queue.save_queue(str(tmp_path), ledger)
+    task = ledger["tasks"][0]
+    queue.append_job_receipt(str(tmp_path), {
+        "task_id": task["id"],
+        "idempotency_key": task["idempotency_key"],
+        "external_job_id": "job-1",
+        "status": "success",
+    })
+
+    dry = queue.reconcile_jobs(str(tmp_path), apply=False)
+    assert dry["summary"]["proposed_pass"] == 1
+    assert queue.load_queue(str(tmp_path))["tasks"][0]["status"] == "queued"
+
+    applied = queue.reconcile_jobs(str(tmp_path), apply=True)
+    assert applied["summary"]["proposed_pass"] == 1
+    assert queue.load_queue(str(tmp_path))["tasks"][0]["status"] == "done"
+
+
+# ── P2-1: 协调后端 adapter 接口 + 注册表 ─────────────────────────────────────
+class _FakeBackend:
+    """内存假后端，实现 CoordinationBackend 协议的 6 个方法，用于验证注册表分发。"""
+    instances = []
+
+    def __init__(self, root):
+        self.root = root
+        self.calls = []
+        _FakeBackend.instances.append(self)
+
+    def load_queue(self):
+        self.calls.append("load_queue")
+        return {"kind": "n2d_batch_queue", "tasks": [], "_via": "fake"}
+
+    def sync_from_queue(self, q):
+        self.calls.append("sync_from_queue")
+
+    def claim(self, *, limit, worker, lease_seconds):
+        self.calls.append("claim")
+        return [{"id": "fake-1", "_via": "fake"}]
+
+    def mark(self, task_id_value, status, note="", **kwargs):
+        self.calls.append("mark")
+        return {"id": task_id_value, "status": status, "_via": "fake"}
+
+    def reclaim(self, *, worker=None, force_worker=False):
+        self.calls.append("reclaim")
+        return []
+
+    def renew(self, task_ids, lease_seconds, worker=None):
+        self.calls.append("renew")
+        return 0
+
+
+def _register_fake(monkeypatch, name="redis"):
+    _FakeBackend.instances = []
+    monkeypatch.setenv("N2D_COORDINATION_BACKEND", name)
+    queue.register_coordination_backend(name, _FakeBackend)
+    monkeypatch.setattr(queue, "_COORDINATION_FACTORIES",
+                        dict(queue._COORDINATION_FACTORIES), raising=False)
+    # 上面的 copy 让 monkeypatch 结束后自动还原全局注册表，避免污染其它测试
+    queue._COORDINATION_FACTORIES[name] = _FakeBackend
+
+
+def test_protocol_isinstance_structural():
+    fake = _FakeBackend("/x")
+    assert isinstance(fake, queue.CoordinationBackend)
+    assert not isinstance(object(), queue.CoordinationBackend)
+
+
+def test_registered_external_backend_reports_active(tmp_path, monkeypatch):
+    _register_fake(monkeypatch, "redis")
+    status = queue.coordination_backend_status(str(tmp_path))
+    assert status["backend"] == "redis"
+    assert status["status"] == "ok"
+    assert status["external_adapter"] is True
+
+
+def test_unregistered_external_backend_reports_declared_not_active(tmp_path, monkeypatch):
+    monkeypatch.setenv("N2D_COORDINATION_BACKEND", "object_store")
+    # 没注册工厂 → 仍是死路声明，状态如实报 declared_not_active
+    status = queue.coordination_backend_status(str(tmp_path))
+    assert status["backend"] == "object_store"
+    assert status["status"] == "declared_not_active"
+
+
+def test_claim_mark_dispatch_through_registered_backend(tmp_path, monkeypatch):
+    _register_fake(monkeypatch, "redis")
+    claimed = queue.claim(str(tmp_path))
+    assert claimed == [{"id": "fake-1", "_via": "fake"}]
+    marked = queue.mark(str(tmp_path), "fake-1", "done")
+    assert marked["_via"] == "fake" and marked["status"] == "done"
+    # 确实走了假后端而非文件锁
+    assert "claim" in _FakeBackend.instances[0].calls
+
+
+def test_active_backend_none_for_file_modes(tmp_path, monkeypatch):
+    monkeypatch.setenv("N2D_COORDINATION_BACKEND", "local_file")
+    assert queue.active_coordination_backend(str(tmp_path)) is None
+    monkeypatch.setenv("N2D_COORDINATION_BACKEND", "shared_fs")
+    assert queue.active_coordination_backend(str(tmp_path)) is None
+
+
+def test_sqlite_still_registered_by_default():
+    assert "sqlite" in queue._COORDINATION_FACTORIES
+    assert queue._COORDINATION_FACTORIES["sqlite"] is queue.SQLiteQueueBackend
+
+
+def test_sqlite_status_warns_on_network_fs_and_documents_scope(tmp_path, monkeypatch):
+    monkeypatch.setenv("N2D_COORDINATION_BACKEND", "sqlite")
+    st = queue.coordination_backend_status(str(tmp_path))
+    # 本地盘 → ok，但 note 必须指明单机参考实现 + 多机走 redis/db
+    assert st["backend"] == "sqlite"
+    assert "redis/db" in st["note"]
+    # 模拟 DB 落在网络 FS → warn
+    monkeypatch.setattr(queue, "_network_fs_type", lambda p: "nfs4")
+    st2 = queue.coordination_backend_status(str(tmp_path))
+    assert st2["status"] == "warn" and st2["network_fs"] == "nfs4"
+    assert "静默损坏" in st2["note"]
+
+
+def test_network_fs_type_local_path_returns_empty(tmp_path):
+    assert queue._network_fs_type(str(tmp_path)) == ""

@@ -50,6 +50,12 @@ except Exception:  # 退化：常量不可用时本地兜底，保持与 n2d_con
     SYSTEM_PANEL_VFX_ID = "VFX_系统面板"
     SYSTEM_PANEL_OVERLAY_FIELDS = ("title", "level", "attrs")
 
+try:
+    from n2d_friction import log_friction  # 现场摩擦信号（自我优化闭环·纯 stdlib）
+except Exception:  # 采集绝不拖垮检测
+    def log_friction(*a, **k):  # type: ignore
+        return None
+
 # 哪些母题类型呈现为"系统面板"形态（套 system_panel 镜头模板 + VFX_系统面板 + overlay）。
 # 其余（loot/cheat 等）暂不绑面板模板，只在 motif_plan 报告里列出，待后续加专属模板。
 PANEL_FAMILY_MOTIF_TYPES = ("system_panel", "level_up", "system_refresh", "signin", "gacha")
@@ -80,11 +86,14 @@ def detect_genre(text: str, *, min_hits: int = GENRE_MIN_HITS) -> Dict[str, Any]
 # ── 母题桥段检测（纯函数·可测） ───────────────────────────────────────────────
 
 def clip_text(clip: Dict[str, Any]) -> str:
-    """聚合 Clip 的可读文本（label/scene/台词/分镜描述/状态），用于母题关键词匹配。纯函数·可测。"""
+    """聚合 Clip 的当前桥段文本，用于母题关键词匹配。纯函数·可测。
+
+    不读 continuity.start_state/end_state：它们是相邻镜头衔接状态，
+    会把上一镜“系统面板收起”误判成本镜仍是系统面板。
+    """
     parts: List[str] = [str(clip.get("label") or ""), str(clip.get("scene") or ""),
-                        str(clip.get("voiceover") or clip.get("台词") or "")]
-    cont = clip.get("continuity") if isinstance(clip.get("continuity"), dict) else {}
-    parts += [str(cont.get("start_state") or ""), str(cont.get("end_state") or "")]
+                        str(clip.get("voiceover") or clip.get("台词") or ""),
+                        str(clip.get("template") or "")]
     for s in clip.get("shots") or []:
         if isinstance(s, dict):
             parts.append(str(s.get("desc") or ""))
@@ -320,6 +329,12 @@ def inject_storyboard(root: str, ep: str, motif_clips: List[Dict[str, Any]]) -> 
             continue  # 人工已声明别的模板，优先
         clip["template"] = m["template"]
         tc = clip.setdefault("template_contract", {})
+        tc.setdefault("template_id", m["template"])
+        tc.setdefault("beats", ["面板底框浮现", "overlay 信息刷新", "角色反应承接"])
+        tc.setdefault("blocking", "面板位于角色视线前方，角色反应与空光幕底框分层。")
+        tc.setdefault("camera_rule", "面板正对屏幕，不随镜头透视畸变；AI 只画空底框。")
+        tc.setdefault("continuity_must", "面板跨镜锁色锁形，文字和数值走后期 overlay。")
+        tc.setdefault("negative", "面板内不出现可读文字、数字、汉字、等级数值或进度条数字。")
         if not tc.get("motif_id"):
             tc["motif_id"] = m["motif_id"]
             tc.setdefault("vfx_asset", SYSTEM_PANEL_VFX_ID)
@@ -417,6 +432,18 @@ def main(argv: Optional[List[str]] = None) -> int:
     print(f"[ok] 人读报告 → {md_path}")
     s = plan["summary"]
     print(f"     题材={s['genre'] or '未判定'} / 母题桥段 {s['motif_clips']} 处（面板家族 {s['panel_clips']} 处）")
+    # 自我优化闭环：题材判定为爽文类（有母题预期）+ storyboard 在场，却 0 母题桥段命中——
+    # 多半是题材/母题词典或检测器对该作的写法没覆盖（漏增强=掉留存）。上报给流程自审复核词典。
+    if s["genre"] and s["storyboard_present"] and s["motif_clips"] == 0:
+        gmatched = "/".join(plan["genre"].get("matched") or []) or "—"
+        log_friction(
+            root, "n2d-script",
+            f"{args.episode} 题材判定为「{s['genre']}」（命中 {gmatched}）但 storyboard 0 母题桥段命中——疑似母题词典/检测器漏覆盖该写法",
+            kind="mismatch", stage="分镜/母题检测", episode=args.episode,
+            evidence=os.path.join("生产数据", f"motif_plan_{args.episode}.md"),
+            proposed="人核该集确有系统面板/升级/签到类桥段则扩 n2d_const MOTIF_TYPE_KEYWORDS；纯属无母题题材则忽略",
+            severity="warn",
+        )
     if args.write:
         n = inject_storyboard(root, args.episode, plan["motif_clips"])
         reg = upsert_motif_registry(root, plan["motif_clips"])

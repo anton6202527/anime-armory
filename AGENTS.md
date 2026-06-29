@@ -22,6 +22,7 @@
 |---|---|
 | 写小说、导入源书、生活观察素材、审美样本、扩写/改写/续写/评分/审稿/专业编辑、穿越/系统流的力量体系·等级·成长值一致性自检 | **`novel`**（分诊到 novel-create/observe/aesthetic/fetch/rewrite/review/edit/score/wiki 等） |
 | 把小说做成 AI 漫剧/短剧（分镜/配音/出图/出视频/合成） | **`n2d`**（分诊到 n2d-script/voice/image/video/compose） |
+| 用 agent 方式总控 n2d、自动跑前置、生成 context pack/creative loop、派发少量专家 | **`n2d-supervisor`**（消费 `n2d/run.py next --json`；不替代 n2d 状态机/gate/skill） |
 | 写歌、改词、作曲、多版挑版、翻唱/换声、审歌 | **`song`**（分诊到 song-lyrics/compose/cover/review 等） |
 | 给歌曲做 MV、卡点、出图出视频、卡拉 OK 字幕、合成 | **`mv`**（分诊到 mv-script/beat/plan/image/video/compose 等） |
 | 做广告片、TVC、信息流广告、产品 demo、带货视频、投放前广告评分 | **`ad`**（分诊到 ad-concept/script/voice/image/video/compose/score/review） |

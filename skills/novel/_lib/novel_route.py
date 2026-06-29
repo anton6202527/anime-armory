@@ -127,7 +127,7 @@ def stage_of(root: str, row: Dict[str, str], header: List[str]) -> Dict[str, Opt
         val = row.get(label, "")
         if not is_done(val):
             skill = spec["skill"]
-            cmd = f"npx skills run {skill} {{root}} {{ch}}"
+            cmd = 'python3 skills/novel/scripts/flow.py "{root}"'
             return {
                 "ch": ch,
                 "col": label,
@@ -143,7 +143,10 @@ def format_route(root: str, route: Dict[str, Optional[str]]) -> str:
     ch = route.get("ch") or ""
     label = route.get("label") or ""
     cmd = route.get("cmd")
-    return f"{ch}: {label}" if not cmd else f"{ch}: {label}  → {cmd.format(root=root, ch=ch)}"
+    skill = route.get("skill")
+    if not cmd:
+        return f"{ch}: {label}"
+    return f"{ch}: {label}  → {skill}（建议先跑：{cmd.format(root=root, ch=ch)}）"
 
 def flagged_cells(header: List[str], rows: Iterable[Dict[str, str]]) -> List[Dict[str, str]]:
     """收集所有 🟡（flagged）单元格——已跑但有未消除的建议级问题。

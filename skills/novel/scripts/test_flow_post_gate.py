@@ -148,6 +148,34 @@ class PostWriteTest(unittest.TestCase):
 
 
 class FlowSchemaTest(unittest.TestCase):
+    def test_flow_handles_import_progress(self):
+        with tempfile.TemporaryDirectory() as root:
+            write_json(os.path.join(root, "_meta.json"), {
+                "kind": "import",
+                "title": "导入源书",
+                "rights_status": "user-declared",
+            })
+            write(os.path.join(root, "_进度.md"), """# 进度
+
+<!-- novel-progress-schema: 1; kind: import -->
+
+## 源书纳管阶段（机器读）
+<!-- novel-import-stage-table: 1; kind: import -->
+- [x] 项目骨架 <!-- stage:setup -->
+- [x] 原作导入 <!-- stage:source_import -->
+- [x] 权利复核（当前：user-declared） <!-- stage:rights_review -->
+- [ ] 选择下一步：评分 / 审稿 / 改写 / 精简 / 续写 / 转制就绪检查 <!-- stage:next_action -->
+""")
+            got = subprocess.run(
+                [sys.executable, FLOW, root],
+                cwd=REPO,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(got.returncode, 0, got.stderr)
+            self.assertIn("同构阶段清单", got.stdout)
+            self.assertIn("选择下一步", got.stdout)
+
     def test_flow_handles_stage_checklist_progress(self):
         with tempfile.TemporaryDirectory() as root:
             write_json(os.path.join(root, "_meta.json"), {
@@ -192,6 +220,24 @@ class FlowSchemaTest(unittest.TestCase):
             self.assertIn("state_verify_第03章.json", got.stdout)
             self.assertIn("小批回扫", got.stdout)
             self.assertIn("--range 1-3", got.stdout)
+
+    def test_flow_prompts_revision_plan_when_reports_exist(self):
+        with tempfile.TemporaryDirectory() as root:
+            make_matrix_project(root)
+            write(os.path.join(root, "写作任务", "第03章.md"), "# 第03章写作任务包\n")
+            write_json(os.path.join(root, "评分", "score_report.json"), {
+                "verdict": "小改",
+                "next_actions": [],
+            })
+            got = subprocess.run(
+                [sys.executable, FLOW, root],
+                cwd=REPO,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(got.returncode, 0, got.stderr)
+            self.assertIn("revision_planner.py", got.stdout)
+            self.assertIn("统一修订计划", got.stdout)
 
 
 class NovelRouteProgressCellTest(unittest.TestCase):

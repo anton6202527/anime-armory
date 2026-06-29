@@ -7,7 +7,8 @@ gate 只拦缺 `shot_size` 字段，不拦"景别没进程、连撞同景别、�
 
   ① 连续 ≥3 镜同景别 → PPT感/无对比（业余头号信号）；
   ② 全集无定场镜（LS/ELS/全景）→ 观众失去空间地理；
-  ③ 爽点/情绪爆点镜（rhythm=爽点·CU硬切）景别不是近景档（CU/ECU/特写）→ 情绪没怼近；
+  ③ 爽点/反转/觉醒等情绪爆点镜（rhythm 含峰值标记）景别不是近景档（CU/ECU/特写）→ 情绪没怼近
+     （分镜语法.md「爽点/反转/觉醒 → CU/ECU」，反转/觉醒此前漏检·穿越系统流核心留存拍）；
   ④ 全集景别极差太小（几乎不变）→ 没有景别对比、像 slideshow；
   ⑤ 30°法则代理：相邻镜同景别且同机位角度 → 跳切风险。
 
@@ -35,7 +36,11 @@ SCALE_RANKS = (
 )
 ESTABLISHING_MIN_RANK = 6   # LS/ELS/全景 起算定场
 CLOSEUP_MAX_RANK = 2        # CU/ECU/特写/近景 算近景档
-PEAK_RHYTHM_MARKERS = ("爽点", "爆点", "高潮", "CU硬切")
+# 峰值拍标记：除爽点/爆点/高潮外，纳入分镜语法.md:29 同样要求 CU/ECU 的「反转/觉醒」族
+# （穿越系统流核心留存拍）。只取**无歧义多字**标记，不引 beat_audit.REVERSAL_RE 的单字词
+# （却/竟/原来 等对台词适用、但会误判 rhythm 短标签），避免景别检误报。
+PEAK_RHYTHM_MARKERS = ("爽点", "爆点", "高潮", "CU硬切",
+                       "反转", "逆转", "翻盘", "反杀", "逆袭", "打脸", "觉醒", "高光", "揭真相")
 # 机位角度词（30°法则代理用）。
 ANGLE_TOKENS = ("仰拍", "俯拍", "平视", "过肩", "OTS", "正面", "侧面", "背面", "反打", "顶拍", "低角度", "高角度")
 # B2 转场类型：有表现力的变化型转场 vs 机械硬切。
@@ -145,7 +150,7 @@ def audit_clips(clips: List[Dict[str, Any]]) -> List[Tuple[str, str, str]]:
             r = ranks[idx]
             if r is not None and r > CLOSEUP_MAX_RANK:
                 findings.append(("warn", "peak_not_closeup",
-                                 f"镜{idx+1} 标爽点/爆点（rhythm={_clip_rhythm(c)}）但景别 rank {r} 不是近景档：情绪爆点应怼 CU/ECU 硬切"))
+                                 f"镜{idx+1} 标爽点/反转/觉醒等爆点（rhythm={_clip_rhythm(c)}）但景别 rank {r} 不是近景档：情绪爆点应怼 CU/ECU 硬切"))
 
     # ④ 景别极差太小
     if scale_spread(ranks) <= 1:

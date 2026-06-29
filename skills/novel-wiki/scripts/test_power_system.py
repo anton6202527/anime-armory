@@ -189,3 +189,37 @@ def test_run_advisory_only_no_block(tmp_path):
     res = ps.run(str(tmp_path), advisory_only=True)
     assert res["ran"] is True
     assert res["blocking"] == 0
+
+
+# ── B10 收口：run() 经 heuristic_gate.enforce —— 确定性退档保留阻断 ──
+def test_run_routes_through_heuristic_gate_tier_regress_stays_blocking(tmp_path):
+    setdir = tmp_path / "设定"
+    setdir.mkdir()
+    reg = {
+        "kind": ps.POWER_SYSTEM_REGISTRY_KIND, "version": 1, "system_type": "修仙",
+        "tiers": {"sequence": ["练气", "筑基", "金丹"], "subtiers": ["初期", "中期", "后期"]},
+        "progression": [
+            {"chapter": 5, "character": "主角", "tier": "金丹初期"},
+            {"chapter": 8, "character": "主角", "tier": "练气后期"},   # 退档 → 确定性阻断
+        ],
+    }
+    (setdir / "power_system_registry.json").write_text(json.dumps(reg, ensure_ascii=False), encoding="utf-8")
+    res = ps.run(str(tmp_path))
+    assert res["ran"] is True
+    types = {a["type"] for a in res["alerts"]}
+    assert "power_tier_regress" in types
+    # 经 enforce 后退档仍是阻断级（已登记 DETERMINISTIC_TYPES），blocking 计入
+    regress = [a for a in res["alerts"] if a["type"] == "power_tier_regress"][0]
+    assert regress["severity"] == "阻断级"
+    assert res["blocking"] >= 1
+    assert "downgrades" in res
+
+
+def test_enforce_downgrades_hypothetical_heuristic_block():
+    # 若未来误把非确定性 type 标成阻断级，收口必须降级（绝不让脆弱启发式硬挡）
+    if ps._hg_enforce is None:
+        return  # _lib 不可用环境优雅跳过
+    alerts = [{"type": "some_prose_guess", "severity": "阻断级", "entity": "x"}]
+    out, downgrades = ps._hg_enforce(alerts)
+    assert out[0]["severity"] == "建议级"
+    assert ps._hg_count_blocking(out) == 0 and len(downgrades) == 1

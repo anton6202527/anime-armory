@@ -46,26 +46,18 @@ from skill_snapshot import (  # noqa: E402
     now_iso,
     snapshot_for_skills,
 )
+# 共享真值单一来源：这三组常量同时被 gate.py 的「物料新鲜度」预检消费（n2d/_lib/skill_freshness.py）。
+from skill_freshness import (  # noqa: E402
+    ALWAYS_RELEVANT_SKILLS,
+    N2D_LIB_OBSERVE_ONLY_TOKENS,
+    OBSERVE_ONLY_SKILLS,
+)
 from settings import get_setting as get_project_setting  # noqa: E402
 
 KIND_SNAPSHOT = SKILL_UPDATE_SNAPSHOT_KIND
 KIND_PLAN = SKILL_UPDATE_PLAN_KIND
 SNAPSHOT_FILE = "skill_update_snapshot.json"
 PLAN_PREFIX = "skill_update_plan"
-
-ALWAYS_RELEVANT_SKILLS = {
-    "n2d",
-    "n2d-dashboard",
-    "n2d-review",
-    "n2d-batch",
-    "n2d-update",
-}
-OBSERVE_ONLY_SKILLS = {
-    "n2d-dashboard",
-    "n2d-review",
-    "n2d-batch",
-    "n2d-update",
-}
 
 
 def rel(path: str) -> str:
@@ -254,7 +246,7 @@ GATE_ONLY_FILE_STAGE_HINTS: Dict[str, Tuple[Tuple[str, Tuple[str, ...]], ...]] =
     ),
     # 后端探活/阈值/finding 工具只影响 gate/review 结论，不直接改变已生成媒体。
     "n2d": (
-        ("image_prompt", ("_lib/image_backends.py",)),
+        ("image_prompt", ("_lib/image_backends.py", "_lib/backend_smoke.py")),
     ),
 }
 
@@ -289,6 +281,7 @@ N2D_LIB_FILE_STAGE_HINTS: Tuple[Tuple[str, Tuple[str, ...]], ...] = (
         (
             "_lib/n2d_platform_profiles.py",
             "_lib/n2d_spectacle.py",
+            "_lib/n2d_intent.py",
         ),
     ),
     (
@@ -305,6 +298,7 @@ N2D_LIB_FILE_STAGE_HINTS: Tuple[Tuple[str, Tuple[str, ...]], ...] = (
             # 出图→出视频逐镜身份/物料交接继承校验（inherit_contract.py 消费）。
             "_lib/n2d_handoff.py",
             "_lib/video_backend_adapter.py",
+            "_lib/n2d_policy.py",
         ),
     ),
     (
@@ -315,21 +309,9 @@ N2D_LIB_FILE_STAGE_HINTS: Tuple[Tuple[str, Tuple[str, ...]], ...] = (
     ),
 )
 
-N2D_LIB_OBSERVE_ONLY_TOKENS: Tuple[str, ...] = (
-    "_lib/skill_snapshot.py",
-    "_lib/n2d_findings_utils.py",
-    "_lib/n2d_thresholds.py",
-    "_lib/n2d_telemetry.py",
-    "_lib/freshness.py",
-    "_lib/refresh.py",
-    "_lib/n2d_contract_diff.py",
-    "_lib/n2d_color.py",
-    "_lib/style_policy.py",
-    # 跨集视觉契约一致性是 warn-only 审计（建于 n2d_contract_diff 之上），不产物料：
-    # 改了只需重跑 gate/review 刷新告警，不触发任何阶段重制。
-    "_lib/n2d_cross_episode.py",
-    "_lib/n2d_maintenance.py",
-)
+# N2D_LIB_OBSERVE_ONLY_TOKENS 现由 n2d/_lib/skill_freshness.py 单一来源提供（见顶部 import）：
+# 确认为观测/维护/加速基建的 _lib 文件（friction 上报、prework 提速、跨集 warn-only 审计、
+# skill 漂移体检自身等），改了只刷新 gate/审查、不触发阶段重制。gate.py 的「物料新鲜度」预检共用同一份。
 
 # 出图阶段是两层架构：共享定妆库（定妆照/场景照/identity_registry，全篇复用的锁定档案）
 # + 本集分镜帧（一镜一图）。n2d-image 变更命中以下片段，才说明"共享定妆库生产规则"变了

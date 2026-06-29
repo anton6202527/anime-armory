@@ -6,12 +6,12 @@
 
 为什么分两个脚本：SyncNet 需 torch + s3fd + 模型权重，是 out-of-repo 重活（同 CLAUDE.md 的
 ~/CosyVoice 等），只能在装好的 conda 环境跑；而消费端纯数学要能进 gate/CI 无依赖跑。分开后
-消费端永远轻量可测，重活按需在 facefusion 环境跑完喂回 JSON。
+消费端永远轻量可测，重活按需在 syncnet 环境跑完喂回 JSON。
 
-依赖（必须在装好的环境跑，本机 = facefusion conda env）：
+依赖（必须在装好的环境跑，本机 = syncnet conda env）：
   torch + cv2 + scipy + numpy + scenedetect + python_speech_features + ffmpeg + SyncNet 仓库&权重。
   仓库默认 ~/syncnet_python（可 env SYNCNET_HOME / --syncnet-home 覆盖），权重 data/syncnet_v2.model
-  + detectors/s3fd/weights/sfd_face.pth（download_model.sh 下，本机已下）。
+  + detectors/s3fd/weights/sfd_face.pth（download_model.sh 下）。
 
 输入视频：口型↔配音偏移只在**音画已合到一起**的视频上有意义（per-clip 出视频是静音的）。
   默认取 合成/<集>/成片_*.mp4；可 --video 显式指定（如某条已混音的 clip）。
@@ -19,9 +19,9 @@
 流程：run_pipeline.py（场景切+人脸追踪+裁脸轨）→ SyncNetInstance.evaluate 逐轨出 (offset帧, 置信) →
   按轨起始时间映射到 storyboard 的 Clip（累计时长定位）→ 每 Clip 取最高置信轨 → 写 JSON。
 
-用法（务必在 facefusion 环境）：
-  conda run -n facefusion python lipsync_measure.py <作品根> 第N集 [--video PATH]
-                                  [--syncnet-home ~/syncnet_python] [--fps 25] [--keep-work] [--json]
+用法（务必在 syncnet 环境）：
+  conda run -n syncnet python lipsync_measure.py <作品根> 第N集 [--video PATH]
+                              [--syncnet-home ~/syncnet_python] [--fps 25] [--keep-work] [--json]
 退出码：0 成功写报告 / 2 环境或输入缺失（不臆造，给安装提示）。
 """
 from __future__ import annotations
@@ -59,7 +59,7 @@ def _check_env(home: str) -> List[str]:
         try:
             __import__(mod)
         except Exception:
-            missing.append(f"python 包 {mod}（在 facefusion 环境 pip/conda 装）")
+            missing.append(f"python 包 {mod}（在 syncnet 环境 pip/conda 装）")
     return missing
 
 
@@ -171,7 +171,7 @@ def measure(root: str, ep: str, video: Optional[str] = None, home: Optional[str]
     missing = _check_env(home)
     if missing:
         res["notes"].append("SyncNet 环境未就绪，缺：" + "；".join(missing)
-                             + "。务必在 facefusion 环境跑：conda run -n facefusion python lipsync_measure.py ...")
+                             + "。务必在 syncnet 环境跑：conda run -n syncnet python lipsync_measure.py ...")
         return res
 
     vid = _resolve_video(root, ep, video)

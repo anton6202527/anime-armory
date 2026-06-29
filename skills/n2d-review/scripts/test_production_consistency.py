@@ -567,3 +567,22 @@ def test_series_packaging_requires_platform_and_brand_fields(tmp_path: Path) -> 
     messages = "\n".join(row["message"] for row in res["findings"])
     assert "platform_specs" in messages
     assert "brand_visual" in messages
+
+
+# ── P4：注册表不连贯（block 级）经 CAL 浮现为 finding（掣肘四：注册表此前只判存在性）──
+
+def test_registry_incoherence_surfaces_as_cal_finding(tmp_path):
+    import json, os
+    import production_consistency as pc
+    root = str(tmp_path)
+    os.makedirs(os.path.join(root, "生产数据"))
+    reg = {"kind": "n2d_consistency_threshold_registry", "rows": [],
+           "coherence_issues": [
+               {"dimension": "character_consistency", "stage": "image", "backend": "seedance",
+                "severity": "block", "message": "seedance 后端 floor 0.400 低于全局 0.600——无标定背书"}
+           ]}
+    json.dump(reg, open(os.path.join(root, "生产数据", "consistency_threshold_registry.json"), "w",
+                        encoding="utf-8"), ensure_ascii=False)
+    res = pc.check_review_calibration(root, "第1集")
+    assert any("不连贯" in f.get("message", "") and "seedance" in f.get("message", "")
+               for f in res["findings"])

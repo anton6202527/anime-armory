@@ -110,6 +110,56 @@ def write_text(path: str, text: str) -> None:
     os.replace(tmp, path)
 
 
+def _sha256_file(path: str) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _file_record(root: str, rel_path: str) -> dict[str, Any]:
+    path = os.path.join(root, rel_path)
+    record: dict[str, Any] = {"path": rel_path.replace(os.sep, "/"), "exists": os.path.exists(path)}
+    if os.path.isfile(path):
+        record.update({
+            "sha256": _sha256_file(path),
+            "size_bytes": os.path.getsize(path),
+        })
+    return record
+
+
+def _records_hash(records: list[dict[str, Any]]) -> str:
+    h = hashlib.sha256()
+    for record in sorted(records, key=lambda item: item.get("path", "")):
+        h.update(str(record.get("path") or "").encode("utf-8"))
+        h.update(str(record.get("sha256") or "").encode("utf-8"))
+    return h.hexdigest()
+
+
+def _chapter_records(root: str) -> list[dict[str, Any]]:
+    chdir = os.path.join(root, "章节")
+    if not os.path.isdir(chdir):
+        return []
+    return [
+        _file_record(root, os.path.join("章节", name))
+        for name in sorted(os.listdir(chdir))
+        if name.endswith(".md") and re.search(r"第0*\d+章", name)
+    ]
+
+
+def _export_records(root: str) -> list[dict[str, Any]]:
+    out_dir = os.path.join(root, "导出")
+    if not os.path.isdir(out_dir):
+        return []
+    return [
+        _file_record(root, os.path.join("导出", name))
+        for name in sorted(os.listdir(out_dir))
+        if os.path.isfile(os.path.join(out_dir, name))
+        and name not in {"release_manifest.json", "release_manifest.md"}
+    ]
+
+
 def profile_path(root: str) -> str:
     return os.path.join(root, PROFILE_REL)
 
@@ -208,12 +258,29 @@ def ai_summary(root: str) -> dict[str, Any]:
     }
 
 
-def _input_fingerprint(meta: dict[str, Any], settings: dict[str, Any], ai: dict[str, Any]) -> str:
+def input_fingerprint_components(root: str, meta: dict[str, Any], settings: dict[str, Any], ai: dict[str, Any]) -> dict[str, Any]:
+    chapter_records = _chapter_records(root)
+    export_records = _export_records(root)
+    return {
+        "meta": _file_record(root, "_meta.json"),
+        "settings": _file_record(root, "_设置.md"),
+        "ai_usage": _file_record(root, os.path.join("合规", "ai_usage.json")),
+        "chapter_count": len(chapter_records),
+        "chapter_aggregate_hash": _records_hash(chapter_records),
+        "export_count": len(export_records),
+        "export_aggregate_hash": _records_hash(export_records),
+        "target_axes": target_axes(meta, settings),
+        "ai_summary": ai,
+    }
+
+
+def _input_fingerprint(root: str, meta: dict[str, Any], settings: dict[str, Any], ai: dict[str, Any]) -> str:
     h = hashlib.sha256()
     h.update(json.dumps({
         "meta": meta,
         "settings": settings,
         "ai": ai,
+        "components": input_fingerprint_components(root, meta, settings, ai),
         "sources": SOURCE_PROVENANCE,
     }, ensure_ascii=False, sort_keys=True).encode("utf-8"))
     return h.hexdigest()
@@ -360,12 +427,14 @@ def build_profile(root: str) -> dict[str, Any]:
 
     blockers = [r for r in requirements if r["severity"] == "blocking" and r["status"] in {"missing", "action_required"}]
     warnings = [r for r in requirements if r["severity"] == "warning" and r["status"] in {"missing", "action_required", "upcoming"}]
+    fingerprint_components = input_fingerprint_components(root, meta, settings, ai)
     profile = {
         "schema_version": SCHEMA_VERSION,
         "kind": KIND,
         "generated_at": today(),
         "project_root": root,
-        "input_fingerprint": _input_fingerprint(meta, settings, ai),
+        "input_fingerprint": _input_fingerprint(root, meta, settings, ai),
+        "input_fingerprint_components": fingerprint_components,
         "target_axes": axes,
         "rights_status": rights_status,
         "ai_usage": ai,
@@ -386,6 +455,7 @@ def render_markdown(profile: dict[str, Any]) -> str:
         f"- 项目：{profile.get('project_root')}",
         f"- 阻断：{profile.get('blocking', 0)}",
         f"- 提醒：{profile.get('warning', 0)}",
+        f"- input_fingerprint：`{profile.get('input_fingerprint') or ''}`",
         "",
         "## Target Axes",
         "",
@@ -395,6 +465,15 @@ def render_markdown(profile: dict[str, Any]) -> str:
         lines.append(f"- {key}: {axes.get(key)}")
     if axes.get("regions"):
         lines.append("- regions: " + ", ".join(axes["regions"]))
+    components = profile.get("input_fingerprint_components") or {}
+    lines.extend([
+        "",
+        "## Input Fingerprint",
+        "",
+        f"- chapters: {components.get('chapter_count', 0)} `{components.get('chapter_aggregate_hash') or ''}`",
+        f"- exports: {components.get('export_count', 0)} `{components.get('export_aggregate_hash') or ''}`",
+        f"- ai_usage: `{(components.get('ai_usage') or {}).get('sha256') or ''}`",
+    ])
     lines.extend([
         "",
         "## Requirements",

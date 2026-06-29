@@ -180,3 +180,62 @@ def test_load_save_roundtrip(tmp_path):
         reloaded = json.load(f)
     assert reloaded["kind"] == fl.KIND
     assert reloaded["seeds"][0]["id"] == "SEED_001"
+
+
+# ── 自动抽取的「伏笔候选」（auto_extracted/confirmed=False）行为 ──────────────────
+def _candidate(seed_id="AUTO_001", planted=3):
+    return {"id": seed_id, "description": "殊不知此乃后话", "status": "pending",
+            "planted_chapter": planted, "expected_payoff_chapter": None,
+            "actual_payoff_chapter": None, "importance": "medium",
+            "linked_entities": [], "evidence": None,
+            "auto_extracted": True, "confirmed": False, "anchor": "殊不知"}
+
+
+def test_candidate_not_in_payoff_denominator():
+    rate = fl.payoff_rate([_candidate(), _candidate("AUTO_002")])
+    # 两条都是未确认候选 → 无有效伏笔，rate None，candidates 计 2
+    assert rate["rate"] is None
+    assert rate["effective_total"] == 0
+    assert rate["candidates"] == 2
+
+
+def test_candidate_never_overdue():
+    cand = _candidate()
+    cand["expected_payoff_chapter"] = 5  # 即便有预期回收章
+    assert fl.is_overdue(cand, through_chapter=100, grace=0) is False
+
+
+def test_confirmed_seed_still_counts():
+    cand = _candidate()
+    confirmed = dict(cand, confirmed=True, expected_payoff_chapter=5, importance="high")
+    rate = fl.payoff_rate([cand, confirmed])
+    assert rate["effective_total"] == 1  # 只有确认的进分母
+    assert rate["candidates"] == 1
+    assert fl.is_overdue(confirmed, through_chapter=100, grace=5) is True
+
+
+def test_analyze_ran_true_with_only_candidates(tmp_path):
+    proj = str(tmp_path)
+    os.makedirs(os.path.join(proj, "设定"))
+    data = {"kind": fl.KIND, "seeds": [_candidate()]}
+    fl.save_ledger(proj, data)
+    rep = fl.analyze(proj, through_chapter=50)
+    assert rep["ran"] is True
+    assert rep["candidate_count"] == 1
+    assert rep["blocking"] == 0  # 候选永不阻断
+    assert any(a.get("kind") == "foreshadow_candidate" for a in rep["alerts"])
+
+
+def test_confirm_flips_candidate_to_real_seed():
+    data = {"kind": fl.KIND, "seeds": [_candidate()]}
+    seed = fl.confirm(data, "AUTO_001", expected_payoff_chapter=20, importance="high")
+    assert seed["confirmed"] is True
+    assert seed["expected_payoff_chapter"] == 20 and seed["importance"] == "high"
+    # 确认后即进分母
+    assert fl.payoff_rate(data["seeds"])["effective_total"] == 1
+
+
+def test_manual_plant_is_confirmed():
+    data = {"kind": fl.KIND, "seeds": []}
+    seed = fl.plant(data, "手动埋点", 5, 50)
+    assert seed["confirmed"] is True and seed["auto_extracted"] is False

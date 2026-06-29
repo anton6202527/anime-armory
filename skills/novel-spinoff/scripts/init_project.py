@@ -233,6 +233,9 @@ def main():
     meta.update({
         "source_novel": source_path,
         "source_title": source_title,
+        # 桥接标记：公版/经典 IP 外传 → 下游改编成漫剧/微短剧须按广电2026-04新规复核
+        # （禁颠覆性魔改经典/英雄/历史人物·真人肖像授权·三级备案）。结构化字段，供改编环节合规接力。
+        "classic_ip_adaptation": rights_status in ("public-domain", "public_domain"),
         "spinoff_character": args.character,
         "mode": args.mode,
         "branch_point": args.branch_point,

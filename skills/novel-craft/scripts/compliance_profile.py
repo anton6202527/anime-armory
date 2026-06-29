@@ -26,6 +26,20 @@ def _load_lib():
 
 cp = _load_lib()
 
+# Re-export the deterministic library API. Some test/process orders import this
+# CLI wrapper as module name "compliance_profile" before qa_gate imports its
+# library dependency; forwarding keeps qa_gate insulated from that order.
+build_profile = cp.build_profile
+gate_items = cp.gate_items
+load_existing_profile = cp.load_existing_profile
+profile_path = cp.profile_path
+write_profile = cp.write_profile
+write_json = cp.write_json
+
+
+def __getattr__(name: str):
+    return getattr(cp, name)
+
 
 def _confirm(root: str, req_id: str, *, note: str = "", by: str = "user-confirmed") -> None:
     existing = cp.load_existing_profile(root)

@@ -66,6 +66,14 @@ def make_project(root):
     for clip in clips:
         with open(os.path.join(root, clip["image_path"]), "wb") as f:
             f.write(b"fake png")
+    qc_dir = os.path.join(root, "生产数据", "image_qc")
+    os.makedirs(qc_dir, exist_ok=True)
+    with open(os.path.join(qc_dir, "image_qc.json"), "w", encoding="utf-8") as f:
+        json.dump({
+            "kind": "mv_image_qc",
+            "summary": {"hard_blocks": 0, "advisory": 0, "verdict": "ok"},
+            "qc_environment": {"precision_level": "full"},
+        }, f, ensure_ascii=False)
 
 
 class VideoJobsTest(unittest.TestCase):

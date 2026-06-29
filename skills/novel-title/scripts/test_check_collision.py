@@ -35,6 +35,29 @@ class CheckCollisionTest(unittest.TestCase):
     def test_same_candidate_diff_title_is_soft_collision(self):
         self.assertEqual(status_of("逆天小毒妃", hits=["逆天小毒妃|凤还巢|http://x|抖音"]), "soft_collision")
 
+    def test_checked_candidate_without_hit_is_clear(self):
+        reports, _ = cc.assess(
+            ["逆天小毒妃"],
+            [],
+            [],
+            timeout=1.0,
+            checked=["逆天小毒妃|web exact search returned no obvious title match|https://search.example|web"],
+        )
+        self.assertEqual(reports[0]["status"], "clear")
+        self.assertEqual(reports[0]["checks"][0]["platform"], "web")
+
+    def test_checked_candidate_does_not_clear_other_candidates(self):
+        reports, _ = cc.assess(
+            ["逆天小毒妃", "凤还巢"],
+            [],
+            [],
+            timeout=1.0,
+            checked=["逆天小毒妃|web exact search returned no obvious title match|https://search.example|web"],
+        )
+        by_candidate = {item["candidate"]: item["status"] for item in reports}
+        self.assertEqual(by_candidate["逆天小毒妃"], "clear")
+        self.assertEqual(by_candidate["凤还巢"], "unchecked")
+
 
 if __name__ == "__main__":
     unittest.main()

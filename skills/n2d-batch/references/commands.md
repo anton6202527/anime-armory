@@ -120,6 +120,18 @@ cp skills/n2d-batch/references/batch_runner.example.json <作品根>/生产数�
 
 > **stage 前置边界**：runner 不内置 image/video/compose 的业务规则，避免把阶段逻辑复制进队列层；标准 wrapper 只做可复用 gate/preflight，真正的生成仍由对应阶段脚本或显式配置的本地命令执行。
 
+### 4.1 幂等键 / trace / 错误分类
+
+每个任务会按作品根、集、stage、reason、scope、affected shots/artifacts 生成稳定 `idempotency_key`。runner 自动注入：
+
+```text
+N2D_IDEMPOTENCY_KEY
+```
+
+并把 `task_id / trace_id / idempotency_key / error_class` 写入 dashboard manual event 的 `meta`，由 dashboard 提升到 `event.trace`。阶段 wrapper 可用该键避免重复提交同一付费任务，或把生成产物、死信和发布 manifest 串回同一次生产尝试。
+
+失败会写 `last_error_class`：`preflight_block / capability / budget / timeout / output_contract / configuration / command_failed / unknown`。超过重试上限后任务标 `dead_letter=true`，等待人工处理根因。
+
 ### 4.5 单机多 worker 安全（原子认领 + 租约回收 + 断点恢复）
 
 一台机器多 GPU / 多 worker 同抢一个队列时，靠**文件锁 + 租约**保证安全，**纯本地、零后端**（多机/私有算力池需协调后端，见下「边界」）：
@@ -148,6 +160,24 @@ python3 skills/n2d-batch/scripts/queue.py mark <作品根> 002-image-progress --
 ```
 
 失败未超过重试上限时会回到 `retry_queued`；超过后变 `failed`。
+
+### 5.5 生产治理 / SLO / 死信
+
+```bash
+python3 skills/n2d-batch/scripts/governance.py init-slo <作品根>
+python3 skills/n2d-batch/scripts/governance.py check <作品根> --write
+python3 skills/n2d-batch/scripts/governance.py dead-letter <作品根> --write
+```
+
+输出：
+
+- `生产数据/production_slo.json`
+- `生产数据/batch_governance.json`
+- `生产数据/batch_governance.md`
+- `生产数据/dead_letter_queue.json`
+- `生产数据/dead_letter_queue.md`
+
+`check` 有 critical 时退出码 1；`dead-letter` 有死信时退出码 1。量产 runner/cron/CI 应把这两个非零退出码视为停线信号：先修 wrapper、后端能力、预算或产物契约，再用最小范围 `plan --rerun-from ...` 重新排队。
 
 ### 6. 只重跑受影响镜头/Clip
 

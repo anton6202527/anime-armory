@@ -333,3 +333,141 @@ def test_overlock_never_blocks():
     char_emo = {"CHAR_01": {"emotions": {"悲", "怒", "喜"}, "closeups": 4}}
     rows = ca.expression_overlock_findings(expr, face, char_emo)
     assert rows and not any(r["verdict"] == "block" for r in rows)
+
+
+# ── P3：曾经 report-only 的 EXP2/MG1/ASP 现接入 audit→gate（不再只落 ledger）──
+
+def test_exp2_block_reaches_audit_findings(tmp_path):
+    """storyboard state_delta 改 identity_invariant 又没进 allowed_state_deltas →
+    EXP2 block 必须出现在 consistency_audit 的 findings（证明孤儿已进闸）。"""
+    import json, os
+    root = str(tmp_path)
+    shared = os.path.join(root, "出图", "共享")
+    ep_dir = os.path.join(root, "脚本", "第1集")
+    os.makedirs(shared); os.makedirs(ep_dir)
+    json.dump({"characters": [
+        {"id": "CHAR_01", "name": "沈念", "identity_invariants": ["eye_color"], "allowed_state_deltas": []}
+    ]}, open(os.path.join(shared, "identity_registry.json"), "w", encoding="utf-8"), ensure_ascii=False)
+    json.dump({"clips": [
+        {"id": "Clip_01", "character_ids": ["CHAR_01"],
+         "continuity": {"state_delta": {"eye_color": "蓝→红"}}}
+    ]}, open(os.path.join(ep_dir, "storyboard.json"), "w", encoding="utf-8"), ensure_ascii=False)
+    rep = ca.exstate.run(root, "第1集")
+    assert any(f["severity"] == "block" and "EXP2" in f["dimension"] for f in rep["findings"])
+    # 段已注册进 schema audit_labels（角色身份维度），不会被 score 漏扣
+    import n2d_schema
+    mapped = {lbl for spec in n2d_schema.CONSISTENCY_DIMENSIONS.values() for lbl in spec.get("audit_labels", ())}
+    assert "状态化表情(EXP2)" in mapped
+    assert "运动语法(MG1)" in mapped
+    assert "声音空间(ASP)" in mapped
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# 证据等级账本 evidence_grade（#3）：proof_type 可见化 + advanced tier 的 under_proven
+# 运行：cd skills/n2d-review/scripts && python -m pytest test_consistency_audit.py -k evidence_grade
+# ───────────────────────────────────────────────────────────────────────────
+def test_evidence_grade_torch_missing_marks_s2v_under_proven():
+    sections = {"主体视频一致(S2V)": {"skipped": False, "verdicts": ["ok"]}}
+    eg = ca.evidence_grade(sections, {"pillow": True, "insightface": True, "torch": False})
+    rec = eg["by_dim"]["主体视频一致(S2V)"]
+    assert rec["tier"] == "advanced" and rec["actual"] == "structured" and rec["achievable"] == "embedding"
+    assert rec["under_proven"] is True
+    assert "主体视频一致(S2V)" in eg["under_proven"]
+
+
+def test_evidence_grade_torch_present_s2v_at_grade():
+    sections = {"主体视频一致(S2V)": {"skipped": False, "verdicts": ["ok"]}}
+    eg = ca.evidence_grade(sections, {"pillow": True, "insightface": True, "torch": True})
+    assert eg["by_dim"]["主体视频一致(S2V)"]["actual"] == "embedding"
+    assert eg["under_proven"] == []
+
+
+def test_evidence_grade_skipped_no_content_not_under_proven():
+    # S2V 无视频内容（出图阶段）→ 不可适用，不 PENDING（避免无内容误报）
+    sections = {"主体视频一致(S2V)": {"skipped": True}}
+    eg = ca.evidence_grade(sections, {"pillow": True, "insightface": True, "torch": False})
+    assert eg["by_dim"]["主体视频一致(S2V)"]["applicable"] is False
+    assert eg["under_proven"] == []
+
+
+def test_evidence_grade_pixel_tier_degraded_is_visible_not_double_blocked():
+    # insightface 缺 → 脸只到 declared（可见），但 pixel tier 不计 under_proven（全局 precision 闸处置）
+    sections = {"脸(G1)": {"skipped": False, "precision": "degraded", "verdicts": ["ok"]}}
+    eg = ca.evidence_grade(sections, {"pillow": True, "insightface": False, "torch": True})
+    rec = eg["by_dim"]["脸(G1)"]
+    assert rec["tier"] == "pixel" and rec["actual"] == "declared" and rec["achievable"] == "embedding"
+    assert rec["under_proven"] is False
+    assert eg["weakest"] == "declared"  # 最弱级仍诚实反映降级
+
+
+def test_evidence_grade_pixel_full_and_structured_ok():
+    sections = {
+        "脸(G1)": {"skipped": False, "precision": "full", "verdicts": ["ok"]},
+        "称谓口头禅(A1)": {"skipped": False, "verdicts": ["ok"]},
+    }
+    eg = ca.evidence_grade(sections, {"pillow": True, "insightface": True, "torch": True})
+    assert eg["by_dim"]["脸(G1)"]["actual"] == "embedding"
+    assert eg["by_dim"]["称谓口头禅(A1)"]["actual"] == "structured"
+    assert eg["under_proven"] == []
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# 跨集场景漂移 SCNX（#5）：场景轴此前无跨集机检（脸有 G5），补色调指纹累积比对
+# 运行：cd skills/n2d-review/scripts && python -m pytest test_consistency_audit.py -k scene_drift
+# ───────────────────────────────────────────────────────────────────────────
+def test_scene_hist_l1_basic():
+    assert ca.scene_hist_l1([0.5, 0.5], [0.5, 0.5]) == 0.0
+    assert ca.scene_hist_l1([1.0, 0.0], [0.0, 1.0]) == 2.0
+    assert ca.scene_hist_l1([0.5], [0.5, 0.5]) == 0.0  # 长度不一→0（不误判）
+
+
+def test_scene_drift_stable_scene_no_rows():
+    means = {"第1集": {"大殿": [0.5, 0.5]}, "第2集": {"大殿": [0.5, 0.5]}}
+    assert ca.scene_drift_rows(means, "第2集") == []
+
+
+def test_scene_drift_non_core_warns():
+    means = {"第1集": {"大殿": [1.0, 0.0]}, "第2集": {"大殿": [0.0, 1.0]}}
+    rows = ca.scene_drift_rows(means, "第2集")
+    assert len(rows) == 1 and rows[0]["verdict"] == "warn" and "大殿" in rows[0]["shot"]
+
+
+def test_scene_drift_core_scene_blocks():
+    means = {"第1集": {"大殿": [1.0, 0.0]}, "第2集": {"大殿": [0.0, 1.0]}}
+    rows = ca.scene_drift_rows(means, "第2集", core_scenes=["大殿"])
+    assert len(rows) == 1 and rows[0]["verdict"] == "block"
+
+
+def test_scene_drift_first_episode_no_prior_no_rows():
+    means = {"第1集": {"大殿": [1.0, 0.0]}}
+    assert ca.scene_drift_rows(means, "第1集") == []
+
+
+# ── 跨集场景结构漂移（dHash 原型·补色调看不出的布局/朝向变化）──────────────────
+def test_scene_struct_drift_stable_no_rows():
+    protos = {"第1集": {"殿": [0] * 64}, "第2集": {"殿": [0] * 64}}
+    assert ca.scene_struct_drift_rows(protos, "第2集") == []
+
+
+def test_scene_struct_drift_non_core_warns():
+    # 30/64 位翻转（>warn 18，<core block 26 但非 core）→ warn
+    protos = {"第1集": {"殿": [0] * 64}, "第2集": {"殿": [1] * 30 + [0] * 34}}
+    rows = ca.scene_struct_drift_rows(protos, "第2集")
+    assert len(rows) == 1 and rows[0]["verdict"] == "warn" and "结构漂移" in rows[0]["msg"]
+
+
+def test_scene_struct_drift_core_scene_blocks():
+    protos = {"第1集": {"殿": [0] * 64}, "第2集": {"殿": [0] * 64}, "第3集": {"殿": [1] * 30 + [0] * 34}}
+    rows = ca.scene_struct_drift_rows(protos, "第3集", core_scenes=["殿"])
+    assert len(rows) == 1 and rows[0]["verdict"] == "block" and "跨3集结构" in rows[0]["shot"]
+
+
+def test_scene_struct_drift_below_warn_no_rows():
+    protos = {"第1集": {"殿": [0] * 64}, "第2集": {"殿": [1] * 5 + [0] * 59}}  # 仅 5 位 < warn 18
+    assert ca.scene_struct_drift_rows(protos, "第2集") == []
+
+
+def test_scene_drift_baseline_is_mean_of_priors():
+    # 前两集基线均值=[0.5,0.5]，第3集=[0.5,0.5] → L1=0，无行（基线是历史均值非仅上一集）
+    means = {"第1集": {"S": [1.0, 0.0]}, "第2集": {"S": [0.0, 1.0]}, "第3集": {"S": [0.5, 0.5]}}
+    assert ca.scene_drift_rows(means, "第3集") == []

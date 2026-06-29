@@ -28,7 +28,7 @@ from project_io import list_chapter_files, load_project_settings, read_text
 from qa_gate import collect_gate_status
 from report_snapshot import validate_snapshot
 
-_STAGE_TABLE_MARKERS = ("novel-derived-stage-table", "novel-create-stage-table")
+_STAGE_TABLE_MARKERS = ("novel-derived-stage-table", "novel-create-stage-table", "novel-import-stage-table")
 
 def check_wiki_freshness(root):
     wiki_path = get_product_path(root, "wiki")

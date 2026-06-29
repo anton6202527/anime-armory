@@ -46,6 +46,43 @@ class NovelSelfAuditTest(unittest.TestCase):
             self.assertEqual(report["summary"]["warn"], 0, report["findings"])
             self.assertTrue(any(item["id"] == "MARKET-FRESH" for item in report["findings"]))
 
+    def test_ingests_open_optimization_signals(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            sig_dir = os.path.join(tmp, "生产数据")
+            os.makedirs(sig_dir, exist_ok=True)
+            with open(os.path.join(sig_dir, "优化信号.jsonl"), "w", encoding="utf-8") as f:
+                f.write(json.dumps({
+                    "kind": "score_coverage_gap", "skill": "novel-score",
+                    "severity": "warn", "title": "覆盖缺口", "detail": "d",
+                    "suggested_fix": "补证据", "signature": "abc", "status": "open",
+                }, ensure_ascii=False) + "\n")
+                # a resolved one must NOT surface
+                f.write(json.dumps({
+                    "kind": "score_low_verdict", "skill": "novel-score",
+                    "severity": "advice", "title": "旧信号", "detail": "d",
+                    "signature": "def", "status": "resolved",
+                }, ensure_ascii=False) + "\n")
+            got = subprocess.run(
+                [sys.executable, SELF_AUDIT, "--json", "--project-root", tmp],
+                capture_output=True, text=True, check=True,
+            )
+            report = json.loads(got.stdout)
+            by_id = {item["id"]: item for item in report["findings"]}
+            self.assertIn("FRICTION-SCORE-COVERAGE-GAP", by_id)
+            self.assertEqual(by_id["FRICTION-SCORE-COVERAGE-GAP"]["severity"], "warn")
+            self.assertNotIn("FRICTION-SCORE-LOW-VERDICT", by_id)
+
+    def test_no_open_signals_reports_clean(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            got = subprocess.run(
+                [sys.executable, SELF_AUDIT, "--json", "--project-root", tmp],
+                capture_output=True, text=True, check=True,
+            )
+            report = json.loads(got.stdout)
+            friction = [i for i in report["findings"] if i["id"].startswith("FRICTION-")]
+            self.assertEqual([i["id"] for i in friction], ["FRICTION-NONE"])
+            self.assertEqual(friction[0]["severity"], "info")
+
 
 if __name__ == "__main__":
     unittest.main()

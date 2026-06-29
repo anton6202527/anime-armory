@@ -125,9 +125,7 @@ image prompt = [生图模型/渠道的 prompt 写法] + [固定生视频模型�
 ### 禁止：第三方逆向 / web 自动化出图（安全 invariant）
 禁的是**未授权路径**：不要装第三方逆向 CLI，也不要进入即梦 web 自动化出图。Dreamina/即梦官方 CLI 与 ByteDance 官方 Seedream API 都是可选生图渠道。生图模型+渠道选定后整集统一一组、不与 Codex 混用。
 
-### Gemini-Imagen（Google）
-- **提示词语言**：英文最稳，中文次之
-- **prompt 长度**：偏好"描述性英文段落"，不要短关键词列表
+### Gemini-Imagen / Nano Banana (Google)\n- **提示词语言**：英文最稳，中文次之\n- **模型矩阵**：\n  - `gemini-3.1-flash-image`（Nano Banana 2）：主打高速度、高效率与大批量生产（默认 1K，额外支持 0.5K(512px)/2K/4K 分辨率与 1:4/4:1/1:8/8:1 画幅），支持“思考”模式、Google Search 与图片搜索实时增强，视频到图像（Video-to-image）能力，以及出色的文字渲染。\n  - `gemini-3-pro-image`（Nano Banana Pro）：主打专业级工作室画质。\n- **prompt 长度**：偏好"描述性英文段落"，不要短关键词列表
 - **参考图**：支持（图生图 / Multi-image input）
 - **参考预算（2026-06-18 核验）**：Gemini 3 Pro Image 高保真人物参考最多 5 张、对象参考最多 6 张、风格参考最多 3 张、总输入最多 14 张；Gemini 3.1 Flash Image 支持最多 4 个角色相似与 10 个对象保真。`reference_planner` 必须在预算内挑选，不要把共享库全量塞入。
 - **高保真提示**：关键脸部/标志/服装细节要在 prompt 中明写；只给图不写细节，模型仍可能按新场景重画身份。

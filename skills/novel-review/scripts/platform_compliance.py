@@ -33,6 +33,14 @@ REGULATORY_SOURCES = [
         "url": "https://www.news.cn/politics/20241221/0d5bf6a634124b03ae74e3ec849111de/c.html",
         "notes": ["片名提升思想/文化/审美内涵", "不渲染极端对立、复仇、暴戾、焦虑"],
     },
+    {
+        "title": "广电总局 AI 漫剧/微短剧备案新规：先备案后上线·投资额三级分层审核",
+        "date": "2026-04-01",
+        "url": "https://www.21jingji.com/article/20260410/herald/055ad9a327c3eed4dc4a0aa93f0863f2.html",
+        "notes": ["先备案后上线，未备案存量下架", "投资额三级审核（≥300万/100-300万/<100万）",
+                  "严禁颠覆性魔改经典作品与英雄/历史人物", "未授权真人肖像禁用",
+                  "AI生成内容片头/显著位置标识"],
+    },
 ]
 
 TITLE_RISK_PATTERNS = [
@@ -148,6 +156,30 @@ def metadata_findings(meta, settings_text, microdrama):
     return findings
 
 
+def classic_ip_findings(meta, microdrama):
+    """广电2026-04新规：严禁'颠覆性魔改经典作品与英雄/历史人物'+真人肖像须授权。
+
+    只读 _meta 的**结构化字段**（不扫正文，符合 B10）：rights_status=='public-domain'（作者声明
+    公版来源，强信号=老作品/经典/历史题材）或显式 _meta.classic_ip_adaptation 标记 → 该源书一旦
+    改编成漫剧/微短剧，须按新规复核经典/历史/英雄人物形象与真人肖像授权。
+    judgment call → 仅 warn（review·不硬阻断）；微短剧/漫剧目标才触发（纯小说不受此规）。"""
+    findings = []
+    if not microdrama:
+        return findings
+    rights = str(meta.get("rights_status") or "").strip().lower()
+    flagged = bool(meta.get("classic_ip_adaptation")) or rights in ("public-domain", "public_domain")
+    if flagged:
+        findings.append(finding(
+            "classic_ip_alteration_review",
+            "warn",
+            "metadata",
+            "源书为公版/经典 IP 改编：改编成漫剧/微短剧前须按广电2026-04新规复核——不得颠覆性魔改"
+            "经典作品或英雄/历史人物形象；涉真人肖像须取得授权；按投资额三级备案审核；AI生成内容"
+            "片头/显著位置标识。小说侧先记录为发布前待办，并随交付契约把 classic_ip 标记传给改编环节。",
+        ))
+    return findings
+
+
 def check(root):
     meta = load_json(os.path.join(root, "_meta.json"))
     settings_text = load_settings_text(root)
@@ -158,6 +190,7 @@ def check(root):
     findings.extend(scan_title(title))
     findings.extend(scan_content(text))
     findings.extend(metadata_findings(meta, settings_text, microdrama))
+    findings.extend(classic_ip_findings(meta, microdrama))
     blockers = [item for item in findings if item["severity"] == "block"]
     warnings = [item for item in findings if item["severity"] == "warn"]
     verdict = "pass"

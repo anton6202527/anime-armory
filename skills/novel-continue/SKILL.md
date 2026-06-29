@@ -69,6 +69,8 @@ python3 <skill>/scripts/init_project.py "<原作>" \
 落点 `创作区/写小说/<原作名>-续写/`。骨架同其他 novel-* 派生 skill 模式（`设定/` / `章节/` / `导出/` / `_meta.json` / `_进度.md`）。
 `init_project.py` 会把 `--new-chapters` 同步写入 `_meta.json.target_chapters`，并按 `target_platform` 推导 `target_words_per_chapter / target_wordcount_min_max / demo_chapters / draft_mode`，同时把 `draft_mode / chapter_granularity / ai_text_usage` 写进 `_meta.json` 与 `_设置.md`。后续 `draft_packets.py --next` 只读这些机器字段推进，不再靠人类文案猜章数。
 
+> **源语言/文体体检**：默认假设原作是现代中文白话文。续写前若原作是**文言文/古文或外文**，先 `python3 skills/novel/_lib/source_language.py <项目根>` 体检——非现代白话需先 `--scaffold` 建 `设定/source_comprehension.md` 源理解层并补全、把 `status` 置 confirmed（否则 qa_gate 阻断 `SOURCE-LANG-COMPREHENSION`）。续写从理解层（现代白话理解）写、保留 curated 古语/术语作文风。
+
 ### 第 2 步 — 吸收原作（最长的一步）
 
 读全本，输出：
@@ -79,13 +81,20 @@ python3 <skill>/scripts/init_project.py "<原作>" \
 - `设定/末章状态.md` —— 人物在哪 / 做什么 / **未回收的伏笔 / 悬念 / 钩子**（这是续写最珍贵的资产）
 - `设定/作者口吻.md` —— 原作的句长 / 词汇密度 / 标志性短句 / 节奏特征（续写文风的锚定）
 
-**未回收伏笔表**是续写章纲的输入；列得越完整，续写越像同一本书。把每条原作未回收伏笔登记进伏笔台账（init 已 seed 空台账 `设定/foreshadowing_ledger.json`）：
+**未回收伏笔表**是续写章纲的输入；列得越完整，续写越像同一本书。**init 已从原作启发式抽出「伏笔候选」预播进 `设定/foreshadowing_ledger.json`**（带 `confirmed:false`，`id=AUTO_NNN`）——所以 `analyze()` 一开局就 `ran:True` 给你一份待确认清单，不再空转。本步逐条裁决候选：
 
 ```
+# 看候选清单
+python3 ../../novel-wiki/scripts/foreshadow_ledger.py <作品根> scan --through <原作末章>
+# 是真伏笔 → 确认并补预期回收章（机检超期的前提）
+python3 ../../novel-wiki/scripts/foreshadow_ledger.py <作品根> confirm --id AUTO_001 --by <预期回收章> --importance high
+# 是噪声 → 否决
+python3 ../../novel-wiki/scripts/foreshadow_ledger.py <作品根> drop --id AUTO_002
+# 候选漏抽的，手动补
 python3 ../../novel-wiki/scripts/foreshadow_ledger.py <作品根> plant --desc "断剑认主线索" --at <原作埋设章> --by <预期回收章> --importance high
 ```
 
-否则台账无 seeds，`foreshadow_ledger.analyze()` 永远 `ran:False`，"续写是否兑现 ≥50% 未回收伏笔"无从机检——这恰是续写最该守的一致性。续写章回收后用 `payoff --id SEED_xxx` 销账。
+**未确认候选永不升阻断、不计回收率分母**（候选只是提示，避免正则误识别制造噪声）；只有 `confirm`/`plant` 过的才进"续写是否兑现 ≥50% 未回收伏笔"的机检——这恰是续写最该守的一致性。续写章回收后用 `payoff --id <SEED/AUTO id>` 销账。
 
 ### 第 3 步 — 续写方向（最重要 gate）
 

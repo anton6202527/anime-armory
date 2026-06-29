@@ -1,0 +1,14 @@
+{
+  "kind": "n2d_scene_world_ledger",
+  "episode": "第1集",
+  "available": true,
+  "timeline": [],
+  "scenes": {},
+  "summary": {
+    "scene_count": 0,
+    "finding_count": 0,
+    "block_count": 0,
+    "warn_count": 0
+  },
+  "source": "n2d-review/world_continuity"
+}

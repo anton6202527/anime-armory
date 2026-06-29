@@ -94,6 +94,21 @@ python3 skills/n2d-update/scripts/update_plan.py media <作品根> 第3集 --ima
 - **无证据不判**：没有 findings 或人工判定时（无报告即 `evidence_verdict=no_evidence`），`media` 只能列出下一步复核命令/人工确认步骤；不得把 `--image`/`--video`/`--target` 直接当作坏目标，也不得无条件排入重制。
 - **不碰未列目标**：`media` 是少量图片/视频刷新工具，不做整集全链重跑。
 
+## 出图/出视频前的自动哨兵（gate 侧「物料新鲜度」预检）
+
+同一套 skill 漂移检测已下沉到 `n2d/_lib/skill_freshness.py`，被 `n2d-review` 的
+`image_prompt_preflight` / `image_preflight` / `video_prompt_preflight` / `video_preflight`
+预检在**正式调用后端花钱前**自动跑一次：若生产本阶段输入物料的 skill（n2d-script/voice/image/video
+或 `n2d/_lib` 运行期契约）自上次 `record` 的基线后有改动，预检会发一条 **WARN「物料新鲜度」**——
+*前期物料可能已过期，先跑 `update_plan.py check` 评估哪些物料需重制再生成*。这是 **advisory·不硬阻断**
+（是否重制是判断题，交给本 skill 的精确规划器；横切/QC/gate-only 改动只发 INFO 不报过期），WARN 与
+BLOCK 区分见 `add()` 严重度模型。
+
+**前提**：哨兵只在作品**已有基线**时说话——无基线 = 无可比对对象，预检**静默**。要开启它，先在产完一个
+阶段、验收通过时跑一次 `record`（见下「`record`」），此后每次出图/出视频前都会自动体检 skill 漂移。
+gate 侧只读不写、永不自动落基线；精确的「文件→阶段 / artifact vs gate-only」裁决仍由本 skill 的
+`check` 给出。
+
 ## 主动提示
 
 进入已有 n2d 作品时，推荐在 `n2d` 源新鲜度检查之后追加一次：

@@ -51,9 +51,28 @@ def build_dreamina_prompt(root: Path, episode: str, target: base.Target) -> str:
         _field(body, "视线方向"),
         _field(body, "光位锚"),
         _field(body, "关键道具结构唯一性闸门"),
-        _field(body, "负向 prompt"),
-        "只输出一张正式剧情帧；禁止文字、水印、logo、漫画分格、UI边框；角色脸/妆造不得漂移，服装配色一致。",
     ]
+    # 视线防呆 + 对撞构图：与 Codex 后端同源注入（单一真值源 codex_image_runner→n2d_const）。
+    # 此前即梦后端只誊抄作者手写字段——作者漏写视线防呆，打斗镜就被渲染成正对镜头/肖像摆拍/自拍
+    # （正脸定妆锚又把脸怼向镜头）。非 POV 镜统一补旁观者视线锁；POV/破第四墙/对观众压迫特写自动豁免。
+    gaze_neg = base.camera_gaze_negatives_for(body)
+    if gaze_neg:
+        parts.append(
+            "镜头为旁观者视角：角色不看镜头、不与镜头对视/eye contact，视线锁场内目标"
+            "（对手 / 武器来路 / 命中点 / 对话对象 / 所视之物）；身份可辨用三分之二侧脸 / 侧脸 / 过肩 / 45°回头，"
+            "不正对镜头肖像摆拍。打斗动作镜动作优先于脸。"
+        )
+    clash = base.weapon_clash_compose_for(body)
+    if clash:
+        parts.append(clash)
+    # 打斗/法术/动作高潮镜：注入「经费在燃烧」视觉盛宴保底层（与 Codex 后端同源·单一真值源 n2d_const）。
+    richness = base.combat_spectacle_richness_for(body)
+    if richness:
+        parts.append(richness)
+    parts.append(_field(body, "负向 prompt"))
+    if gaze_neg:
+        parts.append("负向：" + gaze_neg + "——不得直视镜头 / 正对镜头摆拍 / 自拍感。")
+    parts.append("只输出一张正式剧情帧；禁止文字、水印、logo、漫画分格、UI边框；角色脸/妆造不得漂移，服装配色一致。")
     if target.mode == "midframe":
         parts.append("这是同 Clip 中段锚帧：以上一张首帧图生图为母图，只改中段动作/表情，不重画脸。")
     elif target.mode == "tailframe":
@@ -400,6 +419,7 @@ def process_target(
             "请把承载角色的脸部特写/正面参考置 ready，或设 N2D_ALLOW_UNANCHORED_IDENTITY_PLATE=1 显式豁免。",
             file=sys.stderr,
         )
+        base.log_unanchored_friction(root, episode, target.shot, bundle.get("carried_identity"), "Dreamina")
         return False
 
     started = time.monotonic()
@@ -500,6 +520,11 @@ def main(argv: Sequence[str]) -> int:
     if not targets:
         raise SystemExit("no targets resolved")
     task_id = os.environ.get("N2D_TASK_ID") or f"dreamina-{episode}"
+
+    # Non-waivable ordering lock shared with codex_image_runner: --skip-preflight
+    # cannot spend on Clip PNGs before the episode shared library is complete.
+    if not ns.dry_run and not base.enforce_shared_first_interlock(root, episode):
+        return 1
 
     # Pre-spend interlock: 生成前先跑 image_preflight 硬闸门，block 即拒绝生成不花钱；
     # 逃生口 --skip-preflight 留痕成 dashboard waiver（与 codex_image_runner 同源）。

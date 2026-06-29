@@ -43,13 +43,29 @@ def file_lock(lock_path, *, poll_seconds=0.05):
 
 
 def atomic_write_text(path, text, *, encoding="utf-8"):
-    """Write text via same-directory temp file and atomic replace."""
-    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+    """Write text via same-directory temp file, fsync, atomic replace, then fsync dir.
+
+    fsync 让「崩溃/断电后要么旧内容要么新内容、绝不半截写」真正成立（B2·crash-atomic，
+    非仅 atomic-visibility）：临时文件 flush+fsync 落盘后才 os.replace；rename 后再 fsync 目录项，
+    保证 rename 本身持久。非 POSIX / 不支持 fsync 目录的平台优雅跳过（退化为 atomic-visibility）。
+    """
+    d = os.path.dirname(path) or "."
+    os.makedirs(d, exist_ok=True)
     tmp = f"{path}.tmp.{os.getpid()}"
     try:
         with open(tmp, "w", encoding=encoding) as f:
             f.write(text)
+            f.flush()
+            os.fsync(f.fileno())
         os.replace(tmp, path)
+        try:
+            dir_fd = os.open(d, os.O_RDONLY)
+            try:
+                os.fsync(dir_fd)
+            finally:
+                os.close(dir_fd)
+        except (OSError, AttributeError):  # pragma: no cover - 非 POSIX 目录 fsync 不可用
+            pass
     except Exception:
         try:
             os.remove(tmp)

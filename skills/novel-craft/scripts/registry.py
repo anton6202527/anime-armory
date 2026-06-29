@@ -124,6 +124,21 @@ NOVEL_SKILLS = [
         "role": "progress",
         "summary": "read-only progress dashboard for novel projects",
     },
+    {
+        "name": "novel-dashboard",
+        "role": "dashboard",
+        "summary": "read-only production control dashboard for pipeline, QA, revision, batch, and release signals",
+    },
+    {
+        "name": "novel-supervisor",
+        "role": "orchestration",
+        "summary": "read-only next-action recommender: 读 pipeline plan/review·QA/revision/batch/circuit 信号→输出下一步安全动作(命令+角色+handoff)；不执行·不循环·不调模型·不写正文",
+    },
+    {
+        "name": "novel-batch",
+        "role": "orchestration",
+        "summary": "local file-backed batch queue for parallel review/score/dashboard tasks",
+    },
 ]
 
 

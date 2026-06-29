@@ -9,10 +9,10 @@ ArcFace(insightface) 测的是身份 embedding 相似度；它在无库 / 侧背
 
 外部命令契约（二选一，batch 优先——VLM 只加载一次）：
 * `N2D_APPEARANCE_BATCH_CMD`（推荐）：收 `<manifest_path>`，就地把判定写进该文件 `findings` 并覆写。
-  见 `backends/appearance_mlxvlm.py`。
+  见 `backends/appearance_mlxvlm.py`。未显式设置时，若本机有 `n2dvlm` conda 环境且该后端存在，会自动接上。
 * `N2D_APPEARANCE_CMD` / `N2D_VLM_CMD`（逐对·慢）：收 `<reference_image> <shot_image> <character_id>`，
   stdout 输出 JSON `{"similarity": 0-1, "verdict": "ok|warn|block", "message": "..."}`。
-缺命令则只产 manifest（不臆造分），交装好 VLM 的环境复跑。
+显式设置 `N2D_APPEARANCE_BATCH_CMD=off` 可关闭自动后端。缺命令则只产 manifest（不臆造分），交装好 VLM 的环境复跑。
 
 用法：python3 appearance_judge_runner.py <作品根> 第N集 [--write] [--json]
 """
@@ -23,6 +23,7 @@ import datetime as dt
 import glob
 import json
 import os
+import shlex
 import subprocess
 import sys
 from typing import Any, Dict, List, Mapping, Optional
@@ -32,6 +33,38 @@ import production_consistency as pc
 APPEARANCE_JUDGE_KIND = "n2d_appearance_judge"
 SIM_WARN_FLOOR = float(os.environ.get("N2D_APPEARANCE_WARN_FLOOR", "0.7"))
 SIM_BLOCK_FLOOR = float(os.environ.get("N2D_APPEARANCE_BLOCK_FLOOR", "0.5"))
+
+
+def _n2dvlm_env_exists() -> bool:
+    """本机是否有 n2dvlm conda 环境；只探路径，避免 runner 无故调用 conda。"""
+    bases = []
+    cp = os.environ.get("CONDA_PREFIX")
+    if cp:
+        bases += [cp, os.path.dirname(os.path.dirname(cp))]
+    bases += [
+        "/opt/homebrew/Caskroom/miniforge/base",
+        os.path.expanduser("~/miniforge3"),
+        os.path.expanduser("~/miniconda3"),
+        os.path.expanduser("~/anaconda3"),
+    ]
+    return any(b and os.path.isdir(os.path.join(b, "envs", "n2dvlm")) for b in bases)
+
+
+def _auto_appearance_batch_cmd() -> str:
+    """本机默认 VAP 后端：appearance_mlxvlm.py + n2dvlm 环境都在时自动接上。"""
+    adapter = os.path.abspath(os.path.join(
+        os.path.dirname(__file__), "backends", "appearance_mlxvlm.py"))
+    if os.path.isfile(adapter) and _n2dvlm_env_exists():
+        return f"conda run -n n2dvlm python {shlex.quote(adapter)}"
+    return ""
+
+
+def _appearance_batch_cmd() -> str:
+    """显式 N2D_APPEARANCE_BATCH_CMD 优先；未设时尝试本机 mlx-vlm 默认。"""
+    cmd = os.environ.get("N2D_APPEARANCE_BATCH_CMD", "").strip()
+    if cmd.lower() in ("off", "none", "disabled", "0"):
+        return ""
+    return cmd or _auto_appearance_batch_cmd()
 
 
 def _identity_registry(root: str) -> dict:
@@ -151,12 +184,11 @@ def fill_findings(root: str, manifest: dict) -> dict:
     return manifest
 
 
-def _run_batch(path: str) -> bool:
-    cmd = os.environ.get("N2D_APPEARANCE_BATCH_CMD", "").strip()
+def _run_batch(path: str, cmd: str) -> bool:
     if not cmd:
         return False
     try:
-        subprocess.run([*cmd.split(), path], timeout=7200, check=True)
+        subprocess.run([*shlex.split(cmd), path], timeout=7200, check=True)
         return True
     except Exception as exc:
         print(f"[appearance_judge][warn] batch 后端调用失败（忽略，保留 manifest）：{exc}", file=sys.stderr)
@@ -165,14 +197,15 @@ def _run_batch(path: str) -> bool:
 
 def write(root: str, ep: str) -> str:
     manifest = build_manifest(root, ep)
-    if not os.environ.get("N2D_APPEARANCE_BATCH_CMD"):
+    batch_cmd = _appearance_batch_cmd()
+    if not batch_cmd:
         manifest = fill_findings(root, manifest)
     path = os.path.join(root, "生产数据", f"appearance_judge_{ep}.json")
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(manifest, fh, ensure_ascii=False, indent=2)
         fh.write("\n")
-    _run_batch(path)
+    _run_batch(path, batch_cmd)
     return path
 
 

@@ -113,6 +113,8 @@
 }
 ```
 
+`physical_scale` 是体态/相对身量层。`relative_scale`（以某角色为标尺的相对身量，如「比沈念高半个头」）是**唯一进出图 prompt 的字段**——多人同框由 `n2d-image`（`reference_planner.plan_multi_subject_strategy`）收进 clip 策略并要求写进镜头 prompt，`n2d-review` 的「物理尺寸对账」据此对账。`height_cm`/`body_type` 是**写作连续性元数据，不注入 prompt**（绝对数字对图像模型基本是装饰、占 token 却 steer 不动像素）；定性体型词写进 `character_dna`/角色卡「固定体态」即可。身份级体型不漂仍由 `drift_forbidden`/`identity_invariants` 的 `body_type` 锁。可选字段，缺省不影响 gate。
+
 `performance_signature` 是角色表演一致性层，记录微表情、惯用动作、站姿、眼神反应和说话节奏。production profile 下，核心/常驻角色缺该字段会被 `n2d-review` gate 阻断；临时配角可不填。
 
 `identity_marks` 是辨识标记层，登记疤痕/胎记/纹身/瞳色/痣/义体等**载剧情**辨识标记（认亲胎记、战损疤、血统异瞳、禁术印记），由 `n2d-review` 的 `辨识标记(MK1)` 机检（`marks_consistency.py`，归入 `character_consistency` 评分维度）。每条字段：`type`（类型）、`region`（部位）、`side`（left/right/center，可选）、`color`（可选）、`persistence`（`"permanent"` 永久标记，或 `{"acquired_at":"第N集"}` 获得型标记）、`plot_load`（是否载剧情）、`keywords`（机检在 storyboard/出图 prompt 里搜的词；不填则从 type+region 等派生）。机检语义：永久/已获得标记未在某镜文本出现 → 🟡warn（疑似漂移/丢失，或合理遮挡，人核对）；未获得标记在获得集之前出现 → 🔴block（时间线穿帮）。这是**文本/结构**机检（查标记有没有写进分镜/出图 prompt），像素/VLM 在场核验（OWLv2/外观判官）是后续增强档。无 `identity_marks` 登记则该机检优雅跳过，不假报。

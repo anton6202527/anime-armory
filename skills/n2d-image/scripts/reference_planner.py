@@ -40,10 +40,40 @@ if _COMMON not in sys.path:
 import face_drift_risk as fdr  # 同 skill·同目录复用诊断层纯函数
 
 try:
+    import codex_image_runner as cir  # 同 skill·复用 face_policy/承载脸锚单一真值源（不 fork）
+except Exception:  # pragma: no cover - 异常布局兜底
+    cir = None  # type: ignore
+
+try:
     from n2d_contract import image_identity_profile, image_lock_tier
 except Exception:  # pragma: no cover - 异常布局兜底
     image_identity_profile = None  # type: ignore
     image_lock_tier = None  # type: ignore
+
+# 镜头不是对视对象铁律·生成侧前移（治"防脸漂堆 frontal → 全员正对镜头摆拍"）：
+# image_qc 侧只在交付/出图后**检测**直视镜头/frontal portrait 偏置（_lint_action_eyeline/
+# _lint_camera_gaze_general），但参考规划是**生成侧**——这里在选参考时就把动作镜导向 ¾/侧脸主锚 +
+# 写「不看镜头·视线锁戏内目标」prompt 指令，让偏置在花钱出图前就被掰正，而不是事后返工。
+# 动作标记与 POV 豁免**与 image_qc/n2d_const 同源**（单一真值源·避免规划侧/QC 侧判定漂离）。
+try:
+    from n2d_const import is_camera_gaze_pov_exempt as _is_camera_gaze_pov_exempt, CAMERA_GAZE_NEGATIVES
+except Exception:  # pragma: no cover - 异常布局兜底
+    CAMERA_GAZE_NEGATIVES = (
+        "looking at viewer", "直视镜头", "看镜头", "正对镜头摆拍", "肖像摆拍", "selfie",
+    )
+
+    def _is_camera_gaze_pov_exempt(text: str) -> bool:  # type: ignore
+        return False
+
+try:
+    from image_qc import ACTION_EYELINE_MARKERS as _ACTION_EYELINE_MARKERS
+except Exception:  # pragma: no cover - 异常布局兜底（与 image_qc.ACTION_EYELINE_MARKERS 同步）
+    _ACTION_EYELINE_MARKERS = (
+        "fight_exchange", "magic_burst", "chase", "battle", "combat", "action keyframe",
+        "打斗", "武打", "拆招", "交锋", "对打", "攻防", "追逐", "爆冲", "斜劈", "劈", "斩",
+        "刺", "挥", "命中", "受击", "撞击", "投掷", "施法", "法术", "斗法", "枪线", "戟刃",
+        "spear", "slash", "strike", "impact", "attack", "burst",
+    )
 
 PLAN_KIND = "n2d_reference_plan"
 
@@ -61,6 +91,15 @@ STRENGTH = {
 
 # ── 纯函数（无依赖·可测） ──────────────────────────────────────────────────────
 
+def is_action_eyeline_shot(text: str) -> bool:
+    """本镜是否动作/打斗/强互动镜（与 image_qc._is_action_eyeline_shot 同源标记）。纯函数·可测。
+
+    动作镜是「角色总看镜头/摆拍宣传照」最高发档——拆招本该把视线/姿态锁向对手·武器·命中点，
+    一旦被防脸漂的 frontal 措辞带偏成正对镜头，力线与真实感全丢。规划侧据此把动作镜导向 ¾/侧脸主锚。"""
+    t = str(text or "").lower()
+    return any(str(m).lower() in t for m in _ACTION_EYELINE_MARKERS)
+
+
 def variation_deltas(lens: str, text: str, angle_policy: Mapping[str, Any],
                      shot_size: str = "", expression_span: str = "") -> List[str]:
     """单角色单镜相对定妆照的变化量（不含多人同框，那个在 clip 级算）。纯函数·可测。
@@ -77,6 +116,10 @@ def variation_deltas(lens: str, text: str, angle_policy: Mapping[str, Any],
     for tok in fdr.extreme_angle_tokens(f"{lens} {shot_size}", text,
                                         (angle_policy or {}).get("risky") or []):
         d.append(f"extreme_angle:{tok}")
+    # 动作镜视线/姿态锁（生成侧前移·治"全员正对镜头摆拍"）：命中动作标记且非显式 POV/破第四墙镜，
+    # 标 action_eyeline_lock → 下游把 ¾/侧脸提为主身份锚 + 写「不看镜头」prompt 指令。
+    if is_action_eyeline_shot(f"{lens} {text} {shot_size}") and not _is_camera_gaze_pov_exempt(text):
+        d.append("action_eyeline_lock")
     return d
 
 
@@ -232,6 +275,30 @@ def plan_character_in_clip(
     if multi and bool(profile.get("multi_reference")) and tier in {"reference_group", "multi_reference"}:
         controlnet = ["pose", "depth"]
 
+    # 动作镜视线/姿态锁（生成侧·治"防脸漂堆 frontal → 拆招拍成正对镜头摆拍"）：
+    # ¾/侧轮廓做主身份锚（避免 frontal portrait 偏置），front 降权为辅助身份核对；并开出
+    # 「不看镜头·视线锁戏内目标·camera=observer」prompt 指令——这是 image_qc 动作视线 block 闸的
+    # 生成侧前移（出图前掰正，而非交付后返工）。在预算封顶前重排，让 ¾ 锚优先保住。
+    pose_gaze_directive: Optional[str] = None
+    prompt_required: List[str] = []
+    if "action_eyeline_lock" in deltas:
+        for r in refs:
+            if r.get("role") == "three_quarter":
+                r["strength_hint"] = max(float(r.get("strength_hint") or 0), 0.78)
+            elif r.get("role") == "front":
+                r["strength_hint"] = min(float(r.get("strength_hint") or 0), 0.55)
+        # 稳定排序：memory_anchor / three_quarter 提到 front 之前，保留同组相对次序。
+        refs.sort(key=lambda r: 0 if r.get("role") in ("memory_anchor", "three_quarter") else 1)
+        pose_gaze_directive = (
+            "动作镜：脸可辨但不直视镜头——¾/侧/背侧轮廓，视线锁戏内目标（对手/武器来路/命中点），"
+            "camera=observer 而非 opponent POV；负面词注入「"
+            + "、".join(CAMERA_GAZE_NEGATIVES[:6]) + "…」。"
+            "若本镜确为 opponent POV/破第四墙/对观众压迫特写，请在分镜显式标 POV 豁免。"
+        )
+        prompt_required.append("动作镜视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）")
+        if not any(r.get("role") == "three_quarter" for r in refs):
+            missing.append("45°/¾ 侧脸参考（动作镜主身份锚·避免 frontal 摆拍偏置）")
+
     # 按后端能力封顶参考张数；预算溢出要显式写进 plan，不能静默吞参考。
     requested_ref_count = len(refs)
     dropped_refs: List[Dict[str, Any]] = []
@@ -270,6 +337,41 @@ def plan_character_in_clip(
             f"`python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id {cid} --form '{form}'`"
         )
 
+    # P2-7 窄增量：把后端已知能力（multi_reference / ingests_video）显式翻成「这一镜怎么喂参考」处方。
+    # 2026 SOTA 是**分离的带标签多参考**（Seedance @Image1.. / Seedream Universal Reference / 可灵主体库），
+    # 而非把多张定妆照拼成一张参考表 sheet（拼图损分辨率与可寻址性）；支持视频参考的后端（Kling Elements/
+    # Custom Model）对身份信息量最大的镜（大表情/近景/原生主体注册）可喂定妆**视频/多帧**胜单张静帧。
+    multi_cap = bool(profile.get("multi_reference"))
+    video_cap = bool(profile.get("ingests_video"))
+    ref_count = len(refs)
+    if multi_cap and ref_count > 1:
+        feed_mode = "tagged_multi_image"
+        feed_guidance = (
+            f"{label} 支持多参考：把这 {ref_count} 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… "
+            "各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。")
+        tagged_inputs = [f"@Image{i + 1}:{r.get('role')}" for i, r in enumerate(refs)]
+    elif ref_count > 1:
+        feed_mode = "sequential_single_reference"
+        feed_guidance = (
+            f"{label} 不支持多图参考：以最高优先锚为主图做图生图，其余角度/表情参考转写进 prompt 描述或分步参考。")
+        tagged_inputs = []
+    else:
+        feed_mode = "single_reference"
+        feed_guidance = ""
+        tagged_inputs = []
+    video_hint = ""
+    if video_cap and (closeup or strong_emotion or tier in {"native_unregistered", "native_subject"}):
+        video_hint = (
+            f"{label} 可吃视频参考：身份信息量最大化可喂该角色定妆**视频/多帧**（读 3D 结构 + 表情动态，"
+            "胜单张静帧），尤其大表情/近景与原生主体注册时。")
+    reference_feed = {
+        "mode": feed_mode,
+        "guidance": feed_guidance,
+        "tagged_inputs": tagged_inputs,
+        "video_reference_supported": video_cap,
+        "video_reference_hint": video_hint,
+    }
+
     needs_action = bool(missing or escalation or tier == "native_unregistered")
     return {
         "char_id": cid,
@@ -281,11 +383,14 @@ def plan_character_in_clip(
         "reference_budget": reference_budget,
         "dropped_references": dropped_refs,
         "controlnet": controlnet,
+        "reference_feed": reference_feed,
         "missing_references": missing,
         "native_subject_action": native_action,
         "escalation": escalation,
         "needs_action": needs_action,
         "memory_anchor_reinjected": bool(memory_injected),
+        "pose_gaze_directive": pose_gaze_directive,
+        "prompt_required": prompt_required,
     }
 
 
@@ -530,6 +635,17 @@ def plan_multi_subject_strategy(
 
     distinct = plan_distinct_anchors(dna_by_id or {}, unique_ids, confusable_pairs=confusable_pairs)
 
+    # 相对身量注入：多人同框是体型信号唯一真有用的地方（区分角色 + 跨镜保持谁比谁高/壮，参考图本身保证不了）。
+    # registry 角色若声明了 physical_scale.relative_scale（以某角色为标尺的相对身量），收进 clip 策略，
+    # 供 01_分镜出图.md 写进 prompt、gate 对账。绝对 height_cm/weight 是写作元数据，不进 prompt（数字 steer 不动像素）。
+    relative_scale: Dict[str, str] = {}
+    for cid in unique_ids:
+        rs = str((dna_by_id or {}).get(cid, {}).get("relative_scale") or "").strip()
+        if rs:
+            relative_scale[cid] = rs
+    if relative_scale:
+        required_prompt_fields.append("相对身量/身高比例（relative_scale）")
+
     # ① 分镜调度（C6 剧情优先）：多人同框由剧情决定，不为迁就后端删戏。
     #    任一 ≥2 清晰具名同框都必须登记槽位+执行策略；≥4/近景/遮挡只是更高风险档。
     n = len(unique_ids)
@@ -562,6 +678,7 @@ def plan_multi_subject_strategy(
         "required_prompt_fields": required_prompt_fields,
         "execution": execution,
         "distinct_anchors": distinct,
+        "relative_scale": relative_scale,
         "shot_scheduling": shot_scheduling,
         "needs_action": True,
     }
@@ -603,6 +720,7 @@ def load_character_forms(root: Path) -> List[Dict[str, Any]]:
             "image_adapters": (f.get("identity_adapters") or {}).get("image") or {},
             "character_dna": f.get("character_dna") or {},
             "anchor_phrase": str(f.get("anchor_phrase") or ""),
+            "physical_scale": f.get("physical_scale") or {},
         } for f in forms]
         out.append({
             "id": cid,
@@ -622,22 +740,37 @@ def parse_clip(clip: Mapping[str, Any]) -> Dict[str, Any]:
     新 schema：description + character_ids + continuity.shot_size/expression_span +
               template_contract.camera_rule/blocking/beats/character_slots（shots 可能是 int 列表）。
     """
-    parts: List[str] = [str(clip.get("label") or ""), str(clip.get("scene") or ""),
-                        str(clip.get("description") or "")]
+    parts: List[str] = [str(clip.get("clip") or ""), str(clip.get("label") or ""), str(clip.get("scene") or ""),
+                        str(clip.get("description") or ""), str(clip.get("action") or ""), str(clip.get("camera") or "")]
+    raw_characters = clip.get("characters") or []
+    if isinstance(raw_characters, (list, tuple)):
+        parts += [str(item) for item in raw_characters if item]
+    elif raw_characters:
+        parts.append(str(raw_characters))
     cont = clip.get("continuity") or {}
     parts += [str(cont.get("start_state") or ""), str(cont.get("end_state") or "")]
     tc = clip.get("template_contract") or {}
-    parts += [str(tc.get("camera_rule") or ""), str(tc.get("blocking") or ""), str(tc.get("face_priority") or "")]
-    parts += [str(b) for b in (tc.get("beats") or [])]
-    slots = tc.get("character_slots")
-    if isinstance(slots, dict):
-        parts += [str(v) for v in slots.values()]
+    if isinstance(tc, Mapping):
+        parts += [str(tc.get("camera_rule") or ""), str(tc.get("blocking") or ""), str(tc.get("face_priority") or "")]
+        parts += [str(b) for b in (tc.get("beats") or [])]
+        slots = tc.get("character_slots")
+        if isinstance(slots, dict):
+            parts += [str(v) for v in slots.values()]
+    elif isinstance(tc, (list, tuple)):
+        parts += [str(item) for item in tc if item]
+    else:
+        parts.append(str(tc))
     lenses: List[str] = []
     for s in (clip.get("shots") or []):
         if isinstance(s, dict):
             parts.append(str(s.get("desc") or ""))
             lenses.append(str(s.get("lens") or ""))
     cids = [str(x) for x in (clip.get("character_ids") or []) if x]
+    if not cids and isinstance(raw_characters, (list, tuple)):
+        for item in raw_characters:
+            text = str(item or "").strip()
+            if text.startswith("CHAR_"):
+                cids.append(text.split("/", 1)[0])
     return {
         "text": " ".join(p for p in parts if p),
         "lens": " ".join(lenses),
@@ -659,6 +792,9 @@ def _pick_form(char: Mapping[str, Any], clip_text: str) -> Dict[str, Any]:
     """clip 文本命中某变体 form 的 asset_key → 选该 form，否则用第 1 form 作策略锚。"""
     forms = char.get("forms") or [{}]
     for f in forms:
+        fname = str(f.get("form") or "")
+        if fname and fname in clip_text:
+            return f
         ak = str(f.get("asset_key") or "")
         if ak and ak in clip_text:
             return f
@@ -696,6 +832,86 @@ def _memory_refs_for(mem_map: Mapping[str, List[str]], cid: str, name: str, asse
     return []
 
 
+def plan_shared_assets(root: Path, chars: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
+    """规划共享定妆资产（武器/道具/VFX/海报…）的脸策略——治"含人资产镜被规划器静默跳过、无脸参考"。
+
+    此前 reference_planner 只逐 storyboard clip × 角色规划，**共享资产不是 clip → 从不进规划器**，
+    含人脸的武器握持/持械动作/海报等就被静默放任（大荒碎星戟握持镜脸漂的规划侧盲区）。这里按
+    `codex_image_runner.resolve_face_policy`（单一真值源）逐资产判脸策略并开处方：
+      - face_locked：列出承载角色（owner/carries_identity·owner-aware）+ 可注入脸锚路径；无承载或承载
+        无 ready 脸锚 → action（与 image_qc.audit_asset_face_policy 硬闸互补，规划侧前移提示）。
+      - faceless：显式标"出图须背身/裁到下巴以下/无清晰五官·落档像素验 0 脸"（不再静默无参考）。
+      - none：纯武器美术/空镜/道具不涉脸，跳过。
+    cir 不可加载（缺依赖）→ available=False 优雅跳过。report-only·处方层。"""
+    out: Dict[str, Any] = {"available": True, "assets": [], "actions": [], "notes": []}
+    if cir is None or not hasattr(cir, "resolve_face_policy"):
+        out["available"] = False
+        out["notes"].append("codex_image_runner.resolve_face_policy 不可用——共享资产脸策略规划跳过。")
+        return out
+    try:
+        reg = json.loads((Path(root) / "出图" / "共享" / "asset_registry.json").read_text(encoding="utf-8"))
+    except Exception:
+        out["notes"].append("asset_registry.json 缺失/损坏——共享资产脸策略规划跳过。")
+        return out
+    by_id = {str(c.get("id") or "").strip(): c for c in (chars or [])}
+
+    def _anchor_for(ref: str) -> Optional[str]:
+        cid = ref.split("/", 1)[0]
+        ch = by_id.get(cid)
+        if not isinstance(ch, dict) or not ch.get("forms"):
+            return None
+        bare = "/" not in ref
+        for form in ch["forms"]:
+            fname = str(form.get("form") or "常态").strip()
+            if bare or f"{cid}/{fname}" == ref:
+                p = _front_ref_abs(root, form)
+                if p:
+                    return p
+        return _front_ref_abs(root, ch["forms"][0])
+
+    for asset in reg.get("assets") or []:
+        if not isinstance(asset, dict):
+            continue
+        aid = str(asset.get("id") or asset.get("name") or "?").strip()
+        policy = cir.resolve_face_policy(asset)
+        if policy == "none":
+            continue
+        entry: Dict[str, Any] = {"asset_id": aid, "type": asset.get("type"), "face_policy": policy}
+        if policy == "faceless":
+            entry["requirement"] = "出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。"
+            entry["face_refs"] = []
+        else:  # face_locked
+            carried = cir._asset_carried_identities(asset) if hasattr(cir, "_asset_carried_identities") else []
+            entry["carried_identities"] = carried
+            if not carried:
+                entry["issue"] = "face_locked_no_owner"
+                out["actions"].append({"kind": "shared_asset_face", "asset": aid,
+                                       "issue": "face_locked_no_owner",
+                                       "fix": "补 owner: CHAR_xx 或 carries_identity，或改 face_policy: faceless。"})
+            else:
+                refs = []
+                missing = []
+                for ref in carried:
+                    p = _anchor_for(ref)
+                    (refs.append({"carried": ref, "path": p, "role": "face_anchor",
+                                  "strength_hint": STRENGTH["face_anchor"]}) if p else missing.append(ref))
+                entry["face_refs"] = refs
+                if missing:
+                    entry["issue"] = "carried_anchor_missing"
+                    entry["missing_carried"] = missing
+                    out["actions"].append({"kind": "shared_asset_face", "asset": aid,
+                                           "issue": "carried_anchor_missing", "missing": missing,
+                                           "fix": "把承载角色脸部特写/正面参考置 ready，规划器才能折脸锚。"})
+        out["assets"].append(entry)
+    out["summary"] = {
+        "person_bearing_assets": len(out["assets"]),
+        "faceless": sum(1 for a in out["assets"] if a["face_policy"] == "faceless"),
+        "face_locked": sum(1 for a in out["assets"] if a["face_policy"] == "face_locked"),
+        "actions": len(out["actions"]),
+    }
+    return out
+
+
 def build_plan(root: Path, ep: str) -> Dict[str, Any]:
     chars = load_character_forms(root)
     clips = fdr.load_clips(root, ep)
@@ -728,14 +944,14 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
             ref_paths[c["id"]] = _front_ref_abs(root, c["forms"][0])
     confusable_pairs = compute_confusable_pairs(root, ref_paths)["pairs"] if ref_paths else set()
 
-    for clip in clips:
+    for idx, clip in enumerate(clips, 1):
         parsed = parse_clip(clip)
         text, lens = parsed["text"], parsed["lens"]
         present = clip_present(parsed, chars)
         multi = len({c["id"] for c in present}) >= 2
         if multi:
             multi_person_clips += 1
-        clip_id = str(clip.get("id") or clip.get("label") or "")
+        clip_id = str(clip.get("id") or clip.get("clip") or clip.get("label") or "")
         char_plans: List[Dict[str, Any]] = []
         clip_has_weak_big = False
         for c in present:
@@ -774,6 +990,7 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
             form = _pick_form(c, text)
             dna = dict(form.get("character_dna") or {})
             dna["anchor_phrase"] = form.get("anchor_phrase") or ""
+            dna["relative_scale"] = str((form.get("physical_scale") or {}).get("relative_scale") or "")
             dna_by_id[c["id"]] = dna
         clip_confusable = [p for p in confusable_pairs if set(p) <= {c["id"] for c in present}]
         strategy = plan_multi_subject_strategy(char_plans, profile,
@@ -815,6 +1032,24 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
             + ("（本集多人镜占比高，优先评估）" if ratio >= 0.4 else "")
         )
 
+    # 动作镜视线/姿态锁汇总（生成侧前移·治"全员正对镜头摆拍"）：逐镜处方已写 ¾ 主锚 + 视线指令，
+    # 这里给整集一句总览，提示落进 prompt 并由 image_qc 动作视线闸交付侧兜底。
+    _eyeline_clips = sum(1 for cp in clip_plans
+                         if any(p.get("pose_gaze_directive") for p in cp.get("characters") or []))
+    if _eyeline_clips:
+        notes.append(
+            f"动作镜视线/姿态锁：本集 {_eyeline_clips} 镜命中动作/打斗 → 逐镜已把 ¾/侧脸提为主身份锚、"
+            "front 降权，并写「不看镜头·视线锁戏内目标·camera=observer」指令（生成侧前移，治'全员正对镜头摆拍'）。"
+            "逐镜 prompt 落 `pose_gaze_directive`/`视线锁定` 字段；image_qc 动作视线闸在交付侧兜底。"
+        )
+
+    # 共享资产脸策略规划（治含人资产镜被规划器静默跳过·无脸参考）：与逐镜规划并列。
+    shared_assets = plan_shared_assets(root, chars)
+    for a in shared_assets.get("actions") or []:
+        action_required.append({"kind": "shared_asset_face", "asset": a.get("asset"),
+                                "issue": a.get("issue"), "fix": a.get("fix"),
+                                "missing": a.get("missing")})
+
     return {
         "kind": PLAN_KIND,
         "version": 1,
@@ -824,17 +1059,34 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
         "backend_label": profile.get("label") or backend,
         "backend_strategy": profile.get("strategy"),
         "clips": clip_plans,
+        "shared_assets": shared_assets,
         "summary": {
             "clip_count": len(clip_plans),
+            "shared_person_bearing_assets": (shared_assets.get("summary") or {}).get("person_bearing_assets", 0),
+            "shared_asset_actions": (shared_assets.get("summary") or {}).get("actions", 0),
             "weak_backend_large_delta_clips": weak_big_delta_clips,
             "chars_need_native_registration": sorted(need_registration),
             "chars_need_lora": sorted(need_lora),
             "multi_subject_actions": multi_subject_actions,
             "action_required": action_required,
             "multi_person_clips": multi_person_clips,
+            "action_eyeline_lock_clips": sum(
+                1 for cp in clip_plans
+                if any(p.get("pose_gaze_directive") for p in cp.get("characters") or [])
+            ),
             "memory_anchor_reinjected_clips": sum(
                 1 for cp in clip_plans
                 if any(p.get("memory_anchor_reinjected") for p in cp.get("characters") or [])
+            ),
+            "tagged_multi_image_clips": sum(
+                1 for cp in clip_plans
+                if any((p.get("reference_feed") or {}).get("mode") == "tagged_multi_image"
+                       for p in cp.get("characters") or [])
+            ),
+            "video_reference_candidate_clips": sum(
+                1 for cp in clip_plans
+                if any((p.get("reference_feed") or {}).get("video_reference_hint")
+                       for p in cp.get("characters") or [])
             ),
         },
         "notes": notes + ([
@@ -860,6 +1112,19 @@ def render_md(plan: Mapping[str, Any]) -> str:
     ]
     if plan.get("notes"):
         lines += ["## 备注"] + [f"- {n}" for n in plan["notes"]] + [""]
+
+    sa = plan.get("shared_assets") or {}
+    if sa.get("assets"):
+        lines += ["## 共享资产脸策略（含人资产镜·治规划侧脸漂盲区）"]
+        for a in sa["assets"]:
+            pol = a.get("face_policy")
+            if pol == "faceless":
+                lines.append(f"- `{a.get('asset_id')}`（{a.get('type')}）→ **faceless**：{a.get('requirement')}")
+            else:
+                carried = "、".join(a.get("carried_identities") or []) or "（无）"
+                tail = f"⚠️ {a.get('issue')}" if a.get("issue") else "脸锚已可注入"
+                lines.append(f"- `{a.get('asset_id')}`（{a.get('type')}）→ **face_locked**：承载 {carried}；{tail}")
+        lines.append("")
 
     reg = s.get("chars_need_native_registration") or []
     lora = s.get("chars_need_lora") or []
@@ -889,8 +1154,18 @@ def render_md(plan: Mapping[str, Any]) -> str:
             )
         lines.append("")
 
-    lines += ["## 逐镜处方", "", "| 镜头 | 角色/形态 | 档位 | 变化量 | 推荐参考 | 预算 | 控制网 | 补拍缺口 | 升档 |",
-              "|---|---|---|---|---|---|---|---|---|"]
+    s2 = plan.get("summary") or {}
+    if s2.get("tagged_multi_image_clips") or s2.get("video_reference_candidate_clips"):
+        lines += [
+            f"> 喂法（后端能力路由）：分图分标镜 {s2.get('tagged_multi_image_clips', 0)}、"
+            f"可喂视频参考镜 {s2.get('video_reference_candidate_clips', 0)}。多参考后端喂**分离带标签图**而非拼 sheet；"
+            "支持视频参考的后端对大表情/近景/原生主体注册可喂定妆视频/多帧。",
+            "",
+        ]
+    _FEED_LABEL = {"tagged_multi_image": "分图分标", "sequential_single_reference": "单图主参考",
+                   "single_reference": "单参考"}
+    lines += ["## 逐镜处方", "", "| 镜头 | 角色/形态 | 档位 | 变化量 | 推荐参考 | 喂法 | 预算 | 控制网 | 补拍缺口 | 升档 |",
+              "|---|---|---|---|---|---|---|---|---|---|"]
     for clip in plan.get("clips") or []:
         for c in clip.get("characters") or []:
             refs = "<br>".join(f"{r['role']}({r['strength_hint']})" for r in c.get("recommended_references") or []) or "-"
@@ -901,11 +1176,18 @@ def render_md(plan: Mapping[str, Any]) -> str:
             if dropped:
                 budget_cell += f"<br>丢弃{dropped}"
             cn = "、".join(c.get("controlnet") or []) or "-"
-            miss = "<br>".join(c.get("missing_references") or []) or "-"
+            miss_items = list(c.get("missing_references") or [])
+            if c.get("pose_gaze_directive"):
+                miss_items.append("🎥动作视线锁：¾/侧脸主锚 + 不看镜头·视线锁戏内目标（见 pose_gaze_directive）")
+            miss = "<br>".join(miss_items) or "-"
             esc = "✅需升档" if c.get("escalation") else "-"
+            feed = c.get("reference_feed") or {}
+            feed_cell = _FEED_LABEL.get(feed.get("mode") or "", "-")
+            if feed.get("video_reference_hint"):
+                feed_cell += "<br>🎬视频参考"
             lines.append(
                 f"| {clip.get('clip_id')} | {c.get('char_id')}/{c.get('form')} | {c.get('tier')} "
-                f"| {'、'.join(c.get('variation_delta') or []) or '-'} | {refs} | {budget_cell} | {cn} | {miss} | {esc} |"
+                f"| {'、'.join(c.get('variation_delta') or []) or '-'} | {refs} | {feed_cell} | {budget_cell} | {cn} | {miss} | {esc} |"
             )
     lines.append("")
     actions = s.get("action_required") or []

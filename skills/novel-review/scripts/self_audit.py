@@ -18,11 +18,18 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 SKILLS = os.path.join(REPO, "skills")
 CRAFT_SCRIPTS = os.path.join(SKILLS, "novel-craft", "scripts")
-if CRAFT_SCRIPTS not in sys.path:
-    sys.path.insert(0, CRAFT_SCRIPTS)
+NOVEL_LIB = os.path.join(SKILLS, "novel", "_lib")
+for _path in (NOVEL_LIB, CRAFT_SCRIPTS):
+    if _path not in sys.path:
+        sys.path.insert(0, _path)
 
-import contract  # noqa: E402
+import novel_contract as contract  # noqa: E402
 import registry  # noqa: E402
+
+try:
+    import friction_log  # noqa: E402  novel/_lib 生产摩擦埋点
+except ImportError:
+    friction_log = None
 
 
 def read(relpath):
@@ -131,6 +138,38 @@ def audit_market_baseline(project_root):
     return out
 
 
+def audit_optimization_signals(project_root):
+    """摄入生产线埋点：评分等阶段写入 生产数据/优化信号.jsonl 的流程摩擦信号。
+    每条未解决（status=open）的信号都翻成一条自审 finding，让"再次运行就触发自我优化"成闭环。
+    严重度映射：block→block、warn→warn、其余→info。"""
+    if not project_root:
+        return []
+    if friction_log is None:
+        return [finding(
+            "info", "FRICTION-NO-LIB", "未加载摩擦埋点库",
+            "novel/_lib/friction_log 不可导入；跳过生产摩擦信号摄入。",
+        )]
+    signals = [s for s in friction_log.load_signals(project_root)
+               if str(s.get("status") or "open") == "open"]
+    if not signals:
+        return [finding(
+            "info", "FRICTION-NONE", "无未解决的生产摩擦信号",
+            f"{rel(project_root)}/生产数据/优化信号.jsonl 无 open 信号（或文件不存在）。",
+        )]
+    sev_map = {"block": "block", "warn": "warn"}
+    out = []
+    for s in signals:
+        sev = sev_map.get(str(s.get("severity") or ""), "info")
+        out.append(finding(
+            sev,
+            f"FRICTION-{str(s.get('kind') or 'UNKNOWN').upper().replace('_', '-')}",
+            f"[{s.get('skill')}] {s.get('title')}",
+            str(s.get("detail") or ""),
+            s.get("suggested_fix") or "",
+        ))
+    return out
+
+
 def audit_registry():
     expected = set(registry.skill_names())
     actual = actual_novel_skills()
@@ -203,6 +242,9 @@ def audit_batch_queue_and_docs():
     out = []
     queue_script = os.path.join(REPO, "skills/novel-craft/scripts/draft_queue.py")
     queue_test = os.path.join(REPO, "skills/novel-craft/scripts/test_draft_queue.py")
+    batch_skill = os.path.join(REPO, "skills/novel-batch/SKILL.md")
+    batch_queue = os.path.join(REPO, "skills/novel-batch/scripts/queue.py")
+    batch_test = os.path.join(REPO, "skills/novel-batch/scripts/test_queue.py")
     craft = read("skills/novel-craft/SKILL.md")
     create = read("skills/novel-create/SKILL.md")
     if not os.path.exists(queue_script):
@@ -217,8 +259,26 @@ def audit_batch_queue_and_docs():
             "novel-craft/SKILL.md 与 novel-create/SKILL.md 应提示 claim/done 流程。",
             "同步两个 SKILL.md，避免继续只用 --range 手工分配。",
         ))
+    if not os.path.exists(batch_skill):
+        out.append(finding("block", "NOVEL-BATCH-SKILL-MISSING", "novel-batch 缺少 SKILL.md", rel(batch_skill)))
+    if not os.path.exists(batch_queue):
+        out.append(finding("block", "NOVEL-BATCH-QUEUE-MISSING", "novel-batch 缺少 queue.py", rel(batch_queue)))
+    else:
+        text = open(batch_queue, encoding="utf-8").read()
+        missing = [token for token in ("lease_expires_at", "dead_letter", "reclaim", "idempotency_key", "flock") if token not in text]
+        if missing:
+            out.append(finding(
+                "block",
+                "NOVEL-BATCH-QUEUE-WEAK",
+                "novel-batch 队列缺少工业化协调能力",
+                f"missing tokens: {missing}",
+                "保留 claim/lease/reclaim/dead-letter/idempotent plan 的本地队列能力。",
+            ))
+    if not os.path.exists(batch_test):
+        out.append(finding("warn", "NOVEL-BATCH-TEST-MISSING", "novel-batch 缺少队列测试", rel(batch_test)))
     if not out:
         out.append(finding("info", "DRAFT-QUEUE-OK", "批量写章队列已落地", "draft_queue.py + docs + test"))
+        out.append(finding("info", "NOVEL-BATCH-OK", "novel-batch 本地批量队列已落地", "queue.py + SKILL.md + test"))
     return out
 
 
@@ -253,6 +313,46 @@ def audit_contract():
     return out
 
 
+# mock/占位实现的招牌特征：声称"待实现"却被当真接进流程，或返回伪造常量让 gate 误信。
+# 治本病灶——本批审查里 graph_sentry 恒 clean、research_rag 恒 score:0.95 就是这类。
+_MOCK_MARKERS = re.compile(
+    r"mock for now|pending\s+(full|vector|graph)\b.*implementation|mock result|mock rag|"
+    r"return\s+a\s+fake|placeholder\s+implementation",
+    re.IGNORECASE,
+)
+
+
+def audit_mock_stubs():
+    """扫 novel-* 脚本里的 mock/占位招牌，防"mock 冒充实现接进流程/gate"回潮。report-only。"""
+    out = []
+    flagged = []
+    roots = [SKILLS]
+    for skill_dir in sorted(glob(os.path.join(SKILLS, "novel*"))):
+        for sub in ("scripts", "_lib", ""):
+            for path in glob(os.path.join(skill_dir, sub, "*.py")):
+                base = os.path.basename(path)
+                if base.startswith("test_") or base == "self_audit.py":
+                    continue  # 排除哨兵自身（其正则字面量含招牌词，否则自我误报）
+                try:
+                    text = open(path, encoding="utf-8").read()
+                except Exception:
+                    continue
+                hit = _MOCK_MARKERS.search(text)
+                if hit:
+                    flagged.append((rel(path), hit.group(0)))
+    if flagged:
+        for path, marker in flagged:
+            out.append(finding(
+                "block", "MOCK-STUB-IN-FLOW",
+                f"疑似 mock/占位实现：{path}",
+                f"命中招牌「{marker}」。mock 不得接进流程/gate（恒定返回=静默假阴性）。",
+                fix="改成真实实现，或显式 status=unimplemented/non-gating 且不返回伪造数据。",
+            ))
+    else:
+        out.append(finding("info", "MOCK-STUB-OK", "novel 脚本无 mock 招牌残留", "graph_sentry/research_rag 已落地真实实现"))
+    return out
+
+
 def run_audit(project_root=None):
     findings = []
     findings.extend(audit_registry())
@@ -260,7 +360,9 @@ def run_audit(project_root=None):
     findings.extend(audit_batch_queue_and_docs())
     findings.extend(audit_self_audit_docs())
     findings.extend(audit_contract())
+    findings.extend(audit_mock_stubs())
     findings.extend(audit_market_baseline(project_root))
+    findings.extend(audit_optimization_signals(project_root))
     summary = {
         "block": sum(1 for item in findings if item["severity"] == "block"),
         "warn": sum(1 for item in findings if item["severity"] == "warn"),

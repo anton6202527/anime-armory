@@ -15,6 +15,7 @@
 
 一项执行层 lint（读 `出图/第N集/prompt/01_分镜出图.md` 逐镜块，治人工誊抄漏）：
 - 角色镜是否有参考图块（禁纯文生图）/ 视线方向字段 / 锚点句 / 身份锁定句
+- 打斗/动作/追逐/法术/强互动镜不得直视主镜头：镜头是旁观者，不是对手 POV；必须把视线锁到对手/武器来路/命中点
 - **CHAR_xx/形态 是否在 identity_registry 合法存在**（gate.py 不查这条——它只查"写了 CHAR_xx"，
   不验 ID 真的在 registry 里，写错 CHAR_99 出图阶段无人拦）
 - 尾帧/下一镜入点若切到非主镜身份，必须有 `尾帧专用重抽提示`，并写目标 `CHAR_xx/形态`
@@ -55,6 +56,19 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, 
 
 # 同家族复用：一致性机检的阈值与数学只在 n2d-review/scripts 维护一份。
 REVIEW_SCRIPTS_DIR = Path(__file__).resolve().parents[2] / "n2d-review" / "scripts"
+
+# 一致性 lint 共享词表单一真值源（n2d_const）：强情绪/表情库/多主体放行集只此一份，
+# 本文件禁止再用字面量重定义同名集合（test_marker_single_source.py 守护）。纯 stdlib 常量，import 安全。
+_LIB_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
+if _LIB_DIR not in sys.path:
+    sys.path.insert(0, _LIB_DIR)
+from n2d_const import (  # noqa: E402
+    STRONG_EMOTION_MARKERS,
+    EXPRESSION_LIB_MARKERS,
+    MULTI_SUBJECT_ACCEPTING_MARKERS,
+)
+# 多主体「已登记执行策略」放行集 —— 与 review gate 的 _has_native_multi_subject_strategy 同源。
+MULTI_SUBJECT_STRATEGY_MARKERS = MULTI_SUBJECT_ACCEPTING_MARKERS
 
 # verdict 严重度（与 n2d-review/face_consistency._sev 同序；noface=图里没脸，介于 ok 与 warn）
 SEVERITY = {"ok": 0, "info": 0, "noface": 1, "warn": 2, "block": 3}
@@ -366,6 +380,180 @@ def audit_carried_identity_anchors(root: Path) -> Dict[str, Any]:
                                        "（形态级 `CHAR_xx/形态` 更精准），或显式豁免 "
                                        "N2D_ALLOW_UNANCHORED_IDENTITY_PLATE=1。"})
     return res
+
+
+def _resolve_shared_png(root: Path, rel: str) -> Optional[Path]:
+    """资产 reference_group 里的 png 相对路径 → 实际文件（兼容 作品根相对 / 共享相对 / 仅文件名）。"""
+    rel = str(rel or "").strip()
+    if not rel.lower().endswith(".png"):
+        return None
+    for cand in (root / rel, root / "出图" / "共享" / rel,
+                 root / "出图" / "共享" / "图片" / Path(rel).name):
+        if cand.exists():
+            return cand
+    return None
+
+
+def _asset_face_pngs(asset: Dict[str, Any]) -> List[str]:
+    """资产 reference_group / scale_reference 里所有 png 相对路径（faceless 像素核验目标）。"""
+    rg = asset.get("reference_group")
+    out: List[str] = []
+    def walk(node: Any) -> None:
+        if isinstance(node, str):
+            if node.lower().endswith(".png"):
+                out.append(node)
+        elif isinstance(node, dict):
+            for v in node.values():
+                walk(v)
+        elif isinstance(node, list):
+            for v in node:
+                walk(v)
+    walk(rg)
+    return out
+
+
+def audit_asset_face_policy(root: Path) -> Dict[str, Any]:
+    """人物脸一致性铁律（A·face_policy 落档机检）：含人脸资产定妆绝不放任自由生成脸。
+
+    对 asset_registry 每个资产解析 face_policy（codex_image_runner.resolve_face_policy 单一真值源）：
+      - face_locked：必须能折入 owner/承载角色脸锚——无任何承载角色 = `asset_face_locked_no_owner` 硬拦
+        （脸锚 ready 与否另由 audit_carried_identity_anchors 核，二者互补）。
+      - faceless：对已生成的 PNG **实时像素核验**（face_consistency.verify_faceless），检出清晰脸
+        = `asset_faceless_face_detected` 硬拦（握持比例镜画出可辨识脸=脸漂真因）。**不信任**资产里手写的
+        face_consistency.verdict（证现实不证声明）——一律重新像素核验；缺 insightface 则降级人审 advisory。
+    none（无人物）跳过。runner/face_consistency 不可加载 → available=False 优雅跳过。"""
+    res: Dict[str, Any] = {"available": True, "findings": [], "notes": []}
+    base = _load_sibling("codex_image_runner")
+    if base is None or not hasattr(base, "resolve_face_policy"):
+        res["available"] = False
+        res["notes"].append("codex_image_runner.resolve_face_policy 不可用——face_policy 机检跳过。")
+        return res
+    fc = _load_review_module("face_consistency")
+    try:
+        assets = json.loads((root / "出图" / "共享" / "asset_registry.json").read_text(encoding="utf-8"))
+    except Exception:
+        res["notes"].append("asset_registry.json 缺失/损坏——face_policy 机检跳过。")
+        return res
+    for asset in assets.get("assets") or []:
+        if not isinstance(asset, dict):
+            continue
+        aid = str(asset.get("id") or asset.get("name") or "?").strip()
+        policy = base.resolve_face_policy(asset)
+        if policy == "none":
+            continue
+        if policy == "face_locked":
+            carried = base._asset_carried_identities(asset) if hasattr(base, "_asset_carried_identities") else []
+            if not carried:
+                res["findings"].append({"level": "block", "code": "asset_face_locked_no_owner",
+                    "msg": f"资产 {aid}：脸策略=face_locked（画面有具名角色脸）却无 owner/carries_identity 可折脸锚"
+                           "——会自画新脸。补 `owner: CHAR_xx` 或 `carries_identity`，或改 `face_policy: faceless`。"})
+            continue
+        # faceless：优先信任**持久机器证据**（asset.face_consistency·source=machine_pixel 且 png_sha256 新鲜
+        # ·record_faceless_evidence 写入）；缺/陈旧/手写 → 实时像素核验（证现实不证声明·绝不信手写 verdict）。
+        pngs = _asset_face_pngs(asset)
+        checked = False
+        for rel in pngs:
+            full = _resolve_shared_png(root, rel)
+            if full is None:
+                continue  # 尚未生成 → 出图时由 faceless prompt note 约束，生成后再核
+            current_sha = _sha256_file(full)
+            fresh = _faceless_fresh_record(asset, rel, current_sha) if current_sha else None
+            if fresh is not None:
+                checked = True
+                if fresh.get("verdict") == "block":
+                    res["findings"].append({"level": "block", "code": "asset_faceless_face_detected",
+                        "msg": f"资产 {aid}：faceless 脸策略，登记的机器证据（png_sha256 新鲜）记 {rel} 检出 "
+                               f"{fresh.get('clear_faces')} 张清晰脸——脸漂。重出为背身/裁脸/无脸中性人台，或改 face_locked 折 owner 脸锚。"})
+                continue  # ok 的新鲜机器证据 → 放行，不必重跑 insightface
+            if fc is None or not hasattr(fc, "verify_faceless"):
+                res["notes"].append(f"资产 {aid}：{rel} 无新鲜机器证据且 verify_faceless 不可用——faceless 像素核验跳过（人审）。")
+                continue
+            v = fc.verify_faceless(str(full))
+            checked = True
+            if v.get("verdict") == "block":
+                res["findings"].append({"level": "block", "code": "asset_faceless_face_detected",
+                    "msg": f"资产 {aid}：faceless 脸策略，但 {rel} 像素核验检出 {v.get('clear_faces')} 张清晰脸"
+                           f"（max_ratio={v.get('max_ratio')}）——握持比例/尺度参考画出了可辨识人脸=脸漂。"
+                           "重出为背身/裁到下巴以下/无脸中性人台，或改 `face_policy: face_locked` 并折入 owner 脸锚。"})
+            elif v.get("verdict") == "unavailable":
+                res["findings"].append({"level": "warn", "code": "asset_faceless_unverified_degraded",
+                    "msg": f"资产 {aid}：{rel} faceless 像素核验降级（{v.get('reason','无 insightface')}）——"
+                           "跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"})
+        if pngs and not checked:
+            res["notes"].append(f"资产 {aid}：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。")
+    return res
+
+
+def _faceless_fresh_record(asset: Dict[str, Any], rel: str, current_sha: Optional[str]):
+    """取该 faceless PNG 的**新鲜机器证据**：asset.face_consistency.source==machine_pixel 且某 record 的
+    png==rel 且 png_sha256==当前 PNG sha。手写/无机器源/陈旧(sha 不匹配) → None（不信任·走实时重验）。"""
+    if not current_sha:
+        return None
+    rec = asset.get("face_consistency")
+    if not isinstance(rec, dict) or rec.get("source") != "machine_pixel":
+        return None
+    for r in rec.get("records") or []:
+        if isinstance(r, dict) and r.get("png") == rel and r.get("png_sha256") and r.get("png_sha256") == current_sha:
+            return r
+    return None
+
+
+def record_faceless_evidence(root: Path, *, write: bool = True) -> Dict[str, Any]:
+    """faceless 像素核验**产出端**：跑 verify_faceless 把结果（含 png_sha256 指纹）写回 asset_registry 的
+    `asset.face_consistency`（source=machine_pixel），当**持久机器证据**——替换手写自断言 verdict，闭合
+    "证现实不证声明"（gate 据 png_sha256 新鲜度信任，图一重出即陈旧失效→重验）。
+
+    只对 faceless 资产、已生成且能核验（有 insightface）的 PNG 写记录；unavailable 不写假证据。
+    需要 insightface；缺则 available=False 不写。返回 {available, recorded, notes}。"""
+    out: Dict[str, Any] = {"available": True, "recorded": [], "notes": []}
+    base = _load_sibling("codex_image_runner")
+    fc = _load_review_module("face_consistency")
+    if base is None or not hasattr(base, "resolve_face_policy"):
+        out["available"] = False
+        out["notes"].append("codex_image_runner.resolve_face_policy 不可用——无法登记 faceless 证据。")
+        return out
+    if fc is None or not hasattr(fc, "verify_faceless"):
+        out["available"] = False
+        out["notes"].append("face_consistency.verify_faceless 不可用（缺 insightface）——无法登记 faceless 证据。")
+        return out
+    reg_path = root / "出图" / "共享" / "asset_registry.json"
+    try:
+        assets = json.loads(reg_path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        out["available"] = False
+        out["notes"].append(f"asset_registry.json 读取失败：{exc}")
+        return out
+    changed = False
+    attempted = 0
+    unavailable = 0
+    for asset in assets.get("assets") or []:
+        if not isinstance(asset, dict) or base.resolve_face_policy(asset) != "faceless":
+            continue
+        aid = str(asset.get("id") or asset.get("name") or "?").strip()
+        recs: List[Dict[str, Any]] = []
+        for rel in _asset_face_pngs(asset):
+            full = _resolve_shared_png(root, rel)
+            if full is None:
+                continue
+            sha = _sha256_file(full)
+            v = fc.verify_faceless(str(full))
+            attempted += 1
+            if v.get("verdict") == "unavailable" or not sha:
+                unavailable += 1
+                out["notes"].append(f"资产 {aid}：{rel} 无法核验（{v.get('reason','')}）——不写假证据。")
+                continue
+            recs.append({"png": rel, "png_sha256": sha, "verdict": v.get("verdict"),
+                         "clear_faces": v.get("clear_faces"), "max_ratio": v.get("max_ratio")})
+        if recs:
+            asset["face_consistency"] = {"source": "machine_pixel",
+                                         "checker": "face_consistency.verify_faceless", "records": recs}
+            changed = True
+            out["recorded"].append({"asset": aid, "records": recs})
+    if changed and write:
+        reg_path.write_text(json.dumps(assets, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if attempted and unavailable == attempted and not out["recorded"]:
+        out["available"] = False
+    return out
 
 
 def _registry_path() -> Path:
@@ -867,15 +1055,7 @@ def _has_unnegated_text2img(text: str) -> bool:
 # 近景大表情脸锚 gate（④ 治表情镜脸漂）：近景/特写/反打 + 强情绪的角色镜，若 prompt
 # 未引用同源『基础脸锚 face_anchor_refs / 表情库 expressions / 脸部特写』参考，AI 会为大表情重画整张脸 → 表情镜脸漂。
 # 2026-06：基础定妆包不再按主配角放松；所有人物近景大表情都 hard block，角色体量只影响 LoRA/主体库升档。
-STRONG_EMOTION_MARKERS = (
-    "哭", "泣", "落泪", "含泪", "泪", "怒", "愤", "暴怒", "狂怒", "震惊", "惊恐", "恐惧",
-    "狂喜", "大笑", "狂笑", "嘶吼", "咆哮", "嚎", "痛苦", "崩溃", "狰狞", "扭曲", "癫狂",
-    "失控", "绝望", "悲恸", "惊愕", "狂怒",
-)
-EXPRESSION_LIB_MARKERS = (
-    "face_anchor_refs", "基础脸锚", "脸部特写",
-    "表情库", "expressions", "表情_", "_表情", "情绪库", "微表情参考",
-)
+# STRONG_EMOTION_MARKERS / EXPRESSION_LIB_MARKERS 已上提 n2d_const 单一真值源（见文件顶部 import）。
 # 近景识别：仅认中文近景词 + 作为整 token 的英文景别码，避免 "CU" 子串误命中正文。
 _CLOSEUP_LINT_RE = re.compile(r"特写|近景|反打|过肩|ECU|BCU|MCU|(?<![A-Za-z])CU(?![A-Za-z])")
 
@@ -933,17 +1113,9 @@ SPATIAL_POSITION_MARKERS = ("画左", "画右", "画中", "靠左", "靠右", "�
                             "前景", "后景", "背景", "中景", "近端", "远端", "左", "右",
                             "left", "right", "center", "foreground", "background")
 BLOCKING_FIELD_MARKERS = ("blocking", "站位", "走位", "机位站位")
-# 多人同框分层合成/原生主体执行策略标记——与 n2d-review gate.py 的 split_composite/native 策略放行口径对齐，
+# 多人同框分层合成/原生主体执行策略放行集 —— 已上提 n2d_const.MULTI_SUBJECT_ACCEPTING_MARKERS，
+# 本文件顶部 alias 为 MULTI_SUBJECT_STRATEGY_MARKERS，与 gate.py / shot_risk_audit.py 同源，
 # 使本 lint 的 block ⊆ review 的同框 block（登记了这些策略 review 放行的镜，这里也放行，不误挡）。
-# 注：gate.py / shot_risk_audit.py 各自维护同类副本（跨线独立，无共享层）——改这里需同步那两处的 *_MARKERS。
-MULTI_SUBJECT_STRATEGY_MARKERS = (
-    "split_composite", "regional_construct", "分别出图+合成", "分别出图 + 合成",
-    "分角色出图", "分区构建", "区域构建", "单人分层出图", "分层合成", "景别分层",
-    "拆成单人镜", "拆单人镜", "empty_plate", "多人同框执行策略", "native_subject_slots",
-    "原生主体", "多主体", "区域绑定", "shot_reverse_shot",
-)
-
-
 def _distinct_char_bases(id_refs: Sequence[str]) -> Set[str]:
     """身份引用集合 → 去掉形态/星标后的角色 base id 集合（判多人同框）。"""
     return {normalize_identity_ref(r).split("/")[0] for r in (id_refs or []) if r}
@@ -1142,6 +1314,114 @@ def _lint_semantic_conflict(label: str, body: str) -> List[Dict[str, str]]:
     return findings
 
 
+ACTION_EYELINE_MARKERS = (
+    "fight_exchange", "magic_burst", "chase", "battle", "combat", "action keyframe",
+    "打斗", "武打", "拆招", "交锋", "对打", "攻防", "追逐", "爆冲", "斜劈", "劈", "斩",
+    "刺", "挥", "命中", "受击", "撞击", "投掷", "施法", "法术", "斗法", "枪线", "戟刃",
+    "spear", "slash", "strike", "impact", "attack", "burst",
+)
+CAMERA_GAZE_EXCEPTION_MARKERS = (
+    "opponent pov", "camera-as-opponent", "first-person pov", "pov shot", "direct address",
+    "fourth wall", "主观镜头", "镜头代表对手", "镜头=对手", "第一人称", "破第四墙",
+    "直视镜头=导演意图", "看镜头=导演意图",
+)
+CAMERA_EYE_CONTACT_RE = re.compile(
+    r"(看向?镜头|望向?镜头|直视镜头|盯(?:着)?镜头|对(?:着)?镜头|看向?观众|直视观众|"
+    r"looking\s+at\s+(?:the\s+)?viewer|look(?:s|ing)?\s+at\s+(?:the\s+)?viewer|"
+    r"eye\s+contact\s+with\s+(?:the\s+)?camera|staring\s+at\s+(?:the\s+)?camera|"
+    r"look(?:s|ing)?\s+into\s+(?:the\s+)?camera|gaze\s+into\s+(?:the\s+)?camera)",
+    re.I,
+)
+FRONTAL_PORTRAIT_BIAS_RE = re.compile(
+    r"(清晰正脸|主检清晰正脸|唯一清晰正脸|正脸特写|正面肖像|"
+    r"clear\s+frontal\s+face|frontal\s+face|front-facing\s+face|portrait\s+pose|portrait-facing)",
+    re.I,
+)
+ANTI_CAMERA_EYELINE_RE = re.compile(
+    r"(不看镜头|不直视镜头|不与镜头对视|镜头是旁观者|镜头为旁观者|镜头是观察者|镜头为观察者|"
+    r"视线锁定|锁定对手|看向(?!镜头|观众)|望向(?!镜头|观众)|瞄准|"
+    r"not\s+looking\s+at\s+(?:the\s+)?camera|no\s+eye\s+contact\s+with\s+(?:the\s+)?camera|"
+    r"camera\s+is\s+(?:an?\s+)?observer|gaze\s+locked\s+on|eyes\s+locked\s+on|"
+    r"look(?:s|ing)?\s+toward|eyes?\s+(?:lift|lifting|turn|turning)\s+toward)",
+    re.I,
+)
+
+
+def _is_action_eyeline_shot(body: str) -> bool:
+    text = _positive_prompt_text(body).lower()
+    return any(str(marker).lower() in text for marker in ACTION_EYELINE_MARKERS)
+
+
+def _has_camera_gaze_exception(body: str) -> bool:
+    text = _positive_prompt_text(body).lower()
+    return any(str(marker).lower() in text for marker in CAMERA_GAZE_EXCEPTION_MARKERS)
+
+
+def _frontal_match_is_negated(text: str, start: int) -> bool:
+    prefix = text[max(0, start - 36):start].lower()
+    return any(token in prefix for token in (
+        "no ", "not ", "without ", "禁止", "不得", "不要", "不许", "不能", "不允许", "不生成", "无",
+    ))
+
+
+def _camera_gaze_match_is_negated(text: str, start: int) -> bool:
+    prefix = text[max(0, start - 18):start].lower()
+    return any(token in prefix for token in (
+        "no ", "not ", "without ", "禁止", "不得", "不要", "不许", "不能", "不允许", "无", "不",
+    ))
+
+
+def _lint_action_eyeline(label: str, body: str) -> List[Dict[str, str]]:
+    """动作/打斗镜视线铁律：镜头是旁观者，角色视线锁对手/武器/命中点，不能看主镜头。"""
+    findings: List[Dict[str, str]] = []
+    if not _is_action_eyeline_shot(body) or _has_camera_gaze_exception(body):
+        return findings
+    positive = _positive_prompt_text(body)
+    if any(not _camera_gaze_match_is_negated(positive, m.start()) for m in CAMERA_EYE_CONTACT_RE.finditer(positive)):
+        findings.append({
+            "level": "block",
+            "code": "combat_camera_eye_contact",
+            "msg": f"{label}：打斗/动作/强互动镜写了直视主镜头/看观众；除非明确 opponent POV 或破第四墙，"
+                   "镜头必须是旁观者，角色视线应锁定对手、武器来路或命中点。",
+        })
+    if any(not _frontal_match_is_negated(positive, m.start()) for m in FRONTAL_PORTRAIT_BIAS_RE.finditer(positive)):
+        findings.append({
+            "level": "block",
+            "code": "combat_frontal_portrait_bias",
+            "msg": f"{label}：打斗/动作镜含清晰正脸/frontal portrait 倾向，容易把拆招拍成看镜头摆拍；"
+                   "改为可辨三分之二侧脸/侧脸/背身侧轮廓，并明确不与主镜头对视。",
+        })
+    if not ANTI_CAMERA_EYELINE_RE.search(positive):
+        findings.append({
+            "level": "warn",
+            "code": "combat_eyeline_guard_missing",
+            "msg": f"{label}：打斗/动作镜缺“不看镜头/镜头是旁观者/视线锁对手或命中点”的视线防呆句；"
+                   "容易被脸部清晰约束带成 portrait pose。",
+        })
+    return findings
+
+
+def _lint_camera_gaze_general(label: str, body: str) -> List[Dict[str, str]]:
+    """镜头不是对视对象铁律·全场景版（非动作镜也查）：任何含人物镜，除非显式 POV/破第四墙/对观众特写，
+    写了直视镜头/清晰正脸肖像倾向却无「不看镜头/视线锁场内目标」防呆句 → WARN（动作镜已由 _lint_action_eyeline
+    升 block，本函数只补非动作镜的 advisory，治"角色摆拍宣传照、总看镜头"普遍隐患）。"""
+    findings: List[Dict[str, str]] = []
+    if _is_action_eyeline_shot(body) or _has_camera_gaze_exception(body):
+        return findings  # 动作镜走 block 路径；POV 豁免
+    positive = _positive_prompt_text(body)
+    eye = any(not _camera_gaze_match_is_negated(positive, m.start()) for m in CAMERA_EYE_CONTACT_RE.finditer(positive))
+    frontal = any(not _frontal_match_is_negated(positive, m.start()) for m in FRONTAL_PORTRAIT_BIAS_RE.finditer(positive))
+    if (eye or frontal) and not ANTI_CAMERA_EYELINE_RE.search(positive):
+        findings.append({
+            "level": "warn",
+            "code": "camera_gaze_portrait_bias",
+            "msg": f"{label}：本镜含{'直视镜头' if eye else ''}{'/' if eye and frontal else ''}{'清晰正脸肖像' if frontal else ''}"
+                   "倾向却无视线防呆句——除非是 POV/对观众特写，角色不应正对镜头摆拍/对视；"
+                   "改可辨侧脸/过肩/三分之二，视线锁场内目标（对手/对话对象/所视之物）。",
+        })
+    return findings
+
+
 # ── 辨识标记（MK1）出图前文本预检 · vendored 纯函数（不跨 import n2d-review·独立性铁律） ──────
 
 def _mk_episode_num(ep: str) -> Optional[int]:
@@ -1266,6 +1546,8 @@ def lint_shot_block(
     findings.extend(_lint_asset_binding(label, body, asset_index))
     findings.extend(_lint_physical_lens_parameters(label, body))
     findings.extend(_lint_semantic_conflict(label, body))
+    findings.extend(_lint_action_eyeline(label, body))
+    findings.extend(_lint_camera_gaze_general(label, body))
 
     id_refs = IDENTITY_REF_RE.findall(body)
     ref_block_present = "参考图" in body and "定妆_" in body
@@ -1461,6 +1743,10 @@ HARD_LINT_CODES = (
     "weak_face_anchor_core",
     "unanchored_identity_plate",  # 承载角色脸的资产无 ready 脸锚（定妆脸漂真因·后端无关落档版）
     "carried_identity_unknown",   # 承载角色在 identity_registry 不存在——无锚可注入
+    "asset_faceless_face_detected",  # faceless 脸策略资产（握持比例/尺度参考）像素核验检出清晰脸=脸漂
+    "asset_face_locked_no_owner",    # face_locked 资产无 owner/承载角色可折脸锚——会自画新脸
+    "combat_camera_eye_contact",
+    "combat_frontal_portrait_bias",
 )
 VISUAL_CHECK_LABELS = {
     "face": "崩脸 G1",
@@ -1805,7 +2091,25 @@ def _asset_primary_map(root: Path) -> Dict[str, str]:
     except Exception:
         return out
     for a in (data.get("assets") or []):
-        primary = ((a.get("reference_group") or {}).get("primary") or "").strip()
+        rg = a.get("reference_group") or {}
+        primary = ""
+        if isinstance(rg, Mapping):
+            raw = rg.get("primary") or rg.get("main") or rg.get("front")
+            if isinstance(raw, Mapping):
+                primary = str(raw.get("path") or "").strip()
+            else:
+                primary = str(raw or "").strip()
+        elif isinstance(rg, list):
+            for item in rg:
+                if isinstance(item, Mapping):
+                    status = str(item.get("status") or "").strip().lower()
+                    candidate = str(item.get("path") or "").strip()
+                    if candidate and (not status or status in {"ready", "accepted", "ok", "pass"}):
+                        primary = candidate
+                        break
+                elif isinstance(item, str) and item.strip():
+                    primary = item.strip()
+                    break
         if not primary:
             continue
         aid = str(a.get("id") or "").strip()
@@ -3503,6 +3807,14 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True, strict_pixel: bool = Fa
             payload["lint"].setdefault("findings", []).append(
                 {"level": f["level"], "code": f["code"], "msg": f["msg"]})
     payload["carried_identity_anchors"] = ci
+    # 人物脸一致性铁律（A·face_policy）：含人脸资产定妆必须 faceless（像素核验 0 清晰脸）或
+    # face_locked（折 owner/承载角色脸锚）——绝不放任自由生成脸（武器握持比例脸漂结构性真因）。
+    fp = audit_asset_face_policy(root)
+    for f in fp.get("findings", []):
+        if f.get("level") in ("block", "warn"):
+            payload["lint"].setdefault("findings", []).append(
+                {"level": f["level"], "code": f["code"], "msg": f["msg"]})
+    payload["asset_face_policy"] = fp
     # ④ VLM 语义判定（描述↔渲染图·opt-in）：关键注册角色/资产 VLM 判崩设定（剪裁/配饰/识别特征违反 canonical）
     #    → block；走专属 payload key（不塞 lint，避免被 lint_prompts 覆盖+不依赖 HARD_LINT_CODES），summarize/to_findings 直接读。
     #    无 N2D_VLM_CMD 后端 → available=False 整段跳过，绝不阻断默认无依赖产线。
@@ -3764,12 +4076,28 @@ def _anchor_relpath(form: Mapping[str, Any]) -> str:
     """form 锚点定妆图（front 主参考）项目相对路径；缺 front 回退第一张可用视图。
     与 gate.py `_form_anchor_relpath` 同口径。"""
     rg = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
+
+    def item_path(value: Any) -> str:
+        if isinstance(value, str):
+            return value.strip()
+        if isinstance(value, Mapping):
+            path = value.get("path")
+            return path.strip() if isinstance(path, str) else ""
+        if isinstance(value, list):
+            for item in value:
+                path = item_path(item)
+                if path:
+                    return path
+        return ""
+
     front = rg.get("front")
-    if isinstance(front, str) and front.strip():
-        return front.strip()
+    front_path = item_path(front)
+    if front_path:
+        return front_path
     for v in rg.values():
-        if isinstance(v, str) and v.strip():
-            return v.strip()
+        path = item_path(v)
+        if path:
+            return path
     return ""
 
 
@@ -3861,8 +4189,13 @@ def finalize_expression(root: Path, target: str, value: bool = True) -> Dict[str
             return {"ok": False, "msg": f"`{cid}` 无形态 `{form_name}`"}
         fm = matches[0]
         anchors = fm.get("expression_anchors")
+        anchor_source = "expression_anchors"
         if not isinstance(anchors, list):
-            return {"ok": False, "msg": f"`{cid}/{form_name}` 未登记 expression_anchors；先在 registry 加 `{{emotion, path}}`"}
+            rg = fm.get("reference_group") if isinstance(fm.get("reference_group"), dict) else {}
+            anchors = rg.get("expressions") if isinstance(rg, dict) else None
+            anchor_source = "reference_group.expressions"
+        if not isinstance(anchors, list):
+            return {"ok": False, "msg": f"`{cid}/{form_name}` 未登记 expression_anchors 或 reference_group.expressions；先在 registry 加 `{{emotion, path}}`"}
         hit = next((a for a in anchors if isinstance(a, dict) and str(a.get("emotion") or "").strip() == emotion), None)
         if hit is None:
             return {"ok": False, "msg": f"`{cid}/{form_name}` 无情绪锚 `{emotion}`；先登记其 path"}
@@ -3873,8 +4206,18 @@ def finalize_expression(root: Path, target: str, value: bool = True) -> Dict[str
             if not sha:
                 return {"ok": False, "msg": f"情绪锚图不存在或不可读：{rel}（先出该情绪脸部特写）"}
             hit["anchor_sha"] = sha
+            hit["status"] = "ready"
+            human_review = hit.get("human_review") if isinstance(hit.get("human_review"), dict) else {}
+            human_review.update({
+                "status": "pass",
+                "reviewed_by": "image_qc --finalize-expr",
+                "reviewed_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+                "reason": f"expression anchor finalized from {anchor_source}",
+            })
+            hit["human_review"] = human_review
         else:
             hit.pop("anchor_sha", None)
+            hit["status"] = "review_pending"
         p.write_text(json.dumps(reg, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         return {"ok": True, "target": t, "value": bool(value),
                 "msg": f"{t}.self_check_passed={value}" + (f" anchor_sha={hit.get('anchor_sha','')[:12]}…" if value else "")}
@@ -3899,6 +4242,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     help="把表情库锚落档为跨集共享锁定（self_check_passed=true + 钉 sha）：CHAR_xx/形态/情绪")
     ap.add_argument("--unfinalize-expr", action="store_true",
                     help="与 --finalize-expr 连用：标脏（self_check_passed=false，gate 引用即 block）")
+    ap.add_argument("--record-faceless", action="store_true",
+                    help="对 faceless 资产跑 verify_faceless，把结果+png_sha256 写回 asset_registry 当持久机器证据（registry 级·需 insightface）")
     ap.add_argument("--no-pixel", action="store_true", help="只跑 prompt lint，不跑像素机检")
     ap.add_argument("--json", action="store_true", help="打印机器可读 payload")
     ap.add_argument("--findings", action="store_true",
@@ -3941,8 +4286,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         r = finalize_expression(root, ns.finalize_expr, value=not ns.unfinalize_expr)
         print(("✅ " if r.get("ok") else "⛔ ") + r.get("msg", ""))
         return 0 if r.get("ok") else 1
+    if ns.record_faceless:
+        r = record_faceless_evidence(root)
+        print(json.dumps(r, ensure_ascii=False, indent=2, sort_keys=True))
+        return 0 if r.get("available") else 1
     if not ns.episode:
-        ap.error("episode 必填（除非用 --mark-finalized / --pin-anchor / --finalize-expr 写 registry）")
+        ap.error("episode 必填（除非用 --mark-finalized / --pin-anchor / --finalize-expr / --record-faceless 写 registry）")
     if ns.prop_shape_report or ns.prop_shape_affected_shots:
         report = prop_shape_review_report(root, ns.episode, build_stitches=True)
         if ns.prop_shape_affected_shots:

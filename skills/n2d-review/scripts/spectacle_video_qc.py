@@ -23,6 +23,7 @@ if LIB not in sys.path:
     sys.path.insert(0, LIB)
 
 from n2d_contract import (  # noqa: E402
+    ACTION_CHOREOGRAPHY_SHOT_TYPES,
     SPECTACLE_QC_DIMENSIONS,
     SPECTACLE_VIDEO_QC_KIND,
     high_flow_sampling_plan,
@@ -36,9 +37,9 @@ ACTION_CRITICAL_NEW_DIMS = ("optical_flow_direction", "limb_artifact", "motion_b
 from video_consistency_common import existing_media, finding, load_json, rows_from  # noqa: E402
 
 
-ACTION_KINDS = {"fight_exchange", "chase", "flight"}
+ACTION_KINDS = set(ACTION_CHOREOGRAPHY_SHOT_TYPES)
 CHAR_RE = re.compile(r"\bCHAR_[A-Za-z0-9_]+\b")
-ASSET_RE = re.compile(r"\b(?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_]+\b")
+ASSET_RE = re.compile(r"\b(?:LOC|PROP|WEAPON|OUTFIT|VFX|BEAST|MOUNT|VEHICLE)_[A-Za-z0-9_]+\b")
 
 
 def ep_label(value: str) -> str:

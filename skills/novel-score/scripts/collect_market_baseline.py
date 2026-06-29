@@ -36,6 +36,35 @@ MANUAL_REQUIRED_SOURCES = [
 # target_platform 命中这些词时，要求 红果/抖音 有真实覆盖（--manual-evidence 或 --source）。
 SHORT_DRAMA_KEYWORDS = ("红果", "抖音", "漫剧", "短剧")
 
+# 短剧/漫剧「平台覆盖」证据的保质期，与日榜（expires_after_days，默认 21）解耦。
+# 红果/抖音漫剧 没有公开日榜网页，平台覆盖只能靠行业报告/MAU/审核新规这类
+# 结构性慢变量证据——它们天然是按月/季发布的（如 QuestMobile 月活、平台审核新规），
+# 用 21 天日榜窗口卡，会让覆盖闸「永远无法用真实证据满足」，逼每次评分都 --allow-stale-baseline，
+# 把硬闸退化成长期豁免。故覆盖证据另给一个更长但仍有界的窗口（一个季度），
+# 既不放过两三年前的旧 factoid，也不误伤当季真实行业证据。
+COVERAGE_EVIDENCE_MAX_AGE_DAYS = 90
+
+
+def coverage_window(expires_after_days):
+    """平台覆盖证据窗口：至少一个季度，且不短于调用方设的日榜窗口。"""
+    try:
+        base = int(expires_after_days or 0)
+    except (TypeError, ValueError):
+        base = 0
+    return max(base, COVERAGE_EVIDENCE_MAX_AGE_DAYS)
+SIGNAL_NOISE_RE = re.compile(
+    r"("
+    r"@font-face|font-family|window\.|document\.|XMLHttpRequest|"
+    r"\bfunction\b|\bvar\s+|\blet\s+|\bconst\s+|"
+    r"<script|</script|sdk|captcha|csrf|jQuery|ajax|"
+    r"You need to enable JavaScript|url\(|data:image|"
+    r"\{[^}]*:[^}]*\}|^\s*[.#][\w-]+\s*\{|"
+    r"user-select|webkit|moz-|ms-|khtml-|prefers-color-scheme"
+    r")",
+    re.IGNORECASE,
+)
+MOJIBAKE_RE = re.compile(r"[\ufffd]")
+
 
 class TextExtractor(HTMLParser):
     def __init__(self):
@@ -69,6 +98,46 @@ def fetch_text(url, timeout):
     parser = TextExtractor()
     parser.feed(raw.decode("utf-8", errors="replace"))
     return parser.title.strip(), parser.parts
+
+
+def _is_noise_signal(text):
+    text = re.sub(r"\s+", " ", str(text or "")).strip()
+    if not text:
+        return True
+    if SIGNAL_NOISE_RE.search(text):
+        return True
+    if MOJIBAKE_RE.search(text):
+        return True
+    if len(text) > 260 and not re.search(r"[\u4e00-\u9fff]{4,}", text):
+        return True
+    code_marks = len(re.findall(r"[{}();=<>]", text))
+    if len(text) >= 40 and code_marks / max(len(text), 1) > 0.08:
+        return True
+    chinese_chars = len(re.findall(r"[\u4e00-\u9fff]", text))
+    if chinese_chars == 0 and len(text) <= 40:
+        return True
+    if len(text) >= 20 and chinese_chars == 0 and code_marks:
+        return True
+    return False
+
+
+def clean_signals(parts, max_signals):
+    signals = []
+    seen = set()
+    for raw in parts or []:
+        text = re.sub(r"\s+", " ", str(raw or "")).strip()
+        if _is_noise_signal(text):
+            continue
+        if len(text) > 180:
+            text = text[:177].rstrip() + "..."
+        key = text.casefold()
+        if key in seen:
+            continue
+        seen.add(key)
+        signals.append(text)
+        if len(signals) >= max_signals:
+            break
+    return signals
 
 
 def parse_source(value):
@@ -143,22 +212,24 @@ def source_quality(item):
         signal_score = min(0.25, len(signals) / 80.0)
         score += signal_score
         reasons.append(f"signals={len(signals)}")
+        if item.get("title"):
+            score += 0.08
+            reasons.append("有页面标题")
+        bonus = _https_bonus(item.get("url"))
+        if bonus:
+            score += bonus
+            reasons.append("https 来源")
+        if str(item.get("use_for") or "").endswith("_rank"):
+            score += 0.08
+            reasons.append("rank 用途匹配")
+    elif status == "ok":
+        reasons.append("status=ok 但 signals 为空，不计有效证据")
     elif status == "manual_required":
         reasons.append("manual_required 占位，不计有效证据")
     elif status == "fetch_error":
         reasons.append("fetch_error，不计有效证据")
     else:
         reasons.append(f"status={status or 'missing'}")
-    if item.get("title"):
-        score += 0.08
-        reasons.append("有页面标题")
-    bonus = _https_bonus(item.get("url"))
-    if bonus:
-        score += bonus
-        reasons.append("https 来源")
-    if str(item.get("use_for") or "").endswith("_rank"):
-        score += 0.08
-        reasons.append("rank 用途匹配")
     score = min(1.0, round(score, 4))
     return {"score": score, "confidence": _quality_band(score), "reasons": reasons[:6]}
 
@@ -235,6 +306,46 @@ def build_evidence_tasks(result):
     return tasks
 
 
+def build_evidence_jobs(result):
+    jobs = []
+    target = result.get("target_platform") or "红果/抖音/漫剧/短剧"
+    baseline_date = result.get("baseline_date")
+    for idx, task in enumerate(result.get("evidence_tasks") or [], 1):
+        jobs.append({
+            "id": f"MARKET-SEARCH-{idx:03d}",
+            "status": "open",
+            "kind": "novel_market_evidence_search_job",
+            "target_platform": target,
+            "baseline_date": baseline_date,
+            "source_task_id": task.get("id"),
+            "search_queries": [
+                f"{target} 热榜 榜单 报告 {baseline_date}",
+                f"红果短剧 热榜 第三方榜单 报告 {baseline_date}",
+                f"抖音漫剧 短剧 热榜 数据 报告 {baseline_date}",
+                f"{target} 题材 趋势 短剧 漫剧 {baseline_date}",
+            ],
+            "required_output_schema": {
+                "platform": "红果短剧/抖音漫剧/短剧等被覆盖平台",
+                "date": "YYYY-MM-DD，证据核验或报告发布日期",
+                "source": "官方/第三方榜单/行业报告/平台公开页等来源名称",
+                "summary": "一句话趋势结论，必须可追溯到来源",
+                "url": "https://...，能打开的证据链接；无公开链接时说明不可公开复核",
+            },
+            "manual_evidence_format": "平台|日期YYYY-MM-DD|来源|结论|URL",
+            "return_command_template": (
+                'python3 skills/novel-score/scripts/collect_market_baseline.py "<作品根>/评分" '
+                '--target-platform "<目标平台>" --allow-fetch-errors '
+                '--manual-evidence "平台|YYYY-MM-DD|来源|结论|URL"'
+            ),
+            "acceptance": [
+                "日期未过期，且不晚于 baseline_date",
+                "platform/source/summary 至少一个字段明确命中红果/抖音/漫剧/短剧",
+                "summary 不得只是自由备注，必须能被 source/url 支撑",
+            ],
+        })
+    return jobs
+
+
 def collect(args):
     sources = list(DEFAULT_SOURCES) if args.defaults else []
     sources.extend(parse_source(v) for v in args.source)
@@ -263,7 +374,7 @@ def collect(args):
         try:
             title, parts = fetch_text(url, args.timeout)
             item["title"] = title or platform
-            item["signals"] = parts[:args.max_signals]
+            item["signals"] = clean_signals(parts, args.max_signals)
         except (OSError, URLError, ValueError) as exc:
             item["status"] = "fetch_error"
             item["error"] = str(exc)
@@ -298,7 +409,9 @@ def collect(args):
         covered_by_manual = any(
             any(k in " ".join(str(ev.get(field, "")) for field in ("platform", "source", "summary"))
                 for k in SHORT_DRAMA_KEYWORDS)
-            and manual_evidence_fresh(ev, result["baseline_date"], result["expires_after_days"])
+            and manual_evidence_fresh(
+                ev, result["baseline_date"], coverage_window(result["expires_after_days"])
+            )
             for ev in result["manual_evidence"]
         )
         if not covered_by_source and not covered_by_manual:
@@ -309,6 +422,7 @@ def collect(args):
                 "或 --source '红果短剧|<第三方报告URL>'。"
             )
     result["evidence_tasks"] = build_evidence_tasks(result)
+    result["evidence_jobs"] = build_evidence_jobs(result)
     attach_evidence_quality(result)
     return result
 
@@ -369,8 +483,16 @@ def write_artifacts(result, out_dir):
                 f.write(f"  - 原因：{task['reason']}\n")
                 for command in task.get("suggested_commands") or []:
                     f.write(f"  - 命令：`{command}`\n")
+        if result.get("evidence_jobs"):
+            f.write("\n## 深搜 Evidence Jobs\n\n")
+            for job in result["evidence_jobs"]:
+                f.write(f"- {job['id']}：{job['target_platform']}\n")
+                for query in job.get("search_queries") or []:
+                    f.write(f"  - 搜索：{query}\n")
     tasks_json = os.path.join(out_dir, "market_evidence_tasks.json")
     tasks_md = os.path.join(out_dir, "市场证据待补.md")
+    jobs_json = os.path.join(out_dir, "market_evidence_jobs.json")
+    jobs_md = os.path.join(out_dir, "市场证据深搜任务.md")
     if result.get("evidence_tasks"):
         with open(tasks_json, "w", encoding="utf-8") as f:
             json.dump({
@@ -394,8 +516,26 @@ def write_artifacts(result, out_dir):
                 for command in task.get("suggested_commands") or []:
                     f.write(f"  - `{command}`\n")
                 f.write("\n")
+        if result.get("evidence_jobs"):
+            with open(jobs_json, "w", encoding="utf-8") as f:
+                json.dump({
+                    "schema_version": 1,
+                    "kind": "novel_market_evidence_jobs",
+                    "baseline_date": date_s,
+                    "target_platform": result["target_platform"],
+                    "jobs": result["evidence_jobs"],
+                }, f, ensure_ascii=False, indent=2)
+            with open(jobs_md, "w", encoding="utf-8") as f:
+                f.write(f"# 市场证据深搜任务 — {date_s}\n\n")
+                for job in result["evidence_jobs"]:
+                    f.write(f"## {job['id']} {job['target_platform']}\n\n")
+                    f.write("搜索问题：\n")
+                    for query in job.get("search_queries") or []:
+                        f.write(f"- {query}\n")
+                    f.write("\n回灌格式：\n\n")
+                    f.write(f"`--manual-evidence \"{job['manual_evidence_format']}\"`\n\n")
     else:
-        for stale in (tasks_json, tasks_md):
+        for stale in (tasks_json, tasks_md, jobs_json, jobs_md):
             if os.path.exists(stale):
                 os.remove(stale)
     return json_path, md_path

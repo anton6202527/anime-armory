@@ -28,7 +28,7 @@ import json
 import os
 import re
 import sys
-from typing import Any, Dict, Iterable, List, Sequence, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if COMMON not in sys.path:
@@ -39,6 +39,7 @@ from n2d_contract import (  # noqa: E402  findings kind / 生产数据目录 / �
     production_dir,
 )
 from n2d_contract_diff import diff_contracts  # noqa: E402  视觉契约继承 Diff 核心（common 层单一真值源）
+from n2d_cross_episode import core_scene_names  # noqa: E402  核心场景判定单一真值源（与 gate 跨集光位轴线共用）
 # Seam conditioning hints (writes advisory JSON for next-episode prompt generation)
 import importlib.util as _imu
 _seam_cond_spec = _imu.find_spec("seam_conditioning")
@@ -86,6 +87,26 @@ import costume_consistency as cstc
 import expression_verification as expv
 import state_pixel_verify as spv
 import av_emotion_consistency as avec
+import expression_state_consistency as exstate  # EXP2 状态化表情（state_delta 改 identity invariants → block）
+import motion_grammar_consistency as mgram      # MG1 运动语法（运镜/动作语义 advisory）
+import audio_space_consistency as aspace        # ASP/NV1 声音空间 + 原生声纹路由证据
+import object_state_continuity as objstate      # OST 物件状态（未声明的道具状态互斥翻转）
+
+# 音色声纹 / 跨集 voice_key 漂移住在 n2d-identity（同线 n2d-* 互引允许）。2026-06 接入主审计：
+# 此前音色机检只走 n2d-identity identity.py --write 旁路，纯 consistency_audit 调用漏掉音色漂移
+# （n2d_schema 旧注 1 的已知缺口）。voice_consistency 纯 stdlib 报跨集换声；voice_print 用 speaker
+# embedding 量真实音色相似度，缺后端/音频优雅降级交人判。advisory：block 封顶 warn，不硬阻断视觉 gate。
+_IDENTITY_SCRIPTS = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d-identity", "scripts"))
+if _IDENTITY_SCRIPTS not in sys.path:
+    sys.path.insert(0, _IDENTITY_SCRIPTS)
+try:
+    import voice_consistency as vcon  # noqa: E402
+except Exception:  # pragma: no cover - 缺文件/异常布局兜底
+    vcon = None  # type: ignore[assignment]
+try:
+    import voice_print_consistency as vprint  # noqa: E402
+except Exception:  # pragma: no cover
+    vprint = None  # type: ignore[assignment]
 
 
 PRODUCTION_CONSISTENCY_META = {
@@ -196,6 +217,73 @@ def audit_precision_level(capabilities: Dict[str, Any]) -> str:
     if not capabilities.get("insightface"):
         return "degraded"
     return "full"
+
+
+# ── 证据等级账本（#3·2026-06-27）─────────────────────────────────────────────
+# 把"这条一致性维度本次到底验到什么程度"显式化：闸的"通过"强度 = 最弱可适用维度的证据级；
+# 某维度本可验到 pixel/embedding，却因依赖缺位只到 structured/declared → under_proven(PENDING)。
+# 设计要点（避免与既有闸重复 block）：
+#   - pixel tier（脸/服装/发型/场景/景深/风格…）依赖全局 pillow/insightface，其 degraded 已由
+#     precision_level 全局闸在交付边界 block——这里只给它们标 proof_type 做**可见化**，不重复 block；
+#   - advanced tier（S2V 跨帧主体一致需 torch-DINOv2 / AV1 口型词级需 SyncNet）此前"未跑也不阻断"
+#     （见 probe_capabilities 注释），是**完全不可见**的盲区——#3 真正新增的可见化 + 交付边界 PENDING；
+#   - 其余=structured 文本检，跑了即达 structured 级，不 under_proven。
+PROOF_ORDER = {"absent": 0, "declared": 1, "structured": 2, "embedding": 3, "pixel": 4}
+_PIXEL_TIER_CODES = {"G1", "G1b", "G5", "EXP1", "EXP2", "EXP3", "N1", "COST", "H1", "MK1",
+                     "O2", "B1", "S1", "DOF1", "VFXC", "GRADE1", "N4", "N5", "R1", "X1", "W1", "SP1V"}
+_EMBED_TIER_CODES = {"G1", "G5"}        # 人脸=embedding 证据（ArcFace 余弦）
+_TORCH_TIER_CODES = {"S2V"}            # DINOv2 跨帧主体一致：torch 缺则退结构级
+_SYNCNET_TIER_CODES = {"AV1"}         # 口型词级数值：SyncNet 缺则退启发式
+
+
+def _dim_code(dim: str) -> str:
+    """维度名里括号中的稳定代号（"脸(G1)"→"G1"）。按代号建注册表，Chinese label 改名不破。纯函数。"""
+    m = re.search(r"\(([A-Za-z0-9]+)\)", str(dim or ""))
+    return m.group(1) if m else ""
+
+
+def evidence_grade(sections: Dict[str, dict], capabilities: Optional[Dict[str, Any]] = None) -> dict:
+    """各维度证据等级账本 → {by_dim:{dim:{tier,actual,achievable,applicable,under_proven}}, under_proven:[...], weakest}。
+
+    actual = 本次实际验到的证据级；achievable = 依赖齐备时这条维度能达到的最强级。
+    under_proven 只对 advanced tier（torch/syncnet 进阶依赖缺位、此前完全不阻断）置位——pixel tier 的
+    degraded 由全局 precision_level 闸处置，不在此重复。纯函数·可测。"""
+    caps = capabilities or {}
+    pixel_full = bool(caps.get("pillow")) and bool(caps.get("insightface"))
+    torch_ok = bool(caps.get("torch"))
+    syncnet_ok = bool(caps.get("syncnet"))
+    by_dim: Dict[str, dict] = {}
+    under: List[str] = []
+    applicable_actual: List[str] = []
+    for dim, sec in sections.items():
+        code = _dim_code(dim)
+        skipped = bool(sec.get("skipped", False))
+        # 有内容可验：跑过(未 skip) / 有 verdicts / 有 precision 字段（runner 真的 engage 了内容）。
+        has_content = (not skipped) or bool(sec.get("verdicts")) or (sec.get("precision") is not None)
+        if code in _TORCH_TIER_CODES:
+            tier = "advanced"; achievable = "embedding"
+            actual = "embedding" if torch_ok else ("structured" if has_content else "absent")
+        elif code in _SYNCNET_TIER_CODES:
+            tier = "advanced"; achievable = "pixel"
+            prec = str(sec.get("precision") or "")
+            actual = "pixel" if (syncnet_ok or prec == "full") else ("structured" if has_content else "absent")
+        elif code in _PIXEL_TIER_CODES:
+            tier = "pixel"; achievable = "embedding" if code in _EMBED_TIER_CODES else "pixel"
+            actual = achievable if pixel_full else ("declared" if has_content else "absent")
+        else:
+            tier = "structured"; achievable = "structured"
+            actual = "structured" if has_content else "absent"
+        applicable = has_content
+        # 只有 advanced tier 的不足计入 under_proven（pixel tier 走全局 precision 闸，structured 已达级）。
+        is_under = applicable and tier == "advanced" and PROOF_ORDER[actual] < PROOF_ORDER[achievable]
+        by_dim[dim] = {"tier": tier, "actual": actual, "achievable": achievable,
+                       "applicable": applicable, "under_proven": is_under}
+        if applicable:
+            applicable_actual.append(actual)
+        if is_under:
+            under.append(dim)
+    weakest = min(applicable_actual, key=lambda a: PROOF_ORDER[a]) if applicable_actual else "absent"
+    return {"by_dim": by_dim, "under_proven": sorted(under), "weakest": weakest}
 
 
 PRODUCTION_PROFILE_VALUES = {"production", "prod", "release", "strict", "投放", "上线", "正式", "发布", "严格", "生产"}
@@ -315,6 +403,10 @@ _DIM_RISK_MAP: List[Tuple[str, float]] = [
     ("伏笔兑现(SP1)", 0.30), ("文字渲染(OCR1)", 0.35),
     ("服装独立(COST)", 0.50), ("状态像素验证(SP1V)", 0.75),
     ("音画情绪一致(AVE)", 0.50),
+    ("状态化表情(EXP2)", 0.45), ("运动语法(MG1)", 0.35),
+    ("声音空间(ASP)", 0.30), ("原生声纹(NV1)", 0.55),
+    ("物件状态(OST)", 0.50), ("音色声纹", 0.55),
+    ("打斗撞点(SPEC-APEX)", 0.60),
 ]
 
 
@@ -447,6 +539,43 @@ def active_findings(details: Sequence[dict]) -> List[dict]:
     return out
 
 
+def _combat_cue_apex_rows(root: str, ep: str) -> List[dict]:
+    """打斗剪辑 cue↔apex 对齐 findings → consistency rows（核心打斗镜在 gate 升 BLOCK）。
+
+    in-process 调 n2d-script 的 combat_cue_apex_audit.build_audit（纯 stdlib·同 n2d 线·非跨线·
+    与 sc.analyze/exstate.run 等同样 in-process），保证每跑必新鲜、不被静默跳过。任何异常→[]（绝不让
+    打斗审计拖垮总审）。row 带 scene(场景 LOC·核心场景对账) + clip_label(高潮/爆点 key-scene 对账) +
+    metric(code) → _strict_advisory_should_block 据此把 warn 码在核心打斗镜×交付边界升 BLOCK。"""
+    try:
+        import importlib.util
+        from pathlib import Path as _Path
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            "..", "..", "n2d-script", "scripts", "combat_cue_apex_audit.py")
+        spec = importlib.util.spec_from_file_location("combat_cue_apex_audit", path)
+        if not spec or not spec.loader:
+            return []
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        audit = mod.build_audit(_Path(root), ep)
+    except Exception:
+        return []
+    rows: List[dict] = []
+    for f in audit.get("findings") or []:
+        if not isinstance(f, dict):
+            continue
+        rows.append({
+            "scene": f.get("scene") or f.get("clip_id"),
+            "shot": f.get("clip_id"),
+            "verdict": "warn" if f.get("level") == "warn" else "info",
+            "msg": f.get("msg"),
+            "metric": f.get("code"),
+            "clip_label": f.get("clip_label"),
+            "spectacle_type": f.get("spectacle_type"),
+            "return_to_stage": "script_stage2",
+        })
+    return rows
+
+
 def _episode_num(ep: str) -> int:
     m = re.search(r"(\d+)", str(ep))
     return int(m.group(1)) if m else 0
@@ -495,6 +624,148 @@ def cross_episode_face_rows(root: str, ep: str, face_result: dict) -> List[dict]
                 "char": char,
             })
     return rows
+
+
+# ── 跨集场景漂移（SCNX·#5·2026-06-27）──────────────────────────────────────────
+# 场景是唯一无跨集机检的视觉轴（脸有 G5，场景只有集内 dHash）。这里镜像 G5：累计每集每场景的
+# 平均色调指纹（scene_ep_means.json），当前集 vs 历史基线比 L1 → 揪"每集内部一致、却跨集慢慢变样"
+# 的场景漂。三条互补指纹（各抓不同失效模式·见 cross_episode_scene_rows）：①色调直方图(torch-free·Pillow)
+# 抓色温/调色漂；②结构 dHash 原型抓布局/朝向漂；③DINOv2 语义嵌入(scene_embed·可选后端)抓材质/几何/
+# 语义漂(色调/结构盲区)。①②常开，③有嵌入后端时叠加、无则优雅退回①②。
+SCENE_DRIFT_WARN = 0.45    # 跨集场景色调 L1 漂移告警阈（归一直方图）
+SCENE_DRIFT_BLOCK = 0.80   # 核心场景跨集硬漂阈
+# 跨集场景**结构**漂移（dHash 原型汉明·补色调直方图看不出的布局/朝向变化）。64 位里差这么多算结构变样；
+# 跨集天然比集内噪（不同镜/构图/时段），故阈比集内 floor(12) 宽。
+SCENE_STRUCT_DRIFT_WARN = 18
+SCENE_STRUCT_DRIFT_BLOCK = 26
+
+
+def scene_hist_l1(a: Sequence[float], b: Sequence[float]) -> float:
+    """两个等长归一直方图的 L1 距离（0=同，越大越漂）。纯函数·可测。"""
+    if not a or not b or len(a) != len(b):
+        return 0.0
+    return round(sum(abs(float(x) - float(y)) for x, y in zip(a, b)), 4)
+
+
+def scene_drift_rows(means_by_ep: Dict[str, Dict[str, Sequence[float]]], cur_ep: str,
+                     core_scenes: Iterable[str] = (),
+                     warn: float = SCENE_DRIFT_WARN, block: float = SCENE_DRIFT_BLOCK) -> List[dict]:
+    """跨集场景漂移判定（纯函数·可测）。
+
+    means_by_ep：{集: {场景: 平均色调指纹}}；cur_ep：当前集。当前集每个场景的指纹 vs 该场景**历史各集
+    指纹的逐维基线均值** 比 L1：≥warn 出行；核心场景且 ≥block → block，否则 warn。历史无该场景/当前集
+    无该场景 → 跳过（≥2 集出现才比）。core_scenes 子串匹配（定妆名 vs asset name 可能略不同）。"""
+    core = list(core_scenes or ())
+    cur = means_by_ep.get(cur_ep) or {}
+    eps_prior = [e for e in means_by_ep if _episode_num(e) < _episode_num(cur_ep)]
+    rows: List[dict] = []
+    for scene, cur_fp in sorted(cur.items()):
+        prior = [means_by_ep[e][scene] for e in eps_prior
+                 if isinstance(means_by_ep.get(e), dict) and scene in means_by_ep[e]]
+        if not prior or not cur_fp:
+            continue
+        dim = len(cur_fp)
+        base = [sum(float(p[i]) for p in prior) / len(prior) for i in range(dim)]
+        d = scene_hist_l1(cur_fp, base)
+        if d < warn:
+            continue
+        is_core = any(scene in c or c in scene for c in core if c)
+        verdict = "block" if (is_core and d >= block) else "warn"
+        rows.append({
+            "verdict": verdict,
+            "shot": f"场景[{scene}] 跨{len(prior) + 1}集",
+            "msg": (f"场景[{scene}] 跨集色调/光位漂移 L1={d}（vs 前 {len(prior)} 集基线，阈 warn={warn}"
+                    f"{'·core block=' + str(block) if is_core else ''}）"
+                    + ("——核心场景跨集硬漂，回 n2d-image 对齐定妆/光位锚；若为有意昼夜/季节变化按 allowed_variations 签收。"
+                       if verdict == "block"
+                       else "——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。")),
+            "scene": scene,
+        })
+    return rows
+
+
+def scene_struct_drift_rows(protos_by_ep: Dict[str, Dict[str, Sequence[int]]], cur_ep: str,
+                            core_scenes: Iterable[str] = (),
+                            warn: int = SCENE_STRUCT_DRIFT_WARN, block: int = SCENE_STRUCT_DRIFT_BLOCK) -> List[dict]:
+    """跨集场景**结构**漂移（纯函数·可测）。当前集每场景结构原型 dHash vs 历史各集原型的共识原型比汉明：
+    ≥warn 出行；核心场景且 ≥block → block，否则 warn。≥2 集出现该场景才比。"""
+    core = list(core_scenes or ())
+    cur = protos_by_ep.get(cur_ep) or {}
+    eps_prior = [e for e in protos_by_ep if _episode_num(e) < _episode_num(cur_ep)]
+    rows: List[dict] = []
+    for scene, cur_proto in sorted(cur.items()):
+        priors = [protos_by_ep[e][scene] for e in eps_prior
+                  if isinstance(protos_by_ep.get(e), dict) and protos_by_ep[e].get(scene)]
+        if not priors or not cur_proto:
+            continue
+        base = sc.majority_bits(priors)  # 历史共识结构原型
+        d = sc.hamming(list(cur_proto), base)
+        if d < warn:
+            continue
+        is_core = any(scene in c or c in scene for c in core if c)
+        verdict = "block" if (is_core and d >= block) else "warn"
+        rows.append({
+            "verdict": verdict,
+            "shot": f"场景[{scene}] 跨{len(priors) + 1}集结构",
+            "msg": (f"场景[{scene}] 跨集结构漂移 dHash 汉明={d}（vs 前 {len(priors)} 集结构原型，阈 warn={warn}"
+                    f"{'·core block=' + str(block) if is_core else ''}）"
+                    + ("——核心场景跨集结构硬漂：色调没动但布局/家具/构图朝向变了（同房间被重新布置/拍反向），"
+                       "回 n2d-image 对齐场景定妆 spatial_layout/floor_plan；若为有意改建/换机位按 allowed_variations 签收。"
+                       if verdict == "block"
+                       else "——色调一致但结构疑似变样（家具挪位/构图朝向变），核对是否同一空间，否则对齐场景定妆 spatial_layout。")),
+            "scene": scene,
+        })
+    return rows
+
+
+def _accumulate_scene_history(path: str, ep: str, cur: dict) -> dict:
+    """读 path 的 {集:{场景:指纹}} 历史账本，写入当前集（若非空）并落盘，返回累计后的账本。"""
+    try:
+        hist = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {}
+    except Exception:
+        hist = {}
+    if not isinstance(hist, dict):
+        hist = {}
+    if cur:
+        hist[ep] = cur
+        try:
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w", encoding="utf-8") as fh:
+                json.dump(hist, fh, ensure_ascii=False, indent=2)
+        except Exception:
+            pass
+    return hist
+
+
+def cross_episode_scene_rows(root: str, ep: str) -> List[dict]:
+    """SCNX 跨集场景漂移：累计每集每场景的(色调指纹 + 结构原型 dHash)，当前集 vs 历史基线比对。
+    核心场景(asset_registry 显式标 core)硬漂→block，其余→warn。镜像 G5 脸漂的自累积侧车账本。
+    色调直方图治色温/调色跨集漂；结构 dHash 原型补「色调没动但布局/朝向变了」（两者互补，同段 SCNX 输出）。"""
+    try:
+        core = core_scene_names(root)
+    except Exception:
+        core = []
+    # ① 色调指纹（既有）
+    hist = _accumulate_scene_history(
+        os.path.join(production_dir(root), "scene_ep_means.json"), ep, sc.scene_tone_means(root, ep))
+    color_rows = scene_drift_rows(hist, ep, core_scenes=core)
+    # ② 结构原型（新增）：补色调看不出的布局/构图朝向漂移
+    sproto = _accumulate_scene_history(
+        os.path.join(production_dir(root), "scene_struct_ep_means.json"), ep, sc.scene_struct_prototypes(root, ep))
+    struct_rows = scene_struct_drift_rows(sproto, ep, core_scenes=core)
+    # ③ 语义嵌入（DINOv2·最强指纹）：连材质/几何/布局都能测，色调/结构盲区的兜底。
+    #    仅当可选嵌入后端已回填逐镜 embedding 时才有数据，否则空（退回①②，不硬失败）。
+    embed_rows: List[dict] = []
+    try:
+        import scene_embed as se
+        cur_embed = se.scene_embed_means(root, ep)
+        if cur_embed:
+            ehist = _accumulate_scene_history(
+                os.path.join(production_dir(root), "scene_embed_ep_means.json"), ep, cur_embed)
+            embed_rows = se.scene_embed_drift_rows(ehist, ep, core_scenes=core)
+    except Exception:
+        embed_rows = []
+    return color_rows + struct_rows + embed_rows
 
 
 def _clip_num(value: Any) -> int | None:
@@ -858,11 +1129,84 @@ def run(root: str, ep: str) -> dict:
                               "verdicts": [c.get("verdict") for c in t.get("clips", [])], "notes": t.get("notes", [])}
     collect_simple("片内时序(N2)", t.get("clips", []), stage="video", default_artifacts=(f"出视频/{ep}/视频",))
 
-    # O2 场景
+    # EXP2 状态化表情：storyboard state_delta 改 identity_invariants 又没进 allowed_state_deltas → block；
+    # 大表情跨度近景缺 micro_expression → warn。此前只落 ledger 从不进闸（孤儿）；现接入审计→gate。
+    sb_path = os.path.join(root, "脚本", ep, "storyboard.json")
+    has_sb = os.path.isfile(sb_path)
+    exp2 = exstate.run(root, ep)
+    sections["状态化表情(EXP2)"] = section_from_result(
+        dim="状态化表情(EXP2)", result=exp2, detail_key="findings",
+        skipped=not has_sb, ep=ep, stage="script_stage2",
+        default_artifacts=(f"脚本/{ep}/storyboard.json", "出图/共享/identity_registry.json"))
+
+    # MG1 运动语法（advisory）：运镜/动作语义连贯——此前只落 ledger 从不进闸（孤儿）。
+    mg1 = mgram.run(root, ep)
+    sections["运动语法(MG1)"] = section_from_result(
+        dim="运动语法(MG1)", result=mg1, detail_key="findings",
+        skipped=not has_sb, ep=ep, stage="video",
+        default_artifacts=(f"脚本/{ep}/storyboard.json", f"出视频/{ep}/prompt"))
+
+    # ASP 声音空间 + NV1 原生声纹路由证据：native_speech 路由缺声纹证据/ambient_map 缺位 → warn，
+    # 证据显式 fail/mismatch → block。与 check_native_voice_identity 互补（路由级交叉核验）。原孤儿。
+    routes_path = os.path.join(root, "出视频", ep, "prompt", "video_model_routes.json")
+    asp = aspace.run(root, ep)
+    sections["声音空间(ASP)"] = section_from_result(
+        dim="声音空间(ASP)", result=asp, detail_key="findings",
+        skipped=not os.path.isfile(routes_path), ep=ep, stage="video",
+        default_artifacts=(routes_path, "设定库/ambient_map.json", f"生产数据/native_voice_identity_{ep}.json"))
+
+    # OST 物件状态：未声明的道具状态互斥翻转（满↔空/完好↔破碎…）——补 prop_alerts 只查已声明转换的洞。
+    ost = objstate.analyze(root, ep)
+    sections["物件状态(OST)"] = {"skipped": not ost.get("available", False),
+                              "verdicts": _verdicts(ost.get("shots", [])), "notes": ost.get("notes", [])}
+    collect_simple("物件状态(OST)", ost.get("shots", []), stage="image",
+                   default_artifacts=(f"脚本/{ep}/storyboard.json", f"出图/{ep}/prompt/01_分镜出图.md", "出图/共享/visual_state_ledger.json"))
+
+    # O2 场景：结构离群/色光离群（scene_consistency）+ floor_plan/门窗几何核对（scene_geometry sidecar·#5）。
     s = sc.analyze(root, ep)
+    o2_rows = list(s.get("shots", []))
+    geom_path = os.path.join(production_dir(root), f"scene_geometry_{ep}.json")
+    geom_notes: List[str] = []
+    try:
+        if os.path.isfile(geom_path):
+            geom = json.load(open(geom_path, encoding="utf-8"))
+            for f in (geom.get("findings") or []):
+                if isinstance(f, dict) and f.get("verdict") in ("warn", "block"):
+                    o2_rows.append({"scene": f.get("scene"), "verdict": f["verdict"],
+                                    "msg": f.get("message"), "kind": "几何"})
+            geom_notes = list(geom.get("notes") or [])
+    except Exception:
+        pass
+    # 击中光效(apex)：复活 scene_consistency.verify_impact_frames——impact_frame_sync 镜的命中帧须比首帧
+    # 亮度涌动 >15%（motivated 闪光/apex 轮廓光），否则"打击感软弱"。此前 res["impact_physics"] 被算出却丢弃
+    # （consistency_audit 只读 shots），本轮接入 O2 roll-up，让光绑战斗节拍的检测真正生效（heuristic·warn）。
+    for f in (s.get("impact_physics") or []):
+        if isinstance(f, dict):
+            o2_rows.append({"scene": f.get("clip"), "verdict": f.get("severity", "warn"),
+                            "msg": f.get("message"), "kind": "击中光效",
+                            "actual_surge": f.get("actual_surge")})
     sections["场景(O2)"] = {"skipped": not s.get("available", False),
-                          "verdicts": _verdicts(s.get("shots", [])), "notes": s.get("notes", [])}
-    collect_simple("场景(O2)", s.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
+                          "verdicts": _verdicts(o2_rows), "notes": s.get("notes", []) + geom_notes}
+    collect_simple("场景(O2)", o2_rows, stage="image",
+                   default_artifacts=(f"出图/{ep}/图片", "出图/共享/asset_registry.json"))
+
+    # SCNX 跨集场景漂移（#5）：补上场景轴此前完全缺失的跨集机检（脸有 G5，场景没有）。自累积每集每场景
+    # 平均色调指纹，当前集 vs 历史基线比 L1；核心场景硬漂=block，其余 warn。需 ≥2 集且 Pillow 可用。
+    scnx_rows = cross_episode_scene_rows(root, ep)
+    sections["跨集场景漂移(SCNX)"] = {"skipped": not s.get("available", False) or not scnx_rows,
+                                  "verdicts": [r["verdict"] for r in scnx_rows], "notes": []}
+    collect_simple("跨集场景漂移(SCNX)", scnx_rows, stage="image",
+                   default_artifacts=("出图/共享/asset_registry.json", f"出图/{ep}/图片"))
+
+    # 打斗撞点(SPEC-APEX·P1 升闸)：combat_cue_apex_audit 平时 report-only，核心打斗镜(核心场景 LOC 或
+    # 高潮/爆点/关键 key 镜)×交付边界(compose/review) 的 combat_apex_untimestamped/combat_cue_apex_no_keyframe
+    # 由 gate._strict_advisory_should_block 升 BLOCK——剪辑峰值对不上命中关键帧=打击感软散，交付前挡。
+    # in-process 跑(纯 stdlib·同 n2d 线)；fix 回 n2d-script 把 impact_frame 写成带秒命中帧 + anchor_planner 注回。
+    combat_rows = _combat_cue_apex_rows(root, ep)
+    sections["打斗撞点(SPEC-APEX)"] = {"skipped": not combat_rows,
+                                  "verdicts": _verdicts(combat_rows), "notes": []}
+    collect_simple("打斗撞点(SPEC-APEX)", combat_rows, stage="script_stage2",
+                   default_artifacts=(f"脚本/{ep}/storyboard.json", f"生产数据/combat_cue_apex_{ep}.json"))
 
     # B1 跨镜空间站位/遮挡（同 LOC 各镜站位声明 vs 注册场景站位；违锁=block，链式=warn；纯文本无依赖）
     sb = sbc.analyze(root, ep)
@@ -883,6 +1227,13 @@ def run(root: str, ep: str) -> dict:
                                "verdicts": _verdicts(df.get("shots", [])), "notes": df.get("notes", [])}
     collect_simple("景深一致(DOF1)", df.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
 
+    # DOFL 景深锁：实测景深比 vs 场景注册 dof_profile.depth_intent（per-scene 锁；补 DOF1 只集内自比的缺口）
+    dofl_rows = dof.dof_profile_rows(root, ep)
+    sections["景深锁(DOFL)"] = {"skipped": not df.get("available", False) or not dofl_rows,
+                             "verdicts": [r["verdict"] for r in dofl_rows], "notes": []}
+    collect_simple("景深锁(DOFL)", dofl_rows, stage="image",
+                   default_artifacts=("出图/共享/asset_registry.json", f"出图/{ep}/图片"))
+
     # VFXC 特效窜色：剑气/系统面板/妖纹光效跨镜变色（registry color_target 已声明却没人量）
     vx = vfxc.analyze(root, ep)
     sections["特效窜色(VFXC)"] = {"skipped": not vx.get("available", False) or not vx.get("shots"),
@@ -894,6 +1245,13 @@ def run(root: str, ep: str) -> dict:
     sections["色温调色(GRADE1)"] = {"skipped": not cgr.get("available", False) or not cgr.get("shots"),
                                 "verdicts": _verdicts(cgr.get("shots", [])), "notes": cgr.get("notes", [])}
     collect_simple("色温调色(GRADE1)", cgr.get("shots", []), stage="image", default_artifacts=(f"出图/{ep}/图片",))
+
+    # LSIG 光照签名数值强制：实测色相/饱和度 vs 场景注册 constraints.lighting_signature（接活死 schema）
+    lsig_rows = sc.lighting_signature_rows(root, ep)
+    sections["光照签名(LSIG)"] = {"skipped": not s.get("available", False) or not lsig_rows,
+                              "verdicts": [r["verdict"] for r in lsig_rows], "notes": []}
+    collect_simple("光照签名(LSIG)", lsig_rows, stage="image",
+                   default_artifacts=("出图/共享/asset_registry.json", f"出图/{ep}/图片"))
 
     # 接缝 接力(尾帧 vs 下一首帧)——PNG 层，把"逐接缝人判"降成机检初筛
     sm = tcheck.seam_analyze(root, ep)
@@ -988,6 +1346,50 @@ def run(root: str, ep: str) -> dict:
     sections["音画情绪一致(AVE)"] = {"skipped": not av_emo.get("available", False),
                                    "verdicts": _verdicts(av_emo.get("findings", [])), "notes": av_emo.get("notes", [])}
     collect_simple("音画情绪一致(AVE)", av_emo.get("findings", []), stage="compose", default_artifacts=(f"出图/{ep}/图片",))
+
+    # 音色声纹 + 跨集 voice_key 漂移（VOICE·advisory）——2026-06 接入主审计：此前只走 n2d-identity
+    # identity.py --write 旁路，纯 consistency_audit 漏音色漂移。preflight 纯 stdlib 报跨集换声/未登记；
+    # voice_print 用 speaker embedding 量真实音色相似度（缺后端/音频优雅降级交人判）。block 封顶 warn，
+    # 不硬阻断视觉 gate（音色返工回 n2d-voice，不该卡出图/出视频）。
+    voice_rows: List[dict] = []
+    voice_notes: List[str] = []
+    voice_skipped = True
+    if vcon is not None:
+        try:
+            pf = vcon.preflight(root, ep)
+            voice_skipped = False
+            for w in pf.get("warnings", []):
+                voice_rows.append({
+                    "verdict": "warn",
+                    "message": w.get("scope") or w.get("type") or "voice_key 跨集漂移",
+                    "character": w.get("character", ""),
+                    "loc": f"voicemap:{w.get('character', '')}",
+                    "return_to_stage": "voice",
+                    "affected_artifacts": ["设定库/voicemap.json"],
+                })
+            voice_notes += [n for n in pf.get("notes", []) if n]
+        except Exception:
+            pass  # advisory only; never break the audit
+    if vprint is not None:
+        try:
+            vp = vprint.analyze(root, ep)
+            if vp.get("available"):
+                voice_skipped = False
+                payload = vprint.findings_payload(root, ep, vp)
+                for f in payload.get("findings", []):
+                    row = dict(f)
+                    sev = str(row.get("severity") or row.get("verdict") or "warn")
+                    # advisory 封顶：声纹机检 block→warn，不进 total_block 硬阻断视觉 gate。
+                    row["verdict"] = "warn" if sev in ("block", "warn") else "ok"
+                    row.setdefault("return_to_stage", "voice")
+                    voice_rows.append(row)
+            elif vp.get("note"):
+                voice_notes.append(vp.get("note"))
+        except Exception:
+            pass
+    sections["音色声纹"] = {"skipped": voice_skipped, "verdicts": _verdicts(voice_rows), "notes": voice_notes}
+    collect_simple("音色声纹", voice_rows, stage="voice",
+                   default_artifacts=("设定库/voicemap.json", f"合成/{ep}/配音/voice_zh.wav"))
 
     # Rhythm 节奏/留存启发式（advisory）：不声称是成片观感模型，但把 storyboard 时长曲线/钩子密度纳入审计链。
     pace = pr.analyze(root, ep)
@@ -1255,6 +1657,8 @@ def main(argv: List[str]) -> int:
     res["capabilities"] = probe_capabilities()
     # 总精度写进 summary（外发/score/gate/人 据此判"没检查"≠"通过"）——必须在 export 之前算
     res["summary"]["precision_level"] = audit_precision_level(res["capabilities"])
+    # 证据等级账本：每维度 proof_type + advanced tier 的 under_proven（gate 据此在交付边界 PENDING→BLOCK）。
+    res["summary"]["evidence_grade"] = evidence_grade(res["sections"], res["capabilities"])
     if not ns.no_export and os.path.isdir(ns.root):
         export_findings(ns.root.rstrip("/"), ns.episode, res)
     exit_code = exit_code_for(res["summary"], profile=profile)
@@ -1268,6 +1672,11 @@ def main(argv: List[str]) -> int:
         print(f"⚠️ 本次机检总精度：{plv}——{reason}\n")
     for note in res["capabilities"].get("notes", []):
         print(f"⚠️ {note}\n")
+    eg = res["summary"].get("evidence_grade") or {}
+    if eg.get("under_proven"):
+        print(f"⚠️ 证据等级未达标(PENDING)：{('、').join(eg['under_proven'])} 本可验到 embedding/pixel 级却只到结构/启发式级"
+              f"（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 未数值化）；交付边界(compose/review)将 BLOCK，"
+              f"装好进阶依赖复跑或显式 N2D_ALLOW_DEGRADED_QC=1 自负其责。\n")
     by = res["summary"]["by_dim"]
     print(f"{'维度':<16} 🔴  🟡  ✅  状态")
     for dim, c in by.items():

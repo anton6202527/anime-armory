@@ -1,0 +1,9 @@
+{
+  "kind": "n2d_golden_project_expected",
+  "version": 1,
+  "case": "video_first",
+  "expected_stage_key": "voice",
+  "expected_owner": "n2d-voice",
+  "expected_release_readiness_after_enrichment": "pass",
+  "notes": "先出视频后配音模式在合成前必须拦回 n2d-voice 补真实配音。"
+}

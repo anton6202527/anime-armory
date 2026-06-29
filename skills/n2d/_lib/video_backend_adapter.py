@@ -51,6 +51,8 @@ CATALOG_VERIFIED = {
     "source": "n2d_platform_profiles static catalog + Veo/Sora lifecycle refresh + per-run official docs / CLI / API evidence",
     "profile_catalog": PROFILE_VERIFIED,
 }
+SKILLS_DIR = Path(__file__).resolve().parents[1]
+CLI_SNAPSHOT_ROOT = SKILLS_DIR.parent / "n2d-video" / "references" / "cli_snapshots"
 
 OFF_OR_MANUAL_VALUES = {
     "",
@@ -329,6 +331,37 @@ def refresh_evidence_path(root: str, backend: Optional[str], channel: Optional[s
     return Path(root) / "生产数据" / "video_backend_capabilities" / f"{_slug(canonical)}{suffix}.json"
 
 
+def load_cli_snapshot_evidence(cli: str) -> Optional[Dict[str, Any]]:
+    path = CLI_SNAPSHOT_ROOT / _slug(cli) / "_index.json"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    if not isinstance(data, dict) or data.get("kind") != "n2d_cli_snapshot_index":
+        return None
+    commands = [
+        {"command": c.get("command"), "captured_at": c.get("captured_at"), "flag_count": len(c.get("flags") or [])}
+        for c in data.get("commands") or []
+        if isinstance(c, dict) and c.get("ok")
+    ]
+    return {
+        "kind": "n2d_cli_snapshot_evidence",
+        "cli": data.get("cli") or cli,
+        "captured_at": data.get("captured_at") or "",
+        "path": str(path),
+        "commands": commands,
+    }
+
+
+def cli_evidence_for_route(backend: Optional[str], channel: Optional[str] = None) -> List[Dict[str, Any]]:
+    execution = effective_frame_backend(backend, channel)
+    channel_key = normalize_video_backend(channel or "", default="")
+    if execution != "dreamina" and channel_key != "dreamina":
+        return []
+    evidence = load_cli_snapshot_evidence("dreamina")
+    return [evidence] if evidence else []
+
+
 def load_refresh_evidence(root: str, backend: Optional[str], channel: Optional[str] = None) -> Optional[Dict[str, Any]]:
     path = refresh_evidence_path(root, backend, channel)
     try:
@@ -412,9 +445,15 @@ def write_refresh_evidence(
     adapter = backend_adapter(backend, channel)
     values = default_capability_assertions(backend, channel)
     values.update(capability_overrides or {})
+    cli_evidence = cli_evidence_for_route(backend, channel)
+    merged_sources = list(sources)
+    for item in cli_evidence:
+        label = f"cli_snapshot:{item.get('cli')}@{item.get('captured_at') or 'unknown'}"
+        if label not in merged_sources:
+            merged_sources.append(label)
     assertions = structured_capability_assertions(
         values,
-        sources=sources,
+        sources=merged_sources,
         source_urls=source_urls,
         evidence_kind=evidence_kind,
         note=note,
@@ -425,9 +464,10 @@ def write_refresh_evidence(
         "channel": adapter.get("channel"),
         "execution_backend": adapter.get("execution_backend"),
         "verified_at": date_s,
-        "sources": list(sources),
+        "sources": merged_sources,
         "source_urls": list(source_urls),
         "evidence_kind": evidence_kind,
+        "cli_snapshot_evidence": cli_evidence,
         "capability_assertions": assertions,
         "note": note,
         "adapter": adapter,

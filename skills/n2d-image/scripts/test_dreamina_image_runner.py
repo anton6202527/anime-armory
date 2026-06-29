@@ -67,6 +67,49 @@ def test_dreamina_merges_carried_face_anchor_despite_prose_placeholder(tmp_path:
     assert names.index("定妆_沈念_脸部特写.png") < names.index("占位图.png")
 
 
+def _combat_target(body: str) -> "base.Target":
+    section = base.ClipSection(
+        clip="Clip_07", title="## 镜头 7", body=body, target_line="`出图/第1集/图片/镜头7.png`")
+    return base.Target(shot="Clip_07::镜头7", clip="Clip_07", mode="firstframe",
+                       rel_path="出图/第1集/图片/镜头7.png", section=section)
+
+
+def test_dreamina_injects_camera_gaze_backstop_for_combat(tmp_path: Path) -> None:
+    # 非 POV 打斗镜：即使作者没在「视线方向」里手写防呆，即梦 prompt 也必须含旁观者视线锁 + 负面词。
+    body = "**正向 prompt（中文）**：近景，少年挥剑劈砍，对手格挡。\n**负向 prompt**：模糊"
+    prompt = dreamina.build_dreamina_prompt(tmp_path, "第1集", _combat_target(body))
+    assert "镜头为旁观者视角" in prompt
+    assert "不看镜头" in prompt
+    assert "直视镜头" in prompt  # 负面词来自 n2d_const.CAMERA_GAZE_NEGATIVES
+    # 与 Codex 后端同源：两条 helper 对同一 body 的判定一致。
+    assert base.camera_gaze_negatives_for(body)
+
+
+def test_dreamina_pov_shot_is_exempt(tmp_path: Path) -> None:
+    # 显式 POV / 破第四墙镜：不得注入防呆（否则破坏主观镜头/对观众压迫特写）。
+    body = "**正向 prompt（中文）**：opponent POV 主观镜头，破第四墙，角色直视镜头压迫观众。"
+    prompt = dreamina.build_dreamina_prompt(tmp_path, "第1集", _combat_target(body))
+    assert "镜头为旁观者视角" not in prompt
+    assert base.camera_gaze_negatives_for(body) == ""
+
+
+def test_dreamina_injects_spectacle_richness_for_combat(tmp_path: Path) -> None:
+    # 打斗镜：即梦 prompt 必须含「经费在燃烧」四层（体积光/大气纵深/环境受力/运动能量）。
+    body = "**正向 prompt（中文）**：少年挥剑劈砍，命中炸开冲击波。\n**负向 prompt**：模糊"
+    prompt = dreamina.build_dreamina_prompt(tmp_path, "第1集", _combat_target(body))
+    assert "经费在燃烧" in prompt
+    assert "体积光" in prompt and "大气透视" in prompt
+    assert base.combat_spectacle_richness_for(body)
+
+
+def test_dreamina_no_spectacle_richness_for_calm_shot(tmp_path: Path) -> None:
+    # 平静对白/无动作镜：不得注入盛宴层（避免给每个镜堆特效·稀释 prompt）。
+    body = "**正向 prompt（中文）**：少女在窗边静静喝茶，神情温柔。\n**负向 prompt**：模糊"
+    prompt = dreamina.build_dreamina_prompt(tmp_path, "第1集", _combat_target(body))
+    assert "经费在燃烧" not in prompt
+    assert base.combat_spectacle_richness_for(body) == ""
+
+
 def test_dreamina_unanchored_check_matches_attached_paths(tmp_path: Path) -> None:
     target = _project(tmp_path)
     bundle = base.reference_bundle_for_target(tmp_path, "第1集", target)

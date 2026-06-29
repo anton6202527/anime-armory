@@ -32,6 +32,7 @@ import argparse
 
 from wiki_builder import FLASHBACK_HINTS, _context, list_chapters
 from logic_sentry import cjk_to_int
+from heuristic_gate import enforce, count_blocking  # B10：脆弱启发式不得硬阻断（单一收口）
 
 # 季节 → 0..3（春夏秋冬）。
 _SEASONS = {"春": 0, "夏": 1, "秋": 2, "冬": 3}
@@ -221,6 +222,9 @@ def analyze(project, ledger=None):
                 chapter_of_event[str(e["name"]).strip()] = e["chapter"]
         alerts.extend(check_ledger_order(ledger, chapter_of_event))
 
+    # B10 单一收口：timeline_event_disorder（台账整数序比较·不扫正文）是确定性证据闸·保留阻断；
+    # timeline_backward（正文时间标记解析）是脆弱启发式·本就建议级，enforce 后仍建议级。
+    enforce(alerts)
     return {"alerts": alerts}
 
 
@@ -233,7 +237,7 @@ def main(argv=None):
     ledger = _load_ledger(args.project_path)
     result = analyze(args.project_path, ledger=ledger)
     alerts = result["alerts"]
-    blocking = sum(1 for a in alerts if a["severity"] == "阻断级")
+    blocking = count_blocking(alerts)  # analyze 已跑 B10 enforce
 
     out_dir = os.path.join(args.project_path, "审稿")
     os.makedirs(out_dir, exist_ok=True)

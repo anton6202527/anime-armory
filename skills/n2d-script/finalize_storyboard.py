@@ -98,6 +98,45 @@ def build_from_storyboard(clips):
         shots[key] = round(shots.get(key, 0.0) + dur, 3)
     return shots
 
+def _storyboard_subtitle_lines(clip):
+    """从 storyboard clip 读取计划字幕行；最终成片仍以 whisperx 词级对齐为准。"""
+    for key in ("subtitle_lines", "voiceover_lines", "lines"):
+        value = clip.get(key)
+        if isinstance(value, list):
+            lines = [str(x).strip() for x in value if str(x).strip()]
+            if lines:
+                return lines
+        if isinstance(value, str) and value.strip():
+            return [x.strip() for x in re.split(r"\n+", value) if x.strip()]
+    return []
+
+def build_planned_srt_from_storyboard(clips):
+    # 原生音画：阶段2仍需要给剪辑/审看一个中文字幕草稿；它是脚本计划时间轴，不冒充最终口型字幕。
+    cues = []
+    t = 0.0
+    idx = 1
+    for i, c in enumerate(clips, 1):
+        if not isinstance(c, dict):
+            continue
+        dur = _clip_duration(c)
+        key = str(c.get('镜头') or c.get('id') or c.get('label') or f'clip{i}')
+        if dur is None:
+            raise ValueError(f"clip「{key}」缺可解析的 duration（duration/duration_sec/时长/seconds 之一）——无法生成计划字幕。")
+        lines = _storyboard_subtitle_lines(c)
+        if not lines:
+            t += dur
+            continue
+        span = max(0.8, dur / len(lines))
+        for j, line in enumerate(lines):
+            start = t + j * span
+            end = t + dur if j == len(lines) - 1 else min(t + dur, start + span)
+            if end <= start:
+                end = start + 0.8
+            cues.append(f"{idx}\n{_ts(start)} --> {_ts(end)}\n{_wrap_zh(_clean_punct(line))}\n")
+            idx += 1
+        t += dur
+    return "\n".join(cues)
+
 def _parse_srt_texts(path):
     out=[]
     if not os.path.exists(path): return out
@@ -260,13 +299,19 @@ def main():
             clips = (json.load(open(sb_p,encoding='utf-8')) or {}).get('clips') or []
             try:
                 shots = build_from_storyboard(clips)
+                zh_srt = build_planned_srt_from_storyboard(clips)
             except ValueError as e:
                 print('⛔ 原生音画定稿失败：'+str(e)); sys.exit(2)
             if not shots:
                 print('⛔ 原生音画模式：storyboard.json clips 缺 duration，无法定稿镜头时长——分镜设计时按脚本规划填 Clip duration。'); sys.exit(2)
             json.dump(shots, open(os.path.join(root,'脚本',ep,'镜头时长.json'),'w',encoding='utf-8'), ensure_ascii=False, indent=2)
+            if zh_srt.strip():
+                open(os.path.join(root,'脚本',ep,'字幕_中文.srt'),'w',encoding='utf-8').write(zh_srt)
             print(f"原生音画定稿: 从 storyboard 取 {len(shots)} 镜时长 → 镜头时长.json。")
-            print("  说话镜台词由视频后端原生生成，字幕请用 whisperx 对成片词级对齐，不在本步按配音重定时。")
+            if zh_srt.strip():
+                print("  已按 storyboard 台词生成计划字幕_中文.srt；最终成片仍需 whisperx 词级对齐。")
+            else:
+                print("  storyboard 未提供 subtitle_lines/voiceover_lines；最终字幕请用 whisperx 对成片词级对齐。")
             _apply_priors()
             sys.exit(0)
         print('⛔ 缺 时长清单.json（合成/'+ep+'/配音/ 或 出视频/'+ep+'/配音/）——请先 n2d-voice 配音。'); sys.exit(2)
@@ -300,5 +345,13 @@ def main():
     json.dump(shots, open(os.path.join(root,'脚本',ep,'镜头时长.json'),'w',encoding='utf-8'), ensure_ascii=False, indent=2)
     print(f"定稿: {len(manifest)} 句重定时 → 字幕_中文.srt{'+字幕_英文.srt' if want_en else '(仅中文)'}；{len(shots)} 镜 → 镜头时长.json")
     _apply_priors()
+    # 逐镜意图黑板生产者（StageC）：分镜定稿后重建 shot_intent.json，让作者 override 通道(allowed_evolution)
+    # 真存在、且派生字段与最新 storyboard 同步（陈旧自失效靠镜数对账）。best-effort：缺/异常不挡定稿。
+    try:
+        from n2d_intent import write_shot_intent
+        write_shot_intent(root, ep)
+        print("  逐镜意图黑板已重建 → 脚本/%s/shot_intent.json（作者可在 allowed_evolution field-tag 声明有意演进）" % ep)
+    except Exception as _e:
+        print(f"  （shot_intent 黑板重建跳过：{_e}）")
 
 if __name__=='__main__': main()

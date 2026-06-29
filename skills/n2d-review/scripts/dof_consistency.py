@@ -98,6 +98,63 @@ def _dof_proxy(path: str) -> Optional[float]:
     return dof_ratio(g) if g is not None else None
 
 
+def _norm_dof_intent(value: object) -> str:
+    """注册 depth_intent → 归一档（shallow/deep/medium/""）。纯函数·可测。"""
+    t = str(value or "").strip().lower()
+    if any(m in t for m in ("shallow", "浅", "奶油", "虚化", "bokeh")):
+        return "shallow"
+    if any(m in t for m in ("deep", "深焦", "全清", "pan_focus", "deep_focus")):
+        return "deep"
+    if any(m in t for m in ("medium", "中", "适中")):
+        return "medium"
+    return ""
+
+
+def dof_intent_violation(ratio: float, intent: object, *,
+                         shallow_max: float = 0.85, deep_min: float = 0.55) -> Optional[str]:
+    """实测景深比(背景清晰/主体清晰) vs 注册 depth_intent 是否矛盾 → 原因串或 None。纯函数·可测。
+    浅景深应低(背景虚)、深焦应高(背景清)；medium 不强判。"""
+    norm = _norm_dof_intent(intent)
+    if norm == "shallow" and ratio > shallow_max:
+        return f"登记浅景深(背景应虚化)但实测背景偏清(景深比 {round(ratio, 3)}>{shallow_max})"
+    if norm == "deep" and ratio < deep_min:
+        return f"登记深焦(背景应清晰)但实测背景偏糊(景深比 {round(ratio, 3)}<{deep_min})"
+    return None
+
+
+def dof_profile_rows(root: str, ep: str) -> List[dict]:
+    """场景 dof_profile.depth_intent 锁（per-scene 景深锁）：逐镜实测景深比 vs 注册意图，矛盾=warn。
+
+    补 DOF1（analyze）只做**集内自比**、无 per-scene 注册锚的缺口——把每镜景深档锚到声明的场景景深意图
+    （跨镜/跨集一致到同一意图）。dof_profile 可放 scene_dna.dof_profile 或 constraints.dof_profile（任一）。
+    只对登记了 depth_intent 的场景生效；需 Pillow。warn 级（景深代理是几何启发·不硬阻断）。"""
+    if not scn._probe_pillow():
+        return []
+    registry = scn._load_asset_registry(root)
+    smap = scn._scene_of_shot(root, ep)
+    rows: List[dict] = []
+    for png, scene in sorted(smap.items()):
+        aid = scn._match_asset_id(scene, registry)
+        asset = registry.get(aid) if aid else None
+        if not isinstance(asset, dict):
+            continue
+        prof = (asset.get("scene_dna") or {}).get("dof_profile")
+        if not isinstance(prof, dict):
+            prof = (asset.get("constraints") or {}).get("dof_profile")
+        if not isinstance(prof, dict) or not prof.get("depth_intent"):
+            continue
+        r = _dof_proxy(os.path.join(root, "出图", ep, png))
+        if r is None:
+            continue
+        why = dof_intent_violation(r, prof.get("depth_intent"))
+        if why:
+            rows.append({"png": png, "scene": scene, "verdict": "warn",
+                         "message": (f"场景[{scene}] 景深锁矛盾：{why}——对齐登记 dof_profile.depth_intent，"
+                                     f"或确认意图后改注册。"),
+                         "ratio": round(r, 3), "intent": _norm_dof_intent(prof.get("depth_intent"))})
+    return rows
+
+
 def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN) -> dict:
     res: dict = {"available": scn._probe_pillow(), "groups": {}, "shots": [], "notes": []}
     if not res["available"]:

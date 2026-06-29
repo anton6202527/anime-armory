@@ -228,6 +228,8 @@
 - **镜头 → 必传参考图 速查表**（路径指向共享库图片目录）
 - **不重复**写定妆 prompt（指向共享 `00_索引.md` 链接即可）
 
+> **Clip 图前完整资产基础包铁律**：`01_分镜出图.md` 可以先写，但任何 `Clip_*` / `镜头*` PNG 生成前，本集逐镜引用的共享资产必须全部先在共享层生成并过落档自检。人物/形态必须有正面主参考、45°、侧面、背面、半身或全身服装参考、脸部特写或同源表情参考、三视图人审拼版，并核对配饰/标志物；场景必须有主参考，反复场景按机位补多视图；道具、配饰、武器、法宝、VFX 必须有 `asset_registry` ID、参考图、结构/数量/尺度/材质/色卡/禁漂项，核心武器还要 `weapon_profile` 与握持/比例参考。缺任一基础包时，只能先补 `出图/共享/图片/`，不得进入 `出图/第N集/图片/` 分镜生成。
+
 ### 2.2 `01_分镜出图.md` — 单镜头格式
 
 ```markdown
@@ -244,7 +246,7 @@
 
 **参考图选择策略**（含角色镜必填）：从 `identity_registry.json.reference_atlas.selection_policy` 读取并说明本镜命中类型：closeup / three_quarter / profile / back_view / full_body_action / fight_or_spell / multi_person_contact。列出实际传入的 ready 参考图；45° 与脸部特写基础锚不得是 planned。若表情/动作参考仍是 planned，写 `reference_gap=<缺口>` 和降级（如用 front+three_quarter+side+脸部特写、降 MCU/OTS、拆正反打、先补共享参考）。
 **参考图入参清单与预算**（含角色/资产镜必填）：从 `reference_plan_第N集.md/json` 落地，不写规划空话，写**实际准备传给后端**的清单：`backend=<生图AI>`、`backend_limit=<总图数/主体图数/控制图数>`、`selected=[路径 + 角色/资产ID + 用途(face_anchor/expression/profile/outfit/scene/prop/control)]`、`dropped=[路径 + 原因(超预算/低清/非ready/水印logo/重复弱锚)]`、`fallback=<拆镜/降景别/先补共享/升主体ID/LoRA>`。参考图必须是 ready、清晰、无水印/Logo/无关文字/NSFW、格式受后端支持；`regional_construct_required`、`split_composite_required`、pose/depth/canny/scribble、mask/inpaint 等控制资产也在这里列路径和槽位绑定。
-**视线方向**（含角色镜必填 · 出图阶段焊进像素 · 视频改不动）：画左 / 画右 / 镜头外上方…（取自 `00_总览.md` 本场轴线；与反打镜 `Clip K±1` 对位，不越轴）
+**视线方向**（含角色镜必填 · 出图阶段焊进像素 · 视频改不动）：画左 / 画右 / 镜头外上方…（取自 `00_总览.md` 本场轴线；与反打镜 `Clip K±1` 对位，不越轴）。**打斗/追逐/法术/强互动镜头必须额外写清**：镜头是旁观者，不是对手 POV；角色不看镜头、不与主镜头 eye contact；视线锁定对手 / 武器来路 / 命中点 / 破绽 / 下一动作目标。只有逐镜明确 `opponent POV` / `主观镜头` / `破第四墙` 时才允许直视镜头。
 **光位锚**（继承本场 · 跨镜不各打各的光）：继承 `00_总览.md` 本场「场景光位锚」（主光方向 + 色温 + 动机光源）；本镜默认不改光，若改光写剧情理由
 **起幅·运动余量**（出图为视频铺路 · clip 首帧=起幅，非动作顶点）：本镜为 Clip K **首帧=起幅**（动作顶点交尾帧 `镜头N_end.png`，封面/定格图才抓顶点）；按 `故事板.md` 本镜节奏/张力反推的运镜（推近/环绕/跟摇）**预留构图余量**——推近→框略宽、环绕→主体周围留空、跟摇→运动方向留 lead room
 **专项镜头模板**（复杂镜必填 · 普通镜写“无”）：若所属 Clip 有 `template/template_contract`，这里誊抄模板 ID + 本镜要落实的 `beats/blocking/camera_rule/continuity_must/negative` + 模板专属字段（如 `impact_frame`、`screen_direction`、`axis`、`effect_asset`、`contact_points`、`screen_positions`）。本镜构图必须服务模板契约：例如反打锁轴线、飞行锁姿态动背景、亲密互动锁接触点、多人数锁主次站位。
@@ -252,6 +254,7 @@
 **多人同框执行策略**（同框 ≥2 个 `CHAR_` 必填；否则写“无”）：按所选后端能力写一个确定模式，不写条件式兜底。无持久角色 ID 后端（Codex/OpenAI/Dreamina/Nano/Gemini）默认写 `regional_construct_required`（兼容 token `split_composite_required`）：空场景底板 `empty_plate` → 官方 inpaint / regional-prompt 按 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位逐区域喂该角色 reference_group / face_anchor_refs（强情绪再加 expressions）→ 统一 relighting/color match；这是本镜硬执行。持久主体后端且所有角色已 registered/ready 写 `native_subject_slots`：逐槽位绑定原生主体/角色 ID + 区域/站位；若有角色未注册，先写 `register_subjects_or_split` 并明确“先注册主体”或“本镜登记回退到 `regional_construct_required`/`split_composite_required`”。若导演上允许拆镜，写 `shot_reverse_shot` 并回到 storyboard/prompt 拆成正反打，不硬塞同框。
 **多人同框分镜调度**（同框 ≥2 个 `CHAR_` 必填）：誊抄 `reference_plan_第N集.md` 的 `shot_scheduling`。① **默认做对**：剧情需要的同框不删戏；多人同框默认中景/全景 + 景别分层（清晰主角领镜，其余推背景/虚焦/背身/过肩），双人/多人 CU 优先拆「单人 CU + 反打」。② **≥2 具名角色清晰同框**：必须登记 `多人同框身份槽位` + `多人同框执行策略`，策略写 `native_subject_slots` / `regional_construct_required` / `split_composite_required` / `shot_reverse_shot` 之一；gate 拦的是“没登记怎么做对”，不是删戏或降人数。③ **≥4 清晰脸、多人近景、强交互/遮挡**：`shot_scheduling.verdict` 应提示拆组、景别分层、反打或分区构建；确属远景群像（脸不解析）在本镜显式标 `远景/群像` 豁免。
 **区分锚点**（同框 ≥2 个 `CHAR_` 必填，治④串脸）：誊抄 `reference_plan_第N集.md` 的 `distinct_anchors`，逐主体写 **5–7 个互斥锚点**（各自唯一发色 / 发型 / 服装主色 HEX / 标志配饰），并显式声明两两**不撞色**（发色 + 服装主色至少一层拉开）；规划器标 `collision=true` 的撞色对，改其中一方服装主色或加唯一配饰再落档。缺本字段 gate 对 Codex 多人镜记 WARN。
+**相对身量**（同框 ≥2 个 `CHAR_` 且 registry 声明了 `physical_scale.relative_scale` 时必填）：誊抄 `reference_plan_第N集.md` `multi_subject_strategy.relative_scale` 的相对身量串（以某角色为标尺，如「王敦比沈念高半个头」「三人中阿青最高、肩最宽」），写进同框镜 prompt 锁谁比谁高/壮——参考图保证脸，但保证不了人物间的身量秩序；跨镜身量翻转靠这句钉死。**只写相对关系，绝对身高数字（178cm）不写**（图像模型没有量尺，数字 steer 不动像素、还占 token）。registry 没声明 relative_scale 时本字段写“无”，由 `n2d-review` 物理尺寸对账提示是否要在 registry 固化。
 **Codex/GPT Image 分区构建实现**（`regional_construct_required` / `split_composite_required` 时必须写）：实现路径 = 空场景底板 →（官方后端）inpaint / regional-prompt 逐区域各喂该角色自己的 `reference_group` 把人一个个画进对应槽位区域 → 统一 relighting/color match → Adetailer / IP-Adapter Face 脸部二次精修。这是合法的「分区逐次构建」（模型重绘整张脸并自然融光），**不是**禁用的「对成片抠脸贴回」（见 SKILL.md「本地贴脸修复禁用铁律」边界澄清）。inpaint 多主体时 prompt 须保留人数标识、删掉单主体关键词，避免 inpaint 把主体擦除而非替换。
 **角色圣经引用**（含角色镜必填）：`设定库/角色圣经.md` → `CHAR_xx/形态`；本镜人物描述先继承圣经里的锚点句、五层角色 DNA 和气质/动作习惯，再写本镜状态。普通无人物镜写“无”。
 **人物审美基线**（含角色镜必填；普通无人物镜写“无”）：继承共享层该角色「人物审美基线」。除非本镜有特殊说明（伤病、战损、恐怖、丑化、喜剧、粗粝写实、非主流造型等），人物默认按主流可播审美和镜头友好处理：五官比例协调、脸部清晰有辨识度、发型妆造服装精致耐看、光影让脸好看；同时保持角色年龄、身份阶层、状态演进和角色 DNA，不临场换脸、不统一成网红脸。
@@ -282,7 +285,8 @@
 \`\`\`
 （按八维装配顺序：[①镜头][②机位]，[③同一少女·锚点句·人物审美基线·此刻状态] 正在 [④动作],
 置身 [⑤场景+时间+环境]，[⑥光影]，整体 [⑦情绪+张力+色调]，[⑧画风+渲染+画幅+固定模型锚定句/通用视频兼容锚定句]，
- [含角色镜头末尾加**身份锁定句**：单人镜可写保持与主参考的人脸/五官比例/发型完全一致；多人同框必须按「多人同框身份槽位」逐主体写锁定句，不得用“参考图①”泛化到所有人]）
+ [含角色镜头末尾加**身份锁定句**：单人镜可写保持与主参考的人脸/五官比例/发型完全一致；多人同框必须按「多人同框身份槽位」逐主体写锁定句，不得用“参考图①”泛化到所有人]；
+ [动作/打斗/追逐/法术镜必须加**视线防呆句**：镜头是旁观者，角色不看镜头，视线锁定对手/武器来路/命中点；用“可辨三分之二侧脸/侧脸/背身侧轮廓”，不要写“清晰正脸/clear frontal face”]）
 
 # 身份锁定句（多参考后端必加·与锚点句互补别混）：锚点句锁"特征词不漂"，身份锁定句锁"与参考图就是同一张脸"——
 # Nano Banana Pro/Seedream/Gemini 这类多参考·编辑类模型对它最敏感（2026-06 标配）。单人镜英文版可写：
@@ -299,6 +303,7 @@
 \`\`\`
 （统一负面词 + 本镜专属堵漏词 + **继承「本集基础视觉风格契约.风格禁忌」**——把所选风格的禁忌逐项拼进本镜负向，
  如二次元档拼"照片皮肤/3D塑料/风格跳变"，写实档拼"插画化/游戏CG"；风格禁忌只在契约不进逐镜负向=shot 级防不住风格漂。
+ 动作/打斗/追逐/法术镜补：looking at viewer, eye contact with camera, staring at camera, portrait pose, front-facing portrait, selfie composition。
  实际提交给后端前按平台语法归一为短负面词/短语，避免把“不要/不得/禁止/no/don't”指令句原样塞进 negative prompt；硬性动作约束写进正向 prompt 或本镜约束。）
 \`\`\`
 
@@ -309,7 +314,7 @@
 4. ✅ 景别符合分镜要求 + 与相邻镜成景别阶梯不撞 + 机位有理由非默认正面平视（①②）
 5. ✅ 光影=继承本场光位锚、跨镜不飘、在叙事非均匀打亮（⑥）
 6. ✅ 表情符合本镜情绪 + 张力/色调一致（⑦）
-7. ✅ 视线方向已填 + 与反打镜对位、守本场轴线（②）
+7. ✅ 视线方向已填 + 与反打镜对位、守本场轴线；动作/打斗镜已写“镜头是旁观者、不看镜头、视线锁对手/武器/命中点”，且未写清晰正脸/looking at viewer（②）
 8. ✅ 负向已继承本集风格禁忌（防 shot 级风格漂；S1 风格检测器会兜底机检）
 9. ✅ 复杂镜已继承 `专项镜头模板`：beats / blocking / camera_rule / continuity_must / negative 与 storyboard.json 一致
 10. ✅ 角色镜已继承 `identity_registry.json`：本镜写了具体 `CHAR_xx/形态`，reference_group / reference_atlas / angle_policy / drift_forbidden 已写进本镜约束，执行时按 ID 自动取定妆组和 atlas ready 图做图生图/多图参考
@@ -333,6 +338,7 @@
 - [ ] 近景/反打/表情镜发髻、脸型、五官比例和标志配饰与脸部特写/表情参考一致；相邻尾帧与下一首帧不换人
 - [ ] 正反打/反应/表情尾帧使用上一张成图或同镜首帧图生图接力；未用纯文生图重抽成新演员
 - [ ] 视线方向 / 左右站位与本场轴线一致，正反打不穿帮（对照 00_总览 场景轴线·视线）
+- [ ] 动作/打斗/追逐/法术镜没有看主镜头、没有与镜头 eye contact、没有肖像摆拍；视线确实落在对手 / 武器来路 / 命中点 / 破绽 / 下一动作目标
 - [ ] 光位与本场光位锚一致（主光方向/色温/动机光源没飘），跨镜不闪
 - [ ] 人物此刻状态与状态演进表对齐（该有的伤/泪/乱发在、没提前泄露后续状态）
 - [ ] 首帧是起幅非动作顶点、留了运镜余量（接力镜的顶点已交尾帧 镜头N_end.png）
@@ -377,6 +383,7 @@
 > 含武打/法术的集，出图按 `n2d-script/references/打斗分镜.md` 工艺。要点：
 
 - **一招出关键帧定格图**：起手帧 + **命中帧**（供 n2d-video 当首尾帧）。命中帧是打击感核心，画冲击波/火花/凹陷/受击 + 速度线 + motion blur。
+- **打斗视线铁律**：拆招镜不是角色正脸摆拍。机位是旁观摄影机，角色眼神跟对手/武器/命中点走；除非写明 opponent POV/主观镜头，禁止看镜头、禁止 eye contact with camera、禁止 portrait pose。脸部一致性用三分之二侧脸/侧脸/背身侧轮廓 + 定妆参考锁，不用清晰正脸。
 - **武器/法宝实体进 WEAPON_ 武器库，法术/光效进 VFX_ 定妆库** `出图/共享/图片/`（如 `图片/定妆_霜纹长剑.png` + `图片/定妆_青色剑气.png`）。武器锁剪影/尺度/材质/握持方式/战斗用法，光效锁颜色/形状/拖尾；含特效镜头走**多图参考派生**（角色定妆 + WEAPON/VFX 定妆 + 上一关键帧）防漂。
 - prompt 写"动态定格 dynamic action pose / 发力瞬间 / 拧腰送肩 / 拖影"。
 - 详见 `n2d-script/references/打斗分镜.md`（§二 五帧拆招、§五 特效一致、§九 示例）。

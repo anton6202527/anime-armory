@@ -541,11 +541,19 @@ def check_object_presence_visual(root: str, ep: str) -> dict:
     data = _read_sidecar(root, ep, OBJECT_PRESENCE_KIND,
                          os.path.join("生产数据", f"object_presence_{ep}.json"),
                          os.path.join("出图", ep, "object_presence.json"))
-    res = {"available": data is not None, "findings": [], "notes": []}
-    if data is None:
+    # 场景常驻陈设(set-dressing)在场检测：resident_presence runner 产出，同 kind，合并消费
+    # （它把 LOC.scene_dna.resident_assets 转探针，场景级判某陈设是否从整个场景消失）。
+    resident = _read_sidecar(root, ep, OBJECT_PRESENCE_KIND,
+                             os.path.join("生产数据", f"resident_presence_{ep}.json"))
+    res = {"available": data is not None or resident is not None, "findings": [], "notes": []}
+    if data is None and resident is None:
         res["notes"].append("缺 object_presence sidecar（可选视觉在场检测 runner）；O3 物件常驻由契约文本 + 人判兜底。")
         return res
-    for f in data.get("findings") or data.get("shots") or []:
+    merged_findings = list((data or {}).get("findings") or (data or {}).get("shots") or [])
+    merged_findings += list((resident or {}).get("findings") or [])
+    for note in (resident or {}).get("notes", []):
+        res["notes"].append(note)
+    for f in merged_findings:
         if not isinstance(f, dict):
             continue
         present = f.get("present")

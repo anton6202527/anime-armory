@@ -1,0 +1,38 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 1,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_铁碗钥匙铁锁.png",
+      "bytes": 2384295,
+      "owner": "PROP_KEY_LOCK",
+      "priority": 40,
+      "rel_path": "出图/共享/图片/定妆_铁碗钥匙铁锁.png",
+      "role": "asset",
+      "sequence": 0,
+      "sha256": "7ce3b294769f181977a4fbdf901ba4238489c2bf695f11ae0e46c258aec04c01",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "id": "PROP_KEY_LOCK",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_铁碗钥匙铁锁.png"
+      ],
+      "type": "prop"
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "PROP_KEY_LOCK::定妆_旧钥匙与生锈铁锁",
+  "target": "出图/共享/图片/定妆_旧钥匙与生锈铁锁.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

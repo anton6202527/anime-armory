@@ -73,6 +73,7 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "native_av": False,
         "consistency_face_floor_delta": 0.05,  # multishot + character_id → tighter identity floor
         "lipsync_audio_ref": True,  # 可灵 Omni 原生口型：可吃音频参考做口型驱动
+        "multilingual_lipsync": True,  # 可灵 3.0 Omni 多语言/方言/口音原生口型（出海次选，Seedance 优先）
         # Kling 3.0（2026 市场报告）：单次生成可出**最多 6 个连续镜头 + 共享音轨时间线**的多镜叙事，
         # 字符一致性显著增强——同 Seedance 一样属「多镜单次生成」能力，对连续接力镜组可一次 co-generate
         # 整段消缝。判定走能力字段，由 MULTISHOT_NATIVE_BACKENDS 自动收录 → router 标 multishot_candidate。
@@ -101,6 +102,7 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "identity_mechanism": "face_lock",
         "native_av": True,
         "lipsync_audio_ref": True,  # Seedance 2.0 音素级口型：可吃音频参考做口型驱动
+        "multilingual_lipsync": True,  # 2026 多语言唇同步 best-in-class（出海非中文台词口型/口音匹配）
         # Seedance 2.0 一次生成可出「多镜头叙事 + 跨镜人物一致 + 无缝转场」（multi-shot single-gen），
         # 也能收视频片段作运动/风格参考（reference_video_motion 已在 MOTION_CONTROL_PROFILES 登记）。
         "multishot_native": True,
@@ -298,6 +300,29 @@ LIPSYNC_AUDIO_REF_BACKENDS = frozenset(
     key for key, spec in VIDEO_BACKEND_PROFILES.items() if bool(spec.get("lipsync_audio_ref"))
 )
 
+# 多语言唇同步后端（非中文台词口型/口音匹配）——出海(目标语言≠中文)说话镜优先。从 multilingual_lipsync
+# 字段派生；偏好序列 seedance(2026 best-in-class)→kling(Omni)→veo，用于 overseas 路由 primary 抢占。
+MULTILINGUAL_LIPSYNC_BACKENDS = frozenset(
+    key for key, spec in VIDEO_BACKEND_PROFILES.items() if bool(spec.get("multilingual_lipsync"))
+)
+_MULTILINGUAL_LIPSYNC_PREFERENCE = ("seedance", "kling", "veo")
+
+
+def video_backend_supports_multilingual_lipsync(backend: Optional[str]) -> bool:
+    """该后端是否支持多语言唇同步（出海非中文台词口型）。纯函数·可测。"""
+    return normalize_video_backend(backend or "", default="") in MULTILINGUAL_LIPSYNC_BACKENDS
+
+
+def preferred_multilingual_lipsync_backend() -> str:
+    """出海说话镜首选的多语言唇同步后端（按偏好序列取首个可自动路由者）；无则空串。纯函数·可测。"""
+    for key in _MULTILINGUAL_LIPSYNC_PREFERENCE:
+        if key in MULTILINGUAL_LIPSYNC_BACKENDS and video_backend_auto_routable(key):
+            return key
+    for key in sorted(MULTILINGUAL_LIPSYNC_BACKENDS):
+        if video_backend_auto_routable(key):
+            return key
+    return ""
+
 
 # ── 运镜/运动控制能力档（与 frame_control 同属本快照，CATALOG_VERIFIED 戳记覆盖）──────────
 # 本表描述「运镜/运动控制」能力（level + 运动类 capabilities：motion_brush/pose_sequence/depth…），
@@ -356,6 +381,26 @@ SPECTACLE_BACKEND_PRIOR: Dict[str, Dict[str, Any]] = {
     "flight": {
         "ranking": ("veo", "seedance", "kling", "dreamina"),
         "basis": "flight 兼顾物理(云海/坠落重量)与运镜语言: Veo 写实物理+运镜强, Seedance 多镜次之",
+    },
+    "mount_ride": {
+        "ranking": ("seedance", "kling", "dreamina", "veo"),
+        "basis": "mount_ride 吃连续步态和背景视差: Seedance 长连续运动强, Kling 适合主体/接触约束",
+    },
+    "vehicle_ride": {
+        "ranking": ("seedance", "kling", "dreamina", "veo"),
+        "basis": "vehicle_ride 吃轮转、牵引连接和侧向跟拍: Seedance 连续运动强, Kling 适合局部运动控制",
+    },
+    "vessel_flight": {
+        "ranking": ("seedance", "veo", "kling", "dreamina"),
+        "basis": "vessel_flight 吃载具剪影、云层视差和运镜: Seedance 连续飞行强, Veo 电影运镜强",
+    },
+    "road_vehicle": {
+        "ranking": ("seedance", "kling", "dreamina", "veo"),
+        "basis": "road_vehicle 吃车流连续、车道保持、轮转和视差: Seedance 连续运动强, Kling 适合局部运动控制",
+    },
+    "stealth_stalk": {
+        "ranking": ("seedance", "kling", "veo", "dreamina"),
+        "basis": "stealth_stalk 吃慢速跟拍、遮挡层和低光连续性: Seedance 连续运动强, Kling 适合遮挡/主体约束",
     },
     "large_establishing": {
         "ranking": ("veo", "seedance", "kling", "dreamina"),
@@ -515,27 +560,29 @@ def effective_frame_backend(backend: Optional[str], channel: Optional[str] = Non
 def backend_supports_three_plus_frames(backend: Optional[str], channel: Optional[str] = None) -> bool:
     """Whether the route can express 3+ timeline anchors (first + mid + last).
 
-    True means high-risk anchors can be executed and ordinary D0 midframes may be enabled by policy.
-    It no longer overrides the project-level ROI/speed choice for low-risk ordinary clips.
-    判定（向前看·宁强制勿放过）：
-      · 后端不在档案里（未知/新后端）→ True（默认假定支持；后端在普遍支持化）。
+    This is a video consumption capability, not the image-stage policy. n2d still
+    produces first/mid/end image assets by default; this function only tells
+    n2d-video whether those anchors can become native timeline frames or need
+    split relay/reference/QC/reroute handling.
+    判定（证据优先）：
+      · 后端不在档案里（未知/新后端）→ False（需 record-refresh/smoke 或人工确认后入档；不默认假定支持）。
       · 原生多帧（supports_native_mid_anchors，如即梦 multiframe2video）→ True。
       · max_timeline_frames ≥ 3 → True。
       · 支持尾帧（supports_last_frame，如可灵/Veo/Luma 首尾档）→ True：可首尾拆段接力凑 ≥3 帧。
-    False = **唯一豁免**：后端明确为 first-frame-only（无尾帧、无原生多帧、max<3，如
-      seedance/sora/runway/pika），连拆段接力都钉不住第 3 个关键帧。
+    False = 不具备可执行三帧证据：明确 first-frame-only，或未知/未选后端；
+    不表示图片阶段可以省掉 `_mid`。
     """
     key = effective_frame_backend(backend, channel)
     spec = VIDEO_BACKEND_PROFILES.get(key)
-    if not spec:                       # 未知/新后端：保守按支持（强制三帧）
-        return True
+    if not spec:                       # 未知/未选后端：先要能力证据，不默认强制三帧
+        return False
     fc = spec.get("frame_control") or {}
     if fc.get("supports_native_mid_anchors") or fc.get("supports_last_frame"):
         return True
     try:
         return int(fc.get("max_timeline_frames") or 1) >= 3
     except (TypeError, ValueError):
-        return True
+        return False
 
 
 def video_backend_frame_control(backend: Optional[str], channel: Optional[str] = None) -> Dict[str, object]:
@@ -564,10 +611,11 @@ def anchor_consumption_plan(
 ) -> Dict[str, Any]:
     """Describe how first/mid/end keyframes can actually be consumed by the backend.
 
-    `backend_supports_three_plus_frames()` answers the policy question ("do we still
-    require a 3-frame contract?").  This function answers the execution question:
-    whether declared mid anchors become native timeline keyframes, require split
-    relay, or are only available for QC/manual reference.
+    `backend_supports_three_plus_frames()` answers the video capability question.
+    Image-stage policy is stricter: declared first/mid/end image assets are still
+    produced by default. This function answers the execution question: whether
+    declared mid anchors become native timeline keyframes, require split relay,
+    or are only available for QC/manual reference.
     """
     key = effective_frame_backend(backend, channel)
     spec = VIDEO_BACKEND_PROFILES.get(key)
@@ -620,7 +668,7 @@ def anchor_consumption_plan(
     elif mode == "reference_only_qc":
         plan["action"] = "do not assume timeline consumption; use anchors as references/QC or reroute"
     elif mode.startswith("unsupported"):
-        plan["action"] = "reroute to native multiframe/first-last backend or rewrite storyboard frame contract"
+        plan["action"] = "keep image anchors for QC/reference; reroute to native multiframe/first-last backend or split manually before paid video"
     else:
         plan["action"] = "manual confirmation required before paid generation"
     return plan

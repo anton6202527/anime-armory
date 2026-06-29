@@ -43,6 +43,17 @@ def test_audit_flags_peak_not_closeup():
     assert "peak_not_closeup" in codes      # 爽点镜却是 MS
 
 
+def test_audit_flags_reversal_and_awakening_peak_not_closeup():
+    # 分镜语法.md:29「爽点/反转/觉醒 → CU/ECU」；反转/觉醒此前漏检（PEAK_RHYTHM_MARKERS 只认爽点族）。
+    for mark in ("反转·打脸", "觉醒·金瞳爆发", "逆袭·翻盘"):
+        clips = [_clip("ELS 定场"), _clip("MS"), _clip("MS", rhythm=mark)]
+        codes = {c for _s, c, _m in sg.audit_clips(clips)}
+        assert "peak_not_closeup" in codes, f"{mark} 应触发 peak_not_closeup"
+    # 反转拍给了 CU → 不报
+    ok = [_clip("ELS 定场"), _clip("MS 中景"), _clip("CU 特写", rhythm="反转·打脸")]
+    assert "peak_not_closeup" not in {c for _s, c, _m in sg.audit_clips(ok)}
+
+
 def test_audit_clean_progression_passes():
     clips = [_clip("ELS 定场"), _clip("MS 中景"), _clip("MCU 中近景"),
              _clip("CU 特写", rhythm="爽点·CU硬切")]

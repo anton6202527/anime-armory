@@ -80,13 +80,15 @@ def test_runner_claims_executes_marks_done_and_records_dashboard(tmp_path: Path)
     out_file = tmp_path / "runner_was_here.txt"
     config = write_config(
         tmp_path,
-        "python3 -c \"import os, pathlib; pathlib.Path(os.environ['N2D_ROOT']).joinpath('runner_was_here.txt').write_text(os.environ['N2D_TASK_ID'], encoding='utf-8')\"",
+        "python3 -c \"import os, pathlib; pathlib.Path(os.environ['N2D_ROOT']).joinpath('runner_was_here.txt').write_text(os.environ['N2D_TASK_ID']+'|'+os.environ['N2D_IDEMPOTENCY_KEY'], encoding='utf-8')\"",
     )
 
     result = runner.run_once(str(tmp_path), limit=1, config_path=str(config))
 
     assert result["processed"] == 1
-    assert out_file.read_text(encoding="utf-8").startswith("001-image")
+    written = out_file.read_text(encoding="utf-8")
+    assert written.startswith("001-image")
+    assert "|" in written and written.split("|", 1)[1]
     loaded = queue.load_queue(str(tmp_path))
     assert loaded["tasks"][0]["status"] == "done"
     assert loaded["tasks"][0]["attempts"] == 1
@@ -110,6 +112,8 @@ def test_runner_failure_requeues_then_fails_after_retry_limit(tmp_path: Path) ->
     assert loaded["tasks"][0]["status"] == "failed"
     assert loaded["tasks"][0]["attempts"] == 2
     assert loaded["tasks"][0]["last_runner"]["exit_code"] == 7
+    assert loaded["tasks"][0]["last_runner"]["error_class"] == "command_failed"
+    assert loaded["tasks"][0]["dead_letter"] is True
 
 
 def test_runner_marks_unconfigured_slash_command_as_retryable_failure(tmp_path: Path) -> None:

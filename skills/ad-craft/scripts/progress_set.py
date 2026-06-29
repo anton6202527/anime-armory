@@ -7,11 +7,21 @@ tables and appends a maintenance note. This keeps manual notes outside those
 tables intact while giving stage skills one deterministic status writer.
 """
 import argparse
+import importlib.util
 import os
 import sys
 from datetime import date
 
-import contract
+
+def _load_contract():
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "contract.py")
+    spec = importlib.util.spec_from_file_location("_ad_craft_contract", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+contract = _load_contract()
 
 
 STATUS_CHOICES = ("✅", "⬜", "⏳rough", "🔴block")

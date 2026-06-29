@@ -12,13 +12,13 @@ IDENTITY_HANDLE_FIELDS = ("id", "handle", "reference", "model_path")
 
 # identity_adapters.<backend>.status 的标准状态集合
 IDENTITY_ADAPTER_KNOWN_STATUSES = (
-    "unregistered", "fallback_reference_group", "registered", "pending", "training",
+    "unregistered", "fallback_reference_group", "registered", "candidate", "pending", "training",
     "ready", "error", "deprecated", "unsupported", "not_needed",
 )
 IDENTITY_ADAPTER_READY_STATUSES = ("registered", "ready")
 IDENTITY_ADAPTER_FALLBACK_STATUSES = ("unregistered", "fallback_reference_group", "fallback", "reference_group")
 IDENTITY_ADAPTER_PASSIVE_STATUSES = ("unsupported", "not_needed")
-IDENTITY_ADAPTER_IN_PROGRESS_STATUSES = ("pending", "training")
+IDENTITY_ADAPTER_IN_PROGRESS_STATUSES = ("candidate", "pending", "training")
 
 # ── compliance / gate 共享状态集合 ────────────────────────────────────────────
 COMPLIANCE_ALLOWED_RIGHTS = ("original", "public_domain", "licensed", "stock_licensed", "user_declared", "not_applicable", "unknown", "")
@@ -99,7 +99,28 @@ IDENTITY_ANCHOR_POINTS_FIELD = "identity_anchor_points"
 # ── 镜头类型 ──────────────────────────────────────────────────────────────
 SHOT_TYPE_KEYWORDS = (
     ("fight_exchange", ("打斗", "搏斗", "交手", "格挡", "出拳", "挥剑", "命中", "受击", "撞击", "掌风", "刀光", "fight", "combat", "hit")),
+    ("mount_ride", (
+        "御兽", "骑乘", "骑兽", "坐骑", "灵兽", "妖兽", "骑马", "骑狼", "骑虎", "骑龙", "兽背",
+        "mount ride", "riding beast", "mounted",
+    )),
+    ("road_vehicle", (
+        "汽车", "轿车", "出租车", "网约车", "警车", "救护车", "摩托", "电动车", "公交车", "地铁进站",
+        "开车", "驾驶", "方向盘", "车道", "变道", "刹车", "急刹", "追车", "车流", "高架", "公路",
+        "car", "taxi", "police car", "motorcycle", "driving", "traffic", "lane", "brake", "car chase",
+    )),
+    ("vehicle_ride", (
+        "马车", "车驾", "车队", "车轮", "车夫", "缰绳", "马匹拉车", "载具行进", "驾驶马车",
+        "carriage", "wagon", "chariot", "vehicle ride",
+    )),
+    ("vessel_flight", (
+        "飞舟", "灵舟", "云舟", "法舟", "飞梭", "御物飞行", "飞行法器", "御舟", "空中舟",
+        "flying vessel", "airship", "flying boat",
+    )),
     ("chase", ("追逐", "追赶", "追杀", "奔逃", "逃跑", "追上", "紧追", "chase", "running away")),
+    ("stealth_stalk", (
+        "尾随", "跟踪", "潜入", "潜行", "躲藏", "偷窥", "窥视", "门缝", "暗处", "暗影", "脚步声",
+        "走廊尽头", "手电", "手电光", "光束扫过", "stalk", "stalking", "stealth", "sneak", "shadow",
+    )),
     ("flight", (
         "御剑", "御剑飞行", "飞行", "凌空", "腾空", "腾云", "驾雾", "腾云驾雾", "掠空", "掠过云",
         "飞掠", "坠落", "飞檐", "云海穿行", "空中追逐", "剑光飞行", "flight", "flying", "cloud riding",
@@ -109,7 +130,56 @@ SHOT_TYPE_KEYWORDS = (
     ("public_confrontation", ("公开对质", "当众对质", "公堂", "朝堂", "审讯", "逼问", "盘问", "质问", "谈判", "交易", "交涉", "智斗", "权谋", "当众打脸", "反将一军", "confrontation", "interrogation", "negotiation")),
     ("dialogue_shot_reverse", ("对话反打", "正反打", "反打", "过肩", "对视", "视线对位", "台词", "dialogue", "shot reverse", "ots", "eyeline")),
     ("dialogue_closeup", ("说话特写", "口型", "嘴部", "近景说话", "lip-sync", "mouth", "close-up dialogue")),
+    ("tribulation_breakthrough", (
+        "渡劫", "天劫", "雷劫", "天雷", "雷云", "劫雷", "破境", "突破", "境界突破", "光柱冲天",
+        "金丹", "元婴", "化神", "晋升境界", "heavenly tribulation", "breakthrough", "light pillar",
+    )),
+    ("meditation_cultivation", (
+        "打坐", "静坐", "入定", "冥想", "闭关", "吐纳", "调息", "运功", "周天", "内视", "修炼", "蒲团",
+        "灵气入体", "气海", "丹田", "meditation", "cultivation meditation", "breathing exercise",
+    )),
+    ("dual_cultivation", (
+        "双修", "合修", "共修", "双人修炼", "灵力交汇", "阴阳调和", "疗伤合修", "掌心相抵",
+        "dual cultivation", "paired cultivation", "energy circulation between two",
+    )),
+    ("alchemy_forging", (
+        "炼丹", "丹炉", "开炉", "成丹", "丹药", "药材入炉", "火候", "炼器", "铸剑", "锻炉", "淬炼",
+        "法器出炉", "alchemy", "pill refining", "forging", "furnace",
+    )),
+    ("array_ritual", (
+        "阵法", "法阵", "大阵", "阵图", "起阵", "破阵", "阵眼", "符文", "结界", "封印", "祭坛",
+        "传送阵", "ritual array", "magic circle", "formation", "seal",
+    )),
+    ("soul_manifestation", (
+        "神魂", "神识", "元神", "元神出窍", "魂魄", "魂体", "夺舍", "夺体", "搜魂", "识海",
+        "灵魂出窍", "二我", "spirit soul", "nascent soul", "soul possession",
+    )),
+    ("realm_portal", (
+        "穿越", "魂穿", "身穿", "穿到", "醒来在", "异界", "时空裂缝", "传送门", "传送阵", "秘境入口",
+        "遗迹入口", "跨界", "portal", "transmigration", "isekai", "secret realm entrance",
+    )),
+    ("contract_summon", (
+        "契约灵兽", "灵兽契约", "血契", "认主", "召唤", "召唤阵", "召唤兽", "魔兽契约", "法灵",
+        "契约印记", "契约成立", "summon", "contract beast", "binding mark",
+    )),
+    ("talent_test", (
+        "测灵", "测灵石", "灵根测试", "资质测试", "天赋测试", "觉醒仪式", "血脉觉醒", "武魂觉醒",
+        "水晶柱", "天赋等级", "测试台", "talent test", "bloodline awakening", "spirit root",
+    )),
     ("magic_burst", ("法术", "符阵", "符纹", "灵光", "灵力", "爆发", "雷劫", "雷落", "光束", "剑气", "护盾", "阵法", "magic", "burst", "spell")),
+    ("screen_insert", (
+        "手机屏幕", "手机界面", "聊天记录", "短信", "来电", "通话界面", "定位", "转账", "付款码",
+        "电脑屏幕", "监控画面", "监控回放", "CCTV", "时间码", "弹窗", "录音波形", "邮件界面",
+        "phone screen", "chat log", "text message", "computer screen", "surveillance footage", "cctv",
+    )),
+    ("evidence_search", (
+        "搜证", "线索", "物证", "证物", "证物袋", "血迹", "指纹", "脚印", "监控证据", "档案", "翻找",
+        "搜查", "现场勘查", "照片墙", "线索板", "clue", "evidence", "crime scene", "fingerprint", "blood stain",
+    )),
+    ("kiss_or_near_kiss", (
+        "接吻", "亲吻", "吻别", "吻住", "额头吻", "脸颊吻", "唇边停住", "差点吻上", "近吻", "轻吻",
+        "kiss", "kissing", "near kiss", "forehead kiss", "cheek kiss",
+    )),
     ("hug_or_pull", ("拥抱", "抱住", "拉扯", "拉住", "抓腕", "拽住", "推开", "扯住", "拉袖", "tug", "pull", "grab", "hug")),
     ("intimate_interaction", ("牵手", "靠近", "亲密", "搀扶", "扶住", "抚脸", "扶肩", "贴近", "疗伤", "intimate", "touch")),
     ("relationship_turn", ("告白", "表白", "承认心意", "心动", "定情", "决裂", "分手", "误会爆发", "反目", "和解", "破镜重圆", "救赎", "互相救场", "吃醋", "护短", "原谅", "relationship turn", "confession", "reconciliation")),
@@ -120,9 +190,13 @@ SHOT_TYPE_KEYWORDS = (
 )
 
 SPECIAL_TEMPLATE_SHOT_TYPES = (
-    "fight_exchange", "chase", "flight", "dialogue_shot_reverse", "magic_burst",
+    "fight_exchange", "chase", "flight", "mount_ride", "vehicle_ride", "vessel_flight",
+    "road_vehicle", "stealth_stalk", "screen_insert", "evidence_search",
+    "tribulation_breakthrough", "meditation_cultivation", "dual_cultivation", "alchemy_forging", "array_ritual", "soul_manifestation",
+    "realm_portal", "contract_summon", "talent_test",
+    "dialogue_shot_reverse", "magic_burst",
     "reveal_reaction_chain", "public_confrontation", "relationship_turn",
-    "hug_or_pull", "intimate_interaction", "multi_character_same_frame",
+    "kiss_or_near_kiss", "hug_or_pull", "intimate_interaction", "multi_character_same_frame",
     "ensemble_blocking", "multi_person_blocking",
 )
 
@@ -131,7 +205,9 @@ SPECIAL_TEMPLATE_SHOT_TYPES = (
 # 单一真值源：anchor_planner（排锚帧密度）与 gate（帧能力闸门）共用，避免两处各定义一份漂移。
 HIGH_MOTION_TEMPLATES = frozenset({
     "fight_exchange", "chase", "magic_burst", "flight",
-    "hug_or_pull", "intimate_interaction",
+    "mount_ride", "vehicle_ride", "vessel_flight", "road_vehicle", "stealth_stalk",
+    "tribulation_breakthrough", "array_ritual", "soul_manifestation", "realm_portal", "contract_summon",
+    "kiss_or_near_kiss", "hug_or_pull", "intimate_interaction", "dual_cultivation",
 })
 
 # 近景表情跨度档（角色脸的情绪从起到止跨几档）。单一真值源：storyboard.continuity.expression_span
@@ -186,11 +262,18 @@ STATIC_CAMERA_WORDS = ("固定", "静止", "不动", "锁定机位", "定镜", "
 # ── 运动强度连续档（替代 HIGH_MOTION_TEMPLATES 二分的细粒度补充）──────────────────────────────
 # HIGH_MOTION_TEMPLATES 是「是否高风险」的二分闸；这里给 0–3 连续档，供 prompt 调 motion strength/
 # cfg 与下游采样密度参考（强动作降 cfg/motion strength 换脸稳是 2026 公认做法）。1=轻微局部动，
-# 2=明显全身/主体动，3=高速大幅动作(打斗/追逐/飞行峰值)。0=静帧/空镜。
+# 2=明显全身/主体动，3=高速大幅动作(打斗/追逐/飞行/御兽/载具/潜行峰值)。0=静帧/空镜。
 MOTION_INTENSITY_LEVELS = (0, 1, 2, 3)
 MOTION_INTENSITY_BY_TEMPLATE = {
-    "fight_exchange": 3, "chase": 3, "flight": 3, "magic_burst": 3,
-    "hug_or_pull": 2, "intimate_interaction": 2,
+    "fight_exchange": 3, "chase": 3, "flight": 3,
+    "mount_ride": 3, "vehicle_ride": 3, "vessel_flight": 3,
+    "road_vehicle": 3, "stealth_stalk": 3,
+    "tribulation_breakthrough": 3, "array_ritual": 2, "soul_manifestation": 2,
+    "meditation_cultivation": 1, "dual_cultivation": 1,
+    "realm_portal": 2, "contract_summon": 2, "alchemy_forging": 2, "talent_test": 1,
+    "magic_burst": 3,
+    "kiss_or_near_kiss": 2, "hug_or_pull": 2, "intimate_interaction": 2,
+    "evidence_search": 1, "screen_insert": 0,
     "dialogue_closeup": 1, "dialogue_shot_reverse": 1,
     "empty_establishing": 0,
 }
@@ -393,6 +476,12 @@ MOTIF_REGISTRY_KIND = "n2d_motif_registry"          # 题材母题数据真值�
 MOTIF_PLAN_KIND = "n2d_motif_plan"                  # 母题检测建议（生产数据/motif_plan_第N集.{json,md}）
 COMBAT_REGISTRY_KIND = "n2d_combat_registry"        # 招式/打斗套路真值（出图/共享/combat_registry.json）
 BATCH_QUEUE_KIND = "n2d_batch_queue"
+ARTIFACT_LINEAGE_MANIFEST_KIND = "n2d_artifact_lineage_manifest"
+PRODUCTION_READINESS_KIND = "n2d_production_readiness"
+GATE_POLICY_COVERAGE_KIND = "n2d_gate_policy_coverage"
+GENERATION_RECIPE_MANIFEST_KIND = "n2d_generation_recipe_manifest"
+GENRE_PACK_KIND = "n2d_genre_pack"
+GENRE_PACK_CONTEXT_KIND = "n2d_genre_pack_context"
 DIFFERENTIATION_CANDIDATES_KIND = "n2d_differentiation_candidates"
 EPISODE_REVIEW_SCORE_KIND = "n2d_episode_review_score"
 # 外部投放战绩 JSONL 可复用该 kind；保持无前缀便于非 n2d 工具读取。
@@ -418,3 +507,164 @@ PROGRESS_ROUGH_PREFIX = "⏳"
 PROGRESS_PARTIAL_RE = r"(\d+)\s*/\s*(\d+)"
 
 CONTRACT_VERSION = 2
+
+# ── 一致性 lint 共享词表（单一真值源）──────────────────────────────────────────
+# 历史上 image_qc / gate / face_drift_risk / shot_risk_audit 各存一份近义词表，成员逐渐
+# 漂移 → 同一镜「出图放行 / 质检阻断」口径分裂（const 漂离消费端 bug 家族）。统一收口到这里，
+# 消费端一律 import，不得在 .py 内用字面量重新定义同名集合（test_marker_single_source.py 守护）。
+# 各集合为历史各副本成员的并集；多主体放行集走「越全越宽松」的安全方向，使 block ⊆ review block。
+
+# 近景大表情触发词（让 AI 重画整张脸 → 表情镜脸漂的强情绪标记）
+STRONG_EMOTION_MARKERS = (
+    "哭", "泣", "落泪", "含泪", "泪", "怒", "愤", "暴怒", "狂怒", "震惊", "惊恐", "恐惧",
+    "狂喜", "大笑", "狂笑", "嘶吼", "咆哮", "嚎", "痛苦", "崩溃", "狰狞", "扭曲", "癫狂",
+    "失控", "绝望", "悲恸", "惊愕",
+)
+# 表情库 / 基础脸锚参考标记（近景大表情角色镜须引用同源参考，否则脸漂）
+EXPRESSION_LIB_MARKERS = (
+    "face_anchor_refs", "基础脸锚", "脸部特写",
+    "表情库", "expressions", "表情_", "_表情", "情绪库", "微表情参考",
+)
+
+# 多人同框策略词表（按语义分类；消费端按需 concat）。
+# ① 分层/分区/分别出图合成（无持久主体 ID 后端的执行路径）
+SPLIT_COMPOSITE_MARKERS = (
+    "split_composite", "split_composite_required",
+    "regional_construct", "regional_construct_required",
+    "shot_reverse_shot_or_split_composite_required",
+    "regional-prompt", "region masks",
+    "分别出图+合成", "分别出图 + 合成", "分角色出图+合成", "分角色出图 + 合成",
+    "分别出图", "分角色出图", "分区构建", "分区逐次构建", "区域构建",
+    "empty_plate", "拆成单人镜", "拆单人镜", "单人分层出图", "单人分层",
+    "分层合成", "景别分层", "登记降级",
+)
+# ② 原生持久主体（主体库 / 角色 ID / 多参考绑定后端）
+NATIVE_MULTI_SUBJECT_STRATEGY_MARKERS = (
+    "主体库", "角色ID", "角色 ID", "Character ID", "persistent subject",
+    "原生主体", "多主体", "区域绑定", "Universal Reference",
+    "Seedream", "可灵", "Kling", "Sora Cameo", "Nano Banana", "多参考",
+)
+# ③ 执行策略字段标记（storyboard 里登记的执行路径键）
+MULTI_SUBJECT_EXECUTION_STRATEGY_MARKERS = (
+    "多人同框执行策略", "multi_subject_strategy", "native_subject_slots",
+    "regional_construct_required", "split_composite_required",
+    "register_subjects_or_split", "shot_reverse_shot", "same_frame_policy",
+)
+# ④ 身份槽位标记（每个身份绑画面槽位）
+MULTI_SUBJECT_SLOT_MARKERS = (
+    "多人同框身份槽位", "身份槽位", "character_slots", "subject_slots",
+    "screen_positions", "face_priority",
+    "LEFT_SLOT", "RIGHT_SLOT", "FOREGROUND_SLOT", "BACKGROUND_SLOT", "EXTRA_SLOT",
+    "画左槽", "画右槽", "前景槽", "后景槽",
+)
+# ⑤ 画面站位标记（逐角色空间位置）
+MULTI_SUBJECT_POSITION_MARKERS = (
+    "画左", "画右", "左侧", "右侧", "前景", "后景", "前后景",
+    "screen_position", "screen positions", "blocking",
+)
+# 多人同框「已登记执行策略」放行集 = 分层 + 原生 + 执行策略三类并集。
+# image_qc 用它放宽 block、gate 用它判 _has_native_multi_subject_strategy、shot_risk 用它判
+# has_multi_subject_strategy —— 三处同源 → block ⊆ review block 结构性成立，不再靠人手同步。
+MULTI_SUBJECT_ACCEPTING_MARKERS = (
+    SPLIT_COMPOSITE_MARKERS
+    + NATIVE_MULTI_SUBJECT_STRATEGY_MARKERS
+    + MULTI_SUBJECT_EXECUTION_STRATEGY_MARKERS
+)
+
+# ── 镜头不是对视对象铁律（camera-is-not-the-gaze-target·单一真值源）──────────────
+# 为防脸漂反复强调「清晰正脸/主检脸/frontal」会把扩散模型带偏成「角色正对镜头摆拍/自拍肖像」，
+# 削弱力线/空间关系/真实感（打斗里视线本该锁对手·武器·撞点，而非镜头）。锁脸不放弃，但≠正对镜头。
+# 全局负面（非 POV 镜默认注入两个 runner + 建议进 global_style 全集统一负面词）：
+CAMERA_GAZE_NEGATIVES = (
+    "looking at viewer", "eye contact with camera", "looking into the camera",
+    "直视镜头", "看镜头", "对视镜头",
+    "portrait pose", "front-facing symmetric stance", "正对镜头摆拍", "肖像摆拍",
+    "fashion portrait", "magazine cover pose", "selfie", "自拍感",
+)
+# POV / 破第四墙 / 对观众压迫感特写 = 唯一例外（此时允许直视镜头）。与 image_qc 审计同源。
+CAMERA_GAZE_EXCEPTION_MARKERS = (
+    "opponent pov", "camera-as-opponent", "first-person pov", "pov shot", "direct address",
+    "fourth wall", "主观镜头", "主观视角", "镜头代表对手", "镜头=对手", "第一人称", "破第四墙",
+    "直视镜头=导演意图", "看镜头=导演意图", "对观众压迫", "压迫感特写",
+)
+
+
+def is_camera_gaze_pov_exempt(text: str) -> bool:
+    """本镜是否显式声明 POV/破第四墙/对观众特写（→ 允许直视镜头·免「镜头非对视对象」铁律）。纯函数。"""
+    t = str(text or "").lower()
+    return any(m.lower() in t for m in CAMERA_GAZE_EXCEPTION_MARKERS)
+
+
+# ── 武器/武技碰撞（weapon-clash·单一真值源）──────────────────────────────────────
+# 缺口：打斗常被拆成单人正反打 + 单向命中（A 打中 B），很少出现「双方兵器/武技在画面里硬碰硬相交于
+# 一点」的撞点镜（剑刃交击迸火星/格挡较力/双术对冲）。clash 是 **mutual**（力对力·谁都还没落）且
+# **face-safe**——构图焦点是**接触点**，脸只需 ¾/侧轮廓非主体，故与脸一致性铁律不冲突，反而正好不需
+# 正对镜头。检测命中即在出图侧注入撞点构图、在授权侧提示单独出一帧。melee 与法术对冲都算。
+WEAPON_CLASH_MARKERS = (
+    "相交", "相击", "相撞", "对撞", "对轰", "硬碰硬", "格挡", "招架", "格开", "架住", "格架",
+    "兵器相", "刀剑相", "剑刃相", "刀光剑影", "较力", "顶法", "僵持", "迸火", "火星四溅",
+    "劲气对冲", "掌力相抵", "拳掌相接", "兵刃交", "刀枪相", "枪戟相",
+    "clash", "parry", "blade lock", "weapon lock", "cross blades", "deflect",
+)
+
+
+def is_weapon_clash_shot(text: str) -> bool:
+    """本镜是否为兵器/武技硬碰硬相交的撞点镜（双方武器或两道劲气在接触点相击）。纯函数·可测。
+
+    用于：① 出图侧注入「两兵器相交于焦点·迸火星·力对冲·双方侧轮廓·camera observer·双主体接触非单人正反打」
+    构图；② 授权侧提示该镜应单独写 clash_frame / collision_or_apex_frame 撞点帧。face-safe·与脸铁律协同。"""
+    t = str(text or "").lower()
+    return any(str(m).lower() in t for m in WEAPON_CLASH_MARKERS)
+
+
+# 出图侧撞点构图指令（runner 注入·正向）：让模型把两件兵器/两道劲气画成在同一接触点硬碰硬。
+WEAPON_CLASH_COMPOSE_GUIDANCE = (
+    "本镜是兵器/武技对撞镜（含相交/格挡/对轰/较力）：画面焦点 = 双方武器（或两道劲气）在同一接触点"
+    "**硬碰硬相交**——迸火星/能量挤压/力的对冲与僵持可见；两件兵器都要清楚入框（这一镜是**双主体接触**，"
+    "不是单人正反打）；双方取 ¾ 或侧轮廓（脸非焦点·face-safe·不必正对镜头）；camera=observer 不偏帮任何一方，"
+    "机位放在能同时看清两件兵器接触点与力线传递的角度。"
+)
+
+
+# ── 打斗/动作高潮镜·视觉盛宴增强（"经费在燃烧"·单一真值源）────────────────────────────
+# 缺口：打斗的电影级制作语言（体积光/大气纵深/环境受力/运动能量）目前主要散落在 `打斗分镜.md`
+# 散文示例和 SPECTACLE_ADVISORY_FIELDS（per-clip 建议字段·靠作者誊抄）里——和"看镜头"同一类
+# 不可靠链路：作者漏写一个打斗镜，那一镜就平光、平面、零环境反馈，看着"经费没烧"。这里把它兑现成
+# **检测到打斗/法术/动作高潮镜就由两个出图 runner 同源注入的保底层**（与 apex_light 协同：plan 字段
+# 引导作者、本注入保底；与脸/视线铁律协同：所有特效服务动作与主体可读，不糊脸不盖受力点）。
+# 风格中性（只给电影摄影语法·不绑某种 look），与 global_style/风格禁忌 组合后由风格契约收口。
+COMBAT_SPECTACLE_MARKERS = (
+    "打斗", "交手", "缠斗", "拆招", "出招", "过招", "挥剑", "劈砍", "斩击", "出拳", "出掌",
+    "踢腿", "命中", "击中", "接触帧", "撞点", "冲击波", "气浪", "爆发", "炸开", "迸射",
+    "震开", "震飞", "击飞", "重创", "破防", "突破", "渡劫", "雷劫", "御剑", "御兽",
+    "剑气", "刀气", "掌风", "拳劲", "劲气", "灵力", "法力", "能量", "术法", "法术", "结界",
+    "fight_exchange", "magic_burst", "impact_frame", "collision_or_apex", "clash_frame",
+    "combat", "punch", "slash", "strike", "impact", "blast", "burst", "shockwave", "spell", "magic",
+)
+
+
+def is_combat_spectacle_shot(text: str) -> bool:
+    """本镜是否打斗/法术/动作高潮镜（需要堆视觉盛宴的"经费在燃烧"镜）。纯函数·可测。
+
+    命中 COMBAT_SPECTACLE_MARKERS 或兵器对撞镜即为真。用于两个出图 runner 同源注入
+    COMBAT_SPECTACLE_RICHNESS_GUIDANCE（体积光/大气纵深/环境受力/运动能量四层保底层）。"""
+    t = str(text or "").lower()
+    if any(str(m).lower() in t for m in COMBAT_SPECTACLE_MARKERS):
+        return True
+    return is_weapon_clash_shot(text)
+
+
+# 出图侧视觉盛宴注入（runner 注入·正向·四层）：在保住身份与动作可读的前提下，把"经费在燃烧"的
+# 电影级动作制作语言堆进打斗镜。分层喂以保密度而不糊成词堆；调色给具体科学方向而非泛 "cinematic" 套词。
+COMBAT_SPECTACLE_RICHNESS_GUIDANCE = (
+    "本镜是打斗/法术/动作高潮镜——在身份与动作可读优先的前提下，按电影级动作大片标准堆视觉信息密度"
+    "（\"经费在燃烧\"），分四层落实，特效一律服务动作与主体、绝不糊脸或盖过受力点："
+    "① 光：体积光 / 丁达尔光束穿过烟尘或雾气；强逆光 + 边缘轮廓光把主体从压暗环境里拔出来、明暗对比拉大"
+    "（拒绝平光）；命中/爆发帧给一束 motivated 强光。"
+    "② 纵深：前景放虚焦的余烬/火星/飞尘/断裂物做前景遮挡，中景清晰主体，远景用大气透视压灰——三层纵深拉开空间，别贴成平面。"
+    "③ 环境受力：动作让环境有反应——扬尘、碎屑顺受力方向飞溅、地面皲裂/凹陷、气浪掀动布幔草木、火星四溅，"
+    "战场可见破坏感与规模感。"
+    "④ 运动能量：高速段顺攻击方向给速度线 + 拖影 motion blur；发丝/衣摆/飘带被气流甩动（二级运动）；"
+    "命中瞬间呈升格慢放般的张力定格（动态定格·不是平静站姿）。"
+    "调色走具体色彩科学（压暗环境、提亮主体、控制高光溢出），避免泛泛\"cinematic/电影感\"套词；色与光遵守本场光位锚与风格禁忌。"
+)

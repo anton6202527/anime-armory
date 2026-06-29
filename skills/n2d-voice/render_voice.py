@@ -11,6 +11,11 @@ from n2d_const import PRODUCTION_MODE_DEFAULT  # noqa: E402  制作模式默认�
 from n2d_text_utils import clean_punctuation  # noqa: E402
 from n2d_route import voiceover_fingerprint, manifest_is_placeholder  # noqa: E402  配音源指纹 + 占位判定单一真值源（治"配音后改 voiceover 导致清单过期" / 占位口径不一致）
 from n2d_telemetry import record_event, Timer  # noqa: E402
+try:
+    from n2d_friction import log_friction  # noqa: E402  现场摩擦信号（自我优化闭环生产者；纯 stdlib）
+except Exception:  # 采集绝不拖垮配音
+    def log_friction(*a, **k):  # type: ignore
+        return None
 from voice_text import clean_text  # 念白文本清洗（独立模块·带单测，治 ||→「。，」脏标点）
 import voice_manifest as vmf  # 时长清单条目 + voice_key 音色留痕（独立模块·带单测；契约字段 VOICE_KEY_FIELD）
 import voice_lexicon as vlex  # 专名/多音字读音词典（谐音只下到声学层，字幕/清单保留正名；独立模块·带单测）
@@ -374,6 +379,14 @@ if placeholders:
     open(os.path.join(W,'_占位说明.md'),'w',encoding='utf-8').write(
         f"# 本地占位配音\n\n{warn}\n\n用途: 跑通分镜/字幕时间轴 rough preview。\n要求: 跨过出图前,换 CosyVoice/克隆/MiniMax 等真实配音重跑,并用真实时长回跑 n2d-script 阶段2。\n"
     )
+    # 自我优化闭环：配音后端不可用→被迫静音占位，是「n2d-voice 适配层该优化」的现场信号。
+    # 落 作品根/生产数据/优化信号.jsonl，由 n2d-review 流程自审(self_audit --work)读进差距清单。
+    log_friction(ROOT, 'n2d-voice',
+                 f'{len(placeholders)}/{n} 句静音占位（非有声配音）：{placeholder_reason}',
+                 kind='workaround', stage='配音', episode=EP,
+                 evidence=os.path.join('合成', EP, '配音', '_占位说明.md'),
+                 proposed='render_voice 缺真实后端时早探活并提示安装/换后端；或在 references/backends.md 补可跑通道',
+                 severity='warn')
 
 if LANG == 'zh' and os.environ.get('N2D_UPDATE_PROGRESS', '1') != '0':
     prog = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'n2d', 'progress.py'))

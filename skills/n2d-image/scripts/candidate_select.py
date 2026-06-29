@@ -15,14 +15,24 @@
   ③ 排序·确定性兜底：无 VLM 时按 face 余弦(对锚)→QC warn 数→清晰度 排序。
 reroll_needed：全部候选都硬伤（无合格者），或最优者 face 余弦仍 < identity_floor（最好的也崩脸）。
 
-报告型：写 `生产数据/candidate_selection_第N集.json`；`--apply` 才把选中图拷到落档路径（不可逆=显式）。
-纯排序/选片是纯函数，有 pytest 覆盖（test_candidate_select.py）。
+**Genflow 式纠偏 reroll（arXiv 2605.16748·2026）**：reroll 不再只是二元"重抽"，而是从**失败分布**生成
+**负权纠偏处方**（`corrective`：该加的 negatives + 该强化的 reinforce + raise_face_anchor/force_image2image
+标志），喂给 runner 下一轮**有的放矢**地重生成——动态纠偏比固定 best-of-N 抽卡把可用率从 42%→89%。
+处方纯由已采集的确定性信号（qc 硬伤原因 / face 余弦）推导，不挂 LLM 评委。
 
-用法：python3 candidate_select.py <作品根> 第N集 [--clip 镜头X] [--apply] [--json]
+**可用率账本（yield ledger）**：2026 工业级第一指标是 usable-yield（可用率=过硬地板/总生成），不是 cost。
+每次选片把逐镜可用率事件追加到 `生产数据/yield_ledger.jsonl`，并重算滚动汇总 `生产数据/yield_summary.json`；
+reroll 后再跑即记一轮新事件，可用率随纠偏回升可见。n2d-feedback/self_audit 可读该账本看趋势。
+
+报告型：写 `生产数据/candidate_selection_第N集.json`；`--apply` 才把选中图拷到落档路径（不可逆=显式）。
+纯排序/选片/纠偏/可用率是纯函数，有 pytest 覆盖（test_candidate_select.py）。
+
+用法：python3 candidate_select.py <作品根> 第N集 [--clip 镜头X] [--apply] [--no-ledger] [--json]
 """
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import glob
 import json
 import os
@@ -87,6 +97,163 @@ def vlm_champion(survivors: Sequence[Dict[str, Any]],
     return champ
 
 
+# ── Genflow 式纠偏处方：从失败分布生成"负权纠偏" + 该强化项（确定性·非 LLM）────────────
+# arXiv 2605.16748 Genflow：把"为什么废"动态回灌成 negative 提示（而非固定 best-of-N 抽卡），
+# 可用率 42%→89%、judge↔人 ρ=0.84。本处方纯由已采集确定性信号（qc 硬伤原因 / face 余弦）推导。
+FAILURE_CORRECTIONS: Dict[str, Dict[str, Any]] = {
+    "face_drift": {
+        "label": "崩脸/换脸",
+        "negatives": ["不要换脸", "不要重画五官", "不要改脸型/发型/发饰", "no face swap", "no identity drift"],
+        "reinforce": ["以定妆脸 image2image 派生（非纯文生图）", "提高脸锚参考强度", "锁脸型/五官比例/发型发饰"],
+        "raise_face_anchor": True, "force_image2image": True,
+    },
+    "text2img": {
+        "label": "纯文生图脱参考",
+        "negatives": ["不要纯文生图", "no text-to-image from scratch"],
+        "reinforce": ["必须以同 Clip 首帧/定妆库 image2image 派生", "注入 source_frame 参考"],
+        "force_image2image": True,
+    },
+    "seam_break": {
+        "label": "接缝断/姿态跳",
+        "negatives": ["不要姿态突变", "不要光线跳变", "no pose jump"],
+        "reinforce": ["以相邻帧 image2image 接力", "对齐构图/光位/人物状态到相邻帧"],
+        "force_image2image": True,
+    },
+    "hands": {
+        "label": "崩手/多指",
+        "negatives": ["不要多指", "不要畸形手", "no extra fingers", "no malformed hands"],
+        "reinforce": ["手部清晰、五指正常", "必要时遮挡或避开手部特写"],
+    },
+    "composition": {
+        "label": "构图/景别偏",
+        "negatives": ["不要主体出框", "不要构图失衡"],
+        "reinforce": ["按分镜景别与构图意图", "主体居正确画域、留运镜余量"],
+    },
+}
+# 失败信号 → 失败模式键（解析候选 sidecar 里的硬伤原因文本/码；中英文都认）。
+FAIL_KEYWORDS: Dict[str, Sequence[str]] = {
+    "face_drift": ("崩脸", "换脸", "脸漂", "face_drift", "faceswap", "face swap", "identity"),
+    "text2img": ("纯文生图", "text2img", "txt2img", "文生", "from scratch"),
+    "seam_break": ("接缝", "seam", "姿态跳", "闪烁", "flicker"),
+    "hands": ("崩手", "多指", "畸形手", "hand", "finger"),
+    "composition": ("构图", "出框", "composition", "crop"),
+}
+
+
+def _fail_reason_text(cand: Mapping[str, Any]) -> str:
+    """把候选上可能记录失败原因的字段拼成一段可检索文本（小写）。纯函数。"""
+    parts: List[str] = []
+    for k in ("qc_hard_fail", "qc_fail_reason", "fail_reason", "reason"):
+        v = cand.get(k)
+        if isinstance(v, str):
+            parts.append(v)
+        elif isinstance(v, (list, tuple)):
+            parts.extend(str(x) for x in v)
+        elif isinstance(v, dict):
+            parts.extend(f"{kk} {vv}" for kk, vv in v.items())
+    for k in ("fail_codes", "qc_codes", "codes"):
+        v = cand.get(k)
+        if isinstance(v, (list, tuple)):
+            parts.extend(str(x) for x in v)
+    return " ".join(parts).lower()
+
+
+def classify_failures(cands: Sequence[Dict[str, Any]],
+                      identity_floor: float = IDENTITY_FLOOR) -> Dict[str, int]:
+    """统计 N 张候选里各失败模式命中数（从已采信号推导·确定性）。纯函数。"""
+    counts = {k: 0 for k in FAILURE_CORRECTIONS}
+    for c in cands:
+        text = _fail_reason_text(c)
+        matched = False
+        for key, kws in FAIL_KEYWORDS.items():
+            if any(kw.lower() in text for kw in kws):
+                counts[key] += 1
+                matched = True
+        face = c.get("face_consistency")
+        if isinstance(face, (int, float)) and float(face) < identity_floor:
+            if "face" not in text and "崩脸" not in text and "换脸" not in text:
+                counts["face_drift"] += 1
+            matched = True
+        if not matched and c.get("qc_hard_fail"):
+            # 硬伤但无可解析原因 → 最常见根因是脸漂，保守归 face_drift。
+            counts["face_drift"] += 1
+    return {k: v for k, v in counts.items() if v > 0}
+
+
+def corrective_prescription(cands: Sequence[Dict[str, Any]],
+                            identity_floor: float = IDENTITY_FLOOR) -> Optional[Dict[str, Any]]:
+    """从失败分布生成负权纠偏处方（喂给 runner 下一轮生成）。无可解析失败信号→None。纯函数。
+
+    返回 {dominant, failure_counts, negatives, reinforce, raise_face_anchor, force_image2image, reason}。"""
+    counts = classify_failures(cands, identity_floor)
+    if not counts:
+        return None
+    dominant = sorted(counts, key=lambda k: (counts[k], k), reverse=True)
+    negatives: List[str] = []
+    reinforce: List[str] = []
+    raise_face = force_i2i = False
+    for key in dominant:
+        spec = FAILURE_CORRECTIONS[key]
+        for t in spec["negatives"]:
+            if t not in negatives:
+                negatives.append(t)
+        for t in spec["reinforce"]:
+            if t not in reinforce:
+                reinforce.append(t)
+        raise_face = raise_face or bool(spec.get("raise_face_anchor"))
+        force_i2i = force_i2i or bool(spec.get("force_image2image"))
+    dist = "；".join(f"{FAILURE_CORRECTIONS[k]['label']}×{counts[k]}" for k in dominant)
+    return {
+        "dominant": dominant, "failure_counts": counts,
+        "negatives": negatives, "reinforce": reinforce,
+        "raise_face_anchor": raise_face, "force_image2image": force_i2i,
+        "reason": f"上一轮失败分布：{dist}（负权纠偏后重生成·非简单 best-of-N 抽卡）",
+    }
+
+
+# ── 可用率（yield）：逐镜 + 集级汇总 + 滚动账本（纯函数 + I/O 分离）─────────────────────
+
+def shot_yield(res: Mapping[str, Any]) -> Dict[str, Any]:
+    """单镜可用率：survivors/candidate_count = 过硬地板的比例；usable_pick=是否拿到可落档终选。纯函数。"""
+    n = int(res.get("candidate_count") or 0)
+    surv = int(res.get("survivors") or 0)
+    usable = 1 if (res.get("picked") and not res.get("reroll_needed")) else 0
+    return {
+        "candidate_count": n, "survivors": surv, "usable_pick": usable,
+        "shot_yield": round(surv / n, 4) if n else 0.0,
+        "reroll_needed": bool(res.get("reroll_needed")),
+    }
+
+
+def aggregate_yield(rows: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
+    """集级可用率汇总（usable_yield=过硬地板/总生成；resolution_rate=拿到终选的镜比例）。纯函数。"""
+    total_c = sum(int(r.get("candidate_count") or 0) for r in rows)
+    total_s = sum(int(r.get("survivors") or 0) for r in rows)
+    resolved = sum(1 for r in rows if r.get("picked") and not r.get("reroll_needed"))
+    reroll = sum(1 for r in rows if r.get("reroll_needed"))
+    clips = len(rows)
+    return {
+        "clips": clips, "total_candidates": total_c, "total_survivors": total_s,
+        "usable_yield": round(total_s / total_c, 4) if total_c else 0.0,
+        "resolved_clips": resolved, "reroll_clips": reroll,
+        "resolution_rate": round(resolved / clips, 4) if clips else 0.0,
+    }
+
+
+def rolling_yield_from_events(events: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
+    """从账本全部事件重算滚动可用率（跨集/跨轮）。纯函数·可测。"""
+    total_c = sum(int(e.get("candidate_count") or 0) for e in events)
+    total_s = sum(int(e.get("survivors") or 0) for e in events)
+    rounds = len(events)
+    rerolls = sum(1 for e in events if e.get("reroll_needed"))
+    return {
+        "rounds": rounds, "total_candidates": total_c, "total_survivors": total_s,
+        "usable_yield": round(total_s / total_c, 4) if total_c else 0.0,
+        "reroll_rounds": rerolls,
+        "reroll_rate": round(rerolls / rounds, 4) if rounds else 0.0,
+    }
+
+
 def select_best(cands: Sequence[Dict[str, Any]], *,
                 vlm_compare: Optional[Callable[[Dict[str, Any], Dict[str, Any]], str]] = None,
                 identity_floor: float = IDENTITY_FLOOR) -> Dict[str, Any]:
@@ -96,14 +263,16 @@ def select_best(cands: Sequence[Dict[str, Any]], *,
     cands = [dict(c) for c in cands]
     if not cands:
         return {"ranked": [], "picked": None, "reroll_needed": True,
-                "reason": "无候选图", "method": "none", "survivors": 0, "disqualified": 0}
+                "reason": "无候选图", "method": "none", "survivors": 0, "disqualified": 0,
+                "corrective": None}
     ranked = deterministic_rank(cands)
     survivors = [c for c in ranked if not c.get("qc_hard_fail")]
     disq = len(cands) - len(survivors)
     if not survivors:
         return {"ranked": ranked, "picked": None, "reroll_needed": True,
                 "reason": f"全部 {len(cands)} 张候选都有 QC 硬伤（崩脸/纯文生图/接缝断）→ 整镜 reroll",
-                "method": "deterministic", "survivors": 0, "disqualified": disq}
+                "method": "deterministic", "survivors": 0, "disqualified": disq,
+                "corrective": corrective_prescription(cands, identity_floor)}
     if vlm_compare is not None and len(survivors) > 1:
         picked = vlm_champion(survivors, vlm_compare)
         method = "vlm_ranker"
@@ -114,8 +283,10 @@ def select_best(cands: Sequence[Dict[str, Any]], *,
     reroll = isinstance(face, (int, float)) and float(face) < identity_floor
     reason = ("选出最优候选" if not reroll
               else f"最优候选 face 余弦 {float(face):.3f} < 地板 {identity_floor:.2f}（最好的也崩脸）→ reroll")
+    # 纠偏处方只在 reroll 时给（按全部候选的失败分布·含被淘汰者）；非 reroll 时为 None。
     return {"ranked": ranked, "picked": picked, "reroll_needed": bool(reroll),
-            "reason": reason, "method": method, "survivors": len(survivors), "disqualified": disq}
+            "reason": reason, "method": method, "survivors": len(survivors), "disqualified": disq,
+            "corrective": corrective_prescription(cands, identity_floor) if reroll else None}
 
 
 # ── VLM ranker 适配（厂商无关·N2D_VLM_COMPARE_CMD）────────────────────────────────
@@ -188,8 +359,11 @@ def gather_candidate(png: str, root: str) -> Dict[str, Any]:
         try:
             data = json.loads(Path(sidecar).read_text(encoding="utf-8"))
             if isinstance(data, dict):
+                # 选片信号 + 失败原因（后者喂 Genflow 纠偏处方·classify_failures 用）。
                 for k in ("face_consistency", "composition", "hook_strength", "style_match",
-                          "asset_consistency", "qc_hard_fail"):
+                          "asset_consistency", "qc_hard_fail",
+                          "qc_fail_reason", "fail_reason", "reason",
+                          "fail_codes", "qc_codes", "codes"):
                     if k in data:
                         cand[k] = data[k]
         except Exception:
@@ -238,17 +412,86 @@ def build_report(root: str, ep: str, only_clip: Optional[str] = None) -> Dict[st
     vlm = make_vlm_compare()
     clips = [only_clip] if only_clip else list_clips(root, ep)
     rows = [select_clip(root, ep, c, vlm_compare=vlm) for c in clips if c]
+    for r in rows:
+        r["yield"] = shot_yield(r)
     reroll = [r["clip"] for r in rows if r.get("reroll_needed")]
     return {
         "kind": KIND, "version": VERSION, "episode": ep,
         "vlm_ranker": vlm is not None,
         "clips_selected": len(rows),
         "reroll_clips": reroll,
+        "yield": aggregate_yield(rows),
         "rows": rows,
         "notes": ([] if vlm is not None else
                   ["未配置 N2D_VLM_COMPARE_CMD：用确定性排序（face 余弦→QC→清晰度）选片；"
                    "配置厂商无关成对比较器可启用 VLM ranker（成对·非绝对打分）。"]),
     }
+
+
+YIELD_LEDGER = "yield_ledger.jsonl"
+YIELD_SUMMARY = "yield_summary.json"
+YIELD_EVENT_KIND = "n2d_yield_event"
+
+
+def _read_yield_events(path: str) -> List[Dict[str, Any]]:
+    if not os.path.isfile(path):
+        return []
+    out: List[Dict[str, Any]] = []
+    with open(path, encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                e = json.loads(line)
+            except Exception:
+                continue
+            if isinstance(e, dict) and e.get("kind") == YIELD_EVENT_KIND:
+                out.append(e)
+    return out
+
+
+def append_yield_ledger(root: str, ep: str, rows: Sequence[Mapping[str, Any]],
+                        *, now: Optional[str] = None) -> Optional[str]:
+    """把逐镜可用率事件追加到 生产数据/yield_ledger.jsonl，并重算滚动汇总 yield_summary.json。
+
+    每次跑 = 一轮测量；reroll 后再跑即记新一轮事件（round 按 (集,镜) 历史计数 +1），
+    可用率随纠偏回升可见。返回账本路径（无可记行 → None）。I/O 层（pure 部分见 *_yield 函数）。"""
+    rows = [r for r in rows if int(r.get("candidate_count") or 0) > 0]
+    if not rows:
+        return None
+    out_dir = os.path.join(root, "生产数据")
+    os.makedirs(out_dir, exist_ok=True)
+    path = os.path.join(out_dir, YIELD_LEDGER)
+    prior = _read_yield_events(path)
+    round_of: Dict[str, int] = {}
+    for e in prior:
+        k = f"{e.get('episode')}/{e.get('clip')}"
+        round_of[k] = max(round_of.get(k, 0), int(e.get("round") or 0))
+    new_events: List[Dict[str, Any]] = []
+    for r in rows:
+        clip = r.get("clip")
+        k = f"{ep}/{clip}"
+        rnd = round_of.get(k, 0) + 1
+        round_of[k] = rnd
+        ev = {"kind": YIELD_EVENT_KIND, "episode": ep, "clip": clip, "round": rnd}
+        ev.update(shot_yield(r))
+        ev["had_corrective"] = bool(r.get("corrective"))
+        if now:
+            ev["at"] = now
+        new_events.append(ev)
+    with open(path, "a", encoding="utf-8") as fh:
+        for ev in new_events:
+            fh.write(json.dumps(ev, ensure_ascii=False, sort_keys=True) + "\n")
+    summary = rolling_yield_from_events(prior + new_events)
+    summary["kind"] = "n2d_yield_summary"
+    if now:
+        summary["updated_at"] = now
+    tmp = os.path.join(out_dir, YIELD_SUMMARY + ".tmp")
+    with open(tmp, "w", encoding="utf-8") as fh:
+        json.dump(summary, fh, ensure_ascii=False, indent=2, sort_keys=True)
+    os.replace(tmp, os.path.join(out_dir, YIELD_SUMMARY))
+    return path
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -257,6 +500,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("episode")
     ap.add_argument("--clip", help="只选某一镜（默认全集所有候选镜）")
     ap.add_argument("--apply", action="store_true", help="把选中候选拷到落档路径（不可逆）")
+    ap.add_argument("--no-ledger", action="store_true", help="不追加 yield_ledger.jsonl（默认追加可用率账本）")
     ap.add_argument("--json", action="store_true")
     ns = ap.parse_args(argv)
     root = ns.root.rstrip("/")
@@ -271,18 +515,36 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         report["applied"] = applied
     out_dir = os.path.join(root, "生产数据")
     os.makedirs(out_dir, exist_ok=True)
+    if not ns.no_ledger:
+        now = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+        ledger = append_yield_ledger(root, ns.episode, report["rows"], now=now)
+        if ledger:
+            report["yield_ledger"] = os.path.relpath(ledger, root)
+            report["yield_summary"] = rolling_yield_from_events(_read_yield_events(ledger))
     path = os.path.join(out_dir, f"candidate_selection_{ns.episode}.json")
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(report, fh, ensure_ascii=False, indent=2, sort_keys=True)
     if ns.json:
         print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
     else:
+        y = report.get("yield") or {}
         print(f"候选选片 {ns.episode}：{report['clips_selected']} 镜，VLM ranker={report['vlm_ranker']}，"
-              f"需 reroll {len(report['reroll_clips'])} 镜")
+              f"需 reroll {len(report['reroll_clips'])} 镜｜可用率 {y.get('usable_yield')}（终选率 {y.get('resolution_rate')}）")
         for r in report["rows"]:
             pick = (r.get("picked") or {}).get("candidate") if r.get("picked") else "—"
             flag = "🔁REROLL" if r.get("reroll_needed") else f"✅{pick}"
             print(f"  · {r['clip']}（{r['candidate_count']}选·{r['method']}）：{flag}　{r['reason']}")
+            corr = r.get("corrective")
+            if corr:
+                print(f"      ↳ 纠偏处方：{corr['reason']}")
+                print(f"        negatives: {('、'.join(corr['negatives'][:6]))}")
+                print(f"        reinforce: {('、'.join(corr['reinforce'][:5]))}"
+                      + ("｜提脸锚强度" if corr.get("raise_face_anchor") else "")
+                      + ("｜强制 image2image" if corr.get("force_image2image") else ""))
+        if report.get("yield_summary"):
+            ys = report["yield_summary"]
+            print(f"  滚动可用率账本：{ys.get('rounds')} 轮，累计可用率 {ys.get('usable_yield')}，"
+                  f"reroll 轮占比 {ys.get('reroll_rate')} → {report.get('yield_ledger')}")
         if ns.apply:
             print(f"  已落档 {len(applied)} 镜")
     return 0  # report-only，永不非零退出

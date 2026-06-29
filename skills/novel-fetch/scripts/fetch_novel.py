@@ -25,7 +25,9 @@ from urllib.parse import quote, unquote, urljoin
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                 "..", "..", "novel-craft", "scripts"))
-from contract import rights_metadata  # noqa: E402
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "..", "..", "novel", "_lib"))
+from novel_contract import rights_metadata  # noqa: E402
 
 # 依赖：import 名 -> pip 安装名。bs4/trafilatura 是高质量解析增强项，缺失时可降级。
 _REQUIRED_DEP_INSTALL_NAME = {
@@ -308,8 +310,8 @@ def extract_body(html, url=None):
 
 
 # 章节链接锚文本特征：含「第…章/回/节/卷」或「序/楔子/尾声/番外」
-_CH_LINK_RE = re.compile(
-    r"第\s*[0-9零一二三四五六七八九十百千两]+\s*[章回节卷]|楔子|序章|序言|尾声|番外")
+_CH_LINK_RE = re.compile(r"新刻金瓶梅詞話卷之|金瓶梅詞話 第一回|"
+    r"第\s*[0-9零一二三四五六七八九十百千两兩廿]+\s*[章回节卷]|楔子|序章|序言|尾声|番外|第[一二三四五六七八九十百千]+回|第一回")
 
 
 def extract_chapter_links(html, base_url):

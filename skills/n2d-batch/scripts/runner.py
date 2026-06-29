@@ -148,6 +148,7 @@ def env_for_task(root: str, task: Dict[str, Any], config: Dict[str, Any]) -> Dic
         "N2D_STAGE": str(task.get("stage_key", "")),
         "N2D_OWNER": str(task.get("owner", "")),
         "N2D_REASON": str(task.get("reason", "")),
+        "N2D_IDEMPOTENCY_KEY": str(task.get("idempotency_key", "")),
         "N2D_RERUN_SCOPE": str(task.get("rerun_scope", "")),
         "N2D_AFFECTED_SHOTS": ",".join(str(item) for item in task.get("affected_shots", [])),
         "N2D_AFFECTED_ARTIFACTS": ",".join(str(item) for item in task.get("affected_artifacts", [])),
@@ -178,11 +179,14 @@ def append_runner_event(
         return
     meta = {
         "task_id": task.get("id"),
+        "idempotency_key": task.get("idempotency_key"),
+        "trace_id": task.get("trace_id") or task.get("idempotency_key") or task.get("id"),
         "runner_status": status,
         "exit_code": exit_code,
         "command": command,
         "dry_run": dry_run,
         "error": error,
+        "error_class": queue_mod.classify_error(error, {"exit_code": exit_code, "note": error}) if status == "fail" else "",
         "attempt": task.get("attempts"),
     }
     event = dashboard_mod.make_event(
@@ -452,10 +456,12 @@ def execute_task(
         status = "fail"
         note = f"{type(exc).__name__}: {exc}"
     duration = time.monotonic() - started
+    error_class = queue_mod.classify_error(note, {"exit_code": exit_code, "stdout": stdout, "stderr": stderr, "note": note}) if status == "fail" else ""
     task["last_runner"] = {
         "command": command,
         "status": status,
         "exit_code": exit_code,
+        "error_class": error_class,
         "duration_sec": round(duration, 3),
         "stdout": truncate(stdout),
         "stderr": truncate(stderr),

@@ -62,6 +62,10 @@ def test_import_txt_creates_project_with_manifest(tmp_path):
     assert meta["purpose"] == "未定"
     settings = (project / "_设置.md").read_text(encoding="utf-8")
     assert "小说用途**：未定（导入源书；后续再选）" in settings
+    progress = (project / "_进度.md").read_text(encoding="utf-8")
+    assert "novel-progress-schema: 1; kind: import" in progress
+    assert "novel-import-stage-table: 1; kind: import" in progress
+    assert "stage:next_action" in progress
 
 
 def test_import_docx_uses_stdlib_extractor(tmp_path):

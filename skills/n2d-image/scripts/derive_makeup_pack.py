@@ -95,7 +95,7 @@ def _save_front_crop(src: Path, dst: Path, kind: str, target_size: tuple[int, in
     img = Image.open(src).convert("RGB")
     width, height = img.size
     if kind == "face_anchor_refs":
-        box = _crop_box(width, height, (0.26, 0.03, 0.74, 0.50))
+        box = _crop_box(width, height, (0.38, 0.11, 0.57, 0.31))
     else:
         box = _crop_box(width, height, (0.08, 0.02, 0.92, 0.68))
     crop = img.crop(box)
@@ -170,7 +170,13 @@ def _face_anchor_path(form: dict[str, Any]) -> str:
     return _reference_group_path(form, "face_anchor_refs", FACE_ANCHOR_SUFFIX)
 
 
-def derive_project(root: Path, *, write: bool = False, force: bool = False) -> dict[str, Any]:
+def derive_project(
+    root: Path,
+    *,
+    write: bool = False,
+    force: bool = False,
+    asset_keys: set[str] | None = None,
+) -> dict[str, Any]:
     root = root.resolve()
     registry_path = root / "出图" / "共享" / "identity_registry.json"
     data = _load_json(registry_path)
@@ -182,6 +188,9 @@ def derive_project(root: Path, *, write: bool = False, force: bool = False) -> d
         char_id = str(char.get("id") or "").strip()
         for form in char.get("forms", []):
             if not isinstance(form, dict):
+                continue
+            asset_key = str(form.get("asset_key") or "").strip()
+            if asset_keys and asset_key not in asset_keys:
                 continue
             form_name = str(form.get("form") or "").strip()
             form_label = f"{char_id}/{form_name}".strip("/")
@@ -258,7 +267,7 @@ def derive_project(root: Path, *, write: bool = False, force: bool = False) -> d
                     if write:
                         crop_box = _save_front_crop(front_path, dst, "face_anchor_refs", target_size)
                     else:
-                        crop_box = list(_crop_box(target_size[0], target_size[1], (0.26, 0.03, 0.74, 0.50)))
+                        crop_box = list(_crop_box(target_size[0], target_size[1], (0.38, 0.11, 0.57, 0.31)))
                     deriv = _derivation(FACE_ANCHOR_METHOD, front_rel, source_sha, crop_box)
                     label = f"{form_label} 同源脸锚"
                     rg["face_anchor_refs"] = _update_face_anchor_list(
@@ -286,9 +295,12 @@ def main() -> int:
     ap.add_argument("project_root", help="作品根目录")
     ap.add_argument("--write", action="store_true", help="写出 PNG 并回写 identity_registry.json")
     ap.add_argument("--force", action="store_true", help="覆盖已存在的派生 PNG")
+    ap.add_argument("--asset-key", action="append", default=[],
+                    help="只派生指定 form.asset_key；可重复传入，避免误处理不兼容三视图布局")
     args = ap.parse_args()
 
-    summary = derive_project(Path(args.project_root), write=args.write, force=args.force)
+    asset_keys = {str(v).strip() for v in args.asset_key if str(v).strip()} or None
+    summary = derive_project(Path(args.project_root), write=args.write, force=args.force, asset_keys=asset_keys)
     print(json.dumps(summary, ensure_ascii=False, indent=2))
     return 0
 

@@ -16,6 +16,11 @@ from datetime import date
 
 from store import atomic_write_json, file_lock
 
+try:
+    import semantic_job
+except ImportError:  # pragma: no cover - helper is optional for legacy direct use
+    semantic_job = None
+
 def load_json(path, default=None):
     if not os.path.exists(path):
         return default
@@ -365,9 +370,40 @@ def main():
         if not success:
             print(f"[err] Audit 准备失败: {res}", file=sys.stderr)
             sys.exit(2)
+        job = None
+        if semantic_job is not None:
+            delta_path = get_delta_path(root, args.chapter)
+            expected_hashes = expected_verification_hashes(root, args.chapter)
+            response_rel = os.path.join("审稿", f"state_verify_第{args.chapter:02d}章.json")
+            complete_cmd = (
+                f'python3 skills/novel-craft/scripts/reconcile_ledger.py "{root}" '
+                f'--chapter {args.chapter} --merge --verified "{os.path.join(root, response_rel)}" --stamp-hashes'
+            )
+            job = semantic_job.create_job(
+                root,
+                semantic_kind="ledger_reconcile",
+                prompt=res,
+                response_out=response_rel,
+                required_fields=["chapter", "status", "notes"],
+                schema_ref="ledger_reconcile",
+                source_snapshot={
+                    "chapter": args.chapter,
+                    "chapter_path": os.path.relpath(chapter_file, root).replace(os.sep, "/"),
+                    "delta_path": os.path.relpath(delta_path, root).replace(os.sep, "/"),
+                    **expected_hashes,
+                },
+                complete_command=complete_cmd,
+                metadata={
+                    "chapter": args.chapter,
+                    "delta_path": os.path.relpath(delta_path, root).replace(os.sep, "/"),
+                },
+            )
         print("--- LEDGER RECONCILE PROMPT ---")
         print(res)
         print("--- END PROMPT ---")
+        if job:
+            print(f"[info] 语义任务已写入：{job['job_path']}")
+            print(f"[info] 让 AI 代理读取 {os.path.join(root, job['prompt_path'])} 并写回 {os.path.join(root, job['response_out'])}。")
         if args.auto and not args.merge:
             print("[err] --auto 已废弃：不会合并未经验证的 delta。请保存核对结论 JSON 后重跑 "
                   "`--merge --verified <verification.json>`。", file=sys.stderr)

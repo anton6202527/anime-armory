@@ -10,7 +10,7 @@ description: "P0 横切 skill for novel2drama/n2d production metrics, ROI dashbo
 ## 输入 / 输出 / 读写边界
 
 - **输入**：各 stage 的 generation/redraw/manual/release 事件、gate findings、平台投放指标、告警阈值。
-- **输出**：`生产数据/production_events.jsonl`、`dashboard.json/md/html`、`alerts.json/md`、`gate_findings_*_第N集.json`。
+- **输出**：`生产数据/production_events.jsonl`、`dashboard.json/md/html`、`alerts.json/md`、`gate_findings_*_第N集.json`、`production_events_audit.json/md`、`production_events_chain.jsonl`、`dashboard_replay.json`。
 - **读写边界**：只记账、汇总、告警和 gate 入账；不修改 `_进度.md`、不执行实际生成、不解释评分维度。
 - **契约关系**：事件枚举、重抽分类、gate stage 和 finding schema 与 `skills/n2d/_lib/n2d_contract.py` 对齐；生产 gate 推荐从本 skill 入口调用。
 
@@ -18,12 +18,15 @@ description: "P0 横切 skill for novel2drama/n2d production metrics, ROI dashbo
 
 - **事件日志是机器真值**：所有生产数据先追加到 `创作区/制漫剧/<剧名>/生产数据/production_events.jsonl`，再由脚本汇总成 `dashboard.json` + `dashboard.md`。不要把成本/重抽原因塞进 `_进度.md`。
 - **事件读写带本地锁**：`record` / `gate` / `build` / `watch` 对 `production_events.jsonl` 和 dashboard 输出统一走 `production_events.lock`；JSON/MD/HTML 用临时文件原子替换，避免多 worker 同时记账时读半截或互相覆盖。
+- **账本必须可审计、可重放**：`event_ledger.py audit|doctor` 校验 JSONL 字段、缺 trace、解析错误，并生成不可改历史行的 hash chain；`replay` 只从事件日志重算 dashboard，和当前 `dashboard.json` 比 hash，用来证明“看板不是手改出来的”。发布前、批量停线后、交接给运营前都应跑一次。
+- **trace 放量前可升硬闸**：默认缺 `trace_id/task_id/idempotency_key` 仍是 warn，兼容旧项目；放量、外部 job 对账或发布前跑 `event_ledger.py audit <作品根> --strict-trace --write`，缺 `trace_id` 直接 fail，避免成本、死信、成片找不回同一次生产尝试。
+- **trace 上提到事件顶层**：从 batch/runner 或外部 wrapper 写入的 `task_id`、`trace_id`、`idempotency_key` 会被 `dashboard.py record` 提升到 `event.trace`，方便从发布 manifest、死信、资产账本回查到同一次生产尝试。
 - **每次生成都记账**：n2d-image / n2d-video / n2d-voice / n2d-compose 的每次 AI 调用或实质性处理，都记录 `stage`、`asset`、`duration_sec`、`cost`、`status`。重抽必须写 `redraw_reason`。
 - **重抽原因分维度（契约枚举）**：`redraw_reason` 仍写自由文本，但记账时同步归入契约 `REDRAW_REASON_CATEGORIES` 九类维度（脸漂/服装/场景/画风/道具/参考图裁切/prompt 冲突/时序/其他）——显式传 `--redraw-category` 则尊重，否则按关键词自动归类；存量自由文本事件在 rebuild 时读时归类，不改写历史 jsonl。`dashboard.md` 出「重抽原因分维度」表并单列**一致性小计**（face/outfit/scene/style），让"一致性是不是最大成本杀手"一眼可见、可驱动投入决策。
 - **每次审查都入账**：生产前 gate、成片后 review 的 QA finding 都写入仪表盘。`block` 是 QA 阻断，`warn` 是风险提示；两者分开统计。
 - **最终通过率定义固定**：`final_pass_rate = generation_passes / (generation_passes + generation_fails)`。没有记录 pass/fail 时显示 `—`，不得凭感觉补。
 - **ROI 五件套固定**：`cost_per_finished_min`（生产成本 ÷ 成片分钟）、`duration_sec`（每集生产耗时）、`one_pass_rate`（一次通过数 ÷ 生成尝试数）、`redraw_rate`（重抽数 ÷ 生成尝试数）、`recoup_ratio`（投放净回收 ÷ 同币种生产成本）。没有同币种成本/收入时显示 `—`，不跨币种硬算。
-- **跨作品 Portfolio Rollup + 吞吐率（F1·2026-06-26）**：`dashboard.py` 只算单部剧；`python3 portfolio.py [base目录] [--work 作品根...] [--json]` 扫多部剧（递归找含 `生产数据/production_events.jsonl` 的作品根）、复用 `aggregate_events` 逐部聚合，产 `<base>/生产数据/portfolio.{json,md}`——组合成本/完成集数/完成分钟/单完成分钟成本（跨剧）、**加权**一次通过率/重抽率（按生成次数加权·非简单平均）、回收比，以及 **吞吐率指标**：从事件时间戳算日历跨度 → 完成集/天、完成分钟/天、单剧速度（dashboard 此前只有「生成耗时之和」不是日历吞吐）。跨度有 1 小时地板，避免「同时刻出 3 集」算出天文吞吐。制片厂级放量看板。
+- **跨作品 Portfolio Rollup + 吞吐率 + QA 债排名（F1·2026-06-26，舰队层 P2-2 扩展）**：`dashboard.py` 只算单部剧；`python3 portfolio.py [base目录] [--work 作品根...] [--json]` 扫多部剧（递归找含 `生产数据/production_events.jsonl` 的作品根）、复用 `aggregate_events` 逐部聚合，产 `<base>/生产数据/portfolio.{json,md}`——组合成本/完成集数/完成分钟/单完成分钟成本（跨剧）、**加权**一次通过率/重抽率（按生成次数加权·非简单平均）、回收比，以及 **吞吐率指标**：从事件时间戳算日历跨度 → 完成集/天、完成分钟/天、单剧速度（dashboard 此前只有「生成耗时之和」不是日历吞吐）。跨度有 1 小时地板，避免「同时刻出 3 集」算出天文吞吐。**舰队 QA 债 + 先动哪部排名**：另上卷 `qa_blockers_total`/`consistency_blockers_total`（cost/吞吐之外补一个跨剧 QA 阻断负载视角），并出 `rankings`：`worst_one_pass`（一次通过率最低·先救）/`most_blockers`（阻断最多·先停产复盘）/`losing_money`（净回收为负·先止损），把"人力钱往哪投/从哪撤"显式排出来。制片厂级放量看板。
 - **投放回收从平台数据或 release 事件来**：dashboard 会自动读取 `生产数据/platform_metrics.csv|jsonl|json` 的 `revenue/distribution_spend/plays` 等字段；也可手动 `record --event release|revenue`。投放数据不再只进 `n2d-feedback`，必须进入 ROI 仪表盘。
 - **默认覆盖同一 gate 结果**：同一集同一 stage 重跑 `dashboard.py gate` 时，默认替换旧 gate 事件，避免 QA 阻断重复累计；要保留历史用 `--append`。
 - **工业级判断看 ROI 趋势**：单集 dashboard 是局部事实；批量后看 `每分钟成本`、`每集耗时`、`一次通过率`、`重抽率`、`投放净回收/生产成本`、`QA阻断Top`，再决定优先优化哪个 stage。
@@ -37,6 +40,9 @@ description: "P0 横切 skill for novel2drama/n2d production metrics, ROI dashbo
 创作区/制漫剧/<剧名>/生产数据/
   production_events.jsonl   # 事件日志，append-only 为主
   production_events.lock    # 本地文件锁，保护事件读写 + dashboard 重建
+  production_events_audit.json/md
+  production_events_chain.jsonl
+  dashboard_replay.json
   platform_metrics.csv      # 可选：平台播放/收入/投放成本，dashboard 自动合并 ROI
   dashboard.json            # 机器读汇总
   dashboard.md              # 人读仪表盘
@@ -106,6 +112,25 @@ python3 skills/n2d-batch/scripts/queue.py plan <作品根> \
 python3 skills/n2d-dashboard/scripts/dashboard.py build <作品根>
 python3 skills/n2d-dashboard/scripts/dashboard.py build <作品根> --markdown
 ```
+
+### 3.1 账本审计与重放
+
+```bash
+# 审计 production_events.jsonl，写 audit + hash chain
+python3 skills/n2d-dashboard/scripts/event_ledger.py audit <作品根> --write
+python3 skills/n2d-dashboard/scripts/event_ledger.py audit <作品根> --strict-trace --write
+
+# doctor = audit 并默认落档，适合发布/停线前跑
+python3 skills/n2d-dashboard/scripts/event_ledger.py doctor <作品根>
+
+# 只从事件日志重算 dashboard，并和当前 dashboard.json 比 hash
+python3 skills/n2d-dashboard/scripts/event_ledger.py replay <作品根> --write
+```
+
+验收口径：
+- `audit.status=fail`：事件行损坏或必填字段缺失，不能发布；
+- `audit.status=warn`：通常是缺 `trace_id/task_id`、缺 provider 等可追溯性问题，放量前应补 runner/wrapper；
+- `replay.matches_current_dashboard=false`：当前看板与事件账本不一致，先重建 dashboard 或排查手改文件。
 
 ### 3.5 成本预检（开跑前估这集要花多少）
 

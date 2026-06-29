@@ -452,3 +452,48 @@ def test_analyze_reentry_escalates_and_reanchors(tmp_path: Path) -> None:
     assert row["signals"]["recurrence_gap"] == 2
     assert rep["recurrence_reentries"] == 1
     assert "长间隔再登场" in row["suggestions"][0]  # 重锚建议置顶
+
+
+# ── 含人共享资产镜脸漂诊断（治诊断侧盲区·#7 续） ──
+def _mk_reg(tmp_path, assets):
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True, exist_ok=True)
+    (shared / "asset_registry.json").write_text(
+        json.dumps({"assets": assets}, ensure_ascii=False), encoding="utf-8")
+    return tmp_path
+
+
+def test_assess_shared_asset_faceless_low_and_none_skipped(tmp_path):
+    root = _mk_reg(tmp_path, [
+        {"id": "WEAPON_H", "type": "weapon", "owner": "CHAR_J", "name": "戟",
+         "reference_group": {"scale_reference": "图片/定妆_握持比例.png"}},   # faceless → low
+        {"id": "WEAPON_PLAIN", "type": "weapon", "name": "纯武器美术"},        # none → skip
+    ])
+    sa = fdr.assess_shared_asset_face_risk(root, [])
+    ids = {a["asset_id"]: a for a in sa["assets"]}
+    assert ids["WEAPON_H"]["band"] == "low" and ids["WEAPON_H"]["face_policy"] == "faceless"
+    assert "WEAPON_PLAIN" not in ids and sa["low"] == 1
+
+
+def test_assess_shared_asset_face_locked_no_owner_high(tmp_path):
+    root = _mk_reg(tmp_path, [{"id": "POSTER_BAD", "type": "poster", "name": "群像海报 人物"}])
+    sa = fdr.assess_shared_asset_face_risk(root, [])
+    a = [x for x in sa["assets"] if x["asset_id"] == "POSTER_BAD"][0]
+    assert a["band"] == "high" and a["face_policy"] == "face_locked" and sa["high"] == 1
+
+
+def test_assess_shared_asset_face_locked_with_anchor_medium(tmp_path):
+    root = _mk_reg(tmp_path, [
+        {"id": "WEAPON_ACT", "type": "weapon", "owner": "CHAR_J", "name": "持械动作参考",
+         "reference_group": {"primary": "图片/定妆_WEAPON_ACT_动作_持.png"}}])
+    chars = [{"id": "CHAR_J", "forms": [{"form": "常态",
+              "reference_group": {"face": "出图/共享/图片/定妆_CHAR_J_脸.png"}}]}]
+    sa = fdr.assess_shared_asset_face_risk(root, chars)
+    a = [x for x in sa["assets"] if x["asset_id"] == "WEAPON_ACT"][0]
+    assert a["band"] == "medium" and a["face_policy"] == "face_locked"
+
+
+def test_analyze_includes_shared_asset_face_risk_key(tmp_path):
+    root = _mk_reg(tmp_path, [{"id": "WEAPON_PLAIN", "type": "weapon", "name": "纯武器美术"}])
+    rep = fdr.analyze(root, "第1集")
+    assert "shared_asset_face_risk" in rep and rep["shared_asset_face_risk"]["available"] is True

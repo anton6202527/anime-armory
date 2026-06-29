@@ -103,6 +103,22 @@ def test_analyze_skips_without_backend(tmp_path):
         assert res["judged"] == 0 and res["findings"] == []
 
 
+def test_load_judge_auto_mlxvlm_template(monkeypatch):
+    monkeypatch.delenv("N2D_VLM_CMD", raising=False)
+    monkeypatch.setattr(vv, "_n2dvlm_env_exists", lambda: True)
+    cmd = vv._auto_vlm_cmd()
+    assert "vlm_cmd_mlxvlm.py" in cmd
+    assert "--image {image}" in cmd
+    assert "--prompt {prompt}" in cmd
+    assert vv.load_judge() is not None
+
+
+def test_load_judge_can_disable_auto(monkeypatch):
+    monkeypatch.setenv("N2D_VLM_CMD", "off")
+    monkeypatch.setattr(vv, "_n2dvlm_env_exists", lambda: True)
+    assert vv.load_judge() is None
+
+
 def test_pairs_from_payload_dedup():
     payload = {"checks": {
         "face": {"shots": [{"name": "沈念", "png": "p1.png"}]},

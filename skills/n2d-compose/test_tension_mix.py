@@ -12,6 +12,14 @@ import tension_mix as tm  # noqa: E402
 def test_tension_gain_climax_loud_detail_quiet():
     assert tm.tension_gain("爽点·碎切") == 0.95      # 爽点顶上去
     assert tm.tension_gain("爆发·CU") == 0.95
+    assert tm.tension_gain("命中·hit-stop") == 0.98
+    assert tm.tension_gain("破境·雷劫·突破") == 0.98
+    assert tm.tension_gain("武技·剑气") == 0.96
+    assert tm.tension_gain("开炉·成丹") == 0.92
+    assert tm.tension_gain("打坐·吐纳") == 0.48
+    assert tm.tension_gain("接吻·呼吸停顿") == 0.54
+    assert tm.tension_gain("拥抱·关系转折") == 0.62
+    assert tm.tension_gain("双修·疗伤") == 0.58
     assert tm.tension_gain("悬念·细节") == 0.40      # 细节压下来
     assert tm.tension_gain("留白·定格") == 0.36
     assert tm.tension_gain("铺垫·长镜") == 0.58

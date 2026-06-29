@@ -21,7 +21,16 @@ description: Shared writing-primitives and deterministic production helpers for 
 | **正向审美样本库** | `novel-aesthetic` + `设定/aesthetic_bank.json` | Demo 高光、授权/公版样本、项目审美标尺；line edit 和 score 可引用“为什么有效”的转写规则 |
 | **专业资料包注入** | `novel-research` + `资料/research_sources.json` | 医疗/法律/刑侦/金融/军事/历史/宗教/海外/科技/职业文等专业场景；`draft_packets.py` 自动把适用章节的 `资料/专业资料包_<主题>.md` 加进必读源文件 |
 | **合规 profile / 平台辖区清单** | `scripts/compliance_profile.py` | KDP/中国公开发布/欧盟/出海/微短剧等目标命中时，生成 `合规/compliance_profile.json` 并在 QA gate 中提示/阻断 |
+| **Workflow registry / runner** | `../novel/_lib/novel_pipeline.py` + `../novel/scripts/pipeline_runner.py` | 长流程恢复、薄 agent 编排、dry-run 下一阶段、创建 `pipeline_runs/<run_id>.json`、阶段 claim/complete/fail/block/skip、生成 handoff contract；只查输入/输出/gate 和并行/语义标记，不直接写正文或调用模型 |
+| **生产控制台** | `novel-dashboard` + `../novel-dashboard/scripts/dashboard.py` | 汇总 pipeline、stale artifacts、语义任务、review/score blockers、revision、batch、release readiness、review board、prompt cache metrics，写 `生产数据/novel_dashboard.*` |
+| **批量任务队列** | `novel-batch` + `../novel-batch/scripts/queue.py` | 多章节审稿/评分/dashboard 刷新等任务的本地 flock 队列；支持 claim/lease/renew/reclaim/dead-letter，不直接执行模型 |
 | **统一修订计划** | `scripts/revision_planner.py` | review/score/balance/feedback/simulate 都跑过后，合并成 `修订/revision_plan.json` + `修订/修订计划.md` |
+| **语义任务队列** | `scripts/semantic_job.py` + `scripts/semantic_schemas.py` | 需要 LLM/人工深读但又要保留机器绑定时，把 prompt、source_snapshot、response_contract、assigned_role、attempts、model/provider、human/review_required、回填命令写成 `语义任务/*.json`；完成时按 schema 校验后才复制到目标产物 |
+| **Provenance 事件账本** | `scripts/provenance.py` | pipeline plan、pipeline run、semantic job 创建/领取/完成等关键节点写 `生产数据/provenance.jsonl`，记录输入/输出路径、sha256、工具和元数据，并可查 artifact lineage / OpenLineage 风格事件 |
+| **Pipeline golden eval** | `../novel/scripts/tests/golden_pipeline_cases.json` + `../novel/scripts/test_pipeline_eval.py` | 最小原创/导入项目样例，固定 runner next_stage 与 done stage 预期；改 registry、stage 输入输出、gate 时必须同步 |
+| **转制就绪检查** | `scripts/screen_adaptation_ready.py` | 小说成品准备进入视觉生产线前，只检查文本、权利、评分、审稿、AI 披露、改编潜力等小说侧条件是否齐备，不生成视觉侧契约 |
+| **Review board** | `scripts/review_board.py` | 聚合 review/score/revision/feedback/release 信号，校验 review/score source_snapshot 与 release_manifest 新鲜度，写 `审稿/review_board.{json,md}`，`--html` 另写仲裁页；不替代 QA gate |
+| **Prompt cache metrics** | `scripts/prompt_cache_metrics.py` | 递归扫描 `写作任务/**/*.md` 与 `语义任务/**/*.json` 的 `static_context/cache_control`，输出 cache_readiness 估算；若有 usage JSON/JSONL 则汇总真实 cached input tokens，写 `生产数据/prompt_cache_metrics.{json,md}` |
 | **三段式精品写章** | `references/trio-pipeline.md` | 长篇 / `商业连载` / `漫剧源书` / `小说生成工作流=三步迭代`；每章拆成 Architect → Ghostwriter → Senior Editor 三个任务包 |
 | **弧段任务包 / 长篇压力测试** | `scripts/arc_packets.py` + `novel-review/scripts/arc_gate.py` | 每 3-5 章或自然 arc 前后；写前物化弧段目标，写后抓连续不推进读者契约、整段无题旨对齐等中段跑偏 |
 | **弧段记忆摘要** | `references/arc-memory.md` + `scripts/arc_memory.py` | 每 3-5 章压缩剧情/人物/情绪/未收钩子，写后形成 `arc_summaries.json` / `emotional_progression.json`，写章包自动读取当前弧段摘要 |
@@ -59,6 +68,7 @@ description: Shared writing-primitives and deterministic production helpers for 
 | `scripts/store.py` | 跨脚本加锁与原子写：`file_lock`、`atomic_write_text/json` | progress / draft_queue / draft_packets / reconcile_ledger |
 | `scripts/waivers.py` | 统一生成 / 读取 `审稿/waiver_log.jsonl`，所有 gate 绕过都要留同构痕迹 | export / draft_packets / score / report_gate |
 | `scripts/report_snapshot.py` | 给 review/score 报告记录正文文件 hash 与 aggregate hash；QA gate 用它判断报告是否仍绑定当前正文 | novel-review / novel-score / qa_gate |
+| `../novel/scripts/pipeline_runner.py` | 读取 `novel_pipeline.py` registry，生成 `生产数据/novel_pipeline_plan.{json,md}`，声明每阶段 owner/input/output/gate/cost/semantic/parallel/agent_role；可创建 `pipeline_runs/<run_id>.json` 并对阶段 claim/complete/fail/block/skip；`--artifact-graph` 查产物依赖和 stale，`--handoff <stage>` 生成 specialist agent 边界契约 | 长流程 dry-run、恢复、agent 编排前置 |
 | `scripts/qa_gate.py`（薄转发，真值源在 `novel/_lib/qa_gate.py`）/ `scripts/report_gate.py` | 读取 rights / research / review / score / **arc 弧段** / state closure / AI usage / compliance profile / simulate signal-only；缺 review、报告 schema 不合规、报告 hash 过期、阻断 finding、阻断 score verdict、baseline freshness、required 专业资料包缺失、**已跑的 arc_gate 仍含阻断**、写后状态未合并、商业/平台导出缺 AI 披露或平台/辖区合规缺口都会进入 gate；长篇从未跑 arc_gate 会 warning；`drafting` 不因缺 score 阻断，`--waive-missing-score` 只豁免带作用域的缺评分 | progress / export / novel 续跑 |
 | `scripts/export.py` | 章节/第NN章.md 合并 → txt / docx / 大纲；默认执行 export QA gate，缺 review 或阻断未清不能导出；`--ignore-qa-gate` 会写带章节 hash / blocker ids / formats 的 waiver log；`--combine` 走续写合本 | create / spinoff / rewrite / expand / condense / continue **共用同一份** |
 | `scripts/progress.py` | 扫描 `<作品根>/_进度.md`，输出第一条未完成项 + stage owner/gate/on_fail + QA 阻断；`set <stage> done|todo` 通过 `_进度.lock` 加锁原子更新机器阶段 | 所有会写 `_进度.md` 的 novel-* 项目 |
@@ -67,18 +77,25 @@ description: Shared writing-primitives and deterministic production helpers for 
 | `scripts/arc_packets.py` | 生成 `写作任务/弧段_第AA-BB章.md` + `审稿/arc_plan_第AA-BB章.json`，把一小段章节的章纲、读者契约、未收线程和 gate 命令物化 | 长篇每 3-5 章或一个自然 arc 的写前计划 |
 | `scripts/arc_memory.py` | 生成/检查 `设定/arc_summaries.json` 与 `设定/emotional_progression.json`；把旧章窗口压成可注入的弧段级长期记忆 | 每 3-5 章或自然 arc 写完后 |
 | `scripts/scene_cards.py` | 生成/检查 `设定/scene_cards.json`；每个场景记录 POV、目标、阻碍、冲突、转折、价值变化、潜台词与五感锚点 | 章纲定稿后、Demo/批量写章前；`draft_packets.py` 注入当前章场景卡 |
-| `scripts/reconcile_ledger.py` | 输出正文/Delta 核对 prompt；仅在提供已通过核对的 `--verified` JSON 后合并入 `state_ledger.json`（`--stamp-hashes` 免手抄 sha256，供写后即时对账）；`--rollup --before N` 压缩旧章逐章明细控制账本膨胀（canonical 状态不动） | 所有 `draft` 阶段，写章后同步状态；长篇定期 rollup |
+| `scripts/reconcile_ledger.py` | 输出正文/Delta 核对 prompt，并登记带 `ledger_reconcile` schema 与 hash snapshot 的 `语义任务/`；仅在提供已通过核对的 `--verified` JSON 后合并入 `state_ledger.json`（`--stamp-hashes` 免手抄 sha256，供写后即时对账）；`--rollup --before N` 压缩旧章逐章明细控制账本膨胀（canonical 状态不动） | 所有 `draft` 阶段，写章后同步状态；长篇定期 rollup |
+| `scripts/semantic_job.py` | 创建/展示/领取/阻塞/拒收/重开/完成/审核批准绑定 prompt 的语义任务；任务含 schema_ref、source_snapshot、response_contract、assigned_role、attempts、provider/model、cost_estimate、human_required、review_required，完成时按 `semantic_schemas.py` 校验 JSON 并写 provenance 后复制到目标产物 | 需要 AI/人工判断但必须可追踪、可续跑的步骤 |
+| `scripts/provenance.py` | 追加写 `生产数据/provenance.jsonl`；记录输入/输出文件 sha256、工具、事件类型与元数据；支持 `lineage` / `artifact-events` / `openlineage` 查询 | runner、semantic job、后续关键 workflow 脚本 |
 | `scripts/propose_state_delta.py` | 为单章生成 `审稿/state_delta_第NN章.suggested.json` 草案，含章节 hash、候选实体和待填槽位；确认后再另存正式 delta 并 merge | 写完章节后，减少从空白 JSON 开始写 state_delta 的摩擦 |
 | `scripts/ai_usage.py` | 写 `合规/ai_usage.json` + `合规/AI使用说明.md`，记录 AI-generated / AI-assisted / 未使用 AI 文本、人工贡献、AI 介入直接程度、人类 steering、可替代性、直接纳入程度与复核步骤 | 发布、导出、交平台前 |
 | `scripts/compliance_profile.py` | 写 `合规/compliance_profile.json` + `.md`；支持 `--confirm <requirement_id>` 留痕平台侧披露/备案/权利确认 | 发布、出海、KDP/中国/欧盟/微短剧等目标 |
-| `scripts/revision_planner.py` | 合并 `review_report`、`score_report`、balance/heatmap、`reader_telemetry_summary`、`reader_panel_signals` 为统一修订计划 `修订/revision_plan.json`；**该计划会回流**——`draft_packets.py` 把命中本章的修订任务注入写章包「本章待处理修订项」，`arc_packets.py` 注入弧段窗内任务，不再是无人读的终端报告 | 大改/小改前，避免各报告各说各话 |
+| `scripts/revision_planner.py` | 合并 `review_report`、`score_report`、balance/heatmap、真实读者反馈、模拟读者信号、市场证据任务为统一修订计划 `修订/revision_plan.json`；**该计划会回流**——`draft_packets.py` 把命中本章的修订任务注入写章包「本章待处理修订项」，`arc_packets.py` 注入弧段窗内任务，不再是无人读的终端报告 | 大改/小改前，避免各报告各说各话 |
+| `scripts/screen_adaptation_ready.py` | 检查导出文本/章节、权利声明、核心设定、审稿、评分、AI 使用披露、短剧/漫剧目标的改编潜力与市场基准，写 `导出/转制就绪检查.md` + JSON；有 blocker 时退出 1 | 小说成品准备进入视觉生产线前的小说侧准入 |
+| `scripts/manage_takes.py` | 登记、列出、选择同一章节多版 take；可配合 `novel-score` 对 take 独立评分并同步 manifest | A/B、开篇多版、章节多版挑选 |
+| `scripts/story_vcs.py` | VCS-free 文件级分支：branch manifest 记录 base hash，merge dry-run 检冲突/缺分支文件/legacy 无 base hash，正式 merge 先备份并写 audit/provenance，可 rollback；`migrate` 迁移旧分支，`health` 汇总分支健康；旧分支无 base hash 必须显式 `--accept-legacy-no-base` 或可信迁移 `--trust-current-main` | 多版设定/百科/进度试写，避免 A/B 分支静默覆盖主线 |
+| `scripts/release_manifest.py` | 固化导出物、章节、review/score、AI 使用、合规 profile、research、revision、waiver 的 hash，写 `导出/release_manifest.{json,md}`，并按 `--release-profile internal_draft|beta_read|platform_publish|kdp_publish|archive` 计算 `release_ready`；默认 `platform_publish`，会阻断 stale review/score 与 stale compliance input_fingerprint；未就绪返回非零，只有显式 `--allow-not-ready` 才允许只落报告不放行 | 导出/投稿/交付前，证明各报告绑定同一版文本 |
+| `../novel/scripts/vector_store_eval.py` | 读取 `生产数据/retrieval_golden.json`，从保存 index 或 `章节/` 构建检索库，按 Recall@K/MRR 阈值写 `生产数据/vector_store_eval.{json,md}` 并作为回归闸门 | 长篇记忆/RAG/别名与时间线检索质量回归 |
 
 ## 工业化生产线（批量写章闭环）
 
 1.  **准备阶段**：先用 `python3 skills/novel-craft/scripts/draft_queue.py <作品根> init` 建队列；小批/多代理写章时用 `claim --agent <名字>` 认领章节，再跑 `python3 skills/novel-craft/scripts/draft_packets.py <作品根> --chapter NN`。任务包内含本章章纲、前文摘要、风格锚点及**当前状态账本（State Ledger）**快照。长篇 / `商业连载` / `漫剧源书` 或 `_设置.md` 写 `小说生成工作流：三步迭代` 时，默认生成 `_architect`、`_ghostwriter`、`_editor` 三份任务包；显式 `--step full` 或 `_设置.md` 写 `默认单步` 可降回单包，显式 `--step trio` 可强制三包。长篇每 3-5 章先跑 `arc_packets.py` 生成弧段计划，写完该窗口后跑 `arc_gate.py`。`小说生成工作流：边写边自检` 时，任务包会把 `post_write.py` 写后自检命令写进去，并按 `小批回扫间隔` 提示 3-5 章一次的 novel-review 集中修正；用户只需选择该工作流并按任务包执行。
 2.  **写章阶段**：普通项目按 `第NN章.md` 完成 `章节/第NN章.md`；三段式按 `_architect` 产 beats、`_ghostwriter` 产 draft、`_editor` 写最终正文。然后根据内容填写 `审稿/state_delta_第NN章.json`（记录本章引入的新事实、人设变动、新线索）。不想从空白 JSON 开始时，先跑 `propose_state_delta.py --chapter NN` 生成 `.suggested.json` 草案，再人工/AI 补全为正式 delta。
 3.  **对账与同步**：
-    -   **Audit**：`python3 skills/novel-craft/scripts/reconcile_ledger.py <作品根> --chapter NN --audit`，用输出 prompt 核对正文与 Delta 是否一致，防止「记了没写」或「写了没记」。
+    -   **Audit**：`python3 skills/novel-craft/scripts/reconcile_ledger.py <作品根> --chapter NN --audit`，用输出 prompt 核对正文与 Delta 是否一致，防止「记了没写」或「写了没记」；脚本会把该核对登记为 `语义任务/*.json`，方便后续 agent 接着完成。
     -   **Merge**：把核对结论保存成 `审稿/state_verify_第NN章.json`（必须含 `chapter: NN`、`status: ok`、`chapter_file_hash`、`delta_hash`；hash 由 audit prompt 给出），再跑 `python3 skills/novel-craft/scripts/reconcile_ledger.py <作品根> --chapter NN --merge --verified 审稿/state_verify_第NN章.json`。未经验证不合并，泛化 `{"status":"ok"}` 不合并；正文或 delta 改动导致 hash 不匹配时必须重新 audit。
 4.  **质检阶段**：`python3 skills/novel-review/scripts/mechanical_check.py <作品根>` 检查硬伤；字数带宽默认从 `_meta.target_wordcount_min_max` / scale / target words 自动解析，只有人工复核确认需要时才传 `--min/--max` 覆盖。
 5.  **循环**：章节通过回扫后用 `draft_queue.py <作品根> done NN --agent <名字>` 标记完成；若返工则 `fail NN --reason "<原因>"` 或 `todo NN` 放回队列，直至完成所有 Demo 章或目标章节。
@@ -104,6 +121,23 @@ python3 skills/novel-craft/scripts/report_gate.py "<作品根>" --progress-mode 
 ```
 
 ```bash
+python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --write-plan
+python3 skills/novel/scripts/pipeline_runner.py --registry-only
+python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --artifact-graph --json
+python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --handoff blueprint
+python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --start-run --agent orchestrator
+python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --run-id run_YYYYMMDD_HHMMSS --claim-stage blueprint --agent writer-agent
+python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --run-id run_YYYYMMDD_HHMMSS --complete-stage blueprint
+```
+
+```bash
+python3 skills/novel-dashboard/scripts/dashboard.py "<作品根>" --write --html
+python3 skills/novel-batch/scripts/queue.py plan "<作品根>" --kind review --chapters 1-10
+python3 skills/novel-batch/scripts/queue.py claim "<作品根>" --worker worker-a --json
+python3 skills/novel-batch/scripts/queue.py mark "<作品根>" --task-id "<task_id>" --worker worker-a --status pass
+```
+
+```bash
 python3 skills/novel-craft/scripts/draft_queue.py "<作品根>" init
 python3 skills/novel-craft/scripts/draft_queue.py "<作品根>" claim --agent agent-a
 python3 skills/novel-craft/scripts/draft_queue.py "<作品根>" done 4 --agent agent-a
@@ -119,6 +153,28 @@ python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --chapter 4 --
 ```bash
 python3 skills/novel-craft/scripts/propose_state_delta.py "<作品根>" --chapter 4
 python3 skills/novel-craft/scripts/revision_planner.py "<作品根>"
+```
+
+```bash
+python3 skills/novel-craft/scripts/semantic_job.py show "<作品根>/语义任务/<job_id>.json"
+python3 skills/novel-craft/scripts/semantic_job.py claim "<作品根>/语义任务/<job_id>.json" --claimed-by reviewer --model-provider openai --model "<model>"
+python3 skills/novel-craft/scripts/semantic_job.py complete "<作品根>/语义任务/<job_id>.json" --response "<评估或核对JSON>"
+python3 skills/novel-craft/scripts/semantic_job.py approve "<作品根>/语义任务/<job_id>.json" --reviewer human-editor
+python3 skills/novel-craft/scripts/provenance.py lineage "<作品根>" "审稿/review_report.json"
+python3 skills/novel-craft/scripts/provenance.py openlineage "<作品根>"
+```
+
+```bash
+python3 skills/novel-craft/scripts/screen_adaptation_ready.py "<作品根>"
+python3 skills/novel-craft/scripts/release_manifest.py "<作品根>" --release-name v1
+python3 skills/novel-craft/scripts/release_manifest.py "<作品根>" --release-name beta1 --release-profile beta_read
+python3 skills/novel-craft/scripts/release_manifest.py "<作品根>" --release-name kdp-v1 --release-profile kdp_publish
+python3 skills/novel-craft/scripts/release_manifest.py "<作品根>" --release-name v1 --allow-not-ready
+python3 skills/novel-craft/scripts/review_board.py "<作品根>" --write
+python3 skills/novel-craft/scripts/review_board.py "<作品根>" --write --html
+python3 skills/novel-craft/scripts/prompt_cache_metrics.py "<作品根>" --write
+python3 skills/novel-craft/scripts/prompt_cache_metrics.py "<作品根>" --usage-file 生产数据/model_usage.jsonl --write
+python3 skills/novel/scripts/vector_store_eval.py "<作品根>" --write
 ```
 
 ```bash
@@ -168,3 +224,6 @@ python3 skills/novel-craft/scripts/compliance_profile.py "<作品根>" \
 | 跨章设定不记录账本 | 跳过 `state_ledger.json` 会导致后续章节丧失一致性依据，务必通过 `reconcile_ledger.py` 原子化合并新设定 |
 | 让 draft_packets.py 直接写正文 | 该脚本仅用于组装上下文和包，不要期望它执行 LLM 写入操作 |
 | 手动修改进度文件且不加锁 | 强行在外部编辑 `_进度.md` 可能引发冲突，应始终用 `progress.py set` |
+| 多份报告各自回流 | 先跑 `revision_planner.py` 生成统一修订计划，再让写章包/弧段包读取计划，不要让 review、score、市场证据各自驱动改稿 |
+| 小说侧直接生成视觉生产契约 | 小说线只跑 `screen_adaptation_ready.py` 判断是否具备转制条件；视觉资产、镜头、音频、合成等生产约束由用户显式选择的生产线重新建立 |
+| 导出后没有版本留痕 | 跑 `release_manifest.py`，把导出物与 review/score/AI 使用/资料包 hash 绑定，避免交付物和报告错版 |

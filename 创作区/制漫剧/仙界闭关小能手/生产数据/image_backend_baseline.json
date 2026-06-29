@@ -1,0 +1,26 @@
+{
+  "created_at": "2026-06-29T08:20:23+00:00",
+  "kind": "n2d_image_backend_baseline",
+  "policy": {
+    "backend_change_requires_rerun_plan": true,
+    "project_single_image_backend": true
+  },
+  "selection": {
+    "access": "Codex CLI",
+    "adapter_model": "GPT Image 2",
+    "backend": "codex",
+    "backend_status": "approved",
+    "channel": "Codex CLI",
+    "image_model": "GPT Image 2",
+    "persistent_subject": false,
+    "reference_input": {
+      "character_refs": null,
+      "max_total": 24,
+      "mode": "multi_image_flags",
+      "object_refs": null,
+      "style_refs": null
+    },
+    "subject_registration": false
+  },
+  "version": 1
+}

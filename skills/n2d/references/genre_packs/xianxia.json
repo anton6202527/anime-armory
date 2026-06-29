@@ -1,0 +1,41 @@
+{
+  "aliases": ["仙侠", "修仙", "古风仙侠"],
+  "degrade_plans": [
+    "长连续御剑/飞舟镜拆成起势、巡航、抵达三镜",
+    "群战法术爆发拆成反打、特写、冲击波结果镜",
+    "御兽骑乘失败时退为近景坐骑接触 + 远景剪影飞行"
+  ],
+  "genre_key": "xianxia",
+  "kind": "n2d_genre_pack",
+  "label": "仙侠",
+  "motion_contract_fields": ["mount_contact", "gait_cycle", "vehicle_lock", "harness_lock", "screen_direction", "parallax_layers", "degrade_plan"],
+  "qc_focus": ["角色定妆跨集", "法器/灵兽尺度", "飞行空间层次", "法术光色连续", "服饰发型抗漂移"],
+  "scene_archetypes": [
+    {
+      "id": "beast_mount",
+      "label": "御兽/坐骑",
+      "production_risks": ["身体悬空", "骑乘接触丢失", "坐骑步态错乱"],
+      "required_contract_fields": ["mount_contact", "gait_cycle", "harness_lock", "screen_direction"],
+      "style_binding": "坐骑和人物服饰须共享同一基础视觉风格；灵兽可有材质特效但轮廓不可跨镜变种"
+    },
+    {
+      "id": "object_flight",
+      "label": "御剑/御物飞行",
+      "production_risks": ["主体漂移", "高度曲线断裂", "风向和衣摆不一致"],
+      "required_contract_fields": ["vehicle_lock", "screen_direction", "parallax_layers", "degrade_plan"],
+      "style_binding": "飞行法器先作为 PROP/WEAPON 登记，视频 prompt 必须继承资产 id"
+    },
+    {
+      "id": "sect_battle",
+      "label": "宗门大场面/群战",
+      "production_risks": ["群像站位乱", "光效遮脸", "空间尺度塌陷"],
+      "required_contract_fields": ["screen_direction", "parallax_layers", "degrade_plan"],
+      "style_binding": "同一战场统一天光、地形、宗门服色和法术色系"
+    }
+  ],
+  "style_binding_policy": {
+    "bind_to_visual_style": true,
+    "notes": "题材 pack 给场景和 QC 权重；基础视觉风格仍由项目 _设置.md 决定。不要把仙侠写成唯一画风。"
+  },
+  "version": 1
+}

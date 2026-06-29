@@ -209,3 +209,150 @@ def format_style_contract_markdown(style_name: str) -> str:
 
 def style_options_text() -> str:
     return " / ".join(STYLE_OPTIONS)
+
+
+# ── 题材感知风格推荐（纯函数·可测） ─────────────────────────────────────────────
+#
+# 这只产出一个「推荐的预选默认」，不是硬绑：菜单仍展示、用户一句话即可覆盖
+# （见 references/visual_styles.md 的使用规则与设计宪法 C1/C2「选择点是预选不是铁律」）。
+# 把过去恒定的 DEFAULT_STYLE 预选，换成按本剧题材打分的预选——其余流程不变。
+#
+# 题材键对齐 n2d_const.GENRE_KEYWORDS；自由文本子串覆盖女频/悬疑/校园等 GENRE 未列的细分。
+# 每条 (风格, 权重)，多题材累加取最高分；平分时按 STYLE_OPTIONS 顺序（DEFAULT 在首位故偏稳）。
+GENRE_STYLE_AFFINITY: Dict[str, tuple] = {
+    "系统流": (("国漫写实", 2), ("热血少年战斗番", 1), ("冷灰写实3D国风漫剧", 1)),
+    "穿越": (("冷灰写实3D国风漫剧", 1), ("国漫写实", 1)),
+    "修仙": (("冷灰写实3D国风漫剧", 2), ("国漫写实", 2), ("厚涂幻想", 1), ("水墨国风", 1)),
+    "都市": (("写实电影感", 2), ("韩漫精致清透", 1), ("赛博霓虹", 1)),
+    "宫斗": (("古风乙女清雅", 2), ("暗黑悬疑写实", 1), ("写实电影感", 1)),
+    "赘婿": (("写实电影感", 2), ("国漫写实", 1)),
+    "战神": (("写实电影感", 2), ("美漫硬线阴影", 1), ("热血少年战斗番", 1)),
+}
+
+# 自由文本子串 → (风格, 权重)。扫 题材 设置值 / 书名 / 正文片段，补 GENRE_KEYWORDS 之外的细分气质。
+KEYWORD_STYLE_AFFINITY: tuple = (
+    ("悬疑", (("暗黑悬疑写实", 2),)),
+    ("刑侦", (("暗黑悬疑写实", 2),)),
+    ("惊悚", (("暗黑悬疑写实", 2),)),
+    ("复仇", (("暗黑悬疑写实", 1),)),
+    ("权谋", (("暗黑悬疑写实", 1),)),
+    ("斩妖", (("冷灰写实3D国风漫剧", 1), ("暗黑悬疑写实", 1))),
+    ("除魔", (("冷灰写实3D国风漫剧", 1),)),
+    ("妖", (("冷灰写实3D国风漫剧", 1),)),
+    ("玄幻", (("厚涂幻想", 1), ("冷灰写实3D国风漫剧", 1))),
+    ("武侠", (("水墨国风", 1), ("国漫写实", 1))),
+    ("乙女", (("古风乙女清雅", 2),)),
+    ("女频", (("古风乙女清雅", 1), ("韩漫精致清透", 1))),
+    ("言情", (("韩漫精致清透", 2),)),
+    ("恋爱", (("韩漫精致清透", 2),)),
+    ("甜宠", (("韩漫精致清透", 2),)),
+    ("情感", (("韩漫精致清透", 1), ("古风乙女清雅", 1))),
+    ("宫廷", (("古风乙女清雅", 1),)),
+    ("校园", (("二次元赛璐璐", 1), ("日漫剧场版光影", 1))),
+    ("青春", (("二次元赛璐璐", 1),)),
+    ("搞笑", (("Q版轻喜", 2),)),
+    ("喜剧", (("Q版轻喜", 1),)),
+    ("萌系", (("Q版轻喜", 1),)),
+    ("热血", (("热血少年战斗番", 2),)),
+    ("战斗", (("热血少年战斗番", 1),)),
+    ("科幻", (("赛博霓虹", 2),)),
+    ("末世", (("暗黑悬疑写实", 1), ("赛博霓虹", 1))),
+    ("儿童", (("3D卡通电影感", 2),)),
+    ("合家欢", (("3D卡通电影感", 2),)),
+    ("童话", (("纸片剪影 / 定格动画", 1),)),
+    ("寓言", (("纸片剪影 / 定格动画", 1),)),
+)
+
+_STYLE_ORDER = {name: i for i, name in enumerate(STYLE_OPTIONS)}
+
+
+def recommend_style(genres=(), genre_text: str = "", *, fallback: str = DEFAULT_STYLE) -> Dict:
+    """按题材打分推荐一个「预选默认」基础视觉风格。纯函数·确定性·可测。
+
+    入参
+      genres:     已检测的题材键序列（来自 motif_detector.detect_genre 的 by_genre·命中达标项）。
+      genre_text: 自由文本（书名 + `题材` 设置值 + 正文片段），子串扫细分气质。
+      fallback:   无任何题材信号时的兜底（默认 DEFAULT_STYLE）。
+
+    返回 {recommended, is_default_fallback, ranked:[(style,score)], scores, signals, rationale}。
+    signals 逐条可解释：[{source, key, style, weight}]，便于人复核为什么推这个。
+    """
+    scores: Dict[str, int] = {}
+    signals = []
+
+    def _add(source: str, key: str, affinity) -> None:
+        for style, weight in affinity:
+            scores[style] = scores.get(style, 0) + weight
+            signals.append({"source": source, "key": key, "style": style, "weight": weight})
+
+    for g in genres or ():
+        g = (g or "").strip()
+        if g in GENRE_STYLE_AFFINITY:
+            _add("genre", g, GENRE_STYLE_AFFINITY[g])
+
+    text = genre_text or ""
+    for kw, affinity in KEYWORD_STYLE_AFFINITY:
+        if kw in text:
+            _add("keyword", kw, affinity)
+
+    if not scores:
+        return {
+            "recommended": fallback,
+            "is_default_fallback": True,
+            "ranked": [],
+            "scores": {},
+            "signals": [],
+            "rationale": f"未检测到题材信号 → 用通用默认「{fallback}」（菜单仍开放，可一句话覆盖）。",
+        }
+
+    ranked = sorted(scores.items(), key=lambda kv: (-kv[1], _STYLE_ORDER.get(kv[0], len(STYLE_OPTIONS))))
+    recommended = ranked[0][0]
+    contributing = sorted({s["key"] for s in signals if s["style"] == recommended})
+    runner = ranked[1][0] if len(ranked) > 1 else ""
+    rationale = (
+        f"题材信号 [{ '、'.join(contributing) }] 综合得分最高 → 推荐「{recommended}」"
+        f"（{ranked[0][1]} 分）"
+        + (f"；次选「{runner}」（{ranked[1][1]} 分），如需更{_hint_for(runner)}可改用。" if runner else "。")
+    )
+    return {
+        "recommended": recommended,
+        "is_default_fallback": recommended == fallback,
+        "ranked": ranked,
+        "scores": scores,
+        "signals": signals,
+        "rationale": rationale,
+    }
+
+
+def _hint_for(style: str) -> str:
+    """次选风格的一句话气质提示（仅用于 rationale 文案，不参与决策）。"""
+    hints = {
+        "国漫写实": "国漫美型/稳定角色",
+        "暗黑悬疑写实": "悬疑暗线压迫感",
+        "厚涂幻想": "史诗高魔体量",
+        "水墨国风": "诗性写意",
+        "写实电影感": "真人影视质感",
+        "古风乙女清雅": "女性向清雅审美",
+        "韩漫精致清透": "都市恋爱清透感",
+        "热血少年战斗番": "热血战斗番动感",
+    }
+    return hints.get(style, "该方向气质")
+
+
+def format_style_recommendation_markdown(rec: Dict) -> str:
+    """把 recommend_style() 结果渲染成 global_style.md 的「风格推荐依据」区块。"""
+    if not rec:
+        return ""
+    lines = [
+        f"- 推荐基础视觉风格：{rec.get('recommended', DEFAULT_STYLE)}",
+        f"- 依据：{rec.get('rationale', '')}",
+    ]
+    ranked = rec.get("ranked") or []
+    if ranked:
+        rank_txt = " / ".join(f"{name}({score})" for name, score in ranked[:5])
+        lines.append(f"- 候选排名：{rank_txt}")
+    lines.append(
+        "- 说明：本项是**题材感知的预选默认**，不是铁律；菜单仍开放。"
+        "若你说「更像电影写实/二次元/水墨/赛博/Q版…」或给参考图，立即覆盖并同步本文件与 `_设置.md`。"
+    )
+    return "\n".join(lines)

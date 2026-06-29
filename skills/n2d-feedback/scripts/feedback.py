@@ -53,6 +53,23 @@ RETENTION_PRIOR_DIMENSIONS: Tuple[Tuple[str, str, str], ...] = (
     ("paywall_position_bucket", "paywall_unlock", "unlock_or_subscribe_rate"),
     ("continue_path", "continue_path_follow", "follow_next_rate"),
 )
+# 第一方留存 → pacing 密度带校准（pacing_retention.py 的 density_slow/fast_per_min 真值源）。
+# industry_benchmark.json 明写这两项是 confidence=low 内部启发式、"真值须由 n2d-feedback 第一方留存
+# 数据校准"——本文件即写端。kind 本线自定义，消费端（n2d-review/pacing_retention.py）按 kind 校验。
+PACING_PROFILES_KIND = "n2d_pacing_profiles"
+PACING_PROFILES_FILENAME = "pacing_profiles.json"
+PACING_PROFILES_VERSION = 1
+PACING_MIN_SAMPLES = 3  # 阈值校准比 best/worst 展示更需样本量，默认比 feedback min_samples(2) 高
+# density_bucket() 的标签 → 数值带 [low, high)（high=None=开口顶档）。
+# 必须与本文件 density_bucket() 输出字符串**严格一致**（test_feedback 锁）：据此把"留存好的密度档"
+# 还原成 slow/fast 数值带。改 density_bucket() 的标签/分界必同步改这里 + 测试。
+DENSITY_BUCKET_BOUNDS: Dict[str, Tuple[float, Optional[float]]] = {
+    "<12/m 过慢": (0.0, 12.0),
+    "12-20/m 舒展": (12.0, 20.0),
+    "20-30/m 标准快节奏": (20.0, 30.0),
+    "30-40/m 高密度": (30.0, 40.0),
+    ">=40/m 过密": (40.0, None),
+}
 DEFAULT_REQUIRED_METRICS: Tuple[str, ...] = (
     "retention_3s",
     "retention_6s",
@@ -1146,6 +1163,90 @@ def write_creative_priors(root: str, priors: Dict[str, Any]) -> str:
     return path
 
 
+def build_pacing_profiles(
+    analyses: Dict[str, Dict[str, Any]],
+    root: str,
+    *,
+    min_samples: int = PACING_MIN_SAMPLES,
+    generated_at: Optional[str] = None,
+) -> Dict[str, Any]:
+    """第一方留存 → 本剧题材的 pacing 密度带校准（pacing_retention.py 的 density_slow/fast_per_min 真值源）。
+
+    背景：density_slow_per_min(10)/density_fast_per_min(45) 是内部启发式（confidence=low·无公开基准），
+    industry_benchmark.json 明写"真值须由 n2d-feedback 第一方留存数据校准"。本函数据已算好的
+    `shot_density_bounce` 分组（按 shot_density_bucket 看 bounce_3s，越低留存越好），把"跳出率≤全剧均值
+    且样本≥min_samples"的密度档并成健康带 [slow, fast)，作为本剧题材的校准阈值。
+
+    诚实边界：无合格档/样本不足/退化成窄带 → evidence_status='insufficient_samples' 且 thresholds={}，
+    消费端（pacing_retention.load_pacing_profile）只认 'calibrated'，否则静默退回 benchmark/默认（不臆造）。
+    advisory 契约不变：本校准只调"健康密度带"，绝不创造任何 block。
+    """
+    settings = load_settings(root)
+    genre = settings.get("题材") or settings.get("类型") or "未分类"
+    dens = analyses.get("shot_density_bounce") or {}
+    baseline = dens.get("baseline")  # 全剧 bounce_3s 加权均值（越低越好）；缺则不按均值过滤、仅靠样本量
+    groups = [g for g in (dens.get("groups") or []) if isinstance(g, dict)]
+
+    qualifying: List[Dict[str, Any]] = []
+    for g in groups:
+        name = g.get("name")
+        if name not in DENSITY_BUCKET_BOUNDS:
+            continue
+        if int(g.get("n") or 0) < min_samples:
+            continue
+        bounce = g.get("bounce_3s")
+        if bounce is None:
+            continue
+        if baseline is not None and bounce > baseline:
+            continue  # 跳出率高于全剧均值 = 该密度档留存偏差，不纳入健康带
+        qualifying.append(g)
+
+    episodes = sorted({ep for g in qualifying for ep in (g.get("episodes") or [])})
+    sample_n = sum(int(g.get("n") or 0) for g in qualifying)
+    thresholds: Dict[str, float] = {}
+    status = "insufficient_samples"
+    if not qualifying:
+        notes = "无密度档同时满足样本量与跳出率门槛 → 退回 benchmark/默认"
+    else:
+        lows = [DENSITY_BUCKET_BOUNDS[g["name"]][0] for g in qualifying]
+        highs = [DENSITY_BUCKET_BOUNDS[g["name"]][1] for g in qualifying]
+        known_highs = [h for h in highs if h is not None]
+        slow = min(lows)
+        fast = max(known_highs) if known_highs else slow + 20.0
+        if any(h is None for h in highs):  # 开口顶档也留得住 → 给宽松上界，别误判"过密"
+            fast = max(fast, 60.0)
+        if fast - slow >= 8.0:  # 至少一个档宽，避免退化成空带
+            thresholds = {"density_slow_per_min": round(slow, 1), "density_fast_per_min": round(fast, 1)}
+            status = "calibrated"
+            notes = f"{len(qualifying)} 个密度档跳出率≤全剧均值，健康带校准为 [{slow:.0f},{fast:.0f})/min"
+        else:
+            notes = "合格密度档过窄（退化带）→ 丢弃，退回 benchmark/默认"
+
+    return {
+        "kind": PACING_PROFILES_KIND,
+        "version": PACING_PROFILES_VERSION,
+        "generated_at": generated_at or now_iso(),
+        "min_samples": min_samples,
+        "genre": genre,
+        "evidence_status": status,
+        "sample_n": sample_n,
+        "episodes": episodes,
+        "qualifying_buckets": [g["name"] for g in qualifying],
+        "source": "n2d-feedback shot_density_bounce (第一方留存/跳出)",
+        "thresholds": thresholds,
+        "notes": notes,
+    }
+
+
+def write_pacing_profiles(root: str, profiles: Dict[str, Any]) -> str:
+    os.makedirs(production_dir(root), exist_ok=True)
+    path = os.path.join(production_dir(root), PACING_PROFILES_FILENAME)
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(profiles, fh, ensure_ascii=False, indent=2, sort_keys=True)
+        fh.write("\n")
+    return path
+
+
 def load_consistency_reports(root: str) -> List[Dict[str, Any]]:
     """读 n2d-review/review-ui 外发的 n2d_consistency_findings（无文件优雅返回空）。"""
     reports: List[Dict[str, Any]] = []
@@ -1327,13 +1428,13 @@ def analyze_genre_retention(rows: List[Dict[str, Any]], root: str) -> Dict[str, 
 
     需要至少 2 集同题材数据才有统计意义。无题材信息时静默跳过，不阻断。
     """
+    settings = load_settings(root)  # 题材是本作品级（每 root 一题材），循环外解析一次即可
+    genre = settings.get("题材") or settings.get("类型") or "未分类"
     genre_rows: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
     for row in rows:
         ep = normalize_episode(row.get("episode"))
         if not ep:
             continue
-        settings = load_settings(root)
-        genre = settings.get("题材") or settings.get("类型") or "未分类"
         genre_rows[genre].append(row)
     profiles: List[Dict[str, Any]] = []
     metrics = ("retention_3s", "retention_6s", "retention_15s", "completion_rate", "bounce_3s", "follow_next_rate")
@@ -1663,6 +1764,11 @@ def parser() -> argparse.ArgumentParser:
         action="store_true",
         help=f"write A/B-won 开场/断点/封面/标题 winners to 生产数据/{CREATIVE_PRIORS_FILENAME} (n2d-script 阶段2 finalize 读为先验)",
     )
+    ap.add_argument(
+        "--write-pacing-profiles",
+        action="store_true",
+        help=f"write 第一方留存校准的 pacing 密度带 to 生产数据/{PACING_PROFILES_FILENAME} (n2d-review/pacing_retention.py 读为 density_slow/fast 真值)",
+    )
     ap.add_argument("--markdown", action="store_true")
     ap.add_argument("--update-guide", action="store_true")
     ap.add_argument(
@@ -1719,6 +1825,20 @@ def cmd(ns: argparse.Namespace) -> int:
         # 诚实可见提示：无显著胜出维度会落空文件（priors={}），明说不是 bug。
         print(
             f"creative_priors → {priors_path}：{('写入 ' + '、'.join(kept)) if kept else '无维度达 lift/样本阈值（priors 为空，下游 no-op）'}",
+            file=sys.stderr,
+        )
+    if ns.write_pacing_profiles and not ns.no_write:
+        profiles = build_pacing_profiles(
+            feedback["analyses"],
+            root,
+            min_samples=max(ns.min_samples, PACING_MIN_SAMPLES),
+            generated_at=feedback.get("generated_at"),
+        )
+        profiles_path = write_pacing_profiles(root, profiles)
+        # 诚实可见：样本不足/无合格档会落 evidence_status=insufficient_samples（thresholds 空，下游退默认），明说不是 bug。
+        print(
+            f"pacing_profiles → {profiles_path}：{profiles['evidence_status']}"
+            + (f"（{profiles['notes']}）" if profiles.get("notes") else ""),
             file=sys.stderr,
         )
     if ns.update_guide:

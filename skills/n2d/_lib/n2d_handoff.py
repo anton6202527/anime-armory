@@ -166,7 +166,11 @@ def _has_native_binding(text: str) -> bool:
 
 
 def _storyboard_clip_meta(root: str, ep: str) -> dict:
-    """storyboard.json → {clip_num: {expression_span, closeup, need_endframe}}。缺文件返回空。"""
+    """storyboard.json → {clip_num: {expression_span, closeup, need_endframe}}。缺文件返回空。
+
+    `shot_intent.json` 里的 expression_span/need_endframe/motion_intensity 是 storyboard 快照投影，
+    不是作者 override；生成/交接契约必须继续以 storyboard 为真值源，避免 gate 与生成侧读不同值。
+    """
     path = os.path.join(root, "脚本", ep, "storyboard.json")
     data = _load_json(path)
     if not isinstance(data, dict) or not isinstance(data.get("clips"), list):
@@ -185,8 +189,17 @@ def _storyboard_clip_meta(root: str, ep: str) -> dict:
             "need_endframe": cont.get("need_endframe") is True,
             "closeup": any(m in blob for m in CLOSEUP_MARKERS),
             "action_beat": _is_action_beat_blob(blob, cont),
+            "motion_intensity": str(cont.get("motion_intensity") or "").strip(),
         }
     return out
+
+
+def _overlay_shot_intent(root: str, ep: str, meta: dict) -> None:
+    """Deprecated no-op.
+
+    Kept only for older imports/tests.  Derived fields in `shot_intent.json` do not override storyboard.
+    """
+    return None
 
 
 def _is_action_beat_blob(blob: str, cont: dict) -> bool:

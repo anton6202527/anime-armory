@@ -45,6 +45,7 @@ from n2d_contract import (  # noqa: E402  身份/LoRA 判定的单一真值源�
     lora_registry_ready_blocks,
 )
 from n2d_route import episode_number as route_episode_number, normalize_episode as route_normalize_episode  # noqa: E402
+from n2d_registry import episode_png_fingerprint  # noqa: E402  内容级新鲜度指纹（与 gate 共用单一真值源）
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 if _HERE not in sys.path:
@@ -623,12 +624,27 @@ def parse_episodes(value: str, available: List[str]) -> List[str]:
 
 def load_face_consistency():
     here = Path(__file__).resolve()
-    script = here.parents[2] / "n2d-review" / "scripts" / "face_consistency.py"
+    review_scripts = here.parents[2] / "n2d-review" / "scripts"
+    script = review_scripts / "face_consistency.py"
     spec = importlib.util.spec_from_file_location("n2d_identity_face_consistency", script)
     if spec is None or spec.loader is None:
         return None
     mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
+    # face_consistency.py 会 `import state_continuity` 等本目录兄弟模块。它不在本进程 sys.path 上时，
+    # 动态 exec 会 ModuleNotFoundError——此前只因别的 n2d-review 测试先把该目录塞进 sys.path 才偶然能跑
+    # （收集顺序一变就崩）。这里临时把 n2d-review/scripts 放上 sys.path 再 exec，保证加载自洽。
+    review_path = str(review_scripts)
+    added = review_path not in sys.path
+    if added:
+        sys.path.insert(0, review_path)
+    try:
+        spec.loader.exec_module(mod)
+    finally:
+        if added:
+            try:
+                sys.path.remove(review_path)
+            except ValueError:
+                pass
     return mod
 
 
@@ -724,6 +740,12 @@ def build_drift_report(
         }
     results = {ep: fc.analyze(str(root), ep) for ep in episodes}
     report = summarize_face_results(root, episodes, results, generated_at=generated_at)
+    # 内容级新鲜度：记下「本报告是基于哪一版 PNG 像素算的」。消费端 gate 据此判定报告是否陈旧
+    # （集级覆盖看着没问题、但图重出过 → 指纹变 → 报告其实已过期）。单一真值源在 n2d_registry。
+    report["png_fingerprints"] = {
+        ep: fp for ep in episodes
+        for fp in [episode_png_fingerprint(str(root), ep)] if fp is not None
+    }
     # 跨集 embedding 漂移：逐角色按集质心 vs 锚点接近度，揪"每集各自过 floor 但整体逐集偏离"的系统性漂移
     # （registry 传入做 P1 tier 感知标注：升档角色的偏移可能是换分布而非崩脸）
     report["embedding_drift"] = build_embedding_drift(fc, report, registry)

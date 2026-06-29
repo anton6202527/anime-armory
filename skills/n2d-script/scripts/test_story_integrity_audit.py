@@ -71,6 +71,28 @@ def test_write_scaffolds_creates_story_ledgers():
     assert pilot["kind"] == "n2d_pilot_arc_contract"
 
 
+def test_write_scaffolds_updates_same_episode_thread_after_tail_rewrite():
+    root = _mk_ep(
+        "[镜头1·沈念·紧张·快] 我决定救她。\n"
+        "[镜头2·沈念·痛苦·快] 因此我暴露身份。\n"
+        "[镜头3·旁白·悬疑·快] 门外突然传来脚步。 🪝集尾\n"
+    )
+    SI.write_scaffolds(root, ["第1集"])
+    voice_path = Path(root) / "脚本" / "第1集" / "voiceover.txt"
+    voice_path.write_text(
+        "[镜头1·沈念·紧张·快] 我决定救她。\n"
+        "[镜头2·沈念·痛苦·快] 因此我暴露身份。\n"
+        "[镜头3·旁白·悬疑·快] 门外突然响起陌生脚步。 🪝集尾\n",
+        encoding="utf-8",
+    )
+
+    outputs = SI.write_scaffolds(root, ["第1集"])
+
+    scheduler = json.loads(Path(outputs["thread_scheduler"]).read_text(encoding="utf-8"))
+    assert len(scheduler["threads"]) == 1
+    assert "陌生脚步" in scheduler["threads"][0]["open_question"]
+
+
 def test_dialogue_not_advancing_warned():
     root = _mk_ep(
         "[镜头1·沈念·平静·慢] 从前这里有一座旧城。\n"

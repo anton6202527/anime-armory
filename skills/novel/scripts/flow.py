@@ -21,7 +21,7 @@ from novel_route import summarize
 from novel_contract import is_long_arc_project
 from project_io import load_project_settings
 
-_STAGE_TABLE_MARKERS = ("novel-derived-stage-table", "novel-create-stage-table")
+_STAGE_TABLE_MARKERS = ("novel-derived-stage-table", "novel-create-stage-table", "novel-import-stage-table")
 
 def load_json(path):
     if not os.path.exists(path):
@@ -72,6 +72,32 @@ def arc_window_for_chapter(ch_num, interval, meta):
 def long_arc_mode(settings, meta):
     # 单一真值源在 novel_contract.is_long_arc_project（flow 与 qa_gate 共用）。
     return is_long_arc_project(meta, settings)
+
+
+REVISION_SIGNAL_RELS = (
+    "审稿/review_report.json",
+    "评分/score_report.json",
+    "评分/pacing_signals.json",
+    "评分/reader_telemetry_summary.json",
+    "评分/reader_panel_signals.json",
+    "评分/market_evidence_tasks.json",
+    "评分/market_evidence_jobs.json",
+)
+
+
+def revision_plan_hint(root):
+    sources = [os.path.join(root, rel) for rel in REVISION_SIGNAL_RELS if os.path.exists(os.path.join(root, rel))]
+    if not sources:
+        return ""
+    plan = os.path.join(root, "修订", "revision_plan.json")
+    latest_source = max(os.path.getmtime(path) for path in sources)
+    if not os.path.exists(plan):
+        reason = "已有审稿/评分/反馈信号，但缺少统一修订计划"
+    elif os.path.getmtime(plan) < latest_source:
+        reason = "统一修订计划早于最新审稿/评分/反馈信号"
+    else:
+        return ""
+    return f"{reason}：python3 skills/novel-craft/scripts/revision_planner.py \"{root}\""
 
 
 def is_stage_checklist(root):
@@ -192,6 +218,10 @@ def main():
                     f"长篇弧段 gate：本窗口到第 {end:02d} 章，建议跑 "
                     f"python3 skills/novel-review/scripts/arc_gate.py \"{root}\" --arc {start}-{end}"
                 )
+
+    revision_hint = revision_plan_hint(root)
+    if revision_hint:
+        advice.append(revision_hint)
 
     # 输出
     if blockers:

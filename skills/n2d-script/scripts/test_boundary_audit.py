@@ -31,6 +31,15 @@ def _mk_work(eps, settings=""):
     return d
 
 
+def _mark_main_nodes_source(root):
+    src = Path(root) / "小说"
+    src.mkdir(parents=True, exist_ok=True)
+    (src / "_源指纹.json").write_text(
+        json.dumps({"kind": "n2d_source_fingerprint", "version": 1, "source_kind": "main_nodes_txt"}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+
 def _run_json(root, *extra):
     out = subprocess.run([sys.executable, SCRIPT, root, "--json", *extra],
                          capture_output=True, text=True)
@@ -132,5 +141,80 @@ def test_no_spectacle_no_issue():
     assert sp["spectacle_eps"] == [] and sp["issues"] == []
 
 
+def test_main_node_source_uses_explicit_hook_and_beats_as_boundary_evidence():
+    eps = [
+        "# 第1集 冷宫赐死，妖血觉醒\n\n"
+        "源章：01-03\n\n"
+        "沈念醒来发现自己顶着林婉儿的脸，被赐毒酒，又被冷宫妖物柳娘子逼到死角。\n\n"
+        "必保节点：错脸醒来；毒酒赐死；柳娘子逼杀；吞妖觉醒。\n\n"
+        "结尾钩子：冷宫有妖，本宫最大。\n\n"
+        "n2d 要点：先锁身份定妆。",
+        "# 第2集 冷宫立规矩\n\n"
+        "源章：04-08\n\n"
+        "沈念把收租妖物和御膳房妖油串成证据链。\n\n"
+        "必保节点：收租妖物；冷宫规矩；半份证据送御前。\n\n"
+        "结尾钩子：皇帝收到证据，猎局反向开启。\n\n"
+        "n2d 要点：冷宫空间复用。",
+    ]
+    root = _mk_work(eps, "变现模式: 免费\n")
+    _mark_main_nodes_source(root)
+    data = _run_json(root)
+    rows = data["episodes"]
+    assert rows[0]["structured_main_node"] is True
+    assert rows[0]["strength"] == 2
+    assert rows[0]["closed_loop"] is True
+    assert rows[0]["risk"] is False
+
+
 if __name__ == "__main__":
     sys.exit(subprocess.call([sys.executable, "-m", "pytest", __file__, "-q"]))
+
+
+# ── G3·付费墙断点强度入闸（仅付费/海外档）─────────────────────────
+def _run(root, *extra):
+    """Return (data_or_None, returncode). JSON parsed when --json present."""
+    cp = subprocess.run([sys.executable, SCRIPT, root, *extra], capture_output=True, text=True)
+    data = json.loads(cp.stdout) if "--json" in extra and cp.stdout.strip() else None
+    return data, cp.returncode
+
+
+# 10 集，1-7/9/10 强尾(！=strength2·闭环·章头)，第8集弱卡点(钩词但无标点=strength1·非逐集risk)
+def _paid_eps_weak_wall8():
+    eps = ["第%d章\n他逼问背叛，她反击夺回主导，竟是另有隐情！" % i for i in range(1, 11)]
+    # 第8集：付费墙位，钩词收尾但无悬念标点 → strength 1（中），不触发逐集 risk，但付费墙应最强
+    eps[7] = "第8章\n他逼问背叛，她反击夺回主导，门外站着的人究竟是谁"
+    return eps
+
+
+def test_paid_weak_paywall_enters_strict_gate():
+    root = _mk_work(_paid_eps_weak_wall8(), "题材: 宫斗\n变现模式: 付费\n")
+    data, _ = _run(root, "--json")
+    arc = data["series_arc"]
+    assert 8 in arc["cliffhanger_targets"]
+    assert arc["weak_paywalls"] == [8]          # 付费墙断点偏弱进闸列
+    assert data["has_risk"] is False            # 第8集本身不是逐集高风险（strength=1·闭环·章头）
+    assert data["strict_block"] is True         # G3·净增覆盖：靠付费墙弱触发
+
+
+def test_paid_weak_paywall_strict_exits_1():
+    root = _mk_work(_paid_eps_weak_wall8(), "题材: 宫斗\n变现模式: 付费\n")
+    _, rc_plain = _run(root)                     # 无 --strict → report-only
+    _, rc_strict = _run(root, "--strict")
+    assert rc_plain == 0 and rc_strict == 1
+
+
+def test_paid_strong_walls_pass_strict():
+    # 所有付费墙都以悬念标点收尾(strength2) → 无弱卡点 → strict 放行
+    eps = ["第%d章\n他逼问背叛，她反击夺回主导，竟是另有隐情！" % i for i in range(1, 11)]
+    root = _mk_work(eps, "题材: 宫斗\n变现模式: 付费\n")
+    data, rc = _run(root, "--strict", "--json")
+    assert data["series_arc"]["weak_paywalls"] == []
+    assert data["strict_block"] is False and rc == 0
+
+
+def test_free_mode_weak_wall_not_gated():
+    # 同样的弱卡点，免费档 weak_paywalls 恒空（不设硬付费墙）→ 不因此阻断
+    root = _mk_work(_paid_eps_weak_wall8(), "题材: 宫斗\n变现模式: 免费\n")
+    data, rc = _run(root, "--strict", "--json")
+    assert data["series_arc"]["weak_paywalls"] == []
+    assert data["series_arc"]["cliffhanger_targets"] == []

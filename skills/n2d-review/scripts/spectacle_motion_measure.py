@@ -7,7 +7,7 @@
   · optical_flow_direction  成片实际运动/运镜方向 vs storyboard camera_path（Kling 笔刷方向≠prompt 必崩的机检版）
   · motion_blur_plausibility 该糊的高速段糊、不该糊的清楚
   · limb_artifact_score      肢体畸变/多手多脚（需 pose 检测器；缺则该维留空=unverified，绝不臆造）
-写 生产数据/spectacle_motion_artifacts_第N集.json，spectacle_video_qc 自动并入八维核验。
+写 生产数据/spectacle_motion_artifacts_第N集.json，spectacle_video_qc 自动并入动作 QC 核验。
 
 依赖（在 facefusion 环境跑）：cv2(+numpy) 必需（光流/锐度）；mediapipe 可选（肢体/人数）。
   conda run -n facefusion python spectacle_motion_measure.py <作品根> 第N集 [--json]
@@ -31,11 +31,12 @@ if LIB not in sys.path:
     sys.path.insert(0, LIB)
 
 from n2d_contract import (  # noqa: E402
+    ACTION_CHOREOGRAPHY_SHOT_TYPES,
     high_flow_sampling_plan,
     infer_spectacle_type,
 )
 
-ACTION_KINDS = {"fight_exchange", "chase", "flight"}
+ACTION_KINDS = set(ACTION_CHOREOGRAPHY_SHOT_TYPES)
 SPECTACLE_MOTION_ARTIFACTS_KIND = "n2d_spectacle_motion_artifacts"
 
 # 运动近静止阈：平均光流幅度（像素/帧）低于此视为基本静止（运镜方向判 static）。
@@ -362,7 +363,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     for c in res.get("checks", []):
         print(f"  {c.get('clip')}: {json.dumps({k: v for k, v in c.items() if k not in ('clip','spectacle_type')}, ensure_ascii=False)}")
     if res["ok"]:
-        print(f"\n已写 {res.get('report')}（spectacle_video_qc 自动并入八维核验）")
+        print(f"\n已写 {res.get('report')}（spectacle_video_qc 自动并入动作 QC 核验）")
     return 0 if res["ok"] else 2
 
 

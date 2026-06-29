@@ -209,6 +209,19 @@ class TestNovelScore(unittest.TestCase):
             report = json.load(f)
         self.assertEqual(report["reader_telemetry_path"], "评分/reader_telemetry_summary.json")
         self.assertEqual(report["reader_telemetry_summary"]["aggregate"]["drop_rate"], 0.45)
+        self.assertEqual(report["pre_reader_feedback_score"], 95.0)
+        self.assertEqual(report["reader_feedback_adjustment"]["points"], -7.0)
+        self.assertEqual(report["total_score"], 88.0)
+        self.assertTrue(any("真实完读率" in item for item in report["reader_feedback_adjustment"]["reasons"]))
+
+    def test_reader_feedback_adjustment_uses_panel_and_ab_with_cap(self):
+        adjustment = score.compute_reader_feedback_adjustment(
+            reader_panel={"retention_prior": 0.35, "cliche_density_per_kchar": 4.5},
+            ab_take_results={"winner": "B", "completion_uplift": -0.12, "confidence": "high"},
+        )
+        self.assertEqual(adjustment["raw_points"], -6.0)
+        self.assertEqual(adjustment["points"], -6.0)
+        self.assertEqual(adjustment["ab_take_results_summary"]["winner"], "B")
 
     def test_reference_distribution_percentile_reported(self):
         samples = []
@@ -279,6 +292,19 @@ class TestNovelScore(unittest.TestCase):
         self.assertEqual(score.get_tier_verdict(75), ("合格偏上", "小改", "high"))
         self.assertEqual(score.get_tier_verdict(60), ("及格线下", "大改", "medium"))
         self.assertEqual(score.get_tier_verdict(40), ("不及格", "弃稿重立", "low"))
+
+    def test_minor_next_actions_are_not_hard_rewrite_routes(self):
+        processed = [
+            {"dimension": "topic_heat", "raw_score": 8.2, "weight": 20},
+            {"dimension": "plot_structure", "raw_score": 8.0, "weight": 12},
+            {"dimension": "prose", "raw_score": 8.2, "weight": 8},
+        ]
+        actions = score.build_next_actions("小改", processed)
+        self.assertEqual(len(actions), 1)
+        self.assertEqual(actions[0]["priority"], "should")
+        self.assertEqual(actions[0]["recommended_skill"], "novel-review")
+        self.assertIn("压缩支线", actions[0]["action"])
+        self.assertNotIn("重做题材", actions[0]["action"])
 
     def test_adaptation_check_low_potential_threshold(self):
         # 5 维各 2 分 = 10/25 < 15 → low_potential
@@ -431,6 +457,24 @@ class TestNovelScore(unittest.TestCase):
         freshness = score.baseline_freshness(baseline)
         self.assertTrue(freshness["blocking"])
         self.assertEqual(freshness["status"], "coverage_gap")
+
+    def test_quarter_old_short_drama_evidence_passes_coverage(self):
+        # 红果/抖音漫剧 平台覆盖靠按月·季发布的行业证据：季度内（COVERAGE_EVIDENCE_MAX_AGE_DAYS）
+        # 的真实证据应满足覆盖闸，不应被 21 天日榜窗口卡成 coverage_gap → 长期 stale-waiver。
+        today = date.today()
+        baseline = score.find_latest_baseline(self.tmp)
+        baseline["baseline_date"] = today.isoformat()
+        baseline["sources"] = [{"platform": "番茄小说", "status": "ok", "signals": ["网文榜新鲜"]}]
+        baseline["manual_evidence"] = [{
+            "platform": "红果短剧",
+            "date": (today - timedelta(days=60)).isoformat(),
+            "source": "QuestMobile行业报告",
+            "summary": "红果短剧月活3亿+，系统流题材放量。",
+            "url": "https://example.com/q",
+        }]
+        freshness = score.baseline_freshness(baseline)
+        self.assertEqual(freshness["status"], "fresh")
+        self.assertFalse(freshness["blocking"])
 
     def test_missing_baseline_markdown_blocks_scoring(self):
         md_path = os.path.join(self.score_dir, f"题材热榜_{date.today().isoformat()}.md")

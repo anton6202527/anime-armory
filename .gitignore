@@ -69,3 +69,7 @@ QWEN.md
 
 # 流程自审报告是一次性的：每次 audit 重跑全流程，不留存档（见各 *-review SKILL 模式②）
 _流程自审_*.md
+
+# 临时 format-patch dump（某流程导出近期提交用，非源码）
+.recent_novel_commits.patch
+*.patch

@@ -1,0 +1,41 @@
+{
+  "aliases": ["穿越", "穿书", "重生", "系统流"],
+  "degrade_plans": [
+    "复杂系统面板改为独立 UI 图层叠加",
+    "时空转换用环境变体前后对照，不强求长镜头变形",
+    "现代物品进入古代场景时先出道具参考，避免模型改形"
+  ],
+  "genre_key": "chuanyue",
+  "kind": "n2d_genre_pack",
+  "label": "穿越",
+  "motion_contract_fields": ["mount_contact", "harness_lock", "screen_direction", "parallax_layers", "degrade_plan"],
+  "qc_focus": ["时代物件一致", "系统面板 OCR", "前后身份/服饰状态", "空间转换因果"],
+  "scene_archetypes": [
+    {
+      "id": "system_panel",
+      "label": "系统面板/HUD",
+      "production_risks": ["中文字乱码", "数值不一致", "面板风格跨集漂移"],
+      "required_contract_fields": ["screen_direction", "degrade_plan"],
+      "style_binding": "HUD 作为 ui_asset_registry 资产，文字优先独立图层"
+    },
+    {
+      "id": "time_transfer",
+      "label": "穿越/重生瞬间",
+      "production_risks": ["角色外观误改", "场景时代混乱", "因果不清"],
+      "required_contract_fields": ["parallax_layers", "degrade_plan"],
+      "style_binding": "前后场景用 LOC id 区分，人物状态变化只写 allowed_state_delta"
+    },
+    {
+      "id": "anachronism_prop",
+      "label": "现代物品/知识落地",
+      "production_risks": ["道具形态漂移", "古今材质冲突", "手持关系错"],
+      "required_contract_fields": ["mount_contact", "harness_lock", "screen_direction"],
+      "style_binding": "现代道具登记为 PROP，交互镜必须有 contact/possession 说明"
+    }
+  ],
+  "style_binding_policy": {
+    "bind_to_visual_style": true,
+    "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。"
+  },
+  "version": 1
+}

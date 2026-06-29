@@ -63,6 +63,21 @@ try:
 except Exception:  # pragma: no cover - degraded local env
     artifact_fingerprint = None  # type: ignore[assignment]
 
+try:
+    from gate_receipt import unresolved_waivers as _gr_unresolved_waivers  # type: ignore
+except Exception:  # pragma: no cover - degraded local env
+    _gr_unresolved_waivers = None  # type: ignore[assignment]
+
+
+def _unresolved_unverified_waivers(root: str) -> List[Dict[str, Any]]:
+    """未销账的「未验证强标 ✅」债（缺凭据则空表，不阻断仪表盘自身）。"""
+    if not root or _gr_unresolved_waivers is None:
+        return []
+    try:
+        return list(_gr_unresolved_waivers(root))
+    except Exception:
+        return []
+
 EVENT_KIND = PRODUCTION_EVENT_KIND
 DASHBOARD_KIND = PRODUCTION_DASHBOARD_KIND
 EVENT_VERSION = 1
@@ -230,7 +245,26 @@ def make_event(
         item["release"] = {k: v for k, v in release.items() if v not in (None, "")}
     if meta:
         item["meta"] = {k: v for k, v in meta.items() if v not in (None, "")}
+    trace = trace_context(item.get("meta") if isinstance(item.get("meta"), dict) else {})
+    if trace:
+        item["trace"] = trace
     return item
+
+
+def trace_context(meta: Dict[str, Any]) -> Dict[str, Any]:
+    trace_id = str(meta.get("trace_id") or os.environ.get("N2D_TRACE_ID") or "").strip()
+    task_id = str(meta.get("task_id") or os.environ.get("N2D_TASK_ID") or "").strip()
+    idem = str(meta.get("idempotency_key") or os.environ.get("N2D_IDEMPOTENCY_KEY") or "").strip()
+    span_id = str(meta.get("span_id") or os.environ.get("N2D_SPAN_ID") or "").strip()
+    if not trace_id and (task_id or idem):
+        trace_id = idem or task_id
+    out = {
+        "trace_id": trace_id,
+        "span_id": span_id or task_id,
+        "task_id": task_id,
+        "idempotency_key": idem,
+    }
+    return {k: v for k, v in out.items() if v}
 
 
 def _load_events_unlocked(root: str) -> List[Dict[str, Any]]:
@@ -400,6 +434,10 @@ def blank_episode(ep: str, progress: Optional[Dict[str, Any]] = None) -> Dict[st
         "qa_blockers": 0,
         "qa_warnings": 0,
         "qa_infos": 0,
+        "warnings_per_attempt": None,
+        "blockers_per_attempt": None,
+        "false_positive_recoveries": 0,
+        "false_positive_recovery_rate": None,
         "consistency_blockers": 0,
         "consistency_warnings": 0,
         "generation_pass_rate": None,
@@ -459,6 +497,21 @@ def add_qa_signal(summary: Dict[str, Any], stage: str, severity: str, dim: str, 
 
 def add_counter_value(target: Dict[str, float], key: str, amount: float) -> None:
     target[key] = round(float(target.get(key, 0.0)) + amount, 6)
+
+
+def is_false_positive_waiver(event: Dict[str, Any]) -> bool:
+    """Whether a waiver records a gate false-positive recovery.
+
+    This keeps "gate was too noisy" measurable without changing historical QA
+    event schemas.  Operators can record it with:
+    `dashboard.py waiver ... --waiver false_positive --reason 误报`.
+    """
+    if str(event.get("event") or "") != "waiver":
+        return False
+    meta = event.get("meta") if isinstance(event.get("meta"), dict) else {}
+    blob = " ".join(str(meta.get(k) or "") for k in ("waiver", "reason", "scope")).lower()
+    markers = ("false_positive", "false-positive", "false positive", "误报", "假阳性")
+    return any(marker in blob for marker in markers)
 
 
 def cost_keys(cost: Dict[str, Any]) -> Tuple[str, str]:
@@ -684,6 +737,9 @@ def aggregate_events(root: str, events: List[Dict[str, Any]]) -> Dict[str, Any]:
             if int(qa_gate.get("blocks") or 0) == 0:
                 summary["qa_gate_passes"] += 1
 
+        if is_false_positive_waiver(event):
+            summary["false_positive_recoveries"] += 1
+
         qa = event.get("qa") if isinstance(event.get("qa"), dict) else {}
         if qa:
             severity = str(qa.get("severity") or qa.get("sev") or "").lower()
@@ -760,6 +816,11 @@ def aggregate_events(root: str, events: List[Dict[str, Any]]) -> Dict[str, Any]:
         if summary["generation_attempts"]:
             summary["one_pass_rate"] = round(summary["one_pass_count"] / summary["generation_attempts"], 4)
             summary["redraw_rate"] = round(summary["redraw_count"] / summary["generation_attempts"], 4)
+            summary["warnings_per_attempt"] = round(summary["qa_warnings"] / summary["generation_attempts"], 4)
+            summary["blockers_per_attempt"] = round(summary["qa_blockers"] / summary["generation_attempts"], 4)
+        qa_noise = int(summary["qa_blockers"] or 0) + int(summary["qa_warnings"] or 0)
+        if qa_noise:
+            summary["false_positive_recovery_rate"] = round(summary["false_positive_recoveries"] / qa_noise, 4)
         summary["recoup_ratio"] = ratio_dict(summary["release_net_totals"], summary["cost_totals"])
         for sb in summary["stages"].values():
             sb["duration_sec"] = round(float(sb["duration_sec"]), 3)
@@ -786,6 +847,10 @@ def aggregate_events(root: str, events: List[Dict[str, Any]]) -> Dict[str, Any]:
         "qa_blockers": sum(item["qa_blockers"] for item in ordered),
         "qa_warnings": sum(item["qa_warnings"] for item in ordered),
         "qa_infos": sum(item["qa_infos"] for item in ordered),
+        "warnings_per_attempt": None,
+        "blockers_per_attempt": None,
+        "false_positive_recoveries": sum(item["false_positive_recoveries"] for item in ordered),
+        "false_positive_recovery_rate": None,
         "consistency_blockers": sum(item.get("consistency_blockers") or 0 for item in ordered),
         "consistency_warnings": sum(item.get("consistency_warnings") or 0 for item in ordered),
         "cost_totals": {},
@@ -810,6 +875,11 @@ def aggregate_events(root: str, events: List[Dict[str, Any]]) -> Dict[str, Any]:
     if totals["generation_attempts"]:
         totals["one_pass_rate"] = round(totals["one_pass_count"] / totals["generation_attempts"], 4)
         totals["redraw_rate"] = round(totals["redraw_count"] / totals["generation_attempts"], 4)
+        totals["warnings_per_attempt"] = round(totals["qa_warnings"] / totals["generation_attempts"], 4)
+        totals["blockers_per_attempt"] = round(totals["qa_blockers"] / totals["generation_attempts"], 4)
+    total_noise = int(totals["qa_blockers"] or 0) + int(totals["qa_warnings"] or 0)
+    if total_noise:
+        totals["false_positive_recovery_rate"] = round(totals["false_positive_recoveries"] / total_noise, 4)
     cost_total: Dict[str, float] = {}
     revenue_total: Dict[str, float] = {}
     spend_total: Dict[str, float] = {}
@@ -1023,6 +1093,16 @@ def render_markdown(dashboard: Dict[str, Any]) -> str:
             f"{format_cost(totals.get('release_revenue_totals', {}))} | {format_cost(totals.get('release_spend_totals', {}))} | "
             f"{format_cost(totals.get('release_net_totals', {}))} | {format_ratio(totals.get('recoup_ratio', {}))} |"
         ),
+        "",
+        "## Gate 噪声",
+        "",
+        "| warn/生成 | block/生成 | 误报回收 | 误报回收率 |",
+        "|---:|---:|---:|---:|",
+        (
+            f"| {totals.get('warnings_per_attempt') if totals.get('warnings_per_attempt') is not None else '—'} | "
+            f"{totals.get('blockers_per_attempt') if totals.get('blockers_per_attempt') is not None else '—'} | "
+            f"{totals.get('false_positive_recoveries', 0)} | {format_rate(totals.get('false_positive_recovery_rate'))} |"
+        ),
         *_benchmark_rows(dashboard),
         "",
         "## 逐集",
@@ -1187,6 +1267,17 @@ def evaluate_alerts(dashboard: Dict[str, Any], thresholds: Dict[str, Any]) -> Li
         alerts.append(_alert("critical", "qa_blockers", "totals",
                              f"QA 阻断 {blockers} 项（阈值 >{cap:g}）；先按 recent_blockers 修复再继续付费生成",
                              value=blockers, threshold=cap))
+
+    # 未验证回写债：progress.py 在缺/陈旧/无指纹凭据时被 N2D_PROGRESS_ALLOW_UNVERIFIED 强标 ✅。
+    # 这类绿灯是「声明非现实」，必须在仪表盘醒目计债（且对当前产物重跑闸门后自动销账，不误报）。
+    debts = _unresolved_unverified_waivers(dashboard.get("root") or "")
+    if debts:
+        eps = sorted({str(w.get("episode")) for w in debts if w.get("episode")})
+        ep_disp = "、".join(eps[:6]) + ("…" if len(eps) > 6 else "")
+        alerts.append(_alert("critical", "unverified_progress", "totals",
+                             f"{len(debts)} 处未验证强标 ✅（{ep_disp}）：受闸列没有「真跑过+指纹新鲜」的闸门凭据，"
+                             f"本季视为 provisional；对当前产物重跑对应 dashboard gate 销账。",
+                             value=len(debts)))
 
     # 通过率下限
     floor = thresholds.get("final_pass_rate_floor")
@@ -1616,6 +1707,24 @@ def gate_findings_payload(root: str, episode: str, stage: str, findings: List[Di
             "findings": group["findings"][:12],
         })
 
+    # 输入指纹：证「这份缓存判定对应当前产物」。下游（release_manifest）据此判定缓存是否陈旧，
+    # 堵「gate 从未跑过/产物已改但仍读旧 gate_findings 当作 0 block」的证声明不证现实。
+    fp_files = sorted(
+        {
+            a
+            for row in rows
+            for a in (row.get("affected_artifacts") or [])
+            if isinstance(a, str) and a.strip()
+        }
+        | {f"脚本/{episode}/storyboard.json"}
+    )
+    inputs_fingerprint = None
+    if artifact_fingerprint is not None:
+        try:
+            inputs_fingerprint = artifact_fingerprint(root, fp_files)
+        except Exception:
+            inputs_fingerprint = None
+
     return {
         "kind": CONSISTENCY_FINDINGS_KIND,
         "version": 1,
@@ -1623,6 +1732,7 @@ def gate_findings_payload(root: str, episode: str, stage: str, findings: List[Di
         "episode": episode,
         "gate_stage": stage,
         "generated_at": now_iso(),
+        "inputs_fingerprint": inputs_fingerprint,
         "summary": {"total": len(rows), "severity": severity_counts, "by_dim": by_dim},
         "findings": rows,
         "auto_return_tasks": auto_tasks,
@@ -1714,6 +1824,18 @@ def image_qc_report_paths(root: str) -> List[str]:
     return sorted(glob.glob(os.path.join(base, "*", "image_qc_*.json")))
 
 
+def load_image_qc_module() -> Optional[Any]:
+    script = os.path.join(REPO_SKILLS, "n2d-image", "scripts", "image_qc.py")
+    if not os.path.isfile(script):
+        return None
+    spec = importlib.util.spec_from_file_location("n2d_image_qc_for_dashboard", script)
+    if spec is None or spec.loader is None:
+        return None
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
 def image_qc_report_findings(root: str, episode: str) -> Tuple[Optional[List[Dict[str, Any]]], Optional[str]]:
     path = image_qc_report_path(root, episode)
     if not os.path.isfile(path):
@@ -1725,12 +1847,9 @@ def image_qc_report_findings(root: str, episode: str) -> Tuple[Optional[List[Dic
             return None, None
         if image_qc_missing_prop_shape_confirmation_dependency(payload, episode):
             return None, None
-        script = os.path.join(REPO_SKILLS, "n2d-image", "scripts", "image_qc.py")
-        spec = importlib.util.spec_from_file_location("n2d_image_qc_for_dashboard", script)
-        if spec is None or spec.loader is None:
-            return None, f"无法加载 image_qc.py：{script}"
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
+        mod = load_image_qc_module()
+        if mod is None:
+            return None, "无法加载 image_qc.py"
         findings = mod.to_findings(payload)  # type: ignore[attr-defined]
         if not isinstance(findings, list):
             return None, "既有 image_qc 报告转换结果不是 findings list"
@@ -1742,20 +1861,50 @@ def image_qc_report_findings(root: str, episode: str) -> Tuple[Optional[List[Dic
 def image_preflight_qc_findings(root: str, episode: str) -> List[Dict[str, Any]]:
     """Return image_qc findings that are meaningful before paid shot generation.
 
-    `image_qc` also owns post-image pixel review.  Prop-shape confirmation is a
-    review of landed PNG pixels and belongs to the `image` gate; keeping it in
-    `image_preflight` blocks shared-library preparation with confirmations for
-    images that are not being generated in that phase.
+    `image_qc --findings` writes a full report as a side effect.  Running that
+    from preflight can turn planned-but-not-generated PNGs into bogus face/prop
+    blocks and make the passive dashboard counters fail.  Preflight therefore
+    imports the lint-only helpers directly and leaves pixel review to
+    `dashboard gate --stage image`.
     """
-    findings = image_qc_findings(root, episode)
+    mod = load_image_qc_module()
+    if mod is None:
+        return []
+    ep = normalize_episode(episode)
     out: List[Dict[str, Any]] = []
-    for item in findings:
-        if not isinstance(item, dict):
-            continue
-        msg = str(item.get("msg") or item.get("message") or "")
-        if item.get("dim") == "multimodal_continuity" and "高风险道具禁形/尺寸未逐图确认" in msg:
-            continue
-        out.append(item)
+    try:
+        lint = mod.lint_prompts(mod.Path(root), ep)  # type: ignore[attr-defined]
+        hard_codes = set(getattr(mod, "HARD_LINT_CODES", ()))
+        for item in (lint.get("findings") or []):
+            if not isinstance(item, dict):
+                continue
+            hard = item.get("level") == "block" and item.get("code") in hard_codes
+            sev = "block" if hard else ("info" if item.get("level") == "info" else "warn")
+            out.append({
+                "sev": sev,
+                "dim": "image_prompt_lint",
+                "loc": item.get("loc"),
+                "msg": item.get("msg"),
+                "return_to_stage": "image",
+            })
+        prohibited = mod.prohibited_face_patch_outputs(mod.Path(root), ep)  # type: ignore[attr-defined]
+        label = getattr(mod, "PROHIBITED_FACE_PATCH_LABEL", "本地贴脸修复产物禁用")
+        for item in (prohibited.get("outputs") or []):
+            if not isinstance(item, dict):
+                continue
+            out.append({
+                "sev": "block",
+                "dim": "character_consistency",
+                "loc": item.get("png"),
+                "msg": (
+                    f"{label}：{item.get('png')} 最新落档事件来自 "
+                    f"`{item.get('provider') or 'unknown'}` / `{item.get('method') or 'unknown'}`。"
+                    "不能用裁脸/贴脸/换脸产物进入正式图生视频。"
+                ),
+                "return_to_stage": "image",
+            })
+    except Exception:
+        return []
     return out
 
 

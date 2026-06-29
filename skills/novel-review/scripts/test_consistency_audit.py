@@ -44,7 +44,8 @@ def test_run_logic_skips_without_character_card():
 
 def test_run_logic_flags_deceased_reactivation():
     # Chapter 1: 李锦云 dies (death keyword immediately after name).
-    # Chapter 3: dead character acts again, non-flashback -> blocking alert.
+    # Chapter 3: dead character acts again, non-flashback.
+    # B10：死人复活靠关键词扫正文=脆弱启发式 → 仍被检出为候选，但降为建议级（不硬阻断 post_write）。
     card = "## 李锦云\n\n姓名：李锦云\n身份：女主\n"
     chapters = {
         "第1章.md": "战场之上，李锦云身亡，全场震动，再无人能挡住敌军的攻势了。",
@@ -56,7 +57,8 @@ def test_run_logic_flags_deceased_reactivation():
 
     assert res["ran"] is True
     assert res["alerts"] >= 1
-    assert res["blocking"] >= 1
+    assert res["blocking"] == 0                 # 脆弱启发式不再硬阻断
+    assert res["heuristic_downgraded"] >= 1     # 降级账可见
 
     # documented summary file exists with documented shape
     summary_path = os.path.join(root, "审稿", "logic_alerts_summary.json")
@@ -64,9 +66,9 @@ def test_run_logic_flags_deceased_reactivation():
     assert summary_path == res["json"]
     with open(summary_path, encoding="utf-8") as f:
         summary = json.load(f)
-    assert set(["blocking", "total", "alerts"]).issubset(summary.keys())
-    types = {a["type"] for a in summary["alerts"]}
-    assert "deceased_reactivation" in types
+    assert set(["blocking", "total", "alerts", "heuristic_downgraded"]).issubset(summary.keys())
+    react = [a for a in summary["alerts"] if a["type"] == "deceased_reactivation"]
+    assert react and react[0]["severity"] == "建议级" and react[0]["confidence"] == "heuristic"
 
     # wiki was written by run_logic
     wiki_path = os.path.join(root, "设定", "动态百科.json")
@@ -220,3 +222,33 @@ def test_run_style_reuses_chapter_fingerprint_cache(monkeypatch):
     assert second["ran"] is True
     assert second["cache_hits"] == 2
     assert second["cache_misses"] == 0
+
+
+# ── ConStory 五类 taxonomy 覆盖体检 ──────────────────────────────────────────
+def test_taxonomy_all_categories_present():
+    cov = consistency_audit.taxonomy_coverage({})
+    assert set(cov) == set(consistency_audit.CONSTORY_TAXONOMY)
+
+
+def test_taxonomy_covered_when_detector_ran():
+    result = {"timeline": {"ran": True}, "style_drift": {"ran": True},
+              "logic_sentry": {"ran": True}, "research_fact_support": {"ran": True},
+              "power_system": {"ran": True}, "tone_curve": {"ran": True},
+              "mechanical": {"ran": True}}
+    cov = consistency_audit.taxonomy_coverage(result)
+    assert all(c["status"] == "covered" for c in cov.values())
+
+
+def test_taxonomy_degraded_when_all_skipped():
+    # 叙事与文风的 mapped 检测器全 skipped → degraded（mapped 但没跑），不是 covered
+    result = {"style_drift": {"ran": False, "skipped": "无锚点"},
+              "tone_curve": {"ran": False}, "mechanical": {"ran": False}}
+    cov = consistency_audit.taxonomy_coverage(result)
+    assert cov["叙事与文风"]["status"] == "degraded"
+
+
+def test_taxonomy_gap_when_no_detector_present():
+    # result 里完全没有某类的任何检测器键 → gap（该类一致性根本没接入）
+    cov = consistency_audit.taxonomy_coverage({"style_drift": {"ran": True}})
+    assert cov["时间线与情节逻辑"]["status"] == "gap"
+    assert cov["叙事与文风"]["status"] == "covered"

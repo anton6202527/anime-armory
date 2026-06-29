@@ -43,7 +43,7 @@ description: 给【已写好】的小说/章节做"市场 + 品质"综合评分�
 题材热度会变,**每次评分前现拉**,不靠记忆:
 - 同步跑共享采集器落盘，避免 score/self-audit 各拉一份：
   `python3 skills/novel-score/scripts/collect_market_baseline.py "<作品根>/评分" --target-platform "<目标平台>" --allow-fetch-errors`。
-- 红果/抖音/漫剧等 app 内榜无公开网页时，用结构化且未过期的人工证据补齐：`--manual-evidence "红果短剧|YYYY-MM-DD|第三方榜单|结论|URL"`；`--note` 只做人读备注，不计入有效证据。若缺口存在，采集器会额外写 `评分/market_evidence_tasks.json` 和 `评分/市场证据待补.md`，交给 `novel-research` 补平台市场资料包后再回跑采集器。
+- 红果/抖音/漫剧等 app 内榜无公开网页时，用结构化且未过期的人工证据补齐：`--manual-evidence "红果短剧|YYYY-MM-DD|第三方榜单|结论|URL"`；`--note` 只做人读备注，不计入有效证据。若缺口存在，采集器会额外写 `评分/market_evidence_tasks.json`、`评分/market_evidence_jobs.json` 和 `评分/市场证据待补.md`/`评分/市场证据深搜任务.md`，前者交给 `novel-research` 补平台市场资料包，后者交给能联网深搜的 agent 按 schema 回填人工证据，再回跑采集器。
 - 采集器会给每个来源写 `source_quality`，给整份基准写 `evidence_quality`；评分 prompt 会显示 high/medium/low 置信度。低质量证据不是不能看，但不能与官方/结构化/信号充足来源等权处理。
 - `score.py` 会检查 `market_baseline_*.json` 的 `expires_after_days`、人读 md 文件、有效证据和短剧/漫剧覆盖缺口。缺失/过期/缺 md/无证据/coverage_gap 会失败并提示重拉。有效证据指至少一个 `status=ok` 且 `signals` 非空且未过期的来源，或 `manual_evidence[]` 有结构化且未过期的人工核验补充；全是 `fetch_error`、过期人工证据或自由文本 `notes` 不算基准。只有离线测试或人工明确豁免时才加 `--allow-stale-baseline`；此时 `score_report.waivers[]` 与 `审稿/waiver_log.jsonl` 会记录 `score_baseline_freshness`，且 QA gate 只降为 warning，不会伪装成 fresh。
 
@@ -89,8 +89,8 @@ python3 skills/novel-score/scripts/build_reference_distribution.py \
 
 ### 2. 取样与评估
 - **自动化打分引擎**：
-  1. 先生成绑定任务：`python3 skills/novel-score/scripts/score.py <作品根> [--scope opening|full|arc] [--file <Take路径>] [--chapter <章节号>]`。脚本会写 `评分/score_task.json`，内含 `source_snapshot`、market baseline hash、`assessment_prompt_hash` 和 `score_task_id`。
-  2. 用该 prompt 取回 LLM JSON 后再注入：`python3 skills/novel-score/scripts/score.py <作品根> --mock-assessment <评估JSON> [--task 评分/score_task.json]`。评估 JSON 必须回显同一个 `score_task_id`；正文、baseline 或 scope 变化会阻断，必须重出 task。
+  1. 先生成绑定任务：`python3 skills/novel-score/scripts/score.py <作品根> [--scope opening|full|arc] [--file <Take路径>] [--chapter <章节号>]`。脚本会写 `评分/score_task.json`，内含 `source_snapshot`、market baseline hash、`assessment_prompt_hash` 和 `score_task_id`，并登记 `语义任务/score_assessment_*.json`。
+  2. 能直接处理语义任务的 agent 先用 `python3 skills/novel-craft/scripts/semantic_job.py claim "<job.json>" --claimed-by <agent>` 领取，再读 `语义任务/*.prompt.md`，产出评估 JSON 后用 `python3 skills/novel-craft/scripts/semantic_job.py complete "<job.json>" --response "<评估JSON>"` 回填；阻塞/拒收用 `block` / `reject` 留痕。兼容路径仍可用 `python3 skills/novel-score/scripts/score.py <作品根> --mock-assessment <评估JSON> [--task 评分/score_task.json]`。评估 JSON 必须回显同一个 `score_task_id`；正文、baseline 或 scope 变化会阻断，必须重出 task。
 - **单 Take 评估**：针对多版生成中的某一版进行独立打分，分数会自动同步至 `章节/takes/第NN章/takes_manifest.json`。
 - **批量/全本评估**：默认 opening 取前 3 章；`--scope full` 读取 `章节/` 全量定稿文件，并会在新增/删除章节后使旧 full score task 失效。
 
@@ -123,12 +123,16 @@ python3 skills/novel-score/scripts/build_reference_distribution.py \
   - `score_task_id / score_task_path / assessment_prompt_hash` 必须保留，用于追踪评分 JSON 绑定的 prompt。
   - `source_snapshot` 必须记录本次评分样本的 path/hash/aggregate hash；正文或 Take 文件改动后旧分数失效，QA gate 会提示重评。
   - `market_baseline` 必须带 `baseline_path`(人读 md)、`baseline_json_path`、`sources`、`expires_after_days` 和 freshness 状态。
+  - `评分/market_evidence_jobs.json` 存在时表示平台热度证据仍需深搜补齐；修订前先把结果回填为结构化人工证据或让 `revision_planner.py` 将其列入统一修订计划。
   - `reader_telemetry_path` / `reader_telemetry_summary` 存在时表示真实读者反馈已接入；`reader_panel_path` 存在时表示虚拟试读信号已接入。
   - `benchmark_percentile` 存在时表示已接入合规参考分布百分位。
   - `waivers[]` 必须记录所有评分阶段显式豁免；baseline freshness 阻断被豁免时仍保留 `freshness.blocking=true`，且 waiver scope 必须绑定当次 `baseline_date` 与 `freshness_status`。
   - `production_decision` 必须包含 `decision/route/reason/score/verdict`，作为 demo 后 go/no-go 的机器判断。
   - `next_actions[]` 必须写清 `recommended_skill` 和应回流的 `return_to_stage`。
   - 若针对 Take 评分，分数同步后可配合 `novel-craft/scripts/manage_takes.py --select --chapter N --take M` 定稿。
+
+### 5.5 生产摩擦埋点(自我优化闭环)
+`score.py` 跑完会把本次评分遇到的**流程摩擦**写成优化信号到 `<作品根>/生产数据/优化信号.jsonl`（`novel/_lib/friction_log.py`）：豁免了 baseline 新鲜度闸（`score_baseline_waiver`）、短剧/漫剧覆盖缺口（`score_coverage_gap`）、判定大改/弃稿（`score_low_verdict`）、书名不过关（`score_needs_rename`）、改编潜力低（`score_low_adaptation`）。信号按 `signature` 幂等去重——**重复跑同一摩擦不会刷屏**，只记真正的新摩擦。`novel-review` 模式②（流程自审 `self_audit.py --project-root <作品根>`）会摄入这些 open 信号并翻成差距 finding，让"再次运行评分就持续触发自我优化"成闭环；摩擦被处理后用 `friction_log.resolve_signals` 标 resolved 即停止复现。
 
 
 ## 容错铁律(同 review)

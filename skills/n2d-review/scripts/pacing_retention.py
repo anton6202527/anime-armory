@@ -111,9 +111,17 @@ ADVISORY_WARN_FLOOR = _env_float("N2D_PACE_WARN_FLOOR", _bench_value("advisory_w
 # 评分至少要几个 clip 才可信（太少 → inconclusive，不臆造分）。
 MIN_CLIPS_FOR_SCORE = int(_env_float("N2D_PACE_MIN_CLIPS", _bench_value("min_clips_for_score", 4)))
 
+# ── 第一方留存校准（n2d-feedback 产物·优先于 benchmark/默认）──
+# density_slow/fast_per_min 是 confidence=low 内部启发式；当 n2d-feedback 用第一方留存跑出
+# evidence_status='calibrated' 的 生产数据/pacing_profiles.json 时，本脚本优先采用其密度带。
+# 产物由 skills/n2d-feedback/scripts/feedback.py::build_pacing_profiles 写；本端只读、只认 calibrated。
+# 阈值优先级：env 显式覆盖 > 第一方校准 profile > benchmark JSON > 写死默认。
+PACING_PROFILES_FILENAME = "pacing_profiles.json"
+PACING_PROFILES_KIND = "n2d_pacing_profiles"
+
 # 开场钩信号关键词（命中 rhythm/label/标注 → 认为开场是钩子，与 导演节奏 的「冷开场/倒叙钩」同口径）。
 HOOK_MARKERS = (
-    "冷开场", "钩子", "倒叙", "悬念", "开场钩", "cold open", "hook", "cliffhanger",
+    "冷开场", "冷开", "钩子", "倒叙", "悬念", "开场钩", "cold open", "hook", "cliffhanger",
     "反转", "断点", "爆", "⚡", "💥", "🪝",
 )
 # 长镜/铺垫标注关键词（用于交叉印证长镜聚集是不是「有意铺垫」）。
@@ -131,7 +139,7 @@ ONSCREEN_TEXT_MARKERS = (
     "字幕", "标题", "标题卡", "大字", "弹幕", "字卡", "题板", "花字", "title", "caption", "text",
 )
 # 结构性视觉钩：本身即「画面跳入」，静音下也成立——与 HOOK_MARKERS 里偏声音/内容的（悬念/钩子/反转词）区分。
-STRUCTURAL_VISUAL_HOOK = ("冷开场", "倒叙", "断点", "cold open", "cliffhanger", "🪝", "⚡", "💥")
+STRUCTURAL_VISUAL_HOOK = ("冷开场", "冷开", "倒叙", "断点", "cold open", "cliffhanger", "🪝", "⚡", "💥")
 
 
 # ---------- 纯数学/启发式核心（无依赖 · pytest 覆盖） ----------
@@ -362,6 +370,42 @@ def storyboard_clips(sb: Optional[dict]) -> List[dict]:
     return [c for c in sb.get("clips", []) if isinstance(c, dict)]
 
 
+def load_pacing_profile(root: str) -> dict:
+    """读 生产数据/pacing_profiles.json（n2d-feedback 第一方留存校准产物）。
+
+    仅当 kind 对且 evidence_status=='calibrated' 才返回 {thresholds, genre, sample_n}；否则 {}
+    → 退回 benchmark/默认（不据未校准/陈旧数据调阈值=安全方向）。永不抛，缺文件即 {}。
+    本产物是本作品级（同 root 同题材），故无需再解析 _设置.md 题材，保持本脚本纯 stdlib·可离线。"""
+    data = _read_json(os.path.join(root, "生产数据", PACING_PROFILES_FILENAME))
+    if not isinstance(data, dict):
+        return {}
+    if data.get("kind") != PACING_PROFILES_KIND or data.get("evidence_status") != "calibrated":
+        return {}
+    th = data.get("thresholds")
+    if not isinstance(th, dict) or not th:
+        return {}
+    return {"thresholds": th, "genre": data.get("genre"), "sample_n": data.get("sample_n")}
+
+
+def _profile_threshold(thresholds: dict, key: str, env_name: str, default: float) -> float:
+    """阈值解析优先级：env 显式覆盖 > 第一方校准 profile > 传入 default（=benchmark/写死）。
+    env 永远最高（运营显式意图）；profile 值坏/缺 → 退回 default。纯函数·可测。"""
+    env_v = os.environ.get(env_name)
+    if env_v not in (None, ""):
+        try:
+            return float(env_v)
+        except Exception:
+            pass
+    if thresholds:
+        v = thresholds.get(key)
+        if v not in (None, ""):
+            try:
+                return float(v)
+            except Exception:
+                pass
+    return default
+
+
 # ---------- 编排（纯数据 → 报告，I/O 独立） ----------
 
 def analyze(root: str, ep: str) -> dict:
@@ -381,8 +425,19 @@ def analyze(root: str, ep: str) -> dict:
         return res
 
     durs = shot_durations(clips)
+    # 密度带优先用 n2d-feedback 第一方留存校准（calibrated）；缺/未校准则退回 benchmark/默认。
+    profile = load_pacing_profile(root)
+    prof_th = profile.get("thresholds") or {}
+    slow = _profile_threshold(prof_th, "density_slow_per_min", "N2D_PACE_DENSITY_SLOW", DENSITY_SLOW_PER_MIN)
+    fast = _profile_threshold(prof_th, "density_fast_per_min", "N2D_PACE_DENSITY_FAST", DENSITY_FAST_PER_MIN)
+    threshold_source = (
+        f"calibrated(genre={profile.get('genre')},n={profile.get('sample_n')})"
+        if prof_th else "benchmark_or_default"
+    )
+    res["pacing_thresholds"] = {"density_slow_per_min": slow, "density_fast_per_min": fast,
+                                "source": threshold_source}
     hook = hook_strength(clips)
-    pacing = pacing_score(durs)
+    pacing = pacing_score(durs, slow_per_min=slow, fast_per_min=fast)
     clusters = long_shot_clusters(clips)
     retention = retention_proxy_score(durs, clusters)
     total = advisory_total(hook, pacing, retention)
@@ -417,6 +472,10 @@ def analyze(root: str, ep: str) -> dict:
     res["notes"].append(
         f"advisory 节奏/留存分 {total}（钩子{hook.get('score')}/pacing{pacing.get('score')}"
         f"/留存{retention.get('score')}）——脚本自身不写 block；consistency_audit/gate 按 profile 汇总和升级。")
+    if prof_th:
+        res["notes"].append(
+            f"pacing 密度带已用第一方留存校准：{threshold_source} → "
+            f"健康带 [{slow:.0f},{fast:.0f})/min（覆盖 benchmark/默认）。")
     return res
 
 
@@ -429,6 +488,7 @@ def to_score_report(res: dict) -> dict:
     if not res.get("available"):
         evidence.extend(res.get("notes", []))
         return {"blocks": 0, "warnings": 0, "infos": 0, "evidence": evidence,
+                "beat_density_variance": None,
                 "metrics": {"available": False, "verdict": "inconclusive", "score": None}}
     warnings += len(risk)
     if res.get("verdict") == "warn":
@@ -439,11 +499,20 @@ def to_score_report(res: dict) -> dict:
     infos = 1 if res.get("verdict") == "ok" and not risk else 0
     if infos:
         evidence.append(f"节奏/留存 advisory 通过：分 {res.get('score')}（无风险镜）")
+    pt = res.get("pacing_thresholds", {})
+    if str(pt.get("source", "")).startswith("calibrated"):
+        evidence.append(
+            f"pacing 密度带已第一方留存校准：{pt['source']} → "
+            f"[{pt.get('density_slow_per_min')},{pt.get('density_fast_per_min')})/min")
     return {
         "blocks": 0,  # advisory 永不硬阻断 gate
         "warnings": warnings,
         "infos": infos,
         "evidence": evidence,
+        # 顶层暴露「节拍密度方差」供 n2d-dashboard G3 告警消费（dashboard 读顶层键，非 metrics 内）。
+        # 值取留存代理的镜头时长变异系数 cv（归一化离散度，跨集可比，故 ceiling 可固定）：
+        # cv 偏低→retention_proxy 判催眠/平；cv 偏高→此告警判节奏紊乱，两端互补。
+        "beat_density_variance": res.get("retention", {}).get("cv"),
         "metrics": {
             "available": True,
             "verdict": res.get("verdict"),
@@ -452,6 +521,9 @@ def to_score_report(res: dict) -> dict:
             "pacing_score": res.get("pacing", {}).get("score"),
             "retention_score": res.get("retention", {}).get("score"),
             "density_per_min": res.get("pacing", {}).get("density_per_min"),
+            "density_slow_per_min": pt.get("density_slow_per_min"),
+            "density_fast_per_min": pt.get("density_fast_per_min"),
+            "pacing_threshold_source": pt.get("source"),
             "risk_shot_count": len(risk),
         },
     }

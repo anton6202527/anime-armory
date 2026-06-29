@@ -33,6 +33,10 @@ try:
     from n2d_thresholds import load_benchmark  # noqa: E402
 except Exception:  # pragma: no cover - beat_audit must remain usable in partial checkouts
     load_benchmark = None
+try:
+    from n2d_settings import get_setting  # noqa: E402
+except Exception:  # pragma: no cover - beat_audit must remain usable in partial checkouts
+    get_setting = None
 
 LINE_RE = re.compile(r"^\[镜头(\d+)·([^·\]]+)·([^·\]]+?)(?:·([^·\]]+))?\]\s*(.*)$")
 HOOK_NORMAL = "⚡"
@@ -41,7 +45,8 @@ HOOK_ENDING = "🪝"
 
 # 信息回报：揭示信息增量（真相/身世/系统/线索/数值/命名）。
 INFO_RE = re.compile(r"(原来|竟是|竟然|其实|真相|身世|来历|名字|是.{0,6}的人|系统|面板|提示|【|"
-                     r"等级|经验|线索|证据|因为|原来是|揭|暴露|发现|秘密|内幕)")
+                     r"等级|经验|线索|证据|因为|原来是|揭|暴露|发现|秘密|内幕|得到|获得|"
+                     r"血脉|权限|能力|规则|反噬|代价|伪人皮|潜行)")
 # 情绪回报：情绪宣泄/解气（反击/打脸/解气/胜负/生死/护宠）。
 EMO_RE = re.compile(r"(反击|还手|打脸|解气|爽|痛快|怒|恨|哭|跪|斩|杀|赢|胜|夺回|护|宠|碾压|"
                     r"震住|压住|逆袭|翻盘|报仇|雪恨)")
@@ -54,6 +59,11 @@ HOOK_CONTENT_RE = re.compile(r"(危机|来了|出事|不好了|危险|追来|杀
 CALM_EMO = ("低沉", "平静", "茫然", "悲伤", "淡漠", "疲惫")
 # 高能/峰值情绪（用于情绪弧起伏判定：缺峰值=情绪扁平）。
 PEAK_EMO = ("愤怒", "怒", "暴怒", "狂喜", "痛快", "震惊", "惊恐", "崩溃", "亢奋", "癫狂", "杀意", "决绝", "爆发")
+
+# 语速标注归一（D2·此前 (语速) 只解析不消费）。可选字段·快/慢/常速及别名。
+SLOW_SPEED = ("慢", "缓", "放慢", "慢速")
+FAST_SPEED = ("快", "急", "加快", "快速", "提速")
+SPEED_MIN_ANNOTATED = 6   # 判"全程同速"所需最少标注样本（不足→信号不够·跳过，绝不臆造）
 
 # 实体抽取（用于集间「钩子接力」连贯性）：上一集集尾钩抛出的人/物，下一集冷开场是否接住同一根线。
 # 实体 = 出场角色（非旁白）∪ 称谓 ∪ 【…】《…》专名标记。保守取词，宁缺毋滥（漏报好过误拦流水线）。
@@ -83,9 +93,17 @@ def _inferred_hook(beat) -> bool:
     """这一拍是否（按内容）算一个钩子——补回作者漏标的 ⚡💥🪝。"""
     return bool(beat["hooks"]) or bool(REVERSAL_RE.search(beat["text"])) or bool(HOOK_CONTENT_RE.search(beat["text"]))
 
-HOOK_GAP_SEC = 20.0   # 中段钩子间隔上限（导演节奏 §二：每 15-20s 一个钩子）
+HOOK_GAP_SEC = 20.0   # 中段钩子间隔上限·国内默认（导演节奏 §二：每 15-20s 一个钩子）
+DEFAULT_OVERSEAS_HOOK_GAP_SEC = 10.0  # G2·海外档：ReelShort/TikTok 出海素材更碎更狠（每~10s 一反转）
 HOOK_GAP_SHOTS = 4    # 无真实时长时：相邻钩子最多隔几镜
 LINK_WINDOW = 3       # 集尾钩 / 下集冷开场 的窗口拍数（取首/尾各 N 拍算实体重合）
+# G1·开场拉力地板：开场只「有钩」不够，要够深（conflict/suspense/reversal 至少一条强层）。
+# 2026 Sensor Tower：下一集解锁率与本集**开场钩子强度**相关性高于集尾悬念——开场是最高杠杆留存信号。
+DEFAULT_COLD_OPEN_PULL_FLOOR = 0.3
+# 开场拉力四层正则（与 cold_open_quality_score 共用·提到模块级，G1 逐集与 --series 同源单一真值）。
+COLD_OPEN_CONFLICT_RE = re.compile(r"(冲突|矛盾|对抗|危机|危险|威胁|追杀|逃|战|敌|恨|怒|杀|死|仇|争|斗)")
+COLD_OPEN_SUSPENSE_RE = re.compile(r"(谁|什么|为什么|怎么|哪里|何时|秘密|真相|隐瞒|神秘|未知|谜|疑|奇怪|不对劲)")
+COLD_OPEN_INFO_RE = re.compile(r"(发现|揭露|原来|其实|真相|证据|线索|秘密|第一次|首次|竟然|没想到)")
 
 VISUAL_HOOK_RE = re.compile(r"(画面|视觉|特写|近景|大特写|冲突|动作|打斗|掌掴|血|脸|表情|追|逃|刀|剑|火|爆|"
                             r"系统面板|光幕|标题卡|字幕|烧屏|大字|caption|title|text|cold open|冷开场|倒叙)")
@@ -226,6 +244,104 @@ def _first_screen_thresholds(root):
         "caption_words_per_sec_band": caption_band,
         "first_6s_hook_required": first_6s_required,
     }
+
+
+def _as_float(value, default):
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return float(default)
+
+
+def _proxy_thresholds(root):
+    rb = _retention_benchmark(root)
+    proxy = rb.get("proxy_thresholds") if isinstance(rb, dict) else None
+    return proxy if isinstance(proxy, dict) else {}
+
+
+# 海外档信号词：取自 `发行地区` 枚举（北美/东南亚/全球）+ `变现模式=海外` + 平台名。读的是 _设置.md 的
+# canonical 选择点值（非菜单文案），符合 choice-point 适配器原则——不在此 if 扫菜单文本做后端分支。
+_OVERSEAS_REGION_TOKENS = ("北美", "东南亚", "全球", "海外", "overseas", "tiktok", "reelshort", "海外短剧")
+
+
+def pacing_region(root):
+    """从 _设置.md 的 变现模式/发行地区 推断节奏档：'overseas' vs 'domestic'。
+
+    海外（ReelShort/TikTok）出海素材节奏更碎更狠（每~10s 一反转）；国内保持~20s（导演节奏 §二）。
+    任何读取失败 → 'domestic'（保守：不因缺设置而误收紧、误拦国内项目）。"""
+    if get_setting is None:
+        return "domestic"
+    try:
+        monet = (get_setting(root, "变现模式", "") or "").strip()
+        region = (get_setting(root, "发行地区", "") or "").strip()
+    except Exception:
+        return "domestic"
+    if "海外" in monet:
+        return "overseas"
+    if any(tok in region for tok in _OVERSEAS_REGION_TOKENS):
+        return "overseas"
+    return "domestic"
+
+
+def effective_hook_gap_sec(root):
+    """G2·有效中段钩子间隔上限：benchmark proxy_thresholds.hook_gap_sec（默认 20s）+ 区域档覆盖。
+
+    海外档优先取 proxy_thresholds.overseas_hook_gap_sec（默认 10s）。阈值单一真值在
+    industry_benchmark.json，可被项目 生产数据/industry_benchmark.json 覆盖（走 v2 provenance schema）。"""
+    proxy = _proxy_thresholds(root)
+    base = _as_float(proxy.get("hook_gap_sec"), HOOK_GAP_SEC)
+    if pacing_region(root) == "overseas":
+        return _as_float(proxy.get("overseas_hook_gap_sec"), DEFAULT_OVERSEAS_HOOK_GAP_SEC)
+    return base
+
+
+def cold_open_pull_layers(head_beats):
+    """G1·开场拉力四层评分（纯函数·可测）：conflict/suspense/reversal/info 加权 → 0-1 分 + 各层命中。
+
+    与 cold_open_quality_score 共用同一套权重/正则，确保「逐集 audit_episode」与「--series 链」对开场强度
+    口径一致（单一真值，避免两处漂离）。"""
+    head_text = " ".join(b["text"] for b in head_beats)
+    conflict_layer = 1.0 if COLD_OPEN_CONFLICT_RE.search(head_text) else 0.0
+    suspense_layer = 1.0 if COLD_OPEN_SUSPENSE_RE.search(head_text) else 0.0
+    reversal_layer = 1.0 if any(REVERSAL_RE.search(b["text"]) for b in head_beats) else 0.0
+    info_layer = 1.0 if COLD_OPEN_INFO_RE.search(head_text) else 0.0
+    score = (conflict_layer * 0.3 + suspense_layer * 0.3 +
+             reversal_layer * 0.25 + info_layer * 0.15)
+    layers = {"conflict": conflict_layer, "suspense": suspense_layer,
+              "reversal": reversal_layer, "info": info_layer}
+    return round(score, 3), layers
+
+
+def _cold_open_pull_floor(root):
+    return _as_float(_proxy_thresholds(root).get("cold_open_pull_floor"), DEFAULT_COLD_OPEN_PULL_FLOOR)
+
+
+def audit_cold_open_pull_strength(root, ep, beats):
+    """G1·开场拉力（独立留存杠杆）。
+
+    Sensor Tower 2026：第2集解锁率 ≈ 上一集**开场钩子强度**，相关性高于集尾悬念。此前 n2d 把开场强度
+    只当 --series 连续性（接没接住上集的钩）来查，且 cold_open 检查只问「有没有钩」(二值)；本检查把「开场够不够深」
+    提为逐集留存信号——开场只有单薄 info 层 / 零强层 = 拉力不足，正式出图前补强（改开场比改成片便宜）。
+
+    score < floor → warn（开场缺 conflict/suspense/reversal 任一强层）；nonzero 但仍偏薄 → info 提示加深。
+    报告产物：voiceover.txt 开场窗（前2拍，与 cold_open/cold_open_quality_score 同窗）。"""
+    head = beats[:2]
+    if not head:
+        return []
+    score, layers = cold_open_pull_layers(head)
+    floor = _cold_open_pull_floor(root)
+    present = [k for k, v in layers.items() if v]
+    if score < floor:
+        shown = "/".join(present) if present else "无强层"
+        return [("warn", "cold_open_pull_weak",
+                 f"开场拉力 {score:.2f} < 地板 {floor:.2f}（命中层：{shown}）——开场只『有钩』不够深："
+                 "2026 数据显示下一集解锁率与本集**开场钩子强度**相关性高于集尾悬念，"
+                 "开场补到至少一条强层（直给冲突/抛悬念/反转直入），别把最强信息留到中段")]
+    if score < 0.6:
+        return [("info", "cold_open_pull_thin",
+                 f"开场拉力 {score:.2f}（命中层：{'/'.join(present)}）达地板但偏单薄——"
+                 "叠加第二条强层（冲突+悬念/反转）可进一步拉高下一集解锁率，留存最高杠杆在开场")]
+    return []
 
 
 def _parse_expected_metric(value):
@@ -592,6 +708,18 @@ def _is_peak(beat) -> bool:
     return any(p in beat["emotion"] for p in PEAK_EMO)
 
 
+def _norm_speed(s: str) -> str:
+    """语速文本 → 'slow'/'fast'/'normal'/''(未标)。纯函数·可测。"""
+    s = (s or "").strip()
+    if not s:
+        return ""
+    if any(w in s for w in SLOW_SPEED):
+        return "slow"
+    if any(w in s for w in FAST_SPEED):
+        return "fast"
+    return "normal"
+
+
 def worst_cadence_gap(beats, starts, predicate, threshold):
     """该层拍（predicate 命中）相邻两拍间的最大超阈间距 (prev_sec, cur_sec, gap) 或 None。
 
@@ -731,13 +859,53 @@ def parse_voiceover(path):
 
 
 def load_shot_seconds(root, ep):
+    sb_path = Path(root) / "脚本" / ep / "storyboard.json"
+    if sb_path.exists():
+        try:
+            sb = json.loads(sb_path.read_text(encoding="utf-8"))
+        except Exception:
+            sb = None
+        out = {}
+        if isinstance(sb, dict) and isinstance(sb.get("clips"), list):
+            for clip in sb["clips"]:
+                if not isinstance(clip, dict):
+                    continue
+                try:
+                    dur = float(clip.get("duration"))
+                except (TypeError, ValueError):
+                    continue
+                indices = clip.get("voiceover_indices") or clip.get("source_shots") or clip.get("shot_indices")
+                if not isinstance(indices, list) or not indices:
+                    continue
+                nums = []
+                for item in indices:
+                    if isinstance(item, bool):
+                        continue
+                    if isinstance(item, int):
+                        nums.append(item)
+                        continue
+                    m = re.search(r"\d+", str(item))
+                    if m:
+                        nums.append(int(m.group()))
+                nums = [n for n in nums if n > 0]
+                if not nums:
+                    continue
+                share = dur / len(nums)
+                for n in nums:
+                    out[n] = out.get(n, 0.0) + share
+        if out:
+            return {k: round(v, 3) for k, v in out.items()}
     p = Path(root) / "脚本" / ep / "镜头时长.json"
     if not p.exists():
         return None
     data = json.loads(p.read_text(encoding="utf-8"))
     out = {}
     for k, v in data.items():
-        m = re.search(r"(\d+)", str(k))
+        m = re.search(r"镜头\s*(\d+)", str(k))
+        if not m:
+            m = re.search(r"(?:^|[_\s-])shot[_\s-]*0*(\d+)", str(k), re.I)
+        if not m:
+            m = re.search(r"(?:^|[_\s-])clip[_\s-]*0*(\d+)", str(k), re.I)
         if m:
             out[int(m.group(1))] = float(v)
     return out or None
@@ -788,17 +956,22 @@ def audit_episode(root, ep):
     # ①e 钩子类型轮换（GAP-4）：集内同型钩子连甩 = 观众疲劳，advisory 提示换角度。
     findings.extend(audit_hook_type_rotation(root, ep, beats))
 
+    # ①f 开场拉力（G1·最高杠杆留存信号）：开场只「有钩」不够，要够深——下一集解锁率与开场强度相关性 > 集尾悬念。
+    findings.extend(audit_cold_open_pull_strength(root, ep, beats))
+
     # ② 钩子间隔（导演节奏 §二）·用 marker∪content 钩子算间隔（漏标记不再误判 hook_gap）
+    # G2·间隔上限按区域档取（国内~20s / 海外~10s），单一真值在 industry_benchmark.json。
+    gap_sec = effective_hook_gap_sec(root)
     if shot_secs:
         starts, total = cumulative_starts(shot_secs)
         hook_times = sorted(starts.get(b["shot"], 0.0) for b in effective_hooked)
         prev = 0.0
         for t in hook_times:
-            if t - prev > HOOK_GAP_SEC:
+            if t - prev > gap_sec:
                 findings.append(("warn", "hook_gap",
-                                 f"{prev:.0f}s–{t:.0f}s 间隔 {t-prev:.0f}s 无钩子（>{HOOK_GAP_SEC:.0f}s）：中段易划走，补悬念/信息/反差/危机"))
+                                 f"{prev:.0f}s–{t:.0f}s 间隔 {t-prev:.0f}s 无钩子（>{gap_sec:.0f}s）：中段易划走，补悬念/信息/反差/危机"))
             prev = t
-        if total - prev > HOOK_GAP_SEC and hook_times:
+        if total - prev > gap_sec and hook_times:
             findings.append(("info", "hook_gap_tail", f"末钩到结尾 {total-prev:.0f}s 无新钩，确认集尾张力"))
         # ②b A1 多层节奏栅格：爆点/反转(≤30s·warn) + 情绪峰(≤180s·info·主要约束长剪)。
         #     只在该层 ≥2 拍且相邻间距超阈时报（dead stretch between detonations/peaks）。
@@ -877,6 +1050,20 @@ def audit_episode(root, ep):
         elif peak_n == 0:
             findings.append(("info", "no_emotion_peak",
                              "全集无高能峰值情绪（愤怒/痛快/震惊/崩溃…）：确认爽点拍的情绪强度是否够顶"))
+
+    # ⑨ 语速呼吸（D2·把此前只解析不消费的 (语速) 标注接进节奏审计·与 ⑥镜长/⑦情绪弧 三轴互补）。
+    #    语速是可选标注：覆盖低→信号不足，按注释覆盖率优雅跳过、绝不臆造。全 info（软提示·不阻断 --strict）。
+    speeds = [_norm_speed(b["speed"]) for b in beats]
+    # A. 开场拖速：黄金3秒忌冗长铺垫——首2镜显式标 slow（与 ① cold_open 的"旁白+平缓"判据互补·不同源）。
+    if any(s == "slow" for s in speeds[:2]):
+        findings.append(("info", "slow_cold_open_speed",
+                         "开场首镜标注慢语速：黄金3秒忌拖沓铺垫，开场提速或把慢拍后移（与冷开场情绪判据互补）"))
+    # B. 全程同速：标注足够多却零快慢变化——节奏第三呼吸轴缺失（标注不足则跳过，不臆造）。
+    annotated = [s for s in speeds if s]
+    if len(annotated) >= SPEED_MIN_ANNOTATED and len(set(annotated)) == 1:
+        findings.append(("info", "flat_speed",
+                         f"已标语速 {len(annotated)}/{len(beats)} 镜均为同一档、无快慢变化："
+                         "节奏第三呼吸轴——临近爽点提速碎切、铺垫/留白放缓，与镜长曲线/情绪弧一起做起伏"))
 
     # ⑧ 集间因果钩子闭合（与上一集的接力·Gap：钩子接错根/接不上）
     findings.extend(incoming_link_findings(root, ep, beats))
@@ -1007,26 +1194,14 @@ def cold_open_quality_score(root, ep):
     beats = parse_voiceover(vpath)
     if not beats:
         return {"score": 0.0, "layers": {}, "depth": "unknown", "note": "无节拍数据"}
-    head = beats[:2]
-    head_text = " ".join(b["text"] for b in head)
-    conflict_re = re.compile(r"(冲突|矛盾|对抗|危机|危险|威胁|追杀|逃|战|敌|恨|怒|杀|死|仇|争|斗)")
-    conflict_layer = 1.0 if conflict_re.search(head_text) else 0.0
-    suspense_re = re.compile(r"(谁|什么|为什么|怎么|哪里|何时|秘密|真相|隐瞒|神秘|未知|谜|疑|奇怪|不对劲)")
-    suspense_layer = 1.0 if suspense_re.search(head_text) else 0.0
-    reversal_layer = 1.0 if any(REVERSAL_RE.search(b["text"]) for b in head) else 0.0
-    info_re = re.compile(r"(发现|揭露|原来|其实|真相|证据|线索|秘密|第一次|首次|竟然|没想到)")
-    info_layer = 1.0 if info_re.search(head_text) else 0.0
-    score = (conflict_layer * 0.3 + suspense_layer * 0.3 +
-             reversal_layer * 0.25 + info_layer * 0.15)
-    layers = {"conflict": conflict_layer, "suspense": suspense_layer,
-              "reversal": reversal_layer, "info": info_layer}
+    score, layers = cold_open_pull_layers(beats[:2])
     if score >= 0.6:
         depth = "deep"
     elif score >= 0.3:
         depth = "moderate"
     else:
         depth = "shallow"
-    return {"score": round(score, 3), "layers": layers, "depth": depth}
+    return {"score": score, "layers": layers, "depth": depth}
 
 
 def cold_open_chain(root):

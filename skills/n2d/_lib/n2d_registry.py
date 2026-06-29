@@ -2,6 +2,7 @@
 """Registry management and filesystem helpers for the n2d pipeline."""
 
 from __future__ import annotations
+import glob
 import hashlib
 import json
 import os
@@ -107,6 +108,36 @@ def _sha256(path: str) -> Optional[str]:
         for chunk in iter(lambda: f.read(1024 * 1024), b""):
             h.update(chunk)
     return h.hexdigest()
+
+def episode_png_fingerprint(root: str, ep: str) -> Optional[str]:
+    """本集逐镜帧 PNG 集合的内容指纹（出图/<集>/图片/*.png 的 相对名+大小+sha256 摘成一个 sha256）。
+
+    用途（内容级新鲜度）：任何「基于本集 PNG 算出来的一致性报告」（脸漂实测报告、场景跨集漂移…）
+    把生成时的本指纹一并写进报告；消费端 gate 把报告里记的指纹 vs **当前** PNG 集合指纹比一比——
+    不等 = 报告基于旧像素（图重出过），即便它「集级覆盖」看着没问题也已陈旧。单一真值源：生产端
+    （identity.py 等）与消费端（gate.py）都 import 本函数，杜绝两处各抄一份导致口径漂离。
+
+    无任何 PNG → None（没有可指纹的像素，由调用方按「缺报告/缺帧」既有逻辑处理）。VCS-free·纯内容快照。"""
+    base = os.path.join(root.rstrip("/"), "出图", ep, "图片")
+    if not os.path.isdir(base):
+        return None
+    items: List[str] = []
+    for full in sorted(glob.glob(os.path.join(base, "*.png"))):
+        if not os.path.isfile(full):
+            continue
+        digest = _sha256(full)
+        if digest is None:
+            continue
+        try:
+            size = os.path.getsize(full)
+        except OSError:
+            size = -1
+        items.append(f"{os.path.basename(full)}|{size}|{digest}")
+    if not items:
+        return None
+    blob = "\n".join(items)
+    return hashlib.sha256(blob.encode("utf-8")).hexdigest()
+
 
 def _dir_count(path: str) -> Optional[int]:
     if not os.path.isdir(path):

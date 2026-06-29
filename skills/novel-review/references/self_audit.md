@@ -15,7 +15,7 @@ python3 skills/novel-review/scripts/self_audit.py
 python3 skills/novel-review/scripts/self_audit.py --project-root "<作品根>"
 ```
 
-该脚本**只读不改、不联网**，检查 novel-* registry、`novel` 路由表、`skills/README.md` 索引、`_进度.md` 加锁写入口、`state_ledger.json` 原子写、批量写章队列、项目级市场基准新鲜度。若本地治理已有 block/warn，优先修这些，再进入下面的联网取证。
+该脚本**只读不改、不联网**，检查 novel-* registry、`novel` 路由表、`skills/README.md` 索引、`_进度.md` 加锁写入口、`state_ledger.json` 原子写、写章队列 `draft_queue.py`、运营批量队列 `novel-batch`、项目级市场基准新鲜度。若本地治理已有 block/warn，优先修这些，再进入下面的联网取证。
 
 ## 三轴取证（联网，必带年月）
 按写小说三大验收维分轴搜，每轴落到"当前 SOTA 做法 + 证据链接 + 日期"：

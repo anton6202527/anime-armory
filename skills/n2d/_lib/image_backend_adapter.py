@@ -13,6 +13,7 @@ import argparse
 import datetime as dt
 import json
 import os
+import re
 import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
@@ -21,6 +22,14 @@ try:
     from n2d_contract import classify_image_backend, image_identity_profile
 except Exception:  # pragma: no cover
     from .n2d_contract import classify_image_backend, image_identity_profile  # type: ignore
+
+try:
+    from n2d_settings import get_setting
+except Exception:  # pragma: no cover
+    try:
+        from .n2d_settings import get_setting  # type: ignore
+    except Exception:
+        get_setting = None  # type: ignore
 
 try:
     import image_backends
@@ -529,6 +538,115 @@ def refresh_evidence_path(root: str, backend: Optional[str]) -> Path:
     return Path(root) / "生产数据" / "image_backend_capabilities" / f"{key}.json"
 
 
+IMAGE_BACKEND_BASELINE_KIND = "n2d_image_backend_baseline"
+
+
+def image_backend_baseline_path(root: str) -> Path:
+    """Project-level image backend baseline.
+
+    This is deliberately separate from per-run capability evidence: capability
+    evidence says "what the backend can do today"; the baseline says "which
+    image model/channel this show has committed to for visual continuity".
+    """
+    return Path(root) / "生产数据" / "image_backend_baseline.json"
+
+
+def _setting(root: str, key: str, default: str = "") -> str:
+    if get_setting is None:
+        return default
+    try:
+        return str(get_setting(root, key, default) or "").strip()
+    except Exception:
+        return default
+
+
+def current_image_backend_selection(root: str) -> Dict[str, Any]:
+    access = _setting(root, "生图AI", "Codex") or "Codex"
+    adapter = backend_adapter(access)
+    model = _setting(root, "生图模型", "") or str(adapter.get("model") or "")
+    canonical = str(adapter.get("canonical") or "").strip()
+    return {
+        "backend": canonical,
+        "backend_status": adapter.get("classification") or "",
+        "access": access,
+        "image_model": model,
+        "adapter_model": adapter.get("model") or "",
+        "channel": adapter.get("channel") or "",
+        "persistent_subject": bool(adapter.get("persistent_subject")),
+        "subject_registration": bool(adapter.get("subject_registration")),
+        "reference_input": adapter.get("reference_input") or {},
+    }
+
+
+def build_image_backend_baseline(root: str) -> Dict[str, Any]:
+    return {
+        "kind": IMAGE_BACKEND_BASELINE_KIND,
+        "version": 1,
+        "created_at": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
+        "selection": current_image_backend_selection(root),
+        "policy": {
+            "project_single_image_backend": True,
+            "backend_change_requires_rerun_plan": True,
+        },
+    }
+
+
+def write_image_backend_baseline(root: str, *, force: bool = False) -> Path:
+    path = image_backend_baseline_path(root)
+    if path.exists() and not force:
+        return path
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = build_image_backend_baseline(root)
+    tmp = path.with_suffix(".json.tmp")
+    tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    os.replace(tmp, path)
+    return path
+
+
+def _baseline_cmp_value(value: Any) -> str:
+    return re.sub(r"\s+", " ", str(value or "").strip()).lower()
+
+
+def image_backend_baseline_status(root: str) -> Dict[str, Any]:
+    path = image_backend_baseline_path(root)
+    current = current_image_backend_selection(root)
+    if not path.exists():
+        return {"status": "missing", "path": str(path), "current": current, "changed_fields": []}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        return {
+            "status": "invalid",
+            "path": str(path),
+            "current": current,
+            "changed_fields": [],
+            "message": f"baseline unreadable: {type(exc).__name__}: {exc}",
+        }
+    if not isinstance(data, dict) or data.get("kind") != IMAGE_BACKEND_BASELINE_KIND:
+        return {
+            "status": "invalid",
+            "path": str(path),
+            "current": current,
+            "baseline": data if isinstance(data, dict) else {},
+            "changed_fields": [],
+            "message": f"kind must be {IMAGE_BACKEND_BASELINE_KIND}",
+        }
+    baseline = data.get("selection") if isinstance(data.get("selection"), Mapping) else {}
+    fields = ("backend", "image_model", "access", "channel")
+    changed = [
+        key for key in fields
+        if _baseline_cmp_value((baseline or {}).get(key)) != _baseline_cmp_value(current.get(key))
+    ]
+    return {
+        "status": "changed" if changed else "matched",
+        "path": str(path),
+        "baseline": baseline,
+        "current": current,
+        "changed_fields": changed,
+        "payload": data,
+    }
+
+
 def default_capability_assertions(raw: Optional[str]) -> Dict[str, Any]:
     adapter = backend_adapter(raw)
     refs = adapter.get("reference_input") if isinstance(adapter.get("reference_input"), dict) else {}
@@ -745,6 +863,15 @@ def main(argv: Optional[List[str]] = None) -> int:
     p.add_argument("--note", default="")
     p.add_argument("--date", default=None)
 
+    p = sub.add_parser("baseline-status")
+    p.add_argument("root")
+    p.add_argument("--json", action="store_true")
+
+    p = sub.add_parser("record-baseline")
+    p.add_argument("root")
+    p.add_argument("--force", action="store_true")
+    p.add_argument("--json", action="store_true")
+
     ns = ap.parse_args(argv)
     if ns.cmd == "catalog":
         payload = adapter_catalog()
@@ -774,6 +901,13 @@ def main(argv: Optional[List[str]] = None) -> int:
             today=ns.date,
         )
         payload = {"path": str(path), "status": "written"}
+    elif ns.cmd == "baseline-status":
+        payload = image_backend_baseline_status(ns.root)
+    elif ns.cmd == "record-baseline":
+        path = write_image_backend_baseline(ns.root, force=bool(ns.force))
+        payload = image_backend_baseline_status(ns.root)
+        payload["path"] = str(path)
+        payload["status"] = "written" if payload.get("status") == "matched" else payload.get("status")
     else:  # pragma: no cover
         raise AssertionError(ns.cmd)
     if getattr(ns, "json", False):

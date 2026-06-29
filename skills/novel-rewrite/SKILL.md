@@ -39,6 +39,8 @@ description: Use when rewriting / reimagining / 魔改 an existing novel into a 
 
 0. **确认输入 + 合法性**：原作路径、**改动方向**（一句话：要把它改成什么；**若先跑过 `novel-score`，加 `--score-source 评分/score_report.json` 让评分弱项驱动改写方向**）、规模（short/medium/long/微短剧/漫剧）、目标平台、输出（txt/docx/outline）。判版权。
 1. **建骨架**：`python3 <skill>/scripts/init_project.py "<原作>" --rewrite-type "<方向>" [--score-source 评分/score_report.json] ...` → `创作区/写小说/<原作名>-改写/`。
+   > **源语言/文体体检（init 自动·最上游）**：默认假设原作是现代中文白话文。init 会确定性体检 `原作.txt` 的文体——遇**文言文/古文或外文**会**停下提示**并自动建 `设定/source_comprehension.md` 源理解层脚手架（并把 `_meta.source_register` 标为 classical_zh/non_chinese、`source_comprehension_status=draft`）。**这种情况先做「1.5 加强源理解」再继续**；现代白话无感放行。手动复检：`python3 skills/novel/_lib/source_language.py <项目根>`。
+1.5. **加强源理解（仅文言文/外文原作·改写成白话文前必做）**：补全 `设定/source_comprehension.md`——文言文写「现代白话理解层(parse+gloss 逐章释义) + 古今词/典故/称谓对照 + 文化/制度注释 + 改写边界(白话化 vs 保留古意·语体倾向)」；外文写「现代中文理解层(译文/释义) + 专名/术语本地化表 + 习语/双关 transcreation + 改写边界(本地化 vs 异域感)」。补全后把 `设定/source_comprehension.json` 的 `status` 置 `confirmed`。**未确认前 qa_gate（demo/导出）会硬阻断 `SOURCE-LANG-COMPREHENSION`**。之后第 2 步起的改动spec/章纲/Demo **从源理解层（现代白话理解）改写成白话文**，保留 curated 的古语/术语/意象作文风与设定锚点，不照搬文言原句或外文。
 2. **填改动spec + 读者契约**（最重要）：三栏【保留内核 / 改什么 / 加什么】写实写细。**若传了 `--score-source`，②栏已预填评分诊断（弱项/扣分雷点，标记「建议·待对账」）——逐条与用户要求对账：采纳的并入对应栏，保留的显式标注；冲突时以用户要求为准。评分判 `弃稿重立` 时先确认是否该走 `novel-create` 另起。** → 用户审。
 3. **建新设定圣经 + 角色/世界观卡**：把"加的新设定/材料"系统化、列一致性约束，**按家族统一 schema `novel-craft/references/setting-bible.md`**（新金手指也必写代价、新设定标"改自原作哪条"+首现章）。→ 用户审。
 4. **书名**：委托 `novel-title`（同人改写/魔改类型）。→ 用户审。

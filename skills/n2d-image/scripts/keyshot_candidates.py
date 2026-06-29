@@ -3,6 +3,11 @@
 
 高质量短剧不该让封面、开场钩、反转、爽点、多人同框、强情绪近景只抽一张就进流水线。
 本脚本识别关键镜，生成候选数量、评选维度和预期落档路径；若候选 sidecar 已存在，也能给出简单排序。
+
+「名场面」最高优先档（signature_scene，2026-06-26）：原著高光/爽点兑现镜（打脸/逆袭/封神/重逢/
+告白/复仇/真相大白/决战/绝境翻盘…）是 IP 改编漫剧的初始流量来源（行业实测：爆款约 70% 为头部 IP
+改编、原著粉贡献约 60% 初始流量），观众是冲这些名场面来的。这类镜按封面级（6 张）多候选兜底，并标
+`signature_scene` 供下游（n2d-model-router 跨后端英雄镜多版、candidate_select 选优）优先成镜。
 """
 from __future__ import annotations
 
@@ -16,6 +21,13 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 KIND = "n2d_keyshot_candidate_plan"
 KEY_RE = re.compile(r"(🔑|封面|首图|开场|冷开场|钩子|🪝|⚡|💥|爽点|反转|真相|觉醒|系统|升级)")
+# 名场面/爽点兑现镜（原著高光，IP 改编初始流量来源）——必须一眼认出、必须做到位的最高优先档。
+# 高精度词表（聚焦爽点 payoff，不含中性词），避免把普通推进镜误升为 signature。
+SIGNATURE_RE = re.compile(
+    r"(名场面|高光时刻|打脸|逆袭|反杀|反败为胜|翻盘|绝地反击|封神|破境|突破境界|觉醒时刻|"
+    r"重逢|相认|认亲|告白|表白|复仇|报仇|雪耻|揭穿|揭露身份|真相大白|身世揭晓|夺权|登基|加冕|"
+    r"碾压|力压全场|扮猪吃虎|一鸣惊人|决战|对决|决斗|生死决|诀别|牺牲|英雄救美|全场震惊|众人震惊|"
+    r"当众打脸|封印|救场)")
 MULTI_RE = re.compile(r"(多人|同框|CHAR_[A-Za-z0-9_]+.*CHAR_[A-Za-z0-9_]+)")
 CLOSE_RE = re.compile(r"(CU|ECU|MCU|近景|特写|反打|表情)")
 ACTION_RE = re.compile(r"(打斗|追逐|法术|飞行|爆炸|御剑|冲刺|受击)")
@@ -49,7 +61,7 @@ def storyboard(root: Path, ep: str) -> List[dict]:
 
 
 def candidate_count(tags: Sequence[str]) -> int:
-    if "cover" in tags or "opening" in tags:
+    if "signature_scene" in tags or "cover" in tags or "opening" in tags:
         return 6
     if "multi_subject" in tags:
         return 5
@@ -65,6 +77,8 @@ def classify(clip: Mapping[str, Any], idx: int) -> List[str]:
         tags.append("opening")
     if "封面" in blob or "首图" in blob:
         tags.append("cover")
+    if SIGNATURE_RE.search(blob):
+        tags.append("signature_scene")
     if KEY_RE.search(blob):
         tags.append("hook_or_payoff")
     if MULTI_RE.search(blob):
@@ -78,6 +92,8 @@ def classify(clip: Mapping[str, Any], idx: int) -> List[str]:
 
 def selection_criteria(tags: Sequence[str]) -> List[str]:
     base = ["角色 DNA 一致", "构图一眼读懂", "光位/色调继承本集契约", "无文字/手/脸明显硬伤"]
+    if "signature_scene" in tags:
+        base.append("原著名场面/爽点兑现：必须一眼认出该高光，情绪与动作到位，建议跨后端多版兜底、人工终选")
     if "opening" in tags:
         base.append("0-3 秒钩子强，第一眼能理解冲突")
     if "cover" in tags:

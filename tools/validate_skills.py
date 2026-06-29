@@ -5,8 +5,11 @@
   - E1  交付端 VCS-free：skill 不得用 git 做本仓状态/基线/变更检测（内容快照除外）。
   - B2  推荐 skill 写裸名：skill 的 SKILL.md/.sh/.py 不得把 skill 当斜杠命令写成 /skillname
          （含脚本里打印给用户看的 echo —— agent 可能把 /name 当内置斜杠命令）。
-  - B7  n2d 人物定妆基础包不可缺失：宪法、n2d-image 铁律、gate 常量和回归测试必须同时存在。
+  - B7  n2d 人物定妆基础包与 Clip 前共享资产基础包不可缺失：
+         宪法、n2d-image 铁律、prompt 模板、gate 常量和回归测试必须同时存在。
   - B9  n2d 无持久主体 ID 与项目记忆分层：Codex/OpenAI 无公开 subject_id 不得等同不能锁角色。
+  - N1  novel runtime 不得裸 import contract：避免 shim 被 sys.path 顺序误解析。
+  - N2  novel 易变市场断言必须绑定 market baseline / research sources。
   - F1  改了 skill 集合必须同步 skills/README.md 索引：每个 skills/<name>/ 都要在 README 出现。
   - F3  入口文档同步：AGENTS/GEMINI/CLAUDE 不得保留过期命令或旧路径，关键入口保持一致。
 
@@ -18,6 +21,7 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import re
 import sys
 from pathlib import Path
@@ -74,23 +78,90 @@ ENTRY_FORBIDDEN = {
     ".claude/创作偏好-默认.md": "Claude 私有旧路径不应作为唯一全局默认；应写工具中立私有默认并注明 .claude legacy",
 }
 
+NOVEL_MARKET_ALLOWED_FILES = {
+    "novel-score/references/market-claims.md",
+    "novel-score/scripts/collect_market_baseline.py",
+}
+NOVEL_MARKET_ALLOWED_PATH_PARTS = (
+    "/test_",
+    "/tests/",
+    "/fixtures/",
+)
+NOVEL_MARKET_ANCHORS = (
+    "market_baseline",
+    "评分/market_baseline",
+    "评分/题材热榜",
+    "research_sources",
+    "资料/research_sources",
+    "market-claims.md",
+    "实时基准",
+    "当前基准",
+    "资料包",
+    "证据",
+    "核验",
+    "未单独验证",
+    "待验证",
+    "以实时基准为准",
+)
+NOVEL_MARKET_EXEMPT_RE = re.compile(r"(AI\s*检测|AI检测|perplexity|burstiness|burst|合规|版权|侵权|GB\s*\d|AI Act)")
+NOVEL_MARKET_CLAIM_RE = re.compile(
+    r"(?=.*(?:市场|平台|榜单|热榜|番茄|七猫|晋江|红果|抖音|短剧|改编|赛道|题材热度|读者口味|爆款|头部(?:作品|内容|平台|榜单)|支柱))"
+    r"(?:"
+    r".*\b20(?:2[5-9]|3\d)\b|"
+    r".*\d+(?:\.\d+)?\s*%|"
+    r".*\d+\s*(?:万|亿|千)\+?|"
+    r".*(?:成功率|市场规模|半壁市场|第一变现|"
+    r"平台(?:确认|投入|榜单|热榜)|"
+    r"支柱|趋势|上升|降温|热门|退潮|疲软|头部(?:作品|内容|平台|榜单)|"
+    r"改编(?:机会|概率|成功率|池|赛道))"
+    r")"
+)
+
 B7_REQUIRED_SNIPPETS = {
     "docs/skill-design-principles.md": (
         "B7 人物定妆基础包不可缺失铁律",
+        "Clip 图前完整资产基础包铁律",
         "七类基础定妆包",
         "三视图不能替代拆分 PNG",
         "同源母本派生",
         "derivation.method/source_path/source_sha256/crop_box",
         "planned",
+        "共享资产必须先完成可传给模型的基础包",
+        "不得生成 Clip 分镜图",
+        "共享库先行顺序不可被",
+        "enforce_shared_first_interlock",
     ),
     "skills/n2d-image/SKILL.md": (
         "角色定妆基础包铁律",
+        "Clip 图前完整资产基础包铁律",
         "基础包至少七类",
         "不能替代正/45°/侧/背/半身/脸锚任一拆图",
         "同源母本派生铁律",
         "derive_makeup_pack.py",
         "derivation.method/source_path/source_sha256/crop_box",
         "未过人审不得标 ready",
+        "配饰/标志物",
+        "weapon_profile",
+        "不得生成 Clip 分镜图",
+        "--skip-preflight",
+        "共享库先行顺序不可被",
+        "enforce_shared_first_interlock",
+    ),
+    "skills/n2d-image/references/prompt_format.md": (
+        "Clip 图前完整资产基础包铁律",
+        "不得进入 `出图/第N集/图片/` 分镜生成",
+        "`asset_registry` ID",
+        "`weapon_profile`",
+    ),
+    "skills/n2d-image/references/角色一致性checklist.md": (
+        "Clip 图前完整资产基础包",
+        "不许先生成 `Clip_*` / `镜头*` 分镜 PNG",
+    ),
+    "skills/n2d-image/QUICKSTART.md": (
+        "Shared reference assets must be complete before episode shot PNGs",
+        "shared-first order is non-waivable",
+        "post-generation self-check",
+        "preflight block",
     ),
     "skills/n2d-image/scripts/derive_makeup_pack.py": (
         "turnaround_split",
@@ -101,6 +172,17 @@ B7_REQUIRED_SNIPPETS = {
         "requires_human_review_before_ready",
         "review_pending",
         "N2D_HUMAN_REVIEWED_SHARED",
+        "shared_first_interlock_issues",
+        "enforce_shared_first_interlock",
+        "cannot bypass shared-first",
+    ),
+    "skills/n2d-image/scripts/dreamina_image_runner.py": (
+        "enforce_shared_first_interlock",
+        "--skip-preflight",
+    ),
+    "skills/n2d-image/scripts/test_codex_image_runner.py": (
+        "test_shared_first_interlock_blocks_incomplete_character_pack",
+        "test_main_skip_preflight_cannot_bypass_shared_first_interlock",
     ),
     "skills/n2d-image/scripts/test_derive_makeup_pack.py": (
         "test_derive_project_splits_turnaround_and_front_crops",
@@ -120,6 +202,8 @@ B7_REQUIRED_SNIPPETS = {
         "test_identity_registry_planned_makeup_reference_is_blocked",
         "test_identity_registry_ready_split_reference_requires_same_source_derivation",
         "test_identity_registry_turnaround_cannot_replace_split_makeup_refs",
+        "test_image_shot_prompt_missing_post_generation_self_check_blocks",
+        "缺生成后逐张自检段",
     ),
 }
 
@@ -260,15 +344,28 @@ def check_entry_docs_sync() -> list[str]:
     return bad
 
 
+def _gate_layer_text(p) -> str:
+    """读 n2d-review gate 闸源码全集：若是 gate.py，则并上同目录 gate_core.py + gates/*.py。
+
+    增量2 按证据族拆分后，B7/B9 守护片段分散到共享基座 gate_core.py / 证据族子包 gates/*.py，
+    单读 gate.py 会漏报。与 consistency_charter.gate_source_text 同一多文件纪律。"""
+    text = p.read_text("utf-8", "ignore")
+    if p.name == "gate.py" and p.parent.name == "scripts" and p.parent.parent.name == "n2d-review":
+        for e in [p.parent / "gate_core.py", *sorted(p.parent.glob("gates/*.py"))]:
+            if e.is_file():
+                text += "\n" + e.read_text("utf-8", "ignore")
+    return text
+
+
 def check_n2d_character_makeup_constitution() -> list[str]:
-    """B7: n2d 人物定妆基础包铁律不能只剩口号，必须有文档、gate 和测试锚点。"""
+    """B7: n2d 定妆/Clip 前基础包铁律不能只剩口号，必须有文档、gate 和测试锚点。"""
     bad: list[str] = []
     for rel, snippets in B7_REQUIRED_SNIPPETS.items():
         p = REPO / rel
         if not p.is_file():
-            bad.append(f"{rel}: 文件不存在，B7 人物定妆基础包铁律失去覆盖")
+            bad.append(f"{rel}: 文件不存在，B7 定妆/Clip 前基础包铁律失去覆盖")
             continue
-        text = p.read_text("utf-8", "ignore")
+        text = _gate_layer_text(p)
         for needle in snippets:
             if needle not in text:
                 bad.append(f"{rel}: 缺少 B7 守护片段 '{needle}'")
@@ -283,18 +380,79 @@ def check_n2d_project_memory_constitution() -> list[str]:
         if not p.is_file():
             bad.append(f"{rel}: 文件不存在，B9 项目记忆铁律失去覆盖")
             continue
-        text = p.read_text("utf-8", "ignore")
+        text = _gate_layer_text(p)
         for needle in snippets:
             if needle not in text:
                 bad.append(f"{rel}: 缺少 B9 守护片段 '{needle}'")
     return bad
 
 
+def check_novel_import_shadowing() -> list[str]:
+    """N1: novel runtime code must import novel_contract explicitly."""
+    script = REPO / "tools" / "independence-audit" / "scripts" / "check_novel_import_shadowing.py"
+    if not script.is_file():
+        return [f"{script.relative_to(REPO)}: 文件不存在，novel import-shadowing 机检失去覆盖"]
+    spec = importlib.util.spec_from_file_location("_novel_import_shadowing_check", script)
+    if spec is None or spec.loader is None:
+        return [f"{script.relative_to(REPO)}: 无法加载 novel import-shadowing 机检"]
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return list(module.check_novel_import_shadowing())
+
+
+def _line_has_market_anchor(lines: list[str], idx: int) -> bool:
+    """Return whether the claim line is tied to an explicit evidence mechanism."""
+    window = "\n".join(lines[max(0, idx - 2): min(len(lines), idx + 3)])
+    doc_scope = "\n".join(lines[:12])
+    return any(anchor in window or anchor in doc_scope for anchor in NOVEL_MARKET_ANCHORS)
+
+
+def check_novel_market_claims() -> list[str]:
+    """N2: novel docs/scripts must not freeze volatile market claims in prose.
+
+    Platform rankings, trend years, percentages, market-size numbers, and
+    adaptation-probability claims must point to project evidence
+    (market_baseline/research_sources) or live verification wording. The
+    dedicated collector and policy doc are allowed to describe the rule itself.
+    """
+    bad: list[str] = []
+    for root in sorted(SKILLS.glob("novel*")):
+        if not root.is_dir():
+            continue
+        for p in root.rglob("*"):
+            if p.suffix not in (".md", ".py") or not p.is_file():
+                continue
+            rel = _rel(p)
+            rel_with_slash = "/" + rel
+            if rel in NOVEL_MARKET_ALLOWED_FILES:
+                continue
+            if any(part in rel_with_slash for part in NOVEL_MARKET_ALLOWED_PATH_PARTS):
+                continue
+            lines = p.read_text("utf-8", "ignore").splitlines()
+            for i, line in enumerate(lines, 1):
+                stripped = line.strip()
+                if not stripped or stripped.startswith(("import ", "from ")):
+                    continue
+                if NOVEL_MARKET_EXEMPT_RE.search(stripped):
+                    continue
+                if not NOVEL_MARKET_CLAIM_RE.search(stripped):
+                    continue
+                if _line_has_market_anchor(lines, i - 1):
+                    continue
+                bad.append(
+                    f"{rel}:{i}: 易变市场/平台断言缺少 market_baseline 或 research_sources 证据锚点 —— "
+                    f"{stripped[:100]}"
+                )
+    return bad
+
+
 CHECKS = {
     "E1": ("交付端 VCS-free（无 git 调用）", check_no_git_calls),
     "B2": ("推荐 skill 写裸名（无 /skillname）", check_bare_skill_refs),
-    "B7": ("n2d 人物定妆基础包不可缺失", check_n2d_character_makeup_constitution),
+    "B7": ("n2d 人物定妆与 Clip 前共享资产基础包不可缺失", check_n2d_character_makeup_constitution),
     "B9": ("n2d 无持久主体 ID 与项目记忆分层", check_n2d_project_memory_constitution),
+    "N1": ("novel runtime 无 contract 裸导入", check_novel_import_shadowing),
+    "N2": ("novel 市场断言必须绑定证据", check_novel_market_claims),
     "F1": ("skills/README.md 索引同步", check_readme_index),
     "F3": ("入口文档同步", check_entry_docs_sync),
 }

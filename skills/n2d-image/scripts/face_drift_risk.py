@@ -40,21 +40,27 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence, Set, Tuple
 _COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
+# 一致性 lint 共享词表单一真值源（n2d_const，纯 stdlib 常量）：强情绪/多主体策略只此一份，
+# 本文件禁止再用字面量重定义同名集合（test_marker_single_source.py 守护）。
+from n2d_const import (  # noqa: E402
+    STRONG_EMOTION_MARKERS,
+    MULTI_SUBJECT_ACCEPTING_MARKERS,
+    MULTI_SUBJECT_SLOT_MARKERS,
+)
 try:
     from n2d_contract import classify_image_backend, image_identity_profile, image_lock_tier
 except Exception:  # pragma: no cover - 测试/异常布局兜底
     classify_image_backend = None  # type: ignore
     image_identity_profile = None  # type: ignore
     image_lock_tier = None  # type: ignore
+try:
+    import codex_image_runner as _cir  # 同 skill·复用 face_policy/承载脸锚单一真值源（不 fork·无循环 import）
+except Exception:  # pragma: no cover - 异常布局兜底
+    _cir = None  # type: ignore
 
 # 近景景别（与 image_qc.CLOSEUP_MARKERS / video_qc 同义；本 skill 自留一份，不跨 import）。
 CLOSEUP_MARKERS = ("ECU", "MCU", "BCU", "CU", "OTS", "反打", "特写", "近景", "过肩", "脸部")
-# 强情绪（与 image_qc.STRONG_EMOTION_MARKERS 对齐：表情镜脸漂的触发词）。
-STRONG_EMOTION_MARKERS = (
-    "哭", "泣", "落泪", "含泪", "泪", "怒", "愤", "暴怒", "狂怒", "震惊", "惊恐", "恐惧",
-    "狂喜", "大笑", "狂笑", "嘶吼", "咆哮", "嚎", "痛苦", "崩溃", "狰狞", "扭曲", "癫狂",
-    "失控", "绝望", "悲恸", "惊愕",
-)
+# STRONG_EMOTION_MARKERS 已上提 n2d_const 单一真值源（见文件顶部 import）。
 READY_STATUSES = {"registered", "ready"}
 CORE_SCOPE_MARKERS = ("核心", "长线", "全篇", "主角", "女主", "男主", "主反派", "贯穿")
 # 2026 公认正面+3/4+侧面是身份核心集，纯 90° 正侧是较弱的重投影锚。
@@ -79,10 +85,8 @@ PROJECT_MEMORY_TOKENS = (
     "image2image", "图生图", "多图参考", "真实附件", "真实参考图",
 )
 FACE_REFERENCE_TOKENS = ("脸部特写", "face_anchor", "expression", "表情库", "表情锚")
-MULTI_SUBJECT_TOKENS = (
-    "split_composite_required", "shot_reverse_shot_or_split_composite_required",
-    "分别出图", "分层合成", "单人分层", "多人同框身份槽位", "多人同框执行策略",
-)
+# 多主体策略检测集 = 放行集 + 身份槽位（已上提 n2d_const 单一真值源，与 gate/image_qc/shot_risk 同源）。
+MULTI_SUBJECT_TOKENS = MULTI_SUBJECT_ACCEPTING_MARKERS + MULTI_SUBJECT_SLOT_MARKERS
 
 
 # ── 纯函数（无依赖·可测） ──────────────────────────────────────────────────────
@@ -569,6 +573,69 @@ def present_characters(text: str, chars: Sequence[Mapping[str, Any]]) -> List[Ma
     return [c for c in chars if any(a in text for a in c.get("aliases") or set())]
 
 
+def assess_shared_asset_face_risk(root: Path, chars: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
+    """诊断共享定妆资产（武器/道具/VFX/海报…）的脸漂风险——治"含人资产镜被逐镜诊断静默跳过"。
+
+    face_drift_risk 此前只逐 storyboard clip×角色诊断·共享资产非 clip → 从不进诊断（武器握持镜脸漂的
+    诊断侧盲区）。这里按 `codex_image_runner.resolve_face_policy`（单一真值源）逐资产判脸漂风险档：
+      - face_locked 无 owner/承载 → high（出图必自画新脸·与 image_qc 硬闸互补）；
+      - face_locked 承载无 ready 脸锚 → high（无锚可注入）；承载有锚 → medium（出图须折脸锚）；
+      - faceless → low（须背身/裁脸·落档像素验 0 脸·提示非阻断）；
+      - none → 跳过。
+    诊断层·report-only（不改 block 计数·不当门控）。cir 不可加载 → available=False 优雅跳过。"""
+    out: Dict[str, Any] = {"available": True, "assets": [], "high": 0, "medium": 0, "low": 0, "notes": []}
+    if _cir is None or not hasattr(_cir, "resolve_face_policy"):
+        out["available"] = False
+        out["notes"].append("codex_image_runner.resolve_face_policy 不可用——共享资产脸漂诊断跳过。")
+        return out
+    try:
+        reg = json.loads((Path(root) / "出图" / "共享" / "asset_registry.json").read_text(encoding="utf-8"))
+    except Exception:
+        out["notes"].append("asset_registry.json 缺失/损坏——共享资产脸漂诊断跳过。")
+        return out
+    by_id = {str(c.get("id") or "").strip(): c for c in (chars or [])}
+
+    def _has_ready_anchor(ref: str) -> bool:
+        cid = ref.split("/", 1)[0]
+        ch = by_id.get(cid)
+        if not isinstance(ch, dict) or not ch.get("forms"):
+            return False
+        return any(_front_ref_abs(root, f) for f in ch["forms"] if isinstance(f, Mapping))
+
+    for asset in reg.get("assets") or []:
+        if not isinstance(asset, dict):
+            continue
+        aid = str(asset.get("id") or asset.get("name") or "?").strip()
+        policy = _cir.resolve_face_policy(asset)
+        if policy == "none":
+            continue
+        if policy == "faceless":
+            band, driver = "low", "faceless·须背身/裁脸·落档像素验 0 清晰脸"
+        else:  # face_locked
+            carried = _cir._asset_carried_identities(asset) if hasattr(_cir, "_asset_carried_identities") else []
+            if not carried:
+                band, driver = "high", "face_locked 无 owner/承载角色·出图必自画新脸（补 owner 或改 faceless）"
+            elif not any(_has_ready_anchor(r) for r in carried):
+                band, driver = "high", f"face_locked 承载 {'、'.join(carried)} 无 ready 脸锚·无锚可注入"
+            else:
+                band, driver = "medium", f"face_locked·出图须折承载 {'、'.join(carried)} 脸锚"
+        out["assets"].append({"asset_id": aid, "type": asset.get("type"),
+                              "face_policy": policy, "band": band, "driver": driver})
+        out[band] += 1
+    out["assets"].sort(key=lambda a: {"high": 2, "medium": 1, "low": 0}.get(a["band"], 0), reverse=True)
+    return out
+
+
+def _front_ref_abs(root: Path, form: Mapping[str, Any]) -> Optional[str]:
+    """取一个 form 最适合做脸锚的参考图绝对路径：优先脸部特写(face)，回退正面(front)。诊断层自留一份。"""
+    rg = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
+    for key in ("face", "front"):
+        v = rg.get(key)
+        if isinstance(v, str) and v:
+            return str(Path(root) / v)
+    return None
+
+
 def analyze(root: Path, ep: str) -> Dict[str, Any]:
     chars = load_characters(root)
     clips = load_clips(root, ep)
@@ -684,10 +751,12 @@ def analyze(root: Path, ep: str) -> Dict[str, Any]:
         results.append(rec)
     band_rank = {"block": 3, "high": 2, "medium": 1, "low": 0}
     results.sort(key=lambda r: (band_rank.get(r["band"], 0), r["score"]), reverse=True)
+    shared_assets = assess_shared_asset_face_risk(root, chars)  # 含人共享资产镜脸漂诊断（治诊断侧盲区）
     return {
         "kind": "n2d_face_drift_risk", "version": 1, "root": str(root), "episode": ep,
         "default_backend": default_backend,
         "backend_profile": profile,
+        "shared_asset_face_risk": shared_assets,
         "block": sum(1 for r in results if r["band"] == "block"),
         "high": sum(1 for r in results if r["band"] == "high"),
         "medium": sum(1 for r in results if r["band"] == "medium"),
@@ -727,6 +796,15 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         lines.append(f"## {icon.get(r['band'])} {r['name']}（{r['character_id']}/{r['form']}）· 分 {r['score']}")
         for s in r["suggestions"]:
             lines.append(f"- {s}")
+        lines.append("")
+    sa = report.get("shared_asset_face_risk") or {}
+    if sa.get("assets"):
+        lines += ["## 含人共享资产镜脸漂诊断（治诊断侧盲区·武器/道具/海报）",
+                  f"- 🔴 {sa.get('high', 0)} · 🟡 {sa.get('medium', 0)} · 🟢 {sa.get('low', 0)}",
+                  "| 资产 | 脸策略 | 风险 | 主驱动 |", "|---|---|---|---|"]
+        for a in sa["assets"]:
+            lines.append(f"| `{a['asset_id']}`（{a.get('type')}） | {a['face_policy']} "
+                         f"| {icon.get(a['band'],'?')} {a['band']} | {a['driver']} |")
         lines.append("")
     for n in report.get("notes", []):
         lines.append(f"- note: {n}")

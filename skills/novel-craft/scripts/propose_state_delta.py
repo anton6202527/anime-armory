@@ -103,6 +103,9 @@ def build_delta(root: str, chapter: int) -> tuple[dict, str]:
             "character_changes（[{name,change,state_update}]）、open_threads_added / threads_resolved（线程）。",
             "candidate_entities 仅是抽取提示，挑出真正出场/有变化的角色填进 character_changes，删除误抽实体。",
             "伏笔/关系温度/能力数值变化分别落 open_threads_*、relationship_changes、character_changes.state_update。",
+            "relationship_changes 每条 {pair:\"甲↔乙\", temperature:-100..100, label:\"本章关系如何变\", "
+            "turning_point:true/false}——logic_sentry.build_relationship_graph 据此构动态关系图检「突变无铺垫」；"
+            "label 非空或 turning_point=true 即视为有铺垫（背叛/和解/牺牲等陡转务必写明，否则机检升阻断）。",
             "确认后另存为 审稿/state_delta_第NN章.json 并跑 reconcile_ledger.py。",
         ],
     }

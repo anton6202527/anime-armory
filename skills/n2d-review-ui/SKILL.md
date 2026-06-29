@@ -20,7 +20,7 @@ description: "Build a local visual UI for n2d. Two zero-build (self-contained HT
 ## 输入 / 输出 / 读写边界
 
 - **输入**：`_进度.md`、`storyboard.json`、首尾帧、clip MP4、identity registry、score/gate/mechanical/visual check JSON。
-- **输出**：`生产数据/review_ui_第N集.html/json`、可选 `review_ui_findings_第N集.json`，以及整部 `board.html/json`。
+- **输出**：`生产数据/review_ui_第N集.html/json`、可选 `review_ui_findings_第N集.json`，整部 `board.html/json`，以及人审校准 `review_calibration_cases.json`、`review_calibration.json/md`。
 - **读写边界**：只生成可视化和可消费 findings；不改进度、不改原始媒体、不执行返工队列。
 - **契约关系**：阶段前沿与 `n2d-progress` 同源于 `n2d_contract.py`；导出的 findings 使用统一 `n2d_consistency_findings` kind，供 `n2d-batch` 消费。
 
@@ -73,6 +73,7 @@ HTML 是静态文件，可直接用浏览器打开；不需要开发服务器。
 ## 使用原则
 
 - **先机检，再人审**：UI 负责聚合、呈现，并可用 `--export-findings` 把红黄 QA flag 导出成 batch 可消费的 `n2d_consistency_findings`；低分来源仍由 `n2d-review` / `n2d-score` 产出。
+- **批量人审前先校准**：同一批审片员要先跑少量金标 case，校准 block/warn/pass 口径；否则同样的脸漂、接缝跳切、字幕遮挡会被不同人判成不同等级，后续 batch 回流和评分阈值都会失真。
 - **先看红黄，再看全片**：画布支持按 block / warn / 缺素材筛选，先处理阻断项。
 - **接缝并排看**：每个接缝都展示“上一尾帧 → 下一首帧”，用于判断跳切、尾帧没接上、构图突变。
 - **定妆同屏比对**：角色参考图在左侧固定区域，审片时和每个 Clip 的首帧/视频并排比。
@@ -88,6 +89,26 @@ UI 本身不改进度、不重跑、不提交任务。发现问题后按：
 - 机器分低于阈值：用 `n2d-score --enqueue-low` 写入 `n2d-batch`。
 - 要把画布里的红黄 flag 直接排入返工队列：先生成 findings，再执行
   `python3 skills/n2d-batch/scripts/queue.py plan <作品根> --from-consistency-findings <作品根>/生产数据/review_ui_findings_第N集.json`。
+
+## 人审校准
+
+```bash
+# 初始化金标 case 模板，人工把 asset/gold_label/rationale 补实
+python3 skills/n2d-review-ui/scripts/calibration.py init <作品根>
+
+# 收集 reviewer 投票后评分；votes 支持 CSV 或 JSONL
+python3 skills/n2d-review-ui/scripts/calibration.py score <作品根> --votes votes.csv --write
+```
+
+`votes.csv` 最少字段：
+
+```csv
+case_id,reviewer,label
+CAL_FACE_001,alice,block
+CAL_FACE_001,bob,warn
+```
+
+输出 `生产数据/review_calibration.json/md`。`status=needs_calibration` 时，先统一口径或补训练样例，再进入正式批量验收；它不自动改 review 结论，只给人工验收一致性证据。
 
 ## 常见错误
 

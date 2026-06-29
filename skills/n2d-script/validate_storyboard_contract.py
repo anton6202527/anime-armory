@@ -17,7 +17,7 @@ LIB = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "n2d", "_lib
 if LIB not in sys.path:
     sys.path.insert(0, LIB)
 
-from n2d_contract import TEMPLATE_BASE_FIELDS  # noqa: E402
+from n2d_contract import TEMPLATE_BASE_FIELDS, spectacle_required_fields  # noqa: E402
 from n2d_const import STYLE_CONTRACT_FIELDS, VISUAL_CONTRACT_FIELDS  # noqa: E402
 from n2d_logic import special_template_keywords  # noqa: E402
 from n2d_platform_profiles import backend_supports_three_plus_frames  # noqa: E402
@@ -126,7 +126,8 @@ def check_template_contract(rows: List[Dict[str, Any]], clip: Dict[str, Any], lo
         return
     if str(contract.get("template_id") or "").strip() != template:
         add(rows, "block", "专项镜头模板", loc, f"template_contract.template_id 必须等于 template={template}。")
-    for field in TEMPLATE_BASE_FIELDS:
+    required_fields = tuple(spectacle_required_fields(template)) or TEMPLATE_BASE_FIELDS
+    for field in required_fields:
         if missing(contract.get(field)):
             add(rows, "block", "专项镜头模板", loc, f"template_contract 缺字段或为空：{field}")
 

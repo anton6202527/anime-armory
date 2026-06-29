@@ -97,9 +97,26 @@ fi
 
 echo "=== [1/6] 时域插帧/裁切 + 统一规格 ${PXW}x${PXH}/30fps（含 clip 级缓存）==="
 SOURCE_LIST="$W/source_clips.txt"
-python3 - "$ROOT" "$EP" "$VID" "$SOURCE_LIST" <<'PY'
+python3 - "$ROOT" "$EP" "$VID" "$SOURCE_LIST" "$SKILL_DIR" "$PXW" "$PXH" <<'PY'
 import glob, json, os, sys
-root, ep, vid, out_path = sys.argv[1:5]
+root, ep, vid, out_path, skill_dir, pxw, pxh = sys.argv[1:8]
+try:
+    pxw, pxh = int(pxw), int(pxh)
+except ValueError:
+    pxw, pxh = 0, 0
+# 打斗命中帧微震屏（P2·保时长·拼进本就发生的逐 clip 重编码·零额外成本）。导入失败→不加震屏。
+sys.path.insert(0, os.path.join(skill_dir, "scripts"))
+try:
+    import combat_punch as _cp
+except Exception:
+    _cp = None
+def _punch(clip):
+    if _cp is None or not pxw or not pxh:
+        return ""
+    try:
+        return _cp.clip_punch_fragment(clip, pxw, pxh)
+    except Exception:
+        return ""
 storyboard_path = os.path.join(root, "脚本", ep, "storyboard.json")
 try:
     data = json.load(open(storyboard_path, encoding="utf-8"))
@@ -113,7 +130,7 @@ if clips:
         path = clip.get("video_out")
         if path:
             path = os.path.join(root, path)
-        
+
         cid = clip.get("id")
         if cid:
             # 优先找 part 拆段 (automated split relay)
@@ -122,23 +139,24 @@ if clips:
                 for p in parts:
                     # 拆段后的子文件时长由生成时控制，此处设为 None 让 ffmpeg 取全长，
                     # 速度模式设为 trim（生成时已对齐时长，不需要整体 warp，否则会把子段拉长到总时长）
-                    ordered.append((p, "None", "trim"))
+                    # 拆段子文件不加震屏（命中秒是相对整镜的，映射到 part 偏移过复杂·保守跳过）
+                    ordered.append((p, "None", "trim", ""))
                 continue
-            
+
             # 无拆段时，尝试精确匹配或模糊匹配
             if not path or not os.path.exists(path):
                 cands = sorted(glob.glob(os.path.join(vid, f"*{cid}*.mp4")))
                 if cands: path = cands[0]
-        
+
         if path and os.path.exists(path):
-            ordered.append((path, clip.get("duration", "None"), clip.get("speed_mode", "warp")))
+            ordered.append((path, clip.get("duration", "None"), clip.get("speed_mode", "warp"), _punch(clip)))
 else:
     for p in sorted(glob.glob(os.path.join(vid, "*.mp4"))):
-        ordered.append((p, "None", "trim"))
+        ordered.append((p, "None", "trim", ""))
 
 with open(out_path, "w", encoding="utf-8") as f:
-    for p, d, s in ordered:
-        f.write(f"{p}\t{d}\t{s}\n")
+    for p, d, s, pv in ordered:
+        f.write(f"{p}\t{d}\t{s}\t{pv}\n")
 PY
 
 if [ ! -s "$SOURCE_LIST" ]; then
@@ -149,10 +167,10 @@ fi
 CACHE="$ROOT/合成/$EP/_clipcache"; mkdir -p "$CACHE"
 : > "$W/list.txt"
 CLIPS=() # 重置 CLIPS 以确保后续读取原生音频的顺序也是排好的
-while IFS=$'\t' read -r c dur speed_mode; do
+while IFS=$'\t' read -r c dur speed_mode punch_vf; do
   [ -f "$c" ] || continue
   CLIPS+=("$c")
-  key=$(python3 -c "import os,hashlib,sys;p=sys.argv[1];print(hashlib.md5(f'{os.path.basename(p)}:{os.path.getmtime(p)}:{sys.argv[2]}:{sys.argv[3]}:{sys.argv[4]}'.encode()).hexdigest()[:16])" "$c" "${PXW}x${PXH}:${VIDEO_CRF}:${VIDEO_PRESET}" "$dur" "$speed_mode")
+  key=$(python3 -c "import os,hashlib,sys;p=sys.argv[1];print(hashlib.md5(f'{os.path.basename(p)}:{os.path.getmtime(p)}:{sys.argv[2]}:{sys.argv[3]}:{sys.argv[4]}:{sys.argv[5]}'.encode()).hexdigest()[:16])" "$c" "${PXW}x${PXH}:${VIDEO_CRF}:${VIDEO_PRESET}" "$dur" "$speed_mode" "$punch_vf")
   nf="$CACHE/n_${key}.mp4"
   
   if [ ! -f "$nf" ]; then
@@ -191,9 +209,13 @@ while IFS=$'\t' read -r c dur speed_mode; do
       fi
     fi
 
+    # 打斗命中帧微震屏（P2·保时长·拼进既有逐 clip -vf 链尾·零额外重编码）。
+    # 只对 fight_exchange/magic_burst 且有命中秒的镜非空；crop 抖动在 PXWxPXH 上做再 scale 回原尺寸。
+    PUNCH_FILTER=""
+    [ -n "$punch_vf" ] && PUNCH_FILTER=",${punch_vf}"
     # 只在 compose 的规格化缓存中 -an；出视频目录里的 AI 原片保持不变。
     ffmpeg -y -loglevel error -i "$c" \
-      -vf "${SETPTS_OPT}scale=${PXW}:${PXH}:force_original_aspect_ratio=decrease,pad=${PXW}:${PXH}:(ow-iw)/2:(oh-ih)/2:black,fps=30${COLOR_FILTER},format=yuv420p" \
+      -vf "${SETPTS_OPT}scale=${PXW}:${PXH}:force_original_aspect_ratio=decrease,pad=${PXW}:${PXH}:(ow-iw)/2:(oh-ih)/2:black,fps=30${COLOR_FILTER}${PUNCH_FILTER},format=yuv420p" \
       $TRIM_OPT -c:v libx264 -preset "$VIDEO_PRESET" -crf "$VIDEO_CRF" -an "$nf.tmp.mp4" && mv "$nf.tmp.mp4" "$nf"
   else
     echo "  ♻ 复用规格化缓存 $(basename "$c") -> ${dur}s"

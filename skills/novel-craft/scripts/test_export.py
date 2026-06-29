@@ -6,6 +6,7 @@ Can run without pytest:
     python3 skills/novel-craft/scripts/test_export.py
 """
 import json
+import importlib.util
 import os
 import subprocess
 import sys
@@ -22,6 +23,14 @@ EXPORT = os.path.join(HERE, "export.py")
 EXPAND_INIT = os.path.join(REPO, "skills", "novel-expand", "scripts", "init_project.py")
 
 
+def load_export_module():
+    spec = importlib.util.spec_from_file_location("novel_craft_export_under_test", EXPORT)
+    module = importlib.util.module_from_spec(spec)
+    assert spec and spec.loader
+    spec.loader.exec_module(module)
+    return module
+
+
 def sha256_file(path):
     h = hashlib.sha256()
     with open(path, "rb") as f:
@@ -34,7 +43,7 @@ def write_chapter(project_root):
     chap_dir = os.path.join(project_root, "章节")
     os.makedirs(chap_dir, exist_ok=True)
     with open(os.path.join(chap_dir, "第01章.md"), "w", encoding="utf-8") as f:
-        f.write("# 第1章 《扩写开端》\n<!-- meta: demo=false -->\n扩写正文内容。\n")
+        f.write("# 第1章 《扩写开端》\n<!-- meta: demo=false -->\n<!-- pov: 测试 -->\n扩写正文内容。\n")
 
 
 def write_review_pass(project_root):
@@ -127,7 +136,11 @@ class ExportContractTest(unittest.TestCase):
                 capture_output=True,
                 text=True,
             )
-            self.assertTrue(os.path.exists(os.path.join(project, "导出", "源书-扩写.txt")))
+            out_path = os.path.join(project, "导出", "源书-扩写.txt")
+            self.assertTrue(os.path.exists(out_path))
+            with open(out_path, encoding="utf-8") as f:
+                exported = f.read()
+            self.assertNotIn("<!--", exported)
 
     def test_missing_formats_is_hard_error(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -225,6 +238,30 @@ class ExportContractTest(unittest.TestCase):
             self.assertIn("source_aggregate_hash", waiver["scope"])
             self.assertEqual(waiver["scope"]["blocker_ids"], ["REVIEW-MISSING"])
             self.assertTrue(os.path.exists(os.path.join(project, "导出", "源书-扩写.txt")))
+
+    def test_export_waiver_scope_handles_directory_report_paths(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project = os.path.join(tmp, "proj")
+            os.makedirs(project, exist_ok=True)
+            write_chapter(project)
+            review_dir = os.path.join(project, "审稿")
+            os.makedirs(review_dir, exist_ok=True)
+            with open(os.path.join(review_dir, "arc_gate_01-03.json"), "w", encoding="utf-8") as f:
+                json.dump({"kind": "arc_gate", "blocking": 1}, f)
+
+            export_mod = load_export_module()
+            scope = export_mod.export_waiver_scope(
+                project,
+                {
+                    "reports": [{"kind": "arc", "path": review_dir}],
+                    "blockers": [{"id": "ARC-MISSING"}],
+                },
+                ["txt"],
+            )
+            self.assertEqual(scope["reports"][0]["type"], "directory")
+            self.assertEqual(scope["reports"][0]["path"], "审稿")
+            self.assertEqual(scope["reports"][0]["files"], 1)
+            self.assertRegex(scope["reports"][0]["sha256"], r"^[0-9a-f]{64}$")
 
 
 if __name__ == "__main__":

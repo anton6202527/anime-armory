@@ -70,6 +70,8 @@ def test_coverage_warning_when_short_drama_platform_uncovered():
     assert result["coverage_warnings"], "expected non-empty coverage_warnings"
     assert "红果" in result["coverage_warnings"][0]
     assert result["evidence_tasks"]
+    assert result["evidence_jobs"]
+    assert result["evidence_jobs"][0]["search_queries"]
     assert result["evidence_tasks"][0]["recommended_skill"] == "novel-research"
 
 
@@ -104,6 +106,25 @@ def test_future_manual_evidence_does_not_suppress_short_drama_warning():
     ))
     assert result["coverage_warnings"], "future manual evidence must not close short-drama coverage"
     assert result["evidence_tasks"]
+
+
+def test_quarter_old_industry_evidence_closes_short_drama_coverage():
+    # 红果/抖音漫剧 平台覆盖靠 MAU/题材趋势/审核新规等按月·季发布的行业证据，
+    # 它们天然比 21 天日榜窗口旧；只要在一个季度（COVERAGE_EVIDENCE_MAX_AGE_DAYS）内即算有效覆盖。
+    result = cmb.collect(_args(
+        date="2026-06-25",
+        manual_evidence=["红果短剧|2026-04-26|QuestMobile行业报告|月活3亿+，系统流题材放量|https://example.com/q"],
+    ))
+    assert result["coverage_warnings"] == [], "季度内行业证据应关闭覆盖告警"
+
+
+def test_beyond_quarter_evidence_does_not_close_short_drama_coverage():
+    # 仍有界：超过一个季度（这里约 175 天）的旧 factoid 不算有效平台覆盖。
+    result = cmb.collect(_args(
+        date="2026-06-25",
+        manual_evidence=["红果短剧|2026-01-01|旧行业报告|半年前结论|https://example.com/old"],
+    ))
+    assert result["coverage_warnings"], "超出覆盖窗口的旧证据不应关闭覆盖告警"
 
 
 def test_no_warning_when_platform_not_short_drama():
@@ -172,6 +193,8 @@ def test_write_artifacts_writes_both_files_and_md_warning_section():
     assert "待补市场证据任务" in md
     assert os.path.exists(os.path.join(out_dir, "market_evidence_tasks.json"))
     assert os.path.exists(os.path.join(out_dir, "市场证据待补.md"))
+    assert os.path.exists(os.path.join(out_dir, "market_evidence_jobs.json"))
+    assert os.path.exists(os.path.join(out_dir, "市场证据深搜任务.md"))
 
 
 def test_write_artifacts_no_warning_section_when_clean():
@@ -188,12 +211,16 @@ def test_write_artifacts_removes_stale_market_evidence_tasks_when_clean():
     out_dir = tempfile.mkdtemp()
     open(os.path.join(out_dir, "market_evidence_tasks.json"), "w", encoding="utf-8").write("{}")
     open(os.path.join(out_dir, "市场证据待补.md"), "w", encoding="utf-8").write("stale")
+    open(os.path.join(out_dir, "market_evidence_jobs.json"), "w", encoding="utf-8").write("{}")
+    open(os.path.join(out_dir, "市场证据深搜任务.md"), "w", encoding="utf-8").write("stale")
 
     result = cmb.collect(_args(target_platform="番茄网文向"))
     cmb.write_artifacts(result, out_dir)
 
     assert not os.path.exists(os.path.join(out_dir, "market_evidence_tasks.json"))
     assert not os.path.exists(os.path.join(out_dir, "市场证据待补.md"))
+    assert not os.path.exists(os.path.join(out_dir, "market_evidence_jobs.json"))
+    assert not os.path.exists(os.path.join(out_dir, "市场证据深搜任务.md"))
 
 
 def test_source_quality_marks_ok_signal_source():
@@ -214,3 +241,56 @@ def test_source_quality_marks_ok_signal_source():
     assert quality["score"] > 0.5
     assert quality["confidence"] in {"medium", "high"}
     assert "source_quality" in source
+
+
+def test_clean_signals_drops_script_style_noise():
+    signals = cmb.clean_signals([
+        "@font-face{font-family:X;src:url(x.woff2)}",
+        "var width = window.innerWidth; document.location.href = '/rank';",
+        "You need to enable JavaScript to run this app.",
+        "���а� - ������ѧ��",
+        "APP",
+        "priest",
+        "古言权谋榜：冷宫废妃、复仇逆袭、妖妃题材热度上升",
+        "古言权谋榜：冷宫废妃、复仇逆袭、妖妃题材热度上升",
+        ".rank-list{display:flex;color:red}",
+    ], max_signals=10)
+    assert signals == ["古言权谋榜：冷宫废妃、复仇逆袭、妖妃题材热度上升"]
+
+
+def test_collect_filters_fetched_noise_before_quality(monkeypatch):
+    def fake_fetch_text(_url, _timeout):
+        return "测试榜单", [
+            "window._SdkGlueInit({self:{aid:2503,pageId:24117}})",
+            "body { -moz-user-select: none; -webkit-user-select: none; }",
+            "短剧古风权谋榜：宫斗、妖怪、女强逆袭仍有榜单入口",
+        ]
+
+    monkeypatch.setattr(cmb, "fetch_text", fake_fetch_text)
+    result = cmb.collect(_args(
+        source=["测试榜单|https://example.com/rank|web_novel_rank"],
+        target_platform="番茄网文向",
+    ))
+    source = result["sources"][0]
+    assert source["signals"] == ["短剧古风权谋榜：宫斗、妖怪、女强逆袭仍有榜单入口"]
+    assert source["source_quality"]["score"] > 0
+
+
+def test_source_quality_does_not_count_empty_or_placeholder_sources():
+    empty_ok = cmb.source_quality({
+        "platform": "起点",
+        "url": "https://example.com/rank",
+        "use_for": "web_novel_rank",
+        "status": "ok",
+        "title": "起点中文网",
+        "signals": [],
+    })
+    placeholder = cmb.source_quality({
+        "platform": "红果短剧",
+        "url": "App 内榜",
+        "use_for": "short_drama_rank",
+        "status": "manual_required",
+        "signals": [],
+    })
+    assert empty_ok["score"] == 0.0
+    assert placeholder["score"] == 0.0
