@@ -24,7 +24,7 @@
   ],
   "episodes": [
     {
-      "blockers_per_attempt": 2.94,
+      "blockers_per_attempt": 2.9109,
       "completion_rate": null,
       "consistency_blockers": 40,
       "consistency_ledger": {
@@ -132,22 +132,22 @@
       "cost_per_finished_min": {},
       "cost_totals": {},
       "deliverable_pass_rate": 0.0,
-      "duration_hms": "7h25m08s",
-      "duration_sec": 26707.97,
-      "elapsed_per_finished_min_sec": 17805.313,
+      "duration_hms": "7h29m34s",
+      "duration_sec": 26973.902,
+      "elapsed_per_finished_min_sec": 17982.601,
       "episode": "第1集",
-      "event_count": 542,
+      "event_count": 543,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 100,
+      "generation_attempts": 101,
       "generation_fails": 0,
       "generation_pass_rate": 1.0,
-      "generation_passes": 100,
+      "generation_passes": 101,
       "image_qc_passive": {},
       "missing_deliverables": [],
-      "one_pass_count": 100,
+      "one_pass_count": 101,
       "one_pass_rate": 1.0,
       "progress_next_skill": "n2d-image",
       "progress_next_stage": "出图",
@@ -223,10 +223,10 @@
       "runtime_source": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/脚本/第1集/storyboard.json",
       "stages": {
         "image": {
-          "duration_sec": 22507.97,
-          "generation_attempts": 98,
+          "duration_sec": 22773.902,
+          "generation_attempts": 99,
           "generation_fails": 0,
-          "generation_passes": 98,
+          "generation_passes": 99,
           "missing_deliverables": 0,
           "qa_blockers": 160,
           "qa_infos": 15,
@@ -280,7 +280,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 1.37
+      "warnings_per_attempt": 1.3564
     },
     {
       "blockers_per_attempt": null,
@@ -390,7 +390,7 @@
     }
   ],
   "event_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
-  "generated_at": "2026-06-29T11:36:10+00:00",
+  "generated_at": "2026-06-29T11:40:36+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -858,7 +858,7 @@
   "retention_trend": {},
   "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔",
   "totals": {
-    "blockers_per_attempt": 2.94,
+    "blockers_per_attempt": 2.9109,
     "consistency_blockers": 40,
     "consistency_ledger_counts": {
       "block": 6,
@@ -869,19 +869,19 @@
     "cost_per_finished_min": {},
     "cost_totals": {},
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "7h25m08s",
-    "duration_sec": 26707.97,
-    "elapsed_per_finished_min_sec": 17805.313,
+    "duration_hms": "7h29m34s",
+    "duration_sec": 26973.902,
+    "elapsed_per_finished_min_sec": 17982.601,
     "episode_count": 3,
-    "event_count": 542,
+    "event_count": 543,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
-    "generation_attempts": 100,
+    "generation_attempts": 101,
     "generation_fails": 0,
     "generation_pass_rate": 1.0,
-    "generation_passes": 100,
-    "one_pass_count": 100,
+    "generation_passes": 101,
+    "one_pass_count": 101,
     "one_pass_rate": 1.0,
     "qa_blockers": 294,
     "qa_infos": 44,
@@ -897,7 +897,7 @@
     "release_spend_totals": {},
     "runtime_hms": "1m30s",
     "runtime_sec": 90.0,
-    "warnings_per_attempt": 1.37
+    "warnings_per_attempt": 1.3564
   },
   "version": 1
 }
