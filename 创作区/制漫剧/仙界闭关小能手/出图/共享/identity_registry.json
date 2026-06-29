@@ -123,36 +123,160 @@
             ]
           },
           "reference_group": {
-            "front": "出图/共享/图片/定妆_贺平生.png",
-            "side": "出图/共享/图片/定妆_贺平生_侧.png",
-            "back": "出图/共享/图片/定妆_贺平生_背.png",
+            "front": {
+              "path": "出图/共享/图片/定妆_贺平生.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split_front",
+                "source_path": "出图/共享/图片/定妆_贺平生_三视图.png",
+                "source_sha256": "47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc",
+                "crop_box": [
+                  14,
+                  0,
+                  221,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:56+00:00"
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_贺平生_侧.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_贺平生_三视图.png",
+                "source_sha256": "47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc",
+                "crop_box": [
+                  484,
+                  0,
+                  692,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:56+00:00"
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_贺平生_背.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_贺平生_三视图.png",
+                "source_sha256": "47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc",
+                "crop_box": [
+                  720,
+                  0,
+                  927,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:56+00:00"
+              }
+            },
             "outfit": "出图/共享/图片/定妆_贺平生_半身.png",
-            "turnaround": "出图/共享/图片/定妆_贺平生_三视图.png",
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_贺平生_三视图.png",
+              "status": "ready"
+            },
             "face_anchor_refs": [
               {
                 "label": "基础脸锚",
                 "path": "出图/共享/图片/定妆_贺平生_脸部特写.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_贺平生.png",
+                  "source_sha256": "2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:57+00:00"
+                }
               }
             ],
             "expressions": [
               {
                 "label": "克制",
                 "path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
-                "status": "planned"
+                "status": "ready",
+                "human_review": {
+                  "status": "pass",
+                  "reviewed_by": "visual_inspection+registry_sync",
+                  "reviewed_at": "2026-06-29T10:40:08+00:00",
+                  "reason": "same-form expression reference visually checked against locked face anchor"
+                },
+                "emotion": "克制",
+                "self_check_passed": true,
+                "anchor_sha": "305a617ccf2aa21aa1dc0826cca5e7379d935905eab140cf049c616a847605a5"
               },
               {
                 "label": "疲惫隐忍",
                 "path": "出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
-                "status": "planned"
+                "status": "ready",
+                "human_review": {
+                  "status": "pass",
+                  "reviewed_by": "visual_inspection+registry_sync",
+                  "reviewed_at": "2026-06-29T10:40:08+00:00",
+                  "reason": "same-form expression reference visually checked against locked face anchor"
+                },
+                "emotion": "疲惫隐忍",
+                "self_check_passed": true,
+                "anchor_sha": "073cc78f6e81b4feb0f800f6a4ea3e2fb720bc9598010fdc615eb3394fc40629"
               },
               {
                 "label": "警觉",
                 "path": "出图/共享/图片/定妆_贺平生_表情_警觉.png",
-                "status": "planned"
+                "status": "ready",
+                "human_review": {
+                  "status": "pass",
+                  "reviewed_by": "visual_inspection+registry_sync",
+                  "reviewed_at": "2026-06-29T10:40:08+00:00",
+                  "reason": "same-form expression reference visually checked against locked face anchor"
+                },
+                "emotion": "警觉",
+                "self_check_passed": true,
+                "anchor_sha": "786686dfceefd47ffef266bc5f0e8c134a86cb420d287a792b11928a154d0bf4"
               }
             ],
-            "three_quarter": "出图/共享/图片/定妆_贺平生_45度.png"
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_贺平生_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_贺平生_三视图.png",
+                "source_sha256": "47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc",
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:56+00:00"
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_贺平生_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_贺平生.png",
+                "source_sha256": "2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974",
+                "crop_box": [
+                  75,
+                  33,
+                  866,
+                  1137
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:57+00:00"
+              }
+            }
           },
           "reference_atlas": {
             "version": 1,
@@ -160,48 +284,157 @@
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_贺平生.png",
-                "status": "planned"
+                "status": "ready",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                },
+                "derivation": {
+                  "method": "turnaround_split_front",
+                  "source_path": "出图/共享/图片/定妆_贺平生_三视图.png",
+                  "source_sha256": "47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc",
+                  "crop_box": [
+                    14,
+                    0,
+                    221,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:56+00:00"
+                }
               },
               "three_quarter": {
                 "path": "出图/共享/图片/定妆_贺平生_45度.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_贺平生_三视图.png",
+                  "source_sha256": "47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc",
+                  "crop_box": [
+                    249,
+                    0,
+                    456,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:56+00:00"
+                }
               },
               "side": {
                 "path": "出图/共享/图片/定妆_贺平生_侧.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_贺平生_三视图.png",
+                  "source_sha256": "47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc",
+                  "crop_box": [
+                    484,
+                    0,
+                    692,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:56+00:00"
+                }
               },
               "back": {
                 "path": "出图/共享/图片/定妆_贺平生_背.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_贺平生_三视图.png",
+                  "source_sha256": "47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc",
+                  "crop_box": [
+                    720,
+                    0,
+                    927,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:56+00:00"
+                }
               },
               "half_body": {
                 "path": "出图/共享/图片/定妆_贺平生_半身.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_贺平生.png",
+                  "source_sha256": "2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974",
+                  "crop_box": [
+                    75,
+                    33,
+                    866,
+                    1137
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:57+00:00"
+                }
               }
             },
             "face_anchor_refs": [
               {
                 "label": "基础脸锚",
                 "path": "出图/共享/图片/定妆_贺平生_脸部特写.png",
-                "status": "planned",
-                "priority": "core"
+                "status": "ready",
+                "priority": "core",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_贺平生.png",
+                  "source_sha256": "2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:57+00:00"
+                }
               }
             ],
             "expression_refs": [
               {
                 "label": "克制",
                 "path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
-                "status": "planned"
+                "status": "ready",
+                "human_review": {
+                  "status": "pass",
+                  "reviewed_by": "visual_inspection+registry_sync",
+                  "reviewed_at": "2026-06-29T10:40:08+00:00",
+                  "reason": "same-form expression reference visually checked against locked face anchor"
+                },
+                "emotion": "克制",
+                "self_check_passed": true,
+                "anchor_sha": "305a617ccf2aa21aa1dc0826cca5e7379d935905eab140cf049c616a847605a5"
               },
               {
                 "label": "疲惫隐忍",
                 "path": "出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
-                "status": "planned"
+                "status": "ready",
+                "human_review": {
+                  "status": "pass",
+                  "reviewed_by": "visual_inspection+registry_sync",
+                  "reviewed_at": "2026-06-29T10:40:08+00:00",
+                  "reason": "same-form expression reference visually checked against locked face anchor"
+                },
+                "emotion": "疲惫隐忍",
+                "self_check_passed": true,
+                "anchor_sha": "073cc78f6e81b4feb0f800f6a4ea3e2fb720bc9598010fdc615eb3394fc40629"
               },
               {
                 "label": "警觉",
                 "path": "出图/共享/图片/定妆_贺平生_表情_警觉.png",
-                "status": "planned"
+                "status": "ready",
+                "human_review": {
+                  "status": "pass",
+                  "reviewed_by": "visual_inspection+registry_sync",
+                  "reviewed_at": "2026-06-29T10:40:08+00:00",
+                  "reason": "same-form expression reference visually checked against locked face anchor"
+                },
+                "emotion": "警觉",
+                "self_check_passed": true,
+                "anchor_sha": "786686dfceefd47ffef266bc5f0e8c134a86cb420d287a792b11928a154d0bf4"
               }
             ],
             "action_refs": [],
@@ -251,7 +484,13 @@
               }
             },
             "lora": {
-              "status": "not_needed"
+              "status": "candidate",
+              "base_model": "sdxl",
+              "model_path": "",
+              "trigger": "贺平生_常态_v1",
+              "dataset": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset",
+              "card": "设定库/lora/CHAR_HE_PINGSHENG/常态/lora_card.json",
+              "train_job": "设定库/lora/CHAR_HE_PINGSHENG/常态/train_job.json"
             }
           },
           "generation_control": {
@@ -310,6 +549,52 @@
           ],
           "signature_equipment": [
             "PROP_HEI_TAO_PEN"
+          ],
+          "self_check_passed": true,
+          "anchor_sha": "2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974",
+          "expression_anchors": [
+            {
+              "label": "克制",
+              "path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
+              "status": "ready",
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "image_qc --finalize-expr",
+                "reviewed_at": "2026-06-29T12:12:46.103180+00:00",
+                "reason": "expression anchor finalized from expression_anchors"
+              },
+              "emotion": "克制",
+              "self_check_passed": true,
+              "anchor_sha": "7d1930b228e7636fe5c22b276f0b38b5c034c37afbb12fa0c8b2a39b51640ece"
+            },
+            {
+              "label": "疲惫隐忍",
+              "path": "出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
+              "status": "ready",
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "image_qc --finalize-expr",
+                "reviewed_at": "2026-06-29T12:12:46.153531+00:00",
+                "reason": "expression anchor finalized from expression_anchors"
+              },
+              "emotion": "疲惫隐忍",
+              "self_check_passed": true,
+              "anchor_sha": "fe6bcb050ef1ee0266b098e672430bc16e4ed0dcc7e86a4928a39206e5c708f6"
+            },
+            {
+              "label": "警觉",
+              "path": "出图/共享/图片/定妆_贺平生_表情_警觉.png",
+              "status": "ready",
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "image_qc --finalize-expr",
+                "reviewed_at": "2026-06-29T12:12:46.203334+00:00",
+                "reason": "expression anchor finalized from expression_anchors"
+              },
+              "emotion": "警觉",
+              "self_check_passed": true,
+              "anchor_sha": "e380ed8e62d189b24dd3d120e845b96e7da40df0dadaf8a0f043c70b43b50365"
+            }
           ]
         },
         {
@@ -364,36 +649,160 @@
             ]
           },
           "reference_group": {
-            "front": "出图/共享/图片/定妆_贺平生_幼年.png",
-            "side": "出图/共享/图片/定妆_贺平生_幼年_侧.png",
-            "back": "出图/共享/图片/定妆_贺平生_幼年_背.png",
+            "front": {
+              "path": "出图/共享/图片/定妆_贺平生_幼年.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split_front",
+                "source_path": "出图/共享/图片/定妆_贺平生_幼年_三视图.png",
+                "source_sha256": "963c6447caa656d89ef708c9d6cbbb8fcb7b3d15d1c954f1e20cd357733b6ef7",
+                "crop_box": [
+                  14,
+                  0,
+                  221,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:57+00:00"
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_贺平生_幼年_侧.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_贺平生_幼年_三视图.png",
+                "source_sha256": "963c6447caa656d89ef708c9d6cbbb8fcb7b3d15d1c954f1e20cd357733b6ef7",
+                "crop_box": [
+                  484,
+                  0,
+                  692,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:57+00:00"
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_贺平生_幼年_背.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_贺平生_幼年_三视图.png",
+                "source_sha256": "963c6447caa656d89ef708c9d6cbbb8fcb7b3d15d1c954f1e20cd357733b6ef7",
+                "crop_box": [
+                  720,
+                  0,
+                  927,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:57+00:00"
+              }
+            },
             "outfit": "出图/共享/图片/定妆_贺平生_幼年_半身.png",
-            "turnaround": "出图/共享/图片/定妆_贺平生_幼年_三视图.png",
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_贺平生_幼年_三视图.png",
+              "status": "ready"
+            },
             "face_anchor_refs": [
               {
                 "label": "幼年脸锚",
                 "path": "出图/共享/图片/定妆_贺平生_幼年_脸部特写.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_贺平生_幼年.png",
+                  "source_sha256": "0ddffbe1e6e6c5deada581fcb714d50a17a7ea4fa7669e89694bd828cd248bd5",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:57+00:00"
+                }
               }
             ],
             "expressions": [
               {
                 "label": "克制",
                 "path": "出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
-                "status": "planned"
+                "status": "ready",
+                "human_review": {
+                  "status": "pass",
+                  "reviewed_by": "visual_inspection+registry_sync",
+                  "reviewed_at": "2026-06-29T10:40:08+00:00",
+                  "reason": "same-form expression reference visually checked against locked face anchor"
+                },
+                "emotion": "克制",
+                "self_check_passed": true,
+                "anchor_sha": "b006a94eb2635ec60eacf20a2f16b7bde48d243b735be632e4942a9248ccd085"
               },
               {
                 "label": "疲惫隐忍",
                 "path": "出图/共享/图片/定妆_贺平生_幼年_表情_疲惫隐忍.png",
-                "status": "planned"
+                "status": "ready",
+                "human_review": {
+                  "status": "pass",
+                  "reviewed_by": "visual_inspection+registry_sync",
+                  "reviewed_at": "2026-06-29T10:40:08+00:00",
+                  "reason": "same-form expression reference visually checked against locked face anchor"
+                },
+                "emotion": "疲惫隐忍",
+                "self_check_passed": true,
+                "anchor_sha": "bc494ad1bec180eb3ef9cea4a821a55a906a2437c651327d2f7fc63e0c99876c"
               },
               {
                 "label": "警觉",
                 "path": "出图/共享/图片/定妆_贺平生_幼年_表情_警觉.png",
-                "status": "planned"
+                "status": "ready",
+                "human_review": {
+                  "status": "pass",
+                  "reviewed_by": "visual_inspection+registry_sync",
+                  "reviewed_at": "2026-06-29T10:40:08+00:00",
+                  "reason": "same-form expression reference visually checked against locked face anchor"
+                },
+                "emotion": "警觉",
+                "self_check_passed": true,
+                "anchor_sha": "7a0ae17a898629431c7e3211e9ca576160046543f7d1a7cf3b33dd87a66a4cb0"
               }
             ],
-            "three_quarter": "出图/共享/图片/定妆_贺平生_幼年_45度.png"
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_贺平生_幼年_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_贺平生_幼年_三视图.png",
+                "source_sha256": "963c6447caa656d89ef708c9d6cbbb8fcb7b3d15d1c954f1e20cd357733b6ef7",
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:57+00:00"
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_贺平生_幼年_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_贺平生_幼年.png",
+                "source_sha256": "0ddffbe1e6e6c5deada581fcb714d50a17a7ea4fa7669e89694bd828cd248bd5",
+                "crop_box": [
+                  75,
+                  33,
+                  866,
+                  1137
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:57+00:00"
+              }
+            }
           },
           "identity_adapters": {
             "image": {
@@ -409,7 +818,13 @@
               }
             },
             "lora": {
-              "status": "not_needed"
+              "status": "candidate",
+              "base_model": "sdxl",
+              "model_path": "",
+              "trigger": "贺平生_幼年_v1",
+              "dataset": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset",
+              "card": "设定库/lora/CHAR_HE_PINGSHENG/幼年/lora_card.json",
+              "train_job": "设定库/lora/CHAR_HE_PINGSHENG/幼年/train_job.json"
             }
           },
           "generation_control": {
@@ -470,47 +885,156 @@
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_贺平生_幼年.png",
-                "status": "planned"
+                "status": "ready",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                },
+                "derivation": {
+                  "method": "turnaround_split_front",
+                  "source_path": "出图/共享/图片/定妆_贺平生_幼年_三视图.png",
+                  "source_sha256": "963c6447caa656d89ef708c9d6cbbb8fcb7b3d15d1c954f1e20cd357733b6ef7",
+                  "crop_box": [
+                    14,
+                    0,
+                    221,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:57+00:00"
+                }
               },
               "three_quarter": {
                 "path": "出图/共享/图片/定妆_贺平生_幼年_45度.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_贺平生_幼年_三视图.png",
+                  "source_sha256": "963c6447caa656d89ef708c9d6cbbb8fcb7b3d15d1c954f1e20cd357733b6ef7",
+                  "crop_box": [
+                    249,
+                    0,
+                    456,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:57+00:00"
+                }
               },
               "side": {
                 "path": "出图/共享/图片/定妆_贺平生_幼年_侧.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_贺平生_幼年_三视图.png",
+                  "source_sha256": "963c6447caa656d89ef708c9d6cbbb8fcb7b3d15d1c954f1e20cd357733b6ef7",
+                  "crop_box": [
+                    484,
+                    0,
+                    692,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:57+00:00"
+                }
               },
               "back": {
                 "path": "出图/共享/图片/定妆_贺平生_幼年_背.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_贺平生_幼年_三视图.png",
+                  "source_sha256": "963c6447caa656d89ef708c9d6cbbb8fcb7b3d15d1c954f1e20cd357733b6ef7",
+                  "crop_box": [
+                    720,
+                    0,
+                    927,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:57+00:00"
+                }
               },
               "half_body": {
                 "path": "出图/共享/图片/定妆_贺平生_幼年_半身.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_贺平生_幼年.png",
+                  "source_sha256": "0ddffbe1e6e6c5deada581fcb714d50a17a7ea4fa7669e89694bd828cd248bd5",
+                  "crop_box": [
+                    75,
+                    33,
+                    866,
+                    1137
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:57+00:00"
+                }
               }
             },
             "face_anchor_refs": [
               {
                 "label": "幼年脸锚",
                 "path": "出图/共享/图片/定妆_贺平生_幼年_脸部特写.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_贺平生_幼年.png",
+                  "source_sha256": "0ddffbe1e6e6c5deada581fcb714d50a17a7ea4fa7669e89694bd828cd248bd5",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:57+00:00"
+                }
               }
             ],
             "expression_refs": [
               {
                 "label": "克制",
                 "path": "出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
-                "status": "planned"
+                "status": "ready",
+                "human_review": {
+                  "status": "pass",
+                  "reviewed_by": "visual_inspection+registry_sync",
+                  "reviewed_at": "2026-06-29T10:40:08+00:00",
+                  "reason": "same-form expression reference visually checked against locked face anchor"
+                },
+                "emotion": "克制",
+                "self_check_passed": true,
+                "anchor_sha": "b006a94eb2635ec60eacf20a2f16b7bde48d243b735be632e4942a9248ccd085"
               },
               {
                 "label": "疲惫隐忍",
                 "path": "出图/共享/图片/定妆_贺平生_幼年_表情_疲惫隐忍.png",
-                "status": "planned"
+                "status": "ready",
+                "human_review": {
+                  "status": "pass",
+                  "reviewed_by": "visual_inspection+registry_sync",
+                  "reviewed_at": "2026-06-29T10:40:08+00:00",
+                  "reason": "same-form expression reference visually checked against locked face anchor"
+                },
+                "emotion": "疲惫隐忍",
+                "self_check_passed": true,
+                "anchor_sha": "bc494ad1bec180eb3ef9cea4a821a55a906a2437c651327d2f7fc63e0c99876c"
               },
               {
                 "label": "警觉",
                 "path": "出图/共享/图片/定妆_贺平生_幼年_表情_警觉.png",
-                "status": "planned"
+                "status": "ready",
+                "human_review": {
+                  "status": "pass",
+                  "reviewed_by": "visual_inspection+registry_sync",
+                  "reviewed_at": "2026-06-29T10:40:08+00:00",
+                  "reason": "same-form expression reference visually checked against locked face anchor"
+                },
+                "emotion": "警觉",
+                "self_check_passed": true,
+                "anchor_sha": "7a0ae17a898629431c7e3211e9ca576160046543f7d1a7cf3b33dd87a66a4cb0"
               }
             ],
             "action_refs": [],
@@ -548,6 +1072,52 @@
           },
           "signature_equipment": [
             "PROP_HEI_TAO_PEN"
+          ],
+          "self_check_passed": true,
+          "anchor_sha": "0ddffbe1e6e6c5deada581fcb714d50a17a7ea4fa7669e89694bd828cd248bd5",
+          "expression_anchors": [
+            {
+              "label": "克制",
+              "path": "出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
+              "status": "ready",
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "image_qc --finalize-expr",
+                "reviewed_at": "2026-06-29T12:12:46.254666+00:00",
+                "reason": "expression anchor finalized from expression_anchors"
+              },
+              "emotion": "克制",
+              "self_check_passed": true,
+              "anchor_sha": "0c2a2c7bc2d0bee3eb200f9377bdd73d39948fbba2dc68b184b8e86ad0234207"
+            },
+            {
+              "label": "疲惫隐忍",
+              "path": "出图/共享/图片/定妆_贺平生_幼年_表情_疲惫隐忍.png",
+              "status": "ready",
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "image_qc --finalize-expr",
+                "reviewed_at": "2026-06-29T12:12:46.306414+00:00",
+                "reason": "expression anchor finalized from expression_anchors"
+              },
+              "emotion": "疲惫隐忍",
+              "self_check_passed": true,
+              "anchor_sha": "0b59a60b4bd43226c5b3ad68f4642c494b1a955958f8fb5d6a8bfc41968306d5"
+            },
+            {
+              "label": "警觉",
+              "path": "出图/共享/图片/定妆_贺平生_幼年_表情_警觉.png",
+              "status": "ready",
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "image_qc --finalize-expr",
+                "reviewed_at": "2026-06-29T12:12:46.356762+00:00",
+                "reason": "expression anchor finalized from expression_anchors"
+              },
+              "emotion": "警觉",
+              "self_check_passed": true,
+              "anchor_sha": "253f5af9dcaaa1310d94b49e668adc383c6fc49a3fd1e1d6f80a3f39efaa632e"
+            }
           ]
         }
       ]
@@ -631,20 +1201,117 @@
             ]
           },
           "reference_group": {
-            "front": "出图/共享/图片/定妆_张老大.png",
-            "side": "出图/共享/图片/定妆_张老大_侧.png",
-            "back": "出图/共享/图片/定妆_张老大_背.png",
+            "front": {
+              "path": "出图/共享/图片/定妆_张老大.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split_front",
+                "source_path": "出图/共享/图片/定妆_张老大_三视图.png",
+                "source_sha256": "3aaa6878994aa77fcc2d941d178d77867e8af2e62c878b839dc7ff6d04f44ef1",
+                "crop_box": [
+                  14,
+                  0,
+                  221,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:57+00:00"
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_张老大_侧.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_张老大_三视图.png",
+                "source_sha256": "3aaa6878994aa77fcc2d941d178d77867e8af2e62c878b839dc7ff6d04f44ef1",
+                "crop_box": [
+                  484,
+                  0,
+                  692,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:58+00:00"
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_张老大_背.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_张老大_三视图.png",
+                "source_sha256": "3aaa6878994aa77fcc2d941d178d77867e8af2e62c878b839dc7ff6d04f44ef1",
+                "crop_box": [
+                  720,
+                  0,
+                  927,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:58+00:00"
+              }
+            },
             "outfit": "出图/共享/图片/定妆_张老大_半身.png",
-            "turnaround": "出图/共享/图片/定妆_张老大_三视图.png",
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_张老大_三视图.png",
+              "status": "ready"
+            },
             "face_anchor_refs": [
               {
                 "label": "基础脸锚",
                 "path": "出图/共享/图片/定妆_张老大_脸部特写.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_张老大.png",
+                  "source_sha256": "d1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:58+00:00"
+                }
               }
             ],
             "expressions": [],
-            "three_quarter": "出图/共享/图片/定妆_张老大_45度.png"
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_张老大_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_张老大_三视图.png",
+                "source_sha256": "3aaa6878994aa77fcc2d941d178d77867e8af2e62c878b839dc7ff6d04f44ef1",
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:58+00:00"
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_张老大_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_张老大.png",
+                "source_sha256": "d1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929",
+                "crop_box": [
+                  75,
+                  33,
+                  866,
+                  1137
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:58+00:00"
+              }
+            }
           },
           "reference_atlas": {
             "version": 1,
@@ -652,31 +1319,113 @@
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_张老大.png",
-                "status": "planned"
+                "status": "ready",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                },
+                "derivation": {
+                  "method": "turnaround_split_front",
+                  "source_path": "出图/共享/图片/定妆_张老大_三视图.png",
+                  "source_sha256": "3aaa6878994aa77fcc2d941d178d77867e8af2e62c878b839dc7ff6d04f44ef1",
+                  "crop_box": [
+                    14,
+                    0,
+                    221,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:57+00:00"
+                }
               },
               "three_quarter": {
                 "path": "出图/共享/图片/定妆_张老大_45度.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_张老大_三视图.png",
+                  "source_sha256": "3aaa6878994aa77fcc2d941d178d77867e8af2e62c878b839dc7ff6d04f44ef1",
+                  "crop_box": [
+                    249,
+                    0,
+                    456,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:58+00:00"
+                }
               },
               "side": {
                 "path": "出图/共享/图片/定妆_张老大_侧.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_张老大_三视图.png",
+                  "source_sha256": "3aaa6878994aa77fcc2d941d178d77867e8af2e62c878b839dc7ff6d04f44ef1",
+                  "crop_box": [
+                    484,
+                    0,
+                    692,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:58+00:00"
+                }
               },
               "back": {
                 "path": "出图/共享/图片/定妆_张老大_背.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_张老大_三视图.png",
+                  "source_sha256": "3aaa6878994aa77fcc2d941d178d77867e8af2e62c878b839dc7ff6d04f44ef1",
+                  "crop_box": [
+                    720,
+                    0,
+                    927,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:58+00:00"
+                }
               },
               "half_body": {
                 "path": "出图/共享/图片/定妆_张老大_半身.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_张老大.png",
+                  "source_sha256": "d1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929",
+                  "crop_box": [
+                    75,
+                    33,
+                    866,
+                    1137
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:58+00:00"
+                }
               }
             },
             "face_anchor_refs": [
               {
                 "label": "基础脸锚",
                 "path": "出图/共享/图片/定妆_张老大_脸部特写.png",
-                "status": "planned",
-                "priority": "basic"
+                "status": "ready",
+                "priority": "basic",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_张老大.png",
+                  "source_sha256": "d1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:58+00:00"
+                }
               }
             ],
             "expression_refs": [],
@@ -774,7 +1523,9 @@
             "modern_workwear",
             "body_type_reset",
             "youth_reset"
-          ]
+          ],
+          "self_check_passed": true,
+          "anchor_sha": "d1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929"
         }
       ]
     },
@@ -856,20 +1607,117 @@
             ]
           },
           "reference_group": {
-            "front": "出图/共享/图片/定妆_韩老三.png",
-            "side": "出图/共享/图片/定妆_韩老三_侧.png",
-            "back": "出图/共享/图片/定妆_韩老三_背.png",
+            "front": {
+              "path": "出图/共享/图片/定妆_韩老三.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split_front",
+                "source_path": "出图/共享/图片/定妆_韩老三_三视图.png",
+                "source_sha256": "cbdefbb1827f4097ce2c097a042582385c35e02dc32025701014c10490f9a8b5",
+                "crop_box": [
+                  14,
+                  0,
+                  221,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:58+00:00"
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_韩老三_侧.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_韩老三_三视图.png",
+                "source_sha256": "cbdefbb1827f4097ce2c097a042582385c35e02dc32025701014c10490f9a8b5",
+                "crop_box": [
+                  484,
+                  0,
+                  692,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:58+00:00"
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_韩老三_背.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_韩老三_三视图.png",
+                "source_sha256": "cbdefbb1827f4097ce2c097a042582385c35e02dc32025701014c10490f9a8b5",
+                "crop_box": [
+                  720,
+                  0,
+                  927,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:58+00:00"
+              }
+            },
             "outfit": "出图/共享/图片/定妆_韩老三_半身.png",
-            "turnaround": "出图/共享/图片/定妆_韩老三_三视图.png",
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_韩老三_三视图.png",
+              "status": "ready"
+            },
             "face_anchor_refs": [
               {
                 "label": "基础脸锚",
                 "path": "出图/共享/图片/定妆_韩老三_脸部特写.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_韩老三.png",
+                  "source_sha256": "c20df5a1e5a5ed18569220876d0ee1e6b6d3e6432035161c7a8a43018d1cab04",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:58+00:00"
+                }
               }
             ],
             "expressions": [],
-            "three_quarter": "出图/共享/图片/定妆_韩老三_45度.png"
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_韩老三_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_韩老三_三视图.png",
+                "source_sha256": "cbdefbb1827f4097ce2c097a042582385c35e02dc32025701014c10490f9a8b5",
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:58+00:00"
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_韩老三_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_韩老三.png",
+                "source_sha256": "c20df5a1e5a5ed18569220876d0ee1e6b6d3e6432035161c7a8a43018d1cab04",
+                "crop_box": [
+                  75,
+                  33,
+                  866,
+                  1137
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:58+00:00"
+              }
+            }
           },
           "reference_atlas": {
             "version": 1,
@@ -877,31 +1725,113 @@
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_韩老三.png",
-                "status": "planned"
+                "status": "ready",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                },
+                "derivation": {
+                  "method": "turnaround_split_front",
+                  "source_path": "出图/共享/图片/定妆_韩老三_三视图.png",
+                  "source_sha256": "cbdefbb1827f4097ce2c097a042582385c35e02dc32025701014c10490f9a8b5",
+                  "crop_box": [
+                    14,
+                    0,
+                    221,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:58+00:00"
+                }
               },
               "three_quarter": {
                 "path": "出图/共享/图片/定妆_韩老三_45度.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_韩老三_三视图.png",
+                  "source_sha256": "cbdefbb1827f4097ce2c097a042582385c35e02dc32025701014c10490f9a8b5",
+                  "crop_box": [
+                    249,
+                    0,
+                    456,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:58+00:00"
+                }
               },
               "side": {
                 "path": "出图/共享/图片/定妆_韩老三_侧.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_韩老三_三视图.png",
+                  "source_sha256": "cbdefbb1827f4097ce2c097a042582385c35e02dc32025701014c10490f9a8b5",
+                  "crop_box": [
+                    484,
+                    0,
+                    692,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:58+00:00"
+                }
               },
               "back": {
                 "path": "出图/共享/图片/定妆_韩老三_背.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_韩老三_三视图.png",
+                  "source_sha256": "cbdefbb1827f4097ce2c097a042582385c35e02dc32025701014c10490f9a8b5",
+                  "crop_box": [
+                    720,
+                    0,
+                    927,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:58+00:00"
+                }
               },
               "half_body": {
                 "path": "出图/共享/图片/定妆_韩老三_半身.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_韩老三.png",
+                  "source_sha256": "c20df5a1e5a5ed18569220876d0ee1e6b6d3e6432035161c7a8a43018d1cab04",
+                  "crop_box": [
+                    75,
+                    33,
+                    866,
+                    1137
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:58+00:00"
+                }
               }
             },
             "face_anchor_refs": [
               {
                 "label": "基础脸锚",
                 "path": "出图/共享/图片/定妆_韩老三_脸部特写.png",
-                "status": "planned",
-                "priority": "basic"
+                "status": "ready",
+                "priority": "basic",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_韩老三.png",
+                  "source_sha256": "c20df5a1e5a5ed18569220876d0ee1e6b6d3e6432035161c7a8a43018d1cab04",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:58+00:00"
+                }
               }
             ],
             "expression_refs": [],
@@ -999,7 +1929,9 @@
             "heroic_wuxia_style",
             "body_type_reset",
             "age_reset"
-          ]
+          ],
+          "self_check_passed": true,
+          "anchor_sha": "c20df5a1e5a5ed18569220876d0ee1e6b6d3e6432035161c7a8a43018d1cab04"
         }
       ]
     },
@@ -1051,6 +1983,10 @@
               "布带",
               "旧布靴"
             ],
+            "collar": "旧外门袍交领或简领，低调不华丽。",
+            "sleeve": "旧袍窄袖，袖口有轻磨损。",
+            "waist": "布带束腰，可固定旧包袱或行囊。",
+            "hem": "长袍下摆旧而低垂，背影行动方便。",
             "fabric": "粗布旧袍，低反光。",
             "pattern": "无金边，无华丽纹样。",
             "palette": {
@@ -1075,20 +2011,124 @@
             ]
           },
           "reference_group": {
-            "front": "出图/共享/图片/定妆_江剑.png",
-            "side": "出图/共享/图片/定妆_江剑_侧.png",
-            "back": "出图/共享/图片/定妆_江剑_背影.png",
-            "outfit": "出图/共享/图片/定妆_江剑_半身.png",
-            "turnaround": "出图/共享/图片/定妆_江剑_三视图.png",
+            "front": {
+              "path": "出图/共享/图片/定妆_江剑_背影.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split_front",
+                "source_path": "出图/共享/图片/定妆_江剑_背影_三视图.png",
+                "source_sha256": "e23683178bfc3d642dfd96b4f2796d6fc6fdebd5da736dda3746a163f29f4c88",
+                "crop_box": [
+                  14,
+                  0,
+                  221,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:18+00:00"
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_江剑_背影_侧.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_江剑_背影_三视图.png",
+                "source_sha256": "e23683178bfc3d642dfd96b4f2796d6fc6fdebd5da736dda3746a163f29f4c88",
+                "crop_box": [
+                  484,
+                  0,
+                  692,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:18+00:00"
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_江剑_背影_背.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_江剑_背影_三视图.png",
+                "source_sha256": "e23683178bfc3d642dfd96b4f2796d6fc6fdebd5da736dda3746a163f29f4c88",
+                "crop_box": [
+                  720,
+                  0,
+                  927,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:18+00:00"
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_江剑_背影_半身.png",
+              "status": "planned"
+            },
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_江剑_背影_三视图.png",
+              "status": "ready",
+              "human_review": {
+                "status": "passed",
+                "reason": "visual inspection passed for same-source turnaround derivation"
+              }
+            },
             "face_anchor_refs": [
               {
                 "label": "侧背锚",
-                "path": "出图/共享/图片/定妆_江剑_侧背.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_江剑_背影_侧背.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_江剑_背影.png",
+                  "source_sha256": "b75fa7c9d3e0a69d5d35a78e17751caf60f8d0e797a15cef89daf63d9c099f4b",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:18+00:00"
+                }
               }
             ],
             "expressions": [],
-            "three_quarter": "出图/共享/图片/定妆_江剑_45度.png"
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_江剑_背影_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_江剑_背影_三视图.png",
+                "source_sha256": "e23683178bfc3d642dfd96b4f2796d6fc6fdebd5da736dda3746a163f29f4c88",
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:18+00:00"
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_江剑_背影_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_江剑_背影.png",
+                "source_sha256": "b75fa7c9d3e0a69d5d35a78e17751caf60f8d0e797a15cef89daf63d9c099f4b",
+                "crop_box": [
+                  75,
+                  33,
+                  866,
+                  1137
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:18+00:00"
+              }
+            }
           },
           "identity_adapters": {
             "image": {
@@ -1161,31 +2201,109 @@
             "build_tier": "basic_planned",
             "base_views": {
               "front": {
-                "path": "出图/共享/图片/定妆_江剑.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_江剑_背影.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split_front",
+                  "source_path": "出图/共享/图片/定妆_江剑_背影_三视图.png",
+                  "source_sha256": "e23683178bfc3d642dfd96b4f2796d6fc6fdebd5da736dda3746a163f29f4c88",
+                  "crop_box": [
+                    14,
+                    0,
+                    221,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:18+00:00"
+                }
               },
               "three_quarter": {
-                "path": "出图/共享/图片/定妆_江剑_45度.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_江剑_背影_45度.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_江剑_背影_三视图.png",
+                  "source_sha256": "e23683178bfc3d642dfd96b4f2796d6fc6fdebd5da736dda3746a163f29f4c88",
+                  "crop_box": [
+                    249,
+                    0,
+                    456,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:18+00:00"
+                }
               },
               "side": {
-                "path": "出图/共享/图片/定妆_江剑_侧.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_江剑_背影_侧.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_江剑_背影_三视图.png",
+                  "source_sha256": "e23683178bfc3d642dfd96b4f2796d6fc6fdebd5da736dda3746a163f29f4c88",
+                  "crop_box": [
+                    484,
+                    0,
+                    692,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:18+00:00"
+                }
               },
               "back": {
-                "path": "出图/共享/图片/定妆_江剑_背影.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_江剑_背影_背.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_江剑_背影_三视图.png",
+                  "source_sha256": "e23683178bfc3d642dfd96b4f2796d6fc6fdebd5da736dda3746a163f29f4c88",
+                  "crop_box": [
+                    720,
+                    0,
+                    927,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:18+00:00"
+                }
               },
               "half_body": {
-                "path": "出图/共享/图片/定妆_江剑_半身.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_江剑_背影_半身.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_江剑_背影.png",
+                  "source_sha256": "b75fa7c9d3e0a69d5d35a78e17751caf60f8d0e797a15cef89daf63d9c099f4b",
+                  "crop_box": [
+                    75,
+                    33,
+                    866,
+                    1137
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:18+00:00"
+                }
               }
             },
             "face_anchor_refs": [
               {
                 "label": "侧背锚",
-                "path": "出图/共享/图片/定妆_江剑_侧背.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_江剑_背影_侧背.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_江剑_背影.png",
+                  "source_sha256": "b75fa7c9d3e0a69d5d35a78e17751caf60f8d0e797a15cef89daf63d9c099f4b",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:18+00:00"
+                }
               }
             ],
             "expression_refs": [],
@@ -1221,7 +2339,9 @@
               ]
             },
             "fallback_policy": "先补 ready 基础定妆包；未 ready 前不得生成分镜 PNG。"
-          }
+          },
+          "self_check_passed": true,
+          "anchor_sha": "b75fa7c9d3e0a69d5d35a78e17751caf60f8d0e797a15cef89daf63d9c099f4b"
         }
       ]
     },
@@ -1273,6 +2393,10 @@
               "旧法袍外披",
               "布靴"
             ],
+            "collar": "深青灰旧法袍交领，领口端正但不金饰化。",
+            "sleeve": "长袍窄袖或普通宽袖，禁止夸张大袖和金边。",
+            "waist": "暗色布带内束，外披法袍不显贵重腰饰。",
+            "hem": "长袍下摆低垂，旧布质感，不拖成帝王袍。",
             "fabric": "低饱和布袍，轻磨损。",
             "pattern": "无金边，无高饱和纹样。",
             "palette": {
@@ -1296,20 +2420,124 @@
             ]
           },
           "reference_group": {
-            "front": "出图/共享/图片/定妆_太虚门长老.png",
-            "side": "出图/共享/图片/定妆_太虚门长老_侧.png",
-            "back": "出图/共享/图片/定妆_太虚门长老_背影.png",
-            "outfit": "出图/共享/图片/定妆_太虚门长老_半身.png",
-            "turnaround": "出图/共享/图片/定妆_太虚门长老_三视图.png",
+            "front": {
+              "path": "出图/共享/图片/定妆_太虚门长老_回忆背影.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split_front",
+                "source_path": "出图/共享/图片/定妆_太虚门长老_回忆背影_三视图.png",
+                "source_sha256": "f1ad54beea91a82f6e309e7bb46a69560f83e0e24a9743adf1a6abf1eb2b827a",
+                "crop_box": [
+                  14,
+                  0,
+                  221,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:18+00:00"
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_侧.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_太虚门长老_回忆背影_三视图.png",
+                "source_sha256": "f1ad54beea91a82f6e309e7bb46a69560f83e0e24a9743adf1a6abf1eb2b827a",
+                "crop_box": [
+                  484,
+                  0,
+                  692,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:18+00:00"
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_背.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_太虚门长老_回忆背影_三视图.png",
+                "source_sha256": "f1ad54beea91a82f6e309e7bb46a69560f83e0e24a9743adf1a6abf1eb2b827a",
+                "crop_box": [
+                  720,
+                  0,
+                  927,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:18+00:00"
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_半身.png",
+              "status": "planned"
+            },
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_三视图.png",
+              "status": "ready",
+              "human_review": {
+                "status": "passed",
+                "reason": "visual inspection passed for same-source turnaround derivation"
+              }
+            },
             "face_anchor_refs": [
               {
                 "label": "背影锚",
-                "path": "出图/共享/图片/定妆_太虚门长老_侧背.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_太虚门长老_回忆背影.png",
+                  "source_sha256": "b50280d80b8fc37f27ccb2284c88156bb07c3546edabd77172379fb304c8cc04",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               }
             ],
             "expressions": [],
-            "three_quarter": "出图/共享/图片/定妆_太虚门长老_45度.png"
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_太虚门长老_回忆背影_三视图.png",
+                "source_sha256": "f1ad54beea91a82f6e309e7bb46a69560f83e0e24a9743adf1a6abf1eb2b827a",
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:18+00:00"
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_太虚门长老_回忆背影.png",
+                "source_sha256": "b50280d80b8fc37f27ccb2284c88156bb07c3546edabd77172379fb304c8cc04",
+                "crop_box": [
+                  75,
+                  33,
+                  866,
+                  1137
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:18+00:00"
+              }
+            }
           },
           "identity_adapters": {
             "image": {
@@ -1380,31 +2608,109 @@
             "build_tier": "basic_planned",
             "base_views": {
               "front": {
-                "path": "出图/共享/图片/定妆_太虚门长老.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_太虚门长老_回忆背影.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split_front",
+                  "source_path": "出图/共享/图片/定妆_太虚门长老_回忆背影_三视图.png",
+                  "source_sha256": "f1ad54beea91a82f6e309e7bb46a69560f83e0e24a9743adf1a6abf1eb2b827a",
+                  "crop_box": [
+                    14,
+                    0,
+                    221,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:18+00:00"
+                }
               },
               "three_quarter": {
-                "path": "出图/共享/图片/定妆_太虚门长老_45度.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_45度.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_太虚门长老_回忆背影_三视图.png",
+                  "source_sha256": "f1ad54beea91a82f6e309e7bb46a69560f83e0e24a9743adf1a6abf1eb2b827a",
+                  "crop_box": [
+                    249,
+                    0,
+                    456,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:18+00:00"
+                }
               },
               "side": {
-                "path": "出图/共享/图片/定妆_太虚门长老_侧.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_侧.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_太虚门长老_回忆背影_三视图.png",
+                  "source_sha256": "f1ad54beea91a82f6e309e7bb46a69560f83e0e24a9743adf1a6abf1eb2b827a",
+                  "crop_box": [
+                    484,
+                    0,
+                    692,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:18+00:00"
+                }
               },
               "back": {
-                "path": "出图/共享/图片/定妆_太虚门长老_背影.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_背.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_太虚门长老_回忆背影_三视图.png",
+                  "source_sha256": "f1ad54beea91a82f6e309e7bb46a69560f83e0e24a9743adf1a6abf1eb2b827a",
+                  "crop_box": [
+                    720,
+                    0,
+                    927,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:18+00:00"
+                }
               },
               "half_body": {
-                "path": "出图/共享/图片/定妆_太虚门长老_半身.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_半身.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_太虚门长老_回忆背影.png",
+                  "source_sha256": "b50280d80b8fc37f27ccb2284c88156bb07c3546edabd77172379fb304c8cc04",
+                  "crop_box": [
+                    75,
+                    33,
+                    866,
+                    1137
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:18+00:00"
+                }
               }
             },
             "face_anchor_refs": [
               {
                 "label": "背影锚",
-                "path": "出图/共享/图片/定妆_太虚门长老_侧背.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_太虚门长老_回忆背影.png",
+                  "source_sha256": "b50280d80b8fc37f27ccb2284c88156bb07c3546edabd77172379fb304c8cc04",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               }
             ],
             "expression_refs": [],
@@ -1440,7 +2746,9 @@
               ]
             },
             "fallback_policy": "先补 ready 基础定妆包；未 ready 前不得生成分镜 PNG。"
-          }
+          },
+          "self_check_passed": true,
+          "anchor_sha": "b50280d80b8fc37f27ccb2284c88156bb07c3546edabd77172379fb304c8cc04"
         }
       ]
     },
@@ -1492,6 +2800,10 @@
               "布带",
               "布靴"
             ],
+            "collar": "旧外门袍交领或简领，回忆影中保持低调。",
+            "sleeve": "普通窄袖，边缘可因回忆虚化而不抢眼。",
+            "waist": "朴素布带束腰，无高阶法器挂饰。",
+            "hem": "旧袍下摆自然垂落，低饱和，不破成血腥状态。",
             "fabric": "旧布、低反光。",
             "pattern": "无华丽纹样，无金边。",
             "palette": {
@@ -1516,20 +2828,124 @@
             ]
           },
           "reference_group": {
-            "front": "出图/共享/图片/定妆_贺三杰.png",
-            "side": "出图/共享/图片/定妆_贺三杰_侧.png",
-            "back": "出图/共享/图片/定妆_贺三杰_回忆影.png",
-            "outfit": "出图/共享/图片/定妆_贺三杰_半身.png",
-            "turnaround": "出图/共享/图片/定妆_贺三杰_三视图.png",
+            "front": {
+              "path": "出图/共享/图片/定妆_贺三杰_回忆影.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split_front",
+                "source_path": "出图/共享/图片/定妆_贺三杰_回忆影_三视图.png",
+                "source_sha256": "4e33e8c9ef126f8369eff791bd24cce074c69013e528ba9a0ae984d959b60e7c",
+                "crop_box": [
+                  14,
+                  0,
+                  221,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:19+00:00"
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_贺三杰_回忆影_侧.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_贺三杰_回忆影_三视图.png",
+                "source_sha256": "4e33e8c9ef126f8369eff791bd24cce074c69013e528ba9a0ae984d959b60e7c",
+                "crop_box": [
+                  484,
+                  0,
+                  692,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:19+00:00"
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_贺三杰_回忆影_背.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_贺三杰_回忆影_三视图.png",
+                "source_sha256": "4e33e8c9ef126f8369eff791bd24cce074c69013e528ba9a0ae984d959b60e7c",
+                "crop_box": [
+                  720,
+                  0,
+                  927,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:19+00:00"
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_贺三杰_回忆影_半身.png",
+              "status": "planned"
+            },
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_贺三杰_回忆影_三视图.png",
+              "status": "ready",
+              "human_review": {
+                "status": "passed",
+                "reason": "visual inspection passed for same-source turnaround derivation"
+              }
+            },
             "face_anchor_refs": [
               {
                 "label": "回忆侧影锚",
-                "path": "出图/共享/图片/定妆_贺三杰_侧影.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_贺三杰_回忆影_侧影.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_贺三杰_回忆影.png",
+                  "source_sha256": "156a4400925018faa1b78124498d05be7380413e4ce12d53142897a98848614b",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               }
             ],
             "expressions": [],
-            "three_quarter": "出图/共享/图片/定妆_贺三杰_45度.png"
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_贺三杰_回忆影_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_贺三杰_回忆影_三视图.png",
+                "source_sha256": "4e33e8c9ef126f8369eff791bd24cce074c69013e528ba9a0ae984d959b60e7c",
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:19+00:00"
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_贺三杰_回忆影_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_贺三杰_回忆影.png",
+                "source_sha256": "156a4400925018faa1b78124498d05be7380413e4ce12d53142897a98848614b",
+                "crop_box": [
+                  75,
+                  33,
+                  866,
+                  1137
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:19+00:00"
+              }
+            }
           },
           "identity_adapters": {
             "image": {
@@ -1601,31 +3017,109 @@
             "build_tier": "basic_planned",
             "base_views": {
               "front": {
-                "path": "出图/共享/图片/定妆_贺三杰.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_贺三杰_回忆影.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split_front",
+                  "source_path": "出图/共享/图片/定妆_贺三杰_回忆影_三视图.png",
+                  "source_sha256": "4e33e8c9ef126f8369eff791bd24cce074c69013e528ba9a0ae984d959b60e7c",
+                  "crop_box": [
+                    14,
+                    0,
+                    221,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               },
               "three_quarter": {
-                "path": "出图/共享/图片/定妆_贺三杰_45度.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_贺三杰_回忆影_45度.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_贺三杰_回忆影_三视图.png",
+                  "source_sha256": "4e33e8c9ef126f8369eff791bd24cce074c69013e528ba9a0ae984d959b60e7c",
+                  "crop_box": [
+                    249,
+                    0,
+                    456,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               },
               "side": {
-                "path": "出图/共享/图片/定妆_贺三杰_侧.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_贺三杰_回忆影_侧.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_贺三杰_回忆影_三视图.png",
+                  "source_sha256": "4e33e8c9ef126f8369eff791bd24cce074c69013e528ba9a0ae984d959b60e7c",
+                  "crop_box": [
+                    484,
+                    0,
+                    692,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               },
               "back": {
-                "path": "出图/共享/图片/定妆_贺三杰_回忆影.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_贺三杰_回忆影_背.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_贺三杰_回忆影_三视图.png",
+                  "source_sha256": "4e33e8c9ef126f8369eff791bd24cce074c69013e528ba9a0ae984d959b60e7c",
+                  "crop_box": [
+                    720,
+                    0,
+                    927,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               },
               "half_body": {
-                "path": "出图/共享/图片/定妆_贺三杰_半身.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_贺三杰_回忆影_半身.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_贺三杰_回忆影.png",
+                  "source_sha256": "156a4400925018faa1b78124498d05be7380413e4ce12d53142897a98848614b",
+                  "crop_box": [
+                    75,
+                    33,
+                    866,
+                    1137
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               }
             },
             "face_anchor_refs": [
               {
                 "label": "回忆侧影锚",
-                "path": "出图/共享/图片/定妆_贺三杰_侧影.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_贺三杰_回忆影_侧影.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_贺三杰_回忆影.png",
+                  "source_sha256": "156a4400925018faa1b78124498d05be7380413e4ce12d53142897a98848614b",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               }
             ],
             "expression_refs": [],
@@ -1661,7 +3155,9 @@
               ]
             },
             "fallback_policy": "先补 ready 基础定妆包；未 ready 前不得生成分镜 PNG。"
-          }
+          },
+          "self_check_passed": true,
+          "anchor_sha": "156a4400925018faa1b78124498d05be7380413e4ce12d53142897a98848614b"
         }
       ]
     },
@@ -1713,6 +3209,10 @@
               "旧布衣",
               "布鞋"
             ],
+            "collar": "杂役粗布短打或旧布衣简领，群像可有差异但不华丽。",
+            "sleeve": "短袖、窄袖或卷起袖混合，统一劳动感。",
+            "waist": "布带或旧绳随意束腰，无统一制服腰封。",
+            "hem": "短打或旧衣下摆便于劳作，后景虚化但不现代化。",
             "fabric": "粗布、油污、灰尘、低反光。",
             "pattern": "无统一制服，无华丽纹样。",
             "palette": {
@@ -1738,20 +3238,124 @@
             ]
           },
           "reference_group": {
-            "front": "出图/共享/图片/定妆_群杂役_虚化.png",
-            "side": "出图/共享/图片/定妆_群杂役_侧.png",
-            "back": "出图/共享/图片/定妆_群杂役_背.png",
-            "outfit": "出图/共享/图片/定妆_群杂役_半身.png",
-            "turnaround": "出图/共享/图片/定妆_群杂役_三视图.png",
+            "front": {
+              "path": "出图/共享/图片/定妆_群杂役_虚化.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split_front",
+                "source_path": "出图/共享/图片/定妆_群杂役_虚化_三视图.png",
+                "source_sha256": "e09e97887d251379dea674ce9e5770e0bb3623bb40aa2e5bbb4daa09c1ce6898",
+                "crop_box": [
+                  14,
+                  0,
+                  221,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:19+00:00"
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_群杂役_虚化_侧.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_群杂役_虚化_三视图.png",
+                "source_sha256": "e09e97887d251379dea674ce9e5770e0bb3623bb40aa2e5bbb4daa09c1ce6898",
+                "crop_box": [
+                  484,
+                  0,
+                  692,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:19+00:00"
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_群杂役_虚化_背.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_群杂役_虚化_三视图.png",
+                "source_sha256": "e09e97887d251379dea674ce9e5770e0bb3623bb40aa2e5bbb4daa09c1ce6898",
+                "crop_box": [
+                  720,
+                  0,
+                  927,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:19+00:00"
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_群杂役_虚化_半身.png",
+              "status": "planned"
+            },
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_群杂役_虚化_三视图.png",
+              "status": "ready",
+              "human_review": {
+                "status": "passed",
+                "reason": "visual inspection passed for same-source turnaround derivation"
+              }
+            },
             "face_anchor_refs": [
               {
                 "label": "群像虚化锚",
-                "path": "出图/共享/图片/定妆_群杂役_群像sheet.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_群杂役_虚化_群像sheet.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_群杂役_虚化.png",
+                  "source_sha256": "1c6ecc08d1cc7124edf53cf2ab286f756cbed11abc3ac5f4a1210f40219b4fd4",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               }
             ],
             "expressions": [],
-            "three_quarter": "出图/共享/图片/定妆_群杂役_虚化_45度.png"
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_群杂役_虚化_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_群杂役_虚化_三视图.png",
+                "source_sha256": "e09e97887d251379dea674ce9e5770e0bb3623bb40aa2e5bbb4daa09c1ce6898",
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:19+00:00"
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_群杂役_虚化_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_群杂役_虚化.png",
+                "source_sha256": "1c6ecc08d1cc7124edf53cf2ab286f756cbed11abc3ac5f4a1210f40219b4fd4",
+                "crop_box": [
+                  75,
+                  33,
+                  866,
+                  1137
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:19+00:00"
+              }
+            }
           },
           "identity_adapters": {
             "image": {
@@ -1824,30 +3428,108 @@
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_群杂役_虚化.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split_front",
+                  "source_path": "出图/共享/图片/定妆_群杂役_虚化_三视图.png",
+                  "source_sha256": "e09e97887d251379dea674ce9e5770e0bb3623bb40aa2e5bbb4daa09c1ce6898",
+                  "crop_box": [
+                    14,
+                    0,
+                    221,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               },
               "three_quarter": {
                 "path": "出图/共享/图片/定妆_群杂役_虚化_45度.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_群杂役_虚化_三视图.png",
+                  "source_sha256": "e09e97887d251379dea674ce9e5770e0bb3623bb40aa2e5bbb4daa09c1ce6898",
+                  "crop_box": [
+                    249,
+                    0,
+                    456,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               },
               "side": {
-                "path": "出图/共享/图片/定妆_群杂役_侧.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_群杂役_虚化_侧.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_群杂役_虚化_三视图.png",
+                  "source_sha256": "e09e97887d251379dea674ce9e5770e0bb3623bb40aa2e5bbb4daa09c1ce6898",
+                  "crop_box": [
+                    484,
+                    0,
+                    692,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               },
               "back": {
-                "path": "出图/共享/图片/定妆_群杂役_背.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_群杂役_虚化_背.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_群杂役_虚化_三视图.png",
+                  "source_sha256": "e09e97887d251379dea674ce9e5770e0bb3623bb40aa2e5bbb4daa09c1ce6898",
+                  "crop_box": [
+                    720,
+                    0,
+                    927,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               },
               "half_body": {
-                "path": "出图/共享/图片/定妆_群杂役_半身.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_群杂役_虚化_半身.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_群杂役_虚化.png",
+                  "source_sha256": "1c6ecc08d1cc7124edf53cf2ab286f756cbed11abc3ac5f4a1210f40219b4fd4",
+                  "crop_box": [
+                    75,
+                    33,
+                    866,
+                    1137
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               }
             },
             "face_anchor_refs": [
               {
                 "label": "群像虚化锚",
-                "path": "出图/共享/图片/定妆_群杂役_群像sheet.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_群杂役_虚化_群像sheet.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_群杂役_虚化.png",
+                  "source_sha256": "1c6ecc08d1cc7124edf53cf2ab286f756cbed11abc3ac5f4a1210f40219b4fd4",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               }
             ],
             "expression_refs": [],
@@ -1883,7 +3565,9 @@
               ]
             },
             "fallback_policy": "先补 ready 基础定妆包；未 ready 前不得生成分镜 PNG。"
-          }
+          },
+          "self_check_passed": true,
+          "anchor_sha": "1c6ecc08d1cc7124edf53cf2ab286f756cbed11abc3ac5f4a1210f40219b4fd4"
         }
       ]
     },
@@ -1935,6 +3619,10 @@
               "窄袖",
               "布靴或不可辨鞋"
             ],
+            "collar": "远景长袍简领或交领，只保留剪影轮廓。",
+            "sleeve": "窄袖剪影，禁止强特效光翼替代袖形。",
+            "waist": "低饱和腰带剪影，不展示高阶法器。",
+            "hem": "长袍下摆小比例远景可读，不近景抢主角。",
             "fabric": "远景不可辨布料。",
             "pattern": "无高饱和花纹。",
             "palette": {
@@ -1959,20 +3647,124 @@
             ]
           },
           "reference_group": {
-            "front": "出图/共享/图片/定妆_远景修士剪影.png",
-            "side": "出图/共享/图片/定妆_远景修士剪影_侧.png",
-            "back": "出图/共享/图片/定妆_远景修士剪影_背.png",
-            "outfit": "出图/共享/图片/定妆_远景修士剪影_半身.png",
-            "turnaround": "出图/共享/图片/定妆_远景修士剪影_三视图.png",
+            "front": {
+              "path": "出图/共享/图片/定妆_远景修士剪影.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split_front",
+                "source_path": "出图/共享/图片/定妆_远景修士剪影_三视图.png",
+                "source_sha256": "6ac5f3b537eb743f146178660f5ae9779b25290ba6605713e8204c231f67eddc",
+                "crop_box": [
+                  14,
+                  0,
+                  221,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:19+00:00"
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_远景修士剪影_侧.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_远景修士剪影_三视图.png",
+                "source_sha256": "6ac5f3b537eb743f146178660f5ae9779b25290ba6605713e8204c231f67eddc",
+                "crop_box": [
+                  484,
+                  0,
+                  692,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:19+00:00"
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_远景修士剪影_背.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_远景修士剪影_三视图.png",
+                "source_sha256": "6ac5f3b537eb743f146178660f5ae9779b25290ba6605713e8204c231f67eddc",
+                "crop_box": [
+                  720,
+                  0,
+                  927,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:19+00:00"
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_远景修士剪影_半身.png",
+              "status": "planned"
+            },
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_远景修士剪影_三视图.png",
+              "status": "ready",
+              "human_review": {
+                "status": "passed",
+                "reason": "visual inspection passed for same-source turnaround derivation"
+              }
+            },
             "face_anchor_refs": [
               {
                 "label": "远景剪影锚",
                 "path": "出图/共享/图片/定妆_远景修士剪影_sheet.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_远景修士剪影.png",
+                  "source_sha256": "ebdd0a65f57f098089c219f0f48b50f9bbfd3d1de57c06cd425fcd6bbf799262",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:20+00:00"
+                }
               }
             ],
             "expressions": [],
-            "three_quarter": "出图/共享/图片/定妆_远景修士剪影_45度.png"
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_远景修士剪影_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_远景修士剪影_三视图.png",
+                "source_sha256": "6ac5f3b537eb743f146178660f5ae9779b25290ba6605713e8204c231f67eddc",
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:19+00:00"
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_远景修士剪影_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_远景修士剪影.png",
+                "source_sha256": "ebdd0a65f57f098089c219f0f48b50f9bbfd3d1de57c06cd425fcd6bbf799262",
+                "crop_box": [
+                  75,
+                  33,
+                  866,
+                  1137
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:20+00:00"
+              }
+            }
           },
           "identity_adapters": {
             "image": {
@@ -2045,30 +3837,108 @@
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_远景修士剪影.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split_front",
+                  "source_path": "出图/共享/图片/定妆_远景修士剪影_三视图.png",
+                  "source_sha256": "6ac5f3b537eb743f146178660f5ae9779b25290ba6605713e8204c231f67eddc",
+                  "crop_box": [
+                    14,
+                    0,
+                    221,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               },
               "three_quarter": {
                 "path": "出图/共享/图片/定妆_远景修士剪影_45度.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_远景修士剪影_三视图.png",
+                  "source_sha256": "6ac5f3b537eb743f146178660f5ae9779b25290ba6605713e8204c231f67eddc",
+                  "crop_box": [
+                    249,
+                    0,
+                    456,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               },
               "side": {
                 "path": "出图/共享/图片/定妆_远景修士剪影_侧.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_远景修士剪影_三视图.png",
+                  "source_sha256": "6ac5f3b537eb743f146178660f5ae9779b25290ba6605713e8204c231f67eddc",
+                  "crop_box": [
+                    484,
+                    0,
+                    692,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               },
               "back": {
                 "path": "出图/共享/图片/定妆_远景修士剪影_背.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_远景修士剪影_三视图.png",
+                  "source_sha256": "6ac5f3b537eb743f146178660f5ae9779b25290ba6605713e8204c231f67eddc",
+                  "crop_box": [
+                    720,
+                    0,
+                    927,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               },
               "half_body": {
                 "path": "出图/共享/图片/定妆_远景修士剪影_半身.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_远景修士剪影.png",
+                  "source_sha256": "ebdd0a65f57f098089c219f0f48b50f9bbfd3d1de57c06cd425fcd6bbf799262",
+                  "crop_box": [
+                    75,
+                    33,
+                    866,
+                    1137
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:20+00:00"
+                }
               }
             },
             "face_anchor_refs": [
               {
                 "label": "远景剪影锚",
                 "path": "出图/共享/图片/定妆_远景修士剪影_sheet.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_远景修士剪影.png",
+                  "source_sha256": "ebdd0a65f57f098089c219f0f48b50f9bbfd3d1de57c06cd425fcd6bbf799262",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:20+00:00"
+                }
               }
             ],
             "expression_refs": [],
@@ -2104,7 +3974,9 @@
               ]
             },
             "fallback_policy": "先补 ready 基础定妆包；未 ready 前不得生成分镜 PNG。"
-          }
+          },
+          "self_check_passed": true,
+          "anchor_sha": "ebdd0a65f57f098089c219f0f48b50f9bbfd3d1de57c06cd425fcd6bbf799262"
         }
       ]
     }

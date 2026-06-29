@@ -2,16 +2,16 @@
   "kind": "n2d_identity_adapter_matrix",
   "version": 1,
   "root": "创作区/制漫剧/仙界闭关小能手",
-  "generated_at": "2026-06-29T08:09:55+00:00",
+  "generated_at": "2026-06-29T11:36:04+00:00",
   "summary": {
     "forms": 9,
-    "forms_with_reference_group_ready": 0,
+    "forms_with_reference_group_ready": 9,
     "forms_with_native_image_ready": 0,
     "forms_with_native_video_ready": 0,
     "forms_with_lora_ready": 0,
-    "forms_with_gaps": 9,
-    "anchor_fingerprint": "1eb6fb87bdf902f99db5f36809bef9979d22ce344e4b5cc0725381865793106b",
-    "forms_with_anchor_pinned": 0,
+    "forms_with_gaps": 0,
+    "anchor_fingerprint": "4219291ad6bf455bd1933a345a110583b19a4b98a73752894c5fa2e16cb9f685",
+    "forms_with_anchor_pinned": 9,
     "characters_needing_lora_upgrade": []
   },
   "forms": [
@@ -25,23 +25,23 @@
       "reference_group": {
         "front": {
           "path": "出图/共享/图片/定妆_贺平生.png",
-          "exists": false
+          "exists": true
         },
         "side": {
           "path": "出图/共享/图片/定妆_贺平生_侧.png",
-          "exists": false
+          "exists": true
         },
         "back": {
           "path": "出图/共享/图片/定妆_贺平生_背.png",
-          "exists": false
+          "exists": true
         },
         "outfit": {
           "path": "出图/共享/图片/定妆_贺平生_半身.png",
-          "exists": false
+          "exists": true
         },
         "turnaround": {
           "path": "出图/共享/图片/定妆_贺平生_三视图.png",
-          "exists": false
+          "exists": true
         },
         "_extra": {
           "value": {
@@ -49,26 +49,114 @@
               {
                 "label": "基础脸锚",
                 "path": "出图/共享/图片/定妆_贺平生_脸部特写.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_贺平生.png",
+                  "source_sha256": "2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:57+00:00"
+                }
               }
             ],
-            "expressions": []
+            "expressions": [
+              {
+                "label": "克制",
+                "path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "pass",
+                  "reviewed_by": "visual_inspection+registry_sync",
+                  "reviewed_at": "2026-06-29T10:40:08+00:00",
+                  "reason": "same-form expression reference visually checked against locked face anchor"
+                },
+                "emotion": "克制",
+                "self_check_passed": true,
+                "anchor_sha": "305a617ccf2aa21aa1dc0826cca5e7379d935905eab140cf049c616a847605a5"
+              },
+              {
+                "label": "疲惫隐忍",
+                "path": "出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "pass",
+                  "reviewed_by": "visual_inspection+registry_sync",
+                  "reviewed_at": "2026-06-29T10:40:08+00:00",
+                  "reason": "same-form expression reference visually checked against locked face anchor"
+                },
+                "emotion": "疲惫隐忍",
+                "self_check_passed": true,
+                "anchor_sha": "073cc78f6e81b4feb0f800f6a4ea3e2fb720bc9598010fdc615eb3394fc40629"
+              },
+              {
+                "label": "警觉",
+                "path": "出图/共享/图片/定妆_贺平生_表情_警觉.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "pass",
+                  "reviewed_by": "visual_inspection+registry_sync",
+                  "reviewed_at": "2026-06-29T10:40:08+00:00",
+                  "reason": "same-form expression reference visually checked against locked face anchor"
+                },
+                "emotion": "警觉",
+                "self_check_passed": true,
+                "anchor_sha": "786686dfceefd47ffef266bc5f0e8c134a86cb420d287a792b11928a154d0bf4"
+              }
+            ],
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_贺平生_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_贺平生_三视图.png",
+                "source_sha256": "47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc",
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:56+00:00"
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_贺平生_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_贺平生.png",
+                "source_sha256": "2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974",
+                "crop_box": [
+                  75,
+                  33,
+                  866,
+                  1137
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:57+00:00"
+              }
+            }
           },
           "exists": true
         }
       },
-      "reference_group_ready": false,
+      "reference_group_ready": true,
       "image_bindings": {
         "codex": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -76,27 +164,25 @@
         "dreamina": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
       "lora_binding": {
-        "status": "not_needed",
+        "status": "candidate",
         "ready": false,
-        "base_model": "",
+        "base_model": "sdxl",
         "model_path": "",
-        "trigger": "",
-        "dataset": "",
+        "trigger": "贺平生_常态_v1",
+        "dataset": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset",
         "model_hash": "",
         "validation_report": "",
-        "train_job": "",
-        "card": "",
+        "train_job": "设定库/lora/CHAR_HE_PINGSHENG/常态/train_job.json",
+        "card": "设定库/lora/CHAR_HE_PINGSHENG/常态/lora_card.json",
         "gaps": []
       },
       "angle_policy": {
@@ -127,15 +213,7 @@
         "eye_color_change",
         "body_type_reset"
       ],
-      "gaps": [
-        "image.codex:reference_group_assets_missing",
-        "missing_reference:back",
-        "missing_reference:front",
-        "missing_reference:outfit",
-        "missing_reference:side",
-        "missing_reference:turnaround",
-        "video.dreamina:reference_group_assets_missing"
-      ],
+      "gaps": [],
       "recommendations": [
         "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
         "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
@@ -151,23 +229,23 @@
       "reference_group": {
         "front": {
           "path": "出图/共享/图片/定妆_贺平生_幼年.png",
-          "exists": false
+          "exists": true
         },
         "side": {
           "path": "出图/共享/图片/定妆_贺平生_幼年_侧.png",
-          "exists": false
+          "exists": true
         },
         "back": {
           "path": "出图/共享/图片/定妆_贺平生_幼年_背.png",
-          "exists": false
+          "exists": true
         },
         "outfit": {
           "path": "出图/共享/图片/定妆_贺平生_幼年_半身.png",
-          "exists": false
+          "exists": true
         },
         "turnaround": {
           "path": "出图/共享/图片/定妆_贺平生_幼年_三视图.png",
-          "exists": false
+          "exists": true
         },
         "_extra": {
           "value": {
@@ -175,26 +253,114 @@
               {
                 "label": "幼年脸锚",
                 "path": "出图/共享/图片/定妆_贺平生_幼年_脸部特写.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_贺平生_幼年.png",
+                  "source_sha256": "0ddffbe1e6e6c5deada581fcb714d50a17a7ea4fa7669e89694bd828cd248bd5",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:57+00:00"
+                }
               }
             ],
-            "expressions": []
+            "expressions": [
+              {
+                "label": "克制",
+                "path": "出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "pass",
+                  "reviewed_by": "visual_inspection+registry_sync",
+                  "reviewed_at": "2026-06-29T10:40:08+00:00",
+                  "reason": "same-form expression reference visually checked against locked face anchor"
+                },
+                "emotion": "克制",
+                "self_check_passed": true,
+                "anchor_sha": "b006a94eb2635ec60eacf20a2f16b7bde48d243b735be632e4942a9248ccd085"
+              },
+              {
+                "label": "疲惫隐忍",
+                "path": "出图/共享/图片/定妆_贺平生_幼年_表情_疲惫隐忍.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "pass",
+                  "reviewed_by": "visual_inspection+registry_sync",
+                  "reviewed_at": "2026-06-29T10:40:08+00:00",
+                  "reason": "same-form expression reference visually checked against locked face anchor"
+                },
+                "emotion": "疲惫隐忍",
+                "self_check_passed": true,
+                "anchor_sha": "bc494ad1bec180eb3ef9cea4a821a55a906a2437c651327d2f7fc63e0c99876c"
+              },
+              {
+                "label": "警觉",
+                "path": "出图/共享/图片/定妆_贺平生_幼年_表情_警觉.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "pass",
+                  "reviewed_by": "visual_inspection+registry_sync",
+                  "reviewed_at": "2026-06-29T10:40:08+00:00",
+                  "reason": "same-form expression reference visually checked against locked face anchor"
+                },
+                "emotion": "警觉",
+                "self_check_passed": true,
+                "anchor_sha": "7a0ae17a898629431c7e3211e9ca576160046543f7d1a7cf3b33dd87a66a4cb0"
+              }
+            ],
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_贺平生_幼年_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_贺平生_幼年_三视图.png",
+                "source_sha256": "963c6447caa656d89ef708c9d6cbbb8fcb7b3d15d1c954f1e20cd357733b6ef7",
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:57+00:00"
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_贺平生_幼年_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_贺平生_幼年.png",
+                "source_sha256": "0ddffbe1e6e6c5deada581fcb714d50a17a7ea4fa7669e89694bd828cd248bd5",
+                "crop_box": [
+                  75,
+                  33,
+                  866,
+                  1137
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:57+00:00"
+              }
+            }
           },
           "exists": true
         }
       },
-      "reference_group_ready": false,
+      "reference_group_ready": true,
       "image_bindings": {
         "codex": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -202,27 +368,25 @@
         "dreamina": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
       "lora_binding": {
-        "status": "not_needed",
+        "status": "candidate",
         "ready": false,
-        "base_model": "",
+        "base_model": "sdxl",
         "model_path": "",
-        "trigger": "",
-        "dataset": "",
+        "trigger": "贺平生_幼年_v1",
+        "dataset": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset",
         "model_hash": "",
         "validation_report": "",
-        "train_job": "",
-        "card": "",
+        "train_job": "设定库/lora/CHAR_HE_PINGSHENG/幼年/train_job.json",
+        "card": "设定库/lora/CHAR_HE_PINGSHENG/幼年/lora_card.json",
         "gaps": []
       },
       "angle_policy": {
@@ -251,15 +415,7 @@
         "modern_student",
         "replace_normal_form"
       ],
-      "gaps": [
-        "image.codex:reference_group_assets_missing",
-        "missing_reference:back",
-        "missing_reference:front",
-        "missing_reference:outfit",
-        "missing_reference:side",
-        "missing_reference:turnaround",
-        "video.dreamina:reference_group_assets_missing"
-      ],
+      "gaps": [],
       "recommendations": [
         "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
         "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
@@ -275,23 +431,23 @@
       "reference_group": {
         "front": {
           "path": "出图/共享/图片/定妆_张老大.png",
-          "exists": false
+          "exists": true
         },
         "side": {
           "path": "出图/共享/图片/定妆_张老大_侧.png",
-          "exists": false
+          "exists": true
         },
         "back": {
           "path": "出图/共享/图片/定妆_张老大_背.png",
-          "exists": false
+          "exists": true
         },
         "outfit": {
           "path": "出图/共享/图片/定妆_张老大_半身.png",
-          "exists": false
+          "exists": true
         },
         "turnaround": {
           "path": "出图/共享/图片/定妆_张老大_三视图.png",
-          "exists": false
+          "exists": true
         },
         "_extra": {
           "value": {
@@ -299,26 +455,71 @@
               {
                 "label": "基础脸锚",
                 "path": "出图/共享/图片/定妆_张老大_脸部特写.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_张老大.png",
+                  "source_sha256": "d1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:58+00:00"
+                }
               }
             ],
-            "expressions": []
+            "expressions": [],
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_张老大_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_张老大_三视图.png",
+                "source_sha256": "3aaa6878994aa77fcc2d941d178d77867e8af2e62c878b839dc7ff6d04f44ef1",
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:58+00:00"
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_张老大_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_张老大.png",
+                "source_sha256": "d1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929",
+                "crop_box": [
+                  75,
+                  33,
+                  866,
+                  1137
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:58+00:00"
+              }
+            }
           },
           "exists": true
         }
       },
-      "reference_group_ready": false,
+      "reference_group_ready": true,
       "image_bindings": {
         "codex": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -326,13 +527,11 @@
         "dreamina": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -373,15 +572,7 @@
         "body_type_reset",
         "youth_reset"
       ],
-      "gaps": [
-        "image.codex:reference_group_assets_missing",
-        "missing_reference:back",
-        "missing_reference:front",
-        "missing_reference:outfit",
-        "missing_reference:side",
-        "missing_reference:turnaround",
-        "video.dreamina:reference_group_assets_missing"
-      ],
+      "gaps": [],
       "recommendations": [
         "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
         "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
@@ -397,23 +588,23 @@
       "reference_group": {
         "front": {
           "path": "出图/共享/图片/定妆_韩老三.png",
-          "exists": false
+          "exists": true
         },
         "side": {
           "path": "出图/共享/图片/定妆_韩老三_侧.png",
-          "exists": false
+          "exists": true
         },
         "back": {
           "path": "出图/共享/图片/定妆_韩老三_背.png",
-          "exists": false
+          "exists": true
         },
         "outfit": {
           "path": "出图/共享/图片/定妆_韩老三_半身.png",
-          "exists": false
+          "exists": true
         },
         "turnaround": {
           "path": "出图/共享/图片/定妆_韩老三_三视图.png",
-          "exists": false
+          "exists": true
         },
         "_extra": {
           "value": {
@@ -421,26 +612,71 @@
               {
                 "label": "基础脸锚",
                 "path": "出图/共享/图片/定妆_韩老三_脸部特写.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_韩老三.png",
+                  "source_sha256": "c20df5a1e5a5ed18569220876d0ee1e6b6d3e6432035161c7a8a43018d1cab04",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T09:58:58+00:00"
+                }
               }
             ],
-            "expressions": []
+            "expressions": [],
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_韩老三_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_韩老三_三视图.png",
+                "source_sha256": "cbdefbb1827f4097ce2c097a042582385c35e02dc32025701014c10490f9a8b5",
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:58+00:00"
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_韩老三_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_韩老三.png",
+                "source_sha256": "c20df5a1e5a5ed18569220876d0ee1e6b6d3e6432035161c7a8a43018d1cab04",
+                "crop_box": [
+                  75,
+                  33,
+                  866,
+                  1137
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T09:58:58+00:00"
+              }
+            }
           },
           "exists": true
         }
       },
-      "reference_group_ready": false,
+      "reference_group_ready": true,
       "image_bindings": {
         "codex": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -448,13 +684,11 @@
         "dreamina": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -495,15 +729,7 @@
         "body_type_reset",
         "age_reset"
       ],
-      "gaps": [
-        "image.codex:reference_group_assets_missing",
-        "missing_reference:back",
-        "missing_reference:front",
-        "missing_reference:outfit",
-        "missing_reference:side",
-        "missing_reference:turnaround",
-        "video.dreamina:reference_group_assets_missing"
-      ],
+      "gaps": [],
       "recommendations": [
         "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
         "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
@@ -518,51 +744,96 @@
       "anchor_phrase": "四五十岁中等偏瘦外门修士背影，黑发夹灰，深灰旧袍，背旧包袱。",
       "reference_group": {
         "front": {
-          "path": "出图/共享/图片/定妆_江剑.png",
-          "exists": false
+          "path": "出图/共享/图片/定妆_江剑_背影.png",
+          "exists": true
         },
         "side": {
-          "path": "出图/共享/图片/定妆_江剑_侧.png",
-          "exists": false
+          "path": "出图/共享/图片/定妆_江剑_背影_侧.png",
+          "exists": true
         },
         "back": {
-          "path": "出图/共享/图片/定妆_江剑_背影.png",
-          "exists": false
+          "path": "出图/共享/图片/定妆_江剑_背影_背.png",
+          "exists": true
         },
         "outfit": {
-          "path": "出图/共享/图片/定妆_江剑_半身.png",
-          "exists": false
+          "path": "出图/共享/图片/定妆_江剑_背影_半身.png",
+          "exists": true
         },
         "turnaround": {
-          "path": "出图/共享/图片/定妆_江剑_三视图.png",
-          "exists": false
+          "path": "出图/共享/图片/定妆_江剑_背影_三视图.png",
+          "exists": true
         },
         "_extra": {
           "value": {
             "face_anchor_refs": [
               {
                 "label": "侧背锚",
-                "path": "出图/共享/图片/定妆_江剑_侧背.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_江剑_背影_侧背.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_江剑_背影.png",
+                  "source_sha256": "b75fa7c9d3e0a69d5d35a78e17751caf60f8d0e797a15cef89daf63d9c099f4b",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:18+00:00"
+                }
               }
             ],
-            "expressions": []
+            "expressions": [],
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_江剑_背影_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_江剑_背影_三视图.png",
+                "source_sha256": "e23683178bfc3d642dfd96b4f2796d6fc6fdebd5da736dda3746a163f29f4c88",
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:18+00:00"
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_江剑_背影_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_江剑_背影.png",
+                "source_sha256": "b75fa7c9d3e0a69d5d35a78e17751caf60f8d0e797a15cef89daf63d9c099f4b",
+                "crop_box": [
+                  75,
+                  33,
+                  866,
+                  1137
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:18+00:00"
+              }
+            }
           },
           "exists": true
         }
       },
-      "reference_group_ready": false,
+      "reference_group_ready": true,
       "image_bindings": {
         "codex": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -570,13 +841,11 @@
         "dreamina": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -616,15 +885,7 @@
         "modern_backpack",
         "villain_black_robe"
       ],
-      "gaps": [
-        "image.codex:reference_group_assets_missing",
-        "missing_reference:back",
-        "missing_reference:front",
-        "missing_reference:outfit",
-        "missing_reference:side",
-        "missing_reference:turnaround",
-        "video.dreamina:reference_group_assets_missing"
-      ],
+      "gaps": [],
       "recommendations": [
         "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
         "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
@@ -639,51 +900,96 @@
       "anchor_phrase": "老年太虚门长老背影，银灰束发，深青灰旧法袍，转身离开，不露正脸。",
       "reference_group": {
         "front": {
-          "path": "出图/共享/图片/定妆_太虚门长老.png",
-          "exists": false
+          "path": "出图/共享/图片/定妆_太虚门长老_回忆背影.png",
+          "exists": true
         },
         "side": {
-          "path": "出图/共享/图片/定妆_太虚门长老_侧.png",
-          "exists": false
+          "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_侧.png",
+          "exists": true
         },
         "back": {
-          "path": "出图/共享/图片/定妆_太虚门长老_背影.png",
-          "exists": false
+          "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_背.png",
+          "exists": true
         },
         "outfit": {
-          "path": "出图/共享/图片/定妆_太虚门长老_半身.png",
-          "exists": false
+          "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_半身.png",
+          "exists": true
         },
         "turnaround": {
-          "path": "出图/共享/图片/定妆_太虚门长老_三视图.png",
-          "exists": false
+          "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_三视图.png",
+          "exists": true
         },
         "_extra": {
           "value": {
             "face_anchor_refs": [
               {
                 "label": "背影锚",
-                "path": "出图/共享/图片/定妆_太虚门长老_侧背.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_太虚门长老_回忆背影.png",
+                  "source_sha256": "b50280d80b8fc37f27ccb2284c88156bb07c3546edabd77172379fb304c8cc04",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               }
             ],
-            "expressions": []
+            "expressions": [],
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_太虚门长老_回忆背影_三视图.png",
+                "source_sha256": "f1ad54beea91a82f6e309e7bb46a69560f83e0e24a9743adf1a6abf1eb2b827a",
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:18+00:00"
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_太虚门长老_回忆背影.png",
+                "source_sha256": "b50280d80b8fc37f27ccb2284c88156bb07c3546edabd77172379fb304c8cc04",
+                "crop_box": [
+                  75,
+                  33,
+                  866,
+                  1137
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:18+00:00"
+              }
+            }
           },
           "exists": true
         }
       },
-      "reference_group_ready": false,
+      "reference_group_ready": true,
       "image_bindings": {
         "codex": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -691,13 +997,11 @@
         "dreamina": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -735,15 +1039,7 @@
         "chibi_elder",
         "monster_face"
       ],
-      "gaps": [
-        "image.codex:reference_group_assets_missing",
-        "missing_reference:back",
-        "missing_reference:front",
-        "missing_reference:outfit",
-        "missing_reference:side",
-        "missing_reference:turnaround",
-        "video.dreamina:reference_group_assets_missing"
-      ],
+      "gaps": [],
       "recommendations": [
         "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
         "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
@@ -758,51 +1054,96 @@
       "anchor_phrase": "三四十岁中等体态旧外门修士回忆影，黑发束起，灰青旧袍，脸不清晰。",
       "reference_group": {
         "front": {
-          "path": "出图/共享/图片/定妆_贺三杰.png",
-          "exists": false
+          "path": "出图/共享/图片/定妆_贺三杰_回忆影.png",
+          "exists": true
         },
         "side": {
-          "path": "出图/共享/图片/定妆_贺三杰_侧.png",
-          "exists": false
+          "path": "出图/共享/图片/定妆_贺三杰_回忆影_侧.png",
+          "exists": true
         },
         "back": {
-          "path": "出图/共享/图片/定妆_贺三杰_回忆影.png",
-          "exists": false
+          "path": "出图/共享/图片/定妆_贺三杰_回忆影_背.png",
+          "exists": true
         },
         "outfit": {
-          "path": "出图/共享/图片/定妆_贺三杰_半身.png",
-          "exists": false
+          "path": "出图/共享/图片/定妆_贺三杰_回忆影_半身.png",
+          "exists": true
         },
         "turnaround": {
-          "path": "出图/共享/图片/定妆_贺三杰_三视图.png",
-          "exists": false
+          "path": "出图/共享/图片/定妆_贺三杰_回忆影_三视图.png",
+          "exists": true
         },
         "_extra": {
           "value": {
             "face_anchor_refs": [
               {
                 "label": "回忆侧影锚",
-                "path": "出图/共享/图片/定妆_贺三杰_侧影.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_贺三杰_回忆影_侧影.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_贺三杰_回忆影.png",
+                  "source_sha256": "156a4400925018faa1b78124498d05be7380413e4ce12d53142897a98848614b",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               }
             ],
-            "expressions": []
+            "expressions": [],
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_贺三杰_回忆影_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_贺三杰_回忆影_三视图.png",
+                "source_sha256": "4e33e8c9ef126f8369eff791bd24cce074c69013e528ba9a0ae984d959b60e7c",
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:19+00:00"
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_贺三杰_回忆影_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_贺三杰_回忆影.png",
+                "source_sha256": "156a4400925018faa1b78124498d05be7380413e4ce12d53142897a98848614b",
+                "crop_box": [
+                  75,
+                  33,
+                  866,
+                  1137
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:19+00:00"
+              }
+            }
           },
           "exists": true
         }
       },
-      "reference_group_ready": false,
+      "reference_group_ready": true,
       "image_bindings": {
         "codex": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -810,13 +1151,11 @@
         "dreamina": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -855,15 +1194,7 @@
         "luxury_elder",
         "modern_outfit"
       ],
-      "gaps": [
-        "image.codex:reference_group_assets_missing",
-        "missing_reference:back",
-        "missing_reference:front",
-        "missing_reference:outfit",
-        "missing_reference:side",
-        "missing_reference:turnaround",
-        "video.dreamina:reference_group_assets_missing"
-      ],
+      "gaps": [],
       "recommendations": [
         "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
         "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
@@ -879,50 +1210,95 @@
       "reference_group": {
         "front": {
           "path": "出图/共享/图片/定妆_群杂役_虚化.png",
-          "exists": false
+          "exists": true
         },
         "side": {
-          "path": "出图/共享/图片/定妆_群杂役_侧.png",
-          "exists": false
+          "path": "出图/共享/图片/定妆_群杂役_虚化_侧.png",
+          "exists": true
         },
         "back": {
-          "path": "出图/共享/图片/定妆_群杂役_背.png",
-          "exists": false
+          "path": "出图/共享/图片/定妆_群杂役_虚化_背.png",
+          "exists": true
         },
         "outfit": {
-          "path": "出图/共享/图片/定妆_群杂役_半身.png",
-          "exists": false
+          "path": "出图/共享/图片/定妆_群杂役_虚化_半身.png",
+          "exists": true
         },
         "turnaround": {
-          "path": "出图/共享/图片/定妆_群杂役_三视图.png",
-          "exists": false
+          "path": "出图/共享/图片/定妆_群杂役_虚化_三视图.png",
+          "exists": true
         },
         "_extra": {
           "value": {
             "face_anchor_refs": [
               {
                 "label": "群像虚化锚",
-                "path": "出图/共享/图片/定妆_群杂役_群像sheet.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_群杂役_虚化_群像sheet.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_群杂役_虚化.png",
+                  "source_sha256": "1c6ecc08d1cc7124edf53cf2ab286f756cbed11abc3ac5f4a1210f40219b4fd4",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:19+00:00"
+                }
               }
             ],
-            "expressions": []
+            "expressions": [],
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_群杂役_虚化_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_群杂役_虚化_三视图.png",
+                "source_sha256": "e09e97887d251379dea674ce9e5770e0bb3623bb40aa2e5bbb4daa09c1ce6898",
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:19+00:00"
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_群杂役_虚化_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_群杂役_虚化.png",
+                "source_sha256": "1c6ecc08d1cc7124edf53cf2ab286f756cbed11abc3ac5f4a1210f40219b4fd4",
+                "crop_box": [
+                  75,
+                  33,
+                  866,
+                  1137
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:19+00:00"
+              }
+            }
           },
           "exists": true
         }
       },
-      "reference_group_ready": false,
+      "reference_group_ready": true,
       "image_bindings": {
         "codex": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -930,13 +1306,11 @@
         "dreamina": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -975,15 +1349,7 @@
         "immortal_disciple_robes",
         "uniform_costumes"
       ],
-      "gaps": [
-        "image.codex:reference_group_assets_missing",
-        "missing_reference:back",
-        "missing_reference:front",
-        "missing_reference:outfit",
-        "missing_reference:side",
-        "missing_reference:turnaround",
-        "video.dreamina:reference_group_assets_missing"
-      ],
+      "gaps": [],
       "recommendations": [
         "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
         "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
@@ -999,23 +1365,23 @@
       "reference_group": {
         "front": {
           "path": "出图/共享/图片/定妆_远景修士剪影.png",
-          "exists": false
+          "exists": true
         },
         "side": {
           "path": "出图/共享/图片/定妆_远景修士剪影_侧.png",
-          "exists": false
+          "exists": true
         },
         "back": {
           "path": "出图/共享/图片/定妆_远景修士剪影_背.png",
-          "exists": false
+          "exists": true
         },
         "outfit": {
           "path": "出图/共享/图片/定妆_远景修士剪影_半身.png",
-          "exists": false
+          "exists": true
         },
         "turnaround": {
           "path": "出图/共享/图片/定妆_远景修士剪影_三视图.png",
-          "exists": false
+          "exists": true
         },
         "_extra": {
           "value": {
@@ -1023,26 +1389,71 @@
               {
                 "label": "远景剪影锚",
                 "path": "出图/共享/图片/定妆_远景修士剪影_sheet.png",
-                "status": "planned"
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_远景修士剪影.png",
+                  "source_sha256": "ebdd0a65f57f098089c219f0f48b50f9bbfd3d1de57c06cd425fcd6bbf799262",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-29T10:18:20+00:00"
+                }
               }
             ],
-            "expressions": []
+            "expressions": [],
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_远景修士剪影_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_远景修士剪影_三视图.png",
+                "source_sha256": "6ac5f3b537eb743f146178660f5ae9779b25290ba6605713e8204c231f67eddc",
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:19+00:00"
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_远景修士剪影_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_远景修士剪影.png",
+                "source_sha256": "ebdd0a65f57f098089c219f0f48b50f9bbfd3d1de57c06cd425fcd6bbf799262",
+                "crop_box": [
+                  75,
+                  33,
+                  866,
+                  1137
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-29T10:18:20+00:00"
+              }
+            }
           },
           "exists": true
         }
       },
-      "reference_group_ready": false,
+      "reference_group_ready": true,
       "image_bindings": {
         "codex": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -1050,13 +1461,11 @@
         "dreamina": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -1095,15 +1504,7 @@
         "modern_aircraft",
         "strong_light_wings"
       ],
-      "gaps": [
-        "image.codex:reference_group_assets_missing",
-        "missing_reference:back",
-        "missing_reference:front",
-        "missing_reference:outfit",
-        "missing_reference:side",
-        "missing_reference:turnaround",
-        "video.dreamina:reference_group_assets_missing"
-      ],
+      "gaps": [],
       "recommendations": [
         "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
         "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"

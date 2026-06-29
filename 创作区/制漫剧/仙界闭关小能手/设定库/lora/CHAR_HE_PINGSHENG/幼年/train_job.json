@@ -1,0 +1,39 @@
+{
+  "kind": "n2d_lora_train_job",
+  "version": 1,
+  "project_root": "创作区/制漫剧/仙界闭关小能手",
+  "character_id": "CHAR_HE_PINGSHENG",
+  "character_name": "贺平生",
+  "form": "幼年",
+  "created_at": "2026-06-29T11:35:51+00:00",
+  "status": "planned",
+  "provider": "manual",
+  "base_model": "sdxl",
+  "license_mode": "unknown",
+  "trigger": "贺平生_幼年_v1",
+  "dataset_manifest": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset_manifest.json",
+  "output_dir": "设定库/lora/CHAR_HE_PINGSHENG/幼年",
+  "expected_model_path": "设定库/lora/CHAR_HE_PINGSHENG/幼年/CHAR_HE_PINGSHENG_幼年_v1.safetensors",
+  "hyperparameters": {
+    "steps": 1000,
+    "rank": 8,
+    "learning_rate": "5e-4"
+  },
+  "provider_payload": {
+    "provider": "manual",
+    "base_model": "sdxl",
+    "trigger": "贺平生_幼年_v1",
+    "dataset_dir": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset",
+    "steps": 1000,
+    "rank": 8,
+    "learning_rate": "5e-4"
+  },
+  "warnings": [
+    "dataset_has_warnings",
+    "dataset_below_recommended_15_images"
+  ],
+  "notes": [
+    "This job manifest is auditable input for fal/RunPod/manual training.",
+    "Do not mark LoRA ready until validation_report verdict is pass."
+  ]
+}

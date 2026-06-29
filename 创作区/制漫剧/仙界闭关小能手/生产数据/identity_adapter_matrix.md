@@ -1,20 +1,20 @@
 # 角色身份 Adapter Matrix
 
 - root: 创作区/制漫剧/仙界闭关小能手
-- generated_at: 2026-06-29T08:09:55+00:00
-- anchor_fingerprint: `1eb6fb87bdf902f9…`（锚点版本快照·0 form 已钉死；指纹变=锚点被改，跨集继承换脸风险）
+- generated_at: 2026-06-29T11:36:04+00:00
+- anchor_fingerprint: `4219291ad6bf455b…`（锚点版本快照·9 form 已钉死；指纹变=锚点被改，跨集继承换脸风险）
 
 | 角色 | 形态 | reference_group | image native ready | video native ready | LoRA | gaps |
 |---|---|---|---|---|---|---|
-| 贺平生 | 常态 | missing | - | - | not_needed | image.codex:reference_group_assets_missing, missing_reference:back, missing_reference:front, missing_reference:outfit, missing_reference:side, missing_reference:turnaround, video.dreamina:reference_group_assets_missing |
-| 贺平生 | 幼年 | missing | - | - | not_needed | image.codex:reference_group_assets_missing, missing_reference:back, missing_reference:front, missing_reference:outfit, missing_reference:side, missing_reference:turnaround, video.dreamina:reference_group_assets_missing |
-| 张老大 | 常态 | missing | - | - | not_needed | image.codex:reference_group_assets_missing, missing_reference:back, missing_reference:front, missing_reference:outfit, missing_reference:side, missing_reference:turnaround, video.dreamina:reference_group_assets_missing |
-| 韩老三 | 常态 | missing | - | - | not_needed | image.codex:reference_group_assets_missing, missing_reference:back, missing_reference:front, missing_reference:outfit, missing_reference:side, missing_reference:turnaround, video.dreamina:reference_group_assets_missing |
-| 江剑 | 背影 | missing | - | - | not_needed | image.codex:reference_group_assets_missing, missing_reference:back, missing_reference:front, missing_reference:outfit, missing_reference:side, missing_reference:turnaround, video.dreamina:reference_group_assets_missing |
-| 太虚门长老 | 回忆背影 | missing | - | - | not_needed | image.codex:reference_group_assets_missing, missing_reference:back, missing_reference:front, missing_reference:outfit, missing_reference:side, missing_reference:turnaround, video.dreamina:reference_group_assets_missing |
-| 贺三杰 | 回忆影 | missing | - | - | not_needed | image.codex:reference_group_assets_missing, missing_reference:back, missing_reference:front, missing_reference:outfit, missing_reference:side, missing_reference:turnaround, video.dreamina:reference_group_assets_missing |
-| 群杂役 | 虚化 | missing | - | - | not_needed | image.codex:reference_group_assets_missing, missing_reference:back, missing_reference:front, missing_reference:outfit, missing_reference:side, missing_reference:turnaround, video.dreamina:reference_group_assets_missing |
-| 太虚门远景修士剪影 | 远景剪影 | missing | - | - | not_needed | image.codex:reference_group_assets_missing, missing_reference:back, missing_reference:front, missing_reference:outfit, missing_reference:side, missing_reference:turnaround, video.dreamina:reference_group_assets_missing |
+| 贺平生 | 常态 | ready | - | - | candidate | - |
+| 贺平生 | 幼年 | ready | - | - | candidate | - |
+| 张老大 | 常态 | ready | - | - | not_needed | - |
+| 韩老三 | 常态 | ready | - | - | not_needed | - |
+| 江剑 | 背影 | ready | - | - | not_needed | - |
+| 太虚门长老 | 回忆背影 | ready | - | - | not_needed | - |
+| 贺三杰 | 回忆影 | ready | - | - | not_needed | - |
+| 群杂役 | 虚化 | ready | - | - | not_needed | - |
+| 太虚门远景修士剪影 | 远景剪影 | ready | - | - | not_needed | - |
 
 ## Recommendations
 

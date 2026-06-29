@@ -70,11 +70,78 @@
           },
           "reverse": {
             "path": "出图/共享/图片/定妆_秀竹峰杂役大殿_反打.png",
-            "status": "planned"
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "reverse",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役大殿.png",
+              "source_sha256": "62aaa3dde225442cbd591e539093e86a24748784f38b11475d83d77778df8128",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            }
           },
           "side_left": {
             "path": "出图/共享/图片/定妆_秀竹峰杂役大殿_侧机位.png",
-            "status": "planned"
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_left",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役大殿.png",
+              "source_sha256": "62aaa3dde225442cbd591e539093e86a24748784f38b11475d83d77778df8128",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            }
+          },
+          "side_right": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役大殿_side_right.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_right",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役大殿.png",
+              "source_sha256": "62aaa3dde225442cbd591e539093e86a24748784f38b11475d83d77778df8128",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            }
+          },
+          "left": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役大殿_侧机位.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_left",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役大殿.png",
+              "source_sha256": "62aaa3dde225442cbd591e539093e86a24748784f38b11475d83d77778df8128",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            },
+            "alias_of": "side_left"
+          },
+          "right": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役大殿_side_right.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_right",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役大殿.png",
+              "source_sha256": "62aaa3dde225442cbd591e539093e86a24748784f38b11475d83d77778df8128",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            },
+            "alias_of": "side_right"
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役大殿_反打.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "reverse",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役大殿.png",
+              "source_sha256": "62aaa3dde225442cbd591e539093e86a24748784f38b11475d83d77778df8128",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            },
+            "alias_of": "reverse"
           }
         },
         "fallback_policy": "先补同源 front + reverse/side 多机位板；未 ready 前不得生成引用该场景的分镜 PNG。"
@@ -149,11 +216,78 @@
           },
           "reverse": {
             "path": "出图/共享/图片/定妆_秀竹峰杂役院_反打.png",
-            "status": "planned"
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "reverse",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+              "source_sha256": "a96d09633b368e79441cd68c13023955d68a2e0910fdb612221b8b60f22fcff4",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            }
           },
           "side_left": {
             "path": "出图/共享/图片/定妆_秀竹峰杂役院_侧机位.png",
-            "status": "planned"
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_left",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+              "source_sha256": "a96d09633b368e79441cd68c13023955d68a2e0910fdb612221b8b60f22fcff4",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            }
+          },
+          "side_right": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役院_side_right.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_right",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+              "source_sha256": "a96d09633b368e79441cd68c13023955d68a2e0910fdb612221b8b60f22fcff4",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            }
+          },
+          "left": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役院_侧机位.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_left",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+              "source_sha256": "a96d09633b368e79441cd68c13023955d68a2e0910fdb612221b8b60f22fcff4",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            },
+            "alias_of": "side_left"
+          },
+          "right": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役院_side_right.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_right",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+              "source_sha256": "a96d09633b368e79441cd68c13023955d68a2e0910fdb612221b8b60f22fcff4",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            },
+            "alias_of": "side_right"
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役院_反打.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "reverse",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+              "source_sha256": "a96d09633b368e79441cd68c13023955d68a2e0910fdb612221b8b60f22fcff4",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            },
+            "alias_of": "reverse"
           }
         },
         "fallback_policy": "先补同源 front + reverse/side 多机位板；未 ready 前不得生成引用该场景的分镜 PNG。"
@@ -229,11 +363,78 @@
           },
           "reverse": {
             "path": "出图/共享/图片/定妆_后山山泉浅潭_反打.png",
-            "status": "planned"
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "reverse",
+              "source_path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+              "source_sha256": "a486f01eeaac1851e77f3d11ef29406cd24b5d28363bfc373cffdef8a6914d8e",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:04+00:00"
+            }
           },
           "side_left": {
             "path": "出图/共享/图片/定妆_后山山泉浅潭_侧机位.png",
-            "status": "planned"
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_left",
+              "source_path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+              "source_sha256": "a486f01eeaac1851e77f3d11ef29406cd24b5d28363bfc373cffdef8a6914d8e",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            }
+          },
+          "side_right": {
+            "path": "出图/共享/图片/定妆_后山山泉浅潭_side_right.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_right",
+              "source_path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+              "source_sha256": "a486f01eeaac1851e77f3d11ef29406cd24b5d28363bfc373cffdef8a6914d8e",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            }
+          },
+          "left": {
+            "path": "出图/共享/图片/定妆_后山山泉浅潭_侧机位.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_left",
+              "source_path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+              "source_sha256": "a486f01eeaac1851e77f3d11ef29406cd24b5d28363bfc373cffdef8a6914d8e",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            },
+            "alias_of": "side_left"
+          },
+          "right": {
+            "path": "出图/共享/图片/定妆_后山山泉浅潭_side_right.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_right",
+              "source_path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+              "source_sha256": "a486f01eeaac1851e77f3d11ef29406cd24b5d28363bfc373cffdef8a6914d8e",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            },
+            "alias_of": "side_right"
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_后山山泉浅潭_反打.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "reverse",
+              "source_path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+              "source_sha256": "a486f01eeaac1851e77f3d11ef29406cd24b5d28363bfc373cffdef8a6914d8e",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:04+00:00"
+            },
+            "alias_of": "reverse"
           }
         },
         "fallback_policy": "先补同源 front + reverse/side 多机位板；未 ready 前不得生成引用该场景的分镜 PNG。"
@@ -312,11 +513,78 @@
           },
           "reverse": {
             "path": "出图/共享/图片/定妆_太虚门外门旧院_反打.png",
-            "status": "planned"
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "reverse",
+              "source_path": "出图/共享/图片/定妆_太虚门外门旧院.png",
+              "source_sha256": "23ca08ab8d680814f5ce6f4f29a63d636e19d62f3b8f663ffdc2b8f29017fd30",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:04+00:00"
+            }
           },
           "side_left": {
             "path": "出图/共享/图片/定妆_太虚门外门旧院_侧机位.png",
-            "status": "planned"
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_left",
+              "source_path": "出图/共享/图片/定妆_太虚门外门旧院.png",
+              "source_sha256": "23ca08ab8d680814f5ce6f4f29a63d636e19d62f3b8f663ffdc2b8f29017fd30",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:04+00:00"
+            }
+          },
+          "side_right": {
+            "path": "出图/共享/图片/定妆_太虚门外门旧院_side_right.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_right",
+              "source_path": "出图/共享/图片/定妆_太虚门外门旧院.png",
+              "source_sha256": "23ca08ab8d680814f5ce6f4f29a63d636e19d62f3b8f663ffdc2b8f29017fd30",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:04+00:00"
+            }
+          },
+          "left": {
+            "path": "出图/共享/图片/定妆_太虚门外门旧院_侧机位.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_left",
+              "source_path": "出图/共享/图片/定妆_太虚门外门旧院.png",
+              "source_sha256": "23ca08ab8d680814f5ce6f4f29a63d636e19d62f3b8f663ffdc2b8f29017fd30",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:04+00:00"
+            },
+            "alias_of": "side_left"
+          },
+          "right": {
+            "path": "出图/共享/图片/定妆_太虚门外门旧院_side_right.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_right",
+              "source_path": "出图/共享/图片/定妆_太虚门外门旧院.png",
+              "source_sha256": "23ca08ab8d680814f5ce6f4f29a63d636e19d62f3b8f663ffdc2b8f29017fd30",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:04+00:00"
+            },
+            "alias_of": "side_right"
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_太虚门外门旧院_反打.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "reverse",
+              "source_path": "出图/共享/图片/定妆_太虚门外门旧院.png",
+              "source_sha256": "23ca08ab8d680814f5ce6f4f29a63d636e19d62f3b8f663ffdc2b8f29017fd30",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:04+00:00"
+            },
+            "alias_of": "reverse"
           }
         },
         "fallback_policy": "先补同源 front + reverse/side 多机位板；未 ready 前不得生成引用该场景的分镜 PNG。"

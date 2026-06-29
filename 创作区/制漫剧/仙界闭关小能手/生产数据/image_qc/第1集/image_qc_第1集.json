@@ -2,13 +2,7 @@
   "asset_face_policy": {
     "available": true,
     "findings": [],
-    "notes": [
-      "资产 LOC_HOUSHAN_QIANTAN：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
-      "资产 PROP_HEI_TAO_PEN：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
-      "资产 PROP_SHUI_TONG：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
-      "资产 PROP_TIE_WAN：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
-      "资产 PROP_KEY_LOCK：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。"
-    ]
+    "notes": []
   },
   "asset_human_review": [],
   "asset_lifecycle": {
@@ -25,26 +19,174 @@
   },
   "checks": {
     "anchors": {
-      "anchors": [],
+      "anchors": [
+        {
+          "box_ratio": 0.004,
+          "char": "太虚门长老_回忆背影",
+          "faces": 1,
+          "verdict": "warn"
+        },
+        {
+          "box_ratio": 0.0035,
+          "char": "张老大",
+          "faces": 1,
+          "verdict": "warn"
+        },
+        {
+          "box_ratio": 0.0025,
+          "char": "江剑_背影",
+          "faces": 1,
+          "verdict": "warn"
+        },
+        {
+          "box_ratio": 0.0041,
+          "char": "群杂役_虚化",
+          "faces": 1,
+          "verdict": "warn"
+        },
+        {
+          "box_ratio": 0.0029,
+          "char": "贺三杰_回忆影",
+          "faces": 1,
+          "verdict": "warn"
+        },
+        {
+          "box_ratio": 0.0045,
+          "char": "贺平生",
+          "faces": 1,
+          "verdict": "warn"
+        },
+        {
+          "box_ratio": 0.0055,
+          "char": "贺平生_幼年",
+          "faces": 1,
+          "verdict": "warn"
+        },
+        {
+          "box_ratio": 0.0,
+          "char": "远景修士剪影",
+          "faces": 0,
+          "verdict": "block"
+        },
+        {
+          "box_ratio": 0.0037,
+          "char": "韩老三",
+          "faces": 1,
+          "verdict": "warn"
+        }
+      ],
       "available": true,
       "notes": []
     },
     "face": {
       "arbiter": null,
       "available": true,
-      "characters": {},
-      "encoder": "arcface_buffalo_l",
+      "characters": {
+        "太虚门长老_回忆背影": {
+          "floor": 0.5718,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 3
+        },
+        "张老大": {
+          "floor": 0.499,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 4
+        },
+        "江剑_背影": {
+          "floor": 0.251,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 3
+        },
+        "群杂役_虚化": {
+          "floor": 0.52,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 4
+        },
+        "贺三杰_回忆影": {
+          "floor": 0.3902,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 4
+        },
+        "贺平生": {
+          "floor": 0.3774,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 4
+        },
+        "贺平生_幼年": {
+          "floor": 0.4192,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 4
+        },
+        "远景修士剪影": {
+          "floor": 0.5,
+          "floor_calibrated": false,
+          "has_main": false,
+          "intra_pairs": 0
+        },
+        "韩老三": {
+          "floor": 0.5486,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 4
+        }
+      },
+      "encoder": "arcface_fallback",
       "fidelity_gate": "absent",
       "margin": 0.08,
       "mode": "insightface",
       "notes": [
+        "请求 styleid 但 StyleID 权重缺失（设 N2D_STYLEID_MODEL）——已回退 ArcFace；风格化脸下 ArcFace 余弦偏低，按低精度看待，崩脸仍需人判兜底。",
         "无 fidelity-gate（未跑 vlm_verify --write）——一致性均值可能被'稳定地错'的镜抬高；如需剔除崩 canonical 的镜，先跑 vlm_verify --write 落 canonical 通过表再复审。"
       ],
       "shots": []
     },
     "hair": {
       "available": true,
-      "characters": {},
+      "characters": {
+        "太虚门长老_回忆背影": {
+          "floor": 0.3271,
+          "intra_pairs": 6
+        },
+        "张老大": {
+          "floor": 0.5239,
+          "intra_pairs": 6
+        },
+        "江剑_背影": {
+          "floor": 0.811,
+          "intra_pairs": 6
+        },
+        "群杂役_虚化": {
+          "floor": 0.2772,
+          "intra_pairs": 6
+        },
+        "贺三杰_回忆影": {
+          "floor": 0.3696,
+          "intra_pairs": 6
+        },
+        "贺平生": {
+          "floor": 0.2496,
+          "intra_pairs": 6
+        },
+        "贺平生_幼年": {
+          "floor": 0.18,
+          "intra_pairs": 6
+        },
+        "远景修士剪影": {
+          "floor": 0.7865,
+          "intra_pairs": 6
+        },
+        "韩老三": {
+          "floor": 0.2812,
+          "intra_pairs": 6
+        }
+      },
       "margin": 0.08,
       "min_group": 3,
       "notes": [],
@@ -100,36 +242,53 @@
       "character_assets": [
         "贺平生",
         "CHAR_HE_PINGSHENG",
-        "贺平生_脸部特写.png', 'status': 'planned'}]",
+        "derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
+        "贺平生_三视图.png', 'status': 'ready'}",
+        "derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:57+00:00'}}]",
+        "贺平生_表情_警觉.png', 'status': 'ready', 'human_review': {'status': 'pass', 'reviewed_by': 'visual_inspection+registry_sync', 'reviewed_at': '2026-06-29T10:40:08+00:00', 'reason': 'same-form expression reference visually checked against locked face anchor'}, 'emotion': '警觉', 'self_check_passed': True, 'anchor_sha': '786686dfceefd47ffef266bc5f0e8c134a86cb420d287a792b11928a154d0bf4'}]",
+        "derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:57+00:00'}}",
         "贺平生_幼年",
-        "贺平生_幼年_脸部特写.png', 'status': 'planned'}]",
+        "贺平生_幼年_三视图.png', 'status': 'ready'}",
+        "贺平生_幼年_表情_警觉.png', 'status': 'ready', 'human_review': {'status': 'pass', 'reviewed_by': 'visual_inspection+registry_sync', 'reviewed_at': '2026-06-29T10:40:08+00:00', 'reason': 'same-form expression reference visually checked against locked face anchor'}, 'emotion': '警觉', 'self_check_passed': True, 'anchor_sha': '7a0ae17a898629431c7e3211e9ca576160046543f7d1a7cf3b33dd87a66a4cb0'}]",
         "张老大",
         "CHAR_ZHANG_LAODA",
-        "张老大_脸部特写.png', 'status': 'planned'}]",
+        "derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:58+00:00'}}",
+        "张老大_三视图.png', 'status': 'ready'}",
+        "derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:58+00:00'}}]",
         "韩老三",
         "CHAR_HAN_LAOSAN",
-        "韩老三_脸部特写.png', 'status': 'planned'}]",
+        "韩老三_三视图.png', 'status': 'ready'}",
         "江剑",
         "CHAR_JIANG_JIAN",
         "江剑_背影",
-        "江剑_侧背.png', 'status': 'planned'}]",
+        "derive_makeup_pack.py', 'generated_at': '2026-06-29T10:18:18+00:00'}}",
+        "江剑_背影_半身.png', 'status': 'planned'}",
+        "江剑_背影_三视图.png', 'status': 'ready', 'human_review': {'status': 'passed', 'reason': 'visual inspection passed for same-source turnaround derivation'}}",
+        "derive_makeup_pack.py', 'generated_at': '2026-06-29T10:18:18+00:00'}}]",
         "太虚门长老",
         "CHAR_TAIXUMEN_ZHANGLAO",
         "太虚门长老_回忆背影",
-        "太虚门长老_背影",
-        "太虚门长老_侧背.png', 'status': 'planned'}]",
+        "太虚门长老_回忆背影_半身.png', 'status': 'planned'}",
+        "太虚门长老_回忆背影_三视图.png', 'status': 'ready', 'human_review': {'status': 'passed', 'reason': 'visual inspection passed for same-source turnaround derivation'}}",
+        "derive_makeup_pack.py', 'generated_at': '2026-06-29T10:18:19+00:00'}}]",
         "贺三杰",
         "CHAR_HE_SANJIE",
         "贺三杰_回忆影",
-        "贺三杰_侧影.png', 'status': 'planned'}]",
+        "derive_makeup_pack.py', 'generated_at': '2026-06-29T10:18:19+00:00'}}",
+        "贺三杰_回忆影_半身.png', 'status': 'planned'}",
+        "贺三杰_回忆影_三视图.png', 'status': 'ready', 'human_review': {'status': 'passed', 'reason': 'visual inspection passed for same-source turnaround derivation'}}",
         "群杂役",
         "CROWD_ZAYI",
         "群杂役_虚化",
-        "群杂役_群像sheet.png', 'status': 'planned'}]",
+        "群杂役_虚化_半身.png', 'status': 'planned'}",
+        "群杂役_虚化_三视图.png', 'status': 'ready', 'human_review': {'status': 'passed', 'reason': 'visual inspection passed for same-source turnaround derivation'}}",
         "太虚门远景修士剪影",
         "CROWD_TAIXU_CULTIVATOR",
         "远景修士剪影",
-        "远景修士剪影_sheet.png', 'status': 'planned'}]"
+        "远景修士剪影_半身.png', 'status': 'planned'}",
+        "远景修士剪影_三视图.png', 'status': 'ready', 'human_review': {'status': 'passed', 'reason': 'visual inspection passed for same-source turnaround derivation'}}",
+        "derive_makeup_pack.py', 'generated_at': '2026-06-29T10:18:20+00:00'}}]",
+        "derive_makeup_pack.py', 'generated_at': '2026-06-29T10:18:20+00:00'}}"
       ],
       "embedding_backend": "rgb_hist+dhash",
       "episode": "第1集",
@@ -143,7 +302,44 @@
     },
     "outfit": {
       "available": true,
-      "characters": {},
+      "characters": {
+        "太虚门长老_回忆背影": {
+          "floor": 0.5803,
+          "intra_pairs": 6
+        },
+        "张老大": {
+          "floor": 0.556,
+          "intra_pairs": 6
+        },
+        "江剑_背影": {
+          "floor": 0.8616,
+          "intra_pairs": 6
+        },
+        "群杂役_虚化": {
+          "floor": 0.4792,
+          "intra_pairs": 6
+        },
+        "贺三杰_回忆影": {
+          "floor": 0.5774,
+          "intra_pairs": 6
+        },
+        "贺平生": {
+          "floor": 0.3603,
+          "intra_pairs": 6
+        },
+        "贺平生_幼年": {
+          "floor": 0.2739,
+          "intra_pairs": 6
+        },
+        "远景修士剪影": {
+          "floor": 0.8325,
+          "intra_pairs": 6
+        },
+        "韩老三": {
+          "floor": 0.3172,
+          "intra_pairs": 6
+        }
+      },
       "margin": 0.1,
       "min_group": 3,
       "notes": [],
@@ -179,8 +375,57 @@
   },
   "face_anchor_quality": {
     "available": true,
-    "checked": 0,
-    "findings": [],
+    "checked": 24,
+    "findings": [
+      {
+        "asset": "出图/共享/图片/定妆_江剑_背影_侧背.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_JIANG_JIAN/背影「侧背锚」（出图/共享/图片/定妆_江剑_背影_侧背.png）：脸占画面仅 3%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "asset": "出图/共享/图片/定妆_江剑_背影_侧背.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_JIANG_JIAN/背影「侧背锚」（出图/共享/图片/定妆_江剑_背影_侧背.png）：脸占画面仅 3%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "asset": "出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_TAIXUMEN_ZHANGLAO/回忆背影「背影锚」（出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "asset": "出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_TAIXUMEN_ZHANGLAO/回忆背影「背影锚」（出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "asset": "出图/共享/图片/定妆_贺三杰_回忆影_侧影.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_HE_SANJIE/回忆影「回忆侧影锚」（出图/共享/图片/定妆_贺三杰_回忆影_侧影.png）：脸占画面仅 5%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "asset": "出图/共享/图片/定妆_贺三杰_回忆影_侧影.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_HE_SANJIE/回忆影「回忆侧影锚」（出图/共享/图片/定妆_贺三杰_回忆影_侧影.png）：脸占画面仅 5%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "asset": "出图/共享/图片/定妆_群杂役_虚化_群像sheet.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CROWD_ZAYI/虚化「群像虚化锚」（出图/共享/图片/定妆_群杂役_虚化_群像sheet.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "asset": "出图/共享/图片/定妆_群杂役_虚化_群像sheet.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CROWD_ZAYI/虚化「群像虚化锚」（出图/共享/图片/定妆_群杂役_虚化_群像sheet.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      }
+    ],
     "notes": []
   },
   "face_human_review": [],
@@ -190,7 +435,143 @@
     "face_mode": "insightface",
     "missing": [],
     "notes": [],
-    "pending": [],
+    "pending": [
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "Clip 01 黑殿审问 🔑前3秒冲突",
+        "png": "出图/第1集/图片/Clip01_黑殿审问.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "Clip 01 黑殿审问 🔑前3秒冲突",
+        "png": "出图/第1集/图片/Clip01_黑殿审问_mid.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "Clip 01 黑殿审问 🔑前3秒冲突",
+        "png": "出图/第1集/图片/Clip01_黑殿审问_end.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态",
+          "CHAR_HE_PINGSHENG/幼年",
+          "CHAR_HE_SANJIE/回忆影",
+          "CHAR_JIANG_JIAN/背影"
+        ],
+        "label": "Clip 03 外门遗孤",
+        "png": "出图/第1集/图片/Clip03_外门遗孤.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态",
+          "CHAR_HE_PINGSHENG/幼年",
+          "CHAR_HE_SANJIE/回忆影",
+          "CHAR_JIANG_JIAN/背影"
+        ],
+        "label": "Clip 03 外门遗孤",
+        "png": "出图/第1集/图片/Clip03_外门遗孤_mid.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态",
+          "CHAR_HE_PINGSHENG/幼年",
+          "CHAR_HE_SANJIE/回忆影",
+          "CHAR_JIANG_JIAN/背影"
+        ],
+        "label": "Clip 03 外门遗孤",
+        "png": "出图/第1集/图片/Clip03_外门遗孤_end.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HAN_LAOSAN/常态",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "Clip 04 两缸水和空屋",
+        "png": "出图/第1集/图片/Clip04_两缸水和空屋.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HAN_LAOSAN/常态",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "Clip 04 两缸水和空屋",
+        "png": "出图/第1集/图片/Clip04_两缸水和空屋_mid.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HAN_LAOSAN/常态",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "Clip 04 两缸水和空屋",
+        "png": "出图/第1集/图片/Clip04_两缸水和空屋_end.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "Clip 05 夜挑五趟",
+        "png": "出图/第1集/图片/Clip05_夜挑五趟.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "Clip 05 夜挑五趟",
+        "png": "出图/第1集/图片/Clip05_夜挑五趟_mid.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "Clip 05 夜挑五趟",
+        "png": "出图/第1集/图片/Clip05_夜挑五趟_end.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "Clip 06 水底破盆 🔑核心机缘",
+        "png": "出图/第1集/图片/Clip06_水底破盆.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "Clip 06 水底破盆 🔑核心机缘",
+        "png": "出图/第1集/图片/Clip06_水底破盆_mid.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "Clip 06 水底破盆 🔑核心机缘",
+        "png": "出图/第1集/图片/Clip06_水底破盆_end.png",
+        "shot": "Clip_06"
+      }
+    ],
     "precision_level": "full",
     "required": 0,
     "unclassified": [],
@@ -198,72 +579,213 @@
   },
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "dac564d71bdf5a9e6f0a806e1db73c04afbe02364b27ee52612db9d6c3b088bc",
-      "出图/共享/identity_registry.json": "f6541c4233e4641e3da10154dcdbea5eecd0415b42029845e642771f14703617",
-      "出图/第1集/prompt/00_总览.md": "29c4df582a437e1b0d75a1ea1c7128074041962ae39ccc141f19af351d706f5a",
-      "出图/第1集/prompt/01_分镜出图.md": "2d346f58cdbcdde5dd698cdcba180038a8be3f752980b842dfd9e43b866d3e14",
+      "出图/共享/asset_registry.json": "3440ec8394fe03e41441c2d2688462ceb7ec844272b7bab483d0a9fbbeeff1a1",
+      "出图/共享/identity_registry.json": "fb9f00e648db725a320e9af1cb3b0b72e58c6b83ac5c7e1c108576738e0bd0d4",
+      "出图/第1集/prompt/00_总览.md": "f9dedfb50e728b4594c4d0ab927b56896cd8d9a10e724dcf308cab1a5b031698",
+      "出图/第1集/prompt/01_分镜出图.md": "4989b6f3579ecbf113c9e006cd6bf5025832a9f729936103aba1bbeb8e26e4c9",
+      "出图/第1集/图片/Clip01_黑殿审问.png": null,
+      "出图/第1集/图片/Clip01_黑殿审问_end.png": null,
+      "出图/第1集/图片/Clip01_黑殿审问_mid.png": null,
+      "出图/第1集/图片/Clip03_外门遗孤.png": null,
+      "出图/第1集/图片/Clip03_外门遗孤_end.png": null,
+      "出图/第1集/图片/Clip03_外门遗孤_mid.png": null,
+      "出图/第1集/图片/Clip04_两缸水和空屋.png": null,
+      "出图/第1集/图片/Clip04_两缸水和空屋_end.png": null,
+      "出图/第1集/图片/Clip04_两缸水和空屋_mid.png": null,
+      "出图/第1集/图片/Clip05_夜挑五趟.png": null,
+      "出图/第1集/图片/Clip05_夜挑五趟_end.png": null,
+      "出图/第1集/图片/Clip05_夜挑五趟_mid.png": null,
+      "出图/第1集/图片/Clip06_水底破盆.png": null,
+      "出图/第1集/图片/Clip06_水底破盆_end.png": null,
+      "出图/第1集/图片/Clip06_水底破盆_mid.png": null,
       "图片/Clip04_两缸水和空屋.png": null,
       "图片/Clip05_夜挑五趟.png": null,
       "图片/Clip06_水底破盆.png": null,
       "图片/Clip07_盆底微光.png": null,
       "生产数据/image_qc/第1集/prop_shape_confirmations.json": null
     },
-    "sha": "0e00ffab0fc65f21dbda8bfbaea1f0f59a8a06a37fa5508bad19002c7d3c8821"
+    "sha": "5fe3472f69c74173dba8abfe9e62af1e37735a0e3c178a447f6128c98b965e6b"
   },
   "kind": "n2d_image_qc",
   "lint": {
     "available": true,
-    "character_shots": [],
+    "character_shots": [
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "Clip 01 黑殿审问 🔑前3秒冲突",
+        "png": "出图/第1集/图片/Clip01_黑殿审问.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "Clip 01 黑殿审问 🔑前3秒冲突",
+        "png": "出图/第1集/图片/Clip01_黑殿审问_mid.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "Clip 01 黑殿审问 🔑前3秒冲突",
+        "png": "出图/第1集/图片/Clip01_黑殿审问_end.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态",
+          "CHAR_HE_PINGSHENG/幼年",
+          "CHAR_HE_SANJIE/回忆影",
+          "CHAR_JIANG_JIAN/背影"
+        ],
+        "label": "Clip 03 外门遗孤",
+        "png": "出图/第1集/图片/Clip03_外门遗孤.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态",
+          "CHAR_HE_PINGSHENG/幼年",
+          "CHAR_HE_SANJIE/回忆影",
+          "CHAR_JIANG_JIAN/背影"
+        ],
+        "label": "Clip 03 外门遗孤",
+        "png": "出图/第1集/图片/Clip03_外门遗孤_mid.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态",
+          "CHAR_HE_PINGSHENG/幼年",
+          "CHAR_HE_SANJIE/回忆影",
+          "CHAR_JIANG_JIAN/背影"
+        ],
+        "label": "Clip 03 外门遗孤",
+        "png": "出图/第1集/图片/Clip03_外门遗孤_end.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HAN_LAOSAN/常态",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "Clip 04 两缸水和空屋",
+        "png": "出图/第1集/图片/Clip04_两缸水和空屋.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HAN_LAOSAN/常态",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "Clip 04 两缸水和空屋",
+        "png": "出图/第1集/图片/Clip04_两缸水和空屋_mid.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HAN_LAOSAN/常态",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "Clip 04 两缸水和空屋",
+        "png": "出图/第1集/图片/Clip04_两缸水和空屋_end.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "Clip 05 夜挑五趟",
+        "png": "出图/第1集/图片/Clip05_夜挑五趟.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "Clip 05 夜挑五趟",
+        "png": "出图/第1集/图片/Clip05_夜挑五趟_mid.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "Clip 05 夜挑五趟",
+        "png": "出图/第1集/图片/Clip05_夜挑五趟_end.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "Clip 06 水底破盆 🔑核心机缘",
+        "png": "出图/第1集/图片/Clip06_水底破盆.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "Clip 06 水底破盆 🔑核心机缘",
+        "png": "出图/第1集/图片/Clip06_水底破盆_mid.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "Clip 06 水底破盆 🔑核心机缘",
+        "png": "出图/第1集/图片/Clip06_水底破盆_end.png",
+        "shot": "Clip_06"
+      }
+    ],
     "findings": [
       {
-        "code": "missing_physical_lens_params",
+        "code": "weak_face_anchor",
         "level": "warn",
-        "msg": "Clip_01 黑殿审问 🔑前3秒冲突：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+        "msg": "脸部锚弱信噪比 CHAR_JIANG_JIAN/背影「侧背锚」（出图/共享/图片/定妆_江剑_背影_侧背.png）：脸占画面仅 3%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
       },
       {
-        "code": "camera_gaze_portrait_bias",
+        "code": "weak_face_anchor",
         "level": "warn",
-        "msg": "Clip_01 黑殿审问 🔑前3秒冲突：本镜含清晰正脸肖像倾向却无视线防呆句——除非是 POV/对观众特写，角色不应正对镜头摆拍/对视；改可辨侧脸/过肩/三分之二，视线锁场内目标（对手/对话对象/所视之物）。"
+        "msg": "脸部锚弱信噪比 CHAR_JIANG_JIAN/背影「侧背锚」（出图/共享/图片/定妆_江剑_背影_侧背.png）：脸占画面仅 3%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
       },
       {
-        "code": "asset_must_not_have_not_propagated",
-        "level": "block",
-        "msg": "Clip_04 两缸水和空屋：资产 `PROP_KEY_LOCK` 在 asset_registry 登记了 must_not_have=['现代防盗锁', '金色宝物', '法器符文', '巨大链锁', '多套重复']，但本镜 prompt 未继承禁项 ['现代防盗锁', '金色宝物', '法器符文', '巨大链锁', '多套重复']；关键道具禁形必须写进负向/结构约束。"
-      },
-      {
-        "code": "asset_must_not_have_not_propagated",
-        "level": "block",
-        "msg": "Clip_04 两缸水和空屋：资产 `PROP_TIE_WAN` 在 asset_registry 登记了 must_not_have=['现代锁具', '金色宝物', '瓷碗', '多套重复']，但本镜 prompt 未继承禁项 ['现代锁具', '金色宝物', '瓷碗', '多套重复']；关键道具禁形必须写进负向/结构约束。"
-      },
-      {
-        "code": "asset_must_not_have_not_propagated",
-        "level": "block",
-        "msg": "Clip_05 夜挑五趟：资产 `PROP_SHUI_TONG` 在 asset_registry 登记了 must_not_have=['现代塑料桶', '金属水桶', '单只桶漂移', '华丽法器化']，但本镜 prompt 未继承禁项 ['现代塑料桶', '金属水桶', '单只桶漂移', '华丽法器化']；关键道具禁形必须写进负向/结构约束。"
-      },
-      {
-        "code": "asset_must_not_have_not_propagated",
-        "level": "block",
-        "msg": "Clip_06 水底破盆 🔑核心机缘：资产 `PROP_HEI_TAO_PEN` 在 asset_registry 登记了 must_not_have=['强光柱', '金边', '符文文字', '玉石质感', '现代塑料盆', '多盆重复']，但本镜 prompt 未继承禁项 ['强光柱', '符文文字', '玉石质感', '现代塑料盆', '多盆重复']；关键道具禁形必须写进负向/结构约束。"
-      },
-      {
-        "code": "asset_must_not_have_not_propagated",
-        "level": "block",
-        "msg": "Clip_06 水底破盆 🔑核心机缘：资产 `PROP_SHUI_TONG` 在 asset_registry 登记了 must_not_have=['现代塑料桶', '金属水桶', '单只桶漂移', '华丽法器化']，但本镜 prompt 未继承禁项 ['现代塑料桶', '金属水桶', '单只桶漂移', '华丽法器化']；关键道具禁形必须写进负向/结构约束。"
-      },
-      {
-        "code": "asset_must_not_have_not_propagated",
-        "level": "block",
-        "msg": "Clip_07 盆底微光 🔑集尾硬断：资产 `PROP_HEI_TAO_PEN` 在 asset_registry 登记了 must_not_have=['强光柱', '金边', '符文文字', '玉石质感', '现代塑料盆', '多盆重复']，但本镜 prompt 未继承禁项 ['玉石质感', '多盆重复']；关键道具禁形必须写进负向/结构约束。"
-      },
-      {
-        "code": "missing_physical_lens_params",
+        "code": "weak_face_anchor",
         "level": "warn",
-        "msg": "Clip_07 盆底微光 🔑集尾硬断：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+        "msg": "脸部锚弱信噪比 CHAR_TAIXUMEN_ZHANGLAO/回忆背影「背影锚」（出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
       },
       {
-        "code": "camera_gaze_portrait_bias",
+        "code": "weak_face_anchor",
         "level": "warn",
-        "msg": "Clip_07 盆底微光 🔑集尾硬断：本镜含清晰正脸肖像倾向却无视线防呆句——除非是 POV/对观众特写，角色不应正对镜头摆拍/对视；改可辨侧脸/过肩/三分之二，视线锁场内目标（对手/对话对象/所视之物）。"
+        "msg": "脸部锚弱信噪比 CHAR_TAIXUMEN_ZHANGLAO/回忆背影「背影锚」（出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_HE_SANJIE/回忆影「回忆侧影锚」（出图/共享/图片/定妆_贺三杰_回忆影_侧影.png）：脸占画面仅 5%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_HE_SANJIE/回忆影「回忆侧影锚」（出图/共享/图片/定妆_贺三杰_回忆影_侧影.png）：脸占画面仅 5%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CROWD_ZAYI/虚化「群像虚化锚」（出图/共享/图片/定妆_群杂役_虚化_群像sheet.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CROWD_ZAYI/虚化「群像虚化锚」（出图/共享/图片/定妆_群杂役_虚化_群像sheet.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
       }
     ],
     "notes": [],
@@ -288,11 +810,11 @@
         "asset_name": "旧钥匙与生锈铁锁",
         "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": false,
-        "label": "Clip_04 两缸水和空屋",
+        "label": "Clip 04 两缸水和空屋",
         "must_not_have": [
           "现代防盗锁",
           "金色宝物",
-          "法器符文",
+          "符文刻字",
           "巨大链锁",
           "多套重复"
         ],
@@ -310,11 +832,12 @@
         "asset_name": "铁碗/钥匙铁锁",
         "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": false,
-        "label": "Clip_04 两缸水和空屋",
+        "label": "Clip 04 两缸水和空屋",
         "must_not_have": [
           "现代锁具",
           "金色宝物",
           "瓷碗",
+          "异物化",
           "多套重复"
         ],
         "png": "图片/Clip04_两缸水和空屋.png",
@@ -331,12 +854,12 @@
         "asset_name": "水桶与扁担",
         "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": false,
-        "label": "Clip_05 夜挑五趟",
+        "label": "Clip 05 夜挑五趟",
         "must_not_have": [
           "现代塑料桶",
           "金属水桶",
           "单只桶漂移",
-          "华丽法器化"
+          "华丽异物化"
         ],
         "png": "图片/Clip05_夜挑五趟.png",
         "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_夜挑五趟.png",
@@ -352,7 +875,7 @@
         "asset_name": "黑陶破盆",
         "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": false,
-        "label": "Clip_06 水底破盆 🔑核心机缘",
+        "label": "Clip 06 水底破盆 🔑核心机缘",
         "must_not_have": [
           "强光柱",
           "金边",
@@ -375,12 +898,12 @@
         "asset_name": "水桶与扁担",
         "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": false,
-        "label": "Clip_06 水底破盆 🔑核心机缘",
+        "label": "Clip 06 水底破盆 🔑核心机缘",
         "must_not_have": [
           "现代塑料桶",
           "金属水桶",
           "单只桶漂移",
-          "华丽法器化"
+          "华丽异物化"
         ],
         "png": "图片/Clip06_水底破盆.png",
         "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆.png",
@@ -396,7 +919,7 @@
         "asset_name": "黑陶破盆",
         "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": false,
-        "label": "Clip_07 盆底微光 🔑集尾硬断",
+        "label": "Clip 07 盆底微光 🔑集尾硬断",
         "must_not_have": [
           "强光柱",
           "金边",
@@ -474,10 +997,10 @@
     }
   },
   "summary": {
-    "advisory": 4,
+    "advisory": 9,
     "by_check": {
       "anchors": {
-        "block": 0,
+        "block": 1,
         "noface": 0,
         "ok": 0,
         "warn": 0
@@ -495,10 +1018,10 @@
         "warn": 0
       },
       "lint": {
-        "block": 6,
+        "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 4
+        "warn": 8
       },
       "multimodal": {
         "block": 0,
@@ -538,7 +1061,7 @@
       }
     },
     "degraded": true,
-    "hard_blocks": 12,
+    "hard_blocks": 6,
     "unavailable_visual_checks": [
       "seam"
     ],
