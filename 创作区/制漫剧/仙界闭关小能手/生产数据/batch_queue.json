@@ -1,0 +1,70 @@
+{
+  "batches": [
+    [
+      "001-script_stage1-rerun"
+    ]
+  ],
+  "budget": {
+    "accepted_total": 0.2,
+    "blocked_tasks": 0,
+    "estimated_total": 0.2,
+    "limit": null,
+    "recomputed_at": "2026-06-29T13:11:23+00:00",
+    "scope": "ledger",
+    "unit": "mixed"
+  },
+  "coordination": {
+    "backend": "local_file",
+    "config_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/coordination_backend.json",
+    "external_adapter": false,
+    "lock_mode": "flock",
+    "lock_ttl_sec": 120.0,
+    "note": "local queue coordination; leases and reclaim provide crash recovery",
+    "status": "ok"
+  },
+  "generated_at": "2026-06-29T13:11:23+00:00",
+  "kind": "n2d_batch_queue",
+  "max_concurrency": 1,
+  "max_retries": 1,
+  "root": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+  "summary": {
+    "by_stage": {
+      "script_stage1": 1
+    },
+    "by_status": {
+      "queued": 1
+    },
+    "total": 1
+  },
+  "tasks": [
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "attempts": 0,
+      "coarse_fingerprints": [],
+      "command": "n2d-script /Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手 第1集",
+      "created_at": "2026-06-29T13:11:23+00:00",
+      "episode": "第1集",
+      "estimated_cost": {
+        "amount": 0.2,
+        "unit": "work_units"
+      },
+      "finding_fingerprints": [],
+      "gate_stage": null,
+      "history": [],
+      "id": "001-script_stage1-rerun",
+      "idempotency_key": "46782410f5933a8f",
+      "max_retries": 1,
+      "owner": "n2d-script",
+      "priority": 1,
+      "reason": "rerun",
+      "rerun_scope": "skill 更新后重制到 image·复用共享定妆库·只重出本集分镜帧",
+      "stage_key": "script_stage1",
+      "stage_label": "阶段1·剧本改编",
+      "status": "queued",
+      "updated_at": "2026-06-29T13:11:23+00:00"
+    }
+  ],
+  "updated_at": "2026-06-29T13:11:23+00:00",
+  "version": 1
+}

@@ -17,7 +17,7 @@ description: LoRA 训练/部署生命周期管理：为 n2d 核心长线角色�
 
 - **输入**：identity drift recommendations、角色 reference group、LoRA card/dataset/train job、`.safetensors` 和验证报告。
 - **输出**：`设定库/lora/<CHAR>/<形态>/` 下的 card/dataset/job/validation 产物，并在验证通过后回写 registry 的 lora binding。
-- **读写边界**：只管理 LoRA 生命周期；不直接训练云任务、不替 `n2d-image` 生成全集画面、不绕过验证注册 ready。
+- **读写边界**：只管理 LoRA 生命周期；不替 `n2d-image` 生成全集画面、不绕过验证注册 ready；本机训练只在运行时路由判定完整可用时启用。
 - **契约关系**：LoRA ready 三件套、dataset warning 放行条件、registry 字段和 `suggest` 数据源与 `skills/n2d/_lib/n2d_contract.py` / `n2d-identity` 保持同源。
 
 ## 硬规则
@@ -28,6 +28,7 @@ description: LoRA 训练/部署生命周期管理：为 n2d 核心长线角色�
 - **只给核心长线角色**：女主、主反派、长期高频出镜角色；短线配角和路人不训练。
 - **商用许可先记账**：商用项目必须在 `train_job.json` 留底模许可风险；许可未明不能当“可商用 ready”。
 - **验证不过不注册 ready**：没有 `validation_report.json` 或 verdict 不是 `pass`，不得把 registry lora 标成 `ready`。`register --force` 只允许记录人工覆盖为 `candidate` + `manual_override.reasons`，不能绕过验证制造 ready。
+- **运行时先路由**：每次准备 LoRA 训练/验证前先跑 `sdxl_local.py route`。只有本机 ComfyUI、conda/MPS、SDXL checkpoint、LoRA 训练入口和目标角色 dataset 都完整时，才优先走本机 LoRA 训练；否则不要阻塞产线，回到项目 `_设置.md` 的云端/主生图后端继续出图。
 - **LoRA 只跑 hero 镜**：不要整集切到开源链路，避免画风跳变和成本失控。
 - **LoRA hero 镜必须写例外范围**：LoRA 用在非项目主生图模型/渠道时，不得把它解释成“整集换生图模型”或绕过 `single_model_channel_per_project`。本集只允许在明确 hero shot 范围内使用，并写 `生产数据/lora_exception_scope_第N集.json`（kind=`n2d_lora_exception_scope`）：`clips`、`character_id/form`、`reason`、`project_image_model`、`lora_base_model`、`style_bridge`、`qc_required`、`not_a_project_model_switch=true`。缺 manifest 时，回 `n2d-image` 主链路或补例外范围，不能混用。
 
@@ -41,6 +42,7 @@ description: LoRA 训练/部署生命周期管理：为 n2d 核心长线角色�
 - “验证这个 safetensors”
 - “把沈念 LoRA 写回 registry”
 - “看看哪些角色该升档 LoRA”
+- “部署本机 SDXL / ComfyUI 验证链路”
 
 AI 内部按阶段跑：
 
@@ -54,6 +56,19 @@ python3 skills/n2d-lora/scripts/lora.py register <作品根> --character-id CHAR
 python3 skills/n2d-lora/scripts/lora.py exception-scope <作品根> 第N集 --character-id CHAR_XXX --form 常态 --clip Clip_03 --reason "<为什么只有这几个 hero 镜用 LoRA>" --project-image-model "<本剧主生图模型>" --lora-base-model "<LoRA底模>" --style-bridge "<如何贴回本剧风格/LUT/QC>"
 python3 skills/n2d-identity/scripts/identity.py <作品根> --write
 ```
+
+本机 SDXL / ComfyUI sidechain（只做 LoRA 验证与 hero 镜补强，不替代主生图后端）：
+
+```bash
+bash skills/n2d-lora/scripts/install_sdxl_comfy.sh
+python3 skills/n2d-lora/scripts/sdxl_local.py doctor
+python3 skills/n2d-lora/scripts/sdxl_local.py write-profile <作品根>
+python3 skills/n2d-lora/scripts/sdxl_local.py route <作品根> --character-id CHAR_XXX --form 常态 --write
+python3 skills/n2d-lora/scripts/sdxl_local.py workflow <作品根> 第N集 --clip Clip_03 --character-id CHAR_XXX --checkpoint "<sdxl.safetensors>" --lora "<char.safetensors>" --prompt "<hero shot prompt>"
+python3 skills/n2d-lora/scripts/sdxl_local.py record-output <作品根> 第N集 --clip Clip_03 --output "<输出PNG路径>" --lora-model "<char.safetensors>"
+```
+
+细节见 `references/local_sdxl_comfyui.md`。
 
 ## 工作流
 
@@ -90,7 +105,15 @@ python3 skills/n2d-lora/scripts/lora.py suggest <作品根>
 
 ### Stage 2：训练任务
 
-运行 `train-job`，生成 `train_job.json`。这是一份可审计的训练输入，后续可交 fal / RunPod / 手动训练执行。
+先运行本机/云端路由判定：
+
+```bash
+python3 skills/n2d-lora/scripts/sdxl_local.py route <作品根> --character-id CHAR_XXX --form 常态 --write
+```
+
+若 `生产数据/lora_runtime_route.json` 的 `decision.route=local_lora_training`，才优先使用本机 LoRA 训练命令（通过 `N2D_LORA_TRAIN_CMD` 或已安装训练脚本识别）。若为 `cloud_image_generation_fallback`，不要在本机硬训，也不要把 LoRA 缺口卡住整集出图；回到项目 `_设置.md` 的 `生图AI` / `生图模型`，让 `n2d-image` 主链路继续云端出图。
+
+运行 `train-job`，生成 `train_job.json`。这是一份可审计的训练输入，后续可交本机训练入口、fal / RunPod / 手动训练执行。
 
 本版不直接联网提交，避免把云账号、价格、许可和失败状态藏进不可追踪黑箱。
 

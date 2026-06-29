@@ -10,12 +10,12 @@
   ],
   "notes": [],
   "summary": {
-    "asset_targets": 28,
+    "asset_targets": 32,
     "character_targets": 72,
     "multi_subject_targets": 8,
-    "planned": 44,
-    "ready": 64,
-    "total": 108
+    "planned": 26,
+    "ready": 86,
+    "total": 112
   },
   "targets": [
     {
@@ -28,11 +28,11 @@
     },
     {
       "owner": "CHAR_HE_PINGSHENG/常态",
-      "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_常态_three_quarter.png",
+      "path": "出图/共享/图片/定妆_贺平生_45度.png",
       "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
       "scope": "character",
       "slot": "three_quarter",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_HE_PINGSHENG/常态",
@@ -52,11 +52,11 @@
     },
     {
       "owner": "CHAR_HE_PINGSHENG/常态",
-      "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_常态_half_body_or_full_body.png",
+      "path": "出图/共享/图片/定妆_贺平生_半身.png",
       "reason": "服装/体态参考，防止镜头内换身材或换衣。",
       "scope": "character",
       "slot": "half_body_or_full_body",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_HE_PINGSHENG/常态",
@@ -68,7 +68,7 @@
     },
     {
       "owner": "CHAR_HE_PINGSHENG/常态",
-      "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_常态_expression_bank.png",
+      "path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
       "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
       "scope": "character",
       "slot": "expression_bank",
@@ -92,11 +92,11 @@
     },
     {
       "owner": "CHAR_HE_PINGSHENG/幼年",
-      "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_幼年_three_quarter.png",
+      "path": "出图/共享/图片/定妆_贺平生_幼年_45度.png",
       "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
       "scope": "character",
       "slot": "three_quarter",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_HE_PINGSHENG/幼年",
@@ -116,11 +116,11 @@
     },
     {
       "owner": "CHAR_HE_PINGSHENG/幼年",
-      "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_幼年_half_body_or_full_body.png",
+      "path": "出图/共享/图片/定妆_贺平生_幼年_半身.png",
       "reason": "服装/体态参考，防止镜头内换身材或换衣。",
       "scope": "character",
       "slot": "half_body_or_full_body",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_HE_PINGSHENG/幼年",
@@ -132,7 +132,7 @@
     },
     {
       "owner": "CHAR_HE_PINGSHENG/幼年",
-      "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_幼年_expression_bank.png",
+      "path": "出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
       "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
       "scope": "character",
       "slot": "expression_bank",
@@ -156,11 +156,11 @@
     },
     {
       "owner": "CHAR_ZHANG_LAODA/常态",
-      "path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA_常态_three_quarter.png",
+      "path": "出图/共享/图片/定妆_张老大_45度.png",
       "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
       "scope": "character",
       "slot": "three_quarter",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_ZHANG_LAODA/常态",
@@ -180,11 +180,11 @@
     },
     {
       "owner": "CHAR_ZHANG_LAODA/常态",
-      "path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA_常态_half_body_or_full_body.png",
+      "path": "出图/共享/图片/定妆_张老大_半身.png",
       "reason": "服装/体态参考，防止镜头内换身材或换衣。",
       "scope": "character",
       "slot": "half_body_or_full_body",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_ZHANG_LAODA/常态",
@@ -220,11 +220,11 @@
     },
     {
       "owner": "CHAR_HAN_LAOSAN/常态",
-      "path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN_常态_three_quarter.png",
+      "path": "出图/共享/图片/定妆_韩老三_45度.png",
       "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
       "scope": "character",
       "slot": "three_quarter",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_HAN_LAOSAN/常态",
@@ -244,11 +244,11 @@
     },
     {
       "owner": "CHAR_HAN_LAOSAN/常态",
-      "path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN_常态_half_body_or_full_body.png",
+      "path": "出图/共享/图片/定妆_韩老三_半身.png",
       "reason": "服装/体态参考，防止镜头内换身材或换衣。",
       "scope": "character",
       "slot": "half_body_or_full_body",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_HAN_LAOSAN/常态",
@@ -276,7 +276,7 @@
     },
     {
       "owner": "CHAR_JIANG_JIAN/背影",
-      "path": "出图/共享/图片/定妆_江剑.png",
+      "path": "出图/共享/图片/定妆_江剑_背影.png",
       "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
       "scope": "character",
       "slot": "front",
@@ -284,15 +284,15 @@
     },
     {
       "owner": "CHAR_JIANG_JIAN/背影",
-      "path": "出图/共享/图片/定妆_CHAR_JIANG_JIAN_背影_three_quarter.png",
+      "path": "出图/共享/图片/定妆_江剑_背影_45度.png",
       "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
       "scope": "character",
       "slot": "three_quarter",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_JIANG_JIAN/背影",
-      "path": "出图/共享/图片/定妆_江剑_侧.png",
+      "path": "出图/共享/图片/定妆_江剑_背影_侧.png",
       "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
       "scope": "character",
       "slot": "side",
@@ -300,7 +300,7 @@
     },
     {
       "owner": "CHAR_JIANG_JIAN/背影",
-      "path": "出图/共享/图片/定妆_江剑_背影.png",
+      "path": "出图/共享/图片/定妆_江剑_背影_背.png",
       "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
       "scope": "character",
       "slot": "back",
@@ -308,15 +308,15 @@
     },
     {
       "owner": "CHAR_JIANG_JIAN/背影",
-      "path": "出图/共享/图片/定妆_CHAR_JIANG_JIAN_背影_half_body_or_full_body.png",
+      "path": "出图/共享/图片/定妆_江剑_背影_半身.png",
       "reason": "服装/体态参考，防止镜头内换身材或换衣。",
       "scope": "character",
       "slot": "half_body_or_full_body",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_JIANG_JIAN/背影",
-      "path": "出图/共享/图片/定妆_江剑_侧背.png",
+      "path": "出图/共享/图片/定妆_江剑_背影_侧背.png",
       "reason": "脸部特写锚，近景/反打/表情镜必用。",
       "scope": "character",
       "slot": "face_anchor_refs",
@@ -340,7 +340,7 @@
     },
     {
       "owner": "CHAR_TAIXUMEN_ZHANGLAO/回忆背影",
-      "path": "出图/共享/图片/定妆_太虚门长老.png",
+      "path": "出图/共享/图片/定妆_太虚门长老_回忆背影.png",
       "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
       "scope": "character",
       "slot": "front",
@@ -348,15 +348,15 @@
     },
     {
       "owner": "CHAR_TAIXUMEN_ZHANGLAO/回忆背影",
-      "path": "出图/共享/图片/定妆_CHAR_TAIXUMEN_ZHANGLAO_回忆背影_three_quarter.png",
+      "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_45度.png",
       "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
       "scope": "character",
       "slot": "three_quarter",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_TAIXUMEN_ZHANGLAO/回忆背影",
-      "path": "出图/共享/图片/定妆_太虚门长老_侧.png",
+      "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_侧.png",
       "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
       "scope": "character",
       "slot": "side",
@@ -364,7 +364,7 @@
     },
     {
       "owner": "CHAR_TAIXUMEN_ZHANGLAO/回忆背影",
-      "path": "出图/共享/图片/定妆_太虚门长老_背影.png",
+      "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_背.png",
       "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
       "scope": "character",
       "slot": "back",
@@ -372,15 +372,15 @@
     },
     {
       "owner": "CHAR_TAIXUMEN_ZHANGLAO/回忆背影",
-      "path": "出图/共享/图片/定妆_CHAR_TAIXUMEN_ZHANGLAO_回忆背影_half_body_or_full_body.png",
+      "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_半身.png",
       "reason": "服装/体态参考，防止镜头内换身材或换衣。",
       "scope": "character",
       "slot": "half_body_or_full_body",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_TAIXUMEN_ZHANGLAO/回忆背影",
-      "path": "出图/共享/图片/定妆_太虚门长老_侧背.png",
+      "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png",
       "reason": "脸部特写锚，近景/反打/表情镜必用。",
       "scope": "character",
       "slot": "face_anchor_refs",
@@ -404,7 +404,7 @@
     },
     {
       "owner": "CHAR_HE_SANJIE/回忆影",
-      "path": "出图/共享/图片/定妆_贺三杰.png",
+      "path": "出图/共享/图片/定妆_贺三杰_回忆影.png",
       "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
       "scope": "character",
       "slot": "front",
@@ -412,15 +412,15 @@
     },
     {
       "owner": "CHAR_HE_SANJIE/回忆影",
-      "path": "出图/共享/图片/定妆_CHAR_HE_SANJIE_回忆影_three_quarter.png",
+      "path": "出图/共享/图片/定妆_贺三杰_回忆影_45度.png",
       "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
       "scope": "character",
       "slot": "three_quarter",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_HE_SANJIE/回忆影",
-      "path": "出图/共享/图片/定妆_贺三杰_侧.png",
+      "path": "出图/共享/图片/定妆_贺三杰_回忆影_侧.png",
       "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
       "scope": "character",
       "slot": "side",
@@ -428,7 +428,7 @@
     },
     {
       "owner": "CHAR_HE_SANJIE/回忆影",
-      "path": "出图/共享/图片/定妆_贺三杰_回忆影.png",
+      "path": "出图/共享/图片/定妆_贺三杰_回忆影_背.png",
       "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
       "scope": "character",
       "slot": "back",
@@ -436,15 +436,15 @@
     },
     {
       "owner": "CHAR_HE_SANJIE/回忆影",
-      "path": "出图/共享/图片/定妆_CHAR_HE_SANJIE_回忆影_half_body_or_full_body.png",
+      "path": "出图/共享/图片/定妆_贺三杰_回忆影_半身.png",
       "reason": "服装/体态参考，防止镜头内换身材或换衣。",
       "scope": "character",
       "slot": "half_body_or_full_body",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_HE_SANJIE/回忆影",
-      "path": "出图/共享/图片/定妆_贺三杰_侧影.png",
+      "path": "出图/共享/图片/定妆_贺三杰_回忆影_侧影.png",
       "reason": "脸部特写锚，近景/反打/表情镜必用。",
       "scope": "character",
       "slot": "face_anchor_refs",
@@ -476,15 +476,15 @@
     },
     {
       "owner": "CROWD_ZAYI/虚化",
-      "path": "出图/共享/图片/定妆_CROWD_ZAYI_虚化_three_quarter.png",
+      "path": "出图/共享/图片/定妆_群杂役_虚化_45度.png",
       "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
       "scope": "character",
       "slot": "three_quarter",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CROWD_ZAYI/虚化",
-      "path": "出图/共享/图片/定妆_群杂役_侧.png",
+      "path": "出图/共享/图片/定妆_群杂役_虚化_侧.png",
       "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
       "scope": "character",
       "slot": "side",
@@ -492,7 +492,7 @@
     },
     {
       "owner": "CROWD_ZAYI/虚化",
-      "path": "出图/共享/图片/定妆_群杂役_背.png",
+      "path": "出图/共享/图片/定妆_群杂役_虚化_背.png",
       "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
       "scope": "character",
       "slot": "back",
@@ -500,15 +500,15 @@
     },
     {
       "owner": "CROWD_ZAYI/虚化",
-      "path": "出图/共享/图片/定妆_CROWD_ZAYI_虚化_half_body_or_full_body.png",
+      "path": "出图/共享/图片/定妆_群杂役_虚化_半身.png",
       "reason": "服装/体态参考，防止镜头内换身材或换衣。",
       "scope": "character",
       "slot": "half_body_or_full_body",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CROWD_ZAYI/虚化",
-      "path": "出图/共享/图片/定妆_群杂役_群像sheet.png",
+      "path": "出图/共享/图片/定妆_群杂役_虚化_群像sheet.png",
       "reason": "脸部特写锚，近景/反打/表情镜必用。",
       "scope": "character",
       "slot": "face_anchor_refs",
@@ -540,11 +540,11 @@
     },
     {
       "owner": "CROWD_TAIXU_CULTIVATOR/远景剪影",
-      "path": "出图/共享/图片/定妆_CROWD_TAIXU_CULTIVATOR_远景剪影_three_quarter.png",
+      "path": "出图/共享/图片/定妆_远景修士剪影_45度.png",
       "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
       "scope": "character",
       "slot": "three_quarter",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CROWD_TAIXU_CULTIVATOR/远景剪影",
@@ -564,11 +564,11 @@
     },
     {
       "owner": "CROWD_TAIXU_CULTIVATOR/远景剪影",
-      "path": "出图/共享/图片/定妆_CROWD_TAIXU_CULTIVATOR_远景剪影_half_body_or_full_body.png",
+      "path": "出图/共享/图片/定妆_远景修士剪影_半身.png",
       "reason": "服装/体态参考，防止镜头内换身材或换衣。",
       "scope": "character",
       "slot": "half_body_or_full_body",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CROWD_TAIXU_CULTIVATOR/远景剪影",
@@ -627,6 +627,14 @@
       "status": "ready"
     },
     {
+      "owner": "LOC_ZAYI_DADIAN",
+      "path": "出图/共享/图片/定妆_秀竹峰杂役大殿_反打.png",
+      "reason": "scene_atlas reverse 视角：锁同一空间换机位的一致性。",
+      "scope": "asset",
+      "slot": "base_view_reverse",
+      "status": "ready"
+    },
+    {
       "owner": "LOC_ZAYI_YUAN",
       "path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
@@ -659,6 +667,14 @@
       "status": "ready"
     },
     {
+      "owner": "LOC_ZAYI_YUAN",
+      "path": "出图/共享/图片/定妆_秀竹峰杂役院_反打.png",
+      "reason": "scene_atlas reverse 视角：锁同一空间换机位的一致性。",
+      "scope": "asset",
+      "slot": "base_view_reverse",
+      "status": "ready"
+    },
+    {
       "owner": "LOC_HOUSHAN_QIANTAN",
       "path": "出图/共享/图片/定妆_后山山泉浅潭.png",
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
@@ -691,6 +707,14 @@
       "status": "ready"
     },
     {
+      "owner": "LOC_HOUSHAN_QIANTAN",
+      "path": "出图/共享/图片/定妆_后山山泉浅潭_反打.png",
+      "reason": "scene_atlas reverse 视角：锁同一空间换机位的一致性。",
+      "scope": "asset",
+      "slot": "base_view_reverse",
+      "status": "ready"
+    },
+    {
       "owner": "LOC_WAIMEN_JIUYUAN",
       "path": "出图/共享/图片/定妆_太虚门外门旧院.png",
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
@@ -720,6 +744,14 @@
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
       "scope": "asset",
       "slot": "lighting_plate",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_WAIMEN_JIUYUAN",
+      "path": "出图/共享/图片/定妆_太虚门外门旧院_反打.png",
+      "reason": "scene_atlas reverse 视角：锁同一空间换机位的一致性。",
+      "scope": "asset",
+      "slot": "base_view_reverse",
       "status": "ready"
     },
     {

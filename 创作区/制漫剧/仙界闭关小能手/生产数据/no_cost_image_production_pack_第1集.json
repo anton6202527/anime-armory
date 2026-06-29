@@ -69,7 +69,7 @@
       {
         "kind": "reference_anchor",
         "owner": "CHAR_HE_PINGSHENG/常态",
-        "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_常态_expression_bank.png",
+        "path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
         "slot": "expression_bank"
       },
       {
@@ -81,7 +81,7 @@
       {
         "kind": "reference_anchor",
         "owner": "CHAR_HE_PINGSHENG/幼年",
-        "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_幼年_expression_bank.png",
+        "path": "出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
         "slot": "expression_bank"
       },
       {
@@ -272,7 +272,7 @@
   ],
   "reference_generation_queue": [
     {
-      "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_常态_expression_bank.png",
+      "output_path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": "P0",
       "prompt_recipe": {
@@ -312,7 +312,7 @@
       "task_id": "REF_008"
     },
     {
-      "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_幼年_expression_bank.png",
+      "output_path": "出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
       "owner": "CHAR_HE_PINGSHENG/幼年",
       "priority": "P0",
       "prompt_recipe": {
@@ -649,7 +649,7 @@
       "recipe_hash": "746b36fcdfd65cec",
       "scope": "multi_subject",
       "slot": "regional_construct_plate",
-      "task_id": "REF_101"
+      "task_id": "REF_105"
     },
     {
       "output_path": "出图/第1集/区域构建/EP01_CLIP01/masks.json",
@@ -669,7 +669,7 @@
       "recipe_hash": "fdf6039fed4a664f",
       "scope": "multi_subject",
       "slot": "region_masks",
-      "task_id": "REF_102"
+      "task_id": "REF_106"
     },
     {
       "output_path": "出图/第1集/区域构建/EP01_CLIP02/empty_plate.png",
@@ -689,7 +689,7 @@
       "recipe_hash": "5d68f8a2c93b5047",
       "scope": "multi_subject",
       "slot": "regional_construct_plate",
-      "task_id": "REF_103"
+      "task_id": "REF_107"
     },
     {
       "output_path": "出图/第1集/区域构建/EP01_CLIP02/masks.json",
@@ -709,7 +709,7 @@
       "recipe_hash": "ef9e513aeeecd37c",
       "scope": "multi_subject",
       "slot": "region_masks",
-      "task_id": "REF_104"
+      "task_id": "REF_108"
     },
     {
       "output_path": "出图/第1集/区域构建/EP01_CLIP03/empty_plate.png",
@@ -729,7 +729,7 @@
       "recipe_hash": "b0632ff3e4d774f0",
       "scope": "multi_subject",
       "slot": "regional_construct_plate",
-      "task_id": "REF_105"
+      "task_id": "REF_109"
     },
     {
       "output_path": "出图/第1集/区域构建/EP01_CLIP03/masks.json",
@@ -749,7 +749,7 @@
       "recipe_hash": "cb4e0deadf3b207b",
       "scope": "multi_subject",
       "slot": "region_masks",
-      "task_id": "REF_106"
+      "task_id": "REF_110"
     },
     {
       "output_path": "出图/第1集/区域构建/EP01_CLIP04/empty_plate.png",
@@ -769,7 +769,7 @@
       "recipe_hash": "5ae43c5eb376050c",
       "scope": "multi_subject",
       "slot": "regional_construct_plate",
-      "task_id": "REF_107"
+      "task_id": "REF_111"
     },
     {
       "output_path": "出图/第1集/区域构建/EP01_CLIP04/masks.json",
@@ -789,367 +789,7 @@
       "recipe_hash": "66220ee3a8a6f724",
       "scope": "multi_subject",
       "slot": "region_masks",
-      "task_id": "REF_108"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_常态_three_quarter.png",
-      "owner": "CHAR_HE_PINGSHENG/常态",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_HE_PINGSHENG/常态",
-        "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-        "slot": "three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "2dc125ce78b4bee9",
-      "scope": "character",
-      "slot": "three_quarter",
-      "task_id": "REF_002"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_常态_half_body_or_full_body.png",
-      "owner": "CHAR_HE_PINGSHENG/常态",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_HE_PINGSHENG/常态",
-        "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-        "slot": "half_body_or_full_body",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "9084143b6c7d0056",
-      "scope": "character",
-      "slot": "half_body_or_full_body",
-      "task_id": "REF_005"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_幼年_three_quarter.png",
-      "owner": "CHAR_HE_PINGSHENG/幼年",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_HE_PINGSHENG/幼年",
-        "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-        "slot": "three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "3040b28cac45eb47",
-      "scope": "character",
-      "slot": "three_quarter",
-      "task_id": "REF_010"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_幼年_half_body_or_full_body.png",
-      "owner": "CHAR_HE_PINGSHENG/幼年",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_HE_PINGSHENG/幼年",
-        "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-        "slot": "half_body_or_full_body",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "5f385421b42fcf1b",
-      "scope": "character",
-      "slot": "half_body_or_full_body",
-      "task_id": "REF_013"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA_常态_three_quarter.png",
-      "owner": "CHAR_ZHANG_LAODA/常态",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_ZHANG_LAODA/常态",
-        "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-        "slot": "three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "889a9875e1c365d3",
-      "scope": "character",
-      "slot": "three_quarter",
-      "task_id": "REF_018"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA_常态_half_body_or_full_body.png",
-      "owner": "CHAR_ZHANG_LAODA/常态",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_ZHANG_LAODA/常态",
-        "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-        "slot": "half_body_or_full_body",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "25324f2865701194",
-      "scope": "character",
-      "slot": "half_body_or_full_body",
-      "task_id": "REF_021"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN_常态_three_quarter.png",
-      "owner": "CHAR_HAN_LAOSAN/常态",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_HAN_LAOSAN/常态",
-        "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-        "slot": "three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "e0c26580c40bb427",
-      "scope": "character",
-      "slot": "three_quarter",
-      "task_id": "REF_026"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN_常态_half_body_or_full_body.png",
-      "owner": "CHAR_HAN_LAOSAN/常态",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_HAN_LAOSAN/常态",
-        "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-        "slot": "half_body_or_full_body",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "e74b657209e335bc",
-      "scope": "character",
-      "slot": "half_body_or_full_body",
-      "task_id": "REF_029"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_JIANG_JIAN_背影_three_quarter.png",
-      "owner": "CHAR_JIANG_JIAN/背影",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_JIANG_JIAN/背影",
-        "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-        "slot": "three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "9e8912228d7e955c",
-      "scope": "character",
-      "slot": "three_quarter",
-      "task_id": "REF_034"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_JIANG_JIAN_背影_half_body_or_full_body.png",
-      "owner": "CHAR_JIANG_JIAN/背影",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_JIANG_JIAN/背影",
-        "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-        "slot": "half_body_or_full_body",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "85b5297ec0628dab",
-      "scope": "character",
-      "slot": "half_body_or_full_body",
-      "task_id": "REF_037"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_TAIXUMEN_ZHANGLAO_回忆背影_three_quarter.png",
-      "owner": "CHAR_TAIXUMEN_ZHANGLAO/回忆背影",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_TAIXUMEN_ZHANGLAO/回忆背影",
-        "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-        "slot": "three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "40e43011584167d2",
-      "scope": "character",
-      "slot": "three_quarter",
-      "task_id": "REF_042"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_TAIXUMEN_ZHANGLAO_回忆背影_half_body_or_full_body.png",
-      "owner": "CHAR_TAIXUMEN_ZHANGLAO/回忆背影",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_TAIXUMEN_ZHANGLAO/回忆背影",
-        "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-        "slot": "half_body_or_full_body",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "2583b98e8ca064e3",
-      "scope": "character",
-      "slot": "half_body_or_full_body",
-      "task_id": "REF_045"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_HE_SANJIE_回忆影_three_quarter.png",
-      "owner": "CHAR_HE_SANJIE/回忆影",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_HE_SANJIE/回忆影",
-        "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-        "slot": "three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "dc160340216cac3c",
-      "scope": "character",
-      "slot": "three_quarter",
-      "task_id": "REF_050"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_HE_SANJIE_回忆影_half_body_or_full_body.png",
-      "owner": "CHAR_HE_SANJIE/回忆影",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_HE_SANJIE/回忆影",
-        "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-        "slot": "half_body_or_full_body",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "5917d306cbc79e39",
-      "scope": "character",
-      "slot": "half_body_or_full_body",
-      "task_id": "REF_053"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CROWD_ZAYI_虚化_three_quarter.png",
-      "owner": "CROWD_ZAYI/虚化",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CROWD_ZAYI/虚化",
-        "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-        "slot": "three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "e01a35faec59be8e",
-      "scope": "character",
-      "slot": "three_quarter",
-      "task_id": "REF_058"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CROWD_ZAYI_虚化_half_body_or_full_body.png",
-      "owner": "CROWD_ZAYI/虚化",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CROWD_ZAYI/虚化",
-        "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-        "slot": "half_body_or_full_body",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "a99194a0f76ebc0d",
-      "scope": "character",
-      "slot": "half_body_or_full_body",
-      "task_id": "REF_061"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CROWD_TAIXU_CULTIVATOR_远景剪影_three_quarter.png",
-      "owner": "CROWD_TAIXU_CULTIVATOR/远景剪影",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CROWD_TAIXU_CULTIVATOR/远景剪影",
-        "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-        "slot": "three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "789238b269b5b01d",
-      "scope": "character",
-      "slot": "three_quarter",
-      "task_id": "REF_066"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CROWD_TAIXU_CULTIVATOR_远景剪影_half_body_or_full_body.png",
-      "owner": "CROWD_TAIXU_CULTIVATOR/远景剪影",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CROWD_TAIXU_CULTIVATOR/远景剪影",
-        "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-        "slot": "half_body_or_full_body",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "579877fc871745ae",
-      "scope": "character",
-      "slot": "half_body_or_full_body",
-      "task_id": "REF_069"
+      "task_id": "REF_112"
     }
   ],
   "regional_construct_manifests": [
@@ -1356,7 +996,7 @@
       "recipe_hash": "93aed01ad5b3fc56",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_常态_expression_bank.png",
+          "output_path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
           "owner": "CHAR_HE_PINGSHENG/常态",
           "priority": "P0",
           "prompt_recipe": {
@@ -1396,27 +1036,7 @@
           "task_id": "REF_008"
         },
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_常态_three_quarter.png",
-          "owner": "CHAR_HE_PINGSHENG/常态",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CHAR_HE_PINGSHENG/常态",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "2dc125ce78b4bee9",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_002"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_幼年_expression_bank.png",
+          "output_path": "出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
           "owner": "CHAR_HE_PINGSHENG/幼年",
           "priority": "P0",
           "prompt_recipe": {
@@ -1454,26 +1074,6 @@
           "scope": "character",
           "slot": "action_pose_pack",
           "task_id": "REF_016"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_幼年_three_quarter.png",
-          "owner": "CHAR_HE_PINGSHENG/幼年",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CHAR_HE_PINGSHENG/幼年",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "3040b28cac45eb47",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_010"
         },
         {
           "output_path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA_常态_expression_bank.png",
@@ -1516,26 +1116,6 @@
           "task_id": "REF_024"
         },
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA_常态_three_quarter.png",
-          "owner": "CHAR_ZHANG_LAODA/常态",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CHAR_ZHANG_LAODA/常态",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "889a9875e1c365d3",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_018"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_CROWD_ZAYI_虚化_expression_bank.png",
           "owner": "CROWD_ZAYI/虚化",
           "priority": "P0",
@@ -1574,26 +1154,6 @@
           "scope": "character",
           "slot": "action_pose_pack",
           "task_id": "REF_064"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_CROWD_ZAYI_虚化_three_quarter.png",
-          "owner": "CROWD_ZAYI/虚化",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CROWD_ZAYI/虚化",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "e01a35faec59be8e",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_058"
         }
       ],
       "regional_construct": {
@@ -1678,7 +1238,7 @@
       "recipe_hash": "f58d8172d9064817",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_常态_expression_bank.png",
+          "output_path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
           "owner": "CHAR_HE_PINGSHENG/常态",
           "priority": "P0",
           "prompt_recipe": {
@@ -1718,27 +1278,7 @@
           "task_id": "REF_008"
         },
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_常态_three_quarter.png",
-          "owner": "CHAR_HE_PINGSHENG/常态",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CHAR_HE_PINGSHENG/常态",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "2dc125ce78b4bee9",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_002"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_幼年_expression_bank.png",
+          "output_path": "出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
           "owner": "CHAR_HE_PINGSHENG/幼年",
           "priority": "P0",
           "prompt_recipe": {
@@ -1776,26 +1316,6 @@
           "scope": "character",
           "slot": "action_pose_pack",
           "task_id": "REF_016"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_幼年_three_quarter.png",
-          "owner": "CHAR_HE_PINGSHENG/幼年",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CHAR_HE_PINGSHENG/幼年",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "3040b28cac45eb47",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_010"
         },
         {
           "output_path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA_常态_expression_bank.png",
@@ -1838,26 +1358,6 @@
           "task_id": "REF_024"
         },
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA_常态_three_quarter.png",
-          "owner": "CHAR_ZHANG_LAODA/常态",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CHAR_ZHANG_LAODA/常态",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "889a9875e1c365d3",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_018"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_CHAR_TAIXUMEN_ZHANGLAO_回忆背影_expression_bank.png",
           "owner": "CHAR_TAIXUMEN_ZHANGLAO/回忆背影",
           "priority": "P0",
@@ -1896,26 +1396,6 @@
           "scope": "character",
           "slot": "action_pose_pack",
           "task_id": "REF_048"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_CHAR_TAIXUMEN_ZHANGLAO_回忆背影_three_quarter.png",
-          "owner": "CHAR_TAIXUMEN_ZHANGLAO/回忆背影",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CHAR_TAIXUMEN_ZHANGLAO/回忆背影",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "40e43011584167d2",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_042"
         }
       ],
       "regional_construct": {
@@ -2000,7 +1480,7 @@
       "recipe_hash": "64c68aa38acae9da",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_常态_expression_bank.png",
+          "output_path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
           "owner": "CHAR_HE_PINGSHENG/常态",
           "priority": "P0",
           "prompt_recipe": {
@@ -2040,27 +1520,7 @@
           "task_id": "REF_008"
         },
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_常态_three_quarter.png",
-          "owner": "CHAR_HE_PINGSHENG/常态",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CHAR_HE_PINGSHENG/常态",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "2dc125ce78b4bee9",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_002"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_幼年_expression_bank.png",
+          "output_path": "出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
           "owner": "CHAR_HE_PINGSHENG/幼年",
           "priority": "P0",
           "prompt_recipe": {
@@ -2098,26 +1558,6 @@
           "scope": "character",
           "slot": "action_pose_pack",
           "task_id": "REF_016"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_幼年_three_quarter.png",
-          "owner": "CHAR_HE_PINGSHENG/幼年",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CHAR_HE_PINGSHENG/幼年",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "3040b28cac45eb47",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_010"
         },
         {
           "output_path": "出图/共享/图片/定妆_CHAR_JIANG_JIAN_背影_expression_bank.png",
@@ -2160,26 +1600,6 @@
           "task_id": "REF_040"
         },
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_JIANG_JIAN_背影_three_quarter.png",
-          "owner": "CHAR_JIANG_JIAN/背影",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CHAR_JIANG_JIAN/背影",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "9e8912228d7e955c",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_034"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_CHAR_HE_SANJIE_回忆影_expression_bank.png",
           "owner": "CHAR_HE_SANJIE/回忆影",
           "priority": "P0",
@@ -2220,26 +1640,6 @@
           "task_id": "REF_056"
         },
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_SANJIE_回忆影_three_quarter.png",
-          "owner": "CHAR_HE_SANJIE/回忆影",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CHAR_HE_SANJIE/回忆影",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "dc160340216cac3c",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_050"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_CROWD_TAIXU_CULTIVATOR_远景剪影_expression_bank.png",
           "owner": "CROWD_TAIXU_CULTIVATOR/远景剪影",
           "priority": "P0",
@@ -2278,26 +1678,6 @@
           "scope": "character",
           "slot": "action_pose_pack",
           "task_id": "REF_072"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_CROWD_TAIXU_CULTIVATOR_远景剪影_three_quarter.png",
-          "owner": "CROWD_TAIXU_CULTIVATOR/远景剪影",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CROWD_TAIXU_CULTIVATOR/远景剪影",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "789238b269b5b01d",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_066"
         }
       ],
       "regional_construct": {
@@ -2390,7 +1770,7 @@
       "recipe_hash": "f5ddc8e06c055006",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_常态_expression_bank.png",
+          "output_path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
           "owner": "CHAR_HE_PINGSHENG/常态",
           "priority": "P0",
           "prompt_recipe": {
@@ -2430,27 +1810,7 @@
           "task_id": "REF_008"
         },
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_常态_three_quarter.png",
-          "owner": "CHAR_HE_PINGSHENG/常态",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CHAR_HE_PINGSHENG/常态",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "2dc125ce78b4bee9",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_002"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_幼年_expression_bank.png",
+          "output_path": "出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
           "owner": "CHAR_HE_PINGSHENG/幼年",
           "priority": "P0",
           "prompt_recipe": {
@@ -2488,26 +1848,6 @@
           "scope": "character",
           "slot": "action_pose_pack",
           "task_id": "REF_016"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_幼年_three_quarter.png",
-          "owner": "CHAR_HE_PINGSHENG/幼年",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CHAR_HE_PINGSHENG/幼年",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "3040b28cac45eb47",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_010"
         },
         {
           "output_path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN_常态_expression_bank.png",
@@ -2548,26 +1888,6 @@
           "scope": "character",
           "slot": "action_pose_pack",
           "task_id": "REF_032"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN_常态_three_quarter.png",
-          "owner": "CHAR_HAN_LAOSAN/常态",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CHAR_HAN_LAOSAN/常态",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "e0c26580c40bb427",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_026"
         }
       ],
       "regional_construct": {
@@ -2644,7 +1964,7 @@
       "recipe_hash": "740cf11eaf675df9",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_常态_expression_bank.png",
+          "output_path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
           "owner": "CHAR_HE_PINGSHENG/常态",
           "priority": "P0",
           "prompt_recipe": {
@@ -2684,27 +2004,7 @@
           "task_id": "REF_008"
         },
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_常态_three_quarter.png",
-          "owner": "CHAR_HE_PINGSHENG/常态",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CHAR_HE_PINGSHENG/常态",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "2dc125ce78b4bee9",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_002"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_幼年_expression_bank.png",
+          "output_path": "出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
           "owner": "CHAR_HE_PINGSHENG/幼年",
           "priority": "P0",
           "prompt_recipe": {
@@ -2742,26 +2042,6 @@
           "scope": "character",
           "slot": "action_pose_pack",
           "task_id": "REF_016"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_幼年_three_quarter.png",
-          "owner": "CHAR_HE_PINGSHENG/幼年",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CHAR_HE_PINGSHENG/幼年",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "3040b28cac45eb47",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_010"
         }
       ],
       "regional_construct": null,
@@ -2805,7 +2085,7 @@
       "recipe_hash": "8f38e8e161e1648f",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_常态_expression_bank.png",
+          "output_path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
           "owner": "CHAR_HE_PINGSHENG/常态",
           "priority": "P0",
           "prompt_recipe": {
@@ -2845,27 +2125,7 @@
           "task_id": "REF_008"
         },
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_常态_three_quarter.png",
-          "owner": "CHAR_HE_PINGSHENG/常态",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CHAR_HE_PINGSHENG/常态",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "2dc125ce78b4bee9",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_002"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_幼年_expression_bank.png",
+          "output_path": "出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
           "owner": "CHAR_HE_PINGSHENG/幼年",
           "priority": "P0",
           "prompt_recipe": {
@@ -2903,26 +2163,6 @@
           "scope": "character",
           "slot": "action_pose_pack",
           "task_id": "REF_016"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_幼年_three_quarter.png",
-          "owner": "CHAR_HE_PINGSHENG/幼年",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CHAR_HE_PINGSHENG/幼年",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "3040b28cac45eb47",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_010"
         }
       ],
       "regional_construct": null,
@@ -2965,7 +2205,7 @@
       "recipe_hash": "95365107e3907077",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_常态_expression_bank.png",
+          "output_path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
           "owner": "CHAR_HE_PINGSHENG/常态",
           "priority": "P0",
           "prompt_recipe": {
@@ -3005,27 +2245,7 @@
           "task_id": "REF_008"
         },
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_常态_three_quarter.png",
-          "owner": "CHAR_HE_PINGSHENG/常态",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CHAR_HE_PINGSHENG/常态",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "2dc125ce78b4bee9",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_002"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_幼年_expression_bank.png",
+          "output_path": "出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
           "owner": "CHAR_HE_PINGSHENG/幼年",
           "priority": "P0",
           "prompt_recipe": {
@@ -3063,26 +2283,6 @@
           "scope": "character",
           "slot": "action_pose_pack",
           "task_id": "REF_016"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG_幼年_three_quarter.png",
-          "owner": "CHAR_HE_PINGSHENG/幼年",
-          "priority": "P2",
-          "prompt_recipe": {
-            "owner": "CHAR_HE_PINGSHENG/幼年",
-            "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-            "slot": "three_quarter",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "3040b28cac45eb47",
-          "scope": "character",
-          "slot": "three_quarter",
-          "task_id": "REF_010"
         }
       ],
       "regional_construct": null,
@@ -3096,7 +2296,7 @@
   "summary": {
     "clips": 7,
     "keyshot_candidate_tasks": 7,
-    "reference_generation_tasks": 44,
+    "reference_generation_tasks": 26,
     "regional_construct_manifests": 4,
     "shot_packages": 7
   },

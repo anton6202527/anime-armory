@@ -1049,7 +1049,7 @@ def reference_bundle_for_target(root: Path, episode: str, target: Target) -> Dic
             if reference_policy in FACE_MOOD_ONLY_POLICIES:
                 reference_group = form.get("reference_group") if isinstance(form.get("reference_group"), dict) else {}
                 reference_atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), dict) else {}
-                for key in CHARACTER_SHARED_FACE_FIELDS:
+                for key in CHARACTER_SHARED_CORE_FIELDS + CHARACTER_SHARED_FACE_FIELDS:
                     _collect_ready_image_paths(reference_group.get(key), root, paths, seen)
                     _collect_ready_image_paths(reference_atlas.get(key), root, paths, seen)
             else:

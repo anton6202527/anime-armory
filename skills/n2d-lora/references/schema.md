@@ -13,6 +13,12 @@
 └── <CHAR_ID>_<形态>_v1.safetensors
 ```
 
+作品级运行路由会写：
+
+```text
+创作区/制漫剧/<剧名>/生产数据/lora_runtime_route.json
+```
+
 ## `lora_card.json`
 
 记录角色、形态、触发词、底模、许可和策略：
@@ -57,6 +63,16 @@
 - `warnings`
 
 这份文件可以交给人或后续云适配器执行。商用项目若使用许可不清的底模，必须留 warning。
+
+## `lora_runtime_route.json`
+
+每次准备 LoRA 训练/验证前，由 `sdxl_local.py route --write` 生成。关键字段：
+
+- `decision.route`: `local_lora_training | cloud_image_generation_fallback`
+- `decision.use_local_lora_training`: 本机训练链是否完整可用。
+- `decision.fallback_image_backend`: 本机不完整时，回到 `_设置.md` 的项目主/云端生图后端。
+- `local_training.missing_requirements`: 本机链路缺口，例如 `lora_trainer_missing`、`sdxl_checkpoint_missing`、`dataset_manifest_missing`。
+- `policy.not_a_project_model_switch`: 永远为 `true`，避免把 LoRA sidechain 误解释成整集切换主生图模型。
 
 ## `validation_report.json`
 

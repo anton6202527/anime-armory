@@ -37,39 +37,39 @@
 
 | 镜头 | 角色/形态 | 档位 | 变化量 | 推荐参考 | 喂法 | 预算 | 控制网 | 补拍缺口 | 升档 |
 |---|---|---|---|---|---|---|---|---|---|
-| EP01_CLIP01 | CHAR_HE_PINGSHENG/常态 | multi_reference | closeup、extreme_angle:face_too_small、multi_character | front(0.8)<br>face_anchor(0.7)<br>outfit(0.5)<br>turnaround(0.5)<br>side(0.55)<br>back(0.5) | 分图分标 | 6/不限 | pose、depth | 45°/three_quarter 基础角度参考（所有角色/形态强制 ready）<br>脸部特写主参考 | ✅需升档 |
-| EP01_CLIP01 | CHAR_ZHANG_LAODA/常态 | multi_reference | closeup、extreme_angle:face_too_small、multi_character | front(0.8)<br>face_anchor(0.7)<br>outfit(0.5)<br>turnaround(0.5) | 分图分标 | 4/不限 | pose、depth | 45°/three_quarter 基础角度参考（所有角色/形态强制 ready）<br>脸部特写主参考 | - |
-| EP01_CLIP01 | CROWD_ZAYI/虚化 | multi_reference | closeup、multi_character | front(0.8)<br>face_anchor(0.7)<br>outfit(0.5) | 分图分标 | 3/不限 | pose、depth | 45°/three_quarter 基础角度参考（所有角色/形态强制 ready）<br>脸部特写主参考 | - |
-| EP01_CLIP02 | CHAR_HE_PINGSHENG/常态 | multi_reference | closeup、multi_character | front(0.8)<br>face_anchor(0.7)<br>outfit(0.5)<br>side(0.55)<br>back(0.5) | 分图分标 | 5/不限 | pose、depth | 45°/three_quarter 基础角度参考（所有角色/形态强制 ready）<br>脸部特写主参考 | ✅需升档 |
-| EP01_CLIP02 | CHAR_ZHANG_LAODA/常态 | multi_reference | closeup、multi_character | front(0.8)<br>face_anchor(0.7)<br>outfit(0.5) | 分图分标 | 3/不限 | pose、depth | 45°/three_quarter 基础角度参考（所有角色/形态强制 ready）<br>脸部特写主参考 | - |
-| EP01_CLIP02 | CHAR_TAIXUMEN_ZHANGLAO/回忆背影 | multi_reference | closeup、multi_character | front(0.8)<br>face_anchor(0.7)<br>outfit(0.5) | 分图分标 | 3/不限 | pose、depth | 45°/three_quarter 基础角度参考（所有角色/形态强制 ready）<br>脸部特写主参考 | - |
-| EP01_CLIP03 | CHAR_HE_PINGSHENG/常态 | multi_reference | closeup、extreme_angle:face_too_small、extreme_angle:deep_shadow、multi_character | front(0.8)<br>face_anchor(0.7)<br>outfit(0.5)<br>turnaround(0.5)<br>side(0.55)<br>back(0.5) | 分图分标 | 6/不限 | pose、depth | 45°/three_quarter 基础角度参考（所有角色/形态强制 ready）<br>脸部特写主参考 | ✅需升档 |
-| EP01_CLIP03 | CHAR_JIANG_JIAN/背影 | multi_reference | closeup、extreme_angle:face_too_small、multi_character | front(0.8)<br>face_anchor(0.7)<br>outfit(0.5)<br>turnaround(0.5) | 分图分标 | 4/不限 | pose、depth | 45°/three_quarter 基础角度参考（所有角色/形态强制 ready）<br>脸部特写主参考 | - |
-| EP01_CLIP03 | CHAR_HE_SANJIE/回忆影 | multi_reference | closeup、multi_character | front(0.8)<br>face_anchor(0.7)<br>outfit(0.5) | 分图分标 | 3/不限 | pose、depth | 45°/three_quarter 基础角度参考（所有角色/形态强制 ready）<br>脸部特写主参考 | - |
-| EP01_CLIP03 | CROWD_TAIXU_CULTIVATOR/远景剪影 | multi_reference | closeup、multi_character | front(0.8)<br>face_anchor(0.7)<br>outfit(0.5) | 分图分标 | 3/不限 | pose、depth | 45°/three_quarter 基础角度参考（所有角色/形态强制 ready）<br>脸部特写主参考 | - |
-| EP01_CLIP04 | CHAR_HE_PINGSHENG/常态 | multi_reference | closeup、extreme_angle:extreme_low、extreme_angle:face_too_small、multi_character | front(0.8)<br>face_anchor(0.7)<br>outfit(0.5)<br>turnaround(0.5)<br>side(0.55)<br>back(0.5) | 分图分标 | 6/不限 | pose、depth | 45°/three_quarter 基础角度参考（所有角色/形态强制 ready）<br>脸部特写主参考 | ✅需升档 |
-| EP01_CLIP04 | CHAR_HAN_LAOSAN/常态 | multi_reference | closeup、extreme_angle:face_too_small、multi_character | front(0.8)<br>face_anchor(0.7)<br>outfit(0.5)<br>turnaround(0.5) | 分图分标 | 4/不限 | pose、depth | 45°/three_quarter 基础角度参考（所有角色/形态强制 ready）<br>脸部特写主参考 | - |
-| EP01_CLIP05 | CHAR_HE_PINGSHENG/常态 | multi_reference | closeup | front(0.8)<br>face_anchor(0.7)<br>outfit(0.5)<br>side(0.55)<br>back(0.5) | 分图分标 | 5/不限 | - | 45°/three_quarter 基础角度参考（所有角色/形态强制 ready）<br>脸部特写主参考 | ✅需升档 |
-| EP01_CLIP06 | CHAR_HE_PINGSHENG/常态 | multi_reference | closeup | front(0.8)<br>face_anchor(0.7)<br>outfit(0.5)<br>side(0.55)<br>back(0.5) | 分图分标 | 5/不限 | - | 45°/three_quarter 基础角度参考（所有角色/形态强制 ready）<br>脸部特写主参考 | ✅需升档 |
-| EP01_CLIP07 | CHAR_HE_PINGSHENG/常态 | multi_reference | closeup | front(0.8)<br>face_anchor(0.7)<br>outfit(0.5)<br>side(0.55)<br>back(0.5) | 分图分标 | 5/不限 | - | 45°/three_quarter 基础角度参考（所有角色/形态强制 ready）<br>脸部特写主参考 | ✅需升档 |
+| EP01_CLIP01 | CHAR_HE_PINGSHENG/常态 | multi_reference | closeup、extreme_angle:face_too_small、multi_character | front(0.8)<br>three_quarter(0.65)<br>face_anchor(0.7)<br>outfit(0.5)<br>expression(0.6)<br>expression(0.6)<br>expression(0.6)<br>turnaround(0.5)<br>side(0.55)<br>back(0.5) | 分图分标 | 10/不限 | pose、depth | - | ✅需升档 |
+| EP01_CLIP01 | CHAR_ZHANG_LAODA/常态 | multi_reference | closeup、extreme_angle:face_too_small、multi_character | front(0.8)<br>three_quarter(0.65)<br>face_anchor(0.7)<br>outfit(0.5)<br>turnaround(0.5) | 分图分标 | 5/不限 | pose、depth | 脸部特写主参考 | - |
+| EP01_CLIP01 | CROWD_ZAYI/虚化 | multi_reference | closeup、multi_character | front(0.8)<br>three_quarter(0.65)<br>face_anchor(0.7)<br>outfit(0.5) | 分图分标 | 4/不限 | pose、depth | 脸部特写主参考 | - |
+| EP01_CLIP02 | CHAR_HE_PINGSHENG/常态 | multi_reference | closeup、multi_character | front(0.8)<br>three_quarter(0.65)<br>face_anchor(0.7)<br>outfit(0.5)<br>expression(0.6)<br>expression(0.6)<br>expression(0.6)<br>side(0.55)<br>back(0.5) | 分图分标 | 9/不限 | pose、depth | - | ✅需升档 |
+| EP01_CLIP02 | CHAR_ZHANG_LAODA/常态 | multi_reference | closeup、multi_character | front(0.8)<br>three_quarter(0.65)<br>face_anchor(0.7)<br>outfit(0.5) | 分图分标 | 4/不限 | pose、depth | 脸部特写主参考 | - |
+| EP01_CLIP02 | CHAR_TAIXUMEN_ZHANGLAO/回忆背影 | multi_reference | closeup、multi_character | front(0.8)<br>three_quarter(0.65)<br>face_anchor(0.7)<br>outfit(0.5) | 分图分标 | 4/不限 | pose、depth | 脸部特写主参考 | - |
+| EP01_CLIP03 | CHAR_HE_PINGSHENG/常态 | multi_reference | closeup、extreme_angle:face_too_small、extreme_angle:deep_shadow、multi_character | front(0.8)<br>three_quarter(0.65)<br>face_anchor(0.7)<br>outfit(0.5)<br>expression(0.6)<br>expression(0.6)<br>expression(0.6)<br>turnaround(0.5)<br>side(0.55)<br>back(0.5) | 分图分标 | 10/不限 | pose、depth | - | ✅需升档 |
+| EP01_CLIP03 | CHAR_JIANG_JIAN/背影 | multi_reference | closeup、extreme_angle:face_too_small、multi_character | front(0.8)<br>three_quarter(0.65)<br>face_anchor(0.7)<br>outfit(0.5)<br>turnaround(0.5) | 分图分标 | 5/不限 | pose、depth | 脸部特写主参考 | - |
+| EP01_CLIP03 | CHAR_HE_SANJIE/回忆影 | multi_reference | closeup、multi_character | front(0.8)<br>three_quarter(0.65)<br>face_anchor(0.7)<br>outfit(0.5) | 分图分标 | 4/不限 | pose、depth | 脸部特写主参考 | - |
+| EP01_CLIP03 | CROWD_TAIXU_CULTIVATOR/远景剪影 | multi_reference | closeup、multi_character | front(0.8)<br>three_quarter(0.65)<br>face_anchor(0.7)<br>outfit(0.5) | 分图分标 | 4/不限 | pose、depth | 脸部特写主参考 | - |
+| EP01_CLIP04 | CHAR_HE_PINGSHENG/常态 | multi_reference | closeup、extreme_angle:extreme_low、extreme_angle:face_too_small、multi_character | front(0.8)<br>three_quarter(0.65)<br>face_anchor(0.7)<br>outfit(0.5)<br>expression(0.6)<br>expression(0.6)<br>expression(0.6)<br>turnaround(0.5)<br>side(0.55)<br>back(0.5) | 分图分标 | 10/不限 | pose、depth | - | ✅需升档 |
+| EP01_CLIP04 | CHAR_HAN_LAOSAN/常态 | multi_reference | closeup、extreme_angle:face_too_small、multi_character | front(0.8)<br>three_quarter(0.65)<br>face_anchor(0.7)<br>outfit(0.5)<br>turnaround(0.5) | 分图分标 | 5/不限 | pose、depth | 脸部特写主参考 | - |
+| EP01_CLIP05 | CHAR_HE_PINGSHENG/常态 | multi_reference | closeup | front(0.8)<br>three_quarter(0.65)<br>face_anchor(0.7)<br>outfit(0.5)<br>expression(0.6)<br>expression(0.6)<br>expression(0.6)<br>side(0.55)<br>back(0.5) | 分图分标 | 9/不限 | - | - | ✅需升档 |
+| EP01_CLIP06 | CHAR_HE_PINGSHENG/常态 | multi_reference | closeup | front(0.8)<br>three_quarter(0.65)<br>face_anchor(0.7)<br>outfit(0.5)<br>expression(0.6)<br>expression(0.6)<br>expression(0.6)<br>side(0.55)<br>back(0.5) | 分图分标 | 9/不限 | - | - | ✅需升档 |
+| EP01_CLIP07 | CHAR_HE_PINGSHENG/常态 | multi_reference | closeup | front(0.8)<br>three_quarter(0.65)<br>face_anchor(0.7)<br>outfit(0.5)<br>expression(0.6)<br>expression(0.6)<br>expression(0.6)<br>side(0.55)<br>back(0.5) | 分图分标 | 9/不限 | - | - | ✅需升档 |
 
 ## 行动项（人审后落进 prompt）
-- [EP01_CLIP01] CHAR_HE_PINGSHENG/常态：补拍：45°/three_quarter 基础角度参考（所有角色/形态强制 ready）；脸部特写主参考 ｜ 弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`
-- [EP01_CLIP01] CHAR_ZHANG_LAODA/常态：补拍：45°/three_quarter 基础角度参考（所有角色/形态强制 ready）；脸部特写主参考
-- [EP01_CLIP01] CROWD_ZAYI/虚化：补拍：45°/three_quarter 基础角度参考（所有角色/形态强制 ready）；脸部特写主参考
+- [EP01_CLIP01] CHAR_HE_PINGSHENG/常态：弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`
+- [EP01_CLIP01] CHAR_ZHANG_LAODA/常态：补拍：脸部特写主参考
+- [EP01_CLIP01] CROWD_ZAYI/虚化：补拍：脸部特写主参考
 - [EP01_CLIP01] 多人同框：regional_construct_required；角色槽位=CHAR_HE_PINGSHENG/常态、CHAR_ZHANG_LAODA/常态、CROWD_ZAYI/虚化；必填=多人同框身份槽位、多人同框执行策略、screen_positions/blocking、逐主体参考绑定、primary 星标 CHAR_xx*、区分锚点（互斥发色/服装主色/配饰）、空场景底板 empty_plate、区域遮罩/region masks、统一 relighting/color match、相对身量/身高比例（relative_scale）；无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。
-- [EP01_CLIP02] CHAR_HE_PINGSHENG/常态：补拍：45°/three_quarter 基础角度参考（所有角色/形态强制 ready）；脸部特写主参考 ｜ 弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`
-- [EP01_CLIP02] CHAR_ZHANG_LAODA/常态：补拍：45°/three_quarter 基础角度参考（所有角色/形态强制 ready）；脸部特写主参考
-- [EP01_CLIP02] CHAR_TAIXUMEN_ZHANGLAO/回忆背影：补拍：45°/three_quarter 基础角度参考（所有角色/形态强制 ready）；脸部特写主参考
+- [EP01_CLIP02] CHAR_HE_PINGSHENG/常态：弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`
+- [EP01_CLIP02] CHAR_ZHANG_LAODA/常态：补拍：脸部特写主参考
+- [EP01_CLIP02] CHAR_TAIXUMEN_ZHANGLAO/回忆背影：补拍：脸部特写主参考
 - [EP01_CLIP02] 多人同框：regional_construct_required；角色槽位=CHAR_HE_PINGSHENG/常态、CHAR_ZHANG_LAODA/常态、CHAR_TAIXUMEN_ZHANGLAO/回忆背影；必填=多人同框身份槽位、多人同框执行策略、screen_positions/blocking、逐主体参考绑定、primary 星标 CHAR_xx*、区分锚点（互斥发色/服装主色/配饰）、空场景底板 empty_plate、区域遮罩/region masks、统一 relighting/color match、相对身量/身高比例（relative_scale）；无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。
-- [EP01_CLIP03] CHAR_HE_PINGSHENG/常态：补拍：45°/three_quarter 基础角度参考（所有角色/形态强制 ready）；脸部特写主参考 ｜ 弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`
-- [EP01_CLIP03] CHAR_JIANG_JIAN/背影：补拍：45°/three_quarter 基础角度参考（所有角色/形态强制 ready）；脸部特写主参考
-- [EP01_CLIP03] CHAR_HE_SANJIE/回忆影：补拍：45°/three_quarter 基础角度参考（所有角色/形态强制 ready）；脸部特写主参考
-- [EP01_CLIP03] CROWD_TAIXU_CULTIVATOR/远景剪影：补拍：45°/three_quarter 基础角度参考（所有角色/形态强制 ready）；脸部特写主参考
+- [EP01_CLIP03] CHAR_HE_PINGSHENG/常态：弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`
+- [EP01_CLIP03] CHAR_JIANG_JIAN/背影：补拍：脸部特写主参考
+- [EP01_CLIP03] CHAR_HE_SANJIE/回忆影：补拍：脸部特写主参考
+- [EP01_CLIP03] CROWD_TAIXU_CULTIVATOR/远景剪影：补拍：脸部特写主参考
 - [EP01_CLIP03] 多人同框：regional_construct_required；角色槽位=CHAR_HE_PINGSHENG/常态、CHAR_JIANG_JIAN/背影、CHAR_HE_SANJIE/回忆影、CROWD_TAIXU_CULTIVATOR/远景剪影；必填=多人同框身份槽位、多人同框执行策略、screen_positions/blocking、逐主体参考绑定、primary 星标 CHAR_xx*、区分锚点（互斥发色/服装主色/配饰）、空场景底板 empty_plate、区域遮罩/region masks、统一 relighting/color match、相对身量/身高比例（relative_scale）；无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。
-- [EP01_CLIP04] CHAR_HE_PINGSHENG/常态：补拍：45°/three_quarter 基础角度参考（所有角色/形态强制 ready）；脸部特写主参考 ｜ 弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`
-- [EP01_CLIP04] CHAR_HAN_LAOSAN/常态：补拍：45°/three_quarter 基础角度参考（所有角色/形态强制 ready）；脸部特写主参考
+- [EP01_CLIP04] CHAR_HE_PINGSHENG/常态：弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`
+- [EP01_CLIP04] CHAR_HAN_LAOSAN/常态：补拍：脸部特写主参考
 - [EP01_CLIP04] 多人同框：regional_construct_required；角色槽位=CHAR_HE_PINGSHENG/常态、CHAR_HAN_LAOSAN/常态；必填=多人同框身份槽位、多人同框执行策略、screen_positions/blocking、逐主体参考绑定、primary 星标 CHAR_xx*、区分锚点（互斥发色/服装主色/配饰）、空场景底板 empty_plate、区域遮罩/region masks、统一 relighting/color match、相对身量/身高比例（relative_scale）；无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。
-- [EP01_CLIP05] CHAR_HE_PINGSHENG/常态：补拍：45°/three_quarter 基础角度参考（所有角色/形态强制 ready）；脸部特写主参考 ｜ 弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`
-- [EP01_CLIP06] CHAR_HE_PINGSHENG/常态：补拍：45°/three_quarter 基础角度参考（所有角色/形态强制 ready）；脸部特写主参考 ｜ 弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`
-- [EP01_CLIP07] CHAR_HE_PINGSHENG/常态：补拍：45°/three_quarter 基础角度参考（所有角色/形态强制 ready）；脸部特写主参考 ｜ 弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`
+- [EP01_CLIP05] CHAR_HE_PINGSHENG/常态：弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`
+- [EP01_CLIP06] CHAR_HE_PINGSHENG/常态：弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`
+- [EP01_CLIP07] CHAR_HE_PINGSHENG/常态：弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`

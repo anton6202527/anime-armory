@@ -89,7 +89,7 @@
           "intra_pairs": 3
         },
         "张老大": {
-          "floor": 0.499,
+          "floor": 0.4988,
           "floor_calibrated": true,
           "has_main": true,
           "intra_pairs": 4
@@ -101,7 +101,7 @@
           "intra_pairs": 3
         },
         "群杂役_虚化": {
-          "floor": 0.52,
+          "floor": 0.5203,
           "floor_calibrated": true,
           "has_main": true,
           "intra_pairs": 4
@@ -113,13 +113,15 @@
           "intra_pairs": 4
         },
         "贺平生": {
-          "floor": 0.3774,
+          "ep_mean_score": 0.4327,
+          "ep_n_shots": 13,
+          "floor": 0.3775,
           "floor_calibrated": true,
           "has_main": true,
           "intra_pairs": 4
         },
         "贺平生_幼年": {
-          "floor": 0.4192,
+          "floor": 0.4193,
           "floor_calibrated": true,
           "has_main": true,
           "intra_pairs": 4
@@ -145,7 +147,148 @@
         "请求 styleid 但 StyleID 权重缺失（设 N2D_STYLEID_MODEL）——已回退 ArcFace；风格化脸下 ArcFace 余弦偏低，按低精度看待，崩脸仍需人判兜底。",
         "无 fidelity-gate（未跑 vlm_verify --write）——一致性均值可能被'稳定地错'的镜抬高；如需剔除崩 canonical 的镜，先跑 vlm_verify --write 落 canonical 通过表再复审。"
       ],
-      "shots": []
+      "shots": [
+        {
+          "char": "贺平生",
+          "face_idx": 1,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip01_黑殿审问.png",
+          "score": 0.5247,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "face_idx": 1,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip01_黑殿审问_end.png",
+          "score": 0.462,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "贺平生",
+          "face_idx": 1,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip01_黑殿审问_mid.png",
+          "score": 0.4859,
+          "score_vs_main": 0.4738,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "face_idx": 1,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip02_挑水命令.png",
+          "score": 0.5713,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "face_idx": 1,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip02_挑水命令_end.png",
+          "score": 0.4196,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "face_idx": 1,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip02_挑水命令_mid.png",
+          "score": 0.5417,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip03_外门遗孤.png",
+          "score": 0.5346,
+          "score_vs_main": 0.5144,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip03_外门遗孤_end.png",
+          "score": 0.5482,
+          "score_vs_main": 0.4212,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip03_外门遗孤_mid.png",
+          "score": 0.485,
+          "score_vs_main": 0.4842,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "贺平生",
+          "face_idx": 1,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_两缸水和空屋.png",
+          "score": 0.3054,
+          "score_vs_main": 0.2142,
+          "verdict": "warn"
+        },
+        {
+          "chars": [
+            "贺平生"
+          ],
+          "png": "图片/Clip04_两缸水和空屋_end.png",
+          "verdict": "noface"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "贺平生",
+          "face_idx": 1,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_两缸水和空屋_mid.png",
+          "score": 0.2418,
+          "score_vs_main": 0.2307,
+          "verdict": "block"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip05_夜挑五趟.png",
+          "score": 0.5163,
+          "score_vs_main": 0.3769,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip05_夜挑五趟_mid.png",
+          "score": 0.5084,
+          "score_vs_main": 0.3903,
+          "verdict": "ok"
+        }
+      ]
     },
     "hair": {
       "available": true,
@@ -191,7 +334,106 @@
       "min_group": 3,
       "notes": [],
       "rel_margin": 0.15,
-      "shots": []
+      "shots": [
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip01_黑殿审问.png",
+          "score": 0.3862,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip01_黑殿审问_end.png",
+          "score": 0.4074,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip01_黑殿审问_mid.png",
+          "score": 0.4461,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip02_挑水命令.png",
+          "score": 0.4646,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip02_挑水命令_end.png",
+          "score": 0.6252,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip02_挑水命令_mid.png",
+          "score": 0.5313,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip03_外门遗孤.png",
+          "score": 0.8218,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip03_外门遗孤_end.png",
+          "score": 0.5746,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip03_外门遗孤_mid.png",
+          "score": 0.7043,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip04_两缸水和空屋.png",
+          "score": 0.1357,
+          "verdict": "block"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip04_两缸水和空屋_end.png",
+          "score": 0.2952,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip04_两缸水和空屋_mid.png",
+          "score": 0.2986,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip05_夜挑五趟.png",
+          "score": 0.4346,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip05_夜挑五趟_mid.png",
+          "score": 0.4334,
+          "verdict": "ok"
+        }
+      ]
     },
     "multimodal": {
       "asset_ref_source": "asset_registry",
@@ -292,10 +534,39 @@
       ],
       "embedding_backend": "rgb_hist+dhash",
       "episode": "第1集",
-      "groups": {},
+      "groups": {
+        "LOC_HOUSHAN_QIANTAN": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "LOC_WAIMEN_JIUYUAN": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "LOC_ZAYI_DADIAN": {
+          "shots": 2,
+          "skipped": "组<3镜"
+        },
+        "LOC_ZAYI_YUAN": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "PROP_KEY_LOCK": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "PROP_SHUI_TONG": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "PROP_TIE_WAN": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        }
+      },
       "kind": "n2d_multimodal_consistency_report",
       "notes": [],
-      "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+      "root": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
       "shots": [],
       "verdicts": [],
       "version": 1
@@ -344,29 +615,269 @@
       "min_group": 3,
       "notes": [],
       "rel_margin": 0.15,
-      "shots": []
+      "shots": [
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip01_黑殿审问.png",
+          "score": 0.5351,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip01_黑殿审问_end.png",
+          "score": 0.5427,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip01_黑殿审问_mid.png",
+          "score": 0.5576,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip02_挑水命令.png",
+          "score": 0.5363,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip02_挑水命令_end.png",
+          "score": 0.6616,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip02_挑水命令_mid.png",
+          "score": 0.6392,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip03_外门遗孤.png",
+          "score": 0.8756,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip03_外门遗孤_end.png",
+          "score": 0.6072,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip03_外门遗孤_mid.png",
+          "score": 0.7423,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip04_两缸水和空屋.png",
+          "score": 0.1815,
+          "verdict": "block"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip04_两缸水和空屋_end.png",
+          "score": 0.3197,
+          "verdict": "warn"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip04_两缸水和空屋_mid.png",
+          "score": 0.3382,
+          "verdict": "warn"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip05_夜挑五趟.png",
+          "score": 0.4335,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip05_夜挑五趟_mid.png",
+          "score": 0.435,
+          "verdict": "ok"
+        }
+      ]
     },
     "scene": {
       "available": true,
-      "groups": {},
+      "groups": {
+        "太虚门外门旧院.png": {
+          "constraints": {
+            "axis": "贺平生在院门边，视线通向远处山门。",
+            "layout": "旧院贫瘠，山门远景，不得变成宏大宗门广场。",
+            "light_anchor": "日间低饱和柔冷光，回忆感但不梦幻过度。",
+            "lighting_signature": "克制回忆光，不用血色或金色神光。",
+            "structure": "灰旧院门、低矮院墙、旧行囊、山路、远处山门固定。"
+          },
+          "registered_id": "LOC_WAIMEN_JIUYUAN",
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "秀竹峰杂役大殿.png": {
+          "constraints": {
+            "axis": "张老大画右前景，贺平生画左下，横轴锁定。",
+            "layout": "低矮旧殿，前景压迫，后景围笑；不得变成高大华丽仙宫。",
+            "light_anchor": "画左门缝冷光，低照度，灰尘可见。",
+            "lighting_signature": "灰褐冷调，低饱和，局部冷门缝光。",
+            "structure": "旧木梁、粗木柱、石地、杂役用品固定出现。"
+          },
+          "registered_id": "LOC_ZAYI_DADIAN",
+          "shots": 2,
+          "skipped": "组<3镜"
+        },
+        "秀竹峰杂役院.png": {
+          "constraints": {
+            "axis": "水缸后景压迫，贺平生画左后，韩老三画右前。",
+            "layout": "低矮旧房、两口巨大水缸、贫瘠空屋。",
+            "light_anchor": "空屋窗格冷月光，灰褐旧木主色。",
+            "lighting_signature": "日转夜后冷月光，贫瘠感。",
+            "structure": "旧房、水缸、硬板床、铁碗、钥匙铁锁不得丢。"
+          },
+          "registered_id": "LOC_ZAYI_YUAN",
+          "shots": 1,
+          "skipped": "组<3镜"
+        }
+      },
       "impact_physics": [],
-      "notes": [],
+      "notes": [
+        "场景[太虚门外门旧院.png] 已注册layout：旧院贫瘠，山门远景，不得变成宏大宗门广场。。验收时请重点核对。",
+        "场景[太虚门外门旧院.png] 已注册axis：贺平生在院门边，视线通向远处山门。。验收时请重点核对。",
+        "场景[太虚门外门旧院.png] 已注册light_anchor：日间低饱和柔冷光，回忆感但不梦幻过度。。验收时请重点核对。",
+        "场景[太虚门外门旧院.png] 已注册structure：灰旧院门、低矮院墙、旧行囊、山路、远处山门固定。。验收时请重点核对。",
+        "场景[太虚门外门旧院.png] 已注册lighting_signature：克制回忆光，不用血色或金色神光。。验收时请重点核对。",
+        "场景[秀竹峰杂役大殿.png] 已注册layout：低矮旧殿，前景压迫，后景围笑；不得变成高大华丽仙宫。。验收时请重点核对。",
+        "场景[秀竹峰杂役大殿.png] 已注册axis：张老大画右前景，贺平生画左下，横轴锁定。。验收时请重点核对。",
+        "场景[秀竹峰杂役大殿.png] 已注册light_anchor：画左门缝冷光，低照度，灰尘可见。。验收时请重点核对。",
+        "场景[秀竹峰杂役大殿.png] 已注册structure：旧木梁、粗木柱、石地、杂役用品固定出现。。验收时请重点核对。",
+        "场景[秀竹峰杂役大殿.png] 已注册lighting_signature：灰褐冷调，低饱和，局部冷门缝光。。验收时请重点核对。",
+        "场景[秀竹峰杂役院.png] 已注册layout：低矮旧房、两口巨大水缸、贫瘠空屋。。验收时请重点核对。",
+        "场景[秀竹峰杂役院.png] 已注册axis：水缸后景压迫，贺平生画左后，韩老三画右前。。验收时请重点核对。",
+        "场景[秀竹峰杂役院.png] 已注册light_anchor：空屋窗格冷月光，灰褐旧木主色。。验收时请重点核对。",
+        "场景[秀竹峰杂役院.png] 已注册structure：旧房、水缸、硬板床、铁碗、钥匙铁锁不得丢。。验收时请重点核对。",
+        "场景[秀竹峰杂役院.png] 已注册lighting_signature：日转夜后冷月光，贫瘠感。。验收时请重点核对。"
+      ],
       "shots": []
     },
     "seam": {
-      "available": false,
-      "contradictions": [],
+      "available": true,
+      "contradictions": [
+        {
+          "msg": "镜头1 存在接力尾帧 _end.png，但 storyboard 声明 j_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 1,
+          "tail": "Clip01_黑殿审问_end.png",
+          "transition": "j_cut"
+        },
+        {
+          "msg": "镜头2 存在接力尾帧 _end.png，但 storyboard 声明 hard_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 2,
+          "tail": "Clip02_挑水命令_end.png",
+          "transition": "hard_cut"
+        },
+        {
+          "msg": "镜头3 存在接力尾帧 _end.png，但 storyboard 声明 match_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 3,
+          "tail": "Clip03_外门遗孤_end.png",
+          "transition": "match_cut"
+        },
+        {
+          "msg": "镜头4 存在接力尾帧 _end.png，但 storyboard 声明 action_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 4,
+          "tail": "Clip04_两缸水和空屋_end.png",
+          "transition": "action_cut"
+        }
+      ],
       "notes": [],
-      "seams": []
+      "relative_floor": 40.5,
+      "seams": [
+        {
+          "action_shift": 0.048,
+          "action_verdict": null,
+          "color_dist": 0.0959,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 25,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip02_挑水命令.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip01_黑殿审问_end.png",
+          "transition": "j_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.101,
+          "action_verdict": null,
+          "color_dist": 0.2169,
+          "color_verdict": "warn",
+          "cross_face_cos": null,
+          "dist": 34,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip03_外门遗孤.png",
+          "relative_outlier": false,
+          "struct_verdict": "block",
+          "tail": "Clip02_挑水命令_end.png",
+          "transition": "hard_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.026,
+          "action_verdict": null,
+          "color_dist": 0.2766,
+          "color_verdict": "warn",
+          "cross_face_cos": null,
+          "dist": 33,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip04_两缸水和空屋.png",
+          "relative_outlier": false,
+          "struct_verdict": "block",
+          "tail": "Clip03_外门遗孤_end.png",
+          "transition": "match_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.052,
+          "action_verdict": null,
+          "color_dist": 0.0561,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 27,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip05_夜挑五趟.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip04_两缸水和空屋_end.png",
+          "transition": "action_cut",
+          "verdict": "info"
+        }
+      ]
     }
   },
   "cross_episode_face_drift": {
     "available": true,
     "entries": [],
-    "history_chars": 0,
-    "notes": [
-      "无跨集历史（首集或降级精度未累积均值）"
-    ]
+    "history_chars": 1
   },
   "episode": "第1集",
   "face_anchor_lighting": {
@@ -431,122 +942,34 @@
   "face_human_review": [],
   "face_reference_coverage": {
     "available": true,
-    "covered": 0,
+    "covered": 10,
     "face_mode": "insightface",
-    "missing": [],
+    "missing": [
+      {
+        "face_verdict": "warn",
+        "identity_refs": [
+          "CHAR_HAN_LAOSAN/常态",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "Clip 04 两缸水和空屋",
+        "png": "图片/Clip04_两缸水和空屋.png",
+        "reason": "face_verdict_warn",
+        "shot": "Clip_04"
+      },
+      {
+        "face_verdict": "noface",
+        "identity_refs": [
+          "CHAR_HAN_LAOSAN/常态",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "Clip 04 两缸水和空屋",
+        "png": "图片/Clip04_两缸水和空屋_end.png",
+        "reason": "face_verdict_noface",
+        "shot": "Clip_04"
+      }
+    ],
     "notes": [],
     "pending": [
-      {
-        "identity_refs": [
-          "CHAR_HE_PINGSHENG/常态",
-          "CHAR_ZHANG_LAODA/常态"
-        ],
-        "label": "Clip 01 黑殿审问 🔑前3秒冲突",
-        "png": "出图/第1集/图片/Clip01_黑殿审问.png",
-        "shot": "Clip_01"
-      },
-      {
-        "identity_refs": [
-          "CHAR_HE_PINGSHENG/常态",
-          "CHAR_ZHANG_LAODA/常态"
-        ],
-        "label": "Clip 01 黑殿审问 🔑前3秒冲突",
-        "png": "出图/第1集/图片/Clip01_黑殿审问_mid.png",
-        "shot": "Clip_01"
-      },
-      {
-        "identity_refs": [
-          "CHAR_HE_PINGSHENG/常态",
-          "CHAR_ZHANG_LAODA/常态"
-        ],
-        "label": "Clip 01 黑殿审问 🔑前3秒冲突",
-        "png": "出图/第1集/图片/Clip01_黑殿审问_end.png",
-        "shot": "Clip_01"
-      },
-      {
-        "identity_refs": [
-          "CHAR_HE_PINGSHENG/常态",
-          "CHAR_HE_PINGSHENG/幼年",
-          "CHAR_HE_SANJIE/回忆影",
-          "CHAR_JIANG_JIAN/背影"
-        ],
-        "label": "Clip 03 外门遗孤",
-        "png": "出图/第1集/图片/Clip03_外门遗孤.png",
-        "shot": "Clip_03"
-      },
-      {
-        "identity_refs": [
-          "CHAR_HE_PINGSHENG/常态",
-          "CHAR_HE_PINGSHENG/幼年",
-          "CHAR_HE_SANJIE/回忆影",
-          "CHAR_JIANG_JIAN/背影"
-        ],
-        "label": "Clip 03 外门遗孤",
-        "png": "出图/第1集/图片/Clip03_外门遗孤_mid.png",
-        "shot": "Clip_03"
-      },
-      {
-        "identity_refs": [
-          "CHAR_HE_PINGSHENG/常态",
-          "CHAR_HE_PINGSHENG/幼年",
-          "CHAR_HE_SANJIE/回忆影",
-          "CHAR_JIANG_JIAN/背影"
-        ],
-        "label": "Clip 03 外门遗孤",
-        "png": "出图/第1集/图片/Clip03_外门遗孤_end.png",
-        "shot": "Clip_03"
-      },
-      {
-        "identity_refs": [
-          "CHAR_HAN_LAOSAN/常态",
-          "CHAR_HE_PINGSHENG/常态"
-        ],
-        "label": "Clip 04 两缸水和空屋",
-        "png": "出图/第1集/图片/Clip04_两缸水和空屋.png",
-        "shot": "Clip_04"
-      },
-      {
-        "identity_refs": [
-          "CHAR_HAN_LAOSAN/常态",
-          "CHAR_HE_PINGSHENG/常态"
-        ],
-        "label": "Clip 04 两缸水和空屋",
-        "png": "出图/第1集/图片/Clip04_两缸水和空屋_mid.png",
-        "shot": "Clip_04"
-      },
-      {
-        "identity_refs": [
-          "CHAR_HAN_LAOSAN/常态",
-          "CHAR_HE_PINGSHENG/常态"
-        ],
-        "label": "Clip 04 两缸水和空屋",
-        "png": "出图/第1集/图片/Clip04_两缸水和空屋_end.png",
-        "shot": "Clip_04"
-      },
-      {
-        "identity_refs": [
-          "CHAR_HE_PINGSHENG/常态"
-        ],
-        "label": "Clip 05 夜挑五趟",
-        "png": "出图/第1集/图片/Clip05_夜挑五趟.png",
-        "shot": "Clip_05"
-      },
-      {
-        "identity_refs": [
-          "CHAR_HE_PINGSHENG/常态"
-        ],
-        "label": "Clip 05 夜挑五趟",
-        "png": "出图/第1集/图片/Clip05_夜挑五趟_mid.png",
-        "shot": "Clip_05"
-      },
-      {
-        "identity_refs": [
-          "CHAR_HE_PINGSHENG/常态"
-        ],
-        "label": "Clip 05 夜挑五趟",
-        "png": "出图/第1集/图片/Clip05_夜挑五趟_end.png",
-        "shot": "Clip_05"
-      },
       {
         "identity_refs": [
           "CHAR_HE_PINGSHENG/常态"
@@ -573,38 +996,58 @@
       }
     ],
     "precision_level": "full",
-    "required": 0,
-    "unclassified": [],
-    "verdict": "ok"
+    "required": 12,
+    "unclassified": [
+      {
+        "face_verdict": "ok",
+        "label": "lint_unclassified",
+        "png": "图片/Clip02_挑水命令.png",
+        "reason": "unclassified_face_shot",
+        "shot": "Clip_02"
+      }
+    ],
+    "verdict": "block"
   },
   "inputs_fingerprint": {
     "files": {
       "出图/共享/asset_registry.json": "3440ec8394fe03e41441c2d2688462ceb7ec844272b7bab483d0a9fbbeeff1a1",
-      "出图/共享/identity_registry.json": "fb9f00e648db725a320e9af1cb3b0b72e58c6b83ac5c7e1c108576738e0bd0d4",
+      "出图/共享/identity_registry.json": "6c42e919563a1dccf58cbc73e3c3d7c705492a1690851377f497326707373b4e",
       "出图/第1集/prompt/00_总览.md": "f9dedfb50e728b4594c4d0ab927b56896cd8d9a10e724dcf308cab1a5b031698",
-      "出图/第1集/prompt/01_分镜出图.md": "4989b6f3579ecbf113c9e006cd6bf5025832a9f729936103aba1bbeb8e26e4c9",
-      "出图/第1集/图片/Clip01_黑殿审问.png": null,
-      "出图/第1集/图片/Clip01_黑殿审问_end.png": null,
-      "出图/第1集/图片/Clip01_黑殿审问_mid.png": null,
-      "出图/第1集/图片/Clip03_外门遗孤.png": null,
-      "出图/第1集/图片/Clip03_外门遗孤_end.png": null,
-      "出图/第1集/图片/Clip03_外门遗孤_mid.png": null,
-      "出图/第1集/图片/Clip04_两缸水和空屋.png": null,
-      "出图/第1集/图片/Clip04_两缸水和空屋_end.png": null,
-      "出图/第1集/图片/Clip04_两缸水和空屋_mid.png": null,
-      "出图/第1集/图片/Clip05_夜挑五趟.png": null,
+      "出图/第1集/prompt/01_分镜出图.md": "7755906986ade85f6e45714c2644cb6bc87e00dd5509dd5dba125b76c29d547f",
+      "出图/第1集/图片/Clip01_黑殿审问.png": "4efcea463217c8b6add11aa21bd6a2eba61cdef34808bf73a0f592fafe9f1e76",
+      "出图/第1集/图片/Clip01_黑殿审问_end.png": "6b1f1092c00dea5db19dcfd0380ba05a0b9f8001f7e310cd2f9dffa07909b39d",
+      "出图/第1集/图片/Clip01_黑殿审问_mid.png": "96170ffd4183130b1360cb7ef4e2b91d39f876a96ca513361bf57fb7f90fb341",
+      "出图/第1集/图片/Clip03_外门遗孤.png": "201bfea5dacd6f2ceb3e9a3b6a26ffb2d4f219a03073d05b29dfa660ba294aaa",
+      "出图/第1集/图片/Clip03_外门遗孤_end.png": "ed2c107781ffb3dab696878ef5bce3eb00df0acefbceba00c2a30a396d4a7895",
+      "出图/第1集/图片/Clip03_外门遗孤_mid.png": "1fdad5fa9eaf284d8069ddadfea91b3375146c7fa8b1364b4d9ca0a53b3e32ec",
+      "出图/第1集/图片/Clip04_两缸水和空屋.png": "ec34dfdcaa08a7d696125f2ad95a5a206437d2838fc0807b546eaefadb05e29f",
+      "出图/第1集/图片/Clip04_两缸水和空屋_end.png": "7a985e6ee8c0044ef69f0972f6a568e6b50945925657367f27ebdec48afecb5a",
+      "出图/第1集/图片/Clip04_两缸水和空屋_mid.png": "c63cd314386868188a0489b5e1962a5e7c50f40be309bb6a6d55eb02ca2b1da0",
+      "出图/第1集/图片/Clip05_夜挑五趟.png": "7fe51478c2a5ac2ef9729a00fd049bfbf25c382284ae3d5e4c1619ebc990f296",
       "出图/第1集/图片/Clip05_夜挑五趟_end.png": null,
-      "出图/第1集/图片/Clip05_夜挑五趟_mid.png": null,
+      "出图/第1集/图片/Clip05_夜挑五趟_mid.png": "6507b778c44edb9e54417eaa56fc23e14ce9f6f0ed7909000f4a5dba811ec21e",
       "出图/第1集/图片/Clip06_水底破盆.png": null,
       "出图/第1集/图片/Clip06_水底破盆_end.png": null,
       "出图/第1集/图片/Clip06_水底破盆_mid.png": null,
+      "图片/Clip01_黑殿审问.png": null,
+      "图片/Clip01_黑殿审问_end.png": null,
+      "图片/Clip01_黑殿审问_mid.png": null,
+      "图片/Clip02_挑水命令.png": null,
+      "图片/Clip02_挑水命令_end.png": null,
+      "图片/Clip02_挑水命令_mid.png": null,
+      "图片/Clip03_外门遗孤.png": null,
+      "图片/Clip03_外门遗孤_end.png": null,
+      "图片/Clip03_外门遗孤_mid.png": null,
       "图片/Clip04_两缸水和空屋.png": null,
+      "图片/Clip04_两缸水和空屋_end.png": null,
+      "图片/Clip04_两缸水和空屋_mid.png": null,
       "图片/Clip05_夜挑五趟.png": null,
+      "图片/Clip05_夜挑五趟_mid.png": null,
       "图片/Clip06_水底破盆.png": null,
       "图片/Clip07_盆底微光.png": null,
       "生产数据/image_qc/第1集/prop_shape_confirmations.json": null
     },
-    "sha": "5fe3472f69c74173dba8abfe9e62af1e37735a0e3c178a447f6128c98b965e6b"
+    "sha": "3d19f1787ae47f435ff5b736283e347664d5a03d6ad9640b8bad2936414eff4e"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -786,6 +1229,11 @@
         "code": "weak_face_anchor",
         "level": "warn",
         "msg": "脸部锚弱信噪比 CROWD_ZAYI/虚化「群像虚化锚」（出图/共享/图片/定妆_群杂役_虚化_群像sheet.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "code": "vlm_setting_check_skipped",
+        "level": "warn",
+        "msg": "VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。"
       }
     ],
     "notes": [],
@@ -801,14 +1249,14 @@
   },
   "prop_shape_review": {
     "available": true,
-    "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+    "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
     "confirmed": 0,
     "pending": 6,
     "targets": [
       {
         "asset": "PROP_KEY_LOCK",
         "asset_name": "旧钥匙与生锈铁锁",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": false,
         "label": "Clip 04 两缸水和空屋",
         "must_not_have": [
@@ -819,18 +1267,18 @@
           "多套重复"
         ],
         "png": "图片/Clip04_两缸水和空屋.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_旧钥匙与生锈铁锁.png",
         "scale": "少年单手可握，锁体小，适合低矮旧房木门。",
         "shot": "Clip_04",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_KEY_LOCK_Clip_04_Clip04_两缸水和空屋_compare.png",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_KEY_LOCK_Clip_04_Clip04_两缸水和空屋_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_TIE_WAN",
         "asset_name": "铁碗/钥匙铁锁",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": false,
         "label": "Clip 04 两缸水和空屋",
         "must_not_have": [
@@ -841,18 +1289,18 @@
           "多套重复"
         ],
         "png": "图片/Clip04_两缸水和空屋.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_铁碗钥匙铁锁.png",
         "scale": "铁碗可手持，钥匙铁锁为小型杂役房门物件。",
         "shot": "Clip_04",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_TIE_WAN_Clip_04_Clip04_两缸水和空屋_compare.png",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_TIE_WAN_Clip_04_Clip04_两缸水和空屋_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_SHUI_TONG",
         "asset_name": "水桶与扁担",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": false,
         "label": "Clip 05 夜挑五趟",
         "must_not_have": [
@@ -862,18 +1310,18 @@
           "华丽异物化"
         ],
         "png": "图片/Clip05_夜挑五趟.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_夜挑五趟.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_夜挑五趟.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_水桶与扁担.png",
         "scale": "少年挑水工具，桶身到少年膝上附近。",
         "shot": "Clip_05",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_05_Clip05_夜挑五趟_compare.png",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_05_Clip05_夜挑五趟_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_HEI_TAO_PEN",
         "asset_name": "黑陶破盆",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": false,
         "label": "Clip 06 水底破盆 🔑核心机缘",
         "must_not_have": [
@@ -885,18 +1333,18 @@
           "多盆重复"
         ],
         "png": "图片/Clip06_水底破盆.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_黑陶破盆.png",
         "scale": "普通脸盆大小，可被十四岁少年夹在臂弯。",
         "shot": "Clip_06",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_06_Clip06_水底破盆_compare.png",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_06_Clip06_水底破盆_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_SHUI_TONG",
         "asset_name": "水桶与扁担",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": false,
         "label": "Clip 06 水底破盆 🔑核心机缘",
         "must_not_have": [
@@ -906,18 +1354,18 @@
           "华丽异物化"
         ],
         "png": "图片/Clip06_水底破盆.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_水桶与扁担.png",
         "scale": "少年挑水工具，桶身到少年膝上附近。",
         "shot": "Clip_06",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_06_Clip06_水底破盆_compare.png",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_06_Clip06_水底破盆_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_HEI_TAO_PEN",
         "asset_name": "黑陶破盆",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": false,
         "label": "Clip 07 盆底微光 🔑集尾硬断",
         "must_not_have": [
@@ -929,12 +1377,12 @@
           "多盆重复"
         ],
         "png": "图片/Clip07_盆底微光.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip07_盆底微光.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip07_盆底微光.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_黑陶破盆.png",
         "scale": "普通脸盆大小，可被十四岁少年夹在臂弯。",
         "shot": "Clip_07",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_07_Clip07_盆底微光_compare.png",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_07_Clip07_盆底微光_compare.png",
         "stitched": true
       }
     ],
@@ -942,27 +1390,33 @@
   },
   "qc_environment": {
     "face_mode": "insightface",
-    "jump_reason": "视觉质检为降级结果，正式进 video 前需补依赖重跑到 full 精度",
+    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
     "jump_to_stage": "image",
-    "missing_or_degraded": [
-      "接缝接力"
-    ],
-    "precision_level": "degraded",
-    "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
-    "recommended_install": "优先用 facefusion conda env：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。若无该 env，用 Python 3.10-3.12 conda env；系统 Python 3.14 不作为重视觉依赖首选。",
-    "user_notice": "图片质检环境：degraded；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：优先用 facefusion conda env：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。若无该 env，用 Python 3.10-3.12 conda env；系统 Python 3.14 不作为重视觉依赖首选。；当前应停在/回退：image；原因：视觉质检为降级结果，正式进 video 前需补依赖重跑到 full 精度"
+    "missing_or_degraded": [],
+    "precision_level": "full",
+    "python": "/opt/homebrew/Caskroom/miniconda/base/bin/python3",
+    "recommended_install": "",
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniconda/base/bin/python3；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
   },
-  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+  "root": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
   "semantic_drift": {
-    "available": true,
+    "available": false,
     "compared": 0,
     "findings": [],
-    "floor": 0.55
+    "notes": [
+      "DINO/CLIP 嵌入后端不可用——语义漂移信号跳过（full env 装 torch+transformers 后复检）。"
+    ]
   },
   "shot_scale_contract": {
     "available": true,
-    "checked": 0,
-    "findings": []
+    "checked": 2,
+    "findings": [
+      {
+        "code": "shot_scale_closeup_tiny_face",
+        "level": "warn",
+        "msg": "景别像素兜底：镜2 声明 CU(特写) 但 出图/第1集/图片/Clip02_挑水命令.png 实测脸占比 2.9% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
+      }
+    ]
   },
   "state_ledger": {
     "advise": false,
@@ -997,7 +1451,7 @@
     }
   },
   "summary": {
-    "advisory": 9,
+    "advisory": 17,
     "by_check": {
       "anchors": {
         "block": 1,
@@ -1006,22 +1460,34 @@
         "warn": 0
       },
       "face": {
-        "block": 0,
+        "block": 1,
+        "noface": 1,
+        "ok": 11,
+        "warn": 1
+      },
+      "face_reference_coverage": {
+        "block": 2,
         "noface": 0,
-        "ok": 0,
+        "ok": 10,
         "warn": 0
       },
-      "hair": {
+      "face_reference_coverage_unclassified": {
         "block": 0,
         "noface": 0,
         "ok": 0,
+        "warn": 1
+      },
+      "hair": {
+        "block": 1,
+        "noface": 0,
+        "ok": 13,
         "warn": 0
       },
       "lint": {
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 8
+        "warn": 9
       },
       "multimodal": {
         "block": 0,
@@ -1030,10 +1496,10 @@
         "warn": 0
       },
       "outfit": {
-        "block": 0,
+        "block": 1,
         "noface": 0,
-        "ok": 0,
-        "warn": 0
+        "ok": 11,
+        "warn": 2
       },
       "prohibited_face_patch": {
         "block": 0,
@@ -1058,36 +1524,38 @@
         "noface": 0,
         "ok": 0,
         "warn": 0
+      },
+      "shot_scale_contract": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 1
       }
     },
-    "degraded": true,
-    "hard_blocks": 6,
-    "unavailable_visual_checks": [
-      "seam"
-    ],
+    "degraded": false,
+    "hard_blocks": 9,
+    "unavailable_visual_checks": [],
     "verdict": "block"
   },
   "tone_light_contract": {
-    "available": false,
-    "checked": 0,
+    "available": true,
+    "checked": 14,
     "findings": [],
     "intent": {
       "brightness": null,
       "evidence": "杂役大殿和空屋灰褐冷调；后山夜潭冷蓝月光；破盆只给极弱微光，不给神器光柱。",
       "warmth": "cool"
     },
-    "notes": [
-      "本集无可测出图帧（或 Pillow 不可用）——色调/光位像素兜底跳过。"
-    ]
+    "luma_median": 32.5,
+    "warmth_median": -0.1
   },
   "version": 1,
   "vlm_consistency": {
-    "available": true,
-    "block": 0,
-    "block_floor": 0.6,
+    "available": false,
     "findings": [],
     "judged": 0,
-    "shot_canonical": {},
-    "votes": 1
+    "notes": [
+      "VLM 后端不可用——VLM 语义判定跳过（配置 N2D_VLM_CMD 后复检；厂商无关）。"
+    ]
   }
 }

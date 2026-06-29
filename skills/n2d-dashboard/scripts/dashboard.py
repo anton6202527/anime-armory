@@ -78,6 +78,30 @@ def _unresolved_unverified_waivers(root: str) -> List[Dict[str, Any]]:
     except Exception:
         return []
 
+
+def loads_json_from_noisy_stdout(text: str) -> Any:
+    """Parse JSON even when native model libraries print diagnostics first."""
+    raw = (text or "").strip()
+    if not raw:
+        raise json.JSONDecodeError("empty stdout", text or "", 0)
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        pass
+    decoder = json.JSONDecoder()
+    last: Any = None
+    for match in re.finditer(r"[\{\[]", text):
+        try:
+            obj, end = decoder.raw_decode(text[match.start():])
+        except json.JSONDecodeError:
+            continue
+        if not text[match.start() + end:].strip():
+            return obj
+        last = obj
+    if last is None:
+        raise json.JSONDecodeError("no JSON object found", text, 0)
+    return last
+
 EVENT_KIND = PRODUCTION_EVENT_KIND
 DASHBOARD_KIND = PRODUCTION_DASHBOARD_KIND
 EVENT_VERSION = 1
@@ -1996,7 +2020,7 @@ def run_image_qc_findings(root: str, episode: str, *, fail_closed: bool) -> List
     except Exception as exc:
         return [image_qc_failure_finding(root, episode, f"{type(exc).__name__}: {exc}")] if fail_closed else []
     try:
-        data = json.loads(proc.stdout or "[]")
+        data = loads_json_from_noisy_stdout(proc.stdout or "[]")
     except Exception as exc:
         detail = str(exc)
         if proc.stderr:

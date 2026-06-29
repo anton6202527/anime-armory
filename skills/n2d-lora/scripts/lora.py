@@ -639,6 +639,9 @@ def cmd_register(args: argparse.Namespace) -> int:
             "card": relative(root, out_dir / "lora_card.json") if (out_dir / "lora_card.json").is_file() else "",
         }
     )
+    base_model_norm = str(report.get("base_model", "")).strip().lower().replace("_", "-")
+    if base_model_norm in {"sdxl", "sd-xl", "stable-diffusion-xl"} and not lora.get("target_backends"):
+        lora["target_backends"] = ["sdxl", "comfyui"]
     if ready_blocks:
         lora["manual_override"] = {
             "forced": True,

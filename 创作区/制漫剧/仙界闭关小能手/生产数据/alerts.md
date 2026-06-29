@@ -1,13 +1,13 @@
 # n2d 生产告警
 
-- root: /Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手
-- generated_at: 2026-06-29T10:37:34+00:00
+- root: /Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手
+- generated_at: 2026-06-29T15:05:26+00:00
 - 告警数: 2（critical 1 / warn 1）
 
 | 级别 | 类型 | 范围 | 说明 |
 |---|---|---|---|
-| 🔴 critical | qa_blockers | totals | QA 阻断 234 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成 |
-| 🟡 warn | qa_blockers | 第1集 | 第1集 QA 阻断 234 项 |
+| 🔴 critical | qa_blockers | totals | QA 阻断 3 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成 |
+| 🟡 warn | qa_blockers | 第1集 | 第1集 QA 阻断 3 项 |
 
 ## 当前阈值
 ```json

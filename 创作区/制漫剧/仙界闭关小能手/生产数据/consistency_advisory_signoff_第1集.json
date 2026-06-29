@@ -1,0 +1,15 @@
+{
+  "kind": "n2d_consistency_advisory_signoff",
+  "version": 1,
+  "episode": "第1集",
+  "accepted": [
+    {
+      "accepted": true,
+      "finding_hash": "1f5e382d7b19",
+      "dimension": "节奏密度(Rhythm)",
+      "reviewer": "codex-agent",
+      "reason": "第1集是前情压缩与底层压迫铺垫，本轮只重制到 image gate；慢热留存风险先签收，剪辑/成片交付前复审。",
+      "expires_at": "2026-07-13T23:59:59+08:00"
+    }
+  ]
+}

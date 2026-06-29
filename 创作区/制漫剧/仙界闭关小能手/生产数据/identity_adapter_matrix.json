@@ -2,7 +2,7 @@
   "kind": "n2d_identity_adapter_matrix",
   "version": 1,
   "root": "创作区/制漫剧/仙界闭关小能手",
-  "generated_at": "2026-06-29T11:36:04+00:00",
+  "generated_at": "2026-06-29T13:25:41+00:00",
   "summary": {
     "forms": 9,
     "forms_with_reference_group_ready": 9,
@@ -10,7 +10,7 @@
     "forms_with_native_video_ready": 0,
     "forms_with_lora_ready": 0,
     "forms_with_gaps": 0,
-    "anchor_fingerprint": "4219291ad6bf455bd1933a345a110583b19a4b98a73752894c5fa2e16cb9f685",
+    "anchor_fingerprint": "5e73c080b0c314a4f03f03b8e3d4c79de8b3313bfe921cc082a4e88c564bb3ea",
     "forms_with_anchor_pinned": 9,
     "characters_needing_lora_upgrade": []
   },
@@ -1500,6 +1500,7 @@
       "drift_forbidden": [
         "front_closeup",
         "clear_face",
+        "no_clear_facial_features",
         "heroic_main_character",
         "modern_aircraft",
         "strong_light_wings"

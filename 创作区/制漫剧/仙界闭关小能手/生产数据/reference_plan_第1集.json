@@ -24,8 +24,13 @@
           "recommended_references": [
             {
               "role": "front",
-              "path": "出图/共享/图片/定妆_贺平生.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split_front', 'source_path': '出图/共享/图片/定妆_贺平生_三视图.png', 'source_sha256': '47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc', 'crop_box': [14, 0, 221, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
               "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_贺平生_45度.png",
+              "strength_hint": 0.65
             },
             {
               "role": "face_anchor",
@@ -38,25 +43,40 @@
               "strength_hint": 0.5
             },
             {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
+              "strength_hint": 0.6
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
+              "strength_hint": 0.6
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_贺平生_表情_警觉.png",
+              "strength_hint": 0.6
+            },
+            {
               "role": "turnaround",
-              "path": "出图/共享/图片/定妆_贺平生_三视图.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_三视图.png', 'status': 'ready'}",
               "strength_hint": 0.5
             },
             {
               "role": "side",
-              "path": "出图/共享/图片/定妆_贺平生_侧.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_侧.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split', 'source_path': '出图/共享/图片/定妆_贺平生_三视图.png', 'source_sha256': '47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc', 'crop_box': [484, 0, 692, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
               "strength_hint": 0.55
             },
             {
               "role": "back",
-              "path": "出图/共享/图片/定妆_贺平生_背.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_背.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split', 'source_path': '出图/共享/图片/定妆_贺平生_三视图.png', 'source_sha256': '47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc', 'crop_box': [720, 0, 927, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
               "strength_hint": 0.5
             }
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 6,
-            "selected": 6,
+            "requested": 10,
+            "selected": 10,
             "dropped": 0
           },
           "dropped_references": [],
@@ -66,22 +86,23 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 6 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 10 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
-              "@Image2:face_anchor",
-              "@Image3:outfit",
-              "@Image4:turnaround",
-              "@Image5:side",
-              "@Image6:back"
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:expression",
+              "@Image7:expression",
+              "@Image8:turnaround",
+              "@Image9:side",
+              "@Image10:back"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
           },
-          "missing_references": [
-            "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
-            "脸部特写主参考"
-          ],
+          "missing_references": [],
           "native_subject_action": null,
           "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`",
           "needs_action": true,
@@ -102,8 +123,13 @@
           "recommended_references": [
             {
               "role": "front",
-              "path": "出图/共享/图片/定妆_张老大.png",
+              "path": "{'path': '出图/共享/图片/定妆_张老大.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split_front', 'source_path': '出图/共享/图片/定妆_张老大_三视图.png', 'source_sha256': '3aaa6878994aa77fcc2d941d178d77867e8af2e62c878b839dc7ff6d04f44ef1', 'crop_box': [14, 0, 221, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:57+00:00'}}",
               "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_张老大_45度.png",
+              "strength_hint": 0.65
             },
             {
               "role": "face_anchor",
@@ -117,14 +143,14 @@
             },
             {
               "role": "turnaround",
-              "path": "出图/共享/图片/定妆_张老大_三视图.png",
+              "path": "{'path': '出图/共享/图片/定妆_张老大_三视图.png', 'status': 'ready'}",
               "strength_hint": 0.5
             }
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
@@ -134,18 +160,18 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
-              "@Image2:face_anchor",
-              "@Image3:outfit",
-              "@Image4:turnaround"
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:turnaround"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
           },
           "missing_references": [
-            "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
             "脸部特写主参考"
           ],
           "native_subject_action": null,
@@ -167,24 +193,29 @@
           "recommended_references": [
             {
               "role": "front",
-              "path": "出图/共享/图片/定妆_群杂役_虚化.png",
+              "path": "{'path': '出图/共享/图片/定妆_群杂役_虚化.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split_front', 'source_path': '出图/共享/图片/定妆_群杂役_虚化_三视图.png', 'source_sha256': 'e09e97887d251379dea674ce9e5770e0bb3623bb40aa2e5bbb4daa09c1ce6898', 'crop_box': [14, 0, 221, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T10:18:19+00:00'}}",
               "strength_hint": 0.8
             },
             {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_群杂役_虚化_45度.png",
+              "strength_hint": 0.65
+            },
+            {
               "role": "face_anchor",
-              "path": "出图/共享/图片/定妆_群杂役_群像sheet.png",
+              "path": "出图/共享/图片/定妆_群杂役_虚化_群像sheet.png",
               "strength_hint": 0.7
             },
             {
               "role": "outfit",
-              "path": "出图/共享/图片/定妆_群杂役_半身.png",
+              "path": "{'path': '出图/共享/图片/定妆_群杂役_虚化_半身.png', 'status': 'planned'}",
               "strength_hint": 0.5
             }
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 3,
-            "selected": 3,
+            "requested": 4,
+            "selected": 4,
             "dropped": 0
           },
           "dropped_references": [],
@@ -194,17 +225,17 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 3 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
-              "@Image2:face_anchor",
-              "@Image3:outfit"
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
           },
           "missing_references": [
-            "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
             "脸部特写主参考"
           ],
           "native_subject_action": null,
@@ -331,8 +362,13 @@
           "recommended_references": [
             {
               "role": "front",
-              "path": "出图/共享/图片/定妆_贺平生.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split_front', 'source_path': '出图/共享/图片/定妆_贺平生_三视图.png', 'source_sha256': '47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc', 'crop_box': [14, 0, 221, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
               "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_贺平生_45度.png",
+              "strength_hint": 0.65
             },
             {
               "role": "face_anchor",
@@ -345,20 +381,35 @@
               "strength_hint": 0.5
             },
             {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
+              "strength_hint": 0.6
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
+              "strength_hint": 0.6
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_贺平生_表情_警觉.png",
+              "strength_hint": 0.6
+            },
+            {
               "role": "side",
-              "path": "出图/共享/图片/定妆_贺平生_侧.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_侧.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split', 'source_path': '出图/共享/图片/定妆_贺平生_三视图.png', 'source_sha256': '47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc', 'crop_box': [484, 0, 692, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
               "strength_hint": 0.55
             },
             {
               "role": "back",
-              "path": "出图/共享/图片/定妆_贺平生_背.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_背.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split', 'source_path': '出图/共享/图片/定妆_贺平生_三视图.png', 'source_sha256': '47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc', 'crop_box': [720, 0, 927, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
               "strength_hint": 0.5
             }
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 5,
-            "selected": 5,
+            "requested": 9,
+            "selected": 9,
             "dropped": 0
           },
           "dropped_references": [],
@@ -368,21 +419,22 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 9 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
-              "@Image2:face_anchor",
-              "@Image3:outfit",
-              "@Image4:side",
-              "@Image5:back"
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:expression",
+              "@Image7:expression",
+              "@Image8:side",
+              "@Image9:back"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
           },
-          "missing_references": [
-            "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
-            "脸部特写主参考"
-          ],
+          "missing_references": [],
           "native_subject_action": null,
           "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`",
           "needs_action": true,
@@ -402,8 +454,13 @@
           "recommended_references": [
             {
               "role": "front",
-              "path": "出图/共享/图片/定妆_张老大.png",
+              "path": "{'path': '出图/共享/图片/定妆_张老大.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split_front', 'source_path': '出图/共享/图片/定妆_张老大_三视图.png', 'source_sha256': '3aaa6878994aa77fcc2d941d178d77867e8af2e62c878b839dc7ff6d04f44ef1', 'crop_box': [14, 0, 221, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:57+00:00'}}",
               "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_张老大_45度.png",
+              "strength_hint": 0.65
             },
             {
               "role": "face_anchor",
@@ -418,8 +475,8 @@
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 3,
-            "selected": 3,
+            "requested": 4,
+            "selected": 4,
             "dropped": 0
           },
           "dropped_references": [],
@@ -429,17 +486,17 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 3 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
-              "@Image2:face_anchor",
-              "@Image3:outfit"
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
           },
           "missing_references": [
-            "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
             "脸部特写主参考"
           ],
           "native_subject_action": null,
@@ -461,24 +518,29 @@
           "recommended_references": [
             {
               "role": "front",
-              "path": "出图/共享/图片/定妆_太虚门长老.png",
+              "path": "{'path': '出图/共享/图片/定妆_太虚门长老_回忆背影.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split_front', 'source_path': '出图/共享/图片/定妆_太虚门长老_回忆背影_三视图.png', 'source_sha256': 'f1ad54beea91a82f6e309e7bb46a69560f83e0e24a9743adf1a6abf1eb2b827a', 'crop_box': [14, 0, 221, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T10:18:18+00:00'}}",
               "strength_hint": 0.8
             },
             {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_45度.png",
+              "strength_hint": 0.65
+            },
+            {
               "role": "face_anchor",
-              "path": "出图/共享/图片/定妆_太虚门长老_侧背.png",
+              "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png",
               "strength_hint": 0.7
             },
             {
               "role": "outfit",
-              "path": "出图/共享/图片/定妆_太虚门长老_半身.png",
+              "path": "{'path': '出图/共享/图片/定妆_太虚门长老_回忆背影_半身.png', 'status': 'planned'}",
               "strength_hint": 0.5
             }
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 3,
-            "selected": 3,
+            "requested": 4,
+            "selected": 4,
             "dropped": 0
           },
           "dropped_references": [],
@@ -488,17 +550,17 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 3 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
-              "@Image2:face_anchor",
-              "@Image3:outfit"
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
           },
           "missing_references": [
-            "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
             "脸部特写主参考"
           ],
           "native_subject_action": null,
@@ -617,8 +679,13 @@
           "recommended_references": [
             {
               "role": "front",
-              "path": "出图/共享/图片/定妆_贺平生.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split_front', 'source_path': '出图/共享/图片/定妆_贺平生_三视图.png', 'source_sha256': '47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc', 'crop_box': [14, 0, 221, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
               "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_贺平生_45度.png",
+              "strength_hint": 0.65
             },
             {
               "role": "face_anchor",
@@ -631,25 +698,40 @@
               "strength_hint": 0.5
             },
             {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
+              "strength_hint": 0.6
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
+              "strength_hint": 0.6
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_贺平生_表情_警觉.png",
+              "strength_hint": 0.6
+            },
+            {
               "role": "turnaround",
-              "path": "出图/共享/图片/定妆_贺平生_三视图.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_三视图.png', 'status': 'ready'}",
               "strength_hint": 0.5
             },
             {
               "role": "side",
-              "path": "出图/共享/图片/定妆_贺平生_侧.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_侧.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split', 'source_path': '出图/共享/图片/定妆_贺平生_三视图.png', 'source_sha256': '47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc', 'crop_box': [484, 0, 692, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
               "strength_hint": 0.55
             },
             {
               "role": "back",
-              "path": "出图/共享/图片/定妆_贺平生_背.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_背.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split', 'source_path': '出图/共享/图片/定妆_贺平生_三视图.png', 'source_sha256': '47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc', 'crop_box': [720, 0, 927, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
               "strength_hint": 0.5
             }
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 6,
-            "selected": 6,
+            "requested": 10,
+            "selected": 10,
             "dropped": 0
           },
           "dropped_references": [],
@@ -659,22 +741,23 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 6 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 10 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
-              "@Image2:face_anchor",
-              "@Image3:outfit",
-              "@Image4:turnaround",
-              "@Image5:side",
-              "@Image6:back"
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:expression",
+              "@Image7:expression",
+              "@Image8:turnaround",
+              "@Image9:side",
+              "@Image10:back"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
           },
-          "missing_references": [
-            "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
-            "脸部特写主参考"
-          ],
+          "missing_references": [],
           "native_subject_action": null,
           "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`",
           "needs_action": true,
@@ -695,29 +778,34 @@
           "recommended_references": [
             {
               "role": "front",
-              "path": "出图/共享/图片/定妆_江剑.png",
+              "path": "{'path': '出图/共享/图片/定妆_江剑_背影.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split_front', 'source_path': '出图/共享/图片/定妆_江剑_背影_三视图.png', 'source_sha256': 'e23683178bfc3d642dfd96b4f2796d6fc6fdebd5da736dda3746a163f29f4c88', 'crop_box': [14, 0, 221, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T10:18:18+00:00'}}",
               "strength_hint": 0.8
             },
             {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_江剑_背影_45度.png",
+              "strength_hint": 0.65
+            },
+            {
               "role": "face_anchor",
-              "path": "出图/共享/图片/定妆_江剑_侧背.png",
+              "path": "出图/共享/图片/定妆_江剑_背影_侧背.png",
               "strength_hint": 0.7
             },
             {
               "role": "outfit",
-              "path": "出图/共享/图片/定妆_江剑_半身.png",
+              "path": "{'path': '出图/共享/图片/定妆_江剑_背影_半身.png', 'status': 'planned'}",
               "strength_hint": 0.5
             },
             {
               "role": "turnaround",
-              "path": "出图/共享/图片/定妆_江剑_三视图.png",
+              "path": "{'path': '出图/共享/图片/定妆_江剑_背影_三视图.png', 'status': 'ready', 'human_review': {'status': 'passed', 'reason': 'visual inspection passed for same-source turnaround derivation'}}",
               "strength_hint": 0.5
             }
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
@@ -727,18 +815,18 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
-              "@Image2:face_anchor",
-              "@Image3:outfit",
-              "@Image4:turnaround"
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:turnaround"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
           },
           "missing_references": [
-            "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
             "脸部特写主参考"
           ],
           "native_subject_action": null,
@@ -760,24 +848,29 @@
           "recommended_references": [
             {
               "role": "front",
-              "path": "出图/共享/图片/定妆_贺三杰.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺三杰_回忆影.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split_front', 'source_path': '出图/共享/图片/定妆_贺三杰_回忆影_三视图.png', 'source_sha256': '4e33e8c9ef126f8369eff791bd24cce074c69013e528ba9a0ae984d959b60e7c', 'crop_box': [14, 0, 221, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T10:18:19+00:00'}}",
               "strength_hint": 0.8
             },
             {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_贺三杰_回忆影_45度.png",
+              "strength_hint": 0.65
+            },
+            {
               "role": "face_anchor",
-              "path": "出图/共享/图片/定妆_贺三杰_侧影.png",
+              "path": "出图/共享/图片/定妆_贺三杰_回忆影_侧影.png",
               "strength_hint": 0.7
             },
             {
               "role": "outfit",
-              "path": "出图/共享/图片/定妆_贺三杰_半身.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺三杰_回忆影_半身.png', 'status': 'planned'}",
               "strength_hint": 0.5
             }
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 3,
-            "selected": 3,
+            "requested": 4,
+            "selected": 4,
             "dropped": 0
           },
           "dropped_references": [],
@@ -787,17 +880,17 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 3 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
-              "@Image2:face_anchor",
-              "@Image3:outfit"
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
           },
           "missing_references": [
-            "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
             "脸部特写主参考"
           ],
           "native_subject_action": null,
@@ -819,8 +912,13 @@
           "recommended_references": [
             {
               "role": "front",
-              "path": "出图/共享/图片/定妆_远景修士剪影.png",
+              "path": "{'path': '出图/共享/图片/定妆_远景修士剪影.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split_front', 'source_path': '出图/共享/图片/定妆_远景修士剪影_三视图.png', 'source_sha256': '6ac5f3b537eb743f146178660f5ae9779b25290ba6605713e8204c231f67eddc', 'crop_box': [14, 0, 221, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T10:18:19+00:00'}}",
               "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_远景修士剪影_45度.png",
+              "strength_hint": 0.65
             },
             {
               "role": "face_anchor",
@@ -829,14 +927,14 @@
             },
             {
               "role": "outfit",
-              "path": "出图/共享/图片/定妆_远景修士剪影_半身.png",
+              "path": "{'path': '出图/共享/图片/定妆_远景修士剪影_半身.png', 'status': 'planned'}",
               "strength_hint": 0.5
             }
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 3,
-            "selected": 3,
+            "requested": 4,
+            "selected": 4,
             "dropped": 0
           },
           "dropped_references": [],
@@ -846,17 +944,17 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 3 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
-              "@Image2:face_anchor",
-              "@Image3:outfit"
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
           },
           "missing_references": [
-            "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
             "脸部特写主参考"
           ],
           "native_subject_action": null,
@@ -984,8 +1082,13 @@
           "recommended_references": [
             {
               "role": "front",
-              "path": "出图/共享/图片/定妆_贺平生.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split_front', 'source_path': '出图/共享/图片/定妆_贺平生_三视图.png', 'source_sha256': '47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc', 'crop_box': [14, 0, 221, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
               "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_贺平生_45度.png",
+              "strength_hint": 0.65
             },
             {
               "role": "face_anchor",
@@ -998,25 +1101,40 @@
               "strength_hint": 0.5
             },
             {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
+              "strength_hint": 0.6
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
+              "strength_hint": 0.6
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_贺平生_表情_警觉.png",
+              "strength_hint": 0.6
+            },
+            {
               "role": "turnaround",
-              "path": "出图/共享/图片/定妆_贺平生_三视图.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_三视图.png', 'status': 'ready'}",
               "strength_hint": 0.5
             },
             {
               "role": "side",
-              "path": "出图/共享/图片/定妆_贺平生_侧.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_侧.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split', 'source_path': '出图/共享/图片/定妆_贺平生_三视图.png', 'source_sha256': '47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc', 'crop_box': [484, 0, 692, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
               "strength_hint": 0.55
             },
             {
               "role": "back",
-              "path": "出图/共享/图片/定妆_贺平生_背.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_背.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split', 'source_path': '出图/共享/图片/定妆_贺平生_三视图.png', 'source_sha256': '47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc', 'crop_box': [720, 0, 927, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
               "strength_hint": 0.5
             }
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 6,
-            "selected": 6,
+            "requested": 10,
+            "selected": 10,
             "dropped": 0
           },
           "dropped_references": [],
@@ -1026,22 +1144,23 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 6 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 10 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
-              "@Image2:face_anchor",
-              "@Image3:outfit",
-              "@Image4:turnaround",
-              "@Image5:side",
-              "@Image6:back"
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:expression",
+              "@Image7:expression",
+              "@Image8:turnaround",
+              "@Image9:side",
+              "@Image10:back"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
           },
-          "missing_references": [
-            "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
-            "脸部特写主参考"
-          ],
+          "missing_references": [],
           "native_subject_action": null,
           "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`",
           "needs_action": true,
@@ -1062,8 +1181,13 @@
           "recommended_references": [
             {
               "role": "front",
-              "path": "出图/共享/图片/定妆_韩老三.png",
+              "path": "{'path': '出图/共享/图片/定妆_韩老三.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split_front', 'source_path': '出图/共享/图片/定妆_韩老三_三视图.png', 'source_sha256': 'cbdefbb1827f4097ce2c097a042582385c35e02dc32025701014c10490f9a8b5', 'crop_box': [14, 0, 221, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:58+00:00'}}",
               "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_韩老三_45度.png",
+              "strength_hint": 0.65
             },
             {
               "role": "face_anchor",
@@ -1077,14 +1201,14 @@
             },
             {
               "role": "turnaround",
-              "path": "出图/共享/图片/定妆_韩老三_三视图.png",
+              "path": "{'path': '出图/共享/图片/定妆_韩老三_三视图.png', 'status': 'ready'}",
               "strength_hint": 0.5
             }
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
@@ -1094,18 +1218,18 @@
           ],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 4 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
-              "@Image2:face_anchor",
-              "@Image3:outfit",
-              "@Image4:turnaround"
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:turnaround"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
           },
           "missing_references": [
-            "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
             "脸部特写主参考"
           ],
           "native_subject_action": null,
@@ -1200,8 +1324,13 @@
           "recommended_references": [
             {
               "role": "front",
-              "path": "出图/共享/图片/定妆_贺平生.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split_front', 'source_path': '出图/共享/图片/定妆_贺平生_三视图.png', 'source_sha256': '47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc', 'crop_box': [14, 0, 221, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
               "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_贺平生_45度.png",
+              "strength_hint": 0.65
             },
             {
               "role": "face_anchor",
@@ -1214,41 +1343,57 @@
               "strength_hint": 0.5
             },
             {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
+              "strength_hint": 0.6
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
+              "strength_hint": 0.6
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_贺平生_表情_警觉.png",
+              "strength_hint": 0.6
+            },
+            {
               "role": "side",
-              "path": "出图/共享/图片/定妆_贺平生_侧.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_侧.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split', 'source_path': '出图/共享/图片/定妆_贺平生_三视图.png', 'source_sha256': '47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc', 'crop_box': [484, 0, 692, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
               "strength_hint": 0.55
             },
             {
               "role": "back",
-              "path": "出图/共享/图片/定妆_贺平生_背.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_背.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split', 'source_path': '出图/共享/图片/定妆_贺平生_三视图.png', 'source_sha256': '47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc', 'crop_box': [720, 0, 927, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
               "strength_hint": 0.5
             }
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 5,
-            "selected": 5,
+            "requested": 9,
+            "selected": 9,
             "dropped": 0
           },
           "dropped_references": [],
           "controlnet": [],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 9 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
-              "@Image2:face_anchor",
-              "@Image3:outfit",
-              "@Image4:side",
-              "@Image5:back"
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:expression",
+              "@Image7:expression",
+              "@Image8:side",
+              "@Image9:back"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
           },
-          "missing_references": [
-            "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
-            "脸部特写主参考"
-          ],
+          "missing_references": [],
           "native_subject_action": null,
           "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`",
           "needs_action": true,
@@ -1273,8 +1418,13 @@
           "recommended_references": [
             {
               "role": "front",
-              "path": "出图/共享/图片/定妆_贺平生.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split_front', 'source_path': '出图/共享/图片/定妆_贺平生_三视图.png', 'source_sha256': '47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc', 'crop_box': [14, 0, 221, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
               "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_贺平生_45度.png",
+              "strength_hint": 0.65
             },
             {
               "role": "face_anchor",
@@ -1287,41 +1437,57 @@
               "strength_hint": 0.5
             },
             {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
+              "strength_hint": 0.6
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
+              "strength_hint": 0.6
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_贺平生_表情_警觉.png",
+              "strength_hint": 0.6
+            },
+            {
               "role": "side",
-              "path": "出图/共享/图片/定妆_贺平生_侧.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_侧.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split', 'source_path': '出图/共享/图片/定妆_贺平生_三视图.png', 'source_sha256': '47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc', 'crop_box': [484, 0, 692, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
               "strength_hint": 0.55
             },
             {
               "role": "back",
-              "path": "出图/共享/图片/定妆_贺平生_背.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_背.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split', 'source_path': '出图/共享/图片/定妆_贺平生_三视图.png', 'source_sha256': '47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc', 'crop_box': [720, 0, 927, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
               "strength_hint": 0.5
             }
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 5,
-            "selected": 5,
+            "requested": 9,
+            "selected": 9,
             "dropped": 0
           },
           "dropped_references": [],
           "controlnet": [],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 9 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
-              "@Image2:face_anchor",
-              "@Image3:outfit",
-              "@Image4:side",
-              "@Image5:back"
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:expression",
+              "@Image7:expression",
+              "@Image8:side",
+              "@Image9:back"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
           },
-          "missing_references": [
-            "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
-            "脸部特写主参考"
-          ],
+          "missing_references": [],
           "native_subject_action": null,
           "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`",
           "needs_action": true,
@@ -1346,8 +1512,13 @@
           "recommended_references": [
             {
               "role": "front",
-              "path": "出图/共享/图片/定妆_贺平生.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split_front', 'source_path': '出图/共享/图片/定妆_贺平生_三视图.png', 'source_sha256': '47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc', 'crop_box': [14, 0, 221, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
               "strength_hint": 0.8
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/定妆_贺平生_45度.png",
+              "strength_hint": 0.65
             },
             {
               "role": "face_anchor",
@@ -1360,41 +1531,57 @@
               "strength_hint": 0.5
             },
             {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
+              "strength_hint": 0.6
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
+              "strength_hint": 0.6
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/定妆_贺平生_表情_警觉.png",
+              "strength_hint": 0.6
+            },
+            {
               "role": "side",
-              "path": "出图/共享/图片/定妆_贺平生_侧.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_侧.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split', 'source_path': '出图/共享/图片/定妆_贺平生_三视图.png', 'source_sha256': '47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc', 'crop_box': [484, 0, 692, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
               "strength_hint": 0.55
             },
             {
               "role": "back",
-              "path": "出图/共享/图片/定妆_贺平生_背.png",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_背.png', 'status': 'ready', 'derivation': {'method': 'turnaround_split', 'source_path': '出图/共享/图片/定妆_贺平生_三视图.png', 'source_sha256': '47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc', 'crop_box': [720, 0, 927, 1672], 'generated_by': 'skills/n2d-image/scripts/derive_makeup_pack.py', 'generated_at': '2026-06-29T09:58:56+00:00'}}",
               "strength_hint": 0.5
             }
           ],
           "reference_budget": {
             "limit": null,
-            "requested": 5,
-            "selected": 5,
+            "requested": 9,
+            "selected": 9,
             "dropped": 0
           },
           "dropped_references": [],
           "controlnet": [],
           "reference_feed": {
             "mode": "tagged_multi_image",
-            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 5 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
+            "guidance": "GPT Image 2（渠道 Codex CLI） 支持多参考：把这 9 张作为**分离的带标签参考**喂（每张独立 @Image1/@Image2… 各自语义角色），不要拼成一张参考表 sheet——拼图损分辨率/可寻址性，2026 SOTA 是分图分标。",
             "tagged_inputs": [
               "@Image1:front",
-              "@Image2:face_anchor",
-              "@Image3:outfit",
-              "@Image4:side",
-              "@Image5:back"
+              "@Image2:three_quarter",
+              "@Image3:face_anchor",
+              "@Image4:outfit",
+              "@Image5:expression",
+              "@Image6:expression",
+              "@Image7:expression",
+              "@Image8:side",
+              "@Image9:back"
             ],
             "video_reference_supported": false,
             "video_reference_hint": ""
           },
-          "missing_references": [
-            "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
-            "脸部特写主参考"
-          ],
+          "missing_references": [],
           "native_subject_action": null,
           "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`",
           "needs_action": true,
@@ -1581,10 +1768,7 @@
         "clip": "EP01_CLIP01",
         "char_id": "CHAR_HE_PINGSHENG",
         "form": "常态",
-        "missing": [
-          "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
-          "脸部特写主参考"
-        ],
+        "missing": [],
         "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`",
         "native_subject_action": null
       },
@@ -1593,7 +1777,6 @@
         "char_id": "CHAR_ZHANG_LAODA",
         "form": "常态",
         "missing": [
-          "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
           "脸部特写主参考"
         ],
         "escalation": null,
@@ -1604,7 +1787,6 @@
         "char_id": "CROWD_ZAYI",
         "form": "虚化",
         "missing": [
-          "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
           "脸部特写主参考"
         ],
         "escalation": null,
@@ -1642,10 +1824,7 @@
         "clip": "EP01_CLIP02",
         "char_id": "CHAR_HE_PINGSHENG",
         "form": "常态",
-        "missing": [
-          "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
-          "脸部特写主参考"
-        ],
+        "missing": [],
         "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`",
         "native_subject_action": null
       },
@@ -1654,7 +1833,6 @@
         "char_id": "CHAR_ZHANG_LAODA",
         "form": "常态",
         "missing": [
-          "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
           "脸部特写主参考"
         ],
         "escalation": null,
@@ -1665,7 +1843,6 @@
         "char_id": "CHAR_TAIXUMEN_ZHANGLAO",
         "form": "回忆背影",
         "missing": [
-          "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
           "脸部特写主参考"
         ],
         "escalation": null,
@@ -1703,10 +1880,7 @@
         "clip": "EP01_CLIP03",
         "char_id": "CHAR_HE_PINGSHENG",
         "form": "常态",
-        "missing": [
-          "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
-          "脸部特写主参考"
-        ],
+        "missing": [],
         "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`",
         "native_subject_action": null
       },
@@ -1715,7 +1889,6 @@
         "char_id": "CHAR_JIANG_JIAN",
         "form": "背影",
         "missing": [
-          "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
           "脸部特写主参考"
         ],
         "escalation": null,
@@ -1726,7 +1899,6 @@
         "char_id": "CHAR_HE_SANJIE",
         "form": "回忆影",
         "missing": [
-          "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
           "脸部特写主参考"
         ],
         "escalation": null,
@@ -1737,7 +1909,6 @@
         "char_id": "CROWD_TAIXU_CULTIVATOR",
         "form": "远景剪影",
         "missing": [
-          "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
           "脸部特写主参考"
         ],
         "escalation": null,
@@ -1776,10 +1947,7 @@
         "clip": "EP01_CLIP04",
         "char_id": "CHAR_HE_PINGSHENG",
         "form": "常态",
-        "missing": [
-          "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
-          "脸部特写主参考"
-        ],
+        "missing": [],
         "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`",
         "native_subject_action": null
       },
@@ -1788,7 +1956,6 @@
         "char_id": "CHAR_HAN_LAOSAN",
         "form": "常态",
         "missing": [
-          "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
           "脸部特写主参考"
         ],
         "escalation": null,
@@ -1825,10 +1992,7 @@
         "clip": "EP01_CLIP05",
         "char_id": "CHAR_HE_PINGSHENG",
         "form": "常态",
-        "missing": [
-          "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
-          "脸部特写主参考"
-        ],
+        "missing": [],
         "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`",
         "native_subject_action": null
       },
@@ -1836,10 +2000,7 @@
         "clip": "EP01_CLIP06",
         "char_id": "CHAR_HE_PINGSHENG",
         "form": "常态",
-        "missing": [
-          "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
-          "脸部特写主参考"
-        ],
+        "missing": [],
         "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`",
         "native_subject_action": null
       },
@@ -1847,10 +2008,7 @@
         "clip": "EP01_CLIP07",
         "char_id": "CHAR_HE_PINGSHENG",
         "form": "常态",
-        "missing": [
-          "45°/three_quarter 基础角度参考（所有角色/形态强制 ready）",
-          "脸部特写主参考"
-        ],
+        "missing": [],
         "escalation": "弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`",
         "native_subject_action": null
       }

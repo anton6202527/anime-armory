@@ -447,6 +447,54 @@
           "CHAR_HE_PINGSHENG"
         ]
       },
+      "interaction_graph": {
+        "version": 1,
+        "type": "memory_montage_blocking",
+        "participants": [
+          "CHAR_HE_PINGSHENG/幼年与常态",
+          "CHAR_JIANG_JIAN/背影",
+          "CHAR_HE_SANJIE/回忆影",
+          "CROWD_TAIXU_CULTIVATOR/远景剪影",
+          "旧行囊"
+        ],
+        "contact_points": [
+          {
+            "time": "8-15s",
+            "subject": "CHAR_JIANG_JIAN",
+            "body_part": "hands",
+            "object": "旧行囊",
+            "contact": "收拾/持有旧行囊，不与贺平生直接肢体接触"
+          },
+          {
+            "time": "15-22s",
+            "subject": "CHAR_HE_PINGSHENG",
+            "body_part": "eyes",
+            "object": "CROWD_TAIXU_CULTIVATOR/远景剪影",
+            "contact": "视线指向；无物理接触"
+          }
+        ],
+        "body_part_ownership": [
+          "CHAR_JIANG_JIAN.hands -> 旧行囊",
+          "CHAR_HE_PINGSHENG.eyes -> CROWD_TAIXU_CULTIVATOR/远景剪影",
+          "CROWD_TAIXU_CULTIVATOR.face -> forbidden/no_full_face"
+        ],
+        "holder_state": [
+          {
+            "object": "旧行囊",
+            "holder": "CHAR_JIANG_JIAN",
+            "time": "8-15s",
+            "transfer_event": "无递交；只作回忆引路暗示"
+          }
+        ],
+        "occlusion_order": [
+          "CHAR_HE_PINGSHENG left foreground",
+          "CHAR_JIANG_JIAN mid right back view",
+          "CHAR_HE_SANJIE background memory hint",
+          "CROWD_TAIXU_CULTIVATOR far background silhouette"
+        ],
+        "distance_perspective": "远景修士必须小比例、薄雾遮挡、不露脸；只有贺平生可清晰可辨。",
+        "degrade_plan": "若多人同框不稳，拆成旧院空景、江剑背影收拾行囊、贺平生远望修士剪影三段。"
+      },
       "template": "ensemble_blocking",
       "template_contract": {
         "template_id": "ensemble_blocking",

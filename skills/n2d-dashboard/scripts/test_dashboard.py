@@ -228,6 +228,19 @@ def test_image_qc_findings_reruns_stale_report(monkeypatch, tmp_path: Path) -> N
     assert findings == [{"sev": "block", "dim": "出图落档QC", "msg": "rerun"}]
 
 
+def test_image_qc_findings_accepts_noisy_stdout(monkeypatch, tmp_path: Path) -> None:
+    class Proc:
+        returncode = 0
+        stdout = "onnxruntime provider warning\nfind model: buffalo_l\n" \
+                 '[{"sev":"block","dim":"出图落档QC","msg":"rerun"}]\n'
+        stderr = ""
+
+    monkeypatch.setattr(dashboard.subprocess, "run", lambda *args, **kwargs: Proc())
+    findings = dashboard.run_image_qc_findings(str(tmp_path), "第1集", fail_closed=True)
+
+    assert findings == [{"sev": "block", "dim": "出图落档QC", "msg": "rerun"}]
+
+
 def test_image_qc_findings_reruns_report_missing_prop_confirmation_dependency(monkeypatch, tmp_path: Path) -> None:
     report_dir = tmp_path / "生产数据" / "image_qc" / "第1集"
     report_dir.mkdir(parents=True)

@@ -3330,24 +3330,25 @@ def _character_names_in_refs(refs: str) -> set:
         "场景", "道具", "寝殿", "宫", "殿", "庭", "院", "山", "洞", "门", "廊", "道",
         "床", "榻", "托盘", "光幕", "符纹", "剑气", "法宝", "特效", "阵", "丹炉", "炉",
         "雷", "火", "云", "光效", "地标", "花田", "花", "米饼", "灯", "剪影",
+        "战场", "尸城", "破屋", "朝堂", "御案", "急报", "戟", "白气", "精气",
+        "绘卷", "虚影", "龙珠", "雾影", "系统面板",
         "角色", "<角色>", "铜镜", "镜", "VFX", "万妖血脉", "噬妖", "系统面板", "潜行边缘",
     )
     names = set()
     for raw in re.findall(r"定妆_([^`\s，。、,）)]+)", refs):
-        if raw.endswith(".png"):
-            raw = raw[:-4]
+        raw = re.sub(r"\.(?:png|jpe?g|webp)$", "", raw, flags=re.I)
         base = raw
         # Strip view/crop suffixes first, then local form labels. Otherwise
         # `定妆_沈念_常态_45度.png` and `定妆_沈念_常态_半身.png` are counted as
         # different "characters", which creates false multi-subject blockers.
         for _ in range(2):
             base = re.sub(
-                r"_(45度|45°|三分之二|three_quarter|侧|侧面|半身|全身|背|背面|三视图|设定表|表情|脸部特写|头部特写|面部特写|局部|近景|特写)$",
+                r"_(45度|45°|三分之二|three_quarter|侧|侧面|半身|全身|背|背面|三视图|设定表|表情|脸部特写|头部特写|面部特写|局部|近景|特写|主参考|母本)$",
                 "",
                 base,
             )
             base = re.sub(
-                r"_(常态|觉醒态|潜行态|人形|妖形|小妖群|裂口妖|少年态|幼年态|成年态|受伤态|伪装态|战斗态)$",
+                r"_(常态|觉醒态|觉醒蓝调母本|战场形态|朝堂常态|断臂校尉|残兵剪影|群臣剪影|潜行态|人形|妖形|小妖群|裂口妖|少年态|幼年态|成年态|受伤态|伪装态|战斗态)$",
                 "",
                 base,
             )

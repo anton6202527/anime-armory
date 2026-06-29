@@ -1,26 +1,26 @@
 # n2d 生产数据仪表盘
 
-- 生成时间：2026-06-29T12:13:59+00:00
-- 事件日志：`创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
+- 生成时间：2026-06-29T15:05:26+00:00
+- 事件日志：`/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
 ## 总览
 
 | 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 生成通过率 | 可交付通过率 |
 |---:|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 4 | 373 | — | 1h02m14s | 27 | 0 | 225 | 90 | 100.0% | 0.0% |
+| 4 | 107 | — | 2h31m11s | 42 | 0 | 3 | 28 | 100.0% | 0.0% |
 
 ## ROI
 
 | 成片分钟 | 每分钟成本 | 每集耗时 | 一次通过率 | 重抽率 | 投放播放 | 投放收入 | 投放成本 | 净回收 | 回收/生产成本 |
 |---:|---|---:|---:|---:|---:|---|---|---|---:|
-| 1m55s | — | 1h02m14s | 100.0% | 0.0% | 0 | — | — | — | — |
+| 1m55s | — | 2h31m11s | 100.0% | 0.0% | 0 | — | — | — | — |
 
 ## Gate 噪声
 
 | warn/生成 | block/生成 | 误报回收 | 误报回收率 |
 |---:|---:|---:|---:|
-| 3.3333 | 8.3333 | 0 | 0.0% |
+| 0.6667 | 0.0714 | 0 | 0.0% |
 
 ## 行业基准对照（只读 · 非闸门 · 采集 2026-06-25）
 
@@ -47,24 +47,21 @@
 
 | 集 | 当前前沿 | 成本 | 每分钟成本 | 耗时 | 一次通过率 | 重抽率 | 重抽原因Top3 | QA阻断 | 净回收 | 回收/成本 | 3s留存 | 15s留存 | 完播率 | 追更率 |
 |---|---|---|---|---:|---:|---:|---|---:|---|---:|---:|---:|---:|---:|
-| 第1集 | 出图 | — | — | 1h02m14s | 100.0% | 0.0% | — | 225 | — | — | — | — | — | — |
+| 第1集 | 出图 | — | — | 2h31m11s | 100.0% | 0.0% | — | 3 | — | — | — | — | — | — |
 | 第2集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第3集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第4集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 
 ## 最新阻断
 
-- 第1集 / image / 生图后端基线: 创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_baseline.json — 本项目尚未锁定生图后端基线。production 必须每部剧固定一组生图模型/渠道；先确认当前 _设置.md 的 `生图AI/生图模型` 后执行 `python3 skills/n2d/_lib/image_backend_adapter.py record-baseline "创作区/制漫剧/仙界闭关小能手"`，再进入付费出图。
-- 第1集 / image / 关键镜候选: 创作区/制漫剧/仙界闭关小能手/生产数据/candidate_selection_第1集.json — production 出图后缺 candidate_selection_第1集.json；关键镜必须经过 best-of-N 选优而不是单张通过。生成候选后跑 `python3 skills/n2d-image/scripts/candidate_select.py "创作区/制漫剧/仙界闭关小能手" 第1集 --apply`。
-- 第1集 / image / 主角装备库: 创作区/制漫剧/仙界闭关小能手/出图/共享/identity_registry.json character#1 form#1 signature_equipment — 核心动作角色缺 signature_equipment；请把主角常用武器/法宝/标志性道具登记为 WEAPON_xx/PROP_xx/VFX_xx，并在角色 form 上绑定，避免主角形象只锁脸不锁随身装备。
-- 第1集 / image / 资产身份注册层: 创作区/制漫剧/仙界闭关小能手/出图/共享/identity_registry.json character#1 form#1 — reference_atlas.base_views 基础视角必须为 ready 且有路径：front, three_quarter, side, back, half_body；所有人物/形态都强制包含 45°/three_quarter 与脸部特写基础锚，不能登记为 planned 后放行。
-- 第1集 / image / 资产身份注册层: 创作区/制漫剧/仙界闭关小能手/出图/共享/identity_registry.json character#1 form#1 — reference_atlas 至少登记一个 ready 的同源脸部特写/表情参考（face_anchor_refs 或 expression_refs）；功能角色也不能只靠正脸硬扛近景，planned 脸锚不能放行。
-- 第1集 / image / 资产身份注册层: 创作区/制漫剧/仙界闭关小能手/出图/共享/identity_registry.json character#1 form#1 — reference_group 缺核心路径：three_quarter
-- 第1集 / image / 资产身份注册层: 创作区/制漫剧/仙界闭关小能手/出图/共享/identity_registry.json character#1 form#1 — side ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须登记 method=controlled_multiref_generation 并保留可校验 source_path/source_sha256。禁止逐张文生图补角度导致脸漂。
-- 第1集 / image / 资产身份注册层: 创作区/制漫剧/仙界闭关小能手/出图/共享/identity_registry.json character#1 form#1 — back ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须登记 method=controlled_multiref_generation 并保留可校验 source_path/source_sha256。禁止逐张文生图补角度导致脸漂。
+- 第1集 / image / 锚点门(N3): 出图/共享/图片 — 一致性审计发现问题
+- 第1集 / image / 出图落档QC: 创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集 — image gate 无法取得 image_qc findings：Expecting value: line 1 column 1 (char 0); stderr=/Users/lalala/.local/lib/python3.13/site-packages/onnxruntime/capi/onnxruntime_inference_collection.py:149: UserWarning: Specified provider 'CUDAExecutionProvider' is not in available provider names.Available providers: 'CoreMLExecutionProvider, AzureExecutionProvider, CPUExecutionProvider'
+  warnings.warn(
+Applied providers: ['CPUExecutionProvider'], with options: {'CPUExecutionProvider': {}}
+find model: /Users/lalala/.insightface/models/buffalo_l/1k3d68.onnx landmark_3d_68 ['None', 3, 192, 192；出图落档回验必须 fail-closed，先修复 image_qc 再放行。
 
 ## 验收总账
 
 | 集 | 状态 | 实体数 | block | high | medium | 重点实体 |
 |---|---|---:|---:|---:|---:|---|
-| 第1集 | blocked | 16 | 5 | 3 | 13 | 贺平生(block)；黑陶破盆(block)；张老大(high) |
+| 第1集 | blocked | 16 | 9 | 4 | 10 | 黑陶破盆(block)；水桶与扁担(block)；铁碗/钥匙铁锁(block) |

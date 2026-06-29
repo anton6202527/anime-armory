@@ -3597,6 +3597,8 @@
       "forms": [
         {
           "form": "远景剪影",
+          "restricted_partial": true,
+          "face_policy": "no_full_face",
           "asset_key": "远景修士剪影",
           "anchor_phrase": "远景太虚门修士剪影，低饱和长袍，山间云雾中小比例掠过，不露脸。",
           "character_dna": {
@@ -3827,13 +3829,14 @@
           "drift_forbidden": [
             "front_closeup",
             "clear_face",
+            "no_clear_facial_features",
             "heroic_main_character",
             "modern_aircraft",
             "strong_light_wings"
           ],
           "reference_atlas": {
             "version": 1,
-            "build_tier": "basic_planned",
+            "build_tier": "restricted_partial",
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_远景修士剪影.png",
@@ -3945,9 +3948,9 @@
             "action_refs": [],
             "selection_policy": {
               "closeup": [
-                "front",
-                "face_anchor_refs",
-                "three_quarter"
+                "back",
+                "side",
+                "half_body"
               ],
               "three_quarter": [
                 "three_quarter",
@@ -3956,7 +3959,7 @@
               ],
               "profile": [
                 "side",
-                "front"
+                "back"
               ],
               "back_view": [
                 "back",
@@ -3968,9 +3971,9 @@
                 "side"
               ],
               "multi_person_contact": [
-                "front",
-                "face_anchor_refs",
-                "three_quarter"
+                "back",
+                "side",
+                "half_body"
               ]
             },
             "fallback_policy": "先补 ready 基础定妆包；未 ready 前不得生成分镜 PNG。"

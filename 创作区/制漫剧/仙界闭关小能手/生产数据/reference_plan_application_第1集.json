@@ -7,9 +7,9 @@
   "accepted": true,
   "reviewer": "codex",
   "plan_path": "生产数据/reference_plan_第1集.json",
-  "plan_sha256": "b16db52bd3feed67dc1687c085679e5fafc402e8762d7a1a59ec20d00f806efe",
+  "plan_sha256": "c486622f41dd2bb4646753e28e09a87f6e19a86c70e950fd9f1f3b9f6c661025",
   "prompt_path": "出图/第1集/prompt/01_分镜出图.md",
-  "prompt_sha256": "4989b6f3579ecbf113c9e006cd6bf5025832a9f729936103aba1bbeb8e26e4c9",
+  "prompt_sha256": "7755906986ade85f6e45714c2644cb6bc87e00dd5509dd5dba125b76c29d547f",
   "shared_prompt_paths": [
     "出图/共享/prompt/角色定妆.md",
     "出图/共享/prompt/场景定妆.md",
@@ -91,7 +91,7 @@
     "所有可见人物必须先具备年级或年龄段、身高段、体态、肤色、脸型、发型、服装、相对身量和漂移禁令"
   ],
   "notes": "本文件只确认 reference_plan 已落实到 prompt 结构；仍需共享参考图 ready、锚点 pin、face_anchor_refs/expression refs 和 image_preflight 通过后，才能正式跑 Clip 成图。",
-  "updated_at": "2026-06-29T20:06:33+08:00",
+  "updated_at": "2026-06-29T21:45:00+08:00",
   "storyboard_path": "脚本/第1集/storyboard.json",
-  "storyboard_sha256": "2691790afd3ab90f63d11b356d2989f36bd53d7ed30bc3f5c525b2f89cd12a5e"
+  "storyboard_sha256": "7a072ee4cee397d96b2af246db445e13f98da86dea2a17f843208e34f18175ae"
 }
