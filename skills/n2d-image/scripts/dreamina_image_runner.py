@@ -66,7 +66,8 @@ def build_dreamina_prompt(root: Path, episode: str, target: base.Target) -> str:
     if clash:
         parts.append(clash)
     # 打斗/法术/动作高潮镜：注入「经费在燃烧」视觉盛宴保底层（与 Codex 后端同源·单一真值源 n2d_const）。
-    richness = base.combat_spectacle_richness_for(body)
+    # 传本剧风格句 → cel/ink/flat 风格自动换变体，避免给赛璐璐/水墨/Q版剧硬塞写实体积光与 motion blur。
+    richness = base.combat_spectacle_richness_for(body, style)
     if richness:
         parts.append(richness)
     parts.append(_field(body, "负向 prompt"))

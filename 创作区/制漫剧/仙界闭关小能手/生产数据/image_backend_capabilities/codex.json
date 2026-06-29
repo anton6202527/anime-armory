@@ -69,102 +69,102 @@
   "capability_assertions": {
     "auto_runnable": {
       "evidence_kind": "cli_probe",
-      "observed_text": "Codex CLI found at /opt/homebrew/bin/codex; image_generation feature stable=true; adapter scan reports backend=codex auto_usable=true for GPT Image 2 via Codex CLI; OpenAI API not used because OPENAI_API_KEY is absent.",
-      "source": "codex features list + image_backend_adapter.py scan --json",
+      "observed_text": "2026-06-29 本机探活：Codex CLI 0.142.4 可作为访问入口；adapter scan 显示 codex auto_usable=true，OpenAI env 可用；本轮继续沿用项目已锁定的 GPT Image 2 via Codex CLI，不切换后端、不混用模型。",
+      "source": "local cli probe: image_backend_adapter scan --json + codex --version/help",
       "source_url": "",
       "value": true
     },
     "channel": {
       "evidence_kind": "cli_probe",
-      "observed_text": "Codex CLI found at /opt/homebrew/bin/codex; image_generation feature stable=true; adapter scan reports backend=codex auto_usable=true for GPT Image 2 via Codex CLI; OpenAI API not used because OPENAI_API_KEY is absent.",
-      "source": "codex features list + image_backend_adapter.py scan --json",
+      "observed_text": "2026-06-29 本机探活：Codex CLI 0.142.4 可作为访问入口；adapter scan 显示 codex auto_usable=true，OpenAI env 可用；本轮继续沿用项目已锁定的 GPT Image 2 via Codex CLI，不切换后端、不混用模型。",
+      "source": "local cli probe: image_backend_adapter scan --json + codex --version/help",
       "source_url": "",
       "value": "Codex CLI"
     },
     "max_reference_images": {
       "evidence_kind": "cli_probe",
-      "observed_text": "Codex CLI found at /opt/homebrew/bin/codex; image_generation feature stable=true; adapter scan reports backend=codex auto_usable=true for GPT Image 2 via Codex CLI; OpenAI API not used because OPENAI_API_KEY is absent.",
-      "source": "codex features list + image_backend_adapter.py scan --json",
+      "observed_text": "2026-06-29 本机探活：Codex CLI 0.142.4 可作为访问入口；adapter scan 显示 codex auto_usable=true，OpenAI env 可用；本轮继续沿用项目已锁定的 GPT Image 2 via Codex CLI，不切换后端、不混用模型。",
+      "source": "local cli probe: image_backend_adapter scan --json + codex --version/help",
       "source_url": "",
       "value": 24
     },
     "model": {
       "evidence_kind": "cli_probe",
-      "observed_text": "Codex CLI found at /opt/homebrew/bin/codex; image_generation feature stable=true; adapter scan reports backend=codex auto_usable=true for GPT Image 2 via Codex CLI; OpenAI API not used because OPENAI_API_KEY is absent.",
-      "source": "codex features list + image_backend_adapter.py scan --json",
+      "observed_text": "2026-06-29 本机探活：Codex CLI 0.142.4 可作为访问入口；adapter scan 显示 codex auto_usable=true，OpenAI env 可用；本轮继续沿用项目已锁定的 GPT Image 2 via Codex CLI，不切换后端、不混用模型。",
+      "source": "local cli probe: image_backend_adapter scan --json + codex --version/help",
       "source_url": "",
       "value": "GPT Image 2"
     },
     "official": {
       "evidence_kind": "cli_probe",
-      "observed_text": "Codex CLI found at /opt/homebrew/bin/codex; image_generation feature stable=true; adapter scan reports backend=codex auto_usable=true for GPT Image 2 via Codex CLI; OpenAI API not used because OPENAI_API_KEY is absent.",
-      "source": "codex features list + image_backend_adapter.py scan --json",
+      "observed_text": "2026-06-29 本机探活：Codex CLI 0.142.4 可作为访问入口；adapter scan 显示 codex auto_usable=true，OpenAI env 可用；本轮继续沿用项目已锁定的 GPT Image 2 via Codex CLI，不切换后端、不混用模型。",
+      "source": "local cli probe: image_backend_adapter scan --json + codex --version/help",
       "source_url": "",
       "value": true
     },
     "output": {
       "evidence_kind": "cli_probe",
-      "observed_text": "Codex CLI found at /opt/homebrew/bin/codex; image_generation feature stable=true; adapter scan reports backend=codex auto_usable=true for GPT Image 2 via Codex CLI; OpenAI API not used because OPENAI_API_KEY is absent.",
-      "source": "codex features list + image_backend_adapter.py scan --json",
+      "observed_text": "2026-06-29 本机探活：Codex CLI 0.142.4 可作为访问入口；adapter scan 显示 codex auto_usable=true，OpenAI env 可用；本轮继续沿用项目已锁定的 GPT Image 2 via Codex CLI，不切换后端、不混用模型。",
+      "source": "local cli probe: image_backend_adapter scan --json + codex --version/help",
       "source_url": "",
       "value": "png_file"
     },
     "persistent_subject": {
       "evidence_kind": "cli_probe",
-      "observed_text": "Codex CLI found at /opt/homebrew/bin/codex; image_generation feature stable=true; adapter scan reports backend=codex auto_usable=true for GPT Image 2 via Codex CLI; OpenAI API not used because OPENAI_API_KEY is absent.",
-      "source": "codex features list + image_backend_adapter.py scan --json",
+      "observed_text": "2026-06-29 本机探活：Codex CLI 0.142.4 可作为访问入口；adapter scan 显示 codex auto_usable=true，OpenAI env 可用；本轮继续沿用项目已锁定的 GPT Image 2 via Codex CLI，不切换后端、不混用模型。",
+      "source": "local cli probe: image_backend_adapter scan --json + codex --version/help",
       "source_url": "",
       "value": false
     },
     "reference_mode": {
       "evidence_kind": "cli_probe",
-      "observed_text": "Codex CLI found at /opt/homebrew/bin/codex; image_generation feature stable=true; adapter scan reports backend=codex auto_usable=true for GPT Image 2 via Codex CLI; OpenAI API not used because OPENAI_API_KEY is absent.",
-      "source": "codex features list + image_backend_adapter.py scan --json",
+      "observed_text": "2026-06-29 本机探活：Codex CLI 0.142.4 可作为访问入口；adapter scan 显示 codex auto_usable=true，OpenAI env 可用；本轮继续沿用项目已锁定的 GPT Image 2 via Codex CLI，不切换后端、不混用模型。",
+      "source": "local cli probe: image_backend_adapter scan --json + codex --version/help",
       "source_url": "",
       "value": "multi_image_flags"
     },
     "supports_edit": {
       "evidence_kind": "cli_probe",
-      "observed_text": "Codex CLI found at /opt/homebrew/bin/codex; image_generation feature stable=true; adapter scan reports backend=codex auto_usable=true for GPT Image 2 via Codex CLI; OpenAI API not used because OPENAI_API_KEY is absent.",
-      "source": "codex features list + image_backend_adapter.py scan --json",
+      "observed_text": "2026-06-29 本机探活：Codex CLI 0.142.4 可作为访问入口；adapter scan 显示 codex auto_usable=true，OpenAI env 可用；本轮继续沿用项目已锁定的 GPT Image 2 via Codex CLI，不切换后端、不混用模型。",
+      "source": "local cli probe: image_backend_adapter scan --json + codex --version/help",
       "source_url": "",
       "value": false
     },
     "supports_high_fidelity_reference": {
       "evidence_kind": "cli_probe",
-      "observed_text": "Codex CLI found at /opt/homebrew/bin/codex; image_generation feature stable=true; adapter scan reports backend=codex auto_usable=true for GPT Image 2 via Codex CLI; OpenAI API not used because OPENAI_API_KEY is absent.",
-      "source": "codex features list + image_backend_adapter.py scan --json",
+      "observed_text": "2026-06-29 本机探活：Codex CLI 0.142.4 可作为访问入口；adapter scan 显示 codex auto_usable=true，OpenAI env 可用；本轮继续沿用项目已锁定的 GPT Image 2 via Codex CLI，不切换后端、不混用模型。",
+      "source": "local cli probe: image_backend_adapter scan --json + codex --version/help",
       "source_url": "",
       "value": true
     },
     "supports_image_reference": {
       "evidence_kind": "cli_probe",
-      "observed_text": "Codex CLI found at /opt/homebrew/bin/codex; image_generation feature stable=true; adapter scan reports backend=codex auto_usable=true for GPT Image 2 via Codex CLI; OpenAI API not used because OPENAI_API_KEY is absent.",
-      "source": "codex features list + image_backend_adapter.py scan --json",
+      "observed_text": "2026-06-29 本机探活：Codex CLI 0.142.4 可作为访问入口；adapter scan 显示 codex auto_usable=true，OpenAI env 可用；本轮继续沿用项目已锁定的 GPT Image 2 via Codex CLI，不切换后端、不混用模型。",
+      "source": "local cli probe: image_backend_adapter scan --json + codex --version/help",
       "source_url": "",
       "value": true
     },
     "supports_mask": {
       "evidence_kind": "cli_probe",
-      "observed_text": "Codex CLI found at /opt/homebrew/bin/codex; image_generation feature stable=true; adapter scan reports backend=codex auto_usable=true for GPT Image 2 via Codex CLI; OpenAI API not used because OPENAI_API_KEY is absent.",
-      "source": "codex features list + image_backend_adapter.py scan --json",
+      "observed_text": "2026-06-29 本机探活：Codex CLI 0.142.4 可作为访问入口；adapter scan 显示 codex auto_usable=true，OpenAI env 可用；本轮继续沿用项目已锁定的 GPT Image 2 via Codex CLI，不切换后端、不混用模型。",
+      "source": "local cli probe: image_backend_adapter scan --json + codex --version/help",
       "source_url": "",
       "value": false
     },
     "supports_text2image": {
       "evidence_kind": "cli_probe",
-      "observed_text": "Codex CLI found at /opt/homebrew/bin/codex; image_generation feature stable=true; adapter scan reports backend=codex auto_usable=true for GPT Image 2 via Codex CLI; OpenAI API not used because OPENAI_API_KEY is absent.",
-      "source": "codex features list + image_backend_adapter.py scan --json",
+      "observed_text": "2026-06-29 本机探活：Codex CLI 0.142.4 可作为访问入口；adapter scan 显示 codex auto_usable=true，OpenAI env 可用；本轮继续沿用项目已锁定的 GPT Image 2 via Codex CLI，不切换后端、不混用模型。",
+      "source": "local cli probe: image_backend_adapter scan --json + codex --version/help",
       "source_url": "",
       "value": true
     }
   },
   "evidence_kind": "cli_probe",
   "kind": "n2d_image_backend_refresh_evidence",
-  "note": "Codex CLI found at /opt/homebrew/bin/codex; image_generation feature stable=true; adapter scan reports backend=codex auto_usable=true for GPT Image 2 via Codex CLI; OpenAI API not used because OPENAI_API_KEY is absent.",
+  "note": "2026-06-29 本机探活：Codex CLI 0.142.4 可作为访问入口；adapter scan 显示 codex auto_usable=true，OpenAI env 可用；本轮继续沿用项目已锁定的 GPT Image 2 via Codex CLI，不切换后端、不混用模型。",
   "source_urls": [],
   "sources": [
-    "codex features list + image_backend_adapter.py scan --json"
+    "local cli probe: image_backend_adapter scan --json + codex --version/help"
   ],
-  "verified_at": "2026-06-29"
+  "verified_at": "2026-06-30"
 }

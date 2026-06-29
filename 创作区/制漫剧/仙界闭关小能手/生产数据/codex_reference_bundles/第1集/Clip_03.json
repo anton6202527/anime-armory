@@ -17,6 +17,17 @@
       "source": "reference_bundle"
     },
     {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门外门旧院_反打.png",
+      "bytes": 2673760,
+      "owner": "LOC_WAIMEN_JIUYUAN",
+      "priority": 40,
+      "rel_path": "出图/共享/图片/定妆_太虚门外门旧院_反打.png",
+      "role": "asset",
+      "sequence": 35,
+      "sha256": "ca704e720fc89ab75d2f6c9e4fea03cdf634367f0c26baf3743e3d88b3facd37",
+      "source": "reference_bundle"
+    },
+    {
       "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_脸部特写.png",
       "bytes": 544124,
       "owner": "CHAR_HE_PINGSHENG/常态",
@@ -257,17 +268,6 @@
       "sequence": 25,
       "sha256": "2abe4f99610d8aa802ef05b29459287b7740594a5120f0b0cee73ef49d2c4f6e",
       "source": "reference_bundle"
-    },
-    {
-      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_侧.png",
-      "bytes": 516739,
-      "owner": "CHAR_HE_SANJIE/回忆影",
-      "priority": 130,
-      "rel_path": "出图/共享/图片/定妆_贺三杰_回忆影_侧.png",
-      "role": "character",
-      "sequence": 28,
-      "sha256": "81351ff59749d488de9b402a4515c26bba775e9112eed05cea0bdb8145ffc079",
-      "source": "reference_bundle"
     }
   ],
   "episode": "第1集",
@@ -338,7 +338,8 @@
       "id": "LOC_WAIMEN_JIUYUAN",
       "kind": "asset",
       "paths": [
-        "出图/共享/图片/定妆_太虚门外门旧院.png"
+        "出图/共享/图片/定妆_太虚门外门旧院.png",
+        "出图/共享/图片/定妆_太虚门外门旧院_反打.png"
       ],
       "type": "location"
     }

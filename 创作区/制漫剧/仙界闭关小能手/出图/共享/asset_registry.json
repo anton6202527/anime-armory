@@ -8,10 +8,7 @@
       "name": "秀竹峰杂役大殿",
       "scope": "第1集主场景",
       "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_秀竹峰杂役大殿.png",
-          "status": "ready"
-        },
+        "primary": "出图/共享/图片/定妆_秀竹峰杂役大殿.png",
         "alternates": []
       },
       "scene_dna": {
@@ -154,10 +151,7 @@
       "name": "秀竹峰杂役院与空房",
       "scope": "第1集主场景",
       "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
-          "status": "ready"
-        },
+        "primary": "出图/共享/图片/定妆_秀竹峰杂役院.png",
         "alternates": []
       },
       "scene_dna": {
@@ -300,10 +294,7 @@
       "name": "后山山泉浅潭",
       "scope": "第1集主场景",
       "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_后山山泉浅潭.png",
-          "status": "ready"
-        },
+        "primary": "出图/共享/图片/定妆_后山山泉浅潭.png",
         "alternates": []
       },
       "scene_dna": {
@@ -447,12 +438,9 @@
       "name": "太虚门外门旧院/秀竹峰山门回忆场",
       "scope": "第1集回忆蒙太奇",
       "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_太虚门外门旧院.png",
-          "status": "ready"
-        },
+        "primary": "出图/共享/图片/定妆_太虚门外门旧院.png",
         "alternates": [
-          "出图/共享/图片/定妆_秀竹峰山门.png"
+          "出图/共享/图片/定妆_太虚门外门旧院_反打.png"
         ]
       },
       "scene_dna": {
@@ -613,10 +601,7 @@
         }
       ],
       "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_黑陶破盆.png",
-          "status": "ready"
-        },
+        "primary": "出图/共享/图片/定妆_黑陶破盆.png",
         "alternates": []
       },
       "constraints": {
@@ -660,10 +645,7 @@
         }
       ],
       "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_水桶与扁担.png",
-          "status": "ready"
-        },
+        "primary": "出图/共享/图片/定妆_水桶与扁担.png",
         "alternates": []
       },
       "constraints": {
@@ -705,10 +687,7 @@
         }
       ],
       "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_铁碗钥匙铁锁.png",
-          "status": "ready"
-        },
+        "primary": "出图/共享/图片/定妆_铁碗钥匙铁锁.png",
         "alternates": []
       },
       "constraints": {
@@ -754,15 +733,9 @@
         }
       ],
       "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_旧钥匙与生锈铁锁.png",
-          "status": "ready"
-        },
+        "primary": "出图/共享/图片/定妆_旧钥匙与生锈铁锁.png",
         "alternates": [
-          {
-            "path": "出图/共享/图片/定妆_铁碗钥匙铁锁.png",
-            "status": "ready"
-          }
+          "出图/共享/图片/定妆_铁碗钥匙铁锁.png"
         ]
       },
       "constraints": {

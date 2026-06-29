@@ -63,10 +63,12 @@
           "verdict": "warn"
         },
         {
+          "anchor_policy": "non_human_no_face",
           "box_ratio": 0.0,
           "char": "远景修士剪影",
           "faces": 0,
-          "verdict": "block"
+          "reason": "non_human_anchor_policy",
+          "verdict": "ok"
         },
         {
           "box_ratio": 0.0037,
@@ -113,8 +115,8 @@
           "intra_pairs": 4
         },
         "贺平生": {
-          "ep_mean_score": 0.4327,
-          "ep_n_shots": 13,
+          "ep_mean_score": 0.4342,
+          "ep_n_shots": 18,
           "floor": 0.3775,
           "floor_calibrated": true,
           "has_main": true,
@@ -211,8 +213,8 @@
           "floor": 0.3775,
           "floor_calibrated": true,
           "png": "图片/Clip03_外门遗孤.png",
-          "score": 0.5346,
-          "score_vs_main": 0.5144,
+          "score": 0.4462,
+          "score_vs_main": 0.4192,
           "verdict": "ok"
         },
         {
@@ -222,8 +224,8 @@
           "floor": 0.3775,
           "floor_calibrated": true,
           "png": "图片/Clip03_外门遗孤_end.png",
-          "score": 0.5482,
-          "score_vs_main": 0.4212,
+          "score": 0.4617,
+          "score_vs_main": 0.4029,
           "verdict": "ok"
         },
         {
@@ -233,8 +235,8 @@
           "floor": 0.3775,
           "floor_calibrated": true,
           "png": "图片/Clip03_外门遗孤_mid.png",
-          "score": 0.485,
-          "score_vs_main": 0.4842,
+          "score": 0.4654,
+          "score_vs_main": 0.3949,
           "verdict": "ok"
         },
         {
@@ -244,16 +246,20 @@
           "floor": 0.3775,
           "floor_calibrated": true,
           "png": "图片/Clip04_两缸水和空屋.png",
-          "score": 0.3054,
-          "score_vs_main": 0.2142,
-          "verdict": "warn"
+          "score": 0.2957,
+          "score_vs_main": 0.2769,
+          "verdict": "block"
         },
         {
-          "chars": [
-            "贺平生"
-          ],
+          "anchor": "best_of_variants",
+          "char": "贺平生",
+          "face_idx": 1,
+          "floor": 0.3775,
+          "floor_calibrated": true,
           "png": "图片/Clip04_两缸水和空屋_end.png",
-          "verdict": "noface"
+          "score": 0.3384,
+          "score_vs_main": 0.2938,
+          "verdict": "warn"
         },
         {
           "anchor": "best_of_variants",
@@ -262,9 +268,9 @@
           "floor": 0.3775,
           "floor_calibrated": true,
           "png": "图片/Clip04_两缸水和空屋_mid.png",
-          "score": 0.2418,
-          "score_vs_main": 0.2307,
-          "verdict": "block"
+          "score": 0.3857,
+          "score_vs_main": 0.332,
+          "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
@@ -283,10 +289,64 @@
           "face_idx": 0,
           "floor": 0.3775,
           "floor_calibrated": true,
+          "png": "图片/Clip05_夜挑五趟_end.png",
+          "score": 0.4783,
+          "score_vs_main": 0.3863,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
           "png": "图片/Clip05_夜挑五趟_mid.png",
           "score": 0.5084,
           "score_vs_main": 0.3903,
           "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip06_水底破盆.png",
+          "score": 0.5716,
+          "score_vs_main": 0.5713,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip06_水底破盆_end.png",
+          "score": 0.4626,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip06_水底破盆_mid.png",
+          "score": 0.5146,
+          "verdict": "ok"
+        },
+        {
+          "chars": [
+            "贺平生"
+          ],
+          "png": "图片/Clip07_盆底微光.png",
+          "verdict": "noface"
+        },
+        {
+          "chars": [
+            "贺平生"
+          ],
+          "png": "图片/Clip07_盆底微光_mid.png",
+          "verdict": "noface"
         }
       ]
     },
@@ -381,42 +441,42 @@
           "char": "贺平生",
           "floor": 0.2496,
           "png": "图片/Clip03_外门遗孤.png",
-          "score": 0.8218,
+          "score": 0.5693,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "floor": 0.2496,
           "png": "图片/Clip03_外门遗孤_end.png",
-          "score": 0.5746,
-          "verdict": "ok"
+          "score": 0.2224,
+          "verdict": "warn"
         },
         {
           "char": "贺平生",
           "floor": 0.2496,
           "png": "图片/Clip03_外门遗孤_mid.png",
-          "score": 0.7043,
+          "score": 0.4735,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "floor": 0.2496,
           "png": "图片/Clip04_两缸水和空屋.png",
-          "score": 0.1357,
-          "verdict": "block"
+          "score": 0.3311,
+          "verdict": "ok"
         },
         {
           "char": "贺平生",
           "floor": 0.2496,
           "png": "图片/Clip04_两缸水和空屋_end.png",
-          "score": 0.2952,
+          "score": 0.3252,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "floor": 0.2496,
           "png": "图片/Clip04_两缸水和空屋_mid.png",
-          "score": 0.2986,
+          "score": 0.2952,
           "verdict": "ok"
         },
         {
@@ -429,8 +489,50 @@
         {
           "char": "贺平生",
           "floor": 0.2496,
+          "png": "图片/Clip05_夜挑五趟_end.png",
+          "score": 0.5515,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
           "png": "图片/Clip05_夜挑五趟_mid.png",
           "score": 0.4334,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip06_水底破盆.png",
+          "score": 0.5228,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip06_水底破盆_end.png",
+          "score": 0.4217,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip06_水底破盆_mid.png",
+          "score": 0.6469,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip07_盆底微光.png",
+          "score": 0.8972,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip07_盆底微光_mid.png",
+          "score": 0.8009,
           "verdict": "ok"
         }
       ]
@@ -536,8 +638,8 @@
       "episode": "第1集",
       "groups": {
         "LOC_HOUSHAN_QIANTAN": {
-          "shots": 1,
-          "skipped": "组<3镜"
+          "median_dist": 0.512,
+          "shots": 3
         },
         "LOC_WAIMEN_JIUYUAN": {
           "shots": 1,
@@ -551,12 +653,16 @@
           "shots": 1,
           "skipped": "组<3镜"
         },
+        "PROP_HEI_TAO_PEN": {
+          "shots": 2,
+          "skipped": "组<3镜"
+        },
         "PROP_KEY_LOCK": {
           "shots": 1,
           "skipped": "组<3镜"
         },
         "PROP_SHUI_TONG": {
-          "shots": 1,
+          "shots": 2,
           "skipped": "组<3镜"
         },
         "PROP_TIE_WAN": {
@@ -662,43 +768,43 @@
           "char": "贺平生",
           "floor": 0.3603,
           "png": "图片/Clip03_外门遗孤.png",
-          "score": 0.8756,
+          "score": 0.5668,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "floor": 0.3603,
           "png": "图片/Clip03_外门遗孤_end.png",
-          "score": 0.6072,
-          "verdict": "ok"
+          "score": 0.2496,
+          "verdict": "block"
         },
         {
           "char": "贺平生",
           "floor": 0.3603,
           "png": "图片/Clip03_外门遗孤_mid.png",
-          "score": 0.7423,
+          "score": 0.4908,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "floor": 0.3603,
           "png": "图片/Clip04_两缸水和空屋.png",
-          "score": 0.1815,
-          "verdict": "block"
+          "score": 0.4108,
+          "verdict": "ok"
         },
         {
           "char": "贺平生",
           "floor": 0.3603,
           "png": "图片/Clip04_两缸水和空屋_end.png",
-          "score": 0.3197,
+          "score": 0.3491,
           "verdict": "warn"
         },
         {
           "char": "贺平生",
           "floor": 0.3603,
           "png": "图片/Clip04_两缸水和空屋_mid.png",
-          "score": 0.3382,
-          "verdict": "warn"
+          "score": 0.2498,
+          "verdict": "block"
         },
         {
           "char": "贺平生",
@@ -710,8 +816,50 @@
         {
           "char": "贺平生",
           "floor": 0.3603,
+          "png": "图片/Clip05_夜挑五趟_end.png",
+          "score": 0.5681,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
           "png": "图片/Clip05_夜挑五趟_mid.png",
           "score": 0.435,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip06_水底破盆.png",
+          "score": 0.6118,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip06_水底破盆_end.png",
+          "score": 0.505,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip06_水底破盆_mid.png",
+          "score": 0.719,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip07_盆底微光.png",
+          "score": 0.8913,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip07_盆底微光_mid.png",
+          "score": 0.8113,
           "verdict": "ok"
         }
       ]
@@ -802,10 +950,22 @@
           "shot": 4,
           "tail": "Clip04_两缸水和空屋_end.png",
           "transition": "action_cut"
+        },
+        {
+          "msg": "镜头5 存在接力尾帧 _end.png，但 storyboard 声明 j_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 5,
+          "tail": "Clip05_夜挑五趟_end.png",
+          "transition": "j_cut"
+        },
+        {
+          "msg": "镜头6 存在接力尾帧 _end.png，但 storyboard 声明 hard_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 6,
+          "tail": "Clip06_水底破盆_end.png",
+          "transition": "hard_cut"
         }
       ],
       "notes": [],
-      "relative_floor": 40.5,
+      "relative_floor": 39.0,
       "seams": [
         {
           "action_shift": 0.048,
@@ -824,28 +984,28 @@
           "verdict": "info"
         },
         {
-          "action_shift": 0.101,
+          "action_shift": 0.112,
           "action_verdict": null,
-          "color_dist": 0.2169,
+          "color_dist": 0.1576,
           "color_verdict": "warn",
           "cross_face_cos": null,
-          "dist": 34,
+          "dist": 29,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "Clip03_外门遗孤.png",
           "relative_outlier": false,
-          "struct_verdict": "block",
+          "struct_verdict": "warn",
           "tail": "Clip02_挑水命令_end.png",
           "transition": "hard_cut",
           "verdict": "info"
         },
         {
-          "action_shift": 0.026,
+          "action_shift": 0.028,
           "action_verdict": null,
-          "color_dist": 0.2766,
-          "color_verdict": "warn",
+          "color_dist": 0.0836,
+          "color_verdict": "ok",
           "cross_face_cos": null,
-          "dist": 33,
+          "dist": 32,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "Clip04_两缸水和空屋.png",
@@ -856,19 +1016,51 @@
           "verdict": "info"
         },
         {
-          "action_shift": 0.052,
+          "action_shift": 0.034,
           "action_verdict": null,
-          "color_dist": 0.0561,
+          "color_dist": 0.0275,
           "color_verdict": "ok",
           "cross_face_cos": null,
-          "dist": 27,
+          "dist": 34,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "Clip05_夜挑五趟.png",
           "relative_outlier": false,
-          "struct_verdict": "warn",
+          "struct_verdict": "block",
           "tail": "Clip04_两缸水和空屋_end.png",
           "transition": "action_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.036,
+          "action_verdict": null,
+          "color_dist": 0.0162,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 24,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip06_水底破盆.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip05_夜挑五趟_end.png",
+          "transition": "j_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.018,
+          "action_verdict": null,
+          "color_dist": 0.0053,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 28,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip07_盆底微光.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip06_水底破盆_end.png",
+          "transition": "hard_cut",
           "verdict": "info"
         }
       ]
@@ -942,7 +1134,7 @@
   "face_human_review": [],
   "face_reference_coverage": {
     "available": true,
-    "covered": 10,
+    "covered": 14,
     "face_mode": "insightface",
     "missing": [
       {
@@ -952,51 +1144,15 @@
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "Clip 04 两缸水和空屋",
-        "png": "图片/Clip04_两缸水和空屋.png",
-        "reason": "face_verdict_warn",
-        "shot": "Clip_04"
-      },
-      {
-        "face_verdict": "noface",
-        "identity_refs": [
-          "CHAR_HAN_LAOSAN/常态",
-          "CHAR_HE_PINGSHENG/常态"
-        ],
-        "label": "Clip 04 两缸水和空屋",
         "png": "图片/Clip04_两缸水和空屋_end.png",
-        "reason": "face_verdict_noface",
+        "reason": "face_verdict_warn",
         "shot": "Clip_04"
       }
     ],
     "notes": [],
-    "pending": [
-      {
-        "identity_refs": [
-          "CHAR_HE_PINGSHENG/常态"
-        ],
-        "label": "Clip 06 水底破盆 🔑核心机缘",
-        "png": "出图/第1集/图片/Clip06_水底破盆.png",
-        "shot": "Clip_06"
-      },
-      {
-        "identity_refs": [
-          "CHAR_HE_PINGSHENG/常态"
-        ],
-        "label": "Clip 06 水底破盆 🔑核心机缘",
-        "png": "出图/第1集/图片/Clip06_水底破盆_mid.png",
-        "shot": "Clip_06"
-      },
-      {
-        "identity_refs": [
-          "CHAR_HE_PINGSHENG/常态"
-        ],
-        "label": "Clip 06 水底破盆 🔑核心机缘",
-        "png": "出图/第1集/图片/Clip06_水底破盆_end.png",
-        "shot": "Clip_06"
-      }
-    ],
+    "pending": [],
     "precision_level": "full",
-    "required": 12,
+    "required": 15,
     "unclassified": [
       {
         "face_verdict": "ok",
@@ -1010,25 +1166,25 @@
   },
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "3440ec8394fe03e41441c2d2688462ceb7ec844272b7bab483d0a9fbbeeff1a1",
-      "出图/共享/identity_registry.json": "6c42e919563a1dccf58cbc73e3c3d7c705492a1690851377f497326707373b4e",
+      "出图/共享/asset_registry.json": "298b0ed5d156b0ce7f0e516cfcf98099a310b27498ecb844f51d8cf2215b2d30",
+      "出图/共享/identity_registry.json": "baf11ed55b56d4e166baa9291dc1c6042d205bd916fa48c26d222b420702856a",
       "出图/第1集/prompt/00_总览.md": "f9dedfb50e728b4594c4d0ab927b56896cd8d9a10e724dcf308cab1a5b031698",
-      "出图/第1集/prompt/01_分镜出图.md": "7755906986ade85f6e45714c2644cb6bc87e00dd5509dd5dba125b76c29d547f",
+      "出图/第1集/prompt/01_分镜出图.md": "1cc78daa198b0d65a96e0dc2a5a02178d538d8cae340c2c1882a4ae903aef990",
       "出图/第1集/图片/Clip01_黑殿审问.png": "4efcea463217c8b6add11aa21bd6a2eba61cdef34808bf73a0f592fafe9f1e76",
       "出图/第1集/图片/Clip01_黑殿审问_end.png": "6b1f1092c00dea5db19dcfd0380ba05a0b9f8001f7e310cd2f9dffa07909b39d",
       "出图/第1集/图片/Clip01_黑殿审问_mid.png": "96170ffd4183130b1360cb7ef4e2b91d39f876a96ca513361bf57fb7f90fb341",
-      "出图/第1集/图片/Clip03_外门遗孤.png": "201bfea5dacd6f2ceb3e9a3b6a26ffb2d4f219a03073d05b29dfa660ba294aaa",
-      "出图/第1集/图片/Clip03_外门遗孤_end.png": "ed2c107781ffb3dab696878ef5bce3eb00df0acefbceba00c2a30a396d4a7895",
-      "出图/第1集/图片/Clip03_外门遗孤_mid.png": "1fdad5fa9eaf284d8069ddadfea91b3375146c7fa8b1364b4d9ca0a53b3e32ec",
-      "出图/第1集/图片/Clip04_两缸水和空屋.png": "ec34dfdcaa08a7d696125f2ad95a5a206437d2838fc0807b546eaefadb05e29f",
-      "出图/第1集/图片/Clip04_两缸水和空屋_end.png": "7a985e6ee8c0044ef69f0972f6a568e6b50945925657367f27ebdec48afecb5a",
-      "出图/第1集/图片/Clip04_两缸水和空屋_mid.png": "c63cd314386868188a0489b5e1962a5e7c50f40be309bb6a6d55eb02ca2b1da0",
+      "出图/第1集/图片/Clip03_外门遗孤.png": "af48420a07476b95cbb8d8cb8dc172da459c272c84fcf7c676789fb6a4c61ebd",
+      "出图/第1集/图片/Clip03_外门遗孤_end.png": "646653b2092b068e1a25977d2b8fc28e5209a6c8b9f31782ff9fcfb01701e12d",
+      "出图/第1集/图片/Clip03_外门遗孤_mid.png": "10428817f0b0f8ae9a0968fe0a80501e0a31b495d090719b63a64c41bfb1b2d6",
+      "出图/第1集/图片/Clip04_两缸水和空屋.png": "3f2715c87fc1f88267973117323fe602ea78a39f407453991f84df160838f99d",
+      "出图/第1集/图片/Clip04_两缸水和空屋_end.png": "db6458a9ec7f8db7ae4928f392f7166f035db51b94d3470d77bf28ed213ae9f2",
+      "出图/第1集/图片/Clip04_两缸水和空屋_mid.png": "f6161b88c976ade73a73912dfe25691da842008c39ffacaba3566b3dc24f359b",
       "出图/第1集/图片/Clip05_夜挑五趟.png": "7fe51478c2a5ac2ef9729a00fd049bfbf25c382284ae3d5e4c1619ebc990f296",
-      "出图/第1集/图片/Clip05_夜挑五趟_end.png": null,
+      "出图/第1集/图片/Clip05_夜挑五趟_end.png": "3c8276f92f327006a2d4ada92fb2ef5f7108d35913f089be8e818fcfb9a218a1",
       "出图/第1集/图片/Clip05_夜挑五趟_mid.png": "6507b778c44edb9e54417eaa56fc23e14ce9f6f0ed7909000f4a5dba811ec21e",
-      "出图/第1集/图片/Clip06_水底破盆.png": null,
-      "出图/第1集/图片/Clip06_水底破盆_end.png": null,
-      "出图/第1集/图片/Clip06_水底破盆_mid.png": null,
+      "出图/第1集/图片/Clip06_水底破盆.png": "faacbc6661b73f3ddc281b63a76251b75c313edf1ab4846fc32d69d4a42da47b",
+      "出图/第1集/图片/Clip06_水底破盆_end.png": "f6205b6437426968f34724e63e09dcf69a4173d55c2644c4faafbe7e187eed07",
+      "出图/第1集/图片/Clip06_水底破盆_mid.png": "692f8d8d9f94902414eda36bce8df412b77642738c96146abcd9968c0ad74a68",
       "图片/Clip01_黑殿审问.png": null,
       "图片/Clip01_黑殿审问_end.png": null,
       "图片/Clip01_黑殿审问_mid.png": null,
@@ -1042,12 +1198,16 @@
       "图片/Clip04_两缸水和空屋_end.png": null,
       "图片/Clip04_两缸水和空屋_mid.png": null,
       "图片/Clip05_夜挑五趟.png": null,
+      "图片/Clip05_夜挑五趟_end.png": null,
       "图片/Clip05_夜挑五趟_mid.png": null,
       "图片/Clip06_水底破盆.png": null,
+      "图片/Clip06_水底破盆_end.png": null,
+      "图片/Clip06_水底破盆_mid.png": null,
       "图片/Clip07_盆底微光.png": null,
+      "图片/Clip07_盆底微光_mid.png": null,
       "生产数据/image_qc/第1集/prop_shape_confirmations.json": null
     },
-    "sha": "3d19f1787ae47f435ff5b736283e347664d5a03d6ad9640b8bad2936414eff4e"
+    "sha": "b926d8478c9933dd1734a341c1ff7f0396856004e41d16523f0086f81fd733f7"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -1409,12 +1569,17 @@
   },
   "shot_scale_contract": {
     "available": true,
-    "checked": 2,
+    "checked": 4,
     "findings": [
       {
         "code": "shot_scale_closeup_tiny_face",
         "level": "warn",
         "msg": "景别像素兜底：镜2 声明 CU(特写) 但 出图/第1集/图片/Clip02_挑水命令.png 实测脸占比 2.9% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
+      },
+      {
+        "code": "shot_scale_closeup_tiny_face",
+        "level": "warn",
+        "msg": "景别像素兜底：镜7 声明 ECU(特写) 但 出图/第1集/图片/Clip07_盆底微光.png 实测脸占比 0.4% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
       }
     ]
   },
@@ -1454,21 +1619,21 @@
     "advisory": 17,
     "by_check": {
       "anchors": {
-        "block": 1,
+        "block": 0,
         "noface": 0,
         "ok": 0,
         "warn": 0
       },
       "face": {
         "block": 1,
-        "noface": 1,
-        "ok": 11,
+        "noface": 2,
+        "ok": 16,
         "warn": 1
       },
       "face_reference_coverage": {
-        "block": 2,
+        "block": 1,
         "noface": 0,
-        "ok": 10,
+        "ok": 14,
         "warn": 0
       },
       "face_reference_coverage_unclassified": {
@@ -1478,10 +1643,10 @@
         "warn": 1
       },
       "hair": {
-        "block": 1,
+        "block": 0,
         "noface": 0,
-        "ok": 13,
-        "warn": 0
+        "ok": 19,
+        "warn": 1
       },
       "lint": {
         "block": 0,
@@ -1496,10 +1661,10 @@
         "warn": 0
       },
       "outfit": {
-        "block": 1,
+        "block": 2,
         "noface": 0,
-        "ok": 11,
-        "warn": 2
+        "ok": 17,
+        "warn": 1
       },
       "prohibited_face_patch": {
         "block": 0,
@@ -1529,24 +1694,24 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 1
+        "warn": 2
       }
     },
     "degraded": false,
-    "hard_blocks": 9,
+    "hard_blocks": 8,
     "unavailable_visual_checks": [],
     "verdict": "block"
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 14,
+    "checked": 20,
     "findings": [],
     "intent": {
       "brightness": null,
       "evidence": "杂役大殿和空屋灰褐冷调；后山夜潭冷蓝月光；破盆只给极弱微光，不给神器光柱。",
       "warmth": "cool"
     },
-    "luma_median": 32.5,
+    "luma_median": 29.5,
     "warmth_median": -0.1
   },
   "version": 1,

@@ -1687,16 +1687,19 @@ def weapon_clash_compose_for(body: str) -> str:
     return ""
 
 
-def combat_spectacle_richness_for(body: str) -> str:
+def combat_spectacle_richness_for(body: str, style: str = "") -> str:
     """打斗/法术/动作高潮镜的「经费在燃烧」视觉盛宴注入（体积光/大气纵深/环境受力/运动能量四层），
-    单一真值源 n2d_const；非打斗镜返回空串。两个出图后端共用，与 apex_light 协同、不糊脸不盖受力点。"""
+    单一真值源 n2d_const；非打斗镜返回空串。两个出图后端共用，与 apex_light 协同、不糊脸不盖受力点。
+
+    ``style`` 传本剧风格名/风格句（style_contract_phrase）：cel/ink/flat 风格自动换成
+    赛璐璐速度线/水墨气劲/夸张图形化变体，避免给非写实剧硬塞写实体积光与 motion blur。"""
     try:
         _lib = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
         if _lib not in sys.path:
             sys.path.insert(0, _lib)
-        from n2d_const import is_combat_spectacle_shot as _is_spec, COMBAT_SPECTACLE_RICHNESS_GUIDANCE as _CSR
+        from n2d_const import is_combat_spectacle_shot as _is_spec, combat_spectacle_guidance_for_style as _csg
         if _is_spec(str(body or "")):
-            return str(_CSR)
+            return str(_csg(str(style or "")))
     except Exception:
         pass
     return ""
@@ -1735,7 +1738,11 @@ def build_codex_prompt(
     clash_compose = ("- " + _ccg) if _ccg else ""
 
     # 打斗/法术/动作高潮镜：注入「经费在燃烧」视觉盛宴保底层（体积光/大气纵深/环境受力/运动能量四层）。
-    _csr = combat_spectacle_richness_for(str(getattr(target.section, "body", "") or ""))
+    # 传本剧风格句 → cel/ink/flat 风格自动换变体，避免给赛璐璐/水墨/Q版剧硬塞写实体积光与 motion blur。
+    _csr = combat_spectacle_richness_for(
+        str(getattr(target.section, "body", "") or ""),
+        style_contract_phrase(root, episode),
+    )
     spectacle_richness = ("- " + _csr) if _csr else ""
 
     return f"""你正在为 N2D 项目生成正式分镜 PNG。必须使用内置 AI 生图能力（imagegen/image_generation），不要用 Python/SVG/canvas/纯色图/占位图伪造。

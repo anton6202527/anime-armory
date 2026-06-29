@@ -2,7 +2,7 @@
 
 > 百分制。每维先打 **1-10 原始分**,再 ×(权重/10) 汇成百分。题材热度维度必须对标当次联网拉取的 `评分/market_baseline_*.json`、`评分/题材热榜_<date>.md` 和必要的 `资料/research_sources.json`,不是泛评。
 
-> **多判官去偏（用 ≥2 个 LLM 判官给同一稿打分 / 成对比稿时必接）**：LLM 判官有 position bias + 单模型偏（LitBench arXiv 2507.00769 / dual-judge）。量规分按判官内 z 归一去宽严偏再聚合、判官间高方差准则降信；成对比稿要 position-swap（两序判同一赢家才算）+ dual-judge 一致才采纳。确定性执行层已就绪：`skills/novel/_lib/judge_protocol.py`（`aggregate_rubric` / `debias_verdict`），见 `novel-supervisor/references/critic-loop.md` 判官去偏协议。单判官单序直接采信的分数视为 low_confidence。
+> **多判官去偏（用 ≥2 个 LLM 判官给同一稿打分 / 成对比稿时必接）**：LLM 判官有 position bias + 单模型偏（LitBench arXiv 2507.00769 / dual-judge）。量规分按判官内 z 归一去宽严偏再聚合、判官间高方差准则降信；成对比稿要 position-swap（两序判同一赢家才算）+ dual-judge 一致才采纳。确定性执行层已就绪并**已接进 novel-score**：评估 JSON 里可选附 `"judges_panel": {判官: {维度: 1-10}}`（≥2 判官触发），`score.py` 自动跑 `judge_protocol.aggregate_rubric` 把高方差维度标 `judge_confidence: low` 写进 `score_report.json` + 评分报告（advisory，不改 raw_score/总分），并在 `next_actions` 提示人工复核。也可独立跑 CLI：`python3 skills/novel/_lib/judge_protocol.py --verdicts v.json [--panel p.json]`。见 `novel-supervisor/references/critic-loop.md`。单判官单序直接采信的分数视为 low_confidence。
 
 ## 七维定义 + 看什么(1-10 锚点)
 
@@ -95,6 +95,7 @@
 2. **逐维**:得分 / 证据引文(原文) / 短评 / 改进抓手
 2.5 **书名体检**(附加项):5 维分 + 撞名状态 + 换名结论(见上节)
 3. **真实/模拟读端证据**:若有 `reader_telemetry_summary.json`，列完读/弃读/weakest_chapters；若有 `reader_panel_signals.json`，列虚拟试读留存先验
+3.5 **跨章重复率/机械文风先验**(确定性·喂 ⑦完读/留存):score.py 用 `novel/_lib/repetition.py`（与 novel-review 同一真值源）对已加载章节算相邻章 shingle Jaccard 近重复 + 机械开篇 + 跨章整句复用，折成 `repetition_prior`（档 none/mild/elevated/high·负向调分上限 -3·internal-heuristic 非平台硬数字）注入评估 prompt 作 ⑦ 维**负向先验**并计入 `reader_feedback_adjustment`（平台对 AI 内容做连续章节重复率/机械文风质检·高重复=弃读信号）。机检只给信号，最终分仍以判官对正文判读为准。
 4. **参考分布百分位**:若有合规 reference distribution，列总分百分位与弱项维度百分位
 5. **读者契约对齐**:对照 `设定/读者契约.md`,说明核心题旨、读者承诺、文学质感是否被正文兑现
 6. **类型专项解释**:说明是否按悬疑/硬科幻/文学向/历史/恐怖/言情/群像等调档，避免误用爽点尺

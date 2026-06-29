@@ -48,6 +48,47 @@ def test_fight_routes_to_kling_with_seedance_fallback(tmp_path):
     assert recipe["fallback"]["fallback_backends"] == route["fallback_backends"]
 
 
+def _write_storyboard_with_style(root: Path, clips, style_name):
+    p = root / "脚本" / "第1集" / "storyboard.json"
+    p.write_text(json.dumps(
+        {"episode": 1, "clips": clips, "style_contract": {"风格名": style_name}},
+        ensure_ascii=False), encoding="utf-8")
+    return p
+
+
+def test_motion_spectacle_guidance_attached_to_combat_route(tmp_path):
+    # P0-2：打斗镜 route 必须挂上 motion 侧视觉盛宴指导（与出图 runner 同源·风格自适应）。
+    root = _root(tmp_path)
+    _write_storyboard(root, [{"id": "Clip 1", "template": "fight_exchange", "scene": "王敦挥剑命中追兵，冲击波炸开"}])
+    plan = router.route_episode(root, "第1集", generated_at="2026-06-08T00:00:00Z")
+    route = plan["routes"][0]
+    assert plan["motion_spectacle_guidance_applied"] == 1
+    assert "经费在燃烧" in route["motion_spectacle_guidance"]  # 无风格 → cinematic 默认
+    assert any("motion_spectacle_guidance" in r for r in route.get("prompt_requirements", []))
+
+
+def test_motion_spectacle_guidance_adapts_to_cel_style(tmp_path):
+    # 赛璐璐风格的打斗 route：换赛璐璐速度线变体，绝不硬塞写实 motion blur 长拖影。
+    root = _root(tmp_path)
+    _write_storyboard_with_style(
+        root,
+        [{"id": "Clip 1", "template": "fight_exchange", "scene": "少年挥剑劈砍，命中炸开冲击波"}],
+        "二次元赛璐璐")
+    plan = router.route_episode(root, "第1集", generated_at="2026-06-08T00:00:00Z")
+    g = plan["routes"][0]["motion_spectacle_guidance"]
+    assert "赛璐璐" in g and "速度线" in g
+    assert "顺攻击方向给速度线 + 拖影 motion blur" not in g
+
+
+def test_motion_spectacle_guidance_skips_calm_shot(tmp_path):
+    # 平静对白镜：不挂盛宴指导（避免稀释 prompt）。
+    root = _root(tmp_path)
+    _write_storyboard(root, [{"id": "Clip 1", "template": "dialogue_closeup", "scene": "少女在窗边静静喝茶"}])
+    plan = router.route_episode(root, "第1集", generated_at="2026-06-08T00:00:00Z")
+    assert plan["motion_spectacle_guidance_applied"] == 0
+    assert "motion_spectacle_guidance" not in plan["routes"][0]
+
+
 def test_t2v_experimental_fight_without_named_character_skips_timeline_frames(tmp_path):
     root = _root(
         tmp_path,

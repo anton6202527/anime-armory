@@ -23,6 +23,7 @@ from gate_core import (  # import* 默认漏的下划线私有助手，按需显
     _possession_mentions_core_asset,
     _reference_plan_application_status,
     _reference_plan_requirement,
+    _director_plan_application_status,
     _route_allows_no_firstframe,
     _tone_base,
 )
@@ -147,6 +148,113 @@ def check_reference_plan_applied(root: str, ep: str) -> None:
         f"当前落实证据状态：{applied_reason}。{tail}",
         return_to_stage="image",
     )
+
+DIRECTOR_CAMERA_PLAN_KIND = "n2d_director_camera_plan"
+_DIRECTOR_IMAGE_VOCAB = ("起幅", "运动余量", "构图防呆", "导演意图", "镜头/机位")
+_DIRECTOR_VIDEO_VOCAB = ("起幅", "落幅", "镜头运动", "运动精修", "动态细节", "导演意图")
+
+
+def _director_plan_peak_clips(clips: Sequence[Any]) -> List[str]:
+    """director_camera_plan clips 里命中 KEY_SCENE_MARKERS（高潮/关键/钩子/反转/爆点）的镜 id。
+
+    复用 gate 的 KEY_SCENE_MARKERS（与其它「核心场景→BLOCK」闸同源），不另立 PEAK 词表避免漂离。"""
+    peak: List[str] = []
+    for c in clips:
+        if not isinstance(c, dict):
+            continue
+        blob = " ".join(str(c.get(k) or "") for k in ("clip_id", "rhythm", "template", "shot_size"))
+        rec = c.get("recommended")
+        if isinstance(rec, dict):
+            blob += " " + str(rec.get("reason") or "")
+        if any(str(m).lower() in blob.lower() for m in KEY_SCENE_MARKERS):
+            peak.append(str(c.get("clip_id") or ""))
+    return peak
+
+
+def check_director_camera_plan_consumption(root: str, ep: str) -> None:
+    """导演运镜计划（director_camera_plan.py）→ 落实对账（消费收据）。
+
+    sidecar `生产数据/director_camera_plan_<ep>.json` 把每镜运镜意图拆成可注入的 image/video_prompt_injection；
+    但此前靠「下游约定消费」无强制——规划好却没落进 prompt，那一镜就回平光摆拍/运动失焦
+    （memory「规划好却没落成片」反模式·与 combat-punch 渲染教训同根）。本检查在出图/出视频付费前，
+    核对 prompt 包是否出现导演运镜词汇证据：含高潮/关键镜(KEY_SCENE_MARKERS)且零证据=BLOCK，普通镜=WARN，
+    有证据=INFO。sidecar 缺省（没跑 director_camera_plan）则不强制，与 check_reference_plan_applied 一致。
+
+    两档收据（Tier A 精确优先·Tier B 烟雾回退）：
+      - Tier A 逐镜精确：存在 SHA 绑定 plan+prompt 的结构化签收档 `director_camera_plan_applied_<ep>.json`
+        （fresh）时，按 `scopes[].applied_clip_ids` 逐镜判落实——未签收镜里高潮/关键镜=BLOCK、普通镜=WARN。
+        plan 或 prompt 变更→SHA 不符→该 scope 回退 Tier B，stale 签收不能蒙混放行。
+      - Tier B 文档级烟雾：无签收档时核对整包是否出现导演运镜词汇（flat MD 无法可靠按 clip 切分），
+        含高潮/关键镜且零词汇=BLOCK、普通镜=WARN，并提示落结构化签收档升精确归属。
+    """
+    sidecar = os.path.join(root, "生产数据", f"director_camera_plan_{ep}.json")
+    plan = load_json(sidecar)
+    if not isinstance(plan, dict) or plan.get("kind") != DIRECTOR_CAMERA_PLAN_KIND:
+        return
+    clips = plan.get("clips") or []
+    if not clips:
+        return
+    all_ids = [str((c or {}).get("clip_id") or "") for c in clips if isinstance(c, dict)]
+    peak_clips = [c for c in _director_plan_peak_clips(clips) if c]
+    peak_set = set(peak_clips)
+    # Tier A 逐镜精确签收（升级版）：SHA 绑定 plan + 每 scope prompt 的结构化 applied 档；fresh 才采信。
+    application = _director_plan_application_status(root, ep, sidecar)
+
+    def _precise_check(scope: str, prompt_path: str, stage: str, applied_ids: set) -> None:
+        missing = [cid for cid in all_ids if cid and cid not in applied_ids]
+        if not missing:
+            add(INFO, "导演运镜落实", prompt_path,
+                f"director_camera_plan_{ep}.json（{len(all_ids)} 镜）的{scope}运镜注入已逐镜签收落实"
+                f"（director_camera_plan_applied_{ep}.json·SHA 绑定 plan+prompt）。",
+                return_to_stage=stage)
+            return
+        peak_missing = [cid for cid in missing if cid in peak_set]
+        sev = BLOCK if peak_missing else WARN
+        shown = "、".join(missing[:8]) + ("…" if len(missing) > 8 else "")
+        tail = (f"；其中高潮/关键镜 {'、'.join(peak_missing[:8])} → 付费前 BLOCK" if peak_missing else "（均普通镜 WARN）")
+        add(sev, "导演运镜落实", prompt_path,
+            f"逐镜签收档显示 {len(missing)} 镜的{scope}运镜注入未落实：{shown}{tail}。"
+            f"请把 director_camera_plan_{ep}.md 对应镜的 {scope}_prompt_injection 抄进 prompt，"
+            f"并把镜号补进 director_camera_plan_applied_{ep}.json 的 {scope} scope.applied_clip_ids（plan/prompt 变更需重签）。",
+            return_to_stage=stage)
+
+    def _smoke_check(prompt_path: str, prompt_rel: str, vocab: Sequence[str], scope: str, stage: str) -> None:
+        try:
+            text = open(prompt_path, encoding="utf-8").read()
+        except OSError:
+            return
+        hits = [v for v in vocab if v in text]
+        if hits:
+            add(INFO, "导演运镜落实", prompt_path,
+                f"director_camera_plan_{ep}.json（{len(all_ids)} 镜）的{scope}运镜词汇已现身 prompt 包"
+                f"（命中 {len(hits)}/{len(vocab)}：{'、'.join(hits)}）——文档级已消费。"
+                f"要逐镜精确归属请落 director_camera_plan_applied_{ep}.json（结构化签收）。",
+                return_to_stage=stage)
+            return
+        sev = BLOCK if peak_clips else WARN
+        shown = ("、".join(peak_clips[:8]) + ("…" if len(peak_clips) > 8 else "")) if peak_clips else ""
+        tail = (f"；含高潮/关键镜 {shown} → 付费前 BLOCK" if peak_clips else "（普通镜 WARN）")
+        add(sev, "导演运镜落实", prompt_path,
+            f"导演运镜计划 director_camera_plan_{ep}.json 有 {len(all_ids)} 镜，但 {prompt_rel} 里找不到任何"
+            f"{scope}运镜注入词汇（{'、'.join(vocab)}）——规划好却没落进 prompt，那些镜会回到平光摆拍/运动失焦。"
+            f"请按 director_camera_plan_{ep}.md 把 {scope} prompt 注入（{scope}_prompt_injection）抄进 {prompt_rel}{tail}。"
+            "（文档级烟雾收据·不做逐镜精确归属；逐镜精确请落结构化签收档。）",
+            return_to_stage=stage)
+
+    def _consume_check(prompt_rel: str, vocab: Sequence[str], scope: str) -> None:
+        prompt_path = os.path.join(root, prompt_rel)
+        stage = "image" if scope == "出图" else "video"
+        if not os.path.isfile(prompt_path):
+            return  # 该 prompt 包还没产出：上游阶段负责，不在此 BLOCK
+        scope_app = application.get("scopes", {}).get(scope) if application.get("accepted") else None
+        if isinstance(scope_app, dict) and scope_app.get("fresh"):
+            _precise_check(scope, prompt_path, stage, scope_app.get("applied_ids") or set())  # Tier A 精确
+            return
+        _smoke_check(prompt_path, prompt_rel, vocab, scope, stage)  # Tier B 烟雾回退
+
+    _consume_check(os.path.join("出图", ep, "prompt", "01_分镜出图.md"), _DIRECTOR_IMAGE_VOCAB, "出图")
+    _consume_check(os.path.join("出视频", ep, "prompt", "01_clips.md"), _DIRECTOR_VIDEO_VOCAB, "出视频")
+
 
 def check_storyboard_contract(root: str, ep: str, require_frame_assets: bool = True) -> Optional[dict]:
     data = load_storyboard(root, ep)
@@ -613,6 +721,7 @@ __all__ = [
     'check_contract_inheritance',
     'check_asset_handoff_inheritance',
     'check_reference_plan_applied',
+    'check_director_camera_plan_consumption',
     'check_storyboard_contract',
     'check_storyboard_visual_contract',
     'check_storyboard_style_contract',

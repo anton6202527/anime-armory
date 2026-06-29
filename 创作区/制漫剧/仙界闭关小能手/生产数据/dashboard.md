@@ -1,6 +1,6 @@
 # n2d 生产数据仪表盘
 
-- 生成时间：2026-06-29T15:05:26+00:00
+- 生成时间：2026-06-29T23:39:41+00:00
 - 事件日志：`/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
@@ -8,19 +8,19 @@
 
 | 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 生成通过率 | 可交付通过率 |
 |---:|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 4 | 107 | — | 2h31m11s | 42 | 0 | 3 | 28 | 100.0% | 0.0% |
+| 4 | 163 | — | 3h34m08s | 59 | 0 | 19 | 54 | 89.8% | 0.0% |
 
 ## ROI
 
 | 成片分钟 | 每分钟成本 | 每集耗时 | 一次通过率 | 重抽率 | 投放播放 | 投放收入 | 投放成本 | 净回收 | 回收/生产成本 |
 |---:|---|---:|---:|---:|---:|---|---|---|---:|
-| 1m55s | — | 2h31m11s | 100.0% | 0.0% | 0 | — | — | — | — |
+| 1m55s | — | 3h34m08s | 89.8% | 0.0% | 0 | — | — | — | — |
 
 ## Gate 噪声
 
 | warn/生成 | block/生成 | 误报回收 | 误报回收率 |
 |---:|---:|---:|---:|
-| 0.6667 | 0.0714 | 0 | 0.0% |
+| 0.9153 | 0.322 | 0 | 0.0% |
 
 ## 行业基准对照（只读 · 非闸门 · 采集 2026-06-25）
 
@@ -28,7 +28,7 @@
 
 | 指标 | 本作实测 | 行业基准 | 对照 |
 |---|---:|---:|:---:|
-| 一次通过率 | 100.0% | 90.0% | ✅ 达标 |
+| 一次通过率 | 89.8% | 90.0% | ⚠️ 差距 |
 | 重抽率 | 0.0% | 10.0% | ✅ 达标 |
 | 每分钟成本（CNY） | — | CNY 6.00/min | — |
 | 跨集角色一致性 | 见 n2d-score 视觉分 | 95.0% | — |
@@ -47,21 +47,24 @@
 
 | 集 | 当前前沿 | 成本 | 每分钟成本 | 耗时 | 一次通过率 | 重抽率 | 重抽原因Top3 | QA阻断 | 净回收 | 回收/成本 | 3s留存 | 15s留存 | 完播率 | 追更率 |
 |---|---|---|---|---:|---:|---:|---|---:|---|---:|---:|---:|---:|---:|
-| 第1集 | 出图 | — | — | 2h31m11s | 100.0% | 0.0% | — | 3 | — | — | — | — | — | — |
+| 第1集 | 出图 | — | — | 3h34m08s | 89.8% | 0.0% | — | 19 | — | — | — | — | — | — |
 | 第2集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第3集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第4集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 
 ## 最新阻断
 
-- 第1集 / image / 锚点门(N3): 出图/共享/图片 — 一致性审计发现问题
-- 第1集 / image / 出图落档QC: 创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集 — image gate 无法取得 image_qc findings：Expecting value: line 1 column 1 (char 0); stderr=/Users/lalala/.local/lib/python3.13/site-packages/onnxruntime/capi/onnxruntime_inference_collection.py:149: UserWarning: Specified provider 'CUDAExecutionProvider' is not in available provider names.Available providers: 'CoreMLExecutionProvider, AzureExecutionProvider, CPUExecutionProvider'
-  warnings.warn(
-Applied providers: ['CPUExecutionProvider'], with options: {'CPUExecutionProvider': {}}
-find model: /Users/lalala/.insightface/models/buffalo_l/1k3d68.onnx landmark_3d_68 ['None', 3, 192, 192；出图落档回验必须 fail-closed，先修复 image_qc 再放行。
+- 第1集 / image / 出图落档QC: 创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json — 输入首帧 image_qc 仍有 8 项硬阻断（崩脸/接缝断/降级精度近景/非法 CHAR）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。
+- 第1集 / image / 脸(G1): 出图/第1集/图片 — 一致性审计发现问题
+- 第1集 / image / 服装配色(N1): 出图/第1集/图片 — 一致性审计发现问题
+- 第1集 / image / 服装配色(N1): 出图/第1集/图片 — 一致性审计发现问题
+- 第1集 / image / 风格(S1): 出图/第1集/图片 — 一致性审计发现问题
+- 第1集 / image / 风格(S1): 出图/第1集/图片 — 一致性审计发现问题
+- 第1集 / image / character_consistency: 图片/Clip04_两缸水和空屋.png — 崩脸 G1 block：图片/Clip04_两缸水和空屋.png（脸/身份漂移机检）
+- 第1集 / image / multimodal_continuity: 图片/Clip04_两缸水和空屋.png — 高风险道具禁形/尺寸未逐图确认：Clip 04 两缸水和空屋 的 `PROP_KEY_LOCK`（旧钥匙与生锈铁锁）登记了 must_not_have=现代防盗锁、金色宝物、符文刻字、巨大链锁、多套重复；scale=少年单手可握，锁体小，适合低矮旧房木门。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip04_两缸水和空屋.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_KEY_LOCK_Clip_04_Clip04_两缸水和空屋_compare.png
 
 ## 验收总账
 
 | 集 | 状态 | 实体数 | block | high | medium | 重点实体 |
 |---|---|---:|---:|---:|---:|---|
-| 第1集 | blocked | 16 | 9 | 4 | 10 | 黑陶破盆(block)；水桶与扁担(block)；铁碗/钥匙铁锁(block) |
+| 第1集 | blocked | 16 | 8 | 3 | 12 | 贺平生(block)；黑陶破盆(block)；水桶与扁担(block) |

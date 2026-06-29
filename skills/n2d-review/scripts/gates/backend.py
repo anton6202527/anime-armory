@@ -366,6 +366,28 @@ def check_image_ai_policy(root: str, ep: str) -> None:
             "请把 _设置.md 与所有 prompt 统一到同一组生图模型/渠道后再出图。",
         )
 
+    # 基线「验现实」reconcile（坑 D）：check_image_backend_baseline 只比对 _设置.md 声明 vs 锁定基线，
+    # 都是声明；这里把**真实落档事件**实际用的后端 canonical（`used`，已去重到每 asset 最新成功）对账
+    # 锁定基线 canonical。声明没改、却把整集悄悄换成另一个（单一·官方·不混用）后端 → 上面的混用闸和
+    # 声明对账都抓不到，唯独真实事件能戳穿。两侧都过 classify_image_backend 归一，词表一致避免误报。
+    baseline_status = image_backend_adapter.image_backend_baseline_status(root)
+    baseline_sel = baseline_status.get("baseline") if isinstance(baseline_status.get("baseline"), Mapping) else {}
+    baseline_canon = classify_image_backend(
+        str((baseline_sel or {}).get("access") or (baseline_sel or {}).get("backend") or "")
+    )[0]
+    if baseline_canon:
+        drifted = sorted(c for c in used if c and c != baseline_canon)
+        if drifted:
+            add(
+                BLOCK,
+                "生图后端基线",
+                event_path,
+                f"production_events 显示本集实际出图后端（{'、'.join(drifted)}）与项目锁定基线（{baseline_canon}）不一致——"
+                "基线对账只比 _设置.md 声明，这里比**真实落档事件**：声明没改但实际换了后端=视觉 DNA 漂移、跨集脸/画风裂。"
+                "请把生成统一回基线后端重出，或先跑 `n2d-update media` 形成重制计划 + `record-baseline --force` 更新基线。",
+                return_to_stage="image",
+            )
+
     # 主体库硬闸（一致性梯子第②档）：所选后端**支持原生角色主体/Character ID**（seedream/可灵等）
     # 而核心长线角色还停在 unregistered 时，付费出图前 BLOCK。注册一次按 ID 跨镜跨集引用，比每张重喂
     # 参考图更稳更省，是压住跨集脸漂的省钱前置。Codex/OpenAI 等无持久主体的后端不触发

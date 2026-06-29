@@ -223,6 +223,35 @@ class TestNovelScore(unittest.TestCase):
         self.assertEqual(adjustment["points"], -6.0)
         self.assertEqual(adjustment["ab_take_results_summary"]["winner"], "B")
 
+    def test_repetition_prior_feeds_reader_feedback_adjustment(self):
+        # 跨章重复先验（确定性机检）→ retention 负向调分 + 留痕 source/reason
+        adjustment = score.compute_reader_feedback_adjustment(
+            repetition_prior={
+                "summary": {"adjacent_max_jaccard": 0.30, "mechanical_opener_groups": 1,
+                            "repeated_sentences": 4},
+                "prior": {"level": "high", "points": -3,
+                          "reasons": ["相邻章最高近重复 30%：注水/套模板，弃读风险"]},
+            })
+        self.assertEqual(adjustment["points"], -3.0)
+        self.assertIn(score.REPETITION_PRIOR_SOURCE, adjustment["sources"])
+        self.assertTrue(any("跨章重复机检先验" in r for r in adjustment["reasons"]))
+
+    def test_repetition_prior_none_is_noop(self):
+        adjustment = score.compute_reader_feedback_adjustment(repetition_prior=None)
+        self.assertEqual(adjustment["points"], 0.0)
+        self.assertNotIn(score.REPETITION_PRIOR_SOURCE, adjustment["sources"])
+
+    def test_repetition_prior_text_injected_for_judge(self):
+        self.assertIn("章节不足", score.repetition_prior_text(None))
+        txt = score.repetition_prior_text({
+            "summary": {"adjacent_max_jaccard": 0.22, "mechanical_opener_groups": 0,
+                        "repeated_sentences": 0},
+            "prior": {"level": "elevated", "points": -2,
+                      "reasons": ["相邻章最高近重复 22%（≥18%）：注水/套模板，弃读风险"]},
+        })
+        self.assertIn("22%", txt)
+        self.assertIn("负向先验", txt)
+
     def test_reference_distribution_percentile_reported(self):
         samples = []
         for total, raw in [(50, 5), (80, 8), (100, 10)]:
@@ -404,7 +433,8 @@ class TestNovelScore(unittest.TestCase):
         baseline["sources"] = [{"platform": "test", "status": "fetch_error", "signals": []}]
         baseline["manual_evidence"] = [{
             "platform": "红果短剧",
-            "date": "2026-06-08",
+            # 相对今日的新鲜日期（21 天窗口内）——硬编固定日期会随 wall-clock 走过期变 flaky
+            "date": (date.today() - timedelta(days=5)).isoformat(),
             "source": "第三方榜单",
             "summary": "仙侠复仇仍在上升。",
             "url": "https://example.com/rank",
@@ -532,6 +562,38 @@ class TestNovelScore(unittest.TestCase):
         self.assertTrue(any("evidence" in e for e in errors))
         self.assertTrue(any("comment" in e for e in errors))
         self.assertTrue(any("improve_by" in e for e in errors))
+
+    def test_judges_panel_validation_optional_and_shape_checked(self):
+        # 不给 judges_panel → 单判官，合法（向后兼容）
+        self.assertEqual(score.validate_assessment(valid_assessment()), [])
+        # 给了但形状错 → 报错
+        bad = valid_assessment()
+        bad["judges_panel"] = {"评委A": {"topic_heat": 99, "unknown_dim": 5}}
+        errors = score.validate_assessment(bad)
+        self.assertTrue(any("1-10" in e for e in errors))
+        self.assertTrue(any("未知维度" in e for e in errors))
+
+    def test_apply_judge_debias_single_judge_disabled(self):
+        out = score.apply_judge_debias(valid_assessment(), [])
+        self.assertFalse(out["enabled"])  # 无 panel → 不做去偏，不改分
+
+    def test_apply_judge_debias_flags_high_variance_dimension(self):
+        assessment = valid_assessment()
+        # 两判官在 opening_hook 上分歧极大（9 vs 2 → stdev>1）→ 低信心
+        assessment["judges_panel"] = {
+            "评委A": {"opening_hook": 9, "retention": 8},
+            "评委B": {"opening_hook": 2, "retention": 8},
+        }
+        processed = [{"dimension": "opening_hook"}, {"dimension": "retention"}]
+        out = score.apply_judge_debias(assessment, processed)
+        self.assertTrue(out["enabled"])
+        low_dims = {d["dimension"] for d in out["low_confidence_dimensions"]}
+        self.assertIn("opening_hook", low_dims)
+        self.assertNotIn("retention", low_dims)
+        # 注入到 processed_scores（advisory，不动 raw_score）
+        hook = next(p for p in processed if p["dimension"] == "opening_hook")
+        self.assertEqual(hook["judge_confidence"], "low")
+        self.assertNotIn("raw_score", hook)  # 没有改/造分
 
     def test_validate_assessment_requires_title_check_when_title_set(self):
         payload = valid_assessment()

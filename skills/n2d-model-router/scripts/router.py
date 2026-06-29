@@ -56,6 +56,10 @@ from n2d_platform_profiles import (  # noqa: E402  视频后端档案单一真�
     video_backend_supports_quality_tier,
     preferred_multilingual_lipsync_backend,
 )
+from n2d_const import (  # noqa: E402  打斗镜判定 + 风格自适应视觉盛宴（与出图 runner 同源单一真值源）
+    is_combat_spectacle_shot,
+    combat_spectacle_guidance_for_style,
+)
 from n2d_settings import load_settings as _load_settings_md  # noqa: E402  _设置.md 解析单一真值源
 try:  # ③ 一角一后端亲和（advisory）：读 identity_registry 找已注册原生视频主体的角色
     from n2d_registry import load_identity_registry as _load_identity_registry  # noqa: E402
@@ -301,6 +305,42 @@ def _clip_text(clip: Mapping[str, Any]) -> str:
         "notes",
     )
     return " ".join(_flatten_text(clip.get(k)) for k in keys)
+
+
+def _style_text_from_storyboard(storyboard: Mapping[str, Any]) -> str:
+    """本剧风格名/视觉基调（取 storyboard.style_contract）。供打斗镜 motion 侧视觉盛宴按风格族分流。
+
+    读不到 → 空串（combat_spectacle_guidance_for_style 回 cinematic 默认·向后兼容）。"""
+    sc = storyboard.get("style_contract") if isinstance(storyboard, Mapping) else None
+    if not isinstance(sc, Mapping):
+        return ""
+    for k in ("风格名", "style_name", "视觉基调"):
+        v = sc.get(k)
+        if isinstance(v, (list, tuple)):
+            v = "、".join(str(x) for x in v if str(x).strip())
+        if str(v or "").strip():
+            return str(v).strip()
+    return ""
+
+
+def apply_motion_spectacle_guidance(routes: Sequence[Mapping[str, Any]], clips: Sequence[Mapping[str, Any]], style_text: str) -> int:
+    """打斗/法术/动作镜：把风格自适应「经费在燃烧」指导挂进 route 机器字段（motion 侧·与出图 runner 同源）。
+
+    出图 runner 已按风格族注入四层视觉盛宴；视频 prompt 由 LLM 撰写、此前拿不到这份指导——
+    于是首帧是盛宴、运动段可能平淡。这里把同一份风格自适应文案挂进 route，供出视频 prompt 作者落实 +
+    spectacle QC 对账。纯函数式 in-place 标注，返回标注镜数。非打斗镜不碰（避免稀释）。"""
+    guidance = combat_spectacle_guidance_for_style(style_text or "")
+    applied = 0
+    for route, clip in zip(routes, clips):
+        if not isinstance(route, dict) or not is_combat_spectacle_shot(_clip_text(clip)):
+            continue
+        route["motion_spectacle_guidance"] = guidance
+        reqs = route.setdefault("prompt_requirements", [])
+        hint = "motion_spectacle_guidance：按本字段把风格自适应视觉盛宴落进运动描述（体积光/速度线随风格族变体·勿给赛璐璐/水墨硬塞写实 motion blur）"
+        if isinstance(reqs, list) and hint not in reqs:
+            reqs.append(hint)
+        applied += 1
+    return applied
 
 
 def _has_any(text: str, words: Iterable[str]) -> bool:
@@ -2657,6 +2697,11 @@ def route_episode(
             for i, clip in enumerate(clips, 1)
         ],
     }
+    # P0-2 打斗 motion 侧视觉盛宴：把风格自适应「经费在燃烧」指导挂进打斗/法术镜 route（与出图 runner 同源），
+    # 让 LLM 撰写的出视频 prompt 拿得到同一份风格自适应文案——治「首帧盛宴、运动平淡」的图↔视频不对称。
+    plan["motion_spectacle_guidance_applied"] = apply_motion_spectacle_guidance(
+        plan["routes"], clips, _style_text_from_storyboard(storyboard)
+    )
     # G8 时效档：项目级意图逐镜留痕，供 dashboard 拆 realtime vs batch 成本账、执行侧消费 batch 通道。
     for _entry in plan["routes"]:
         _entry["urgency_tier"] = urgency_tier

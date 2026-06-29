@@ -1,23 +1,22 @@
 # n2d Image QC（出图落档机检）
 
 - episode: 第1集
-- 总判定: **block** · 硬阻断 9（必须修） · 非阻断初筛 17 · 视觉降级 0
+- 总判定: **block** · 硬阻断 8（必须修） · 非阻断初筛 17 · 视觉降级 0
 - 机检能力: **full** · 当前解释器: `/opt/homebrew/Caskroom/miniconda/base/bin/python3`
 - 阶段跳转: **image** · image_qc 有硬阻断，需修复/重抽受影响镜头后重跑
 
 ## 一致性机检（复用 n2d-review 阈值，单一真值源；崩脸=硬阻断，其余=非阻断初筛）
 - 崩脸 G1: 🔴 block 1 · warn 1
-- 发型 H1: 🔴 block 1 · warn 0
-- 服装 N1: 🔴 block 1 · warn 2
+- 发型 H1: 🟡 block 0 · warn 1
+- 服装 N1: 🔴 block 2 · warn 1
 - 场景 O2: 🟢 block 0 · warn 0
 - 道具/特效 P2: 🟢 block 0 · warn 0
 - 接缝接力: 🟢 block 0 · warn 0
-- 锚点门 N3: 🔴 block 1 · warn 0
+- 锚点门 N3: 🟢 block 0 · warn 0
 
 ## 角色脸定妆比对覆盖（硬闸）
-- 🔴 已落档角色图 required 12 · covered 10 · missing 2 · pending 3 · precision full
-  - 🔴 Clip 04 两缸水和空屋 图片/Clip04_两缸水和空屋.png：face_verdict_warn
-  - 🔴 Clip 04 两缸水和空屋 图片/Clip04_两缸水和空屋_end.png：face_verdict_noface
+- 🔴 已落档角色图 required 15 · covered 14 · missing 1 · pending 0 · precision full
+  - 🔴 Clip 04 两缸水和空屋 图片/Clip04_两缸水和空屋_end.png：face_verdict_warn
   - 🟡 漏分类有脸镜 Clip_02 图片/Clip02_挑水命令.png：未在 character_shots 清单，待人工确认是否角色镜（非阻断）
 
 ## 跨集脸漂移趋势（B·治每集过floor但逐集偏离·advisory）

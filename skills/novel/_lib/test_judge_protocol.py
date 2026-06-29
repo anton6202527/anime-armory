@@ -76,3 +76,54 @@ def test_debias_verdict_end_to_end():
     # tie → low
     out3 = jp.debias_verdict([{"judge": "m1", "ab_winner": "稿A", "ba_winner": "稿B"}])
     assert out3["decision"] == jp.TIE and out3["confidence"] == "low"
+
+
+def test_main_returns_callable_module_api(tmp_path):
+    """main() 是真入口（CLI 接线证据）：可被调用、调度 debias_verdict、产 result。"""
+    assert callable(getattr(jp, "main", None))
+
+
+def test_cli_subprocess_verdicts_and_panel(tmp_path):
+    """CLI 端到端：写 verdicts/panel JSON → 子进程跑 → stdout 是去偏结论 JSON。"""
+    import json
+    import os
+    import subprocess
+    import sys
+    verdicts = tmp_path / "v.json"
+    panel = tmp_path / "p.json"
+    verdicts.write_text(json.dumps([
+        {"judge": "m1", "ab_winner": "稿A", "ba_winner": "稿A"},
+        {"judge": "m2", "ab_winner": "稿A", "ba_winner": "稿A"},
+    ]), encoding="utf-8")
+    panel.write_text(json.dumps({"m1": {"hook": 9}, "m2": {"hook": 8}}), encoding="utf-8")
+    here = os.path.dirname(os.path.abspath(__file__))
+    proc = subprocess.run(
+        [sys.executable, os.path.join(here, "judge_protocol.py"),
+         "--verdicts", str(verdicts), "--panel", str(panel)],
+        capture_output=True, text=True)
+    assert proc.returncode == 0, proc.stderr
+    out = json.loads(proc.stdout)
+    assert out["winner"] == "稿A" and out["confidence"] == "high"
+
+
+def test_cli_require_confidence_gate_exit1(tmp_path):
+    """opt-in 硬闸：tie 时 --require-confidence high → exit 1（critic-loop 可拒采纳）。"""
+    import json
+    import os
+    import subprocess
+    import sys
+    verdicts = tmp_path / "v.json"
+    verdicts.write_text(json.dumps([
+        {"judge": "m1", "ab_winner": "稿A", "ba_winner": "稿B"},  # 翻面=位置偏→tie
+    ]), encoding="utf-8")
+    here = os.path.dirname(os.path.abspath(__file__))
+    proc = subprocess.run(
+        [sys.executable, os.path.join(here, "judge_protocol.py"),
+         "--verdicts", str(verdicts), "--require-confidence", "high"],
+        capture_output=True, text=True)
+    assert proc.returncode == 1
+    # 默认（不给 --require-confidence）→ advisory，恒 exit 0
+    proc2 = subprocess.run(
+        [sys.executable, os.path.join(here, "judge_protocol.py"), "--verdicts", str(verdicts)],
+        capture_output=True, text=True)
+    assert proc2.returncode == 0

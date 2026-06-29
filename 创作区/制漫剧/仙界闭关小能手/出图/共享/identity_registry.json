@@ -3599,6 +3599,10 @@
           "form": "远景剪影",
           "restricted_partial": true,
           "face_policy": "no_full_face",
+          "anchor_policy": {
+            "type": "non_human_no_face",
+            "reason": "远景修士剪影只作为无清晰脸的群像/背景资产，N3 锚点门不要求单张清晰人脸。"
+          },
           "asset_key": "远景修士剪影",
           "anchor_phrase": "远景太虚门修士剪影，低饱和长袍，山间云雾中小比例掠过，不露脸。",
           "character_dna": {

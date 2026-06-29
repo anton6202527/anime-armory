@@ -27,6 +27,11 @@ if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from text_utils import cjk_count, strip_quotes  # noqa: E402  vendored 进 novel/_lib
 from novel_contract import scale_profile, wordcount_band_for_words_per_chapter  # noqa: E402
+# 跨章重复率/机械文风：单一真值源在 novel/_lib/repetition.py（novel-score 也消费同一套）
+from repetition import (  # noqa: E402
+    adjacent_chapter_jaccard, cross_chapter_repetition,
+    REP_ADJ_JACCARD_YELLOW, REP_ADJ_JACCARD_GREEN, REP_OPENER_PREFIX,
+)
 
 # 章号数字：阿拉伯 / 全角 / 中文数字都接受（# 第1章 / # 第一章 / # 第 12 章 均合规）
 CH_NUM = r"[0-9０-９一二三四五六七八九十百千零〇两]+"
@@ -301,6 +306,42 @@ def extract_terms_from_settings(root):
     return sorted(terms, key=lambda x: (len(x), x))
 
 
+def load_confirmed_entity_terms(root):
+    """读 设定/角色别名.json（status==confirmed）→ 人工**已确认**的实体名集合（规范名 + 别名）。
+
+    这是术语漂移统计的**权威源**：人确认过的角色名/别名直接采信，绕过 `_term_like` 正则启发式
+    （正则会漏掉或切坏含中点/单字/带「的之」的合法专名）。缺文件/未确认（draft）→ 空集，
+    退化为纯正则抽取（完全向后兼容）。文件由 novel-wiki/alias_scaffold.py 生成候选、人确认，
+    与 graph_sentry/load_curated_alias_map 同一真值源（闭合"抽取→人确认→消费"环）。"""
+    data = load_json(os.path.join(root, "设定", "角色别名.json"))
+    if not isinstance(data, dict) or str(data.get("status") or "").strip().lower() != "confirmed":
+        return set()
+    terms = set()
+    ca = data.get("character_aliases")
+    if isinstance(ca, dict):  # {别名: 规范名}
+        for alias, canon in ca.items():
+            terms.add(str(alias).strip())
+            terms.add(str(canon).strip())
+    chars = data.get("characters")
+    if isinstance(chars, list):  # [{name/canonical, aliases/别名/also_known_as: [...]}]
+        for c in chars:
+            if not isinstance(c, dict):
+                continue
+            name = c.get("name") or c.get("canonical") or c.get("规范名")
+            if name:
+                terms.add(str(name).strip())
+            al = c.get("aliases") or c.get("别名") or c.get("also_known_as") or []
+            if isinstance(al, list):
+                terms.update(str(a).strip() for a in al)
+    al = data.get("aliases")
+    if isinstance(al, dict):  # {规范名: [别名...]}
+        for canon, lst in al.items():
+            terms.add(str(canon).strip())
+            if isinstance(lst, list):
+                terms.update(str(a).strip() for a in lst)
+    return {t for t in terms if t}
+
+
 def _strip_md(value):
     """剥掉 markdown 强调标记与首部清单/编号/复选框记号，露出可能的术语本体。
 
@@ -419,6 +460,8 @@ def main():
     ap.add_argument("--no-plagiarism", action="store_true")
     ap.add_argument("--no-ai-tell", action="store_true",
                     help="关闭 AI 腔/同质化启发式（默认开；advisory，治平台 AI 双重质检风险）")
+    ap.add_argument("--no-repetition", action="store_true",
+                    help="关闭跨章重复率/机械文风机检（默认开；advisory，治平台连续章节重复率检测）")
     ap.add_argument("--json-out", default=None,
                     help="可选：把机检结果写成 JSON，供 review_report.json 汇总")
     args = ap.parse_args()
@@ -446,8 +489,11 @@ def main():
             nums.append(int(m.group(1)))
     outline = load_outline_titles(args.root)
     manual_terms = [t.strip() for t in args.terms.split(",") if t.strip()]
+    # 权威源优先：人确认的实体表（角色别名.json·confirmed）直接采信，绕过 _term_like 正则启发式；
+    # 正则抽取退化为补充（覆盖法宝/地名/功法等非角色术语）。缺确认表则纯正则，向后兼容。
+    confirmed_terms = [] if args.no_auto_terms else sorted(load_confirmed_entity_terms(args.root))
     auto_terms = [] if args.no_auto_terms else extract_terms_from_settings(args.root)
-    terms = sorted(set(manual_terms + auto_terms), key=lambda x: (len(x), x))
+    terms = sorted(set(manual_terms + confirmed_terms + auto_terms), key=lambda x: (len(x), x))
 
     # 原文照搬：预载原作滑窗集
     src_shingles = None
@@ -460,6 +506,7 @@ def main():
 
     findings = []
     pov_density = {}
+    chapter_bodies = []  # [(章号, 正文)]，供跨章重复率机检（需全章一起看）
 
     def add(ch, sev, dim, msg, ev=""):
         findings.append({"chapter": ch, "severity": sev, "dim": dim, "msg": msg, "evidence": ev[:40]})
@@ -490,6 +537,7 @@ def main():
             add(ch, "🟡", "标题", f"标题与章纲不符：正文「{title}」 vs 章纲「{outline[ch]}」")
         is_demo = "demo=true" in md
         body = body_of(md)
+        chapter_bodies.append((ch, body))
         # 2 字数（demo 特长开篇豁免带宽）
         wc = cjk_count(body)
         if not is_demo:
@@ -521,6 +569,14 @@ def main():
         if not args.no_ai_tell:
             for sev, msg, ev in ai_tell_scan(body):
                 add(ch, sev, "AI腔", msg, ev)
+
+    # 跨章重复率/机械文风（需全章一起看·advisory·绝不 🔴）
+    repetition_summary = None
+    if not args.no_repetition and len(chapter_bodies) >= 2:
+        rep_findings, repetition_summary = cross_chapter_repetition(
+            sorted(chapter_bodies, key=lambda kv: kv[0]))
+        for ch, sev, dim, msg, ev in rep_findings:
+            add(ch, sev, dim, msg, ev)
 
     # 术语出现矩阵（单列打印，不进 findings）
     term_matrix = {}
@@ -554,11 +610,23 @@ def main():
                   f"多为内心独白（合法），但**请 LLM 优先抽查这几章是否有真串视角**：")
             print("  " + "、".join(f"第{c}章({n})" for c, n in top))
     if term_matrix:
-        source = "手动+设定自动" if manual_terms and auto_terms else ("设定自动" if auto_terms else "手动")
+        src_parts = []
+        if manual_terms:
+            src_parts.append("手动")
+        if confirmed_terms:
+            src_parts.append("已确认实体表(权威)")
+        if auto_terms:
+            src_parts.append("设定正则")
+        source = "+".join(src_parts) or "无"
         print(f"\n术语出现次数（{source}；看跨章漂移，0 与突变值得注意）：")
         print("  章 | " + " | ".join(terms))
         for ch in sorted(term_matrix):
             print(f"  {ch:>2} | " + " | ".join(str(term_matrix[ch][t]) for t in terms))
+    if repetition_summary:
+        rs = repetition_summary
+        print(f"\n跨章重复率/机械文风（advisory·内部启发式·绝不 🔴）：相邻章最高近重复 "
+              f"{rs['adjacent_max_jaccard']:.0%}（🟡阈 {REP_ADJ_JACCARD_YELLOW:.0%}）；"
+              f"机械开篇组 {rs['mechanical_opener_groups']}；跨章复用整句 {rs['repeated_sentences']}")
     counts = {s: sum(1 for x in findings if x["severity"] == s) for s in ("🔴", "🟡", "🟢")}
     print(f"\n小结：🔴 {counts['🔴']}  🟡 {counts['🟡']}  🟢 {counts['🟢']}")
     payload = {
@@ -577,9 +645,11 @@ def main():
             "source_path": "原作.txt" if os.path.exists(src_path) else "",
         },
         "pov_density": pov_density,
+        "repetition": repetition_summary,
         "term_matrix": term_matrix,
         "terms_source": {
             "manual": manual_terms,
+            "confirmed_entities": confirmed_terms,  # 权威源：角色别名.json(confirmed)
             "auto": auto_terms,
         },
     }

@@ -7,24 +7,24 @@
   "cli_image_inputs": [
     {
       "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤.png",
-      "bytes": 2075065,
+      "bytes": 2280187,
       "owner": "Clip_03",
       "priority": 0,
       "rel_path": "出图/第1集/图片/Clip03_外门遗孤.png",
       "role": "source_frame",
       "sequence": 0,
-      "sha256": "201bfea5dacd6f2ceb3e9a3b6a26ffb2d4f219a03073d05b29dfa660ba294aaa",
+      "sha256": "af48420a07476b95cbb8d8cb8dc172da459c272c84fcf7c676789fb6a4c61ebd",
       "source": "same_clip_firstframe"
     },
     {
       "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤_mid.png",
-      "bytes": 2342678,
+      "bytes": 2315169,
       "owner": "Clip_03",
       "priority": 0,
       "rel_path": "出图/第1集/图片/Clip03_外门遗孤_mid.png",
       "role": "source_frame",
       "sequence": 1,
-      "sha256": "1fdad5fa9eaf284d8069ddadfea91b3375146c7fa8b1364b4d9ca0a53b3e32ec",
+      "sha256": "10428817f0b0f8ae9a0968fe0a80501e0a31b495d090719b63a64c41bfb1b2d6",
       "source": "same_clip_anchor"
     },
     {
@@ -36,6 +36,17 @@
       "role": "asset",
       "sequence": 36,
       "sha256": "23ca08ab8d680814f5ce6f4f29a63d636e19d62f3b8f663ffdc2b8f29017fd30",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门外门旧院_反打.png",
+      "bytes": 2673760,
+      "owner": "LOC_WAIMEN_JIUYUAN",
+      "priority": 40,
+      "rel_path": "出图/共享/图片/定妆_太虚门外门旧院_反打.png",
+      "role": "asset",
+      "sequence": 37,
+      "sha256": "ca704e720fc89ab75d2f6c9e4fea03cdf634367f0c26baf3743e3d88b3facd37",
       "source": "reference_bundle"
     },
     {
@@ -257,17 +268,6 @@
       "sequence": 23,
       "sha256": "4a197b5c84bdea7deea89e9065e3a61850742be127254793663baff2cd5da112",
       "source": "reference_bundle"
-    },
-    {
-      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_侧背.png",
-      "bytes": 742959,
-      "owner": "CHAR_JIANG_JIAN/背影",
-      "priority": 130,
-      "rel_path": "出图/共享/图片/定妆_江剑_背影_侧背.png",
-      "role": "character",
-      "sequence": 26,
-      "sha256": "1df7c15dabda9327ccce0f90b899db5b90b92fadcdd7eab958b3aa775d919bf4",
-      "source": "reference_bundle"
     }
   ],
   "episode": "第1集",
@@ -338,7 +338,8 @@
       "id": "LOC_WAIMEN_JIUYUAN",
       "kind": "asset",
       "paths": [
-        "出图/共享/图片/定妆_太虚门外门旧院.png"
+        "出图/共享/图片/定妆_太虚门外门旧院.png",
+        "出图/共享/图片/定妆_太虚门外门旧院_反打.png"
       ],
       "type": "location"
     }

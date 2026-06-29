@@ -46,6 +46,15 @@ LLM 判官有系统偏差（LitBench arXiv 2507.00769 / dual-judge / blind peer 
 一次成对裁决用 `debias_verdict(judgements, panel=...)` 收口，返回 `{winner, decision, confidence,
 consensus, rubric}`，全过程留痕。结论始终 **advisory**，绝不当确定性门控（B10）。
 
+**直接可执行（别再手算）**：把判官原始 verdict 写成 JSON，跑 CLI——
+```bash
+# verdicts.json: [{"judge":"m1","ab_winner":"稿A","ba_winner":"稿A"}, ...]；panel.json: {"m1":{"hook":9}, ...}
+python3 skills/novel/_lib/judge_protocol.py --verdicts verdicts.json [--panel panel.json]
+# critic-loop 要「不达标就别采纳」时加 opt-in 硬闸（信心不足 → exit 1）：
+python3 skills/novel/_lib/judge_protocol.py --verdicts verdicts.json --require-confidence high
+```
+默认恒 `exit 0`（纯 advisory）；只有显式 `--require-confidence` 才把信心不足升成非零退出。
+
 ## 成本闸控
 - 跑前估算 token（章字数 × 镜头数 × 轮数），超 `_设置.md` 预算上限 → 停下报数等确认。
 - 默认单轮、≤3 镜；想要 debate（提案→批判→修订）再加一轮，且每加一轮重新确认成本。

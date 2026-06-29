@@ -176,6 +176,106 @@
       "to": "clip:Clip_07"
     },
     {
+      "from": "clip:Clip_01",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip01_黑殿审问.png"
+    },
+    {
+      "from": "clip:Clip_01",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip01_黑殿审问_end.png"
+    },
+    {
+      "from": "clip:Clip_01",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip01_黑殿审问_mid.png"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip02_挑水命令.png"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip02_挑水命令_end.png"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip02_挑水命令_mid.png"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip03_外门遗孤.png"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip03_外门遗孤_end.png"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip03_外门遗孤_mid.png"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip04_两缸水和空屋.png"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip04_两缸水和空屋_end.png"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip04_两缸水和空屋_mid.png"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip05_夜挑五趟.png"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip05_夜挑五趟_end.png"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip05_夜挑五趟_mid.png"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip06_水底破盆.png"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip06_水底破盆_end.png"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip06_水底破盆_mid.png"
+    },
+    {
+      "from": "clip:Clip_07",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip07_盆底微光.png"
+    },
+    {
+      "from": "clip:Clip_07",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip07_盆底微光_mid.png"
+    },
+    {
       "from": "episode:第1集",
       "relation": "has_evidence",
       "to": "evidence:consistency_ledger_第1集.json"
@@ -377,14 +477,134 @@
       "kind": "evidence",
       "label": "motion_grammar_consistency_第1集.json",
       "path": "生产数据/motion_grammar_consistency_第1集.json"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip01_黑殿审问.png",
+      "kind": "image",
+      "label": "Clip01_黑殿审问.png",
+      "path": "出图/第1集/图片/Clip01_黑殿审问.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip01_黑殿审问_end.png",
+      "kind": "image",
+      "label": "Clip01_黑殿审问_end.png",
+      "path": "出图/第1集/图片/Clip01_黑殿审问_end.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip01_黑殿审问_mid.png",
+      "kind": "image",
+      "label": "Clip01_黑殿审问_mid.png",
+      "path": "出图/第1集/图片/Clip01_黑殿审问_mid.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip02_挑水命令.png",
+      "kind": "image",
+      "label": "Clip02_挑水命令.png",
+      "path": "出图/第1集/图片/Clip02_挑水命令.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip02_挑水命令_end.png",
+      "kind": "image",
+      "label": "Clip02_挑水命令_end.png",
+      "path": "出图/第1集/图片/Clip02_挑水命令_end.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip02_挑水命令_mid.png",
+      "kind": "image",
+      "label": "Clip02_挑水命令_mid.png",
+      "path": "出图/第1集/图片/Clip02_挑水命令_mid.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip03_外门遗孤.png",
+      "kind": "image",
+      "label": "Clip03_外门遗孤.png",
+      "path": "出图/第1集/图片/Clip03_外门遗孤.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip03_外门遗孤_end.png",
+      "kind": "image",
+      "label": "Clip03_外门遗孤_end.png",
+      "path": "出图/第1集/图片/Clip03_外门遗孤_end.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip03_外门遗孤_mid.png",
+      "kind": "image",
+      "label": "Clip03_外门遗孤_mid.png",
+      "path": "出图/第1集/图片/Clip03_外门遗孤_mid.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip04_两缸水和空屋.png",
+      "kind": "image",
+      "label": "Clip04_两缸水和空屋.png",
+      "path": "出图/第1集/图片/Clip04_两缸水和空屋.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip04_两缸水和空屋_end.png",
+      "kind": "image",
+      "label": "Clip04_两缸水和空屋_end.png",
+      "path": "出图/第1集/图片/Clip04_两缸水和空屋_end.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip04_两缸水和空屋_mid.png",
+      "kind": "image",
+      "label": "Clip04_两缸水和空屋_mid.png",
+      "path": "出图/第1集/图片/Clip04_两缸水和空屋_mid.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip05_夜挑五趟.png",
+      "kind": "image",
+      "label": "Clip05_夜挑五趟.png",
+      "path": "出图/第1集/图片/Clip05_夜挑五趟.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip05_夜挑五趟_end.png",
+      "kind": "image",
+      "label": "Clip05_夜挑五趟_end.png",
+      "path": "出图/第1集/图片/Clip05_夜挑五趟_end.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip05_夜挑五趟_mid.png",
+      "kind": "image",
+      "label": "Clip05_夜挑五趟_mid.png",
+      "path": "出图/第1集/图片/Clip05_夜挑五趟_mid.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip06_水底破盆.png",
+      "kind": "image",
+      "label": "Clip06_水底破盆.png",
+      "path": "出图/第1集/图片/Clip06_水底破盆.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip06_水底破盆_end.png",
+      "kind": "image",
+      "label": "Clip06_水底破盆_end.png",
+      "path": "出图/第1集/图片/Clip06_水底破盆_end.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip06_水底破盆_mid.png",
+      "kind": "image",
+      "label": "Clip06_水底破盆_mid.png",
+      "path": "出图/第1集/图片/Clip06_水底破盆_mid.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip07_盆底微光.png",
+      "kind": "image",
+      "label": "Clip07_盆底微光.png",
+      "path": "出图/第1集/图片/Clip07_盆底微光.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip07_盆底微光_mid.png",
+      "kind": "image",
+      "label": "Clip07_盆底微光_mid.png",
+      "path": "出图/第1集/图片/Clip07_盆底微光_mid.png"
     }
   ],
   "root": "创作区/制漫剧/仙界闭关小能手",
   "summary": {
     "clips": 7,
-    "edges": 39,
-    "images": 0,
-    "nodes": 28,
+    "edges": 59,
+    "images": 20,
+    "nodes": 48,
     "videos": 0
   },
   "version": 1

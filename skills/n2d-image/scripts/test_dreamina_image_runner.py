@@ -110,6 +110,41 @@ def test_dreamina_no_spectacle_richness_for_calm_shot(tmp_path: Path) -> None:
     assert base.combat_spectacle_richness_for(body) == ""
 
 
+def _write_style_contract(tmp_path: Path, style_name: str) -> None:
+    p = tmp_path / "脚本" / "第1集"
+    p.mkdir(parents=True, exist_ok=True)
+    (p / "storyboard.json").write_text(
+        json.dumps({"style_contract": {"风格名": style_name}}, ensure_ascii=False),
+        encoding="utf-8")
+
+
+def test_dreamina_spectacle_adapts_to_cel_style(tmp_path: Path) -> None:
+    # P0-1：赛璐璐风格的打斗镜，盛宴层换成赛璐璐速度线变体，绝不硬塞写实体积光/motion blur 长拖影。
+    _write_style_contract(tmp_path, "二次元赛璐璐")
+    body = "**正向 prompt（中文）**：少年挥剑劈砍，命中炸开冲击波。\n**负向 prompt**：模糊"
+    prompt = dreamina.build_dreamina_prompt(tmp_path, "第1集", _combat_target(body))
+    assert "赛璐璐" in prompt and "速度线" in prompt
+    assert "丁达尔光束穿过烟尘" not in prompt
+    assert "顺攻击方向给速度线 + 拖影 motion blur" not in prompt
+
+
+def test_dreamina_spectacle_adapts_to_ink_style(tmp_path: Path) -> None:
+    # 水墨风格的打斗镜：飞白泼墨气劲 + 留白纵深，不用写实体积光/景深。
+    _write_style_contract(tmp_path, "水墨国风")
+    body = "**正向 prompt（中文）**：剑客御剑斩击，剑气迸射。\n**负向 prompt**：模糊"
+    prompt = dreamina.build_dreamina_prompt(tmp_path, "第1集", _combat_target(body))
+    assert "飞白" in prompt and "留白" in prompt
+    assert "丁达尔光束穿过烟尘" not in prompt
+
+
+def test_dreamina_spectacle_stays_cinematic_for_realist_style(tmp_path: Path) -> None:
+    # 写实风格：仍走原写实四层（含「经费在燃烧」「丁达尔」），与历史行为一致。
+    _write_style_contract(tmp_path, "写实电影感")
+    body = "**正向 prompt（中文）**：武者出拳，命中震飞对手。\n**负向 prompt**：模糊"
+    prompt = dreamina.build_dreamina_prompt(tmp_path, "第1集", _combat_target(body))
+    assert "经费在燃烧" in prompt and "丁达尔" in prompt
+
+
 def test_dreamina_unanchored_check_matches_attached_paths(tmp_path: Path) -> None:
     target = _project(tmp_path)
     bundle = base.reference_bundle_for_target(tmp_path, "第1集", target)

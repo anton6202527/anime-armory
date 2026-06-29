@@ -191,26 +191,72 @@
     },
     {
       "affected_artifacts": [
-        "出图/共享/图片",
-        "设定库/identity_eval_pack.json",
-        "生产数据/identity_eval_pack.json"
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt",
+        "出图/第1集/图片"
       ],
       "affected_shots": [],
+      "dimensions": [
+        "出图落档QC"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/prompt",
+            "出图/第1集/prompt",
+            "出图/第1集/图片"
+          ],
+          "affected_shots": [],
+          "dim": "出图落档QC",
+          "dim_key": "出图落档QC",
+          "dimension": "出图落档QC",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json",
+          "message": "输入首帧 image_qc 仍有 8 项硬阻断（崩脸/接缝断/降级精度近景/非法 CHAR）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
+          "msg": "输入首帧 image_qc 仍有 8 项硬阻断（崩脸/接缝断/降级精度近景/非法 CHAR）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
+          "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/prompt、出图/第1集/prompt、出图/第1集/图片"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/图片",
+        "出图/共享/图片"
+      ],
+      "affected_shots": [
+        "Clip_04",
+        "Clip_07"
+      ],
       "dimensions": [
         "character_consistency"
       ],
       "findings": [
         {
           "affected_artifacts": [
-            "出图/共享/图片"
+            "出图/第1集/图片"
           ],
-          "affected_shots": [],
-          "dim": "锚点门(N3)",
+          "affected_shots": [
+            "Clip_04"
+          ],
+          "dim": "脸(G1)",
           "dim_key": "character_consistency",
-          "dimension": "锚点门(N3)",
+          "dimension": "脸(G1)",
           "episode": "第1集",
           "gate_stage": "image",
-          "loc": "出图/共享/图片",
+          "loc": "出图/第1集/图片",
           "message": "一致性审计发现问题",
           "msg": "一致性审计发现问题",
           "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
@@ -221,15 +267,17 @@
         },
         {
           "affected_artifacts": [
-            "出图/共享/图片"
+            "出图/第1集/图片"
           ],
-          "affected_shots": [],
-          "dim": "锚点门(N3)",
+          "affected_shots": [
+            "Clip_04"
+          ],
+          "dim": "脸(G1)",
           "dim_key": "character_consistency",
-          "dimension": "锚点门(N3)",
+          "dimension": "脸(G1)",
           "episode": "第1集",
           "gate_stage": "image",
-          "loc": "出图/共享/图片",
+          "loc": "出图/第1集/图片",
           "message": "一致性审计发现问题",
           "msg": "一致性审计发现问题",
           "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
@@ -373,18 +421,59 @@
         },
         {
           "affected_artifacts": [
-            "设定库/identity_eval_pack.json",
-            "生产数据/identity_eval_pack.json"
+            "出图/共享/图片"
           ],
           "affected_shots": [],
-          "dim": "多视角身份包(MVIEW)",
+          "dim": "锚点门(N3)",
           "dim_key": "character_consistency",
-          "dimension": "多视角身份包(MVIEW)",
+          "dimension": "锚点门(N3)",
           "episode": "第1集",
           "gate_stage": "image",
-          "loc": "设定库/identity_eval_pack.json",
-          "message": "核心/长线角色 CHAR_HE_PINGSHENG 缺 identity_eval_pack / multiview_identity_pack；后端或画风升级前缺正脸/45度/侧脸/背影/表情桶的固定身份哨兵。",
-          "msg": "核心/长线角色 CHAR_HE_PINGSHENG 缺 identity_eval_pack / multiview_identity_pack；后端或画风升级前缺正脸/45度/侧脸/背影/表情桶的固定身份哨兵。",
+          "loc": "出图/共享/图片",
+          "message": "一致性审计发现问题",
+          "msg": "一致性审计发现问题",
+          "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/第1集/图片"
+          ],
+          "affected_shots": [
+            "Clip_07"
+          ],
+          "dim": "无脸崩坏(G1b)",
+          "dim_key": "character_consistency",
+          "dimension": "无脸崩坏(G1b)",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "出图/第1集/图片",
+          "message": "贺平生 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
+          "msg": "贺平生 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
+          "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/第1集/图片"
+          ],
+          "affected_shots": [
+            "Clip_07"
+          ],
+          "dim": "无脸崩坏(G1b)",
+          "dim_key": "character_consistency",
+          "dimension": "无脸崩坏(G1b)",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "出图/第1集/图片",
+          "message": "贺平生 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
+          "msg": "贺平生 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
           "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
           "return_to_stage": "image",
           "sev": "warn",
@@ -393,69 +482,108 @@
         }
       ],
       "return_to_stage": "image",
-      "scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。；定位产物：出图/共享/图片、设定库/identity_eval_pack.json、生产数据/identity_eval_pack.json"
+      "scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。；崩脸 G1 block：图片/Clip04_两缸水和空屋.png（脸/身份漂移机检）；崩脸 G1 warn：图片/Clip04_两缸水和空屋_end.png（脸/身份漂移机检）；角色脸定妆比对覆盖缺口：Clip 04 两缸水和空屋 图片/Clip04_两缸水和空屋_end.png；脸部比对为 warn，疑似身份漂移。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。；疑似漏分类角色镜：图片/Clip02_挑水命令.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景脸）可忽略。；发型 H1 初筛：图片/Clip03_外门遗孤_end.png（发色/发型轮廓离群，非阻断）；锚点门 N3：太虚门长老_回忆背影 主参考非单张清晰正脸（非阻断）；锚点门 N3：张老大 主参考非单张清晰正脸（非阻断）；锚点门 N3：江剑_背影 主参考非单张清晰正脸（非阻断）；锚点门 N3：群杂役_虚化 主参考非单张清晰正脸（非阻断）；锚点门 N3：贺三杰_回忆影 主参考非单张清晰正脸（非阻断）；锚点门 N3：贺平生 主参考非单张清晰正脸（非阻断）；锚点门 N3：贺平生_幼年 主参考非单张清晰正脸（非阻断）；锚点门 N3：韩老三 主参考非单张清晰正脸（非阻断）；定位镜头：Clip_04、Clip_07；定位产物：出图/第1集/图片、出图/共享/图片"
     },
     {
       "affected_artifacts": [
-        "设定库/consistency_truth_map.json"
+        "出图/第1集/图片"
       ],
-      "affected_shots": [],
+      "affected_shots": [
+        "Clip_03",
+        "Clip_04"
+      ],
       "dimensions": [
-        "production_ops_consistency"
+        "outfit_consistency"
       ],
       "findings": [
         {
           "affected_artifacts": [
-            "设定库/consistency_truth_map.json"
+            "出图/第1集/图片"
           ],
-          "affected_shots": [],
-          "dim": "真值源(TRUTH)",
-          "dim_key": "production_ops_consistency",
-          "dimension": "真值源(TRUTH)",
+          "affected_shots": [
+            "Clip_03"
+          ],
+          "dim": "服装配色(N1)",
+          "dim_key": "outfit_consistency",
+          "dimension": "服装配色(N1)",
           "episode": "第1集",
           "gate_stage": "image",
-          "loc": "设定库/consistency_truth_map.json",
-          "message": "项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。",
-          "msg": "项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "return_to_stage": "review",
+          "loc": "出图/第1集/图片",
+          "message": "一致性审计发现问题",
+          "msg": "一致性审计发现问题",
+          "rerun_scope": "回 n2d-image 重出服装/配色/配饰漂移镜头；先检查 character_dna、定妆组和服装参考图。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/第1集/图片"
+          ],
+          "affected_shots": [
+            "Clip_04"
+          ],
+          "dim": "服装配色(N1)",
+          "dim_key": "outfit_consistency",
+          "dimension": "服装配色(N1)",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "出图/第1集/图片",
+          "message": "一致性审计发现问题",
+          "msg": "一致性审计发现问题",
+          "rerun_scope": "回 n2d-image 重出服装/配色/配饰漂移镜头；先检查 character_dna、定妆组和服装参考图。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "outfit_consistency",
+          "dim_key": "outfit_consistency",
+          "dimension": "outfit_consistency",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "图片/Clip03_外门遗孤_end.png",
+          "message": "服装 N1 初筛：图片/Clip03_外门遗孤_end.png（调色板离群，非阻断）",
+          "msg": "服装 N1 初筛：图片/Clip03_外门遗孤_end.png（调色板离群，非阻断）",
+          "rerun_scope": "",
+          "return_to_stage": "image",
           "sev": "warn",
           "severity": "warn",
           "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "review",
-      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位产物：设定库/consistency_truth_map.json"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/entity_memory_bank.json",
-        "出图/共享/entity_memory_bank.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "multimodal_continuity"
-      ],
-      "findings": [
+        },
         {
-          "affected_artifacts": [
-            "生产数据/entity_memory_bank.json",
-            "出图/共享/entity_memory_bank.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json"
-          ],
+          "affected_artifacts": [],
           "affected_shots": [],
-          "dim": "实体记忆(EMB)",
-          "dim_key": "multimodal_continuity",
-          "dimension": "实体记忆(EMB)",
+          "dim": "outfit_consistency",
+          "dim_key": "outfit_consistency",
+          "dimension": "outfit_consistency",
           "episode": "第1集",
           "gate_stage": "image",
-          "loc": "生产数据/entity_memory_bank.json",
-          "message": "本集有重复/核心实体（CHAR_HE_PINGSHENG, CHAR_HE_PINGSHENG/常态, CHAR_HE_PINGSHENG/肩颈红痕, CHAR_ZHANG_LAODA, CHAR_ZHANG_LAODA/常态, LOC_HOUSHAN_QIANTAN）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。",
-          "msg": "本集有重复/核心实体（CHAR_HE_PINGSHENG, CHAR_HE_PINGSHENG/常态, CHAR_HE_PINGSHENG/肩颈红痕, CHAR_ZHANG_LAODA, CHAR_ZHANG_LAODA/常态, LOC_HOUSHAN_QIANTAN）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。",
-          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+          "loc": "图片/Clip04_两缸水和空屋_end.png",
+          "message": "服装 N1 初筛：图片/Clip04_两缸水和空屋_end.png（调色板离群，非阻断）",
+          "msg": "服装 N1 初筛：图片/Clip04_两缸水和空屋_end.png（调色板离群，非阻断）",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "outfit_consistency",
+          "dim_key": "outfit_consistency",
+          "dimension": "outfit_consistency",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "图片/Clip04_两缸水和空屋_mid.png",
+          "message": "服装 N1 初筛：图片/Clip04_两缸水和空屋_mid.png（调色板离群，非阻断）",
+          "msg": "服装 N1 初筛：图片/Clip04_两缸水和空屋_mid.png（调色板离群，非阻断）",
+          "rerun_scope": "",
           "return_to_stage": "image",
           "sev": "warn",
           "severity": "warn",
@@ -463,7 +591,119 @@
         }
       ],
       "return_to_stage": "image",
-      "scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。；定位产物：生产数据/entity_memory_bank.json、出图/共享/entity_memory_bank.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json"
+      "scope": "回 n2d-image 重出服装/配色/配饰漂移镜头；先检查 character_dna、定妆组和服装参考图。；服装 N1 初筛：图片/Clip03_外门遗孤_end.png（调色板离群，非阻断）；服装 N1 初筛：图片/Clip04_两缸水和空屋_end.png（调色板离群，非阻断）；服装 N1 初筛：图片/Clip04_两缸水和空屋_mid.png（调色板离群，非阻断）；定位镜头：Clip_03、Clip_04；定位产物：出图/第1集/图片"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/图片",
+        "出图/第1集/图片/Clip03_外门遗孤.png",
+        "出图/第1集/图片/Clip03_外门遗孤_end.png"
+      ],
+      "affected_shots": [
+        "Clip_03"
+      ],
+      "dimensions": [
+        "style_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "出图/第1集/图片",
+            "出图/第1集/图片/Clip03_外门遗孤.png"
+          ],
+          "affected_shots": [
+            "Clip_03"
+          ],
+          "dim": "风格(S1)",
+          "dim_key": "style_consistency",
+          "dimension": "风格(S1)",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "出图/第1集/图片",
+          "message": "一致性审计发现问题",
+          "msg": "一致性审计发现问题",
+          "rerun_scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/第1集/图片",
+            "出图/第1集/图片/Clip03_外门遗孤_end.png"
+          ],
+          "affected_shots": [
+            "Clip_03"
+          ],
+          "dim": "风格(S1)",
+          "dim_key": "style_consistency",
+          "dimension": "风格(S1)",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "出图/第1集/图片",
+          "message": "一致性审计发现问题",
+          "msg": "一致性审计发现问题",
+          "rerun_scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "style_consistency",
+          "dim_key": "style_consistency",
+          "dimension": "style_consistency",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "景别像素兜底：镜2 声明 CU(特写) 但 出图/第1集/图片/Clip02_挑水命令.png 实测脸占比 2.9% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。",
+          "msg": "景别像素兜底：镜2 声明 CU(特写) 但 出图/第1集/图片/Clip02_挑水命令.png 实测脸占比 2.9% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "style_consistency",
+          "dim_key": "style_consistency",
+          "dimension": "style_consistency",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "景别像素兜底：镜7 声明 ECU(特写) 但 出图/第1集/图片/Clip07_盆底微光.png 实测脸占比 0.4% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。",
+          "msg": "景别像素兜底：镜7 声明 ECU(特写) 但 出图/第1集/图片/Clip07_盆底微光.png 实测脸占比 0.4% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "style_consistency",
+          "dim_key": "style_consistency",
+          "dimension": "style_consistency",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "风格归属无法机检：style_contract 未登记风格锚（style_anchor）。请在定妆阶段出 1–2 张「国漫写实」风格锚图、登记进 style_contract.style_anchor，后续每集出图帧才能对锚做风格归属佐证。当前降级为人判：逐图核对是否踩 风格禁忌：低幼Q版、欧美卡通脸、照片级毛孔、塑料3D、游戏CG感、跨镜线条粗细跳变、破盆强光神器化。",
+          "msg": "风格归属无法机检：style_contract 未登记风格锚（style_anchor）。请在定妆阶段出 1–2 张「国漫写实」风格锚图、登记进 style_contract.style_anchor，后续每集出图帧才能对锚做风格归属佐证。当前降级为人判：逐图核对是否踩 风格禁忌：低幼Q版、欧美卡通脸、照片级毛孔、塑料3D、游戏CG感、跨镜线条粗细跳变、破盆强光神器化。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。；景别像素兜底：镜2 声明 CU(特写) 但 出图/第1集/图片/Clip02_挑水命令.png 实测脸占比 2.9% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。；景别像素兜底：镜7 声明 ECU(特写) 但 出图/第1集/图片/Clip07_盆底微光.png 实测脸占比 0.4% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。；风格归属无法机检：style_contract 未登记风格锚（style_anchor）。请在定妆阶段出 1–2 张「国漫写实」风格锚图、登记进 style_contract.style_anchor，后续每集出图帧才能对锚做风格归属佐证。当前降级为人判：逐图核对是否踩 风格禁忌：低幼Q版、欧美卡通脸、照片级毛孔、塑料3D、游戏CG感、跨镜线条粗细跳变、破盆强光神器化。；定位镜头：Clip_03；定位产物：出图/第1集/图片、出图/第1集/图片/Clip03_外门遗孤.png、出图/第1集/图片/Clip03_外门遗孤_end.png"
     },
     {
       "affected_artifacts": [
@@ -537,8 +777,8 @@
           "episode": "第1集",
           "gate_stage": "image",
           "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第1集.json",
-          "message": "另有 52 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
-          "msg": "另有 52 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+          "message": "另有 77 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+          "msg": "另有 77 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
           "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
           "return_to_stage": "review",
           "sev": "warn",
@@ -550,28 +790,109 @@
       "scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/prompt、出图/第1集/prompt、出图/第1集/图片"
     },
     {
-      "affected_artifacts": [
-        "生产数据/image_qc/第1集"
-      ],
+      "affected_artifacts": [],
       "affected_shots": [],
       "dimensions": [
-        "出图落档QC"
+        "multimodal_continuity"
       ],
       "findings": [
         {
-          "affected_artifacts": [
-            "生产数据/image_qc/第1集"
-          ],
+          "affected_artifacts": [],
           "affected_shots": [],
-          "dim": "出图落档QC",
-          "dim_key": "出图落档QC",
-          "dimension": "出图落档QC",
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
           "episode": "第1集",
           "gate_stage": "image",
-          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集",
-          "message": "image gate 无法取得 image_qc findings：Expecting value: line 1 column 1 (char 0); stderr=/Users/lalala/.local/lib/python3.13/site-packages/onnxruntime/capi/onnxruntime_inference_collection.py:149: UserWarning: Specified provider 'CUDAExecutionProvider' is not in available provider names.Available providers: 'CoreMLExecutionProvider, AzureExecutionProvider, CPUExecutionProvider'\n  warnings.warn(\nApplied providers: ['CPUExecutionProvider'], with options: {'CPUExecutionProvider': {}}\nfind model: /Users/lalala/.insightface/models/buffalo_l/1k3d68.onnx landmark_3d_68 ['None', 3, 192, 192；出图落档回验必须 fail-closed，先修复 image_qc 再放行。",
-          "msg": "image gate 无法取得 image_qc findings：Expecting value: line 1 column 1 (char 0); stderr=/Users/lalala/.local/lib/python3.13/site-packages/onnxruntime/capi/onnxruntime_inference_collection.py:149: UserWarning: Specified provider 'CUDAExecutionProvider' is not in available provider names.Available providers: 'CoreMLExecutionProvider, AzureExecutionProvider, CPUExecutionProvider'\n  warnings.warn(\nApplied providers: ['CPUExecutionProvider'], with options: {'CPUExecutionProvider': {}}\nfind model: /Users/lalala/.insightface/models/buffalo_l/1k3d68.onnx landmark_3d_68 ['None', 3, 192, 192；出图落档回验必须 fail-closed，先修复 image_qc 再放行。",
-          "rerun_scope": "修复 n2d-image/scripts/image_qc.py 或本机依赖后，重跑 dashboard gate --stage image。",
+          "loc": "图片/Clip04_两缸水和空屋.png",
+          "message": "高风险道具禁形/尺寸未逐图确认：Clip 04 两缸水和空屋 的 `PROP_KEY_LOCK`（旧钥匙与生锈铁锁）登记了 must_not_have=现代防盗锁、金色宝物、符文刻字、巨大链锁、多套重复；scale=少年单手可握，锁体小，适合低矮旧房木门。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip04_两缸水和空屋.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_KEY_LOCK_Clip_04_Clip04_两缸水和空屋_compare.png",
+          "msg": "高风险道具禁形/尺寸未逐图确认：Clip 04 两缸水和空屋 的 `PROP_KEY_LOCK`（旧钥匙与生锈铁锁）登记了 must_not_have=现代防盗锁、金色宝物、符文刻字、巨大链锁、多套重复；scale=少年单手可握，锁体小，适合低矮旧房木门。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip04_两缸水和空屋.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_KEY_LOCK_Clip_04_Clip04_两缸水和空屋_compare.png",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "图片/Clip04_两缸水和空屋.png",
+          "message": "高风险道具禁形/尺寸未逐图确认：Clip 04 两缸水和空屋 的 `PROP_TIE_WAN`（铁碗/钥匙铁锁）登记了 must_not_have=现代锁具、金色宝物、瓷碗、异物化、多套重复；scale=铁碗可手持，钥匙铁锁为小型杂役房门物件。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip04_两缸水和空屋.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_TIE_WAN_Clip_04_Clip04_两缸水和空屋_compare.png",
+          "msg": "高风险道具禁形/尺寸未逐图确认：Clip 04 两缸水和空屋 的 `PROP_TIE_WAN`（铁碗/钥匙铁锁）登记了 must_not_have=现代锁具、金色宝物、瓷碗、异物化、多套重复；scale=铁碗可手持，钥匙铁锁为小型杂役房门物件。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip04_两缸水和空屋.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_TIE_WAN_Clip_04_Clip04_两缸水和空屋_compare.png",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "图片/Clip05_夜挑五趟.png",
+          "message": "高风险道具禁形/尺寸未逐图确认：Clip 05 夜挑五趟 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代塑料桶、金属水桶、单只桶漂移、华丽异物化；scale=少年挑水工具，桶身到少年膝上附近。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip05_夜挑五趟.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_05_Clip05_夜挑五趟_compare.png",
+          "msg": "高风险道具禁形/尺寸未逐图确认：Clip 05 夜挑五趟 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代塑料桶、金属水桶、单只桶漂移、华丽异物化；scale=少年挑水工具，桶身到少年膝上附近。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip05_夜挑五趟.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_05_Clip05_夜挑五趟_compare.png",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "图片/Clip06_水底破盆.png",
+          "message": "高风险道具禁形/尺寸未逐图确认：Clip 06 水底破盆 🔑核心机缘 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=强光柱、金边、符文文字、玉石质感、现代塑料盆、多盆重复；scale=普通脸盆大小，可被十四岁少年夹在臂弯。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip06_水底破盆.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_06_Clip06_水底破盆_compare.png",
+          "msg": "高风险道具禁形/尺寸未逐图确认：Clip 06 水底破盆 🔑核心机缘 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=强光柱、金边、符文文字、玉石质感、现代塑料盆、多盆重复；scale=普通脸盆大小，可被十四岁少年夹在臂弯。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip06_水底破盆.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_06_Clip06_水底破盆_compare.png",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "图片/Clip06_水底破盆.png",
+          "message": "高风险道具禁形/尺寸未逐图确认：Clip 06 水底破盆 🔑核心机缘 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代塑料桶、金属水桶、单只桶漂移、华丽异物化；scale=少年挑水工具，桶身到少年膝上附近。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip06_水底破盆.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_06_Clip06_水底破盆_compare.png",
+          "msg": "高风险道具禁形/尺寸未逐图确认：Clip 06 水底破盆 🔑核心机缘 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代塑料桶、金属水桶、单只桶漂移、华丽异物化；scale=少年挑水工具，桶身到少年膝上附近。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip06_水底破盆.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_06_Clip06_水底破盆_compare.png",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "图片/Clip07_盆底微光.png",
+          "message": "高风险道具禁形/尺寸未逐图确认：Clip 07 盆底微光 🔑集尾硬断 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=强光柱、金边、符文文字、玉石质感、现代塑料盆、多盆重复；scale=普通脸盆大小，可被十四岁少年夹在臂弯。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip07_盆底微光.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_07_Clip07_盆底微光_compare.png",
+          "msg": "高风险道具禁形/尺寸未逐图确认：Clip 07 盆底微光 🔑集尾硬断 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=强光柱、金边、符文文字、玉石质感、现代塑料盆、多盆重复；scale=普通脸盆大小，可被十四岁少年夹在臂弯。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip07_盆底微光.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_07_Clip07_盆底微光_compare.png",
+          "rerun_scope": "",
           "return_to_stage": "image",
           "sev": "block",
           "severity": "block",
@@ -579,7 +900,171 @@
         }
       ],
       "return_to_stage": "image",
-      "scope": "修复 n2d-image/scripts/image_qc.py 或本机依赖后，重跑 dashboard gate --stage image。；定位产物：生产数据/image_qc/第1集"
+      "scope": "高风险道具禁形/尺寸未逐图确认：Clip 04 两缸水和空屋 的 `PROP_KEY_LOCK`（旧钥匙与生锈铁锁）登记了 must_not_have=现代防盗锁、金色宝物、符文刻字、巨大链锁、多套重复；scale=少年单手可握，锁体小，适合低矮旧房木门。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip04_两缸水和空屋.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_KEY_LOCK_Clip_04_Clip04_两缸水和空屋_compare.png；高风险道具禁形/尺寸未逐图确认：Clip 04 两缸水和空屋 的 `PROP_TIE_WAN`（铁碗/钥匙铁锁）登记了 must_not_have=现代锁具、金色宝物、瓷碗、异物化、多套重复；scale=铁碗可手持，钥匙铁锁为小型杂役房门物件。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip04_两缸水和空屋.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_TIE_WAN_Clip_04_Clip04_两缸水和空屋_compare.png；高风险道具禁形/尺寸未逐图确认：Clip 05 夜挑五趟 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代塑料桶、金属水桶、单只桶漂移、华丽异物化；scale=少年挑水工具，桶身到少年膝上附近。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip05_夜挑五趟.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_05_Clip05_夜挑五趟_compare.png；高风险道具禁形/尺寸未逐图确认：Clip 06 水底破盆 🔑核心机缘 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=强光柱、金边、符文文字、玉石质感、现代塑料盆、多盆重复；scale=普通脸盆大小，可被十四岁少年夹在臂弯。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip06_水底破盆.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_06_Clip06_水底破盆_compare.png；高风险道具禁形/尺寸未逐图确认：Clip 06 水底破盆 🔑核心机缘 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代塑料桶、金属水桶、单只桶漂移、华丽异物化；scale=少年挑水工具，桶身到少年膝上附近。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip06_水底破盆.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_06_Clip06_水底破盆_compare.png；高风险道具禁形/尺寸未逐图确认：Clip 07 盆底微光 🔑集尾硬断 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=强光柱、金边、符文文字、玉石质感、现代塑料盆、多盆重复；scale=普通脸盆大小，可被十四岁少年夹在臂弯。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip07_盆底微光.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_07_Clip07_盆底微光_compare.png"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dimensions": [
+        "image_prompt_lint"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "脸部锚弱信噪比 CHAR_JIANG_JIAN/背影「侧背锚」（出图/共享/图片/定妆_江剑_背影_侧背.png）：脸占画面仅 3%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "msg": "脸部锚弱信噪比 CHAR_JIANG_JIAN/背影「侧背锚」（出图/共享/图片/定妆_江剑_背影_侧背.png）：脸占画面仅 3%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "脸部锚弱信噪比 CHAR_JIANG_JIAN/背影「侧背锚」（出图/共享/图片/定妆_江剑_背影_侧背.png）：脸占画面仅 3%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "msg": "脸部锚弱信噪比 CHAR_JIANG_JIAN/背影「侧背锚」（出图/共享/图片/定妆_江剑_背影_侧背.png）：脸占画面仅 3%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "脸部锚弱信噪比 CHAR_TAIXUMEN_ZHANGLAO/回忆背影「背影锚」（出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "msg": "脸部锚弱信噪比 CHAR_TAIXUMEN_ZHANGLAO/回忆背影「背影锚」（出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "脸部锚弱信噪比 CHAR_TAIXUMEN_ZHANGLAO/回忆背影「背影锚」（出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "msg": "脸部锚弱信噪比 CHAR_TAIXUMEN_ZHANGLAO/回忆背影「背影锚」（出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "脸部锚弱信噪比 CHAR_HE_SANJIE/回忆影「回忆侧影锚」（出图/共享/图片/定妆_贺三杰_回忆影_侧影.png）：脸占画面仅 5%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "msg": "脸部锚弱信噪比 CHAR_HE_SANJIE/回忆影「回忆侧影锚」（出图/共享/图片/定妆_贺三杰_回忆影_侧影.png）：脸占画面仅 5%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "脸部锚弱信噪比 CHAR_HE_SANJIE/回忆影「回忆侧影锚」（出图/共享/图片/定妆_贺三杰_回忆影_侧影.png）：脸占画面仅 5%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "msg": "脸部锚弱信噪比 CHAR_HE_SANJIE/回忆影「回忆侧影锚」（出图/共享/图片/定妆_贺三杰_回忆影_侧影.png）：脸占画面仅 5%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "脸部锚弱信噪比 CROWD_ZAYI/虚化「群像虚化锚」（出图/共享/图片/定妆_群杂役_虚化_群像sheet.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "msg": "脸部锚弱信噪比 CROWD_ZAYI/虚化「群像虚化锚」（出图/共享/图片/定妆_群杂役_虚化_群像sheet.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "脸部锚弱信噪比 CROWD_ZAYI/虚化「群像虚化锚」（出图/共享/图片/定妆_群杂役_虚化_群像sheet.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "msg": "脸部锚弱信噪比 CROWD_ZAYI/虚化「群像虚化锚」（出图/共享/图片/定妆_群杂役_虚化_群像sheet.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image",
+          "loc": "",
+          "message": "VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。",
+          "msg": "VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "脸部锚弱信噪比 CHAR_JIANG_JIAN/背影「侧背锚」（出图/共享/图片/定妆_江剑_背影_侧背.png）：脸占画面仅 3%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。；脸部锚弱信噪比 CHAR_TAIXUMEN_ZHANGLAO/回忆背影「背影锚」（出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。；脸部锚弱信噪比 CHAR_HE_SANJIE/回忆影「回忆侧影锚」（出图/共享/图片/定妆_贺三杰_回忆影_侧影.png）：脸占画面仅 5%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。；脸部锚弱信噪比 CROWD_ZAYI/虚化「群像虚化锚」（出图/共享/图片/定妆_群杂役_虚化_群像sheet.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。；VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。"
     }
   ],
   "episode": "第1集",
@@ -991,15 +1476,41 @@
     },
     {
       "affected_artifacts": [
-        "出图/共享/图片"
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt",
+        "出图/第1集/图片"
       ],
       "affected_shots": [],
-      "dim": "锚点门(N3)",
-      "dim_key": "character_consistency",
-      "dimension": "锚点门(N3)",
+      "dim": "出图落档QC",
+      "dim_key": "出图落档QC",
+      "dimension": "出图落档QC",
       "episode": "第1集",
       "gate_stage": "image",
-      "loc": "出图/共享/图片",
+      "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json",
+      "message": "输入首帧 image_qc 仍有 8 项硬阻断（崩脸/接缝断/降级精度近景/非法 CHAR）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
+      "msg": "输入首帧 image_qc 仍有 8 项硬阻断（崩脸/接缝断/降级精度近景/非法 CHAR）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
+      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/图片"
+      ],
+      "affected_shots": [
+        "Clip_04"
+      ],
+      "dim": "脸(G1)",
+      "dim_key": "character_consistency",
+      "dimension": "脸(G1)",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "出图/第1集/图片",
       "message": "一致性审计发现问题",
       "msg": "一致性审计发现问题",
       "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
@@ -1010,15 +1521,103 @@
     },
     {
       "affected_artifacts": [
-        "出图/共享/图片"
+        "出图/第1集/图片"
       ],
-      "affected_shots": [],
-      "dim": "锚点门(N3)",
-      "dim_key": "character_consistency",
-      "dimension": "锚点门(N3)",
+      "affected_shots": [
+        "Clip_03"
+      ],
+      "dim": "服装配色(N1)",
+      "dim_key": "outfit_consistency",
+      "dimension": "服装配色(N1)",
       "episode": "第1集",
       "gate_stage": "image",
-      "loc": "出图/共享/图片",
+      "loc": "出图/第1集/图片",
+      "message": "一致性审计发现问题",
+      "msg": "一致性审计发现问题",
+      "rerun_scope": "回 n2d-image 重出服装/配色/配饰漂移镜头；先检查 character_dna、定妆组和服装参考图。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/图片"
+      ],
+      "affected_shots": [
+        "Clip_04"
+      ],
+      "dim": "服装配色(N1)",
+      "dim_key": "outfit_consistency",
+      "dimension": "服装配色(N1)",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "出图/第1集/图片",
+      "message": "一致性审计发现问题",
+      "msg": "一致性审计发现问题",
+      "rerun_scope": "回 n2d-image 重出服装/配色/配饰漂移镜头；先检查 character_dna、定妆组和服装参考图。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/图片",
+        "出图/第1集/图片/Clip03_外门遗孤.png"
+      ],
+      "affected_shots": [
+        "Clip_03"
+      ],
+      "dim": "风格(S1)",
+      "dim_key": "style_consistency",
+      "dimension": "风格(S1)",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "出图/第1集/图片",
+      "message": "一致性审计发现问题",
+      "msg": "一致性审计发现问题",
+      "rerun_scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/图片",
+        "出图/第1集/图片/Clip03_外门遗孤_end.png"
+      ],
+      "affected_shots": [
+        "Clip_03"
+      ],
+      "dim": "风格(S1)",
+      "dim_key": "style_consistency",
+      "dimension": "风格(S1)",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "出图/第1集/图片",
+      "message": "一致性审计发现问题",
+      "msg": "一致性审计发现问题",
+      "rerun_scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/图片"
+      ],
+      "affected_shots": [
+        "Clip_04"
+      ],
+      "dim": "脸(G1)",
+      "dim_key": "character_consistency",
+      "dimension": "脸(G1)",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "出图/第1集/图片",
       "message": "一致性审计发现问题",
       "msg": "一致性审计发现问题",
       "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
@@ -1154,6 +1753,67 @@
       "loc": "出图/共享/图片",
       "message": "一致性审计发现问题",
       "msg": "一致性审计发现问题",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/共享/图片"
+      ],
+      "affected_shots": [],
+      "dim": "锚点门(N3)",
+      "dim_key": "character_consistency",
+      "dimension": "锚点门(N3)",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "出图/共享/图片",
+      "message": "一致性审计发现问题",
+      "msg": "一致性审计发现问题",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/图片"
+      ],
+      "affected_shots": [
+        "Clip_07"
+      ],
+      "dim": "无脸崩坏(G1b)",
+      "dim_key": "character_consistency",
+      "dimension": "无脸崩坏(G1b)",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "出图/第1集/图片",
+      "message": "贺平生 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
+      "msg": "贺平生 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/图片"
+      ],
+      "affected_shots": [
+        "Clip_07"
+      ],
+      "dim": "无脸崩坏(G1b)",
+      "dim_key": "character_consistency",
+      "dimension": "无脸崩坏(G1b)",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "出图/第1集/图片",
+      "message": "贺平生 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
+      "msg": "贺平生 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
       "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
       "return_to_stage": "image",
       "sev": "warn",
@@ -1183,63 +1843,26 @@
     },
     {
       "affected_artifacts": [
-        "设定库/consistency_truth_map.json"
-      ],
-      "affected_shots": [],
-      "dim": "真值源(TRUTH)",
-      "dim_key": "production_ops_consistency",
-      "dimension": "真值源(TRUTH)",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "设定库/consistency_truth_map.json",
-      "message": "项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。",
-      "msg": "项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "return_to_stage": "review",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "设定库/identity_eval_pack.json",
-        "生产数据/identity_eval_pack.json"
-      ],
-      "affected_shots": [],
-      "dim": "多视角身份包(MVIEW)",
-      "dim_key": "character_consistency",
-      "dimension": "多视角身份包(MVIEW)",
-      "episode": "第1集",
-      "gate_stage": "image",
-      "loc": "设定库/identity_eval_pack.json",
-      "message": "核心/长线角色 CHAR_HE_PINGSHENG 缺 identity_eval_pack / multiview_identity_pack；后端或画风升级前缺正脸/45度/侧脸/背影/表情桶的固定身份哨兵。",
-      "msg": "核心/长线角色 CHAR_HE_PINGSHENG 缺 identity_eval_pack / multiview_identity_pack；后端或画风升级前缺正脸/45度/侧脸/背影/表情桶的固定身份哨兵。",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "return_to_stage": "image",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/entity_memory_bank.json",
-        "出图/共享/entity_memory_bank.json",
+        "合规/compliance_manifest.json",
         "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json"
+        "出图/共享/identity_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt",
+        "出图/第1集/图片"
       ],
       "affected_shots": [],
-      "dim": "实体记忆(EMB)",
-      "dim_key": "multimodal_continuity",
-      "dimension": "实体记忆(EMB)",
+      "dim": "逐镜仲裁",
+      "dim_key": "逐镜仲裁",
+      "dimension": "逐镜仲裁",
       "episode": "第1集",
       "gate_stage": "image",
-      "loc": "生产数据/entity_memory_bank.json",
-      "message": "本集有重复/核心实体（CHAR_HE_PINGSHENG, CHAR_HE_PINGSHENG/常态, CHAR_HE_PINGSHENG/肩颈红痕, CHAR_ZHANG_LAODA, CHAR_ZHANG_LAODA/常态, LOC_HOUSHAN_QIANTAN）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。",
-      "msg": "本集有重复/核心实体（CHAR_HE_PINGSHENG, CHAR_HE_PINGSHENG/常态, CHAR_HE_PINGSHENG/肩颈红痕, CHAR_ZHANG_LAODA, CHAR_ZHANG_LAODA/常态, LOC_HOUSHAN_QIANTAN）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。",
-      "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
-      "return_to_stage": "image",
-      "sev": "warn",
-      "severity": "warn",
+      "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第1集.json",
+      "message": "1 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_04(2维/2族/3条·最坏block)",
+      "msg": "1 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_04(2维/2族/3条·最坏block)",
+      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
+      "return_to_stage": "review",
+      "sev": "info",
+      "severity": "info",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -1306,8 +1929,8 @@
       "episode": "第1集",
       "gate_stage": "image",
       "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第1集.json",
-      "message": "另有 52 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
-      "msg": "另有 52 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+      "message": "另有 77 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+      "msg": "另有 77 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
       "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
       "return_to_stage": "review",
       "sev": "warn",
@@ -1315,45 +1938,600 @@
       "source": "n2d-dashboard/gate"
     },
     {
-      "affected_artifacts": [
-        "生产数据/image_qc/第1集"
-      ],
+      "affected_artifacts": [],
       "affected_shots": [],
-      "dim": "出图落档QC",
-      "dim_key": "出图落档QC",
-      "dimension": "出图落档QC",
+      "dim": "character_consistency",
+      "dim_key": "character_consistency",
+      "dimension": "character_consistency",
       "episode": "第1集",
       "gate_stage": "image",
-      "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集",
-      "message": "image gate 无法取得 image_qc findings：Expecting value: line 1 column 1 (char 0); stderr=/Users/lalala/.local/lib/python3.13/site-packages/onnxruntime/capi/onnxruntime_inference_collection.py:149: UserWarning: Specified provider 'CUDAExecutionProvider' is not in available provider names.Available providers: 'CoreMLExecutionProvider, AzureExecutionProvider, CPUExecutionProvider'\n  warnings.warn(\nApplied providers: ['CPUExecutionProvider'], with options: {'CPUExecutionProvider': {}}\nfind model: /Users/lalala/.insightface/models/buffalo_l/1k3d68.onnx landmark_3d_68 ['None', 3, 192, 192；出图落档回验必须 fail-closed，先修复 image_qc 再放行。",
-      "msg": "image gate 无法取得 image_qc findings：Expecting value: line 1 column 1 (char 0); stderr=/Users/lalala/.local/lib/python3.13/site-packages/onnxruntime/capi/onnxruntime_inference_collection.py:149: UserWarning: Specified provider 'CUDAExecutionProvider' is not in available provider names.Available providers: 'CoreMLExecutionProvider, AzureExecutionProvider, CPUExecutionProvider'\n  warnings.warn(\nApplied providers: ['CPUExecutionProvider'], with options: {'CPUExecutionProvider': {}}\nfind model: /Users/lalala/.insightface/models/buffalo_l/1k3d68.onnx landmark_3d_68 ['None', 3, 192, 192；出图落档回验必须 fail-closed，先修复 image_qc 再放行。",
-      "rerun_scope": "修复 n2d-image/scripts/image_qc.py 或本机依赖后，重跑 dashboard gate --stage image。",
+      "loc": "图片/Clip04_两缸水和空屋.png",
+      "message": "崩脸 G1 block：图片/Clip04_两缸水和空屋.png（脸/身份漂移机检）",
+      "msg": "崩脸 G1 block：图片/Clip04_两缸水和空屋.png（脸/身份漂移机检）",
+      "rerun_scope": "",
       "return_to_stage": "image",
       "sev": "block",
       "severity": "block",
       "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "character_consistency",
+      "dim_key": "character_consistency",
+      "dimension": "character_consistency",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "图片/Clip04_两缸水和空屋_end.png",
+      "message": "崩脸 G1 warn：图片/Clip04_两缸水和空屋_end.png（脸/身份漂移机检）",
+      "msg": "崩脸 G1 warn：图片/Clip04_两缸水和空屋_end.png（脸/身份漂移机检）",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "style_consistency",
+      "dim_key": "style_consistency",
+      "dimension": "style_consistency",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "景别像素兜底：镜2 声明 CU(特写) 但 出图/第1集/图片/Clip02_挑水命令.png 实测脸占比 2.9% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。",
+      "msg": "景别像素兜底：镜2 声明 CU(特写) 但 出图/第1集/图片/Clip02_挑水命令.png 实测脸占比 2.9% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "style_consistency",
+      "dim_key": "style_consistency",
+      "dimension": "style_consistency",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "景别像素兜底：镜7 声明 ECU(特写) 但 出图/第1集/图片/Clip07_盆底微光.png 实测脸占比 0.4% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。",
+      "msg": "景别像素兜底：镜7 声明 ECU(特写) 但 出图/第1集/图片/Clip07_盆底微光.png 实测脸占比 0.4% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "style_consistency",
+      "dim_key": "style_consistency",
+      "dimension": "style_consistency",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "风格归属无法机检：style_contract 未登记风格锚（style_anchor）。请在定妆阶段出 1–2 张「国漫写实」风格锚图、登记进 style_contract.style_anchor，后续每集出图帧才能对锚做风格归属佐证。当前降级为人判：逐图核对是否踩 风格禁忌：低幼Q版、欧美卡通脸、照片级毛孔、塑料3D、游戏CG感、跨镜线条粗细跳变、破盆强光神器化。",
+      "msg": "风格归属无法机检：style_contract 未登记风格锚（style_anchor）。请在定妆阶段出 1–2 张「国漫写实」风格锚图、登记进 style_contract.style_anchor，后续每集出图帧才能对锚做风格归属佐证。当前降级为人判：逐图核对是否踩 风格禁忌：低幼Q版、欧美卡通脸、照片级毛孔、塑料3D、游戏CG感、跨镜线条粗细跳变、破盆强光神器化。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "图片/Clip04_两缸水和空屋.png",
+      "message": "高风险道具禁形/尺寸未逐图确认：Clip 04 两缸水和空屋 的 `PROP_KEY_LOCK`（旧钥匙与生锈铁锁）登记了 must_not_have=现代防盗锁、金色宝物、符文刻字、巨大链锁、多套重复；scale=少年单手可握，锁体小，适合低矮旧房木门。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip04_两缸水和空屋.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_KEY_LOCK_Clip_04_Clip04_两缸水和空屋_compare.png",
+      "msg": "高风险道具禁形/尺寸未逐图确认：Clip 04 两缸水和空屋 的 `PROP_KEY_LOCK`（旧钥匙与生锈铁锁）登记了 must_not_have=现代防盗锁、金色宝物、符文刻字、巨大链锁、多套重复；scale=少年单手可握，锁体小，适合低矮旧房木门。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip04_两缸水和空屋.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_KEY_LOCK_Clip_04_Clip04_两缸水和空屋_compare.png",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "图片/Clip04_两缸水和空屋.png",
+      "message": "高风险道具禁形/尺寸未逐图确认：Clip 04 两缸水和空屋 的 `PROP_TIE_WAN`（铁碗/钥匙铁锁）登记了 must_not_have=现代锁具、金色宝物、瓷碗、异物化、多套重复；scale=铁碗可手持，钥匙铁锁为小型杂役房门物件。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip04_两缸水和空屋.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_TIE_WAN_Clip_04_Clip04_两缸水和空屋_compare.png",
+      "msg": "高风险道具禁形/尺寸未逐图确认：Clip 04 两缸水和空屋 的 `PROP_TIE_WAN`（铁碗/钥匙铁锁）登记了 must_not_have=现代锁具、金色宝物、瓷碗、异物化、多套重复；scale=铁碗可手持，钥匙铁锁为小型杂役房门物件。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip04_两缸水和空屋.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_TIE_WAN_Clip_04_Clip04_两缸水和空屋_compare.png",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "图片/Clip05_夜挑五趟.png",
+      "message": "高风险道具禁形/尺寸未逐图确认：Clip 05 夜挑五趟 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代塑料桶、金属水桶、单只桶漂移、华丽异物化；scale=少年挑水工具，桶身到少年膝上附近。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip05_夜挑五趟.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_05_Clip05_夜挑五趟_compare.png",
+      "msg": "高风险道具禁形/尺寸未逐图确认：Clip 05 夜挑五趟 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代塑料桶、金属水桶、单只桶漂移、华丽异物化；scale=少年挑水工具，桶身到少年膝上附近。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip05_夜挑五趟.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_05_Clip05_夜挑五趟_compare.png",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "图片/Clip06_水底破盆.png",
+      "message": "高风险道具禁形/尺寸未逐图确认：Clip 06 水底破盆 🔑核心机缘 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=强光柱、金边、符文文字、玉石质感、现代塑料盆、多盆重复；scale=普通脸盆大小，可被十四岁少年夹在臂弯。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip06_水底破盆.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_06_Clip06_水底破盆_compare.png",
+      "msg": "高风险道具禁形/尺寸未逐图确认：Clip 06 水底破盆 🔑核心机缘 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=强光柱、金边、符文文字、玉石质感、现代塑料盆、多盆重复；scale=普通脸盆大小，可被十四岁少年夹在臂弯。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip06_水底破盆.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_06_Clip06_水底破盆_compare.png",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "图片/Clip06_水底破盆.png",
+      "message": "高风险道具禁形/尺寸未逐图确认：Clip 06 水底破盆 🔑核心机缘 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代塑料桶、金属水桶、单只桶漂移、华丽异物化；scale=少年挑水工具，桶身到少年膝上附近。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip06_水底破盆.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_06_Clip06_水底破盆_compare.png",
+      "msg": "高风险道具禁形/尺寸未逐图确认：Clip 06 水底破盆 🔑核心机缘 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代塑料桶、金属水桶、单只桶漂移、华丽异物化；scale=少年挑水工具，桶身到少年膝上附近。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip06_水底破盆.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_06_Clip06_水底破盆_compare.png",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "图片/Clip07_盆底微光.png",
+      "message": "高风险道具禁形/尺寸未逐图确认：Clip 07 盆底微光 🔑集尾硬断 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=强光柱、金边、符文文字、玉石质感、现代塑料盆、多盆重复；scale=普通脸盆大小，可被十四岁少年夹在臂弯。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip07_盆底微光.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_07_Clip07_盆底微光_compare.png",
+      "msg": "高风险道具禁形/尺寸未逐图确认：Clip 07 盆底微光 🔑集尾硬断 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=强光柱、金边、符文文字、玉石质感、现代塑料盆、多盆重复；scale=普通脸盆大小，可被十四岁少年夹在臂弯。。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip07_盆底微光.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_07_Clip07_盆底微光_compare.png",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "character_consistency",
+      "dim_key": "character_consistency",
+      "dimension": "character_consistency",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "图片/Clip04_两缸水和空屋_end.png",
+      "message": "角色脸定妆比对覆盖缺口：Clip 04 两缸水和空屋 图片/Clip04_两缸水和空屋_end.png；脸部比对为 warn，疑似身份漂移。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+      "msg": "角色脸定妆比对覆盖缺口：Clip 04 两缸水和空屋 图片/Clip04_两缸水和空屋_end.png；脸部比对为 warn，疑似身份漂移。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "character_consistency",
+      "dim_key": "character_consistency",
+      "dimension": "character_consistency",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "图片/Clip02_挑水命令.png",
+      "message": "疑似漏分类角色镜：图片/Clip02_挑水命令.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景脸）可忽略。",
+      "msg": "疑似漏分类角色镜：图片/Clip02_挑水命令.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景脸）可忽略。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "character_consistency",
+      "dim_key": "character_consistency",
+      "dimension": "character_consistency",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "图片/Clip03_外门遗孤_end.png",
+      "message": "发型 H1 初筛：图片/Clip03_外门遗孤_end.png（发色/发型轮廓离群，非阻断）",
+      "msg": "发型 H1 初筛：图片/Clip03_外门遗孤_end.png（发色/发型轮廓离群，非阻断）",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "outfit_consistency",
+      "dim_key": "outfit_consistency",
+      "dimension": "outfit_consistency",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "图片/Clip03_外门遗孤_end.png",
+      "message": "服装 N1 初筛：图片/Clip03_外门遗孤_end.png（调色板离群，非阻断）",
+      "msg": "服装 N1 初筛：图片/Clip03_外门遗孤_end.png（调色板离群，非阻断）",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "outfit_consistency",
+      "dim_key": "outfit_consistency",
+      "dimension": "outfit_consistency",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "图片/Clip04_两缸水和空屋_end.png",
+      "message": "服装 N1 初筛：图片/Clip04_两缸水和空屋_end.png（调色板离群，非阻断）",
+      "msg": "服装 N1 初筛：图片/Clip04_两缸水和空屋_end.png（调色板离群，非阻断）",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "outfit_consistency",
+      "dim_key": "outfit_consistency",
+      "dimension": "outfit_consistency",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "图片/Clip04_两缸水和空屋_mid.png",
+      "message": "服装 N1 初筛：图片/Clip04_两缸水和空屋_mid.png（调色板离群，非阻断）",
+      "msg": "服装 N1 初筛：图片/Clip04_两缸水和空屋_mid.png（调色板离群，非阻断）",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "character_consistency",
+      "dim_key": "character_consistency",
+      "dimension": "character_consistency",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "太虚门长老_回忆背影",
+      "message": "锚点门 N3：太虚门长老_回忆背影 主参考非单张清晰正脸（非阻断）",
+      "msg": "锚点门 N3：太虚门长老_回忆背影 主参考非单张清晰正脸（非阻断）",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "character_consistency",
+      "dim_key": "character_consistency",
+      "dimension": "character_consistency",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "张老大",
+      "message": "锚点门 N3：张老大 主参考非单张清晰正脸（非阻断）",
+      "msg": "锚点门 N3：张老大 主参考非单张清晰正脸（非阻断）",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "character_consistency",
+      "dim_key": "character_consistency",
+      "dimension": "character_consistency",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "江剑_背影",
+      "message": "锚点门 N3：江剑_背影 主参考非单张清晰正脸（非阻断）",
+      "msg": "锚点门 N3：江剑_背影 主参考非单张清晰正脸（非阻断）",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "character_consistency",
+      "dim_key": "character_consistency",
+      "dimension": "character_consistency",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "群杂役_虚化",
+      "message": "锚点门 N3：群杂役_虚化 主参考非单张清晰正脸（非阻断）",
+      "msg": "锚点门 N3：群杂役_虚化 主参考非单张清晰正脸（非阻断）",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "character_consistency",
+      "dim_key": "character_consistency",
+      "dimension": "character_consistency",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "贺三杰_回忆影",
+      "message": "锚点门 N3：贺三杰_回忆影 主参考非单张清晰正脸（非阻断）",
+      "msg": "锚点门 N3：贺三杰_回忆影 主参考非单张清晰正脸（非阻断）",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "character_consistency",
+      "dim_key": "character_consistency",
+      "dimension": "character_consistency",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "贺平生",
+      "message": "锚点门 N3：贺平生 主参考非单张清晰正脸（非阻断）",
+      "msg": "锚点门 N3：贺平生 主参考非单张清晰正脸（非阻断）",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "character_consistency",
+      "dim_key": "character_consistency",
+      "dimension": "character_consistency",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "贺平生_幼年",
+      "message": "锚点门 N3：贺平生_幼年 主参考非单张清晰正脸（非阻断）",
+      "msg": "锚点门 N3：贺平生_幼年 主参考非单张清晰正脸（非阻断）",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "character_consistency",
+      "dim_key": "character_consistency",
+      "dimension": "character_consistency",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "韩老三",
+      "message": "锚点门 N3：韩老三 主参考非单张清晰正脸（非阻断）",
+      "msg": "锚点门 N3：韩老三 主参考非单张清晰正脸（非阻断）",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "脸部锚弱信噪比 CHAR_JIANG_JIAN/背影「侧背锚」（出图/共享/图片/定妆_江剑_背影_侧背.png）：脸占画面仅 3%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+      "msg": "脸部锚弱信噪比 CHAR_JIANG_JIAN/背影「侧背锚」（出图/共享/图片/定妆_江剑_背影_侧背.png）：脸占画面仅 3%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "脸部锚弱信噪比 CHAR_JIANG_JIAN/背影「侧背锚」（出图/共享/图片/定妆_江剑_背影_侧背.png）：脸占画面仅 3%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+      "msg": "脸部锚弱信噪比 CHAR_JIANG_JIAN/背影「侧背锚」（出图/共享/图片/定妆_江剑_背影_侧背.png）：脸占画面仅 3%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "脸部锚弱信噪比 CHAR_TAIXUMEN_ZHANGLAO/回忆背影「背影锚」（出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+      "msg": "脸部锚弱信噪比 CHAR_TAIXUMEN_ZHANGLAO/回忆背影「背影锚」（出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "脸部锚弱信噪比 CHAR_TAIXUMEN_ZHANGLAO/回忆背影「背影锚」（出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+      "msg": "脸部锚弱信噪比 CHAR_TAIXUMEN_ZHANGLAO/回忆背影「背影锚」（出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "脸部锚弱信噪比 CHAR_HE_SANJIE/回忆影「回忆侧影锚」（出图/共享/图片/定妆_贺三杰_回忆影_侧影.png）：脸占画面仅 5%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+      "msg": "脸部锚弱信噪比 CHAR_HE_SANJIE/回忆影「回忆侧影锚」（出图/共享/图片/定妆_贺三杰_回忆影_侧影.png）：脸占画面仅 5%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "脸部锚弱信噪比 CHAR_HE_SANJIE/回忆影「回忆侧影锚」（出图/共享/图片/定妆_贺三杰_回忆影_侧影.png）：脸占画面仅 5%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+      "msg": "脸部锚弱信噪比 CHAR_HE_SANJIE/回忆影「回忆侧影锚」（出图/共享/图片/定妆_贺三杰_回忆影_侧影.png）：脸占画面仅 5%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "脸部锚弱信噪比 CROWD_ZAYI/虚化「群像虚化锚」（出图/共享/图片/定妆_群杂役_虚化_群像sheet.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+      "msg": "脸部锚弱信噪比 CROWD_ZAYI/虚化「群像虚化锚」（出图/共享/图片/定妆_群杂役_虚化_群像sheet.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "脸部锚弱信噪比 CROWD_ZAYI/虚化「群像虚化锚」（出图/共享/图片/定妆_群杂役_虚化_群像sheet.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+      "msg": "脸部锚弱信噪比 CROWD_ZAYI/虚化「群像虚化锚」（出图/共享/图片/定妆_群杂役_虚化_群像sheet.png）：脸占画面仅 7%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image",
+      "loc": "",
+      "message": "VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。",
+      "msg": "VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
     }
   ],
   "gate_stage": "image",
-  "generated_at": "2026-06-29T13:26:30+00:00",
+  "generated_at": "2026-06-29T17:13:04+00:00",
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/entity_memory_bank.json": null,
-      "出图/共享/identity_registry.json": "6c42e919563a1dccf58cbc73e3c3d7c705492a1690851377f497326707373b4e",
+      "出图/共享/identity_registry.json": "baf11ed55b56d4e166baa9291dc1c6042d205bd916fa48c26d222b420702856a",
       "出图/共享/prompt": null,
       "出图/共享/图片": null,
       "出图/第1集/prompt": null,
       "出图/第1集/图片": null,
+      "出图/第1集/图片/Clip03_外门遗孤.png": "af48420a07476b95cbb8d8cb8dc172da459c272c84fcf7c676789fb6a4c61ebd",
+      "出图/第1集/图片/Clip03_外门遗孤_end.png": "646653b2092b068e1a25977d2b8fc28e5209a6c8b9f31782ff9fcfb01701e12d",
       "出视频/第1集/prompt": null,
       "合规/compliance_manifest.json": "ffb8887ca84dffc6048d3d121b94e0d918c4689064ad08d498efe062d9f7fb68",
-      "生产数据/entity_memory_bank.json": null,
-      "生产数据/identity_eval_pack.json": null,
-      "生产数据/image_qc/第1集": null,
-      "脚本/第1集/storyboard.json": "7a072ee4cee397d96b2af246db445e13f98da86dea2a17f843208e34f18175ae",
-      "设定库/consistency_truth_map.json": null,
-      "设定库/identity_eval_pack.json": null
+      "脚本/第1集/storyboard.json": "7a072ee4cee397d96b2af246db445e13f98da86dea2a17f843208e34f18175ae"
     },
-    "sha": "5268fc0868478aa3a7d97a688f2e8ee6629a1a96582021a0dabb3f4c64996768"
+    "sha": "e26a381f45442372a20a8202b7439d00db4537cc7b06fe95dd3a24fd113d4cc4"
   },
   "kind": "n2d_consistency_findings",
   "root": "创作区/制漫剧/仙界闭关小能手",
@@ -1363,10 +2541,35 @@
   },
   "summary": {
     "by_dim": {
+      "character_consistency": {
+        "block": 2,
+        "info": 0,
+        "warn": 11
+      },
       "fidelity-gate": {
         "block": 0,
         "info": 0,
         "warn": 1
+      },
+      "image_prompt_lint": {
+        "block": 0,
+        "info": 0,
+        "warn": 9
+      },
+      "multimodal_continuity": {
+        "block": 6,
+        "info": 0,
+        "warn": 0
+      },
+      "outfit_consistency": {
+        "block": 0,
+        "info": 0,
+        "warn": 3
+      },
+      "style_consistency": {
+        "block": 0,
+        "info": 0,
+        "warn": 3
       },
       "一致性总审": {
         "block": 0,
@@ -1383,15 +2586,15 @@
         "info": 3,
         "warn": 0
       },
-      "多视角身份包(MVIEW)": {
+      "无脸崩坏(G1b)": {
         "block": 0,
         "info": 0,
-        "warn": 1
+        "warn": 2
       },
-      "实体记忆(EMB)": {
-        "block": 0,
+      "服装配色(N1)": {
+        "block": 2,
         "info": 0,
-        "warn": 1
+        "warn": 0
       },
       "物料漂移预案": {
         "block": 0,
@@ -1403,8 +2606,8 @@
         "info": 1,
         "warn": 0
       },
-      "真值源(TRUTH)": {
-        "block": 0,
+      "脸(G1)": {
+        "block": 1,
         "info": 0,
         "warn": 1
       },
@@ -1418,18 +2621,28 @@
         "info": 0,
         "warn": 2
       },
+      "逐镜仲裁": {
+        "block": 0,
+        "info": 1,
+        "warn": 0
+      },
       "锚点门(N3)": {
-        "block": 1,
+        "block": 0,
         "info": 0,
         "warn": 8
+      },
+      "风格(S1)": {
+        "block": 2,
+        "info": 0,
+        "warn": 0
       }
     },
     "severity": {
-      "block": 2,
-      "info": 13,
-      "warn": 19
+      "block": 14,
+      "info": 14,
+      "warn": 45
     },
-    "total": 34
+    "total": 73
   },
   "version": 1
 }

@@ -2331,6 +2331,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_cross_episode_character_definition(root, ep)  # 跨集角色文字定义漂移（重派生）信号
         if stage == "image_preflight":
             check_reference_plan_applied(root, ep)  # 逐镜参考规划落实对账（advisory·治跨集脸漂）
+            check_director_camera_plan_consumption(root, ep)  # 导演运镜计划→出图 prompt 消费收据（治「规划好没落片」·高潮镜未消费 BLOCK）
             check_long_running_weak_backend(root, ep)  # 长线剧×无持久主体 ID 后端→核心/常驻角色必须升身份锁
             check_stylized_face_encoder_policy(root, ep, stage)
             # P1（2026-06-26）：付费出图前的**叙事/留存地板**——批量 runner 经 dashboard 直接跑 image_preflight
@@ -2418,6 +2419,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_storyboard_contract(root, ep, require_frame_assets=True)
         check_storyboard_style_contract(root, ep)
         check_storyboard_special_templates(root, ep)
+        check_director_camera_plan_consumption(root, ep)  # 导演运镜计划→出视频 prompt 消费收据（治「规划好没落片」）
         check_spectacle_sequence_plan(root, ep)
         check_action_beat_budget(root, ep, check_stage)
         check_expression_span_frame_contract(root, ep)
@@ -2452,6 +2454,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_storyboard_contract(root, ep, require_frame_assets=True)
         check_storyboard_style_contract(root, ep)
         check_storyboard_special_templates(root, ep)
+        check_director_camera_plan_consumption(root, ep)  # 导演运镜计划→出视频 prompt 消费收据（治「规划好没落片」）
         check_spectacle_sequence_plan(root, ep)
         check_action_beat_budget(root, ep, check_stage)
         check_expression_span_frame_contract(root, ep)

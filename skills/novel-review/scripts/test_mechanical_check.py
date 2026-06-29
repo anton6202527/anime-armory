@@ -363,3 +363,145 @@ def test_extract_terms_skips_setting_noise(tmp_path):
     for junk in ("好男不跟女斗，我闭嘴，我闭嘴……", "[ ] 1. 灵药谷之前的人生",
                  "**护短第一**", "灵药谷之前的人生"):
         assert junk not in terms, junk
+
+
+# ---------- 跨章重复率 / 机械文风（缺口#1） ----------
+
+def test_adjacent_chapter_jaccard_identical_vs_distinct():
+    a = "他推开门屋里一片漆黑窗外的风卷着雪远处传来钟声她说你终于来了"
+    assert mc.adjacent_chapter_jaccard(a, a) == 1.0           # 逐字相同 → 1.0
+    b = "完全不一样的另一段文字讲述清晨阳光洒满整片金色的麦田少年奔跑"
+    assert mc.adjacent_chapter_jaccard(a, b) < 0.05           # 互异 → 近 0
+    assert mc.adjacent_chapter_jaccard("短", "短") == 0.0     # 短于窗口 → 0
+
+
+def test_cross_chapter_repetition_flags_near_duplicate():
+    shared = "林夜推开斑驳的铁门走进废弃工厂霉味混着铁锈扑面而来他握紧手中的探测仪屏幕幽幽地亮着"
+    chapters = [
+        (1, shared + "今天他在东侧角落发现了第一块碎片。"),
+        (2, shared + "今天他在西侧管道找到了第二块碎片。"),  # 大段复述上一章
+    ]
+    findings, summary = mc.cross_chapter_repetition(chapters)
+    dims = {(sev, dim) for _, sev, dim, _, _ in findings}
+    assert ("🟡", "跨章重复") in dims
+    assert summary["adjacent_max_jaccard"] >= mc.REP_ADJ_JACCARD_YELLOW
+
+
+def test_cross_chapter_repetition_mechanical_opener():
+    opener = "清晨第一缕阳光照进窗棂的时候林夜已经醒了"
+    chapters = [(n, opener + f"，这是第{n}天的开始，他做了不同的事情情节甲乙丙{n}。") for n in (1, 2, 3, 4)]
+    findings, summary = mc.cross_chapter_repetition(chapters)
+    dims = {(sev, dim) for _, sev, dim, _, _ in findings}
+    assert ("🟡", "机械开篇") in dims
+    assert summary["mechanical_opener_groups"] >= 1
+
+
+def test_cross_chapter_repetition_sentence_reuse():
+    line = "系统冰冷的声音在脑海中响起宿主请完成今日任务否则将受到惩罚"
+    chapters = [(n, f"第{n}章发生了独特的事件甲乙丙丁戊己{n}。{line}。然后他继续前行探索未知。") for n in (1, 2, 3)]
+    findings, summary = mc.cross_chapter_repetition(chapters)
+    dims = {(sev, dim) for _, sev, dim, _, _ in findings}
+    assert ("🟡", "机械句复用") in dims
+    assert summary["repeated_sentences"] >= 1
+
+
+def test_cross_chapter_clean_is_silent():
+    chapters = [
+        (1, "他推开门屋里一片漆黑窗外的风卷着雪远处传来钟声。"),
+        (2, "清晨阳光洒满整片金色麦田少年沿着田埂奔跑笑声飞扬。"),
+        (3, "深夜的码头汽笛长鸣货轮缓缓驶离港口灯火渐远。"),
+    ]
+    findings, summary = mc.cross_chapter_repetition(chapters)
+    assert findings == []
+    assert summary["adjacent_max_jaccard"] < mc.REP_ADJ_JACCARD_GREEN
+
+
+def _body(n, text):
+    return f"# 第 {n} 章 《章{n}》\n<!-- meta: demo=true -->\n{text}\n"
+
+
+def test_repetition_wired_into_findings_and_toggle(tmp_path):
+    shared = "林夜推开斑驳的铁门走进废弃工厂霉味混着铁锈扑面而来他握紧探测仪屏幕幽幽亮着"
+    root = make_proj(str(tmp_path), {
+        "第1章.md": _body(1, shared + "他在东侧发现第一块碎片甲乙丙。"),
+        "第2章.md": _body(2, shared + "他在西侧找到第二块碎片丁戊己。"),
+    })
+    findings = run(root)
+    assert ("🟡", "跨章重复") in sev_dims(findings)
+    # --no-repetition 关闭
+    findings_off = run(root, "--no-repetition")
+    assert ("🟡", "跨章重复") not in sev_dims(findings_off)
+
+
+def test_repetition_summary_in_json_payload(tmp_path):
+    root = make_proj(str(tmp_path), {
+        "第1章.md": _body(1, "他推开门屋里一片漆黑窗外的风卷着雪远处传来钟声。"),
+        "第2章.md": _body(2, "清晨阳光洒满金色麦田少年沿着田埂奔跑笑声飞扬不停。"),
+    })
+    out_json = os.path.join(str(tmp_path), "out.json")
+    r = subprocess.run([sys.executable, SCRIPT, root, "--json-out", out_json],
+                       capture_output=True, text=True, cwd=HERE)
+    assert r.returncode == 0, r.stderr
+    with open(out_json, encoding="utf-8") as f:
+        payload = json.load(f)
+    assert payload["repetition"] is not None
+    assert "adjacent_max_jaccard" in payload["repetition"]
+    assert payload["repetition"]["thresholds_provenance"].startswith("internal-heuristic")
+
+
+# ---------- 已确认实体表作术语权威源（缺口#2） ----------
+
+def _write_alias(root, data):
+    os.makedirs(os.path.join(root, "设定"), exist_ok=True)
+    with open(os.path.join(root, "设定", "角色别名.json"), "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False)
+
+
+def test_load_confirmed_entity_terms_three_shapes(tmp_path):
+    # ① character_aliases {别名:规范名}
+    root = make_proj(str(tmp_path), {"第1章.md": CLEAN})
+    _write_alias(root, {"status": "confirmed", "character_aliases": {"剑帝": "墨衣", "老祖": "墨衣"}})
+    assert mc.load_confirmed_entity_terms(root) == {"剑帝", "老祖", "墨衣"}
+    # ② characters[].aliases
+    _write_alias(root, {"status": "confirmed",
+                        "characters": [{"name": "苏离", "aliases": ["阿离", "离姐"]}]})
+    assert mc.load_confirmed_entity_terms(root) == {"苏离", "阿离", "离姐"}
+    # ③ aliases {规范名:[别名]}
+    _write_alias(root, {"status": "confirmed", "aliases": {"林夜": ["夜枭"]}})
+    assert mc.load_confirmed_entity_terms(root) == {"林夜", "夜枭"}
+
+
+def test_confirmed_entity_terms_ignored_when_draft_or_missing(tmp_path):
+    root = make_proj(str(tmp_path), {"第1章.md": CLEAN})
+    assert mc.load_confirmed_entity_terms(root) == set()          # 缺文件
+    _write_alias(root, {"status": "draft", "character_aliases": {"剑帝": "墨衣"}})
+    assert mc.load_confirmed_entity_terms(root) == set()          # draft 不采信
+
+
+def test_confirmed_entity_is_authoritative_even_when_regex_would_reject(tmp_path):
+    # 含中点的合法专名「夜·影」会被 _term_like 正则剔除，但确认表应权威采信并进术语矩阵
+    assert mc._term_like("夜·影") is False                        # 正则会拒
+    ch = "# 第 1 章 《会面》\n<!-- meta: demo=true -->\n夜·影站在屋顶，墨衣抬头看他。\n"
+    root = make_proj(str(tmp_path), {"第1章.md": ch})
+    _write_alias(root, {"status": "confirmed", "character_aliases": {"夜·影": "墨衣"}})
+    out_json = os.path.join(str(tmp_path), "out.json")
+    r = subprocess.run([sys.executable, SCRIPT, root, "--json-out", out_json],
+                       capture_output=True, text=True, cwd=HERE)
+    assert r.returncode == 0, r.stderr
+    with open(out_json, encoding="utf-8") as f:
+        payload = json.load(f)
+    assert "夜·影" in payload["terms_source"]["confirmed_entities"]
+    # 术语矩阵真统计了这个权威专名（第1章出现 1 次）
+    assert payload["term_matrix"]["1"]["夜·影"] == 1
+
+
+def test_no_auto_terms_also_skips_confirmed_entities(tmp_path):
+    root = make_proj(str(tmp_path), {"第1章.md": CLEAN})
+    _write_alias(root, {"status": "confirmed", "character_aliases": {"剑帝": "墨衣"}})
+    out_json = os.path.join(str(tmp_path), "out.json")
+    r = subprocess.run([sys.executable, SCRIPT, root, "--no-auto-terms", "--json-out", out_json],
+                       capture_output=True, text=True, cwd=HERE)
+    assert r.returncode == 0, r.stderr
+    with open(out_json, encoding="utf-8") as f:
+        payload = json.load(f)
+    assert payload["terms_source"]["confirmed_entities"] == []

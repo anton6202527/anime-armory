@@ -656,6 +656,14 @@ def is_combat_spectacle_shot(text: str) -> bool:
 
 # 出图侧视觉盛宴注入（runner 注入·正向·四层）：在保住身份与动作可读的前提下，把"经费在燃烧"的
 # 电影级动作制作语言堆进打斗镜。分层喂以保密度而不糊成词堆；调色给具体科学方向而非泛 "cinematic" 套词。
+#
+# ⚠️ 风格自适应（P0-1）：四层「视觉盛宴」此前是**单一写实电影语法**（体积光丁达尔 / motion blur 拖影 /
+# 大气透视）。但 `recommend_style` 本身能把本剧定成 二次元赛璐璐 / 水墨国风 / Q版 / 纸片剪影——这些
+# 风格**反对**写实体积光与真实 motion blur，硬塞会糊成四不像、和 `global_style/风格禁忌` 打架。
+# 故按风格族分流：cinematic（写实/电影/厚涂/国漫写实/暗黑悬疑…）走原写实四层；cel（赛璐璐/二次元/
+# 条漫/韩漫/乙女）把 motion blur 换赛璐璐速度线·体积光换硬边卡通光束；ink（水墨）改飞白泼墨气劲·留白
+# 纵深；flat（Q版/剪影/定格/低多边形/玩具）改夸张图形化冲击·克制堆料。`COMBAT_SPECTACLE_RICHNESS_GUIDANCE`
+# 保留为 cinematic 默认（向后兼容既有 import/测试），新增分流入口 `combat_spectacle_guidance_for_style`。
 COMBAT_SPECTACLE_RICHNESS_GUIDANCE = (
     "本镜是打斗/法术/动作高潮镜——在身份与动作可读优先的前提下，按电影级动作大片标准堆视觉信息密度"
     "（\"经费在燃烧\"），分四层落实，特效一律服务动作与主体、绝不糊脸或盖过受力点："
@@ -668,3 +676,71 @@ COMBAT_SPECTACLE_RICHNESS_GUIDANCE = (
     "命中瞬间呈升格慢放般的张力定格（动态定格·不是平静站姿）。"
     "调色走具体色彩科学（压暗环境、提亮主体、控制高光溢出），避免泛泛\"cinematic/电影感\"套词；色与光遵守本场光位锚与风格禁忌。"
 )
+
+_SPECTACLE_CEL_GUIDANCE = (
+    "本镜是打斗/法术/动作高潮镜——按二次元/赛璐璐动作番标准堆视觉信息密度（身份与动作可读优先、"
+    "绝不糊脸或盖过受力点），分四层落实，全程保持赛璐璐平涂质感、不混入写实胶片颗粒/景深虚焦："
+    "① 光：硬边赛璐璐高光 + 强对比投影；光柱/耶稣光做成卡通光束（非写实体积光雾化）；命中/爆发帧给夸张高光爆点。"
+    "② 纵深：前景放动态遮挡（飞溅碎片/花瓣/符纸），中景主体清晰，背景用分层平涂或简化——靠分层与对比拉空间，不靠写实大气透视压灰。"
+    "③ 环境受力：碎屑/尘片顺受力方向飞溅、地裂、气浪掀动衣摆草木，破坏感用图形化块面处理（漫画式碎裂）。"
+    "④ 运动能量：高速段给赛璐璐速度线 / 集中线 / 动势线（非写实长拖影 motion blur）；发丝衣摆飘带被气流甩动（二级运动）；"
+    "命中瞬间用冲击星芒 / 震动线 / 动态定格强调张力。"
+    "色与光遵守本场光位锚与风格禁忌。"
+)
+
+_SPECTACLE_INK_GUIDANCE = (
+    "本镜是打斗/法术/动作高潮镜——按水墨写意动作标准堆张力（身份与动作可读优先、绝不糊脸或盖过受力点），"
+    "分四层落实，全程保持水墨写意质感、不混入 3D 体积光/写实景深："
+    "① 光：以墨色浓淡与留白代替写实布光——主体浓墨实笔拔出、环境淡墨虚化；不用写实体积光丁达尔/胶片高光。"
+    "② 纵深：近实远虚靠墨阶与留白（近景浓墨、中景灰墨、远景大面积留白）拉空间，不用写实大气透视/虚焦余烬。"
+    "③ 环境受力：以泼墨/飞白/水痕扩散表现气劲冲击——墨点迸溅、纸面气流掀动、笔势带出破坏感，写意而非写实碎屑物理。"
+    "④ 运动能量：高速段用飞白笔触/拖墨/笔势走向表现速度（非写实速度线/motion blur）；衣袂发丝以线条动势甩动；"
+    "命中瞬间用墨爆/笔锋顿挫定格张力。"
+    "色与光遵守本场光位锚与风格禁忌。"
+)
+
+_SPECTACLE_FLAT_GUIDANCE = (
+    "本镜是打斗/法术/动作高潮镜——按夸张风格化卡通标准堆张力（身份与动作可读优先、绝不糊脸或盖过受力点），"
+    "克制堆料、避免与平面/夸张风格打架，分四层落实，保持本风格平面/Q版/玩具质感、绝不注入写实电影摄影语言"
+    "（体积光/景深虚焦/真实 motion blur）："
+    "① 光：简化硬光 + 大色块对比；命中帧给夸张卡通高光/星芒；不用写实体积光雾化、不用胶片颗粒。"
+    "② 纵深：靠大小对比与图层错位拉空间，前景放夸张冲击图形；不强求写实三层大气透视。"
+    "③ 环境受力：用图形化卡通烟云/爆炸团/碎块/夸张变形（squash & stretch）表现冲击与破坏，不追写实碎屑物理。"
+    "④ 运动能量：高速段给夸张动势线/速度线/集中线 + 形变；命中瞬间用大号冲击星芒/震动符号/夸张定格。"
+    "色与光遵守本场光位锚与风格禁忌。"
+)
+
+# 风格族分流（substring 匹配，非命中即 cinematic 默认）。precedence: ink → flat → cel → cinematic。
+# 日漫剧场版光影 / 厚涂幻想 / 3D卡通电影感 等本就含写实体积光与大气纵深 → 留 cinematic。
+SPECTACLE_STYLE_PROFILES: Dict[str, str] = {
+    "cinematic": COMBAT_SPECTACLE_RICHNESS_GUIDANCE,
+    "cel": _SPECTACLE_CEL_GUIDANCE,
+    "ink": _SPECTACLE_INK_GUIDANCE,
+    "flat": _SPECTACLE_FLAT_GUIDANCE,
+}
+_SPECTACLE_INK_MARKERS = ("水墨",)
+_SPECTACLE_FLAT_MARKERS = ("Q版", "q版", "纸片", "剪影", "定格", "低多边形", "玩具")
+_SPECTACLE_CEL_MARKERS = ("赛璐璐", "二次元", "条漫", "动态漫画", "韩漫", "乙女")
+
+
+def spectacle_style_family(style_text: str) -> str:
+    """把风格名/风格句（含「风格禁忌」）归到 cinematic/cel/ink/flat 之一。纯函数·可测。
+
+    入参可为 style_contract 的风格名、style_contract_phrase 整句、或 _设置.md 风格值；
+    空串或无命中 → "cinematic"（保守回到原写实四层，向后兼容）。"""
+    t = str(style_text or "")
+    if any(m in t for m in _SPECTACLE_INK_MARKERS):
+        return "ink"
+    if any(m in t for m in _SPECTACLE_FLAT_MARKERS):
+        return "flat"
+    if any(m in t for m in _SPECTACLE_CEL_MARKERS):
+        return "cel"
+    return "cinematic"
+
+
+def combat_spectacle_guidance_for_style(style_text: str = "") -> str:
+    """按本剧风格族返回打斗镜「经费在燃烧」视觉盛宴注入文案（四层·风格自适应）。
+
+    两个出图 runner 在 ``is_combat_spectacle_shot`` 命中后调用，避免给赛璐璐/水墨/Q版剧
+    硬塞写实体积光与 motion blur（和 global_style/风格禁忌 打架·糊成四不像）。"""
+    return SPECTACLE_STYLE_PROFILES[spectacle_style_family(style_text)]

@@ -521,5 +521,6 @@ python3 skills/n2d-batch/scripts/queue.py plan <作品根> \
 | 把"预算一般"当成所有图都随便过 | 预算一般不是不审图；关键图严格自检直到满意，普通图也必须无核心错位、无身份漂移、无硬性禁忌 |
 | 看到 `dreamina` 就直接当逆向禁掉 | 错。Dreamina/即梦官方 CLI 已是 approved 后端；只禁第三方逆向、`同视频AI` / `同视频模型` 含糊口径和 web 自动化 |
 | 一集里这镜 Codex、那镜 Seedream | 后端混用是跨镜漂移真凶，gate 会 BLOCK——全集统一一个官方后端 |
+| `_设置.md` 没改，但实际换后端重出了整集 | 仍 BLOCK：基线对账除了比 `_设置.md` 声明，还比 `production_events` **真实落档后端**——声明没改而事件后端≠锁定基线=视觉 DNA 漂移；统一回基线后端重出，或 `n2d-update media` 重制计划 + `record-baseline --force` |
 | 看到 `codex` 就假定能命令行生图 | 必须检查 `image_generation` feature / 插件 / 内置 `image_gen`；没有直接保存 PNG 的命令时用 Codex 会话生图工具落档 |
 | 无 CLI 就直接进即梦 web 手动模式 | 违反当前生产闸门。所选生图渠道不可用时必须停下报告，不得用 web 自动化兜底 |

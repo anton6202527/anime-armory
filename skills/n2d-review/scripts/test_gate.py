@@ -3439,6 +3439,58 @@ def test_image_ai_backend_migration_uses_latest_event_per_asset(tmp_path):
     assert not any(f["sev"] == gate.BLOCK and f["dim"] == "生图AI一致性" for f in gate.findings)
 
 
+def _write_image_baseline(root: Path, access: str = "Codex", model: str = "GPT Image 2") -> None:
+    prod = root / "生产数据"
+    prod.mkdir(parents=True, exist_ok=True)
+    (prod / "image_backend_baseline.json").write_text(json.dumps({
+        "kind": "n2d_image_backend_baseline", "version": 1,
+        "selection": {"access": access, "backend": "", "image_model": model, "channel": ""},
+    }, ensure_ascii=False), encoding="utf-8")
+
+
+def test_image_backend_reality_drifts_from_baseline_blocks(tmp_path):
+    # 坑 D：_设置.md 仍声明 Codex（与锁定基线一致），但真实落档事件用了 Dreamina（单一·不混用）→
+    # 混用闸/声明对账都抓不到，唯有事件对账基线戳穿：BLOCK「生图后端基线」。
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 生图AI: Codex\n", encoding="utf-8")
+    _write_image_baseline(root, access="Codex")
+    _append_image_event(root, "出图/第1集/图片/Clip_01.png", "Dreamina")
+
+    gate.check_image_ai_policy(str(root), "第1集")
+
+    hits = [f for f in gate.findings if f["dim"] == "生图后端基线" and f["sev"] == gate.BLOCK]
+    assert hits and any("真实落档事件" in f["msg"] for f in hits)
+
+
+def test_image_backend_reality_matches_baseline_no_block(tmp_path):
+    # 真实事件与锁定基线一致 → 不报「生图后端基线」reconcile。
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 生图AI: Codex\n", encoding="utf-8")
+    _write_image_baseline(root, access="Codex")
+    _append_image_event(root, "出图/第1集/图片/Clip_01.png", "Codex")
+
+    gate.check_image_ai_policy(str(root), "第1集")
+
+    assert not any(f["dim"] == "生图后端基线" for f in gate.findings)
+
+
+def test_image_backend_reality_reconcile_skipped_without_baseline(tmp_path):
+    # 无锁定基线 → 事件对账跳过（由 check_image_backend_baseline 管缺基线），不误报。
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 生图AI: Codex\n", encoding="utf-8")
+    _append_image_event(root, "出图/第1集/图片/Clip_01.png", "Dreamina")
+
+    gate.check_image_ai_policy(str(root), "第1集")
+
+    assert not any(f["dim"] == "生图后端基线" for f in gate.findings)
+
+
 def test_image_ai_backend_mixing_across_latest_assets_is_blocked(tmp_path):
     root = tmp_path / "制漫剧" / "测试剧"
     root.mkdir(parents=True)
@@ -3591,6 +3643,86 @@ def test_reference_plan_blocks_high_risk_actions_in_demo(tmp_path):
 
     matches = [f for f in gate.findings if f["dim"] == "参考规划落实"]
     assert matches and all(f["sev"] == gate.BLOCK for f in matches)
+
+
+def _write_director_camera_plan(root, clips):
+    prod = root / "生产数据"
+    prod.mkdir(parents=True, exist_ok=True)
+    plan = {"kind": "n2d_director_camera_plan", "version": 1, "episode": "第1集", "clips": clips}
+    (prod / "director_camera_plan_第1集.json").write_text(
+        json.dumps(plan, ensure_ascii=False), encoding="utf-8")
+
+
+def _write_image_prompt(root, text):
+    p = root / "出图" / "第1集" / "prompt"
+    p.mkdir(parents=True, exist_ok=True)
+    (p / "01_分镜出图.md").write_text(text, encoding="utf-8")
+
+
+def test_director_camera_plan_blocks_peak_shot_unconsumed(tmp_path):
+    # P0-3：含高潮镜的导演运镜计划，但出图 prompt 零运镜词汇 → 付费前 BLOCK（规划好没落片）。
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    _write_director_camera_plan(root, [
+        {"clip_id": "Clip_07", "rhythm": "高潮", "recommended": {"reason": "反转瞬间压迫"}},
+    ])
+    _write_image_prompt(root, "# Clip 07\n正向 prompt：少年挥剑。\n负向：模糊")  # 无导演运镜词汇
+    gate.check_director_camera_plan_consumption(str(root), "第1集")
+    matches = [f for f in gate.findings if f["dim"] == "导演运镜落实"]
+    assert matches and any(f["sev"] == gate.BLOCK for f in matches)
+    assert any("Clip_07" in f["msg"] for f in matches if f["sev"] == gate.BLOCK)
+
+
+def test_director_camera_plan_warns_non_peak_unconsumed(tmp_path):
+    # 普通镜未消费 → WARN（不 BLOCK）。
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    _write_director_camera_plan(root, [
+        {"clip_id": "Clip_02", "rhythm": "过渡", "recommended": {"reason": "平稳对话"}},
+    ])
+    _write_image_prompt(root, "# Clip 02\n正向 prompt：少女喝茶。")
+    gate.check_director_camera_plan_consumption(str(root), "第1集")
+    matches = [f for f in gate.findings if f["dim"] == "导演运镜落实"]
+    assert matches and all(f["sev"] == gate.WARN for f in matches)
+    assert not any(f["sev"] == gate.BLOCK for f in matches)
+
+
+def test_director_camera_plan_info_when_consumed(tmp_path):
+    # prompt 含导演运镜词汇 → INFO（文档级已消费），即使含高潮镜也不 BLOCK。
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    _write_director_camera_plan(root, [
+        {"clip_id": "Clip_07", "rhythm": "高潮", "recommended": {"reason": "反转瞬间压迫"}},
+    ])
+    _write_image_prompt(root, "# Clip 07\n镜头/机位：CU 推镜。\n起幅·运动余量：预留前景运动余量。\n构图防呆：主体不顶边。")
+    gate.check_director_camera_plan_consumption(str(root), "第1集")
+    matches = [f for f in gate.findings if f["dim"] == "导演运镜落实"]
+    assert matches and all(f["sev"] == gate.INFO for f in matches)
+
+
+def test_director_camera_plan_skips_when_no_sidecar(tmp_path):
+    # 没跑 director_camera_plan（无 sidecar）→ 不强制、零发现（与 reference_plan 一致）。
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    _write_image_prompt(root, "# Clip 07\n正向 prompt：少年挥剑。")
+    gate.check_director_camera_plan_consumption(str(root), "第1集")
+    assert [f for f in gate.findings if f["dim"] == "导演运镜落实"] == []
+
+
+def test_director_camera_plan_skips_when_prompt_absent(tmp_path):
+    # sidecar 在但出图 prompt 包还没产出 → 不在此 BLOCK（上游阶段负责）。
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    _write_director_camera_plan(root, [
+        {"clip_id": "Clip_07", "rhythm": "高潮", "recommended": {"reason": "反转"}},
+    ])
+    gate.check_director_camera_plan_consumption(str(root), "第1集")
+    assert [f for f in gate.findings if f["dim"] == "导演运镜落实"] == []
 
 
 def test_reference_plan_application_sidecar_clears_pending_actions(tmp_path):

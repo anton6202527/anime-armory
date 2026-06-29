@@ -1853,6 +1853,56 @@ def _reference_plan_application_status(root: str, ep: str, plan_path: str, actio
     if not isinstance(evidence, list) or not evidence:
         return False, app_path, "applied_evidence 必须列出落实字段/取舍理由"
     return True, app_path, "ok"
+DIRECTOR_CAMERA_PLAN_APPLICATION_KIND = "n2d_director_camera_plan_application"
+def _director_plan_application_path(root: str, ep: str) -> str:
+    return os.path.join(root, "生产数据", f"director_camera_plan_applied_{ep}.json")
+def _director_plan_application_status(root: str, ep: str, plan_path: str) -> Dict[str, Any]:
+    """逐镜结构化签收：导演运镜计划每镜落进哪个 prompt（出图/出视频）的精确归属证据。
+
+    返回 {accepted, reason, app_path, scopes:{scope:{applied_ids:set, fresh:bool, prompt_path}}}。
+    与 reference_plan 同范式：SHA 绑定 plan + 每 scope prompt，stale plan/prompt 不放行（freshness 死扣），
+    把 P0-3 文档级烟雾收据升成逐镜精确归属。无效/未签收时 accepted=False、scopes 空，check 自动回退烟雾收据。
+    """
+    app_path = _director_plan_application_path(root, ep)
+    app = load_json(app_path)
+    out: Dict[str, Any] = {"accepted": False, "reason": "", "app_path": app_path, "scopes": {}}
+    if not isinstance(app, dict):
+        out["reason"] = "缺 director_camera_plan_applied 结构化签收"
+        return out
+    if app.get("kind") != DIRECTOR_CAMERA_PLAN_APPLICATION_KIND:
+        out["reason"] = f"kind 必须是 {DIRECTOR_CAMERA_PLAN_APPLICATION_KIND}"
+        return out
+    if app.get("accepted") is not True:
+        out["reason"] = "accepted 必须为 true"
+        return out
+    if not str(app.get("reviewer") or "").strip():
+        out["reason"] = "reviewer 不能为空"
+        return out
+    plan_sha = _safe_sha256(plan_path)
+    if not plan_sha or str(app.get("plan_sha256") or "").strip() != plan_sha:
+        out["reason"] = "plan_sha256 与当前 director_camera_plan 不一致（plan 变了需重新签收）"
+        return out
+    default_prompt = {
+        "出图": os.path.join("出图", ep, "prompt", "01_分镜出图.md"),
+        "出视频": os.path.join("出视频", ep, "prompt", "01_clips.md"),
+    }
+    scopes: Dict[str, Any] = {}
+    for entry in app.get("scopes") or []:
+        if not isinstance(entry, dict):
+            continue
+        scope = str(entry.get("scope") or "").strip()
+        if scope not in default_prompt:
+            continue
+        prompt_rel = str(entry.get("prompt_path") or default_prompt[scope]).strip()
+        prompt_path = prompt_rel if os.path.isabs(prompt_rel) else os.path.join(root, prompt_rel)
+        psha = _safe_sha256(prompt_path)
+        fresh = bool(psha) and str(entry.get("prompt_sha256") or "").strip() == psha
+        ids = {str(x).strip() for x in (entry.get("applied_clip_ids") or []) if str(x).strip()}
+        scopes[scope] = {"applied_ids": ids, "fresh": fresh, "prompt_path": prompt_path}
+    out["accepted"] = True
+    out["reason"] = "ok"
+    out["scopes"] = scopes
+    return out
 def storyboard_path(root: str, ep: str) -> str:
     return os.path.join(root, "脚本", ep, "storyboard.json")
 def load_storyboard(root: str, ep: str) -> Optional[dict]:
@@ -4987,6 +5037,9 @@ __all__ = [
     '_reference_plan_prompt_path',
     '_safe_sha256',
     '_reference_plan_application_status',
+    'DIRECTOR_CAMERA_PLAN_APPLICATION_KIND',
+    '_director_plan_application_path',
+    '_director_plan_application_status',
     'storyboard_path',
     'load_storyboard',
     '_route_allows_no_firstframe',

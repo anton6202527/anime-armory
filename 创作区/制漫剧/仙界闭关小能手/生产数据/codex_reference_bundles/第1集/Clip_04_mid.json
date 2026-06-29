@@ -6,13 +6,13 @@
   "cli_image_inputs": [
     {
       "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋.png",
-      "bytes": 2219734,
+      "bytes": 2428373,
       "owner": "Clip_04",
       "priority": 0,
       "rel_path": "出图/第1集/图片/Clip04_两缸水和空屋.png",
       "role": "source_frame",
       "sequence": 0,
-      "sha256": "ec34dfdcaa08a7d696125f2ad95a5a206437d2838fc0807b546eaefadb05e29f",
+      "sha256": "3f2715c87fc1f88267973117323fe602ea78a39f407453991f84df160838f99d",
       "source": "same_clip_firstframe"
     },
     {

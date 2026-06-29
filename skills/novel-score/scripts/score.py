@@ -54,6 +54,19 @@ try:
 except ImportError:
     log_friction = None
 
+try:
+    import judge_protocol  # noqa: E402  novel/_lib 单一真值源：LLM 判官去偏协议执行层
+except ImportError:  # pragma: no cover - 缺则单判官按原行为，不做 dual-judge 去偏
+    judge_protocol = None
+
+try:
+    import repetition  # noqa: E402  novel/_lib 单一真值源：跨章重复率/机械文风（与 novel-review 共用）
+except ImportError:  # pragma: no cover - 缺则不算 retention 重复先验，按原行为
+    repetition = None
+
+# 跨章重复率/机械文风先验的来源标签（确定性机检·喂 retention 调分）
+REPETITION_PRIOR_SOURCE = "机检/跨章重复(确定性)"
+
 DIMENSIONS = [
     ("topic_heat", "题材热度匹配"),
     ("opening_hook", "开篇黄金三章钩子"),
@@ -755,7 +768,8 @@ def summarize_ab_take_results(results):
     }
 
 
-def compute_reader_feedback_adjustment(reader_telemetry=None, reader_panel=None, ab_take_results=None):
+def compute_reader_feedback_adjustment(reader_telemetry=None, reader_panel=None, ab_take_results=None,
+                                       repetition_prior=None):
     components = []
     reasons = []
     sources = []
@@ -813,6 +827,14 @@ def compute_reader_feedback_adjustment(reader_telemetry=None, reader_panel=None,
             add(-2, f"A/B take {metric} uplift {uplift:.2f} 明显为负", AB_TAKE_RESULTS_REL_PATH)
         elif uplift <= -0.03:
             add(-1, f"A/B take {metric} uplift {uplift:.2f} 小幅为负", AB_TAKE_RESULTS_REL_PATH)
+
+    # 跨章重复率/机械文风先验（确定性机检）：retention 维度负向先验，prior 自身已封顶 -3。
+    if repetition_prior:
+        prior = repetition_prior.get("prior") or {}
+        pts = float(prior.get("points") or 0)
+        if pts:
+            reason_bits = prior.get("reasons") or []
+            add(pts, "跨章重复机检先验：" + "；".join(reason_bits[:3]), REPETITION_PRIOR_SOURCE)
 
     raw_points = sum(float(item["points"]) for item in components)
     capped = max(-8.0, min(8.0, raw_points))
@@ -1111,7 +1133,62 @@ def validate_assessment(assessment, expect_title_check=False, expect_adaptation=
                 errors.append("adaptation_check.comment 不能为空")
             if not isinstance(adaptation.get("low_potential"), bool):
                 errors.append("adaptation_check.low_potential 必须是 bool")
+    # 可选 dual-judge 面板：{判官: {维度: 1-10}}。给了就校验形状（≥2 判官触发去偏）；
+    # 不给 → 单判官按原行为，向后兼容。
+    panel = assessment.get("judges_panel")
+    if panel is not None:
+        if not isinstance(panel, dict):
+            errors.append("judges_panel 必须是 object：{判官名: {维度: 1-10}}")
+        else:
+            for judge, scores in panel.items():
+                if not isinstance(scores, dict):
+                    errors.append(f"judges_panel[{judge!r}] 必须是 object：{{维度: 1-10}}")
+                    continue
+                for dim, val in scores.items():
+                    if dim not in expected:
+                        errors.append(f"judges_panel[{judge!r}].{dim} 未知维度")
+                    if not isinstance(val, (int, float)) or not (1 <= float(val) <= 10):
+                        errors.append(f"judges_panel[{judge!r}].{dim} 必须是 1-10 数字：{val!r}")
     return errors
+
+
+def apply_judge_debias(assessment, processed_scores):
+    """跑 judge_protocol 去偏协议（rubric z 归一 + 判官间方差→低信心），结果 advisory 注入。
+
+    单判官（无 judges_panel 或 <2 判官）→ enabled=False，不改任何分（向后兼容）。
+    多判官 → 逐维度算 mean/stdev/confidence，给 processed_scores 标 judge_confidence，
+    高方差维度汇总到 low_confidence_dimensions。**绝不改 raw_score / 总分 / 判定**——
+    与 judge_protocol「绝不当确定性门控」一致，只暴露判官分歧供人判（B10）。"""
+    panel = (assessment or {}).get("judges_panel") or {}
+    judges = [j for j, s in panel.items() if isinstance(s, dict) and s]
+    if judge_protocol is None or len(judges) < 2:
+        reason = ("judge_protocol 不可用" if judge_protocol is None
+                  else "单判官——提供 ≥2 判官的 judges_panel 即触发 dual-judge 去偏")
+        return {"enabled": False, "judges": judges, "low_confidence_dimensions": [], "note": reason}
+    rubric = judge_protocol.aggregate_rubric(panel)
+    dim_map = dict(DIMENSIONS)
+    low_dims = []
+    by_dim = {}
+    for dim, stats in rubric.items():
+        by_dim[dim] = stats
+        if stats.get("confidence") == "low":
+            low_dims.append({"dimension": dim, "dimension_label": dim_map.get(dim, dim),
+                             "stdev": stats.get("stdev"), "n": stats.get("n")})
+    for ps in processed_scores:
+        stats = by_dim.get(ps["dimension"])
+        if stats:
+            ps["judge_confidence"] = stats.get("confidence")
+            ps["judge_panel_stdev"] = stats.get("stdev")
+            ps["judge_panel_n"] = stats.get("n")
+    return {
+        "enabled": True,
+        "judges": judges,
+        "judges_count": len(judges),
+        "rubric": rubric,
+        "low_confidence_dimensions": low_dims,
+        "note": ("dual-judge 去偏已执行；高方差维度仅标低信心、不改分"
+                 if low_dims else "dual-judge 去偏已执行；判官共识良好"),
+    }
 
 
 def build_next_actions(verdict, processed_scores):
@@ -1196,9 +1273,28 @@ def get_tier_verdict(total_score):
         return "不及格", "弃稿重立", "low"
 
 
+def repetition_prior_text(repetition_prior):
+    """把跨章重复率机检先验折成给判官的 retention 维度提示文本（确定性·只读机检 summary）。"""
+    if not repetition_prior:
+        return ("无（章节不足 2 章或机检不可用；retention 维度按内容自行判读）")
+    summary = repetition_prior.get("summary") or {}
+    prior = repetition_prior.get("prior") or {}
+    jmax = float(summary.get("adjacent_max_jaccard") or 0.0)
+    bits = (prior.get("reasons") or [])
+    detail = "；".join(bits) if bits else "未见显著跨章重复/机械文风"
+    return (
+        f"跨章重复率/机械文风（确定性机检·internal-heuristic 非平台公开硬数字）：相邻章最高近重复 "
+        f"{jmax:.0%}，机械开篇组 {summary.get('mechanical_opener_groups', 0)}，跨章复用整句 "
+        f"{summary.get('repeated_sentences', 0)}；先验档 {prior.get('level', 'none')}。{detail}。"
+        "平台对 AI 内容做连续章节重复率/机械文风质检，高重复是弃读信号——retention 维度评分请把此"
+        "作为**负向先验**纳入（机检只给信号，最终分仍以你对正文的判读为准）。"
+    )
+
+
 def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_party=None,
                  reader_panel=None, reader_telemetry=None, reference_distribution=None, title_collision=None,
-                 ab_take_results=None, task_id="__SCORE_TASK_ID__", expect_adaptation=False):
+                 ab_take_results=None, task_id="__SCORE_TASK_ID__", expect_adaptation=False,
+                 repetition_prior=None):
     # This function generates a prompt for the LLM to perform the assessment
     # In a real automation, this would be sent to an LLM API.
 
@@ -1289,6 +1385,9 @@ def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_
 ## A/B take 结果（小流量分流 · 读端反馈低权重补充）
 {ab_take_results_text(ab_take_results)}
 
+## 跨章重复率/机械文风（确定性机检 · retention 维度负向先验）
+{repetition_prior_text(repetition_prior)}
+
 ## 参考分布（合规样本百分位 · WebNovelBench 式相对水位）
 {reference_distribution_text(reference_distribution)}
 
@@ -1323,6 +1422,11 @@ def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_
     }}
   ]{title_check_json}{adaptation_json}
 }}
+
+【可选·去偏增强】若你能用 ≥2 个相互独立的判官视角（或不同模型）各自独立打这 7 个维度，
+请额外附 "judges_panel": {{"判官A": {{"topic_heat": 8, ...}}, "判官B": {{...}}}}（每维 1-10）。
+系统会按 judge_protocol 去偏协议算判官间方差：分歧大的维度自动标低信心、提示人工复核
+（仅 advisory，不改你给的 scores 与总分）。单判官可省略此字段，按原行为评分。
 """
     return prompt
 
@@ -1370,6 +1474,29 @@ def generate_markdown_report(root, meta, result, total_score, tier, verdict, roi
             f"（样本 {benchmark.get('sample_count')}，{benchmark.get('distribution_title')}）"
         )
     lines.append("")
+
+    rp = result.get("repetition_prior") or {}
+    rp_prior = rp.get("prior") or {}
+    if rp_prior and rp_prior.get("level") and rp_prior["level"] != "none":
+        rp_sum = rp.get("summary") or {}
+        lines.append(f"## 跨章重复率/机械文风先验（retention·确定性机检·档 {rp_prior['level']}）")
+        lines.append(f"- 相邻章最高近重复 {float(rp_sum.get('adjacent_max_jaccard') or 0):.0%}；"
+                     f"机械开篇组 {rp_sum.get('mechanical_opener_groups', 0)}；"
+                     f"跨章复用整句 {rp_sum.get('repeated_sentences', 0)}；retention 调分 {rp_prior.get('points', 0):+d}")
+        for r in rp_prior.get("reasons", [])[:4]:
+            lines.append(f"  - {r}")
+        lines.append("")
+
+    debias = result.get("judge_debias") or {}
+    if debias.get("enabled"):
+        low = debias.get("low_confidence_dimensions") or []
+        lines.append(f"## 判官去偏（dual-judge · {debias.get('judges_count')} 判官）")
+        if low:
+            dims = "、".join(d["dimension_label"] for d in low)
+            lines.append(f"- ⚠️ 判官分歧大、低信心维度（仅供参考，未改分）：{dims}")
+        else:
+            lines.append("- ✅ 判官共识良好，无高方差维度")
+        lines.append("")
 
     if result.get("waivers"):
         lines.append("## 显式豁免")
@@ -1526,6 +1653,13 @@ def main():
             title = title_m.group(1).strip() if title_m else ""
             samples.append({"num": num, "title": title, "content": content})
 
+    # 跨章重复率/机械文风先验（确定性·喂 retention 维度）：用已加载章节算，<2 章或机检不可用 → None。
+    repetition_prior = None
+    if repetition is not None and len(samples) >= 2:
+        _rep_chapters = [(s["num"], s["content"]) for s in sorted(samples, key=lambda s: s["num"])]
+        _rep_findings, _rep_summary = repetition.cross_chapter_repetition(_rep_chapters)
+        repetition_prior = {"summary": _rep_summary, "prior": repetition.retention_prior(_rep_summary)}
+
     source_snapshot = (
         snapshot_files(root, sample_paths, mode=f"score:{args.scope}")
         if snapshot_files else None
@@ -1540,6 +1674,7 @@ def main():
         ab_take_results=ab_take_results,
         task_id="__SCORE_TASK_ID__",
         expect_adaptation=short_drama_target,
+        repetition_prior=repetition_prior,
     )
     expected_task = build_score_task(
         root,
@@ -1651,6 +1786,8 @@ def main():
             "improve_by": s.get("improve_by", "")
         })
 
+    judge_debias = apply_judge_debias(assessment, processed_scores)
+
     deductions = assessment.get("deductions", [])
     total_deductions = sum(d["points"] for d in deductions)
     # 扣分上限 -30：防止雷点扣分淹没基本面（加权 90 扣到 40 vs 加权 40 无扣分，
@@ -1661,6 +1798,7 @@ def main():
         reader_telemetry=reader_telemetry,
         reader_panel=reader_panel,
         ab_take_results=ab_take_results,
+        repetition_prior=repetition_prior,
     )
     final_score = max(0.0, min(100.0, pre_reader_feedback_score + reader_feedback_adjustment["points"]))
     tier, verdict, roi = get_tier_verdict(final_score)
@@ -1692,6 +1830,17 @@ def main():
             "action": (f"短剧改编潜力偏低（{adaptation_check['total']:.0f}/{adaptation_check['max_total']}）："
                        "若要走短剧/漫剧改编，先用 novel-condense 出漫剧版精简骨架"),
             "dimension": "adaptation_check",
+        })
+    # dual-judge 去偏：判官分歧大的维度提示人工复核（advisory，不改分不阻断）。
+    if judge_debias.get("enabled") and judge_debias.get("low_confidence_dimensions"):
+        dims = "、".join(d["dimension_label"] for d in judge_debias["low_confidence_dimensions"])
+        next_actions.append({
+            "priority": "could",
+            "recommended_skill": "novel-score",
+            "return_to_stage": "review",
+            "action": (f"判官分歧大（{judge_debias['judges_count']} 判官）：{dims} 维度方差超阈值，"
+                       "该维度分仅供参考，建议人工复核或加判官"),
+            "dimension": "judge_debias",
         })
     waivers = []
     if pending_waiver:
@@ -1733,6 +1882,8 @@ def main():
         "ab_take_results_summary": summarize_ab_take_results(ab_take_results),
         "benchmark_percentile": benchmark_percentile,
         "scores": processed_scores,
+        "judge_debias": judge_debias,
+        "repetition_prior": repetition_prior,
         "title_check": title_check,
         "adaptation_check": adaptation_check,
         "deductions": deductions,

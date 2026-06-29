@@ -128,3 +128,54 @@ def debias_verdict(judgements, panel=None, min_judges=2, variance_threshold=DEFA
         "rubric": rubric,
         "low_confidence_criteria": low_conf_crits,
     }
+
+
+# ── CLI：让去偏协议从「文档规范」变「可执行闸」（critic-loop / novel-score 真跑此入口） ──
+_CONFIDENCE_RANK = {"low": 0, "medium": 1, "high": 2}
+
+
+def _load_json(path):
+    import json
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def main(argv=None):
+    """对仓库外判官产物跑去偏协议，stdout 输出可信结论 + 全过程留痕。
+
+    --verdicts: 成对裁决 JSON（list[{judge, ab_winner, ba_winner}]，协议1+2）。
+    --panel:    量规分 JSON（{判官: {准则: 分}}，协议3）。二者至少给一个。
+    默认纯 advisory（恒 exit 0）；--require-confidence 才把信心不足升成 exit 1（opt-in 硬闸，
+    给 critic-loop 这类「不达标就别采纳」的调用方用；与模块「绝不静默吞偏差」一致）。"""
+    import argparse
+    import json
+    import sys
+    p = argparse.ArgumentParser(description="LLM-as-judge 去偏协议确定性执行层（不调用 LLM）")
+    p.add_argument("--verdicts", help="成对裁决 JSON 路径：list[{judge,ab_winner,ba_winner}]")
+    p.add_argument("--panel", help="量规分 JSON 路径：{judge:{criterion:score}}")
+    p.add_argument("--min-judges", type=int, default=2)
+    p.add_argument("--variance-threshold", type=float, default=DEFAULT_VARIANCE_THRESHOLD)
+    p.add_argument("--require-confidence", choices=["low", "medium", "high"], default=None,
+                   help="opt-in 硬闸：实得信心低于此 → exit 1（默认不给则恒 advisory exit 0）")
+    args = p.parse_args(argv)
+    if not args.verdicts and not args.panel:
+        p.error("至少提供 --verdicts 或 --panel 之一")
+    judgements = _load_json(args.verdicts) if args.verdicts else []
+    panel = _load_json(args.panel) if args.panel else None
+    result = debias_verdict(judgements, panel=panel,
+                            min_judges=args.min_judges,
+                            variance_threshold=args.variance_threshold)
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    if args.require_confidence:
+        got = _CONFIDENCE_RANK.get(result["confidence"], 0)
+        need = _CONFIDENCE_RANK[args.require_confidence]
+        if got < need:
+            print(f"[gate] 信心 {result['confidence']} < 所需 {args.require_confidence}（位置偏/判官分歧/高方差）→ 不可采纳",
+                  file=sys.stderr)
+            return 1
+    return 0
+
+
+if __name__ == "__main__":  # pragma: no cover - exercised via subprocess in tests
+    import sys
+    sys.exit(main())
