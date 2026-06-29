@@ -23,6 +23,7 @@ TURNAROUND_SPLITS = {
     "side": (2, "turnaround_split"),
     "back": (3, "turnaround_split"),
 }
+TURNAROUND_FRONT_METHOD = "turnaround_split_front"
 FRONT_CROPS = {
     "half_body": "front_crop",
 }
@@ -176,6 +177,7 @@ def derive_project(
     write: bool = False,
     force: bool = False,
     asset_keys: set[str] | None = None,
+    front_from_turnaround: bool = False,
 ) -> dict[str, Any]:
     root = root.resolve()
     registry_path = root / "出图" / "共享" / "identity_registry.json"
@@ -217,6 +219,33 @@ def derive_project(
             if turn_ready and turn_rel and turn_path.exists():
                 target_size = Image.open(turn_path).size
                 source_sha = _sha256(turn_path)
+                if front_from_turnaround and front_rel:
+                    dst = _resolve(root, front_rel)
+                    if dst.exists() and not force:
+                        summary["skipped"].append({"form": form_label, "field": "front", "reason": "exists"})
+                    else:
+                        if write:
+                            crop_box = _save_turnaround_split(turn_path, dst, 0, target_size)
+                        else:
+                            column_width = target_size[0] / 4
+                            inset = round(column_width * 0.06)
+                            crop_box = [
+                                inset,
+                                0,
+                                round(column_width) - inset,
+                                target_size[1],
+                            ]
+                        deriv = _derivation(TURNAROUND_FRONT_METHOD, turn_rel, source_sha, crop_box)
+                        rg["front"] = _ready_item(rg.get("front"), front_rel, deriv)
+                        base_views["front"] = _ready_item(base_views.get("front"), front_rel, deriv)
+                        front_ready = True
+                        front_path = _resolve(root, front_rel)
+                        summary["derived"].append({
+                            "form": form_label,
+                            "field": "front",
+                            "path": front_rel,
+                            "method": TURNAROUND_FRONT_METHOD,
+                        })
                 for key, (column_index, method) in TURNAROUND_SPLITS.items():
                     rel = _reference_group_path(form, key, {"three_quarter": "45度", "side": "侧", "back": "背"}[key])
                     dst = _resolve(root, rel)
@@ -295,12 +324,20 @@ def main() -> int:
     ap.add_argument("project_root", help="作品根目录")
     ap.add_argument("--write", action="store_true", help="写出 PNG 并回写 identity_registry.json")
     ap.add_argument("--force", action="store_true", help="覆盖已存在的派生 PNG")
+    ap.add_argument("--front-from-turnaround", action="store_true",
+                    help="从三视图第 1 列生成/覆盖 front，确保 front 与 45/侧/背同源")
     ap.add_argument("--asset-key", action="append", default=[],
                     help="只派生指定 form.asset_key；可重复传入，避免误处理不兼容三视图布局")
     args = ap.parse_args()
 
     asset_keys = {str(v).strip() for v in args.asset_key if str(v).strip()} or None
-    summary = derive_project(Path(args.project_root), write=args.write, force=args.force, asset_keys=asset_keys)
+    summary = derive_project(
+        Path(args.project_root),
+        write=args.write,
+        force=args.force,
+        asset_keys=asset_keys,
+        front_from_turnaround=args.front_from_turnaround,
+    )
     print(json.dumps(summary, ensure_ascii=False, indent=2))
     return 0
 
