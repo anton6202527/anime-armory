@@ -1,0 +1,50 @@
+{
+  "available": true,
+  "findings": [
+    {
+      "character_id": "CHAR_JIANG_YUECHU",
+      "code": "core_form_missing_performance_signature",
+      "form": "战场形态",
+      "message": "核心/长线角色 CHAR_JIANG_YUECHU/战场形态 缺表演签名字段：micro_expression、gaze、stance、habitual_gesture、action_style",
+      "severity": "warn"
+    },
+    {
+      "character_id": "CHAR_JIANG_YUECHU",
+      "code": "core_form_missing_performance_signature",
+      "form": "觉醒蓝调母本",
+      "message": "核心/长线角色 CHAR_JIANG_YUECHU/觉醒蓝调母本 缺表演签名字段：micro_expression、gaze、stance、habitual_gesture、action_style",
+      "severity": "warn"
+    }
+  ],
+  "kind": "n2d_performance_signature_audit",
+  "rows": [
+    {
+      "character_id": "CHAR_JIANG_YUECHU",
+      "core": true,
+      "form": "战场形态",
+      "missing_fields": [
+        "micro_expression",
+        "gaze",
+        "stance",
+        "habitual_gesture",
+        "action_style"
+      ],
+      "name": "姜月初",
+      "ready": false
+    },
+    {
+      "character_id": "CHAR_JIANG_YUECHU",
+      "core": true,
+      "form": "觉醒蓝调母本",
+      "missing_fields": [
+        "micro_expression",
+        "gaze",
+        "stance",
+        "habitual_gesture",
+        "action_style"
+      ],
+      "name": "姜月初",
+      "ready": false
+    }
+  ]
+}

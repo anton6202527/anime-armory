@@ -1,0 +1,404 @@
+{
+  "assets": [
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "LOC_BAXI_BATTLEFIELD",
+      "name": "巴西郡尸城战场",
+      "type": "scene"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "LOC_BAXI_BATTLEFIELD_ESTABLISH",
+      "name": "巴西郡尸城大全景",
+      "type": "scene"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "LOC_TANG_COURT",
+      "name": "大唐朝堂",
+      "type": "scene"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "LOC_BROKEN_HOUSE",
+      "name": "尸城破屋",
+      "type": "scene"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "LOC_CONSCIOUSNESS_SEA",
+      "name": "姜月初识海/阴山内景",
+      "type": "scene"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "WEAPON_DAHUANG_HALBERD",
+      "name": "大荒碎星戟",
+      "type": "weapon"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_IMPERIAL_DESK",
+      "name": "御案",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_STATE_LETTER",
+      "name": "巴西郡急报/朝廷信札",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "VFX_SYSTEM_PANEL",
+      "name": "系统面板光幕",
+      "type": "vfx"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "VFX_ESSENCE_STREAMS",
+      "name": "精气洪流",
+      "type": "vfx"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "VFX_WHITE_QI",
+      "name": "白气缠绕",
+      "type": "vfx"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "VFX_RED_FLOOD_DRAGON_SCROLL",
+      "name": "赤蛟绘卷虚影",
+      "type": "vfx"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "VFX_THREE_DRAGON_ORBS",
+      "name": "三色龙珠",
+      "type": "vfx"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "VFX_YINSHAN_MIST",
+      "name": "阴山雾影",
+      "type": "vfx"
+    }
+  ],
+  "characters": [
+    {
+      "forms": [
+        {
+          "asset_key": "姜月初_战场形态",
+          "form": "战场形态",
+          "has_performance_signature": true,
+          "signature_equipment": [
+            "WEAPON_DAHUANG_HALBERD"
+          ]
+        },
+        {
+          "asset_key": "姜月初_觉醒蓝调母本",
+          "form": "觉醒蓝调母本",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "CHAR_JIANG_YUECHU",
+      "name": "姜月初",
+      "scope": "全篇"
+    }
+  ],
+  "episodes": [
+    "第1集",
+    "第2集",
+    "第3集"
+  ],
+  "findings": [
+    {
+      "code": "episode_missing_storyboard",
+      "message": "部分集缺 storyboard.json：第2集、第3集",
+      "severity": "info"
+    },
+    {
+      "code": "series_layers_not_registered",
+      "message": "以下剧级层尚未登记：narrative_state_ledger、leitmotif_registry、ambient_map、ui_asset_registry、translation_glossary、series_packaging、location_spatial_memory、scene_floorplan",
+      "severity": "info"
+    }
+  ],
+  "generated_at": "2026-06-29T03:08:03+00:00",
+  "kind": "n2d_series_bible",
+  "narrative_graph": {
+    "episode_nodes": [
+      {
+        "assets": [
+          "LOC_BAXI_BATTLEFIELD",
+          "WEAPON_DAHUANG_HALBERD",
+          "LOC_BAXI_BATTLEFIELD_ESTABLISH",
+          "VFX_WHITE_QI",
+          "VFX_SYSTEM_PANEL",
+          "VFX_ESSENCE_STREAMS",
+          "VFX_YINSHAN_MIST",
+          "LOC_TANG_COURT",
+          "PROP_IMPERIAL_DESK",
+          "PROP_STATE_LETTER",
+          "LOC_BROKEN_HOUSE",
+          "VFX_RED_FLOOD_DRAGON_SCROLL",
+          "LOC_CONSCIOUSNESS_SEA",
+          "VFX_THREE_DRAGON_ORBS"
+        ],
+        "characters": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_GARRISON_SURVIVORS",
+          "CHAR_CHENG_LAO",
+          "CHAR_EMPEROR_TANG",
+          "CHAR_COURT_MINISTERS",
+          "CHAR_YOUNG_CAPTAIN"
+        ],
+        "clip_count": 13,
+        "clips": [
+          {
+            "assets": [
+              "LOC_BAXI_BATTLEFIELD",
+              "WEAPON_DAHUANG_HALBERD",
+              "LOC_BAXI_BATTLEFIELD_ESTABLISH"
+            ],
+            "characters": [
+              "CHAR_JIANG_YUECHU",
+              "CHAR_GARRISON_SURVIVORS"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP01"
+          },
+          {
+            "assets": [
+              "LOC_BAXI_BATTLEFIELD",
+              "WEAPON_DAHUANG_HALBERD",
+              "VFX_WHITE_QI",
+              "VFX_SYSTEM_PANEL",
+              "VFX_ESSENCE_STREAMS"
+            ],
+            "characters": [
+              "CHAR_JIANG_YUECHU"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP02"
+          },
+          {
+            "assets": [
+              "LOC_BAXI_BATTLEFIELD",
+              "VFX_YINSHAN_MIST"
+            ],
+            "characters": [
+              "CHAR_JIANG_YUECHU"
+            ],
+            "hook_signal": false,
+            "id": "EP01_CLIP03"
+          },
+          {
+            "assets": [
+              "LOC_TANG_COURT",
+              "PROP_IMPERIAL_DESK"
+            ],
+            "characters": [
+              "CHAR_CHENG_LAO",
+              "CHAR_EMPEROR_TANG",
+              "CHAR_COURT_MINISTERS"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP04"
+          },
+          {
+            "assets": [
+              "LOC_TANG_COURT",
+              "PROP_IMPERIAL_DESK",
+              "PROP_STATE_LETTER"
+            ],
+            "characters": [
+              "CHAR_EMPEROR_TANG",
+              "CHAR_CHENG_LAO"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP05"
+          },
+          {
+            "assets": [
+              "LOC_BAXI_BATTLEFIELD",
+              "WEAPON_DAHUANG_HALBERD"
+            ],
+            "characters": [
+              "CHAR_JIANG_YUECHU",
+              "CHAR_YOUNG_CAPTAIN",
+              "CHAR_GARRISON_SURVIVORS"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP06"
+          },
+          {
+            "assets": [
+              "LOC_BAXI_BATTLEFIELD",
+              "WEAPON_DAHUANG_HALBERD"
+            ],
+            "characters": [
+              "CHAR_JIANG_YUECHU",
+              "CHAR_YOUNG_CAPTAIN"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP07"
+          },
+          {
+            "assets": [
+              "LOC_BROKEN_HOUSE",
+              "WEAPON_DAHUANG_HALBERD",
+              "VFX_RED_FLOOD_DRAGON_SCROLL",
+              "LOC_CONSCIOUSNESS_SEA"
+            ],
+            "characters": [
+              "CHAR_JIANG_YUECHU"
+            ],
+            "hook_signal": false,
+            "id": "EP01_CLIP08"
+          },
+          {
+            "assets": [
+              "LOC_CONSCIOUSNESS_SEA",
+              "VFX_RED_FLOOD_DRAGON_SCROLL",
+              "VFX_SYSTEM_PANEL"
+            ],
+            "characters": [
+              "CHAR_JIANG_YUECHU"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP09"
+          },
+          {
+            "assets": [
+              "LOC_CONSCIOUSNESS_SEA",
+              "VFX_RED_FLOOD_DRAGON_SCROLL",
+              "VFX_SYSTEM_PANEL"
+            ],
+            "characters": [
+              "CHAR_JIANG_YUECHU"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP10"
+          },
+          {
+            "assets": [
+              "LOC_BROKEN_HOUSE",
+              "VFX_THREE_DRAGON_ORBS",
+              "LOC_CONSCIOUSNESS_SEA"
+            ],
+            "characters": [
+              "CHAR_JIANG_YUECHU"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP11"
+          },
+          {
+            "assets": [
+              "LOC_BROKEN_HOUSE",
+              "VFX_SYSTEM_PANEL",
+              "VFX_YINSHAN_MIST"
+            ],
+            "characters": [
+              "CHAR_JIANG_YUECHU"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP12"
+          },
+          {
+            "assets": [
+              "LOC_CONSCIOUSNESS_SEA",
+              "VFX_YINSHAN_MIST",
+              "VFX_SYSTEM_PANEL"
+            ],
+            "characters": [
+              "CHAR_JIANG_YUECHU"
+            ],
+            "hook_signal": false,
+            "id": "EP01_CLIP13"
+          }
+        ],
+        "episode": "第1集",
+        "has_storyboard": true,
+        "hooks": [
+          "# 改编范围：以第320章为主，按 boundary_review 将第321章开头的系统钩子前移为本集结尾。",
+          "[镜头1·旁白·低沉·快] 满城妖魔死光了，朝廷的援军却只来了一个人。  ⚡钩子",
+          "[镜头5·系统·冷机械] 系统面板显示：【当前道行：三十七万九千八百四十五年】。  ⚡钩子",
+          "[镜头16·皇帝·决断·快] 传朕旨意！备国书，遣使入五仙山，求仙山援手！  ⚡钩子",
+          "[镜头23·旁白·低燃] 他望着那道赤氅如血的背影，终于明白。她要以一人之力，光复一道之地。  💥爽点",
+          "[镜头28·系统·冷机械] 系统提示：成功将赤鳞妖尊提升至染朱，获得妖物馈赠：【《化龙经·残三》（圆满）】。  💥爽点"
+        ],
+        "threads": [
+          "y_review 将第321章开头的系统钩子前移为本集结尾。 [镜头1·旁白·低沉·快] 满城",
+          "能近身，便已被绞杀干净。 [镜头5·系统·冷机械] 系统面板显示：【当前道行：三十七万九千八百四",
+          "杀干净。 [镜头5·系统·冷机械] 系统面板显示：【当前道行：三十七万九千八百四十五年】。 ⚡",
+          "下，赤蛟身影由虚转实。 [镜头28·系统·冷机械] 系统提示：成功将赤鳞妖尊提升至染朱，获得妖物",
+          "转实。 [镜头28·系统·冷机械] 系统提示：成功将赤鳞妖尊提升至染朱，获得妖物馈赠：【《化龙经",
+          "点金芒，好似画龙点睛。 [镜头31·系统·冷机械] 系统提示：成功将赤鳞妖尊提升至点睛，获得妖物",
+          "点睛。 [镜头31·系统·冷机械] 系统提示：成功将赤鳞妖尊提升至点睛，获得妖物馈赠：【《化龙经",
+          "下方，却忽然轻轻一颤。 [镜头35·系统·冷机械·慢] 聚灵衍象素材已齐备，是否开始衍化内景？"
+        ]
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第2集",
+        "has_storyboard": false,
+        "hooks": [
+          "之前衍化阳山之时，是系统自动筛选了四头妖魔。"
+        ],
+        "threads": [
+          "月初微微一愣。 之前衍化阳山之时，是系统自动筛选了四头妖魔。 如今这阴山...... 素材既齐。"
+        ]
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第3集",
+        "has_storyboard": false,
+        "hooks": [
+          "这些人手，对于一道危机而言，着实不够看。"
+        ],
+        "threads": []
+      }
+    ],
+    "hook_count": 8,
+    "thread_count": 9
+  },
+  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔",
+  "truth_sources": {
+    "ambient_map": null,
+    "global_style": "设定库/global_style.md",
+    "leitmotif_registry": null,
+    "location_spatial_memory": null,
+    "narrative_state_ledger": null,
+    "scene_floorplan": null,
+    "series_packaging": null,
+    "setup_payoff_ledger": "设定库/setup_payoff_ledger.json",
+    "story_integrity_ledger": "设定库/story_integrity_ledger.json",
+    "thread_scheduler": "设定库/thread_scheduler.json",
+    "translation_glossary": null,
+    "ui_asset_registry": null,
+    "角色圣经": "设定库/角色圣经.md"
+  },
+  "version": 1
+}

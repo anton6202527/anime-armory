@@ -1,0 +1,148 @@
+{
+  "kind": "n2d_spectacle_probe_pack",
+  "version": 1,
+  "episode": "第1集",
+  "probe_clips": [
+    {
+      "spectacle_type": "magic_burst",
+      "clip_id": "EP01_CLIP13",
+      "risk_score": 16,
+      "risk_tags": [
+        "long_clip_8s",
+        "high_motion",
+        "closeup",
+        "large_expression_span",
+        "vfx_or_asset",
+        "spectacle_magic_burst"
+      ],
+      "candidate_backends": [
+        "dreamina",
+        "seedance",
+        "veo"
+      ],
+      "control_inputs_required": [
+        "depth_sequence",
+        "camera_path",
+        "spatial_path",
+        "vfx_layers",
+        "parallax_layers"
+      ],
+      "success_criteria": [
+        "identity/pose does not drift across start-mid-end",
+        "camera/path direction matches storyboard contract",
+        "no extra unplanned action beats or unreadable contact",
+        "usable first/last frame for downstream seam checks"
+      ],
+      "degrade_plan": "拆成蓄力/释放/撞点或峰值/余波四镜；撞点与特效峰值单独锁图，失败时改 VFX overlay + 反应镜。",
+      "recommendations": [
+        "法术/剑气/武技 VFX 必须入库并写 effect_asset/vfx_asset_lock，颜色、形状、来源点和轨迹跨镜不漂。",
+        "collision_or_apex_frame 是武技爽点帧：撞点、破防、护盾碎裂或峰值剑气必须单独可读。",
+        "必须写 keyframe_plan/post_cue_points/physics_guard，明确蓄力、释放、撞点/峰值、余波和音画爆点。"
+      ]
+    },
+    {
+      "spectacle_type": "large_establishing",
+      "clip_id": "EP01_CLIP01",
+      "risk_score": 7,
+      "risk_tags": [
+        "multi_character",
+        "vfx_or_asset",
+        "spectacle_large_establishing"
+      ],
+      "candidate_backends": [
+        "veo",
+        "seedance",
+        "dreamina"
+      ],
+      "control_inputs_required": [
+        "camera_path",
+        "depth_sequence",
+        "parallax_layers"
+      ],
+      "success_criteria": [
+        "identity/pose does not drift across start-mid-end",
+        "camera/path direction matches storyboard contract",
+        "no extra unplanned action beats or unreadable contact",
+        "usable first/last frame for downstream seam checks"
+      ],
+      "degrade_plan": "先出静态全景关键帧，再做慢推/横移/分层 parallax；复杂人群改剪影或分层合成。",
+      "recommendations": [
+        "先写 geography_map/landmark_anchor/scale_reference，避免大场景只剩氛围词。",
+        "把远中近 parallax_planes 分层，慢推/横移优先，少做自由旋转航拍。",
+        "可复用 LOC/asset_registry 的场景资产，复杂人群用剪影/雾化/后期层而不是清晰逐人生成。"
+      ]
+    }
+  ],
+  "coverage_gaps": [
+    "fight_exchange",
+    "chase",
+    "flight",
+    "mount_ride",
+    "vehicle_ride",
+    "vessel_flight",
+    "road_vehicle",
+    "stealth_stalk"
+  ],
+  "benchmark_write_path": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/spectacle_backend_benchmark.json",
+  "benchmark_schema": {
+    "kind": "n2d_spectacle_backend_benchmark",
+    "version": 1,
+    "recommendations": {
+      "fight_exchange": {
+        "primary_backend": "kling",
+        "score": null,
+        "evidence": "fill after probe"
+      },
+      "chase": {
+        "primary_backend": "seedance",
+        "score": null,
+        "evidence": "fill after probe"
+      },
+      "magic_burst": {
+        "primary_backend": "dreamina",
+        "score": null,
+        "evidence": "fill after probe"
+      },
+      "flight": {
+        "primary_backend": "seedance",
+        "score": null,
+        "evidence": "fill after probe"
+      },
+      "mount_ride": {
+        "primary_backend": "seedance",
+        "score": null,
+        "evidence": "fill after probe"
+      },
+      "vehicle_ride": {
+        "primary_backend": "seedance",
+        "score": null,
+        "evidence": "fill after probe"
+      },
+      "vessel_flight": {
+        "primary_backend": "seedance",
+        "score": null,
+        "evidence": "fill after probe"
+      },
+      "road_vehicle": {
+        "primary_backend": "seedance",
+        "score": null,
+        "evidence": "fill after probe"
+      },
+      "stealth_stalk": {
+        "primary_backend": "seedance",
+        "score": null,
+        "evidence": "fill after probe"
+      },
+      "large_establishing": {
+        "primary_backend": "veo",
+        "score": null,
+        "evidence": "fill after probe"
+      }
+    }
+  },
+  "source_risk_summary": {
+    "clips": 13,
+    "max_score": 16,
+    "warn_or_higher": 10
+  }
+}

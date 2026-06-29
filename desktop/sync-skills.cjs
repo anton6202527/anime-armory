@@ -5,8 +5,8 @@
 // source checkout needed). With --demos, ALSO bundle each creative line's
 // most-complete work as a seedable sample.
 //
-// Runs automatically before `tauri build` via tauri.conf.json `beforeBuildCommand`
-// (skills only — demos are preserved, never auto-rebuilt unless you pass --demos).
+// Runs automatically before `tauri build` via tauri.conf.json `beforeBuildCommand`.
+// Demos are bundled when --demos, TOD_DEMOS=1, or desktop/bundle-demos.json enables them.
 // Run manually via `/toa --desktop[-demos]` (formerly the /tod slash command), or
 // directly `node sync-skills.cjs [--demos|--no-demos]`.
 //
@@ -19,6 +19,7 @@ const path = require('path');
 
 const repo = path.resolve(__dirname, '..');
 const bundle = path.join(__dirname, 'src-tauri', 'resources');
+const demoConfigPath = path.join(__dirname, 'bundle-demos.json');
 
 // the 5 creative lines, by product dir under 创作区 (mirror src-tauri/src/commands.rs LINES)
 const CREATION_ROOT = '创作区';
@@ -50,8 +51,10 @@ function champions() {
     const lineDir = path.join(repo, CREATION_ROOT, line);
     if (!fs.existsSync(lineDir)) continue;
     let best = null;
-    for (const e of fs.readdirSync(lineDir, { withFileTypes: true })) {
-      if (!e.isDirectory() || e.name.startsWith('.') || e.name.startsWith('_')) continue;
+    const works = fs.readdirSync(lineDir, { withFileTypes: true })
+      .filter((e) => e.isDirectory() && !e.name.startsWith('.') && !e.name.startsWith('_'))
+      .sort((a, b) => a.name.localeCompare(b.name));
+    for (const e of works) {
       const prog = path.join(lineDir, e.name, '_进度.md');
       if (!fs.existsSync(prog)) continue;
       const done = (fs.readFileSync(prog, 'utf8').match(/✅/g) || []).length;
@@ -62,8 +65,19 @@ function champions() {
   return picks;
 }
 
+function configWantsDemos() {
+  if (!fs.existsSync(demoConfigPath)) return false;
+  try {
+    const cfg = JSON.parse(fs.readFileSync(demoConfigPath, 'utf8'));
+    return cfg && cfg.include_demos === true;
+  } catch (e) {
+    console.warn(`[desktop-bundle] 忽略无效 demo 配置 ${demoConfigPath}: ${e.message}`);
+    return false;
+  }
+}
+
 function main() {
-  const withDemos = process.argv.includes('--demos') || process.env.TOD_DEMOS === '1';
+  const withDemos = process.argv.includes('--demos') || process.env.TOD_DEMOS === '1' || configWantsDemos();
   const clearDemos = process.argv.includes('--no-demos');
 
   if (!fs.existsSync(path.join(repo, 'skills'))) {
@@ -115,7 +129,7 @@ function main() {
 
   const demoLine = withDemos
     ? `+ demos: ${demoPicks.map((p) => `${p.line}/${p.name}(✅×${p.done})`).join(', ') || '（无作品）'}`
-    : '（skills only — demos 保持原样，加 --demos 才重建）';
+    : '（skills only — demos 保持原样，加 --demos / TOD_DEMOS=1 / bundle-demos.json 才重建）';
   console.log(`[desktop-bundle] bundled ${manifest.skills} skill files + ${toolFiles} tool files → src-tauri/resources/`);
   console.log(`[desktop-bundle] ${demoLine}`);
 }

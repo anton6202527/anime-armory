@@ -1,0 +1,771 @@
+{
+  "kind": "n2d_spectacle_plan",
+  "version": 1,
+  "root": "创作区/制漫剧/从变身少女开始斩妖除魔",
+  "episode": "第1集",
+  "clips": [
+    {
+      "clip_id": "Clip_01",
+      "source_id": "EP01_CLIP01",
+      "spectacle_type": "large_establishing",
+      "required_contract_fields": [
+        "geography_map",
+        "scale_reference",
+        "parallax_planes",
+        "landmark_anchor",
+        "camera_path",
+        "establishing_progression",
+        "reuse_asset_id"
+      ],
+      "missing_contract_fields": [],
+      "motion_control_manifest_path": "出视频/第1集/control/Clip_01/motion_control_manifest.json",
+      "control_inputs_required": [
+        "camera_path",
+        "depth_sequence",
+        "parallax_layers"
+      ],
+      "keyframes_required": {
+        "start_frame": true,
+        "end_frame": true,
+        "mid_anchors": true,
+        "premium_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "apex_or_result_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        }
+      },
+      "edit_cue_profile": "large_establishing",
+      "edit_cues": [
+        {
+          "cue": "slow_push",
+          "when": "establishing_progression starts"
+        },
+        {
+          "cue": "scale_reveal_sfx",
+          "when": "landmark_anchor appears"
+        },
+        {
+          "cue": "ambient_bed",
+          "when": "full clip",
+          "layer": "wind/crowd/temple"
+        },
+        {
+          "cue": "title_or_locator_hold",
+          "when": "scale_reference is readable"
+        }
+      ],
+      "premium_passes": {
+        "level": "premium_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "apex_or_result_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      },
+      "degrade_plan": "先出静态全景关键帧，再做慢推/横移/分层 parallax；复杂人群改剪影或分层合成。",
+      "recommendations": [
+        "先写 geography_map/landmark_anchor/scale_reference，避免大场景只剩氛围词。",
+        "把远中近 parallax_planes 分层，慢推/横移优先，少做自由旋转航拍。",
+        "可复用 LOC/asset_registry 的场景资产，复杂人群用剪影/雾化/后期层而不是清晰逐人生成。"
+      ]
+    },
+    {
+      "clip_id": "Clip_02",
+      "source_id": "EP01_CLIP02",
+      "spectacle_type": "magic_burst",
+      "required_contract_fields": [
+        "template_id",
+        "beats",
+        "blocking",
+        "camera_rule",
+        "continuity_must",
+        "negative",
+        "charge_frame",
+        "release_frame",
+        "effect_asset",
+        "energy_path",
+        "collision_or_apex_frame",
+        "power_shift",
+        "vfx_asset_lock",
+        "intensity_curve",
+        "speed_curve",
+        "spatial_path",
+        "camera_path",
+        "screen_direction",
+        "readability_beats",
+        "degrade_plan",
+        "keyframe_plan",
+        "post_cue_points",
+        "physics_guard"
+      ],
+      "missing_contract_fields": [],
+      "motion_control_manifest_path": "出视频/第1集/control/Clip_02/motion_control_manifest.json",
+      "control_inputs_required": [
+        "depth_sequence",
+        "camera_path",
+        "spatial_path",
+        "vfx_layers",
+        "parallax_layers"
+      ],
+      "keyframes_required": {
+        "start_frame": true,
+        "end_frame": true,
+        "mid_anchors": true,
+        "premium_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "collision_or_apex_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        }
+      },
+      "edit_cue_profile": "magic_burst",
+      "edit_cues": [
+        {
+          "cue": "charge_riser",
+          "when": "charge_frame",
+          "layer": "low_hum + particle_spark"
+        },
+        {
+          "cue": "release_whoosh",
+          "when": "release_frame",
+          "layer": "air_shear"
+        },
+        {
+          "cue": "white_flash",
+          "when": "3.8s 精气洪流最密。",
+          "duration_frames": 2
+        },
+        {
+          "cue": "impact_or_energy_boom",
+          "when": "3.8s 精气洪流最密。",
+          "layer": "sub_hit + crackle"
+        },
+        {
+          "cue": "screen_shake",
+          "when": "3.8s 精气洪流最密。",
+          "strength": "medium-low",
+          "purpose": "sell power without hiding VFX shape"
+        },
+        {
+          "cue": "aftershock_tail",
+          "when": "aftermath/result",
+          "layer": "reverb + dust/embers"
+        }
+      ],
+      "premium_passes": {
+        "level": "premium_action_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "collision_or_apex_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      },
+      "degrade_plan": "若精气路径混乱，拆成面板插入、掌心特写、气海内视三镜。",
+      "recommendations": [
+        "法术/剑气/武技 VFX 必须入库并写 effect_asset/vfx_asset_lock，颜色、形状、来源点和轨迹跨镜不漂。",
+        "collision_or_apex_frame 是武技爽点帧：撞点、破防、护盾碎裂或峰值剑气必须单独可读。",
+        "必须写 keyframe_plan/post_cue_points/physics_guard，明确蓄力、释放、撞点/峰值、余波和音画爆点。"
+      ]
+    },
+    {
+      "clip_id": "Clip_03",
+      "source_id": "EP01_CLIP03",
+      "spectacle_type": "meditation_cultivation",
+      "required_contract_fields": [
+        "template_id",
+        "beats",
+        "blocking",
+        "camera_rule",
+        "continuity_must",
+        "negative",
+        "posture_lock",
+        "breath_cycle",
+        "energy_flow",
+        "aura_vfx_lock",
+        "inner_state_beat",
+        "environment_stillness",
+        "micro_motion",
+        "readability_beats",
+        "degrade_plan",
+        "keyframe_plan",
+        "post_cue_points",
+        "physics_guard"
+      ],
+      "missing_contract_fields": [],
+      "motion_control_manifest_path": "出视频/第1集/control/Clip_03/motion_control_manifest.json",
+      "control_inputs_required": [
+        "pose_sequence",
+        "depth_sequence",
+        "vfx_layers"
+      ],
+      "keyframes_required": {
+        "start_frame": true,
+        "end_frame": true,
+        "mid_anchors": true,
+        "premium_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "inner_state_or_aura_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        }
+      },
+      "edit_cue_profile": "meditation_cultivation",
+      "edit_cues": [
+        {
+          "cue": "breath_bed",
+          "when": "breath_cycle begins",
+          "layer": "low_air + chest_sub"
+        },
+        {
+          "cue": "aura_swell",
+          "when": "energy_flow reaches dantian/meridian",
+          "layer": "soft_chime + particle"
+        },
+        {
+          "cue": "inner_state_sting",
+          "when": "inner_state_beat",
+          "purpose": "make the invisible cultivation beat readable"
+        },
+        {
+          "cue": "silence_hold",
+          "when": "return_or_hold",
+          "duration_frames": 8,
+          "purpose": "sell calm power"
+        }
+      ],
+      "premium_passes": {
+        "level": "premium_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "inner_state_or_aura_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      },
+      "degrade_plan": "若内视叠层混乱，改为侧脸特写 + 后期雾形overlay。",
+      "recommendations": [
+        "打坐/静坐/冥想不是空镜：posture_lock、breath_cycle、energy_flow 和 aura_vfx_lock 必须可见可审。",
+        "人物主体少动，微动作只给呼吸、指节、衣摆、发丝、灵气粒子和环境响应；不要让角色站起或乱换手印。",
+        "inner_state_beat 要明确是内视、心魔压制、气海波纹、灵气入体还是收功钩子；一镜只给一个内在结果。",
+        "必须写 keyframe_plan/post_cue_points/physics_guard，确保起势、周天峰值、结果留白都有锚。"
+      ]
+    },
+    {
+      "clip_id": "Clip_08",
+      "source_id": "EP01_CLIP08",
+      "spectacle_type": "meditation_cultivation",
+      "required_contract_fields": [
+        "template_id",
+        "beats",
+        "blocking",
+        "camera_rule",
+        "continuity_must",
+        "negative",
+        "posture_lock",
+        "breath_cycle",
+        "energy_flow",
+        "aura_vfx_lock",
+        "inner_state_beat",
+        "environment_stillness",
+        "micro_motion",
+        "readability_beats",
+        "degrade_plan",
+        "keyframe_plan",
+        "post_cue_points",
+        "physics_guard"
+      ],
+      "missing_contract_fields": [],
+      "motion_control_manifest_path": "出视频/第1集/control/Clip_08/motion_control_manifest.json",
+      "control_inputs_required": [
+        "pose_sequence",
+        "depth_sequence",
+        "vfx_layers"
+      ],
+      "keyframes_required": {
+        "start_frame": true,
+        "end_frame": true,
+        "mid_anchors": true,
+        "premium_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "inner_state_or_aura_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        }
+      },
+      "edit_cue_profile": "meditation_cultivation",
+      "edit_cues": [
+        {
+          "cue": "breath_bed",
+          "when": "breath_cycle begins",
+          "layer": "low_air + chest_sub"
+        },
+        {
+          "cue": "aura_swell",
+          "when": "energy_flow reaches dantian/meridian",
+          "layer": "soft_chime + particle"
+        },
+        {
+          "cue": "inner_state_sting",
+          "when": "inner_state_beat",
+          "purpose": "make the invisible cultivation beat readable"
+        },
+        {
+          "cue": "silence_hold",
+          "when": "return_or_hold",
+          "duration_frames": 8,
+          "purpose": "sell calm power"
+        }
+      ],
+      "premium_passes": {
+        "level": "premium_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "inner_state_or_aura_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      },
+      "degrade_plan": "若识海转场不稳，拆破屋坐姿和识海绘卷两张关键帧。",
+      "recommendations": [
+        "打坐/静坐/冥想不是空镜：posture_lock、breath_cycle、energy_flow 和 aura_vfx_lock 必须可见可审。",
+        "人物主体少动，微动作只给呼吸、指节、衣摆、发丝、灵气粒子和环境响应；不要让角色站起或乱换手印。",
+        "inner_state_beat 要明确是内视、心魔压制、气海波纹、灵气入体还是收功钩子；一镜只给一个内在结果。",
+        "必须写 keyframe_plan/post_cue_points/physics_guard，确保起势、周天峰值、结果留白都有锚。"
+      ]
+    },
+    {
+      "clip_id": "Clip_11",
+      "source_id": "EP01_CLIP11",
+      "spectacle_type": "magic_burst",
+      "required_contract_fields": [
+        "template_id",
+        "beats",
+        "blocking",
+        "camera_rule",
+        "continuity_must",
+        "negative",
+        "charge_frame",
+        "release_frame",
+        "effect_asset",
+        "energy_path",
+        "collision_or_apex_frame",
+        "power_shift",
+        "vfx_asset_lock",
+        "intensity_curve",
+        "speed_curve",
+        "spatial_path",
+        "camera_path",
+        "screen_direction",
+        "readability_beats",
+        "degrade_plan",
+        "keyframe_plan",
+        "post_cue_points",
+        "physics_guard"
+      ],
+      "missing_contract_fields": [],
+      "motion_control_manifest_path": "出视频/第1集/control/Clip_11/motion_control_manifest.json",
+      "control_inputs_required": [
+        "depth_sequence",
+        "camera_path",
+        "spatial_path",
+        "vfx_layers",
+        "parallax_layers"
+      ],
+      "keyframes_required": {
+        "start_frame": true,
+        "end_frame": true,
+        "mid_anchors": true,
+        "premium_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "collision_or_apex_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        }
+      },
+      "edit_cue_profile": "magic_burst",
+      "edit_cues": [
+        {
+          "cue": "charge_riser",
+          "when": "charge_frame",
+          "layer": "low_hum + particle_spark"
+        },
+        {
+          "cue": "release_whoosh",
+          "when": "release_frame",
+          "layer": "air_shear"
+        },
+        {
+          "cue": "white_flash",
+          "when": "4.2s 三颗龙珠形成完整环绕，眼底雷火云雾亮起。",
+          "duration_frames": 2
+        },
+        {
+          "cue": "impact_or_energy_boom",
+          "when": "4.2s 三颗龙珠形成完整环绕，眼底雷火云雾亮起。",
+          "layer": "sub_hit + crackle"
+        },
+        {
+          "cue": "screen_shake",
+          "when": "4.2s 三颗龙珠形成完整环绕，眼底雷火云雾亮起。",
+          "strength": "medium-low",
+          "purpose": "sell power without hiding VFX shape"
+        },
+        {
+          "cue": "aftershock_tail",
+          "when": "aftermath/result",
+          "layer": "reverb + dust/embers"
+        }
+      ],
+      "premium_passes": {
+        "level": "premium_action_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "collision_or_apex_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      },
+      "degrade_plan": "若龙珠绕身混乱，拆成手背鳞片、额角、三珠静态三镜。",
+      "recommendations": [
+        "法术/剑气/武技 VFX 必须入库并写 effect_asset/vfx_asset_lock，颜色、形状、来源点和轨迹跨镜不漂。",
+        "collision_or_apex_frame 是武技爽点帧：撞点、破防、护盾碎裂或峰值剑气必须单独可读。",
+        "必须写 keyframe_plan/post_cue_points/physics_guard，明确蓄力、释放、撞点/峰值、余波和音画爆点。"
+      ]
+    },
+    {
+      "clip_id": "Clip_13",
+      "source_id": "EP01_CLIP13",
+      "spectacle_type": "magic_burst",
+      "required_contract_fields": [
+        "template_id",
+        "beats",
+        "blocking",
+        "camera_rule",
+        "continuity_must",
+        "negative",
+        "charge_frame",
+        "release_frame",
+        "effect_asset",
+        "energy_path",
+        "collision_or_apex_frame",
+        "power_shift",
+        "vfx_asset_lock",
+        "intensity_curve",
+        "speed_curve",
+        "spatial_path",
+        "camera_path",
+        "screen_direction",
+        "readability_beats",
+        "degrade_plan",
+        "keyframe_plan",
+        "post_cue_points",
+        "physics_guard"
+      ],
+      "missing_contract_fields": [],
+      "motion_control_manifest_path": "出视频/第1集/control/Clip_13/motion_control_manifest.json",
+      "control_inputs_required": [
+        "depth_sequence",
+        "camera_path",
+        "spatial_path",
+        "vfx_layers",
+        "parallax_layers"
+      ],
+      "keyframes_required": {
+        "start_frame": true,
+        "end_frame": true,
+        "mid_anchors": true,
+        "premium_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "collision_or_apex_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        }
+      },
+      "edit_cue_profile": "magic_burst",
+      "edit_cues": [
+        {
+          "cue": "charge_riser",
+          "when": "charge_frame",
+          "layer": "low_hum + particle_spark"
+        },
+        {
+          "cue": "release_whoosh",
+          "when": "release_frame",
+          "layer": "air_shear"
+        },
+        {
+          "cue": "white_flash",
+          "when": "5.5s 阴山轮廓最清晰但仍未成型。",
+          "duration_frames": 2
+        },
+        {
+          "cue": "impact_or_energy_boom",
+          "when": "5.5s 阴山轮廓最清晰但仍未成型。",
+          "layer": "sub_hit + crackle"
+        },
+        {
+          "cue": "screen_shake",
+          "when": "5.5s 阴山轮廓最清晰但仍未成型。",
+          "strength": "medium-low",
+          "purpose": "sell power without hiding VFX shape"
+        },
+        {
+          "cue": "aftershock_tail",
+          "when": "aftermath/result",
+          "layer": "reverb + dust/embers"
+        }
+      ],
+      "premium_passes": {
+        "level": "premium_action_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "collision_or_apex_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      },
+      "degrade_plan": "若阴山雾影不稳，改眼神特写 + 后期水墨雾overlay + 黑场字幕。",
+      "recommendations": [
+        "法术/剑气/武技 VFX 必须入库并写 effect_asset/vfx_asset_lock，颜色、形状、来源点和轨迹跨镜不漂。",
+        "collision_or_apex_frame 是武技爽点帧：撞点、破防、护盾碎裂或峰值剑气必须单独可读。",
+        "必须写 keyframe_plan/post_cue_points/physics_guard，明确蓄力、释放、撞点/峰值、余波和音画爆点。"
+      ]
+    }
+  ],
+  "summary": {
+    "spectacle_clips": 6,
+    "contract_missing_clips": 0,
+    "motion_control_required_clips": 6
+  }
+}

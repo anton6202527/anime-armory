@@ -1,0 +1,537 @@
+{
+  "assets": [
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 4 个",
+          "points": 16
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "颜色/拖尾强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        },
+        {
+          "factor": "本集出镜 1 次",
+          "points": 3
+        }
+      ],
+      "id": "LOC_TANG_COURT",
+      "name": "大唐朝堂",
+      "scope": "第1集本集场景",
+      "score": 41,
+      "signals": {
+        "appear": 1,
+        "drift_forbidden": 4,
+        "has_color": true,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+        "颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。"
+      ],
+      "type": "scene"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "多形态(跨形态易窜色)",
+          "points": 15
+        },
+        {
+          "factor": "禁漂项 3 个",
+          "points": 12
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "VFX_SYSTEM_PANEL",
+      "name": "系统面板光幕",
+      "scope": "",
+      "score": 41,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 3,
+        "has_color": false,
+        "has_multiform": true,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+        "多形态：每个形态各自定妆 + 各自锁颜色拖尾；用结构化 states/transitions（asset 状态机）防形态回退/窜色。"
+      ],
+      "type": "vfx"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 4 个",
+          "points": 16
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "颜色/拖尾强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "LOC_BAXI_BATTLEFIELD",
+      "name": "巴西郡尸城战场",
+      "scope": "第1集本集场景",
+      "score": 38,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 4,
+        "has_color": true,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+        "颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。"
+      ],
+      "type": "scene"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 4 个",
+          "points": 16
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "颜色/拖尾强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "LOC_BAXI_BATTLEFIELD_ESTABLISH",
+      "name": "巴西郡尸城大全景",
+      "scope": "第1集本集场景",
+      "score": 38,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 4,
+        "has_color": true,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+        "颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。"
+      ],
+      "type": "scene"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 4 个",
+          "points": 16
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "颜色/拖尾强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "LOC_BROKEN_HOUSE",
+      "name": "尸城破屋",
+      "scope": "第1集本集场景",
+      "score": 38,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 4,
+        "has_color": true,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+        "颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。"
+      ],
+      "type": "scene"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 4 个",
+          "points": 16
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "颜色/拖尾强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "LOC_CONSCIOUSNESS_SEA",
+      "name": "姜月初识海/阴山内景",
+      "scope": "第1集本集场景",
+      "score": 38,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 4,
+        "has_color": true,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+        "颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。"
+      ],
+      "type": "scene"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "WEAPON_DAHUANG_HALBERD",
+      "name": "大荒碎星戟",
+      "scope": "主角第1集起核心武器/后续发簪形态",
+      "score": 34,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "weapon"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 3 个",
+          "points": 12
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        },
+        {
+          "factor": "本集出镜 2 次",
+          "points": 6
+        }
+      ],
+      "id": "PROP_IMPERIAL_DESK",
+      "name": "御案",
+      "scope": "",
+      "score": 32,
+      "signals": {
+        "appear": 2,
+        "drift_forbidden": 3,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 3 个",
+          "points": 12
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        },
+        {
+          "factor": "本集出镜 2 次",
+          "points": 6
+        }
+      ],
+      "id": "VFX_THREE_DRAGON_ORBS",
+      "name": "三色龙珠",
+      "scope": "",
+      "score": 32,
+      "signals": {
+        "appear": 2,
+        "drift_forbidden": 3,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "vfx"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 3 个",
+          "points": 12
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        },
+        {
+          "factor": "本集出镜 2 次",
+          "points": 6
+        }
+      ],
+      "id": "VFX_YINSHAN_MIST",
+      "name": "阴山雾影",
+      "scope": "",
+      "score": 32,
+      "signals": {
+        "appear": 2,
+        "drift_forbidden": 3,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "vfx"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 3 个",
+          "points": 12
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        },
+        {
+          "factor": "本集出镜 1 次",
+          "points": 3
+        }
+      ],
+      "id": "VFX_ESSENCE_STREAMS",
+      "name": "精气洪流",
+      "scope": "",
+      "score": 29,
+      "signals": {
+        "appear": 1,
+        "drift_forbidden": 3,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "vfx"
+    },
+    {
+      "band": "low",
+      "drivers": [
+        {
+          "factor": "禁漂项 3 个",
+          "points": 12
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_STATE_LETTER",
+      "name": "巴西郡急报/朝廷信札",
+      "scope": "",
+      "score": 26,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 3,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "low",
+      "drivers": [
+        {
+          "factor": "禁漂项 3 个",
+          "points": 12
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "VFX_WHITE_QI",
+      "name": "白气缠绕",
+      "scope": "",
+      "score": 26,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 3,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "vfx"
+    },
+    {
+      "band": "low",
+      "drivers": [
+        {
+          "factor": "禁漂项 3 个",
+          "points": 12
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "VFX_RED_FLOOD_DRAGON_SCROLL",
+      "name": "赤蛟绘卷虚影",
+      "scope": "",
+      "score": 26,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 3,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "vfx"
+    }
+  ],
+  "episode": "第1集",
+  "high": 0,
+  "kind": "n2d_asset_drift_risk",
+  "medium": 11,
+  "notes": [],
+  "root": "创作区/制漫剧/从变身少女开始斩妖除魔",
+  "version": 1
+}

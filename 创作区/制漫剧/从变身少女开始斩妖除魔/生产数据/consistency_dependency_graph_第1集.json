@@ -1,0 +1,646 @@
+{
+  "edges": [
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:LOC_BAXI_BATTLEFIELD",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:CHAR_JIANG_YUECHU",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:CHAR_GARRISON_SURVIVORS",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:WEAPON_DAHUANG_HALBERD",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:LOC_BAXI_BATTLEFIELD_ESTABLISH",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:LOC_BAXI_BATTLEFIELD",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:CHAR_JIANG_YUECHU",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:WEAPON_DAHUANG_HALBERD",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:VFX_WHITE_QI",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:VFX_SYSTEM_PANEL",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:VFX_ESSENCE_STREAMS",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:LOC_BAXI_BATTLEFIELD",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:CHAR_JIANG_YUECHU",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:VFX_YINSHAN_MIST",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:LOC_TANG_COURT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:CHAR_CHENG_LAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:CHAR_EMPEROR_TANG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:CHAR_COURT_MINISTERS",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:PROP_IMPERIAL_DESK",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:LOC_TANG_COURT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:CHAR_EMPEROR_TANG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:CHAR_CHENG_LAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:PROP_IMPERIAL_DESK",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:PROP_STATE_LETTER",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:LOC_BAXI_BATTLEFIELD",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:CHAR_JIANG_YUECHU",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:CHAR_YOUNG_CAPTAIN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:CHAR_GARRISON_SURVIVORS",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:WEAPON_DAHUANG_HALBERD",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:LOC_BAXI_BATTLEFIELD",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:CHAR_JIANG_YUECHU",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:CHAR_YOUNG_CAPTAIN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:WEAPON_DAHUANG_HALBERD",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:LOC_BROKEN_HOUSE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:CHAR_JIANG_YUECHU",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:WEAPON_DAHUANG_HALBERD",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:VFX_RED_FLOOD_DRAGON_SCROLL",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:LOC_CONSCIOUSNESS_SEA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:LOC_CONSCIOUSNESS_SEA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:CHAR_JIANG_YUECHU",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:VFX_RED_FLOOD_DRAGON_SCROLL",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:VFX_SYSTEM_PANEL",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:LOC_CONSCIOUSNESS_SEA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:CHAR_JIANG_YUECHU",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:VFX_RED_FLOOD_DRAGON_SCROLL",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:VFX_SYSTEM_PANEL",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:LOC_BROKEN_HOUSE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:CHAR_JIANG_YUECHU",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:VFX_THREE_DRAGON_ORBS",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:LOC_CONSCIOUSNESS_SEA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:LOC_BROKEN_HOUSE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:CHAR_JIANG_YUECHU",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:VFX_SYSTEM_PANEL",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:VFX_YINSHAN_MIST",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:LOC_CONSCIOUSNESS_SEA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:CHAR_JIANG_YUECHU",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:VFX_YINSHAN_MIST",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:VFX_SYSTEM_PANEL",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "has_evidence",
+      "to": "evidence:consistency_ledger_第1集.json"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "has_evidence",
+      "to": "evidence:audio_space_consistency_第1集.json"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "has_evidence",
+      "to": "evidence:motion_grammar_consistency_第1集.json"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "has_evidence",
+      "to": "evidence:expression_state_consistency_第1集.json"
+    }
+  ],
+  "episode": "第1集",
+  "kind": "n2d_consistency_dependency_graph",
+  "nodes": [
+    {
+      "id": "clip:Clip_01",
+      "kind": "clip",
+      "label": "Clip_01",
+      "loc": "LOC_BAXI_BATTLEFIELD",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "ensemble_blocking"
+    },
+    {
+      "id": "clip:Clip_02",
+      "kind": "clip",
+      "label": "Clip_02",
+      "loc": "LOC_BAXI_BATTLEFIELD",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "magic_burst"
+    },
+    {
+      "id": "clip:Clip_03",
+      "kind": "clip",
+      "label": "Clip_03",
+      "loc": "LOC_BAXI_BATTLEFIELD",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "meditation_cultivation"
+    },
+    {
+      "id": "clip:Clip_04",
+      "kind": "clip",
+      "label": "Clip_04",
+      "loc": "LOC_TANG_COURT",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "public_confrontation"
+    },
+    {
+      "id": "clip:Clip_05",
+      "kind": "clip",
+      "label": "Clip_05",
+      "loc": "LOC_TANG_COURT",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "public_confrontation"
+    },
+    {
+      "id": "clip:Clip_06",
+      "kind": "clip",
+      "label": "Clip_06",
+      "loc": "LOC_BAXI_BATTLEFIELD",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "ensemble_blocking"
+    },
+    {
+      "id": "clip:Clip_07",
+      "kind": "clip",
+      "label": "Clip_07",
+      "loc": "LOC_BAXI_BATTLEFIELD",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "dialogue_shot_reverse"
+    },
+    {
+      "id": "clip:Clip_08",
+      "kind": "clip",
+      "label": "Clip_08",
+      "loc": "LOC_BROKEN_HOUSE",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "meditation_cultivation"
+    },
+    {
+      "id": "clip:Clip_09",
+      "kind": "clip",
+      "label": "Clip_09",
+      "loc": "LOC_CONSCIOUSNESS_SEA",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "system_panel"
+    },
+    {
+      "id": "clip:Clip_10",
+      "kind": "clip",
+      "label": "Clip_10",
+      "loc": "LOC_CONSCIOUSNESS_SEA",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "system_panel"
+    },
+    {
+      "id": "clip:Clip_11",
+      "kind": "clip",
+      "label": "Clip_11",
+      "loc": "LOC_BROKEN_HOUSE",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "magic_burst"
+    },
+    {
+      "id": "clip:Clip_12",
+      "kind": "clip",
+      "label": "Clip_12",
+      "loc": "LOC_BROKEN_HOUSE",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "system_panel"
+    },
+    {
+      "id": "clip:Clip_13",
+      "kind": "clip",
+      "label": "Clip_13",
+      "loc": "LOC_CONSCIOUSNESS_SEA",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "magic_burst"
+    },
+    {
+      "id": "entity:CHAR_CHENG_LAO",
+      "kind": "character",
+      "label": "程老",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_COURT_MINISTERS",
+      "kind": "character",
+      "label": "朝堂群臣",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_EMPEROR_TANG",
+      "kind": "character",
+      "label": "大唐皇帝",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_GARRISON_SURVIVORS",
+      "kind": "character",
+      "label": "巴西郡残兵",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_JIANG_YUECHU",
+      "kind": "character",
+      "label": "姜月初",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_YOUNG_CAPTAIN",
+      "kind": "character",
+      "label": "年轻校尉",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:LOC_BAXI_BATTLEFIELD",
+      "kind": "scene",
+      "label": "巴西郡尸城战场",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:LOC_BAXI_BATTLEFIELD_ESTABLISH",
+      "kind": "scene",
+      "label": "巴西郡尸城大全景",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:LOC_BROKEN_HOUSE",
+      "kind": "scene",
+      "label": "尸城破屋",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:LOC_CONSCIOUSNESS_SEA",
+      "kind": "scene",
+      "label": "姜月初识海/阴山内景",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:LOC_TANG_COURT",
+      "kind": "scene",
+      "label": "大唐朝堂",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_IMPERIAL_DESK",
+      "kind": "prop",
+      "label": "御案",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_STATE_LETTER",
+      "kind": "prop",
+      "label": "巴西郡急报/朝廷信札",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:VFX_ESSENCE_STREAMS",
+      "kind": "vfx",
+      "label": "精气洪流",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:VFX_RED_FLOOD_DRAGON_SCROLL",
+      "kind": "vfx",
+      "label": "赤蛟绘卷虚影",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:VFX_SYSTEM_PANEL",
+      "kind": "vfx",
+      "label": "系统面板光幕",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:VFX_THREE_DRAGON_ORBS",
+      "kind": "vfx",
+      "label": "三色龙珠",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:VFX_WHITE_QI",
+      "kind": "vfx",
+      "label": "白气缠绕",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:VFX_YINSHAN_MIST",
+      "kind": "vfx",
+      "label": "阴山雾影",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:WEAPON_DAHUANG_HALBERD",
+      "kind": "weapon",
+      "label": "大荒碎星戟",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "episode:第1集",
+      "kind": "episode",
+      "label": "第1集",
+      "path": "脚本/第1集/storyboard.json"
+    },
+    {
+      "id": "evidence:audio_space_consistency_第1集.json",
+      "kind": "evidence",
+      "label": "audio_space_consistency_第1集.json",
+      "path": "生产数据/audio_space_consistency_第1集.json"
+    },
+    {
+      "id": "evidence:consistency_ledger_第1集.json",
+      "kind": "evidence",
+      "label": "consistency_ledger_第1集.json",
+      "path": "生产数据/consistency_ledger_第1集.json"
+    },
+    {
+      "id": "evidence:expression_state_consistency_第1集.json",
+      "kind": "evidence",
+      "label": "expression_state_consistency_第1集.json",
+      "path": "生产数据/expression_state_consistency_第1集.json"
+    },
+    {
+      "id": "evidence:motion_grammar_consistency_第1集.json",
+      "kind": "evidence",
+      "label": "motion_grammar_consistency_第1集.json",
+      "path": "生产数据/motion_grammar_consistency_第1集.json"
+    }
+  ],
+  "root": "创作区/制漫剧/从变身少女开始斩妖除魔",
+  "summary": {
+    "clips": 13,
+    "edges": 75,
+    "images": 0,
+    "nodes": 38,
+    "videos": 0
+  },
+  "version": 1
+}

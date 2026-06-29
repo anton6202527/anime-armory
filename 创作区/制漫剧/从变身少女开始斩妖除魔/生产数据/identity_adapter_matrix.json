@@ -1,0 +1,1293 @@
+{
+  "kind": "n2d_identity_adapter_matrix",
+  "version": 1,
+  "root": "创作区/制漫剧/从变身少女开始斩妖除魔",
+  "generated_at": "2026-06-29T06:03:07+00:00",
+  "summary": {
+    "forms": 7,
+    "forms_with_reference_group_ready": 5,
+    "forms_with_native_image_ready": 0,
+    "forms_with_native_video_ready": 0,
+    "forms_with_lora_ready": 0,
+    "forms_with_gaps": 2,
+    "anchor_fingerprint": "f89db7978efed21efeffe78dd00114bd598d2cc9b8e6be3d29990a01cfe2cf25",
+    "forms_with_anchor_pinned": 0,
+    "characters_needing_lora_upgrade": []
+  },
+  "forms": [
+    {
+      "character_id": "CHAR_JIANG_YUECHU",
+      "character_name": "姜月初",
+      "scope": "全篇",
+      "form": "战场形态",
+      "asset_key": "姜月初_战场形态",
+      "anchor_phrase": "清冷东方少女黑眸·乌黑长发·玄衣赤氅·右肩暗金凶兽护肩·大荒碎星戟",
+      "reference_group": {
+        "front": {
+          "path": "出图/共享/图片/定妆_姜月初_战场形态.png",
+          "exists": true
+        },
+        "side": {
+          "path": "出图/共享/图片/定妆_姜月初_战场形态_侧.png",
+          "exists": true
+        },
+        "back": {
+          "path": "出图/共享/图片/定妆_姜月初_战场形态_背.png",
+          "exists": true
+        },
+        "outfit": {
+          "path": "出图/共享/图片/定妆_姜月初_战场形态_半身.png",
+          "exists": true
+        },
+        "turnaround": {
+          "path": "出图/共享/图片/定妆_姜月初_战场形态_三视图.png",
+          "exists": true
+        },
+        "_extra": {
+          "value": {
+            "face_anchor_refs": [
+              {
+                "label": "用户主角脸部参考母本（只取脸，不继承衣装/表情/姿态）",
+                "path": "出图/共享/图片/定妆_姜月初_战场形态_主参考.jpeg",
+                "status": "ready"
+              }
+            ],
+            "expressions": [
+              {
+                "emotion": "中性脸锚",
+                "path": "出图/共享/图片/定妆_姜月初_战场形态_脸部特写.png",
+                "status": "ready",
+                "source_face_reference": "出图/共享/图片/定妆_姜月初_战场形态_主参考.jpeg",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_姜月初_战场形态_半身.png",
+                  "source_sha256": "56b46b3b2163c6c7cc59e5850d0a1996b90326d1444a3aa4ef2fd2ed48856660",
+                  "crop_box": [
+                    0,
+                    0,
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-06-29T04:16:40+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_姜月初_战场形态_半身.png",
+                      "sha256": "56b46b3b2163c6c7cc59e5850d0a1996b90326d1444a3aa4ef2fd2ed48856660",
+                      "role": "character",
+                      "owner": "CHAR_JIANG_YUECHU/战场形态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_姜月初_战场形态.png",
+                      "sha256": "5e0413f2dd5bc83286aaf48d963949f17e25c090d413ad84879fa6055dc708e6",
+                      "role": "character",
+                      "owner": "CHAR_JIANG_YUECHU/战场形态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_姜月初_战场形态_主参考.jpeg",
+                      "sha256": "021b2bdc2fd6bc211615497f902481448c22cb929e663e778f375aadd89db15b",
+                      "role": "character",
+                      "owner": "CHAR_JIANG_YUECHU/战场形态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_姜月初_战场形态_侧.png",
+                      "sha256": "fc8e27132db54126a928cfe47f06c1c94ce4be8cc4af30a8f0c204d23fba73f6",
+                      "role": "character",
+                      "owner": "CHAR_JIANG_YUECHU/战场形态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_姜月初_战场形态_45度.png",
+                      "sha256": "26de0bfdcbb5d6879e19ac5710bf0e7a06470709a21b00248ec805bea1950b7f",
+                      "role": "character",
+                      "owner": "CHAR_JIANG_YUECHU/战场形态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_姜月初_战场形态_背.png",
+                      "sha256": "cddfe9ad7b999f62cf5011fff850837dfa7da69c4da2a52e01a4f32252233659",
+                      "role": "character",
+                      "owner": "CHAR_JIANG_YUECHU/战场形态",
+                      "source": "reference_bundle"
+                    }
+                  ]
+                }
+              }
+            ],
+            "three_quarter": "出图/共享/图片/定妆_姜月初_战场形态_45度.png",
+            "half_body": "出图/共享/图片/定妆_姜月初_战场形态_半身.png",
+            "source_face_reference": "出图/共享/图片/定妆_姜月初_战场形态_主参考.jpeg"
+          },
+          "exists": true
+        }
+      },
+      "reference_group_ready": true,
+      "image_bindings": {
+        "codex": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        }
+      },
+      "video_bindings": {
+        "dreamina": {
+          "mode": "first_last_frame",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        }
+      },
+      "lora_binding": {
+        "status": "not_needed",
+        "ready": false,
+        "base_model": "",
+        "model_path": "",
+        "trigger": "",
+        "dataset": "",
+        "model_hash": "",
+        "validation_report": "",
+        "train_job": "",
+        "card": "",
+        "gaps": []
+      },
+      "angle_policy": {
+        "allowed": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "over_shoulder"
+        ],
+        "risky": [
+          "extreme_top",
+          "extreme_low",
+          "face_too_small",
+          "deep_shadow",
+          "heavy_vfx_over_face"
+        ],
+        "requires_extra_reference": [
+          "side",
+          "back",
+          "full_body_action",
+          "multi_person_contact"
+        ]
+      },
+      "drift_forbidden": [
+        "face_shape",
+        "eye_shape",
+        "hairstyle_black_long",
+        "outfit_palette_black_crimson_gold",
+        "right_beast_shoulder_guard",
+        "halberd_identity"
+      ],
+      "gaps": [],
+      "recommendations": [
+        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
+        "lora: core long-running character; consider LoRA only if reference_group/native adapters still drift",
+        "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
+      ]
+    },
+    {
+      "character_id": "CHAR_JIANG_YUECHU",
+      "character_name": "姜月初",
+      "scope": "全篇",
+      "form": "觉醒蓝调母本",
+      "asset_key": "姜月初_觉醒蓝调母本",
+      "anchor_phrase": "同一清冷东方少女黑眸·乌黑长发·蓝灰冷雾·龙神觉醒气息·阴山雾影",
+      "reference_group": {
+        "front": {
+          "path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本.png",
+          "exists": true
+        },
+        "side": {
+          "path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_侧.png",
+          "exists": true
+        },
+        "back": {
+          "path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_背.png",
+          "exists": true
+        },
+        "outfit": {
+          "path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_半身.png",
+          "exists": true
+        },
+        "turnaround": {
+          "path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_三视图.png",
+          "exists": true
+        },
+        "_extra": {
+          "value": {
+            "face_anchor_refs": [
+              {
+                "label": "用户主角脸部/觉醒气质参考母本（不继承裸露造型）",
+                "path": "出图/共享/图片/定妆_姜月初_觉醒蓝调_母本.jpeg",
+                "status": "ready"
+              }
+            ],
+            "expressions": [
+              {
+                "emotion": "中性脸锚",
+                "path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_脸部特写.png",
+                "status": "ready",
+                "source_face_reference": "出图/共享/图片/定妆_姜月初_觉醒蓝调_母本.jpeg",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_半身.png",
+                  "source_sha256": "c5993a9c61d93e1b4d551205e38e4e9d58954313023e60b27db090e6582483e3",
+                  "crop_box": [
+                    0,
+                    0,
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-06-29T04:31:45+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_半身.png",
+                      "sha256": "c5993a9c61d93e1b4d551205e38e4e9d58954313023e60b27db090e6582483e3",
+                      "role": "character",
+                      "owner": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本.png",
+                      "sha256": "21ff23d6ce9ea2c384346d93755596a411b8a3ec27d78b14bd6adb3f5693a2f8",
+                      "role": "character",
+                      "owner": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_姜月初_觉醒蓝调_母本.jpeg",
+                      "sha256": "07eaa478371c032b75e35b037f98908c8ace20affe30b4f3fd71ec4711e0c57c",
+                      "role": "character",
+                      "owner": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_侧.png",
+                      "sha256": "2881af9157ce7fc999b9c0403205ea694bdace578b74d5694c708d3cefe17c04",
+                      "role": "character",
+                      "owner": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_45度.png",
+                      "sha256": "b2f858768da377fcac22af0e24b2792478799445204b62eabdb21fdf9806d8b8",
+                      "role": "character",
+                      "owner": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_背.png",
+                      "sha256": "767b0efc2fd7227405059297a87b97cf1cb4a87590eaa612bc799a3b889d36dd",
+                      "role": "character",
+                      "owner": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+                      "source": "reference_bundle"
+                    }
+                  ]
+                }
+              }
+            ],
+            "three_quarter": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_45度.png",
+            "half_body": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_半身.png",
+            "source_face_reference": "出图/共享/图片/定妆_姜月初_觉醒蓝调_母本.jpeg"
+          },
+          "exists": true
+        }
+      },
+      "reference_group_ready": true,
+      "image_bindings": {
+        "codex": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        }
+      },
+      "video_bindings": {
+        "dreamina": {
+          "mode": "first_last_frame",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        }
+      },
+      "lora_binding": {
+        "status": "not_needed",
+        "ready": false,
+        "base_model": "",
+        "model_path": "",
+        "trigger": "",
+        "dataset": "",
+        "model_hash": "",
+        "validation_report": "",
+        "train_job": "",
+        "card": "",
+        "gaps": []
+      },
+      "angle_policy": {
+        "allowed": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "over_shoulder"
+        ],
+        "risky": [
+          "extreme_top",
+          "extreme_low",
+          "face_too_small",
+          "deep_shadow",
+          "heavy_vfx_over_face"
+        ],
+        "requires_extra_reference": [
+          "side",
+          "back",
+          "full_body_action",
+          "multi_person_contact"
+        ]
+      },
+      "drift_forbidden": [
+        "new_face",
+        "hairstyle_black_long",
+        "nude_shoulder_reference_inherited_as_costume",
+        "dragon_awakened_eye_shape"
+      ],
+      "gaps": [],
+      "recommendations": [
+        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
+        "lora: core long-running character; consider LoRA only if reference_group/native adapters still drift",
+        "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
+      ]
+    },
+    {
+      "character_id": "CHAR_YOUNG_CAPTAIN",
+      "character_name": "年轻校尉",
+      "scope": "第1集功能角色",
+      "form": "断臂校尉",
+      "asset_key": "年轻校尉_断臂校尉",
+      "anchor_phrase": "二十多岁大唐镇魔卫校尉·断一臂·破损黑铁甲·灰蓝布衣·疲惫感激眼神",
+      "reference_group": {
+        "front": {
+          "path": "出图/共享/图片/定妆_年轻校尉_断臂校尉.png",
+          "exists": true
+        },
+        "side": {
+          "path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_侧.png",
+          "exists": true
+        },
+        "back": {
+          "path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_背.png",
+          "exists": true
+        },
+        "outfit": {
+          "path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_半身.png",
+          "exists": true
+        },
+        "turnaround": {
+          "path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_三视图.png",
+          "exists": true
+        },
+        "_extra": {
+          "value": {
+            "three_quarter": "出图/共享/图片/定妆_年轻校尉_断臂校尉_45度.png",
+            "half_body": "出图/共享/图片/定妆_年轻校尉_断臂校尉_半身.png",
+            "face_anchor_refs": [
+              {
+                "label": "脸部特写待出",
+                "path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_脸部特写.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_半身.png",
+                  "source_sha256": "7d44030a4ba76fde3e6e70e7568105b7dacc45af9534a73957f03601fcc33aa6",
+                  "crop_box": [
+                    0,
+                    0,
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-06-29T04:49:31+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_半身.png",
+                      "sha256": "7d44030a4ba76fde3e6e70e7568105b7dacc45af9534a73957f03601fcc33aa6",
+                      "role": "character",
+                      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_年轻校尉_断臂校尉.png",
+                      "sha256": "c37c22f38ba8dafe54ed57a03249ea550f032a5de0aadc3ce8e5a03c03da6ead",
+                      "role": "character",
+                      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_45度.png",
+                      "sha256": "96a8e2754e92ebfe6b9ca2647697a2788f6ddb94ae8c9c1825b9c28174bbc0e4",
+                      "role": "character",
+                      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_侧.png",
+                      "sha256": "ce3c08d66888ccf4bdb4ad774a399371600b2705f6b57b18ec484524881372fc",
+                      "role": "character",
+                      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_背.png",
+                      "sha256": "c41746bd40f378a6c79407e0eaafdfec43f65a22f501bea5264d4d83561600df",
+                      "role": "character",
+                      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+                      "source": "reference_bundle"
+                    }
+                  ]
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "emotion": "中性",
+                "path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_脸部特写.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_半身.png",
+                  "source_sha256": "7d44030a4ba76fde3e6e70e7568105b7dacc45af9534a73957f03601fcc33aa6",
+                  "crop_box": [
+                    0,
+                    0,
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-06-29T04:49:31+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_半身.png",
+                      "sha256": "7d44030a4ba76fde3e6e70e7568105b7dacc45af9534a73957f03601fcc33aa6",
+                      "role": "character",
+                      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_年轻校尉_断臂校尉.png",
+                      "sha256": "c37c22f38ba8dafe54ed57a03249ea550f032a5de0aadc3ce8e5a03c03da6ead",
+                      "role": "character",
+                      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_45度.png",
+                      "sha256": "96a8e2754e92ebfe6b9ca2647697a2788f6ddb94ae8c9c1825b9c28174bbc0e4",
+                      "role": "character",
+                      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_侧.png",
+                      "sha256": "ce3c08d66888ccf4bdb4ad774a399371600b2705f6b57b18ec484524881372fc",
+                      "role": "character",
+                      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_背.png",
+                      "sha256": "c41746bd40f378a6c79407e0eaafdfec43f65a22f501bea5264d4d83561600df",
+                      "role": "character",
+                      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+                      "source": "reference_bundle"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "exists": true
+        }
+      },
+      "reference_group_ready": true,
+      "image_bindings": {
+        "codex": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        }
+      },
+      "video_bindings": {
+        "dreamina": {
+          "mode": "first_last_frame",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        }
+      },
+      "lora_binding": {
+        "status": "not_needed",
+        "ready": false,
+        "base_model": "",
+        "model_path": "",
+        "trigger": "",
+        "dataset": "",
+        "model_hash": "",
+        "validation_report": "",
+        "train_job": "",
+        "card": "",
+        "gaps": []
+      },
+      "angle_policy": {
+        "allowed": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "over_shoulder"
+        ],
+        "risky": [
+          "deep_shadow",
+          "face_too_small",
+          "multi_person_contact"
+        ],
+        "requires_extra_reference": [
+          "closeup",
+          "expression"
+        ]
+      },
+      "drift_forbidden": [
+        "two_arms_restored",
+        "modern_uniform",
+        "golden_hero_armor"
+      ],
+      "gaps": [],
+      "recommendations": [
+        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
+        "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
+      ]
+    },
+    {
+      "character_id": "CHAR_EMPEROR_TANG",
+      "character_name": "大唐皇帝",
+      "scope": "第1集功能角色",
+      "form": "朝堂常态",
+      "asset_key": "大唐皇帝_朝堂常态",
+      "anchor_phrase": "中年大唐皇帝·疲惫威严·玄金龙纹朝服·高位御案后·冷色烛光",
+      "reference_group": {
+        "front": {
+          "path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态.png",
+          "exists": true
+        },
+        "side": {
+          "path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_侧.png",
+          "exists": true
+        },
+        "back": {
+          "path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_背.png",
+          "exists": true
+        },
+        "outfit": {
+          "path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_半身.png",
+          "exists": true
+        },
+        "turnaround": {
+          "path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_三视图.png",
+          "exists": true
+        },
+        "_extra": {
+          "value": {
+            "three_quarter": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_45度.png",
+            "half_body": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_半身.png",
+            "face_anchor_refs": [
+              {
+                "label": "脸部特写待出",
+                "path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_脸部特写.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_半身.png",
+                  "source_sha256": "4593447c7a28cc37b2bb4bcada44d731f532cb79d85501e8605243748c864405",
+                  "crop_box": [
+                    0,
+                    0,
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-06-29T05:12:58+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_半身.png",
+                      "sha256": "4593447c7a28cc37b2bb4bcada44d731f532cb79d85501e8605243748c864405",
+                      "role": "character",
+                      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态.png",
+                      "sha256": "9014dcb53e021af2535f6e4406aeb3b0b90744f04e2b434282e625c4660d6fbd",
+                      "role": "character",
+                      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_45度.png",
+                      "sha256": "bf5a39be6e3c6cace8d2122a8cbf1ca54b7583dec35805de531ec553ad82db16",
+                      "role": "character",
+                      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_侧.png",
+                      "sha256": "63fced3d1e0bc53c1c10d91a549cfe4e96c31a9679ff4846cb3ba0b152b2495f",
+                      "role": "character",
+                      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_背.png",
+                      "sha256": "c3ed41fe67706c1aa0f6f0367f41ebbfbe9557cb065a00bf120b307f35321fea",
+                      "role": "character",
+                      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+                      "source": "reference_bundle"
+                    }
+                  ]
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "emotion": "中性",
+                "path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_脸部特写.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_半身.png",
+                  "source_sha256": "4593447c7a28cc37b2bb4bcada44d731f532cb79d85501e8605243748c864405",
+                  "crop_box": [
+                    0,
+                    0,
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-06-29T05:12:58+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_半身.png",
+                      "sha256": "4593447c7a28cc37b2bb4bcada44d731f532cb79d85501e8605243748c864405",
+                      "role": "character",
+                      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态.png",
+                      "sha256": "9014dcb53e021af2535f6e4406aeb3b0b90744f04e2b434282e625c4660d6fbd",
+                      "role": "character",
+                      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_45度.png",
+                      "sha256": "bf5a39be6e3c6cace8d2122a8cbf1ca54b7583dec35805de531ec553ad82db16",
+                      "role": "character",
+                      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_侧.png",
+                      "sha256": "63fced3d1e0bc53c1c10d91a549cfe4e96c31a9679ff4846cb3ba0b152b2495f",
+                      "role": "character",
+                      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_背.png",
+                      "sha256": "c3ed41fe67706c1aa0f6f0367f41ebbfbe9557cb065a00bf120b307f35321fea",
+                      "role": "character",
+                      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+                      "source": "reference_bundle"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "exists": true
+        }
+      },
+      "reference_group_ready": true,
+      "image_bindings": {
+        "codex": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        }
+      },
+      "video_bindings": {
+        "dreamina": {
+          "mode": "first_last_frame",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        }
+      },
+      "lora_binding": {
+        "status": "not_needed",
+        "ready": false,
+        "base_model": "",
+        "model_path": "",
+        "trigger": "",
+        "dataset": "",
+        "model_hash": "",
+        "validation_report": "",
+        "train_job": "",
+        "card": "",
+        "gaps": []
+      },
+      "angle_policy": {
+        "allowed": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "over_shoulder"
+        ],
+        "risky": [
+          "deep_shadow",
+          "face_too_small",
+          "multi_person_contact"
+        ],
+        "requires_extra_reference": [
+          "closeup",
+          "expression"
+        ]
+      },
+      "drift_forbidden": [
+        "bright_yellow_game_robe",
+        "modern_suit",
+        "young_idol_face"
+      ],
+      "gaps": [],
+      "recommendations": [
+        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
+        "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
+      ]
+    },
+    {
+      "character_id": "CHAR_CHENG_LAO",
+      "character_name": "程老",
+      "scope": "第1集功能角色",
+      "form": "朝堂常态",
+      "asset_key": "程老_朝堂常态",
+      "anchor_phrase": "大唐老臣程老·白发短须·深色官服·拱手进言·沉重克制",
+      "reference_group": {
+        "front": {
+          "path": "出图/共享/图片/定妆_程老_朝堂常态.png",
+          "exists": true
+        },
+        "side": {
+          "path": "出图/共享/图片/定妆_程老_朝堂常态_侧.png",
+          "exists": true
+        },
+        "back": {
+          "path": "出图/共享/图片/定妆_程老_朝堂常态_背.png",
+          "exists": true
+        },
+        "outfit": {
+          "path": "出图/共享/图片/定妆_程老_朝堂常态_半身.png",
+          "exists": true
+        },
+        "turnaround": {
+          "path": "出图/共享/图片/定妆_程老_朝堂常态_三视图.png",
+          "exists": true
+        },
+        "_extra": {
+          "value": {
+            "three_quarter": "出图/共享/图片/定妆_程老_朝堂常态_45度.png",
+            "half_body": "出图/共享/图片/定妆_程老_朝堂常态_半身.png",
+            "face_anchor_refs": [
+              {
+                "label": "脸部特写待出",
+                "path": "出图/共享/图片/定妆_程老_朝堂常态_脸部特写.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_程老_朝堂常态_半身.png",
+                  "source_sha256": "aac058903d23f11b722f5ab2d32072d81df53a4da2f1070aab0cbe7eebb86c46",
+                  "crop_box": [
+                    0,
+                    0,
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-06-29T05:29:56+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_程老_朝堂常态_半身.png",
+                      "sha256": "aac058903d23f11b722f5ab2d32072d81df53a4da2f1070aab0cbe7eebb86c46",
+                      "role": "character",
+                      "owner": "CHAR_CHENG_LAO/朝堂常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_程老_朝堂常态.png",
+                      "sha256": "b189a275751ced65fd01cfdb4fe003905fd3bfbcc7c49b2292805d000995c61c",
+                      "role": "character",
+                      "owner": "CHAR_CHENG_LAO/朝堂常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_程老_朝堂常态_45度.png",
+                      "sha256": "9b35cab9e630dd3b589a1135fcbda3a27ecc6ece052f7871c1e1a450bc8a1c4b",
+                      "role": "character",
+                      "owner": "CHAR_CHENG_LAO/朝堂常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_程老_朝堂常态_侧.png",
+                      "sha256": "77d02f83899df5971bacb3055b0962ccf7f70c9067fc9c57d52a02e6c344f124",
+                      "role": "character",
+                      "owner": "CHAR_CHENG_LAO/朝堂常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_程老_朝堂常态_背.png",
+                      "sha256": "325fd4fbd5305259ebb6f6382098e0ec20d5e55d30e9b4760ff0ed6a5ec66fa0",
+                      "role": "character",
+                      "owner": "CHAR_CHENG_LAO/朝堂常态",
+                      "source": "reference_bundle"
+                    }
+                  ]
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "emotion": "中性",
+                "path": "出图/共享/图片/定妆_程老_朝堂常态_脸部特写.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_程老_朝堂常态_半身.png",
+                  "source_sha256": "aac058903d23f11b722f5ab2d32072d81df53a4da2f1070aab0cbe7eebb86c46",
+                  "crop_box": [
+                    0,
+                    0,
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-06-29T05:29:56+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_程老_朝堂常态_半身.png",
+                      "sha256": "aac058903d23f11b722f5ab2d32072d81df53a4da2f1070aab0cbe7eebb86c46",
+                      "role": "character",
+                      "owner": "CHAR_CHENG_LAO/朝堂常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_程老_朝堂常态.png",
+                      "sha256": "b189a275751ced65fd01cfdb4fe003905fd3bfbcc7c49b2292805d000995c61c",
+                      "role": "character",
+                      "owner": "CHAR_CHENG_LAO/朝堂常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_程老_朝堂常态_45度.png",
+                      "sha256": "9b35cab9e630dd3b589a1135fcbda3a27ecc6ece052f7871c1e1a450bc8a1c4b",
+                      "role": "character",
+                      "owner": "CHAR_CHENG_LAO/朝堂常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_程老_朝堂常态_侧.png",
+                      "sha256": "77d02f83899df5971bacb3055b0962ccf7f70c9067fc9c57d52a02e6c344f124",
+                      "role": "character",
+                      "owner": "CHAR_CHENG_LAO/朝堂常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_程老_朝堂常态_背.png",
+                      "sha256": "325fd4fbd5305259ebb6f6382098e0ec20d5e55d30e9b4760ff0ed6a5ec66fa0",
+                      "role": "character",
+                      "owner": "CHAR_CHENG_LAO/朝堂常态",
+                      "source": "reference_bundle"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "exists": true
+        }
+      },
+      "reference_group_ready": true,
+      "image_bindings": {
+        "codex": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        }
+      },
+      "video_bindings": {
+        "dreamina": {
+          "mode": "first_last_frame",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        }
+      },
+      "lora_binding": {
+        "status": "not_needed",
+        "ready": false,
+        "base_model": "",
+        "model_path": "",
+        "trigger": "",
+        "dataset": "",
+        "model_hash": "",
+        "validation_report": "",
+        "train_job": "",
+        "card": "",
+        "gaps": []
+      },
+      "angle_policy": {
+        "allowed": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "over_shoulder"
+        ],
+        "risky": [
+          "deep_shadow",
+          "face_too_small",
+          "multi_person_contact"
+        ],
+        "requires_extra_reference": [
+          "closeup",
+          "expression"
+        ]
+      },
+      "drift_forbidden": [
+        "young_face",
+        "immortal_white_robe",
+        "modern_clothes"
+      ],
+      "gaps": [],
+      "recommendations": [
+        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
+        "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
+      ]
+    },
+    {
+      "character_id": "CHAR_COURT_MINISTERS",
+      "character_name": "朝堂群臣",
+      "scope": "第1集背景群像",
+      "form": "群臣剪影",
+      "asset_key": "朝堂群臣_群臣剪影",
+      "anchor_phrase": "低头群臣剪影·深色官服层次·无清晰正脸·朝堂压迫背景",
+      "reference_group": {
+        "front": {
+          "path": "",
+          "exists": false
+        },
+        "side": {
+          "path": "",
+          "exists": false
+        },
+        "back": {
+          "path": "",
+          "exists": false
+        },
+        "outfit": {
+          "path": "",
+          "exists": false
+        },
+        "turnaround": {
+          "path": "出图/共享/图片/定妆_朝堂群臣_群臣剪影_剪影.png",
+          "exists": true
+        },
+        "_extra": {
+          "value": {
+            "restricted_partial": true,
+            "silhouette": "出图/共享/图片/定妆_朝堂群臣_群臣剪影_剪影.png",
+            "face_anchor_refs": [
+              {
+                "label": "restricted_partial_no_full_face",
+                "path": "出图/共享/图片/定妆_朝堂群臣_群臣剪影_剪影.png",
+                "status": "ready"
+              }
+            ],
+            "expressions": [
+              {
+                "emotion": "none",
+                "path": "出图/共享/图片/定妆_朝堂群臣_群臣剪影_剪影.png",
+                "status": "ready"
+              }
+            ]
+          },
+          "exists": true
+        }
+      },
+      "reference_group_ready": false,
+      "image_bindings": {
+        "codex": {
+          "mode": "reference_group",
+          "status": "restricted_partial",
+          "ready": false,
+          "binding": "none",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "unknown_status:restricted_partial"
+          ],
+          "recommendations": []
+        }
+      },
+      "video_bindings": {
+        "dreamina": {
+          "mode": "first_last_frame",
+          "status": "restricted_partial",
+          "ready": false,
+          "binding": "none",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "unknown_status:restricted_partial"
+          ],
+          "recommendations": []
+        }
+      },
+      "lora_binding": {
+        "status": "not_needed",
+        "ready": false,
+        "base_model": "",
+        "model_path": "",
+        "trigger": "",
+        "dataset": "",
+        "model_hash": "",
+        "validation_report": "",
+        "train_job": "",
+        "card": "",
+        "gaps": []
+      },
+      "angle_policy": {
+        "allowed": [
+          "silhouette",
+          "background",
+          "wide"
+        ],
+        "risky": [
+          "clear_face",
+          "closeup"
+        ],
+        "requires_extra_reference": [
+          "none_clear_face_disallowed"
+        ]
+      },
+      "drift_forbidden": [
+        "clear_individual_faces",
+        "modern_crowd",
+        "bright_game_palette"
+      ],
+      "gaps": [
+        "image.codex:unknown_status:restricted_partial",
+        "missing_reference:back",
+        "missing_reference:front",
+        "missing_reference:outfit",
+        "missing_reference:side",
+        "video.dreamina:unknown_status:restricted_partial"
+      ],
+      "recommendations": [
+        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
+        "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
+      ]
+    },
+    {
+      "character_id": "CHAR_GARRISON_SURVIVORS",
+      "character_name": "巴西郡残兵",
+      "scope": "第1集背景群像",
+      "form": "残兵剪影",
+      "asset_key": "巴西郡残兵_残兵剪影",
+      "anchor_phrase": "战场残兵剪影·残甲破旗·低清脸·仰视主角·尸城比例尺",
+      "reference_group": {
+        "front": {
+          "path": "",
+          "exists": false
+        },
+        "side": {
+          "path": "",
+          "exists": false
+        },
+        "back": {
+          "path": "",
+          "exists": false
+        },
+        "outfit": {
+          "path": "",
+          "exists": false
+        },
+        "turnaround": {
+          "path": "出图/共享/图片/定妆_巴西郡残兵_残兵剪影_剪影.png",
+          "exists": true
+        },
+        "_extra": {
+          "value": {
+            "restricted_partial": true,
+            "silhouette": "出图/共享/图片/定妆_巴西郡残兵_残兵剪影_剪影.png",
+            "face_anchor_refs": [
+              {
+                "label": "restricted_partial_no_full_face",
+                "path": "出图/共享/图片/定妆_巴西郡残兵_残兵剪影_剪影.png",
+                "status": "ready"
+              }
+            ],
+            "expressions": [
+              {
+                "emotion": "none",
+                "path": "出图/共享/图片/定妆_巴西郡残兵_残兵剪影_剪影.png",
+                "status": "ready"
+              }
+            ]
+          },
+          "exists": true
+        }
+      },
+      "reference_group_ready": false,
+      "image_bindings": {
+        "codex": {
+          "mode": "reference_group",
+          "status": "restricted_partial",
+          "ready": false,
+          "binding": "none",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "unknown_status:restricted_partial"
+          ],
+          "recommendations": []
+        }
+      },
+      "video_bindings": {
+        "dreamina": {
+          "mode": "first_last_frame",
+          "status": "restricted_partial",
+          "ready": false,
+          "binding": "none",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "unknown_status:restricted_partial"
+          ],
+          "recommendations": []
+        }
+      },
+      "lora_binding": {
+        "status": "not_needed",
+        "ready": false,
+        "base_model": "",
+        "model_path": "",
+        "trigger": "",
+        "dataset": "",
+        "model_hash": "",
+        "validation_report": "",
+        "train_job": "",
+        "card": "",
+        "gaps": []
+      },
+      "angle_policy": {
+        "allowed": [
+          "silhouette",
+          "background",
+          "wide"
+        ],
+        "risky": [
+          "clear_face",
+          "closeup"
+        ],
+        "requires_extra_reference": [
+          "none_clear_face_disallowed"
+        ]
+      },
+      "drift_forbidden": [
+        "clear_hero_faces",
+        "modern_soldiers",
+        "gore_closeup"
+      ],
+      "gaps": [
+        "image.codex:unknown_status:restricted_partial",
+        "missing_reference:back",
+        "missing_reference:front",
+        "missing_reference:outfit",
+        "missing_reference:side",
+        "video.dreamina:unknown_status:restricted_partial"
+      ],
+      "recommendations": [
+        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
+        "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
+      ]
+    }
+  ],
+  "notes": []
+}

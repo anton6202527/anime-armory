@@ -1,0 +1,5381 @@
+{
+  "counts": {
+    "block": 6,
+    "high": 0,
+    "medium": 19
+  },
+  "delivery_surface": {
+    "blocking_counts": {
+      "block": 6,
+      "high": 0
+    },
+    "required_domains": [
+      "剧情",
+      "角色",
+      "资产",
+      "镜头",
+      "音频",
+      "字幕",
+      "合规",
+      "生产操作"
+    ],
+    "status": "blocked"
+  },
+  "dependency_graph": {
+    "available": true,
+    "impact_plan": {},
+    "kind": "n2d_consistency_dependency_graph",
+    "path": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/consistency_dependency_graph_第1集.json",
+    "summary": {
+      "clips": 13,
+      "edges": 75,
+      "images": 0,
+      "nodes": 38,
+      "videos": 0
+    }
+  },
+  "domain_counts": {
+    "block": 5,
+    "high": 0,
+    "medium": 3
+  },
+  "domains": [
+    {
+      "counts": {
+        "block": 5,
+        "high": 0,
+        "medium": 72
+      },
+      "findings": [
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "",
+          "message": " 状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜2 仍保留。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "",
+          "message": " 状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜3 仍保留。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "",
+          "message": " 状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜6 仍保留。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "",
+          "message": " 状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜7 仍保留。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "",
+          "message": " 状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜8 仍保留。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "",
+          "message": " 状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜9 仍保留。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "",
+          "message": " 状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜10 仍保留。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "",
+          "message": " 状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜11 仍保留。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ],
+      "key": "story",
+      "label": "剧情",
+      "overall": "block",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image"
+      ]
+    },
+    {
+      "counts": {
+        "block": 322,
+        "high": 0,
+        "medium": 78
+      },
+      "findings": [
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": " 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": " 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": " 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": " 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": " 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": " 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": " 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": " 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        }
+      ],
+      "key": "character",
+      "label": "角色",
+      "overall": "block",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image"
+      ]
+    },
+    {
+      "counts": {
+        "block": 0,
+        "high": 0,
+        "medium": 41
+      },
+      "findings": [
+        {
+          "dimension": "打斗撞点(SPEC-APEX)",
+          "loc": "",
+          "message": " 打斗撞点(SPEC-APEX)    Clip_02（magic_burst）：剪辑峰值钉在 [3.8]s，但本镜 continuity.anchors 无 keyframe 锚——跑 `anchor_planner.py <根> <集> --write` 让 apex 命中帧落成真关键帧，剪辑峰值才有离散落点。",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "打斗撞点(SPEC-APEX)",
+          "loc": "",
+          "message": " 打斗撞点(SPEC-APEX)    Clip_11（magic_burst）：剪辑峰值钉在 [4.2]s，但本镜 continuity.anchors 无 keyframe 锚——跑 `anchor_planner.py <根> <集> --write` 让 apex 命中帧落成真关键帧，剪辑峰值才有离散落点。",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "打斗撞点(SPEC-APEX)",
+          "loc": "",
+          "message": " 打斗撞点(SPEC-APEX)    Clip_13（magic_burst）：剪辑峰值钉在 [5.5]s，但本镜 continuity.anchors 无 keyframe 锚——跑 `anchor_planner.py <根> <集> --write` 让 apex 命中帧落成真关键帧，剪辑峰值才有离散落点。",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "交互接触(I1)",
+          "loc": "",
+          "message": " 交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "交互接触(I1)",
+          "loc": "",
+          "message": " 交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "交互接触(I1)",
+          "loc": "",
+          "message": " 交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "交互接触(I1)",
+          "loc": "",
+          "message": " 交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "交互接触(I1)",
+          "loc": "",
+          "message": " 交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ],
+      "key": "asset",
+      "label": "资产",
+      "overall": "warn",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image"
+      ]
+    },
+    {
+      "counts": {
+        "block": 1,
+        "high": 0,
+        "medium": 7
+      },
+      "findings": [
+        {
+          "dimension": "实体记忆(EMB)",
+          "loc": "",
+          "message": " 实体记忆(EMB)   本集有重复/核心实体（CHAR_CHENG_LAO, CHAR_EMPEROR_TANG, CHAR_GARRISON_SURVIVORS, CHAR_JIANG_YUECHU, CHAR_JIANG_YUECHU/战场形态, CHAR_JIANG_YUECHU/静修）但缺 entity_memory_bank；后续镜头无法按已验收",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_qc_precision",
+          "loc": "",
+          "message": "image_qc_precision  None image_qc 精度为 degraded：正式进 video 前需补依赖重跑到 full 精度；普通人审记录只能辅助定位，不能替代 video/compose 前的 full QC gate。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "scene_consistency",
+          "loc": "",
+          "message": "scene_consistency  None 接缝接力 未执行：视觉机检不可用；本轮图片一致性为降级判定，需补依赖后重跑或人工复核。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "style_consistency",
+          "loc": "",
+          "message": "style_consistency  None 风格归属无法机检：style_contract 未登记风格锚（style_anchor）。请在定妆阶段出 1–2 张「冷灰写实3D国风漫剧」风格锚图、登记进 style_contract.style_anchor，后续每集出图帧才能对锚做风格归属佐证。当前降级为人判：逐图核对是否踩 风格禁忌：禁欧美魔幻脸、页游",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "参考规划落实",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/reference_plan_第1集.json",
+          "message": "参考规划落实 逐镜参考规划有 20 条行动项未确认落实（无持久主体 ID 后端×大变化镜 11 镜）：镜头 EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP06、EP01_CLIP07、EP01_CLIP08…。请按 reference_plan_第1集.md 把补拍/",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image_qc_precision",
+          "loc": "",
+          "message": "image_qc_precision image_qc 精度为 degraded：正式进 video 前需补依赖重跑到 full 精度；普通人审记录只能辅助定位，不能替代 video/compose 前的 full QC gate。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "scene_consistency",
+          "loc": "",
+          "message": "scene_consistency 接缝接力 未执行：视觉机检不可用；本轮图片一致性为降级判定，需补依赖后重跑或人工复核。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "style_consistency",
+          "loc": "",
+          "message": "style_consistency 风格归属无法机检：style_contract 未登记风格锚（style_anchor）。请在定妆阶段出 1–2 张「冷灰写实3D国风漫剧」风格锚图、登记进 style_contract.style_anchor，后续每集出图帧才能对锚做风格归属佐证。当前降级为人判：逐图核对是否踩 风格禁忌：禁欧美魔幻脸、页游高饱和、塑料",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ],
+      "key": "shot",
+      "label": "镜头",
+      "overall": "block",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image"
+      ]
+    },
+    {
+      "counts": {
+        "block": 1,
+        "high": 0,
+        "medium": 14
+      },
+      "findings": [
+        {
+          "dimension": "配音情绪弧(VEA)",
+          "loc": "",
+          "message": " 配音情绪弧(VEA)   镜头4·旁白：台词含强情绪但配音标注「压低」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "配音情绪弧(VEA)",
+          "loc": "",
+          "message": " 配音情绪弧(VEA)   镜头17·旁白：台词含强情绪但配音标注「硬切」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "配音情绪弧(VEA)",
+          "loc": "",
+          "message": " 配音情绪弧(VEA)   镜头34·旁白：台词含强情绪但配音标注「压住」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "音乐衔接(BGM)",
+          "loc": "",
+          "message": " 音乐衔接(BGM)   配乐相邻段速度两极硬接（fast→slow）且无过渡：「[镜头16 皇帝下旨] 朝堂钟声一记」→「[镜头35 集尾钩] 面板轻颤、空气」；调性/速度whiplash，加渐变过渡或确认是卡点切。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "",
+          "message": " 语义谱系(P0)   配音角色 `旁白` 未进入 storyboard。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "",
+          "message": " 语义谱系(P0)   配音角色 `镇魔卫` 未进入 storyboard。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "",
+          "message": " 语义谱系(P0)   配音角色 `年轻校尉` 未进入 storyboard。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "声音空间(ASP)",
+          "loc": "",
+          "message": " 声音空间(ASP)   缺 acoustic_space/room_tone/ambient_map；同一场景的 room tone、混响、远近感和环境声床无法跨 clip 复核。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ],
+      "key": "audio",
+      "label": "音频",
+      "overall": "block",
+      "sources": [
+        "detect",
+        "gate:image_prompt_preflight",
+        "gate:image"
+      ]
+    },
+    {
+      "counts": {
+        "block": 0,
+        "high": 0,
+        "medium": 7
+      },
+      "findings": [
+        {
+          "dimension": "系列包装(PKG)",
+          "loc": "",
+          "message": " 系列包装(PKG)   缺系列包装规范（片头/片尾/封面字/字幕字体/转场音效/平台交付名）；多集发布会出现包装漂移。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": "",
+          "message": " 文字渲染(OCR1)   Clip_01 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": "",
+          "message": " 文字渲染(OCR1)   Clip_02 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": "",
+          "message": " 文字渲染(OCR1)   Clip_09 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": "",
+          "message": " 文字渲染(OCR1)   Clip_10 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": "",
+          "message": " 文字渲染(OCR1)   Clip_12 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": "",
+          "message": " 文字渲染(OCR1)   Clip_13 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ],
+      "key": "subtitle",
+      "label": "字幕",
+      "overall": "warn",
+      "sources": [
+        "detect"
+      ]
+    },
+    {
+      "counts": {
+        "block": 0,
+        "high": 0,
+        "medium": 3
+      },
+      "findings": [
+        {
+          "dimension": "世界一致性(WCS)",
+          "loc": "",
+          "message": " 世界一致性(WCS)   已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ],
+      "key": "compliance",
+      "label": "合规",
+      "overall": "warn",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image",
+        "compliance"
+      ]
+    },
+    {
+      "counts": {
+        "block": 5,
+        "high": 0,
+        "medium": 42
+      },
+      "findings": [
+        {
+          "dimension": "成本路由(K1)",
+          "loc": "",
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_年轻校尉_断臂校尉.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": "",
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_年轻校尉_断臂校尉_45度.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": "",
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_姜月初_战场形态.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": "",
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_姜月初_战场形态_45度.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": "",
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_姜月初_战场形态_侧.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": "",
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_姜月初_战场形态_背.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": "",
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_姜月初_战场形态_半身.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": "",
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_姜月初_战场形态_三视图.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ],
+      "key": "ops",
+      "label": "生产操作",
+      "overall": "block",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image",
+        "score",
+        "expression_state_consistency"
+      ]
+    }
+  ],
+  "entity_counts": {
+    "block": 1,
+    "high": 0,
+    "medium": 16
+  },
+  "intentional_discontinuity": {
+    "available": true,
+    "counts": {
+      "accepted": 0,
+      "block": 0,
+      "warn": 0
+    },
+    "kind": "n2d_intentional_discontinuity_audit",
+    "path": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/intentional_discontinuity_audit_第1集.json",
+    "status": "pass"
+  },
+  "kind": "n2d_consistency_ledger",
+  "root_causes": [
+    {
+      "anchor": "leitmotif_registry.json",
+      "dimensions": [
+        "音乐母题(LM1)"
+      ],
+      "domain": "audio",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "音乐母题(LM1)",
+          "loc": "设定库/leitmotif_registry.json",
+          "message": "音乐母题(LM1) [production一致性升级:关键场景] 本集有配乐/多角色但缺 设定库/leitmotif_registry.json——建议像 voice_key 一样为主要角色/情绪主题登记主题动机（subject→motif），保证跨集 BGM 母题可复现不串用。。如确认为可接受，写入 生产数据/consistency_advisory_si",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": " 觉醒蓝调母本",
+      "dimensions": [
+        "跨集成长一致性"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "跨集成长一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/角色定妆.md ## CHAR_JIANG_YUECHU / 姜月初 / 觉醒蓝调母本",
+          "message": "跨集成长一致性 成长派生形态 `姜月初/觉醒蓝调母本` 的定妆未声明从锚定形态`战场形态` 的正脸/脸部特写 image2image 派生（evolution_profile 渐进升级）。纯文生图重抽新脸=同一个人被换成另一张脸，下游每镜还会忠实继承错脸。请写明：以 `定妆_<角色>_<锚定形态>` 正脸/脸部特写为母图做 image2image 派生，只升",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "跨集成长一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/角色定妆.md ## CHAR_JIANG_YUECHU / 姜月初 / 觉醒蓝调母本",
+          "message": "跨集成长一致性 成长派生形态 `姜月初/觉醒蓝调母本` 的定妆未声明从锚定形态`战场形态` 的正脸/脸部特写 image2image 派生（evolution_profile 渐进升级）。纯文生图重抽新脸=同一个人被换成另一张脸，下游每镜还会忠实继承错脸。请写明：以 `定妆_<角色>_<锚定形态>` 正脸/脸部特写为母图做 image2image 派生，只升",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "00_总览.md",
+      "dimensions": [
+        "共享定妆",
+        "跨集角色定义"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "共享定妆",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/00_总览.md",
+          "message": "共享定妆 本集引用的共享定妆仍有未完成项：| ⬜ | 角色 | `CHAR_JIANG_YUECHU/战场形态` | `出图/共享/图片/定妆_姜月初_战场形态_主参考.jpeg` |",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "跨集角色定义",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/00_总览.md",
+          "message": "跨集角色定义 本集出图总览引用了角色「年轻校尉」(CHAR_YOUNG_CAPTAIN)，却未出现其 identity_registry 锚定相任一描述符（二十多岁大唐镇魔卫校尉·断一臂·破损黑铁甲·灰蓝布衣·疲惫感激眼神）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "跨集角色定义",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/00_总览.md",
+          "message": "跨集角色定义 本集出图总览引用了角色「大唐皇帝」(CHAR_EMPEROR_TANG)，却未出现其 identity_registry 锚定相任一描述符（中年大唐皇帝·疲惫威严·玄金龙纹朝服·高位御案后·冷色烛光）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "跨集角色定义",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/00_总览.md",
+          "message": "跨集角色定义 本集出图总览引用了角色「程老」(CHAR_CHENG_LAO)，却未出现其 identity_registry 锚定相任一描述符（大唐老臣程老·白发短须·深色官服·拱手进言·沉重克制）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "跨集角色定义",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/00_总览.md",
+          "message": "跨集角色定义 本集出图总览引用了角色「朝堂群臣」(CHAR_COURT_MINISTERS)，却未出现其 identity_registry 锚定相任一描述符（低头群臣剪影·深色官服层次·无清晰正脸·朝堂压迫背景）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "跨集角色定义",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/00_总览.md",
+          "message": "跨集角色定义 本集出图总览引用了角色「巴西郡残兵」(CHAR_GARRISON_SURVIVORS)，却未出现其 identity_registry 锚定相任一描述符（战场残兵剪影·残甲破旗·低清脸·仰视主角·尸城比例尺）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "共享定妆",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/00_总览.md",
+          "message": "共享定妆 本集引用的共享定妆仍有未完成项：| ⬜ | 角色 | `CHAR_JIANG_YUECHU/战场形态` | `出图/共享/图片/定妆_姜月初_战场形态.png` |",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 10 — EP01_CLIP10 点睛奖励：化龙经无上",
+      "dimensions": [
+        "角色一致性"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 10 — EP01_CLIP10 点睛奖励：化龙经无上",
+          "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 10 — EP01_CLIP10 点睛奖励：化龙经无上",
+          "message": "角色一致性 多人同框（姜月初_战场形态_主参考.jpeg/赤蛟绘卷虚影）缺 `区分锚点` 字段：同框角色发色/发型/服装主色越接近，越易被模型平均成同一张脸。逐主体写 5–7 个互斥锚点（各自唯一发色/发型/服装主色HEX/标志配饰）并确保两两不撞色；可读 reference_planner 的 `distinct_anchors` 处方。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 10 — EP01_CLIP10 点睛奖励：化龙经无上",
+          "message": "角色一致性 单镜多角色同框（姜月初_战场形态_主参考.jpeg/赤蛟绘卷虚影）虽登记了分层/合成，但缺 `多人同框身份槽位`。无持久角色 ID 后端必须逐主体写 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位，每个槽位绑定 `CHAR_xx/形态`、画面位置、视线、自己的脸部参考/表情库和 primary 星标；否则分层合成阶段仍会串",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 10 — EP01_CLIP10 点睛奖励：化龙经无上",
+          "message": "角色一致性 多人同框（姜月初_战场形态/姜月初_战场形态_主参考.jpeg/赤蛟绘卷虚影）缺 `区分锚点` 字段：同框角色发色/发型/服装主色越接近，越易被模型平均成同一张脸。逐主体写 5–7 个互斥锚点（各自唯一发色/发型/服装主色HEX/标志配饰）并确保两两不撞色；可读 reference_planner 的 `distinct_anchors` 处方。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 10 — EP01_CLIP10 点睛奖励：化龙经无上",
+          "message": "角色一致性 单镜多角色同框（姜月初_战场形态/姜月初_战场形态_主参考.jpeg/赤蛟绘卷虚影）虽登记了分层/合成，但缺 `多人同框身份槽位`。无持久角色 ID 后端必须逐主体写 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位，每个槽位绑定 `CHAR_xx/形态`、画面位置、视线、自己的脸部参考/表情库和 primary 星标；否则",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 11 — 🔑关键镜 EP01_CLIP11 三色龙鳞与龙珠觉醒",
+      "dimensions": [
+        "角色一致性"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 11 — 🔑关键镜 EP01_CLIP11 三色龙鳞与龙珠觉醒",
+          "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 11 — 🔑关键镜 EP01_CLIP11 三色龙鳞与龙珠觉醒",
+          "message": "角色一致性 多人同框（三色龙珠/姜月初_觉醒蓝调_母本.jpeg/尸城破屋）缺 `区分锚点` 字段：同框角色发色/发型/服装主色越接近，越易被模型平均成同一张脸。逐主体写 5–7 个互斥锚点（各自唯一发色/发型/服装主色HEX/标志配饰）并确保两两不撞色；可读 reference_planner 的 `distinct_anchors` 处方。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 11 — 🔑关键镜 EP01_CLIP11 三色龙鳞与龙珠觉醒",
+          "message": "角色一致性 单镜多角色同框（三色龙珠/姜月初_觉醒蓝调_母本.jpeg/尸城破屋）虽登记了分层/合成，但缺 `多人同框身份槽位`。无持久角色 ID 后端必须逐主体写 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位，每个槽位绑定 `CHAR_xx/形态`、画面位置、视线、自己的脸部参考/表情库和 primary 星标；否则分层合成阶段仍",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 11 — 🔑关键镜 EP01_CLIP11 三色龙鳞与龙珠觉醒",
+          "message": "角色一致性 多人同框（三色龙珠/姜月初_觉醒蓝调_母本.jpeg/姜月初_觉醒蓝调母本/尸城破屋）缺 `区分锚点` 字段：同框角色发色/发型/服装主色越接近，越易被模型平均成同一张脸。逐主体写 5–7 个互斥锚点（各自唯一发色/发型/服装主色HEX/标志配饰）并确保两两不撞色；可读 reference_planner 的 `distinct_anchors`",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 11 — 🔑关键镜 EP01_CLIP11 三色龙鳞与龙珠觉醒",
+          "message": "角色一致性 单镜多角色同框（三色龙珠/姜月初_觉醒蓝调_母本.jpeg/姜月初_觉醒蓝调母本/尸城破屋）虽登记了分层/合成，但缺 `多人同框身份槽位`。无持久角色 ID 后端必须逐主体写 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位，每个槽位绑定 `CHAR_xx/形态`、画面位置、视线、自己的脸部参考/表情库和 primary 星",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 12 — EP01_CLIP12 系统提示：是否衍化内景",
+      "dimensions": [
+        "角色一致性"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 12 — EP01_CLIP12 系统提示：是否衍化内景",
+          "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 12 — EP01_CLIP12 系统提示：是否衍化内景",
+          "message": "角色一致性 多人同框（姜月初_觉醒蓝调_母本.jpeg/尸城破屋）缺 `区分锚点` 字段：同框角色发色/发型/服装主色越接近，越易被模型平均成同一张脸。逐主体写 5–7 个互斥锚点（各自唯一发色/发型/服装主色HEX/标志配饰）并确保两两不撞色；可读 reference_planner 的 `distinct_anchors` 处方。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 12 — EP01_CLIP12 系统提示：是否衍化内景",
+          "message": "角色一致性 单镜多角色同框（姜月初_觉醒蓝调_母本.jpeg/尸城破屋）虽登记了分层/合成，但缺 `多人同框身份槽位`。无持久角色 ID 后端必须逐主体写 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位，每个槽位绑定 `CHAR_xx/形态`、画面位置、视线、自己的脸部参考/表情库和 primary 星标；否则分层合成阶段仍会串脸或无",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 12 — EP01_CLIP12 系统提示：是否衍化内景",
+          "message": "角色一致性 多人同框（姜月初_觉醒蓝调_母本.jpeg/姜月初_觉醒蓝调母本/尸城破屋）缺 `区分锚点` 字段：同框角色发色/发型/服装主色越接近，越易被模型平均成同一张脸。逐主体写 5–7 个互斥锚点（各自唯一发色/发型/服装主色HEX/标志配饰）并确保两两不撞色；可读 reference_planner 的 `distinct_anchors` 处方。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 12 — EP01_CLIP12 系统提示：是否衍化内景",
+          "message": "角色一致性 单镜多角色同框（姜月初_觉醒蓝调_母本.jpeg/姜月初_觉醒蓝调母本/尸城破屋）虽登记了分层/合成，但缺 `多人同框身份槽位`。无持久角色 ID 后端必须逐主体写 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位，每个槽位绑定 `CHAR_xx/形态`、画面位置、视线、自己的脸部参考/表情库和 primary 星标；否则分",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 13 — 🔑关键镜 EP01_CLIP13 阴山雾影硬断",
+      "dimensions": [
+        "角色一致性"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 13 — 🔑关键镜 EP01_CLIP13 阴山雾影硬断",
+          "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 13 — 🔑关键镜 EP01_CLIP13 阴山雾影硬断",
+          "message": "角色一致性 多人同框（姜月初_觉醒蓝调_母本.jpeg/姜月初_觉醒蓝调母本）缺 `区分锚点` 字段：同框角色发色/发型/服装主色越接近，越易被模型平均成同一张脸。逐主体写 5–7 个互斥锚点（各自唯一发色/发型/服装主色HEX/标志配饰）并确保两两不撞色；可读 reference_planner 的 `distinct_anchors` 处方。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 13 — 🔑关键镜 EP01_CLIP13 阴山雾影硬断",
+          "message": "角色一致性 单镜多角色同框（姜月初_觉醒蓝调_母本.jpeg/姜月初_觉醒蓝调母本）虽登记了分层/合成，但缺 `多人同框身份槽位`。无持久角色 ID 后端必须逐主体写 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位，每个槽位绑定 `CHAR_xx/形态`、画面位置、视线、自己的脸部参考/表情库和 primary 星标；否则分层合成阶段",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 2 — 🔑关键镜 EP01_CLIP02 白气护体与精气洪流",
+      "dimensions": [
+        "角色一致性"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 2 — 🔑关键镜 EP01_CLIP02 白气护体与精气洪流",
+          "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 2 — 🔑关键镜 EP01_CLIP02 白气护体与精气洪流",
+          "message": "角色一致性 多人同框（大荒碎星戟/姜月初_战场形态_主参考.jpeg/巴西郡尸城战场/白气缠绕）缺 `区分锚点` 字段：同框角色发色/发型/服装主色越接近，越易被模型平均成同一张脸。逐主体写 5–7 个互斥锚点（各自唯一发色/发型/服装主色HEX/标志配饰）并确保两两不撞色；可读 reference_planner 的 `distinct_anchors` ",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 2 — 🔑关键镜 EP01_CLIP02 白气护体与精气洪流",
+          "message": "角色一致性 单镜多角色同框（大荒碎星戟/姜月初_战场形态_主参考.jpeg/巴西郡尸城战场/白气缠绕）虽登记了分层/合成，但缺 `多人同框身份槽位`。无持久角色 ID 后端必须逐主体写 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位，每个槽位绑定 `CHAR_xx/形态`、画面位置、视线、自己的脸部参考/表情库和 primary 星标",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 2 — 🔑关键镜 EP01_CLIP02 白气护体与精气洪流",
+          "message": "角色一致性 多人同框（大荒碎星戟/姜月初_战场形态/姜月初_战场形态_主参考.jpeg/巴西郡尸城战场/白气缠绕）缺 `区分锚点` 字段：同框角色发色/发型/服装主色越接近，越易被模型平均成同一张脸。逐主体写 5–7 个互斥锚点（各自唯一发色/发型/服装主色HEX/标志配饰）并确保两两不撞色；可读 reference_planner 的 `distinct_",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 2 — 🔑关键镜 EP01_CLIP02 白气护体与精气洪流",
+          "message": "角色一致性 单镜多角色同框（大荒碎星戟/姜月初_战场形态/姜月初_战场形态_主参考.jpeg/巴西郡尸城战场/白气缠绕）虽登记了分层/合成，但缺 `多人同框身份槽位`。无持久角色 ID 后端必须逐主体写 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位，每个槽位绑定 `CHAR_xx/形态`、画面位置、视线、自己的脸部参考/表情库和 p",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 3 — EP01_CLIP03 阴山未成，压下燃灯",
+      "dimensions": [
+        "角色一致性"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 3 — EP01_CLIP03 阴山未成，压下燃灯",
+          "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 3 — EP01_CLIP03 阴山未成，压下燃灯",
+          "message": "角色一致性 多人同框（姜月初_战场形态_主参考.jpeg/巴西郡尸城战场）缺 `区分锚点` 字段：同框角色发色/发型/服装主色越接近，越易被模型平均成同一张脸。逐主体写 5–7 个互斥锚点（各自唯一发色/发型/服装主色HEX/标志配饰）并确保两两不撞色；可读 reference_planner 的 `distinct_anchors` 处方。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 3 — EP01_CLIP03 阴山未成，压下燃灯",
+          "message": "角色一致性 单镜多角色同框（姜月初_战场形态_主参考.jpeg/巴西郡尸城战场）虽登记了分层/合成，但缺 `多人同框身份槽位`。无持久角色 ID 后端必须逐主体写 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位，每个槽位绑定 `CHAR_xx/形态`、画面位置、视线、自己的脸部参考/表情库和 primary 星标；否则分层合成阶段仍会",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 3 — EP01_CLIP03 阴山未成，压下燃灯",
+          "message": "角色一致性 多人同框（姜月初_战场形态/姜月初_战场形态_主参考.jpeg/巴西郡尸城战场）缺 `区分锚点` 字段：同框角色发色/发型/服装主色越接近，越易被模型平均成同一张脸。逐主体写 5–7 个互斥锚点（各自唯一发色/发型/服装主色HEX/标志配饰）并确保两两不撞色；可读 reference_planner 的 `distinct_anchors` 处方",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 3 — EP01_CLIP03 阴山未成，压下燃灯",
+          "message": "角色一致性 单镜多角色同框（姜月初_战场形态/姜月初_战场形态_主参考.jpeg/巴西郡尸城战场）虽登记了分层/合成，但缺 `多人同框身份槽位`。无持久角色 ID 后端必须逐主体写 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位，每个槽位绑定 `CHAR_xx/形态`、画面位置、视线、自己的脸部参考/表情库和 primary 星标；否",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 8 — EP01_CLIP08 破屋静修，灌注赤鳞妖尊",
+      "dimensions": [
+        "角色一致性"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 8 — EP01_CLIP08 破屋静修，灌注赤鳞妖尊",
+          "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 8 — EP01_CLIP08 破屋静修，灌注赤鳞妖尊",
+          "message": "角色一致性 多人同框（大荒碎星戟/姜月初_战场形态_主参考.jpeg/尸城破屋/赤蛟绘卷虚影）缺 `区分锚点` 字段：同框角色发色/发型/服装主色越接近，越易被模型平均成同一张脸。逐主体写 5–7 个互斥锚点（各自唯一发色/发型/服装主色HEX/标志配饰）并确保两两不撞色；可读 reference_planner 的 `distinct_anchors` 处",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 8 — EP01_CLIP08 破屋静修，灌注赤鳞妖尊",
+          "message": "角色一致性 单镜多角色同框（大荒碎星戟/姜月初_战场形态_主参考.jpeg/尸城破屋/赤蛟绘卷虚影）虽登记了分层/合成，但缺 `多人同框身份槽位`。无持久角色 ID 后端必须逐主体写 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位，每个槽位绑定 `CHAR_xx/形态`、画面位置、视线、自己的脸部参考/表情库和 primary 星标；",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 8 — EP01_CLIP08 破屋静修，灌注赤鳞妖尊",
+          "message": "角色一致性 多人同框（大荒碎星戟/姜月初_战场形态/姜月初_战场形态_主参考.jpeg/尸城破屋/赤蛟绘卷虚影）缺 `区分锚点` 字段：同框角色发色/发型/服装主色越接近，越易被模型平均成同一张脸。逐主体写 5–7 个互斥锚点（各自唯一发色/发型/服装主色HEX/标志配饰）并确保两两不撞色；可读 reference_planner 的 `distinct_a",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 8 — EP01_CLIP08 破屋静修，灌注赤鳞妖尊",
+          "message": "角色一致性 单镜多角色同框（大荒碎星戟/姜月初_战场形态/姜月初_战场形态_主参考.jpeg/尸城破屋/赤蛟绘卷虚影）虽登记了分层/合成，但缺 `多人同框身份槽位`。无持久角色 ID 后端必须逐主体写 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位，每个槽位绑定 `CHAR_xx/形态`、画面位置、视线、自己的脸部参考/表情库和 pr",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 9 — EP01_CLIP09 染朱奖励：化龙经圆满",
+      "dimensions": [
+        "角色一致性"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 9 — EP01_CLIP09 染朱奖励：化龙经圆满",
+          "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 9 — EP01_CLIP09 染朱奖励：化龙经圆满",
+          "message": "角色一致性 多人同框（姜月初_战场形态_主参考.jpeg/赤蛟绘卷虚影）缺 `区分锚点` 字段：同框角色发色/发型/服装主色越接近，越易被模型平均成同一张脸。逐主体写 5–7 个互斥锚点（各自唯一发色/发型/服装主色HEX/标志配饰）并确保两两不撞色；可读 reference_planner 的 `distinct_anchors` 处方。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 9 — EP01_CLIP09 染朱奖励：化龙经圆满",
+          "message": "角色一致性 单镜多角色同框（姜月初_战场形态_主参考.jpeg/赤蛟绘卷虚影）虽登记了分层/合成，但缺 `多人同框身份槽位`。无持久角色 ID 后端必须逐主体写 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位，每个槽位绑定 `CHAR_xx/形态`、画面位置、视线、自己的脸部参考/表情库和 primary 星标；否则分层合成阶段仍会串",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 9 — EP01_CLIP09 染朱奖励：化龙经圆满",
+          "message": "角色一致性 多人同框（姜月初_战场形态/姜月初_战场形态_主参考.jpeg/赤蛟绘卷虚影）缺 `区分锚点` 字段：同框角色发色/发型/服装主色越接近，越易被模型平均成同一张脸。逐主体写 5–7 个互斥锚点（各自唯一发色/发型/服装主色HEX/标志配饰）并确保两两不撞色；可读 reference_planner 的 `distinct_anchors` 处方。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 9 — EP01_CLIP09 染朱奖励：化龙经圆满",
+          "message": "角色一致性 单镜多角色同框（姜月初_战场形态/姜月初_战场形态_主参考.jpeg/赤蛟绘卷虚影）虽登记了分层/合成，但缺 `多人同框身份槽位`。无持久角色 ID 后端必须逐主体写 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位，每个槽位绑定 `CHAR_xx/形态`、画面位置、视线、自己的脸部参考/表情库和 primary 星标；否则",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP01.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP01.png",
+          "message": "character_consistency  图片/EP01_CLIP01.png 崩脸 G1 block：图片/EP01_CLIP01.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP01.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP01.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP01_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP01_end.png",
+          "message": "character_consistency  图片/EP01_CLIP01_end.png 崩脸 G1 block：图片/EP01_CLIP01_end.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP01_end.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP01_end.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP01_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP01_mid.png",
+          "message": "character_consistency  图片/EP01_CLIP01_mid.png 崩脸 G1 block：图片/EP01_CLIP01_mid.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP01_mid.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP01_mid.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP02.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP02.png",
+          "message": "character_consistency  图片/EP01_CLIP02.png 崩脸 G1 block：图片/EP01_CLIP02.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP02.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP02.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP02_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP02_end.png",
+          "message": "character_consistency  图片/EP01_CLIP02_end.png 崩脸 G1 block：图片/EP01_CLIP02_end.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP02_end.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP02_end.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP02_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP02_mid.png",
+          "message": "character_consistency  图片/EP01_CLIP02_mid.png 崩脸 G1 block：图片/EP01_CLIP02_mid.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP02_mid.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP02_mid.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP03.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP03.png",
+          "message": "character_consistency  图片/EP01_CLIP03.png 崩脸 G1 block：图片/EP01_CLIP03.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP03.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP03.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP03_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP03_end.png",
+          "message": "character_consistency  图片/EP01_CLIP03_end.png 崩脸 G1 block：图片/EP01_CLIP03_end.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP03_end.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP03_end.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP03_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP03_mid.png",
+          "message": "character_consistency  图片/EP01_CLIP03_mid.png 崩脸 G1 block：图片/EP01_CLIP03_mid.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP03_mid.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP03_mid.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP04.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP04.png",
+          "message": "character_consistency  图片/EP01_CLIP04.png 崩脸 G1 block：图片/EP01_CLIP04.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP04.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP04.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP04_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP04_end.png",
+          "message": "character_consistency  图片/EP01_CLIP04_end.png 崩脸 G1 block：图片/EP01_CLIP04_end.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP04_end.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP04_end.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP04_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP04_mid.png",
+          "message": "character_consistency  图片/EP01_CLIP04_mid.png 崩脸 G1 block：图片/EP01_CLIP04_mid.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP04_mid.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP04_mid.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP05.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP05.png",
+          "message": "character_consistency  图片/EP01_CLIP05.png 崩脸 G1 block：图片/EP01_CLIP05.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP05.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP05.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP05_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP05_end.png",
+          "message": "character_consistency  图片/EP01_CLIP05_end.png 崩脸 G1 block：图片/EP01_CLIP05_end.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP05_end.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP05_end.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP05_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP05_mid.png",
+          "message": "character_consistency  图片/EP01_CLIP05_mid.png 崩脸 G1 block：图片/EP01_CLIP05_mid.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP05_mid.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP05_mid.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP06.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP06.png",
+          "message": "character_consistency  图片/EP01_CLIP06.png 崩脸 G1 block：图片/EP01_CLIP06.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP06.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP06.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP06_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP06_end.png",
+          "message": "character_consistency  图片/EP01_CLIP06_end.png 崩脸 G1 block：图片/EP01_CLIP06_end.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP06_end.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP06_end.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP06_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP06_mid.png",
+          "message": "character_consistency  图片/EP01_CLIP06_mid.png 崩脸 G1 block：图片/EP01_CLIP06_mid.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP06_mid.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP06_mid.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP07.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP07.png",
+          "message": "character_consistency  图片/EP01_CLIP07.png 崩脸 G1 block：图片/EP01_CLIP07.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP07.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP07.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP07_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP07_end.png",
+          "message": "character_consistency  图片/EP01_CLIP07_end.png 崩脸 G1 block：图片/EP01_CLIP07_end.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP07_end.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP07_end.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP07_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP07_mid.png",
+          "message": "character_consistency  图片/EP01_CLIP07_mid.png 崩脸 G1 block：图片/EP01_CLIP07_mid.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP07_mid.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP07_mid.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP08.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP08.png",
+          "message": "character_consistency  图片/EP01_CLIP08.png 崩脸 G1 block：图片/EP01_CLIP08.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP08.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP08.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP08_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP08_end.png",
+          "message": "character_consistency  图片/EP01_CLIP08_end.png 崩脸 G1 block：图片/EP01_CLIP08_end.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP08_end.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP08_end.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP08_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP08_mid.png",
+          "message": "character_consistency  图片/EP01_CLIP08_mid.png 崩脸 G1 block：图片/EP01_CLIP08_mid.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP08_mid.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP08_mid.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP09.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP09.png",
+          "message": "character_consistency  图片/EP01_CLIP09.png 崩脸 G1 block：图片/EP01_CLIP09.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP09.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP09.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP09_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP09_end.png",
+          "message": "character_consistency  图片/EP01_CLIP09_end.png 崩脸 G1 block：图片/EP01_CLIP09_end.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP09_end.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP09_end.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP09_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP09_mid.png",
+          "message": "character_consistency  图片/EP01_CLIP09_mid.png 崩脸 G1 block：图片/EP01_CLIP09_mid.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP09_mid.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP09_mid.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP10.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP10.png",
+          "message": "character_consistency  图片/EP01_CLIP10.png 崩脸 G1 block：图片/EP01_CLIP10.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP10.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP10.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP10_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP10_end.png",
+          "message": "character_consistency  图片/EP01_CLIP10_end.png 崩脸 G1 block：图片/EP01_CLIP10_end.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP10_end.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP10_end.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP10_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP10_mid.png",
+          "message": "character_consistency  图片/EP01_CLIP10_mid.png 崩脸 G1 block：图片/EP01_CLIP10_mid.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP10_mid.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP10_mid.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP11.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP11.png",
+          "message": "character_consistency  图片/EP01_CLIP11.png 崩脸 G1 block：图片/EP01_CLIP11.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP11.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP11.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP11_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP11_end.png",
+          "message": "character_consistency  图片/EP01_CLIP11_end.png 崩脸 G1 block：图片/EP01_CLIP11_end.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP11_end.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP11_end.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP11_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP11_mid.png",
+          "message": "character_consistency  图片/EP01_CLIP11_mid.png 崩脸 G1 block：图片/EP01_CLIP11_mid.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP11_mid.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP11_mid.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP12.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP12.png",
+          "message": "character_consistency  图片/EP01_CLIP12.png 崩脸 G1 block：图片/EP01_CLIP12.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP12.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP12.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP12_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP12_end.png",
+          "message": "character_consistency  图片/EP01_CLIP12_end.png 崩脸 G1 block：图片/EP01_CLIP12_end.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP12_end.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP12_end.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP12_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP12_mid.png",
+          "message": "character_consistency  图片/EP01_CLIP12_mid.png 崩脸 G1 block：图片/EP01_CLIP12_mid.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP12_mid.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP12_mid.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP13.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP13.png",
+          "message": "character_consistency  图片/EP01_CLIP13.png 崩脸 G1 block：图片/EP01_CLIP13.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP13.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP13.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP13_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP13_end.png",
+          "message": "character_consistency  图片/EP01_CLIP13_end.png 崩脸 G1 block：图片/EP01_CLIP13_end.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP13_end.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP13_end.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP13_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP13_mid.png",
+          "message": "character_consistency  图片/EP01_CLIP13_mid.png 崩脸 G1 block：图片/EP01_CLIP13_mid.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP13_mid.png",
+          "message": "character_consistency 崩脸 G1 block：图片/EP01_CLIP13_mid.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "_设置.md",
+      "dimensions": [
+        "生图后端适配",
+        "风格化脸机检"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "生图后端适配",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/_设置.md",
+          "message": "生图后端适配 统一标准已按「Codex」自动加载弥补措施：加载 reference_group：正/45度/侧/半身/脸锚/表情库按镜头风险选入参；近景/大表情/暗光镜强制同源脸锚或表情参考，并用 full image_qc 回验；长线核心角反复漂移时升档到原生主体或 LoRA，不降低角色一致性标准。这些是后端差异的执行补偿，不降低 n2d 的出图标准。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "生图后端适配",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/_设置.md",
+          "message": "生图后端适配 适配层评分建议升档：当前「Codex」score=30，推荐「Seedream Universal Reference (访问入口 Seedream 官方 API)」score=57。理由：推荐后端能力=persistent_subject,multi_reference,high_fidelity_reference；若确认切换，先统一 `_",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "风格化脸机检",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/_设置.md",
+          "message": "风格化脸机检 基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。 当前已触发发布闸门（release standard (demo=product",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "风格化脸机检",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/_设置.md",
+          "message": "风格化脸机检 基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "asset_registry.json asset#1 scene_dna.resident_assets",
+      "dimensions": [
+        "场景 DNA"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景 DNA",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#1 scene_dna.resident_assets",
+          "message": "场景 DNA scene_dna 字段必须是非空列表",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "场景 DNA",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#1 scene_dna.resident_assets",
+          "message": "场景 DNA scene_dna 字段必须是非空列表",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "asset_registry.json asset#2 scene_dna.resident_assets",
+      "dimensions": [
+        "场景 DNA"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景 DNA",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#2 scene_dna.resident_assets",
+          "message": "场景 DNA scene_dna 字段必须是非空列表",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "场景 DNA",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#2 scene_dna.resident_assets",
+          "message": "场景 DNA scene_dna 字段必须是非空列表",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "asset_registry.json asset#3 scene_dna.resident_assets",
+      "dimensions": [
+        "场景 DNA"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景 DNA",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#3 scene_dna.resident_assets",
+          "message": "场景 DNA scene_dna 字段必须是非空列表",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "场景 DNA",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#3 scene_dna.resident_assets",
+          "message": "场景 DNA scene_dna 字段必须是非空列表",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "asset_registry.json asset#4 scene_dna.resident_assets",
+      "dimensions": [
+        "场景 DNA"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景 DNA",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#4 scene_dna.resident_assets",
+          "message": "场景 DNA scene_dna 字段必须是非空列表",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "场景 DNA",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#4 scene_dna.resident_assets",
+          "message": "场景 DNA scene_dna 字段必须是非空列表",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "asset_registry.json asset#5 scene_dna.resident_assets",
+      "dimensions": [
+        "场景 DNA"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景 DNA",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#5 scene_dna.resident_assets",
+          "message": "场景 DNA scene_dna 字段必须是非空列表",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "场景 DNA",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#5 scene_dna.resident_assets",
+          "message": "场景 DNA scene_dna 字段必须是非空列表",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "character",
+      "dimensions": [
+        "脸(G1)",
+        "表情连续(EXP1)",
+        "真值源(TRUTH)",
+        "多视角身份包(MVIEW)",
+        "台词语域(D1)",
+        "成本路由(K1)",
+        "叙事状态(NS1)",
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": " 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": " 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": " 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": " 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": " 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": " 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": " 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": " 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "consistency_findings_第1集.json",
+      "dimensions": [
+        "一致性总审"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "一致性总审",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/consistency_findings_第1集.json",
+          "message": "一致性总审 一致性审计精度为 degraded（insightface 等不可用，脸/像素一致性未真正验证）；出图后闸门不放行——请在 full 环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 放行并自负其责。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "identity_registry.json",
+      "dimensions": [
+        "锚点钉死"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "锚点钉死",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json",
+          "message": "锚点钉死 核心长线角色未启用定妆锚点钉死：姜月初(CHAR_JIANG_YUECHU)——这些脸被多集引用，重刷/重生成定妆若换脸则下游每集静默继承（anchor_sha 未登记 = check_anchor_fingerprints 跳过）。对其 front 定妆图 `image_qc --pin-anchor CHAR_xx/形态` 钉死后再付费出图，重",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "锚点钉死",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json",
+          "message": "锚点钉死 核心长线角色未启用定妆锚点钉死：姜月初(CHAR_JIANG_YUECHU)——这些脸被多集引用，重刷/重生成定妆若换脸则下游每集静默继承（anchor_sha 未登记 = check_anchor_fingerprints 跳过）。对其 front 定妆图 `image_qc --pin-anchor CHAR_xx/形态` 钉死后再付费出图，重",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "identity_registry.json character#1 form#1",
+      "dimensions": [
+        "资产身份注册层"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#1 form#1",
+          "message": "资产身份注册层 reference_atlas.base_views 基础视角必须为 ready 且有路径：three_quarter, side, back, half_body；所有人物/形态都强制包含 45°/three_quarter 与脸部特写基础锚，不能登记为 planned 后放行。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#1 form#1",
+          "message": "资产身份注册层 reference_atlas 至少登记一个 ready 的同源脸部特写/表情参考（face_anchor_refs 或 expression_refs）；功能角色也不能只靠正脸硬扛近景，planned 脸锚不能放行。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#1 form#1",
+          "message": "资产身份注册层 three_quarter ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须登记 ",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#1 form#1",
+          "message": "资产身份注册层 side ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须登记 method=co",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#1 form#1",
+          "message": "资产身份注册层 back ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须登记 method=co",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#1 form#1",
+          "message": "资产身份注册层 half_body ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须登记 meth",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#1 form#1",
+          "message": "资产身份注册层 face_anchor_refs ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#1 form#1",
+          "message": "资产身份注册层 face_anchor_refs ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "identity_registry.json character#1 form#2",
+      "dimensions": [
+        "资产身份注册层"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#1 form#2",
+          "message": "资产身份注册层 reference_atlas.base_views 基础视角必须为 ready 且有路径：three_quarter, side, back, half_body；所有人物/形态都强制包含 45°/three_quarter 与脸部特写基础锚，不能登记为 planned 后放行。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#1 form#2",
+          "message": "资产身份注册层 reference_atlas 至少登记一个 ready 的同源脸部特写/表情参考（face_anchor_refs 或 expression_refs）；功能角色也不能只靠正脸硬扛近景，planned 脸锚不能放行。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#1 form#2",
+          "message": "资产身份注册层 reference_group.front 路径 `出图/共享/图片/定妆_姜月初_觉醒蓝调_母本.jpeg` 未包含 asset_key=姜月初_觉醒蓝调母本；服饰/形态变体必须独立定妆，禁止复用其它服饰形态参考",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#1 form#2",
+          "message": "资产身份注册层 reference_group.three_quarter 路径 `出图/共享/图片/定妆_姜月初_觉醒蓝调_母本.jpeg` 未包含 asset_key=姜月初_觉醒蓝调母本；服饰/形态变体必须独立定妆，禁止复用其它服饰形态参考",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#1 form#2",
+          "message": "资产身份注册层 three_quarter ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须登记 ",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#1 form#2",
+          "message": "资产身份注册层 reference_group.side 路径 `出图/共享/图片/定妆_姜月初_觉醒蓝调_母本.jpeg` 未包含 asset_key=姜月初_觉醒蓝调母本；服饰/形态变体必须独立定妆，禁止复用其它服饰形态参考",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#1 form#2",
+          "message": "资产身份注册层 side ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须登记 method=co",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#1 form#2",
+          "message": "资产身份注册层 reference_group.back 路径 `出图/共享/图片/定妆_姜月初_觉醒蓝调_母本.jpeg` 未包含 asset_key=姜月初_觉醒蓝调母本；服饰/形态变体必须独立定妆，禁止复用其它服饰形态参考",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "identity_registry.json character#1 form#2 signature_equipment",
+      "dimensions": [
+        "主角装备库"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "主角装备库",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#1 form#2 signature_equipment",
+          "message": "主角装备库 核心动作角色缺 signature_equipment；请把主角常用武器/法宝/标志性道具登记为 WEAPON_xx/PROP_xx/VFX_xx，并在角色 form 上绑定，避免主角形象只锁脸不锁随身装备。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "主角装备库",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#1 form#2 signature_equipment",
+          "message": "主角装备库 核心动作角色缺 signature_equipment；请把主角常用武器/法宝/标志性道具登记为 WEAPON_xx/PROP_xx/VFX_xx，并在角色 form 上绑定，避免主角形象只锁脸不锁随身装备。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "identity_registry.json character#2 form#1",
+      "dimensions": [
+        "资产身份注册层"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#2 form#1",
+          "message": "资产身份注册层 reference_atlas.base_views 基础视角必须为 ready 且有路径：front, three_quarter, side, back, half_body；所有人物/形态都强制包含 45°/three_quarter 与脸部特写基础锚，不能登记为 planned 后放行。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#2 form#1",
+          "message": "资产身份注册层 reference_atlas 至少登记一个 ready 的同源脸部特写/表情参考（face_anchor_refs 或 expression_refs）；功能角色也不能只靠正脸硬扛近景，planned 脸锚不能放行。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#2 form#1",
+          "message": "资产身份注册层 three_quarter ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须登记 ",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#2 form#1",
+          "message": "资产身份注册层 side ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须登记 method=co",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#2 form#1",
+          "message": "资产身份注册层 back ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须登记 method=co",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#2 form#1",
+          "message": "资产身份注册层 half_body ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须登记 meth",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#2 form#1",
+          "message": "资产身份注册层 reference_group 至少需要一个同源脸部特写/表情参考：优先写 face_anchor_refs，也兼容 expressions；所有人物（含短线/功能角色）都按主角基础定妆包标准执行。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#2 form#1",
+          "message": "资产身份注册层 reference_group.face_anchor_refs 必须为 ready 且有路径；planned 脸部特写不能放行。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "identity_registry.json character#3 form#1",
+      "dimensions": [
+        "资产身份注册层"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#3 form#1",
+          "message": "资产身份注册层 reference_atlas.base_views 基础视角必须为 ready 且有路径：front, three_quarter, side, back, half_body；所有人物/形态都强制包含 45°/three_quarter 与脸部特写基础锚，不能登记为 planned 后放行。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#3 form#1",
+          "message": "资产身份注册层 reference_atlas 至少登记一个 ready 的同源脸部特写/表情参考（face_anchor_refs 或 expression_refs）；功能角色也不能只靠正脸硬扛近景，planned 脸锚不能放行。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#3 form#1",
+          "message": "资产身份注册层 three_quarter ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须登记 ",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#3 form#1",
+          "message": "资产身份注册层 side ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须登记 method=co",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#3 form#1",
+          "message": "资产身份注册层 back ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须登记 method=co",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#3 form#1",
+          "message": "资产身份注册层 half_body ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须登记 meth",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#3 form#1",
+          "message": "资产身份注册层 reference_group 至少需要一个同源脸部特写/表情参考：优先写 face_anchor_refs，也兼容 expressions；所有人物（含短线/功能角色）都按主角基础定妆包标准执行。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#3 form#1",
+          "message": "资产身份注册层 reference_group.face_anchor_refs 必须为 ready 且有路径；planned 脸部特写不能放行。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "identity_registry.json character#4 form#1",
+      "dimensions": [
+        "资产身份注册层"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#4 form#1",
+          "message": "资产身份注册层 reference_atlas.base_views 基础视角必须为 ready 且有路径：front, three_quarter, side, back, half_body；所有人物/形态都强制包含 45°/three_quarter 与脸部特写基础锚，不能登记为 planned 后放行。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#4 form#1",
+          "message": "资产身份注册层 reference_atlas 至少登记一个 ready 的同源脸部特写/表情参考（face_anchor_refs 或 expression_refs）；功能角色也不能只靠正脸硬扛近景，planned 脸锚不能放行。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#4 form#1",
+          "message": "资产身份注册层 three_quarter ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须登记 ",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#4 form#1",
+          "message": "资产身份注册层 side ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须登记 method=co",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#4 form#1",
+          "message": "资产身份注册层 back ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须登记 method=co",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#4 form#1",
+          "message": "资产身份注册层 half_body ready 拆分定妆必须是同源母本派生，登记 derivation.method/source_path/source_sha256/crop_box；45°/侧/背优先从人审通过 turnaround 拆，半身/脸部特写优先从已通过正面裁；若使用真实 image2image/multiref 后端生成，必须登记 meth",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#4 form#1",
+          "message": "资产身份注册层 reference_group 至少需要一个同源脸部特写/表情参考：优先写 face_anchor_refs，也兼容 expressions；所有人物（含短线/功能角色）都按主角基础定妆包标准执行。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#4 form#1",
+          "message": "资产身份注册层 reference_group.face_anchor_refs 必须为 ready 且有路径；planned 脸部特写不能放行。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "identity_registry.json character#5 form#1",
+      "dimensions": [
+        "资产身份注册层"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#5 form#1",
+          "message": "资产身份注册层 reference_atlas.base_views 缺基础视角：front, three_quarter, side, back, half_body_or_full_body",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#5 form#1",
+          "message": "资产身份注册层 reference_atlas.base_views 基础视角必须为 ready 且有路径：full_body；所有人物/形态都强制包含 45°/three_quarter 与脸部特写基础锚，不能登记为 planned 后放行。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#5 form#1",
+          "message": "资产身份注册层 reference_atlas 至少登记一个 ready 的同源脸部特写/表情参考（face_anchor_refs 或 expression_refs）；功能角色也不能只靠正脸硬扛近景，planned 脸锚不能放行。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#5 form#1",
+          "message": "资产身份注册层 reference_group 缺核心路径：front",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#5 form#1",
+          "message": "资产身份注册层 reference_group 缺核心路径：three_quarter",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#5 form#1",
+          "message": "资产身份注册层 reference_group 缺核心路径：side",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#5 form#1",
+          "message": "资产身份注册层 reference_group 缺核心路径：back",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#5 form#1",
+          "message": "资产身份注册层 reference_group 缺核心路径：half_body_or_full_body；基础定妆包必须有半身或全身服装参考。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "identity_registry.json character#5 form#1 identity_adapters.image.codex",
+      "dimensions": [
+        "资产身份注册层"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#5 form#1 identity_adapters.image.codex",
+          "message": "资产身份注册层 未知 status「restricted_partial」；必须使用结构化枚举，不能自由写",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#5 form#1 identity_adapters.image.codex",
+          "message": "资产身份注册层 未知 status「restricted_partial」；必须使用结构化枚举，不能自由写",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "identity_registry.json character#5 form#1 identity_adapters.video.dreamina",
+      "dimensions": [
+        "资产身份注册层"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#5 form#1 identity_adapters.video.dreamina",
+          "message": "资产身份注册层 未知 status「restricted_partial」；必须使用结构化枚举，不能自由写",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#5 form#1 identity_adapters.video.dreamina",
+          "message": "资产身份注册层 未知 status「restricted_partial」；必须使用结构化枚举，不能自由写",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "identity_registry.json character#6 form#1",
+      "dimensions": [
+        "资产身份注册层"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#6 form#1",
+          "message": "资产身份注册层 reference_atlas.base_views 缺基础视角：front, three_quarter, side, back, half_body_or_full_body",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#6 form#1",
+          "message": "资产身份注册层 reference_atlas.base_views 基础视角必须为 ready 且有路径：full_body；所有人物/形态都强制包含 45°/three_quarter 与脸部特写基础锚，不能登记为 planned 后放行。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#6 form#1",
+          "message": "资产身份注册层 reference_atlas 至少登记一个 ready 的同源脸部特写/表情参考（face_anchor_refs 或 expression_refs）；功能角色也不能只靠正脸硬扛近景，planned 脸锚不能放行。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#6 form#1",
+          "message": "资产身份注册层 reference_group 缺核心路径：front",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#6 form#1",
+          "message": "资产身份注册层 reference_group 缺核心路径：three_quarter",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#6 form#1",
+          "message": "资产身份注册层 reference_group 缺核心路径：side",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#6 form#1",
+          "message": "资产身份注册层 reference_group 缺核心路径：back",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#6 form#1",
+          "message": "资产身份注册层 reference_group 缺核心路径：half_body_or_full_body；基础定妆包必须有半身或全身服装参考。",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "identity_registry.json character#6 form#1 identity_adapters.image.codex",
+      "dimensions": [
+        "资产身份注册层"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#6 form#1 identity_adapters.image.codex",
+          "message": "资产身份注册层 未知 status「restricted_partial」；必须使用结构化枚举，不能自由写",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#6 form#1 identity_adapters.image.codex",
+          "message": "资产身份注册层 未知 status「restricted_partial」；必须使用结构化枚举，不能自由写",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "identity_registry.json character#6 form#1 identity_adapters.video.dreamina",
+      "dimensions": [
+        "资产身份注册层"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#6 form#1 identity_adapters.video.dreamina",
+          "message": "资产身份注册层 未知 status「restricted_partial」；必须使用结构化枚举，不能自由写",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产身份注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#6 form#1 identity_adapters.video.dreamina",
+          "message": "资产身份注册层 未知 status「restricted_partial」；必须使用结构化枚举，不能自由写",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "图片",
+      "dimensions": [
+        "脸(G1)"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "脸(G1)",
+          "loc": "出图/第1集/图片",
+          "message": "脸(G1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "出图/第1集/图片",
+          "message": "脸(G1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "出图/第1集/图片",
+          "message": "脸(G1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "出图/第1集/图片",
+          "message": "脸(G1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "出图/第1集/图片",
+          "message": "脸(G1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "出图/第1集/图片",
+          "message": "脸(G1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "出图/第1集/图片",
+          "message": "脸(G1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "出图/第1集/图片",
+          "message": "脸(G1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "角色定妆.md ## 用户人物参考图脸锚铁律",
+      "dimensions": [
+        "共享定妆",
+        "角色一致性",
+        "角色定妆基础包"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "共享定妆",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/角色定妆.md ## 用户人物参考图脸锚铁律",
+          "message": "共享定妆 缺目标存档；共享资产无法归档追踪",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "共享定妆",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/角色定妆.md ## 用户人物参考图脸锚铁律",
+          "message": "共享定妆 缺正向 prompt（中文）",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "共享定妆",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/角色定妆.md ## 用户人物参考图脸锚铁律",
+          "message": "共享定妆 缺正向 prompt（英文）",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "共享定妆",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/角色定妆.md ## 用户人物参考图脸锚铁律",
+          "message": "共享定妆 缺负向 prompt",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "共享定妆",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/角色定妆.md ## 用户人物参考图脸锚铁律",
+          "message": "共享定妆 缺定妆提交前检查清单",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "共享定妆",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/角色定妆.md ## 用户人物参考图脸锚铁律",
+          "message": "共享定妆 缺生成后落档自检段",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/角色定妆.md ## 用户人物参考图脸锚铁律",
+          "message": "角色一致性 角色定妆缺定妆组说明；人物角色不能只靠单张正脸",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "角色定妆基础包",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/角色定妆.md ## 用户人物参考图脸锚铁律",
+          "message": "角色定妆基础包 人物定妆基础包必须写齐：正面主参考 + 45°参考 + 侧面参考 + 背面参考 + 半身/全身服装参考 + 脸部特写/同源表情参考 + `定妆_<角色>_三视图.png` 人审拼版。完整表情组、动作参考、主体库/LoRA 是风险升档项，不替代基础包。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "production_events.jsonl",
+      "dimensions": [
+        "强配方Schema(RCP2)",
+        "生成配方(RCP)"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "强配方Schema(RCP2)",
+          "loc": "生产数据/production_events.jsonl",
+          "message": "强配方Schema(RCP2) [production一致性升级:重复同维度] 脚本/第1集/voiceover.txt 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "强配方Schema(RCP2)",
+          "loc": "生产数据/production_events.jsonl",
+          "message": "强配方Schema(RCP2) [production一致性升级:重复同维度] 脚本/第1集/storyboard.json 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifac",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "生成配方(RCP)",
+          "loc": "生产数据/production_events.jsonl",
+          "message": "生成配方(RCP) [production一致性升级:重复同维度] 脚本/第1集/voiceover.txt 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=cccc53a5dc6e99b9，但复跑审计证据不完整。",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "生成配方(RCP)",
+          "loc": "生产数据/production_events.jsonl",
+          "message": "生成配方(RCP) [production一致性升级:重复同维度] 脚本/第1集/storyboard.json 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=9a6dc8cb3aaeee02，但复跑审计证据不完",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "score_第1集.json",
+      "dimensions": [
+        "自动审片总分"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "score"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "自动审片总分",
+          "loc": "生产数据/score_第1集.json",
+          "message": "缺 score JSON；验收总账无法闭环",
+          "severity": "block",
+          "source": "score"
+        }
+      ]
+    },
+    {
+      "anchor": "reference_plan_第1集.json",
+      "dimensions": [
+        "参考规划落实"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "参考规划落实",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/reference_plan_第1集.json",
+          "message": "参考规划落实 逐镜参考规划有 20 条行动项未确认落实（无持久主体 ID 后端×大变化镜 11 镜）：镜头 EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP06、EP01_CLIP07、EP01_CLIP08…。请按 reference_plan_第1集.md 把补拍/",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "story",
+      "dimensions": [
+        "状态百科(P1)",
+        "节奏密度(Rhythm)",
+        "视线状态回读(X2)",
+        "状态转场视频证据(ST1)",
+        "生成配方(RCP)",
+        "强配方Schema(RCP2)",
+        "成本路由(K1)"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "状态百科(P1)",
+          "loc": null,
+          "message": " 状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜2 仍保留。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": null,
+          "message": " 状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜3 仍保留。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": null,
+          "message": " 状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜6 仍保留。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": null,
+          "message": " 状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜7 仍保留。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": null,
+          "message": " 状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜8 仍保留。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": null,
+          "message": " 状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜9 仍保留。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": null,
+          "message": " 状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜10 仍保留。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": null,
+          "message": " 状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜11 仍保留。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "storyboard.json",
+      "dimensions": [
+        "语义谱系(P0)",
+        "状态百科(P1)",
+        "节奏密度(Rhythm)"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) 配音角色 `旁白` 未进入 storyboard。；缺：旁白",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) 配音角色 `镇魔卫` 未进入 storyboard。；缺：镇魔卫",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) 配音角色 `年轻校尉` 未进入 storyboard。；缺：年轻校尉",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) 配音角色 `旁白` 未进入 storyboard。；缺：旁白",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) 配音角色 `镇魔卫` 未进入 storyboard。；缺：镇魔卫",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) 配音角色 `年轻校尉` 未进入 storyboard。；缺：年轻校尉",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "状态百科(P1) CHAR_JIANG_YUECHU 的状态 `EP01_CLIP08-10 静修灌注：坐姿稳定，衣装不变，识海金光增强。` 在镜8前提前泄露。",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "语义谱系(P0) 配音角色 `旁白` 未进入 storyboard。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "状态百科(P1)",
+      "dimensions": [
+        "状态百科(P1)"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "状态百科(P1)",
+          "message": "状态百科(P1) CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜2 仍保留。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "状态百科(P1)",
+          "message": "状态百科(P1) CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜3 仍保留。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "状态百科(P1)",
+          "message": "状态百科(P1) CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜6 仍保留。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "状态百科(P1)",
+          "message": "状态百科(P1) CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜7 仍保留。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "状态百科(P1)",
+          "message": "状态百科(P1) CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜8 仍保留。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "状态百科(P1)",
+          "message": "状态百科(P1) CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜9 仍保留。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "状态百科(P1)",
+          "message": "状态百科(P1) CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜10 仍保留。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "状态百科(P1)",
+          "message": "状态百科(P1) CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。` 声明至镜1，但镜11 仍保留。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "asset",
+      "dimensions": [
+        "打斗撞点(SPEC-APEX)",
+        "交互接触(I1)",
+        "结构化交互图谱(I2)",
+        "系统面板(UI1)"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "打斗撞点(SPEC-APEX)",
+          "loc": null,
+          "message": " 打斗撞点(SPEC-APEX)    Clip_02（magic_burst）：剪辑峰值钉在 [3.8]s，但本镜 continuity.anchors 无 keyframe 锚——跑 `anchor_planner.py <根> <集> --write` 让 apex 命中帧落成真关键帧，剪辑峰值才有离散落点。",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "打斗撞点(SPEC-APEX)",
+          "loc": null,
+          "message": " 打斗撞点(SPEC-APEX)    Clip_11（magic_burst）：剪辑峰值钉在 [4.2]s，但本镜 continuity.anchors 无 keyframe 锚——跑 `anchor_planner.py <根> <集> --write` 让 apex 命中帧落成真关键帧，剪辑峰值才有离散落点。",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "打斗撞点(SPEC-APEX)",
+          "loc": null,
+          "message": " 打斗撞点(SPEC-APEX)    Clip_13（magic_burst）：剪辑峰值钉在 [5.5]s，但本镜 continuity.anchors 无 keyframe 锚——跑 `anchor_planner.py <根> <集> --write` 让 apex 命中帧落成真关键帧，剪辑峰值才有离散落点。",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "交互接触(I1)",
+          "loc": null,
+          "message": " 交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "交互接触(I1)",
+          "loc": null,
+          "message": " 交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "交互接触(I1)",
+          "loc": null,
+          "message": " 交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "交互接触(I1)",
+          "loc": null,
+          "message": " 交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "交互接触(I1)",
+          "loc": null,
+          "message": " 交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "asset_registry.json asset#1",
+      "dimensions": [
+        "资产引用注册层"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#1",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#1",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "asset_registry.json asset#2",
+      "dimensions": [
+        "资产引用注册层"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#2",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#2",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "asset_registry.json asset#3",
+      "dimensions": [
+        "资产引用注册层"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#3",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#3",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "asset_registry.json asset#4",
+      "dimensions": [
+        "资产引用注册层"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#4",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#4",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "asset_registry.json asset#5",
+      "dimensions": [
+        "资产引用注册层"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#5",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#5",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "audio",
+      "dimensions": [
+        "配音情绪弧(VEA)",
+        "音乐衔接(BGM)",
+        "语义谱系(P0)",
+        "声音空间(ASP)",
+        "生成配方(RCP)",
+        "强配方Schema(RCP2)",
+        "成本路由(K1)",
+        "音乐母题(LM1)",
+        "环境声(AMB)"
+      ],
+      "domain": "audio",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "配音情绪弧(VEA)",
+          "loc": null,
+          "message": " 配音情绪弧(VEA)   镜头4·旁白：台词含强情绪但配音标注「压低」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "配音情绪弧(VEA)",
+          "loc": null,
+          "message": " 配音情绪弧(VEA)   镜头17·旁白：台词含强情绪但配音标注「硬切」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "配音情绪弧(VEA)",
+          "loc": null,
+          "message": " 配音情绪弧(VEA)   镜头34·旁白：台词含强情绪但配音标注「压住」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "音乐衔接(BGM)",
+          "loc": null,
+          "message": " 音乐衔接(BGM)   配乐相邻段速度两极硬接（fast→slow）且无过渡：「[镜头16 皇帝下旨] 朝堂钟声一记」→「[镜头35 集尾钩] 面板轻颤、空气」；调性/速度whiplash，加渐变过渡或确认是卡点切。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": null,
+          "message": " 语义谱系(P0)   配音角色 `旁白` 未进入 storyboard。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": null,
+          "message": " 语义谱系(P0)   配音角色 `镇魔卫` 未进入 storyboard。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": null,
+          "message": " 语义谱系(P0)   配音角色 `年轻校尉` 未进入 storyboard。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "声音空间(ASP)",
+          "loc": null,
+          "message": " 声音空间(ASP)   缺 acoustic_space/room_tone/ambient_map；同一场景的 room tone、混响、远近感和环境声床无法跨 clip 复核。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "第1集",
+      "dimensions": [
+        "物料新鲜度"
+      ],
+      "domain": "audio",
+      "severity": "warn",
+      "sources": [
+        "gate:image_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "物料新鲜度",
+          "loc": "第1集",
+          "message": "物料新鲜度 前期物料可能已过期：n2d-image, n2d-voice 自上次 skill 基线后有改动，可能影响本阶段（image_prompt）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/从变身少女开始斩妖除魔\" ",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 1 — 🔑关键镜 EP01_CLIP01 尸城冷开：只来了一个人",
+      "dimensions": [
+        "角色一致性"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "角色一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 1 — 🔑关键镜 EP01_CLIP01 尸城冷开：只来了一个人",
+          "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "asset_registry.json asset#11",
+      "dimensions": [
+        "主角装备库"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "主角装备库",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#11",
+          "message": "主角装备库 该 VFX/法术资产看起来承担武器/法宝识别功能；若它是实体武器或主角本命法宝，请拆成 WEAPON_xx 实体资产 + VFX_xx 光效表现，并在角色 signature_equipment 中绑定。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "主角装备库",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/asset_registry.json asset#11",
+          "message": "主角装备库 该 VFX/法术资产看起来承担武器/法宝识别功能；若它是实体武器或主角本命法宝，请拆成 WEAPON_xx 实体资产 + VFX_xx 光效表现，并在角色 signature_equipment 中绑定。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "identity_registry.json character#2 form#1 wardrobe_profile",
+      "dimensions": [
+        "服装契约"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "服装契约",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#2 form#1 wardrobe_profile",
+          "message": "服装契约 wardrobe_profile 缺服装部件字段：layers, collar/neckline, sleeve, waist/belt/waist_belt, hem, fabric/material/texture",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "服装契约",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#2 form#1 wardrobe_profile",
+          "message": "服装契约 wardrobe_profile 缺服装部件字段：layers, collar/neckline, sleeve, waist/belt/waist_belt, hem, fabric/material/texture",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "identity_registry.json character#3 form#1 wardrobe_profile",
+      "dimensions": [
+        "服装契约"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "服装契约",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#3 form#1 wardrobe_profile",
+          "message": "服装契约 wardrobe_profile 缺服装部件字段：layers, collar/neckline, sleeve, waist/belt/waist_belt, hem, fabric/material/texture",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "服装契约",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#3 form#1 wardrobe_profile",
+          "message": "服装契约 wardrobe_profile 缺服装部件字段：layers, collar/neckline, sleeve, waist/belt/waist_belt, hem, fabric/material/texture",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "identity_registry.json character#4 form#1 wardrobe_profile",
+      "dimensions": [
+        "服装契约"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "服装契约",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#4 form#1 wardrobe_profile",
+          "message": "服装契约 wardrobe_profile 缺服装部件字段：layers, collar/neckline, sleeve, waist/belt/waist_belt, hem, fabric/material/texture",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "服装契约",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#4 form#1 wardrobe_profile",
+          "message": "服装契约 wardrobe_profile 缺服装部件字段：layers, collar/neckline, sleeve, waist/belt/waist_belt, hem, fabric/material/texture",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "identity_registry.json character#5 form#1 wardrobe_profile",
+      "dimensions": [
+        "服装契约"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "服装契约",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#5 form#1 wardrobe_profile",
+          "message": "服装契约 wardrobe_profile 缺服装部件字段：layers, collar/neckline, sleeve, waist/belt/waist_belt, hem, fabric/material/texture",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "服装契约",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#5 form#1 wardrobe_profile",
+          "message": "服装契约 wardrobe_profile 缺服装部件字段：layers, collar/neckline, sleeve, waist/belt/waist_belt, hem, fabric/material/texture",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "identity_registry.json character#6 form#1 wardrobe_profile",
+      "dimensions": [
+        "服装契约"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "服装契约",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#6 form#1 wardrobe_profile",
+          "message": "服装契约 wardrobe_profile 缺服装部件字段：layers, collar/neckline, sleeve, waist/belt/waist_belt, hem, fabric/material/texture",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "服装契约",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#6 form#1 wardrobe_profile",
+          "message": "服装契约 wardrobe_profile 缺服装部件字段：layers, collar/neckline, sleeve, waist/belt/waist_belt, hem, fabric/material/texture",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_大唐皇帝_朝堂常态.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_大唐皇帝_朝堂常态.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_大唐皇帝_朝堂常态.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_大唐皇帝_朝堂常态_45度.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_45度.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_大唐皇帝_朝堂常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_大唐皇帝_朝堂常态_侧.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_侧.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_大唐皇帝_朝堂常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_大唐皇帝_朝堂常态_半身.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_半身.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_大唐皇帝_朝堂常态_半身.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_大唐皇帝_朝堂常态_背.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_背.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_大唐皇帝_朝堂常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_大唐皇帝_朝堂常态_脸部特写.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_脸部特写.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_大唐皇帝_朝堂常态_脸部特写.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_巴西郡残兵_残兵剪影_剪影.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_巴西郡残兵_残兵剪影_剪影.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_巴西郡残兵_残兵剪影_剪影.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_年轻校尉_断臂校尉.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_年轻校尉_断臂校尉.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_年轻校尉_断臂校尉.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_年轻校尉_断臂校尉_45度.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_年轻校尉_断臂校尉_45度.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_年轻校尉_断臂校尉_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_年轻校尉_断臂校尉_侧.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_年轻校尉_断臂校尉_侧.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_年轻校尉_断臂校尉_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_年轻校尉_断臂校尉_半身.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_年轻校尉_断臂校尉_半身.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_年轻校尉_断臂校尉_半身.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_年轻校尉_断臂校尉_背.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_年轻校尉_断臂校尉_背.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_年轻校尉_断臂校尉_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_年轻校尉_断臂校尉_脸部特写.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_年轻校尉_断臂校尉_脸部特写.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_年轻校尉_断臂校尉_脸部特写.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_朝堂群臣_群臣剪影_剪影.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_朝堂群臣_群臣剪影_剪影.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_朝堂群臣_群臣剪影_剪影.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_程老_朝堂常态.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_程老_朝堂常态.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_程老_朝堂常态.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_程老_朝堂常态_45度.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_程老_朝堂常态_45度.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_程老_朝堂常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_程老_朝堂常态_侧.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_程老_朝堂常态_侧.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_程老_朝堂常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_程老_朝堂常态_半身.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_程老_朝堂常态_半身.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_程老_朝堂常态_半身.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_程老_朝堂常态_背.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_程老_朝堂常态_背.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_程老_朝堂常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_程老_朝堂常态_脸部特写.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_程老_朝堂常态_脸部特写.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_程老_朝堂常态_脸部特写.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "compliance",
+      "dimensions": [
+        "世界一致性(WCS)"
+      ],
+      "domain": "compliance",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "世界一致性(WCS)",
+          "loc": null,
+          "message": " 世界一致性(WCS)   已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "compliance_manifest.json",
+      "dimensions": [
+        "合规前置"
+      ],
+      "domain": "compliance",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP06…",
+      "dimensions": [
+        "景别阶梯"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "景别阶梯",
+          "loc": "EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP06…",
+          "message": "景别阶梯 13 个镜写了 lens 但抽不出景别分级（EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP06…）——景别阶梯单调性机检对它们失效；把 lens 写成标准景别词（ELS/LS/MS/MCU/CU/ECU 或 大远景/远景/中景/中近景/特写/大特写）再机检。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "景别阶梯",
+          "loc": "EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP06…",
+          "message": "景别阶梯 13 个镜写了 lens 但抽不出景别分级（EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP06…）——景别阶梯单调性机检对它们失效；把 lens 写成标准景别词（ELS/LS/MS/MCU/CU/ECU 或 大远景/远景/中景/中近景/特写/大特写）再机检。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP11",
+      "dimensions": [
+        "状态化表情(EXP2)"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "expression_state_consistency"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "状态化表情(EXP2)",
+          "loc": "EP01_CLIP11",
+          "message": "状态化表情(EXP2) big expression span needs 微表情节拍 so identity is locked while emotion changes",
+          "severity": "warn",
+          "source": "expression_state_consistency"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP13",
+      "dimensions": [
+        "状态化表情(EXP2)"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "expression_state_consistency"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "状态化表情(EXP2)",
+          "loc": "EP01_CLIP13",
+          "message": "状态化表情(EXP2) big expression span needs 微表情节拍 so identity is locked while emotion changes",
+          "severity": "warn",
+          "source": "expression_state_consistency"
+        }
+      ]
+    },
+    {
+      "anchor": "consistency_findings_第1集.json",
+      "dimensions": [
+        "一致性总审"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "一致性总审",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/consistency_findings_第1集.json",
+          "message": "一致性总审 另有 102 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "ops",
+      "dimensions": [
+        "成本路由(K1)",
+        "人审校准集(CAL)",
+        "一致性探针包(PROBE)"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "成本路由(K1)",
+          "loc": null,
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_年轻校尉_断臂校尉.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": null,
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_年轻校尉_断臂校尉_45度.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": null,
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_姜月初_战场形态.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": null,
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_姜月初_战场形态_45度.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": null,
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_姜月初_战场形态_侧.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": null,
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_姜月初_战场形态_背.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": null,
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_姜月初_战场形态_半身.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": null,
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_姜月初_战场形态_三视图.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "vlm_canonical_第1集.json",
+      "dimensions": [
+        "fidelity-gate"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "fidelity-gate",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/vlm_canonical_第1集.json",
+          "message": "fidelity-gate fidelity-gate 未激活；vlm_verify --write 可在出图后跑 canonical 通过表。image 阶段不硬拦（出图后还没建 canonical 表），但 compose/review 会 BLOCK。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "第1集",
+      "dimensions": [
+        "物料新鲜度"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "物料新鲜度",
+          "loc": "第1集",
+          "message": "物料新鲜度 前期物料可能已过期：n2d, n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/从变身少女开始斩妖除魔\" 第1集` 评估哪些物料需重",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "shot",
+      "dimensions": [
+        "实体记忆(EMB)",
+        "image_qc_precision",
+        "scene_consistency",
+        "style_consistency"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "实体记忆(EMB)",
+          "loc": null,
+          "message": " 实体记忆(EMB)   本集有重复/核心实体（CHAR_CHENG_LAO, CHAR_EMPEROR_TANG, CHAR_GARRISON_SURVIVORS, CHAR_JIANG_YUECHU, CHAR_JIANG_YUECHU/战场形态, CHAR_JIANG_YUECHU/静修）但缺 entity_memory_bank；后续镜头无法按已验收",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_qc_precision",
+          "loc": null,
+          "message": "image_qc_precision  None image_qc 精度为 degraded：正式进 video 前需补依赖重跑到 full 精度；普通人审记录只能辅助定位，不能替代 video/compose 前的 full QC gate。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "scene_consistency",
+          "loc": null,
+          "message": "scene_consistency  None 接缝接力 未执行：视觉机检不可用；本轮图片一致性为降级判定，需补依赖后重跑或人工复核。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "style_consistency",
+          "loc": null,
+          "message": "style_consistency  None 风格归属无法机检：style_contract 未登记风格锚（style_anchor）。请在定妆阶段出 1–2 张「冷灰写实3D国风漫剧」风格锚图、登记进 style_contract.style_anchor，后续每集出图帧才能对锚做风格归属佐证。当前降级为人判：逐图核对是否踩 风格禁忌：禁欧美魔幻脸、页游",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_qc_precision",
+          "loc": "",
+          "message": "image_qc_precision image_qc 精度为 degraded：正式进 video 前需补依赖重跑到 full 精度；普通人审记录只能辅助定位，不能替代 video/compose 前的 full QC gate。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "scene_consistency",
+          "loc": "",
+          "message": "scene_consistency 接缝接力 未执行：视觉机检不可用；本轮图片一致性为降级判定，需补依赖后重跑或人工复核。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "style_consistency",
+          "loc": "",
+          "message": "style_consistency 风格归属无法机检：style_contract 未登记风格锚（style_anchor）。请在定妆阶段出 1–2 张「冷灰写实3D国风漫剧」风格锚图、登记进 style_contract.style_anchor，后续每集出图帧才能对锚做风格归属佐证。当前降级为人判：逐图核对是否踩 风格禁忌：禁欧美魔幻脸、页游高饱和、塑料",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "subtitle",
+      "dimensions": [
+        "系列包装(PKG)",
+        "文字渲染(OCR1)"
+      ],
+      "domain": "subtitle",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "系列包装(PKG)",
+          "loc": null,
+          "message": " 系列包装(PKG)   缺系列包装规范（片头/片尾/封面字/字幕字体/转场音效/平台交付名）；多集发布会出现包装漂移。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": null,
+          "message": " 文字渲染(OCR1)   Clip_01 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": null,
+          "message": " 文字渲染(OCR1)   Clip_02 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": null,
+          "message": " 文字渲染(OCR1)   Clip_09 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": null,
+          "message": " 文字渲染(OCR1)   Clip_10 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": null,
+          "message": " 文字渲染(OCR1)   Clip_12 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": null,
+          "message": " 文字渲染(OCR1)   Clip_13 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "contract": "ok",
+      "detect": "block",
+      "hits": [
+        "[warn]  状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大",
+        "[warn]  状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大",
+        "[warn]  状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大"
+      ],
+      "id": "CHAR_JIANG_YUECHU",
+      "kind": "character",
+      "name": "姜月初",
+      "overall": "block",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  语义谱系(P0)   配音角色 `年轻校尉` 未进入 storyboard。 ",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_年轻校尉_断臂校尉.png 生成事件缺 cost/provider 记账；无法计算重试性价比",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_年轻校尉_断臂校尉_45度.png 生成事件缺 cost/provider 记账；无法计算重"
+      ],
+      "id": "CHAR_YOUNG_CAPTAIN",
+      "kind": "character",
+      "name": "年轻校尉",
+      "overall": "warn",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  状态百科(P1)   CHAR_EMPEROR_TANG 在镜1后应保持 `疲惫但威严，不出现战场状态。`，但镜4 prompt 未见状态",
+        "[warn]  状态百科(P1)   CHAR_EMPEROR_TANG 在镜1后应保持 `疲惫但威严，不出现战场状态。`，但镜5 prompt 未见状态",
+        "[warn]  实体记忆(EMB)   本集有重复/核心实体（CHAR_CHENG_LAO, CHAR_EMPEROR_TANG, CHAR_GARRIS"
+      ],
+      "id": "CHAR_EMPEROR_TANG",
+      "kind": "character",
+      "name": "大唐皇帝",
+      "overall": "warn",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  实体记忆(EMB)   本集有重复/核心实体（CHAR_CHENG_LAO, CHAR_EMPEROR_TANG, CHAR_GARRIS",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_程老_朝堂常态.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_程老_朝堂常态_45度.png 生成事件缺 cost/provider 记账；无法计算重试性"
+      ],
+      "id": "CHAR_CHENG_LAO",
+      "kind": "character",
+      "name": "程老",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_朝堂群臣_群臣剪影_剪影.png 生成事件缺 cost/provider 记账；无法计算重试"
+      ],
+      "id": "CHAR_COURT_MINISTERS",
+      "kind": "character",
+      "name": "朝堂群臣",
+      "overall": "warn",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  实体记忆(EMB)   本集有重复/核心实体（CHAR_CHENG_LAO, CHAR_EMPEROR_TANG, CHAR_GARRIS",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_巴西郡残兵_残兵剪影_剪影.png 生成事件缺 cost/provider 记账；无法计算重"
+      ],
+      "id": "CHAR_GARRISON_SURVIVORS",
+      "kind": "character",
+      "name": "巴西郡残兵",
+      "overall": "warn",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_巴西郡尸城战场.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模"
+      ],
+      "id": "LOC_BAXI_BATTLEFIELD",
+      "kind": "scene",
+      "name": "巴西郡尸城战场",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "LOC_BAXI_BATTLEFIELD_ESTABLISH",
+      "kind": "scene",
+      "name": "巴西郡尸城大全景",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "LOC_TANG_COURT",
+      "kind": "scene",
+      "name": "大唐朝堂",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "LOC_BROKEN_HOUSE",
+      "kind": "scene",
+      "name": "尸城破屋",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "LOC_CONSCIOUSNESS_SEA",
+      "kind": "scene",
+      "name": "姜月初识海/阴山内景",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大",
+        "[warn]  状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大",
+        "[warn]  状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大"
+      ],
+      "id": "WEAPON_DAHUANG_HALBERD",
+      "kind": "weapon",
+      "name": "大荒碎星戟",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "PROP_IMPERIAL_DESK",
+      "kind": "prop",
+      "name": "御案",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "VFX_SYSTEM_PANEL",
+      "kind": "vfx",
+      "name": "系统面板光幕",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "VFX_ESSENCE_STREAMS",
+      "kind": "vfx",
+      "name": "精气洪流",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP11-13 觉醒预备：三色龙鳞、玉色龙角、三色龙珠短",
+        "[warn]  状态百科(P1)   CHAR_JIANG_YUECHU 的状态 `EP01_CLIP11-13 觉醒预备：三色龙鳞、玉色龙角、三色龙珠短"
+      ],
+      "id": "VFX_THREE_DRAGON_ORBS",
+      "kind": "vfx",
+      "name": "三色龙珠",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "VFX_YINSHAN_MIST",
+      "kind": "vfx",
+      "name": "阴山雾影",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "PROP_STATE_LETTER",
+      "kind": "prop",
+      "name": "巴西郡急报/朝廷信札",
+      "overall": "ok",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "VFX_WHITE_QI",
+      "kind": "vfx",
+      "name": "白气缠绕",
+      "overall": "ok",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "VFX_RED_FLOOD_DRAGON_SCROLL",
+      "kind": "vfx",
+      "name": "赤蛟绘卷虚影",
+      "overall": "ok",
+      "prevent": "ok"
+    }
+  ],
+  "supplemental_reports": {
+    "audio_space_consistency": {
+      "available": true,
+      "counts": {
+        "block": 0,
+        "warn": 0
+      },
+      "kind": "n2d_audio_space_consistency",
+      "path": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/audio_space_consistency_第1集.json",
+      "status": "pass"
+    },
+    "expression_state_consistency": {
+      "available": true,
+      "counts": {
+        "block": 0,
+        "warn": 2
+      },
+      "kind": "n2d_expression_state_consistency",
+      "path": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/expression_state_consistency_第1集.json",
+      "status": "pass"
+    },
+    "motion_grammar_consistency": {
+      "available": true,
+      "counts": {
+        "block": 0,
+        "warn": 0
+      },
+      "kind": "n2d_motion_grammar_consistency",
+      "path": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/motion_grammar_consistency_第1集.json",
+      "status": "pass"
+    }
+  },
+  "unattributed": [
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[block]  脸(G1)    ",
+    "[warn]  打斗撞点(SPEC-APEX)    Clip_02（magic_burst）：剪辑峰值钉在 [3.8]s，但本镜 continuity.",
+    "[warn]  打斗撞点(SPEC-APEX)    Clip_11（magic_burst）：剪辑峰值钉在 [4.2]s，但本镜 continuity.",
+    "[warn]  打斗撞点(SPEC-APEX)    Clip_13（magic_burst）：剪辑峰值钉在 [5.5]s，但本镜 continuity.",
+    "[warn]  配音情绪弧(VEA)   镜头4·旁白：台词含强情绪但配音标注「压低」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒",
+    "[warn]  配音情绪弧(VEA)   镜头17·旁白：台词含强情绪但配音标注「硬切」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 ",
+    "[warn]  配音情绪弧(VEA)   镜头34·旁白：台词含强情绪但配音标注「压住」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 ",
+    "[warn]  音乐衔接(BGM)   配乐相邻段速度两极硬接（fast→slow）且无过渡：「[镜头16 皇帝下旨] 朝堂钟声一记」→「[镜头35 集尾",
+    "[warn]  语义谱系(P0)   配音角色 `旁白` 未进入 storyboard。 ",
+    "[warn]  语义谱系(P0)   配音角色 `镇魔卫` 未进入 storyboard。 ",
+    "[warn]  声音空间(ASP)   缺 acoustic_space/room_tone/ambient_map；同一场景的 room tone、混响",
+    "[warn]  节奏密度(Rhythm)   连续 12 个长镜聚集（EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_C",
+    "[warn]  真值源(TRUTH)   项目已有 identity_registry / asset_registry / storyboard / s",
+    "[warn]  视线状态回读(X2)   13 个视线/状态高风险镜当前 image_qc 精度为 degraded；需要 full QC 或人审签收，不",
+    "[warn]  状态转场视频证据(ST1)   检测到 13 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 ",
+    "[warn]  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、",
+    "[warn]  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、",
+    "[warn]  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、",
+    "[warn]  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、",
+    "[warn]  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、",
+    "[warn]  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、",
+    "[warn]  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、",
+    "[warn]  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、",
+    "[warn]  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、",
+    "[warn]  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、",
+    "[warn]  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、",
+    "[warn]  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、",
+    "[warn]  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  世界一致性(WCS)   已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系",
+    "[warn]  生成配方(RCP)   脚本/第1集/voiceover.txt 生成事件缺配方字段：mode, seed/seed_degrade, b",
+    "[warn]  生成配方(RCP)   脚本/第1集/storyboard.json 生成事件缺配方字段：mode, seed/seed_degrade,",
+    "[warn]  强配方Schema(RCP2)   脚本/第1集/voiceover.txt 强配方 schema 缺字段：prompt_sha256, ",
+    "[warn]  强配方Schema(RCP2)   脚本/第1集/storyboard.json 强配方 schema 缺字段：prompt_sha256",
+    "[warn]  系列包装(PKG)   缺系列包装规范（片头/片尾/封面字/字幕字体/转场音效/平台交付名）；多集发布会出现包装漂移。 ",
+    "[warn]  台词语域(D1)   缺 dialogue_register/语域表；目前只能查称谓 + 文白横跳启发式，无法约束角色正式度、句长上限和禁",
+    "[warn]  成本路由(K1)   脚本/第1集/voiceover.txt 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换",
+    "[warn]  成本路由(K1)   脚本/第1集/storyboard.json 生成事件缺 cost/provider 记账；无法计算重试性价比和模型",
+    "[warn]  人审校准集(CAL)   检测到人审签收/覆盖记录，但缺 consistency_calibration.jsonl；误报/漏报没有进入全",
+    "[warn]  一致性探针包(PROBE)   项目已有多集或媒体产物，但缺 consistency_probe_pack；后端/模板升级没有固定哨兵小样",
+    "[warn]  系统面板(UI1)   检出 6 个系统数值/HUD 镜头，但缺 system_state_ledger；等级/经验/成长值单调性无法复核",
+    "[warn]  系统面板(UI1)   检出 6 个 UI/HUD/图中文字镜头，但缺 设定库/ui_asset_registry.json——系统面板/",
+    "[warn]  音乐母题(LM1)   本集有配乐/多角色但缺 设定库/leitmotif_registry.json——建议像 voice_key 一样",
+    "[warn]  环境声(AMB)   本集涉 13 个场景但缺 设定库/ambient_map.json——reverb_profile 只管每场混响，环",
+    "[warn]  文字渲染(OCR1)   Clip_01 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_",
+    "[warn]  文字渲染(OCR1)   Clip_02 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_",
+    "[warn]  文字渲染(OCR1)   Clip_09 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_",
+    "[warn]  文字渲染(OCR1)   Clip_10 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_",
+    "[warn]  文字渲染(OCR1)   Clip_12 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_",
+    "[warn]  文字渲染(OCR1)   Clip_13 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_",
+    "[warn]  叙事状态(NS1)   本集有知识/位置叙事但缺 设定库/narrative_state_ledger.json——跨集易出『知道得太早/",
+    "[warn] image_qc_precision  None image_qc 精度为 degraded：正式进 video 前需补依赖重跑到 full",
+    "[warn] character_consistency  None 崩脸 G1 未执行：未装 insightface——已降级为 Pillow 基础机检",
+    "[warn] scene_consistency  None 接缝接力 未执行：视觉机检不可用；本轮图片一致性为降级判定，需补依赖后重跑或人工复核。 ",
+    "[warn] character_consistency  None 锚点门 N3 未执行：锚点质量门已跳过（未装 insightface/cv2）——主",
+    "[block] character_consistency  图片/EP01_CLIP01.png 崩脸 G1 block：图片/EP01_CLIP01.p",
+    "[block] character_consistency  图片/EP01_CLIP01_end.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP01_mid.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP02.png 崩脸 G1 block：图片/EP01_CLIP02.p",
+    "[block] character_consistency  图片/EP01_CLIP02_end.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP02_mid.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP03.png 崩脸 G1 block：图片/EP01_CLIP03.p",
+    "[block] character_consistency  图片/EP01_CLIP03_end.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP03_mid.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP04.png 崩脸 G1 block：图片/EP01_CLIP04.p",
+    "[block] character_consistency  图片/EP01_CLIP04_end.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP04_mid.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP05.png 崩脸 G1 block：图片/EP01_CLIP05.p",
+    "[block] character_consistency  图片/EP01_CLIP05_end.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP05_mid.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP06.png 崩脸 G1 block：图片/EP01_CLIP06.p",
+    "[block] character_consistency  图片/EP01_CLIP06_end.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP06_mid.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP07.png 崩脸 G1 block：图片/EP01_CLIP07.p",
+    "[block] character_consistency  图片/EP01_CLIP07_end.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP07_mid.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP08.png 崩脸 G1 block：图片/EP01_CLIP08.p",
+    "[block] character_consistency  图片/EP01_CLIP08_end.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP08_mid.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP09.png 崩脸 G1 block：图片/EP01_CLIP09.p",
+    "[block] character_consistency  图片/EP01_CLIP09_end.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP09_mid.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP10.png 崩脸 G1 block：图片/EP01_CLIP10.p",
+    "[block] character_consistency  图片/EP01_CLIP10_end.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP10_mid.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP11.png 崩脸 G1 block：图片/EP01_CLIP11.p",
+    "[block] character_consistency  图片/EP01_CLIP11_end.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP11_mid.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP12.png 崩脸 G1 block：图片/EP01_CLIP12.p",
+    "[block] character_consistency  图片/EP01_CLIP12_end.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP12_mid.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP13.png 崩脸 G1 block：图片/EP01_CLIP13.p",
+    "[block] character_consistency  图片/EP01_CLIP13_end.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP13_mid.png 崩脸 G1 block：图片/EP01_CLIP",
+    "[warn] style_consistency  None 风格归属无法机检：style_contract 未登记风格锚（style_anchor）。请"
+  ],
+  "version": 1
+}

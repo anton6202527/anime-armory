@@ -1,0 +1,154 @@
+{
+  "action_contract": {
+    "owner": "n2d-image",
+    "paid_or_irreversible": true,
+    "prework_steps": [
+      "doctor",
+      "identity",
+      "reference_plan",
+      "image_preflight_gate",
+      "compliance"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": false,
+    "requires_human_approval": true,
+    "requires_trace": true,
+    "schema_version": 1,
+    "specialist": "n2d-visual-agent",
+    "stage_key": "image",
+    "stop_policy": "needs_payment_confirm",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第1集",
+  "files": [
+    {
+      "bytes": 2122,
+      "exists": true,
+      "preview": "# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）\n- 制作模式：原生音画  # source=explicit_user\n- 项目规模：多集长线  # source=explicit_user\n- 基础视觉风格：冷灰写实3D国风漫剧  # source=explicit_user\n- 首切范围：部分先切  # source=explicit_user\n- 视频模型路由：自动按镜头路由  # source=explicit_user\n- 题材：修仙  # source=explicit_user\n- 母题增强：仅建议  # source=explicit_user\n- 字幕语言：中文  # source=explicit_user\n- 画幅：9:16  # source=explicit_user\n- 合规用途：internal_only  # source=explicit_user\n- 拆集节奏：均衡  # source=explicit_user\n- 生图AI：Codex  # source=explicit_user\n- 生图模型：GPT Image 2  # source=explicit_user\n- 生成粒度：整集  # source=explicit_user\n## 记录\n- 2026-06-29 用户明确要求第1集整集出图，无需逐批批准；使用 schema 值 整集\n- 2026-06-29 用户明确要求第1集整集出图，无需逐批批准\n- 2026-06-29 本次自动扫描 Codex 访问入口对应 GPT Image 2；全集统一模型，避免混用\n- 2026-06-29 本次自动扫描仅 Codex 可直接落 PNG；用户授权整集出图，统一走 Codex 访问入口\n- 2026-06-29 设置 拆集节奏 = 均衡 (source=explicit_user, 原值: None)\n- 2026-06-29 当前先做内部打样；正式投放前补平台/备案/AI标识等合规项\n- 2026-06-29 默认竖屏漫剧画幅\n- 2026-06-29 默认国内中文漫剧，先产中文字幕\n- 2026-06-29 系统面板/道行加点母题先登记为建议，正式注入前再由生成阶段确认\n- 2026-06-29 基于第320章窗口：五仙山、道行、妖尊、阴山阳山、神通，先按修仙/玄幻处理\n- 2026-06-29 首跑选择：生视频后端延后到 n2d-video router/probe\n- 2026-06-29 首跑选择：第320章窗口先切少量集验证节拍\n- 2026-06-29 首跑选择：使用推荐默认冷灰写实3D国风漫剧\n- 2026-06-29 首跑选择：长篇中段开工，按多集长线管理一致性\n- 2026-06-29 首跑选择：使用推荐默认 A 原生音画（用户授权自主推进，可后续覆盖）",
+      "relpath": "_设置.md",
+      "sha256": "595d46d62f5a44fc8f02e25032daa16fe9e490851c24db56cd3c7fef8da3785a"
+    },
+    {
+      "bytes": 814,
+      "exists": true,
+      "preview": "# 从变身少女开始斩妖除魔 — 生产进度\n已粗切 **3** 集（从第320章起）（本窗口约估 507 集；部分先切，精修验证后重跑 split 加大 --limit 续切）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 2122 | ✅ | ✅ | ✅ | ✅ | ⬜ | ✅ | ✅ | ✅ | — | ✅ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 2037 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 2076 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+      "relpath": "_进度.md",
+      "sha256": "bc548a7022357cbd817e0af8d849b0ec38fa191fc800d04815cb731f5e357892"
+    },
+    {
+      "bytes": 144679,
+      "exists": true,
+      "preview": "# 从变身少女开始斩妖除魔_第1集_分镜出图 Prompt\n## 生成后自检流程\n所有 PNG 落档后先按逐镜自检过一轮，再跑 `image_qc.py --no-pixel` / full image_qc；未过自检不得进入 video。\n## 用户人物参考图脸锚铁律\n姜月初参考图只取脸型、五官比例、眼神气质、肤质、体态/年龄感；不得继承原图服装、裸露程度、发型/发饰、表情、姿态、配饰、场景、光色或原图剧情状态。战场形态、觉醒形态、服饰、配饰、武器、法宝、表情与状态以小说、角色圣经、identity_registry 的 form/wardrobe_profile、asset_registry 和本镜分镜状态为准。\n## 镜头 1 — 🔑关键镜 EP01_CLIP01 尸城冷开：只来了一个人\n**目标落档**：首帧 `出图/第1集/图片/EP01_CLIP01.png`；中段锚帧 `出图/第1集/图片/EP01_CLIP01_mid.png`；尾帧 `出图/第1集/图片/EP01_CLIP01_end.png`。\n**本镜出图张数**：3 张 = 首帧 1 + 尾帧 1 + 中段锚帧 1；原因：锁尸城规模与女主剪影。\n**场景**：`LOC_BAXI_BATTLEFIELD` / 巴西郡城外尸山血海，残墙焦黑，血雾低伏。\n**字幕/画面信息**：满城妖魔死光了，朝廷的援军却只来了一个人。 / 朝廷的支援……到了！\n**参考图**：\n- `出图/共享/图片/定妆_姜月初_战场形态.png`（CHAR_JIANG_YUECHU/战场形态 front，强度 0.80，多图参考派生）\n- `出图/共享/图片/定妆_姜月初_战场形态_45度.png`（CHAR_JIANG_YUECHU/战场形态 three_quarter，强度 0.65，多图参考派生）\n- `出图/共享/图片/定妆_姜月初_战场形态_侧.png`（CHAR_JIANG_YUECHU/战场形态 side，强度 0.55，多图参考派生）\n- `出图/共享/图片/定妆_姜月初_战场形态_背.png`（CHAR_JIANG_YUECHU/战场形态 back，强度 0.50，多图参考派生）\n- `出图/共享/图片/定妆_姜月初_战场形态_半身.png`（CHAR_JIANG_YUECHU/战场形态 half_body/outfit，强度 0.50，多图参考派生）\n- `出图/共享/图片/定妆_姜月初_战场形态_主参考.jpeg`（CHAR_JIANG_YUECHU/战场形态 face_anchor_refs，只取脸部身份锚，强度 0.70，多图参考派生）\n- `出图/共享/图片/定妆_姜月初_战场形态_脸部特写.png`（CHAR_JIANG_YUECHU/战场形态 expressions，强度 0.60，多图参考派生）\n- `出图/共享/图片/定妆_巴西郡残兵_残兵剪影_剪影.png`（CHAR_GARRISON_SURVIVORS/残兵剪影 face_anchor_refs，强度 0.70，多图参考派生）\n- `出图/共享/图片/定妆_巴西郡残兵_残兵剪影_剪影.png`（CHAR_GARRISON_SURVIVORS/残兵剪影 silhouette，强度 0.45，多图参考派生）\n- `出图/共享/图片/定妆_巴西郡尸城战场.png`（LOC_BAXI_BATTLEFIELD / 巴西郡尸城战场，强度 0.45，asset_registry constraints + drift_forbidden）\n- `出图/共享/图片/定妆_巴西郡尸城大全景.png`（LOC_BAXI_BATTLEFIELD_ESTABLISH / 巴西郡尸城大全景，强度 0.45，asset_registry constraints + drift_forbidden）\n- `出图/共享/图片/定妆_大荒碎星戟.png`（WEAPON_DAHUANG_HALBERD / 大荒碎星戟，强度 0.45，asset_registry constraints + drift_forbidden）\n- 参考图入参清单与预算：selected=角色 ready/planned 基础包 + 场景/道具/VFX 定妆；dropped=无；backend_limit=正式生图前按已选渠道核验；控制图/遮罩=多人同框镜使用区域构建/分层合成。\n**资产身份注册层**：`CHAR_JIANG_YUECHU/战场形态*`；`CHAR_GARRISON_SURVIVORS/残兵剪影`；从 `出图/共享/identity_registry.json` 继承 reference_group / reference_atlas / generation_control / angle_policy / drift_forbidden；生成方式=image2image/多图参考派生，禁止纯文生图。\n**资产引用注册层**：`LOC_BAXI_BATTLEFIELD`；`LOC_BAXI_BATTLEFIELD_ESTABLISH`；`WEAPON_DAHUANG_HALBERD`；从 `asset_registry.json` 继承 reference_group / scene_dna / weapon_profile / constraints / drift_forbidden。\n**多人同框身份槽位**：\n- CENTER_SLOT=`CHAR_JIANG_YUECHU/战场形态*`（primary，画面中心偏上）\n- FOREGROUND_SLOT=`CHAR_GARRISON_SURVIVORS/残\n...",
+      "relpath": "出图/第1集/prompt/01_分镜出图.md",
+      "sha256": "2b1da8031700696ebbb891224ebe72e8caf25f2a0d8bc785f1a46931203d09c5"
+    },
+    {
+      "bytes": 140784,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_identity_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "updated_at",
+          "characters"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/identity_registry.json",
+      "sha256": "dea860f1e842c647a71ce550a09a21f8fd398e91567f7b739cdc58447ce64f49"
+    },
+    {
+      "bytes": 14936,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_asset_reference_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "updated_at",
+          "assets"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/asset_registry.json",
+      "sha256": "1e9b48218105dbf89082e79e04fed2ae256495522f6bfd1cc1ec14d714b8562e"
+    },
+    {
+      "exists": false,
+      "relpath": "生产数据/reference_pack_第1集.json"
+    }
+  ],
+  "genre_pack_context": {
+    "active_scene_archetypes": [],
+    "episode": "第1集",
+    "generated_at": "2026-06-29T06:03:07+00:00",
+    "genre": {
+      "genre_key": "xianxia",
+      "label": "仙侠",
+      "matched": true,
+      "raw": "修仙"
+    },
+    "issues": [],
+    "kind": "n2d_genre_pack_context",
+    "pack": {
+      "degrade_plans": [
+        "长连续御剑/飞舟镜拆成起势、巡航、抵达三镜",
+        "群战法术爆发拆成反打、特写、冲击波结果镜",
+        "御兽骑乘失败时退为近景坐骑接触 + 远景剪影飞行"
+      ],
+      "motion_contract_fields": [
+        "mount_contact",
+        "gait_cycle",
+        "vehicle_lock",
+        "harness_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "qc_focus": [
+        "角色定妆跨集",
+        "法器/灵兽尺度",
+        "飞行空间层次",
+        "法术光色连续",
+        "服饰发型抗漂移"
+      ],
+      "style_binding_policy": {
+        "bind_to_visual_style": true,
+        "notes": "题材 pack 给场景和 QC 权重；基础视觉风格仍由项目 _设置.md 决定。不要把仙侠写成唯一画风。"
+      }
+    },
+    "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔",
+    "stage_key": "image",
+    "status": "pass",
+    "summary": {
+      "active_scenes": 0,
+      "issues": 0,
+      "matched_clips": 0
+    },
+    "version": 1
+  },
+  "kind": "n2d_context_pack",
+  "missing_required_files": [
+    "生产数据/reference_pack_第1集.json"
+  ],
+  "root": "创作区/制漫剧/从变身少女开始斩妖除魔",
+  "stage_key": "image",
+  "usage": {
+    "read_order": [
+      "_设置.md",
+      "_进度.md",
+      "出图/第1集/prompt/01_分镜出图.md",
+      "出图/共享/identity_registry.json",
+      "出图/共享/asset_registry.json"
+    ],
+    "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
+  },
+  "version": 1
+}

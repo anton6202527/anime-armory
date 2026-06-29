@@ -1,0 +1,43 @@
+{
+  "kind": "n2d_boundary_review",
+  "version": 1,
+  "generated_at": "2026-06-29T02:26:27.972948+00:00",
+  "scope": "all",
+  "source": "boundary_audit.py",
+  "reviews": [
+    {
+      "episode": "第1集",
+      "raw_rel": "脚本/第1集/raw.txt",
+      "raw_sha256": "07cda5c0795bdb1e4da7672b0e908c3f16ae959e9a70c2d9e111bdcb4626c30f",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩"
+      ],
+      "decision": "move_boundary",
+      "notes": "第1集 raw 同时包含朝堂求五仙山、巴西郡战后、主角第一次灌注赤鳞妖尊，信息量偏长且结尾停在《化龙经·残三》（无上），钩子不够硬。阶段1精修时不要照 raw 机械落词：建议以巴西郡尸山血海吸收精气冷开场，朝堂五仙山作交叉剪辑；结尾前后挪到“聚灵衍象素材已齐备，是否开始衍化内景？”或“继续灌注，赤蛟点睛”形成下一集阴山成的硬钩。",
+      "reviewed_by": "Codex",
+      "reviewed_at": "2026-06-29"
+    },
+    {
+      "episode": "第3集",
+      "raw_rel": "脚本/第3集/raw.txt",
+      "raw_sha256": "f9a5b94f576127264dc9fa444b7fe009cf964fdff074f5f04df3a88b6c781a6f",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "第3集 raw 以阴山成后出门、孟山劝阻、姜月初一人雷火清剿郡县、徐骁援军误判为“城破人亡噩耗”收尾。虽然 audit 标弱钩，但可保留为悬念断点：阶段1精修时强化徐骁视角和“噩耗将至”的错判，把下一集“巴西郡还在/只有殿下一人”的反转留住。",
+      "reviewed_by": "Codex",
+      "reviewed_at": "2026-06-29"
+    }
+  ]
+}

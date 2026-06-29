@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_GARRISON_SURVIVORS",
+  "character_name": "巴西郡残兵",
+  "package_dir": "设定库/character_assets/CHAR_GARRISON_SURVIVORS__garrison_survivors",
+  "directories": {
+    "reference": "设定库/character_assets/CHAR_GARRISON_SURVIVORS__garrison_survivors/reference",
+    "prompts": "设定库/character_assets/CHAR_GARRISON_SURVIVORS__garrison_survivors/prompts",
+    "lora": "设定库/character_assets/CHAR_GARRISON_SURVIVORS__garrison_survivors/lora",
+    "voice": "设定库/character_assets/CHAR_GARRISON_SURVIVORS__garrison_survivors/voice",
+    "adapters": "设定库/character_assets/CHAR_GARRISON_SURVIVORS__garrison_survivors/adapters",
+    "qc": "设定库/character_assets/CHAR_GARRISON_SURVIVORS__garrison_survivors/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "episode_materials": "脚本/第1集/素材清单.md",
+    "storyboard": "脚本/第1集/storyboard.json"
+  },
+  "current_gaps": [
+    "剪影/低清群像参考 PNG 待出，禁止正脸化"
+  ]
+}

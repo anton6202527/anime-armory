@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_thread_scheduler",
+  "version": 1,
+  "generated_at": "2026-06-29",
+  "threads": [
+    {
+      "id": "THREAD_001",
+      "thread_id": "T001",
+      "status": "candidate",
+      "opened_ep": "第1集",
+      "last_touched_ep": "第1集",
+      "next_due_ep": "第2集",
+      "payoff_ep": "",
+      "open_question": "聚灵衍象素材已齐备，是否开始衍化内景？ 阴山，终于等到了。  🪝集尾",
+      "touch_keywords": [
+        "姜月初",
+        "系统"
+      ]
+    }
+  ]
+}

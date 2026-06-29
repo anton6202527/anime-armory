@@ -1,0 +1,74 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 4,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_程老_朝堂常态.png",
+      "bytes": 2143498,
+      "owner": "CHAR_CHENG_LAO/朝堂常态",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_程老_朝堂常态.png",
+      "role": "character",
+      "sequence": 0,
+      "sha256": "b189a275751ced65fd01cfdb4fe003905fd3bfbcc7c49b2292805d000995c61c",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_程老_朝堂常态_45度.png",
+      "bytes": 2108664,
+      "owner": "CHAR_CHENG_LAO/朝堂常态",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_程老_朝堂常态_45度.png",
+      "role": "character",
+      "sequence": 1,
+      "sha256": "9b35cab9e630dd3b589a1135fcbda3a27ecc6ece052f7871c1e1a450bc8a1c4b",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_程老_朝堂常态_侧.png",
+      "bytes": 1838778,
+      "owner": "CHAR_CHENG_LAO/朝堂常态",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_程老_朝堂常态_侧.png",
+      "role": "character",
+      "sequence": 2,
+      "sha256": "77d02f83899df5971bacb3055b0962ccf7f70c9067fc9c57d52a02e6c344f124",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_程老_朝堂常态_背.png",
+      "bytes": 1958319,
+      "owner": "CHAR_CHENG_LAO/朝堂常态",
+      "priority": 150,
+      "rel_path": "出图/共享/图片/定妆_程老_朝堂常态_背.png",
+      "role": "character",
+      "sequence": 3,
+      "sha256": "325fd4fbd5305259ebb6f6382098e0ec20d5e55d30e9b4760ff0ed6a5ec66fa0",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "form": "朝堂常态",
+      "id": "CHAR_CHENG_LAO",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_程老_朝堂常态.png",
+        "出图/共享/图片/定妆_程老_朝堂常态_45度.png",
+        "出图/共享/图片/定妆_程老_朝堂常态_侧.png",
+        "出图/共享/图片/定妆_程老_朝堂常态_背.png"
+      ]
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "CHAR_CHENG_LAO::定妆_程老_朝堂常态_半身",
+  "target": "出图/共享/图片/定妆_程老_朝堂常态_半身.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_COURT_MINISTERS",
+  "character_name": "朝堂群臣",
+  "package_dir": "设定库/character_assets/CHAR_COURT_MINISTERS__court_ministers",
+  "directories": {
+    "reference": "设定库/character_assets/CHAR_COURT_MINISTERS__court_ministers/reference",
+    "prompts": "设定库/character_assets/CHAR_COURT_MINISTERS__court_ministers/prompts",
+    "lora": "设定库/character_assets/CHAR_COURT_MINISTERS__court_ministers/lora",
+    "voice": "设定库/character_assets/CHAR_COURT_MINISTERS__court_ministers/voice",
+    "adapters": "设定库/character_assets/CHAR_COURT_MINISTERS__court_ministers/adapters",
+    "qc": "设定库/character_assets/CHAR_COURT_MINISTERS__court_ministers/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "episode_materials": "脚本/第1集/素材清单.md",
+    "storyboard": "脚本/第1集/storyboard.json"
+  },
+  "current_gaps": [
+    "剪影/低清群像参考 PNG 待出，禁止正脸化"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "kind": "n2d_image_prompt_manifest",
+  "version": 1,
+  "episode": "第1集",
+  "files": [
+    "出图/共享/prompt/00_索引.md",
+    "出图/共享/prompt/角色定妆.md",
+    "出图/共享/prompt/场景定妆.md",
+    "出图/共享/prompt/道具定妆.md",
+    "出图/共享/prompt/法宝定妆.md",
+    "出图/共享/prompt/特效定妆.md",
+    "出图/第1集/prompt/00_总览.md",
+    "出图/第1集/prompt/01_分镜出图.md"
+  ],
+  "shared_planned_count": 51,
+  "episode_planned_count": 39,
+  "boundary": "prompt_only_no_paid_generation"
+}

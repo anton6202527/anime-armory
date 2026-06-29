@@ -1,0 +1,39 @@
+{
+  "kind": "n2d_possession_ledger",
+  "version": 1,
+  "episode": "第1集",
+  "events": [
+    {
+      "clip": "EP01_CLIP01",
+      "asset": "WEAPON_DAHUANG_HALBERD",
+      "holder": "CHAR_JIANG_YUECHU/战场形态",
+      "action": "wield",
+      "state_after": "held_by_jiang_yuechu",
+      "note": "冷开尸城主角一人一戟剪影。"
+    },
+    {
+      "clip": "EP01_CLIP02",
+      "asset": "WEAPON_DAHUANG_HALBERD",
+      "holder": "CHAR_JIANG_YUECHU/战场形态",
+      "action": "carry",
+      "state_after": "held_by_jiang_yuechu",
+      "note": "吸纳精气时长戟不离身。"
+    },
+    {
+      "clip": "EP01_CLIP05",
+      "asset": "PROP_IMPERIAL_DESK",
+      "holder": "CHAR_EMPEROR_TANG/朝堂常态",
+      "action": "press_on",
+      "state_after": "in_tang_court_high_dais",
+      "note": "皇帝压住御案形成决策压力。"
+    },
+    {
+      "clip": "EP01_CLIP05",
+      "asset": "PROP_STATE_LETTER",
+      "holder": "CHAR_EMPEROR_TANG/朝堂常态",
+      "action": "review",
+      "state_after": "on_imperial_desk",
+      "note": "巴西郡急报在御案上，不发生交接。"
+    }
+  ]
+}

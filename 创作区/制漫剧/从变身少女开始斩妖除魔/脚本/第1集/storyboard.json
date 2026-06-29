@@ -1,0 +1,1657 @@
+{
+  "kind": "n2d_storyboard",
+  "version": 1,
+  "episode": "第1集",
+  "duration": 90.0,
+  "source_chapters": [
+    "第320章",
+    "第321章开头钩子"
+  ],
+  "policy": {
+    "aspect_ratio": "9:16",
+    "mode": "原生音画",
+    "video_backend": "deferred",
+    "midframe_default": true,
+    "tailframe_default": true
+  },
+  "first_3s_visual_hook": {
+    "visual_hook": "巴西郡尸城满地妖魔残骸，唯一站着的是玄衣赤氅少女，静音也能看懂她一个人杀穿全城。",
+    "hook_type": "反差",
+    "content_proposition": "本集回答真正的援军是谁，以及姜月初为何不能立刻破境。",
+    "onscreen_text": "满城妖魔死光，朝廷援军只来了一个人",
+    "onscreen_text_hook": "标题卡大字：满城妖魔死光，朝廷援军只来了一个人",
+    "muted_safe": true,
+    "muted_safe_proof": "画面有血雾尸城、唯一站立的女主、残兵抬头和标题卡大字，关声也能理解危机和反差。",
+    "expected_metric": {
+      "primary": "retention_3s",
+      "target": 0.8
+    }
+  },
+  "retention_promise_ledger": [
+    {
+      "hook_id": "OPENING_LONE_REINFORCEMENT",
+      "promise_type": "opening_hook",
+      "opened_at": "EP01_CLIP01",
+      "promise": "朝廷援军只来了一个人，她是谁、强到什么程度。",
+      "payoff_due": "第1集",
+      "payoff_status": "paid",
+      "payoff_clip": "EP01_CLIP02",
+      "payoff_evidence": "系统面板显示三十七万年道行，满城精气被她一掌收起。"
+    },
+    {
+      "hook_id": "COURT_WUXIAN_MOUNTAIN_PRICE",
+      "promise_type": "mid_hook",
+      "opened_at": "EP01_CLIP04",
+      "promise": "大唐求五仙山援手会付出什么代价。",
+      "payoff_due": "第2集",
+      "delayed_payoff_ep": "第2集",
+      "payoff_status": "open"
+    },
+    {
+      "hook_id": "TAIL_YINSHAN_INTERIOR",
+      "promise_type": "tail_hook",
+      "opened_at": "EP01_CLIP12",
+      "promise": "聚灵衍象已齐备，姜月初是否能衍化阴山。",
+      "payoff_due": "第2集",
+      "delayed_payoff_ep": "第2集",
+      "payoff_status": "open"
+    }
+  ],
+  "creative_variants_used": {
+    "opening_variant": {
+      "variant": "lone_reinforcement_cold_open",
+      "reason": "从中段爆点开工，边界复核已决定改用巴西郡尸城冷开。"
+    },
+    "cliffhanger_cut_variant": {
+      "variant": "system_yinshan_prompt_tail",
+      "reason": "将第321章系统提示前移作硬断点，第2集兑现阴山成。"
+    },
+    "cover_variant": {
+      "variant": "battlefield_lone_hero",
+      "reason": "本集最大卖点是一人光复一道之地。"
+    }
+  },
+  "visual_contract": {
+    "色调基线": "巴西郡冷灰血雾暗红；朝堂冷石青灰和烛金；识海黑蓝虚空与金色绘卷。",
+    "场景光位锚": {
+      "LOC_BAXI_BATTLEFIELD": "左后方冷月主光，地面残火仅作暖边。",
+      "LOC_TANG_COURT": "高处冷顶光压住群臣，御案烛火给皇帝暖边。",
+      "LOC_BROKEN_HOUSE": "门缝冷月侧逆光，弱反光保脸部可读。",
+      "LOC_CONSCIOUSNESS_SEA": "金色绘卷与系统面板自发光，黑蓝虚空作负空间。"
+    },
+    "场景轴线视线": {
+      "LOC_BAXI_BATTLEFIELD": "姜月初居中或画右，残兵从画左下仰视。",
+      "LOC_TANG_COURT": "皇帝高位居中，程老画左下拱手，群臣低头作剪影。",
+      "LOC_BROKEN_HOUSE": "姜月初正面或三分之四侧脸，门在后方，长戟靠画右。",
+      "LOC_CONSCIOUSNESS_SEA": "绘卷横向展开，姜月初眼神与赤蛟竖瞳match cut。"
+    },
+    "角色状态演进": {
+      "CHAR_JIANG_YUECHU": [
+        "EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。",
+        "EP01_CLIP08-10 静修灌注：坐姿稳定，衣装不变，识海金光增强。",
+        "EP01_CLIP11-13 觉醒预备：三色龙鳞、玉色龙角、三色龙珠短暂显现。"
+      ],
+      "CHAR_YOUNG_CAPTAIN": "断臂、残甲、疲惫感只在巴西郡幸存者段出现。",
+      "CHAR_EMPEROR_TANG": "疲惫但威严，不出现战场状态。"
+    },
+    "景别阶梯": "广角尸城冷开 → 主角中近景 → 系统插入 → 朝堂广角/反打 → 幸存者近景 → 静修中近景 → 识海奇观 → 集尾眼神特写。"
+  },
+  "style_contract": {
+    "风格名": "冷灰写实3D国风漫剧",
+    "视觉基调": "可信东方短剧演员骨相与国漫写实美型折中，低饱和冷灰，材质真实，妖气和系统特效克制清晰。",
+    "镜头与构图": "竖屏叙事优先，近景情绪、中景动作、远景尺度交替；35mm建环境，50mm动作和对话，85mm眼神特写。",
+    "光色策略": "冷月、冷石反光和系统自发光为主要光源；朱红披风和暗金护肩作识别强调。",
+    "运动边界": "慢推、硬切、J-cut、match cut为主；高光镜让披风、发丝、精气、龙珠和雾动，人物主体不乱动。",
+    "风格禁忌": "禁欧美魔幻脸、页游高饱和、塑料盔甲、红裙替代赤氅、系统面板烤字、无来源强光、血腥器官特写、脸被雾遮住。"
+  },
+  "clips": [
+    {
+      "id": "EP01_CLIP01",
+      "label": "尸城冷开：只来了一个人",
+      "duration": 5.0,
+      "scene": "巴西郡城外尸山血海，残墙焦黑，血雾低伏。",
+      "location_id": "LOC_BAXI_BATTLEFIELD",
+      "character_ids": [
+        "CHAR_JIANG_YUECHU",
+        "CHAR_GARRISON_SURVIVORS"
+      ],
+      "object_ids": [
+        "WEAPON_DAHUANG_HALBERD"
+      ],
+      "voiceover_indices": [
+        1,
+        2,
+        3
+      ],
+      "subtitle_lines": [
+        "满城妖魔死光了，朝廷的援军却只来了一个人。",
+        "朝廷的支援……到了！"
+      ],
+      "template": "ensemble_blocking",
+      "template_contract": {
+        "template_id": "ensemble_blocking",
+        "geography_map": "巴西郡城外主街废墟，城墙残缺在后景，妖魔残骸沿街道形成引导线。",
+        "scale_reference": "姜月初单人身形与满街妖魔残骸对比，远处残兵作为人类比例尺。",
+        "parallax_planes": [
+          "前景妖魔残影与破旗",
+          "中景姜月初与血雾",
+          "后景残城和冷月"
+        ],
+        "landmark_anchor": "残破巴西郡城门与倒塌旗杆。",
+        "camera_path": "竖屏低角度从地面残骸慢推到姜月初背影。",
+        "establishing_progression": "残骸规模 → 唯一站立的人 → 残兵抬头确认支援。",
+        "reuse_asset_id": "LOC_BAXI_BATTLEFIELD_ESTABLISH",
+        "screen_positions": {
+          "FOREGROUND_SLOT": "CHAR_GARRISON_SURVIVORS 残兵与尸骸在画面下缘/前景，脸不清晰，以剪影和断肢绷带读身份",
+          "CENTER_SLOT": "CHAR_JIANG_YUECHU 位于中景中心偏上，玄衣赤氅剪影清晰，长戟竖向破画面",
+          "BACKGROUND_SLOT": "LOC_BAXI_BATTLEFIELD 尸城街巷、血雾与倒塌城门形成纵深"
+        },
+        "focus_hierarchy": [
+          "姜月初剪影与赤氅",
+          "长戟/白气",
+          "尸城规模",
+          "残兵反应"
+        ],
+        "crowd_simplification": "残兵只做远景剪影/低清脸，避免与主角抢身份；清晰脸只保留姜月初。",
+        "subject_slots": [
+          {
+            "slot": "CENTER_SLOT",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "form": "战场形态",
+            "face_priority": "primary",
+            "position": "画面中心偏上"
+          },
+          {
+            "slot": "FOREGROUND_SLOT",
+            "character_id": "CHAR_GARRISON_SURVIVORS",
+            "form": "残兵剪影",
+            "face_priority": "silhouette_only",
+            "position": "画左下/画右下前景"
+          }
+        ],
+        "多人同框身份槽位": [
+          {
+            "slot": "CENTER_SLOT",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "form": "战场形态",
+            "face_priority": "primary",
+            "position": "画面中心偏上"
+          },
+          {
+            "slot": "FOREGROUND_SLOT",
+            "character_id": "CHAR_GARRISON_SURVIVORS",
+            "form": "残兵剪影",
+            "face_priority": "silhouette_only",
+            "position": "画左下/画右下前景"
+          }
+        ],
+        "multi_subject_strategy": "远景群像 + regional_construct_required + split_composite_required：先出空尸城底板，再按 CENTER_SLOT 锁主角；残兵低清剪影，不生成多张清晰具名脸。",
+        "多人同框执行策略": "远景群像 + regional_construct_required + split_composite_required：先出空尸城底板，再按 CENTER_SLOT 锁主角；残兵低清剪影，不生成多张清晰具名脸。",
+        "same_frame_policy": "远景群像 + regional_construct_required + split_composite_required：先出空尸城底板，再按 CENTER_SLOT 锁主角；残兵低清剪影，不生成多张清晰具名脸。",
+        "beats": [
+          "黑场后尸城全景压入",
+          "残兵仰视主角剪影",
+          "姜月初长戟与赤氅定格",
+          "掌心精气将起"
+        ],
+        "blocking": "姜月初中心偏上站立，残兵与尸骸在前景/下缘，尸城街巷拉开纵深。",
+        "camera_rule": "高位广角慢推到中景，camera=observer，不做主角正面肖像摆拍。",
+        "continuity_must": [
+          "冷青灰尸城光位不跳",
+          "姜月初赤氅与长戟剪影连续",
+          "残兵低清剪影不抢脸",
+          "尾帧接 Clip2 掌心吸精气起幅"
+        ],
+        "negative": [
+          "looking at viewer",
+          "front-facing portrait",
+          "crowd faces over-detailed",
+          "warm heroic sunset",
+          "modern city"
+        ]
+      },
+      "entity_schedule": {
+        "characters": [
+          "CHAR_JIANG_YUECHU/战场形态",
+          "CHAR_GARRISON_SURVIVORS/远景"
+        ],
+        "objects": [
+          "WEAPON_DAHUANG_HALBERD"
+        ],
+        "locations": [
+          "LOC_BAXI_BATTLEFIELD"
+        ],
+        "knowledge_state": {
+          "CHAR_GARRISON_SURVIVORS": [
+            "知道朝廷支援到达但未理解姜月初下一步"
+          ]
+        },
+        "required_presence": [
+          "CHAR_JIANG_YUECHU",
+          "WEAPON_DAHUANG_HALBERD",
+          "LOC_BAXI_BATTLEFIELD"
+        ]
+      },
+      "continuity": {
+        "start_state": "黑场后直接进入满地妖魔残躯，静音也能看懂大战刚结束。",
+        "end_state": "姜月初立于尸城血雾中，掌心将要吸起精气。",
+        "transition": "低频硬切接系统面板",
+        "need_endframe": true,
+        "eyeline": "残兵从画左下仰视画面中心的姜月初。",
+        "shot_size": "wide_to_medium",
+        "midframe": {
+          "midframe_png": "出图/第1集/图片/EP01_CLIP01_mid.png",
+          "split_at_sec": 2.5,
+          "reason": "锁尸城规模与女主剪影。"
+        },
+        "expression_span": "微",
+        "endframe_png": "出图/第1集/图片/EP01_CLIP01_end.png",
+        "tailframe_generation": "image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress"
+      },
+      "firstframe_png": "出图/第1集/图片/EP01_CLIP01.png",
+      "large_scene_contract": {
+        "template_id": "large_establishing",
+        "geography_map": "巴西郡城外主街废墟，城墙残缺在后景，妖魔残骸沿街道形成引导线。",
+        "scale_reference": "姜月初单人身形与满街妖魔残骸对比，远处残兵作为人类比例尺。",
+        "parallax_planes": [
+          "前景妖魔残影与破旗",
+          "中景姜月初与血雾",
+          "后景残城和冷月"
+        ],
+        "landmark_anchor": "残破巴西郡城门与倒塌旗杆。",
+        "camera_path": "竖屏低角度从地面残骸慢推到姜月初背影。",
+        "establishing_progression": "残骸规模 → 唯一站立的人 → 残兵抬头确认支援。",
+        "reuse_asset_id": "LOC_BAXI_BATTLEFIELD_ESTABLISH"
+      }
+    },
+    {
+      "id": "EP01_CLIP02",
+      "label": "白气护体与精气洪流",
+      "duration": 7.0,
+      "scene": "巴西郡城外，姜月初吸收妖魔精气。",
+      "location_id": "LOC_BAXI_BATTLEFIELD",
+      "character_ids": [
+        "CHAR_JIANG_YUECHU"
+      ],
+      "object_ids": [
+        "WEAPON_DAHUANG_HALBERD",
+        "VFX_WHITE_QI",
+        "VFX_SYSTEM_PANEL"
+      ],
+      "voiceover_indices": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "subtitle_lines": [
+        "她叫姜月初。周身白气游走，妖魔尚未近身便被绞杀干净。",
+        "系统面板显示：【当前道行：三十七万九千八百四十五年】。",
+        "还不够。"
+      ],
+      "template": "magic_burst",
+      "template_contract": {
+        "template_id": "magic_burst",
+        "beats": [
+          "白气贴身旋转",
+          "系统面板冷光浮现",
+          "精气洪流入掌",
+          "气流在气海散尽"
+        ],
+        "blocking": "姜月初画面中心偏右，戟柄在画右形成竖向锚，精气从四周向掌心汇聚。",
+        "camera_rule": "中近景慢推，不环绕，不让面板遮脸。",
+        "continuity_must": [
+          "玄衣赤氅不变",
+          "右肩护肩在画面右侧",
+          "系统面板内部留空给overlay"
+        ],
+        "negative": [
+          "不要把白气画成火焰",
+          "不要让AI生成可读面板文字",
+          "不要遮住脸"
+        ],
+        "charge_frame": "白气开始贴身旋转。",
+        "release_frame": "千百道青白精气涌入掌心。",
+        "effect_asset": "VFX_WHITE_QI + VFX_ESSENCE_STREAMS",
+        "energy_path": "妖魔残骸 → 掌心 → 气海山脚 → 消散。",
+        "collision_or_apex_frame": "3.8s 精气洪流最密。",
+        "power_shift": "她已有三十七万年道行，但气海已满。",
+        "vfx_asset_lock": "白气为青白细线，精气为半透明流束，系统面板为青白空底框。",
+        "intensity_curve": "低 → 中高 → 散尽",
+        "speed_curve": "精气汇聚加速，散尽瞬间降速。",
+        "spatial_path": "气流从画面四边向中心手掌汇聚。",
+        "camera_path": "侧脸中景慢推至掌心和面板过肩插入。",
+        "screen_direction": "气流向画面中心收束。",
+        "readability_beats": [
+          "先看清角色",
+          "再看清面板",
+          "最后看清精气散尽"
+        ],
+        "degrade_plan": "若精气路径混乱，拆成面板插入、掌心特写、气海内视三镜。",
+        "keyframe_plan": {
+          "start": "白气贴身",
+          "intent_mid": "面板数值",
+          "impact_or_apex": "精气洪流",
+          "result_or_recovery": "气海散尽",
+          "end": "姜月初垂眸"
+        },
+        "post_cue_points": {
+          "pre_peak": "2.0s 面板提示音",
+          "peak": "3.8s 精气吸入低频",
+          "aftershock_or_hold": "6.2s 气流消散静默"
+        },
+        "physics_guard": "精气是VFX流体，角色身体和衣装不变形；面板文字走overlay。",
+        "combat_micro_expression": "姜月初表情克制，只在精气散尽时眉心微收。",
+        "secondary_motion": "披风末端、发丝、尘雾和精气流束向掌心轻动。",
+        "apex_light": "精气洪流峰值给掌心青白轮廓光，脸部不过曝。"
+      },
+      "entity_schedule": {
+        "characters": [
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "objects": [
+          "WEAPON_DAHUANG_HALBERD",
+          "VFX_WHITE_QI",
+          "VFX_SYSTEM_PANEL"
+        ],
+        "locations": [
+          "LOC_BAXI_BATTLEFIELD"
+        ],
+        "knowledge_state": {
+          "CHAR_JIANG_YUECHU": [
+            "知道当前道行充足但气海已满"
+          ]
+        },
+        "required_presence": [
+          "CHAR_JIANG_YUECHU",
+          "VFX_SYSTEM_PANEL"
+        ]
+      },
+      "continuity": {
+        "start_state": "姜月初立于尸城血雾中，掌心将要吸起精气。",
+        "end_state": "精气散尽，姜月初垂眸确认气海已满。",
+        "transition": "气海嗡鸣J-cut进内视",
+        "need_endframe": true,
+        "eyeline": "姜月初视线由掌心下移到系统面板。",
+        "shot_size": "medium_to_close",
+        "midframe": {
+          "midframe_png": "出图/第1集/图片/EP01_CLIP02_mid.png",
+          "split_at_sec": 3.5,
+          "reason": "锁精气洪流峰值和面板位置。"
+        },
+        "expression_span": "中",
+        "endframe_png": "出图/第1集/图片/EP01_CLIP02_end.png",
+        "tailframe_generation": "image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress"
+      },
+      "firstframe_png": "出图/第1集/图片/EP01_CLIP02.png"
+    },
+    {
+      "id": "EP01_CLIP03",
+      "label": "阴山未成，压下燃灯",
+      "duration": 6.0,
+      "scene": "战场侧脸与气海内视叠层。",
+      "location_id": "LOC_BAXI_BATTLEFIELD",
+      "character_ids": [
+        "CHAR_JIANG_YUECHU"
+      ],
+      "object_ids": [
+        "VFX_YINSHAN_MIST"
+      ],
+      "voiceover_indices": [
+        8,
+        9
+      ],
+      "subtitle_lines": [
+        "观山圆满了。想再进一步，只剩燃灯这道门。",
+        "可阴山未成，现在跨过去，后面就难说了。"
+      ],
+      "template": "meditation_cultivation",
+      "template_contract": {
+        "template_id": "meditation_cultivation",
+        "beats": [
+          "侧脸压低",
+          "气海阳山浮现",
+          "阴山空位被雾遮住",
+          "她选择暂缓"
+        ],
+        "blocking": "姜月初静立，内视画面作为半透明叠层在画面左侧。",
+        "camera_rule": "85mm近景慢推，不旋转，内视叠层保持半透明。",
+        "continuity_must": [
+          "战场形态不变",
+          "阴山只露雾影不提前成型"
+        ],
+        "negative": [
+          "不要出现完整阴山",
+          "不要突破光柱",
+          "不要把静立写成乱舞法术"
+        ],
+        "posture_lock": "站姿稳定，手臂自然垂下，披风轻动。",
+        "breath_cycle": "一次压低呼吸，肩膀几乎不动。",
+        "energy_flow": "气海内视中灵气绕阳山山脚一圈后散开。",
+        "aura_vfx_lock": "阴山雾影为冷蓝灰水墨雾，不发强金光。",
+        "inner_state_beat": "她决定先补阴山，不立刻跨入燃灯。",
+        "environment_stillness": "残火和血雾低幅流动，主体不大动。",
+        "micro_motion": "眼神微动、披风末端轻摆、雾影翻涌。",
+        "readability_beats": [
+          "气海已满",
+          "阴山未成",
+          "她做出选择"
+        ],
+        "degrade_plan": "若内视叠层混乱，改为侧脸特写 + 后期雾形overlay。",
+        "keyframe_plan": {
+          "start": "侧脸",
+          "intent_mid": "气海双山空位",
+          "impact_or_apex": "雾影遮空位",
+          "result_or_recovery": "眼神定住",
+          "end": "朝堂冷雾转场"
+        },
+        "post_cue_points": {
+          "pre_peak": "2.0s 气海低鸣",
+          "peak": "3.5s 阴山空位显现",
+          "aftershock_or_hold": "5.2s 冷静收住"
+        },
+        "physics_guard": "内视是叠层VFX，不改变战场真实空间与角色衣装。"
+      },
+      "entity_schedule": {
+        "characters": [
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "objects": [
+          "VFX_YINSHAN_MIST"
+        ],
+        "locations": [
+          "LOC_BAXI_BATTLEFIELD"
+        ],
+        "knowledge_state": {
+          "CHAR_JIANG_YUECHU": [
+            "知道阴山未成，暂缓燃灯"
+          ]
+        },
+        "required_presence": [
+          "CHAR_JIANG_YUECHU",
+          "VFX_YINSHAN_MIST"
+        ]
+      },
+      "continuity": {
+        "start_state": "精气散尽，姜月初垂眸确认气海已满。",
+        "end_state": "五仙山三字压住朝堂。",
+        "transition": "内视空山雾影match cut到朝堂冷雾",
+        "need_endframe": true,
+        "eyeline": "姜月初视线向内收，观众看内视叠层。",
+        "shot_size": "close",
+        "midframe": {
+          "midframe_png": "出图/第1集/图片/EP01_CLIP03_mid.png",
+          "split_at_sec": 3.0,
+          "reason": "锁阴山未成的内视信息。"
+        },
+        "expression_span": "微",
+        "endframe_png": "出图/第1集/图片/EP01_CLIP03_end.png",
+        "tailframe_generation": "image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress"
+      },
+      "firstframe_png": "出图/第1集/图片/EP01_CLIP03.png"
+    },
+    {
+      "id": "EP01_CLIP04",
+      "label": "朝堂被五仙山压住",
+      "duration": 7.0,
+      "scene": "大唐朝堂，五仙山三字落下后群臣沉默。",
+      "location_id": "LOC_TANG_COURT",
+      "character_ids": [
+        "CHAR_CHENG_LAO",
+        "CHAR_EMPEROR_TANG",
+        "CHAR_COURT_MINISTERS"
+      ],
+      "object_ids": [
+        "PROP_IMPERIAL_DESK"
+      ],
+      "voiceover_indices": [
+        10,
+        11,
+        12
+      ],
+      "subtitle_lines": [
+        "同一时间，大唐朝堂也被三个字压到鸦雀无声。",
+        "五仙山。",
+        "传闻山中仙人不老不死，太祖立国时曾与其订盟。"
+      ],
+      "template": "public_confrontation",
+      "template_contract": {
+        "template_id": "public_confrontation",
+        "beats": [
+          "朝堂建立",
+          "程老说出五仙山",
+          "群臣沉默",
+          "盟约信息压下"
+        ],
+        "blocking": "皇帝居中高位，程老画左下，群臣只作低头剪影。",
+        "camera_rule": "广角建立后慢推程老，不切无意义群臣清脸。",
+        "continuity_must": [
+          "皇帝始终高位",
+          "程老始终在臣位",
+          "烛火冷暖不跳"
+        ],
+        "negative": [
+          "不要把朝堂拍成红金页游",
+          "不要群臣人人清脸",
+          "不要出现仙山实体"
+        ],
+        "stakes": "程老把“五仙山不能轻入”的代价压到皇帝面前；朝堂是否出兵/借力决定剑南尸城后续支援。",
+        "evidence_ladder": [
+          "五仙山传闻",
+          "巴西郡尸祸",
+          "姜月初一人斩妖后的战报",
+          "朝廷必须在代价与救民之间选择"
+        ],
+        "power_shift": "话语权从皇帝的命令转向程老掌握的五仙山情报；群臣由议论转为噤声。",
+        "crowd_reaction_order": [
+          "群臣低声议论",
+          "程老出列",
+          "皇帝压住御案",
+          "殿内噤声"
+        ],
+        "subject_slots": [
+          {
+            "slot": "LEFT_SLOT",
+            "character_id": "CHAR_CHENG_LAO",
+            "form": "朝堂常态",
+            "face_priority": "secondary",
+            "position": "画左前景/台阶下"
+          },
+          {
+            "slot": "RIGHT_SLOT",
+            "character_id": "CHAR_EMPEROR_TANG",
+            "form": "朝堂常态",
+            "face_priority": "primary",
+            "position": "画右高位御座"
+          },
+          {
+            "slot": "BACKGROUND_SLOT",
+            "character_id": "CHAR_COURT_MINISTERS",
+            "form": "群臣剪影",
+            "face_priority": "silhouette_only",
+            "position": "后景两侧"
+          }
+        ],
+        "多人同框身份槽位": [
+          {
+            "slot": "LEFT_SLOT",
+            "character_id": "CHAR_CHENG_LAO",
+            "form": "朝堂常态",
+            "face_priority": "secondary",
+            "position": "画左前景/台阶下"
+          },
+          {
+            "slot": "RIGHT_SLOT",
+            "character_id": "CHAR_EMPEROR_TANG",
+            "form": "朝堂常态",
+            "face_priority": "primary",
+            "position": "画右高位御座"
+          },
+          {
+            "slot": "BACKGROUND_SLOT",
+            "character_id": "CHAR_COURT_MINISTERS",
+            "form": "群臣剪影",
+            "face_priority": "silhouette_only",
+            "position": "后景两侧"
+          }
+        ],
+        "multi_subject_strategy": "shot_reverse_shot + 景别分层 + regional_construct_required：皇帝/程老清脸拆过肩反打，群臣只做低清背景层。",
+        "多人同框执行策略": "shot_reverse_shot + 景别分层 + regional_construct_required：皇帝/程老清脸拆过肩反打，群臣只做低清背景层。",
+        "same_frame_policy": "shot_reverse_shot + 景别分层 + regional_construct_required：皇帝/程老清脸拆过肩反打，群臣只做低清背景层。"
+      },
+      "entity_schedule": {
+        "characters": [
+          "CHAR_CHENG_LAO",
+          "CHAR_EMPEROR_TANG",
+          "CHAR_COURT_MINISTERS/背景剪影"
+        ],
+        "objects": [
+          "PROP_IMPERIAL_DESK"
+        ],
+        "locations": [
+          "LOC_TANG_COURT"
+        ],
+        "knowledge_state": {
+          "CHAR_EMPEROR_TANG": [
+            "知道五仙山可能是最后求援方向"
+          ]
+        },
+        "required_presence": [
+          "CHAR_CHENG_LAO",
+          "CHAR_EMPEROR_TANG",
+          "LOC_TANG_COURT"
+        ]
+      },
+      "continuity": {
+        "start_state": "五仙山三字压住朝堂。",
+        "end_state": "皇帝握住御案，等程老说出代价。",
+        "transition": "过肩反打",
+        "need_endframe": true,
+        "eyeline": "程老仰视皇帝，皇帝俯视群臣。",
+        "shot_size": "wide_to_medium",
+        "midframe": {
+          "midframe_png": "出图/第1集/图片/EP01_CLIP04_mid.png",
+          "split_at_sec": 3.5,
+          "reason": "锁朝堂空间层级与五仙山压力。"
+        },
+        "expression_span": "中",
+        "endframe_png": "出图/第1集/图片/EP01_CLIP04_end.png",
+        "tailframe_generation": "image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress"
+      },
+      "firstframe_png": "出图/第1集/图片/EP01_CLIP04.png"
+    },
+    {
+      "id": "EP01_CLIP05",
+      "label": "皇帝下旨求仙山",
+      "duration": 7.0,
+      "scene": "皇帝与程老正反打，朝堂求援定局。",
+      "location_id": "LOC_TANG_COURT",
+      "character_ids": [
+        "CHAR_EMPEROR_TANG",
+        "CHAR_CHENG_LAO"
+      ],
+      "object_ids": [
+        "PROP_IMPERIAL_DESK",
+        "PROP_STATE_LETTER"
+      ],
+      "voiceover_indices": [
+        13,
+        14,
+        15,
+        16
+      ],
+      "subtitle_lines": [
+        "依程老之见，五仙山会救大唐吗？",
+        "回陛下，求仙山援手，自然要付代价。",
+        "传朕旨意！备国书，遣使入五仙山！"
+      ],
+      "template": "public_confrontation",
+      "template_contract": {
+        "template_id": "public_confrontation",
+        "beats": [
+          "皇帝发问",
+          "程老说代价",
+          "社稷苍生压迫",
+          "皇帝下旨"
+        ],
+        "blocking": "皇帝画面中心低角度，程老画左下拱手，御案隔开权力距离。",
+        "camera_rule": "正反打守轴线，皇帝下旨用低角度慢推。",
+        "continuity_must": [
+          "程老不越位",
+          "皇帝威严与疲惫并存",
+          "国书只是暗示不抢戏"
+        ],
+        "negative": [
+          "不要让群臣插话",
+          "不要改变朝堂光位",
+          "不要把五仙山画成实景"
+        ],
+        "stakes": "皇帝必须在风险未明时决定是否让姜月初继续深入阴山线索；御案上的急报成为决策压力。",
+        "evidence_ladder": [
+          "巴西郡急报",
+          "程老五仙山警告",
+          "皇帝追问代价",
+          "钟声落下形成决策钩子"
+        ],
+        "power_shift": "皇帝从被动听报转为主动下令，程老保留未说尽的代价。",
+        "crowd_reaction_order": [
+          "程老停顿",
+          "皇帝手指压住御案急报",
+          "群臣屏息",
+          "钟声切断朝堂"
+        ],
+        "subject_slots": [
+          {
+            "slot": "LEFT_SLOT",
+            "character_id": "CHAR_CHENG_LAO",
+            "form": "朝堂常态",
+            "face_priority": "secondary",
+            "position": "画左下仰视"
+          },
+          {
+            "slot": "RIGHT_SLOT",
+            "character_id": "CHAR_EMPEROR_TANG",
+            "form": "朝堂常态",
+            "face_priority": "primary",
+            "position": "画右上/御案后"
+          }
+        ],
+        "多人同框身份槽位": [
+          {
+            "slot": "LEFT_SLOT",
+            "character_id": "CHAR_CHENG_LAO",
+            "form": "朝堂常态",
+            "face_priority": "secondary",
+            "position": "画左下仰视"
+          },
+          {
+            "slot": "RIGHT_SLOT",
+            "character_id": "CHAR_EMPEROR_TANG",
+            "form": "朝堂常态",
+            "face_priority": "primary",
+            "position": "画右上/御案后"
+          }
+        ],
+        "multi_subject_strategy": "shot_reverse_shot + split_composite_required：先分别生成皇帝与程老单人层，再合成同一轴线；御案与急报作为 PROP 层锁位。",
+        "多人同框执行策略": "shot_reverse_shot + split_composite_required：先分别生成皇帝与程老单人层，再合成同一轴线；御案与急报作为 PROP 层锁位。",
+        "same_frame_policy": "shot_reverse_shot + split_composite_required：先分别生成皇帝与程老单人层，再合成同一轴线；御案与急报作为 PROP 层锁位。"
+      },
+      "entity_schedule": {
+        "characters": [
+          "CHAR_EMPEROR_TANG",
+          "CHAR_CHENG_LAO"
+        ],
+        "objects": [
+          "PROP_IMPERIAL_DESK",
+          "PROP_STATE_LETTER"
+        ],
+        "locations": [
+          "LOC_TANG_COURT"
+        ],
+        "knowledge_state": {
+          "CHAR_EMPEROR_TANG": [
+            "决定饮鸩止渴求援五仙山"
+          ]
+        },
+        "required_presence": [
+          "CHAR_EMPEROR_TANG",
+          "CHAR_CHENG_LAO",
+          "LOC_TANG_COURT"
+        ]
+      },
+      "continuity": {
+        "start_state": "皇帝握住御案，等程老说出代价。",
+        "end_state": "朝堂钟声落下，镜头硬切回剑南尸城。",
+        "transition": "钟声hard cut",
+        "need_endframe": true,
+        "eyeline": "皇帝向下看程老，程老仰视。",
+        "shot_size": "medium_to_close",
+        "midframe": {
+          "midframe_png": "出图/第1集/图片/EP01_CLIP05_mid.png",
+          "split_at_sec": 3.5,
+          "reason": "锁皇帝决策表情。"
+        },
+        "expression_span": "中",
+        "endframe_png": "出图/第1集/图片/EP01_CLIP05_end.png",
+        "tailframe_generation": "image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress"
+      },
+      "firstframe_png": "出图/第1集/图片/EP01_CLIP05.png"
+    },
+    {
+      "id": "EP01_CLIP06",
+      "label": "幸存者走出废墟",
+      "duration": 7.0,
+      "scene": "巴西郡幸存者从残垣后走出，断臂校尉上前。",
+      "location_id": "LOC_BAXI_BATTLEFIELD",
+      "character_ids": [
+        "CHAR_JIANG_YUECHU",
+        "CHAR_YOUNG_CAPTAIN",
+        "CHAR_GARRISON_SURVIVORS"
+      ],
+      "object_ids": [
+        "WEAPON_DAHUANG_HALBERD"
+      ],
+      "voiceover_indices": [
+        17,
+        18,
+        19,
+        20
+      ],
+      "subtitle_lines": [
+        "可皇帝不知道，剑南道的尸山之上，已经有人杀出血路。",
+        "殿下……巴西郡以南，诸郡皆已沦陷。",
+        "辛苦你们了。"
+      ],
+      "template": "ensemble_blocking",
+      "template_contract": {
+        "template_id": "ensemble_blocking",
+        "beats": [
+          "废墟后幸存者露面",
+          "断臂校尉踉跄上前",
+          "姜月初语气放缓",
+          "校尉挡脸崩溃"
+        ],
+        "blocking": "姜月初在画面右侧稳定，校尉画左前景，幸存者只作后景剪影。",
+        "camera_rule": "主角和校尉清脸，后景幸存者不清脸，避免多人同框串脸。",
+        "continuity_must": [
+          "校尉断臂状态保持",
+          "姜月初衣装不变",
+          "幸存者只做群体情绪层"
+        ],
+        "negative": [
+          "不要给每个幸存者清晰五官",
+          "不要改变校尉断臂方向",
+          "不要让主角表情过度哭泣"
+        ],
+        "screen_positions": {
+          "LEFT_SLOT": "CHAR_YOUNG_CAPTAIN 断臂校尉在画左前景半跪，脸部可辨但低于主角优先级",
+          "CENTER_SLOT": "CHAR_JIANG_YUECHU 画面中心偏右站立，赤氅背影与长戟形成主剪影",
+          "BACKGROUND_SLOT": "CHAR_GARRISON_SURVIVORS 幸存守军在后景分层，不画多张清晰脸"
+        },
+        "focus_hierarchy": [
+          "姜月初赤氅背影",
+          "断臂校尉抬头",
+          "幸存者层次",
+          "尸城残烟"
+        ],
+        "crowd_simplification": "幸存者只保留姿态和破甲轮廓，避免生成多张可识别新脸；清晰脸最多主角+校尉。",
+        "subject_slots": [
+          {
+            "slot": "CENTER_SLOT",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "form": "战场形态",
+            "face_priority": "primary",
+            "position": "画面中心偏右"
+          },
+          {
+            "slot": "LEFT_SLOT",
+            "character_id": "CHAR_YOUNG_CAPTAIN",
+            "form": "断臂校尉",
+            "face_priority": "secondary",
+            "position": "画左前景"
+          },
+          {
+            "slot": "BACKGROUND_SLOT",
+            "character_id": "CHAR_GARRISON_SURVIVORS",
+            "form": "残兵剪影",
+            "face_priority": "silhouette_only",
+            "position": "后景"
+          }
+        ],
+        "多人同框身份槽位": [
+          {
+            "slot": "CENTER_SLOT",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "form": "战场形态",
+            "face_priority": "primary",
+            "position": "画面中心偏右"
+          },
+          {
+            "slot": "LEFT_SLOT",
+            "character_id": "CHAR_YOUNG_CAPTAIN",
+            "form": "断臂校尉",
+            "face_priority": "secondary",
+            "position": "画左前景"
+          },
+          {
+            "slot": "BACKGROUND_SLOT",
+            "character_id": "CHAR_GARRISON_SURVIVORS",
+            "form": "残兵剪影",
+            "face_priority": "silhouette_only",
+            "position": "后景"
+          }
+        ],
+        "multi_subject_strategy": "regional_construct_required + split_composite_required：主角与校尉分区锁脸，残兵只做背景剪影层。",
+        "多人同框执行策略": "regional_construct_required + split_composite_required：主角与校尉分区锁脸，残兵只做背景剪影层。",
+        "same_frame_policy": "regional_construct_required + split_composite_required：主角与校尉分区锁脸，残兵只做背景剪影层。"
+      },
+      "entity_schedule": {
+        "characters": [
+          "CHAR_JIANG_YUECHU/战场形态",
+          "CHAR_YOUNG_CAPTAIN/断臂",
+          "CHAR_GARRISON_SURVIVORS/背景"
+        ],
+        "objects": [
+          "WEAPON_DAHUANG_HALBERD"
+        ],
+        "locations": [
+          "LOC_BAXI_BATTLEFIELD"
+        ],
+        "knowledge_state": {
+          "CHAR_YOUNG_CAPTAIN": [
+            "知道巴西郡以南沦陷",
+            "尚未理解姜月初要独自光复"
+          ]
+        },
+        "required_presence": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_YOUNG_CAPTAIN"
+        ]
+      },
+      "continuity": {
+        "start_state": "朝堂钟声落下，镜头硬切回剑南尸城。",
+        "end_state": "姜月初的赤氅背影转向破屋。",
+        "transition": "声音先行，幸存者脚步声接披风声",
+        "need_endframe": true,
+        "eyeline": "校尉仰视姜月初，姜月初低头看校尉。",
+        "shot_size": "medium",
+        "midframe": {
+          "midframe_png": "出图/第1集/图片/EP01_CLIP06_mid.png",
+          "split_at_sec": 3.5,
+          "reason": "锁校尉断臂与幸存者层次。"
+        },
+        "expression_span": "中",
+        "endframe_png": "出图/第1集/图片/EP01_CLIP06_end.png",
+        "tailframe_generation": "image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress"
+      },
+      "firstframe_png": "出图/第1集/图片/EP01_CLIP06.png"
+    },
+    {
+      "id": "EP01_CLIP07",
+      "label": "一人光复一道之地",
+      "duration": 6.0,
+      "scene": "姜月初转身离去，校尉意识到她要独自光复剑南。",
+      "location_id": "LOC_BAXI_BATTLEFIELD",
+      "character_ids": [
+        "CHAR_JIANG_YUECHU",
+        "CHAR_YOUNG_CAPTAIN"
+      ],
+      "object_ids": [
+        "WEAPON_DAHUANG_HALBERD"
+      ],
+      "voiceover_indices": [
+        21,
+        22,
+        23,
+        24
+      ],
+      "subtitle_lines": [
+        "你们在此等候。若援军到了，让他们接管此地山河。",
+        "殿下的意思是……",
+        "她要以一人之力，光复一道之地。"
+      ],
+      "template": "dialogue_shot_reverse",
+      "template_contract": {
+        "template_id": "dialogue_shot_reverse",
+        "beats": [
+          "姜月初交代",
+          "校尉疑惑",
+          "赤氅背影离开",
+          "校尉顿悟"
+        ],
+        "blocking": "姜月初画右转身离开，校尉画左前景抬头，二人不做复杂清晰同框近景。",
+        "camera_rule": "过肩反打守左右关系，爽点落在背影中景和校尉反应。",
+        "continuity_must": [
+          "姜月初赤氅从画右掠过",
+          "校尉仍留在原地",
+          "长戟不丢失"
+        ],
+        "negative": [
+          "不要让二人贴脸同框",
+          "不要让主角回头大哭",
+          "不要切到无关援军"
+        ],
+        "axis": "破屋门口横轴：姜月初由画右向画内走，校尉在画左前景目送；反打保持180度轴线。",
+        "eyeline": "校尉视线锁姜月初背影，姜月初不看镜头，视线朝破屋门内。",
+        "shot_pairing": "A镜校尉过肩看姜月初背影，B镜姜月初背侧轮廓入门；同一轴线、同一冷青灰光位。",
+        "subject_slots": [
+          {
+            "slot": "LEFT_SLOT",
+            "character_id": "CHAR_YOUNG_CAPTAIN",
+            "form": "断臂校尉",
+            "face_priority": "secondary",
+            "position": "画左前景过肩"
+          },
+          {
+            "slot": "RIGHT_SLOT",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "form": "战场形态",
+            "face_priority": "primary_back_view",
+            "position": "画右中景背影"
+          }
+        ],
+        "多人同框身份槽位": [
+          {
+            "slot": "LEFT_SLOT",
+            "character_id": "CHAR_YOUNG_CAPTAIN",
+            "form": "断臂校尉",
+            "face_priority": "secondary",
+            "position": "画左前景过肩"
+          },
+          {
+            "slot": "RIGHT_SLOT",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "form": "战场形态",
+            "face_priority": "primary_back_view",
+            "position": "画右中景背影"
+          }
+        ],
+        "multi_subject_strategy": "shot_reverse_shot + split_composite_required：校尉反应与姜月初背影分层，主角背影不强求正脸。",
+        "多人同框执行策略": "shot_reverse_shot + split_composite_required：校尉反应与姜月初背影分层，主角背影不强求正脸。",
+        "same_frame_policy": "shot_reverse_shot + split_composite_required：校尉反应与姜月初背影分层，主角背影不强求正脸。"
+      },
+      "entity_schedule": {
+        "characters": [
+          "CHAR_JIANG_YUECHU/战场形态",
+          "CHAR_YOUNG_CAPTAIN/断臂"
+        ],
+        "objects": [
+          "WEAPON_DAHUANG_HALBERD"
+        ],
+        "locations": [
+          "LOC_BAXI_BATTLEFIELD"
+        ],
+        "knowledge_state": {
+          "CHAR_YOUNG_CAPTAIN": [
+            "明白姜月初要独自光复一道之地"
+          ]
+        },
+        "required_presence": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_YOUNG_CAPTAIN"
+        ]
+      },
+      "continuity": {
+        "start_state": "姜月初的赤氅背影转向破屋。",
+        "end_state": "破屋门在她身后合上。",
+        "transition": "动作切",
+        "need_endframe": true,
+        "eyeline": "校尉视线追随姜月初背影。",
+        "shot_size": "medium_to_close",
+        "midframe": {
+          "midframe_png": "出图/第1集/图片/EP01_CLIP07_mid.png",
+          "split_at_sec": 3.0,
+          "reason": "锁背影爽点和反应。"
+        },
+        "expression_span": "中",
+        "endframe_png": "出图/第1集/图片/EP01_CLIP07_end.png",
+        "tailframe_generation": "image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress"
+      },
+      "firstframe_png": "出图/第1集/图片/EP01_CLIP07.png"
+    },
+    {
+      "id": "EP01_CLIP08",
+      "label": "破屋静修，灌注赤鳞妖尊",
+      "duration": 7.0,
+      "scene": "巴西郡破屋内，姜月初盘坐灌注。",
+      "location_id": "LOC_BROKEN_HOUSE",
+      "character_ids": [
+        "CHAR_JIANG_YUECHU"
+      ],
+      "object_ids": [
+        "WEAPON_DAHUANG_HALBERD",
+        "VFX_RED_FLOOD_DRAGON_SCROLL"
+      ],
+      "voiceover_indices": [
+        25,
+        26,
+        27
+      ],
+      "subtitle_lines": [
+        "破屋门合上。姜月初将三十七万年道行压入识海。",
+        "灌注，赤鳞妖尊。",
+        "金光炸开，古老绘卷徐徐展开。"
+      ],
+      "template": "meditation_cultivation",
+      "template_contract": {
+        "template_id": "meditation_cultivation",
+        "beats": [
+          "门合上",
+          "盘坐入定",
+          "掌心微光入识海",
+          "金色绘卷展开"
+        ],
+        "blocking": "姜月初盘坐榻上居中，长戟靠画右，门缝冷光在后。",
+        "camera_rule": "慢推脸部和掌心，不环绕，不让坐姿漂移。",
+        "continuity_must": [
+          "坐姿稳定",
+          "长戟位置固定",
+          "破屋光位固定"
+        ],
+        "negative": [
+          "不要乱舞法术",
+          "不要让长戟消失",
+          "不要改变衣装"
+        ],
+        "posture_lock": "盘坐榻上，背直，双手在膝前结印，重心稳定。",
+        "breath_cycle": "一吸一呼，冷雾轻动。",
+        "energy_flow": "掌心微光 → 眉心 → 识海绘卷。",
+        "aura_vfx_lock": "金色绘卷光，不扩散成现代科幻光圈。",
+        "inner_state_beat": "她把道行投入赤鳞妖尊绘卷。",
+        "environment_stillness": "破屋内尘粒、月光、衣摆低幅运动。",
+        "micro_motion": "发丝轻动、指节微压、面部不夸张。",
+        "readability_beats": [
+          "门合上隔绝外界",
+          "坐姿入定",
+          "识海绘卷开"
+        ],
+        "degrade_plan": "若识海转场不稳，拆破屋坐姿和识海绘卷两张关键帧。",
+        "keyframe_plan": {
+          "start": "门合上",
+          "intent_mid": "盘坐掌心亮",
+          "impact_or_apex": "识海金光炸开",
+          "result_or_recovery": "绘卷展开",
+          "end": "赤蛟虚影将现"
+        },
+        "post_cue_points": {
+          "pre_peak": "2.5s 掌心亮",
+          "peak": "5.0s 金光炸开",
+          "aftershock_or_hold": "6.5s 绘卷停住"
+        },
+        "physics_guard": "坐姿和衣装不变；识海是转场VFX，不让身体漂浮。"
+      },
+      "entity_schedule": {
+        "characters": [
+          "CHAR_JIANG_YUECHU/静修"
+        ],
+        "objects": [
+          "WEAPON_DAHUANG_HALBERD",
+          "VFX_RED_FLOOD_DRAGON_SCROLL"
+        ],
+        "locations": [
+          "LOC_BROKEN_HOUSE",
+          "LOC_CONSCIOUSNESS_SEA"
+        ],
+        "knowledge_state": {
+          "CHAR_JIANG_YUECHU": [
+            "决定灌注赤鳞妖尊"
+          ]
+        },
+        "required_presence": [
+          "CHAR_JIANG_YUECHU",
+          "VFX_RED_FLOOD_DRAGON_SCROLL"
+        ]
+      },
+      "continuity": {
+        "start_state": "破屋门在她身后合上。",
+        "end_state": "识海金光从黑暗中炸开。",
+        "transition": "门缝黑场match cut识海金光",
+        "need_endframe": true,
+        "eyeline": "姜月初闭眼内视。",
+        "shot_size": "medium_close",
+        "midframe": {
+          "midframe_png": "出图/第1集/图片/EP01_CLIP08_mid.png",
+          "split_at_sec": 3.5,
+          "reason": "锁静修坐姿与掌心入识海。"
+        },
+        "expression_span": "微",
+        "endframe_png": "出图/第1集/图片/EP01_CLIP08_end.png",
+        "tailframe_generation": "image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress"
+      },
+      "firstframe_png": "出图/第1集/图片/EP01_CLIP08.png"
+    },
+    {
+      "id": "EP01_CLIP09",
+      "label": "染朱奖励：化龙经圆满",
+      "duration": 7.0,
+      "scene": "内景古绘卷中赤蛟由虚转实，系统奖励浮现。",
+      "location_id": "LOC_CONSCIOUSNESS_SEA",
+      "character_ids": [
+        "CHAR_JIANG_YUECHU"
+      ],
+      "object_ids": [
+        "VFX_RED_FLOOD_DRAGON_SCROLL",
+        "VFX_SYSTEM_PANEL"
+      ],
+      "voiceover_indices": [
+        28
+      ],
+      "subtitle_lines": [
+        "系统提示：赤鳞妖尊提升至染朱，获得【《化龙经·残三》（圆满）】。"
+      ],
+      "template": "system_panel",
+      "template_contract": {
+        "template_id": "system_panel",
+        "beats": [
+          "赤蛟凝实",
+          "空面板浮现",
+          "奖励文字overlay",
+          "姜月初眼神亮起"
+        ],
+        "blocking": "赤蛟绘卷占画面左侧，系统空面板在右侧，姜月初侧脸作为前景。",
+        "camera_rule": "面板正对屏幕，文字后期叠，不随透视扭曲。",
+        "continuity_must": [
+          "面板锁青白空底框",
+          "奖励文字走overlay",
+          "赤蛟形态不变"
+        ],
+        "negative": [
+          "面板内不要AI生成文字",
+          "不要把赤蛟变龙",
+          "不要改变姜月初脸"
+        ],
+        "motif_id": "MOTIF_系统面板",
+        "vfx_asset": "VFX_SYSTEM_PANEL",
+        "text_layer": "overlay",
+        "growth_ref": "第1集首次高额道行奖励",
+        "panel_tier": "v1_素纹"
+      },
+      "entity_schedule": {
+        "characters": [
+          "CHAR_JIANG_YUECHU/静修"
+        ],
+        "objects": [
+          "VFX_RED_FLOOD_DRAGON_SCROLL",
+          "VFX_SYSTEM_PANEL"
+        ],
+        "locations": [
+          "LOC_CONSCIOUSNESS_SEA"
+        ],
+        "knowledge_state": {
+          "CHAR_JIANG_YUECHU": [
+            "获得化龙经残三圆满"
+          ]
+        },
+        "required_presence": [
+          "CHAR_JIANG_YUECHU",
+          "VFX_SYSTEM_PANEL"
+        ]
+      },
+      "continuity": {
+        "start_state": "识海金光从黑暗中炸开。",
+        "end_state": "赤蛟虚影眼中金芒将亮未亮。",
+        "transition": "绘卷金光溢满画面",
+        "need_endframe": true,
+        "eyeline": "姜月初看向系统面板。",
+        "shot_size": "insert_to_close",
+        "midframe": {
+          "midframe_png": "出图/第1集/图片/EP01_CLIP09_mid.png",
+          "split_at_sec": 3.5,
+          "reason": "锁系统奖励面板与赤蛟绘卷。"
+        },
+        "expression_span": "微",
+        "endframe_png": "出图/第1集/图片/EP01_CLIP09_end.png",
+        "tailframe_generation": "image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress"
+      },
+      "firstframe_png": "出图/第1集/图片/EP01_CLIP09.png"
+    },
+    {
+      "id": "EP01_CLIP10",
+      "label": "点睛奖励：化龙经无上",
+      "duration": 7.0,
+      "scene": "赤蛟竖瞳点金，第二次系统奖励。",
+      "location_id": "LOC_CONSCIOUSNESS_SEA",
+      "character_ids": [
+        "CHAR_JIANG_YUECHU"
+      ],
+      "object_ids": [
+        "VFX_RED_FLOOD_DRAGON_SCROLL",
+        "VFX_SYSTEM_PANEL"
+      ],
+      "voiceover_indices": [
+        29,
+        30,
+        31
+      ],
+      "subtitle_lines": [
+        "继续。",
+        "赤蛟竖瞳中亮起两点金芒，好似画龙点睛。",
+        "系统提示：获得【《化龙经·残三》（无上）】。"
+      ],
+      "template": "system_panel",
+      "template_contract": {
+        "template_id": "system_panel",
+        "beats": [
+          "姜月初说继续",
+          "赤蛟点睛",
+          "空面板再亮",
+          "无上奖励overlay"
+        ],
+        "blocking": "姜月初眼睛与赤蛟竖瞳做match cut，面板保持画面右侧。",
+        "camera_rule": "先CU眼神，再插入面板；不让面板透视变形。",
+        "continuity_must": [
+          "同一面板样式",
+          "同一赤蛟绘卷",
+          "奖励层级只升不降"
+        ],
+        "negative": [
+          "不要烤字",
+          "不要把赤蛟眼睛画歪",
+          "不要新增无关龙"
+        ],
+        "motif_id": "MOTIF_系统面板",
+        "vfx_asset": "VFX_SYSTEM_PANEL",
+        "text_layer": "overlay",
+        "growth_ref": "赤鳞妖尊点睛",
+        "panel_tier": "v1_素纹"
+      },
+      "entity_schedule": {
+        "characters": [
+          "CHAR_JIANG_YUECHU/静修"
+        ],
+        "objects": [
+          "VFX_RED_FLOOD_DRAGON_SCROLL",
+          "VFX_SYSTEM_PANEL"
+        ],
+        "locations": [
+          "LOC_CONSCIOUSNESS_SEA"
+        ],
+        "knowledge_state": {
+          "CHAR_JIANG_YUECHU": [
+            "获得化龙经残三无上"
+          ]
+        },
+        "required_presence": [
+          "CHAR_JIANG_YUECHU",
+          "VFX_SYSTEM_PANEL",
+          "VFX_RED_FLOOD_DRAGON_SCROLL"
+        ]
+      },
+      "continuity": {
+        "start_state": "赤蛟虚影眼中金芒将亮未亮。",
+        "end_state": "三色龙珠光影从她眉心涌出。",
+        "transition": "赤蛟眼睛match cut到姜月初眼睛",
+        "need_endframe": true,
+        "eyeline": "姜月初视线从绘卷转向面板。",
+        "shot_size": "close_insert",
+        "midframe": {
+          "midframe_png": "出图/第1集/图片/EP01_CLIP10_mid.png",
+          "split_at_sec": 3.5,
+          "reason": "锁赤蛟点睛高光。"
+        },
+        "expression_span": "中",
+        "endframe_png": "出图/第1集/图片/EP01_CLIP10_end.png",
+        "tailframe_generation": "image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress"
+      },
+      "firstframe_png": "出图/第1集/图片/EP01_CLIP10.png"
+    },
+    {
+      "id": "EP01_CLIP11",
+      "label": "三色龙鳞与龙珠觉醒",
+      "duration": 7.0,
+      "scene": "破屋与识海叠层，姜月初短暂显出龙神/阴山觉醒态。",
+      "location_id": "LOC_BROKEN_HOUSE",
+      "character_ids": [
+        "CHAR_JIANG_YUECHU"
+      ],
+      "object_ids": [
+        "VFX_THREE_DRAGON_ORBS"
+      ],
+      "voiceover_indices": [
+        32,
+        33
+      ],
+      "subtitle_lines": [
+        "三色龙鳞覆上她的手背，玉色龙角刺破额角。",
+        "三系术法……可以同时施展？"
+      ],
+      "template": "magic_burst",
+      "template_contract": {
+        "template_id": "magic_burst",
+        "beats": [
+          "龙鳞覆手",
+          "玉角显现",
+          "三色龙珠环身",
+          "姜月初确认三系术法"
+        ],
+        "blocking": "姜月初盘坐居中，三颗龙珠沿顺时针轨道绕身，脸部始终清晰。",
+        "camera_rule": "从手背特写推到半身，不做快速环绕。",
+        "continuity_must": [
+          "龙鳞只在觉醒态出现",
+          "三颗龙珠颜色固定赤白乌",
+          "脸不被光遮住"
+        ],
+        "negative": [
+          "不要把龙角画成鹿角",
+          "不要多出第四颗龙珠",
+          "不要裸露或继承参考图蓝调场景"
+        ],
+        "charge_frame": "手背鳞片第一层浮现。",
+        "release_frame": "三颗龙珠从眉心流光飞出。",
+        "effect_asset": "VFX_THREE_DRAGON_ORBS",
+        "energy_path": "眉心 → 三颗龙珠环绕 → 手背鳞片与额角龙角响应。",
+        "collision_or_apex_frame": "4.2s 三颗龙珠形成完整环绕，眼底雷火云雾亮起。",
+        "power_shift": "姜月初获得三系术法同时施展的能力信息。",
+        "vfx_asset_lock": "赤珠火、白珠水、乌珠风雷，颜色不串。",
+        "intensity_curve": "中 → 高 → 收束",
+        "speed_curve": "鳞片慢生，龙珠环身一圈后减速。",
+        "spatial_path": "龙珠围绕人物前后景绕行，半径稳定。",
+        "camera_path": "手背CU → 半身慢推 → 眼神CU。",
+        "screen_direction": "龙珠顺时针，不跨镜反转。",
+        "readability_beats": [
+          "看清鳞片",
+          "看清龙角",
+          "看清三珠颜色",
+          "看清主角反应"
+        ],
+        "degrade_plan": "若龙珠绕身混乱，拆成手背鳞片、额角、三珠静态三镜。",
+        "keyframe_plan": {
+          "start": "手背鳞片",
+          "intent_mid": "龙角显现",
+          "impact_or_apex": "三珠环身",
+          "result_or_recovery": "眼神竖瞳",
+          "end": "面板底部轻颤"
+        },
+        "post_cue_points": {
+          "pre_peak": "1.8s 鳞片声",
+          "peak": "4.2s 三珠龙吟",
+          "aftershock_or_hold": "6.5s 眼神低频"
+        },
+        "physics_guard": "龙珠是VFX轨道，不碰撞身体；角色坐姿和服装不漂。",
+        "combat_micro_expression": "姜月初眼神由冷静转为一瞬确认，表情不夸张。",
+        "secondary_motion": "龙珠绕身时带动发丝、衣摆和细小光尘。",
+        "apex_light": "三珠环身峰值给眼底雷火轮廓光，保持面部可读。"
+      },
+      "entity_schedule": {
+        "characters": [
+          "CHAR_JIANG_YUECHU/龙神觉醒预备态"
+        ],
+        "objects": [
+          "VFX_THREE_DRAGON_ORBS"
+        ],
+        "locations": [
+          "LOC_BROKEN_HOUSE",
+          "LOC_CONSCIOUSNESS_SEA"
+        ],
+        "knowledge_state": {
+          "CHAR_JIANG_YUECHU": [
+            "发现三系术法可同时施展"
+          ]
+        },
+        "required_presence": [
+          "CHAR_JIANG_YUECHU",
+          "VFX_THREE_DRAGON_ORBS"
+        ]
+      },
+      "continuity": {
+        "start_state": "三色龙珠光影从她眉心涌出。",
+        "end_state": "面板底部忽然轻颤。",
+        "transition": "龙珠绕身的圆周运动带到面板光圈",
+        "need_endframe": true,
+        "eyeline": "姜月初低头看手背鳞片，再抬眼看龙珠。",
+        "shot_size": "close_to_medium",
+        "midframe": {
+          "midframe_png": "出图/第1集/图片/EP01_CLIP11_mid.png",
+          "split_at_sec": 3.5,
+          "reason": "锁三色龙珠与觉醒态识别。"
+        },
+        "expression_span": "大",
+        "endframe_png": "出图/第1集/图片/EP01_CLIP11_end.png",
+        "tailframe_generation": "image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress"
+      },
+      "firstframe_png": "出图/第1集/图片/EP01_CLIP11.png"
+    },
+    {
+      "id": "EP01_CLIP12",
+      "label": "系统提示：是否衍化内景",
+      "duration": 8.0,
+      "scene": "系统面板近景，光幕底部轻颤。",
+      "location_id": "LOC_BROKEN_HOUSE",
+      "character_ids": [
+        "CHAR_JIANG_YUECHU"
+      ],
+      "object_ids": [
+        "VFX_SYSTEM_PANEL",
+        "VFX_YINSHAN_MIST"
+      ],
+      "voiceover_indices": [
+        34,
+        35
+      ],
+      "subtitle_lines": [
+        "她刚要收起面板，光幕最下方却忽然轻轻一颤。",
+        "聚灵衍象素材已齐备，是否开始衍化内景？"
+      ],
+      "template": "system_panel",
+      "template_contract": {
+        "template_id": "system_panel",
+        "beats": [
+          "面板将收",
+          "底部轻颤",
+          "空底框稳定",
+          "问题文字overlay"
+        ],
+        "blocking": "面板占画面前景，姜月初侧脸在后景右侧，眼神转向底部提示。",
+        "camera_rule": "面板正对屏幕，慢推，不做倾斜透视。",
+        "continuity_must": [
+          "面板样式继承前文",
+          "文字走overlay",
+          "姜月初脸部仍可读"
+        ],
+        "negative": [
+          "不要AI生成面板文字",
+          "不要出现完整阴山",
+          "不要加现代UI图标"
+        ],
+        "motif_id": "MOTIF_系统面板",
+        "vfx_asset": "VFX_SYSTEM_PANEL",
+        "text_layer": "overlay",
+        "growth_ref": "聚灵衍象素材齐备",
+        "panel_tier": "v1_素纹"
+      },
+      "entity_schedule": {
+        "characters": [
+          "CHAR_JIANG_YUECHU/觉醒态收束"
+        ],
+        "objects": [
+          "VFX_SYSTEM_PANEL",
+          "VFX_YINSHAN_MIST"
+        ],
+        "locations": [
+          "LOC_BROKEN_HOUSE"
+        ],
+        "knowledge_state": {
+          "CHAR_JIANG_YUECHU": [
+            "知道阴山衍化条件已齐"
+          ]
+        },
+        "required_presence": [
+          "CHAR_JIANG_YUECHU",
+          "VFX_SYSTEM_PANEL"
+        ]
+      },
+      "continuity": {
+        "start_state": "面板底部忽然轻颤。",
+        "end_state": "姜月初眼底出现阴山雾影。",
+        "transition": "BGM抽真空，面板嗡鸣持续",
+        "need_endframe": true,
+        "eyeline": "姜月初视线锁定面板底部提示。",
+        "shot_size": "insert_close",
+        "midframe": {
+          "midframe_png": "出图/第1集/图片/EP01_CLIP12_mid.png",
+          "split_at_sec": 4.0,
+          "reason": "锁集尾系统问题和面板构图。"
+        },
+        "expression_span": "中",
+        "endframe_png": "出图/第1集/图片/EP01_CLIP12_end.png",
+        "tailframe_generation": "image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress"
+      },
+      "firstframe_png": "出图/第1集/图片/EP01_CLIP12.png"
+    },
+    {
+      "id": "EP01_CLIP13",
+      "label": "阴山雾影硬断",
+      "duration": 9.0,
+      "scene": "识海深处阴山雾影将成未成，黑场硬断。",
+      "location_id": "LOC_CONSCIOUSNESS_SEA",
+      "character_ids": [
+        "CHAR_JIANG_YUECHU"
+      ],
+      "object_ids": [
+        "VFX_YINSHAN_MIST",
+        "VFX_SYSTEM_PANEL"
+      ],
+      "voiceover_indices": [
+        36
+      ],
+      "subtitle_lines": [
+        "阴山，终于等到了。"
+      ],
+      "template": "magic_burst",
+      "template_contract": {
+        "template_id": "magic_burst",
+        "beats": [
+          "眼底雾影",
+          "识海水墨翻涌",
+          "阴山轮廓半露",
+          "黑场硬断"
+        ],
+        "blocking": "姜月初眼睛占前景，阴山雾影在瞳孔叠层与识海远景之间切换。",
+        "camera_rule": "眼神ECU慢推，最后切识海远景再黑场。",
+        "continuity_must": [
+          "只露阴山轮廓",
+          "不提前展示完整阴山",
+          "面板嗡鸣保持"
+        ],
+        "negative": [
+          "不要把阴山完整画出",
+          "不要变成山水旅游图",
+          "不要新增人物"
+        ],
+        "charge_frame": "眼底冷雾亮起。",
+        "release_frame": "识海水墨雾向中心卷起。",
+        "effect_asset": "VFX_YINSHAN_MIST",
+        "energy_path": "眼底雾影 → 识海深处 → 阴山轮廓。",
+        "collision_or_apex_frame": "5.5s 阴山轮廓最清晰但仍未成型。",
+        "power_shift": "观众确认阴山即将衍化，但结果延迟到第2集。",
+        "vfx_asset_lock": "阴山雾影为冷蓝灰水墨，不用金色突破光柱。",
+        "intensity_curve": "低 → 中 → 悬停",
+        "speed_curve": "雾气缓慢卷起后定格。",
+        "spatial_path": "雾从画面边缘向中心山影聚拢。",
+        "camera_path": "眼神ECU慢推，切识海远景定格。",
+        "screen_direction": "雾向中心收束。",
+        "readability_beats": [
+          "眼神知道答案",
+          "识海雾起",
+          "阴山轮廓半露",
+          "黑场"
+        ],
+        "degrade_plan": "若阴山雾影不稳，改眼神特写 + 后期水墨雾overlay + 黑场字幕。",
+        "keyframe_plan": {
+          "start": "眼底雾影",
+          "intent_mid": "识海雾起",
+          "impact_or_apex": "阴山半露",
+          "result_or_recovery": "定格",
+          "end": "黑场"
+        },
+        "post_cue_points": {
+          "pre_peak": "2.0s 面板低鸣",
+          "peak": "5.5s 阴山半露",
+          "aftershock_or_hold": "8.2s 黑场留白"
+        },
+        "physics_guard": "阴山只是VFX轮廓，不改变角色脸；黑场硬断不加新动作。",
+        "combat_micro_expression": "姜月初眼神压住喜色，语气低而稳。",
+        "secondary_motion": "水墨雾、眼神高光和面板边框轻微颤动。",
+        "apex_light": "阴山半露时给冷蓝灰轮廓光，不提前爆成金色突破光。"
+      },
+      "entity_schedule": {
+        "characters": [
+          "CHAR_JIANG_YUECHU/眼神特写"
+        ],
+        "objects": [
+          "VFX_YINSHAN_MIST",
+          "VFX_SYSTEM_PANEL"
+        ],
+        "locations": [
+          "LOC_CONSCIOUSNESS_SEA"
+        ],
+        "knowledge_state": {
+          "CHAR_JIANG_YUECHU": [
+            "准备开始衍化阴山"
+          ]
+        },
+        "required_presence": [
+          "CHAR_JIANG_YUECHU",
+          "VFX_YINSHAN_MIST"
+        ]
+      },
+      "continuity": {
+        "start_state": "姜月初眼底出现阴山雾影。",
+        "end_state": "黑场停在“阴山，终于等到了”。",
+        "transition": "尾帧定格后硬切黑",
+        "need_endframe": true,
+        "eyeline": "姜月初视线向内看识海。",
+        "shot_size": "extreme_close_to_wide_inner",
+        "midframe": {
+          "midframe_png": "出图/第1集/图片/EP01_CLIP13_mid.png",
+          "split_at_sec": 4.5,
+          "reason": "锁阴山半露的尾钩画面。"
+        },
+        "expression_span": "大",
+        "endframe_png": "出图/第1集/图片/EP01_CLIP13_end.png",
+        "tailframe_generation": "image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress"
+      },
+      "firstframe_png": "出图/第1集/图片/EP01_CLIP13.png"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 0,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [],
+  "episode": "第1集",
+  "items": [],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [
+    "VFX_RED_FLOOD_DRAGON_SCROLL"
+  ],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "VFX_RED_FLOOD_DRAGON_SCROLL::定妆_赤蛟绘卷虚影",
+  "target": "出图/共享/图片/定妆_赤蛟绘卷虚影.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

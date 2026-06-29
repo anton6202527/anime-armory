@@ -1,0 +1,36 @@
+{
+  "kind": "n2d_project_character_asset_index",
+  "version": 1,
+  "characters": [
+    {
+      "character_id": "CHAR_JIANG_YUECHU",
+      "name": "姜月初",
+      "manifest": "设定库/character_assets/CHAR_JIANG_YUECHU__jiang_yuechu/manifest.json"
+    },
+    {
+      "character_id": "CHAR_YOUNG_CAPTAIN",
+      "name": "年轻校尉",
+      "manifest": "设定库/character_assets/CHAR_YOUNG_CAPTAIN__young_captain/manifest.json"
+    },
+    {
+      "character_id": "CHAR_EMPEROR_TANG",
+      "name": "大唐皇帝",
+      "manifest": "设定库/character_assets/CHAR_EMPEROR_TANG__emperor_tang/manifest.json"
+    },
+    {
+      "character_id": "CHAR_CHENG_LAO",
+      "name": "程老",
+      "manifest": "设定库/character_assets/CHAR_CHENG_LAO__cheng_lao/manifest.json"
+    },
+    {
+      "character_id": "CHAR_COURT_MINISTERS",
+      "name": "朝堂群臣",
+      "manifest": "设定库/character_assets/CHAR_COURT_MINISTERS__court_ministers/manifest.json"
+    },
+    {
+      "character_id": "CHAR_GARRISON_SURVIVORS",
+      "name": "巴西郡残兵",
+      "manifest": "设定库/character_assets/CHAR_GARRISON_SURVIVORS__garrison_survivors/manifest.json"
+    }
+  ]
+}

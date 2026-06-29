@@ -1,0 +1,57 @@
+{
+  "kind": "n2d_scene_layer_pack_plan",
+  "version": 1,
+  "root": "创作区/制漫剧/从变身少女开始斩妖除魔",
+  "episode": "第1集",
+  "packs": [
+    {
+      "loc_id": "LOC_BAXI_BATTLEFIELD_ESTABLISH",
+      "path": "设定库/scene_layers/LOC_BAXI_BATTLEFIELD_ESTABLISH/scene_layer_pack.json",
+      "source_clips": [
+        "Clip_01"
+      ],
+      "pack": {
+        "kind": "n2d_scene_layer_pack",
+        "version": 1,
+        "loc_id": "LOC_BAXI_BATTLEFIELD_ESTABLISH",
+        "source_episode": "第1集",
+        "source_clips": [
+          "Clip_01"
+        ],
+        "floorplan": {
+          "status": "planned",
+          "path": "设定库/scene_layers/LOC_BAXI_BATTLEFIELD_ESTABLISH/floorplan.png",
+          "notes": "标出主轴线、入口、地标、角色默认动线；无图时至少在 notes 写文字平面。"
+        },
+        "landmark_anchor": "残破巴西郡城门与倒塌旗杆。",
+        "scale_reference": "姜月初单人身形与满街妖魔残骸对比，远处残兵作为人类比例尺。",
+        "depth_planes": [
+          "foreground",
+          "midground",
+          "background"
+        ],
+        "parallax_planes": [
+          "前景妖魔残影与破旗",
+          "中景姜月初与血雾",
+          "后景残城和冷月"
+        ],
+        "crowd_strategy": "复杂人群默认剪影/背身/雾化/分层合成，避免清晰逐人生成。",
+        "atmosphere_lut": "待补：本 LOC 统一色温/雾气/对比度/LUT。",
+        "reusable_bg_keyframes": [
+          "设定库/scene_layers/LOC_BAXI_BATTLEFIELD_ESTABLISH/keyframes/wide.png",
+          "设定库/scene_layers/LOC_BAXI_BATTLEFIELD_ESTABLISH/keyframes/mid.png",
+          "设定库/scene_layers/LOC_BAXI_BATTLEFIELD_ESTABLISH/keyframes/detail.png"
+        ],
+        "consistency_rules": [
+          "reuse this pack for all large_establishing/flight/chase/mount_ride/vehicle_ride/vessel_flight shots in the same LOC",
+          "do not change landmark_anchor or scale_reference without forking a new loc_id",
+          "video prompts should move parallax/depth layers instead of regenerating the whole place"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "scene_layer_packs": 1,
+    "source_clips": 1
+  }
+}

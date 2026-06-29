@@ -1,0 +1,685 @@
+{
+  "auto_return_tasks": [
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "character_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "跨集角色定义",
+          "dim_key": "character_consistency",
+          "dimension": "跨集角色定义",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/00_总览.md",
+          "message": "本集出图总览引用了角色「年轻校尉」(CHAR_YOUNG_CAPTAIN)，却未出现其 identity_registry 锚定相任一描述符（二十多岁大唐镇魔卫校尉·断一臂·破损黑铁甲·灰蓝布衣·疲惫感激眼神）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+          "msg": "本集出图总览引用了角色「年轻校尉」(CHAR_YOUNG_CAPTAIN)，却未出现其 identity_registry 锚定相任一描述符（二十多岁大唐镇魔卫校尉·断一臂·破损黑铁甲·灰蓝布衣·疲惫感激眼神）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "跨集角色定义",
+          "dim_key": "character_consistency",
+          "dimension": "跨集角色定义",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/00_总览.md",
+          "message": "本集出图总览引用了角色「大唐皇帝」(CHAR_EMPEROR_TANG)，却未出现其 identity_registry 锚定相任一描述符（中年大唐皇帝·疲惫威严·玄金龙纹朝服·高位御案后·冷色烛光）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+          "msg": "本集出图总览引用了角色「大唐皇帝」(CHAR_EMPEROR_TANG)，却未出现其 identity_registry 锚定相任一描述符（中年大唐皇帝·疲惫威严·玄金龙纹朝服·高位御案后·冷色烛光）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "跨集角色定义",
+          "dim_key": "character_consistency",
+          "dimension": "跨集角色定义",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/00_总览.md",
+          "message": "本集出图总览引用了角色「程老」(CHAR_CHENG_LAO)，却未出现其 identity_registry 锚定相任一描述符（大唐老臣程老·白发短须·深色官服·拱手进言·沉重克制）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+          "msg": "本集出图总览引用了角色「程老」(CHAR_CHENG_LAO)，却未出现其 identity_registry 锚定相任一描述符（大唐老臣程老·白发短须·深色官服·拱手进言·沉重克制）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "跨集角色定义",
+          "dim_key": "character_consistency",
+          "dimension": "跨集角色定义",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/00_总览.md",
+          "message": "本集出图总览引用了角色「朝堂群臣」(CHAR_COURT_MINISTERS)，却未出现其 identity_registry 锚定相任一描述符（低头群臣剪影·深色官服层次·无清晰正脸·朝堂压迫背景）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+          "msg": "本集出图总览引用了角色「朝堂群臣」(CHAR_COURT_MINISTERS)，却未出现其 identity_registry 锚定相任一描述符（低头群臣剪影·深色官服层次·无清晰正脸·朝堂压迫背景）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "跨集角色定义",
+          "dim_key": "character_consistency",
+          "dimension": "跨集角色定义",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/00_总览.md",
+          "message": "本集出图总览引用了角色「巴西郡残兵」(CHAR_GARRISON_SURVIVORS)，却未出现其 identity_registry 锚定相任一描述符（战场残兵剪影·残甲破旗·低清脸·仰视主角·尸城比例尺）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+          "msg": "本集出图总览引用了角色「巴西郡残兵」(CHAR_GARRISON_SURVIVORS)，却未出现其 identity_registry 锚定相任一描述符（战场残兵剪影·残甲破旗·低清脸·仰视主角·尸城比例尺）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "character_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "风格化脸机检",
+          "dim_key": "character_consistency",
+          "dimension": "风格化脸机检",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/_设置.md",
+          "message": "基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。",
+          "msg": "基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "review",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "review",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "物料新鲜度"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "物料新鲜度",
+          "dim_key": "物料新鲜度",
+          "dimension": "物料新鲜度",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "第1集",
+          "message": "前期物料可能已过期：n2d-image, n2d-voice 自上次 skill 基线后有改动，可能影响本阶段（image_prompt）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/从变身少女开始斩妖除魔\" 第1集` 评估哪些物料需重制，再决定是否生成。（注：当前基线为自动建立的临时 bootstrap，看不到更早 skill 版本的差异；确认现有产物可接受后请 `record` 固化）",
+          "msg": "前期物料可能已过期：n2d-image, n2d-voice 自上次 skill 基线后有改动，可能影响本阶段（image_prompt）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/从变身少女开始斩妖除魔\" 第1集` 评估哪些物料需重制，再决定是否生成。（注：当前基线为自动建立的临时 bootstrap，看不到更早 skill 版本的差异；确认现有产物可接受后请 `record` 固化）",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "script_stage2",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json"
+    }
+  ],
+  "episode": "第1集",
+  "findings": [
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "合规前置",
+      "dim_key": "合规前置",
+      "dimension": "合规前置",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/合规/compliance_manifest.json platform_review.TODO",
+      "message": "平台审核缺字段：platform（发布/合成前需补；当前 image 阶段不阻断）",
+      "msg": "平台审核缺字段：platform（发布/合成前需补；当前 image 阶段不阻断）",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "合规前置",
+      "dim_key": "合规前置",
+      "dimension": "合规前置",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/合规/compliance_manifest.json platform_review.TODO",
+      "message": "平台审核缺字段：policy_profile（发布/合成前需补；当前 image 阶段不阻断）",
+      "msg": "平台审核缺字段：policy_profile（发布/合成前需补；当前 image 阶段不阻断）",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "合规前置",
+      "dim_key": "合规前置",
+      "dimension": "合规前置",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/合规/compliance_manifest.json regulatory_filing",
+      "message": "pre_broadcast_review 不能停在 pending（境内投放须先过播前审核）（发布/合成前需补；当前 image 阶段不阻断）",
+      "msg": "pre_broadcast_review 不能停在 pending（境内投放须先过播前审核）（发布/合成前需补；当前 image 阶段不阻断）",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "脸漂预案",
+      "dim_key": "character_consistency",
+      "dimension": "脸漂预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "程老（CHAR_CHENG_LAO）",
+      "message": "本集脸漂风险 medium（分31.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+      "msg": "本集脸漂风险 medium（分31.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "大唐朝堂（LOC_TANG_COURT）",
+      "message": "本集物料漂移风险 medium（分41·第1集本集场景）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分41·第1集本集场景）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "系统面板光幕（VFX_SYSTEM_PANEL）",
+      "message": "本集物料漂移风险 medium（分41）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分41）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "巴西郡尸城战场（LOC_BAXI_BATTLEFIELD）",
+      "message": "本集物料漂移风险 medium（分38·第1集本集场景）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分38·第1集本集场景）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "巴西郡尸城大全景（LOC_BAXI_BATTLEFIELD_ESTABLISH）",
+      "message": "本集物料漂移风险 medium（分38·第1集本集场景）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分38·第1集本集场景）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "尸城破屋（LOC_BROKEN_HOUSE）",
+      "message": "本集物料漂移风险 medium（分38·第1集本集场景）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分38·第1集本集场景）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "姜月初识海/阴山内景（LOC_CONSCIOUSNESS_SEA）",
+      "message": "本集物料漂移风险 medium（分38·第1集本集场景）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分38·第1集本集场景）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "大荒碎星戟（WEAPON_DAHUANG_HALBERD）",
+      "message": "本集物料漂移风险 medium（分34·主角第1集起核心武器/后续发簪形态）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分34·主角第1集起核心武器/后续发簪形态）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "御案（PROP_IMPERIAL_DESK）",
+      "message": "本集物料漂移风险 medium（分32）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分32）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "三色龙珠（VFX_THREE_DRAGON_ORBS）",
+      "message": "本集物料漂移风险 medium（分32）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分32）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "阴山雾影（VFX_YINSHAN_MIST）",
+      "message": "本集物料漂移风险 medium（分32）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分32）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "精气洪流（VFX_ESSENCE_STREAMS）",
+      "message": "本集物料漂移风险 medium（分29）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分29）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "跨集角色定义",
+      "dim_key": "character_consistency",
+      "dimension": "跨集角色定义",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/00_总览.md",
+      "message": "本集出图总览引用了角色「年轻校尉」(CHAR_YOUNG_CAPTAIN)，却未出现其 identity_registry 锚定相任一描述符（二十多岁大唐镇魔卫校尉·断一臂·破损黑铁甲·灰蓝布衣·疲惫感激眼神）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+      "msg": "本集出图总览引用了角色「年轻校尉」(CHAR_YOUNG_CAPTAIN)，却未出现其 identity_registry 锚定相任一描述符（二十多岁大唐镇魔卫校尉·断一臂·破损黑铁甲·灰蓝布衣·疲惫感激眼神）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "跨集角色定义",
+      "dim_key": "character_consistency",
+      "dimension": "跨集角色定义",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/00_总览.md",
+      "message": "本集出图总览引用了角色「大唐皇帝」(CHAR_EMPEROR_TANG)，却未出现其 identity_registry 锚定相任一描述符（中年大唐皇帝·疲惫威严·玄金龙纹朝服·高位御案后·冷色烛光）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+      "msg": "本集出图总览引用了角色「大唐皇帝」(CHAR_EMPEROR_TANG)，却未出现其 identity_registry 锚定相任一描述符（中年大唐皇帝·疲惫威严·玄金龙纹朝服·高位御案后·冷色烛光）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "跨集角色定义",
+      "dim_key": "character_consistency",
+      "dimension": "跨集角色定义",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/00_总览.md",
+      "message": "本集出图总览引用了角色「程老」(CHAR_CHENG_LAO)，却未出现其 identity_registry 锚定相任一描述符（大唐老臣程老·白发短须·深色官服·拱手进言·沉重克制）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+      "msg": "本集出图总览引用了角色「程老」(CHAR_CHENG_LAO)，却未出现其 identity_registry 锚定相任一描述符（大唐老臣程老·白发短须·深色官服·拱手进言·沉重克制）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "跨集角色定义",
+      "dim_key": "character_consistency",
+      "dimension": "跨集角色定义",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/00_总览.md",
+      "message": "本集出图总览引用了角色「朝堂群臣」(CHAR_COURT_MINISTERS)，却未出现其 identity_registry 锚定相任一描述符（低头群臣剪影·深色官服层次·无清晰正脸·朝堂压迫背景）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+      "msg": "本集出图总览引用了角色「朝堂群臣」(CHAR_COURT_MINISTERS)，却未出现其 identity_registry 锚定相任一描述符（低头群臣剪影·深色官服层次·无清晰正脸·朝堂压迫背景）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "跨集角色定义",
+      "dim_key": "character_consistency",
+      "dimension": "跨集角色定义",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/00_总览.md",
+      "message": "本集出图总览引用了角色「巴西郡残兵」(CHAR_GARRISON_SURVIVORS)，却未出现其 identity_registry 锚定相任一描述符（战场残兵剪影·残甲破旗·低清脸·仰视主角·尸城比例尺）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+      "msg": "本集出图总览引用了角色「巴西郡残兵」(CHAR_GARRISON_SURVIVORS)，却未出现其 identity_registry 锚定相任一描述符（战场残兵剪影·残甲破旗·低清脸·仰视主角·尸城比例尺）——可能跨集重新派生而非复用定妆。请核对本集发型/瞳色/服装/配饰与定妆库一致，并在总览引用锚定相（或角色参考图）以防跨集悄悄变样。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "风格化脸机检",
+      "dim_key": "character_consistency",
+      "dimension": "风格化脸机检",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/_设置.md",
+      "message": "基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。",
+      "msg": "基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "review",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料新鲜度",
+      "dim_key": "物料新鲜度",
+      "dimension": "物料新鲜度",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "第1集",
+      "message": "前期物料可能已过期：n2d-image, n2d-voice 自上次 skill 基线后有改动，可能影响本阶段（image_prompt）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/从变身少女开始斩妖除魔\" 第1集` 评估哪些物料需重制，再决定是否生成。（注：当前基线为自动建立的临时 bootstrap，看不到更早 skill 版本的差异；确认现有产物可接受后请 `record` 固化）",
+      "msg": "前期物料可能已过期：n2d-image, n2d-voice 自上次 skill 基线后有改动，可能影响本阶段（image_prompt）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/从变身少女开始斩妖除魔\" 第1集` 评估哪些物料需重制，再决定是否生成。（注：当前基线为自动建立的临时 bootstrap，看不到更早 skill 版本的差异；确认现有产物可接受后请 `record` 固化）",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    }
+  ],
+  "gate_stage": "image_prompt_preflight",
+  "generated_at": "2026-06-29T03:21:53+00:00",
+  "inputs_fingerprint": {
+    "files": {
+      "合规/compliance_manifest.json": "d0eb9863e5faa04f5df6c9284f4c148adfebdba38113b0d0807658b34a6a30ce",
+      "脚本/第1集/storyboard.json": "9af8dcb4301a36e5d0556cc12b880e1e601f9886ddae951443fe95b301fce5fd"
+    },
+    "sha": "dc0ac8236589ea0c5a6ce169be8e9d9768436a0e3579a208d2323fed987aa960"
+  },
+  "kind": "n2d_consistency_findings",
+  "root": "创作区/制漫剧/从变身少女开始斩妖除魔",
+  "source": {
+    "kind": "n2d_gate",
+    "path": "n2d-review/scripts/gate.py"
+  },
+  "summary": {
+    "by_dim": {
+      "合规前置": {
+        "block": 0,
+        "info": 3,
+        "warn": 0
+      },
+      "物料新鲜度": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
+      "物料漂移预案": {
+        "block": 0,
+        "info": 11,
+        "warn": 0
+      },
+      "脸漂预案": {
+        "block": 0,
+        "info": 1,
+        "warn": 0
+      },
+      "跨集角色定义": {
+        "block": 0,
+        "info": 0,
+        "warn": 5
+      },
+      "风格化脸机检": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      }
+    },
+    "severity": {
+      "block": 0,
+      "info": 15,
+      "warn": 7
+    },
+    "total": 22
+  },
+  "version": 1
+}

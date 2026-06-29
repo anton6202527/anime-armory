@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_EMPEROR_TANG",
+  "character_name": "大唐皇帝",
+  "package_dir": "设定库/character_assets/CHAR_EMPEROR_TANG__emperor_tang",
+  "directories": {
+    "reference": "设定库/character_assets/CHAR_EMPEROR_TANG__emperor_tang/reference",
+    "prompts": "设定库/character_assets/CHAR_EMPEROR_TANG__emperor_tang/prompts",
+    "lora": "设定库/character_assets/CHAR_EMPEROR_TANG__emperor_tang/lora",
+    "voice": "设定库/character_assets/CHAR_EMPEROR_TANG__emperor_tang/voice",
+    "adapters": "设定库/character_assets/CHAR_EMPEROR_TANG__emperor_tang/adapters",
+    "qc": "设定库/character_assets/CHAR_EMPEROR_TANG__emperor_tang/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "episode_materials": "脚本/第1集/素材清单.md",
+    "storyboard": "脚本/第1集/storyboard.json"
+  },
+  "current_gaps": [
+    "基础定妆 PNG 待出"
+  ]
+}

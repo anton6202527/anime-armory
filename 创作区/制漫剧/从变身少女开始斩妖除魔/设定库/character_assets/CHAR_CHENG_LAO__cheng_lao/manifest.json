@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_CHENG_LAO",
+  "character_name": "程老",
+  "package_dir": "设定库/character_assets/CHAR_CHENG_LAO__cheng_lao",
+  "directories": {
+    "reference": "设定库/character_assets/CHAR_CHENG_LAO__cheng_lao/reference",
+    "prompts": "设定库/character_assets/CHAR_CHENG_LAO__cheng_lao/prompts",
+    "lora": "设定库/character_assets/CHAR_CHENG_LAO__cheng_lao/lora",
+    "voice": "设定库/character_assets/CHAR_CHENG_LAO__cheng_lao/voice",
+    "adapters": "设定库/character_assets/CHAR_CHENG_LAO__cheng_lao/adapters",
+    "qc": "设定库/character_assets/CHAR_CHENG_LAO__cheng_lao/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "episode_materials": "脚本/第1集/素材清单.md",
+    "storyboard": "脚本/第1集/storyboard.json"
+  },
+  "current_gaps": [
+    "基础定妆 PNG 待出"
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 3,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_姜月初_战场形态.png",
+      "bytes": 2122945,
+      "owner": "CHAR_JIANG_YUECHU/战场形态",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_姜月初_战场形态.png",
+      "role": "character",
+      "sequence": 0,
+      "sha256": "5e0413f2dd5bc83286aaf48d963949f17e25c090d413ad84879fa6055dc708e6",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_姜月初_战场形态_主参考.jpeg",
+      "bytes": 16816,
+      "owner": "CHAR_JIANG_YUECHU/战场形态",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_姜月初_战场形态_主参考.jpeg",
+      "role": "character",
+      "sequence": 1,
+      "sha256": "021b2bdc2fd6bc211615497f902481448c22cb929e663e778f375aadd89db15b",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_姜月初_战场形态_45度.png",
+      "bytes": 1911377,
+      "owner": "CHAR_JIANG_YUECHU/战场形态",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_姜月初_战场形态_45度.png",
+      "role": "character",
+      "sequence": 2,
+      "sha256": "26de0bfdcbb5d6879e19ac5710bf0e7a06470709a21b00248ec805bea1950b7f",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "form": "战场形态",
+      "id": "CHAR_JIANG_YUECHU",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_姜月初_战场形态.png",
+        "出图/共享/图片/定妆_姜月初_战场形态_主参考.jpeg",
+        "出图/共享/图片/定妆_姜月初_战场形态_45度.png"
+      ]
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "CHAR_JIANG_YUECHU::定妆_姜月初_战场形态_侧",
+  "target": "出图/共享/图片/定妆_姜月初_战场形态_侧.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

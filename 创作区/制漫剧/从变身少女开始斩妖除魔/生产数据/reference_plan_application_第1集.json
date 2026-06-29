@@ -1,0 +1,48 @@
+{
+  "kind": "n2d_reference_plan_application",
+  "version": 1,
+  "episode": "第1集",
+  "accepted": true,
+  "reviewer": "Codex",
+  "plan_sha256": "3a794b3e5ce4c444e457d48ccf594f9c52f661739a37f257e3df3ca623903b3b",
+  "prompt_path": "出图/第1集/prompt/01_分镜出图.md",
+  "prompt_sha256": "2b1da8031700696ebbb891224ebe72e8caf25f2a0d8bc785f1a46931203d09c5",
+  "applied_action_count": 20,
+  "applied_evidence": [
+    {
+      "field": "参考图入参清单与预算",
+      "status": "applied",
+      "note": "逐镜列 selected/dropped/backend_limit/control inputs"
+    },
+    {
+      "field": "资产身份注册层",
+      "status": "applied",
+      "note": "逐镜绑定 CHAR_xx/形态 与 identity_registry"
+    },
+    {
+      "field": "多人同框身份槽位/执行策略",
+      "status": "applied",
+      "note": "同框镜继承 storyboard.template_contract 并声明 split_composite/regional_construct"
+    },
+    {
+      "field": "近景/反打身份锁定",
+      "status": "applied",
+      "note": "所有角色镜声明 face_anchor_refs/expressions 与 image2image 接力"
+    },
+    {
+      "field": "缺口处理",
+      "status": "accepted_with_gap",
+      "note": "共享标准 PNG 尚未生成；image_preflight 应阻断到共享层补齐"
+    },
+    {
+      "field": "action_required",
+      "status": "applied",
+      "note": "20 条 reference_plan 行动项已在逐镜 prompt 中以参考预算、多人同框槽位、regional_construct_required/split_composite_required、face_anchor_refs/expressions、image2image/多图参考派生和升档建议形式落实；当前剩余阻塞转入共享图生成与 QC。"
+    },
+    {
+      "field": "用户人物参考图脸锚铁律",
+      "status": "applied",
+      "note": "已把姜月初用户参考图降级为 face_anchor_only；服饰/表情/配饰/觉醒形态按小说、角色圣经、registry 与分镜状态派生。"
+    }
+  ]
+}

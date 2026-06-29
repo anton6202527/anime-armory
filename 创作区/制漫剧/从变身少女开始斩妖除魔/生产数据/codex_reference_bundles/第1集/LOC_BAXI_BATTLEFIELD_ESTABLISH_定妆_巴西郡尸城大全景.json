@@ -1,0 +1,19 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 0,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [],
+  "episode": "第1集",
+  "items": [],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [
+    "LOC_BAXI_BATTLEFIELD_ESTABLISH"
+  ],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "LOC_BAXI_BATTLEFIELD_ESTABLISH::定妆_巴西郡尸城大全景",
+  "target": "出图/共享/图片/定妆_巴西郡尸城大全景.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

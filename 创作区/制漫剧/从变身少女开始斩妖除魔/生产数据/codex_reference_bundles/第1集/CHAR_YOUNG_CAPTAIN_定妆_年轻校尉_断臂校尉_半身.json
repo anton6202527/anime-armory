@@ -1,0 +1,74 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 4,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_年轻校尉_断臂校尉.png",
+      "bytes": 2021764,
+      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_年轻校尉_断臂校尉.png",
+      "role": "character",
+      "sequence": 0,
+      "sha256": "c37c22f38ba8dafe54ed57a03249ea550f032a5de0aadc3ce8e5a03c03da6ead",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_年轻校尉_断臂校尉_45度.png",
+      "bytes": 1972833,
+      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_45度.png",
+      "role": "character",
+      "sequence": 1,
+      "sha256": "96a8e2754e92ebfe6b9ca2647697a2788f6ddb94ae8c9c1825b9c28174bbc0e4",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_年轻校尉_断臂校尉_侧.png",
+      "bytes": 1929730,
+      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_侧.png",
+      "role": "character",
+      "sequence": 2,
+      "sha256": "ce3c08d66888ccf4bdb4ad774a399371600b2705f6b57b18ec484524881372fc",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_年轻校尉_断臂校尉_背.png",
+      "bytes": 2089706,
+      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+      "priority": 150,
+      "rel_path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_背.png",
+      "role": "character",
+      "sequence": 3,
+      "sha256": "c41746bd40f378a6c79407e0eaafdfec43f65a22f501bea5264d4d83561600df",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "form": "断臂校尉",
+      "id": "CHAR_YOUNG_CAPTAIN",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_年轻校尉_断臂校尉.png",
+        "出图/共享/图片/定妆_年轻校尉_断臂校尉_45度.png",
+        "出图/共享/图片/定妆_年轻校尉_断臂校尉_侧.png",
+        "出图/共享/图片/定妆_年轻校尉_断臂校尉_背.png"
+      ]
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "CHAR_YOUNG_CAPTAIN::定妆_年轻校尉_断臂校尉_半身",
+  "target": "出图/共享/图片/定妆_年轻校尉_断臂校尉_半身.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

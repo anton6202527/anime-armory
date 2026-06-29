@@ -1,0 +1,70 @@
+{
+  "kind": "n2d_setup_payoff_ledger",
+  "version": 1,
+  "pairs": [
+    {
+      "id": "第1集-伏笔1",
+      "setup_ep": "第1集",
+      "payoff_ep": "第1集",
+      "desc": "# 改编范围：以第320章为主，按 boundary_review 将第321章",
+      "status": "done",
+      "note": "本集改编范围已按 boundary_review 收束：第321章只作为阴山尾钩，不提前展开。"
+    },
+    {
+      "id": "第1集-伏笔2",
+      "setup_ep": "第1集",
+      "payoff_ep": "第2集",
+      "desc": "⚡钩子",
+      "status": "ongoing",
+      "note": "集尾阴山/系统衍化钩子，下一集进入阴山觉醒态兑现。"
+    },
+    {
+      "id": "第1集-伏笔3",
+      "setup_ep": "第1集",
+      "payoff_ep": "第1集",
+      "desc": "**Clip 1（EP01_CLIP01）：5.0秒**　**节奏**：冷开钩子",
+      "status": "done",
+      "note": "冷开尸城钩子在本集通过精气入体与五仙山代价兑现第一层信息。"
+    },
+    {
+      "id": "第1集-伏笔4",
+      "setup_ep": "第1集",
+      "payoff_ep": "第1集",
+      "desc": "**Clip 2（EP01_CLIP02）：7.0秒**　**节奏**：信息钩子",
+      "status": "done",
+      "note": "信息钩子在本集系统奖励面板与道行补强段落兑现。"
+    },
+    {
+      "id": "第1集-伏笔5",
+      "setup_ep": "第1集",
+      "payoff_ep": "第2集",
+      "desc": "**Clip 5（EP01_CLIP05）：7.0秒**　**节奏**：决策钩子",
+      "status": "ongoing",
+      "note": "朝堂决策钩子延后到第2集继续推动五仙山/阴山代价。"
+    },
+    {
+      "id": "第1集-伏笔6",
+      "setup_ep": "第1集",
+      "payoff_ep": "第2集",
+      "desc": "\"第321章开头钩子\"",
+      "status": "ongoing",
+      "note": "第321章开头钩子作为第2集开场承接。"
+    },
+    {
+      "id": "第1集-伏笔7",
+      "setup_ep": "第1集",
+      "payoff_ep": "第2集",
+      "desc": "\"cliffhanger_cut_variant\": {",
+      "status": "ongoing",
+      "note": "cliffhanger_cut_variant 对应阴山等待的尾钩，第2集开头回收。"
+    },
+    {
+      "id": "第1集-伏笔8",
+      "setup_ep": "第1集",
+      "payoff_ep": "第2集",
+      "desc": "\"钟声落下形成决策钩子\"",
+      "status": "ongoing",
+      "note": "朝堂钟声切断决策，作为第2集五仙山/阴山线继续推进的政治压力钩子。"
+    }
+  ]
+}

@@ -81,12 +81,16 @@ export function Line(props: {
           <div className="root-card" key={root.path} onClick={() => onOpen(root)}>
             <button
               className="del-btn"
+              type="button"
+              title="移到垃圾桶"
+              aria-label={`删除作品 ${root.name}`}
               onClick={(e) => {
                 e.stopPropagation();
                 remove(root);
               }}
             >
-              <span style={{ fontSize: 14 }}>🗑</span> 删除
+              <span className="del-icon" aria-hidden="true">🗑</span>
+              <span>删除</span>
             </button>
             <div className="name">{root.name}</div>
             <div className="meta">{root.has_progress ? "● 有进度" : "○ 仅初始化"}</div>

@@ -1,0 +1,184 @@
+{
+  "kind": "n2d_shot_intent",
+  "version": 1,
+  "episode": "第1集",
+  "storyboard_sha": "41e07998401ecbf29751c5591eba5eee9cf073a8b4ab210afb76bcd6c50ef051",
+  "shots": [
+    {
+      "clip": "EP01_CLIP01",
+      "clip_no": 1,
+      "expression_span": "",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP02",
+      "clip_no": 2,
+      "expression_span": "",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP03",
+      "clip_no": 3,
+      "expression_span": "",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP04",
+      "clip_no": 4,
+      "expression_span": "",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP05",
+      "clip_no": 5,
+      "expression_span": "",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP06",
+      "clip_no": 6,
+      "expression_span": "",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP07",
+      "clip_no": 7,
+      "expression_span": "",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP08",
+      "clip_no": 8,
+      "expression_span": "",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP09",
+      "clip_no": 9,
+      "expression_span": "",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP10",
+      "clip_no": 10,
+      "expression_span": "",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP11",
+      "clip_no": 11,
+      "expression_span": "",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP12",
+      "clip_no": 12,
+      "expression_span": "",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP13",
+      "clip_no": 13,
+      "expression_span": "",
+      "need_endframe": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    }
+  ],
+  "allowed_evolution": [
+    {
+      "character": "CHAR_JIANG_YUECHU",
+      "from_shot": 1,
+      "to_shot": null,
+      "field": "",
+      "desc": "EP01_CLIP01-07 战场形态：玄衣赤氅、右肩暗金凶兽护肩、大荒碎星戟、周身白气。",
+      "source": "seed"
+    },
+    {
+      "character": "CHAR_JIANG_YUECHU",
+      "from_shot": 1,
+      "to_shot": null,
+      "field": "",
+      "desc": "EP01_CLIP08-10 静修灌注：坐姿稳定，衣装不变，识海金光增强。",
+      "source": "seed"
+    },
+    {
+      "character": "CHAR_JIANG_YUECHU",
+      "from_shot": 1,
+      "to_shot": null,
+      "field": "",
+      "desc": "EP01_CLIP11-13 觉醒预备：三色龙鳞、玉色龙角、三色龙珠短暂显现。",
+      "source": "seed"
+    },
+    {
+      "character": "CHAR_YOUNG_CAPTAIN",
+      "from_shot": null,
+      "to_shot": null,
+      "field": "",
+      "desc": "断臂、残甲、疲惫感只在巴西郡幸存者段出现。",
+      "source": "seed"
+    },
+    {
+      "character": "CHAR_EMPEROR_TANG",
+      "from_shot": null,
+      "to_shot": null,
+      "field": "",
+      "desc": "疲惫但威严，不出现战场状态。",
+      "source": "seed"
+    }
+  ],
+  "notes": [
+    "派生字段只是 storyboard 快照投影：expression_span/need_endframe/motion_intensity/action_beat/closeup 以 storyboard.json 为权威，手改本文件不会覆盖 gate 或生成侧行为。",
+    "allowed_evolution 是唯一作者 override 通道：把 field 标成 costume/face/hair/prop 并填 from_shot/to_shot、置 source=\"author\"，即可显式声明『这一镜某角色该维度就该变』，对应一致性锁会把该镜 block 降 warn（补回关键词漏检的有意改动）。"
+  ]
+}

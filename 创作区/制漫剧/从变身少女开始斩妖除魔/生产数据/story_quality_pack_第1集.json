@@ -1,0 +1,585 @@
+{
+  "audience_question_ledger": {
+    "ending_hook": false,
+    "findings": [],
+    "payoff_contexts": [
+      "20·旁白·克制] 城中幸存者麻木走出废墟，死寂的眼瞳里终于泛起活人的光彩。只这一句，那断臂校尉便抬手挡住脸，肩膀止",
+      "… [镜头23·旁白·低燃] 他望着那道赤氅如血的背影，终于明白。她要以一人之力，光复一道之地。 💥爽点 [镜头2",
+      "否开始衍化内景？ [镜头36·姜月初·低声·慢] 阴山，终于等到了。 🪝集尾 # 从变身少女开始斩妖除魔_第1集",
+      "：「殿下的意思是……」旁白：「他望着那道赤氅如血的背影，终于明白。她要以一人之力，光复一道之地。」 ## 镜头 9",
+      "聚灵衍象素材已齐备，是否开始衍化内景？」姜月初：「阴山，终于等到了。」音效：BGM 抽真空，面板嗡鸣悬停。 # 从",
+      "姜月初眼底出现阴山雾影。 - 出点：黑场停在“阴山，终于等到了”。 - 转场：尾帧定格后硬切黑。 - 需",
+      "ason\": \"将第321章系统提示前移作硬断点，第2集兑现阴山成。\" }, \"cover_vari",
+      "\"不要出现完整阴山\", \"不要突破光柱\", \"不要把静立写成乱舞法术\""
+    ],
+    "questions": [
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "，按 boundary_review 将第321章开头的系统钩子前移为本集结尾。 [镜头1·旁白·低沉·快] 满城",
+        "question_id": "Q01",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "气游走，寻常妖魔尚不能近身，便已被绞杀干净。 [镜头5·系统·冷机械] 系统面板显示：【当前道行：三十七万九千八百四",
+        "question_id": "Q02",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "尚不能近身，便已被绞杀干净。 [镜头5·系统·冷机械] 系统面板显示：【当前道行：三十七万九千八百四十五年】。 ⚡",
+        "question_id": "Q03",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "徐展开。六万年道行砸下，赤蛟身影由虚转实。 [镜头28·系统·冷机械] 系统提示：成功将赤鳞妖尊提升至染朱，获得妖物",
+        "question_id": "Q04",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "行砸下，赤蛟身影由虚转实。 [镜头28·系统·冷机械] 系统提示：成功将赤鳞妖尊提升至染朱，获得妖物馈赠：【《化龙经",
+        "question_id": "Q05",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "年。赤蛟竖瞳中亮起两点金芒，好似画龙点睛。 [镜头31·系统·冷机械] 系统提示：成功将赤鳞妖尊提升至点睛，获得妖物",
+        "question_id": "Q06",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "起两点金芒，好似画龙点睛。 [镜头31·系统·冷机械] 系统提示：成功将赤鳞妖尊提升至点睛，获得妖物馈赠：【《化龙经",
+        "question_id": "Q07",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "刚要收起面板，光幕最下方，却忽然轻轻一颤。 [镜头35·系统·冷机械·慢] 聚灵衍象素材已齐备，是否开始衍化内景？",
+        "question_id": "Q08",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "# 镜头 3 **画面视觉描述：** 主观插入镜，半透明系统面板浮在姜月初眼前，面板底框留空，数值由后期 overl",
+        "question_id": "Q09",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "气海山脚无声散开。 **台词 / 音效 / 旁白：** 系统：「系统面板显示：【当前道行：三十七万九千八百四十五年】",
+        "question_id": "Q10",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "无声散开。 **台词 / 音效 / 旁白：** 系统：「系统面板显示：【当前道行：三十七万九千八百四十五年】。」姜月",
+        "question_id": "Q11",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "老绘卷在金光中展开，赤蛟虚影被道行灌入，鳞片由暗红转亮。系统面板底框悬浮在画面右侧，文字后期 overlay。 **",
+        "question_id": "Q12",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "，古老绘卷徐徐展开。六万年道行砸下，赤蛟身影由虚转实。」系统：「系统提示：成功将赤鳞妖尊提升至染朱，获得妖物馈赠：【",
+        "question_id": "Q13",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "卷徐徐展开。六万年道行砸下，赤蛟身影由虚转实。」系统：「系统提示：成功将赤鳞妖尊提升至染朱，获得妖物馈赠：【《化龙经",
+        "question_id": "Q14",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "五千八百九十年。赤蛟竖瞳中亮起两点金芒，好似画龙点睛。」系统：「系统提示：成功将赤鳞妖尊提升至点睛，获得妖物馈赠：【",
+        "question_id": "Q15",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "九十年。赤蛟竖瞳中亮起两点金芒，好似画龙点睛。」系统：「系统提示：成功将赤鳞妖尊提升至点睛，获得妖物馈赠：【《化龙经",
+        "question_id": "Q16",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "旁白：「她刚要收起面板，光幕最下方，却忽然轻轻一颤。」系统：「聚灵衍象素材已齐备，是否开始衍化内景？」姜月初：「阴",
+        "question_id": "Q17",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "尸城血雾中，掌心将要吸起精气。 - 转场：低频硬切接系统面板。 - 需要尾帧：是。中段锚帧：2.5s。",
+        "question_id": "Q18",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "中段锚帧：3.5s。 **分镜**：白气绞妖气 → 系统面板数值 overlay → 千百精气洪流汇入掌心。",
+        "question_id": "Q19",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "s。 **分镜**：绘卷展开 → 赤蛟虚影凝实 → 系统奖励 overlay。 **Clip 10（EP01_",
+        "question_id": "Q20",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "**分镜**：姜月初说继续 → 赤蛟点睛 → 第二次系统奖励 overlay。 **Clip 11（EP01_",
+        "question_id": "Q21",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "**场景**：LOC_BROKEN_HOUSE / 系统面板近景 **衔接设计**： - 入点：面板底部",
+        "question_id": "Q22",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "osition\": \"本集回答真正的援军是谁，以及姜月初为何不能立刻破境。\", \"onscreen_text",
+        "question_id": "Q23",
+        "signal": "为何",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": ", \"payoff_evidence\": \"系统面板显示三十七万年道行，满城精气被她一掌收起。\"",
+        "question_id": "Q24",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "il\", \"reason\": \"将第321章系统提示前移作硬断点，第2集兑现阴山成。\" },",
+        "question_id": "Q25",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "C_CONSCIOUSNESS_SEA\": \"金色绘卷与系统面板自发光，黑蓝虚空作负空间。\" },",
+        "question_id": "Q26",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\"景别阶梯\": \"广角尸城冷开 → 主角中近景 → 系统插入 → 朝堂广角/反打 → 幸存者近景 → 静修中近景",
+        "question_id": "Q27",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "演员骨相与国漫写实美型折中，低饱和冷灰，材质真实，妖气和系统特效克制清晰。\", \"镜头与构图\": \"竖屏叙事",
+        "question_id": "Q28",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "神特写。\", \"光色策略\": \"冷月、冷石反光和系统自发光为主要光源；朱红披风和暗金护肩作识别强调。\",",
+        "question_id": "Q29",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": ": \"禁欧美魔幻脸、页游高饱和、塑料盔甲、红裙替代赤氅、系统面板烤字、无来源强光、血腥器官特写、脸被雾遮住。\"",
+        "question_id": "Q30",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\"transition\": \"低频硬切接系统面板\", \"need_endframe\"",
+        "question_id": "Q31",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "游走，妖魔尚未近身便被绞杀干净。\", \"系统面板显示：【当前道行：三十七万九千八百四十五年】。\",",
+        "question_id": "Q32",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\"白气贴身旋转\", \"系统面板冷光浮现\", \"精气洪流入掌\",",
+        "question_id": "Q33",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\"右肩护肩在画面右侧\", \"系统面板内部留空给overlay\" ],",
+        "question_id": "Q34",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "et_lock\": \"白气为青白细线，精气为半透明流束，系统面板为青白空底框。\", \"intensi",
+        "question_id": "Q35",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\"eyeline\": \"姜月初视线由掌心下移到系统面板。\", \"shot_size\": \"",
+        "question_id": "Q36",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\": \"皇帝必须在风险未明时决定是否让姜月初继续深入阴山线索；御案上的急报成为决策压力。\", \"ev",
+        "question_id": "Q37",
+        "signal": "线索",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\"scene\": \"内景古绘卷中赤蛟由虚转实，系统奖励浮现。\", \"location_id\":",
+        "question_id": "Q38",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "subtitle_lines\": [ \"系统提示：赤鳞妖尊提升至染朱，获得【《化龙经·残三》（圆满）",
+        "question_id": "Q39",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\"blocking\": \"赤蛟绘卷占画面左侧，系统空面板在右侧，姜月初侧脸作为前景。\",",
+        "question_id": "Q40",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\"motif_id\": \"MOTIF_系统面板\", \"vfx_asset\": \"V",
+        "question_id": "Q41",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "e, \"eyeline\": \"姜月初看向系统面板。\", \"shot_size\": \"",
+        "question_id": "Q42",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "3.5, \"reason\": \"锁系统奖励面板与赤蛟绘卷。\" },",
+        "question_id": "Q43",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": ", \"scene\": \"赤蛟竖瞳点金，第二次系统奖励。\", \"location_id\": \"",
+        "question_id": "Q44",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "瞳中亮起两点金芒，好似画龙点睛。\", \"系统提示：获得【《化龙经·残三》（无上）】。\"",
+        "question_id": "Q45",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\"motif_id\": \"MOTIF_系统面板\", \"vfx_asset\": \"V",
+        "question_id": "Q46",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "01_CLIP12\", \"label\": \"系统提示：是否衍化内景\", \"duration\"",
+        "question_id": "Q47",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "tion\": 8.0, \"scene\": \"系统面板近景，光幕底部轻颤。\", \"locati",
+        "question_id": "Q48",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\"motif_id\": \"MOTIF_系统面板\", \"vfx_asset\": \"V",
+        "question_id": "Q49",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": ".0, \"reason\": \"锁集尾系统问题和面板构图。\" },",
+        "question_id": "Q50",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      }
+    ]
+  },
+  "boundary_continuation": {
+    "available": false,
+    "reason": "第1集无上集边界",
+    "status": "n/a"
+  },
+  "episode": "第1集",
+  "kind": "n2d_story_quality_pack",
+  "notes": [
+    "文本期 report-only；不把时长升成硬门，只加强剧情可看性和下游 prompt 继承。"
+  ],
+  "pack_hash": "7cf668cfa59ef58a",
+  "performance_prompt_cues": [
+    {
+      "clip": "EP01_CLIP01",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_JIANG_YUECHU/战场形态",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        },
+        {
+          "character_form": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        }
+      ]
+    },
+    {
+      "clip": "EP01_CLIP02",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_JIANG_YUECHU/战场形态",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        },
+        {
+          "character_form": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        }
+      ]
+    },
+    {
+      "clip": "EP01_CLIP03",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_JIANG_YUECHU/战场形态",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        },
+        {
+          "character_form": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        }
+      ]
+    },
+    {
+      "clip": "EP01_CLIP06",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_JIANG_YUECHU/战场形态",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        },
+        {
+          "character_form": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        }
+      ]
+    },
+    {
+      "clip": "EP01_CLIP07",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_JIANG_YUECHU/战场形态",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        },
+        {
+          "character_form": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        }
+      ]
+    },
+    {
+      "clip": "EP01_CLIP08",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_JIANG_YUECHU/战场形态",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        },
+        {
+          "character_form": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        }
+      ]
+    },
+    {
+      "clip": "EP01_CLIP09",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_JIANG_YUECHU/战场形态",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        },
+        {
+          "character_form": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        }
+      ]
+    },
+    {
+      "clip": "EP01_CLIP10",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_JIANG_YUECHU/战场形态",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        },
+        {
+          "character_form": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        }
+      ]
+    },
+    {
+      "clip": "EP01_CLIP11",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_JIANG_YUECHU/战场形态",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        },
+        {
+          "character_form": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        }
+      ]
+    },
+    {
+      "clip": "EP01_CLIP12",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_JIANG_YUECHU/战场形态",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        },
+        {
+          "character_form": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        }
+      ]
+    },
+    {
+      "clip": "EP01_CLIP13",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_JIANG_YUECHU/战场形态",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        },
+        {
+          "character_form": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+          "prompt_cue": "speech_rhythm=短句、低音量、收尾干净。"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "boundary_status": "n/a",
+    "open_questions": 0,
+    "performance_cue_clips": 11
+  },
+  "version": 1
+}

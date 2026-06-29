@@ -1,0 +1,10 @@
+{
+  "kind": "n2d_styleid_release_signoff",
+  "version": 1,
+  "episode": "第1集",
+  "accepted": true,
+  "reviewer": "Codex",
+  "reason": "用户明确要求第1集整集出图且无需逐张批准；当前本机未配置 N2D_STYLEID_MODEL，先按 internal_only 内部打样继续生成图片。进入正式投放/高近景发布前必须补 styleid full QC 或重新签收。",
+  "scope": "image_generation_internal_preview",
+  "expires_at": "2026-07-06"
+}

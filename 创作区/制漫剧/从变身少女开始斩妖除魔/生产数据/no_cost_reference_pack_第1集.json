@@ -1,0 +1,951 @@
+{
+  "clip_count": 13,
+  "episode": "第1集",
+  "kind": "n2d_no_cost_reference_pack",
+  "multi_subject_clips": [
+    "EP01_CLIP01",
+    "EP01_CLIP04",
+    "EP01_CLIP05",
+    "EP01_CLIP06",
+    "EP01_CLIP07"
+  ],
+  "notes": [],
+  "summary": {
+    "asset_targets": 47,
+    "character_targets": 56,
+    "multi_subject_targets": 10,
+    "planned": 33,
+    "ready": 80,
+    "total": 113
+  },
+  "targets": [
+    {
+      "owner": "CHAR_JIANG_YUECHU/战场形态",
+      "path": "出图/共享/图片/定妆_姜月初_战场形态.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "front",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_JIANG_YUECHU/战场形态",
+      "path": "出图/共享/图片/定妆_姜月初_战场形态_45度.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "three_quarter",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_JIANG_YUECHU/战场形态",
+      "path": "出图/共享/图片/定妆_姜月初_战场形态_侧.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "side",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_JIANG_YUECHU/战场形态",
+      "path": "出图/共享/图片/定妆_姜月初_战场形态_背.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "back",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_JIANG_YUECHU/战场形态",
+      "path": "出图/共享/图片/定妆_姜月初_战场形态_半身.png",
+      "reason": "服装/体态参考，防止镜头内换身材或换衣。",
+      "scope": "character",
+      "slot": "half_body_or_full_body",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_JIANG_YUECHU/战场形态",
+      "path": "出图/共享/图片/定妆_姜月初_战场形态_主参考.jpeg",
+      "reason": "脸部特写锚，近景/反打/表情镜必用。",
+      "scope": "character",
+      "slot": "face_anchor_refs",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_JIANG_YUECHU/战场形态",
+      "path": "出图/共享/图片/定妆_姜月初_战场形态_脸部特写.png",
+      "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+      "scope": "character",
+      "slot": "expression_bank",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_JIANG_YUECHU/战场形态",
+      "path": "出图/共享/图片/定妆_姜月初_战场形态_主参考.jpeg",
+      "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+      "scope": "character",
+      "slot": "action_pose_pack",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+      "path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "front",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+      "path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_45度.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "three_quarter",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+      "path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_侧.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "side",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+      "path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_背.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "back",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+      "path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_半身.png",
+      "reason": "服装/体态参考，防止镜头内换身材或换衣。",
+      "scope": "character",
+      "slot": "half_body_or_full_body",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+      "path": "出图/共享/图片/定妆_姜月初_觉醒蓝调_母本.jpeg",
+      "reason": "脸部特写锚，近景/反打/表情镜必用。",
+      "scope": "character",
+      "slot": "face_anchor_refs",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+      "path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_脸部特写.png",
+      "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+      "scope": "character",
+      "slot": "expression_bank",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+      "path": "出图/共享/图片/定妆_CHAR_JIANG_YUECHU_觉醒蓝调母本_action_pose_pack.png",
+      "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+      "scope": "character",
+      "slot": "action_pose_pack",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+      "path": "出图/共享/图片/定妆_年轻校尉_断臂校尉.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "front",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+      "path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_45度.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "three_quarter",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+      "path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_侧.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "side",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+      "path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_背.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "back",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+      "path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_半身.png",
+      "reason": "服装/体态参考，防止镜头内换身材或换衣。",
+      "scope": "character",
+      "slot": "half_body_or_full_body",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+      "path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_脸部特写.png",
+      "reason": "脸部特写锚，近景/反打/表情镜必用。",
+      "scope": "character",
+      "slot": "face_anchor_refs",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+      "path": "出图/共享/图片/定妆_年轻校尉_断臂校尉_脸部特写.png",
+      "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+      "scope": "character",
+      "slot": "expression_bank",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_YOUNG_CAPTAIN/断臂校尉",
+      "path": "出图/共享/图片/定妆_CHAR_YOUNG_CAPTAIN_断臂校尉_action_pose_pack.png",
+      "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+      "scope": "character",
+      "slot": "action_pose_pack",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+      "path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "front",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+      "path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_45度.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "three_quarter",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+      "path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_侧.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "side",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+      "path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_背.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "back",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+      "path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_半身.png",
+      "reason": "服装/体态参考，防止镜头内换身材或换衣。",
+      "scope": "character",
+      "slot": "half_body_or_full_body",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+      "path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_脸部特写.png",
+      "reason": "脸部特写锚，近景/反打/表情镜必用。",
+      "scope": "character",
+      "slot": "face_anchor_refs",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+      "path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_脸部特写.png",
+      "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+      "scope": "character",
+      "slot": "expression_bank",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+      "path": "出图/共享/图片/定妆_CHAR_EMPEROR_TANG_朝堂常态_action_pose_pack.png",
+      "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+      "scope": "character",
+      "slot": "action_pose_pack",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_CHENG_LAO/朝堂常态",
+      "path": "出图/共享/图片/定妆_程老_朝堂常态.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "front",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_CHENG_LAO/朝堂常态",
+      "path": "出图/共享/图片/定妆_程老_朝堂常态_45度.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "three_quarter",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_CHENG_LAO/朝堂常态",
+      "path": "出图/共享/图片/定妆_程老_朝堂常态_侧.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "side",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_CHENG_LAO/朝堂常态",
+      "path": "出图/共享/图片/定妆_程老_朝堂常态_背.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "back",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_CHENG_LAO/朝堂常态",
+      "path": "出图/共享/图片/定妆_程老_朝堂常态_半身.png",
+      "reason": "服装/体态参考，防止镜头内换身材或换衣。",
+      "scope": "character",
+      "slot": "half_body_or_full_body",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_CHENG_LAO/朝堂常态",
+      "path": "出图/共享/图片/定妆_程老_朝堂常态_脸部特写.png",
+      "reason": "脸部特写锚，近景/反打/表情镜必用。",
+      "scope": "character",
+      "slot": "face_anchor_refs",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_CHENG_LAO/朝堂常态",
+      "path": "出图/共享/图片/定妆_程老_朝堂常态_脸部特写.png",
+      "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+      "scope": "character",
+      "slot": "expression_bank",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_CHENG_LAO/朝堂常态",
+      "path": "出图/共享/图片/定妆_CHAR_CHENG_LAO_朝堂常态_action_pose_pack.png",
+      "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+      "scope": "character",
+      "slot": "action_pose_pack",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_COURT_MINISTERS/群臣剪影",
+      "path": "出图/共享/图片/定妆_CHAR_COURT_MINISTERS_群臣剪影_front.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "front",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_COURT_MINISTERS/群臣剪影",
+      "path": "出图/共享/图片/定妆_CHAR_COURT_MINISTERS_群臣剪影_three_quarter.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "three_quarter",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_COURT_MINISTERS/群臣剪影",
+      "path": "出图/共享/图片/定妆_CHAR_COURT_MINISTERS_群臣剪影_side.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "side",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_COURT_MINISTERS/群臣剪影",
+      "path": "出图/共享/图片/定妆_CHAR_COURT_MINISTERS_群臣剪影_back.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "back",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_COURT_MINISTERS/群臣剪影",
+      "path": "出图/共享/图片/定妆_CHAR_COURT_MINISTERS_群臣剪影_half_body_or_full_body.png",
+      "reason": "服装/体态参考，防止镜头内换身材或换衣。",
+      "scope": "character",
+      "slot": "half_body_or_full_body",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_COURT_MINISTERS/群臣剪影",
+      "path": "出图/共享/图片/定妆_朝堂群臣_群臣剪影_剪影.png",
+      "reason": "脸部特写锚，近景/反打/表情镜必用。",
+      "scope": "character",
+      "slot": "face_anchor_refs",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_COURT_MINISTERS/群臣剪影",
+      "path": "出图/共享/图片/定妆_朝堂群臣_群臣剪影_剪影.png",
+      "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+      "scope": "character",
+      "slot": "expression_bank",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_COURT_MINISTERS/群臣剪影",
+      "path": "出图/共享/图片/定妆_CHAR_COURT_MINISTERS_群臣剪影_action_pose_pack.png",
+      "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+      "scope": "character",
+      "slot": "action_pose_pack",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_GARRISON_SURVIVORS/残兵剪影",
+      "path": "出图/共享/图片/定妆_CHAR_GARRISON_SURVIVORS_残兵剪影_front.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "front",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_GARRISON_SURVIVORS/残兵剪影",
+      "path": "出图/共享/图片/定妆_CHAR_GARRISON_SURVIVORS_残兵剪影_three_quarter.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "three_quarter",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_GARRISON_SURVIVORS/残兵剪影",
+      "path": "出图/共享/图片/定妆_CHAR_GARRISON_SURVIVORS_残兵剪影_side.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "side",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_GARRISON_SURVIVORS/残兵剪影",
+      "path": "出图/共享/图片/定妆_CHAR_GARRISON_SURVIVORS_残兵剪影_back.png",
+      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+      "scope": "character",
+      "slot": "back",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_GARRISON_SURVIVORS/残兵剪影",
+      "path": "出图/共享/图片/定妆_CHAR_GARRISON_SURVIVORS_残兵剪影_half_body_or_full_body.png",
+      "reason": "服装/体态参考，防止镜头内换身材或换衣。",
+      "scope": "character",
+      "slot": "half_body_or_full_body",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_GARRISON_SURVIVORS/残兵剪影",
+      "path": "出图/共享/图片/定妆_巴西郡残兵_残兵剪影_剪影.png",
+      "reason": "脸部特写锚，近景/反打/表情镜必用。",
+      "scope": "character",
+      "slot": "face_anchor_refs",
+      "status": "ready"
+    },
+    {
+      "owner": "CHAR_GARRISON_SURVIVORS/残兵剪影",
+      "path": "出图/共享/图片/定妆_巴西郡残兵_残兵剪影_剪影.png",
+      "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+      "scope": "character",
+      "slot": "expression_bank",
+      "status": "planned"
+    },
+    {
+      "owner": "CHAR_GARRISON_SURVIVORS/残兵剪影",
+      "path": "出图/共享/图片/定妆_CHAR_GARRISON_SURVIVORS_残兵剪影_action_pose_pack.png",
+      "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+      "scope": "character",
+      "slot": "action_pose_pack",
+      "status": "planned"
+    },
+    {
+      "owner": "LOC_BAXI_BATTLEFIELD",
+      "path": "出图/共享/图片/定妆_巴西郡尸城战场.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "wide_plate",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_BAXI_BATTLEFIELD",
+      "path": "出图/共享/图片/定妆_巴西郡尸城战场.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "reverse_angle",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_BAXI_BATTLEFIELD",
+      "path": "出图/共享/图片/定妆_巴西郡尸城战场.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "empty_plate",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_BAXI_BATTLEFIELD",
+      "path": "出图/共享/图片/定妆_巴西郡尸城战场.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "lighting_plate",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_BAXI_BATTLEFIELD_ESTABLISH",
+      "path": "出图/共享/图片/定妆_巴西郡尸城大全景.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "wide_plate",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_BAXI_BATTLEFIELD_ESTABLISH",
+      "path": "出图/共享/图片/定妆_巴西郡尸城大全景.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "reverse_angle",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_BAXI_BATTLEFIELD_ESTABLISH",
+      "path": "出图/共享/图片/定妆_巴西郡尸城大全景.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "empty_plate",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_BAXI_BATTLEFIELD_ESTABLISH",
+      "path": "出图/共享/图片/定妆_巴西郡尸城大全景.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "lighting_plate",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_TANG_COURT",
+      "path": "出图/共享/图片/定妆_大唐朝堂.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "wide_plate",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_TANG_COURT",
+      "path": "出图/共享/图片/定妆_大唐朝堂.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "reverse_angle",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_TANG_COURT",
+      "path": "出图/共享/图片/定妆_大唐朝堂.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "empty_plate",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_TANG_COURT",
+      "path": "出图/共享/图片/定妆_大唐朝堂.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "lighting_plate",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_BROKEN_HOUSE",
+      "path": "出图/共享/图片/定妆_尸城破屋.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "wide_plate",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_BROKEN_HOUSE",
+      "path": "出图/共享/图片/定妆_尸城破屋.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "reverse_angle",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_BROKEN_HOUSE",
+      "path": "出图/共享/图片/定妆_尸城破屋.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "empty_plate",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_BROKEN_HOUSE",
+      "path": "出图/共享/图片/定妆_尸城破屋.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "lighting_plate",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_CONSCIOUSNESS_SEA",
+      "path": "出图/共享/图片/定妆_姜月初识海阴山.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "wide_plate",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_CONSCIOUSNESS_SEA",
+      "path": "出图/共享/图片/定妆_姜月初识海阴山.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "reverse_angle",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_CONSCIOUSNESS_SEA",
+      "path": "出图/共享/图片/定妆_姜月初识海阴山.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "empty_plate",
+      "status": "ready"
+    },
+    {
+      "owner": "LOC_CONSCIOUSNESS_SEA",
+      "path": "出图/共享/图片/定妆_姜月初识海阴山.png",
+      "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
+      "scope": "asset",
+      "slot": "lighting_plate",
+      "status": "ready"
+    },
+    {
+      "owner": "WEAPON_DAHUANG_HALBERD",
+      "path": "出图/共享/图片/定妆_大荒碎星戟.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "primary",
+      "status": "ready"
+    },
+    {
+      "owner": "WEAPON_DAHUANG_HALBERD",
+      "path": "出图/共享/图片/定妆_大荒碎星戟_握持比例.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "scale_reference",
+      "status": "ready"
+    },
+    {
+      "owner": "WEAPON_DAHUANG_HALBERD",
+      "path": "出图/共享/图片/定妆_大荒碎星戟.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "detail_closeup",
+      "status": "ready"
+    },
+    {
+      "owner": "PROP_IMPERIAL_DESK",
+      "path": "出图/共享/图片/定妆_御案.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "primary",
+      "status": "ready"
+    },
+    {
+      "owner": "PROP_IMPERIAL_DESK",
+      "path": "出图/共享/图片/定妆_御案.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "scale_reference",
+      "status": "ready"
+    },
+    {
+      "owner": "PROP_IMPERIAL_DESK",
+      "path": "出图/共享/图片/定妆_御案.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "detail_closeup",
+      "status": "ready"
+    },
+    {
+      "owner": "PROP_STATE_LETTER",
+      "path": "出图/共享/图片/定妆_巴西郡急报.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "primary",
+      "status": "ready"
+    },
+    {
+      "owner": "PROP_STATE_LETTER",
+      "path": "出图/共享/图片/定妆_巴西郡急报.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "scale_reference",
+      "status": "ready"
+    },
+    {
+      "owner": "PROP_STATE_LETTER",
+      "path": "出图/共享/图片/定妆_巴西郡急报.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "detail_closeup",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_SYSTEM_PANEL",
+      "path": "出图/共享/图片/定妆_系统面板_v1.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "primary",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_SYSTEM_PANEL",
+      "path": "出图/共享/图片/定妆_系统面板_v1.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "scale_reference",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_SYSTEM_PANEL",
+      "path": "出图/共享/图片/定妆_系统面板_v1.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "detail_closeup",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_ESSENCE_STREAMS",
+      "path": "出图/共享/图片/定妆_精气洪流.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "primary",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_ESSENCE_STREAMS",
+      "path": "出图/共享/图片/定妆_精气洪流.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "scale_reference",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_ESSENCE_STREAMS",
+      "path": "出图/共享/图片/定妆_精气洪流.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "detail_closeup",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_WHITE_QI",
+      "path": "出图/共享/图片/定妆_白气缠绕.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "primary",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_WHITE_QI",
+      "path": "出图/共享/图片/定妆_白气缠绕.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "scale_reference",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_WHITE_QI",
+      "path": "出图/共享/图片/定妆_白气缠绕.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "detail_closeup",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_RED_FLOOD_DRAGON_SCROLL",
+      "path": "出图/共享/图片/定妆_赤蛟绘卷虚影.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "primary",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_RED_FLOOD_DRAGON_SCROLL",
+      "path": "出图/共享/图片/定妆_赤蛟绘卷虚影.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "scale_reference",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_RED_FLOOD_DRAGON_SCROLL",
+      "path": "出图/共享/图片/定妆_赤蛟绘卷虚影.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "detail_closeup",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_THREE_DRAGON_ORBS",
+      "path": "出图/共享/图片/定妆_三色龙珠.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "primary",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_THREE_DRAGON_ORBS",
+      "path": "出图/共享/图片/定妆_三色龙珠.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "scale_reference",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_THREE_DRAGON_ORBS",
+      "path": "出图/共享/图片/定妆_三色龙珠.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "detail_closeup",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_YINSHAN_MIST",
+      "path": "出图/共享/图片/定妆_阴山雾影.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "primary",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_YINSHAN_MIST",
+      "path": "出图/共享/图片/定妆_阴山雾影.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "scale_reference",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_YINSHAN_MIST",
+      "path": "出图/共享/图片/定妆_阴山雾影.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "detail_closeup",
+      "status": "ready"
+    },
+    {
+      "owner": "EP01_CLIP01",
+      "path": "出图/第1集/区域构建/EP01_CLIP01/empty_plate.png",
+      "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "status": "planned"
+    },
+    {
+      "owner": "EP01_CLIP01",
+      "path": "出图/第1集/区域构建/EP01_CLIP01/masks.json",
+      "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "status": "planned"
+    },
+    {
+      "owner": "EP01_CLIP04",
+      "path": "出图/第1集/区域构建/EP01_CLIP04/empty_plate.png",
+      "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "status": "planned"
+    },
+    {
+      "owner": "EP01_CLIP04",
+      "path": "出图/第1集/区域构建/EP01_CLIP04/masks.json",
+      "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "status": "planned"
+    },
+    {
+      "owner": "EP01_CLIP05",
+      "path": "出图/第1集/区域构建/EP01_CLIP05/empty_plate.png",
+      "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "status": "planned"
+    },
+    {
+      "owner": "EP01_CLIP05",
+      "path": "出图/第1集/区域构建/EP01_CLIP05/masks.json",
+      "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "status": "planned"
+    },
+    {
+      "owner": "EP01_CLIP06",
+      "path": "出图/第1集/区域构建/EP01_CLIP06/empty_plate.png",
+      "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "status": "planned"
+    },
+    {
+      "owner": "EP01_CLIP06",
+      "path": "出图/第1集/区域构建/EP01_CLIP06/masks.json",
+      "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "status": "planned"
+    },
+    {
+      "owner": "EP01_CLIP07",
+      "path": "出图/第1集/区域构建/EP01_CLIP07/empty_plate.png",
+      "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "status": "planned"
+    },
+    {
+      "owner": "EP01_CLIP07",
+      "path": "出图/第1集/区域构建/EP01_CLIP07/masks.json",
+      "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "status": "planned"
+    }
+  ],
+  "used_assets": [
+    "LOC_BAXI_BATTLEFIELD",
+    "LOC_BAXI_BATTLEFIELD_ESTABLISH",
+    "LOC_BROKEN_HOUSE",
+    "LOC_CONSCIOUSNESS_SEA",
+    "LOC_TANG_COURT",
+    "PROP_IMPERIAL_DESK",
+    "PROP_STATE_LETTER",
+    "VFX_ESSENCE_STREAMS",
+    "VFX_RED_FLOOD_DRAGON_SCROLL",
+    "VFX_SYSTEM_PANEL",
+    "VFX_THREE_DRAGON_ORBS",
+    "VFX_WHITE_QI",
+    "VFX_YINSHAN_MIST",
+    "WEAPON_DAHUANG_HALBERD"
+  ],
+  "used_characters": [
+    "CHAR_CHENG_LAO",
+    "CHAR_COURT_MINISTERS",
+    "CHAR_EMPEROR_TANG",
+    "CHAR_GARRISON_SURVIVORS",
+    "CHAR_JIANG_YUECHU",
+    "CHAR_YOUNG_CAPTAIN"
+  ]
+}

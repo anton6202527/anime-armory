@@ -1,0 +1,280 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 19,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/图片/EP01_CLIP05.png",
+      "bytes": 2098866,
+      "owner": "Clip_05",
+      "priority": 0,
+      "rel_path": "出图/第1集/图片/EP01_CLIP05.png",
+      "role": "source_frame",
+      "sequence": 0,
+      "sha256": "373b5403075279b7dc640a5b87209c8262cd3b3b4766190e33bf05df7fcaa8de",
+      "source": "same_clip_firstframe"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/图片/EP01_CLIP05_mid.png",
+      "bytes": 2085710,
+      "owner": "Clip_05",
+      "priority": 0,
+      "rel_path": "出图/第1集/图片/EP01_CLIP05_mid.png",
+      "role": "source_frame",
+      "sequence": 1,
+      "sha256": "de1b626b982f1f59fd325168d166323d92c0ca4aec9747296ed805c1c06f6a7e",
+      "source": "same_clip_anchor"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_大唐朝堂.png",
+      "bytes": 2363811,
+      "owner": "LOC_TANG_COURT",
+      "priority": 40,
+      "rel_path": "出图/共享/图片/定妆_大唐朝堂.png",
+      "role": "asset",
+      "sequence": 16,
+      "sha256": "b8a1a4b709d405928de7d152ebb7bfa82aa2b34835639c199c843e5068fddf9b",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_御案.png",
+      "bytes": 2138526,
+      "owner": "PROP_IMPERIAL_DESK",
+      "priority": 40,
+      "rel_path": "出图/共享/图片/定妆_御案.png",
+      "role": "asset",
+      "sequence": 17,
+      "sha256": "28c57e2147a19986d4d15993ed161ebc2b85e2d094f32fdf3c155148517bec69",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_巴西郡急报.png",
+      "bytes": 2702304,
+      "owner": "PROP_STATE_LETTER",
+      "priority": 40,
+      "rel_path": "出图/共享/图片/定妆_巴西郡急报.png",
+      "role": "asset",
+      "sequence": 18,
+      "sha256": "b78532017b5f228b08caa39decfa7e458e20499f391614bf89d385e53d5230c1",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_大唐皇帝_朝堂常态_脸部特写.png",
+      "bytes": 2325940,
+      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_脸部特写.png",
+      "role": "character",
+      "sequence": 8,
+      "sha256": "d65ca45b30c8423265ebacbc140cd7a052e9e255779a18ab81b5ad0ef4425b1d",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_程老_朝堂常态_脸部特写.png",
+      "bytes": 2228793,
+      "owner": "CHAR_CHENG_LAO/朝堂常态",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_程老_朝堂常态_脸部特写.png",
+      "role": "character",
+      "sequence": 15,
+      "sha256": "9b5f91c276cf7141224ca51d33ec850dd5c68cfe556ab0fb4d6c4987475ce317",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_大唐皇帝_朝堂常态_半身.png",
+      "bytes": 2448715,
+      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+      "priority": 110,
+      "rel_path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_半身.png",
+      "role": "character",
+      "sequence": 6,
+      "sha256": "e4c765dea6522ea584377a6ad1869411070995d83bf5a5a81976b997f832c76a",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_程老_朝堂常态_半身.png",
+      "bytes": 2269041,
+      "owner": "CHAR_CHENG_LAO/朝堂常态",
+      "priority": 110,
+      "rel_path": "出图/共享/图片/定妆_程老_朝堂常态_半身.png",
+      "role": "character",
+      "sequence": 13,
+      "sha256": "aac058903d23f11b722f5ab2d32072d81df53a4da2f1070aab0cbe7eebb86c46",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_大唐皇帝_朝堂常态.png",
+      "bytes": 2290926,
+      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态.png",
+      "role": "character",
+      "sequence": 2,
+      "sha256": "f58d3abc51ec1cf5e7038734bc348974f027e010c929b14052943bd472e61238",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_程老_朝堂常态.png",
+      "bytes": 2143498,
+      "owner": "CHAR_CHENG_LAO/朝堂常态",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_程老_朝堂常态.png",
+      "role": "character",
+      "sequence": 9,
+      "sha256": "b189a275751ced65fd01cfdb4fe003905fd3bfbcc7c49b2292805d000995c61c",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_大唐皇帝_朝堂常态_45度.png",
+      "bytes": 1931378,
+      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_45度.png",
+      "role": "character",
+      "sequence": 3,
+      "sha256": "5c091288cc381c1f5407f33ff1dca2376f700341448c76cc8bbdf02bd4639924",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_大唐皇帝_朝堂常态_侧.png",
+      "bytes": 1843182,
+      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_侧.png",
+      "role": "character",
+      "sequence": 4,
+      "sha256": "068ba06601d9a6a3c785d3864b07d5cc70124c8e8e4eab9c0a5654fb14e83f3f",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_程老_朝堂常态_45度.png",
+      "bytes": 2108664,
+      "owner": "CHAR_CHENG_LAO/朝堂常态",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_程老_朝堂常态_45度.png",
+      "role": "character",
+      "sequence": 10,
+      "sha256": "9b35cab9e630dd3b589a1135fcbda3a27ecc6ece052f7871c1e1a450bc8a1c4b",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_程老_朝堂常态_侧.png",
+      "bytes": 1838778,
+      "owner": "CHAR_CHENG_LAO/朝堂常态",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_程老_朝堂常态_侧.png",
+      "role": "character",
+      "sequence": 11,
+      "sha256": "77d02f83899df5971bacb3055b0962ccf7f70c9067fc9c57d52a02e6c344f124",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_大唐皇帝_朝堂常态_三视图.png",
+      "bytes": 2221084,
+      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+      "priority": 140,
+      "rel_path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_三视图.png",
+      "role": "character",
+      "sequence": 7,
+      "sha256": "37105153e5f1d909fa549c4daea9188b034652329f367c15b6f4810e63c6533f",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_程老_朝堂常态_三视图.png",
+      "bytes": 2056141,
+      "owner": "CHAR_CHENG_LAO/朝堂常态",
+      "priority": 140,
+      "rel_path": "出图/共享/图片/定妆_程老_朝堂常态_三视图.png",
+      "role": "character",
+      "sequence": 14,
+      "sha256": "55e4fb1e79c8b1fae541df1b99c7d72a3461894ac5155a73cfae1614b4b57cec",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_大唐皇帝_朝堂常态_背.png",
+      "bytes": 2074687,
+      "owner": "CHAR_EMPEROR_TANG/朝堂常态",
+      "priority": 150,
+      "rel_path": "出图/共享/图片/定妆_大唐皇帝_朝堂常态_背.png",
+      "role": "character",
+      "sequence": 5,
+      "sha256": "2bd6c0838b33ca4a34e39601bbe349bf3f3f1e94a46795c2ba9dc5048808eb62",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_程老_朝堂常态_背.png",
+      "bytes": 1958319,
+      "owner": "CHAR_CHENG_LAO/朝堂常态",
+      "priority": 150,
+      "rel_path": "出图/共享/图片/定妆_程老_朝堂常态_背.png",
+      "role": "character",
+      "sequence": 12,
+      "sha256": "325fd4fbd5305259ebb6f6382098e0ec20d5e55d30e9b4760ff0ed6a5ec66fa0",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "form": "朝堂常态",
+      "id": "CHAR_EMPEROR_TANG",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_大唐皇帝_朝堂常态.png",
+        "出图/共享/图片/定妆_大唐皇帝_朝堂常态_45度.png",
+        "出图/共享/图片/定妆_大唐皇帝_朝堂常态_侧.png",
+        "出图/共享/图片/定妆_大唐皇帝_朝堂常态_背.png",
+        "出图/共享/图片/定妆_大唐皇帝_朝堂常态_半身.png",
+        "出图/共享/图片/定妆_大唐皇帝_朝堂常态_三视图.png",
+        "出图/共享/图片/定妆_大唐皇帝_朝堂常态_脸部特写.png"
+      ]
+    },
+    {
+      "form": "朝堂常态",
+      "id": "CHAR_CHENG_LAO",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_程老_朝堂常态.png",
+        "出图/共享/图片/定妆_程老_朝堂常态_45度.png",
+        "出图/共享/图片/定妆_程老_朝堂常态_侧.png",
+        "出图/共享/图片/定妆_程老_朝堂常态_背.png",
+        "出图/共享/图片/定妆_程老_朝堂常态_半身.png",
+        "出图/共享/图片/定妆_程老_朝堂常态_三视图.png",
+        "出图/共享/图片/定妆_程老_朝堂常态_脸部特写.png"
+      ]
+    },
+    {
+      "id": "LOC_TANG_COURT",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_大唐朝堂.png"
+      ],
+      "type": "scene"
+    },
+    {
+      "id": "PROP_IMPERIAL_DESK",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_御案.png"
+      ],
+      "type": "prop"
+    },
+    {
+      "id": "PROP_STATE_LETTER",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_巴西郡急报.png"
+      ],
+      "type": "prop"
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "Clip_05_end",
+  "target": "出图/第1集/图片/EP01_CLIP05_end.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

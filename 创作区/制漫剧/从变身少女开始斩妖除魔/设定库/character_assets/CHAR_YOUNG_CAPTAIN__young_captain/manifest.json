@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_YOUNG_CAPTAIN",
+  "character_name": "年轻校尉",
+  "package_dir": "设定库/character_assets/CHAR_YOUNG_CAPTAIN__young_captain",
+  "directories": {
+    "reference": "设定库/character_assets/CHAR_YOUNG_CAPTAIN__young_captain/reference",
+    "prompts": "设定库/character_assets/CHAR_YOUNG_CAPTAIN__young_captain/prompts",
+    "lora": "设定库/character_assets/CHAR_YOUNG_CAPTAIN__young_captain/lora",
+    "voice": "设定库/character_assets/CHAR_YOUNG_CAPTAIN__young_captain/voice",
+    "adapters": "设定库/character_assets/CHAR_YOUNG_CAPTAIN__young_captain/adapters",
+    "qc": "设定库/character_assets/CHAR_YOUNG_CAPTAIN__young_captain/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "episode_materials": "脚本/第1集/素材清单.md",
+    "storyboard": "脚本/第1集/storyboard.json"
+  },
+  "current_gaps": [
+    "基础定妆 PNG 待出"
+  ]
+}

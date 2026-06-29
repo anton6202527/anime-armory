@@ -1,0 +1,1894 @@
+{
+  "asset_face_policy": {
+    "available": true,
+    "findings": [],
+    "notes": [
+      "资产 WEAPON_DAHUANG_HALBERD：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。"
+    ]
+  },
+  "asset_human_review": [],
+  "asset_lifecycle": {
+    "available": true,
+    "checked": 14,
+    "findings": [],
+    "notes": [],
+    "structured": 3
+  },
+  "carried_identity_anchors": {
+    "available": true,
+    "findings": [],
+    "notes": []
+  },
+  "checks": {
+    "anchors": {
+      "anchors": [],
+      "available": false,
+      "notes": [
+        "锚点质量门已跳过（未装 insightface/cv2）——主参考是否单张清晰正脸暂由人判。"
+      ]
+    },
+    "face": {
+      "available": true,
+      "characters": {},
+      "margin": 0.08,
+      "mode": "pillow_fallback",
+      "notes": [
+        "未装 insightface——已降级为 Pillow 基础机检（仅查 图存在/可解码/分辨率/清晰度，不做人脸相似度、不臆造相似度分）；建议安装 insightface 提升精度，崩脸仍需人判兜底。"
+      ],
+      "precision": "insufficient_precision",
+      "precision_level": "degraded",
+      "shots": [
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/EP01_CLIP01.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/EP01_CLIP01_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/EP01_CLIP01_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP02.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP02_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP02_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP03.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP03_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP03_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "大唐皇帝_朝堂常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/EP01_CLIP04.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "大唐皇帝_朝堂常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/EP01_CLIP04_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "大唐皇帝_朝堂常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/EP01_CLIP04_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "大唐皇帝_朝堂常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/EP01_CLIP05.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "大唐皇帝_朝堂常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/EP01_CLIP05_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "大唐皇帝_朝堂常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/EP01_CLIP05_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/EP01_CLIP06.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/EP01_CLIP06_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/EP01_CLIP06_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/EP01_CLIP07.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/EP01_CLIP07_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/EP01_CLIP07_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP08.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP08_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP08_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP09.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP09_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP09_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP10.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP10_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_战场形态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP10_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_觉醒蓝调母本"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP11.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_觉醒蓝调母本"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP11_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_觉醒蓝调母本"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP11_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_觉醒蓝调母本"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP12.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_觉醒蓝调母本"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP12_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_觉醒蓝调母本"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP12_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_觉醒蓝调母本"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP13.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_觉醒蓝调母本"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP13_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "姜月初_觉醒蓝调母本"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/EP01_CLIP13_mid.png",
+          "verdict": "block"
+        }
+      ]
+    },
+    "hair": {
+      "available": true,
+      "characters": {
+        "大唐皇帝_朝堂常态": {
+          "floor": 0.4396,
+          "intra_pairs": 6
+        },
+        "姜月初_战场形态": {
+          "floor": 0.4319,
+          "intra_pairs": 6
+        },
+        "姜月初_觉醒蓝调母本": {
+          "floor": 0.3404,
+          "intra_pairs": 6
+        },
+        "巴西郡残兵_残兵剪影": {
+          "floor": 0.55,
+          "intra_pairs": 0
+        },
+        "年轻校尉_断臂校尉": {
+          "floor": 0.594,
+          "intra_pairs": 6
+        },
+        "朝堂群臣_群臣剪影": {
+          "floor": 0.55,
+          "intra_pairs": 0
+        },
+        "程老_朝堂常态": {
+          "floor": 0.6666,
+          "intra_pairs": 6
+        }
+      },
+      "margin": 0.08,
+      "min_group": 3,
+      "notes": [],
+      "rel_margin": 0.15,
+      "shots": []
+    },
+    "multimodal": {
+      "asset_ref_source": "asset_registry",
+      "asset_registry_assets": [
+        {
+          "id": "LOC_BAXI_BATTLEFIELD",
+          "name": "巴西郡尸城战场",
+          "type": "scene"
+        },
+        {
+          "id": "LOC_BAXI_BATTLEFIELD_ESTABLISH",
+          "name": "巴西郡尸城大全景",
+          "type": "scene"
+        },
+        {
+          "id": "LOC_BROKEN_HOUSE",
+          "name": "尸城破屋",
+          "type": "scene"
+        },
+        {
+          "id": "LOC_CONSCIOUSNESS_SEA",
+          "name": "姜月初识海/阴山内景",
+          "type": "scene"
+        },
+        {
+          "id": "LOC_TANG_COURT",
+          "name": "大唐朝堂",
+          "type": "scene"
+        },
+        {
+          "id": "PROP_IMPERIAL_DESK",
+          "name": "御案",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_STATE_LETTER",
+          "name": "巴西郡急报/朝廷信札",
+          "type": "prop"
+        },
+        {
+          "id": "VFX_ESSENCE_STREAMS",
+          "name": "精气洪流",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_RED_FLOOD_DRAGON_SCROLL",
+          "name": "赤蛟绘卷虚影",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_SYSTEM_PANEL",
+          "name": "系统面板光幕",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_THREE_DRAGON_ORBS",
+          "name": "三色龙珠",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_WHITE_QI",
+          "name": "白气缠绕",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_YINSHAN_MIST",
+          "name": "阴山雾影",
+          "type": "vfx"
+        },
+        {
+          "id": "WEAPON_DAHUANG_HALBERD",
+          "name": "大荒碎星戟",
+          "type": "weapon"
+        }
+      ],
+      "available": true,
+      "character_asset_source": "identity_registry",
+      "character_assets": [
+        "姜月初",
+        "CHAR_JIANG_YUECHU",
+        "姜月初_战场形态",
+        "姜月初_战场形态_主参考.jpeg', 'status': 'ready'}]",
+        "战场形态', 'source': 'reference_bundle'}]}}]",
+        "姜月初_战场形态_45度",
+        "姜月初_战场形态_主参考.jpeg",
+        "姜月初_觉醒蓝调母本",
+        "姜月初_觉醒蓝调_母本.jpeg', 'status': 'ready'}]",
+        "觉醒蓝调母本', 'source': 'reference_bundle'}]}}]",
+        "姜月初_觉醒蓝调母本_45度",
+        "姜月初_觉醒蓝调_母本.jpeg",
+        "年轻校尉",
+        "CHAR_YOUNG_CAPTAIN",
+        "年轻校尉_断臂校尉",
+        "年轻校尉_断臂校尉_45度",
+        "断臂校尉', 'source': 'reference_bundle'}]}}]",
+        "大唐皇帝",
+        "CHAR_EMPEROR_TANG",
+        "大唐皇帝_朝堂常态",
+        "大唐皇帝_朝堂常态_45度",
+        "朝堂常态', 'source': 'reference_bundle'}]}}]",
+        "程老",
+        "CHAR_CHENG_LAO",
+        "程老_朝堂常态",
+        "程老_朝堂常态_45度",
+        "朝堂群臣",
+        "CHAR_COURT_MINISTERS",
+        "朝堂群臣_群臣剪影",
+        "True",
+        "朝堂群臣_群臣剪影_剪影",
+        "朝堂群臣_群臣剪影_剪影.png', 'status': 'ready'}]",
+        "巴西郡残兵",
+        "CHAR_GARRISON_SURVIVORS",
+        "巴西郡残兵_残兵剪影",
+        "巴西郡残兵_残兵剪影_剪影",
+        "巴西郡残兵_残兵剪影_剪影.png', 'status': 'ready'}]"
+      ],
+      "embedding_backend": "rgb_hist+dhash",
+      "episode": "第1集",
+      "groups": {},
+      "kind": "n2d_multimodal_consistency_report",
+      "notes": [],
+      "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔",
+      "shots": [],
+      "verdicts": [],
+      "version": 1
+    },
+    "outfit": {
+      "available": true,
+      "characters": {
+        "大唐皇帝_朝堂常态": {
+          "floor": 0.7417,
+          "intra_pairs": 6
+        },
+        "姜月初_战场形态": {
+          "floor": 0.5555,
+          "intra_pairs": 6
+        },
+        "姜月初_觉醒蓝调母本": {
+          "floor": 0.3247,
+          "intra_pairs": 6
+        },
+        "巴西郡残兵_残兵剪影": {
+          "floor": 0.85,
+          "intra_pairs": 0
+        },
+        "年轻校尉_断臂校尉": {
+          "floor": 0.5542,
+          "intra_pairs": 6
+        },
+        "朝堂群臣_群臣剪影": {
+          "floor": 0.85,
+          "intra_pairs": 0
+        },
+        "程老_朝堂常态": {
+          "floor": 0.7246,
+          "intra_pairs": 6
+        }
+      },
+      "margin": 0.1,
+      "min_group": 3,
+      "notes": [],
+      "rel_margin": 0.15,
+      "shots": []
+    },
+    "scene": {
+      "available": true,
+      "groups": {},
+      "impact_physics": [],
+      "notes": [],
+      "shots": []
+    },
+    "seam": {
+      "available": false,
+      "contradictions": [],
+      "notes": [],
+      "seams": []
+    }
+  },
+  "cross_episode_face_drift": {
+    "available": true,
+    "entries": [],
+    "history_chars": 0,
+    "notes": [
+      "无跨集历史（首集或降级精度未累积均值）"
+    ]
+  },
+  "episode": "第1集",
+  "face_anchor_lighting": {
+    "available": true,
+    "flagged": []
+  },
+  "face_anchor_quality": {
+    "available": true,
+    "checked": 15,
+    "findings": [],
+    "notes": []
+  },
+  "face_human_review": [],
+  "face_reference_coverage": {
+    "available": true,
+    "covered": 0,
+    "face_mode": "pillow_fallback",
+    "missing": [],
+    "notes": [],
+    "pending": [
+      {
+        "identity_refs": [
+          "CHAR_GARRISON_SURVIVORS",
+          "CHAR_GARRISON_SURVIVORS/残兵剪影",
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 1 — 🔑关键镜 EP01_CLIP01 尸城冷开：只来了一个人",
+        "png": "出图/第1集/图片/EP01_CLIP01.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_GARRISON_SURVIVORS",
+          "CHAR_GARRISON_SURVIVORS/残兵剪影",
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 1 — 🔑关键镜 EP01_CLIP01 尸城冷开：只来了一个人",
+        "png": "出图/第1集/图片/EP01_CLIP01_mid.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_GARRISON_SURVIVORS",
+          "CHAR_GARRISON_SURVIVORS/残兵剪影",
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 1 — 🔑关键镜 EP01_CLIP01 尸城冷开：只来了一个人",
+        "png": "出图/第1集/图片/EP01_CLIP01_end.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 2 — 🔑关键镜 EP01_CLIP02 白气护体与精气洪流",
+        "png": "出图/第1集/图片/EP01_CLIP02.png",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 2 — 🔑关键镜 EP01_CLIP02 白气护体与精气洪流",
+        "png": "出图/第1集/图片/EP01_CLIP02_mid.png",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 2 — 🔑关键镜 EP01_CLIP02 白气护体与精气洪流",
+        "png": "出图/第1集/图片/EP01_CLIP02_end.png",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 3 — EP01_CLIP03 阴山未成，压下燃灯",
+        "png": "出图/第1集/图片/EP01_CLIP03.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 3 — EP01_CLIP03 阴山未成，压下燃灯",
+        "png": "出图/第1集/图片/EP01_CLIP03_mid.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 3 — EP01_CLIP03 阴山未成，压下燃灯",
+        "png": "出图/第1集/图片/EP01_CLIP03_end.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHENG_LAO",
+          "CHAR_CHENG_LAO/朝堂常态",
+          "CHAR_COURT_MINISTERS",
+          "CHAR_COURT_MINISTERS/群臣剪影",
+          "CHAR_EMPEROR_TANG",
+          "CHAR_EMPEROR_TANG/朝堂常态"
+        ],
+        "label": "镜头 4 — EP01_CLIP04 朝堂被五仙山压住",
+        "png": "出图/第1集/图片/EP01_CLIP04.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHENG_LAO",
+          "CHAR_CHENG_LAO/朝堂常态",
+          "CHAR_COURT_MINISTERS",
+          "CHAR_COURT_MINISTERS/群臣剪影",
+          "CHAR_EMPEROR_TANG",
+          "CHAR_EMPEROR_TANG/朝堂常态"
+        ],
+        "label": "镜头 4 — EP01_CLIP04 朝堂被五仙山压住",
+        "png": "出图/第1集/图片/EP01_CLIP04_mid.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHENG_LAO",
+          "CHAR_CHENG_LAO/朝堂常态",
+          "CHAR_COURT_MINISTERS",
+          "CHAR_COURT_MINISTERS/群臣剪影",
+          "CHAR_EMPEROR_TANG",
+          "CHAR_EMPEROR_TANG/朝堂常态"
+        ],
+        "label": "镜头 4 — EP01_CLIP04 朝堂被五仙山压住",
+        "png": "出图/第1集/图片/EP01_CLIP04_end.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHENG_LAO",
+          "CHAR_CHENG_LAO/朝堂常态",
+          "CHAR_EMPEROR_TANG",
+          "CHAR_EMPEROR_TANG/朝堂常态"
+        ],
+        "label": "镜头 5 — EP01_CLIP05 皇帝下旨求仙山",
+        "png": "出图/第1集/图片/EP01_CLIP05.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHENG_LAO",
+          "CHAR_CHENG_LAO/朝堂常态",
+          "CHAR_EMPEROR_TANG",
+          "CHAR_EMPEROR_TANG/朝堂常态"
+        ],
+        "label": "镜头 5 — EP01_CLIP05 皇帝下旨求仙山",
+        "png": "出图/第1集/图片/EP01_CLIP05_mid.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHENG_LAO",
+          "CHAR_CHENG_LAO/朝堂常态",
+          "CHAR_EMPEROR_TANG",
+          "CHAR_EMPEROR_TANG/朝堂常态"
+        ],
+        "label": "镜头 5 — EP01_CLIP05 皇帝下旨求仙山",
+        "png": "出图/第1集/图片/EP01_CLIP05_end.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_GARRISON_SURVIVORS",
+          "CHAR_GARRISON_SURVIVORS/残兵剪影",
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态",
+          "CHAR_YOUNG_CAPTAIN",
+          "CHAR_YOUNG_CAPTAIN/断臂校尉"
+        ],
+        "label": "镜头 6 — EP01_CLIP06 幸存者走出废墟",
+        "png": "出图/第1集/图片/EP01_CLIP06.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_GARRISON_SURVIVORS",
+          "CHAR_GARRISON_SURVIVORS/残兵剪影",
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态",
+          "CHAR_YOUNG_CAPTAIN",
+          "CHAR_YOUNG_CAPTAIN/断臂校尉"
+        ],
+        "label": "镜头 6 — EP01_CLIP06 幸存者走出废墟",
+        "png": "出图/第1集/图片/EP01_CLIP06_mid.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_GARRISON_SURVIVORS",
+          "CHAR_GARRISON_SURVIVORS/残兵剪影",
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态",
+          "CHAR_YOUNG_CAPTAIN",
+          "CHAR_YOUNG_CAPTAIN/断臂校尉"
+        ],
+        "label": "镜头 6 — EP01_CLIP06 幸存者走出废墟",
+        "png": "出图/第1集/图片/EP01_CLIP06_end.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态",
+          "CHAR_YOUNG_CAPTAIN",
+          "CHAR_YOUNG_CAPTAIN/断臂校尉"
+        ],
+        "label": "镜头 7 — EP01_CLIP07 一人光复一道之地",
+        "png": "出图/第1集/图片/EP01_CLIP07.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态",
+          "CHAR_YOUNG_CAPTAIN",
+          "CHAR_YOUNG_CAPTAIN/断臂校尉"
+        ],
+        "label": "镜头 7 — EP01_CLIP07 一人光复一道之地",
+        "png": "出图/第1集/图片/EP01_CLIP07_mid.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态",
+          "CHAR_YOUNG_CAPTAIN",
+          "CHAR_YOUNG_CAPTAIN/断臂校尉"
+        ],
+        "label": "镜头 7 — EP01_CLIP07 一人光复一道之地",
+        "png": "出图/第1集/图片/EP01_CLIP07_end.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 8 — EP01_CLIP08 破屋静修，灌注赤鳞妖尊",
+        "png": "出图/第1集/图片/EP01_CLIP08.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 8 — EP01_CLIP08 破屋静修，灌注赤鳞妖尊",
+        "png": "出图/第1集/图片/EP01_CLIP08_mid.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 8 — EP01_CLIP08 破屋静修，灌注赤鳞妖尊",
+        "png": "出图/第1集/图片/EP01_CLIP08_end.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 9 — EP01_CLIP09 染朱奖励：化龙经圆满",
+        "png": "出图/第1集/图片/EP01_CLIP09.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 9 — EP01_CLIP09 染朱奖励：化龙经圆满",
+        "png": "出图/第1集/图片/EP01_CLIP09_mid.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 9 — EP01_CLIP09 染朱奖励：化龙经圆满",
+        "png": "出图/第1集/图片/EP01_CLIP09_end.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 10 — EP01_CLIP10 点睛奖励：化龙经无上",
+        "png": "出图/第1集/图片/EP01_CLIP10.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 10 — EP01_CLIP10 点睛奖励：化龙经无上",
+        "png": "出图/第1集/图片/EP01_CLIP10_mid.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 10 — EP01_CLIP10 点睛奖励：化龙经无上",
+        "png": "出图/第1集/图片/EP01_CLIP10_end.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/觉醒蓝调母本"
+        ],
+        "label": "镜头 11 — 🔑关键镜 EP01_CLIP11 三色龙鳞与龙珠觉醒",
+        "png": "出图/第1集/图片/EP01_CLIP11.png",
+        "shot": "Clip_11"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/觉醒蓝调母本"
+        ],
+        "label": "镜头 11 — 🔑关键镜 EP01_CLIP11 三色龙鳞与龙珠觉醒",
+        "png": "出图/第1集/图片/EP01_CLIP11_mid.png",
+        "shot": "Clip_11"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/觉醒蓝调母本"
+        ],
+        "label": "镜头 11 — 🔑关键镜 EP01_CLIP11 三色龙鳞与龙珠觉醒",
+        "png": "出图/第1集/图片/EP01_CLIP11_end.png",
+        "shot": "Clip_11"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/觉醒蓝调母本"
+        ],
+        "label": "镜头 12 — EP01_CLIP12 系统提示：是否衍化内景",
+        "png": "出图/第1集/图片/EP01_CLIP12.png",
+        "shot": "Clip_12"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/觉醒蓝调母本"
+        ],
+        "label": "镜头 12 — EP01_CLIP12 系统提示：是否衍化内景",
+        "png": "出图/第1集/图片/EP01_CLIP12_mid.png",
+        "shot": "Clip_12"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/觉醒蓝调母本"
+        ],
+        "label": "镜头 12 — EP01_CLIP12 系统提示：是否衍化内景",
+        "png": "出图/第1集/图片/EP01_CLIP12_end.png",
+        "shot": "Clip_12"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/觉醒蓝调母本"
+        ],
+        "label": "镜头 13 — 🔑关键镜 EP01_CLIP13 阴山雾影硬断",
+        "png": "出图/第1集/图片/EP01_CLIP13.png",
+        "shot": "Clip_13"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/觉醒蓝调母本"
+        ],
+        "label": "镜头 13 — 🔑关键镜 EP01_CLIP13 阴山雾影硬断",
+        "png": "出图/第1集/图片/EP01_CLIP13_mid.png",
+        "shot": "Clip_13"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/觉醒蓝调母本"
+        ],
+        "label": "镜头 13 — 🔑关键镜 EP01_CLIP13 阴山雾影硬断",
+        "png": "出图/第1集/图片/EP01_CLIP13_end.png",
+        "shot": "Clip_13"
+      }
+    ],
+    "precision_level": "degraded",
+    "required": 0,
+    "unclassified": [],
+    "verdict": "ok"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "出图/共享/asset_registry.json": "1e9b48218105dbf89082e79e04fed2ae256495522f6bfd1cc1ec14d714b8562e",
+      "出图/共享/identity_registry.json": "dea860f1e842c647a71ce550a09a21f8fd398e91567f7b739cdc58447ce64f49",
+      "出图/第1集/prompt/00_总览.md": "9705544dc65019ab78736067d054710c837a7aee72620b81f6375dabae2796ff",
+      "出图/第1集/prompt/01_分镜出图.md": "2b1da8031700696ebbb891224ebe72e8caf25f2a0d8bc785f1a46931203d09c5",
+      "出图/第1集/图片/EP01_CLIP01.png": null,
+      "出图/第1集/图片/EP01_CLIP01_end.png": null,
+      "出图/第1集/图片/EP01_CLIP01_mid.png": null,
+      "出图/第1集/图片/EP01_CLIP02.png": null,
+      "出图/第1集/图片/EP01_CLIP02_end.png": null,
+      "出图/第1集/图片/EP01_CLIP02_mid.png": null,
+      "出图/第1集/图片/EP01_CLIP03.png": null,
+      "出图/第1集/图片/EP01_CLIP03_end.png": null,
+      "出图/第1集/图片/EP01_CLIP03_mid.png": null,
+      "出图/第1集/图片/EP01_CLIP04.png": null,
+      "出图/第1集/图片/EP01_CLIP04_end.png": null,
+      "出图/第1集/图片/EP01_CLIP04_mid.png": null,
+      "出图/第1集/图片/EP01_CLIP05.png": null,
+      "出图/第1集/图片/EP01_CLIP05_end.png": null,
+      "出图/第1集/图片/EP01_CLIP05_mid.png": null,
+      "出图/第1集/图片/EP01_CLIP06.png": null,
+      "出图/第1集/图片/EP01_CLIP06_end.png": null,
+      "出图/第1集/图片/EP01_CLIP06_mid.png": null,
+      "出图/第1集/图片/EP01_CLIP07.png": null,
+      "出图/第1集/图片/EP01_CLIP07_end.png": null,
+      "出图/第1集/图片/EP01_CLIP07_mid.png": null,
+      "出图/第1集/图片/EP01_CLIP08.png": null,
+      "出图/第1集/图片/EP01_CLIP08_end.png": null,
+      "出图/第1集/图片/EP01_CLIP08_mid.png": null,
+      "出图/第1集/图片/EP01_CLIP09.png": null,
+      "出图/第1集/图片/EP01_CLIP09_end.png": null,
+      "出图/第1集/图片/EP01_CLIP09_mid.png": null,
+      "出图/第1集/图片/EP01_CLIP10.png": null,
+      "出图/第1集/图片/EP01_CLIP10_end.png": null,
+      "出图/第1集/图片/EP01_CLIP10_mid.png": null,
+      "出图/第1集/图片/EP01_CLIP11.png": null,
+      "出图/第1集/图片/EP01_CLIP11_end.png": null,
+      "出图/第1集/图片/EP01_CLIP11_mid.png": null,
+      "出图/第1集/图片/EP01_CLIP12.png": null,
+      "出图/第1集/图片/EP01_CLIP12_end.png": null,
+      "出图/第1集/图片/EP01_CLIP12_mid.png": null,
+      "出图/第1集/图片/EP01_CLIP13.png": null,
+      "出图/第1集/图片/EP01_CLIP13_end.png": null,
+      "出图/第1集/图片/EP01_CLIP13_mid.png": null,
+      "图片/EP01_CLIP01.png": null,
+      "图片/EP01_CLIP01_end.png": null,
+      "图片/EP01_CLIP01_mid.png": null,
+      "图片/EP01_CLIP02.png": null,
+      "图片/EP01_CLIP02_end.png": null,
+      "图片/EP01_CLIP02_mid.png": null,
+      "图片/EP01_CLIP03.png": null,
+      "图片/EP01_CLIP03_end.png": null,
+      "图片/EP01_CLIP03_mid.png": null,
+      "图片/EP01_CLIP04.png": null,
+      "图片/EP01_CLIP04_end.png": null,
+      "图片/EP01_CLIP04_mid.png": null,
+      "图片/EP01_CLIP05.png": null,
+      "图片/EP01_CLIP05_end.png": null,
+      "图片/EP01_CLIP05_mid.png": null,
+      "图片/EP01_CLIP06.png": null,
+      "图片/EP01_CLIP06_end.png": null,
+      "图片/EP01_CLIP06_mid.png": null,
+      "图片/EP01_CLIP07.png": null,
+      "图片/EP01_CLIP07_end.png": null,
+      "图片/EP01_CLIP07_mid.png": null,
+      "图片/EP01_CLIP08.png": null,
+      "图片/EP01_CLIP08_end.png": null,
+      "图片/EP01_CLIP08_mid.png": null,
+      "图片/EP01_CLIP09.png": null,
+      "图片/EP01_CLIP09_end.png": null,
+      "图片/EP01_CLIP09_mid.png": null,
+      "图片/EP01_CLIP10.png": null,
+      "图片/EP01_CLIP10_end.png": null,
+      "图片/EP01_CLIP10_mid.png": null,
+      "图片/EP01_CLIP11.png": null,
+      "图片/EP01_CLIP11_end.png": null,
+      "图片/EP01_CLIP11_mid.png": null,
+      "图片/EP01_CLIP12.png": null,
+      "图片/EP01_CLIP12_end.png": null,
+      "图片/EP01_CLIP12_mid.png": null,
+      "图片/EP01_CLIP13.png": null,
+      "图片/EP01_CLIP13_end.png": null,
+      "图片/EP01_CLIP13_mid.png": null,
+      "生产数据/image_qc/第1集/prop_shape_confirmations.json": null
+    },
+    "sha": "3f97d81986f30d9b7759836e9c5abc20912d67473383eefa9a729f760cc15e19"
+  },
+  "kind": "n2d_image_qc",
+  "lint": {
+    "available": true,
+    "character_shots": [
+      {
+        "identity_refs": [
+          "CHAR_GARRISON_SURVIVORS",
+          "CHAR_GARRISON_SURVIVORS/残兵剪影",
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 1 — 🔑关键镜 EP01_CLIP01 尸城冷开：只来了一个人",
+        "png": "出图/第1集/图片/EP01_CLIP01.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_GARRISON_SURVIVORS",
+          "CHAR_GARRISON_SURVIVORS/残兵剪影",
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 1 — 🔑关键镜 EP01_CLIP01 尸城冷开：只来了一个人",
+        "png": "出图/第1集/图片/EP01_CLIP01_mid.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_GARRISON_SURVIVORS",
+          "CHAR_GARRISON_SURVIVORS/残兵剪影",
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 1 — 🔑关键镜 EP01_CLIP01 尸城冷开：只来了一个人",
+        "png": "出图/第1集/图片/EP01_CLIP01_end.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 2 — 🔑关键镜 EP01_CLIP02 白气护体与精气洪流",
+        "png": "出图/第1集/图片/EP01_CLIP02.png",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 2 — 🔑关键镜 EP01_CLIP02 白气护体与精气洪流",
+        "png": "出图/第1集/图片/EP01_CLIP02_mid.png",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 2 — 🔑关键镜 EP01_CLIP02 白气护体与精气洪流",
+        "png": "出图/第1集/图片/EP01_CLIP02_end.png",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 3 — EP01_CLIP03 阴山未成，压下燃灯",
+        "png": "出图/第1集/图片/EP01_CLIP03.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 3 — EP01_CLIP03 阴山未成，压下燃灯",
+        "png": "出图/第1集/图片/EP01_CLIP03_mid.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 3 — EP01_CLIP03 阴山未成，压下燃灯",
+        "png": "出图/第1集/图片/EP01_CLIP03_end.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHENG_LAO",
+          "CHAR_CHENG_LAO/朝堂常态",
+          "CHAR_COURT_MINISTERS",
+          "CHAR_COURT_MINISTERS/群臣剪影",
+          "CHAR_EMPEROR_TANG",
+          "CHAR_EMPEROR_TANG/朝堂常态"
+        ],
+        "label": "镜头 4 — EP01_CLIP04 朝堂被五仙山压住",
+        "png": "出图/第1集/图片/EP01_CLIP04.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHENG_LAO",
+          "CHAR_CHENG_LAO/朝堂常态",
+          "CHAR_COURT_MINISTERS",
+          "CHAR_COURT_MINISTERS/群臣剪影",
+          "CHAR_EMPEROR_TANG",
+          "CHAR_EMPEROR_TANG/朝堂常态"
+        ],
+        "label": "镜头 4 — EP01_CLIP04 朝堂被五仙山压住",
+        "png": "出图/第1集/图片/EP01_CLIP04_mid.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHENG_LAO",
+          "CHAR_CHENG_LAO/朝堂常态",
+          "CHAR_COURT_MINISTERS",
+          "CHAR_COURT_MINISTERS/群臣剪影",
+          "CHAR_EMPEROR_TANG",
+          "CHAR_EMPEROR_TANG/朝堂常态"
+        ],
+        "label": "镜头 4 — EP01_CLIP04 朝堂被五仙山压住",
+        "png": "出图/第1集/图片/EP01_CLIP04_end.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHENG_LAO",
+          "CHAR_CHENG_LAO/朝堂常态",
+          "CHAR_EMPEROR_TANG",
+          "CHAR_EMPEROR_TANG/朝堂常态"
+        ],
+        "label": "镜头 5 — EP01_CLIP05 皇帝下旨求仙山",
+        "png": "出图/第1集/图片/EP01_CLIP05.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHENG_LAO",
+          "CHAR_CHENG_LAO/朝堂常态",
+          "CHAR_EMPEROR_TANG",
+          "CHAR_EMPEROR_TANG/朝堂常态"
+        ],
+        "label": "镜头 5 — EP01_CLIP05 皇帝下旨求仙山",
+        "png": "出图/第1集/图片/EP01_CLIP05_mid.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHENG_LAO",
+          "CHAR_CHENG_LAO/朝堂常态",
+          "CHAR_EMPEROR_TANG",
+          "CHAR_EMPEROR_TANG/朝堂常态"
+        ],
+        "label": "镜头 5 — EP01_CLIP05 皇帝下旨求仙山",
+        "png": "出图/第1集/图片/EP01_CLIP05_end.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_GARRISON_SURVIVORS",
+          "CHAR_GARRISON_SURVIVORS/残兵剪影",
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态",
+          "CHAR_YOUNG_CAPTAIN",
+          "CHAR_YOUNG_CAPTAIN/断臂校尉"
+        ],
+        "label": "镜头 6 — EP01_CLIP06 幸存者走出废墟",
+        "png": "出图/第1集/图片/EP01_CLIP06.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_GARRISON_SURVIVORS",
+          "CHAR_GARRISON_SURVIVORS/残兵剪影",
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态",
+          "CHAR_YOUNG_CAPTAIN",
+          "CHAR_YOUNG_CAPTAIN/断臂校尉"
+        ],
+        "label": "镜头 6 — EP01_CLIP06 幸存者走出废墟",
+        "png": "出图/第1集/图片/EP01_CLIP06_mid.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_GARRISON_SURVIVORS",
+          "CHAR_GARRISON_SURVIVORS/残兵剪影",
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态",
+          "CHAR_YOUNG_CAPTAIN",
+          "CHAR_YOUNG_CAPTAIN/断臂校尉"
+        ],
+        "label": "镜头 6 — EP01_CLIP06 幸存者走出废墟",
+        "png": "出图/第1集/图片/EP01_CLIP06_end.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态",
+          "CHAR_YOUNG_CAPTAIN",
+          "CHAR_YOUNG_CAPTAIN/断臂校尉"
+        ],
+        "label": "镜头 7 — EP01_CLIP07 一人光复一道之地",
+        "png": "出图/第1集/图片/EP01_CLIP07.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态",
+          "CHAR_YOUNG_CAPTAIN",
+          "CHAR_YOUNG_CAPTAIN/断臂校尉"
+        ],
+        "label": "镜头 7 — EP01_CLIP07 一人光复一道之地",
+        "png": "出图/第1集/图片/EP01_CLIP07_mid.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态",
+          "CHAR_YOUNG_CAPTAIN",
+          "CHAR_YOUNG_CAPTAIN/断臂校尉"
+        ],
+        "label": "镜头 7 — EP01_CLIP07 一人光复一道之地",
+        "png": "出图/第1集/图片/EP01_CLIP07_end.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 8 — EP01_CLIP08 破屋静修，灌注赤鳞妖尊",
+        "png": "出图/第1集/图片/EP01_CLIP08.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 8 — EP01_CLIP08 破屋静修，灌注赤鳞妖尊",
+        "png": "出图/第1集/图片/EP01_CLIP08_mid.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 8 — EP01_CLIP08 破屋静修，灌注赤鳞妖尊",
+        "png": "出图/第1集/图片/EP01_CLIP08_end.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 9 — EP01_CLIP09 染朱奖励：化龙经圆满",
+        "png": "出图/第1集/图片/EP01_CLIP09.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 9 — EP01_CLIP09 染朱奖励：化龙经圆满",
+        "png": "出图/第1集/图片/EP01_CLIP09_mid.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 9 — EP01_CLIP09 染朱奖励：化龙经圆满",
+        "png": "出图/第1集/图片/EP01_CLIP09_end.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 10 — EP01_CLIP10 点睛奖励：化龙经无上",
+        "png": "出图/第1集/图片/EP01_CLIP10.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 10 — EP01_CLIP10 点睛奖励：化龙经无上",
+        "png": "出图/第1集/图片/EP01_CLIP10_mid.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/战场形态"
+        ],
+        "label": "镜头 10 — EP01_CLIP10 点睛奖励：化龙经无上",
+        "png": "出图/第1集/图片/EP01_CLIP10_end.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/觉醒蓝调母本"
+        ],
+        "label": "镜头 11 — 🔑关键镜 EP01_CLIP11 三色龙鳞与龙珠觉醒",
+        "png": "出图/第1集/图片/EP01_CLIP11.png",
+        "shot": "Clip_11"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/觉醒蓝调母本"
+        ],
+        "label": "镜头 11 — 🔑关键镜 EP01_CLIP11 三色龙鳞与龙珠觉醒",
+        "png": "出图/第1集/图片/EP01_CLIP11_mid.png",
+        "shot": "Clip_11"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/觉醒蓝调母本"
+        ],
+        "label": "镜头 11 — 🔑关键镜 EP01_CLIP11 三色龙鳞与龙珠觉醒",
+        "png": "出图/第1集/图片/EP01_CLIP11_end.png",
+        "shot": "Clip_11"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/觉醒蓝调母本"
+        ],
+        "label": "镜头 12 — EP01_CLIP12 系统提示：是否衍化内景",
+        "png": "出图/第1集/图片/EP01_CLIP12.png",
+        "shot": "Clip_12"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/觉醒蓝调母本"
+        ],
+        "label": "镜头 12 — EP01_CLIP12 系统提示：是否衍化内景",
+        "png": "出图/第1集/图片/EP01_CLIP12_mid.png",
+        "shot": "Clip_12"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/觉醒蓝调母本"
+        ],
+        "label": "镜头 12 — EP01_CLIP12 系统提示：是否衍化内景",
+        "png": "出图/第1集/图片/EP01_CLIP12_end.png",
+        "shot": "Clip_12"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/觉醒蓝调母本"
+        ],
+        "label": "镜头 13 — 🔑关键镜 EP01_CLIP13 阴山雾影硬断",
+        "png": "出图/第1集/图片/EP01_CLIP13.png",
+        "shot": "Clip_13"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/觉醒蓝调母本"
+        ],
+        "label": "镜头 13 — 🔑关键镜 EP01_CLIP13 阴山雾影硬断",
+        "png": "出图/第1集/图片/EP01_CLIP13_mid.png",
+        "shot": "Clip_13"
+      },
+      {
+        "identity_refs": [
+          "CHAR_JIANG_YUECHU",
+          "CHAR_JIANG_YUECHU/觉醒蓝调母本"
+        ],
+        "label": "镜头 13 — 🔑关键镜 EP01_CLIP13 阴山雾影硬断",
+        "png": "出图/第1集/图片/EP01_CLIP13_end.png",
+        "shot": "Clip_13"
+      }
+    ],
+    "findings": [],
+    "notes": [],
+    "shots_linted": 15
+  },
+  "prohibited_face_patch": {
+    "available": true,
+    "notes": [
+      "未发现最新落档事件来自本地贴脸修复。"
+    ],
+    "outputs": [],
+    "verdict": "ok"
+  },
+  "prop_shape_review": {
+    "available": true,
+    "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+    "confirmed": 0,
+    "pending": 0,
+    "targets": [],
+    "total": 0
+  },
+  "qc_environment": {
+    "face_mode": "pillow_fallback",
+    "jump_reason": "视觉质检为降级结果，正式进 video 前需补依赖重跑到 full 精度",
+    "jump_to_stage": "image",
+    "missing_or_degraded": [
+      "insightface/onnxruntime/buffalo_l face embedding",
+      "崩脸 G1",
+      "接缝接力",
+      "锚点门 N3"
+    ],
+    "precision_level": "degraded",
+    "python": "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "recommended_install": "优先用 facefusion conda env：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。若无该 env，用 Python 3.10-3.12 conda env；系统 Python 3.14 不作为重视觉依赖首选。",
+    "user_notice": "图片质检环境：degraded；当前解释器：/opt/homebrew/opt/python@3.14/bin/python3.14；建议安装：优先用 facefusion conda env：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。若无该 env，用 Python 3.10-3.12 conda env；系统 Python 3.14 不作为重视觉依赖首选。；当前应停在/回退：image；原因：视觉质检为降级结果，正式进 video 前需补依赖重跑到 full 精度"
+  },
+  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔",
+  "semantic_drift": {
+    "available": false,
+    "compared": 0,
+    "findings": [],
+    "notes": [
+      "DINO/CLIP 嵌入后端不可用——语义漂移信号跳过（full env 装 torch+transformers 后复检）。"
+    ]
+  },
+  "shot_scale_contract": {
+    "available": true,
+    "checked": 0,
+    "findings": [],
+    "notes": [
+      "storyboard 无可解析景别（CU/LS…）——跳过。"
+    ]
+  },
+  "state_ledger": {
+    "advise": true,
+    "available": true,
+    "ledger_present": false,
+    "markers": [
+      "破损",
+      "觉醒"
+    ],
+    "not_injected_markers": []
+  },
+  "style_attribution": {
+    "anchor_status": "missing",
+    "available": true,
+    "checked": 0,
+    "findings": [
+      {
+        "code": "style_anchor_missing",
+        "level": "warn",
+        "msg": "风格归属无法机检：style_contract 未登记风格锚（style_anchor）。请在定妆阶段出 1–2 张「冷灰写实3D国风漫剧」风格锚图、登记进 style_contract.style_anchor，后续每集出图帧才能对锚做风格归属佐证。当前降级为人判：逐图核对是否踩 风格禁忌：禁欧美魔幻脸、页游高饱和、塑料盔甲、红裙替代赤氅、系统面板烤字、无来源强光、血腥器官特写、脸被雾遮住。。"
+      }
+    ],
+    "intent": {
+      "anchors": [],
+      "style_name": "冷灰写实3D国风漫剧",
+      "taboos": [
+        "禁欧美魔幻脸",
+        "页游高饱和",
+        "塑料盔甲",
+        "红裙替代赤氅",
+        "系统面板烤字",
+        "无来源强光",
+        "血腥器官特写",
+        "脸被雾遮住。"
+      ]
+    }
+  },
+  "summary": {
+    "advisory": 0,
+    "by_check": {
+      "anchors": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "face": {
+        "block": 39,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "hair": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "lint": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "multimodal": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "outfit": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "prohibited_face_patch": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "scene": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "seam": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      }
+    },
+    "degraded": true,
+    "hard_blocks": 39,
+    "unavailable_visual_checks": [
+      "face",
+      "seam",
+      "anchors"
+    ],
+    "verdict": "block"
+  },
+  "tone_light_contract": {
+    "available": false,
+    "checked": 0,
+    "findings": [],
+    "intent": {
+      "brightness": "dark",
+      "evidence": "巴西郡冷灰血雾暗红；朝堂冷石青灰和烛金；识海黑蓝虚空与金色绘卷。",
+      "warmth": "cool"
+    },
+    "notes": [
+      "本集无可测出图帧（或 Pillow 不可用）——色调/光位像素兜底跳过。"
+    ]
+  },
+  "version": 1,
+  "vlm_consistency": {
+    "available": true,
+    "block": 0,
+    "block_floor": 0.6,
+    "findings": [],
+    "judged": 0,
+    "shot_canonical": {},
+    "votes": 1
+  }
+}

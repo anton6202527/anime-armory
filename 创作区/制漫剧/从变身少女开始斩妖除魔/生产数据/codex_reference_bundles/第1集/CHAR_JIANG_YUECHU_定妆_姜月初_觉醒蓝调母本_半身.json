@@ -1,0 +1,86 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 5,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_姜月初_觉醒蓝调母本.png",
+      "bytes": 2114244,
+      "owner": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本.png",
+      "role": "character",
+      "sequence": 0,
+      "sha256": "21ff23d6ce9ea2c384346d93755596a411b8a3ec27d78b14bd6adb3f5693a2f8",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_姜月初_觉醒蓝调_母本.jpeg",
+      "bytes": 14964,
+      "owner": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_姜月初_觉醒蓝调_母本.jpeg",
+      "role": "character",
+      "sequence": 3,
+      "sha256": "07eaa478371c032b75e35b037f98908c8ace20affe30b4f3fd71ec4711e0c57c",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_姜月初_觉醒蓝调母本_侧.png",
+      "bytes": 1912145,
+      "owner": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_侧.png",
+      "role": "character",
+      "sequence": 1,
+      "sha256": "2881af9157ce7fc999b9c0403205ea694bdace578b74d5694c708d3cefe17c04",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_姜月初_觉醒蓝调母本_45度.png",
+      "bytes": 1891841,
+      "owner": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_45度.png",
+      "role": "character",
+      "sequence": 4,
+      "sha256": "b2f858768da377fcac22af0e24b2792478799445204b62eabdb21fdf9806d8b8",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_姜月初_觉醒蓝调母本_背.png",
+      "bytes": 2000245,
+      "owner": "CHAR_JIANG_YUECHU/觉醒蓝调母本",
+      "priority": 150,
+      "rel_path": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_背.png",
+      "role": "character",
+      "sequence": 2,
+      "sha256": "767b0efc2fd7227405059297a87b97cf1cb4a87590eaa612bc799a3b889d36dd",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "form": "觉醒蓝调母本",
+      "id": "CHAR_JIANG_YUECHU",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_姜月初_觉醒蓝调母本.png",
+        "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_侧.png",
+        "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_背.png",
+        "出图/共享/图片/定妆_姜月初_觉醒蓝调_母本.jpeg",
+        "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_45度.png"
+      ]
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "CHAR_JIANG_YUECHU::定妆_姜月初_觉醒蓝调母本_半身",
+  "target": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_半身.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

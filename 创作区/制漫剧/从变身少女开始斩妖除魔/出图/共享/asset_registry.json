@@ -1,0 +1,519 @@
+{
+  "kind": "n2d_asset_reference_registry",
+  "version": 1,
+  "updated_at": "2026-06-29",
+  "assets": [
+    {
+      "id": "LOC_BAXI_BATTLEFIELD",
+      "type": "scene",
+      "name": "巴西郡尸城战场",
+      "scope": "第1集本集场景",
+      "reference_group": {
+        "primary": "出图/共享/图片/定妆_巴西郡尸城战场.png"
+      },
+      "scene_dna": {
+        "version": 1,
+        "belonging_anchor": "巴西郡尸城战场",
+        "landmarks": [
+          "巴西郡尸城战场",
+          "冷青灰空间识别物"
+        ],
+        "spatial_layout": [
+          "街巷纵深、倒塌城门、尸骸与血雾分前中后景"
+        ],
+        "architecture_materials": [
+          "冷灰石材/木构/战场残骸按场景区分"
+        ],
+        "color_lighting_weather": [
+          "5600K冷青灰天光+血雾低饱和红反光"
+        ],
+        "resident_assets": [],
+        "allowed_variations": [
+          "镜头景别和烟雾浓度可变，核心地标与轴线不变"
+        ],
+        "forbidden": [
+          "现代城市",
+          "高饱和页游宫殿",
+          "随机换轴线"
+        ]
+      },
+      "spatial_layout": {
+        "default_axis": "姜月初中心轴，残兵从画面下缘仰视",
+        "notes": "街巷纵深、倒塌城门、尸骸与血雾分前中后景"
+      },
+      "constraints": {
+        "layout": "街巷纵深、倒塌城门、尸骸与血雾分前中后景",
+        "axis": "姜月初中心轴，残兵从画面下缘仰视",
+        "light_anchor": "5600K冷青灰天光+血雾低饱和红反光"
+      },
+      "drift_forbidden": [
+        "layout",
+        "axis",
+        "light_direction",
+        "era_style"
+      ]
+    },
+    {
+      "id": "LOC_BAXI_BATTLEFIELD_ESTABLISH",
+      "type": "scene",
+      "name": "巴西郡尸城大全景",
+      "scope": "第1集本集场景",
+      "reference_group": {
+        "primary": "出图/共享/图片/定妆_巴西郡尸城大全景.png"
+      },
+      "scene_dna": {
+        "version": 1,
+        "belonging_anchor": "巴西郡尸城大全景",
+        "landmarks": [
+          "巴西郡尸城大全景",
+          "冷青灰空间识别物"
+        ],
+        "spatial_layout": [
+          "高位俯看尸城规模，城门/街巷/尸骸三层"
+        ],
+        "architecture_materials": [
+          "冷灰石材/木构/战场残骸按场景区分"
+        ],
+        "color_lighting_weather": [
+          "5600K冷青灰天光，血雾只作低饱和层"
+        ],
+        "resident_assets": [],
+        "allowed_variations": [
+          "镜头景别和烟雾浓度可变，核心地标与轴线不变"
+        ],
+        "forbidden": [
+          "现代城市",
+          "高饱和页游宫殿",
+          "随机换轴线"
+        ]
+      },
+      "spatial_layout": {
+        "default_axis": "镜头自高处压向姜月初所在中心点",
+        "notes": "高位俯看尸城规模，城门/街巷/尸骸三层"
+      },
+      "constraints": {
+        "layout": "高位俯看尸城规模，城门/街巷/尸骸三层",
+        "axis": "镜头自高处压向姜月初所在中心点",
+        "light_anchor": "5600K冷青灰天光，血雾只作低饱和层"
+      },
+      "drift_forbidden": [
+        "layout",
+        "axis",
+        "light_direction",
+        "era_style"
+      ]
+    },
+    {
+      "id": "LOC_TANG_COURT",
+      "type": "scene",
+      "name": "大唐朝堂",
+      "scope": "第1集本集场景",
+      "reference_group": {
+        "primary": "出图/共享/图片/定妆_大唐朝堂.png"
+      },
+      "scene_dna": {
+        "version": 1,
+        "belonging_anchor": "大唐朝堂",
+        "landmarks": [
+          "大唐朝堂",
+          "冷青灰空间识别物"
+        ],
+        "spatial_layout": [
+          "皇帝御座高位、群臣两侧、程老台阶下出列"
+        ],
+        "architecture_materials": [
+          "冷灰石材/木构/战场残骸按场景区分"
+        ],
+        "color_lighting_weather": [
+          "4300K殿内冷金主光+高处冷灰阴影"
+        ],
+        "resident_assets": [],
+        "allowed_variations": [
+          "镜头景别和烟雾浓度可变，核心地标与轴线不变"
+        ],
+        "forbidden": [
+          "现代城市",
+          "高饱和页游宫殿",
+          "随机换轴线"
+        ]
+      },
+      "spatial_layout": {
+        "default_axis": "皇帝画右高位看画左下，程老画左下仰视",
+        "notes": "皇帝御座高位、群臣两侧、程老台阶下出列"
+      },
+      "constraints": {
+        "layout": "皇帝御座高位、群臣两侧、程老台阶下出列",
+        "axis": "皇帝画右高位看画左下，程老画左下仰视",
+        "light_anchor": "4300K殿内冷金主光+高处冷灰阴影"
+      },
+      "drift_forbidden": [
+        "layout",
+        "axis",
+        "light_direction",
+        "era_style"
+      ]
+    },
+    {
+      "id": "LOC_BROKEN_HOUSE",
+      "type": "scene",
+      "name": "尸城破屋",
+      "scope": "第1集本集场景",
+      "reference_group": {
+        "primary": "出图/共享/图片/定妆_尸城破屋.png"
+      },
+      "scene_dna": {
+        "version": 1,
+        "belonging_anchor": "尸城破屋",
+        "landmarks": [
+          "尸城破屋",
+          "冷青灰空间识别物"
+        ],
+        "spatial_layout": [
+          "破屋门口横轴，门内黑暗，门外冷雾"
+        ],
+        "architecture_materials": [
+          "冷灰石材/木构/战场残骸按场景区分"
+        ],
+        "color_lighting_weather": [
+          "5200K门外冷光，室内低照度"
+        ],
+        "resident_assets": [],
+        "allowed_variations": [
+          "镜头景别和烟雾浓度可变，核心地标与轴线不变"
+        ],
+        "forbidden": [
+          "现代城市",
+          "高饱和页游宫殿",
+          "随机换轴线"
+        ]
+      },
+      "spatial_layout": {
+        "default_axis": "姜月初从画右入门，校尉在画左目送",
+        "notes": "破屋门口横轴，门内黑暗，门外冷雾"
+      },
+      "constraints": {
+        "layout": "破屋门口横轴，门内黑暗，门外冷雾",
+        "axis": "姜月初从画右入门，校尉在画左目送",
+        "light_anchor": "5200K门外冷光，室内低照度"
+      },
+      "drift_forbidden": [
+        "layout",
+        "axis",
+        "light_direction",
+        "era_style"
+      ]
+    },
+    {
+      "id": "LOC_CONSCIOUSNESS_SEA",
+      "type": "scene",
+      "name": "姜月初识海/阴山内景",
+      "scope": "第1集本集场景",
+      "face_policy": "faceless",
+      "human_presence": "no_person_scene_plate",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_姜月初识海阴山.png",
+          "status": "ready"
+        }
+      },
+      "scene_dna": {
+        "version": 1,
+        "belonging_anchor": "姜月初识海/阴山内景",
+        "landmarks": [
+          "姜月初识海/阴山内景",
+          "冷青灰空间识别物"
+        ],
+        "spatial_layout": [
+          "黑暗识海、金色系统光幕、赤蛟绘卷、阴山雾影分层"
+        ],
+        "architecture_materials": [
+          "冷灰石材/木构/战场残骸按场景区分"
+        ],
+        "color_lighting_weather": [
+          "冷黑底+金光面板+蓝灰雾影"
+        ],
+        "resident_assets": [],
+        "allowed_variations": [
+          "镜头景别和烟雾浓度可变，核心地标与轴线不变"
+        ],
+        "forbidden": [
+          "现代城市",
+          "高饱和页游宫殿",
+          "随机换轴线"
+        ]
+      },
+      "spatial_layout": {
+        "default_axis": "系统面板、赤蛟绘卷与阴山雾影形成横向视线轴；场景板不含人物",
+        "notes": "黑暗识海、金色系统光幕、赤蛟绘卷、阴山雾影分层；纯环境定妆，不出现姜月初背影或任何未绑定人物"
+      },
+      "constraints": {
+        "layout": "黑暗识海、金色系统光幕、赤蛟绘卷、阴山雾影分层",
+        "axis": "系统面板、赤蛟绘卷与阴山雾影形成横向视线轴；场景定妆不出现姜月初本人",
+        "light_anchor": "冷黑底+金光面板+蓝灰雾影",
+        "no_person_rule": "纯环境定妆板，不出现人物、背影、剪影、男女角色或清晰人脸；分镜若需要姜月初背影，必须单独引用 CHAR_JIANG_YUECHU 对应形态。"
+      },
+      "drift_forbidden": [
+        "layout",
+        "axis",
+        "light_direction",
+        "era_style",
+        "person_or_silhouette"
+      ]
+    },
+    {
+      "id": "WEAPON_DAHUANG_HALBERD",
+      "type": "weapon",
+      "name": "大荒碎星戟",
+      "scope": "主角第1集起核心武器/后续发簪形态",
+      "owner": "CHAR_JIANG_YUECHU",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_大荒碎星戟.png",
+          "status": "ready"
+        },
+        "scale_reference": {
+          "path": "出图/共享/图片/定妆_大荒碎星戟_握持比例.png",
+          "status": "ready"
+        }
+      },
+      "weapon_profile": {
+        "version": 1,
+        "design_intent": "主角高辨识度本命长戟，冷冽大气，不堆廉价装饰。",
+        "silhouette": "长柄战戟，戟刃有碎星棱线，竖屏中形成清晰长线。",
+        "scale": "全长高于主角一头以上，握持点在中下段，后续可化为寸许发簪。",
+        "material": "暗银金属、冷白刃光、暗金细纹。",
+        "palette": {
+          "blade": "#D8E0E6",
+          "shaft": "#25272B",
+          "accent": "#8A6A2A"
+        },
+        "ornament_motif": "碎星细纹，不出现火焰龙纹或厚重页游金边。",
+        "carry_modes": [
+          "手持",
+          "竖立",
+          "后续发簪形态"
+        ],
+        "combat_usage": "斩妖、镇场、吸纳精气时作为主角权力剪影。",
+        "vfx_signature": "冷白白气与碎星细光，不爆炸成火焰。",
+        "forbidden_drift": [
+          "变成长刀",
+          "双戟复制",
+          "金色巨斧",
+          "枪头消失",
+          "比例变短"
+        ]
+      },
+      "constraints": {
+        "structure": "一柄长柄战戟，单主刃+侧月牙，不复制成双武器，握持比例固定。"
+      },
+      "drift_forbidden": [
+        "silhouette",
+        "scale",
+        "blade_shape",
+        "palette",
+        "carry_mode"
+      ]
+    },
+    {
+      "id": "PROP_IMPERIAL_DESK",
+      "type": "prop",
+      "name": "御案",
+      "owner": "CHAR_EMPEROR_TANG",
+      "current_state": "in_tang_court_high_dais",
+      "reference_group": {
+        "primary": "出图/共享/图片/定妆_御案.png"
+      },
+      "lifecycle": {
+        "states": [
+          "intact_on_dais",
+          "edict_pressure_closeup"
+        ],
+        "transitions": [
+          {
+            "from": "intact_on_dais",
+            "to": "edict_pressure_closeup",
+            "trigger_clip": "EP01_CLIP05",
+            "rule": "御案位置和朝代样式不变，只通过低角度与烛火边缘强调皇命压力。"
+          }
+        ]
+      },
+      "constraints": {
+        "structure": "一张深色御案，位于皇帝前方高位，不变成餐桌/现代办公桌。"
+      },
+      "drift_forbidden": [
+        "position",
+        "scale",
+        "era_style"
+      ]
+    },
+    {
+      "id": "PROP_STATE_LETTER",
+      "type": "prop",
+      "name": "巴西郡急报/朝廷信札",
+      "owner": "CHAR_EMPEROR_TANG",
+      "current_state": "on_imperial_desk",
+      "reference_group": {
+        "primary": "出图/共享/图片/定妆_巴西郡急报.png"
+      },
+      "lifecycle": {
+        "states": [
+          "sealed",
+          "opened_on_desk"
+        ],
+        "transitions": [
+          {
+            "from": "sealed",
+            "to": "opened_on_desk",
+            "at_clip": "EP01_CLIP05"
+          }
+        ]
+      },
+      "constraints": {
+        "structure": "一封古代纸质急报/信札，单张主纸，不生成现代文件夹或多份报纸。"
+      },
+      "drift_forbidden": [
+        "item_count",
+        "paper_style",
+        "position_on_desk"
+      ]
+    },
+    {
+      "id": "VFX_SYSTEM_PANEL",
+      "type": "vfx",
+      "name": "系统面板光幕",
+      "reference_group": {
+        "primary": "出图/共享/图片/定妆_系统面板_v1.png"
+      },
+      "forms": [
+        {
+          "id": "v1_素纹"
+        }
+      ],
+      "vfx_params": {
+        "color_target": {
+          "h": 195,
+          "s": 0.4,
+          "v": 0.95
+        },
+        "trail": "无"
+      },
+      "lifecycle": {
+        "states": [
+          "idle_blank",
+          "rank_readout_glow"
+        ],
+        "transitions": [
+          {
+            "from": "idle_blank",
+            "to": "rank_readout_glow",
+            "trigger_clip": "EP01_CLIP09",
+            "rule": "边框、透明度和色相保持一致，内部中文信息留给后期叠字。"
+          }
+        ]
+      },
+      "constraints": {
+        "structure": "半透明金青光幕，边框固定，内部文字区留空由 compose overlay；禁止 AI 烤死中文小字。"
+      },
+      "drift_forbidden": [
+        "frame_shape",
+        "color",
+        "text_baked_in"
+      ]
+    },
+    {
+      "id": "VFX_ESSENCE_STREAMS",
+      "type": "vfx",
+      "name": "精气洪流",
+      "face_policy": "faceless",
+      "human_presence": "no_person_vfx_plate",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_精气洪流.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "structure": "低饱和白气/青白半透明气流束，从尸城残骸/地面碎屑汇聚成可被掌心承接的流向；纯特效板不出现人物脸。",
+        "no_face_rule": "不得出现清晰人物脸、角色立绘、未绑定女性或男性肖像；如需尺度只能出现下巴以下的手掌/前臂局部或无脸人台。"
+      },
+      "drift_forbidden": [
+        "color",
+        "face_occlusion",
+        "direction",
+        "unbound_face"
+      ]
+    },
+    {
+      "id": "VFX_WHITE_QI",
+      "type": "vfx",
+      "name": "白气缠绕",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_白气缠绕.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "structure": "细白气/青白气丝贴近衣摆、长戟、脚边轨迹，可表现局部衣摆或下巴以下尺度参考；纯特效板，不出现清晰人物脸，不替任何角色定妆，不爆成烟花。",
+        "human_presence": "faceless_only；如需尺度只能下巴以下、背身、侧后剪影、手臂/衣摆/长戟局部，不得出现姜月初或任何新人物正脸。"
+      },
+      "drift_forbidden": [
+        "clear_face",
+        "identity_drift",
+        "full_character_portrait",
+        "density",
+        "face_occlusion",
+        "color"
+      ],
+      "face_policy": "faceless"
+    },
+    {
+      "id": "VFX_RED_FLOOD_DRAGON_SCROLL",
+      "type": "vfx",
+      "name": "赤蛟绘卷虚影",
+      "reference_group": {
+        "primary": "出图/共享/图片/定妆_赤蛟绘卷虚影.png"
+      },
+      "constraints": {
+        "structure": "赤蛟在金色绘卷中点睛，虚影半透明，禁止变成实体巨龙抢画面。"
+      },
+      "drift_forbidden": [
+        "dragon_shape",
+        "scroll_frame",
+        "scale"
+      ]
+    },
+    {
+      "id": "VFX_THREE_DRAGON_ORBS",
+      "type": "vfx",
+      "name": "三色龙珠",
+      "reference_group": {
+        "primary": "出图/共享/图片/定妆_三色龙珠.png"
+      },
+      "constraints": {
+        "structure": "三颗龙珠环绕，三色分明，数量固定为三，不复制成多颗。"
+      },
+      "drift_forbidden": [
+        "item_count",
+        "color_set",
+        "orbit_shape"
+      ]
+    },
+    {
+      "id": "VFX_YINSHAN_MIST",
+      "type": "vfx",
+      "name": "阴山雾影",
+      "reference_group": {
+        "primary": "出图/共享/图片/定妆_阴山雾影.png"
+      },
+      "constraints": {
+        "structure": "蓝灰山影半露在识海雾中，只给轮廓和压迫感，不提前画清完整阴山。"
+      },
+      "drift_forbidden": [
+        "early_reveal",
+        "color",
+        "mountain_silhouette"
+      ]
+    }
+  ]
+}

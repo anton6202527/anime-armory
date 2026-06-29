@@ -1,0 +1,219 @@
+{
+  "kind": "n2d_episode_manifest",
+  "schema_version": 2,
+  "episode": "第2集",
+  "stage": "all",
+  "production_mode": "原生音画",
+  "artifacts": [
+    {
+      "stage": "source",
+      "path": "脚本/第2集/raw.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "24ada9f99e1d2bbaead51a462a9a4ab1d2bd6d33109023fbbd66999d5838f1c3"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第2集/voiceover.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "5c0354f1a0658c0e4d87b60bcbd7e815237b6e1942ada624023e7e0a3fc4aab6"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第2集/bgm.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "6ba19ff5ff9c7906d44fdb2626386982512cdf6a198aec834809a70912102418"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第2集/封面.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "7b7cababb0ddb8775a26cac13728220ca76575155b9a550f6201b1ed2dc08226"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/global_style.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "5b74edef9a8b59c98785ab6b809626a5cbfeb8b1dc9cd04f32bc105cc67f08ba"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/characters/_角色总表.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "94bc1bc032d4475911ca8c1e06c05f780ec98c8e19bbde90a64390460295c344"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/locations/_场景总表.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "23a4c9ce2a5280c4cf68453fe54e5bea2fcd7841a264d71d44d55ebffee80bc3"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第2集/配音/voice_zh.wav",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第2集/配音/时长清单.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第2集/配音/_占位说明.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第2集/分镜剧本.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "4db633a2aa987d642750f0f7ac76e5db5656400d4862ad42956b10ee43e2beaf"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第2集/故事板.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "0841ca29204f2137d30da7c8a464689914a6c0565259b7b9d6943ca2c28f45a5"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第2集/storyboard.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第2集/素材清单.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "16ed8e6f42d2eb4c5d76e0403b32cdc61c82e77a857b21775419d022b0c44981"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第2集/字幕_中文.srt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "91d39a573ca82657f22e1536474796d7ae353f5a4fecc9aefb5292720e7e3631"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第2集/字幕_英文.srt",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第2集/镜头时长.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/共享/prompt/00_索引.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/第2集/prompt/00_总览.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/第2集/prompt/01_分镜出图.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image",
+      "path": "出图/共享/图片",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image",
+      "path": "出图/第2集/图片",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video_prompt",
+      "path": "出视频/第2集/prompt/00_总览.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video_prompt",
+      "path": "出视频/第2集/prompt/01_clips.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video",
+      "path": "出视频/第2集/视频",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "compose",
+      "path": "合成/第2集/成片_第2集_zh.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "compose",
+      "path": "合成/第2集/成片_第2集_bilingual.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/score_第2集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/consistency_ledger_第2集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/review_ui_第2集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/review_ui_findings_第2集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "合成/第2集/成片_第2集_zh.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "合成/第2集/成片_第2集_bilingual.mp4",
+      "exists": false,
+      "kind": "missing"
+    }
+  ],
+  "migration_note": "migrated v1->v2 by refreshing manifest"
+}

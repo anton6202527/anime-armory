@@ -1,0 +1,24 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_JIANG_YUECHU",
+  "character_name": "姜月初",
+  "package_dir": "设定库/character_assets/CHAR_JIANG_YUECHU__jiang_yuechu",
+  "directories": {
+    "reference": "设定库/character_assets/CHAR_JIANG_YUECHU__jiang_yuechu/reference",
+    "prompts": "设定库/character_assets/CHAR_JIANG_YUECHU__jiang_yuechu/prompts",
+    "lora": "设定库/character_assets/CHAR_JIANG_YUECHU__jiang_yuechu/lora",
+    "voice": "设定库/character_assets/CHAR_JIANG_YUECHU__jiang_yuechu/voice",
+    "adapters": "设定库/character_assets/CHAR_JIANG_YUECHU__jiang_yuechu/adapters",
+    "qc": "设定库/character_assets/CHAR_JIANG_YUECHU__jiang_yuechu/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/姜月初.md",
+    "source_references": "设定库/references/主角参考_沈念_待核对姜月初/"
+  },
+  "current_gaps": [
+    "需要正式派生正/45度/侧/背/半身/脸锚 PNG",
+    "需要第2集觉醒态完整定妆组"
+  ]
+}

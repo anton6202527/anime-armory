@@ -1,0 +1,998 @@
+{
+  "kind": "n2d_spectacle_sequence_plan",
+  "version": 1,
+  "root": "创作区/制漫剧/从变身少女开始斩妖除魔",
+  "episode": "第1集",
+  "clips": [
+    {
+      "clip_id": "Clip_01",
+      "source_id": "EP01_CLIP01",
+      "spectacle_type": "large_establishing",
+      "beat_categories": [],
+      "beat_decomposition": [],
+      "motion_intensity": 2,
+      "same_frame_characters": 2,
+      "same_frame_over_cap": false,
+      "characters": [
+        "CHAR_GARRISON_SURVIVORS",
+        "CHAR_JIANG_YUECHU"
+      ],
+      "loc": "LOC_BAXI_BATTLEFIELD",
+      "assets": [
+        "CHAR_GARRISON_SURVIVORS",
+        "CHAR_JIANG_YUECHU",
+        "LOC_BAXI_BATTLEFIELD",
+        "LOC_BAXI_BATTLEFIELD_ESTABLISH",
+        "WEAPON_DAHUANG_HALBERD"
+      ],
+      "screen_direction": "",
+      "spatial_path": "",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "竖屏低角度从地面残骸慢推到姜月初背影。",
+      "in_state": "黑场后直接进入满地妖魔残躯，静音也能看懂大战刚结束。",
+      "out_state": "姜月初立于尸城血雾中，掌心将要吸起精气。",
+      "continuity_text": "黑场后直接进入满地妖魔残躯，静音也能看懂大战刚结束。 姜月初立于尸城血雾中，掌心将要吸起精气。 低频硬切接系统面板 True 残兵从画左下仰视画面中心的姜月初。 wide_to_medium 出图/第1集/图片/EP01_CLIP01_mid.png 2.5 锁尸城规模与女主剪影。 微 出图/第1集/图片/EP01_CLIP01_end.png image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress",
+      "control_inputs_required": [
+        "camera_path",
+        "depth_sequence",
+        "parallax_layers"
+      ],
+      "premium_passes": {
+        "level": "premium_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "apex_or_result_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    },
+    {
+      "clip_id": "Clip_02",
+      "source_id": "EP01_CLIP02",
+      "spectacle_type": "magic_burst",
+      "beat_categories": [
+        "block",
+        "impact"
+      ],
+      "beat_decomposition": [
+        {
+          "beat": "charge",
+          "intent": "蓄力帧锁颜色/来源/手势或武器，特效资产先入库",
+          "camera": "近中景或手部/武器特写"
+        },
+        {
+          "beat": "release",
+          "intent": "释放路径只保留一条 energy_path，首尾/中段锚住方向",
+          "camera": "顺能量方向推进或侧向跟随"
+        },
+        {
+          "beat": "collision_or_apex",
+          "intent": "撞点/剑气峰值/护盾破裂单独可读，留 hit_stop 或闪白",
+          "camera": "稳定或撞点 CU"
+        },
+        {
+          "beat": "aftermath",
+          "intent": "余波、尘、衣摆、地裂和角色状态交代结果",
+          "camera": "反应或拉远留白"
+        }
+      ],
+      "motion_intensity": 3,
+      "same_frame_characters": 1,
+      "same_frame_over_cap": false,
+      "characters": [
+        "CHAR_JIANG_YUECHU"
+      ],
+      "loc": "LOC_BAXI_BATTLEFIELD",
+      "assets": [
+        "CHAR_JIANG_YUECHU",
+        "LOC_BAXI_BATTLEFIELD",
+        "VFX_ESSENCE_STREAMS",
+        "VFX_SYSTEM_PANEL",
+        "VFX_WHITE_QI",
+        "WEAPON_DAHUANG_HALBERD"
+      ],
+      "screen_direction": "气流向画面中心收束。",
+      "spatial_path": "气流从画面四边向中心手掌汇聚。",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "侧脸中景慢推至掌心和面板过肩插入。",
+      "in_state": "姜月初立于尸城血雾中，掌心将要吸起精气。",
+      "out_state": "精气散尽，姜月初垂眸确认气海已满。",
+      "continuity_text": "姜月初立于尸城血雾中，掌心将要吸起精气。 精气散尽，姜月初垂眸确认气海已满。 气海嗡鸣J-cut进内视 True 姜月初视线由掌心下移到系统面板。 medium_to_close 出图/第1集/图片/EP01_CLIP02_mid.png 3.5 锁精气洪流峰值和面板位置。 中 出图/第1集/图片/EP01_CLIP02_end.png image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress",
+      "control_inputs_required": [
+        "depth_sequence",
+        "camera_path",
+        "spatial_path",
+        "vfx_layers",
+        "parallax_layers"
+      ],
+      "premium_passes": {
+        "level": "premium_action_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "collision_or_apex_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    },
+    {
+      "clip_id": "Clip_03",
+      "source_id": "EP01_CLIP03",
+      "spectacle_type": "meditation_cultivation",
+      "beat_categories": [],
+      "beat_decomposition": [
+        {
+          "beat": "posture_settle",
+          "intent": "打坐/入定姿态先锁，衣摆、发丝、蒲团和手印不漂",
+          "camera": "固定中近景或低幅慢推"
+        },
+        {
+          "beat": "breath_energy_cycle",
+          "intent": "吐纳节奏与灵气入体路径清楚，气海/丹田/周天只走一条能量路径",
+          "camera": "稳定，必要时切手印/胸口/丹田"
+        },
+        {
+          "beat": "inner_state_response",
+          "intent": "内视、心魔压制、境界波纹或环境响应给可读半拍",
+          "camera": "微推或特写留白"
+        },
+        {
+          "beat": "return_or_hold",
+          "intent": "收功、睁眼、气息沉静或下一镜钩子，结果明确",
+          "camera": "落回稳定构图"
+        }
+      ],
+      "motion_intensity": 1,
+      "same_frame_characters": 1,
+      "same_frame_over_cap": false,
+      "characters": [
+        "CHAR_JIANG_YUECHU"
+      ],
+      "loc": "LOC_BAXI_BATTLEFIELD",
+      "assets": [
+        "CHAR_JIANG_YUECHU",
+        "LOC_BAXI_BATTLEFIELD",
+        "VFX_YINSHAN_MIST"
+      ],
+      "screen_direction": "",
+      "spatial_path": "",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "",
+      "in_state": "精气散尽，姜月初垂眸确认气海已满。",
+      "out_state": "五仙山三字压住朝堂。",
+      "continuity_text": "精气散尽，姜月初垂眸确认气海已满。 五仙山三字压住朝堂。 内视空山雾影match cut到朝堂冷雾 True 姜月初视线向内收，观众看内视叠层。 close 出图/第1集/图片/EP01_CLIP03_mid.png 3.0 锁阴山未成的内视信息。 微 出图/第1集/图片/EP01_CLIP03_end.png image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress",
+      "control_inputs_required": [
+        "pose_sequence",
+        "depth_sequence",
+        "vfx_layers"
+      ],
+      "premium_passes": {
+        "level": "premium_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "inner_state_or_aura_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    },
+    {
+      "clip_id": "Clip_08",
+      "source_id": "EP01_CLIP08",
+      "spectacle_type": "meditation_cultivation",
+      "beat_categories": [],
+      "beat_decomposition": [
+        {
+          "beat": "posture_settle",
+          "intent": "打坐/入定姿态先锁，衣摆、发丝、蒲团和手印不漂",
+          "camera": "固定中近景或低幅慢推"
+        },
+        {
+          "beat": "breath_energy_cycle",
+          "intent": "吐纳节奏与灵气入体路径清楚，气海/丹田/周天只走一条能量路径",
+          "camera": "稳定，必要时切手印/胸口/丹田"
+        },
+        {
+          "beat": "inner_state_response",
+          "intent": "内视、心魔压制、境界波纹或环境响应给可读半拍",
+          "camera": "微推或特写留白"
+        },
+        {
+          "beat": "return_or_hold",
+          "intent": "收功、睁眼、气息沉静或下一镜钩子，结果明确",
+          "camera": "落回稳定构图"
+        }
+      ],
+      "motion_intensity": 1,
+      "same_frame_characters": 1,
+      "same_frame_over_cap": false,
+      "characters": [
+        "CHAR_JIANG_YUECHU"
+      ],
+      "loc": "LOC_BROKEN_HOUSE",
+      "assets": [
+        "CHAR_JIANG_YUECHU",
+        "LOC_BROKEN_HOUSE",
+        "LOC_CONSCIOUSNESS_SEA",
+        "VFX_RED_FLOOD_DRAGON_SCROLL",
+        "WEAPON_DAHUANG_HALBERD"
+      ],
+      "screen_direction": "",
+      "spatial_path": "",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "",
+      "in_state": "破屋门在她身后合上。",
+      "out_state": "识海金光从黑暗中炸开。",
+      "continuity_text": "破屋门在她身后合上。 识海金光从黑暗中炸开。 门缝黑场match cut识海金光 True 姜月初闭眼内视。 medium_close 出图/第1集/图片/EP01_CLIP08_mid.png 3.5 锁静修坐姿与掌心入识海。 微 出图/第1集/图片/EP01_CLIP08_end.png image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress",
+      "control_inputs_required": [
+        "pose_sequence",
+        "depth_sequence",
+        "vfx_layers"
+      ],
+      "premium_passes": {
+        "level": "premium_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "inner_state_or_aura_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    },
+    {
+      "clip_id": "Clip_11",
+      "source_id": "EP01_CLIP11",
+      "spectacle_type": "magic_burst",
+      "beat_categories": [
+        "attack",
+        "block",
+        "impact"
+      ],
+      "beat_decomposition": [
+        {
+          "beat": "charge",
+          "intent": "蓄力帧锁颜色/来源/手势或武器，特效资产先入库",
+          "camera": "近中景或手部/武器特写"
+        },
+        {
+          "beat": "release",
+          "intent": "释放路径只保留一条 energy_path，首尾/中段锚住方向",
+          "camera": "顺能量方向推进或侧向跟随"
+        },
+        {
+          "beat": "collision_or_apex",
+          "intent": "撞点/剑气峰值/护盾破裂单独可读，留 hit_stop 或闪白",
+          "camera": "稳定或撞点 CU"
+        },
+        {
+          "beat": "aftermath",
+          "intent": "余波、尘、衣摆、地裂和角色状态交代结果",
+          "camera": "反应或拉远留白"
+        }
+      ],
+      "motion_intensity": 3,
+      "same_frame_characters": 1,
+      "same_frame_over_cap": false,
+      "characters": [
+        "CHAR_JIANG_YUECHU"
+      ],
+      "loc": "LOC_BROKEN_HOUSE",
+      "assets": [
+        "CHAR_JIANG_YUECHU",
+        "LOC_BROKEN_HOUSE",
+        "LOC_CONSCIOUSNESS_SEA",
+        "VFX_THREE_DRAGON_ORBS"
+      ],
+      "screen_direction": "龙珠顺时针，不跨镜反转。",
+      "spatial_path": "龙珠围绕人物前后景绕行，半径稳定。",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "手背CU → 半身慢推 → 眼神CU。",
+      "in_state": "三色龙珠光影从她眉心涌出。",
+      "out_state": "面板底部忽然轻颤。",
+      "continuity_text": "三色龙珠光影从她眉心涌出。 面板底部忽然轻颤。 龙珠绕身的圆周运动带到面板光圈 True 姜月初低头看手背鳞片，再抬眼看龙珠。 close_to_medium 出图/第1集/图片/EP01_CLIP11_mid.png 3.5 锁三色龙珠与觉醒态识别。 大 出图/第1集/图片/EP01_CLIP11_end.png image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress",
+      "control_inputs_required": [
+        "depth_sequence",
+        "camera_path",
+        "spatial_path",
+        "vfx_layers",
+        "parallax_layers"
+      ],
+      "premium_passes": {
+        "level": "premium_action_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "collision_or_apex_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    },
+    {
+      "clip_id": "Clip_13",
+      "source_id": "EP01_CLIP13",
+      "spectacle_type": "magic_burst",
+      "beat_categories": [
+        "block",
+        "impact"
+      ],
+      "beat_decomposition": [
+        {
+          "beat": "charge",
+          "intent": "蓄力帧锁颜色/来源/手势或武器，特效资产先入库",
+          "camera": "近中景或手部/武器特写"
+        },
+        {
+          "beat": "release",
+          "intent": "释放路径只保留一条 energy_path，首尾/中段锚住方向",
+          "camera": "顺能量方向推进或侧向跟随"
+        },
+        {
+          "beat": "collision_or_apex",
+          "intent": "撞点/剑气峰值/护盾破裂单独可读，留 hit_stop 或闪白",
+          "camera": "稳定或撞点 CU"
+        },
+        {
+          "beat": "aftermath",
+          "intent": "余波、尘、衣摆、地裂和角色状态交代结果",
+          "camera": "反应或拉远留白"
+        }
+      ],
+      "motion_intensity": 3,
+      "same_frame_characters": 1,
+      "same_frame_over_cap": false,
+      "characters": [
+        "CHAR_JIANG_YUECHU"
+      ],
+      "loc": "LOC_CONSCIOUSNESS_SEA",
+      "assets": [
+        "CHAR_JIANG_YUECHU",
+        "LOC_CONSCIOUSNESS_SEA",
+        "VFX_SYSTEM_PANEL",
+        "VFX_YINSHAN_MIST"
+      ],
+      "screen_direction": "雾向中心收束。",
+      "spatial_path": "雾从画面边缘向中心山影聚拢。",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "眼神ECU慢推，切识海远景定格。",
+      "in_state": "姜月初眼底出现阴山雾影。",
+      "out_state": "黑场停在“阴山，终于等到了”。",
+      "continuity_text": "姜月初眼底出现阴山雾影。 黑场停在“阴山，终于等到了”。 尾帧定格后硬切黑 True 姜月初视线向内看识海。 extreme_close_to_wide_inner 出图/第1集/图片/EP01_CLIP13_mid.png 4.5 锁阴山半露的尾钩画面。 大 出图/第1集/图片/EP01_CLIP13_end.png image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress",
+      "control_inputs_required": [
+        "depth_sequence",
+        "camera_path",
+        "spatial_path",
+        "vfx_layers",
+        "parallax_layers"
+      ],
+      "premium_passes": {
+        "level": "premium_action_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "collision_or_apex_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    }
+  ],
+  "sequences": [
+    {
+      "sequence_id": "SQ_LARGE_01",
+      "sequence_type": "large_establishing",
+      "clip_order": [
+        "Clip_01"
+      ],
+      "spectacle_types": [
+        "large_establishing"
+      ],
+      "subject_slots": {
+        "characters": [
+          "CHAR_GARRISON_SURVIVORS",
+          "CHAR_JIANG_YUECHU"
+        ],
+        "slot_policy": "keep each CHAR_xx in the same screen role across this sequence; do not swap pursuer/target or attacker/defender without an explicit handoff_state."
+      },
+      "asset_persistence": {
+        "assets": [
+          "CHAR_GARRISON_SURVIVORS",
+          "CHAR_JIANG_YUECHU",
+          "LOC_BAXI_BATTLEFIELD",
+          "LOC_BAXI_BATTLEFIELD_ESTABLISH",
+          "WEAPON_DAHUANG_HALBERD"
+        ],
+        "locs": [
+          "LOC_BAXI_BATTLEFIELD"
+        ],
+        "policy": "all listed LOC/PROP/WEAPON/OUTFIT/VFX ids must persist unless a clip handoff_state explicitly changes them."
+      },
+      "path_lock": {
+        "screen_direction": [],
+        "spatial_path_global": [],
+        "distance_curve_global": [],
+        "altitude_curve_global": [],
+        "camera_path_global": [
+          "竖屏低角度从地面残骸慢推到姜月初背影。"
+        ]
+      },
+      "handoff_states": [
+        {
+          "clip_id": "Clip_01",
+          "in": "黑场后直接进入满地妖魔残躯，静音也能看懂大战刚结束。",
+          "out": "姜月初立于尸城血雾中，掌心将要吸起精气。",
+          "continuity": "黑场后直接进入满地妖魔残躯，静音也能看懂大战刚结束。 姜月初立于尸城血雾中，掌心将要吸起精气。 低频硬切接系统面板 True 残兵从画左下仰视画面中心的姜月初。 wide_to_medium 出图/第1集/图片/EP01_CLIP01_mid.png 2.5 锁尸城规模与女主剪影。 微 出图/第1集/图片/EP01_CLIP01_end.png image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress"
+        }
+      ],
+      "required_controls": [
+        "camera_path",
+        "depth_sequence",
+        "parallax_layers"
+      ],
+      "reference_clip_policy": {
+        "policy": "scene_layer_pack_required",
+        "source": "设定库/scene_layers/LOC_xx/scene_layer_pack.json",
+        "use": "大场景同 LOC 复用地标、景深层、parallax 层和调色，不逐镜重想象背景。"
+      },
+      "premium_coverage_policy": {
+        "required": true,
+        "qc_dimensions": [
+          "edit_sfx_sync",
+          "impact_apex_readability",
+          "keyframe_coverage",
+          "motion_smoothness",
+          "optical_flow_direction",
+          "subject_identity"
+        ],
+        "keyframe_rule": "每条高光动作/奇观 clip 必须有 start→intent_mid→impact/apex→result/end 的关键帧或拆段锚。",
+        "post_rule": "action_edit_cues 中的 hit-stop/速度坡/闪白/震屏/SFX 峰值必须和 impact/apex 对齐（由 combat_cue_apex_audit.py 机检兑现：impact_frame 须带 `<秒>s` → anchor_planner 把该秒落成 keyframe 锚 → 剪辑峰值钉同秒；缺一即 warn，核心打斗镜可升 BLOCK）。",
+        "review_rule": "SPECV 未覆盖 keyframe_coverage、impact_apex_readability、edit_sfx_sync 时，production 交付边界不可静默签收。"
+      },
+      "split_degrade_plan": "先出静态全景关键帧，再做慢推/横移/分层 parallax；复杂人群改剪影或分层合成。",
+      "negative_identity_lock": [
+        "de-aging",
+        "morphing features",
+        "shifting jawline",
+        "changing face shape",
+        "changing clothes",
+        "color shift",
+        "disappearing accessories",
+        "extra limbs",
+        "extra fingers",
+        "flickering background",
+        "identity drift"
+      ],
+      "same_frame_policy": {
+        "cap": 2,
+        "over_cap_clips": [],
+        "advice": "同框具名脸 ≥2 必须登记身份槽位+执行策略；>2 的镜建议拆成正反打/分组逐一绑定主体，或压低优先级脸为侧/背/虚焦。"
+      },
+      "identity_reference_advice": "为本序列吃身份的核心角色准备 3–4 角度定妆参考（正/侧/3⁄4），强动作镜降 motion strength/cfg 换脸稳。",
+      "gate_policy": "video_preflight blocks if this sequence plan is missing for high-dynamic/large-scene clips."
+    },
+    {
+      "sequence_id": "SQ_ACTION_02",
+      "sequence_type": "magic_burst",
+      "clip_order": [
+        "Clip_02"
+      ],
+      "spectacle_types": [
+        "magic_burst"
+      ],
+      "subject_slots": {
+        "characters": [
+          "CHAR_JIANG_YUECHU"
+        ],
+        "slot_policy": "keep each CHAR_xx in the same screen role across this sequence; do not swap pursuer/target or attacker/defender without an explicit handoff_state."
+      },
+      "asset_persistence": {
+        "assets": [
+          "CHAR_JIANG_YUECHU",
+          "LOC_BAXI_BATTLEFIELD",
+          "VFX_ESSENCE_STREAMS",
+          "VFX_SYSTEM_PANEL",
+          "VFX_WHITE_QI",
+          "WEAPON_DAHUANG_HALBERD"
+        ],
+        "locs": [
+          "LOC_BAXI_BATTLEFIELD"
+        ],
+        "policy": "all listed LOC/PROP/WEAPON/OUTFIT/VFX ids must persist unless a clip handoff_state explicitly changes them."
+      },
+      "path_lock": {
+        "screen_direction": [
+          "气流向画面中心收束。"
+        ],
+        "spatial_path_global": [
+          "气流从画面四边向中心手掌汇聚。"
+        ],
+        "distance_curve_global": [],
+        "altitude_curve_global": [],
+        "camera_path_global": [
+          "侧脸中景慢推至掌心和面板过肩插入。"
+        ]
+      },
+      "handoff_states": [
+        {
+          "clip_id": "Clip_02",
+          "in": "姜月初立于尸城血雾中，掌心将要吸起精气。",
+          "out": "精气散尽，姜月初垂眸确认气海已满。",
+          "continuity": "姜月初立于尸城血雾中，掌心将要吸起精气。 精气散尽，姜月初垂眸确认气海已满。 气海嗡鸣J-cut进内视 True 姜月初视线由掌心下移到系统面板。 medium_to_close 出图/第1集/图片/EP01_CLIP02_mid.png 3.5 锁精气洪流峰值和面板位置。 中 出图/第1集/图片/EP01_CLIP02_end.png image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress"
+        }
+      ],
+      "required_controls": [
+        "camera_path",
+        "depth_sequence",
+        "parallax_layers",
+        "spatial_path",
+        "vfx_layers"
+      ],
+      "reference_clip_policy": {
+        "policy": "first_passed_clip_becomes_motion_reference",
+        "source": "生产数据/motion_reference_library.json",
+        "use": "本序列第一条通过 QC 的 clip 登记为 reference_video_motion/camera_motion_reference，后续同序列优先引用。"
+      },
+      "premium_coverage_policy": {
+        "required": true,
+        "qc_dimensions": [
+          "edit_sfx_sync",
+          "impact_apex_readability",
+          "keyframe_coverage",
+          "motion_smoothness",
+          "optical_flow_direction",
+          "subject_identity"
+        ],
+        "keyframe_rule": "每条高光动作/奇观 clip 必须有 start→intent_mid→impact/apex→result/end 的关键帧或拆段锚。",
+        "post_rule": "action_edit_cues 中的 hit-stop/速度坡/闪白/震屏/SFX 峰值必须和 impact/apex 对齐（由 combat_cue_apex_audit.py 机检兑现：impact_frame 须带 `<秒>s` → anchor_planner 把该秒落成 keyframe 锚 → 剪辑峰值钉同秒；缺一即 warn，核心打斗镜可升 BLOCK）。",
+        "review_rule": "SPECV 未覆盖 keyframe_coverage、impact_apex_readability、edit_sfx_sync 时，production 交付边界不可静默签收。"
+      },
+      "split_degrade_plan": "拆成蓄力/释放/撞点或峰值/余波四镜；撞点与特效峰值单独锁图，失败时改 VFX overlay + 反应镜。",
+      "negative_identity_lock": [
+        "de-aging",
+        "morphing features",
+        "shifting jawline",
+        "changing face shape",
+        "changing clothes",
+        "color shift",
+        "disappearing accessories",
+        "extra limbs",
+        "extra fingers",
+        "flickering background",
+        "identity drift"
+      ],
+      "same_frame_policy": {
+        "cap": 2,
+        "over_cap_clips": [],
+        "advice": "同框具名脸 ≥2 必须登记身份槽位+执行策略；>2 的镜建议拆成正反打/分组逐一绑定主体，或压低优先级脸为侧/背/虚焦。"
+      },
+      "identity_reference_advice": "为本序列吃身份的核心角色准备 3–4 角度定妆参考（正/侧/3⁄4），强动作镜降 motion strength/cfg 换脸稳。",
+      "gate_policy": "video_preflight blocks if this sequence plan is missing for high-dynamic/large-scene clips."
+    },
+    {
+      "sequence_id": "SQ_SPECTACLE_03",
+      "sequence_type": "meditation_cultivation",
+      "clip_order": [
+        "Clip_03",
+        "Clip_08"
+      ],
+      "spectacle_types": [
+        "meditation_cultivation",
+        "meditation_cultivation"
+      ],
+      "subject_slots": {
+        "characters": [
+          "CHAR_JIANG_YUECHU"
+        ],
+        "slot_policy": "keep each CHAR_xx in the same screen role across this sequence; do not swap pursuer/target or attacker/defender without an explicit handoff_state."
+      },
+      "asset_persistence": {
+        "assets": [
+          "CHAR_JIANG_YUECHU",
+          "LOC_BAXI_BATTLEFIELD",
+          "LOC_BROKEN_HOUSE",
+          "LOC_CONSCIOUSNESS_SEA",
+          "VFX_RED_FLOOD_DRAGON_SCROLL",
+          "VFX_YINSHAN_MIST",
+          "WEAPON_DAHUANG_HALBERD"
+        ],
+        "locs": [
+          "LOC_BAXI_BATTLEFIELD",
+          "LOC_BROKEN_HOUSE"
+        ],
+        "policy": "all listed LOC/PROP/WEAPON/OUTFIT/VFX ids must persist unless a clip handoff_state explicitly changes them."
+      },
+      "path_lock": {
+        "screen_direction": [],
+        "spatial_path_global": [],
+        "distance_curve_global": [],
+        "altitude_curve_global": [],
+        "camera_path_global": []
+      },
+      "handoff_states": [
+        {
+          "clip_id": "Clip_03",
+          "in": "精气散尽，姜月初垂眸确认气海已满。",
+          "out": "五仙山三字压住朝堂。",
+          "continuity": "精气散尽，姜月初垂眸确认气海已满。 五仙山三字压住朝堂。 内视空山雾影match cut到朝堂冷雾 True 姜月初视线向内收，观众看内视叠层。 close 出图/第1集/图片/EP01_CLIP03_mid.png 3.0 锁阴山未成的内视信息。 微 出图/第1集/图片/EP01_CLIP03_end.png image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress"
+        },
+        {
+          "clip_id": "Clip_08",
+          "in": "破屋门在她身后合上。",
+          "out": "识海金光从黑暗中炸开。",
+          "continuity": "破屋门在她身后合上。 识海金光从黑暗中炸开。 门缝黑场match cut识海金光 True 姜月初闭眼内视。 medium_close 出图/第1集/图片/EP01_CLIP08_mid.png 3.5 锁静修坐姿与掌心入识海。 微 出图/第1集/图片/EP01_CLIP08_end.png image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress"
+        }
+      ],
+      "required_controls": [
+        "depth_sequence",
+        "pose_sequence",
+        "vfx_layers"
+      ],
+      "reference_clip_policy": {
+        "policy": "first_passed_clip_becomes_motion_reference",
+        "source": "生产数据/motion_reference_library.json",
+        "use": "本序列第一条通过 QC 的 clip 登记为 reference_video_motion/camera_motion_reference，后续同序列优先引用。"
+      },
+      "premium_coverage_policy": {
+        "required": true,
+        "qc_dimensions": [
+          "edit_sfx_sync",
+          "impact_apex_readability",
+          "keyframe_coverage",
+          "motion_smoothness",
+          "optical_flow_direction",
+          "subject_identity"
+        ],
+        "keyframe_rule": "每条高光动作/奇观 clip 必须有 start→intent_mid→impact/apex→result/end 的关键帧或拆段锚。",
+        "post_rule": "action_edit_cues 中的 hit-stop/速度坡/闪白/震屏/SFX 峰值必须和 impact/apex 对齐（由 combat_cue_apex_audit.py 机检兑现：impact_frame 须带 `<秒>s` → anchor_planner 把该秒落成 keyframe 锚 → 剪辑峰值钉同秒；缺一即 warn，核心打斗镜可升 BLOCK）。",
+        "review_rule": "SPECV 未覆盖 keyframe_coverage、impact_apex_readability、edit_sfx_sync 时，production 交付边界不可静默签收。"
+      },
+      "split_degrade_plan": "拆姿态建立/吐纳周天/内视或灵气响应/收功四镜；人物少动，灵气、尘粒、衣摆和环境响应承担高级感。",
+      "negative_identity_lock": [
+        "de-aging",
+        "morphing features",
+        "shifting jawline",
+        "changing face shape",
+        "changing clothes",
+        "color shift",
+        "disappearing accessories",
+        "extra limbs",
+        "extra fingers",
+        "flickering background",
+        "identity drift"
+      ],
+      "same_frame_policy": {
+        "cap": 2,
+        "over_cap_clips": [],
+        "advice": "同框具名脸 ≥2 必须登记身份槽位+执行策略；>2 的镜建议拆成正反打/分组逐一绑定主体，或压低优先级脸为侧/背/虚焦。"
+      },
+      "identity_reference_advice": "为本序列吃身份的核心角色准备 3–4 角度定妆参考（正/侧/3⁄4），强动作镜降 motion strength/cfg 换脸稳。",
+      "gate_policy": "video_preflight blocks if this sequence plan is missing for high-dynamic/large-scene clips."
+    },
+    {
+      "sequence_id": "SQ_ACTION_04",
+      "sequence_type": "magic_burst",
+      "clip_order": [
+        "Clip_11",
+        "Clip_13"
+      ],
+      "spectacle_types": [
+        "magic_burst",
+        "magic_burst"
+      ],
+      "subject_slots": {
+        "characters": [
+          "CHAR_JIANG_YUECHU"
+        ],
+        "slot_policy": "keep each CHAR_xx in the same screen role across this sequence; do not swap pursuer/target or attacker/defender without an explicit handoff_state."
+      },
+      "asset_persistence": {
+        "assets": [
+          "CHAR_JIANG_YUECHU",
+          "LOC_BROKEN_HOUSE",
+          "LOC_CONSCIOUSNESS_SEA",
+          "VFX_SYSTEM_PANEL",
+          "VFX_THREE_DRAGON_ORBS",
+          "VFX_YINSHAN_MIST"
+        ],
+        "locs": [
+          "LOC_BROKEN_HOUSE",
+          "LOC_CONSCIOUSNESS_SEA"
+        ],
+        "policy": "all listed LOC/PROP/WEAPON/OUTFIT/VFX ids must persist unless a clip handoff_state explicitly changes them."
+      },
+      "path_lock": {
+        "screen_direction": [
+          "龙珠顺时针，不跨镜反转。",
+          "雾向中心收束。"
+        ],
+        "spatial_path_global": [
+          "龙珠围绕人物前后景绕行，半径稳定。",
+          "雾从画面边缘向中心山影聚拢。"
+        ],
+        "distance_curve_global": [],
+        "altitude_curve_global": [],
+        "camera_path_global": [
+          "手背CU → 半身慢推 → 眼神CU。",
+          "眼神ECU慢推，切识海远景定格。"
+        ]
+      },
+      "handoff_states": [
+        {
+          "clip_id": "Clip_11",
+          "in": "三色龙珠光影从她眉心涌出。",
+          "out": "面板底部忽然轻颤。",
+          "continuity": "三色龙珠光影从她眉心涌出。 面板底部忽然轻颤。 龙珠绕身的圆周运动带到面板光圈 True 姜月初低头看手背鳞片，再抬眼看龙珠。 close_to_medium 出图/第1集/图片/EP01_CLIP11_mid.png 3.5 锁三色龙珠与觉醒态识别。 大 出图/第1集/图片/EP01_CLIP11_end.png image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress"
+        },
+        {
+          "clip_id": "Clip_13",
+          "in": "姜月初眼底出现阴山雾影。",
+          "out": "黑场停在“阴山，终于等到了”。",
+          "continuity": "姜月初眼底出现阴山雾影。 黑场停在“阴山，终于等到了”。 尾帧定格后硬切黑 True 姜月初视线向内看识海。 extreme_close_to_wide_inner 出图/第1集/图片/EP01_CLIP13_mid.png 4.5 锁阴山半露的尾钩画面。 大 出图/第1集/图片/EP01_CLIP13_end.png image2image_from_same_clip_firstframe; align composition/light/state to next clip ingress"
+        }
+      ],
+      "required_controls": [
+        "camera_path",
+        "depth_sequence",
+        "parallax_layers",
+        "spatial_path",
+        "vfx_layers"
+      ],
+      "reference_clip_policy": {
+        "policy": "first_passed_clip_becomes_motion_reference",
+        "source": "生产数据/motion_reference_library.json",
+        "use": "本序列第一条通过 QC 的 clip 登记为 reference_video_motion/camera_motion_reference，后续同序列优先引用。"
+      },
+      "premium_coverage_policy": {
+        "required": true,
+        "qc_dimensions": [
+          "edit_sfx_sync",
+          "impact_apex_readability",
+          "keyframe_coverage",
+          "motion_smoothness",
+          "optical_flow_direction",
+          "subject_identity"
+        ],
+        "keyframe_rule": "每条高光动作/奇观 clip 必须有 start→intent_mid→impact/apex→result/end 的关键帧或拆段锚。",
+        "post_rule": "action_edit_cues 中的 hit-stop/速度坡/闪白/震屏/SFX 峰值必须和 impact/apex 对齐（由 combat_cue_apex_audit.py 机检兑现：impact_frame 须带 `<秒>s` → anchor_planner 把该秒落成 keyframe 锚 → 剪辑峰值钉同秒；缺一即 warn，核心打斗镜可升 BLOCK）。",
+        "review_rule": "SPECV 未覆盖 keyframe_coverage、impact_apex_readability、edit_sfx_sync 时，production 交付边界不可静默签收。"
+      },
+      "split_degrade_plan": "拆成蓄力/释放/撞点或峰值/余波四镜；撞点与特效峰值单独锁图，失败时改 VFX overlay + 反应镜。",
+      "negative_identity_lock": [
+        "de-aging",
+        "morphing features",
+        "shifting jawline",
+        "changing face shape",
+        "changing clothes",
+        "color shift",
+        "disappearing accessories",
+        "extra limbs",
+        "extra fingers",
+        "flickering background",
+        "identity drift"
+      ],
+      "same_frame_policy": {
+        "cap": 2,
+        "over_cap_clips": [],
+        "advice": "同框具名脸 ≥2 必须登记身份槽位+执行策略；>2 的镜建议拆成正反打/分组逐一绑定主体，或压低优先级脸为侧/背/虚焦。"
+      },
+      "identity_reference_advice": "为本序列吃身份的核心角色准备 3–4 角度定妆参考（正/侧/3⁄4），强动作镜降 motion strength/cfg 换脸稳。",
+      "gate_policy": "video_preflight blocks if this sequence plan is missing for high-dynamic/large-scene clips."
+    }
+  ],
+  "summary": {
+    "spectacle_clips": 6,
+    "sequences": 4,
+    "action_sequences": 2,
+    "large_scene_sequences": 1,
+    "multi_clip_sequences": 2
+  }
+}
