@@ -23,6 +23,8 @@ fn main() {
             commands::list_skills,
             commands::skill_tree,
             commands::read_skill_file,
+            commands::work_tree,
+            commands::read_work_file,
             commands::detect_agents,
             commands::default_workspace,
             commands::resolve_repo,

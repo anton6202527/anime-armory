@@ -312,18 +312,60 @@ def copy_reference_group(root: Path, form: Mapping[str, Any], dataset_dir: Path,
     copied: List[Dict[str, Any]] = []
     ref = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
     dataset_dir.mkdir(parents=True, exist_ok=True)
+
+    def add_item(items: List[Dict[str, str]], role: str, raw: Any, label: str = "") -> None:
+        rel = ref_to_path(raw)
+        if rel:
+            items.append({"role": role, "source": rel, "label": label})
+
+    items: List[Dict[str, str]] = []
     for role in REFERENCE_KEYS:
-        rel = ref_to_path(ref.get(role, ""))
-        if not rel:
+        add_item(items, role, ref.get(role, ""))
+    for role in ("three_quarter", "half_body", "full_body"):
+        add_item(items, role, ref.get(role, ""))
+    for idx, item in enumerate(ref.get("face_anchor_refs") or [], 1):
+        label = str(item.get("label") or f"face_anchor_{idx}") if isinstance(item, Mapping) else f"face_anchor_{idx}"
+        add_item(items, "face_anchor", item, label)
+    for idx, item in enumerate(ref.get("expressions") or [], 1):
+        label = str(item.get("label") or item.get("emotion") or f"expression_{idx}") if isinstance(item, Mapping) else f"expression_{idx}"
+        add_item(items, "expression", item, label)
+
+    atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
+    views = atlas.get("base_views") if isinstance(atlas.get("base_views"), Mapping) else {}
+    for role in ("front", "three_quarter", "side", "back", "half_body", "full_body"):
+        add_item(items, role, views.get(role, ""))
+    for idx, item in enumerate(atlas.get("face_anchor_refs") or [], 1):
+        label = str(item.get("label") or f"face_anchor_{idx}") if isinstance(item, Mapping) else f"face_anchor_{idx}"
+        add_item(items, "face_anchor", item, label)
+    for idx, item in enumerate(atlas.get("expression_refs") or [], 1):
+        label = str(item.get("label") or item.get("emotion") or f"expression_{idx}") if isinstance(item, Mapping) else f"expression_{idx}"
+        add_item(items, "expression", item, label)
+    for idx, item in enumerate(form.get("expression_anchors") or [], 1):
+        label = str(item.get("label") or item.get("emotion") or f"expression_{idx}") if isinstance(item, Mapping) else f"expression_{idx}"
+        add_item(items, "expression", item, label)
+
+    seen_sources: set[str] = set()
+    role_counts: Dict[str, int] = {}
+    for item in items:
+        rel = item["source"]
+        if rel in seen_sources:
             continue
+        seen_sources.add(rel)
         src = resolve_path(root, rel)
         if not src.is_file():
             continue
-        target = dataset_dir / f"seed_{role}{src.suffix.lower() or '.png'}"
+        role = item["role"]
+        role_counts[role] = role_counts.get(role, 0) + 1
+        if role in REFERENCE_KEYS and role_counts[role] == 1:
+            name = f"seed_{role}"
+        else:
+            name = f"seed_{slugify(role)}_{role_counts[role]:02d}"
+        target = dataset_dir / f"{name}{src.suffix.lower() or '.png'}"
         shutil.copy2(src, target)
-        caption = f"{trigger}, {role} reference, {form.get('anchor_phrase', '')}".strip().strip(",")
+        label = item.get("label", "")
+        caption = f"{trigger}, {role} reference, {label}, {form.get('anchor_phrase', '')}".strip().strip(",")
         write_text(target.with_suffix(".txt"), caption + "\n")
-        copied.append({"role": role, "source": rel, "target": target.name})
+        copied.append({"role": role, "source": rel, "target": target.name, "label": label})
     return copied
 
 
@@ -339,7 +381,7 @@ def build_dataset_manifest(root: Path, out_dir: Path, char: Mapping[str, Any], f
         width, height = image_size(img)
         lower = img.stem.lower()
         role = "unknown"
-        for candidate in ("front", "side", "back", "outfit", "turnaround", "closeup", "halfbody", "fullbody", "expression"):
+        for candidate in ("front", "three_quarter", "side", "back", "outfit", "turnaround", "closeup", "face_anchor", "halfbody", "half_body", "fullbody", "full_body", "expression"):
             if candidate in lower:
                 role = candidate
                 break

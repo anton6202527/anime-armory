@@ -1,0 +1,201 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 13,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/图片/EP01_CLIP10.png",
+      "bytes": 2571879,
+      "owner": "Clip_10",
+      "priority": 0,
+      "rel_path": "出图/第1集/图片/EP01_CLIP10.png",
+      "role": "source_frame",
+      "sequence": 0,
+      "sha256": "815be8f9c320e9ab107f4e9aabcadd631aef340f1e56836201133aaed342ba83",
+      "source": "same_clip_firstframe"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/图片/EP01_CLIP10_mid.png",
+      "bytes": 2594932,
+      "owner": "Clip_10",
+      "priority": 0,
+      "rel_path": "出图/第1集/图片/EP01_CLIP10_mid.png",
+      "role": "source_frame",
+      "sequence": 1,
+      "sha256": "b586e9422c15838cd52974e5334b34957d91e08f4f2c577940c1974c1b1bdf49",
+      "source": "same_clip_anchor"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_姜月初识海阴山.png",
+      "bytes": 2137656,
+      "owner": "LOC_CONSCIOUSNESS_SEA",
+      "priority": 40,
+      "rel_path": "出图/共享/图片/定妆_姜月初识海阴山.png",
+      "role": "asset",
+      "sequence": 10,
+      "sha256": "f00888966aa6c1e406a22cd993bce2d88bf5cafd66c56779b49fb8646e8fb9ca",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_系统面板_v1.png",
+      "bytes": 1912014,
+      "owner": "VFX_SYSTEM_PANEL",
+      "priority": 40,
+      "rel_path": "出图/共享/图片/定妆_系统面板_v1.png",
+      "role": "asset",
+      "sequence": 11,
+      "sha256": "add29c788094f36cadba97d887fc4e4d34ac059b92d9cbe9f6c142877984a2e4",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_赤蛟绘卷虚影.png",
+      "bytes": 2530169,
+      "owner": "VFX_RED_FLOOD_DRAGON_SCROLL",
+      "priority": 40,
+      "rel_path": "出图/共享/图片/定妆_赤蛟绘卷虚影.png",
+      "role": "asset",
+      "sequence": 12,
+      "sha256": "87707ac57ce66c8cde2474c2724140898aa13b5f680d9408e29663cb6647fbfe",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_姜月初_战场形态_脸部特写.png",
+      "bytes": 2344698,
+      "owner": "CHAR_JIANG_YUECHU/战场形态",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_姜月初_战场形态_脸部特写.png",
+      "role": "character",
+      "sequence": 8,
+      "sha256": "b89b63e433c669830611daa6e85b3180c0541b26a14646c1c5c8dca602b1941e",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_姜月初_战场形态_半身.png",
+      "bytes": 2225829,
+      "owner": "CHAR_JIANG_YUECHU/战场形态",
+      "priority": 110,
+      "rel_path": "出图/共享/图片/定妆_姜月初_战场形态_半身.png",
+      "role": "character",
+      "sequence": 5,
+      "sha256": "56b46b3b2163c6c7cc59e5850d0a1996b90326d1444a3aa4ef2fd2ed48856660",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_姜月初_战场形态.png",
+      "bytes": 2122945,
+      "owner": "CHAR_JIANG_YUECHU/战场形态",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_姜月初_战场形态.png",
+      "role": "character",
+      "sequence": 2,
+      "sha256": "5e0413f2dd5bc83286aaf48d963949f17e25c090d413ad84879fa6055dc708e6",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_姜月初_战场形态_主参考.jpeg",
+      "bytes": 16816,
+      "owner": "CHAR_JIANG_YUECHU/战场形态",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_姜月初_战场形态_主参考.jpeg",
+      "role": "character",
+      "sequence": 7,
+      "sha256": "021b2bdc2fd6bc211615497f902481448c22cb929e663e778f375aadd89db15b",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_姜月初_战场形态_侧.png",
+      "bytes": 1893820,
+      "owner": "CHAR_JIANG_YUECHU/战场形态",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_姜月初_战场形态_侧.png",
+      "role": "character",
+      "sequence": 3,
+      "sha256": "fc8e27132db54126a928cfe47f06c1c94ce4be8cc4af30a8f0c204d23fba73f6",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_姜月初_战场形态_45度.png",
+      "bytes": 1911377,
+      "owner": "CHAR_JIANG_YUECHU/战场形态",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_姜月初_战场形态_45度.png",
+      "role": "character",
+      "sequence": 9,
+      "sha256": "26de0bfdcbb5d6879e19ac5710bf0e7a06470709a21b00248ec805bea1950b7f",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_姜月初_战场形态_三视图.png",
+      "bytes": 2089108,
+      "owner": "CHAR_JIANG_YUECHU/战场形态",
+      "priority": 140,
+      "rel_path": "出图/共享/图片/定妆_姜月初_战场形态_三视图.png",
+      "role": "character",
+      "sequence": 6,
+      "sha256": "2c751a0260862ff550fe06fc93bcfdeab22cef228ddb948affb4be90b9d56297",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_姜月初_战场形态_背.png",
+      "bytes": 1897264,
+      "owner": "CHAR_JIANG_YUECHU/战场形态",
+      "priority": 150,
+      "rel_path": "出图/共享/图片/定妆_姜月初_战场形态_背.png",
+      "role": "character",
+      "sequence": 4,
+      "sha256": "cddfe9ad7b999f62cf5011fff850837dfa7da69c4da2a52e01a4f32252233659",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "form": "战场形态",
+      "id": "CHAR_JIANG_YUECHU",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_姜月初_战场形态.png",
+        "出图/共享/图片/定妆_姜月初_战场形态_侧.png",
+        "出图/共享/图片/定妆_姜月初_战场形态_背.png",
+        "出图/共享/图片/定妆_姜月初_战场形态_半身.png",
+        "出图/共享/图片/定妆_姜月初_战场形态_三视图.png",
+        "出图/共享/图片/定妆_姜月初_战场形态_主参考.jpeg",
+        "出图/共享/图片/定妆_姜月初_战场形态_脸部特写.png",
+        "出图/共享/图片/定妆_姜月初_战场形态_45度.png"
+      ]
+    },
+    {
+      "id": "LOC_CONSCIOUSNESS_SEA",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_姜月初识海阴山.png"
+      ],
+      "type": "scene"
+    },
+    {
+      "id": "VFX_SYSTEM_PANEL",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_系统面板_v1.png"
+      ],
+      "type": "vfx"
+    },
+    {
+      "id": "VFX_RED_FLOOD_DRAGON_SCROLL",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_赤蛟绘卷虚影.png"
+      ],
+      "type": "vfx"
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "Clip_10_end",
+  "target": "出图/第1集/图片/EP01_CLIP10_end.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

@@ -220,6 +220,7 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
                 key_aliases=("一致性发布档", "一致性落地档", "一致性验收档", "制作质量档")),
     SettingSpec("重抽预算策略", ("n2d",), ("预算充足", "预算一般")),
     SettingSpec("脸一致性机检后端", ("n2d",), ("arcface", "styleid", "自动按画风"), key_aliases=("脸encoder", "face_encoder")),
+    SettingSpec("N2D_STYLEID_MODEL", ("n2d",), ("kwanY/styleid", "自定义"), key_aliases=("StyleID模型", "StyleID model"), parameterized=True, syncable=False),
     SettingSpec("更新重制策略", ("n2d",), ("最小", "严审刷新")),
     SettingSpec("BGM来源", ("n2d",), ("占位", "文件", "Suno"), parameterized=True),
     SettingSpec("接缝兜底", ("n2d",), ("硬切", "微溶解", "报警"), parameterized=True),

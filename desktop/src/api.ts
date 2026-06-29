@@ -57,6 +57,16 @@ export async function readSkillFile(repoRoot: string, dir: string, rel: string):
   return invoke<string>("read_skill_file", { repoRoot, dir, rel });
 }
 
+/** The full file/folder tree under a work root, for the 文件 viewer tab. */
+export async function workTree(root: string): Promise<SkillTreeEntry[]> {
+  return invoke<SkillTreeEntry[]>("work_tree", { root });
+}
+
+/** Read one text file inside a work root (<root>/<rel>) for the file preview. */
+export async function readWorkFile(root: string, rel: string): Promise<string> {
+  return invoke<string>("read_work_file", { root, rel });
+}
+
 /** Create an empty work folder under a line's product dir; returns its absolute path.
  *  `repoRoot` is passed so the backend can refuse to create inside the project repo. */
 export async function createWork(dir: string, repoRoot: string, name: string): Promise<string> {

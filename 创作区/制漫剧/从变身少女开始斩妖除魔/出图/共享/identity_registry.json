@@ -744,7 +744,8 @@
             ],
             "three_quarter": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_45度.png",
             "half_body": "出图/共享/图片/定妆_姜月初_觉醒蓝调母本_半身.png",
-            "source_face_reference": "出图/共享/图片/定妆_姜月初_觉醒蓝调_母本.jpeg"
+            "source_face_reference": "出图/共享/图片/定妆_姜月初_觉醒蓝调_母本.jpeg",
+            "reference_use_policy": "face_mood_only"
           },
           "reference_atlas": {
             "version": 1,
@@ -1136,7 +1137,9 @@
               "原图场景"
             ],
             "canonical_form_source": "小说/分镜状态：龙鳞、玉角、三色龙珠、阴山雾影；服装另按剧情派生"
-          }
+          },
+          "reference_use_policy": "face_mood_only",
+          "reference_use_note": "仅作脸型、五官比例、眼神气质、湿冷蓝调气质锚；不得继承本组蓝衣/造型/配饰/裸露或替换战场形态服装。"
         }
       ]
     },

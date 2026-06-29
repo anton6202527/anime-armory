@@ -588,7 +588,15 @@ def check_stylized_face_encoder_policy(root: str, ep: str = "", stage: str = "")
     """风格化项目应把脸一致性机检切到 StyleID；缺权重时标降级 KPI。"""
     style = get_setting(root, "基础视觉风格", "")
     encoder = get_setting(root, "脸一致性机检后端", "arcface")
-    policy = face_encoder_policy(style, encoder)
+    model_ref = (
+        get_setting(root, "N2D_STYLEID_MODEL", "")
+        or get_setting(root, "StyleID模型", "")
+        or get_setting(root, "StyleID model", "")
+    )
+    policy_env = dict(os.environ)
+    if str(model_ref or "").strip():
+        policy_env["N2D_STYLEID_MODEL"] = str(model_ref).strip()
+    policy = face_encoder_policy(style, encoder, policy_env)
     if not (policy.get("stylized") or policy.get("requested_styleid")):
         return
     if policy.get("status") == "ready":
@@ -597,7 +605,14 @@ def check_stylized_face_encoder_policy(root: str, ep: str = "", stage: str = "")
     model_status = str(policy.get("model_status") or "missing")
     model_path = str(policy.get("model_path") or "")
     if policy.get("requested_styleid"):
-        detail = "未配置" if model_status == "missing" else f"路径不存在：{model_path}"
+        if model_status == "missing":
+            detail = "未配置"
+        elif model_status == "download_disabled":
+            detail = f"指向 Hugging Face 模型 `{model_path}`，但 N2D_ALLOW_MODEL_DOWNLOAD=0 禁止下载"
+        elif model_status == "unapproved_remote":
+            detail = f"指向未登记的远端模型：{model_path}"
+        else:
+            detail = f"路径不存在：{model_path}"
         msg = (
             f"基础视觉风格「{style}」已选择脸一致性机检后端=styleid，但 N2D_STYLEID_MODEL {detail}；"
             "StyleID 不可用时会回退 arcface_fallback，本集 character_consistency_kpi 标为降级档。"

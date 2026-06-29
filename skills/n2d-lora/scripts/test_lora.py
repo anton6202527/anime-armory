@@ -110,6 +110,36 @@ def test_lora_lifecycle_registers_ready_binding(tmp_path):
     assert binding["validation_report"].endswith("validation_report.json")
 
 
+def test_lora_dataset_copies_atlas_face_and_expression_refs(tmp_path):
+    root = _root(tmp_path)
+    extra = {
+        "three_quarter": "出图/共享/图片/定妆_沈念_45度.png",
+        "face": "出图/共享/图片/定妆_沈念_脸部特写.png",
+        "expression": "出图/共享/图片/定妆_沈念_表情_克制.png",
+    }
+    for rel in extra.values():
+        _png(root / rel)
+    reg_path = root / "出图/共享/identity_registry.json"
+    registry = json.loads(reg_path.read_text(encoding="utf-8"))
+    form = registry["characters"][0]["forms"][0]
+    form["reference_group"]["three_quarter"] = extra["three_quarter"]
+    form["reference_group"]["face_anchor_refs"] = [{"label": "基础脸锚", "path": extra["face"], "status": "ready"}]
+    form["reference_atlas"] = {
+        "base_views": {"three_quarter": {"path": extra["three_quarter"], "status": "ready"}},
+        "expression_refs": [{"label": "克制", "path": extra["expression"], "status": "ready"}],
+    }
+    lora.write_json(reg_path, registry)
+
+    assert lora.main(["init", str(root), "--character-id", "CHAR_SHEN", "--form", "常态", "--base-model", "sdxl"]) == 0
+    assert lora.main(["dataset", str(root), "--character-id", "CHAR_SHEN", "--form", "常态", "--copy-references"]) == 0
+
+    manifest = json.loads((root / "设定库/lora/CHAR_SHEN/常态/dataset_manifest.json").read_text(encoding="utf-8"))
+    roles = {item["role"] for item in manifest["items"]}
+    copied_roles = {item["role"] for item in manifest["copied_references"]}
+    assert {"three_quarter", "face_anchor", "expression"} <= roles
+    assert {"three_quarter", "face_anchor", "expression"} <= copied_roles
+
+
 def test_lora_force_register_writes_candidate_override_not_ready(tmp_path):
     root = _root(tmp_path)
     assert lora.main(["init", str(root), "--character-id", "CHAR_SHEN", "--form", "常态", "--base-model", "sdxl"]) == 0

@@ -320,8 +320,22 @@ def requires_controlled_makeup_derivation(rel_path: str) -> bool:
     stem = Path(rel_path).stem
     if not stem.startswith(("CHAR_", "定妆_")):
         return False
-    unsafe_tokens = ("45度", "_侧", "_背", "半身", "全身", "脸部特写")
-    return any(token in stem for token in unsafe_tokens)
+    if stem.endswith("_三视图"):
+        return False
+    unsafe_suffixes = (
+        "_45度",
+        "_侧",
+        "_背",
+        "_侧背",
+        "_侧影",
+        "_半身",
+        "_全身翼展",
+        "_全身",
+        "_脸部特写",
+        "_群像sheet",
+        "_sheet",
+    )
+    return stem.endswith(unsafe_suffixes)
 
 
 def requires_human_review_before_ready(rel_path: str) -> bool:
@@ -341,7 +355,7 @@ def has_controlled_makeup_source(rel_path: str, reference_inputs: Sequence[Dict[
     if not requires_controlled_makeup_derivation(rel_path):
         return True
     stem = Path(rel_path).stem
-    base = re.sub(r"_(?:45度|侧|背|半身|全身翼展|全身|脸部特写)$", "", stem)
+    base = re.sub(r"_(?:45度|侧|背|侧背|侧影|半身|全身翼展|全身|脸部特写|群像sheet|sheet)$", "", stem)
     expected = {base, f"{base}_front", f"{base}_三视图"}
     for item in reference_inputs or []:
         ref_stem = Path(str(item.get("rel_path") or item.get("abs_path") or "")).stem
@@ -466,6 +480,8 @@ def shared_aliases(title: str, body: str, rel_path: str) -> set:
     # must not become selectable aliases for this target.
     ids = re.findall(r"`?((?:CHAR|LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\u4e00-\u9fff]+)`?", title)
     aliases.update(ids)
+    form_refs = re.findall(r"`?(CHAR_[A-Za-z0-9_]+/[A-Za-z0-9_\u4e00-\u9fff·.-]+)`?", f"{title}\n{body}")
+    aliases.update(form_refs)
     if "CHAR_01" in aliases and "常态" in title:
         aliases.add("CHAR_01/常态")
     if "CHAR_01" in aliases and "觉醒态" in title:
@@ -727,6 +743,22 @@ _FACELESS_STEM_RE = re.compile(r"握持比例|比例尺|尺度|scale|grip|propor
 _FACE_LOCKED_STEM_RE = re.compile(r"动作_持|持械|wielding|wield|半身|全身|脸部特写|45度|_侧|_背|肖像|portrait",
                                   re.IGNORECASE)
 FACE_POLICY_CHOICES = ("faceless", "face_locked", "none")
+FACE_MOOD_ONLY_POLICIES = {"face_mood_only", "face_only", "identity_mood_only", "mood_only"}
+
+
+def _form_reference_use_policy(form: Dict[str, Any]) -> str:
+    reference_group = form.get("reference_group") if isinstance(form.get("reference_group"), dict) else {}
+    reference_atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), dict) else {}
+    for value in (
+        form.get("reference_use_policy"),
+        form.get("reference_policy"),
+        reference_group.get("reference_use_policy"),
+        reference_atlas.get("reference_use_policy"),
+    ):
+        text = str(value or "").strip().lower()
+        if text:
+            return text
+    return ""
 
 
 def _asset_owner_refs(asset: Dict[str, Any]) -> List[str]:
@@ -1013,16 +1045,24 @@ def reference_bundle_for_target(root: Path, episode: str, target: Target) -> Dic
                 continue
             paths: List[str] = []
             seen: Set[str] = set()
-            _collect_ready_image_paths(
-                ch.get("external_visual_references"),
-                root,
-                paths,
-                seen,
-                allow_non_shared=True,
-                allow_pending_user_reference=True,
-            )
-            _collect_ready_image_paths(form.get("reference_group"), root, paths, seen)
-            _collect_ready_image_paths(form.get("reference_atlas"), root, paths, seen)
+            reference_policy = _form_reference_use_policy(form)
+            if reference_policy in FACE_MOOD_ONLY_POLICIES:
+                reference_group = form.get("reference_group") if isinstance(form.get("reference_group"), dict) else {}
+                reference_atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), dict) else {}
+                for key in CHARACTER_SHARED_FACE_FIELDS:
+                    _collect_ready_image_paths(reference_group.get(key), root, paths, seen)
+                    _collect_ready_image_paths(reference_atlas.get(key), root, paths, seen)
+            else:
+                _collect_ready_image_paths(
+                    ch.get("external_visual_references"),
+                    root,
+                    paths,
+                    seen,
+                    allow_non_shared=True,
+                    allow_pending_user_reference=True,
+                )
+                _collect_ready_image_paths(form.get("reference_group"), root, paths, seen)
+                _collect_ready_image_paths(form.get("reference_atlas"), root, paths, seen)
             if paths:
                 items.append({"kind": "character", "id": cid, "form": fname, "paths": paths})
             else:

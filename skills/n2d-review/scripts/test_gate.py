@@ -5453,6 +5453,21 @@ def test_stylized_face_encoder_policy_passes_with_styleid_model(tmp_path, monkey
     assert not any(f["dim"] == "风格化脸机检" for f in gate.findings)
 
 
+def test_stylized_face_encoder_policy_reads_styleid_model_from_project_settings(tmp_path, monkeypatch):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    monkeypatch.delenv("N2D_STYLEID_MODEL", raising=False)
+    monkeypatch.setenv("N2D_ALLOW_MODEL_DOWNLOAD", "1")
+    (root / "_设置.md").write_text(
+        "# _设置\n- 基础视觉风格: 国漫写实\n- 脸一致性机检后端: styleid\n- N2D_STYLEID_MODEL: kwanY/styleid\n",
+        encoding="utf-8",
+    )
+
+    gate.check_stylized_face_encoder_policy(str(root), "第1集", "image_preflight")
+
+    assert not any(f["dim"] == "风格化脸机检" for f in gate.findings)
+
+
 def test_storyboard_possession_gate_warns_for_prop_holder_without_ledger(tmp_path):
     root = tmp_path / "制漫剧" / "测试剧"
     sb_dir = root / "脚本" / "第1集"

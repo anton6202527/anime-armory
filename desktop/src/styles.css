@@ -214,8 +214,52 @@ button:hover { border-color: var(--accent); }
 .ep-switch .ep.active { background: var(--accent); color: #06223f; border-color: var(--accent); }
 
 .op-body { flex: 1; display: flex; min-height: 0; }
-.op-left { flex: 1; min-width: 0; position: relative; }
+.op-left { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .op-right { width: 42%; min-width: 320px; border-left: 1px solid var(--border); display: flex; flex-direction: column; }
+
+/* ---- left-pane sub-tabs (文件 / 画布) ---- */
+.subtabs { display: flex; gap: 6px; padding: 6px 10px; border-bottom: 1px solid var(--border); background: var(--bg-2); }
+.subtab {
+  padding: 4px 12px; border-radius: 6px 6px 0 0; cursor: pointer; font-size: 12px;
+  color: var(--muted); border: 1px solid transparent;
+}
+.subtab:hover { color: var(--text); }
+.subtab.active { color: var(--accent); background: var(--bg); border-color: var(--border); border-bottom-color: var(--bg); }
+.subtab-body { flex: 1; min-height: 0; position: relative; }
+
+/* ---- 文件 viewer (tree + preview) ---- */
+.files-pane { position: absolute; inset: 0; display: flex; }
+.files-tree { width: 280px; border-right: 1px solid var(--border); overflow: auto; padding: 8px 4px; }
+.files-preview { flex: 1; min-width: 0; overflow: auto; }
+.files-empty { padding: 24px; color: var(--muted); font-style: italic; }
+.files-text {
+  margin: 0; padding: 16px; font-family: Menlo, Monaco, monospace; font-size: 12px;
+  line-height: 1.6; color: var(--text); white-space: pre-wrap; word-break: break-word;
+}
+.files-media { padding: 16px; display: flex; justify-content: center; }
+.files-media img, .files-media video { max-width: 100%; max-height: calc(100vh - 180px); border-radius: 8px; }
+.files-media audio { width: 90%; }
+
+/* ---- 看板 (Kanban: status columns by production stage) ---- */
+.kanban-board { position: absolute; inset: 0; display: flex; gap: 10px; padding: 12px; overflow-x: auto; }
+.kanban-col {
+  flex: 1; min-width: 220px; display: flex; flex-direction: column;
+  background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+}
+.kanban-col-head {
+  padding: 8px 12px; border-bottom: 1px solid var(--border); font-size: 12px;
+  font-weight: 600; color: var(--text); background: var(--panel);
+}
+.kanban-col-head .count { color: var(--muted); font-weight: 400; margin-left: 4px; }
+.kanban-col-body { flex: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 8px; }
+.kanban-empty { color: var(--muted); text-align: center; padding: 12px 0; }
+.kanban-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 11px; }
+.kanban-card:hover { border-color: var(--accent); }
+.kanban-thumb { height: 110px; background: #0b0e14; }
+.kanban-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.kanban-card-body { padding: 8px 10px; }
+.kanban-card-body .label { font-weight: 600; margin-bottom: 4px; color: var(--text); }
+.kanban-card-body .row { display: flex; gap: 6px; flex-wrap: wrap; color: var(--muted); }
 
 .next-strip {
   padding: 8px 12px; border-bottom: 1px solid var(--border); background: var(--panel);

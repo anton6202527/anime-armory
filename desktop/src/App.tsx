@@ -43,12 +43,13 @@ export function App() {
       .catch((e) => console.error("repo resolve failed", e));
   }, []);
 
-  // resolve the dedicated workspace on boot, then seed /tod --demos samples once
+  // resolve the dedicated workspace on boot, then seed each line's champion
+  // sample (on by default; re-adds any missing one, never clobbers user work)
   useEffect(() => {
     defaultWorkspace()
       .then((ws) => {
         setWorkspaceRoot(ws);
-        seedDemos(ws).catch(() => {}); // no-op unless built with --demos
+        seedDemos(ws).catch(() => {}); // no-op only if built --no-demos
       })
       .catch((e) => console.error("workspace resolve failed", e));
   }, []);

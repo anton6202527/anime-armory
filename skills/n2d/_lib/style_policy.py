@@ -7,6 +7,7 @@ and QC scripts can agree on when stylized projects should use StyleID.
 from __future__ import annotations
 
 import os
+import re
 from typing import Any, Dict, Mapping, Optional
 
 
@@ -45,6 +46,11 @@ STYLIZED_STYLE_MARKERS = (
 
 STYLEID_ENCODER_VALUES = {"styleid", "styleid_clip_l", "clip_l_styleid"}
 AUTO_FACE_ENCODER_VALUES = {"自动按画风", "auto", "auto_by_style", "auto-by-style"}
+STYLEID_OFFICIAL_HF_MODEL_ID = "kwanY/styleid"
+STYLEID_OFFICIAL_HF_MODEL_IDS = {
+    STYLEID_OFFICIAL_HF_MODEL_ID,
+    f"hf://{STYLEID_OFFICIAL_HF_MODEL_ID}",
+}
 
 
 def is_stylized_visual_style(style: object) -> bool:
@@ -68,14 +74,39 @@ def normalize_face_encoder(value: object) -> str:
     return low
 
 
+def normalize_styleid_model_ref(value: object) -> str:
+    text = str(value or "").strip()
+    if text.startswith("hf://"):
+        text = text[len("hf://"):]
+    return text
+
+
+def is_official_styleid_model_ref(value: object) -> bool:
+    text = str(value or "").strip()
+    normalized = normalize_styleid_model_ref(text)
+    return text in STYLEID_OFFICIAL_HF_MODEL_IDS or normalized.lower() == STYLEID_OFFICIAL_HF_MODEL_ID.lower()
+
+
+def allow_styleid_model_download(env: Optional[Mapping[str, str]] = None) -> bool:
+    source = os.environ if env is None else env
+    return str(source.get("N2D_ALLOW_MODEL_DOWNLOAD", "1") or "1").strip() != "0"
+
+
 def styleid_model_status(env: Optional[Mapping[str, str]] = None) -> Dict[str, str]:
     source = os.environ if env is None else env
     path = str(source.get("N2D_STYLEID_MODEL", "") or "").strip()
     if not path:
-        return {"status": "missing", "path": ""}
+        return {"status": "missing", "path": "", "source": ""}
+    if is_official_styleid_model_ref(path):
+        model_id = normalize_styleid_model_ref(path)
+        if not allow_styleid_model_download(source):
+            return {"status": "download_disabled", "path": path, "source": "huggingface", "model_id": model_id}
+        return {"status": "ready", "path": path, "source": "huggingface", "model_id": model_id}
     if os.path.exists(path):
-        return {"status": "ready", "path": path}
-    return {"status": "not_found", "path": path}
+        return {"status": "ready", "path": path, "source": "local"}
+    if re.match(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$", path):
+        return {"status": "unapproved_remote", "path": path, "source": "huggingface"}
+    return {"status": "not_found", "path": path, "source": "local"}
 
 
 def face_encoder_policy(

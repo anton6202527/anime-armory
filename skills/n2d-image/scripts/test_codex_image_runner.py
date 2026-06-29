@@ -455,6 +455,59 @@ def test_faceless_shared_scene_suppresses_character_refs_from_prompt_text(tmp_pa
     assert all(item["rel_path"] != face_rel for item in inputs)
 
 
+def test_face_mood_only_form_excludes_outfit_references(tmp_path: Path) -> None:
+    face_rel = "出图/共享/图片/定妆_姜月初_觉醒_脸部特写.png"
+    front_rel = "出图/共享/图片/定妆_姜月初_觉醒.png"
+    outfit_rel = "出图/共享/图片/定妆_姜月初_觉醒_半身.png"
+    for rel in (face_rel, front_rel, outfit_rel):
+        write_valid_png(tmp_path / rel)
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True, exist_ok=True)
+    (shared / "identity_registry.json").write_text(
+        json.dumps(
+            {
+                "characters": [
+                    {
+                        "id": "CHAR_JIANG_YUECHU",
+                        "forms": [
+                            {
+                                "form": "觉醒蓝调母本",
+                                "reference_use_policy": "face_mood_only",
+                                "reference_group": {
+                                    "front": {"path": front_rel, "status": "ready"},
+                                    "outfit": {"path": outfit_rel, "status": "ready"},
+                                    "face_anchor_refs": {"path": face_rel, "status": "ready"},
+                                },
+                            }
+                        ],
+                    }
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    (shared / "asset_registry.json").write_text('{"assets":[]}', encoding="utf-8")
+    section = codex_image_runner.ClipSection(
+        clip="Clip_11",
+        title="## Clip 11",
+        body="**资产身份注册层**：`CHAR_JIANG_YUECHU/觉醒蓝调母本*`。",
+        target_line="`出图/第1集/图片/Clip_11.png`",
+    )
+    target = codex_image_runner.Target(
+        "Clip_11",
+        "Clip_11",
+        "firstframe",
+        "出图/第1集/图片/Clip_11.png",
+        section,
+    )
+
+    bundle = codex_image_runner.reference_bundle_for_target(tmp_path, "第1集", target)
+    inputs = codex_image_runner.codex_reference_inputs_for_target(tmp_path, "第1集", target, bundle)
+
+    assert [item["rel_path"] for item in inputs] == [face_rel]
+
+
 def test_asset_shared_target_status_ready_even_with_makeup_filename() -> None:
     section = codex_image_runner.ClipSection("LOC_TEST", "## LOC_TEST", "", "")
     target = codex_image_runner.Target(
@@ -566,6 +619,7 @@ def test_shared_targets_include_character_base_pack_and_registry_expressions(tmp
         "# 角色定妆 Prompt\n\n"
         "## ① CHAR_01 沈念 / 林婉儿·常态（待生成）\n"
         "**目标存档**：`出图/共享/图片/定妆_沈念_常态.png`\n"
+        "**身份注册**：`出图/共享/identity_registry.json` → `CHAR_01/常态`\n"
         "**角色定妆组**：正面主参考 `定妆_沈念_常态.png`；"
         "45°参考 `定妆_沈念_常态_45度.png`；"
         "侧面参考 `定妆_沈念_常态_侧.png`；"
@@ -574,7 +628,8 @@ def test_shared_targets_include_character_base_pack_and_registry_expressions(tmp
         "基础脸部参考 `定妆_沈念_常态_脸部特写.png`；"
         "人审拼版 `定妆_沈念_常态_三视图.png`。\n"
         "## ② CHAR_01 沈念 / 林婉儿·觉醒态（待生成）\n"
-        "**目标存档**：`出图/共享/图片/定妆_沈念_觉醒态.png`\n",
+        "**目标存档**：`出图/共享/图片/定妆_沈念_觉醒态.png`\n"
+        "**身份注册**：`出图/共享/identity_registry.json` → `CHAR_01/觉醒态`\n",
         encoding="utf-8",
     )
     (prompt_dir / "场景定妆.md").write_text("", encoding="utf-8")
@@ -603,7 +658,12 @@ def test_shared_targets_include_character_base_pack_and_registry_expressions(tmp
                             },
                             {
                                 "form": "觉醒态",
-                                "reference_group": {"front": "出图/共享/图片/定妆_沈念_觉醒态.png"},
+                                "reference_group": {
+                                    "front": "出图/共享/图片/定妆_沈念_觉醒态.png",
+                                    "expressions": [
+                                        {"emotion": "怒", "path": "出图/共享/图片/定妆_沈念_觉醒态_表情_怒.png"}
+                                    ],
+                                },
                             },
                         ],
                     }
@@ -620,9 +680,11 @@ def test_shared_targets_include_character_base_pack_and_registry_expressions(tmp
     assert "出图/共享/图片/定妆_沈念_常态_45度.png" in by_path
     assert "出图/共享/图片/定妆_沈念_常态_脸部特写.png" in by_path
     assert "出图/共享/图片/定妆_沈念_常态_表情_冷静.png" in by_path
+    assert "出图/共享/图片/定妆_沈念_觉醒态_表情_怒.png" in by_path
     assert "出图/共享/图片/定妆_测试法宝.png" in by_path
     assert "45°" in by_path["出图/共享/图片/定妆_沈念_常态_45度.png"].variant_note
     assert by_path["出图/共享/图片/定妆_沈念_觉醒态.png"].section.title.startswith("## ②")
+    assert by_path["出图/共享/图片/定妆_沈念_觉醒态_表情_怒.png"].section.title.startswith("## ②")
 
 
 def test_restricted_partial_silhouette_form_does_not_require_full_basic_pack(tmp_path: Path) -> None:
@@ -1326,6 +1388,30 @@ def test_full_wingspan_makeup_derivation_accepts_same_source_refs() -> None:
 
     assert codex_image_runner.has_controlled_makeup_source(
         "出图/共享/图片/定妆_CHAR_YUNLING_GOLDEN_ROC_全身翼展.png",
+        refs,
+    )
+
+
+def test_back_view_form_turnaround_is_not_misclassified_as_split_ref() -> None:
+    assert not codex_image_runner.requires_controlled_makeup_derivation(
+        "出图/共享/图片/定妆_江剑_背影_三视图.png"
+    )
+    assert not codex_image_runner.requires_controlled_makeup_derivation(
+        "出图/共享/图片/定妆_江剑_背影.png"
+    )
+    assert codex_image_runner.requires_controlled_makeup_derivation(
+        "出图/共享/图片/定妆_江剑_背影_背.png"
+    )
+    assert codex_image_runner.requires_controlled_makeup_derivation(
+        "出图/共享/图片/定妆_江剑_背影_侧背.png"
+    )
+    assert codex_image_runner.requires_controlled_makeup_derivation(
+        "出图/共享/图片/定妆_远景修士剪影_sheet.png"
+    )
+
+    refs = [{"rel_path": "出图/共享/图片/定妆_江剑_背影_三视图.png"}]
+    assert codex_image_runner.has_controlled_makeup_source(
+        "出图/共享/图片/定妆_江剑_背影_侧背.png",
         refs,
     )
 

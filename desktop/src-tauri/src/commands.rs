@@ -107,7 +107,7 @@ pub fn skill_tree(repo_root: String, dir: String) -> Vec<SkillTreeEntry> {
 }
 
 fn walk_tree(dir: &Path, prefix: &str, depth: usize, out: &mut Vec<SkillTreeEntry>) {
-    if depth > 4 {
+    if depth > 6 {
         return;
     }
     let mut entries: Vec<_> = match fs::read_dir(dir) {
@@ -167,6 +167,50 @@ pub fn read_skill_file(repo_root: String, dir: String, rel: String) -> Result<St
         return Err("这是一个目录".into());
     }
     const MAX: u64 = 512 * 1024; // 512 KB preview cap
+    if meta.len() > MAX {
+        return Err(format!("文件过大（{} KB），不在此预览", meta.len() / 1024));
+    }
+    let bytes = fs::read(&target_canon).map_err(|e| e.to_string())?;
+    if bytes.contains(&0) {
+        return Err("二进制文件，不预览".into());
+    }
+    Ok(String::from_utf8_lossy(&bytes).into_owned())
+}
+
+// ---- work-folder file viewer (the default "文件" tab of every work) ----
+
+/// The full file/folder tree under a work root (`创作区/<line>/<work>/`), for the
+/// in-app 文件 viewer. Reuses `SkillTreeEntry`'s {name,path,depth,is_dir} shape.
+/// `root` is an absolute work path produced by `scan_workspace`; read-only.
+#[tauri::command]
+pub fn work_tree(root: String) -> Vec<SkillTreeEntry> {
+    let base = Path::new(&root);
+    let mut out = Vec::new();
+    if base.is_dir() {
+        walk_tree(base, "", 0, &mut out);
+    }
+    out
+}
+
+/// Read one text file inside a work root (`<root>/<rel>`) for the file preview.
+/// Hard-guarded: `rel` must stay inside the work dir (no `..` escape);
+/// binary/oversize files are refused (images/video go through the media server).
+#[tauri::command]
+pub fn read_work_file(root: String, rel: String) -> Result<String, String> {
+    if rel.is_empty() || rel.contains("..") {
+        return Err("非法文件路径".into());
+    }
+    let base = Path::new(&root);
+    let base_canon = fs::canonicalize(base).map_err(|e| e.to_string())?;
+    let target_canon = fs::canonicalize(base.join(&rel)).map_err(|e| e.to_string())?;
+    if !target_canon.starts_with(&base_canon) {
+        return Err("路径越界，已拒绝".into());
+    }
+    let meta = fs::metadata(&target_canon).map_err(|e| e.to_string())?;
+    if meta.is_dir() {
+        return Err("这是一个目录".into());
+    }
+    const MAX: u64 = 1024 * 1024; // 1 MB preview cap
     if meta.len() > MAX {
         return Err(format!("文件过大（{} KB），不在此预览", meta.len() / 1024));
     }
@@ -446,25 +490,22 @@ fn copy_dir_all(src: &Path, dst: &Path) -> std::io::Result<()> {
     Ok(())
 }
 
-/// Seed the `/tod --demos` sample works into the app's works workspace, ONCE.
-/// For each bundled `resources/demos/创作区/<产品目录>/<作品>`, if the same path is
-/// missing under `workspace_root`, copy it in. A `.demos_seeded` sentinel in the
-/// workspace makes this idempotent and means user-deleted demos stay deleted.
-/// Returns the number of works seeded (0 if nothing bundled / already seeded).
+/// Seed each line's most-complete work (the bundled samples) into the app's works
+/// workspace so a fresh app is never empty. For each bundled
+/// `resources/demos/创作区/<产品目录>/<作品>`, if the same path is MISSING under
+/// `workspace_root`, copy it in (existing user work is never clobbered). Runs on
+/// every launch and re-adds any champion the user is missing — these samples are
+/// a default, not a one-shot seed. Returns the number of works (re)seeded.
 #[tauri::command]
 pub fn seed_demos(app: tauri::AppHandle, workspace_root: String) -> Result<usize, String> {
     let ws = Path::new(&workspace_root);
-    let sentinel = ws.join(".demos_seeded");
-    if sentinel.exists() {
-        return Ok(0);
-    }
     let res = match app.path().resource_dir() {
         Ok(r) => r,
         Err(e) => return Err(e.to_string()),
     };
     let demos = res.join("resources").join("demos").join(CREATION_ROOT);
     if !demos.is_dir() {
-        return Ok(0); // app was built without --demos
+        return Ok(0); // app was built with --no-demos
     }
     let mut seeded = 0usize;
     // demos/创作区/<产品目录>/<作品>/
@@ -487,7 +528,6 @@ pub fn seed_demos(app: tauri::AppHandle, workspace_root: String) -> Result<usize
             seeded += 1;
         }
     }
-    let _ = fs::write(&sentinel, b"1");
     Ok(seeded)
 }
 

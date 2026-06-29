@@ -96,7 +96,7 @@ def _save_front_crop(src: Path, dst: Path, kind: str, target_size: tuple[int, in
     img = Image.open(src).convert("RGB")
     width, height = img.size
     if kind == "face_anchor_refs":
-        box = _crop_box(width, height, (0.38, 0.11, 0.57, 0.31))
+        box = _crop_box(width, height, (0.37, 0.17, 0.63, 0.43))
     else:
         box = _crop_box(width, height, (0.08, 0.02, 0.92, 0.68))
     crop = img.crop(box)

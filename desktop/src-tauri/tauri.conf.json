@@ -1,10 +1,10 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "AnimeArsenal",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "identifier": "com.animearsenal.desktop",
   "build": {
-    "beforeDevCommand": "npm run dev",
+    "beforeDevCommand": "node sync-skills.cjs && npm run dev",
     "devUrl": "http://localhost:1420",
     "beforeBuildCommand": "node sync-skills.cjs && npm run build",
     "frontendDist": "../dist"

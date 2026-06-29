@@ -38,6 +38,10 @@ COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 from n2d_contract import shared_asset_path  # noqa: E402  共享定妆目录单一真值源
+from style_policy import (  # noqa: E402  StyleID official model ref normalization shared with gates
+    is_official_styleid_model_ref,
+    normalize_styleid_model_ref,
+)
 import state_continuity as stc  # noqa: E402  剧情指定易容/变身/毁容区间 → 脸漂 block 降 warn（不误伤剧情）
 
 DEFAULT_MARGIN = 0.08
@@ -323,7 +327,9 @@ def _load_styleid_embedder():
     （保持与 arcface 同一套脸框，仅替换 embedding）。任一缺失/加载失败 → None（调用方回退 arcface，
     绝不退化成裸 CLIP）。模型加载在 full 精度 conda env（facefusion）内做。"""
     model_path = os.environ.get("N2D_STYLEID_MODEL", "").strip()
-    if not model_path or not allow_model_download_ok():
+    if not model_path:
+        return None
+    if is_official_styleid_model_ref(model_path) and not allow_model_download_ok():
         return None
     try:
         import torch  # type: ignore  # noqa: F401
@@ -347,10 +353,57 @@ def allow_model_download_ok() -> bool:
 
 
 def _load_styleid_checkpoint(model_path: str):
-    """加载 StyleID CLIP-L+LoRA checkpoint。当前为接口占位：真实权重接入时在此 torch.load + 构图。
-    返回一个 callable(face_bgr_crop)->List[float]（归一化 embedding）或 None。缺真实实现时返回 None，
-    使 _load_styleid_embedder 回退 arcface——绝不静默用裸 CLIP 充数。"""
-    return None
+    """加载 StyleID CLIP-L+LoRA checkpoint。
+
+    支持两种引用：
+      - 官方 Hugging Face 模型 ID：`kwanY/styleid`（也接受 `hf://kwanY/styleid`）；
+      - 本地 `from_pretrained` 目录（含 config/tokenizer/processor/model 权重）。
+
+    返回 callable(face_bgr_crop)->List[float]（L2 归一化 embedding）或 None。单文件 ckpt
+    没有架构/processor 信息时不猜结构，返回 None，使调用方回退 arcface_fallback；绝不把裸 CLIP
+    或随机特征冒充 StyleID。
+    """
+    raw = str(model_path or "").strip()
+    if not raw:
+        return None
+    model_ref = normalize_styleid_model_ref(raw) if is_official_styleid_model_ref(raw) else raw
+    if not is_official_styleid_model_ref(raw):
+        if not os.path.isdir(model_ref):
+            return None
+    try:
+        import torch  # type: ignore
+        from PIL import Image  # type: ignore
+        from transformers import CLIPModel, CLIPProcessor  # type: ignore
+    except Exception:
+        return None
+    try:
+        device = "cuda" if hasattr(torch, "cuda") and torch.cuda.is_available() else "cpu"
+        processor = CLIPProcessor.from_pretrained(model_ref)
+        model = CLIPModel.from_pretrained(model_ref)
+        model.to(device)
+        model.eval()
+    except Exception:
+        return None
+
+    def _encode(face_bgr_crop):
+        try:
+            # cv2 gives BGR numpy arrays.  PIL expects RGB.
+            if getattr(face_bgr_crop, "ndim", 0) == 3 and int(face_bgr_crop.shape[2]) >= 3:
+                rgb = face_bgr_crop[:, :, :3][:, :, ::-1]
+            else:
+                rgb = face_bgr_crop
+            image = Image.fromarray(rgb).convert("RGB")
+            inputs = processor(images=image, return_tensors="pt")
+            inputs = {k: v.to(device) if hasattr(v, "to") else v for k, v in inputs.items()}
+            with torch.no_grad():
+                features = model.get_image_features(**inputs)
+                denom = features.norm(dim=-1, keepdim=True).clamp_min(1e-12)
+                features = features / denom
+            return list(map(float, features[0].detach().cpu().tolist()))
+        except Exception:
+            return None
+
+    return _encode
 
 
 class _FaceObj:
