@@ -24,7 +24,7 @@
   ],
   "episodes": [
     {
-      "blockers_per_attempt": 0.4096,
+      "blockers_per_attempt": 0.4048,
       "completion_rate": null,
       "consistency_blockers": 0,
       "consistency_ledger": {
@@ -129,32 +129,32 @@
       },
       "consistency_warnings": 88,
       "cost_by_provider": {
-        "dreamina:credits": 504.0
+        "dreamina:credits": 658.0
       },
       "cost_per_finished_min": {
-        "credits": 262.956522
+        "credits": 343.304348
       },
       "cost_totals": {
-        "credits": 504.0
+        "credits": 658.0
       },
       "deliverable_pass_rate": 0.0,
-      "duration_hms": "4h42m56s",
-      "duration_sec": 16976.087,
-      "elapsed_per_finished_min_sec": 8857.089,
+      "duration_hms": "4h42m59s",
+      "duration_sec": 16978.537,
+      "elapsed_per_finished_min_sec": 8858.367,
       "episode": "第1集",
-      "event_count": 260,
+      "event_count": 261,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 83,
+      "generation_attempts": 84,
       "generation_fails": 6,
-      "generation_pass_rate": 0.9277,
-      "generation_passes": 77,
+      "generation_pass_rate": 0.9286,
+      "generation_passes": 78,
       "image_qc_passive": {},
       "missing_deliverables": [],
-      "one_pass_count": 72,
-      "one_pass_rate": 0.8675,
+      "one_pass_count": 73,
+      "one_pass_rate": 0.869,
       "progress_next_skill": "n2d-video",
       "progress_next_stage": "图生视频",
       "qa_blockers": 34,
@@ -217,7 +217,7 @@
         "style_drift": 4
       },
       "redraw_count": 4,
-      "redraw_rate": 0.0482,
+      "redraw_rate": 0.0476,
       "redraw_reasons": {
         "deterministic global color grade to clear S1 style cohesion block; no face patch/swap": 2,
         "global color grade to clear S1 style cohesion block; no face patch/swap": 2
@@ -313,10 +313,10 @@
           "redraw_count": 0
         },
         "video": {
-          "duration_sec": 11.942,
-          "generation_attempts": 4,
+          "duration_sec": 14.392,
+          "generation_attempts": 5,
           "generation_fails": 0,
-          "generation_passes": 4,
+          "generation_passes": 5,
           "missing_deliverables": 0,
           "qa_blockers": 34,
           "qa_infos": 6,
@@ -335,7 +335,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 1.0723
+      "warnings_per_attempt": 1.0595
     },
     {
       "blockers_per_attempt": 0.0,
@@ -62626,7 +62626,7 @@
     }
   ],
   "event_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
-  "generated_at": "2026-06-30T11:58:08+00:00",
+  "generated_at": "2026-06-30T12:08:34+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -63094,7 +63094,7 @@
   "retention_trend": {},
   "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
   "totals": {
-    "blockers_per_attempt": 0.4048,
+    "blockers_per_attempt": 0.4,
     "consistency_blockers": 0,
     "consistency_ledger_counts": {
       "block": 2,
@@ -63103,26 +63103,26 @@
     },
     "consistency_warnings": 88,
     "cost_per_finished_min": {
-      "credits": 262.956522
+      "credits": 343.304348
     },
     "cost_totals": {
-      "credits": 504.0
+      "credits": 658.0
     },
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "4h52m56s",
-    "duration_sec": 17576.087,
-    "elapsed_per_finished_min_sec": 9170.132,
+    "duration_hms": "4h52m59s",
+    "duration_sec": 17578.537,
+    "elapsed_per_finished_min_sec": 9171.411,
     "episode_count": 1176,
-    "event_count": 261,
+    "event_count": 262,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
-    "generation_attempts": 84,
+    "generation_attempts": 85,
     "generation_fails": 6,
-    "generation_pass_rate": 0.9286,
-    "generation_passes": 78,
-    "one_pass_count": 73,
-    "one_pass_rate": 0.869,
+    "generation_pass_rate": 0.9294,
+    "generation_passes": 79,
+    "one_pass_count": 74,
+    "one_pass_rate": 0.8706,
     "qa_blockers": 34,
     "qa_infos": 43,
     "qa_warnings": 89,
@@ -63131,7 +63131,7 @@
       "style_drift": 4
     },
     "redraw_count": 4,
-    "redraw_rate": 0.0476,
+    "redraw_rate": 0.0471,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
@@ -63139,7 +63139,7 @@
     "release_spend_totals": {},
     "runtime_hms": "1m55s",
     "runtime_sec": 115.0,
-    "warnings_per_attempt": 1.0595
+    "warnings_per_attempt": 1.0471
   },
   "version": 1
 }

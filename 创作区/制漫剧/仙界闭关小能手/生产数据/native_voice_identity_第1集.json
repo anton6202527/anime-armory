@@ -41,8 +41,18 @@
       "speaker_key": "CHAR_HE_PINGSHENG_native",
       "updated_at": "2026-06-30T11:49:26+00:00",
       "wav": "出视频/第1集/audio/Clip_04_native.wav"
+    },
+    {
+      "character_id": "CHAR_HE_PINGSHENG",
+      "clip_id": "Clip_05",
+      "evidence_status": "needs_review",
+      "review_status": "needs_review",
+      "source_video": "出视频/第1集/视频/Clip_05_外门遗孤上.mp4",
+      "speaker_key": "CHAR_HE_PINGSHENG_native",
+      "updated_at": "2026-06-30T12:06:51+00:00",
+      "wav": "出视频/第1集/audio/Clip_05_native.wav"
     }
   ],
-  "updated_at": "2026-06-30T11:49:26+00:00",
+  "updated_at": "2026-06-30T12:06:51+00:00",
   "version": 1
 }
