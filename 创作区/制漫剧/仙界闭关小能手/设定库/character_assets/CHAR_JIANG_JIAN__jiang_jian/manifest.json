@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_JIANG_JIAN",
+  "character_name": "江剑",
+  "form": "背影",
+  "truth_sources": {
+    "character_card": "设定库/characters/江剑.md",
+    "character_bible": "设定库/角色圣经.md",
+    "identity_registry": "出图/共享/identity_registry.json"
+  },
+  "directories": {
+    "reference": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/reference",
+    "prompts": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/prompts",
+    "lora": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/lora",
+    "voice": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/voice",
+    "adapters": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/adapters",
+    "qc": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/qc"
+  },
+  "status": "planned"
+}

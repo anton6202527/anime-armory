@@ -1,0 +1,198 @@
+{
+  "kind": "n2d_lora_dataset_manifest",
+  "version": 1,
+  "project_root": "创作区/制漫剧/仙界闭关小能手",
+  "character_id": "CHAR_HE_PINGSHENG",
+  "character_name": "贺平生",
+  "form": "幼年",
+  "trigger": "贺平生_幼年_v1",
+  "generated_at": "2026-06-29T11:35:51+00:00",
+  "dataset_dir": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset",
+  "recommended": {
+    "min_images": 15,
+    "max_images": 50,
+    "target_resolution": "1024x1024"
+  },
+  "summary": {
+    "images": 10,
+    "captions": 10,
+    "role_counts": {
+      "back": 1,
+      "expression": 3,
+      "face_anchor": 1,
+      "front": 1,
+      "outfit": 1,
+      "side": 1,
+      "three_quarter": 1,
+      "turnaround": 1
+    },
+    "warnings": [
+      "dataset_below_recommended_15_images"
+    ],
+    "ready_for_training": false
+  },
+  "items": [
+    {
+      "file": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset/seed_back.png",
+      "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset/seed_back.txt",
+      "caption": "贺平生_幼年_v1, back reference, , 八到十岁瘦小东方男孩，深色清醒眼，黑发朴素，旧灰布童衣，沉默早熟。",
+      "width": 941,
+      "height": 1672,
+      "role": "back",
+      "sha256": "898f4a56a6f22b0032e1779f4b2853da58e3bad0e201e7ce2f248a6e8d1e67ad",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset/seed_expression_01.png",
+      "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset/seed_expression_01.txt",
+      "caption": "贺平生_幼年_v1, expression reference, 克制, 八到十岁瘦小东方男孩，深色清醒眼，黑发朴素，旧灰布童衣，沉默早熟。",
+      "width": 941,
+      "height": 1672,
+      "role": "expression",
+      "sha256": "b006a94eb2635ec60eacf20a2f16b7bde48d243b735be632e4942a9248ccd085",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset/seed_expression_02.png",
+      "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset/seed_expression_02.txt",
+      "caption": "贺平生_幼年_v1, expression reference, 疲惫隐忍, 八到十岁瘦小东方男孩，深色清醒眼，黑发朴素，旧灰布童衣，沉默早熟。",
+      "width": 941,
+      "height": 1672,
+      "role": "expression",
+      "sha256": "bc494ad1bec180eb3ef9cea4a821a55a906a2437c651327d2f7fc63e0c99876c",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset/seed_expression_03.png",
+      "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset/seed_expression_03.txt",
+      "caption": "贺平生_幼年_v1, expression reference, 警觉, 八到十岁瘦小东方男孩，深色清醒眼，黑发朴素，旧灰布童衣，沉默早熟。",
+      "width": 941,
+      "height": 1672,
+      "role": "expression",
+      "sha256": "7a0ae17a898629431c7e3211e9ca576160046543f7d1a7cf3b33dd87a66a4cb0",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset/seed_face_anchor_01.png",
+      "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset/seed_face_anchor_01.txt",
+      "caption": "贺平生_幼年_v1, face_anchor reference, 幼年脸锚, 八到十岁瘦小东方男孩，深色清醒眼，黑发朴素，旧灰布童衣，沉默早熟。",
+      "width": 941,
+      "height": 1672,
+      "role": "face_anchor",
+      "sha256": "3cb45a672056819b912cbf1b24db8e5bb3fd3468bdabdaa92402c139b0620a34",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset/seed_front.png",
+      "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset/seed_front.txt",
+      "caption": "贺平生_幼年_v1, front reference, , 八到十岁瘦小东方男孩，深色清醒眼，黑发朴素，旧灰布童衣，沉默早熟。",
+      "width": 941,
+      "height": 1672,
+      "role": "front",
+      "sha256": "0ddffbe1e6e6c5deada581fcb714d50a17a7ea4fa7669e89694bd828cd248bd5",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset/seed_outfit.png",
+      "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset/seed_outfit.txt",
+      "caption": "贺平生_幼年_v1, outfit reference, , 八到十岁瘦小东方男孩，深色清醒眼，黑发朴素，旧灰布童衣，沉默早熟。",
+      "width": 941,
+      "height": 1672,
+      "role": "outfit",
+      "sha256": "a1af79fd1e5a728d88f89478fdb8f3781002f5327df87791066ac6d708db9074",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset/seed_side.png",
+      "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset/seed_side.txt",
+      "caption": "贺平生_幼年_v1, side reference, , 八到十岁瘦小东方男孩，深色清醒眼，黑发朴素，旧灰布童衣，沉默早熟。",
+      "width": 941,
+      "height": 1672,
+      "role": "side",
+      "sha256": "eade4c50cab195a747197157f8628e1c78e20bbfd9e34066d9e5d1eb4f141177",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset/seed_three_quarter_01.png",
+      "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset/seed_three_quarter_01.txt",
+      "caption": "贺平生_幼年_v1, three_quarter reference, , 八到十岁瘦小东方男孩，深色清醒眼，黑发朴素，旧灰布童衣，沉默早熟。",
+      "width": 941,
+      "height": 1672,
+      "role": "three_quarter",
+      "sha256": "df4471efffd7ad221f257c6ceec7ce53a6e0513fadc63e3caa0731765b169ebf",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset/seed_turnaround.png",
+      "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/幼年/dataset/seed_turnaround.txt",
+      "caption": "贺平生_幼年_v1, turnaround reference, , 八到十岁瘦小东方男孩，深色清醒眼，黑发朴素，旧灰布童衣，沉默早熟。",
+      "width": 941,
+      "height": 1672,
+      "role": "turnaround",
+      "sha256": "963c6447caa656d89ef708c9d6cbbb8fcb7b3d15d1c954f1e20cd357733b6ef7",
+      "warnings": []
+    }
+  ],
+  "copied_references": [
+    {
+      "role": "front",
+      "source": "出图/共享/图片/定妆_贺平生_幼年.png",
+      "target": "seed_front.png",
+      "label": ""
+    },
+    {
+      "role": "side",
+      "source": "出图/共享/图片/定妆_贺平生_幼年_侧.png",
+      "target": "seed_side.png",
+      "label": ""
+    },
+    {
+      "role": "back",
+      "source": "出图/共享/图片/定妆_贺平生_幼年_背.png",
+      "target": "seed_back.png",
+      "label": ""
+    },
+    {
+      "role": "outfit",
+      "source": "出图/共享/图片/定妆_贺平生_幼年_半身.png",
+      "target": "seed_outfit.png",
+      "label": ""
+    },
+    {
+      "role": "turnaround",
+      "source": "出图/共享/图片/定妆_贺平生_幼年_三视图.png",
+      "target": "seed_turnaround.png",
+      "label": ""
+    },
+    {
+      "role": "three_quarter",
+      "source": "出图/共享/图片/定妆_贺平生_幼年_45度.png",
+      "target": "seed_three_quarter_01.png",
+      "label": ""
+    },
+    {
+      "role": "face_anchor",
+      "source": "出图/共享/图片/定妆_贺平生_幼年_脸部特写.png",
+      "target": "seed_face_anchor_01.png",
+      "label": "幼年脸锚"
+    },
+    {
+      "role": "expression",
+      "source": "出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
+      "target": "seed_expression_01.png",
+      "label": "克制"
+    },
+    {
+      "role": "expression",
+      "source": "出图/共享/图片/定妆_贺平生_幼年_表情_疲惫隐忍.png",
+      "target": "seed_expression_02.png",
+      "label": "疲惫隐忍"
+    },
+    {
+      "role": "expression",
+      "source": "出图/共享/图片/定妆_贺平生_幼年_表情_警觉.png",
+      "target": "seed_expression_03.png",
+      "label": "警觉"
+    }
+  ]
+}

@@ -1,0 +1,325 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Tests for anchor_planner.py — run from skills/n2d-script/scripts/."""
+import json
+import os
+
+import anchor_planner as ap
+
+
+# ── resolve_default_midframe（选择点解析·纯函数）──
+
+def test_default_midframe_defaults_on_per_choice_point():
+    # 缺设置 / 设置开启 / 旧项目写关闭 → 都开（三帧图片契约全局默认）
+    assert ap.resolve_default_midframe(False, False, None) is True
+    assert ap.resolve_default_midframe(False, False, "开启") is True
+    assert ap.resolve_default_midframe(False, False, "关闭") is True
+    # 后端能力只决定视频消费方式，不决定图片阶段是否产出 _mid。
+    assert ap.resolve_default_midframe(False, False, "关闭", backend_capable=True) is True
+    assert ap.resolve_default_midframe(False, False, "开启", backend_capable=False) is True
+
+
+def test_default_midframe_cli_flags_override_setting():
+    # --default-midframe 强开，覆盖关闭设置
+    assert ap.resolve_default_midframe(True, False, "关闭") is True
+    # --no-default-midframe 强关，覆盖开启设置
+    assert ap.resolve_default_midframe(False, True, "开启") is False
+
+
+def test_video_backend_selection_uses_model_and_channel(tmp_path):
+    root = tmp_path / "作品"
+    root.mkdir()
+    (root / "_设置.md").write_text(
+        "- 生视频模型: Seedance 2.0\n- 生视频渠道: 即梦/Dreamina\n",
+        encoding="utf-8",
+    )
+
+    sel = ap.video_backend_selection(str(root))
+
+    assert sel["backend"] == "Seedance 2.0"
+    assert sel["channel"] == "即梦/Dreamina"
+    assert sel["supports_three_plus_frames"] is True
+    assert sel["anchor_consumption_plan"]["consumption_mode"] == "native_multiframe"
+
+
+# ── plan_anchor_times（纯函数）──
+
+def test_times_snap_to_shot_boundaries():
+    # 15s / target 5 → 3 段 2 锚；理想点 5、10 各自吸附容差内的分镜边界
+    times = ap.plan_anchor_times(15, [4, 7.5, 11], target_seg=5, min_seg=4)
+    assert times == [4, 11]
+    # 段长 4 / 7 / 4，全部 ≥ min_seg
+    assert all(b - a >= 4 for a, b in zip([0] + times, times + [15]))
+
+
+def test_times_fall_back_to_even_split_without_boundaries():
+    assert ap.plan_anchor_times(12, [], target_seg=5, min_seg=4) == [6]
+
+
+def test_times_too_short_returns_empty():
+    assert ap.plan_anchor_times(7, [3.5], target_seg=5, min_seg=4) == []
+
+
+def test_times_capped_by_min_segment():
+    # 13s 想按 3.5s 切 4 段，但 min_seg=4 → 最多 3 段 2 锚
+    times = ap.plan_anchor_times(13, [], target_seg=3.5, min_seg=4)
+    assert len(times) == 2
+    assert all(b - a >= 4 for a, b in zip([0] + times, times + [13]))
+
+
+# ── plan_episode（集成）──
+
+def _write_project(tmp_path, clips, events=None):
+    root = tmp_path / "作品"
+    sb_dir = root / "脚本" / "第1集"
+    sb_dir.mkdir(parents=True)
+    (sb_dir / "storyboard.json").write_text(
+        json.dumps({"episode": 1, "policy": {"tailframe_default": True}, "clips": clips},
+                   ensure_ascii=False), encoding="utf-8")
+    if events:
+        prod = root / "生产数据"
+        prod.mkdir(parents=True)
+        (prod / "production_events.jsonl").write_text(
+            "".join(json.dumps(e, ensure_ascii=False) + "\n" for e in events), encoding="utf-8")
+    return str(root)
+
+
+def _clip(index, duration, *, template=None, beats=None, shots=None, continuity=None):
+    clip = {"id": f"EP01_CLIP{index:02d}", "duration": duration,
+            "firstframe_png": f"出图/第1集/图片/镜头{index:02d}_x.png",
+            "continuity": continuity or {"start_state": "s", "end_state": "e",
+                                         "transition": "硬切", "need_endframe": True}}
+    if template:
+        clip["template"] = template
+        clip["template_contract"] = {"template_id": template, "beats": beats or []}
+    if shots is not None:
+        clip["shots"] = shots
+    return clip
+
+
+def test_fight_clip_planned_normal_short_clip_not(tmp_path):
+    # 10s 打斗：multiframe 地板(1.5s) 下 fight_target=3.5 真正生效 → 2 锚=4帧
+    # （旧 4s relay 地板会卡成 1 锚=3帧，那是接 multiframe2video 前的退化行为）
+    root = _write_project(tmp_path, [
+        _clip(1, 10, template="fight_exchange", beats=["起手", "命中", "收势"],
+              shots=[{"t": "0-3s"}, {"t": "3-6.5s"}, {"t": "6.5-10s"}]),
+        _clip(2, 7, shots=[{"t": "0-4s"}, {"t": "4-7s"}]),
+    ])
+    plan = ap.plan_episode(root, "第1集")
+    assert [p["clip_index"] for p in plan["planned"]] == [1]
+    p = plan["planned"][0]
+    assert p["rule"].startswith("R1")
+    assert [a["at_sec"] for a in p["anchors"]] == [3.0, 6.5]  # 2 锚 → 4 帧
+    assert p["anchors"][0]["anchor_png"] == "出图/第1集/图片/镜头01_x_a1.png"
+    assert p["anchors"][1]["anchor_png"] == "出图/第1集/图片/镜头01_x_a2.png"
+
+
+def test_long_fight_gets_more_than_three_frames(tmp_path):
+    # 15s 打斗(Seedance 长镜)：3 锚 → 5 帧。这是"长镜/打斗会超过3帧"的核心兑现。
+    root = _write_project(tmp_path, [
+        _clip(1, 15, template="fight_exchange",
+              beats=["起手", "逼近", "命中", "受击", "收势"],
+              shots=[{"t": "0-3s"}, {"t": "3-6s"}, {"t": "6-9s"}, {"t": "9-12s"}, {"t": "12-15s"}]),
+    ])
+    plan = ap.plan_episode(root, "第1集")
+    anchors = plan["planned"][0]["anchors"]
+    assert len(anchors) == 3, [a["at_sec"] for a in anchors]  # 首 + 3锚 + 尾 = 5 帧
+    # 严格递增、各段 ≥ multiframe 地板
+    ts = [0.0] + [a["at_sec"] for a in anchors] + [15.0]
+    assert all(ts[i + 1] - ts[i] >= 1.5 for i in range(len(ts) - 1))
+
+
+def test_relay_floor_still_governs_eligibility(tmp_path):
+    # 短打斗(<2×min_seg=8s)仍不触发 R1（避免给短镜过度加锚）；密度地板只管"出几锚"，不放宽门槛。
+    root = _write_project(tmp_path, [
+        _clip(1, 7, template="fight_exchange", beats=["起手", "命中"],
+              shots=[{"t": "0-3.5s"}, {"t": "3.5-7s"}]),
+    ])
+    plan = ap.plan_episode(root, "第1集")  # 无 default_midframe
+    assert plan["planned"] == []  # 7 < 8，不命中 R1
+
+
+def test_long_normal_clip_planned_by_r2(tmp_path):
+    root = _write_project(tmp_path, [
+        _clip(1, 12, shots=[{"t": "0-3s"}, {"t": "3-6s"}, {"t": "6-9s"}, {"t": "9-12s"}]),
+    ])
+    plan = ap.plan_episode(root, "第1集")
+    assert len(plan["planned"]) == 1 and plan["planned"][0]["rule"].startswith("R2")
+    assert plan["planned"][0]["anchors"][0]["at_sec"] == 6.0  # 吸附分镜边界=理想点
+
+
+def test_drift_redraw_promotes_clip_by_r3(tmp_path):
+    # 9s/2拍 不够 R2（需 ≥3 拍），但有中段漂移重抽记录 → R3 命中
+    events = [{"kind": "n2d_production_event", "episode": "第1集", "stage": "video",
+               "event": "redraw",
+               "generation": {"asset": "出视频/第1集/视频/Clip_01_打斗.mp4",
+                              "redraw_reason": "中段动作漂移"}}]
+    root = _write_project(tmp_path, [
+        _clip(1, 9, shots=[{"t": "0-4.5s"}, {"t": "4.5-9s"}]),
+    ], events=events)
+    plan = ap.plan_episode(root, "第1集")
+    assert len(plan["planned"]) == 1 and plan["planned"][0]["rule"].startswith("R3")
+
+
+# ── P1a 关键帧密度自适应：文本/运镜运动信号 + 大表情 → R1 级密锚帧 ──
+
+def test_high_motion_signal_pure():
+    assert ap.high_motion_signal({"shots": [{"desc": "主角疾驰冲入大殿"}]}) is True
+    assert ap.high_motion_signal({"continuity": {"camera": "镜头快摇跟随"}}) is True
+    assert ap.high_motion_signal({"continuity": {"expression_span": "大"}}) is True  # 大表情峰值
+    assert ap.high_motion_signal({"shots": [{"desc": "两人静坐对饮，缓慢交谈"}],
+                                  "continuity": {"expression_span": "中"}}) is False
+
+
+def test_text_motion_signal_promotes_to_r1(tmp_path):
+    # 10s 普通镜无高运动模板，但描述里「疾驰」→ R1b 密锚帧（2 锚=4 帧），而非掉到 D0 单中锚
+    root = _write_project(tmp_path, [
+        _clip(1, 10, shots=[{"t": "0-3s", "desc": "主角疾驰穿过长廊"},
+                            {"t": "3-6.5s", "desc": "翻身跃起"}, {"t": "6.5-10s", "desc": "落地收势"}]),
+    ])
+    plan = ap.plan_episode(root, "第1集")
+    assert len(plan["planned"]) == 1
+    p = plan["planned"][0]
+    assert p["rule"].startswith("R1") and "运动信号" in p["rule"]
+    assert len(p["anchors"]) == 2  # fight_target 密度 → 4 帧
+
+
+def test_big_expression_span_promotes_to_r1(tmp_path):
+    # 9s/2拍 本不够 R2（需 ≥3 拍），但 expression_span=大 → R1b 捕捉表情峰值
+    cont = {"start_state": "隐忍", "end_state": "崩溃痛哭", "transition": "硬切",
+            "need_endframe": True, "expression_span": "大"}
+    root = _write_project(tmp_path, [
+        _clip(1, 9, shots=[{"t": "0-4.5s"}, {"t": "4.5-9s"}], continuity=cont),
+    ])
+    plan = ap.plan_episode(root, "第1集")
+    assert len(plan["planned"]) == 1 and plan["planned"][0]["rule"].startswith("R1")
+    assert len(plan["planned"][0]["anchors"]) == 2
+
+
+def test_manual_declaration_is_skipped(tmp_path):
+    cont = {"start_state": "s", "end_state": "e", "transition": "硬切", "need_endframe": True,
+            "midframe": {"midframe_png": "出图/第1集/图片/镜头01_mid.png",
+                         "split_at_sec": 5, "reason": "手动"}}
+    root = _write_project(tmp_path, [
+        _clip(1, 12, shots=[{"t": "0-4s"}, {"t": "4-8s"}, {"t": "8-12s"}], continuity=cont),
+    ])
+    plan = ap.plan_episode(root, "第1集")
+    assert plan["planned"] == []
+    assert plan["skipped"] and "人工优先" in plan["skipped"][0]["why"]
+
+
+def test_write_back_is_idempotent(tmp_path):
+    root = _write_project(tmp_path, [
+        _clip(1, 12, shots=[{"t": "0-3s"}, {"t": "3-6s"}, {"t": "6-9s"}, {"t": "9-12s"}]),
+    ])
+    plan = ap.plan_episode(root, "第1集")
+    assert ap.write_back(root, "第1集", plan) == 1
+    sb = json.loads(open(os.path.join(root, "脚本", "第1集", "storyboard.json"),
+                         encoding="utf-8").read())
+    anchors = sb["clips"][0]["continuity"]["anchors"]
+    assert len(anchors) == 1 and anchors[0]["reason"].startswith("auto: R2")
+    # 第二轮：已声明 → 不再规划、不重复写
+    plan2 = ap.plan_episode(root, "第1集")
+    assert plan2["planned"] == [] and plan2["skipped"]
+    assert ap.write_back(root, "第1集", plan2) == 0
+
+
+# ── 三帧契约（--default-midframe）──
+
+def test_default_midframe_plans_qc_anchor_for_short_clip(tmp_path):
+    # 6s 对话镜：拆不了两段（min_seg=4）→ use=qc 的默认中锚，at=duration/2
+    root = _write_project(tmp_path, [
+        _clip(1, 6, template="dialogue_shot_reverse",
+              beats=["抬眼", "轻笑", "定住"], shots=[{"t": "0-6s"}]),
+    ])
+    plan = ap.plan_episode(root, "第1集", default_midframe=True)
+    assert len(plan["planned"]) == 1
+    p = plan["planned"][0]
+    assert p["rule"].startswith("D0") and p["anchors"][0]["use"] == "qc"
+    assert p["anchors"][0]["at_sec"] == 3.0
+    assert p["anchors"][0]["anchor_png"].endswith("_mid.png")
+    assert "轻笑" in p["anchors"][0]["reason"]  # 中间拍提示
+    assert p["added_cost"]["video_segments"] == 0  # qc 不拆段不加视频成本
+
+
+def test_default_midframe_uses_split_when_long_enough(tmp_path):
+    root = _write_project(tmp_path, [_clip(1, 9, shots=[{"t": "0-4.5s"}, {"t": "4.5-9s"}])])
+    plan = ap.plan_episode(root, "第1集", default_midframe=True)
+    a = plan["planned"][0]["anchors"][0]
+    assert a["use"] == "split" and plan["planned"][0]["added_cost"]["video_segments"] == 1
+
+
+def test_default_midframe_exempts_very_short_clip(tmp_path):
+    root = _write_project(tmp_path, [_clip(1, 2.1, shots=[{"t": "0-2.1s"}])])
+    plan = ap.plan_episode(root, "第1集", default_midframe=True)
+    assert plan["planned"] == []
+    assert len(plan["exempted"]) == 1 and "极短镜" in plan["exempted"][0]["reason"]
+
+
+def test_default_midframe_write_back_sets_policy_and_exemptions(tmp_path):
+    root = _write_project(tmp_path, [
+        _clip(1, 6, shots=[{"t": "0-6s"}]),
+        _clip(2, 2.1, shots=[{"t": "0-2.1s"}]),
+    ])
+    plan = ap.plan_episode(root, "第1集", default_midframe=True)
+    assert ap.write_back(root, "第1集", plan) == 1
+    sb = json.loads(open(os.path.join(root, "脚本", "第1集", "storyboard.json"),
+                         encoding="utf-8").read())
+    assert sb["policy"]["midframe_default"] is True
+    assert sb["clips"][0]["continuity"]["anchors"][0]["use"] == "qc"
+    assert "极短镜" in sb["clips"][1]["continuity"]["midframe_exempt_reason"]
+
+
+def test_rule_hit_takes_precedence_over_default(tmp_path):
+    # 10s 打斗镜：命中 R1 → 走 split 规则锚（_a1 命名），不落 D0 默认中锚
+    root = _write_project(tmp_path, [
+        _clip(1, 10, template="fight_exchange", beats=["起手", "命中", "收势"],
+              shots=[{"t": "0-3s"}, {"t": "3-6.5s"}, {"t": "6.5-10s"}]),
+    ])
+    plan = ap.plan_episode(root, "第1集", default_midframe=True)
+    assert len(plan["planned"]) == 1
+    assert plan["planned"][0]["rule"].startswith("R1")
+    assert plan["planned"][0]["anchors"][0]["anchor_png"].endswith("_a1.png")
+
+
+# ── apex-aware 锚帧：命中/爆发帧强制落成真关键帧（动作轴·四轴撞点） ──
+def test_apex_anchor_seconds_extracts_impact_cue():
+    clip = {"template": "fight_exchange", "duration": 6.0, "template_contract": {
+        "post_cue_points": ["0.4s 起手", "3.2s 命中巨响", "5.0s 收势"], "impact_frame": "戟没入"}}
+    assert _ap().apex_anchor_seconds(clip, 6.0) == [3.2]
+
+
+def test_apex_anchor_seconds_magic_collision_and_no_impact():
+    m = {"template": "magic_burst", "duration": 5.5, "template_contract": {
+        "post_cue_points": ["0.6s 蓄力", "4.6s 砸落全频低频轰鸣"]}}
+    assert _ap().apex_anchor_seconds(m, 5.5) == [4.6]
+    none = {"template": "fight_exchange", "duration": 4.0, "template_contract": {
+        "post_cue_points": ["1.0s 起手", "2.0s 收势"]}}
+    assert _ap().apex_anchor_seconds(none, 4.0) == []        # 无命中关键词 → 不抽
+    assert _ap().apex_anchor_seconds({"template": "fight_exchange", "duration": 3.0,
+        "template_contract": {"post_cue_points": ["9.0s 命中"]}}, 3.0) == []  # 超时长 → 丢弃
+
+
+def _ap():
+    import importlib.util, os
+    spec = importlib.util.spec_from_file_location(
+        "anchor_planner", os.path.join(os.path.dirname(__file__), "anchor_planner.py"))
+    m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+    return m
+
+
+def test_plan_episode_places_apex_keyframe(tmp_path):
+    import json
+    ap = _ap()
+    sb = {"clips": [{"id": "Clip_01", "template": "fight_exchange", "duration": 10.0,
+        "shots": [{"t": "0-10s", "desc": "x"}],
+        "template_contract": {"template_id": "fight_exchange",
+            "beats": ["起手", "命中", "收势"],
+            "post_cue_points": ["0.5s 起手", "4.0s 命中巨响", "8.0s 收势"]}}]}
+    (tmp_path / "脚本" / "第1集").mkdir(parents=True)
+    (tmp_path / "脚本" / "第1集" / "storyboard.json").write_text(
+        json.dumps(sb, ensure_ascii=False), encoding="utf-8")
+    res = ap.plan_episode(str(tmp_path), "第1集")
+    anchors = res["planned"][0]["anchors"]
+    apex = [a for a in anchors if a.get("use") == "keyframe"]
+    assert apex and any(abs(a["at_sec"] - 4.0) <= 0.4 for a in apex)   # 命中帧落成 keyframe

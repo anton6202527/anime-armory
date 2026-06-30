@@ -1,0 +1,764 @@
+{
+  "kind": "n2d_asset_reference_registry",
+  "version": 1,
+  "assets": [
+    {
+      "id": "LOC_ZAYI_DADIAN",
+      "type": "location",
+      "name": "秀竹峰杂役大殿",
+      "scope": "第1集主场景",
+      "reference_group": {
+        "primary": "出图/共享/图片/定妆_秀竹峰杂役大殿.png",
+        "alternates": []
+      },
+      "scene_dna": {
+        "belonging_anchor": "太虚门秀竹峰底层杂役班，黑暗旧殿，不是仙宫。",
+        "landmarks": [
+          "旧木梁",
+          "粗木柱",
+          "石地",
+          "角落杂役用品",
+          "门缝冷光"
+        ],
+        "spatial_layout": "贺平生画左下，张老大画右前景，群杂役两侧与后景围压；张老大→贺平生为横轴。",
+        "architecture_materials": "旧木梁、粗柱、石地、灰尘、油污，灰褐低饱和。",
+        "color_lighting_weather": "夜/内，画左门缝冷光，4200K冷，低照度，灰褐冷调。",
+        "resident_assets": [
+          "粗木柱",
+          "杂役用品",
+          "尘土",
+          "油污"
+        ],
+        "forbidden": [
+          "仙宫",
+          "官府大堂",
+          "现代办公室",
+          "明亮金碧大殿",
+          "华丽宗门正殿"
+        ]
+      },
+      "spatial_layout": {
+        "floor_plan": "入口在画左偏后，张老大常压在画右前景，贺平生站画左下。",
+        "doors_windows": "主冷光来自画左门缝/屋顶漏光。",
+        "axis_rules": "张老大→贺平生横轴，正反打不得交换左右关系。",
+        "screen_direction_rules": "贺平生看画右上，张老大看画左下；群杂役只作后景虚化。"
+      },
+      "constraints": {
+        "layout": "低矮旧殿，前景压迫，后景围笑；不得变成高大华丽仙宫。",
+        "axis": "张老大画右前景，贺平生画左下，横轴锁定。",
+        "light_anchor": "画左门缝冷光，低照度，灰尘可见。",
+        "structure": "旧木梁、粗木柱、石地、杂役用品固定出现。",
+        "lighting_signature": "灰褐冷调，低饱和，局部冷门缝光。"
+      },
+      "drift_forbidden": [
+        "仙宫化",
+        "现代化",
+        "强暖光",
+        "高饱和金色",
+        "轴线左右互换"
+      ],
+      "scene_atlas": {
+        "version": 1,
+        "single_angle": false,
+        "base_views": {
+          "front": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役大殿.png",
+            "status": "ready"
+          },
+          "reverse": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役大殿_反打.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "reverse",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役大殿.png",
+              "source_sha256": "62aaa3dde225442cbd591e539093e86a24748784f38b11475d83d77778df8128",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            }
+          },
+          "side_left": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役大殿_侧机位.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_left",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役大殿.png",
+              "source_sha256": "62aaa3dde225442cbd591e539093e86a24748784f38b11475d83d77778df8128",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            }
+          },
+          "side_right": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役大殿_side_right.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_right",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役大殿.png",
+              "source_sha256": "62aaa3dde225442cbd591e539093e86a24748784f38b11475d83d77778df8128",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            }
+          },
+          "left": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役大殿_侧机位.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_left",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役大殿.png",
+              "source_sha256": "62aaa3dde225442cbd591e539093e86a24748784f38b11475d83d77778df8128",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            },
+            "alias_of": "side_left"
+          },
+          "right": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役大殿_side_right.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_right",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役大殿.png",
+              "source_sha256": "62aaa3dde225442cbd591e539093e86a24748784f38b11475d83d77778df8128",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            },
+            "alias_of": "side_right"
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役大殿_反打.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "reverse",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役大殿.png",
+              "source_sha256": "62aaa3dde225442cbd591e539093e86a24748784f38b11475d83d77778df8128",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            },
+            "alias_of": "reverse"
+          }
+        },
+        "fallback_policy": "先补同源 front + reverse/side 多机位板；未 ready 前不得生成引用该场景的分镜 PNG。"
+      },
+      "self_check_passed": true
+    },
+    {
+      "id": "LOC_ZAYI_YUAN",
+      "type": "location",
+      "name": "秀竹峰杂役院与空房",
+      "scope": "第1集主场景",
+      "reference_group": {
+        "primary": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+        "alternates": []
+      },
+      "scene_dna": {
+        "belonging_anchor": "秀竹峰底层杂役生活区，低矮旧房和贫瘠空屋。",
+        "landmarks": [
+          "六七间低矮旧房",
+          "巨大水缸",
+          "空屋硬板床",
+          "铁碗",
+          "窗格冷月光"
+        ],
+        "spatial_layout": "水缸区韩老三画右前方，贺平生画左后方，两口水缸占后景；空屋内硬板床贴墙。",
+        "architecture_materials": "灰褐旧木、粗糙石地、旧门板、冷窗格。",
+        "color_lighting_weather": "日转夜；空屋用窗格月光画右后，5000K冷。",
+        "resident_assets": [
+          "两口水缸",
+          "硬板床",
+          "铁碗",
+          "钥匙",
+          "铁锁"
+        ],
+        "forbidden": [
+          "精致庭院",
+          "仙宫厢房",
+          "现代宿舍",
+          "富贵家具"
+        ]
+      },
+      "spatial_layout": {
+        "floor_plan": "水缸在后景压迫尺度；空房几乎无家具，硬板床靠墙。",
+        "doors_windows": "空屋门在画面前侧，窗格在画右后。",
+        "axis_rules": "水缸→贺平生为纵深轴；韩老三只在远景/中景交代，不持续压迫。",
+        "screen_direction_rules": "贺平生看后景水缸，再看空屋内部。"
+      },
+      "constraints": {
+        "layout": "低矮旧房、两口巨大水缸、贫瘠空屋。",
+        "axis": "水缸后景压迫，贺平生画左后，韩老三画右前。",
+        "light_anchor": "空屋窗格冷月光，灰褐旧木主色。",
+        "structure": "旧房、水缸、硬板床、铁碗、钥匙铁锁不得丢。",
+        "lighting_signature": "日转夜后冷月光，贫瘠感。"
+      },
+      "drift_forbidden": [
+        "富贵化",
+        "现代宿舍",
+        "明亮仙宫",
+        "水缸数量漂移",
+        "空屋家具过多"
+      ],
+      "scene_atlas": {
+        "version": 1,
+        "single_angle": false,
+        "base_views": {
+          "front": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+            "status": "ready"
+          },
+          "reverse": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役院_反打.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "reverse",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+              "source_sha256": "a96d09633b368e79441cd68c13023955d68a2e0910fdb612221b8b60f22fcff4",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            }
+          },
+          "side_left": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役院_侧机位.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_left",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+              "source_sha256": "a96d09633b368e79441cd68c13023955d68a2e0910fdb612221b8b60f22fcff4",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            }
+          },
+          "side_right": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役院_side_right.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_right",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+              "source_sha256": "a96d09633b368e79441cd68c13023955d68a2e0910fdb612221b8b60f22fcff4",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            }
+          },
+          "left": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役院_侧机位.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_left",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+              "source_sha256": "a96d09633b368e79441cd68c13023955d68a2e0910fdb612221b8b60f22fcff4",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            },
+            "alias_of": "side_left"
+          },
+          "right": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役院_side_right.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_right",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+              "source_sha256": "a96d09633b368e79441cd68c13023955d68a2e0910fdb612221b8b60f22fcff4",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            },
+            "alias_of": "side_right"
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役院_反打.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "reverse",
+              "source_path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+              "source_sha256": "a96d09633b368e79441cd68c13023955d68a2e0910fdb612221b8b60f22fcff4",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            },
+            "alias_of": "reverse"
+          }
+        },
+        "fallback_policy": "先补同源 front + reverse/side 多机位板；未 ready 前不得生成引用该场景的分镜 PNG。"
+      },
+      "self_check_passed": true
+    },
+    {
+      "id": "LOC_HOUSHAN_QIANTAN",
+      "type": "location",
+      "name": "后山山泉浅潭",
+      "scope": "第1集主场景",
+      "reference_group": {
+        "primary": "出图/共享/图片/定妆_后山山泉浅潭.png",
+        "alternates": []
+      },
+      "scene_dna": {
+        "belonging_anchor": "秀竹峰后山挑水路线尽头，浅潭藏黑陶破盆。",
+        "landmarks": [
+          "崎岖小路",
+          "一尺宽小瀑布",
+          "巨石",
+          "清澈浅潭",
+          "竹影",
+          "湿石"
+        ],
+        "spatial_layout": "贺平生画左前，浅潭画右下，小瀑布在后景；贺平生→潭底破盆为斜轴。",
+        "architecture_materials": "湿石、砂石、水面、竹影、薄雾。",
+        "color_lighting_weather": "夜/外，画左上冷月光，5600K冷，水面反射。",
+        "resident_assets": [
+          "浅潭",
+          "砂石",
+          "湿石",
+          "竹影",
+          "小瀑布"
+        ],
+        "forbidden": [
+          "宽阔湖泊",
+          "仙境瀑布大景",
+          "强神器光柱",
+          "现代水渠"
+        ]
+      },
+      "spatial_layout": {
+        "floor_plan": "山路进入浅潭左侧，水面在画右下，小瀑布后景。",
+        "doors_windows": "无门窗；主光来自画左上月光。",
+        "axis_rules": "贺平生→潭底破盆斜轴，视线落画右下。",
+        "screen_direction_rules": "贺平生看画右下潭底，集尾人物背对或只露手臂。"
+      },
+      "constraints": {
+        "layout": "浅潭小尺度，清澈见底，砂石和湿石必须可辨。",
+        "axis": "贺平生画左前，潭底破盆画右下。",
+        "light_anchor": "画左上冷月光，水面弱反光。",
+        "structure": "一尺宽小瀑布、巨石、竹影、浅潭固定。",
+        "lighting_signature": "冷蓝月光，薄雾，极弱道具微光。"
+      },
+      "drift_forbidden": [
+        "大湖化",
+        "神器强光",
+        "热带河谷",
+        "现代水渠",
+        "破盆位置漂移"
+      ],
+      "scene_atlas": {
+        "version": 1,
+        "single_angle": false,
+        "base_views": {
+          "front": {
+            "path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+            "status": "ready"
+          },
+          "reverse": {
+            "path": "出图/共享/图片/定妆_后山山泉浅潭_反打.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "reverse",
+              "source_path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+              "source_sha256": "a486f01eeaac1851e77f3d11ef29406cd24b5d28363bfc373cffdef8a6914d8e",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:04+00:00"
+            }
+          },
+          "side_left": {
+            "path": "出图/共享/图片/定妆_后山山泉浅潭_侧机位.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_left",
+              "source_path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+              "source_sha256": "a486f01eeaac1851e77f3d11ef29406cd24b5d28363bfc373cffdef8a6914d8e",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            }
+          },
+          "side_right": {
+            "path": "出图/共享/图片/定妆_后山山泉浅潭_side_right.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_right",
+              "source_path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+              "source_sha256": "a486f01eeaac1851e77f3d11ef29406cd24b5d28363bfc373cffdef8a6914d8e",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            }
+          },
+          "left": {
+            "path": "出图/共享/图片/定妆_后山山泉浅潭_侧机位.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_left",
+              "source_path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+              "source_sha256": "a486f01eeaac1851e77f3d11ef29406cd24b5d28363bfc373cffdef8a6914d8e",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            },
+            "alias_of": "side_left"
+          },
+          "right": {
+            "path": "出图/共享/图片/定妆_后山山泉浅潭_side_right.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_right",
+              "source_path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+              "source_sha256": "a486f01eeaac1851e77f3d11ef29406cd24b5d28363bfc373cffdef8a6914d8e",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:03+00:00"
+            },
+            "alias_of": "side_right"
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_后山山泉浅潭_反打.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "reverse",
+              "source_path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+              "source_sha256": "a486f01eeaac1851e77f3d11ef29406cd24b5d28363bfc373cffdef8a6914d8e",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:04+00:00"
+            },
+            "alias_of": "reverse"
+          }
+        },
+        "fallback_policy": "先补同源 front + reverse/side 多机位板；未 ready 前不得生成引用该场景的分镜 PNG。"
+      },
+      "self_check_passed": true
+    },
+    {
+      "id": "LOC_WAIMEN_JIUYUAN",
+      "type": "location",
+      "name": "太虚门外门旧院/秀竹峰山门回忆场",
+      "scope": "第1集回忆蒙太奇",
+      "reference_group": {
+        "primary": "出图/共享/图片/定妆_太虚门外门旧院.png",
+        "alternates": [
+          "出图/共享/图片/定妆_太虚门外门旧院_反打.png"
+        ]
+      },
+      "scene_dna": {
+        "belonging_anchor": "太虚门外门边缘旧院与通往秀竹峰的山门路口，承担贺平生被送去杂役班的前情压缩。",
+        "landmarks": [
+          "灰旧院门",
+          "破旧包袱",
+          "低矮院墙",
+          "远处秀竹峰山门",
+          "山间云雾",
+          "远景修士剪影"
+        ],
+        "spatial_layout": "院门在画面左前，贺平生站门边；江剑背影在中景偏右；远处山门和修士剪影在画面深处。",
+        "architecture_materials": "灰旧木门、粗石台阶、低矮院墙、山路、薄雾。",
+        "color_lighting_weather": "日间回忆柔冷光，低饱和，不煽情，不金碧辉煌。",
+        "resident_assets": [
+          "旧行囊",
+          "院门",
+          "低矮院墙",
+          "山门路口",
+          "薄雾"
+        ],
+        "forbidden": [
+          "豪华宗门正殿",
+          "现代校园",
+          "血腥现场",
+          "高饱和仙境",
+          "清晰父母死亡画面"
+        ]
+      },
+      "spatial_layout": {
+        "floor_plan": "外门旧院近景连接秀竹峰山门远景，用山路形成纵深。",
+        "doors_windows": "旧院门在画左前，山门在远景偏右。",
+        "axis_rules": "贺平生→远处山门/修士剪影为纵深视线轴；江剑背影不可抢主角脸。",
+        "screen_direction_rules": "贺平生看画面深处；江剑只给背影或侧背，远景修士只做剪影。"
+      },
+      "constraints": {
+        "layout": "旧院贫瘠，山门远景，不得变成宏大宗门广场。",
+        "axis": "贺平生在院门边，视线通向远处山门。",
+        "light_anchor": "日间低饱和柔冷光，回忆感但不梦幻过度。",
+        "structure": "灰旧院门、低矮院墙、旧行囊、山路、远处山门固定。",
+        "lighting_signature": "克制回忆光，不用血色或金色神光。"
+      },
+      "drift_forbidden": [
+        "仙宫化",
+        "现代校园化",
+        "血腥化",
+        "山门过度华丽",
+        "回忆人物清晰新脸"
+      ],
+      "scene_atlas": {
+        "version": 1,
+        "single_angle": false,
+        "base_views": {
+          "front": {
+            "path": "出图/共享/图片/定妆_太虚门外门旧院.png",
+            "status": "ready"
+          },
+          "reverse": {
+            "path": "出图/共享/图片/定妆_太虚门外门旧院_反打.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "reverse",
+              "source_path": "出图/共享/图片/定妆_太虚门外门旧院.png",
+              "source_sha256": "23ca08ab8d680814f5ce6f4f29a63d636e19d62f3b8f663ffdc2b8f29017fd30",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:04+00:00"
+            }
+          },
+          "side_left": {
+            "path": "出图/共享/图片/定妆_太虚门外门旧院_侧机位.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_left",
+              "source_path": "出图/共享/图片/定妆_太虚门外门旧院.png",
+              "source_sha256": "23ca08ab8d680814f5ce6f4f29a63d636e19d62f3b8f663ffdc2b8f29017fd30",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:04+00:00"
+            }
+          },
+          "side_right": {
+            "path": "出图/共享/图片/定妆_太虚门外门旧院_side_right.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_right",
+              "source_path": "出图/共享/图片/定妆_太虚门外门旧院.png",
+              "source_sha256": "23ca08ab8d680814f5ce6f4f29a63d636e19d62f3b8f663ffdc2b8f29017fd30",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:04+00:00"
+            }
+          },
+          "left": {
+            "path": "出图/共享/图片/定妆_太虚门外门旧院_侧机位.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_left",
+              "source_path": "出图/共享/图片/定妆_太虚门外门旧院.png",
+              "source_sha256": "23ca08ab8d680814f5ce6f4f29a63d636e19d62f3b8f663ffdc2b8f29017fd30",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:04+00:00"
+            },
+            "alias_of": "side_left"
+          },
+          "right": {
+            "path": "出图/共享/图片/定妆_太虚门外门旧院_side_right.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "side_right",
+              "source_path": "出图/共享/图片/定妆_太虚门外门旧院.png",
+              "source_sha256": "23ca08ab8d680814f5ce6f4f29a63d636e19d62f3b8f663ffdc2b8f29017fd30",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:04+00:00"
+            },
+            "alias_of": "side_right"
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_太虚门外门旧院_反打.png",
+            "status": "ready",
+            "derivation": {
+              "method": "flip",
+              "view": "reverse",
+              "source_path": "出图/共享/图片/定妆_太虚门外门旧院.png",
+              "source_sha256": "23ca08ab8d680814f5ce6f4f29a63d636e19d62f3b8f663ffdc2b8f29017fd30",
+              "generated_by": "skills/n2d-image/scripts/derive_scene_views.py",
+              "generated_at": "2026-06-29T09:15:04+00:00"
+            },
+            "alias_of": "reverse"
+          }
+        },
+        "fallback_policy": "先补同源 front + reverse/side 多机位板；未 ready 前不得生成引用该场景的分镜 PNG。"
+      },
+      "self_check_passed": true
+    },
+    {
+      "id": "PROP_HEI_TAO_PEN",
+      "type": "prop",
+      "name": "黑陶破盆",
+      "scope": "核心道具/第1集尾扣",
+      "owner": "CHAR_HE_PINGSHENG/常态（镜头23后持有）",
+      "current_state": "水底旧黑陶破盆；第1集尾离水后盆底极弱微光",
+      "lifecycle": [
+        {
+          "episode": "第1集",
+          "state": "LOC_HOUSHAN_QIANTAN 水底可见"
+        },
+        {
+          "episode": "第1集",
+          "state": "被贺平生捞起并夹在臂弯"
+        },
+        {
+          "episode": "第2集",
+          "state": "计划兑现异常用途"
+        }
+      ],
+      "reference_group": {
+        "primary": "出图/共享/图片/定妆_黑陶破盆.png",
+        "alternates": []
+      },
+      "constraints": {
+        "structure": "旧黑陶洗脸/洗衣盆，圆盆，边缘有磨损和小缺口，盆底可有极弱微光。",
+        "scale": "普通脸盆大小，可被十四岁少年夹在臂弯。",
+        "material": "黑乎乎陶质，低反光，水下只反一线冷月光。",
+        "must_not_have": [
+          "强光柱",
+          "金边",
+          "符文文字",
+          "玉石质感",
+          "现代塑料盆",
+          "多盆重复"
+        ]
+      },
+      "drift_forbidden": [
+        "神器化",
+        "强发光",
+        "符文文字",
+        "尺寸过大",
+        "金属鼎化",
+        "现代塑料盆"
+      ],
+      "self_check_passed": true
+    },
+    {
+      "id": "PROP_SHUI_TONG",
+      "type": "prop",
+      "name": "水桶与扁担",
+      "scope": "第1集苦役视觉符号",
+      "owner": "CHAR_HE_PINGSHENG/常态",
+      "current_state": "夜挑水时持有；水桶有水渍和磨损",
+      "lifecycle": [
+        {
+          "episode": "第1集",
+          "state": "空屋后被贺平生带去认路"
+        },
+        {
+          "episode": "第1集",
+          "state": "挑水五趟，肩颈压痕形成"
+        }
+      ],
+      "reference_group": {
+        "primary": "出图/共享/图片/定妆_水桶与扁担.png",
+        "alternates": []
+      },
+      "constraints": {
+        "structure": "两只旧木水桶 + 一根粗木扁担；水桶对称悬挂。",
+        "scale": "少年挑水工具，桶身到少年膝上附近。",
+        "material": "旧木、水渍、磨损、绳索。",
+        "must_not_have": [
+          "现代塑料桶",
+          "金属水桶",
+          "单只桶漂移",
+          "华丽异物化"
+        ]
+      },
+      "drift_forbidden": [
+        "塑料化",
+        "金属化",
+        "数量漂移",
+        "奇物化",
+        "尺寸忽大忽小"
+      ],
+      "asset_role_note": "ordinary_life_prop; keep faceless and non-magical",
+      "self_check_passed": true
+    },
+    {
+      "id": "PROP_TIE_WAN",
+      "type": "prop",
+      "name": "铁碗/钥匙铁锁",
+      "scope": "第1集贫瘠生活道具",
+      "owner": "CHAR_HE_PINGSHENG/常态",
+      "current_state": "空屋内生活道具；韩老三交钥匙铁锁后归贺平生",
+      "lifecycle": [
+        {
+          "episode": "第1集",
+          "state": "韩老三交钥匙铁锁"
+        },
+        {
+          "episode": "第1集",
+          "state": "空屋内只剩铁碗与冷月光"
+        }
+      ],
+      "reference_group": {
+        "primary": "出图/共享/图片/定妆_铁碗钥匙铁锁.png",
+        "alternates": []
+      },
+      "constraints": {
+        "structure": "粗糙铁碗 + 旧钥匙 + 生锈铁锁，小件生活道具。",
+        "scale": "铁碗可手持，钥匙铁锁为小型杂役房门物件。",
+        "material": "暗金属、锈迹、冷月光反射。",
+        "must_not_have": [
+          "现代锁具",
+          "金色宝物",
+          "瓷碗",
+          "异物化",
+          "多套重复"
+        ]
+      },
+      "drift_forbidden": [
+        "现代化",
+        "贵重异物化",
+        "碗材质变瓷",
+        "钥匙铁锁丢失"
+      ],
+      "asset_role_note": "ordinary_life_prop; keep faceless and non-magical",
+      "self_check_passed": true
+    },
+    {
+      "id": "PROP_KEY_LOCK",
+      "type": "prop",
+      "name": "旧钥匙与生锈铁锁",
+      "scope": "第1集房门交接/锁门动作道具",
+      "owner": "CHAR_HE_PINGSHENG/常态（韩老三交付后）",
+      "current_state": "韩老三交给贺平生的旧钥匙和生锈铁锁；锁门后随身持有钥匙。",
+      "lifecycle": [
+        {
+          "episode": "第1集",
+          "state": "韩老三交钥匙和铁锁"
+        },
+        {
+          "episode": "第1集",
+          "state": "贺平生锁门后握钥匙去认路"
+        },
+        {
+          "episode": "第1集",
+          "state": "空屋生活贫瘠感的可见小道具"
+        }
+      ],
+      "reference_group": {
+        "primary": "出图/共享/图片/定妆_旧钥匙与生锈铁锁.png",
+        "alternates": [
+          "出图/共享/图片/定妆_铁碗钥匙铁锁.png"
+        ]
+      },
+      "constraints": {
+        "structure": "一把旧铜铁钥匙 + 一只小型生锈铁锁，房门生活道具，不是奇物。",
+        "scale": "少年单手可握，锁体小，适合低矮旧房木门。",
+        "material": "暗金属、锈迹、磨损边缘、冷月光低反光。",
+        "must_not_have": [
+          "现代防盗锁",
+          "金色宝物",
+          "符文刻字",
+          "巨大链锁",
+          "多套重复"
+        ]
+      },
+      "drift_forbidden": [
+        "现代锁具化",
+        "奇物化",
+        "金银贵重化",
+        "尺寸过大",
+        "钥匙或锁丢失"
+      ],
+      "asset_role_note": "ordinary_life_prop; keep faceless and non-magical",
+      "self_check_passed": true
+    }
+  ]
+}

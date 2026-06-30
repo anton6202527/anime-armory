@@ -1,0 +1,135 @@
+---
+name: novel-condense
+description: Given a long novel (.txt/.docx), compress it into a shorter version by cutting descriptions / minor subplots / repetitive interiority and merging adjacent chapters. Preserves main plot, anchor events, reversal points, hooks, and ending. Target uses include shorter readable version, AI 漫剧 storyboard-friendly cut, or chapter-grade outline. Defaults to public-domain / user-owned / user-licensed sources. Triggers 精简, 压缩小说, 砍章, 改成短版, 改成漫剧版, 提取大纲, condense novel, shorten novel.
+---
+
+# novel-condense — 精简一部小说
+
+给定**原作长篇**（公版 / 自有 / 用户已声明授权）→ 输出一部**主线保留、细节大幅压缩**的精简版。
+
+## 偏好（私有 · 用户选择，不写死在本 skill）
+
+本 skill 的可选项**不写死在源码里**，按 `../skills/novel-craft/references/选择点与偏好.md`（家族统一的偏好读写机制 + 全部选择点目录与缺省）解析：`<作品根>/_设置.md` → 全局默认 `创作偏好-默认.md` 预填并告知一句 → 缺则**首次问一次**→写回 `_设置.md`→**沉默沿用**（合规/不可逆/花钱点每次仍确认）。
+
+本 skill 涉及的选择点：`小说用途`、`权利来源`、`输出格式`、`小说生成模式`、`章节生成粒度`、`AI使用披露`。
+
+## 合法性铁律
+
+家族统一铁律（公版 / 自有 / `--i-have-rights` + provenance 留痕；当代受版权网文未声明授权→拒做）见 `novel/SKILL.md` 合法性继承。
+- 本 skill 特有：精简时即便高潮段也要重写，不照搬原文。
+
+## 用途分档
+
+| 目标用途 | 压缩比 | 输出形态 |
+|---|---|---|
+| 短读版 | 1.5–3× | txt+docx，章节结构基本保留 |
+| 短篇改写版 | 5–10× | txt+docx + outline，按戏剧节拍重切 |
+| 大纲级 | 20×+ | outline.md 为主，不再是小说 |
+
+## 工作流（七步）
+
+> **派生流水线**：阶段表 + demo_gate / draft_packets / 状态账本 / export / ai_usage 的通用机制见 `novel-craft/references/derive-pipeline.md`。本 skill 的 `source_model` = 主线骨架/锚点/反转点，`direction_spec` = 压缩比/目标用途/合章策略。
+
+### 第 0 步 — 输入
+
+- 原作路径
+- **目标压缩比** 或 目标总量
+- **目标用途**（短读版 / 漫剧版 / 大纲）
+- 输出形式
+
+### 第 1 步 — 建项目
+
+```bash
+python3 <skill>/scripts/init_project.py "<原作>" \
+  --ratio 5 \
+  --target 漫剧 \
+  [--target-chapters 60] \
+  [--draft-mode 漫剧源书] [--chapter-granularity 逐章] [--ai-text-usage AI-assisted] \
+  [--out <输出根>] \
+  [--i-have-rights]
+```
+
+`init_project.py` 会根据 `target_chars_estimate + target/outputs` 推导 `target_chapters / target_words_per_chapter / target_wordcount_min_max / demo_chapters / draft_mode`，并把 `draft_mode / chapter_granularity / ai_text_usage` 同步写进 `_meta.json` 与 `_设置.md`；若漫剧版已有明确集/章规划，必须传 `--target-chapters`，保证后续 `draft_packets.py --next` 按机器字段推进。
+
+### 第 2 步 — 标主线 / 锚点 / 反转点
+
+读原作，输出 `设定/主线骨架.json` —— 标记不可砍的"硬骨头"：
+- 主角关键决定
+- 所有锚点事件
+- 反转点
+- 章末钩子
+- 关键人物首次出场
+- 大高潮的情绪段
+
+同步把原作主角 + 主要配角登记进 `设定/人物.md`（姓名 / 身份 / 关系 / 关键设定）。精简会做合章重写，没有这份卡，`novel-wiki` 的角色护栏与 `logic_sentry` 的死人复活机检拿不到实体、静默放行，合章时最易写出 OOC / 复活穿帮。
+
+同时裁决原作里"种下后必须回收"的关键伏笔。**init 已从原作启发式抽出「伏笔候选」预播进 `设定/foreshadowing_ledger.json`**（`confirmed:false`，`id=AUTO_NNN`），`scan` 即可看清单，逐条 confirm/drop，漏抽的手动 plant：
+
+```
+python3 ../../novel-wiki/scripts/foreshadow_ledger.py <作品根> scan --through <原作末章>
+python3 ../../novel-wiki/scripts/foreshadow_ledger.py <作品根> confirm --id AUTO_001 --by <预期回收章> --importance high
+python3 ../../novel-wiki/scripts/foreshadow_ledger.py <作品根> plant --desc "..." --at <埋设章> --by <预期回收章> --importance high
+```
+
+砍支线 / 合章最容易把某条伏笔的"收"删掉只留"种"。确认后精简完再 `scan --through <末章>` 巡检，`foreshadow_ledger.analyze()` 才能把被砍出的孤儿伏笔揪出来。**未确认候选不升阻断、不计回收率**——它只是提示你别漏裁决。
+
+### 第 3 步 — 划章 / 合章
+
+按 `_meta.json.target_chapters` 与目标压缩比决定新章数。相邻同主题章合并；纯支线章砍掉或缩成一句话。映射写入 `设定/章节映射.md`。
+随后按 `novel-craft/references/reader-contract.md` 补 `设定/读者契约.md`：精简版必须保留的核心题旨、读者承诺、反转 / 高潮 / 余味、文学质感和禁偏清单。精简不是把每章均匀砍短，而是保住读者为什么继续看的理由。
+
+### 第 4 步 — 章纲
+
+**先按 `novel-craft/references/split.md` 反推精简后总章数 / 字数分档**（短读版 1.5-3× 压缩 / 漫剧友好版 5-10× / 大纲级 20×+，对应章数差极大）；然后引用 `novel-craft/references/outline.md` + `condense.md` 编织章纲。注意：漫剧友好版的章 = 戏剧节拍 ≠ 原作章节。
+
+### 第 5 步 — Demo（前 2-3 章）+ 用户审
+
+引用 `novel-craft/references/chapter.md` + `condense.md`。每章独立写、独立审。
+Demo 审完必须写 `审稿/demo_gate.json`（见 `novel-craft/references/demo-gate.md`）；`status != passed` 不进第 6 步。
+
+### 第 6 步 — 续 + 回扫
+
+先读 `novel-craft/references/draft-pipeline.md`，跑 `python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --next|--range A-B` 生成逐章任务包。
+续压子任务必须喂 `审稿/demo_gate.json` 的 `style_anchor` / `reader_promises` / `setting_constraints`，并读取 `审稿/state_ledger.json`。
+同时必须喂 `设定/读者契约.md`，确保被保留的章不偏离核心题旨，且高光段的文学质感不被压成梗概。
+每章写完填 `审稿/state_delta_第NN章.json`，记录主线骨架、钩子、反转点是否保留。
+重点扫：
+- 主线骨架是否完整
+- 钩子是否还在
+- 反转点是否保留
+- 节奏是否仍连贯
+- 没有大段原文照搬
+
+### 第 7 步 — 导出
+
+发布/交平台前先用 `novel-craft/scripts/ai_usage.py` 写 AI 使用披露。
+
+```bash
+python3 skills/novel-craft/scripts/export.py "<作品根>" --formats txt,docx[,outline]   # 家族通用导出器
+```
+
+## 输出约定
+
+- 默认落 `创作区/写小说/<原作名>-精简/`。
+- 终态进 `导出/`，中间产物留作品根。
+
+## 何时不用本 skill
+
+- 用户想**扩写** → 用 novel-expand。
+- 用户想**配角视角续写** → 用 novel-spinoff。
+- 用户想**改设定 / 换主线魔改重写** → 用 novel-rewrite。
+- 用户想**接着原作末章往后写新章** → 用 novel-continue。
+- 用户不需要精简版小说 → 不用本 skill。
+
+## 常见错误
+
+| 错误 | 纠正 |
+|---|---|
+| 砍了反转点 | 反转点是钩子来源，必须保 |
+| 每章压成一段 | 那是大纲不是小说；按目标用途分档 |
+| 漫剧版仍按原章节切 | 漫剧要按戏剧节拍切，跨章合理 |
+| 大段复刻原作高潮段 | 即便高潮段也要重写，不搬文本 |
+| 均匀压缩每段砍 50% | 高潮段失去击穿；要重点保高潮 |
+| Demo 没审就续 | 第 5 步 gate 必须等用户点头 |
+| Demo 过审后不跑 `draft_packets.py` | 缺单章上下文包和状态账本，容易砍丢主线或钩子 |
+| Demo 过审但没写 `审稿/demo_gate.json` | 后续压缩缺保留风格/承诺的机器锚点 |

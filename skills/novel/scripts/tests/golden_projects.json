@@ -1,0 +1,64 @@
+[
+  {
+    "name": "original_legacy_missing_kind",
+    "files": {
+      "_meta.json": {"title": "原创旧项目"},
+      "_设置.md": "# 设置\n",
+      "_进度.md": "# 进度\n"
+    },
+    "expected": {
+      "next_stage": "blueprint",
+      "done_stages": ["setup"]
+    }
+  },
+  {
+    "name": "import_rewrite_source_project",
+    "files": {
+      "_meta.json": {"title": "导入改写样例", "kind": "rewrite"},
+      "_设置.md": "# 设置\n",
+      "_进度.md": "# 进度\n",
+      "原作.txt": "第一章\n原作内容\n",
+      "小说/source_manifest.json": {"kind": "novel_source_manifest", "rights_status": "user-declared"}
+    },
+    "expected": {
+      "next_stage": "blueprint",
+      "done_stages": ["setup", "source_import"]
+    }
+  },
+  {
+    "name": "short_drama_score_review_retrieval",
+    "files": {
+      "_meta.json": {"title": "短剧目标样例", "kind": "create", "target_platform": "红果短剧"},
+      "_设置.md": "# 设置\n目标平台：红果短剧\n",
+      "_进度.md": "# 进度\n",
+      "章节/第01章.md": "姜月初在雨夜发现玉佩，妖纹微亮，短剧冲突从当面退婚开始。\n",
+      "章节/第02章.md": "茶楼众人议论青铜门后的终局密钥，反派逼她交出玉佩。\n",
+      "生产数据/retrieval_golden.json": {
+        "thresholds": {"min_recall_at_k": 1.0, "min_mrr": 1.0},
+        "cases": [
+          {"query": "玉佩 妖纹 退婚", "expected_ids": ["章节/第01章.md"]},
+          {"query": "青铜门 终局密钥", "expected_ids": ["章节/第02章.md"]}
+        ]
+      },
+      "评分/score_report.json": {
+        "kind": "novel_score_report",
+        "total_score": 82,
+        "verdict": "小改",
+        "production_decision": {"decision": "revise"}
+      },
+      "审稿/review_report.json": {
+        "kind": "novel_review_report",
+        "summary": {"blocking_count": 0},
+        "findings": []
+      }
+    },
+    "expected": {
+      "next_stage": "blueprint",
+      "retrieval_passed": true,
+      "retrieval_top_k": 1,
+      "score_total": 82,
+      "score_verdict": "小改",
+      "review_blocking_count": 0
+    }
+  }
+]

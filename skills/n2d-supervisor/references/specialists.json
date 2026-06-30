@@ -1,0 +1,30 @@
+{
+  "kind": "n2d_supervisor_specialists",
+  "version": 1,
+  "specialists": {
+    "n2d-script-agent": {
+      "scope": "剧本改编、分镜设计、题材母题、爽点/钩子/叙事连续性",
+      "stage_keys": ["script_stage1", "script_stage2"],
+      "allowed": ["read_context_pack", "run_creative_loop", "draft_stage_artifacts", "return_findings"],
+      "forbidden": ["paid_generation", "direct_progress_write", "backend_switch_without_adapter"]
+    },
+    "n2d-visual-agent": {
+      "scope": "出图 prompt、视频 prompt、模型路由、身份/资产/运动契约继承",
+      "stage_keys": ["image_prompt", "image", "video_prompt", "video"],
+      "allowed": ["read_context_pack", "run_creative_loop", "draft_prompt_artifacts", "return_findings"],
+      "forbidden": ["paid_generation", "bypass_gate", "drop_template_contract"]
+    },
+    "n2d-qc-agent": {
+      "scope": "gate、score、review-ui、consistency ledger、返工队列",
+      "stage_keys": ["compose", "review"],
+      "allowed": ["run_review_bundle", "summarize_findings", "propose_minimal_rerun"],
+      "forbidden": ["human_signoff", "silent_accept_gate_block", "direct_progress_write"]
+    },
+    "n2d-producer-agent": {
+      "scope": "制作模式、合规/花钱放行、batch、dashboard、ROI 和停线判断",
+      "stage_keys": ["voice", "image", "video", "compose"],
+      "allowed": ["ask_user", "prepare_batch_plan", "read_dashboard", "stop_line"],
+      "forbidden": ["paid_generation_without_approval", "compliance_override", "untracked_backend_change"]
+    }
+  }
+}

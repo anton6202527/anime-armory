@@ -1,0 +1,9 @@
+{
+  "kind": "n2d_golden_project_expected",
+  "version": 1,
+  "case": "xianxia_spectacle",
+  "expected_stage_key": "image",
+  "expected_owner": "n2d-image",
+  "expected_release_readiness_after_enrichment": "pass",
+  "notes": "仙侠高动态场面应卡在出图补齐，后续视频不可越过未满首帧资产。"
+}

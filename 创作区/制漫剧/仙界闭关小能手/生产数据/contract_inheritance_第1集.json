@@ -1,0 +1,120 @@
+{
+  "kind": "n2d_contract_inheritance",
+  "episode": "第1集",
+  "image_overview": "出图/第1集/prompt/00_总览.md",
+  "video_overview": "出视频/第1集/prompt/00_总览.md",
+  "fields": [
+    {
+      "field": "色调基线",
+      "image_text": "杂役大殿和空屋灰褐冷调；后山夜潭冷蓝月光；破盆只给极弱微光，不给神器光柱。",
+      "video_text": "杂役大殿和空屋灰褐冷调；后山夜潭冷蓝月光；破盆只给极弱微光，不给神器光柱。",
+      "status": "pass",
+      "severity": "pass",
+      "note": "逐字一致"
+    },
+    {
+      "field": "场景光位锚",
+      "image_text": "",
+      "video_text": "",
+      "status": "upstream_missing",
+      "severity": "warn",
+      "note": "出图侧契约缺此字段（上游问题，不拦本步）：回 n2d-image 补 00_总览 视觉契约，image_preflight/image gate 会阻断"
+    },
+    {
+      "field": "场景轴线视线",
+      "image_text": "",
+      "video_text": "",
+      "status": "upstream_missing",
+      "severity": "warn",
+      "note": "出图侧契约缺此字段（上游问题，不拦本步）：回 n2d-image 补 00_总览 视觉契约，image_preflight/image gate 会阻断"
+    },
+    {
+      "field": "角色状态演进",
+      "image_text": "",
+      "video_text": "",
+      "status": "upstream_missing",
+      "severity": "warn",
+      "note": "出图侧契约缺此字段（上游问题，不拦本步）：回 n2d-image 补 00_总览 视觉契约，image_preflight/image gate 会阻断"
+    },
+    {
+      "field": "景别阶梯",
+      "image_text": "ELS 大殿建立 → MS/CU 审问反打 → 回忆蒙太奇 → WS 水缸压迫 → CU 空屋道具 → MS 挑水动作 → ECU 破盆微光硬断。",
+      "video_text": "ELS 大殿建立 → MS/CU 审问反打 → 回忆蒙太奇 → WS 水缸压迫 → CU 空屋道具 → MS 挑水动作 → ECU 破盆微光硬断。",
+      "status": "pass",
+      "severity": "pass",
+      "note": "逐字一致"
+    }
+  ],
+  "summary": {
+    "pass": 2,
+    "warn": 3,
+    "block": 0
+  },
+  "identity_handoff": {
+    "available": true,
+    "findings": [],
+    "checked": 10,
+    "notes": [],
+    "routes_file": "出视频/第1集/prompt/video_model_routes.json",
+    "clips_file": "出视频/第1集/prompt/01_clips.md"
+  },
+  "asset_handoff": {
+    "available": true,
+    "findings": [
+      {
+        "clip_id": "Clip_03",
+        "severity": "warn",
+        "code": "asset_handoff_dropped",
+        "note": "Clip_03：出图绑定的资产 LOC_WAIMEN(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。"
+      },
+      {
+        "clip_id": "Clip_04",
+        "severity": "warn",
+        "code": "asset_handoff_dropped",
+        "note": "Clip_04：出图绑定的资产 PROP_KEY(?)、PROP_TIE(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。"
+      },
+      {
+        "clip_id": "Clip_05",
+        "severity": "warn",
+        "code": "asset_handoff_dropped",
+        "note": "Clip_05：出图绑定的资产 LOC_HOUSHAN(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。"
+      },
+      {
+        "clip_id": "Clip_06",
+        "severity": "warn",
+        "code": "asset_handoff_dropped",
+        "note": "Clip_06：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。"
+      },
+      {
+        "clip_id": "Clip_07",
+        "severity": "warn",
+        "code": "asset_handoff_dropped",
+        "note": "Clip_07：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。"
+      }
+    ],
+    "checked": 7,
+    "notes": [],
+    "image_clips_file": "出图/第1集/prompt/01_分镜出图.md",
+    "video_clips_file": "出视频/第1集/prompt/01_clips.md"
+  },
+  "pixel_contract": {
+    "available": true,
+    "fresh": true,
+    "findings": [],
+    "note": ""
+  },
+  "verdict": "warn",
+  "rule": "视频侧契约可有意收紧/细化（归一化后包含出图侧原文即 pass）；只拦改写/丢失；光位锚+轴线视线漂移=block；命名角色镜逐镜 prompt 未锁身份=block；出图绑定资产在出视频丢失=block",
+  "generated_at": "2026-06-30T08:27:27Z",
+  "inputs_fingerprint": {
+    "files": {
+      "出图/共享/asset_registry.json": "298b0ed5d156b0ce7f0e516cfcf98099a310b27498ecb844f51d8cf2215b2d30",
+      "出图/第1集/prompt/00_总览.md": "f9dedfb50e728b4594c4d0ab927b56896cd8d9a10e724dcf308cab1a5b031698",
+      "出图/第1集/prompt/01_分镜出图.md": "c01a01bf03f471dd3813ead6a054bc21502f8894ed0f20e4389388c2cb1421d2",
+      "出视频/第1集/prompt/00_总览.md": "a1ba60d15fb5093d317da6ff6ddae394433caec16a8cb811b09a3d4d6e948a4e",
+      "出视频/第1集/prompt/01_clips.md": "62d1e4091365b29194b05ac6490aae14cbeb6de50abe652b121bf6892287938b",
+      "出视频/第1集/prompt/video_model_routes.json": "6c0a690f11e7b2acb9d186f6cbf94c8ca9d82899ba93e6be736f31498ca719a7"
+    },
+    "sha": "ec73b4e0178193ec7145bd5bad012bd96cb3bc0e894153bdaf9562585759e8c9"
+  }
+}

@@ -1,0 +1,24 @@
+continuity:
+  start_state: 中段接力帧：回忆蒙太奇跨时间，需要中锚锁主角少年常态。
+  action: 江剑收拾行囊，把贺平生送向秀竹峰。，贺平生看远处修士剪影掠过山间云雾，决定留下。
+  end_state: 贺平生站在秀竹峰杂役身份边缘，决定留下，离仙途更近一步。
+  constraints: 首帧=出图/第1集/图片/Clip03_外门遗孤_mid.png; 尾帧=出图/第1集/图片/Clip03_外门遗孤_end.png; asset_ids=LOC_WAIMEN_JIUYUAN, 旧行囊, 秀竹峰山门; character_ids=CHAR_HE_PINGSHENG, CHAR_JIANG_JIAN, CHAR_HE_SANJIE, CROWD_TAIXU_CULTIVATOR; 保持光位、轴线、服装、年龄、道具比例和 reference_group 身份锁。
+  negative: 不要换脸、不要换衣、不要新增清晰陌生脸、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要强仙侠光柱、不要现代物。
+导演意图：动作过程需要空间方向清楚；匀速移镜比自由漂浮更容易守轴线和人物站位。;
+起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;
+落幅：落在蒙太奇→WS，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;
+场面调度：贺平生站画左前院门边；CHAR_JIANG_JIAN/背影在中景偏右；CHAR_HE_SANJIE/回忆影只作旧影或旧物暗示；CROWD_TAIXU_CULTIVATOR/远景剪影在画面深处山间云雾里。;
+表演节拍：[0-4s] 江剑收拾行囊，把贺平生送向秀竹峰。（中景背影）；[4-11s] 贺平生看远处修士剪影掠过山间云雾，决定留下。（远景抬头）;
+三轨音频：旁白音频后期 compose 叠加；本视频生成不要生成旁白音频，只允许画内角色对白口型;
+运动精修约束：张力=克制；镜头运动只服务情绪，不追加未声明的旋转、漂浮、急甩。; 身体守卫=脸部轮廓和发髻不拉伸，肩颈/手部不穿模，道具不粘连;
+环境交互约束：旧院尘土、低饱和天光和山间薄雾轻动，非主角人物保持背影、剪影或虚化。;
+专项模板约束：template_id=ensemble_blocking；beats=旧院空景和旧行囊暗示前情；幼年贺平生短闪；江剑背影收拾行囊；十四岁贺平生望向远处修士剪影；blocking=贺平生站画左前院门边；CHAR_JIANG_JIAN/背影在中景偏右；CHAR_HE_SANJIE/回忆影只作旧影或旧物暗示；CROWD_TAIXU_CULTIVATOR/远景剪影在画面深处山间云雾里。；camera_rule=回忆蒙太奇低饱和柔冷光，慢推或固定切片；不做无动机环绕，不切成血腥事件。；continuity_must=贺平生年龄形态与 identity_registry 对齐；江剑只背影/侧背；贺三杰不清晰露脸；远景修士只小比例剪影；外门旧院不豪华化；negative=不要清晰父母死亡；不要血腥；不要豪华宗门正殿；不要现代校园；不要新增清晰陌生脸；screen_positions=LEFT_FOREGROUND=CHAR_HE_PINGSHENG/常态或幼年，唯一可清晰脸。；MID_RIGHT=CHAR_JIANG_JIAN/背影，不露清晰正脸。；BACKGROUND_MEMORY=CHAR_HE_SANJIE/回忆影，只用旧影/旧物，不画死亡细节。；FAR_BACKGROUND=CROWD_TAIXU_CULTIVATOR/远景剪影，小比例不露脸。；LOCATION_PLATE=LOC_WAIMEN_JIUYUAN 灰旧院门、低矮院墙、远处山门。；focus_hierarchy=CHAR_HE_PINGSHENG；LOC_WAIMEN_JIUYUAN；CHAR_JIANG_JIAN/背影；CROWD_TAIXU_CULTIVATOR/远景剪影；CHAR_HE_SANJIE/回忆影；crowd_simplification=除贺平生外，所有人都按背影、侧背、剪影、虚化或旧物暗示处理；不得新增清晰父母死亡画面。；keyframe_plan=start=中段接力帧：回忆蒙太奇跨时间，需要中锚锁主角少年常态。；end=贺平生站在秀竹峰杂役身份边缘，决定留下，离仙途更近一步。；motion_control=level=degrade_only；reason=回忆群像不直接生成复杂连续动作，拆成空景/背影/远景剪影短镜。。
+模型路由约束：读取 video_model_routes.json；本镜 primary_backend=seedance，fallback=seedance，mode=native_av，native_audio_policy=native_speech，identity_requirement=character_id_or_reference_group；只使用 Seedance via Dreamina 已刷新证据支持的能力；失败按 degrade_plan 或 Motion Control degrade_only 停审，不临场改后端;
+身份锁定约束：读取 identity_registry.json 和 identity_adapter_matrix.json；使用首/尾帧与 reference_group，保持 drift_forbidden=face_shape/hairstyle/outfit_palette/age/costume；角色=CHAR_HE_PINGSHENG, CHAR_JIANG_JIAN, CHAR_HE_SANJIE, CROWD_TAIXU_CULTIVATOR;
+近景身份锁定约束：CU/MCU/反打/说话镜优先脸部特写、表情参考、front/side/back reference_group；锁脸型、五官比例、发型发髻、标志配饰、服装配色；配角近景不稳则用 MCU/OTS/侧脸/手部/物件反应镜;
+原生音画约束：台词、口型和保留原片音轨由原生音画后端生成；声源归属=画内说话主体；compose_policy=保留原片音轨；生成后复核口型同步。
+人物运动：江剑收拾行囊，把贺平生送向秀竹峰。，贺平生看远处修士剪影掠过山间云雾，决定留下。;
+镜头运动：匀速移镜头，横移跟随主体，保持轴线方向不反转，落到蒙太奇→WS; 后端控制写法：自然语言运镜：匀速移镜头，横移跟随主体，保持轴线方向不反转，落到蒙太奇→WS；首帧锚定，不改变角色、光位、轴线和场景设定。;
+动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;
+衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，转场=match_cut;
+声音约束：台词、口型和保留原片音轨由原生音画后端生成；声源归属=画内说话主体；compose_policy=保留原片音轨；生成后复核口型同步。

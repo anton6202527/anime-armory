@@ -1,0 +1,146 @@
+[
+  {
+    "name": "original_setup_only",
+    "files": {
+      "_meta.json": {
+        "title": "原创金样例",
+        "kind": "create"
+      },
+      "_设置.md": "# 设置\n",
+      "_进度.md": "# 进度\n"
+    },
+    "expected_next_stage": "blueprint",
+    "expected_done": [
+      "setup"
+    ]
+  },
+  {
+    "name": "original_outline_ready_for_demo",
+    "files": {
+      "_meta.json": {
+        "title": "原创金样例",
+        "kind": "create"
+      },
+      "_设置.md": "# 设置\n",
+      "_进度.md": "# 进度\n",
+      "设定/蓝图.md": "# 蓝图\n",
+      "设定/角色卡.md": "# 角色\n",
+      "设定/世界观.md": "# 世界\n",
+      "设定/读者契约.md": "# 契约\n",
+      "设定/章纲.md": "# 章纲\n"
+    },
+    "expected_next_stage": "demo",
+    "expected_done": [
+      "setup",
+      "blueprint",
+      "setting",
+      "outline"
+    ]
+  },
+  {
+    "name": "import_project_needs_blueprint_after_source",
+    "files": {
+      "_meta.json": {
+        "title": "导入金样例",
+        "kind": "import"
+      },
+      "_设置.md": "# 设置\n",
+      "_进度.md": "# 进度\n",
+      "原作.txt": "第一章\n",
+      "小说/source_manifest.json": {
+        "rights_status": "user-declared"
+      }
+    },
+    "expected_next_stage": "blueprint",
+    "expected_done": [
+      "setup",
+      "source_import"
+    ]
+  },
+  {
+    "name": "release_manifest_file_exists_but_not_ready_blocks_screen_ready",
+    "files": {
+      "_meta.json": {
+        "title": "发布金样例",
+        "kind": "create"
+      },
+      "_设置.md": "# 设置\n",
+      "_进度.md": "# 进度\n",
+      "设定/蓝图.md": "# 蓝图\n",
+      "设定/角色卡.md": "# 角色\n",
+      "设定/世界观.md": "# 世界\n",
+      "设定/读者契约.md": "# 契约\n",
+      "设定/章纲.md": "# 章纲\n",
+      "章节/第01章.md": "# 第1章\n正文\n",
+      "写作任务/第01章.md": "# 任务\n",
+      "审稿/demo_gate.json": {
+        "status": "passed"
+      },
+      "审稿/state_ledger.json": {
+        "chapter_deltas": {}
+      },
+      "审稿/state_verify_第01章.json": {
+        "status": "ok"
+      },
+      "审稿/review_report.json": {
+        "findings": []
+      },
+      "评分/score_report.json": {
+        "verdict": "小改"
+      },
+      "修订/revision_plan.json": {
+        "tasks": []
+      },
+      "导出/发布金样例.txt": "正文\n",
+      "导出/release_manifest.json": {
+        "kind": "novel_release_manifest",
+        "release_ready": false
+      },
+      "导出/release_manifest.md": "# Release Manifest\n"
+    },
+    "expected_next_stage": "release_manifest",
+    "expected_done": [
+      "setup",
+      "blueprint",
+      "setting",
+      "outline",
+      "demo",
+      "draft",
+      "post_write",
+      "review",
+      "score",
+      "revision",
+      "export"
+    ]
+  },
+  {
+    "name": "draft_partial_chapters_stays_on_draft",
+    "files": {
+      "_meta.json": {
+        "title": "分章金样例",
+        "kind": "create",
+        "target_chapters": 3
+      },
+      "_设置.md": "# 设置\n",
+      "_进度.md": "# 进度\n",
+      "设定/蓝图.md": "# 蓝图\n",
+      "设定/角色卡.md": "# 角色\n",
+      "设定/世界观.md": "# 世界\n",
+      "设定/读者契约.md": "# 契约\n",
+      "设定/章纲.md": "# 章纲\n",
+      "审稿/demo_gate.json": {
+        "passed": true
+      },
+      "写作任务/第01章.md": "# 任务\n",
+      "章节/第01章.md": "# 第1章\n"
+    },
+    "expected_next_stage": "draft",
+    "expected_done": [
+      "setup",
+      "blueprint",
+      "setting",
+      "outline",
+      "demo"
+    ]
+  }
+]

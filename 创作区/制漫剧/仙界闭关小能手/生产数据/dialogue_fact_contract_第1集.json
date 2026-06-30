@@ -1,0 +1,1148 @@
+{
+  "clips": [
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 2,
+          "role": "张老大",
+          "source": "脚本/第1集/voiceover.txt:21",
+          "text": "你叫贺平生？多大了？"
+        },
+        {
+          "index": 3,
+          "role": "贺平生",
+          "source": "脚本/第1集/voiceover.txt:23",
+          "text": "回张老大的话，我今年十四岁。"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        2,
+        3
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 1,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:19",
+          "text": "黑暗的大殿里，十四岁的贺平生被人审问威胁，第一次听见别人叫他“费钱货”。"
+        },
+        {
+          "index": 2,
+          "role": "张老大",
+          "source": "脚本/第1集/voiceover.txt:21",
+          "text": "你叫贺平生？多大了？"
+        },
+        {
+          "index": 3,
+          "role": "贺平生",
+          "source": "脚本/第1集/voiceover.txt:23",
+          "text": "回张老大的话，我今年十四岁。"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 1,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:19",
+          "text": "黑暗的大殿里，十四岁的贺平生被人审问威胁，第一次听见别人叫他“费钱货”。"
+        }
+      ],
+      "allowed_narration_indices": [
+        1
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 1,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:19",
+          "text": "黑暗的大殿里，十四岁的贺平生被人审问威胁，第一次听见别人叫他“费钱货”。"
+        },
+        {
+          "index": 2,
+          "role": "张老大",
+          "source": "脚本/第1集/voiceover.txt:21",
+          "text": "你叫贺平生？多大了？"
+        },
+        {
+          "index": 3,
+          "role": "贺平生",
+          "source": "脚本/第1集/voiceover.txt:23",
+          "text": "回张老大的话，我今年十四岁。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        1,
+        2,
+        3
+      ],
+      "clip": "Clip_01",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "黑殿审问上",
+      "screen_text_lines": [
+        {
+          "duration": "0-2.5s",
+          "id": "ST01_IDENTITY_HOOK",
+          "placement": "upper_left_safe",
+          "purpose": "静音首屏锁定主角年龄与灵根，避免模型口误成错误年龄。",
+          "render_policy": "compose_overlay_only",
+          "source_field": "screen_text_lines",
+          "text": "十四岁 · 五行灵根"
+        }
+      ],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "EP01_CLIP01",
+      "split_segment": "A",
+      "storyboard_clip_id": "EP01_CLIP01"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 4,
+          "role": "张老大",
+          "source": "脚本/第1集/voiceover.txt:25",
+          "text": "什么灵根？"
+        },
+        {
+          "index": 5,
+          "role": "贺平生",
+          "source": "脚本/第1集/voiceover.txt:27",
+          "text": "五行灵根。"
+        },
+        {
+          "index": 6,
+          "role": "群杂役",
+          "source": "脚本/第1集/voiceover.txt:29",
+          "text": "哈哈哈哈！"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        4,
+        5,
+        6
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 4,
+          "role": "张老大",
+          "source": "脚本/第1集/voiceover.txt:25",
+          "text": "什么灵根？"
+        },
+        {
+          "index": 5,
+          "role": "贺平生",
+          "source": "脚本/第1集/voiceover.txt:27",
+          "text": "五行灵根。"
+        },
+        {
+          "index": 6,
+          "role": "群杂役",
+          "source": "脚本/第1集/voiceover.txt:29",
+          "text": "哈哈哈哈！"
+        }
+      ],
+      "allowed_narration": [],
+      "allowed_narration_indices": [],
+      "allowed_spoken_lines": [
+        {
+          "index": 4,
+          "role": "张老大",
+          "source": "脚本/第1集/voiceover.txt:25",
+          "text": "什么灵根？"
+        },
+        {
+          "index": 5,
+          "role": "贺平生",
+          "source": "脚本/第1集/voiceover.txt:27",
+          "text": "五行灵根。"
+        },
+        {
+          "index": 6,
+          "role": "群杂役",
+          "source": "脚本/第1集/voiceover.txt:29",
+          "text": "哈哈哈哈！"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        4,
+        5,
+        6
+      ],
+      "clip": "Clip_02",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "黑殿审问下",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "EP01_CLIP01",
+      "split_segment": "B",
+      "storyboard_clip_id": "EP01_CLIP02"
+    },
+    {
+      "allowed_character_dialogue": [],
+      "allowed_character_dialogue_indices": [],
+      "allowed_dialogue": [
+        {
+          "index": 7,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:31",
+          "text": "金木水火土俱全，听起来像天赋，可在太虚门，这种灵根要吞掉无数资源。"
+        },
+        {
+          "index": 8,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:33",
+          "text": "太虚门的那些长老，没有一个愿意收他；最后，贺平生连外门弟子的资格都没有。"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 7,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:31",
+          "text": "金木水火土俱全，听起来像天赋，可在太虚门，这种灵根要吞掉无数资源。"
+        },
+        {
+          "index": 8,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:33",
+          "text": "太虚门的那些长老，没有一个愿意收他；最后，贺平生连外门弟子的资格都没有。"
+        }
+      ],
+      "allowed_narration_indices": [
+        7,
+        8
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 7,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:31",
+          "text": "金木水火土俱全，听起来像天赋，可在太虚门，这种灵根要吞掉无数资源。"
+        },
+        {
+          "index": 8,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:33",
+          "text": "太虚门的那些长老，没有一个愿意收他；最后，贺平生连外门弟子的资格都没有。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        7,
+        8
+      ],
+      "clip": "Clip_03",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "挑水命令上",
+      "screen_text_lines": [
+        {
+          "duration": "1-4s",
+          "id": "ST02_ROOT_COST",
+          "placement": "lower_third",
+          "purpose": "承接灵根嘲笑到长老拒收的因果，压缩解释。",
+          "render_policy": "compose_overlay_only",
+          "source_field": "screen_text_lines",
+          "text": "五行俱全，却无人愿收"
+        }
+      ],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "EP01_CLIP02",
+      "split_segment": "A",
+      "storyboard_clip_id": "EP01_CLIP03"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 9,
+          "role": "张老大",
+          "source": "脚本/第1集/voiceover.txt:35",
+          "text": "从今日起，秀竹峰挑水的活儿，就归你了。天不亮开始，晚上才能停；否则老爷们责罚下来，谁也担不起。"
+        },
+        {
+          "index": 10,
+          "role": "贺平生",
+          "source": "脚本/第1集/voiceover.txt:37",
+          "text": "是。"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        9,
+        10
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 9,
+          "role": "张老大",
+          "source": "脚本/第1集/voiceover.txt:35",
+          "text": "从今日起，秀竹峰挑水的活儿，就归你了。天不亮开始，晚上才能停；否则老爷们责罚下来，谁也担不起。"
+        },
+        {
+          "index": 10,
+          "role": "贺平生",
+          "source": "脚本/第1集/voiceover.txt:37",
+          "text": "是。"
+        }
+      ],
+      "allowed_narration": [],
+      "allowed_narration_indices": [],
+      "allowed_spoken_lines": [
+        {
+          "index": 9,
+          "role": "张老大",
+          "source": "脚本/第1集/voiceover.txt:35",
+          "text": "从今日起，秀竹峰挑水的活儿，就归你了。天不亮开始，晚上才能停；否则老爷们责罚下来，谁也担不起。"
+        },
+        {
+          "index": 10,
+          "role": "贺平生",
+          "source": "脚本/第1集/voiceover.txt:37",
+          "text": "是。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        9,
+        10
+      ],
+      "clip": "Clip_04",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "挑水命令下",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "EP01_CLIP02",
+      "split_segment": "B",
+      "storyboard_clip_id": "EP01_CLIP04"
+    },
+    {
+      "allowed_character_dialogue": [],
+      "allowed_character_dialogue_indices": [],
+      "allowed_dialogue": [
+        {
+          "index": 11,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:39",
+          "text": "八岁那年，贺平生的父亲贺三杰外出寻机缘，被妖兽所杀；母亲也很快离世，家里留下的修真资源被人抢得干干净净。"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 11,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:39",
+          "text": "八岁那年，贺平生的父亲贺三杰外出寻机缘，被妖兽所杀；母亲也很快离世，家里留下的修真资源被人抢得干干净净。"
+        }
+      ],
+      "allowed_narration_indices": [
+        11
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 11,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:39",
+          "text": "八岁那年，贺平生的父亲贺三杰外出寻机缘，被妖兽所杀；母亲也很快离世，家里留下的修真资源被人抢得干干净净。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        11
+      ],
+      "clip": "Clip_05",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "外门遗孤上",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "EP01_CLIP03",
+      "split_segment": "A",
+      "storyboard_clip_id": "EP01_CLIP05"
+    },
+    {
+      "allowed_character_dialogue": [],
+      "allowed_character_dialogue_indices": [],
+      "allowed_dialogue": [
+        {
+          "index": 12,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:41",
+          "text": "这些年，父亲旧友江剑照拂着他。如今江剑大道无望、年岁渐晚，只能把他推荐到秀竹峰杂役班。"
+        },
+        {
+          "index": 13,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:43",
+          "text": "所谓杂役弟子，就是打杂干活的人。因此，贺平生从外门遗孤变成了秀竹峰最底层的杂役；可他还是选择留下，离仙人近一点，也许就能离仙途近一点。"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 12,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:41",
+          "text": "这些年，父亲旧友江剑照拂着他。如今江剑大道无望、年岁渐晚，只能把他推荐到秀竹峰杂役班。"
+        },
+        {
+          "index": 13,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:43",
+          "text": "所谓杂役弟子，就是打杂干活的人。因此，贺平生从外门遗孤变成了秀竹峰最底层的杂役；可他还是选择留下，离仙人近一点，也许就能离仙途近一点。"
+        }
+      ],
+      "allowed_narration_indices": [
+        12,
+        13
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 12,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:41",
+          "text": "这些年，父亲旧友江剑照拂着他。如今江剑大道无望、年岁渐晚，只能把他推荐到秀竹峰杂役班。"
+        },
+        {
+          "index": 13,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:43",
+          "text": "所谓杂役弟子，就是打杂干活的人。因此，贺平生从外门遗孤变成了秀竹峰最底层的杂役；可他还是选择留下，离仙人近一点，也许就能离仙途近一点。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        12,
+        13
+      ],
+      "clip": "Clip_06",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "外门遗孤下",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "EP01_CLIP03",
+      "split_segment": "B",
+      "storyboard_clip_id": "EP01_CLIP06"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 14,
+          "role": "韩老三",
+          "source": "脚本/第1集/voiceover.txt:45",
+          "text": "看见那两口水缸了吗？每天必须挑满。后山山泉，来回二里，一天至少二十趟。"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        14
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 14,
+          "role": "韩老三",
+          "source": "脚本/第1集/voiceover.txt:45",
+          "text": "看见那两口水缸了吗？每天必须挑满。后山山泉，来回二里，一天至少二十趟。"
+        },
+        {
+          "index": 15,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:47",
+          "text": "对一个十四岁的少年，这不是活儿，是压在肩上的山。"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 15,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:47",
+          "text": "对一个十四岁的少年，这不是活儿，是压在肩上的山。"
+        }
+      ],
+      "allowed_narration_indices": [
+        15
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 14,
+          "role": "韩老三",
+          "source": "脚本/第1集/voiceover.txt:45",
+          "text": "看见那两口水缸了吗？每天必须挑满。后山山泉，来回二里，一天至少二十趟。"
+        },
+        {
+          "index": 15,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:47",
+          "text": "对一个十四岁的少年，这不是活儿，是压在肩上的山。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        14,
+        15
+      ],
+      "clip": "Clip_07",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "两缸水和空屋上",
+      "screen_text_lines": [
+        {
+          "duration": "1-4s",
+          "id": "ST03_WATER_DUTY",
+          "placement": "lower_third",
+          "purpose": "锁定挑水任务强度，静音也能读懂压迫。",
+          "render_policy": "compose_overlay_only",
+          "source_field": "screen_text_lines",
+          "text": "一天至少二十趟"
+        }
+      ],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "EP01_CLIP04",
+      "split_segment": "A",
+      "storyboard_clip_id": "EP01_CLIP07"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 16,
+          "role": "韩老三",
+          "source": "脚本/第1集/voiceover.txt:49",
+          "text": "这是你的房间。前面是食堂，吃饭别晚，晚了就没了。"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        16
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 16,
+          "role": "韩老三",
+          "source": "脚本/第1集/voiceover.txt:49",
+          "text": "这是你的房间。前面是食堂，吃饭别晚，晚了就没了。"
+        },
+        {
+          "index": 17,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:51",
+          "text": "房间里空空荡荡。没有被子，没有生活用具，只有一只铁碗。"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 17,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:51",
+          "text": "房间里空空荡荡。没有被子，没有生活用具，只有一只铁碗。"
+        }
+      ],
+      "allowed_narration_indices": [
+        17
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 16,
+          "role": "韩老三",
+          "source": "脚本/第1集/voiceover.txt:49",
+          "text": "这是你的房间。前面是食堂，吃饭别晚，晚了就没了。"
+        },
+        {
+          "index": 17,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:51",
+          "text": "房间里空空荡荡。没有被子，没有生活用具，只有一只铁碗。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        16,
+        17
+      ],
+      "clip": "Clip_08",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "两缸水和空屋下",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "EP01_CLIP04",
+      "split_segment": "B",
+      "storyboard_clip_id": "EP01_CLIP08"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 18,
+          "role": "贺平生",
+          "source": "脚本/第1集/voiceover.txt:53",
+          "text": "明天再挑，万一出状况就来不及了。我必须先去认路。"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        18
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 18,
+          "role": "贺平生",
+          "source": "脚本/第1集/voiceover.txt:53",
+          "text": "明天再挑，万一出状况就来不及了。我必须先去认路。"
+        },
+        {
+          "index": 19,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:55",
+          "text": "他锁上门，推门出去，挑起两个水桶往后山走。第一趟，两桶水压得他喘不过气；第三趟，肩膀已经被扁担磨得发疼。"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 19,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:55",
+          "text": "他锁上门，推门出去，挑起两个水桶往后山走。第一趟，两桶水压得他喘不过气；第三趟，肩膀已经被扁担磨得发疼。"
+        }
+      ],
+      "allowed_narration_indices": [
+        19
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 18,
+          "role": "贺平生",
+          "source": "脚本/第1集/voiceover.txt:53",
+          "text": "明天再挑，万一出状况就来不及了。我必须先去认路。"
+        },
+        {
+          "index": 19,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:55",
+          "text": "他锁上门，推门出去，挑起两个水桶往后山走。第一趟，两桶水压得他喘不过气；第三趟，肩膀已经被扁担磨得发疼。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        18,
+        19
+      ],
+      "clip": "Clip_09",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "夜挑五趟上",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "EP01_CLIP05",
+      "split_segment": "A",
+      "storyboard_clip_id": "EP01_CLIP09"
+    },
+    {
+      "allowed_character_dialogue": [],
+      "allowed_character_dialogue_indices": [],
+      "allowed_dialogue": [
+        {
+          "index": 20,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:57",
+          "text": "夜越来越深，他还是决定再挑一次。第五次来到水边时，清澈的浅潭底下，忽然有一点微光。"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 20,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:57",
+          "text": "夜越来越深，他还是决定再挑一次。第五次来到水边时，清澈的浅潭底下，忽然有一点微光。"
+        }
+      ],
+      "allowed_narration_indices": [
+        20
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 20,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:57",
+          "text": "夜越来越深，他还是决定再挑一次。第五次来到水边时，清澈的浅潭底下，忽然有一点微光。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        20
+      ],
+      "clip": "Clip_10",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "夜挑五趟下",
+      "screen_text_lines": [
+        {
+          "duration": "0-3s",
+          "id": "ST04_FIFTH_TRIP",
+          "placement": "lower_third",
+          "purpose": "承接挑水蒙太奇与夜潭发现，避免节奏断裂。",
+          "render_policy": "compose_overlay_only",
+          "source_field": "screen_text_lines",
+          "text": "第五趟，夜已深"
+        }
+      ],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "EP01_CLIP05",
+      "split_segment": "B",
+      "storyboard_clip_id": "EP01_CLIP10"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 21,
+          "role": "贺平生",
+          "source": "脚本/第1集/voiceover.txt:59",
+          "text": "这是……"
+        },
+        {
+          "index": 23,
+          "role": "贺平生",
+          "source": "脚本/第1集/voiceover.txt:63",
+          "text": "我还以为是什么宝贝，原来是个破盆啊。"
+        },
+        {
+          "index": 24,
+          "role": "贺平生",
+          "source": "脚本/第1集/voiceover.txt:65",
+          "text": "不过也能用。拿回去洗脸洗衣服，正好。"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        21,
+        23,
+        24
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 21,
+          "role": "贺平生",
+          "source": "脚本/第1集/voiceover.txt:59",
+          "text": "这是……"
+        },
+        {
+          "index": 22,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:61",
+          "text": "水底躺着一个黑乎乎的破旧陶盆，正好反出一缕月光。"
+        },
+        {
+          "index": 23,
+          "role": "贺平生",
+          "source": "脚本/第1集/voiceover.txt:63",
+          "text": "我还以为是什么宝贝，原来是个破盆啊。"
+        },
+        {
+          "index": 24,
+          "role": "贺平生",
+          "source": "脚本/第1集/voiceover.txt:65",
+          "text": "不过也能用。拿回去洗脸洗衣服，正好。"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 22,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:61",
+          "text": "水底躺着一个黑乎乎的破旧陶盆，正好反出一缕月光。"
+        }
+      ],
+      "allowed_narration_indices": [
+        22
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 21,
+          "role": "贺平生",
+          "source": "脚本/第1集/voiceover.txt:59",
+          "text": "这是……"
+        },
+        {
+          "index": 22,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:61",
+          "text": "水底躺着一个黑乎乎的破旧陶盆，正好反出一缕月光。"
+        },
+        {
+          "index": 23,
+          "role": "贺平生",
+          "source": "脚本/第1集/voiceover.txt:63",
+          "text": "我还以为是什么宝贝，原来是个破盆啊。"
+        },
+        {
+          "index": 24,
+          "role": "贺平生",
+          "source": "脚本/第1集/voiceover.txt:65",
+          "text": "不过也能用。拿回去洗脸洗衣服，正好。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        21,
+        22,
+        23,
+        24
+      ],
+      "clip": "Clip_11",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "水底破盆",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "EP01_CLIP06",
+      "split_segment": "",
+      "storyboard_clip_id": "EP01_CLIP11"
+    },
+    {
+      "allowed_character_dialogue": [],
+      "allowed_character_dialogue_indices": [],
+      "allowed_dialogue": [
+        {
+          "index": 25,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:67",
+          "text": "他没有看见，陶盆离开水面的一瞬间，盆底那点微光，又亮了一下。"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 25,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:67",
+          "text": "他没有看见，陶盆离开水面的一瞬间，盆底那点微光，又亮了一下。"
+        }
+      ],
+      "allowed_narration_indices": [
+        25
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 25,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:67",
+          "text": "他没有看见，陶盆离开水面的一瞬间，盆底那点微光，又亮了一下。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        25
+      ],
+      "clip": "Clip_12",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "盆底微光",
+      "screen_text_lines": [
+        {
+          "duration": "0.5-3.5s",
+          "id": "ST05_TAIL_SECRET",
+          "placement": "bottom_safe",
+          "purpose": "集尾钩子，明确观众知道而主角不知道。",
+          "render_policy": "compose_overlay_only",
+          "source_field": "screen_text_lines",
+          "text": "他没有看见，盆底又亮了一下"
+        }
+      ],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "EP01_CLIP07",
+      "split_segment": "",
+      "storyboard_clip_id": "EP01_CLIP12"
+    }
+  ],
+  "episode": "第1集",
+  "facts": [
+    {
+      "allowed_values": [
+        "成年档，不具名",
+        "成年档，不具名"
+      ],
+      "canonical": "成年档，不具名",
+      "character": "太虚门远景修士剪影",
+      "forbidden_values": [],
+      "key": "age",
+      "policy": "numeric_fact_no_paraphrase",
+      "source": "设定库/characters/太虚门远景修士剪影.md"
+    },
+    {
+      "allowed_values": [
+        "少年偏矮",
+        "155-160cm",
+        "155 到 160cm",
+        "155到160cm"
+      ],
+      "canonical": "约165-180cm区间",
+      "character": "太虚门远景修士剪影",
+      "forbidden_values": [],
+      "key": "height",
+      "policy": "body_scale_no_drift",
+      "source": "设定库/characters/太虚门远景修士剪影.md"
+    },
+    {
+      "allowed_values": [
+        "六十岁以上或老年档",
+        "六十岁以上或老年档"
+      ],
+      "canonical": "六十岁以上或老年档",
+      "character": "太虚门长老/回忆背影",
+      "forbidden_values": [],
+      "key": "age",
+      "policy": "numeric_fact_no_paraphrase",
+      "source": "设定库/characters/太虚门长老_回忆背影.md"
+    },
+    {
+      "allowed_values": [
+        "少年偏矮",
+        "155-160cm",
+        "155 到 160cm",
+        "155到160cm"
+      ],
+      "canonical": "约170-178cm",
+      "character": "太虚门长老/回忆背影",
+      "forbidden_values": [],
+      "key": "height",
+      "policy": "body_scale_no_drift",
+      "source": "设定库/characters/太虚门长老_回忆背影.md"
+    },
+    {
+      "allowed_values": [
+        "三四十岁",
+        "三四十岁"
+      ],
+      "canonical": "三四十岁",
+      "character": "张老大",
+      "forbidden_values": [],
+      "key": "age",
+      "policy": "numeric_fact_no_paraphrase",
+      "source": "设定库/characters/张老大.md"
+    },
+    {
+      "allowed_values": [
+        "少年偏矮",
+        "155-160cm",
+        "155 到 160cm",
+        "155到160cm"
+      ],
+      "canonical": "约175-180cm；同框压过贺平生一头，肩宽体厚",
+      "character": "张老大",
+      "forbidden_values": [],
+      "key": "height",
+      "policy": "body_scale_no_drift",
+      "source": "设定库/characters/张老大.md"
+    },
+    {
+      "allowed_values": [
+        "四五十岁",
+        "四五十岁"
+      ],
+      "canonical": "四五十岁",
+      "character": "江剑",
+      "forbidden_values": [],
+      "key": "age",
+      "policy": "numeric_fact_no_paraphrase",
+      "source": "设定库/characters/江剑.md"
+    },
+    {
+      "allowed_values": [
+        "少年偏矮",
+        "155-160cm",
+        "155 到 160cm",
+        "155到160cm"
+      ],
+      "canonical": "约172-176cm；同框比十四岁贺平生高一截，但不压迫",
+      "character": "江剑",
+      "forbidden_values": [],
+      "key": "height",
+      "policy": "body_scale_no_drift",
+      "source": "设定库/characters/江剑.md"
+    },
+    {
+      "allowed_values": [
+        "十八到五十岁混合",
+        "十八到五十岁混合"
+      ],
+      "canonical": "十八到五十岁混合",
+      "character": "群杂役/虚化",
+      "forbidden_values": [],
+      "key": "age",
+      "policy": "numeric_fact_no_paraphrase",
+      "source": "设定库/characters/群杂役_虚化.md"
+    },
+    {
+      "allowed_values": [
+        "少年偏矮",
+        "155-160cm",
+        "155 到 160cm",
+        "155到160cm"
+      ],
+      "canonical": "约155-180cm区间，个体高矮错落",
+      "character": "群杂役/虚化",
+      "forbidden_values": [],
+      "key": "height",
+      "policy": "body_scale_no_drift",
+      "source": "设定库/characters/群杂役_虚化.md"
+    },
+    {
+      "allowed_values": [
+        "三四十岁",
+        "三四十岁"
+      ],
+      "canonical": "三四十岁",
+      "character": "贺三杰/回忆影",
+      "forbidden_values": [],
+      "key": "age",
+      "policy": "numeric_fact_no_paraphrase",
+      "source": "设定库/characters/贺三杰.md"
+    },
+    {
+      "allowed_values": [
+        "少年偏矮",
+        "155-160cm",
+        "155 到 160cm",
+        "155到160cm"
+      ],
+      "canonical": "约174-178cm；成人外门修士体量",
+      "character": "贺三杰/回忆影",
+      "forbidden_values": [],
+      "key": "height",
+      "policy": "body_scale_no_drift",
+      "source": "设定库/characters/贺三杰.md"
+    },
+    {
+      "allowed_values": [
+        "十四岁",
+        "14岁"
+      ],
+      "canonical": "十四岁",
+      "character": "贺平生",
+      "forbidden_values": [
+        "十三岁",
+        "十五岁",
+        "十六岁",
+        "13岁",
+        "15岁",
+        "16岁",
+        "13 岁",
+        "15 岁",
+        "16 岁"
+      ],
+      "key": "age",
+      "policy": "numeric_fact_no_paraphrase",
+      "source": "设定库/characters/贺平生.md"
+    },
+    {
+      "allowed_values": [
+        "少年偏矮",
+        "155-160cm",
+        "155 到 160cm",
+        "155到160cm"
+      ],
+      "canonical": "少年偏矮，约155-160cm；与张老大同框时明显矮一头，与韩老三同框时到其肩颈以下",
+      "character": "贺平生",
+      "forbidden_values": [
+        "170cm",
+        "175cm",
+        "180cm",
+        "一米七",
+        "一米八"
+      ],
+      "key": "height",
+      "policy": "body_scale_no_drift",
+      "source": "设定库/characters/贺平生.md"
+    },
+    {
+      "allowed_values": [
+        "五行灵根",
+        "金木水火土俱全"
+      ],
+      "canonical": "五行灵根",
+      "character": "贺平生",
+      "forbidden_values": [
+        "天灵根",
+        "单灵根",
+        "火灵根",
+        "变异灵根"
+      ],
+      "key": "spiritual_root",
+      "policy": "setting_fact_no_paraphrase",
+      "source": "设定库/characters/贺平生.md"
+    },
+    {
+      "allowed_values": [
+        "约八到十岁",
+        "约八到十岁"
+      ],
+      "canonical": "约八到十岁",
+      "character": "贺平生/幼年",
+      "forbidden_values": [],
+      "key": "age",
+      "policy": "numeric_fact_no_paraphrase",
+      "source": "设定库/characters/贺平生_幼年.md"
+    },
+    {
+      "allowed_values": [
+        "少年偏矮",
+        "155-160cm",
+        "155 到 160cm",
+        "155到160cm"
+      ],
+      "canonical": "约125-135cm；同十四岁常态相比明显更矮、更稚嫩",
+      "character": "贺平生/幼年",
+      "forbidden_values": [],
+      "key": "height",
+      "policy": "body_scale_no_drift",
+      "source": "设定库/characters/贺平生_幼年.md"
+    },
+    {
+      "allowed_values": [
+        "四十岁上下的中年杂役",
+        "四十岁上下的中年杂役"
+      ],
+      "canonical": "四十岁上下的中年杂役",
+      "character": "韩老三",
+      "forbidden_values": [],
+      "key": "age",
+      "policy": "numeric_fact_no_paraphrase",
+      "source": "设定库/characters/韩老三.md"
+    },
+    {
+      "allowed_values": [
+        "少年偏矮",
+        "155-160cm",
+        "155 到 160cm",
+        "155到160cm"
+      ],
+      "canonical": "约178-182cm；瘦高，站立时比贺平生高明显一截",
+      "character": "韩老三",
+      "forbidden_values": [],
+      "key": "height",
+      "policy": "body_scale_no_drift",
+      "source": "设定库/characters/韩老三.md"
+    },
+    {
+      "allowed_values": [
+        "一天至少二十趟",
+        "二十趟",
+        "20趟"
+      ],
+      "canonical": "一天至少二十趟",
+      "character": "剧情账本",
+      "forbidden_values": [
+        "十五趟",
+        "十六趟",
+        "15趟",
+        "16趟",
+        "十几趟"
+      ],
+      "key": "daily_water_trips",
+      "policy": "quantity_fact_no_paraphrase",
+      "source": "脚本/第1集/voiceover.txt"
+    },
+    {
+      "allowed_values": [
+        "第五次",
+        "第五趟",
+        "5次",
+        "5趟"
+      ],
+      "canonical": "第五次来到水边",
+      "character": "剧情账本",
+      "forbidden_values": [
+        "第四次",
+        "第六次",
+        "四趟",
+        "六趟",
+        "4次",
+        "6次",
+        "4趟",
+        "6趟"
+      ],
+      "key": "night_water_trip",
+      "policy": "quantity_fact_no_paraphrase",
+      "source": "脚本/第1集/voiceover.txt"
+    }
+  ],
+  "generated_at": "2026-06-30T07:54:14+00:00",
+  "kind": "n2d_dialogue_fact_contract",
+  "sources": {
+    "character_cards": "设定库/characters",
+    "storyboard": "脚本/第1集/storyboard.json",
+    "voiceover": "脚本/第1集/voiceover.txt"
+  },
+  "version": 1
+}

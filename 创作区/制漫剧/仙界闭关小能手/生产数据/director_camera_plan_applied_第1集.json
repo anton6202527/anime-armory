@@ -1,0 +1,48 @@
+{
+  "kind": "n2d_director_camera_plan_application",
+  "episode": "第1集",
+  "accepted": true,
+  "reviewer": "codex-video-preflight-regenerator",
+  "generated_at": "2026-06-30T04:52:37+00:00",
+  "plan_sha256": "a84f48fd16b18aed57de641cc698a52c163f4856dfd3b6f84b6a677df3842aab",
+  "scopes": [
+    {
+      "scope": "video_prompt",
+      "prompt_path": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+      "prompt_sha256": "d92acfd8d4c5f84aa7ba01f59a354bf1311e61a0c8a08a0be46ee8de7d69a5f6",
+      "applied_clip_ids": [
+        "Clip_01",
+        "Clip_02",
+        "Clip_03",
+        "Clip_04",
+        "Clip_05",
+        "Clip_06",
+        "Clip_07",
+        "Clip_08",
+        "Clip_09",
+        "Clip_10",
+        "Clip_11",
+        "Clip_12"
+      ]
+    },
+    {
+      "scope": "video_overview",
+      "prompt_path": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/00_总览.md",
+      "prompt_sha256": "34aa8e66051bf26312483223597c32609d65314ef1f8ce1625a0ba79e28a6856",
+      "applied_clip_ids": [
+        "Clip_01",
+        "Clip_02",
+        "Clip_03",
+        "Clip_04",
+        "Clip_05",
+        "Clip_06",
+        "Clip_07",
+        "Clip_08",
+        "Clip_09",
+        "Clip_10",
+        "Clip_11",
+        "Clip_12"
+      ]
+    }
+  ]
+}

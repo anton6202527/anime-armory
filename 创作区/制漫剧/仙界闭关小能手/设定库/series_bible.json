@@ -1,0 +1,386 @@
+{
+  "assets": [
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "LOC_ZAYI_DADIAN",
+      "name": "秀竹峰杂役大殿",
+      "type": "location"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "LOC_ZAYI_YUAN",
+      "name": "秀竹峰杂役院与空房",
+      "type": "location"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "LOC_HOUSHAN_QIANTAN",
+      "name": "后山山泉浅潭",
+      "type": "location"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "LOC_WAIMEN_JIUYUAN",
+      "name": "太虚门外门旧院/秀竹峰山门回忆场",
+      "type": "location"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_HEI_TAO_PEN",
+      "name": "黑陶破盆",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_SHUI_TONG",
+      "name": "水桶与扁担",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_TIE_WAN",
+      "name": "铁碗/钥匙铁锁",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_KEY_LOCK",
+      "name": "旧钥匙与生锈铁锁",
+      "type": "prop"
+    }
+  ],
+  "characters": [
+    {
+      "forms": [
+        {
+          "asset_key": "贺平生",
+          "form": "常态",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        },
+        {
+          "asset_key": "贺平生_幼年",
+          "form": "幼年",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "CHAR_HE_PINGSHENG",
+      "name": "贺平生",
+      "scope": "全篇/主角/长线"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "张老大",
+          "form": "常态",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "CHAR_ZHANG_LAODA",
+      "name": "张老大",
+      "scope": "第1集功能配角"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "韩老三",
+          "form": "常态",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "CHAR_HAN_LAOSAN",
+      "name": "韩老三",
+      "scope": "第1集功能配角"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "江剑_背影",
+          "form": "背影",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "CHAR_JIANG_JIAN",
+      "name": "江剑",
+      "scope": "第1集回忆背影"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "太虚门长老_回忆背影",
+          "form": "回忆背影",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "CHAR_TAIXUMEN_ZHANGLAO",
+      "name": "太虚门长老",
+      "scope": "第1集回忆背影"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "贺三杰_回忆影",
+          "form": "回忆影",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "CHAR_HE_SANJIE",
+      "name": "贺三杰",
+      "scope": "第1集回忆影/前情伏笔"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "群杂役_虚化",
+          "form": "虚化",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "CROWD_ZAYI",
+      "name": "群杂役",
+      "scope": "第1集背景群像"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "远景修士剪影",
+          "form": "远景剪影",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "CROWD_TAIXU_CULTIVATOR",
+      "name": "太虚门远景修士剪影",
+      "scope": "第1集回忆远景"
+    }
+  ],
+  "episodes": [
+    "第1集",
+    "第2集",
+    "第3集",
+    "第4集"
+  ],
+  "findings": [
+    {
+      "code": "episode_missing_storyboard",
+      "message": "部分集缺 storyboard.json：第2集、第3集、第4集",
+      "severity": "info"
+    },
+    {
+      "code": "series_layers_not_registered",
+      "message": "以下剧级层尚未登记：narrative_state_ledger、leitmotif_registry、ambient_map、ui_asset_registry、translation_glossary、series_packaging、location_spatial_memory、scene_floorplan",
+      "severity": "info"
+    }
+  ],
+  "generated_at": "2026-06-29T08:08:39+00:00",
+  "kind": "n2d_series_bible",
+  "narrative_graph": {
+    "episode_nodes": [
+      {
+        "assets": [
+          "LOC_ZAYI_DADIAN",
+          "LOC_WAIMEN_JIUYUAN",
+          "PROP_TIE_WAN",
+          "PROP_KEY_LOCK",
+          "LOC_ZAYI_YUAN",
+          "PROP_SHUI_TONG",
+          "LOC_HOUSHAN_QIANTAN",
+          "PROP_HEI_TAO_PEN"
+        ],
+        "characters": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_ZHANG_LAODA",
+          "CROWD_ZAYI",
+          "CHAR_TAIXUMEN_ZHANGLAO",
+          "CHAR_JIANG_JIAN",
+          "CHAR_HE_SANJIE",
+          "CROWD_TAIXU_CULTIVATOR",
+          "CHAR_HAN_LAOSAN"
+        ],
+        "clip_count": 7,
+        "clips": [
+          {
+            "assets": [
+              "LOC_ZAYI_DADIAN"
+            ],
+            "characters": [
+              "CHAR_HE_PINGSHENG",
+              "CHAR_ZHANG_LAODA",
+              "CROWD_ZAYI"
+            ],
+            "hook_signal": false,
+            "id": "EP01_CLIP01"
+          },
+          {
+            "assets": [
+              "LOC_ZAYI_DADIAN"
+            ],
+            "characters": [
+              "CHAR_HE_PINGSHENG",
+              "CHAR_ZHANG_LAODA",
+              "CHAR_TAIXUMEN_ZHANGLAO"
+            ],
+            "hook_signal": false,
+            "id": "EP01_CLIP02"
+          },
+          {
+            "assets": [
+              "LOC_WAIMEN_JIUYUAN"
+            ],
+            "characters": [
+              "CHAR_HE_PINGSHENG",
+              "CHAR_JIANG_JIAN",
+              "CHAR_HE_SANJIE",
+              "CROWD_TAIXU_CULTIVATOR"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP03"
+          },
+          {
+            "assets": [
+              "PROP_TIE_WAN",
+              "PROP_KEY_LOCK",
+              "LOC_ZAYI_YUAN"
+            ],
+            "characters": [
+              "CHAR_HE_PINGSHENG",
+              "CHAR_HAN_LAOSAN"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP04"
+          },
+          {
+            "assets": [
+              "PROP_SHUI_TONG",
+              "LOC_HOUSHAN_QIANTAN",
+              "LOC_ZAYI_YUAN",
+              "PROP_KEY_LOCK"
+            ],
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "hook_signal": false,
+            "id": "EP01_CLIP05"
+          },
+          {
+            "assets": [
+              "PROP_HEI_TAO_PEN",
+              "PROP_SHUI_TONG",
+              "LOC_HOUSHAN_QIANTAN"
+            ],
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "hook_signal": false,
+            "id": "EP01_CLIP06"
+          },
+          {
+            "assets": [
+              "PROP_HEI_TAO_PEN",
+              "LOC_HOUSHAN_QIANTAN"
+            ],
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "hook_signal": false,
+            "id": "EP01_CLIP07"
+          }
+        ],
+        "episode": "第1集",
+        "has_storyboard": true,
+        "hooks": [
+          "- 0-8s 黑暗大殿审问，张老大一句“五行灵根”引出嘲笑。⚡",
+          "- 100-110s 水底黑陶破盆反出月光，成为本集异常点。🪝",
+          "[镜头1·旁白·低沉悬疑·快] 黑暗的大殿里，十四岁的贺平生被人审问威胁，第一次听见别人叫他“费钱货”。⚡",
+          "[镜头7·旁白·压迫·中] 金木水火土俱全，听起来像天赋，可在太虚门，这种灵根要吞掉无数资源。⚡",
+          "[镜头9·张老大·笑意忽收·中] 从今日起，秀竹峰挑水的活儿，就归你了。天不亮开始，晚上才能停；否则老爷们责罚下来，谁也担不起。⚡",
+          "[镜头13·旁白·坚定·中] 所谓杂役弟子，就是打杂干活的人。因此，贺平生从外门遗孤变成了秀竹峰最底层的杂役；可他还是选择留下，离仙人近一点，也许就能离仙途近一点。⚡"
+        ],
+        "threads": [
+          "，看了两个巨大的水缸。 贺平生每天的任务，就是要把这水缸给填满了。 而要填满这两大水缸，却至少需",
+          "镜头 11 **画面视觉描述：** 身世快闪：父亲外出遇妖兽、母亲病榻、家中修真资源被人掠走，全",
+          "：镜头14-17。两口大水缸、二十趟任务、空房间。 **片段5（EP01_CLIP05）：时长",
+          "备注 - 第1集无正式斗法，不提前做法宝光柱。 - 黑陶破盆不能画成明显神器，必须先“废物感”强",
+          "ition\": \"观众要知道这个少年为什么被仙门嘲笑，以及他会不会得到机会。\", \"ons",
+          "\"promise\": \"贺平生为什么被叫费钱货\", \"payoff_due\":",
+          "\"promise\": \"贺平生为什么宁愿做杂役也要留下\", \"payoff_du",
+          "\"promise\": \"黑陶破盆为什么会在离水时微光一闪\", \"delayed_p"
+        ]
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第2集",
+        "has_storyboard": false,
+        "hooks": [],
+        "threads": [
+          "呀，我也知道你累啊！” “明天能完成任务吗？” 面对张老大的询问，贺平生心里是没底的。 他只能说",
+          "好的，但是就怕你累死也完不成这跳水的任务啊！” “你看，这是什么？” 张老大将他手里的那个布袋打",
+          "月都有十斤！” “啊？”贺平生道：“为什么？” 张老大道：“还能是为什么？挑水的活儿重呗。不过兄弟",
+          "道：“为什么？” 张老大道：“还能是为什么？挑水的活儿重呗。不过兄弟，每一个新来的都要经过这个阶段"
+        ]
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第3集",
+        "has_storyboard": false,
+        "hooks": [],
+        "threads": [
+          "道面前的东西乃是极品品质的灵米。 可为什么会这样？ 昨天张老大那狗日的给我的不是半盆白色之中带着些",
+          "“记住我的话，回头吃点灵米，今儿的任务必须完成，否则你晚上就别想着睡觉了！” “哎哎哎……“贺",
+          "想法一出现，就被贺平生给直接否了。 为什么？ 因为太香。 当初他帮江剑煮过灵米的，那个香味他至今都",
+          "的。 贺平生知道，若是这么快的完成了任务，肯定会引起张老大的怀疑，若张老大调查下去，搞不好这金米"
+        ]
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第4集",
+        "has_storyboard": false,
+        "hooks": [],
+        "threads": []
+      }
+    ],
+    "hook_count": 6,
+    "thread_count": 16
+  },
+  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+  "truth_sources": {
+    "ambient_map": null,
+    "global_style": "设定库/global_style.md",
+    "leitmotif_registry": null,
+    "location_spatial_memory": null,
+    "narrative_state_ledger": null,
+    "scene_floorplan": null,
+    "series_packaging": null,
+    "setup_payoff_ledger": "设定库/setup_payoff_ledger.json",
+    "story_integrity_ledger": "设定库/story_integrity_ledger.json",
+    "thread_scheduler": "设定库/thread_scheduler.json",
+    "translation_glossary": null,
+    "ui_asset_registry": null,
+    "角色圣经": "设定库/角色圣经.md"
+  },
+  "version": 1
+}

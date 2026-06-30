@@ -1,0 +1,273 @@
+{
+  "schema_version": 1,
+  "source_snapshot": {
+    "schema_version": 1,
+    "kind": "novel_text_snapshot",
+    "mode": "consistency_audit",
+    "files": [
+      {
+        "path": "章节/第01章.md",
+        "chapter": 1,
+        "sha256": "b6d9f99a1211635851dc9489d80d6ee41ee7a330e6d057201ae4b66bc26fcce8",
+        "bytes": 4499
+      },
+      {
+        "path": "章节/第02章.md",
+        "chapter": 2,
+        "sha256": "58762984f38901deb487aa0528c19e1cc71d7840ab6987daba43e13eafffa6a5",
+        "bytes": 3400
+      },
+      {
+        "path": "章节/第03章.md",
+        "chapter": 3,
+        "sha256": "08d68e4989a18e5a3a3e83a271a7f0726822c0de622851ff0f39fcb0c0e5112c",
+        "bytes": 3060
+      },
+      {
+        "path": "章节/第04章.md",
+        "chapter": 4,
+        "sha256": "23ba125b026af2cc0714fac99e13900c6ce96d1c40a58516259f329d757a2793",
+        "bytes": 3289
+      },
+      {
+        "path": "章节/第05章.md",
+        "chapter": 5,
+        "sha256": "b21b97b67af1ce83bed6e822bcd089cad6c851ea26527ab19e85d034736a8383",
+        "bytes": 3402
+      },
+      {
+        "path": "章节/第06章.md",
+        "chapter": 6,
+        "sha256": "af0d2ee0f816d97fc6560e20337f24d7229fa3fce4b5c3acd79efc0f0a9c3af7",
+        "bytes": 3511
+      },
+      {
+        "path": "章节/第07章.md",
+        "chapter": 7,
+        "sha256": "ee8cd1fd8f19ce9e1a3aaeaa770249958e09d8fc3eb965e3c0385ac0e6168af8",
+        "bytes": 3291
+      },
+      {
+        "path": "章节/第08章.md",
+        "chapter": 8,
+        "sha256": "5865180328333a54de795c9a63f2f639974a79b9ea90e361fcb7108e3e4950ed",
+        "bytes": 4655
+      },
+      {
+        "path": "章节/第09章.md",
+        "chapter": 9,
+        "sha256": "3401730c9bb726ced8da703649b2159810c6fa5de66efb4d80edb063151f0425",
+        "bytes": 4021
+      },
+      {
+        "path": "章节/第10章.md",
+        "chapter": 10,
+        "sha256": "11ac6743150b763f526391a86b13294ea289daa048ae03b1911859a8fcc6a3cd",
+        "bytes": 3566
+      },
+      {
+        "path": "章节/第11章.md",
+        "chapter": 11,
+        "sha256": "3fe9829e5545a6d8604db00753f1f76808df30c4083b09a49b65db37fc2ce712",
+        "bytes": 3988
+      },
+      {
+        "path": "章节/第12章.md",
+        "chapter": 12,
+        "sha256": "aa1f7c9a153b795c2f0b2aae30dd892431e3f9fd6411126e6896465bf324d44f",
+        "bytes": 4050
+      },
+      {
+        "path": "章节/第13章.md",
+        "chapter": 13,
+        "sha256": "2d45f74ab7ea5cf5a8b9459487cd85e152fbbd1250b3920a49cabf2343dedc9f",
+        "bytes": 4087
+      },
+      {
+        "path": "章节/第14章.md",
+        "chapter": 14,
+        "sha256": "dc0990551a8ded424ae6636f6251e929e2cf8bb39079f6be1dd20589b3df977f",
+        "bytes": 4104
+      },
+      {
+        "path": "章节/第15章.md",
+        "chapter": 15,
+        "sha256": "497d7bc1efb53e5e68145df8a0ea5da805bca4c2583c752c2c81e7dfc45063af",
+        "bytes": 4062
+      },
+      {
+        "path": "章节/第16章.md",
+        "chapter": 16,
+        "sha256": "ba7d6886b3ed0570c2086b0f87f7cdabaea034320c11e8428011a14094ba3c53",
+        "bytes": 3869
+      },
+      {
+        "path": "章节/第17章.md",
+        "chapter": 17,
+        "sha256": "c24b54f936001c37f3e718117e06a2a43ad9ae65ab03522c6eca4045bdaa7b22",
+        "bytes": 3581
+      },
+      {
+        "path": "章节/第18章.md",
+        "chapter": 18,
+        "sha256": "3731b2427fadc1b029c2243ff7fe5e3f413a2b1ba5412f2f4b9d270544acc275",
+        "bytes": 3697
+      },
+      {
+        "path": "章节/第19章.md",
+        "chapter": 19,
+        "sha256": "8b343957383904a86771e387c68f08740f12026c43eca097ca5ea46177abf387",
+        "bytes": 3120
+      },
+      {
+        "path": "章节/第20章.md",
+        "chapter": 20,
+        "sha256": "ef3faae578e4e820f0c4c2043be0cdd90736f2ab6e4aa57d40b54b9e6004f5bb",
+        "bytes": 3314
+      },
+      {
+        "path": "章节/第21章.md",
+        "chapter": 21,
+        "sha256": "e7680ea7205c6d11f55c5e1a7d664add7b1fc107fe3eb3b2e2cc21eb791e018e",
+        "bytes": 3702
+      },
+      {
+        "path": "章节/第22章.md",
+        "chapter": 22,
+        "sha256": "b82bf908b60be3c145101ee1ec875867203a860bbf66110717d451e5138a94a4",
+        "bytes": 3532
+      },
+      {
+        "path": "章节/第23章.md",
+        "chapter": 23,
+        "sha256": "2f1f331bf87b00faf88ce0171de7f75530c76deb554f4a5fdafe80a1bf522e0b",
+        "bytes": 3178
+      },
+      {
+        "path": "章节/第24章.md",
+        "chapter": 24,
+        "sha256": "d569920b79199e2da7fbdff7b6832366ae3151863d367ca15ec410dba8dc6716",
+        "bytes": 3042
+      }
+    ],
+    "aggregate_hash": "3f75a55f9d96dd56f51188fe0840b696c8e78e3cd666d87b5c804571569e1a9c"
+  },
+  "options": {
+    "pov": "",
+    "anchor": {
+      "path": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录/设定/风格指纹.json",
+      "sha256": null
+    },
+    "min": 800,
+    "max": 1800,
+    "tool_hashes": {
+      "consistency_audit": "0e92b5540f37aeb6efe780e403be3ddb194bedd2613f991b590a48020e425c23",
+      "mechanical_check": "32c641df00171e6a021d1551f8c47b2dcd28c1c1eeef635d34bcf077b96afaf0",
+      "reader_contract_sentry": "6153dedbc8d6ccf5813bc8b4d2d0939f9ca59811b972bf26522304d8a1bb881c",
+      "wiki_builder": "26f95a56f80d9fb4cc2be059f8ecce70cb5f4de96f305e21b8a7550d68f7e509",
+      "logic_sentry": "78a2869e94488c5b4be24bb4d34cd267a0b188332c066431cc2d471ab48924a9",
+      "extract_style": "261f9ccecb3d6f93181955574538186d8acc061fb96845fa1b212a6134950f5a",
+      "research_pack": "d67e2aab01d5c782af7a84c9c3b5a5cf790888d7c468492be81189a1c84cc771"
+    }
+  },
+  "result": {
+    "mechanical": {
+      "ran": true,
+      "returncode": 0,
+      "json": "创作区/写小说/金睛缉妖录/审稿/mechanical_findings.json",
+      "tail": ": \"格式\", \"msg\": \"缺 meta 注释头\", \"evidence\": \"\"}, {\"chapter\": 21, \"severity\": \"🟢\", \"dim\": \"格式\", \"msg\": \"缺 meta 注释头\", \"evidence\": \"\"}, {\"chapter\": 22, \"severity\": \"🟢\", \"dim\": \"格式\", \"msg\": \"缺 meta 注释头\", \"evidence\": \"\"}, {\"chapter\": 23, \"severity\": \"🟢\", \"dim\": \"格式\", \"msg\": \"缺 meta 注释头\", \"evidence\": \"\"}, {\"chapter\": 24, \"severity\": \"🟢\", \"dim\": \"格式\", \"msg\": \"缺 meta 注释头\", \"evidence\": \"\"}]\nFINDINGS_JSON -->\n"
+    },
+    "reader_contract": {
+      "ran": true,
+      "json": "创作区/写小说/金睛缉妖录/审稿/reader_contract_sentry_summary.json",
+      "alerts": 0,
+      "blocking": 0
+    },
+    "foreshadow": {
+      "ran": false,
+      "skipped": "无伏笔台账或台账为空（先用 foreshadow_ledger.py plant 埋点）"
+    },
+    "logic_sentry": {
+      "ran": false,
+      "skipped": "无 设定/角色卡.md，无法播种动态百科——先补角色卡"
+    },
+    "style_drift": {
+      "ran": false,
+      "skipped": "无锚点指纹 创作区/写小说/金睛缉妖录/设定/风格指纹.json——先跑 extract_style.py 提取锚点章指纹"
+    },
+    "power_system": {
+      "ran": false,
+      "skipped": "无 设定/power_system_registry.json——先 novel-create 立项脚手架或手建"
+    },
+    "research_fact_support": {
+      "ran": true,
+      "json": "创作区/写小说/金睛缉妖录/审稿/research_fact_support.json",
+      "alerts": 0,
+      "blocking": 0,
+      "detected_domains": {
+        "crime": [
+          "口供"
+        ],
+        "history": [
+          "历史",
+          "朝代",
+          "年号"
+        ],
+        "religion": [
+          "教会"
+        ],
+        "technology": [
+          "AI"
+        ],
+        "platform": [
+          "平台",
+          "备案",
+          "合规",
+          "短剧",
+          "漫剧",
+          "发行"
+        ]
+      }
+    },
+    "hook_endings": {
+      "ran": true,
+      "json": "创作区/写小说/金睛缉妖录/审稿/hook_findings.json",
+      "alerts": 24,
+      "blocking": 0
+    },
+    "voice_drift": {
+      "ran": false,
+      "skipped": "无 创作区/写小说/金睛缉妖录/设定/角色语感.json——先在 novel-craft 建立角色语感画像，本检测器跳过"
+    },
+    "tone_curve": {
+      "ran": false,
+      "skipped": "无 设定/tone_curve.json（情绪曲线未配置）——跳过情绪曲线对账"
+    },
+    "thread_resolution": {
+      "ran": true,
+      "json": "创作区/写小说/金睛缉妖录/审稿/thread_findings.json",
+      "alerts": 0,
+      "blocking": 0
+    },
+    "antagonist_scaling": {
+      "ran": false,
+      "skipped": "无 设定/power_system_registry.json——先 novel-create 立项脚手架或手建"
+    },
+    "timeline": {
+      "ran": true,
+      "json": "创作区/写小说/金睛缉妖录/审稿/timeline_findings.json",
+      "alerts": 4,
+      "blocking": 0
+    },
+    "minor_characters": {
+      "ran": true,
+      "json": "创作区/写小说/金睛缉妖录/审稿/minor_character_findings.json",
+      "alerts": 0,
+      "blocking": 0
+    },
+    "_cache": {
+      "hit": false,
+      "path": "创作区/写小说/金睛缉妖录/审稿/consistency_audit_cache.json"
+    }
+  }
+}

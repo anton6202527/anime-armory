@@ -1,0 +1,25 @@
+continuity:
+  start_state: 贺平生把黑陶破盆从水中拿起，认定只是能用的旧盆。
+  action: 破盆离水，盆底极弱微光一闪，硬断。
+  end_state: 黑陶破盆离水一瞬，盆底微光再亮，画面硬断。
+  constraints: 首帧=出图/第1集/图片/Clip07_盆底微光.png; 中段锚帧=出图/第1集/图片/Clip07_盆底微光_mid.png; asset_ids=LOC_HOUSHAN_QIANTAN, PROP_HEI_TAO_PEN; character_ids=CHAR_HE_PINGSHENG; 保持光位、轴线、服装、年龄、道具比例和 reference_group 身份锁。
+  negative: 不要换脸、不要换衣、不要新增清晰陌生脸、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要强仙侠光柱、不要现代物。
+导演意图：铺垫和压迫段用慢推聚焦信息，让观众逐步靠近秘密。;
+起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;
+落幅：落在MS/MCU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;
+场面调度：继承 storyboard 槽位;
+表演节拍：[0-4s] 破盆离水，盆底极弱微光一闪，硬断。（ECU定格）;
+三轨音频：旁白音频后期 compose 叠加；本视频生成不要生成旁白音频，只允许画内角色对白口型;
+三轨修补：屏幕文案仅后期overlay显示「他没有看见，盆底又亮了一下」，本视频生成不要画字、不要生成字幕卡、不要生成logo;
+运动精修约束：张力=克制；镜头运动只服务情绪，不追加未声明的旋转、漂浮、急甩。; 身体守卫=脸部轮廓和发髻不拉伸，肩颈/手部不穿模，道具不粘连;
+环境交互约束：冷蓝月光、水面细波、桶中水晃和黑陶盆湿痕只随可见动作触发。;
+专项模板约束：无。
+模型路由约束：读取 video_model_routes.json；本镜 primary_backend=seedance，fallback=seedance，mode=image2video，native_audio_policy=none，identity_requirement=reference_group；只使用 Seedance via Dreamina 已刷新证据支持的能力；失败按 degrade_plan 或 Motion Control degrade_only 停审，不临场改后端;
+身份锁定约束：读取 identity_registry.json 和 identity_adapter_matrix.json；使用首/尾帧与 reference_group，保持 drift_forbidden=face_shape/hairstyle/outfit_palette/age/costume；角色=CHAR_HE_PINGSHENG;
+近景身份锁定约束：CU/MCU/反打/说话镜优先脸部特写、表情参考、front/side/back reference_group；锁脸型、五官比例、发型发髻、标志配饰、服装配色；配角近景不稳则用 MCU/OTS/侧脸/手部/物件反应镜;
+原生音画约束：无对白、无旁白、不要生成原生人声；如产生原生音轨，compose 默认丢弃。
+人物运动：破盆离水，盆底极弱微光一闪，硬断。;
+镜头运动：缓慢推镜头，从场面关系慢推到人物/物证，落到MS/MCU; 后端控制写法：自然语言运镜：缓慢推镜头，从场面关系慢推到人物/物证，落到MS/MCU；首帧锚定，不改变角色、光位、轴线和场景设定。;
+动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;
+衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，转场=hard_cut;
+声音约束：无对白、无旁白、不要生成原生人声；如产生原生音轨，compose 默认丢弃。

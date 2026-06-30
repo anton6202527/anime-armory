@@ -1,0 +1,23 @@
+import os
+from typing import Any, Dict, List, Set
+import json
+import sys
+sys.path.append('skills/novel/_lib')
+from model_family import model_family
+from model_usage import get_generator_models
+
+def get_judge_models(root: str) -> Set[str]:
+    models: Set[str] = set()
+    score_report = os.path.join(root, '评分', 'score_report.json')
+    if os.path.isfile(score_report):
+        try:
+            with open(score_report, encoding='utf-8') as f:
+                report = json.load(f)
+            # How is the judge model stored in score report?
+            if isinstance(report, dict) and report.get('judge_model'):
+                 models.add(report.get('judge_model'))
+        except Exception:
+            pass
+    return models
+    
+print('Done')

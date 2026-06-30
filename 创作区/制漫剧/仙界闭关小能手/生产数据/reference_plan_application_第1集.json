@@ -1,0 +1,97 @@
+{
+  "kind": "n2d_reference_plan_application",
+  "version": 1,
+  "root": "创作区/制漫剧/仙界闭关小能手",
+  "episode": "第1集",
+  "created_at": "2026-06-29T16:32:39.636703+08:00",
+  "accepted": true,
+  "reviewer": "codex",
+  "plan_path": "生产数据/reference_plan_第1集.json",
+  "plan_sha256": "aaf17f0e8d1440a3e36045f2fdbd1caf1370c325a283ef52dddb180390b8ef0b",
+  "prompt_path": "出图/第1集/prompt/01_分镜出图.md",
+  "prompt_sha256": "c01a01bf03f471dd3813ead6a054bc21502f8894ed0f20e4389388c2cb1421d2",
+  "shared_prompt_paths": [
+    "出图/共享/prompt/角色定妆.md",
+    "出图/共享/prompt/场景定妆.md",
+    "出图/共享/prompt/道具定妆.md"
+  ],
+  "shared_prompt_sha256": {
+    "出图/共享/prompt/角色定妆.md": "d9deec5c3037e0a08cc5fd55255eca30e1fdc4f937d13b3ffec4ffefe49d8166",
+    "出图/共享/prompt/场景定妆.md": "accfdf004d8566a32a2732fbb14e488a777010e0c974bc7b9587d7b60394752a",
+    "出图/共享/prompt/道具定妆.md": "2fd488d8565f6593cc07aca08f16ea7c1cc0f0e6ca12d738681c3d8029211f4e"
+  },
+  "applied_action_count": 19,
+  "applied_action_source": "reference_plan.summary.action_required",
+  "applied_evidence": [
+    {
+      "clip_id": "EP01_CLIP01",
+      "applied": [
+        "regional_construct_required + split_composite_required written into prompt",
+        "LEFT/RIGHT/BACKGROUND identity slots locked",
+        "observer camera / no direct eye contact added",
+        "physical lens parameters added",
+        "shared reference gaps routed to shared makeup stage before shot generation"
+      ]
+    },
+    {
+      "clip_id": "EP01_CLIP02",
+      "applied": [
+        "shot_reverse_shot_or_split_composite_required retained",
+        "dual-subject references and hand-on-shoulder insert called out",
+        "elder remains back-view low-cost reference tier",
+        "drop/self-check gate added"
+      ]
+    },
+    {
+      "clip_id": "EP01_CLIP03",
+      "applied": [
+        "memory montage low-cost roles constrained to back/silhouette tiers",
+        "only He Pingsheng may have a clear face",
+        "death/truth reveal blocked by prompt and self-check gate"
+      ]
+    },
+    {
+      "clip_id": "EP01_CLIP04",
+      "applied": [
+        "two-subject regional construction and relative scale written",
+        "two water jars locked",
+        "PROP_TIE_WAN and PROP_KEY_LOCK must_not_have inheritance added to positive/negative/self-check fields"
+      ]
+    },
+    {
+      "clip_id": "EP01_CLIP05",
+      "applied": [
+        "single-subject He Pingsheng reference route written",
+        "PROP_SHUI_TONG structure and must_not_have inheritance added",
+        "observer camera and no heroic pose constraints retained"
+      ]
+    },
+    {
+      "clip_id": "EP01_CLIP06",
+      "applied": [
+        "PROP_HEI_TAO_PEN first-appearance reference route written",
+        "PROP_HEI_TAO_PEN and PROP_SHUI_TONG must_not_have inheritance added",
+        "water-bottom sand/stone and weak-glimmer constraints reinforced"
+      ]
+    },
+    {
+      "clip_id": "EP01_CLIP07",
+      "applied": [
+        "PROP_HEI_TAO_PEN ECU reference route written",
+        "macro lens parameters added",
+        "no clear face / no eye contact added",
+        "weak glimmer and hard-cut tail constraints reinforced"
+      ]
+    }
+  ],
+  "hard_rules": [
+    "正式分镜出图前必须先完成共享定妆、脸部特写/三视图、场景和道具参考图",
+    "Codex/GPT Image 2 无持久主体 ID，所有清晰人物镜头必须喂真实参考图并做 full image_qc",
+    "多人同框按区域构图/分层合成，不把多角色参考平均成一张脸",
+    "所有可见人物必须先具备年级或年龄段、身高段、体态、肤色、脸型、发型、服装、相对身量和漂移禁令"
+  ],
+  "notes": "本文件只确认 reference_plan 已落实到 prompt 结构；仍需共享参考图 ready、锚点 pin、face_anchor_refs/expression refs 和 image_preflight 通过后，才能正式跑 Clip 成图。",
+  "updated_at": "2026-06-30T10:57:52+08:00",
+  "storyboard_path": "脚本/第1集/storyboard.json",
+  "storyboard_sha256": "7a072ee4cee397d96b2af246db445e13f98da86dea2a17f843208e34f18175ae"
+}

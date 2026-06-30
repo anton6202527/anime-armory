@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "kind": "novel_screen_adaptation_readiness",
+  "generated_at": "2026-06-30",
+  "project_root": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录",
+  "title": "金睛缉妖录",
+  "target_is_short_drama": true,
+  "verdict": "review",
+  "counts": {
+    "block": 0,
+    "warn": 1,
+    "pass": 10
+  },
+  "candidate_text_files": [
+    "导出/金睛缉妖录.docx",
+    "导出/金睛缉妖录.txt",
+    "章节/第01章.md",
+    "章节/第02章.md",
+    "章节/第03章.md",
+    "章节/第04章.md",
+    "章节/第05章.md",
+    "章节/第06章.md",
+    "章节/第07章.md",
+    "章节/第08章.md",
+    "章节/第09章.md",
+    "章节/第10章.md",
+    "章节/第11章.md",
+    "章节/第12章.md",
+    "章节/第13章.md",
+    "章节/第14章.md",
+    "章节/第15章.md",
+    "章节/第16章.md",
+    "章节/第17章.md",
+    "章节/第18章.md",
+    "章节/第19章.md",
+    "章节/第20章.md",
+    "章节/第21章.md",
+    "章节/第22章.md",
+    "章节/第23章.md",
+    "章节/第24章.md"
+  ],
+  "checks": [
+    {
+      "id": "TEXT-FILES",
+      "status": "pass",
+      "message": "发现可选成品文本/章节文件 26 个",
+      "path": "导出/金睛缉妖录.docx, 导出/金睛缉妖录.txt, 章节/第01章.md, 章节/第02章.md, 章节/第03章.md, 章节/第04章.md",
+      "next_action": ""
+    },
+    {
+      "id": "RIGHTS",
+      "status": "pass",
+      "message": "权利状态已声明：original",
+      "path": "",
+      "next_action": ""
+    },
+    {
+      "id": "SETTING-CHARACTERS",
+      "status": "pass",
+      "message": "已找到 设定/角色卡.md",
+      "path": "设定/角色卡.md",
+      "next_action": ""
+    },
+    {
+      "id": "SETTING-WORLD",
+      "status": "pass",
+      "message": "已找到 设定/世界观.md",
+      "path": "设定/世界观.md",
+      "next_action": ""
+    },
+    {
+      "id": "SETTING-OUTLINE",
+      "status": "pass",
+      "message": "已找到 设定/章纲.md",
+      "path": "设定/章纲.md",
+      "next_action": ""
+    },
+    {
+      "id": "SETTING-READER_CONTRACT",
+      "status": "pass",
+      "message": "已找到 设定/读者契约.md",
+      "path": "设定/读者契约.md",
+      "next_action": ""
+    },
+    {
+      "id": "AI-USAGE",
+      "status": "pass",
+      "message": "AI 使用披露已记录",
+      "path": "合规/ai_usage.json",
+      "next_action": ""
+    },
+    {
+      "id": "REVIEW",
+      "status": "pass",
+      "message": "review 无阻断项",
+      "path": "审稿/review_report.json",
+      "next_action": ""
+    },
+    {
+      "id": "SCORE",
+      "status": "pass",
+      "message": "评分结论可用：小改",
+      "path": "评分/score_report.json",
+      "next_action": ""
+    },
+    {
+      "id": "MARKET-BASELINE",
+      "status": "pass",
+      "message": "已找到市场基准 评分/market_baseline_2026-06-30.json",
+      "path": "",
+      "next_action": ""
+    },
+    {
+      "id": "VIDEO-BRIEF",
+      "status": "warn",
+      "message": "缺少高光视频 brief",
+      "path": "",
+      "next_action": "可跑 novel-promote 生成高光片段/短视频 brief，用来选择首个 pilot。"
+    }
+  ],
+  "next_actions": [
+    {
+      "id": "VIDEO-BRIEF",
+      "status": "warn",
+      "message": "缺少高光视频 brief",
+      "path": "",
+      "next_action": "可跑 novel-promote 生成高光片段/短视频 brief，用来选择首个 pilot。"
+    }
+  ],
+  "pilot_advice": [
+    "先选 1 集或 3-5 个高风险镜头做 pilot，不要整书直接批量转制。",
+    "视觉生产阶段应重新建立角色、场景、道具、镜头和合规产物的独立台账。",
+    "参考图、首帧、首尾帧和成片 provenance 应在视觉生产线中重新落档。"
+  ]
+}

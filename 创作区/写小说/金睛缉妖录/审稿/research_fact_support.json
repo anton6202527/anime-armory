@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "kind": "novel_research_fact_support",
+  "generated_at": "2026-06-30",
+  "project_root": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录",
+  "chapter": null,
+  "ran": true,
+  "detected_domains": {
+    "crime": [
+      "口供"
+    ],
+    "history": [
+      "历史",
+      "朝代",
+      "年号"
+    ],
+    "religion": [
+      "教会"
+    ],
+    "technology": [
+      "AI"
+    ],
+    "platform": [
+      "平台",
+      "备案",
+      "合规",
+      "短剧",
+      "漫剧",
+      "发行"
+    ]
+  },
+  "required_domains": [],
+  "commercial_signals": [
+    "改编",
+    "漫剧",
+    "短剧",
+    "红果",
+    "番茄",
+    "抖音"
+  ],
+  "packs_checked": [
+    {
+      "topic": "架空探案与口供证据边界",
+      "domain": "crime",
+      "status": "ready",
+      "pack_path": "资料/专业资料包_架空探案与口供证据边界.md"
+    },
+    {
+      "topic": "架空历史与公版神魔边界",
+      "domain": "history",
+      "status": "ready",
+      "pack_path": "资料/专业资料包_架空历史与公版神魔边界.md"
+    },
+    {
+      "topic": "宗教神魔幻想使用边界",
+      "domain": "religion",
+      "status": "ready",
+      "pack_path": "资料/专业资料包_宗教神魔幻想使用边界.md"
+    },
+    {
+      "topic": "AI内容标识与漫剧制作边界",
+      "domain": "technology",
+      "status": "ready",
+      "pack_path": "资料/专业资料包_AI内容标识与漫剧制作边界.md"
+    },
+    {
+      "topic": "红果抖音短剧漫剧平台与市场基准",
+      "domain": "platform",
+      "status": "ready",
+      "pack_path": "资料/专业资料包_红果抖音短剧漫剧平台与市场基准.md"
+    }
+  ],
+  "total": 0,
+  "blocking": 0,
+  "alerts": []
+}

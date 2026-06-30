@@ -1,0 +1,76 @@
+{
+  "audience_question_ledger": {
+    "ending_hook": false,
+    "findings": [],
+    "payoff_contexts": [
+      "13·旁白·坚定·中] 所谓杂役弟子，就是打杂干活的人。因此，贺平生从外门遗孤变成了秀竹峰最底层的杂役；可他还是选择",
+      "：** 旁白（坚定）：「所谓杂役弟子，就是打杂干活的人。因此，贺平生从外门遗孤变成了秀竹峰最底层的杂役；可他还是选择",
+      "陶破盆特写，锁道具形态。 **分镜**：镜头21-24。发现旧陶盆、捞出、误判为普通破盆。 **片段7（EP01_",
+      "- 贺平生在本集必须保持十四岁、瘦削、粗布杂役服，不得升级成成年修士造型。 { \"episode\": 1,",
+      ": \"镜头语言接近真人短剧，兼顾国漫画面张力；关键羞辱和发现镜头使用清晰轮廓线和剪影。\", \"光色策略\":",
+      "_HE_PINGSHENG\": [\"决定提前认路\", \"发现潭底微光但不知道是什么\"] },"
+    ],
+    "questions": [
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "：「是。」 ## 镜头 11 **画面视觉描述：** 身世快闪：父亲外出遇妖兽、母亲病榻、家中修真资源被人掠走，全",
+        "question_id": "Q01",
+        "signal": "身世",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "贫瘠。 **分镜**：镜头14-17。两口大水缸、二十趟任务、空房间。 **片段5（EP01_CLIP05）：时长",
+        "question_id": "Q02",
+        "signal": "任务",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "ent_proposition\": \"观众要知道这个少年为什么被仙门嘲笑，以及他会不会得到机会。\", \"ons",
+        "question_id": "Q03",
+        "signal": "为什么",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "镜头1\", \"promise\": \"贺平生为什么被叫费钱货\", \"payoff_due\":",
+        "question_id": "Q04",
+        "signal": "为什么",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "镜头13\", \"promise\": \"贺平生为什么宁愿做杂役也要留下\", \"payoff_du",
+        "question_id": "Q05",
+        "signal": "为什么",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "集尾\", \"promise\": \"黑陶破盆为什么会在离水时微光一闪\", \"delayed_p",
+        "question_id": "Q06",
+        "signal": "为什么",
+        "status": "paid_or_progressed"
+      }
+    ]
+  },
+  "boundary_continuation": {
+    "available": false,
+    "reason": "第1集无上集边界",
+    "status": "n/a"
+  },
+  "episode": "第1集",
+  "kind": "n2d_story_quality_pack",
+  "notes": [
+    "文本期 report-only；不把时长升成硬门，只加强剧情可看性和下游 prompt 继承。"
+  ],
+  "pack_hash": "9bd126f52c6e1d5d",
+  "performance_prompt_cues": [],
+  "summary": {
+    "boundary_status": "n/a",
+    "open_questions": 0,
+    "performance_cue_clips": 0
+  },
+  "version": 1
+}

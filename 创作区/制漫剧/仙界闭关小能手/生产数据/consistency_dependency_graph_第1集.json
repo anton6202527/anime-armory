@@ -1,0 +1,611 @@
+{
+  "edges": [
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:CHAR_ZHANG_LAODA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:LOC_ZAYI_DADIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:CHAR_ZHANG_LAODA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:LOC_ZAYI_DADIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:CHAR_HE_SANJIE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:LOC_WAIMEN_JIUYUAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:PROP_TIE_WAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:PROP_KEY_LOCK",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:LOC_ZAYI_YUAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:PROP_SHUI_TONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:LOC_HOUSHAN_QIANTAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:LOC_ZAYI_YUAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:PROP_KEY_LOCK",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:PROP_HEI_TAO_PEN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:PROP_SHUI_TONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:LOC_HOUSHAN_QIANTAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:PROP_HEI_TAO_PEN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:LOC_HOUSHAN_QIANTAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "clip:Clip_01",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip01_黑殿审问.png"
+    },
+    {
+      "from": "clip:Clip_01",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip01_黑殿审问_end.png"
+    },
+    {
+      "from": "clip:Clip_01",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip01_黑殿审问_mid.png"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip02_挑水命令.png"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip02_挑水命令_end.png"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip02_挑水命令_mid.png"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip03_外门遗孤.png"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip03_外门遗孤_end.png"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip03_外门遗孤_mid.png"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip04_两缸水和空屋.png"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip04_两缸水和空屋_end.png"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip04_两缸水和空屋_mid.png"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip05_夜挑五趟.png"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip05_夜挑五趟_end.png"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip05_夜挑五趟_mid.png"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip06_水底破盆.png"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip06_水底破盆_end.png"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip06_水底破盆_mid.png"
+    },
+    {
+      "from": "clip:Clip_07",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip07_盆底微光.png"
+    },
+    {
+      "from": "clip:Clip_07",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip07_盆底微光_mid.png"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "has_evidence",
+      "to": "evidence:consistency_ledger_第1集.json"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "has_evidence",
+      "to": "evidence:audio_space_consistency_第1集.json"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "has_evidence",
+      "to": "evidence:motion_grammar_consistency_第1集.json"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "has_evidence",
+      "to": "evidence:expression_state_consistency_第1集.json"
+    }
+  ],
+  "episode": "第1集",
+  "kind": "n2d_consistency_dependency_graph",
+  "nodes": [
+    {
+      "id": "clip:Clip_01",
+      "kind": "clip",
+      "label": "Clip_01",
+      "loc": "LOC_ZAYI_DADIAN",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "dialogue_shot_reverse"
+    },
+    {
+      "id": "clip:Clip_02",
+      "kind": "clip",
+      "label": "Clip_02",
+      "loc": "LOC_ZAYI_DADIAN",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "dialogue_shot_reverse"
+    },
+    {
+      "id": "clip:Clip_03",
+      "kind": "clip",
+      "label": "Clip_03",
+      "loc": "LOC_WAIMEN_JIUYUAN",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "ensemble_blocking"
+    },
+    {
+      "id": "clip:Clip_04",
+      "kind": "clip",
+      "label": "Clip_04",
+      "loc": "LOC_ZAYI_YUAN",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "multi_character_same_frame"
+    },
+    {
+      "id": "clip:Clip_05",
+      "kind": "clip",
+      "label": "Clip_05",
+      "loc": "LOC_HOUSHAN_QIANTAN",
+      "path": "脚本/第1集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_06",
+      "kind": "clip",
+      "label": "Clip_06",
+      "loc": "LOC_HOUSHAN_QIANTAN",
+      "path": "脚本/第1集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_07",
+      "kind": "clip",
+      "label": "Clip_07",
+      "loc": "LOC_HOUSHAN_QIANTAN",
+      "path": "脚本/第1集/storyboard.json"
+    },
+    {
+      "id": "entity:CHAR_HAN_LAOSAN",
+      "kind": "character",
+      "label": "韩老三",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_HE_PINGSHENG",
+      "kind": "character",
+      "label": "贺平生",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_HE_SANJIE",
+      "kind": "character",
+      "label": "贺三杰",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_JIANG_JIAN",
+      "kind": "character",
+      "label": "江剑",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "kind": "character",
+      "label": "太虚门长老",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_ZHANG_LAODA",
+      "kind": "character",
+      "label": "张老大",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CROWD_TAIXU_CULTIVATOR",
+      "kind": "character",
+      "label": "太虚门远景修士剪影",
+      "source": "identity_registry"
+    },
+    {
+      "id": "entity:CROWD_ZAYI",
+      "kind": "character",
+      "label": "群杂役",
+      "source": "identity_registry"
+    },
+    {
+      "id": "entity:LOC_HOUSHAN_QIANTAN",
+      "kind": "location",
+      "label": "后山山泉浅潭",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:LOC_WAIMEN_JIUYUAN",
+      "kind": "location",
+      "label": "太虚门外门旧院/秀竹峰山门回忆场",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:LOC_ZAYI_DADIAN",
+      "kind": "location",
+      "label": "秀竹峰杂役大殿",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:LOC_ZAYI_YUAN",
+      "kind": "location",
+      "label": "秀竹峰杂役院与空房",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_HEI_TAO_PEN",
+      "kind": "prop",
+      "label": "黑陶破盆",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_KEY_LOCK",
+      "kind": "prop",
+      "label": "旧钥匙与生锈铁锁",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_SHUI_TONG",
+      "kind": "prop",
+      "label": "水桶与扁担",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_TIE_WAN",
+      "kind": "prop",
+      "label": "铁碗/钥匙铁锁",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "episode:第1集",
+      "kind": "episode",
+      "label": "第1集",
+      "path": "脚本/第1集/storyboard.json"
+    },
+    {
+      "id": "evidence:audio_space_consistency_第1集.json",
+      "kind": "evidence",
+      "label": "audio_space_consistency_第1集.json",
+      "path": "生产数据/audio_space_consistency_第1集.json"
+    },
+    {
+      "id": "evidence:consistency_ledger_第1集.json",
+      "kind": "evidence",
+      "label": "consistency_ledger_第1集.json",
+      "path": "生产数据/consistency_ledger_第1集.json"
+    },
+    {
+      "id": "evidence:expression_state_consistency_第1集.json",
+      "kind": "evidence",
+      "label": "expression_state_consistency_第1集.json",
+      "path": "生产数据/expression_state_consistency_第1集.json"
+    },
+    {
+      "id": "evidence:motion_grammar_consistency_第1集.json",
+      "kind": "evidence",
+      "label": "motion_grammar_consistency_第1集.json",
+      "path": "生产数据/motion_grammar_consistency_第1集.json"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip01_黑殿审问.png",
+      "kind": "image",
+      "label": "Clip01_黑殿审问.png",
+      "path": "出图/第1集/图片/Clip01_黑殿审问.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip01_黑殿审问_end.png",
+      "kind": "image",
+      "label": "Clip01_黑殿审问_end.png",
+      "path": "出图/第1集/图片/Clip01_黑殿审问_end.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip01_黑殿审问_mid.png",
+      "kind": "image",
+      "label": "Clip01_黑殿审问_mid.png",
+      "path": "出图/第1集/图片/Clip01_黑殿审问_mid.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip02_挑水命令.png",
+      "kind": "image",
+      "label": "Clip02_挑水命令.png",
+      "path": "出图/第1集/图片/Clip02_挑水命令.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip02_挑水命令_end.png",
+      "kind": "image",
+      "label": "Clip02_挑水命令_end.png",
+      "path": "出图/第1集/图片/Clip02_挑水命令_end.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip02_挑水命令_mid.png",
+      "kind": "image",
+      "label": "Clip02_挑水命令_mid.png",
+      "path": "出图/第1集/图片/Clip02_挑水命令_mid.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip03_外门遗孤.png",
+      "kind": "image",
+      "label": "Clip03_外门遗孤.png",
+      "path": "出图/第1集/图片/Clip03_外门遗孤.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip03_外门遗孤_end.png",
+      "kind": "image",
+      "label": "Clip03_外门遗孤_end.png",
+      "path": "出图/第1集/图片/Clip03_外门遗孤_end.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip03_外门遗孤_mid.png",
+      "kind": "image",
+      "label": "Clip03_外门遗孤_mid.png",
+      "path": "出图/第1集/图片/Clip03_外门遗孤_mid.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip04_两缸水和空屋.png",
+      "kind": "image",
+      "label": "Clip04_两缸水和空屋.png",
+      "path": "出图/第1集/图片/Clip04_两缸水和空屋.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip04_两缸水和空屋_end.png",
+      "kind": "image",
+      "label": "Clip04_两缸水和空屋_end.png",
+      "path": "出图/第1集/图片/Clip04_两缸水和空屋_end.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip04_两缸水和空屋_mid.png",
+      "kind": "image",
+      "label": "Clip04_两缸水和空屋_mid.png",
+      "path": "出图/第1集/图片/Clip04_两缸水和空屋_mid.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip05_夜挑五趟.png",
+      "kind": "image",
+      "label": "Clip05_夜挑五趟.png",
+      "path": "出图/第1集/图片/Clip05_夜挑五趟.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip05_夜挑五趟_end.png",
+      "kind": "image",
+      "label": "Clip05_夜挑五趟_end.png",
+      "path": "出图/第1集/图片/Clip05_夜挑五趟_end.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip05_夜挑五趟_mid.png",
+      "kind": "image",
+      "label": "Clip05_夜挑五趟_mid.png",
+      "path": "出图/第1集/图片/Clip05_夜挑五趟_mid.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip06_水底破盆.png",
+      "kind": "image",
+      "label": "Clip06_水底破盆.png",
+      "path": "出图/第1集/图片/Clip06_水底破盆.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip06_水底破盆_end.png",
+      "kind": "image",
+      "label": "Clip06_水底破盆_end.png",
+      "path": "出图/第1集/图片/Clip06_水底破盆_end.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip06_水底破盆_mid.png",
+      "kind": "image",
+      "label": "Clip06_水底破盆_mid.png",
+      "path": "出图/第1集/图片/Clip06_水底破盆_mid.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip07_盆底微光.png",
+      "kind": "image",
+      "label": "Clip07_盆底微光.png",
+      "path": "出图/第1集/图片/Clip07_盆底微光.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip07_盆底微光_mid.png",
+      "kind": "image",
+      "label": "Clip07_盆底微光_mid.png",
+      "path": "出图/第1集/图片/Clip07_盆底微光_mid.png"
+    }
+  ],
+  "root": "创作区/制漫剧/仙界闭关小能手",
+  "summary": {
+    "clips": 7,
+    "edges": 59,
+    "images": 20,
+    "nodes": 48,
+    "videos": 0
+  },
+  "version": 1
+}

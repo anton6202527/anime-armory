@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "kind": "novel_character_guardrails",
+  "characters": {
+    "沈砚": {
+      "hard_limits": ["嫁祸无辜", "伪造证据", "拿百姓性命做饵"],
+      "forbidden_actions": ["滥用金睛害人", "投靠通妖者"],
+      "allow_if_context": ["伪装", "被控制", "幻境", "重大转折"]
+    },
+    "裴决": {
+      "hard_limits": ["滥杀", "拿同僚顶罪"],
+      "forbidden_actions": ["背叛缉妖司", "弃同伴独走"],
+      "allow_if_context": ["伪装", "被控制", "重大转折"]
+    },
+    "苏窈": {
+      "hard_limits": ["篡改验尸结论", "昧良心做证"],
+      "forbidden_actions": [],
+      "allow_if_context": ["被胁迫", "重大转折"]
+    }
+  }
+}

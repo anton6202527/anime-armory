@@ -1,0 +1,355 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 24,
+  "cli_image_input_limit": 24,
+  "cli_image_input_truncated": true,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤.png",
+      "bytes": 2333197,
+      "owner": "Clip_03",
+      "priority": 0,
+      "rel_path": "出图/第1集/图片/Clip03_外门遗孤.png",
+      "role": "source_frame",
+      "sequence": 0,
+      "sha256": "98695dc40b802494dee16f86bc1c5e8c3726fdf838170a59c4ba926dabb68ea1",
+      "source": "same_clip_firstframe"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门外门旧院.png",
+      "bytes": 2762765,
+      "owner": "LOC_WAIMEN_JIUYUAN",
+      "priority": 40,
+      "rel_path": "出图/共享/图片/定妆_太虚门外门旧院.png",
+      "role": "asset",
+      "sequence": 35,
+      "sha256": "23ca08ab8d680814f5ce6f4f29a63d636e19d62f3b8f663ffdc2b8f29017fd30",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门外门旧院_反打.png",
+      "bytes": 2673760,
+      "owner": "LOC_WAIMEN_JIUYUAN",
+      "priority": 40,
+      "rel_path": "出图/共享/图片/定妆_太虚门外门旧院_反打.png",
+      "role": "asset",
+      "sequence": 36,
+      "sha256": "ca704e720fc89ab75d2f6c9e4fea03cdf634367f0c26baf3743e3d88b3facd37",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_脸部特写.png",
+      "bytes": 544124,
+      "owner": "CHAR_HE_PINGSHENG/常态",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_贺平生_脸部特写.png",
+      "role": "character",
+      "sequence": 6,
+      "sha256": "340903a861f758d565f149e96f879f8eb2a802868e2f2bf54cb93555fe48f235",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_脸部特写.png",
+      "bytes": 597368,
+      "owner": "CHAR_HE_PINGSHENG/幼年",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_贺平生_幼年_脸部特写.png",
+      "role": "character",
+      "sequence": 16,
+      "sha256": "f3ff17cbf3c5d8077242bd9f4086430ed446080244f99f5866e7aee77aed941d",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_半身.png",
+      "bytes": 647675,
+      "owner": "CHAR_HE_PINGSHENG/常态",
+      "priority": 110,
+      "rel_path": "出图/共享/图片/定妆_贺平生_半身.png",
+      "role": "character",
+      "sequence": 4,
+      "sha256": "fb7e27fbaa858e7d02d49aa70406345aa9161eac96547aca6827e0bdfb791d84",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_半身.png",
+      "bytes": 657105,
+      "owner": "CHAR_HE_PINGSHENG/幼年",
+      "priority": 110,
+      "rel_path": "出图/共享/图片/定妆_贺平生_幼年_半身.png",
+      "role": "character",
+      "sequence": 14,
+      "sha256": "a1af79fd1e5a728d88f89478fdb8f3781002f5327df87791066ac6d708db9074",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_半身.png",
+      "bytes": 628349,
+      "owner": "CHAR_JIANG_JIAN/背影",
+      "priority": 110,
+      "rel_path": "出图/共享/图片/定妆_江剑_背影_半身.png",
+      "role": "character",
+      "sequence": 27,
+      "sha256": "52259db60b7e70ad69ec13d1e698fbe08ad0950d4500819de61d8c9b519e4a92",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_半身.png",
+      "bytes": 675253,
+      "owner": "CHAR_HE_SANJIE/回忆影",
+      "priority": 110,
+      "rel_path": "出图/共享/图片/定妆_贺三杰_回忆影_半身.png",
+      "role": "character",
+      "sequence": 34,
+      "sha256": "216eda7ed1b7351c7f5b0412e0900c80b78994573721825f8a758cd626393c15",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生.png",
+      "bytes": 490135,
+      "owner": "CHAR_HE_PINGSHENG/常态",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_贺平生.png",
+      "role": "character",
+      "sequence": 1,
+      "sha256": "2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_表情_克制.png",
+      "bytes": 1165133,
+      "owner": "CHAR_HE_PINGSHENG/常态",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
+      "role": "character",
+      "sequence": 7,
+      "sha256": "7d1930b228e7636fe5c22b276f0b38b5c034c37afbb12fa0c8b2a39b51640ece",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
+      "bytes": 1266904,
+      "owner": "CHAR_HE_PINGSHENG/常态",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
+      "role": "character",
+      "sequence": 8,
+      "sha256": "fe6bcb050ef1ee0266b098e672430bc16e4ed0dcc7e86a4928a39206e5c708f6",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_表情_警觉.png",
+      "bytes": 1217820,
+      "owner": "CHAR_HE_PINGSHENG/常态",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_贺平生_表情_警觉.png",
+      "role": "character",
+      "sequence": 9,
+      "sha256": "e380ed8e62d189b24dd3d120e845b96e7da40df0dadaf8a0f043c70b43b50365",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年.png",
+      "bytes": 494996,
+      "owner": "CHAR_HE_PINGSHENG/幼年",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_贺平生_幼年.png",
+      "role": "character",
+      "sequence": 11,
+      "sha256": "0ddffbe1e6e6c5deada581fcb714d50a17a7ea4fa7669e89694bd828cd248bd5",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
+      "bytes": 1302695,
+      "owner": "CHAR_HE_PINGSHENG/幼年",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
+      "role": "character",
+      "sequence": 17,
+      "sha256": "0c2a2c7bc2d0bee3eb200f9377bdd73d39948fbba2dc68b184b8e86ad0234207",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_疲惫隐忍.png",
+      "bytes": 1320226,
+      "owner": "CHAR_HE_PINGSHENG/幼年",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_贺平生_幼年_表情_疲惫隐忍.png",
+      "role": "character",
+      "sequence": 18,
+      "sha256": "0b59a60b4bd43226c5b3ad68f4642c494b1a955958f8fb5d6a8bfc41968306d5",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_警觉.png",
+      "bytes": 1273106,
+      "owner": "CHAR_HE_PINGSHENG/幼年",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_贺平生_幼年_表情_警觉.png",
+      "role": "character",
+      "sequence": 19,
+      "sha256": "253f5af9dcaaa1310d94b49e668adc383c6fc49a3fd1e1d6f80a3f39efaa632e",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影.png",
+      "bytes": 531824,
+      "owner": "CHAR_HE_SANJIE/回忆影",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_贺三杰_回忆影.png",
+      "role": "character",
+      "sequence": 28,
+      "sha256": "156a4400925018faa1b78124498d05be7380413e4ce12d53142897a98848614b",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_侧.png",
+      "bytes": 469844,
+      "owner": "CHAR_HE_PINGSHENG/常态",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_贺平生_侧.png",
+      "role": "character",
+      "sequence": 2,
+      "sha256": "b07ec09a8d3dad29e837112f748de177387597d4447f7c6086291afab6c1a4af",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_45度.png",
+      "bytes": 491562,
+      "owner": "CHAR_HE_PINGSHENG/常态",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_贺平生_45度.png",
+      "role": "character",
+      "sequence": 10,
+      "sha256": "4509c6e821d4d3a5148fb4cbc501d676513bf9f00994724bb17e36aaf2df7694",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_侧.png",
+      "bytes": 475842,
+      "owner": "CHAR_HE_PINGSHENG/幼年",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_贺平生_幼年_侧.png",
+      "role": "character",
+      "sequence": 12,
+      "sha256": "eade4c50cab195a747197157f8628e1c78e20bbfd9e34066d9e5d1eb4f141177",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_45度.png",
+      "bytes": 495292,
+      "owner": "CHAR_HE_PINGSHENG/幼年",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_贺平生_幼年_45度.png",
+      "role": "character",
+      "sequence": 20,
+      "sha256": "df4471efffd7ad221f257c6ceec7ce53a6e0513fadc63e3caa0731765b169ebf",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_侧.png",
+      "bytes": 548131,
+      "owner": "CHAR_JIANG_JIAN/背影",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_江剑_背影_侧.png",
+      "role": "character",
+      "sequence": 22,
+      "sha256": "4a197b5c84bdea7deea89e9065e3a61850742be127254793663baff2cd5da112",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_侧背.png",
+      "bytes": 742959,
+      "owner": "CHAR_JIANG_JIAN/背影",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_江剑_背影_侧背.png",
+      "role": "character",
+      "sequence": 25,
+      "sha256": "1df7c15dabda9327ccce0f90b899db5b90b92fadcdd7eab958b3aa775d919bf4",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "form": "常态",
+      "id": "CHAR_HE_PINGSHENG",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_贺平生.png",
+        "出图/共享/图片/定妆_贺平生_侧.png",
+        "出图/共享/图片/定妆_贺平生_背.png",
+        "出图/共享/图片/定妆_贺平生_半身.png",
+        "出图/共享/图片/定妆_贺平生_三视图.png",
+        "出图/共享/图片/定妆_贺平生_脸部特写.png",
+        "出图/共享/图片/定妆_贺平生_表情_克制.png",
+        "出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
+        "出图/共享/图片/定妆_贺平生_表情_警觉.png",
+        "出图/共享/图片/定妆_贺平生_45度.png"
+      ]
+    },
+    {
+      "form": "幼年",
+      "id": "CHAR_HE_PINGSHENG",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_贺平生_幼年.png",
+        "出图/共享/图片/定妆_贺平生_幼年_侧.png",
+        "出图/共享/图片/定妆_贺平生_幼年_背.png",
+        "出图/共享/图片/定妆_贺平生_幼年_半身.png",
+        "出图/共享/图片/定妆_贺平生_幼年_三视图.png",
+        "出图/共享/图片/定妆_贺平生_幼年_脸部特写.png",
+        "出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
+        "出图/共享/图片/定妆_贺平生_幼年_表情_疲惫隐忍.png",
+        "出图/共享/图片/定妆_贺平生_幼年_表情_警觉.png",
+        "出图/共享/图片/定妆_贺平生_幼年_45度.png"
+      ]
+    },
+    {
+      "form": "背影",
+      "id": "CHAR_JIANG_JIAN",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_江剑_背影.png",
+        "出图/共享/图片/定妆_江剑_背影_侧.png",
+        "出图/共享/图片/定妆_江剑_背影_背.png",
+        "出图/共享/图片/定妆_江剑_背影_三视图.png",
+        "出图/共享/图片/定妆_江剑_背影_侧背.png",
+        "出图/共享/图片/定妆_江剑_背影_45度.png",
+        "出图/共享/图片/定妆_江剑_背影_半身.png"
+      ]
+    },
+    {
+      "form": "回忆影",
+      "id": "CHAR_HE_SANJIE",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_贺三杰_回忆影.png",
+        "出图/共享/图片/定妆_贺三杰_回忆影_侧.png",
+        "出图/共享/图片/定妆_贺三杰_回忆影_背.png",
+        "出图/共享/图片/定妆_贺三杰_回忆影_三视图.png",
+        "出图/共享/图片/定妆_贺三杰_回忆影_侧影.png",
+        "出图/共享/图片/定妆_贺三杰_回忆影_45度.png",
+        "出图/共享/图片/定妆_贺三杰_回忆影_半身.png"
+      ]
+    },
+    {
+      "id": "LOC_WAIMEN_JIUYUAN",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_太虚门外门旧院.png",
+        "出图/共享/图片/定妆_太虚门外门旧院_反打.png"
+      ],
+      "type": "location"
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "Clip_03_mid",
+  "target": "出图/第1集/图片/Clip03_外门遗孤_mid.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

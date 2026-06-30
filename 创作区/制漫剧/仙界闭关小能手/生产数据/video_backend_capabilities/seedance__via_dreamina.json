@@ -1,0 +1,229 @@
+{
+  "adapter": {
+    "anchor_consumption_sample": {
+      "action": "submit first/mid/end frames in one native multi-keyframe request",
+      "anchor_count": 1,
+      "auto_routable": true,
+      "backend": "seedance",
+      "consumes_endframe": true,
+      "consumes_mid_anchors_natively": true,
+      "consumption_mode": "native_multiframe",
+      "execution_backend": "dreamina",
+      "frame_control_mode": "multi_keyframe",
+      "known_profile": true,
+      "need_end": true,
+      "reference_only": false,
+      "requires_split_relay": false,
+      "supports_last_frame": true,
+      "supports_native_mid_anchors": true
+    },
+    "canonical": "seedance",
+    "capability_confidence": {
+      "backend": "seedance",
+      "channel": "dreamina",
+      "confidence": "evidence",
+      "execution_backend": "dreamina",
+      "paid_routing_allowed": true,
+      "reason": "2026-06-12 local official dreamina CLI --help snapshot"
+    },
+    "channel": "dreamina",
+    "channel_classification": "known",
+    "classification": "known",
+    "control_idiom": "structured_multi_prompt",
+    "control_idiom_source": "static_catalog",
+    "control_idiom_supported": true,
+    "default_mode": "image2video",
+    "evidence": "conservative n2d profile; Dreamina channel has separate verified multiframe capability",
+    "execution_backend": "dreamina",
+    "frame_control": {
+      "fallback": "Use multiframe2video for first/mid/end anchors; if invalid, fall back to first+last frames2video or single first frame.",
+      "max_timeline_frames": 20,
+      "mode": "multi_keyframe",
+      "segment_seconds_range": [
+        0.5,
+        8.0
+      ],
+      "supports_first_frame": true,
+      "supports_last_frame": true,
+      "supports_native_mid_anchors": true,
+      "verified": "2026-06-12 local official dreamina CLI --help snapshot"
+    },
+    "identity_mechanism": "face_lock",
+    "kind": "n2d_video_backend_adapter",
+    "label": "Seedance",
+    "lipsync_audio_ref": true,
+    "max_clip_seconds": 15,
+    "motion_control": {
+      "capabilities": [
+        "multimodal_reference",
+        "reference_video_motion",
+        "face_lock"
+      ],
+      "level": "medium"
+    },
+    "native_audio": true,
+    "native_av": true,
+    "paid_routing_allowed": true,
+    "profile_known": true
+  },
+  "backend": "seedance",
+  "capability_assertions": {
+    "control_idiom": {
+      "evidence_kind": "cli_help_snapshot",
+      "observed_text": "Reviewed local official Dreamina CLI snapshots for this video preflight: multiframe2video supports 2-20 images and segment durations 0.5-8s; multimodal2video supports Seedance 2.0 family with duration 4-15s, images/videos/audio references, 9:16 ratio, and audio input 2-15s. Route has been split so all clips are <=15s; split clips use first+last relay and Clip11-12 use native multiframe anchors.",
+      "source": "local official Dreamina CLI help snapshots: multiframe2video + multimodal2video",
+      "source_url": "skills/n2d-video/references/cli_snapshots/dreamina/multiframe2video.txt",
+      "value": "structured_multi_prompt"
+    },
+    "control_idiom_supported": {
+      "evidence_kind": "cli_help_snapshot",
+      "observed_text": "Reviewed local official Dreamina CLI snapshots for this video preflight: multiframe2video supports 2-20 images and segment durations 0.5-8s; multimodal2video supports Seedance 2.0 family with duration 4-15s, images/videos/audio references, 9:16 ratio, and audio input 2-15s. Route has been split so all clips are <=15s; split clips use first+last relay and Clip11-12 use native multiframe anchors.",
+      "source": "local official Dreamina CLI help snapshots: multiframe2video + multimodal2video",
+      "source_url": "skills/n2d-video/references/cli_snapshots/dreamina/multiframe2video.txt",
+      "value": true
+    },
+    "frame_control_mode": {
+      "evidence_kind": "cli_help_snapshot",
+      "observed_text": "Reviewed local official Dreamina CLI snapshots for this video preflight: multiframe2video supports 2-20 images and segment durations 0.5-8s; multimodal2video supports Seedance 2.0 family with duration 4-15s, images/videos/audio references, 9:16 ratio, and audio input 2-15s. Route has been split so all clips are <=15s; split clips use first+last relay and Clip11-12 use native multiframe anchors.",
+      "source": "local official Dreamina CLI help snapshots: multiframe2video + multimodal2video",
+      "source_url": "skills/n2d-video/references/cli_snapshots/dreamina/multiframe2video.txt",
+      "value": "multi_keyframe"
+    },
+    "identity_mechanism": {
+      "evidence_kind": "cli_help_snapshot",
+      "observed_text": "Reviewed local official Dreamina CLI snapshots for this video preflight: multiframe2video supports 2-20 images and segment durations 0.5-8s; multimodal2video supports Seedance 2.0 family with duration 4-15s, images/videos/audio references, 9:16 ratio, and audio input 2-15s. Route has been split so all clips are <=15s; split clips use first+last relay and Clip11-12 use native multiframe anchors.",
+      "source": "local official Dreamina CLI help snapshots: multiframe2video + multimodal2video",
+      "source_url": "skills/n2d-video/references/cli_snapshots/dreamina/multiframe2video.txt",
+      "value": "face_lock"
+    },
+    "lipsync_audio_ref": {
+      "evidence_kind": "cli_help_snapshot",
+      "observed_text": "Reviewed local official Dreamina CLI snapshots for this video preflight: multiframe2video supports 2-20 images and segment durations 0.5-8s; multimodal2video supports Seedance 2.0 family with duration 4-15s, images/videos/audio references, 9:16 ratio, and audio input 2-15s. Route has been split so all clips are <=15s; split clips use first+last relay and Clip11-12 use native multiframe anchors.",
+      "source": "local official Dreamina CLI help snapshots: multiframe2video + multimodal2video",
+      "source_url": "skills/n2d-video/references/cli_snapshots/dreamina/multiframe2video.txt",
+      "value": true
+    },
+    "max_clip_seconds": {
+      "evidence_kind": "cli_help_snapshot",
+      "observed_text": "Reviewed local official Dreamina CLI snapshots for this video preflight: multiframe2video supports 2-20 images and segment durations 0.5-8s; multimodal2video supports Seedance 2.0 family with duration 4-15s, images/videos/audio references, 9:16 ratio, and audio input 2-15s. Route has been split so all clips are <=15s; split clips use first+last relay and Clip11-12 use native multiframe anchors.",
+      "source": "local official Dreamina CLI help snapshots: multiframe2video + multimodal2video",
+      "source_url": "skills/n2d-video/references/cli_snapshots/dreamina/multiframe2video.txt",
+      "value": 15
+    },
+    "max_reference_images": {
+      "evidence_kind": "cli_help_snapshot",
+      "observed_text": "Reviewed local official Dreamina CLI snapshots for this video preflight: multiframe2video supports 2-20 images and segment durations 0.5-8s; multimodal2video supports Seedance 2.0 family with duration 4-15s, images/videos/audio references, 9:16 ratio, and audio input 2-15s. Route has been split so all clips are <=15s; split clips use first+last relay and Clip11-12 use native multiframe anchors.",
+      "source": "local official Dreamina CLI help snapshots: multiframe2video + multimodal2video",
+      "source_url": "skills/n2d-video/references/cli_snapshots/dreamina/multiframe2video.txt",
+      "value": null
+    },
+    "max_timeline_frames": {
+      "evidence_kind": "cli_help_snapshot",
+      "observed_text": "Reviewed local official Dreamina CLI snapshots for this video preflight: multiframe2video supports 2-20 images and segment durations 0.5-8s; multimodal2video supports Seedance 2.0 family with duration 4-15s, images/videos/audio references, 9:16 ratio, and audio input 2-15s. Route has been split so all clips are <=15s; split clips use first+last relay and Clip11-12 use native multiframe anchors.",
+      "source": "local official Dreamina CLI help snapshots: multiframe2video + multimodal2video",
+      "source_url": "skills/n2d-video/references/cli_snapshots/dreamina/multiframe2video.txt",
+      "value": 20
+    },
+    "motion_control_capabilities": {
+      "evidence_kind": "cli_help_snapshot",
+      "observed_text": "Reviewed local official Dreamina CLI snapshots for this video preflight: multiframe2video supports 2-20 images and segment durations 0.5-8s; multimodal2video supports Seedance 2.0 family with duration 4-15s, images/videos/audio references, 9:16 ratio, and audio input 2-15s. Route has been split so all clips are <=15s; split clips use first+last relay and Clip11-12 use native multiframe anchors.",
+      "source": "local official Dreamina CLI help snapshots: multiframe2video + multimodal2video",
+      "source_url": "skills/n2d-video/references/cli_snapshots/dreamina/multiframe2video.txt",
+      "value": [
+        "multimodal_reference",
+        "reference_video_motion",
+        "face_lock"
+      ]
+    },
+    "motion_control_level": {
+      "evidence_kind": "cli_help_snapshot",
+      "observed_text": "Reviewed local official Dreamina CLI snapshots for this video preflight: multiframe2video supports 2-20 images and segment durations 0.5-8s; multimodal2video supports Seedance 2.0 family with duration 4-15s, images/videos/audio references, 9:16 ratio, and audio input 2-15s. Route has been split so all clips are <=15s; split clips use first+last relay and Clip11-12 use native multiframe anchors.",
+      "source": "local official Dreamina CLI help snapshots: multiframe2video + multimodal2video",
+      "source_url": "skills/n2d-video/references/cli_snapshots/dreamina/multiframe2video.txt",
+      "value": "medium"
+    },
+    "native_audio": {
+      "evidence_kind": "cli_help_snapshot",
+      "observed_text": "Reviewed local official Dreamina CLI snapshots for this video preflight: multiframe2video supports 2-20 images and segment durations 0.5-8s; multimodal2video supports Seedance 2.0 family with duration 4-15s, images/videos/audio references, 9:16 ratio, and audio input 2-15s. Route has been split so all clips are <=15s; split clips use first+last relay and Clip11-12 use native multiframe anchors.",
+      "source": "local official Dreamina CLI help snapshots: multiframe2video + multimodal2video",
+      "source_url": "skills/n2d-video/references/cli_snapshots/dreamina/multiframe2video.txt",
+      "value": true
+    },
+    "native_av": {
+      "evidence_kind": "cli_help_snapshot",
+      "observed_text": "Reviewed local official Dreamina CLI snapshots for this video preflight: multiframe2video supports 2-20 images and segment durations 0.5-8s; multimodal2video supports Seedance 2.0 family with duration 4-15s, images/videos/audio references, 9:16 ratio, and audio input 2-15s. Route has been split so all clips are <=15s; split clips use first+last relay and Clip11-12 use native multiframe anchors.",
+      "source": "local official Dreamina CLI help snapshots: multiframe2video + multimodal2video",
+      "source_url": "skills/n2d-video/references/cli_snapshots/dreamina/multiframe2video.txt",
+      "value": true
+    },
+    "supports_first_frame": {
+      "evidence_kind": "cli_help_snapshot",
+      "observed_text": "Reviewed local official Dreamina CLI snapshots for this video preflight: multiframe2video supports 2-20 images and segment durations 0.5-8s; multimodal2video supports Seedance 2.0 family with duration 4-15s, images/videos/audio references, 9:16 ratio, and audio input 2-15s. Route has been split so all clips are <=15s; split clips use first+last relay and Clip11-12 use native multiframe anchors.",
+      "source": "local official Dreamina CLI help snapshots: multiframe2video + multimodal2video",
+      "source_url": "skills/n2d-video/references/cli_snapshots/dreamina/multiframe2video.txt",
+      "value": true
+    },
+    "supports_last_frame": {
+      "evidence_kind": "cli_help_snapshot",
+      "observed_text": "Reviewed local official Dreamina CLI snapshots for this video preflight: multiframe2video supports 2-20 images and segment durations 0.5-8s; multimodal2video supports Seedance 2.0 family with duration 4-15s, images/videos/audio references, 9:16 ratio, and audio input 2-15s. Route has been split so all clips are <=15s; split clips use first+last relay and Clip11-12 use native multiframe anchors.",
+      "source": "local official Dreamina CLI help snapshots: multiframe2video + multimodal2video",
+      "source_url": "skills/n2d-video/references/cli_snapshots/dreamina/multiframe2video.txt",
+      "value": true
+    },
+    "supports_native_mid_anchors": {
+      "evidence_kind": "cli_help_snapshot",
+      "observed_text": "Reviewed local official Dreamina CLI snapshots for this video preflight: multiframe2video supports 2-20 images and segment durations 0.5-8s; multimodal2video supports Seedance 2.0 family with duration 4-15s, images/videos/audio references, 9:16 ratio, and audio input 2-15s. Route has been split so all clips are <=15s; split clips use first+last relay and Clip11-12 use native multiframe anchors.",
+      "source": "local official Dreamina CLI help snapshots: multiframe2video + multimodal2video",
+      "source_url": "skills/n2d-video/references/cli_snapshots/dreamina/multiframe2video.txt",
+      "value": true
+    }
+  },
+  "channel": "dreamina",
+  "cli_snapshot_evidence": [
+    {
+      "captured_at": "2026-06-22T01:11:11Z",
+      "cli": "dreamina",
+      "commands": [
+        {
+          "captured_at": "2026-06-22T01:11:11Z",
+          "command": "multiframe2video",
+          "flag_count": 9
+        },
+        {
+          "captured_at": "2026-06-22T01:11:11Z",
+          "command": "frames2video",
+          "flag_count": 10
+        },
+        {
+          "captured_at": "2026-06-22T01:11:11Z",
+          "command": "image2video",
+          "flag_count": 9
+        },
+        {
+          "captured_at": "2026-06-22T01:11:11Z",
+          "command": "multimodal2video",
+          "flag_count": 12
+        },
+        {
+          "captured_at": "2026-06-22T01:11:11Z",
+          "command": "text2video",
+          "flag_count": 9
+        }
+      ],
+      "kind": "n2d_cli_snapshot_evidence",
+      "path": "/Users/wesley/learn/anime-arsenal/skills/n2d-video/references/cli_snapshots/dreamina/_index.json"
+    }
+  ],
+  "evidence_kind": "cli_help_snapshot",
+  "execution_backend": "dreamina",
+  "kind": "n2d_video_backend_refresh_evidence",
+  "note": "Reviewed local official Dreamina CLI snapshots for this video preflight: multiframe2video supports 2-20 images and segment durations 0.5-8s; multimodal2video supports Seedance 2.0 family with duration 4-15s, images/videos/audio references, 9:16 ratio, and audio input 2-15s. Route has been split so all clips are <=15s; split clips use first+last relay and Clip11-12 use native multiframe anchors.",
+  "source_urls": [
+    "skills/n2d-video/references/cli_snapshots/dreamina/multiframe2video.txt"
+  ],
+  "sources": [
+    "local official Dreamina CLI help snapshots: multiframe2video + multimodal2video",
+    "cli_snapshot:dreamina@2026-06-22T01:11:11Z"
+  ],
+  "verified_at": "2026-06-30"
+}

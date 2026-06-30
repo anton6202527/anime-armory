@@ -1,0 +1,1144 @@
+#!/usr/bin/env python3
+"""Shared schemas and metadata for the n2d pipeline."""
+
+from __future__ import annotations
+from typing import Dict, List, Any, Tuple
+try:
+    from n2d_const import *
+except ImportError:
+    from .n2d_const import *
+
+# ── n2d 边界型机器产物注册表 ──────────────────────────────────────────────
+BOUNDARY_PRODUCT_KINDS = {
+    MANIFEST_KIND: {
+        "owner": "n2d (contract)",
+        "path": "脚本/{ep}/manifest.json",
+        "layer": "contract",
+        "boundary": "episode_summary",
+    },
+    IDENTITY_REGISTRY_KIND: {
+        "owner": "n2d-image",
+        "writer_owner": "n2d-image",
+        "schema_owner": "n2d (contract)",
+        "consumer_owner": "n2d-identity",
+        "path": f"出图/{SHARED_ASSET_DIR}/identity_registry.json",
+        "layer": "shared_asset",
+        "boundary": "identity_definition",
+    },
+    ASSET_REFERENCE_REGISTRY_KIND: {
+        "owner": "n2d-asset-market",
+        "path": f"出图/{SHARED_ASSET_DIR}/asset_registry.json",
+        "layer": "shared_asset",
+        "boundary": "asset_definition",
+    },
+    IDENTITY_ADAPTER_MATRIX_KIND: {
+        "owner": "n2d-identity",
+        "path": f"{PRODUCTION_DIR}/identity_adapter_matrix.json",
+        "layer": "production_data",
+        "boundary": "adapter_mapping",
+    },
+    COMPLIANCE_MANIFEST_KIND: {
+        "owner": "n2d-compliance",
+        "path": "合规/compliance_manifest.json",
+        "layer": "governance",
+        "boundary": "rights_clearance",
+    },
+    IMAGE_QC_REPORT_KIND: {
+        "owner": "n2d-image",
+        "path": f"{PRODUCTION_DIR}/image_qc/{{ep}}/image_qc_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "image_drop_qc",
+    },
+    CONSISTENCY_FINDINGS_KIND: {
+        "owner": "n2d-review",
+        "path": f"{PRODUCTION_DIR}/consistency_findings_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "consistency_findings",
+    },
+    GATE_FINDINGS_KIND: {
+        "owner": "n2d-dashboard",
+        "path": f"{PRODUCTION_DIR}/gate_findings_{{stage}}_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "gate_findings",
+    },
+    CONSISTENCY_LEDGER_KIND: {
+        "owner": "n2d-review",
+        "path": f"{PRODUCTION_DIR}/consistency_ledger_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "consistency_ledger",
+    },
+    CONSISTENCY_POLICY_LATTICE_KIND: {
+        "owner": "n2d-model-router",
+        "path": f"{PRODUCTION_DIR}/consistency_policy_lattice.json",
+        "layer": "production_data",
+        "boundary": "policy_priority_lattice",
+    },
+    CONSISTENCY_DEPENDENCY_GRAPH_KIND: {
+        "owner": "n2d-review",
+        "path": f"{PRODUCTION_DIR}/consistency_dependency_graph_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "transitive_impact_graph",
+    },
+    INTENTIONAL_DISCONTINUITY_MANIFEST_KIND: {
+        "owner": "n2d-review",
+        "path": f"{PRODUCTION_DIR}/intentional_discontinuity_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "signed_off_discontinuity_exceptions",
+    },
+    VIDEO_MODEL_ROUTES_KIND: {
+        "owner": "n2d-model-router",
+        # 真实落点：router.py 写、inherit_contract/lipsync_pass/interp_pass 读，均为
+        # 出视频/<集>/prompt/。此前误标 生产数据/；该 path 字段不用于定位（仅 kind 字符串做校验），
+        # 属文档性陷阱，按实际路径校正。
+        "path": "出视频/{ep}/prompt/video_model_routes.json",
+        "layer": "production_data",
+        "boundary": "routing_decisions",
+    },
+    MOTION_CONTROL_MANIFEST_KIND: {
+        "owner": "n2d-video",
+        "path": f"{PRODUCTION_DIR}/motion_control_manifest.json",
+        "layer": "production_data",
+        "boundary": "control_readiness",
+    },
+    EMOTION_FLOW_KIND: {
+        "owner": "n2d-voice",
+        "path": "合成/{ep}/配音/emotion_flow.json",
+        "layer": "production_data",
+        "boundary": "emotional_pacing",
+    },
+    CONTRACT_INHERITANCE_KIND: {
+        "owner": "n2d-video",
+        "path": f"{PRODUCTION_DIR}/contract_inheritance_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "visual_contract_handoff",
+    },
+    IDENTITY_DRIFT_REPORT_KIND: {
+        "owner": "n2d-identity",
+        "path": f"{PRODUCTION_DIR}/identity_drift_report.json",
+        "layer": "production_data",
+        "boundary": "identity_drift",
+    },
+    IDENTITY_VOICE_DRIFT_REPORT_KIND: {
+        "owner": "n2d-identity",
+        "path": f"{PRODUCTION_DIR}/identity_voice_drift_report.json",
+        "layer": "production_data",
+        "boundary": "voice_key_drift",
+    },
+    IDENTITY_VOICE_PRINT_REPORT_KIND: {
+        "owner": "n2d-identity",
+        "path": f"{PRODUCTION_DIR}/identity_voice_print_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "voice_print_consistency",
+    },
+    VISUAL_STATE_LEDGER_KIND: {
+        "owner": "n2d-image",
+        "path": f"出图/{SHARED_ASSET_DIR}/visual_state_ledger.json",
+        "layer": "shared_asset",
+        # 边界须点明与 identity_registry 的分工：本账本记【状态演进】(受伤/战损/获法宝随集累积)，
+        # identity_registry 记【身份锁定】(角色是谁)，互补不重叠（见 test_visual_state_manager）。
+        "boundary": "state_continuity_vs_identity_registry",
+    },
+    ASSET_RERUN_PLAN_KIND: {
+        "owner": "n2d-image",
+        "path": f"{PRODUCTION_DIR}/asset_rerun_plan_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "rerun_plan",
+    },
+    BATCH_QUEUE_KIND: {
+        "owner": "n2d-batch",
+        "path": f"{PRODUCTION_DIR}/batch_queue.json",
+        "layer": "production_data",
+        "boundary": "work_queue",
+    },
+    ARTIFACT_LINEAGE_MANIFEST_KIND: {
+        "owner": "n2d",
+        "path": f"{PRODUCTION_DIR}/artifact_lineage_{{ep}}.json",
+        "layer": "release_evidence",
+        "boundary": "artifact_lineage",
+    },
+    PRODUCTION_READINESS_KIND: {
+        "owner": "n2d",
+        "path": f"{PRODUCTION_DIR}/production_readiness_{{ep}}.json",
+        "layer": "release_evidence",
+        "boundary": "production_readiness_gate",
+    },
+    GATE_POLICY_COVERAGE_KIND: {
+        "owner": "n2d",
+        "path": f"{PRODUCTION_DIR}/gate_policy_coverage_{{ep}}.json",
+        "layer": "release_evidence",
+        "boundary": "gate_policy_coverage",
+    },
+    GENERATION_RECIPE_MANIFEST_KIND: {
+        "owner": "n2d",
+        "path": f"{PRODUCTION_DIR}/generation_recipe_manifest_{{ep}}.json",
+        "layer": "release_evidence",
+        "boundary": "generation_recipe_provenance",
+    },
+    GENRE_PACK_KIND: {
+        "owner": "n2d",
+        "path": "skills/n2d/references/genre_packs/{genre}.json",
+        "layer": "reference_contract",
+        "boundary": "genre_specific_scene_contract",
+    },
+    GENRE_PACK_CONTEXT_KIND: {
+        "owner": "n2d",
+        "path": f"{PRODUCTION_DIR}/genre_pack_context_{{ep}}_{{stage}}.json",
+        "layer": "production_data",
+        "boundary": "genre_specific_stage_context",
+    },
+    EPISODE_REVIEW_SCORE_KIND: {
+        "owner": "n2d-score",
+        "path": f"{PRODUCTION_DIR}/score_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "review_score",
+    },
+    SCORE_VISUAL_CHECKS_KIND: {
+        "owner": "n2d-score",
+        "path": f"{PRODUCTION_DIR}/score_inputs/{{ep}}_visual.json",
+        "layer": "production_data",
+        "boundary": "visual_score_inputs",
+    },
+    REVIEW_UI_KIND: {
+        "owner": "n2d-review-ui",
+        "path": f"{PRODUCTION_DIR}/review_ui_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "human_review_ui",
+    },
+    PLATFORM_FEEDBACK_KIND: {
+        "owner": "n2d-feedback",
+        "path": f"{PRODUCTION_DIR}/platform_feedback.json",
+        "layer": "production_data",
+        "boundary": "feedback_metrics",
+    },
+    GENRE_PERFORMANCE_RECORD_KIND: {
+        "owner": "n2d-feedback",
+        "path": f"{PRODUCTION_DIR}/genre_performance.jsonl",
+        "layer": "production_data",
+        "boundary": "market_signal",
+    },
+    DIFFERENTIATION_CANDIDATES_KIND: {
+        "owner": "n2d-feedback",
+        "path": f"{PRODUCTION_DIR}/differentiation_candidates.json",
+        "layer": "production_data",
+        "boundary": "market_positioning",
+    },
+    LORA_CARD_KIND: {
+        "owner": "n2d-lora",
+        "path": "设定库/lora/{character}/{form}/lora_card.json",
+        "layer": "training_asset",
+        "boundary": "lora_card",
+    },
+    LORA_DATASET_MANIFEST_KIND: {
+        "owner": "n2d-lora",
+        "path": "设定库/lora/{character}/{form}/dataset_manifest.json",
+        "layer": "training_asset",
+        "boundary": "lora_dataset",
+    },
+    LORA_TRAIN_JOB_KIND: {
+        "owner": "n2d-lora",
+        "path": "设定库/lora/{character}/{form}/train_job.json",
+        "layer": "training_asset",
+        "boundary": "lora_train_job",
+    },
+    LORA_EXCEPTION_SCOPE_KIND: {
+        "owner": "n2d-lora",
+        "path": f"{PRODUCTION_DIR}/lora_exception_scope_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "lora_exception_scope",
+    },
+    ASSET_PACK_KIND: {
+        "owner": "n2d-asset-market",
+        "path": "资产库/{slug}/asset_pack.json",
+        "layer": "asset_market",
+        "boundary": "asset_pack",
+    },
+    MOTIF_REGISTRY_KIND: {
+        "owner": "n2d-script",
+        "path": f"出图/{SHARED_ASSET_DIR}/motif_registry.json",
+        "layer": "shared_asset",
+        # 题材母题真值：场景级母题(系统面板/升级/签到…)定义，引用 asset_registry 的成长 VFX，
+        # 持有镜头模板 id + 台词模式 + overlay 文字层规格 + 逐次成长 progression(单调不回退)。
+        # 与 asset_registry 互补：本表记【母题桥段】，asset_registry 记【单资产】，VFX 成长状态机本体落 asset_registry。
+        "boundary": "motif_definition",
+    },
+    MOTIF_PLAN_KIND: {
+        "owner": "n2d-script",
+        "path": f"{PRODUCTION_DIR}/motif_plan_{{ep}}.json",
+        "layer": "production_data",
+        "boundary": "motif_suggestion",
+    },
+    COMBAT_REGISTRY_KIND: {
+        "owner": "n2d-asset-market",
+        "path": f"出图/{SHARED_ASSET_DIR}/combat_registry.json",
+        "layer": "shared_asset",
+        # 招式/打斗套路真值：每条 combat set 持有 SM_ 招式(五帧拆招模板 + action_choreography 契约骨架)、
+        # 节奏 preset、绑定的 WEAPON_/VFX_ 引用。与 asset_registry 互补：本表记【打斗套路结构】，
+        # asset_registry 记【武器实体/特效单资产】。跨剧 export/import-combat 复用结构、reskin 换皮、重出关键帧。
+        # ⚠️ **仅跨项目复用层，不进逐集流水线**：本文件只由 n2d-asset-market 的 export/import-combat 读写，
+        # script→image→video→gate 逐集管线既不读也不写它（无自动沉淀产者——靠 import-combat 或手工编入填充）。
+        # 逐集打斗真值在 storyboard `template_contract` + `spectacle_sequence_plan`(gate BLOCK)，不在本表；
+        # 别在逐集 gate 里加读 combat_registry 的检查（会与 spectacle_sequence_plan 重复、并造一条假边）。
+        "boundary": "combat_definition",
+    },
+}
+
+PRODUCT_KINDS = BOUNDARY_PRODUCT_KINDS
+
+# 「奇观连续性」是信息态留痕列（非硬闸·硬闸是 gate.check_spectacle_sequence_plan）：
+# ✅=本集打斗/追逐/腾云/大场景已被 spectacle_sequence_plan 序列总账覆盖；—=本集无奇观镜(N/A)。
+# 默认 — 不挡 flow（na=已满足）；由 image_prompt prework 生成序列总账后回写，让"奇观连续性做没做"
+# 在状态机里可见，而非只埋在 prework 输出/gate 即时判定里。
+PROGRESS_COLUMNS = (
+    "集", "字数", "raw", "剧本改编", "bgm", "封面", "配音", "分镜设计",
+    "素材清单", "字幕中", "字幕英", "奇观连续性", "出图prompt", "出图", "视频prompt", "视频", "成片", "验收",
+)
+
+IDENTITY_FORK_HISTORY_FIELD = "fork_history"
+IDENTITY_FORK_HISTORY_ENTRY_FIELDS = (
+    "from_pack",
+    "from_slug",
+    "from_character_id",
+    "forked_at",
+    "reason",
+)
+
+# ── 一致性维度定义 ────────────────────────────────────────────────────────────
+# 一致性维度富表（评分维度·单一真值源）——n2d-score 按 weight 加权打分，consistency_audit / gate /
+# feedback / batch 按 audit_labels 把检测器段(脸(G1)/服装配色(N1)…)归并到评分维度并据 return_to_stage 回流。
+# 字段：label(中文名) · weight(评分权重·不必和=100，score 按 total_weight 归一) · return_to_stage(回流 stage) ·
+# scope(回流修法) · audit_labels(consistency_audit 段名→本维度) · keywords(自由文本兜底解析)。
+# 2026-06-15：modularize 重构曾误把本表换成 7 键精简表(face/voice/motion…)致 n2d-score 全挂；此处恢复
+# 富表为单一真值源，并把发型机检 发型(H1) 折进 character_consistency（发型属角色 DNA）。
+CONSISTENCY_DIMENSIONS: Dict[str, Dict[str, Any]] = {
+    "character_consistency": {
+        "label": "角色 DNA/形体一致性（脸/发型/身形/手）",
+        "weight": 20,
+        "return_to_stage": "image",
+        "scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+        "audit_labels": ("锚点门(N3)", "脸(G1)", "无脸崩坏(G1b)", "跨集脸漂(G5)", "发型(H1)", "辨识标记(MK1)", "片内时序(N2)", "手部/解剖(N5)", "身高比例(R1)", "跨集体型(R2)", "外观判官(VAP)", "主体视频一致(S2V)", "表情连续(EXP1)", "表情过锁(EXP3)", "状态化表情(EXP2)", "多视角身份包(MVIEW)"),
+        "keywords": ("角色", "角色DNA", "DNA", "脸", "发型", "身高", "体型", "跨集体型", "手部", "解剖", "资产身份", "identity", "face", "锚点", "S2V", "主体视频", "外观判官", "VLM-Appearance", "表情", "情绪", "微表演", "状态化表情", "allowed_state_delta", "expression", "辨识标记", "疤痕", "胎记", "纹身", "异瞳", "瞳色", "标记", "mark"),
+    },
+    "outfit_consistency": {
+        "label": "角色 DNA 一致性（服装/配饰）",
+        "weight": 12,
+        "return_to_stage": "image",
+        "scope": "回 n2d-image 重出服装/配色/配饰漂移镜头；先检查 character_dna、定妆组和服装参考图。",
+        "audit_labels": ("服装配色(N1)",),
+        "keywords": ("服装", "配色", "妆造", "配饰", "accessory", "outfit"),
+    },
+    "scene_consistency": {
+        "label": "场景/构图连续性",
+        "weight": 12,
+        "return_to_stage": "image",
+        "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+        "audit_labels": ("场景(O2)", "接缝接力", "轴线视线(X1)", "天气时辰(W1)", "光位方向(W2)", "色温调色(GRADE1)", "字幕安全区(L2)", "空间站位(B1)", "物件常驻(O3)", "物件状态(OST)", "在场检测(O3V)", "视线状态回读(X2)", "场景平面(FP1)", "相机空间轨迹(CAM1)", "运动质量(MOT1)", "运动语法(MG1)", "合法不连续(DIS1)", "高动态成片证据(SPECV)", "世界一致性(WCS)"),
+        "keywords": ("场景", "接缝", "尾帧", "场景资产", "轴线", "视线", "站位", "遮挡", "前后景", "天气", "时辰", "字幕安全区", "字幕带", "构图", "物件常驻", "物件状态", "道具状态", "在场检测", "对象持久", "object permanence", "平面图", "相机轨迹", "运动质量", "运动语法", "合法不连续", "intentional discontinuity", "motion", "camera"),
+    },
+    "subtitle_correctness": {
+        "label": "字幕正确性",
+        "weight": 16,
+        "return_to_stage": "script_stage2",
+        "scope": "回 n2d-script 阶段2重跑 finalize_storyboard / 字幕重定时 / 修翻译层；必要时重出配音 manifest。译名漂移补/复用 translation_glossary 的专有名词/称谓 canonical 译法，跨集统一。",
+        "audit_labels": ("字幕对齐(L1)", "译名一致(TX1)"),
+        "keywords": ("字幕", "srt", "cue", "对齐", "断句", "漏译", "阅读速度", "双语", "subtitle",
+                     "译名", "术语", "专有名词", "glossary", "海外投放", "翻译一致", "translation"),
+    },
+    "audio_visual_sync": {
+        "label": "音画同步",
+        "weight": 16,
+        "return_to_stage": "compose",
+        "scope": "回 n2d-compose 对齐配音轨、clip 时长、原生音轨策略和多人对话说话人结构；若时长源头错，回 n2d-script 阶段2。",
+        "audit_labels": ("音画同步(AV1)", "多人对话音画(DAV)"),
+        "keywords": ("音画", "配音", "原生音", "双人声", "多人对话", "说话人", "时长", "voice", "audio", "口型", "mouth"),
+    },
+    "voice_consistency": {
+        "label": "音色一致性",
+        "weight": 10,
+        "return_to_stage": "voice",
+        "scope": "回 n2d-voice 按 voicemap 注册音色重配受影响角色台词；重配后复核时长清单与分镜时长。配音情绪弧(VEA)失配回 n2d-script 改 voiceover.txt 情绪标注/回 n2d-voice 带情绪重配；口音方言(ACC)冲突回 voicemap 锁唯一口音；原生音画说话镜缺 native_voice_identity 证据时回 video/router 改 voice-first 或补可审计声纹 sidecar。",
+        "audit_labels": ("音色声纹", "声纹一致性", "音色漂移", "配音情绪弧(VEA)", "口音方言(ACC)", "原生声纹(NV1)"),
+        "keywords": ("音色", "声纹", "speaker", "voice print", "voice_key", "voicemap", "克隆音色", "原生声纹", "native_voice_identity", "情绪弧", "情绪标注", "口音", "方言", "accent", "念白表演"),
+    },
+    "rhythm_density": {
+        "label": "节奏密度",
+        "weight": 12,
+        "return_to_stage": "script_stage2",
+        "scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。",
+        "audit_labels": ("节奏密度(Rhythm)",),
+        "keywords": ("节奏", "钩子", "爽点", "留存", "集尾", "rhythm"),
+    },
+    "style_consistency": {
+        "label": "风格一致性",
+        "weight": 12,
+        "return_to_stage": "image",
+        "scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。",
+        "audit_labels": ("风格(S1)", "糊/低质(N4)", "景深一致(DOF1)", "调色层级(COLORH)"),
+        "keywords": ("风格", "style", "画风", "基础视觉", "糊", "低质", "清晰度", "景深", "虚化", "焦段", "镜头光学", "bokeh", "DoF", "调色层级", "series_grade", "LUT", "故事光"),
+    },
+    "semantic_continuity": {
+        "label": "语义继承",
+        "weight": 8,
+        "return_to_stage": "script_stage2",
+        "scope": "回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点、VLM 判题失败与称谓口头禅漂移。伏笔兑现(SP1)：坑没填/兑现早于种下回 n2d-script 修 setup_payoff_ledger 与拆集边界。",
+        "audit_labels": ("语义谱系(P0)", "称谓口头禅(A1)", "台词语域(D1)", "视频VLM判题(VLM1)", "伏笔兑现(SP1)"),
+        "keywords": ("语义", "谱系", "继承", "称谓", "口头禅", "人设", "语域", "VLM", "LMM", "semantic", "voiceover", "storyboard", "伏笔", "兑现", "坑", "setup", "payoff", "foreshadow"),
+    },
+    "state_continuity": {
+        "label": "状态百科",
+        "weight": 8,
+        "return_to_stage": "image",
+        "scope": "回 n2d-image 修 visual_state_ledger / 出图分镜状态锁；必要时回 storyboard 修角色状态演进。",
+        "audit_labels": ("状态百科(P1)", "状态转场视频证据(ST1)", "合法状态转场(STE)"),
+        "keywords": ("状态", "动态百科", "visual_state_ledger", "state", "状态转场", "state_transition"),
+    },
+    "multimodal_continuity": {
+        "label": "多模态漂移",
+        "weight": 8,
+        "return_to_stage": "image",
+        "scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+        "audit_labels": ("多模态(P2)", "视频语义一致(VSEM)", "特效窜色(VFXC)", "实体记忆(EMB)"),
+        "keywords": ("多模态", "道具", "法宝", "视觉语义", "embedding", "DINO", "CLIP", "DreamSim", "视频语义", "实体记忆", "entity_memory", "entity schedule"),
+    },
+    "contract_inheritance": {
+        "label": "视觉契约继承",
+        "weight": 8,
+        "return_to_stage": "video_prompt",
+        "scope": "回 n2d-video 修 出视频/prompt/00_总览.md 的本集视觉一致性契约；以出图总览原文为准，光位锚/轴线视线不得改写。",
+        "audit_labels": ("契约继承", "视觉契约继承"),
+        "keywords": ("契约继承", "contract_inheritance", "光位锚", "轴线视线", "导演一致性"),
+    },
+    "interaction_continuity": {
+        "label": "交互/接触因果一致性",
+        "weight": 8,
+        "return_to_stage": "script_stage2",
+        "scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
+        "audit_labels": ("交互接触(I1)", "持有账本(POS)", "结构化交互图谱(I2)", "物理因果链(CG1)", "物理事件图(PHY)"),
+        "keywords": ("交互", "接触", "持有", "持有账本", "递给", "抓握", "因果链", "物理", "物理事件图", "physical_event", "motion_control", "interaction", "contact", "possession"),
+    },
+    "delivery_packaging_consistency": {
+        "label": "成片/包装一致性",
+        "weight": 8,
+        "return_to_stage": "compose",
+        "scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
+        "audit_labels": ("成片统一(C1)", "成片时间线探针(FT1)", "系列包装(PKG)", "系列调色(GRD)", "环境声(AMB)", "声音空间(ASP)"),
+        "keywords": ("成片统一", "包装", "片头", "片尾", "LUFS", "响度", "room tone", "BGM", "subtitle style", "final_timeline_probe", "系列调色", "调色", "LUT", "白平衡", "color grade", "环境声", "ambient", "底噪", "room tone"),
+    },
+    "production_ops_consistency": {
+        "label": "生产操作一致性",
+        "weight": 6,
+        "return_to_stage": "review",
+        "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+        "audit_labels": ("生成配方(RCP)", "强配方Schema(RCP2)", "配方可复现(RCP3)", "成本路由(K1)", "策略裁决(POL)", "依赖图(DEP)", "例外签收(DIS)", "人审校准集(CAL)", "阈值校准(CAL2)", "一致性探针包(PROBE)", "视频证据完整性(EVID)", "真值源(TRUTH)", "后端一致性作用域(BSCOPE)"),
+        "keywords": ("生成配方", "recipe_hash", "prompt_sha256", "reference_bundle_sha256", "成本", "路由", "策略裁决", "policy_lattice", "依赖图", "dependency_graph", "例外签收", "intentional_discontinuity", "重试", "production_events", "provider", "seed", "校准集", "阈值校准", "probe", "证据完整性", "video_eval_manifest", "sidecar"),
+    },
+    "ui_hud_consistency": {
+        "label": "UI/系统面板/HUD 一致性",
+        "weight": 6,
+        "return_to_stage": "image",
+        "scope": "回 n2d-image 复用 ui_asset_registry 的面板定妆底图（边框/配色/字体/版式锁），只重出数值/文案区；"
+                 "系统面板/血条/等级框等 HUD 跨集应是同一套视觉，中文文字渲染漂移则回 n2d-image 重出或改用独立文字图层叠加。",
+        "audit_labels": ("系统面板(UI1)",),
+        "keywords": ("系统面板", "HUD", "UI", "面板", "血条", "等级框", "属性条", "状态栏", "签到", "抽奖",
+                     "system panel", "穿越系统流", "升级", "界面元素", "牌匾", "图中文字"),
+    },
+    "leitmotif_consistency": {
+        "label": "音乐母题/leitmotif 一致性",
+        "weight": 6,
+        "return_to_stage": "script_stage1",
+        "scope": "回 n2d-script 阶段1（bgm）或 n2d-compose 复用 leitmotif_registry 的角色/情绪主题动机；"
+                 "同一角色/主题跨集 BGM 母题应可复现且不串用，缺登记先补 leitmotif_registry。",
+        "audit_labels": ("音乐母题(LM1)", "音乐衔接(BGM)"),
+        "keywords": ("音乐母题", "主题动机", "leitmotif", "motif", "角色主题曲", "情绪主题", "BGM母题",
+                     "配乐一致", "主旋律", "theme", "音乐衔接", "调性", "速度", "tempo", "whiplash"),
+    },
+    "text_render_consistency": {
+        "label": "图中文字渲染一致性（OCR 校验）",
+        "weight": 8,
+        "return_to_stage": "image",
+        "scope": "回 n2d-image 重出图中文字渲染错的镜头：系统面板数值/属性、牌匾/匾额/招牌、卷轴书页等"
+                 "中文字若 OCR 实读与预期不符（错字/缺笔/乱码/数值不对），优先改用独立文字图层叠加而非让模型画；"
+                 "预期文字来自 ui_asset_registry.text_template 或 storyboard 声明，校验经 text_render sidecar。",
+        "audit_labels": ("文字渲染(OCR1)",),
+        "keywords": ("图中文字", "文字渲染", "OCR", "系统面板数值", "属性数值", "牌匾", "匾额", "招牌",
+                     "卷轴", "书页", "乱码", "错字", "缺笔", "glyph", "text render", "字形"),
+    },
+}
+
+# 显式声明：以下维度**有意**不接 consistency_audit / gate 机检 runner（audit_labels 为空）。
+# 当前没有空 audit_labels 维度；仍保留 allowlist 断言，让未来新增维度不会因漏配 audit_labels 而
+# **静默**失去机检（要么接 runner，要么显式登记进这里）。
+# 注 1：voice_consistency 的「音色声纹」+ 跨集 voice_key 漂移已于 2026-06 接入 consistency_audit 主审计
+#       的『音色声纹』advisory runner（voice_consistency.preflight 纯 stdlib 跨集换声 + voice_print
+#       speaker-embedding 量真实音色相似度，缺后端/音频优雅降级；block 封顶 warn 不硬阻断视觉 gate）。
+#       n2d-identity 的 identity.py --write 仍另出跨集音色总账，二者同源 findings 通道，不再是旁路独占。
+# 注 2：audio_visual_sync 已于 2026-06 接入 consistency_audit 的 音画同步(AV1) advisory runner
+#       （lipsync_consistency.py·口型↔配音偏移，SyncNet/LatentSync/外部偏移报告，缺则优雅回退，
+#       block 封顶到 warn 不硬阻断 gate；实测严重档喂 n2d-score）——故已移出本缺口表。
+# 注 3：rhythm_density 已接入 consistency_audit 的 节奏密度(Rhythm) advisory runner（pacing_retention.py）。
+#       它仍不是成片观感模型，常规 profile 不硬阻断；production profile 可按 gate 策略对重复/关键场景
+#       或人工未签收问题升级。
+GATE_UNAUDITED_DIMENSIONS: frozenset = frozenset()
+assert {k for k, v in CONSISTENCY_DIMENSIONS.items() if not v.get("audit_labels")} == GATE_UNAUDITED_DIMENSIONS, (
+    "空 audit_labels 的一致性维度必须与 GATE_UNAUDITED_DIMENSIONS 显式一致——"
+    "新增维度请配 audit_labels 接机检 runner，或显式登记为已知缺口，别让机检静默蒸发。"
+)
+
+# ── STAGE_GRAPH ──────────────────────────────────────────────────────────────
+STAGE_GRAPH: List[Dict[str, Any]] = [
+    {
+        "key": "source",
+        "label": "源文本落档",
+        "owner": "n2d-script",
+        "progress_columns": ("raw",),
+        "command": "n2d-script {root}",
+        "routes": False,
+        "gate_stage": None,
+        "requires": (),
+        "outputs": ("脚本/{ep}/raw.txt",),
+        "return_to_stage": "source",
+    },
+    {
+        "key": "script_stage1",
+        "label": "阶段1·剧本改编",
+        "owner": "n2d-script",
+        "progress_columns": ("剧本改编", "bgm", "封面"),
+        "command": "n2d-script {root} {ep}",
+        "routes": True,
+        "gate_stage": None,
+        "requires": ("raw",),
+        "outputs": (
+            "脚本/{ep}/voiceover.txt",
+            "脚本/{ep}/bgm.txt",
+            "脚本/{ep}/封面.md",
+            "设定库/global_style.md",
+            "设定库/characters/_角色总表.md",
+            "设定库/locations/_场景总表.md",
+        ),
+        "return_to_stage": "script_stage1",
+    },
+    {
+        "key": "voice",
+        "label": "角色配音",
+        "owner": "n2d-voice",
+        "progress_columns": ("配音",),
+        "command": "n2d-voice {root} {ep}",
+        "routes": True,
+        "gate_stage": None,
+        "requires": ("剧本改编",),
+        "outputs": (
+            "合成/{ep}/配音/voice_zh.wav",
+            "合成/{ep}/配音/时长清单.json",
+            "合成/{ep}/配音/_占位说明.md",
+        ),
+        "output_contract": {
+            "any_of": (
+                {
+                    "label": "真实配音",
+                    "all_of": (
+                        "合成/{ep}/配音/voice_zh.wav",
+                        "合成/{ep}/配音/时长清单.json",
+                    ),
+                },
+                {
+                    "label": "视频先行占位时长",
+                    "all_of": (
+                        "合成/{ep}/配音/_占位说明.md",
+                        "合成/{ep}/配音/时长清单.json",
+                    ),
+                },
+            ),
+        },
+        "return_to_stage": "voice",
+    },
+    {
+        "key": "script_stage2",
+        "label": "阶段2·分镜设计",
+        "owner": "n2d-script",
+        "progress_columns": ("分镜设计", "素材清单", "字幕中", "字幕英"),
+        "command": "n2d-script {root} {ep}  (配音后定稿)",
+        "routes": True,
+        "gate_stage": None,
+        "requires": ("配音",),
+        "outputs": (
+            "脚本/{ep}/分镜剧本.md",
+            "脚本/{ep}/故事板.md",
+            "脚本/{ep}/storyboard.json",
+            "脚本/{ep}/素材清单.md",
+            "脚本/{ep}/字幕_中文.srt",
+            "脚本/{ep}/字幕_英文.srt",
+            "脚本/{ep}/镜头时长.json",
+        ),
+        "output_contract": {
+            "required": (
+                "脚本/{ep}/分镜剧本.md",
+                "脚本/{ep}/故事板.md",
+                "脚本/{ep}/storyboard.json",
+                "脚本/{ep}/素材清单.md",
+                "脚本/{ep}/字幕_中文.srt",
+                "脚本/{ep}/镜头时长.json",
+            ),
+        },
+        "return_to_stage": "script_stage2",
+    },
+    {
+        "key": "image_prompt",
+        "label": "出图prompt",
+        "owner": "n2d-image",
+        "progress_columns": ("出图prompt",),
+        "command": "n2d-image {root} {ep}",
+        "routes": True,
+        "gate_stage": "image_prompt_preflight",
+        "requires": ("配音", "分镜设计"),
+        "outputs": (
+            f"出图/{SHARED_ASSET_DIR}/prompt/00_索引.md",
+            "出图/{ep}/prompt/00_总览.md",
+            "出图/{ep}/prompt/01_分镜出图.md",
+        ),
+        "return_to_stage": "image_prompt",
+    },
+    {
+        "key": "image",
+        "label": "出图",
+        "owner": "n2d-image",
+        "progress_columns": ("出图",),
+        "command": "n2d-image {root} {ep}",
+        "routes": True,
+        "gate_stage": "image",
+        "requires": ("出图prompt",),
+        "outputs": (
+            f"出图/{SHARED_ASSET_DIR}/图片",
+            "出图/{ep}/图片",
+        ),
+        "return_to_stage": "image",
+    },
+    {
+        "key": "video_prompt",
+        "label": "视频prompt",
+        "owner": "n2d-video",
+        "progress_columns": ("视频prompt",),
+        "command": "n2d-video {root} {ep}",
+        "routes": True,
+        "gate_stage": "video_prompt_preflight",
+        "requires": ("出图",),
+        "outputs": (
+            "出视频/{ep}/prompt/00_总览.md",
+            "出视频/{ep}/prompt/01_clips.md",
+        ),
+        "return_to_stage": "video_prompt",
+    },
+    {
+        "key": "video",
+        "label": "图生视频",
+        "owner": "n2d-video",
+        "progress_columns": ("视频",),
+        "command": "n2d-video {root} {ep}",
+        "routes": True,
+        "gate_stage": "video",
+        "requires": ("视频prompt", "出图"),
+        "outputs": ("出视频/{ep}/视频",),
+        "return_to_stage": "video",
+    },
+    {
+        "key": "compose",
+        "label": "合成成片",
+        "owner": "n2d-compose",
+        "progress_columns": ("成片",),
+        "command": "n2d-compose {root} {ep}",
+        "routes": True,
+        "gate_stage": "compose",
+        "requires": ("视频",),
+        "outputs": (
+            "合成/{ep}/成片_{ep}_zh.mp4",
+            "合成/{ep}/成片_{ep}_bilingual.mp4",
+        ),
+        "output_contract": {
+            "any_of": (
+                {"label": "中文字幕成片", "all_of": ("合成/{ep}/成片_{ep}_zh.mp4",)},
+                {"label": "双语成片", "all_of": ("合成/{ep}/成片_{ep}_bilingual.mp4",)},
+                {"label": "英文字幕成片", "all_of": ("合成/{ep}/成片_{ep}_en.mp4",)},
+            ),
+        },
+        "return_to_stage": "compose",
+    },
+    {
+        "key": "review",
+        "label": "审查验收",
+        "owner": "n2d-review",
+        "progress_columns": ("验收",),
+        "command": "n2d-review {root} {ep}",
+        "routes": True,
+        "gate_stage": "review",
+        "requires": ("成片",),
+        "outputs": (
+            "生产数据/score_{ep}.json",
+            "生产数据/consistency_ledger_{ep}.json",
+            "生产数据/review_ui_{ep}.json",
+            "生产数据/review_ui_findings_{ep}.json",
+            "合成/{ep}/成片_{ep}_zh.mp4",
+            "合成/{ep}/成片_{ep}_bilingual.mp4",
+        ),
+        "output_contract": {
+            "required": (
+                "生产数据/score_{ep}.json",
+                "生产数据/consistency_ledger_{ep}.json",
+                "生产数据/review_ui_{ep}.json",
+                "生产数据/review_ui_findings_{ep}.json",
+            ),
+            "any_of": (
+                {"label": "中文字幕成片", "all_of": ("合成/{ep}/成片_{ep}_zh.mp4",)},
+                {"label": "双语成片", "all_of": ("合成/{ep}/成片_{ep}_bilingual.mp4",)},
+                {"label": "英文字幕成片", "all_of": ("合成/{ep}/成片_{ep}_en.mp4",)},
+            ),
+        },
+        "return_to_stage": "review",
+    },
+]
+
+GATE_RECOVERY: Dict[str, Any] = {
+    "image_prompt_preflight": {
+        "return_to_stage": "script_stage2",
+        "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+        "affected_artifacts": (
+            "合规/compliance_manifest.json",
+            "脚本/{ep}/storyboard.json",
+        ),
+    },
+    "image_preflight": {
+        "return_to_stage": "image_prompt",
+        "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+        "affected_artifacts": (
+            "合规/compliance_manifest.json",
+            "脚本/{ep}/storyboard.json",
+            f"出图/{SHARED_ASSET_DIR}/identity_registry.json",
+            f"出图/{SHARED_ASSET_DIR}/asset_registry.json",
+            f"出图/{SHARED_ASSET_DIR}/prompt",
+            "出图/{ep}/prompt",
+        ),
+    },
+    "image": {
+        "return_to_stage": "image_prompt",
+        "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
+        "affected_artifacts": (
+            "合规/compliance_manifest.json",
+            "脚本/{ep}/storyboard.json",
+            f"出图/{SHARED_ASSET_DIR}/identity_registry.json",
+            f"出图/{SHARED_ASSET_DIR}/prompt",
+            "出图/{ep}/prompt",
+            "出图/{ep}/图片",
+        ),
+    },
+    "video_prompt_preflight": {
+        "return_to_stage": "image",
+        "rerun_scope": "先修身份矩阵/路由、已落档 PNG、image_qc full 报告、storyboard frame assets 与出图交接，再生成视频 prompt。",
+        "affected_artifacts": (
+            "合规/compliance_manifest.json",
+            "脚本/{ep}/storyboard.json",
+            f"出图/{SHARED_ASSET_DIR}/identity_registry.json",
+            f"出图/{SHARED_ASSET_DIR}/asset_registry.json",
+            f"{PRODUCTION_DIR}/identity_adapter_matrix.json",
+            "出图/{ep}/图片",
+            f"{PRODUCTION_DIR}/image_qc/{{ep}}",
+        ),
+    },
+    "video_preflight": {
+        "return_to_stage": "video_prompt",
+        "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+        "affected_artifacts": (
+            "合规/compliance_manifest.json",
+            "脚本/{ep}/storyboard.json",
+            f"出图/{SHARED_ASSET_DIR}/identity_registry.json",
+            f"出图/{SHARED_ASSET_DIR}/asset_registry.json",
+            f"{PRODUCTION_DIR}/identity_adapter_matrix.json",
+            "出图/{ep}/图片",
+            "出视频/{ep}/prompt",
+            "出视频/{ep}/control",
+        ),
+    },
+    "video": {
+        "return_to_stage": "video_prompt",
+        "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+        "affected_artifacts": (
+            "合规/compliance_manifest.json",
+            "脚本/{ep}/storyboard.json",
+            f"出图/{SHARED_ASSET_DIR}/identity_registry.json",
+            "出图/{ep}/图片",
+            "出视频/{ep}/prompt",
+            "出视频/{ep}/视频",
+        ),
+    },
+    "compose": {
+        "return_to_stage": "compose",
+        "rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
+        "affected_artifacts": (
+            "合规/compliance_manifest.json",
+            f"出图/{SHARED_ASSET_DIR}/identity_registry.json",
+            "出视频/{ep}/视频",
+            "合成/{ep}/配音",
+            "脚本/{ep}/字幕_中文.srt",
+            "合成/{ep}",
+        ),
+    },
+    "review": {
+        "return_to_stage": "review",
+        "rerun_scope": "按 finding 回退到最早受影响阶段。",
+        "affected_artifacts": (
+            "合规/compliance_manifest.json",
+            "脚本/{ep}/storyboard.json",
+            f"出图/{SHARED_ASSET_DIR}/identity_registry.json",
+            "出视频/{ep}/视频",
+            "合成/{ep}",
+        ),
+    },
+}
+
+GATE_STAGES = tuple(GATE_RECOVERY.keys())
+
+IDENTITY_IMAGE_ADAPTERS: Dict[str, Dict[str, Any]] = {
+    "codex": {
+        "allowed_modes": ("reference_group",),
+        "default_mode": "reference_group",
+        "default_status": "fallback_reference_group",
+    },
+    "openai": {
+        "allowed_modes": ("reference_group",),
+        "default_mode": "reference_group",
+        "default_status": "fallback_reference_group",
+    },
+    "dreamina": {
+        "allowed_modes": ("reference_group",),
+        "default_mode": "reference_group",
+        "default_status": "fallback_reference_group",
+    },
+    "seedream": {
+        "allowed_modes": ("universal_reference", "reference_group"),
+        "default_mode": "universal_reference",
+        "default_status": "unregistered",
+    },
+    "kling": {
+        "allowed_modes": ("character_id", "subject_library", "custom_model", "element_library", "reference_group"),
+        "default_mode": "character_id",
+        "default_status": "unregistered",
+    },
+    "sora": {
+        "allowed_modes": ("character_cameo", "reference_group"),
+        "default_mode": "character_cameo",
+        "default_status": "unregistered",
+    },
+}
+
+IDENTITY_VIDEO_ADAPTERS: Dict[str, Dict[str, Any]] = {
+    "dreamina": {
+        "allowed_modes": ("first_last_frame", "reference_group"),
+        "default_mode": "first_last_frame",
+        "default_status": "fallback_reference_group",
+    },
+    "kling": {
+        "allowed_modes": ("character_id", "reference_group"),
+        "default_mode": "character_id",
+        "default_status": "unregistered",
+    },
+    "seedance": {
+        "allowed_modes": ("face_lock", "reference_group"),
+        "default_mode": "face_lock",
+        "default_status": "unregistered",
+    },
+    "veo": {
+        "allowed_modes": ("reference_controls", "reference_group"),
+        "default_mode": "reference_controls",
+        "default_status": "unregistered",
+    },
+    "sora": {
+        "allowed_modes": ("character_cameo", "reference_media", "reference_group"),
+        "default_mode": "character_cameo",
+        "default_status": "unregistered",
+    },
+}
+
+MOTION_CONTROL_REQUIRED_SHOT_TYPES = (
+    "fight_exchange",
+    "chase",
+    "magic_burst",
+    "flight",
+    "mount_ride",
+    "vehicle_ride",
+    "vessel_flight",
+    "road_vehicle",
+    "stealth_stalk",
+    "kiss_or_near_kiss",
+    "hug_or_pull",
+    "intimate_interaction",
+    "dual_cultivation",
+    "multi_character_same_frame",
+    "ensemble_blocking",
+    "multi_person_blocking",
+)
+MOTION_CONTROL_RISK_FLAGS = (
+    "physical_contact",
+    "complex_blocking",
+    "multi_character_overlap",
+    "high_speed_motion",
+    "extreme_camera",
+    "identity_high_risk",
+)
+
+# ── 生图后端治理 ─────────────────────────────────────────────────────────────
+# 采集日期：2026-06-14  来源：n2d-image/SKILL.md 放行清单 + 各后端官方文档
+APPROVED_IMAGE_BACKENDS: Dict[str, Dict[str, Any]] = {
+    "codex": {
+        "name": "Codex",
+        "label": "Codex",
+        "canonical": "codex",
+        "multi_reference": True,
+        "native_subject": False,
+        "tier": "tier-1",
+    },
+    "openai": {
+        # 官方 OpenAI Images（gpt-image / DALL·E）入口，与 codex 同属 OpenAI 官方路线、
+        # 同走 reference_group（见 IDENTITY_IMAGE_ADAPTERS["openai"] 与 n2d-image references）。
+        "name": "OpenAI gpt-image / DALL·E",
+        "label": "官方 OpenAI gpt-image / DALL·E",
+        "canonical": "openai",
+        "multi_reference": True,
+        "native_subject": False,
+        "tier": "tier-1",
+    },
+    "dreamina_official": {
+        "name": "Dreamina/即梦官方 CLI",
+        "label": "Dreamina/即梦官方 CLI",
+        "canonical": "dreamina",
+        "multi_reference": True,
+        "native_subject": False,
+        "tier": "tier-1",
+    },
+    "seedream": {
+        "name": "Seedream",
+        "label": "Seedream",
+        "canonical": "seedream",
+        "multi_reference": True,
+        "native_subject": True,
+        "tier": "tier-1",
+    },
+    "kling_subject": {
+        "name": "可灵主体库",
+        "label": "可灵主体库",
+        "canonical": "kling",
+        "multi_reference": True,
+        "native_subject": True,
+        "tier": "tier-2",
+    },
+    "nano_banana": {
+        "name": "Nano Banana",
+        "label": "Nano Banana",
+        "canonical": "nano_banana",
+        "multi_reference": True,
+        "native_subject": False,
+        "tier": "tier-2",
+    },
+    "sora_cameo": {
+        "name": "Sora Cameo",
+        "label": "Sora Cameo",
+        "canonical": "sora",
+        "multi_reference": True,
+        "native_subject": True,
+        "tier": "tier-2",
+    },
+}
+
+IMAGE_BACKEND_ALIASES = {
+    "即梦": "dreamina_official",
+    "dreamina": "dreamina_official",
+    "codex": "codex",
+    # C5 模型名（生图模型）→ 默认访问渠道。GPT Image 2 默认走 Codex CLI；显式写 openai 走 Images API。
+    "gpt image 2": "codex",
+    "gpt-image-2": "codex",
+    "gpt image2": "codex",
+    "image2": "codex",
+    "openai": "openai",
+    "gpt-image": "openai",
+    "dall-e": "openai",
+    "dalle": "openai",
+    "seedream": "seedream",
+    "可灵": "kling_subject",
+    "kling": "kling_subject",
+    "nano banana": "nano_banana",
+    "nano_banana": "nano_banana",
+    "nanobanana": "nano_banana",
+    "gemini": "nano_banana",
+    "sora": "sora_cameo",
+}
+
+FORBIDDEN_IMAGE_BACKEND_KEYWORDS = ("同视频ai", "同视频AI", "第三方", "逆向", "web自动化", "web 自动化")
+
+# 生图模型/渠道身份一致性能力档（出图侧）。
+#
+# `APPROVED_IMAGE_BACKENDS` 只回答「这个生图渠道是否可用/官方」；
+# 本表回答「它能把角色身份锁到哪一级」。`face_drift_risk.py`、gate 和后续路由建议应读这里，
+# 避免把 Dreamina 这类“多参考但无持久主体 ID”的后端误当成 Seedream/可灵主体库。
+# 采集日期同 APPROVED_IMAGE_BACKENDS：2026-06-14；易变事实需走 freshness/refresh 流程刷新。
+IMAGE_IDENTITY_PROFILES: Dict[str, Dict[str, Any]] = {
+    # C5 铁律（贯通到执行真值表）：每条 profile 必须指认到具体**模型名**（model）；
+    # 渠道/访问入口单列（channel），label 以模型主导、渠道附注，禁止用纯渠道壳名（Codex/即梦）。
+    # in_context_consistency = 模型「同次生成/同会话内」多参考/上下文身份一致性强度（strong/moderate/standard）：
+    #   GPT Image 2 高保真多参考/上下文一致性=strong（≠弱后端），face_drift_risk 据此在集内 base 适度记功；
+    #   跨集仍按 multi_reference 不放水（见 face_drift_risk.score_character 注释）。
+    "codex": {
+        "label": "GPT Image 2（渠道 Codex CLI）",
+        "model": "GPT Image 2",
+        "channel": "Codex CLI",
+        "in_context_consistency": "strong",
+        "persistent_subject": False,
+        "multi_reference": True,
+        "strategy": "multi_reference",
+        "max_reference_images": None,
+        "ingests_video": False,
+        "recommended_diverse_reference_min": None,
+        "native_modes": (),
+        "notes": "生成者=GPT Image 2（第一梯队·高保真多参考/编辑·强上下文一致性·4K级尺寸·非弱后端）；Codex 仅访问入口。无公开服务端持久角色 ID；当前官方文档未证实可注册 subject-id/handle，每镜走项目记忆 reference_group + 真实图片入参 + 锚点句 + full QC。",
+    },
+    "openai": {
+        "label": "GPT Image 2（渠道 OpenAI Images API）",
+        "model": "GPT Image 2",
+        "channel": "OpenAI Images API",
+        "in_context_consistency": "strong",
+        "persistent_subject": False,
+        "multi_reference": True,
+        "strategy": "multi_reference",
+        "max_reference_images": None,
+        "ingests_video": False,
+        "recommended_diverse_reference_min": None,
+        "native_modes": (),
+        "notes": "生成者=GPT Image 2（经官方 OpenAI Images API）；支持图片输入/编辑/高保真参考，但无 n2d 持久主体 ID；按项目记忆 reference_group 与 image edit 兜底。",
+    },
+    "dreamina": {
+        "label": "即梦图像模型 Seedream 系（渠道 Dreamina/即梦官方 CLI）",
+        "model": "即梦图像模型（Seedream 系·版本以 per-run 官方证据为准）",
+        "channel": "Dreamina/即梦官方 CLI",
+        "in_context_consistency": "moderate",
+        "persistent_subject": False,
+        "multi_reference": True,
+        "strategy": "multi_reference_sticky_reference",
+        "max_reference_images": None,
+        "ingests_video": False,
+        "recommended_diverse_reference_min": None,
+        "native_modes": (),
+        "notes": "生成者=Seedream 系图像模型（即梦是 ByteDance 消费端渠道壳，≠模型本身）。官方 CLI 可多参考/图生图；按无持久角色 ID 处理，切角色前必须清空参考框。",
+    },
+    "nano_banana": {
+        "label": "Nano Banana Pro = Gemini 3 Pro Image（渠道 Gemini API）",
+        "model": "Nano Banana Pro（Gemini 3 Pro Image·版本以 per-run 证据为准）",
+        "channel": "Gemini API",
+        "in_context_consistency": "moderate",
+        "persistent_subject": False,
+        "multi_reference": True,
+        "strategy": "multi_reference",
+        "max_reference_images": 14,
+        "max_character_refs": 5,
+        "max_object_refs": 10,
+        "max_style_refs": 3,
+        "ingests_video": False,
+        "recommended_diverse_reference_min": None,
+        "native_modes": (),
+        "notes": (
+            "生成者=Nano Banana Pro（即 Google Gemini 3 Pro Image，DeepMind）；无持久角色 ID，不等同 Seedream Universal Reference，"
+            "不写入 seedream adapter。按官方 2026-06 文档：Gemini 3 Pro Image 高保真人物参考最多 5 张、"
+            "总输入最多 14 张；Gemini 3.1 Flash Image 支持至多 4 个角色相似与 10 个对象保真。"
+            "reference_planner 应在容量内优先选当前镜角色 face_anchor/expression/服装/场景参考，禁止全量喂图。"
+        ),
+    },
+    "seedream": {
+        "label": "Seedream（Universal Reference·渠道 Seedream 官方 API）",
+        "model": "Seedream 4.5（Universal Reference·版本以 per-run 证据为准）",
+        "channel": "Seedream 官方 API",
+        "in_context_consistency": "strong",
+        "persistent_subject": True,
+        "multi_reference": True,
+        "strategy": "universal_reference",
+        "max_reference_images": 14,
+        "ingests_video": False,
+        "recommended_diverse_reference_min": 8,
+        "native_modes": ("universal_reference",),
+        "notes": "生成者=Seedream 4.5（ByteDance）；支持原生主体/通用参考能力；注册或 ready 后按 ID/handle/reference 跨镜复用。注册时喂多样参考集（多角度+多表情+多光）比单 sheet 稳。",
+    },
+    "kling": {
+        "label": "可灵 Kling 主体库图像模型（渠道 可灵/Kling）",
+        "model": "Kling 主体库图像模型（版本以 per-run 证据为准）",
+        "channel": "可灵/Kling",
+        "in_context_consistency": "strong",
+        "persistent_subject": True,
+        "multi_reference": True,
+        "strategy": "subject_library",
+        "max_reference_images": None,
+        "ingests_video": True,
+        "recommended_diverse_reference_min": 10,
+        "native_modes": ("character_id", "subject_library", "custom_model", "element_library"),
+        "notes": "生成者=可灵 Kling 主体库图像模型（快手）；支持主体库/角色 ID 类能力；高危多人同框与接触镜优先注册。Custom Model 可吃 10–30 段视频/多帧拿最丰富身份，是治板式的首选。",
+    },
+    "sora": {
+        "label": "Sora（Character Cameo·渠道 Sora）",
+        "model": "Sora（Character Cameo）",
+        "channel": "Sora",
+        "in_context_consistency": "strong",
+        "persistent_subject": True,
+        "multi_reference": True,
+        "strategy": "character_cameo",
+        "max_reference_images": None,
+        "ingests_video": True,
+        "recommended_diverse_reference_min": 8,
+        "native_modes": ("character_cameo",),
+        "notes": "生成者=Sora（OpenAI·Character Cameo）；支持可复用角色 Cameo；以官方当前能力为准，执行前刷新候选。",
+    },
+}
+
+# ── 横切 readiness 注册表 ───────────────────────────────────────────────
+READINESS_TRACKED_SKILLS: List[Dict[str, Any]] = [
+    {
+        "key": "compliance",
+        "label": "合规治理",
+        "skill": "n2d-compliance",
+        "artifact": "合规/compliance_manifest.json",
+        "required_before": ("image", "video", "compose", "review"),
+    },
+    {
+        "key": "identity",
+        "label": "身份一致性",
+        "skill": "n2d-identity",
+        "artifact": f"出图/{SHARED_ASSET_DIR}/identity_registry.json",
+        "required_before": ("image", "video", "review"),
+    },
+    {
+        "key": "motion-control",
+        "label": "Motion Control",
+        "skill": "n2d-video",
+        "artifact": f"{PRODUCTION_DIR}/motion_control_manifest.json",
+        "required_before": ("video",),
+    },
+]
+
+CROSS_CUTTING_TOOLS: List[Dict[str, Any]] = [
+    {"key": "update", "label": "重制/更新", "skill": "n2d-update", "artifact": f"{PRODUCTION_DIR}/skill_update_plan_*.json"},
+    {"key": "batch", "label": "批量调度", "skill": "n2d-batch", "artifact": f"{PRODUCTION_DIR}/batch_queue.json"},
+    {"key": "score", "label": "评分审计", "skill": "n2d-score", "artifact": f"{PRODUCTION_DIR}/score_*.json"},
+    {"key": "dashboard", "label": "生产看板", "skill": "n2d-dashboard", "artifact": f"{PRODUCTION_DIR}/dashboard.json"},
+    {"key": "feedback", "label": "返工反馈", "skill": "n2d-feedback", "artifact": f"{PRODUCTION_DIR}/platform_feedback.json"},
+]
+
+CONTINUITY_FIELDS = (
+    "start_state",
+    "action",
+    "end_state",
+    "constraints",
+    "negative",
+    "transition",
+    "need_endframe",
+    "spatial_anchor",
+    "identity_anchor_points",
+    "emotion_flow",
+)
+
+COSTLY_HINTS = {
+    "配音": "声音克隆需肖像/音色授权（合规闸门）",
+    "出图": "会真出图·消耗额度 → 开跑前确认生图后端 + 重抽预算档位",
+    "视频": "会真出视频·消耗额度 → 开跑前确认生视频后端",
+    "成片": "合成成片（混音+烧字幕），相对便宜但耗时",
+    "验收": "不生产新媒体，但会刷新 review gate、评分、总账和审片 UI；通过后仍需人工签收",
+}

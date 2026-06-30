@@ -1,0 +1,2903 @@
+{
+  "auto_return_tasks": [
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "中段锚帧"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "中段锚帧",
+          "dim_key": "中段锚帧",
+          "dimension": "中段锚帧",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_黑殿审问_a1.png",
+          "message": "声明了锚帧 1 但锚帧 PNG 不存在",
+          "msg": "声明了锚帧 1 但锚帧 PNG 不存在",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "中段锚帧",
+          "dim_key": "中段锚帧",
+          "dimension": "中段锚帧",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_黑殿审问_mid_a1.png",
+          "message": "声明了锚帧 1 但锚帧 PNG 不存在",
+          "msg": "声明了锚帧 1 但锚帧 PNG 不存在",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "中段锚帧",
+          "dim_key": "中段锚帧",
+          "dimension": "中段锚帧",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_挑水命令_a1.png",
+          "message": "声明了锚帧 1 但锚帧 PNG 不存在",
+          "msg": "声明了锚帧 1 但锚帧 PNG 不存在",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "中段锚帧",
+          "dim_key": "中段锚帧",
+          "dimension": "中段锚帧",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_挑水命令_mid_a1.png",
+          "message": "声明了锚帧 1 但锚帧 PNG 不存在",
+          "msg": "声明了锚帧 1 但锚帧 PNG 不存在",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "中段锚帧",
+          "dim_key": "中段锚帧",
+          "dimension": "中段锚帧",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤_a1.png",
+          "message": "声明了锚帧 1 但锚帧 PNG 不存在",
+          "msg": "声明了锚帧 1 但锚帧 PNG 不存在",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "中段锚帧",
+          "dim_key": "中段锚帧",
+          "dimension": "中段锚帧",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤_mid_a1.png",
+          "message": "声明了锚帧 1 但锚帧 PNG 不存在",
+          "msg": "声明了锚帧 1 但锚帧 PNG 不存在",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "中段锚帧",
+          "dim_key": "中段锚帧",
+          "dimension": "中段锚帧",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋_a1.png",
+          "message": "声明了锚帧 1 但锚帧 PNG 不存在",
+          "msg": "声明了锚帧 1 但锚帧 PNG 不存在",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "中段锚帧",
+          "dim_key": "中段锚帧",
+          "dimension": "中段锚帧",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋_mid_a1.png",
+          "message": "声明了锚帧 1 但锚帧 PNG 不存在",
+          "msg": "声明了锚帧 1 但锚帧 PNG 不存在",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "中段锚帧",
+          "dim_key": "中段锚帧",
+          "dimension": "中段锚帧",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_夜挑五趟_mid_mid.png",
+          "message": "声明了锚帧 1 但锚帧 PNG 不存在",
+          "msg": "声明了锚帧 1 但锚帧 PNG 不存在",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video_prompt",
+      "scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/视频"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "中段锚帧"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "中段锚帧",
+          "dim_key": "中段锚帧",
+          "dimension": "中段锚帧",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "出视频/第1集/prompt/01_clips.md Clip_01",
+          "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+          "msg": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "中段锚帧",
+          "dim_key": "中段锚帧",
+          "dimension": "中段锚帧",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "出视频/第1集/prompt/01_clips.md Clip_02",
+          "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+          "msg": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "中段锚帧",
+          "dim_key": "中段锚帧",
+          "dimension": "中段锚帧",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "出视频/第1集/prompt/01_clips.md Clip_03",
+          "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+          "msg": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "中段锚帧",
+          "dim_key": "中段锚帧",
+          "dimension": "中段锚帧",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "出视频/第1集/prompt/01_clips.md Clip_04",
+          "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+          "msg": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "中段锚帧",
+          "dim_key": "中段锚帧",
+          "dimension": "中段锚帧",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "出视频/第1集/prompt/01_clips.md Clip_05",
+          "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+          "msg": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "中段锚帧",
+          "dim_key": "中段锚帧",
+          "dimension": "中段锚帧",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "出视频/第1集/prompt/01_clips.md Clip_06",
+          "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+          "msg": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "中段锚帧",
+          "dim_key": "中段锚帧",
+          "dimension": "中段锚帧",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "出视频/第1集/prompt/01_clips.md Clip_07",
+          "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+          "msg": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "中段锚帧",
+          "dim_key": "中段锚帧",
+          "dimension": "中段锚帧",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "出视频/第1集/prompt/01_clips.md Clip_08",
+          "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+          "msg": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "中段锚帧",
+          "dim_key": "中段锚帧",
+          "dimension": "中段锚帧",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "出视频/第1集/prompt/01_clips.md Clip_09",
+          "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+          "msg": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "中段锚帧",
+          "dim_key": "中段锚帧",
+          "dimension": "中段锚帧",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "出视频/第1集/prompt/01_clips.md Clip_10",
+          "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+          "msg": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video",
+      "scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/视频"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "生视频后端连通性"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "生视频后端连通性",
+          "dim_key": "生视频后端连通性",
+          "dimension": "生视频后端连通性",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/_设置.md",
+          "message": "生视频后端「即梦/Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL 启用自动探活。。出视频前请人工确认它能出片（官方 CLI 已登录·会员有效 / API 额度可用 / 一次 dry-run），不通即停，勿静默兜底换后端。",
+          "msg": "生视频后端「即梦/Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL 启用自动探活。。出视频前请人工确认它能出片（官方 CLI 已登录·会员有效 / API 额度可用 / 一次 dry-run），不通即停，勿静默兜底换后端。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video_prompt",
+      "scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/视频"
+    },
+    {
+      "affected_artifacts": [
+        "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "production_ops_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json"
+          ],
+          "affected_shots": [],
+          "dim": "后端一致性作用域(BSCOPE)",
+          "dim_key": "production_ops_consistency",
+          "dimension": "后端一致性作用域(BSCOPE)",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json",
+          "message": "video_model_routes.json 缺 backend_consistency_scope；需显式声明 image_generation=single_model_channel_per_project、video_generation=per_clip_allowed_with_baseline，并列出 baseline/identity_handoff/execution_recipe/post_video_qc 护栏。",
+          "msg": "video_model_routes.json 缺 backend_consistency_scope；需显式声明 image_generation=single_model_channel_per_project、video_generation=per_clip_allowed_with_baseline，并列出 baseline/identity_handoff/execution_recipe/post_video_qc 护栏。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video_prompt",
+      "scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。；定位产物：创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json"
+    },
+    {
+      "affected_artifacts": [
+        "创作区/制漫剧/仙界闭关小能手/生产数据/video_backend_capabilities/veo__via_dreamina.json",
+        "创作区/制漫剧/仙界闭关小能手/生产数据/video_backend_capabilities/kling__via_dreamina.json"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "生视频后端适配"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "创作区/制漫剧/仙界闭关小能手/生产数据/video_backend_capabilities/veo__via_dreamina.json"
+          ],
+          "affected_shots": [],
+          "dim": "生视频后端适配",
+          "dim_key": "生视频后端适配",
+          "dimension": "生视频后端适配",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json",
+          "message": "生视频后端「veo」（渠道 即梦/Dreamina，执行后端 veo）缺少本次官方 API/CLI 刷新证据：no per-run video backend refresh evidence。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额度和输出 schema，再记录刷新证据：`python3 skills/n2d/_lib/video_backend_adapter.py record-refresh <作品根> --backend \"veo\" --channel \"即梦/Dreamina\" --source \"<官方文档或CLI/API证据>\" --note \"<本次能力结论>\"`。证据文件：创作区/制漫剧/仙界闭关小能手/生产数据/video_backend_capabilities/veo__via_dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+          "msg": "生视频后端「veo」（渠道 即梦/Dreamina，执行后端 veo）缺少本次官方 API/CLI 刷新证据：no per-run video backend refresh evidence。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额度和输出 schema，再记录刷新证据：`python3 skills/n2d/_lib/video_backend_adapter.py record-refresh <作品根> --backend \"veo\" --channel \"即梦/Dreamina\" --source \"<官方文档或CLI/API证据>\" --note \"<本次能力结论>\"`。证据文件：创作区/制漫剧/仙界闭关小能手/生产数据/video_backend_capabilities/veo__via_dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "创作区/制漫剧/仙界闭关小能手/生产数据/video_backend_capabilities/kling__via_dreamina.json"
+          ],
+          "affected_shots": [],
+          "dim": "生视频后端适配",
+          "dim_key": "生视频后端适配",
+          "dimension": "生视频后端适配",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json",
+          "message": "生视频后端「kling」（渠道 即梦/Dreamina，执行后端 kling）缺少本次官方 API/CLI 刷新证据：no per-run video backend refresh evidence。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额度和输出 schema，再记录刷新证据：`python3 skills/n2d/_lib/video_backend_adapter.py record-refresh <作品根> --backend \"kling\" --channel \"即梦/Dreamina\" --source \"<官方文档或CLI/API证据>\" --note \"<本次能力结论>\"`。证据文件：创作区/制漫剧/仙界闭关小能手/生产数据/video_backend_capabilities/kling__via_dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+          "msg": "生视频后端「kling」（渠道 即梦/Dreamina，执行后端 kling）缺少本次官方 API/CLI 刷新证据：no per-run video backend refresh evidence。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额度和输出 schema，再记录刷新证据：`python3 skills/n2d/_lib/video_backend_adapter.py record-refresh <作品根> --backend \"kling\" --channel \"即梦/Dreamina\" --source \"<官方文档或CLI/API证据>\" --note \"<本次能力结论>\"`。证据文件：创作区/制漫剧/仙界闭关小能手/生产数据/video_backend_capabilities/kling__via_dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video",
+      "scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。；定位产物：创作区/制漫剧/仙界闭关小能手/生产数据/video_backend_capabilities/veo__via_dreamina.json、创作区/制漫剧/仙界闭关小能手/生产数据/video_backend_capabilities/kling__via_dreamina.json"
+    },
+    {
+      "affected_artifacts": [
+        "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json"
+      ],
+      "affected_shots": [
+        "Clip_05",
+        "Clip_06",
+        "Clip_09",
+        "Clip_10"
+      ],
+      "dimensions": [
+        "动作身份优先级"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json"
+          ],
+          "affected_shots": [
+            "Clip_05"
+          ],
+          "dim": "动作身份优先级",
+          "dim_key": "动作身份优先级",
+          "dimension": "动作身份优先级",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json",
+          "message": "Clip_05 是高动作/接触/奇观镜且 identity_requirement=character_id_or_reference_group，但缺 identity_preservation_plan；请声明何时允许减少静态锚点以保物理/动作、如何保留角色身份、以及失败时拆近景身份镜/动作远景的方案。",
+          "msg": "Clip_05 是高动作/接触/奇观镜且 identity_requirement=character_id_or_reference_group，但缺 identity_preservation_plan；请声明何时允许减少静态锚点以保物理/动作、如何保留角色身份、以及失败时拆近景身份镜/动作远景的方案。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json"
+          ],
+          "affected_shots": [
+            "Clip_06"
+          ],
+          "dim": "动作身份优先级",
+          "dim_key": "动作身份优先级",
+          "dimension": "动作身份优先级",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json",
+          "message": "Clip_06 是高动作/接触/奇观镜且 identity_requirement=character_id_or_reference_group，但缺 identity_preservation_plan；请声明何时允许减少静态锚点以保物理/动作、如何保留角色身份、以及失败时拆近景身份镜/动作远景的方案。",
+          "msg": "Clip_06 是高动作/接触/奇观镜且 identity_requirement=character_id_or_reference_group，但缺 identity_preservation_plan；请声明何时允许减少静态锚点以保物理/动作、如何保留角色身份、以及失败时拆近景身份镜/动作远景的方案。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json"
+          ],
+          "affected_shots": [
+            "Clip_09"
+          ],
+          "dim": "动作身份优先级",
+          "dim_key": "动作身份优先级",
+          "dimension": "动作身份优先级",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json",
+          "message": "Clip_09 是高动作/接触/奇观镜且 identity_requirement=face_lock_or_reference_group，但缺 identity_preservation_plan；请声明何时允许减少静态锚点以保物理/动作、如何保留角色身份、以及失败时拆近景身份镜/动作远景的方案。",
+          "msg": "Clip_09 是高动作/接触/奇观镜且 identity_requirement=face_lock_or_reference_group，但缺 identity_preservation_plan；请声明何时允许减少静态锚点以保物理/动作、如何保留角色身份、以及失败时拆近景身份镜/动作远景的方案。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json"
+          ],
+          "affected_shots": [
+            "Clip_10"
+          ],
+          "dim": "动作身份优先级",
+          "dim_key": "动作身份优先级",
+          "dimension": "动作身份优先级",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json",
+          "message": "Clip_10 是高动作/接触/奇观镜且 identity_requirement=face_lock_or_reference_group，但缺 identity_preservation_plan；请声明何时允许减少静态锚点以保物理/动作、如何保留角色身份、以及失败时拆近景身份镜/动作远景的方案。",
+          "msg": "Clip_10 是高动作/接触/奇观镜且 identity_requirement=face_lock_or_reference_group，但缺 identity_preservation_plan；请声明何时允许减少静态锚点以保物理/动作、如何保留角色身份、以及失败时拆近景身份镜/动作远景的方案。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video_prompt",
+      "scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。；定位镜头：Clip_05、Clip_06、Clip_09、Clip_10；定位产物：创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "Motion Control"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "Motion Control",
+          "dim_key": "Motion Control",
+          "dimension": "Motion Control",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/control/Clip_09/motion_control_manifest.json",
+          "message": "缺 motion_control_manifest.json；必须先准备 ready 控制资产，或写 status=degrade_only 的拆镜 manifest",
+          "msg": "缺 motion_control_manifest.json；必须先准备 ready 控制资产，或写 status=degrade_only 的拆镜 manifest",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "Motion Control",
+          "dim_key": "Motion Control",
+          "dimension": "Motion Control",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/control/Clip_10/motion_control_manifest.json",
+          "message": "缺 motion_control_manifest.json；必须先准备 ready 控制资产，或写 status=degrade_only 的拆镜 manifest",
+          "msg": "缺 motion_control_manifest.json；必须先准备 ready 控制资产，或写 status=degrade_only 的拆镜 manifest",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video_prompt",
+      "scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/视频"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "动作编排"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "动作编排",
+          "dim_key": "动作编排",
+          "dimension": "动作编排",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md ## Clip 09（时长 10s · EP01_CLIP09 · 夜挑五趟上）",
+          "message": "动作编排契约缺字段：beats, speed_curve, spatial_path, camera_path, readability_beats, keyframe_plan, post_cue_points, physics_guard, flight_path, altitude_curve, pose_lock, parallax_layers, mount_or_cloud_lock",
+          "msg": "动作编排契约缺字段：beats, speed_curve, spatial_path, camera_path, readability_beats, keyframe_plan, post_cue_points, physics_guard, flight_path, altitude_curve, pose_lock, parallax_layers, mount_or_cloud_lock",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "动作编排",
+          "dim_key": "动作编排",
+          "dimension": "动作编排",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md ## Clip 09（时长 10s · EP01_CLIP09 · 夜挑五趟上）",
+          "message": "中文视频 prompt 缺动作编排约束；必须说明速度曲线、空间路径、镜头路径、可读性节拍和失败降级。",
+          "msg": "中文视频 prompt 缺动作编排约束；必须说明速度曲线、空间路径、镜头路径、可读性节拍和失败降级。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "动作编排",
+          "dim_key": "动作编排",
+          "dimension": "动作编排",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md ## Clip 10（时长 10s · EP01_CLIP10 · 夜挑五趟下）",
+          "message": "动作编排契约缺字段：beats, speed_curve, spatial_path, camera_path, readability_beats, keyframe_plan, post_cue_points, physics_guard, flight_path, altitude_curve, pose_lock, parallax_layers, mount_or_cloud_lock",
+          "msg": "动作编排契约缺字段：beats, speed_curve, spatial_path, camera_path, readability_beats, keyframe_plan, post_cue_points, physics_guard, flight_path, altitude_curve, pose_lock, parallax_layers, mount_or_cloud_lock",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "动作编排",
+          "dim_key": "动作编排",
+          "dimension": "动作编排",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md ## Clip 10（时长 10s · EP01_CLIP10 · 夜挑五趟下）",
+          "message": "中文视频 prompt 缺动作编排约束；必须说明速度曲线、空间路径、镜头路径、可读性节拍和失败降级。",
+          "msg": "中文视频 prompt 缺动作编排约束；必须说明速度曲线、空间路径、镜头路径、可读性节拍和失败降级。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video_prompt",
+      "scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/视频"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "production_ops_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+          "message": "出视频/第1集/视频/Clip01_黑殿审问.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "msg": "出视频/第1集/视频/Clip01_黑殿审问.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+          "message": "出视频/第1集/视频/Clip01_黑殿审问_mid.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "msg": "出视频/第1集/视频/Clip01_黑殿审问_mid.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+          "message": "出视频/第1集/视频/Clip02_挑水命令.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "msg": "出视频/第1集/视频/Clip02_挑水命令.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+          "message": "出视频/第1集/视频/Clip02_挑水命令_mid.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "msg": "出视频/第1集/视频/Clip02_挑水命令_mid.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+          "message": "出视频/第1集/视频/Clip03_外门遗孤.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "msg": "出视频/第1集/视频/Clip03_外门遗孤.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+          "message": "出视频/第1集/视频/Clip03_外门遗孤_mid.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "msg": "出视频/第1集/视频/Clip03_外门遗孤_mid.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+          "message": "出视频/第1集/视频/Clip04_两缸水和空屋.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "msg": "出视频/第1集/视频/Clip04_两缸水和空屋.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+          "message": "出视频/第1集/视频/Clip04_两缸水和空屋_mid.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "msg": "出视频/第1集/视频/Clip04_两缸水和空屋_mid.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+          "message": "出视频/第1集/视频/Clip05_夜挑五趟.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "msg": "出视频/第1集/视频/Clip05_夜挑五趟.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+          "message": "出视频/第1集/视频/Clip05_夜挑五趟_mid.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "msg": "出视频/第1集/视频/Clip05_夜挑五趟_mid.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+          "message": "出视频/第1集/视频/Clip06_水底破盆.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "msg": "出视频/第1集/视频/Clip06_水底破盆.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方证据",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方证据",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+          "message": "出视频/第1集/视频/Clip07_盆底微光.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "msg": "出视频/第1集/视频/Clip07_盆底微光.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video",
+      "scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/视频"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "contract_inheritance"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "契约继承",
+          "dim_key": "contract_inheritance",
+          "dimension": "契约继承",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+          "message": "资产逐镜交接[asset_handoff_dropped]：Clip_03：出图绑定的资产 LOC_WAIMEN(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+          "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_03：出图绑定的资产 LOC_WAIMEN(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "契约继承",
+          "dim_key": "contract_inheritance",
+          "dimension": "契约继承",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+          "message": "资产逐镜交接[asset_handoff_dropped]：Clip_04：出图绑定的资产 PROP_KEY(?)、PROP_TIE(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+          "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_04：出图绑定的资产 PROP_KEY(?)、PROP_TIE(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "契约继承",
+          "dim_key": "contract_inheritance",
+          "dimension": "契约继承",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+          "message": "资产逐镜交接[asset_handoff_dropped]：Clip_05：出图绑定的资产 LOC_HOUSHAN(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+          "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_05：出图绑定的资产 LOC_HOUSHAN(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "契约继承",
+          "dim_key": "contract_inheritance",
+          "dimension": "契约继承",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+          "message": "资产逐镜交接[asset_handoff_dropped]：Clip_06：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+          "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_06：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "契约继承",
+          "dim_key": "contract_inheritance",
+          "dimension": "契约继承",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+          "message": "资产逐镜交接[asset_handoff_dropped]：Clip_07：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+          "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_07：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video_prompt",
+      "scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/视频"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "fidelity-gate"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "fidelity-gate",
+          "dim_key": "fidelity-gate",
+          "dimension": "fidelity-gate",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/vlm_canonical_第1集.json",
+          "message": "出视频后建议跑 vlm_verify --write 落 canonical 通过表，否则 compose/review gate 会 BLOCK。",
+          "msg": "出视频后建议跑 vlm_verify --write 落 canonical 通过表，否则 compose/review gate 会 BLOCK。",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video_prompt",
+      "scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/视频"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "一致性总审"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/视频"
+          ],
+          "affected_shots": [],
+          "dim": "一致性总审",
+          "dim_key": "一致性总审",
+          "dimension": "一致性总审",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第1集.json",
+          "message": "consistency_audit.py 退出码 1，但未导出 block finding；stderr=Traceback (most recent call last):\n  File \"/Users/wesley/learn/anime-arsenal/skills/n2d-review/scripts/consistency_audit.py\", line 1700, in <module>\n    sys.exit(main(sys.argv[1:]))\n             ~~~~^^^^^^^^^^^^^^\n  File \"/Users/wesley/learn/anime-arsenal/skills/n2d-review/scripts/consistency_audit.py\", line 1654, in main\n    res = run(ns.root.rstrip(\"/\"), ns.episode)\n  File \"/Users/wesley/learn/anime-arsenal/skills/n2d-review/scripts/consistency_audit.py\", line 1166, in run\n    s = sc.analyze(r",
+          "msg": "consistency_audit.py 退出码 1，但未导出 block finding；stderr=Traceback (most recent call last):\n  File \"/Users/wesley/learn/anime-arsenal/skills/n2d-review/scripts/consistency_audit.py\", line 1700, in <module>\n    sys.exit(main(sys.argv[1:]))\n             ~~~~^^^^^^^^^^^^^^\n  File \"/Users/wesley/learn/anime-arsenal/skills/n2d-review/scripts/consistency_audit.py\", line 1654, in main\n    res = run(ns.root.rstrip(\"/\"), ns.episode)\n  File \"/Users/wesley/learn/anime-arsenal/skills/n2d-review/scripts/consistency_audit.py\", line 1166, in run\n    s = sc.analyze(r",
+          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+          "return_to_stage": "review",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "review",
+      "scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/视频"
+    }
+  ],
+  "episode": "第1集",
+  "findings": [
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "合规前置",
+      "dim_key": "合规前置",
+      "dimension": "合规前置",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json platform_review.TODO",
+      "message": "平台审核缺字段：platform（发布/合成前需补；当前 video 阶段不阻断）",
+      "msg": "平台审核缺字段：platform（发布/合成前需补；当前 video 阶段不阻断）",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "合规前置",
+      "dim_key": "合规前置",
+      "dimension": "合规前置",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json platform_review.TODO",
+      "message": "平台审核缺字段：policy_profile（发布/合成前需补；当前 video 阶段不阻断）",
+      "msg": "平台审核缺字段：policy_profile（发布/合成前需补；当前 video 阶段不阻断）",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "合规前置",
+      "dim_key": "合规前置",
+      "dimension": "合规前置",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json regulatory_filing",
+      "message": "pre_broadcast_review 不能停在 pending（境内投放须先过播前审核）（发布/合成前需补；当前 video 阶段不阻断）",
+      "msg": "pre_broadcast_review 不能停在 pending（境内投放须先过播前审核）（发布/合成前需补；当前 video 阶段不阻断）",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "中段锚帧",
+      "dim_key": "中段锚帧",
+      "dimension": "中段锚帧",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_黑殿审问_a1.png",
+      "message": "声明了锚帧 1 但锚帧 PNG 不存在",
+      "msg": "声明了锚帧 1 但锚帧 PNG 不存在",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "中段锚帧",
+      "dim_key": "中段锚帧",
+      "dimension": "中段锚帧",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_黑殿审问_mid_a1.png",
+      "message": "声明了锚帧 1 但锚帧 PNG 不存在",
+      "msg": "声明了锚帧 1 但锚帧 PNG 不存在",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "中段锚帧",
+      "dim_key": "中段锚帧",
+      "dimension": "中段锚帧",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_挑水命令_a1.png",
+      "message": "声明了锚帧 1 但锚帧 PNG 不存在",
+      "msg": "声明了锚帧 1 但锚帧 PNG 不存在",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "中段锚帧",
+      "dim_key": "中段锚帧",
+      "dimension": "中段锚帧",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_挑水命令_mid_a1.png",
+      "message": "声明了锚帧 1 但锚帧 PNG 不存在",
+      "msg": "声明了锚帧 1 但锚帧 PNG 不存在",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "中段锚帧",
+      "dim_key": "中段锚帧",
+      "dimension": "中段锚帧",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤_a1.png",
+      "message": "声明了锚帧 1 但锚帧 PNG 不存在",
+      "msg": "声明了锚帧 1 但锚帧 PNG 不存在",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "中段锚帧",
+      "dim_key": "中段锚帧",
+      "dimension": "中段锚帧",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤_mid_a1.png",
+      "message": "声明了锚帧 1 但锚帧 PNG 不存在",
+      "msg": "声明了锚帧 1 但锚帧 PNG 不存在",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "中段锚帧",
+      "dim_key": "中段锚帧",
+      "dimension": "中段锚帧",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋_a1.png",
+      "message": "声明了锚帧 1 但锚帧 PNG 不存在",
+      "msg": "声明了锚帧 1 但锚帧 PNG 不存在",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "中段锚帧",
+      "dim_key": "中段锚帧",
+      "dimension": "中段锚帧",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋_mid_a1.png",
+      "message": "声明了锚帧 1 但锚帧 PNG 不存在",
+      "msg": "声明了锚帧 1 但锚帧 PNG 不存在",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "中段锚帧",
+      "dim_key": "中段锚帧",
+      "dimension": "中段锚帧",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_夜挑五趟_mid_mid.png",
+      "message": "声明了锚帧 1 但锚帧 PNG 不存在",
+      "msg": "声明了锚帧 1 但锚帧 PNG 不存在",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "导演运镜落实",
+      "dim_key": "导演运镜落实",
+      "dimension": "导演运镜落实",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md",
+      "message": "director_camera_plan_第1集.json（12 镜）的出图运镜词汇已现身 prompt 包（命中 3/5：起幅、运动余量、导演意图）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第1集.json（结构化签收）。",
+      "msg": "director_camera_plan_第1集.json（12 镜）的出图运镜词汇已现身 prompt 包（命中 3/5：起幅、运动余量、导演意图）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第1集.json（结构化签收）。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "image",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "导演运镜落实",
+      "dim_key": "导演运镜落实",
+      "dimension": "导演运镜落实",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+      "message": "director_camera_plan_第1集.json（12 镜）的出视频运镜词汇已现身 prompt 包（命中 6/6：起幅、落幅、镜头运动、运动精修、动态细节、导演意图）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第1集.json（结构化签收）。",
+      "msg": "director_camera_plan_第1集.json（12 镜）的出视频运镜词汇已现身 prompt 包（命中 6/6：起幅、落幅、镜头运动、运动精修、动态细节、导演意图）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第1集.json（结构化签收）。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "中段锚帧",
+      "dim_key": "中段锚帧",
+      "dimension": "中段锚帧",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "出视频/第1集/prompt/01_clips.md Clip_01",
+      "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+      "msg": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "中段锚帧",
+      "dim_key": "中段锚帧",
+      "dimension": "中段锚帧",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "出视频/第1集/prompt/01_clips.md Clip_02",
+      "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+      "msg": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "中段锚帧",
+      "dim_key": "中段锚帧",
+      "dimension": "中段锚帧",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "出视频/第1集/prompt/01_clips.md Clip_03",
+      "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+      "msg": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "中段锚帧",
+      "dim_key": "中段锚帧",
+      "dimension": "中段锚帧",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "出视频/第1集/prompt/01_clips.md Clip_04",
+      "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+      "msg": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "中段锚帧",
+      "dim_key": "中段锚帧",
+      "dimension": "中段锚帧",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "出视频/第1集/prompt/01_clips.md Clip_05",
+      "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+      "msg": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "中段锚帧",
+      "dim_key": "中段锚帧",
+      "dimension": "中段锚帧",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "出视频/第1集/prompt/01_clips.md Clip_06",
+      "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+      "msg": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "中段锚帧",
+      "dim_key": "中段锚帧",
+      "dimension": "中段锚帧",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "出视频/第1集/prompt/01_clips.md Clip_07",
+      "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+      "msg": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "中段锚帧",
+      "dim_key": "中段锚帧",
+      "dimension": "中段锚帧",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "出视频/第1集/prompt/01_clips.md Clip_08",
+      "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+      "msg": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "中段锚帧",
+      "dim_key": "中段锚帧",
+      "dimension": "中段锚帧",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "出视频/第1集/prompt/01_clips.md Clip_09",
+      "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+      "msg": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "中段锚帧",
+      "dim_key": "中段锚帧",
+      "dimension": "中段锚帧",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "出视频/第1集/prompt/01_clips.md Clip_10",
+      "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+      "msg": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "生视频后端连通性",
+      "dim_key": "生视频后端连通性",
+      "dimension": "生视频后端连通性",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/_设置.md",
+      "message": "生视频后端「即梦/Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL 启用自动探活。。出视频前请人工确认它能出片（官方 CLI 已登录·会员有效 / API 额度可用 / 一次 dry-run），不通即停，勿静默兜底换后端。",
+      "msg": "生视频后端「即梦/Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL 启用自动探活。。出视频前请人工确认它能出片（官方 CLI 已登录·会员有效 / API 额度可用 / 一次 dry-run），不通即停，勿静默兜底换后端。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json"
+      ],
+      "affected_shots": [],
+      "dim": "后端一致性作用域(BSCOPE)",
+      "dim_key": "production_ops_consistency",
+      "dimension": "后端一致性作用域(BSCOPE)",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json",
+      "message": "video_model_routes.json 缺 backend_consistency_scope；需显式声明 image_generation=single_model_channel_per_project、video_generation=per_clip_allowed_with_baseline，并列出 baseline/identity_handoff/execution_recipe/post_video_qc 护栏。",
+      "msg": "video_model_routes.json 缺 backend_consistency_scope；需显式声明 image_generation=single_model_channel_per_project、video_generation=per_clip_allowed_with_baseline，并列出 baseline/identity_handoff/execution_recipe/post_video_qc 护栏。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "创作区/制漫剧/仙界闭关小能手/生产数据/video_backend_capabilities/veo__via_dreamina.json"
+      ],
+      "affected_shots": [],
+      "dim": "生视频后端适配",
+      "dim_key": "生视频后端适配",
+      "dimension": "生视频后端适配",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json",
+      "message": "生视频后端「veo」（渠道 即梦/Dreamina，执行后端 veo）缺少本次官方 API/CLI 刷新证据：no per-run video backend refresh evidence。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额度和输出 schema，再记录刷新证据：`python3 skills/n2d/_lib/video_backend_adapter.py record-refresh <作品根> --backend \"veo\" --channel \"即梦/Dreamina\" --source \"<官方文档或CLI/API证据>\" --note \"<本次能力结论>\"`。证据文件：创作区/制漫剧/仙界闭关小能手/生产数据/video_backend_capabilities/veo__via_dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+      "msg": "生视频后端「veo」（渠道 即梦/Dreamina，执行后端 veo）缺少本次官方 API/CLI 刷新证据：no per-run video backend refresh evidence。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额度和输出 schema，再记录刷新证据：`python3 skills/n2d/_lib/video_backend_adapter.py record-refresh <作品根> --backend \"veo\" --channel \"即梦/Dreamina\" --source \"<官方文档或CLI/API证据>\" --note \"<本次能力结论>\"`。证据文件：创作区/制漫剧/仙界闭关小能手/生产数据/video_backend_capabilities/veo__via_dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "创作区/制漫剧/仙界闭关小能手/生产数据/video_backend_capabilities/kling__via_dreamina.json"
+      ],
+      "affected_shots": [],
+      "dim": "生视频后端适配",
+      "dim_key": "生视频后端适配",
+      "dimension": "生视频后端适配",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json",
+      "message": "生视频后端「kling」（渠道 即梦/Dreamina，执行后端 kling）缺少本次官方 API/CLI 刷新证据：no per-run video backend refresh evidence。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额度和输出 schema，再记录刷新证据：`python3 skills/n2d/_lib/video_backend_adapter.py record-refresh <作品根> --backend \"kling\" --channel \"即梦/Dreamina\" --source \"<官方文档或CLI/API证据>\" --note \"<本次能力结论>\"`。证据文件：创作区/制漫剧/仙界闭关小能手/生产数据/video_backend_capabilities/kling__via_dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+      "msg": "生视频后端「kling」（渠道 即梦/Dreamina，执行后端 kling）缺少本次官方 API/CLI 刷新证据：no per-run video backend refresh evidence。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额度和输出 schema，再记录刷新证据：`python3 skills/n2d/_lib/video_backend_adapter.py record-refresh <作品根> --backend \"kling\" --channel \"即梦/Dreamina\" --source \"<官方文档或CLI/API证据>\" --note \"<本次能力结论>\"`。证据文件：创作区/制漫剧/仙界闭关小能手/生产数据/video_backend_capabilities/kling__via_dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json"
+      ],
+      "affected_shots": [
+        "Clip_05"
+      ],
+      "dim": "动作身份优先级",
+      "dim_key": "动作身份优先级",
+      "dimension": "动作身份优先级",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json",
+      "message": "Clip_05 是高动作/接触/奇观镜且 identity_requirement=character_id_or_reference_group，但缺 identity_preservation_plan；请声明何时允许减少静态锚点以保物理/动作、如何保留角色身份、以及失败时拆近景身份镜/动作远景的方案。",
+      "msg": "Clip_05 是高动作/接触/奇观镜且 identity_requirement=character_id_or_reference_group，但缺 identity_preservation_plan；请声明何时允许减少静态锚点以保物理/动作、如何保留角色身份、以及失败时拆近景身份镜/动作远景的方案。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json"
+      ],
+      "affected_shots": [
+        "Clip_06"
+      ],
+      "dim": "动作身份优先级",
+      "dim_key": "动作身份优先级",
+      "dimension": "动作身份优先级",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json",
+      "message": "Clip_06 是高动作/接触/奇观镜且 identity_requirement=character_id_or_reference_group，但缺 identity_preservation_plan；请声明何时允许减少静态锚点以保物理/动作、如何保留角色身份、以及失败时拆近景身份镜/动作远景的方案。",
+      "msg": "Clip_06 是高动作/接触/奇观镜且 identity_requirement=character_id_or_reference_group，但缺 identity_preservation_plan；请声明何时允许减少静态锚点以保物理/动作、如何保留角色身份、以及失败时拆近景身份镜/动作远景的方案。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json"
+      ],
+      "affected_shots": [
+        "Clip_09"
+      ],
+      "dim": "动作身份优先级",
+      "dim_key": "动作身份优先级",
+      "dimension": "动作身份优先级",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json",
+      "message": "Clip_09 是高动作/接触/奇观镜且 identity_requirement=face_lock_or_reference_group，但缺 identity_preservation_plan；请声明何时允许减少静态锚点以保物理/动作、如何保留角色身份、以及失败时拆近景身份镜/动作远景的方案。",
+      "msg": "Clip_09 是高动作/接触/奇观镜且 identity_requirement=face_lock_or_reference_group，但缺 identity_preservation_plan；请声明何时允许减少静态锚点以保物理/动作、如何保留角色身份、以及失败时拆近景身份镜/动作远景的方案。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "Motion Control",
+      "dim_key": "Motion Control",
+      "dimension": "Motion Control",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/control/Clip_09/motion_control_manifest.json",
+      "message": "缺 motion_control_manifest.json；必须先准备 ready 控制资产，或写 status=degrade_only 的拆镜 manifest",
+      "msg": "缺 motion_control_manifest.json；必须先准备 ready 控制资产，或写 status=degrade_only 的拆镜 manifest",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json"
+      ],
+      "affected_shots": [
+        "Clip_10"
+      ],
+      "dim": "动作身份优先级",
+      "dim_key": "动作身份优先级",
+      "dimension": "动作身份优先级",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json",
+      "message": "Clip_10 是高动作/接触/奇观镜且 identity_requirement=face_lock_or_reference_group，但缺 identity_preservation_plan；请声明何时允许减少静态锚点以保物理/动作、如何保留角色身份、以及失败时拆近景身份镜/动作远景的方案。",
+      "msg": "Clip_10 是高动作/接触/奇观镜且 identity_requirement=face_lock_or_reference_group，但缺 identity_preservation_plan；请声明何时允许减少静态锚点以保物理/动作、如何保留角色身份、以及失败时拆近景身份镜/动作远景的方案。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "Motion Control",
+      "dim_key": "Motion Control",
+      "dimension": "Motion Control",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/control/Clip_10/motion_control_manifest.json",
+      "message": "缺 motion_control_manifest.json；必须先准备 ready 控制资产，或写 status=degrade_only 的拆镜 manifest",
+      "msg": "缺 motion_control_manifest.json；必须先准备 ready 控制资产，或写 status=degrade_only 的拆镜 manifest",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "动作编排",
+      "dim_key": "动作编排",
+      "dimension": "动作编排",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md ## Clip 09（时长 10s · EP01_CLIP09 · 夜挑五趟上）",
+      "message": "动作编排契约缺字段：beats, speed_curve, spatial_path, camera_path, readability_beats, keyframe_plan, post_cue_points, physics_guard, flight_path, altitude_curve, pose_lock, parallax_layers, mount_or_cloud_lock",
+      "msg": "动作编排契约缺字段：beats, speed_curve, spatial_path, camera_path, readability_beats, keyframe_plan, post_cue_points, physics_guard, flight_path, altitude_curve, pose_lock, parallax_layers, mount_or_cloud_lock",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "动作编排",
+      "dim_key": "动作编排",
+      "dimension": "动作编排",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md ## Clip 09（时长 10s · EP01_CLIP09 · 夜挑五趟上）",
+      "message": "中文视频 prompt 缺动作编排约束；必须说明速度曲线、空间路径、镜头路径、可读性节拍和失败降级。",
+      "msg": "中文视频 prompt 缺动作编排约束；必须说明速度曲线、空间路径、镜头路径、可读性节拍和失败降级。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "动作编排",
+      "dim_key": "动作编排",
+      "dimension": "动作编排",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md ## Clip 10（时长 10s · EP01_CLIP10 · 夜挑五趟下）",
+      "message": "动作编排契约缺字段：beats, speed_curve, spatial_path, camera_path, readability_beats, keyframe_plan, post_cue_points, physics_guard, flight_path, altitude_curve, pose_lock, parallax_layers, mount_or_cloud_lock",
+      "msg": "动作编排契约缺字段：beats, speed_curve, spatial_path, camera_path, readability_beats, keyframe_plan, post_cue_points, physics_guard, flight_path, altitude_curve, pose_lock, parallax_layers, mount_or_cloud_lock",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "动作编排",
+      "dim_key": "动作编排",
+      "dimension": "动作编排",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md ## Clip 10（时长 10s · EP01_CLIP10 · 夜挑五趟下）",
+      "message": "中文视频 prompt 缺动作编排约束；必须说明速度曲线、空间路径、镜头路径、可读性节拍和失败降级。",
+      "msg": "中文视频 prompt 缺动作编排约束；必须说明速度曲线、空间路径、镜头路径、可读性节拍和失败降级。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+      "message": "出视频/第1集/视频/Clip01_黑殿审问.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "msg": "出视频/第1集/视频/Clip01_黑殿审问.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+      "message": "出视频/第1集/视频/Clip01_黑殿审问_mid.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "msg": "出视频/第1集/视频/Clip01_黑殿审问_mid.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+      "message": "出视频/第1集/视频/Clip02_挑水命令.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "msg": "出视频/第1集/视频/Clip02_挑水命令.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+      "message": "出视频/第1集/视频/Clip02_挑水命令_mid.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "msg": "出视频/第1集/视频/Clip02_挑水命令_mid.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+      "message": "出视频/第1集/视频/Clip03_外门遗孤.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "msg": "出视频/第1集/视频/Clip03_外门遗孤.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+      "message": "出视频/第1集/视频/Clip03_外门遗孤_mid.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "msg": "出视频/第1集/视频/Clip03_外门遗孤_mid.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+      "message": "出视频/第1集/视频/Clip04_两缸水和空屋.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "msg": "出视频/第1集/视频/Clip04_两缸水和空屋.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+      "message": "出视频/第1集/视频/Clip04_两缸水和空屋_mid.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "msg": "出视频/第1集/视频/Clip04_两缸水和空屋_mid.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+      "message": "出视频/第1集/视频/Clip05_夜挑五趟.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "msg": "出视频/第1集/视频/Clip05_夜挑五趟.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+      "message": "出视频/第1集/视频/Clip05_夜挑五趟_mid.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "msg": "出视频/第1集/视频/Clip05_夜挑五趟_mid.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+      "message": "出视频/第1集/视频/Clip06_水底破盆.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "msg": "出视频/第1集/视频/Clip06_水底破盆.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "生成配方证据",
+      "dim_key": "production_ops_consistency",
+      "dimension": "生成配方证据",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+      "message": "出视频/第1集/视频/Clip07_盆底微光.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "msg": "出视频/第1集/视频/Clip07_盆底微光.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "契约继承",
+      "dim_key": "contract_inheritance",
+      "dimension": "契约继承",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+      "message": "资产逐镜交接[asset_handoff_dropped]：Clip_03：出图绑定的资产 LOC_WAIMEN(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+      "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_03：出图绑定的资产 LOC_WAIMEN(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "契约继承",
+      "dim_key": "contract_inheritance",
+      "dimension": "契约继承",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+      "message": "资产逐镜交接[asset_handoff_dropped]：Clip_04：出图绑定的资产 PROP_KEY(?)、PROP_TIE(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+      "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_04：出图绑定的资产 PROP_KEY(?)、PROP_TIE(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "契约继承",
+      "dim_key": "contract_inheritance",
+      "dimension": "契约继承",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+      "message": "资产逐镜交接[asset_handoff_dropped]：Clip_05：出图绑定的资产 LOC_HOUSHAN(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+      "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_05：出图绑定的资产 LOC_HOUSHAN(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "契约继承",
+      "dim_key": "contract_inheritance",
+      "dimension": "契约继承",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+      "message": "资产逐镜交接[asset_handoff_dropped]：Clip_06：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+      "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_06：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "契约继承",
+      "dim_key": "contract_inheritance",
+      "dimension": "契约继承",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+      "message": "资产逐镜交接[asset_handoff_dropped]：Clip_07：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+      "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_07：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "fidelity-gate",
+      "dim_key": "fidelity-gate",
+      "dimension": "fidelity-gate",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/vlm_canonical_第1集.json",
+      "message": "出视频后建议跑 vlm_verify --write 落 canonical 通过表，否则 compose/review gate 会 BLOCK。",
+      "msg": "出视频后建议跑 vlm_verify --write 落 canonical 通过表，否则 compose/review gate 会 BLOCK。",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "现实覆盖",
+      "dim_key": "现实覆盖",
+      "dimension": "现实覆盖",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "第1集",
+      "message": "场景现实验证器覆盖 0/2 真跑（DINOv2/OWLv2）；休眠 2（适用但后端没真出活）。stage=video",
+      "msg": "场景现实验证器覆盖 0/2 真跑（DINOv2/OWLv2）；休眠 2（适用但后端没真出活）。stage=video",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "video_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "一致性总审",
+      "dim_key": "一致性总审",
+      "dimension": "一致性总审",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第1集.json",
+      "message": "consistency_audit.py 退出码 1，但未导出 block finding；stderr=Traceback (most recent call last):\n  File \"/Users/wesley/learn/anime-arsenal/skills/n2d-review/scripts/consistency_audit.py\", line 1700, in <module>\n    sys.exit(main(sys.argv[1:]))\n             ~~~~^^^^^^^^^^^^^^\n  File \"/Users/wesley/learn/anime-arsenal/skills/n2d-review/scripts/consistency_audit.py\", line 1654, in main\n    res = run(ns.root.rstrip(\"/\"), ns.episode)\n  File \"/Users/wesley/learn/anime-arsenal/skills/n2d-review/scripts/consistency_audit.py\", line 1166, in run\n    s = sc.analyze(r",
+      "msg": "consistency_audit.py 退出码 1，但未导出 block finding；stderr=Traceback (most recent call last):\n  File \"/Users/wesley/learn/anime-arsenal/skills/n2d-review/scripts/consistency_audit.py\", line 1700, in <module>\n    sys.exit(main(sys.argv[1:]))\n             ~~~~^^^^^^^^^^^^^^\n  File \"/Users/wesley/learn/anime-arsenal/skills/n2d-review/scripts/consistency_audit.py\", line 1654, in main\n    res = run(ns.root.rstrip(\"/\"), ns.episode)\n  File \"/Users/wesley/learn/anime-arsenal/skills/n2d-review/scripts/consistency_audit.py\", line 1166, in run\n    s = sc.analyze(r",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
+      "return_to_stage": "review",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    }
+  ],
+  "gate_stage": "video",
+  "generated_at": "2026-06-30T08:21:08+00:00",
+  "inputs_fingerprint": {
+    "files": {
+      "出图/共享/identity_registry.json": "baf11ed55b56d4e166baa9291dc1c6042d205bd916fa48c26d222b420702856a",
+      "出图/第1集/图片": null,
+      "出视频/第1集/prompt": null,
+      "出视频/第1集/视频": null,
+      "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/video_model_routes.json": null,
+      "创作区/制漫剧/仙界闭关小能手/生产数据/video_backend_capabilities/kling__via_dreamina.json": null,
+      "创作区/制漫剧/仙界闭关小能手/生产数据/video_backend_capabilities/veo__via_dreamina.json": null,
+      "合规/compliance_manifest.json": "ffb8887ca84dffc6048d3d121b94e0d918c4689064ad08d498efe062d9f7fb68",
+      "脚本/第1集/storyboard.json": "532a48c1b4c88006c0529d18fc2ef55ad71281ec6155340b79c9dbc3078e822c"
+    },
+    "sha": "fd8fd8b7b298dd6259780b614e564783413d10e355464562a5bcb1207c8663bd"
+  },
+  "kind": "n2d_consistency_findings",
+  "root": "创作区/制漫剧/仙界闭关小能手",
+  "source": {
+    "kind": "n2d_gate",
+    "path": "n2d-review/scripts/gate.py"
+  },
+  "summary": {
+    "by_dim": {
+      "Motion Control": {
+        "block": 2,
+        "info": 0,
+        "warn": 0
+      },
+      "fidelity-gate": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
+      "一致性总审": {
+        "block": 1,
+        "info": 0,
+        "warn": 0
+      },
+      "中段锚帧": {
+        "block": 9,
+        "info": 0,
+        "warn": 10
+      },
+      "动作编排": {
+        "block": 4,
+        "info": 0,
+        "warn": 0
+      },
+      "动作身份优先级": {
+        "block": 4,
+        "info": 0,
+        "warn": 0
+      },
+      "合规前置": {
+        "block": 0,
+        "info": 3,
+        "warn": 0
+      },
+      "后端一致性作用域(BSCOPE)": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
+      "契约继承": {
+        "block": 0,
+        "info": 0,
+        "warn": 5
+      },
+      "导演运镜落实": {
+        "block": 0,
+        "info": 2,
+        "warn": 0
+      },
+      "现实覆盖": {
+        "block": 0,
+        "info": 1,
+        "warn": 0
+      },
+      "生成配方证据": {
+        "block": 12,
+        "info": 0,
+        "warn": 0
+      },
+      "生视频后端连通性": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
+      "生视频后端适配": {
+        "block": 2,
+        "info": 0,
+        "warn": 0
+      }
+    },
+    "severity": {
+      "block": 34,
+      "info": 6,
+      "warn": 18
+    },
+    "total": 58
+  },
+  "version": 1
+}

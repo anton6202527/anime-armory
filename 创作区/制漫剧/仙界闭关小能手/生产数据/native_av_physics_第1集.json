@@ -1,0 +1,480 @@
+{
+  "clips": [
+    {
+      "action_sounds": [],
+      "audio_intent": "native_speech",
+      "clip_id": "Clip_01",
+      "evidence_status": "needs_review",
+      "generated_by": "n2d-video/native_av_sidecar.py",
+      "has_audio": true,
+      "lip_sync": {
+        "evidence": "accepted_clip_requires_human_or_machine_lipsync_review",
+        "mouth_visible": true,
+        "policy": "native_dialogue_match",
+        "status": "needs_review"
+      },
+      "post_policy": {
+        "compose_policy": "保留原片音轨",
+        "processing": "compose_stage_controls_native_track"
+      },
+      "review_status": "needs_review",
+      "spatial_acoustics": {
+        "distance": "needs_review",
+        "reverb_profile": "needs_review",
+        "space_id": "LOC_ZAYI_DADIAN"
+      },
+      "speaker_source": {
+        "character_id": "CHAR_HE_PINGSHENG",
+        "dialogue_ref": "needs_review",
+        "mouth_visible": true,
+        "on_screen": true,
+        "speaker_key": "CHAR_HE_PINGSHENG_native"
+      },
+      "updated_at": "2026-06-30T09:24:30+00:00",
+      "video_path": "出视频/第1集/视频/Clip01_黑殿审问.mp4"
+    },
+    {
+      "action_sounds": [
+        {
+          "action": "visible body/prop movement in this clip",
+          "sound": "cloth/step/water/bucket/key-lock/bowl/ceramic sounds only when visibly triggered",
+          "source": "visible_body_or_prop_motion",
+          "timing": "must follow visible action beats; no early artifact or offscreen voice cues",
+          "visible_evidence": "only sounds tied to visible cloth, step, water, bucket, key/lock, bowl, or ceramic basin motion"
+        }
+      ],
+      "audio_intent": "native_speech",
+      "clip_id": "Clip_02",
+      "evidence_status": "preflight_contract",
+      "lip_sync": {
+        "policy": "native_dialogue_match",
+        "review": "post-generation lip-sync review required before compose keeps original audio",
+        "target": "visible mouth movement follows generated native dialogue timing"
+      },
+      "post_policy": {
+        "compose_policy": "保留原片音轨",
+        "processing": "compose_stage_controls_native_track; do not strip before video QC",
+        "review": "verify source ownership, lip sync if speech, and no unwanted native voice in no-dialogue clips"
+      },
+      "review_status": "needs_generation_review",
+      "spatial_acoustics": {
+        "distance": "medium_close",
+        "reverb_profile": "short_wooden_hall_low_reverb",
+        "space_id": "LOC_ZAYI_DADIAN",
+        "visible_space_evidence": "inherits storyboard scene and first/end frame location anchors"
+      },
+      "speaker_source": {
+        "character_id": "CHAR_HE_PINGSHENG",
+        "dialogue_ref": "脚本/第1集/storyboard.json#clips[1].beats",
+        "dialogue_text": "黑殿审问下",
+        "mouth_visible": true,
+        "on_screen": true,
+        "source_rule": "voice must belong to visible on-screen speaker or visible crowd laughter; no offscreen narrator in video generation",
+        "speaker_id": "Clip_02_visible_native_speech",
+        "visible": true
+      },
+      "storyboard_id": "EP01_CLIP02"
+    },
+    {
+      "action_sounds": [
+        {
+          "action": "visible body/prop movement in this clip",
+          "sound": "cloth/step/water/bucket/key-lock/bowl/ceramic sounds only when visibly triggered",
+          "source": "visible_body_or_prop_motion",
+          "timing": "must follow visible action beats; no early artifact or offscreen voice cues",
+          "visible_evidence": "only sounds tied to visible cloth, step, water, bucket, key/lock, bowl, or ceramic basin motion"
+        }
+      ],
+      "audio_intent": "native_speech",
+      "clip_id": "Clip_03",
+      "evidence_status": "preflight_contract",
+      "lip_sync": {
+        "policy": "native_dialogue_match",
+        "review": "post-generation lip-sync review required before compose keeps original audio",
+        "target": "visible mouth movement follows generated native dialogue timing"
+      },
+      "post_policy": {
+        "compose_policy": "保留原片音轨",
+        "processing": "compose_stage_controls_native_track; do not strip before video QC",
+        "review": "verify source ownership, lip sync if speech, and no unwanted native voice in no-dialogue clips"
+      },
+      "review_status": "needs_generation_review",
+      "spatial_acoustics": {
+        "distance": "medium_close",
+        "reverb_profile": "short_wooden_hall_low_reverb",
+        "space_id": "LOC_ZAYI_DADIAN",
+        "visible_space_evidence": "inherits storyboard scene and first/end frame location anchors"
+      },
+      "speaker_source": {
+        "character_id": "CHAR_TAIXUMEN_ZHANGLAO",
+        "dialogue_ref": "脚本/第1集/storyboard.json#clips[2].beats",
+        "dialogue_text": "挑水命令上",
+        "mouth_visible": true,
+        "on_screen": true,
+        "source_rule": "voice must belong to visible on-screen speaker or visible crowd laughter; no offscreen narrator in video generation",
+        "speaker_id": "Clip_03_visible_native_speech",
+        "visible": true
+      },
+      "storyboard_id": "EP01_CLIP03"
+    },
+    {
+      "action_sounds": [
+        {
+          "action": "visible body/prop movement in this clip",
+          "sound": "cloth/step/water/bucket/key-lock/bowl/ceramic sounds only when visibly triggered",
+          "source": "visible_body_or_prop_motion",
+          "timing": "must follow visible action beats; no early artifact or offscreen voice cues",
+          "visible_evidence": "only sounds tied to visible cloth, step, water, bucket, key/lock, bowl, or ceramic basin motion"
+        }
+      ],
+      "audio_intent": "native_speech",
+      "clip_id": "Clip_04",
+      "evidence_status": "preflight_contract",
+      "lip_sync": {
+        "policy": "native_dialogue_match",
+        "review": "post-generation lip-sync review required before compose keeps original audio",
+        "target": "visible mouth movement follows generated native dialogue timing"
+      },
+      "post_policy": {
+        "compose_policy": "保留原片音轨",
+        "processing": "compose_stage_controls_native_track; do not strip before video QC",
+        "review": "verify source ownership, lip sync if speech, and no unwanted native voice in no-dialogue clips"
+      },
+      "review_status": "needs_generation_review",
+      "spatial_acoustics": {
+        "distance": "medium_close",
+        "reverb_profile": "short_wooden_hall_low_reverb",
+        "space_id": "LOC_ZAYI_DADIAN",
+        "visible_space_evidence": "inherits storyboard scene and first/end frame location anchors"
+      },
+      "speaker_source": {
+        "character_id": "CHAR_ZHANG_LAODA",
+        "dialogue_ref": "脚本/第1集/storyboard.json#clips[3].beats",
+        "dialogue_text": "挑水命令下",
+        "mouth_visible": true,
+        "on_screen": true,
+        "source_rule": "voice must belong to visible on-screen speaker or visible crowd laughter; no offscreen narrator in video generation",
+        "speaker_id": "Clip_04_visible_native_speech",
+        "visible": true
+      },
+      "storyboard_id": "EP01_CLIP04"
+    },
+    {
+      "action_sounds": [
+        {
+          "action": "visible body/prop movement in this clip",
+          "sound": "cloth/step/water/bucket/key-lock/bowl/ceramic sounds only when visibly triggered",
+          "source": "visible_body_or_prop_motion",
+          "timing": "must follow visible action beats; no early artifact or offscreen voice cues",
+          "visible_evidence": "only sounds tied to visible cloth, step, water, bucket, key/lock, bowl, or ceramic basin motion"
+        }
+      ],
+      "audio_intent": "native_speech",
+      "clip_id": "Clip_05",
+      "evidence_status": "preflight_contract",
+      "lip_sync": {
+        "policy": "native_dialogue_match",
+        "review": "post-generation lip-sync review required before compose keeps original audio",
+        "target": "visible mouth movement follows generated native dialogue timing"
+      },
+      "post_policy": {
+        "compose_policy": "保留原片音轨",
+        "processing": "compose_stage_controls_native_track; do not strip before video QC",
+        "review": "verify source ownership, lip sync if speech, and no unwanted native voice in no-dialogue clips"
+      },
+      "review_status": "needs_generation_review",
+      "spatial_acoustics": {
+        "distance": "medium_montage",
+        "reverb_profile": "outdoor_old_courtyard_soft_reverb",
+        "space_id": "LOC_WAIMEN_JIUYUAN",
+        "visible_space_evidence": "inherits storyboard scene and first/end frame location anchors"
+      },
+      "speaker_source": {
+        "character_id": "CHAR_HE_PINGSHENG",
+        "dialogue_ref": "脚本/第1集/storyboard.json#clips[4].beats",
+        "dialogue_text": "外门遗孤上",
+        "mouth_visible": true,
+        "on_screen": true,
+        "source_rule": "voice must belong to visible on-screen speaker or visible crowd laughter; no offscreen narrator in video generation",
+        "speaker_id": "Clip_05_visible_native_speech",
+        "visible": true
+      },
+      "storyboard_id": "EP01_CLIP05"
+    },
+    {
+      "action_sounds": [
+        {
+          "action": "visible body/prop movement in this clip",
+          "sound": "cloth/step/water/bucket/key-lock/bowl/ceramic sounds only when visibly triggered",
+          "source": "visible_body_or_prop_motion",
+          "timing": "must follow visible action beats; no early artifact or offscreen voice cues",
+          "visible_evidence": "only sounds tied to visible cloth, step, water, bucket, key/lock, bowl, or ceramic basin motion"
+        }
+      ],
+      "audio_intent": "native_speech",
+      "clip_id": "Clip_06",
+      "evidence_status": "preflight_contract",
+      "lip_sync": {
+        "policy": "native_dialogue_match",
+        "review": "post-generation lip-sync review required before compose keeps original audio",
+        "target": "visible mouth movement follows generated native dialogue timing"
+      },
+      "post_policy": {
+        "compose_policy": "保留原片音轨",
+        "processing": "compose_stage_controls_native_track; do not strip before video QC",
+        "review": "verify source ownership, lip sync if speech, and no unwanted native voice in no-dialogue clips"
+      },
+      "review_status": "needs_generation_review",
+      "spatial_acoustics": {
+        "distance": "medium_montage",
+        "reverb_profile": "outdoor_old_courtyard_soft_reverb",
+        "space_id": "LOC_WAIMEN_JIUYUAN",
+        "visible_space_evidence": "inherits storyboard scene and first/end frame location anchors"
+      },
+      "speaker_source": {
+        "character_id": "CHAR_HE_PINGSHENG",
+        "dialogue_ref": "脚本/第1集/storyboard.json#clips[5].beats",
+        "dialogue_text": "外门遗孤下",
+        "mouth_visible": true,
+        "on_screen": true,
+        "source_rule": "voice must belong to visible on-screen speaker or visible crowd laughter; no offscreen narrator in video generation",
+        "speaker_id": "Clip_06_visible_native_speech",
+        "visible": true
+      },
+      "storyboard_id": "EP01_CLIP06"
+    },
+    {
+      "action_sounds": [
+        {
+          "action": "visible body/prop movement in this clip",
+          "sound": "cloth/step/water/bucket/key-lock/bowl/ceramic sounds only when visibly triggered",
+          "source": "visible_body_or_prop_motion",
+          "timing": "must follow visible action beats; no early artifact or offscreen voice cues",
+          "visible_evidence": "only sounds tied to visible cloth, step, water, bucket, key/lock, bowl, or ceramic basin motion"
+        }
+      ],
+      "audio_intent": "native_speech",
+      "clip_id": "Clip_07",
+      "evidence_status": "preflight_contract",
+      "lip_sync": {
+        "policy": "native_dialogue_match",
+        "review": "post-generation lip-sync review required before compose keeps original audio",
+        "target": "visible mouth movement follows generated native dialogue timing"
+      },
+      "post_policy": {
+        "compose_policy": "保留原片音轨",
+        "processing": "compose_stage_controls_native_track; do not strip before video QC",
+        "review": "verify source ownership, lip sync if speech, and no unwanted native voice in no-dialogue clips"
+      },
+      "review_status": "needs_generation_review",
+      "spatial_acoustics": {
+        "distance": "wide_to_medium",
+        "reverb_profile": "dry_courtyard_to_empty_room_moon_reverb",
+        "space_id": "LOC_ZAYI_YUAN",
+        "visible_space_evidence": "inherits storyboard scene and first/end frame location anchors"
+      },
+      "speaker_source": {
+        "character_id": "CHAR_HAN_LAOSAN",
+        "dialogue_ref": "脚本/第1集/storyboard.json#clips[6].beats",
+        "dialogue_text": "两缸水和空屋上",
+        "mouth_visible": true,
+        "on_screen": true,
+        "source_rule": "voice must belong to visible on-screen speaker or visible crowd laughter; no offscreen narrator in video generation",
+        "speaker_id": "Clip_07_visible_native_speech",
+        "visible": true
+      },
+      "storyboard_id": "EP01_CLIP07"
+    },
+    {
+      "action_sounds": [
+        {
+          "action": "visible body/prop movement in this clip",
+          "sound": "cloth/step/water/bucket/key-lock/bowl/ceramic sounds only when visibly triggered",
+          "source": "visible_body_or_prop_motion",
+          "timing": "must follow visible action beats; no early artifact or offscreen voice cues",
+          "visible_evidence": "only sounds tied to visible cloth, step, water, bucket, key/lock, bowl, or ceramic basin motion"
+        }
+      ],
+      "audio_intent": "native_speech",
+      "clip_id": "Clip_08",
+      "evidence_status": "preflight_contract",
+      "lip_sync": {
+        "policy": "native_dialogue_match",
+        "review": "post-generation lip-sync review required before compose keeps original audio",
+        "target": "visible mouth movement follows generated native dialogue timing"
+      },
+      "post_policy": {
+        "compose_policy": "保留原片音轨",
+        "processing": "compose_stage_controls_native_track; do not strip before video QC",
+        "review": "verify source ownership, lip sync if speech, and no unwanted native voice in no-dialogue clips"
+      },
+      "review_status": "needs_generation_review",
+      "spatial_acoustics": {
+        "distance": "medium_to_close",
+        "reverb_profile": "dry_empty_room_moon_reverb",
+        "space_id": "LOC_ZAYI_YUAN",
+        "visible_space_evidence": "inherits storyboard scene and first/end frame location anchors"
+      },
+      "speaker_source": {
+        "character_id": "CHAR_HAN_LAOSAN",
+        "dialogue_ref": "脚本/第1集/storyboard.json#clips[7].beats",
+        "dialogue_text": "两缸水和空屋下",
+        "mouth_visible": true,
+        "on_screen": true,
+        "source_rule": "voice must belong to visible on-screen speaker or visible crowd laughter; no offscreen narrator in video generation",
+        "speaker_id": "Clip_08_visible_native_speech",
+        "visible": true
+      },
+      "storyboard_id": "EP01_CLIP08"
+    },
+    {
+      "action_sounds": [
+        {
+          "action": "visible body/prop movement in this clip",
+          "sound": "cloth/step/water/bucket/key-lock/bowl/ceramic sounds only when visibly triggered",
+          "source": "visible_body_or_prop_motion",
+          "timing": "must follow visible action beats; no early artifact or offscreen voice cues",
+          "visible_evidence": "only sounds tied to visible cloth, step, water, bucket, key/lock, bowl, or ceramic basin motion"
+        }
+      ],
+      "audio_intent": "none",
+      "clip_id": "Clip_09",
+      "evidence_status": "preflight_contract",
+      "lip_sync": {
+        "evidence": "mouth_visible=no; native_audio_policy=none",
+        "policy": "no_dialogue_no_lipsync",
+        "status": "not_applicable"
+      },
+      "post_policy": {
+        "compose_policy": "丢弃",
+        "processing": "compose_stage_controls_native_track; do not strip before video QC",
+        "review": "verify source ownership, lip sync if speech, and no unwanted native voice in no-dialogue clips"
+      },
+      "review_status": "needs_generation_review",
+      "spatial_acoustics": {
+        "distance": "montage_wide_to_medium",
+        "reverb_profile": "outdoor_night_water_low_reverb",
+        "space_id": "LOC_HOUSHAN_QIANTAN",
+        "visible_space_evidence": "inherits storyboard scene and first/end frame location anchors"
+      },
+      "speaker_source": {
+        "source": "none",
+        "visible_evidence": "no visible dialogue source; any generated native voice must be discarded before compose"
+      },
+      "storyboard_id": "EP01_CLIP09"
+    },
+    {
+      "action_sounds": [
+        {
+          "action": "visible body/prop movement in this clip",
+          "sound": "cloth/step/water/bucket/key-lock/bowl/ceramic sounds only when visibly triggered",
+          "source": "visible_body_or_prop_motion",
+          "timing": "must follow visible action beats; no early artifact or offscreen voice cues",
+          "visible_evidence": "only sounds tied to visible cloth, step, water, bucket, key/lock, bowl, or ceramic basin motion"
+        }
+      ],
+      "audio_intent": "none",
+      "clip_id": "Clip_10",
+      "evidence_status": "preflight_contract",
+      "lip_sync": {
+        "evidence": "mouth_visible=no; native_audio_policy=none",
+        "policy": "no_dialogue_no_lipsync",
+        "status": "not_applicable"
+      },
+      "post_policy": {
+        "compose_policy": "丢弃",
+        "processing": "compose_stage_controls_native_track; do not strip before video QC",
+        "review": "verify source ownership, lip sync if speech, and no unwanted native voice in no-dialogue clips"
+      },
+      "review_status": "needs_generation_review",
+      "spatial_acoustics": {
+        "distance": "montage_medium_to_close",
+        "reverb_profile": "outdoor_night_water_low_reverb",
+        "space_id": "LOC_HOUSHAN_QIANTAN",
+        "visible_space_evidence": "inherits storyboard scene and first/end frame location anchors"
+      },
+      "speaker_source": {
+        "source": "none",
+        "visible_evidence": "no visible dialogue source; any generated native voice must be discarded before compose"
+      },
+      "storyboard_id": "EP01_CLIP10"
+    },
+    {
+      "action_sounds": [
+        {
+          "action": "visible body/prop movement in this clip",
+          "sound": "cloth/step/water/bucket/key-lock/bowl/ceramic sounds only when visibly triggered",
+          "source": "visible_body_or_prop_motion",
+          "timing": "must follow visible action beats; no early artifact or offscreen voice cues",
+          "visible_evidence": "only sounds tied to visible cloth, step, water, bucket, key/lock, bowl, or ceramic basin motion"
+        }
+      ],
+      "audio_intent": "none",
+      "clip_id": "Clip_11",
+      "evidence_status": "preflight_contract",
+      "lip_sync": {
+        "evidence": "mouth_visible=no; native_audio_policy=none",
+        "policy": "no_dialogue_no_lipsync",
+        "status": "not_applicable"
+      },
+      "post_policy": {
+        "compose_policy": "丢弃",
+        "processing": "compose_stage_controls_native_track; do not strip before video QC",
+        "review": "verify source ownership, lip sync if speech, and no unwanted native voice in no-dialogue clips"
+      },
+      "review_status": "needs_generation_review",
+      "spatial_acoustics": {
+        "distance": "close_to_ecu",
+        "reverb_profile": "outdoor_night_water_low_reverb",
+        "space_id": "LOC_HOUSHAN_QIANTAN",
+        "visible_space_evidence": "inherits storyboard scene and first/end frame location anchors"
+      },
+      "speaker_source": {
+        "source": "none",
+        "visible_evidence": "no visible dialogue source; any generated native voice must be discarded before compose"
+      },
+      "storyboard_id": "EP01_CLIP11"
+    },
+    {
+      "action_sounds": [
+        {
+          "action": "visible body/prop movement in this clip",
+          "sound": "cloth/step/water/bucket/key-lock/bowl/ceramic sounds only when visibly triggered",
+          "source": "visible_body_or_prop_motion",
+          "timing": "must follow visible action beats; no early artifact or offscreen voice cues",
+          "visible_evidence": "only sounds tied to visible cloth, step, water, bucket, key/lock, bowl, or ceramic basin motion"
+        }
+      ],
+      "audio_intent": "none",
+      "clip_id": "Clip_12",
+      "evidence_status": "preflight_contract",
+      "lip_sync": {
+        "evidence": "mouth_visible=no; native_audio_policy=none",
+        "policy": "no_dialogue_no_lipsync",
+        "status": "not_applicable"
+      },
+      "post_policy": {
+        "compose_policy": "丢弃",
+        "processing": "compose_stage_controls_native_track; do not strip before video QC",
+        "review": "verify source ownership, lip sync if speech, and no unwanted native voice in no-dialogue clips"
+      },
+      "review_status": "needs_generation_review",
+      "spatial_acoustics": {
+        "distance": "ecu_to_close",
+        "reverb_profile": "outdoor_night_water_low_reverb",
+        "space_id": "LOC_HOUSHAN_QIANTAN",
+        "visible_space_evidence": "inherits storyboard scene and first/end frame location anchors"
+      },
+      "speaker_source": {
+        "source": "none",
+        "visible_evidence": "no visible dialogue source; any generated native voice must be discarded before compose"
+      },
+      "storyboard_id": "EP01_CLIP12"
+    }
+  ],
+  "episode": "第1集",
+  "kind": "n2d_native_av_physics",
+  "source": "video_preflight contract regeneration after Clip split and Seedance/Dreamina routing",
+  "updated_at": "2026-06-30T09:24:30+00:00",
+  "version": 1
+}

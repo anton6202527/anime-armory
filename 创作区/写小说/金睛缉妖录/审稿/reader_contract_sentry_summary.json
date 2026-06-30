@@ -1,0 +1,151 @@
+{
+  "blocking": 0,
+  "total": 0,
+  "chapters": [
+    {
+      "chapter": 1,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 2,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 3,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 4,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 5,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 6,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 7,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 8,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 9,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 10,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 11,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 12,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 13,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 14,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 15,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 16,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 17,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 18,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 19,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 20,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 21,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 22,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 23,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    },
+    {
+      "chapter": 24,
+      "status": "clean",
+      "blocking": 0,
+      "warnings": 0
+    }
+  ],
+  "findings": []
+}

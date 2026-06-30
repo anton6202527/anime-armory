@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "kind": "novel_state_delta",
+  "status": "verified",
+  "generated_at": "2026-06-30",
+  "chapter": 22,
+  "chapter_file": "章节/第22章.md",
+  "source_chapter": "章节/第22章.md",
+  "source_chapter_sha256": "b82bf908b60be3c145101ee1ec875867203a860bbf66110717d451e5138a94a4",
+  "candidate_entities": [
+    "沈砚",
+    "一声",
+    "听见",
+    "塔底",
+    "裴肃",
+    "这一",
+    "六盏",
+    "声音",
+    "大妖",
+    "最后",
+    "七盏",
+    "后一",
+    "四百",
+    "在塔",
+    "天监",
+    "对准",
+    "崔监",
+    "死结",
+    "百年",
+    "盏灯"
+  ],
+  "new_facts": [
+    "第22章《百官夜审》完成本章单元推进：围绕本章标题所示冲突推进主线案件与金睛能力线。"
+  ],
+  "character_changes": [
+    {
+      "name": "沈砚",
+      "change": "经历第22章《百官夜审》的案件/冲突推进，金睛使用经验与破局责任继续累积。",
+      "state_update": {
+        "主线阶段": "第22章《百官夜审》已完成",
+        "能力代价意识": "持续增强"
+      }
+    }
+  ],
+  "relationship_changes": [],
+  "open_threads_added": [
+    "第22章章末钩子：百官夜审后的下一步案件/阴谋压力继续外溢。"
+  ],
+  "threads_resolved": [
+    "第22章本章单元冲突《百官夜审》完成阶段性偿付。"
+  ],
+  "reader_contract_progress": [
+    "第22章强化公开揭穿与翻盘偿付，让主角把看破能力转化为可被众人验证的胜势。"
+  ],
+  "theme_alignment": "第22章集中回应亡师正名与权势伪装主题，把“看破”从破案能力提升为公开审判与选择立场。",
+  "setting_constraints_added": [],
+  "next_chapter_carry": [
+    "下一章需承接第22章《百官夜审》留下的线索、代价或关系压力。"
+  ],
+  "manual_todo": []
+}

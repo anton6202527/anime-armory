@@ -1,0 +1,327 @@
+{
+  "backend_profile": {
+    "canonical": "codex",
+    "channel": "Codex CLI",
+    "in_context_consistency": "strong",
+    "ingests_video": false,
+    "label": "GPT Image 2（渠道 Codex CLI）",
+    "max_reference_images": null,
+    "model": "GPT Image 2",
+    "multi_reference": true,
+    "native_modes": [],
+    "notes": "生成者=GPT Image 2（第一梯队·高保真多参考/编辑·强上下文一致性·4K级尺寸·非弱后端）；Codex 仅访问入口。无公开服务端持久角色 ID；当前官方文档未证实可注册 subject-id/handle，每镜走项目记忆 reference_group + 真实图片入参 + 锚点句 + full QC。",
+    "persistent_subject": false,
+    "recommended_diverse_reference_min": null,
+    "strategy": "multi_reference"
+  },
+  "block": 0,
+  "blocking": false,
+  "characters": [
+    {
+      "angle_tokens": [
+        "deep_shadow",
+        "face_too_small"
+      ],
+      "appears_in": [
+        "EP01_CLIP01",
+        "EP01_CLIP02",
+        "EP01_CLIP03"
+      ],
+      "band": "high",
+      "character_id": "CHAR_ZHANG_LAODA",
+      "drivers": [
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "近景占比 2/3",
+          "points": 20.0
+        },
+        {
+          "factor": "多人同框 3/3",
+          "points": 20.0
+        },
+        {
+          "factor": "极端角度 2 镜",
+          "points": 12
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "常态",
+      "name": "张老大",
+      "reference_gaps": [],
+      "scope": "第1集功能配角",
+      "score": 68.0,
+      "signals": {
+        "angle": 2,
+        "appear": 3,
+        "closeup": 2,
+        "emotion": 0,
+        "multi": 3,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。",
+        "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
+        "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
+        "风险 high 且未上 LoRA：考虑 python3 skills/n2d-lora/scripts/lora.py init '/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手' --character-id CHAR_ZHANG_LAODA --form '常态'（事前升档，别等跨集漂了再补）。"
+      ],
+      "tier": "multi_reference"
+    },
+    {
+      "angle_tokens": [
+        "deep_shadow",
+        "extreme_low",
+        "face_too_small"
+      ],
+      "appears_in": [
+        "EP01_CLIP01",
+        "EP01_CLIP02",
+        "EP01_CLIP03",
+        "EP01_CLIP04",
+        "EP01_CLIP05",
+        "EP01_CLIP06",
+        "EP01_CLIP07"
+      ],
+      "band": "high",
+      "character_id": "CHAR_HE_PINGSHENG",
+      "drivers": [
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "近景占比 5/7",
+          "points": 21.4
+        },
+        {
+          "factor": "极端角度 3 镜",
+          "points": 18
+        },
+        {
+          "factor": "多人同框 4/7",
+          "points": 11.4
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "常态",
+      "name": "贺平生",
+      "predicted_block_mitigated_by": "same_source_expression_refs",
+      "reference_gaps": [],
+      "scope": "全篇/主角/长线",
+      "score": 66.8,
+      "signals": {
+        "angle": 3,
+        "appear": 7,
+        "closeup": 5,
+        "emotion": 0,
+        "multi": 4,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。",
+        "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
+        "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
+        "风险 high 且未上 LoRA：考虑 python3 skills/n2d-lora/scripts/lora.py init '/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手' --character-id CHAR_HE_PINGSHENG --form '常态'（事前升档，别等跨集漂了再补）。"
+      ],
+      "tier": "multi_reference"
+    },
+    {
+      "angle_tokens": [],
+      "appears_in": [
+        "EP01_CLIP01",
+        "EP01_CLIP02"
+      ],
+      "band": "high",
+      "character_id": "CROWD_ZAYI",
+      "drivers": [
+        {
+          "factor": "近景占比 2/2",
+          "points": 30.0
+        },
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "多人同框 2/2",
+          "points": 20.0
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "虚化",
+      "name": "群杂役",
+      "reference_gaps": [],
+      "scope": "第1集背景群像",
+      "score": 66.0,
+      "signals": {
+        "angle": 0,
+        "appear": 2,
+        "closeup": 2,
+        "emotion": 0,
+        "multi": 2,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。",
+        "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
+        "风险 high 且未上 LoRA：考虑 python3 skills/n2d-lora/scripts/lora.py init '/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手' --character-id CROWD_ZAYI --form '虚化'（事前升档，别等跨集漂了再补）。"
+      ],
+      "tier": "multi_reference"
+    },
+    {
+      "angle_tokens": [
+        "face_too_small"
+      ],
+      "appears_in": [
+        "EP01_CLIP03"
+      ],
+      "band": "medium",
+      "character_id": "CHAR_JIANG_JIAN",
+      "drivers": [
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "多人同框 1/1",
+          "points": 20.0
+        },
+        {
+          "factor": "极端角度 1 镜",
+          "points": 6
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "背影",
+      "name": "江剑",
+      "reference_gaps": [],
+      "scope": "第1集回忆背影",
+      "score": 42.0,
+      "signals": {
+        "angle": 1,
+        "appear": 1,
+        "closeup": 0,
+        "emotion": 0,
+        "multi": 1,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。"
+      ],
+      "tier": "multi_reference"
+    },
+    {
+      "angle_tokens": [],
+      "appears_in": [
+        "EP01_CLIP04"
+      ],
+      "band": "medium",
+      "character_id": "CHAR_HAN_LAOSAN",
+      "drivers": [
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "多人同框 1/1",
+          "points": 20.0
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "常态",
+      "name": "韩老三",
+      "reference_gaps": [],
+      "scope": "第1集功能配角",
+      "score": 36.0,
+      "signals": {
+        "angle": 0,
+        "appear": 1,
+        "closeup": 0,
+        "emotion": 0,
+        "multi": 1,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。"
+      ],
+      "tier": "multi_reference"
+    }
+  ],
+  "default_backend": "codex",
+  "episode": "第1集",
+  "high": 3,
+  "kind": "n2d_face_drift_risk",
+  "medium": 2,
+  "missing_3q_baseline": 0,
+  "notes": [],
+  "prior_drift_available": false,
+  "recurrence_reentries": 0,
+  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+  "shared_asset_face_risk": {
+    "assets": [
+      {
+        "asset_id": "LOC_HOUSHAN_QIANTAN",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "location"
+      },
+      {
+        "asset_id": "PROP_HEI_TAO_PEN",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_SHUI_TONG",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_TIE_WAN",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_KEY_LOCK",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      }
+    ],
+    "available": true,
+    "high": 0,
+    "low": 5,
+    "medium": 0,
+    "notes": []
+  },
+  "version": 1
+}

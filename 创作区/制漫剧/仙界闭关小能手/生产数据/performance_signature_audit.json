@@ -1,0 +1,12 @@
+{
+  "available": false,
+  "findings": [
+    {
+      "code": "missing_identity_registry",
+      "message": "缺 /Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/identity_registry.json",
+      "severity": "warn"
+    }
+  ],
+  "kind": "n2d_performance_signature_audit",
+  "rows": []
+}

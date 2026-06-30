@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CROWD_ZAYI",
+  "character_name": "群杂役",
+  "form": "虚化",
+  "truth_sources": {
+    "character_card": "设定库/characters/群杂役_虚化.md",
+    "character_bible": "设定库/角色圣经.md",
+    "identity_registry": "出图/共享/identity_registry.json"
+  },
+  "directories": {
+    "reference": "设定库/character_assets/CROWD_ZAYI__crowd_zayi/reference",
+    "prompts": "设定库/character_assets/CROWD_ZAYI__crowd_zayi/prompts",
+    "lora": "设定库/character_assets/CROWD_ZAYI__crowd_zayi/lora",
+    "voice": "设定库/character_assets/CROWD_ZAYI__crowd_zayi/voice",
+    "adapters": "设定库/character_assets/CROWD_ZAYI__crowd_zayi/adapters",
+    "qc": "设定库/character_assets/CROWD_ZAYI__crowd_zayi/qc"
+  },
+  "status": "planned"
+}

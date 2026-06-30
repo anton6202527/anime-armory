@@ -1,0 +1,42 @@
+{
+  "aliases": ["都市", "现代都市", "职场", "甜宠都市"],
+  "degrade_plans": [
+    "多人办公室/餐厅对白拆成双人反打和环境插镜",
+    "车辆行驶用内景固定机位 + 外景切换，不强求长镜头连续驾驶",
+    "手机聊天/合同文字用后期叠层，不让模型直接画小字"
+  ],
+  "genre_key": "urban",
+  "kind": "n2d_genre_pack",
+  "label": "都市",
+  "motion_contract_fields": ["vehicle_lock", "wheel_rotation", "screen_direction", "parallax_layers", "degrade_plan"],
+  "qc_focus": ["现代道具文字", "服装妆造连续", "车/手机/合同资产", "对白轴线和视线", "环境声空间"],
+  "scene_archetypes": [
+    {
+      "id": "car_travel",
+      "label": "汽车/载具行进",
+      "production_risks": ["车轮不转", "窗外视差错", "车内外方向不一致"],
+      "required_contract_fields": ["vehicle_lock", "wheel_rotation", "screen_direction", "parallax_layers"],
+      "style_binding": "车辆作为 PROP/vehicle 资产锁型号、颜色、车牌策略和行驶方向"
+    },
+    {
+      "id": "dialogue_blocking",
+      "label": "办公室/餐厅对白",
+      "production_risks": ["视线反打错", "座位关系漂移", "手中物件丢失"],
+      "required_contract_fields": ["screen_direction", "degrade_plan"],
+      "style_binding": "同场对话必须锁座位平面、光位和服装状态"
+    },
+    {
+      "id": "phone_contract_text",
+      "label": "手机/合同/聊天记录",
+      "production_risks": ["小字乱码", "关键信息读不清", "UI 风格漂移"],
+      "required_contract_fields": ["degrade_plan"],
+      "style_binding": "关键信息用独立文字层；画面 prompt 只留屏幕区域和反光"
+    }
+  ],
+  "style_binding_policy": {
+    "bind_to_visual_style": true,
+    "notes": "都市题材对真实道具、室内空间和对白视线更敏感；不要用奇观模板替代日常调度。"
+  },
+  "version": 1
+}
+

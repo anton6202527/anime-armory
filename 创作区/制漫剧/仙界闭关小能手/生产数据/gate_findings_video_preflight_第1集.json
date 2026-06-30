@@ -1,0 +1,618 @@
+{
+  "auto_return_tasks": [
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "物料新鲜度"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "物料新鲜度",
+          "dim_key": "物料新鲜度",
+          "dimension": "物料新鲜度",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "第1集",
+          "message": "前期物料可能已过期：n2d, n2d-image, n2d-script, n2d-video 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手\" 第1集` 评估哪些物料需重制，再决定是否生成。",
+          "msg": "前期物料可能已过期：n2d, n2d-image, n2d-script, n2d-video 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手\" 第1集` 评估哪些物料需重制，再决定是否生成。",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video_prompt",
+      "scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/control"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "生视频后端连通性"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "生视频后端连通性",
+          "dim_key": "生视频后端连通性",
+          "dimension": "生视频后端连通性",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/_设置.md",
+          "message": "生视频后端「即梦/Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL 启用自动探活。。出视频前请人工确认它能出片（官方 CLI 已登录·会员有效 / API 额度可用 / 一次 dry-run），不通即停，勿静默兜底换后端。",
+          "msg": "生视频后端「即梦/Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL 启用自动探活。。出视频前请人工确认它能出片（官方 CLI 已登录·会员有效 / API 额度可用 / 一次 dry-run），不通即停，勿静默兜底换后端。",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video_prompt",
+      "scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/control"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "contract_inheritance"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "契约继承",
+          "dim_key": "contract_inheritance",
+          "dimension": "契约继承",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+          "message": "资产逐镜交接[asset_handoff_dropped]：Clip_03：出图绑定的资产 LOC_WAIMEN(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+          "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_03：出图绑定的资产 LOC_WAIMEN(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "契约继承",
+          "dim_key": "contract_inheritance",
+          "dimension": "契约继承",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+          "message": "资产逐镜交接[asset_handoff_dropped]：Clip_04：出图绑定的资产 PROP_KEY(?)、PROP_TIE(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+          "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_04：出图绑定的资产 PROP_KEY(?)、PROP_TIE(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "契约继承",
+          "dim_key": "contract_inheritance",
+          "dimension": "契约继承",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+          "message": "资产逐镜交接[asset_handoff_dropped]：Clip_05：出图绑定的资产 LOC_HOUSHAN(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+          "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_05：出图绑定的资产 LOC_HOUSHAN(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "契约继承",
+          "dim_key": "contract_inheritance",
+          "dimension": "契约继承",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+          "message": "资产逐镜交接[asset_handoff_dropped]：Clip_06：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+          "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_06：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "契约继承",
+          "dim_key": "contract_inheritance",
+          "dimension": "契约继承",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+          "message": "资产逐镜交接[asset_handoff_dropped]：Clip_07：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+          "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_07：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video_prompt",
+      "scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/control"
+    }
+  ],
+  "episode": "第1集",
+  "findings": [
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "合规前置",
+      "dim_key": "合规前置",
+      "dimension": "合规前置",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json platform_review.TODO",
+      "message": "平台审核缺字段：platform（发布/合成前需补；当前 video 阶段不阻断）",
+      "msg": "平台审核缺字段：platform（发布/合成前需补；当前 video 阶段不阻断）",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "合规前置",
+      "dim_key": "合规前置",
+      "dimension": "合规前置",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json platform_review.TODO",
+      "message": "平台审核缺字段：policy_profile（发布/合成前需补；当前 video 阶段不阻断）",
+      "msg": "平台审核缺字段：policy_profile（发布/合成前需补；当前 video 阶段不阻断）",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "合规前置",
+      "dim_key": "合规前置",
+      "dimension": "合规前置",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json regulatory_filing",
+      "message": "pre_broadcast_review 不能停在 pending（境内投放须先过播前审核）（发布/合成前需补；当前 video 阶段不阻断）",
+      "msg": "pre_broadcast_review 不能停在 pending（境内投放须先过播前审核）（发布/合成前需补；当前 video 阶段不阻断）",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "物料新鲜度",
+      "dim_key": "物料新鲜度",
+      "dimension": "物料新鲜度",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "第1集",
+      "message": "前期物料可能已过期：n2d, n2d-image, n2d-script, n2d-video 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手\" 第1集` 评估哪些物料需重制，再决定是否生成。",
+      "msg": "前期物料可能已过期：n2d, n2d-image, n2d-script, n2d-video 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手\" 第1集` 评估哪些物料需重制，再决定是否生成。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "导演运镜落实",
+      "dim_key": "导演运镜落实",
+      "dimension": "导演运镜落实",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md",
+      "message": "director_camera_plan_第1集.json（12 镜）的出图运镜词汇已现身 prompt 包（命中 3/5：起幅、运动余量、导演意图）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第1集.json（结构化签收）。",
+      "msg": "director_camera_plan_第1集.json（12 镜）的出图运镜词汇已现身 prompt 包（命中 3/5：起幅、运动余量、导演意图）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第1集.json（结构化签收）。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "image",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "导演运镜落实",
+      "dim_key": "导演运镜落实",
+      "dimension": "导演运镜落实",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+      "message": "director_camera_plan_第1集.json（12 镜）的出视频运镜词汇已现身 prompt 包（命中 6/6：起幅、落幅、镜头运动、运动精修、动态细节、导演意图）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第1集.json（结构化签收）。",
+      "msg": "director_camera_plan_第1集.json（12 镜）的出视频运镜词汇已现身 prompt 包（命中 6/6：起幅、落幅、镜头运动、运动精修、动态细节、导演意图）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第1集.json（结构化签收）。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "生视频后端连通性",
+      "dim_key": "生视频后端连通性",
+      "dimension": "生视频后端连通性",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/_设置.md",
+      "message": "生视频后端「即梦/Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL 启用自动探活。。出视频前请人工确认它能出片（官方 CLI 已登录·会员有效 / API 额度可用 / 一次 dry-run），不通即停，勿静默兜底换后端。",
+      "msg": "生视频后端「即梦/Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL 启用自动探活。。出视频前请人工确认它能出片（官方 CLI 已登录·会员有效 / API 额度可用 / 一次 dry-run），不通即停，勿静默兜底换后端。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "契约继承",
+      "dim_key": "contract_inheritance",
+      "dimension": "契约继承",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+      "message": "资产逐镜交接[asset_handoff_dropped]：Clip_03：出图绑定的资产 LOC_WAIMEN(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+      "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_03：出图绑定的资产 LOC_WAIMEN(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "契约继承",
+      "dim_key": "contract_inheritance",
+      "dimension": "契约继承",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+      "message": "资产逐镜交接[asset_handoff_dropped]：Clip_04：出图绑定的资产 PROP_KEY(?)、PROP_TIE(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+      "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_04：出图绑定的资产 PROP_KEY(?)、PROP_TIE(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "契约继承",
+      "dim_key": "contract_inheritance",
+      "dimension": "契约继承",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+      "message": "资产逐镜交接[asset_handoff_dropped]：Clip_05：出图绑定的资产 LOC_HOUSHAN(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+      "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_05：出图绑定的资产 LOC_HOUSHAN(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "契约继承",
+      "dim_key": "contract_inheritance",
+      "dimension": "契约继承",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+      "message": "资产逐镜交接[asset_handoff_dropped]：Clip_06：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+      "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_06：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "契约继承",
+      "dim_key": "contract_inheritance",
+      "dimension": "契约继承",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+      "message": "资产逐镜交接[asset_handoff_dropped]：Clip_07：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+      "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_07：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    }
+  ],
+  "gate_stage": "video_preflight",
+  "generated_at": "2026-06-30T09:25:33+00:00",
+  "inputs_fingerprint": {
+    "files": {
+      "出图/共享/asset_registry.json": "298b0ed5d156b0ce7f0e516cfcf98099a310b27498ecb844f51d8cf2215b2d30",
+      "出图/共享/identity_registry.json": "baf11ed55b56d4e166baa9291dc1c6042d205bd916fa48c26d222b420702856a",
+      "出图/第1集/图片": null,
+      "出视频/第1集/control": null,
+      "出视频/第1集/prompt": null,
+      "合规/compliance_manifest.json": "ffb8887ca84dffc6048d3d121b94e0d918c4689064ad08d498efe062d9f7fb68",
+      "生产数据/identity_adapter_matrix.json": "fb96e5111326c287e6f695421cf665cdbaea51506e4962585a6fea8816d143a7",
+      "脚本/第1集/storyboard.json": "c9d6000fbf22bbc82f10a9e2640a708642c98334bcb0000b1e0ca7304ab2366e"
+    },
+    "sha": "b709e681c92ad0a3eb2ec3c176a3e08f4398e39dfea7942e6bbd70fd90d5c199"
+  },
+  "kind": "n2d_consistency_findings",
+  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+  "source": {
+    "kind": "n2d_gate",
+    "path": "n2d-review/scripts/gate.py"
+  },
+  "summary": {
+    "by_dim": {
+      "合规前置": {
+        "block": 0,
+        "info": 3,
+        "warn": 0
+      },
+      "契约继承": {
+        "block": 0,
+        "info": 0,
+        "warn": 5
+      },
+      "导演运镜落实": {
+        "block": 0,
+        "info": 2,
+        "warn": 0
+      },
+      "物料新鲜度": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
+      "生视频后端连通性": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      }
+    },
+    "severity": {
+      "block": 0,
+      "info": 5,
+      "warn": 7
+    },
+    "total": 12
+  },
+  "version": 1
+}

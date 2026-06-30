@@ -1,0 +1,41 @@
+{
+  "aliases": ["悬疑", "刑侦", "探案", "惊悚悬疑"],
+  "degrade_plans": [
+    "线索特写独立出图并在剪辑中插入，避免视频生成改掉证物细节",
+    "追逐/跟踪拆成主观视角、脚步、转角、结果镜",
+    "暗光镜降低运动幅度，保留关键证据可读性"
+  ],
+  "genre_key": "suspense",
+  "kind": "n2d_genre_pack",
+  "label": "悬疑",
+  "motion_contract_fields": ["screen_direction", "parallax_layers", "degrade_plan"],
+  "qc_focus": ["线索可读性", "证物状态", "空间方位", "暗光清晰度", "伏笔兑现顺序"],
+  "scene_archetypes": [
+    {
+      "id": "clue_closeup",
+      "label": "线索/证物特写",
+      "production_risks": ["证物文字改写", "关键细节被虚化", "前后证物状态不一致"],
+      "required_contract_fields": ["degrade_plan"],
+      "style_binding": "证物作为 PROP 登记，关键信息用独立文字/图层或清晰定帧"
+    },
+    {
+      "id": "stalk_chase",
+      "label": "跟踪/追逐",
+      "production_risks": ["追逐方向反复", "空间关系混乱", "暗光丢脸"],
+      "required_contract_fields": ["screen_direction", "parallax_layers", "degrade_plan"],
+      "style_binding": "每次转角/楼层/门牌必须继承 LOC id 和方向"
+    },
+    {
+      "id": "reveal_reconstruction",
+      "label": "反转揭示/案情复盘",
+      "production_risks": ["回忆与现实混淆", "时间线顺序错", "证据前后矛盾"],
+      "required_contract_fields": ["screen_direction", "degrade_plan"],
+      "style_binding": "回忆镜头用明确调色/边框/音效契约区分，不靠随机风格变化"
+    }
+  ],
+  "style_binding_policy": {
+    "bind_to_visual_style": true,
+    "notes": "悬疑题材优先保线索和空间逻辑，不为氛围牺牲证据可读性。"
+  },
+  "version": 1
+}

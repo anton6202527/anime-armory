@@ -1,0 +1,115 @@
+{
+  "action_contract": {
+    "owner": "n2d-script",
+    "paid_or_irreversible": false,
+    "prework_steps": [
+      "source_check",
+      "update_plan",
+      "doctor"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": true,
+    "requires_human_approval": false,
+    "requires_trace": true,
+    "schema_version": 1,
+    "specialist": "n2d-script-agent",
+    "stage_key": "script_stage2",
+    "stop_policy": "needs_agent_gen",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第2集",
+  "files": [
+    {
+      "bytes": 2186,
+      "exists": true,
+      "preview": "# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）\n- 制作模式：原生音画  # source=explicit_user\n- 基础视觉风格：国漫写实  # source=explicit_user\n- 一致性严格度：demo  # source=explicit_user\n- 脸一致性机检后端：styleid  # source=strict_guoman_required\n- N2D_STYLEID_MODEL：kwanY/styleid  # source=official_styleid_hf, runtime_requires=torch+transformers+insightface\n- 重抽预算策略：预算充足  # source=explicit_user\n- 生图模型：GPT Image 2  # source=explicit_user\n- 生图AI：Codex CLI  # source=explicit_user\n- 生成粒度：按场景分批  # source=explicit_user\n- 合规用途：internal_only  # source=explicit_user\n- 一致性增强：锚点+参考图  # source=explicit_user\n## 记录\n- 2026-06-29 默认 Codex reference_group 路线：多视图锚点、脸锚、表情锚和逐镜参考图入参尽量拉满\n- 2026-06-29 内部打样，不直接投放；转投放前重新升 production 并补执行层身份锁/full QC\n- 2026-06-29 用户裁决：LoRA成本高，默认改内部打样档，继续 Codex reference_group 路线；降级但一致性做到可做到的极致\n- 2026-06-29 设置 生成粒度 = 按场景分批 (source=explicit_user, 原值: None)\n- 2026-06-29 设置 生图AI = Codex CLI (source=explicit_user, 原值: None)\n- 2026-06-29 设置 生图模型 = GPT Image 2 (source=explicit_user, 原值: None)\n- 2026-06-29 用户要求一致性严格，图片重抽策略提升为预算充足\n- 2026-06-29 用户要求国漫写实脸一致性严格；脸一致性机检后端升级为 styleid，缺 N2D_STYLEID_MODEL 前不得写降级发布确认\n- 2026-06-29 N2D_STYLEID_MODEL 固定为官方 Hugging Face 模型 kwanY/styleid；正式 full QC 运行环境仍需 torch/transformers/insightface\n- 2026-06-29 当前严格档以 StyleID 为准；若运行环境缺 torch/transformers/insightface，只能报告依赖缺口，不得改回 arcface 降级发布\n- 2026-06-29 用户要求一致性一定严格，项目提升到 production 严格档\n- 2026-06-29 用户首跑明确选择基础视觉风格=国漫写实\n- 2026-06-29 用户首跑明确选择制作模式=A 原生音画",
+      "relpath": "_设置.md",
+      "sha256": "d9140485d36a26f8d1228bacba61fbb7e68e5289389e28a0103a0bff4259f8af"
+    },
+    {
+      "bytes": 2955,
+      "exists": true,
+      "preview": "# 仙界闭关小能手 — 生产进度\n已粗切 **4** 集（全本约估 1176 集；部分先切，精修验证后重跑 split 加大 --limit 续切）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 2355 | ✅ | ✅ | ✅ | ✅ | ⬜ | ✅ | ✅ | ✅ | — | — | ✅ | ✅内部打样/reference_group | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 2065 | ✅ | ✅ | ✅ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 2023 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n## 2026-06-29 出图前置状态\n- 第1集共享定妆库已完成并落档：9 个角色/形态 reference_group ready，场景/道具已生成并过共享自检；主角常态与幼年表情库各 3 张已 ready 并钉 anchor_sha。\n- `N2D_STYLEID_MODEL` 已配置为官方 Hugging Face 模型 `kwanY/styleid`，StyleID 未配置 block 已清除；正式 full QC 运行环境仍需 `torch/transformers/insightface`。\n- 用户已裁决默认走内部打样档：`一致性严格度=demo`、`合规用途=internal_only`，继续 `GPT Image 2 via Codex CLI` + `reference_group` 路线；LoRA 成本高，仅保留为后续可选升档，不作为默认阻断条件。\n- 已为贺平生常态/幼年建立 LoRA 生命周期包：`设定库/lora/CHAR_HE_PINGSHENG/常态`、`设定库/lora/CHAR_HE_PINGSHENG/幼年`；各 10 张同源 dataset、caption、train_job 已落盘，registry 状态为 `candidate`，当前不训练不注册 ready。\n- 当前 image_preflight gate 已通过（0 block）。内部打样降级不等于放松一致性：后续出图仍必须尽量拉满多视图 reference_group、脸锚、表情锚、身份锁定句、多人槽位、full QC/StyleID 可用时复检；转正式投放前需重新升 `production` 并补执行层身份锁或重新签收。\n- 已按内部打样/reference_group 路线补强第1集出图包：`01_分镜出图.md` 逐镜新增身份锁定句、多人区分锚点、物理镜头参数和状态锁；`identity_registry.json` 补齐低清/背影角色服装部件字段；后山浅潭 scene_atlas 反打/侧机位 PNG 已补齐。\n- 已把贺平生常态/幼年、张老大、韩老三脸锚裁成更紧的 1024 face anchors，并同步贺平生常态/幼年表情锚 SHA；旧弱脸锚备份在 `废料/出图/共享/图片/weak_face_anchor_backup_20260629_2009/`。刷新后 `image_qc` 的执行层 prompt lint 已降为 0 block；当前 image 阶段 hard block 剩 6 个，均为 Clip PNG 生成后道具形状/尺寸逐图复核 pending，不是 prompt 或主角脸锚阻断。",
+      "relpath": "_进度.md",
+      "sha256": "436f94aabc9067133efaefe3d3a785f2c6684fbbfa132730347683d9279781dc"
+    },
+    {
+      "bytes": 4901,
+      "exists": true,
+      "preview": "# 仙界闭关小能手_第2集_配音文案\n## 改编定位\n- 本集功能：让破盆首次显神异（半盆清水一夜化作满盆碧绿灵水）兑现第1集尾钩；用主角误判倒掉灵水制造揪心反差；揭张老大“假关照、真克扣”，压出主角弱势；尾扣把最差灵米倒进破盆，埋第3集“米变金”爽点。\n- 建议时长：100-115 秒（原生音画，按 storyboard clip 时长估算）。\n- 口播节奏：冷开场直接砸碧绿满盆的奇观；倒水反差给一个停顿；白日挑水压缩不复述第1集；夜里送米段用张老大的假暖把克扣收紧；尾段压低声音收钩。\n- 集尾尾扣：观众已知破盆能“变”，主角却把最差的灰败灵米倒进破盆——盆底那缕微光，又开始动了。\n## 节拍点表\n- 0-3s 冷开场：黑陶破盆里半盆清水一夜变成满满一盆碧绿灵水，盆底微光游动（兑现第1集尾钩）。⚡\n- 3-16s 贺平生进屋僵住，凑近细看，判定“水腐坏了”。\n- 16-30s 他把整盆碧绿灵水泼出窗外——“以后拿它洗衣服吧”，观众揪心。💥\n- 30-44s 白日挑水十五趟压缩交代；明日还要二十趟，是不可能完成的任务。\n- 44-58s 早饭张老大让老鲍多打肉，贺平生以为是关心；其实是怕他没力气干活。⚡\n- 58-80s 深夜张老大提布袋来，倒出小半袋灵米：“别人一月二斤，你十斤。”\n- 80-98s 贺平生帮江剑领过十斤灵米，一眼看出这最多五斤——被克扣了；而且是仙人都看不上的最差灰败米。⚡\n- 98-110s 他知道被坑，却弱小到讨不回；屋里唯一能盛米的，只剩那只破盆。\n- 110-115s 灰败灵米倒进黑陶破盆，盆底那点微光，又开始动了。🪝\n## 配音正文\n[镜头1·旁白·悬疑压低·慢] 一夜之间，半盆清水，变成了满满一盆碧绿。⚡\n[镜头2·旁白·悬疑·中] 那只昨夜还黑乎乎的破陶盆，此刻盆底正有一缕微光，缓缓游动。\n[镜头3·贺平生·茫然·短] 这……\n[镜头4·贺平生·疑惑凑近·中] 我昨晚分明只舀了半盆清水，怎么一夜就满了，还绿成这样？\n[镜头5·旁白·克制·中] 离得近了他才看清，那水是真绿，碧绿碧绿的，像是整盆都腐坏透了。\n[镜头6·贺平生·嫌弃·中] 才一夜就变质……这盆子，以后可不能再用来盛水了。\n[镜头7·旁白·反差·慢] 他没有多想，端起盆，把那一整盆碧绿，‖全泼到了窗外。💥\n[镜头8·贺平生·随口务实·中] 以后……就拿它洗衣服吧。\n[镜头9·旁白·惋惜暗示·慢] 他不知道，这是那破盆，第一次为他显出的神异。\n[镜头10·旁白·推进加速·快] 哐啷一声把盆丢在墙角，贺平生挑起水桶，又往后山去了。\n[镜头11·旁白·压力升级·中] 昨日挑了五趟，今日要挑十五趟。等他把活全干完，天又黑透了。\n[镜头12·贺平生·发愁喘息·慢] 十五趟就到极限了……明天二十趟，我到底怎么挑得动？\n[镜头13·旁白·回扣早饭·中] 也是这天早上，开饭时张老大特意吩咐了一句。\n[镜头14·张老大·粗声“关照”·中] 老鲍，给这小子多打点肉，一定要吃饱——不然没力气挑水。\n[镜头15·贺平生·懵懂感激·短] 谢谢张老大！\n[镜头16·旁白·点破潜台词·中] 贺平生只当是关心。他还太小，看不出这“关照”里，护的从来不是他，是那两口必须挑满的水缸。⚡\n[镜头17·旁白·夜·转场·中] 这一夜他刚躺下，门外就传来了拍门声。\n[镜头18·张老大·堆笑·中] 平生啊，今儿累不累？我都看见了，昨儿五趟，今儿十五趟，你也没歇着。\n[镜头19·贺平生·疲惫老实·短] 有点……累。\n[镜头20·张老大·“施恩”·中] 你看这是什么？上仙可怜咱们杂役，发了灵米。别人一个月二斤，你——十斤。\n[镜头21·贺平生·意外·短] 为啥我有十斤？\n[镜头22·张老大·顺势·中] 挑水的活儿重呗。哗——找个东西，我给你倒。\n[镜头23·旁白·反转将至·中] 屋里能盛米的，只有那只破陶盆。张老大把布袋一抖，米全倒了进去。\n[镜头24·贺平生·心里起疑·慢] 江叔做外门弟子时，每月也是十斤灵米，都是我替他领的……这一盆，‖哪有十斤？最多五斤。⚡\n[镜头25·旁白·揭破·中] 月光下，那米白里泛着一点灰败的绿——是仙人都看不上、最差的那一等。被克扣了一半，他一眼就看得出。💥\n[镜头26·贺平生·咽下憋屈·慢] 知道又能怎样？我这点本事，讨得回来吗……\n[镜头27·旁白·压低收钩·慢] 他把门栓顶死，倒头就睡。却没看见——盛着灰败灵米的破陶盆，盆底那缕微光，‖又开始动了。🪝",
+      "relpath": "脚本/第2集/voiceover.txt",
+      "sha256": "b40383c8c8e52f063ccf3a820e3d746a5b531f84b5c43b6048f73a7c80cc2460"
+    },
+    {
+      "bytes": 2891,
+      "exists": true,
+      "preview": "# 仙界闭关小能手_第2集_BGM与音效\n## 整体声音方向\n- 基调：破盆异象悬疑 + 底层杂役压迫 + 被克扣的隐忍憋屈。\n- 配器：低频鼓点、暗色弦乐、古琴/箫国风质感；破盆异象处沿用第1集的极轻空灵金属泛音作\"母题动机\"（主角机缘主题），跨集复现不可换音色。\n- 混音重点：对白必须清晰；张老大的\"假暖\"语气要听得出油滑，不能盖词；憋屈段留白，不堆乐器。\n## 分段设计\n- 0-3s：冷开场只留极轻灵光泛音 + 一缕水声，碧绿满盆给一记上扬空灵动机（兑现第1集尾钩，同音色）。\n- 3-16s：贺平生凑近观察，乐器抽到最薄，只剩环境与轻微水纹声，留住悬疑。\n- 16-30s：泼水瞬间给一个\"哗\"的真实水声 + 半拍静默，让\"倒掉灵水\"的反差揪心；不加滑稽音效，保持惋惜。\n- 30-44s：白日挑水压缩段，扁担吱呀、水桶晃荡、急促喘息、碎石脚步由疏到密，节奏推快，但不复述第1集的完整挑水音景。\n- 44-58s：早饭回扣，食堂嘈杂人声远景；张老大吩咐多打肉处给一条很薄的暖弦线（之后在克扣段被冷弦推翻，形成\"假暖\"对照）。\n- 58-80s：深夜送米段，拍门声 + 门栓卸动；张老大堆笑说话时暖弦回来，倒米\"哗啦\"用真实拟音。\n- 80-98s：贺平生起疑、揭破灰败米段，暖弦冷化、低频微沉，给\"被克扣\"一记极克制的下行弦，不做激烈反派音。\n- 98-110s：憋屈认命段，几乎抽空音乐，只留呼吸与夜虫；门栓顶死一声闷响收住情绪。\n- 110-115s：尾钩——破盆微光再动，重新引入开场那条空灵金属泛音动机，轻微上扬悬停，硬断不收尾。\n## 关键音效清单\n- 破陶盆异象：水纹轻涌、盆底微光的极轻金属泛音（与第1集同一动机，机缘主题）。\n- 泼水：整盆水泼出窗外的\"哗\"声 + 落地水渍声；后接半拍静默。\n- 山路挑水：扁担摩擦肩膀、水桶摇晃、急促喘息、碎石脚步（压缩版，不重复第1集长度）。\n- 食堂早饭：远景人声嘈杂、铁碗碰撞、打饭勺声。\n- 深夜送米：拍门声、木门吱呀、门栓卸动与顶死、布袋抖动、米粒倒入陶盆的\"哗啦\"。\n## 音乐母题登记（LM1·跨集一致）\n- 机缘主题（破盆异象）：极轻空灵金属泛音，第1集尾钩首次出现，本集开场与尾钩复现；只用于破盆显神异，不得移作他用。\n- 张老大假暖动机：一条很薄的暖弦线，凡张老大\"施恩/关照\"时短暂出现，随即被冷弦推翻；标识\"假暖真算计\"。\n## 禁忌\n- 不用欢快仙侠主题曲；不用史诗大合唱。\n- 倒掉灵水处不加滑稽/搞笑音效，保留惋惜揪心。\n- 破盆异象仍只暗示，不做夸张法宝音；机缘动机沿用第1集音色，不另起新主题。",
+      "relpath": "脚本/第2集/bgm.txt",
+      "sha256": "1c609c884cd5b272f12d221738f729db22d6f85a90f87e797e43f812fd8df355"
+    },
+    {
+      "bytes": 155663,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_identity_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "characters"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/identity_registry.json",
+      "sha256": "baf11ed55b56d4e166baa9291dc1c6042d205bd916fa48c26d222b420702856a"
+    }
+  ],
+  "genre_pack_context": {
+    "active_scene_archetypes": [],
+    "episode": "第2集",
+    "generated_at": "2026-06-29T23:53:42+00:00",
+    "genre": {
+      "genre_key": "",
+      "label": "",
+      "matched": false,
+      "raw": ""
+    },
+    "issues": [],
+    "kind": "n2d_genre_pack_context",
+    "pack": {
+      "degrade_plans": [],
+      "motion_contract_fields": [],
+      "qc_focus": [],
+      "style_binding_policy": {}
+    },
+    "root": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+    "stage_key": "script_stage2",
+    "status": "pass",
+    "summary": {
+      "active_scenes": 0,
+      "issues": 0,
+      "matched_clips": 0
+    },
+    "version": 1
+  },
+  "kind": "n2d_context_pack",
+  "missing_required_files": [],
+  "root": "创作区/制漫剧/仙界闭关小能手",
+  "stage_key": "script_stage2",
+  "usage": {
+    "read_order": [
+      "_设置.md",
+      "_进度.md",
+      "脚本/第2集/voiceover.txt",
+      "脚本/第2集/bgm.txt",
+      "出图/共享/identity_registry.json"
+    ],
+    "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
+  },
+  "version": 1
+}

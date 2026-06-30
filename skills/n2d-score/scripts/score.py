@@ -1,0 +1,1047 @@
+#!/usr/bin/env python3
+"""Automatic episode scoring for n2d.
+
+The score is a deterministic roll-up over existing n2d-review checks,
+n2d-dashboard events, and optional cached inputs.  It does not replace human
+review; it decides whether an episode should automatically flow back to the
+smallest likely stage before more expensive work continues.
+"""
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import importlib.util
+import json
+import os
+import re
+import subprocess
+import sys
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
+
+SCRIPT_DIR = os.path.dirname(__file__)
+SKILL_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
+REPO_SKILLS = os.path.abspath(os.path.join(SKILL_DIR, ".."))
+COMMON = os.path.join(REPO_SKILLS, "n2d", "_lib")
+if COMMON not in sys.path:
+    sys.path.insert(0, COMMON)
+if SCRIPT_DIR not in sys.path:
+    sys.path.insert(0, os.path.abspath(SCRIPT_DIR))
+from narrative_kpi import build_narrative_kpi, collect_narrative_signals  # noqa: E402  长篇叙事 KPI（报告型）
+from n2d_contract import (  # noqa: E402  生产数据目录 / kind / 一致性维度单一真值源
+    EPISODE_REVIEW_SCORE_KIND,
+    PRODUCTION_DIR,
+    consistency_dimensions,
+    production_dir,
+)
+from n2d_thresholds import load_thresholds  # noqa: E402  告警阈值单一真值源（与 n2d-dashboard 共用）
+from n2d_settings import get_setting  # noqa: E402  读 canonical 一致性严格度 key（与 review gate 同源，避免门槛口径背离）
+
+# 一致性严格度 canonical key + gate 同款别名（与 n2d-review/gate.py _profile_values 对齐）。
+CONSISTENCY_PROFILE_KEYS = ("一致性严格度", "一致性发布档", "一致性落地档", "一致性验收档", "制作质量档")
+
+INPUT_DIR = "score_inputs"
+SCORE_KIND = EPISODE_REVIEW_SCORE_KIND
+VERSION = 1
+SCORE_PROFILE_THRESHOLDS = {"demo": 75, "standard": 85, "production": 90, "overseas": 88}
+
+DIMENSIONS: Dict[str, Dict[str, Any]] = consistency_dimensions()
+
+CONSISTENCY_MAP = {
+    str(label): key
+    for key, spec in DIMENSIONS.items()
+    for label in tuple(spec.get("audit_labels", ()))
+}
+
+MECHANICAL_DIM_MAP = {
+    "字幕": "subtitle_correctness",
+    "节奏": "rhythm_density",
+    "配音": "audio_visual_sync",
+    "故事板": "audio_visual_sync",
+    "衔接": "scene_consistency",
+}
+
+QA_KEYWORDS = tuple((key, tuple(spec.get("keywords", ()))) for key, spec in DIMENSIONS.items())
+
+
+from n2d_route import episode_number, normalize_episode  # noqa: E402  集号单一真值源
+
+
+def now_iso() -> str:
+    return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+
+
+def score_input_dir(root: str) -> str:
+    return os.path.join(production_dir(root), INPUT_DIR)
+
+
+def safe_ep(ep: str) -> str:
+    return normalize_episode(ep)
+
+
+def cached_path(root: str, ep: str, name: str) -> str:
+    return os.path.join(score_input_dir(root), f"{safe_ep(ep)}_{name}.json")
+
+
+def load_json(path: str) -> Optional[Any]:
+    if not os.path.isfile(path):
+        return None
+    return json.load(open(path, encoding="utf-8"))
+
+
+def write_json(path: str, data: Any) -> None:
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(data, fh, ensure_ascii=False, indent=2, sort_keys=True)
+        fh.write("\n")
+
+
+def run_json(cmd: Sequence[str]) -> Any:
+    proc = subprocess.run(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+    try:
+        return json.loads(proc.stdout or "null")
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(f"command did not return JSON: {' '.join(cmd)}\n{proc.stdout}\n{proc.stderr}") from exc
+
+
+def run_json_safe(cmd: Sequence[str]) -> Any:
+    """像 run_json，但命令失败 / 没吐 JSON 时返回 None（不抛）。
+    用于可缺席的旁路机检（如 identity 跨集漂移：registry 缺失或 insightface 没装时不该让整次评分崩）。"""
+    try:
+        proc = subprocess.run(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+        return json.loads(proc.stdout or "null")
+    except Exception:
+        return None
+
+
+def run_identity_drift(root: str, ep: str) -> Optional[Dict[str, Any]]:
+    """跨集角色漂移：对截至本集的长窗口跑 n2d-identity，取其 drift 报告。
+
+    窗口 = 第1集..本集。此前只跑本集+前两集，长间隔再登场（隔很多集回归的角色/物件）
+    容易被短窗口漏掉；n2d-identity 已有 recurrence 统计，评分侧必须给它完整历史。
+    registry 缺失 / insightface 不可用 / 无早集 → 返回 None 或 available=false 的报告，评分侧按"缺数据"处理，不崩、不臆造。
+    这里只拿来识别**跨集回归**（早集稳、本集崩），片内崩脸已由 consistency_audit 脸(G1) 计分，避免双重扣分。"""
+    identity_py = os.path.join(REPO_SKILLS, "n2d-identity", "scripts", "identity.py")
+    n = episode_number(ep)
+    eps_arg = f"1-{n}" if n is not None else ep
+    combined = run_json_safe([sys.executable, identity_py, root, "--episodes", eps_arg, "--json"])
+    if not isinstance(combined, dict):
+        return None
+    drift = combined.get("drift")
+    return drift if isinstance(drift, dict) else None
+
+
+def run_checks(root: str, ep: str) -> Dict[str, Any]:
+    review_scripts = os.path.join(REPO_SKILLS, "n2d-review", "scripts")
+    identity_scripts = os.path.join(REPO_SKILLS, "n2d-identity", "scripts")
+    consistency = run_json([sys.executable, os.path.join(review_scripts, "consistency_audit.py"), root, ep, "--json"])
+    mechanical = run_json([sys.executable, os.path.join(review_scripts, "mechanical_check.py"), root, ep, "--json"])
+    visual = run_json([sys.executable, os.path.join(SCRIPT_DIR, "visual_checks.py"), root, ep, "--json"])
+    identity = run_identity_drift(root, ep)
+    voice_print = run_json_safe([sys.executable, os.path.join(identity_scripts, "voice_print_consistency.py"), root, ep, "--json"])
+    write_json(cached_path(root, ep, "consistency"), consistency)
+    write_json(cached_path(root, ep, "mechanical"), mechanical)
+    write_json(cached_path(root, ep, "visual"), visual)
+    if identity is not None:
+        write_json(cached_path(root, ep, "identity"), identity)
+    if voice_print is not None:
+        write_json(cached_path(root, ep, "voice_print"), voice_print)
+    return {"consistency": consistency, "mechanical": mechanical, "visual": visual, "identity": identity, "voice_print": voice_print}
+
+
+def load_dashboard_episode(root: str, ep: str) -> Optional[Dict[str, Any]]:
+    dashboard = load_json(os.path.join(production_dir(root), "dashboard.json"))
+    if not isinstance(dashboard, dict):
+        return None
+    for item in dashboard.get("episodes", []):
+        if isinstance(item, dict) and item.get("episode") == ep:
+            return item
+    return None
+
+
+def resolve_score_profile(root: str, explicit: Optional[str] = None) -> str:
+    raw = str(explicit or os.environ.get("N2D_SCORE_PROFILE") or os.environ.get("N2D_NARRATIVE_PROFILE") or "").strip().lower()
+    if raw in SCORE_PROFILE_THRESHOLDS:
+        return raw
+    if raw in {"prod", "release", "paid", "投放", "上线", "production_release"}:
+        return "production"
+    if raw in {"test", "sample", "pilot", "打样", "测试"}:
+        return "demo"
+    if raw in {"intl", "international", "global", "english", "海外", "出海"}:
+        return "overseas"
+    # canonical 一致性严格度 key 优先（与 review gate 同源）：显式写了严格度就照它判，
+    # 不再被 目标平台:抖音 / 投放时效:付费上线 这类**非严格度**字段的子串误升档（治 gate=demo 而 score=production 的背离）。
+    for key in CONSISTENCY_PROFILE_KEYS:
+        try:
+            val = str(get_setting(root, key, "") or "").strip().lower()
+        except Exception:
+            val = ""
+        if not val:
+            continue
+        if val in SCORE_PROFILE_THRESHOLDS:
+            return val
+        if val in {"production_no_cost_image", "prod", "release", "paid", "投放", "上线", "production_release"}:
+            return "production"
+        if val in {"test", "sample", "pilot", "打样", "测试"}:
+            return "demo"
+        if val in {"intl", "international", "global", "english", "海外", "出海"}:
+            return "overseas"
+        break  # 严格度 key 写了但值无法识别 → 落到下方旧启发式，不静默吞
+    try:
+        text = open(os.path.join(root, "_设置.md"), encoding="utf-8").read().lower()
+    except Exception:
+        return "standard"
+    if any(x in text for x in ("production", "付费", "投放", "上线", "发行", "douyin", "抖音")):
+        return "production"
+    if any(x in text for x in ("demo", "打样", "测试", "internal_only", "内部")):
+        return "demo"
+    if any(x in text for x in ("overseas", "english", "海外", "出海")):
+        return "overseas"
+    return "standard"
+
+
+def threshold_for_profile(profile: str) -> int:
+    return SCORE_PROFILE_THRESHOLDS.get(profile, SCORE_PROFILE_THRESHOLDS["standard"])
+
+
+def empty_dimension(key: str) -> Dict[str, Any]:
+    spec = DIMENSIONS[key]
+    return {
+        "key": key,
+        "label": spec["label"],
+        "weight": spec["weight"],
+        "score": 70,
+        "status": "insufficient_data",
+        "blocks": 0,
+        "warnings": 0,
+        "infos": 0,
+        "skipped": True,
+        "evidence": ["未采集该维度机器信号"],
+        "return_to_stage": spec["return_to_stage"],
+        "rerun_scope": spec["scope"],
+    }
+
+
+def severity_counts_to_score(blocks: int, warnings: int, infos: int, skipped: bool) -> Tuple[int, str]:
+    if skipped and blocks == 0 and warnings == 0:
+        return 70, "insufficient_data"
+    score = max(0, 100 - blocks * 35 - warnings * 12 - infos * 2)
+    if blocks > 0:
+        return score, "fail"
+    if warnings > 0 or score < 85:
+        return score, "warn"
+    return score, "pass"
+
+
+def add_signal(
+    dims: Dict[str, Dict[str, Any]],
+    dim_key: str,
+    *,
+    blocks: int = 0,
+    warnings: int = 0,
+    infos: int = 0,
+    skipped: bool = False,
+    evidence: Optional[str] = None,
+) -> None:
+    item = dims[dim_key]
+    item["blocks"] += int(blocks)
+    item["warnings"] += int(warnings)
+    item["infos"] += int(infos)
+    item["skipped"] = bool(item["skipped"] and skipped)
+    if evidence:
+        item["evidence"].append(evidence)
+
+
+def normalize_mechanical_severity(sev: str) -> str:
+    return {"🔴": "block", "🟡": "warn", "🟢": "info", "block": "block", "warn": "warn", "info": "info"}.get(sev, "info")
+
+
+def map_qa_dim(text: str) -> Optional[str]:
+    hay = (text or "").lower()
+    for key, words in QA_KEYWORDS:
+        if any(str(word).lower() in hay for word in words):
+            return key
+    return None
+
+
+FACE_DIM = "脸(G1)"
+PILLOW_FALLBACK_MODE = "pillow_fallback"  # 与 n2d-review face_consistency.PILLOW_FALLBACK_MODE 同字面值
+
+
+def apply_face_precision(dims: Dict[str, Dict[str, Any]], consistency: Optional[Dict[str, Any]]) -> None:
+    """G1 Pillow 降级档消费：有真实（但低精度）信号 → 不再整维度 insufficient_data，给降权分。
+
+    face_consistency 无 insightface 时降级为 Pillow 基础机检（图存在/可解码/分辨率/清晰度），
+    section 标 mode=pillow_fallback。此时 character_consistency：
+      - skipped=False（有信号，避免假性缺数据）；
+      - 标 precision=pillow_fallback → finalize 时维度权重减半（降权分），状态封顶 warn(需复核)；
+      - 留证据提示「建议装 insightface 提升精度」。
+    """
+    if not isinstance(consistency, dict):
+        return
+    sections = consistency.get("sections") if isinstance(consistency.get("sections"), dict) else {}
+    face = sections.get(FACE_DIM) if isinstance(sections.get(FACE_DIM), dict) else {}
+    if face.get("mode") != PILLOW_FALLBACK_MODE:
+        return
+    item = dims["character_consistency"]
+    item["precision"] = PILLOW_FALLBACK_MODE
+    item["precision_level"] = "degraded"  # 契约三档（n2d_contract.PRECISION_*）
+    item["skipped"] = False
+    item["evidence"].append(
+        "脸(G1) 为 Pillow 降级机检（仅查图存在/可解码/分辨率/清晰度，无人脸相似度）——"
+        "该维度按降权分计入；建议安装 insightface 提升精度，崩脸仍需人判兜底"
+    )
+
+
+def apply_consistency(dims: Dict[str, Dict[str, Any]], consistency: Optional[Dict[str, Any]]) -> None:
+    if not isinstance(consistency, dict):
+        return
+    by_dim = ((consistency.get("summary") or {}).get("by_dim") or {})
+    for source_dim, target in CONSISTENCY_MAP.items():
+        data = by_dim.get(source_dim)
+        if not isinstance(data, dict):
+            continue
+        add_signal(
+            dims,
+            target,
+            blocks=int(data.get("block") or 0),
+            warnings=int(data.get("warn") or 0),
+            infos=0,
+            skipped=bool(data.get("skipped")),
+            evidence=f"{source_dim}: block={data.get('block', 0)} warn={data.get('warn', 0)} ok={data.get('ok', 0)} skipped={data.get('skipped', False)}",
+        )
+        sections_obj = consistency.get("sections") if isinstance(consistency.get("sections"), dict) else {}
+        section = (sections_obj.get(source_dim) or {})
+        details = section.get("details") if isinstance(section, dict) else []
+        if isinstance(details, list):
+            for detail in details[:4]:
+                if not isinstance(detail, dict):
+                    continue
+                msg = str(detail.get("message") or detail.get("kind") or "")
+                shots = "、".join(str(x) for x in detail.get("affected_shots", [])[:4])
+                artifacts = "、".join(str(x) for x in detail.get("affected_artifacts", [])[:4])
+                suffix = ""
+                if shots:
+                    suffix += f" 定位镜头：{shots}"
+                if artifacts:
+                    suffix += f" 定位产物：{artifacts}"
+                add_signal(dims, target, skipped=bool(data.get("skipped")), evidence=f"{source_dim} detail: {msg}{suffix}".strip())
+
+
+def apply_identity_drift(dims: Dict[str, Dict[str, Any]], drift: Optional[Dict[str, Any]], ep: str) -> None:
+    """把 n2d-identity 的跨集漂移报告并进 character_consistency。
+
+    只加**跨集回归**信号（早集稳、本集崩/临界）且是 warn 级——片内崩脸的 block 已由
+    consistency_audit 的脸(G1) 计入，这里再按 block 计就会双重扣分。机检不可用时只标 skipped、
+    不臆造分数（与"缺数据"语义一致：单集评分对跨集本就是盲的，缺则显式标注而非假装通过）。"""
+    if not isinstance(drift, dict):
+        return
+    if not drift.get("available"):
+        add_signal(
+            dims, "character_consistency", skipped=True,
+            evidence="跨集漂移机检不可用（insightface/cv2 缺失、identity_registry 缺失或机检跳过）——本集未核对跨集角色漂",
+        )
+        return
+    episodes = list(drift.get("episodes") or [])
+    if len(episodes) < 2:
+        return  # 窗口不足两集，无跨集信息
+
+    def _num(value: str) -> int:
+        n = episode_number(value)
+        return n if n is not None else 10 ** 9
+
+    this_num = _num(ep)
+    for name, info in sorted((drift.get("characters") or {}).items()):
+        if not isinstance(info, dict):
+            continue
+        eps = info.get("episodes") or {}
+        cur = eps.get(ep) or {}
+        block = int(cur.get("block") or 0)
+        warn = int(cur.get("warn") or 0)
+        first_bad = str(info.get("first_bad_episode") or "")
+        prior_clean = any(
+            int((eps.get(e) or {}).get("block") or 0) == 0 and int((eps.get(e) or {}).get("ok") or 0) > 0
+            for e in episodes if _num(e) < this_num
+        )
+        if block > 0 and (first_bad == ep or prior_clean):
+            add_signal(
+                dims, "character_consistency", warnings=1, skipped=False,
+                evidence=f"跨集漂移：{name} 在 {ep} 有 {block} 个崩脸镜头、早集尚稳（first_bad={first_bad or ep}）→ 角色相对前集回归，定位重出该角色镜头",
+            )
+        elif warn > 0 and prior_clean:
+            add_signal(
+                dims, "character_consistency", warnings=1, skipped=False,
+                evidence=f"跨集漂移预警：{name} 在 {ep} 有 {warn} 个临界镜头、早集稳→ 关注该角色是否开始漂",
+            )
+        recurrence = info.get("recurrence") if isinstance(info.get("recurrence"), dict) else {}
+        reentries = recurrence.get("long_gap_reentries") if isinstance(recurrence.get("long_gap_reentries"), list) else []
+        for entry in reentries:
+            if not isinstance(entry, dict):
+                continue
+            if str(entry.get("at") or "") != ep:
+                continue
+            add_signal(
+                dims, "character_consistency", warnings=1, skipped=False,
+                evidence=(
+                    f"长间隔再登场风险：{name} 从 {entry.get('prev')} 到 {ep} 缺席 {entry.get('gap')} 集；"
+                    "本集应使用 canonical + 最近同形态/同表情/同视角实体记忆重锚"
+                ),
+            )
+
+
+def apply_voice_print(dims: Dict[str, Dict[str, Any]], report: Optional[Dict[str, Any]]) -> None:
+    """把声纹机检并进 voice_consistency。缺后端只标缺数据，不把未知当通过。"""
+    if not isinstance(report, dict):
+        return
+    if not report.get("available"):
+        add_signal(
+            dims,
+            "voice_consistency",
+            skipped=True,
+            evidence=f"声纹机检不可用：mode={report.get('mode')} precision={report.get('precision')}；{report.get('note', '')}",
+        )
+        return
+    add_signal(
+        dims,
+        "voice_consistency",
+        skipped=False,
+        evidence=f"声纹机检已采集：mode={report.get('mode')} total_drift={report.get('total_drift', 0)}",
+    )
+    for label, group in sorted((report.get("groups") or {}).items()):
+        if not isinstance(group, dict):
+            continue
+        lines = group.get("lines") if isinstance(group.get("lines"), list) else []
+        bad = sum(1 for line in lines if isinstance(line, dict) and line.get("band") == "bad")
+        warn = sum(1 for line in lines if isinstance(line, dict) and line.get("band") == "warn")
+        if bad or warn:
+            add_signal(
+                dims,
+                "voice_consistency",
+                blocks=bad,
+                warnings=warn,
+                skipped=False,
+                evidence=f"声纹漂移[{label}]: bad={bad} warn={warn} floor={group.get('floor')} mode={report.get('mode')}",
+            )
+
+
+def apply_mechanical(dims: Dict[str, Dict[str, Any]], mechanical: Optional[List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
+    """把 mechanical_check findings 并进维度分，返回**无法归到任一维度的 findings**。
+    历史 bug：dim 命不中关键词就 `continue` 静默丢弃——`BLOCK 完整性`(缺产物)/`BLOCK 视频`
+    这类真问题不归任何 schema 维度，曾被静默吞掉、不扣分、可放行。现改为回传给上层显式留痕、阻断静默通过。"""
+    unmapped: List[Dict[str, Any]] = []
+    if not isinstance(mechanical, list):
+        return unmapped
+    for finding in mechanical:
+        if not isinstance(finding, dict):
+            continue
+        dim = str(finding.get("dim") or "")
+        msg = str(finding.get("msg") or "")
+        sev = normalize_mechanical_severity(str(finding.get("sev") or ""))
+        target = MECHANICAL_DIM_MAP.get(dim) or map_qa_dim(dim + msg)
+        if not target:
+            unmapped.append({"source": "mechanical", "sev": sev, "dim": dim, "loc": str(finding.get("loc") or ""), "msg": msg})
+            continue
+        add_signal(
+            dims,
+            target,
+            blocks=1 if sev == "block" else 0,
+            warnings=1 if sev == "warn" else 0,
+            infos=1 if sev == "info" else 0,
+            skipped=False,
+            evidence=f"mechanical[{dim}] {finding.get('loc', '')}: {msg}",
+        )
+    return unmapped
+
+
+def resolve_pass_rate_floor(root: str, explicit: Optional[float]) -> Optional[float]:
+    """通过率下限与 n2d-dashboard 完全同源：显式 --pass-rate-floor >
+    n2d_thresholds.load_thresholds（默认 ← _设置.md「告警通过率下限」← alert_thresholds.json ← 环境变量）。
+    历史 bug：曾只读 json、漏 _设置.md/env，现统一走 load_thresholds 修掉。"""
+    if explicit is not None:
+        return explicit
+    val = load_thresholds(root).get("final_pass_rate_floor")
+    if isinstance(val, (int, float)):
+        return float(val)
+    return None
+
+
+def apply_dashboard(dims: Dict[str, Dict[str, Any]], dashboard_ep: Optional[Dict[str, Any]], pass_rate_floor: Optional[float] = None) -> List[Dict[str, Any]]:
+    """并进 dashboard 的 recent_blockers + 通过率告警，返回**无法归维的 blocker**（均为 block 级）。"""
+    unmapped: List[Dict[str, Any]] = []
+    if not isinstance(dashboard_ep, dict):
+        return unmapped
+    for blocker in dashboard_ep.get("recent_blockers", []):
+        if not isinstance(blocker, dict):
+            continue
+        target = map_qa_dim(" ".join(str(blocker.get(k, "")) for k in ("dim", "loc", "msg")))
+        if target:
+            add_signal(
+                dims,
+                target,
+                blocks=1,
+                skipped=False,
+                evidence=f"dashboard block[{blocker.get('stage', '')}/{blocker.get('dim', '')}]: {blocker.get('msg', '')}",
+            )
+        else:
+            unmapped.append({"source": "dashboard", "sev": "block", "dim": str(blocker.get("dim") or ""),
+                             "loc": f"{blocker.get('stage', '')}/{blocker.get('loc', '')}".strip("/"), "msg": str(blocker.get("msg") or "")})
+    pass_rate = dashboard_ep.get("final_pass_rate")
+    # 通过率下限不再硬编码：与 n2d-dashboard 的 final_pass_rate_floor 同源（生产数据/alert_thresholds.json
+    # 或 _设置.md 告警通过率下限）。floor=None（默认，同 dashboard）→ 不告警，避免两处口径打架。
+    if pass_rate_floor is not None and isinstance(pass_rate, (int, float)) and pass_rate < pass_rate_floor:
+        # Low final pass rate is a production instability signal.  It is not a
+        # content-specific dimension, so attach it to the most expensive visual
+        # stages as a warning.
+        add_signal(
+            dims,
+            "character_consistency",
+            warnings=1,
+            skipped=False,
+            evidence=f"dashboard final_pass_rate={pass_rate:.2f} < 下限 {pass_rate_floor:.2f}（同 dashboard 阈值），生成稳定性偏低",
+        )
+    return unmapped
+
+
+VISUAL_DIM_MAP = {
+    "image_similarity": "scene_consistency",
+    "subtitle_ocr": "subtitle_correctness",
+    "av_duration": "audio_visual_sync",
+    "lip_sync": "audio_visual_sync",
+    "final_rhythm_density": "rhythm_density",
+}
+
+
+def apply_visual(dims: Dict[str, Dict[str, Any]], visual: Optional[Dict[str, Any]]) -> None:
+    if not isinstance(visual, dict):
+        return
+    sections = visual.get("sections")
+    if not isinstance(sections, dict):
+        return
+    for source, target in VISUAL_DIM_MAP.items():
+        sec = sections.get(source)
+        if not isinstance(sec, dict):
+            continue
+        evidence = sec.get("evidence") or []
+        if isinstance(evidence, str):
+            evidence = [evidence]
+        metrics = sec.get("metrics")
+        metric_text = f" metrics={json.dumps(metrics, ensure_ascii=False, sort_keys=True)}" if isinstance(metrics, dict) and metrics else ""
+        add_signal(
+            dims,
+            target,
+            blocks=int(sec.get("blocks") or 0),
+            warnings=int(sec.get("warnings") or 0),
+            infos=int(sec.get("infos") or 0),
+            skipped=bool(sec.get("skipped")),
+            evidence=f"visual[{source}]: block={sec.get('blocks', 0)} warn={sec.get('warnings', 0)} skipped={sec.get('skipped', False)}{metric_text}",
+        )
+        for item in evidence[:4]:
+            add_signal(dims, target, infos=0, skipped=bool(sec.get("skipped")), evidence=f"visual[{source}] {item}")
+
+
+def finalize_dimensions(dims: Dict[str, Dict[str, Any]], threshold: int) -> None:
+    for item in dims.values():
+        # Remove the default "no data" note once real evidence exists.
+        if len(item["evidence"]) > 1 and item["evidence"][0] == "未采集该维度机器信号":
+            item["evidence"] = item["evidence"][1:]
+        score, status = severity_counts_to_score(item["blocks"], item["warnings"], item["infos"], item["skipped"])
+        item["score"] = score
+        if score < threshold and status == "pass":
+            status = "warn"
+        if item.get("precision") == PILLOW_FALLBACK_MODE:
+            # 降级档（低精度信号）：维度权重减半（降权分），干净结果也只给 warn(需复核)、不臆造满信心 pass
+            item["weight"] = max(1, int(round(int(item["weight"]) / 2)))
+            if status == "pass":
+                status = "warn"
+        item["status"] = status
+
+
+def weighted_total(dims: Dict[str, Dict[str, Any]]) -> int:
+    total_weight = sum(int(item["weight"]) for item in dims.values())
+    weighted = sum(float(item["score"]) * int(item["weight"]) for item in dims.values())
+    return int(round(weighted / total_weight)) if total_weight else 0
+
+
+def unique(items: Iterable[str]) -> List[str]:
+    out: List[str] = []
+    seen = set()
+    for item in items:
+        text = str(item or "").strip()
+        if text and text not in seen:
+            seen.add(text)
+            out.append(text)
+    return out
+
+
+def extract_shots(text: str) -> List[str]:
+    shots: List[str] = []
+    for match in re.finditer(r"(?i)\b(EP\d+[_-]CLIP[_-]?0*(\d+)|CLIP[_\s-]*0*(\d+))\b", text or ""):
+        raw = match.group(1)
+        number = match.group(2) or match.group(3)
+        if raw.upper().startswith("EP"):
+            shots.append(raw.upper().replace("-", "_"))
+        if number:
+            shots.append(f"Clip_{int(number):02d}")
+    for match in re.finditer(r"镜头\s*0*(\d+)", text or ""):
+        shots.append(f"Clip_{int(match.group(1)):02d}")
+    return unique(shots)
+
+
+def extract_artifacts(text: str) -> List[str]:
+    artifacts: List[str] = []
+    pattern = r"(?:出图|出视频|合成|脚本|设定库|合规)/[^\s，。；;|)）]+"
+    for match in re.finditer(pattern, text or ""):
+        artifacts.append(match.group(0).rstrip("，。；;:："))
+    return unique(artifacts)
+
+
+def inferred_artifacts(stage: str, dim_key: str, ep: str, shots: Sequence[str]) -> List[str]:
+    out: List[str] = []
+    if not shots and stage == "script_stage2":
+        shots = []
+    for shot in shots:
+        if stage == "image":
+            out.append(f"出图/{ep}/图片/{shot}.png")
+        elif stage == "video":
+            out.append(f"出视频/{ep}/视频/{shot}.mp4")
+        elif stage == "compose":
+            out.append(f"出视频/{ep}/视频/{shot}.mp4")
+    if stage == "script_stage2":
+        if dim_key == "subtitle_correctness":
+            out.extend([f"脚本/{ep}/字幕_中文.srt", f"脚本/{ep}/字幕_英文.srt"])
+        out.append(f"脚本/{ep}/storyboard.json")
+        if dim_key == "semantic_continuity":
+            out.extend([f"出图/{ep}/prompt", f"出视频/{ep}/prompt"])
+    elif stage == "compose":
+        out.append(f"合成/{ep}")
+    elif stage == "image":
+        if dim_key == "state_continuity":
+            out.extend([f"脚本/{ep}/storyboard.json", f"出图/{ep}/prompt/01_分镜出图.md", "出图/共享/visual_state_ledger.json"])
+        elif dim_key == "multimodal_continuity":
+            out.extend([f"出图/{ep}/prompt/01_分镜出图.md", f"出图/{ep}/图片"])
+    return unique(out)
+
+
+def evidence_scope(item: Dict[str, Any], ep: str) -> Tuple[List[str], List[str]]:
+    stage = str(item["return_to_stage"])
+    dim_key = str(item["key"])
+    shots: List[str] = []
+    artifacts: List[str] = []
+    for ev in item.get("evidence", []) or []:
+        text = str(ev)
+        shots.extend(extract_shots(text))
+        artifacts.extend(extract_artifacts(text))
+    shots = unique(shots)
+    artifacts = unique([*artifacts, *inferred_artifacts(stage, dim_key, ep, shots)])
+    return shots, artifacts
+
+
+def build_auto_return_tasks(dims: Dict[str, Dict[str, Any]], threshold: int, ep: str) -> List[Dict[str, Any]]:
+    grouped: Dict[str, Dict[str, Any]] = {}
+    for item in dims.values():
+        if item["status"] == "insufficient_data":
+            continue
+        if item["score"] >= threshold and item["status"] not in {"fail", "insufficient_data"}:
+            continue
+        stage = str(item["return_to_stage"])
+        if stage not in grouped:
+            grouped[stage] = {
+                "return_to_stage": stage,
+                "dimensions": [],
+                "scope": [],
+                "affected_artifacts": [],
+                "affected_shots": [],
+            }
+        grouped[stage]["dimensions"].append(item["label"])
+        grouped[stage]["scope"].append(item["rerun_scope"])
+        shots, artifacts = evidence_scope(item, ep)
+        grouped[stage]["affected_shots"].extend(shots)
+        grouped[stage]["affected_artifacts"].extend(artifacts)
+    tasks = []
+    for stage, data in grouped.items():
+        shots = unique(data["affected_shots"])
+        artifacts = unique(data["affected_artifacts"])
+        scope_parts = unique(data["scope"])
+        if shots:
+            scope_parts.append("定位镜头：" + "、".join(shots))
+        if artifacts:
+            scope_parts.append("定位产物：" + "、".join(artifacts[:8]))
+        unique_scope = "；".join(scope_parts)
+        tasks.append({
+            "return_to_stage": stage,
+            "dimensions": data["dimensions"],
+            "scope": unique_scope,
+            "affected_artifacts": artifacts,
+            "affected_shots": shots,
+        })
+    return tasks
+
+
+def build_data_collection_tasks(dims: Dict[str, Dict[str, Any]]) -> List[Dict[str, Any]]:
+    missing = [item for item in dims.values() if item["status"] == "insufficient_data"]
+    if not missing:
+        return []
+    return [{
+        "skill": "n2d-score",
+        "action": "run_checks",
+        "dimensions": [item["label"] for item in missing],
+        "scope": "缺机器信号，先采集 consistency/mechanical/visual checks；不要在缺证据时直接返工。",
+        "command": "python3 skills/n2d-score/scripts/score.py <作品根> <集> --run-checks --profile <demo|standard|production|overseas>",
+    }]
+
+
+def build_triage_tasks(unmapped: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """无法归到 schema 维度的 findings → 分诊任务。block 级单列（必须人判归类，不能放行），warn/info 仅留痕。"""
+    if not unmapped:
+        return []
+    blocks = [u for u in unmapped if u.get("sev") == "block"]
+    others = [u for u in unmapped if u.get("sev") != "block"]
+    tasks: List[Dict[str, Any]] = []
+    if blocks:
+        tasks.append({
+            "skill": "n2d-score",
+            "action": "triage_unmapped",
+            "scope": "存在无法自动归到 schema 维度的 block 级证据（如 完整性/视频）——必须人判归类或修复，不能直接放行。"
+                     + "；".join(f"[{b['dim']}] {b['loc']}: {b['msg']}" for b in blocks[:6]),
+            "findings": blocks,
+        })
+    if others:
+        tasks.append({
+            "skill": "n2d-score",
+            "action": "triage_unmapped_low",
+            "scope": "未归类的 warn/info 证据，仅留痕供复核：" + "；".join(f"[{o['dim']}] {o['msg']}" for o in others[:6]),
+            "findings": others,
+        })
+    return tasks
+
+
+def build_consistency_kpi(consistency: Optional[Dict[str, Any]],
+                          identity: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    """角色一致性 **报告型 KPI**（参考 EntityBench/MSVBench 风格的主体一致性评测轴）——
+    纯函数·可测。与 severity_counts_to_score 的"扣分式"正交：扣分回答"扣几分"，KPI 回答
+    "本集一致性 0.82、跨集 0.79、离可投放线 0.85 差多少"，供 n2d-review 模式② 横向对标。
+
+    - intra_episode：本集各角色「质心 vs 主参考」余弦（face_consistency.ep_mean_score）的均值。
+      该值已过 G3 fidelity-gate（崩 canonical 的镜不计入），不会被"稳定地错"抬高。
+    - cross_episode：n2d-identity 跨集漂移报告里各角色 mean_score 的均值（缺则 None）。
+    - release_line：可投放下限，默认 0.85，可经 N2D_CONSISTENCY_RELEASE_LINE 覆盖。
+      **必须随 encoder 重标定**——arcface 与 styleid 余弦尺度不同，不能共用同一条线。
+    verdict：intra ≥ line → above；< line → below；无 intra → None（不臆造）。"""
+    sections = (consistency or {}).get("sections")
+    face = sections.get(FACE_DIM) if isinstance(sections, dict) and isinstance(sections.get(FACE_DIM), dict) else {}
+    chars = face.get("characters") if isinstance(face.get("characters"), dict) else {}
+    intra_vals = [c["ep_mean_score"] for c in chars.values()
+                  if isinstance(c, dict) and isinstance(c.get("ep_mean_score"), (int, float))]
+    intra = round(sum(intra_vals) / len(intra_vals), 4) if intra_vals else None
+
+    cross_vals: List[float] = []
+    idchars = (identity or {}).get("characters") if isinstance(identity, dict) else None
+    if isinstance(idchars, dict):
+        for info in idchars.values():
+            if not isinstance(info, dict):
+                continue
+            ms = info.get("mean_score")
+            if isinstance(ms, (int, float)):
+                cross_vals.append(float(ms))
+            else:  # 退而求其次：逐集条目里的 mean_score
+                for e in (info.get("episodes") or {}).values():
+                    if isinstance(e, dict) and isinstance(e.get("mean_score"), (int, float)):
+                        cross_vals.append(float(e["mean_score"]))
+    cross = round(sum(cross_vals) / len(cross_vals), 4) if cross_vals else None
+
+    try:
+        line = float(os.environ.get("N2D_CONSISTENCY_RELEASE_LINE", "0.85"))
+    except ValueError:
+        line = 0.85
+    fidelity_status = face.get("fidelity_gate")
+    if fidelity_status is None or fidelity_status == "absent":
+        # fidelity-gate 未激活 → intra scores may be inflated by stable-but-wrong renders;
+        # refuse to give a misleading above/below verdict.
+        verdict = "insufficient_data" if intra is not None else None
+    else:
+        verdict = None if intra is None else ("above" if intra >= line else "below")
+    result = {
+        "intra_episode": intra,
+        "cross_episode": cross,
+        "encoder": face.get("encoder"),
+        "fidelity_gate": fidelity_status,
+        "release_line": line,
+        "verdict": verdict,
+        "characters_counted": len(intra_vals),
+        "benchmark_ref": ("EntityBench/MSVBench 风格的主体/实体一致性评测轴；风格化脸另参 Face Consistency "
+                          "Benchmark for GenAI Video；叙事级长视频参 NarrLV/DirectorBench；"
+                          "具体 release line 必须用本项目 encoder 与人审校准集重标定"),
+        "note": "报告型 KPI·不参与扣分；与 severity 扣分维度正交",
+    }
+    if fidelity_status is None or fidelity_status == "absent":
+        result["warnings"] = [
+            "⚠️ fidelity-gate 未激活（vlm_verify --write 未跑），脸一致分数未经 VLM canonical 验证，"
+            "above/below 判定不可靠（已标为 insufficient_data）。请跑 vlm_verify --write 落 canonical 通过表后重算。"
+        ]
+    return result
+
+
+def score_episode(
+    root: str,
+    ep: str,
+    *,
+    consistency: Optional[Dict[str, Any]] = None,
+    mechanical: Optional[List[Dict[str, Any]]] = None,
+    visual: Optional[Dict[str, Any]] = None,
+    identity: Optional[Dict[str, Any]] = None,
+    voice_print: Optional[Dict[str, Any]] = None,
+    dashboard_ep: Optional[Dict[str, Any]] = None,
+    narrative: Optional[Dict[str, Any]] = None,
+    threshold: int = 85,
+    pass_rate_floor: Optional[float] = None,
+    review_profile: str = "standard",
+) -> Dict[str, Any]:
+    ep = normalize_episode(ep)
+    dims = {key: empty_dimension(key) for key in DIMENSIONS}
+    apply_consistency(dims, consistency)
+    apply_face_precision(dims, consistency)
+    apply_identity_drift(dims, identity, ep)
+    apply_voice_print(dims, voice_print)
+    unmapped = apply_mechanical(dims, mechanical)
+    apply_visual(dims, visual)
+    unmapped += apply_dashboard(dims, dashboard_ep, pass_rate_floor)
+    finalize_dimensions(dims, threshold)
+    total = weighted_total(dims)
+    hard_fail = any(item["status"] == "fail" for item in dims.values())
+    insufficient = any(item["status"] == "insufficient_data" for item in dims.values())
+    # 无法归到 schema 维度的 findings 不能静默吞：block 级强制不通过（曾因关键词没命中而被丢弃、放行）。
+    unmapped_blocks = [u for u in unmapped if u.get("sev") == "block"]
+    status = "fail" if hard_fail or total < threshold else "pass"
+    if unmapped_blocks and status == "pass":
+        status = "warn"  # 有未归类的 block 证据时，绝不给 pass；交人判分诊
+    if insufficient and status == "pass":
+        status = "warn"
+    narrative_signals = dict(narrative or {})
+    narrative_signals.setdefault("profile", review_profile)
+    return {
+        "kind": SCORE_KIND,
+        "version": VERSION,
+        "root": root,
+        "episode": ep,
+        "review_profile": review_profile,
+        "generated_at": now_iso(),
+        "threshold": threshold,
+        "total_score": total,
+        "status": status,
+        "character_consistency_kpi": build_consistency_kpi(consistency, identity),
+        "narrative_continuity_kpi": build_narrative_kpi(narrative_signals),
+        "score_inputs": {
+            "consistency": cached_path(root, ep, "consistency"),
+            "mechanical": cached_path(root, ep, "mechanical"),
+            "visual": cached_path(root, ep, "visual"),
+            "identity": cached_path(root, ep, "identity"),
+            "voice_print": cached_path(root, ep, "voice_print"),
+        },
+        "dimensions": list(dims.values()),
+        "auto_return_tasks": build_auto_return_tasks(dims, threshold, ep),
+        "data_collection_tasks": build_data_collection_tasks(dims) + build_triage_tasks(unmapped),
+        "unmapped_findings": unmapped,
+    }
+
+
+def format_status(status: str) -> str:
+    return {"pass": "通过", "warn": "需复核", "fail": "回流", "insufficient_data": "缺数据"}.get(status, status)
+
+
+def render_markdown(score: Dict[str, Any]) -> str:
+    lines = [
+        "# n2d 自动审片评分",
+        "",
+        f"- 集：{score['episode']}",
+        f"- Profile：{score.get('review_profile', 'standard')}",
+        f"- 总分：{score['total_score']} / 100",
+        f"- 阈值：{score['threshold']}",
+        f"- 状态：{format_status(score['status'])}",
+        f"- 生成时间：{score['generated_at']}",
+        "",
+    ]
+    kpi = score.get("character_consistency_kpi")
+    if isinstance(kpi, dict) and kpi.get("intra_episode") is not None:
+        cross = kpi.get("cross_episode")
+        verdict_zh = {"above": "达标", "below": "低于可投放线"}.get(kpi.get("verdict"), "—")
+        lines.extend([
+            "## 角色一致性 KPI（报告型·非扣分·对标 EntityBench/MSVBench）",
+            "",
+            f"- 本集 intra：{kpi['intra_episode']}"
+            + (f" · 跨集 cross：{cross}" if cross is not None else " · 跨集：缺数据")
+            + f" · 可投放线：{kpi['release_line']} → **{verdict_zh}**",
+            f"- encoder：{kpi.get('encoder')} · fidelity-gate：{kpi.get('fidelity_gate')} · 计入角色数：{kpi.get('characters_counted')}",
+            f"- 基准：{kpi.get('benchmark_ref')}",
+            "",
+        ])
+    nkpi = score.get("narrative_continuity_kpi")
+    if isinstance(nkpi, dict) and nkpi.get("narrative_continuity") is not None:
+        nverdict = {"above": "达标", "below": "低于参考线"}.get(nkpi.get("verdict"), "—")
+        subs = nkpi.get("subscores", {})
+        lines.extend([
+            "## 长篇叙事一致性 KPI（报告型·非扣分·NarrLV/DirectorBench 轴）",
+            "",
+            f"- 叙事连续性：{nkpi['narrative_continuity']} · profile {nkpi.get('profile')} · 参考线 {nkpi.get('release_line')} → **{nverdict}**"
+            + f"（集数 {nkpi.get('episodes_counted')}）",
+            f"- 子分：伏笔已回收 {subs.get('payoff_completed')} · 伏笔已规划 {subs.get('payoff_planned')} · "
+            f"冷开场链 {subs.get('cold_open_chain')} · 反套路 {subs.get('anti_trope')} · "
+            f"情绪起伏 {subs.get('emotion_variation')} · 叙事原子 {subs.get('narrative_atom_density')} · "
+            f"实体排程 {subs.get('entity_schedule')}"
+            + (f" · 未填伏笔 {nkpi.get('open_setups')}" if nkpi.get("open_setups") else ""),
+            f"- 基准：{nkpi.get('benchmark_ref')}",
+            "",
+        ])
+    lines += [
+        "## 维度",
+        "",
+        "| 维度 | 权重 | 分数 | 状态 | block | warn | 回流 stage |",
+        "|---|---:|---:|---|---:|---:|---|",
+    ]
+    for item in score["dimensions"]:
+        lines.append(
+            f"| {item['label']} | {item['weight']} | {item['score']} | {format_status(item['status'])} | "
+            f"{item['blocks']} | {item['warnings']} | {item['return_to_stage']} |"
+        )
+    if score.get("auto_return_tasks"):
+        lines.extend(["", "## 自动回流建议", ""])
+        for task in score["auto_return_tasks"]:
+            dims = "、".join(task.get("dimensions", []))
+            lines.append(f"- `{task['return_to_stage']}`：{dims}；{task.get('scope', '')}")
+    if score.get("data_collection_tasks"):
+        lines.extend(["", "## 数据采集建议", ""])
+        for task in score["data_collection_tasks"]:
+            dims = "、".join(task.get("dimensions", []))
+            lines.append(f"- `{task['skill']}`：{dims}；{task.get('scope', '')}")
+    if score.get("unmapped_findings"):
+        lines.extend(["", "## 未归类证据（无法自动归到 schema 维度·需人判分诊）", ""])
+        for u in score["unmapped_findings"]:
+            lines.append(f"- {u.get('sev')} [{u.get('dim')}] {u.get('loc', '')}: {u.get('msg', '')}（来源 {u.get('source')}）")
+    lines.extend(["", "## 证据", ""])
+    for item in score["dimensions"]:
+        lines.append(f"### {item['label']}")
+        for ev in item.get("evidence", [])[:8]:
+            lines.append(f"- {ev}")
+        if len(item.get("evidence", [])) > 8:
+            lines.append(f"- ...另有 {len(item['evidence']) - 8} 条")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def write_score(root: str, score: Dict[str, Any]) -> None:
+    os.makedirs(production_dir(root), exist_ok=True)
+    ep = score["episode"]
+    write_json(os.path.join(production_dir(root), f"score_{ep}.json"), score)
+    with open(os.path.join(production_dir(root), f"score_{ep}.md"), "w", encoding="utf-8") as fh:
+        fh.write(render_markdown(score))
+
+
+def enqueue_low(score: Dict[str, Any], *, max_concurrency: int, max_retries: int, budget: Optional[float], budget_unit: Optional[str]) -> Optional[Dict[str, Any]]:
+    tasks_spec = score.get("auto_return_tasks") or []
+    if not tasks_spec:
+        return None
+    queue_py = os.path.join(REPO_SKILLS, "n2d-batch", "scripts", "queue.py")
+    spec = importlib.util.spec_from_file_location("n2d_batch_queue_for_score", queue_py)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("cannot load n2d-batch queue.py")
+    batch = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(batch)
+    root = score["root"]
+    ep = score["episode"]
+    estimates = batch.load_cost_estimates(root)
+    tasks: List[Dict[str, Any]] = []
+    for item in tasks_spec:
+        tasks.extend(
+            batch.rerun_tasks(
+                root,
+                episodes={ep},
+                rerun_from=item["return_to_stage"],
+                cost_estimates=estimates,
+                max_retries=max_retries,
+                rerun_scope=item.get("scope", ""),
+                affected_artifacts=item.get("affected_artifacts", []),
+                affected_shots=item.get("affected_shots", []),
+            )
+        )
+    tasks = batch.dedupe_task_ids(tasks)
+    budget_data = batch.apply_budget(tasks, budget, budget_unit)
+    queue = batch.make_queue(root, tasks, max_concurrency=max_concurrency, max_retries=max_retries, budget=budget_data)
+    return batch.write_planned_queue(root, queue, replace=False)
+
+
+def cmd_score(ns: argparse.Namespace) -> int:
+    root = ns.root.rstrip("/")
+    ep = normalize_episode(ns.episode)
+    profile = resolve_score_profile(root, ns.profile)
+    threshold = ns.threshold if ns.threshold is not None else threshold_for_profile(profile)
+    inputs: Dict[str, Any] = {}
+    if ns.run_checks:
+        inputs.update(run_checks(root, ep))
+    else:
+        inputs["consistency"] = load_json(cached_path(root, ep, "consistency"))
+        inputs["mechanical"] = load_json(cached_path(root, ep, "mechanical"))
+        inputs["visual"] = load_json(cached_path(root, ep, "visual"))
+        inputs["identity"] = load_json(cached_path(root, ep, "identity"))
+        inputs["voice_print"] = load_json(cached_path(root, ep, "voice_print"))
+    inputs["dashboard_ep"] = load_dashboard_episode(root, ep)
+    try:
+        inputs["narrative"] = collect_narrative_signals(root)  # 跨集报告型 KPI·best-effort
+        if isinstance(inputs["narrative"], dict):
+            inputs["narrative"]["profile"] = profile
+    except Exception:
+        inputs["narrative"] = {"profile": profile}
+    score = score_episode(
+        root,
+        ep,
+        consistency=inputs.get("consistency"),
+        mechanical=inputs.get("mechanical"),
+        visual=inputs.get("visual"),
+        identity=inputs.get("identity"),
+        voice_print=inputs.get("voice_print"),
+        dashboard_ep=inputs.get("dashboard_ep"),
+        narrative=inputs.get("narrative"),
+        threshold=threshold,
+        pass_rate_floor=resolve_pass_rate_floor(root, ns.pass_rate_floor),
+        review_profile=profile,
+    )
+    queue = None
+    if ns.enqueue_low and score["status"] != "pass":
+        queue = enqueue_low(
+            score,
+            max_concurrency=ns.max_concurrency,
+            max_retries=ns.max_retries,
+            budget=ns.budget,
+            budget_unit=ns.budget_unit,
+        )
+        score["enqueued_batch_tasks"] = len((queue or {}).get("tasks", []))
+    if not ns.no_write:
+        write_score(root, score)
+    print(render_markdown(score) if ns.markdown else json.dumps(score, ensure_ascii=False, indent=2))
+    return 1 if score["status"] == "fail" else 0
+
+
+def parser() -> argparse.ArgumentParser:
+    ap = argparse.ArgumentParser(description="n2d automatic episode review score")
+    ap.add_argument("root")
+    ap.add_argument("episode")
+    ap.add_argument("--run-checks", action="store_true", help="run consistency/mechanical/visual checks and cache their JSON")
+    ap.add_argument("--profile", choices=sorted(SCORE_PROFILE_THRESHOLDS),
+                    help="review profile: demo/standard/production/overseas; sets default threshold and narrative KPI line")
+    ap.add_argument("--threshold", type=int, default=None,
+                    help="override score threshold; default comes from --profile or project settings")
+    ap.add_argument("--pass-rate-floor", type=float, default=None,
+                    help="通过率下限告警阈值；缺省读 生产数据/alert_thresholds.json 的 final_pass_rate_floor（与 n2d-dashboard 同源），都没有则不告警")
+    ap.add_argument("--no-write", action="store_true")
+    ap.add_argument("--markdown", action="store_true")
+    ap.add_argument("--enqueue-low", action="store_true", help="write n2d-batch rerun queue when score is below threshold")
+    ap.add_argument("--max-concurrency", type=int, default=1)
+    ap.add_argument("--max-retries", type=int, default=1)
+    ap.add_argument("--budget", type=float)
+    ap.add_argument("--budget-unit")
+    return ap
+
+
+def main(argv: List[str]) -> int:
+    return cmd_score(parser().parse_args(argv))
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

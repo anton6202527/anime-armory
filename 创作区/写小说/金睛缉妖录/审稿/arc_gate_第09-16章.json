@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "kind": "novel_arc_gate",
+  "checked_at": "2026-06-30",
+  "arc": "9-16",
+  "chapters": [
+    {
+      "chapter": 9,
+      "chapter_file": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录/章节/第09章.md",
+      "state_delta": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录/审稿/state_delta_第09章.json",
+      "has_reader_contract_progress": true,
+      "has_theme_alignment": true,
+      "resolved_threads": 1,
+      "warnings": []
+    },
+    {
+      "chapter": 10,
+      "chapter_file": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录/章节/第10章.md",
+      "state_delta": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录/审稿/state_delta_第10章.json",
+      "has_reader_contract_progress": true,
+      "has_theme_alignment": true,
+      "resolved_threads": 1,
+      "warnings": []
+    },
+    {
+      "chapter": 11,
+      "chapter_file": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录/章节/第11章.md",
+      "state_delta": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录/审稿/state_delta_第11章.json",
+      "has_reader_contract_progress": true,
+      "has_theme_alignment": true,
+      "resolved_threads": 1,
+      "warnings": []
+    },
+    {
+      "chapter": 12,
+      "chapter_file": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录/章节/第12章.md",
+      "state_delta": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录/审稿/state_delta_第12章.json",
+      "has_reader_contract_progress": true,
+      "has_theme_alignment": true,
+      "resolved_threads": 1,
+      "warnings": []
+    },
+    {
+      "chapter": 13,
+      "chapter_file": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录/章节/第13章.md",
+      "state_delta": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录/审稿/state_delta_第13章.json",
+      "has_reader_contract_progress": true,
+      "has_theme_alignment": true,
+      "resolved_threads": 1,
+      "warnings": []
+    },
+    {
+      "chapter": 14,
+      "chapter_file": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录/章节/第14章.md",
+      "state_delta": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录/审稿/state_delta_第14章.json",
+      "has_reader_contract_progress": true,
+      "has_theme_alignment": true,
+      "resolved_threads": 1,
+      "warnings": []
+    },
+    {
+      "chapter": 15,
+      "chapter_file": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录/章节/第15章.md",
+      "state_delta": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录/审稿/state_delta_第15章.json",
+      "has_reader_contract_progress": true,
+      "has_theme_alignment": true,
+      "resolved_threads": 1,
+      "warnings": []
+    },
+    {
+      "chapter": 16,
+      "chapter_file": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录/章节/第16章.md",
+      "state_delta": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录/审稿/state_delta_第16章.json",
+      "has_reader_contract_progress": true,
+      "has_theme_alignment": true,
+      "resolved_threads": 1,
+      "warnings": []
+    }
+  ],
+  "status": "warnings",
+  "blocking": 0,
+  "warnings": 1,
+  "findings": [
+    {
+      "severity": "建议级",
+      "type": "arc_plan_missing",
+      "message": "缺少弧段任务包/计划；长篇建议先跑 novel-craft/scripts/arc_packets.py 生成弧段目标。"
+    }
+  ]
+}

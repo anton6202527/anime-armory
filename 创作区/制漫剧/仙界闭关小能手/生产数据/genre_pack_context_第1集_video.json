@@ -1,0 +1,291 @@
+{
+  "active_scene_archetypes": [
+    {
+      "label": "御剑/御物飞行",
+      "matched_clips": [
+        "EP01_CLIP01",
+        "EP01_CLIP02",
+        "EP01_CLIP03",
+        "EP01_CLIP04",
+        "EP01_CLIP05",
+        "EP01_CLIP06",
+        "EP01_CLIP07",
+        "EP01_CLIP08",
+        "EP01_CLIP09",
+        "EP01_CLIP10"
+      ],
+      "missing_by_clip": [
+        {
+          "clip": "EP01_CLIP01",
+          "missing": [
+            "vehicle_lock",
+            "screen_direction",
+            "parallax_layers",
+            "degrade_plan"
+          ]
+        },
+        {
+          "clip": "EP01_CLIP02",
+          "missing": [
+            "vehicle_lock",
+            "screen_direction",
+            "parallax_layers",
+            "degrade_plan"
+          ]
+        },
+        {
+          "clip": "EP01_CLIP03",
+          "missing": [
+            "vehicle_lock",
+            "screen_direction",
+            "parallax_layers",
+            "degrade_plan"
+          ]
+        },
+        {
+          "clip": "EP01_CLIP04",
+          "missing": [
+            "vehicle_lock",
+            "screen_direction",
+            "parallax_layers",
+            "degrade_plan"
+          ]
+        },
+        {
+          "clip": "EP01_CLIP05",
+          "missing": [
+            "vehicle_lock",
+            "screen_direction",
+            "parallax_layers",
+            "degrade_plan"
+          ]
+        },
+        {
+          "clip": "EP01_CLIP06",
+          "missing": [
+            "vehicle_lock",
+            "screen_direction",
+            "parallax_layers",
+            "degrade_plan"
+          ]
+        },
+        {
+          "clip": "EP01_CLIP07",
+          "missing": [
+            "vehicle_lock",
+            "screen_direction",
+            "parallax_layers",
+            "degrade_plan"
+          ]
+        },
+        {
+          "clip": "EP01_CLIP08",
+          "missing": [
+            "vehicle_lock",
+            "screen_direction",
+            "parallax_layers",
+            "degrade_plan"
+          ]
+        },
+        {
+          "clip": "EP01_CLIP09",
+          "missing": [
+            "vehicle_lock",
+            "screen_direction",
+            "parallax_layers",
+            "degrade_plan"
+          ]
+        },
+        {
+          "clip": "EP01_CLIP10",
+          "missing": [
+            "vehicle_lock",
+            "screen_direction",
+            "parallax_layers",
+            "degrade_plan"
+          ]
+        }
+      ],
+      "production_risks": [
+        "主体漂移",
+        "高度曲线断裂",
+        "风向和衣摆不一致"
+      ],
+      "required_contract_fields": [
+        "vehicle_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "scene_id": "object_flight",
+      "style_binding": "飞行法器先作为 PROP/WEAPON 登记，视频 prompt 必须继承资产 id"
+    }
+  ],
+  "episode": "第1集",
+  "generated_at": "2026-06-30T08:20:57+00:00",
+  "genre": {
+    "genre_key": "xianxia",
+    "label": "仙侠",
+    "matched": true,
+    "raw": "修仙/玄幻"
+  },
+  "issues": [
+    {
+      "clip": "EP01_CLIP01",
+      "message": "missing genre motion contract fields: vehicle_lock, screen_direction, parallax_layers, degrade_plan",
+      "missing_fields": [
+        "vehicle_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "scene_id": "object_flight",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP02",
+      "message": "missing genre motion contract fields: vehicle_lock, screen_direction, parallax_layers, degrade_plan",
+      "missing_fields": [
+        "vehicle_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "scene_id": "object_flight",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP03",
+      "message": "missing genre motion contract fields: vehicle_lock, screen_direction, parallax_layers, degrade_plan",
+      "missing_fields": [
+        "vehicle_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "scene_id": "object_flight",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP04",
+      "message": "missing genre motion contract fields: vehicle_lock, screen_direction, parallax_layers, degrade_plan",
+      "missing_fields": [
+        "vehicle_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "scene_id": "object_flight",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP05",
+      "message": "missing genre motion contract fields: vehicle_lock, screen_direction, parallax_layers, degrade_plan",
+      "missing_fields": [
+        "vehicle_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "scene_id": "object_flight",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP06",
+      "message": "missing genre motion contract fields: vehicle_lock, screen_direction, parallax_layers, degrade_plan",
+      "missing_fields": [
+        "vehicle_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "scene_id": "object_flight",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP07",
+      "message": "missing genre motion contract fields: vehicle_lock, screen_direction, parallax_layers, degrade_plan",
+      "missing_fields": [
+        "vehicle_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "scene_id": "object_flight",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP08",
+      "message": "missing genre motion contract fields: vehicle_lock, screen_direction, parallax_layers, degrade_plan",
+      "missing_fields": [
+        "vehicle_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "scene_id": "object_flight",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP09",
+      "message": "missing genre motion contract fields: vehicle_lock, screen_direction, parallax_layers, degrade_plan",
+      "missing_fields": [
+        "vehicle_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "scene_id": "object_flight",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP10",
+      "message": "missing genre motion contract fields: vehicle_lock, screen_direction, parallax_layers, degrade_plan",
+      "missing_fields": [
+        "vehicle_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "scene_id": "object_flight",
+      "severity": "block"
+    }
+  ],
+  "kind": "n2d_genre_pack_context",
+  "pack": {
+    "degrade_plans": [
+      "长连续御剑/飞舟镜拆成起势、巡航、抵达三镜",
+      "群战法术爆发拆成反打、特写、冲击波结果镜",
+      "御兽骑乘失败时退为近景坐骑接触 + 远景剪影飞行"
+    ],
+    "motion_contract_fields": [
+      "mount_contact",
+      "gait_cycle",
+      "vehicle_lock",
+      "harness_lock",
+      "screen_direction",
+      "parallax_layers",
+      "degrade_plan"
+    ],
+    "qc_focus": [
+      "角色定妆跨集",
+      "法器/灵兽尺度",
+      "飞行空间层次",
+      "法术光色连续",
+      "服饰发型抗漂移"
+    ],
+    "style_binding_policy": {
+      "bind_to_visual_style": true,
+      "notes": "题材 pack 给场景和 QC 权重；基础视觉风格仍由项目 _设置.md 决定。不要把仙侠写成唯一画风。"
+    }
+  },
+  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+  "stage_key": "video",
+  "status": "fail",
+  "summary": {
+    "active_scenes": 1,
+    "issues": 10,
+    "matched_clips": 10
+  },
+  "version": 1
+}

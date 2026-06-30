@@ -1,0 +1,221 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+wiki_builder.py — 动态百科增量构建（确定性骨架，纯标准库）
+
+跑真活，不是 mock：
+  - 从 设定/角色卡.md 播种实体（角色名 → category=character, status=active）
+  - 扫章节算每个实体的 last_seen_chapter
+  - 用死亡关键词做"疑似阵亡"候选标记（带证据章 + auto 标志，交人/LLM 复核）
+  - 与已有 动态百科.json 合并：保留人工字段，只更新 last_seen / 追加候选
+
+语义级状态（伤势细节、道具归属精确变更）仍建议 LLM 在交互节点补全；本脚本提供
+确定性骨架，让 logic_sentry.py 有真实可比对的状态底座。
+
+  python3 wiki_builder.py <作品根> [--range 1-50] [--chapter 12]
+
+测试：cd skills/novel-wiki/scripts && python3 -m pytest test_logic_sentry.py
+"""
+import os
+import re
+import json
+import argparse
+import sys
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_SKILLS = os.path.abspath(os.path.join(_HERE, "..", ".."))
+_COMMON = os.path.join(_SKILLS, "novel", "_lib")
+if _COMMON not in sys.path:
+    sys.path.insert(0, _COMMON)
+from project_io import parse_chapter_range, read_chapters  # noqa: E402
+from report_snapshot import snapshot_chapters, snapshot_files  # noqa: E402
+from consistency_scaffold import resolve_character_card  # noqa: E402  同认 角色卡.md / 人物.md
+
+DEATH_KEYWORDS = ["死了", "身亡", "阵亡", "殒命", "殒", "葬身", "气绝", "咽气",
+                  "命丧", "战死", "殉", "毙命", "丧命", "已死", "死去"]
+ITEM_GONE_KEYWORDS = ["丢弃", "遗失", "损毁", "破碎", "碎裂", "夺走", "失去", "摧毁"]
+FLASHBACK_HINTS = ["回忆", "闪回", "梦中", "梦里", "想起", "记忆", "当年", "曾经", "幻象", "亡魂", "鬼魂", "托梦"]
+
+_CJK = r"一-鿿"
+
+
+def list_chapters(project, chap_range=None, single=None):
+    """返回 [(chapter_index, path, text)]，按章号自然序。"""
+    return read_chapters(project, chap_range, single, fill_missing_numbers=True)
+
+
+def _parse_range(chap_range):
+    return parse_chapter_range(chap_range) or (0, 10 ** 9)
+
+
+def parse_character_names(project):
+    """从 设定/角色卡.md（或派生线的 人物.md）抽角色名；抽不到退回正文高频专名候选。"""
+    names = set()
+    card = resolve_character_card(project)
+    if card:
+        with open(card, "r", encoding="utf-8") as f:
+            text = f.read()
+        for ln in text.splitlines():
+            s = ln.strip()
+            m = re.match(r"#{1,4}\s+([" + _CJK + r"·]{2,6})\s*$", s)
+            if m:
+                names.add(m.group(1))
+            m = re.search(r"(?:姓名|名字|角色)[:：]\s*([" + _CJK + r"·]{2,6})", s)
+            if m:
+                names.add(m.group(1))
+            # 别称/封号：一角多名（如 沈念=林婉儿=林贵妃），逗号/顿号分隔，全部计入已跟踪名
+            m = re.search(r"(?:别称|别名|封号|旧名|曾用名|尊称)[:：]\s*(.+)", s)
+            if m:
+                for alias in re.split(r"[、，,/\s]+", m.group(1).strip()):
+                    alias = alias.strip("（）()。 ")
+                    if 2 <= len(alias) <= 6 and re.fullmatch(r"[" + _CJK + r"·]+", alias):
+                        names.add(alias)
+    return names
+
+
+def _context(text, pos, radius=20):
+    return text[max(0, pos - radius): pos + radius]
+
+
+_CLAUSE_END = "。！？!?\n，,；;"
+
+
+def _death_evidence(text, name, name_pos, fwd=12):
+    """死亡只在'名字之后、同一小句内'判定，避免把邻近另一个角色的死安到本角色头上。
+
+    返回证据串（命中）或 None。前向窗口遇句读即止，再做闪回语境排除。
+    """
+    start = name_pos + len(name)
+    window = []
+    for ch in text[start:start + fwd]:
+        if ch in _CLAUSE_END:
+            break
+        window.append(ch)
+    seg = "".join(window)
+    if not any(k in seg for k in DEATH_KEYWORDS):
+        return None
+    ctx = _context(text, name_pos, 18)
+    if any(h in ctx for h in FLASHBACK_HINTS):
+        return None
+    return (name + seg).strip()
+
+
+def build_wiki(project, chap_range=None, single=None, existing=None):
+    chapters = list_chapters(project, chap_range, single)
+    names = parse_character_names(project)
+    wiki = dict(existing or {})
+
+    # 未经人工确认的自动死亡（auto:true）在重扫前先清回 active，让修正能传播；
+    # 人工确认的状态（无 auto 标志）保留。这样改了正文重跑能纠正旧误报。
+    for entry in wiki.values():
+        if entry.get("auto") and entry.get("status") == "deceased":
+            entry["status"] = "active"
+            entry.pop("death_chapter", None)
+            entry.pop("evidence", None)
+            entry.pop("auto", None)
+
+    for name in names:
+        entry = wiki.get(name, {"category": "character", "status": "active"})
+        wiki[name] = entry
+
+    for idx, _, text in chapters:
+        for name in names:
+            if name not in text:
+                continue
+            entry = wiki[name]
+            entry["last_seen_chapter"] = max(entry.get("last_seen_chapter", 0), idx)
+            entry.setdefault("last_update", idx)
+            entry["last_update"] = max(entry.get("last_update", 0), idx)
+            # 疑似阵亡：死亡词必须紧跟在本角色名之后、同一小句内（排除邻近他人之死 + 闪回）
+            for pos in (m.start() for m in re.finditer(re.escape(name), text)):
+                ev = _death_evidence(text, name, pos)
+                if ev:
+                    if entry.get("status") != "deceased":
+                        entry["status"] = "deceased"
+                        entry["death_chapter"] = idx
+                        entry["auto"] = True
+                        entry["evidence"] = ev
+                    break
+    
+    # Initialize Matrix and Ledger if not exist
+    init_ancillary_files(project, names)
+    
+    return wiki
+
+
+def init_ancillary_files(project, character_names):
+    """Initialize Relationship Matrix, Foreshadowing Ledger, and Plot Loops if missing."""
+    matrix_path = os.path.join(project, "设定", "relationship_matrix.json")
+    if not os.path.exists(matrix_path):
+        matrix = {"kind": "novel_relationship_matrix", "version": 1, "matrix": {}}
+        with open(matrix_path, "w", encoding="utf-8") as f:
+            json.dump(matrix, f, ensure_ascii=False, indent=2)
+            
+    ledger_path = os.path.join(project, "设定", "foreshadowing_ledger.json")
+    if not os.path.exists(ledger_path):
+        ledger = {"kind": "novel_foreshadowing_ledger", "seeds": []}
+        with open(ledger_path, "w", encoding="utf-8") as f:
+            json.dump(ledger, f, ensure_ascii=False, indent=2)
+
+    loop_path = os.path.join(project, "设定", "剧情环.json")
+    if not os.path.exists(loop_path):
+        loops = {
+            "kind": "novel_plot_loops",
+            "version": 1,
+            "loops": []
+        }
+        with open(loop_path, "w", encoding="utf-8") as f:
+            json.dump(loops, f, ensure_ascii=False, indent=2)
+            
+    world_path = os.path.join(project, "设定", "world_state_ledger.json")
+    if not os.path.exists(world_path):
+        world = {"kind": "novel_world_state_evolution", "major_changes": []}
+        with open(world_path, "w", encoding="utf-8") as f:
+            json.dump(world, f, ensure_ascii=False, indent=2)
+
+    tension_path = os.path.join(project, "设定", "tension_ledger.json")
+    if not os.path.exists(tension_path):
+        tension = {"kind": "novel_tension_ledger", "version": 1,
+                   "unresolved_hooks": [], "reader_promises": [], "chapter_tension_curve": []}
+        with open(tension_path, "w", encoding="utf-8") as f:
+            json.dump(tension, f, ensure_ascii=False, indent=2)
+
+
+def main():
+    p = argparse.ArgumentParser(description="动态百科增量构建（确定性骨架）")
+    p.add_argument("project_path")
+    p.add_argument("--range", dest="chap_range", help="章节范围，如 1-50")
+    p.add_argument("--chapter", type=int, help="只扫单章")
+    args = p.parse_args()
+
+    wiki_path = os.path.join(args.project_path, "设定", "动态百科.json")
+    existing = {}
+    if os.path.exists(wiki_path):
+        with open(wiki_path, "r", encoding="utf-8") as f:
+            existing = json.load(f)
+
+    wiki = build_wiki(args.project_path, args.chap_range, args.chapter, existing)
+    os.makedirs(os.path.dirname(wiki_path), exist_ok=True)
+    with open(wiki_path, "w", encoding="utf-8") as f:
+        json.dump(wiki, f, ensure_ascii=False, indent=2)
+    snapshot_path = os.path.join(args.project_path, "设定", "动态百科.source_snapshot.json")
+    if args.chap_range or args.chapter:
+        scanned = [path for _idx, path, _text in list_chapters(args.project_path, args.chap_range, args.chapter)]
+        snapshot = snapshot_files(args.project_path, scanned, mode="wiki:partial")
+        snapshot["scope"] = {"range": args.chap_range, "chapter": args.chapter}
+    else:
+        snapshot = snapshot_chapters(args.project_path, mode="wiki:dynamic")
+    with open(snapshot_path, "w", encoding="utf-8") as f:
+        json.dump(snapshot, f, ensure_ascii=False, indent=2)
+
+    n_dead = sum(1 for v in wiki.values() if v.get("status") == "deceased")
+    print(f"动态百科 → {wiki_path}")
+    print(f"  source_snapshot → {snapshot_path}")
+    print(f"  实体 {len(wiki)} 个，疑似阵亡 {n_dead} 个"
+          + ("（带 auto 标志，需人/LLM 复核）" if n_dead else ""))
+    if not parse_character_names(args.project_path):
+        print("  ⚠️ 未找到 设定/角色卡.md 的角色名——建议先补角色卡，否则只能空播种。")
+
+
+if __name__ == "__main__":
+    main()

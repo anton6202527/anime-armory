@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "kind": "novel_state_delta",
+  "status": "verified",
+  "generated_at": "2026-06-30",
+  "chapter": 1,
+  "chapter_file": "章节/第01章.md",
+  "source_chapter": "章节/第01章.md",
+  "source_chapter_sha256": "b6d9f99a1211635851dc9489d80d6ee41ee7a330e6d057201ae4b66bc26fcce8",
+  "candidate_entities": [
+    "沈砚",
+    "东西",
+    "陈贵",
+    "一道",
+    "回来",
+    "来的",
+    "满屋",
+    "眼前",
+    "一双",
+    "上的",
+    "下的",
+    "不是",
+    "了一",
+    "了他",
+    "城外",
+    "干净",
+    "的东",
+    "的人",
+    "的那",
+    "的金"
+  ],
+  "new_facts": [
+    "第01章《金瞳初醒》完成本章单元推进：围绕本章标题所示冲突推进主线案件与金睛能力线。"
+  ],
+  "character_changes": [
+    {
+      "name": "沈砚",
+      "change": "经历第01章《金瞳初醒》的案件/冲突推进，金睛使用经验与破局责任继续累积。",
+      "state_update": {
+        "主线阶段": "第01章《金瞳初醒》已完成",
+        "能力代价意识": "初步建立"
+      }
+    }
+  ],
+  "relationship_changes": [],
+  "open_threads_added": [
+    "第01章章末钩子：金瞳初醒后的下一步案件/阴谋压力继续外溢。"
+  ],
+  "threads_resolved": [
+    "第01章本章单元冲突《金瞳初醒》完成阶段性偿付。"
+  ],
+  "reader_contract_progress": [
+    "第01章兑现开篇承诺：诡案启动、金睛看破伪装、主角用可视化真相完成第一次翻盘，建立核心爽点闭环。"
+  ],
+  "theme_alignment": "第01章围绕“看穿伪装后如何对抗体面与权势背后的人心”推进：主角不只识破妖相，也逐步识破制度与人心的遮蔽。",
+  "setting_constraints_added": [],
+  "next_chapter_carry": [
+    "下一章需承接第01章《金瞳初醒》留下的线索、代价或关系压力。"
+  ],
+  "manual_todo": []
+}

@@ -1,0 +1,66 @@
+---
+name: novel-promote
+description: 宣发一体化与爆点挖掘 — 挖掘小说中的"高光时刻"(视觉冲击力强的战斗、情感爆发点、神反转),自动生成适用于抖音/TikTok/小红书的短视频脚本、高燃预告片文案或引流切片建议。Use when asked to 宣发, 引流, 出视频脚本, 爆点挖掘, 推广文案, novel promotion, marketing script, viral hook. Triggers 宣发, 推广, 引流脚本, 预告片, 爆点, 抖音文案, 视频分镜, novel promote.
+---
+
+# novel-promote — 宣发一体化与爆点挖掘
+
+解决好书“深巷无人知”的问题，将小说的高光片段转化为社交媒体的引流利器。
+
+## 核心机制
+
+1. **爆点扫描 (Highlight Miner)**：分析章节，提取：
+   - **视觉高光**：特效级描写（如暗金血、分影、领域）。
+   - **金句钩子**：具有传播力的对白或独白。
+   - **情绪爆点**：反杀、打脸、虐心、宿命感瞬间。
+2. **多平台适配 (Multi-Platform Adapter)**：生成不同风格的脚本：
+   - **抖音/TikTok 风格**：3秒黄金开头、强节奏感、悬念留白。
+   - **小红书风格**：高颜值氛围感描写、情绪共鸣、精致标签。
+   - **B站风格**：深度解读、逻辑伏笔分析。
+
+## 工作流
+
+### 1. 生成宣发脚本
+```bash
+python3 skills/novel-promote/scripts/promo_gen.py "<作品根>" --chapter <章节号> [--platform tiktok]
+```
+- 读取指定章节。
+- 产出：`导出/宣发/第NN章_引流脚本_<平台>.md`。
+- **`--platform` 缺省自动推断**：不显式传 `--platform` 时，按项目 `目标平台` 选择点推断投放平台（晋江/情感→xiaohongshu，红果/抖音/漫剧/番茄→douyin，历史/B站→bilibili，否则 tiktok）；显式 `--platform` 永远优先（CLI 覆盖）。
+- 爆点关键词词表来自单一定义源 `skills/novel/_lib/keyword_banks.py`（与 novel-balance/novel-simulate 共用）。
+
+### 2. 生成短视频 brief
+- 同步产出 `导出/宣发/第NN章_video_brief.md`：把高光片段整理成短视频预告骨架（场景/角色/动作/字幕/时长建议）。
+
+### 3. 投放战绩回灌（闭环写端）
+作品发布、拿到真实投放数据后，把它回灌进仓库级「自有题材战绩库」，供 **novel-score** 下次评同题材作品时作第一方题材热度先验（权重高于公榜）：
+
+```bash
+python3 skills/novel-promote/scripts/record_performance.py "<作品根>" \
+    --plays 120000 --roi 1.8 --retention-3s 0.62 --retention-15s 0.41 \
+    --completion-rate 0.33 --follow-next-rate 0.28 [--subgenres 战神,赘婿] [--release-id 2026Q2-douyin]
+```
+- 题材/书名缺省读 `_meta.json`，可 `--genre`/`--title` 覆盖；百分比按 0–1 小数填。
+- 追加写 `生产战绩/genre_ledger.jsonl`（仓库根；或环境变量 `NOVEL_GENRE_LEDGER`），`kind=genre_performance_record`，与 `novel-score` 的 `load_genre_ledger` 读端逐字对齐。
+- **这是"选题→投放→反哺选题"闭环此前缺失的生产者**：在此之前 score 有消费者、无生产者，第一方战绩永远读空。回灌后 score 的"第一方实测权重高于公榜"才真正生效。
+
+## 脚本示例
+> **【抖音高燃向】**
+> - **00:00-00:03**：[视觉] 暗金色的液体顺着沈念指缝滴落，地面冒烟腐蚀。[字幕] “这皇宫，本宫说了算。”
+> - **00:03-00:10**：[视觉] 红嬷嬷血霜领域铺开，沈念分影瞬杀。[音效] 极短促的金属撞击声。
+> - **00:10-00:15**：[画面定格] 沈念金色竖瞳特写。[字幕] 冷宫弃妃逆天改命，点击下方看后续。
+
+## 与家族其它 Skill 的联动
+
+- **novel-balance**：热力图中的“高冲突点”自动标记为 `novel-promote` 的推荐源。
+- **novel-style**：为宣发脚本提供文风质感约束。
+
+## 详细参考
+- 各平台脚本范式、爆点三类、剧透红线：`references/platform-patterns.md`
+
+## 常见错误
+
+| 错误 | 纠正 |
+|---|---|
+| 剧透过度 | 宣发只需抓手，严禁揭露核心解密点 |
+| 货不对板 | 脚本风格需与 `novel-style` 提取的文风质感保持一致 |

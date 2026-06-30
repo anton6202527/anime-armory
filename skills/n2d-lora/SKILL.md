@@ -1,0 +1,162 @@
+---
+name: n2d-lora
+description: LoRA 训练/部署生命周期管理：为 n2d 核心长线角色建立 LoRA 数据集、训练任务、验证报告和 identity_registry ready 回写，工程化一致性梯子最后一档；suggest 子命令读 identity 漂移报表打印升档建议（升档触发已工程化）。Use when asked about LoRA 自动化, LoRA 训练, LoRA 部署, 第三代一致性, safetensors 注册, LoRA 数据集, ComfyUI 验证, 核心角色脸漂, LoRA 升档建议, 该不该上 LoRA.
+---
+
+# n2d-lora — LoRA 生命周期管理
+
+你是 **n2d LoRA 资产管理员**。你的目标不是默认给每个角色训练 LoRA，而是在确实需要第三档一致性时，把 LoRA 训练/部署做成可审计资产。
+
+## 触发
+
+- 用户说：LoRA 自动化、LoRA 训练、LoRA 部署、第三代一致性、核心角色脸漂、safetensors 注册、ComfyUI 验证。
+- `n2d-identity` 报核心长线角色持续漂移，参考图派生和后端原生角色 ID / 主体库仍压不住。
+- 用户已有 `.safetensors`，想写回 `identity_registry.json`。
+
+## 输入 / 输出 / 读写边界
+
+- **输入**：identity drift recommendations、角色 reference group、LoRA card/dataset/train job、`.safetensors` 和验证报告。
+- **输出**：`设定库/lora/<CHAR>/<形态>/` 下的 card/dataset/job/validation 产物，并在验证通过后回写 registry 的 lora binding。
+- **读写边界**：只管理 LoRA 生命周期；不替 `n2d-image` 生成全集画面、不绕过验证注册 ready；本机训练只在运行时路由判定完整可用时启用。
+- **契约关系**：LoRA ready 三件套、dataset warning 放行条件、registry 字段和 `suggest` 数据源与 `skills/n2d/_lib/n2d_contract.py` / `n2d-identity` 保持同源。
+
+## 硬规则
+
+- **默认不启用 LoRA**：先用参考图派生 + 后端原生角色 ID / 主体库。仍不稳才进本 skill。
+- **升档触发已工程化**：「要不要上 LoRA」不靠拍脑袋——`n2d-identity` 的漂移报表会在角色跨集漂移显著（warn/block 集数 ≥2 或有 first_bad_episode）且 lora status 不是 ready/training 时自动产出 `recommendations[]`（type=lora_upgrade，带 character_id/理由/下一步 init 命令）；本 skill 的 `suggest` 子命令只消费该判定，不另立标准。先跑 `suggest` 再决定 `init`。
+- **先看 face_embedding 中间档（P2a·别一步跳 LoRA）**：`recommendations[]` 带 `intermediate_rung`——当角色还没挂 `face_embedding`（IP-Adapter FaceID 等免训练脸嵌入锁）且非原生主体后端时值为 `"face_embedding"`，提示**先挂免训练脸嵌入锁（比训 LoRA 快/省），仍漂再 `init` LoRA**；已挂 face_embedding 或原生主体的角色该字段为 `null`，可直接评估 LoRA。LoRA 是一致性梯子最后一档，不是第一反应。
+- **只给核心长线角色**：女主、主反派、长期高频出镜角色；短线配角和路人不训练。
+- **商用许可先记账**：商用项目必须在 `train_job.json` 留底模许可风险；许可未明不能当“可商用 ready”。
+- **验证不过不注册 ready**：没有 `validation_report.json` 或 verdict 不是 `pass`，不得把 registry lora 标成 `ready`。`register --force` 只允许记录人工覆盖为 `candidate` + `manual_override.reasons`，不能绕过验证制造 ready。
+- **运行时先路由**：每次准备 LoRA 训练/验证前先跑 `sdxl_local.py route`。只有本机 ComfyUI、conda/MPS、SDXL checkpoint、LoRA 训练入口和目标角色 dataset 都完整时，才优先走本机 LoRA 训练；否则不要阻塞产线，回到项目 `_设置.md` 的云端/主生图后端继续出图。
+- **LoRA 只跑 hero 镜**：不要整集切到开源链路，避免画风跳变和成本失控。
+- **LoRA hero 镜必须写例外范围**：LoRA 用在非项目主生图模型/渠道时，不得把它解释成“整集换生图模型”或绕过 `single_model_channel_per_project`。本集只允许在明确 hero shot 范围内使用，并写 `生产数据/lora_exception_scope_第N集.json`（kind=`n2d_lora_exception_scope`）：`clips`、`character_id/form`、`reason`、`project_image_model`、`lora_base_model`、`style_bridge`、`qc_required`、`not_a_project_model_switch=true`。缺 manifest 时，回 `n2d-image` 主链路或补例外范围，不能混用。
+
+## 用户不用记 CLI
+
+用户可以直接说：
+
+- “给沈念启动 LoRA 生命周期”
+- “审计沈念 LoRA 数据集”
+- “生成沈念 LoRA 训练任务”
+- “验证这个 safetensors”
+- “把沈念 LoRA 写回 registry”
+- “看看哪些角色该升档 LoRA”
+- “部署本机 SDXL / ComfyUI 验证链路”
+
+AI 内部按阶段跑：
+
+```bash
+python3 skills/n2d-lora/scripts/lora.py suggest <作品根>   # Stage -1：读漂移报表打印升档建议
+python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_XXX --form 常态
+python3 skills/n2d-lora/scripts/lora.py dataset <作品根> --character-id CHAR_XXX --form 常态 --copy-references
+python3 skills/n2d-lora/scripts/lora.py train-job <作品根> --character-id CHAR_XXX --form 常态 --provider manual
+python3 skills/n2d-lora/scripts/lora.py validate <作品根> --character-id CHAR_XXX --form 常态 --model-path <模型.safetensors> --approved  # 数据集无 warning 时
+python3 skills/n2d-lora/scripts/lora.py register <作品根> --character-id CHAR_XXX --form 常态
+python3 skills/n2d-lora/scripts/lora.py exception-scope <作品根> 第N集 --character-id CHAR_XXX --form 常态 --clip Clip_03 --reason "<为什么只有这几个 hero 镜用 LoRA>" --project-image-model "<本剧主生图模型>" --lora-base-model "<LoRA底模>" --style-bridge "<如何贴回本剧风格/LUT/QC>"
+python3 skills/n2d-identity/scripts/identity.py <作品根> --write
+```
+
+本机 SDXL / ComfyUI sidechain（只做 LoRA 验证与 hero 镜补强，不替代主生图后端）：
+
+```bash
+bash skills/n2d-lora/scripts/install_sdxl_comfy.sh
+python3 skills/n2d-lora/scripts/sdxl_local.py doctor
+python3 skills/n2d-lora/scripts/sdxl_local.py write-profile <作品根>
+python3 skills/n2d-lora/scripts/sdxl_local.py route <作品根> --character-id CHAR_XXX --form 常态 --write
+python3 skills/n2d-lora/scripts/sdxl_local.py workflow <作品根> 第N集 --clip Clip_03 --character-id CHAR_XXX --checkpoint "<sdxl.safetensors>" --lora "<char.safetensors>" --prompt "<hero shot prompt>"
+python3 skills/n2d-lora/scripts/sdxl_local.py record-output <作品根> 第N集 --clip Clip_03 --output "<输出PNG路径>" --lora-model "<char.safetensors>"
+```
+
+细节见 `references/local_sdxl_comfyui.md`。
+
+## 工作流
+
+### Stage -1：升档建议（suggest）
+
+```bash
+python3 skills/n2d-lora/scripts/lora.py suggest <作品根>
+```
+
+读 `生产数据/identity_drift_report.json` 的 `recommendations[]`（n2d-identity 工程化判定：跨集漂移显著
+且 lora status 不是 ready/training），逐条打印 角色 / 理由 / 下一步 `init` 命令。没有报表时提示先跑
+`python3 skills/n2d-identity/scripts/identity.py <作品根> --write`；报表 `available=false`（机检缺依赖）
+时提示在装好 insightface/cv2 的环境重跑。本命令只消费判定、不另立标准，也不改任何文件。
+
+### Stage 0：启动
+
+运行 `init`，创建：
+
+- `设定库/lora/<CHAR_ID>/<形态>/lora_card.json`
+- `lora_card.md`
+- registry 里的 `identity_adapters.lora.status=candidate`
+
+需要明确：
+
+- 是否商用：`--license-mode self_test|commercial|unknown`
+- 底模：`--base-model sdxl|flux-schnell|flux-dev|custom`
+- 训练入口：`--provider manual|fal|runpod`
+
+### Stage 1：数据集
+
+运行 `dataset --copy-references`，先把角色定妆组复制进 `dataset/` 作为种子，并生成 `dataset_manifest.json`。
+
+这一步只做审计，不替用户胡乱扩样。真正训练前仍应补到 15-20 张高一致性样本。
+
+### Stage 2：训练任务
+
+先运行本机/云端路由判定：
+
+```bash
+python3 skills/n2d-lora/scripts/sdxl_local.py route <作品根> --character-id CHAR_XXX --form 常态 --write
+```
+
+若 `生产数据/lora_runtime_route.json` 的 `decision.route=local_lora_training`，才优先使用本机 LoRA 训练命令（通过 `N2D_LORA_TRAIN_CMD` 或已安装训练脚本识别）。若为 `cloud_image_generation_fallback`，不要在本机硬训，也不要把 LoRA 缺口卡住整集出图；回到项目 `_设置.md` 的 `生图AI` / `生图模型`，让 `n2d-image` 主链路继续云端出图。
+
+运行 `train-job`，生成 `train_job.json`。这是一份可审计的训练输入，后续可交本机训练入口、fal / RunPod / 手动训练执行。
+
+本版不直接联网提交，避免把云账号、价格、许可和失败状态藏进不可追踪黑箱。
+
+### Stage 3：验证
+
+拿到 `.safetensors` 后运行 `validate`。若人工审图确认 LoRA 比参考图方案更稳，加 `--approved`。
+
+没有 `--approved` 时，报告会是 `warn`，不能直接注册 ready。
+
+若 `dataset_manifest.summary.warnings` 非空，`--approved` 也不会自动通过；必须先补数据集到无 warning，或在明确接受风险时加 `--allow-dataset-warnings --notes "<原因>"`。脚本会阻断空 notes，避免只开 override 不留审计理由。这样 ready 资产能区分“数据合格”与“人工带风险放行”。
+
+### Stage 4：注册
+
+运行 `register`，只有 `validation_report.verdict=pass` 时才写回：
+
+- `status=ready`
+- `base_model`
+- `model_path`
+- `trigger`
+- `model_hash`
+- `validation_report`
+- `train_job`
+
+若使用 `register --force` 且存在任何 ready 阻断项，脚本只写 `status=candidate` 和 `manual_override` 留痕，需补齐验证后重新注册 ready。
+
+随后必须跑 `n2d-identity --write`，让 adapter matrix 成为下游真值。
+
+## 产物 schema
+
+见 `references/schema.md`。
+
+## 和其它 skill 的关系
+
+- `n2d-image`：只有核心角色参考图/原生主体仍漂时才转入本 skill；LoRA 生成的图仍按出图规则落档。
+- `n2d-identity`：消费 registry 的 lora binding，检查 ready 三件套和 fake ready；其漂移报表的 `recommendations[]` 是本 skill `suggest` 的数据源（升档触发已工程化，三方 ready 判定同源于 `skills/n2d/_lib/n2d_contract.py` 的 `lora_report_ready_blocks/lora_registry_ready_blocks`）。
+- `n2d-review`：漂移报告可触发 LoRA candidate；验证失败继续回 dataset/train 调整。
+- `n2d-asset-market`：导入跨项目角色模板时默认重置 LoRA ready，不能沿用旧项目 safetensors 假装可用。
+
+## 常见错误
+
+| 错误 | 纠正 |
+|---|---|
+| 一次性角色也训练 LoRA | 不训练；用参考图即可 |
+| 有 safetensors 就标 ready | 必须先有 validation_report pass + model_hash；dataset warning 需显式 override；`--force` 也只能落 candidate |
+| 商用项目用许可不明底模 | train_job 留风险，发布前核实 |
+| 整集切 LoRA 出图 | 只跑核心 hero 镜，其余仍走默认产线 |
