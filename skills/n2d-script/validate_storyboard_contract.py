@@ -17,10 +17,36 @@ LIB = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "n2d", "_lib
 if LIB not in sys.path:
     sys.path.insert(0, LIB)
 
-from n2d_contract import TEMPLATE_BASE_FIELDS, spectacle_required_fields  # noqa: E402
-from n2d_const import STYLE_CONTRACT_FIELDS, VISUAL_CONTRACT_FIELDS  # noqa: E402
+from n2d_contract import (  # noqa: E402
+    ACTION_CHOREOGRAPHY_SHOT_TYPES,
+    TEMPLATE_BASE_FIELDS,
+    spectacle_required_fields,
+)
+from n2d_const import HIGH_MOTION_TEMPLATES, STYLE_CONTRACT_FIELDS, VISUAL_CONTRACT_FIELDS  # noqa: E402
 from n2d_logic import special_template_keywords  # noqa: E402
 from n2d_platform_profiles import backend_supports_three_plus_frames  # noqa: E402
+
+
+ACTION_ANCHOR_DURATION_SEC = 8.0
+_ACTION_ANCHOR_HEAVY_RE = re.compile(
+    r"打斗|攻防|拳脚|挥拳|刀剑|挥剑|抬剑|举剑|拔剑|掌法|出掌|追逐|追赶|冲刺|法术|武技|斗法|撞点|命中|碰撞|接触|抓腕|拉扯|拥抱|多主体接触|多人接触|"
+    r"fight|chase|magic|impact|collision|contact",
+    re.I,
+)
+_ACTION_ANCHOR_PREP_RE = re.compile(r"起手|蓄力|预备|发力|逼近|冲刺|冲向|追近|跃起|抬剑|举剑|拔剑|挥拳|出招|charge|windup|approach", re.I)
+_ACTION_ANCHOR_IMPACT_RE = re.compile(r"命中|击中|撞点|撞击|碰撞|格挡|接触|抓住|拉住|爆发|落地|受击|hit|impact|collision|contact", re.I)
+_ACTION_ANCHOR_RESPONSE_RE = re.compile(r"反应|受击|后撤|倒退|跌落|摔倒|余波|收势|回收|定住|僵住|退开|reaction|recovery|aftershock", re.I)
+ACTION_ANCHOR_RISK_FLAGS = frozenset({
+    "physical_contact",
+    "multi_character_overlap",
+    "high_speed_motion",
+    "extreme_camera",
+    "high_action",
+    "spectacle",
+    "contact_motion",
+    "fast_motion",
+    "physics",
+})
 
 
 def storyboard_path(root: str, ep: str) -> str:
@@ -94,6 +120,81 @@ def duration_of(clip: Dict[str, Any]) -> Optional[float]:
     return None
 
 
+def action_anchor_text(clip: Dict[str, Any]) -> str:
+    """Text surface for deciding whether a clip is a long/heavy action chain."""
+    parts: List[str] = []
+    for key in (
+        "id",
+        "clip_id",
+        "label",
+        "scene",
+        "description",
+        "visual",
+        "action",
+        "template",
+        "template_contract",
+        "shots",
+        "continuity",
+    ):
+        value = clip.get(key)
+        if value is None:
+            continue
+        parts.append(json.dumps(value, ensure_ascii=False, sort_keys=True) if isinstance(value, (dict, list)) else str(value))
+    return "\n".join(parts)
+
+
+def action_anchor_chain(text: str) -> Dict[str, bool]:
+    prep = bool(_ACTION_ANCHOR_PREP_RE.search(text))
+    impact = bool(_ACTION_ANCHOR_IMPACT_RE.search(text))
+    response = bool(_ACTION_ANCHOR_RESPONSE_RE.search(text))
+    return {
+        "prep": prep,
+        "impact": impact,
+        "response": response,
+        "partial": impact and (prep or response),
+        "full": prep and impact and response,
+    }
+
+
+def _listish(value: Any) -> List[str]:
+    if isinstance(value, list):
+        return [str(x).strip() for x in value if str(x).strip()]
+    if isinstance(value, str):
+        return [x.strip() for x in re.split(r"[,，、\s]+", value) if x.strip()]
+    return []
+
+
+def action_anchor_requirement(clip: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    template = str(clip.get("template") or "").strip()
+    contract = clip.get("template_contract") if isinstance(clip.get("template_contract"), dict) else {}
+    shot_type = str(clip.get("shot_type") or contract.get("template_id") or template).strip()
+    risk_flags = set(_listish(clip.get("risk_flags"))) | set(_listish(contract.get("risk_flags")))
+    text = action_anchor_text(clip)
+    high_action = (
+        template in HIGH_MOTION_TEMPLATES
+        or shot_type in HIGH_MOTION_TEMPLATES
+        or shot_type in ACTION_CHOREOGRAPHY_SHOT_TYPES
+        or bool(risk_flags & ACTION_ANCHOR_RISK_FLAGS)
+        or bool(_ACTION_ANCHOR_HEAVY_RE.search(text))
+    )
+    if not high_action:
+        return None
+    duration = duration_of(clip)
+    chain = action_anchor_chain(text)
+    long_clip = duration is not None and duration >= ACTION_ANCHOR_DURATION_SEC
+    if not long_clip and not chain["partial"]:
+        return None
+    severity = "block" if (long_clip or chain["full"] or shot_type in ACTION_CHOREOGRAPHY_SHOT_TYPES) else "warn"
+    reasons = []
+    if long_clip:
+        reasons.append(f"单镜时长 {duration:g}s >= {ACTION_ANCHOR_DURATION_SEC:g}s")
+    if chain["full"]:
+        reasons.append("含起手-命中-反应/收势完整动作链")
+    elif chain["partial"]:
+        reasons.append("含命中/接触及起手或反应动作链")
+    return {"severity": severity, "reason": "；".join(reasons) or "重动作镜", "duration": duration, "chain": chain}
+
+
 def add(rows: List[Dict[str, Any]], sev: str, dim: str, loc: str, msg: str) -> None:
     rows.append({"severity": sev, "dimension": dim, "loc": loc, "message": msg})
 
@@ -155,6 +256,20 @@ def check_anchor_contract(rows: List[Dict[str, Any]], clip: Dict[str, Any], loc:
     if mid is not None and anchors is not None:
         add(rows, "block", "中段锚帧", loc, "continuity.midframe 与 continuity.anchors 不能同时声明。")
         return
+    req = action_anchor_requirement(clip)
+    has_anchor_list = isinstance(anchors, list) and any(isinstance(a, dict) for a in anchors)
+    if req and not has_anchor_list:
+        if mid is not None:
+            suffix = "当前只有 continuity.midframe；重动作/长动作链不能只靠单个 _mid。"
+        else:
+            suffix = "当前缺 continuity.anchors[]。"
+        add(
+            rows,
+            str(req["severity"]),
+            "重动作多中帧",
+            loc,
+            f"{req['reason']}，必须写 continuity.anchors[] 多中帧链；{suffix}请跑 skills/n2d-script/scripts/anchor_planner.py <作品根> <集> --write 后重跑 n2d-image。",
+        )
     duration = duration_of(clip)
     anchor_rows: List[Tuple[int, Dict[str, Any], str, str, str]] = []
     if mid is not None:

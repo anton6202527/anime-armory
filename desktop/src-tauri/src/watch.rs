@@ -5,7 +5,7 @@ use std::collections::HashMap;
 use std::path::Path;
 use std::sync::Mutex;
 
-use notify::{EventKind, RecommendedWatcher, RecursiveMode, Watcher};
+use notify::{event::ModifyKind, EventKind, RecommendedWatcher, RecursiveMode, Watcher};
 use serde::Serialize;
 use tauri::{AppHandle, Emitter, State};
 
@@ -32,7 +32,10 @@ pub fn watch_root(app: AppHandle, state: State<WatchState>, root: String) -> Res
     let mut watcher = notify::recommended_watcher(move |res: notify::Result<notify::Event>| {
         if let Ok(ev) = res {
             // Ignore pure access/metadata noise; only react to content changes.
-            if matches!(ev.kind, EventKind::Access(_)) {
+            if matches!(
+                ev.kind,
+                EventKind::Access(_) | EventKind::Modify(ModifyKind::Metadata(_))
+            ) {
                 return;
             }
             let _ = app2.emit(

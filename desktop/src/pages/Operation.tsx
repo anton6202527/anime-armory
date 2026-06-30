@@ -197,7 +197,6 @@ export function Operation(props: {
         const sig = `${snap.signature}:${snap.file_count}:${snap.dir_count}`;
         if (lastSnapshotRef.current == null) {
           lastSnapshotRef.current = sig;
-          setRefreshKey((k) => k + 1);
           return;
         }
         if (sig !== lastSnapshotRef.current) {
@@ -212,7 +211,7 @@ export function Operation(props: {
     };
 
     tick();
-    const interval = window.setInterval(tick, 1500);
+    const interval = window.setInterval(tick, 4000);
     return () => {
       alive = false;
       window.clearInterval(interval);

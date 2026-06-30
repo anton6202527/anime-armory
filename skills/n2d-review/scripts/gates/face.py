@@ -284,7 +284,12 @@ def check_identity_registry(
                     for key in partial_keys:
                         if _field_is_missing(reference_group, key):
                             continue
-                        rel = str(reference_group.get(key, "")).strip()
+                        item = reference_group.get(key)
+                        rel = _identity_reference_item_path(item)
+                        if strict_references and not _identity_reference_item_ready(item):
+                            add(BLOCK, "资产身份注册层", floc,
+                                f"restricted_partial reference_group.{key} 必须为 ready 且有路径；planned/空路径不能放行。")
+                            continue
                         if require_reference_assets and strict_references and not _identity_reference_exists(root, rel):
                             add(BLOCK, "资产身份注册层", os.path.join(root, rel) if not os.path.isabs(rel) else rel, f"reference_group.{key} 路径不存在")
                 else:

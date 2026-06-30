@@ -273,6 +273,7 @@
       "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_03_挑水命令上.mp4"
     },
     {
+      "accepted_at": "2026-06-30T19:49:26+0800",
       "anchor_consumption": {
         "action": "submit first+last frames as timeline endpoints",
         "anchor_count": 0,
@@ -333,8 +334,27 @@
       "last_submit_returncode": 0,
       "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
       "logid": "202606301802421921681130054037B0C",
+      "native_av_sidecar": {
+        "audio_extract": "extracted",
+        "audio_intent": "native_speech",
+        "physics_path": "生产数据/native_av_physics_第1集.json",
+        "status": "updated",
+        "voice_path": "生产数据/native_voice_identity_第1集.json"
+      },
       "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_04_挑水命令下.prompt.txt",
-      "status": "downloaded",
+      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/04_04/video_qc_第1集_04_04.json",
+      "qc_machine": {
+        "intra_blocks": 0,
+        "intra_checked": 1,
+        "intra_warns": 1,
+        "seam_blocks": 0,
+        "seam_info": 1,
+        "seam_warns": 0,
+        "seams_checked": 1
+      },
+      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/04_04/video_qc_第1集_04_04.md",
+      "qc_overridden": false,
+      "status": "accepted",
       "story_duration": 9.0,
       "submit_duration": 9,
       "submit_id": "73e403f6-e7fc-4562-99b2-527f479f221f",
@@ -362,16 +382,41 @@
       },
       "anchor_consumption_mode": "first_last",
       "clip": "Clip_05",
+      "cost_provider": "dreamina",
+      "credit_count": 154,
       "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤_mid.png",
       "end_image_rel": "出图/第1集/图片/Clip03_外门遗孤_mid.png",
       "frame_control_mode": "multi_keyframe",
+      "gen_status": "querying",
       "heading": "## Clip 05（时长 11s · EP01_CLIP05 · 外门遗孤上）",
       "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤.png",
       "image_rel": "出图/第1集/图片/Clip03_外门遗孤.png",
+      "last_query": {
+        "credit_count": 154,
+        "gen_status": "querying",
+        "logid": "202606301958081921681130059794FBB",
+        "prompt": "continuity:\n  start_state: 张老大手压在贺平生肩上，挑水命令落下，贺平生低头应是。\n  action: 父母亡故、资源被抢。，江剑收拾行囊，把贺平生送向秀竹峰。\n  end_state: 中段接力帧：回忆蒙太奇跨时间，需要中锚锁主角少年常态。\n  constraints: 首帧=出图/第1集/图片/Clip03_外门遗孤.png; 尾帧=出图/第1集/图片/Clip03_外门遗孤_mid.png; asset_ids=LOC_WAIMEN_JIUYUAN, 旧行囊, 秀竹峰山门; character_ids=CHAR_HE_PINGSHENG, CHAR_JIANG_JIAN, CHAR_HE_SANJIE, CROWD_TAIXU_CULTIVATOR; 保持光位、轴线、服装、年龄、道具比例和 reference_group 身份锁。\n  negative: 不要换脸、不要换衣、不要新增清晰陌生脸、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要强仙侠光柱、不要现代物。\n导演意图：动作过程需要空间方向清楚；匀速移镜比自由漂浮更容易守轴线和人物站位。;\n起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;\n落幅：落在蒙太奇→WS，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;\n场面调度：贺平生站画左前院门边；CHAR_JIANG_JIAN/背影在中景偏右；CHAR_HE_SANJIE/回忆影只作旧影或旧物暗示；CROWD_TAIXU_CULTIVATOR/远景剪影在画面深处山间云雾里。;\n表演节拍：[0-8s] 父母亡故、资源被抢。（碎片蒙太奇）；[8-11s] 江剑收拾行囊，把贺平生送向秀竹峰。（中景背影）;\n三轨音频：旁白音频后期 compose 叠加；本视频生成不要生成旁白音频，只允许画内角色对白口型;\n运动精修约束：张力=克制；镜头运动只服务情绪，不追加未声明的旋转、漂浮、急甩。; 身体守卫=脸部轮廓和发髻不拉伸，肩颈/手部不穿模，道具不粘连;\n环境交互约束：旧院尘土、低饱和天光和山间薄雾轻动，非主角人物保持背影、剪影或虚化。;\n专项模板约束：template_id=ensemble_blocking；beats=旧院空景和旧行囊暗示前情；幼年贺平生短闪；江剑背影收拾行囊；十四岁贺平生望向远处修士剪影；blocking=贺平生站画左前院门边；CHAR_JIANG_JIAN/背影在中景偏右；CHAR_HE_SANJIE/回忆影只作旧影或旧物暗示；CROWD_TAIXU_CULTIVATOR/远景剪影在画面深处山间云雾里。；camera_rule=回忆蒙太奇低饱和柔冷光，慢推或固定切片；不做无动机环绕，不切成血腥事件。；continuity_must=贺平生年龄形态与 identity_registry 对齐；江剑只背影/侧背；贺三杰不清晰露脸；远景修士只小比例剪影；外门旧院不豪华化；negative=不要清晰父母死亡；不要血腥；不要豪华宗门正殿；不要现代校园；不要新增清晰陌生脸；screen_positions=LEFT_FOREGROUND=CHAR_HE_PINGSHENG/常态或幼年，唯一可清晰脸。；MID_RIGHT=CHAR_JIANG_JIAN/背影，不露清晰正脸。；BACKGROUND_MEMORY=CHAR_HE_SANJIE/回忆影，只用旧影/旧物，不画死亡细节。；FAR_BACKGROUND=CROWD_TAIXU_CULTIVATOR/远景剪影，小比例不露脸。；LOCATION_PLATE=LOC_WAIMEN_JIUYUAN 灰旧院门、低矮院墙、远处山门。；focus_hierarchy=CHAR_HE_PINGSHENG；LOC_WAIMEN_JIUYUAN；CHAR_JIANG_JIAN/背影；CROWD_TAIXU_CULTIVATOR/远景剪影；CHAR_HE_SANJIE/回忆影；crowd_simplification=除贺平生外，所有人都按背影、侧背、剪影、虚化或旧物暗示处理；不得新增清晰父母死亡画面。；keyframe_plan=start=张老大手压在贺平生肩上，挑水命令落下，贺平生低头应是。；end=中段接力帧：回忆蒙太奇跨时间，需要中锚锁主角少年常态。；motion_control=level=degrade_only；reason=回忆群像不直接生成复杂连续动作，拆成空景/背影/远景剪影短镜。。\n模型路由约束：读取 video_model_routes.json；本镜 primary_backend=seedance，fallback=seedance，mode=native_av，native_audio_policy=native_speech，identity_requirement=character_id_or_reference_group；只使用 Seedance via Dreamina 已刷新证据支持的能力；失败按 degrade_plan 或 Motion Control degrade_only 停审，不临场改后端;\n身份锁定约束：读取 identity_registry.json 和 identity_adapter_matrix.json；使用首/尾帧与 reference_group，保持 drift_forbidden=face_shape/hairstyle/outfit_palette/age/costume；角色=CHAR_HE_PINGSHENG, CHAR_JIANG_JIAN, CHAR_HE_SANJIE, CROWD_TAIXU_CULTIVATOR;\n近景身份锁定约束：CU/MCU/反打/说话镜优先脸部特写、表情参考、front/side/back reference_group；锁脸型、五官比例、发型发髻、标志配饰、服装配色；配角近景不稳则用 MCU/OTS/侧脸/手部/物件反应镜;\n原生音画约束：台词、口型和保留原片音轨由原生音画后端生成；声源归属=画内说话主体；compose_policy=保留原片音轨；生成后复核口型同步。\n人物运动：父母亡故、资源被抢。，江剑收拾行囊，把贺平生送向秀竹峰。;\n镜头运动：匀速移镜头，横移跟随主体，保持轴线方向不反转，落到蒙太奇→WS; 后端控制写法：自然语言运镜：匀速移镜头，横移跟随主体，保持轴线方向不反转，落到蒙太奇→WS；首帧锚定，不改变角色、光位、轴线和场景设定。;\n动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，转场=split_relay;\n声音约束：台词、口型和保留原片音轨由原生音画后端生成；声源归属=画内说话主体；compose_policy=保留原片音轨；生成后复核口型同步。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_05; allowed_voiceover_indices=[11]\n- allowed_narration_indices=[11]; allowed_character_dialogue_indices=[]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- narration_for_compose_only: 11. 旁白: 八岁那年，贺平生的父亲贺三杰外出寻机缘，被妖兽所杀；母亲也很快离世，家里留下的修真资源被人抢得干干净净。\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: none; 不要让视频模型生成文字\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: 贺平生.age=十四岁; 贺平生.height=少年偏矮，约155-160cm；与张老大同框时明显矮一头，与韩老三同框时到其肩颈以下; 贺平生.spiritual_root=五行灵根; 剧情账本.daily_water_trips=一天至少二十趟; 剧情账本.night_water_trip=第五次来到水边\n- forbidden_fact_values: 13 岁, 13岁, 15 岁, 15岁, 15趟, 16 岁, 16岁, 16趟, 170cm, 175cm, 180cm, 4次, 4趟, 6次, 6趟, 一米七, 一米八, 六趟, 十三岁, 十五岁, 十五趟, 十六岁, 十六趟, 十几趟, 单灵根, 变异灵根, 四趟, 天灵根, 火灵根, 第六次, 第四次\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
+        "queue_info": {
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "priority": 1,
+          "queue_idx": 0,
+          "queue_length": 0,
+          "queue_status": "Generating"
+        },
+        "submit_id": "50abc0cb-3478-478b-91eb-7d448256faaf"
+      },
+      "last_query_at": "2026-06-30T20:00:59+0800",
+      "last_query_returncode": 0,
+      "last_submit_elapsed_sec": 2.449237108230591,
+      "last_submit_returncode": 0,
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "logid": "202606301958081921681130059794FBB",
       "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_05_外门遗孤上.prompt.txt",
-      "status": "prepared",
+      "status": "queried",
       "story_duration": 11.0,
       "submit_duration": 11,
+      "submit_id": "50abc0cb-3478-478b-91eb-7d448256faaf",
+      "submitted_at": "2026-06-30T19:58:08+0800",
       "target": "Clip_05_外门遗孤上.mp4"
     },
     {
@@ -623,7 +668,7 @@
   "kind": "n2d_video_batch",
   "model_version": "3.0",
   "ratio": "9:16",
-  "updated_at": "2026-06-30T18:07:59+0800",
+  "updated_at": "2026-06-30T20:00:59+0800",
   "version": 1,
   "video_resolution": "720p"
 }

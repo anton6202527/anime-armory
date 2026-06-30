@@ -215,6 +215,81 @@ def test_route_frame_capability_blocks_endframe_mismatch_in_production(tmp_path)
                for f in gate.findings)
 
 
+def test_action_anchor_contract_blocks_long_fight_with_only_midframe(tmp_path):
+    root = _write_storyboard_with_clips(
+        tmp_path,
+        [{
+            "id": "EP01_CLIP01",
+            "duration": 10.0,
+            "template": "fight_exchange",
+            "template_contract": {"template_id": "fight_exchange", "beats": ["起手", "命中", "收势"]},
+            "continuity": {
+                "start_state": "s",
+                "end_state": "e",
+                "transition": "硬切",
+                "need_endframe": True,
+                "midframe": {"midframe_png": "出图/第1集/图片/镜头01_mid.png", "split_at_sec": 5.0, "reason": "default"},
+            },
+        }],
+    )
+
+    gate.check_action_anchor_contract(root, "第1集", "video_preflight")
+
+    assert any(f["dim"] == "重动作多中帧" and f["sev"] == gate.BLOCK and "continuity.anchors" in f["msg"]
+               for f in gate.findings)
+
+
+def test_action_anchor_contract_allows_long_fight_with_anchors(tmp_path):
+    root = _write_storyboard_with_clips(
+        tmp_path,
+        [{
+            "id": "EP01_CLIP01",
+            "duration": 10.0,
+            "template": "fight_exchange",
+            "template_contract": {"template_id": "fight_exchange", "beats": ["起手", "命中", "收势"]},
+            "continuity": {
+                "start_state": "s",
+                "end_state": "e",
+                "transition": "硬切",
+                "need_endframe": True,
+                "anchors": [
+                    {"anchor_png": "出图/第1集/图片/镜头01_a1.png", "at_sec": 3.0, "reason": "起手后"},
+                    {"anchor_png": "出图/第1集/图片/镜头01_a2.png", "at_sec": 6.5, "reason": "命中收势"},
+                ],
+            },
+        }],
+    )
+
+    gate.check_action_anchor_contract(root, "第1集", "video_preflight")
+
+    assert not gate.findings
+
+
+def test_action_anchor_contract_ignores_long_dialogue_with_literal_hand_or_name(tmp_path):
+    root = _write_storyboard_with_clips(
+        tmp_path,
+        [{
+            "id": "EP01_CLIP03",
+            "duration": 11.0,
+            "template": "dialogue_shot_reverse",
+            "template_contract": {
+                "template_id": "dialogue_shot_reverse",
+                "beats": ["张老大手掌拍肩下命令", "江剑背影收拾行囊", "贺平生低头应是"],
+            },
+            "continuity": {
+                "start_state": "s",
+                "end_state": "e",
+                "transition": "硬切",
+                "need_endframe": True,
+            },
+        }],
+    )
+
+    gate.check_action_anchor_contract(root, "第1集", "video_preflight")
+
+    assert not gate.findings
+
+
 def test_spectacle_sequence_plan_missing_blocks(tmp_path):
     root = _write_storyboard_with_clips(
         tmp_path,
@@ -506,6 +581,7 @@ def test_video_preflight_reuses_video_checks(monkeypatch, tmp_path):
         "check_identity_adapter_matrix",
         "check_route_identity_readiness",
         "check_storyboard_contract",
+        "check_action_anchor_contract",
         "check_storyboard_style_contract",
         "check_storyboard_special_templates",
         "check_image_assets",
@@ -551,6 +627,7 @@ def test_video_gate_runs_multimodal_p2_before_video_prompt(monkeypatch, tmp_path
         "check_asset_reference_registry",
         "check_identity_adapter_matrix",
         "check_storyboard_contract",
+        "check_action_anchor_contract",
         "check_storyboard_style_contract",
         "check_storyboard_special_templates",
         "check_image_assets",
@@ -2018,8 +2095,8 @@ def test_identity_registry_restricted_partial_uses_partial_refs(tmp_path):
         "back": "",
         "outfit": "",
         "turnaround": "",
-        "hand": "出图/共享/图片/定妆_皇后_局部_手部搁茶.png",
-        "silhouette": "出图/共享/图片/定妆_皇后_局部_帘后剪影.png",
+        "hand": {"path": "出图/共享/图片/定妆_皇后_局部_手部搁茶.png", "status": "ready"},
+        "silhouette": {"path": "出图/共享/图片/定妆_皇后_局部_帘后剪影.png", "status": "ready"},
         "expressions": [],
     }
     form["reference_atlas"] = {"build_tier": "restricted_partial"}
@@ -3198,7 +3275,7 @@ def _patch_video_prompt_preflight_dependencies(monkeypatch):
         "check_placeholder_policy", "check_voiceover_fingerprint", "check_timing_manifest_complete",
         "check_voice_cross_episode", "check_identity_registry", "check_asset_reference_registry",
         "check_identity_adapter_matrix", "check_route_identity_readiness", "check_storyboard_contract",
-        "check_storyboard_style_contract", "check_storyboard_special_templates",
+        "check_action_anchor_contract", "check_storyboard_style_contract", "check_storyboard_special_templates",
         "check_expression_span_frame_contract", "check_image_assets", "check_input_frame_qc",
         "check_multimodal_continuity", "check_semantic_lineage", "check_state_continuity",
         "check_video_backend_reachable",

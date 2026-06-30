@@ -952,6 +952,151 @@ def check_route_frame_capability(
             f"最多 {max_frames} 张时间轴帧，消费计划为 {consumption_mode}；{consequence}。fallback：{fallback}{risk_note}",
             return_to_stage="video",
         )
+
+
+ACTION_ANCHOR_DURATION_SEC = 8.0
+_ACTION_ANCHOR_HEAVY_RE = re.compile(
+    r"打斗|攻防|拳脚|挥拳|刀剑|挥剑|抬剑|举剑|拔剑|掌法|出掌|追逐|追赶|冲刺|法术|武技|斗法|撞点|命中|碰撞|接触|抓腕|拉扯|拥抱|多主体接触|多人接触|"
+    r"fight|chase|magic|impact|collision|contact",
+    re.I,
+)
+_ACTION_ANCHOR_PREP_RE = re.compile(r"起手|蓄力|预备|发力|逼近|冲刺|冲向|追近|跃起|抬剑|举剑|拔剑|挥拳|出招|charge|windup|approach", re.I)
+_ACTION_ANCHOR_IMPACT_RE = re.compile(r"命中|击中|撞点|撞击|碰撞|格挡|接触|抓住|拉住|爆发|落地|受击|hit|impact|collision|contact", re.I)
+_ACTION_ANCHOR_RESPONSE_RE = re.compile(r"反应|受击|后撤|倒退|跌落|摔倒|余波|收势|回收|定住|僵住|退开|reaction|recovery|aftershock", re.I)
+ACTION_ANCHOR_RISK_FLAGS = frozenset({
+    "physical_contact",
+    "multi_character_overlap",
+    "high_speed_motion",
+    "extreme_camera",
+    "high_action",
+    "spectacle",
+    "contact_motion",
+    "fast_motion",
+    "physics",
+})
+
+
+def _action_anchor_text(clip: Mapping[str, Any], route: Optional[Mapping[str, Any]] = None) -> str:
+    parts: List[str] = []
+    for source in (clip, route or {}):
+        for key in (
+            "id",
+            "clip_id",
+            "label",
+            "scene",
+            "description",
+            "visual",
+            "action",
+            "template",
+            "shot_type",
+            "risk_flags",
+            "template_contract",
+            "action_choreography",
+            "motion_control",
+            "shots",
+            "continuity",
+        ):
+            value = source.get(key)
+            if value is None:
+                continue
+            parts.append(json.dumps(value, ensure_ascii=False, sort_keys=True) if isinstance(value, (dict, list)) else str(value))
+    return "\n".join(parts)
+
+
+def _action_anchor_chain(text: str) -> Dict[str, bool]:
+    prep = bool(_ACTION_ANCHOR_PREP_RE.search(text))
+    impact = bool(_ACTION_ANCHOR_IMPACT_RE.search(text))
+    response = bool(_ACTION_ANCHOR_RESPONSE_RE.search(text))
+    return {
+        "prep": prep,
+        "impact": impact,
+        "response": response,
+        "partial": impact and (prep or response),
+        "full": prep and impact and response,
+    }
+
+
+def _action_anchor_duration(clip: Mapping[str, Any]) -> Optional[float]:
+    for key in ("duration", "duration_sec", "时长", "seconds"):
+        value = clip.get(key)
+        if isinstance(value, bool):
+            continue
+        if isinstance(value, (int, float)):
+            return float(value)
+        if isinstance(value, str):
+            match = re.search(r"\d+(?:\.\d+)?", value)
+            if match:
+                return float(match.group(0))
+    return None
+
+
+def _action_anchor_has_list(clip: Mapping[str, Any]) -> bool:
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    anchors = cont.get("anchors") if isinstance(cont, Mapping) else None
+    return isinstance(anchors, list) and any(isinstance(item, Mapping) for item in anchors)
+
+
+def _action_anchor_requirement(
+    clip: Mapping[str, Any],
+    route: Optional[Mapping[str, Any]] = None,
+) -> Optional[Dict[str, Any]]:
+    contract = clip.get("template_contract") if isinstance(clip.get("template_contract"), Mapping) else {}
+    template = str(clip.get("template") or "").strip()
+    shot_type = str((route or {}).get("shot_type") or clip.get("shot_type") or contract.get("template_id") or template).strip()
+    route_flags = set(str(x).strip() for x in _listify((route or {}).get("risk_flags")) if str(x).strip())
+    clip_flags = set(str(x).strip() for x in _listify(clip.get("risk_flags")) if str(x).strip())
+    text = _action_anchor_text(clip, route)
+    high_action = (
+        template in HIGH_MOTION_TEMPLATES
+        or shot_type in HIGH_MOTION_TEMPLATES
+        or shot_type in ACTION_CHOREOGRAPHY_SHOT_TYPES
+        or bool((route_flags | clip_flags) & ACTION_ANCHOR_RISK_FLAGS)
+        or bool(_ACTION_ANCHOR_HEAVY_RE.search(text))
+    )
+    if not high_action:
+        return None
+    duration = _action_anchor_duration(clip)
+    chain = _action_anchor_chain(text)
+    long_clip = duration is not None and duration >= ACTION_ANCHOR_DURATION_SEC
+    if not long_clip and not chain["partial"]:
+        return None
+    sev = BLOCK if (long_clip or chain["full"] or shot_type in ACTION_CHOREOGRAPHY_SHOT_TYPES) else WARN
+    reasons: List[str] = []
+    if long_clip:
+        reasons.append(f"单镜时长 {duration:g}s >= {ACTION_ANCHOR_DURATION_SEC:g}s")
+    if chain["full"]:
+        reasons.append("含起手-命中-反应/收势完整动作链")
+    elif chain["partial"]:
+        reasons.append("含命中/接触及起手或反应动作链")
+    return {"severity": sev, "reason": "；".join(reasons) or "重动作镜", "duration": duration, "chain": chain}
+
+
+def check_action_anchor_contract(root: str, ep: str, stage: str = "video_preflight") -> None:
+    data = load_json(storyboard_path(root, ep))
+    if not isinstance(data, dict) or not isinstance(data.get("clips"), list):
+        return
+    route_map = _video_route_policy_map(root, ep)
+    for idx, clip in enumerate(data.get("clips") or [], 1):
+        if not isinstance(clip, Mapping):
+            continue
+        route = route_map.get(idx)
+        req = _action_anchor_requirement(clip, route)
+        if not req or _action_anchor_has_list(clip):
+            continue
+        cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+        has_mid = isinstance(cont.get("midframe"), Mapping) if isinstance(cont, Mapping) else False
+        clip_id = _gate_make_clip_id(clip, idx)
+        loc = f"{storyboard_path(root, ep)} {clip_id}"
+        suffix = "当前只有 continuity.midframe；重动作/长动作链不能只靠单个 _mid。" if has_mid else "当前缺 continuity.anchors[]。"
+        add(
+            str(req["severity"]),
+            "重动作多中帧",
+            loc,
+            f"{req['reason']}，必须写 continuity.anchors[] 多中帧链；{suffix}"
+            "先回 n2d-script 跑 anchor_planner.py --write，出图补 anchor PNG，再重跑 n2d-model-router/video_preflight；"
+            "这样 video_runner 才能自动走 native_multiframe 或 split_relay。",
+            return_to_stage="script_stage2",
+        )
 def check_native_av_voice_fallback_route(root: str, ep: str, route: Mapping[str, object], routes_path: str, idx: int) -> None:
     """Native AV speech shots must either be native_speech or explicitly reopen voice-first."""
     if not is_native_av_production(root):
@@ -2518,6 +2663,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_identity_adapter_matrix(root)
         check_route_identity_readiness(root, ep)
         check_storyboard_contract(root, ep, require_frame_assets=True)
+        check_action_anchor_contract(root, ep, check_stage)
         check_dialogue_fact_contract(root, ep, stage)
         check_storyboard_style_contract(root, ep)
         check_storyboard_special_templates(root, ep)
@@ -2554,6 +2700,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_identity_adapter_matrix(root)
         check_route_identity_readiness(root, ep)
         check_storyboard_contract(root, ep, require_frame_assets=True)
+        check_action_anchor_contract(root, ep, check_stage)
         check_dialogue_fact_contract(root, ep, stage)
         check_storyboard_style_contract(root, ep)
         check_storyboard_special_templates(root, ep)

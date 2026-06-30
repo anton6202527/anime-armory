@@ -787,7 +787,7 @@ def char_file_ref(cid: str) -> str:
 def make_shared_index(root: Path) -> str:
     rows = []
     for cid, cfg in CHARACTER_DEFS.items():
-        rows.append(f"| 角色 | `{cid}/{cfg['form']}` | `出图/共享/图片/定妆_{cfg['asset_key']}_正面.png` | ⏳prompt ready | {cfg['anchor']} |")
+        rows.append(f"| 角色 | `{cid}/{cfg['form']}` | `{char_file_ref(cid)}` | ⏳prompt ready | {cfg['anchor']} |")
     for aid, cfg in ASSET_DEFS.items():
         rows.append(f"| {cfg['type']} | `{aid}` | `出图/共享/图片/{cfg['path_name']}.png` | ⏳prompt ready | {cfg['name']} |")
     return "\n".join([

@@ -373,7 +373,7 @@ def has_controlled_makeup_source(rel_path: str, reference_inputs: Sequence[Dict[
         return True
     stem = Path(rel_path).stem
     base = re.sub(r"_(?:45度|侧|背|侧背|侧影|半身|全身翼展|全身|脸部特写|群像sheet|sheet)$", "", stem)
-    expected = {base, f"{base}_front", f"{base}_三视图"}
+    expected = {base, f"{base}_front", f"{base}_正面", f"{base}_三视图"}
     for item in reference_inputs or []:
         ref_stem = Path(str(item.get("rel_path") or item.get("abs_path") or "")).stem
         if ref_stem in expected:
@@ -2326,7 +2326,8 @@ def controlled_multiref_derivation(
         return "三视图" in Path(str(item.get("rel_path") or item.get("abs_path") or "")).stem
 
     def is_front(item: Dict[str, Any]) -> bool:
-        return Path(str(item.get("rel_path") or item.get("abs_path") or "")).stem.endswith("_front")
+        stem = Path(str(item.get("rel_path") or item.get("abs_path") or "")).stem
+        return stem.endswith("_front") or stem.endswith("_正面")
 
     source = None
     predicates = (is_turnaround, is_front) if prefer_turnaround else (is_front, is_turnaround)

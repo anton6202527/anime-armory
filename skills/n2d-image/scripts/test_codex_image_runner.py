@@ -827,6 +827,13 @@ def test_codex_blocks_text_only_character_split_makeup(tmp_path: Path, monkeypat
     )
 
 
+def test_chinese_front_ref_allows_character_split_makeup() -> None:
+    assert codex_image_runner.has_controlled_makeup_source(
+        "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_45度.png",
+        [{"rel_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_正面.png"}],
+    )
+
+
 def test_reference_bundle_resolves_ready_character_and_asset_refs(tmp_path: Path) -> None:
     ref = tmp_path / "出图" / "共享" / "图片" / "定妆_沈念_常态.png"
     ref.parent.mkdir(parents=True)

@@ -63,7 +63,8 @@ ACTION_BEAT_MARKERS = (
 # 显式高动作强度声明（storyboard continuity 字段）。
 HIGH_MOTION_VALUES = {"高", "大", "high", "violent", "large", "intense"}
 # 逐镜资产 id（场景/道具/武器/服装/特效）。
-ASSET_HANDOFF_ID_RE = re.compile(r"(?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9]+")
+ASSET_HANDOFF_ID_RE = re.compile(r"(?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_]+")
+PNG_REF_RE = re.compile(r"`([^`]+\.png)`|([^\s`，,；;。)）]+\.png)")
 
 
 def _clip_num(text: str):
@@ -109,6 +110,55 @@ def split_video_clip_blocks(clips_md: str):
     if cur_num is not None:
         blocks[cur_num] = "\n".join(cur)
     return blocks
+
+
+def _png_refs(text: str) -> list[str]:
+    """文本中的 PNG 路径引用。优先兼容 markdown 反引号路径，也容忍裸路径。"""
+    refs = []
+    for m in PNG_REF_RE.finditer(str(text or "")):
+        ref = (m.group(1) or m.group(2) or "").strip()
+        if ref:
+            refs.append(ref)
+    return refs
+
+
+def _png_stem(path: str) -> str:
+    """PNG 路径 → 文件 stem，用于 split relay 后按首帧回溯出图逻辑块。"""
+    return os.path.splitext(os.path.basename(str(path or "").strip()))[0]
+
+
+def _index_image_blocks_by_png_stem(img_blocks: dict[int, str]) -> dict[str, tuple[int, str]]:
+    """出图块中 `**目标**` 的首/中/尾 PNG 都可作为视频物理段首帧来源。"""
+    out = {}
+    for num, block in img_blocks.items():
+        for ref in _png_refs(block):
+            stem = _png_stem(ref)
+            if stem and stem not in out:
+                out[stem] = (num, block)
+    return out
+
+
+def _source_image_block_for_video(
+    video_num: int,
+    video_block: str,
+    img_blocks: dict[int, str],
+    img_by_png_stem: dict[str, tuple[int, str]],
+) -> tuple[int | None, str | None, str]:
+    """视频物理 Clip → 出图逻辑 Clip。
+
+    split relay 会把一个出图逻辑 Clip 拆成多个视频物理 Clip，例如视频 Clip_05/06
+    都来自 `Clip03_外门遗孤*.png`。资产继承必须按真实首帧来源回溯，不能按物理
+    Clip 编号硬对齐；旧项目没有首帧引用时才回退数字对齐。
+    """
+    refs = _frame_refs(video_block).get("first") or _png_refs(video_block)
+    for ref in refs:
+        stem = _png_stem(ref)
+        if stem in img_by_png_stem:
+            img_num, img_block = img_by_png_stem[stem]
+            return img_num, img_block, f"firstframe:{stem}"
+    if video_num in img_blocks:
+        return video_num, img_blocks[video_num], "clip_number_fallback"
+    return None, None, "unmatched"
 
 
 def clip_block_locks_identity(block_text: str) -> bool:
@@ -430,32 +480,48 @@ def check_asset_handoff(root: str, ep: str) -> dict:
         return res
     img_blocks = split_video_clip_blocks(open(img_path, encoding="utf-8").read())
     vid_blocks = split_video_clip_blocks(open(vid_path, encoding="utf-8").read())
+    img_by_png_stem = _index_image_blocks_by_png_stem(img_blocks)
     id2name = asset_id_to_name(root)
     res["available"] = True
-    for num in sorted(img_blocks):
-        img_assets = extract_asset_ids(img_blocks[num])
+    matched_image_nums = set()
+    for num in sorted(vid_blocks):
+        clip_id = f"Clip_{num:02d}"
+        source_num, source_block, source_reason = _source_image_block_for_video(
+            num, vid_blocks[num], img_blocks, img_by_png_stem
+        )
+        if source_block is None:
+            continue
+        img_assets = extract_asset_ids(source_block)
         if not img_assets:
             continue
+        matched_image_nums.add(source_num)
         res["checked"] += 1
-        clip_id = f"Clip_{num:02d}"
-        vblk = vid_blocks.get(num)
-        if vblk is None:
-            # 整个逐镜 prompt 缺失（结构性、高精度）= block，同 identity_clip_prompt_missing。
-            res["findings"].append({
-                "clip_id": clip_id, "severity": "block", "code": "asset_clip_prompt_missing",
-                "note": (f"{clip_id}：出图绑定资产 {sorted(img_assets)}，但 01_clips.md 无对应逐镜 prompt"
-                         "——资产在视频侧无锚，易场景/道具/特效漂移。"),
-            })
-            continue
-        dropped = sorted(img_assets - extract_asset_ids(vblk))
+        dropped = sorted(img_assets - extract_asset_ids(vid_blocks[num]))
         if dropped:
             # 资产 id 丢失（可能是有意的松引用，如记忆遮罩/转场只提名字）= warn，交人确认；
             # 不 block（不像人脸交接那样必然崩），但每个丢失都要醒目入账，避免执行端默默取不到 constraints。
             names = "、".join(f"{aid}({id2name.get(aid, '?')})" for aid in dropped)
+            source_note = f"；source=Clip_{source_num:02d}({source_reason})" if source_num else ""
             res["findings"].append({
                 "clip_id": clip_id, "severity": "warn", "code": "asset_handoff_dropped",
                 "note": (f"{clip_id}：出图绑定的资产 {names} 在出视频逐镜 prompt 丢了 id"
+                         f"{source_note}"
                          "——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，"
                          "补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。"),
             })
+    for num in sorted(img_blocks):
+        if num in matched_image_nums:
+            continue
+        img_assets = extract_asset_ids(img_blocks[num])
+        if not img_assets:
+            continue
+        if num in vid_blocks:
+            continue
+        # 整个逐镜 prompt 缺失（结构性、高精度）= block，同 identity_clip_prompt_missing。
+        clip_id = f"Clip_{num:02d}"
+        res["findings"].append({
+            "clip_id": clip_id, "severity": "block", "code": "asset_clip_prompt_missing",
+            "note": (f"{clip_id}：出图绑定资产 {sorted(img_assets)}，但 01_clips.md 无对应逐镜 prompt"
+                     "——资产在视频侧无锚，易场景/道具/特效漂移。"),
+        })
     return res

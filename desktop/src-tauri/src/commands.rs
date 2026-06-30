@@ -282,11 +282,6 @@ fn snapshot_signature(
             *file_count += 1;
             "file".hash(hasher);
             meta.len().hash(hasher);
-            if let Ok(modified) = meta.modified() {
-                if let Ok(dur) = modified.duration_since(UNIX_EPOCH) {
-                    dur.as_nanos().hash(hasher);
-                }
-            }
         }
     }
 }
@@ -297,6 +292,8 @@ fn snapshot_signature(
 struct FileMeta {
     mtime: u64, // millis since UNIX epoch
     size: u64,
+    #[serde(default)]
+    hash: u64, // deterministic content hash; 0 means unavailable/legacy baseline
     #[serde(default)]
     text: Option<String>, // archived text snapshot for VS Code-style diffs
 }
@@ -366,8 +363,29 @@ fn file_meta(p: &Path) -> Option<FileMeta> {
     Some(FileMeta {
         mtime,
         size: m.len(),
+        hash: 0,
         text: None,
     })
+}
+
+fn content_hash(p: &Path) -> Option<u64> {
+    const FNV_OFFSET: u64 = 0xcbf29ce484222325;
+    const FNV_PRIME: u64 = 0x00000100000001b3;
+
+    let mut file = fs::File::open(p).ok()?;
+    let mut hash = FNV_OFFSET;
+    let mut buf = [0u8; 16 * 1024];
+    loop {
+        let n = file.read(&mut buf).ok()?;
+        if n == 0 {
+            break;
+        }
+        for b in &buf[..n] {
+            hash ^= u64::from(*b);
+            hash = hash.wrapping_mul(FNV_PRIME);
+        }
+    }
+    Some(hash)
 }
 
 fn read_diff_text(p: &Path, size: u64) -> (Option<String>, String) {
@@ -394,9 +412,28 @@ fn read_diff_text(p: &Path, size: u64) -> (Option<String>, String) {
 
 fn file_snapshot(p: &Path) -> Option<FileMeta> {
     let mut fm = file_meta(p)?;
+    fm.hash = content_hash(p).unwrap_or(0);
     let (text, _) = read_diff_text(p, fm.size);
     fm.text = text;
     Some(fm)
+}
+
+fn file_changed(base: &Path, rel: &str, prev: &FileMeta, cur: &FileMeta) -> bool {
+    if cur.size != prev.size {
+        return true;
+    }
+    if cur.mtime == prev.mtime {
+        return false;
+    }
+    if prev.hash == 0 {
+        // Legacy baselines did not store content hashes. Fall back to the old
+        // mtime+size behavior until the user archives once with the new build.
+        return true;
+    }
+    match content_hash(&base.join(rel)) {
+        Some(hash) => hash != prev.hash,
+        None => true,
+    }
 }
 
 /// Walk a directory the SAME way `walk_tree` does (same ignores + depth cap) but
@@ -440,7 +477,7 @@ fn annotate_status(root: &str, entries: &mut [SkillTreeEntry], bl: &Baseline) {
             None => e.status = "u".into(),
             Some(prev) => {
                 if let Some(cur) = file_meta(&base.join(&e.path)) {
-                    if cur.size != prev.size || cur.mtime != prev.mtime {
+                    if file_changed(base, &e.path, prev, &cur) {
                         e.status = "m".into();
                     }
                 }
@@ -513,7 +550,7 @@ pub fn work_diff(root: String, rel: String) -> Result<WorkDiff, String> {
         (None, Some(_)) => "u",
         (Some(_), None) => "d",
         (Some(old), Some(now)) => {
-            if old.size != now.size || old.mtime != now.mtime {
+            if file_changed(base, &rel, old, now) {
                 "m"
             } else {
                 "clean"

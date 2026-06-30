@@ -196,7 +196,7 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 - 出点：本 Clip 结束时人物姿态/视线/道具/空镜停在哪里，下一 Clip 从哪里接。**这句会成为下一 Clip 的入点。**
 - 转场：match cut / eyeline cut / 动作切 / 空镜缓冲 / 声音先行(J-cut) / 硬切。
 - 需要尾帧?：是/否。**默认首尾双帧接力：除最终 Clip 外均为是**（n2d-image 出尾帧 PNG=下一 Clip 首帧构图，**尾帧命名=对应首帧名+`_end`**：`镜头N_xxx.png`→`镜头N_end.png`、`Clip_NN.png`→`Clip_NN_end.png`；n2d-video 用首尾双帧引导锁死接点）；只有换场空镜/时间大跳/明确不连续的接缝可设否，并必须写豁免原因。
-- 中段锚帧?（默认规划·按后端能力落地）：选择点 `中段锚帧默认=开启` 时，普通镜默认得一张 `_mid` 锚帧（`use=split` 可拆段 / `use=qc` 短镜只作视频验收中段基准），<3s 极短镜写 `midframe_exempt_reason` 豁免；高运动模板、≥8s 多拍长镜或已有中段漂移重抽记录的镜头，可声明多锚 `continuity.anchors`（命名=首帧名+`_a1.._aN`）。声明即必须填全字段，gate 阻断缺项/不递增/越界。**自动识别**：分镜定稿后跑 `python3 skills/n2d-script/scripts/anchor_planner.py <作品根> 第N集`，按 R1 高运动模板 / R2 ≥8s 多拍长镜 / R3 dashboard 漂移重抽实证出 `生产数据/anchor_plan_第N集.json/md`；`--write` 后写回 `policy.midframe_default=true` 与逐镜锚点/豁免。**执行口径**：即梦 `multiframe2video` 可原生吃 2–20 张时间轴关键帧，无 K+1 视频倍数；Veo/Luma/可灵等首尾帧后端只确认 first/last，中锚需拆段接力、extend/interpolate 或仅作 QC/参考；首帧/参考图后端退回单首帧 + 强 end_state 文字或 reroute。video_preflight 会对不支持中锚的路由给 WARN，不能静默吞 `_mid`。
+- 中段锚帧?（默认规划·按后端能力落地）：选择点 `中段锚帧默认=开启` 时，普通镜默认得一张 `_mid` 锚帧（`use=split` 可拆段 / `use=qc` 短镜只作视频验收中段基准），<3s 极短镜写 `midframe_exempt_reason` 豁免；高运动模板、≥8s 多拍长镜或已有中段漂移重抽记录的镜头，可声明多锚 `continuity.anchors`（命名=首帧名+`_a1.._aN`）。**重动作铁律**：打斗/追逐/法术撞点/多主体接触等镜头，只要单 Clip `>=8s`，或包含“起手/蓄力/逼近 → 命中/接触/撞点 → 反应/收势/余波”链，就必须写 `continuity.anchors[]`，单个 `continuity.midframe` 不够。声明即必须填全字段，gate 阻断缺项/不递增/越界。**自动识别**：分镜定稿后跑 `python3 skills/n2d-script/scripts/anchor_planner.py <作品根> 第N集`，按 R1 高运动模板 / R2 ≥8s 多拍长镜 / R3 dashboard 漂移重抽实证出 `生产数据/anchor_plan_第N集.json/md`；`--write` 后写回 `policy.midframe_default=true` 与逐镜锚点/豁免。**执行口径**：即梦 `multiframe2video` 可原生吃 2–20 张时间轴关键帧，无 K+1 视频倍数；Veo/Luma/可灵等首尾帧后端只确认 first/last，中锚需拆段接力、extend/interpolate 或仅作 QC/参考；首帧/参考图后端退回单首帧 + 强 end_state 文字或 reroute。video_preflight 会对不支持中锚的路由给 WARN，不能静默吞 `_mid`。
 - 连贯性：轴线方向、人物左右站位、出入画方向、首尾帧是否可用于双帧引导；非最终 Clip 不能省略接力契约。
 **分镜1：0-4s**
 镜头：{景别}，{距离}，{机位角度}，{运镜}。
@@ -371,8 +371,8 @@ character design / reference sheet: {name}, minimum reference set with front-fac
           "split_at_sec": 4.0,                          // 建议锚点秒数；native multiframe 为时间轴约束，split 时为 A 段时长
           "reason": "9s 三拍动作，redraw×2 中段动作漂移"      // 必填：为什么需要中锚（漂移风险/重抽记录/三帧契约默认）
         },
-        "anchors": [                                    // ← 可选·N 锚帧链通用形（与 midframe 二选一，同时声明 gate 阻断）
-          // 由 scripts/anchor_planner.py 自动识别+规划写入（打斗等高运动模板/≥8s 长镜/漂移重抽实证），也可手写
+        "anchors": [                                    // ← 可选·N 锚帧链通用形（与 midframe 二选一，同时声明 gate 阻断；重动作长镜/动作链必填）
+          // 由 scripts/anchor_planner.py 自动识别+规划写入（打斗等高运动模板/≥8s 长镜/起手-命中-收势链/漂移重抽实证），也可手写
           { "anchor_png": "出图/第1集/图片/镜头01_x_a1.png",  // 命名=首帧名+`_aK`（三帧契约默认中锚=首帧名+`_mid`）；n2d-image 落档后回填
             "at_sec": 4.0,                              // 焊点秒数，严格递增；use=split 时各段 ≥ 目标后端最短时长
             "use": "split",                             // split=拆段接力 | qc=不拆段·视频验收中段基准/多参考 | reference=多参考输入

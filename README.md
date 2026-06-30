@@ -143,7 +143,7 @@ macOS 本机需要 Rust targets、`mingw-w64` 和 NSIS（`makensis`）；`/toa` 
 
 ```bash
 # 推一个 desktop-v* tag 即触发云端构建 + 发布（mac .dmg / win .exe[NSIS] / .vsix）
-git tag desktop-v0.1.28 && git push origin desktop-v0.1.28
+git tag desktop-v0.1.29 && git push origin desktop-v0.1.29
 # 或在 Actions 页手动 workflow_dispatch（只产出 build artifact，不发 Release）
 ```
 
@@ -385,7 +385,7 @@ On macOS this requires Rust targets, `mingw-w64`, and NSIS (`makensis`); `/toa` 
 The repo still includes [`.github/workflows/desktop-release.yml`](.github/workflows/desktop-release.yml). Pushing a `desktop-v*` tag triggers GitHub Actions to build and publish the same stable filenames:
 
 ```bash
-git tag desktop-v0.1.28 && git push origin desktop-v0.1.28
+git tag desktop-v0.1.29 && git push origin desktop-v0.1.29
 ```
 
 Prerequisite: configure the `ARMORY_RELEASE_TOKEN` secret in the `anime-arsenal` repo. It must be a PAT with `contents: write` permission for `anime-armory`.

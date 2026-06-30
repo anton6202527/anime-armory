@@ -91,156 +91,6 @@
       ],
       "return_to_stage": "video_prompt",
       "scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/control"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/control"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "contract_inheritance"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第1集/图片",
-            "出视频/第1集/prompt",
-            "出视频/第1集/control"
-          ],
-          "affected_shots": [],
-          "dim": "契约继承",
-          "dim_key": "contract_inheritance",
-          "dimension": "契约继承",
-          "episode": "第1集",
-          "gate_stage": "video_preflight",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
-          "message": "资产逐镜交接[asset_handoff_dropped]：Clip_03：出图绑定的资产 LOC_WAIMEN(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
-          "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_03：出图绑定的资产 LOC_WAIMEN(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
-          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
-          "return_to_stage": "video_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第1集/图片",
-            "出视频/第1集/prompt",
-            "出视频/第1集/control"
-          ],
-          "affected_shots": [],
-          "dim": "契约继承",
-          "dim_key": "contract_inheritance",
-          "dimension": "契约继承",
-          "episode": "第1集",
-          "gate_stage": "video_preflight",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
-          "message": "资产逐镜交接[asset_handoff_dropped]：Clip_04：出图绑定的资产 PROP_KEY(?)、PROP_TIE(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
-          "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_04：出图绑定的资产 PROP_KEY(?)、PROP_TIE(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
-          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
-          "return_to_stage": "video_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第1集/图片",
-            "出视频/第1集/prompt",
-            "出视频/第1集/control"
-          ],
-          "affected_shots": [],
-          "dim": "契约继承",
-          "dim_key": "contract_inheritance",
-          "dimension": "契约继承",
-          "episode": "第1集",
-          "gate_stage": "video_preflight",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
-          "message": "资产逐镜交接[asset_handoff_dropped]：Clip_05：出图绑定的资产 LOC_HOUSHAN(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
-          "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_05：出图绑定的资产 LOC_HOUSHAN(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
-          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
-          "return_to_stage": "video_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第1集/图片",
-            "出视频/第1集/prompt",
-            "出视频/第1集/control"
-          ],
-          "affected_shots": [],
-          "dim": "契约继承",
-          "dim_key": "contract_inheritance",
-          "dimension": "契约继承",
-          "episode": "第1集",
-          "gate_stage": "video_preflight",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
-          "message": "资产逐镜交接[asset_handoff_dropped]：Clip_06：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
-          "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_06：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
-          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
-          "return_to_stage": "video_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第1集/图片",
-            "出视频/第1集/prompt",
-            "出视频/第1集/control"
-          ],
-          "affected_shots": [],
-          "dim": "契约继承",
-          "dim_key": "contract_inheritance",
-          "dimension": "契约继承",
-          "episode": "第1集",
-          "gate_stage": "video_preflight",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
-          "message": "资产逐镜交接[asset_handoff_dropped]：Clip_07：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
-          "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_07：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
-          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
-          "return_to_stage": "video_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "video_prompt",
-      "scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/control"
     }
   ],
   "episode": "第1集",
@@ -426,140 +276,10 @@
       "sev": "warn",
       "severity": "warn",
       "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/control"
-      ],
-      "affected_shots": [],
-      "dim": "契约继承",
-      "dim_key": "contract_inheritance",
-      "dimension": "契约继承",
-      "episode": "第1集",
-      "gate_stage": "video_preflight",
-      "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
-      "message": "资产逐镜交接[asset_handoff_dropped]：Clip_03：出图绑定的资产 LOC_WAIMEN(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
-      "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_03：出图绑定的资产 LOC_WAIMEN(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
-      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
-      "return_to_stage": "video_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/control"
-      ],
-      "affected_shots": [],
-      "dim": "契约继承",
-      "dim_key": "contract_inheritance",
-      "dimension": "契约继承",
-      "episode": "第1集",
-      "gate_stage": "video_preflight",
-      "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
-      "message": "资产逐镜交接[asset_handoff_dropped]：Clip_04：出图绑定的资产 PROP_KEY(?)、PROP_TIE(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
-      "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_04：出图绑定的资产 PROP_KEY(?)、PROP_TIE(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
-      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
-      "return_to_stage": "video_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/control"
-      ],
-      "affected_shots": [],
-      "dim": "契约继承",
-      "dim_key": "contract_inheritance",
-      "dimension": "契约继承",
-      "episode": "第1集",
-      "gate_stage": "video_preflight",
-      "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
-      "message": "资产逐镜交接[asset_handoff_dropped]：Clip_05：出图绑定的资产 LOC_HOUSHAN(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
-      "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_05：出图绑定的资产 LOC_HOUSHAN(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
-      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
-      "return_to_stage": "video_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/control"
-      ],
-      "affected_shots": [],
-      "dim": "契约继承",
-      "dim_key": "contract_inheritance",
-      "dimension": "契约继承",
-      "episode": "第1集",
-      "gate_stage": "video_preflight",
-      "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
-      "message": "资产逐镜交接[asset_handoff_dropped]：Clip_06：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
-      "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_06：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?)、PROP_SHUI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
-      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
-      "return_to_stage": "video_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/control"
-      ],
-      "affected_shots": [],
-      "dim": "契约继承",
-      "dim_key": "contract_inheritance",
-      "dimension": "契约继承",
-      "episode": "第1集",
-      "gate_stage": "video_preflight",
-      "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
-      "message": "资产逐镜交接[asset_handoff_dropped]：Clip_07：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
-      "msg": "资产逐镜交接[asset_handoff_dropped]：Clip_07：出图绑定的资产 LOC_HOUSHAN(?)、PROP_HEI(?) 在出视频逐镜 prompt 丢了 id——执行端取不到其 reference_group/constraints/drift_forbidden，若非有意松引用，补回 LOC/PROP/WEAPON/VFX_xx 让结构/颜色/光位锚自动继承（防场景/道具/武器/特效跨镜漂移）。",
-      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
-      "return_to_stage": "video_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
     }
   ],
   "gate_stage": "video_preflight",
-  "generated_at": "2026-06-30T10:02:42+00:00",
+  "generated_at": "2026-06-30T11:58:08+00:00",
   "inputs_fingerprint": {
     "files": {
       "出图/共享/asset_registry.json": "298b0ed5d156b0ce7f0e516cfcf98099a310b27498ecb844f51d8cf2215b2d30",
@@ -586,11 +306,6 @@
         "info": 3,
         "warn": 0
       },
-      "契约继承": {
-        "block": 0,
-        "info": 0,
-        "warn": 5
-      },
       "导演运镜落实": {
         "block": 0,
         "info": 2,
@@ -610,9 +325,9 @@
     "severity": {
       "block": 0,
       "info": 5,
-      "warn": 7
+      "warn": 2
     },
-    "total": 12
+    "total": 7
   },
   "version": 1
 }

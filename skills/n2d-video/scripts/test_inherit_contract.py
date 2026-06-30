@@ -541,6 +541,7 @@ def _write_clip_prompts(tmp_path, img_clips=_IMG_CLIPS, vid_clips=_VID_CLIPS_OK)
 def test_extract_asset_ids():
     ids = ic.extract_asset_ids("资产=LOC_01 冷宫 + PROP_01 铜镜；WEAPON_01 霜纹长剑；VFX_01 脉冲；OUTFIT_02 战袍")
     assert ids == {"LOC_01", "PROP_01", "WEAPON_01", "VFX_01", "OUTFIT_02"}
+    assert ic.extract_asset_ids("LOC_HOUSHAN_QIANTAN + PROP_SHUI_TONG") == {"LOC_HOUSHAN_QIANTAN", "PROP_SHUI_TONG"}
     assert ic.extract_asset_ids("无注册资产的空镜") == set()
 
 
@@ -571,6 +572,31 @@ def test_asset_handoff_blocks_missing_clip(tmp_path):
     assert ic.run(root, EP) == 1
     codes = {f["code"] for f in _report(root)["asset_handoff"]["findings"]}
     assert "asset_clip_prompt_missing" in codes
+
+
+def test_asset_handoff_uses_firstframe_source_for_split_video_clips(tmp_path):
+    # 出视频物理 Clip_05/09 可能来自出图逻辑 Clip03/Clip05；资产继承应按首帧来源，不按物理编号硬对齐。
+    img = """## Clip 03 外门遗孤
+**目标**：`出图/第1集/图片/Clip03_外门遗孤.png` `出图/第1集/图片/Clip03_外门遗孤_mid.png`
+**资产引用注册层**：`LOC_WAIMEN_JIUYUAN`
+
+## Clip 05 夜挑五趟
+**目标**：`出图/第1集/图片/Clip05_夜挑五趟.png` `出图/第1集/图片/Clip05_夜挑五趟_mid.png`
+**资产引用注册层**：`LOC_HOUSHAN_QIANTAN`、`PROP_SHUI_TONG`
+"""
+    vid = """## Clip 05（外门遗孤上）
+**首帧**：`出图/第1集/图片/Clip03_外门遗孤.png`
+**涉及资产**：LOC_WAIMEN_JIUYUAN
+
+## Clip 09（夜挑五趟上）
+**首帧**：`出图/第1集/图片/Clip05_夜挑五趟.png`
+**涉及资产**：LOC_HOUSHAN_QIANTAN, PROP_SHUI_TONG
+"""
+    root = _write_clip_prompts(tmp_path, img_clips=img, vid_clips=vid)
+    assert ic.run(root, EP) == 0
+    rep = _report(root)
+    assert rep["asset_handoff"]["checked"] == 2
+    assert rep["asset_handoff"]["findings"] == []
 
 
 def test_asset_handoff_skipped_when_clip_files_absent(tmp_path):

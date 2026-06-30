@@ -69,7 +69,7 @@ button:hover { border-color: var(--accent); }
   color: var(--muted); font-size: 11px; white-space: nowrap;
 }
 .language-switch select {
-  height: 24px; width: 76px; padding: 0 20px 0 7px;
+  height: 24px; width: 58px; padding: 0 16px 0 6px;
   color: var(--text); background: var(--panel); border: 1px solid var(--border);
   border-radius: 6px; font: inherit; cursor: pointer;
 }
