@@ -26,6 +26,7 @@
 | 写歌、改词、作曲、多版挑版、翻唱/换声、审歌 | **`song`**（分诊到 song-lyrics/compose/cover/review 等） |
 | 给歌曲做 MV、卡点、出图出视频、卡拉 OK 字幕、合成 | **`mv`**（分诊到 mv-script/beat/plan/image/video/compose 等） |
 | 做广告片、TVC、信息流广告、产品 demo、带货视频、投放前广告评分 | **`ad`**（分诊到 ad-concept/script/voice/image/video/compose/score/review） |
+| 检查小说 skill 更新是否影响项目、生成最小文本返工/重审/重评计划 | **`novel-update`**（内容快照比对 + 最小返工计划；只写计划/基线，不改正文或 `_进度.md`） |
 | 查看项目进度/下一步，或在仓库根汇总所有 n2d 项目 | **`n2d-progress`**（只读扫描 n2d 进度，不回写 `_进度.md`） |
 | 修改/审计项目设置、选择点或全局默认 | **`n2d-settings`**（包住 `_设置.md` 读写/校验/重置/同步全局默认） |
 | 检查 skill 更新是否影响项目、生成重制计划、只重出部分图片/视频 | **`n2d-update`**（skill 快照比对 + 最小重制计划；`media` 子命令做少量图片/视频选择性刷新计划） |

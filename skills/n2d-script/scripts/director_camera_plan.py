@@ -24,6 +24,8 @@ if str(N2D_LIB) not in sys.path:
 
 from n2d_const import CAMERA_MOVE_LEXICON, STATIC_CAMERA_WORDS  # noqa: E402
 from n2d_logic import normalize_camera_move  # noqa: E402
+from n2d_settings import get_setting  # noqa: E402
+import video_backend_adapter  # noqa: E402
 
 
 PEAK_WORDS = (
@@ -244,6 +246,29 @@ def camera_phrase(rec: Dict[str, str]) -> str:
     return f"{speed}{move}，{direction}"
 
 
+def backend_control_instruction(rec: Dict[str, str], backend_control: Dict[str, Any], clip_id: str) -> str:
+    """Render the same camera plan into the target backend's control idiom."""
+    idiom = str(backend_control.get("control_idiom") or "natural_language")
+    move = rec["camera_move_zh"]
+    speed = rec["speed"]
+    direction = rec["direction"]
+    end_size = rec["end_size"] or "storyboard end frame"
+    phrase = camera_phrase(rec)
+    if idiom == "motion_brush_on_firstframe":
+        return (
+            f"Kling motion brush：在首帧上沿「{direction}」画主体/背景运动路径；"
+            f"per-shot: camera_move={move}; speed={speed}; end_size={end_size}; "
+            "lock first-frame identity, axis, lighting, and contact points."
+        )
+    if idiom == "structured_multi_prompt":
+        return (
+            f"Shot {clip_id}: camera={move}; speed={speed}; direction={direction}; "
+            f"end_frame={end_size}; keep first-frame identity/lighting/axis; "
+            "no unplanned spin, drift, or scene rebuild."
+        )
+    return f"自然语言运镜：{phrase}；首帧锚定，不改变角色、光位、轴线和场景设定。"
+
+
 def tension_word(clip: Dict[str, Any]) -> str:
     flags = classify_clip(clip)
     if flags["peak"] and flags["action"]:
@@ -257,11 +282,16 @@ def tension_word(clip: Dict[str, Any]) -> str:
     return "聚焦"
 
 
-def build_prompt_injections(clip: Dict[str, Any], rec: Dict[str, str]) -> Tuple[Dict[str, str], Dict[str, str]]:
+def build_prompt_injections(
+    clip: Dict[str, Any],
+    rec: Dict[str, str],
+    backend_control: Optional[Dict[str, Any]] = None,
+) -> Tuple[Dict[str, str], Dict[str, str]]:
     shot = clip_shot_size(clip) or "沿 storyboard 景别"
     phrase = camera_phrase(rec)
     tension = tension_word(clip)
     reason = rec["reason"]
+    backend_control = backend_control or {"control_idiom": "natural_language", "source": "no_route"}
     image = {
         "镜头/机位": f"{shot}；按导演运镜预留起幅，首帧不是摆拍肖像。",
         "起幅·运动余量": f"为「{phrase}」预留前景/背景运动余量；主体不要顶边，动作方向留 15%-25% 空间。",
@@ -273,20 +303,22 @@ def build_prompt_injections(clip: Dict[str, Any], rec: Dict[str, str]) -> Tuple[
         "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
         "落幅": f"落在{rec['end_size'] or shot}，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
         "镜头运动": phrase,
+        "后端控制写法": backend_control_instruction(rec, backend_control, str(clip.get("clip_id") or clip.get("id") or "")),
         "运动精修": f"张力={tension}；镜头运动只服务情绪，不追加未声明的旋转、漂浮、急甩。",
         "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。",
     }
     return image, video
 
 
-def analyze_clip(clip: Dict[str, Any], index: int) -> Dict[str, Any]:
+def analyze_clip(clip: Dict[str, Any], index: int, backend_control: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     clip_id = _clip_id(clip, index)
     camera_text = extract_camera_text(clip)
     norm = normalize_camera_move(camera_text) if camera_text else {
         "moves": [], "speeds": [], "is_static": False, "recognized": False,
     }
     rec = recommend_camera_move(clip)
-    image, video = build_prompt_injections(clip, rec)
+    backend_control = backend_control or {"control_idiom": "natural_language", "source": "no_route"}
+    image, video = build_prompt_injections(clip, rec, backend_control)
     findings: List[Dict[str, str]] = []
 
     if not camera_text:
@@ -331,21 +363,54 @@ def analyze_clip(clip: Dict[str, Any], index: int) -> Dict[str, Any]:
         "existing_camera": camera_text,
         "normalized_camera": norm,
         "recommended": rec,
+        "backend_control": backend_control,
         "image_prompt_injection": image,
         "video_prompt_injection": video,
         "findings": findings,
     }
 
 
-def build_plan(storyboard: Dict[str, Any], episode: str) -> Dict[str, Any]:
+def _route_map(root: str, episode: str) -> Dict[str, Dict[str, Any]]:
+    if not root:
+        return {}
+    return {
+        str(route.get("clip_id") or ""): route
+        for route in video_backend_adapter.load_video_routes(root, episode)
+        if isinstance(route, dict) and route.get("clip_id")
+    }
+
+
+def _clip_backend_control(root: str, episode: str, clip_id: str, routes_by_id: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
+    if not root:
+        return {"control_idiom": "natural_language", "control_idiom_supported": False, "source": "no_project_root"}
+    route = routes_by_id.get(clip_id)
+    if not route:
+        return {"control_idiom": "natural_language", "control_idiom_supported": False, "source": "no_video_route"}
+    backend = str(route.get("primary_backend") or "").strip()
+    channel = get_setting(root, "生视频渠道", "").strip()
+    if not backend:
+        return {"control_idiom": "natural_language", "control_idiom_supported": False, "source": "route_without_backend"}
+    control = video_backend_adapter.resolve_control_idiom(root, backend, channel)
+    control["route_backend"] = backend
+    control["route_channel"] = channel
+    return control
+
+
+def build_plan(storyboard: Dict[str, Any], episode: str, root: str = "") -> Dict[str, Any]:
     clips = storyboard.get("clips") if isinstance(storyboard.get("clips"), list) else []
-    analyzed = [analyze_clip(c, i + 1) for i, c in enumerate(clips) if isinstance(c, dict)]
+    routes_by_id = _route_map(root, episode)
+    analyzed = []
+    for i, clip in enumerate(clips):
+        if not isinstance(clip, dict):
+            continue
+        clip_id = _clip_id(clip, i + 1)
+        analyzed.append(analyze_clip(clip, i + 1, _clip_backend_control(root, episode, clip_id, routes_by_id)))
     warn_count = sum(1 for c in analyzed for f in c["findings"] if f.get("severity") == "warn")
     missing_count = sum(1 for c in analyzed for f in c["findings"] if f.get("code") == "camera_move_missing")
     unstructured_count = sum(1 for c in analyzed for f in c["findings"] if f.get("code") == "camera_move_unstructured")
     return {
         "kind": "n2d_director_camera_plan",
-        "version": 1,
+        "version": 2,
         "episode": episode,
         "summary": {
             "clips": len(analyzed),
@@ -382,6 +447,7 @@ def format_markdown(plan: Dict[str, Any]) -> str:
             f"- 节奏：{clip.get('rhythm') or '未声明'}",
             f"- 原运镜：{clip.get('existing_camera') or '未声明'}",
             f"- 建议运镜：{camera_phrase(rec)}",
+            f"- 后端控制写法：{clip.get('backend_control', {}).get('control_idiom', 'natural_language')}（source={clip.get('backend_control', {}).get('source', 'unknown')}）",
             f"- 理由：{rec['reason']}",
         ])
         if clip["findings"]:
@@ -403,6 +469,7 @@ def format_markdown(plan: Dict[str, Any]) -> str:
             f"起幅：{clip['video_prompt_injection']['起幅']}",
             f"落幅：{clip['video_prompt_injection']['落幅']}",
             f"镜头运动：{clip['video_prompt_injection']['镜头运动']}",
+            f"后端控制写法：{clip['video_prompt_injection']['后端控制写法']}",
             f"运动精修：{clip['video_prompt_injection']['运动精修']}",
             f"动态细节：{clip['video_prompt_injection']['动态细节']}",
             "```",
@@ -437,7 +504,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         print(f"缺/坏 {storyboard_path(args.root, ep)}：{exc}", file=sys.stderr)
         return 2
 
-    plan = build_plan(storyboard, ep)
+    plan = build_plan(storyboard, ep, args.root)
     if args.write:
         json_path, md_path = write_plan(args.root, ep, plan)
         print(f"wrote {json_path}")

@@ -1,4 +1,5 @@
 import type { LineInfo, WorkRoot } from "../types";
+import { LanguageSwitcher, useI18n } from "../i18n";
 
 export interface WorkTab {
   id: string; // = root.path (unique)
@@ -19,30 +20,31 @@ export function TopTabs(props: {
   onClose: (id: string) => void;
 }) {
   const { tabs, activeId, onHome, onSelect, onClose } = props;
+  const { t } = useI18n();
   return (
     <div className="topbar" data-tauri-drag-region style={{ paddingLeft: isMac ? 78 : 8 }}>
       <button
         className={"home-tab" + (activeId === null ? " active" : "")}
-        title="首页"
+        title={t("tabs.home")}
         onClick={onHome}
       >
         <span className="home-glyph">⌂</span>
       </button>
       <div className="tabs" data-tauri-drag-region>
-        {tabs.map((t) => (
+        {tabs.map((tab) => (
           <div
-            key={t.id}
-            className={"work-tab" + (activeId === t.id ? " active" : "")}
-            onClick={() => onSelect(t.id)}
-            title={t.root.path}
+            key={tab.id}
+            className={"work-tab" + (activeId === tab.id ? " active" : "")}
+            onClick={() => onSelect(tab.id)}
+            title={tab.root.path}
           >
-            <span className="tab-label">{t.root.name}</span>
+            <span className="tab-label">{tab.root.name}</span>
             <button
               className="tab-close"
-              title="关闭"
+              title={t("tabs.close")}
               onClick={(e) => {
                 e.stopPropagation();
-                onClose(t.id);
+                onClose(tab.id);
               }}
             >
               ✕
@@ -51,6 +53,7 @@ export function TopTabs(props: {
         ))}
       </div>
       <div className="topbar-fill" data-tauri-drag-region />
+      <LanguageSwitcher />
     </div>
   );
 }

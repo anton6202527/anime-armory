@@ -1,20 +1,25 @@
 import { useMemo, useSyncExternalStore } from "react";
 import { getMediaPort, mediaUrl, subscribeMediaPort } from "../api";
+import { useI18n } from "../i18n";
 import type { CanvasClip } from "../types";
 import type { ViewProps } from "../views/registry";
 
 // Kanban board for canvas lines (n2d/ad/mv): the same per-episode clips as the
 // infinite canvas, but laid out as status columns by production stage derived
 // from each clip's on-disk state (first frame / video). A produce-progress view.
-const COLUMNS: { key: string; label: string; of: (c: CanvasClip) => boolean }[] = [
-  { key: "todo", label: "📝 待出图", of: (c) => !c.first_frame_exists },
-  { key: "image", label: "🎨 已出图", of: (c) => c.first_frame_exists && !c.video_exists },
-  { key: "video", label: "🎬 已出视频", of: (c) => c.video_exists },
+const COLUMNS: { key: string; labelKey: "kanban.todo" | "kanban.image" | "kanban.video"; of: (c: CanvasClip) => boolean }[] = [
+  { key: "todo", labelKey: "kanban.todo", of: (c) => !c.first_frame_exists },
+  { key: "image", labelKey: "kanban.image", of: (c) => c.first_frame_exists && !c.video_exists },
+  { key: "video", labelKey: "kanban.video", of: (c) => c.video_exists },
 ];
 
-function Card({ clip }: { clip: CanvasClip }) {
+function Card({ clip, refreshKey }: { clip: CanvasClip; refreshKey: number }) {
   useSyncExternalStore(subscribeMediaPort, getMediaPort);
-  const thumb = clip.first_frame_exists && clip.first_frame_abs ? mediaUrl(clip.first_frame_abs) : "";
+  const withRevision = (url: string) => (url ? `${url}&v=${refreshKey}` : "");
+  const thumb =
+    clip.first_frame_exists && clip.first_frame_abs
+      ? withRevision(mediaUrl(clip.first_frame_abs))
+      : "";
   return (
     <div className="kanban-card">
       {thumb && <div className="kanban-thumb"><img src={thumb} alt={clip.label} /></div>}
@@ -42,14 +47,15 @@ function Card({ clip }: { clip: CanvasClip }) {
   );
 }
 
-export function KanbanPane({ canvas }: ViewProps) {
+export function KanbanPane({ canvas, refreshKey = 0 }: ViewProps) {
+  const { t } = useI18n();
   const groups = useMemo(() => {
     const clips = canvas?.clips ?? [];
     return COLUMNS.map((col) => ({ ...col, clips: clips.filter(col.of) }));
   }, [canvas]);
 
   if (!canvas || canvas.clips.length === 0) {
-    return <div className="stub-view">本集暂无分镜（storyboard.json 未生成）。</div>;
+    return <div className="stub-view">{t("canvas.noStoryboard")}</div>;
   }
 
   return (
@@ -57,13 +63,13 @@ export function KanbanPane({ canvas }: ViewProps) {
       {groups.map((g) => (
         <div className="kanban-col" key={g.key}>
           <div className="kanban-col-head">
-            {g.label} <span className="count">{g.clips.length}</span>
+            {t(g.labelKey)} <span className="count">{g.clips.length}</span>
           </div>
           <div className="kanban-col-body">
             {g.clips.length === 0 ? (
               <div className="kanban-empty">—</div>
             ) : (
-              g.clips.map((c) => <Card key={c.id} clip={c} />)
+              g.clips.map((c) => <Card key={c.id} clip={c} refreshKey={refreshKey} />)
             )}
           </div>
         </div>

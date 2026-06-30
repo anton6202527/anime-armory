@@ -27,14 +27,28 @@ fn content_type(path: &str) -> &'static str {
         "image/webp"
     } else if p.ends_with(".gif") {
         "image/gif"
+    } else if p.ends_with(".bmp") {
+        "image/bmp"
+    } else if p.ends_with(".svg") {
+        "image/svg+xml"
     } else if p.ends_with(".mp4") || p.ends_with(".m4v") {
         "video/mp4"
+    } else if p.ends_with(".mov") {
+        "video/quicktime"
     } else if p.ends_with(".webm") {
         "video/webm"
     } else if p.ends_with(".wav") {
         "audio/wav"
     } else if p.ends_with(".mp3") {
         "audio/mpeg"
+    } else if p.ends_with(".m4a") {
+        "audio/mp4"
+    } else if p.ends_with(".aac") {
+        "audio/aac"
+    } else if p.ends_with(".flac") {
+        "audio/flac"
+    } else if p.ends_with(".ogg") {
+        "audio/ogg"
     } else {
         "application/octet-stream"
     }
@@ -88,7 +102,11 @@ fn parse_range(headers: &[Header], len: u64) -> Option<(u64, u64)> {
             if let Some(r) = v.strip_prefix("bytes=") {
                 let (a, b) = r.split_once('-')?;
                 let start: u64 = a.parse().ok()?;
-                let end: u64 = if b.is_empty() { len - 1 } else { b.parse().ok()? };
+                let end: u64 = if b.is_empty() {
+                    len - 1
+                } else {
+                    b.parse().ok()?
+                };
                 if start <= end && end < len {
                     return Some((start, end));
                 }
@@ -139,12 +157,25 @@ fn handle(req: tiny_http::Request, roots: Arc<Mutex<Vec<PathBuf>>>) {
                 return;
             }
             let reader = file.take(chunk);
-            let cr = Header::from_bytes("Content-Range", format!("bytes {start}-{end}/{len}")).unwrap();
-            let resp = Response::new(StatusCode(206), vec![ct, accept, cr], reader, Some(chunk as usize), None);
+            let cr =
+                Header::from_bytes("Content-Range", format!("bytes {start}-{end}/{len}")).unwrap();
+            let resp = Response::new(
+                StatusCode(206),
+                vec![ct, accept, cr],
+                reader,
+                Some(chunk as usize),
+                None,
+            );
             let _ = req.respond(resp);
         }
         None => {
-            let resp = Response::new(StatusCode(200), vec![ct, accept], file, Some(len as usize), None);
+            let resp = Response::new(
+                StatusCode(200),
+                vec![ct, accept],
+                file,
+                Some(len as usize),
+                None,
+            );
             let _ = req.respond(resp);
         }
     }
@@ -156,7 +187,11 @@ impl MediaState {
             return Ok(p);
         }
         let server = Arc::new(Server::http("127.0.0.1:0").map_err(|e| e.to_string())?);
-        let port = server.server_addr().to_ip().map(|a| a.port()).ok_or("no port")?;
+        let port = server
+            .server_addr()
+            .to_ip()
+            .map(|a| a.port())
+            .ok_or("no port")?;
         *self.port.lock().unwrap() = Some(port);
         // Fixed worker pool instead of one thread per request (bounded fan-out).
         for _ in 0..4 {

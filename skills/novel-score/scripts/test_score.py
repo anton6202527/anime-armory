@@ -115,6 +115,8 @@ class TestNovelScore(unittest.TestCase):
         self.assertEqual(len(report["source_snapshot"]["files"]), 1)
         self.assertEqual(report["market_baseline"]["baseline_path"], f"评分/题材热榜_{date.today().isoformat()}.md")
         self.assertEqual(report["market_baseline"]["sources"][0]["platform"], "红果短剧")
+        self.assertIn("judge_bias_advisory", report)
+        self.assertEqual(report["judge_bias_advisory"]["score_adjustment"], 0)
         # 书名体检：19/25 且未撞名 → 不换名，也不路由 novel-title
         self.assertEqual(report["title_check"]["title"], "Test Book")
         self.assertEqual(report["title_check"]["total"], 19)
@@ -245,12 +247,32 @@ class TestNovelScore(unittest.TestCase):
         self.assertIn("章节不足", score.repetition_prior_text(None))
         txt = score.repetition_prior_text({
             "summary": {"adjacent_max_jaccard": 0.22, "mechanical_opener_groups": 0,
-                        "repeated_sentences": 0},
+                        "repeated_sentences": 0, "sentence_start_token_groups": 2,
+                        "short_sentence_templates": 1, "low_chapter_compression_count": 2,
+                        "compression_ratio": 0.32},
             "prior": {"level": "elevated", "points": -2,
                       "reasons": ["相邻章最高近重复 22%（≥18%）：注水/套模板，弃读风险"]},
         })
         self.assertIn("22%", txt)
+        self.assertIn("短句式模板 1", txt)
+        self.assertIn("低压缩章节 2", txt)
         self.assertIn("负向先验", txt)
+
+    def test_prompt_and_advisory_are_length_format_neutral(self):
+        task = self.generate_score_task()
+        prompt = task["assessment_prompt"]
+        self.assertIn("只评**内容质量本身**", prompt)
+        self.assertIn("排版/markdown", prompt)
+        self.assertIn("长度/篇幅相近时以内容质量为先", prompt)
+        samples = [
+            {"content": "# 第1章\n" + "\n".join(["- 事件推进"] * 20) + "\n" + ("他向前走。" * 900)},
+            {"content": "# 第2章\n" + ("她停下脚步。" * 120)},
+        ]
+        adv = score.presentation_bias_advisory(samples)
+        self.assertEqual(adv["level"], "review")
+        self.assertEqual(adv["score_adjustment"], 0)
+        self.assertEqual(adv["raw_score_adjustment"], 0)
+        self.assertTrue(any("格式" in r or "长度" in r or "篇幅" in r for r in adv["reasons"]))
 
     def test_reference_distribution_percentile_reported(self):
         samples = []
@@ -581,8 +603,8 @@ class TestNovelScore(unittest.TestCase):
         assessment = valid_assessment()
         # 两判官在 opening_hook 上分歧极大（9 vs 2 → stdev>1）→ 低信心
         assessment["judges_panel"] = {
-            "评委A": {"opening_hook": 9, "retention": 8},
-            "评委B": {"opening_hook": 2, "retention": 8},
+            "gpt-5": {"opening_hook": 9, "retention": 8},
+            "claude-sonnet": {"opening_hook": 2, "retention": 8},
         }
         processed = [{"dimension": "opening_hook"}, {"dimension": "retention"}]
         out = score.apply_judge_debias(assessment, processed)
@@ -590,10 +612,30 @@ class TestNovelScore(unittest.TestCase):
         low_dims = {d["dimension"] for d in out["low_confidence_dimensions"]}
         self.assertIn("opening_hook", low_dims)
         self.assertNotIn("retention", low_dims)
+        self.assertIn("opening_hook", {d["dimension"] for d in out["abstain_dimensions"]})
+        self.assertEqual(out["escalation_actions"][0]["decision"], "abstain")
+        self.assertFalse(out["family_diversity"]["meets_recommended"])
         # 注入到 processed_scores（advisory，不动 raw_score）
         hook = next(p for p in processed if p["dimension"] == "opening_hook")
         self.assertEqual(hook["judge_confidence"], "low")
+        self.assertEqual(hook["judge_decision"], "abstain")
         self.assertNotIn("raw_score", hook)  # 没有改/造分
+
+    def test_apply_judge_debias_three_families_recommended(self):
+        assessment = valid_assessment()
+        assessment["judges_panel"] = {
+            "judge_a": {"retention": 8},
+            "judge_b": {"retention": 8},
+            "judge_c": {"retention": 8},
+        }
+        assessment["judge_families"] = {
+            "judge_a": "openai",
+            "judge_b": "anthropic",
+            "judge_c": "google",
+        }
+        out = score.apply_judge_debias(assessment, [{"dimension": "retention"}])
+        self.assertTrue(out["family_diversity"]["meets_recommended"])
+        self.assertIn("≥3", out["note"])
 
     def test_validate_assessment_requires_title_check_when_title_set(self):
         payload = valid_assessment()

@@ -16,7 +16,7 @@ import json
 import os
 import re
 from pathlib import Path
-from typing import Any, Callable, Dict, Mapping, Optional, Sequence, Tuple
+from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Tuple
 
 try:
     from n2d_platform_profiles import (
@@ -67,6 +67,29 @@ OFF_OR_MANUAL_VALUES = {
     "manual",
     "人工",
     "手工",
+}
+
+CONTROL_IDIOM_NATURAL_LANGUAGE = "natural_language"
+CONTROL_IDIOM_STRUCTURED_MULTI_PROMPT = "structured_multi_prompt"
+CONTROL_IDIOM_MOTION_BRUSH = "motion_brush_on_firstframe"
+CONTROL_IDIOM_VALUES = {
+    CONTROL_IDIOM_NATURAL_LANGUAGE,
+    CONTROL_IDIOM_STRUCTURED_MULTI_PROMPT,
+    CONTROL_IDIOM_MOTION_BRUSH,
+}
+
+# Static hint only. Paid execution still needs per-run capability evidence; callers
+# that need a guaranteed current capability should use resolve_control_idiom().
+STATIC_CONTROL_IDIOMS: Dict[str, str] = {
+    "dreamina": CONTROL_IDIOM_STRUCTURED_MULTI_PROMPT,
+    "seedance": CONTROL_IDIOM_STRUCTURED_MULTI_PROMPT,
+    "kling": CONTROL_IDIOM_MOTION_BRUSH,
+    "veo": CONTROL_IDIOM_NATURAL_LANGUAGE,
+    "luma": CONTROL_IDIOM_NATURAL_LANGUAGE,
+    "runway": CONTROL_IDIOM_NATURAL_LANGUAGE,
+    "pika": CONTROL_IDIOM_NATURAL_LANGUAGE,
+    "wan": CONTROL_IDIOM_NATURAL_LANGUAGE,
+    "sora": CONTROL_IDIOM_NATURAL_LANGUAGE,
 }
 
 
@@ -169,6 +192,8 @@ def backend_adapter(raw: Optional[str], channel: Optional[str] = None) -> Dict[s
     frame_control = video_backend_frame_control(canonical, channel_key)
     motion_control = video_backend_motion_control(canonical)
     confidence = video_backend_capability_confidence(canonical, channel_key)
+    control_idiom = static_control_idiom(canonical, channel_key)
+    native_av = bool(profile.get("native_av"))
     return {
         "kind": "n2d_video_backend_adapter",
         "canonical": canonical,
@@ -180,11 +205,15 @@ def backend_adapter(raw: Optional[str], channel: Optional[str] = None) -> Dict[s
         "profile_known": canonical in VIDEO_BACKEND_PROFILES,
         "max_clip_seconds": video_backend_max_seconds(canonical, default=8),
         "default_mode": profile.get("default_mode") or "",
-        "native_av": bool(profile.get("native_av")),
+        "native_av": native_av,
+        "native_audio": native_av,
         "lipsync_audio_ref": bool(profile.get("lipsync_audio_ref")),
         "identity_mechanism": profile.get("identity_mechanism") or "",
         "frame_control": frame_control,
         "motion_control": motion_control,
+        "control_idiom": control_idiom,
+        "control_idiom_supported": control_idiom != CONTROL_IDIOM_NATURAL_LANGUAGE,
+        "control_idiom_source": "static_catalog",
         "capability_confidence": confidence,
         "paid_routing_allowed": bool(confidence.get("paid_routing_allowed")),
         "anchor_consumption_sample": anchor_consumption_plan(
@@ -196,6 +225,131 @@ def backend_adapter(raw: Optional[str], channel: Optional[str] = None) -> Dict[s
         "evidence": profile.get("frame_control", {}).get("verified", "unknown")
         if isinstance(profile.get("frame_control"), dict)
         else "unknown",
+    }
+
+
+def static_control_idiom(raw: Optional[str], channel: Optional[str] = None) -> str:
+    """Best-effort static motion-control prompt idiom for a backend/channel.
+
+    This is a catalog hint, not paid-run proof. Use resolve_control_idiom() when
+    a project root is available and current per-run evidence is required.
+    """
+    execution = effective_frame_backend(raw, channel)
+    return STATIC_CONTROL_IDIOMS.get(execution, CONTROL_IDIOM_NATURAL_LANGUAGE)
+
+
+def _assertion_value(assertions: Mapping[str, Any], key: str, default: Any = None) -> Any:
+    if key not in assertions:
+        return default
+    return capability_assertion_value(assertions.get(key))
+
+
+def resolve_control_idiom(
+    root: str,
+    backend: Optional[str],
+    channel: Optional[str] = None,
+    *,
+    today: Optional[dt.date] = None,
+    max_age_days: int = 0,
+) -> Dict[str, Any]:
+    """Return the currently usable motion-control idiom.
+
+    Structured idioms are only returned when fresh per-run evidence contains a
+    supported `control_idiom` assertion. Missing/stale evidence degrades to
+    natural language, which every video prompt backend can consume.
+    """
+    status = refresh_evidence_status(
+        root,
+        backend,
+        channel,
+        today=today,
+        max_age_days=max_age_days,
+    )
+    assertions = status.get("capability_assertions")
+    if status.get("status") == "fresh" and isinstance(assertions, Mapping):
+        raw_idiom = str(_assertion_value(assertions, "control_idiom", "") or "").strip()
+        supported = _assertion_value(assertions, "control_idiom_supported", None)
+        if raw_idiom in CONTROL_IDIOM_VALUES and (raw_idiom == CONTROL_IDIOM_NATURAL_LANGUAGE or supported is not False):
+            return {
+                "control_idiom": raw_idiom,
+                "control_idiom_supported": raw_idiom != CONTROL_IDIOM_NATURAL_LANGUAGE,
+                "source": "per_run_evidence",
+                "status": status.get("status"),
+                "backend": backend or "",
+                "channel": channel or "",
+            }
+    return {
+        "control_idiom": CONTROL_IDIOM_NATURAL_LANGUAGE,
+        "control_idiom_supported": False,
+        "source": "fallback_no_fresh_evidence",
+        "status": status.get("status"),
+        "backend": backend or "",
+        "channel": channel or "",
+    }
+
+
+def video_routes_path(root: str, episode: str) -> Path:
+    return Path(root) / "出视频" / episode / "prompt" / "video_model_routes.json"
+
+
+def load_video_routes(root: str, episode: str) -> List[Dict[str, Any]]:
+    try:
+        data = json.loads(video_routes_path(root, episode).read_text(encoding="utf-8"))
+    except Exception:
+        return []
+    routes = data.get("routes") if isinstance(data, Mapping) else []
+    return [r for r in routes if isinstance(r, dict)]
+
+
+def route_native_audio_profile(
+    root: str,
+    episode: str,
+    *,
+    channel: Optional[str] = None,
+    routes: Optional[Sequence[Mapping[str, Any]]] = None,
+    include_fallback: bool = False,
+) -> Dict[str, Any]:
+    """Summarize whether this episode routes through native-audio-capable video.
+
+    This is intentionally route-aware: `_设置.md` may hold a generic default,
+    while `video_model_routes.json` is the actual per-Clip execution contract.
+    """
+    selected = list(routes) if routes is not None else load_video_routes(root, episode)
+    hits: List[Dict[str, Any]] = []
+    for idx, route in enumerate(selected, 1):
+        backends: List[Tuple[str, str]] = []
+        primary = str(route.get("primary_backend") or "").strip()
+        if primary:
+            backends.append(("primary", primary))
+        if include_fallback:
+            fallbacks = route.get("fallback_backends")
+            if isinstance(fallbacks, list):
+                backends.extend(("fallback", str(item or "").strip()) for item in fallbacks if str(item or "").strip())
+        for role, backend in backends:
+            adapter = backend_adapter(backend, channel)
+            route_native = (
+                str(route.get("mode") or "").strip() == "native_av"
+                or str(route.get("native_audio_policy") or "").strip() == "native_speech"
+            )
+            backend_native = bool(adapter.get("native_audio") or adapter.get("native_av"))
+            if route_native or backend_native:
+                hits.append({
+                    "clip_id": route.get("clip_id") or f"routes[{idx}]",
+                    "role": role,
+                    "backend": backend,
+                    "canonical": adapter.get("canonical"),
+                    "execution_backend": adapter.get("execution_backend"),
+                    "route_native_audio": route_native,
+                    "backend_native_audio": backend_native,
+                    "native_audio_policy": route.get("native_audio_policy") or "",
+                    "mode": route.get("mode") or "",
+                })
+    return {
+        "kind": "n2d_route_native_audio_profile",
+        "episode": episode,
+        "native_audio": bool(hits),
+        "hits": hits,
+        "routes_path": str(video_routes_path(root, episode)),
     }
 
 
@@ -227,10 +381,13 @@ def default_capability_assertions(raw: Optional[str], channel: Optional[str] = N
         "supports_last_frame": bool(frame.get("supports_last_frame")),
         "supports_native_mid_anchors": bool(frame.get("supports_native_mid_anchors")),
         "native_av": bool(adapter.get("native_av")),
+        "native_audio": bool(adapter.get("native_audio")),
         "lipsync_audio_ref": bool(adapter.get("lipsync_audio_ref")),
         "identity_mechanism": adapter.get("identity_mechanism") or "",
         "motion_control_level": motion.get("level") or "",
         "motion_control_capabilities": list(motion.get("capabilities") or []),
+        "control_idiom": adapter.get("control_idiom") or CONTROL_IDIOM_NATURAL_LANGUAGE,
+        "control_idiom_supported": bool(adapter.get("control_idiom_supported")),
     }
 
 

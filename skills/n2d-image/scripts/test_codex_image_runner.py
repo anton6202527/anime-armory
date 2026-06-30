@@ -241,9 +241,11 @@ def test_codex_prompt_treats_user_character_references_as_face_only(tmp_path: Pa
 
     prompt = codex_image_runner.build_codex_prompt(tmp_path, "第1集", target, tmp_path / "out.png", "seed-1")
 
-    assert "用户提供的人物/主角参考图默认只作脸部身份锚" in prompt
-    assert "不得继承参考图里的服装、裸露程度、发型/发饰、表情、姿态、配饰、场景、光色" in prompt
-    assert "小说原文、角色圣经、identity_registry" in prompt
+    assert "用户提供的人物/主角参考图默认只作身份与身形锚" in prompt
+    assert "基础身高、体型/身材比例、体态、脸型、五官比例" in prompt
+    assert "不得继承参考图里的画风、照片/摄影风格、渲染风格、滤镜" in prompt
+    assert "外部参考图的风格权重视为 0" in prompt
+    assert "项目风格必须以 _设置.md 的基础视觉风格" in prompt
     assert "非角色资产/VFX/道具/武器/场景若未在 registry 显式声明" in prompt
     assert "不得生成清晰可辨的人物脸、角色立绘" in prompt
     assert "人物全身、标准立绘、正面/45°/侧面/背面、三视图/turnaround" in prompt
@@ -703,6 +705,20 @@ def test_restricted_partial_silhouette_form_does_not_require_full_basic_pack(tmp
     }
 
     assert codex_image_runner._character_basic_pack_issues(tmp_path, "CHAR_GROUP", form) == []
+
+
+def test_character_basic_pack_blocks_dirty_self_check(tmp_path: Path) -> None:
+    form = {
+        "form": "常态",
+        "self_check_passed": False,
+        "reference_group": {
+            "front": {"path": "出图/共享/图片/定妆_沈念_常态.png", "status": "ready"}
+        },
+    }
+
+    issues = codex_image_runner._character_basic_pack_issues(tmp_path, "CHAR_01", form)
+
+    assert issues == ["CHAR_01/常态: 共享定妆 self_check_passed=false，先复核/重出共享库"]
 
 
 def test_shared_target_skips_existing_png_without_force(tmp_path: Path, monkeypatch) -> None:

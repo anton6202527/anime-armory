@@ -59,7 +59,31 @@ def test_aggregate_rubric_flags_high_variance():
     }
     agg = jp.aggregate_rubric(panel, variance_threshold=1.0)
     assert agg["hook"]["confidence"] == "low"   # 高方差 → 降信
+    assert agg["hook"]["decision"] == jp.ABSTAIN
     assert agg["logic"]["confidence"] == "ok"   # 一致
+
+
+def test_family_diversity_recommends_three_families_but_keeps_two_compatible():
+    two = jp.family_diversity(["gpt-5", "claude-sonnet"])
+    assert two["families_count"] == 2
+    assert two["meets_recommended"] is False
+    assert two["backward_compatible_min_judges"] == 2
+    three = jp.family_diversity(["gpt-5", "claude-sonnet", "gemini-3-pro"])
+    assert three["meets_recommended"] is True
+    assert set(three["families"]) == {"anthropic", "google", "openai"}
+
+
+def test_high_variance_escalation_actions():
+    rubric = jp.aggregate_rubric({
+        "gpt-5": {"hook": 9},
+        "claude-sonnet": {"hook": 2},
+        "gemini-3-pro": {"hook": 8},
+    })
+    actions = jp.rubric_escalation_actions(rubric)
+    assert actions
+    assert actions[0]["criterion"] == "hook"
+    assert actions[0]["decision"] == jp.ABSTAIN
+    assert "stronger" in actions[0]["next_action"]
 
 
 def test_debias_verdict_end_to_end():
@@ -70,9 +94,12 @@ def test_debias_verdict_end_to_end():
     panel = {"m1": {"hook": 9}, "m2": {"hook": 8}}
     out = jp.debias_verdict(judgements, panel=panel)
     assert out["winner"] == "稿A" and out["confidence"] == "high"
+    assert out["family_diversity"]["meets_recommended"] is False
     # 有高方差准则 → medium
     out2 = jp.debias_verdict(judgements, panel={"m1": {"hook": 9}, "m2": {"hook": 2}})
     assert out2["confidence"] == "medium"
+    assert out2["abstain_criteria"] == ["hook"]
+    assert out2["escalation_actions"][0]["decision"] == jp.ABSTAIN
     # tie → low
     out3 = jp.debias_verdict([{"judge": "m1", "ab_winner": "稿A", "ba_winner": "稿B"}])
     assert out3["decision"] == jp.TIE and out3["confidence"] == "low"

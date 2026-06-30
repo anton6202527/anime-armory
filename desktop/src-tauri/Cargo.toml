@@ -1,5 +1,5 @@
 [package]
-name = "anime-arsenal-desktop"
+name = "anime-armory-desktop"
 version = "0.1.0"
 description = "Tauri desktop shell for the anime-arsenal creation factory"
 edition = "2021"
@@ -21,7 +21,7 @@ dirs = "5"      # cross-platform home dir (HOME / USERPROFILE)
 trash = "5"     # cross-platform Trash / Recycle Bin
 
 [[bin]]
-name = "anime-arsenal-desktop"
+name = "anime-armory-desktop"
 path = "src/main.rs"
 
 [profile.release]

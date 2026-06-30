@@ -39,6 +39,7 @@ Match user intent against the table below (and each `SKILL.md`'s Triggers). Reco
 | Write a song, edit lyrics, compose, pick takes, cover/voice-swap, review | **`song`** (→ song-lyrics/compose/cover/review …) |
 | Make an MV for a song, beat-sync, image/video, karaoke subtitles, compose | **`mv`** (→ mv-script/beat/plan/image/video/compose …) |
 | Make an ad / TVC / feed ad / product demo / promo video / pre-spend ad scoring | **`ad`** (→ ad-concept/script/voice/image/video/compose/score/review) |
+| Check whether novel skill updates affect a writing project and plan minimal text rework / re-review / re-score | **`novel-update`** (content snapshot diff + minimal rework plan; writes plan/baseline only) |
 | See project progress / next step, or summarize every n2d project at repo root | **`n2d-progress`** (read-only scan; never writes `_进度.md`) |
 | Edit/audit project settings, choice points, or global defaults | **`n2d-settings`** (wraps `_设置.md` read/validate/reset/sync) |
 | Check whether skill updates affect a project, plan a rebuild, re-render some images/videos | **`n2d-update`** (snapshot diff + minimal rebuild plan; `media` subcommand for selective image/video refresh) |

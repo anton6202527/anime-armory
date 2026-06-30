@@ -15,8 +15,15 @@
 （拔剑/关门/爆炸）落在 clip 内估计的动作时刻（默认 clip 中点，或读 clip 的 `动作时刻`/`action_at`
 秒偏移）。诚实边界：无更细数据时是**估计**、已标 `aligned="estimated"`，不臆造精确踩点。
 
-纯函数（extract_sfx_events / build_foley_plan / load_foley_backend / total_duration）无依赖、有 pytest；
-ffmpeg/后端 I/O best-effort。退出码：产出 foley_mix.wav=0；未产出=非0（compose 据此回退自造静音轨）。
+原生音画后端去双层（2026-06-30）：Veo 3.1 / Kling 3.0 / Vidu Q3 等原生音画后端单次出片自带
+同步 foley/SFX/环境声。当这类 clip 的原生音轨被保留（视频原生音轨≠丢弃）时，再叠 compose 侧
+V2A foley = 重复打击声、糊。`foley_render_policy` 纯函数据此决定 full / suppress；suppress 时只留
+foley_plan.json 留档、渲染静音轨让模型原生音效站台。选择点 `后期拟音策略=自动|强制叠加|关闭`
+控制默认分支；逃生口 `FORCE_COMPOSE_FOLEY=1` 临时强制叠加。
+
+纯函数（extract_sfx_events / build_foley_plan / load_foley_backend / total_duration /
+foley_render_policy）无依赖、有 pytest；ffmpeg/后端·设置读取 I/O best-effort。
+退出码：产出 foley_mix.wav=0；未产出=非0（compose 据此回退自造静音轨）。
 
 用法：python3 foley_agent.py <root> <episode>
 """
@@ -199,6 +206,115 @@ def load_foley_backend() -> Optional[Callable[[str, str, float], bool]]:
     return _backend
 
 
+def foley_render_policy(
+    *,
+    clip_audio_preserved: bool,
+    backend_native_av: Optional[bool],
+    native_av_mode_intended: bool = False,
+    force_compose_foley: bool = False,
+    foley_strategy: str = "自动",
+) -> Dict[str, str]:
+    """决定 compose 侧 V2A foley 该不该叠（治原生音画后端双层音效）。纯函数·可测。
+
+    2026 原生音画后端（Veo 3.1 / Kling 3.0 / Vidu Q3）单次出片自带同步 foley/SFX/环境声；
+    当这类 clip 的原生音轨被保留（视频原生音轨≠丢弃）时，再叠 compose 侧 V2A foley =
+    重复打击声、糊。判定优先级：
+      · force=1 → full（原生 foley 不满意时人工补，永远放行）；
+      · clip 原生音轨被丢弃（discard）→ full（clip 没声，compose foley 是唯一 SFX 源）；
+      · clip 原生音轨保留 且（后端原生音画 / 能力未知但项目制作模式=原生音画）→ suppress
+        （让模型原生音效站台，避免双层）；
+      · 其余（普通静默后端 / 配音先行）→ full（维持现状）。
+    backend_native_av=None 表示后端能力未知 → 回退用 native_av_mode_intended 判定。
+    返回 {"mode": "full"|"suppress", "reason": ...}。"""
+    strategy = str(foley_strategy or "自动").strip().lower()
+    if strategy in {"关闭", "off", "disable", "disabled", "none", "无"}:
+        return {"mode": "suppress", "reason": "disabled:后期拟音策略"}
+    if force_compose_foley or strategy in {"强制叠加", "force", "forced", "full", "always"}:
+        return {"mode": "full", "reason": "forced:FORCE_COMPOSE_FOLEY"}
+    if not clip_audio_preserved:
+        return {"mode": "full", "reason": "clip_audio_discarded:compose_foley_is_only_sfx_source"}
+    native = backend_native_av if backend_native_av is not None else native_av_mode_intended
+    if native:
+        why = "backend_native_av" if backend_native_av else "native_av_mode_intended"
+        return {"mode": "suppress", "reason": f"native_audio_present:{why}"}
+    return {"mode": "full", "reason": "silent_backend:compose_foley_provides_sfx"}
+
+
+def _truthy_env(name: str) -> Optional[bool]:
+    """读布尔环境变量；未设/空 → None（让上层回退到自推导）。"""
+    v = os.environ.get(name)
+    if v is None or v.strip() == "":
+        return None
+    return v.strip().lower() in {"1", "true", "yes", "on", "是"}
+
+
+_N2D_LIB = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "n2d", "_lib"))
+
+
+def _get_setting(root: str, key: str, default: str = "") -> str:
+    """best-effort 读 _设置.md（走 n2d 线 vendored 单一真值源）。缺库/缺文件 → default。"""
+    try:
+        if _N2D_LIB not in sys.path:
+            sys.path.insert(0, _N2D_LIB)
+        from n2d_settings import get_setting  # type: ignore
+        return str(get_setting(root, key, default) or default)
+    except Exception:
+        return default
+
+
+def _resolve_backend_native_av(root: str, ep: str = "") -> Optional[bool]:
+    """从本集路由优先查 native_audio 能力。缺路由/缺 adapter → None（policy 回退 intended）。"""
+    try:
+        if _N2D_LIB not in sys.path:
+            sys.path.insert(0, _N2D_LIB)
+        import video_backend_adapter  # type: ignore
+        channel = _get_setting(root, "生视频渠道", "").strip()
+        if ep:
+            routed = video_backend_adapter.route_native_audio_profile(root, ep, channel=channel)
+            if routed.get("hits"):
+                return bool(routed.get("native_audio"))
+        backend = (_get_setting(root, "生视频模型", "") or _get_setting(root, "生视频AI", "")).strip()
+        channel_or_legacy = channel or _get_setting(root, "生视频AI", "").strip()
+        if not backend and not channel_or_legacy:
+            return None
+        return bool(video_backend_adapter.backend_adapter(backend or channel_or_legacy, channel_or_legacy).get("native_audio"))
+    except Exception:
+        return None
+
+
+def _native_av_mode_intended(root: str) -> bool:
+    """制作模式=原生音画 → True（clip 自带原生音轨，含模型 foley）。"""
+    mode = _get_setting(root, "制作模式", "").lower()
+    return "原生音画" in _get_setting(root, "制作模式", "") or "native_av" in mode
+
+
+def _clip_audio_preserved(root: str) -> bool:
+    """clip 原生音轨是否被保留：env 优先；缺则从 视频原生音轨 + 制作模式 自推导（原生音画 compose 自动保留）。"""
+    env = _truthy_env("N2D_FOLEY_CLIP_AUDIO_PRESERVED")
+    if env is not None:
+        return env
+    policy = _get_setting(root, "视频原生音轨", "丢弃").strip().lower()
+    discarded = policy in {"丢弃", "discard", "none", ""}
+    return (not discarded) or _native_av_mode_intended(root)
+
+
+def _foley_strategy(root: str) -> str:
+    return _get_setting(root, "后期拟音策略", "自动").strip() or "自动"
+
+
+def _resolve_foley_policy(root: str, ep: str = "") -> Dict[str, str]:
+    """汇总信号（env 优先·设置兜底）→ 调纯函数 foley_render_policy。best-effort，绝不抛。"""
+    intended_env = _truthy_env("N2D_FOLEY_NATIVE_AV_INTENDED")
+    intended = intended_env if intended_env is not None else _native_av_mode_intended(root)
+    return foley_render_policy(
+        clip_audio_preserved=_clip_audio_preserved(root),
+        backend_native_av=_resolve_backend_native_av(root, ep),
+        native_av_mode_intended=intended,
+        force_compose_foley=bool(_truthy_env("FORCE_COMPOSE_FOLEY")),
+        foley_strategy=_foley_strategy(root),
+    )
+
+
 def _render_silent(out_wav: str, duration: float) -> bool:
     """静音占位轨（诚实默认·不假装有真音效）。ffmpeg 缺则 False。"""
     dur = max(0.1, float(duration or 0.1))
@@ -234,6 +350,31 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         json.dump(plan, f, ensure_ascii=False, indent=2)
 
     out_wav = os.path.join(work, "foley_mix.wav")
+
+    # 原生音画后端去双层：clip 自带模型同步音效且被保留时，抑制 compose 侧 V2A foley（只留计划档）。
+    policy = _resolve_foley_policy(root, ep)
+    policy_path = os.path.join(work, "foley_render_policy.json")
+    with open(policy_path, "w", encoding="utf-8") as f:
+        json.dump({
+            "kind": "n2d_foley_render_policy",
+            "episode": ep,
+            "mode": policy.get("mode"),
+            "reason": policy.get("reason"),
+            "strategy": _foley_strategy(root),
+            "force_compose_foley": bool(_truthy_env("FORCE_COMPOSE_FOLEY")),
+            "clip_audio_preserved": _clip_audio_preserved(root),
+            "backend_native_av": _resolve_backend_native_av(root, ep),
+            "native_av_mode_intended": _native_av_mode_intended(root),
+        }, f, ensure_ascii=False, indent=2)
+        f.write("\n")
+    if policy["mode"] == "suppress":
+        if _render_silent(out_wav, dur):
+            print(f"原生音画后端自带同步音效（{policy['reason']}）→ compose 侧 V2A foley 已抑制，"
+                  f"避免双层打击声/糊。拟音计划 {len(plan)} 事件仅留档 foley_plan.json；"
+                  "如需强制叠加 compose foley：FORCE_COMPOSE_FOLEY=1。")
+            return 0
+        return 1  # 连静音轨都没产出 → compose 回退自造
+
     backend = load_foley_backend()
     if backend is not None and backend(plan_path, out_wav, dur):
         print(f"✓ 拟音：真 V2A 后端合成 {len(plan)} 个 SFX 事件（N2D_FOLEY_CMD）。")

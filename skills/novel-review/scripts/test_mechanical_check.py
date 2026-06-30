@@ -446,6 +446,10 @@ def test_repetition_summary_in_json_payload(tmp_path):
         payload = json.load(f)
     assert payload["repetition"] is not None
     assert "adjacent_max_jaccard" in payload["repetition"]
+    assert "sentence_start_token_groups" in payload["repetition"]
+    assert "short_sentence_templates" in payload["repetition"]
+    assert "chapter_compression_ratios" in payload["repetition"]
+    assert "distinct_4" in payload["repetition"]
     assert payload["repetition"]["thresholds_provenance"].startswith("internal-heuristic")
 
 

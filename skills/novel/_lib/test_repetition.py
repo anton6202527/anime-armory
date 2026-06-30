@@ -32,6 +32,37 @@ def test_cross_chapter_mechanical_opener_and_sentence_reuse():
     assert ("🟡", "机械句复用") in dims
 
 
+def test_sentence_start_and_short_template_signals():
+    chapters = []
+    for n in (1, 2, 3):
+        body = "。".join([
+            f"他不由得握紧拳头{n}{i}。他不由得后退半步{n}{i}。她不是害怕而是在等风声{n}{i}"
+            for i in range(3)
+        ])
+        chapters.append((n, body))
+    findings, summary = rep.cross_chapter_repetition(chapters)
+    dims = {(s, d) for _, s, d, _, _ in findings}
+    assert ("🟢", "句首词频率") in dims
+    assert ("🟡", "短句式模板") in dims
+    assert summary["sentence_start_token_groups"] >= 1
+    assert summary["short_sentence_templates"] >= 1
+    out = rep.retention_prior(summary)
+    assert any("短句式模板" in r for r in out["reasons"])
+
+
+def test_compression_ratio_book_and_chapter_summary():
+    repeated = "他不由得停下脚步，风声又一次穿过长廊。" * 80
+    findings, summary = rep.cross_chapter_repetition([
+        (1, repeated),
+        (2, repeated.replace("长廊", "山门")),
+    ])
+    assert summary["compression_ratio"] is not None
+    assert summary["chapter_compression_ratios"]
+    assert "min_chapter_compression_ratio" in summary
+    assert "distinct_2" in summary
+    assert any(dim == "文本多样性" for _, _, dim, _, _ in findings)
+
+
 def test_cross_chapter_clean_is_silent():
     findings, summary = rep.cross_chapter_repetition([
         (1, "他推开门屋里一片漆黑窗外的风卷着雪远处传来钟声。"),

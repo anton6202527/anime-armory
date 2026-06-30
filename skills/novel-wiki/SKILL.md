@@ -18,7 +18,7 @@ description: 长篇小说逻辑一致性守护者 — 自动提取并维护《�
    - **检索增强**：`novel/_lib/retrieval.py`（CJK-bigram BM25·纯标准库）给 `draft_packets` 写作包注入"跨 3 章窗口之外的相关旧章回溯"，补长程依赖盲区（写第230章想得起第47章埋的伏笔）。
 3. **伏笔台账 (Foreshadow Ledger)**：`foreshadow_ledger.py` 维护 `设定/foreshadowing_ledger.json`，把「埋了哪些伏笔、该在哪一章收、收没收」记成账。**伏笔的识别（哪段算埋、哪段算收）是 LLM/人工的活，脚本不做正则式"自动伏笔检测"**（中文长篇里那只会制造噪声）；脚本负责的确定性部分是：超期(overdue)判定、回收率计算、状态机合法迁移与 JSON 完整性——和 logic_sentry 的"只报硬冲突候选"同一条诚实边界。
 
-4. **角色别名脚手架 (Alias Scaffold)**：`alias_scaffold.py <作品根>` 从 角色卡/动态百科 抽**候选**别名（本名↔封号↔化名）写 `设定/角色别名.json`（status=`draft`）。**人工核对后把 status 改 `confirmed`**，`graph_sentry` 生命周期硬闸才会用它做实体消解——治"死亡记在本名、复现记在封号→硬闸漏判"（实体消解是确定性一致性闸的强制前置）。draft 期不影响判定；自动抽取可能误并同名角色，故必须人确认才入硬闸。
+4. **角色别名脚手架 (Alias Scaffold)**：`alias_scaffold.py <作品根>` 从 角色卡/动态百科 抽**候选**别名（本名↔封号↔化名），并用正文共现/连通分量补一批 `candidate_clusters`（一簇疑似一个角色，供人逐簇确认），写 `设定/角色别名.json`（status=`draft`）。**人工核对后把 status 改 `confirmed`**，并把确认簇手动并入 `aliases/character_aliases`，`graph_sentry` 生命周期硬闸才会用它做实体消解——治"死亡记在本名、复现记在封号→硬闸漏判"（实体消解是确定性一致性闸的强制前置）。draft 期不影响判定；自动抽取/共现聚类可能误并同名角色或同场角色，故必须人确认才入硬闸。
 
 ## 工作流
 

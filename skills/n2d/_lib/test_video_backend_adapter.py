@@ -29,6 +29,7 @@ def test_alias_normalizes_to_execution_profile():
     assert data["capability_confidence"]["confidence"] == "evidence"
     assert data["paid_routing_allowed"] is True
     assert data["anchor_consumption_sample"]["consumption_mode"] == "native_multiframe"
+    assert data["control_idiom"] == "structured_multi_prompt"
 
 
 def test_manual_backend_skips_refresh_requirement(tmp_path):
@@ -72,7 +73,44 @@ def test_refresh_evidence_status_lifecycle(tmp_path):
     assert fresh["capability_assertions"]["supports_last_frame"]["value"] is True
     assert fresh["capability_assertions"]["supports_last_frame"]["source"] == "Google Gemini API Veo docs"
     assert fresh["capability_assertions"]["native_av"]["value"] is True
+    assert fresh["capability_assertions"]["native_audio"]["value"] is True
     assert stale["status"] == "stale"
+
+
+def test_control_idiom_requires_fresh_evidence(tmp_path):
+    missing = adapter.resolve_control_idiom(str(tmp_path), "Kling 3.0", "可灵/Kling", today=dt.date(2026, 6, 21))
+    assert missing["control_idiom"] == "natural_language"
+    assert missing["source"] == "fallback_no_fresh_evidence"
+
+    adapter.write_refresh_evidence(
+        str(tmp_path),
+        "Kling 3.0",
+        channel="可灵/Kling",
+        sources=["Kling API docs"],
+        evidence_kind="official_docs",
+        note="motion brush verified",
+        today="2026-06-21",
+    )
+    fresh = adapter.resolve_control_idiom(str(tmp_path), "Kling 3.0", "可灵/Kling", today=dt.date(2026, 6, 21))
+    assert fresh["control_idiom"] == "motion_brush_on_firstframe"
+    assert fresh["source"] == "per_run_evidence"
+
+
+def test_route_native_audio_profile_reads_video_routes(tmp_path):
+    routes_dir = tmp_path / "出视频" / "第1集" / "prompt"
+    routes_dir.mkdir(parents=True)
+    (routes_dir / "video_model_routes.json").write_text(json.dumps({
+        "kind": "n2d_video_model_routes",
+        "routes": [
+            {"clip_id": "Clip_01", "primary_backend": "Veo 3.1", "native_audio_policy": "native_speech", "mode": "native_av"},
+            {"clip_id": "Clip_02", "primary_backend": "Dreamina", "native_audio_policy": "none", "mode": "image2video"},
+        ],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    profile = adapter.route_native_audio_profile(str(tmp_path), "第1集")
+
+    assert profile["native_audio"] is True
+    assert profile["hits"][0]["clip_id"] == "Clip_01"
 
 
 def test_dreamina_refresh_evidence_includes_cli_snapshot(tmp_path):

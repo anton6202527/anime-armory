@@ -69,7 +69,7 @@ python3 skills/n2d-script/scripts/director_camera_plan.py <作品根> 第N集 --
 
 - `findings`：检查缺运镜、自由散文运镜、缺速度档、近景大表情却写旋转/飞行/急速等高风险运镜。
 - `image_prompt_injection`：给 `01_分镜出图.md` 的 `镜头/机位`、`起幅·运动余量`、`构图防呆`，确保首帧有推近/跟拍/拉远所需的 lead room。
-- `video_prompt_injection`：给 `01_clips.md` 的 `导演意图`、`起幅`、`落幅`、`镜头运动`、`运动精修`、`动态细节`，且 `镜头运动` 默认使用 `CAMERA_MOVE_LEXICON` 结构化词和速度档。
+- `video_prompt_injection`：给 `01_clips.md` 的 `导演意图`、`起幅`、`落幅`、`镜头运动`、`运动精修`、`动态细节`，且 `镜头运动` 默认使用 `CAMERA_MOVE_LEXICON` 结构化词和速度档；若 `video_model_routes.json` + 后端证据能确认 `control_idiom`，还会附 `后端控制写法`（如 Kling motion brush / Seedance Shot 标号 / 通用自然语言），缺新鲜证据则降级通用自然语言。
 
 这份 sidecar 不替代导演判断。若它和剧情状态、轴线或模板契约冲突，以 `storyboard.json` 为真值，人工改写；但改写后的 `镜头运动` 仍必须是结构化运镜词 + 速度/方向/起止点。
 

@@ -35,7 +35,12 @@ pub fn watch_root(app: AppHandle, state: State<WatchState>, root: String) -> Res
             if matches!(ev.kind, EventKind::Access(_)) {
                 return;
             }
-            let _ = app2.emit("fs-changed", FsChanged { root: root_for_event.clone() });
+            let _ = app2.emit(
+                "fs-changed",
+                FsChanged {
+                    root: root_for_event.clone(),
+                },
+            );
         }
     })
     .map_err(|e| e.to_string())?;

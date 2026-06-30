@@ -39,17 +39,19 @@ LLM 判官有系统偏差（LitBench arXiv 2507.00769 / dual-judge / blind peer 
 （它不调用 LLM，只把 LLM 在仓库外产出的 verdict 按协议过一遍）：
 1. **position-swap 稳定**：每对候选让判官在 (A,B) 与 (B,A) 两序各判一次；只有两序判同一赢家才算数，
    翻面=位置偏 → 该判官此对作废（`position_stable_winner`）。
-2. **dual-judge 一致**：≥2 个**不同**判官模型、全体 position-stable 票指向同一赢家才采纳；分歧 →
-   `tie`（需人判），不强行取多数（`pairwise_consensus(min_judges=2)`）。
-3. **rubric-anchored**：量规分先按判官内 z 归一去判官宽严偏再聚合；判官间高方差准则标 `low_confidence`，
-   不拿去当结论（`zscore_normalize` / `aggregate_rubric`）。
+2. **judge-family diverse**：关键稿推荐 ≥3 个**不同模型家族**（如 OpenAI / Anthropic / Google）；
+   ≥2 判官仍向后兼容，但报告会标明未满推荐家族数。全体 position-stable 票指向同一赢家才采纳；
+   分歧 → `tie`（需人判），不强行取多数（`pairwise_consensus(min_judges=2)` + `family_diversity`）。
+3. **rubric-anchored + abstain/escalate**：量规分先按判官内 z 归一去判官宽严偏再聚合；判官间高方差准则
+   从“只标 low_confidence”升级为该维度 `abstain` + `escalation_actions`，不拿去当结论，应触发人审或换更强跨家族判官
+   （`zscore_normalize` / `aggregate_rubric` / `rubric_escalation_actions`）。
 一次成对裁决用 `debias_verdict(judgements, panel=...)` 收口，返回 `{winner, decision, confidence,
 consensus, rubric}`，全过程留痕。结论始终 **advisory**，绝不当确定性门控（B10）。
 
 **直接可执行（别再手算）**：把判官原始 verdict 写成 JSON，跑 CLI——
 ```bash
-# verdicts.json: [{"judge":"m1","ab_winner":"稿A","ba_winner":"稿A"}, ...]；panel.json: {"m1":{"hook":9}, ...}
-python3 skills/novel/_lib/judge_protocol.py --verdicts verdicts.json [--panel panel.json]
+# verdicts.json: [{"judge":"gpt-5","ab_winner":"稿A","ba_winner":"稿A"}, ...]；panel.json: {"gpt-5":{"hook":9}, ...}
+python3 skills/novel/_lib/judge_protocol.py --verdicts verdicts.json [--panel panel.json] [--judge-families families.json]
 # critic-loop 要「不达标就别采纳」时加 opt-in 硬闸（信心不足 → exit 1）：
 python3 skills/novel/_lib/judge_protocol.py --verdicts verdicts.json --require-confidence high
 ```

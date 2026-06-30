@@ -111,3 +111,81 @@ def test_extract_sfx_events_multi_hit_one_per_apex():
     sword = [e for e in fa.extract_sfx_events(clip, 0.0) if e["tag"] == "sword_whoosh"]
     assert sorted(e["start"] for e in sword) == [2.0, 7.0]  # 每个命中各一击
     assert all(e["aligned"] == "apex" for e in sword)
+
+
+# ── 2026-06-30：原生音画后端去双层 foley_render_policy ──
+def test_policy_suppress_when_native_av_backend_audio_preserved():
+    # 原生音画后端 + clip 音轨保留 → 抑制 compose foley（避免双层打击声）
+    p = fa.foley_render_policy(clip_audio_preserved=True, backend_native_av=True)
+    assert p["mode"] == "suppress" and "backend_native_av" in p["reason"]
+
+
+def test_policy_full_when_clip_audio_discarded():
+    # clip 原生音轨被丢弃 → compose foley 是唯一 SFX 源，必须 full（即便后端原生音画）
+    p = fa.foley_render_policy(clip_audio_preserved=False, backend_native_av=True)
+    assert p["mode"] == "full" and "discarded" in p["reason"]
+
+
+def test_policy_full_for_silent_backend():
+    # 普通静默后端（即梦等）+ 保留 → full（维持现状，compose 提供 SFX）
+    p = fa.foley_render_policy(clip_audio_preserved=True, backend_native_av=False)
+    assert p["mode"] == "full" and "silent_backend" in p["reason"]
+
+
+def test_policy_force_overrides_suppression():
+    # FORCE_COMPOSE_FOLEY=1 → 永远 full（原生 foley 不满意时人工补）
+    p = fa.foley_render_policy(clip_audio_preserved=True, backend_native_av=True, force_compose_foley=True)
+    assert p["mode"] == "full" and "forced" in p["reason"]
+
+
+def test_policy_strategy_force_overrides_suppression():
+    p = fa.foley_render_policy(
+        clip_audio_preserved=True,
+        backend_native_av=True,
+        foley_strategy="强制叠加",
+    )
+    assert p["mode"] == "full" and "forced" in p["reason"]
+
+
+def test_policy_strategy_disabled_suppresses():
+    p = fa.foley_render_policy(
+        clip_audio_preserved=False,
+        backend_native_av=False,
+        foley_strategy="关闭",
+    )
+    assert p["mode"] == "suppress" and "disabled" in p["reason"]
+
+
+def test_policy_unknown_backend_falls_back_to_intent():
+    # 后端能力未知 → 回退用制作模式意图：原生音画意图 + 保留 → suppress；否则 full
+    p_intent = fa.foley_render_policy(clip_audio_preserved=True, backend_native_av=None,
+                                      native_av_mode_intended=True)
+    assert p_intent["mode"] == "suppress" and "native_av_mode_intended" in p_intent["reason"]
+    p_none = fa.foley_render_policy(clip_audio_preserved=True, backend_native_av=None,
+                                    native_av_mode_intended=False)
+    assert p_none["mode"] == "full"
+
+
+def test_policy_default_standalone_is_full(monkeypatch, tmp_path):
+    # 无 env 信号、无 _设置.md（默认丢弃·非原生音画）→ 向后兼容 full（不误抑制现有产线）
+    for k in ("FORCE_COMPOSE_FOLEY", "N2D_FOLEY_CLIP_AUDIO_PRESERVED", "N2D_FOLEY_NATIVE_AV_INTENDED"):
+        monkeypatch.delenv(k, raising=False)
+    assert fa._resolve_foley_policy(str(tmp_path))["mode"] == "full"
+
+
+def test_resolve_policy_env_preserved_with_intent_suppresses(monkeypatch, tmp_path):
+    # compose.sh 传入的 env 信号优先：保留 + 原生音画意图（后端能力未知）→ suppress
+    monkeypatch.delenv("FORCE_COMPOSE_FOLEY", raising=False)
+    monkeypatch.setenv("N2D_FOLEY_CLIP_AUDIO_PRESERVED", "1")
+    monkeypatch.setenv("N2D_FOLEY_NATIVE_AV_INTENDED", "1")
+    assert fa._resolve_foley_policy(str(tmp_path))["mode"] == "suppress"
+
+
+def test_resolve_backend_native_av_reads_episode_routes(tmp_path):
+    routes_dir = tmp_path / "出视频" / "第1集" / "prompt"
+    routes_dir.mkdir(parents=True)
+    (routes_dir / "video_model_routes.json").write_text(
+        '{"routes":[{"clip_id":"Clip_01","primary_backend":"Veo 3.1","native_audio_policy":"native_speech","mode":"native_av"}]}',
+        encoding="utf-8",
+    )
+    assert fa._resolve_backend_native_av(str(tmp_path), "第1集") is True

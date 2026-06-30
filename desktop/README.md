@@ -1,9 +1,10 @@
-# Anime Arsenal — Desktop (Tauri + React)
+# AnimeArmory — Desktop (Tauri + React)
 
 A Tauri 2 + Vite/React/TS desktop shell for the anime-arsenal creation factory.
 
 - **Home** → lists creative lines (n2d / ad / mv / song / novel) and their work roots.
-- **Operation page** → **left = infinite canvas** (React Flow), **right = native terminal** (real PTY) + a read-only "next action" strip.
+- **Operation page** → **left = file tree by default** (plus canvas/kanban where available), **right = resizable native terminal** (real PTY) + a read-only "next action" strip.
+- The terminal agent bar detects Claude Code / Codex CLI / Gemini CLI / OpenCode. If no paid/specialized agent is installed, OpenCode is shown as an installable open-source fallback; clicking it runs the official installer in the terminal and then launches `opencode`.
 - The canvas reads `生产数据/review_ui_第N集.json` when present, else **falls back to `脚本/第N集/storyboard.json`** — so it shows clips even before 出图.
 
 This is a **scaffold/spike**. It reuses the repo's existing `--json` contracts as its backend; it does not reimplement skill logic.
@@ -43,7 +44,7 @@ npm run app:build
 ```
 src/                         React frontend
   pages/Home.tsx             line + work-root launcher  (scan_workspace)
-  pages/Operation.tsx        left view / right terminal + episode switcher
+  pages/Operation.tsx        left file/canvas views / resizable right terminal + episode switcher
   views/registry.tsx         per-line view registry: canvas | files(novel) | audio(song)
   components/CanvasPane.tsx   React Flow: clip nodes + 接力链/seam edges
   components/ClipNode.tsx     clip card: frame thumb, rhythm/duration chips, QA badges
@@ -73,7 +74,7 @@ src-tauri/src/
 | Media server (range requests) | ✅ images + inline video (`<video>` when 出视频 exists); path-confined to allowed roots, 4-thread pool |
 | Home launcher + folder picker | ✅ |
 | File-watch live refresh (`notify` → `fs-changed` → debounced re-pull) | ✅ |
-| novel view (file tree) | ⛔ stub |
+| File tree + previews (`md` / `json` / images / audio / video) | ✅ default tab for every work |
 | song view (waveform/takes) | ⛔ stub |
 | Interactive canvas editing | ⛔ TODO (v1 is display-only) |
 

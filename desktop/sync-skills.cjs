@@ -14,7 +14,7 @@
 //
 // Consumption (wired in src-tauri): a packaged app whose live DEFAULT_REPO is
 // absent falls back to <resourceDir>/resources as its skills repo (Rust
-// `resolve_repo`); bundled demos are seeded once into the user's ~/AnimeArsenal
+// `resolve_repo`); bundled demos are seeded once into the user's ~/AnimeArmory
 // workspace (Rust `seed_demos`). In dev the live checkout always wins.
 const fs = require('fs');
 const path = require('path');

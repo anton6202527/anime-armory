@@ -293,6 +293,12 @@ fi
 
 echo "=== [3.5/6] V2A Foley 拟音 (Next Gen) ==="
 FOLEY_WAV="$W/foley_mix.wav"
+# 原生音画后端去双层：把已解析的 clip 原生音轨保留态 + 制作模式意图传给 foley_agent。
+# 原生音画后端（Veo3.1/Kling3/Vidu Q3）自带同步音效，clip 音轨被保留时 foley_agent 自动抑制 compose foley。
+# 强制叠加：FORCE_COMPOSE_FOLEY=1（环境变量自动继承，无需在此显式传）。
+if [ "$NATIVE_AUDIO_MODE" != "discard" ]; then N2D_FOLEY_CLIP_AUDIO_PRESERVED=1; else N2D_FOLEY_CLIP_AUDIO_PRESERVED=0; fi
+export N2D_FOLEY_CLIP_AUDIO_PRESERVED
+export N2D_FOLEY_NATIVE_AV_INTENDED="$NATIVE_AV_MODE"
 if python3 "$SKILL_DIR/scripts/foley_agent.py" "$ROOT" "$EP"; then
   echo "  🔊 Foley SFX 已就绪"
 else

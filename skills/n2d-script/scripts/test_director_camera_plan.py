@@ -1,5 +1,6 @@
 """cd skills/n2d-script/scripts && python -m pytest test_director_camera_plan.py"""
 import json
+import datetime as dt
 
 import director_camera_plan as dcp
 
@@ -74,3 +75,47 @@ def test_write_plan_creates_sidecars(tmp_path):
     md = (root / "生产数据" / "director_camera_plan_第1集.md").read_text(encoding="utf-8")
     assert data["kind"] == "n2d_director_camera_plan"
     assert "视频注入" in md
+
+
+def test_backend_control_uses_kling_motion_brush_when_evidence_is_fresh(tmp_path):
+    root = tmp_path / "作品"
+    ep_dir = root / "脚本" / "第1集"
+    route_dir = root / "出视频" / "第1集" / "prompt"
+    ep_dir.mkdir(parents=True)
+    route_dir.mkdir(parents=True)
+    clip = _clip(camera="快速跟拍", template="fight_exchange", rhythm="高潮·爽点")
+    clip["clip_id"] = "Clip_01"
+    (ep_dir / "storyboard.json").write_text(json.dumps({"clips": [clip]}, ensure_ascii=False), encoding="utf-8")
+    (route_dir / "video_model_routes.json").write_text(json.dumps({
+        "routes": [{"clip_id": "Clip_01", "primary_backend": "Kling 3.0"}],
+    }, ensure_ascii=False), encoding="utf-8")
+    dcp.video_backend_adapter.write_refresh_evidence(
+        str(root),
+        "Kling 3.0",
+        sources=["Kling API docs"],
+        evidence_kind="official_docs",
+        note="motion brush verified",
+        today=dt.date.today().isoformat(),
+    )
+
+    plan = dcp.build_plan(json.loads((ep_dir / "storyboard.json").read_text(encoding="utf-8")), "第1集", str(root))
+    out = plan["clips"][0]
+
+    assert out["backend_control"]["control_idiom"] == "motion_brush_on_firstframe"
+    assert "motion brush" in out["video_prompt_injection"]["后端控制写法"]
+
+
+def test_backend_control_degrades_to_natural_language_without_evidence(tmp_path):
+    root = tmp_path / "作品"
+    route_dir = root / "出视频" / "第1集" / "prompt"
+    route_dir.mkdir(parents=True)
+    clip = _clip(camera="快速跟拍")
+    clip["clip_id"] = "Clip_01"
+    (route_dir / "video_model_routes.json").write_text(json.dumps({
+        "routes": [{"clip_id": "Clip_01", "primary_backend": "Kling 3.0"}],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    plan = dcp.build_plan({"clips": [clip]}, "第1集", str(root))
+
+    assert plan["clips"][0]["backend_control"]["control_idiom"] == "natural_language"
+    assert "自然语言运镜" in plan["clips"][0]["video_prompt_injection"]["后端控制写法"]

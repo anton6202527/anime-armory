@@ -1,6 +1,6 @@
 // Thin wrappers over the Rust commands + a media-server URL helper.
 import { invoke } from "@tauri-apps/api/core";
-import type { AgentInfo, CanvasData, LineInfo, NextAction, SkillInfo, SkillTreeEntry } from "./types";
+import type { AgentInfo, CanvasData, LineInfo, NextAction, SkillInfo, SkillTreeEntry, WorkSnapshot } from "./types";
 
 // The skills repo (where skills/n2d/run.py + SKILL.md live). Fixed; drives the
 // pipeline. Kept SEPARATE from the works workspace below.
@@ -62,9 +62,50 @@ export async function workTree(root: string): Promise<SkillTreeEntry[]> {
   return invoke<SkillTreeEntry[]>("work_tree", { root });
 }
 
+/** Cheap recursive fingerprint for live-refresh polling; no baseline side effects. */
+export async function workSnapshot(root: string): Promise<WorkSnapshot> {
+  return invoke<WorkSnapshot>("work_snapshot", { root });
+}
+
 /** Read one text file inside a work root (<root>/<rel>) for the file preview. */
 export async function readWorkFile(root: string, rel: string): Promise<string> {
   return invoke<string>("read_work_file", { root, rel });
+}
+
+/** Baseline files that no longer exist on disk (deleted since last archive). */
+export async function workDeleted(root: string): Promise<string[]> {
+  return invoke<string[]>("work_deleted", { root });
+}
+
+/** Archive (= confirm) changes into the work's baseline so their u/m markers clear.
+ *  `rel` undefined archives the whole work; `rel` set confirms just that file/folder. */
+export async function archiveWork(root: string, rel?: string): Promise<void> {
+  return invoke("archive_work", { root, rel: rel ?? null });
+}
+
+export async function createWorkEntry(
+  root: string,
+  parentRel: string,
+  name: string,
+  kind: "file" | "folder",
+): Promise<string> {
+  return invoke<string>("create_work_entry", { root, parentRel, name, kind });
+}
+
+export async function renameWorkEntry(root: string, rel: string, newName: string): Promise<string> {
+  return invoke<string>("rename_work_entry", { root, rel, newName });
+}
+
+export async function deleteWorkEntry(root: string, rel: string): Promise<void> {
+  return invoke("delete_work_entry", { root, rel });
+}
+
+export async function revealWorkEntry(root: string, rel: string): Promise<void> {
+  return invoke("reveal_work_entry", { root, rel });
+}
+
+export async function openWorkEntry(root: string, rel: string): Promise<void> {
+  return invoke("open_work_entry", { root, rel });
 }
 
 /** Create an empty work folder under a line's product dir; returns its absolute path.
@@ -73,7 +114,7 @@ export async function createWork(dir: string, repoRoot: string, name: string): P
   return invoke<string>("create_work", { dir, repoRoot, name });
 }
 
-/** Resolve (and create) the app's dedicated works workspace (~/AnimeArsenal). */
+/** Resolve (and create) the app's dedicated works workspace (~/AnimeArmory). */
 export async function defaultWorkspace(): Promise<string> {
   return invoke<string>("default_workspace");
 }
@@ -116,12 +157,14 @@ export async function detectAgents(force = false): Promise<AgentInfo[]> {
 
 /** The agent to auto-enter when a work opens. Priority: codex first (repo
  *  default 生图AI + user preference), then any other image-capable agent
- *  (e.g. gemini), then any found agent (e.g. claude). Null if none installed. */
+ *  (e.g. gemini), then OpenCode as the open-source fallback, then any found
+ *  agent (e.g. claude). Null if none installed. */
 export function pickDefaultAgent(agents: AgentInfo[]): AgentInfo | null {
   const found = agents.filter((a) => a.found);
   return (
     found.find((a) => a.id === "codex") ||
     found.find((a) => a.image === "yes") ||
+    found.find((a) => a.id === "opencode") ||
     found[0] ||
     null
   );

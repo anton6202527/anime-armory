@@ -30,6 +30,15 @@ export interface SkillTreeEntry {
   path: string; // relative to the skill dir, e.g. "scripts/market.py"
   depth: number;
   is_dir: boolean;
+  // git-like change marker vs the work's archived baseline (work_tree only):
+  // "u" = new since last archive, "m" = modified, "" = clean. Absent for skills.
+  status?: string;
+}
+
+export interface WorkSnapshot {
+  signature: string;
+  file_count: number;
+  dir_count: number;
 }
 
 // One locally-detected AI agent CLI (from the Rust detect_agents command).
@@ -41,6 +50,7 @@ export interface AgentInfo {
   path: string;
   image: "yes" | "maybe" | "no"; // image-generation (生图) capability
   note: string;
+  install_command?: string; // optional terminal command for user-triggered install
 }
 
 // QA flag, normalized from review_ui qa_flags / gate findings.
@@ -64,6 +74,7 @@ export interface CanvasClip {
   first_frame_exists: boolean;
   video_abs?: string;
   video_exists: boolean;
+  mediaRevision?: number; // frontend cache-buster for regenerated files at the same path
   qa: QaFlag[];
 }
 

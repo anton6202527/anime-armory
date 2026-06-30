@@ -42,9 +42,11 @@ CHARACTER_SHARED_CORE_FIELDS = ("front", "three_quarter", "side", "back", "turna
 CHARACTER_SHARED_BODY_FIELDS = ("half_body", "full_body", "outfit")
 CHARACTER_SHARED_FACE_FIELDS = ("face_anchor_refs", "expressions")
 EXTERNAL_CHARACTER_REFERENCE_GUIDANCE = (
-    "用户提供的人物/主角参考图默认只作脸部身份锚：只提取脸型、五官比例、眼神气质、肤质/体态/年龄感等身份信息。"
-    "不得继承参考图里的服装、裸露程度、发型/发饰、表情、姿态、配饰、场景、光色、IP/水印或原图剧情状态；"
-    "这些一律以小说原文、角色圣经、identity_registry 的 form/wardrobe_profile、asset_registry 和本镜分镜状态为准。"
+    "用户提供的人物/主角参考图默认只作身份与身形锚：只提取基础身高、体型/身材比例、体态、脸型、五官比例、"
+    "眼神气质、肤质、年龄感等身份信息。不得继承参考图里的画风、照片/摄影风格、渲染风格、滤镜、色彩分级、"
+    "光影方案、景深、清晰度质感、构图/镜头语言、背景、服装、裸露程度、发型/发饰、表情、姿态、配饰、"
+    "场景、IP/水印或原图剧情状态；外部参考图的风格权重视为 0。项目风格必须以 _设置.md 的基础视觉风格、"
+    "本集 style_contract/基础视觉风格契约和角色/资产 registry 为唯一真值，统一转译到项目风格。"
 )
 NON_CHARACTER_FACE_POLICY_GUIDANCE = (
     "非角色资产/VFX/道具/武器/场景若未在 registry 显式声明 owner/carries_identity 且 face_policy=face_locked，"
@@ -1181,6 +1183,8 @@ def _character_basic_pack_issues(root: Path, char_ref: str, form: Dict[str, Any]
     if _form_is_restricted_partial(form):
         return []
     form_name = str(form.get("form") or "常态").strip()
+    if form.get("self_check_passed") is False:
+        return [f"{char_ref}/{form_name}: 共享定妆 self_check_passed=false，先复核/重出共享库"]
     reference_group = form.get("reference_group")
     if not isinstance(reference_group, dict):
         return [f"{char_ref}/{form_name}: reference_group 缺失，不能进入 Clip 分镜图生成"]

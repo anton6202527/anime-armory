@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { scanWorkspace } from "../api";
+import { useI18n, useLineLabel } from "../i18n";
 import type { LineInfo } from "../types";
 
 // Placeholder cover glyph per line (until real cover art is wired).
@@ -18,6 +19,8 @@ export function Home(props: {
   onEnter: (line: LineInfo) => void;
 }) {
   const { workspaceRoot, onPickWorkspace, onShowSkills, onEnter } = props;
+  const { t } = useI18n();
+  const lineLabel = useLineLabel();
   const [lines, setLines] = useState<LineInfo[]>([]);
   const [err, setErr] = useState<string>("");
 
@@ -30,27 +33,27 @@ export function Home(props: {
 
   return (
     <div className="home">
-      <h1>Anime Arsenal</h1>
+      <h1>AnimeArmory</h1>
       <div className="repo">
-        <span>workspace: {workspaceRoot}</span>
-        <button onClick={onPickWorkspace}>切换工作区…</button>
+        <span>{t("home.workspace", { path: workspaceRoot })}</span>
+        <button onClick={onPickWorkspace}>{t("home.switchWorkspace")}</button>
       </div>
-      {err && <div className="empty">扫描失败：{err}</div>}
+      {err && <div className="empty">{t("common.scanFailed", { error: err })}</div>}
 
       <div className="line-grid">
         {lines.map((line) => (
           <div className="line-card" key={line.line}>
             <div className="line-cover">{GLYPH[line.line] ?? "✦"}</div>
             <div className="line-info">
-              <div className="line-title">{line.label}</div>
+              <div className="line-title">{lineLabel(line)}</div>
               <div className="line-sub">
-                {line.dir.split("/").pop()}/ · {line.roots.length} 部作品
+                {line.dir.split("/").pop()}/ · {t("common.workCount", { count: line.roots.length })}
               </div>
             </div>
             <div className="card-actions">
-              <button onClick={() => onShowSkills(line)}>skills 详情</button>
+              <button onClick={() => onShowSkills(line)}>{t("home.skillDetails")}</button>
               <button className="primary" onClick={() => onEnter(line)}>
-                进入创作区 →
+                {t("home.enterCreation")}
               </button>
             </div>
           </div>

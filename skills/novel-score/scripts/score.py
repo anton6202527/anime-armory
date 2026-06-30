@@ -24,6 +24,7 @@ if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from settings import load_settings as _load_settings  # noqa: E402  vendored 进 novel/_lib
 from io_utils import load_meta  # noqa: E402  本线 _lib 单一真值源
+from text_utils import cjk_count  # noqa: E402
 from report_snapshot import (  # noqa: E402  章号/哈希纯函数走 _lib，不再本地复制
     chapter_number_from_path,
     chapter_sort_key,
@@ -1149,6 +1150,9 @@ def validate_assessment(assessment, expect_title_check=False, expect_adaptation=
                         errors.append(f"judges_panel[{judge!r}].{dim} 未知维度")
                     if not isinstance(val, (int, float)) or not (1 <= float(val) <= 10):
                         errors.append(f"judges_panel[{judge!r}].{dim} 必须是 1-10 数字：{val!r}")
+    judge_families = assessment.get("judge_families")
+    if judge_families is not None and not isinstance(judge_families, dict):
+        errors.append("judge_families 必须是 object：{判官名: 模型家族}")
     return errors
 
 
@@ -1156,16 +1160,20 @@ def apply_judge_debias(assessment, processed_scores):
     """跑 judge_protocol 去偏协议（rubric z 归一 + 判官间方差→低信心），结果 advisory 注入。
 
     单判官（无 judges_panel 或 <2 判官）→ enabled=False，不改任何分（向后兼容）。
-    多判官 → 逐维度算 mean/stdev/confidence，给 processed_scores 标 judge_confidence，
-    高方差维度汇总到 low_confidence_dimensions。**绝不改 raw_score / 总分 / 判定**——
+    多判官 → 逐维度算 mean/stdev/confidence，给 processed_scores 标 judge_confidence。
+    推荐 ≥3 不同模型家族；≥2 仍向后兼容。高方差维度进入 abstain_dimensions/escalation_actions。
+    **绝不改 raw_score / 总分 / 判定**——
     与 judge_protocol「绝不当确定性门控」一致，只暴露判官分歧供人判（B10）。"""
     panel = (assessment or {}).get("judges_panel") or {}
     judges = [j for j, s in panel.items() if isinstance(s, dict) and s]
     if judge_protocol is None or len(judges) < 2:
         reason = ("judge_protocol 不可用" if judge_protocol is None
                   else "单判官——提供 ≥2 判官的 judges_panel 即触发 dual-judge 去偏")
-        return {"enabled": False, "judges": judges, "low_confidence_dimensions": [], "note": reason}
+        return {"enabled": False, "judges": judges, "low_confidence_dimensions": [],
+                "abstain_dimensions": [], "escalation_actions": [], "note": reason}
     rubric = judge_protocol.aggregate_rubric(panel)
+    diversity = judge_protocol.family_diversity(judges, judge_families=(assessment or {}).get("judge_families"))
+    escalations = judge_protocol.rubric_escalation_actions(rubric)
     dim_map = dict(DIMENSIONS)
     low_dims = []
     by_dim = {}
@@ -1173,21 +1181,41 @@ def apply_judge_debias(assessment, processed_scores):
         by_dim[dim] = stats
         if stats.get("confidence") == "low":
             low_dims.append({"dimension": dim, "dimension_label": dim_map.get(dim, dim),
-                             "stdev": stats.get("stdev"), "n": stats.get("n")})
+                             "stdev": stats.get("stdev"), "n": stats.get("n"),
+                             "decision": "abstain"})
     for ps in processed_scores:
         stats = by_dim.get(ps["dimension"])
         if stats:
             ps["judge_confidence"] = stats.get("confidence")
             ps["judge_panel_stdev"] = stats.get("stdev")
             ps["judge_panel_n"] = stats.get("n")
+            if stats.get("confidence") == "low":
+                ps["judge_decision"] = "abstain"
+    if low_dims:
+        note = "判官高方差维度已标记为弃权/升级；不改分，但该维度结论需人审或更强跨家族判官"
+    elif not diversity.get("meets_recommended"):
+        note = "dual-judge 去偏已执行；未满 ≥3 不同模型家族推荐标准，结论可用但建议关键稿加第三家族复核"
+    else:
+        note = "≥3 不同模型家族判官去偏已执行；判官共识良好"
     return {
         "enabled": True,
         "judges": judges,
         "judges_count": len(judges),
+        "family_diversity": diversity,
         "rubric": rubric,
         "low_confidence_dimensions": low_dims,
-        "note": ("dual-judge 去偏已执行；高方差维度仅标低信心、不改分"
-                 if low_dims else "dual-judge 去偏已执行；判官共识良好"),
+        "abstain_dimensions": low_dims,
+        "escalation_actions": [
+            {
+                "dimension": item["criterion"],
+                "dimension_label": dim_map.get(item["criterion"], item["criterion"]),
+                "decision": item["decision"],
+                "action": "人工复核该维度，或换 ≥3 个不同模型家族/更强判官重评",
+                "reason": item["reason"],
+            }
+            for item in escalations
+        ],
+        "note": note,
     }
 
 
@@ -1280,15 +1308,77 @@ def repetition_prior_text(repetition_prior):
     summary = repetition_prior.get("summary") or {}
     prior = repetition_prior.get("prior") or {}
     jmax = float(summary.get("adjacent_max_jaccard") or 0.0)
+    cr = summary.get("compression_ratio")
+    cr_txt = f"{float(cr):.0%}" if isinstance(cr, (int, float)) else "n/a"
     bits = (prior.get("reasons") or [])
     detail = "；".join(bits) if bits else "未见显著跨章重复/机械文风"
     return (
         f"跨章重复率/机械文风（确定性机检·internal-heuristic 非平台公开硬数字）：相邻章最高近重复 "
         f"{jmax:.0%}，机械开篇组 {summary.get('mechanical_opener_groups', 0)}，跨章复用整句 "
-        f"{summary.get('repeated_sentences', 0)}；先验档 {prior.get('level', 'none')}。{detail}。"
+        f"{summary.get('repeated_sentences', 0)}，机械句式模板 {summary.get('sentence_opener_templates', 0)}，"
+        f"句首词高频 {summary.get('sentence_start_token_groups', 0)}，短句式模板 "
+        f"{summary.get('short_sentence_templates', 0)}，全书压缩比 {cr_txt}，低压缩章节 "
+        f"{summary.get('low_chapter_compression_count', 0)}；先验档 {prior.get('level', 'none')}。{detail}。"
         "平台对 AI 内容做连续章节重复率/机械文风质检，高重复是弃读信号——retention 维度评分请把此"
         "作为**负向先验**纳入（机检只给信号，最终分仍以你对正文的判读为准）。"
     )
+
+
+_PRESENTATION_MARKDOWN_RE = re.compile(r"^\s*(?:#{1,6}\s|[-*+]\s|\d+[.)、]\s|>\s|```|\|)")
+
+
+def presentation_bias_advisory(samples):
+    """长度/格式偏好事后提示。只出 advisory，不改 raw_score/total_score。"""
+    samples = samples or []
+    if not samples:
+        return {
+            "enabled": False,
+            "level": "none",
+            "score_adjustment": 0,
+            "raw_score_adjustment": 0,
+            "reasons": [],
+            "stats": {},
+            "note": "无样本，未计算长度/格式中立性提示",
+        }
+    char_counts = [cjk_count(s.get("content") or "") for s in samples]
+    nonempty_lines = 0
+    md_lines = 0
+    for s in samples:
+        for line in (s.get("content") or "").splitlines():
+            if not line.strip():
+                continue
+            nonempty_lines += 1
+            if _PRESENTATION_MARKDOWN_RE.match(line):
+                md_lines += 1
+    min_chars = min(char_counts) if char_counts else 0
+    max_chars = max(char_counts) if char_counts else 0
+    mean_chars = sum(char_counts) / max(1, len(char_counts))
+    spread = (max_chars / max(1, min_chars)) if min_chars else 0.0
+    md_ratio = md_lines / max(1, nonempty_lines)
+    reasons = []
+    if mean_chars >= 2600:
+        reasons.append("样本平均篇幅偏长：复核高分是否来自有效信息密度，而非字数带来的充实感")
+    if spread >= 2.2 and len(char_counts) >= 2:
+        reasons.append("样本章节长度差异大：不要把更长章节自动视为更高质量")
+    if md_ratio >= 0.18:
+        reasons.append("markdown/列表/引用等格式线索偏多：复核分数是否被排版可读性带偏")
+    return {
+        "enabled": True,
+        "level": "review" if reasons else "none",
+        "score_adjustment": 0,
+        "raw_score_adjustment": 0,
+        "reasons": reasons,
+        "stats": {
+            "sample_count": len(samples),
+            "cjk_chars_total": sum(char_counts),
+            "mean_cjk_chars": round(mean_chars, 1),
+            "min_cjk_chars": min_chars,
+            "max_cjk_chars": max_chars,
+            "max_to_min_chapter_chars": round(spread, 2) if spread else 0.0,
+            "markdown_line_ratio": round(md_ratio, 3),
+        },
+        "note": "advisory only：提示判官复核长度/格式偏好，不改 raw_score 或 total_score",
+    }
 
 
 def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_party=None,
@@ -1401,6 +1491,13 @@ def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_
 请根据上述内容，对照评分细则（rubric.md），对以下七个维度给出 1-10 的原始分，并提供证据（原文引文）和短评。
 同时检查是否有「雷点扣分项」（开篇慢热、题材退潮、主角降智、注水、三观雷、AI味、烂尾）。
 
+**评分中立化须知（判官去偏·务必遵守）**：只评**内容质量本身**——情节、人物、文笔、信息密度、留存力。
+- **不要**因为某段更长、字数更多、排版/markdown 更花、列表更多、标题层级更清楚、辞藻更密就给更高分；长度/篇幅相近时以内容质量为先。
+- 若两个章节/版本长度相近，优先比较有效信息增量、人物选择、冲突推进、语言准确度和留存力；不要用“看起来更完整/更会排版”替代质量判断。
+- 注水、铺陈过度、重复复述属于**减分**，应进 ⑦完读/留存 与雷点项扣分，绝不能因为"字多/看起来充实"而加分。
+- 评分对照固定 rubric 锚点，不被呈现形式带偏（研究表明：长度与格式风格是 LLM 判官最大的残留偏差，
+  而位置偏差在前沿模型已很小——故重点防长度/格式偏好，而非单纯换序）。
+
 请输出 JSON 格式，严格遵守以下结构：
 {{
   "score_task_id": "{task_id}",
@@ -1423,9 +1520,11 @@ def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_
   ]{title_check_json}{adaptation_json}
 }}
 
-【可选·去偏增强】若你能用 ≥2 个相互独立的判官视角（或不同模型）各自独立打这 7 个维度，
+【可选·去偏增强】关键稿推荐用 ≥3 个**不同模型家族**的判官各自独立打这 7 个维度；
+若当前只有 ≥2 个相互独立的判官视角（或不同模型），系统仍向后兼容接收，但会提示未满推荐标准。
 请额外附 "judges_panel": {{"判官A": {{"topic_heat": 8, ...}}, "判官B": {{...}}}}（每维 1-10）。
-系统会按 judge_protocol 去偏协议算判官间方差：分歧大的维度自动标低信心、提示人工复核
+如判官名不含模型家族，可额外附 "judge_families": {{"判官A": "openai", "判官B": "anthropic", "判官C": "google"}}。
+系统会按 judge_protocol 去偏协议算判官间方差：分歧大的维度自动标「弃权/升级」、提示人工复核或换更强跨家族判官
 （仅 advisory，不改你给的 scores 与总分）。单判官可省略此字段，按原行为评分。
 """
     return prompt
@@ -1482,7 +1581,12 @@ def generate_markdown_report(root, meta, result, total_score, tier, verdict, roi
         lines.append(f"## 跨章重复率/机械文风先验（retention·确定性机检·档 {rp_prior['level']}）")
         lines.append(f"- 相邻章最高近重复 {float(rp_sum.get('adjacent_max_jaccard') or 0):.0%}；"
                      f"机械开篇组 {rp_sum.get('mechanical_opener_groups', 0)}；"
-                     f"跨章复用整句 {rp_sum.get('repeated_sentences', 0)}；retention 调分 {rp_prior.get('points', 0):+d}")
+                     f"跨章复用整句 {rp_sum.get('repeated_sentences', 0)}；"
+                     f"机械句式模板 {rp_sum.get('sentence_opener_templates', 0)}；"
+                     f"句首词高频 {rp_sum.get('sentence_start_token_groups', 0)}；"
+                     f"短句式模板 {rp_sum.get('short_sentence_templates', 0)}；"
+                     f"低压缩章节 {rp_sum.get('low_chapter_compression_count', 0)}；"
+                     f"retention 调分 {rp_prior.get('points', 0):+d}")
         for r in rp_prior.get("reasons", [])[:4]:
             lines.append(f"  - {r}")
         lines.append("")
@@ -1490,12 +1594,27 @@ def generate_markdown_report(root, meta, result, total_score, tier, verdict, roi
     debias = result.get("judge_debias") or {}
     if debias.get("enabled"):
         low = debias.get("low_confidence_dimensions") or []
-        lines.append(f"## 判官去偏（dual-judge · {debias.get('judges_count')} 判官）")
+        diversity = debias.get("family_diversity") or {}
+        lines.append(f"## 判官去偏（{debias.get('judges_count')} 判官 · {diversity.get('families_count', 0)} 家族）")
+        if diversity and not diversity.get("meets_recommended"):
+            lines.append(f"- 未满 ≥{diversity.get('recommended_min_families', 3)} 不同模型家族推荐标准；关键稿建议补第三家族复核。")
         if low:
             dims = "、".join(d["dimension_label"] for d in low)
-            lines.append(f"- ⚠️ 判官分歧大、低信心维度（仅供参考，未改分）：{dims}")
+            lines.append(f"- ⚠️ 判官分歧大、弃权/升级维度（仅供参考，未改分）：{dims}")
         else:
             lines.append("- ✅ 判官共识良好，无高方差维度")
+        lines.append("")
+
+    bias_adv = result.get("judge_bias_advisory") or {}
+    if bias_adv.get("level") and bias_adv.get("level") != "none":
+        lines.append("## 判官长度/格式中立性提示（advisory）")
+        for r in bias_adv.get("reasons", []):
+            lines.append(f"- {r}")
+        stats = bias_adv.get("stats") or {}
+        lines.append(
+            f"- 样本均字数 {stats.get('mean_cjk_chars')}；长度 max/min {stats.get('max_to_min_chapter_chars')}；"
+            f"markdown 行占比 {stats.get('markdown_line_ratio')}；本提示未改 raw_score/total_score。"
+        )
         lines.append("")
 
     if result.get("waivers"):
@@ -1805,6 +1924,7 @@ def main():
     benchmark_percentile = compute_benchmark_percentiles(
         root, final_score, processed_scores, reference_distribution
     )
+    judge_bias_advisory = presentation_bias_advisory(samples)
 
     next_actions = build_next_actions(verdict, processed_scores)
     production_decision = build_production_decision(verdict, final_score, meta, settings)
@@ -1835,13 +1955,24 @@ def main():
     if judge_debias.get("enabled") and judge_debias.get("low_confidence_dimensions"):
         dims = "、".join(d["dimension_label"] for d in judge_debias["low_confidence_dimensions"])
         next_actions.append({
-            "priority": "could",
+            "priority": "should",
             "recommended_skill": "novel-score",
             "return_to_stage": "review",
             "action": (f"判官分歧大（{judge_debias['judges_count']} 判官）：{dims} 维度方差超阈值，"
-                       "该维度分仅供参考，建议人工复核或加判官"),
+                       "该维度结论弃权，建议人工复核或换 ≥3 个不同模型家族/更强判官重评"),
             "dimension": "judge_debias",
         })
+    elif judge_debias.get("enabled"):
+        diversity = judge_debias.get("family_diversity") or {}
+        if diversity and not diversity.get("meets_recommended"):
+            next_actions.append({
+                "priority": "could",
+                "recommended_skill": "novel-score",
+                "return_to_stage": "review",
+                "action": (f"当前判官覆盖 {diversity.get('families_count', 0)} 个模型家族；"
+                           f"关键稿建议补足 ≥{diversity.get('recommended_min_families', 3)} 家族后复核"),
+                "dimension": "judge_debias",
+            })
     waivers = []
     if pending_waiver:
         waivers.append(pending_waiver)
@@ -1883,6 +2014,7 @@ def main():
         "benchmark_percentile": benchmark_percentile,
         "scores": processed_scores,
         "judge_debias": judge_debias,
+        "judge_bias_advisory": judge_bias_advisory,
         "repetition_prior": repetition_prior,
         "title_check": title_check,
         "adaptation_check": adaptation_check,

@@ -39,7 +39,12 @@ impl PtyManager {
     fn spawn(&self, app: AppHandle, cwd: String, rows: u16, cols: u16) -> Result<u64, String> {
         let pty_system = native_pty_system();
         let pair = pty_system
-            .openpty(PtySize { rows, cols, pixel_width: 0, pixel_height: 0 })
+            .openpty(PtySize {
+                rows,
+                cols,
+                pixel_width: 0,
+                pixel_height: 0,
+            })
             .map_err(|e| e.to_string())?;
 
         let shell = std::env::var("SHELL").unwrap_or_else(|_| "/bin/zsh".to_string());
@@ -75,10 +80,14 @@ impl PtyManager {
             let _ = app2.emit("pty-exit", PtyExit { id });
         });
 
-        self.sessions
-            .lock()
-            .unwrap()
-            .insert(id, PtySession { master: pair.master, writer, child });
+        self.sessions.lock().unwrap().insert(
+            id,
+            PtySession {
+                master: pair.master,
+                writer,
+                child,
+            },
+        );
         Ok(id)
     }
 
@@ -93,7 +102,12 @@ impl PtyManager {
         let map = self.sessions.lock().unwrap();
         let s = map.get(&id).ok_or("no such pty session")?;
         s.master
-            .resize(PtySize { rows, cols, pixel_width: 0, pixel_height: 0 })
+            .resize(PtySize {
+                rows,
+                cols,
+                pixel_width: 0,
+                pixel_height: 0,
+            })
             .map_err(|e| e.to_string())
     }
 

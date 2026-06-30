@@ -13,7 +13,7 @@ description: Stage 6 of n2d (剪映合成的脚本化替代) — assemble a fini
 
 本 skill 的可选项**不写死在源码里**。按 `../skills/n2d/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
-本 skill涉及的选择点：`BGM来源`、`画幅`、`制作模式`（决定配音轨是否需先拟合到已成片镜头长·见「先出视频后配音」节）、`视频原生音轨`（丢弃 / 低音量混入环境声 / 保留原片音轨）、`目标平台`、`发行地区`、`合规用途`。其中 `目标平台/发行地区/合规用途` 只是偏好入口，**实际放行以 `合规/compliance_manifest.json` 为准**，不得只看 `_设置.md`。
+本 skill涉及的选择点：`BGM来源`、`画幅`、`制作模式`（决定配音轨是否需先拟合到已成片镜头长·见「先出视频后配音」节）、`视频原生音轨`（丢弃 / 低音量混入环境声 / 保留原片音轨）、`后期拟音策略`（自动 / 强制叠加 / 关闭）、`目标平台`、`发行地区`、`合规用途`。其中 `目标平台/发行地区/合规用途` 只是偏好入口，**实际放行以 `合规/compliance_manifest.json` 为准**，不得只看 `_设置.md`。
 
 > **AI 标识非阻断铁律**：compose `[6/6]` 后可自动跑 `ai_label.py` 做 best-effort 后处理：落显式角标（如「AI生成」）+ 写元数据，并回写 `合规/compliance_manifest.json` 的 `ai_labeling` 状态。但 AI 标识/披露/水印不得阻断合成、进度回写、dashboard 记账或后续集推进；失败只形成发布前待办。数字水印、平台侧 AIGC 披露与严格 GB 45438 字节级封装均可在工具外补齐。
 
@@ -146,7 +146,7 @@ python3 skills/n2d-compose/release_manifest.py check <作品根> 第N集
 clip 已带即梦原生音效。额外「2~5 个转场音效」做成可选：用户给 SFX 文件就在 clip 边界铺，不给跳过。
 
 ## 视觉拟音 SFX（V2A·可插拔后端·`scripts/foley_agent.py`）
-compose 混音前自动跑 `foley_agent.py`：分析 `storyboard.json` 识别视觉动因（拔剑/脚步/雨/门/爆炸…）→ 产**带绝对时间戳的拟音计划**（`_work/foley_plan.json`：环境/天气类铺满整 clip·冲击/动作类落 clip 内动作时刻），再交拟音后端合成 SFX 轨（`_work/foley_mix.wav`，作 compose ducking 混音的 `[foley]` 输入）。**拟音后端是选择点**：默认产**静音占位轨**（诚实·不假装真音效，向后兼容）；接真 V2A 后端设环境变量 `N2D_FOLEY_CMD` 命令模板（与 `N2D_VLM_CMD` 同套路·厂商无关·`{plan}{out}{duration}` 占位，可包装 Sony Woosh 本地/Mirelo·WaveSpeed 云）。**对齐粒度（2026-06-29 修真·治"打斗 SFX 对不上画面命中"）**：冲击类踩拍优先级 = **storyboard 命中/撞点秒（`impact_seconds_from_clip` 读 impact_frame/collision_or_apex_frame/post_cue_points/anchors keyframe·与 `anchor_planner.apex_anchor_seconds` 同源·多回合命中各一击·标 `aligned=apex`）** > 显式 `动作时刻/sfx_at`（`explicit`）> clip 中点估计（`estimated` 兜底）。即上游 apex-aware 算好的命中帧现在真的交给 foley 踩点，而非落镜头中间。打斗/动作题材爽感吃重时配真后端最值。详见 `n2d/references/模型矩阵.md` 横切 § 「SFX 拟音 V2A」。
+compose 混音前自动跑 `foley_agent.py`：分析 `storyboard.json` 识别视觉动因（拔剑/脚步/雨/门/爆炸…）→ 产**带绝对时间戳的拟音计划**（`_work/foley_plan.json`：环境/天气类铺满整 clip·冲击/动作类落 clip 内动作时刻），再交拟音后端合成 SFX 轨（`_work/foley_mix.wav`，作 compose ducking 混音的 `[foley]` 输入）。**拟音后端是选择点**：默认产**静音占位轨**（诚实·不假装真音效，向后兼容）；接真 V2A 后端设环境变量 `N2D_FOLEY_CMD` 命令模板（与 `N2D_VLM_CMD` 同套路·厂商无关·`{plan}{out}{duration}` 占位，可包装 Sony Woosh 本地/Mirelo·WaveSpeed 云）。`后期拟音策略=自动` 时，若本集路由为原生音画/原生音频后端且 compose 保留 clip 原生音轨，`foley_agent` 会只留 `foley_plan.json` 和静音 `foley_mix.wav`，让模型原生 foley/SFX 站台，避免双层打击声；需要补拟音时写 `后期拟音策略=强制叠加` 或临时设 `FORCE_COMPOSE_FOLEY=1`。**对齐粒度（2026-06-29 修真·治"打斗 SFX 对不上画面命中"）**：冲击类踩拍优先级 = **storyboard 命中/撞点秒（`impact_seconds_from_clip` 读 impact_frame/collision_or_apex_frame/post_cue_points/anchors keyframe·与 `anchor_planner.apex_anchor_seconds` 同源·多回合命中各一击·标 `aligned=apex`）** > 显式 `动作时刻/sfx_at`（`explicit`）> clip 中点估计（`estimated` 兜底）。即上游 apex-aware 算好的命中帧现在真的交给 foley 踩点，而非落镜头中间。打斗/动作题材爽感吃重时配真后端最值。详见 `n2d/references/模型矩阵.md` 横切 § 「SFX 拟音 V2A」。
 
 ## 打斗命中帧微震屏（P2·`scripts/combat_punch.py`·让规划好的撞点有物理冲击）
 `[1/6]` 逐 clip 规格化重编码时，对 `fight_exchange/magic_burst` 且有命中秒的镜，把一段**保时长**的 ffmpeg `-vf` 微震屏拼进既有 `-vf` 链尾（**零额外重编码**）：命中秒 ±0.09s 窗口内做低幅 crop 抖动（screen-shake）再 scale 回 `PXWxPXH`，让命中帧有冲击力。**保时长是硬约束**——hit-stop（冻帧）会改时长、和配音对轨错位，故**刻意只做抖动不做冻帧**（白闪因本机 ffmpeg 的 eq 表达式解析器不稳也暂不做）。抖幅按可用 headroom 自适应（恒 ≤ headroom·永不越界）；命中秒来自 `foley_agent.impact_seconds_from_clip`（与拟音同源）。拆段子文件保守跳过。`combat_punch.py <root> <ep> <PXW> <PXH> --json` 可看每个打斗镜的命中秒+震屏片段。

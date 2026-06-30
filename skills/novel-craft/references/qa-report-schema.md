@@ -85,6 +85,9 @@
 | `reader_panel_path` | string/null | 否 | `评分/reader_panel_signals.json`；模拟读者信号存在时填写 |
 | `benchmark_percentile` | object/null | 否 | 合规参考分布百分位；无 `reference_distribution*.json` 时为 null |
 | `scores` | list[object] | 是 | 七维分数 |
+| `judge_debias` | object/null | 否 | 多判官去偏聚合结果；推荐 ≥3 不同模型家族，高方差维度标 `abstain`/升级，不改原始分 |
+| `judge_bias_advisory` | object/null | 否 | 长度/格式中立性提示；只提醒复核，不改 `raw_score` 或 `total_score` |
+| `repetition_prior` | object/null | 否 | 跨章重复率/机械文风确定性先验；由 `novel/_lib/repetition.py` 生成，喂 retention 维度 |
 | `title_check` | object/null | 否 | 书名体检（附加项，不计入总分）；新版 `score.py` 总会写入，书名未定时为 null；更早的旧报告可缺省 |
 | `deductions` | list[object] | 是 | 雷点扣分 |
 | `total_score` | number | 是 | 百分制总分 |

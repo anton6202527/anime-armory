@@ -6,6 +6,7 @@ import { Operation } from "./pages/Operation";
 import { SkillsModal } from "./components/SkillsModal";
 import { TopTabs, type WorkTab } from "./components/TopTabs";
 import { DEFAULT_REPO, defaultWorkspace, ensureMedia, mediaAllowRoot, resolveRepo, seedDemos } from "./api";
+import { useI18n } from "./i18n";
 import type { LineInfo, WorkRoot } from "./types";
 
 // The non-tab "home" area: the line picker, or one line's works list.
@@ -22,11 +23,12 @@ function pathsOverlap(a: string, b: string): boolean {
 }
 
 export function App() {
+  const { t } = useI18n();
   // skills repo (runs the pipeline) — live checkout on a dev machine, else the
   // /tod-bundled copy shipped inside the installed app. Separate from the works
   // workspace. Falls back to DEFAULT_REPO until resolve_repo answers.
   const [repoRoot, setRepoRoot] = useState<string>(DEFAULT_REPO);
-  // works workspace (~/AnimeArsenal) — app creates/deletes works here only
+  // works workspace (~/AnimeArmory) — app creates/deletes works here only
   const [workspaceRoot, setWorkspaceRoot] = useState<string>("");
   // non-tab navigation (line picker ↔ a line's works list)
   const [homeRoute, setHomeRoute] = useState<HomeRoute>({ kind: "home" });
@@ -76,8 +78,8 @@ export function App() {
       // commands also hard-block repo paths; this stops the mistake earlier.)
       if (pathsOverlap(picked, repoRoot)) {
         await message(
-          "该目录与项目仓库重叠，已拒绝。\n请选择仓库之外的目录作为作品工作区（作品与项目仓库需完全隔离）。",
-          { title: "无法选择该工作区", kind: "error" },
+          t("app.workspaceBlockedMessage"),
+          { title: t("app.workspaceBlockedTitle"), kind: "error" },
         );
         return;
       }
@@ -108,7 +110,7 @@ export function App() {
   }
 
   if (!workspaceRoot) {
-    return <div className="home"><h1>Anime Arsenal</h1><div className="empty">初始化工作区…</div></div>;
+    return <div className="home"><h1>AnimeArmory</h1><div className="empty">{t("app.initWorkspace")}</div></div>;
   }
 
   return (

@@ -9,13 +9,15 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { ClipNode } from "./ClipNode";
+import { useI18n } from "../i18n";
 import type { ViewProps } from "../views/registry";
 
 const nodeTypes = { clip: ClipNode };
 
 // Infinite canvas for n2d/ad/mv: clip nodes laid out left→right with
 // 接力链 (continuity) edges between consecutive clips and seam transitions.
-export function CanvasPane({ canvas }: ViewProps) {
+export function CanvasPane({ canvas, refreshKey = 0 }: ViewProps) {
+  const { t } = useI18n();
   const { nodes, edges } = useMemo(() => {
     if (!canvas) return { nodes: [] as Node[], edges: [] as Edge[] };
     const COL_W = 300;
@@ -23,7 +25,7 @@ export function CanvasPane({ canvas }: ViewProps) {
       id: clip.id,
       type: "clip",
       position: { x: i * COL_W, y: (i % 2) * 70 }, // gentle stagger for readability
-      data: clip as unknown as Record<string, unknown>,
+      data: { ...clip, mediaRevision: refreshKey } as unknown as Record<string, unknown>,
     }));
     const edges: Edge[] = canvas.seams.map((s) => ({
       id: `${s.from}->${s.to}`,
@@ -36,10 +38,10 @@ export function CanvasPane({ canvas }: ViewProps) {
       labelBgStyle: { fill: "#11151f" },
     }));
     return { nodes, edges };
-  }, [canvas]);
+  }, [canvas, refreshKey]);
 
   if (!canvas || canvas.clips.length === 0) {
-    return <div className="stub-view">本集暂无分镜（storyboard.json 未生成）。</div>;
+    return <div className="stub-view">{t("canvas.noStoryboard")}</div>;
   }
 
   return (

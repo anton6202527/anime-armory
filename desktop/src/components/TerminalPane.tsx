@@ -10,6 +10,7 @@ const b64ToBytes = (b64: string) => Uint8Array.from(atob(b64), (c) => c.charCode
 /** Imperative handle so parents can drive the live shell (e.g. "进入" an agent). */
 export interface TerminalHandle {
   runCommand: (cmd: string) => void;
+  switchCommand: (cmd: string) => void;
   focus: () => void;
 }
 
@@ -21,11 +22,16 @@ export const TerminalPane = forwardRef<TerminalHandle, { cwd: string; onReady?: 
   const ptyIdRef = useRef<number | null>(null);
   const termRef = useRef<Terminal | null>(null);
   const onReadyRef = useRef(onReady);
+  const switchCommandRef = useRef<(cmd: string) => void>(() => {});
   onReadyRef.current = onReady;
 
   useImperativeHandle(ref, () => ({
     runCommand: (cmd: string) => {
       if (ptyIdRef.current != null) ptyWrite(ptyIdRef.current, cmd + "\r").catch(() => {});
+      termRef.current?.focus();
+    },
+    switchCommand: (cmd: string) => {
+      switchCommandRef.current(cmd);
       termRef.current?.focus();
     },
     focus: () => termRef.current?.focus(),
@@ -50,31 +56,80 @@ export const TerminalPane = forwardRef<TerminalHandle, { cwd: string; onReady?: 
     }
 
     let disposed = false;
+    let sessionSeq = 0;
     const unlisten: Array<() => void> = [];
+    const disposables: Array<{ dispose: () => void }> = [];
 
-    (async () => {
-      const id = await ptySpawn(cwd, term.rows, term.cols);
-      if (disposed) {
-        ptyKill(id).catch(() => {});
-        return;
+    function addUnlisten(promise: Promise<() => void>) {
+      promise
+        .then((fn) => {
+          if (disposed) fn();
+          else unlisten.push(fn);
+        })
+        .catch(() => {});
+    }
+
+    async function startSession(command?: string, clear = false) {
+      const seq = ++sessionSeq;
+      const previous = ptyIdRef.current;
+      ptyIdRef.current = null;
+      if (previous != null) await ptyKill(previous).catch(() => {});
+      if (disposed || seq !== sessionSeq) return;
+
+      if (clear) {
+        try {
+          term.reset();
+          term.clear();
+        } catch {
+          /* noop */
+        }
       }
-      ptyIdRef.current = id;
-      onReadyRef.current?.(); // PTY live — parent may now auto-run a command
 
-      unlisten.push(
-        await listen<{ id: number; data: string }>("pty-data", (e) => {
-          if (e.payload.id === id) term.write(b64ToBytes(e.payload.data));
-        }),
-      );
-      unlisten.push(
-        await listen<{ id: number }>("pty-exit", (e) => {
-          if (e.payload.id === id) term.write("\r\n\x1b[90m[process exited]\x1b[0m\r\n");
-        }),
-      );
+      try {
+        const id = await ptySpawn(cwd, term.rows, term.cols);
+        if (disposed || seq !== sessionSeq) {
+          ptyKill(id).catch(() => {});
+          return;
+        }
+        ptyIdRef.current = id;
+        onReadyRef.current?.(); // PTY live — parent may now auto-run a command
+        if (command) ptyWrite(id, command + "\r").catch(() => {});
+      } catch (e) {
+        if (!disposed) term.write(`\r\n\x1b[31m[terminal error] ${String(e)}\x1b[0m\r\n`);
+      }
+    }
 
-      term.onData((d) => ptyWrite(id, d).catch(() => {}));
-      term.onResize(({ rows, cols }) => ptyResize(id, rows, cols).catch(() => {}));
-    })();
+    switchCommandRef.current = (cmd: string) => {
+      startSession(cmd, true).catch(() => {});
+    };
+
+    addUnlisten(
+      listen<{ id: number; data: string }>("pty-data", (e) => {
+        if (e.payload.id === ptyIdRef.current) term.write(b64ToBytes(e.payload.data));
+      }),
+    );
+    addUnlisten(
+      listen<{ id: number }>("pty-exit", (e) => {
+        if (e.payload.id !== ptyIdRef.current) return;
+        ptyIdRef.current = null;
+        term.write("\r\n\x1b[90m[process exited]\x1b[0m\r\n");
+      }),
+    );
+
+    disposables.push(
+      term.onData((d) => {
+        const id = ptyIdRef.current;
+        if (id != null) ptyWrite(id, d).catch(() => {});
+      }),
+    );
+    disposables.push(
+      term.onResize(({ rows, cols }) => {
+        const id = ptyIdRef.current;
+        if (id != null) ptyResize(id, rows, cols).catch(() => {});
+      }),
+    );
+
+    startSession().catch(() => {});
 
     const refit = () => {
       try {
@@ -89,9 +144,12 @@ export const TerminalPane = forwardRef<TerminalHandle, { cwd: string; onReady?: 
 
     return () => {
       disposed = true;
+      sessionSeq++;
+      switchCommandRef.current = () => {};
       window.removeEventListener("resize", refit);
       ro.disconnect();
       unlisten.forEach((fn) => fn());
+      disposables.forEach((d) => d.dispose());
       if (ptyIdRef.current != null) ptyKill(ptyIdRef.current).catch(() => {});
       ptyIdRef.current = null;
       termRef.current = null;

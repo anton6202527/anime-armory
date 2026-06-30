@@ -1,10 +1,10 @@
 name: desktop-release
 
-# Builds the desktop app installers for macOS (.dmg, universal Intel+Apple-Silicon)
-# and Windows (.exe NSIS + .msi) in the cloud — the only way to produce a Windows
-# installer, since Tauri can't cross-compile it from macOS. Also packages the VS Code
-# extension (.vsix), then publishes everything to the PUBLIC anime-armory repo's
-# GitHub Release under STABLE filenames so the README's
+# Optional fallback for the desktop app installers when local `/toa` packaging is
+# not used. Builds macOS (.dmg, universal Intel+Apple-Silicon) and Windows (.exe
+# NSIS, plus .msi if produced) in GitHub Actions, packages the VS Code extension
+# (.vsix), then publishes everything to the PUBLIC anime-armory repo's GitHub
+# Release under STABLE filenames so the README's
 # `releases/latest/download/<name>` links keep resolving across versions.
 #
 # Push a tag like `desktop-v0.1.0` -> build on both OS + publish a Release on
@@ -133,6 +133,7 @@ jobs:
           if [ "${{ steps.vsix.outputs.ok }}" = "1" ] && [ -f vscode-extension/anime-armory.vsix ]; then
             cp vscode-extension/anime-armory.vsix "out/anime-armory.vsix"
           fi
+          (cd out && sha256sum * > SHA256SUMS.txt)
           echo "Release assets:"; ls -la out
 
       - name: Publish to anime-armory release
@@ -146,7 +147,7 @@ jobs:
             gh release upload "$TAG" out/* --repo "$REPO" --clobber
           else
             gh release create "$TAG" out/* --repo "$REPO" \
-              --title "Anime Arsenal Desktop $TAG" \
-              --notes "桌面端安装包（macOS \`.dmg\` / Windows \`.exe\`+\`.msi\`）与 VS Code 插件 \`.vsix\`。下载安装见 README《下载安装》。" \
+              --title "AnimeArsenal Desktop $TAG" \
+              --notes "桌面端安装包（macOS \`.dmg\` / Windows \`.exe\`，若产出则含 \`.msi\`）与 VS Code 插件 \`.vsix\`。下载安装见 README《下载安装》。" \
               --latest
           fi

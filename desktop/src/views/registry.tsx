@@ -8,4 +8,5 @@ export interface ViewProps {
   canvas: CanvasData | null;
   root: WorkRoot;
   ep: string;
+  refreshKey?: number;
 }

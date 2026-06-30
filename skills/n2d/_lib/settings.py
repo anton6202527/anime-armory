@@ -55,6 +55,7 @@ DEFAULTS = {
     "重抽预算策略": "预算充足",
     "出视频规格": "预算一般",
     "视频原生音轨": "丢弃",
+    "后期拟音策略": "自动",
     "字幕语言": "中文",
     "变现模式": "免费",
 }
@@ -213,6 +214,7 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("配音后端", ("n2d",), ("CosyVoice", "GPT-SoVITS", "MiniMax", "火山", "say占位", "自定义"), parameterized=True),
     SettingSpec("字幕语言", ("n2d",), ("中文", "中英双语", "仅英文", "无字幕")),
     SettingSpec("视频原生音轨", ("n2d",), ("丢弃", "低音量混入环境声", "保留原片音轨")),
+    SettingSpec("后期拟音策略", ("n2d",), ("自动", "强制叠加", "关闭")),
     SettingSpec("生成粒度", ("n2d",), ("逐个", "小批", "按场景分批", "整集", "自定义"), parameterized=True, composite=True),
     SettingSpec("生成优先序", ("n2d",), ("关键镜优先", "分镜顺序", "先易后难")),
     SettingSpec("一致性增强", ("n2d",), ("锚点+参考图", "指定参考图", "+LoRA"), key_aliases=("一致性增强(LoRA)",), parameterized=True),

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { confirm } from "@tauri-apps/plugin-dialog";
 import { createWork, deleteWork, scanWorkspace } from "../api";
+import { useI18n, useLineLabel } from "../i18n";
 import type { LineInfo, WorkRoot } from "../types";
 
 /** A line's 创作区: its existing works + a 新建作品 entry. Works live in the
@@ -13,6 +14,8 @@ export function Line(props: {
   onOpen: (root: WorkRoot) => void;
 }) {
   const { workspaceRoot, repoRoot, line, onBack, onOpen } = props;
+  const { t } = useI18n();
+  const lineLabel = useLineLabel();
   const [roots, setRoots] = useState<WorkRoot[]>(line.roots);
   const [err, setErr] = useState<string>("");
   const [creating, setCreating] = useState(false);
@@ -49,11 +52,11 @@ export function Line(props: {
   }
 
   async function remove(root: WorkRoot) {
-    const ok = await confirm(`删除作品「${root.name}」？\n会移到系统垃圾桶（可恢复），不影响项目仓库。`, {
-      title: "删除作品",
+    const ok = await confirm(t("line.deleteWorkMessage", { name: root.name }), {
+      title: t("line.deleteWorkTitle"),
       kind: "warning",
-      okLabel: "移到垃圾桶",
-      cancelLabel: "取消",
+      okLabel: t("line.moveToTrash"),
+      cancelLabel: t("common.cancel"),
     });
     if (!ok) return;
     setErr("");
@@ -68,9 +71,9 @@ export function Line(props: {
   return (
     <div className="line-page">
       <div className="line-page-top">
-        <button onClick={onBack}>← 首页</button>
+        <button onClick={onBack}>{t("line.backHome")}</button>
         <div className="crumb">
-          {line.label} <span style={{ color: "var(--muted)" }}>· {line.dir.split("/").pop()}/</span>
+          {lineLabel(line)} <span style={{ color: "var(--muted)" }}>· {line.dir.split("/").pop()}/</span>
         </div>
       </div>
 
@@ -82,18 +85,17 @@ export function Line(props: {
             <button
               className="del-btn"
               type="button"
-              title="移到垃圾桶"
-              aria-label={`删除作品 ${root.name}`}
+              title={t("line.moveToTrash")}
+              aria-label={t("line.deleteWorkAria", { name: root.name })}
               onClick={(e) => {
                 e.stopPropagation();
                 remove(root);
               }}
             >
               <span className="del-icon" aria-hidden="true">🗑</span>
-              <span>删除</span>
             </button>
             <div className="name">{root.name}</div>
-            <div className="meta">{root.has_progress ? "● 有进度" : "○ 仅初始化"}</div>
+            <div className="meta">{root.has_progress ? t("line.hasProgress") : t("line.initialOnly")}</div>
           </div>
         ))}
 
@@ -102,7 +104,7 @@ export function Line(props: {
             <input
               autoFocus
               className="new-input"
-              placeholder="作品名…"
+              placeholder={t("line.workNamePlaceholder")}
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               onKeyDown={(e) => {
@@ -114,14 +116,14 @@ export function Line(props: {
               }}
             />
             <div className="new-actions">
-              <button onClick={submitNew}>创建</button>
-              <button onClick={() => { setCreating(false); setNewName(""); }}>取消</button>
+              <button onClick={submitNew}>{t("common.create")}</button>
+              <button onClick={() => { setCreating(false); setNewName(""); }}>{t("common.cancel")}</button>
             </div>
           </div>
         ) : (
           <div className="root-card new-card" onClick={() => setCreating(true)}>
             <div className="plus">＋</div>
-            <div className="meta">新建作品</div>
+            <div className="meta">{t("line.newWork")}</div>
           </div>
         )}
       </div>

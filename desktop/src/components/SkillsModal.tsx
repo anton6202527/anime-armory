@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { listSkills, readSkillFile, skillTree } from "../api";
+import { useI18n, useLineLabel } from "../i18n";
 import type { LineInfo, SkillInfo, SkillTreeEntry } from "../types";
 
 /** Overlay listing one line's skill roster, parsed live from each SKILL.md.
@@ -11,6 +12,8 @@ export function SkillsModal(props: {
   onEnter: (line: LineInfo) => void;
 }) {
   const { repoRoot, line, onClose, onEnter } = props;
+  const { t } = useI18n();
+  const lineLabel = useLineLabel();
   const [skills, setSkills] = useState<SkillInfo[]>([]);
   const [err, setErr] = useState<string>("");
   const [activeIdx, setActiveIdx] = useState<number>(0);
@@ -49,12 +52,12 @@ export function SkillsModal(props: {
 
   async function loadFile(s: SkillInfo, rel: string) {
     setActiveFile(rel);
-    setFileContent("读取中…");
+    setFileContent(t("common.loading"));
     try {
       const txt = await readSkillFile(repoRoot, s.dir, rel);
       setFileContent(txt);
     } catch (e) {
-      setFileContent(`读取失败：${e}`);
+      setFileContent(t("common.readFailed", { error: String(e) }));
     }
   }
 
@@ -73,9 +76,9 @@ export function SkillsModal(props: {
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-head">
           <h2>
-            {line.label} · skills <span className="count">{skills.length}</span>
+            {lineLabel(line)} · {t("skills.skills")} <span className="count">{skills.length}</span>
           </h2>
-          <button className="modal-close" onClick={onClose}>
+          <button className="modal-close" title={t("skills.close")} onClick={onClose}>
             ✕
           </button>
         </div>
@@ -87,7 +90,7 @@ export function SkillsModal(props: {
                 className={"skill-item" + (i === activeIdx ? " active" : "")}
                 onClick={() => selectSkill(i)}
               >
-                {i === 0 && <div className="dispatch-dot" title="调度器" />}
+                {i === 0 && <div className="dispatch-dot" title={t("skills.dispatcher")} />}
                 {s.name}
               </div>
             ))}
@@ -103,8 +106,8 @@ export function SkillsModal(props: {
                 <div className="detail-content">
                   <div className="tree-pane">
                     <div className="skill-tree">
-                      {tree === undefined && <div className="tree-line muted">读取目录…</div>}
-                      {tree && tree.length === 0 && <div className="tree-line muted">（空目录）</div>}
+                      {tree === undefined && <div className="tree-line muted">{t("skills.loadingDir")}</div>}
+                      {tree && tree.length === 0 && <div className="tree-line muted">{t("skills.emptyDir")}</div>}
                       {tree?.map((n, j) => (
                         <div
                           className={"tree-line" + (n.is_dir ? " dir" : "") + (activeFile === n.path ? " active" : "")}
@@ -123,13 +126,13 @@ export function SkillsModal(props: {
                     <pre style={{ margin: 0, whiteSpace: "pre-wrap", fontSize: 12, lineHeight: 1.5 }}>
                       {fileContent}
                     </pre>
-                    {!activeFile && <div className="placeholder">（选择左侧文件查看代码）</div>}
+                    {!activeFile && <div className="placeholder">{t("skills.selectFile")}</div>}
                   </div>
                 </div>
               </>
             )}
-            {!current && !err && <div className="empty" style={{ padding: 40 }}>未找到 skills</div>}
-            {err && <div className="empty" style={{ padding: 40 }}>读取失败：{err}</div>}
+            {!current && !err && <div className="empty" style={{ padding: 40 }}>{t("skills.notFound")}</div>}
+            {err && <div className="empty" style={{ padding: 40 }}>{t("common.readFailed", { error: err })}</div>}
           </div>
         </div>
         <div className="modal-foot">
@@ -140,7 +143,7 @@ export function SkillsModal(props: {
               onEnter(line);
             }}
           >
-            进入创作区 →
+            {t("skills.enterCreation")}
           </button>
         </div>
       </div>

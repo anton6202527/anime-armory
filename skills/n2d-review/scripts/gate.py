@@ -1953,6 +1953,50 @@ def check_native_audio_compose_policy(root: str, ep: str, audio_hits: List[str])
 
     if mode == NATIVE_AUDIO_KEEP and voice_track_exists(root, ep):
         add(BLOCK, "原生音画", os.path.join(root, "合成", ep, "配音"), "`视频原生音轨=保留原片音轨` 且存在 n2d-voice 配音轨；正式合成会双人声，改为「低音量混入环境声」或「丢弃」")
+def check_compose_foley_native_audio_policy(root: str, ep: str) -> None:
+    """Advisory guard: native-AV clip audio should not get a second compose foley layer."""
+    effective_audio_preserved = (
+        is_native_av_production(root)
+        or native_audio_policy_mode(native_audio_policy(root)) != NATIVE_AUDIO_DISCARD
+    )
+    if not effective_audio_preserved:
+        return
+    profile = video_backend_adapter.route_native_audio_profile(
+        root,
+        ep,
+        channel=get_setting(root, "生视频渠道", "").strip(),
+    )
+    if not profile.get("native_audio"):
+        return
+    work = os.path.join(root, "合成", ep, "_work")
+    policy_path = os.path.join(work, "foley_render_policy.json")
+    foley_wav = os.path.join(work, "foley_mix.wav")
+    data = load_json(policy_path)
+    if isinstance(data, dict):
+        forced = bool(data.get("force_compose_foley")) or str(data.get("strategy") or "").strip() == "强制叠加"
+        if data.get("mode") == "full" and not forced:
+            sample = "、".join(str(h.get("clip_id") or h.get("backend") or "") for h in (profile.get("hits") or [])[:4])
+            add(
+                WARN,
+                "后期拟音",
+                policy_path,
+                "本集路由/制作模式会保留原生音画后端音轨，但 compose 侧 foley_render_policy=full 且未显式 force；"
+                f"疑似双层拟音/重复打击声（clips: {sample or 'unknown'}）。"
+                "默认应由 foley_agent 抑制 compose foley；确需补拟音请设 `_设置.md` 后期拟音策略=强制叠加 或 FORCE_COMPOSE_FOLEY=1。",
+                return_to_stage="compose",
+                confidence="heuristic",
+            )
+        return
+    if os.path.isfile(foley_wav):
+        add(
+            WARN,
+            "后期拟音",
+            foley_wav,
+            "本集路由/制作模式会保留原生音画后端音轨，但合成工作区缺 foley_render_policy.json，无法确认 compose foley 是否已抑制。"
+            "请用新版 n2d-compose 重跑；确需强制叠加时显式 FORCE_COMPOSE_FOLEY=1 或 后期拟音策略=强制叠加。",
+            return_to_stage="compose",
+            confidence="heuristic",
+        )
 def check_video_assets(root: str, ep: str) -> None:
     check_video_stage_raw_output_policy(root, ep)
     clips = clip_files(root, ep)
@@ -1981,6 +2025,7 @@ def check_video_assets(root: str, ep: str) -> None:
             f"ffprobe 不可用，{len(unprobeable)} 个 clip 无法探测原生音轨——"
             f"「原生台词 + n2d-voice 配音 = 双人声」硬闸门无法校验，交付边界不放行。{tail}")
     check_native_audio_compose_policy(root, ep, audio_hits)
+    check_compose_foley_native_audio_policy(root, ep)
     shots = load_json(os.path.join(root, "脚本", ep, "镜头时长.json"))
     if isinstance(shots, dict):
         target = sum(float(v) for v in shots.values())

@@ -624,9 +624,15 @@ def main():
             print(f"  {ch:>2} | " + " | ".join(str(term_matrix[ch][t]) for t in terms))
     if repetition_summary:
         rs = repetition_summary
+        cr = rs.get("compression_ratio")
+        cr_txt = f"{cr:.0%}" if isinstance(cr, (int, float)) else "n/a"
         print(f"\n跨章重复率/机械文风（advisory·内部启发式·绝不 🔴）：相邻章最高近重复 "
               f"{rs['adjacent_max_jaccard']:.0%}（🟡阈 {REP_ADJ_JACCARD_YELLOW:.0%}）；"
-              f"机械开篇组 {rs['mechanical_opener_groups']}；跨章复用整句 {rs['repeated_sentences']}")
+              f"机械开篇组 {rs['mechanical_opener_groups']}；跨章复用整句 {rs['repeated_sentences']}；"
+              f"机械句式模板 {rs.get('sentence_opener_templates', 0)}；"
+              f"句首词高频 {rs.get('sentence_start_token_groups', 0)}；"
+              f"短句式模板 {rs.get('short_sentence_templates', 0)}；"
+              f"全书压缩比 {cr_txt}；低压缩章节 {rs.get('low_chapter_compression_count', 0)}（多样性代理）")
     counts = {s: sum(1 for x in findings if x["severity"] == s) for s in ("🔴", "🟡", "🟢")}
     print(f"\n小结：🔴 {counts['🔴']}  🟡 {counts['🟡']}  🟢 {counts['🟢']}")
     payload = {

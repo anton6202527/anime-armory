@@ -34,7 +34,44 @@
 - **桌面端 App**：macOS 下载 `.dmg` 双击安装；Windows 下载 `.exe` 运行安装程序。打开即用，内置全部 skill。
 - **VS Code 插件**：下载 `.vsix` 后，在 VS Code 命令面板执行 `Extensions: Install from VSIX…` 选中该文件安装。
 
-> 链接始终指向 anime-armory **最新发布版**（已发布，可直接下载）；桌面端 App 内置当前全部 skill。历史版本与校验和见 [Releases 页](https://github.com/anton6202527/anime-armory/releases)。维护者出新版见下方“自行打包发布”（推 `desktop-v*` tag 触发云端构建，自动按稳定文件名发布到 Release）。
+> 链接始终指向 anime-armory **最新发布版**（已发布，可直接下载）；桌面端 App 内置当前全部 skill。历史版本与校验和见 [Releases 页](https://github.com/anton6202527/anime-armory/releases)。维护者出新版见下方“自行打包发布”（推荐执行 `/toa` 本地打包并直接上传 Release）。
+
+## 桌面端 App 能做什么
+
+桌面端 App 是 anime-armory 的本地制作中控台：打开后先选择工作区，再按生产线进入 `制漫剧`、`拍广告`、`制MV`、`写歌`、`写小说` 等作品目录。它把原本散在文件夹、终端和 skill 文档里的信息收拢到一个界面里，让制作团队能直观看到每条线有多少作品、每个项目走到哪一步、下一步该调用哪个 skill。
+
+进入项目后，App 会把左侧文件树、分镜画布 / 生产看板、右侧下一步提示和 AI agent 终端放在同一个工作台里。用户可以一边查看脚本、定妆图、分镜图、质检报告和生产数据，一边按右侧建议直接进入 Claude Code / Codex CLI / Gemini CLI 继续执行 `n2d-image`、`n2d-video`、`n2d-compose` 等阶段任务。
+
+<table>
+  <tr>
+    <td width="50%">
+      <img src="docs/app-screenshots/app-home.png" alt="AnimeArmory 桌面端首页，展示五条生产线和作品数量" />
+      <br />
+      <strong>生产线首页</strong><br />
+      统一展示制漫剧、广告、MV、歌曲、小说五条创作线，点击即可进入对应作品区。
+    </td>
+    <td width="50%">
+      <img src="docs/app-screenshots/app-skills.png" alt="桌面端 skill 浏览窗口，展示 n2d skill 列表、说明和文件内容" />
+      <br />
+      <strong>内置 skill 浏览</strong><br />
+      直接查看每条生产线的 skill 职责、触发条件和脚本文件，方便团队理解流水线能力边界。
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="docs/app-screenshots/app-kanban.png" alt="项目生产看板，展示待出图、已出图、已出视频和下一步命令" />
+      <br />
+      <strong>项目生产看板</strong><br />
+      按集数汇总待出图、已出图、已出视频状态，并在右侧给出下一步命令和 agent 入口。
+    </td>
+    <td width="50%">
+      <img src="docs/app-screenshots/app-files-preview.png" alt="项目文件预览界面，左侧是文件树，中间显示角色定妆图，右侧是 AI agent 终端" />
+      <br />
+      <strong>文件预览 + AI 终端</strong><br />
+      在同一屏查看素材、图片、Markdown、JSON 等产物，同时保留可执行命令的 AI agent 终端。
+    </td>
+  </tr>
+</table>
 
 ### 核心资产是 skill —— 也可以不装 App，自行下载调试
 
@@ -90,23 +127,39 @@ MV：mv -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-s
 
 上面“下载安装”里的安装包就是用本节脚本打出来后上传到 anime-armory 的 GitHub Release 的。自己分发或出新版时按下面流程重新打包即可。
 
-**桌面端 App / VS Code 插件（推荐用云端构建，一步到位）**：
+**桌面端 App / VS Code 插件（推荐走 `/toa` 本地打包 + 直接上传 Release）**：
 
-Windows 安装包**无法在 macOS 上交叉编译**，必须在 Windows 上构建。仓库已内置云端流水线 [`​.github/workflows/desktop-release.yml`](.github/workflows/desktop-release.yml)，用 GitHub Actions 同时在 macOS 与 Windows 上构建，并把安装包按“下载安装”表里的**稳定文件名**发布到 anime-armory 的 Release：
+当前推荐流程是执行 `/toa`：它会先本地打包 VS Code 插件、macOS universal `.dmg`、Windows x64 NSIS `.exe`，再用 `gh release create/upload --clobber` 直接发布到 `anime-armory` 的 GitHub Release。上传时会统一重命名为“下载安装”表里的**稳定文件名**，所以这些直链会立刻指向新包：
+
+- `AnimeArsenal_macos.dmg`
+- `AnimeArsenal_windows.exe`
+- `anime-armory.vsix`
+
+macOS 本机需要 Rust targets、`mingw-w64` 和 NSIS（`makensis`）；`/toa` 会检测/安装缺失项。Windows 包是交叉构建，未签名；若要完全匹配 Windows 主机环境，可改用下面的云端备用流程。
+
+**云端备用流程（不稳定时不要优先用）**：
+
+仓库仍保留 [`.github/workflows/desktop-release.yml`](.github/workflows/desktop-release.yml)。推 `desktop-v*` tag 会触发 GitHub Actions 在 macOS 与 Windows 上构建并发布同样的稳定文件名：
 
 ```bash
 # 推一个 desktop-v* tag 即触发云端构建 + 发布（mac .dmg / win .exe[NSIS] / .vsix）
-git tag desktop-v0.1.22 && git push origin desktop-v0.1.22
+git tag desktop-v0.1.25 && git push origin desktop-v0.1.25
 # 或在 Actions 页手动 workflow_dispatch（只产出 build artifact，不发 Release）
 ```
 
-前置：在 anime-arsenal 仓库加一个 secret `ARMORY_RELEASE_TOKEN`（一个对 anime-armory 有 `contents: write` 权限的 PAT）——默认 `GITHUB_TOKEN` 只能写当前仓库，跨仓发布到 armory 必须用 PAT。流水线会自动把产物重命名为 `AnimeArsenal_macos.dmg`（macOS）/ `AnimeArsenal_windows.exe`（Windows NSIS 安装程序）/ `anime-armory.vsix`，与“下载安装”表里的 `releases/latest/download/...` 直链一一对应。Windows 只打 NSIS `.exe`（MSI/WiX 对大体积 `skills/` 资源树不稳定）。
+前置：在 anime-arsenal 仓库加一个 secret `ARMORY_RELEASE_TOKEN`（一个对 anime-armory 有 `contents: write` 权限的 PAT）——默认 `GITHUB_TOKEN` 只能写当前仓库，跨仓发布到 armory 必须用 PAT。Windows 只打 NSIS `.exe`（MSI/WiX 对大体积 `skills/` 资源树不稳定）。
 
-本地手动打包（仅产出当前系统的安装包；macOS 上得不到 Windows 包）：
+本地手动打包（不走 `/toa` 时）：
 
 ```bash
-# 桌面端：在 desktop/ 里用 Tauri 打当前平台的安装包
-cd desktop && npm install && npm run tauri build
+# 桌面端：Mac universal
+cd desktop && npm install
+npm run tauri -- build --target universal-apple-darwin --bundles app,dmg --ci
+
+# 桌面端：Windows x64 NSIS（macOS 交叉构建）
+rustup target add x86_64-pc-windows-gnu
+brew install mingw-w64 makensis
+cd desktop && npm run tauri -- build --target x86_64-pc-windows-gnu --bundles nsis --ci
 
 # VS Code 插件：在 vscode-extension/ 里打 .vsix
 cd vscode-extension && npx @vscode/vsce package
@@ -315,27 +368,37 @@ Ad: ad -> ad-concept -> ad-script -> ad-voice -> ad-script(storyboard) -> ad-ima
 
 ## Maintainer Packaging
 
-The packages listed above are built and uploaded to the `anime-armory` GitHub Release.
+The packages listed above are built locally and uploaded to the `anime-armory` GitHub Release under stable filenames.
 
-**Desktop App / VS Code extension, cloud build recommended:**
+**Desktop App / VS Code extension, recommended `/toa` flow:**
 
-Windows installers cannot be cross-compiled from macOS. The repo includes [`.github/workflows/desktop-release.yml`](.github/workflows/desktop-release.yml), which builds on macOS and Windows via GitHub Actions and publishes stable filenames:
-
-```bash
-git tag desktop-v0.1.22 && git push origin desktop-v0.1.22
-```
-
-Prerequisite: configure the `ARMORY_RELEASE_TOKEN` secret in the `anime-arsenal` repo. It must be a PAT with `contents: write` permission for `anime-armory`. The workflow publishes:
+Run `/toa` to package the VS Code extension, macOS universal `.dmg`, and Windows x64 NSIS `.exe` locally, then upload them directly to the `anime-armory` GitHub Release with `gh release create/upload --clobber`. The uploaded assets are renamed to the stable filenames used by the download table:
 
 - `AnimeArsenal_macos.dmg`
 - `AnimeArsenal_windows.exe`
 - `anime-armory.vsix`
 
-Local manual packaging only builds the current platform:
+On macOS this requires Rust targets, `mingw-w64`, and NSIS (`makensis`); `/toa` checks for missing tools. The Windows package is cross-built and unsigned.
+
+**Cloud fallback, not the preferred path when Actions is unstable:**
+
+The repo still includes [`.github/workflows/desktop-release.yml`](.github/workflows/desktop-release.yml). Pushing a `desktop-v*` tag triggers GitHub Actions to build and publish the same stable filenames:
 
 ```bash
-cd desktop && npm install && npm run tauri build
-cd vscode-extension && npx @vscode/vsce package
+git tag desktop-v0.1.25 && git push origin desktop-v0.1.25
+```
+
+Prerequisite: configure the `ARMORY_RELEASE_TOKEN` secret in the `anime-arsenal` repo. It must be a PAT with `contents: write` permission for `anime-armory`.
+
+Manual packaging without `/toa`:
+
+```bash
+cd desktop && npm install
+npm run tauri -- build --target universal-apple-darwin --bundles app,dmg --ci
+rustup target add x86_64-pc-windows-gnu
+brew install mingw-w64 makensis
+npm run tauri -- build --target x86_64-pc-windows-gnu --bundles nsis --ci
+cd ../vscode-extension && npx @vscode/vsce package
 ```
 
 **Lightweight starter package:**

@@ -1,13 +1,15 @@
 // Bridge commands: scan the workspace, read the canvas (review_ui or
 // storyboard fallback), and shell out to the repo's `--json` tools.
+use std::collections::BTreeMap;
 use std::fs;
+use std::hash::{Hash, Hasher};
 use std::io::Read;
-use std::path::{Path, PathBuf};
+use std::path::{Component, Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::thread;
-use std::time::{Duration, Instant};
+use std::time::{Duration, Instant, UNIX_EPOCH};
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use tauri::Manager;
 
@@ -91,6 +93,17 @@ pub struct SkillTreeEntry {
     path: String, // path relative to the skill dir, e.g. "scripts/market.py"
     depth: usize,
     is_dir: bool,
+    // git-like change status vs the work's archived baseline snapshot:
+    // "u" = new since last archive, "m" = modified, "" = clean / not tracked.
+    // Always "" for skill_tree (which has no baseline).
+    status: String,
+}
+
+#[derive(Serialize)]
+pub struct WorkSnapshot {
+    signature: String,
+    file_count: usize,
+    dir_count: usize,
 }
 
 /// The file/folder tree under `skills/<dir>/` for the skills-detail view.
@@ -121,10 +134,7 @@ fn walk_tree(dir: &Path, prefix: &str, depth: usize, out: &mut Vec<SkillTreeEntr
     });
     for e in entries {
         let name = e.file_name().to_string_lossy().to_string();
-        if matches!(
-            name.as_str(),
-            "__pycache__" | ".DS_Store" | "node_modules" | "_voicecache" | ".git"
-        ) {
+        if should_skip_tree_entry(&name) {
             continue;
         }
         let is_dir = e.path().is_dir();
@@ -138,11 +148,19 @@ fn walk_tree(dir: &Path, prefix: &str, depth: usize, out: &mut Vec<SkillTreeEntr
             path: rel.clone(),
             depth,
             is_dir,
+            status: String::new(),
         });
         if is_dir {
             walk_tree(&e.path(), &rel, depth + 1, out);
         }
     }
+}
+
+fn should_skip_tree_entry(name: &str) -> bool {
+    matches!(
+        name,
+        "__pycache__" | ".DS_Store" | "node_modules" | "_voicecache" | ".git"
+    )
 }
 
 /// Read one text file inside a skill (`skills/<dir>/<rel>`) for the code pane.
@@ -180,16 +198,285 @@ pub fn read_skill_file(repo_root: String, dir: String, rel: String) -> Result<St
 // ---- work-folder file viewer (the default "文件" tab of every work) ----
 
 /// The full file/folder tree under a work root (`创作区/<line>/<work>/`), for the
-/// in-app 文件 viewer. Reuses `SkillTreeEntry`'s {name,path,depth,is_dir} shape.
-/// `root` is an absolute work path produced by `scan_workspace`; read-only.
+/// in-app 文件 viewer. Reuses `SkillTreeEntry`'s {name,path,depth,is_dir} shape and
+/// fills `status` ("u"/"m"/"") against the work's archived baseline snapshot.
+/// `root` is an absolute work path produced by `scan_workspace`; read-only to the work.
 #[tauri::command]
 pub fn work_tree(root: String) -> Vec<SkillTreeEntry> {
     let base = Path::new(&root);
     let mut out = Vec::new();
-    if base.is_dir() {
-        walk_tree(base, "", 0, &mut out);
+    if !base.is_dir() {
+        return out;
     }
+    walk_tree(base, "", 0, &mut out);
+
+    // First-ever scan of a work: silently seed the baseline from the current
+    // state so everything starts "clean" (no marker noise) — markers only show
+    // for genuine changes made after this point.
+    if !baseline_exists(&root) {
+        let mut bl = Baseline::default();
+        snapshot_files(base, "", 0, &mut bl.files);
+        let _ = save_baseline(&root, &bl);
+        return out;
+    }
+
+    let bl = load_baseline(&root);
+    annotate_status(&root, &mut out, &bl);
     out
+}
+
+/// Cheap recursive fingerprint of the visible work tree. Used by the frontend
+/// as a polling fallback when the OS watcher misses a burst of skill-generated
+/// file writes. It has no baseline side effects; it only observes the directory.
+#[tauri::command]
+pub fn work_snapshot(root: String) -> WorkSnapshot {
+    let base = Path::new(&root);
+    let mut hasher = std::collections::hash_map::DefaultHasher::new();
+    let mut file_count = 0usize;
+    let mut dir_count = 0usize;
+    if base.is_dir() {
+        snapshot_signature(base, "", 0, &mut hasher, &mut file_count, &mut dir_count);
+    } else {
+        "missing".hash(&mut hasher);
+    }
+    WorkSnapshot {
+        signature: format!("{:016x}", hasher.finish()),
+        file_count,
+        dir_count,
+    }
+}
+
+fn snapshot_signature(
+    dir: &Path,
+    prefix: &str,
+    depth: usize,
+    hasher: &mut std::collections::hash_map::DefaultHasher,
+    file_count: &mut usize,
+    dir_count: &mut usize,
+) {
+    if depth > 6 {
+        return;
+    }
+    let mut entries: Vec<_> = match fs::read_dir(dir) {
+        Ok(rd) => rd.flatten().collect(),
+        Err(_) => return,
+    };
+    entries.sort_by(|a, b| a.file_name().cmp(&b.file_name()));
+    for e in entries {
+        let name = e.file_name().to_string_lossy().to_string();
+        if should_skip_tree_entry(&name) {
+            continue;
+        }
+        let rel = if prefix.is_empty() {
+            name.clone()
+        } else {
+            format!("{prefix}/{name}")
+        };
+        let p = e.path();
+        rel.hash(hasher);
+        if p.is_dir() {
+            *dir_count += 1;
+            "dir".hash(hasher);
+            snapshot_signature(&p, &rel, depth + 1, hasher, file_count, dir_count);
+        } else if let Ok(meta) = fs::metadata(&p) {
+            *file_count += 1;
+            "file".hash(hasher);
+            meta.len().hash(hasher);
+            if let Ok(modified) = meta.modified() {
+                if let Ok(dur) = modified.duration_since(UNIX_EPOCH) {
+                    dur.as_nanos().hash(hasher);
+                }
+            }
+        }
+    }
+}
+
+// ---- archived-baseline change tracking (git-like u/m markers) ----
+
+#[derive(Serialize, Deserialize, Clone)]
+struct FileMeta {
+    mtime: u64, // millis since UNIX epoch
+    size: u64,
+}
+
+#[derive(Serialize, Deserialize, Default)]
+struct Baseline {
+    files: BTreeMap<String, FileMeta>, // rel path -> snapshot at last archive
+}
+
+/// Where a work's baseline snapshot lives — OS config dir, keyed by a hash of the
+/// absolute work path. Kept OUT of the work folder so it never pollutes 创作区/
+/// nor gets swept up by the repo's periodic auto-commit hook.
+fn baseline_path(root: &str) -> Option<PathBuf> {
+    let mut hasher = std::collections::hash_map::DefaultHasher::new();
+    root.hash(&mut hasher);
+    let h = hasher.finish();
+    Some(
+        dirs::config_dir()?
+            .join("anime-arsenal")
+            .join("baselines")
+            .join(format!("{h:016x}.json")),
+    )
+}
+
+fn baseline_exists(root: &str) -> bool {
+    baseline_path(root).map(|p| p.exists()).unwrap_or(false)
+}
+
+fn load_baseline(root: &str) -> Baseline {
+    baseline_path(root)
+        .and_then(|p| fs::read(p).ok())
+        .and_then(|b| serde_json::from_slice(&b).ok())
+        .unwrap_or_default()
+}
+
+fn save_baseline(root: &str, bl: &Baseline) -> Result<(), String> {
+    let p = baseline_path(root).ok_or("无法定位配置目录")?;
+    if let Some(parent) = p.parent() {
+        fs::create_dir_all(parent).map_err(|e| e.to_string())?;
+    }
+    let data = serde_json::to_vec_pretty(bl).map_err(|e| e.to_string())?;
+    fs::write(p, data).map_err(|e| e.to_string())
+}
+
+fn file_meta(p: &Path) -> Option<FileMeta> {
+    let m = fs::metadata(p).ok()?;
+    let mtime = m
+        .modified()
+        .ok()?
+        .duration_since(UNIX_EPOCH)
+        .ok()?
+        .as_millis() as u64;
+    Some(FileMeta {
+        mtime,
+        size: m.len(),
+    })
+}
+
+/// Walk a directory the SAME way `walk_tree` does (same ignores + depth cap) but
+/// collect only files with their {mtime,size}, so a snapshot matches the tree.
+fn snapshot_files(dir: &Path, prefix: &str, depth: usize, out: &mut BTreeMap<String, FileMeta>) {
+    if depth > 6 {
+        return;
+    }
+    let rd = match fs::read_dir(dir) {
+        Ok(rd) => rd,
+        Err(_) => return,
+    };
+    for e in rd.flatten() {
+        let name = e.file_name().to_string_lossy().to_string();
+        if should_skip_tree_entry(&name) {
+            continue;
+        }
+        let rel = if prefix.is_empty() {
+            name.clone()
+        } else {
+            format!("{prefix}/{name}")
+        };
+        let p = e.path();
+        if p.is_dir() {
+            snapshot_files(&p, &rel, depth + 1, out);
+        } else if let Some(fm) = file_meta(&p) {
+            out.insert(rel, fm);
+        }
+    }
+}
+
+/// Fill each entry's `status` from the baseline: files compare mtime+size; dirs
+/// roll up to "u" (a brand-new folder) or "m" (a folder with edited descendants).
+fn annotate_status(root: &str, entries: &mut [SkillTreeEntry], bl: &Baseline) {
+    let base = Path::new(root);
+    for e in entries.iter_mut() {
+        if e.is_dir {
+            continue;
+        }
+        match bl.files.get(&e.path) {
+            None => e.status = "u".into(),
+            Some(prev) => {
+                if let Some(cur) = file_meta(&base.join(&e.path)) {
+                    if cur.size != prev.size || cur.mtime != prev.mtime {
+                        e.status = "m".into();
+                    }
+                }
+            }
+        }
+    }
+    // Dir rollup needs the just-computed file statuses; snapshot them first to
+    // avoid an aliasing borrow while we mutate dir entries.
+    let files: Vec<(String, String)> = entries
+        .iter()
+        .filter(|e| !e.is_dir)
+        .map(|e| (e.path.clone(), e.status.clone()))
+        .collect();
+    for e in entries.iter_mut() {
+        if !e.is_dir {
+            continue;
+        }
+        let prefix = format!("{}/", e.path);
+        let changed = files
+            .iter()
+            .any(|(p, st)| p.starts_with(&prefix) && (st == "u" || st == "m"));
+        if changed {
+            let had_tracked = bl.files.keys().any(|k| k.starts_with(&prefix));
+            e.status = if had_tracked { "m".into() } else { "u".into() };
+        }
+    }
+}
+
+/// Baseline files that no longer exist on disk (deleted since last archive).
+/// Returned separately from `work_tree` because a deleted file has no tree row.
+/// Empty when there's no baseline yet (first scan silently seeds it).
+#[tauri::command]
+pub fn work_deleted(root: String) -> Vec<String> {
+    if !Path::new(&root).is_dir() || !baseline_exists(&root) {
+        return Vec::new();
+    }
+    let base = Path::new(&root);
+    let bl = load_baseline(&root);
+    bl.files
+        .keys()
+        .filter(|k| !base.join(k).is_file())
+        .cloned()
+        .collect()
+}
+
+/// Archive (= confirm) changes so they become the new clean baseline.
+/// `rel = None` archives the whole work; `rel = Some(path)` confirms just that
+/// file or subfolder (its current state becomes clean, others keep their markers).
+#[tauri::command]
+pub fn archive_work(root: String, rel: Option<String>) -> Result<(), String> {
+    let base = Path::new(&root);
+    if !base.is_dir() {
+        return Err("作品目录不存在".into());
+    }
+    match rel.as_deref().filter(|r| !r.is_empty()) {
+        None => {
+            let mut bl = Baseline::default();
+            snapshot_files(base, "", 0, &mut bl.files);
+            save_baseline(&root, &bl)
+        }
+        Some(r) => {
+            if r.contains("..") {
+                return Err("非法路径".into());
+            }
+            let mut bl = load_baseline(&root);
+            let target = base.join(r);
+            if target.is_dir() {
+                // re-snapshot just this subtree (drop stale + add current)
+                let prefix = format!("{r}/");
+                bl.files.retain(|k, _| !k.starts_with(&prefix) && k != r);
+                let mut sub = BTreeMap::new();
+                snapshot_files(&target, r, 0, &mut sub);
+                bl.files.extend(sub);
+            } else if let Some(fm) = file_meta(&target) {
+                bl.files.insert(r.to_string(), fm);
+            } else {
+                // confirming a now-deleted file just forgets it
+                bl.files.remove(r);
+            }
+            save_baseline(&root, &bl)
+        }
+    }
 }
 
 /// Read one text file inside a work root (`<root>/<rel>`) for the file preview.
@@ -221,6 +508,207 @@ pub fn read_work_file(root: String, rel: String) -> Result<String, String> {
     Ok(String::from_utf8_lossy(&bytes).into_owned())
 }
 
+fn validate_rel_path(rel: &str, allow_empty: bool) -> Result<(), String> {
+    if rel.is_empty() {
+        return if allow_empty {
+            Ok(())
+        } else {
+            Err("非法文件路径".into())
+        };
+    }
+    if !allow_empty && rel == "." {
+        return Err("非法文件路径".into());
+    }
+    let p = Path::new(rel);
+    if p.is_absolute() {
+        return Err("非法文件路径".into());
+    }
+    let mut has_normal = false;
+    for c in p.components() {
+        match c {
+            Component::Normal(_) => has_normal = true,
+            Component::CurDir => {}
+            _ => return Err("非法文件路径".into()),
+        }
+    }
+    if !allow_empty && !has_normal {
+        return Err("非法文件路径".into());
+    }
+    Ok(())
+}
+
+fn validate_entry_name(name: &str) -> Result<String, String> {
+    let trimmed = name.trim();
+    if trimmed.is_empty()
+        || trimmed == "."
+        || trimmed == ".."
+        || trimmed.contains('/')
+        || trimmed.contains('\\')
+        || trimmed.contains('\0')
+    {
+        return Err("名称含非法字符".into());
+    }
+    Ok(trimmed.to_string())
+}
+
+fn existing_work_path(root: &str, rel: &str, allow_empty: bool) -> Result<PathBuf, String> {
+    validate_rel_path(rel, allow_empty)?;
+    let base = Path::new(root);
+    let base_canon = fs::canonicalize(base).map_err(|e| e.to_string())?;
+    let target = if rel.is_empty() {
+        base.to_path_buf()
+    } else {
+        base.join(rel)
+    };
+    let target_canon = fs::canonicalize(target).map_err(|e| e.to_string())?;
+    if target_canon == base_canon || target_canon.starts_with(&base_canon) {
+        Ok(target_canon)
+    } else {
+        Err("路径越界，已拒绝".into())
+    }
+}
+
+#[tauri::command]
+pub fn create_work_entry(
+    root: String,
+    parent_rel: String,
+    name: String,
+    kind: String,
+) -> Result<String, String> {
+    validate_rel_path(&parent_rel, true)?;
+    let clean_name = validate_entry_name(&name)?;
+    let parent = existing_work_path(&root, &parent_rel, true)?;
+    if !parent.is_dir() {
+        return Err("父路径不是文件夹".into());
+    }
+    let target = parent.join(&clean_name);
+    if target.exists() {
+        return Err("同名文件或文件夹已存在".into());
+    }
+    match kind.as_str() {
+        "file" => {
+            fs::OpenOptions::new()
+                .write(true)
+                .create_new(true)
+                .open(&target)
+                .map_err(|e| e.to_string())?;
+        }
+        "folder" => fs::create_dir(&target).map_err(|e| e.to_string())?,
+        _ => return Err("未知创建类型".into()),
+    }
+    let rel = if parent_rel.is_empty() {
+        clean_name
+    } else {
+        format!("{parent_rel}/{clean_name}")
+    };
+    Ok(rel)
+}
+
+#[tauri::command]
+pub fn rename_work_entry(root: String, rel: String, new_name: String) -> Result<String, String> {
+    validate_rel_path(&rel, false)?;
+    let clean_name = validate_entry_name(&new_name)?;
+    let target = existing_work_path(&root, &rel, false)?;
+    let parent = target
+        .parent()
+        .ok_or_else(|| "无法定位父目录".to_string())?;
+    let next = parent.join(&clean_name);
+    if next.exists() {
+        return Err("同名文件或文件夹已存在".into());
+    }
+    fs::rename(&target, &next).map_err(|e| e.to_string())?;
+    let parent_rel = Path::new(&rel)
+        .parent()
+        .and_then(|p| {
+            let s = p.to_string_lossy().to_string();
+            if s.is_empty() || s == "." {
+                None
+            } else {
+                Some(s)
+            }
+        })
+        .unwrap_or_default();
+    Ok(if parent_rel.is_empty() {
+        clean_name
+    } else {
+        format!("{parent_rel}/{clean_name}")
+    })
+}
+
+#[tauri::command]
+pub fn delete_work_entry(root: String, rel: String) -> Result<(), String> {
+    validate_rel_path(&rel, false)?;
+    let target = existing_work_path(&root, &rel, false)?;
+    let base = fs::canonicalize(&root).map_err(|e| e.to_string())?;
+    if target == base {
+        return Err("拒绝删除作品根目录".into());
+    }
+    trash::delete(&target).map_err(|e| format!("移入垃圾桶失败：{e}"))
+}
+
+fn spawn_os_open(program: &str, args: &[&str]) -> Result<(), String> {
+    Command::new(program)
+        .args(args)
+        .spawn()
+        .map(|_| ())
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn reveal_work_entry(root: String, rel: String) -> Result<(), String> {
+    let target = existing_work_path(&root, &rel, true)?;
+    let target_s = target.to_string_lossy().to_string();
+
+    #[cfg(target_os = "macos")]
+    {
+        return spawn_os_open("open", &["-R", &target_s]);
+    }
+    #[cfg(target_os = "windows")]
+    {
+        if target.is_dir() {
+            return spawn_os_open("explorer", &[&target_s]);
+        }
+        let select_arg = format!("/select,{target_s}");
+        return spawn_os_open("explorer", &[&select_arg]);
+    }
+    #[cfg(not(any(target_os = "macos", target_os = "windows")))]
+    {
+        let dir = if target.is_dir() {
+            target
+        } else {
+            target
+                .parent()
+                .map(Path::to_path_buf)
+                .ok_or("无法定位父目录")?
+        };
+        let dir_s = dir.to_string_lossy().to_string();
+        return spawn_os_open("xdg-open", &[&dir_s]);
+    }
+}
+
+#[tauri::command]
+pub fn open_work_entry(root: String, rel: String) -> Result<(), String> {
+    let target = existing_work_path(&root, &rel, true)?;
+    let target_s = target.to_string_lossy().to_string();
+
+    #[cfg(target_os = "macos")]
+    {
+        return spawn_os_open("open", &[&target_s]);
+    }
+    #[cfg(target_os = "windows")]
+    {
+        return Command::new("cmd")
+            .args(["/C", "start", "", &target_s])
+            .spawn()
+            .map(|_| ())
+            .map_err(|e| e.to_string());
+    }
+    #[cfg(not(any(target_os = "macos", target_os = "windows")))]
+    {
+        return spawn_os_open("xdg-open", &[&target_s]);
+    }
+}
+
 // ---- AI agent CLI detection (for the operation-page terminal) ----
 
 #[derive(Serialize)]
@@ -232,6 +720,7 @@ pub struct AgentInfo {
     path: String,
     image: String, // image-gen capability: "yes" | "maybe" | "no"
     note: String,
+    install_command: Option<String>,
 }
 
 /// Run a command with a hard timeout. Returns stdout (lossy utf8) on a clean
@@ -280,7 +769,7 @@ pub fn detect_agents() -> Vec<AgentInfo> {
     let shell = std::env::var("SHELL").unwrap_or_else(|_| "/bin/zsh".to_string());
 
     // resolve every candidate command in ONE login-shell call (PATH parity)
-    let probe = r#"for c in claude codex gemini gemini-cli; do p=$(command -v "$c" 2>/dev/null) && printf '%s\t%s\n' "$c" "$p"; done"#;
+    let probe = r#"for c in claude codex gemini gemini-cli opencode; do p=$(command -v "$c" 2>/dev/null) && printf '%s\t%s\n' "$c" "$p"; done"#;
     let mut found: std::collections::HashMap<String, String> = std::collections::HashMap::new();
     if let Some(out) = run_capped(&shell, &["-lc", probe], 8) {
         for line in out.lines() {
@@ -296,7 +785,10 @@ pub fn detect_agents() -> Vec<AgentInfo> {
     let codex_image = if found.contains_key("codex") {
         run_capped(
             &shell,
-            &["-lc", "codex features list 2>/dev/null; codex plugin list 2>/dev/null"],
+            &[
+                "-lc",
+                "codex features list 2>/dev/null; codex plugin list 2>/dev/null",
+            ],
             8,
         )
         .map(|s| {
@@ -336,6 +828,7 @@ pub fn detect_agents() -> Vec<AgentInfo> {
         .or_else(|| found.get("gemini-cli"))
         .cloned()
         .unwrap_or_default();
+    let opencode_install = r#"printf '\n[AnimeArmory] Installing OpenCode...\n' && curl -fsSL https://opencode.ai/install | bash && export PATH="$HOME/.opencode/bin:$HOME/bin:$HOME/.local/bin:$PATH" && hash -r && opencode"#;
 
     vec![
         AgentInfo {
@@ -346,6 +839,7 @@ pub fn detect_agents() -> Vec<AgentInfo> {
             path: found.get("claude").cloned().unwrap_or_default(),
             image: "no".into(),
             note: "对话 / Agent CLI，无原生生图能力".into(),
+            install_command: None,
         },
         AgentInfo {
             id: "codex".into(),
@@ -355,6 +849,7 @@ pub fn detect_agents() -> Vec<AgentInfo> {
             path: found.get("codex").cloned().unwrap_or_default(),
             image: codex_img.into(),
             note: codex_note.into(),
+            install_command: None,
         },
         AgentInfo {
             id: "gemini".into(),
@@ -364,6 +859,18 @@ pub fn detect_agents() -> Vec<AgentInfo> {
             path: gemini_path,
             image: "yes".into(),
             note: "原生生图（Imagen / Nano Banana）".into(),
+            install_command: None,
+        },
+        AgentInfo {
+            id: "opencode".into(),
+            name: "OpenCode".into(),
+            command: "opencode".into(),
+            found: found.contains_key("opencode"),
+            path: found.get("opencode").cloned().unwrap_or_default(),
+            image: "no".into(),
+            note: "开源终端 Agent；模型可走其 provider 配置，适合无付费专属 agent 的兜底入口"
+                .into(),
+            install_command: Some(opencode_install.into()),
         },
     ]
 }
@@ -442,13 +949,13 @@ pub fn list_skills(repo_root: String, line: String) -> Vec<SkillInfo> {
     members.into_iter().map(|(_, s)| s).collect()
 }
 
-/// Resolve (and create) the app's dedicated works workspace `<home>/AnimeArsenal/`.
+/// Resolve (and create) the app's dedicated works workspace `<home>/AnimeArmory/`.
 /// This is kept SEPARATE from the skills repo so app works never touch the
 /// repo's demo product dirs (创作区/制漫剧/ etc.). Cross-platform (HOME / USERPROFILE).
 #[tauri::command]
 pub fn default_workspace() -> Result<String, String> {
     let home = dirs::home_dir().ok_or("无法定位用户主目录")?;
-    let ws = home.join("AnimeArsenal");
+    let ws = home.join("AnimeArmory");
     fs::create_dir_all(&ws).map_err(|e| e.to_string())?;
     Ok(ws.to_string_lossy().to_string())
 }
@@ -515,7 +1022,10 @@ pub fn seed_demos(app: tauri::AppHandle, workspace_root: String) -> Result<usize
             continue;
         }
         let product = line.file_name();
-        for work in fs::read_dir(&line_dir).map_err(|e| e.to_string())?.flatten() {
+        for work in fs::read_dir(&line_dir)
+            .map_err(|e| e.to_string())?
+            .flatten()
+        {
             let from = work.path();
             if !from.is_dir() {
                 continue;
@@ -573,7 +1083,9 @@ pub fn delete_work(workspace_root: String, repo_root: String, path: String) -> R
         return Err("拒绝删除：该作品不在 app 工作区内".into());
     }
     if inside_repo(&target, &repo_root) {
-        return Err("拒绝删除：该路径位于项目仓库内，已被隔离保护（仓库 demo 不是 app 作品）".into());
+        return Err(
+            "拒绝删除：该路径位于项目仓库内，已被隔离保护（仓库 demo 不是 app 作品）".into(),
+        );
     }
     trash::delete(&target).map_err(|e| format!("移入垃圾桶失败：{e}"))?;
     Ok(())
@@ -677,7 +1189,10 @@ fn s(v: &Value, k: &str) -> Option<String> {
 
 fn from_storyboard(root: &Path, ep: &str, data: &Value) -> Vec<CanvasClip> {
     let empty = vec![];
-    let clips = data.get("clips").and_then(|c| c.as_array()).unwrap_or(&empty);
+    let clips = data
+        .get("clips")
+        .and_then(|c| c.as_array())
+        .unwrap_or(&empty);
     clips
         .iter()
         .enumerate()
@@ -700,7 +1215,10 @@ fn from_storyboard(root: &Path, ep: &str, data: &Value) -> Vec<CanvasClip> {
             };
             CanvasClip {
                 id: s(c, "id").unwrap_or_else(|| format!("{ep}_CLIP{:02}", i + 1)),
-                number: c.get("number").and_then(|n| n.as_i64()).or(Some((i + 1) as i64)),
+                number: c
+                    .get("number")
+                    .and_then(|n| n.as_i64())
+                    .or(Some((i + 1) as i64)),
                 label: s(c, "label").unwrap_or_default(),
                 duration: c.get("duration").and_then(|d| d.as_f64()),
                 scene: s(c, "scene"),
@@ -718,7 +1236,10 @@ fn from_storyboard(root: &Path, ep: &str, data: &Value) -> Vec<CanvasClip> {
 
 fn seams_from_clips(clips: &[CanvasClip], data: &Value) -> Vec<CanvasSeam> {
     let empty = vec![];
-    let raw = data.get("clips").and_then(|c| c.as_array()).unwrap_or(&empty);
+    let raw = data
+        .get("clips")
+        .and_then(|c| c.as_array())
+        .unwrap_or(&empty);
     let mut seams = Vec::new();
     for i in 0..clips.len().saturating_sub(1) {
         let transition = raw
@@ -738,7 +1259,10 @@ fn seams_from_clips(clips: &[CanvasClip], data: &Value) -> Vec<CanvasSeam> {
 
 fn from_review_ui(root: &Path, data: &Value) -> (Vec<CanvasClip>, Vec<CanvasSeam>) {
     let empty = vec![];
-    let clips = data.get("clips").and_then(|c| c.as_array()).unwrap_or(&empty);
+    let clips = data
+        .get("clips")
+        .and_then(|c| c.as_array())
+        .unwrap_or(&empty);
     let out_clips: Vec<CanvasClip> = clips
         .iter()
         .map(|c| {
@@ -813,8 +1337,15 @@ pub fn read_canvas(root: String, ep: String) -> CanvasData {
         if let Ok(v) = serde_json::from_str::<Value>(&txt) {
             let (clips, seams) = from_review_ui(root_p, &v);
             out.source = "review_ui".into();
-            out.title = v.get("storyboard").and_then(|s| s.get("title")).and_then(|t| t.as_str()).map(|t| t.to_string());
-            out.total_duration = v.get("storyboard").and_then(|s| s.get("total_duration")).and_then(|d| d.as_f64());
+            out.title = v
+                .get("storyboard")
+                .and_then(|s| s.get("title"))
+                .and_then(|t| t.as_str())
+                .map(|t| t.to_string());
+            out.total_duration = v
+                .get("storyboard")
+                .and_then(|s| s.get("total_duration"))
+                .and_then(|d| d.as_f64());
             out.clips = clips;
             out.seams = seams;
             return out;
@@ -843,7 +1374,11 @@ pub fn read_canvas(root: String, ep: String) -> CanvasData {
 // Async so the python shell-out runs off the main thread (no UI freeze), with a
 // hard timeout so a hung run.py can't wedge the call.
 #[tauri::command]
-pub async fn read_next_action(repo_root: String, root: String, ep: String) -> Result<String, String> {
+pub async fn read_next_action(
+    repo_root: String,
+    root: String,
+    ep: String,
+) -> Result<String, String> {
     tauri::async_runtime::spawn_blocking(move || run_next_blocking(&repo_root, &root, &ep))
         .await
         .map_err(|e| e.to_string())?

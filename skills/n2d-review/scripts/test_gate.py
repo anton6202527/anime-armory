@@ -3725,6 +3725,90 @@ def test_director_camera_plan_skips_when_prompt_absent(tmp_path):
     assert [f for f in gate.findings if f["dim"] == "导演运镜落实"] == []
 
 
+def _write_director_applied(root, applied_image_ids, *, reviewer="wesley", plan_sha=None, prompt_sha=None):
+    prod = root / "生产数据"
+    sidecar = prod / "director_camera_plan_第1集.json"
+    img_prompt = root / "出图" / "第1集" / "prompt" / "01_分镜出图.md"
+    payload = {
+        "kind": "n2d_director_camera_plan_application",
+        "accepted": True,
+        "reviewer": reviewer,
+        "plan_sha256": plan_sha if plan_sha is not None else gate._safe_sha256(str(sidecar)),
+        "scopes": [{
+            "scope": "出图",
+            "prompt_path": "出图/第1集/prompt/01_分镜出图.md",
+            "prompt_sha256": prompt_sha if prompt_sha is not None else gate._safe_sha256(str(img_prompt)),
+            "applied_clip_ids": applied_image_ids,
+        }],
+    }
+    (prod / "director_camera_plan_applied_第1集.json").write_text(
+        json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+
+
+def test_director_camera_plan_precise_all_signed_info(tmp_path):
+    # Tier A：逐镜签收档覆盖所有镜（SHA fresh）→ INFO，即使 prompt 无烟雾词汇也精确采信。
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    _write_director_camera_plan(root, [
+        {"clip_id": "Clip_07", "rhythm": "高潮", "recommended": {"reason": "反转"}},
+    ])
+    _write_image_prompt(root, "# Clip 07\n正向 prompt：少年挥剑。")  # 无烟雾词汇
+    _write_director_applied(root, ["Clip_07"])
+    gate.check_director_camera_plan_consumption(str(root), "第1集")
+    matches = [f for f in gate.findings if f["dim"] == "导演运镜落实"]
+    assert matches and all(f["sev"] == gate.INFO for f in matches)
+    assert any("逐镜签收落实" in f["msg"] for f in matches)
+
+
+def test_director_camera_plan_precise_peak_missing_blocks(tmp_path):
+    # Tier A：签收档漏了高潮镜 → 精确 BLOCK，点名该镜（非整包烟雾）。
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    _write_director_camera_plan(root, [
+        {"clip_id": "Clip_07", "rhythm": "高潮", "recommended": {"reason": "反转"}},
+        {"clip_id": "Clip_02", "rhythm": "过渡", "recommended": {"reason": "对话"}},
+    ])
+    _write_image_prompt(root, "# 分镜\n起幅·运动余量：略。")  # 即使有烟雾词汇，Tier A 仍按签收逐镜判
+    _write_director_applied(root, ["Clip_02"])  # 漏签 Clip_07（高潮）
+    gate.check_director_camera_plan_consumption(str(root), "第1集")
+    blocks = [f for f in gate.findings if f["dim"] == "导演运镜落实" and f["sev"] == gate.BLOCK]
+    assert blocks and any("Clip_07" in f["msg"] for f in blocks)
+
+
+def test_director_camera_plan_precise_non_peak_missing_warns(tmp_path):
+    # Tier A：只漏普通镜 → WARN（不 BLOCK）。
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    _write_director_camera_plan(root, [
+        {"clip_id": "Clip_02", "rhythm": "过渡", "recommended": {"reason": "对话"}},
+        {"clip_id": "Clip_03", "rhythm": "铺垫", "recommended": {"reason": "环境"}},
+    ])
+    _write_image_prompt(root, "# 分镜\n无关内容。")
+    _write_director_applied(root, ["Clip_02"])  # 漏签 Clip_03（普通）
+    gate.check_director_camera_plan_consumption(str(root), "第1集")
+    matches = [f for f in gate.findings if f["dim"] == "导演运镜落实"]
+    assert matches and all(f["sev"] == gate.WARN for f in matches)
+    assert any("Clip_03" in f["msg"] for f in matches)
+
+
+def test_director_camera_plan_stale_signoff_falls_back_to_smoke(tmp_path):
+    # 防蒙混：plan_sha256 不符（plan 变了没重签）→ 不走 Tier A，回退烟雾收据；prompt 无词汇+高潮镜→BLOCK。
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    _write_director_camera_plan(root, [
+        {"clip_id": "Clip_07", "rhythm": "高潮", "recommended": {"reason": "反转"}},
+    ])
+    _write_image_prompt(root, "# Clip 07\n正向 prompt：少年挥剑。")  # 无烟雾词汇
+    _write_director_applied(root, ["Clip_07"], plan_sha="deadbeef")  # 陈旧签收
+    gate.check_director_camera_plan_consumption(str(root), "第1集")
+    blocks = [f for f in gate.findings if f["dim"] == "导演运镜落实" and f["sev"] == gate.BLOCK]
+    assert blocks and any("找不到任何" in f["msg"] for f in blocks)  # 走了烟雾分支
+
+
 def test_reference_plan_application_sidecar_clears_pending_actions(tmp_path):
     gate.findings.clear()
     root = tmp_path / "制漫剧" / "测试剧"
@@ -5501,6 +5585,52 @@ def test_native_av_blocks_character_voice_track(tmp_path):
     gate.check_native_audio_compose_policy(str(root), "第1集", ["Clip01.mp4"])
 
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "原生音画" and "无法确认仅为旁白/系统" in f["msg"] for f in gate.findings)
+
+
+def test_native_av_compose_foley_full_warns_when_not_forced(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    route_dir = root / "出视频" / "第1集" / "prompt"
+    work = root / "合成" / "第1集" / "_work"
+    route_dir.mkdir(parents=True)
+    work.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n- 制作模式: 原生音画\n", encoding="utf-8")
+    (route_dir / "video_model_routes.json").write_text(json.dumps({
+        "routes": [{"clip_id": "Clip_01", "primary_backend": "Veo 3.1", "native_audio_policy": "native_speech", "mode": "native_av"}],
+    }, ensure_ascii=False), encoding="utf-8")
+    (work / "foley_render_policy.json").write_text(json.dumps({
+        "kind": "n2d_foley_render_policy",
+        "mode": "full",
+        "reason": "silent_backend:compose_foley_provides_sfx",
+        "force_compose_foley": False,
+        "strategy": "自动",
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_compose_foley_native_audio_policy(str(root), "第1集")
+
+    assert any(f["sev"] == gate.WARN and f["dim"] == "后期拟音" and "双层拟音" in f["msg"] for f in gate.findings)
+
+
+def test_native_av_compose_foley_full_forced_is_allowed(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    route_dir = root / "出视频" / "第1集" / "prompt"
+    work = root / "合成" / "第1集" / "_work"
+    route_dir.mkdir(parents=True)
+    work.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n- 制作模式: 原生音画\n", encoding="utf-8")
+    (route_dir / "video_model_routes.json").write_text(json.dumps({
+        "routes": [{"clip_id": "Clip_01", "primary_backend": "Veo 3.1", "native_audio_policy": "native_speech", "mode": "native_av"}],
+    }, ensure_ascii=False), encoding="utf-8")
+    (work / "foley_render_policy.json").write_text(json.dumps({
+        "kind": "n2d_foley_render_policy",
+        "mode": "full",
+        "reason": "forced:FORCE_COMPOSE_FOLEY",
+        "force_compose_foley": True,
+        "strategy": "自动",
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_compose_foley_native_audio_policy(str(root), "第1集")
+
+    assert not any(f["dim"] == "后期拟音" for f in gate.findings)
 
 
 def test_style_contract_name_mismatch_setting_warns(tmp_path):

@@ -19,16 +19,16 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 
 ## Skills 规模统计
 
-> 统计时间：2026-06-27。`SKILL.md 总行数` 仅统计 `skills/*/SKILL.md` 的物理行数（`wc -l`）；`目录文本总行数` 统计每个 skill 目录下的 `.md/.py/.sh/.json/.html` 文本文件，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
+> 统计时间：2026-06-30。`SKILL.md 总行数` 仅统计 `skills/*/SKILL.md` 的物理行数（`wc -l`）；`目录文本总行数` 统计每个 skill 目录下的 `.md/.py/.sh/.json/.html` 文本文件，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
 
 | 系列 | 统计范围 | Skill 数 | SKILL.md 总行数 | 目录文本总行数 |
 |---|---|---:|---:|---:|
-| n2d | `n2d` + `n2d-*` | 21 | 4190 | 172520 |
-| novel | `novel` + `novel-*` | 27 | 2907 | 55270 |
+| n2d | `n2d` + `n2d-*` | 21 | 4268 | 188926 |
+| novel | `novel` + `novel-*` | 28 | 3007 | 60790 |
 | song | `song` + `song-*` | 7 | 414 | 3857 |
 | mv | `mv` + `mv-*` | 11 | 874 | 9539 |
 | ad | `ad` + `ad-*` | 10 | 701 | 10754 |
-| **合计** | `skills/*/SKILL.md` | **76** | 9086 | 251940 |
+| **合计** | `skills/*/SKILL.md` | **77** | 9264 | 273866 |
 
 > 仓库级清理工具 `tools/shared-cleanup` 已移出 `skills/`，不计入 skill 统计。
 
@@ -148,12 +148,13 @@ novel 负责从点子/源书/派生需求生产可审计文本资产，产物落
 | 节奏平衡 | `novel-balance` | 情节热力图、注水、断章、爽点节奏 |
 | 宣发 | `novel-promote` | 爆点提取、短视频脚本底稿、视频 brief |
 | 出海/本地化 | `novel-localize` | 术语锁（专名跨章 canonical 译名）+ 文化适配逐章翻译 + 未译残留/术语/覆盖/manifest 元数据机检；翻译后端选择点；源书权利/目标辖区/AI 标识三连合规 |
+| 更新影响 | `novel-update` | novel skill 内容快照比对 + 最小文本返工/重审/重评计划；只写 `生产数据/novel_skill_update_plan.{json,md}` 和基线，不改正文/进度 |
 | 进度·下一步（只读）| `novel-progress` | 扫 `创作区/写小说/<项目>/_进度.md` 章节矩阵 → 汇总完成度 + 创作前沿（下一步该跑哪个 novel skill）+ 可并行事项；只读不改文件 |
 | 生产控制台（只读） | `novel-dashboard` | 聚合 pipeline plan、stale artifacts、语义任务、review/score blockers、revision tasks、batch 队列、release readiness，写 `生产数据/novel_dashboard.{json,md,html}`；不改正文/进度 |
 | Agent 总控（上层） | `novel-supervisor` | novel 线 agent 编排层：消费 pipeline runner 计划、语义任务、revision plan 与 batch 状态，输出 next action；不绕过蓝图/设定/Demo 等人工审批 |
 | 并发调度（横切）| `novel-batch` | 纯本地单机多 worker 原子锁排队，支持 claim、lease、renew、reclaim、retry、dead-letter 和幂等 plan，提供多章节审稿/评分/dashboard 刷新任务队列 |
 
-**默认产品路径**：`novel-create` / 派生 skill 产文本 → 必要时 `novel-research` 补专业资料包、`novel-observe` 补生活观察素材、`novel-aesthetic` 建正向审美样本 → `novel-score` 给生产决策 → `novel-review` 回扫 → `novel-edit` 生成分层编辑计划与 line edit packet → `novel-craft` 用 `revision_planner.py` 合并修订任务并导出 txt/docx/outline → `release_manifest.py` 固化交付版本。运营层用 `novel-dashboard` 看全局状态，放量任务用 `novel-batch` 排队，长流程 agent 派发用 `novel-supervisor` 输出 next action。novel 没有独立设置 skill；项目设置只是 `_设置.md` 数据文件，由各 novel 脚本读写。`小说生成工作流` 选择点支持 `默认单步` / `三步迭代` / `边写边自检`；长篇/商业连载/漫剧源书默认三步迭代，除非项目显式写 `默认单步`。`边写边自检` 会把每章正文 + state_delta + `post_write.py` 自检闭环写进任务包和 flow 下一步提示，写后可先用 `propose_state_delta.py` 生成 delta 草案，`post_write.py` 先过读者契约 sentry，再过账本/百科/逻辑/力量体系自检；每 3-5 章可用 `arc_packets.py` + `arc_gate.py` 做长篇弧段压力测试；发布/出海/KDP/中国公开发布等目标用 `compliance_profile.py` 生成平台/辖区合规清单，QA gate 统一读取。
+**默认产品路径**：`novel-create` / 派生 skill 产文本 → 必要时 `novel-research` 补专业资料包、`novel-observe` 补生活观察素材、`novel-aesthetic` 建正向审美样本 → `novel-score` 给生产决策 → `novel-review` 回扫 → `novel-edit` 生成分层编辑计划与 line edit packet → `novel-craft` 用 `revision_planner.py` 合并修订任务并导出 txt/docx/outline → `release_manifest.py` 固化交付版本。运营层用 `novel-dashboard` 看全局状态，放量任务用 `novel-batch` 排队，长流程 agent 派发用 `novel-supervisor` 输出 next action；skill 升级后用 `novel-update` 做内容快照比对与最小文本返工计划。novel 没有独立设置 skill；项目设置只是 `_设置.md` 数据文件，由各 novel 脚本读写。`小说生成工作流` 选择点支持 `默认单步` / `三步迭代` / `边写边自检`；长篇/商业连载/漫剧源书默认三步迭代，除非项目显式写 `默认单步`。`边写边自检` 会把每章正文 + state_delta + `post_write.py` 自检闭环写进任务包和 flow 下一步提示，写后可先用 `propose_state_delta.py` 生成 delta 草案，`post_write.py` 先过读者契约 sentry，再过账本/百科/逻辑/力量体系自检；每 3-5 章可用 `arc_packets.py` + `arc_gate.py` 做长篇弧段压力测试；发布/出海/KDP/中国公开发布等目标用 `compliance_profile.py` 生成平台/辖区合规清单，QA gate 统一读取。
 
 > **力量体系自检（穿越/系统流/修仙·等级·成长值·战力严丝合缝·实时监控）**：网文力量体系是命门——等级跳变、战力前后矛盾、属性突变、升级节奏崩（数值膨胀/越级无代价）是高发穿帮，人脑记不住几百章。落地：① `novel-create` 立项按题材自动脚手架 `设定/power_system_registry.json`（研究落地的等级体系模板 + 系统面板字段[属性≤7] + 升级节奏[每章小奖/每5章中奖/每20章大奖] + 逐章成长 progression），见 `novel-craft/references/力量体系设计.md`；② 引擎 `novel-wiki/scripts/power_system.py` 确定性机检：等级/境界/战力**只增不减**（退档=阻断·除非标跌境/废修豁免）、未知境界=阻断、越级过快/面板属性超7/系统流久无升级桥段=建议；③ **实时监控**：`novel/scripts/post_write.py` 每章写后自动跑（受 `力量体系自检` 选择点控制），`context_loader` 写章前把"主角现状(Lv/境界/属性/战力)"喂给上下文让 AI 按现状推进；④ 审稿 `novel-review/consistency_audit.py` 含 `power_system` 子runner。真值/默认在 `novel/_lib/power_system_defs.py`。
 
