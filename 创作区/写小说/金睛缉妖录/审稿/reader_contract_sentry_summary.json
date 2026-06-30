@@ -1,0 +1,296 @@
+{
+  "blocking": 24,
+  "total": 24,
+  "chapters": [
+    {
+      "chapter": 1,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 2,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 3,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 4,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 5,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 6,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 7,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 8,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 9,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 10,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 11,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 12,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 13,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 14,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 15,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 16,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 17,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 18,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 19,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 20,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 21,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 22,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 23,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    },
+    {
+      "chapter": 24,
+      "status": "blocked",
+      "blocking": 1,
+      "warnings": 0
+    }
+  ],
+  "findings": [
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第01章.json",
+      "chapter": 1
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第02章.json",
+      "chapter": 2
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第03章.json",
+      "chapter": 3
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第04章.json",
+      "chapter": 4
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第05章.json",
+      "chapter": 5
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第06章.json",
+      "chapter": 6
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第07章.json",
+      "chapter": 7
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第08章.json",
+      "chapter": 8
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第09章.json",
+      "chapter": 9
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第10章.json",
+      "chapter": 10
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第11章.json",
+      "chapter": 11
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第12章.json",
+      "chapter": 12
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第13章.json",
+      "chapter": 13
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第14章.json",
+      "chapter": 14
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第15章.json",
+      "chapter": 15
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第16章.json",
+      "chapter": 16
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第17章.json",
+      "chapter": 17
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第18章.json",
+      "chapter": 18
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第19章.json",
+      "chapter": 19
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第20章.json",
+      "chapter": 20
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第21章.json",
+      "chapter": 21
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第22章.json",
+      "chapter": 22
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第23章.json",
+      "chapter": 23
+    },
+    {
+      "severity": "阻断级",
+      "type": "state_delta_missing",
+      "message": "缺失状态增量：审稿/state_delta_第24章.json",
+      "chapter": 24
+    }
+  ]
+}

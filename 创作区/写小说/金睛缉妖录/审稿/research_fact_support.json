@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "kind": "novel_research_fact_support",
+  "generated_at": "2026-06-30",
+  "project_root": "/Users/lalala/learn/anime-arsenal/创作区/写小说/金睛缉妖录",
+  "chapter": null,
+  "ran": true,
+  "detected_domains": {
+    "crime": [
+      "口供"
+    ],
+    "history": [
+      "历史",
+      "朝代",
+      "年号"
+    ],
+    "religion": [
+      "教会"
+    ],
+    "technology": [
+      "AI"
+    ],
+    "platform": [
+      "平台",
+      "备案",
+      "合规",
+      "短剧",
+      "漫剧",
+      "发行"
+    ]
+  },
+  "required_domains": [],
+  "commercial_signals": [
+    "改编",
+    "漫剧",
+    "短剧",
+    "红果",
+    "番茄",
+    "抖音"
+  ],
+  "packs_checked": [],
+  "total": 6,
+  "blocking": 5,
+  "alerts": [
+    {
+      "severity": "阻断级",
+      "type": "missing_research_pack",
+      "message": "检测到 crime 专业场景关键词，但没有适用的 ready 专业资料包",
+      "pack": "",
+      "domain": "crime",
+      "evidence": "口供"
+    },
+    {
+      "severity": "阻断级",
+      "type": "missing_research_pack",
+      "message": "检测到 history 专业场景关键词，但没有适用的 ready 专业资料包",
+      "pack": "",
+      "domain": "history",
+      "evidence": "历史、朝代、年号"
+    },
+    {
+      "severity": "阻断级",
+      "type": "missing_research_pack",
+      "message": "检测到 religion 专业场景关键词，但没有适用的 ready 专业资料包",
+      "pack": "",
+      "domain": "religion",
+      "evidence": "教会"
+    },
+    {
+      "severity": "阻断级",
+      "type": "missing_research_pack",
+      "message": "检测到 technology 专业场景关键词，但没有适用的 ready 专业资料包",
+      "pack": "",
+      "domain": "technology",
+      "evidence": "AI"
+    },
+    {
+      "severity": "阻断级",
+      "type": "missing_research_pack",
+      "message": "检测到 platform 专业场景关键词，但没有适用的 ready 专业资料包",
+      "pack": "",
+      "domain": "platform",
+      "evidence": "平台、备案、合规、短剧、漫剧、发行"
+    },
+    {
+      "severity": "建议级",
+      "type": "commercial_research_recommended",
+      "message": "商业/平台/出海/改编项目建议建立平台规则或目标市场资料包",
+      "pack": "",
+      "domain": "",
+      "evidence": "改编、漫剧、短剧、红果、番茄、抖音"
+    }
+  ]
+}

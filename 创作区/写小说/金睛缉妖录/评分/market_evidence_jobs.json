@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "kind": "novel_market_evidence_jobs",
+  "baseline_date": "2026-06-30",
+  "target_platform": "红果短剧",
+  "jobs": [
+    {
+      "id": "MARKET-SEARCH-001",
+      "status": "open",
+      "kind": "novel_market_evidence_search_job",
+      "target_platform": "红果短剧",
+      "baseline_date": "2026-06-30",
+      "source_task_id": "MARKET-EVIDENCE-001",
+      "search_queries": [
+        "红果短剧 热榜 榜单 报告 2026-06-30",
+        "红果短剧 热榜 第三方榜单 报告 2026-06-30",
+        "抖音漫剧 短剧 热榜 数据 报告 2026-06-30",
+        "红果短剧 题材 趋势 短剧 漫剧 2026-06-30"
+      ],
+      "required_output_schema": {
+        "platform": "红果短剧/抖音漫剧/短剧等被覆盖平台",
+        "date": "YYYY-MM-DD，证据核验或报告发布日期",
+        "source": "官方/第三方榜单/行业报告/平台公开页等来源名称",
+        "summary": "一句话趋势结论，必须可追溯到来源",
+        "url": "https://...，能打开的证据链接；无公开链接时说明不可公开复核"
+      },
+      "manual_evidence_format": "平台|日期YYYY-MM-DD|来源|结论|URL",
+      "return_command_template": "python3 skills/novel-score/scripts/collect_market_baseline.py \"<作品根>/评分\" --target-platform \"<目标平台>\" --allow-fetch-errors --manual-evidence \"平台|YYYY-MM-DD|来源|结论|URL\"",
+      "acceptance": [
+        "日期未过期，且不晚于 baseline_date",
+        "platform/source/summary 至少一个字段明确命中红果/抖音/漫剧/短剧",
+        "summary 不得只是自由备注，必须能被 source/url 支撑"
+      ]
+    }
+  ]
+}

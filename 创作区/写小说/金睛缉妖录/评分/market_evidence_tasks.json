@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "kind": "novel_market_evidence_tasks",
+  "baseline_date": "2026-06-30",
+  "target_platform": "红果短剧",
+  "tasks": [
+    {
+      "id": "MARKET-EVIDENCE-001",
+      "status": "open",
+      "priority": "P1",
+      "title": "补齐目标平台市场证据",
+      "reason": "target_platform 命中 红果/抖音/漫剧/短剧，但无任何有效来源或 --manual-evidence 覆盖这些平台；当前基准只反映 番茄/起点/晋江 等网文公榜，对主投放平台是盲区。请补 --manual-evidence '红果短剧|YYYY-MM-DD|第三方榜单|结论|URL' 或 --source '红果短剧|<第三方报告URL>'。",
+      "target_platform": "红果短剧",
+      "recommended_skill": "novel-research",
+      "return_to_stage": "market_baseline",
+      "required_evidence": [
+        "至少一条覆盖红果/抖音/漫剧/短剧的结构化人工证据：平台|日期|来源|结论|URL",
+        "若用于商业蓝图，把差异化缺口和拥挤度写入 novel-research 平台市场资料包"
+      ],
+      "suggested_commands": [
+        "python3 skills/novel-score/scripts/collect_market_baseline.py \"<作品根>/评分\" --target-platform \"<目标平台>\" --allow-fetch-errors --manual-evidence \"红果短剧|YYYY-MM-DD|第三方榜单|结论|URL\"",
+        "python3 skills/novel-research/scripts/research_pack.py scaffold \"<作品根>\" --topic \"平台市场\" --domain platform --risk high --keyword \"红果\" --keyword \"抖音\""
+      ]
+    }
+  ]
+}
