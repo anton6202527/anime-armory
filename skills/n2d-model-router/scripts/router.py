@@ -1669,7 +1669,7 @@ def choose_route(
         # 空间绑定硬约束（与 gate 多人同框槽位 block 同源）：同框必须逐主体绑定到画面槽位+各自参考，
         # 决不能用一张共享参考喂整帧——单参考会让模型把多张脸平均成同一张/混位（脸漂真凶）。
         prompt_requirements = list(prompt_requirements) + [
-            "bind EACH named CHAR_xx to its own screen slot (LEFT/RIGHT/FOREGROUND/BACKGROUND) AND its own subject/reference anchor — regional/mask binding per subject; never feed one shared reference for the whole frame (single shared ref makes the model average faces)",
+            "bind each named registered character id to its own screen slot (LEFT/RIGHT/FOREGROUND/BACKGROUND) AND its own subject/reference anchor — regional/mask binding per subject; never feed one shared reference for the whole frame (single shared ref makes the model average faces)",
         ]
         route = {
             "primary_backend": mp_primary,

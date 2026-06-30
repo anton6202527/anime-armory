@@ -12,28 +12,139 @@
       "clip": "Clip_01",
       "clip_index": 1,
       "duration_sec": 9.101995,
-      "file": "Clip01_黑殿审问.mp4",
+      "file": "Clip_01_黑殿审问上.mp4",
       "file_clip": "Clip_01",
       "frames": [
         {
           "label": "start",
-          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/01_12/frames/Clip_01_ba40d053_01_start.jpg",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/01_12/frames/Clip_01_dd55288e_01_start.jpg",
           "time_sec": 0.0
         },
         {
           "label": "mid",
-          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/01_12/frames/Clip_01_ba40d053_02_mid.jpg",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/01_12/frames/Clip_01_dd55288e_02_mid.jpg",
           "time_sec": 4.551
         },
         {
           "label": "end",
-          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/01_12/frames/Clip_01_ba40d053_03_end.jpg",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/01_12/frames/Clip_01_dd55288e_03_end.jpg",
           "time_sec": 8.902
         }
       ],
       "has_audio": true,
       "height": 1280,
-      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip01_黑殿审问.mp4",
+      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_01_黑殿审问上.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [
+        {
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "index": 0
+        }
+      ],
+      "clip": "Clip_02",
+      "clip_index": 2,
+      "duration_sec": 9.101995,
+      "file": "Clip_02_黑殿审问下.mp4",
+      "file_clip": "Clip_02",
+      "frames": [
+        {
+          "label": "start",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/01_12/frames/Clip_02_bb4c4344_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/01_12/frames/Clip_02_bb4c4344_02_mid.jpg",
+          "time_sec": 4.551
+        },
+        {
+          "label": "end",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/01_12/frames/Clip_02_bb4c4344_03_end.jpg",
+          "time_sec": 8.902
+        }
+      ],
+      "has_audio": true,
+      "height": 1280,
+      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_02_黑殿审问下.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [
+        {
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "index": 0
+        }
+      ],
+      "clip": "Clip_03",
+      "clip_index": 3,
+      "duration_sec": 9.101995,
+      "file": "Clip_03_挑水命令上.mp4",
+      "file_clip": "Clip_03",
+      "frames": [
+        {
+          "label": "start",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/01_12/frames/Clip_03_615b2468_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/01_12/frames/Clip_03_615b2468_02_mid.jpg",
+          "time_sec": 4.551
+        },
+        {
+          "label": "end",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/01_12/frames/Clip_03_615b2468_03_end.jpg",
+          "time_sec": 8.902
+        }
+      ],
+      "has_audio": true,
+      "height": 1280,
+      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_03_挑水命令上.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [
+        {
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "index": 0
+        }
+      ],
+      "clip": "Clip_04",
+      "clip_index": 4,
+      "duration_sec": 9.101995,
+      "file": "Clip_04_挑水命令下.mp4",
+      "file_clip": "Clip_04",
+      "frames": [
+        {
+          "label": "start",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/01_12/frames/Clip_04_670f2733_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/01_12/frames/Clip_04_670f2733_02_mid.jpg",
+          "time_sec": 4.551
+        },
+        {
+          "label": "end",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/01_12/frames/Clip_04_670f2733_03_end.jpg",
+          "time_sec": 8.902
+        }
+      ],
+      "has_audio": true,
+      "height": 1280,
+      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_04_挑水命令下.mp4",
       "probe_error": null,
       "video_codec": "h264",
       "width": 720
@@ -45,7 +156,7 @@
     {
       "clip": "Clip_01",
       "double_frame": true,
-      "file": "Clip01_黑殿审问.mp4",
+      "file": "Clip_01_黑殿审问上.mp4",
       "file_clip": "Clip_01",
       "lens": "全景·慢推；中近景反打",
       "max_dist": 35,
@@ -60,20 +171,94 @@
         }
       ],
       "verdict": "warn"
+    },
+    {
+      "clip": "Clip_02",
+      "double_frame": true,
+      "file": "Clip_02_黑殿审问下.mp4",
+      "file_clip": "Clip_02",
+      "lens": "中近景反打；CU碎切",
+      "max_dist": 35,
+      "pairs": [
+        {
+          "color_dist": 0.0447,
+          "dist": 35
+        },
+        {
+          "color_dist": 0.0109,
+          "dist": 28
+        }
+      ],
+      "verdict": "warn"
+    },
+    {
+      "clip": "Clip_04",
+      "double_frame": true,
+      "file": "Clip_04_挑水命令下.mp4",
+      "file_clip": "Clip_04",
+      "lens": "概念快闪；MS到CU",
+      "max_dist": 31,
+      "pairs": [
+        {
+          "color_dist": 0.0307,
+          "dist": 27
+        },
+        {
+          "color_dist": 0.0748,
+          "dist": 31
+        }
+      ],
+      "verdict": "warn"
     }
   ],
   "kind": "n2d_video_qc",
   "machine_notes": [],
   "machine_summary": {
     "intra_blocks": 0,
-    "intra_checked": 1,
-    "intra_warns": 1,
+    "intra_checked": 3,
+    "intra_warns": 3,
     "seam_blocks": 0,
-    "seam_info": 0,
+    "seam_info": 2,
     "seam_warns": 0,
-    "seams_checked": 0
+    "seams_checked": 3
   },
   "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
-  "seams": [],
+  "seams": [
+    {
+      "color_dist": 0.0007,
+      "color_verdict": "ok",
+      "dist": 3,
+      "from_clip": "Clip_01",
+      "strictness": "info",
+      "struct_verdict": "ok",
+      "to_clip": "Clip_02",
+      "transition": "split_relay",
+      "verdict": "ok"
+    },
+    {
+      "color_dist": 0.0581,
+      "color_verdict": "ok",
+      "dist": 31,
+      "from_clip": "Clip_02",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_03",
+      "transition": "j_cut",
+      "verdict": "info",
+      "verdict_if_relay": "block"
+    },
+    {
+      "color_dist": 0.0475,
+      "color_verdict": "ok",
+      "dist": 42,
+      "from_clip": "Clip_03",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_04",
+      "transition": "split_relay",
+      "verdict": "info",
+      "verdict_if_relay": "block"
+    }
+  ],
   "version": 1
 }

@@ -590,7 +590,7 @@ def plan_multi_subject_strategy(
     elif all_native_ready:
         mode = "native_subject_slots"
         execution = (
-            "按后端原生主体/角色 ID 逐槽位引用；每个槽位绑定 CHAR_xx/形态 + 屏幕位置 + 视线方向，"
+            "按后端原生主体/角色 ID 逐槽位引用；每个槽位绑定具体注册角色ID/形态 + 屏幕位置 + 视线方向，"
             "pose/depth/区域绑定可用时作为站位双保险。"
         )
     else:
@@ -621,7 +621,7 @@ def plan_multi_subject_strategy(
         "多人同框执行策略",
         "screen_positions/blocking",
         "逐主体参考绑定",
-        "primary 星标 CHAR_xx*",
+        "primary 星标具体注册角色ID*",
         "区分锚点（互斥发色/服装主色/配饰）",
     ]
     if mode not in {"split_composite_required", "regional_construct_required"}:

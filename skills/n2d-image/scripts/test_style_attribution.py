@@ -107,6 +107,24 @@ def test_analyze_anchor_missing_emits_human_checklist(tmp_path):
     assert res["findings"][0]["code"] == "style_anchor_missing"
 
 
+def test_analyze_uses_style_anchor_registry_fallback(tmp_path):
+    anchor_rel = "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
+    _solid_png(tmp_path / anchor_rel, (90, 90, 95))
+    _write_storyboard(tmp_path, {"风格名": "国漫写实", "风格禁忌": ["插画化"]})
+    reg = tmp_path / "出图" / "共享" / "style_anchor_registry.json"
+    reg.parent.mkdir(parents=True, exist_ok=True)
+    reg.write_text(json.dumps({
+        "kind": "n2d_style_anchor_registry",
+        "selected_anchor": {"path": anchor_rel, "status": "ready"},
+    }, ensure_ascii=False), encoding="utf-8")
+
+    res = sa.analyze(tmp_path, "第1集")
+
+    assert res["anchor_status"] == "ok"
+    assert res["intent"]["anchors"] == [anchor_rel]
+    assert res["intent"]["anchor_source"] == str(sa.STYLE_ANCHOR_REGISTRY)
+
+
 def test_analyze_anchor_registered_but_file_absent(tmp_path):
     _write_storyboard(tmp_path, {"风格名": "国漫写实", "style_anchor": ["出图/共享/图片/缺.png"]})
     res = sa.analyze(tmp_path, "第1集")

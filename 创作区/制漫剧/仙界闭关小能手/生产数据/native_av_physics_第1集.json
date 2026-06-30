@@ -31,91 +31,73 @@
         "speaker_key": "CHAR_HE_PINGSHENG_native"
       },
       "updated_at": "2026-06-30T09:24:30+00:00",
-      "video_path": "出视频/第1集/视频/Clip01_黑殿审问.mp4"
+      "video_path": "出视频/第1集/视频/Clip_01_黑殿审问上.mp4"
     },
     {
-      "action_sounds": [
-        {
-          "action": "visible body/prop movement in this clip",
-          "sound": "cloth/step/water/bucket/key-lock/bowl/ceramic sounds only when visibly triggered",
-          "source": "visible_body_or_prop_motion",
-          "timing": "must follow visible action beats; no early artifact or offscreen voice cues",
-          "visible_evidence": "only sounds tied to visible cloth, step, water, bucket, key/lock, bowl, or ceramic basin motion"
-        }
-      ],
+      "action_sounds": [],
       "audio_intent": "native_speech",
       "clip_id": "Clip_02",
-      "evidence_status": "preflight_contract",
+      "evidence_status": "needs_review",
+      "generated_by": "n2d-video/native_av_sidecar.py",
+      "has_audio": true,
       "lip_sync": {
+        "evidence": "accepted_clip_requires_human_or_machine_lipsync_review",
+        "mouth_visible": true,
         "policy": "native_dialogue_match",
-        "review": "post-generation lip-sync review required before compose keeps original audio",
-        "target": "visible mouth movement follows generated native dialogue timing"
+        "status": "needs_review"
       },
       "post_policy": {
         "compose_policy": "保留原片音轨",
-        "processing": "compose_stage_controls_native_track; do not strip before video QC",
-        "review": "verify source ownership, lip sync if speech, and no unwanted native voice in no-dialogue clips"
+        "processing": "compose_stage_controls_native_track"
       },
-      "review_status": "needs_generation_review",
+      "review_status": "needs_review",
       "spatial_acoustics": {
-        "distance": "medium_close",
-        "reverb_profile": "short_wooden_hall_low_reverb",
-        "space_id": "LOC_ZAYI_DADIAN",
-        "visible_space_evidence": "inherits storyboard scene and first/end frame location anchors"
+        "distance": "needs_review",
+        "reverb_profile": "needs_review",
+        "space_id": "LOC_ZAYI_DADIAN"
       },
       "speaker_source": {
         "character_id": "CHAR_HE_PINGSHENG",
-        "dialogue_ref": "脚本/第1集/storyboard.json#clips[1].beats",
-        "dialogue_text": "黑殿审问下",
+        "dialogue_ref": "needs_review",
         "mouth_visible": true,
         "on_screen": true,
-        "source_rule": "voice must belong to visible on-screen speaker or visible crowd laughter; no offscreen narrator in video generation",
-        "speaker_id": "Clip_02_visible_native_speech",
-        "visible": true
+        "speaker_key": "CHAR_HE_PINGSHENG_native"
       },
-      "storyboard_id": "EP01_CLIP02"
+      "updated_at": "2026-06-30T09:49:25+00:00",
+      "video_path": "出视频/第1集/视频/Clip_02_黑殿审问下.mp4"
     },
     {
-      "action_sounds": [
-        {
-          "action": "visible body/prop movement in this clip",
-          "sound": "cloth/step/water/bucket/key-lock/bowl/ceramic sounds only when visibly triggered",
-          "source": "visible_body_or_prop_motion",
-          "timing": "must follow visible action beats; no early artifact or offscreen voice cues",
-          "visible_evidence": "only sounds tied to visible cloth, step, water, bucket, key/lock, bowl, or ceramic basin motion"
-        }
-      ],
+      "action_sounds": [],
       "audio_intent": "native_speech",
       "clip_id": "Clip_03",
-      "evidence_status": "preflight_contract",
+      "evidence_status": "needs_review",
+      "generated_by": "n2d-video/native_av_sidecar.py",
+      "has_audio": true,
       "lip_sync": {
+        "evidence": "accepted_clip_requires_human_or_machine_lipsync_review",
+        "mouth_visible": true,
         "policy": "native_dialogue_match",
-        "review": "post-generation lip-sync review required before compose keeps original audio",
-        "target": "visible mouth movement follows generated native dialogue timing"
+        "status": "needs_review"
       },
       "post_policy": {
         "compose_policy": "保留原片音轨",
-        "processing": "compose_stage_controls_native_track; do not strip before video QC",
-        "review": "verify source ownership, lip sync if speech, and no unwanted native voice in no-dialogue clips"
+        "processing": "compose_stage_controls_native_track"
       },
-      "review_status": "needs_generation_review",
+      "review_status": "needs_review",
       "spatial_acoustics": {
-        "distance": "medium_close",
-        "reverb_profile": "short_wooden_hall_low_reverb",
-        "space_id": "LOC_ZAYI_DADIAN",
-        "visible_space_evidence": "inherits storyboard scene and first/end frame location anchors"
+        "distance": "needs_review",
+        "reverb_profile": "needs_review",
+        "space_id": "LOC_ZAYI_DADIAN"
       },
       "speaker_source": {
-        "character_id": "CHAR_TAIXUMEN_ZHANGLAO",
-        "dialogue_ref": "脚本/第1集/storyboard.json#clips[2].beats",
-        "dialogue_text": "挑水命令上",
+        "character_id": "CHAR_HE_PINGSHENG",
+        "dialogue_ref": "needs_review",
         "mouth_visible": true,
         "on_screen": true,
-        "source_rule": "voice must belong to visible on-screen speaker or visible crowd laughter; no offscreen narrator in video generation",
-        "speaker_id": "Clip_03_visible_native_speech",
-        "visible": true
+        "speaker_key": "CHAR_HE_PINGSHENG_native"
       },
-      "storyboard_id": "EP01_CLIP03"
+      "updated_at": "2026-06-30T10:02:32+00:00",
+      "video_path": "出视频/第1集/视频/Clip_03_挑水命令上.mp4"
     },
     {
       "action_sounds": [
@@ -475,6 +457,6 @@
   "episode": "第1集",
   "kind": "n2d_native_av_physics",
   "source": "video_preflight contract regeneration after Clip split and Seedance/Dreamina routing",
-  "updated_at": "2026-06-30T09:24:30+00:00",
+  "updated_at": "2026-06-30T10:02:32+00:00",
   "version": 1
 }

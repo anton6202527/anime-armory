@@ -65,6 +65,7 @@ def test_prepare_manifest_uses_stable_prompt_files(tmp_path: Path) -> None:
     assert manifest["kind"] == "n2d_video_batch"
     assert manifest["batch_id"] == "06_07"
     assert [item["clip"] for item in manifest["items"]] == ["Clip_06", "Clip_07"]
+    assert [item["target"] for item in manifest["items"]] == ["Clip_06_小禾撞门.mp4", "Clip_07_催命酒到门前.mp4"]
     assert manifest["items"][0]["submit_duration"] == 5
     assert manifest["items"][1]["submit_duration"] == 7
     prompt_file = Path(manifest["items"][0]["prompt_file"])
@@ -72,6 +73,57 @@ def test_prepare_manifest_uses_stable_prompt_files(tmp_path: Path) -> None:
     assert "/private/tmp" not in str(prompt_file)
     assert prompt_file.read_text(encoding="utf-8").startswith("continuity:")
     assert (tmp_path / "生产数据" / "video_batch_第1集_06_07.json").is_file()
+
+
+def test_prepare_manifest_targets_use_physical_clip_number_not_mid_source_name(tmp_path: Path) -> None:
+    prompt_pack = """# clips
+
+## Clip 01（时长 8.5s · EP01_CLIP01 · 黑殿审问上）
+
+**首帧**：`出图/第1集/图片/Clip01_黑殿审问.png`
+
+### 视频 prompt（中文，目标=即梦）
+```
+人物运动：审问开始；
+镜头运动：慢推；
+```
+
+## Clip 02（时长 8.5s · EP01_CLIP02 · 黑殿审问下）
+
+**首帧**：`出图/第1集/图片/Clip01_黑殿审问_mid.png`
+
+### 视频 prompt（中文，目标=即梦）
+```
+人物运动：灵根回答；
+镜头运动：反打；
+```
+"""
+    prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    (prompt_dir / "01_clips.md").write_text(prompt_pack, encoding="utf-8")
+    image_dir = tmp_path / "出图" / "第1集" / "图片"
+    image_dir.mkdir(parents=True)
+    (image_dir / "Clip01_黑殿审问.png").write_bytes(b"png")
+    (image_dir / "Clip01_黑殿审问_mid.png").write_bytes(b"png")
+
+    manifest = video_runner.prepare_manifest(
+        tmp_path,
+        "第1集",
+        1,
+        2,
+        backend="dreamina",
+        resolution="720p",
+        model_version="3.0",
+    )
+
+    assert [item["target"] for item in manifest["items"]] == [
+        "Clip_01_黑殿审问上.mp4",
+        "Clip_02_黑殿审问下.mp4",
+    ]
+    assert [Path(item["prompt_file"]).name for item in manifest["items"]] == [
+        "Clip_01_黑殿审问上.prompt.txt",
+        "Clip_02_黑殿审问下.prompt.txt",
+    ]
 
 
 def test_submit_duration_has_dreamina_floor() -> None:
@@ -159,6 +211,104 @@ def test_dreamina_args_blocks_native_speech_without_dialogue_fact_contract(tmp_p
     msg = str(exc.value)
     assert "dialogue fact contract missing before paid video submit" in msg
     assert "dialogue_fact_guard.py" in msg
+
+
+def test_dreamina_args_blocks_native_speech_when_contract_has_no_character_dialogue(tmp_path: Path) -> None:
+    import pytest
+
+    prompt = tmp_path / "prompt.txt"
+    prompt.write_text(
+        "模型路由约束：mode=native_av，native_audio_policy=native_speech；\n"
+        "原生音画约束：台词、口型由原生音画后端生成；",
+        encoding="utf-8",
+    )
+    contract_dir = tmp_path / "生产数据"
+    contract_dir.mkdir()
+    (contract_dir / "dialogue_fact_contract_第1集.json").write_text(
+        """{
+  "kind": "n2d_dialogue_fact_contract",
+  "episode": "第1集",
+  "clips": [{
+    "clip": "Clip_03",
+    "allowed_voiceover_indices": [7, 8],
+    "allowed_narration_indices": [7, 8],
+    "allowed_character_dialogue_indices": [],
+    "allowed_character_dialogue": [],
+    "allowed_narration": [
+      {"index": 7, "role": "旁白", "text": "五行俱全，却无人愿收。"}
+    ],
+    "screen_text_lines": [
+      {"text": "五行俱全，却无人愿收", "render_policy": "compose_overlay_only"}
+    ]
+  }],
+  "facts": []
+}""",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(RuntimeError) as exc:
+        video_runner._dreamina_args(
+            {
+                "clip": "Clip_03",
+                "target": "Clip_03.mp4",
+                "image": str(tmp_path / "first.png"),
+                "prompt_file": str(prompt),
+                "submit_duration": 4,
+            },
+            {"episode": "第1集", "_root": str(tmp_path)},
+        )
+
+    msg = str(exc.value)
+    assert "native_speech route has no allowed character dialogue" in msg
+    assert "narration belongs to compose" in msg
+
+
+def test_acceptance_recipe_meta_does_not_enforce_submit_only_native_speech_guard(tmp_path: Path) -> None:
+    prompt = tmp_path / "prompt.txt"
+    prompt.write_text(
+        "模型路由约束：mode=native_av，native_audio_policy=native_speech；\n"
+        "原生音画约束：台词、口型由原生音画后端生成；",
+        encoding="utf-8",
+    )
+    first = tmp_path / "first.png"
+    first.write_bytes(b"first")
+    contract_dir = tmp_path / "生产数据"
+    contract_dir.mkdir()
+    (contract_dir / "dialogue_fact_contract_第1集.json").write_text(
+        """{
+  "kind": "n2d_dialogue_fact_contract",
+  "episode": "第1集",
+  "clips": [{
+    "clip": "Clip_03",
+    "allowed_voiceover_indices": [7],
+    "allowed_narration_indices": [7],
+    "allowed_character_dialogue_indices": [],
+    "allowed_character_dialogue": [],
+    "allowed_narration": [
+      {"index": 7, "role": "旁白", "text": "五行俱全，却无人愿收。"}
+    ],
+    "screen_text_lines": []
+  }],
+  "facts": []
+}""",
+        encoding="utf-8",
+    )
+
+    meta = video_runner.acceptance_recipe_meta(
+        tmp_path,
+        "第1集",
+        {
+            "clip": "Clip_03",
+            "image": str(first),
+            "prompt_file": str(prompt),
+            "cost_provider": "dreamina",
+            "submit_id": "sid123",
+        },
+        {"episode": "第1集", "backend": "dreamina", "model_version": "3.0", "video_resolution": "720p"},
+    )
+
+    assert meta["submit_id"] == "sid123"
+    assert meta["prompt_sha256"]
 
 
 def test_dreamina_args_allows_non_native_prompt_without_dialogue_fact_contract(tmp_path: Path) -> None:

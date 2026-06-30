@@ -174,7 +174,7 @@
       "path": "出视频/第1集/视频",
       "exists": true,
       "kind": "dir",
-      "file_count": 1
+      "file_count": 3
     },
     {
       "stage": "compose",
@@ -227,6 +227,6 @@
     }
   ],
   "last_progress_column": "视频",
-  "last_progress_value": "1/12",
+  "last_progress_value": "3/12",
   "last_progress_state": "partial"
 }

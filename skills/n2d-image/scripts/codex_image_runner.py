@@ -35,9 +35,11 @@ PROMPT_REL = Path("出图") / "{episode}" / "prompt" / "01_分镜出图.md"
 DASHBOARD = Path("skills") / "n2d-dashboard" / "scripts" / "dashboard.py"
 IMAGE_QC = Path("skills") / "n2d-image" / "scripts" / "image_qc.py"
 SOURCE = "skills/n2d-image/scripts/codex_image_runner.py"
+STYLE_ANCHOR_REGISTRY = Path("出图") / "共享" / "style_anchor_registry.json"
 MAX_CODEX_REFERENCE_IMAGES = int(os.environ.get("N2D_CODEX_MAX_REFERENCE_IMAGES", "24"))
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp"}
 FAILED_SHARED_REF_STATUSES = {"review_failed", "failed", "fail", "rejected", "needs_regen", "blocked"}
+STYLE_ANCHOR_READY_STATUSES = {"ready", "approved", "selected", "selected_anchor", "style_anchor", "pass", "ok"}
 CHARACTER_SHARED_CORE_FIELDS = ("front", "three_quarter", "side", "back", "turnaround")
 CHARACTER_SHARED_BODY_FIELDS = ("half_body", "full_body", "outfit")
 CHARACTER_SHARED_FACE_FIELDS = ("face_anchor_refs", "expressions")
@@ -56,6 +58,19 @@ NON_CHARACTER_FACE_POLICY_GUIDANCE = (
 FULL_BODY_SHOES_GUIDANCE = (
     "人物全身、标准立绘、正面/45°/侧面/背面、三视图/turnaround、全身动作参考必须头到脚完整入画，鞋靴/脚部清楚可见；"
     "不得裁掉脚、被衣摆/烟雾完全遮住鞋、或用半身构图冒充全身。半身/脸部特写目标按其命名豁免。"
+)
+STYLE_ONLY_REFERENCE_GUIDANCE = (
+    "项目统一风格锚只用于学习渲染语言、材质质感、色彩分级、镜头焦段、背景明暗和半写实 3D 国漫完成度；"
+    "不得继承风格锚里的具体人物身份、五官、服装、动作、剧情状态或构图。"
+)
+SHARED_MAKEUP_BOARD_GUIDANCE = (
+    "共享定妆必须是统一规格的定妆参考板，不是剧情剧照：同一深灰/雨窗影棚背景、同一胸口高度机位、"
+    "同一 70mm 左右等效镜头、同一柔和冷灰主光+极弱暖边、同一半写实 3D 国漫材质；"
+    "不要真人摄影剧照质感，不要页游/仙侠游戏概念立绘，不要剧情动作、台词表演、复杂场面调度。"
+)
+RESTRICTED_PARTIAL_BOARD_GUIDANCE = (
+    "restricted_partial 局部角色只出手部、肩背、布料或侧后剪影参考板；不建立完整正脸，不生成可识别主角脸，"
+    "不画跪哭/递笔录等剧情剧照。"
 )
 
 
@@ -201,7 +216,7 @@ def load_shared_sections(root: Path) -> List[Target]:
     references can be generated later as explicit follow-up targets if needed.
     """
     prompt_dir = root / "出图" / "共享" / "prompt"
-    files = ["角色定妆.md", "场景定妆.md", "道具定妆.md", "法宝定妆.md", "特效定妆.md"]
+    files = ["风格锚.md", "角色定妆.md", "场景定妆.md", "道具定妆.md", "法宝定妆.md", "特效定妆.md"]
     targets: List[Target] = []
     section_by_alias: list[tuple[set, ClipSection]] = []
     seen_paths: set[str] = set()
@@ -476,7 +491,10 @@ def registry_image_paths(value) -> List[str]:
 
 
 def shared_aliases(title: str, body: str, rel_path: str) -> set:
-    aliases = {Path(rel_path).stem, Path(rel_path).name}
+    stem = Path(rel_path).stem
+    aliases = {stem, Path(rel_path).name}
+    if "风格锚" in stem or "style_anchor" in stem.lower():
+        aliases.update({"风格锚", "STYLE_ANCHOR", "style_anchor"})
     # The section title owns the shared target identity.  Body text may mention
     # related assets, such as VFX_01 in a character form, but those references
     # must not become selectable aliases for this target.
@@ -979,6 +997,54 @@ def _add_ready_image_path(raw: str, root: Path, out: List[str], seen: Set[str], 
     out.append(rel)
 
 
+def _style_anchor_status_ready(value: Any) -> bool:
+    status = str(value or "").strip().lower()
+    return not status or status in STYLE_ANCHOR_READY_STATUSES
+
+
+def load_style_anchor_paths(root: Path) -> List[str]:
+    """Return project-level style-only anchors from ``style_anchor_registry``.
+
+    The runner needs an image input it can actually pass to Codex.  This sidecar
+    lets an operator select a style probe as the temporary style carrier without
+    editing the upstream storyboard contract first.
+    """
+    data = load_json_file(root / STYLE_ANCHOR_REGISTRY)
+    if not data:
+        return []
+    anchors: List[str] = []
+    seen: Set[str] = set()
+
+    def add(raw: Any, status: Any = "") -> None:
+        text = str(raw or "").strip()
+        if not text or Path(text).suffix.lower() not in IMAGE_SUFFIXES:
+            return
+        if not _style_anchor_status_ready(status):
+            return
+        rel = text if text.startswith("出图/") else str(Path("出图") / "共享" / "图片" / text)
+        if rel in seen or not (root / rel).is_file():
+            return
+        seen.add(rel)
+        anchors.append(rel)
+
+    def scan(node: Any) -> None:
+        if isinstance(node, dict):
+            if "path" in node:
+                add(node.get("path"), node.get("status"))
+                return
+            for value in node.values():
+                scan(value)
+        elif isinstance(node, list):
+            for item in node:
+                scan(item)
+        elif isinstance(node, str):
+            add(node)
+
+    scan(data.get("selected_anchor") or data.get("style_anchor"))
+    scan(data.get("anchors"))
+    return anchors
+
+
 def reference_bundle_for_target(root: Path, episode: str, target: Target) -> Dict[str, Any]:
     """Resolve per-shot character/asset references into a backend-friendly bundle."""
     body = target.section.body
@@ -1000,6 +1066,14 @@ def reference_bundle_for_target(root: Path, episode: str, target: Target) -> Dic
         char_refs.clear()
     items: List[Dict[str, Any]] = []
     missing: List[str] = []
+    style_anchor_paths = load_style_anchor_paths(root)
+    if style_anchor_paths:
+        items.append({
+            "kind": "style",
+            "id": "STYLE_ANCHOR",
+            "paths": style_anchor_paths,
+            "use_policy": "style_only",
+        })
 
     # An asset that depicts a character must inherit that character's locked face
     # anchor; its own reference_group only self-references the not-yet-existing
@@ -1051,7 +1125,7 @@ def reference_bundle_for_target(root: Path, episode: str, target: Target) -> Dic
             if reference_policy in FACE_MOOD_ONLY_POLICIES:
                 reference_group = form.get("reference_group") if isinstance(form.get("reference_group"), dict) else {}
                 reference_atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), dict) else {}
-                for key in CHARACTER_SHARED_CORE_FIELDS + CHARACTER_SHARED_FACE_FIELDS:
+                for key in CHARACTER_SHARED_FACE_FIELDS:
                     _collect_ready_image_paths(reference_group.get(key), root, paths, seen)
                     _collect_ready_image_paths(reference_atlas.get(key), root, paths, seen)
             else:
@@ -1366,6 +1440,8 @@ def codex_reference_inputs_for_target(
         stem = Path(rel_path).stem
         if role == "source_frame":
             return 0
+        if role == "style":
+            return 5
         if role == "asset":
             if stem.startswith("PROP_"):
                 return 10
@@ -1595,6 +1671,33 @@ def reference_bundle_prompt_text(root: Path, bundle: Dict[str, Any], manifest_pa
     return "\n".join(lines)
 
 
+def _target_has_character_alias(target: Target) -> bool:
+    aliases = {str(item).strip() for item in (getattr(target, "aliases", set()) or set())}
+    return any(alias.startswith("CHAR_") for alias in aliases)
+
+
+def _target_is_restricted_partial(target: Target) -> bool:
+    stem = Path(target.rel_path).stem
+    text = f"{stem}\n{target.section.body}"
+    return any(token in text for token in ("restricted_partial", "局部参考", "剪影局部", "手部局部", "布料局部", "no_full_face"))
+
+
+def shared_style_guidance(target: Target, reference_bundle: Optional[Dict[str, Any]]) -> str:
+    if target.mode != "shared":
+        return ""
+    lines = [f"- {SHARED_MAKEUP_BOARD_GUIDANCE}"]
+    if _target_is_restricted_partial(target):
+        lines.append(f"- {RESTRICTED_PARTIAL_BOARD_GUIDANCE}")
+    elif _target_has_character_alias(target):
+        lines.append("- 人物主参考板采用中性站姿/中性表情，角色正面或 45° 身份可辨，但不要看镜头式写真感。")
+    has_style = any(str(item.get("kind") or "") == "style" for item in (reference_bundle or {}).get("items") or [])
+    if has_style:
+        lines.append(f"- {STYLE_ONLY_REFERENCE_GUIDANCE}")
+    else:
+        lines.append("- 当前没有 ready 风格锚附件；只能按文字风格契约生成，产出必须先作为风格探针/候选，不得直接钉成最终定妆。")
+    return "共享定妆统一风格约束：\n" + "\n".join(lines)
+
+
 def aspect_ratio(root: Path) -> str:
     """画幅 选择点（绝不写死，对齐 skills/n2d/references/选择点与偏好.md「画幅」与 compose.sh）：
     env N2D_ASPECT/ASPECT(9:16|16:9) > _设置.md「画幅」> 默认 9:16 竖屏。缺 _lib 时降级正则扫 _设置.md。"""
@@ -1776,6 +1879,7 @@ def build_codex_prompt(
 shot：{target.shot}
 生成模式：{target.mode}
 帧角色：{frame_role_note(target) or "常规定妆/共享资产目标。"}
+{shared_style_guidance(target, reference_bundle)}
 正式目标：{final_path}
 {"共享定妆变体要求：" + target.variant_note if target.variant_note else ""}
 可读注册表：
@@ -2261,6 +2365,33 @@ def controlled_multiref_derivation(
     }
 
 
+def is_style_anchor_path(rel_path: str) -> bool:
+    stem = Path(str(rel_path or "")).stem.lower()
+    return "风格锚" in stem or "style_anchor" in stem
+
+
+def mark_style_anchor_ready(root: Path, rel_path: str, *, status: str = "ready") -> None:
+    path = root / STYLE_ANCHOR_REGISTRY
+    data = load_json_file(path)
+    if not data:
+        data = {"kind": "n2d_style_anchor_registry", "version": 1}
+    selected = data.get("selected_anchor") if isinstance(data.get("selected_anchor"), dict) else {}
+    selected = dict(selected)
+    selected.update({
+        "path": rel_path,
+        "status": status,
+        "role": "style_anchor",
+        "use_policy": "style_only",
+        "identity_policy": "do_not_clone_face_or_costume",
+        "updated_by": SOURCE,
+        "updated_at": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
+    })
+    data["selected_anchor"] = selected
+    data["updated_at"] = selected["updated_at"]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
 def mark_shared_reference_status(
     root: Path,
     rel_path: str,
@@ -2425,12 +2556,15 @@ def process_target(
         return True
 
     if not force and existing_shared_image:
-        mark_shared_reference_status(
-            root,
-            target.rel_path,
-            status_after_shared_generation(target.rel_path, target),
-            preserve_ready=True,
-        )
+        if is_style_anchor_path(target.rel_path):
+            mark_style_anchor_ready(root, target.rel_path)
+        else:
+            mark_shared_reference_status(
+                root,
+                target.rel_path,
+                status_after_shared_generation(target.rel_path, target),
+                preserve_ready=True,
+            )
         print(f"[skip] {target.shot} existing shared image: {target.rel_path}")
         append_log(root, {
             "ts": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
@@ -2522,12 +2656,15 @@ def process_target(
             os.replace(temp_path, final)
             ok = png_valid(final)
             if ok and target.mode == "shared":
-                mark_shared_reference_status(
-                    root,
-                    target.rel_path,
-                    status_after_shared_generation(target.rel_path, target),
-                    derivation=controlled_multiref_derivation(root, target.rel_path, reference_inputs),
-                )
+                if is_style_anchor_path(target.rel_path):
+                    mark_style_anchor_ready(root, target.rel_path)
+                else:
+                    mark_shared_reference_status(
+                        root,
+                        target.rel_path,
+                        status_after_shared_generation(target.rel_path, target),
+                        derivation=controlled_multiref_derivation(root, target.rel_path, reference_inputs),
+                    )
             if not ok:
                 error = f"moved output is not a valid PNG: {final}"
     except subprocess.TimeoutExpired:

@@ -30,6 +30,20 @@ from n2d_contract import (  # noqa: E402
 
 REFERENCE_PLAN_APPLICATION_KIND = "n2d_reference_plan_application"
 DIRECTOR_CAMERA_PLAN_APPLICATION_KIND = "n2d_director_camera_plan_application"
+STYLE_ANCHOR_REL = "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
+STYLE_ANCHOR_REGISTRY_REL = "出图/共享/style_anchor_registry.json"
+STYLE_REFERENCE_BOARD_RULES = (
+    "统一风格锚只锁本剧渲染语言：半写实 3D 国漫、冷灰低饱和、柔和皮肤 shader、旧木/布料/金属材质、"
+    "同一暗灰影棚或雨窗背景、同一胸口高度机位、同一镜头焦段和光比；不得继承风格锚里的具体人物脸、服装、动作或剧情状态。"
+)
+FULL_CHARACTER_BOARD_RULES = (
+    "统一定妆参考板，不是剧情剧照：中性站姿、中性表情、全身从头到鞋靴完整入画，深灰/雨窗影棚背景，"
+    "冷灰柔光+极弱暖边，同一半写实 3D 国漫材质；不要真人摄影剧照质感，不要页游/仙侠游戏概念立绘，不要复杂剧情调度。"
+)
+PARTIAL_CHARACTER_BOARD_RULES = (
+    "restricted_partial 局部参考板，不是剧情剧照：只画手部、肩背、布料或侧后剪影；不建立完整正脸，"
+    "不出现清晰五官，不画跪哭/递笔录等剧情动作。"
+)
 
 EP_RE = re.compile(r"\d+")
 
@@ -780,6 +794,7 @@ def make_shared_index(root: Path) -> str:
         "# 共享定妆索引",
         "",
         "本索引只登记 prompt 阶段的共享定妆位；未实际产出 PNG 前不标 ✅。",
+        f"统一风格锚：`{STYLE_ANCHOR_REL}`；机器登记：`{STYLE_ANCHOR_REGISTRY_REL}`。共享角色定妆必须先继承该锚的渲染语言，再锁各自身份。",
         "",
         "| 类型 | ID | 目标存档 | 状态 | 锚点 |",
         "|---|---|---|---|---|",
@@ -789,11 +804,33 @@ def make_shared_index(root: Path) -> str:
 
 
 def shared_character_prompt() -> str:
-    parts = ["# 角色定妆", "", "所有角色定妆继承本剧 `identity_registry.json`，先出共享定妆，再派生分镜图。"]
+    parts = [
+        "# 角色定妆",
+        "",
+        "所有角色定妆继承本剧 `identity_registry.json`，先出共享定妆，再派生分镜图。",
+        f"**统一风格锚**：`{STYLE_ANCHOR_REL}`（登记在 `{STYLE_ANCHOR_REGISTRY_REL}`）。",
+        f"**风格锚使用规则**：{STYLE_REFERENCE_BOARD_RULES}",
+    ]
     for cid, cfg in CHARACTER_DEFS.items():
         ak = cfg["asset_key"]
         restricted = cfg["tier"] == "restricted_partial"
         target = f"出图/共享/图片/定妆_{ak}_正面.png" if not restricted else f"出图/共享/图片/定妆_{ak}_剪影局部.png"
+        board_rule = PARTIAL_CHARACTER_BOARD_RULES if restricted else FULL_CHARACTER_BOARD_RULES
+        chinese_prompt = (
+            f"{cfg['anchor']}。{cfg['face']}；{cfg['hair']}；{cfg['outfit']}；{cfg['accessories']}。"
+            f"{board_rule}冷灰写实3D国风漫剧，9:16，主流审美，五官清晰协调，服装结构稳定。"
+        )
+        english_prompt = (
+            f"{cfg['name']} unified character reference board, semi-realistic 3D guoman comic-drama style, "
+            "style-anchor matched cold gray palette, same studio/rain-window background, same lens and lighting, "
+            "stable facial structure, stable hair and costume, vertical 9:16 production reference, not a live-action photo, not a game concept art, not a story still."
+        )
+        if restricted:
+            english_prompt = (
+                f"{cfg['name']} restricted partial reference board, semi-realistic 3D guoman comic-drama style, "
+                "style-anchor matched cold gray palette, hands / shoulder-back / cloth / side-back silhouette only, "
+                "no full face, no readable facial identity, no story action still, vertical 9:16 production reference."
+            )
         parts += [
             "",
             f"## {cfg['name']}（`{cid}/{cfg['form']}`）",
@@ -801,16 +838,18 @@ def shared_character_prompt() -> str:
             f"**身份注册**：`identity_registry.json` -> `{cid}/{cfg['form']}`；资产包 `设定库/character_assets/{cid}__*`。",
             f"**角色定妆组**：正面 `_正面`、45° `_45度`、侧面 `_侧面`、背面 `_背面`、半身服装 `_半身`、脸部特写 `_脸部特写`、标准三视图 `_三视图`；局部角色为 `restricted_partial/no_full_face`，只手部/剪影/布料局部，绝不正脸。",
             f"**锚点句:** {cfg['anchor']}",
+            f"**定妆参考板规格**：{board_rule}",
             "**半身参考裁切规则**：半身图从已通过自检的正面主参考裁切，裁切后回 9:16，主体居中；不得用白底/浅灰底/空白补下半截。",
             "### 正向 prompt（中文）",
-            f"{cfg['anchor']}。{cfg['face']}；{cfg['hair']}；{cfg['outfit']}；{cfg['accessories']}。冷灰写实3D国风漫剧，9:16，主流审美，五官清晰协调，服装结构稳定。",
+            chinese_prompt,
             "### 正向 prompt（英文）",
-            f"{cfg['name']} character reference sheet, realistic 3D Chinese comic-drama style, restrained cold gray palette, stable facial structure, stable hair and costume, 9:16 vertical production reference.",
+            english_prompt,
             "### 负向 prompt",
-            "风格禁忌：禁Q版、禁现代服饰、禁高饱和页游光效、禁图中烤入文字、禁水印logo；身份禁漂：" + "、".join(cfg["drift"]),
+            "风格禁忌：禁Q版、禁现代服饰、禁高饱和页游光效、禁图中烤入文字、禁水印logo、禁真人摄影剧照质感、禁页游/仙侠游戏概念立绘、禁剧情动作剧照；身份禁漂：" + "、".join(cfg["drift"]),
             "### 检查清单（定妆自查）",
             "- 正面/45度/侧面/背面/半身/脸部特写/三视图是否同源，不逐张文生图补角度。",
             "- 脸型、发型、服装主色、关键配饰是否可被逐镜复用。",
+            "- 是否继承统一风格锚的渲染语言，但没有继承风格锚里的具体人脸/服装/动作。",
             "- restricted_partial 角色是否没有完整正脸。",
             "**自检（生成后逐张过）**：通过后回填 identity_registry 的 `self_check_passed=true`、`anchor_sha` 和真实图片路径。",
         ]
@@ -836,6 +875,27 @@ def shared_scene_prompt() -> str:
         "- 光位锚：画左冷雨光 + 油灯弱暖边可读。",
         "- 轴线：沈砚画右看画左、陈贵画左看画右不跳轴。",
         "**自检（生成后逐张过）**：通过后回填 asset_registry 的 `self_check_passed=true` 和 scene_atlas 真实图片 sha。",
+    ]) + "\n"
+
+
+def shared_style_anchor_prompt() -> str:
+    return "\n".join([
+        "# 统一风格锚",
+        "",
+        "## STYLE_ANCHOR / 冷灰写实3D国风漫剧",
+        f"**目标存档**：`{STYLE_ANCHOR_REL}`",
+        f"**机器登记**：`{STYLE_ANCHOR_REGISTRY_REL}` -> `selected_anchor.path`。",
+        "",
+        "### 正向 prompt（中文）",
+        "冷灰写实3D国风漫剧统一风格锚图，9:16竖屏。深灰影棚与微弱雨窗背景，冷灰低饱和主光，极弱油灯暖边，半写实3D国漫材质，柔和皮肤 shader，旧木、旧布、暗金属材质清楚但不过度写实。画面可放无脸中性人台、布料、旧木桌、油灯和雨窗材质样本，作为渲染风格参考；不要任何具名角色、不要清晰可识别人物脸、不要剧情动作。",
+        "### 正向 prompt（英文）",
+        "Unified style anchor board for a semi-realistic 3D guoman comic-drama, vertical 9:16, cold gray low-saturation color grade, dark gray studio with subtle rainy window background, weak warm oil-lamp rim light, soft skin shader, old wood, aged cloth and dark metal material samples. Anonymous faceless mannequin or material samples only, no named character identity, no readable face, no story action still.",
+        "### 负向 prompt",
+        "禁真人摄影剧照、禁页游/仙侠游戏概念立绘、禁Q版、禁现代物件、禁高饱和霓虹、禁清晰人物脸、禁具体角色服装、禁剧情动作、禁文字/水印/logo。",
+        "### 检查清单",
+        "- 是否能作为全剧角色定妆的统一渲染语言参考。",
+        "- 是否没有具体角色身份、清晰脸、剧情动作。",
+        "- 是否明确冷灰低饱和、半写实 3D 国漫、统一光比和材质。",
     ]) + "\n"
 
 
@@ -1176,6 +1236,8 @@ def write_pack(root: Path, ep: str) -> Dict[str, Any]:
     written.append(root / "出图" / "共享" / "prompt" / "00_索引.md")
     write_text(root / "出图" / "共享" / "prompt" / "角色定妆.md", shared_character_prompt())
     written.append(root / "出图" / "共享" / "prompt" / "角色定妆.md")
+    write_text(root / "出图" / "共享" / "prompt" / "风格锚.md", shared_style_anchor_prompt())
+    written.append(root / "出图" / "共享" / "prompt" / "风格锚.md")
     write_text(root / "出图" / "共享" / "prompt" / "场景定妆.md", shared_scene_prompt())
     written.append(root / "出图" / "共享" / "prompt" / "场景定妆.md")
     prop_ids = [aid for aid, cfg in ASSET_DEFS.items() if cfg["type"] in {"prop", "weapon"}]

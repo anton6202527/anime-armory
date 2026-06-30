@@ -31,6 +31,10 @@ from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 
+STYLE_ANCHOR_REGISTRY = Path("出图") / "共享" / "style_anchor_registry.json"
+STYLE_ANCHOR_READY_STATUSES = {"ready", "approved", "selected", "selected_anchor", "style_anchor", "pass", "ok"}
+
+
 def _envf(name: str, default: float) -> float:
     try:
         return float(os.environ.get(name, str(default)))
@@ -225,6 +229,57 @@ def _load_style_contract(root: Path, ep: str) -> Dict[str, Any]:
         return {}
 
 
+def _load_style_anchor_registry(root: Path) -> Dict[str, Any]:
+    p = Path(root) / STYLE_ANCHOR_REGISTRY
+    if not p.is_file():
+        return {}
+    try:
+        data = json.loads(p.read_text(encoding="utf-8"))
+        return data if isinstance(data, dict) else {}
+    except Exception:
+        return {}
+
+
+def _registry_style_anchors(root: Path) -> List[str]:
+    data = _load_style_anchor_registry(root)
+    if not data:
+        return []
+    out: List[str] = []
+    seen = set()
+
+    def ready(status: Any) -> bool:
+        text = str(status or "").strip().lower()
+        return not text or text in STYLE_ANCHOR_READY_STATUSES
+
+    def add(raw: Any, status: Any = "") -> None:
+        text = str(raw or "").strip()
+        if not text or Path(text).suffix.lower() not in {".png", ".jpg", ".jpeg", ".webp"}:
+            return
+        if not ready(status):
+            return
+        rel = text if text.startswith("出图/") else str(Path("出图") / "共享" / "图片" / text)
+        if rel not in seen:
+            seen.add(rel)
+            out.append(rel)
+
+    def scan(node: Any) -> None:
+        if isinstance(node, dict):
+            if "path" in node:
+                add(node.get("path"), node.get("status"))
+                return
+            for value in node.values():
+                scan(value)
+        elif isinstance(node, list):
+            for item in node:
+                scan(item)
+        elif isinstance(node, str):
+            add(node)
+
+    scan(data.get("selected_anchor") or data.get("style_anchor"))
+    scan(data.get("anchors"))
+    return out
+
+
 def _resolve_anchor_status(root: Path, anchors: Sequence[str]) -> Tuple[str, List[str]]:
     """风格锚解析：未登记→missing；登记但磁盘缺→files_missing；有存在的→ok + 存在的绝对路径列表。"""
     if not anchors:
@@ -241,12 +296,19 @@ def analyze(root: Path, ep: str) -> Dict[str, Any]:
     无 style_contract / 无风格名 → available True、findings 空（存在性归 preflight gate，不双报）。
     未登记/缺失锚图 → available True，findings 出「人判清单」warn（降级，不臆造）。
     无可测帧或 Pillow 不可用 → available False（跳过）。"""
-    intent = parse_style_intent(_load_style_contract(Path(root), ep))
+    root = Path(root)
+    intent = parse_style_intent(_load_style_contract(root, ep))
+    if not intent.get("anchors"):
+        registry_anchors = _registry_style_anchors(root)
+        if registry_anchors:
+            intent = dict(intent)
+            intent["anchors"] = registry_anchors
+            intent["anchor_source"] = str(STYLE_ANCHOR_REGISTRY)
     if not intent.get("style_name"):
         return {"available": True, "checked": 0, "intent": intent, "findings": [],
                 "notes": ["storyboard.json 无 style_contract.风格名——存在性由 image_preflight gate 负责，此处不双报。"]}
 
-    anchor_status, anchor_paths = _resolve_anchor_status(Path(root), intent.get("anchors") or [])
+    anchor_status, anchor_paths = _resolve_anchor_status(root, intent.get("anchors") or [])
     if anchor_status != "ok":
         return {"available": True, "checked": 0, "intent": intent, "anchor_status": anchor_status,
                 "findings": style_findings(intent, None, None, 0, anchor_status)}

@@ -82,6 +82,7 @@ END_FRAME_RE = re.compile(r"\*\*尾帧\*\*[^`]*`([^`]+\.png)`")
 ZH_PROMPT_RE = re.compile(r"###\s*视频 prompt（中文[^`]*```(?:\w+)?\s*(.*?)```", re.DOTALL)
 FENCE_RE = re.compile(r"```(?:\w+)?\s*(.*?)```", re.DOTALL)
 DURATION_RE = re.compile(r"时长\s*([0-9]+(?:\.[0-9]+)?)\s*s", re.IGNORECASE)
+FILENAME_UNSAFE_RE = re.compile(r"[\\/:*?\"<>|\r\n\t]+")
 
 
 def production_dir(root: Path) -> Path:
@@ -148,19 +149,76 @@ def _requires_dialogue_fact_contract(prompt: str) -> bool:
     return any(token in prompt for token in DIALOGUE_FACT_REQUIRED_TOKENS)
 
 
-def _dialogue_fact_prompt_suffix(root: Path, episode: str, clip: str) -> str:
+def _dialogue_fact_contract_row(root: Path, episode: str, clip: str) -> Optional[Dict[str, Any]]:
     path = dialogue_fact_contract_path(root, episode)
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError):
-        return ""
+        return None
     if not isinstance(data, dict) or data.get("kind") != "n2d_dialogue_fact_contract":
-        return ""
+        return None
     wanted = _base_clip_id(clip)
     rows = data.get("clips") if isinstance(data.get("clips"), list) else []
-    row = next((r for r in rows if isinstance(r, dict) and _base_clip_id(r.get("clip")) == wanted), None)
+    return next((r for r in rows if isinstance(r, dict) and _base_clip_id(r.get("clip")) == wanted), None)
+
+
+def _has_character_dialogue(row: Optional[Dict[str, Any]]) -> bool:
+    if not row:
+        return False
+    indices = row.get("allowed_character_dialogue_indices")
+    if isinstance(indices, list) and any(str(v).strip() for v in indices):
+        return True
+    for key in ("allowed_character_dialogue", "allowed_dialogue"):
+        values = row.get(key)
+        if not isinstance(values, list):
+            continue
+        for entry in values:
+            if isinstance(entry, dict) and str(entry.get("text") or "").strip():
+                return True
+    return False
+
+
+def _requests_native_speech(prompt: str) -> bool:
+    text = prompt or ""
+    return bool(
+        re.search(r"native_audio_policy\s*=\s*native_speech", text, re.IGNORECASE)
+        or re.search(r"speech_policy\s*=\s*native_speech", text, re.IGNORECASE)
+        or "native_speech" in text
+        or "台词+口型" in text
+        or "台词、口型" in text
+        or "原生音画后端生成" in text
+    )
+
+
+def _guard_native_speech_contract(prompt: str, item: Dict[str, Any], manifest: Dict[str, Any]) -> None:
+    root = _manifest_root(manifest)
+    episode = str(manifest.get("episode") or "")
+    if not root or not episode or not _requests_native_speech(prompt):
+        return
+    clip = str(item.get("clip") or "")
+    row = _dialogue_fact_contract_row(root, episode, clip)
+    if row is None:
+        return
+    if _has_character_dialogue(row):
+        return
+    raise RuntimeError(
+        "native_speech route has no allowed character dialogue before paid video submit: "
+        f"{episode} {clip}. This clip is narration/screen-text only, so narration belongs to compose. "
+        "Rerun n2d-model-router/video prompt with native_audio_policy=none/no_native_speech or ambience-only "
+        "before spending credits."
+    )
+
+
+def _dialogue_fact_prompt_suffix(root: Path, episode: str, clip: str) -> str:
+    row = _dialogue_fact_contract_row(root, episode, clip)
     if not row:
         return ""
+    wanted = _base_clip_id(clip)
+    path = dialogue_fact_contract_path(root, episode)
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        data = {}
     character_allowed = row.get("allowed_character_dialogue")
     if not isinstance(character_allowed, list):
         character_allowed = row.get("allowed_dialogue") if isinstance(row.get("allowed_dialogue"), list) else []
@@ -215,11 +273,14 @@ def _dialogue_fact_prompt_suffix(root: Path, episode: str, clip: str) -> str:
     ]).strip()
 
 
-def _append_dialogue_fact_contract(prompt: str, item: Dict[str, Any], manifest: Dict[str, Any]) -> str:
+def _append_dialogue_fact_contract(prompt: str, item: Dict[str, Any], manifest: Dict[str, Any], *,
+                                  enforce_submit_guard: bool = True) -> str:
     root = _manifest_root(manifest)
     episode = str(manifest.get("episode") or "")
     if not root or not episode:
         return prompt
+    if enforce_submit_guard:
+        _guard_native_speech_contract(prompt, item, manifest)
     clip = str(item.get("clip") or "")
     if "Dialogue-Fact Contract" in prompt or "对白事实锁" in prompt:
         return prompt
@@ -243,6 +304,41 @@ def append_jsonl(path: Path, item: Dict[str, Any]) -> None:
 
 def clip_key(number: int) -> str:
     return f"Clip_{number:02d}"
+
+
+def _filename_part(text: str, *, fallback: str = "clip") -> str:
+    value = FILENAME_UNSAFE_RE.sub("_", str(text or "")).strip(" ._-")
+    value = re.sub(r"\s+", "_", value)
+    value = re.sub(r"_+", "_", value).strip(" ._-")
+    return (value or fallback)[:80]
+
+
+def _title_from_heading(heading: str) -> str:
+    match = re.search(r"（([^）]+)）", heading or "")
+    body = match.group(1) if match else heading
+    parts = [p.strip() for p in re.split(r"[·|]", body) if p.strip()]
+    useful: List[str] = []
+    for part in parts:
+        if re.search(r"时长\s*[0-9]", part, re.IGNORECASE):
+            continue
+        if re.search(r"\bEP\d+[_-]?CLIP\d+\b", part, re.IGNORECASE):
+            continue
+        if re.fullmatch(r"镜头\s*", part):
+            continue
+        useful.append(part)
+    return useful[-1] if useful else ""
+
+
+def _title_from_image_rel(image_rel: str) -> str:
+    stem = Path(str(image_rel or "")).stem
+    stem = re.sub(r"^Clip[_\s-]?\d+[_\s-]*", "", stem, flags=re.IGNORECASE)
+    return stem
+
+
+def video_target_name(number: int, heading: str, image_rel: str) -> str:
+    """Formal MP4 targets use the physical manifest clip id, not the source PNG id."""
+    title = _title_from_heading(heading) or _title_from_image_rel(image_rel)
+    return f"{clip_key(number)}_{_filename_part(title)}.mp4"
 
 
 def _duration_from_heading(text: str) -> Optional[float]:
@@ -295,7 +391,7 @@ def parse_prompt_pack(root: Path, episode: str, start: int, end: int) -> List[Di
         end_image = (root / end_image_rel).resolve() if end_image_rel and not Path(end_image_rel).is_absolute() else (Path(end_image_rel) if end_image_rel else None)
 
         prompt = _extract_prompt(block)
-        target = Path(image.name).with_suffix(".mp4").name
+        target = video_target_name(number, heading, image_rel)
         story_duration = _duration_from_heading(heading) or _duration_from_heading(block)
         out.append({
             "clip": clip_key(number),
@@ -1021,7 +1117,12 @@ def acceptance_recipe_meta(root: Path, episode: str, item: Dict[str, Any], manif
     video_resolution = str(manifest.get("video_resolution") or "unknown")
     prompt_path = Path(str(item.get("prompt_file") or ""))
     prompt = prompt_path.read_text(encoding="utf-8") if prompt_path.is_file() else ""
-    prompt = _append_dialogue_fact_contract(prompt, item, {**manifest, "_root": str(root)})
+    prompt = _append_dialogue_fact_contract(
+        prompt,
+        item,
+        {**manifest, "_root": str(root)},
+        enforce_submit_guard=False,
+    )
     images = _actual_image_inputs(item)
     image_rels = [_rel_path(root, p) for p in images]
     reference_bundle_sha256 = _sha256_text("\n".join(_existing_file_digest(root, p) for p in images))

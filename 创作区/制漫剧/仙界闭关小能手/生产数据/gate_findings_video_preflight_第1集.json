@@ -559,7 +559,7 @@
     }
   ],
   "gate_stage": "video_preflight",
-  "generated_at": "2026-06-30T09:25:33+00:00",
+  "generated_at": "2026-06-30T10:02:42+00:00",
   "inputs_fingerprint": {
     "files": {
       "出图/共享/asset_registry.json": "298b0ed5d156b0ce7f0e516cfcf98099a310b27498ecb844f51d8cf2215b2d30",

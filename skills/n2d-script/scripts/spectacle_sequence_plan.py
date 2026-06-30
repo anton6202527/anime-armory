@@ -223,7 +223,7 @@ def _build_sequence(items: Sequence[Mapping[str, Any]], index: int) -> Dict[str,
         "spectacle_types": [item.get("spectacle_type") for item in items],
         "subject_slots": {
             "characters": characters,
-            "slot_policy": "keep each CHAR_xx in the same screen role across this sequence; do not swap pursuer/target or attacker/defender without an explicit handoff_state.",
+            "slot_policy": "keep each registered character id in the same screen role across this sequence; do not swap pursuer/target or attacker/defender without an explicit handoff_state.",
         },
         "asset_persistence": {
             "assets": assets,

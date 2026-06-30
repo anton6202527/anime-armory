@@ -277,6 +277,17 @@ def test_shared_variant_note_specializes_spatial_map_and_scale_refs() -> None:
     )
 
 
+def test_style_anchor_shared_aliases_include_short_names() -> None:
+    aliases = codex_image_runner.shared_aliases(
+        "## 统一风格锚",
+        "",
+        "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+    )
+
+    assert "风格锚" in aliases
+    assert "STYLE_ANCHOR" in aliases
+
+
 def test_mark_shared_reference_status_upgrades_string_registry_refs(tmp_path: Path) -> None:
     rel = "出图/共享/图片/定妆_VFX_TEST.png"
     shared = tmp_path / "出图" / "共享"
@@ -883,6 +894,66 @@ def test_reference_bundle_resolves_ready_character_and_asset_refs(tmp_path: Path
     assert "--image" in cmd
     assert any(str(ref) in part for part in cmd)
     assert any(str(prop) in part for part in cmd)
+
+
+def test_shared_reference_inputs_include_project_style_anchor(tmp_path: Path) -> None:
+    style_rel = "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
+    write_valid_png(tmp_path / style_rel)
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True, exist_ok=True)
+    (shared / "style_anchor_registry.json").write_text(
+        json.dumps({
+            "kind": "n2d_style_anchor_registry",
+            "selected_anchor": {
+                "path": style_rel,
+                "status": "ready",
+                "use_policy": "style_only",
+            },
+        }, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    (shared / "identity_registry.json").write_text(
+        json.dumps({
+            "characters": [{
+                "id": "CHAR_01",
+                "forms": [{"form": "常态", "reference_group": {}}],
+            }]
+        }, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    (shared / "asset_registry.json").write_text('{"assets":[]}', encoding="utf-8")
+    rel = "出图/共享/图片/定妆_沈念_常态.png"
+    section = codex_image_runner.ClipSection(
+        clip="CHAR_01",
+        title="## CHAR_01 沈念",
+        body=f"**目标存档**：`{rel}`\n角色定妆。",
+        target_line=f"`{rel}`",
+    )
+    target = codex_image_runner.Target("CHAR_01::定妆_沈念_常态", "CHAR_01", "shared", rel, section)
+    target.aliases = {"CHAR_01", "CHAR_01/常态"}
+
+    bundle = codex_image_runner.reference_bundle_for_target(tmp_path, "第1集", target)
+    inputs = codex_image_runner.codex_reference_inputs_for_target(tmp_path, "第1集", target, bundle)
+    prompt = codex_image_runner.build_codex_prompt(
+        tmp_path, "第1集", target, tmp_path / "out.png", "seed-1", bundle
+    )
+
+    assert any(item["kind"] == "style" for item in bundle["items"])
+    assert inputs[0]["role"] == "style"
+    assert inputs[0]["rel_path"] == style_rel
+    assert "统一规格的定妆参考板" in prompt
+    assert "不得继承风格锚里的具体人物身份" in prompt
+
+
+def test_style_anchor_target_marks_registry_ready(tmp_path: Path) -> None:
+    rel = "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
+
+    codex_image_runner.mark_style_anchor_ready(tmp_path, rel)
+
+    data = json.loads((tmp_path / "出图" / "共享" / "style_anchor_registry.json").read_text(encoding="utf-8"))
+    assert data["selected_anchor"]["path"] == rel
+    assert data["selected_anchor"]["status"] == "ready"
+    assert data["selected_anchor"]["use_policy"] == "style_only"
 
 
 def test_reference_bundle_prefers_form_qualified_refs_over_bare_character_id(tmp_path: Path) -> None:
