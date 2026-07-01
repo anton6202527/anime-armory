@@ -268,7 +268,7 @@ n2d-image →
 ```
 def dispatch(work_root):
     progress = read(f"{work_root}/_进度.md")
-    mode = read_setting(work_root, "制作模式", default="原生音画")
+    mode = read_setting(work_root, "制作模式", default="配音先行")
     for episode in episodes_sorted_by_number(progress):
         if any(episode[c] != "✅" for c in ["剧本改编", "bgm", "封面"]):
             return ("n2d-script(阶段1)", episode.id, "剧本改编未齐")

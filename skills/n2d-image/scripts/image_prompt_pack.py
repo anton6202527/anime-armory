@@ -30,6 +30,16 @@ from n2d_contract import (  # noqa: E402
 
 REFERENCE_PLAN_APPLICATION_KIND = "n2d_reference_plan_application"
 DIRECTOR_CAMERA_PLAN_APPLICATION_KIND = "n2d_director_camera_plan_application"
+SCRIPT_CONTRACT_APPLICATION_KIND = "n2d_script_contract_application"
+SCRIPT_QUALITY_CONTRACT_KIND = "n2d_script_quality_contract"
+SCRIPT_CONTRACT_REQUIRED_FIELDS = [
+    "core_attraction",
+    "first_3s_visual_hook",
+    "retention_promise_ledger",
+    "clip_dramatic_function",
+    "audience_question_ledger",
+    "performance_cues",
+]
 ASSET_ID_HINTS: Dict[str, Dict[str, Any]] = {
     "LOC_ZAYI_DADIAN": {
         "name": "秀竹峰杂役大殿",
@@ -398,6 +408,38 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: fh.read(1024 * 1024), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def flatten_contract_value(value: Any) -> str:
+    if isinstance(value, str):
+        return value.strip()
+    if isinstance(value, Mapping):
+        return "；".join(f"{k}={flatten_contract_value(v)}" for k, v in value.items() if flatten_contract_value(v))
+    if isinstance(value, list):
+        return "；".join(flatten_contract_value(v) for v in value if flatten_contract_value(v))
+    return str(value or "").strip()
+
+
+def load_script_contract(root: Path, ep: str) -> Mapping[str, Any]:
+    data = load_json(root / "生产数据" / f"script_quality_contract_{ep}.json")
+    if isinstance(data, Mapping) and data.get("kind") == SCRIPT_QUALITY_CONTRACT_KIND:
+        return data
+    return {}
+
+
+def script_contract_fields(contract: Mapping[str, Any]) -> Mapping[str, Any]:
+    fields = contract.get("signable_fields")
+    return fields if isinstance(fields, Mapping) else {}
+
+
+def script_clip_contract(contract: Mapping[str, Any], clip_id_value: str) -> Mapping[str, Any]:
+    fields = script_contract_fields(contract)
+    for row in fields.get("clip_dramatic_functions") or []:
+        if not isinstance(row, Mapping):
+            continue
+        if str(row.get("clip_id") or "") == str(clip_id_value):
+            return row
+    return {}
 
 
 def normalize_ep(value: str) -> str:
@@ -1525,9 +1567,11 @@ def shared_asset_prompt(kind: str, title: str, asset_ids: Sequence[str]) -> str:
     return "\n".join(parts) + "\n"
 
 
-def overview_md(story: Mapping[str, Any], clips: Sequence[Mapping[str, Any]], total_frames: int) -> str:
+def overview_md(root: Path, ep: str, story: Mapping[str, Any], clips: Sequence[Mapping[str, Any]], total_frames: int) -> str:
     sc = style_contract(story)
     vc = visual_contract(story)
+    script_contract = load_script_contract(root, ep)
+    script_fields = script_contract_fields(script_contract)
     style_forbidden = prompt_safe_forbidden(sc.get("风格禁忌", ""))
     status_rows = []
     for cid, cfg in CHARACTER_DEFS.items():
@@ -1546,6 +1590,14 @@ def overview_md(story: Mapping[str, Any], clips: Sequence[Mapping[str, Any]], to
         f"- 轴线：{json.dumps(vc.get('场景轴线视线', {}), ensure_ascii=False)}",
         "- 状态演进：以 storyboard 的分段状态为上游契约；逐镜 prompt 只写本镜已发生状态锁，不把后镜反转/救场结局提前展开。",
         f"- 景别阶梯：{vc.get('景别阶梯', '')}",
+        "",
+        "## 本集可看性签收合同",
+        f"- 合同来源：`生产数据/script_quality_contract_{ep}.json`；status={script_contract.get('status', 'missing')}；hash={script_contract.get('contract_hash', '-')}",
+        f"- 核心看点：{flatten_contract_value(script_fields.get('core_attraction'))[:260] or '缺；回 n2d-script 补 core_attraction'}",
+        f"- 首屏 0-3s 视觉钩：{flatten_contract_value(script_fields.get('first_3s_visual_hook'))[:260] or '缺；回 n2d-script 补 first_3s_visual_hook'}",
+        f"- 留存承诺账本：{len(script_fields.get('retention_promise_ledger') or [])} 条；出图不得把承诺/兑现链画散。",
+        f"- 观众问题账本：{len((script_fields.get('audience_question_ledger') or {}).get('questions') or [])} 条；开放问题必须以视觉钩、道具、表演或集尾断点接住。",
+        f"- 下游必须消费字段：{', '.join(script_contract.get('required_consumption_fields') or SCRIPT_CONTRACT_REQUIRED_FIELDS)}",
         "",
         "## 本集基础视觉风格契约",
         f"- 风格名：{sc.get('风格名', '')}",
@@ -1623,6 +1675,20 @@ def asset_forbidden_terms(asset_ids: Sequence[str]) -> List[str]:
 
 def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], drow: Mapping[str, Any], story: Mapping[str, Any]) -> str:
     cid = str(clip.get("id") or f"EP01_CLIP{idx:02d}")
+    contract = load_script_contract(root, ep)
+    script_row = script_clip_contract(contract, cid)
+    dramatic_function = (
+        flatten_contract_value(script_row.get("dramatic_function"))
+        or flatten_contract_value(clip.get("dramatic_function") or clip.get("story_function") or clip.get("rhythm"))
+    )
+    audience_effect = (
+        flatten_contract_value(script_row.get("audience_effect"))
+        or flatten_contract_value(clip.get("audience_effect") or clip.get("viewer_effect"))
+    )
+    spectacle_story_function = (
+        flatten_contract_value(script_row.get("spectacle_story_function"))
+        or flatten_contract_value(clip.get("spectacle_story_function") or clip.get("visual_payoff"))
+    )
     chars = clip_chars(clip)
     assets = clip_assets(clip)
     frame_count, has_mid, need_end = continuity_frame_count(clip)
@@ -1700,6 +1766,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
     return "\n".join([
         f"## 镜头 {idx}（`{cid}` · {clip.get('label', '')} · {clip.get('template', '')}）",
         f"**剧本描述**：{desc}",
+        f"**剧本可看性合同**：戏剧功能={dramatic_function or '缺 dramatic_function'}；观众效果={audience_effect or '缺 audience_effect'}；奇观叙事功能={spectacle_story_function or '普通镜/无'}。",
         f"**目标落档**：{' '.join(f'`{path}`' for path in target_paths)}",
         f"**本镜出图张数**：{frame_count} 张；{'；'.join(frame_parts)}。",
         "**参考图**：",
@@ -1719,7 +1786,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"**起幅·运动余量**：{move}",
         f"**构图防呆**：{comp_guard}",
         f"**本镜状态锁**：{state_lock}",
-        f"**导演意图**：{intent}",
+        f"**导演意图**：{intent}；必须服务剧本可看性合同：{dramatic_function or '先补戏剧功能'}。",
         f"**专项镜头模板**：shot_type={clip.get('template', '')}；beats={json.dumps(template_contract.get('beats', []), ensure_ascii=False)}；blocking={template_contract.get('blocking', '')}；camera_rule={template_contract.get('camera_rule', '')}；continuity_must={json.dumps(template_contract.get('continuity_must', []), ensure_ascii=False)}；negative={json.dumps(negative, ensure_ascii=False)}。",
         "**近景/反打身份锁定**：" + closeup_lock,
         f"**尾帧接力生成方式**：{tail}",
@@ -1730,7 +1797,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         "**导演视角八维**：",
         "| 维度 | 本镜约束 |",
         "|---|---|",
-        f"| ① 戏剧目标 | {clip.get('rhythm', '')}；{clip.get('label', '')} |",
+        f"| ① 戏剧目标 | {dramatic_function or clip.get('rhythm', '')}；观众效果={audience_effect or '-'} |",
         f"| ② 主体/表演 | {', '.join(char_bindings) if char_bindings else '空镜/证据'}；{char_phrase} |",
         f"| ③ 构图/轴线 | {comp_guard} |",
         f"| ④ 光色/天气 | {vc.get('色调基线', '')} |",
@@ -1740,7 +1807,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"| ⑧ 禁忌/QC | {style_forbidden}；{'; '.join(negative)} |",
         "",
         "### 正向 prompt（中文）",
-        f"锚点句: {char_phrase or asset_phrase}。{desc}。本镜状态锁：{state_lock}。{sc.get('视觉基调', '')}，竖屏9:16，{vc.get('色调基线', '')}。身份锁定句：{', '.join(char_bindings) if char_bindings else '无人物'} 从共享定妆 image2image / 多图参考派生，脸型、发型、服装主色和关键配饰不漂。镜头是旁观者，不看镜头；视线锁戏内目标。{lens}，{move}",
+        f"锚点句: {char_phrase or asset_phrase}。{desc}。剧本可看性合同：本镜戏剧功能是{dramatic_function or '待补'}，观众应获得{audience_effect or '明确情绪/信息回报'}。本镜状态锁：{state_lock}。{sc.get('视觉基调', '')}，竖屏9:16，{vc.get('色调基线', '')}。身份锁定句：{', '.join(char_bindings) if char_bindings else '无人物'} 从共享定妆 image2image / 多图参考派生，脸型、发型、服装主色和关键配饰不漂。镜头是旁观者，不看镜头；视线锁戏内目标。{lens}，{move}",
         "### 正向 prompt（英文）",
         "Vertical 9:16 cinematic keyframe, cold gray realistic 3D Chinese fantasy comic-drama style, stable character identity from reference images, stable location landmarks, stable lighting and screen direction, no direct camera gaze unless POV, production-ready frame.",
         "### 负向 prompt",
@@ -1796,6 +1863,54 @@ def reference_action_count(plan: Mapping[str, Any]) -> int:
     return count
 
 
+def upsert_script_contract_application(root: Path, ep: str, scope: str, prompt_rel: Path, clips: Sequence[Mapping[str, Any]]) -> Optional[Path]:
+    contract_path = root / "生产数据" / f"script_quality_contract_{ep}.json"
+    contract = load_json(contract_path)
+    prompt_path = root / prompt_rel
+    if not isinstance(contract, Mapping) or contract.get("kind") != SCRIPT_QUALITY_CONTRACT_KIND or not prompt_path.is_file():
+        return None
+    app_path = root / "生产数据" / f"script_contract_applied_{ep}.json"
+    existing = load_json(app_path)
+    if isinstance(existing, Mapping) and existing.get("kind") == SCRIPT_CONTRACT_APPLICATION_KIND:
+        data: Dict[str, Any] = dict(existing)
+        scopes = [s for s in data.get("scopes") or [] if isinstance(s, Mapping) and s.get("scope") != scope]
+    else:
+        data = {
+            "kind": SCRIPT_CONTRACT_APPLICATION_KIND,
+            "episode": ep,
+            "accepted": True,
+            "scopes": [],
+        }
+        scopes = []
+    contract_sha = sha256_file(contract_path)
+    scopes.append({
+        "scope": scope,
+        "prompt_path": str(prompt_rel),
+        "prompt_sha256": sha256_file(prompt_path),
+        "contract_path": str(contract_path.relative_to(root)),
+        "contract_sha256": contract_sha,
+        "consumed_fields": list(contract.get("required_consumption_fields") or SCRIPT_CONTRACT_REQUIRED_FIELDS),
+        "applied_clip_ids": [str(c.get("id") or f"Clip_{i:02d}") for i, c in enumerate(clips, start=1)],
+        "evidence": [
+            "出图总览写入本集可看性签收合同：核心看点、首屏钩、留存承诺、观众问题账本。",
+            "逐镜 prompt 写入剧本可看性合同：dramatic_function、audience_effect、spectacle_story_function。",
+            "导演视角八维与中文 prompt 按戏剧功能组织画面，而非只画剧情描述。",
+        ],
+        "reviewed_at": now_iso(),
+    })
+    data.update({
+        "episode": ep,
+        "accepted": True,
+        "reviewer": "Codex n2d-image prompt pack",
+        "reviewed_at": now_iso(),
+        "contract_path": str(contract_path.relative_to(root)),
+        "contract_sha256": contract_sha,
+        "scopes": scopes,
+    })
+    write_json(app_path, data)
+    return app_path
+
+
 def write_application_receipts(root: Path, ep: str, clips: Sequence[Mapping[str, Any]]) -> List[Path]:
     out: List[Path] = []
     prompt_rel = Path("出图") / ep / "prompt" / "01_分镜出图.md"
@@ -1847,6 +1962,9 @@ def write_application_receipts(root: Path, ep: str, clips: Sequence[Mapping[str,
             path = root / "生产数据" / f"director_camera_plan_applied_{ep}.json"
             write_json(path, data)
             out.append(path)
+        script_receipt = upsert_script_contract_application(root, ep, "出图", prompt_rel, clips)
+        if script_receipt:
+            out.append(script_receipt)
     return out
 
 
@@ -1880,7 +1998,7 @@ def write_pack(root: Path, ep: str) -> Dict[str, Any]:
     written.append(root / "出图" / "共享" / "prompt" / "道具定妆.md")
     write_text(root / "出图" / "共享" / "prompt" / "特效定妆.md", shared_asset_prompt("vfx", "特效定妆", vfx_ids))
     written.append(root / "出图" / "共享" / "prompt" / "特效定妆.md")
-    write_text(root / "出图" / ep / "prompt" / "00_总览.md", overview_md(story, clips, total_frames))
+    write_text(root / "出图" / ep / "prompt" / "00_总览.md", overview_md(root, ep, story, clips, total_frames))
     written.append(root / "出图" / ep / "prompt" / "00_总览.md")
     write_text(root / "出图" / ep / "prompt" / "01_分镜出图.md", shots_md(root, ep, story, clips))
     written.append(root / "出图" / ep / "prompt" / "01_分镜出图.md")

@@ -29,8 +29,8 @@ zh = parse_srt(os.path.join(W, 'zh.srt'))
 en = parse_srt(os.path.join(W, 'en.srt'))
 idxs = sorted(set(zh) | set(en))
 
-ZH_SIZE = int(os.environ.get('ZH_SIZE', 42))   # 竖屏漫剧默认更克制；可由 compose 的「字幕字号」选择点覆盖
-EN_SIZE = int(os.environ.get('EN_SIZE', 30))
+ZH_SIZE = int(os.environ.get('ZH_SIZE', 38))   # 竖屏漫剧默认更克制；可由 compose 的「字幕字号」选择点覆盖
+EN_SIZE = int(os.environ.get('EN_SIZE', 28))
 
 # ── 字幕样式分级（cue 标签 → 字号/颜色）。默认=normal 即原行为，全部 env 可覆盖 ──
 # 标签来自 时长清单.json（compose.sh 复制为 W/manifest.json）：角色含"系统/旁白"→narrator；钩子=climax→emphasis。

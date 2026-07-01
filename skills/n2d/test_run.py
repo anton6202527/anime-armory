@@ -42,9 +42,9 @@ def make_work(cells, settings=None):
 ALL_DONE_TO = {
     "script_stage1": ["✅", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜"],
     "voice":         ["✅", "✅", "✅", "✅", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜"],
-    "image_prompt":  ["✅", "✅", "✅", "✅", "⬜", "✅", "✅", "✅", "✅", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜"],
+    "image_prompt":  ["✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜"],
     "image":         ["✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "0/10", "⬜", "⬜", "⬜", "⬜"],
-    "video_prompt":  ["✅", "✅", "✅", "✅", "⬜", "✅", "✅", "✅", "✅", "✅", "✅", "⬜", "⬜", "⬜", "⬜"],
+    "video_prompt":  ["✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "⬜", "⬜", "⬜", "⬜"],
     "compose":       ["✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "⬜", "⬜"],
     "review":        ["✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "✅", "⬜"],
 }
@@ -93,14 +93,14 @@ def test_resolve_frontier_image():
 
 
 def test_resolve_frontier_voice():
-    # 默认现为「原生音画」（路由跳过 n2d-voice），显式选「配音先行」以验证 voice 前沿。
+    # 默认现为「配音先行」，这里显式写入以固定 voice 前沿语义。
     root = make_work(ALL_DONE_TO["voice"], settings="# _设置\n- 制作模式: 配音先行\n")
     route = run.resolve_frontier(root)
     assert run.stage_key_of(route) == "voice"
 
 
 def test_resolve_frontier_native_av_script_stage2_labels_timing_not_voice():
-    root = make_work(ALL_DONE_TO["voice"])
+    root = make_work(ALL_DONE_TO["voice"], settings="# _设置\n- 制作模式: 原生音画\n")
     route = run.resolve_frontier(root)
     assert run.stage_key_of(route) == "script_stage2"
     assert "原生音画" in route["label"]
@@ -109,7 +109,7 @@ def test_resolve_frontier_native_av_script_stage2_labels_timing_not_voice():
 
 
 def test_decide_uses_mode_aware_route_command():
-    root = make_work(ALL_DONE_TO["voice"])
+    root = make_work(ALL_DONE_TO["voice"], settings="# _设置\n- 制作模式: 原生音画\n")
     route = run.resolve_frontier(root)
     na = run.decide(root, route, "script_stage2", run.Probes())
     cmd = na["action_card"]["exact_command"]
@@ -151,11 +151,11 @@ def test_next_action_done_after_review_signoff():
     assert "已完成验收" in na["action_card"]["headline"]
 
 
-def test_production_mode_menu_defaults_to_shortest_path():
+def test_production_mode_menu_defaults_to_dubbing_first():
     root = make_work(ALL_DONE_TO["script_stage1"])
     menu = run._menu(root, "制作模式")
-    assert menu["options"][:3] == ["原生音画", "配音先行", "先出视频后配音"]
-    assert menu["default_preselect"] == "原生音画"
+    assert menu["options"][:3] == ["配音先行", "原生音画", "先出视频后配音"]
+    assert menu["default_preselect"] == "配音先行"
 
 
 def test_base_visual_style_menu_includes_reference_media_intake():
@@ -735,7 +735,7 @@ def test_image_qc_gate_issue_blocks_stale_report():
 
 def test_enter_action_includes_entry_checks(monkeypatch):
     root = make_work(ALL_DONE_TO["image"])
-    monkeypatch.setattr(run, "entry_checks", lambda root, ep=None: [{"step": "source_check", "status": "clean"}])
+    monkeypatch.setattr(run, "entry_checks", lambda root, ep=None, stage_key=None, preview=False: [{"step": "source_check", "status": "clean"}])
     monkeypatch.setattr(run, "gather_probes", lambda *a, **k: run.Probes())
     na = run.enter_action(root, "第1集")
     assert na["entry_checks"][0]["step"] == "source_check"

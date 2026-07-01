@@ -18,7 +18,7 @@ def _write_manifest(root, ep, manifest):
 
 def test_placeholder_gate_blocks_finalize(tmp_path):
     # 占位音色定稿会污染镜头时长 → finalize 必须拒绝（退出码 2），除非 FINALIZE_ALLOW_PLACEHOLDER=1
-    # 默认现为「原生音画」（占位不作硬闸），本用例显式选「配音先行」以触发占位闸门。
+    # 默认现为「配音先行」，本用例显式写入以固定占位闸门语义。
     root, ep = str(tmp_path), "第1集"
     _write_manifest(root, ep, [
         {"idx": 0, "镜头": "镜头1", "文本": "甲。", "时长": 2.0, "占位": True},
@@ -176,7 +176,7 @@ def test_native_av_finalize_fails_on_missing_clip_duration(tmp_path):
 def test_non_native_still_requires_manifest(tmp_path):
     root = str(tmp_path)
     os.makedirs(os.path.join(root, "脚本", "第1集"), exist_ok=True)
-    # 默认现为「原生音画」，本用例显式选回「配音先行」以验证非原生音画仍要求配音清单。
+    # 默认现为「配音先行」，本用例显式写入以验证非原生音画仍要求配音清单。
     open(os.path.join(root, "_设置.md"), "w", encoding="utf-8").write("# _设置\n## 选择\n- 制作模式: 配音先行\n")
     r = subprocess.run([sys.executable, os.path.join(_HERE, "finalize_storyboard.py"), root, "第1集"],
                        capture_output=True, text=True)

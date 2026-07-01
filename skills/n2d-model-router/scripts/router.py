@@ -891,6 +891,9 @@ def execution_recipe_for_route(
     max_reference_images = int(frame_control.get("max_reference_images") or 0)
     mode = str(entry.get("mode") or "").strip().lower()
     consumes_timeline_frames = mode not in {"text2video", "t2v"}
+    anchor_count = int(anchor.get("anchor_count") or 0) if consumes_timeline_frames else 0
+    uses_last_frame = bool(consumes_timeline_frames and (anchor.get("need_end") or frame_control.get("supports_last_frame")))
+    timeline_frame_count = (1 + anchor_count + (1 if uses_last_frame else 0)) if consumes_timeline_frames else 0
     recipe = {
         "backend": backend,
         "execution_backend": anchor.get("execution_backend") or backend,
@@ -899,10 +902,10 @@ def execution_recipe_for_route(
         "urgency_tier": entry.get("urgency_tier"),
         "frame_inputs": {
             "first_frame": bool(consumes_timeline_frames),
-            "last_frame": bool(consumes_timeline_frames and (anchor.get("need_end") or frame_control.get("supports_last_frame"))),
-            "mid_anchors": int(anchor.get("anchor_count") or 0) if consumes_timeline_frames else 0,
+            "last_frame": uses_last_frame,
+            "mid_anchors": anchor_count,
             "consumption_mode": (anchor.get("consumption_mode") or "first_frame") if consumes_timeline_frames else "text_prompt_with_references",
-            "native_timeline_frames": int(frame_control.get("max_timeline_frames") or 1),
+            "native_timeline_frames": timeline_frame_count or int(frame_control.get("max_timeline_frames") or 1),
             "requires_split_relay": bool(anchor.get("requires_split_relay")),
             "reference_only": bool(anchor.get("reference_only")),
         },
@@ -1298,6 +1301,26 @@ def _is_speech_shot(clip: Mapping[str, Any], shot_type: str) -> bool:
     return shot_type in SPEECH_SHOT_TYPES or clip_has_mouth_visible(clip)
 
 
+def _clip_has_character_dialogue(clip: Mapping[str, Any]) -> bool:
+    """Storyboard-level machine truth for visible character dialogue.
+
+    `voiceover_indices` may include narration; native_speech must only be
+    selected when the clip has character dialogue that the video backend may
+    actually generate.
+    """
+    for key in ("dialogue_indices", "allowed_character_dialogue_indices"):
+        raw = clip.get(key)
+        if isinstance(raw, Iterable) and not isinstance(raw, (str, bytes, bytearray)):
+            if any(str(item).strip() for item in raw):
+                return True
+    raw_dialogue = clip.get("allowed_character_dialogue")
+    if isinstance(raw_dialogue, Iterable) and not isinstance(raw_dialogue, (str, bytes, bytearray)):
+        if any(bool(item) for item in raw_dialogue):
+            return True
+    raw_text = clip.get("dialogue")
+    return isinstance(raw_text, str) and bool(raw_text.strip())
+
+
 def _lipsync_enabled(lip_sync_setting: str) -> bool:
     """`_设置.md 对口型` 是否 opt-in（非「关闭」即视为启用）。"""
     return str(lip_sync_setting).strip().lower() not in LIPSYNC_OFF_VALUES
@@ -1489,6 +1512,19 @@ def choose_route(
             )
         return route
 
+    # 原生音画模式：说话镜优先走原生同步音画路由（绕过配音先行）。其余镜头走常规路由。
+    if av_mode == "native_av" and _is_speech_shot(clip, shot_type) and (
+        shot_type not in NARRATIVE_STATE_SHOT_TYPES or _clip_has_character_dialogue(clip)
+    ):
+        route = _route_native_av_speech(clip, shot_type, default_backend, overseas=overseas)
+        fallbacks: List[str] = []
+        for backend in route["fallback_backends"] + [default_backend]:
+            backend = normalize_backend(backend)
+            if backend != route["primary_backend"] and backend not in fallbacks:
+                fallbacks.append(backend)
+        route["fallback_backends"] = fallbacks[:3]
+        return route
+
     if shot_type in NARRATIVE_STATE_SHOT_TYPES:
         return _route_narrative_state_scene(
             clip,
@@ -1498,17 +1534,6 @@ def choose_route(
             lip_sync_setting=lip_sync_setting,
             av_mode=av_mode,
         )
-
-    # 原生音画模式：说话镜优先走原生同步音画路由（绕过配音先行）。其余镜头走常规路由。
-    if av_mode == "native_av" and _is_speech_shot(clip, shot_type):
-        route = _route_native_av_speech(clip, shot_type, default_backend, overseas=overseas)
-        fallbacks: List[str] = []
-        for backend in route["fallback_backends"] + [default_backend]:
-            backend = normalize_backend(backend)
-            if backend != route["primary_backend"] and backend not in fallbacks:
-                fallbacks.append(backend)
-        route["fallback_backends"] = fallbacks[:3]
-        return route
     # voice_first + 对口型 opt-in 的说话镜：克隆配音作口型条件喂进支持音频参考的后端，
     # 同帧出对口型画面（不双人声、省后期对口型 pass）。固定后端模式不抢路由。
     if (

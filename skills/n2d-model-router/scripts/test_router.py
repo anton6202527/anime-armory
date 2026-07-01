@@ -588,6 +588,49 @@ def test_native_av_mode_routes_dialogue_to_native_speech(tmp_path):
     assert "native_speech" in route["risk_flags"]
 
 
+def test_native_av_routes_narrative_state_with_character_dialogue_to_native_speech(tmp_path):
+    root = _root(tmp_path, "- 生视频AI: 即梦\n- 视频模型路由: 自动按镜头路由\n- 制作模式: 原生音画\n")
+    _write_storyboard(root, [{
+        "id": "Clip 5",
+        "template": "reveal_reaction_chain",
+        "scene": "虎妖诈死复苏，虎妖开口拦路，裴长青确认不可能",
+        "character_ids": ["CHAR_01", "CHAR_02", "CHAR_03"],
+        "dialogue_indices": [14, 15],
+        "narration_indices": [13],
+        "continuity": {
+            "anchors": [{"label": "虎妖开口拦路"}],
+            "need_endframe": True,
+        },
+    }])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["shot_type"] == "reveal_reaction_chain"
+    assert route["mode"] == "native_av"
+    assert route["native_audio_policy"] == "native_speech"
+    assert route.get("requires_voice_fallback") is not True
+    frame_inputs = route["execution_recipe"]["frame_inputs"]
+    assert frame_inputs["first_frame"] is True
+    assert frame_inputs["native_timeline_frames"] == 3
+
+
+def test_native_av_keeps_narration_only_narrative_state_visual_first(tmp_path):
+    root = _root(tmp_path, "- 生视频AI: 即梦\n- 视频模型路由: 自动按镜头路由\n- 制作模式: 原生音画\n")
+    _write_storyboard(root, [{
+        "id": "Clip 5",
+        "template": "reveal_reaction_chain",
+        "scene": "真相物证露出，众人无声反应",
+        "character_ids": ["CHAR_01", "CHAR_02"],
+        "narration_indices": [13],
+    }])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["shot_type"] == "reveal_reaction_chain"
+    assert route["native_audio_policy"] == "none"
+    assert route.get("requires_voice_fallback") is True
+
+
 def test_native_av_mode_leaves_action_shots_unchanged(tmp_path):
     root = _root(tmp_path, "- 生视频AI: 即梦\n- 视频模型路由: 自动按镜头路由\n- 制作模式: 原生音画\n")
     _write_storyboard(root, [{"id": "Clip 1", "template": "fight_exchange", "scene": "挥剑命中追兵"}])

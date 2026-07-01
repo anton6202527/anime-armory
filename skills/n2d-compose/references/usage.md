@@ -101,7 +101,7 @@ python3 skills/n2d-compose/release_manifest.py check <作品根> 第N集
 完成后回写「成片」列：`python3 <n2d skill>/progress.py set <作品根> 第N集 成片 ✅`。
 
 ## 字幕字号微调 + 样式分级
-- 基础字号来自选择点 `字幕字号`：`小`=ZH 42 / EN 30（默认），`中`=46/32，`大`=50/34；也可用 `ZH_SIZE` / `EN_SIZE` 环境变量精确覆盖。
+- 基础字号来自选择点 `字幕字号`：`小`=ZH 38 / EN 28（默认），`中`=46/32，`大`=50/34；也可用 `ZH_SIZE` / `EN_SIZE` 环境变量精确覆盖。
 - **样式分级**（自动）：compose 把 `配音/时长清单.json` 复制为 `_work/manifest.json`，render_subs 据 `角色`/`钩子` 字段分级——旁白/系统句→灰色小一号、爽点(钩子=climax)句→暖金大一号、其余 normal。增量可调：`NARR_DZH`(-8)`NARR_DEN`(-4) / `EMPH_DZH`(+6)`EMPH_DEN`(+2)。无 manifest 时全部 normal（=原行为）。
 
 ## 打斗后期（补打击感）

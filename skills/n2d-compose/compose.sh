@@ -42,7 +42,7 @@ fi
 SUBTITLE_SIZE_SETTING=$(eval $_GET_SETTING "\"$ROOT\" \"字幕字号\" \"小\"")
 if [ -z "${ZH_SIZE:-}" ] && [ -z "${EN_SIZE:-}" ]; then
   case "$SUBTITLE_SIZE_SETTING" in
-    小|small) export ZH_SIZE=42 EN_SIZE=30 ;;
+    小|small) export ZH_SIZE=38 EN_SIZE=28 ;;
     中|medium) export ZH_SIZE=46 EN_SIZE=32 ;;
     大|large) export ZH_SIZE=50 EN_SIZE=34 ;;
     *) : ;;

@@ -1063,6 +1063,12 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 "beat_audit 未通过；先回 n2d-script 补冷开场、钩子间隔、反转、集尾钩、信息回报或集间钩子接力（上集集尾钩→本集冷开场接住同一根线）。",
             ),
             (
+                "script_quality_gate",
+                os.path.join(SKILLS_DIR, "n2d-script", "scripts", "script_quality_gate.py"),
+                [root, ep, "--strict", "--write", "--json"],
+                "script_quality_gate 未通过；n2d-script 必须先把“好看”拆成可签收字段（核心看点、首屏钩、留存账本、逐镜戏剧功能、观众问题账本），再交给 image/video 下游。",
+            ),
+            (
                 "spectacle_contract_audit",
                 os.path.join(SKILLS_DIR, "n2d-script", "scripts", "spectacle_contract_audit.py"),
                 [root, ep, "--strict", "--json"],

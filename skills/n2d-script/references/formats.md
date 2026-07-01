@@ -173,6 +173,77 @@ python3 skills/n2d-script/scripts/midstart_context.py <作品根> check
 
 ---
 
+## 0.6 剧本质量交接合同（生产数据/script_quality_contract_第N集.json）
+
+阶段2 定稿后必须由 `script_quality_gate.py --strict --write` 生成。它不是“评分报告”，而是 `n2d-script` 交给 `n2d-image` / `n2d-video` 的制片合同：把“好看”拆成下游必须消费的字段。
+
+```json
+{
+  "kind": "n2d_script_quality_contract",
+  "version": 1,
+  "episode": "第1集",
+  "status": "pass",
+  "required_consumption_fields": [
+    "core_attraction",
+    "first_3s_visual_hook",
+    "retention_promise_ledger",
+    "clip_dramatic_function",
+    "audience_question_ledger",
+    "performance_cues"
+  ],
+  "signable_fields": {
+    "core_attraction": {
+      "category": "强反转",
+      "why_watch": "观众想看女主如何当众反杀并拿回主动权",
+      "audience_payoff": "压迫兑现为打脸，且留下下一集追问"
+    },
+    "first_3s_visual_hook": {
+      "visual_hook": "雨夜门槛血迹 + 女主被当众逼跪，反派鞋底干净",
+      "content_promise": "谁杀了人、女主怎么翻盘",
+      "muted_readable": true,
+      "expected_metric": {"primary": "retention_3s", "target": 0.72}
+    },
+    "retention_promise_ledger": [
+      {
+        "hook_id": "H01",
+        "promise_type": "truth_reveal",
+        "opened_at": "Clip_01",
+        "promise": "鞋底干净为何是破绽",
+        "payoff_due": "第1集",
+        "payoff_status": "paid",
+        "payoff_evidence": "Clip_06 当众揭穿"
+      }
+    ],
+    "clip_dramatic_functions": [
+      {
+        "clip_id": "Clip_01",
+        "dramatic_function": "用可视证据提出观众问题",
+        "audience_effect": "让观众立刻判断女主被冤，并期待她反击",
+        "spectacle_story_function": "无"
+      }
+    ],
+    "audience_question_ledger": {"questions": []},
+    "performance_cues": []
+  },
+  "findings": [],
+  "summary": {"status": "pass", "blocks": 0, "warnings": 0, "clips": 8}
+}
+```
+
+硬规则：
+
+- `core_attraction` 必须回答“这一集凭什么好看/观众为什么看”，不是只写题材标签。
+- `first_3s_visual_hook` 必须可画、静音可读，并明确内容承诺或观众问题。
+- 每个 Clip 必须有 `dramatic_function`；首镜、尾镜、爽点、反转、高潮、真相揭示等关键镜必须有 `audience_effect`。
+- 打斗、追逐、飞行、大场景、法术爆发等奇观镜必须写 `spectacle_story_function`：奇观服务哪个剧情/情绪/信息回报，不能只写“酷炫”。
+- 下游消费必须写 `生产数据/script_contract_applied_第N集.json`，按 `出图` / `出视频` scope 分别绑定 prompt SHA 与 contract SHA。`n2d-image` 自动写 `出图` scope；视频 prompt 写好后跑：
+
+```bash
+python3 skills/n2d-video/scripts/script_contract_receipt.py <作品根> 第N集 --scope 出视频
+```
+
+---
+
 ## 1. 角色卡（设定库/characters/角色名.md，全篇唯一，首次出现即建卡）
 
 ```markdown
